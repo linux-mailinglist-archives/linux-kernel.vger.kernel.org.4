@@ -2,94 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B70E6DF7AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:49:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E26EC6DF7AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:50:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231262AbjDLNtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 09:49:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52042 "EHLO
+        id S231335AbjDLNuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 09:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbjDLNtq (ORCPT
+        with ESMTP id S231307AbjDLNuI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 09:49:46 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A95A4696
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 06:49:43 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id o6-20020a05600c4fc600b003ef6e6754c5so4289311wmq.5
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 06:49:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1681307382; x=1683899382;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Bb6P2byqyLNvxYx5mpnu/HADSn0CeAL5J6+dhakFGrg=;
-        b=B9v3Cr72e/au74c7iF4mlnBofvVBf0by7QnZev1/Fg+aA5h0JtHabAGNwWsTm1dhJb
-         QaHZJk3eU9ZK5/S+ufoY0/U9W83wj8VLxD2sX4rqNIlHS7bbp9sDlk6iqXgC1mTacuk4
-         +RI4jowaObwXoqScKuNcmsqBGuxn86bKGkm97Dv1CgBDCmVWFt+tnlRyfPEBC9BpQZS2
-         YDSEKlsByawXVG/u3DR52AD1jUzzVoJbsyNWCCHPx07GuxHSi/fktwXGh2oun3AqtCE6
-         dJNXUJvNoW6UQrP40bI4//QvWskJftzd1z+RQhoRADiCG8FBuJYsaSPonV/kamY1STsa
-         0GNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681307382; x=1683899382;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bb6P2byqyLNvxYx5mpnu/HADSn0CeAL5J6+dhakFGrg=;
-        b=BBby6h/tmk1MG8h8gXSQ1tbGnOHcB57SJQjUZsQyGeDDT/eV+UPHTmkLtNovvsBcFk
-         hgIU4n9XJruO0ufPMC8yXVudEMZY9HMsUfEaxVaG0c8ruiKIuBXj7Ze75h3ZAu7qBcQC
-         NRewBPzAxTTFd3DoF9qGjH5xr5HCyktuvWUGY4o8oZRvlEQmUgx175MXPsDtmF8ph26z
-         r5LQ5emI56y0G1beODefB1I+X/58uH4JZs0mXu2U9vd2F3iuNlLPf/nCqonQEEMEOhr9
-         jWQ0Ol0AE/s7lx8LytNrCrGHeIh9i2sUrsMrRoJnBDtER+RgWWNxNMxjfCCmO+orDsrY
-         ANKw==
-X-Gm-Message-State: AAQBX9frT/Da7usZCC6/s7Tvh3NrqvhM5UKTZ34bqtl7LNQC9Ta8NK9S
-        YavFUvSMmzkp+YcUCYIcOSi1vA==
-X-Google-Smtp-Source: AKy350ZXbR07ORT2zgwh1nwhJhmgY6mdrSYJvMKUTwK7WgHD/vtESiSZPZKxhQzGEBaaP+LS9j+LgQ==
-X-Received: by 2002:a05:600c:ad2:b0:3ed:9ed7:d676 with SMTP id c18-20020a05600c0ad200b003ed9ed7d676mr5037319wmr.13.1681307382012;
-        Wed, 12 Apr 2023 06:49:42 -0700 (PDT)
-Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.gmail.com with ESMTPSA id i19-20020a1c5413000000b003edf2ae2432sm2466316wmb.7.2023.04.12.06.49.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Apr 2023 06:49:41 -0700 (PDT)
-Message-ID: <de13cb5f-abf2-86b3-d2e0-2b1131cd8dfa@baylibre.com>
-Date:   Wed, 12 Apr 2023 15:49:40 +0200
+        Wed, 12 Apr 2023 09:50:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA381705
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 06:50:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C185563557
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 13:50:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8F09C4339B;
+        Wed, 12 Apr 2023 13:50:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681307406;
+        bh=d697myxGSMJrs0cYzQKYhNiKu5vdRz1Wz5siV1nSnso=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ontkxAZvHVytSkZNIN+YM5FRNn6R+X4cYx0X6UCqwa6+fw69SADfidxVgJ0eLU172
+         NEODlNMeKgtjHslGeelGIRdJkZb944Fp9Xp8sZjBEz3Z+DEvKkre4GxXcb0SQQ7/Ic
+         7h1duizmRldqOpNb8fVqFnEBBIEkbt9twF0vppTqVvov7M3cgRbHvVLxerUUpx/S5o
+         uw27NKO4NvWw500yaA4fQozVJEmJUWB8r5oxuJmnd0T28V13tIeI85o5SbPpfmWgXT
+         2TiIw8p0nab97xH47C72ucO41qxhujGvxr2hWTVVsuPWAcZ9RF6+czvb4lDNefOU/1
+         XsUp5+3IbeSSA==
+Date:   Wed, 12 Apr 2023 14:50:01 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Pierre Gondois <pierre.gondois@arm.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        linux-kernel@vger.kernel.org, Radu Rendec <rrendec@redhat.com>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Gavin Shan <gshan@redhat.com>,
+        Jeremy Linton <jeremy.linton@arm.com>
+Subject: Re: [PATCH v2 1/3] cacheinfo: Check sib_leaf in
+ cache_leaves_are_shared()
+Message-ID: <20230412-catalyze-putt-4a0d48042e4f@spud>
+References: <20230412071809.12670-1-pierre.gondois@arm.com>
+ <20230412071809.12670-2-pierre.gondois@arm.com>
+ <20230412-viewpoint-refutable-a31f3657093c@wendy>
+ <d7a36615-896b-0f13-a1f6-761715ce460f@arm.com>
+ <20230412-hut-unused-21d683fcb8b0@wendy>
+ <b87130ba-b3c2-825c-0e2c-634e8aee8d5c@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH -next 3/3] drm/mediatek: Use
- devm_platform_ioremap_resource()
-Content-Language: en-US
-To:     Yang Li <yang.lee@linux.alibaba.com>, airlied@gmail.com
-Cc:     daniel@ffwll.ch, matthias.bgg@gmail.com, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de, angelogioacchino.delregno@collabora.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230412064635.41315-1-yang.lee@linux.alibaba.com>
- <20230412064635.41315-3-yang.lee@linux.alibaba.com>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-In-Reply-To: <20230412064635.41315-3-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="31Nhce6gARzTUXUy"
+Content-Disposition: inline
+In-Reply-To: <b87130ba-b3c2-825c-0e2c-634e8aee8d5c@arm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/04/2023 08:46, Yang Li wrote:
-> Remove variable 'res' and convert platform_get_resource(),
-> devm_ioremap_resource() to a single call to
-> devm_platform_ioremap_resource(), as this is exactly what this function
-> does.
-> 
-> Signed-off-by: Yang Li<yang.lee@linux.alibaba.com>
 
-Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
+--31Nhce6gARzTUXUy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Regards,
-Alexandre
+On Wed, Apr 12, 2023 at 03:20:19PM +0200, Pierre Gondois wrote:
+> > On Wed, Apr 12, 2023 at 02:34:11PM +0200, Pierre Gondois wrote:
 
+> > Another silly question:
+> > For two caches of level M & N; M !=3D N; M, N > 1 should they be detect=
+ed
+> > as shared in the absence of any information in DT/ACPI?
+> > The comment (to me) reads as if they should not, but it is rather vague.
+>=20
+> I think they should. The naming of cache_leaves_are_shared() might be
+> misleading. The function is more trying to find out if 2 cache leaves str=
+uct
+> are representing the same cache. So maybe renaming the function to
+> cache_leaves_identical() might be better?
+
+Nah, I don't think this is really the fault of anything other than the
+!DT && !ACPI situation.
+I'm just trying to make sure I understand the intended behaviour in that
+scenario, that's all.
+
+> If there is no DT/ACPI, it is not possible to identify whether 2 cache le=
+aves
+> are representing the same cache. The desired behaviour is just:
+> - If this_leaf or sib_leaf is a L1 cache, then the caches are not identic=
+al
+>   (or shared if we use this wording)
+
+> So the meaning of cache_leaves_identical() is a bit bent for this
+> configuration.
+
+Fair enough.
+
+--31Nhce6gARzTUXUy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZDa3BgAKCRB4tDGHoIJi
+0vrcAQCW6Qv7JEnbOaLRCie9bWqvTjhTS9wIpR4saBeeRVODrAEA8WU4D22dkSnN
+K5Zhe/I9KdRpdhwCHiO1hBJaBHUdago=
+=7IKn
+-----END PGP SIGNATURE-----
+
+--31Nhce6gARzTUXUy--
