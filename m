@@ -2,54 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38AD96DEA37
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 06:13:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 268CA6DEA3F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 06:15:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbjDLENt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 00:13:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46634 "EHLO
+        id S229609AbjDLEPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 00:15:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjDLENq (ORCPT
+        with ESMTP id S229507AbjDLEP3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 00:13:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4F82134;
-        Tue, 11 Apr 2023 21:13:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38A8562CE2;
-        Wed, 12 Apr 2023 04:13:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5379CC433EF;
-        Wed, 12 Apr 2023 04:13:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681272824;
-        bh=37vF2OcLT7RuIhgdXGjyAGJ8bZa1FuPhsEVD4ej59XY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SraqQGLFIhfvJlorXj8Yqb4W9Hg/CPdqBkRf1YJpWppOfrHL1yUnZuEmkwN7PwcFc
-         xzYbjov2ePto9SCOxzx3QgVYcr1kPpyc0GSWLVJZkv7Bo7EcOtzamQ4eIQJ5FWYgOk
-         SXQu0MxgIp/3PMO82RjI5mLw0FE1FZRNsDMa1X/vFFFMBjuTngFrhd4WqxUi8VvV3R
-         5Nqt8h7vs1OtnAzJiS1Ex2n6wJXjc8yvidva0pUguoy+kqx64Pl0IJSAUUFt59BE0t
-         Zxo66omQbAkWIX0Yl7oU0N4nBFARZk9lbg0UBHuBL/hs1KLM414TePdZP85HA1pfap
-         X9ZXnnFX07E1A==
-Date:   Tue, 11 Apr 2023 21:13:43 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rafal Ozieblo <rafalo@cadence.com>
-Subject: Re: [PATCH net] net: macb: fix a memory corruption in extended
- buffer descriptor mode
-Message-ID: <20230411211343.43b6833a@kernel.org>
-In-Reply-To: <ZDYqIj4Fg3tlGKd5@P9FQF9L96D.corp.robot.car>
-References: <20230407172402.103168-1-roman.gushchin@linux.dev>
-        <20230411184814.5be340a8@kernel.org>
-        <6c025530-e2f1-955f-fa5f-8779db23edde@metafoo.de>
-        <ZDYqIj4Fg3tlGKd5@P9FQF9L96D.corp.robot.car>
+        Wed, 12 Apr 2023 00:15:29 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 398B42683
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 21:15:27 -0700 (PDT)
+Received: from kwepemm600007.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Px8V1619Kzrb2J;
+        Wed, 12 Apr 2023 12:14:01 +0800 (CST)
+Received: from DESKTOP-6NKE0BC.china.huawei.com (10.174.185.210) by
+ kwepemm600007.china.huawei.com (7.193.23.208) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 12 Apr 2023 12:15:24 +0800
+From:   Kunkun Jiang <jiangkunkun@huawei.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        "open list:IRQCHIP DRIVERS" <linux-kernel@vger.kernel.org>
+CC:     <wanghaibin.wang@huawei.com>,
+        Kunkun Jiang <jiangkunkun@huawei.com>,
+        <chenxiang66@hisilicon.com>, <tangnianyao@huawei.com>
+Subject: [PATCH] irqchipi/gic-v4: Ensure accessing the correct RD when and writing INVLPIR
+Date:   Wed, 12 Apr 2023 12:15:10 +0800
+Message-ID: <20230412041510.497-1-jiangkunkun@huawei.com>
+X-Mailer: git-send-email 2.26.2.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.185.210]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600007.china.huawei.com (7.193.23.208)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,42 +49,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Apr 2023 20:48:50 -0700 Roman Gushchin wrote:
-> > diff --git a/drivers/net/ethernet/cadence/macb_main.c
-> > b/drivers/net/ethernet/cadence/macb_main.c
-> > index d13fb1d31821..1a40d5a26f36 100644
-> > --- a/drivers/net/ethernet/cadence/macb_main.c
-> > +++ b/drivers/net/ethernet/cadence/macb_main.c
-> > @@ -1042,6 +1042,10 @@ static dma_addr_t macb_get_addr(struct macb *bp,
-> > struct macb_dma_desc *desc)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> > =C2=A0#endif
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 addr |=3D MACB_BF(RX_WADDR, =
-MACB_BFEXT(RX_WADDR, desc->addr));
-> > +#ifdef CONFIG_MACB_USE_HWSTAMP
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (bp->hw_dma_cap & HW_DMA_CAP_P=
-TP)
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 addr &=3D ~GEM_BIT(DMA_RXVALID_OFFSET);
-> > +#endif
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return addr;
-> > =C2=A0}
->=20
-> I think this version is slightly worse because it adds an unconditional
-> if statement, which can be removed with certain config options.
-> I can master a version with a helper function, if it's preferable.
->=20
-> But if you like this one, it's fine too, let me know, I'll send an updated
-> version.
+commit f3a059219bc7 ("irqchip/gic-v4.1: Ensure mutual exclusion between
+vPE affinity change and RD access") tried to address the race
+between the RD accesses and the vPE affinity change, but somehow
+forgot to take GICR_INVLPIR into account. Let's take the vpe_lock
+before evaluating vpe->col_idx to fix it.
 
-Yup, IMHO this looks better. More likely that someone reading the code
-will spot the trickiness.
+Fixes: f3a059219bc7 ("irqchip/gic-v4.1: Ensure mutual exclusion between vPE affinity change and RD access")
+Signed-off-by: Kunkun Jiang <jiangkunkun@huawei.com>
+Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
+Signed-off-by: Nianyao Tang <tangnianyao@huawei.com>
+---
+ drivers/irqchip/irq-gic-v3-its.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-I suspect we could clear that bit unconditionally, if the branch is=20
-a concern. The code seems to assume that buffers it gets are 8B aligned
-already, regardless of CONFIG_MACB_USE_HWSTAMP.
+diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+index 586271b8aa39..041f06922587 100644
+--- a/drivers/irqchip/irq-gic-v3-its.c
++++ b/drivers/irqchip/irq-gic-v3-its.c
+@@ -3943,13 +3943,17 @@ static void its_vpe_send_inv(struct irq_data *d)
+ 
+ 	if (gic_rdists->has_direct_lpi) {
+ 		void __iomem *rdbase;
++		unsigned long flags;
++		int cpu;
+ 
+ 		/* Target the redistributor this VPE is currently known on */
+-		raw_spin_lock(&gic_data_rdist_cpu(vpe->col_idx)->rd_lock);
+-		rdbase = per_cpu_ptr(gic_rdists->rdist, vpe->col_idx)->rd_base;
++		cpu = vpe_to_cpuid_lock(vpe, &flags);
++		raw_spin_lock(&gic_data_rdist_cpu(cpu)->rd_lock);
++		rdbase = per_cpu_ptr(gic_rdists->rdist, cpu)->rd_base;
+ 		gic_write_lpir(d->parent_data->hwirq, rdbase + GICR_INVLPIR);
+ 		wait_for_syncr(rdbase);
+-		raw_spin_unlock(&gic_data_rdist_cpu(vpe->col_idx)->rd_lock);
++		raw_spin_unlock(&gic_data_rdist_cpu(cpu)->rd_lock);
++		vpe_to_cpuid_unlock(vpe, flags);
+ 	} else {
+ 		its_vpe_send_cmd(vpe, its_send_inv);
+ 	}
+-- 
+2.27.0
 
-Drivers commonly save the DMA address to a SW ring (here I think
-rx_skbuff plays this role but only holds single ptr per entry)
-so that they don't have to access potentially uncached descriptor
-ring. But that'd be too large of a change for a fix.
