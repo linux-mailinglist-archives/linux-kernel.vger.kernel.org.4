@@ -2,70 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D2166DFC14
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 19:00:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CCCF6DFBF3
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbjDLRAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 13:00:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36524 "EHLO
+        id S229963AbjDLQ4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 12:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbjDLRAV (ORCPT
+        with ESMTP id S229814AbjDLQ4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 13:00:21 -0400
-Received: from out203-205-221-210.mail.qq.com (out203-205-221-210.mail.qq.com [203.205.221.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94AD58A4D
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:59:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1681318488;
-        bh=6c10UxlH4LkCp7R0rruyDMs0C8VPTPNLjrwdbwagOIo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=nnlqgtF9QxMjCbUOFVb7qpnWe0J2Qnpn07cfNc6M6xdZPIZzy/Jbi7ShrlTiidenJ
-         p9UdvVvVGZWwxOVDiVunhKoXb3Yh/jn12koyu3A9PKJfv6zxP205f+QF/SyOqmToCm
-         DLWFxNrHxQtw9CSpjSTsHT1R9nPOycuhqX3gMy0w=
-Received: from [192.168.31.3] ([106.92.97.36])
-        by newxmesmtplogicsvrsza10-0.qq.com (NewEsmtp) with SMTP
-        id DAD82049; Thu, 13 Apr 2023 00:54:45 +0800
-X-QQ-mid: xmsmtpt1681318485ty9emqff1
-Message-ID: <tencent_C3E900CCD37EF2CF49553BD4AC4120932B08@qq.com>
-X-QQ-XMAILINFO: MmpliBmRb3iCqCvITsarzp+v+tIeagWROsQ1DJ7NJ9KtkOzodvs4qVMGYGQ696
-         eYC36mQyTeUUfUGQcK5uAsiox8fa94FlhZ9PNeg83k4lgNlOm6LqCw0FH/aWheQ1X4hhneJFkh/V
-         k77icLT4MMTKvAoOcTBheDoWtXAFoszDw+HwLqWkA/Ti52B/FCCzdrVDNHleYsTx7ckAWDJNSTKZ
-         i4WPuuo/Fbhe+oH5OVhWx4wHHYXzLnxFTl5Ez+dEjCwDSexHEufpHBU2X+WJPbgrdf2J1BuxAWB8
-         qsaveCJrCeFJ4TuIz+IYEY+cBbrZoeTCjls2zBOWNubEQEvl/iIayrjnOiwnUOf7Rv2v/RhDQZMM
-         8j7axXGMloDfWGDgI5fV45SzintR/ROyuDGizSl6Ev+F3G4MR+IkKiZpg5cZBCSTCGdGVlrV7jDj
-         /InsDex6URvSEvSNNq42XBwtXvCckEDbhGR4ApVfRQRo0JytxhWaIv1o71RcrCdyoJDKtlGGEhcr
-         edfbpDcMmSgK55AyqU7U7mblqQAqmkWL5xkz2niZ2gIivWc8bWKYmCPrTjxbwpRMZJ8HxcFoyu90
-         JWy1jtnnO/MBGvOIl25tzsPz5Z4yBbxOFEAGOlNgEXj9tAYTtT55M5VZ85tvtv+QNPfOP0T/UJiR
-         IFR42tYlpZahjOuiZz0vPRQp01ENC6dSxCpuDv0Abhukq5RpgUtE/y/6JlhLg83/1JCQw84C+GRV
-         0DzXYkZiwsP+BXIS5Njqk+WrbFh2UC5vx6AEkHr/YT0+0EECo6bsgBIYMNN+EqvbmjXEY0Ea+VtF
-         UBE3oV2zdN4wuNOchAUZUh280oq/L9beFFAr3HCL3s+GJKlDLocCAt/EopE/uIgjKFbgXP/oBKNU
-         aijRNTRbr4EwgMuIgN+5kPR5dxGPeR81Aq5ZDPqE+iCPWQddrIZ/rzSWRZR4ZSYdLUVtKrkXOYYs
-         ZfEZUc1oq4w+krN0TZg86grLr13Esl7eaZBHRDx41iQe7iPW1h8Q==
-X-OQ-MSGID: <c0e2d8ec-37f4-166b-9929-89616a883581@foxmail.com>
-Date:   Thu, 13 Apr 2023 00:54:43 +0800
+        Wed, 12 Apr 2023 12:56:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF78A729D;
+        Wed, 12 Apr 2023 09:55:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA9D6631EE;
+        Wed, 12 Apr 2023 16:55:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1CDAC433EF;
+        Wed, 12 Apr 2023 16:55:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681318501;
+        bh=ut+9zKLRjX+MsVAyakcnRhLhXAlTYjnQGu1Y4AZSi7c=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Nsa2K5wTsw+L5kWNkQxzBrt77qVWU/FH19fHyIGSf2xQkkeEPvf119Ie50/AsIap3
+         XtagNJwD5B0jmanvO6FqgYgpj2ynchDg4XOjdrEFAKgW+imDV4mshYXZoSIXKWuFsn
+         XOZnw3I43EFkFPVE0WD82GQL4NCAY3xD5z6h58x3sz3DKjuQnkVHZ+Dt2PGweQmMcn
+         aElWx7deAB50EbRwFpnsrQbZxjrI2WbxENejqOSl6MzdrUY1eumReDC7jP3W4pZWJS
+         ojxxLsJoDCixFdnMOCo1PZzBjuEmahErdj/c0tMQLtq6tmZYYx6PexXbPkV0BhmmU4
+         MXrF06eUfL3Eg==
+Date:   Wed, 12 Apr 2023 22:24:57 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     dma <dmaengine@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL]: dmaengine fixes for v6.3
+Message-ID: <ZDbiYVOQFNzdnq24@matsya>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.1
-Subject: Re: [PATCH] mm: compaction: optimize compact_memory to comply with
- the admin-guide
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Mel Gorman <mgorman@techsingularity.net>,
-        Oscar Salvador <osalvador@suse.de>,
-        William Lam <william.lam@bytedance.com>,
-        Fu Wei <wefu@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <tencent_FD958236269FD3A7996FFCF29E9BAA4EA809@qq.com>
- <20230411134801.a4aadef5aba0f51e0d44bb7a@linux-foundation.org>
-From:   Wen Yang <wenyang.linux@foxmail.com>
-In-Reply-To: <20230411134801.a4aadef5aba0f51e0d44bb7a@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
-        FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="15JBCVxE94na5Eta"
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -73,52 +53,76 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-在 2023/4/12 04:48, Andrew Morton 写道:
-> On Wed, 12 Apr 2023 02:24:26 +0800 wenyang.linux@foxmail.com wrote:
->
->> For the /proc/sys/vm/compact_memory file, the admin-guide states:
->> When 1 is written to the file, all zones are compacted such that free
->> memory is available in contiguous blocks where possible. This can be
->> important for example in the allocation of huge pages although processes
->> will also directly compact memory as required
->>
->> But it was not strictly followed, writing any value would cause all
->> zones to be compacted. In some critical scenarios, some applications
->> operating it, such as echo 0, have caused serious problems.
-> Really?  You mean someone actually did this and didn't observe the
-> effect during their testing?
+--15JBCVxE94na5Eta
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for your reply.
+Hello Linus
 
-Since /proc/sys/vm/compact_memory has been well documented for over a 
-decade:
+Please pull couple of fixes in apple driver, core and kernedoc fix for
+dmaengine subsystem for v6.3
 
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/Documentation/admin-guide/sysctl/vm.rst#n109
+The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
-it is believed that only writing 1 will trigger trigger all zones to be 
-compacted.
+  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
 
-Especially for those who write applications, they may only focus on 
-documentation and generally do not read kernel code.  Moreover, such 
-problems are not easily detected through testing on low pressure machines.
+are available in the Git repository at:
 
-Writing any meaningful or meaningless values will trigger it and affect 
-the entire server:
+  git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git tags/dm=
+aengine-fix-6.3
 
-# echo 1 > /proc/sys/vm/compact_memory
-# echo 0 > /proc/sys/vm/compact_memory
-# echo dead > /proc/sys/vm/compact_memory
-# echo "hello world" > /proc/sys/vm/compact_memory
+for you to fetch changes up to d9503be5a100c553731c0e8a82c7b4201e8a970c:
 
-The implementation of this high-risk operation may require following the 
-admin-guides.
+  dmaengine: apple-admac: Fix 'current_tx' not getting freed (2023-03-31 18=
+:17:21 +0530)
 
---
+----------------------------------------------------------------
+dmaengine fixes for v6.3
 
-Best wishes,
+- apple admac driver fixes for current_tx, src_addr_widths and global'
+  interrupt flags handling
+- xdma kerneldoc fix
+- core fix for use of devm_add_action_or_reset
 
-Wen
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      dmaengine: Actually use devm_add_action_or_reset()
 
+Martin Povi=C5=A1er (3):
+      dmaengine: apple-admac: Handle 'global' interrupt flags
+      dmaengine: apple-admac: Set src_addr_widths capability
+      dmaengine: apple-admac: Fix 'current_tx' not getting freed
 
->> It has been slightly optimized to comply with the admin-guide.
+Yang Li (1):
+      dmaengine: xilinx: xdma: Fix some kernel-doc comments
 
+ drivers/dma/apple-admac.c | 20 +++++++++++++++++---
+ drivers/dma/dmaengine.c   |  2 +-
+ drivers/dma/xilinx/xdma.c |  2 +-
+ 3 files changed, 19 insertions(+), 5 deletions(-)
+
+--=20
+~Vinod
+
+--15JBCVxE94na5Eta
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEE+vs47OPLdNbVcHzyfBQHDyUjg0cFAmQ24mAACgkQfBQHDyUj
+g0dLbhAAkZIGIihQhXrP3aquxAkAhs7uQ3138boXX5bfipVxcKfVgiFZRBnjx5Z4
+XRzVqzmk4xTqZkwMwtIpGt76UsmLC7KqRIrJ3/gZbZUhS1CMSnLlgSpZSnRNN0Wl
+BEO/L1NA4QBdIqzss5EjA/H5yH5f4ghIRzvvdWghIqFuXNw7IChjMOvff/AmD+Ra
+0OXhfoQeKo70mpjvtVYIcgZXW6lDQhusIH7rhMoBn54N/9VQUHCO3EiewexqW0+1
+xke9sJTKOuQqeh1ykceyhdTkYxaBKwHMGCa3AupWGr2qgmp2mm7pL7NgA4TOkPzD
+/g31L6gNOjUMMtZQLBfe1/3YGnHNsuMJr8NnuDXXYGfdYFUyvZ/nF7iDLY8RyUMW
+q80UC4PAltw2ytiwy2RXvsd/+qEJma1cjdhXSWgbUfOLF6hhpVB1diyt85LxIYIh
+poWBNHoe5LVW1rTY1Vyg9RDsaD9v0Ny7R6XTROg5mrbJagDklBdvZON7jzfuoXX1
+X+Vl8QNT1keqiLP7zv9ESgB3f+MFu4EXL2FgSQCuBAfdh7Pxmt3AqE/aB2iS6gM/
+cGz1os7LOCKbINUkHBtYtVsov0Fwztd5Y/ZCQSJW8EfXBVQPTE8dBTmNQbJNOn5E
+tAksjmUdw8vrAPYlvEIG1kBYCiAxZo4+CEJthSAuhjSBlKzPlqk=
+=YQNT
+-----END PGP SIGNATURE-----
+
+--15JBCVxE94na5Eta--
