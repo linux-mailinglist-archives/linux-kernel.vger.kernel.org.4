@@ -2,169 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77D526DF961
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 17:11:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEDCC6DF966
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 17:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230325AbjDLPLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 11:11:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38172 "EHLO
+        id S231159AbjDLPMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 11:12:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbjDLPLc (ORCPT
+        with ESMTP id S230345AbjDLPMM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 11:11:32 -0400
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC2759F3
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 08:11:28 -0700 (PDT)
-Received: from [192.168.0.2] (ip5f5aebd0.dynamic.kabel-deutschland.de [95.90.235.208])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id C14D560027FE8;
-        Wed, 12 Apr 2023 17:11:26 +0200 (CEST)
-Message-ID: <21a09968-296b-5b21-8079-6d9d4e0769d4@molgen.mpg.de>
-Date:   Wed, 12 Apr 2023 17:11:26 +0200
+        Wed, 12 Apr 2023 11:12:12 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C4765AA
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 08:12:08 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id my14-20020a17090b4c8e00b0024708e8e2ddso995517pjb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 08:12:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1681312328; x=1683904328;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:subject:cc:to:from:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=G+2dE/XzSoYgXLKmNcRjV06GDc4+0/b0Vl1y/hE9n7M=;
+        b=aeDFGpvbhptI26N7c0q6p8N0elzrhrH4jXsXeTNEjUyEmrYyXyguS0uqTeAQjP4Xiu
+         qdW1W55Dxz+ZLoGpJW6kOy66QNh2ekD+py7oe7R6tIR1j5Y/Cvcgeo8T0l2JKRmHvNLJ
+         j1WZnXp081ZVJbRr2ZvT1E4bX7MyYb2M8Ki3Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681312328; x=1683904328;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:subject:cc:to:from:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=G+2dE/XzSoYgXLKmNcRjV06GDc4+0/b0Vl1y/hE9n7M=;
+        b=n5aCXVVTQzSvWjOgHhhgmDHuutsPJ9Vh7kLDIdGiOtIltVeKqilhkNvqCK761cSYGA
+         HT8b61XOadgDKi9nvNPG9gQcXbq9ljVGDN4OOK7iOkrQf/vM6G9yjoJoiSL01nlivEEw
+         NBCOlkE47UU/RZrzv0sj6feyunG18pW3jWSFrfWLpKHKySmqDOq3nClFbeXh61I3O98s
+         +el0CnfJDI2fiS9nnkglk+zIVudAPdJVweCjsWXZRFhTczqwCo2U63VT0RxdVQjekWDp
+         v06k5cf1e8zlUkAY+OgRml08i+HKChd69nBEnwhQmuOAij/aatdZE1CowTjlAvcYvv23
+         pksA==
+X-Gm-Message-State: AAQBX9dLgw2QaYgKY82p8pkL5YTo0n0ucANuRZBGvRvrl0SQyaFMWRxm
+        obQMZjI2U45p0HnNdGaUMQbD3PR9GCYlQXAlM3w=
+X-Google-Smtp-Source: AKy350YBEJPE8oxKW+WKrzBNuJQ82N/lSby57TJKNApeGFAafpixV3EqtqR6r0kXgUhHbCjyxU4xFA==
+X-Received: by 2002:a05:6a20:b047:b0:db:6026:4393 with SMTP id dx7-20020a056a20b04700b000db60264393mr18616114pzb.59.1681312327946;
+        Wed, 12 Apr 2023 08:12:07 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id u20-20020aa78494000000b005a8bf239f5csm5518679pfn.193.2023.04.12.08.12.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Apr 2023 08:12:07 -0700 (PDT)
+Message-ID: <6436ca47.a70a0220.e83cf.adf4@mx.google.com>
+X-Google-Original-Message-ID: <202304120811.@keescook>
+Date:   Wed, 12 Apr 2023 08:12:06 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Fangrui Song <maskray@google.com>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-hardening@vger.kernel.org, Tom Rix <trix@redhat.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Miroslav Benes <mbenes@suse.cz>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH] ubsan: remove cc-option test for UBSAN_TRAP
+References: <20230407215406.768464-1-ndesaulniers@google.com>
+ <20230407215824.GA1524475@dev-arch.thelio-3990X>
+ <CAFP8O3+YzvwgeSS_GvU3oTtxunyUm8qMaAnV3Mt-ezTsxZ=Q0Q@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Content-Language: en-US
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: AMD EPYC 25 (19h): Hardware Error: Machine Check: 0 Bank 17:
- d42040000000011b
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAFP8O3+YzvwgeSS_GvU3oTtxunyUm8qMaAnV3Mt-ezTsxZ=Q0Q@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Linux folks,
+On Tue, Apr 11, 2023 at 05:12:24PM -0700, Fangrui Song wrote:
+> On Fri, Apr 7, 2023 at 2:58 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > On Fri, Apr 07, 2023 at 02:54:06PM -0700, Nick Desaulniers wrote:
+> > > -fsanitize-undefined-trap-on-error has been supported since GCC 5.1 and
+> > > Clang 3.2.  The minimum supported version of these according to
+> > > Documentation/process/changes.rst is 5.1 and 11.0.0 respectively. Drop
+> > > this cc-option check.
+> > >
+> > > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> >
+> > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> >
+> > As an aside, we should really consider having some standard format of
+> > comment around cc-option checks so that we can easily remove them when
+> > they become stale...
+> >
+> > > ---
+> > > Masahiro, Kees: get_maintainer.pl leaves much to be desired for this
+> > > file. Can one of you please pick this up?
+> > >
+> > >  lib/Kconfig.ubsan | 1 -
+> > >  1 file changed, 1 deletion(-)
+> > >
+> > > diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
+> > > index fd15230a703b..0e7ad0782399 100644
+> > > --- a/lib/Kconfig.ubsan
+> > > +++ b/lib/Kconfig.ubsan
+> > > @@ -15,7 +15,6 @@ if UBSAN
+> > >  config UBSAN_TRAP
+> > >       bool "On Sanitizer warnings, abort the running kernel code"
+> > >       depends on !COMPILE_TEST
+> > > -     depends on $(cc-option, -fsanitize-undefined-trap-on-error)
+> > >       help
+> > >         Building kernels with Sanitizer features enabled tends to grow
+> > >         the kernel size by around 5%, due to adding all the debugging
+> > > --
+> > > 2.40.0.577.gac1e443424-goog
+> > >
+> >
+> 
+> -fsanitize-undefined-trap-on-error is a legacy option from 2013 when
+> -fcatch-undefined-behavior instead of -fsanitize=undefined enabled
+> UBSan.
+> On the Clang side, http://reviews.llvm.org/D10464 added
+> -fsanitize-trap= in June 2015.
+> It's best to use -fsanitize-trap=undefined and avoid uses of
+> -fsanitize-undefined-trap-on-error.
 
+But that's Clang-only. -fsanitize-undefined-trap-on-error works for both
+GCC and Clang.
 
-On a Dell PowerEdge R7525 with AMD EPYC 7763 64-Core Processor, Linux 
-5.15.94 logs the machine check exceptions (MCE) below:
-
-```
-[5154053.127240] mce: [Hardware Error]: Machine check events logged
-[5154053.133711] mce: [Hardware Error]: CPU 3: Machine Check: 0 Bank 17: 
-d42040000000011b
-[5154053.141948] mce: [Hardware Error]: TSC 0 ADDR b3cbdbbc0 PPIN 
-2b615bef7f48098 SYND 6bd210000a801002 IPID 9600650f00
-[5154053.152893] mce: [Hardware Error]: PROCESSOR 2:a00f11 TIME 
-1679213602 SOCKET 0 APIC 6 microcode a001173
-[5608214.292978] mce: [Hardware Error]: Machine check events logged
-[5608214.299771] mce: [Hardware Error]: CPU 3: Machine Check: 0 Bank 17: 
-d42040000000011b
-[5608214.308066] mce: [Hardware Error]: TSC 0 ADDR b3cbdbbc0 PPIN 
-2b615bef7f48098 SYND 6bd210000a801002 IPID 9600650f00
-[5608214.319102] mce: [Hardware Error]: PROCESSOR 2:a00f11 TIME 
-1679667766 SOCKET 0 APIC 6 microcode a001173
-[5707500.646385] mce: [Hardware Error]: Machine check events logged
-[5707500.652973] mce: [Hardware Error]: CPU 3: Machine Check: 0 Bank 17: 
-d42041000000011b
-[5707500.661238] mce: [Hardware Error]: TSC 0 ADDR b3cbdbbc0 PPIN 
-2b615bef7f48098 SYND 6bd210000a801002 IPID 9600650f00
-[5707500.672271] mce: [Hardware Error]: PROCESSOR 2:a00f11 TIME 
-1679767053 SOCKET 0 APIC 6 microcode a001173
-[5810063.788078] mce: [Hardware Error]: Machine check events logged
-[5810063.794698] mce: [Hardware Error]: CPU 3: Machine Check: 0 Bank 17: 
-d42041000000011b
-[5810063.803126] mce: [Hardware Error]: TSC 0 ADDR b3cbdbbc0 PPIN 
-2b615bef7f48098 SYND 6bd210000a801002 IPID 9600650f00
-[5810063.814264] mce: [Hardware Error]: PROCESSOR 2:a00f11 TIME 
-1679869617 SOCKET 0 APIC 6 microcode a001173
-```
-
-Does GNU/Linux offer a way to decode this automatically?
-
-
-Kind regards,
-
-Paul
-
-
-PS:
-
-```
-$ lscpu
-Architecture:            x86_64
-   CPU op-mode(s):        32-bit, 64-bit
-   Address sizes:         48 bits physical, 48 bits virtual
-   Byte Order:            Little Endian
-CPU(s):                  256
-   On-line CPU(s) list:   0-255
-Vendor ID:               AuthenticAMD
-   Model name:            AMD EPYC 7763 64-Core Processor
-     CPU family:          25
-     Model:               1
-     Thread(s) per core:  2
-     Core(s) per socket:  64
-     Socket(s):           2
-     Stepping:            1
-     Frequency boost:     enabled
-     CPU max MHz:         3529.0520
-     CPU min MHz:         1500.0000
-     BogoMIPS:            4890.81
-     Flags:               fpu vme de pse tsc msr pae mce cx8 apic sep 
-mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx 
-mmxext fxsr_o
-                          pt pdpe1gb rdtscp lm constant_tsc rep_good 
-nopl nonstop_tsc cpuid extd_apicid aperfmperf rapl pni pclmulqdq monitor 
-ssse3 fma
-                           cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt 
-aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy abm 
-sse4a mi
-                          salignsse 3dnowprefetch osvw ibs skinit wdt 
-tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpb cat_l3 
-cdp_l3 in
-                          vpcid_single hw_pstate ssbd mba ibrs ibpb 
-stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 invpcid cqm rdt_a rdseed adx 
-smap clflus
-                          hopt clwb sha_ni xsaveopt xsavec xgetbv1 
-xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local clzero irperf 
-xsaveerptr rd
-                          pru wbnoinvd amd_ppin arat npt lbrv svm_lock 
-nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter 
-pfthreshold
-                           v_vmsave_vmload vgif v_spec_ctrl umip pku 
-ospke vaes vpclmulqdq rdpid overflow_recov succor smca
-Virtualization features:
-   Virtualization:        AMD-V
-Caches (sum of all):
-   L1d:                   4 MiB (128 instances)
-   L1i:                   4 MiB (128 instances)
-   L2:                    64 MiB (128 instances)
-   L3:                    512 MiB (16 instances)
-NUMA:
-   NUMA node(s):          8
-   NUMA node0 CPU(s):     0-15,128-143
-   NUMA node1 CPU(s):     16-31,144-159
-   NUMA node2 CPU(s):     32-47,160-175
-   NUMA node3 CPU(s):     48-63,176-191
-   NUMA node4 CPU(s):     64-79,192-207
-   NUMA node5 CPU(s):     80-95,208-223
-   NUMA node6 CPU(s):     96-111,224-239
-   NUMA node7 CPU(s):     112-127,240-255
-Vulnerabilities:
-   Itlb multihit:         Not affected
-   L1tf:                  Not affected
-   Mds:                   Not affected
-   Meltdown:              Not affected
-   Mmio stale data:       Not affected
-   Retbleed:              Not affected
-   Spec store bypass:     Mitigation; Speculative Store Bypass disabled 
-via prctl and seccomp
-   Spectre v1:            Mitigation; usercopy/swapgs barriers and 
-__user pointer sanitization
-   Spectre v2:            Mitigation; Retpolines, IBPB conditional, 
-IBRS_FW, STIBP always-on, RSB filling, PBRSB-eIBRS Not affected
-   Srbds:                 Not affected
-   Tsx async abort:       Not affected
-```
+-- 
+Kees Cook
