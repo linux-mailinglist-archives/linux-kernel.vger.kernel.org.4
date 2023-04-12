@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8EC76E00BC
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 23:22:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 262C56E00BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 23:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbjDLVWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 17:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53142 "EHLO
+        id S229980AbjDLVWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 17:22:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjDLVWg (ORCPT
+        with ESMTP id S229711AbjDLVWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 17:22:36 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C5F19AB
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 14:22:35 -0700 (PDT)
+        Wed, 12 Apr 2023 17:22:39 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025921FFB
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 14:22:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1681334517; i=j.neuschaefer@gmx.net;
-        bh=2NkEXNzdSvLHDezuc3e95Ppy4PB6xfiWobcIdlZ2Mq0=;
+        t=1681334525; i=j.neuschaefer@gmx.net;
+        bh=O8EbCtqxtHYhZl3Wus9zpBDqTyNgSWv3QZ/g5KBbeZI=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=heNVrkO8V0JA6m6qAVX76ayzgy0jtcDI1MX8C7Uaw1rjIM6LwY2sKB5xugYz/DCjs
-         EHjy05Y8y7C0T6mTgOFZ/Y7sF6K8CSerenKbM+WlcoNtTWIhfYsvLXCxyoNdZB3YdW
-         WvMqRZpixnHS6GkmzVSqSOpKeoUqHIyJysYaR/Y070FZQu7JbNZ2HFnYxjDEQ6jxR0
-         HuDvEOFIdLwHUwgS1a5mO5BZ207gY/+py1+idDeYXkonKeBgOdeVukjt3GcrQPLk96
-         +r8iSYHYYonhoaq+ru9UbK+tK6awcDk6+r2AajX8qxPD/NTEwDFV0shpMjszUzCK86
-         3doeYafMk3RFA==
+        b=OEA1FhescqUfkOmuDqtkrGYkKZCy/DMEnk/LaDmgvBNs6cqpozk4B5wSbdVg4eX+0
+         jA55Hn+8mgTDiLiJxRBXYzrhFkxTydPaae1mBbv9EbLrqTZdeeWYTRdDeA2ysIHdWe
+         T2au7ZXelcTcVcaqof0jmgi2RFJ3ed08v4XSOUmqSy2YPWT6FEYzFJDBE66qLlX55A
+         G8gUPrynRofubUWeiO5vh20659JGdvj+8KHG/VPf2VS6bJ027Hv9i5RSjdo/5QZ4fC
+         Jl1N5WtMV8ONYplNfVOxh77gD05BSzzrBsqyp4ZJf/e7cO1qJFFJOGGgoDoehmWX6a
+         EffFTMVy6YMBQ==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([185.66.193.41]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MqJqD-1q80IA0yBP-00nSaK; Wed, 12
- Apr 2023 23:21:57 +0200
+Received: from probook ([185.66.193.41]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N63RQ-1qShXR3GeW-016N3I; Wed, 12
+ Apr 2023 23:22:05 +0200
 From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Russell King <linux@armlinux.org.uk>,
@@ -49,37 +49,37 @@ Cc:     Russell King <linux@armlinux.org.uk>,
         linux-kernel@vger.kernel.org,
         "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
         Kees Cook <keescook@chromium.org>
-Subject: [PATCH 2/3] ARM: compressed: Bump MALLOC_SIZE to 128 KiB
-Date:   Wed, 12 Apr 2023 23:21:25 +0200
-Message-Id: <20230412212126.3966502-3-j.neuschaefer@gmx.net>
+Subject: [PATCH 3/3] ARM: compressed: Enable ZSTD compression
+Date:   Wed, 12 Apr 2023 23:21:26 +0200
+Message-Id: <20230412212126.3966502-4-j.neuschaefer@gmx.net>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230412212126.3966502-1-j.neuschaefer@gmx.net>
 References: <20230412212126.3966502-1-j.neuschaefer@gmx.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:wZAOHj/rfJsRhnvDlu5y2Pqf209q3GQxBJDNPOKh5N5aJE/28+u
- aiTYOIGQtqjo7mKUL2Ge+mmrO+v1wx2Ilp0Bdx3HscAKyzz1xnkU6JULKEApP5ucS3xblXQ
- M60hb/DFKUwIcjooNEcWjrBxnxOMlNYwgJ1WtCxlL7FpUo91a9QZIksmXVCkWneYb4k/kGV
- I8tTOyyrv5gc2q/o+z6Iw==
-UI-OutboundReport: notjunk:1;M01:P0:nNpt2s/KZB4=;FZwzPIEsOrYhKsQ2vHPC+bc7IdD
- xn2kjP1QkVU+suszm+o38bgUmA2AukMfClil/xRcfNU2btUGsh9K8lS7fELArAzWY9Ru3LntF
- bIjTwx1icmJ8KOHFE/aAJceVd9RMNrFfKuWMBaYBcR5S6HC2ZLPy0ee68z6tbPwh0QQAY8u7K
- VYY2ec2QzkbpGGmNov45aH9YBwFoHN3XAa+Po1Wx+V9Kz06d2SGzPhz0wmSVJiyG4682IzVmh
- bxpIKxiHbg3oA+Zlz3LteC832eimhRyrxNpz22Ld7dYzEfNae8ggZnMG9sIl9kjdUnZRQZHkO
- 1UW/PVZKY/C2+n0GfV0+/UkMuDXPmLL+4ywjD5ZLNnTbIpJQDolumKDG+1f2xH48hBf4H7BDl
- dM62mia8CRnL3feQtFWaL3JsMeA0X/KrlBJDTwryl7Ap66DmtP3jthw2GMJYJIg17Bn8/LA8Z
- Va8xp0GzI1PirUYfEfD9L3qO5ueXcr6nQz3fDSAkeyifNMwKAqhmAiFgZwylwtKJCWmGTdac1
- HZMDqVTTYq3C6XFCvDqowArHekDGllKf0heEgbuhhefNBKV14NTcbX03JldFgqeofXWYN+X2H
- O35OHbalTd7UGKXmgQDb93UHqw6tmj+PQZsIMEnX+bvU79Zvfxf9KCEZ0WcBCGlzVvNOvyoiF
- K3ZTVQnkBGbtlx5GqChTVFkymcQ6GyDsySGlNix2iKFgdPw05YmrWiN4Raq/0t1RP0p63HkMh
- 8+z3/mjSPKIpLT4AXMC0dICmOzEoJBYQSOkrLSJqyKiS8gYshf7L0xJQzFDAhzvs773YgZhEG
- x/IqPFS3C8HFJShjcy8iI4WUNuR9ggypmZNKxF8eq0U2bOQ2SMJB6x3D3WumR4vFcqukoTZk2
- GcEeVJEeJI63J9Prl7eLOGdcXbZk5qdE982Qs4lv9B3k7ORIN26wLOdFnkvVCiz4nX3qbJ73u
- RXX5ok5RznmjNVLEJADdazInIMY=
+X-Provags-ID: V03:K1:NLKJGLSHU/mKfwCFI6t1irU5z5u/MoO8jr3NJmsYweqgxdI5Qej
+ 8HKkQD920FU6M/3UgPqB3iyyeKTUracoZXdCvl6zR9JR8iCBQopsrIkYbHNi829tR8F85qN
+ gfcXNwiXoc7xB1PZcoSLxNCks6kZ4E9WWqCJxk/io62ncpopqYU+SGyVLaLVgRb6vXLg/q0
+ nlxUZapXHoRUQp5KeUkCg==
+UI-OutboundReport: notjunk:1;M01:P0:7C88/EJwyYk=;EeZbn8oZQQ/XlBkmsNhLXC3DX7O
+ R87+ukUz9LEx9YhSUTia1vUhBfnlR+q/60srJ9GvSFs3KRBjshvC2NEXiM+VR6mKcx5zKDJGv
+ p08RzsUUX0moiNRGbI4unwoyVbI+tI93CkBjnl8PAGA7QRRK0y6SJWoDU9Z6+BXglJ/sLlvKY
+ EaHPhCyVSyMPTxMDDdfcpd8SSksT5Q91jf2+YQBm/c1XYi/M5Lk4HFxw/bARvBqEYaqe8ZOgy
+ Pt309QyAELbHcVzb/45JWFFsKWO5Jr8LkhAMDaULrGq+E+PBZskNxU3h4O3fxbC4xcjHHhAGu
+ ihSPkV7N88zZL+B6EeNYQYn3s8ayZU8PV9AuCvIWH0pNJEVa9b7CkH66XbkJJDHmhF1Rb0aYP
+ zXzk+Q6pSnSiV4mb7x0IAZcNIw6PtbLnkGQ11w0yJEW4PtthEZmL+opLCg2ddmRmZwQ8GYVch
+ K1ED8gy3/+lWlpp31ahWDrq/7jZdlcdDYH0pX+IGtAVBVtY3xEqK91270ofa6CJGr9KylJ4zv
+ YYTCFR+6ffFOkvpqnw9rEtN0tk65MjseXOK1Cy9CVFA+CLzm9jW1S1rVvSMvuny/W69DYM2gW
+ qp/uM7ccNaBPcdpmdrYGo1EOFi+J8OVw+/qf1dJf14uliHL3T2hWP0MWIEvUl4WseV0Nui1/t
+ EZ98duNQ5kZCmiLiWc5MnmLIDvIYB7RDHzV9gJHZRXww/BGdI18S0EkE3774F4BTjifZodfgy
+ hGN73q3Tku/qeJsvWustKlGnEch6/OkzV54elWHrrYxj8ugoX9nZP+Iy5pE2A8/aMNr8myvCo
+ 1Tofwfxw2qg5xMBP24MahPlPk/HgM7JPwsjqNTQyVfCclALIHvIdgmk2TJGxGM6EyZFS6ddXx
+ nbe4+8TGXLF4Rax/CoyhO1MswNk+4dp9n2+FcBxMsZ9A/xBlSYdVKYfqy6ITGFrIlc2l2lCJp
+ eyu5pQ==
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,53 +87,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ZSTD compressor needs about 100 KiB.
+With the previous two commits, it is possible to enable ZSTD
+in the decompressor stub for 32-bit ARM.
+
+Unfortunately, ZSTD decompression has been quite slow in my tests
+(on ARM926EJ-S, ARMv5T):
+
+ - LZO:  7.2 MiB,  6 seconds
+ - ZSTD: 5.6 MiB, 60 seconds
 
 Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
 =2D--
- arch/arm/boot/compressed/Makefile | 2 +-
- arch/arm/boot/compressed/head.S   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ arch/arm/Kconfig                      | 1 +
+ arch/arm/boot/compressed/Makefile     | 3 ++-
+ arch/arm/boot/compressed/decompress.c | 4 ++++
+ 3 files changed, 7 insertions(+), 1 deletion(-)
 
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index e24a9820e12fa..065a1746a257a 100644
+=2D-- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -108,6 +108,7 @@ config ARM
+ 	select HAVE_KERNEL_LZMA
+ 	select HAVE_KERNEL_LZO
+ 	select HAVE_KERNEL_XZ
++	select HAVE_KERNEL_ZSTD
+ 	select HAVE_KPROBES if !XIP_KERNEL && !CPU_ENDIAN_BE32 && !CPU_V7M
+ 	select HAVE_KRETPROBES if HAVE_KPROBES
+ 	select HAVE_MOD_ARCH_SPECIFIC
 diff --git a/arch/arm/boot/compressed/Makefile b/arch/arm/boot/compressed/=
 Makefile
-index 2ef651a78fa2a..dec565a5b1f21 100644
+index dec565a5b1f21..55bfca154b12a 100644
 =2D-- a/arch/arm/boot/compressed/Makefile
 +++ b/arch/arm/boot/compressed/Makefile
-@@ -69,7 +69,7 @@ ZTEXTADDR	:=3D 0
- ZBSSADDR	:=3D ALIGN(8)
- endif
+@@ -81,6 +81,7 @@ compress-$(CONFIG_KERNEL_LZO)  =3D lzo_with_size
+ compress-$(CONFIG_KERNEL_LZMA) =3D lzma_with_size
+ compress-$(CONFIG_KERNEL_XZ)   =3D xzkern_with_size
+ compress-$(CONFIG_KERNEL_LZ4)  =3D lz4_with_size
++compress-$(CONFIG_KERNEL_ZSTD) =3D zstd22_with_size
 
--MALLOC_SIZE	:=3D 65536
-+MALLOC_SIZE	:=3D 131072
+ libfdt_objs :=3D fdt_rw.o fdt_ro.o fdt_wip.o fdt.o
 
- AFLAGS_head.o +=3D -DTEXT_OFFSET=3D$(TEXT_OFFSET) -DMALLOC_SIZE=3D$(MALLO=
-C_SIZE)
- CPPFLAGS_vmlinux.lds :=3D -DTEXT_START=3D"$(ZTEXTADDR)" -DBSS_START=3D"$(=
-ZBSSADDR)"
-diff --git a/arch/arm/boot/compressed/head.S b/arch/arm/boot/compressed/he=
-ad.S
-index 9f406e9c0ea6f..23fbbe94da6e8 100644
-=2D-- a/arch/arm/boot/compressed/head.S
-+++ b/arch/arm/boot/compressed/head.S
-@@ -337,7 +337,7 @@ restart:	adr	r0, LC1
- 		get_inflated_image_size	r9, r10, lr
+@@ -98,7 +99,7 @@ OBJS	+=3D lib1funcs.o ashldi3.o bswapsdi2.o
+ targets       :=3D vmlinux vmlinux.lds piggy_data piggy.o \
+ 		 head.o $(OBJS)
 
- #ifndef CONFIG_ZBOOT_ROM
--		/* malloc space is above the relocated stack (64k max) */
-+		/* malloc space is above the relocated stack (128k max) */
- 		add	r10, sp, #MALLOC_SIZE
- #else
- 		/*
-@@ -629,7 +629,7 @@ not_relocated:	mov	r0, #0
-  */
- 		mov	r0, r4
- 		mov	r1, sp			@ malloc space above stack
--		add	r2, sp, #MALLOC_SIZE	@ 64k max
-+		add	r2, sp, #MALLOC_SIZE	@ 128k max
- 		mov	r3, r7
- 		bl	decompress_kernel
+-KBUILD_CFLAGS +=3D -DDISABLE_BRANCH_PROFILING
++KBUILD_CFLAGS +=3D -DDISABLE_BRANCH_PROFILING -D__DISABLE_EXPORTS
 
+ ccflags-y :=3D -fpic $(call cc-option,-mno-single-pic-base,) -fno-builtin=
+ \
+ 	     -I$(srctree)/scripts/dtc/libfdt -fno-stack-protector \
+diff --git a/arch/arm/boot/compressed/decompress.c b/arch/arm/boot/compres=
+sed/decompress.c
+index 3d098b84ee391..2c4fd33444829 100644
+=2D-- a/arch/arm/boot/compressed/decompress.c
++++ b/arch/arm/boot/compressed/decompress.c
+@@ -59,6 +59,10 @@ extern char * strchrnul(const char *, int);
+ #include "../../../../lib/decompress_unlz4.c"
+ #endif
+
++#ifdef CONFIG_KERNEL_ZSTD
++#include "../../../../lib/decompress_unzstd.c"
++#endif
++
+ int do_decompress(u8 *input, int len, u8 *output, int outlen, void (*erro=
+r)(char *x))
+ {
+ 	return __decompress(input, len, NULL, NULL, output, outlen, NULL, error)=
+;
 =2D-
 2.39.2
 
