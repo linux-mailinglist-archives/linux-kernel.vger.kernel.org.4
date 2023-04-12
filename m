@@ -2,375 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A5B86DEFFD
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 11:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE756DF000
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 11:00:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbjDLJAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 05:00:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53246 "EHLO
+        id S231452AbjDLJAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 05:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230097AbjDLJAe (ORCPT
+        with ESMTP id S230409AbjDLJAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 05:00:34 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77698A5D0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 02:00:08 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id g3so12037780pja.2
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 02:00:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1681290006; x=1683882006;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=e9P9xEM7RdSRxDMBcqewO4fxgr78P61pTnErrKEjm/w=;
-        b=PloNgPj+ZHBVnRStPb8cJR68BkFlr5B2WyJ5xQ/fOwMYYkrjxvcCxGqqBwkyXzbRbj
-         +ansckk86HkrmiYWxlYxH6bGsNF8sOvGRRZtARTrV896KPZHMPLZFgfDmxb6+biAvJx/
-         MjyH3eSrnW0/lH8IXVT+MnE1M9EgGj65rB8Lsm+9811hoLZtSt5sjsPan4uEGAmrAuUF
-         mtq4E2E8cVhagremEGXRpXm8Hi7fGHQNUzYR0hZURerkoEJL+E+4urSsyxiR8W3L3uaR
-         Fxfq3MHR9B6IK53ErAiy8ngBbEmt92+SV3VYGoR3pw1DsMrp8z7Fz8nDmUXDZ6ENdh0B
-         tvgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681290006; x=1683882006;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e9P9xEM7RdSRxDMBcqewO4fxgr78P61pTnErrKEjm/w=;
-        b=AqOPzuhra7mFw669YJLPlr0PZrM/+5MhDynepEdaCzP7//SOnFj2VmJUVuU/8LzFHn
-         hMLiSxIJPDUlG3YwENJJok13IKpj1B9aljKB4URkWNdXahu1fdcGg/9KgQNrfsGqI1lC
-         +sHBrUTq8s2ZroCnrngJedefOCy4T7GuB9ph12+vUgiBpnOng6tycrGJAk8JZqjhm3va
-         FX44Ecbc16VUgoHv0HIs04nVxxNPUkkTy349PWue0Tv6BBLbsy0g/xPv9JPQGAceUv9k
-         VQGRmgxBEIwJlguD1z1nWdNcxWKxRlEhgNM9itfXtI1lsig65jP1gsLNdP+ndK4DXCvD
-         cNPA==
-X-Gm-Message-State: AAQBX9fEES4jTYOa903q1C6kD6vnaIfNp9jnx135biy8xWOnADn/y1vU
-        rsPxgUkJZAEN/wJ3ypEohGhuaA==
-X-Google-Smtp-Source: AKy350ZvO4vIche02QHwTb2WLYlfvLUVb765c30U3XAh8qmy7ygjeHFQv1rcghvnI3KPQEKFDt3kmw==
-X-Received: by 2002:a17:90b:1647:b0:23f:5c60:67b with SMTP id il7-20020a17090b164700b0023f5c60067bmr7575016pjb.5.1681290006342;
-        Wed, 12 Apr 2023 02:00:06 -0700 (PDT)
-Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
-        by smtp.gmail.com with ESMTPSA id t4-20020a17090a6a0400b00233afe09177sm990821pjj.8.2023.04.12.02.00.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Apr 2023 02:00:06 -0700 (PDT)
-Message-ID: <375c6a74-c664-6ecc-cdcd-20cfa4568cd1@9elements.com>
-Date:   Wed, 12 Apr 2023 14:30:04 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v3 2/2] leds: max597x: Add support for max597x
-To:     Lee Jones <lee@kernel.org>
-Cc:     Pavel Machek <pavel@ucw.cz>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org
-References: <20230328094416.3851801-1-Naresh.Solanki@9elements.com>
- <20230328094416.3851801-2-Naresh.Solanki@9elements.com>
- <20230405150706.GM8371@google.com>
-Content-Language: en-US
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-In-Reply-To: <20230405150706.GM8371@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 12 Apr 2023 05:00:46 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4919ECB;
+        Wed, 12 Apr 2023 02:00:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1681290013; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=TNYyrT4vY6sYLf8S1YBY/TEMyP0QuqVzsqGTtzvBBABiNrPM0NDskD2DCEcNlWPPjm
+    FDn8MDSTSNFhfq77p6oMHvrwRY7kUyYzLyao5hIxBAt9x1hgBIA77U9BvhqwTqlUgvSS
+    naNkpPezjEmETLWScNGvVL1hlQ9LRh+Z1pZ8KcTLOS8s0Fm53WIsoKKPxZmsdCa8a/bD
+    cmdAy65Kz5FpRtjV1gU+njbxoCAgNkBRabdjsW+iOc225tT2E90YX9nvmwuAqPv2iBcm
+    CG5N51j7AJYb77Ou0qi1VKzpIwedUPCM8KnNPRbV+M8av3EylVyTRDnzrzQY/2eMEdCk
+    18Yg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1681290013;
+    s=strato-dkim-0002; d=strato.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=/VjutI0ZUYEY9Ei7NXg8wL9n4Z6riGTDoSp4YbEhNkk=;
+    b=f+A1ZnvjndNx1J1DHJVvNo1nws/pfvvnt4Chg6Laeb8WYBi72iLLnz/wVd12USZTJm
+    f2nooNg0mER3krmEm/zXOvW2oDducYjPl935TohyisGJccmBAMfEsR4A/9+0JHIPx1fC
+    S2BVzeL9xZnIs8HaCC5MecyszyLXUvnST8PF3ALmG1mvY4cHRduOlkyVOewxzg5uGPcS
+    +d0DE8W2x+cSciUugEaTpbspYYyKBpPRF2gjTNIeWYUXdsx7trooxf0K/wm4lJ86FG+U
+    HDqpfsPPUieewQSdFRHCVgMfWo3hjm0f6gR/G/kCm8/XvH69bNgY7349Pmn5k9nKFFZo
+    Ib9Q==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1681290013;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=/VjutI0ZUYEY9Ei7NXg8wL9n4Z6riGTDoSp4YbEhNkk=;
+    b=m3VT2z9T2tcl120BvhUEqF5ZibQxYeYF9VcA0znmJ95k/+Rc0RsxjqHQN9UrkpQeB9
+    V/GTLSZ3pFVXk97n6yswnIoAK0gNQVj6laYEyZUgytMTYrwohl+koBF/riZpxuqYZDma
+    UswiqhxTv4M+GKtuYcqwSOKfBb0L6cGWIGSr516aksPlIano3vwtdvT1UAcMUL3qV3Mj
+    53mzdcIx403UdSBjJ79tqBihCC+x2wOCxNvoqp4SRffppkaxVS21FGalKXZnwhhSpR7+
+    PweeWZOVhfXC7q2L8rJFy4nVMs8zZY4n+7CNvaEwZl5vQcvlr0UBon81Z5LRxruBGUYL
+    z+/g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1681290013;
+    s=strato-dkim-0003; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=/VjutI0ZUYEY9Ei7NXg8wL9n4Z6riGTDoSp4YbEhNkk=;
+    b=qvUgf2XSOgQFiY7gIIxTLJNBriJB6iaFSUbDCPDCOo6zQJ1PFCEbZlyucnrvkEEXxd
+    axE8wxiRRTQRGRRPIRAA==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBp5hRw/qviAxtjc3/w3ZTELzCe0ZLT+GJmiExc1F+owl9gUPBewg=="
+Received: from [IPv6:2001:9e8:a5ee:ed00:57a:8fd6:b9c0:aefd]
+    by smtp.strato.de (RZmta 49.4.0 AUTH)
+    with ESMTPSA id C9fe35z3C90DMxP
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Wed, 12 Apr 2023 11:00:13 +0200 (CEST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH] drm/omap: dsi: Fix deferred probe warnings
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <20230412085044.GP11253@pendragon.ideasonboard.com>
+Date:   Wed, 12 Apr 2023 11:00:12 +0200
+Cc:     Tony Lindgren <tony@atomide.com>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sebastian Reichel <sre@kernel.org>,
+        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <64CDFAA9-4CA3-4557-9C84-E563600B810C@goldelico.com>
+References: <20230412073954.20601-1-tony@atomide.com>
+ <20230412085044.GP11253@pendragon.ideasonboard.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+X-Mailer: Apple Mail (2.3445.104.21)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lee,
 
-On 05-04-2023 08:37 pm, Lee Jones wrote:
-> On Tue, 28 Mar 2023, Naresh Solanki wrote:
-> 
->> From: Patrick Rudolph <patrick.rudolph@9elements.com>
->>
->> max597x is hot swap controller with indicator LED support.
->> This driver uses DT property to configure led during boot time &
->> also provide the LED control in sysfs.
->>
->> DTS example:
->>      i2c {
->>          #address-cells = <1>;
->>          #size-cells = <0>;
->>          regulator@3a {
->>              compatible = "maxim,max5978";
->>              reg = <0x3a>;
->>              vss1-supply = <&p3v3>;
->>
->>              regulators {
->>                  sw0_ref_0: sw0 {
->>                      shunt-resistor-micro-ohms = <12000>;
->>                  };
->>              };
->>
->>              leds {
->>                  #address-cells = <1>;
->>                  #size-cells = <0>;
->>                  led@0 {
->>                      reg = <0>;
->>                      label = "led0";
->>                      default-state = "on";
->>                  };
->>                  led@1 {
->>                      reg = <1>;
->>                      label = "led1";
->>                      default-state = "on";
->>                  };
->>              };
->>          };
->>      };
->>
->> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
->> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
->> ...
->> Changes in V3:
->> - Remove of_node_put as its handled by for loop
->> - Print error if an LED fails to register.
->> - Update driver name in Kconfig description
->> - Remove unneeded variable assignment
->> - Use devm_led_classdev_register to reget led
->> Changes in V2:
->> - Fix regmap update
->> - Remove devm_kfree
->> - Remove default-state
->> - Add example dts in commit message
->> - Fix whitespace in Kconfig
->> - Fix comment
->> ---
->>   drivers/leds/Kconfig        |  11 ++++
->>   drivers/leds/Makefile       |   1 +
->>   drivers/leds/leds-max597x.c | 112 ++++++++++++++++++++++++++++++++++++
->>   3 files changed, 124 insertions(+)
->>   create mode 100644 drivers/leds/leds-max597x.c
->>
->> diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
->> index 9dbce09eabac..60004cb8c257 100644
->> --- a/drivers/leds/Kconfig
->> +++ b/drivers/leds/Kconfig
->> @@ -590,6 +590,17 @@ config LEDS_ADP5520
->>   	  To compile this driver as a module, choose M here: the module will
->>   	  be called leds-adp5520.
->>
->> +config LEDS_MAX597X
->> +	tristate "LED Support for Maxim 597x"
->> +	depends on LEDS_CLASS
->> +	depends on MFD_MAX597X
->> +	help
->> +	  This option enables support for the Maxim MAX5970 & MAX5978 smart
->> +	  switch indication LEDs via the I2C bus.
->> +
->> +	  To compile this driver as a module, choose M here: the module will
->> +	  be called leds-max597x.
->> +
->>   config LEDS_MC13783
->>   	tristate "LED Support for MC13XXX PMIC"
->>   	depends on LEDS_CLASS
->> diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
->> index d30395d11fd8..da1192e40268 100644
->> --- a/drivers/leds/Makefile
->> +++ b/drivers/leds/Makefile
->> @@ -53,6 +53,7 @@ obj-$(CONFIG_LEDS_LP8501)		+= leds-lp8501.o
->>   obj-$(CONFIG_LEDS_LP8788)		+= leds-lp8788.o
->>   obj-$(CONFIG_LEDS_LP8860)		+= leds-lp8860.o
->>   obj-$(CONFIG_LEDS_LT3593)		+= leds-lt3593.o
->> +obj-$(CONFIG_LEDS_MAX597X)		+= leds-max597x.o
->>   obj-$(CONFIG_LEDS_MAX77650)		+= leds-max77650.o
->>   obj-$(CONFIG_LEDS_MAX8997)		+= leds-max8997.o
->>   obj-$(CONFIG_LEDS_MC13783)		+= leds-mc13783.o
->> diff --git a/drivers/leds/leds-max597x.c b/drivers/leds/leds-max597x.c
->> new file mode 100644
->> index 000000000000..83e4dfb617fb
->> --- /dev/null
->> +++ b/drivers/leds/leds-max597x.c
->> @@ -0,0 +1,112 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Device driver for leds in MAX5970 and MAX5978 IC
->> + *
->> + * Copyright (c) 2022 9elements GmbH
->> + *
->> + * Author: Patrick Rudolph <patrick.rudolph@9elements.com>
->> + */
->> +
->> +#include <linux/leds.h>
->> +#include <linux/mfd/max597x.h>
->> +#include <linux/of.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/regmap.h>
->> +
->> +#define ldev_to_maxled(c)       container_of(c, struct max597x_led, led)
->> +
->> +struct max597x_led {
->> +	struct regmap *regmap;
->> +	struct led_classdev led;
->> +	unsigned int index;
->> +};
->> +
->> +static int max597x_led_set_brightness(struct led_classdev *cdev,
->> +				      enum led_brightness brightness)
->> +{
->> +	struct max597x_led *led = ldev_to_maxled(cdev);
->> +	int ret, val = 0;
-> 
-> Why preinitialise?
-Ack. Not needed so will remove.
-> 
->> +	if (!led || !led->regmap)
->> +		return -ENODEV;
-> 
-> Can !led actually happen?
-Ack. Will remove !led .
-> 
->> +	val = !brightness ? BIT(led->index) : 0;
-> 
-> Perhaps a comment?
-Sure. Will add "Set/Clear Led index bit"
-> 
->> +	ret = regmap_update_bits(led->regmap, MAX5970_REG_LED_FLASH, BIT(led->index), val);
->> +	if (ret < 0)
->> +		dev_err(cdev->dev, "failed to set brightness %d\n", ret);
-> 
-> '\n'
-Ack
-> 
->> +	return ret;
->> +}
->> +
->> +static int max597x_setup_led(struct device *dev, struct regmap *regmap, struct device_node *nc,
->> +			     u32 reg)
->> +{
->> +	struct max597x_led *led;
->> +	int ret;
->> +
->> +	led = devm_kzalloc(dev, sizeof(struct max597x_led),
->> +			   GFP_KERNEL);
-> 
-> Consistently break at 100-chars please.
-> 
-> You have lines wayyyy longer than this elsewhere.
-Ack. Will align with 100-chars. Thanks
-> 
->> +	if (!led)
-> 
-> 'led' is confusing.  Either this or the member 'led' should be changed.
-> 
-> Perhaps ddata here and cdev for the member?
-Sure.
-> 
->> +		return -ENOMEM;
->> +
->> +	if (of_property_read_string(nc, "label", &led->led.name))
->> +		led->led.name = nc->name;
->> +
->> +	led->led.max_brightness = 1;
->> +	led->led.brightness_set_blocking = max597x_led_set_brightness;
->> +	led->led.default_trigger = "none";
->> +	led->index = reg;
->> +	led->regmap = regmap;
->> +	ret = devm_led_classdev_register(dev, &led->led);
->> +	if (ret)
->> +		dev_err(dev, "Error in initializing led %s", led->led.name);
-> 
-> Drop the "in" and s/led/LED/
-Ack
-> 
->> +
->> +	return ret;
->> +}
->> +
->> +static int max597x_led_probe(struct platform_device *pdev)
->> +{
->> +	struct device_node *np = dev_of_node(pdev->dev.parent);
-> 
-> Why not have your own compatible string?
-This is leaf driver & MFD driver does has compatible string.
-> 
->> +	struct regmap *regmap = dev_get_regmap(pdev->dev.parent, NULL);
-> 
-> These "big" API calls are usually done outside of the allocation block.
-> 
-> Please move it to just above the check for !regmap.
-> 
->> +	struct device_node *led_node;
->> +	struct device_node *child;
->> +	int ret = 0;
-> 
-> Is it okay for an LED driver to not to register any LEDs?
-Yes. Usage of indication LED on the max5970/5978 is optional.
-> 
-> Perhaps -ENODEV?
-This driver is loaded only if MFD driver is included. remap is setup by 
-MFD driver & hence defer probe till MFD driver is loaded.
-> 
->> +	if (!regmap)
->> +		return -EPROBE_DEFER;
->> +
->> +	led_node = of_get_child_by_name(np, "leds");
->> +	if (!led_node)
->> +		return -ENODEV;
-> 
-> Ah, that's better.  So set ret to -ENODEV and use it here.
-Yes.
-> 
->> +	for_each_available_child_of_node(led_node, child) {
->> +		u32 reg;
->> +
->> +		if (of_property_read_u32(child, "reg", &reg))
->> +			continue;
->> +
->> +		if (reg >= MAX597X_NUM_LEDS) {
->> +			dev_err(&pdev->dev, "invalid LED (%u >= %d)\n", reg,
->> +				MAX597X_NUM_LEDS);
->> +			continue;
->> +		}
->> +
->> +		ret = max597x_setup_led(&pdev->dev, regmap, child, reg);
->> +		if (ret < 0)
->> +			dev_err(&pdev->dev, "Failed to initialize LED %u\n", reg);
-> 
-> I think you (or I) are missing the point of the previous reviews.  It's
-> not okay to error out and continue executing.  Either this is okay (you
-> can warn and carry on) or it's not (return an error).  Your first
-> submission suggested that this was an error.  In which case you do need
-> to return.  I think Pavel was suggesting that you should unwind
-> (de-register) before retuning, rather than leaving things in an odd
-> half-registered state.  Not that you should blindly carry on as if the
-> issue never occurred.
-I did refer to other such implementations & some have used return on 
-error & some just print on error & continue. I felt that continue 
-executing with warning(on error) is better approach.
+> Am 12.04.2023 um 10:50 schrieb Laurent Pinchart =
+<laurent.pinchart@ideasonboard.com>:
+>=20
+> Hi Tony,
+>=20
+> Thank you for the patch.
+>=20
+> On Wed, Apr 12, 2023 at 10:39:53AM +0300, Tony Lindgren wrote:
+>> We may not have dsi->dsidev initialized during probe, and that can
+>> lead into various dsi related warnings as omap_dsi_host_detach() gets
+>> called with dsi->dsidev set to NULL.
+>>=20
+>> The warnings can be "Fixed dependency cycle(s)" followed by a
+>> WARNING: CPU: 0 PID: 787 at drivers/gpu/drm/omapdrm/dss/dsi.c:4414.
+>=20
+> How can this happen ? I assume .detach() can't be called without a
+> priori successful call to .attach(), that that sets dsi->dsidev.
 
-> 
->> +	}
->> +
->> +	return ret;
->> +}
->> +
->> +static struct platform_driver max597x_led_driver = {
->> +	.driver = {
->> +		.name = "max597x-led",
->> +	},
->> +	.probe = max597x_led_probe,
->> +};
->> +
-> 
-> Remove this line.
->> +module_platform_driver(max597x_led_driver);
->> +
->> +MODULE_AUTHOR("Patrick Rudolph <patrick.rudolph@9elements.com>");
->> +MODULE_DESCRIPTION("MAX5970_hot-swap controller driver");
-> 
-> Odd.  I thought this was a LED driver?
-This also has LED. will update the strign to:
-MAX5970_hot-swap controller LED driver
-> 
->> +MODULE_LICENSE("GPL");
->> --
->> 2.39.1
->>
-> 
-> --
-> Lee Jones [李琼斯]
-Regards,
-Naresh
+I have a similar patch (not submitted because it looks like a =
+workaround) in our LetuxOS kernel:
+
+=
+https://git.goldelico.com/?p=3Dletux-kernel.git;a=3Dcommitdiff;h=3D0656acb=
+534439d4546b33826de62694e1df1b8ad
+
+There I had commented:
+
+dsi_init_output() called by dsi_probe() may fail. In that
+case mipi_dsi_host_unregister() is called which may call
+omap_dsi_host_detach() with uninitialized dsi->dsidev
+because omap_dsi_host_attach() was never called before.
+
+This happens if the panel driver asks for an EPROBE_DEFER.
+
+So let's suppress the WARN() in this special case.
+
+[    7.416759] WARNING: CPU: 0 PID: 32 at =
+drivers/gpu/drm/omapdrm/dss/dsi.c:4419 omap_dsi_host_detach+0x3c/0xbc =
+[omapdrm]
+[    7.436053] Modules linked in: ina2xx_adc snd_soc_ts3a227e =
+bq2429x_charger bq27xxx_battery_i2c(+) bq27xxx_battery ina2xx =
+tca8418_keypad as5013(+) omapdrm hci_uart cec palmas_pwrbutton btbcm =
+bmp280_spi palmas_gpadc bluetooth usb3503 ecdh_generic bmc150_accel_i2c =
+bmg160_i2c ecc bmc150_accel_core bmg160_core bmc150_magn_i2c bmp280_i2c =
+bmc150_magn bno055 industrialio_triggered_buffer bmp280 kfifo_buf =
+snd_soc_omap_aess display_connector drm_kms_helper syscopyarea =
+snd_soc_omap_mcbsp snd_soc_ti_sdma sysfillrect ti_tpd12s015 sysimgblt =
+fb_sys_fops wwan_on_off snd_soc_gtm601 generic_adc_battery drm =
+snd_soc_w2cbw003_bt industrialio drm_panel_orientation_quirks pwm_bl =
+pwm_omap_dmtimer ip_tables x_tables ipv6 autofs4
+[    7.507068] CPU: 0 PID: 32 Comm: kworker/u4:2 Tainted: G        W     =
+     6.1.0-rc3-letux-lpae+ #11107
+[    7.516964] Hardware name: Generic OMAP5 (Flattened Device Tree)
+[    7.523284] Workqueue: events_unbound deferred_probe_work_func
+[    7.529456]  unwind_backtrace from show_stack+0x10/0x14
+[    7.534972]  show_stack from dump_stack_lvl+0x40/0x4c
+[    7.540315]  dump_stack_lvl from __warn+0xb0/0x164
+[    7.545379]  __warn from warn_slowpath_fmt+0x70/0x9c
+[    7.550625]  warn_slowpath_fmt from omap_dsi_host_detach+0x3c/0xbc =
+[omapdrm]
+[    7.558137]  omap_dsi_host_detach [omapdrm] from =
+mipi_dsi_remove_device_fn+0x10/0x20
+[    7.566376]  mipi_dsi_remove_device_fn from =
+device_for_each_child+0x60/0x94
+[    7.573729]  device_for_each_child from =
+mipi_dsi_host_unregister+0x20/0x54
+[    7.580992]  mipi_dsi_host_unregister from dsi_probe+0x5d8/0x744 =
+[omapdrm]
+[    7.588315]  dsi_probe [omapdrm] from platform_probe+0x58/0xa8
+[    7.594542]  platform_probe from really_probe+0x144/0x2ac
+[    7.600249]  really_probe from __driver_probe_device+0xc4/0xd8
+[    7.606411]  __driver_probe_device from driver_probe_device+0x3c/0xb8
+[    7.613216]  driver_probe_device from =
+__device_attach_driver+0x58/0xbc
+[    7.620115]  __device_attach_driver from bus_for_each_drv+0xa0/0xb4
+[    7.626737]  bus_for_each_drv from __device_attach+0xdc/0x150
+[    7.632808]  __device_attach from bus_probe_device+0x28/0x80
+[    7.638792]  bus_probe_device from deferred_probe_work_func+0x84/0xa0
+[    7.645595]  deferred_probe_work_func from =
+process_one_work+0x1a4/0x2d8
+[    7.652587]  process_one_work from worker_thread+0x214/0x2b8
+[    7.658567]  worker_thread from kthread+0xe4/0xf0
+[    7.663542]  kthread from ret_from_fork+0x14/0x1c
+[    7.668515] Exception stack(0xf01b5fb0 to 0xf01b5ff8)
+[    7.673827] 5fa0:                                     00000000 =
+00000000 00000000 00000000
+[    7.682435] 5fc0: 00000000 00000000 00000000 00000000 00000000 =
+00000000 00000000 00000000
+[    7.691038] 5fe0: 00000000 00000000 00000000 00000000 00000013 =
+00000000
+
+Hope this helps to find the real cause.
+
+BR,
+Nikolaus
+
