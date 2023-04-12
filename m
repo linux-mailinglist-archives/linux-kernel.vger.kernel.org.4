@@ -2,112 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C94206DF86E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:28:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE3236DF870
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbjDLO2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 10:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55242 "EHLO
+        id S231592AbjDLO2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 10:28:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231526AbjDLO2O (ORCPT
+        with ESMTP id S230257AbjDLO2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 10:28:14 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672A659F4
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:28:03 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f0769b0699so763875e9.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:28:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google; t=1681309682;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0llp1hVKLIkBR+eiPxuvVpVypjNa13pXHpHX4ojYOSk=;
-        b=LEtup2zI+Go27zuQCeKXbwPgSnBpl7LgzN5Uup8JIkSKwTIfHXF4Qfs0o2ElhQI/lF
-         edS86zXQQ0EUz+9Z4snngUTGfNfkuzCPWVNTBkdujpcpLSCNeNK2zHpc7oaepmetXJOO
-         t83iEh/K3JyRtYgZuGN4zk+vCIq7ckQHq3kwg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681309682;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0llp1hVKLIkBR+eiPxuvVpVypjNa13pXHpHX4ojYOSk=;
-        b=CsmRFR5o2xnoQB6k7xiaIl10P5niPe5hg/lDxDi7svcX3SnZhcjnulTvVSqLJc62sL
-         CM0riwDWqKgwUHKPjz8aL8vXuptvD1+V0D+rC6j3Bq94uogXjy61B+Cdysn+wfin2HhM
-         LPvjGrLf6pIVluJ/6L1qP8D7W8/ciHPtn6THHFI2kIa9wQb7odgZ3/1Pv10pr0mWZi2o
-         abm8UmwwV/zAIzCgFSv0e8COdV0e8FKW1yDO18fZk/Fyo+HphEzsGopwCgXmvYIc9CpJ
-         J9R5dGR5fong58FgaTpLncGw62ZYUglNgBg1M0ycMWpTBlVkiZ79ftvp/RsKGybl8s3J
-         cnKg==
-X-Gm-Message-State: AAQBX9d0sLBRqWWWppEY3nrH/VLUWqi/rIvC2TXBxK+nmfXEkmI51Ui1
-        Opg2/QllZ6hxXfMWp9s1Cp5N5w==
-X-Google-Smtp-Source: AKy350a6TSz2oFDMVECGAL4J0n7ZUey5qJ91v7kVdXBaS8nJuOpQQSUiRgtRoHEURnjxfLnkHH3MNg==
-X-Received: by 2002:a05:6000:1148:b0:2f4:a2b3:3ea6 with SMTP id d8-20020a056000114800b002f4a2b33ea6mr1273515wrx.6.1681309681941;
-        Wed, 12 Apr 2023 07:28:01 -0700 (PDT)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id f4-20020adff8c4000000b002cff06039d7sm17313882wrq.39.2023.04.12.07.28.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 07:28:01 -0700 (PDT)
-Date:   Wed, 12 Apr 2023 16:27:59 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
-Cc:     daniel@ffwll.ch, sfr@canb.auug.org.au, greg@kroah.com,
-        ogabbay@kernel.org, jacek.lawrynowicz@linux.intel.com,
-        quic_pkanojiy@quicinc.com, mani@kernel.org, airlied@redhat.com,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-Subject: Re: [PATCH] Revert "accel/qaic: Add mhi_qaic_cntl"
-Message-ID: <ZDa/77pcZyr+W2Be@phenom.ffwll.local>
-Mail-Followup-To: Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        sfr@canb.auug.org.au, greg@kroah.com, ogabbay@kernel.org,
-        jacek.lawrynowicz@linux.intel.com, quic_pkanojiy@quicinc.com,
-        mani@kernel.org, airlied@redhat.com,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-References: <1681307864-3782-1-git-send-email-quic_jhugo@quicinc.com>
- <4e81bfdc-c20a-9e54-7d1f-40bd9f91c758@quicinc.com>
+        Wed, 12 Apr 2023 10:28:17 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E0B2D46;
+        Wed, 12 Apr 2023 07:28:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1681309685; i=rwarsow@gmx.de;
+        bh=NoDxyO+RfjMEcHznS/rod18wWdEUQrsMjf1lVtZiC7w=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+        b=Tlo5TToICrdLP1LLyDp+Dy8pPExIHFLb1TzFk9CF0qN0M4l+Z8cObQXMWYqpIaN4U
+         hkJWJ2bs7C7FJ8itz8ssXGvY/0sHa48OD7J1bukGMCKKEt1dIHXx2RfP23DPxm0pHb
+         HtOpS4OO1SrJlUHrRnVMhg3UXeUf9gPX1aXCrgjrh+At8qfZ9XKn/e0ZSg2rdRAfjw
+         mzLLzmatdbGDBsPijGR9egq2SEOfYKLGvnWy+iSiYAL6ZiDI3LIh3ABpnpxyqhiVUv
+         zJLGmdm4iY377ITH1tEtagQHkpqZFPwlZiD0KOJPFpQSX8mGw9pscz2vO0pmetafQu
+         I8zeO6ykjkTqg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.100.20] ([46.142.34.104]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mz9Z5-1qYdQk29eF-00wDYv; Wed, 12
+ Apr 2023 16:28:05 +0200
+Message-ID: <bff3fc44-d4b7-e1b9-4c7d-7bf478994810@gmx.de>
+Date:   Wed, 12 Apr 2023 16:28:05 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4e81bfdc-c20a-9e54-7d1f-40bd9f91c758@quicinc.com>
-X-Operating-System: Linux phenom 6.1.0-7-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+From:   Ronald Warsow <rwarsow@gmx.de>
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Content-Language: de-DE, en-US
+Subject: Re: [PATCH 6.2 000/173] 6.2.11-rc1 review
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:TOYcClmMigWqbzZN8z7zEl6jF4IO1plBXGWyyS87wqZIixfF2OJ
+ mpKA8fJR6XMiWuHva3e5u7ApMvsP4+OtQ7p/cQe/3xSGk/1jWUHCaZjesvBwND7uJH1z6+2
+ r8ZCDZ7zatQqArzj+MmC/3/Oojb5bBzuQJZShJ1bqoM6pdFyunO4NjHScakZovu+Pt5IwnD
+ 1YiiRGcZOdrV1eVcpqusw==
+UI-OutboundReport: notjunk:1;M01:P0:9eCE+SpgBPc=;+xeY63a8iDZ6YPxk07xNtoRS9UW
+ 1lHoM8QR5pUuP8J80XnALRo75cgk1Qr4Fb4lp0GVCxe3JAT5KRvkmNuXNdnbJBHZY5MT9h+cx
+ 3ZpeQxqritv0DqJ1KjrlRA6fjya9hjWCjJZ0jmw04UjgfrkC/+GjvLV2u/qhyI9elyIMOUFch
+ 7e6Y95XqGpj3gStIas97GtSgcefO1x1fJ1/nj7vUYgFAhAcid3UaKRq3ZqUmaP7fORW+oK+3Y
+ JF3g8xixs5L+HwXAMaGRCf2OOQJpFG9TWa6bWH6Es0jVhInm1DlXSETpNtsFSZ2N3A9Zh0ODF
+ i4qk4CtQurvl+XiGkEDuS83pq3SHyz0GItTSCniyTdHG082SYtxSXZfYyVoTjMTXt0gNg+9Oc
+ EVF4Ag3B42btKd8RTROjaIIGRIVqHVoclGLYVOIu/DKWGJmnDRdc4L4WXM4FDQanMrZEdSviK
+ C2SyVnMRXZy2Ify1BySvPtbV4nOy7bwapXkygcYsQKHiBKSg7n5KPvf8vcaTz0WIKWe7dVkDZ
+ uWZ8RnbEA97K8UrDlHiMOk6jhPg3pevLKFh42EsDkk4ZecsuExOxH+eJM6apt3ea+IGqFRwQh
+ 5GSpXlYmhYLojR5rtOxn07j0VBuiOHH/Vq5skKNRXCMpJeq80GjicoiqUfObhZKld4KUqttK+
+ 5uNOACgoQwreJne9LewU6BvI9jB5h11Xmi7F+2ofWvL7ELTc3h784lpzAtyQw6hFOd5eyn0hS
+ qJHFpf8ZhQlwP08Ga9blh8uIt5/KwT84fcKVG84PSVpziDSi3OlmFbn0nbMIA5cK3raF+acJk
+ ZZsT24MdzZt2VBcQafa9itiqQ6sF/QZi0jZUTTl6N1KqojHi+o5nykY0tZtDLR4/L07w++inE
+ VvInNWUNilAJAVSKuWiAn2+aKHfJA3dMU/vSL2zCybsjjA6kZMEiZEdOEwDNUWLchZc4wAc+d
+ P8lbIA==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 08:00:33AM -0600, Jeffrey Hugo wrote:
-> On 4/12/2023 7:57 AM, Jeffrey Hugo wrote:
-> > This reverts commit 566fc96198b4bb07ca6806386956669881225271.
-> > 
-> > This exposes a userspace API that is still under debate.  Revert the
-> > change before the uAPI gets exposed to avoid making a mistake.  QAIC is
-> > otherwise still functional.
-> > 
-> > Suggested-by: Daniel Vetter <daniel@ffwll.ch>
-> > Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-> > Reviewed-by: Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>
-> > ---
-> 
-> Daniel,
-> 
-> Assuming you find this acceptable, would you please merge it?
-> 
-> Sorry, but I'm still working through an internal process for my drm-misc
-> commit access.  I anticipate having that resolved prior to future changes.
+Hi Greg
 
-It should be pushed to drm-misc-next-fixes (but that's not yet ready, I
-pinged Maarten).
+6.2.11-rc1
 
-Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+compiles, boots and runs here on Intel x86_64
 
-Ack from Greg/Oded would be good too for completeness.
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Thanks
+
+Tested-by: Ronald Warsow <rwarsow@gmx.de>
+
