@@ -2,228 +2,404 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BDBA6DF738
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 878F36DF73A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbjDLNbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 09:31:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33194 "EHLO
+        id S230211AbjDLNcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 09:32:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbjDLNbr (ORCPT
+        with ESMTP id S230059AbjDLNcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 09:31:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F5F2719
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 06:30:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681306231;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bg7I6PXUJoCFhHsVgiCnycnvF0dxTD96+8PGs2bLSIc=;
-        b=MXjOVYruuugK70oMW9eiA4YjVh4HAl3X10siFRhXoqNKRBrm6JECiHMuQIXTNd+cH4MYp7
-        QEVw12G0irwhCZJeQKGKCg+MnAoy3Vua7yaOOCRXA+p/+NvmOUXigQ7B0gPIsgz2tokN1i
-        zni6hL+REu15R7T77kdDflqt4PBHoaI=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-674-0tzlgg0GOQazCHYOnHYlAA-1; Wed, 12 Apr 2023 09:30:28 -0400
-X-MC-Unique: 0tzlgg0GOQazCHYOnHYlAA-1
-Received: by mail-qk1-f198.google.com with SMTP id 1-20020a370301000000b0074681bc7f42so5874028qkd.8
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 06:30:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681306227; x=1683898227;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bg7I6PXUJoCFhHsVgiCnycnvF0dxTD96+8PGs2bLSIc=;
-        b=MRcu2NH4c6vQNAktHXqCR8JmlAqv8oAF31E/Drf1OFqTU11AlzqIT7xOTD5W3vH+iZ
-         Oejfl8OQConE6PZ2q/3NSr007NAenvv6CQIo4zM3Ud9Voe8pTGn8fVrHvoDtoq63S7hp
-         aRFENsDacLbo3LRRzmHVfMOW66NWqxHFvRSbAlp1NavtvSUtOLGfJ0OvRhb2aBQiC4Do
-         cMYwciyQmMUUqxFjm/TrnXO7TzWG+I96qBFydzzbktiVErI+dIXzpdkMDJmVGM2pIMYb
-         Wym4v3Y0yhVOYlLKUcEUvC+OJs1lVHxFHKOfJoxtp43QrJep5KYIBY7D0ulA8gCZXGG1
-         13hQ==
-X-Gm-Message-State: AAQBX9dqIZ3qD2cVF5tIo17p9YhjvnbFItw40fA99e1P8QM1vCYSw5fC
-        qqAC8f+E1t+TOVKn52/0tkuUjzmXdMfixB2eU3kkkiriyP9SjwJ9+3bgEsCjec/PA1VLvmeQ3WO
-        MXROseu73+xOHBjHrVUtBTNA72ufRxDi+
-X-Received: by 2002:a05:6214:20a3:b0:5e5:c0c2:c656 with SMTP id 3-20020a05621420a300b005e5c0c2c656mr7341607qvd.48.1681306227169;
-        Wed, 12 Apr 2023 06:30:27 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Zyf06cH1QWOLuq/G8XCZkxJH7a+9rslUrpQS/BLKF96dZMzJbcwzZ3aVeXRf3w7DqaSbbp4A==
-X-Received: by 2002:a05:6214:20a3:b0:5e5:c0c2:c656 with SMTP id 3-20020a05621420a300b005e5c0c2c656mr7341583qvd.48.1681306226885;
-        Wed, 12 Apr 2023 06:30:26 -0700 (PDT)
-Received: from thinkpad-p1.localdomain (cpe00fc8d79db03-cm00fc8d79db00.cpe.net.fido.ca. [72.137.118.218])
-        by smtp.gmail.com with ESMTPSA id ep9-20020a05621418e900b005e14936cb09sm4002308qvb.11.2023.04.12.06.30.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 06:30:26 -0700 (PDT)
-Message-ID: <c4c679f36ef34f267f5b99a0eeb2c491e163188b.camel@redhat.com>
-Subject: Re: [PATCH v3 1/2] cacheinfo: Add arch specific early level
- initializer
-From:   Radu Rendec <rrendec@redhat.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Pierre Gondois <Pierre.Gondois@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Date:   Wed, 12 Apr 2023 09:30:24 -0400
-In-Reply-To: <20230412113638.p3pkmd46luml2nlr@bogus>
-References: <20230406233926.1670094-1-rrendec@redhat.com>
-         <20230406233926.1670094-2-rrendec@redhat.com>
-         <20230412113638.p3pkmd46luml2nlr@bogus>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Wed, 12 Apr 2023 09:32:09 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2113.outbound.protection.outlook.com [40.107.117.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 435DC9EDB
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 06:30:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=T3uzKuKCMLreP3681aGQskmUNPdeqL4Gin/WcVmveioUaCnIjsABoFuTtlBjONdF/BMB/ekDvXSl3kYHW4dVD/3S0t3YXnKU+K1BM6mVEI4B2HHfpzD3a3BzpO2/9O/hYL4X2W3pNw3fcX2z5aCt0zZRYUEPEPeAUfYqPX1XosNTvet8FGjrD8nUbgJrpHkQtBl3iErPf1fZCWOS3VgjzNRJqtRJ2kCAlpYT7frXf8s2tgmcdgPF9I19/7Vdi+CpypDF2+kRXmlRtDc9v11M1q0YNMJTwmCuPld/0wO6zygkTy09ePGULQqX/Slz58749RvPil/7P8WXr5U0NyeD8A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ATw9//7y4W9do+U4RtIabhlg1SsOCkTdE5Mglnm6zRw=;
+ b=jutd+xSlEtj7ElfO10YL4h/m5dpv7/r6Qg2Px6SPzuFsDZBjyswRR4K0y1zGvUA+LVjC1RDazVA/J6F+66I3UyCr52uqYjIfesz6I+ZK42tSiW4LuHUWf6WmuDM2ODr90SScMZj4uQLysFjJXntII0bJSEiWnJ1YzS1hObqbkqIlb7Q4nYj5SazGjBF0sbCfZ3iKCVMjDZyzzAZCTWYDv97O7fzq9lMkVphFex4hnWu3mNZZwHk3GnAzpm1rOIG0RDPLltMJxPQfwRR8blyCmA7f62o9qEb1k7klwvO374RPYFiyaizWUOOpgmRoCtH7MfxazIdLwPO9gJxMNa+naQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amlogic.com; dmarc=pass action=none header.from=amlogic.com;
+ dkim=pass header.d=amlogic.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amlogic.com;
+Received: from PS1PR03MB5034.apcprd03.prod.outlook.com (2603:1096:300:7b::17)
+ by SEZPR03MB6812.apcprd03.prod.outlook.com (2603:1096:101:67::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Wed, 12 Apr
+ 2023 13:30:48 +0000
+Received: from PS1PR03MB5034.apcprd03.prod.outlook.com
+ ([fe80::c56f:c862:ff8e:909]) by PS1PR03MB5034.apcprd03.prod.outlook.com
+ ([fe80::c56f:c862:ff8e:909%5]) with mapi id 15.20.6277.036; Wed, 12 Apr 2023
+ 13:30:48 +0000
+Message-ID: <dc690524-51d5-7bb9-a106-fa153c4e6250@amlogic.com>
+Date:   Wed, 12 Apr 2023 21:30:42 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v1 1/5] mtd: rawnand: meson: fix NAND access for
+ read/write
+Content-Language: en-US
+To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Yixun Lan <yixun.lan@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>
+Cc:     oxffffaa@gmail.com, kernel@sberdevices.ru,
+        linux-mtd@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230412061700.1492474-1-AVKrasnov@sberdevices.ru>
+ <20230412061700.1492474-2-AVKrasnov@sberdevices.ru>
+ <889cf54e-584c-9bee-2106-633155897324@amlogic.com>
+ <3f247cbe-2798-4871-82a5-5124142fdcc5@sberdevices.ru>
+ <4f552f57-c31e-985c-82be-081dff38d377@sberdevices.ru>
+From:   Liang Yang <liang.yang@amlogic.com>
+In-Reply-To: <4f552f57-c31e-985c-82be-081dff38d377@sberdevices.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: TYCP301CA0017.JPNP301.PROD.OUTLOOK.COM
+ (2603:1096:400:381::8) To PS1PR03MB5034.apcprd03.prod.outlook.com
+ (2603:1096:300:7b::17)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PS1PR03MB5034:EE_|SEZPR03MB6812:EE_
+X-MS-Office365-Filtering-Correlation-Id: d2220fb2-8f61-4772-9fec-08db3b5a203f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 3PPfjm56L3gC+7x0eDInTRPy5ebsxVDi+y6zwzQdMcG31aTATX4LjWE+n31UPyqCxGdBxVUClSAukL1yqzpcr6M1sYR7uRMGU0kT8EhBA0Fuge4Bp2C7eNJukaf0Go6Z7CEiX2tYZIscePaIqw087odcqnkuD3+HHQKGyCLiGlZBt6854yphIW6T8Z/ShIJtB7OvO7J1Veqk/oQcJ69+UdLk/1EBS69gffru+xHx+z1SiTCd4zCOVu7M7EIuktClnhRHsnlI1ZdVHAJaxw2/VzYhtl4eeblBqmL/vTxkMg+5ix1ixlL5eFvxomjn3XLGZntz+8ovEHOK4fwKUlTT6Qjp8bEIIYJjKdVENiEJDf5TXoYa3i9tnk1Ni8AgOFBlnejWgJ+VzItBlIb7GJ7gyGUap/WQoIiQAJt7f0cHNU13fIGRXvDWc/O63HYuL3zIzzUU/DkzAS2OG1zhYlIp7TNvrv/XoRxRov7A7ogHjqhww2MPglYX0vpUx8NfrvdwNtaLUF0cxfeUtdoE0eOcWS9hkCXXRS5W4S1tIJYTsZnkQe3KUw6V1IonC/kO7+iKNLa1VOc8M8y8XTNBUIFw/fBUjlw5+iTx3aM84rO1xWjLmQ5RAjaif5idjyeY8AMWnge2vw9k8k5AwnDqZHCq5bxrSFA+YLc557lg/6wfdTliJATiMHVTJzA25GzeLw9dFdcWQMOqHaJPxC+HcqLjqBXG/KdBvVrrcXrZaVDGDE0DRQoIueNVZI6JXTWZdmjh
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PS1PR03MB5034.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(376002)(366004)(396003)(39850400004)(136003)(451199021)(36756003)(31696002)(86362001)(6486002)(66946007)(41300700001)(110136005)(6666004)(66556008)(6636002)(66476007)(478600001)(52116002)(316002)(4326008)(5660300002)(8676002)(2906002)(8936002)(83380400001)(44832011)(7416002)(38100700002)(38350700002)(921005)(186003)(53546011)(6506007)(26005)(6512007)(2616005)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ODZuVDVxSFIwMXBXZmhUZkk5NnV4dVVYcWJaTTQ1SWt4MVcrdmhTQmFuSGM2?=
+ =?utf-8?B?aS9Bczg5QzZCMkViYmh0VC81U1gwaXluM0VwbHl2SndRUGl3NHNPT2JONTcw?=
+ =?utf-8?B?bGF3cHZ5SU1lV25iUWc2M1F6L2FmLzUvTjhnUjZCU0N0OHpNWjM4WGVzQ2Zi?=
+ =?utf-8?B?MDNJakJrUzUvNCtNNENvNWlqS1RvT1JzM2txL1dYV3Y1b2svKzNZUEVTcjdZ?=
+ =?utf-8?B?QkdtOUxFVitqaXcrUmFGL2wzVXJCYlJVdGJ2YWtRSHUxY2RvMEUxVUIrQ084?=
+ =?utf-8?B?SU4ram9wdURaMWtZL0dsSG5jVm9PMXpnMFJBUzJRZW5HRzdTdGloWm5OM2po?=
+ =?utf-8?B?TTZwOFluWTdzQnZuRUVrNnhCa3pJUWZBRmNMS3hONWlHdE9aYXVOc25XZUxx?=
+ =?utf-8?B?U0szeTFlV3JJeTIzVU9JM3ZIeldLT1BMQTdCc3Q1Zk54M2tXdlZnNXR2RHhp?=
+ =?utf-8?B?cHFONGZTSjZNaU9Va1ZBdHVYdW9LdjQrQmVhbVBZNnNHaGZTakZPRitkK00w?=
+ =?utf-8?B?ZmsySHU5VzNBU1cyNjY2TEFCcDBUZ1FnZjREWi9zZ2NnOWduUjNmbEtUclZk?=
+ =?utf-8?B?LzNqWWJIQVVSK2lFNmVMZDhxS0Y1b3lwcGRjbGZpQXU0S3ZJZjVNK2RqOXFj?=
+ =?utf-8?B?M3ZOM3duY2RQQVNINkphT3JwNGV2S1VzNDNoNUVRaEg1T09OdUdlQXZQdXVR?=
+ =?utf-8?B?aldzenVEcXdpbTRtb08zWVhxQ2tsdXZjamYxQW9GNXg4LzhDOWpoWWRIOTBS?=
+ =?utf-8?B?aE1ML282UjhXWk95eEV5RGkvQmdVNlk1L0FVYnBZWncwcXllcVRhVDh6RWV1?=
+ =?utf-8?B?WkROV2xMdFZGTmlrYlU0dlh4dUVYcHdVdHN2SnpoaXFBNWR1VHljdktBOG41?=
+ =?utf-8?B?TWtWSGllNkR5b1VTdjhOejNiUkdoQzVZNGJFVGlJSVh1ZHY3R1Mzb1BTRjFW?=
+ =?utf-8?B?bTQyVlVqTUtnZUFoYUxyTTI3TUo2UFkxaGFoOVRVcmNxTElVZTY0RStVWDdH?=
+ =?utf-8?B?VjY4b2xOQTRtME1PVzVOYXp5MFNJb3NxdGY1MTIrcnFFK081YWtDK3M5MWFB?=
+ =?utf-8?B?ME91akN2NkplV3RNRWQ4bkViME02VkRFQll4eThWUUpJcFU4WHFDM1hPaTVB?=
+ =?utf-8?B?S0xFK3VJSlREQzhhV3hubFN0S0Y5WEY2SFA2L3I4eCsrcUZzWHdRWU42MHk5?=
+ =?utf-8?B?NW9ZejNSRWltRy9yeUcrRndTY2FFakRQOVhLYjU2Z0ROWTZ1VDYvT1d0TFNS?=
+ =?utf-8?B?TjY5dXNOdzdkbEh3bDRlNW05L09Jb2MrYjRzTGxKcVVHR0JBN3lWK0FVN1FW?=
+ =?utf-8?B?ZDNYd0FLZEF5d0M4Mi9BQ2dwdG1hUWpwYiszQXIzei9LRFJQMTN5VTBCZ1dh?=
+ =?utf-8?B?Nk9iK1l0elNtQXlySkl6cklGVjk5aVBHNlJESlkxTHlCeXdmak5YRlhoeWlk?=
+ =?utf-8?B?NFpaU3FYRnhHUndKRTdnNnUxVWxNVG5wWVRORi9Qc24zWGFvMWFLOFplT2dh?=
+ =?utf-8?B?bU9CbHVxZWRrY1NPdzRGamlYbjJpekFtSGRmM0ExbnE4T05mRU5DNjFIbmVl?=
+ =?utf-8?B?WGhkdEJzRkJ2RmJlTGxYbU5NVUhjaGpXU1ZneE0vZ2F2SFNqdW1Gc1daNlZD?=
+ =?utf-8?B?NWhHS3E1c0E5US9CZ3NYWmlKeE01bDVhZWdod2oxWFN0djZNM1AzOWM2SU9R?=
+ =?utf-8?B?TjBnRVVuN2czL0NnQlhaeVlYR1BBRllFT0llcFFmK29SUngwOXZlRUN0WjVp?=
+ =?utf-8?B?WFZ0c0pnNTVrWmphQ1ZVWEdUbm1mVmRCa0xYSGo5V1NyK2ZyUlc1TVpxZVpZ?=
+ =?utf-8?B?UFpZbEwrRWx4U2dDQUdLUHk0dkYyTFc3ZlBSK2VEdHg0M1ZicFNEYll6L2FE?=
+ =?utf-8?B?K1NyR0RWdGJJTmg0YzRCNzdBdTE0Q0tmNGM2VkFINHFvUUhTdDFzNzZXYUV5?=
+ =?utf-8?B?eDFzaVpEaEZlQ0hPVVZ3WTV2VllqWk1zdnR1ODM5RXNYRm15ZFpPQWgwUmUr?=
+ =?utf-8?B?a0MxNm4wa2JKRFU5cW8zSHNETDVYWUEvRHJjeGtTc1lJdWgwR09qWmwyOWxo?=
+ =?utf-8?B?S1JoVVhQTU5wMWZHOG9XMFZUWCt5WXVTU0V4MzYwTk5JMjBTYThyOFlMby9R?=
+ =?utf-8?B?c1FRdkNlUTNDMlVnYjl4MW5ma3RPT0V0akJqWXNuOHVrYmJTRWc0VEV0M1Vh?=
+ =?utf-8?B?UlE9PQ==?=
+X-OriginatorOrg: amlogic.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d2220fb2-8f61-4772-9fec-08db3b5a203f
+X-MS-Exchange-CrossTenant-AuthSource: PS1PR03MB5034.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2023 13:30:48.4786
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 0df2add9-25ca-4b3a-acb4-c99ddf0b1114
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tC0xa2ey6iKtDlT8P8YroeHfhxAQ+6UpBDTsx+5QBKwPinj70oTwWScjBcI26Mgmgt3u7bJodfdWi9YEemZWKw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR03MB6812
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gV2VkLCAyMDIzLTA0LTEyIGF0IDEyOjM2ICswMTAwLCBTdWRlZXAgSG9sbGEgd3JvdGU6Cj4g
-T24gVGh1LCBBcHIgMDYsIDIwMjMgYXQgMDc6Mzk6MjVQTSAtMDQwMCwgUmFkdSBSZW5kZWMgd3Jv
-dGU6Cj4gPiBUaGlzIHBhdGNoIGdpdmVzIG9mIGFyY2hpdGVjdHVyZSBzcGVjaWZpYyBjb2RlIHRo
-ZSBhYmlsaXR5IHRvIGluaXRpYWxpemUKPiA+IHRoZSBjYWNoZSBsZXZlbCBhbmQgYWxsb2NhdGUg
-Y2FjaGVpbmZvIG1lbW9yeSBlYXJseSwgd2hlbiBjYWNoZSBsZXZlbAo+ID4gaW5pdGlhbGl6YXRp
-b24gcnVucyBvbiB0aGUgcHJpbWFyeSBDUFUgZm9yIGFsbCBwb3NzaWJsZSBDUFVzLgo+ID4gCj4g
-PiBUaGlzIGlzIHBhcnQgb2YgYSBwYXRjaCBzZXJpZXMgdGhhdCBhdHRlbXB0cyB0byBmdXJ0aGVy
-IHRoZSB3b3JrIGluCj4gPiBjb21taXQgNTk0NGNlMDkyYjk3ICgiYXJjaF90b3BvbG9neTogQnVp
-bGQgY2FjaGVpbmZvIGZyb20gcHJpbWFyeSBDUFUiKS4KPiA+IFByZXZpb3VzbHksIGluIHRoZSBh
-YnNlbmNlIG9mIGFueSBEVC9BQ1BJIGNhY2hlIGluZm8sIGFyY2hpdGVjdHVyZQo+ID4gc3BlY2lm
-aWMgY2FjaGUgZGV0ZWN0aW9uIGFuZCBpbmZvIGFsbG9jYXRpb24gZm9yIHNlY29uZGFyeSBDUFVz
-IHdvdWxkCj4gPiBoYXBwZW4gaW4gbm9uLXByZWVtcHRpYmxlIGNvbnRleHQgZHVyaW5nIGVhcmx5
-IENQVSBpbml0aWFsaXphdGlvbiBhbmQKPiA+IHRyaWdnZXIgYSAiQlVHOiBzbGVlcGluZyBmdW5j
-dGlvbiBjYWxsZWQgZnJvbSBpbnZhbGlkIGNvbnRleHQiIHNwbGF0IG9uCj4gPiBhbiBSVCBrZXJu
-ZWwuCj4gPiAKPiA+IE1vcmUgc3BlY2lmaWNhbGx5LCB0aGlzIHBhdGNoIGFkZHMgdGhlIGVhcmx5
-X2NhY2hlX2xldmVsKCkgZnVuY3Rpb24sCj4gPiB3aGljaCBpcyBjYWxsZWQgYnkgZmV0Y2hfY2Fj
-aGVfaW5mbygpIGFzIGEgZmFsbGJhY2sgd2hlbiB0aGUgbnVtYmVyIG9mCj4gPiBjYWNoZSBsZWF2
-ZXMgY2Fubm90IGJlIGV4dHJhY3RlZCBmcm9tIERUL0FDUEkuIEluIHRoZSBkZWZhdWx0IGdlbmVy
-aWMKPiA+ICh3ZWFrKSBpbXBsZW1lbnRhdGlvbiwgdGhpcyBuZXcgZnVuY3Rpb24gcmV0dXJucyAt
-RU5PRU5ULCB3aGljaAo+ID4gcHJlc2VydmVzIHRoZSBvcmlnaW5hbCBiZWhhdmlvciBmb3IgYXJj
-aGl0ZWN0dXJlcyB0aGF0IGRvIG5vdCBpbXBsZW1lbnQKPiA+IHRoZSBmdW5jdGlvbi4KPiA+IAo+
-ID4gU2luY2UgZWFybHkgZGV0ZWN0aW9uIGNhbiBnZXQgdGhlIG51bWJlciBvZiBjYWNoZSBsZWF2
-ZXMgd3JvbmcgaW4gc29tZQo+ID4gY2FzZXMqLCBhZGRpdGlvbmFsIGxvZ2ljIGlzIGFkZGVkIHRv
-IHN0aWxsIGNhbGwgaW5pdF9jYWNoZV9sZXZlbCgpIGxhdGVyCj4gPiBvbiB0aGUgc2Vjb25kYXJ5
-IENQVSwgdGhlcmVmb3JlIGdpdmluZyB0aGUgYXJjaGl0ZWN0dXJlIHNwZWNpZmljIGNvZGUgYW4K
-PiA+IG9wcG9ydHVuaXR5IHRvIGdvIGJhY2sgYW5kIGZpeCB0aGUgaW5pdGlhbCBndWVzcy4gQWdh
-aW4sIHRoZSBvcmlnaW5hbAo+ID4gYmVoYXZpb3IgaXMgcHJlc2VydmVkIGZvciBhcmNoaXRlY3R1
-cmVzIHRoYXQgZG8gbm90IGltcGxlbWVudCB0aGUgbmV3Cj4gPiBmdW5jdGlvbi4KPiA+IAo+ID4g
-KiBGb3IgZXhhbXBsZSwgb24gYXJtNjQsIENMSURSX0VMMSBkZXRlY3Rpb24gd29ya3Mgb25seSB3
-aGVuIGl0IHJ1bnMgb24KPiA+IMKgIHRoZSBjdXJyZW50IENQVS4gSW4gb3RoZXIgd29yZHMsIGEg
-Q1BVIGNhbm5vdCBkZXRlY3QgdGhlIGNhY2hlIGRlcHRoCj4gPiDCoCBmb3IgYW55IG90aGVyIENQ
-VSB0aGFuIGl0c2VsZi4KPiA+IAo+IAo+IFRoYW5rcyBmb3IgdGhlIGRldGFpbGVkIGRlc2NyaXB0
-aW9uIGFuZCBwdXR0aW5nIHRoaXMgdG9nZXRoZXIuCgpObyBwcm9ibGVtLiBIYXBweSB0byBoZWxw
-IQoKPiA+IFNpZ25lZC1vZmYtYnk6IFJhZHUgUmVuZGVjIDxycmVuZGVjQHJlZGhhdC5jb20+Cj4g
-PiAtLS0KPiA+IMKgZHJpdmVycy9iYXNlL2NhY2hlaW5mby5jwqAgfCA3NSArKysrKysrKysrKysr
-KysrKysrKysrKysrKystLS0tLS0tLS0tLS0KPiA+IMKgaW5jbHVkZS9saW51eC9jYWNoZWluZm8u
-aCB8wqAgMiArKwo+ID4gwqAyIGZpbGVzIGNoYW5nZWQsIDU1IGluc2VydGlvbnMoKyksIDIyIGRl
-bGV0aW9ucygtKQo+ID4gCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9iYXNlL2NhY2hlaW5mby5j
-IGIvZHJpdmVycy9iYXNlL2NhY2hlaW5mby5jCj4gPiBpbmRleCBmNjU3M2MzMzVmNGMuLjMwZjU1
-NTNkM2ViYiAxMDA2NDQKPiA+IC0tLSBhL2RyaXZlcnMvYmFzZS9jYWNoZWluZm8uYwo+ID4gKysr
-IGIvZHJpdmVycy9iYXNlL2NhY2hlaW5mby5jCj4gPiBAQCAtMzk4LDYgKzM5OCwxMSBAQCBzdGF0
-aWMgdm9pZCBmcmVlX2NhY2hlX2F0dHJpYnV0ZXModW5zaWduZWQgaW50IGNwdSkKPiA+IMKgwqDC
-oMKgwqDCoMKgwqBjYWNoZV9zaGFyZWRfY3B1X21hcF9yZW1vdmUoY3B1KTsKPiA+IMKgfQo+ID4g
-wqAKPiA+ICtpbnQgX193ZWFrIGVhcmx5X2NhY2hlX2xldmVsKHVuc2lnbmVkIGludCBjcHUpCj4g
-PiArewo+ID4gK8KgwqDCoMKgwqDCoMKgcmV0dXJuIC1FTk9FTlQ7Cj4gPiArfQo+ID4gKwo+ID4g
-wqBpbnQgX193ZWFrIGluaXRfY2FjaGVfbGV2ZWwodW5zaWduZWQgaW50IGNwdSkKPiA+IMKgewo+
-ID4gwqDCoMKgwqDCoMKgwqDCoHJldHVybiAtRU5PRU5UOwo+ID4gQEAgLTQyMyw1NiArNDI4LDgy
-IEBAIGludCBhbGxvY2F0ZV9jYWNoZV9pbmZvKGludCBjcHUpCj4gPiDCoAo+ID4gwqBpbnQgZmV0
-Y2hfY2FjaGVfaW5mbyh1bnNpZ25lZCBpbnQgY3B1KQo+ID4gwqB7Cj4gPiAtwqDCoMKgwqDCoMKg
-wqBzdHJ1Y3QgY3B1X2NhY2hlaW5mbyAqdGhpc19jcHVfY2k7Cj4gPiArwqDCoMKgwqDCoMKgwqBz
-dHJ1Y3QgY3B1X2NhY2hlaW5mbyAqdGhpc19jcHVfY2kgPSBnZXRfY3B1X2NhY2hlaW5mbyhjcHUp
-Owo+ID4gwqDCoMKgwqDCoMKgwqDCoHVuc2lnbmVkIGludCBsZXZlbHMgPSAwLCBzcGxpdF9sZXZl
-bHMgPSAwOwo+ID4gwqDCoMKgwqDCoMKgwqDCoGludCByZXQ7Cj4gPiDCoAo+ID4gwqDCoMKgwqDC
-oMKgwqDCoGlmIChhY3BpX2Rpc2FibGVkKSB7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoHJldCA9IGluaXRfb2ZfY2FjaGVfbGV2ZWwoY3B1KTsKPiA+IC3CoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqBpZiAocmV0IDwgMCkKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIHJldDsKPiA+IMKgwqDCoMKgwqDCoMKgwqB9
-IGVsc2Ugewo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXQgPSBhY3BpX2dl
-dF9jYWNoZV9pbmZvKGNwdSwgJmxldmVscywgJnNwbGl0X2xldmVscyk7Cj4gPiAtwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKHJldCA8IDApCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgaWYgKCFyZXQpIHsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgdGhpc19jcHVfY2ktPm51bV9sZXZlbHMgPSBsZXZlbHM7Cj4gPiAr
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoC8qCj4gPiArwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqIFRoaXMgYXNzdW1l
-cyB0aGF0Ogo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAgKiAtIHRoZXJlIGNhbm5vdCBiZSBhbnkgc3BsaXQgY2FjaGVzIChkYXRhL2luc3RydWN0aW9u
-KQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKsKg
-wqAgYWJvdmUgYSB1bmlmaWVkIGNhY2hlCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoCAqIC0gZGF0YS9pbnN0cnVjdGlvbiBjYWNoZXMgY29tZSBieSBw
-YWlyCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAq
-Lwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB0aGlz
-X2NwdV9jaS0+bnVtX2xlYXZlcyA9IGxldmVscyArIHNwbGl0X2xldmVsczsKPiA+ICvCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB9Cj4gPiArwqDCoMKgwqDCoMKgwqB9Cj4gPiArCj4gPiAr
-wqDCoMKgwqDCoMKgwqBpZiAocmV0IHx8ICFjYWNoZV9sZWF2ZXMoY3B1KSkgewo+ID4gK8KgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldCA9IGVhcmx5X2NhY2hlX2xldmVsKGNwdSk7Cj4g
-PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKHJldCkKPiA+IMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybiByZXQ7Cj4gPiDCoAo+
-ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHRoaXNfY3B1X2NpID0gZ2V0X2NwdV9j
-YWNoZWluZm8oY3B1KTsKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB0aGlzX2Nw
-dV9jaS0+bnVtX2xldmVscyA9IGxldmVsczsKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAvKgo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqIFRoaXMgYXNzdW1l
-cyB0aGF0Ogo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqIC0gdGhlcmUgY2Fu
-bm90IGJlIGFueSBzcGxpdCBjYWNoZXMgKGRhdGEvaW5zdHJ1Y3Rpb24pCj4gPiAtwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgICrCoMKgIGFib3ZlIGEgdW5pZmllZCBjYWNoZQo+ID4gLcKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqIC0gZGF0YS9pbnN0cnVjdGlvbiBjYWNoZXMg
-Y29tZSBieSBwYWlyCj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICovCj4gPiAt
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdGhpc19jcHVfY2ktPm51bV9sZWF2ZXMgPSBs
-ZXZlbHMgKyBzcGxpdF9sZXZlbHM7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-aWYgKCFjYWNoZV9sZWF2ZXMoY3B1KSkKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIC1FTk9FTlQ7Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgdGhpc19jcHVfY2ktPmVhcmx5X2FyY2hfaW5mbyA9IHRydWU7Cj4g
-PiDCoMKgwqDCoMKgwqDCoMKgfQo+ID4gLcKgwqDCoMKgwqDCoMKgaWYgKCFjYWNoZV9sZWF2ZXMo
-Y3B1KSkKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gLUVOT0VOVDsK
-PiA+IMKgCj4gPiDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIGFsbG9jYXRlX2NhY2hlX2luZm8oY3B1
-KTsKPiA+IMKgfQo+ID4gwqAKPiA+IC1pbnQgZGV0ZWN0X2NhY2hlX2F0dHJpYnV0ZXModW5zaWdu
-ZWQgaW50IGNwdSkKPiA+ICtzdGF0aWMgaW5saW5lIGludCBpbml0X2xldmVsX2FsbG9jYXRlX2Np
-KHVuc2lnbmVkIGludCBjcHUpCj4gPiDCoHsKPiA+IC3CoMKgwqDCoMKgwqDCoGludCByZXQ7Cj4g
-PiArwqDCoMKgwqDCoMKgwqB1bnNpZ25lZCBpbnQgZWFybHlfbGVhdmVzID0gY2FjaGVfbGVhdmVz
-KGNwdSk7Cj4gPiDCoAo+ID4gwqDCoMKgwqDCoMKgwqDCoC8qIFNpbmNlIGVhcmx5IGluaXRpYWxp
-emF0aW9uL2FsbG9jYXRpb24gb2YgdGhlIGNhY2hlaW5mbyBpcyBhbGxvd2VkCj4gPiDCoMKgwqDC
-oMKgwqDCoMKgICogdmlhIGZldGNoX2NhY2hlX2luZm8oKSBhbmQgdGhpcyBhbHNvIGdldHMgY2Fs
-bGVkIGFzIENQVSBob3RwbHVnCj4gPiDCoMKgwqDCoMKgwqDCoMKgICogY2FsbGJhY2tzIHZpYSBj
-YWNoZWluZm9fY3B1X29ubGluZSwgdGhlIGluaXQvYWxsb2MgY2FuIGJlIHNraXBwZWQKPiA+IMKg
-wqDCoMKgwqDCoMKgwqAgKiBhcyBpdCB3aWxsIGhhcHBlbiBvbmx5IG9uY2UgKHRoZSBjYWNoZWlu
-Zm8gbWVtb3J5IGlzIG5ldmVyIGZyZWVkKS4KPiA+IC3CoMKgwqDCoMKgwqDCoCAqIEp1c3QgcG9w
-dWxhdGUgdGhlIGNhY2hlaW5mby4KPiA+ICvCoMKgwqDCoMKgwqDCoCAqIEp1c3QgcG9wdWxhdGUg
-dGhlIGNhY2hlaW5mby4gSG93ZXZlciwgaWYgdGhlIGNhY2hlaW5mbyBoYXMgYmVlbgo+ID4gK8Kg
-wqDCoMKgwqDCoMKgICogYWxsb2NhdGVkIGVhcmx5IHRocm91Z2ggdGhlIGFyY2gtc3BlY2lmaWMg
-ZWFybHlfY2FjaGVfbGV2ZWwoKSBjYWxsLAo+ID4gK8KgwqDCoMKgwqDCoMKgICogdGhlcmUgaXMg
-YSBjaGFuY2UgdGhlIGluZm8gaXMgd3JvbmcgKHRoaXMgY2FuIGhhcHBlbiBvbiBhcm02NCkuIElu
-Cj4gPiArwqDCoMKgwqDCoMKgwqAgKiB0aGF0IGNhc2UsIGNhbGwgaW5pdF9jYWNoZV9sZXZlbCgp
-IGFueXdheSB0byBnaXZlIHRoZSBhcmNoLXNwZWNpZmljCj4gPiArwqDCoMKgwqDCoMKgwqAgKiBj
-b2RlIGEgY2hhbmNlIHRvIG1ha2UgdGhpbmdzIHJpZ2h0Lgo+ID4gwqDCoMKgwqDCoMKgwqDCoCAq
-Lwo+ID4gLcKgwqDCoMKgwqDCoMKgaWYgKHBlcl9jcHVfY2FjaGVpbmZvKGNwdSkpCj4gPiAtwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZ290byBwb3B1bGF0ZV9sZWF2ZXM7Cj4gPiArwqDC
-oMKgwqDCoMKgwqBpZiAocGVyX2NwdV9jYWNoZWluZm8oY3B1KSAmJiAhY2lfY2FjaGVpbmZvKGNw
-dSktPmVhcmx5X2FyY2hfaW5mbykKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBy
-ZXR1cm4gMDsKPiA+IMKgCj4gPiDCoMKgwqDCoMKgwqDCoMKgaWYgKGluaXRfY2FjaGVfbGV2ZWwo
-Y3B1KSB8fCAhY2FjaGVfbGVhdmVzKGNwdSkpCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoHJldHVybiAtRU5PRU5UOwo+ID4gwqAKPiA+IC3CoMKgwqDCoMKgwqDCoHJldCA9IGFs
-bG9jYXRlX2NhY2hlX2luZm8oY3B1KTsKPiA+ICvCoMKgwqDCoMKgwqDCoC8qCj4gPiArwqDCoMKg
-wqDCoMKgwqAgKiBOb3cgdGhhdCB3ZSBoYXZlIHByb3Blcmx5IGluaXRpYWxpemVkIHRoZSBjYWNo
-ZSBsZXZlbCBpbmZvLCBtYWtlCj4gPiArwqDCoMKgwqDCoMKgwqAgKiBzdXJlIHdlIGRvbid0IHRy
-eSB0byBkbyB0aGF0IGFnYWluIHRoZSBuZXh0IHRpbWUgd2UgYXJlIGNhbGxlZAo+ID4gK8KgwqDC
-oMKgwqDCoMKgICogKGUuZy4gYXMgQ1BVIGhvdHBsdWcgY2FsbGJhY2tzKS4KPiA+ICvCoMKgwqDC
-oMKgwqDCoCAqLwo+ID4gK8KgwqDCoMKgwqDCoMKgY2lfY2FjaGVpbmZvKGNwdSktPmVhcmx5X2Fy
-Y2hfaW5mbyA9IGZhbHNlOwo+IAo+IEkgYW0gd29uZGVyaW5nIGlmIGl0IG1ha2VzIHNlbnNlIHRv
-IHJlbmFtZSB0aGlzIGFzIGVhcmx5X2NpX2xldmVscyBvcgo+IHNvbWV0aGluZyBzaW1pbGFyIHRv
-IGluZGljYXRlIGl0IGlzIHRvIGRvIHdpdGgganVzdCBsZXZlbCBpbmZvcm1hdGlvbiBvbmx5ID8K
-PiBJZiBub3QsIGl0IG5lZWRzIHRvIGJlIGRvY3VtZW50ZWQgaWYgdGhlIHZhcmlhYmxlIGlzIG5v
-dCBtb3JlIHNwZWNpZmljLgo+IEkgYW0gc3VyZSBJIHdpbGwgZm9yZ2V0IGl0IGFuZCB3aWxsIGJl
-IHdvbmRlcmluZyB0byB1bmRlcnN0YW5kIGluIGZldwo+IG1vbnRocyB0aW1lIPCfmIQuCgpOb3cg
-dGhhdCB5b3UgbWVudGlvbmVkIGl0LCBJIHRoaW5rIGl0IG1ha2UgcGVyZmVjdCBzZW5zZSB0byBy
-ZW5hbWUgaXQuCkkgbGlrZSBlYXJseV9jaV9sZXZlbHMsIEkgd2lsbCB1c2UgdGhhdCBpbiB2NC4K
-Cj4gT3RoZXIgdGhhbiB0aGF0LCBpdCBsb29rcyBnb29kLiBJIHdpbGwgdHJ5IHRvIHB1c2ggdGhp
-cyBmb3IgdjYuNCBidXQgaXQKPiBtYXkgYmUgYml0IGxhdGUgYXMgaXQgaXMgZ29vZCB0byBoYXZl
-IGl0IGluIC1uZXh0IGZvciBzb21ldGltZSB0byBnZXQgbW9yZQo+IHRlc3RpbmcuIEFueXdheXMg
-c2VuZCB2NCwgd2lsbCBwdXQgaXQgaW50byAtbmV4dCBBU0FQIGFuZCBzZWUgd2hhdCBpcyB0aGUK
-PiBiZXN0IGNvdXJzZSBvZiBhY3Rpb24gYWZ0ZXIgdGhhdC4KClNvdW5kcyBncmVhdC4gVGhhbmtz
-IGZvciByZXZpZXdpbmcgdGhlIHBhdGNoZXMgYW5kIGZvciB5b3VyIGlucHV0IQoKQmVzdCByZWdh
-cmRzLApSYWR1Cgo=
+Hi,
 
+On 2023/4/12 20:03, Arseniy Krasnov wrote:
+> [ EXTERNAL EMAIL ]
+> 
+> 
+> 
+> On 12.04.2023 13:24, Arseniy Krasnov wrote:
+>>
+>>
+>> On 12.04.2023 12:37, Liang Yang wrote:
+>>> Hi Arseniy,
+>>>
+>>> Thanks for pointing out this problem. also comment inline.
+>>>
+>>> On 2023/4/12 14:16, Arseniy Krasnov wrote:
+>>>> [ EXTERNAL EMAIL ]
+>>>>
+>>>> This fixes read/write functionality. New command sequences were ported
+>>>> from old vendor's driver. Without this patch driver works unstable. This
+>>>> change is tested with 'nanddump'/'nandwrite' utilities and mounting
+>>>> JFFS2 filesystem on AXG family (A113X SoC).
+>>>>
+>>>> Fixes: 8fae856c5350 ("mtd: rawnand: meson: add support for Amlogic NAND flash controller")
+>>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>>>> ---
+>>>>    drivers/mtd/nand/raw/meson_nand.c | 116 ++++++++++++++++++++++++++----
+>>>>    1 file changed, 101 insertions(+), 15 deletions(-)
+>>>>
+>>>> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
+>>>> index 074e14225c06..256c37c76526 100644
+>>>> --- a/drivers/mtd/nand/raw/meson_nand.c
+>>>> +++ b/drivers/mtd/nand/raw/meson_nand.c
+>>>> @@ -26,6 +26,7 @@
+>>>>    #define NFC_CMD_IDLE        (0xc << 14)
+>>>>    #define NFC_CMD_CLE        (0x5 << 14)
+>>>>    #define NFC_CMD_ALE        (0x6 << 14)
+>>>> +#define NFC_CMD_DRD        (0x8 << 14)
+>>>>    #define NFC_CMD_ADL        ((0 << 16) | (3 << 20))
+>>>>    #define NFC_CMD_ADH        ((1 << 16) | (3 << 20))
+>>>>    #define NFC_CMD_AIL        ((2 << 16) | (3 << 20))
+>>>> @@ -84,6 +85,7 @@
+>>>>      #define DMA_BUSY_TIMEOUT    0x100000
+>>>>    #define CMD_FIFO_EMPTY_TIMEOUT    1000
+>>>> +#define DEVICE_READY_TIMEOUT    1000
+>>>>      #define MAX_CE_NUM        2
+>>>>    @@ -255,8 +257,26 @@ static void meson_nfc_select_chip(struct nand_chip *nand, int chip)
+>>>>        }
+>>>>    }
+>>>>    +static int meson_nfc_wait_cmd_finish(struct meson_nfc *nfc,
+>>>> +                     unsigned int timeout_ms)
+>>>> +{
+>>>> +    u32 cmd_size = 0;
+>>>> +    int ret;
+>>>> +
+>>>> +    /* wait cmd fifo is empty */
+>>>> +    ret = readl_relaxed_poll_timeout(nfc->reg_base + NFC_REG_CMD, cmd_size,
+>>>> +                     !NFC_CMD_GET_SIZE(cmd_size),
+>>>> +                     10, timeout_ms * 1000);
+>>>> +    if (ret)
+>>>> +        dev_err(nfc->dev, "wait for empty CMD FIFO timed out\n");
+>>>> +
+>>>> +    return ret;
+>>>> +}
+>>>> +
+>>>>    static void meson_nfc_cmd_idle(struct meson_nfc *nfc, u32 time)
+>>>>    {
+>>>> +    meson_nfc_wait_cmd_finish(nfc, 0);
+>>>> +
+>>>>        writel(nfc->param.chip_select | NFC_CMD_IDLE | (time & 0x3ff),
+>>>>               nfc->reg_base + NFC_REG_CMD);
+>>>>    }
+>>>> @@ -308,23 +328,9 @@ static void meson_nfc_drain_cmd(struct meson_nfc *nfc)
+>>>>         */
+>>>>        meson_nfc_cmd_idle(nfc, 0);
+>>>>        meson_nfc_cmd_idle(nfc, 0);
+>>>> +    meson_nfc_wait_cmd_finish(nfc, 1000);
+>>>>    }
+>>>>    -static int meson_nfc_wait_cmd_finish(struct meson_nfc *nfc,
+>>>> -                     unsigned int timeout_ms)
+>>>> -{
+>>>> -    u32 cmd_size = 0;
+>>>> -    int ret;
+>>>> -
+>>>> -    /* wait cmd fifo is empty */
+>>>> -    ret = readl_relaxed_poll_timeout(nfc->reg_base + NFC_REG_CMD, cmd_size,
+>>>> -                     !NFC_CMD_GET_SIZE(cmd_size),
+>>>> -                     10, timeout_ms * 1000);
+>>>> -    if (ret)
+>>>> -        dev_err(nfc->dev, "wait for empty CMD FIFO time out\n");
+>>>> -
+>>>> -    return ret;
+>>>> -}
+>>>>      static int meson_nfc_wait_dma_finish(struct meson_nfc *nfc)
+>>>>    {
+>>>> @@ -631,6 +637,48 @@ static int meson_nfc_rw_cmd_prepare_and_execute(struct nand_chip *nand,
+>>>>        return 0;
+>>>>    }
+>>>>    +static uint8_t meson_nfc_read_byte(struct nand_chip *nand)
+>>>> +{
+>>>> +    struct meson_nfc *nfc = nand_get_controller_data(nand);
+>>>> +
+>>>> +    writel(NFC_CMD_DRD, nfc->reg_base + NFC_REG_CMD);
+>>>> +    meson_nfc_cmd_idle(nfc, nfc->timing.twb);
+>>>> +    meson_nfc_drain_cmd(nfc);
+>>>> +
+>>>> +    return readl(nfc->reg_base + NFC_REG_BUF);
+>>>> +}
+>>>> +
+>>>> +static int meson_nfc_wait_dev_ready(struct nand_chip *nand)
+>>>> +{
+>>>> +    struct meson_nfc *nfc = nand_get_controller_data(nand);
+>>>> +    u32 cs = nfc->param.chip_select;
+>>>> +    unsigned long cnt = 0;
+>>>> +
+>>>> +    meson_nfc_drain_cmd(nfc);
+>>>> +
+>>>> +    writel(cs | NFC_CMD_CLE | NAND_CMD_STATUS, nfc->reg_base + NFC_REG_CMD);
+>>>> +
+>>>> +    /* 10 ms. */
+>>>> +    while (cnt < DEVICE_READY_TIMEOUT) {
+>>>> +        uint8_t status;
+>>>> +
+>>>> +        status = meson_nfc_read_byte(nand);
+>>>> +
+>>>> +        if (status & NAND_STATUS_READY)
+>>>> +            break;
+>>>> +
+>>>> +        usleep_range(10, 11);
+>>>> +        cnt++;
+>>>> +    }
+>>>> +
+>>>> +    if (cnt == DEVICE_READY_TIMEOUT) {
+>>>> +        dev_err(nfc->dev, "device ready timeout\n");
+>>>> +        return -ETIMEDOUT;
+>>>> +    }
+>>>> +
+>>>> +    return 0;
+>>>> +}
+>>>> +
+>>>>    static int meson_nfc_write_page_sub(struct nand_chip *nand,
+>>>>                        int page, int raw)
+>>>>    {
+>>>> @@ -643,6 +691,10 @@ static int meson_nfc_write_page_sub(struct nand_chip *nand,
+>>>>        u32 cmd;
+>>>>        int ret;
+>>>>    +    ret = meson_nfc_wait_dev_ready(nand);
+>>>> +    if (ret)
+>>>> +        return ret;
+>>>> +
+>>>>        meson_nfc_select_chip(nand, nand->cur_cs);
+>>>>          data_len =  mtd->writesize + mtd->oobsize;
+>>>> @@ -667,12 +719,20 @@ static int meson_nfc_write_page_sub(struct nand_chip *nand,
+>>>>                         NFC_CMD_SCRAMBLER_DISABLE);
+>>>>        }
+>>>>    +    ret = meson_nfc_wait_dma_finish(nfc);
+>>>> +    if (ret)
+>>>> +        return ret;
+>>>> +
+>>>>        cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_PAGEPROG;
+>>>>        writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>>>>        meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tPROG_max));
+>>>>          meson_nfc_dma_buffer_release(nand, data_len, info_len, DMA_TO_DEVICE);
+>>>>    +    ret = meson_nfc_wait_dev_ready(nand);
+>>>> +    if (ret)
+>>>> +        return ret;
+>>>> +
+>>>>        return ret;
+>>>>    }
+>>>>    @@ -720,6 +780,21 @@ static void meson_nfc_check_ecc_pages_valid(struct meson_nfc *nfc,
+>>>>        } while (!ret);
+>>>>    }
+>>>>    +static inline int meson_nfc_send_read(struct nand_chip *nand)
+>>>> +{
+>>>> +    struct meson_nfc *nfc = nand_get_controller_data(nand);
+>>>> +    u32 cs = nfc->param.chip_select;
+>>>> +    int ret;
+>>>> +
+>>>> +    ret = meson_nfc_wait_dev_ready(nand);
+>>>> +    if (ret)
+>>>> +        return ret;
+>>>> +
+>>>> +    writel(cs | NFC_CMD_CLE | NAND_CMD_READ0, nfc->reg_base + NFC_REG_CMD);
+>>>> +
+>>>> +    return 0;
+>>>> +}
+>>>> +
+>>>
+>>> it already calls meson_nfc_queue_rb() in meson_nfc_rw_cmd_prepare_and_execute(). Could you implements this in meson_nfc_queue_rb()? and we can use the irq method.
+>>> also without Ready/Busy pin, the meson_nfc_queue_rb() should change like below:
+>>>      ......
+>>>      #define NFC_CMD_RB_INT    ((0xb << 10) | BIT(18))
+> 
+> Sorry, I can see this define as (and it is used in the driver):
+> #define NFC_CMD_RB_INT          BIT(14)
+> 
+> in drivers/mtd/nand/raw/meson_nand.c
+> 
+> Which one is correct ?
+
+we need to modify the define 'NFC_CMD_RB_INT' as ((0xb << 10) | BIT(18)).
+
+> 
+> Thanks, Arseniy
+> 
+>>>
+>>>      meson_nfc_cmd_idle(nfc, 0);
+>>>      cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_STATUS;
+>>>      writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>>>      meson_nfc_cmd_idle(nfc, 5);
+>>>      cmd = NFC_CMD_RB | NFC_CMD_RB_INT | nfc->timing.tbers_max;
+>>>      writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>>>
+>>>      ret = wait_for_completion_timeout(&nfc->completion,
+>>>                        msecs_to_jiffies(timeout_ms));
+>>>      if (ret == 0)
+>>>          ret = -1;
+>>>
+>>>      writel(cs | NFC_CMD_CLE | NAND_CMD_READ0, nfc->reg_base + NFC_REG_CMD);
+>>>      ......
+>>>
+>>
+>>      
+>> Thanks for reply! I'll try this code! One more question about OOB processing in this
+>> driver (as You are author of it):
+>>
+>>     OOB size is 64 bytes, but for example if I have 1K ECC, 2 bytes user bytes and 14
+>>     bytes for ECC code for each 1K. In this case I have access to only 32 bytes of OOB:
+>>     2 x (2 user bytes + 14 ECC bytes). Correct me if i'm wrong, but rest of OOB (next
+>>     32 bytes) become unavailable (in both raw and ECC modes) ?
+>>
+>> Thanks, Arseniy
+>>
+>>>>    static int meson_nfc_read_page_sub(struct nand_chip *nand,
+>>>>                       int page, int raw)
+>>>>    {
+>>>> @@ -734,10 +809,18 @@ static int meson_nfc_read_page_sub(struct nand_chip *nand,
+>>>>        data_len =  mtd->writesize + mtd->oobsize;
+>>>>        info_len = nand->ecc.steps * PER_INFO_BYTE;
+>>>>    +    ret = meson_nfc_wait_dev_ready(nand);
+>>>> +    if (ret)
+>>>> +        return ret;
+>>>> +
+>>>>        ret = meson_nfc_rw_cmd_prepare_and_execute(nand, page, DIRREAD);
+>>>>        if (ret)
+>>>>            return ret;
+>>>>    +    ret = meson_nfc_send_read(nand);
+>>>> +    if (ret)
+>>>> +        return ret;
+>>>> +
+>>>>        ret = meson_nfc_dma_buffer_setup(nand, meson_chip->data_buf,
+>>>>                         data_len, meson_chip->info_buf,
+>>>>                         info_len, DMA_FROM_DEVICE);
+>>>> @@ -754,6 +837,9 @@ static int meson_nfc_read_page_sub(struct nand_chip *nand,
+>>>>        }
+>>>>          ret = meson_nfc_wait_dma_finish(nfc);
+>>>> +    if (ret)
+>>>> +        return ret;
+>>>> +
+>>>>        meson_nfc_check_ecc_pages_valid(nfc, nand, raw);
+>>>>          meson_nfc_dma_buffer_release(nand, data_len, info_len, DMA_FROM_DEVICE);
+>>>
+> 
+
+-- 
+Thanks,
+Liang
