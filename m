@@ -2,148 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C51736DF84E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:22:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C2486DF853
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230371AbjDLOWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 10:22:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50380 "EHLO
+        id S229870AbjDLOXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 10:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbjDLOWf (ORCPT
+        with ESMTP id S229535AbjDLOXs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 10:22:35 -0400
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E9F5BB0;
-        Wed, 12 Apr 2023 07:22:33 -0700 (PDT)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-1842f69fe1fso13819117fac.11;
-        Wed, 12 Apr 2023 07:22:33 -0700 (PDT)
+        Wed, 12 Apr 2023 10:23:48 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758CD10C0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:23:47 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id j8so10070592pjy.4
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:23:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681309427; x=1683901427;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=sniY/Tac8A1W1zg6TUFVsDJ2AGSVxreOz6N9SHlp3qk=;
+        b=vJFBedIZHWMArO2ifi9Q8vao8wa60EyYskVgeKCE0jGTq1wu+qkHWzS49sXUerlT+C
+         aolOGj7tsQwD8CXIlwjPXD3rkGqw0qzv41DIWcK5s2lbU+decSPZ1s8mzcU7+CWoOzzy
+         ZGOEqQGPkai+wggf0c+WbDuJ6sMzquYBXPQi6uqvy+9wasZJvRzo/apjPB8a3ITYYHdc
+         MR81Ggj7T/1bmDOdMFlBX3FuRrjbtkki6DKhOYo2y94fPtNRlQiuUa83Vob5HQbduYS7
+         1pD2piidmZmJGsxS32VbT88DSQc906Gs8sxXRueA/nTnJhKJ9fcL2piqYV6ZHoHBnaHp
+         Rpjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681309353; x=1683901353;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VPvHP5zKEhV3wpPCaaJd0A6PHj3TqrNkW4J6dKPRAfw=;
-        b=5lQq/Nejs25Vk0ZcsNlVd/GDTYBvHlzp0fhJkmhrIwKRhF0PQXQnyz5iC5gdAqHO07
-         9V13/a+1FOIJ0Okav0LPeTBoAWPLJxsP0H3aYgYTaPmQjQ+sZHP+PpUz3Z4XH5/uvxM6
-         Yb/zeu+uDxZc1B080IMzGqUDgkTOM1lWEszuyDK1uKMEoZgoebFznNBIdlFkUzCDnMWh
-         Xf92p7MEYfJMqhrbeyb8pFUzSgTnHUzYJi29fSR/KASueuu4C1Fawsw5xV0mtXyvtu7c
-         IH7ZmGgJ5CNUCndtspQkG0sr7/O24w9MlbphBREZ7KypUuuydow7A9rXgEzunJBNuNPo
-         aasw==
-X-Gm-Message-State: AAQBX9dw53FkZiBCCsR8E1Eej7J59cvOHZ1a/hcQzAbsmlVuj4Gwvi/n
-        rxqV5ltY4aZh9ZXIxnew0j6+9pr2Ww==
-X-Google-Smtp-Source: AKy350ZCtkbbDRKlzPF0Ss6Eh8n2Yi3YFFtYIpvQFEmGPtALYaJH/WAqtHFfG07hJhh36HiOUhzpAQ==
-X-Received: by 2002:a05:6870:a713:b0:17a:b026:dacc with SMTP id g19-20020a056870a71300b0017ab026daccmr9345535oam.52.1681309353118;
-        Wed, 12 Apr 2023 07:22:33 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id z7-20020a056870e14700b001842bb0a01csm172819oaa.27.2023.04.12.07.22.32
+        d=1e100.net; s=20210112; t=1681309427; x=1683901427;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sniY/Tac8A1W1zg6TUFVsDJ2AGSVxreOz6N9SHlp3qk=;
+        b=zfwoTpmJ0sbJlSDOVivwnl2YaqhVyYbkQQe7usOfFUIwDpDSmL75QB2ZEFayWsWOB9
+         aNhETJO5JQx+TumrBw4Qwr2LIFb3lKqKjL+xtOpcug7+9IV3ROsMe+1O2CYd1/VxxheL
+         MzvFK6tNbmbKvrVPOkKLbM4T7somOUmvJyDbnO/fRcILl69p+pw3HK7nL3bF9WzavT/B
+         pdQwwVjwOV/QAl4jt4TG5dfKhAG99wol7iheKOZi1VkGWKqnbPa/6yDFrrtDkRXeqh4i
+         8R+TKZlDT+j9cTGKXs0gmv83P4tlSHQ+jaf8UZRZIBXabVsR/LbzXAgg7TKPP015iC9J
+         0rcQ==
+X-Gm-Message-State: AAQBX9eCDNA1STIdShxtbP/qipTYl0/HfUmaAxv7kyHZDb2SKWDJpZow
+        E8adu+mrcyZ1j/xI2bObx/cp
+X-Google-Smtp-Source: AKy350b2yHSuSf+/lZWKlGogXKYfHgRmTqJ85Vt6CI/QEG82FqiOycg96/NUCUl6zAYw9LdMkRqiaQ==
+X-Received: by 2002:a17:902:d484:b0:1a6:6b5d:8381 with SMTP id c4-20020a170902d48400b001a66b5d8381mr3830737plg.21.1681309426789;
+        Wed, 12 Apr 2023 07:23:46 -0700 (PDT)
+Received: from thinkpad ([117.217.185.192])
+        by smtp.gmail.com with ESMTPSA id e5-20020a170902784500b001a5fccab02dsm6737288pln.177.2023.04.12.07.23.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 07:22:32 -0700 (PDT)
-Received: (nullmailer pid 2309359 invoked by uid 1000);
-        Wed, 12 Apr 2023 14:22:32 -0000
-Date:   Wed, 12 Apr 2023 09:22:32 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Wed, 12 Apr 2023 07:23:46 -0700 (PDT)
+Date:   Wed, 12 Apr 2023 19:53:39 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     Rob Herring <robh@kernel.org>, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, bhelgaas@google.com,
+        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: soc: qcom: Add RPM Master stats
-Message-ID: <20230412142232.GA2305202-robh@kernel.org>
-References: <20230405-topic-master_stats-v2-0-51c304ecb610@linaro.org>
- <20230405-topic-master_stats-v2-1-51c304ecb610@linaro.org>
+Subject: Re: [PATCH] Revert "dt-bindings: PCI: qcom: Add iommu-map properties"
+Message-ID: <20230412142339.GC9463@thinkpad>
+References: <20230411121533.22454-1-manivannan.sadhasivam@linaro.org>
+ <20230411174742.GA3428751-robh@kernel.org>
+ <20230411184231.GA59982@thinkpad>
+ <ZDZouY0PEL64MT6N@lpieralisi>
+ <20230412101112.GA9463@thinkpad>
+ <ZDaMCcTD/Nwx0vnh@lpieralisi>
+ <20230412112918.GB9463@thinkpad>
+ <ZDaxvBK9IqAhZwIM@lpieralisi>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230405-topic-master_stats-v2-1-51c304ecb610@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZDaxvBK9IqAhZwIM@lpieralisi>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 04:49:17PM +0200, Konrad Dybcio wrote:
-> The RPM MSG RAM contains per-RPM-master (e.g. APPS, ADSP etc.) sleep
-> statistics. They let one assess which core is actively preventing the
-> system from entering a true low-power mode.
-
-Just curious, is that a debug thing or something the OS uses?
-
+On Wed, Apr 12, 2023 at 03:27:24PM +0200, Lorenzo Pieralisi wrote:
+> On Wed, Apr 12, 2023 at 04:59:18PM +0530, Manivannan Sadhasivam wrote:
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  .../bindings/soc/qcom/rpm-master-stats.yaml        | 53 ++++++++++++++++++++++
+> [...]
+> 
+> > > > This is fine. The plan is to remove the "iommus" property from Qcom PCI binding
+> > > > since we have removed the usage of that property from devicetree [1]. Initially
+> > > > the iommu properties were not documented at all in the binding. But commit,
+> > > > "dt-bindings: PCI: qcom: Add SM8550 compatible" added them to the binding to
+> > > > satisfy dtbs check. But in parallel, the patch removing "iommus" property from
+> > > > dts got merged to qcom tree.
+> > > > 
+> > > > So now we have 2 options here:
+> > > > 
+> > > > 1. Amend the commit "dt-bindings: PCI: qcom: Add SM8550 compatible" to remove
+> > > > the "iommus" property.
+> > > > 
+> > > > 2. I will submit a separate patch removing that property.
+> > > > 
+> > > > Lorenzo, let me know what works for you. Sorry for the mess! Confusion happened
+> > > > due to patches getting applied without sync.
+> > > 
+> > > You can inline a diff here for (1), I will amend the commit.
+> > > 
+> > 
+> > Here you go:
+> > 
+> > diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> > index a1318a4ecadf..1548a7114732 100644
+> > --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> > +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> > @@ -60,9 +60,6 @@ properties:
+> >      minItems: 1
+> >      maxItems: 8
+> >  
+> > -  iommus:
+> > -    maxItems: 1
+> > -
+> >    iommu-map:
+> >      maxItems: 2
+> 
+> Done, please check, thanks.
+> 
 
-qcom,rpm-master-stats.yaml
+LGTM, thanks!
 
->  1 file changed, 53 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/qcom/rpm-master-stats.yaml b/Documentation/devicetree/bindings/soc/qcom/rpm-master-stats.yaml
-> new file mode 100644
-> index 000000000000..d2d6a2a39fef
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/qcom/rpm-master-stats.yaml
-> @@ -0,0 +1,53 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/soc/qcom/rpm-master-stats.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Technologies, Inc. (QTI) RPM Master Stats
-> +
-> +maintainers:
-> +  - Konrad Dybcio <konrad.dybcio@linaro.org>
-> +
-> +description:
-> +  Per-RPM-Master (e.g. APSS, ADSP, etc.) sleep statistics.
-> +
-> +properties:
-> +  compatible:
-> +    const: qcom,rpm-master-stats
-> +
-> +  qcom,rpm-msg-ram:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description: Phandle to an RPM MSG RAM slice containing the master stats
-> +    minItems: 1
-> +    maxItems: 5
-> +
-> +  qcom,master-names:
-> +    $ref: /schemas/types.yaml#/definitions/string-array
-> +    description: RPM Master name
-> +    minItems: 1
-> +    maxItems: 5
-> +
-> +required:
-> +  - compatible
-> +  - qcom,rpm-msg-ram
-> +  - qcom,master-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    stats {
-> +      compatible = "qcom,rpm-master-stats";
-> +      qcom,rpm-msg-ram = <&apss_master_stats>,
-> +                         <&mpss_master_stats>,
-> +                         <&adsp_master_stats>,
-> +                         <&cdsp_master_stats>,
-> +                         <&tz_master_stats>;
-> +      qcom,master-names = "APSS",
-> +                          "MPSS",
-> +                          "ADSP",
-> +                          "CDSP",
-> +                          "TZ";
-> +    };
-> +...
-> 
-> -- 
-> 2.40.0
-> 
+- Mani
+
+> Lorenzo
+
+-- 
+மணிவண்ணன் சதாசிவம்
