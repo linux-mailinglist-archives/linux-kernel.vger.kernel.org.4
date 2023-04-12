@@ -2,106 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0D1C6DEC30
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 09:02:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFC8A6DEC35
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 09:03:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbjDLHCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 03:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35916 "EHLO
+        id S229852AbjDLHDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 03:03:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbjDLHB7 (ORCPT
+        with ESMTP id S229481AbjDLHDi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 03:01:59 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 700161989
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:01:56 -0700 (PDT)
-Received: from dggpemm500013.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PxDBt1sykzDsl5;
-        Wed, 12 Apr 2023 15:01:10 +0800 (CST)
-Received: from [10.67.108.67] (10.67.108.67) by dggpemm500013.china.huawei.com
- (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 12 Apr
- 2023 15:01:53 +0800
-Message-ID: <1ceb1769-f01b-c417-e912-4ee1149dd0cb@huawei.com>
-Date:   Wed, 12 Apr 2023 15:01:53 +0800
+        Wed, 12 Apr 2023 03:03:38 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4F544C2C
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:03:34 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id jg21so25963462ejc.2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:03:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681283013;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7LzhE8XDEHN0mE13t9qLmnorPLOmISq2GFATJ1xxmIA=;
+        b=wRXFdRpdUxWsWOIZg8dikxSelGtuZLguzJn0hWsvIqkcFUtUQziNMcdzRVnTvDTqeH
+         FW97zIGDOupJLwsBG7wu+16HugtpMfJRuA63ySfBOo4QmMoOkFtLl4x0zG2pkePAmFaV
+         7MEYu/rYKgOjBgAdbqIhB6ZtzbSjMzMxwfH8rukdAsUdcD9n6oEXLe6cNtYH2batotpL
+         ZmvjAlvxfaR72zcfG8GQHB1X2DfsUFRKq97vnojoTMJBdbhSzU80rOImxi0TVMB4WPhC
+         SDDiT/qAngGcUhRjz7IrBjlGrwCwECBL+tGp1M7arv9qV/kTK09sfPeEDTeZA52Bo653
+         DTMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681283013;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7LzhE8XDEHN0mE13t9qLmnorPLOmISq2GFATJ1xxmIA=;
+        b=c3oa1os5A+WZuEIXy5qkLSTS4pzE5si7remXcitZArSJtBnWlyVYDxbs8Q8bSlvFvO
+         wEwi9mYq5Kmy+p3KVxjSmlCGlMcpPsDxZZUQGbiWPXwncp81NBiazfgtWU1RCB4KGCDr
+         UoKwgWqnyPZ2h3iZ7GVo/7Qvmgnv3fPt2BSKhcnTJeC98mVR2zO9jVK79i2tvAwTd9Zl
+         rkIwN/ka7G+9t+Y7yEysnw0YSsHo5vluv9KK4cYs8inm2K2XMUj26mjaq2TuCQlLY+UD
+         IaqHsFCiyMSHH0G8N7qGd23uZUV0rCbU2WC0JkTWJ/ZLWhkZb1DhuLfKCrTdIOYAuGkb
+         u6qQ==
+X-Gm-Message-State: AAQBX9ckTiKaqb00Zv+aF16TFLb7KFPvnp+JG5xO/SYcSaxoBNi63pHU
+        9qM4IP/mK4fRsdOwLUq2J+x/bg==
+X-Google-Smtp-Source: AKy350bQSyb2tXwMQt2uxDvqWUUDBrt1x3Jjs+y34xcL4WKJrFQcvNsAaagC6xcfspRReV6mU5rwUQ==
+X-Received: by 2002:a17:906:2e85:b0:94d:a2c2:9aeb with SMTP id o5-20020a1709062e8500b0094da2c29aebmr6032088eji.49.1681283013345;
+        Wed, 12 Apr 2023 00:03:33 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:8fa0:9989:3f72:b14f? ([2a02:810d:15c0:828:8fa0:9989:3f72:b14f])
+        by smtp.gmail.com with ESMTPSA id 24-20020a170906319800b008e9c79ff14csm6864614ejy.96.2023.04.12.00.03.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Apr 2023 00:03:32 -0700 (PDT)
+Message-ID: <15e1d05f-b7e1-27bc-7363-aefd2d155eea@linaro.org>
+Date:   Wed, 12 Apr 2023 09:03:31 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [PATCH 1/2] x86: profiling: remove lock functions hack for
- !FRAME_POINTER
-To:     Dave Hansen <dave.hansen@intel.com>, <x86@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <hpa@zytor.com>,
-        <akpm@linux-foudation.org>, <ben-linux@fluff.org>,
-        <wuchi.zero@gmail.com>
-References: <20230410022226.181812-1-chenzhongjin@huawei.com>
- <20230410022226.181812-2-chenzhongjin@huawei.com>
- <d416428f-c846-b6b9-74da-f3571d92d38a@intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp-lenovo-thinkpad: correct pin
+ drive-strength
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230407180710.128815-1-krzysztof.kozlowski@linaro.org>
+ <ZDVtXkCON8DFUDjh@hovoldconsulting.com>
+ <887eb9f6-9882-37c6-4332-ddae7a354187@linaro.org>
+ <ZDZUiW+74rhhRAfS@hovoldconsulting.com>
 Content-Language: en-US
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-In-Reply-To: <d416428f-c846-b6b9-74da-f3571d92d38a@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ZDZUiW+74rhhRAfS@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.108.67]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/11 3:34, Dave Hansen wrote:
-> On 4/9/23 19:22, Chen Zhongjin wrote:
->> Syzbot has been reporting the problem of stack-out-of-bounds in
->> profile_pc for a long time:
->> https://syzkaller.appspot.com/bug?extid=84fe685c02cd112a2ac3
+On 12/04/2023 08:49, Johan Hovold wrote:
+> On Tue, Apr 11, 2023 at 06:58:33PM +0200, Krzysztof Kozlowski wrote:
+>> On 11/04/2023 16:23, Johan Hovold wrote:
+>>> On Fri, Apr 07, 2023 at 08:07:10PM +0200, Krzysztof Kozlowski wrote:
+>>>> Fix typo in drive-strength property name.
+>>>
+>>> In the future, please try to use the established commit-summary prefix.
+>>> In this case:
+>>>
+>>> 	arm64: dts: qcom: sc8280xp-x13s:
 >>
->> profile_pc tries to get pc if current regs is inside lock function. For
->> !CONFIG_FRAME_POINTER it used a hack way to get the pc from stack, which
->> is not work with ORC. It makes profile_pc read illeagal address, return
->> wrong result, and frequently triggers KASAN.
+>> Sure.
 >>
->> Since lock profiling can be handled with much better other tools, It's
->> reasonable to remove lock functions hack for !FRAME_POINTER kernel.
-> OK, so let me make sure I understand what's going on:
->
-> 1. This whole issue is limited to kernel/profile.c which is what drives
->     readprofile(8) and /proc/profile
-> 2. This is removing code that got added in 2006:
-> 	0cb91a229364 ("[PATCH] i386: Account spinlocks to the caller during
-> profiling for !FP kernels")
-> 3. This was an OK hack back in the day, but it outright breaks today
->     in some situations.  KASAN also didn't exist in 2006.
-Yes, and whether KASAN is enabled it can make problem.
-Some lock_function will save registers on stack (this may not happen in 
-2006).
-These registers can be recorded by profile and be read outside of kernel,
-which is risky theoretically.
-> 4. !CONFIG_FRAME_POINTER is probably even more rare today than it was in
->     2006
-No. !CONFIG_FRAME_POINTER is more common today because of UNWINDER_ORC.
-And that is why the bug is triggered more frequently.
-> 5. Lock function caller information is available at _least_ from perf,
->     maybe other places too??  (What "much better other tools" are there?)
+>> commit ca1ce7207e53cfe69aee5002eb3795069668da53
+>> Author: Johan Hovold <johan+linaro@kernel.org>
+>> Date:   Fri Aug 5 11:23:17 2022 +0200
+>>
+>>     arm64: dts: qcom: sc8280xp-lenovo-thinkpad-x13s: add alternate touchpad
+> 
+> Yeah, we initially used a longer prefix (including "x13s" which was
+> missing in the Subject of this patch), but quite soon decided on using
+> the shorter
+> 
+> 	arm64: dts: qcom: sc8280xp-x13s:
+> 
+> instead.
 
-Yes, it's basically about perf function graph.
+Thanks. Do you know if this rule applies to other long-names? I was
+usually keeping full name or shortening them by cutting end, but maybe I
+should cut the middle?
 
-> Given all that, this patch suggests that we can remove the stack peeking
-> hack.  The downside is that /proc/profile users will see their profiles
-> pointing to the spinlock functions like they did in 2005.  The upside is
-> that we won't get any more KASAN reports.
->
-> If anyone complains, I assume we're just going to tell them to run 'perf
-> --call-graph' and to go away (which also probably didn't exist in 2006).
->
-> If I got all that right, the end result seems sane to me.  It would be
-> _nice_ if you could make a more coherent changelog out of that and
-> resend.  Also, considering that your two "profile" issues are quite
-> independent, you can probably just resend the two patches separately.
-Thanks for review and I'll send another version to provide better details.
+sm8250-sony-xperia-edo-pdx206
+sm8250-sony-xperia-edo
+sm8250-pdx206
+
+Best regards,
+Krzysztof
+
