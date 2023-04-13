@@ -2,200 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15DEE6E0C2A
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 13:12:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9A106E0C2C
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 13:12:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbjDMLMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 07:12:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46364 "EHLO
+        id S230129AbjDMLM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 07:12:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjDMLMU (ORCPT
+        with ESMTP id S229580AbjDMLMY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 07:12:20 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75ADF5FDE
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 04:12:19 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id lh8so1601555plb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 04:12:19 -0700 (PDT)
+        Thu, 13 Apr 2023 07:12:24 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07B972BB
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 04:12:22 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id s2so10560418wra.7
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 04:12:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681384339; x=1683976339;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A73lIhTXN7SmewkpI9NxDWpme+x9dolditKkQgZC8NA=;
-        b=XSjnJwmJv2qB/HoGUzKhLO0qSpSMz8QvIXHumXbWbrFWPs266GvyxjGgAi0h8hmGIB
-         W/bTmRP1GhtbEtKaqNriNMoeUE5WGW+tGOEDiPc2rpkzl2uUXLOWIWfq6EoRKFJt107o
-         gNe2YIdBBubMFFHiEJjCXfGOJpJp/eM2q+tis2uQXOiATnVM/Zi4aXGeKIbtmQDZs+Jj
-         v1hmxBhLOQb9qZ0gxrhaAdrG9hjkrg/CzQQ2FRD/jHKHSRftB2z7Lk3eSKUV1lkJIPBe
-         7pJDfiPRhOAVmNzwTFatyYzUdVeTYT8pL+Uuz1MBof9g5zddrWKqWl8/cjxPrXv6j8qQ
-         77GQ==
+        d=linaro.org; s=google; t=1681384341; x=1683976341;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QArK/FYVA8r4jHMgxjz+s5Hgq6dOuc63XEe7lmAWZVQ=;
+        b=k41bUmuuwfM1btMOKkxoehhXgXxjhJcpDNZ+tOwc0USDBlyDnQSDMbiFA2w0O+mYTA
+         Skeo4ykHdzNaFkiON1NBc6Q5UbdOQQ1B+eQh06KYoaRrqqXjhGqF143wNUBvyNW1rsQ1
+         9PyNa6doco5cnifjr8dZENnaXSiCcU3cpADCd17X2e2R1mU3fDbkRLFvtP0RSsvhDUaM
+         h8hMInV4tCjyHEhwsPGwn6Wwi88Jm4hKdt6AaG3RbNMN9HWd2W8brTFgzpveNzH8pYxF
+         SeueAnnBjaorYeJiy02fAgYcPMM0JSZoK+u/O3AYSw6IkXEDONYJmBGrIpcZqrUk5h1X
+         IP+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681384339; x=1683976339;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=A73lIhTXN7SmewkpI9NxDWpme+x9dolditKkQgZC8NA=;
-        b=fnP6Q13CXJVYhlQaMCIKE/fHAghT7y7cYjjLsaH1eUp+ABrTXW5ejQ8LL+4EmNXFtA
-         xo+LfCdlfGi3CA/uDJbnCJbT4pPK4lmNYvCaE4AtoLoZo3AkBebg3X752W5MC4mvwqUD
-         AxBd8Mzl3GyyNrg3M0head1pQBCYRO9gKu4GN1GAqVxM9RekZvp4oP5xWJ0pSDzplAGc
-         3eiHyZ200XQQz/VVIc6jhdtQTsBiguX6/s+DAORznkiL1I25FmtMpsjwDPeGrBiunhjg
-         oDlgkihO3Wdo0IjdTbrRCwdevNPPN+g6+KUsLmACcA40zPejVMN1U3j9R9e1ymOwuqLO
-         lC0A==
-X-Gm-Message-State: AAQBX9eAIbuSe3HlAKuPXjRom3g54Cojz2tiQTEtBaF+Ik1gWe8LeOzA
-        QeI03XkpWoCvtAM/fvN9lh2A1j5vbrfy4ch5HHM=
-X-Google-Smtp-Source: AKy350bacMx37uuFwzQ0zqDbeOBQbnko1h8u4MC+4Jg/nV+7/t2rpGMh5fDWMRtyY9KhrIjItLuLow99/+KfFG+WD5I=
-X-Received: by 2002:a17:90a:6fc7:b0:244:9909:6e60 with SMTP id
- e65-20020a17090a6fc700b0024499096e60mr425249pjk.3.1681384338861; Thu, 13 Apr
- 2023 04:12:18 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681384341; x=1683976341;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QArK/FYVA8r4jHMgxjz+s5Hgq6dOuc63XEe7lmAWZVQ=;
+        b=eOSoE8AJsK6b+DId33OjnTSmuO1cBj0gmIS9hRp1Y7jEnH05F7/PTOoWtla2gEWYLB
+         ebwZuky4s8SLCoEcr5dbm71ph59q4tm/INrN6wcRn2gcu/LcfWGvNVYiGY6uRcdNyYJy
+         4RXSu3q+2m8pal4Cr915WtebBYeGxaMbhAbBsbI9QxJycDECLKm8jP7sSx8bnWi4dW0J
+         DmiQQcVjd+2T2yq3ijd9OsVINa6Q66SsD2K+TwkSY74RVMoVxoWGfk2uF/+daTJMkKr9
+         a0WX/HHGvBNmkaUM992//sMWIFgkBAZvO2YJIc4d5QlzPNTgE2xLZlORzvTwyborLLJg
+         yMaA==
+X-Gm-Message-State: AAQBX9c8YvHW1ufm5+lB61iX3hhI602aajuHlcX+5n5Q48eXs/gxQ1hL
+        mHdibgp6xoZdOsn2Iay2chFYDr9HPHSBVg84K9I=
+X-Google-Smtp-Source: AKy350ao9yolIef91UMqjque+KErSt6pLHDXQB1aEkBr6cmmLqvMkHUHWz42eqTmRHczBtxsHIAyLA==
+X-Received: by 2002:a05:6000:1b8c:b0:2f4:d4a3:c252 with SMTP id r12-20020a0560001b8c00b002f4d4a3c252mr1304177wru.3.1681384341423;
+        Thu, 13 Apr 2023 04:12:21 -0700 (PDT)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id c14-20020adfe74e000000b002cefcac0c62sm1093126wrn.9.2023.04.13.04.12.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Apr 2023 04:12:20 -0700 (PDT)
+Message-ID: <9156affd-7f08-282b-ee65-ae82f4d94cbc@linaro.org>
+Date:   Thu, 13 Apr 2023 12:12:19 +0100
 MIME-Version: 1.0
-References: <20230312145305.1908607-1-zyytlz.wz@163.com> <CANDhNCr=hdhKS4c+U=+W1ONHDWv6BrwL5TovGjs0G2G+Reqc9g@mail.gmail.com>
- <CAJedcCyJnV+KnFF5h+2-0W1R4uaUxUxXFUH3Q9HGYh-5F5LmBQ@mail.gmail.com>
- <CAJedcCyERP0-9DNgeKmS3C9Soqq590PteEorr_bxKzNanht=TQ@mail.gmail.com> <CAMSo37Vfr0DOqN+1XjH0o3pOY=BaHnSFkUbnZPOdMQ3TbfoAKg@mail.gmail.com>
-In-Reply-To: <CAMSo37Vfr0DOqN+1XjH0o3pOY=BaHnSFkUbnZPOdMQ3TbfoAKg@mail.gmail.com>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Thu, 13 Apr 2023 19:12:07 +0800
-Message-ID: <CAJedcCzm3MqYe3QGT7V4sMmDsVHbjVSnEc2NXWPMGVZL=a_cBA@mail.gmail.com>
-Subject: Re: [PATCH] misc: hisi_hikey_usb: Fix use after free bug in
- hisi_hikey_usb_remove due to race condition
-To:     Yongqin Liu <yongqin.liu@linaro.org>
-Cc:     John Stultz <jstultz@google.com>, Zheng Wang <zyytlz.wz@163.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>, arnd@arndb.de,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        1395428693sheep@gmail.com, alex000young@gmail.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 2/7] dt-bindings: soundwire: qcom: add 16-bit sample
+ interval
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Rao Mandadapu <quic_srivasam@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
+Cc:     Patrick Lai <quic_plai@quicinc.com>
+References: <20230403132503.62090-1-krzysztof.kozlowski@linaro.org>
+ <20230403132503.62090-3-krzysztof.kozlowski@linaro.org>
+ <94590a79-cae3-7b88-8f02-0c356adf06b7@linaro.org>
+ <7c7afc80-713f-1949-4feb-f5f2d192569c@linaro.org>
+Content-Language: en-US
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <7c7afc80-713f-1949-4feb-f5f2d192569c@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yongqin Liu <yongqin.liu@linaro.org> =E4=BA=8E2023=E5=B9=B44=E6=9C=8813=E6=
-=97=A5=E5=91=A8=E5=9B=9B 18:55=E5=86=99=E9=81=93=EF=BC=9A
->
-> Hi, Zheng
->
-> On Thu, 13 Apr 2023 at 16:08, Zheng Hacker <hackerzheng666@gmail.com> wro=
-te:
-> >
-> > Friendly ping about the bug.
->
-> Sorry, wasn't aware of this message before,
->
-> Could you please help share the instructions to reproduce the problem
-> this change fixes?
->
 
-Hi Yongqin,
 
-Thanks for your reply. This bug is found by static analysis. There is no Po=
-C.
+On 12/04/2023 17:16, Krzysztof Kozlowski wrote:
+> On 12/04/2023 17:28, Srinivas Kandagatla wrote:
+>>
+>>
+>> On 03/04/2023 14:24, Krzysztof Kozlowski wrote:
+>>> The port sample interval was always 16-bit, split into low and high
+>>> bytes.  This split was unnecessary, although harmless for older devices
+>>> because all of them used only lower byte (so values < 0xff).  With
+>>> support for Soundwire controller on Qualcomm SM8550 and its devices,
+>>> both bytes will be used, thus add a new 'qcom,ports-sinterval' property
+>>> to allow 16-bit sample intervals.
+>>>
+>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>> ---
+>>>    .../bindings/soundwire/qcom,soundwire.yaml    | 22 +++++++++++++++++--
+>>>    1 file changed, 20 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/soundwire/qcom,soundwire.yaml b/Documentation/devicetree/bindings/soundwire/qcom,soundwire.yaml
+>>> index c283c594fb5c..883b8be9be1b 100644
+>>> --- a/Documentation/devicetree/bindings/soundwire/qcom,soundwire.yaml
+>>> +++ b/Documentation/devicetree/bindings/soundwire/qcom,soundwire.yaml
+>>> @@ -86,7 +86,7 @@ properties:
+>>>      qcom,ports-sinterval-low:
+>>>        $ref: /schemas/types.yaml#/definitions/uint8-array
+>>>        description:
+>>> -      Sample interval low of each data port.
+>>> +      Sample interval (only lowest byte) of each data port.
+>>>          Out ports followed by In ports. Used for Sample Interval calculation.
+>>>          Value of 0xff indicates that this option is not implemented
+>>>          or applicable for the respective data port.
+>>> @@ -94,6 +94,19 @@ properties:
+>>>        minItems: 3
+>>>        maxItems: 16
+>>>    
+>>> +  qcom,ports-sinterval:
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+>>
+>> Should this not be ref: /schemas/types.yaml#/definitions/uint16-array ?
+> 
+> Same answer as for Rob:
+> 
+> Because I am afraid it will grow in next version to 24 or 32 bits. I can
+> change easily maximum, but if I put here uint16-array, all DTS will have
+> /bytes 16/ annotation.
+> 
+As per MiPi Specs the sample Interval is an integer in the range 2 to 
+65535. I don't see a value in making this u32, other than adding some 
+confusion by deviating from specs.
 
-From my personal experience, triggering race condition bugs stably in
-the kernel needs some tricks.
-For example, you can insert some sleep-time code to slow down the
-thread until the related object is freed.
-Besides, you can use gdb to control the time window. Also, there are
-some other tricks as [1] said.
+--srini
 
-As for the reproduction, this attack vector requires that the attacker
-can physically access the device.
-When he/she unplugs the usb, the remove function is triggered, and if
-the set callback is invoked, there might be a race condition.
-
-In practice, you can just use rmmod command to simulate the unplug
-movement, which will also trigger the hisi_hikey_usb_remove if there
-is a real USB device.
-
-If there's some other help I can provide, please feel free to let me know.
-
-Thanks again for your effort.
-
-Best regards,
-Zheng
-
-[1] https://www.usenix.org/conference/usenixsecurity21/presentation/lee-yoo=
-chan
-
-> Thanks,
-> Yongqin Liu
-> > Zheng Hacker <hackerzheng666@gmail.com> =E4=BA=8E2023=E5=B9=B43=E6=9C=
-=8814=E6=97=A5=E5=91=A8=E4=BA=8C 09:01=E5=86=99=E9=81=93=EF=BC=9A
-> > >
-> > > John Stultz <jstultz@google.com> =E4=BA=8E2023=E5=B9=B43=E6=9C=8814=
-=E6=97=A5=E5=91=A8=E4=BA=8C 03:57=E5=86=99=E9=81=93=EF=BC=9A
-> > > >
-> > > > On Sun, Mar 12, 2023 at 7:53=E2=80=AFAM Zheng Wang <zyytlz.wz@163.c=
-om> wrote:
-> > > > >
-> > > > > In hisi_hikey_usb_probe, it called hisi_hikey_usb_of_role_switch
-> > > > > and bound &hisi_hikey_usb->work with relay_set_role_switch.
-> > > > > When it calls hub_usb_role_switch_set, it will finally call
-> > > > > schedule_work to start the work.
-> > > > >
-> > > > > When we call hisi_hikey_usb_remove to remove the driver, there
-> > > > > may be a sequence as follows:
-> > > > >
-> > > > > Fix it by finishing the work before cleanup in hisi_hikey_usb_rem=
-ove.
-> > > > >
-> > > > > CPU0                  CPU1
-> > > > >
-> > > > >                     |relay_set_role_switch
-> > > > > hisi_hikey_usb_remove|
-> > > > >   usb_role_switch_put|
-> > > > >     usb_role_switch_release  |
-> > > > >      kfree(sw)     |
-> > > > >                     | usb_role_switch_set_role
-> > > > >                     |   //use
-> > > > >
-> > > > > Fixes: 7a6ff4c4cbc3 ("misc: hisi_hikey_usb: Driver to support onb=
-oard USB gpio hub on Hikey960")
-> > > > > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-> > > > > ---
-> > > > >  drivers/misc/hisi_hikey_usb.c | 1 +
-> > > > >  1 file changed, 1 insertion(+)
-> > > > >
-> > > > > diff --git a/drivers/misc/hisi_hikey_usb.c b/drivers/misc/hisi_hi=
-key_usb.c
-> > > > > index 2165ec35a343..26fc895c4418 100644
-> > > > > --- a/drivers/misc/hisi_hikey_usb.c
-> > > > > +++ b/drivers/misc/hisi_hikey_usb.c
-> > > > > @@ -242,6 +242,7 @@ static int hisi_hikey_usb_probe(struct platfo=
-rm_device *pdev)
-> > > > >  static int  hisi_hikey_usb_remove(struct platform_device *pdev)
-> > > > >  {
-> > > > >         struct hisi_hikey_usb *hisi_hikey_usb =3D platform_get_dr=
-vdata(pdev);
-> > > > > +       cancel_work_sync(&hisi_hikey_usb->work);
-> > > > >
-> > > > >         if (hisi_hikey_usb->hub_role_sw) {
-> > > > >                 usb_role_switch_unregister(hisi_hikey_usb->hub_ro=
-le_sw);
-> > > >
-> > > > Looks sane to me.
-> > > > Pulling in Sumit and YongQin as they have hardware and can test wit=
-h it.
-> > > >
-> > > Hi John,
-> > >
-> > > Thanks for your reply. Thank Sumit and YongQin for being willing to
-> > > test the solution with their hardware.
-> > >
-> > > Best regards,
-> > > Zheng
->
->
->
-> --
-> Best Regards,
-> Yongqin Liu
-> ---------------------------------------------------------------
-> #mailing list
-> linaro-android@lists.linaro.org
-> http://lists.linaro.org/mailman/listinfo/linaro-android
+> Best regards,
+> Krzysztof
+> 
