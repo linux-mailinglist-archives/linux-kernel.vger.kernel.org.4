@@ -2,75 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52CA96E0D6B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 14:26:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3BEC6E0D7C
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 14:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbjDMM0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 08:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41472 "EHLO
+        id S229959AbjDMMai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 08:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjDMM0b (ORCPT
+        with ESMTP id S229954AbjDMMad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 08:26:31 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1129359A;
-        Thu, 13 Apr 2023 05:26:30 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PxzHb4hLkznbsH;
-        Thu, 13 Apr 2023 20:22:51 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 13 Apr 2023 20:26:27 +0800
-Message-ID: <d232ab9c-4268-1fc1-5265-64b69e273eca@huawei.com>
-Date:   Thu, 13 Apr 2023 20:26:27 +0800
+        Thu, 13 Apr 2023 08:30:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98379A5FF;
+        Thu, 13 Apr 2023 05:30:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A8DB663DD4;
+        Thu, 13 Apr 2023 12:30:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 17A28C433EF;
+        Thu, 13 Apr 2023 12:30:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681389018;
+        bh=dnK2Zkp6F6t3wIz82oZsMbcs6fURxNc2mBwr80iGrjo=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=D0TetbdqW+deWWrRud3FVpWfoZEzAWK4MLn6MQR3i9SlGHrgCqMJB7Ai9hznayYj/
+         sf183VagFuzC5pkMUOHhTad5ReuYz5rT3C5ckLBrjtlTIDQQ+lJ5sdACNvGLtKjllb
+         Rocxez4El9kHJx9Z+qQ5l4IODw8J6ypZLPZ6KXZBWrVhczB+DlP3IBKOaEEGnFQ5Ro
+         Z15FcEP2ly6jr4Ltv3VMZ9h8Zi6b0wDAhbbYsgiVPxj6F+3iGn0VXkuBuMYd0sHkpa
+         HUkq6D4ll3eAi+Tofp2acRB9qUBE0vo3k5/3OV2ow8n9GHbhzwfSUnFLLb0/80hm7F
+         h1bC32tBi2zCg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id ECBA5C395C5;
+        Thu, 13 Apr 2023 12:30:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v3 2/8] ext4: add a new helper to check if es must be kept
-Content-Language: en-US
-To:     Jan Kara <jack@suse.cz>
-CC:     <linux-ext4@vger.kernel.org>, <tytso@mit.edu>,
-        <adilger.kernel@dilger.ca>, <ritesh.list@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
-        <yangerkun@huawei.com>, <yukuai3@huawei.com>,
-        Baokun Li <libaokun1@huawei.com>
-References: <20230412124126.2286716-1-libaokun1@huawei.com>
- <20230412124126.2286716-3-libaokun1@huawei.com>
- <20230412185300.rpfwdlxeiptqaxes@quack3>
- <22b3bfef-7a47-036d-125b-180040a0c743@huawei.com>
- <20230413103447.br5wgi6zhaaarcaz@quack3>
-From:   Baokun Li <libaokun1@huawei.com>
-In-Reply-To: <20230413103447.br5wgi6zhaaarcaz@quack3>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] selftests/bpf: fix use of uninitialized op_name in
+ log tests
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168138901796.10644.342994766666727920.git-patchwork-notify@kernel.org>
+Date:   Thu, 13 Apr 2023 12:30:17 +0000
+References: <20230413094740.18041-1-lmb@isovalent.com>
+In-Reply-To: <20230413094740.18041-1-lmb@isovalent.com>
+To:     Lorenz Bauer <lmb@isovalent.com>
+Cc:     andrii@kernel.org, mykolal@fb.com, ast@kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        shuah@kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/13 18:34, Jan Kara wrote:
-> On Thu 13-04-23 10:00:56, Baokun Li wrote:
->> Can you please help review the remaining patches for any problems?
->> If you have any suggestions, I'll fix them together and post another version
->> of v4.
-> Yes, I've got a bit stuck thinking about the GFP_NOFAIL problem and how to
-> best solve it. It will require some changes but most of the patchset can
-> stay I believe.
->
-> 								Honza
+Hello:
 
-OK! Thank you so much! That's a tricky one indeed.
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
+On Thu, 13 Apr 2023 10:47:40 +0100 you wrote:
+> One of the test assertions uses an uninitialized op_name, which leads
+> to some headscratching if it fails. Use a string constant instead.
+> 
+> Fixes: b1a7a480a112 ("selftests/bpf: Add fixed vs rotating verifier log tests")
+> Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
+> ---
+>  tools/testing/selftests/bpf/prog_tests/verifier_log.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+Here is the summary with links:
+  - [bpf-next] selftests/bpf: fix use of uninitialized op_name in log tests
+    https://git.kernel.org/bpf/bpf-next/c/5a674611d116
+
+You are awesome, thank you!
 -- 
-With Best Regards,
-Baokun Li
-.
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
