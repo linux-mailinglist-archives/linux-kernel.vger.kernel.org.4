@@ -2,126 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF3B06E0982
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0251E6E0984
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbjDMI6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 04:58:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48476 "EHLO
+        id S229864AbjDMI7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 04:59:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbjDMI5j (ORCPT
+        with ESMTP id S229737AbjDMI6n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 04:57:39 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3228486BC;
-        Thu, 13 Apr 2023 01:56:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681376161; x=1712912161;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=Dx/KcB1yuWxjVTqAdCjBiSdHBqk0SPkHcsrbO43oHeQ=;
-  b=Ry3wuscH5Es2scla0SeJ33oiO3feD45rQ1xsl804xXKNXA6S4W7OX8Md
-   Tjao+9MTxBmjB2GzzJf+ev1o9TYqmR5QhmwCyoHpZ+U/dFrjuJk/YTQY3
-   2RDkgtQgdAH3QMsIsggGqM+bZRjW1TpUvwX0SBnsvcNpf0BhkEpMtZOdO
-   w70x91Mrl3gE/Xs1XSltzg7QL3asTxrez1oSiL2/PBlzE4X/yXNTz+mnb
-   aPBh10nTOc9djh5BvzT+5J7FVU4IvdjF1S4ycBONbVBCnXrkqngO4fXJe
-   z7UcIN8JLSnw5oGBxouo0gREkGatR7fAOw/3aiKBtGm1/EnR8yZRnej4S
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="332836327"
-X-IronPort-AV: E=Sophos;i="5.98,341,1673942400"; 
-   d="scan'208";a="332836327"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 01:55:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="719754073"
-X-IronPort-AV: E=Sophos;i="5.98,341,1673942400"; 
-   d="scan'208";a="719754073"
-Received: from pkudryav-mobl1.ger.corp.intel.com ([10.252.45.220])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 01:55:52 -0700
-Date:   Thu, 13 Apr 2023 11:55:46 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Sherry Sun <sherry.sun@nxp.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        philippe.schenker@toradex.com,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-imx@nxp.com
-Subject: Re: [PATCH] tty: serial: fsl_lpuart: use UARTMODIR register bits
- for lpuart32 platform
-In-Reply-To: <20230413053908.17702-1-sherry.sun@nxp.com>
-Message-ID: <a8e12926-58e7-43c3-f4d1-a67b4bfbc1@linux.intel.com>
-References: <20230413053908.17702-1-sherry.sun@nxp.com>
+        Thu, 13 Apr 2023 04:58:43 -0400
+Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0701F49FE;
+        Thu, 13 Apr 2023 01:56:32 -0700 (PDT)
+Date:   Thu, 13 Apr 2023 08:56:18 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+        s=protonmail; t=1681376188; x=1681635388;
+        bh=g737EIKMRnF2623bcmw1pojpvM3xa1H2tKB2+vbIn8Y=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=LyuAJogirvUQPcmeaGUpoAVY3tbakTyN2dL1/pB0jbFXDAUKtGZp6toHX4Lv6RZZS
+         slFhcx29zmnwpwfwtUnLl6qxxggNl4tNPLBmTf4Ya7kOw8LIn758mwm8pajZAaNWHV
+         QqiqwHVRwm251zya9RYAdsJVpuM7Bek99sC7XtlHTLJ8dunlBabmUYHX4VAV0l1jpy
+         K7ZMmG682QbhKPMyPFYkfhiVZ1HQbqOXUeN6RkzQn91jUP8qv6HgaVCN+rGPa4qOgw
+         qqxqdZ7Mt/MjiXVDtQ2qvVd4dEd+BHOii4eRaNXwjPsYI2Mp+N6kytvhQ2hdXoRzY6
+         H7xNA9YGvtndA==
+To:     Wedson Almeida Filho <wedsonaf@gmail.com>,
+        rust-for-linux@vger.kernel.org
+From:   Benno Lossin <benno.lossin@proton.me>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org,
+        Wedson Almeida Filho <walmeida@microsoft.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Subject: Re: [PATCH v4 03/13] rust: lock: introduce `Mutex`
+Message-ID: <fb1ce18b-6d63-6e76-1e55-53974711cbe0@proton.me>
+In-Reply-To: <20230411054543.21278-3-wedsonaf@gmail.com>
+References: <20230411054543.21278-1-wedsonaf@gmail.com> <20230411054543.21278-3-wedsonaf@gmail.com>
+Feedback-ID: 71780778:user:proton
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1437061742-1681376154=:1987"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1437061742-1681376154=:1987
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-
-On Thu, 13 Apr 2023, Sherry Sun wrote:
-
-> For lpuart32 platforms, UARTMODIR register is used instead of UARTMODEM.
-> So here should configure the corresponding UARTMODIR register bits.
-> 
-> Fixes: 67b01837861c ("tty: serial: lpuart: Add RS485 support for 32-bit uart flavour")
-
-The patch is good but I don't think Fixes tag is warranted here because 
-TXRTSPOL and TXRTSE bits are the same for both registers. ...So this 
-is mostly to avoid reader confusion rather than fix an actual problem.
-
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-
--- 
- i.
-
-> Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
+On 11.04.23 07:45, Wedson Almeida Filho wrote:
+> From: Wedson Almeida Filho <walmeida@microsoft.com>
+>
+> This is the `struct mutex` lock backend and allows Rust code to use the
+> kernel mutex idiomatically.
+>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Waiman Long <longman@redhat.com>
+> Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+> Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
 > ---
->  drivers/tty/serial/fsl_lpuart.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-> index 074bfed57fc9..9845d3f5b84b 100644
-> --- a/drivers/tty/serial/fsl_lpuart.c
-> +++ b/drivers/tty/serial/fsl_lpuart.c
-> @@ -1406,12 +1406,12 @@ static int lpuart32_config_rs485(struct uart_port *port, struct ktermios *termio
->  			struct lpuart_port, port);
->  
->  	unsigned long modem = lpuart32_read(&sport->port, UARTMODIR)
-> -				& ~(UARTMODEM_TXRTSPOL | UARTMODEM_TXRTSE);
-> +				& ~(UARTMODIR_TXRTSPOL | UARTMODIR_TXRTSE);
->  	lpuart32_write(&sport->port, modem, UARTMODIR);
->  
->  	if (rs485->flags & SER_RS485_ENABLED) {
->  		/* Enable auto RS-485 RTS mode */
-> -		modem |= UARTMODEM_TXRTSE;
-> +		modem |= UARTMODIR_TXRTSE;
->  
->  		/*
->  		 * The hardware defaults to RTS logic HIGH while transfer.
-> @@ -1420,9 +1420,9 @@ static int lpuart32_config_rs485(struct uart_port *port, struct ktermios *termio
->  		 * Note: UART is assumed to be active high.
->  		 */
->  		if (rs485->flags & SER_RS485_RTS_ON_SEND)
-> -			modem |= UARTMODEM_TXRTSPOL;
-> +			modem |= UARTMODIR_TXRTSPOL;
->  		else if (rs485->flags & SER_RS485_RTS_AFTER_SEND)
-> -			modem &= ~UARTMODEM_TXRTSPOL;
-> +			modem &= ~UARTMODIR_TXRTSPOL;
->  	}
->  
->  	lpuart32_write(&sport->port, modem, UARTMODIR);
-> 
---8323329-1437061742-1681376154=:1987--
+> v1 -> v2: No changes
+> v2 -> v3: No changes
+> v4 -> v4: No changes
+>
+>   rust/helpers.c                 |   7 ++
+>   rust/kernel/sync.rs            |   1 +
+>   rust/kernel/sync/lock.rs       |   2 +
+>   rust/kernel/sync/lock/mutex.rs | 118 +++++++++++++++++++++++++++++++++
+>   4 files changed, 128 insertions(+)
+>   create mode 100644 rust/kernel/sync/lock/mutex.rs
+>
+> diff --git a/rust/helpers.c b/rust/helpers.c
+> index 04b9be46e887..86af099d2d66 100644
+> --- a/rust/helpers.c
+> +++ b/rust/helpers.c
+> @@ -22,6 +22,7 @@
+>   #include <linux/build_bug.h>
+>   #include <linux/err.h>
+>   #include <linux/refcount.h>
+> +#include <linux/mutex.h>
+>
+>   __noreturn void rust_helper_BUG(void)
+>   {
+> @@ -29,6 +30,12 @@ __noreturn void rust_helper_BUG(void)
+>   }
+>   EXPORT_SYMBOL_GPL(rust_helper_BUG);
+>
+> +void rust_helper_mutex_lock(struct mutex *lock)
+> +{
+> +=09mutex_lock(lock);
+> +}
+> +EXPORT_SYMBOL_GPL(rust_helper_mutex_lock);
+> +
+>   refcount_t rust_helper_REFCOUNT_INIT(int n)
+>   {
+>   =09return (refcount_t)REFCOUNT_INIT(n);
+> diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
+> index 81b0998eaa18..693f0b7f4e4f 100644
+> --- a/rust/kernel/sync.rs
+> +++ b/rust/kernel/sync.rs
+> @@ -11,6 +11,7 @@ mod arc;
+>   pub mod lock;
+>
+>   pub use arc::{Arc, ArcBorrow, UniqueArc};
+> +pub use lock::mutex::Mutex;
+>
+>   /// Represents a lockdep class. It's a wrapper around C's `lock_class_k=
+ey`.
+>   #[repr(transparent)]
+> diff --git a/rust/kernel/sync/lock.rs b/rust/kernel/sync/lock.rs
+> index 1a8ecccf4f24..98de109d9e40 100644
+> --- a/rust/kernel/sync/lock.rs
+> +++ b/rust/kernel/sync/lock.rs
+> @@ -10,6 +10,8 @@ use crate::{bindings, init::PinInit, pin_init, str::CSt=
+r, types::Opaque};
+>   use core::{cell::UnsafeCell, marker::PhantomData, marker::PhantomPinned=
+};
+>   use macros::pin_data;
+>
+> +pub mod mutex;
+> +
+>   /// The "backend" of a lock.
+>   ///
+>   /// It is the actual implementation of the lock, without the need to re=
+peat patterns used in all
+> diff --git a/rust/kernel/sync/lock/mutex.rs b/rust/kernel/sync/lock/mutex=
+.rs
+> new file mode 100644
+> index 000000000000..923472f04af4
+> --- /dev/null
+> +++ b/rust/kernel/sync/lock/mutex.rs
+> @@ -0,0 +1,118 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +//! A kernel mutex.
+> +//!
+> +//! This module allows Rust code to use the kernel's `struct mutex`.
+> +
+> +use crate::bindings;
+> +
+> +/// Creates a [`Mutex`] initialiser with the given name and a newly-crea=
+ted lock class.
+> +///
+> +/// It uses the name if one is given, otherwise it generates one based o=
+n the file name and line
+> +/// number.
+> +#[macro_export]
+> +macro_rules! new_mutex {
+> +    ($inner:expr $(, $name:literal)? $(,)?) =3D> {
+> +        $crate::sync::Mutex::new(
+> +            $inner, $crate::optional_name!($($name)?), $crate::static_lo=
+ck_class!())
+> +    };
+> +}
+> +
+> +/// A mutual exclusion primitive.
+> +///
+> +/// Exposes the kernel's [`struct mutex`]. When multiple threads attempt=
+ to lock the same mutex,
+> +/// only one at a time is allowed to progress, the others will block (sl=
+eep) until the mutex is
+> +/// unlocked, at which point another thread will be allowed to wake up a=
+nd make progress.
+> +///
+> +/// Since it may block, [`Mutex`] needs to be used with care in atomic c=
+ontexts.
+> +///
+> +/// Instances of [`Mutex`] need a lock class and to be pinned. The recom=
+mended way to create such
+
+The first sentence reads weird, missing another 'need'?
+
+> +/// instances is with the [`pin_init`](crate::pin_init) and [`new_mutex`=
+] macros.
+> +///
+> +/// # Examples
+> +///
+> +/// The following example shows how to declare, allocate and initialise =
+a struct (`Example`) that
+> +/// contains an inner struct (`Inner`) that is protected by a mutex.
+> +///
+> +/// ```
+> +/// use kernel::{init::InPlaceInit, init::PinInit, new_mutex, pin_init, =
+sync::Mutex};
+> +///
+> +/// struct Inner {
+> +///     a: u32,
+> +///     b: u32,
+> +/// }
+> +///
+> +/// #[pin_data]
+> +/// struct Example {
+> +///     c: u32,
+> +///     #[pin]
+> +///     d: Mutex<Inner>,
+> +/// }
+> +///
+> +/// impl Example {
+> +///     fn new() -> impl PinInit<Self> {
+> +///         pin_init!(Self {
+> +///             c: 10,
+> +///             d <- new_mutex!(Inner { a: 20, b: 30 }),
+> +///         })
+> +///     }
+> +/// }
+> +///
+> +/// // Allocate a boxed `Example`.
+> +/// let e =3D Box::pin_init(Example::new())?;
+> +/// assert_eq!(e.c, 10);
+> +/// assert_eq!(e.d.lock().a, 20);
+> +/// assert_eq!(e.d.lock().b, 30);
+> +/// ```
+> +///
+> +/// The following example shows how to use interior mutability to modify=
+ the contents of a struct
+> +/// protected by a mutex despite only having a shared reference:
+
+I would not bring up interior mutability here, the `Mutex` uses it, but
+not the user of the `Mutex`. I would just say:
+
+     To access the data behind a `Mutex`, simply take a shared reference to
+     the `Mutex` and call `lock()` on it. This function returns a guard obj=
+ect
+     that dereferences to the protected data. The `Mutex` is unlocked when =
+the
+     guard object goes out of scope.
+
+> +///
+> +/// ```
+> +/// use kernel::sync::Mutex;
+> +///
+> +/// struct Example {
+> +///     a: u32,
+> +///     b: u32,
+> +/// }
+> +///
+> +/// fn example(m: &Mutex<Example>) {
+> +///     let mut guard =3D m.lock();
+> +///     guard.a +=3D 10;
+> +///     guard.b +=3D 20;
+> +/// }
+> +/// ```
+> +///
+> +/// [`struct mutex`]: ../../../../include/linux/mutex.h
+> +pub type Mutex<T> =3D super::Lock<T, MutexBackend>;
+> +
+> +/// A kernel `struct mutex` lock backend.
+> +pub struct MutexBackend;
+> +
+> +// SAFETY: The underlying kernel `struct mutex` object ensures mutual ex=
+clusion.
+> +unsafe impl super::Backend for MutexBackend {
+> +    type State =3D bindings::mutex;
+> +    type GuardState =3D ();
+> +
+> +    unsafe fn init(
+> +        ptr: *mut Self::State,
+> +        name: *const core::ffi::c_char,
+> +        key: *mut bindings::lock_class_key,
+> +    ) {
+> +        // SAFETY: The safety requirements ensure that `ptr` is valid fo=
+r writes, and `name` and
+> +        // `key` are valid for read indefinitely.
+> +        unsafe { bindings::__mutex_init(ptr, name, key) }
+> +    }
+> +
+> +    unsafe fn lock(ptr: *mut Self::State) -> Self::GuardState {
+> +        // SAFETY: The safety requirements of this function ensure that =
+`ptr` points to valid
+> +        // memory, and that it has been initialised before.
+> +        unsafe { bindings::mutex_lock(ptr) };
+> +    }
+> +
+> +    unsafe fn unlock(ptr: *mut Self::State, _guard_state: &Self::GuardSt=
+ate) {
+> +        // SAFETY: The safety requirements of this function ensure that =
+`ptr` is valid and that the
+> +        // caller is the owner of the mutex.
+> +        unsafe { bindings::mutex_unlock(ptr) };
+> +    }
+> +}
+> --
+> 2.34.1
+>
+
+
