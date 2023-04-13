@@ -2,130 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C91E46E131B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 19:04:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79EB86E1319
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 19:04:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbjDMREf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 13:04:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36910 "EHLO
+        id S229917AbjDMRER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 13:04:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbjDMREa (ORCPT
+        with ESMTP id S229636AbjDMREP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 13:04:30 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB017D8E;
-        Thu, 13 Apr 2023 10:04:28 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id t16so3265585ybi.13;
-        Thu, 13 Apr 2023 10:04:28 -0700 (PDT)
+        Thu, 13 Apr 2023 13:04:15 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C01061AE
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 10:04:14 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id m18so15580370plx.5
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 10:04:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681405467; x=1683997467;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KYntzwA2QnPK9xOrgshDrAFUujV3P0eNxGswFpFhQIk=;
-        b=sM2sUKt9yEmz9cXYenp9w3rAdPtPDxXn5V00HanFFuNjensfF+Us6VTipZGJBgNVB5
-         L+ydky9CuQxAva8RGKpp5QmWSVhgLxHwWy9cF6bGzvFArG1+KpsNI8JRZlH1TIyyjADC
-         3YkYHxQwv8urME75tdYyX+pTuXz7C6qjwHzURon2oiUo9zx9HAoXTTyKAN1MkgS8Z+SG
-         J9YTiAqLCEKD2s9jduzRpcjsvNhqa6v7vru+zGfmy0Kj+B0tta95TurO4yzG5VpPNsS1
-         3A8BYGlILPiizjVPZBqcN14ZBXdClgpg70tYejRqqZ0KozFUUng55C7Z4rouWd/ZOqQS
-         rliw==
+        d=google.com; s=20221208; t=1681405454; x=1683997454;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ccsEwv5oO7NDzmy7DI9h+6ldasNA+QD8FggJsRLsgZk=;
+        b=taQlQ7g87EtETw7950+oGC++35BjVH5z2ygGlMMbTo5I7kDps9cXFqUloS7mUgBPth
+         di55++ydNmblfUOhmk6Mf0ZCpCc0mg7Vf6yYQEQso89+hO+DKYcj2CoCTaIJIn2Ue3HO
+         //xsWAhOf3MiEmH9CtufeOoszfiO02siNSMA9WvEfdVh/fcgRPIFebc6BJPK1WkgL3tP
+         87y3YtPmFMfzYiYYqk1EBz0a2F3HU71Xqg/99WsL1W85upYH9GyW5rt4Q6q7PQ2hqU9Z
+         1mGZ4HIyPU+it7CmDLMyrPIXqht0YEywvU8X36Fw7a9okB6fZv/g78cDMlXq5Qn95K0W
+         G4FQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681405467; x=1683997467;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KYntzwA2QnPK9xOrgshDrAFUujV3P0eNxGswFpFhQIk=;
-        b=J8qL2nQMoSZnzwu/VzCbH65BAwtsh2ImWwTe/EGdv4+PEPK72HO7zR6G9SWLzSkA4y
-         20ARex0Djrr5cbQ8iHAYdFjrBJzSHymSvsIHHBc9pir9kXP2Wv0p/A2gt51q6FhFdb0U
-         oQ5XjTXkhbMquJWq+LBLXgwAlvyplS/DmysgY2Cc0l9e8++0f8IR7WZqx0//ejc66pOc
-         2qxckWDPgQlwwQ3cN2xIweL9LXY30zKhGr9TKjw1l+R9tiLVyPDrvqlZh4Le3TT6dPZ4
-         B9BD+RJ06LTgQNR7awAM3Dw9IoosCO33X2LWPKSunjrZc6QOG2Zsjp2HQEv++uBGBU1V
-         IXgg==
-X-Gm-Message-State: AAQBX9cOL9YxzWHUbVItBKjBapDnBRa9OppmivxHSD21Cjrj1E5GQupa
-        /1fmQsGY8wTPK1PqWY7o10M=
-X-Google-Smtp-Source: AKy350b5fAtiBx82KDTxqb9UUWUZXaxIURJwS64DLKUDnQ189qF+erBNEuCZxSLRT5D8yFzEjrs5LQ==
-X-Received: by 2002:a25:2b4a:0:b0:b7d:d397:5c51 with SMTP id r71-20020a252b4a000000b00b7dd3975c51mr2557400ybr.17.1681405467692;
-        Thu, 13 Apr 2023 10:04:27 -0700 (PDT)
-Received: from localhost.localdomain ([98.58.151.237])
-        by smtp.googlemail.com with ESMTPSA id e189-20020a2537c6000000b00b8f46c4b4casm572591yba.20.2023.04.13.10.04.26
+        d=1e100.net; s=20221208; t=1681405454; x=1683997454;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ccsEwv5oO7NDzmy7DI9h+6ldasNA+QD8FggJsRLsgZk=;
+        b=EDCKrUSH1Zf3EkjmnDO7mO+Tevwi3UwUxygyd0RAw2mhYtlrBpNJJCkSBQ7baI8xID
+         ICqb/OBtBY8H0dztha3jOdyFzraBR2Cv5kHU1hFqcAMpOvnInKMXQCYfVnHxoBDkh+3k
+         H5ftb+56gP39qFLa44U0pU/sFWSz4BzMe42im7tnAV47g3l6mdotvCMR0mmJSZyiAxuh
+         ihZDXWaNCUlNpP4kk7UBgPxSX2hRAfkeAgbYTK2GYLwcJI9TfOS+d8KfKK1QEZpbsGha
+         2WuKK1B/fh14rVzWz3zMFYcZ5Wjf6GEWF2glsC/+N+03hISDexB3RP6LlHMGPUXNmfOo
+         MICA==
+X-Gm-Message-State: AAQBX9cJ5QWZ47cv0P1gWDSrDKiiUIOTLQSr9LvcfmJqYGy/eEXZbBzH
+        jcDfMzDI9swB56v6BYAu02xN1Q==
+X-Google-Smtp-Source: AKy350b5uuL0C5Q4CRc+UyiuAgC6hHLZveLsP2IeaUlDAnqKlR0imLdZbqrkBwYOC8ijNZ09PqI46Q==
+X-Received: by 2002:a05:6a20:66a1:b0:ea:fb53:4cb1 with SMTP id o33-20020a056a2066a100b000eafb534cb1mr2743042pzh.41.1681405453405;
+        Thu, 13 Apr 2023 10:04:13 -0700 (PDT)
+Received: from google.com ([2620:15c:2d1:203:fde9:d34:5ee3:d2e8])
+        by smtp.gmail.com with ESMTPSA id l15-20020a654c4f000000b0051a3c744256sm1618060pgr.93.2023.04.13.10.04.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 10:04:27 -0700 (PDT)
-From:   John Clark <inindev@gmail.com>
-To:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Peter Geis <pgwipeout@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        John Clark <inindev@gmail.com>
-Subject: [v2] arm64: dts: rockchip: Add pinctrl gpio-ranges for rk356x
-Date:   Thu, 13 Apr 2023 13:03:37 -0400
-Message-Id: <20230413170337.6815-1-inindev@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230413144316.4247-1-inindev@gmail.com>
-References: <20230413144316.4247-1-inindev@gmail.com>
+        Thu, 13 Apr 2023 10:04:12 -0700 (PDT)
+Date:   Thu, 13 Apr 2023 10:04:05 -0700
+From:   Nick Desaulniers <ndesaulniers@google.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     madvenka@linux.microsoft.com, jpoimboe@redhat.com,
+        peterz@infradead.org, chenzhongjin@huawei.com, broonie@kernel.org,
+        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, linux-toolchains@vger.kernel.org
+Subject: Re: [RFC PATCH v3 00/22] arm64: livepatch: Use ORC for dynamic frame
+ pointer validation
+Message-ID: <ZDg2BUL4uauG/w4T@google.com>
+References: <0337266cf19f4c98388e3f6d09f590d9de258dc7>
+ <20230202074036.507249-1-madvenka@linux.microsoft.com>
+ <ZByJmnc/XDcqQwoZ@FVFF77S0Q05N.cambridge.arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZByJmnc/XDcqQwoZ@FVFF77S0Q05N.cambridge.arm.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add gpio-range properties to the pinctrl gpio nodes in rk356x.dtsi
+On Thu, Mar 23, 2023 at 05:17:14PM +0000, Mark Rutland wrote:
+> Hi Madhavan,
+> 
+> At a high-level, I think this still falls afoul of our desire to not reverse
+> engineer control flow from the binary, and so I do not think this is the right
+> approach. I've expanded a bit on that below.
+> 
+> I do think it would be nice to have *some* of the objtool changes, as I do
+> think we will want to use objtool for some things in future (e.g. some
+> build-time binary patching such as table sorting).
+> 
+> > Problem
+> > =======
+> > 
+> > Objtool is complex and highly architecture-dependent. There are a lot of
+> > different checks in objtool that all of the code in the kernel must pass
+> > before livepatch can be enabled. If a check fails, it must be corrected
+> > before we can proceed. Sometimes, the kernel code needs to be fixed.
+> > Sometimes, it is a compiler bug that needs to be fixed. The challenge is
+> > also to prove that all the work is complete for an architecture.
+> > 
+> > As such, it presents a great challenge to enable livepatch for an
+> > architecture.
+> 
+> There's a more fundamental issue here in that objtool has to reverse-engineer
+> control flow, and so even if the kernel code and compiled code generation is
+> *perfect*, it's possible that objtool won't recognise the structure of the
+> generated code, and won't be able to reverse-engineer the correct control flow.
+> 
+> We've seen issues where objtool didn't understand jump tables, so support for
+> that got disabled on x86. A key objection from the arm64 side is that we don't
+> want to disable compile code generation strategies like this. Further, as
+> compiles evolve, their code generation strategies will change, and it's likely
+> there will be other cases that crop up. This is inherently fragile.
+> 
+> The key objections from the arm64 side is that we don't want to
+> reverse-engineer details from the binary, as this is complex, fragile, and
+> unstable. This is why we've previously suggested that we should work with
+> compiler folk to get what we need.
 
-Signed-off-by: John Clark <inindev@gmail.com>
----
- arch/arm64/boot/dts/rockchip/rk356x.dtsi | 5 +++++
- 1 file changed, 5 insertions(+)
+> This still requires reverse-engineering the forward-edge control flow in order
+> to compute those offets, so the same objections apply with this approach. I do
+> not think this is the right approach.
+> 
+> I would *strongly* prefer that we work with compiler folk to get the
+> information that we need.
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-index 802fcc96384e..f62e0fd881a9 100644
---- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-@@ -1808,6 +1808,7 @@ gpio0: gpio@fdd60000 {
- 			interrupts = <GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&pmucru PCLK_GPIO0>, <&pmucru DBCLK_GPIO0>;
- 			gpio-controller;
-+			gpio-ranges = <&pinctrl 0 0 32>;
- 			#gpio-cells = <2>;
- 			interrupt-controller;
- 			#interrupt-cells = <2>;
-@@ -1819,6 +1820,7 @@ gpio1: gpio@fe740000 {
- 			interrupts = <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&cru PCLK_GPIO1>, <&cru DBCLK_GPIO1>;
- 			gpio-controller;
-+			gpio-ranges = <&pinctrl 0 32 32>;
- 			#gpio-cells = <2>;
- 			interrupt-controller;
- 			#interrupt-cells = <2>;
-@@ -1830,6 +1832,7 @@ gpio2: gpio@fe750000 {
- 			interrupts = <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&cru PCLK_GPIO2>, <&cru DBCLK_GPIO2>;
- 			gpio-controller;
-+			gpio-ranges = <&pinctrl 0 64 32>;
- 			#gpio-cells = <2>;
- 			interrupt-controller;
- 			#interrupt-cells = <2>;
-@@ -1841,6 +1844,7 @@ gpio3: gpio@fe760000 {
- 			interrupts = <GIC_SPI 36 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&cru PCLK_GPIO3>, <&cru DBCLK_GPIO3>;
- 			gpio-controller;
-+			gpio-ranges = <&pinctrl 0 96 32>;
- 			#gpio-cells = <2>;
- 			interrupt-controller;
- 			#interrupt-cells = <2>;
-@@ -1852,6 +1856,7 @@ gpio4: gpio@fe770000 {
- 			interrupts = <GIC_SPI 37 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&cru PCLK_GPIO4>, <&cru DBCLK_GPIO4>;
- 			gpio-controller;
-+			gpio-ranges = <&pinctrl 0 128 32>;
- 			#gpio-cells = <2>;
- 			interrupt-controller;
- 			#interrupt-cells = <2>;
--- 
-2.39.2
+IDK if it's relevant here, but I did see a commit go by to LLVM that
+seemed to include such info in a custom ELF section (for the purposes of
+improving fuzzing, IIUC). Maybe such an encoding scheme could be tested
+to see if it's reliable or usable?
+- https://github.com/llvm/llvm-project/commit/3e52c0926c22575d918e7ca8369522b986635cd3
+- https://clang.llvm.org/docs/SanitizerCoverage.html#tracing-control-flow
 
+> 
+> [...]
+> 
+> > 		FWIW, I have also compared the CFI I am generating with DWARF
+> > 		information that the compiler generates. The CFIs match a
+> > 		100% for Clang. In the case of gcc, the comparison fails
+> > 		in 1.7% of the cases. I have analyzed those cases and found
+> > 		the DWARF information generated by gcc is incorrect. The
+> > 		ORC generated by my Objtool is correct.
+> 
+> 
+> Have you reported this to the GCC folk, and can you give any examples?
+> I'm sure they would be interested in fixing this, regardless of whether we end
+> up using it.
+
+Yeah, at least a bug report is good. "See something, say something."
