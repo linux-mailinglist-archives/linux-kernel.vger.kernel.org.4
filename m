@@ -2,105 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0CD46E0626
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 06:51:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B1FD6E0629
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 06:53:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbjDMEvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 00:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60472 "EHLO
+        id S229716AbjDMExc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 00:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjDMEvX (ORCPT
+        with ESMTP id S229498AbjDMEx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 00:51:23 -0400
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ABC24EFD;
-        Wed, 12 Apr 2023 21:51:22 -0700 (PDT)
-Received: by mail-ua1-x92b.google.com with SMTP id o2so9534543uao.11;
-        Wed, 12 Apr 2023 21:51:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681361481; x=1683953481;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kGpfccEFlesihlPqD7G4pgrCSblH7OAQk2NFUzrS9uk=;
-        b=GF/Wy3m+NhO5Zn+rcy1va1rPn6eDR1FoxK7eLKhYmDSidCitNMI+GiFUWnYq9YM1a9
-         68egP8hz6WxR1K0CZx+UWHGMfHdoF9ZHaAF8YMobSNq4jctKr+78q0A03EQjN4TFXUqG
-         l0TpSDcmZGzCS7+tBmg3LeSK8uC98NQ8KLW1qC9/QRqJbJxjLBmzyf1QbqzQDAEUG4Be
-         lJqSkNxCUa3rQD7ufDJN65vCfkCyx8CsjCps3boEKApBUnN8AUXnwgmj+VMNQqrWpAJJ
-         NFoL/Bv8jeWdXSqTJLZqHiDWcC0VbaxkABkgQZQli5XQ87mf8KjwqluHwjnXF2JGbi41
-         7vmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681361481; x=1683953481;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kGpfccEFlesihlPqD7G4pgrCSblH7OAQk2NFUzrS9uk=;
-        b=hypPHqay6gAowoVY+P70gfXMu4qaw5qR53I5CpsO3yvAC5E7Q68F6gJKpMkChzUyQc
-         YLitpaOv1IF4bst217sKjnKUDzZ3tWgwlgILksa88uJZGlthqjIFEPET6uxbK+H8pM4X
-         HOjRLwoHWlC770Pmz4wDHvJRNSMrl2a3BTuurQPRy0+xOJTAr1jX/H50NUDdVOnVYLCq
-         ajjq97oXuN1ghLbZN1jcMPIfkdAOGe0N2kgkkz31fo9MUE6uS/ulHU9MiVqYALnSCqyB
-         gUL8xNxIb/SfPn63hGzSJSKTXassiD3tcQhC4Jh3RAXbnkqDdTq9NQSmdsmf57Crow5p
-         62zA==
-X-Gm-Message-State: AAQBX9fBHw2VCc1qAkxXZImMbW4FlL7aEpc4FcXWc25EpF2TkQeJIjoc
-        tbmejwKitMGWpt435JFU3FmDEwaEhej0zvn6O4c=
-X-Google-Smtp-Source: AKy350Zb2Jyb3W8YK59sNQdQfbMexJEutb2y35WUse23JPiAlEvVxLaPBZCtvPzaPZgarzNRlPny86/AlBJFTYQZwJI=
-X-Received: by 2002:a1f:2004:0:b0:40e:fee9:667a with SMTP id
- g4-20020a1f2004000000b0040efee9667amr271520vkg.3.1681361481221; Wed, 12 Apr
- 2023 21:51:21 -0700 (PDT)
+        Thu, 13 Apr 2023 00:53:29 -0400
+Received: from out-52.mta1.migadu.com (out-52.mta1.migadu.com [IPv6:2001:41d0:203:375::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDDD59D2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 21:53:27 -0700 (PDT)
+Date:   Thu, 13 Apr 2023 12:53:21 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1681361605;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ALJc8puE3WTaCZtOEUK7wahcJtZl4wkyJ9W7p0RjjH0=;
+        b=Z3mB6XZ01R3VKQkLYX1KABQcNA4snHAXdkfwNuGx+3BHPjNGUvY/eA9c/ZciNbGuN/rlk8
+        v6CG2IfZYNcV9J1VZA+tGNH3dGiqU5Ay5bhesjyA77lKnzzBdsk2uUCogAZ/FnoRGaEdL6
+        Gm4AxY2K/tHA42r5+2+NDomGD1zMSs0=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Cai Huoqing <cai.huoqing@linux.dev>
+To:     fancer.lancer@gmail.com, vkoul@kernel.org
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH RESEND v9 0/4] dmaengine: dw-edma: Add support for native
+ HDMA
+Message-ID: <ZDeKwXeCo1TyfUxT@chq-MS-7D45>
+References: <20230413033156.93751-1-cai.huoqing@linux.dev>
 MIME-Version: 1.0
-References: <20230320095620.7480-1-di.shen@unisoc.com> <6055bc39-5c00-d12f-b5c3-fa21a9649d63@arm.com>
- <CAHYJL4qL+nJuiN8vXGaiPQuuaPx6BA+yjRq2TRaBgb+qXi8-yw@mail.gmail.com> <637a3bb1-ba1c-e707-01b7-06c1358583ca@linaro.org>
-In-Reply-To: <637a3bb1-ba1c-e707-01b7-06c1358583ca@linaro.org>
-From:   Di Shen <cindygm567@gmail.com>
-Date:   Thu, 13 Apr 2023 12:51:10 +0800
-Message-ID: <CAHYJL4rnfVp+X3imbxWzUd9ixTFAPe4ioLyi-t50PwhL0y5v8A@mail.gmail.com>
-Subject: Re: [PATCH V3] thermal/core/power_allocator: avoid thermal cdev can
- not be reset
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Lukasz Luba <lukasz.luba@arm.com>, Di Shen <di.shen@unisoc.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xuewen.yan@unisoc.com, jeson.gao@unisoc.com, zhanglyra@gmail.com,
-        orsonzhai@gmail.com, rui.zhang@intel.com, amitk@kernel.org,
-        rafael@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230413033156.93751-1-cai.huoqing@linux.dev>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you Daniel. Any comments would be appreciated!
+On 13 4月 23 11:31:51, Cai Huoqing wrote:
+> Add support for HDMA NATIVE, as long the IP design has set
+> the compatible register map parameter-HDMA_NATIVE,
+> which allows compatibility for native HDMA register configuration.
+> 
+> The HDMA Hyper-DMA IP is an enhancement of the eDMA embedded-DMA IP.
+> And the native HDMA registers are different from eDMA,
+> so this patch add support for HDMA NATIVE mode.
+> 
+> HDMA write and read channels operate independently to maximize
+> the performance of the HDMA read and write data transfer over
+> the link When you configure the HDMA with multiple read channels,
+> then it uses a round robin (RR) arbitration scheme to select
+> the next read channel to be serviced.The same applies when
+> youhave multiple write channels.
+> 
+> The native HDMA driver also supports a maximum of 16 independent
+> channels (8 write + 8 read), which can run simultaneously.
+> Both SAR (Source Address Register) and DAR (Destination Address Register)
+> are aligned to byte.
+Hi Vinod,
 
-Best regards,
-Di
+thanks for your reply,
 
+these resend patchs base on dmaengine-next.
 
-On Tue, Apr 11, 2023 at 3:51=E2=80=AFAM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 10/04/2023 04:09, Di Shen wrote:
-> > Hi Lukasz,
-> > Could you please apply this patch if there's no more comment? Thank you=
-.
->
-> Hi,
->
-> I take care of applying the patches. Give me some time to read the change=
-s.
->
-> Thanks
->    -- Daniel
->
-> --
-> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
-M SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
->
+please try it.
+
+Thanks,
+Cai-
+
+> 
+> Cai Huoqing (1):
+>   dmaengine: dw-edma: Add support for native HDMA
+> 
+> Cai huoqing (3):
+>   dmaengine: dw-edma: Rename dw_edma_core_ops structure to
+>     dw_edma_plat_ops
+>   dmaengine: dw-edma: Create a new dw_edma_core_ops structure to
+>     abstract controller operation
+>   dmaengine: dw-edma: Add HDMA DebugFS support
+> 
+> Tested-by: Serge Semin <fancer.lancer@gmail.com>
+> 
+> v8->v9:
+>   [3/4]
+>   1.Drop an empty line.
+>   [4/4]
+>   2.Update commit log.
+>   3.Remove unused macro
+> 
+> v8 link:
+>   https://lore.kernel.org/lkml/20230323034944.78357-1-cai.huoqing@linux.dev/
+> 
+>  drivers/dma/dw-edma/Makefile                 |   8 +-
+>  drivers/dma/dw-edma/dw-edma-core.c           |  86 ++----
+>  drivers/dma/dw-edma/dw-edma-core.h           |  58 ++++
+>  drivers/dma/dw-edma/dw-edma-pcie.c           |   4 +-
+>  drivers/dma/dw-edma/dw-edma-v0-core.c        |  85 +++++-
+>  drivers/dma/dw-edma/dw-edma-v0-core.h        |  14 +-
+>  drivers/dma/dw-edma/dw-hdma-v0-core.c        | 296 +++++++++++++++++++
+>  drivers/dma/dw-edma/dw-hdma-v0-core.h        |  17 ++
+>  drivers/dma/dw-edma/dw-hdma-v0-debugfs.c     | 170 +++++++++++
+>  drivers/dma/dw-edma/dw-hdma-v0-debugfs.h     |  22 ++
+>  drivers/dma/dw-edma/dw-hdma-v0-regs.h        | 129 ++++++++
+>  drivers/pci/controller/dwc/pcie-designware.c |   2 +-
+>  include/linux/dma/edma.h                     |   7 +-
+>  13 files changed, 807 insertions(+), 91 deletions(-)
+>  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.c
+>  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.h
+>  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
+>  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
+>  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-regs.h
+> 
+> -- 
+> 2.34.1
+> 
