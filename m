@@ -2,200 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 073996E1262
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:34:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 246E06E1266
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229829AbjDMQeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 12:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41516 "EHLO
+        id S229945AbjDMQfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 12:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbjDMQet (ORCPT
+        with ESMTP id S229481AbjDMQfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 12:34:49 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B9C4697
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:34:47 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id az2so834216pgb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:34:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681403687; x=1683995687;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8HvoJ679JuZRdirnHe569ZyC5ZGOdrOnvhMCfAAv7TA=;
-        b=3AV1Vq3WEo42XDTB+pzABN4ZQGhRgzKvgGGRMpqjEY4vrCgRQLSc6nldf0HxtaKXa+
-         kD56HHiCSZzSyEZZfu2q0r+fSBzScCJ03zomGDfbTkvrRRm5KOh5FzGP1yIyr1JW0Rxq
-         mblhLqRHMs7Ag9HWqRwaLyDebTDb3XuOMG+hTbZB1ULS5r2gSRm741v8pVvzIu8TeW/7
-         Pqt7v3nQIuQxKmJ1maXy3a2ncJNhstXZ2QWwC5TyAkwUE3W2UxNwQu3T6/C7arQaUu5/
-         PYJEZ1dps6WXd/BqMAuuaeE0dsGIcgrRr+a+YWF/8/P36E/Zmbrp52oKsgGKdouWF+dm
-         +s7A==
+        Thu, 13 Apr 2023 12:35:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B50CAD
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:34:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681403685;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ekA2VCpAp9UKw6KLbdSwuXdGQWeqh5YSiPTkG8jESh0=;
+        b=VnT3dj+TNCPHDQxr5xUrYkAywySvTYAuZe5VrK2QAI22G1unHdpGbuvBQL3A7C2UMqI6hS
+        z9S5CltRYwehNhAUnH1o2YQOGnBMKcVTjLBFZLja0nCe2GbB3lYsDqIJsdzvb4GYJeIjwV
+        6MwQHyErLoi+7hlp81w8JHKe8equ0Ps=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-615-C5Fi5ad1OhiptiXY5kC9Bw-1; Thu, 13 Apr 2023 12:34:43 -0400
+X-MC-Unique: C5Fi5ad1OhiptiXY5kC9Bw-1
+Received: by mail-wm1-f69.google.com with SMTP id ay4-20020a05600c1e0400b003f0ad935168so698871wmb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:34:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681403687; x=1683995687;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8HvoJ679JuZRdirnHe569ZyC5ZGOdrOnvhMCfAAv7TA=;
-        b=KdoEkt8SVHWrKlt6Vr5I/Lxa1Jwkx+VfuzqawHwkIw3ygTFHSrDwn5LcLMl9Tbhusq
-         IiygAELsu/rCqsbXOmuhOL2JUtyu7L8VmAKDmz8rp0LQG0ouccYwBHnmmfn2SAYgXgH9
-         ngBgfpOjJwUxJSuQJvxpCQNS4DH26rZvss6/fSsP4Ezeo80bBr1kBsCQPILbluja7Vn2
-         R8RYbcfOR7qG675q+TtuSqGJ/VjaQGQ5VRP1R4t+zGdKXEsv+IeMnreBJrMG9go7qAaF
-         ebl81ZpafhiQstnN2uuAMfDEbYCcql8B/Nwk9vhpwqYnjM/a8ZtshLTG4PXFmxa5dm/A
-         W9DA==
-X-Gm-Message-State: AAQBX9df9ShmkKKd9En+wUQXLfdWNfwaX0+oDY5ALikD2XgFAcMZfmkP
-        G2Nq2CiK6q3E92YvctuFIkQxukmod4FM0pUdi7IEoA==
-X-Google-Smtp-Source: AKy350brZLSKImyACD/vTwBAWkj9JzXf2zpBwAPKP+J93fB14HCkdn9PtWI/qhlPPMVYTW639OYp4l/LOfig57cvsRQ=
-X-Received: by 2002:a63:642:0:b0:51b:fa5:7bce with SMTP id 63-20020a630642000000b0051b0fa57bcemr679747pgg.1.1681403686843;
- Thu, 13 Apr 2023 09:34:46 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681403682; x=1683995682;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ekA2VCpAp9UKw6KLbdSwuXdGQWeqh5YSiPTkG8jESh0=;
+        b=DKmeUbh5Qx08IhbGTpvdTm1cXi/RSLSgUxH78Hz4OO6Z0Sf5Qk0BWwVJ4fzYVsAmoY
+         So6/NhnU5XO5BAkrLXeXbGQhxbC302o+a2kSrASkP/bFEXHJrZ6KxwPcaF+CcjyLRQum
+         a9JOtQIylV5GuRfVZJQrTp0MfRcL/nD/D0NTylE/B/fMMTxa10+drQp2hnhEWGjrdJ0k
+         /bgq6NGyDp6rFV41CIcUNG/Y0hxVSECWGvOyy/vNhCTVUIV/E4BPkeYp3v6HPaiPUZZM
+         nJRNrOL/HZDQzKqcsr/HrY+khBf/UNTfFmjOKQpd7MGoLfGQDwIZEoL78MVwxM+Cr7Xs
+         lcNw==
+X-Gm-Message-State: AAQBX9cBCngQruiLkGjs3JOWmvtHKB6FRcuunQarcxdRouVvbXIDk+SV
+        BiVJ+NMrNpACNMN9tF6ilra0D8MDF+NZlWxuvEj+CyTzK45rNa2r1GrWExPHYvOxJrcXhCuVpTI
+        +QMJ2SM8hKduY98fqEJpVCqDe
+X-Received: by 2002:a7b:cd93:0:b0:3ed:320a:3721 with SMTP id y19-20020a7bcd93000000b003ed320a3721mr2450642wmj.22.1681403682717;
+        Thu, 13 Apr 2023 09:34:42 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZRh9fa4sewh00qfbeBg0LvlQLLgGJvfMgChhNLKe98mfIgoWkSSF5jrm9Rl1/yQtbMURZNqQ==
+X-Received: by 2002:a7b:cd93:0:b0:3ed:320a:3721 with SMTP id y19-20020a7bcd93000000b003ed320a3721mr2450625wmj.22.1681403682436;
+        Thu, 13 Apr 2023 09:34:42 -0700 (PDT)
+Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id f16-20020a05600c155000b003f0a1c18128sm3194059wmg.29.2023.04.13.09.34.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 09:34:42 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     Pierre Asselin <pa@panix.com>
+Cc:     Pierre Asselin <pa@panix.com>, tzimmermann@suse.de,
+        linux-kernel@vger.kernel.org, jfalempe@redhat.com,
+        hdegoede@redhat.com, dri-devel@lists.freedesktop.org,
+        daniel.vetter@ffwll.ch, ardb@kernel.org
+Subject: Re: [PATCH] firmware/sysfb: Fix wrong stride when bits-per-pixel is
+ calculated
+In-Reply-To: <ae5f6784c72e1b31cdf7766d3c6dbe0c.squirrel@mail.panix.com>
+References: <20230412150225.3757223-1-javierm@redhat.com>
+ <2e07f818ccdff7023a060e732d7c4ef6.squirrel@mail.panix.com>
+ <87jzyhror0.fsf@minerva.mail-host-address-is-not-set>
+ <beeff0335ab4cc244d214a7baadba371.squirrel@mail.panix.com>
+ <CAFOAJEdKBUg91pDmNYYw5xigUxjifBgOLz2YgD+xQ+WyEy=V2w@mail.gmail.com>
+ <1afd3044c2aca9322ecf304941c7df66.squirrel@mail.panix.com>
+ <87fs94stgw.fsf@minerva.mail-host-address-is-not-set>
+ <87cz48srs4.fsf@minerva.mail-host-address-is-not-set>
+ <40edb0fdb0eaff434f4872dd677923a6.squirrel@mail.panix.com>
+ <87a5zcsqg8.fsf@minerva.mail-host-address-is-not-set>
+ <9e6fff69b09b36cbdd96499cd0015154.squirrel@mail.panix.com>
+ <4PxhQn3zK1zcbc@panix1.panix.com>
+ <87o7nsuumt.fsf@minerva.mail-host-address-is-not-set>
+ <ae5f6784c72e1b31cdf7766d3c6dbe0c.squirrel@mail.panix.com>
+Date:   Thu, 13 Apr 2023 18:34:40 +0200
+Message-ID: <87jzyfrba7.fsf@minerva.mail-host-address-is-not-set>
 MIME-Version: 1.0
-References: <20230413032541.885238-1-yoong.siang.song@intel.com> <20230413032541.885238-3-yoong.siang.song@intel.com>
-In-Reply-To: <20230413032541.885238-3-yoong.siang.song@intel.com>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Thu, 13 Apr 2023 09:34:35 -0700
-Message-ID: <CAKH8qBsWwaGrL4X_xkqGtDB_4Qr3oM4wcFcWVtBanCEE6F9gCg@mail.gmail.com>
-Subject: Re: [PATCH net-next v4 2/3] net: stmmac: add Rx HWTS metadata to XDP
- receive pkt
-To:     Song Yoong Siang <yoong.siang.song@intel.com>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        Ong Boon Leong <boon.leong.ong@intel.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, xdp-hints@xdp-project.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 8:26=E2=80=AFPM Song Yoong Siang
-<yoong.siang.song@intel.com> wrote:
->
-> Add receive hardware timestamp metadata support via kfunc to XDP receive
-> packets.
->
-> Suggested-by: Stanislav Fomichev <sdf@google.com>
-> Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
+"Pierre Asselin" <pa@panix.com> writes:
 
-Conceptually looks good, thanks!
-Acked-by: Stanislav Fomichev <sdf@google.com>
+>> pa@panix.com (Pierre Asselin) writes:
 
+[...]
 
-> ---
->  drivers/net/ethernet/stmicro/stmmac/stmmac.h  |  3 ++
->  .../net/ethernet/stmicro/stmmac/stmmac_main.c | 40 ++++++++++++++++++-
->  2 files changed, 42 insertions(+), 1 deletion(-)
+>>> -		bits_per_pixel = max(max3(si->red_size + si->red_pos,
+>>> +		bits_per_pixel = max3(max3(si->red_size + si->red_pos,
+>>>  					  si->green_size + si->green_pos,
+>>>  					  si->blue_size + si->blue_pos),
+>>> -				     si->rsvd_size + si->rsvd_pos);
+>>> +				     si->rsvd_size + si->rsvd_pos,
+>>> +				     si->lfb_depth);
 >
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac.h b/drivers/net/e=
-thernet/stmicro/stmmac/stmmac.h
-> index ac8ccf851708..826ac0ec88c6 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac.h
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
-> @@ -94,6 +94,9 @@ struct stmmac_rx_buffer {
 >
->  struct stmmac_xdp_buff {
->         struct xdp_buff xdp;
-> +       struct stmmac_priv *priv;
-> +       struct dma_desc *p;
-> +       struct dma_desc *np;
->  };
+>> I would defer to Thomas but personally I don't like it. Seems to me that
+>> this is getting too complicated just to workaround buggy BIOS that are not
+>> reporting consistent information about their firmware-provided
+>> framebuffer.
 >
->  struct stmmac_rx_queue {
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/=
-net/ethernet/stmicro/stmmac/stmmac_main.c
-> index 6ffce52ca837..831a3e22e0d8 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> @@ -5313,10 +5313,15 @@ static int stmmac_rx(struct stmmac_priv *priv, in=
-t limit, u32 queue)
+> Okay, but remember, this is a regression.  The buggy BIOSes were there
+
+Yes, I agree that is a regression and has to be fixed. I'm just arguing
+against this particular fix.
+
+> the whole time and the old code that matched f->bits_per_pixel against
+> si->lfb_depth used to work against these buggy BIOSes.
 >
->                         xdp_init_buff(&ctx.xdp, buf_sz, &rx_q->xdp_rxq);
->                         xdp_prepare_buff(&ctx.xdp, page_address(buf->page=
-),
-> -                                        buf->page_offset, buf1_len, fals=
-e);
-> +                                        buf->page_offset, buf1_len, true=
-);
+> And is it a bug, or is it an underspecified standard ?  "These bits aren't
+> reserved, we just ignore them" or some such.
 >
->                         pre_len =3D ctx.xdp.data_end - ctx.xdp.data_hard_=
-start -
->                                   buf->page_offset;
-> +
-> +                       ctx.priv =3D priv;
-> +                       ctx.p =3D p;
-> +                       ctx.np =3D np;
-> +
->                         skb =3D stmmac_xdp_run_prog(priv, &ctx.xdp);
->                         /* Due xdp_adjust_tail: DMA sync for_device
->                          * cover max len CPU touch
-> @@ -7060,6 +7065,37 @@ void stmmac_fpe_handshake(struct stmmac_priv *priv=
-, bool enable)
->         }
->  }
+> My reading of Thomas' comments in the code was that sometimes lfb_depth
+> was reported too small but never too large ?  But I'm not sure.  It's
+> true in my two cases.
 >
-> +static int stmmac_xdp_rx_timestamp(const struct xdp_md *_ctx, u64 *times=
-tamp)
-> +{
-> +       const struct stmmac_xdp_buff *ctx =3D (void *)_ctx;
-> +       struct stmmac_priv *priv =3D ctx->priv;
-> +       struct dma_desc *desc =3D ctx->p;
-> +       struct dma_desc *np =3D ctx->np;
-> +       struct dma_desc *p =3D ctx->p;
-> +       u64 ns =3D 0;
-> +
-> +       if (!priv->hwts_rx_en)
-> +               return -ENODATA;
-> +
-> +       /* For GMAC4, the valid timestamp is from CTX next desc. */
-> +       if (priv->plat->has_gmac4 || priv->plat->has_xgmac)
-> +               desc =3D np;
-> +
-> +       /* Check if timestamp is available */
-> +       if (stmmac_get_rx_timestamp_status(priv, p, np, priv->adv_ts)) {
-> +               stmmac_get_timestamp(priv, desc, priv->adv_ts, &ns);
-> +               ns -=3D priv->plat->cdc_error_adj;
-> +               *timestamp =3D ns_to_ktime(ns);
-> +               return 0;
-> +       }
-> +
-> +       return -ENODATA;
-> +}
-> +
-> +static const struct xdp_metadata_ops stmmac_xdp_metadata_ops =3D {
-> +       .xmo_rx_timestamp               =3D stmmac_xdp_rx_timestamp,
-> +};
-> +
->  /**
->   * stmmac_dvr_probe
->   * @device: device pointer
-> @@ -7167,6 +7203,8 @@ int stmmac_dvr_probe(struct device *device,
+
+I (mis?)understood that it could be too small as well. But that's why I
+prefer Thomas to chime in before agreeing on any path forward. But he is
+in vacation this week I believe.
+
+>> I would either trust the pixel channel information (what Thomas patch did)
+>> + my patch to calculate the stride (since we can't trust the line lenght
+>> which is based on the reported depth) + a DMI table for broken machines.
 >
->         ndev->netdev_ops =3D &stmmac_netdev_ops;
+>> But that will only work if your systems are the exception and not a common
+>> issue, otherwise then Thomas' approach won't work if there are too many
+>> buggy BIOS out there.
 >
-> +       ndev->xdp_metadata_ops =3D &stmmac_xdp_metadata_ops;
-> +
->         ndev->hw_features =3D NETIF_F_SG | NETIF_F_IP_CSUM | NETIF_F_IPV6=
-_CSUM |
->                             NETIF_F_RXCSUM;
->         ndev->xdp_features =3D NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDI=
-RECT |
-> --
-> 2.34.1
+> The laptop is ancient but the Dell tower is maybe 4 years old.  The
+> BIOS is 09/11/2019 according to dmidecode, and the most recent for
+> this box.
 >
+
+I see.
+
+>> Another option is to do the opposite, not calculate a BPP using the pixel
+>> and then use that value to calculate a new stride, but instead assume that
+>> the lfb_linelength is correct and use that to calculate the BPP.
+>
+> Or reject (some) inconsistencies in the struct screen_info and return
+> false, so the kernel falls back to e.g. vesa ?
+>
+
+That a reasonable approach too. But better if we can make simpledrm work
+too since many distros have dropped all the fbdev drivers in favor of it.
+
+>> Something like the following patch, which should also fix your regression
+>> and may be enough to address Thomas' concerns of inconsistent depths too?
+>
+> I'll try that patch.
+>
+
+Thanks for all your information and testing with this bug!
+
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
+
