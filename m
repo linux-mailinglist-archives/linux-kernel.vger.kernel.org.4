@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4DD6E0999
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 11:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EA8A6E099B
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 11:03:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbjDMJDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 05:03:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54750 "EHLO
+        id S229895AbjDMJDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 05:03:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjDMJCj (ORCPT
+        with ESMTP id S229765AbjDMJCj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 13 Apr 2023 05:02:39 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764FF4489;
-        Thu, 13 Apr 2023 02:02:18 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id he13so13035374wmb.2;
-        Thu, 13 Apr 2023 02:02:18 -0700 (PDT)
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE8CE7D;
+        Thu, 13 Apr 2023 02:02:29 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id v6so13455720wrv.8;
+        Thu, 13 Apr 2023 02:02:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681376537; x=1683968537;
+        d=gmail.com; s=20221208; t=1681376548; x=1683968548;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=hePEpcTr4MAQXnMqmGvunBUBaXlfTQunP3G36DUCNCs=;
-        b=i384PkJRVYCYGBvDYMZG66hIP7oQMpQ+MeQp/fPjllVefZwhzkl3kDUOGFu/vypz8T
-         D6tL+cedlOpEaUDl2/IgVaOdz7L8MEpodY9vNHfqICdYqG8q7ChwsFNgjN7fZtv3mDSW
-         gJPmjsKow89Ry8rWAXCZGQao+/+nYq7MLq6ne7d2RLTRxdBNxPufaWEPyI38RV8QShp/
-         qlKh7Oq95ZAXhbB+RFkVTwXyyKtwMH/zm3QUHdzXfM3TxZAWK0FXb+dVTv1NMJzdjfTa
-         +IMnx+ov+3BB/U97k1VQNoHS0DRz6SXfXLtn1HBSl0R/hCTO3meFsJhRVNi3SSLWq6JN
-         XYdQ==
+        bh=ldTjgbcAixArTLp8Y3OwHiWDDm8sGdVLf5wYTEAfqeg=;
+        b=Sq5siWuukFu2ZV2SC5RtzEOr90Zr3KADENV26Bcj0bkBKMEDDDiM4JLiedIbsGmM6/
+         BpcIyDVkAfqs0T5sp4+dhaJ/a8fvtOtLU/dVNXQtVb6muPxOUfylQpCtAPUnf9ZDnD1N
+         OUsXuUxo4AcxJGPKCiv29bMPXUeeKmzTa5jzzYG9xelseWYh7pI/mtRJw26RhA9rqU+6
+         PQMoTZ4VJX8y2aAEA4TQrdn8lu4dKPxyjcspBIKNTkRnc21PjvOPW2Z8ABijJgHRH18k
+         VV9O2EQfumjBnwcdMIxGuo+bLSkMnncdkcRHP6m4jYcMjXXD2cjI1EktepxPYL6li4Nc
+         I5kA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681376537; x=1683968537;
+        d=1e100.net; s=20221208; t=1681376548; x=1683968548;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hePEpcTr4MAQXnMqmGvunBUBaXlfTQunP3G36DUCNCs=;
-        b=JCBiBHWsEG8OvwuA1TIeQahi0+mqVzgkkjgV8jj3UxH6raFp5+YnU4fLQUTKRSbWXz
-         qSJFSl4NF709AGTgiWobiK6CkAmM7raRFItpJkqRzrrgU3GIciZy534e/idD3/TnkiDp
-         YU4Ba2Z23iyqlvE8G9N9juMdVK0nv9f3TyehIUAEceow3KZal0So5N5b6msPCiqS4ccA
-         pCbIeKZhpvFQXF1nb3yMkigKvhmagycieADra17oJWPpjBIMGN28Qe7varg4zJ/h0Y69
-         lj2G+hdApyT9zoYrazb8r3J6itJUcmLXd/Ti50WfnPOyW5hw5LF5nduhGZYFnaHASCmR
-         jWqg==
-X-Gm-Message-State: AAQBX9c9j15C+yhCO55kfGIUBvJRK0LC+c6gJDtUv0pwfgGuzU6OjKXx
-        6ysKGuptW4VPiJ/O2u7PLno=
-X-Google-Smtp-Source: AKy350aPIkSil2eNqxWa6pty/dkpEVy0N3KQzirw3H6p8KpaxSec/NGQXd6t3JGm8Dit1W6dKyunfA==
-X-Received: by 2002:a7b:cd0b:0:b0:3f0:310c:e3cf with SMTP id f11-20020a7bcd0b000000b003f0310ce3cfmr1204986wmj.37.1681376536720;
-        Thu, 13 Apr 2023 02:02:16 -0700 (PDT)
+        bh=ldTjgbcAixArTLp8Y3OwHiWDDm8sGdVLf5wYTEAfqeg=;
+        b=UqyrWmPJViVS2lBDrhIO6sa1QqH/jdcnhhvhAcqeuCa7MFdXw/3WqGer6wdVVk+2vz
+         Qn3Hf+oGv7GEBbO6NoErP8p40Oeg9B8L/hcCUH5efV5VB6kLJCMzlHss1dM6fmKwIZKJ
+         lHhtumNd6TR749DmmhPJaDBwc8na25opacyniL5M0uUq/leUtK0ROA7bbw3XzzrxGNea
+         h32IEnnTkK9Jj2mxx0VlVjhHDsPw7UCP4is2MZOfGIeKiR8Wt4n2kcQurdrJ/zDRitzm
+         4bELhsC7MgLQVZOf4raWUkP6w26Aa/LUCSvDpwZO0eVj4y98heHToYfIHW1stKMznLsj
+         JBwA==
+X-Gm-Message-State: AAQBX9cvFPdxBH0g3i7YooZgRlXDtsTQeVICRLsxH4ln/XhbxjMPz8uV
+        Sg10xHAuVbVJJanP0lVec1w=
+X-Google-Smtp-Source: AKy350asP4+G83mAEIf1p9IarcfPfSoPgb5XVETZON+sPwEmFsRqvaVHYjROuiy2L1CPru9rX5YgVQ==
+X-Received: by 2002:a5d:4d0c:0:b0:2ce:fd37:938c with SMTP id z12-20020a5d4d0c000000b002cefd37938cmr907993wrt.50.1681376548080;
+        Thu, 13 Apr 2023 02:02:28 -0700 (PDT)
 Received: from [192.168.0.32] ([37.222.243.26])
-        by smtp.gmail.com with ESMTPSA id x19-20020a1c7c13000000b003ef5b011b30sm1267080wmc.8.2023.04.13.02.02.15
+        by smtp.gmail.com with ESMTPSA id r16-20020a056000015000b002f21a96c161sm820964wrx.70.2023.04.13.02.02.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Apr 2023 02:02:15 -0700 (PDT)
-Message-ID: <83323c24-304c-b129-88fa-f001c0d9e04d@gmail.com>
-Date:   Thu, 13 Apr 2023 11:02:14 +0200
+        Thu, 13 Apr 2023 02:02:27 -0700 (PDT)
+Message-ID: <b986d097-6cb4-cbde-3cd1-b8d68d222d9d@gmail.com>
+Date:   Thu, 13 Apr 2023 11:02:25 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH 1/3] dt-bindings: display: mediatek: dsi: Add compatible
- for MediaTek MT8188
+Subject: Re: [PATCH 2/3] drm/mediatek: Add mt8188 dsi compatible to mtk_dsi.c
 Content-Language: en-US
 To:     xinlei.lee@mediatek.com, chunkuang.hu@kernel.org,
         p.zabel@pengutronix.de, airlied@linux.ie, daniel@ffwll.ch,
@@ -67,9 +66,9 @@ Cc:     dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Project_Global_Chrome_Upstream_Group@mediatek.com
 References: <1681366162-4949-1-git-send-email-xinlei.lee@mediatek.com>
- <1681366162-4949-2-git-send-email-xinlei.lee@mediatek.com>
+ <1681366162-4949-3-git-send-email-xinlei.lee@mediatek.com>
 From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <1681366162-4949-2-git-send-email-xinlei.lee@mediatek.com>
+In-Reply-To: <1681366162-4949-3-git-send-email-xinlei.lee@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -87,7 +86,8 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On 13/04/2023 08:09, xinlei.lee@mediatek.com wrote:
 > From: Xinlei Lee <xinlei.lee@mediatek.com>
 > 
-> Add dt-binding documentation of dsi for MediaTek MT8188 SoC.
+> Add the compatible because there are different definitions for cmdq
+> register bit control in mt8188.
 > 
 > Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
 > Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
@@ -95,18 +95,46 @@ On 13/04/2023 08:09, xinlei.lee@mediatek.com wrote:
 Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
 
 > ---
->   .../devicetree/bindings/display/mediatek/mediatek,dsi.yaml       | 1 +
->   1 file changed, 1 insertion(+)
+>   drivers/gpu/drm/mediatek/mtk_drm_drv.c | 2 ++
+>   drivers/gpu/drm/mediatek/mtk_dsi.c     | 8 ++++++++
+>   2 files changed, 10 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.yaml
-> index 4707b60238b0..13fa76299254 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.yaml
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.yaml
-> @@ -29,6 +29,7 @@ properties:
->         - mediatek,mt8173-dsi
->         - mediatek,mt8183-dsi
->         - mediatek,mt8186-dsi
-> +      - mediatek,mt8188-dsi
+> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+> index a13b36ac03a1..9ba05961479d 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+> @@ -654,6 +654,8 @@ static const struct of_device_id mtk_ddp_comp_dt_ids[] = {
+>   	  .data = (void *)MTK_DSI },
+>   	{ .compatible = "mediatek,mt8186-dsi",
+>   	  .data = (void *)MTK_DSI },
+> +	{ .compatible = "mediatek,mt8188-dsi",
+> +	  .data = (void *)MTK_DSI },
+>   	{ }
+>   };
 >   
->     reg:
->       maxItems: 1
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> index 7d5250351193..500a3054282d 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> @@ -1208,6 +1208,12 @@ static const struct mtk_dsi_driver_data mt8186_dsi_driver_data = {
+>   	.has_size_ctl = true,
+>   };
+>   
+> +static const struct mtk_dsi_driver_data mt8188_dsi_driver_data = {
+> +	.reg_cmdq_off = 0xd00,
+> +	.has_shadow_ctl = true,
+> +	.has_size_ctl = true,
+> +};
+> +
+>   static const struct of_device_id mtk_dsi_of_match[] = {
+>   	{ .compatible = "mediatek,mt2701-dsi",
+>   	  .data = &mt2701_dsi_driver_data },
+> @@ -1217,6 +1223,8 @@ static const struct of_device_id mtk_dsi_of_match[] = {
+>   	  .data = &mt8183_dsi_driver_data },
+>   	{ .compatible = "mediatek,mt8186-dsi",
+>   	  .data = &mt8186_dsi_driver_data },
+> +	{ .compatible = "mediatek,mt8188-dsi",
+> +	  .data = &mt8188_dsi_driver_data },
+>   	{ },
+>   };
+>   MODULE_DEVICE_TABLE(of, mtk_dsi_of_match);
