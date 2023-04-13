@@ -2,225 +2,323 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73CCE6E08CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16EC16E08D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230452AbjDMIT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 04:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57208 "EHLO
+        id S229721AbjDMIWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 04:22:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230387AbjDMITQ (ORCPT
+        with ESMTP id S229995AbjDMIWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 04:19:16 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2071.outbound.protection.outlook.com [40.107.21.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3980B98;
-        Thu, 13 Apr 2023 01:19:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gtTNaLmVtWrPX5cnyCwRSMvNC4qcahUiOlS4l8DFBLLH4effIV2LXBRJypUq1BZRF3zggQFfcGpNRrgKih1BMAaM57/ryhvZTCwEyKZqlJHf3wik4BHrVz+Fpd2G1sLpMQpBiSDJD20Cd+K4xCBOgU9DFD4ICBFSseM0T6WYvYiPsaR7fCGiF3fEB4lF2eX3AtbmB4PhVGzdo+e0WSYoxlmPGRqHLLcKZXGIUMq7H9sxKp2J1EwqLTZnjsMxM0bbZ2jVvXbwHvtDhjn4MjhECKTWLZYJZ/6d1TM48DpSVZDffsgAbC09/DofP5D3SPLfP4kQIlQBPf25aDG+CTFHSA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=N174125ILgz38cpAln85Q8rftQqSNm/zgKL0yeDc/UI=;
- b=E/LwciEnyTXg7iJ8rs4K0eXhvqX0bqkacBqucDAxCZRhu3V5XDpTor/MbcDO9wYXjeuNzSH8/Cu64+lepQTu9sbGYvEaQixwfcLnHKEDiLpO8rdLUW4R2YNnZkpOpDevMNTt8IqemUcpzGqTK+tjxaHkePFt1Qoqfcvdj1y8Goul+GWyNNYqdXvYUZlcV1pzML+uW+xE2QaD7czNFwIkqpioxytLDwAvZ3//wBhk6l4H4MOJc7Inc1ttNNczHaS2W5Dt1zbG3IoI7bNJY6drYIJ2hYRF49p7tWf3BRvIhWiADPY26PMPsUp6D+qY2EqxhXCvWcZn5NvifCwLqRluWg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=solid-run.com; dmarc=pass action=none
- header.from=solid-run.com; dkim=pass header.d=solid-run.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=solidrn.onmicrosoft.com; s=selector1-solidrn-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=N174125ILgz38cpAln85Q8rftQqSNm/zgKL0yeDc/UI=;
- b=TXKN3QaAJPANstwDLFYUuHxW4/9J7Yvxhevla6mKyZq0ZzS9dbsxPc5Ac96xwIMLUCmo8QC+xf9NlQDmcjVZW3bh4zd/oFld8VJSAMAhFC5kgkDYaGbvEK1KuqBXzo5DxucjmCLBFxXdt2FIgLRvFmNCvO2w0ol+HKEwf/qUm+U=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=solid-run.com;
-Received: from AM0PR04MB4723.eurprd04.prod.outlook.com (2603:10a6:208:c0::20)
- by DBBPR04MB7721.eurprd04.prod.outlook.com (2603:10a6:10:1f6::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Thu, 13 Apr
- 2023 08:19:13 +0000
-Received: from AM0PR04MB4723.eurprd04.prod.outlook.com
- ([fe80::54c9:6706:9dc6:d977]) by AM0PR04MB4723.eurprd04.prod.outlook.com
- ([fe80::54c9:6706:9dc6:d977%5]) with mapi id 15.20.6298.030; Thu, 13 Apr 2023
- 08:19:13 +0000
-From:   Alvaro Karsz <alvaro.karsz@solid-run.com>
-To:     mst@redhat.com, jasowang@redhat.com
-Cc:     virtualization@lists.linux-foundation.org, cohuck@redhat.com,
-        pasic@linux.ibm.com, farman@linux.ibm.com,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yan@daynix.com, viktor@daynix.com,
-        Alvaro Karsz <alvaro.karsz@solid-run.com>
-Subject: [PATCH 2/2] virtio-vdpa: add VIRTIO_F_NOTIFICATION_DATA feature support
-Date:   Thu, 13 Apr 2023 11:18:55 +0300
-Message-Id: <20230413081855.36643-3-alvaro.karsz@solid-run.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230413081855.36643-1-alvaro.karsz@solid-run.com>
-References: <20230413081855.36643-1-alvaro.karsz@solid-run.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: ZR0P278CA0054.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:1d::23) To AM0PR04MB4723.eurprd04.prod.outlook.com
- (2603:10a6:208:c0::20)
+        Thu, 13 Apr 2023 04:22:08 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3AC2717
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 01:22:05 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id A20A2FF811;
+        Thu, 13 Apr 2023 08:22:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1681374123;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jKDwU6qCHx/OiJp9i/J/E9UgrqMYtUFZ9YIKoZ1nLA8=;
+        b=obZyPhFvxzqi67rpClmp0uemQXyhVAptA6qC/rrXQTaglZY2VEyf5HOIB7FCK9RuBfzBKT
+        zk1MIWguaqNh1YOHX8S3cLrG1n/bgicF4qneiQ7i8C0G8HCGz7ro0P1LVzg+FkFupcagfb
+        afl7CYSwEei68bXZzXGEaQdM9ITYEkkSBhIXkx6uvvtu9H3QiYm8dfYCcNCIoX916v8OH+
+        pdNj8u3khEZDhKrdmwQM2nVCUnXcJdOnzk8W30TfDECn2UMyBIfgdgghszeg1S53eFYYRu
+        dpD4oSTKojdF4owiFKp+aloV2FerZ/1nOOmEJLNAxIFBtGJJdaXQrG1IZ+m2Zw==
+Date:   Thu, 13 Apr 2023 10:22:00 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Cc:     Liang Yang <liang.yang@amlogic.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Yixun Lan <yixun.lan@amlogic.com>, <oxffffaa@gmail.com>,
+        <kernel@sberdevices.ru>, <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "yonghui.yu" <yonghui.yu@amlogic.com>
+Subject: Re: [PATCH v1 4/5] mtd: rawnand: meson: clear OOB buffer before
+ read
+Message-ID: <20230413102200.309fbe9c@xps-13>
+In-Reply-To: <7520e512-8a19-ff04-364c-b5be0a579ef0@sberdevices.ru>
+References: <20230412061700.1492474-1-AVKrasnov@sberdevices.ru>
+        <20230412061700.1492474-5-AVKrasnov@sberdevices.ru>
+        <20230412094400.3c82f631@xps-13>
+        <ac4b66da-6a76-c2ec-7e21-31632f3448d5@sberdevices.ru>
+        <20230412113654.183350d0@xps-13>
+        <4eace0a0-f6af-7d99-a52f-7913a2139330@sberdevices.ru>
+        <20230412141824.755b2bca@xps-13>
+        <eedaaed9-0a41-2c18-9eb2-792613566986@sberdevices.ru>
+        <20230412145715.58c2be4a@xps-13>
+        <7c996832-258f-001c-56bd-87bbdf23eeaa@amlogic.com>
+        <20230412163214.0c764bb3@xps-13>
+        <0c61eaae-053e-5768-a533-70b2ff0cc95d@amlogic.com>
+        <fbb8cb2b-0996-3029-b368-f67087d73487@amlogic.com>
+        <7520e512-8a19-ff04-364c-b5be0a579ef0@sberdevices.ru>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR04MB4723:EE_|DBBPR04MB7721:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4344d1b9-3b2e-4f73-fbce-08db3bf7c3ff
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pthIlGDCP8GebUhMWbDibezoEbzWh50JNkVTXjkYZ8uvZo8wr+mIk+SvOwLwzw8efeEkXs5qSvErS7ClYRxV86U8vbg7DIwFMotnObzFz2ojK5nsm0DUgSsIA/PO/OYruY7Gb26JGgJqH5othIpajXPXfSE5pQjrxSrO3VE7w2me3lNOwGlt79MTyEPEZfEdM4U4vNLuYO7R6xHMUw95inrVTNU6NwuFQRHpGlIdzND/8Gv82Dvj94oph4Wmd/pwGxHYc1w7aiX0HAO/4TObH3oRH7hgWTMHoiE6HTCoctieN/TvGIKIbQqWA39qNRYZvtqnjnhWoA6bVQCoxFQZjI4t2MXF9RjZcteG+PO86ZIbb0DP6HWk9soaaM68pJfBWd033Ud9oVhpEt0ZUS03b6qGrCs9+KG3c/CVaEjuOFvVxqPYbhayFA/Np9qXXh9tQsaoTXGVOrRpbeiPdgXTitepCI7nzmMH2zvCSLeZZ+34ihNFdC1sIwBNyr59qliZo63EfOUxCI9ousAjs1Y2Nm6tYiK4vYjOH7H/QsLdzj8Gz7YteKfpG+8zL4T1+xii6cp1zqiT9d43zP+h70ulAW28imacbd+UuzrgY2WhRL0a6iPpT0QVa8cUz6g3SKCJ
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB4723.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(396003)(346002)(376002)(39840400004)(366004)(451199021)(6666004)(52116002)(6486002)(66476007)(66556008)(66946007)(4326008)(36756003)(2906002)(7416002)(44832011)(86362001)(41300700001)(5660300002)(8676002)(8936002)(316002)(38100700002)(38350700002)(478600001)(6512007)(6506007)(1076003)(26005)(2616005)(186003)(107886003)(66899021)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8yi89h6SVWgUkl1g1O57kE7SYDzoBXmtf4YKPiAs03kJh6Tzd10uAPHLYuVC?=
- =?us-ascii?Q?93dFr5clPcyDjS89BU9gXSzCelCX19MZ+2G1kXl+s53vEj0aBcEMh5OncoiU?=
- =?us-ascii?Q?dQcQGo+v6Dv3PAtkCjJdwk8W4s54cmHWxYNHp/XtgiJ/Ky+xUiVTx5ecVSe2?=
- =?us-ascii?Q?s/D7XkNpw6J30YoKO5XG+QYXiQVPfo2aTrA/ge6jYzEBZjXywyciwJQZ7lBm?=
- =?us-ascii?Q?CGN53sFQgvmuAED6wVMgdpdAHM63evLruVyaWgVi3nlefExkrRceDfmHCnU+?=
- =?us-ascii?Q?pdTy1QJddDAkYHYz2ULqESbWKcOnPc9TqlNcKPdqa4+q+e7X+TO9Zm37TSZV?=
- =?us-ascii?Q?Zg4xi7AStIPm/M+6JRTBBl7f4R8SZqTNp6uJhXa1CHDqoMkZJQhKHSItXQg9?=
- =?us-ascii?Q?276+GDHPbfvgyaYYc29bIgl5EhFeFFmMjJxvHTvtOy4p4ViuSrR0G0V4e7Wa?=
- =?us-ascii?Q?7Nr1ntnDsDn1JJzAk7FkcUSBMayL1XAyEkccEzlo8tPSzrsjkzT0U0PTXQ4P?=
- =?us-ascii?Q?EdUGEzKUMvQr4Y1bvPVZM9SM9rjgyWO5nLtz+Jc8OG9w/ihRbVlYLg44n9qB?=
- =?us-ascii?Q?Aqeo+otmmXPQLiqzBNBGXmo1ddYC0cWlsVMxIEFvwHOISCJgqSe1teLjHDDL?=
- =?us-ascii?Q?PToY7P6FH6IW4GQSMP6QrZzg8GblvR6X64fGszAO2/IrvY+6ckNycOEsFZEZ?=
- =?us-ascii?Q?URvFoEcL9+iMDOGIFtcvCDfoB/LXistOQOmvnocpTsijCJ8MLCPIgm0jQ3f3?=
- =?us-ascii?Q?NlHsEqKYjyrlVT5i5rA5ef6xM5AWFI71qtAF59ScABQ74OU0VYKpz9/SPPr1?=
- =?us-ascii?Q?735JKod+Wu7Ek2JXZHWfeBa44+YDMJ8Dlad4PYvKascSwK9N/QMwtmsR5Zhi?=
- =?us-ascii?Q?8Z4YllMSBEvEtrRs9B2rohBZ4j0iuKjR0VJxD40rWs06DEDjEvktgECBAajr?=
- =?us-ascii?Q?dlkX3A1zV5Et8/XRUO3yc5q9+Esz3xiyEQNZF7922jFBImtgn8PH5KP/Glt3?=
- =?us-ascii?Q?IwdMJXzNlWWu0a8FPQMG9Q9slTiniwO9xPbjYujKqIH5Vlpe6ZAiIOa76+xo?=
- =?us-ascii?Q?jTzohB+SraRU7lNElQ/UWlrTkR24np8SGMZkpa1A4NAGO66xclRTWqJ95wtE?=
- =?us-ascii?Q?hX0Cq58+P9H0ctiQ8ns81zDhA8c5DQ+accrdpPFS2xbz0E9Mb0O7w5lqH8US?=
- =?us-ascii?Q?ZnZRF4265ELSl6k7ijI5ZceMwKbkVYqkPr577imijfmobNENOR9cGsGqjhSb?=
- =?us-ascii?Q?8UNrS+bP5ZVUTP70KvhINr0Gc0yZwO4htbKLZxeTqIuMEKkUH5b0CH9xZDEi?=
- =?us-ascii?Q?6UijCQaURNaeNun91d81zo8sLXaryMPKoMuh5fzrceP2/AnVSrtFrp/ffrrm?=
- =?us-ascii?Q?u5xWpSYisiop0urvsAeUZ2KM/vpvZlUyFaSlWnnx1LPXBI0GxNxW8WyrJ/rd?=
- =?us-ascii?Q?ph/rsSqaes9eZz7lgk+yb3k4eTZRI7SilGE9V7iKKSY1JznzB3bISj/oeehr?=
- =?us-ascii?Q?U5kxmQabqUhGOnScrF0jL942Bc5pj2Rj+YrZADNZ91P9+IdxI+8uNnjRW/VQ?=
- =?us-ascii?Q?rdQzMZbijF8yGRVJbKJCgRGEeXTQfAj9YK+clgst8eus2Ec46pkUuq58Y1EY?=
- =?us-ascii?Q?9Q=3D=3D?=
-X-OriginatorOrg: solid-run.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4344d1b9-3b2e-4f73-fbce-08db3bf7c3ff
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB4723.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2023 08:19:13.6481
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: a4a8aaf3-fd27-4e27-add2-604707ce5b82
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gRNZOUTPJ4Sos5ZJAnJahNVxxsTITNfzJWlJVkYrPChbBlT7XPt/ED3HWD7coAWhfbSR/V3gcya8YWyuNve10CWByPIF2PuIsM8uv0+8Gzo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7721
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add VIRTIO_F_NOTIFICATION_DATA support for vDPA transport.
-If this feature is negotiated, the driver passes extra data when kicking
-a virtqueue.
+Hi Arseniy,
 
-A device that offers this feature needs to implement the
-kick_vq_with_data callback.
+avkrasnov@sberdevices.ru wrote on Thu, 13 Apr 2023 10:00:24 +0300:
 
-kick_vq_with_data receives the vDPA device and data.
-data includes:
-16 bits vqn and 16 bits next available index for split virtqueues.
-16 bits vqs, 15 least significant bits of next available index
-and 1 bit next_wrap for packed virtqueues.
+> On 13.04.2023 09:11, Liang Yang wrote:
+> >=20
+> > On 2023/4/13 13:32, Liang Yang wrote: =20
+> >> Hi Miquel,
+> >>
+> >> On 2023/4/12 22:32, Miquel Raynal wrote: =20
+> >>> [ EXTERNAL EMAIL ]
+> >>>
+> >>> Hello,
+> >>>
+> >>> liang.yang@amlogic.com wrote on Wed, 12 Apr 2023 22:04:28 +0800:
+> >>> =20
+> >>>> Hi Miquel and Arseniy,
+> >>>>
+> >>>> On 2023/4/12 20:57, Miquel Raynal wrote: =20
+> >>>>> [ EXTERNAL EMAIL ]
+> >>>>>
+> >>>>> Hi Arseniy,
+> >>>>>
+> >>>>> avkrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 15:22:26 +0300: =
+=20
+> >>>>>> On 12.04.2023 15:18, Miquel Raynal wrote: =20
+> >>>>>>> Hi Arseniy,
+> >>>>>>>
+> >>>>>>> avkrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 13:14:52 +0300:
+> >>>>>>> =C2=A0=C2=A0=C2=A0 >>>> On 12.04.2023 12:36, Miquel Raynal wrote:=
+ =20
+> >>>>>>>>> Hi Arseniy,
+> >>>>>>>>>
+> >>>>>>>>> avkrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 12:20:55 +03=
+00:
+> >>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 >>>>>> On 12.04.2023 10:44, Miqu=
+el Raynal wrote: =20
+> >>>>>>>>>>> Hi Arseniy,
+> >>>>>>>>>>>
+> >>>>>>>>>>> AVKrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 09:16:58 +=
+0300:
+> >>>>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 >>>>>>>> This NAND=
+ reads only few user's bytes in ECC mode (not full OOB), so
+> >>>>>>>>>>>
+> >>>>>>>>>>> "This NAND reads" does not look right, do you mean "Subpage r=
+eads do
+> >>>>>>>>>>> not retrieve all the OOB bytes,"?
+> >>>>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 >>>>>>>> fill OOB =
+buffer with zeroes to not return garbage from previous reads =20
+> >>>>>>>>>>>> to user.
+> >>>>>>>>>>>> Otherwise 'nanddump' utility prints something like this for =
+just erased
+> >>>>>>>>>>>> page:
+> >>>>>>>>>>>>
+> >>>>>>>>>>>> ...
+> >>>>>>>>>>>> 0x000007f0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+> >>>>>>>>>>>> =C2=A0=C2=A0=C2=A0 OOB Data: ff ff ff ff 00 00 ff ff 80 cf 2=
+2 99 cb ad d3 be
+> >>>>>>>>>>>> =C2=A0=C2=A0=C2=A0 OOB Data: 63 27 ae 06 16 0a 2f eb bb dd 4=
+6 74 41 8e 88 6e
+> >>>>>>>>>>>> =C2=A0=C2=A0=C2=A0 OOB Data: 38 a1 2d e6 77 d4 05 06 f2 a5 7=
+e 25 eb 34 7c ff
+> >>>>>>>>>>>> =C2=A0=C2=A0=C2=A0 OOB Data: 38 ea de 14 10 de 9b 40 33 16 6=
+a cc 9d aa 2f 5e
+> >>>>>>>>>>>>
+> >>>>>>>>>>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+> >>>>>>>>>>>> ---
+> >>>>>>>>>>>> =C2=A0=C2=A0 drivers/mtd/nand/raw/meson_nand.c | 5 +++++
+> >>>>>>>>>>>> =C2=A0=C2=A0 1 file changed, 5 insertions(+)
+> >>>>>>>>>>>>
+> >>>>>>>>>>>> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd=
+/nand/raw/meson_nand.c
+> >>>>>>>>>>>> index f84a10238e4d..f2f2472cb511 100644
+> >>>>>>>>>>>> --- a/drivers/mtd/nand/raw/meson_nand.c
+> >>>>>>>>>>>> +++ b/drivers/mtd/nand/raw/meson_nand.c
+> >>>>>>>>>>>> @@ -858,9 +858,12 @@ static int meson_nfc_read_page_sub(stru=
+ct nand_chip *nand,
+> >>>>>>>>>>>> =C2=A0=C2=A0 static int meson_nfc_read_page_raw(struct nand_=
+chip *nand, u8 *buf,
+> >>>>>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int oob_=
+required, int page)
+> >>>>>>>>>>>> =C2=A0=C2=A0 {
+> >>>>>>>>>>>> +=C2=A0=C2=A0=C2=A0 struct mtd_info *mtd =3D nand_to_mtd(nan=
+d);
+> >>>>>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u8 *oob_buf =3D nand->o=
+ob_poi;
+> >>>>>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int ret;
+> >>>>>>>>>>>> =C2=A0=C2=A0 >>>>>>>> +=C2=A0=C2=A0=C2=A0 memset(oob_buf, 0,=
+ mtd->oobsize); =20
+> >>>>>>>>>>>
+> >>>>>>>>>>> I'm surprised raw reads do not read the entire OOB? =20
+> >>>>>>>>>>
+> >>>>>>>>>> Yes! Seems in case of raw access (what i see in this driver) n=
+umber of OOB bytes read
+> >>>>>>>>>> still depends on ECC parameters: for each portion of data cove=
+red with ECC code we can
+> >>>>>>>>>> read it's ECC code and "user bytes" from OOB - it is what i se=
+e by dumping DMA buffer by
+> >>>>>>>>>> printk(). For example I'm working with 2K NAND pages, each pag=
+e has 2 x 1K ECC blocks.
+> >>>>>>>>>> For each ECC block I have 16 OOB bytes which I can access by r=
+ead/write. Each 16 bytes
+> >>>>>>>>>> contains 2 bytes of user's data and 14 bytes ECC codes. So whe=
+n I read page in raw mode
+> >>>>>>>>>> controller returns 32 bytes (2 x (2 + 14)) of OOB. While OOB i=
+s reported as 64 bytes. =20
+> >>>>>>>>>
+> >>>>>>>>> In all modes, when you read OOB, you should get the full OOB. T=
+he fact
+> >>>>>>>>> that ECC correction is enabled or disabled does not matter. If =
+the NAND
+> >>>>>>>>> features OOB sections of 64 bytes, you should get the 64 bytes.
+> >>>>>>>>>
+> >>>>>>>>> What happens sometimes, is that some of the bytes are not prote=
+cted
+> >>>>>>>>> against bitflips, but the policy is to return the full buffer. =
+=20
+> >>>>>>>>
+> >>>>>>>> Ok, so to clarify case for this NAND controller:
+> >>>>>>>> 1) In both ECC and raw modes i need to return the same raw OOB d=
+ata (e.g. user bytes
+> >>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0 + ECC codes)? =20
+> >>>>>>>
+> >>>>>>> Well, you need to cover the same amount of data, yes. But in the =
+ECC
+> >>>>>>> case the data won't be raw (at least not all of it). =20
+> >>>>>>
+> >>>>>> So "same amount of data", in ECC mode current implementation retur=
+ns only user OOB bytes (e.g.
+> >>>>>> OOB data excluding ECC codes), in raw it returns user bytes + ECC =
+codes. IIUC correct
+> >>>>>> behaviour is to always return user bytes + ECC codes as OOB data e=
+ven in ECC mode ? =20
+> >>>>>
+> >>>>> If the page are 2k+64B you should read 2k+64B when OOB are requeste=
+d.
+> >>>>>
+> >>>>> If the controller only returns 2k+32B, then perform a random read to
+> >>>>> just move the read pointer to mtd->size + mtd->oobsize - 32 and
+> >>>>> retrieve the missing 32 bytes? =20
+> >>>>
+> >>>> 1) raw read can read out the whole page data 2k+64B, decided by the =
+len in the controller raw read command:
+> >>>> =C2=A0=C2=A0=C2=A0=C2=A0cmd =3D (len & GENMASK(5, 0)) | scrambler | =
+DMA_DIR(dir);
+> >>>> after that, the missing oob bytes(not used) can be copied from meson=
+_chip->data_buf. so the implementation of meson_nfc_read_page_raw() is like=
+ this if need.
+> >>>> =C2=A0=C2=A0=C2=A0=C2=A0{
+> >>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ......
+> >>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 meson_nfc_read_page_sub(n=
+and, page, 1);
+> >>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 meson_nfc_get_data_oob(na=
+nd, buf, oob_buf);
+> >>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 oob_len =3D (nand->ecc.by=
+tes + 2) * nand->ecc.steps;
+> >>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 memcpy(oob_buf + oob_len,=
+ meson_chip->data_buf + oob_len, mtd->oobsize - oob_len);
+> >>>>
+> >>>> =C2=A0=C2=A0=C2=A0=C2=A0}
+> >>>> 2) In ECC mode, the controller can't bring back the missing OOB byte=
+s. it can read out the user bytes and ecc bytes per meson_ooblayout_ops def=
+ine. =20
+> >>>
+> >>> And then (if oob_required) you can bring the missing bytes with
+> >>> something along:
+> >>> nand_change_read_column_op(chip, mtd->writesize + oob_len,
+> >>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 oob_buf + oob_len,
+> >>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 mtd->oobsize - oob_len,
+> >>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 false);
+> >>> Should not be a huge performance hit. =20
+> >>
+> >> After finishing ECC mode reading, the column address internal in NAND =
+device should be the right pos; it doesn't need to change the column again.=
+ so adding controller raw read for the missing bytes after ECC reading may =
+works.
+> >> =20
+> > use raw read for the missing bytes, but they are not protected by host =
+ECC. to the NAND type of storage, is it ok or missing bytes better to be fi=
+lled with 0xff? =20
+>=20
+> IIUC Miqu=C3=A8l's reply, valid behaviour is to return full OOB data in b=
+oth modes. So in:
+> ECC mode it is user bytes(corrected by ECC, read from info buffer) + ECC =
++ missing bytes. ECC and missing bytes read in RAW mode.
 
-This patch follows a patch [1] by Viktor Prutyanov which adds support
-for the MMIO, channel I/O and modern PCI transports.
+I believe the ECC bytes you'll get will be corrected.
+You can check this by using nandflipbits in mtd-utils.
 
-Signed-off-by: Alvaro Karsz <alvaro.karsz@solid-run.com>
----
- drivers/virtio/virtio_vdpa.c | 23 +++++++++++++++++++++--
- include/linux/vdpa.h         |  9 +++++++++
- 2 files changed, 30 insertions(+), 2 deletions(-)
+> RAW mode it is user bytes(not corrected by ECC) + ECC + missing bytes
+>=20
+>=20
+> Also @Liang, is this valid code (drivers/mtd/nand/raw/meson_nand.c)?
+>=20
+> 	ret =3D nand_check_erased_ecc_chunk(data, ecc->size,
+>                                           oob, ecc->bytes + 2,
+>                                           NULL, 0,     =20
+>                                           ecc->strength);
+>=20
+> It confused me, because 'oob' buffer contains both user bytes and ECC cod=
+e,
+> 'ecc->bytes + 2' is 16. May be it should be:
+>=20
+> 	ret =3D nand_check_erased_ecc_chunk(data, ecc->size,
+>                                           oob + 2, ecc->bytes,
+>                                           NULL, 0,     =20
+>                                           ecc->strength);
 
-diff --git a/drivers/virtio/virtio_vdpa.c b/drivers/virtio/virtio_vdpa.c
-index d7f5af62dda..737c1f36d32 100644
---- a/drivers/virtio/virtio_vdpa.c
-+++ b/drivers/virtio/virtio_vdpa.c
-@@ -112,6 +112,17 @@ static bool virtio_vdpa_notify(struct virtqueue *vq)
- 	return true;
- }
- 
-+static bool virtio_vdpa_notify_with_data(struct virtqueue *vq)
-+{
-+	struct vdpa_device *vdpa = vd_get_vdpa(vq->vdev);
-+	const struct vdpa_config_ops *ops = vdpa->config;
-+	u32 data = vring_notification_data(vq);
-+
-+	ops->kick_vq_with_data(vdpa, data);
-+
-+	return true;
-+}
-+
- static irqreturn_t virtio_vdpa_config_cb(void *private)
- {
- 	struct virtio_vdpa_device *vd_dev = private;
-@@ -138,6 +149,7 @@ virtio_vdpa_setup_vq(struct virtio_device *vdev, unsigned int index,
- 	struct device *dma_dev;
- 	const struct vdpa_config_ops *ops = vdpa->config;
- 	struct virtio_vdpa_vq_info *info;
-+	bool (*notify)(struct virtqueue *vq) = virtio_vdpa_notify;
- 	struct vdpa_callback cb;
- 	struct virtqueue *vq;
- 	u64 desc_addr, driver_addr, device_addr;
-@@ -154,6 +166,14 @@ virtio_vdpa_setup_vq(struct virtio_device *vdev, unsigned int index,
- 	if (index >= vdpa->nvqs)
- 		return ERR_PTR(-ENOENT);
- 
-+	/* We cannot accept VIRTIO_F_NOTIFICATION_DATA without kick_vq_with_data */
-+	if (__virtio_test_bit(vdev, VIRTIO_F_NOTIFICATION_DATA)) {
-+		if (ops->kick_vq_with_data)
-+			notify = virtio_vdpa_notify_with_data;
-+		else
-+			__virtio_clear_bit(vdev, VIRTIO_F_NOTIFICATION_DATA);
-+	}
-+
- 	/* Queue shouldn't already be set up. */
- 	if (ops->get_vq_ready(vdpa, index))
- 		return ERR_PTR(-ENOENT);
-@@ -183,8 +203,7 @@ virtio_vdpa_setup_vq(struct virtio_device *vdev, unsigned int index,
- 		dma_dev = vdpa_get_dma_dev(vdpa);
- 	vq = vring_create_virtqueue_dma(index, max_num, align, vdev,
- 					true, may_reduce_num, ctx,
--					virtio_vdpa_notify, callback,
--					name, dma_dev);
-+					notify, callback, name, dma_dev);
- 	if (!vq) {
- 		err = -ENOMEM;
- 		goto error_new_virtqueue;
-diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
-index 43f59ef10cc..04cdaad77dd 100644
---- a/include/linux/vdpa.h
-+++ b/include/linux/vdpa.h
-@@ -143,6 +143,14 @@ struct vdpa_map_file {
-  * @kick_vq:			Kick the virtqueue
-  *				@vdev: vdpa device
-  *				@idx: virtqueue index
-+ * @kick_vq_with_data:		Kick the virtqueue and supply extra data
-+ *				(only if VIRTIO_F_NOTIFICATION_DATA is negotiated)
-+ *				@vdev: vdpa device
-+ *				@data for split virtqueue:
-+ *				16 bits vqn and 16 bits next available index.
-+ *				@data for packed virtqueue:
-+ *				16 bits vqn, 15 least significant bits of
-+ *				next available index and 1 bit next_wrap.
-  * @set_vq_cb:			Set the interrupt callback function for
-  *				a virtqueue
-  *				@vdev: vdpa device
-@@ -300,6 +308,7 @@ struct vdpa_config_ops {
- 			      u64 device_area);
- 	void (*set_vq_num)(struct vdpa_device *vdev, u16 idx, u32 num);
- 	void (*kick_vq)(struct vdpa_device *vdev, u16 idx);
-+	void (*kick_vq_with_data)(struct vdpa_device *vdev, u32 data);
- 	void (*set_vq_cb)(struct vdpa_device *vdev, u16 idx,
- 			  struct vdpa_callback *cb);
- 	void (*set_vq_ready)(struct vdpa_device *vdev, u16 idx, bool ready);
--- 
-2.34.1
+When you check for an erased chunk you should probably check the whole
+OOB area.
 
+>=20
+> For example let's look on Tegra's driver (drivers/mtd/nand/raw/tegra_nand=
+.c):
+>=20
+>                         u8 *oob =3D chip->oob_poi + nand->ecc.offset +   =
+=20
+>                                   (chip->ecc.bytes * bit);             =20
+>                                                                        =20
+>                         ret =3D nand_check_erased_ecc_chunk(data, chip->e=
+cc.size,
+>                                                           oob, chip->ecc.=
+bytes,
+>                                                           NULL, 0,     =20
+>                                                           chip->ecc.stren=
+gth);
+>=20
+> 'oob' contains 'nand->ecc.offset', and ECC length does not account user b=
+ytes length
+> (e.g. 2) - it is just 'chip->ecc.bytes'
+
+I haven't looked carefully, but be aware there are two user bytes
+reserved at the beginning of the OOB area for marking bad blocks. There
+*may* be a confusion somewhere. I am not saying there is one, just a
+hint if you can't find an explanation.
+
+
+Thanks,
+Miqu=C3=A8l
