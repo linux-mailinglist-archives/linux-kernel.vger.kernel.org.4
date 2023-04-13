@@ -2,233 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE1556E0B92
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 12:41:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A8E56E0B93
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 12:41:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231222AbjDMKlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 06:41:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50776 "EHLO
+        id S230526AbjDMKlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 06:41:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbjDMKko (ORCPT
+        with ESMTP id S231143AbjDMKkz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 06:40:44 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE281B6
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:40:42 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 84-20020a251457000000b00b8f59a09e1fso1375596ybu.5
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:40:42 -0700 (PDT)
+        Thu, 13 Apr 2023 06:40:55 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1AE8A51
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:40:46 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id q6so2282673wrc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:40:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681382442; x=1683974442;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5OCAYSthWCELWDD+mYmXa9NvWHtbEH3UT/IFpudVmH4=;
-        b=tNgjpd2vJ5sYdihexJ27wp/pJdtBdkGoDWlKPI+Qxip+uc94atiC4v8qSoBRSDpXnF
-         2H1eFR4AE43zDnf3vSAC6PM4Yzv5eOl4FnSZ87ySrNsQr00bC+1pP0q2NisEbs11XCfK
-         wfmIAOuWTU7ukaHpLHwHLoguS2c0haEBvsc03OpVoC1wgoCMAvA/kO8UJucX9FKOKJPQ
-         FUpRKC72wJ0M5aFsenyPyMH3rc7A+TUAdQgnGrgJs85bN23klJx4wsrqR1AZvj2NJaOn
-         RSlnCkB73DeUMUXx2hJ8njcRovku/drtS2o23klZqkp9a4zr1WrXp8WQJA7orQxM0t6d
-         M7ew==
+        d=linaro.org; s=google; t=1681382445; x=1683974445;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wt8QYWYgXcWDb0H4PzSCSB86AxQEfmL5GXKTxvwufWc=;
+        b=vgr124BoHwdFxO+8XR7kdg8rVvjTn0NVgvqh2IRic5l3kYQUOHhoQTaVNENat3MtFT
+         m04F+OZzwB9jdXFcnIsy4aWQ3aKr0ztkHTOY6lQZ0EIMXvg5dVLnUFVklSWIiXyUg4so
+         TPyVIYoQ1qePdYzwdUatim3ab6+GMl+0NJj8xfSvKLwJQnSK51k2RUJ7jcnHU8E/hRB/
+         BKNyh1LoGZg8FGwx9Hl1BU7tjqrmd6G8BpbRurNdgS7Iv9KFU3t9Z9C/31kJSRwapfUb
+         Cgvxo+ND0LV1gCZDa3V6SUHKfqXrfdHaqn3DoKaK9742YoxMJDoe4T2PQI3CKdzzH6ru
+         7PvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681382442; x=1683974442;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5OCAYSthWCELWDD+mYmXa9NvWHtbEH3UT/IFpudVmH4=;
-        b=ecM5V5YQztviINhcsz9UXuPzzIDUh+/ulpPw1G6eI+16qGu2RqZ1eDK46t/kNAD3mB
-         MqlcMuVno+KAH5V8VSlxlXb+KpSGe7rKuJQwyfI5EINvFktl9cwMt1Bs1yqPQ55lXlVD
-         YkGONTMi5H/TnXNUwbw/AE4f5uOxud97RDGwwhKCtmSd49efx//PMWjUxLEq72ostCAK
-         qk9ZeBYjSRN1FHkRPnUVGJY8znCeVX3WwW7QQgLlnqJxqZCPLPYmCuosBT7kz+/6Gxjh
-         F/01GOl/yVUqTHvCkvbsKKizxr9nleaXoqK2S8rtKrphbdR2r2uOqQSnN36OT0sfz5+G
-         V8AQ==
-X-Gm-Message-State: AAQBX9fazqaKB4vVM4lBHcGSDLUqz1pNfvV7NCY/NeWfP6SIwVrUn/rR
-        /1VYzki3j2cWjcBNhype8uTv911z1NkXUe8Y
-X-Google-Smtp-Source: AKy350ato23F52bhKncBfpzqlbDSBjiTYHoOr/++AUIP1InXFnH0R1Cd3N+S/780qX9+qoWZd0rLQvVMvNIOlXzG
-X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
- (user=yosryahmed job=sendgmr) by 2002:a25:dad2:0:b0:ac9:cb97:bd0e with SMTP
- id n201-20020a25dad2000000b00ac9cb97bd0emr904171ybf.5.1681382442136; Thu, 13
- Apr 2023 03:40:42 -0700 (PDT)
-Date:   Thu, 13 Apr 2023 10:40:34 +0000
-In-Reply-To: <20230413104034.1086717-1-yosryahmed@google.com>
-Mime-Version: 1.0
-References: <20230413104034.1086717-1-yosryahmed@google.com>
-X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Message-ID: <20230413104034.1086717-4-yosryahmed@google.com>
-Subject: [PATCH v6 3/3] mm: vmscan: refactor updating current->reclaim_state
-From:   Yosry Ahmed <yosryahmed@google.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        Michal Hocko <mhocko@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-mm@kvack.org,
-        Yosry Ahmed <yosryahmed@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1681382445; x=1683974445;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wt8QYWYgXcWDb0H4PzSCSB86AxQEfmL5GXKTxvwufWc=;
+        b=BQFYi0umPpm50lqmQrDm/fABE8axhQBWRSig6+7j5VDboSzu1E/9CNKamjKfi27dRP
+         uemuixnlWGpfPmCm5ovg5PjxhS1t849QmoXK5BGSaAfVcwVuAKNrcx+S1vemFtUkgI+U
+         yX8gQbacyEIxXYHKz+W/x0f1Qm8vXo9zdvppNjQ7z6ZmS4xFn3hpgwdtcA0/rWNfu4r0
+         E4mGHum39tQUAUWbsfS8qN5DXGk3/i+rjZ4OkZO+9Ep+zQioENqrVUFmNNQkAuIreoZB
+         Ur2JGv7QQnZZ2vrwE3XuMJt3sUSSRXQD9eAcre7sNXdHkOXcELp+yXdCNd1kmrwOSdjn
+         yptg==
+X-Gm-Message-State: AAQBX9cuT95hVKiEqMNQzmpyxT1HA1Vb5HawfU/iLH7Z9reH02XsbLiQ
+        hjY2uyLmjvtFPKZ437X25nsFYg==
+X-Google-Smtp-Source: AKy350ZKTDVRuGJL5YYI5HJoiDXvklp7EVihRfgojTs66okpvLm6QBr1zfRfZkA+Oait71i9Hok2BQ==
+X-Received: by 2002:adf:e352:0:b0:2ef:b1bd:786 with SMTP id n18-20020adfe352000000b002efb1bd0786mr1002307wrj.13.1681382444786;
+        Thu, 13 Apr 2023 03:40:44 -0700 (PDT)
+Received: from myrica ([5.69.146.176])
+        by smtp.gmail.com with ESMTPSA id z1-20020a5d4d01000000b002e5f6f8fc4fsm990119wrt.100.2023.04.13.03.40.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 03:40:44 -0700 (PDT)
+Date:   Thu, 13 Apr 2023 11:40:41 +0100
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc:     Eric Auger <eric.auger@redhat.com>,
+        virtio-dev@lists.oasis-open.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, qemu-devel@nongnu.org
+Subject: Re: virtio-iommu hotplug issue
+Message-ID: <20230413104041.GA3295191@myrica>
+References: <15bf1b00-3aa0-973a-3a86-3fa5c4d41d2c@daynix.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <15bf1b00-3aa0-973a-3a86-3fa5c4d41d2c@daynix.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During reclaim, we keep track of pages reclaimed from other means than
-LRU-based reclaim through scan_control->reclaim_state->reclaimed_slab,
-which we stash a pointer to in current task_struct.
+Hello,
 
-However, we keep track of more than just reclaimed slab pages through
-this. We also use it for clean file pages dropped through pruned inodes,
-and xfs buffer pages freed. Rename reclaimed_slab to reclaimed, and add
-a helper function that wraps updating it through current, so that future
-changes to this logic are contained within include/linux/swap.h.
+On Thu, Apr 13, 2023 at 01:49:43PM +0900, Akihiko Odaki wrote:
+> Hi,
+> 
+> Recently I encountered a problem with the combination of Linux's
+> virtio-iommu driver and QEMU when a SR-IOV virtual function gets disabled.
+> I'd like to ask you what kind of solution is appropriate here and implement
+> the solution if possible.
+> 
+> A PCIe device implementing the SR-IOV specification exports a virtual
+> function, and the guest can enable or disable it at runtime by writing to a
+> configuration register. This effectively looks like a PCI device is
+> hotplugged for the guest.
 
-Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
----
- fs/inode.c           |  3 +--
- fs/xfs/xfs_buf.c     |  3 +--
- include/linux/swap.h | 17 ++++++++++++++++-
- mm/slab.c            |  3 +--
- mm/slob.c            |  6 ++----
- mm/slub.c            |  5 ++---
- 6 files changed, 23 insertions(+), 14 deletions(-)
+Just so I understand this better: the guest gets a whole PCIe device PF
+that implements SR-IOV, and so the guest can dynamically create VFs?  Out
+of curiosity, is that a hardware device assigned to the guest with VFIO,
+or a device emulated by QEMU?
 
-diff --git a/fs/inode.c b/fs/inode.c
-index 4558dc2f1355..e60fcc41faf1 100644
---- a/fs/inode.c
-+++ b/fs/inode.c
-@@ -864,8 +864,7 @@ static enum lru_status inode_lru_isolate(struct list_head *item,
- 				__count_vm_events(KSWAPD_INODESTEAL, reap);
- 			else
- 				__count_vm_events(PGINODESTEAL, reap);
--			if (current->reclaim_state)
--				current->reclaim_state->reclaimed_slab += reap;
-+			mm_account_reclaimed_pages(reap);
- 		}
- 		iput(inode);
- 		spin_lock(lru_lock);
-diff --git a/fs/xfs/xfs_buf.c b/fs/xfs/xfs_buf.c
-index 54c774af6e1c..15d1e5a7c2d3 100644
---- a/fs/xfs/xfs_buf.c
-+++ b/fs/xfs/xfs_buf.c
-@@ -286,8 +286,7 @@ xfs_buf_free_pages(
- 		if (bp->b_pages[i])
- 			__free_page(bp->b_pages[i]);
- 	}
--	if (current->reclaim_state)
--		current->reclaim_state->reclaimed_slab += bp->b_page_count;
-+	mm_account_reclaimed_pages(bp->b_page_count);
- 
- 	if (bp->b_pages != bp->b_page_array)
- 		kmem_free(bp->b_pages);
-diff --git a/include/linux/swap.h b/include/linux/swap.h
-index 209a425739a9..e131ac155fb9 100644
---- a/include/linux/swap.h
-+++ b/include/linux/swap.h
-@@ -153,13 +153,28 @@ union swap_header {
-  * memory reclaim
-  */
- struct reclaim_state {
--	unsigned long reclaimed_slab;
-+	/* pages reclaimed outside of LRU-based reclaim */
-+	unsigned long reclaimed;
- #ifdef CONFIG_LRU_GEN
- 	/* per-thread mm walk data */
- 	struct lru_gen_mm_walk *mm_walk;
- #endif
- };
- 
-+/*
-+ * mm_account_reclaimed_pages(): account reclaimed pages outside of LRU-based
-+ * reclaim
-+ * @pages: number of pages reclaimed
-+ *
-+ * If the current process is undergoing a reclaim operation, increment the
-+ * number of reclaimed pages by @pages.
-+ */
-+static inline void mm_account_reclaimed_pages(unsigned long pages)
-+{
-+	if (current->reclaim_state)
-+		current->reclaim_state->reclaimed += pages;
-+}
-+
- #ifdef __KERNEL__
- 
- struct address_space;
-diff --git a/mm/slab.c b/mm/slab.c
-index dabc2a671fc6..64bf1de817b2 100644
---- a/mm/slab.c
-+++ b/mm/slab.c
-@@ -1392,8 +1392,7 @@ static void kmem_freepages(struct kmem_cache *cachep, struct slab *slab)
- 	smp_wmb();
- 	__folio_clear_slab(folio);
- 
--	if (current->reclaim_state)
--		current->reclaim_state->reclaimed_slab += 1 << order;
-+	mm_account_reclaimed_pages(1 << order);
- 	unaccount_slab(slab, order, cachep);
- 	__free_pages(&folio->page, order);
- }
-diff --git a/mm/slob.c b/mm/slob.c
-index fe567fcfa3a3..79cc8680c973 100644
---- a/mm/slob.c
-+++ b/mm/slob.c
-@@ -61,7 +61,7 @@
- #include <linux/slab.h>
- 
- #include <linux/mm.h>
--#include <linux/swap.h> /* struct reclaim_state */
-+#include <linux/swap.h> /* mm_account_reclaimed_pages() */
- #include <linux/cache.h>
- #include <linux/init.h>
- #include <linux/export.h>
-@@ -211,9 +211,7 @@ static void slob_free_pages(void *b, int order)
- {
- 	struct page *sp = virt_to_page(b);
- 
--	if (current->reclaim_state)
--		current->reclaim_state->reclaimed_slab += 1 << order;
--
-+	mm_account_reclaimed_pages(1 << order);
- 	mod_node_page_state(page_pgdat(sp), NR_SLAB_UNRECLAIMABLE_B,
- 			    -(PAGE_SIZE << order));
- 	__free_pages(sp, order);
-diff --git a/mm/slub.c b/mm/slub.c
-index 39327e98fce3..7aa30eef8235 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -11,7 +11,7 @@
-  */
- 
- #include <linux/mm.h>
--#include <linux/swap.h> /* struct reclaim_state */
-+#include <linux/swap.h> /* mm_account_reclaimed_pages() */
- #include <linux/module.h>
- #include <linux/bit_spinlock.h>
- #include <linux/interrupt.h>
-@@ -2063,8 +2063,7 @@ static void __free_slab(struct kmem_cache *s, struct slab *slab)
- 	/* Make the mapping reset visible before clearing the flag */
- 	smp_wmb();
- 	__folio_clear_slab(folio);
--	if (current->reclaim_state)
--		current->reclaim_state->reclaimed_slab += pages;
-+	mm_account_reclaimed_pages(pages);
- 	unaccount_slab(slab, order, s);
- 	__free_pages(&folio->page, order);
- }
--- 
-2.40.0.577.gac1e443424-goog
+> In such a case, the kernel assumes the endpoint is
+> detached from the virtio-iommu domain, but QEMU actually does not detach it.
+> 
+> This inconsistent view of the removed device sometimes prevents the VM from
+> correctly performing the following procedure, for example:
+> 1. Enable a VF.
+> 2. Disable the VF.
+> 3. Open a vfio container.
+> 4. Open the group which the PF belongs to.
+> 5. Add the group to the vfio container.
+> 6. Map some memory region.
+> 7. Close the group.
+> 8. Close the vfio container.
+> 9. Repeat 3-8
+> 
+> When the VF gets disabled, the kernel assumes the endpoint is detached from
+> the IOMMU domain, but QEMU actually doesn't detach it. Later, the domain
+> will be reused in step 3-8.
+> 
+> In step 7, the PF will be detached, and the kernel thinks there is no
+> endpoint attached and the mapping the domain holds is cleared, but the VF
+> endpoint is still attached and the mapping is kept intact.
+> 
+> In step 9, the same domain will be reused again, and the kernel requests to
+> create a new mapping, but it will conflict with the existing mapping and
+> result in -EINVAL.
+> 
+> This problem can be fixed by either of:
+> - requesting the detachment of the endpoint from the guest when the PCI
+> device is unplugged (the VF is disabled)
 
+Yes, I think this is an issue in the virtio-iommu driver, which should be
+sending a DETACH request when the VF is disabled, likely from
+viommu_release_device(). I'll work on a fix unless you would like to do it
+
+> - detecting that the PCI device is gone and automatically detach it on
+> QEMU-side.
+> 
+> It is not completely clear for me which solution is more appropriate as the
+> virtio-iommu specification is written in a way independent of the endpoint
+> mechanism and does not say what should be done when a PCI device is
+> unplugged.
+
+Yes, I'm not sure it's in scope for the specification, it's more about
+software guidance
+
+Thanks,
+Jean
