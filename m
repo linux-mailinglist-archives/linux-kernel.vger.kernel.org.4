@@ -2,119 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BB606E0C24
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 13:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5636B6E0C28
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 13:11:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbjDMLKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 07:10:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44584 "EHLO
+        id S230060AbjDMLLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 07:11:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbjDMLKi (ORCPT
+        with ESMTP id S229591AbjDMLLb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 07:10:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683465FD4;
-        Thu, 13 Apr 2023 04:10:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 01C2060FDC;
-        Thu, 13 Apr 2023 11:10:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 441A6C433EF;
-        Thu, 13 Apr 2023 11:10:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681384221;
-        bh=047FHGu9Eh8p6igVsqOs4jlOjs1RHZPTczyCtqb9f/4=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=YXVm+OHaLTnqBfgcKFP4knXEdr5JTsUgTwsBhgF7TOKENOpQCuekM2c0EA/h+WIO+
-         YYGrz9UHaKjWR7pe5/O/f96cTWNM4/jIgCSJe6AqzAhHC2+3WjxmUtAMendPPL1PfL
-         ve/zg2SM8urW4HmGiHtPRvG3fv+fVB5FC1ieep42EfYzMrRnl0Yvi4I2jGws4XRNqi
-         MxfNbnB0tK0lkuJxFAQhgUdQj/m7ceHdXldw/uNJtR7fL6AUlvUyR1uloPdcBGmsNa
-         W2EtSA541g5l3/e6j5d9kV9KsKtz6mixNhqv+GtKD0dNCL3yXlxupt1uysCy8iyp6a
-         FndSwIFFyplDg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1C284E52443;
-        Thu, 13 Apr 2023 11:10:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v4 00/12] Add EMAC3 support for sa8540p-ride
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168138422111.3376.5659809856940118374.git-patchwork-notify@kernel.org>
-Date:   Thu, 13 Apr 2023 11:10:21 +0000
-References: <20230411200409.455355-1-ahalaney@redhat.com>
-In-Reply-To: <20230411200409.455355-1-ahalaney@redhat.com>
-To:     Andrew Halaney <ahalaney@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
-        bhupesh.sharma@linaro.org, wens@csie.org, jernej.skrabec@gmail.com,
-        samuel@sholland.org, mturquette@baylibre.com,
-        peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
-        joabreu@synopsys.com, mcoquelin.stm32@gmail.com,
-        richardcochran@gmail.com, linux@armlinux.org.uk, veekhee@apple.com,
-        tee.min.tan@linux.intel.com, mohammad.athari.ismail@intel.com,
-        jonathanh@nvidia.com, ruppala@nvidia.com, bmasney@redhat.com,
-        andrey.konovalov@linaro.org, linux-arm-msm@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
-        jsuraj@qti.qualcomm.com, hisunil@quicinc.com, echanude@redhat.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 13 Apr 2023 07:11:31 -0400
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id C0FC77687;
+        Thu, 13 Apr 2023 04:11:27 -0700 (PDT)
+Received: from localhost.localdomain (unknown [180.167.10.98])
+        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id 2509C18010E345;
+        Thu, 13 Apr 2023 19:11:20 +0800 (CST)
+X-MD-Sfrom: liqiong@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From:   Li Qiong <liqiong@nfschina.com>
+To:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Li Qiong <liqiong@nfschina.com>
+Subject: [PATCH 2/4] scsi: lpfc: Remove unnecessary (void*) conversions
+Date:   Thu, 13 Apr 2023 19:10:31 +0800
+Message-Id: <20230413111031.9034-1-liqiong@nfschina.com>
+X-Mailer: git-send-email 2.11.0
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+No need to cast (void*) pointer to other type.
 
-This series was applied to netdev/net-next.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+Signed-off-by: Li Qiong <liqiong@nfschina.com>
+---
+ drivers/scsi/lpfc/lpfc_attr.c    |  2 +-
+ drivers/scsi/lpfc/lpfc_debugfs.c |  2 +-
+ drivers/scsi/lpfc/lpfc_nvme.c    | 32 ++++++++++++++++----------------
+ 3 files changed, 18 insertions(+), 18 deletions(-)
 
-On Tue, 11 Apr 2023 15:03:57 -0500 you wrote:
-> This is a forward port / upstream refactor of code delivered
-> downstream by Qualcomm over at [0] to enable the DWMAC5 based
-> implementation called EMAC3 on the sa8540p-ride dev board.
-> 
-> From what I can tell with the board schematic in hand,
-> as well as the code delivered, the main changes needed are:
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next,v4,01/12] dt-bindings: net: snps,dwmac: Update interrupt-names
-    https://git.kernel.org/netdev/net-next/c/d554ba0ea03c
-  - [net-next,v4,02/12] dt-bindings: net: snps,dwmac: Add Qualcomm Ethernet ETHQOS compatibles
-    https://git.kernel.org/netdev/net-next/c/d70c215bdd17
-  - [net-next,v4,03/12] dt-bindings: net: qcom,ethqos: Convert bindings to yaml
-    https://git.kernel.org/netdev/net-next/c/02e98ce3db14
-  - [net-next,v4,04/12] dt-bindings: net: qcom,ethqos: Add Qualcomm sc8280xp compatibles
-    https://git.kernel.org/netdev/net-next/c/25926a703ec1
-  - [net-next,v4,05/12] net: stmmac: Remove unnecessary if statement brackets
-    https://git.kernel.org/netdev/net-next/c/7c6b942b81ca
-  - [net-next,v4,06/12] net: stmmac: Fix DMA typo
-    https://git.kernel.org/netdev/net-next/c/d638dcb52b09
-  - [net-next,v4,07/12] net: stmmac: Remove some unnecessary void pointers
-    https://git.kernel.org/netdev/net-next/c/0c3f3c4f4b15
-  - [net-next,v4,08/12] net: stmmac: Pass stmmac_priv in some callbacks
-    https://git.kernel.org/netdev/net-next/c/1d84b487bc2d
-  - [net-next,v4,09/12] net: stmmac: dwmac4: Allow platforms to specify some DMA/MTL offsets
-    https://git.kernel.org/netdev/net-next/c/33719b57f52e
-  - [net-next,v4,10/12] net: stmmac: dwmac-qcom-ethqos: Respect phy-mode and TX delay
-    https://git.kernel.org/netdev/net-next/c/164a9ebe9742
-  - [net-next,v4,11/12] net: stmmac: dwmac-qcom-ethqos: Use loopback_en for all speeds
-    https://git.kernel.org/netdev/net-next/c/030f1d5972aa
-  - [net-next,v4,12/12] net: stmmac: dwmac-qcom-ethqos: Add EMAC3 support
-    https://git.kernel.org/netdev/net-next/c/b68376191c69
-
-You are awesome, thank you!
+diff --git a/drivers/scsi/lpfc/lpfc_attr.c b/drivers/scsi/lpfc/lpfc_attr.c
+index 22f2e046e8eb..0a8c872efc02 100644
+--- a/drivers/scsi/lpfc/lpfc_attr.c
++++ b/drivers/scsi/lpfc/lpfc_attr.c
+@@ -514,7 +514,7 @@ lpfc_nvme_info_show(struct device *dev, struct device_attribute *attr,
+ 				wwn_to_u64(vport->fc_portname.u.wwn));
+ 		return len;
+ 	}
+-	lport = (struct lpfc_nvme_lport *)localport->private;
++	lport = localport->private;
+ 	if (strlcat(buf, "\nNVME Initiator Enabled\n", PAGE_SIZE) >= PAGE_SIZE)
+ 		goto buffer_done;
+ 
+diff --git a/drivers/scsi/lpfc/lpfc_debugfs.c b/drivers/scsi/lpfc/lpfc_debugfs.c
+index f5252e45a48a..99a6d338ed80 100644
+--- a/drivers/scsi/lpfc/lpfc_debugfs.c
++++ b/drivers/scsi/lpfc/lpfc_debugfs.c
+@@ -1166,7 +1166,7 @@ lpfc_debugfs_nvmestat_data(struct lpfc_vport *vport, char *buf, int size)
+ 		localport = vport->localport;
+ 		if (!localport)
+ 			return len;
+-		lport = (struct lpfc_nvme_lport *)localport->private;
++		lport = localport->private;
+ 		if (!lport)
+ 			return len;
+ 
+diff --git a/drivers/scsi/lpfc/lpfc_nvme.c b/drivers/scsi/lpfc/lpfc_nvme.c
+index 152245f7cacc..7aedbc811502 100644
+--- a/drivers/scsi/lpfc/lpfc_nvme.c
++++ b/drivers/scsi/lpfc/lpfc_nvme.c
+@@ -91,7 +91,7 @@ lpfc_nvme_create_queue(struct nvme_fc_local_port *pnvme_lport,
+ 	if (!pnvme_lport->private)
+ 		return -ENOMEM;
+ 
+-	lport = (struct lpfc_nvme_lport *)pnvme_lport->private;
++	lport = pnvme_lport->private;
+ 	vport = lport->vport;
+ 
+ 	if (!vport || vport->load_flag & FC_UNLOADING ||
+@@ -151,7 +151,7 @@ lpfc_nvme_delete_queue(struct nvme_fc_local_port *pnvme_lport,
+ 	if (!pnvme_lport->private)
+ 		return;
+ 
+-	lport = (struct lpfc_nvme_lport *)pnvme_lport->private;
++	lport = pnvme_lport->private;
+ 	vport = lport->vport;
+ 
+ 	lpfc_printf_vlog(vport, KERN_INFO, LOG_NVME,
+@@ -370,7 +370,7 @@ lpfc_nvme_ls_req_cmp(struct lpfc_hba *phba, struct lpfc_iocbq *cmdwqe,
+ 	status = bf_get(lpfc_wcqe_c_status, wcqe) & LPFC_IOCB_STATUS_MASK;
+ 
+ 	if (vport->localport) {
+-		lport = (struct lpfc_nvme_lport *)vport->localport->private;
++		lport = vport->localport->private;
+ 		if (lport) {
+ 			atomic_inc(&lport->fc4NvmeLsCmpls);
+ 			if (status) {
+@@ -666,8 +666,8 @@ lpfc_nvme_ls_req(struct nvme_fc_local_port *pnvme_lport,
+ 	struct lpfc_vport *vport;
+ 	int ret;
+ 
+-	lport = (struct lpfc_nvme_lport *)pnvme_lport->private;
+-	rport = (struct lpfc_nvme_rport *)pnvme_rport->private;
++	lport = pnvme_lport->private;
++	rport = pnvme_rport->private;
+ 	if (unlikely(!lport) || unlikely(!rport))
+ 		return -EINVAL;
+ 
+@@ -766,7 +766,7 @@ lpfc_nvme_xmt_ls_rsp(struct nvme_fc_local_port *localport,
+ 	if (axchg->phba->pport->load_flag & FC_UNLOADING)
+ 		return -ENODEV;
+ 
+-	lport = (struct lpfc_nvme_lport *)localport->private;
++	lport = localport->private;
+ 
+ 	rc = __lpfc_nvme_xmt_ls_rsp(axchg, ls_rsp, __lpfc_nvme_xmt_ls_rsp_cmp);
+ 
+@@ -803,7 +803,7 @@ lpfc_nvme_ls_abort(struct nvme_fc_local_port *pnvme_lport,
+ 	struct lpfc_nodelist *ndlp;
+ 	int ret;
+ 
+-	lport = (struct lpfc_nvme_lport *)pnvme_lport->private;
++	lport = pnvme_lport->private;
+ 	if (unlikely(!lport))
+ 		return;
+ 	vport = lport->vport;
+@@ -979,7 +979,7 @@ lpfc_nvme_io_cmd_cmpl(struct lpfc_hba *phba, struct lpfc_iocbq *pwqeIn,
+ 	phba->sli4_hba.hdwq[idx].nvme_cstat.io_cmpls++;
+ 
+ 	if (unlikely(status && vport->localport)) {
+-		lport = (struct lpfc_nvme_lport *)vport->localport->private;
++		lport = vport->localport->private;
+ 		if (lport) {
+ 			if (bf_get(lpfc_wcqe_c_xb, wcqe))
+ 				atomic_inc(&lport->cmpl_fcp_xb);
+@@ -1545,7 +1545,7 @@ lpfc_nvme_fcp_io_submit(struct nvme_fc_local_port *pnvme_lport,
+ 	/* Validate pointers. LLDD fault handling with transport does
+ 	 * have timing races.
+ 	 */
+-	lport = (struct lpfc_nvme_lport *)pnvme_lport->private;
++	lport = pnvme_lport->private;
+ 	if (unlikely(!lport)) {
+ 		ret = -EINVAL;
+ 		goto out_fail;
+@@ -1585,7 +1585,7 @@ lpfc_nvme_fcp_io_submit(struct nvme_fc_local_port *pnvme_lport,
+ 	if (phba->ktime_on)
+ 		start = ktime_get_ns();
+ #endif
+-	rport = (struct lpfc_nvme_rport *)pnvme_rport->private;
++	rport = pnvme_rport->private;
+ 	lpfc_queue_info = (struct lpfc_nvme_qhandle *)hw_queue_handle;
+ 
+ 	/*
+@@ -1866,7 +1866,7 @@ lpfc_nvme_fcp_abort(struct nvme_fc_local_port *pnvme_lport,
+ 	/* Validate pointers. LLDD fault handling with transport does
+ 	 * have timing races.
+ 	 */
+-	lport = (struct lpfc_nvme_lport *)pnvme_lport->private;
++	lport = pnvme_lport->private;
+ 	if (unlikely(!lport))
+ 		return;
+ 
+@@ -2192,7 +2192,7 @@ lpfc_nvme_create_localport(struct lpfc_vport *vport)
+ 				 lpfc_nvme_template.max_sgl_segments);
+ 
+ 		/* Private is our lport size declared in the template. */
+-		lport = (struct lpfc_nvme_lport *)localport->private;
++		lport = localport->private;
+ 		vport->localport = localport;
+ 		lport->vport = vport;
+ 		vport->nvmei_support = 1;
+@@ -2309,7 +2309,7 @@ lpfc_nvme_destroy_localport(struct lpfc_vport *vport)
+ 	localport = vport->localport;
+ 	if (!localport)
+ 		return;
+-	lport = (struct lpfc_nvme_lport *)localport->private;
++	lport = localport->private;
+ 
+ 	lpfc_printf_vlog(vport, KERN_INFO, LOG_NVME,
+ 			 "6011 Destroying NVME localport x%px\n",
+@@ -2359,7 +2359,7 @@ lpfc_nvme_update_localport(struct lpfc_vport *vport)
+ 				 "6710 Update NVME fail. No localport\n");
+ 		return;
+ 	}
+-	lport = (struct lpfc_nvme_lport *)localport->private;
++	lport = localport->private;
+ 	if (!lport) {
+ 		lpfc_printf_vlog(vport, KERN_WARNING, LOG_NVME,
+ 				 "6171 Update NVME fail. localP x%px, No lport\n",
+@@ -2404,7 +2404,7 @@ lpfc_nvme_register_port(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp)
+ 	if (!localport)
+ 		return 0;
+ 
+-	lport = (struct lpfc_nvme_lport *)localport->private;
++	lport = localport->private;
+ 
+ 	/* NVME rports are not preserved across devloss.
+ 	 * Just register this instance.  Note, rpinfo->dev_loss_tmo
+@@ -2593,7 +2593,7 @@ lpfc_nvme_unregister_port(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp)
+ 	if (!localport)
+ 		return;
+ 
+-	lport = (struct lpfc_nvme_lport *)localport->private;
++	lport = localport->private;
+ 	if (!lport)
+ 		goto input_err;
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.11.0
 
