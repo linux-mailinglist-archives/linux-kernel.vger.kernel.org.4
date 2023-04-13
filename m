@@ -2,126 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 890C76E08BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 171DB6E08BA
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:15:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230407AbjDMIP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 04:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55812 "EHLO
+        id S230390AbjDMIPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 04:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230388AbjDMIPv (ORCPT
+        with ESMTP id S230369AbjDMIPt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 04:15:51 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D6A6EA0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 01:15:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681373746; x=1712909746;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vu4OEu4n9OHOU9LpnDqXdW4qfU3iQsDUoqGpqlbd5Qs=;
-  b=lU7ixeqpxSric/F1+uK29SiQWhzgjOFcxV+O07pwo8ORb4VOkzab+cYE
-   ijnraGRiJ3giLixASrFelWMQjI9iP5pLG+hkWdOkI1uGmp5YsQf1g7oW1
-   7XqgsD/JJm45W0qtZFyN5WnwpxS6tN7sYYm2JYIZJs9BnjXD/wePBRhWy
-   GTFtDydX/xz065QiuFqltdE4sLa8Ey5RjI7TlqUGk79ALRvh9AkVdcslp
-   DWLk4HXWOy8rJ7QVrTOgHiJwFBfnF7EQ31Z0nEvIWljag3UheWu8nlgK0
-   rSWj8WMxCXHwyhCabYLRaZmhfOf1DnA/ag7oVtp4qqFGdx7gdoD2N+f2P
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="346801335"
-X-IronPort-AV: E=Sophos;i="5.98,341,1673942400"; 
-   d="scan'208";a="346801335"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 01:15:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="682871344"
-X-IronPort-AV: E=Sophos;i="5.98,341,1673942400"; 
-   d="scan'208";a="682871344"
-Received: from zbiro-mobl.ger.corp.intel.com (HELO intel.com) ([10.251.212.144])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 01:15:37 -0700
-Date:   Thu, 13 Apr 2023 10:15:10 +0200
-From:   Andi Shyti <andi.shyti@linux.intel.com>
-To:     Cong Liu <liucong2@kylinos.cn>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        Nirmoy Das <nirmoy.das@intel.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Matthew Brost <matthew.brost@intel.com>,
-        Jonathan Cavitt <jonathan.cavitt@intel.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/i915: Fix memory leaks in i915 selftests
-Message-ID: <ZDe6Dvq8p5qsZlCk@ashyti-mobl2.lan>
-References: <20230413031349.9026-1-liucong2@kylinos.cn>
+        Thu, 13 Apr 2023 04:15:49 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920E97280
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 01:15:26 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id d22-20020a17090a111600b0023d1b009f52so17345067pja.2
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 01:15:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681373726; x=1683965726;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9jdV+oxR7hymkmAcO25PV9p0v0m+J7g6fYMaGnJuArE=;
+        b=Er2WaIqMyZjIjpf+TH6izzg0XCUhIXP7M3Uj9gCkht3wC+J1bmcGYWSnLWJB8Du7uN
+         5/kZtEccHiq7Ang1R9XdgE6sKhCNARUI7HUi7hS35SJOBRYHd0Al1wueyLelzJjhbqOB
+         8RH79ycDV9dPN4Df12GEa03qfjmU2xbVJu23dX3D82rOGQvFxyWUsVkScbJtR1vIG9hJ
+         kvzhCdb1iPyBhz1DWhOByNP/R1Bwv9pYV4Rn6JJFu5O5UYT95HDOjRFWvnlZnYZckLcP
+         tjenyd24JL6WNH07O7O6/wa8TF4DX2/r5GtYcndtnLHkzBMHTu4xh3I4+kb3ys1lIxst
+         BY7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681373726; x=1683965726;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9jdV+oxR7hymkmAcO25PV9p0v0m+J7g6fYMaGnJuArE=;
+        b=CLsHwvmkSja0QUaBf89DwC5MNdRnb43TGgZgWvZzSjPRuKZauaYV2OUzQjx1F5mTAD
+         VPV3tTwZ0DUt30R7zgK/x1XeBt5wTo2fwV3DaSa5KaTF3i6dYh67CKizl/WeXrtDExmL
+         cpeNiYXkaAcwsNWpdWPtL8a7dpTgWFoSsYmvBybTBU57wRGJyI07uuPJ6EgheILwiJdx
+         MwcNQXbcXiIQjyolB+o7diwN0PDbEAL9RwObxfxVdeveY0lM8zj0fBu+9KXteGMl7cGe
+         ejfv3SE7i/QzVgmZdLFX18x1k6JXY6k0+G2wdSdid6mUPFxXA76wXgGU9RV1iBn7d+ee
+         GA7w==
+X-Gm-Message-State: AAQBX9f2HXzi0P4qzX62c0gO9vTao6+HZVFLpN0SoTfI91qVsJBIzOc9
+        9BhXJheQLWj8Pe5yBuf/o4W6+cWDaHpvEWkzmlo=
+X-Google-Smtp-Source: AKy350bgnF5aLj4SJMSBycuBsDyU4NLTjYSGBqHRp7G1f7/1qgAG9+Fxm4oZ6vrJBVGcMebK1o4eR/nBOsP/rRh0q7I=
+X-Received: by 2002:a17:90a:558f:b0:244:ae2c:d5d with SMTP id
+ c15-20020a17090a558f00b00244ae2c0d5dmr265793pji.4.1681373725623; Thu, 13 Apr
+ 2023 01:15:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230413031349.9026-1-liucong2@kylinos.cn>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Sender: rubenlorusso106@gmail.com
+Received: by 2002:a05:6a10:24c7:b0:3bc:b7f6:8a30 with HTTP; Thu, 13 Apr 2023
+ 01:15:25 -0700 (PDT)
+From:   Sophia Erick <sdltdkggl3455@gmail.com>
+Date:   Thu, 13 Apr 2023 10:15:25 +0200
+X-Google-Sender-Auth: jhc1WakEStWAzRq3h-hTG2h9XBQ
+Message-ID: <CAGDc9RTDohNYsJN8ifir=Md_nct01LTJ=jAf1qa_4K3UPhNjXw@mail.gmail.com>
+Subject: HELLO
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.8 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_NOVOWEL,
+        HK_RANDOM_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Cong,
+May the peace of God be with you ,
 
-> Fixes: c3bfba9a2225 ("drm/i915: Check for integer truncation on scatterlist creation")
-> 
-> Signed-off-by: Cong Liu <liucong2@kylinos.cn>
+   This letter might be a surprise to you, But I believe that you will
+be honest to fulfill my final wish. I bring peace and love to you. It
+is by the grace of god, I had no choice than to do what is lawful and
+right in the sight of God for eternal life and in the sight of man for
+witness of god=E2=80=99s mercy and glory upon my life. My dear, I sent this
+mail praying it will find you in a good condition, since I myself am
+in a very critical health condition in which I sleep every night
+without knowing if I may be alive to see the next day. I am Mrs.Sophia
+Erick, a widow suffering from a long time illness. I have some funds I
+inherited from my late husband, the sum of (Eleven Million Dollars) my
+Doctor told me recently that I have serious sickness which is a cancer
+problem. What disturbs me most is my stroke sickness. Having known my
+condition, I decided to donate this fund to a good person that will
+utilize it the way I am going to instruct herein. I need a very honest
+and God fearing person who can claim this money and use it for Charity
+works, for orphanages and gives justice and help to the poor, needy
+and widows says The Lord." Jeremiah 22:15-16.and also build schools
+for less privilege that will be named after my late husband if
+possible and to promote the word of god and the effort that the house
+of god is maintained.
 
-As Jani suggested we need a commit message here. Would something
-like this work for you?
+ I do not want a situation where this money will be used in an ungodly
+manner. That's why I'm taking this decision. I'm not afraid of death,
+so I know where I'm going. I accept this decision because I do not
+have any child who will inherit this money after I die. Please I want
+your sincere and urgent answer to know if you will be able to execute
+this project, and I will give you more information on how the fund
+will be transferred to your bank account. May the grace, peace, love
+and the truth in the Word of god be with you and all those that you
+love and  care for.
 
-"
-We forget to free 'pages' after checking for overflow. Be sure to
-properly free the allocated memory before exiting the
-fake_free_pages() function.
-"
-
-If it's OK for you, then I can add this message and fix the blank
-space before pushing this patch.
-
-In any case:
-
-Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com> 
-
-Andi
-
-> ---
->  drivers/gpu/drm/i915/selftests/i915_gem_gtt.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c b/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c
-> index 5361ce70d3f2..154801f1c468 100644
-> --- a/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c
-> +++ b/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c
-> @@ -69,8 +69,10 @@ static int fake_get_pages(struct drm_i915_gem_object *obj)
->  
->  	rem = round_up(obj->base.size, BIT(31)) >> 31;
->  	/* restricted by sg_alloc_table */
-> -	if (overflows_type(rem, unsigned int))
-> +	if (overflows_type(rem, unsigned int)) {
-> +		kfree(pages);
->  		return -E2BIG;
-> +	}
->  
->  	if (sg_alloc_table(pages, rem, GFP)) {
->  		kfree(pages);
-> -- 
-> 2.34.1
-> 
-> 
-> No virus found
-> 		Checked by Hillstone Network AntiVirus
+Mrs. Sophia Erick.
