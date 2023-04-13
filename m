@@ -2,113 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58CEF6E0986
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:59:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A8636E098A
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 11:00:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbjDMI7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 04:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49564 "EHLO
+        id S230142AbjDMJAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 05:00:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbjDMI6s (ORCPT
+        with ESMTP id S230193AbjDMI7g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 04:58:48 -0400
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC5019776;
-        Thu, 13 Apr 2023 01:56:45 -0700 (PDT)
-X-UUID: cffbef502368419ea3c967b9deffaa25-20230413
-X-CID-O-RULE: Release_Ham
-X-CID-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:a4fa865e-d2cd-46d3-b924-f292f65e27f5,IP:5,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:0
-X-CID-INFO: VERSION:1.1.22,REQID:a4fa865e-d2cd-46d3-b924-f292f65e27f5,IP:5,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-        elease,TS:0
-X-CID-META: VersionHash:120426c,CLOUDID:eaf2d5ea-db6f-41fe-8b83-13fe7ed1ef52,B
-        ulkID:230413165640C535AKEK,BulkQuantity:0,Recheck:0,SF:19|44|38|24|17|102,
-        TC:nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-        ,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-UUID: cffbef502368419ea3c967b9deffaa25-20230413
-X-User: zhouzongmin@kylinos.cn
-Received: from thinkpadx13gen2i.. [(116.128.244.169)] by mailgw
-        (envelope-from <zhouzongmin@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 15698829; Thu, 13 Apr 2023 16:56:38 +0800
-From:   Zongmin Zhou <zhouzongmin@kylinos.cn>
-To:     zackr@vmware.com, linux-graphics-maintainer@vmware.com,
-        pv-drivers@vmware.com, dmitry.torokhov@gmail.com
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zongmin Zhou <zhouzongmin@kylinos.cn>
-Subject: [PATCH] Input: vmmouse - add macros to enable vmmouse relative mode
-Date:   Thu, 13 Apr 2023 16:56:35 +0800
-Message-Id: <20230413085635.2515647-1-zhouzongmin@kylinos.cn>
-X-Mailer: git-send-email 2.34.1
+        Thu, 13 Apr 2023 04:59:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08BF93EA;
+        Thu, 13 Apr 2023 01:57:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CD4D60F51;
+        Thu, 13 Apr 2023 08:57:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E76DEC433EF;
+        Thu, 13 Apr 2023 08:57:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681376265;
+        bh=ESKq4Yc4rw95zXlQHJsWDTT7htc0nkptP1B5meprI2s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=myX/JUKqLGrxp5j+ucexvpLLZGyzPqOh7io0Nv6yqjdZAm6RvgYjLRqzgDbS1QPxS
+         5XC0MkXbcv8lj1f4bkkKxrMm+z0HL2Nky4nY4NcBS0I+poEi+gowJR8Bc/Vfncerda
+         SDxfYsnh4Xaj4yk1c3nkR67mczHNiX+6R1QRDjLro23lrKwIdBSURferIoFenHPV0e
+         kmXxNFt+U9rNDHu5Ka9frhGkehtQX1srGgQGj0dqlP6MOFHS/yhsr/lqnaNKWhRvJt
+         uoUg7DyAIV+EeM6kA9WDeMV9G69jhHMUoJlJKB4kQhxi5a0ImyQDZCrhTPcexbflmO
+         E3//COcDggBMQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pmsm4-000092-Qe; Thu, 13 Apr 2023 10:57:48 +0200
+Date:   Thu, 13 Apr 2023 10:57:48 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jarkko Sonninen <kasper@iki.fi>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] USB: serial: xr: Add TIOCGRS485 and TIOCSRS485 ioctls
+Message-ID: <ZDfEDOihHTIDlbx+@hovoldconsulting.com>
+References: <20230313010416.845252-1-kasper@iki.fi>
+ <20230314070002.1008959-1-kasper@iki.fi>
+ <ZBAkOr0epPPICLNP@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBAkOr0epPPICLNP@kroah.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add macros to enable request relative mode.
-
-Change the REL_Y value passed by input_report_rel function,
-to match the direction of mouse movement.
-
-Signed-off-by: Zongmin Zhou<zhouzongmin@kylinos.cn>
----
- drivers/input/mouse/vmmouse.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/input/mouse/vmmouse.c b/drivers/input/mouse/vmmouse.c
-index ea9eff7c8099..f39ce21f7af9 100644
---- a/drivers/input/mouse/vmmouse.c
-+++ b/drivers/input/mouse/vmmouse.c
-@@ -21,6 +21,12 @@
- #include "psmouse.h"
- #include "vmmouse.h"
+On Tue, Mar 14, 2023 at 08:37:30AM +0100, Greg Kroah-Hartman wrote:
+> On Tue, Mar 14, 2023 at 09:00:01AM +0200, Jarkko Sonninen wrote:
+> > Add support for RS-485 in Exar USB adapters.
+> > RS-485 mode is controlled by TIOCGRS485 and TIOCSRS485 ioctls.
+> > Gpio mode register is set to enable RS-485.
+> > 
+> > Signed-off-by: Jarkko Sonninen <kasper@iki.fi>
+> > ---
  
-+/*
-+ * Enable this to request relative mode.
-+ * Defaut to absolute mode.
-+ */
-+//#define VMMOUSE_RELATIVE_MODE
-+
- #define VMMOUSE_PROTO_MAGIC			0x564D5868U
- 
- /*
-@@ -184,7 +190,7 @@ static psmouse_ret_t vmmouse_report_events(struct psmouse *psmouse)
- 		if (status & VMMOUSE_RELATIVE_PACKET) {
- 			pref_dev = rel_dev;
- 			input_report_rel(rel_dev, REL_X, (s32)x);
--			input_report_rel(rel_dev, REL_Y, -(s32)y);
-+			input_report_rel(rel_dev, REL_Y, (s32)y);
- 		} else {
- 			pref_dev = abs_dev;
- 			input_report_abs(abs_dev, ABS_X, x);
-@@ -304,8 +310,13 @@ static int vmmouse_enable(struct psmouse *psmouse)
- 	VMMOUSE_CMD(ABSPOINTER_RESTRICT, VMMOUSE_RESTRICT_CPL0,
- 		    dummy1, dummy2, dummy3, dummy4);
- 
-+#ifdef VMMOUSE_RELATIVE_MODE
-+	VMMOUSE_CMD(ABSPOINTER_COMMAND, VMMOUSE_CMD_REQUEST_RELATIVE,
-+		    dummy1, dummy2, dummy3, dummy4);
-+#else
- 	VMMOUSE_CMD(ABSPOINTER_COMMAND, VMMOUSE_CMD_REQUEST_ABSOLUTE,
- 		    dummy1, dummy2, dummy3, dummy4);
-+#endif
- 
- 	return 0;
- }
--- 
-2.34.1
+> > @@ -237,6 +238,7 @@ static const struct xr_type xr_types[] = {
+> >  struct xr_data {
+> >  	const struct xr_type *type;
+> >  	u8 channel;			/* zero-based index or interface number */
+> > +	u32 rs485_flags;
+> 
+> Nit, you might want to move this up above channel as you now have a hole
+> in this structure.  Not like it's that big of a deal so if you don't
+> have to respin this no need to change.
 
+Generally, it's better to keep related fields together than worry about
+holes so the above is just fine.
 
-No virus found
-		Checked by Hillstone Network AntiVirus
+Johan
