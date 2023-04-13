@@ -2,117 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5146F6E0534
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 05:28:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 178316E0525
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 05:26:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbjDMD2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 23:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46010 "EHLO
+        id S229660AbjDMD0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 23:26:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbjDMD21 (ORCPT
+        with ESMTP id S229522AbjDMD0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 23:28:27 -0400
-Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F402E139;
-        Wed, 12 Apr 2023 20:28:25 -0700 (PDT)
-Received: from localhost.localdomain ([172.16.0.254])
-        (user=u201911681@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 33D3PeWP002793-33D3PeWQ002793
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 13 Apr 2023 11:25:48 +0800
-From:   Zhou Shide <u201911681@hust.edu.cn>
-To:     Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Bai Ping <ping.bai@nxp.com>
-Cc:     hust-os-kernel-patches@googlegroups.com,
-        Zhou Shide <u201911681@hust.edu.cn>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] clk: imx: clk-imx8mm: fix memory leak issue in 'imx8mm_clocks_probe'
-Date:   Thu, 13 Apr 2023 03:24:39 +0000
-Message-Id: <20230413032439.1706448-1-u201911681@hust.edu.cn>
+        Wed, 12 Apr 2023 23:26:18 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0204ED8;
+        Wed, 12 Apr 2023 20:26:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681356377; x=1712892377;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=RjSH9E6OXfyTQYug3/UlEBpso7/A92OM8O59zWyTQIc=;
+  b=mhnxVvyoZePHGYCun5fMNkko14gjKS3ZNW7kEKRvyMsVmpgFcpzMuR3G
+   9+PUioqOkn0XRZ3jzZ250X7ugmUV+Gt7ORzJF1WsRUkNvPaihZ9eTf/Er
+   2CIYaXZVHn7ntrmbEm9r2gsxERd1Y4kB8yyj/DNDfxR81G4HiZNikYQzH
+   luH2A0eagbP6H374fsl/T8miUXyNm7eToto3tFIWOjvglVWDqkWIUuZ7N
+   VvHbRZjde1WsB5uk2BWd69OO+HH5rC+nK267BILfc8UyU5KACkvwX2FTw
+   KMq8mquvsuLyEl5LqWNRpPUF5WPeEc2mjg3FZrKtIKWGUwF8C3PojLVNL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="332781610"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="332781610"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 20:26:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="800597033"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="800597033"
+Received: from p12ill20yoongsia.png.intel.com ([10.88.227.28])
+  by fmsmga002.fm.intel.com with ESMTP; 12 Apr 2023 20:26:11 -0700
+From:   Song Yoong Siang <yoong.siang.song@intel.com>
+To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Alexander Duyck <alexanderduyck@fb.com>,
+        Ong Boon Leong <boon.leong.ong@intel.com>
+Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, xdp-hints@xdp-project.net,
+        Song Yoong Siang <yoong.siang.song@intel.com>
+Subject: [PATCH net-next v4 0/3] XDP Rx HWTS metadata for stmmac driver
+Date:   Thu, 13 Apr 2023 11:25:38 +0800
+Message-Id: <20230413032541.885238-1-yoong.siang.song@intel.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: u201911681@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function imx8mm_clocks_probe() has two main issues:
-- The of_iomap() function may cause a memory leak.
-- Memory allocated for 'clk_hw_data' may not be freed properly
-in some paths.
+Implemented XDP receive hardware timestamp metadata for stmmac driver.
 
-To fix these issues, this commit replaces the use of of_iomap()
-with devm_of_iomap() and replaces kzalloc() with devm_kzalloc().
-This ensures that all memory is properly managed and automatically
-freed when the device is removed.
+This patchset is tested with tools/testing/selftests/bpf/xdp_hw_metadata.
+Below are the test steps and results.
 
-In addition, when devm_of_iomap() allocates memory with an error,
-it will first jump to label "unregister_hws" and
-then return PTR_ ERR(base).
+Command on DUT:
+	sudo ./xdp_hw_metadata <interface name>
 
-Fixes: 9c71f9ea35d7 ("clk: imx: imx8mm: Switch to clk_hw based API")
-Fixes: ba5625c3e272 ("clk: imx: Add clock driver support for imx8mm")
-Signed-off-by: Zhou Shide <u201911681@hust.edu.cn>
+Command on Link Partner:
+	echo -n xdp | nc -u -q1 <destination IPv4 addr> 9091
+	echo -n skb | nc -u -q1 <destination IPv4 addr> 9092
+
+Result for port 9091:
+	0x55fdb5f006d0: rx_desc[3]->addr=1000000003bd000 addr=3bd100 comp_addr=3bd000
+	rx_timestamp: 1677762474360150047
+	rx_hash: 0
+	0x55fdb5f006d0: complete idx=515 addr=3bd000
+
+Result for port 9092:
+	found skb hwtstamp = 1677762476.320146161
+
+Changes since v3:
+ * directly retrieve Rx HWTS in stmmac_xdp_rx_timestamp(), instead of reuse
+   stmmac_get_rx_hwtstamp()
+
+Changes since v2:
+ * To reduce packet processing cost, get the Rx HWTS only when xmo_rx_timestamp()
+   is called
+
+Changes since v1:
+ * Add static to stmmac_xdp_metadata_ops declaration
+
 ---
-The issue is discovered by static analysis, and the patch is not tested yet.
 
- drivers/clk/imx/clk-imx8mm.c | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+Song Yoong Siang (3):
+  net: stmmac: introduce wrapper for struct xdp_buff
+  net: stmmac: add Rx HWTS metadata to XDP receive pkt
+  net: stmmac: add Rx HWTS metadata to XDP ZC receive pkt
 
-diff --git a/drivers/clk/imx/clk-imx8mm.c b/drivers/clk/imx/clk-imx8mm.c
-index b618892170f2..e6e0bb4805a6 100644
---- a/drivers/clk/imx/clk-imx8mm.c
-+++ b/drivers/clk/imx/clk-imx8mm.c
-@@ -303,7 +303,7 @@ static int imx8mm_clocks_probe(struct platform_device *pdev)
- 	void __iomem *base;
- 	int ret;
- 
--	clk_hw_data = kzalloc(struct_size(clk_hw_data, hws,
-+	clk_hw_data = devm_kzalloc(dev, struct_size(clk_hw_data, hws,
- 					  IMX8MM_CLK_END), GFP_KERNEL);
- 	if (WARN_ON(!clk_hw_data))
- 		return -ENOMEM;
-@@ -320,10 +320,12 @@ static int imx8mm_clocks_probe(struct platform_device *pdev)
- 	hws[IMX8MM_CLK_EXT4] = imx_get_clk_hw_by_name(np, "clk_ext4");
- 
- 	np = of_find_compatible_node(NULL, NULL, "fsl,imx8mm-anatop");
--	base = of_iomap(np, 0);
-+	base = devm_of_iomap(dev, np, 0, NULL);
- 	of_node_put(np);
--	if (WARN_ON(!base))
--		return -ENOMEM;
-+	if (WARN_ON(IS_ERR(base))) {
-+		ret = PTR_ERR(base);
-+		goto unregister_hws;
-+	}
- 
- 	hws[IMX8MM_AUDIO_PLL1_REF_SEL] = imx_clk_hw_mux("audio_pll1_ref_sel", base + 0x0, 0, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
- 	hws[IMX8MM_AUDIO_PLL2_REF_SEL] = imx_clk_hw_mux("audio_pll2_ref_sel", base + 0x14, 0, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
-@@ -399,8 +401,10 @@ static int imx8mm_clocks_probe(struct platform_device *pdev)
- 
- 	np = dev->of_node;
- 	base = devm_platform_ioremap_resource(pdev, 0);
--	if (WARN_ON(IS_ERR(base)))
--		return PTR_ERR(base);
-+	if (WARN_ON(IS_ERR(base))) {
-+		ret = PTR_ERR(base);
-+		goto unregister_hws;
-+	}
- 
- 	/* Core Slice */
- 	hws[IMX8MM_CLK_A53_DIV] = imx8m_clk_hw_composite_core("arm_a53_div", imx8mm_a53_sels, base + 0x8000);
+ drivers/net/ethernet/stmicro/stmmac/stmmac.h  |  7 ++
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c | 80 ++++++++++++++++---
+ 2 files changed, 77 insertions(+), 10 deletions(-)
+
 -- 
 2.34.1
 
