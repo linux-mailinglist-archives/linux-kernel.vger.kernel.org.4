@@ -2,114 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D9C86E04EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 04:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E65C6E04FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 04:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbjDMCyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 22:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60958 "EHLO
+        id S229656AbjDMC6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 22:58:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbjDMCyF (ORCPT
+        with ESMTP id S229778AbjDMC56 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 22:54:05 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BAE0901B;
-        Wed, 12 Apr 2023 19:53:59 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33D2rOcgD020527, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33D2rOcgD020527
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Thu, 13 Apr 2023 10:53:24 +0800
-Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Thu, 13 Apr 2023 10:53:46 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Thu, 13 Apr 2023 10:53:46 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
- RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
- 15.01.2375.007; Thu, 13 Apr 2023 10:53:46 +0800
-From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>
-To:     Rob Herring <robh+dt@kernel.org>
-CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 2/2] dt-bindings: usb: snps,dwc3: Add 'snps,global-regs-starting-offset' quirk
-Thread-Topic: [PATCH v2 2/2] dt-bindings: usb: snps,dwc3: Add
- 'snps,global-regs-starting-offset' quirk
-Thread-Index: AQHZbO8UV6MphwFb1U6iZXdc0JZwLK8nG/AAgAFozGA=
-Date:   Thu, 13 Apr 2023 02:53:45 +0000
-Message-ID: <5ae89b563e234acdb36a4ae253cec869@realtek.com>
-References: <20230412033006.10859-1-stanley_chang@realtek.com>
- <20230412033006.10859-2-stanley_chang@realtek.com>
- <CAL_JsqLqTHbHjB1qiLduhzvTaO7EBMgL6KYqZJtgStGVGtX1vQ@mail.gmail.com>
-In-Reply-To: <CAL_JsqLqTHbHjB1qiLduhzvTaO7EBMgL6KYqZJtgStGVGtX1vQ@mail.gmail.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS05.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 12 Apr 2023 22:57:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D372737
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 19:57:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681354636;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5AzEg8Ao4jgsIZn9hnvRCP42sxSvRguawETbd/Q5Ewc=;
+        b=YTAbzPnzlrZ7EONMW+HKpSZ5XKZdEimRsN+Hrc7KMji8U+ScXMtY1AAdUIvSt4ud5qQVgX
+        LKie4WMBUoy7T7+sqzUbfKt1ttnE4W5LBXkAFruraASj434rUMaBZU9SVhddbuz+SRUhKY
+        uWppyGw0DQBB7U7C42cnSe8f2y/BW1Y=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-342-WKjhx5-FNSSDYZ-s21GaHw-1; Wed, 12 Apr 2023 22:57:05 -0400
+X-MC-Unique: WKjhx5-FNSSDYZ-s21GaHw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8493A185A78B;
+        Thu, 13 Apr 2023 02:57:04 +0000 (UTC)
+Received: from ovpn-8-18.pek2.redhat.com (ovpn-8-18.pek2.redhat.com [10.72.8.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A35AB40C83A9;
+        Thu, 13 Apr 2023 02:56:54 +0000 (UTC)
+Date:   Thu, 13 Apr 2023 10:56:49 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Breno Leitao <leitao@debian.org>
+Cc:     asml.silence@gmail.com, axboe@kernel.dk, davem@davemloft.net,
+        dccp@vger.kernel.org, dsahern@kernel.org, edumazet@google.com,
+        io-uring@vger.kernel.org, kuba@kernel.org, leit@fb.com,
+        linux-kernel@vger.kernel.org, marcelo.leitner@gmail.com,
+        matthieu.baerts@tessares.net, mptcp@lists.linux.dev,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        willemdebruijn.kernel@gmail.com, ming.lei@redhat.com
+Subject: Re: [PATCH RFC] io_uring: Pass whole sqe to commands
+Message-ID: <ZDdvcSKLa6ZEAhRW@ovpn-8-18.pek2.redhat.com>
+References: <20230406144330.1932798-1-leitao@debian.org>
+ <20230406165705.3161734-1-leitao@debian.org>
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230406165705.3161734-1-leitao@debian.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQo+IA0KPiBPbiBUdWUsIEFwciAxMSwgMjAyMyBhdCAxMDozMOKAr1BNIFN0YW5sZXkgQ2hhbmcN
-Cj4gPHN0YW5sZXlfY2hhbmdAcmVhbHRlay5jb20+IHdyb3RlOg0KPiA+DQo+ID4gQWRkIGEgbmV3
-ICdzbnBzLGdsb2JhbC1yZWdzLXN0YXJ0aW5nLW9mZnNldCcgRFQgdG8gZHdjMyBjb3JlIHRvIHJl
-bWFwDQo+ID4gdGhlIGdsb2JhbCByZWdpc3RlciBzdGFydCBhZGRyZXNzDQo+ID4NCj4gPiBUaGUg
-UlRLIERIQyBTb0NzIHdlcmUgZGVzaWduZWQgdGhlIGdsb2JhbCByZWdpc3RlciBhZGRyZXNzIG9m
-ZnNldCBhdA0KPiA+IDB4ODEwMC4gVGhlIGRlZmF1bHQgYWRkcmVzcyBpcyBhdCBEV0MzX0dMT0JB
-TFNfUkVHU19TVEFSVCAoMHhjMTAwKS4NCj4gPiBUaGVyZWZvcmUsIGFkZCB0aGUgcHJvcGVydHkg
-b2YgZGV2aWNlLXRyZWUgdG8gYWRqdXN0IHRoaXMgc3RhcnQgYWRkcmVzcy4NCj4gPg0KPiA+IFNp
-Z25lZC1vZmYtYnk6IFN0YW5sZXkgQ2hhbmcgPHN0YW5sZXlfY2hhbmdAcmVhbHRlay5jb20+DQo+
-ID4gLS0tDQo+ID4gIERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2Ivc25wcyxk
-d2MzLnlhbWwgfCA3ICsrKysrKysNCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDcgaW5zZXJ0aW9ucygr
-KQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5n
-cy91c2Ivc25wcyxkd2MzLnlhbWwNCj4gPiBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5k
-aW5ncy91c2Ivc25wcyxkd2MzLnlhbWwNCj4gPiBpbmRleCBiZTM2OTU2YWY1M2IuLjVjYmYzYjdk
-ZWQwNCAxMDA2NDQNCj4gPiAtLS0gYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mv
-dXNiL3NucHMsZHdjMy55YW1sDQo+ID4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2Jp
-bmRpbmdzL3VzYi9zbnBzLGR3YzMueWFtbA0KPiA+IEBAIC0zNTksNiArMzU5LDEzIEBAIHByb3Bl
-cnRpZXM6DQo+ID4gICAgICBpdGVtczoNCj4gPiAgICAgICAgZW51bTogWzEsIDQsIDgsIDE2LCAz
-MiwgNjQsIDEyOCwgMjU2XQ0KPiA+DQo+ID4gKyAgc25wcyxnbG9iYWwtcmVncy1zdGFydGluZy1v
-ZmZzZXQ6DQo+ID4gKyAgICBkZXNjcmlwdGlvbjoNCj4gPiArICAgICAgdmFsdWUgZm9yIHJlbWFw
-cGluZyBnbG9iYWwgcmVnaXN0ZXIgc3RhcnQgYWRkcmVzcy4gRm9yIHNvbWUgZHdjMw0KPiA+ICsg
-ICAgICBjb250cm9sbGVyLCB0aGUgZHdjMyBnbG9iYWwgcmVnaXN0ZXIgc3RhcnQgYWRkcmVzcyBp
-cyBub3QgYXQNCj4gPiArICAgICAgZGVmYXVsdCBEV0MzX0dMT0JBTFNfUkVHU19TVEFSVCAoMHhj
-MTAwKS4gVGhpcyBwcm9wZXJ0eSBpcw0KPiBhZGRlZCB0bw0KPiA+ICsgICAgICBhZGp1c3QgdGhl
-IGFkZHJlc3MuDQo+IA0KPiBXZSBhbHJlYWR5IGhhdmUgJ3JlZycgb3IgdXNpbmcgYSBzcGVjaWZp
-YyBjb21wYXRpYmxlIHRvIGhhbmRsZSBkaWZmZXJlbmNlcy4gVXNlDQo+IG9uZSBvZiB0aG9zZSwg
-bm90IGEgY3VzdG9tIHByb3BlcnR5LiBHZW5lcmFsbHksIHByb3BlcnRpZXMgc2hvdWxkIGJlIHVz
-ZWQgZm9yDQo+IHRoaW5ncyB0aGF0IHZhcnkgcGVyIGJvYXJkLCBub3QgZml4ZWQgaW4gYSBnaXZl
-biBTb0MuDQo+IA0KPiBSb2INCj4gDQoNClRoZSBkZWZhdWx0IG9mZnNldCBpcyBmaXhlZCBieSBt
-YWNybyBEV0MzX0dMT0JBTFNfUkVHU19TVEFSVCwgYW5kIGl0IGlzIG5vdCBzcGVjaWZpZWQgYnkg
-cmVnLg0KVGhlIGR3YzMvY29yZSBpcyBhIGdlbmVyYWwgZHJpdmVyIGZvciBldmVyeSBkd2MzIElQ
-IG9mIFNvQ3MsDQphbmQgdmVuZG9yJ3MgZGVmaW5pdGlvbiBhbmQgY29tcGF0aWJsZSBzaG91bGQg
-c3BlY2lmeSBvbiBpdHMgcGFyZW50Lg0KSWYgd2UgYWRkIGEgc3BlY2lmaWMgY29tcGF0aWJsZSB0
-byBkd2MzL2NvcmUgZHJpdmVyLCB0aGVuIGl0IHdpbGwgYnJlYWsgdGhpcyBydWxlLg0KVGhlcmVm
-b3JlLCBJIHVzZSBhIHByb3BlcnR5IHRvIGFkanVzdCB0aGlzIG9mZnNldC4gDQpJZiBubyBkZWZp
-bmUgdGhpcyBwcm9wZXJ0eSwgaXQgd2lsbCB1c2UgZGVmYXVsdCBvZmZzZXQuIFNvIGl0IHdpbGwg
-bm90IGFmZmVjdCBvdGhlciBib2FyZC4NCg0KVGhhbmtzLA0KU3RhbmxleQ0K
+On Thu, Apr 06, 2023 at 09:57:05AM -0700, Breno Leitao wrote:
+> Currently uring CMD operation relies on having large SQEs, but future
+> operations might want to use normal SQE.
+> 
+> The io_uring_cmd currently only saves the payload (cmd) part of the SQE,
+> but, for commands that use normal SQE size, it might be necessary to
+> access the initial SQE fields outside of the payload/cmd block.  So,
+> saves the whole SQE other than just the pdu.
+> 
+> This changes slighlty how the io_uring_cmd works, since the cmd
+> structures and callbacks are not opaque to io_uring anymore. I.e, the
+> callbacks can look at the SQE entries, not only, in the cmd structure.
+> 
+> The main advantage is that we don't need to create custom structures for
+> simple commands.
+> 
+> Suggested-by: Pavel Begunkov <asml.silence@gmail.com>
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+> ---
+
+...
+
+> diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+> index 2e4c483075d3..9648134ccae1 100644
+> --- a/io_uring/uring_cmd.c
+> +++ b/io_uring/uring_cmd.c
+> @@ -63,14 +63,15 @@ EXPORT_SYMBOL_GPL(io_uring_cmd_done);
+>  int io_uring_cmd_prep_async(struct io_kiocb *req)
+>  {
+>  	struct io_uring_cmd *ioucmd = io_kiocb_to_cmd(req, struct io_uring_cmd);
+> -	size_t cmd_size;
+> +	size_t size = sizeof(struct io_uring_sqe);
+>  
+>  	BUILD_BUG_ON(uring_cmd_pdu_size(0) != 16);
+>  	BUILD_BUG_ON(uring_cmd_pdu_size(1) != 80);
+>  
+> -	cmd_size = uring_cmd_pdu_size(req->ctx->flags & IORING_SETUP_SQE128);
+> +	if (req->ctx->flags & IORING_SETUP_SQE128)
+> +		size <<= 1;
+>  
+> -	memcpy(req->async_data, ioucmd->cmd, cmd_size);
+> +	memcpy(req->async_data, ioucmd->sqe, size);
+
+The copy will make some fields of sqe become READ TWICE, and driver may see
+different sqe field value compared with the one observed in io_init_req().
+
+Can this kind of inconsistency cause trouble to driver?
+
+If it isn't one problem, this patch looks fine.
+
+But I guess any access on cmd->sqe in driver may have to be careful for dealing
+with potential post-sqe-update.
+
+Thanks,
+Ming
+
