@@ -2,109 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6443F6E12FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 19:00:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C52AA6E12FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 19:00:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjDMRAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 13:00:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60320 "EHLO
+        id S230137AbjDMRAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 13:00:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbjDMRAW (ORCPT
+        with ESMTP id S229965AbjDMRA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 13:00:22 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2096.outbound.protection.outlook.com [40.107.255.96])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E8DAD1B
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 10:00:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Nt73Ordig8I2fmxH8O0icn2ikuw2rGJsUpKYk+ZWZEGoY2fuNH6p82Wo4oj3OZbbeWPA6WOYPEdJZhKO9Ia7D/z2l/UCCtmeWxpbA44cIAVNbM7oq5NlYv3syT+BF/RN/WGThXFOZpXp+L9WsvAHUpdiiLoLNzXSxUWzpezpeSFNtKGheX0SwK0ciSskf1STD94s9v+GbFsgcjTPc93VT5810gRI3h8nlaybVvPidVFrsb0skRPn7ewJk3taAHSi6yj58k93QjJEskYMdv/et3MkyegF93G9xPM888eaa4p7f/l4VdNJqw9HEgN+R6jhXBhNGVRDfQ8j620CxyjMQA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KIy2/Ql2VbmGn5JLo7/7JEGdi3FIBsu/zp0wLdA/Alc=;
- b=a61M/7NkfWweWNlvK5XJznJ9qfA1LaaShkyU+89y1EZakuh/FN+3WXEP12VnEIiSQAnxzyQR8vdfi5kQlqXV1xPnlL8k9e2U4CR9Wf9F9Jr6M1YctiPhe9PdoA6g2l8j76A35UUNpLE8ns/5ob2U0/kd2s0OIux0HcgovhJcarVREeQc3UlPhA7f2mtA1H5H+57+mL4M4tZaOJBsqQlxeypvlkiAzxX9QvKEtBunAnPXP8bn1mJ2l3wokzbmWybCuFPbJiV1obCU7Bizuyn3h9PU8i3VqmCRGSPvXH//f9c3zHt0ob3pacLptUOzOi6GCxJIbLRRVnZD97ZcYRPR/A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KIy2/Ql2VbmGn5JLo7/7JEGdi3FIBsu/zp0wLdA/Alc=;
- b=V74WlcxP36vDBl+aUvk356vZuVMP/GX7PO7kBDsXz3VEf/C6veqMeARJwXn881HKDgqyDpjM1ZX4YIPgZxpNdxNf+VCAzEFlWAE86khbgWhrt3QRn4SEQoRtXxI3prdwUGWSW7+Sezyqlf1FKQ9uaWLad19u0MVyETFoV+AR5ASvMqA/Gq1qd8rqNaYek/zwNqMDwPjkDLG1rwrLeKmTWc9fM1LXaopSD3thf/1llVZ1s6BM6ak5V5Oqby7tY5QavMG9yCiLa4V70h2WN37qIfrsJ0Qicdrf6D4nSjiIimD4Mu5VoKyhKdUdvOMHoXzJnHq4hvnH6MHLdriDu9aA+Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by SG2PR06MB5359.apcprd06.prod.outlook.com (2603:1096:4:1d7::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.34; Thu, 13 Apr
- 2023 17:00:01 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::a3a1:af8e:be1e:437c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::a3a1:af8e:be1e:437c%6]) with mapi id 15.20.6277.038; Thu, 13 Apr 2023
- 17:00:01 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
-Cc:     Yangtao Li <frank.li@vivo.com>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] f2fs: add has_enough_free_secs()
-Date:   Fri, 14 Apr 2023 00:59:51 +0800
-Message-Id: <20230413165951.54051-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.35.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR04CA0202.apcprd04.prod.outlook.com
- (2603:1096:4:187::20) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+        Thu, 13 Apr 2023 13:00:26 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 81E3E6592;
+        Thu, 13 Apr 2023 10:00:12 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.41:52718.308395520
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
+        by 189.cn (HERMES) with SMTP id 262321002AA;
+        Fri, 14 Apr 2023 01:00:08 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-7b48884fd-ljp89 with ESMTP id 12553393c9934a86b672e37758b2ae01 for daniel@ffwll.ch;
+        Fri, 14 Apr 2023 01:00:11 CST
+X-Transaction-ID: 12553393c9934a86b672e37758b2ae01
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <531f0bdf-2ae8-0361-183b-57b40df6345f@189.cn>
+Date:   Fri, 14 Apr 2023 01:00:07 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SG2PR06MB5359:EE_
-X-MS-Office365-Filtering-Correlation-Id: a6e58605-5212-4402-d8d1-08db3c408554
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Byv/3yeKOQ/GasG3lFGKB4f2G/0zMClEJWfnw5rmZGF9FxWrq8yypDGeoUdtd3duvuGGXXtBWHniKGzpUKyeDYtZo8mKU5hCjZRe0Zx8ApLqYSUqHghh59UEcvC6W0AnDeG/ojLruM3W/Q2Mj7qB9tBRep+1e3cKQPGW6zJ4HJDPG7rufIGGl//an7zs/22Qbr8jZVbmHBSGilqJ5fOQFImM5+Rlfd3qFkOazPhG7KnNHkgqoGsXUnbD3D6oWZlL7FhuEhs5QnZLXL1Y3bJXH84y10c0oiV9gBs1WRdfiqxCWgb/HkGPNx71lPabskmHpop9gPvTBrubJB4p5m3yGyL5vHS0nwA8g2zck32frd2eNYZuFIxapDqSgTkR1bGC7Ih/Kai9IhLdP/ihgX+s7RcE+b1qAFhu4EHW/LoYrpzRhieri45rf9tqJ3xlvljOLOh65zpfegZE7xq1rmyVH7PX9VNwJJxXEEopbf6flABAkQCBjjDGDN3F9rQRN0BusPenEGDTgGjmzP4RhwjA17MP1IxPOMbDsg6n+8CUTYYVu6VTDRO6eQEhqGLzaZkq347qH2pjpswq/M56Rud/hb5Ci1a4nYLLq+Hm2giX+CagiUv2COP3bebYD4n93ks8
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(39860400002)(136003)(376002)(396003)(451199021)(316002)(6506007)(1076003)(86362001)(186003)(6512007)(83380400001)(2616005)(36756003)(26005)(110136005)(6486002)(478600001)(52116002)(6666004)(4326008)(66476007)(2906002)(8676002)(41300700001)(8936002)(66946007)(66556008)(5660300002)(38100700002)(38350700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dPjYlz1nNKdq2nv0gPIs74X3554UGJlopip/m/QRgv6irXLufzZG7yyWxTaX?=
- =?us-ascii?Q?PNktS0D2SksRVRu/pHGVCnJF88JA8xoldJZcatm39e2hT4jWKvAyWS/X01an?=
- =?us-ascii?Q?9/qV3UylV8Xda2v7uErwqlYfB2CXbnx10WeoF2ejfp5w//Mmwsa027VJc1Gs?=
- =?us-ascii?Q?yew5E2u94T9uNQeZxCH3+xthlvR+iOc/ZTm+aUvPsXFxTpk8hyrtjN9/JPsu?=
- =?us-ascii?Q?LomFJX6K5SdJFPKv9HTqrcTJ2dcFu8QIQ9NoJ7sErZNZdq71zRT7jQpo7aoN?=
- =?us-ascii?Q?bIso0X9XB/5bqytKk3CZO2yY6oYZjXdI2F3dJZ4S6jJE3OPDxj+VUvP8ntpN?=
- =?us-ascii?Q?SzIrRFyF2QwdgZXZk5fNQDVw7z3RpwIuBewiLKBSyF/t0OH6HtqzdRG9BCZh?=
- =?us-ascii?Q?Dc/4VlRoXLTFAYizqk+1mhaZO8tSdncOYrP4oC5JLWHAGwR29J61ayYENsPA?=
- =?us-ascii?Q?NOHp1p2CP/Yx38KMQy2b5C4tqzry9i+qPzblCkcHjMEbtBYrFIvjUxgMb5n1?=
- =?us-ascii?Q?v/6NCvJGD9K9Rb0i9XKJk3QqRj/W5oTgr6axRmWah1Q9D5+TrUJqV0G64RYv?=
- =?us-ascii?Q?FsPS3ID58pQjel6pXUHl73uq0P2w5gwRcXvvBkPLxD3RhZwcR6SFVACIWX98?=
- =?us-ascii?Q?mxooJfeOElW6Wk+hDLOlrokY8VRWAou70gqdUfepxT28WQPbxIhoUBU3/H18?=
- =?us-ascii?Q?Xk76m/WDSl7UWT7PAOW6RZqKkUdFQHT5qPrUJiWFhbkYP3K9mBaFmnNkCtAY?=
- =?us-ascii?Q?IkOq3VMIxYiC6CDdhac2aulec+KLqv4EzduwMv4ByDSZSwVqEGhH52zSco4i?=
- =?us-ascii?Q?1dKxKlHwemO6d5p5lb9qY08DjlHOqgXeOb0I72OZewSzVYNNM2tYqIexM3+z?=
- =?us-ascii?Q?T6b2FBO7noh3svdqbJQmJqkMp+YA6Qzid7xxuQTfcXYWGERvFKW5law5Z/gG?=
- =?us-ascii?Q?f0XhKe28CaUjJgpeQZ+9Ta3IIXoOdLZCliSQTIoLt9/efZMEWxwiagVBSg5H?=
- =?us-ascii?Q?el+9AY8A1qcVzfw79cLZsVB2b0fMIZAlV1qdK2FuygaKDkVg+zVkjjawcMrM?=
- =?us-ascii?Q?xmN/NQxvk6Vd4KHzCrUxufjQCuOJM/ycSZj4MAwdpO08k+zbWiEC/oEvsYhs?=
- =?us-ascii?Q?uUtCfedAngKtzre6U2tX1XuuhVx/kOQE5bUyaeVuvr9dJk4G5RFjpcopL5me?=
- =?us-ascii?Q?Ub0amr9A7oxutCXPNpy+/0a36aiiHnHLmsu9usLpMQuXS41cK02z1cbU2baU?=
- =?us-ascii?Q?duCMagctgdfJA6g7Capn8SLaKwkR7L0TlWxeY1ylt/ysbawEELDH8wOYMsjI?=
- =?us-ascii?Q?Y2+V4tTiSlvV/5yUuUbvyjDjeKPOcA36fekgGlG3dzwnWzLEVvAxR8ou1ImK?=
- =?us-ascii?Q?6+7zbyZz+vR00p3khxE8001vLfhHBS2/wB0g8LDhNWz0IFvojBcxSkVM56hN?=
- =?us-ascii?Q?WNK+GRPbjJhlpeM7F9hOJcit4hvVZlbxbMjWIov/B1JCtcKChm5LkTCONLsq?=
- =?us-ascii?Q?OTsmo90kF3GGWCz6/Vc9t/TUiavqQarfEPmBpm+DN6OJTKkiDKS31ZSl+GKB?=
- =?us-ascii?Q?S8E0FUa0VrdNZa4CxgK8gbx6JOp5FiYviHqKCN9U?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a6e58605-5212-4402-d8d1-08db3c408554
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2023 17:00:01.7397
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pBhJzwYXQDCp1etCwiEsWd+Ql14HhuzQDCYue94MdLbf4HuSPQp9FsKy+qqqgaoCciZX/P+tWnwel+4XKHI/wQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB5359
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] drm/fbdev-generic: fix potential out-of-bounds access
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>, Li Yi <liyi@loongson.cn>,
+        Helge Deller <deller@gmx.de>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
+References: <20230409132110.494630-1-15330273260@189.cn>
+ <ZDV0Te65tSh4Q/vc@phenom.ffwll.local>
+ <42f16d0d-4e1a-a016-f4cc-af24efa75f1c@189.cn>
+ <ZDbuCWKfFlWyiOGp@phenom.ffwll.local>
+ <dbac96b2-0fea-591b-517d-2a23cc36b8de@189.cn>
+ <CAKMK7uG_h7htCDARudZpHOOMG4iOOLZmz0_WskvWGf+DKGwU1w@mail.gmail.com>
+Content-Language: en-US
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <CAKMK7uG_h7htCDARudZpHOOMG4iOOLZmz0_WskvWGf+DKGwU1w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -112,106 +65,245 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace !has_not_enough_free_secs w/ has_enough_free_secs.
-BTW avoid nested 'if' statements in f2fs_balance_fs().
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- fs/f2fs/gc.c      |  2 +-
- fs/f2fs/segment.c | 43 ++++++++++++++++++++++---------------------
- fs/f2fs/segment.h |  8 +++++++-
- 3 files changed, 30 insertions(+), 23 deletions(-)
+On 2023/4/13 23:56, Daniel Vetter wrote:
+> On Thu, 13 Apr 2023 at 17:35, Sui Jingfeng <15330273260@189.cn> wrote:
+>> Hi,
+>>
+>> On 2023/4/13 01:44, Daniel Vetter wrote:
+>>> On Thu, Apr 13, 2023 at 01:13:37AM +0800, Sui Jingfeng wrote:
+>>>> Hi,
+>>>>
+>>>> On 2023/4/11 22:53, Daniel Vetter wrote:
+>>>>> On Sun, Apr 09, 2023 at 09:21:10PM +0800, Sui Jingfeng wrote:
+>>>>>> From: Sui Jingfeng <suijingfeng@loongson.cn>
+>>>>>>
+>>>>>> We should setting the screen buffer size according to the screen's actual
+>>>>>> size, rather than the size of the GEM object backing the front framebuffer.
+>>>>>> The size of GEM buffer is page size aligned, while the size of active area
+>>>>>> of a specific screen is *NOT* necessarily page size aliged. For example,
+>>>>>> 1680x1050, 1600x900, 1440x900, 800x6000 etc. In those case, the damage rect
+>>>>>> computed by drm_fb_helper_memory_range_to_clip() goes out of bottom bounds
+>>>>>> of the display.
+>>>>>>
+>>>>>> Run fbdev test of IGT on a x86+ast2400 platform with 1680x1050 resolution
+>>>>>> will cause the system hang with the following call trace:
+>>>>>>
+>>>>>>      Oops: 0000 [#1] PREEMPT SMP PTI
+>>>>>>      [IGT] fbdev: starting subtest eof
+>>>>>>      Workqueue: events drm_fb_helper_damage_work [drm_kms_helper]
+>>>>>>      [IGT] fbdev: starting subtest nullptr
+>>>>>>
+>>>>>>      RIP: 0010:memcpy_erms+0xa/0x20
+>>>>>>      RSP: 0018:ffffa17d40167d98 EFLAGS: 00010246
+>>>>>>      RAX: ffffa17d4eb7fa80 RBX: ffffa17d40e0aa80 RCX: 00000000000014c0
+>>>>>>      RDX: 0000000000001a40 RSI: ffffa17d40e0b000 RDI: ffffa17d4eb80000
+>>>>>>      RBP: ffffa17d40167e20 R08: 0000000000000000 R09: ffff89522ecff8c0
+>>>>>>      R10: ffffa17d4e4c5000 R11: 0000000000000000 R12: ffffa17d4eb7fa80
+>>>>>>      R13: 0000000000001a40 R14: 000000000000041a R15: ffffa17d40167e30
+>>>>>>      FS:  0000000000000000(0000) GS:ffff895257380000(0000) knlGS:0000000000000000
+>>>>>>      CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>>>>>      CR2: ffffa17d40e0b000 CR3: 00000001eaeca006 CR4: 00000000001706e0
+>>>>>>      Call Trace:
+>>>>>>       <TASK>
+>>>>>>       ? drm_fbdev_generic_helper_fb_dirty+0x207/0x330 [drm_kms_helper]
+>>>>>>       drm_fb_helper_damage_work+0x8f/0x170 [drm_kms_helper]
+>>>>>>       process_one_work+0x21f/0x430
+>>>>>>       worker_thread+0x4e/0x3c0
+>>>>>>       ? __pfx_worker_thread+0x10/0x10
+>>>>>>       kthread+0xf4/0x120
+>>>>>>       ? __pfx_kthread+0x10/0x10
+>>>>>>       ret_from_fork+0x2c/0x50
+>>>>>>       </TASK>
+>>>>>>      CR2: ffffa17d40e0b000
+>>>>>>      ---[ end trace 0000000000000000 ]---
+>>>>>>
+>>>>>> We also add trival code in this patch to restrict the damage rect beyond
+>>>>>> the last line of the framebuffer.
+>>>>> Nice catch!
+>>>>    :)
+>>>>>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+>>>>>> ---
+>>>>>>     drivers/gpu/drm/drm_fb_helper.c     | 2 +-
+>>>>>>     drivers/gpu/drm/drm_fbdev_generic.c | 2 ++
+>>>>>>     2 files changed, 3 insertions(+), 1 deletion(-)
+>>>>>>
+>>>>>> diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helper.c
+>>>>>> index 64458982be40..a2b749372759 100644
+>>>>>> --- a/drivers/gpu/drm/drm_fb_helper.c
+>>>>>> +++ b/drivers/gpu/drm/drm_fb_helper.c
+>>>>>> @@ -645,7 +645,7 @@ static void drm_fb_helper_memory_range_to_clip(struct fb_info *info, off_t off,
+>>>>>>             u32 x1 = 0;
+>>>>>>             u32 y1 = off / info->fix.line_length;
+>>>>>>             u32 x2 = info->var.xres;
+>>>>>> -  u32 y2 = DIV_ROUND_UP(end, info->fix.line_length);
+>>>>>> +  u32 y2 = min_t(u32, DIV_ROUND_UP(end, info->fix.line_length), info->var.yres);
+>>>>> So for additional robustness I think it'd be good if we change the entire
+>>>>> computation here to use drm_framebuffer data and not fb_info data, because
+>>>>> fundamentally that's what the drm kms code consumes. It should all match
+>>>>> anyway, but I think it makes the code more obviously correct.
+>>>>>
+>>>>> So in the entire function instead of looking at fb_info->fix we should
+>>>>> probably look at
+>>>>>
+>>>>>      struct drm_fb_helper *helper = info->par;
+>>>>>
+>>>>> And then helper->fb->pitches[0] and helper->fb->height.
+>>>>>
+>>>>> If you agree would be great if you can please respin with that (and the
+>>>>> commit message augmented to explain why we do the change)?
+>>>> Yes, I'm agree.
+>>>>
+>>>> Thank you for guidance, I will refine this patch with `helper = info->par`.
+>>>>
+>>>> I will send a v2 when I finished.
+>>>>
+>>>>>>             if ((y2 - y1) == 1) {
+>>>>>>                     /*
+>>>>>> diff --git a/drivers/gpu/drm/drm_fbdev_generic.c b/drivers/gpu/drm/drm_fbdev_generic.c
+>>>>>> index 8e5148bf40bb..a6daecb5f640 100644
+>>>>>> --- a/drivers/gpu/drm/drm_fbdev_generic.c
+>>>>>> +++ b/drivers/gpu/drm/drm_fbdev_generic.c
+>>>>>> @@ -95,6 +95,8 @@ static int drm_fbdev_generic_helper_fb_probe(struct drm_fb_helper *fb_helper,
+>>>>>>             fb_helper->fb = buffer->fb;
+>>>>>>             screen_size = buffer->gem->size;
+>>>>> I guess you forgot to remove this line here?
+>>>> Yes, this line should be removed in this patch. I overlooked this, sorry.
+>>>>
+>>>>> Also I'm not understanding
+>>>>> why this matters, I think you're fix only needs the above chunk, not this
+>>>>> one? If I got this right then please drop this part, there's drivers which
+>>>>> only use drm_fb_helper.c but not drm_fbdev_generic.c, and from what I can
+>>>>> tell they all still set the gem buffer size here.
+>>>>>
+>>>>> If otoh we need this too, then there's a few more places that need to be
+>>>>> fixed.
+>>>> I think we need this line, otherwise wrapped around will be happen.
+>>>>
+>>>> Because I found that the value of variable`y1` will be larger in number than
+>>>> the variable `y2` by 1,
+>>>>
+>>>> which are computed  in drm_fb_helper_memory_range_to_clip().
+>>>>
+>>>>
+>>>> This phenomenon will emerged on platforms with large page size or
+>>>>
+>>>> non page size divisiable display resolution case. Take the LoongArch and
+>>>> Mips as an example,
+>>>>
+>>>> the default page size is 16KB(to avoid cache alias).  Even with the most
+>>>> frequently used
+>>>>
+>>>> 1920x1080 screen, the screen_size can not be divided exactly.
+>>>>
+>>>> The total size of the shadow buffer is 1920x1080x4 bytes, 1920x1080x4 /
+>>>> 16384 = 506.25
+>>>>
+>>>> TTM manage the vram in the term of pages, so TTM will allocate 507 pages for
+>>>> us.
+>>>>
+>>>> 507x16384 = 8306688 bytes.
+>>>>
+>>>>
+>>>> drm_fb_helper_memory_range_to_clip() will be called when running fbdev eof
+>>>> test in the IGT.
+>>>>
+>>>> with 8306688 as its second parameter. while 8306688 / (1920x4) = 1081, this
+>>>> cause y1 out of bound.
+>>>>
+>>>> Simply restrict y2 with a min_t() function yeild 1080 in this case, but y2 -
+>>>> y1 cause *wrap around* here.
+>>>>
+>>>> because they are both unsigned number.
+>>>>
+>>>>
+>>>> drm_rect_init() function cast this unsigned int type to int type in end of
+>>>> drm_fb_helper_memory_range_to_clip(),
+>>>>
+>>>> but the last argument of drm_fb_helper_damage() function is a u32 type,
+>>>>
+>>>> it cast the return value of  drm_rect_height(&damage_area) back to unsigned
+>>>> type.
+>>>>
+>>>> Yet, another wrapped around with truncation happened in
+>>>> drm_fb_helper_add_damage_clip()
+>>>>
+>>>> called by subsequent drm_fb_helper_damage() function.
+>>>>
+>>>> I finally got reject by drm_fbdev_generic_helper_fb_dirty() with follow
+>>>> code:
+>>>>
+>>>> ```
+>>>>
+>>>>       /* Call damage handlers only if necessary */
+>>>>       if (!(clip->x1 < clip->x2 && clip->y1 < clip->y2))
+>>>>           return 0;
+>>>>
+>>>> ```
+>>>>
+>>>> On x86-64 platform, because 1920x1080x4 dumb buffer is lucky, it be divided
+>>>> exactly by 4KB(page size).
+>>>>
+>>>> But other resolution will not as luck as this one. Right, fbdev test will be
+>>>> pasted, but wrap around
+>>>>
+>>>> happens many time.
+>>>>
+>>>> Therefore, as long as a larger buffer is allowed to exposed to the
+>>>> user-space.
+>>>>
+>>>> A chance is given to the user-space,  to go beyond of the bottom bound of
+>>>> the actual active display area.
+>>>>
+>>>> I not sure if this is intended, I feel it should not be allowable by
+>>>> intuition.
+>>> Ah yes, thanks for the in-depth explanation. But I think we need a
+>>> different fix, by also limiting y1. Otherwise for really big page sizes
+>>> (64k on arm64 iirc) and really small screens (there's i2c panels with just
+>>> a few lines) we might still run into the issue of y1 being too large.
+>>>
+>>> So we need to limit both y1 and y2. I think it's ok to let y1 == y2 slip
+>>> through, since as you point out that's filtered later on.
+>>>
+>>> The userspace api is that we should expose the full fbdev buffer and allow
+>>> writes into the entire thing. It's just that for the explicit upload with
+>>> damage rects we need to make sure we're staying within the real buffer.
+>>> -Daniel
+>>>
+>> Limiting y1 is easy, and this is necessary, because it is the crazy
+>> fbdev test of IGT writing after EOF intentionally.
+>>
+>> But there some difficulties for me to avoid using info->fix and info->var ,
+>>
+>> I found all other functions are surrounding the info->fix and info-var.
+>>
+>> There seems no good variable to replace info->var related data structure.
+>>
+>> Partially replacement may introduce confusion, this somewhat beyond my
+>> ability.
+>>
+>> I'm afraid of introducing out-of-bound in horizontal direction for
+>> multi-screen case.
+>>
+>> Using fb_info->fix is still more safe.
+>>
+>> Can I  respin my patch by still using fb_info->fix here?
+> Which one do you have an issue with finding the right drm variable? I
+> can help with that.
+> -Daniel
 
-diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-index c748cdfb0501..79a7b4e31672 100644
---- a/fs/f2fs/gc.c
-+++ b/fs/f2fs/gc.c
-@@ -1872,7 +1872,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
- 		sbi->cur_victim_sec = NULL_SEGNO;
- 
- 	if (gc_control->init_gc_type == FG_GC ||
--	    !has_not_enough_free_secs(sbi,
-+	    has_enough_free_secs(sbi,
- 				(gc_type == FG_GC) ? sec_freed : 0, 0)) {
- 		if (gc_type == FG_GC && sec_freed < gc_control->nr_free_secs)
- 			goto go_gc_more;
-diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-index 82430f80c5da..c35476b3c075 100644
---- a/fs/f2fs/segment.c
-+++ b/fs/f2fs/segment.c
-@@ -412,27 +412,28 @@ void f2fs_balance_fs(struct f2fs_sb_info *sbi, bool need)
- 	 * We should do GC or end up with checkpoint, if there are so many dirty
- 	 * dir/node pages without enough free segments.
- 	 */
--	if (has_not_enough_free_secs(sbi, 0, 0)) {
--		if (test_opt(sbi, GC_MERGE) && sbi->gc_thread &&
--					sbi->gc_thread->f2fs_gc_task) {
--			DEFINE_WAIT(wait);
--
--			prepare_to_wait(&sbi->gc_thread->fggc_wq, &wait,
--						TASK_UNINTERRUPTIBLE);
--			wake_up(&sbi->gc_thread->gc_wait_queue_head);
--			io_schedule();
--			finish_wait(&sbi->gc_thread->fggc_wq, &wait);
--		} else {
--			struct f2fs_gc_control gc_control = {
--				.victim_segno = NULL_SEGNO,
--				.init_gc_type = BG_GC,
--				.no_bg_gc = true,
--				.should_migrate_blocks = false,
--				.err_gc_skipped = false,
--				.nr_free_secs = 1 };
--			f2fs_down_write(&sbi->gc_lock);
--			f2fs_gc(sbi, &gc_control);
--		}
-+	if (has_enough_free_secs(sbi, 0, 0))
-+		return;
-+
-+	if (test_opt(sbi, GC_MERGE) && sbi->gc_thread &&
-+				sbi->gc_thread->f2fs_gc_task) {
-+		DEFINE_WAIT(wait);
-+
-+		prepare_to_wait(&sbi->gc_thread->fggc_wq, &wait,
-+					TASK_UNINTERRUPTIBLE);
-+		wake_up(&sbi->gc_thread->gc_wait_queue_head);
-+		io_schedule();
-+		finish_wait(&sbi->gc_thread->fggc_wq, &wait);
-+	} else {
-+		struct f2fs_gc_control gc_control = {
-+			.victim_segno = NULL_SEGNO,
-+			.init_gc_type = BG_GC,
-+			.no_bg_gc = true,
-+			.should_migrate_blocks = false,
-+			.err_gc_skipped = false,
-+			.nr_free_secs = 1 };
-+		f2fs_down_write(&sbi->gc_lock);
-+		f2fs_gc(sbi, &gc_control);
- 	}
- }
- 
-diff --git a/fs/f2fs/segment.h b/fs/f2fs/segment.h
-index ac2e35170f2d..2ca8fb5d0dc4 100644
---- a/fs/f2fs/segment.h
-+++ b/fs/f2fs/segment.h
-@@ -643,11 +643,17 @@ static inline bool has_not_enough_free_secs(struct f2fs_sb_info *sbi,
- 	return !curseg_space;
- }
- 
-+static inline bool has_enough_free_secs(struct f2fs_sb_info *sbi,
-+					int freed, int needed)
-+{
-+	return !has_not_enough_free_secs(sbi, freed, needed);
-+}
-+
- static inline bool f2fs_is_checkpoint_ready(struct f2fs_sb_info *sbi)
- {
- 	if (likely(!is_sbi_flag_set(sbi, SBI_CP_DISABLED)))
- 		return true;
--	if (likely(!has_not_enough_free_secs(sbi, 0, 0)))
-+	if (likely(has_enough_free_secs(sbi, 0, 0)))
- 		return true;
- 	return false;
- }
--- 
-2.35.1
+The info->var.xres and info->var.bits_per_pixel in 
+drm_fb_helper_memory_range_to_clip() function.
 
+>>>>>> +  screen_size = sizes->surface_height * buffer->fb->pitches[0];
+>>>>>> +
+>>>>>>             screen_buffer = vzalloc(screen_size);
+>>>>>>             if (!screen_buffer) {
+>>>>>>                     ret = -ENOMEM;
+>>>>> Cheers, Daniel
+>>>>>
+>>>>>> --
+>>>>>> 2.25.1
+>>>>>>
+>
+>
