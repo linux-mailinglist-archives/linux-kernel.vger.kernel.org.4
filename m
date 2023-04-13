@@ -2,104 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6D0E6E0890
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EECA6E0892
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:05:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230148AbjDMIFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 04:05:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47028 "EHLO
+        id S230214AbjDMIFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 04:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjDMIFL (ORCPT
+        with ESMTP id S230099AbjDMIFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 04:05:11 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6E619A;
-        Thu, 13 Apr 2023 01:05:09 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33D84ZUQ0002708, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33D84ZUQ0002708
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Thu, 13 Apr 2023 16:04:35 +0800
-Received: from RTEXMBS06.realtek.com.tw (172.21.6.99) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 13 Apr 2023 16:04:57 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS06.realtek.com.tw (172.21.6.99) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Thu, 13 Apr 2023 16:04:57 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
- RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
- 15.01.2375.007; Thu, 13 Apr 2023 16:04:57 +0800
-From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 2/2] dt-bindings: usb: snps,dwc3: Add 'snps,parkmode-disable-hs-quirk' quirk
-Thread-Topic: [PATCH v2 2/2] dt-bindings: usb: snps,dwc3: Add
- 'snps,parkmode-disable-hs-quirk' quirk
-Thread-Index: AQHZbDd6gxCuA7crRky4J7/Z72smRa8oCpIAgABLvACAAI03kA==
-Date:   Thu, 13 Apr 2023 08:04:56 +0000
-Message-ID: <30861bce0ef44bdea36b2c90ec033850@realtek.com>
-References: <20230411053550.16360-2-stanley_chang@realtek.com>
- <20230413030344.13483-1-stanley_chang@realtek.com>
- <2d058629-bd97-5e4d-8630-598cc22e5c58@kernel.org>
-In-Reply-To: <2d058629-bd97-5e4d-8630-598cc22e5c58@kernel.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS06.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 13 Apr 2023 04:05:37 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1F4CDD
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 01:05:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=5um94p1h5uO7Sc2MYImSiUcDUS968xF9MGetdiv3K2g=; b=TG8mHfG54ucPO3Q1y3XWkXyIds
+        frLfGnLFuzO6DunRMcKmNQLWtXOPFlaQ0ZINhnDIE67BPploHT6T2VEu9r046x5aGd8S0wP4pusvW
+        jUqfIDKJHCB/FIsIrXuHahNUnEx0g9gFjTLVgZQxuk/n1b0N7IQGjW/0BoYWSJM9uEfHCkIVazBvf
+        ElwVvkWqTuN9/b82P5M3UTUCrCFOOaE+hseqmOul0UWj0e4quVxDACYO3OqhWlDUGZ0XI6n6xaWBA
+        DINoyQJrHAN5tTuLEwbw+hZ5iC4Z7m7m2leQP482HZsfvxdiJwTjLgheVFtlcrUWP9GAanIoWhfCe
+        8PVB1Jew==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pmrxQ-007cih-IE; Thu, 13 Apr 2023 08:05:28 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8F59D30008D;
+        Thu, 13 Apr 2023 10:05:27 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 77B5E235CC4A0; Thu, 13 Apr 2023 10:05:27 +0200 (CEST)
+Date:   Thu, 13 Apr 2023 10:05:27 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Miroslav Benes <mbenes@suse.cz>
+Subject: Re: [PATCH v2 5/9] objtool: Add verbose option for disassembling
+ affected functions
+Message-ID: <20230413080527.GG4253@hirez.programming.kicks-ass.net>
+References: <cover.1681325924.git.jpoimboe@kernel.org>
+ <4cadacc719db1e792c335309056960ca6f71139e.1681325924.git.jpoimboe@kernel.org>
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4cadacc719db1e792c335309056960ca6f71139e.1681325924.git.jpoimboe@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQo+IE9uIDEzLzA0LzIwMjMgMDU6MDMsIFN0YW5sZXkgQ2hhbmcgd3JvdGU6DQo+ID4gQWRkIGEg
-bmV3ICdzbnBzLHBhcmttb2RlLWRpc2FibGUtaHMtcXVpcmsnIERUIHF1aXJrIHRvIGR3YzMgY29y
-ZSBmb3INCj4gPiBkaXNhYmxlIHRoZSBoaWdoLXNwZWVkIHBhcmttb2RlLg0KPiANCj4gUGxlYXNl
-IHVzZSBzY3JpcHRzL2dldF9tYWludGFpbmVycy5wbCB0byBnZXQgYSBsaXN0IG9mIG5lY2Vzc2Fy
-eSBwZW9wbGUgYW5kIGxpc3RzDQo+IHRvIENDLiAgSXQgbWlnaHQgaGFwcGVuLCB0aGF0IGNvbW1h
-bmQgd2hlbiBydW4gb24gYW4gb2xkZXIga2VybmVsLCBnaXZlcw0KPiB5b3Ugb3V0ZGF0ZWQgZW50
-cmllcy4gIFRoZXJlZm9yZSBwbGVhc2UgYmUgc3VyZSB5b3UgYmFzZSB5b3VyIHBhdGNoZXMgb24N
-Cj4gcmVjZW50IExpbnV4IGtlcm5lbC4NCj4gDQo+IEl0J3MgdGhlIHNlY29uZCB0aW1lIEkgYW0g
-d3JpdGluZyBpdC4gSSBkb24ndCB1bmRlcnN0YW5kIHdoeSB5b3Uga2VlcCBpZ25vcmluZw0KPiBp
-dC4NCg0KU29ycnkgZm9yIHRoZSBjb25mdXNpb24uDQpJbiB0aGUgYmVnaW5uaW5nIEkgZGlkbid0
-IGhhdmUgY2MgYWxsIG1haW50YWluZXJzLg0KSSdsbCByZXN1Ym1pdCBhIG5ldyByZXZpZXcgdGhy
-ZWFkLg0KUGxlYXNlIGlnbm9yZSB0aGlzIGVtYWlsLg0KDQo+IFlvdXIgY29tbWl0IG1zZyBkb2Vz
-IG5vdCBleHBsYWluIHdoeSBkbyB3ZSBuZWVkIGl0Lg0KDQpJIHdpbGwgYWRkIGl0IGF0IG5ldyBw
-YXRjaC4NCg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogU3RhbmxleSBDaGFuZyA8c3RhbmxleV9j
-aGFuZ0ByZWFsdGVrLmNvbT4NCj4gPiAtLS0NCj4gPiAgRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVl
-L2JpbmRpbmdzL3VzYi9zbnBzLGR3YzMueWFtbCB8IDUgKysrKysNCj4gPiAgMSBmaWxlIGNoYW5n
-ZWQsIDUgaW5zZXJ0aW9ucygrKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24v
-ZGV2aWNldHJlZS9iaW5kaW5ncy91c2Ivc25wcyxkd2MzLnlhbWwNCj4gPiBiL0RvY3VtZW50YXRp
-b24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2Ivc25wcyxkd2MzLnlhbWwNCj4gPiBpbmRleCBiZTM2
-OTU2YWY1M2IuLjQ1Y2E5NjdiOGQxNCAxMDA2NDQNCj4gPiAtLS0gYS9Eb2N1bWVudGF0aW9uL2Rl
-dmljZXRyZWUvYmluZGluZ3MvdXNiL3NucHMsZHdjMy55YW1sDQo+ID4gKysrIGIvRG9jdW1lbnRh
-dGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi9zbnBzLGR3YzMueWFtbA0KPiA+IEBAIC0yMzIs
-NiArMjMyLDExIEBAIHByb3BlcnRpZXM6DQo+ID4gICAgICAgIFdoZW4gc2V0LCBhbGwgU3VwZXJT
-cGVlZCBidXMgaW5zdGFuY2VzIGluIHBhcmsgbW9kZSBhcmUgZGlzYWJsZWQuDQo+ID4gICAgICB0
-eXBlOiBib29sZWFuDQo+ID4NCj4gPiArICBzbnBzLHBhcmttb2RlLWRpc2FibGUtaHMtcXVpcms6
-DQo+ID4gKyAgICBkZXNjcmlwdGlvbjoNCj4gPiArICAgICAgV2hlbiBzZXQsIGFsbCBIaWdoU3Bl
-ZWQgYnVzIGluc3RhbmNlcyBpbiBwYXJrIG1vZGUgYXJlIGRpc2FibGVkLg0KPiANCj4gV2h5Pw0K
-PiANCg0KRm9yIHNvbWUgVVNCIHdpZmkgZGV2aWNlcywgaWYgZW5hYmxlIHRoaXMgZmVhdHVyZSBp
-dCB3aWxsIHJlZHVjZSB0aGUNCnBlcmZvcm1hbmNlLiBUaGVyZWZvcmUsIGFkZCBhbiBvcHRpb24g
-Zm9yIGRpc2FibGluZyBIUyBwYXJrIG1vZGUgYnkgZGV2aWNlLXRyZWUuDQoNClRoYW5rcywNClN0
-YW5sZXkNCg==
+On Wed, Apr 12, 2023 at 12:03:20PM -0700, Josh Poimboeuf wrote:
+> When a warning is associated with a function, add an option to
+> disassemble that function.
+> 
+> This makes it easier for reporters to submit the information needed to
+> diagnose objtool warnings.
+> 
+> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+> ---
+>  tools/objtool/Documentation/objtool.txt |  5 ++
+>  tools/objtool/builtin-check.c           |  5 ++
+>  tools/objtool/check.c                   | 77 +++++++++++++++++++++++++
+>  tools/objtool/include/objtool/builtin.h |  1 +
+>  4 files changed, 88 insertions(+)
+> 
+> diff --git a/tools/objtool/Documentation/objtool.txt b/tools/objtool/Documentation/objtool.txt
+> index 8e53fc6735ef..4d6c5acde7a3 100644
+> --- a/tools/objtool/Documentation/objtool.txt
+> +++ b/tools/objtool/Documentation/objtool.txt
+> @@ -244,6 +244,11 @@ To achieve the validation, objtool enforces the following rules:
+>  Objtool warnings
+>  ----------------
+>  
+> +NOTE: When requesting help with an objtool warning, please recreate with
+> +OBJTOOL_VERBOSE=1 (e.g., "make OBJTOOL_VERBOSE=1") and send the full
+> +output, including any disassembly below the warning, to the objtool
+> +maintainers.
+> +
+>  For asm files, if you're getting an error which doesn't make sense,
+>  first make sure that the affected code follows the above rules.
+>  
+> diff --git a/tools/objtool/builtin-check.c b/tools/objtool/builtin-check.c
+> index 7c175198d09f..5e21cfb7661d 100644
+> --- a/tools/objtool/builtin-check.c
+> +++ b/tools/objtool/builtin-check.c
+> @@ -93,6 +93,7 @@ static const struct option check_options[] = {
+>  	OPT_BOOLEAN(0, "no-unreachable", &opts.no_unreachable, "skip 'unreachable instruction' warnings"),
+>  	OPT_BOOLEAN(0, "sec-address", &opts.sec_address, "print section addresses in warnings"),
+>  	OPT_BOOLEAN(0, "stats", &opts.stats, "print statistics"),
+> +	OPT_BOOLEAN('v', "verbose", &opts.verbose, "verbose warnings"),
+>  
+>  	OPT_END(),
+>  };
+> @@ -118,6 +119,10 @@ int cmd_parse_options(int argc, const char **argv, const char * const usage[])
+>  		parse_options(envc, envv, check_options, env_usage, 0);
+>  	}
+>  
+> +	env = getenv("OBJTOOL_VERBOSE");
+> +	if (env && !strcmp(env, "1"))
+> +		opts.verbose = true;
+> +
+>  	argc = parse_options(argc, argv, check_options, usage, 0);
+>  	if (argc != 1)
+>  		usage_with_options(usage, check_options);
+
+No real objection; but I do feel obliged to point out that:
+OBJTOOL_ARGS="-v" achieves much the same.
