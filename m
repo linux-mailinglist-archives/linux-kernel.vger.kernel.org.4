@@ -2,91 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C94B6E05DE
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 06:18:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 157386E05E0
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 06:18:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbjDMESB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 00:18:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43892 "EHLO
+        id S229939AbjDMESR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 00:18:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbjDMERX (ORCPT
+        with ESMTP id S229894AbjDMERi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 00:17:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3E6172C;
-        Wed, 12 Apr 2023 21:15:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EDB5963439;
-        Thu, 13 Apr 2023 04:15:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C1C6C4339B;
-        Thu, 13 Apr 2023 04:15:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681359341;
-        bh=BmvSeStlY/3OFiQagQGoFed7dwR+A0UXBFPAOqd2MKE=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=JKK8FIPWTcONpK0kcAc1QD4p15wfvOgd0AKViIdWnl58ICoojmTPqU7gR0hgmw13h
-         byVx5WhdchdVQRvg4IhdZsQ2CAzBWKWKNUVw3x8Bokl+3qDhimaUntwxOoH5XVAaf7
-         jdzd2Sw348lkVTnzNxhyhJDgG2KY5h4B9owSJZgjsttVKdsjYqJrVWx1sDQYmp0d/o
-         lhw0YzSPX7mHtRHhY5A/oTwwDqjHdKHjGUQrWnFLtWWQekNKNbq/MqHr+xTM6Snd4e
-         YMm8ovBlGHMjoy3imd7EAZ3DqiBGb8YXS0e8htDa9mfmk/nvoo5GOOVtvuWFHVdyqy
-         +lefBsX3rS9UQ==
-Message-ID: <8c774af24fa89d44924998064a996a2c.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        Thu, 13 Apr 2023 00:17:38 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6223993D3;
+        Wed, 12 Apr 2023 21:16:19 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id lh8so767528plb.1;
+        Wed, 12 Apr 2023 21:16:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681359379; x=1683951379;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IVdcMCSPC9IdbB1xsDX6nGCc2/KXvPpMpeLbbNIoZdo=;
+        b=ixhStj/lXF2Wb6en9bP6aQn57tdm/ux1IsYvjHemNcm/wBViqRJNPuEFXppLu0E/t2
+         uleZxtEXXiVc6dyJrKWpl7HpfdmkOHFAgl1OxRTbZ9Q+uEQ3+rVyduNe/a/fuE60UE+u
+         uZ/5TJDBkch0aS5/uXkpo8XWmMdTS+k8mFJbyHuzacE+aTvFivhdrHEBeACfuvbLCdcI
+         FI1AtMgnxjrvfF4uBfUxdHZ1TGJXpM+5KJo/9hjgwHT9FlG40e2G5kZ8sK/AhU17YP4/
+         adlzlQoYHHsl6QaDPE+7Q4IShVTBtt0Zrr+XFGq5yuPWPKSNP1ctOj5El1Bglxox+aGA
+         j3GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681359379; x=1683951379;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IVdcMCSPC9IdbB1xsDX6nGCc2/KXvPpMpeLbbNIoZdo=;
+        b=Rq+LKW5hZMM/icPFZP/jjCONisWyt1ur7EJ7BUewo2jZulwQiyO82i6bwBqbgovlnU
+         ZIEd7eZXVZZoxOTNNtbEWPPcwdKX/6REJHcqD17+SdnW0Y7QdZBDPXJWuXMFfNIvKZ02
+         6YAcmYO94VKOKGX7njv7FYPjXR5fdVRfiePhmkDMNWeBD2YYYbtw/WDfAtBb1gATlcvk
+         leRyHp1ZbkcHaTGCYd52DbSYRD2F4uBmgk7FCl9B4jEi9vY+OBKxsOuUfWjS9ZW3b1Ww
+         MHNQOUCNFJKMD/+uc652oItYh3n60rA07Y9SajZEvXnjGh1c+EXoFIsNU4yrdSFViixk
+         spGw==
+X-Gm-Message-State: AAQBX9dRFeZrzqymnpGQum/QlPhrcGqHLurvuOJa+lLyB83Afc7Q9dqE
+        qX4vqVVGUHBiQxwPdIEXFyo=
+X-Google-Smtp-Source: AKy350ZxVVjpIXli7JXsRewIfhWAjg80eCXA9xHAm4QsrsGgjV6RpllcsCD234fzfx934OmJduhV0g==
+X-Received: by 2002:a05:6a20:c110:b0:d9:33a3:e7c5 with SMTP id bh16-20020a056a20c11000b000d933a3e7c5mr781664pzb.35.1681359378790;
+        Wed, 12 Apr 2023 21:16:18 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-66.three.co.id. [180.214.233.66])
+        by smtp.gmail.com with ESMTPSA id x47-20020a056a000bef00b0063418ea5032sm284183pfu.1.2023.04.12.21.16.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Apr 2023 21:16:18 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 70224106755; Thu, 13 Apr 2023 11:16:15 +0700 (WIB)
+Date:   Thu, 13 Apr 2023 11:16:15 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Intel GFX Mailing List <intel-gfx@lists.freedesktop.org>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
+        Niranjana Vishwanathapura <niranjana.vishwanathapura@intel.com>,
+        Manasi Navare <manasi.d.navare@intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux regression tracking <regressions@leemhuis.info>
+Subject: Re: Linux 6.2.1 hits a display driver bug (list_del corruption,
+ ffff88811b4af298->next is NULL)
+Message-ID: <ZDeCD5HuM7KJt4fu@debian.me>
+References: <6feae796-db3f-1135-a607-cfefb0259788@gnuweeb.org>
+ <ZAGqet3U8AMm4Uf1@debian.me>
+ <ZAOTU5CRwdEC1lGH@biznet-home.integral.gnuweeb.org>
+ <87v8jetaik.fsf@intel.com>
+ <ZAXT1B1GTlmA78Ld@biznet-home.integral.gnuweeb.org>
+ <ZDYw0vVg7Y1oExJL@debian.me>
+ <ZDaPNx7WSKeMqgmj@biznet-home.integral.gnuweeb.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1671601032-18397-2-git-send-email-quic_jprakash@quicinc.com>
-References: <1671601032-18397-1-git-send-email-quic_jprakash@quicinc.com> <1671601032-18397-2-git-send-email-quic_jprakash@quicinc.com>
-Subject: Re: [PATCH] spmi: Add a check for remove callback when removing a SPMI driver
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-arm-msm-owner@vger.kernel.org,
-        Jishnu Prakash <quic_jprakash@quicinc.com>
-To:     Jishnu Prakash <quic_jprakash@quicinc.com>, agross@kernel.org,
-        devicetree@vger.kernel.org, gregkh@linuxfoundation.org,
-        linus.walleij@linaro.org, linux-kernel@vger.kernel.org,
-        quic_collinsd@quicinc.com, quic_kamalw@quicinc.com,
-        quic_subbaram@quicinc.com, robh+dt@kernel.org
-Date:   Wed, 12 Apr 2023 21:15:39 -0700
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bhJLHQiEgQvFLfqm"
+Content-Disposition: inline
+In-Reply-To: <ZDaPNx7WSKeMqgmj@biznet-home.integral.gnuweeb.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Jishnu Prakash (2022-12-20 21:37:12)
-> When removing a SPMI driver, there can be a crash due to NULL pointer
-> dereference if it does not have a remove callback defined. This is
-> one such call trace observed when removing the QCOM SPMI PMIC driver:
->=20
->  dump_backtrace.cfi_jt+0x0/0x8
->  dump_stack_lvl+0xd8/0x16c
->  panic+0x188/0x498
->  __cfi_slowpath+0x0/0x214
->  __cfi_slowpath+0x1dc/0x214
->  spmi_drv_remove+0x16c/0x1e0
->  device_release_driver_internal+0x468/0x79c
->  driver_detach+0x11c/0x1a0
->  bus_remove_driver+0xc4/0x124
->  driver_unregister+0x58/0x84
->  cleanup_module+0x1c/0xc24 [qcom_spmi_pmic]
->  __do_sys_delete_module+0x3ec/0x53c
->  __arm64_sys_delete_module+0x18/0x28
->  el0_svc_common+0xdc/0x294
->  el0_svc+0x38/0x9c
->  el0_sync_handler+0x8c/0xf0
->  el0_sync+0x1b4/0x1c0
->=20
-> If a driver has all its resources allocated through devm_() APIs and
-> does not need any other explicit cleanup, it would not require a
-> remove callback to be defined. Hence, add a check for remove callback
-> presence before calling it when removing a SPMI driver.
->=20
-> Signed-off-by: Jishnu Prakash <quic_jprakash@quicinc.com>
-> ---
 
-Applied to spmi-next
+--bhJLHQiEgQvFLfqm
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Apr 12, 2023 at 06:00:07PM +0700, Ammar Faizi wrote:
+> On Wed, Apr 12, 2023 at 11:17:22AM +0700, Bagas Sanjaya wrote:
+> > From gitlab issue above, I don't see any progress on bisection attempt.
+> > Ammar, have you successfully boot Ubuntu 20.04 with v5.10 kernel and
+> > test there?
+>=20
+> I am still using Ubuntu 22.04. Haven't tried 20.04. I'll arrange time
+> for it this week.
+>=20
+> > Anyway, I'm adding this to regzbot (with tentative commit range):
+> >=20
+> > #regzbot introduced: v5.10..v5.15.103
+> > #regzbot title: Linux 6.2.1 hits a display driver bug (list_del corrupt=
+ion, ffff88811b4af298->next is NULL)
+> > #regzbot link: https://gitlab.freedesktop.org/drm/intel/-/issues/8274
+> >=20
+> > (Also Cc: Thorsten)
+>=20
+> Not sure why you marked it as regression. I haven't even found the last
+> good commit. It's possible that it's always broken since the beginning.
+>=20
+
+OK, marking this as inconclusive for now:
+
+#regzbot inconclusive: Still on process on finding last known good commit
+
+Thanks!
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--bhJLHQiEgQvFLfqm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZDeCDwAKCRD2uYlJVVFO
+oyDQAQCpRHiwWX5dI6Er50EYf4tUXS1tL3eFJnh7YP059N3xcgD/WqgxlPTZGAiH
+sI/ZeNdqtFgb4R4FLXyRHG1gh18ugQA=
+=US0W
+-----END PGP SIGNATURE-----
+
+--bhJLHQiEgQvFLfqm--
