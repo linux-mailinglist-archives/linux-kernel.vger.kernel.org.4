@@ -2,127 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E30A96E0DE7
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:00:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E436E0DEE
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbjDMNAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 09:00:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33574 "EHLO
+        id S229897AbjDMNEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 09:04:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbjDMNAn (ORCPT
+        with ESMTP id S229685AbjDMNEC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 09:00:43 -0400
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBDC93D9;
-        Thu, 13 Apr 2023 06:00:41 -0700 (PDT)
-Received: by mail-oo1-f48.google.com with SMTP id bp9-20020a056820198900b005414beaa075so4505532oob.8;
-        Thu, 13 Apr 2023 06:00:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681390841; x=1683982841;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=8wfgGByHfdJ08Wr+lWIbZNkFievhpJuq8NSnds9ngVg=;
-        b=koPrR3WSvIR9bX+SawhHtGG1aeApwQ1KP3KPtGc7z4xzTVsWLJF+Fg/faJ8IdjExUM
-         +5d22uOif7IK0L+RHvJ0expYQAxrj5QSP9lSUaW1GuSXVzXsJYlYzpGQs7SW0PTHRv6w
-         bXNKgUmkZHhwzWA16DDHNuVkvp0zdCHmd6VX8tnmXShk+G6HaRcPFe7tFlnBFa/obi1K
-         CoNEi3mXfQ1geD3sq/jmoXKdFUuuYBFo2XFdRckkTydurxROF+/431nXZoTQVhJgviGT
-         d7uuxWjihtkPrAFG4pspEB5zWX/6eSFHmwAn8F402O2gmJP9UEfoxMdldhw7BgPwZ4nQ
-         H4uQ==
-X-Gm-Message-State: AAQBX9dmUCr8nNuC9f/Bzfi4cD+oRmOETyid4rrDKezZ/ibT6qJp1W+2
-        CNpFPWHTGd8Pw9dMqYxTwQ==
-X-Google-Smtp-Source: AKy350YowH7B9fmcOXSowhNDvvT1rZtphj7sGFoP3nHOx9sYmmIDSimY2y2wdMEqgAujrFACUFt14w==
-X-Received: by 2002:a4a:4589:0:b0:53e:133e:28cf with SMTP id y131-20020a4a4589000000b0053e133e28cfmr890571ooa.1.1681390840836;
-        Thu, 13 Apr 2023 06:00:40 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id h42-20020a056870172a00b001762ce27f9asm674447oae.23.2023.04.13.06.00.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 06:00:40 -0700 (PDT)
-Received: (nullmailer pid 681755 invoked by uid 1000);
-        Thu, 13 Apr 2023 13:00:39 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8bit
+        Thu, 13 Apr 2023 09:04:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B2A1704
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:03:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681390994;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8Cu6EyWN8LOMXD9CXL7Crx6QPnPfI2MeMTBJ/W0AwsE=;
+        b=KbM8KgN9sanLpgHfB28jH2uQKpn9z2KbExdOu0PLisnWOXK4KBUcVII1fRf0DH6cA++Dxk
+        /IPxkYsQIfK1TSmec+rNCT3HlEoUTNCt2xgvQrfLCdzFO18d0CI9B7jAoqNSMuABcy6xtB
+        eKeKPNVRAuKRqEB6wU/MymNoDUsm2HU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-340-4XAPXDlqP0Wi9xKF4IlQTQ-1; Thu, 13 Apr 2023 09:03:12 -0400
+X-MC-Unique: 4XAPXDlqP0Wi9xKF4IlQTQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 32EE23C16E95;
+        Thu, 13 Apr 2023 13:03:07 +0000 (UTC)
+Received: from [10.39.208.7] (unknown [10.39.208.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0D45C4042AD8;
+        Thu, 13 Apr 2023 13:02:48 +0000 (UTC)
+Message-ID: <f9e75ce5-e6df-d1be-201b-7d0f18c1b6e7@redhat.com>
+Date:   Thu, 13 Apr 2023 15:02:47 +0200
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Stanley Chang <stanley_chang@realtek.com>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230413042503.4047-1-stanley_chang@realtek.com>
-References: <20230412033006.10859-2-stanley_chang@realtek.com>
- <20230413042503.4047-1-stanley_chang@realtek.com>
-Message-Id: <168139061467.672124.12193026400229130255.robh@kernel.org>
-Subject: Re: [PATCH v2 2/2] dt-bindings: usb: snps,dwc3: Add
- 'snps,global-regs-starting-offset' quirk
-Date:   Thu, 13 Apr 2023 08:00:39 -0500
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US
+To:     Jason Wang <jasowang@redhat.com>, mst@redhat.com
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, alvaro.karsz@solid-run.com,
+        eperezma@redhat.com, xuanzhuo@linux.alibaba.com,
+        david.marchand@redhat.com
+References: <20230413064027.13267-1-jasowang@redhat.com>
+From:   Maxime Coquelin <maxime.coquelin@redhat.com>
+Subject: Re: [PATCH net-next V2 0/2] virtio-net: don't busy poll for cvq
+ command
+In-Reply-To: <20230413064027.13267-1-jasowang@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jason,
 
-On Thu, 13 Apr 2023 12:25:03 +0800, Stanley Chang wrote:
-> Add a new 'snps,global-regs-starting-offset' DT to dwc3 core to remap
-> the global register start address
+On 4/13/23 08:40, Jason Wang wrote:
+> Hi all:
 > 
-> The RTK DHC SoCs were designed the global register address offset at
-> 0x8100. The default address is at DWC3_GLOBALS_REGS_START (0xc100).
-> Therefore, add the property of device-tree to adjust this start address.
+> The code used to busy poll for cvq command which turns out to have
+> several side effects:
 > 
-> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
-> ---
->  v1 to v2 change:
-> 1. Change the name of the property "snps,global-regs-starting-offset".
-> ---
->  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 7 +++++++
->  1 file changed, 7 insertions(+)
+> 1) infinite poll for buggy devices
+> 2) bad interaction with scheduler
 > 
+> So this series tries to use sleep instead of busy polling. In this
+> version, I take a step back: the hardening part is not implemented and
+> leave for future investigation. We use to aggree to use interruptible
+> sleep but it doesn't work for a general workqueue.
+> 
+> Please review.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Thanks for working on this.
+My DPDK VDUSE RFC missed to set the interrupt, as Xuan Zhou highlighted
+it makes the vdpa dev add/del commands to freeze:
+[<0>] device_del+0x37/0x3d0
+[<0>] device_unregister+0x13/0x60
+[<0>] unregister_virtio_device+0x11/0x20
+[<0>] device_release_driver_internal+0x193/0x200
+[<0>] bus_remove_device+0xbf/0x130
+[<0>] device_del+0x174/0x3d0
+[<0>] device_unregister+0x13/0x60
+[<0>] vdpa_nl_cmd_dev_del_set_doit+0x66/0xe0 [vdpa]
+[<0>] genl_family_rcv_msg_doit.isra.0+0xb8/0x100
+[<0>] genl_rcv_msg+0x151/0x290
+[<0>] netlink_rcv_skb+0x54/0x100
+[<0>] genl_rcv+0x24/0x40
+[<0>] netlink_unicast+0x217/0x340
+[<0>] netlink_sendmsg+0x23e/0x4a0
+[<0>] sock_sendmsg+0x8f/0xa0
+[<0>] __sys_sendto+0xfc/0x170
+[<0>] __x64_sys_sendto+0x20/0x30
+[<0>] do_syscall_64+0x59/0x90
+[<0>] entry_SYSCALL_64_after_hwframe+0x72/0xdc
 
-yamllint warnings/errors:
+Once fixed on DPDK side (you can use my vduse_v1 branch [0] for
+testing), it works fine:
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/snps,dwc3.yaml: properties:snps,global-regs-starting-offset: 'oneOf' conditional failed, one must be fixed:
-	'type' is a required property
-		hint: A vendor boolean property can use "type: boolean"
-	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/snps,dwc3.yaml: properties:snps,global-regs-starting-offset: 'oneOf' conditional failed, one must be fixed:
-		'enum' is a required property
-		'const' is a required property
-		hint: A vendor string property with exact values has an implicit type
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/snps,dwc3.yaml: properties:snps,global-regs-starting-offset: 'oneOf' conditional failed, one must be fixed:
-		'$ref' is a required property
-		'allOf' is a required property
-		hint: A vendor property needs a $ref to types.yaml
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+Tested-by: Maxime Coquelin <maxime.coquelin@redhat.com>
 
-doc reference errors (make refcheckdocs):
+For the potential missing interrupt with non-compliant devices, I guess
+it could be handled with the hardening work as same thing could happen
+if the VDUSE application crashed for example.
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230413042503.4047-1-stanley_chang@realtek.com
+Regards,
+Maxime
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+[0]:
+> Thanks
+> 
+> Changes since V1:
+> - use RTNL to synchronize rx mode worker
+> - use completion for simplicity
+> - don't try to harden CVQ command
+> 
+> Changes since RFC:
+> 
+> - switch to use BAD_RING in virtio_break_device()
+> - check virtqueue_is_broken() after being woken up
+> - use more_used() instead of virtqueue_get_buf() to allow caller to
+>    get buffers afterwards
+>    - break the virtio-net device when timeout
+>    - get buffer manually since the virtio core check more_used() instead
+> 
+> Jason Wang (2):
+>    virtio-net: convert rx mode setting to use workqueue
+>    virtio-net: sleep instead of busy waiting for cvq command
+> 
+>   drivers/net/virtio_net.c | 76 ++++++++++++++++++++++++++++++++++------
+>   1 file changed, 66 insertions(+), 10 deletions(-)
+> 
 
