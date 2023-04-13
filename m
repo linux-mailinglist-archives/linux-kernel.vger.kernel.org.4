@@ -2,108 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34F356E1233
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:25:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 462706E1239
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:26:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbjDMQY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 12:24:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
+        id S229636AbjDMQ0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 12:26:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbjDMQY5 (ORCPT
+        with ESMTP id S229481AbjDMQ0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 12:24:57 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978CB869E
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:24:56 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33DFKhNB013427;
-        Thu, 13 Apr 2023 16:24:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=ARLRHoHpS55qm8rtlTvlDCPA8/zgmyitwtHhAXty57Y=;
- b=Nw3CFdosSJauPwZ+kJ1fDELgGtLK+7iarPCCjCJ2tovsY25hbyhXMlRpYtVEm2/4LApT
- 6ZTZUn2hPZiqfT89BzdwOrCkk2IsSP45i1n3NsYpRQevmkoqPGVwfDYtY2JxcLnk95AB
- /CDTrRbLOaG4V6ERziRkiekxAHNJIymvM7H/p1uxRKzgodVz77WRwUCS+yCDnZpH1RK2
- 9ek4k31LmO/x1y2ez3Rs2RopTtAq38drCqgzPX2CD1cU5ArwNoucalL2E2AOfKm+I0z+
- pqkFmzZoVKoaCHzCYbFNRG1QJacv+9eCSnphFdTqVjgWFf1T7QEY64CHXVt3Vup73oGa Ng== 
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pxma1tseg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Apr 2023 16:24:45 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33DD1IW9020744;
-        Thu, 13 Apr 2023 16:24:45 GMT
-Received: from smtprelay05.wdc07v.mail.ibm.com ([9.208.129.117])
-        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3pu0jhccm6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Apr 2023 16:24:45 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-        by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33DGOhEI20775570
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 13 Apr 2023 16:24:44 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D544258059;
-        Thu, 13 Apr 2023 16:24:43 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0DC3B58055;
-        Thu, 13 Apr 2023 16:24:43 +0000 (GMT)
-Received: from slate16.aus.stglabs.ibm.com (unknown [9.160.69.135])
-        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 13 Apr 2023 16:24:42 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-fsi@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, joel@jms.id.au, jk@ozlabs.org,
-        alistair@popple.id.au, Eddie James <eajames@linux.ibm.com>
-Subject: [PATCH] fsi: core: Fix legacy minor numbering
-Date:   Thu, 13 Apr 2023 11:24:40 -0500
-Message-Id: <20230413162440.3313036-1-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 13 Apr 2023 12:26:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 977BB869E
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:25:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681403149;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QzP5Sz/J0tccGFdHhbGs5sOUHhnm1xuab76oclPkBc0=;
+        b=P5LM2TYVRiDQdOLCemZBH5QnCPtivUvE5M1WpBIo9/M6PnnnLA5GxGYwM/eP16HR0K94SA
+        QxTkTA2SYoKRd+cfWTZutxD5phgVoKAIYPpzjpvXetCUVT6lz++fp7wCJKr1nKVsLeXTbV
+        //am39SlSlUAx6DmeRBNztxMKMx+NvE=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-14-Z-lPzjinPpW2MjjevRpwCg-1; Thu, 13 Apr 2023 12:25:48 -0400
+X-MC-Unique: Z-lPzjinPpW2MjjevRpwCg-1
+Received: by mail-wr1-f69.google.com with SMTP id h26-20020adfa4da000000b002f5d7b791d2so572090wrb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:25:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681403147; x=1683995147;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QzP5Sz/J0tccGFdHhbGs5sOUHhnm1xuab76oclPkBc0=;
+        b=cpLxLGtLyw7Tw0cJoINMep8VZaFfl1eJWBhkLpk3c5hAdq8ynZom9PthF6pdJyO8bO
+         q0BnQ67nzSR66/HycFS/gMD2B+qjX7N69kv5poLWVcCjNF338VPGtjZjHBn5Uct8JkNT
+         WrYru9mHpsu1vQmMUaeybnfIvP6yz5Bzag9fqF/7dKFqzUN/pZhxf6evemezY/CFIoon
+         AuFGN0AtbUgIR9PtScf1aWKyILEqe/jtTgSRRPap1b6ofVKL2OAG9aW0toy15e1FPWFh
+         utynCOqlOLCAg61PdP97vlN4e2Okilde9VdhJpZmxOrfsJ0DiOY4nc5R2ycDzofe/vb3
+         02Yg==
+X-Gm-Message-State: AAQBX9dL+di9Ke8IJqzXP2/MKB3dAbVyic0pm4YbauzN6Ipek3/KlDP/
+        qIgHrynE9E+5TfvMTrV9h6DtRHav5xP73BXyDRupO37e5ihXcxi9IjYTSOxcHvt1VsaMPay5RZh
+        MFn/EY+L+Vf5K9Ihkh/RBSEtu
+X-Received: by 2002:a5d:4405:0:b0:2f0:2dbd:dc3f with SMTP id z5-20020a5d4405000000b002f02dbddc3fmr2133712wrq.43.1681403146967;
+        Thu, 13 Apr 2023 09:25:46 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YakkiXnmsXJr1wAXgIivtlifVtfsJyDI97sZ1EviUV7E6q3QirS5z2K5iJFaxhGOyNCnBQkg==
+X-Received: by 2002:a5d:4405:0:b0:2f0:2dbd:dc3f with SMTP id z5-20020a5d4405000000b002f02dbddc3fmr2133696wrq.43.1681403146604;
+        Thu, 13 Apr 2023 09:25:46 -0700 (PDT)
+Received: from redhat.com ([2a06:c701:742d:fd00:c847:221d:9254:f7ce])
+        by smtp.gmail.com with ESMTPSA id k1-20020a056000004100b002f5925c7cabsm1597332wrx.75.2023.04.13.09.25.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 09:25:46 -0700 (PDT)
+Date:   Thu, 13 Apr 2023 12:25:43 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, maxime.coquelin@redhat.com,
+        alvaro.karsz@solid-run.com, eperezma@redhat.com,
+        xuanzhuo@linux.alibaba.com, david.marchand@redhat.com
+Subject: Re: [PATCH net-next V2 1/2] virtio-net: convert rx mode setting to
+ use workqueue
+Message-ID: <20230413121525-mutt-send-email-mst@kernel.org>
+References: <20230413064027.13267-1-jasowang@redhat.com>
+ <20230413064027.13267-2-jasowang@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 4jQ0wmQ9Wh3-EPjZLpc_WUzFThzE6xT9
-X-Proofpoint-GUID: 4jQ0wmQ9Wh3-EPjZLpc_WUzFThzE6xT9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-13_11,2023-04-13_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- priorityscore=1501 impostorscore=0 lowpriorityscore=0 suspectscore=0
- mlxscore=0 phishscore=0 spamscore=0 mlxlogscore=999 clxscore=1015
- adultscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2303200000 definitions=main-2304130143
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230413064027.13267-2-jasowang@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-FSI reserves the first 64 minor numbers for the legacy numbering
-based on the chip id. However the legacy number shifts the chip
-id too much, resulting in overlap between legacy and non-legacy
-numbers. Reduce the chip id bit shift since the type field only
-takes 2 bits.
+On Thu, Apr 13, 2023 at 02:40:26PM +0800, Jason Wang wrote:
+> This patch convert rx mode setting to be done in a workqueue, this is
+> a must for allow to sleep when waiting for the cvq command to
+> response since current code is executed under addr spin lock.
+> 
+> Signed-off-by: Jason Wang <jasowang@redhat.com>
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
----
- drivers/fsi/fsi-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I don't like this frankly. This means that setting RX mode which would
+previously be reliable, now becomes unreliable.
+- first of all configuration is no longer immediate
+  and there is no way for driver to find out when
+  it actually took effect
+- second, if device fails command, this is also not
+  propagated to driver, again no way for driver to find out 
 
-diff --git a/drivers/fsi/fsi-core.c b/drivers/fsi/fsi-core.c
-index 0b927c9f4267..b9f410170655 100644
---- a/drivers/fsi/fsi-core.c
-+++ b/drivers/fsi/fsi-core.c
-@@ -950,7 +950,7 @@ static int __fsi_get_new_minor(struct fsi_slave *slave, enum fsi_dev_type type,
- 	/* Check if we qualify for legacy numbering */
- 	if (cid >= 0 && cid < 16 && type < 4) {
- 		/* Try reserving the legacy number */
--		id = (cid << 4) | type;
-+		id = (cid << 2) | type;
- 		id = ida_simple_get(&fsi_minor_ida, id, id + 1, GFP_KERNEL);
- 		if (id >= 0) {
- 			*out_index = fsi_adjust_index(cid);
--- 
-2.31.1
+VDUSE needs to be fixed to do tricks to fix this
+without breaking normal drivers.
+
+
+> ---
+> Changes since V1:
+> - use RTNL to synchronize rx mode worker
+> ---
+>  drivers/net/virtio_net.c | 55 +++++++++++++++++++++++++++++++++++++---
+>  1 file changed, 52 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index e2560b6f7980..2e56bbf86894 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -265,6 +265,12 @@ struct virtnet_info {
+>  	/* Work struct for config space updates */
+>  	struct work_struct config_work;
+>  
+> +	/* Work struct for config rx mode */
+> +	struct work_struct rx_mode_work;
+> +
+> +	/* Is rx mode work enabled? */
+> +	bool rx_mode_work_enabled;
+> +
+>  	/* Does the affinity hint is set for virtqueues? */
+>  	bool affinity_hint_set;
+>  
+> @@ -388,6 +394,20 @@ static void disable_delayed_refill(struct virtnet_info *vi)
+>  	spin_unlock_bh(&vi->refill_lock);
+>  }
+>  
+> +static void enable_rx_mode_work(struct virtnet_info *vi)
+> +{
+> +	rtnl_lock();
+> +	vi->rx_mode_work_enabled = true;
+> +	rtnl_unlock();
+> +}
+> +
+> +static void disable_rx_mode_work(struct virtnet_info *vi)
+> +{
+> +	rtnl_lock();
+> +	vi->rx_mode_work_enabled = false;
+> +	rtnl_unlock();
+> +}
+> +
+>  static void virtqueue_napi_schedule(struct napi_struct *napi,
+>  				    struct virtqueue *vq)
+>  {
+> @@ -2310,9 +2330,11 @@ static int virtnet_close(struct net_device *dev)
+>  	return 0;
+>  }
+>  
+> -static void virtnet_set_rx_mode(struct net_device *dev)
+> +static void virtnet_rx_mode_work(struct work_struct *work)
+>  {
+> -	struct virtnet_info *vi = netdev_priv(dev);
+> +	struct virtnet_info *vi =
+> +		container_of(work, struct virtnet_info, rx_mode_work);
+> +	struct net_device *dev = vi->dev;
+>  	struct scatterlist sg[2];
+>  	struct virtio_net_ctrl_mac *mac_data;
+>  	struct netdev_hw_addr *ha;
+> @@ -2325,6 +2347,8 @@ static void virtnet_set_rx_mode(struct net_device *dev)
+>  	if (!virtio_has_feature(vi->vdev, VIRTIO_NET_F_CTRL_RX))
+>  		return;
+>  
+> +	rtnl_lock();
+> +
+>  	vi->ctrl->promisc = ((dev->flags & IFF_PROMISC) != 0);
+>  	vi->ctrl->allmulti = ((dev->flags & IFF_ALLMULTI) != 0);
+>  
+> @@ -2342,14 +2366,19 @@ static void virtnet_set_rx_mode(struct net_device *dev)
+>  		dev_warn(&dev->dev, "Failed to %sable allmulti mode.\n",
+>  			 vi->ctrl->allmulti ? "en" : "dis");
+>  
+> +	netif_addr_lock_bh(dev);
+> +
+>  	uc_count = netdev_uc_count(dev);
+>  	mc_count = netdev_mc_count(dev);
+>  	/* MAC filter - use one buffer for both lists */
+>  	buf = kzalloc(((uc_count + mc_count) * ETH_ALEN) +
+>  		      (2 * sizeof(mac_data->entries)), GFP_ATOMIC);
+>  	mac_data = buf;
+> -	if (!buf)
+> +	if (!buf) {
+> +		netif_addr_unlock_bh(dev);
+> +		rtnl_unlock();
+>  		return;
+> +	}
+>  
+>  	sg_init_table(sg, 2);
+>  
+> @@ -2370,6 +2399,8 @@ static void virtnet_set_rx_mode(struct net_device *dev)
+>  	netdev_for_each_mc_addr(ha, dev)
+>  		memcpy(&mac_data->macs[i++][0], ha->addr, ETH_ALEN);
+>  
+> +	netif_addr_unlock_bh(dev);
+> +
+>  	sg_set_buf(&sg[1], mac_data,
+>  		   sizeof(mac_data->entries) + (mc_count * ETH_ALEN));
+>  
+> @@ -2377,9 +2408,19 @@ static void virtnet_set_rx_mode(struct net_device *dev)
+>  				  VIRTIO_NET_CTRL_MAC_TABLE_SET, sg))
+>  		dev_warn(&dev->dev, "Failed to set MAC filter table.\n");
+>  
+> +	rtnl_unlock();
+> +
+>  	kfree(buf);
+>  }
+>  
+> +static void virtnet_set_rx_mode(struct net_device *dev)
+> +{
+> +	struct virtnet_info *vi = netdev_priv(dev);
+> +
+> +	if (vi->rx_mode_work_enabled)
+> +		schedule_work(&vi->rx_mode_work);
+> +}
+> +
+>  static int virtnet_vlan_rx_add_vid(struct net_device *dev,
+>  				   __be16 proto, u16 vid)
+>  {
+> @@ -3150,6 +3191,8 @@ static void virtnet_freeze_down(struct virtio_device *vdev)
+>  
+>  	/* Make sure no work handler is accessing the device */
+>  	flush_work(&vi->config_work);
+> +	disable_rx_mode_work(vi);
+> +	flush_work(&vi->rx_mode_work);
+>  
+>  	netif_tx_lock_bh(vi->dev);
+>  	netif_device_detach(vi->dev);
+
+So now configuration is not propagated to device.
+Won't device later wake up in wrong state?
+
+
+> @@ -3172,6 +3215,7 @@ static int virtnet_restore_up(struct virtio_device *vdev)
+>  	virtio_device_ready(vdev);
+>  
+>  	enable_delayed_refill(vi);
+> +	enable_rx_mode_work(vi);
+>  
+>  	if (netif_running(vi->dev)) {
+>  		err = virtnet_open(vi->dev);
+> @@ -3969,6 +4013,7 @@ static int virtnet_probe(struct virtio_device *vdev)
+>  	vdev->priv = vi;
+>  
+>  	INIT_WORK(&vi->config_work, virtnet_config_changed_work);
+> +	INIT_WORK(&vi->rx_mode_work, virtnet_rx_mode_work);
+>  	spin_lock_init(&vi->refill_lock);
+>  
+>  	if (virtio_has_feature(vdev, VIRTIO_NET_F_MRG_RXBUF)) {
+> @@ -4077,6 +4122,8 @@ static int virtnet_probe(struct virtio_device *vdev)
+>  	if (vi->has_rss || vi->has_rss_hash_report)
+>  		virtnet_init_default_rss(vi);
+>  
+> +	enable_rx_mode_work(vi);
+> +
+>  	/* serialize netdev register + virtio_device_ready() with ndo_open() */
+>  	rtnl_lock();
+>  
+> @@ -4174,6 +4221,8 @@ static void virtnet_remove(struct virtio_device *vdev)
+>  
+>  	/* Make sure no work handler is accessing the device. */
+>  	flush_work(&vi->config_work);
+> +	disable_rx_mode_work(vi);
+> +	flush_work(&vi->rx_mode_work);
+>  
+>  	unregister_netdev(vi->dev);
+>  
+> -- 
+> 2.25.1
 
