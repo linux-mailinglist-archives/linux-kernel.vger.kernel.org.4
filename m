@@ -2,112 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF6DD6E0A64
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 11:40:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 238A56E0DAD
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 14:49:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbjDMJkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 05:40:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34248 "EHLO
+        id S230017AbjDMMs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 08:48:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjDMJkS (ORCPT
+        with ESMTP id S229663AbjDMMsq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 05:40:18 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD9A10C2;
-        Thu, 13 Apr 2023 02:40:15 -0700 (PDT)
-Received: from [192.168.2.164] (109-252-119-170.nat.spd-mgts.ru [109.252.119.170])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5D8F86603207;
-        Thu, 13 Apr 2023 10:40:13 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681378814;
-        bh=j0PvH5Ogecj9RSBYwtl96lu2V0fvpKZWcVehXb8syVI=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=a/abK8QMsJFVk8AOi1GfbnJq5Ma+VVmWJCm8AKtmO7CxiX0E/3ofrm42er5ShhHpx
-         HRHgGMjbjzbWBq6N3KfPjx9IP7KhOdQ0WCWj2C/5L9R3JUzkMJRTPZbhgjomEQ80Bj
-         v0wrAIjBj4AGFNPuXlJbaDQyKlZgzFuYnW9tTA/0j27K8YcZSYxNXCX5EAalsN1QRy
-         Rv9HpvUhL+Vun4Ox7S53tZBDx+YjgHfxr6W24pG1AqyD1aCgREj/0S9kOfzOvN3yP7
-         VX2Kr4aqMxRGwIrRuUF7HZ/dktizKhMiJzvZwQQIYRcSSyNg6pYP3xtmBG4g6nrRwZ
-         HodAM8Bry7qRQ==
-Message-ID: <e4343807-60ad-3f40-7cd5-4acf8bc52bd9@collabora.com>
-Date:   Thu, 13 Apr 2023 12:40:09 +0300
+        Thu, 13 Apr 2023 08:48:46 -0400
+X-Greylist: delayed 4377 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 13 Apr 2023 05:48:43 PDT
+Received: from mail.posteburundi.bi (mail.posteburundi.bi [196.2.15.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1A28A77;
+        Thu, 13 Apr 2023 05:48:43 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.posteburundi.bi (Postfix) with ESMTP id CBFFA21C93EC;
+        Thu, 13 Apr 2023 11:42:07 +0200 (CAT)
+Received: from mail.posteburundi.bi ([127.0.0.1])
+        by localhost (mail.posteburundi.bi [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id NCbSyYEgFT5d; Thu, 13 Apr 2023 11:42:07 +0200 (CAT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.posteburundi.bi (Postfix) with ESMTP id 4802D21C9221;
+        Thu, 13 Apr 2023 11:42:07 +0200 (CAT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.posteburundi.bi 4802D21C9221
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=posteburundi.bi;
+        s=49734F3E-B0A3-11EC-9971-1E25BC38DE0A; t=1681378927;
+        bh=dfzNWNrtmGnDzpFfAqoHDukvC9bBVQxHlsvV6ZwOE+8=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=JDTULeEARl4Q4q6KQvivftraopOQwsywN9S39ZG6GVmLqjC8jm99lMOqx18vFaG7Y
+         PfG+P7p2yvFGfjrxrkFvn1hc40UFjo4Rvs3BLEAPRl1P6+yh19NtyBBe72N047gQ8G
+         dXlpWB31PyIPsvkjrDfsCX++kZt9VPh0pDKCnuqX8YDa6dTKSNt1FR65+OzWOAGBlZ
+         LgJLMUiN25h/ujPYrsOROrewlCl4hQZtxl8qExCZuNUmJ49slfUCx/pOPvxVfGClz6
+         EXRlKwocu1RQ4CQzIG9cyWMzr2K/fIRfJk911RW+RFJbL2f9WW6ZFMXirdh6DRyeed
+         jPb953Tnx4FWg==
+X-Virus-Scanned: amavisd-new at posteburundi.bi
+Received: from mail.posteburundi.bi ([127.0.0.1])
+        by localhost (mail.posteburundi.bi [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Aqx3BkUIHwQD; Thu, 13 Apr 2023 11:42:07 +0200 (CAT)
+Received: from [192.168.8.101] (unknown [41.85.163.66])
+        by mail.posteburundi.bi (Postfix) with ESMTPSA id 9728221C93EC;
+        Thu, 13 Apr 2023 11:41:58 +0200 (CAT)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v4 1/2] i2c: tegra: Fix PEC support for SMBUS block read
-Content-Language: en-US
-To:     Akhil R <akhilrajeev@nvidia.com>, christian.koenig@amd.com,
-        digetx@gmail.com, jonathanh@nvidia.com, ldewangan@nvidia.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, sumit.semwal@linaro.org,
-        thierry.reding@gmail.com, wsa@kernel.org
-References: <20230324115924.64218-1-akhilrajeev@nvidia.com>
- <20230324115924.64218-2-akhilrajeev@nvidia.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20230324115924.64218-2-akhilrajeev@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SORTED_RECIPS,
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Representative Needed
+To:     Recipients <info@posteburundi.bi>
+From:   Global Trader Company Ltd UK <info@posteburundi.bi>
+Date:   Thu, 13 Apr 2023 10:41:42 +0100
+Reply-To: potterroger68@gmail.com
+Message-Id: <20230413094158.9728221C93EC@mail.posteburundi.bi>
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_SBL_CSS,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/24/23 14:59, Akhil R wrote:
-...
-> @@ -279,6 +280,7 @@ struct tegra_i2c_dev {
->  	size_t msg_buf_remaining;
->  	int msg_err;
->  	u8 *msg_buf;
-> +	__u16 msg_len;
+My name is , Mrs Rita Potter Rogers we need a Company Representative in you=
+r city location, you can work online or at home and get good payment, conta=
+ct us if interested on this Email: potterroger68@gmail.com
 
-__u16 is for UAPI headers, please use unsigned int. Also keep variables
-sorted by string length.
-
->  	struct completion dma_complete;
->  	struct dma_chan *tx_dma_chan;
-> @@ -1169,7 +1171,7 @@ static void tegra_i2c_push_packet_header(struct tegra_i2c_dev *i2c_dev,
->  	else
->  		i2c_writel(i2c_dev, packet_header, I2C_TX_FIFO);
->  
-> -	packet_header = msg->len - 1;
-> +	packet_header = i2c_dev->msg_len - 1;
->  
->  	if (i2c_dev->dma_mode && !i2c_dev->msg_read)
->  		*dma_buf++ = packet_header;
-> @@ -1242,20 +1244,32 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
->  		return err;
->  
->  	i2c_dev->msg_buf = msg->buf;
-> +	i2c_dev->msg_len = msg->len;
->  
-> -	/* The condition true implies smbus block read and len is already read */
-> -	if (msg->flags & I2C_M_RECV_LEN && end_state != MSG_END_CONTINUE)
-> -		i2c_dev->msg_buf = msg->buf + 1;
-> -
-> -	i2c_dev->msg_buf_remaining = msg->len;
->  	i2c_dev->msg_err = I2C_ERR_NONE;
->  	i2c_dev->msg_read = !!(msg->flags & I2C_M_RD);
->  	reinit_completion(&i2c_dev->msg_complete);
->  
-> +	/* *
-
-Please correct the comment style
-
-> +	 * For SMBUS block read command, read only 1 byte in the first transfer.
-> +	 * Adjust that 1 byte for the next transfer in the msg buffer and msg
-> +	 * length.
-> +	 */
-
-
--- 
-Best regards,
-Dmitry
 
