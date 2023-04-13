@@ -2,99 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA4A46E0712
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 08:40:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1213C6E0721
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 08:41:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbjDMGkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 02:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48700 "EHLO
+        id S229820AbjDMGl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 02:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjDMGkm (ORCPT
+        with ESMTP id S229596AbjDMGl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 02:40:42 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B550B6EA0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 23:40:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681368041; x=1712904041;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JPER1IPvFzvIr3r02eSr/qgy8467UVnTjxa1UldoJp8=;
-  b=GkciGk/M0BZhTUWIiKYtE8jdt3/Y3LiFyNaAhr8ibcl5bC5if+lQIG0M
-   JKwFP71ZOLTAG4+wC49ymzLzVsXETmfgLss3Np01gyYC+wgOp/fhb3Ygt
-   XvKY/tQz2+/XXaPwUWnFbdxlF7oVzG0EF9ZQVekdjGoyAMu4m7QpxI8bU
-   5wN8ORCYPYNnBC2/BWMf0lXb73KBSheg+xTESPfOroIILJlyhXkxMScXe
-   GPps6qdx+Fui9M5dKpVyYVblfk0MNTiiPBSE9EQHhXrvEOpEIKRBnw3On
-   ncYmU5OvOMKiyTnO3mdT6kL/gihnLAPRIi66aly4aewczh/nBrVx7ghdp
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="328216282"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="328216282"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 23:40:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="778625448"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="778625448"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 12 Apr 2023 23:40:38 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pmqdK-000YQt-0B;
-        Thu, 13 Apr 2023 06:40:38 +0000
-Date:   Thu, 13 Apr 2023 14:39:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: undefined reference to `ftrace_likely_update'
-Message-ID: <202304131400.BLPkK6sC-lkp@intel.com>
+        Thu, 13 Apr 2023 02:41:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 218806EA0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 23:40:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681368042;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=poCHwQPZfHA/cky6cZa5Q/phSPW/9HqD6ZSWHiw/xOY=;
+        b=YPfiK20M9lFRUiDi3p1tKVfASIFYB4QR/elCSB9keCmUp/7qnioOs9Ta6QOFmqpXscfRGz
+        HwsYhAXSHz5ULdbmzAp6DFMs56BB6uDwXxQtl5Scka6GMJ8YwVVfWcLLQPznzBysQpf9Uf
+        oIg3vros/krw25Lg9sZiLvcuzaTlh34=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-643-SR5elh1kPmmD-MDY5VVb8A-1; Thu, 13 Apr 2023 02:40:36 -0400
+X-MC-Unique: SR5elh1kPmmD-MDY5VVb8A-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 025223C025B3;
+        Thu, 13 Apr 2023 06:40:36 +0000 (UTC)
+Received: from localhost.localdomain (ovpn-12-72.pek2.redhat.com [10.72.12.72])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5707640C6E70;
+        Thu, 13 Apr 2023 06:40:29 +0000 (UTC)
+From:   Jason Wang <jasowang@redhat.com>
+To:     mst@redhat.com, jasowang@redhat.com
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, maxime.coquelin@redhat.com,
+        alvaro.karsz@solid-run.com, eperezma@redhat.com,
+        xuanzhuo@linux.alibaba.com, david.marchand@redhat.com
+Subject: [PATCH net-next V2 0/2] virtio-net: don't busy poll for cvq command
+Date:   Thu, 13 Apr 2023 14:40:25 +0800
+Message-Id: <20230413064027.13267-1-jasowang@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kees,
+Hi all:
 
-FYI, the error/warning still remains.
+The code used to busy poll for cvq command which turns out to have
+several side effects:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   de4664485abbc0529b1eec44d0061bbfe58a28fb
-commit: 54d9469bc515dc5fcbc20eecbe19cea868b70d68 fortify: Add run-time WARN for cross-field memcpy()
-date:   7 months ago
-config: s390-buildonly-randconfig-r001-20230413 (https://download.01.org/0day-ci/archive/20230413/202304131400.BLPkK6sC-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=54d9469bc515dc5fcbc20eecbe19cea868b70d68
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 54d9469bc515dc5fcbc20eecbe19cea868b70d68
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+1) infinite poll for buggy devices
+2) bad interaction with scheduler
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304131400.BLPkK6sC-lkp@intel.com/
+So this series tries to use sleep instead of busy polling. In this
+version, I take a step back: the hardening part is not implemented and
+leave for future investigation. We use to aggree to use interruptible
+sleep but it doesn't work for a general workqueue.
 
-All errors (new ones prefixed by >>):
+Please review.
 
-   s390x-linux-ld: arch/s390/purgatory/purgatory: in function `sha256_update':
->> (.text+0x23f2): undefined reference to `ftrace_likely_update'
->> s390x-linux-ld: (.text+0x2aa8): undefined reference to `ftrace_likely_update'
+Thanks
+
+Changes since V1:
+- use RTNL to synchronize rx mode worker
+- use completion for simplicity
+- don't try to harden CVQ command
+
+Changes since RFC:
+
+- switch to use BAD_RING in virtio_break_device()
+- check virtqueue_is_broken() after being woken up
+- use more_used() instead of virtqueue_get_buf() to allow caller to
+  get buffers afterwards
+  - break the virtio-net device when timeout
+  - get buffer manually since the virtio core check more_used() instead
+
+Jason Wang (2):
+  virtio-net: convert rx mode setting to use workqueue
+  virtio-net: sleep instead of busy waiting for cvq command
+
+ drivers/net/virtio_net.c | 76 ++++++++++++++++++++++++++++++++++------
+ 1 file changed, 66 insertions(+), 10 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.25.1
+
