@@ -2,99 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 561906E05F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 06:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D37256E05FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 06:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbjDMEZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 00:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51254 "EHLO
+        id S229742AbjDME1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 00:27:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjDMEZR (ORCPT
+        with ESMTP id S229503AbjDME1U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 00:25:17 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BABF8BB;
-        Wed, 12 Apr 2023 21:25:16 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33D4OgvnE024490, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33D4OgvnE024490
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Thu, 13 Apr 2023 12:24:42 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 13 Apr 2023 12:25:04 +0800
-Received: from RTEXH36505.realtek.com.tw (172.21.6.25) by
- RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 13 Apr 2023 12:25:03 +0800
-Received: from localhost.localdomain (172.21.252.101) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server id
- 15.1.2375.32 via Frontend Transport; Thu, 13 Apr 2023 12:25:03 +0800
-From:   Stanley Chang <stanley_chang@realtek.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Stanley Chang <stanley_chang@realtek.com>,
-        <linux-usb@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        "Krzysztof Kozlowski" <krzk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>
-Subject: [PATCH v2 2/2] dt-bindings: usb: snps,dwc3: Add 'snps,global-regs-starting-offset' quirk
-Date:   Thu, 13 Apr 2023 12:25:03 +0800
-Message-ID: <20230413042503.4047-1-stanley_chang@realtek.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230412033006.10859-2-stanley_chang@realtek.com>
-References: <20230412033006.10859-2-stanley_chang@realtek.com>
+        Thu, 13 Apr 2023 00:27:20 -0400
+Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AA2170F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 21:27:19 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VfzAfT2_1681360036;
+Received: from 30.221.133.131(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VfzAfT2_1681360036)
+          by smtp.aliyun-inc.com;
+          Thu, 13 Apr 2023 12:27:17 +0800
+Message-ID: <c12b5de6-9591-56ba-85e6-e6292aece7bd@linux.alibaba.com>
+Date:   Thu, 13 Apr 2023 12:27:16 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH] erofs: explicit cast blkaddr to u64 before shift
+ operation
+Content-Language: en-US
+To:     Jia Zhu <zhujia.zj@bytedance.com>, linux-erofs@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, yinxin.x@bytedance.com,
+        xiang@kernel.org
+References: <20230413035734.15457-1-zhujia.zj@bytedance.com>
+From:   Jingbo Xu <jefflexu@linux.alibaba.com>
+In-Reply-To: <20230413035734.15457-1-zhujia.zj@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a new 'snps,global-regs-starting-offset' DT to dwc3 core to remap
-the global register start address
 
-The RTK DHC SoCs were designed the global register address offset at
-0x8100. The default address is at DWC3_GLOBALS_REGS_START (0xc100).
-Therefore, add the property of device-tree to adjust this start address.
 
-Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
----
- v1 to v2 change:
-1. Change the name of the property "snps,global-regs-starting-offset".
----
- Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 7 +++++++
- 1 file changed, 7 insertions(+)
+On 4/13/23 11:57 AM, Jia Zhu wrote:
+> We should explicitly cast @blkaddr from u32 to u64 before the shift
+> operation to return the larger type.
+> 
+> Fixes: b1c2d99b18ff ("erofs: avoid hardcoded blocksize for subpage block support")
+> Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
+> ---
+>  fs/erofs/data.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/erofs/data.c b/fs/erofs/data.c
+> index aa7f9e4f86fb..6fe9a779fa91 100644
+> --- a/fs/erofs/data.c
+> +++ b/fs/erofs/data.c
+> @@ -35,7 +35,7 @@ void *erofs_bread(struct erofs_buf *buf, erofs_blk_t blkaddr,
+>  		  enum erofs_kmap_type type)
+>  {
+>  	struct inode *inode = buf->inode;
+> -	erofs_off_t offset = blkaddr << inode->i_blkbits;
+> +	erofs_off_t offset = (erofs_off_t)blkaddr << inode->i_blkbits;
+>  	pgoff_t index = offset >> PAGE_SHIFT;
+>  	struct page *page = buf->page;
+>  	struct folio *folio;
 
-diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-index be36956af53b..5cbf3b7ded04 100644
---- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-@@ -359,6 +359,13 @@ properties:
-     items:
-       enum: [1, 4, 8, 16, 32, 64, 128, 256]
- 
-+  snps,global-regs-starting-offset:
-+    description:
-+      value for remapping global register start address. For some dwc3
-+      controller, the dwc3 global register start address is not at
-+      default DWC3_GLOBALS_REGS_START (0xc100). This property is added to
-+      adjust the address.
-+
-   port:
-     $ref: /schemas/graph.yaml#/properties/port
-     description:
+LGTM. Thanks for catching this.
+
+Reviewed-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+
 -- 
-2.34.1
-
+Thanks,
+Jingbo
