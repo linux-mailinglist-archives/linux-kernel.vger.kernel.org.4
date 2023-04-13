@@ -2,136 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 871226E156B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 21:51:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B21B46E156E
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 21:52:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbjDMTvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 15:51:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44258 "EHLO
+        id S229820AbjDMTwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 15:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjDMTvb (ORCPT
+        with ESMTP id S229492AbjDMTv7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 15:51:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BAEF271E;
-        Thu, 13 Apr 2023 12:51:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AE0A3615B7;
-        Thu, 13 Apr 2023 19:51:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 251F8C433EF;
-        Thu, 13 Apr 2023 19:51:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681415488;
-        bh=VD3AH8/BOXPv2IMvKmDKEehX7IswoAmODYA+TR627Jo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VCtYT890v2FRNOna+n2kFlQUZGsy0rBa70/M8Fi0623Yy6A8HCCzDldPFgV/ej/xA
-         F1YzJ+Iq1TUbxiDFT+wAZQYKhXSeSDYdq3tkrl+fimUZ0kTr5BryN3l884PPyUGjwt
-         X8cOefnM3db3riLehwMJJ6vV4E/KLhNRL6ikaUoN4tIK/Vdqp/PBwp+6oDrHRc4e/C
-         B/1+1g8M3Z7pWFX4iIjYdKgmVfCM+bMU5z5/iQ5Nu5SPF4CkzTzP1JEpTG1CpKb/Ws
-         GGc3M/KZegRLpXQBISjk4gvp1tRkumWNf7zu5pxa2YVlro/J3OSz5us5R5z+FfF6fz
-         CS5IjwjBxtgUQ==
-Date:   Thu, 13 Apr 2023 21:51:25 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Benjamin Bara <bbara93@gmail.com>
-Cc:     Lee Jones <lee@kernel.org>, rafael.j.wysocki@intel.com,
-        dmitry.osipenko@collabora.com, peterz@infradead.org,
-        jonathanh@nvidia.com, richard.leitner@linux.dev,
-        treding@nvidia.com, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
-        Benjamin Bara <benjamin.bara@skidata.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v4 2/4] i2c: core: run atomic i2c xfer when !preemptible
-Message-ID: <ZDhdPbcHFaR+2dhR@sai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Benjamin Bara <bbara93@gmail.com>, Lee Jones <lee@kernel.org>,
-        rafael.j.wysocki@intel.com, dmitry.osipenko@collabora.com,
-        peterz@infradead.org, jonathanh@nvidia.com,
-        richard.leitner@linux.dev, treding@nvidia.com,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-tegra@vger.kernel.org,
-        Benjamin Bara <benjamin.bara@skidata.com>, stable@vger.kernel.org
-References: <20230327-tegra-pmic-reboot-v4-0-b24af219fb47@skidata.com>
- <20230327-tegra-pmic-reboot-v4-2-b24af219fb47@skidata.com>
+        Thu, 13 Apr 2023 15:51:59 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E836A8A42
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 12:51:49 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id bh10so10752796oib.1
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 12:51:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google; t=1681415509; x=1684007509;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=59xyDC9ZSWXV341Wu5FNueXR+XJowtVJP0DizkPdfFs=;
+        b=h9jPzG/dcUSmvNi2dPyu84iaDmvWbVQHQVlXKglMJlv167YBUDEm3FpOtlXxt9EaCd
+         MtzpzGHTAMLorPU0WONEv6DOwGEIIK0J3mCMAxcLoel7xd3QYAhD9PMqpqrg9lWKXrHu
+         lhSlWQq/SS+sv66P1t6xdTedXwVFW5r7jmweA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681415509; x=1684007509;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=59xyDC9ZSWXV341Wu5FNueXR+XJowtVJP0DizkPdfFs=;
+        b=eYzmHRZm40xLVfV4mUlOzWBw8sjI7bz/nD2MD89087h5RhESwoV4YOM239e0JMELwO
+         +oFqk4e72UKSnOxtdWE40sVsCrF8aHyKTq6GwvpCagje7dXkpR6QMRu1P+FdBNF1yOEt
+         tkaCct2AF7XOBKELzXIcDCmLdw3cZgCyQNnJWN5+6PlmmyPx0iSzzrNqEPCT6ugkSnUn
+         GxFft4U0zaMoPUMYNJk89ZrBoVowEmWADyxoM8iiPldicPwBPXvQBiOZqgTEszewipFd
+         795XoPvTX7sFGVWu2WHrOkgpLzGwTRo4RWNxc+8KjlZ5K4XmtWgWYAPuqD9NqbzOe6V1
+         OOVA==
+X-Gm-Message-State: AAQBX9dSDc80NYIfGtDvQP5NDpQ40JXfxj95DK3UsUim3XYsbm84GCLT
+        CQcxk6ro/nvNEFy0/I3Q6f3sAjOzK1B0mjWH695MKg==
+X-Google-Smtp-Source: AKy350YRwloX6wrMPpX0c5vx9aI9nT3Rkz9UU+Qv6sNaS8uYAcGc+/V8sEso/1ex7VLILj3PMw+fF58bqdYPBRFPhxU=
+X-Received: by 2002:aca:120c:0:b0:38b:f7fa:40ac with SMTP id
+ 12-20020aca120c000000b0038bf7fa40acmr785143ois.8.1681415509145; Thu, 13 Apr
+ 2023 12:51:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+d+oo9lOK+g04O7i"
-Content-Disposition: inline
-In-Reply-To: <20230327-tegra-pmic-reboot-v4-2-b24af219fb47@skidata.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Daniel Vetter <daniel.vetter@ffwll.ch>
+Date:   Thu, 13 Apr 2023 21:51:38 +0200
+Message-ID: <CAKMK7uHy7FMdpEZLu2TTzgnGOrntBcQi_B0c=X+oT_fyUhcTDw@mail.gmail.com>
+Subject: [PULL] drm-fixes for 6.3-rc7
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Dave Airlie <airlied@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linus,
 
---+d+oo9lOK+g04O7i
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+People seem back, still not much.
+-Daniel
 
-On Thu, Apr 13, 2023 at 09:46:40AM +0200, Benjamin Bara wrote:
-> From: Benjamin Bara <benjamin.bara@skidata.com>
->=20
-> Since bae1d3a05a8b, i2c transfers are non-atomic if preemption is
-> disabled. However, non-atomic i2c transfers require preemption (e.g. in
-> wait_for_completion() while waiting for the DMA).
->=20
-> panic() calls preempt_disable_notrace() before calling
-> emergency_restart(). Therefore, if an i2c device is used for the
-> restart, the xfer should be atomic. This avoids warnings like:
->=20
-> [   12.667612] WARNING: CPU: 1 PID: 1 at kernel/rcu/tree_plugin.h:318 rcu=
-_note_context_switch+0x33c/0x6b0
-> [   12.676926] Voluntary context switch within RCU read-side critical sec=
-tion!
-> ...
-> [   12.742376]  schedule_timeout from wait_for_completion_timeout+0x90/0x=
-114
-> [   12.749179]  wait_for_completion_timeout from tegra_i2c_wait_completio=
-n+0x40/0x70
-> ...
-> [   12.994527]  atomic_notifier_call_chain from machine_restart+0x34/0x58
-> [   13.001050]  machine_restart from panic+0x2a8/0x32c
->=20
-> Use !preemptible() instead, which is basically the same check as
-> pre-v5.2.
->=20
-> Fixes: bae1d3a05a8b ("i2c: core: remove use of in_atomic()")
-> Cc: stable@vger.kernel.org # v5.2+
-> Suggested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
+drm-fixes-2023-04-13:
+drm-fixes for -rc7
 
-So, with Peter's input and me checking again:
+- two fbcon regressions
+- amdgpu: dp mst, smu13
+- i915: dual link dsi for tgl+
+- armada, nouveau, drm/sched, fbmem
 
-Acked-by: Wolfram Sang <wsa@kernel.org>
+The following changes since commit 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d:
 
-I assume this shall go in via the mfd-tree. Let me know if I should pick
-it instead.
+  Linux 6.3-rc6 (2023-04-09 11:15:57 -0700)
 
+are available in the Git repository at:
 
---+d+oo9lOK+g04O7i
-Content-Type: application/pgp-signature; name="signature.asc"
+  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2023-04-13
 
------BEGIN PGP SIGNATURE-----
+for you to fetch changes up to cab2932213c5cd72a9e04e5e82002e81b946592b:
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQ4XT0ACgkQFA3kzBSg
-KbbAJA//f+xXOS04L16X+BQ/HPdV9h08kJltv/KDQ7sfvNd+ALOJslAZbEdgNVKH
-zj96ZFX4u75ZdDH6YiImSGUfXqWoseKZiK4ZvkPaKabsG8uv/uHZIJdYG6qXpD7Q
-b0sg6z6TgvpVSAp0l4n0FgeNQE2KVCZ5WAcjFQx46vcXufyvyycZPUU0Ht37ufZL
-x0kCd04YeX+wnRUp9nH9JNI4frjnR/uqwfTM4MCdnyrX1WXk70J6AMQ/C5UuKfGe
-EYsWRs6cTUyo7vMqLEImkb4XXTZMJqCl+dmC1oP2w8w+Lvm9P7RcwuI0Q1yuKKp/
-1fypvphtyrsqnIzaox57pMgE6Fzh8qVSaC0ZMZWX1fje9PWwFhnBX79RBx6V3OIA
-4NKWEtyB2KeCtEPeimh2d2ZUKg4VHjKuT4gHafLx417s7qjRe2jYLg8VM81rgukC
-Qe36LnTryBcGq7TBBGCVZehnwtnHxiYmGJ5cZtKP+Tp4uFUxD8MN9UQDNoeLnI+L
-mXxpmDptYoxPbJBBSCgvgMcnuW2LAAL9Jjtpt/xestPqgSdQhWQ03KwyrNkFztl/
-h59ULzWc90RQoNG8lK++XEI3jyB5VpAfPE/axAjhUTtS3bxZ1iuGh6Vywn3b3iD/
-M/JlFy5nloZAuabCFKByKf7emEp/Wc36fA0r42RkKQsL7IVSXbc=
-=KAjA
------END PGP SIGNATURE-----
+  Merge tag 'drm-misc-fixes-2023-04-13' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-fixes (2023-04-13
+20:47:58 +0200)
 
---+d+oo9lOK+g04O7i--
+----------------------------------------------------------------
+drm-fixes for -rc7
+
+- two fbcon regressions
+- amdgpu: dp mst, smu13
+- i915: dual link dsi for tgl+
+- armada, nouveau, drm/sched, fbmem
+
+----------------------------------------------------------------
+Asahi Lina (1):
+      drm/scheduler: Fix UAF race in drm_sched_entity_push_job()
+
+Christophe JAILLET (1):
+      drm/armada: Fix a potential double free in an error handling path
+
+Daniel Vetter (6):
+      fbmem: Reject FB_ACTIVATE_KD_TEXT from userspace
+      Merge tag 'amd-drm-fixes-6.3-2023-04-12' of
+https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
+      Merge tag 'drm-intel-fixes-2023-04-13' of
+git://anongit.freedesktop.org/drm/drm-intel into drm-fixes
+      fbcon: Fix error paths in set_con2fb_map
+      fbcon: set_con2fb_map needs to set con2fb_map!
+      Merge tag 'drm-misc-fixes-2023-04-13' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
+
+Evan Quan (1):
+      drm/amd/pm: correct the pcie link state check for SMU13
+
+Horatio Zhang (2):
+      drm/amd/pm: correct SMU13.0.7 pstate profiling clock settings
+      drm/amd/pm: correct SMU13.0.7 max shader clock reporting
+
+Jani Nikula (1):
+      drm/i915/dsi: fix DSS CTL register offsets for TGL+
+
+Karol Herbst (1):
+      drm/nouveau/fb: add missing sysmen flush callbacks
+
+Maarten Lankhorst (1):
+      Merge remote-tracking branch 'drm/drm-fixes' into drm-misc-fixes
+
+Wayne Lin (1):
+      drm/amd/display: Pass the right info to drm_dp_remove_payload
+
+ .../drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c  | 57 ++++++++++++--
+ drivers/gpu/drm/amd/pm/swsmu/inc/smu_v13_0.h       |  6 ++
+ .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c   |  4 +-
+ .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c   | 87 +++++++++++++++++++---
+ drivers/gpu/drm/armada/armada_drv.c                |  1 -
+ drivers/gpu/drm/i915/display/icl_dsi.c             | 20 ++++-
+ drivers/gpu/drm/nouveau/nvkm/subdev/fb/gf108.c     |  1 +
+ drivers/gpu/drm/nouveau/nvkm/subdev/fb/gk104.c     |  1 +
+ drivers/gpu/drm/nouveau/nvkm/subdev/fb/gk110.c     |  1 +
+ drivers/gpu/drm/nouveau/nvkm/subdev/fb/gm107.c     |  1 +
+ drivers/gpu/drm/scheduler/sched_entity.c           | 11 ++-
+ drivers/video/fbdev/core/fbcon.c                   | 18 ++---
+ drivers/video/fbdev/core/fbmem.c                   |  2 +
+ 13 files changed, 175 insertions(+), 35 deletions(-)
+
+--
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
