@@ -2,80 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79BAD6E0883
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:00:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16CCE6E0881
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:00:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbjDMIAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 04:00:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43734 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjDMIAS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229737AbjDMIAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 13 Apr 2023 04:00:18 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D05B5FD4;
-        Thu, 13 Apr 2023 01:00:17 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33D7xm103025841, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33D7xm103025841
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Thu, 13 Apr 2023 15:59:48 +0800
-Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43716 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229579AbjDMIAR (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Apr 2023 04:00:17 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BEC469E
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 01:00:15 -0700 (PDT)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PxsPY2gNqzKxxk;
+        Thu, 13 Apr 2023 15:57:37 +0800 (CST)
+Received: from [10.174.177.229] (10.174.177.229) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 13 Apr 2023 16:00:10 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Thu, 13 Apr 2023 16:00:09 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
- RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
- 15.01.2375.007; Thu, 13 Apr 2023 16:00:09 +0800
-From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 1/2] usb: dwc3: core: add support for disabling High-speed park mode
-Thread-Topic: [PATCH v2 1/2] usb: dwc3: core: add support for disabling
- High-speed park mode
-Thread-Index: AQHZbDd6mjqPmjMt8EayK+GV5r/KUq8mG4+AgAFsAjCAANC0AIAAiV6g
-Date:   Thu, 13 Apr 2023 08:00:09 +0000
-Message-ID: <95791748e8284bf188386bba91688988@realtek.com>
-References: <20230411053550.16360-1-stanley_chang@realtek.com>
- <20230411213158.r7i6thg67okbovjp@synopsys.com>
- <e9964b3cd1a34b05990c1061af9d1951@realtek.com>
- <2023041355-parole-enviable-b002@gregkh>
-In-Reply-To: <2023041355-parole-enviable-b002@gregkh>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS05.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ 15.1.2507.23; Thu, 13 Apr 2023 16:00:12 +0800
+Message-ID: <fea18890-7e6c-733e-9710-00a15df60a4c@huawei.com>
+Date:   Thu, 13 Apr 2023 16:00:11 +0800
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 2/2] mm: ksm: Support hwpoison for ksm page
+To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>
+CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linmiaohe@huawei.com" <linmiaohe@huawei.com>,
+        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
+        "sunnanyong@huawei.com" <sunnanyong@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+References: <20230330074501.205092-1-xialonglong1@huawei.com>
+ <20230330074501.205092-3-xialonglong1@huawei.com>
+ <20230331054243.GB1435482@hori.linux.bs1.fc.nec.co.jp>
+From:   xialonglong <xialonglong1@huawei.com>
+In-Reply-To: <20230331054243.GB1435482@hori.linux.bs1.fc.nec.co.jp>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.229]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiANCj4gT24gV2VkLCBBcHIgMTIsIDIwMjMgYXQgMTE6MTU6MzVBTSArMDAwMCwgU3RhbmxleSBD
-aGFuZ1vmmIzogrLlvrddIHdyb3RlOg0KPiA+DQo+ID4gQ0MgbW9yZSBtYWludGFpbmVycyBieSB1
-c2luZyBzY3JpcHRzL2dldF9tYWludGFpbmVycy5wbA0KPiA+DQo+IA0KPiBJIGRvIG5vdCBzZWUg
-YW55IG1lc3NhZ2UgaGVyZSwgc28gSSBhbSB0b3RhbGx5IGNvbmZ1c2VkLg0KPiANCj4gWW91IGhh
-dmUgdG8gdXNlIHRoZSBzY3JpcHQgd2hlbiBkZXRlcm1pbmluZyB3aG8gdG8gc2VuZCB0aGUgcGF0
-Y2ggdG8sIHlvdQ0KPiBjYW4ndCBkbyBpdCBhZnRlciB0aGUgZmFjdCBsaWtlIHRoaXMgYXMgaXQg
-d2lsbCBub3Qgd29yayBhdCBhbGwuDQo+IA0KPiBncmVnIGstaA0KPiANCg0KU29ycnkgZm9yIHRo
-ZSBjb25mdXNpb24uDQpJbiB0aGUgYmVnaW5uaW5nIEkgZGlkbid0IGhhdmUgY2MgYWxsIG1haW50
-YWluZXJzLg0KSSdsbCByZXN1Ym1pdCBhIG5ldyByZXZpZXcgdGhyZWFkLg0KUGxlYXNlIGlnbm9y
-ZSB0aGlzIGVtYWlsLg0KDQoNCg==
+
+
+在 2023/3/31 13:42, HORIGUCHI NAOYA(堀口 直也) 写道:
+> On Thu, Mar 30, 2023 at 03:45:01PM +0800, Longlong Xia wrote:
+>> hwpoison_user_mappings() is updated to support ksm pages, and add
+>> collect_procs_ksm() to collect processes when the error hit an ksm
+>> page. The difference from collect_procs_anon() is that it also needs
+>> to traverse the rmap-item list on the stable node of the ksm page.
+>> At the same time, add_to_kill_ksm() is added to handle ksm pages. And
+>> task_in_to_kill_list() is added to avoid duplicate addition of tsk to
+>> the to_kill list. This is because when scanning the list, if the pages
+>> that make up the ksm page all come from the same process, they may be
+>> added repeatedly.
+>>
+>> Signed-off-by: Longlong Xia <xialonglong1@huawei.com>
+> 
+> I don't find any specific issue by code review for now, so I'll try to
+> test your patches.
+
+Dear maintainer,
+
+Can you please provide a brief update on the testing status of the patch 
+and any suggestions you may have for improving it?
+
+Thank you for your time.
+
+Best regards,
+Longlong Xia
+ >
+> I have one comment about duplicated KSM pages.  It seems that KSM controls
+> page duplication by limiting deduplication factor with max_page_sharing,
+> primarily for performance reason.  But I think it's imporant from memory
+> RAS's viewpoint too because that means we could allow recovery from memory
+> errors on a KSM page by making affected processes to switch to the duplicated
+> pages (without killing the processes!).  Maybe this might be beyond the scope
+> of this patchset and I'm not sure how hard it is, but if you are interested
+> in this issue, that's really nice.
+> 
+> Thanks,
+> Naoya Horiguchi
