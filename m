@@ -2,114 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C1D16E17D5
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 01:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 281286E17DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 01:07:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbjDMXDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 19:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40336 "EHLO
+        id S230028AbjDMXHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 19:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjDMXDf (ORCPT
+        with ESMTP id S229469AbjDMXHa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 19:03:35 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E96A2;
-        Thu, 13 Apr 2023 16:03:34 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id lh8so3660577plb.1;
-        Thu, 13 Apr 2023 16:03:34 -0700 (PDT)
+        Thu, 13 Apr 2023 19:07:30 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F5E10E5
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 16:07:29 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54efad677cbso158970167b3.6
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 16:07:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681427013; x=1684019013;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=D/XQvUMbd184V0d688Zwv75YAW0duMFHkNATV/mO7aw=;
-        b=h4UtgBPumQArhAxQCuQPYMTKctURq6HR3viTzmbHWGpGY814xtwyXhtOruu4Gr2MKW
-         WJIRqalJgwnq5W8HTNGZPk6plfg8WoJoXTFDG2p24lycnFLqgZQPK/nRw4gjOHPgCNNn
-         q+KRpfwDpnuykgOiYgnoRJzV+rShDe6RYDRC4Kl69kBJs1RlBdfJ3ElsG6qBdgem/H+y
-         WPpnlvsMgGvpCqydYphqJUWP6Td1CpcKD+QTkYfz8xBsUSjvTWBl6xdpa7TIUTtPtumI
-         F9Q/28MgGIOqbvW8i1xVfp7UngobLIX5PiloGu0gtvc1cQmb2xi221N1nJleujA4TcSg
-         SUgg==
+        d=google.com; s=20221208; t=1681427248; x=1684019248;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=m0eoChJ3C+wX0j/cXmxt8QdAgHqIaCqFV7218jkkfFU=;
+        b=cUBnq6doIYuLvUGVyiYaA7jpkgVtHOtimIKcwt2fzUEGbTagC+SbFxwzie3YwQBvoi
+         2tvxYDlX35dBRsyJ0dqJ0imqCLe7ogS8WTyC7A5vLzXCTzi2nfvrTc7VxeigvLRuypoj
+         d9zWu9lsiLRAeEcyRqF2vB0H2fEa6JEL4FKRXo81NT0wlQUQMuRZJC6/qqZxiWVlFuvs
+         rCpdS64PxIo7V8SajS2etdSOROdKTmlVD4sBgXB1W2FZSMb7wXUNI2yqiz+J9cWyF9eb
+         0i6PytQOESujv8I6M/6hszVyOyKaqVF3BjpcBY+b2iw09H2OLHz5o/ci5kucUCGLlxuh
+         5zxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681427013; x=1684019013;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=D/XQvUMbd184V0d688Zwv75YAW0duMFHkNATV/mO7aw=;
-        b=G0/bHSFYgBHQEVoEt/8sWC276eah2+spgNPlTJF5OdCng5+rPpArx7PLUqnbAxUvcz
-         lg8oNJ326GUEnLeJaMkJKJPzaoyeAAI+ebzp4cHlnpfwMkCSRi88IxSVGjXwgbyd5CJT
-         A2DLd3WVWo8roomw/DWKzEGDpHmmO0fdoyXLDLxT+VtGNvvpql7oBLw9LscKcNCTSEd9
-         htexoqcJuhVGas+WgndufDEVl06JJunz6/sV0gFQGSl3Kuf5jjggL3027czDlTiXxDD9
-         cwNuf1NbyPCaYaEwtzw0enjAUnhL5UDG3awrclPSWyPS9zFjVNM+KnlMsZSOsup61Wkr
-         p+WQ==
-X-Gm-Message-State: AAQBX9fayOnew0I4j2dYZ1Xl39YYZhkX8BNd274xk0j7FN2vX5XATqRe
-        ebMaFaLOskuQ5s2r4HKIS+umy4JVBYM=
-X-Google-Smtp-Source: AKy350YCRWZETtmNpl+6tfX+EwKUUhjI/gO+2pM1Jjg4upo6vfj+DkbnJ+jk6O10mNDai/mphTjuBA==
-X-Received: by 2002:a17:902:e745:b0:1a2:a8d0:838e with SMTP id p5-20020a170902e74500b001a2a8d0838emr565131plf.61.1681427013126;
-        Thu, 13 Apr 2023 16:03:33 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:a8ce])
-        by smtp.gmail.com with ESMTPSA id c3-20020a170902724300b001a217a7a11csm1952130pll.131.2023.04.13.16.03.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 16:03:32 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 13 Apr 2023 13:03:31 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org
-Subject: [GIT PULL] cgroup fixes for v6.3-rc6
-Message-ID: <ZDiKQ7Bia-ki3Vmh@slm.duckdns.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1681427248; x=1684019248;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=m0eoChJ3C+wX0j/cXmxt8QdAgHqIaCqFV7218jkkfFU=;
+        b=JBYgf6hO0f4OdDCbYy9g8Tiu2EcMo3CgBIWjWuyVK4GqwYZ2coMU+mshIfaFtAUvQf
+         6U3s6vozQNPX6sNTSZQ20RSvtVBb3JBB20Icdp/Kjl0nkuXE9mRUdctdMrOk9d+59zAM
+         qpSudu616/PRzqVKmmn0t6eNoUR9Z+ysffl4M0+ustsUGvgRx9xruC3XEeJqy4X9sZ3w
+         0GbGUaFSA+fkb5YdZgdhXoCW9xR1M5OuHlMp7aCCXFlXsS9mSgX5+sGiqPy70AYpamy5
+         78hbCLF9UgHrbBMqSork5KpQOI4YdX1N5MkfJ/vOYPFKxgpiTTZOnkTt0gFM/3qhbJy4
+         C/9g==
+X-Gm-Message-State: AAQBX9d4XuLYTqX/FlVeRVkU5GarYQL+AJVId7Ar6uRrS4mutRo7Bq8L
+        oFvtxx63VqO4d84y7rq+6srsDwuwRZA=
+X-Google-Smtp-Source: AKy350amwDqyJa+LlzM7biYAI+3i1mkieCfxZS836tmzptZ4SOWRoy5g8JqAYQ9+zKy/xdEKWNYlO5mXB8A=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:d0d6:0:b0:b8f:559f:bd49 with SMTP id
+ h205-20020a25d0d6000000b00b8f559fbd49mr2479865ybg.6.1681427247867; Thu, 13
+ Apr 2023 16:07:27 -0700 (PDT)
+Date:   Thu, 13 Apr 2023 23:07:26 +0000
+In-Reply-To: <diqzedono0m5.fsf@ackerleytng-cloudtop.c.googlers.com>
+Mime-Version: 1.0
+References: <20230412-kurzweilig-unsummen-3c1136f7f437@brauner> <diqzedono0m5.fsf@ackerleytng-cloudtop.c.googlers.com>
+Message-ID: <ZDiLLih4XHUCCwFY@google.com>
+Subject: Re: [RFC PATCH v3 1/2] mm: restrictedmem: Allow userspace to specify
+ mount for memfd_restricted
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ackerley Tng <ackerleytng@google.com>
+Cc:     Christian Brauner <brauner@kernel.org>, kvm@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        qemu-devel@nongnu.org, aarcange@redhat.com, ak@linux.intel.com,
+        akpm@linux-foundation.org, arnd@arndb.de, bfields@fieldses.org,
+        bp@alien8.de, chao.p.peng@linux.intel.com, corbet@lwn.net,
+        dave.hansen@intel.com, david@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, hpa@zytor.com, hughd@google.com,
+        jlayton@kernel.org, jmattson@google.com, joro@8bytes.org,
+        jun.nakajima@intel.com, kirill.shutemov@linux.intel.com,
+        linmiaohe@huawei.com, luto@kernel.org, mail@maciej.szmigiero.name,
+        mhocko@suse.com, michael.roth@amd.com, mingo@redhat.com,
+        naoya.horiguchi@nec.com, pbonzini@redhat.com, qperret@google.com,
+        rppt@kernel.org, shuah@kernel.org, steven.price@arm.com,
+        tabba@google.com, tglx@linutronix.de, vannapurve@google.com,
+        vbabka@suse.cz, vkuznets@redhat.com, wanpengli@tencent.com,
+        wei.w.wang@intel.com, x86@kernel.org, yu.c.zhang@linux.intel.com
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 8d3c682a5e3d9dfc2448ecbb22f4cd48359b9e21:
+On Thu, Apr 13, 2023, Ackerley Tng wrote:
+> Christian Brauner <brauner@kernel.org> writes:
+> > I'm curious, is there an LSFMM session for this?
+> 
+> As far as I know, there is no LSFMM session for this.
 
-  Merge tag 'block-6.3-2023-03-16' of git://git.kernel.dk/linux (2023-03-17 11:20:27 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/ tags/cgroup-for-6.3-rc6-fixes
-
-for you to fetch changes up to 7e27cb6ad4d85fc8bac2a2a896da62ef66b8598e:
-
-  cgroup/cpuset: Make cpuset_attach_task() skip subpartitions CPUs for top_cpuset (2023-04-12 08:23:58 -1000)
-
-----------------------------------------------------------------
-cgroup: Fixes for v6.3-rc6
-
-* Fix several cpuset bugs including one where it wasn't applying the target
-  cgroup when tasks are created with CLONE_INTO_CGROUP.
-
-* Fix inversed locking order in cgroup1 freezer implementation.
-
-* Fix garbage cpu.stat::core_sched.forceidle_usec reporting in the root
-  cgroup.
-
-This is a relatively big pull request this late in the cycle but the major
-contributor is the above mentioned cpuset bug which is rather significant.
-
-----------------------------------------------------------------
-Josh Don (1):
-      cgroup: fix display of forceidle time at root
-
-Tetsuo Handa (1):
-      cgroup,freezer: hold cpu_hotplug_lock before freezer_mutex
-
-Waiman Long (5):
-      cgroup/cpuset: Fix partition root's cpuset.cpus update bug
-      cgroup/cpuset: Wake up cpuset_attach_wq tasks in cpuset_cancel_attach()
-      cgroup/cpuset: Make cpuset_fork() handle CLONE_INTO_CGROUP properly
-      cgroup/cpuset: Add cpuset_can_fork() and cpuset_cancel_fork() methods
-      cgroup/cpuset: Make cpuset_attach_task() skip subpartitions CPUs for top_cpuset
-
- kernel/cgroup/cpuset.c         | 178 +++++++++++++++++++++++++++++++++--------
- kernel/cgroup/legacy_freezer.c |   7 +-
- kernel/cgroup/rstat.c          |   4 +-
- 3 files changed, 150 insertions(+), 39 deletions(-)
+Correct, no LSFMM session.  In hindsight, that's obviously something we should
+have pursued :-(
