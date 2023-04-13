@@ -2,107 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DC636E033E
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 02:33:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCA5A6E0340
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 02:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbjDMAdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 20:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41800 "EHLO
+        id S229603AbjDMAgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 20:36:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjDMAdS (ORCPT
+        with ESMTP id S229482AbjDMAgl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 20:33:18 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2B2449D;
-        Wed, 12 Apr 2023 17:33:17 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id la3so13111306plb.11;
-        Wed, 12 Apr 2023 17:33:17 -0700 (PDT)
+        Wed, 12 Apr 2023 20:36:41 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2FC5449D
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 17:36:39 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id ca18e2360f4ac-760a6703d90so1420439f.1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 17:36:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681345997; x=1683937997;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qeVTMtCux2BOeObz5+AKrGQQdxp1bdVbjpePeClNJpo=;
-        b=k3ksXRI5boYH1PJ4aL51Taqw6hvtAg0KYVtZ5LSutd4bs+Ama7qpxAoSze4A7L0gpl
-         omUHyPRglIG6cycY06ZvINus+/9GsBNP02RktCm3rfaO9kZcr+52IgMeegbeUlkP6Ol4
-         GnazoLBbvVbzAzWqgpBN14eYhnsrg7iPxKjt972IuYhn1qhpJuaINoJQTyp5UolqC3Qb
-         60fnP8jse8Wk56KwrYncNxP9bcPeNiolIjfeD2lH5R8FbbY8XfaJxoGRREv/tqGaTITD
-         B5HenCw6mN5oXFjVd5BO0bvN9qPsuUcLTfEZmg9nlwkiEdsQg7Qa5l55m36Z+aDmNu5C
-         705g==
+        d=linuxfoundation.org; s=google; t=1681346199;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6BXzGy7WHjSScQkD/Qf2J5z99N//XgZkjjaDXm3xA8U=;
+        b=H/STNCdATwsPdMMP9QiadmkP1IhgfWcGAIvl2bJRWlSIBWToPxEsQSFUtPFScjX+fK
+         wr0JCF92Sh5K2kIa501EUVfTBR7O/RhldwXpyjC05GUj/o4rsmlp1iG9uitClkm5S42Z
+         DdD6bLkUWQzCIWH6AApArjNpLTPuGFTo/Tcgw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681345997; x=1683937997;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qeVTMtCux2BOeObz5+AKrGQQdxp1bdVbjpePeClNJpo=;
-        b=VIGrCyQgUfhEppIBc2v5NKTa24XQXVuZ/bnxZeeT1mPAK0XeyoxBFBuMPKY3AViJQf
-         1Wh3syazzbAGNpiQZS7/e0tl7ujsb1sGeK7Y0HD1pGwXbnpLQRvZABgRcsh0Ut742KD2
-         xweaV9/0w20kO/d1lG6/cK2VFdTAAmAaD4g9Qlsy50vGbikBsuRXFK4H2DQIul2LFVcn
-         Gyaxyk7AxaPnDhMLB5RwWog8ImyCLdSza6FTpi05DfLE7rOXC5uY2wiToTvN2hJRotJk
-         dkcYj+5wbFOCPqZ9XAbDjkFYpI0AO/nSpM+VOouMfdmxc0Uagnsd60Dnb96y/Hd9lszw
-         rlzA==
-X-Gm-Message-State: AAQBX9fZNJmAHB+MOACqJ7XGLTLIni5vJPslKXAzrevp7HGlL00/vfRy
-        6iENbpEx7FvmNIBkkW+pT68=
-X-Google-Smtp-Source: AKy350YZNMZkgH+9uWTDQpdE2ql/ltywxQfXLvIF9L9t9EDDXuAjiEgjzlrJcnemUOsx2ulE8Xrclw==
-X-Received: by 2002:a05:6a20:dc9f:b0:c6:c0c1:b1fe with SMTP id ky31-20020a056a20dc9f00b000c6c0c1b1femr136728pzb.57.1681345996825;
-        Wed, 12 Apr 2023 17:33:16 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id u36-20020a634724000000b0050bd9c8c53dsm178076pga.23.2023.04.12.17.33.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 17:33:16 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 12 Apr 2023 14:33:15 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>
-Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
-Message-ID: <ZDdNy2NAfj2_1CbW@slm.duckdns.org>
-References: <20230412153758.3088111-1-longman@redhat.com>
- <ZDcGVebCpyktxyWh@slm.duckdns.org>
- <1ce6a073-e573-0c32-c3d8-f67f3d389a28@redhat.com>
- <ZDcS_yVCgh6g1LoM@slm.duckdns.org>
- <e38f72aa-9705-cf0c-a565-fb790f16c53e@redhat.com>
- <ZDdG1K0kTETZMTCu@slm.duckdns.org>
- <cd4c3f92-4a01-e636-7390-8c6a3d0cfe6c@redhat.com>
+        d=1e100.net; s=20221208; t=1681346199;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=6BXzGy7WHjSScQkD/Qf2J5z99N//XgZkjjaDXm3xA8U=;
+        b=PIn32J84E7UbIPIzCtps3r/l31NB+P+wHjDu6/2vpwxEL/EXFYaYPDTCxpByqIaqpb
+         4irYw9TjHc23DarNnu1jyIUsSzaKMnLa98EbpwWTdPp0WJ3m09sCbv5wiwBa3M2Pam8q
+         0OudDnQqaJNUmH/ONS99brXHAzgvNg4tujgTeJohmp87xExsHGZgGDS5i5VlqWKDn6yD
+         FV5UDFwR+vfE48vfDS4RIioaYx9US/MUjOYJQ6DQF2T2OQZH3MepzcieCGbDZoSA78kn
+         znvsUwFSkqQ/GKKF3PtmJq5ZIfpbbFs02GmcjdRMLqK6qsKxwnYCVCey5H8lacI1+lIk
+         uwxw==
+X-Gm-Message-State: AAQBX9drQd5RyspNhqZbJ7V3Thf0CS4rnJTFY7qCCGFhPwUhURmq1KJh
+        7ELBPcJF88Sr9PfRPR9C3Wi4pzQEfTK3RN5IMJk=
+X-Google-Smtp-Source: AKy350YbfoIh0LIN1/2+QnvknGwNqtJ1/xJJgKUCCa/TAvY06bLoMM2mkIvSty6qSJ2I5vLObdBrVg==
+X-Received: by 2002:a05:6e02:1d92:b0:328:4634:7ed5 with SMTP id h18-20020a056e021d9200b0032846347ed5mr172881ila.0.1681346198871;
+        Wed, 12 Apr 2023 17:36:38 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id s20-20020a92ae14000000b0031796c6d735sm93732ilh.41.2023.04.12.17.36.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Apr 2023 17:36:38 -0700 (PDT)
+Message-ID: <557ef895-ad2d-eff9-7cb8-70dbcf41adea@linuxfoundation.org>
+Date:   Wed, 12 Apr 2023 18:36:37 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cd4c3f92-4a01-e636-7390-8c6a3d0cfe6c@redhat.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org
+Cc:     conduct@kernel.org, tech-board@lists.linux-foundation.org
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: Linux Kernel Code of Conduct Committee: March 31, 2023
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Linux Kernel Code of Conduct Committee: March 31, 2023
 
-On Wed, Apr 12, 2023 at 08:26:03PM -0400, Waiman Long wrote:
->   If the "cpuset.cpus.isolated" isn't set, the existing rules applies. If it
-> is set, the new rule will be used.
-> 
-> Does that look reasonable to you?
+In the period of October 1, 2022 through March 31, 2023, the Code of
+Conduct Committee received the following reports:
 
-Sounds a bit contrived. Does it need to be something defined in the root
-cgroup? The only thing that's needed is that a cgroup needs to claim CPUs
-exclusively without using them, right? Let's say we add a new interface
-file, say, cpuset.cpus.reserve which is always exclusive and can be consumed
-by children whichever way they want, wouldn't that be sufficient? Then,
-there would be nothing to describe in the root cgroup.
+Unacceptable behavior or comments in email: 6
 
-Thanks.
+The result of the investigation:
+  - Education and coaching clarifying the Code of Conduct conduct
+    related to normal review and patch acceptance process: 1
+  - Clarification on the Code of Conduct conduct related to
+    maintainer rights and responsibility to reject code: 5
 
--- 
-tejun
+The reports were about the decisions made in rejecting code and these
+actions are not viewed as violations of the Code of Conduct.
+
+Please see the excerpt from the Responsibilities section in the
+code-of-conduct-interpretation.rst document:
+
+"setting expertise expectations, making decisions and rejecting unsuitable
+contributions are not viewed as a violation of the Code of Conduct."
+
+We would like to thank the Linux kernel community members who have
+supported the adoption of the Code of Conduct and who continue to
+uphold the professional standards of our community. If you have
+questions about this report, please write to <conduct@kernel.org>.
+
+--------------------------------------------------------------------
+
+This report and the past Code Of Conduct Committee reports
+can be found on the Code of Conduct website at
+
+https://www.kernel.org/code-of-conduct.html
+
+thanks,
+-- Shuah (On behalf of the Code of Conduct Committee)
