@@ -2,97 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB1F6E107F
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:58:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC1C76E1082
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231389AbjDMO6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 10:58:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51548 "EHLO
+        id S229938AbjDMO6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 10:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231349AbjDMO6I (ORCPT
+        with ESMTP id S230315AbjDMO6W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 10:58:08 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B85AD15;
-        Thu, 13 Apr 2023 07:57:56 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 922D71FD67;
-        Thu, 13 Apr 2023 14:57:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1681397875;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rSBNwC+d8u++QC7Mbtf4PYXIAx/WzXjSXOiex9i0Dac=;
-        b=sB0vCCftw4cl4Ats2mQZGf5nBVTppwKw30G0zJnipUc171sKoxr1L5pAtdOGnFO3h9jeCY
-        5v/UW2rXLiBh9WzflNbmyXgldffGeFl72pMxwqYxmNXb6h3wU/Wicq5cCTOwzQDmVdtmGI
-        8G4SXlh/8wGkIvqZGJTSheiKUKAsAgY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1681397875;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rSBNwC+d8u++QC7Mbtf4PYXIAx/WzXjSXOiex9i0Dac=;
-        b=wlBpsaltwsBaXEAyWtiJ0Ac8dPuzxHmvtS7diwcDjNcKB9tTcnMyvzY6jYw88KEOL43kfo
-        06a0jpJohtmU+4Bw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3EF811390E;
-        Thu, 13 Apr 2023 14:57:55 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id vQ9bDnMYOGTpSgAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Thu, 13 Apr 2023 14:57:55 +0000
-Date:   Thu, 13 Apr 2023 16:57:48 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Miroslav Benes <mbenes@suse.cz>, linux-btrfs@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-scsi@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2 08/11] btrfs: Mark btrfs_assertfail() __noreturn
-Message-ID: <20230413145748.GF19619@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <cover.1681342859.git.jpoimboe@kernel.org>
- <960bd9c0c9e3cfc409ba9c35a17644b11b832956.1681342859.git.jpoimboe@kernel.org>
+        Thu, 13 Apr 2023 10:58:22 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546AEA260;
+        Thu, 13 Apr 2023 07:58:17 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33DEvePkB015836, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33DEvePkB015836
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Thu, 13 Apr 2023 22:57:40 +0800
+Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Thu, 13 Apr 2023 22:58:02 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Thu, 13 Apr 2023 22:58:02 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
+ RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
+ 15.01.2375.007; Thu, 13 Apr 2023 22:58:02 +0800
+From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>
+Subject: RE: [PATCH v2 2/2] dt-bindings: usb: snps,dwc3: Add 'snps,global-regs-starting-offset' quirk
+Thread-Topic: [PATCH v2 2/2] dt-bindings: usb: snps,dwc3: Add
+ 'snps,global-regs-starting-offset' quirk
+Thread-Index: AQHZbO8UV6MphwFb1U6iZXdc0JZwLK8oH9uAgAA0XICAAQIqgA==
+Date:   Thu, 13 Apr 2023 14:58:01 +0000
+Message-ID: <9f6abbe7a6fd479c98e2fd6c1080ad8a@realtek.com>
+References: <20230412033006.10859-2-stanley_chang@realtek.com>
+ <20230413042503.4047-1-stanley_chang@realtek.com>
+ <167e4a8c-3ebd-92b7-1481-947f08901f97@kernel.org>
+In-Reply-To: <167e4a8c-3ebd-92b7-1481-947f08901f97@kernel.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.190.159]
+x-kse-serverinfo: RTEXMBS02.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <960bd9c0c9e3cfc409ba9c35a17644b11b832956.1681342859.git.jpoimboe@kernel.org>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 04:49:38PM -0700, Josh Poimboeuf wrote:
-> Fixes a bunch of warnings including:
-> 
->   vmlinux.o: warning: objtool: select_reloc_root+0x314: unreachable instruction
->   vmlinux.o: warning: objtool: finish_inode_if_needed+0x15b1: unreachable instruction
->   vmlinux.o: warning: objtool: get_bio_sector_nr+0x259: unreachable instruction
->   vmlinux.o: warning: objtool: raid_wait_read_end_io+0xc26: unreachable instruction
->   vmlinux.o: warning: objtool: raid56_parity_alloc_scrub_rbio+0x37b: unreachable instruction
->   ...
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202302210709.IlXfgMpX-lkp@intel.com/
-> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-
-I'll add this one to btrfs queue, thanks.
+PiBPbiAxMy8wNC8yMDIzIDA2OjI1LCBTdGFubGV5IENoYW5nIHdyb3RlOg0KPiA+IEFkZCBhIG5l
+dyAnc25wcyxnbG9iYWwtcmVncy1zdGFydGluZy1vZmZzZXQnIERUIHRvIGR3YzMgY29yZSB0byBy
+ZW1hcA0KPiA+IHRoZSBnbG9iYWwgcmVnaXN0ZXIgc3RhcnQgYWRkcmVzcw0KPiA+DQo+ID4gVGhl
+IFJUSyBESEMgU29DcyB3ZXJlIGRlc2lnbmVkIHRoZSBnbG9iYWwgcmVnaXN0ZXIgYWRkcmVzcyBv
+ZmZzZXQgYXQNCj4gPiAweDgxMDAuIFRoZSBkZWZhdWx0IGFkZHJlc3MgaXMgYXQgRFdDM19HTE9C
+QUxTX1JFR1NfU1RBUlQgKDB4YzEwMCkuDQo+ID4gVGhlcmVmb3JlLCBhZGQgdGhlIHByb3BlcnR5
+IG9mIGRldmljZS10cmVlIHRvIGFkanVzdCB0aGlzIHN0YXJ0IGFkZHJlc3MuDQo+ID4NCj4gPiBT
+aWduZWQtb2ZmLWJ5OiBTdGFubGV5IENoYW5nIDxzdGFubGV5X2NoYW5nQHJlYWx0ZWsuY29tPg0K
+PiA+IC0tLQ0KPiA+ICB2MSB0byB2MiBjaGFuZ2U6DQo+ID4gMS4gQ2hhbmdlIHRoZSBuYW1lIG9m
+IHRoZSBwcm9wZXJ0eSAic25wcyxnbG9iYWwtcmVncy1zdGFydGluZy1vZmZzZXQiLg0KPiA+IC0t
+LQ0KPiANCj4gRGlkbid0IHlvdSBnb3QgYWxyZWFkeSBjb21tZW50IGZvciB0aGlzIHBhdGNoPyBI
+b3cgZGlkIHlvdSBpbXBsZW1lbnQgaXQ/DQo+IA0KPiBBbHNvLCBJIGFza2VkIHlvdSBtdWx0aXBs
+ZSB0aW1lczoNCj4gDQo+IFBsZWFzZSB1c2Ugc2NyaXB0cy9nZXRfbWFpbnRhaW5lcnMucGwgdG8g
+Z2V0IGEgbGlzdCBvZiBuZWNlc3NhcnkgcGVvcGxlIGFuZCBsaXN0cw0KPiB0byBDQy4gIEl0IG1p
+Z2h0IGhhcHBlbiwgdGhhdCBjb21tYW5kIHdoZW4gcnVuIG9uIGFuIG9sZGVyIGtlcm5lbCwgZ2l2
+ZXMNCj4geW91IG91dGRhdGVkIGVudHJpZXMuICBUaGVyZWZvcmUgcGxlYXNlIGJlIHN1cmUgeW91
+IGJhc2UgeW91ciBwYXRjaGVzIG9uDQo+IHJlY2VudCBMaW51eCBrZXJuZWwuDQo+IA0KPiBJIGRv
+bid0IHVuZGVyc3RhbmQgd2h5IHlvdSBpZ25vcmUgdGhpcy4NCj4gDQo+IE5BSywgcGF0Y2ggaXMg
+bm90IGNvcnJlY3QuDQo+IA0KPiBCZXN0IHJlZ2FyZHMsDQo+IEtyenlzenRvZg0KPiANCg0KVGhh
+bmsgeW91IGZvciB5b3VyIHBhdGllbnQgZ3VpZGFuY2UuDQpCZWNhdXNlIEknbSBub3QgZmFtaWxp
+YXIgd2l0aCB0aGUgcmV2aWV3IHByb2Nlc3MgYW5kIGRpZG4ndCB1c2Ugc2NyaXB0cy9nZXRfbWFp
+bnRhaW5lcnMucGwgcHJvcGVybHkgaW4gdGhlIGluaXRpYWwgZW1haWwgdGhyZWFkLg0KVGhlcmVm
+b3JlLCB0aGlzIHNlcmllcyBvZiBlcnJvcnMgd2FzIGNhdXNlZC4gU29ycnkgZm9yIHRoZSBjb25m
+dXNpb24uDQpOb3cgSSBrbm93IGhvdyB0byB1c2UgdGhlIHNjcmlwdCBwcm9wZXJseS4NCkFmdGVy
+IGNvcnJlY3RpbmcgdGhlIG1haW50YWluZXIncyBzdWdnZXN0aW9uLCBJJ2xsIHJlc3RhcnQgYSBu
+ZXcgZW1haWwgdGhyZWFkIGFuZCByZXZpZXcgYWdhaW4uDQoNCg==
