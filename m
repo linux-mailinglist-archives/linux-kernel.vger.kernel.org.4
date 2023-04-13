@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E4416E05B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 06:08:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA866E05BA
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 06:08:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjDMEH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 00:07:27 -0400
+        id S229579AbjDMEHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 00:07:38 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbjDMEGw (ORCPT
+        with ESMTP id S229729AbjDMEGy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 00:06:52 -0400
+        Thu, 13 Apr 2023 00:06:54 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463C761BF
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 21:06:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566787AB5
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 21:06:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681358811; x=1712894811;
+  t=1681358813; x=1712894813;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=svE7EgjquyhwRZbom4QiBGJ7Mxb0NsfSfLHDW+HF/GA=;
-  b=bgFriL1MB07Fb7DrfEjlyjrE/cBB2csacfJ+aqMBuflFReuqhWfuw9Ke
-   DvvvGBJv+V2yM5dGkxc5Z+9wYfeKGTXrnZ/FZCyPho+wD0PpsCGq+gT3A
-   QjqH4hefbjYV2+nTnqYXyWPd+5Fzza3wVNngGnPd+XNj0AZsO8M5Ati5d
-   rj40CR0PzZeUEW1EbVYcEjx9gVVtjmwOvca2EcElVarzO9Msln4RLyXwO
-   zyPp+kkxIsc2Eq+UX5eqn1Z+KC+l9525ZVxQ7Jhrg0BHFXuyBHAGO9Ttl
-   WbYe7kiY22kENNNaERNrBuZLPW/3u63U2qLD9aQLJnE8lHQlMb8yaxAcG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="332786537"
+  bh=zGpEfMgloBsWMUOjxE9fyxNifshGPev/lcFUTQ3YvYY=;
+  b=jgUhg5ggWOmI+TMIKGAb8h6C1HH8IkbjOnMvgGjwABH80EWzpjYBWy+t
+   O5xFVSdXTvxCYt4xiISU3TWa883tTr+apfZB7lJLZkiQ7zLqGHEH+CtzS
+   Kq97mUDfg4TmHBKVPD08RjL7RjprFgTTUIvaxlrpmT+ATd9ceHK7TxKfu
+   VEDwdJPrgh/YC7edgxJVpNEIfks2yrMVQCtoqI5vQzxKA7UC0Tts1M/V1
+   IXSynZyK3DEPgkKICN4iOqaVZEO1rJuwa7p6nYsPMCB7R5i1rUS/5hylK
+   VBtZ/3YXAbz9oriAsjfnIgWexyIjWzSIT/uTVHDB3DForCt5mpFrg4bq2
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="332786551"
 X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="332786537"
+   d="scan'208";a="332786551"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 21:06:51 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 21:06:52 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="935360987"
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="935360996"
 X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="935360987"
+   d="scan'208";a="935360996"
 Received: from allen-box.sh.intel.com ([10.239.159.127])
-  by fmsmga006.fm.intel.com with ESMTP; 12 Apr 2023 21:06:49 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 12 Apr 2023 21:06:50 -0700
 From:   Lu Baolu <baolu.lu@linux.intel.com>
 To:     Joerg Roedel <joro@8bytes.org>
 Cc:     Tina Zhang <tina.zhang@intel.com>,
         Jacob Pan <jacob.jun.pan@linux.intel.com>,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 04/17] iommu/vt-d: Move pfsid and ats_qdep calculation to device probe path
-Date:   Thu, 13 Apr 2023 12:06:32 +0800
-Message-Id: <20230413040645.46157-5-baolu.lu@linux.intel.com>
+Subject: [PATCH v2 05/17] iommu/vt-d: Move PRI handling to IOPF feature path
+Date:   Thu, 13 Apr 2023 12:06:33 +0800
+Message-Id: <20230413040645.46157-6-baolu.lu@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230413040645.46157-1-baolu.lu@linux.intel.com>
 References: <20230413040645.46157-1-baolu.lu@linux.intel.com>
@@ -63,67 +63,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-They should be part of the per-device iommu private data initialization.
+PRI is only used for IOPF. With this move, the PCI/PRI feature could be
+controlled by the device driver through iommu_dev_enable/disable_feature()
+interfaces.
 
 Reviewed-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
 Reviewed-by: Kevin Tian <kevin.tian@intel.com>
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-Link: https://lore.kernel.org/r/20230324120234.313643-5-baolu.lu@linux.intel.com
+Link: https://lore.kernel.org/r/20230324120234.313643-6-baolu.lu@linux.intel.com
 ---
- drivers/iommu/intel/iommu.c | 26 +++++++++++---------------
- 1 file changed, 11 insertions(+), 15 deletions(-)
+ drivers/iommu/intel/iommu.c | 53 ++++++++++++++++++++++++++++---------
+ 1 file changed, 41 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index a6f07c74da2d..6d77b4072fdd 100644
+index 6d77b4072fdd..cd3a3c4b5e64 100644
 --- a/drivers/iommu/intel/iommu.c
 +++ b/drivers/iommu/intel/iommu.c
-@@ -1406,20 +1406,6 @@ static void iommu_enable_pci_caps(struct device_domain_info *info)
- 		return;
+@@ -1415,11 +1415,6 @@ static void iommu_enable_pci_caps(struct device_domain_info *info)
+ 	if (info->pasid_supported && !pci_enable_pasid(pdev, info->pasid_supported & ~1))
+ 		info->pasid_enabled = 1;
  
- 	pdev = to_pci_dev(info->dev);
--	/* For IOMMU that supports device IOTLB throttling (DIT), we assign
--	 * PFSID to the invalidation desc of a VF such that IOMMU HW can gauge
--	 * queue depth at PF level. If DIT is not set, PFSID will be treated as
--	 * reserved, which should be set to 0.
--	 */
--	if (!ecap_dit(info->iommu->ecap))
--		info->pfsid = 0;
--	else {
--		struct pci_dev *pf_pdev;
+-	if (info->pri_supported &&
+-	    (info->pasid_enabled ? pci_prg_resp_pasid_required(pdev) : 1)  &&
+-	    !pci_reset_pri(pdev) && !pci_enable_pri(pdev, PRQ_DEPTH))
+-		info->pri_enabled = 1;
 -
--		/* pdev will be returned if device is not a vf */
--		pf_pdev = pci_physfn(pdev);
--		info->pfsid = pci_dev_id(pf_pdev);
--	}
- 
- 	/* The PCIe spec, in its wisdom, declares that the behaviour of
- 	   the device if you enable PASID support after ATS support is
-@@ -1438,7 +1424,6 @@ static void iommu_enable_pci_caps(struct device_domain_info *info)
+ 	if (info->ats_supported && pci_ats_page_aligned(pdev) &&
  	    !pci_enable_ats(pdev, VTD_PAGE_SHIFT)) {
  		info->ats_enabled = 1;
+@@ -1442,11 +1437,6 @@ static void iommu_disable_pci_caps(struct device_domain_info *info)
  		domain_update_iotlb(info->domain);
--		info->ats_qdep = pci_ats_queue_depth(pdev);
  	}
- }
  
-@@ -4521,6 +4506,17 @@ static struct iommu_device *intel_iommu_probe_device(struct device *dev)
- 		    dmar_ats_supported(pdev, iommu)) {
- 			info->ats_supported = 1;
- 			info->dtlb_extra_inval = dev_needs_extra_dtlb_flush(pdev);
+-	if (info->pri_enabled) {
+-		pci_disable_pri(pdev);
+-		info->pri_enabled = 0;
+-	}
+-
+ 	if (info->pasid_enabled) {
+ 		pci_disable_pasid(pdev);
+ 		info->pasid_enabled = 0;
+@@ -4667,23 +4657,48 @@ static int intel_iommu_enable_sva(struct device *dev)
+ 
+ static int intel_iommu_enable_iopf(struct device *dev)
+ {
++	struct pci_dev *pdev = dev_is_pci(dev) ? to_pci_dev(dev) : NULL;
+ 	struct device_domain_info *info = dev_iommu_priv_get(dev);
+ 	struct intel_iommu *iommu;
+ 	int ret;
+ 
+-	if (!info || !info->ats_enabled || !info->pri_enabled)
++	if (!pdev || !info || !info->ats_enabled || !info->pri_supported)
+ 		return -ENODEV;
 +
-+			/*
-+			 * For IOMMU that supports device IOTLB throttling
-+			 * (DIT), we assign PFSID to the invalidation desc
-+			 * of a VF such that IOMMU HW can gauge queue depth
-+			 * at PF level. If DIT is not set, PFSID will be
-+			 * treated as reserved, which should be set to 0.
-+			 */
-+			if (ecap_dit(iommu->ecap))
-+				info->pfsid = pci_dev_id(pci_physfn(pdev));
-+			info->ats_qdep = pci_ats_queue_depth(pdev);
- 		}
- 		if (sm_supported(iommu)) {
- 			if (pasid_supported(iommu)) {
++	if (info->pri_enabled)
++		return -EBUSY;
++
+ 	iommu = info->iommu;
+ 	if (!iommu)
+ 		return -EINVAL;
+ 
++	/* PASID is required in PRG Response Message. */
++	if (info->pasid_enabled && !pci_prg_resp_pasid_required(pdev))
++		return -EINVAL;
++
++	ret = pci_reset_pri(pdev);
++	if (ret)
++		return ret;
++
+ 	ret = iopf_queue_add_device(iommu->iopf_queue, dev);
+ 	if (ret)
+ 		return ret;
+ 
+ 	ret = iommu_register_device_fault_handler(dev, iommu_queue_iopf, dev);
+ 	if (ret)
+-		iopf_queue_remove_device(iommu->iopf_queue, dev);
++		goto iopf_remove_device;
++
++	ret = pci_enable_pri(pdev, PRQ_DEPTH);
++	if (ret)
++		goto iopf_unregister_handler;
++	info->pri_enabled = 1;
++
++	return 0;
++
++iopf_unregister_handler:
++	iommu_unregister_device_fault_handler(dev);
++iopf_remove_device:
++	iopf_queue_remove_device(iommu->iopf_queue, dev);
+ 
+ 	return ret;
+ }
+@@ -4694,6 +4709,20 @@ static int intel_iommu_disable_iopf(struct device *dev)
+ 	struct intel_iommu *iommu = info->iommu;
+ 	int ret;
+ 
++	if (!info->pri_enabled)
++		return -EINVAL;
++
++	/*
++	 * PCIe spec states that by clearing PRI enable bit, the Page
++	 * Request Interface will not issue new page requests, but has
++	 * outstanding page requests that have been transmitted or are
++	 * queued for transmission. This is supposed to be called after
++	 * the device driver has stopped DMA, all PASIDs have been
++	 * unbound and the outstanding PRQs have been drained.
++	 */
++	pci_disable_pri(to_pci_dev(dev));
++	info->pri_enabled = 0;
++
+ 	ret = iommu_unregister_device_fault_handler(dev);
+ 	if (ret)
+ 		return ret;
 -- 
 2.34.1
 
