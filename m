@@ -2,80 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 846136E1019
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:36:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E677E6E1048
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:46:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbjDMOgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 10:36:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33338 "EHLO
+        id S230027AbjDMOqB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 13 Apr 2023 10:46:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229958AbjDMOgF (ORCPT
+        with ESMTP id S229611AbjDMOp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 10:36:05 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6F91974C;
-        Thu, 13 Apr 2023 07:36:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681396564; x=1712932564;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=T/ZUvz7oMcvV2CPYNInpUDKAXpWDuzC83GegLLXLcxQ=;
-  b=Ye59tWXGPvFHaeaxqzxc81S1ZdyiceEzPDy6t/eE3V4YhskNaNacj64W
-   vz9xw4DIOOrN1i2Nm5V8OhuIOaMj0mbIHrculL4gnqkMf8EImHcpkRBkV
-   Pf1en6jVqRxU9/g83Ct+DM9z6qOhFmE/oH83dgECU7XDaf+mwbqxvBd45
-   oPY+155/Gt6u+ZswYg4lcQk29B3G3xCaWNsZ6nNUmZvecMKslPVPGWvLM
-   5SQkOYfB/cVU5tHz32VO9zI0OD/EjXhF2rhxfZhtl2v/bSVjY4R6e32nK
-   qPldPeFK8F/8OJ/8ksqoyZvx+ONcBcisFH+ux710e7b5OzEBV70Jl2UGM
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="324552677"
-X-IronPort-AV: E=Sophos;i="5.99,194,1677571200"; 
-   d="scan'208";a="324552677"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 07:36:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="666803538"
-X-IronPort-AV: E=Sophos;i="5.99,194,1677571200"; 
-   d="scan'208";a="666803538"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga006.jf.intel.com with ESMTP; 13 Apr 2023 07:36:03 -0700
-Received: from [10.209.83.224] (kliang2-mobl1.ccr.corp.intel.com [10.209.83.224])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Thu, 13 Apr 2023 10:45:57 -0400
+X-Greylist: delayed 494 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 13 Apr 2023 07:45:32 PDT
+Received: from gnu.wildebeest.org (gnu.wildebeest.org [45.83.234.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5083EA5EC;
+        Thu, 13 Apr 2023 07:45:31 -0700 (PDT)
+Received: from r6.localdomain (82-217-174-174.cable.dynamic.v4.ziggo.nl [82.217.174.174])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 178DA580BEE;
-        Thu, 13 Apr 2023 07:36:01 -0700 (PDT)
-Message-ID: <7959b7f8-8985-54bb-8161-7c5799d8ac72@linux.intel.com>
-Date:   Thu, 13 Apr 2023 10:36:00 -0400
+        by gnu.wildebeest.org (Postfix) with ESMTPSA id 7C8A2302BB02;
+        Thu, 13 Apr 2023 16:37:14 +0200 (CEST)
+Received: by r6.localdomain (Postfix, from userid 1000)
+        id 2A6AB34014C; Thu, 13 Apr 2023 16:37:14 +0200 (CEST)
+Message-ID: <718c102205750a00b86e8d33748e9bfb3c485ee1.camel@klomp.org>
+Subject: Re: [PATCH v5 1/2] check-uapi: Introduce check-uapi.sh
+From:   Mark Wielaard <mark@klomp.org>
+To:     John Moon <quic_johmoo@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Todd Kjos <tkjos@google.com>,
+        Matthias Maennich <maennich@google.com>,
+        Giuliano Procida <gprocida@google.com>,
+        kernel-team@android.com, libabigail@sourceware.org,
+        Jordan Crouse <jorcrous@amazon.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>
+Date:   Thu, 13 Apr 2023 16:37:14 +0200
+In-Reply-To: <d34a6b09-8244-49e2-2d7a-eee5fd5ca5b7@quicinc.com>
+References: <20230407203456.27141-1-quic_johmoo@quicinc.com>
+         <20230407203456.27141-2-quic_johmoo@quicinc.com>
+         <CAK7LNAQQmoyUx+0Jk3c7iqY20KokrHEOPwHNb2doZOOA8RWBDA@mail.gmail.com>
+         <2023041015-lunar-dandelion-1b4e@gregkh>
+         <ae44540f-8947-8efb-fb8d-45a84bd3fef3@quicinc.com>
+         <2023041136-donator-faceplate-5f91@gregkh>
+         <bcdcee9b-f213-bc3c-d300-92a1e0138187@quicinc.com>
+         <2023041209-armed-overlaid-3d3d@gregkh>
+         <d34a6b09-8244-49e2-2d7a-eee5fd5ca5b7@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v1] perf stat: Introduce skippable evsels
-Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230411205622.3266490-1-irogers@google.com>
- <aaa41580-e30a-5a3a-7917-042ddaffe9cf@linux.intel.com>
- <CAP-5=fUnqi3KCEzu8qC8qG+g__qTmCVzc9skNb5yFzz=Fa02QQ@mail.gmail.com>
- <87eb928a-9c66-f821-0f20-22d21c96b7a5@linux.intel.com>
- <CAP-5=fUELu6nT8sGjkPvzKOX2qxH-w9q5mJgsjLBoYwAQ5bP6Q@mail.gmail.com>
- <2a6f6cf3-3de1-33e4-3b51-8c702c270bda@linux.intel.com>
- <CAP-5=fV_6Tjrc3PgEzHbXMvXJNerBOfTnrqb5eyZtjA4dRB0HQ@mail.gmail.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <CAP-5=fV_6Tjrc3PgEzHbXMvXJNerBOfTnrqb5eyZtjA4dRB0HQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,45 +71,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-
-On 2023-04-13 9:52 a.m., Ian Rogers wrote:
-> On Thu, Apr 13, 2023 at 6:36 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
->>
->>
->>
->> On 2023-04-12 2:01 p.m., Ian Rogers wrote:
->>>> - We shouldn't only rely on the event list file. We need to do runtime
->>>> check on the availability of events. Either perf_event_open() or
->>>> /sys/devices/cpu/events/ is fine (althourh personally I prefer sys way,
->>>> since I think it's easier).
->>> Using perf_event_open is the status quo and the sysfs approach is
->>> impractical imo. I think the only thing that is needed in v2 is for
->>> <not counted> to be displayed for skippable evsels.
->>
->> Using perf_event_open is good to check features. If the feature is not
->> supported by the kernel, it will be explicitly rejected.
->> But I'm not sure about the availability of events. The kernel doesn't
->> check every events. For example, on ICL and later platform, we have
->> event=0x00,umask=0x8X for all the topdown metrics events. If we open
->> them on SKL, the perf_event_open will also success, but return 0 value.
+On Wed, 2023-04-12 at 09:37 -0700, John Moon via Libabigail wrote:
+> On 4/11/2023 11:14 PM, Greg Kroah-Hartman wrote:
+> > > Would you find the tool more useful if it simply filtered out all instances
+> > > where the size of the type did not change? This would filter out the
+> > > following which the tool currently flags:
+> > > 
+> > > - enum expansions
+> > > - reserved field expansions
+> > > - expansions of a struct with a flex array at the end
+> > > - type changes
+> > > - re-ordering of existing members
+> > > - ...others?
+> > 
+> > Obviously not, as some of those are real breakages, and some are not at
+> > all.
+> > 
+> > Please understand what is an abi breakage.  Adding new enums is not.
+> > Using a reserved field is not.  Reording existing members IS.
+> > 
 > 
-> Thanks Kan,
-> 
-> The behavior change in perf-tools-next is to use the TopdownL1 metric
-> group rather than programming the events and then having hard coded
-> metrics if we spot the events enabled. On SKL the TopdownL1 metric
-> group will give SKL top down metrics which don't use topdown events
-> because, as you point out, they don't exist. The only way to program
-> event=0x00,umask=0x8X on SKL would be through a raw event, so I don't
-> think there is any issue here.
+> Yes, understood that method would miss certain classes of breakages. I 
+> was suggesting it as a way to improve the signal-to-noise ratio of the 
+> tool since we don't currently have an algorithm for determining 
+> breakages with 100% accuracy.
 
-On ICL/SPR, even if the perf metrics feature isn't available (e.g., in
-VM), the current kernel doesn't reject the event=0x00,umask=0x8X, which
-the TopdownL1 will eventually use.
-But maybe the best way is to change the kernel to not only hide the
-topdown metrics event but also explicitly reject them, if the feature is
-not available.
+Note that you can check the exit code of libabigail's abidiff to see
+whether something is an incompatible abi change or not, see:
+https://sourceware.org/libabigail/manual/abidiff.html#return-values
 
-Thanks,
-Kan
+You can also of course use suppressions to instruct abidiff to avoid
+reporting changes involving certain ABI artifacts:
+https://sourceware.org/libabigail/manual/libabigail-concepts.html#suppr-spec-label
+
+Cheers,
+
+Mark
