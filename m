@@ -2,220 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 904316E17E7
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 01:11:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C1D16E17D5
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 01:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbjDMXLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 19:11:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42732 "EHLO
+        id S229853AbjDMXDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 19:03:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjDMXLW (ORCPT
+        with ESMTP id S229567AbjDMXDf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 19:11:22 -0400
-X-Greylist: delayed 463 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 13 Apr 2023 16:11:20 PDT
-Received: from evilolive.daedalian.us (evilolive.daedalian.us [96.126.118.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E3A1BC0;
-        Thu, 13 Apr 2023 16:11:20 -0700 (PDT)
-Received: by evilolive.daedalian.us (Postfix, from userid 111)
-        id CA547122A0; Thu, 13 Apr 2023 16:03:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=daedalian.us;
-        s=default; t=1681427015;
-        bh=N/oTU12GaiVjXfEcbgH2DNQl+cPLB6Q4XtC5jYOopfM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XI+4AbpoJgoNS2fOY04JwNrwkKhAzZDDVJPwKuuNC9GKkFgCbPs8aVErfl57yT8ml
-         qspC9gPL+FOKALxZ+Ewa3VfttH7pHP3D//2e6KitYvcrjUzkC1LvsCJmRneHNWbOls
-         bG+HjYceNfUQBKOjI9Gu6kozEExSwVzSuMjJs6LrHJjJ+d4a9GO31K24nfecJHfbms
-         CRB5MOPCkMhE7o6uBOeLyqgErw5OhEYuc6wTtbvPU7ZT+dWyjnISvZiQobxbQ7qCW2
-         Myvkt+BSkqfxH9Y7BqzaaXdJlnRv8JUgGkrvjRJhZ8P/71MTN9kJAjzl2yrBNlC6IL
-         nnmVEe7UpBazg==
+        Thu, 13 Apr 2023 19:03:35 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E96A2;
+        Thu, 13 Apr 2023 16:03:34 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id lh8so3660577plb.1;
+        Thu, 13 Apr 2023 16:03:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681427013; x=1684019013;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=D/XQvUMbd184V0d688Zwv75YAW0duMFHkNATV/mO7aw=;
+        b=h4UtgBPumQArhAxQCuQPYMTKctURq6HR3viTzmbHWGpGY814xtwyXhtOruu4Gr2MKW
+         WJIRqalJgwnq5W8HTNGZPk6plfg8WoJoXTFDG2p24lycnFLqgZQPK/nRw4gjOHPgCNNn
+         q+KRpfwDpnuykgOiYgnoRJzV+rShDe6RYDRC4Kl69kBJs1RlBdfJ3ElsG6qBdgem/H+y
+         WPpnlvsMgGvpCqydYphqJUWP6Td1CpcKD+QTkYfz8xBsUSjvTWBl6xdpa7TIUTtPtumI
+         F9Q/28MgGIOqbvW8i1xVfp7UngobLIX5PiloGu0gtvc1cQmb2xi221N1nJleujA4TcSg
+         SUgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681427013; x=1684019013;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=D/XQvUMbd184V0d688Zwv75YAW0duMFHkNATV/mO7aw=;
+        b=G0/bHSFYgBHQEVoEt/8sWC276eah2+spgNPlTJF5OdCng5+rPpArx7PLUqnbAxUvcz
+         lg8oNJ326GUEnLeJaMkJKJPzaoyeAAI+ebzp4cHlnpfwMkCSRi88IxSVGjXwgbyd5CJT
+         A2DLd3WVWo8roomw/DWKzEGDpHmmO0fdoyXLDLxT+VtGNvvpql7oBLw9LscKcNCTSEd9
+         htexoqcJuhVGas+WgndufDEVl06JJunz6/sV0gFQGSl3Kuf5jjggL3027czDlTiXxDD9
+         cwNuf1NbyPCaYaEwtzw0enjAUnhL5UDG3awrclPSWyPS9zFjVNM+KnlMsZSOsup61Wkr
+         p+WQ==
+X-Gm-Message-State: AAQBX9fayOnew0I4j2dYZ1Xl39YYZhkX8BNd274xk0j7FN2vX5XATqRe
+        ebMaFaLOskuQ5s2r4HKIS+umy4JVBYM=
+X-Google-Smtp-Source: AKy350YCRWZETtmNpl+6tfX+EwKUUhjI/gO+2pM1Jjg4upo6vfj+DkbnJ+jk6O10mNDai/mphTjuBA==
+X-Received: by 2002:a17:902:e745:b0:1a2:a8d0:838e with SMTP id p5-20020a170902e74500b001a2a8d0838emr565131plf.61.1681427013126;
+        Thu, 13 Apr 2023 16:03:33 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:a8ce])
+        by smtp.gmail.com with ESMTPSA id c3-20020a170902724300b001a217a7a11csm1952130pll.131.2023.04.13.16.03.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 16:03:32 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 13 Apr 2023 13:03:31 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org
+Subject: [GIT PULL] cgroup fixes for v6.3-rc6
+Message-ID: <ZDiKQ7Bia-ki3Vmh@slm.duckdns.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
-Received: from localhost.localdomain (static-47-181-121-78.lsan.ca.frontiernet.net [47.181.121.78])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by evilolive.daedalian.us (Postfix) with ESMTPSA id A3F6312226;
-        Thu, 13 Apr 2023 16:03:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=daedalian.us;
-        s=default; t=1681427011;
-        bh=N/oTU12GaiVjXfEcbgH2DNQl+cPLB6Q4XtC5jYOopfM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZB/SixbBnXLz1zM0PVkZURtogr+lY+TFo6PiaT+LjuVRUe5gZFijXI7mwTgwEZWWb
-         mUbBMIbS/NlspZYhoU41ZPYeHA7TE3Q4JpTb4Nxvgkn/IBsjLrifR7l6ciFJaXScSP
-         40WKITcP8KaGfz0/CmA0C8H2ll4BGpQjR4LWxPA3ZOHtZzuYWTzOkyqspZCcb1Cp0C
-         ytZh72KxwtM+jCnyN1mzDoCFAuPmfg+KRclOWpHRF1kob8u90/TJEo/ikXqyIgIjhm
-         rewvkJyk+G8q2yV85ngsbjFmz2kWZO/Wkf9uDpBbrkEPFl1aRfxqbEfLdoGLyye3aH
-         tLzAPekcWKFWg==
-From:   John Hickey <jjh@daedalian.us>
-To:     maciej.fijalkowski@intel.com
-Cc:     John Hickey <jjh@daedalian.us>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Shujin Li <lishujin@kuaishou.com>,
-        Jason Xing <xingwanli@kuaishou.com>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH net v4] ixgbe: Fix panic during XDP_TX with > 64 CPUs
-Date:   Thu, 13 Apr 2023 16:03:00 -0700
-Message-Id: <20230413230300.54858-1-jjh@daedalian.us>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <ZC2IYWgTUFCnlKc9@boxer>
-References: <ZC2IYWgTUFCnlKc9@boxer>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 4fe815850bdc ("ixgbe: let the xdpdrv work with more than 64 cpus")
-adds support to allow XDP programs to run on systems with more than
-64 CPUs by locking the XDP TX rings and indexing them using cpu % 64
-(IXGBE_MAX_XDP_QS).
+The following changes since commit 8d3c682a5e3d9dfc2448ecbb22f4cd48359b9e21:
 
-Upon trying this out patch on a system with more than 64 cores,
-the kernel paniced with an array-index-out-of-bounds at the return in
-ixgbe_determine_xdp_ring in ixgbe.h, which means ixgbe_determine_xdp_q_idx
-was just returning the cpu instead of cpu % IXGBE_MAX_XDP_QS.  An example
-splat:
+  Merge tag 'block-6.3-2023-03-16' of git://git.kernel.dk/linux (2023-03-17 11:20:27 -0700)
 
- ==========================================================================
- UBSAN: array-index-out-of-bounds in
- /var/lib/dkms/ixgbe/5.18.6+focal-1/build/src/ixgbe.h:1147:26
- index 65 is out of range for type 'ixgbe_ring *[64]'
- ==========================================================================
- BUG: kernel NULL pointer dereference, address: 0000000000000058
- #PF: supervisor read access in kernel mode
- #PF: error_code(0x0000) - not-present page
- PGD 0 P4D 0
- Oops: 0000 [#1] SMP NOPTI
- CPU: 65 PID: 408 Comm: ksoftirqd/65
- Tainted: G          IOE     5.15.0-48-generic #54~20.04.1-Ubuntu
- Hardware name: Dell Inc. PowerEdge R640/0W23H8, BIOS 2.5.4 01/13/2020
- RIP: 0010:ixgbe_xmit_xdp_ring+0x1b/0x1c0 [ixgbe]
- Code: 3b 52 d4 cf e9 42 f2 ff ff 66 0f 1f 44 00 00 0f 1f 44 00 00 55 b9
- 00 00 00 00 48 89 e5 41 57 41 56 41 55 41 54 53 48 83 ec 08 <44> 0f b7
- 47 58 0f b7 47 5a 0f b7 57 54 44 0f b7 76 08 66 41 39 c0
- RSP: 0018:ffffbc3fcd88fcb0 EFLAGS: 00010282
- RAX: ffff92a253260980 RBX: ffffbc3fe68b00a0 RCX: 0000000000000000
- RDX: ffff928b5f659000 RSI: ffff928b5f659000 RDI: 0000000000000000
- RBP: ffffbc3fcd88fce0 R08: ffff92b9dfc20580 R09: 0000000000000001
- R10: 3d3d3d3d3d3d3d3d R11: 3d3d3d3d3d3d3d3d R12: 0000000000000000
- R13: ffff928b2f0fa8c0 R14: ffff928b9be20050 R15: 000000000000003c
- FS:  0000000000000000(0000) GS:ffff92b9dfc00000(0000)
- knlGS:0000000000000000
- CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- CR2: 0000000000000058 CR3: 000000011dd6a002 CR4: 00000000007706e0
- DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
- DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
- PKRU: 55555554
- Call Trace:
-  <TASK>
-  ixgbe_poll+0x103e/0x1280 [ixgbe]
-  ? sched_clock_cpu+0x12/0xe0
-  __napi_poll+0x30/0x160
-  net_rx_action+0x11c/0x270
-  __do_softirq+0xda/0x2ee
-  run_ksoftirqd+0x2f/0x50
-  smpboot_thread_fn+0xb7/0x150
-  ? sort_range+0x30/0x30
-  kthread+0x127/0x150
-  ? set_kthread_struct+0x50/0x50
-  ret_from_fork+0x1f/0x30
-  </TASK>
+are available in the Git repository at:
 
-I think this is how it happens:
+  git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/ tags/cgroup-for-6.3-rc6-fixes
 
-Upon loading the first XDP program on a system with more than 64 CPUs,
-ixgbe_xdp_locking_key is incremented in ixgbe_xdp_setup.  However,
-immediately after this, the rings are reconfigured by ixgbe_setup_tc.
-ixgbe_setup_tc calls ixgbe_clear_interrupt_scheme which calls
-ixgbe_free_q_vectors which calls ixgbe_free_q_vector in a loop.
-ixgbe_free_q_vector decrements ixgbe_xdp_locking_key once per call if
-it is non-zero.  Commenting out the decrement in ixgbe_free_q_vector
-stopped my system from panicing.
+for you to fetch changes up to 7e27cb6ad4d85fc8bac2a2a896da62ef66b8598e:
 
-I suspect to make the original patch work, I would need to load an XDP
-program and then replace it in order to get ixgbe_xdp_locking_key back
-above 0 since ixgbe_setup_tc is only called when transitioning between
-XDP and non-XDP ring configurations, while ixgbe_xdp_locking_key is
-incremented every time ixgbe_xdp_setup is called.
+  cgroup/cpuset: Make cpuset_attach_task() skip subpartitions CPUs for top_cpuset (2023-04-12 08:23:58 -1000)
 
-Also, ixgbe_setup_tc can be called via ethtool --set-channels, so this
-becomes another path to decrement ixgbe_xdp_locking_key to 0 on systems
-with more than 64 CPUs.
+----------------------------------------------------------------
+cgroup: Fixes for v6.3-rc6
 
-Since ixgbe_xdp_locking_key only protects the XDP_TX path and is tied
-to the number of CPUs present, there is no reason to disable it upon
-unloading an XDP program.  To avoid confusion, I have moved enabling
-ixgbe_xdp_locking_key into ixgbe_sw_init, which is part of the probe path.
+* Fix several cpuset bugs including one where it wasn't applying the target
+  cgroup when tasks are created with CLONE_INTO_CGROUP.
 
-Fixes: 4fe815850bdc ("ixgbe: let the xdpdrv work with more than 64 cpus")
-Signed-off-by: John Hickey <jjh@daedalian.us>
-Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
----
-v1 -> v2:
-	Added Fixes and net tag.  No code changes.
-v2 -> v3:
-	Added splat.  Slight clarification as to why ixgbe_xdp_locking_key
-	is not turned off.  Based on feedback from Maciej Fijalkowski.
-v3 -> v4:
-	Moved setting ixgbe_xdp_locking_key into the probe path.
-	Commit message cleanup.
----
- drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c  | 3 ---
- drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 6 ++++--
- 2 files changed, 4 insertions(+), 5 deletions(-)
+* Fix inversed locking order in cgroup1 freezer implementation.
 
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c
-index f8156fe4b1dc..0ee943db3dc9 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c
-@@ -1035,9 +1035,6 @@ static void ixgbe_free_q_vector(struct ixgbe_adapter *adapter, int v_idx)
- 	adapter->q_vector[v_idx] = NULL;
- 	__netif_napi_del(&q_vector->napi);
- 
--	if (static_key_enabled(&ixgbe_xdp_locking_key))
--		static_branch_dec(&ixgbe_xdp_locking_key);
--
- 	/*
- 	 * after a call to __netif_napi_del() napi may still be used and
- 	 * ixgbe_get_stats64() might access the rings on this vector,
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-index 773c35fecace..d7c247e46dfc 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-@@ -6495,6 +6495,10 @@ static int ixgbe_sw_init(struct ixgbe_adapter *adapter,
- 	set_bit(0, adapter->fwd_bitmask);
- 	set_bit(__IXGBE_DOWN, &adapter->state);
- 
-+	/* enable locking for XDP_TX if we have more CPUs than queues */
-+	if (nr_cpu_ids > IXGBE_MAX_XDP_QS)
-+		static_branch_enable(&ixgbe_xdp_locking_key);
-+
- 	return 0;
- }
- 
-@@ -10290,8 +10294,6 @@ static int ixgbe_xdp_setup(struct net_device *dev, struct bpf_prog *prog)
- 	 */
- 	if (nr_cpu_ids > IXGBE_MAX_XDP_QS * 2)
- 		return -ENOMEM;
--	else if (nr_cpu_ids > IXGBE_MAX_XDP_QS)
--		static_branch_inc(&ixgbe_xdp_locking_key);
- 
- 	old_prog = xchg(&adapter->xdp_prog, prog);
- 	need_reset = (!!prog != !!old_prog);
--- 
-2.37.2
+* Fix garbage cpu.stat::core_sched.forceidle_usec reporting in the root
+  cgroup.
 
+This is a relatively big pull request this late in the cycle but the major
+contributor is the above mentioned cpuset bug which is rather significant.
+
+----------------------------------------------------------------
+Josh Don (1):
+      cgroup: fix display of forceidle time at root
+
+Tetsuo Handa (1):
+      cgroup,freezer: hold cpu_hotplug_lock before freezer_mutex
+
+Waiman Long (5):
+      cgroup/cpuset: Fix partition root's cpuset.cpus update bug
+      cgroup/cpuset: Wake up cpuset_attach_wq tasks in cpuset_cancel_attach()
+      cgroup/cpuset: Make cpuset_fork() handle CLONE_INTO_CGROUP properly
+      cgroup/cpuset: Add cpuset_can_fork() and cpuset_cancel_fork() methods
+      cgroup/cpuset: Make cpuset_attach_task() skip subpartitions CPUs for top_cpuset
+
+ kernel/cgroup/cpuset.c         | 178 +++++++++++++++++++++++++++++++++--------
+ kernel/cgroup/legacy_freezer.c |   7 +-
+ kernel/cgroup/rstat.c          |   4 +-
+ 3 files changed, 150 insertions(+), 39 deletions(-)
