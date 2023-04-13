@@ -2,129 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07E6B6E152E
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 21:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B84A6E1532
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 21:30:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjDMT26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 15:28:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35376 "EHLO
+        id S229939AbjDMTay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 15:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjDMT25 (ORCPT
+        with ESMTP id S229601AbjDMTaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 15:28:57 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5186A2
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 12:28:55 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id bs70so7945778pgb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 12:28:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google; t=1681414135; x=1684006135;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=k/owY4mvJye7p0v+ne1bcGdPR7zZGvCD2rKYaG4godE=;
-        b=Ke4xzhCwH3sUAprbBW59xNAypk0Fk1toJ1iQKBdNYbUFTS5XDMc1gET/Fg0DoMsB/V
-         jqPxWPYgVVI9P2Ga9B5cpUdNM3SXTm22pU3dRBoA5cDHytQbWzbB018KOWQprE7vL2PA
-         Fs8G7iqv0ojRtUrKzOlvMw1df3CTZmFAh394vpsVvh6NKZLSSeMrniQbNkEDbPF5NHwm
-         cQIy1+r5n5mOP7U+xqFxiKyk/6jxJqo5mqtOKuQSVj0wUIYft5WbaepZIe2iYZRcudAo
-         tUu3Usejx5dQkgXut8J3kAc2938Fi8DFig2DZmSkeEg1OcSLRjOrE9hCwenjFB9RrWlm
-         cTSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681414135; x=1684006135;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=k/owY4mvJye7p0v+ne1bcGdPR7zZGvCD2rKYaG4godE=;
-        b=MnQCA3F3Azs08MI+opztqo8hCpSDHGxHtLwKh9YwOSthpOcYF9+cjPMRyL3HvjrvVZ
-         hyd2GhZAIITOaYnxqyIdbikiEbr3A010vGIF3kNk9mNRWwVOuo/mfpdTJU2kUDOrBN0v
-         7hwz6wsufIkOFMYHieNYugeSU4XqjDZcf2UkHpEsMA/o2SimgvBLXMKsI4yimiKAq/qL
-         4OE4mkmIzqdr7Gy3Hb9r5Aie01dvk1lYNBXiJEHNoxFss03XXtlD18MsNgYB2O/GbXVy
-         /vaJbqtvKnjGjgzjxHOki/0MkIjxB2tmWJRdhdTGgxE/vqiHOaHYFZHmrulKPQSN9o8E
-         zL6g==
-X-Gm-Message-State: AAQBX9dkPnyztp6rVKnH9GsRDyOpsSdgrit4YyZ6OgjxlKzpQaM0qLq5
-        oFzEcjM90gwOvp5rvD76VP9m+clCunow300CoNTWTg==
-X-Google-Smtp-Source: AKy350ZvcynFOTI0vNXbHNNrkwfyvIqzDj+xMZMJFaPDZ1bx+dUQLOfRxKAyDO2ht4EiFV67iIZltiL6dHISQ0dim9s=
-X-Received: by 2002:a65:6289:0:b0:513:a24c:f45a with SMTP id
- f9-20020a656289000000b00513a24cf45amr25095pgv.11.1681414135164; Thu, 13 Apr
- 2023 12:28:55 -0700 (PDT)
+        Thu, 13 Apr 2023 15:30:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BBDA2
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 12:30:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 14E9E64146
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 19:30:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A586C433EF;
+        Thu, 13 Apr 2023 19:30:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681414250;
+        bh=ZZFjlEgIY/hx+ul9r9hWiMI+vv8tmmlI+RQGXZaCscE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B234JK3jfbNQPCuedfgMF4nJnvJs60NyIfc6Nm7+w3MbVIl4sp8jCSj995VO2PDVU
+         6iu/2E89G0Qo9NomvB3JKoLhlfjtbzUMduBznJ3+0KVCPIX+aEm+5PJjb3HlEIjhYJ
+         twcQ3Tu1scASNgyWDMO/wNVwfMQd9ODOo+pprstPJaD4RwBXIurW2QrGPerqmnlTpD
+         lPn20Mm3W0lWz1pLVj5t1VnMxWG4TnA7D54EkK5DswcM+DhZakMhi3k0vT7sfp57vR
+         agwkX17AA+uGoJhDPE/ysfudl7PTqxu47jQEZbfpT9H7Ys1GmtxhEbwgIsFU0kiw5U
+         UibPBASil03qw==
+Date:   Thu, 13 Apr 2023 12:30:48 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Miroslav Benes <mbenes@suse.cz>
+Subject: Re: [PATCH 3/3] objtool: Generate ORC data for __pfx code
+Message-ID: <20230413193048.biwxfseynqyc4qkx@treble>
+References: <cover.1681331135.git.jpoimboe@kernel.org>
+ <bc3344e51f3e87102f1301a0be0f72a7689ea4a4.1681331135.git.jpoimboe@kernel.org>
+ <20230413112426.GM4253@hirez.programming.kicks-ass.net>
+ <20230413152933.cxhmocvbdlucvizx@treble>
+ <20230413192449.GQ4253@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <20230413085206.149730-1-iivanov@suse.de> <20230413085206.149730-3-iivanov@suse.de>
- <9b03551a-278d-16dc-08ed-1ef0f89dc79c@i2se.com> <duuhz5pju4q7lnvzwndcnruqwqzbwy4jhrfn42vov2rfct4i7c@qh55cifhoud7>
- <9de62851-73a6-0070-4e64-94b6614c11fd@i2se.com>
-In-Reply-To: <9de62851-73a6-0070-4e64-94b6614c11fd@i2se.com>
-From:   Tim Gover <tim.gover@raspberrypi.com>
-Date:   Thu, 13 Apr 2023 20:28:43 +0100
-Message-ID: <CAAvKZ64KyXJ2QPjRnj3i-8AKh7jGCUw=HNi76XG-a9K-+_JiYQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] ARM: dts: Add nvmem node for BCM2711 bootloader
- public key
-To:     Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     "Ivan T. Ivanov" <iivanov@suse.de>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        linux-rpi-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230413192449.GQ4253@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 13 Apr 2023 at 19:44, Stefan Wahren <stefan.wahren@i2se.com> wrote:
->
-> Hi Ivan,
->
-> Am 13.04.23 um 20:18 schrieb Ivan T. Ivanov:
-> > On 04-13 18:15, Stefan Wahren wrote:
-> >>
-> >> Hi Ivan,
-> >>
-> >> Am 13.04.23 um 10:52 schrieb Ivan T. Ivanov:
-> >>> From: Tim Gover <tim.gover@raspberrypi.com>
-> >>>
-> >>> Make a copy of the bootloader secure-boot public key available to the OS
-> >>> via an nvmem node. The placement information is populated by the
-> >>> Raspberry Pi firmware if a public key is present in the BCM2711
-> >>> bootloader EEPROM.
-> >>
-> >> It would be nice to have a helpful link like:
-> >> https://www.raspberrypi.com/documentation/computers/configuration.html#nvmem-nodes
-> >
-> > Yep, make sense.
-> >
-> >>> +
-> >>> +   /*
-> >>> +    * RPi4 will copy the binary public key blob (if present) from the bootloader
-> >>> +    * into memory for use by the OS.
-> >>> +    */
-> >>> +   blpubkey: nvram@1 {
-> >>> +           compatible = "raspberrypi,bootloader-public-key", "nvmem-rmem";
-> >>
-> >> Yes this looks better, but this introduce a new dtbs_check issue. The new
-> >
-> > Oops, yes, I forgot to make this check.
-> >
-> >> compatible must be documented in
-> >> Documentation/devicetree/bindings/nvmem/rmem.yaml in a separate patch and
-> >> reviewed by the DT guys.
-> >
-> > Or I can drop the new compatible string altogether? It looks like
-> > only alias is strictly required?! Tim Gover is this correct?
->
-> i cannot speak for the firmware side, but i think we should try to keep
-> it compatible with the vendor DTB here.
->
+On Thu, Apr 13, 2023 at 09:24:49PM +0200, Peter Zijlstra wrote:
+> On Thu, Apr 13, 2023 at 08:29:33AM -0700, Josh Poimboeuf wrote:
+> > On Thu, Apr 13, 2023 at 01:24:26PM +0200, Peter Zijlstra wrote:
+> > > > +	if (!insn->cfi) {
+> > > > +		/*
+> > > > +		 * This can happen if stack validation isn't enabled or the
+> > > > +		 * function is annotated with STACK_FRAME_NON_STANDARD.
+> > > > +		 */
+> > > > +		return 0;
+> > > > +	}
+> > > > +
+> > > > +	/* Propagate insn->cfi to the prefix code */
+> > > > +	cfi = cfi_hash_find_or_add(insn->cfi);
+> > > > +	for (; prev != insn; prev = next_insn_same_sec(file, prev))
+> > > > +		prev->cfi = cfi;
+> > > > +
+> > > >  	return 0;
+> > > >  }
+> > > 
+> > > FWIW, this makes the whole thing hard rely on the prefix being single
+> > > byte NOPs -- which they are, but perhaps we should assert this?
+> > 
+> > Couldn't they be any stack-invariant instructions?
+> 
+> Hmm, I was thikning that since we don't know the size of the
+> instructions being written, we need CFI for all offsets. But perhaps,
+> since we do a left-match on IP, only one entry at the __pfx+0 location
+> would work?
 
-The firmware doesn't look at the compatible string. It locates the
-nodes to update using the 'blconfig' and 'blpubkey' aliases. Userspace
-scripts (including the documentation example) should also use these
-aliases.
-Therefore, I don't think it matters if the compatible strings is
-modified, but I won't pretend to know what the correct DT style is
-here :)
+Right, while in objtool (almost) every insn has insn->cfi, the actual
+ORC entries only get created at the boundaries of change.
 
-Tim
+-- 
+Josh
