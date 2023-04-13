@@ -2,319 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F7F6E054A
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 05:33:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E86476E0550
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 05:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbjDMDdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 23:33:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
+        id S229900AbjDMDeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 23:34:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbjDMDct (ORCPT
+        with ESMTP id S229820AbjDMDeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 23:32:49 -0400
-Received: from out-36.mta0.migadu.com (out-36.mta0.migadu.com [IPv6:2001:41d0:1004:224b::24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BEA07A93
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 20:32:33 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1681356746;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uDEXmdgNJHacl2+TV/eqq3wGUWEC8PGlNZQdBzllTsA=;
-        b=mKWHUWQydIUtKMNKPlmSizHmSUklbCnDsANAyFmozUno36gwS1fe8W9fbprKjlFwKg2N39
-        TJKwjFCIILK7xVccwpnU9DSPy4Z4r6M4HYSgktDUWPyRnmT++n8Mo6leKrW1e6KsANWnw2
-        +5jG797SGxcujKSHf2a57lEuLFcxQb4=
-From:   Cai Huoqing <cai.huoqing@linux.dev>
-To:     fancer.lancer@gmail.com
-Cc:     Cai huoqing <cai.huoqing@linux.dev>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: [PATCH RESEND v9 4/4] dmaengine: dw-edma: Add HDMA DebugFS support
-Date:   Thu, 13 Apr 2023 11:31:55 +0800
-Message-Id: <20230413033156.93751-5-cai.huoqing@linux.dev>
-In-Reply-To: <20230413033156.93751-1-cai.huoqing@linux.dev>
-References: <20230413033156.93751-1-cai.huoqing@linux.dev>
+        Wed, 12 Apr 2023 23:34:25 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC3659E1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 20:34:04 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-632384298b3so6493208b3a.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 20:34:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tweaklogic.com; s=google; t=1681356844; x=1683948844;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rYVWcxpcEucFznKvw2ZBVZak6cYUtcRc61ABeJFVQ7M=;
+        b=JHKEcQScy8Klei//HSDNlHPcWWCemzx9Vrg9eQS1sTa0sPQ77CO/+dAz9YUYx00mPw
+         leVr0J2QaiGQaCg4j2763YDW1S2RX2rkhJYwSVAMLiO0l37h+ci5RJTQom5sLlDrxBH8
+         tYJoPsekLK5xxeU1NzK3VUhnD7Wqa3LqtJt+p0JXHLjF0rhLnuY5tjghMqcaVHcb1SAa
+         Cas23GlsY5XWNfcmMBmfu/UVxAARMadeTrgNmj19Jj9t2P26hGeioY3erD4Ot+ajF9WF
+         NWfSN1HRY0lseA07X7AicIn6pEGgEYun2z8Ijmf8RsUL940BpMzeCRUTRR2dZ7EbWvp4
+         LsFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681356844; x=1683948844;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rYVWcxpcEucFznKvw2ZBVZak6cYUtcRc61ABeJFVQ7M=;
+        b=jXUg90IyHv5a/3PjEPI0fQideoCmr0UI+YNKwicW1+cblJ/ExHWDUOJ+/6IM3LnYN3
+         l4jL8tpsBq0MZeJZu83ehOLys7afoUU/Jn2X9sJfT2kedUduKmAXuW18nxAApUp/rs8o
+         JtBeOvJt1fzb5j5OeEeUxmAoni2cjnNppvaY8n3/XGgQCMeKN4RFVPRn/f8nCpjYbUcT
+         4Y2pa4Y0TNQQOed2B7F/PcrrE4vS5/dTO7aiWk1Jsa13RGo2Vv04+7kROS2ZWfpWzQQG
+         1jEqYu8ok8BvbyNO01X0vJ9TKTgpayMOkheCtZ00xXj0ObR/uHyKneWXK/vSwZNmT28H
+         r8OQ==
+X-Gm-Message-State: AAQBX9eb51Htx8RFWRVzVFTsMyyIGT5+Q4HcNbtlZj8hy7/ULoMU7Ky8
+        NQXrR5+CYud0y67snMUK5SA7Mw==
+X-Google-Smtp-Source: AKy350alQdFLNK6MZjc3VSgCVuvkguL3X4kzGdnrZjPbMaZNs2jMjwht877tYirA2PUWT0NefJbAPQ==
+X-Received: by 2002:a05:6a00:1386:b0:625:cf03:e8cb with SMTP id t6-20020a056a00138600b00625cf03e8cbmr455113pfg.4.1681356843903;
+        Wed, 12 Apr 2023 20:34:03 -0700 (PDT)
+Received: from [10.240.2.163] ([124.148.245.238])
+        by smtp.gmail.com with ESMTPSA id n25-20020aa78a59000000b006396be36457sm204069pfa.111.2023.04.12.20.33.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Apr 2023 20:34:03 -0700 (PDT)
+Message-ID: <8dd207d3-a9f0-2c06-795e-efed30656e35@tweaklogic.com>
+Date:   Thu, 13 Apr 2023 11:33:57 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH 2/2] iio: light: Add support for APDS9306 Light Sensor
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>
+References: <20230411011203.5013-1-subhajit.ghosh@tweaklogic.com>
+ <20230411011203.5013-3-subhajit.ghosh@tweaklogic.com>
+ <ZDVWB9xV9Cdbwyqd@smile.fi.intel.com>
+ <ab1d9746-4d23-efcc-0ee1-d2b8c634becd@tweaklogic.com>
+ <ZDa0NIot/4aRJ0pI@smile.fi.intel.com>
+From:   Subhajit Ghosh <subhajit.ghosh@tweaklogic.com>
+In-Reply-To: <ZDa0NIot/4aRJ0pI@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cai huoqing <cai.huoqing@linux.dev>
+On 12/4/23 21:37, Andy Shevchenko wrote:
+> On Wed, Apr 12, 2023 at 12:29:15PM +0800, Subhajit Ghosh wrote:
+> 
+> ...
+> 
+>>>> +static const struct regmap_config apds9306_regmap = {
+>>>> +	.name = "apds9306_regmap",
+>>>> +	.reg_bits = 8,
+>>>> +	.val_bits = 8,
+>>>> +	.rd_table = &apds9306_readable_table,
+>>>> +	.wr_table = &apds9306_writable_table,
+>>>> +	.volatile_table = &apds9306_volatile_table,
+>>>> +	.precious_table = &apds9306_precious_table,
+>>>> +	.max_register = APDS9306_ALS_THRES_VAR,
+>>>> +	.cache_type = REGCACHE_RBTREE,
+>>>
+>>> Do you need an internal regmap lock? If so, why?
+>> For event interface - interrupt enable, adaptive interrupt enable,
+>> upper and lower threshold values, selection of clear or als
+>> channels for interrupt, the mutex in the driver's private data structure
+>> is not used.
+>> I thought to use the regmap's internal locking mechanism for
+>> mutual exclusion as the values are directly written to or read from
+>> the device registers form the write_event(), read_event(),
+>> write_event_config() and read_event_config().
+>> What do you think?
+> 
+> I didn't get. If you have a sequence of registers to be read/write/modified/etc
+> in IRQ handler and/or elsewhere and at the same time in IRQ or elsewhere you
+> have even a single IO access to the hardware you have to be sure that the IO
+> ordering has no side effects. regmap API does not guarantee that. It only works
+> on a simple read/write/modify of a _single_ register, or a coupled group of
+> registers (like bulk ops), if your case is sparse, you on your own and probably
+> lucky enough not to have an issue during the testing. So, take your time and
+> think more about what you are doing in the driver and what locking schema
+> should take place.
+> 
+> ...
+Agree. I have to rethink and re-implement the locking mechanism.
 
-Add HDMA DebugFS support to show registers content
+> 
+>>>> +static int apds9306_power_state(struct apds9306_data *data,
+>>>> +		enum apds9306_power_states state)
+>>>> +{
+>>>> +	int ret;
+>>>> +
+>>>> +	/* Reset not included as it causes ugly I2C bus error */
+>>>> +	switch (state) {
+>>>> +	case standby:
+>>>> +		return regmap_field_write(data->regfield_en, 0);
+>>>> +	case active:
+>>>> +		ret = regmap_field_write(data->regfield_en, 1);
+>>>> +		if (ret)
+>>>> +			return ret;
+>>>> +		/* 5ms wake up time */
+>>>> +		usleep_range(5000, 10000);
+>>>> +		break;
+>>>> +	default:
+>>>> +		return -EINVAL;
+>>>> +	}
+>>>
+>>>> +	return 0;
+>>>
+>>> Move that to a single user of this line inside the switch-case.
+>> Sorry, I did not get you. Can you please elaborate?
+> 
+> The user of this return is only one case in the switch. Instead of breaking
+> the switch-case, just move this return statement to there.
+> 
+Ok. It will be done.
 
-Signed-off-by: Cai huoqing <cai.huoqing@linux.dev>
-Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
----
-v8->v9:
-  1.Update commit log.
-  2.Remove unused macro
+> ...
+> 
+>>>> +	struct device *dev = &data->client->dev;
+>>>
+>>> Why data contains I²C client pointer, what for?
+>> I copied the implementation. It will be re-implemented.
+> 
+> I mean, how client pointer is used in comparison to the plain pointer to the
+> generic device object.
+> 
+> ...
+> 
+>>>> +		while (retries--) {
+>>>> +			ret = regmap_read(data->regmap, APDS9306_MAIN_STATUS,
+>>>> +					&status);
+>>>> +			if (ret) {
+>>>> +				dev_err(dev, "read status failed: %d\n", ret);
+>>>> +				return ret;
+>>>> +			}
+>>>> +			if (status & APDS9306_ALS_DATA_STAT_MASK)
+>>>> +				break;
+>>>> +			/*
+>>>> +			 * In case of continuous one-shot read from userspace,
+>>>> +			 * new data is available after sampling period.
+>>>> +			 * Delays are in the range of 25ms to 2secs.
+>>>> +			 */
+>>>> +			fsleep(delay);
+>>>> +		}
+>>>
+>>> regmap_read_poll_timeout().
+>> According to the regmap_read_poll_timeout() documentation, the maximum time
+>> to sleep between reads should be less than ~20ms as it uses usleep_range().
+>>
+>> If userspace is doing continuous reads, then data is available after sampling
+>> period (25ms to 2sec) or integration time (3.125ms to 400ms) whichever is
+>> greater.
+>>
+>> The runtime_suspend() function is called after 5 seconds, so the device is
+>> still active and running.
+>>
+>> If the ALS data bit is not set in status reg, it is efficient to sleep for
+>> one sampling period rather than continuously checking the status reg
+>> within ~20ms if we use regmap_read_poll_timeout().
+>>
+>> Do you have any suggestions?
+> 
+> Yes, Use proposed API. It takes _two_ timeout parameters, one of which is the
+> same as your delay. You may actually resplit it by multiplying retries and
+> decreasing delay to satisfy the regmap_read_poll_timeout() recommendation.
+> 
+Yes, that can be done. I will re-write this function in the next patch.
 
-v8 link:
-  https://lore.kernel.org/lkml/20230323034944.78357-5-cai.huoqing@linux.dev/
+Thanks once again Andy for the detailed review.
 
- drivers/dma/dw-edma/Makefile             |   3 +-
- drivers/dma/dw-edma/dw-hdma-v0-core.c    |   2 +
- drivers/dma/dw-edma/dw-hdma-v0-debugfs.c | 170 +++++++++++++++++++++++
- drivers/dma/dw-edma/dw-hdma-v0-debugfs.h |  22 +++
- 4 files changed, 196 insertions(+), 1 deletion(-)
- create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
- create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
-
-diff --git a/drivers/dma/dw-edma/Makefile b/drivers/dma/dw-edma/Makefile
-index b1c91ef2c63d..83ab58f87760 100644
---- a/drivers/dma/dw-edma/Makefile
-+++ b/drivers/dma/dw-edma/Makefile
-@@ -1,7 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- obj-$(CONFIG_DW_EDMA)		+= dw-edma.o
--dw-edma-$(CONFIG_DEBUG_FS)	:= dw-edma-v0-debugfs.o
-+dw-edma-$(CONFIG_DEBUG_FS)	:= dw-edma-v0-debugfs.o	\
-+				   dw-hdma-v0-debugfs.o
- dw-edma-objs			:= dw-edma-core.o	\
- 				   dw-edma-v0-core.o	\
- 				   dw-hdma-v0-core.o $(dw-edma-y)
-diff --git a/drivers/dma/dw-edma/dw-hdma-v0-core.c b/drivers/dma/dw-edma/dw-hdma-v0-core.c
-index 22b7b0410deb..00b735a0202a 100644
---- a/drivers/dma/dw-edma/dw-hdma-v0-core.c
-+++ b/drivers/dma/dw-edma/dw-hdma-v0-core.c
-@@ -11,6 +11,7 @@
- #include "dw-edma-core.h"
- #include "dw-hdma-v0-core.h"
- #include "dw-hdma-v0-regs.h"
-+#include "dw-hdma-v0-debugfs.h"
- 
- enum dw_hdma_control {
- 	DW_HDMA_V0_CB					= BIT(0),
-@@ -276,6 +277,7 @@ static void dw_hdma_v0_core_ch_config(struct dw_edma_chan *chan)
- /* HDMA debugfs callbacks */
- static void dw_hdma_v0_core_debugfs_on(struct dw_edma *dw)
- {
-+	dw_hdma_v0_debugfs_on(dw);
- }
- 
- static const struct dw_edma_core_ops dw_hdma_v0_core = {
-diff --git a/drivers/dma/dw-edma/dw-hdma-v0-debugfs.c b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
-new file mode 100644
-index 000000000000..520c81978b08
---- /dev/null
-+++ b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
-@@ -0,0 +1,170 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2023 Cai Huoqing
-+ * Synopsys DesignWare HDMA v0 debugfs
-+ *
-+ * Author: Cai Huoqing <cai.huoqing@linux.dev>
-+ */
-+
-+#include <linux/debugfs.h>
-+#include <linux/bitfield.h>
-+
-+#include "dw-hdma-v0-debugfs.h"
-+#include "dw-hdma-v0-regs.h"
-+#include "dw-edma-core.h"
-+
-+#define REGS_ADDR(dw, name)						       \
-+	({								       \
-+		struct dw_hdma_v0_regs __iomem *__regs = (dw)->chip->reg_base; \
-+									       \
-+		(void __iomem *)&__regs->name;				       \
-+	})
-+
-+#define REGS_CH_ADDR(dw, name, _dir, _ch)				       \
-+	({								       \
-+		struct dw_hdma_v0_ch_regs __iomem *__ch_regs;		       \
-+									       \
-+		if (_dir == EDMA_DIR_READ)				       \
-+			__ch_regs = REGS_ADDR(dw, ch[_ch].rd);		       \
-+		else							       \
-+			__ch_regs = REGS_ADDR(dw, ch[_ch].wr);		       \
-+									       \
-+		(void __iomem *)&__ch_regs->name;			       \
-+	})
-+
-+#define CTX_REGISTER(dw, name, dir, ch) \
-+	{#name, REGS_CH_ADDR(dw, name, dir, ch)}
-+
-+#define WRITE_STR				"write"
-+#define READ_STR				"read"
-+#define CHANNEL_STR				"channel"
-+#define REGISTERS_STR				"registers"
-+
-+struct dw_hdma_debugfs_entry {
-+	const char				*name;
-+	void __iomem				*reg;
-+};
-+
-+static int dw_hdma_debugfs_u32_get(void *data, u64 *val)
-+{
-+	struct dw_hdma_debugfs_entry *entry = data;
-+	void __iomem *reg = entry->reg;
-+
-+	*val = readl(reg);
-+
-+	return 0;
-+}
-+DEFINE_DEBUGFS_ATTRIBUTE(fops_x32, dw_hdma_debugfs_u32_get, NULL, "0x%08llx\n");
-+
-+static void dw_hdma_debugfs_create_x32(struct dw_edma *dw,
-+				       const struct dw_hdma_debugfs_entry ini[],
-+				       int nr_entries, struct dentry *dent)
-+{
-+	struct dw_hdma_debugfs_entry *entries;
-+	int i;
-+
-+	entries = devm_kcalloc(dw->chip->dev, nr_entries, sizeof(*entries),
-+			       GFP_KERNEL);
-+	if (!entries)
-+		return;
-+
-+	for (i = 0; i < nr_entries; i++) {
-+		entries[i] = ini[i];
-+
-+		debugfs_create_file_unsafe(entries[i].name, 0444, dent,
-+					   &entries[i], &fops_x32);
-+	}
-+}
-+
-+static void dw_hdma_debugfs_regs_ch(struct dw_edma *dw, enum dw_edma_dir dir,
-+				    u16 ch, struct dentry *dent)
-+{
-+	const struct dw_hdma_debugfs_entry debugfs_regs[] = {
-+		CTX_REGISTER(dw, ch_en, dir, ch),
-+		CTX_REGISTER(dw, doorbell, dir, ch),
-+		CTX_REGISTER(dw, prefetch, dir, ch),
-+		CTX_REGISTER(dw, handshake, dir, ch),
-+		CTX_REGISTER(dw, llp.lsb, dir, ch),
-+		CTX_REGISTER(dw, llp.msb, dir, ch),
-+		CTX_REGISTER(dw, cycle_sync, dir, ch),
-+		CTX_REGISTER(dw, transfer_size, dir, ch),
-+		CTX_REGISTER(dw, sar.lsb, dir, ch),
-+		CTX_REGISTER(dw, sar.msb, dir, ch),
-+		CTX_REGISTER(dw, dar.lsb, dir, ch),
-+		CTX_REGISTER(dw, dar.msb, dir, ch),
-+		CTX_REGISTER(dw, watermark_en, dir, ch),
-+		CTX_REGISTER(dw, control1, dir, ch),
-+		CTX_REGISTER(dw, func_num, dir, ch),
-+		CTX_REGISTER(dw, qos, dir, ch),
-+		CTX_REGISTER(dw, ch_stat, dir, ch),
-+		CTX_REGISTER(dw, int_stat, dir, ch),
-+		CTX_REGISTER(dw, int_setup, dir, ch),
-+		CTX_REGISTER(dw, int_clear, dir, ch),
-+		CTX_REGISTER(dw, msi_stop.lsb, dir, ch),
-+		CTX_REGISTER(dw, msi_stop.msb, dir, ch),
-+		CTX_REGISTER(dw, msi_watermark.lsb, dir, ch),
-+		CTX_REGISTER(dw, msi_watermark.msb, dir, ch),
-+		CTX_REGISTER(dw, msi_abort.lsb, dir, ch),
-+		CTX_REGISTER(dw, msi_abort.msb, dir, ch),
-+		CTX_REGISTER(dw, msi_msgdata, dir, ch),
-+	};
-+	int nr_entries = ARRAY_SIZE(debugfs_regs);
-+
-+	dw_hdma_debugfs_create_x32(dw, debugfs_regs, nr_entries, dent);
-+}
-+
-+static void dw_hdma_debugfs_regs_wr(struct dw_edma *dw, struct dentry *dent)
-+{
-+	struct dentry *regs_dent, *ch_dent;
-+	char name[16];
-+	int i;
-+
-+	regs_dent = debugfs_create_dir(WRITE_STR, dent);
-+
-+	for (i = 0; i < dw->wr_ch_cnt; i++) {
-+		snprintf(name, sizeof(name), "%s:%d", CHANNEL_STR, i);
-+
-+		ch_dent = debugfs_create_dir(name, regs_dent);
-+
-+		dw_hdma_debugfs_regs_ch(dw, EDMA_DIR_WRITE, i, ch_dent);
-+	}
-+}
-+
-+static void dw_hdma_debugfs_regs_rd(struct dw_edma *dw, struct dentry *dent)
-+{
-+	struct dentry *regs_dent, *ch_dent;
-+	char name[16];
-+	int i;
-+
-+	regs_dent = debugfs_create_dir(READ_STR, dent);
-+
-+	for (i = 0; i < dw->rd_ch_cnt; i++) {
-+		snprintf(name, sizeof(name), "%s:%d", CHANNEL_STR, i);
-+
-+		ch_dent = debugfs_create_dir(name, regs_dent);
-+
-+		dw_hdma_debugfs_regs_ch(dw, EDMA_DIR_READ, i, ch_dent);
-+	}
-+}
-+
-+static void dw_hdma_debugfs_regs(struct dw_edma *dw)
-+{
-+	struct dentry *regs_dent;
-+
-+	regs_dent = debugfs_create_dir(REGISTERS_STR, dw->dma.dbg_dev_root);
-+
-+	dw_hdma_debugfs_regs_wr(dw, regs_dent);
-+	dw_hdma_debugfs_regs_rd(dw, regs_dent);
-+}
-+
-+void dw_hdma_v0_debugfs_on(struct dw_edma *dw)
-+{
-+	if (!debugfs_initialized())
-+		return;
-+
-+	debugfs_create_u32("mf", 0444, dw->dma.dbg_dev_root, &dw->chip->mf);
-+	debugfs_create_u16("wr_ch_cnt", 0444, dw->dma.dbg_dev_root, &dw->wr_ch_cnt);
-+	debugfs_create_u16("rd_ch_cnt", 0444, dw->dma.dbg_dev_root, &dw->rd_ch_cnt);
-+
-+	dw_hdma_debugfs_regs(dw);
-+}
-diff --git a/drivers/dma/dw-edma/dw-hdma-v0-debugfs.h b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
-new file mode 100644
-index 000000000000..e6842c83777d
---- /dev/null
-+++ b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
-@@ -0,0 +1,22 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2023 Cai Huoqing
-+ * Synopsys DesignWare HDMA v0 debugfs
-+ *
-+ * Author: Cai Huoqing <cai.huoqing@linux.dev>
-+ */
-+
-+#ifndef _DW_HDMA_V0_DEBUG_FS_H
-+#define _DW_HDMA_V0_DEBUG_FS_H
-+
-+#include <linux/dma/edma.h>
-+
-+#ifdef CONFIG_DEBUG_FS
-+void dw_hdma_v0_debugfs_on(struct dw_edma *dw);
-+#else
-+static inline void dw_hdma_v0_debugfs_on(struct dw_edma *dw)
-+{
-+}
-+#endif /* CONFIG_DEBUG_FS */
-+
-+#endif /* _DW_HDMA_V0_DEBUG_FS_H */
--- 
-2.34.1
+Regards,
+Subhajit Ghosh
 
