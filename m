@@ -2,45 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E261B6E0BA3
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 12:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D43DC6E0BA7
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 12:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjDMKpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 06:45:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55164 "EHLO
+        id S229804AbjDMKqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 06:46:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjDMKpG (ORCPT
+        with ESMTP id S229516AbjDMKqV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 06:45:06 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A0D0E4A
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:45:05 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 42948C14;
-        Thu, 13 Apr 2023 03:45:49 -0700 (PDT)
-Received: from [10.57.20.214] (unknown [10.57.20.214])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A5E2E3F6C4;
-        Thu, 13 Apr 2023 03:45:03 -0700 (PDT)
-Message-ID: <08c9f2a2-b2fc-2574-e10a-b6dbd0caedb0@arm.com>
-Date:   Thu, 13 Apr 2023 11:44:56 +0100
+        Thu, 13 Apr 2023 06:46:21 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FC2CA
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:46:20 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id z9so9271273ejx.11
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:46:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681382778; x=1683974778;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1kRbU6nc4ZqgrBcPQoPoqFqYgjL9hmlR/TueIIn2YYA=;
+        b=iBBpmFcz38y6AeHKjTWPduIZWh2DEuihaDb0wcg8c1Swf5CchMT/WMzFn4cJ8Njwec
+         2gDac2A57jS+VMzUkiCYDfG4WR+Wcg5thruLzZXtaRBfLmvMb8tK3ihbjQeC2MhcVfVA
+         50yFhgUuVejuA/BqJ4vqXv1mG6v6e7DsHn5yGwQ6iwaLHJDKAC/iPHsg7lAnlBhC/ltl
+         S51m91lIglufOEq1XKWfWm8LIK1OKhPGniM7gPPg0kWsCy75x0a6QeQzmPtLSqSFMlJY
+         uCC1h3nCIcuvsqWVL1pHf5GgNgkH2R6E9NUheV9BH5u91MmuY3N3L5IDdcChQOp4Kh2g
+         buCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681382778; x=1683974778;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1kRbU6nc4ZqgrBcPQoPoqFqYgjL9hmlR/TueIIn2YYA=;
+        b=bzgoGbvOy/oijdk+TWEp86rP+rmDuu9LpAFXr6xW8piGxJ5VuFfUNCHm1PNSKHAA2M
+         G9UxytYUocHrZ4sWugxvkzPj3AIhsGPbTE7nDadFPT7Yki0voCvg8TM8oACs3+2ZKpZx
+         ljIzQ0oCpM/4WFwo2J+4hiASwuKHtog4dE5mHKBybNgx8V1lBURwpEImmP6MbeQfnnlu
+         uueYSaJzgQzy529b8t7UD9C5WjG1awcfWxgay9nSRzr+cQB1gnVw+o+ehVpsYHi1Gqm4
+         7LQVqqgwG/gmECHb4YsrByLRMQF8fmdsvAp5SY6VtsbxCXQQw6k/ZBiE2hLM62d4u5o8
+         I1tg==
+X-Gm-Message-State: AAQBX9d3byXP4YPuh331MGgjBkUveTSnVOWghhALsArE4BsyMvP9LO9B
+        d5tlQJNexQ6Fv0mKQAZezRZcTzscBkM5eCCD8/n7JQ==
+X-Google-Smtp-Source: AKy350aASI2gRddtiUsu6uEbTsoIdtPM75Lk+ucwTweLG2axKrPCTsxtIZLNtTpdA3utnAcOD3Prf8rOfFSZkJPnxXQ=
+X-Received: by 2002:a17:906:2c1a:b0:94e:8e6f:4f1c with SMTP id
+ e26-20020a1709062c1a00b0094e8e6f4f1cmr1032618ejh.15.1681382778488; Thu, 13
+ Apr 2023 03:46:18 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v3] iommu: Optimise PCI SAC address trick
-To:     John Garry <john.g.garry@oracle.com>, joro@8bytes.org
-Cc:     will@kernel.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>, kuba@kernel.org
-References: <e9abc601b00e26fd15a583fcd55f2a8227903077.1674061620.git.robin.murphy@arm.com>
- <40141c33-243c-5da6-fbea-3122e47c7808@oracle.com>
- <02eebcda-f60e-f8ed-7057-cf293d15a173@oracle.com>
-Content-Language: en-GB
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <02eebcda-f60e-f8ed-7057-cf293d15a173@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20230413104034.1086717-1-yosryahmed@google.com> <20230413104034.1086717-2-yosryahmed@google.com>
+In-Reply-To: <20230413104034.1086717-2-yosryahmed@google.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Thu, 13 Apr 2023 03:45:42 -0700
+Message-ID: <CAJD7tkbnsSbZ2+Rf5NQKgBtH_JdN4AKMCuh8jasbQ-hcOOz-KA@mail.gmail.com>
+Subject: Re: [PATCH v6 1/3] mm: vmscan: ignore non-LRU-based reclaim in memcg reclaim
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        David Hildenbrand <david@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,49 +87,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-13 11:16, John Garry wrote:
-> On 20/01/2023 11:33, John Garry wrote:
->> On 18/01/2023 17:26, Robin Murphy wrote:
->>> Per the reasoning in commit 4bf7fda4dce2 ("iommu/dma: Add config for
->>> PCI SAC address trick") and its subsequent revert, this mechanism no
->>> longer serves its original purpose, but now only works around broken
->>> hardware/drivers in a way that is unfortunately too impactful to remove.
->>>
->>> This does not, however prevent us from solving the performance impact
->>> which the workaround imposes on large-scale systems that don't need it.
->>> That is felt once the 32-bit IOVA space fills up and we keep
->>> unsuccessfully trying to allocate from it. However, if we get to that
->>> point then in fact it's already the endgame. The nature of the allocator
->>> is such that the first IOVA we give to a device after the 32-bit space
->>> runs out will be the highest possible address for that device, ever.
->>> If that works, then great, we can be pretty sure it's safe to optimise
->>> for speed by always allocating from the full range. And if it doesn't,
->>> then the worst has already happened and any brokenness is now showing,
->>> so there's no point continuing to try to hide it.
->>>
->>> To that end, implement a flag to refine this into a per-device policy
->>> that can automatically get itself out of the way if and when it stops
->>> being useful.
->>>
->>> CC: John Garry <john.garry@huawei.com>
->>> CC: Linus Torvalds <torvalds@linux-foundation.org>
->>> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
->>> ---
->>>
->>> v3: Expand the flag name, add a print with inline commentary for good
->>>      measure, and refactor the code flow even more (too many ifs and
->>>      indents...) such that I didn't presume to carry forward John's R-b.
->>
->> I like the new changes, so feel free to add:
->>
->> Reviewed-by: John Garry <john.g.garry@oracle.com>
-> 
-> Is there any chance that this can be picked up?
-> 
-> I also saw that it fixed an issue for Jakub (cc'ed) recently.
+On Thu, Apr 13, 2023 at 3:40=E2=80=AFAM Yosry Ahmed <yosryahmed@google.com>=
+ wrote:
+>
+> We keep track of different types of reclaimed pages through
+> reclaim_state->reclaimed_slab, and we add them to the reported number
+> of reclaimed pages.  For non-memcg reclaim, this makes sense. For memcg
+> reclaim, we have no clue if those pages are charged to the memcg under
+> reclaim.
+>
+> Slab pages are shared by different memcgs, so a freed slab page may have
+> only been partially charged to the memcg under reclaim.  The same goes fo=
+r
+> clean file pages from pruned inodes (on highmem systems) or xfs buffer
+> pages, there is no simple way to currently link them to the memcg under
+> reclaim.
+>
+> Stop reporting those freed pages as reclaimed pages during memcg reclaim.
+> This should make the return value of writing to memory.reclaim, and may
+> help reduce unnecessary reclaim retries during memcg charging.  Writing t=
+o
+> memory.reclaim on the root memcg is considered as cgroup_reclaim(), but
+> for this case we want to include any freed pages, so use the
+> global_reclaim() check instead of !cgroup_reclaim().
+>
+> Generally, this should make the return value of
+> try_to_free_mem_cgroup_pages() more accurate. In some limited cases (e.g.
+> freed a slab page that was mostly charged to the memcg under reclaim),
+> the return value of try_to_free_mem_cgroup_pages() can be underestimated,
+> but this should be fine. The freed pages will be uncharged anyway, and we
+> can charge the memcg the next time around as we usually do memcg reclaim
+> in a retry loop.
+>
+> Fixes: f2fe7b09a52b ("mm: memcg/slab: charge individual slab objects
+> instead of pages")
 
-Oh, thanks for the reminder - IIRC this wants a minor rebase now, let me 
-double-check and send a v4 that applies cleanly...
 
-Cheers,
-Robin.
+Andrew, I removed the CC: stable as you were sceptical about the need
+for a backport, but left the Fixes tag so that it's easy to identify
+where to backport it if you and/or stable maintainers decide
+otherwise.
+
+>
+>
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> ---
+>  mm/vmscan.c | 49 ++++++++++++++++++++++++++++++++++++++++++-------
+>  1 file changed, 42 insertions(+), 7 deletions(-)
+>
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 9c1c5e8b24b8..be657832be48 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -511,6 +511,46 @@ static bool writeback_throttling_sane(struct scan_co=
+ntrol *sc)
+>  }
+>  #endif
+>
+> +/*
+> + * flush_reclaim_state(): add pages reclaimed outside of LRU-based recla=
+im to
+> + * scan_control->nr_reclaimed.
+> + */
+> +static void flush_reclaim_state(struct scan_control *sc)
+> +{
+> +       /*
+> +        * Currently, reclaim_state->reclaimed includes three types of pa=
+ges
+> +        * freed outside of vmscan:
+> +        * (1) Slab pages.
+> +        * (2) Clean file pages from pruned inodes (on highmem systems).
+> +        * (3) XFS freed buffer pages.
+> +        *
+> +        * For all of these cases, we cannot universally link the pages t=
+o a
+> +        * single memcg. For example, a memcg-aware shrinker can free one=
+ object
+> +        * charged to the target memcg, causing an entire page to be free=
+d.
+> +        * If we count the entire page as reclaimed from the memcg, we en=
+d up
+> +        * overestimating the reclaimed amount (potentially under-reclaim=
+ing).
+> +        *
+> +        * Only count such pages for global reclaim to prevent under-recl=
+aiming
+> +        * from the target memcg; preventing unnecessary retries during m=
+emcg
+> +        * charging and false positives from proactive reclaim.
+> +        *
+> +        * For uncommon cases where the freed pages were actually mostly
+> +        * charged to the target memcg, we end up underestimating the rec=
+laimed
+> +        * amount. This should be fine. The freed pages will be uncharged
+> +        * anyway, even if they are not counted here properly, and we wil=
+l be
+> +        * able to make forward progress in charging (which is usually in=
+ a
+> +        * retry loop).
+> +        *
+> +        * We can go one step further, and report the uncharged objcg pag=
+es in
+> +        * memcg reclaim, to make reporting more accurate and reduce
+> +        * underestimation, but it's probably not worth the complexity fo=
+r now.
+> +        */
+> +       if (current->reclaim_state && global_reclaim(sc)) {
+> +               sc->nr_reclaimed +=3D current->reclaim_state->reclaimed;
+> +               current->reclaim_state->reclaimed =3D 0;
+> +       }
+> +}
+> +
+>  static long xchg_nr_deferred(struct shrinker *shrinker,
+>                              struct shrink_control *sc)
+>  {
+> @@ -5346,8 +5386,7 @@ static int shrink_one(struct lruvec *lruvec, struct=
+ scan_control *sc)
+>                 vmpressure(sc->gfp_mask, memcg, false, sc->nr_scanned - s=
+canned,
+>                            sc->nr_reclaimed - reclaimed);
+>
+> -       sc->nr_reclaimed +=3D current->reclaim_state->reclaimed_slab;
+> -       current->reclaim_state->reclaimed_slab =3D 0;
+> +       flush_reclaim_state(sc);
+>
+>         return success ? MEMCG_LRU_YOUNG : 0;
+>  }
+> @@ -6450,7 +6489,6 @@ static void shrink_node_memcgs(pg_data_t *pgdat, st=
+ruct scan_control *sc)
+>
+>  static void shrink_node(pg_data_t *pgdat, struct scan_control *sc)
+>  {
+> -       struct reclaim_state *reclaim_state =3D current->reclaim_state;
+>         unsigned long nr_reclaimed, nr_scanned;
+>         struct lruvec *target_lruvec;
+>         bool reclaimable =3D false;
+> @@ -6472,10 +6510,7 @@ static void shrink_node(pg_data_t *pgdat, struct s=
+can_control *sc)
+>
+>         shrink_node_memcgs(pgdat, sc);
+>
+> -       if (reclaim_state) {
+> -               sc->nr_reclaimed +=3D reclaim_state->reclaimed_slab;
+> -               reclaim_state->reclaimed_slab =3D 0;
+> -       }
+> +       flush_reclaim_state(sc);
+>
+>         /* Record the subtree's reclaim efficiency */
+>         if (!sc->proactive)
+> --
+> 2.40.0.577.gac1e443424-goog
+>
