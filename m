@@ -2,181 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61CED6E107A
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:57:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBB1F6E107F
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:58:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231343AbjDMO5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 10:57:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50734 "EHLO
+        id S231389AbjDMO6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 10:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231405AbjDMO5f (ORCPT
+        with ESMTP id S231349AbjDMO6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 10:57:35 -0400
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4743AF0D;
-        Thu, 13 Apr 2023 07:57:32 -0700 (PDT)
-Received: by mail-ua1-x92d.google.com with SMTP id ba16so10485827uab.4;
-        Thu, 13 Apr 2023 07:57:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681397852; x=1683989852;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zSEimHdm7p/unMCCqfVT8tZ9/6y51iFVf9+ovV+dNLo=;
-        b=dd8F+74grz+6Z1qZXKAYYwJX2e7u+RkP96GWsTXwM7sa5bswJrKZ63HtRlLEjTuDLE
-         iTtBlyNwd3lVtfTdIKvBz3nIVQ9vOc64G8ITEkjIt4QkIlCdXC8Kyqw1C2xHrvCPrTPl
-         hVE0tucXAVoFJdr1qtz+HPXkXBbegGWaA27IyiWoTkdRwSmMGruFLLs8DRLdrtlTLEmL
-         me4eRTa36V9xkETc9lhRiKCi3RameJHYrXpH7cdivO9S1p7SV7NVEhJSJ8pGxrEF50L+
-         o2DPoAnqykH69Zz5TiIFUxF1ZdtOQftQ22okIADw6axoasmDCNpndZTezVPaaktNi5Wt
-         ZEww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681397852; x=1683989852;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zSEimHdm7p/unMCCqfVT8tZ9/6y51iFVf9+ovV+dNLo=;
-        b=S05wCEAf3yPUXW0MzRbDTNwAvzxWgMM70y6dVzGJNbvZWBuXECn4JS9MGUdUrjqQj2
-         RNWaVYoA5jA1FDQgypq6GFefXETorgrn627c4z8pXAsyLLnreP5BJJ8LAjBjX1yXg5VF
-         8J5n46Tmj6ELrYj6Gg5vTHusKGZ2sm2Rfxwkugyg1qsALPcwlkvsebBD2qp4s1odIUE4
-         +McVMiGiek1oZazpcdXe1Cf+y3dGTZfwmMT0LEA86ODJn0yzPaxGRiM46OdJ86NeRhAa
-         uWLqexZTPPmPAiEzRH5icCfSDmPzO6qF0JAqFOUhYOLv/guVXx3VowIMwScCAeecScVx
-         UOXQ==
-X-Gm-Message-State: AAQBX9f5EVcCo/PtffqvsCb5LPteUT2e9HW7h4G8wC8Y5Nx4gWFFObZN
-        Tn+eLoWfX46gpAV6TgD9cQEeioZe5t+KWIpA0FI=
-X-Google-Smtp-Source: AKy350bUwtczUoXLbVWtNIum5fqpYWprDuoCGISwx0WMwjFle9l9FFmiPwx6mvYb6vtRCBL+h+yr/nxXqrGsnlCQOhs=
-X-Received: by 2002:a1f:2081:0:b0:43c:2acb:9a60 with SMTP id
- g123-20020a1f2081000000b0043c2acb9a60mr1195742vkg.3.1681397851795; Thu, 13
- Apr 2023 07:57:31 -0700 (PDT)
+        Thu, 13 Apr 2023 10:58:08 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B85AD15;
+        Thu, 13 Apr 2023 07:57:56 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 922D71FD67;
+        Thu, 13 Apr 2023 14:57:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1681397875;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rSBNwC+d8u++QC7Mbtf4PYXIAx/WzXjSXOiex9i0Dac=;
+        b=sB0vCCftw4cl4Ats2mQZGf5nBVTppwKw30G0zJnipUc171sKoxr1L5pAtdOGnFO3h9jeCY
+        5v/UW2rXLiBh9WzflNbmyXgldffGeFl72pMxwqYxmNXb6h3wU/Wicq5cCTOwzQDmVdtmGI
+        8G4SXlh/8wGkIvqZGJTSheiKUKAsAgY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1681397875;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rSBNwC+d8u++QC7Mbtf4PYXIAx/WzXjSXOiex9i0Dac=;
+        b=wlBpsaltwsBaXEAyWtiJ0Ac8dPuzxHmvtS7diwcDjNcKB9tTcnMyvzY6jYw88KEOL43kfo
+        06a0jpJohtmU+4Bw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3EF811390E;
+        Thu, 13 Apr 2023 14:57:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id vQ9bDnMYOGTpSgAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Thu, 13 Apr 2023 14:57:55 +0000
+Date:   Thu, 13 Apr 2023 16:57:48 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Miroslav Benes <mbenes@suse.cz>, linux-btrfs@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-scsi@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2 08/11] btrfs: Mark btrfs_assertfail() __noreturn
+Message-ID: <20230413145748.GF19619@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+References: <cover.1681342859.git.jpoimboe@kernel.org>
+ <960bd9c0c9e3cfc409ba9c35a17644b11b832956.1681342859.git.jpoimboe@kernel.org>
 MIME-Version: 1.0
-References: <20230411165919.23955-1-jim2101024@gmail.com> <20230411165919.23955-3-jim2101024@gmail.com>
- <20230413143935.pmbyjk2boxl3rwne@mraw.org>
-In-Reply-To: <20230413143935.pmbyjk2boxl3rwne@mraw.org>
-From:   Jim Quinlan <jim2101024@gmail.com>
-Date:   Thu, 13 Apr 2023 10:57:19 -0400
-Message-ID: <CANCKTBtXKAYf1LxR4qN+dVyxsWgyDztUVB4EdG=xhHbuhNCq5w@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] PCI: brcmstb: CLKREQ# accomodations of downstream device
-To:     Cyril Brulebois <kibi@debian.org>
-Cc:     linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <960bd9c0c9e3cfc409ba9c35a17644b11b832956.1681342859.git.jpoimboe@kernel.org>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Cyril,
-Can you provide (a) the full boot log prior to applying the patch
-series and (b) full boot log after applying the series, using an
-IDENTICAL  setup.
-If it fails on both then it has little to do with my patch series.
+On Wed, Apr 12, 2023 at 04:49:38PM -0700, Josh Poimboeuf wrote:
+> Fixes a bunch of warnings including:
+> 
+>   vmlinux.o: warning: objtool: select_reloc_root+0x314: unreachable instruction
+>   vmlinux.o: warning: objtool: finish_inode_if_needed+0x15b1: unreachable instruction
+>   vmlinux.o: warning: objtool: get_bio_sector_nr+0x259: unreachable instruction
+>   vmlinux.o: warning: objtool: raid_wait_read_end_io+0xc26: unreachable instruction
+>   vmlinux.o: warning: objtool: raid56_parity_alloc_scrub_rbio+0x37b: unreachable instruction
+>   ...
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/oe-kbuild-all/202302210709.IlXfgMpX-lkp@intel.com/
+> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 
-In my last series your testing somehow conflated the effect of an
-unrelated MMC interrupt issue so please be precise.
-
-Regards,
-Jim  Quinlan
-Broadcom STB
-
-On Thu, Apr 13, 2023 at 10:39=E2=80=AFAM Cyril Brulebois <kibi@debian.org> =
-wrote:
->
-> Hi Jim,
->
-> Jim Quinlan <jim2101024@gmail.com> (2023-04-11):
-> > [=E2=80=A6]
-> > This property has already been in use by Raspian Linux, but this
-> > immplementation adds more details and discerns between (a) and (b)
->   ^^^^^^^^^^^^^^^
->   implementation
->
-> > automatically.
-> >
-> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D217276
-> > Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
->
-> Sorry, it seems like my initial tests with v1 (applied on top of
-> v6.3-rc5-137-gf2afccfefe7b) weren't thorough enough, and I'm seeing the
-> same problems with v2 (applied on top of v6.3-rc6-46-gde4664485abb):
->  - same setup as in https://bugzilla.kernel.org/show_bug.cgi?id=3D217276
->  - the kernel panic is indeed gone;
->  - a USB keyboard connected on that SupaHub PCIe-to-multiple-USB adapter
->    isn't seen by the kernel;
->  - a USB memory stick connected on the same adapter isn't seen by the
->    kernel either;
->  - of course both USB devices are confirmed to work fine if they're
->    plugged directly on the CM4's USB ports.
->
-> Logs with v2:
->
->     root@cm4:~# dmesg|grep -i pci
->     [    0.610997] PCI: CLS 0 bytes, default 64
->     [    1.664886] shpchp: Standard Hot Plug PCI Controller Driver versio=
-n: 0.4
->     [    1.672083] brcm-pcie fd500000.pcie: host bridge /scb/pcie@7d50000=
-0 ranges:
->     [    1.679125] brcm-pcie fd500000.pcie:   No bus range found for /scb=
-/pcie@7d500000, using [bus 00-ff]
->     [    1.688279] brcm-pcie fd500000.pcie:      MEM 0x0600000000..0x0603=
-ffffff -> 0x00f8000000
->     [    1.696463] brcm-pcie fd500000.pcie:   IB MEM 0x0000000000..0x00ff=
-ffffff -> 0x0400000000
->     [    1.705282] brcm-pcie fd500000.pcie: PCI host bridge to bus 0000:0=
-0
->     [    1.711629] pci_bus 0000:00: root bus resource [bus 00-ff]
->     [    1.717172] pci_bus 0000:00: root bus resource [mem 0x600000000-0x=
-603ffffff] (bus address [0xf8000000-0xfbffffff])
->     [    1.727653] pci 0000:00:00.0: [14e4:2711] type 01 class 0x060400
->     [    1.733768] pci 0000:00:00.0: PME# supported from D0 D3hot
->     [    1.740235] pci 0000:00:00.0: bridge configuration invalid ([bus 0=
-0-00]), reconfiguring
->     [    1.855826] brcm-pcie fd500000.pcie: CLKREQ# ignored; no ASPM
->     [    1.863666] brcm-pcie fd500000.pcie: link up, 5.0 GT/s PCIe x1 (SS=
-C)
->     [    1.870115] pci 0000:01:00.0: [1912:0014] type 00 class 0x0c0330
->     [    1.876205] pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x00001fff=
- 64bit]
->     [    1.883177] pci 0000:01:00.0: PME# supported from D0 D3hot
->     [    1.888881] pci_bus 0000:01: busn_res: [bus 01-ff] end is updated =
-to 01
->     [    1.895581] pci 0000:00:00.0: BAR 14: assigned [mem 0x600000000-0x=
-6000fffff]
->     [    1.902707] pci 0000:01:00.0: BAR 0: assigned [mem 0x600000000-0x6=
-00001fff 64bit]
->     [    1.910279] pci 0000:00:00.0: PCI bridge to [bus 01]
->     [    1.915293] pci 0000:00:00.0:   bridge window [mem 0x600000000-0x6=
-000fffff]
->     [    1.922412] pcieport 0000:00:00.0: enabling device (0000 -> 0002)
->     [    1.928633] pcieport 0000:00:00.0: PME: Signaling with IRQ 23
->     [    1.934609] pcieport 0000:00:00.0: AER: enabled with IRQ 23
->     [    1.940340] pci 0000:01:00.0: enabling device (0000 -> 0002)
->     [    6.946090] pci 0000:01:00.0: xHCI HW not ready after 5 sec (HC bu=
-g?) status =3D 0x1801
->     [    6.954026] pci 0000:01:00.0: quirk_usb_early_handoff+0x0/0x968 to=
-ok 4896180 usecs
->
-> Please let me know what I can do to help.
->
->
-> Cheers,
-> --
-> Cyril Brulebois (kibi@debian.org)            <https://debamax.com/>
-> D-I release manager -- Release team member -- Freelance Consultant
+I'll add this one to btrfs queue, thanks.
