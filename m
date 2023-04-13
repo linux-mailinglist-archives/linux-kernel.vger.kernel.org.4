@@ -2,130 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B971F6E12A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:46:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D7556E12A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:46:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbjDMQqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 12:46:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50662 "EHLO
+        id S230103AbjDMQq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 12:46:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230027AbjDMQqN (ORCPT
+        with ESMTP id S230194AbjDMQqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 12:46:13 -0400
-Received: from smtpout30.security-mail.net (smtpout30.security-mail.net [85.31.212.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43A1A5C1
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:46:11 -0700 (PDT)
-Received: from localhost (fx305.security-mail.net [127.0.0.1])
-        by fx305.security-mail.net (Postfix) with ESMTP id 0280130FA29
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 18:46:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalrayinc.com;
-        s=sec-sig-email; t=1681404369;
-        bh=e7wUi4mc3TwCsUMSuEjMHiV+EmAdxJozU/xynxv1Vbw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=EDpp26vpbchLuzWY5nMhKrMGXRfERkj0IoC9kJGKKihcxS/FgvnlfnRZ2iekn1rtk
-         6EBbIg8MAiyGExNSwJKmd1SOFOL/T8nVm9BoxyT59RhM+lEIoLsSaiecQF/JSazEfU
-         GWKI05NC9e8fdCA/ftSVJoS97BItuJTaJy2DhEBU=
-Received: from fx305 (fx305.security-mail.net [127.0.0.1]) by
- fx305.security-mail.net (Postfix) with ESMTP id 9F44430F6D3; Thu, 13 Apr
- 2023 18:46:08 +0200 (CEST)
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com
- (mail-pr2fra01on0109.outbound.protection.outlook.com [104.47.24.109]) by
- fx305.security-mail.net (Postfix) with ESMTPS id 0077830F48A; Thu, 13 Apr
- 2023 18:46:07 +0200 (CEST)
-Received: from MR1P264MB1555.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:15::18)
- by PR1P264MB2159.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:192::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Thu, 13 Apr
- 2023 16:46:07 +0000
-Received: from MR1P264MB1555.FRAP264.PROD.OUTLOOK.COM
- ([fe80::ce25:a152:1cab:d832]) by MR1P264MB1555.FRAP264.PROD.OUTLOOK.COM
- ([fe80::ce25:a152:1cab:d832%4]) with mapi id 15.20.6298.030; Thu, 13 Apr
- 2023 16:46:07 +0000
-X-Virus-Scanned: E-securemail
-Secumail-id: <1d2c.643831cf.f38cd.0>
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ee1k7ngFJXTYCSy5WDm4XhH/SA98NW0Pi02KY+iTnQ4A0DYynqCfwem6VHAZKuW/J+d6Gx5Axb1bcCrNBQlm1KDfX6GuV+K0m8+p3zoOk5VYiKV5u3l19NCaCSb2TodUOS7OQpJNJkmSX/Bbcqff3AfjMEeMvK8VYbkGkX9bf3R23yQL2lNvSZkfq3O/UsKlh+jeTbCrrYhcR+M0kR5JSoV3rjT+bsbso9bV7qd8K+Fdti5m4aa+DlJgoqIwmAedvSVw/TrAypch0vod2IYKA69Mv5jX9SbMrbiL3Vo777FsLNHOb8IT3XTD4xqIZtipF/cyrpjB3iBx0omHWWCH3g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microsoft.com; s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=e7wUi4mc3TwCsUMSuEjMHiV+EmAdxJozU/xynxv1Vbw=;
- b=fRCm12EJ+gjwKXMcW8yDppE2r2DJaDTWCMceAxzXQw3HkZtE46WHFJVk1s58OFheNQQwEBjY9qcsheqDd9WKslYIoO97E1e7pfFozQGEMHe8oEpovcyawDNeY/XNKVAQdkx5nCiPJNH0Mw5DOgdxczMCm7Se+B1HZlhIZ9NkwX3PCVYDp5PcDlyNQyjz0J5EK3pkq/+htCNkdRgNXD8eM9f0rODFyXFRDseNoGtj89lrBOZ3EYewJXb2yhrnov8MpuV9w2vCnjUqR3kG9vhwxvSFHofL3OS2Zhu1blU2JCy9bGpYYD5T3Ju34D45rh89ymW2LIxd59Jn8zV+xxhF1g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kalrayinc.com; dmarc=pass action=none
- header.from=kalrayinc.com; dkim=pass header.d=kalrayinc.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalrayinc.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=e7wUi4mc3TwCsUMSuEjMHiV+EmAdxJozU/xynxv1Vbw=;
- b=dm7FQRV6SZAaqCvCKz/WPnqN5MYjmVPVGxicd8Z7S//WK9nPlDWDuMA8hB5fpnI+QgzbpoBYH6HFAq1DcNeFgGJQub60onPTLREyURKha1eD7MshQNnsG/++RTQi+8ZoUYAYTELHCa4dSZZ466aRmLR3cfnifa8ZgqDahIFleCJP06Gk+/xsyCBy9muOxIZIeFqOopQKD3n1FPb9Qe3YyNuULPajZ8tgf1bpEvCpQJ8JHqCOT+gDxS9y9/V7es3DH175gjPnIzFgJbPuG2v3zUkZe4hnVrCcP1pbaCHRmbZ8pZAO+DstThmQJefTirGPTx60wGDaXDcxnZONszQbMQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=kalrayinc.com;
-Date:   Thu, 13 Apr 2023 18:46:04 +0200
-From:   Louis Morhet <lmorhet@kalrayinc.com>
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     gupt21@gmail.com, jikos@kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] Fixes for the mcp2221 gpiochip get_* calls
-Message-ID: <20230413164604.GA17941@achlys.lin.mbt.kalray.eu>
-References: <cover.1680602387.git.lmorhet@kalrayinc.com>
- <20230413144913.53a22nat4s6i2mib@mail.corp.redhat.com>
-Content-Disposition: inline
-In-Reply-To: <20230413144913.53a22nat4s6i2mib@mail.corp.redhat.com>
-X-ClientProxiedBy: LO4P123CA0465.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:1aa::20) To MR1P264MB1555.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:501:15::18)
+        Thu, 13 Apr 2023 12:46:22 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B10493F4
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:46:21 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id c3so16670277pjg.1
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:46:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681404381; x=1683996381;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p0h0KR6elNnNqXKvjoeKJcNlR6E45HlPbpf02lsirvk=;
+        b=lAWIIiar6znvVMTNS5FSjWiS2KF5uQyvgo/lWJhKpkacy84wCkIK2xwiMiXySaOtEF
+         AInrn4fdEd/AeLHvSiEjIuEFrHfyllQA1jRJwSXK76v7oRvdEByGtECDVriJPV/h8BJU
+         di9BMUiJYsDU9ZlVd5SSqF0AsKcD8ajKcLDyGgnewzdPzWw2sLaVSA+SwcwI+ybJV2jC
+         ht6zqz9d56yrjULi5T+BtsHEkjIsjRd+oxVNuM6o7qbr+CB3gTKhIyZuZQZU7okE3fVh
+         8T6ACcRZXYK7UNd8iU17S1Shi5CeKzKk+Iz2c0ezB6EKhSjTlfzhNz6mplKGoTVum+ws
+         1X0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681404381; x=1683996381;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=p0h0KR6elNnNqXKvjoeKJcNlR6E45HlPbpf02lsirvk=;
+        b=dcKnerq+NjFVZi6PqNfNsIMvXxRWDT2xG3grBBN0i1zo15unLyF8ieGGzkRDKoCxpG
+         Qe57q45fmcQOEZiKfx3yRZ4Rixbu6TpnNdco+iVg+wIYFnb7jv2M1plbxt1vWyR+clJG
+         pj5GSC4m3otioGlbtexQC+U8R6bLEq+ReP7PT/XgJqMz0BwTCsAyEQrloFM5Azh5sleS
+         qsGYpKvBHJQxfhj/XbkX1eACyoCd2PDbF+uSHnv9sVzu/v14LDnqLbxWdrtAE5nH7RUW
+         4Jnf3HKmqH6nuOm/N3KgkH1glUOtcEHshfHEwDzNaDNDYTWVqeR3ofSZZo0b0zmfqkwg
+         7jwA==
+X-Gm-Message-State: AAQBX9ejGeDSt7LVWd34o/te+V9widZocAJYmGbwABD3Z0Yxf22S0Dsz
+        03oqLrVmOVFVEznhmPZKZlwWEiocl3sEiv2FxC4=
+X-Google-Smtp-Source: AKy350arFYZ6D74g3TZB+EM3aPiqTmYPjSCjq+EliPQ9eLzccDlMx7xTAbpkMDVQAr7rs889hanYqWLhw5wVVquUWdI=
+X-Received: by 2002:a17:903:4051:b0:1a2:6e4d:7831 with SMTP id
+ n17-20020a170903405100b001a26e4d7831mr859431pla.12.1681404380958; Thu, 13 Apr
+ 2023 09:46:20 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MR1P264MB1555:EE_|PR1P264MB2159:EE_
-X-MS-Office365-Filtering-Correlation-Id: 03fd6a63-b466-4ab9-1779-08db3c3e939b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mLOggepvdfa527gpae4xzYWASLST93tT1Rf41BMD9gO4VtK7owqcsnm7ipBfmuMm8OF07NPHbTOam2f3vpn1cXphWkZ2R8avCEv1BfjmNfMTXB0OVlPPml8eNKBbSB/vWEiJAdEUWwylWcAAKJXiTP6JqnYfUFcYR9J6xHhdZrVaP/0eqjL5TAkNE01CClSNYh54JSqEqCstoKzHv05JcF2a/jQ7YKkaisTkHsIZqblEdFKqf8DByQuUK7w/+hB4lbt3XGGkapu7pkVDvNAkbXpdI2QodGLNPmG+1f09Olv4yaA4Qi3jxTCq9WTP48hNfB1PyvGkCSAUt72wJFYtyvoZovOPfeQ6Cm3/lUitNSODWHFWFrrjlCkXEsu9fhISBNrmj0Jlkz+VV8jrksYs1Z3uStAUcE+4arKHjKPFqTazKjNHbM/atbqLX8rhuoDSKTQb4/NMMLKlPJ7Zputn06yId6g/NdtAwGlnaNxg8G+jx5OwvgPNBMIsl8tp60JY+cTUBUlJxRXKJ6dTmLjpTq/NsO2JCeh2GHFypC/NG2NZgeFUMEyyFtuwEI904wqB
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MR1P264MB1555.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(396003)(39850400004)(346002)(376002)(451199021)(5660300002)(41300700001)(33656002)(38100700002)(4744005)(2906002)(8676002)(86362001)(4326008)(6916009)(66556008)(8936002)(66946007)(66476007)(316002)(1076003)(83380400001)(6506007)(6512007)(26005)(9686003)(186003)(478600001)(6486002)(6666004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: PO8atFpZk+tcl/5jJJEP5q5uHsbRIByead5WyqF3H80f2cuivK1sRqseFixm6DaqRUAltJ5w60O5+dK0w92Yuoc46Whe4lK6GmbAkJr0YJojoRW+weA4XiYj5eFFC8Fbin0lSyqGTBd61upphRsDAb3NOFXYAmSDFSJniR5CcCney1FoZHMV2Z+HhqRnvS5uJJnO73aeeX9H1FrRJaQCvUZUjbhiRoFL8TW+0ruBKoa0du4eilXg581nN5Khuskhh7JmnOVeaExe0+zsQWfePqsrl2I2gDP0ggUStAmhTMb/tYOGQJPMUhZ/YizodjnAnwUdaWcnPT45TB8X54dQwei+zhyyRFQCHBJ57IDhJKLwAq0LTNzpkYMf0nyaV72BnepSlW1qGcKuGKqx1LxNBKH57aSd2a8y3/qge/0u/aHYMqjSphP8GBhihh0OvViSbBJ1NYrubkBUk21qc3LGO9YhGo+Z9wVBNgstmGIgS5UpF+/U5ivOLszGul29Oyj3T+Y8iPJwYVqPiY/ouPE4jLnMia5xkAFLxfzeBaDSNzDbu4l9eZ6OxvoyEYTdh1nO9m0SaAT5aoFvx5HSydt3NASQJj4w3zHlErkcq93vdAydxnPShPnTX9H45eHDZO+fimbAnN0uLAw4coOkkiFRtQYRRUNCUYXcOfi7IcIjxU+hfLw9b5W8w56Z8MEJUsiXxRs7gJ2mFnaGUYvi7OnBK/mS5K1YE38HUYtDhr/OWbWr1GAsAE82MJvDhbTUDWfTBkM0KtsVZtpBZNTH+JLzYxMRIuz65OCHNSr15i4CwS33CDlc4UA4HL4UnfkNkj7HOxVne//DhOh3Sfqs3C1RPjJN4cX5xjofNFAZ9wmeO0R17BFuv/yE3dSmie/1xTmqNwE1ijqeOrNDDQqtR4i05dn46+KqgUmBJXwSnuhUfazAbbhVtzm/+Lh3N+jIwFm/
- Q6+rxSgwGHMEEKoeHtaGUIomropOxM6z3pCpN1HFcSnc7C81inHB64e4KFB0LnQ8+Dn+4rgjcqHcuWmI3iDAm2+3/clN9cP15lbu+Rdg5WF+wE+LXxjMSE2gne5iI9N37wMM3XVWd0fbDHKdMyKWtpV5WJvZIw7Wy17ndWwIddnvajxETyEigovKtGZbqSbVE48cJpFKZY94BlZCr7UX6ElrcozJred5ite2Sh6CEeQ9C/7rk6X3s1bkv38E5pZdUVeZrhJ0Hmc3b1VxyVo0rIvUS+mLKaJJ2iCbmgipajAeBAcEZcs3tAfY8NiZKTC7Z59+jKkbLRhFwTa2PumIDTtStVT/BXT3/mw1QEhzpYMs2sRUD1lEDdTGOrstKb7BLANEoWuEdSlSr4SYPp3P1azYJkEH05cvKN7wfNYHktlB+5ShkzD0fBB/KlRysVKUS4CdllIEvDhOZeUYGLv8xfvNZ5tlymQZJt4/XnZHb0S9QhWUfvQ4R3Ips2OY/Uhe4xgi43NnxztSmkUQLkOWciYH/dIzVp+BFHEw16MgHQY33x2MVWCii2rU2NGFZLJsoSRUZkDGtg23lrfbPEfeTsuGSqLoRua1/0SyYbe9pp78ZnyNK/gu3n5pU6Ep3FGF
-X-OriginatorOrg: kalrayinc.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 03fd6a63-b466-4ab9-1779-08db3c3e939b
-X-MS-Exchange-CrossTenant-AuthSource: MR1P264MB1555.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2023 16:46:06.9808
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8931925d-7620-4a64-b7fe-20afd86363d3
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kAD9Aj7cge0+wU0PWhkF0WqiIzyezr5i+4rvv+oq4eOpD7tophLE34jCBi51hiEEBwjvCStHQ1IaNjHN7jUgsA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB2159
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-X-ALTERMIMEV2_out: done
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230312145305.1908607-1-zyytlz.wz@163.com> <CANDhNCr=hdhKS4c+U=+W1ONHDWv6BrwL5TovGjs0G2G+Reqc9g@mail.gmail.com>
+ <CAJedcCyJnV+KnFF5h+2-0W1R4uaUxUxXFUH3Q9HGYh-5F5LmBQ@mail.gmail.com>
+ <CAJedcCyERP0-9DNgeKmS3C9Soqq590PteEorr_bxKzNanht=TQ@mail.gmail.com>
+ <CAMSo37Vfr0DOqN+1XjH0o3pOY=BaHnSFkUbnZPOdMQ3TbfoAKg@mail.gmail.com>
+ <CAJedcCzm3MqYe3QGT7V4sMmDsVHbjVSnEc2NXWPMGVZL=a_cBA@mail.gmail.com>
+ <2023041308-nerd-dry-98a6@gregkh> <CAJedcCyeM2a79i0=ffKwdKfnQayo7svhTTEth2ka6K9np0Ztiw@mail.gmail.com>
+ <2023041308-unvisited-slinky-a56f@gregkh>
+In-Reply-To: <2023041308-unvisited-slinky-a56f@gregkh>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Fri, 14 Apr 2023 00:46:08 +0800
+Message-ID: <CAJedcCxzGbUSj0nh4xYp8P2zhYSM31CGi2fGE+9VJt7mkg6h4g@mail.gmail.com>
+Subject: Re: [PATCH] misc: hisi_hikey_usb: Fix use after free bug in
+ hisi_hikey_usb_remove due to race condition
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Yongqin Liu <yongqin.liu@linaro.org>,
+        John Stultz <jstultz@google.com>,
+        Zheng Wang <zyytlz.wz@163.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, 1395428693sheep@gmail.com,
+        alex000young@gmail.com, Mauro Carvalho Chehab <mchehab@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 04:49:13PM +0200, Benjamin Tissoires wrote:
-> As you should have seen in the automatic replied, I took that series in
-> because it seems to fix a rather worrying bug.
-Thanks!
+Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2023=E5=B9=B44=E6=9C=8813=E6=
+=97=A5=E5=91=A8=E5=9B=9B 23:56=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Thu, Apr 13, 2023 at 11:35:17PM +0800, Zheng Hacker wrote:
+> > Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2023=E5=B9=B44=E6=9C=8813=
+=E6=97=A5=E5=91=A8=E5=9B=9B 20:48=E5=86=99=E9=81=93=EF=BC=9A
+> > >
+> > > On Thu, Apr 13, 2023 at 07:12:07PM +0800, Zheng Hacker wrote:
+> > > > Yongqin Liu <yongqin.liu@linaro.org> =E4=BA=8E2023=E5=B9=B44=E6=9C=
+=8813=E6=97=A5=E5=91=A8=E5=9B=9B 18:55=E5=86=99=E9=81=93=EF=BC=9A
+> > > > >
+> > > > > Hi, Zheng
+> > > > >
+> > > > > On Thu, 13 Apr 2023 at 16:08, Zheng Hacker <hackerzheng666@gmail.=
+com> wrote:
+> > > > > >
+> > > > > > Friendly ping about the bug.
+> > > > >
+> > > > > Sorry, wasn't aware of this message before,
+> > > > >
+> > > > > Could you please help share the instructions to reproduce the pro=
+blem
+> > > > > this change fixes?
+> > > > >
+> > > >
+> > > > Hi Yongqin,
+> > > >
+> > > > Thanks for your reply. This bug is found by static analysis. There =
+is no PoC.
+> > > >
+> > > > >From my personal experience, triggering race condition bugs stably=
+ in
+> > > > the kernel needs some tricks.
+> > > > For example, you can insert some sleep-time code to slow down the
+> > > > thread until the related object is freed.
+> > > > Besides, you can use gdb to control the time window. Also, there ar=
+e
+> > > > some other tricks as [1] said.
+> > > >
+> > > > As for the reproduction, this attack vector requires that the attac=
+ker
+> > > > can physically access the device.
+> > > > When he/she unplugs the usb, the remove function is triggered, and =
+if
+> > > > the set callback is invoked, there might be a race condition.
+> > >
+> > > How does the removal of the USB device trigger a platform device
+> > > removal?
+> >
+> > Sorry I made a mistake. The USB device usually calls disconnect
+> > callback when it's unpluged.
+>
+> Yes, but you are changing the platform device disconnect, not the USB
+> device disconnect.
+>
+> > What I want to express here is When the driver-related device(here
+> > it's USB GPIO Hub) was removed, the remove function is triggered.
+>
+> And is this a patform device on a USB device?  If so, that's a bigger
+> problem that we need to fix as that is not allowed.
 
-> Also, just a side note, this driver is very limited in term of scope, as
-> it only touches one dedicated device. Which means that whatever solution
-> feels the more elegant to you has a good chance of being accepted :)
-Well, using a struct to describe the layout of a message seems more
-elegant; but if I'm not mistaken, taking offsets of fields in a packed
-struct is UB... so I was surprised to even see that in Linux, that's why
-I was wondering if I should pursue in that direction.
+No this is not a platform  device on a USB device.
 
+>
+> But in looking at the code, it does not seem to be that at all, this is
+> just a "normal" platform device.  So how can it ever be removed from the
+> system?  (and no, unloading the driver doesn't count, that can never
+> happen on a normal machine.)
+>
 
---
-Louis
+Yes, I finally figured out your meaning. I know it's hard to unplug
+the platform device
+directly. All I want to express is that it's a theoretical method
+except  rmmod. I think it's better to fix the bug. But if the
+developers think it's practically impossible, I think there's no need
+to take further action.
 
+Sorry for wasting your time and thanks for your explanation.
 
+Best regards,
+Zheng
 
-
+> thanks,
+>
+> greg k-h
