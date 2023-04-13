@@ -2,51 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF43B6E108E
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 17:03:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29A396E1091
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 17:04:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230176AbjDMPD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 11:03:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55142 "EHLO
+        id S230499AbjDMPEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 11:04:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjDMPD0 (ORCPT
+        with ESMTP id S229660AbjDMPEJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 11:03:26 -0400
+        Thu, 13 Apr 2023 11:04:09 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041187280
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 08:03:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5631783E2;
+        Thu, 13 Apr 2023 08:04:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9458E63D2A
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 15:03:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B818AC433EF;
-        Thu, 13 Apr 2023 15:03:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E73A263BBE;
+        Thu, 13 Apr 2023 15:04:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC5A7C433EF;
+        Thu, 13 Apr 2023 15:04:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681398204;
-        bh=QPUkqPgRKaIjDDW1YwhxzO3PAAr+2+moV8zN1iwvllg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HQAGJwNO0w5KlMuOrcjxHZuk9mA+AC5HCk4bI+Wt3JgMDYhj4PCe53meaSNxTDoHL
-         p6FuEJk+v6BbCdPaCNEJpuJqw1FcelOfIT9B9e2+uykXHOmjXTJhs+K5jTxNII9kQ2
-         rGSlipknR4nnkahyMMh1+5WijYS/8YGVuQP8peFnFldXFEdVjFKganVbBGmehvCrIj
-         mNqAKCVP7MJ7l492562p4cFrUZFl9dp/Bn9yte1grKye/mJMkxCMQ4W20Si3rMOXYN
-         5pbKAQWXTaYF7C46umjhFQQ74lOvFmMuZ7KL6dVRKxME1QBJPQ5BxmBO7vYLZAcIov
-         UIXK9SgsUy6uw==
-Date:   Thu, 13 Apr 2023 08:03:21 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Miroslav Benes <mbenes@suse.cz>
-Subject: Re: [PATCH v2 3/9] objtool: Limit unreachable warnings to once per
- function
-Message-ID: <20230413150321.6hd4m3vlnonom3qo@treble>
-References: <cover.1681325924.git.jpoimboe@kernel.org>
- <81ed0b8e5218ac6ecae49af901bf5e0fb3687cef.1681325924.git.jpoimboe@kernel.org>
- <20230413080112.GF4253@hirez.programming.kicks-ass.net>
+        s=k20201202; t=1681398247;
+        bh=JdbgbeQTK4oXXpvwy/OkbrBX79V7CMl8I2rByssnbK8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YPGDH/bbVb36/Vi0t11lP6f2sRR4SOLUf7fIxJRUtI28miO5mrqAWIL/3j1+kYij5
+         Znu5MBMUAZ+ABRUL93fKTMB8SrOPqtCDWAWceK9xh6JuqFmfUN0jdOLKeXXtxaZjlk
+         Mji3Ymgy4JBemOYnGu9wR+RTKyZ/BPk926GVY3BLbrJozJPXSyT4kwpnvRSM1BGqMQ
+         lDdzkfb6wkR/K9+ZE7ddssGuJ4sacrzsSzrfTlCIV7dOuOB08yFa6iiLh6ZIpQyFy4
+         pQXosljbJNj3i7pKtYMvmQu2Iu5JzdM+4DG/oqhlS/RRYM3agdlvngB1MvkVuACpU7
+         GLBtV7XMPP1Sw==
+Date:   Thu, 13 Apr 2023 08:04:05 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>
+Cc:     "jiri@resnulli.us" <jiri@resnulli.us>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        "richardcochran@gmail.com" <richardcochran@gmail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>
+Subject: Re: [RFC PATCH v1] ice: add CGU info to devlink info callback
+Message-ID: <20230413080405.30bbe3bd@kernel.org>
+In-Reply-To: <DM6PR11MB46577E14FE17ADA6D1E74E789B989@DM6PR11MB4657.namprd11.prod.outlook.com>
+References: <20230412133811.2518336-1-arkadiusz.kubalewski@intel.com>
+        <20230412203500.36fb7c36@kernel.org>
+        <DM6PR11MB46577E14FE17ADA6D1E74E789B989@DM6PR11MB4657.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230413080112.GF4253@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -56,38 +65,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 10:01:12AM +0200, Peter Zijlstra wrote:
-> On Wed, Apr 12, 2023 at 12:03:18PM -0700, Josh Poimboeuf wrote:
+On Thu, 13 Apr 2023 13:43:52 +0000 Kubalewski, Arkadiusz wrote:
+> >Is it flashed together with the rest of the FW components of the NIC?
+> >Or the update method is different?  
 > 
-> > diff --git a/tools/objtool/include/objtool/warn.h b/tools/objtool/include/objtool/warn.h
-> > index b1c920dc9516..4ef9b278e5fd 100644
-> > --- a/tools/objtool/include/objtool/warn.h
-> > +++ b/tools/objtool/include/objtool/warn.h
-> > @@ -55,7 +55,10 @@ static inline char *offstr(struct section *sec, unsigned long offset)
-> >  
-> >  #define WARN_INSN(insn, format, ...)					\
-> >  ({									\
-> > -	WARN_FUNC(format, insn->sec, insn->offset,  ##__VA_ARGS__);	\
-> > +	if (!insn->sym || !insn->sym->warned)				\
-> > +		WARN_FUNC(format, insn->sec, insn->offset, ##__VA_ARGS__);\
-> > +	if (insn->sym)							\
-> > +		insn->sym->warned = 1;					\
-> >  })
-> 
-> Do we want to write that like:
-> 
-> #define WARN_INSN(insn, format, ...)					\
-> ({									\
-> 	struct instruction *_insn = (insn);				\
-> 	if (!_insn->sym || !_insn->sym->warned)				\
-> 		WARN_FUNC(format, _insn->sec, _insn->offset, ##__VA_ARGS__);\
-> 	if (_insn->sym)							\
-> 		_insn->sym->warned = 1;					\
-> })
-> 
-> instead ?
+> Right now there is no mechanics for CGU firmware update at all, this is why I
+> mention that this is for now mostly for debugging purposes.
+> There are already some works ongoing to have CGU FW update possible, first with
+> Intel's nvmupdate packages and tools. But, for Linux we probably also gonna
+> need to support update through devlink, at least this seems right thing to do,
+> as there is already possibility to update NIC firmware with devlink.
 
-Yes indeed.
+Only FW versions which are updated with a single flashing operation /
+are part of a single FW image should be reported under the device
+instance. If the flash is separate you need to create a separate
+devlink (sub)instance or something along those lines.
 
--- 
-Josh
+Differently put - the components in the API are components of the FW
+image, not components of a board.
+
+We had a similar discussion about "line cards" before.
