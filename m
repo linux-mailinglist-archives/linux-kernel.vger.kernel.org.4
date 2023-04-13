@@ -2,144 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95B296E0963
+	by mail.lfdr.de (Postfix) with ESMTP id 4B75F6E0962
 	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230133AbjDMIxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 04:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47878 "EHLO
+        id S230111AbjDMIxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 04:53:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbjDMIxU (ORCPT
+        with ESMTP id S230016AbjDMIxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 13 Apr 2023 04:53:20 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864AA93DD
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 01:53:10 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id j17so25936957ejs.5
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 01:53:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681375989; x=1683967989;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3H24zP1L7tYYlCqcIbWQTBu/s9gcRQK5v7kIq+g891I=;
-        b=KICwgJX+Xasyma77ZsxbeSnEzglwgFHu4leJC6Q3s8sWKcXe+OofACslEldiD6kYnk
-         Uk/S4fK55NeQMGpZSU5rjisgBKz2TvsOc+DHlm0wGHBMjBxBCWHI3JMx9bzFZBMKMVze
-         ZByORwbDqqjJdRf5ivFzZ4YV+4UtoNrmJEeDuevfmU454EZ1DIBU5w45RjYISe3CA9kd
-         DbWcs2scsLHKfAJ7x4503MKzzC9h50CnBFgN/y0e5MXp4arvvwcpLWnZ8f/3Elgc8rE+
-         uol62orUHmgKVajfoIyRuDToECRDEMrhWxRhhvYKeTOeElWEmjfBN500oIukkhymkzvH
-         9/1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681375989; x=1683967989;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3H24zP1L7tYYlCqcIbWQTBu/s9gcRQK5v7kIq+g891I=;
-        b=l+peetiLMFNytWhHwdhZwvfRBpIUUdBWJ7zWtZhhpj46jZWd/mUsdjiz30J+ekXcmH
-         uivXFtd1kdhRVANbml91z8DPxBZBl/m4Tx14YJQF6qSNgcLDVeveiuG/ykGDzwSOGm8R
-         80dMLl9wD5EGhVtRuJHQB0BjX43E7fuDRo9gMIMKmye/wv2E7JDKMMXB8GfpdmVKOfZa
-         zTkNWF5smAof2+8vA1tRcV9gNVW6PtUlmdyteBxzQEeIWVvFNdbojY1ExxTI0BKuVVqf
-         DDFcuWd05Ja6lXwTEm3/p6vHQe8J8mHNP1jv1i7ddmw1kWevHq54Ky6fMQC0kK+dPkMu
-         /avQ==
-X-Gm-Message-State: AAQBX9fcRodNAKfp80oQi9bAqpH/FLGY+z0E86sbyDxofjF1eLdlqg+W
-        NOCZIEpBKjQgpcpb9Ry1HlQDRpa5+mMkcbjJi5E=
-X-Google-Smtp-Source: AKy350bssJsTsK6f959IfKKZln3Gn31vb5WyeZyv4Fiyd5jiVWOkRLggleMzrk2N2+UqGDJiCAHdxA==
-X-Received: by 2002:a17:907:1b1b:b0:94e:4fac:d92b with SMTP id mp27-20020a1709071b1b00b0094e4facd92bmr2018234ejc.58.1681375989020;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0808793D8;
         Thu, 13 Apr 2023 01:53:09 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:ec6f:1b33:ab3f:bfd7? ([2a02:810d:15c0:828:ec6f:1b33:ab3f:bfd7])
-        by smtp.gmail.com with ESMTPSA id gy18-20020a170906f25200b008ec4333fd65sm637573ejb.188.2023.04.13.01.53.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Apr 2023 01:53:08 -0700 (PDT)
-Message-ID: <a84b11c7-c49d-6859-cdd7-16b4d37489df@linaro.org>
-Date:   Thu, 13 Apr 2023 10:53:07 +0200
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FFB660F82;
+        Thu, 13 Apr 2023 08:53:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEB5AC433D2;
+        Thu, 13 Apr 2023 08:53:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681375989;
+        bh=KD2i7rfc05PNm6fc+ra9GKR25FspBvRlzhcKY9GMol4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KCX6bClgI9it97V9kSVUo+plGUqXnU1pMdGONvavGaXjoMIdNj0S2dL7pq++3n97S
+         KEAgDcJlitxkowAd7t/tuCIzBdLYTLFKFvq00/B0vcCQIQOkL10MuJBaEYEJA5mvjP
+         wnAoNUsOXLL1mtOkFoFj2I+bTbJmGbJ+/xsACyoXroZFFvzEYna0rzeYDPSb+wxYSd
+         dWxy+4c85dRt9Qh/koZycOtBuSxToStJhTeJLbOEWui51kcM9YZPePxWpbYis6TASI
+         AD1k/xV7FYcSV3m4VIdk7p8KZF7V0mfxyBYQwaOizniJk3y6IPloRW56yd89jdIMlk
+         9BOvQaC6H09Uw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pmshb-00007D-5U; Thu, 13 Apr 2023 10:53:11 +0200
+Date:   Thu, 13 Apr 2023 10:53:11 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Jarkko Sonninen <kasper@iki.fi>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] USB: serial: xr: Add TIOCGRS485 and TIOCSRS485 ioctls
+Message-ID: <ZDfC9xkDMAJn60jc@hovoldconsulting.com>
+References: <20230313010416.845252-1-kasper@iki.fi>
+ <20230314070002.1008959-1-kasper@iki.fi>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp-lenovo-thinkpad: correct pin
- drive-strength
-Content-Language: en-US
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230407180710.128815-1-krzysztof.kozlowski@linaro.org>
- <ZDVtXkCON8DFUDjh@hovoldconsulting.com>
- <887eb9f6-9882-37c6-4332-ddae7a354187@linaro.org>
- <ZDZUiW+74rhhRAfS@hovoldconsulting.com>
- <15e1d05f-b7e1-27bc-7363-aefd2d155eea@linaro.org>
- <ZDZbif25qQh79cuG@hovoldconsulting.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ZDZbif25qQh79cuG@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230314070002.1008959-1-kasper@iki.fi>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/04/2023 09:19, Johan Hovold wrote:
-> On Wed, Apr 12, 2023 at 09:03:31AM +0200, Krzysztof Kozlowski wrote:
->> On 12/04/2023 08:49, Johan Hovold wrote:
->>> On Tue, Apr 11, 2023 at 06:58:33PM +0200, Krzysztof Kozlowski wrote:
->>>> On 11/04/2023 16:23, Johan Hovold wrote:
->>>>> On Fri, Apr 07, 2023 at 08:07:10PM +0200, Krzysztof Kozlowski wrote:
->>>>>> Fix typo in drive-strength property name.
->>>>>
->>>>> In the future, please try to use the established commit-summary prefix.
->>>>> In this case:
->>>>>
->>>>> 	arm64: dts: qcom: sc8280xp-x13s:
->>>>
->>>> Sure.
->>>>
->>>> commit ca1ce7207e53cfe69aee5002eb3795069668da53
->>>> Author: Johan Hovold <johan+linaro@kernel.org>
->>>> Date:   Fri Aug 5 11:23:17 2022 +0200
->>>>
->>>>     arm64: dts: qcom: sc8280xp-lenovo-thinkpad-x13s: add alternate touchpad
->>>
->>> Yeah, we initially used a longer prefix (including "x13s" which was
->>> missing in the Subject of this patch), but quite soon decided on using
->>> the shorter
->>>
->>> 	arm64: dts: qcom: sc8280xp-x13s:
->>>
->>> instead.
->>
->> Thanks. Do you know if this rule applies to other long-names? I was
->> usually keeping full name or shortening them by cutting end, but maybe I
->> should cut the middle?
->>
->> sm8250-sony-xperia-edo-pdx206
->> sm8250-sony-xperia-edo
->> sm8250-pdx206
-> 
-> I would not call it a rule just yet, but I guess there are further cases
-> were this could have been used. Perhaps you can all decide to use it for
-> the other Qualcomm dts as well.
-> 
-> For the X13s the, 'sc8280xp-x13s' is enough to uniquely define the
-> board and it mirrors 'sc8280xp-crd' (and using a shorter prefix makes
-> the commit logs easier to read).
-> 
-> The general suggestion is still to check 'git log --oneline' for the
-> files in question and use what appears to be the (recent) common prefix.
+On Tue, Mar 14, 2023 at 09:00:01AM +0200, Jarkko Sonninen wrote:
+> Add support for RS-485 in Exar USB adapters.
+> RS-485 mode is controlled by TIOCGRS485 and TIOCSRS485 ioctls.
+> Gpio mode register is set to enable RS-485.
 
-I do it for subsystems, but I am not going to do it per file. Sorry, I
-am sending way too many of them to keep also customizing them per each
-file. If you wanted x13s prefix, then you would name the file like that.
-If you named file differently, then apparently that's how you want it to
-look.
+Which register you use is an implementation details which is not really
+needed in the commit message.
 
-Best regards,
-Krzysztof
+Please say something about how the hardware works and try to describe
+what you are implementing here and perhaps something about what is left
+unsupported (e.g. the fixed rts polarity).
 
+> Signed-off-by: Jarkko Sonninen <kasper@iki.fi>
+> ---
+> 
+> In this version only rs485.flags are stored to state.
+> There is no locking as only one bit of the flags is used.
+> ioctl returns -ENOIOCTLCMD as the actual error handling is in tty code.
+> 
+>  drivers/usb/serial/xr_serial.c | 62 +++++++++++++++++++++++++++++++++-
+>  1 file changed, 61 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/serial/xr_serial.c b/drivers/usb/serial/xr_serial.c
+> index fdb0aae546c3..7b542ccb6596 100644
+> --- a/drivers/usb/serial/xr_serial.c
+> +++ b/drivers/usb/serial/xr_serial.c
+> @@ -93,6 +93,7 @@ struct xr_txrx_clk_mask {
+>  #define XR_GPIO_MODE_SEL_DTR_DSR	0x2
+>  #define XR_GPIO_MODE_SEL_RS485		0x3
+>  #define XR_GPIO_MODE_SEL_RS485_ADDR	0x4
+> +#define XR_GPIO_MODE_RS485_TX_H		0x8
+>  #define XR_GPIO_MODE_TX_TOGGLE		0x100
+>  #define XR_GPIO_MODE_RX_TOGGLE		0x200
+>  
+> @@ -237,6 +238,7 @@ static const struct xr_type xr_types[] = {
+>  struct xr_data {
+>  	const struct xr_type *type;
+>  	u8 channel;			/* zero-based index or interface number */
+> +	u32 rs485_flags;
+>  };
+>  
+>  static int xr_set_reg(struct usb_serial_port *port, u8 channel, u16 reg, u16 val)
+> @@ -645,9 +647,13 @@ static void xr_set_flow_mode(struct tty_struct *tty,
+>  	/* Set GPIO mode for controlling the pins manually by default. */
+>  	gpio_mode &= ~XR_GPIO_MODE_SEL_MASK;
+>  
+> +	if (data->rs485_flags & SER_RS485_ENABLED)
+> +		gpio_mode |= XR_GPIO_MODE_SEL_RS485 | XR_GPIO_MODE_RS485_TX_H;
+> +	else if (C_CRTSCTS(tty) && C_BAUD(tty) != B0)
+> +		gpio_mode |= XR_GPIO_MODE_SEL_RTS_CTS;
+> +
+>  	if (C_CRTSCTS(tty) && C_BAUD(tty) != B0) {
+>  		dev_dbg(&port->dev, "Enabling hardware flow ctrl\n");
+> -		gpio_mode |= XR_GPIO_MODE_SEL_RTS_CTS;
+>  		flow = XR_UART_FLOW_MODE_HW;
+
+The logic here is unnecessarily convoluted here and you also should not
+set hardware flow control mode if rs485 mode is enabled.
+
+Perhaps you can add a local boolean flag to hold the rs485 state and
+test it before the current if-else construct. Then you only enable
+hw-flow when rs485 mode is disabled while stile allowing sw-flow to be
+set (hopefully that's a legal combination, please do try to verify
+that).
+
+It also looks like you have inverted the RS485 polarity by using
+XR_GPIO_MODE_RS485_TX_H (more on that below).
+
+>  	} else if (I_IXON(tty)) {
+>  		u8 start_char = START_CHAR(tty);
+> @@ -827,6 +833,59 @@ static void xr_set_termios(struct tty_struct *tty,
+>  	xr_set_flow_mode(tty, port, old_termios);
+>  }
+>  
+> +static int xr_get_rs485_config(struct tty_struct *tty,
+> +			 unsigned int __user *argp)
+
+argp points to struct serial_rs485 to use that as the type rather than
+pointer to unsigned int.
+
+> +{
+> +	struct usb_serial_port *port = tty->driver_data;
+> +	struct xr_data *data = usb_get_serial_port_data(port);
+> +	struct serial_rs485 rs485;
+> +
+> +	dev_dbg(tty->dev, "Flags %02x\n", data->rs485_flags);
+
+This is not a very informative message. Please add back the function
+prefix so that is also distinguishable from the dev_dbg() in the other
+rs485 helper and use the following format:
+
+	"%s - flags = 0x%02x\n", __func__, ...
+
+And add a new line here.
+
+> +	memset(&rs485, 0, sizeof(rs485));
+> +	rs485.flags = data->rs485_flags;
+> +	if (copy_to_user(argp, &rs485, sizeof(rs485)))
+> +		return -EFAULT;
+> +
+> +	return 0;
+> +}
+> +
+> +static int xr_set_rs485_config(struct tty_struct *tty,
+> +			 unsigned long __user *argp)
+
+Use a pointer to the struct here too.
+
+> +{
+> +	struct usb_serial_port *port = tty->driver_data;
+> +	struct xr_data *data = usb_get_serial_port_data(port);
+> +	struct serial_rs485 rs485;
+> +
+> +	if (copy_from_user(&rs485, argp, sizeof(rs485)))
+> +		return -EFAULT;
+> +
+> +	dev_dbg(tty->dev, "Flags %02x\n", rs485.flags);
+
+Please update the format string as mentioned above.
+
+Add a newline here.
+
+> +	data->rs485_flags = rs485.flags & SER_RS485_ENABLED;
+> +	xr_set_flow_mode(tty, port, (const struct ktermios *)0);
+
+This function accesses tty->termios so you can not call it here without
+any locking as it can change underneath you and nothing currently
+prevents set_termios() from calling the same function in parallel.
+
+If you take a write lock on the termios rw sempahore you can use it also
+to protect the rs485 data instead of relying on implicit atomicity
+rules.
+
+And perhaps you should just copy the entire rs485 struct from the start
+as these devices supports further features which someone may want to
+implement support for later (e.g. delay after send and 9th bit
+addressing).
+
+You should just use NULL for the third (old_termios) argument.
+
+> +
+> +	// Only the enable flag is implemented
+
+No c99 comments, please.
+
+> +	memset(&rs485, 0, sizeof(rs485));
+> +	rs485.flags = data->rs485_flags;
+
+This does not look correct given that you set the RS485 TX polarity so
+that RTS is high (logic disable) during TX above.
+
+You need to at least make sure that both the SER_RS485_RTS_ON_SEND and
+SER_RS485_RTS_AFTER_SEND bits match the polarity setting. But perhaps
+you could consider implementing support for configuring the polarity
+from the start.
+
+> +	if (copy_to_user(argp, &rs485, sizeof(rs485)))
+> +		return -EFAULT;
+> +
+> +	return 0;
+> +}
+> +
+> +
+> +static int xr_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg)
+> +{
+> +	void __user *argp = (void __user *)arg;
+> +
+> +	switch (cmd) {
+> +	case TIOCGRS485:
+> +		return xr_get_rs485_config(tty, argp);
+> +	case TIOCSRS485:
+> +		return xr_set_rs485_config(tty, argp);
+> +	}
+> +	return -ENOIOCTLCMD;
+> +}
+> +
+>  static int xr_open(struct tty_struct *tty, struct usb_serial_port *port)
+>  {
+>  	int ret;
+> @@ -1010,6 +1069,7 @@ static struct usb_serial_driver xr_device = {
+>  	.set_termios		= xr_set_termios,
+>  	.tiocmget		= xr_tiocmget,
+>  	.tiocmset		= xr_tiocmset,
+> +	.ioctl			= xr_ioctl,
+>  	.dtr_rts		= xr_dtr_rts
+>  };
+
+Johan
