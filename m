@@ -2,76 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26E316E1881
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 01:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0856B6E1886
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 01:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbjDMXyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 19:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38704 "EHLO
+        id S229954AbjDMX7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 19:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjDMXyf (ORCPT
+        with ESMTP id S229530AbjDMX66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 19:54:35 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5AB120;
-        Thu, 13 Apr 2023 16:54:34 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id kt6so3344731ejb.0;
-        Thu, 13 Apr 2023 16:54:34 -0700 (PDT)
+        Thu, 13 Apr 2023 19:58:58 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E6D3C05
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 16:58:57 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1a1b23f49e2so251705ad.0
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 16:58:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681430073; x=1684022073;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JWvjWk4I7oc6dibDy+yZ1HnfJOmElV8h8gzVVqmgQHg=;
-        b=lA//TTbrxMuf+RtLbXQDgO4FDlYsguGdpLEAqEUy1fDjyiwB23DoaHo7S4YdVh1FNo
-         wglzWEGejSBWMuiUIAYJ2cSsH+zzluQ0icAD8Kwb3iYLxpWIv8Ec1+J4KWpQTKI9Ve4C
-         gK+u0G4J7lkRj4YI4zuQE9kCpFCbiL+CzEEZXjVczK50s41pQlRLo6E05iaFYWYE9rlr
-         INkZ+rD7vq52Pz4c8qEa1JvrNCKmybJJxMzL90areN7eiJ6hBUnRs+uCKfYuNykkoeng
-         4rr5FHHMldUCEv+MQ68NNLay2w9sDb0eDfUYarCSx/sVB5914hDeVg3wNicgPhqbUllo
-         CYaw==
+        d=google.com; s=20221208; t=1681430337; x=1684022337;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EefSkyZ3Lf0FxAAlOktzH9a+rP5j/aHtRq9oKYJfYbo=;
+        b=a3byag42DLwFJ6SRJEJQ1CcOmIM/nt97jvXvLVycLr+Vz6t8EuDD3sfm40CDOIf2l+
+         CWnXHMfEZ9X0fhqgtzPG+zqEGL/DmRKb5uFzisQdqhsMYKi2FTj6pW25nSR9jIv/TrhH
+         d0sv/sposQqbLpPuM9L+y+vBg8xN8XjARVzLMSSMPrKJJVxX9Na1q0mDetHv8ISLhI1H
+         Fxc1ejXe8TUp1biTe/A2rKuRtETHTzgVp6Btl5QXZCzGmH6p0qWTIIYYZBj3a+tjVq5H
+         dSl9te0h/slqxMAmE/8u+tC+ViHh/1jJrqttvZd2/SAl8mgV5eT9eYY1Ywf8DluAngIb
+         JgQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681430073; x=1684022073;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JWvjWk4I7oc6dibDy+yZ1HnfJOmElV8h8gzVVqmgQHg=;
-        b=Ni8Djt4SX/sLE9lBVb/uxvOXiExDkQyzqurXiq+xcDNxkBqXGnuIynKNrKZmCMCPe+
-         NHiYlLz/EM3/cnORqN6PiIObCDe1O8Rw7I+ubXcsgEAhTuHzFvVkHFHqR7p11k4rIDbu
-         qZziuJDflpV73qhdhfoDFVQiHwHKQ/Hj8K2dI5I0eNDmqOohlRJGs7bVIwA4gO4KtXDp
-         dl4tMI8X1hJiAmf1ltl+qNkxx+lSBmdhMMte7qGSoyeD/a4TiJIi5p1iSsSKXqYQOA8X
-         y43O/rJ4WWLt4EjsilWNrVxRzlz1qHOj9HE1hNjpC2CarK6OMdg5dO0MR6BVA0loGrzD
-         2NrQ==
-X-Gm-Message-State: AAQBX9dpD+wrW5EKPNkZ3FdNrjVSRZBNvDLOB9ZuIP5Ws6wYcFCxfBa4
-        QhJrMhPOpmDX6QRRZHNA+ltfjGr+fZ9YLRnxUUQ=
-X-Google-Smtp-Source: AKy350b4CoEwB7jArQnIrPMYgyL3cdsVhg3mhG7UHPDCFw43nx0iPj0YuocPDq5JuaNgM6B6LnTgreYIb8SV7JUlVJk=
-X-Received: by 2002:a17:906:3c3:b0:931:3a19:d835 with SMTP id
- c3-20020a17090603c300b009313a19d835mr2130172eja.3.1681430072621; Thu, 13 Apr
- 2023 16:54:32 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681430337; x=1684022337;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EefSkyZ3Lf0FxAAlOktzH9a+rP5j/aHtRq9oKYJfYbo=;
+        b=PeokD/tF1ryErnKtulwGWPN946Quk2W1R7D8hmQ/VX8DRFUbmYA9TPHZd2lEHi1TJV
+         D2C7ajQIdyh7sGceAL9PNQJf2kBrqZg2EANqbejBpNwiiCjoJLeoy68o/MTzm0VVgoo9
+         v9/P0W02j/bejMILlzPLsjjIhIF7sEqyzGM2Y2H9dDGcli1lbZAuDR7WcEHc0MBFARtD
+         ctqErfpaTHWyDXIlef0KHuj77vsJ05Q6aeT/7tiz1oyNhUXz6KA5Fo46MaEbe9HQNOpe
+         3o8H4VIlaRQmDD9ihVeqs41jQjEvAHS0S6kxluJtRDQQqYzNlkFXaR/fGbHXfOuMcPU4
+         2FcQ==
+X-Gm-Message-State: AAQBX9ekhAZvqmc+NxfkklTvOVditKb5pkAGPbL9BtR1PVf99WqK7cEw
+        UcNKZr/97ZnQjfsGu93V/m74kQ==
+X-Google-Smtp-Source: AKy350YH5HIo+Pnar7dEHZwI83HNlquD0aFwYwkXZ4qi+fngzr+A7Sa4LTPVo1hWYWBDnD1pMLkLMQ==
+X-Received: by 2002:a17:902:d546:b0:19c:c5d4:afd2 with SMTP id z6-20020a170902d54600b0019cc5d4afd2mr28099plf.11.1681430336852;
+        Thu, 13 Apr 2023 16:58:56 -0700 (PDT)
+Received: from [2620:0:1008:11:dd63:9ab7:90b4:a420] ([2620:0:1008:11:dd63:9ab7:90b4:a420])
+        by smtp.gmail.com with ESMTPSA id k14-20020aa792ce000000b0062e15c22cd8sm1901961pfa.48.2023.04.13.16.58.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 16:58:56 -0700 (PDT)
+Date:   Thu, 13 Apr 2023 16:58:55 -0700 (PDT)
+From:   David Rientjes <rientjes@google.com>
+To:     Yang Shi <shy828301@gmail.com>, willemb@google.com
+cc:     David Hildenbrand <david@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kirill.shutemov@linux.intel.com, jannh@google.com,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [v4 PATCH] fs/proc: task_mmu.c: don't read mapcount for migration
+ entry
+In-Reply-To: <CAHbLzkp16tAzFRnM3BUnspnR-qR2JG3c9TqaNq3YHxy9u5ZC6w@mail.gmail.com>
+Message-ID: <67d3e5e1-57be-590d-f925-47b49442a67e@google.com>
+References: <20220203182641.824731-1-shy828301@gmail.com> <132ba4a4-3b1d-329d-1db4-f102eea2fd08@suse.cz> <9ba70a5e-4e12-0e9f-a6a4-d955bf25d0fe@redhat.com> <64ec7939-0733-7925-0ec0-d333e62c5f21@suse.cz> <CAHbLzkoZctsJf92Lw3wKMuSqT7-aje0SiAjc6JVW5Z3bNS1JNg@mail.gmail.com>
+ <efab25ef-c29c-3671-5f26-060bba76d481@suse.cz> <CAHbLzkomXCwabFrNaNyuGBozmindHqVD0ki4n75XJ2V8Uw=9rw@mail.gmail.com> <5618f454-7a88-0443-59e7-df9780e9fa50@redhat.com> <CAHbLzkp16tAzFRnM3BUnspnR-qR2JG3c9TqaNq3YHxy9u5ZC6w@mail.gmail.com>
 MIME-Version: 1.0
-References: <ZDWAcN6wfeXzipHz@gofer.mess.org> <CAADnVQJ-zzzTxDj8_7WKW-o3BDsU=DNAnvSEZGNHswbhGA8xhA@mail.gmail.com>
- <ZDe9ND/M4I9ll1xV@gofer.mess.org>
-In-Reply-To: <ZDe9ND/M4I9ll1xV@gofer.mess.org>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 13 Apr 2023 16:54:21 -0700
-Message-ID: <CAADnVQLOmDEQsHX4XfgETXUte9mJ+-qphR_E7dcjXB2PMDaZnA@mail.gmail.com>
-Subject: Re: [PATCH] bpf: lirc program type should not require SYS_CAP_ADMIN
-To:     Sean Young <sean@mess.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: multipart/mixed; boundary="2003089352-1481215759-1681430336=:63269"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,34 +76,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 1:28=E2=80=AFAM Sean Young <sean@mess.org> wrote:
->
-> On Wed, Apr 12, 2023 at 04:14:05PM -0700, Alexei Starovoitov wrote:
-> > On Tue, Apr 11, 2023 at 8:45=E2=80=AFAM Sean Young <sean@mess.org> wrot=
-e:
-> > >
-> > > Make it possible to load lirc program type with just CAP_BPF.
-> >
-> > Is it safe?
-> > If the user can load with just CAP_BPF the FD to the prog and target_fd
-> > will allow attach as well.
->
-> Exactly, that's the $1m question of course.
->
-> I think it's safe from a lirc perspective because you need to be able to
-> open the /dev/lirc0 device in the first place; if you can open it, you
-> alter all sorts of lirc receiving options already. Changing the IR protoc=
-ol
-> decoder is no different in that perspective.
->
-> The other side of course, is it save to load a bpf lirc program as a norm=
-al
-> user. I don't see any issue with this; I guess this depends on whether th=
-e
-> subset of functions in lirc_mode2_func_proto() is safe. I am hoping that
-> the expert opinion everyone here can help answer that question.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-That part is fine under CAP_BPF.
-I don't know how lirc devices are typically setup.
-If they need root to open them
-then why bother relaxing bpf loading part?
+--2003089352-1481215759-1681430336=:63269
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+
+On Mon, 3 Apr 2023, Yang Shi wrote:
+
+> On Mon, Apr 3, 2023 at 12:30 AM David Hildenbrand <david@redhat.com> wrote:
+> >
+> > On 24.03.23 21:12, Yang Shi wrote:
+> > > On Fri, Mar 24, 2023 at 4:25 AM Vlastimil Babka <vbabka@suse.cz> wrote:
+> > >>
+> > >> On 3/23/23 21:45, Yang Shi wrote:
+> > >>> On Thu, Mar 23, 2023 at 3:11 AM Vlastimil Babka <vbabka@suse.cz> wrote:
+> > >>>
+> > >>> Out of curiosity, is there any public link for this CVE? Google search
+> > >>> can't find it.
+> > >>
+> > >> Only this one is live so far, AFAIK
+> > >>
+> > >> https://bugzilla.redhat.com/show_bug.cgi?id=2180936
+> > >
+> > > Thank you.
+> >
+> > There is now
+> >
+> > https://access.redhat.com/security/cve/cve-2023-1582
+> 
+> Thank you.
+> 
+
+Hi Yang,
+
+commit 24d7275ce2791829953ed4e72f68277ceb2571c6
+Author: Yang Shi <shy828301@gmail.com>
+Date:   Fri Feb 11 16:32:26 2022 -0800
+
+    fs/proc: task_mmu.c: don't read mapcount for migration entry
+
+is backported to 5.10 stable but not to 5.4 or earlier stable trees.  The 
+commit advertises to fix a commit from 4.5.
+
+Do we need stable backports for earlier trees or are they not affected?
+
+Thanks!
+--2003089352-1481215759-1681430336=:63269--
