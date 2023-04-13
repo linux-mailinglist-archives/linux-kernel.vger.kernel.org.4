@@ -2,88 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25C856E0F33
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1079E6E0F3A
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbjDMNuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 09:50:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52812 "EHLO
+        id S231407AbjDMNwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 09:52:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbjDMNuT (ORCPT
+        with ESMTP id S231430AbjDMNwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 09:50:19 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D5D7280;
-        Thu, 13 Apr 2023 06:50:04 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-54fbee98814so34788827b3.8;
-        Thu, 13 Apr 2023 06:50:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681393803; x=1683985803;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=me/aMOzykgZd/rQWir4A2t1w//OGU8Q3sKZmPgaxe3w=;
-        b=L6w5otXIHyI2IbOVWI9zFAmYPFxav9f5v27dXrrRH5HzftZ+oIBUdCXz/CXcq12RZK
-         /uxMw4zvD1cr7CPBX5VkAuLku7Csi2L9kUR8s5hSavTTtFO6c1Q7p8j/IShwjeXZ3/e0
-         /6XxUhegy5rZurXznROgvK/yQI1ndV1AdK+/HTneWQlrgs7Sjz8zhnXeQEKoHid1LHWK
-         rej8qf/u8enxGMKgKXMT7VcTCYpfuW/0n1bgRZlGK0ry9fPPE+uO/3WL/VgOspLH/+9P
-         oAEBBGoTla0VCEK2cx2VuMcjujESdZ9fRkAgT9v1oIj9FapE0mgylJzG1/fU24vEMChx
-         pJ6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681393803; x=1683985803;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=me/aMOzykgZd/rQWir4A2t1w//OGU8Q3sKZmPgaxe3w=;
-        b=HRayYSlNRhsbGz2ArQ80AN5DDCLiHlYHnafqZJ2gzJ6SHDeuwgnHyqcvaYzuNnrJUE
-         bAlC0F9zCra4IsC4nks4EYtm6AN2OI/kYhX5m7RWsdlwQcZvVjDsY/CctOJTzi4RgUfS
-         N9nvHd27wl5neqsc9HpchtYH+dJIrcrLLsh+OZlOj7liap1hlIrn9C0J+ia4qmhgHLd9
-         N/Ipn4kfmXYYpcNKcbY6Wnv3MOX3OtDu2vj3Keer9KXL0HU4s7rhSm0hmWb0N5JiJLc9
-         DHUvdPJGMAX+QuTz2xJEv0R0UQPwjxoc6fIlJAT4uib2U9bDSd/dYDgtKtZHlrWFR9+B
-         pZJg==
-X-Gm-Message-State: AAQBX9dhzjwyvUDWGAz1LllY7w8rfxZN1IgOWKbRq2KGWCINbanQUhVW
-        m35tGyhYVBaFgSbDgUOtvyu+ynhH+bCNEogP32t/pTAc9ZY=
-X-Google-Smtp-Source: AKy350abCiWuKt0W2Oza25xh9u6LUaylRn/CALV3kMLCROgnXylFy50rKXHdCamIScI6llmAjIwhKyqMFPANJjviXOY=
-X-Received: by 2002:a81:7613:0:b0:54f:b9f8:70ae with SMTP id
- r19-20020a817613000000b0054fb9f870aemr1470541ywc.7.1681393803597; Thu, 13 Apr
- 2023 06:50:03 -0700 (PDT)
+        Thu, 13 Apr 2023 09:52:09 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559944683
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:52:03 -0700 (PDT)
+Received: from dqrubuntu.lan ([172.16.0.254])
+        (user=flno@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 33DDpasL030134-33DDpasO030134
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 13 Apr 2023 21:51:36 +0800
+From:   Qinrun Dai <flno@hust.edu.cn>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        Qinrun Dai <flno@hust.edu.cn>, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] drivers: clocksource: fix memory leak in davinci_timer_register
+Date:   Thu, 13 Apr 2023 13:50:37 +0000
+Message-Id: <20230413135037.1505799-1-flno@hust.edu.cn>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-From:   Muni Sekhar <munisekharrms@gmail.com>
-Date:   Thu, 13 Apr 2023 19:19:52 +0530
-Message-ID: <CAHhAz+haVH-4Hgsz0PpTgUSW1pX4XxwxXwEd7nLVb0sFFwQwCg@mail.gmail.com>
-Subject: ALSA: arecord : silennce recorded as 0x80
-To:     alsa-devel <alsa-devel@alsa-project.org>,
-        linux-sound@vger.kernel.org
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        kernelnewbies <kernelnewbies@kernelnewbies.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: flno@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Smatch reports:
+drivers/clocksource/timer-davinci.c:332 davinci_timer_register()
+warn: 'base' from ioremap() not released on lines: 274.
 
-I recorded the silence on the default audio card by running "arecord
--d 5 test.wav."
+Fix this and other potential memory leak problems
+by adding a set of corresponding exit lables.
 
-Once it exited, I checked the contents by running "hexdump test.wav,"
-and I see that silence is recorded as a sequence of 0x80 instead of
-0x00.
+Fixes: 721154f972aa ("clocksource/drivers/davinci: Add support for clockevents")
+Signed-off-by: Qinrun Dai <flno@hust.edu.cn>
+---
+ drivers/clocksource/timer-davinci.c | 30 +++++++++++++++++++++++------
+ 1 file changed, 24 insertions(+), 6 deletions(-)
 
-0000000 4952 4646 0024 8000 4157 4556 6d66 2074
-0000010 0010 0000 0001 0001 1f40 0000 1f40 0000
-0000020 0001 0008 6164 6174 0000 8000 8080 8080
-0000030 8080 8080 8080 8080 8080 8080 8080 8080
-0000040 8080 8080 8080 8080 8080 8080 8080 8080
-...
-
-What might be the reason for silence being recorded as 0x80 instead of 0x0?
-
-
+diff --git a/drivers/clocksource/timer-davinci.c b/drivers/clocksource/timer-davinci.c
+index 9996c0542520..b1c248498be4 100644
+--- a/drivers/clocksource/timer-davinci.c
++++ b/drivers/clocksource/timer-davinci.c
+@@ -257,21 +257,25 @@ int __init davinci_timer_register(struct clk *clk,
+ 				resource_size(&timer_cfg->reg),
+ 				"davinci-timer")) {
+ 		pr_err("Unable to request memory region\n");
+-		return -EBUSY;
++		rv = -EBUSY;
++		goto exit_clk_disable;
+ 	}
+ 
+ 	base = ioremap(timer_cfg->reg.start, resource_size(&timer_cfg->reg));
+ 	if (!base) {
+ 		pr_err("Unable to map the register range\n");
+-		return -ENOMEM;
++		rv = -ENOMEM;
++		goto exit_mem_region;
+ 	}
+ 
+ 	davinci_timer_init(base);
+ 	tick_rate = clk_get_rate(clk);
+ 
+ 	clockevent = kzalloc(sizeof(*clockevent), GFP_KERNEL);
+-	if (!clockevent)
+-		return -ENOMEM;
++	if (!clockevent) {
++		rv = -ENOMEM;
++		goto exit_iounmap_base;
++	}
+ 
+ 	clockevent->dev.name = "tim12";
+ 	clockevent->dev.features = CLOCK_EVT_FEAT_ONESHOT;
+@@ -296,7 +300,7 @@ int __init davinci_timer_register(struct clk *clk,
+ 			 "clockevent/tim12", clockevent);
+ 	if (rv) {
+ 		pr_err("Unable to request the clockevent interrupt\n");
+-		return rv;
++		goto exit_free_clockevent;
+ 	}
+ 
+ 	davinci_clocksource.dev.rating = 300;
+@@ -323,13 +327,27 @@ int __init davinci_timer_register(struct clk *clk,
+ 	rv = clocksource_register_hz(&davinci_clocksource.dev, tick_rate);
+ 	if (rv) {
+ 		pr_err("Unable to register clocksource\n");
+-		return rv;
++		goto exit_free_irq;
+ 	}
+ 
+ 	sched_clock_register(davinci_timer_read_sched_clock,
+ 			     DAVINCI_TIMER_CLKSRC_BITS, tick_rate);
+ 
+ 	return 0;
++
++exit_free_irq:
++	free_irq(timer_cfg->irq[DAVINCI_TIMER_CLOCKEVENT_IRQ].start,
++			clockevent);
++exit_free_clockevent:
++	kfree(clockevent);
++exit_iounmap_base:
++	iounmap(base);
++exit_mem_region:
++	release_mem_region(timer_cfg->reg.start,
++			   resource_size(&timer_cfg->reg));
++exit_clk_disable:
++	clk_disable_unprepare(clk);
++	return rv;
+ }
+ 
+ static int __init of_davinci_timer_register(struct device_node *np)
 -- 
-Thanks,
-Sekhar
+2.37.2
+
