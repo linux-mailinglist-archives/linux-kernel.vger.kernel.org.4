@@ -2,104 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14E666E0A6A
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 11:42:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 440926E0A6E
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 11:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjDMJmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 05:42:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35480 "EHLO
+        id S229829AbjDMJo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 05:44:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbjDMJmk (ORCPT
+        with ESMTP id S229564AbjDMJo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 05:42:40 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC544EF2
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 02:42:39 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id f188so46454645ybb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 02:42:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681378958; x=1683970958;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FXuvR6IorGk+vc4Sbx2+ljSRa/GREptQBSmjgKoDNBQ=;
-        b=p5qruo+vwLOmiKdo9zfjlw8oOGsiW3ZhyU3s5t1eTAZWl1pBeBkTL6t40YHwQn3GFI
-         NI2QEtrQ6G8kh5BFWJMngPiODpBFNej8mvd08VDINHZXAboshyC0dYi1xCG71aNdWeOA
-         5MnmtW90zfH0DuhAQS2cJmGWyzQBx9Q+MkqvLvGxJ7jH+UwoAW89+VS2PcKvui2PvGn2
-         Q+JKo81qMBYyAgUglWmMWLpwyByA/OgQQOUdHZir1BQHuF8oyUwcII7JzB3oyXxNkHOf
-         AMSZYJ2XapdoXefH7JHc+a/P1YL5WtIb8e4TeAMQj45qzAbP8ApdjZDDLJJOo4FWnMC8
-         8nlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681378958; x=1683970958;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FXuvR6IorGk+vc4Sbx2+ljSRa/GREptQBSmjgKoDNBQ=;
-        b=MDasMfM6VTwN4feZn1An+UIXNgJElTqX3ixBx491oLCTAiNEwnKp1Pgpzk7k8XaayX
-         PBIQGnMf0vEGK5dj9aY0mYnF6lHU4B++zSlhNS/RIfRUewN6iJWulRbzorzTK0GZaONs
-         GeJjzd0ifGymqaU++Dlb+DMSFcvJLjyipKQYcHKU41apYnzGnHLaSK3znA+Rj0dkYDrG
-         OqVKPdKdPKgsAaUUMbUmE8WgWBIZyhv6A5wOnd89MXZ3KVZ/o8f1SJSNP9Oj5TIKv3o2
-         RwsYhzD3CSwLq/3CMmdm0/IbMvow11QpysWARG3mH3Zory960S/aHWtVzbzwlQ9BKspp
-         ukoA==
-X-Gm-Message-State: AAQBX9cq4wKdSwevkP0XM0FinFBM0l4c+etTRfUHbIloyJrK6z7FTXI2
-        mr16BqZR3EYIiodbCbquQE06n4fbFIjwdkDaXb2XaQ==
-X-Google-Smtp-Source: AKy350aIn2eg4lF1zv8Kw+eVubZMSxHczXifNKoJzcDAryVU6K0a4Ip63GAMTioeux0MH1upuKU6C7L4gGonN+vmr4I=
-X-Received: by 2002:a25:ae45:0:b0:b8f:62b7:e03c with SMTP id
- g5-20020a25ae45000000b00b8f62b7e03cmr190745ybe.1.1681378958351; Thu, 13 Apr
- 2023 02:42:38 -0700 (PDT)
+        Thu, 13 Apr 2023 05:44:56 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2292D40;
+        Thu, 13 Apr 2023 02:44:54 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id E70C3218D6;
+        Thu, 13 Apr 2023 09:44:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1681379092; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=keCaqqSGY7ha37QXjnvDv9stJXEl1mM4kkMWKs/qtKg=;
+        b=zSa1cr4s1WR105cxP6zR9ClgYoWxDTq+/BT6CSI5psaOSWiv/5BqJUWzaA4uPv6VR7lWiN
+        GG+UqT5EAZjAiTGibcjMvZPjabuEjF9qKs0mBm7cn6aq8WlToYpY0eciwgWSZZOxcYrOaN
+        kNwLNjHLA+VTXkRSzct5jEOPOqbkAc8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1681379092;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=keCaqqSGY7ha37QXjnvDv9stJXEl1mM4kkMWKs/qtKg=;
+        b=PdJKFTmluzOfhClBwYxHt/cSdzaO+l9cxRLUhryKUtANzOAdjfwf+/ClBUVVdctzOg2gUI
+        JN4o39+beXxaz5Aw==
+Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id A75982C143;
+        Thu, 13 Apr 2023 09:44:51 +0000 (UTC)
+Date:   Thu, 13 Apr 2023 11:44:51 +0200 (CEST)
+From:   Miroslav Benes <mbenes@suse.cz>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+cc:     david@redhat.com, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com,
+        petr.pavlu@suse.com, prarit@redhat.com,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        rafael@kernel.org, christophe.leroy@csgroup.eu, tglx@linutronix.de,
+        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com,
+        catalin.marinas@arm.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com
+Subject: Re: [PATCH v2 2/2] modules/kmod: replace implementation with a
+ sempahore
+In-Reply-To: <20230405203505.1343562-3-mcgrof@kernel.org>
+Message-ID: <alpine.LSU.2.21.2304131136580.27633@pobox.suse.cz>
+References: <20230405203505.1343562-1-mcgrof@kernel.org> <20230405203505.1343562-3-mcgrof@kernel.org>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-References: <CANX2M5ZRrRA64k0hOif02TjmY9kbbO2aCBPyq79es34RXZ=cAw@mail.gmail.com>
- <CAG_fn=V57m0om5HUHHFOQr9R9TWHtfm4+jO96Smf+Q+XjRkxtQ@mail.gmail.com> <CANX2M5bWPMDJGgD=xq33A3p96ii3wBOuy9UKYAstX4psdAGrrA@mail.gmail.com>
-In-Reply-To: <CANX2M5bWPMDJGgD=xq33A3p96ii3wBOuy9UKYAstX4psdAGrrA@mail.gmail.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Thu, 13 Apr 2023 11:42:01 +0200
-Message-ID: <CAG_fn=WOZ2RTyTYrgV3JhsqESf-YCmj_FmbzJZdJogpZk8SnOw@mail.gmail.com>
-Subject: Re: Possible incorrect handling of fault injection inside KMSAN instrumentation
-To:     Dipanjan Das <mail.dipanjan.das@gmail.com>
-Cc:     Marco Elver <elver@google.com>, Dmitry Vyukov <dvyukov@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        syzkaller <syzkaller@googlegroups.com>,
-        Marius Fleischer <fleischermarius@googlemail.com>,
-        Priyanka Bose <its.priyanka.bose@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 8:24=E2=80=AFPM Dipanjan Das
-<mail.dipanjan.das@gmail.com> wrote:
->
-> On Wed, Apr 12, 2023 at 7:39=E2=80=AFAM Alexander Potapenko <glider@googl=
-e.com> wrote:
->
-> > Here are two patches that fix the problem:
-> >  - https://github.com/google/kmsan/commit/b793a6d5a1c1258326b0f53d6e3ac=
-8aa3eeb3499
-> > - for kmsan_vmap_pages_range_noflush();
-> >  - https://github.com/google/kmsan/commit/cb9e33e0cd7ff735bc302ff69c022=
-74f24060cff
-> > - for kmsan_ioremap_page_range()
-> >
-> > Can you please try them out?
->
-> The second patch needs a small modification.
->
-> The return value of `__vmap_pages_range_noflush` at Line 181
-> (https://github.com/google/kmsan/commit/cb9e33e0cd7ff735bc302ff69c02274f2=
-4060cff#diff-6c23520766ef70571c16b74ed93474716645c7ba81dc07028c076b6fd5ad27=
-31R181)
-> should also be assigned to `mapped`. With this modification, the patch
-> works.
+Hi,
 
-Good catch, thanks!
-I'll send an updated version.
+On Wed, 5 Apr 2023, Luis Chamberlain wrote:
+
+s/sempahore/semaphore/ in the subject
+
+> Simplfy the concurrency delimiter we user for kmod with the semaphore.
+
+"Simplify the concurrency delimiter we use for kmod with the semaphore."
+
+(two typos)
+
+> I had used the kmod strategy to try to implement a similar concurrency
+> delimiter for the kernel_read*() calls from the finit_module() path
+> so to reduce vmalloc() memory pressure. That effort didn't provid yet
+
+s/provid/provide/
+
+> conclusive results, but one thing that did became clear is we can use
+
+s/did // (or s/became/become/)
+
+> the suggested alternative solution with semaphores which Linus hinted
+> at instead of using the atomic / wait strategy.
+> 
+> I've stress tested this with kmod test 0008:
+> 
+> time /data/linux-next/tools/testing/selftests/kmod/kmod.sh -t 0008
+> 
+> And I get only a *slight* delay. That delay however is small, a few
+> seconds for a full test loop run that runs 150 times, for about ~30-40
+> seconds. The small delay is worth the simplfication IMHO.
+> 
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> ---
+>  kernel/module/kmod.c | 26 +++++++-------------------
+>  1 file changed, 7 insertions(+), 19 deletions(-)
+> 
+> diff --git a/kernel/module/kmod.c b/kernel/module/kmod.c
+> index b717134ebe17..925eb85b8346 100644
+> --- a/kernel/module/kmod.c
+> +++ b/kernel/module/kmod.c
+> @@ -40,8 +40,7 @@
+>   * effect. Systems like these are very unlikely if modules are enabled.
+>   */
+>  #define MAX_KMOD_CONCURRENT 50
+> -static atomic_t kmod_concurrent_max = ATOMIC_INIT(MAX_KMOD_CONCURRENT);
+> -static DECLARE_WAIT_QUEUE_HEAD(kmod_wq);
+> +static DEFINE_SEMAPHORE(kmod_concurrent_max, MAX_KMOD_CONCURRENT);
+>  
+>  /*
+>   * This is a restriction on having *all* MAX_KMOD_CONCURRENT threads
+> @@ -148,29 +147,18 @@ int __request_module(bool wait, const char *fmt, ...)
+>  	if (ret)
+>  		return ret;
+>  
+> -	if (atomic_dec_if_positive(&kmod_concurrent_max) < 0) {
+> -		pr_warn_ratelimited("request_module: kmod_concurrent_max (%u) close to 0 (max_modprobes: %u), for module %s, throttling...",
+> -				    atomic_read(&kmod_concurrent_max),
+> -				    MAX_KMOD_CONCURRENT, module_name);
+> -		ret = wait_event_killable_timeout(kmod_wq,
+> -						  atomic_dec_if_positive(&kmod_concurrent_max) >= 0,
+> -						  MAX_KMOD_ALL_BUSY_TIMEOUT * HZ);
+> -		if (!ret) {
+> -			pr_warn_ratelimited("request_module: modprobe %s cannot be processed, kmod busy with %d threads for more than %d seconds now",
+> -					    module_name, MAX_KMOD_CONCURRENT, MAX_KMOD_ALL_BUSY_TIMEOUT);
+> -			return -ETIME;
+> -		} else if (ret == -ERESTARTSYS) {
+> -			pr_warn_ratelimited("request_module: sigkill sent for modprobe %s, giving up", module_name);
+> -			return ret;
+> -		}
+> +	ret = down_timeout(&kmod_concurrent_max, MAX_KMOD_ALL_BUSY_TIMEOUT);
+
+MAX_KMOD_ALL_BUSY_TIMEOUT * HZ ?
+
+The simplification is very nice.
+
+Miroslav
