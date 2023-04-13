@@ -2,84 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEC0D6E11BE
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:07:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC3456E11D3
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:08:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbjDMQHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 12:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46594 "EHLO
+        id S230206AbjDMQIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 12:08:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjDMQHK (ORCPT
+        with ESMTP id S229636AbjDMQIq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 12:07:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A46FAF19;
-        Thu, 13 Apr 2023 09:06:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2553263FAE;
-        Thu, 13 Apr 2023 16:06:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB5FAC43445;
-        Thu, 13 Apr 2023 16:06:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681402018;
-        bh=7UpSyVAtwNT84JAbWIX2mRz/svkFLEyQ1Y2JkSBuIVA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=D3tQKpG2VpnTOBodwzCy8ERn4FwU616rfzFwb7EWsmaymvQF12ssQX7yMgrfZ3gZC
-         eyZUWaFTZrdnAQV4MKv42bdnMzsiBNwgDkHcggjpKmG4XRF21uo3hYzd2QjNWJiPYQ
-         4emV66AMgclMPo1fEBnRCl5M9y2fezkPn7f3UaJz7Mq3DmhwMMqIE0cn2zlG5Se3MX
-         0e0QgV0YwPel3j2pFbK3sHWWtfE9QrfnKcfsTLEKT2t9w/zJ+BICh480svNygb2LdN
-         a6QT87i0Ol0BNbNbdcVD6kRpUr68GDnPIqAfebkHSpGm2Qu8NxDpxQxR3jgOI0L2K0
-         KMgwLCr0+qACQ==
-From:   broonie@kernel.org
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the net-next tree with the origin tree
-Date:   Thu, 13 Apr 2023 17:06:53 +0100
-Message-Id: <20230413160654.3996931-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Thu, 13 Apr 2023 12:08:46 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B624772B3;
+        Thu, 13 Apr 2023 09:08:33 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Py4Bd05W5z689N7;
+        Fri, 14 Apr 2023 00:03:52 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 13 Apr
+ 2023 17:08:17 +0100
+Date:   Thu, 13 Apr 2023 17:08:16 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Terry Bowman <terry.bowman@amd.com>
+CC:     <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
+        <ira.weiny@intel.com>, <bwidawsk@kernel.org>,
+        <dan.j.williams@intel.com>, <dave.jiang@intel.com>,
+        <linux-cxl@vger.kernel.org>, <rrichter@amd.com>,
+        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>, <linux-efi@vger.kernel.org>
+Subject: Re: [PATCH v3 2/6] efi/cper: Export cper_mem_err_unpack() for use
+ by modules
+Message-ID: <20230413170816.0000333b@Huawei.com>
+In-Reply-To: <20230411180302.2678736-3-terry.bowman@amd.com>
+References: <20230411180302.2678736-1-terry.bowman@amd.com>
+        <20230411180302.2678736-3-terry.bowman@amd.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On Tue, 11 Apr 2023 13:02:58 -0500
+Terry Bowman <terry.bowman@amd.com> wrote:
 
-Today's linux-next merge of the net-next tree got a conflict in:
+> The CXL driver plans to use cper_print_aer() for restricted CXL host (RCH)
+> logging. This is not currently possible if CXL is built as a loadable
+> module because cper_print_aer() depends on cper_mem_err_unpack() which
+> is not exported.
+> 
+> Export cper_mem_err_unpack() to enable cper_print_aer() usage in
+> CXL and other loadable modules.
 
-  tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+No problem with the export, but I'm struggling to see the path that needs it.
+Could you give a little more detail, perhaps a call path?
 
-between commit:
+Thanks,
 
-  989cdc373248a ("bpf: sockmap, pull socket helpers out of listen test for general use")
+Jonathan
 
-from the origin tree and commit:
+> 
+> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Cc: linux-efi@vger.kernel.org
+> ---
+>  drivers/firmware/efi/cper.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/firmware/efi/cper.c b/drivers/firmware/efi/cper.c
+> index 35c37f667781..ff15e12160ae 100644
+> --- a/drivers/firmware/efi/cper.c
+> +++ b/drivers/firmware/efi/cper.c
+> @@ -350,6 +350,7 @@ const char *cper_mem_err_unpack(struct trace_seq *p,
+>  
+>  	return ret;
+>  }
+> +EXPORT_SYMBOL_GPL(cper_mem_err_unpack);
+>  
+>  static void cper_print_mem(const char *pfx, const struct cper_sec_mem_err *mem,
+>  	int len)
 
-  d61bd8c1fd02c ("selftests/bpf: add a test case for vsock sockmap")
-
-from the net-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-
-diff --cc tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-index f3913ba9e899c,8f09e1ea3ba75..0000000000000
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
