@@ -2,67 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FAAF6E06C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 08:09:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 859F76E06C8
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 08:10:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbjDMGJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 02:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33842 "EHLO
+        id S229765AbjDMGKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 02:10:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229948AbjDMGJl (ORCPT
+        with ESMTP id S229575AbjDMGKx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 02:09:41 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875E85B9E;
-        Wed, 12 Apr 2023 23:09:39 -0700 (PDT)
-X-UUID: c1501242d9c111edb6b9f13eb10bd0fe-20230413
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=cooVt/7DyMIfNymQDJe2zBqzAP0xjJRI2g2y8h0vqO4=;
-        b=Htq0n6dz1KPeMU5iAX/9cGoikK/kx3m4D/XzhZfCSL5MIA0vwEFH3nABRsd9FW2qUpVAsguGkbDzE0e9J/TjUqx2nNf98miWNyMWVLSBP8RLkLzO3v9o5j6gidu/OWJznM6Tpm4fw+QAqeD3I5+soXWSCqo1oIgOg5cIxZ8Aluk=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:44ef7ec6-2e05-468f-94ad-4ddd4e851da6,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:120426c,CLOUDID:3a55e983-cd9c-45f5-8134-710979e3df0e,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: c1501242d9c111edb6b9f13eb10bd0fe-20230413
-Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
-        (envelope-from <xinlei.lee@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 389169649; Thu, 13 Apr 2023 14:09:31 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Thu, 13 Apr 2023 14:09:29 +0800
-Received: from mszsdaap41.gcn.mediatek.inc (10.16.6.141) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Thu, 13 Apr 2023 14:09:29 +0800
-From:   <xinlei.lee@mediatek.com>
-To:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
-        <airlied@linux.ie>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
-        <jitao.shi@mediatek.com>, <shuijing.li@mediatek.com>
-CC:     <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Xinlei Lee <xinlei.lee@mediatek.com>
-Subject: [PATCH 3/3] drm/mediatek: dsi: Add dsi cmdq_ctl to send panel initial code
-Date:   Thu, 13 Apr 2023 14:09:22 +0800
-Message-ID: <1681366162-4949-4-git-send-email-xinlei.lee@mediatek.com>
-X-Mailer: git-send-email 2.6.4
-In-Reply-To: <1681366162-4949-1-git-send-email-xinlei.lee@mediatek.com>
-References: <1681366162-4949-1-git-send-email-xinlei.lee@mediatek.com>
+        Thu, 13 Apr 2023 02:10:53 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5E06A4D
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 23:10:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681366226; x=1712902226;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=pr4JMmzrY9/O4gH96CYZvtQO5gVEJvmjkeQFkOuJ8iE=;
+  b=akLno7talUivVJMlV9ViBFckQ6PWUzK/d3I9zum/60jzcthC5FSS6+mP
+   FNBSC+On7YNUruXg6AExUeZqeMWvkxbwSE7JQ39P/zOPoQERjpYZXE5kJ
+   bYSUOF1BbaRZysboxam+SjFbpNAY1lwkKe0f5SHqLB1DdO0uhVj9Gd5vx
+   trowwewPkBWekX0m/1VaIvIrvqSle8+nXvkokJy5GPW2WuIK0/gTkROlm
+   mcj9jlLnrxwkcQQYQXU25jC/hCaQO0QIKoWz1+fBeqxjwZr6+TnxK68/B
+   tYcwKJFPEdTd7raeWrAjCoHaw4H7hKr0uHHCL+j10fPO47Mf5c1PXNF3l
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="324453754"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="324453754"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 23:10:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="758554353"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="758554353"
+Received: from lzygo-mobl.ger.corp.intel.com (HELO [10.213.3.63]) ([10.213.3.63])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 23:10:08 -0700
+Message-ID: <71ba4962-14fd-887f-1d40-31089dd1cf50@intel.com>
+Date:   Thu, 13 Apr 2023 08:10:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
-        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=no
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.9.1
+Subject: Re: [PATCH] drm/i915: Fix memory leaks in i915 selftests
+Content-Language: en-US
+To:     Cong Liu <liucong2@kylinos.cn>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Nirmoy Das <nirmoy.das@intel.com>,
+        Matthew Brost <matthew.brost@intel.com>,
+        Jonathan Cavitt <jonathan.cavitt@intel.com>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230413031349.9026-1-liucong2@kylinos.cn>
+From:   Andrzej Hajda <andrzej.hajda@intel.com>
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
+ Gdansk - KRS 101882 - NIP 957-07-52-316
+In-Reply-To: <20230413031349.9026-1-liucong2@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,79 +80,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xinlei Lee <xinlei.lee@mediatek.com>
 
-For mt8188, add dsi cmdq reg control to send long packets to panel initialization.
 
-Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
----
- drivers/gpu/drm/mediatek/mtk_dsi.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+On 13.04.2023 05:13, Cong Liu wrote:
+> Fixes: c3bfba9a2225 ("drm/i915: Check for integer truncation on scatterlist creation")
+>
+> Signed-off-by: Cong Liu <liucong2@kylinos.cn>
+> ---
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
-index 500a3054282d..cbfe5df4647c 100644
---- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-@@ -86,6 +86,7 @@
- 
- #define DSI_CMDQ_SIZE		0x60
- #define CMDQ_SIZE			0x3f
-+#define CMDQ_SIZE_SEL			BIT(15)
- 
- #define DSI_HSTX_CKL_WC		0x64
- 
-@@ -178,6 +179,7 @@ struct mtk_dsi_driver_data {
- 	const u32 reg_cmdq_off;
- 	bool has_shadow_ctl;
- 	bool has_size_ctl;
-+	bool cmdq_long_packet_ctl;
- };
- 
- struct mtk_dsi {
-@@ -965,6 +967,11 @@ static u32 mtk_dsi_recv_cnt(u8 type, u8 *read_data)
- 	return 0;
- }
- 
-+static void mtk_dsi_cmd_packet_ctl(struct mtk_dsi *dsi)
-+{
-+	mtk_dsi_mask(dsi, DSI_CMDQ_SIZE, CMDQ_SIZE_SEL, CMDQ_SIZE_SEL);
-+}
-+
- static void mtk_dsi_cmdq(struct mtk_dsi *dsi, const struct mipi_dsi_msg *msg)
- {
- 	const char *tx_buf = msg->tx_buf;
-@@ -996,6 +1003,8 @@ static void mtk_dsi_cmdq(struct mtk_dsi *dsi, const struct mipi_dsi_msg *msg)
- 
- 	mtk_dsi_mask(dsi, reg_cmdq_off, cmdq_mask, reg_val);
- 	mtk_dsi_mask(dsi, DSI_CMDQ_SIZE, CMDQ_SIZE, cmdq_size);
-+	if (dsi->driver_data->cmdq_long_packet_ctl)
-+		mtk_dsi_cmd_packet_ctl(dsi);
- }
- 
- static ssize_t mtk_dsi_host_send_cmd(struct mtk_dsi *dsi,
-@@ -1200,18 +1209,21 @@ static const struct mtk_dsi_driver_data mt8183_dsi_driver_data = {
- 	.reg_cmdq_off = 0x200,
- 	.has_shadow_ctl = true,
- 	.has_size_ctl = true,
-+	.cmdq_long_packet_ctl = false,
- };
- 
- static const struct mtk_dsi_driver_data mt8186_dsi_driver_data = {
- 	.reg_cmdq_off = 0xd00,
- 	.has_shadow_ctl = true,
- 	.has_size_ctl = true,
-+	.cmdq_long_packet_ctl = false,
- };
- 
- static const struct mtk_dsi_driver_data mt8188_dsi_driver_data = {
- 	.reg_cmdq_off = 0xd00,
- 	.has_shadow_ctl = true,
- 	.has_size_ctl = true,
-+	.cmdq_long_packet_ctl = true,
- };
- 
- static const struct of_device_id mtk_dsi_of_match[] = {
--- 
-2.18.0
+Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
+
+Regards
+Andrzej
+>   drivers/gpu/drm/i915/selftests/i915_gem_gtt.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c b/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c
+> index 5361ce70d3f2..154801f1c468 100644
+> --- a/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c
+> +++ b/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c
+> @@ -69,8 +69,10 @@ static int fake_get_pages(struct drm_i915_gem_object *obj)
+>   
+>   	rem = round_up(obj->base.size, BIT(31)) >> 31;
+>   	/* restricted by sg_alloc_table */
+> -	if (overflows_type(rem, unsigned int))
+> +	if (overflows_type(rem, unsigned int)) {
+> +		kfree(pages);
+>   		return -E2BIG;
+> +	}
+>   
+>   	if (sg_alloc_table(pages, rem, GFP)) {
+>   		kfree(pages);
 
