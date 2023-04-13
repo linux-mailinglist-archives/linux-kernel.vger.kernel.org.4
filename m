@@ -2,161 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C58FA6E162D
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 22:58:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 432276E1631
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 23:01:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjDMU6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 16:58:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42382 "EHLO
+        id S230185AbjDMVBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 17:01:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjDMU6e (ORCPT
+        with ESMTP id S229604AbjDMVBB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 16:58:34 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09EF983EA
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 13:58:34 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-6323eb1a289so1495367b3a.1
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 13:58:34 -0700 (PDT)
+        Thu, 13 Apr 2023 17:01:01 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E361B8A55
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 14:00:55 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-6343fe70a2aso1404950b3a.0
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 14:00:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681419513; x=1684011513;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nEv2HVs1S+Egpav/jnzfzsQjcllfLnLuCFh+OUzwj8A=;
-        b=N/NxeDGiy0A3sp3zsLS3ONiWVymFkZsvGZW/ifZ+0iNpy4Cnu0yvtFO/vEmGTqLWiH
-         KXoYXslYuFxGsyEH33NwF0ERBM0GsmdjykR3Dc67bRTjpbFQ6HEMvFLZiBlBl5vRR2up
-         +3M0y1sLKYIO3HqKiayhyGXRcqPTcmkSVYAJBXoefUccwC7wXAkJ7K/acVdWDJF/zSZE
-         Ws36H1mGkrL56HIgJFH9kyVJunsDFoGM4WLNHVehJERDrCAYFDw4/1tidyOx0ddiMGCT
-         1M62BnNL7CUWlD6K+tKPpRpxO8IEQ/EADHzLI4PjUt2cbDJunv4i411h+dc9f9uqIlsy
-         KO1Q==
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1681419655; x=1684011655;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Po7kMV6PWfvJ0JdTbzWxvRcPOaOmD0dTKySmuNSlDE8=;
+        b=5SO+s+WzALNpDN1F2r4RktSFMbeXUOZ5ZZ4imLVAQoXA9/lC9hm3pg4FQZHjcgDFRr
+         1W6P7WWYojNsiIJnPi5nuXNn2irghWpItwRXONlnThqo2JXE5P7eGdXskbXOeHw4pfWs
+         e4/5GvOocPYZ3hDXjojyciRevZvF858Azln1xhdoJbybRGFGIr/n4fs/v2L8hdzg9s+o
+         8ZlfxWTij0X1M7Oqj0eJgBUQGLAU22t8D3AGl9hVEvZT5GMRqEz+FbjOT15elBmGEZRc
+         Ug46SqyE6nfY3hF8oRes80r0DASMIbliHC9taLr+InAecO1VhkSBXbyNobEJYqH1kvC8
+         qBig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681419513; x=1684011513;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=nEv2HVs1S+Egpav/jnzfzsQjcllfLnLuCFh+OUzwj8A=;
-        b=fDGE++C9a5emEk1JVBJDM1gj10AzHzTZFGSz0mnMApMBuM4A4D0nAgHXMXCnWn2pyo
-         WBgqJdrEfuN6wSrDIk+tfXXbSaze1mlrammttnAYzYbvKXffzyf1hjgSKsB/ohgeBiCV
-         aSAk0tcVWukbFoCT/lnfxZVPQKEGseiAqiV6qYCqt2vw/48z8cTpflo4kYIKKz3TWIN1
-         +g/KaNVq3wwXMtEY2Wch5KT0RY8LGCf81x7mTciTifLGQgC97/Qq8UN77W16mii7R6xe
-         tqiFTimEhcDO+obCtSguumxDcBcnuoBIXATafJHspYLWtN6GOKklapoVIr635PppC2Qc
-         bMHA==
-X-Gm-Message-State: AAQBX9dh4kei22R94qZUc9zOGnTJZOamqdAZmMtKrikj+qzJGx1nLkZM
-        awKGsWbE5J4dqO11ZdCVVBDCgqKdijY=
-X-Google-Smtp-Source: AKy350bSXma0H87PRt68CUCJhjZ6Fcq2Rn85m8fx/BXyeVGSzmlgqoQTUIRypWDhyXYiGsOUwAoC45uhcEQ=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:2d25:b0:62e:1972:fab5 with SMTP id
- fa37-20020a056a002d2500b0062e1972fab5mr1835355pfb.4.1681419513538; Thu, 13
- Apr 2023 13:58:33 -0700 (PDT)
-Date:   Thu, 13 Apr 2023 13:58:32 -0700
-In-Reply-To: <CALzav=dv2MhoZ1BLqJWmmJv=H6vRaRUEcAJPydjrzJf1wdYEOA@mail.gmail.com>
-Mime-Version: 1.0
-References: <20230227171751.1211786-1-jpiotrowski@linux.microsoft.com>
- <ZAd2MRNLw1JAXmOf@google.com> <959c5bce-beb5-b463-7158-33fc4a4f910c@linux.microsoft.com>
- <ZDSa9Bbqvh0btgQo@google.com> <ecd3d8de-859b-e5dd-c3bf-ea9c3c0aac60@linux.microsoft.com>
- <ZDWEgXM/UILjPGiG@google.com> <61d131da-7239-6aae-753f-2eb4f1b84c24@linux.microsoft.com>
- <ZDg6w+1v4e/uRDfF@google.com> <ZDhTeIXRdcXDaD54@google.com> <CALzav=dv2MhoZ1BLqJWmmJv=H6vRaRUEcAJPydjrzJf1wdYEOA@mail.gmail.com>
-Message-ID: <ZDhs+AnytF030DYe@google.com>
-Subject: Re: [PATCH] KVM: SVM: Disable TDP MMU when running on Hyper-V
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Tianyu Lan <ltykernel@gmail.com>,
-        Michael Kelley <mikelley@microsoft.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1681419655; x=1684011655;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Po7kMV6PWfvJ0JdTbzWxvRcPOaOmD0dTKySmuNSlDE8=;
+        b=ciWZA9VsDBrvNC4i1mD2B90Nocc8HRaR+0d5HHnoLwQLE+vDu6NPewXjkg3jBPg77g
+         C7DjERdVjYlxk8E6YlOaZIR4X4MajBx1uZ/Asoen37Fs8USNWSvTI+e6iq02USd/PKP6
+         ndpPwsUGuRdJ9EXCfbq6vIUy84/Qp0xeXPXJddV4S/5s9z4kgh3yl03L1paptsMwl3im
+         G3RRTl4u8sLVAKA2SlF4a01yMFjLhQRDcvyP77nH6QaxpmlW0gKsMqkg2mlaFg4y4kGD
+         zV6u7cGLLCVvjLZPoOyW7flgCBotmr8e1XEG+xb8bKaayBwbmcnLee9s26ZgCiqH/AOW
+         y7bw==
+X-Gm-Message-State: AAQBX9eWt0AwNYrtKS9TQ8GwfZQev+qW/0jiN6BVw3TTgTMbdxZAW55P
+        UgQCGJNodE01gpPiFnUCm+RylA==
+X-Google-Smtp-Source: AKy350ZeUgwDYY5eMW7ZOlxK2igrJRw/XaGk5mqSdFs2oVNX3KK71uxfEiOe9qiJLyAHAqLgA8MlqA==
+X-Received: by 2002:a05:6a00:2e9c:b0:636:d5be:982f with SMTP id fd28-20020a056a002e9c00b00636d5be982fmr6073105pfb.6.1681419655345;
+        Thu, 13 Apr 2023 14:00:55 -0700 (PDT)
+Received: from dread.disaster.area (pa49-180-41-174.pa.nsw.optusnet.com.au. [49.180.41.174])
+        by smtp.gmail.com with ESMTPSA id w5-20020aa78585000000b0063824fef27asm1871769pfn.13.2023.04.13.14.00.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 14:00:54 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1pn43n-00322H-2A; Fri, 14 Apr 2023 07:00:51 +1000
+Date:   Fri, 14 Apr 2023 07:00:51 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v6 3/3] mm: vmscan: refactor updating
+ current->reclaim_state
+Message-ID: <20230413210051.GO3223426@dread.disaster.area>
+References: <20230413104034.1086717-1-yosryahmed@google.com>
+ <20230413104034.1086717-4-yosryahmed@google.com>
+ <b7fe839d-d914-80f7-6b96-f5f3a9d0c9b0@redhat.com>
+ <CAJD7tkae0uDuRG77nQEtzkV1abGstjF-1jfsCguR3jLNW=Cg5w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJD7tkae0uDuRG77nQEtzkV1abGstjF-1jfsCguR3jLNW=Cg5w@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023, David Matlack wrote:
-> On Thu, Apr 13, 2023 at 12:10=E2=80=AFPM Sean Christopherson <seanjc@goog=
-le.com> wrote:
+On Thu, Apr 13, 2023 at 04:29:43AM -0700, Yosry Ahmed wrote:
+> On Thu, Apr 13, 2023 at 4:21 AM David Hildenbrand <david@redhat.com> wrote:
 > >
-> > On Thu, Apr 13, 2023, Sean Christopherson wrote:
-> > > Aha!  Idea.  There are _at most_ 4 possible roots the TDP MMU can enc=
-ounter.
-> > > 4-level non-SMM, 4-level SMM, 5-level non-SMM, and 5-level SMM.  I.e.=
- not keeping
-> > > inactive roots on a per-VM basis is just monumentally stupid.
+> > On 13.04.23 12:40, Yosry Ahmed wrote:
+> > > During reclaim, we keep track of pages reclaimed from other means than
+> > > LRU-based reclaim through scan_control->reclaim_state->reclaimed_slab,
+> > > which we stash a pointer to in current task_struct.
+> > >
+> > > However, we keep track of more than just reclaimed slab pages through
+> > > this. We also use it for clean file pages dropped through pruned inodes,
+> > > and xfs buffer pages freed. Rename reclaimed_slab to reclaimed, and add
 > >
-> > One correction: there are 6 possible roots:
+> > Would "reclaimed_non_lru" be more expressive? Then,
 > >
-> >   1. 4-level !SMM !guest_mode (i.e. not nested)
-> >   2. 4-level SMM !guest_mode
-> >   3. 5-level !SMM !guest_mode
-> >   4. 5-level SMM !guest_mode
-> >   5. 4-level !SMM guest_mode
-> >   6. 5-level !SMM guest_mode
+> > mm_account_reclaimed_pages() -> mm_account_non_lru_reclaimed_pages()
 > >
-> > I forgot that KVM still uses the TDP MMU when running L2 if L1 doesn't =
-enable
-> > EPT/TDP, i.e. if L1 is using shadow paging for L2.  But that really doe=
-sn't change
-> > anything as each vCPU can already track 4 roots, i.e. userspace can sat=
-urate all
-> > 6 roots anyways.  And in practice, no sane VMM will create a VM with bo=
-th 4-level
-> > and 5-level roots (KVM keys off of guest.MAXPHYADDR for the TDP root le=
-vel).
->=20
-> Why do we create a new root for guest_mode=3D1 if L1 disables EPT/NPT?
+> >
+> > Apart from that LGTM.
+> 
+> Thanks!
+> 
+> I suck at naming things. If you think "reclaimed_non_lru" is better,
+> then we can do that. FWIW mm_account_reclaimed_pages() was taken from
+> a suggestion from Dave Chinner. My initial version had a terrible
+> name: report_freed_pages(), so I am happy with whatever you see fit.
+> 
+> Should I re-spin for this or can we change it in place?
 
-Because "private", a.k.a. KVM-internal, memslots are visible to L1 but not =
-L2.
-Which for TDP means the APIC-access page.  From commit 3a2936dedd20:
+I don't care for the noise all the bikeshed painting has generated
+for a simple change like this.  If it's a fix for a bug, and the
+naming is good enough, just merge it already, ok?
 
-    kvm: mmu: Don't expose private memslots to L2
-   =20
-    These private pages have special purposes in the virtualization of L1,
-    but not in the virtualization of L2. In particular, L1's APIC access
-    page should never be entered into L2's page tables, because this
-    causes a great deal of confusion when the APIC virtualization hardware
-    is being used to accelerate L2's accesses to its own APIC.
-
-FWIW, I _think_ KVM could actually let L2 access the APIC-access page when =
-L1 is
-running without any APIC virtualization, i.e. when L1 is passing its APIC t=
-hrough
-to L2.  E.g. something like the below, but I ain't touching that with a 10 =
-foot pole
-unless someone explicitly asks for it :-)
-
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 039fb16560a0..8aa12f5f2c30 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -4370,10 +4370,13 @@ static int __kvm_faultin_pfn(struct kvm_vcpu *vcpu,=
- struct kvm_page_fault *fault
-        if (!kvm_is_visible_memslot(slot)) {
-                /* Don't expose private memslots to L2. */
-                if (is_guest_mode(vcpu)) {
--                       fault->slot =3D NULL;
--                       fault->pfn =3D KVM_PFN_NOSLOT;
--                       fault->map_writable =3D false;
--                       return RET_PF_CONTINUE;
-+                       if (!slot || slot->id !=3D APIC_ACCESS_PAGE_PRIVATE=
-_MEMSLOT ||
-+                           nested_cpu_has_virtual_apic(vcpu)) {
-+                               fault->slot =3D NULL;
-+                               fault->pfn =3D KVM_PFN_NOSLOT;
-+                               fault->map_writable =3D false;
-+                               return RET_PF_CONTINUE;
-+                           }
-                }
-                /*
-                 * If the APIC access page exists but is disabled, go direc=
-tly
-
-
-
-
+-Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
