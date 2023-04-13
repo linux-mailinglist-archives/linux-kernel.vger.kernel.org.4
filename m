@@ -2,110 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E677E6E1048
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:46:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 310B36E101E
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbjDMOqB convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 13 Apr 2023 10:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40972 "EHLO
+        id S230257AbjDMOiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 10:38:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjDMOp5 (ORCPT
+        with ESMTP id S230161AbjDMOiX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 10:45:57 -0400
-X-Greylist: delayed 494 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 13 Apr 2023 07:45:32 PDT
-Received: from gnu.wildebeest.org (gnu.wildebeest.org [45.83.234.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5083EA5EC;
-        Thu, 13 Apr 2023 07:45:31 -0700 (PDT)
-Received: from r6.localdomain (82-217-174-174.cable.dynamic.v4.ziggo.nl [82.217.174.174])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 13 Apr 2023 10:38:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9EB7EC2
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 07:37:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681396656;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zh48LH+lWIDcMUTRVYARFiiBOHlN0g/yHS2D9XaBS5s=;
+        b=EGAx4voipuC2oS6qyv6nP9d8r68ZQAGZJoo66MDs4iSGVG0yi2+laRgKnodRodTr7oZJll
+        odaOJzdbqSqeEcshI/q1MxY7tatVqbVNUGzHBRbSeVArpguiiqkdyRwbdGOpTyDXAJIHxZ
+        tvt9rvkuibFyAO9FWXTkxKSEWgGb6O4=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-345-L-s4HvYwN1Oj_kK05l1ztg-1; Thu, 13 Apr 2023 10:37:35 -0400
+X-MC-Unique: L-s4HvYwN1Oj_kK05l1ztg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by gnu.wildebeest.org (Postfix) with ESMTPSA id 7C8A2302BB02;
-        Thu, 13 Apr 2023 16:37:14 +0200 (CEST)
-Received: by r6.localdomain (Postfix, from userid 1000)
-        id 2A6AB34014C; Thu, 13 Apr 2023 16:37:14 +0200 (CEST)
-Message-ID: <718c102205750a00b86e8d33748e9bfb3c485ee1.camel@klomp.org>
-Subject: Re: [PATCH v5 1/2] check-uapi: Introduce check-uapi.sh
-From:   Mark Wielaard <mark@klomp.org>
-To:     John Moon <quic_johmoo@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Todd Kjos <tkjos@google.com>,
-        Matthias Maennich <maennich@google.com>,
-        Giuliano Procida <gprocida@google.com>,
-        kernel-team@android.com, libabigail@sourceware.org,
-        Jordan Crouse <jorcrous@amazon.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Guru Das Srinagesh <quic_gurus@quicinc.com>
-Date:   Thu, 13 Apr 2023 16:37:14 +0200
-In-Reply-To: <d34a6b09-8244-49e2-2d7a-eee5fd5ca5b7@quicinc.com>
-References: <20230407203456.27141-1-quic_johmoo@quicinc.com>
-         <20230407203456.27141-2-quic_johmoo@quicinc.com>
-         <CAK7LNAQQmoyUx+0Jk3c7iqY20KokrHEOPwHNb2doZOOA8RWBDA@mail.gmail.com>
-         <2023041015-lunar-dandelion-1b4e@gregkh>
-         <ae44540f-8947-8efb-fb8d-45a84bd3fef3@quicinc.com>
-         <2023041136-donator-faceplate-5f91@gregkh>
-         <bcdcee9b-f213-bc3c-d300-92a1e0138187@quicinc.com>
-         <2023041209-armed-overlaid-3d3d@gregkh>
-         <d34a6b09-8244-49e2-2d7a-eee5fd5ca5b7@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 93EDB1C17423;
+        Thu, 13 Apr 2023 14:37:34 +0000 (UTC)
+Received: from aion.usersys.redhat.com (unknown [10.22.32.87])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8357E1121330;
+        Thu, 13 Apr 2023 14:37:34 +0000 (UTC)
+Received: by aion.usersys.redhat.com (Postfix, from userid 1000)
+        id 1C6971A27F5; Thu, 13 Apr 2023 10:37:34 -0400 (EDT)
+Date:   Thu, 13 Apr 2023 10:37:34 -0400
+From:   Scott Mayhew <smayhew@redhat.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Chuck Lever <chuck.lever@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        linux-nfs@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sunrpc: Fix RFC6803 encryption test
+Message-ID: <ZDgTrsTIsYvF78nP@aion.usersys.redhat.com>
+References: <1078410.1681393916@warthog.procyon.org.uk>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1078410.1681393916@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, 13 Apr 2023, David Howells wrote:
 
-On Wed, 2023-04-12 at 09:37 -0700, John Moon via Libabigail wrote:
-> On 4/11/2023 11:14 PM, Greg Kroah-Hartman wrote:
-> > > Would you find the tool more useful if it simply filtered out all instances
-> > > where the size of the type did not change? This would filter out the
-> > > following which the tool currently flags:
-> > > 
-> > > - enum expansions
-> > > - reserved field expansions
-> > > - expansions of a struct with a flex array at the end
-> > > - type changes
-> > > - re-ordering of existing members
-> > > - ...others?
-> > 
-> > Obviously not, as some of those are real breakages, and some are not at
-> > all.
-> > 
-> > Please understand what is an abi breakage.  Adding new enums is not.
-> > Using a reserved field is not.  Reording existing members IS.
-> > 
+>     
+> The usage_data[] array in rfc6803_encrypt_case() is uninitialised, so clear
+> it as it may cause the tests to fail otherwise.
 > 
-> Yes, understood that method would miss certain classes of breakages. I 
-> was suggesting it as a way to improve the signal-to-noise ratio of the 
-> tool since we don't currently have an algorithm for determining 
-> breakages with 100% accuracy.
+> Fixes: b958cff6b27b ("SUNRPC: Add encryption KUnit tests for the RFC 6803 encryption types")
+> Link: https://lore.kernel.org/r/380323.1681314997@warthog.procyon.org.uk/
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Chuck Lever <chuck.lever@oracle.com>
+> cc: Scott Mayhew <smayhew@redhat.com>
+> cc: Herbert Xu <herbert@gondor.apana.org.au>
+> cc: linux-nfs@vger.kernel.org
+> cc: linux-crypto@vger.kernel.org
+> ---
+>  net/sunrpc/auth_gss/gss_krb5_test.c |    1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/net/sunrpc/auth_gss/gss_krb5_test.c b/net/sunrpc/auth_gss/gss_krb5_test.c
+> index ce0541e32fc9..aa6ec4e858aa 100644
+> --- a/net/sunrpc/auth_gss/gss_krb5_test.c
+> +++ b/net/sunrpc/auth_gss/gss_krb5_test.c
+> @@ -1327,6 +1327,7 @@ static void rfc6803_encrypt_case(struct kunit *test)
+>  	if (!gk5e)
+>  		kunit_skip(test, "Encryption type is not available");
+>  
+> +	memset(usage_data, 0, sizeof(usage_data));
+>  	usage.data[3] = param->constant;
+>  
+>  	Ke.len = gk5e->Ke_length;
+> 
 
-Note that you can check the exit code of libabigail's abidiff to see
-whether something is an incompatible abi change or not, see:
-https://sourceware.org/libabigail/manual/abidiff.html#return-values
+I still see the failures with this patch applied.  The rfc6803 checksum
+tests run before the rfc6803 encryption tests, so I'm not sure how this
+would help.
 
-You can also of course use suppressions to instruct abidiff to avoid
-reporting changes involving certain ABI artifacts:
-https://sourceware.org/libabigail/manual/libabigail-concepts.html#suppr-spec-label
+-Scott
 
-Cheers,
-
-Mark
