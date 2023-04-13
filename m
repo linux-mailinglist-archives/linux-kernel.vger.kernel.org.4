@@ -2,91 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FA326E0E6A
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:20:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0670C6E0E6E
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231165AbjDMNUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 09:20:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50392 "EHLO
+        id S231223AbjDMNU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 09:20:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbjDMNTo (ORCPT
+        with ESMTP id S231237AbjDMNUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 09:19:44 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E5C8A74
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:19:23 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id i8-20020a05600c354800b003ee93d2c914so9722343wmq.2
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:19:23 -0700 (PDT)
+        Thu, 13 Apr 2023 09:20:20 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D3EAF0E
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:20:07 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id y16so195976ybb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:20:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1681391961; x=1683983961;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3uZ2L6Z2WT9YlA2M5FGrOlxdAqlFCV2dHB/1lrAHpy8=;
-        b=Ov3hk06jdZM9d+LdbrIweTCN7GSwWPVPVn8K7uK0TKIk+ttnUmCxFAYbX4B6Qow0v+
-         3yxNPHKSoX2xPg9VEAaI3ryZWdl4wWd/HpP2FFf1eXrfTpZR4R0T+KRJvq+SAkW4ypn4
-         rmgp4zxq7aKbyPsofkCGIkZkYE/9WOE9S8AlekWZERnszbZxr3jypF8yuwgsit2BKiYG
-         wJZrp/pLgjCxK0TxZCADbqdMrY/1YuvexbDG5OEcrI5YL2x7RqFPzNKG/UEEGOT9mLe/
-         bhE4rgwiO9H+h5ViytfFeTrueDyueuH0RrL/moWptinT8DITBsTLuN+LUJ2b+22rugnl
-         oHDQ==
+        d=google.com; s=20221208; t=1681392006; x=1683984006;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OEYIJxcj5kmzNVXSipi1HyC65eTywMQLwhS5DFReugM=;
+        b=tQ6wJTzCLuhE8bfXNSfUCszgAi37G4ZhBl+WQz1oQmfYFytFaCY0Oh67v858OE5AXc
+         V/JHLD2pK/I9YKCATu0KIGtLbNWE+Q4heAs/kqfaHUmI+5i3p7MmPvVs8uOMudb2y5hb
+         NFjcqWCUQ3ML208RfeF96TWVB3hDsfVakdBsNxx8dS8iY8IFSlM8p8+as1svnuhRaWdi
+         wdZeobyTFV5I8AlGyW/GyMaYIYeTLYK0ZXwQBQ/2lLkEAXiWME2lJnddrQATjTz/yPU9
+         P65DG16JWYVuRUJjLfxf8rgu2YfakSB1QAyGLkDPIE/PFPLFeyzSl5CbqARP25pGuIRE
+         T4gA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681391961; x=1683983961;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3uZ2L6Z2WT9YlA2M5FGrOlxdAqlFCV2dHB/1lrAHpy8=;
-        b=CdpgMYD9iWT5rjJp+okqoX/F+x1IxLBTZ+rsL5cRh93ZIM9hwRGBjBeh7tAMYtAZBW
-         ZrW21mepqSK1L/6yAq6iD9iHW8rt7F6p77jFzKC8jC5QPCeF1SP9YoFmNF9Mn7ryzGDy
-         gwxIBdBVNYZW/H1Q4xbr/JVNi31tf7ZNcyCQu2DbvXYzCpYNg/k4ZmjIhs5PV3UD8g5h
-         mhGiKoZQ/giPEctGa7bfv7tI0Fs7L6k5H3F1oOX7WlfCAosEIvx/x8Ob/63ORbmcU+zC
-         d9jAsx2jclVllQrSKrzWye9Y/Et0cyteQ2Z9UGrkZbLuJt/xhZa/4I8JgnkE8k+kS6wq
-         rKGw==
-X-Gm-Message-State: AAQBX9ck0+ADZLdyyuK723sntD8ZxLmCuMGwAQLxMBBY5qttAFC/7CWI
-        fuuEYN5glJNb+VGyjQT+KYQTFw==
-X-Google-Smtp-Source: AKy350ahHJ2R0u9+ILirA6SYvVmLljxqBN6oqzCFoHvHTKwkDlxy0i7/480WgJIzYZwsrG2RkQgdPg==
-X-Received: by 2002:a7b:cd15:0:b0:3ed:c468:ab11 with SMTP id f21-20020a7bcd15000000b003edc468ab11mr1819189wmj.28.1681391960810;
-        Thu, 13 Apr 2023 06:19:20 -0700 (PDT)
-Received: from [10.1.3.59] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id m2-20020a05600c3b0200b003f0652084b8sm5463491wms.20.2023.04.13.06.19.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Apr 2023 06:19:20 -0700 (PDT)
-Message-ID: <32450a66-78ff-8ec8-2f31-6e5d91e38a5b@baylibre.com>
-Date:   Thu, 13 Apr 2023 15:19:19 +0200
+        d=1e100.net; s=20221208; t=1681392006; x=1683984006;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OEYIJxcj5kmzNVXSipi1HyC65eTywMQLwhS5DFReugM=;
+        b=cSkl8r9opKNzSXNfG2fal9wR14CdoYx7+uqNv2zSOma+hB6jJ87r2wL9nqbiN5s8sA
+         9l61lJobN5kbQauBT1Kn+efheJpX8/1B6goDHfSABy5vbx6M4D3RxWCIv7VgVcJuccQj
+         xLIxQ+aoqKzuoJuUC2b/DVagnEl+zowN63BHmYzHRLwOs+HXP+rEbSymQ1tdGKxD0vGF
+         B5rgg8Qm2J2/piYcgI4rPqXUGkb5qgXtQpTlnzk3U+uCqA3vv0nLPGH5VbDuugcfK1p7
+         TXkHhxt1iU32+44rdkxiOxwlXS6R/rNTdCl8aAoUYCqXVsJ63KooWU7LjDU40O7iuW8G
+         b1lQ==
+X-Gm-Message-State: AAQBX9f9DQh0PejTKGmyszBMG2i2kXGJ/tOMT4KNSDCz6zEM9Ba7EWMs
+        vvy8fOm7M1dPpNegs4Jc6xA+pQWcGo17jNM6UZd9lQ==
+X-Google-Smtp-Source: AKy350bze9rRwSEH8mQHkOzRLi/0g5jEhOn91d5G//UCGeCd2mlUYHNEOpMVXezcQc9ZFgn8VYY0YoReb5GDXy4TB7Y=
+X-Received: by 2002:a25:d003:0:b0:b8f:32c4:c6f8 with SMTP id
+ h3-20020a25d003000000b00b8f32c4c6f8mr1775428ybg.42.1681392006415; Thu, 13 Apr
+ 2023 06:20:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 6/7] leds: leds-mt6323: Add support for MT6331 leds
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, pavel@ucw.cz
-Cc:     lee@kernel.org, sean.wang@mediatek.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20230412153310.241046-1-angelogioacchino.delregno@collabora.com>
- <20230412153310.241046-7-angelogioacchino.delregno@collabora.com>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-In-Reply-To: <20230412153310.241046-7-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230412145300.3651840-1-glider@google.com> <202304130223.epEIvA1E-lkp@intel.com>
+ <20230412140601.9308b871e38acb842c119478@linux-foundation.org>
+In-Reply-To: <20230412140601.9308b871e38acb842c119478@linux-foundation.org>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Thu, 13 Apr 2023 15:19:29 +0200
+Message-ID: <CAG_fn=Wqf0E0Uo8wA5pdhgpreKZB7TPU-DiyERyG=T7bqqiJ9A@mail.gmail.com>
+Subject: Re: [PATCH 1/2] mm: kmsan: handle alloc failures in kmsan_vmap_pages_range_noflush()
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+        oe-kbuild-all@lists.linux.dev, urezki@gmail.com, hch@infradead.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, elver@google.com,
+        dvyukov@google.com, kasan-dev@googlegroups.com,
+        Dipanjan Das <mail.dipanjan.das@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/04/2023 17:33, AngeloGioacchino Del Regno wrote:
-> Add the register offsets for MT6331. The hwspec is the same as MT6323.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno<angelogioacchino.delregno@collabora.com>
-
-Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
-
-Regards,
-Alexandre
-
+On Wed, Apr 12, 2023 at 11:06=E2=80=AFPM Andrew Morton
+<akpm@linux-foundation.org> wrote:
+>
+> On Thu, 13 Apr 2023 02:27:19 +0800 kernel test robot <lkp@intel.com> wrot=
+e:
+>
+> > Hi Alexander,
+> >
+> > kernel test robot noticed the following build errors:
+> >
+> > [auto build test ERROR on akpm-mm/mm-everything]
+> >
+> > >> include/linux/kmsan.h:291:1: error: non-void function does not retur=
+n a value [-Werror,-Wreturn-type]
+>
+> Thanks, I'll do this:
+Thanks!
+I sent an updated version of the patch series, which includes your fix
+as well as a couple more improvements (__must_check annotations in
+particular)
