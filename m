@@ -2,140 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C9C16E03F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 04:07:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C64286E03FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 04:09:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbjDMCHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 22:07:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53594 "EHLO
+        id S229862AbjDMCJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 22:09:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjDMCHX (ORCPT
+        with ESMTP id S229484AbjDMCJ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 22:07:23 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E09932708;
-        Wed, 12 Apr 2023 19:07:22 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id pm7-20020a17090b3c4700b00246f00dace2so5742532pjb.2;
-        Wed, 12 Apr 2023 19:07:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681351642; x=1683943642;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BEy739Q6DzyPTPI+EMOV/uu+jSkhw/XJ8H+BPcHU6Bs=;
-        b=YABSAzecJklqy+eOR5eewLTULsC0NynzfDE9O0fbd42ALSZM+w+gf4McrSErgoyYaK
-         Fsnz+P7cNCAKB6FN4O1oatl3SbLvcJW0n4yEcX3KBvmQAOJUyEFssVz+xa4BXuzRBUt6
-         zzcSd+nq2FL3bbLR5+tgRXfrbeOgRhnzscVlurEfwPgIU9CXuREmCFZhvruyOhfvWaO+
-         VX/NvzU2baoHrG0KY9uHtl7JRkcuuCXJrc6L7bXh8k+4wTki4//kNKgofyHJS5d8aKPC
-         lBVmNG5TkTc6pN2SCood8G6R/Q5jxVOEcf+3HY1QpIkQeGZE8e164CmoH9SudD2Dlh7c
-         mMRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681351642; x=1683943642;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BEy739Q6DzyPTPI+EMOV/uu+jSkhw/XJ8H+BPcHU6Bs=;
-        b=HPlsTzACCEpaVa60E+B7IYkizFgJz8bR3f5FnCA3FTegJdlo+7fmr+PwbGjbZU2qU/
-         QK7WbePhurErSk3f/L/JIAabJ+dN/UQT+9CmLKmDKYK86L1y9JvxUx54mMLq5w/pjWvw
-         NFp23A/+jCyBlmppHVeckIOEzV2H0QhjjJW1fJk1k0oT7WM+4xxJSfBTDeNCGZ6D0gRW
-         IA+IhVr980gzLWAkYlV5qZYkgBRrstw4eymUXoeZS2lYdRy2+trF0jNwIjzJ6QNzxvRv
-         AERPz/WNzNxt8c3LqhU2Hgtd5ES1boKA/D3Siwkd43HBNTMTVyoizBR1RT9XCjzRgaA9
-         6WGg==
-X-Gm-Message-State: AAQBX9dM+9lTFmLxg9LzpeqBOYgPeb7VMa0ToqdnF0qY0g6rQTKPYlLw
-        zxrmpDUITvNacc1UngbW1P0=
-X-Google-Smtp-Source: AKy350bRu/BzSqanT7tkZ7WazrwfBESoI0yWMZiJHdyKwePaMYz7NCCNIjcPK2NWOPsAetiGcY7GXQ==
-X-Received: by 2002:a17:90a:b005:b0:23d:16d6:2f05 with SMTP id x5-20020a17090ab00500b0023d16d62f05mr212424pjq.22.1681351642301;
-        Wed, 12 Apr 2023 19:07:22 -0700 (PDT)
-Received: from Gentoo (n220246252240.netvigator.com. [220.246.252.240])
-        by smtp.gmail.com with ESMTPSA id q15-20020a170902bd8f00b001a67759f9f8sm239125pls.106.2023.04.12.19.07.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 19:07:21 -0700 (PDT)
-Date:   Thu, 13 Apr 2023 10:07:15 +0800
-From:   Jianhua Lu <lujianhua000@gmail.com>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/5] drm/panel: nt36523: Get orientation from OF
-Message-ID: <ZDdj04+RiBcOP9z0@Gentoo>
-References: <20230412-topic-lenovopanel-v1-0-00b25df46824@linaro.org>
- <20230412-topic-lenovopanel-v1-4-00b25df46824@linaro.org>
+        Wed, 12 Apr 2023 22:09:28 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985E44C3D;
+        Wed, 12 Apr 2023 19:09:26 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Pxjgj6Xhyz4f3yb6;
+        Thu, 13 Apr 2023 10:09:21 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP3 (Coremail) with SMTP id _Ch0CgBnFCJRZDdkM37DGg--.36443S3;
+        Thu, 13 Apr 2023 10:09:23 +0800 (CST)
+Subject: Re: [PATCH 4/4] blk-iolatency: Make initialization lazy
+To:     Tejun Heo <tj@kernel.org>, axboe@kernel.dk, josef@toxicpanda.com,
+        hch@lst.de
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai1@huaweicloud.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20230413000649.115785-1-tj@kernel.org>
+ <20230413000649.115785-5-tj@kernel.org>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <661dc6d6-2786-cbe5-e751-95947a1608cc@huaweicloud.com>
+Date:   Thu, 13 Apr 2023 10:09:21 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230412-topic-lenovopanel-v1-4-00b25df46824@linaro.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230413000649.115785-5-tj@kernel.org>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgBnFCJRZDdkM37DGg--.36443S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxAryrur1xKFWDKFy3ZFW3Awb_yoWrCr4rpr
+        4rWFsxC3yfKFs7WF1xtr4xCr15Kw4kKryrGryfCrySvr129r9xtF1kuF1jqFWkZr4DAFs3
+        Jr48tryDKr4Fk3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
+        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
+        Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UU
+        UUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 09:46:01PM +0200, Konrad Dybcio wrote:
-> Some bright vendors mount their display panels upside down. Add the
-> required pieces to allow for accounting for that.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Hi,
 
-Reviewed-by: Jianhua Lu <lujianhua000@gmail.com>
-> ---
->  drivers/gpu/drm/panel/panel-novatek-nt36523.c | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
+ÔÚ 2023/04/13 8:06, Tejun Heo Ð´µÀ:
+> Other rq_qos policies such as wbt and iocost are lazy-initialized when they
+> are configured for the first time for the device but iolatency is
+> initialized unconditionally from blkcg_init_disk() during gendisk init. Lazy
+> init is beneficial because rq_qos policies add runtime overhead when
+> initialized as every IO has to walk all registered rq_qos callbacks.
 > 
-> diff --git a/drivers/gpu/drm/panel/panel-novatek-nt36523.c b/drivers/gpu/drm/panel/panel-novatek-nt36523.c
-> index 3c81ec014eef..db4b4af13ec1 100644
-> --- a/drivers/gpu/drm/panel/panel-novatek-nt36523.c
-> +++ b/drivers/gpu/drm/panel/panel-novatek-nt36523.c
-> @@ -31,6 +31,7 @@ struct panel_info {
->  	struct drm_panel panel;
->  	struct mipi_dsi_device *dsi[2];
->  	const struct panel_desc *desc;
-> +	enum drm_panel_orientation orientation;
->  
->  	struct gpio_desc *reset_gpio;
->  	struct backlight_device *backlight;
-> @@ -674,11 +675,19 @@ static int nt36523_get_modes(struct drm_panel *panel,
->  	return pinfo->desc->num_modes;
->  }
->  
-> +static enum drm_panel_orientation nt36523_get_orientation(struct drm_panel *panel)
+> This patch switches iolatency to lazy initialization too so that it only
+> registered its rq_qos policy when it is first configured.
+> 
+> Note that there is a known race condition between blkcg config file writes
+> and del_gendisk() and this patch makes iolatency susceptible to it by
+> exposing the init path to race against the deletion path. However, that
+> problem already exists in iocost and is being worked on.
+> 
+> Signed-off-by: Tejun Heo <tj@kernel.org>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> Cc: Josef Bacik <josef@toxicpanda.com>
+> ---
+>   block/blk-cgroup.c    |  8 --------
+>   block/blk-iolatency.c | 29 ++++++++++++++++++++++++++++-
+>   block/blk.h           |  6 ------
+>   3 files changed, 28 insertions(+), 15 deletions(-)
+> 
+> diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
+> index c154b08a7e92..1c1ebeb51003 100644
+> --- a/block/blk-cgroup.c
+> +++ b/block/blk-cgroup.c
+> @@ -33,7 +33,6 @@
+>   #include "blk-cgroup.h"
+>   #include "blk-ioprio.h"
+>   #include "blk-throttle.h"
+> -#include "blk-rq-qos.h"
+>   
+>   /*
+>    * blkcg_pol_mutex protects blkcg_policy[] and policy [de]activation.
+> @@ -1350,14 +1349,8 @@ int blkcg_init_disk(struct gendisk *disk)
+>   	if (ret)
+>   		goto err_ioprio_exit;
+>   
+> -	ret = blk_iolatency_init(disk);
+> -	if (ret)
+> -		goto err_throtl_exit;
+> -
+>   	return 0;
+>   
+> -err_throtl_exit:
+> -	blk_throtl_exit(disk);
+>   err_ioprio_exit:
+>   	blk_ioprio_exit(disk);
+>   err_destroy_all:
+> @@ -1373,7 +1366,6 @@ int blkcg_init_disk(struct gendisk *disk)
+>   void blkcg_exit_disk(struct gendisk *disk)
+>   {
+>   	blkg_destroy_all(disk);
+> -	rq_qos_exit(disk->queue);
+>   	blk_throtl_exit(disk);
+>   }
+>   
+> diff --git a/block/blk-iolatency.c b/block/blk-iolatency.c
+> index 2560708b9109..fd5fec989e39 100644
+> --- a/block/blk-iolatency.c
+> +++ b/block/blk-iolatency.c
+> @@ -755,7 +755,7 @@ static void blkiolatency_enable_work_fn(struct work_struct *work)
+>   	}
+>   }
+>   
+> -int blk_iolatency_init(struct gendisk *disk)
+> +static int blk_iolatency_init(struct gendisk *disk)
+>   {
+>   	struct blk_iolatency *blkiolat;
+>   	int ret;
+> @@ -824,6 +824,29 @@ static void iolatency_clear_scaling(struct blkcg_gq *blkg)
+>   	}
+>   }
+>   
+> +static int blk_iolatency_try_init(struct blkg_conf_ctx *ctx)
 > +{
-> +	struct panel_info *pinfo = to_panel_info(panel);
+> +	static DEFINE_MUTEX(init_mutex);
+> +	int ret;
 > +
-> +	return pinfo->orientation;
+> +	ret = blkg_conf_open_bdev(ctx);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/*
+> +	 * blk_iolatency_init() may fail after rq_qos_add() succeeds which can
+> +	 * confuse iolat_rq_qos() test. Make the test and init atomic.
+> +	 */
+> +	mutex_lock(&init_mutex);
+
+Can we just convert the return value from -EBUSY to 0 in this case, so
+that the global lock won't be needed.
+
+Thanks,
+Kuai
+> +
+> +	if (!iolat_rq_qos(ctx->bdev->bd_queue))
+> +		ret = blk_iolatency_init(ctx->bdev->bd_disk);
+> +
+> +	mutex_unlock(&init_mutex);
+> +
+> +	return ret;
 > +}
 > +
->  static const struct drm_panel_funcs nt36523_panel_funcs = {
->  	.disable = nt36523_disable,
->  	.prepare = nt36523_prepare,
->  	.unprepare = nt36523_unprepare,
->  	.get_modes = nt36523_get_modes,
-> +	.get_orientation = nt36523_get_orientation,
->  };
->  
->  static int nt36523_bl_update_status(struct backlight_device *bl)
-> @@ -784,6 +793,12 @@ static int nt36523_probe(struct mipi_dsi_device *dsi)
->  	mipi_dsi_set_drvdata(dsi, pinfo);
->  	drm_panel_init(&pinfo->panel, dev, &nt36523_panel_funcs, DRM_MODE_CONNECTOR_DSI);
->  
-> +	ret = of_drm_get_panel_orientation(dev->of_node, &pinfo->orientation);
-> +	if (ret < 0) {
-> +		dev_err(dev, "%pOF: failed to get orientation %d\n", dev->of_node, ret);
-> +		return ret;
-> +	}
+>   static ssize_t iolatency_set_limit(struct kernfs_open_file *of, char *buf,
+>   			     size_t nbytes, loff_t off)
+>   {
+> @@ -838,6 +861,10 @@ static ssize_t iolatency_set_limit(struct kernfs_open_file *of, char *buf,
+>   
+>   	blkg_conf_init(&ctx, buf);
+>   
+> +	ret = blk_iolatency_try_init(&ctx);
+> +	if (ret)
+> +		goto out;
 > +
->  	if (pinfo->desc->has_dcs_backlight) {
->  		pinfo->panel.backlight = nt36523_create_backlight(dsi);
->  		if (IS_ERR(pinfo->panel.backlight))
+>   	ret = blkg_conf_prep(blkcg, &blkcg_policy_iolatency, &ctx);
+>   	if (ret)
+>   		goto out;
+> diff --git a/block/blk.h b/block/blk.h
+> index d65d96994a94..62fca868bc61 100644
+> --- a/block/blk.h
+> +++ b/block/blk.h
+> @@ -399,12 +399,6 @@ static inline struct bio *blk_queue_bounce(struct bio *bio,
+>   	return bio;
+>   }
+>   
+> -#ifdef CONFIG_BLK_CGROUP_IOLATENCY
+> -int blk_iolatency_init(struct gendisk *disk);
+> -#else
+> -static inline int blk_iolatency_init(struct gendisk *disk) { return 0; };
+> -#endif
+> -
+>   #ifdef CONFIG_BLK_DEV_ZONED
+>   void disk_free_zone_bitmaps(struct gendisk *disk);
+>   void disk_clear_zone_settings(struct gendisk *disk);
 > 
-> -- 
-> 2.40.0
-> 
+
