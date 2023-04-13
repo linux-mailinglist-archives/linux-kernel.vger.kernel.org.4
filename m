@@ -2,270 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 532736E05E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 06:20:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 503FC6E05E3
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 06:20:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbjDMEUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 00:20:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47956 "EHLO
+        id S229716AbjDMEUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 00:20:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbjDMETt (ORCPT
+        with ESMTP id S229922AbjDMETs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 00:19:49 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5FA12B
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 21:19:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681359586; x=1712895586;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=WEbpKGBUyRF/wlzyVFVPBnMni2cqIZPMdnUzvDvbL8c=;
-  b=giVbtcaIFcHBYOtDxJ+EkzhblNZ423xB8HVsYhCR+mT9L3VjOcjEP6Mu
-   rrM+lqpXlCWGno86mYSLlpx6tmxlRLQKJxENCFfjtqrEI1BuQ7dT+QVeZ
-   0R9Vtp8ESOh11DCZOudHdQ2gAIlVF7geqoIwGqwYcalOnn3PJFP/VSlck
-   Nd3QkI118heOEr1Fsb5bkLh7mWzW4c5/SMeD1Kj7lpjB5GqdoBeZVDh95
-   eR4Bsjkpr6ijzmVZrCAkD84XtkZb1PnAmhXN1z+6VqT8i63ZNE3hDWDUI
-   noygN7Acre8fCVamJkfCA32xbVfIaO7QiKNKcsMdCdSKr5qb0cc2gVaE4
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="409232854"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="409232854"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 21:19:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="719650634"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="719650634"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 12 Apr 2023 21:19:34 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pmoQo-000YL1-01;
-        Thu, 13 Apr 2023 04:19:34 +0000
-Date:   Thu, 13 Apr 2023 12:19:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/apic] BUILD SUCCESS
- 5af507bef93c09a94fb8f058213b489178f4cbe5
-Message-ID: <643782b9.O/QfH4EpUe2FDaK1%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 13 Apr 2023 00:19:48 -0400
+Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6FC2A4
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 21:19:21 -0700 (PDT)
+Received: from authenticated-user (box.trvn.ru [194.87.146.52])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by box.trvn.ru (Postfix) with ESMTPSA id 82FD14137A;
+        Thu, 13 Apr 2023 09:19:18 +0500 (+05)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
+        t=1681359558; bh=EACh0p8x8TBQcC+xIl40sDZ9sHJ0nPKMt/fNm93r6ts=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=0esRjPOG+1XrN5sgTC+MdhEiL05H1pBvZD0Z2aG20oXfW/RYRR9HMYxn1BhrGY8ql
+         U335OCrrHdVfczRMXLEtduafK/pirEXfDmDUkRzsIWkK5/9u1DEsHnvpl9DmsZysSr
+         UzFS5LNa6iL+L4+a7EHMk9eZC2wu7pZaJpW/PaNzAulULzxKcGap14Q9vW4uAO22FS
+         YN9kRbI8CY9TxZKwApu8mLGuu6VWzn/ubXyiPnrsFNGBeBm9ZbDxFMoyqLraFeT9LV
+         bGfh0w+TzRSTNk6W+zSFGCEsgHW7C0VqY1fxEJv5C9jm4NquY/3KlpWqhVM0D1ffWW
+         dOg/PfjGvyjDA==
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Thu, 13 Apr 2023 09:19:17 +0500
+From:   Nikita Travkin <nikita@trvn.ru>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
+        rfoss@kernel.org, airlied@gmail.com, daniel@ffwll.ch,
+        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/bridge: ti-sn65dsi86: Implement wait_hpd_asserted
+In-Reply-To: <CAD=FV=XEQS9MB4e52B4yLjiP8ksYmeos_emiH4=-adCOwzfGUA@mail.gmail.com>
+References: <20230408082014.235425-1-nikita@trvn.ru>
+ <CAD=FV=XEQS9MB4e52B4yLjiP8ksYmeos_emiH4=-adCOwzfGUA@mail.gmail.com>
+Message-ID: <905403377ec62914a2fbe21a6b4a6c8e@trvn.ru>
+X-Sender: nikita@trvn.ru
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/apic
-branch HEAD: 5af507bef93c09a94fb8f058213b489178f4cbe5  x86/ioapic: Don't return 0 from arch_dynirq_lower_bound()
+Doug Anderson писал(а) 13.04.2023 01:22:
+> Hi,
+> 
+> On Sat, Apr 8, 2023 at 1:20 AM Nikita Travkin <nikita@trvn.ru> wrote:
+>>
+>> This bridge doesn't actually implement HPD due to it being way too slow
+>> but instead expects the panel driver to wait enough to assume HPD is
+>> asserted. However some panels (such as the generic 'edp-panel') expect
+>> the bridge to deal with the delay and pass maximum delay to the aux
+>> instead.
+>>
+>> In order to support such panels, add a dummy implementation of wait
+>> that would just sleep the maximum delay and assume no failure has
+>> happened.
+>>
+>> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+>> ---
+>> This was suggested in [1] to make sure DT users can be semantically
+>> correct (not adding no-hpd when the line is actually there) while
+>> still using a hard delay to be faster than waiting the long debounce
+>> time.
+>>
+>> [1] - https://lore.kernel.org/all/CAD=FV=VR7sKsquE25eF7joc7gPApu-vqwduZzjE=wFCoXjMYnQ@mail.gmail.com/
+>> ---
+>>  drivers/gpu/drm/bridge/ti-sn65dsi86.c | 19 +++++++++++++++++++
+>>  1 file changed, 19 insertions(+)
+>>
+>> diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi86.c b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+>> index 7a748785c545..260cad1fd1da 100644
+>> --- a/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+>> +++ b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+>> @@ -618,6 +618,24 @@ static ssize_t ti_sn_aux_transfer(struct drm_dp_aux *aux,
+>>         return len;
+>>  }
+>>
+>> +static int ti_sn_aux_wait_hpd_asserted(struct drm_dp_aux *aux, unsigned long wait_us)
+>> +{
+>> +       /*
+>> +        * The HPD in this chip is a bit useless (See comment in
+>> +        * ti_sn65dsi86_enable_comms) so if our driver is expected to wait
+>> +        * for HPD, we just assume it's asserted after the wait_us delay.
+>> +        *
+>> +        * In case we are asked to wait forever (wait_us=0) take conservative
+>> +        * 500ms delay.
+>> +        */
+>> +       if (wait_us == 0)
+>> +               wait_us = 500000;
+>> +
+>> +       usleep_range(wait_us, wait_us + 1000);
+>> +
+>> +       return 0;
+>> +}
+>> +
+>>  static int ti_sn_aux_probe(struct auxiliary_device *adev,
+>>                            const struct auxiliary_device_id *id)
+>>  {
+>> @@ -627,6 +645,7 @@ static int ti_sn_aux_probe(struct auxiliary_device *adev,
+>>         pdata->aux.name = "ti-sn65dsi86-aux";
+>>         pdata->aux.dev = &adev->dev;
+>>         pdata->aux.transfer = ti_sn_aux_transfer;
+>> +       pdata->aux.wait_hpd_asserted = ti_sn_aux_wait_hpd_asserted;
+> 
+> This looks reasonable to me, but I think you only want this
+> implementation if the "no-hpd" property _isn't_ present. In other
+> words:
+> 
+> if (!of_property_read_bool(np, "no-hpd"))
+>   pdata->aux.wait_hpd_asserted = ti_sn_aux_wait_hpd_asserted;
+> 
+> Essentially:
+> 
+> * If "no-hpd" is present in ti-sn65dsi86 then we'll assume that HPD is
+> handled by the panel driver via a GPIO or a "no-hpd" there (which will
+> cause the panel driver to wait the maximum duration).
+> 
+> * If "no-hpd" isn't present in ti-sn65dsi86 then HPD is actually
+> hooked up and thus the panel driver _won't_ handle it.
+> 
+> Does that seem right? Presumably this should be explained by comments.
+> 
 
-elapsed time: 724m
+This does sound reasonable indeed, I didn't think to add it
+conditionally because, looking at the current users of
+wait_hpd_asserted, they will first try the "no-hpd" paths
+and will only call the bridge when they think it's on the
+bridge to wait.
 
-configs tested: 188
-configs skipped: 122
+Thus, if DT is modeled properly - Panel has no-hpd or a gpio,
+wait_hpd_asserted will never be called anyway. Other bridges
+seem to also unconditionally enable the method.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+For this to be a trouble, a panel driver has to be "broken"
+with some form of calling wait_hpd_asserted despite knowing
+the HPD line is not hooked up...
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r011-20230409   gcc  
-arc                              allyesconfig   gcc  
-arc          buildonly-randconfig-r006-20230410   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r002-20230409   gcc  
-arc                  randconfig-r005-20230409   gcc  
-arc                  randconfig-r005-20230412   gcc  
-arc                  randconfig-r013-20230410   gcc  
-arc                  randconfig-r043-20230409   gcc  
-arc                  randconfig-r043-20230410   gcc  
-arc                  randconfig-r043-20230412   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                          moxart_defconfig   clang
-arm                       netwinder_defconfig   clang
-arm                       omap2plus_defconfig   gcc  
-arm                  randconfig-r046-20230412   clang
-arm                           stm32_defconfig   gcc  
-arm64                            allyesconfig   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r016-20230410   gcc  
-arm64                randconfig-r023-20230410   gcc  
-arm64                randconfig-r025-20230412   gcc  
-arm64                randconfig-r026-20230409   gcc  
-arm64                randconfig-r035-20230409   clang
-csky                                defconfig   gcc  
-csky                 randconfig-r014-20230410   gcc  
-csky                 randconfig-r021-20230409   gcc  
-csky                 randconfig-r024-20230410   gcc  
-hexagon              randconfig-r015-20230409   clang
-hexagon              randconfig-r033-20230409   clang
-hexagon              randconfig-r041-20230412   clang
-hexagon              randconfig-r045-20230412   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230410   clang
-i386                 randconfig-a002-20230410   clang
-i386                 randconfig-a003-20230410   clang
-i386                 randconfig-a004-20230410   clang
-i386                 randconfig-a005-20230410   clang
-i386                 randconfig-a006-20230410   clang
-i386                 randconfig-a011-20230410   gcc  
-i386                 randconfig-a012-20230410   gcc  
-i386                          randconfig-a012   gcc  
-i386                 randconfig-a013-20230410   gcc  
-i386                 randconfig-a014-20230410   gcc  
-i386                          randconfig-a014   gcc  
-i386                 randconfig-a015-20230410   gcc  
-i386                 randconfig-a016-20230410   gcc  
-i386                          randconfig-a016   gcc  
-i386                 randconfig-r036-20230410   clang
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r001-20230410   gcc  
-ia64                 randconfig-r015-20230410   gcc  
-ia64                 randconfig-r024-20230410   gcc  
-ia64                 randconfig-r025-20230409   gcc  
-ia64                 randconfig-r032-20230412   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch    buildonly-randconfig-r002-20230410   gcc  
-loongarch    buildonly-randconfig-r004-20230409   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r004-20230409   gcc  
-loongarch            randconfig-r013-20230410   gcc  
-loongarch            randconfig-r014-20230409   gcc  
-loongarch            randconfig-r016-20230410   gcc  
-loongarch            randconfig-r021-20230410   gcc  
-loongarch            randconfig-r031-20230412   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                        mvme16x_defconfig   gcc  
-m68k                 randconfig-r002-20230409   gcc  
-m68k                 randconfig-r021-20230410   gcc  
-m68k                 randconfig-r024-20230409   gcc  
-microblaze           randconfig-r004-20230409   gcc  
-microblaze           randconfig-r004-20230412   gcc  
-microblaze           randconfig-r005-20230410   gcc  
-microblaze           randconfig-r016-20230409   gcc  
-microblaze           randconfig-r023-20230410   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips         buildonly-randconfig-r001-20230409   gcc  
-mips         buildonly-randconfig-r001-20230410   gcc  
-mips         buildonly-randconfig-r002-20230409   gcc  
-mips                     decstation_defconfig   gcc  
-mips                      maltaaprp_defconfig   clang
-mips                           mtx1_defconfig   clang
-mips                 randconfig-r036-20230412   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r001-20230409   gcc  
-nios2                randconfig-r011-20230409   gcc  
-openrisc             randconfig-r003-20230409   gcc  
-openrisc             randconfig-r006-20230410   gcc  
-openrisc             randconfig-r024-20230410   gcc  
-openrisc             randconfig-r024-20230412   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r004-20230410   gcc  
-parisc               randconfig-r012-20230409   gcc  
-parisc               randconfig-r022-20230409   gcc  
-parisc               randconfig-r024-20230409   gcc  
-parisc               randconfig-r026-20230412   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                     ppa8548_defconfig   clang
-powerpc              randconfig-r021-20230410   gcc  
-powerpc              randconfig-r025-20230409   gcc  
-powerpc              randconfig-r026-20230410   gcc  
-powerpc              randconfig-r034-20230409   clang
-powerpc              randconfig-r036-20230412   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r014-20230410   gcc  
-riscv                randconfig-r021-20230412   gcc  
-riscv                randconfig-r022-20230409   gcc  
-riscv                randconfig-r026-20230410   gcc  
-riscv                randconfig-r031-20230412   clang
-riscv                randconfig-r035-20230412   clang
-riscv                randconfig-r042-20230409   gcc  
-riscv                randconfig-r042-20230410   gcc  
-riscv                randconfig-r042-20230412   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r023-20230409   gcc  
-s390                 randconfig-r025-20230410   gcc  
-s390                 randconfig-r033-20230410   clang
-s390                 randconfig-r044-20230409   gcc  
-s390                 randconfig-r044-20230410   gcc  
-s390                 randconfig-r044-20230412   gcc  
-sh                               allmodconfig   gcc  
-sh                         ap325rxa_defconfig   gcc  
-sh                   randconfig-r001-20230412   gcc  
-sh                   randconfig-r014-20230409   gcc  
-sh                   randconfig-r015-20230409   gcc  
-sh                   randconfig-r023-20230409   gcc  
-sh                   randconfig-r023-20230410   gcc  
-sh                   randconfig-r026-20230409   gcc  
-sparc        buildonly-randconfig-r003-20230409   gcc  
-sparc        buildonly-randconfig-r005-20230409   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r012-20230409   gcc  
-sparc                randconfig-r023-20230412   gcc  
-sparc64      buildonly-randconfig-r005-20230410   gcc  
-sparc64              randconfig-r003-20230410   gcc  
-sparc64              randconfig-r006-20230409   gcc  
-sparc64              randconfig-r006-20230412   gcc  
-sparc64              randconfig-r021-20230409   gcc  
-sparc64              randconfig-r022-20230410   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230410   clang
-x86_64                        randconfig-a001   clang
-x86_64               randconfig-a002-20230410   clang
-x86_64               randconfig-a003-20230410   clang
-x86_64                        randconfig-a003   clang
-x86_64               randconfig-a004-20230410   clang
-x86_64               randconfig-a005-20230410   clang
-x86_64                        randconfig-a005   clang
-x86_64               randconfig-a006-20230410   clang
-x86_64               randconfig-a011-20230410   gcc  
-x86_64               randconfig-a012-20230410   gcc  
-x86_64                        randconfig-a012   clang
-x86_64               randconfig-a013-20230410   gcc  
-x86_64               randconfig-a014-20230410   gcc  
-x86_64                        randconfig-a014   clang
-x86_64               randconfig-a015-20230410   gcc  
-x86_64               randconfig-a016-20230410   gcc  
-x86_64                        randconfig-a016   clang
-x86_64               randconfig-r022-20230410   gcc  
-x86_64               randconfig-r025-20230410   gcc  
-x86_64               randconfig-r034-20230410   clang
-x86_64                               rhel-8.3   gcc  
-xtensa       buildonly-randconfig-r006-20230409   gcc  
-xtensa               randconfig-r002-20230410   gcc  
-xtensa               randconfig-r006-20230409   gcc  
-xtensa               randconfig-r034-20230412   gcc  
+So I feel like guarding the wait_hpd_asserted for no-hpd
+users should not actually change much, but if you think
+I should add the check anyway, please let me know.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks for taking a look!
+Nikita
+
+> -Doug
