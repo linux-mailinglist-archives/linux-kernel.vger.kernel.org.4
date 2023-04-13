@@ -2,171 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F9E96E05F2
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 06:24:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 561906E05F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 06:25:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbjDMEYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 00:24:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50764 "EHLO
+        id S229713AbjDMEZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 00:25:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjDMEYq (ORCPT
+        with ESMTP id S229679AbjDMEZR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 00:24:46 -0400
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BBFF1BE4
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 21:24:42 -0700 (PDT)
-Received: by mail-il1-f205.google.com with SMTP id i25-20020a056e021d1900b00316f1737173so9106577ila.16
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 21:24:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681359881; x=1683951881;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lPLBYJZCaSbvGJr6SFGCV+03ZFiIAG6k72Q9uMQoEvI=;
-        b=Sch7CvGs55mqy8ZGvSmwiY1sz/k3Aq8K3zLViWPtdJEj7H3TbMRV0wq8vS42Rc7AlG
-         DcD2WDA3WOo0AAFy8aQ95F5hRMZO8zd+NAFASKpuRkw13emc1iRzexQuvstF+krvx0V9
-         DPuzYGew+O2S2gfhZ1ECbxMewEiY5bwZefWYOEWqPCJjbzrypDA057xYyc8zCUkv1VBI
-         fqhV2J54Bd9Oa5TIemam7YSth4sPkVSUydvMJGfotSo/C/ruXeky62OUQ2oOz8933Mgb
-         8jNz6njR3isgaRZlQUjGd+ZXkigjJeB7scso6HO5C22dbXrDNJQLyWY0cZyCPOeMYbKD
-         vfcg==
-X-Gm-Message-State: AAQBX9dOrh0ou1ZdyGMWvztUFi0eU6HddFY7ty8/YATOIldR2qLL7l2u
-        Qtm0gIXpUi5BaDLh32itnK6pQXcobaQork+pwqYnxGHADEMc
-X-Google-Smtp-Source: AKy350an4a6gao3vrP+GzViBgy1z7wGEjpvaG+UrUfB4G/F3m36OvoxO1OC5JXju3jdtNaCO1LVB8BtRLGRL6zZVePhENaCxKMq+
+        Thu, 13 Apr 2023 00:25:17 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BABF8BB;
+        Wed, 12 Apr 2023 21:25:16 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33D4OgvnE024490, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33D4OgvnE024490
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Thu, 13 Apr 2023 12:24:42 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Thu, 13 Apr 2023 12:25:04 +0800
+Received: from RTEXH36505.realtek.com.tw (172.21.6.25) by
+ RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Thu, 13 Apr 2023 12:25:03 +0800
+Received: from localhost.localdomain (172.21.252.101) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server id
+ 15.1.2375.32 via Frontend Transport; Thu, 13 Apr 2023 12:25:03 +0800
+From:   Stanley Chang <stanley_chang@realtek.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     Stanley Chang <stanley_chang@realtek.com>,
+        <linux-usb@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        "Krzysztof Kozlowski" <krzk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>
+Subject: [PATCH v2 2/2] dt-bindings: usb: snps,dwc3: Add 'snps,global-regs-starting-offset' quirk
+Date:   Thu, 13 Apr 2023 12:25:03 +0800
+Message-ID: <20230413042503.4047-1-stanley_chang@realtek.com>
+X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230412033006.10859-2-stanley_chang@realtek.com>
+References: <20230412033006.10859-2-stanley_chang@realtek.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:7314:0:b0:3f6:657a:e922 with SMTP id
- y20-20020a027314000000b003f6657ae922mr138404jab.5.1681359881464; Wed, 12 Apr
- 2023 21:24:41 -0700 (PDT)
-Date:   Wed, 12 Apr 2023 21:24:41 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000079737805f9301a86@google.com>
-Subject: [syzbot] [ntfs3?] INFO: trying to register non-static key in ntfs3_setattr
-From:   syzbot <syzbot+2bc11770a01ccf77388f@syzkaller.appspotmail.com>
-To:     almaz.alexandrovich@paragon-software.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
-        ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com,
-        trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Add a new 'snps,global-regs-starting-offset' DT to dwc3 core to remap
+the global register start address
 
-syzbot found the following issue on:
+The RTK DHC SoCs were designed the global register address offset at
+0x8100. The default address is at DWC3_GLOBALS_REGS_START (0xc100).
+Therefore, add the property of device-tree to adjust this start address.
 
-HEAD commit:    a79d5c76f705 Merge tag 'scsi-fixes' of git://git.kernel.or..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1646f4adc80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5666fa6aca264e42
-dashboard link: https://syzkaller.appspot.com/bug?extid=2bc11770a01ccf77388f
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/adf61ecd5810/disk-a79d5c76.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/8192876ea15a/vmlinux-a79d5c76.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/80c6e54ddbe7/bzImage-a79d5c76.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2bc11770a01ccf77388f@syzkaller.appspotmail.com
-
-ntfs3: loop3: ino=0, ntfs_iget5
-INFO: trying to register non-static key.
-The code is fine but needs lockdep annotation, or maybe
-you didn't initialize this object before use?
-turning off the locking correctness validator.
-CPU: 1 PID: 18325 Comm: syz-executor.3 Not tainted 6.3.0-rc5-syzkaller-00202-ga79d5c76f705 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
- assign_lock_key+0x222/0x230 kernel/locking/lockdep.c:982
- register_lock_class+0x28e/0x990 kernel/locking/lockdep.c:1295
- __lock_acquire+0xd3/0x1f80 kernel/locking/lockdep.c:4935
- lock_acquire+0x1e1/0x520 kernel/locking/lockdep.c:5669
- down_write+0x3a/0x50 kernel/locking/rwsem.c:1573
- ntfs_truncate fs/ntfs3/file.c:397 [inline]
- ntfs3_setattr+0x53a/0xb80 fs/ntfs3/file.c:696
- notify_change+0xc8b/0xf40 fs/attr.c:482
- do_truncate+0x220/0x300 fs/open.c:66
- handle_truncate fs/namei.c:3219 [inline]
- do_open fs/namei.c:3564 [inline]
- path_openat+0x294e/0x3170 fs/namei.c:3715
- do_file_open_root+0x376/0x7c0 fs/namei.c:3767
- file_open_root+0x247/0x2a0 fs/open.c:1328
- do_handle_open+0x582/0x960 fs/fhandle.c:232
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7ff798c8c169
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ff799a61168 EFLAGS: 00000246 ORIG_RAX: 0000000000000130
-RAX: ffffffffffffffda RBX: 00007ff798dabf80 RCX: 00007ff798c8c169
-RDX: 0000000000000300 RSI: 0000000020000040 RDI: 0000000000000004
-RBP: 00007ff798ce7ca1 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffe1d3f0f7f R14: 00007ff799a61300 R15: 0000000000022000
- </TASK>
-------------[ cut here ]------------
-DEBUG_RWSEMS_WARN_ON(sem->magic != sem): count = 0x1, magic = 0x0, owner = 0xffff88801c879d40, curr 0xffff88801c879d40, list not empty
-WARNING: CPU: 0 PID: 18325 at kernel/locking/rwsem.c:1364 __up_write kernel/locking/rwsem.c:1364 [inline]
-WARNING: CPU: 0 PID: 18325 at kernel/locking/rwsem.c:1364 up_write+0x40a/0x580 kernel/locking/rwsem.c:1626
-Modules linked in:
-CPU: 0 PID: 18325 Comm: syz-executor.3 Not tainted 6.3.0-rc5-syzkaller-00202-ga79d5c76f705 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
-RIP: 0010:__up_write kernel/locking/rwsem.c:1364 [inline]
-RIP: 0010:up_write+0x40a/0x580 kernel/locking/rwsem.c:1626
-Code: 48 c7 c7 e0 71 ea 8a 48 c7 c6 80 73 ea 8a 48 89 da 48 8b 4c 24 20 4c 8b 44 24 30 4c 8b 4c 24 28 50 e8 5a f9 e8 ff 48 83 c4 08 <0f> 0b e9 c0 fc ff ff 0f 0b e9 36 fd ff ff 48 89 5c 24 30 c6 05 0c
-RSP: 0018:ffffc900163874c0 EFLAGS: 00010296
-RAX: 2c2e1a283ac27d00 RBX: 0000000000000001 RCX: 0000000000040000
-RDX: ffffc90003d71000 RSI: 000000000003ffff RDI: 0000000000040000
-RBP: ffffc90016387590 R08: ffffffff81528012 R09: fffff52002c70e51
-R10: 0000000000000000 R11: dffffc0000000001 R12: ffff8880739717b8
-R13: ffff888073971760 R14: 1ffff92002c70ea0 R15: dffffc0000000000
-FS:  00007ff799a61700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000555556344708 CR3: 000000002ac7c000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- ntfs_truncate fs/ntfs3/file.c:400 [inline]
- ntfs3_setattr+0x5e9/0xb80 fs/ntfs3/file.c:696
- notify_change+0xc8b/0xf40 fs/attr.c:482
- do_truncate+0x220/0x300 fs/open.c:66
- handle_truncate fs/namei.c:3219 [inline]
- do_open fs/namei.c:3564 [inline]
- path_openat+0x294e/0x3170 fs/namei.c:3715
- do_file_open_root+0x376/0x7c0 fs/namei.c:3767
- file_open_root+0x247/0x2a0 fs/open.c:1328
- do_handle_open+0x582/0x960 fs/fhandle.c:232
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7ff798c8c169
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ff799a61168 EFLAGS: 00000246 ORIG_RAX: 0000000000000130
-RAX: ffffffffffffffda RBX: 00007ff798dabf80 RCX: 00007ff798c8c169
-RDX: 0000000000000300 RSI: 0000000020000040 RDI: 0000000000000004
-RBP: 00007ff798ce7ca1 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffe1d3f0f7f R14: 00007ff799a61300 R15: 0000000000022000
- </TASK>
-
-
+Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ v1 to v2 change:
+1. Change the name of the property "snps,global-regs-starting-offset".
+---
+ Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+index be36956af53b..5cbf3b7ded04 100644
+--- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+@@ -359,6 +359,13 @@ properties:
+     items:
+       enum: [1, 4, 8, 16, 32, 64, 128, 256]
+ 
++  snps,global-regs-starting-offset:
++    description:
++      value for remapping global register start address. For some dwc3
++      controller, the dwc3 global register start address is not at
++      default DWC3_GLOBALS_REGS_START (0xc100). This property is added to
++      adjust the address.
++
+   port:
+     $ref: /schemas/graph.yaml#/properties/port
+     description:
+-- 
+2.34.1
+
