@@ -2,78 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D0266E1314
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 19:02:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE4C56E131E
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 19:05:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbjDMRCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 13:02:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35354 "EHLO
+        id S230063AbjDMRFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 13:05:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230084AbjDMRCq (ORCPT
+        with ESMTP id S229638AbjDMRFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 13:02:46 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EDBD7D8E
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 10:02:34 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id si1so8936890ejb.10
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 10:02:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681405353; x=1683997353;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XoOyNFPqJ0IyHX6n7ulD4YPnMEOQxBao9Ld8quonbJ0=;
-        b=JrwBIh8GEUkKj/EEowf3QZ6760qyjqgJUrSJyf2niCh3/BlzMBOVhNT3tk7HlzTFWD
-         mKOw2MYzHGqeoEIHIzRVcKd3l8WSnR4Rkgw+RrbfN6KBUQlLDnEZsVtSbR3/8p8yqix8
-         icmOuo3N7LZq/acKlzCJwcVf+a/SZMHk/aDcH9OcfHKgpoEH6bTsw/gWquwL6FXZjTa1
-         GSmFdUhaq/GIu4FUO3uufNUElRJ9gBobwAW+HvlJbrIezUW8Kis94QEV3SlxJH8GGtl0
-         X1fYHgmD2SGach4l9upERzUiq8J+1IiZZq7g1OtLDi+L/SB68L9qr7DbIS3cQFWSgnSu
-         Q/6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681405353; x=1683997353;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XoOyNFPqJ0IyHX6n7ulD4YPnMEOQxBao9Ld8quonbJ0=;
-        b=aT9B+5KRzSsdqlbppKJKBFL42KLJnR26xIAKxwndmUYSoamMNZpKSdjeMjY5n1sYZF
-         lPw/ZGsXONG8DDu8ZwVsU7dHO58ftFChON7H3lHL8TjMTI3wGXaSjIR0xBsVzQS5lxa0
-         qF12e36JwQYMgcELCECS9syB7hZKfBK8J7kFS2hPY9C4dS6rX0LTuMntqh76FY/watZn
-         3l9sztHTdmsmyg1rwUvO10Fafd3wg2RKeaLIALkJEX+Io9Np8pCVLzDCyjHiotaSu6j0
-         SHp6ZI3I0cUjeJlIKL3+DBEXQq0ctrLpK0anR/YL9tW+nA5tGTHO0+SNfmzK0vvsNheC
-         LuMw==
-X-Gm-Message-State: AAQBX9d2Tg6acNULUSqdS/15pDi6Hinds2kj9lPduCV2ywwGjA0riHET
-        0hapzm4SpZoLT1EKRAYzCdEEkA==
-X-Google-Smtp-Source: AKy350ZLt3GH7UNpajQvUMD1ybmwTF1APpaR4GhQSaxH0pMgd2y3kkQxOLVjvBq0LE802ESeop9DeQ==
-X-Received: by 2002:a17:906:1447:b0:94a:6874:713d with SMTP id q7-20020a170906144700b0094a6874713dmr3300922ejc.56.1681405352314;
-        Thu, 13 Apr 2023 10:02:32 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:5032:d2d4:ece5:b035? ([2a02:810d:15c0:828:5032:d2d4:ece5:b035])
-        by smtp.gmail.com with ESMTPSA id w10-20020a170906b18a00b0094a8115e148sm1230751ejy.87.2023.04.13.10.02.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Apr 2023 10:02:31 -0700 (PDT)
-Message-ID: <45e20583-c905-a611-f105-309097572648@linaro.org>
-Date:   Thu, 13 Apr 2023 19:02:30 +0200
+        Thu, 13 Apr 2023 13:05:02 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA056592;
+        Thu, 13 Apr 2023 10:04:51 -0700 (PDT)
+Received: from leknes.fjasle.eu ([46.142.97.232]) by mrelayeu.kundenserver.de
+ (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MKsf5-1q3qmO31kz-00LIxD; Thu, 13 Apr 2023 19:03:25 +0200
+Received: by leknes.fjasle.eu (Postfix, from userid 1000)
+        id 476813C0EE; Thu, 13 Apr 2023 19:03:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
+        t=1681405402; bh=prF/9k2Xus4Gm9F26joQ49+N2+VxW+Wm+lPAuwRp3dc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dWQ6fAU3wvVnrinGJLkjxvqSon1S0SVzZW5AcGXighRgxgZiYYmHDiL2A1IkifD+o
+         hsuVrD+WosyjaO2AwMJcNqGA0EnoQHvB0nCqQFQ5+cJzBjnAHRzTVnZwXj474Y6r97
+         785SyyD1yi+ohEHMz1L7R5JktSQEAIUsNBk+VsJs=
+Date:   Thu, 13 Apr 2023 19:03:22 +0200
+From:   Nicolas Schier <nicolas@fjasle.eu>
+To:     John Moon <quic_johmoo@quicinc.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Todd Kjos <tkjos@google.com>,
+        Matthias Maennich <maennich@google.com>,
+        Giuliano Procida <gprocida@google.com>,
+        kernel-team@android.com, libabigail@sourceware.org,
+        Jordan Crouse <jorcrous@amazon.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>
+Subject: Re: [PATCH v5 1/2] check-uapi: Introduce check-uapi.sh
+Message-ID: <ZDg12nC0XGx6ZdRX@fjasle.eu>
+References: <20230407203456.27141-1-quic_johmoo@quicinc.com>
+ <20230407203456.27141-2-quic_johmoo@quicinc.com>
+ <CAK7LNAQQmoyUx+0Jk3c7iqY20KokrHEOPwHNb2doZOOA8RWBDA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v7 1/2] dt-bindings: spi: add loongson spi
-Content-Language: en-US
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-References: <20230412045152.4694-1-zhuyinbo@loongson.cn>
- <20230412045152.4694-2-zhuyinbo@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230412045152.4694-2-zhuyinbo@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK7LNAQQmoyUx+0Jk3c7iqY20KokrHEOPwHNb2doZOOA8RWBDA@mail.gmail.com>
+X-Provags-ID: V03:K1:bO1rw56I77aHqH/VCK3YAqnRlsHmHlJPegGsTHf6wVQeF9YdNeJ
+ BX3WJOp72K1UoDLThrwGftGd8Tou6vI7+bFnsDkSM4a0cjjzr5bUQwvX/Qa0dLBZwd+I9Q1
+ AbVv5/6hFwpVX5/Onm0auumhAvtx6eYUlwrhEcx2meg3ZxNOmmE3dRq6t0bH3Z40+sKBWu0
+ oeR7zTDfws8wScvscxvjg==
+UI-OutboundReport: notjunk:1;M01:P0:fa520UNgWXc=;8FOl1iK4C45pcNI0FlwShKu27eu
+ AR1PbR3UET4azRwIN69vPZrhsdhu/TboQH3jYuaixatTTKsxsrw/KY/3J7YiT4nHQ7ouKLeTK
+ o2aMGIsgAYtWIok8YtDmPzzuOKvoZjiTFGVEI0/lEXk+WxlnkSr9BmsrrsdmLpCCjfcpXHvvT
+ L5rpnFig3FIO45uSJR9CBcDPqtSP2lTtXuyMXRT9PMfaxGeQntIvINiDxp0R2u0EzPWrMiCi9
+ TJ8vxu2Y5CUsnksiErOdqLZqjGcs0kbiEdeMTx/zkzNQwjDIvTiesy7oXB4RBNeewiTRAOAAE
+ udl9PC2nzs2B2OrjKu1YwuKQDKk80xKquTAzSPkAvCgclMqCGvoNBDjq5iZC3FVfJRkMGwxVR
+ GuMpQO54FfgpkfmYqf1x7WNZAdxdUgcNgN4UDE4eXLRAklz/2mN+fyTq0j2ZQZgn2RdGMWzo0
+ eEFiiZX+C7oqD7pHmBbf8kevY7dEagD+h9Hawg7oo2SCxzAPaSUD5O9OhCs414C4OYXvQUWvl
+ x5u2TbyCwDQ7Ru7JNZFxZ/wKPt97lr+C8HVl0jciEHjA020Gs9yx8IWUnplQHUjpSQwQa4HpD
+ +eVlfQMFgpYS9ifiBoFhPFm0ud7IcanC/flGF9ZVLh6gR2sEWMf+CsBIwxYMe4HvXz59QsavW
+ ppf6tgPmY+MiGlqWXVean94SHi4S+PxUJ2gKsT4DUQ==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,28 +82,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/04/2023 06:51, Yinbo Zhu wrote:
-> Add the Loongson platform spi binding with DT schema format using
-> json-schema.
+On Mon, Apr 10, 2023 at 07:03:05PM +0900 Masahiro Yamada wrote:
+[...]
+> [2] Be careful!
 > 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> 
+> While testing the patch submissions of this,
+> I messed up my repository multiple times.
+> 
+> The script takes some time because it builds many objects
+> internally.
+> 
+> However, once this script starts running, you must not hit Ctrl-C.
+> If you do it, your repository will be sprinkled with a ton
+> of untracked files.
+> 
+> Apply this patch, and run "./scripts/check-uapi.sh -p v6.0"
+> and hit Ctrl-C.
+> 
+> Repeat it a couple of times, and "git status" will show you
+> something horrible.
+> 
+> 
+> You will never know when git is checking out a commit
+> because this script hides it by 'git checkout --quiet'.
+> 
+> 
+> So, this tool should show a caveat at least.
+> 
+> 
+> 'git checkout' should not be hidden, or
+> maybe a caveat message should be shown.
+> 
+> 
+> CAVEAT
+> This tool runs 'git checkout' a couple of times internally.
+> If you interrupt it, your worktree might be messed up.
 
+John, did you consider using git export for obtaining a source tree that
+can be used for headers_install and the following comparison, instead of
+git stash+checkout?  AFACS the script does not depend on any other git
+functionality than providing a specific version of the source tree.  I am
+pretty sure that leaving the original working copy in its original state
+is supporting the script's popularity.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-This is an automated instruction, just in case, because many review tags
-are being ignored. If you do not know the process, here is a short
-explanation:
-
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions, under or above your Signed-off-by tag. Tools like b4 can help
-here. However, there's no need to repost patches *only* to add the tags.
-The upstream maintainer will do that for acks received on the version
-they apply.
-
-https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
-
-Best regards,
-Krzysztof
+Kind regards,
+Nicolas
 
