@@ -2,75 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B40F66E0D8F
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 14:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DBCA6E0D94
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 14:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbjDMMkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 08:40:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48446 "EHLO
+        id S229873AbjDMMmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 08:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbjDMMkV (ORCPT
+        with ESMTP id S229821AbjDMMm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 08:40:21 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E9893D2
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 05:40:19 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-24684839593so443414a91.1
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 05:40:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1681389619; x=1683981619;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=i16n0EuVK4Vx0ZuKRn6aio2E46/COqvGNVETpBt7N3M=;
-        b=bdMi6LRsmzApVT+9lVXV449TlaEayjrcxsJPYMRY9RE/SLWpGzePKOtoVIMuhPf+6l
-         rNixzs9jq31hq5YM06Zt54JOtdGbp5eR+2PHuz3J0t94ahYKRDOgRvjkntXCT94rgWCB
-         4VWGNts1z+YkZfJp0FwQWTkM8xWcFyQSnhp883Y6wEWNhqT6mUTegSlAY/zW/BwOgCJa
-         CbtjyXI/BwSG4enkF9adD4R7NE+5MoRiyO8+naY+H4OdJaTvdTM8QVnnVWXpaglHIYCc
-         LUo6XsQTBlqfE+dWEELN8N71w3NeAuKRI7yybzA4DPatD+/Z7TbfWjDMNSusW2nB38sA
-         L++g==
+        Thu, 13 Apr 2023 08:42:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78D993D1
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 05:41:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681389707;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=t3dYaUxw3D2j5vjazPvcJJsjf7qa/tkOt/AsUugtvjw=;
+        b=ZbwGg8PJkMryusvRRo5KWnKEZAE3BRJaNbTjlu9UvG1EsoaXcUB5m4AiFXCpZDmSaM+43M
+        BL8da3kv33w3dOYkrjfHJ0mOtzNXPY5wGUoEoXebgftWcN72G441MD1Peg5oEvZ1NCeI5x
+        hbO2735vqbwLvKggM/mGQ6jkeWc72EM=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-617-qYSwLccAMvOAqRZM698WNQ-1; Thu, 13 Apr 2023 08:41:46 -0400
+X-MC-Unique: qYSwLccAMvOAqRZM698WNQ-1
+Received: by mail-wr1-f70.google.com with SMTP id d30-20020adfa35e000000b002f53b0a3377so752710wrb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 05:41:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681389619; x=1683981619;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=i16n0EuVK4Vx0ZuKRn6aio2E46/COqvGNVETpBt7N3M=;
-        b=lbmUcw2NC52ajku2s3bCKMmOHzGz7HaTkJBShaH69RhwI4/bBghM0+hflcP08NPdeQ
-         vy+zVJpCmcpnrZ1JQL9xN+Hvfkg2M2s3HjFWlI6xi34g1uzoPgOA3HiEJOmf0GkId+32
-         eTWPZpfZISJVgWA3AnaMqJOon6X18n+kyS7uPUI8liokRIWmveUUt9wyzWmd+LUbvqvj
-         EqOtilruirpmzeCaFwT0Z3ZSyYQTOqeoTmbBk5xcPSPLO0sJ+IJWf/wUiH48JtxHXdqV
-         3wreuoIfQXykFMPwV17vEdkraTrujNUVTa9UnVZoh3J65i8p45Vqu/TARlZX7uOv6Nb8
-         XWYQ==
-X-Gm-Message-State: AAQBX9eHz8y/uygUGczz1/kINDxyQsjFcj5KFvOyb++AGlORayfzyWA8
-        aJFbugwN13+rNk86bY2aMIfkAA==
-X-Google-Smtp-Source: AKy350YfB/uw5Jo/wLazNddCOrm7dQFK1n8bAWp4X8ziV89fXv+4J24xTdrtmvqrtz0KrLBIFO1rIA==
-X-Received: by 2002:a17:90a:1988:b0:236:1ec1:6d30 with SMTP id 8-20020a17090a198800b002361ec16d30mr1628759pji.3.1681389618490;
-        Thu, 13 Apr 2023 05:40:18 -0700 (PDT)
-Received: from [192.168.4.201] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
-        by smtp.gmail.com with ESMTPSA id m8-20020a1709026bc800b001943d58268csm1416799plt.55.2023.04.13.05.40.17
+        d=1e100.net; s=20221208; t=1681389705; x=1683981705;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=t3dYaUxw3D2j5vjazPvcJJsjf7qa/tkOt/AsUugtvjw=;
+        b=lKYek9S7fk9eXwi1NssdvIfFYeKG88eXpasqFSGra9CXljthcr+Y56xAHdZt/qwz+P
+         EcNsyco1sZdfu1UJ9P5DpGEge/mKgYpTHhw1IUlvvFzlSEbQ9mZZxtNIRxK87m0VDDu+
+         XxvhlMkcvMmye983tArIg3pmV0D49H6e7UPz9pNM0eUhlSgHevT08kswqMiheoJ0Umiz
+         8DvWIF6udBNXVpbyxNqwWzJYw7twn9gRa9+bBkojw6q7qmz++qQEuCd1K/fm4sCwUuFz
+         5NisYQ/igbBwDL4v23xGMWdtW5odv3JOP0BKUqe1r5+pTR5ns16yB+JDtziZlwuEwwQD
+         /Yjg==
+X-Gm-Message-State: AAQBX9drPwc33CuQIpwTcD2hsSwuky6XfBI/iz5DuHlkoniqD+WK1RSB
+        XklDk2f2w00Uml43N/fhbuewfrFJthv94rS69zvxj/FoZwfqEyYaK9BCUgVpi+Z6if6E84fLEWz
+        kcZp8fDw+IpB3LliZRqSTenSx
+X-Received: by 2002:a05:6000:182:b0:2c9:b9bf:e20c with SMTP id p2-20020a056000018200b002c9b9bfe20cmr1384301wrx.2.1681389705393;
+        Thu, 13 Apr 2023 05:41:45 -0700 (PDT)
+X-Google-Smtp-Source: AKy350aTY91v5mpZFzN5+r31N2yPV2YStw3MrraVcnXey4pmNW0tl7fgMD6B90YOR+GLQRT9XfAbNA==
+X-Received: by 2002:a05:6000:182:b0:2c9:b9bf:e20c with SMTP id p2-20020a056000018200b002c9b9bfe20cmr1384276wrx.2.1681389705044;
+        Thu, 13 Apr 2023 05:41:45 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
+        by smtp.gmail.com with ESMTPSA id b7-20020adfde07000000b002f3fcb1869csm1222217wrm.64.2023.04.13.05.41.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Apr 2023 05:40:18 -0700 (PDT)
-Message-ID: <441aa796-5c39-1cf5-c71a-f04633773968@kernel.dk>
-Date:   Thu, 13 Apr 2023 06:40:16 -0600
+        Thu, 13 Apr 2023 05:41:44 -0700 (PDT)
+Message-ID: <c1902449-ab9d-4e26-c532-5df0a73dc1f9@redhat.com>
+Date:   Thu, 13 Apr 2023 14:41:43 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [Syzkaller & bisect] There is "task hung in synchronize_rcu
- bisect" in v6.3-rc2 kernel
-To:     Frederic Weisbecker <frederic@kernel.org>,
-        Pengfei Xu <pengfei.xu@intel.com>
-Cc:     lihuafei1@huawei.com, rostedt@goodmis.org,
-        linux-kernel@vger.kernel.org, lkp@intel.com,
-        quic_neeraju@quicinc.com, paulmck@kernel.org, heng.su@intel.com
-References: <ZBG4HOCQIlGFFcIn@xpf.sh.intel.com>
- <ZDdsz+5/QehZ25hg@xpf.sh.intel.com> <ZDflLOCujdBNXl3D@lothringen>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
 Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <ZDflLOCujdBNXl3D@lothringen>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+To:     David Howells <dhowells@redhat.com>
+Cc:     "Teterevkov, Ivan" <Ivan.Teterevkov@amd.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "jhubbard@nvidia.com" <jhubbard@nvidia.com>,
+        "jack@suse.cz" <jack@suse.cz>,
+        "rppt@linux.ibm.com" <rppt@linux.ibm.com>,
+        "jglisse@redhat.com" <jglisse@redhat.com>,
+        "ira.weiny@intel.com" <ira.weiny@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Matthew Wilcox <willy@infradead.org>
+References: <93f2614e-4521-8bc8-2eca-e7ad03e7e399@redhat.com>
+ <PH0PR12MB5606D4611050BC8B1CC430FEF09A9@PH0PR12MB5606.namprd12.prod.outlook.com>
+ <37946.1681288867@warthog.procyon.org.uk>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: find_get_page() VS pin_user_pages()
+In-Reply-To: <37946.1681288867@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,75 +93,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/13/23 5:19 AM, Frederic Weisbecker wrote:
-> On Thu, Apr 13, 2023 at 10:45:35AM +0800, Pengfei Xu wrote:
->> Hi Huafei and kernel experts,
->>
->> It's a soft remind.
->> This issue could be reproduced in v6.3-rc6 kernel.
->> It could be reproduced on Alder lake, Raptor lake and so on x86 platforms.
->> After reverted the commit "0e792b89e6800c:ftrace: Fix use-after-free for
->> dynamic ftrace_ops" on top of v6.3-rc6 kernel, this issue was gone.
->>
->> New syzkaller reproduced code, repro.report, bisect_info.log and detailed logs
->> are in link:
->> https://github.com/xupengfe/syzkaller_logs/tree/main/230412_031722_synchronize_rcu
+On 12.04.23 10:41, David Howells wrote:
+> David Hildenbrand <david@redhat.com> wrote:
 > 
-> I just tested against v6.3-rc6 and again all I get is this io_ring related
-> issue:
+>> I suspect that find_get_page() is not the kind of interface you want to use
+>> for the purpose you describe. find_get_page() is a wrapper around
+>> pagecache_get_page() and seems more like a helper for implementing an fs
+>> (looking at the users and the fact that it only considers pages that are in
+>> the pagecache).
 > 
-> [  448.290752] INFO: task kworker/u4:0:9 blocked for more than 294 seconds.
-> [  448.293868]       Not tainted 6.3.0-rc6-kvm #1
-> [  448.296019] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> [  448.299592] task:kworker/u4:0    state:D stack:0     pid:9     ppid:2      flags:0x00004000
-> [  448.303397] Workqueue: events_unbound io_ring_exit_work
-> [  448.305884] Call Trace:
-> [  448.307147]  <TASK>
-> [  448.308166]  __schedule+0x422/0xc90
-> [  448.309824]  ? wait_for_completion+0x77/0x170
-> [  448.311870]  schedule+0x63/0xd0
-> [  448.313346]  schedule_timeout+0x2fe/0x4c0
-> [  448.315255]  ? __this_cpu_preempt_check+0x1c/0x30
-> [  448.317360]  ? _raw_spin_unlock_irq+0x27/0x60
-> [  448.319400]  ? lockdep_hardirqs_on+0x88/0x120
-> [  448.321395]  ? wait_for_completion+0x77/0x170
-> [  448.323462]  wait_for_completion+0x9e/0x170
-> [  448.325356]  io_ring_exit_work+0x2b0/0x810
-> [  448.327300]  ? __pfx_io_tctx_exit_cb+0x10/0x10
-> [  448.329345]  ? _raw_spin_unlock_irq+0x27/0x60
-> [  448.331397]  process_one_work+0x34e/0x720
-> [  448.333212]  ? __pfx_io_ring_exit_work+0x10/0x10
-> [  448.335377]  ? process_one_work+0x34e/0x720
-> [  448.337295]  worker_thread+0x4e/0x530
-> [  448.339079]  ? __pfx_worker_thread+0x10/0x10
-> [  448.341008]  kthread+0x128/0x160
-> [  448.342513]  ? __pfx_kthread+0x10/0x10
-> [  448.344305]  ret_from_fork+0x2c/0x50
-> [  448.346016]  </TASK>
-> [  448.347176] 
-> [  448.347176] Showing all locks held in the system:
-> [  448.349887] 2 locks held by kworker/u4:0/9:
-> [  448.351829]  #0: ffff88807eb6dd38 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work+0x2b4/0x720
-> [  448.356362]  #1: ffffc9000005fe68 ((work_completion)(&ctx->exit_work)){+.+.}-{0:0}, at: process_one_work+0x2b4/0x720
-> [  448.361052] 1 lock held by rcu_tasks_kthre/11:
-> [  448.363142]  #0: ffffffff83963450 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x31/0x440
-> [  448.367396] 1 lock held by rcu_tasks_rude_/12:
-> [  448.369387]  #0: ffffffff839631d0 (rcu_tasks_rude.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x31/0x440
-> [  448.373808] 1 lock held by rcu_tasks_trace/13:
-> [  448.375852]  #0: ffffffff83962f10 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x31/0x440
-> [  448.380434] 1 lock held by khungtaskd/30:
-> [  448.382219]  #0: ffffffff83963e60 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x17/0x1d0
-> [  448.386291] 
-> [  448.387159] =============================================
-> [  448.387159] 
+> Btw, at some point we're going to need public functions to get extra pins on
+> pages.  vmsplice() should be pinning the pages it pushes into a pipe - so all
+> pages in a pipe should probably be pinned - and anyone who splices a page out
+> of a pipe and retains it (skbuffs spring strongly to mind) should also get a
+> pin on the page.
 
-Is there a reproducer for this one so we can take a look? It's not
-impossible to get into this state if you muck with signals, eg ring
-exit work is queued but needs requests to complete, and the latter
-is prevented by deliberately sending a SIGSTOP to the task that needs
-to complete them.
+As discussed, vmsplice() is a bit special, because it has 
+longterm-pinning semantics: we'd want to migrate the page out of 
+ZONE_MOVABLE/MIGRATE_CMA/... because the page might remain pinned in the 
+pipe possibly forever, controlled by user space. 
+pin_user_pages(FOLL_LONGTERM) would do the right thing, but we might 
+ahve to be careful with extra pins.
+
+
+I guess it depends on what we want to achieve. Let's discuss what would 
+happen when we want to pin some page (and not going via pin_user_page()) 
+that's definitely not an anon page -- so let's assume a pagecache page:
+
+(a) Short-term pinning when already pinned (extra pins): easy.
+(b) Short-term pinning when not pinned yet: should be fairly easy
+     (pin_user_pages() doesn't do anything special for pagecache pages
+      either).
+(c) Long-term pinning when already long-term pinned (extra long-term
+     pinnings): easy
+(d) Long-term pinning when already short-term pinned: problematic,
+     because we might have to migrate the page first, but it's already
+     pinned ... and if we obtained the page via pin_user_page() from a
+     MAP_PRIVATE VMA, we'd  have to do another
+     pin_user_page(FOLL_LONGTERM) that would properly break COW and give
+     us an anon page ...
+(e) Long-term pinning when not pinned yet: fairly easy, but we might
+     have to migrate the page first (like FOLL_LONGTERM would).
+
+
+Regarding anon pages, we should pin only via pin_user_page(), so the 
+"not pinned" case does not apply. Replicating pins -- (a) and (c) -- is 
+usually easy, but (d) is similarly problematic.
+
+Focusing again on !anon pages: if it's just "get another short-term pin 
+on an already pinned page", it's easy (and I recall John H. had 
+patches). If it's "get a long-term pin on an already pinned page", it 
+can be problematic.
+
+Any pages that will never have to be migrated when long-term pinning 
+(just some allocated kernel page without MOVABLE semantics) are super 
+easy to pin, and to add extra pins to.
+
+> 
+> So should all pages held by an skbuff be pinned rather than ref'd?  I have a
+> patch to use the bottom two bits of an skb frag's page pointer to keep track
+> of whether the page it points to is ref'd, pinned or neither, but if we can
+> make it pin/not-pin them, I only need one bit for that.
+
+It might possibly be the right thing. But ref'd vs. pinned really only 
+makes a difference to (a) pages mapped into user space or (b) pages in 
+the pageache. Of course, in any case, long-term semantics have to be 
+respected if the page to pin might have been allocated with MOVABLE 
+semantics.
 
 -- 
-Jens Axboe
+Thanks,
 
+David / dhildenb
 
