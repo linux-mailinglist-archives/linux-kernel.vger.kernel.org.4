@@ -2,164 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C121A6E0E64
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:19:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAAA66E0E69
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:19:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbjDMNTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 09:19:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49680 "EHLO
+        id S230305AbjDMNTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 09:19:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbjDMNTI (ORCPT
+        with ESMTP id S229877AbjDMNTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 09:19:08 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CAF6A5CB;
-        Thu, 13 Apr 2023 06:18:42 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33DCeE6M027748;
-        Thu, 13 Apr 2023 13:18:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=RRTkCQ0l6XYgsz/wyT39D6/1Wcr56Eh0Y911JQcgA2o=;
- b=dQ9PN1bxJrETx4FWj4QEYEgaLuxJSBasp4NBHn6LZIGlp9IZBnM9mbbdawMwH7GUzIfd
- 7DzsB/e1tNE8/Uk4KcDih9jOp8SLH81ensuMZinFznCH/jgDeZ0PAvyeYKqnk6HWy+vT
- tFGsxXq8GgxKGoEVFcb1NI84ZL5QHWYmLsSMo36LLTu4Mpp+XB6+4SPDF6T56EXEi99M
- WBsDkxrTYZvrebbtKzwz+KJbHHi7iaoRrGOJPqEYKLH6ssaiwBQ2xwuilFHto6HUBgUe
- 9ZMvN7jIs8lu5Man2G0bcsnUI99lK2Azgt/QAgfFbN4PCRDPkf307MCrCw3QVk9JuHAL Nw== 
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pxf129d5r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Apr 2023 13:18:16 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33DC7L9E029751;
-        Thu, 13 Apr 2023 13:18:16 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
-        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3pu0fqtex9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Apr 2023 13:18:15 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33DDIDmP36635248
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 13 Apr 2023 13:18:14 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C7CE858055;
-        Thu, 13 Apr 2023 13:18:13 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E59DB58043;
-        Thu, 13 Apr 2023 13:18:12 +0000 (GMT)
-Received: from [9.65.220.56] (unknown [9.65.220.56])
-        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 13 Apr 2023 13:18:12 +0000 (GMT)
-Message-ID: <71c63813-bbf1-8baa-3b94-f5184cc5e872@linux.ibm.com>
-Date:   Thu, 13 Apr 2023 08:18:12 -0500
+        Thu, 13 Apr 2023 09:19:42 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2082.outbound.protection.outlook.com [40.107.96.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250ABAF2F;
+        Thu, 13 Apr 2023 06:19:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=khZvM4rmaBxbfc+gsSiaGszyt2q+2E4Dk+uUsS7VyMbhy445XyPo3LnGA8kQMwnCsRee5L5m1aapqYwC3odb39/TNE+JvUVoBQWGMyVzzY5UF4rjAQLizIegTCXnaTl6upGC18ST4mJeO8/MUpXxlA9vPIsqPmdRvGJBQhoB8bOBx6kcOKEoccd7wu5lW0y7FfCHRWCPy0wiYfVSNE0fTgVjiQGbDsmPhGRUT4d6lL+iWkoqh9Mb0kka0tvYyCTjnwr4F/L05W4sNR011KHvK/VkVe32VLW5cgiKHifaVg3Na6moqz8AWmIjNSK8G6210LB+TO0LJZJ0NGlUdepWXg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cTyaz9YMwA3g4Ox5JyZGmHHc9jVCFtqgbE9UPgwQWqM=;
+ b=MNnpKsZhuBYj8H/71M5y1p7at+IrWwCaF5mgeqQLT1IDgCgGIu9lMjN76wvr6Ho/XKYWoOBrhK7NoETXLZxwSBhdoHLHES2U9YL3Oo2jN00c7W2cTAAybe48u7bDYTeITPzkN+UtYmMl0TexoK5ITQpj2r+zQePdgMh7R4/p13leiwfW8O6pCzHppBL9RVotjnRc3hX38iTtzXGExfvsS5RJ3cTq1iJ0DlGneqhmpb0LMnCUrFoA9/XH1zjf//H0x7saah7PNH8s4aNMY6Q11GC+v0CmZpznE7Mt98T+Uxj0P6BkmRl66EonDUBsCEHH39Ifxi/Oitzvt6hIrGS4IA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cTyaz9YMwA3g4Ox5JyZGmHHc9jVCFtqgbE9UPgwQWqM=;
+ b=ML02G3Y/jCGhDcs7cGMMrJXwSdfH6SIKFOSqd8Vq2yG36J/jyT8r0YjntvZb9mAElG3A96uJ0qp2tzJDr8Tw0Jtfnom3YtcHLGd8Y1AFg10NjrnAhqZq8mF4YWQFuYcRKaH5X7tIy85oEPZqQf+O2kLBrcutrexq6NBcIhcIvZZDHuDOwTlN+8PuncTf/mtxvzAcvdvbpEmBqPj3684ZUDiEcC53gcZkGKvhQ9VtrwjgIbD5l3jMirQh7JVwdP3staEQ515ui+Juiy1jP3eoVxhKLT9kDxemS6aEkQqnrREuOi3RWz1/70LtKFSbypBvv1Lk2vXLqGkl1BltgsYdZw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by SN7PR12MB7202.namprd12.prod.outlook.com (2603:10b6:806:2a9::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Thu, 13 Apr
+ 2023 13:19:14 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::6045:ad97:10b7:62a2]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::6045:ad97:10b7:62a2%9]) with mapi id 15.20.6298.030; Thu, 13 Apr 2023
+ 13:19:14 +0000
+Date:   Thu, 13 Apr 2023 10:19:12 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     ankita@nvidia.com, alex.williamson@redhat.com,
+        naoya.horiguchi@nec.com, oliver.upton@linux.dev,
+        aniketa@nvidia.com, cjia@nvidia.com, kwankhede@nvidia.com,
+        targupta@nvidia.com, vsethi@nvidia.com, acurrid@nvidia.com,
+        apopple@nvidia.com, jhubbard@nvidia.com, danw@nvidia.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org
+Subject: Re: [PATCH v3 0/6] Expose GPU memory as coherently CPU accessible
+Message-ID: <ZDgBULRSNXgs7Bmo@nvidia.com>
+References: <20230405180134.16932-1-ankita@nvidia.com>
+ <86sfd5l1yf.wl-maz@kernel.org>
+ <ZDapsz2QOdjhcBHJ@nvidia.com>
+ <86ile0kt2t.wl-maz@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <86ile0kt2t.wl-maz@kernel.org>
+X-ClientProxiedBy: YT3PR01CA0119.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:85::24) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.1
-Subject: Re: [PATCH] Remove POWER10_CPU dependency and move
- PPC_MODULE_FEATURE_P10.
-Content-Language: en-US
-To:     Michael Ellerman <mpe@ellerman.id.au>, linux-crypto@vger.kernel.org
-Cc:     herbert@gondor.apana.org.au, leitao@debian.org,
-        nayna@linux.ibm.com, appro@cryptogams.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        ltcgcw@linux.vnet.ibm.com, dtsen@us.ibm.com
-References: <20230412181232.2051-1-dtsen@linux.ibm.com>
- <87wn2g9b9l.fsf@mpe.ellerman.id.au>
-From:   Danny Tsen <dtsen@linux.ibm.com>
-In-Reply-To: <87wn2g9b9l.fsf@mpe.ellerman.id.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: l1U5v_9VpvbIi5deTL7wF5J4Yqnxt5cQ
-X-Proofpoint-GUID: l1U5v_9VpvbIi5deTL7wF5J4Yqnxt5cQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-13_08,2023-04-13_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
- adultscore=0 mlxscore=0 spamscore=0 suspectscore=0 priorityscore=1501
- malwarescore=0 lowpriorityscore=0 impostorscore=0 mlxlogscore=999
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304130116
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,TVD_SUBJ_WIPE_DEBT autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SN7PR12MB7202:EE_
+X-MS-Office365-Filtering-Correlation-Id: 28f9feca-2ff9-4416-b5c7-08db3c21ad11
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XC8Y0UYaLwK6Vz776w4LW6tJpcDsK872jmXXzMEYRt/KbDcw84MiVlfya3MkHgT3pes66qhP6acgrascTkUMQ8+na3D4FOFicIA9t3LdrPRWtfzNw1KTGXybbZlexgC/CWrriMpCY1Ner1g9MstHsKp3ceQVSuH0/OPpyjcctY2gV1ZmMIQEcluijfTH2wvhibUE3S+JTGzfo/n7EVS5RS2HR2jI697s2j4lHcd7h7BDbR68K/iuSk1IBeIkxWUQqOV4caZlVciY+5uUHouWLsTSghXbARnm3Uztd/+FWHn0g6xD/mkQ5RSjQGUaLVwZ82JJ4PTTYq6iP47myykaSRK6aAxEsWyxseKe1LR5TtxCvbfO8CwEwz89ZrInnB672ieeyRi4YZ9dA/ngCW+Ge/PjAvPJdFjm6W/ZDz8wQSQiJn/gDd4yeGeJzAQPMwWIPG6I3s+9To80oJSkUTWXG4qQlvYDEETxdE0dTsYr8zVYNl4jNWfes8q95PPXKC62Hdh3hDy5UVTrwvqIX2MXRhNAW4E3inZtHMtO10XdOUShbb6jtdnt0Mw0TuLXGg9C
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(346002)(376002)(39860400002)(366004)(451199021)(6486002)(6916009)(66476007)(66556008)(66946007)(4326008)(36756003)(2906002)(86362001)(41300700001)(5660300002)(8676002)(8936002)(316002)(38100700002)(478600001)(6512007)(6506007)(26005)(2616005)(186003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?eNYiIi0dbCrK1dCnCVtkuQIZAeq2kWpXSoq4fmfNEoada5Lg7HCF3FKq7I6K?=
+ =?us-ascii?Q?TNsWYng/4qCML0In9HWfVe1GcRGIsavPlhZ76sJcbTAsGX8Ln9GUnhevRQRk?=
+ =?us-ascii?Q?oX0Z/QS7+9K77gVboAp/NGYfxuUJ65tTOijkNW60uHuhZK6Y+iFJznSONDz/?=
+ =?us-ascii?Q?pqzcJAM8NqPiNyE786Bb18JNjkZ9QHAuesT58h1NgIgkRlmzauBX3NHr93Ut?=
+ =?us-ascii?Q?DwUBgwXawMqdO/4k1I3niVMxQ+A/mXfWMpdivIQLkLNi0sBXwzI4qRXpdsi7?=
+ =?us-ascii?Q?CF2rWD/hbGDWOZQdPFOMJDIionaNb/8gh73HynCNTv1Gn0sgzdpxMYlwlYq3?=
+ =?us-ascii?Q?qX2xVUWVRkTHI2uCGU662uDVYbrJEezmz/h7jSeVZY04IzikcKly63GxA39n?=
+ =?us-ascii?Q?i3CkgnbSOYVbrH4AJBCy/dp4g0NKGPpgnCpISoBZBnDqaPMAcD4UgUaQvvTe?=
+ =?us-ascii?Q?Fo++TlqnDrsEtPTWSBBtUBnlu8DaxKrz6TiA5X1Ft0uomRelB1UQI0sxid+T?=
+ =?us-ascii?Q?ie9/S4antxkfnN3eiyi1ghWLJFfg86ZPSqooG1rwtaoHldF7a1a0YtyLJ57w?=
+ =?us-ascii?Q?22kWE0mzw1AOzZRMz7nMNxc97cj65wcFfmbTW2UcaUhWLMnWBi7lYtgktg04?=
+ =?us-ascii?Q?AXRHdADL6NekE9gASUFbLcMXmDQhkOQtZYo2lQTs/xZUC4ftseUSsfnqSwjI?=
+ =?us-ascii?Q?scE0SVPtHIGWlM/Vqmo7adHQeDZ3YLCpMtRcK9ZSa1ZGPPQ1Fr3QRQtrwbm8?=
+ =?us-ascii?Q?GVhKeyrLJfHc/4HYqLIQryRCEYZ8Vx5OA/FgJBP2qCluJm7XiBP0sSWQTEEB?=
+ =?us-ascii?Q?AQoj94kTBHEpQ9RaZ9nYZxSU2TWY3zK2azCYuSItdDWEXz3px3k07pUevmkt?=
+ =?us-ascii?Q?o8F1mRQAcXmbNZjt/QIxIiXa7iD97mF8o7VGUQA7q3m/wSwiMAUQfXegT1R4?=
+ =?us-ascii?Q?SJBQdUPg+k4cceXvhYS7nkO59qQq5hjFlY23A7YcP7Le1y9PMNuzjRaCA7Ut?=
+ =?us-ascii?Q?vOVrRRphie2wZ+4IaGDT1BmgokqVASHXMJCtmOaX4RGlo0sYYyJPFZQQXAfE?=
+ =?us-ascii?Q?/lufF5Wtw2JGa880aPqN50n+3H5Rwkp1e2yBGGux5xvU9JfWG6vJP9PYrLov?=
+ =?us-ascii?Q?WiHkdjmfExJovocTKsegogEo+nhfQYVrA5i7q/a6rHC+IBEbkDi/lpbZtqxq?=
+ =?us-ascii?Q?+v0IlQ6vufTu/aIJPkyz0Z2h6G9raIQ/c2p1KQtZ94wx61cPrh4+dIRLYffX?=
+ =?us-ascii?Q?2w/HH40Spd4mmInDnt7T4MFaxiJJEXWkt+T01RZLCY5rz9ggzButKAWT/cHN?=
+ =?us-ascii?Q?Fq1kV2rn7MKp2jv6XYRWBZAFNQKvD+sgW/nzKst4aeN0QVr12kUDHhIYfmlb?=
+ =?us-ascii?Q?IF5LEBF35KKdx9Nvth6VvSUoNMUT8Ukxk6afdaxpurU6jB1UMmPJq8y0rQik?=
+ =?us-ascii?Q?KXo0M+2KlKHO37V7fVxbtLeBcQjcg1Cz9LKLw5EYi1L3VBKWeIG86B922/hK?=
+ =?us-ascii?Q?NWUnyJS47LZoTlMkVxayfVyJM7BcGFDlhkNsUXo2CZ0BiHovgXknD8j6CQZO?=
+ =?us-ascii?Q?mX9F4B9j4isE6dq4SHQtoh9D5mycQA3SuSoCpNzv?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 28f9feca-2ff9-4416-b5c7-08db3c21ad11
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2023 13:19:14.0055
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jPgn3ZatKY27qKP9Ka7vav2sBq+OAKcfqsiegmhtqppM4NsIDcPiRzXtWDpdEDAX
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7202
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+On Thu, Apr 13, 2023 at 10:52:10AM +0100, Marc Zyngier wrote:
 
-If I do separate patch for moving PPC_MODULE_FEATURE_P10, this will 
-break the build since it is currently defined in aes-gcm-p10-glue.c.  
-And the p10 will be detected when loading the module in 
-module_cpu_feature_match(PPC_MODULE_FEATURE_P10, p10_init); so it won't 
-load if it's not P10.
+> > IMHO, from the mm perspective, the bug is using pfn_is_map_memory() to
+> > determine the cachability or device memory status of a PFN in a
+> > VMA. That is not what that API is for.
+> 
+> It is the right API for what KVM/arm64 has been designed for. RAM gets
+> a normal memory mapping, and everything else gets device. 
 
-Thanks.
+The MM has a pretty flexible definition of "RAM" these days. For
+instance, I don't think pfn_is_map_memory() works correctly for all
+the cases we can do now with devm_memremap_pages().
 
--Danny
+> That may not suit your *new* use case, but that doesn't make it
+> broken.
 
-On 4/13/23 8:12 AM, Michael Ellerman wrote:
-> Danny Tsen <dtsen@linux.ibm.com> writes:
->> Remove Power10 dependency in Kconfig and detect Power10 feature at runtime.
->> Move PPC_MODULE_FEATURE_P10 definition to be in
->> arch/powerpc/include/asm/cpufeature.h.
-> This should be two patches, one for the Kconfig change and one moving
-> the feature flag.
->
-> Also don't you need a cpu feature check in p10_init()? Otherwise the
-> driver can be loaded on non-P10 CPUs, either by being built-in, or
-> manually.
->
-> cheers
->
->> Signed-off-by: Danny Tsen <dtsen@linux.ibm.com>
->> ---
->>   arch/powerpc/crypto/Kconfig            | 2 +-
->>   arch/powerpc/crypto/aes-gcm-p10-glue.c | 1 -
->>   arch/powerpc/include/asm/cpufeature.h  | 1 +
->>   3 files changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/arch/powerpc/crypto/Kconfig b/arch/powerpc/crypto/Kconfig
->> index 1f8f02b494e1..7113f9355165 100644
->> --- a/arch/powerpc/crypto/Kconfig
->> +++ b/arch/powerpc/crypto/Kconfig
->> @@ -96,7 +96,7 @@ config CRYPTO_AES_PPC_SPE
->>   
->>   config CRYPTO_AES_GCM_P10
->>   	tristate "Stitched AES/GCM acceleration support on P10 or later CPU (PPC)"
->> -	depends on PPC64 && POWER10_CPU && CPU_LITTLE_ENDIAN
->> +	depends on PPC64 && CPU_LITTLE_ENDIAN
->>   	select CRYPTO_LIB_AES
->>   	select CRYPTO_ALGAPI
->>   	select CRYPTO_AEAD
->> diff --git a/arch/powerpc/crypto/aes-gcm-p10-glue.c b/arch/powerpc/crypto/aes-gcm-p10-glue.c
->> index 1533c8cdd26f..bd3475f5348d 100644
->> --- a/arch/powerpc/crypto/aes-gcm-p10-glue.c
->> +++ b/arch/powerpc/crypto/aes-gcm-p10-glue.c
->> @@ -22,7 +22,6 @@
->>   #include <linux/module.h>
->>   #include <linux/types.h>
->>   
->> -#define PPC_MODULE_FEATURE_P10	(32 + ilog2(PPC_FEATURE2_ARCH_3_1))
->>   #define	PPC_ALIGN		16
->>   #define GCM_IV_SIZE		12
->>   
->> diff --git a/arch/powerpc/include/asm/cpufeature.h b/arch/powerpc/include/asm/cpufeature.h
->> index f6f790a90367..2dcc66225e7f 100644
->> --- a/arch/powerpc/include/asm/cpufeature.h
->> +++ b/arch/powerpc/include/asm/cpufeature.h
->> @@ -22,6 +22,7 @@
->>    */
->>   
->>   #define PPC_MODULE_FEATURE_VEC_CRYPTO			(32 + ilog2(PPC_FEATURE2_VEC_CRYPTO))
->> +#define PPC_MODULE_FEATURE_P10				(32 + ilog2(PPC_FEATURE2_ARCH_3_1))
->>   
->>   #define cpu_feature(x)		(x)
->>   
->> -- 
->> 2.31.1
+I've now spent alot of time working on improving VFIO and the related
+ecosystem. I would to get to a point where we have a consistent VFIO
+experience on all the platforms.
+
+Currently, real NIC and GPU HW with wide VFIO deployments on x86 do
+not work fully correctly on KVM/arm64. write-combining in the VM is
+the big problem for existing HW, and this new CXL-like stuff has
+problems with cachability.
+
+I don't really care what we call it, as long as we can agree that VFIO
+devices not working fully in VMs is a problem that should be fixed.
+
+> Only if you insist on not losing coherency between the two aliases
+> used at the same time (something that would seem pretty improbable).
+
+This is VFIO so there is DMA involved. My understanding has been that
+the SMMU is allowed to pull data out of the cache. So if the
+hypervisor cachable side has pulled a line into cache and the VM
+uncached side dirtied the physical memory, it is allowed that SMMU
+will read stale cache data? Thus the VM will experience data
+corruption on its DMAs.
+
+With VFIO live migration I expect the hypervisor qemu side to be
+actively reading from the cachable memory while the VM is running to
+migrate it, so it does not seem improbable.
+
+Jason
