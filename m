@@ -2,88 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F1376E04BF
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 04:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C70E6E04C2
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 04:42:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbjDMClo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 22:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35756 "EHLO
+        id S231436AbjDMCmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 22:42:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231408AbjDMClY (ORCPT
+        with ESMTP id S229617AbjDMClo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 22:41:24 -0400
+        Wed, 12 Apr 2023 22:41:44 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D529E7ECA;
-        Wed, 12 Apr 2023 19:39:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD38D6EA1;
+        Wed, 12 Apr 2023 19:39:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D211B63AAB;
-        Thu, 13 Apr 2023 02:38:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90836C433EF;
-        Thu, 13 Apr 2023 02:38:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681353501;
-        bh=XGuQua3qFkKXR113AHzPtaUgmD0Q6HpJpVp/TOacGUs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=nGiA99xhQgizLZeRU/VcMhAjymzMwrM84tXXx8mgCequHl/a+4+z5doWxDeZivgyk
-         Ip6ue6H5P6O1Dgpwo4Ah9fTGN9dlzOCEf0OXtiepEFr58LDMXGykpX2p3kBx25hkmR
-         MqyoFr1oQXoRzIcxBACZgyVPqcBc41kgBM17uqA43yOgtaAZU4+JCw/Fw9G1L1u+7Q
-         xae2XYuJBFFfv069DZUbEGHPNm2iJhy8KGpkh9piKp5+IK4R7LyQ8J+ktt2c/2Hu1M
-         0Ac4W0ruIc+kYgbTmyw336GN2iLTsoBIIcda2iLtClQg27hcFFXAw49DZH3kqOiYZb
-         BoP/DWjzRWECw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     =?UTF-8?q?Patrik=20Dahlstr=C3=B6m?= <risca@dalakolonin.se>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Sasha Levin <sashal@kernel.org>, jic23@kernel.org,
-        linux-iio@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14] iio: adc: palmas_gpadc: fix NULL dereference on rmmod
-Date:   Wed, 12 Apr 2023 22:38:16 -0400
-Message-Id: <20230413023818.75139-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F20263ABE;
+        Thu, 13 Apr 2023 02:38:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AA1EC433D2;
+        Thu, 13 Apr 2023 02:38:36 +0000 (UTC)
+Date:   Wed, 12 Apr 2023 22:38:35 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Lin Yu Chen <starpt.official@gmail.com>, corbet@lwn.net,
+        mhiramat@kernel.org, mark.rutland@arm.com,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH] docs: trace: Fix typo in ftrace.rst
+Message-ID: <20230412223835.3da23ab5@gandalf.local.home>
+In-Reply-To: <4b17c67c-4b3d-4326-37e7-949a08d03f55@gmail.com>
+References: <20230412183739.89894-1-starpt.official@gmail.com>
+        <4b17c67c-4b3d-4326-37e7-949a08d03f55@gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Patrik Dahlström <risca@dalakolonin.se>
+On Thu, 13 Apr 2023 09:19:12 +0700
+Bagas Sanjaya <bagasdotme@gmail.com> wrote:
 
-[ Upstream commit 49f76c499d38bf67803438eee88c8300d0f6ce09 ]
+> On 4/13/23 01:37, Lin Yu Chen wrote:
+> > There is a typo in the sentence "A kernel developer must be
+> > conscience ...". The word conscience should be conscious.
+> > This patch fixes it.
+> >   
+> 
+> Please don't say "This patch does foo".
 
-Calling dev_to_iio_dev() on a platform device pointer is undefined and
-will make adc NULL.
+Yes, that part can be left out.
 
-Signed-off-by: Patrik Dahlström <risca@dalakolonin.se>
-Link: https://lore.kernel.org/r/20230313205029.1881745-1-risca@dalakolonin.se
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/iio/adc/palmas_gpadc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>  
+> > -waste it in functions. A kernel developer must be conscience of
+> > +waste it in functions. A kernel developer must be conscious of  
+> 
+> Alternatively, what about "aware of"?
+> 
 
-diff --git a/drivers/iio/adc/palmas_gpadc.c b/drivers/iio/adc/palmas_gpadc.c
-index f5218461ae255..f422df4daadcb 100644
---- a/drivers/iio/adc/palmas_gpadc.c
-+++ b/drivers/iio/adc/palmas_gpadc.c
-@@ -634,7 +634,7 @@ static int palmas_gpadc_probe(struct platform_device *pdev)
- 
- static int palmas_gpadc_remove(struct platform_device *pdev)
- {
--	struct iio_dev *indio_dev = dev_to_iio_dev(&pdev->dev);
-+	struct iio_dev *indio_dev = dev_get_drvdata(&pdev->dev);
- 	struct palmas_gpadc *adc = iio_priv(indio_dev);
- 
- 	if (adc->wakeup1_enable || adc->wakeup2_enable)
--- 
-2.39.2
+As the author of this document, and the one that doesn't have a conscience
+about using conscious correctly, I approve of Lin Yu's change.
 
+Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+Thanks!
+
+-- Steve
