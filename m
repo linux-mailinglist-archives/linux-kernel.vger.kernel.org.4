@@ -2,70 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4AA66E0F38
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F77B6E0F40
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231408AbjDMNvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 09:51:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54056 "EHLO
+        id S231480AbjDMNw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 09:52:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231354AbjDMNvq (ORCPT
+        with ESMTP id S231513AbjDMNwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 09:51:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6578A6A
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:51:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 13 Apr 2023 09:52:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53498183
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:52:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681393923;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=B7GgR7IsxIkffahtry2Nj63PUFsJG3FcJvFXpSBJLNA=;
+        b=T7+QvR3y6EGIKj22s2vgU4ppZyTw/Y6vX8MU0Cc2TDHONEnodzmbQRFM+NdezIZ/1eiehK
+        hyjkJGy8nGg49HCYuSvNAZxtxCMzqpQhyiwaoTK+DWBq7ybg9sJf9HZrHcNv/J+cLB0u6W
+        FXnFHa4T9cqywZJm/l79raAn3Se3m6A=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-22-jphSqTr7PGaLvWhPkTXB_g-1; Thu, 13 Apr 2023 09:51:59 -0400
+X-MC-Unique: jphSqTr7PGaLvWhPkTXB_g-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 17A4763EC8
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 13:51:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FE7DC433D2;
-        Thu, 13 Apr 2023 13:51:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681393903;
-        bh=s/dmCaH25uHi9qR1VOOh32+D5s22j7AfxC7emCEAXUk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=EmxbZaXmOKsfFhrWOWe9XZto2cFMKYdqZfWd2awovET6dWD3kOE742H29DzV1bg0l
-         fBQpsb6Ctw3O3CyE9JmOkSJYnVadG6S/veP6zHbD4K4IF+8HW0uGphWDw8EssTychz
-         EAWtReusOZABW2XvWOyjiV7j1rDviVH+BFgmmqKNYH7xzLl4HYNQg8lgKvfdl4pQRu
-         Db6mmx4R1jxNIRtpy8ef+aRN7Iy4N8+Xxv9d/06rAzCp2rCIEqrdm4XM/1vzUM9XQW
-         vQ5D20MJw6FKqsQZF6YhDnNH2UtARDE21u8H1FPmNVwuB6Lf/9Vp8cx3rbeWMgSt56
-         IRPtWcq3N59MQ==
-Message-ID: <e66f438c-b1b3-ab9e-319d-939fa665746f@kernel.org>
-Date:   Thu, 13 Apr 2023 21:51:39 +0800
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C45411C07597;
+        Thu, 13 Apr 2023 13:51:57 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.177])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E0C43492B00;
+        Thu, 13 Apr 2023 13:51:56 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+To:     Chuck Lever <chuck.lever@oracle.com>
+cc:     dhowells@redhat.com, Scott Mayhew <smayhew@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        linux-nfs@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] sunrpc: Fix RFC6803 encryption test
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [f2fs-dev] [PATCH] f2fs: fix passing relative address when
- discard zones
-Content-Language: en-US
-To:     Daeho Jeong <daeho43@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com
-Cc:     Daeho Jeong <daehojeong@google.com>
-References: <20230406221104.992322-1-daeho43@gmail.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20230406221104.992322-1-daeho43@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1078409.1681393916.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Thu, 13 Apr 2023 14:51:56 +0100
+Message-ID: <1078410.1681393916@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/7 6:11, Daeho Jeong wrote:
-> From: Daeho Jeong <daehojeong@google.com>
-> 
-> We should not pass relative address in a zone to
-> __f2fs_issue_discard_zone().
-> 
-> Signed-off-by: Daeho Jeong <daehojeong@google.com>
+    =
 
-Reviewed-by: Chao Yu <chao@kernel.org>
+The usage_data[] array in rfc6803_encrypt_case() is uninitialised, so clea=
+r
+it as it may cause the tests to fail otherwise.
 
-Thanks,
+Fixes: b958cff6b27b ("SUNRPC: Add encryption KUnit tests for the RFC 6803 =
+encryption types")
+Link: https://lore.kernel.org/r/380323.1681314997@warthog.procyon.org.uk/
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Chuck Lever <chuck.lever@oracle.com>
+cc: Scott Mayhew <smayhew@redhat.com>
+cc: Herbert Xu <herbert@gondor.apana.org.au>
+cc: linux-nfs@vger.kernel.org
+cc: linux-crypto@vger.kernel.org
+---
+ net/sunrpc/auth_gss/gss_krb5_test.c |    1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/net/sunrpc/auth_gss/gss_krb5_test.c b/net/sunrpc/auth_gss/gss=
+_krb5_test.c
+index ce0541e32fc9..aa6ec4e858aa 100644
+--- a/net/sunrpc/auth_gss/gss_krb5_test.c
++++ b/net/sunrpc/auth_gss/gss_krb5_test.c
+@@ -1327,6 +1327,7 @@ static void rfc6803_encrypt_case(struct kunit *test)
+ 	if (!gk5e)
+ 		kunit_skip(test, "Encryption type is not available");
+ =
+
++	memset(usage_data, 0, sizeof(usage_data));
+ 	usage.data[3] =3D param->constant;
+ =
+
+ 	Ke.len =3D gk5e->Ke_length;
+
