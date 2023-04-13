@@ -2,112 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5A2D6E1486
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 20:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 773C06E1479
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 20:45:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjDMSp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 14:45:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36640 "EHLO
+        id S230204AbjDMSpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 14:45:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230316AbjDMSps (ORCPT
+        with ESMTP id S230194AbjDMSpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 14:45:48 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85C1AD3F
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 11:45:22 -0700 (PDT)
-Received: from [192.168.1.141] ([37.4.248.58]) by mrelayeu.kundenserver.de
- (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MBUuP-1pdyiq1tt9-00CyK2; Thu, 13 Apr 2023 20:44:27 +0200
-Message-ID: <9de62851-73a6-0070-4e64-94b6614c11fd@i2se.com>
-Date:   Thu, 13 Apr 2023 20:44:26 +0200
+        Thu, 13 Apr 2023 14:45:36 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BECA86AA
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 11:45:07 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id x4so501087lfr.8
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 11:45:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681411502; x=1684003502;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=C70yljSMkuFeZf8/ClCI7fC1wDnIxlSvZGT5yxn9eCQ=;
+        b=ZT6OQbajUX9t0AcbsC4F922+uUj7h+pIVA8gzO/JgNwT7mKFGkW/AOWvkrdWz9Bshk
+         fMhjZQar/Om25dsU+lptOJTeVVjGx4kUrM7vM51CaGu7WFILozfLol7ZKCEB3tSRc+2Z
+         3ClF4FKJ27khht+K6+JDnw5/a61UPa8rph0gnDlDFWZiKCAUOCrc6X12IuuzR1iKJWGt
+         Qmt6MI4KZr9gYTyrHCLX/LUWwjYyRGg6keX6e9N1tnlFpkJFvpSQpyKYLfLeNVrl0lpG
+         QID0iosAygedVY65JPcULEC5VpzwhBTrBqaJGACAjJ8IGmdcfT8C3oSdkaZmykIxD5Ot
+         N6Mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681411502; x=1684003502;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=C70yljSMkuFeZf8/ClCI7fC1wDnIxlSvZGT5yxn9eCQ=;
+        b=eDe85m20wxAZ2nsObbEpFbR5Trt/lshJ9MLnLBBLJH/Dvrg2JCD7aUfLEh1Z2tBuVT
+         QNaC3+6L1UCuDIeDGtC5b24Dt6RC9rJ9iSJAjE3yddqL7ud2800YPW6J/Yy2/ZCI6CH3
+         viKd5CCz5yOjIPbieV++BihNITAUoa6Swpa7NNkmlpqLPkjVvFddX8nOEaKt+cqjcReD
+         HMIpIV5CEPle06hzGZU3oKzjCDmtNfT3Z5TMFPXnTmNLawgoorfamPvpZ6nX7uYnbjJD
+         WR8NY+VZ5q+mOQZ+t7qXR3cUslbkV7Kj1dGyBazToNHzij1ChRq1pZl1ots7IK8x8RYw
+         KdAw==
+X-Gm-Message-State: AAQBX9dUyvorA0l8S9VxVbuzpPDIhuXhV3Pe1tZJ0sUMsRr0TghmU67Q
+        U0/nra2umk0WQKEyQibEWILqXg==
+X-Google-Smtp-Source: AKy350bmJCD5sWKiQ4SZYS5hYaua2Wj26P+QZB0+ing6iXln9ikXVan8Wj6rPz2lae2ZFyIDpFkUKA==
+X-Received: by 2002:ac2:532c:0:b0:4ec:8381:f8e6 with SMTP id f12-20020ac2532c000000b004ec8381f8e6mr1211763lfh.46.1681411502551;
+        Thu, 13 Apr 2023 11:45:02 -0700 (PDT)
+Received: from [192.168.1.101] (abyl123.neoplus.adsl.tpnet.pl. [83.9.31.123])
+        by smtp.gmail.com with ESMTPSA id r12-20020ac24d0c000000b004e95f53adc7sm419621lfi.27.2023.04.13.11.45.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 11:45:02 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH 0/2] SM8350 VIDEOCC
+Date:   Thu, 13 Apr 2023 20:44:57 +0200
+Message-Id: <20230413-topic-lahaina_vidcc-v1-0-134f9b22a5b3@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 2/2] ARM: dts: Add nvmem node for BCM2711 bootloader
- public key
-To:     "Ivan T. Ivanov" <iivanov@suse.de>
-Cc:     Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Tim Gover <tim.gover@raspberrypi.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        linux-rpi-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230413085206.149730-1-iivanov@suse.de>
- <20230413085206.149730-3-iivanov@suse.de>
- <9b03551a-278d-16dc-08ed-1ef0f89dc79c@i2se.com>
- <duuhz5pju4q7lnvzwndcnruqwqzbwy4jhrfn42vov2rfct4i7c@qh55cifhoud7>
-Content-Language: en-US
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <duuhz5pju4q7lnvzwndcnruqwqzbwy4jhrfn42vov2rfct4i7c@qh55cifhoud7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:hyaZiqomSHwiu+IWfU2nlYY4f7s2yzaMv4rmt9rE2xuGEtKHPFz
- HtLEVK1LqcdwEtsWfHUezeuuo/Npx3Jq2f+Q4FPnFpB4ZofkDG2zjmx4gW9Fg0NfMfX08aQ
- H6qe5PGhesGkUKsU7pxKJf3+oOKZaUPy5JoIWCoBwoeC9CbVZXhZr+pgGI7VesLLFkUHjwW
- IYPpY/YpddHgbEQdxSBrg==
-UI-OutboundReport: notjunk:1;M01:P0:8t1tl6IeacI=;UdIIlDy/BICJx1lyXkkQjRnNd+s
- c1NLNwLkjLy994Jb7Q3IXrWMCtZz4l18G9w5pmdo4v/SsmaCKrKBtGB1r5s2trye43EOkO2Yj
- 3MPrn5JZhiLbawAu931Z+yRZC+cn3F/V7g3R+2cfD+/k4pxQmGvGryankaMtO5ZLu9YupK5Ch
- xYi3+TJykadAJRaA6bxcsTriycU29lTO6uhqa/wN8hUI4QQjn9yTY4no+SjPLGDIG876N4CLj
- RDOKkpv6gzv9Z1R8p61p5WNq9mGE+hZI49pAQzR1d8eMTtINfJb9YVJ0i9eGOIgjA/Q9uR+D5
- IgjeigTJK27FJi5JIjFoKPl4rXpcPA7HAuJpkWlP4f1tyFJfXHQ1YwZ3BmjM3f7KkgUkFwqBs
- TRaxx0HELsC0BwD+PLeJv2meSTodSOJiu0LBo1HQB99Jj2az7j64HXQIpF8xepozF+d2vNUmE
- dB471Jw6sL8UBqJXP71D8dExcNBciQP88Ii+WTKBcRjNLQuH4EL7guSwWPmn5fujUGhJFH8fM
- lxvRjUnyIZf4wRoEWc3Ctm5a/neRQnMVM1SfwLAFcfkzwYrAMAZHxzWAztAxVBBOLTYMiBLwS
- 64VPyKjHJ0HzfzMKVnaabM+NpRM88rT6OjLCNqF1YckmZ5zrgBkk9Wji+pvGH+vErH7ZJ+Q8E
- Gaehq/ETJl8eINd21doZzyLuB7iMkYwASlBMrxhFFQ==
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-B4-Tracking: v=1; b=H4sIAKlNOGQC/x2N0QqDMAwAf0XyvIDWymC/MsZI07gGSpV2ykD89
+ wUf7+C4A5pUlQaP7oAquzZdisFw64ATlY+gRmNwvRt7P4z4XVZlzJRIC713jcwYOFII/j5N3oG
+ VgZpgqFQ4WVu2nE2uVWb9Xavn6zz/bfSqO3oAAAA=
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Taniya Das <tdas@codeaurora.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1681411500; l=885;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=3YoV3IyxC0BvdlMQpRUMigDv3i7BMAqeSVbYbEew8tU=;
+ b=eoAPSVadbEJXABNXYuptzQgIz8fTQKO7SYAAJLhv+2vYZ2+Tj0hjXG18KPeQEAdvoK0iF68WrfFp
+ Ir+QZXEpDyyWyHauVtKj1M1dbU8cDlWHa3JzkwDcpquTOVUkZ07b
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ivan,
+This serires brings support for SM8350 videocc and updates the
+related dt-bindings.
 
-Am 13.04.23 um 20:18 schrieb Ivan T. Ivanov:
-> On 04-13 18:15, Stefan Wahren wrote:
->>
->> Hi Ivan,
->>
->> Am 13.04.23 um 10:52 schrieb Ivan T. Ivanov:
->>> From: Tim Gover <tim.gover@raspberrypi.com>
->>>
->>> Make a copy of the bootloader secure-boot public key available to the OS
->>> via an nvmem node. The placement information is populated by the
->>> Raspberry Pi firmware if a public key is present in the BCM2711
->>> bootloader EEPROM.
->>
->> It would be nice to have a helpful link like:
->> https://www.raspberrypi.com/documentation/computers/configuration.html#nvmem-nodes
-> 
-> Yep, make sense.
-> 
->>> +
->>> +	/*
->>> +	 * RPi4 will copy the binary public key blob (if present) from the bootloader
->>> +	 * into memory for use by the OS.
->>> +	 */
->>> +	blpubkey: nvram@1 {
->>> +		compatible = "raspberrypi,bootloader-public-key", "nvmem-rmem";
->>
->> Yes this looks better, but this introduce a new dtbs_check issue. The new
-> 
-> Oops, yes, I forgot to make this check.
-> 
->> compatible must be documented in
->> Documentation/devicetree/bindings/nvmem/rmem.yaml in a separate patch and
->> reviewed by the DT guys.
-> 
-> Or I can drop the new compatible string altogether? It looks like
-> only alias is strictly required?! Tim Gover is this correct?
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (2):
+      dt-bindings: clock: qcom,videocc: Add SM8350
+      clk: qcom: Introduce SM8350 VIDEOCC
 
-i cannot speak for the firmware side, but i think we should try to keep 
-it compatible with the vendor DTB here.
+ .../devicetree/bindings/clock/qcom,videocc.yaml    |  29 +-
+ drivers/clk/qcom/Kconfig                           |   9 +
+ drivers/clk/qcom/Makefile                          |   1 +
+ drivers/clk/qcom/videocc-sm8350.c                  | 575 +++++++++++++++++++++
+ include/dt-bindings/clock/qcom,sm8350-videocc.h    |  35 ++
+ include/dt-bindings/reset/qcom,sm8350-videocc.h    |  18 +
+ 6 files changed, 666 insertions(+), 1 deletion(-)
+---
+base-commit: e3342532ecd39bbd9c2ab5b9001cec1589bc37e9
+change-id: 20230413-topic-lahaina_vidcc-bcdabb475542
 
-> 
-> Regards,
-> Ivan
-> 
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
+
