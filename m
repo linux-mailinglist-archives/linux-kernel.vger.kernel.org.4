@@ -2,93 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA8916E0CFC
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 13:47:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F0436E0D03
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 13:48:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231134AbjDMLre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 07:47:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
+        id S231281AbjDMLsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 07:48:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231217AbjDMLrQ (ORCPT
+        with ESMTP id S230469AbjDMLsC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 07:47:16 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702BDA5D0;
-        Thu, 13 Apr 2023 04:47:07 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id z8so20545148lfb.12;
-        Thu, 13 Apr 2023 04:47:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681386426; x=1683978426;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Z3v/g1+YK4ohjxNpY7X/EAjO3Cvna/Uxm2/iuGIHV0o=;
-        b=Z+BPO5+eqiznWawGagxUVRp9ax2e9DRkcHqyZt5OsK+LNa2rKyorWho7ZWRYq1U3Uc
-         aU8uJ9lNldPgMlP+nW9laXMGoA2zoGKA3Uv1Qe7wlS/eoevdGleUVHyeEpEEvR4egW/U
-         Ziat+ldE5jUvwLztLtiep5+tjhBYIIhqe+YR1SlKydKyZWuvhFF9kpcEm4dEWY6RNkJk
-         xMRPXV+rZwNvGhk+LnJz1NLwBG4Nyjy4QEhEYXJOWvLbY6oUNzyGQjGo4ttHUUi1qFlA
-         yCQSnBwZV92iLLdygfLwUaKqIrxDcuDlIrfJaiZ1ZQKtcO8okuvVYiRXZoLjIbNNFrl4
-         +krA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681386426; x=1683978426;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z3v/g1+YK4ohjxNpY7X/EAjO3Cvna/Uxm2/iuGIHV0o=;
-        b=St00qEdFqr5NmJB5R4MO1G9xi4hgALP0N6G9imKgj6U2k6iUMA7OBC6QXxm59tjFLy
-         zJr3I+RXuvtS9Fv65j1vq+AHITIE60R9fVB7IxgXjzLqPRkpLeP5ZvDHbS5nRqBt6hfl
-         rvdtdZG8YlnI53a7wqtFwCMW0TbEknQB/oCYIRUjseA5zlAYgmvBatpOEh4heHHL2+P4
-         sGDMrBgHQskDA1r467SFnP7Y+v5A1EhdlRs0Ef2T+1TsV5T/BrbG7r+lj//BkfE87lcu
-         FbHbzcvnfvuOWnO/O6/ZUuCfcOomAsgZUechV+TnpIEag9bpmFbp8Bn6PU2bxhnmaWu5
-         d/zg==
-X-Gm-Message-State: AAQBX9ded23EgKRcCA9UZnQR5PyZVjb0JOq6LKmlDVRAfDrr7FshUJf2
-        MV0KaDeDgSjLBovb2TWMgRI=
-X-Google-Smtp-Source: AKy350b83BiwhY/ARiBiqr7RAaIjdxIB4n41CUt1Vnh2IVdKu6EVHfUfM4Y6LsQWXnFGf+YQeWQFpg==
-X-Received: by 2002:a05:6512:50f:b0:4eb:4002:a5ca with SMTP id o15-20020a056512050f00b004eb4002a5camr906727lfb.66.1681386425552;
-        Thu, 13 Apr 2023 04:47:05 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id s12-20020ac25fec000000b004ec55ac6cd1sm277523lfg.136.2023.04.13.04.47.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Apr 2023 04:47:05 -0700 (PDT)
-Message-ID: <b259e7fc-130b-1158-00b6-934861a41aaa@gmail.com>
-Date:   Thu, 13 Apr 2023 14:47:04 +0300
+        Thu, 13 Apr 2023 07:48:02 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68B75A5D0;
+        Thu, 13 Apr 2023 04:47:37 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B0E9B13D5;
+        Thu, 13 Apr 2023 04:48:04 -0700 (PDT)
+Received: from e123572-lin.arm.com (e123572-lin.cambridge.arm.com [10.1.194.65])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3FFCC3F73F;
+        Thu, 13 Apr 2023 04:47:19 -0700 (PDT)
+From:   Kevin Brodsky <kevin.brodsky@arm.com>
+To:     netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH v2 2/3] net/compat: Update msg_control_is_user when setting a kernel pointer
+Date:   Thu, 13 Apr 2023 12:47:04 +0100
+Message-Id: <20230413114705.157046-3-kevin.brodsky@arm.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20230413114705.157046-1-kevin.brodsky@arm.com>
+References: <20230413114705.157046-1-kevin.brodsky@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: leds: Add ROHM BD2606MVV LED driver
-Content-Language: en-US, en-GB
-To:     Andreas Kemnade <andreas@kemnade.info>, pavel@ucw.cz,
-        lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230413110307.310944-1-andreas@kemnade.info>
- <20230413110307.310944-2-andreas@kemnade.info>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20230413110307.310944-2-andreas@kemnade.info>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/13/23 14:03, Andreas Kemnade wrote:
-> Document ROHM BD2606MVV LED driver devicetree bindings.
-> 
-> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+cmsghdr_from_user_compat_to_kern() is an unusual case w.r.t. how
+the kmsg->msg_control* fields are used. The input struct msghdr
+holds a pointer to a user buffer, i.e. ksmg->msg_control_user is
+active. However, upon success, a kernel pointer is stored in
+kmsg->msg_control. kmsg->msg_control_is_user should therefore be
+updated accordingly.
 
-Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
+---
+ net/compat.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-
+diff --git a/net/compat.c b/net/compat.c
+index 000a2e054d4c..6564720f32b7 100644
+--- a/net/compat.c
++++ b/net/compat.c
+@@ -211,6 +211,7 @@ int cmsghdr_from_user_compat_to_kern(struct msghdr *kmsg, struct sock *sk,
+ 		goto Einval;
+ 
+ 	/* Ok, looks like we made it.  Hook it up and return success. */
++	kmsg->msg_control_is_user = false;
+ 	kmsg->msg_control = kcmsg_base;
+ 	kmsg->msg_controllen = kcmlen;
+ 	return 0;
 -- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
+2.38.1
 
