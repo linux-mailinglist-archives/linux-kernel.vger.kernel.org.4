@@ -2,124 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 488076E0E9C
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C786B6E0E9D
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbjDMN3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 09:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57080 "EHLO
+        id S231376AbjDMN3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 09:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbjDMN3N (ORCPT
+        with ESMTP id S231377AbjDMN3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 09:29:13 -0400
-Received: from qproxy4-pub.mail.unifiedlayer.com (qproxy4-pub.mail.unifiedlayer.com [66.147.248.250])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDEBA5E2
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:28:53 -0700 (PDT)
-Received: from gproxy2-pub.mail.unifiedlayer.com (gproxy2-pub.mail.unifiedlayer.com [69.89.18.3])
-        by qproxy4.mail.unifiedlayer.com (Postfix) with ESMTP id 73F8E8026DB7
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 13:28:53 +0000 (UTC)
-Received: from cmgw11.mail.unifiedlayer.com (unknown [10.0.90.126])
-        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id 17E7F10048A66
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 13:28:53 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id mx0Ppcmihb9i8mx0PpkD39; Thu, 13 Apr 2023 13:28:53 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=Wd7J12tX c=1 sm=1 tr=0 ts=64380395
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=dKHAf1wccvYA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=+EUr491iCubkFjlqAykEBV9KwvX/H3K+LcVzB4wng6A=; b=NIekdB276CtOLl1AOTd2HceaWQ
-        VCMZDuWXtPe8NqewR1hutnvaIRYvMmkhU/3vsQ+0hiihIzgBfk78g7WZ06cdZKegs8vgmwekN7wHp
-        b0o828xlk8nnxDKcW6uHY+PWsQkGB2f17Fz+tkVy1GTGfsTlFLa0pRsbOIIyF1Q2PnD21WMaWAkLr
-        287CS2Baz7tLeS6yhjNvieUABt3OQghIMy7p0fntpZCFKfK04ettVNqUiNOPDTdU9RXOhElGtEqCQ
-        qfrqLoW77pJFoQWxdL41LWJntSnOHPgd8LoCQVdXTAj4Gd5lf8kkMeFiXvw7E0RBSBlKUYKpoDVxi
-        Y/3kzGfA==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:34870 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1pmx0N-003G1X-Te;
-        Thu, 13 Apr 2023 07:28:51 -0600
-Subject: Re: [PATCH 5.15 00/93] 5.15.107-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230412082823.045155996@linuxfoundation.org>
-In-Reply-To: <20230412082823.045155996@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <4cfbe3a5-ea43-54ab-f64e-2b7b8bab75f3@w6rz.net>
-Date:   Thu, 13 Apr 2023 06:28:49 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 13 Apr 2023 09:29:15 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B8C9ECC
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:28:55 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id b2-20020a17090a6e0200b002470b249e59so4191101pjk.4
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:28:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681392535; x=1683984535;
+        h=to:subject:message-id:date:from:sender:reply-to:mime-version:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=OX1s2Ip7hpbO50rw0mpQgWKmr2sKio07VQZqXu2V7Lo=;
+        b=bie1TryaADvIG1Dc0ltt89H/pABTzYLC17fCxYN+7s8SgByLGREkhrUviYqZlzc14B
+         1GY4UETPLoD+u5ObJJ5YcxFa/7qPFftfhDOQPg+Utzruu3RTXJtWcl9+t+yhwxA3X0QE
+         Q1k0JFDdAOrkdB9vjstn7n2XILFo+szwa+2HcB1RjvOXRZCj11RmM+e6eAfm/NjnEoc4
+         KdlxTAP6JHYlsfq2tNIrJ1tUPf2H87kvzQGejHiddR85nSv05w69gquXo88h2f72oMY3
+         Mp6cuuOMXQq51TTaGyCTk4AO8kd9KwHCUKh7ed9QqTcovGr8nYUic7yanxM5Zks7aFkA
+         v3IA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681392535; x=1683984535;
+        h=to:subject:message-id:date:from:sender:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OX1s2Ip7hpbO50rw0mpQgWKmr2sKio07VQZqXu2V7Lo=;
+        b=NGS6E87msZm/KYli9ixYOGJ/9N+HmMhWi++4jIrwjWK8eN3/CZGfpj3Vua+UdXuDAq
+         tQ4QDgDVNsSxZKq6blHUFMY4cSPmACUB+b8i9jxd90LMjDL2YAHvS2+Q2SNLJJm0Iezi
+         CmQaMJxLuoviurwYF2rbs1+pdGD+QuogUPL0besF5NdxvebQE5ZPkZC3tTsyTN6rUx51
+         TgXcirxH4RFxVeYEuqnWSlJFnmu8AR8zj5c6riF6cnGkUloUiF76U6PM89xD8+Ac0Ia8
+         WaJJNoljnl9Jq6ft+qela81F0Ob5lsA+5QBlN0wKHBbXTOn5Vuj7m2auqmy4iLj62Yqz
+         epeQ==
+X-Gm-Message-State: AAQBX9doNN4ZlobYUY21oUq7PVOYbMxlJ2FP+b58AQyzlP+VoRP9MxZD
+        XSIYFkcNSrc7TSquKCPprhlR2DZqOumPPEtKXuw=
+X-Google-Smtp-Source: AKy350aXdh7BXHczF5FuaM+fP823Gf4hUBd/zDoBEfnFyBHTojRujZ5iJIXYvUfplGDesLDcFyUb5aGgUviw3aczItE=
+X-Received: by 2002:a17:902:e54a:b0:1a6:898a:41fd with SMTP id
+ n10-20020a170902e54a00b001a6898a41fdmr545554plf.6.1681392535331; Thu, 13 Apr
+ 2023 06:28:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1pmx0N-003G1X-Te
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:34870
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Reply-To: johv19344@gmail.com
+Sender: drmusazongo11@gmail.com
+Received: by 2002:a05:7022:1a84:b0:61:df4b:618 with HTTP; Thu, 13 Apr 2023
+ 06:28:54 -0700 (PDT)
+From:   Van Der Kuil Johannes <johv1934@gmail.com>
+Date:   Thu, 13 Apr 2023 13:28:54 +0000
+X-Google-Sender-Auth: Cl5Lae-zbfyTZqeryOyaEnYuH90
+Message-ID: <CAGKduDyD8Dw3VFN1R=7qhv_Q7DDbrnBMC4Vhc+ds9_2NqT1NmA@mail.gmail.com>
+Subject: Are you ready?
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/12/23 1:33 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.107 release.
-> There are 93 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 14 Apr 2023 08:28:02 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.107-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
-
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
-
-Note: This was built with a .config change from CONFIG_SIFIVE_L2 to 
-CONFIG_SIFIVE_CCACHE.
-
-Tested-by: Ron Economos <re@w6rz.net>
-
+Hello, how are you?  my name is Van Der Kuil Johannes Gerhardus Maria.
+I am a lawyer from the Netherlands who reside in Belgium and I am
+working on the donation file of my client, Mr. Bartos Pierre
+Nationality of Belgium.  I would like to know if you will accept my
+client's donation Mr. Bartos Pierre?
