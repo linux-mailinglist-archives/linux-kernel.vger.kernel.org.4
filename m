@@ -2,81 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 281286E17DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 01:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D9706E17E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 01:08:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbjDMXHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 19:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41086 "EHLO
+        id S230188AbjDMXI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 19:08:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjDMXHa (ORCPT
+        with ESMTP id S229676AbjDMXI0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 19:07:30 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F5E10E5
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 16:07:29 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54efad677cbso158970167b3.6
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 16:07:29 -0700 (PDT)
+        Thu, 13 Apr 2023 19:08:26 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465BC1BC8
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 16:08:24 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id h37so4403760lfv.0
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 16:08:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681427248; x=1684019248;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=m0eoChJ3C+wX0j/cXmxt8QdAgHqIaCqFV7218jkkfFU=;
-        b=cUBnq6doIYuLvUGVyiYaA7jpkgVtHOtimIKcwt2fzUEGbTagC+SbFxwzie3YwQBvoi
-         2tvxYDlX35dBRsyJ0dqJ0imqCLe7ogS8WTyC7A5vLzXCTzi2nfvrTc7VxeigvLRuypoj
-         d9zWu9lsiLRAeEcyRqF2vB0H2fEa6JEL4FKRXo81NT0wlQUQMuRZJC6/qqZxiWVlFuvs
-         rCpdS64PxIo7V8SajS2etdSOROdKTmlVD4sBgXB1W2FZSMb7wXUNI2yqiz+J9cWyF9eb
-         0i6PytQOESujv8I6M/6hszVyOyKaqVF3BjpcBY+b2iw09H2OLHz5o/ci5kucUCGLlxuh
-         5zxg==
+        d=linaro.org; s=google; t=1681427302; x=1684019302;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=637H74vWxZ4gX2iKNFYbz5JBcFfkn6d8GocnTsloh8Q=;
+        b=rbKxrjUIAd+X6KwrltL/MkHLE8BgLyCoCvfZZGTIemi37itMcS2npcI2b2HDXXk7Ec
+         ClfsiYCq/4DsihWiPuII+L2VA2mIwvasHklODifyBVJC60EZ5q4dkK3bvUmRKehBllZh
+         8eWmBPT4cz3MKFUfcyBi07WN4D6rWO6fFSDKeVxD7YHw1O31Fhvc6oboUwiBOv5v3I3v
+         yj50Zv8l1V96LC52wkvKR+TN2nWLAU6/lX5a06mJHBSa0Iz7O1+E2WjB9+0Ymxh4edzr
+         UoGMHCam3xcbn9gHW8NkY2U9/qGgC+NLcKzJjPFsXBvLwl8GA9ZtFUWaafO3q+pNFS7Y
+         7g9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681427248; x=1684019248;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=m0eoChJ3C+wX0j/cXmxt8QdAgHqIaCqFV7218jkkfFU=;
-        b=JBYgf6hO0f4OdDCbYy9g8Tiu2EcMo3CgBIWjWuyVK4GqwYZ2coMU+mshIfaFtAUvQf
-         6U3s6vozQNPX6sNTSZQ20RSvtVBb3JBB20Icdp/Kjl0nkuXE9mRUdctdMrOk9d+59zAM
-         qpSudu616/PRzqVKmmn0t6eNoUR9Z+ysffl4M0+ustsUGvgRx9xruC3XEeJqy4X9sZ3w
-         0GbGUaFSA+fkb5YdZgdhXoCW9xR1M5OuHlMp7aCCXFlXsS9mSgX5+sGiqPy70AYpamy5
-         78hbCLF9UgHrbBMqSork5KpQOI4YdX1N5MkfJ/vOYPFKxgpiTTZOnkTt0gFM/3qhbJy4
-         C/9g==
-X-Gm-Message-State: AAQBX9d4XuLYTqX/FlVeRVkU5GarYQL+AJVId7Ar6uRrS4mutRo7Bq8L
-        oFvtxx63VqO4d84y7rq+6srsDwuwRZA=
-X-Google-Smtp-Source: AKy350amwDqyJa+LlzM7biYAI+3i1mkieCfxZS836tmzptZ4SOWRoy5g8JqAYQ9+zKy/xdEKWNYlO5mXB8A=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:d0d6:0:b0:b8f:559f:bd49 with SMTP id
- h205-20020a25d0d6000000b00b8f559fbd49mr2479865ybg.6.1681427247867; Thu, 13
- Apr 2023 16:07:27 -0700 (PDT)
-Date:   Thu, 13 Apr 2023 23:07:26 +0000
-In-Reply-To: <diqzedono0m5.fsf@ackerleytng-cloudtop.c.googlers.com>
-Mime-Version: 1.0
-References: <20230412-kurzweilig-unsummen-3c1136f7f437@brauner> <diqzedono0m5.fsf@ackerleytng-cloudtop.c.googlers.com>
-Message-ID: <ZDiLLih4XHUCCwFY@google.com>
-Subject: Re: [RFC PATCH v3 1/2] mm: restrictedmem: Allow userspace to specify
- mount for memfd_restricted
-From:   Sean Christopherson <seanjc@google.com>
-To:     Ackerley Tng <ackerleytng@google.com>
-Cc:     Christian Brauner <brauner@kernel.org>, kvm@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        qemu-devel@nongnu.org, aarcange@redhat.com, ak@linux.intel.com,
-        akpm@linux-foundation.org, arnd@arndb.de, bfields@fieldses.org,
-        bp@alien8.de, chao.p.peng@linux.intel.com, corbet@lwn.net,
-        dave.hansen@intel.com, david@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, hpa@zytor.com, hughd@google.com,
-        jlayton@kernel.org, jmattson@google.com, joro@8bytes.org,
-        jun.nakajima@intel.com, kirill.shutemov@linux.intel.com,
-        linmiaohe@huawei.com, luto@kernel.org, mail@maciej.szmigiero.name,
-        mhocko@suse.com, michael.roth@amd.com, mingo@redhat.com,
-        naoya.horiguchi@nec.com, pbonzini@redhat.com, qperret@google.com,
-        rppt@kernel.org, shuah@kernel.org, steven.price@arm.com,
-        tabba@google.com, tglx@linutronix.de, vannapurve@google.com,
-        vbabka@suse.cz, vkuznets@redhat.com, wanpengli@tencent.com,
-        wei.w.wang@intel.com, x86@kernel.org, yu.c.zhang@linux.intel.com
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        d=1e100.net; s=20221208; t=1681427302; x=1684019302;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=637H74vWxZ4gX2iKNFYbz5JBcFfkn6d8GocnTsloh8Q=;
+        b=Nx9l+mBJRBT2cKE3IoVCGlVy1FQkiS+jw2FYvxD2ek9ldAf/16SuUO7iKswho8cNKP
+         l/QsgsUS/lF71ziOJTuRv8+iH8zHeQhwwkDUli6PElUahJ27qbYNHfpq9EefeuPXlEFt
+         Htru+0gkwHtnsZeb9iRLqbepgrEzLh4eo736D9UU58n39Iup+hGFX6T1TAMAPyrKVAXY
+         eKR4TEdUm6XkibCeZ50G6ZtiFVGIifyBEBVNRjXgrvfesKJcM5wU8eGjaF5L+s0yDwx+
+         AabBdfqotOruK9Cwo9/oqVmxOMsQUleWkbTfYHwEACFL6p9p0vewX2k0SksHyOja4k2x
+         s1Eg==
+X-Gm-Message-State: AAQBX9e3lTSxAV0aVhZgs9jWf3ixzSNjIYduZmVTE5NwlQiLkwCqnWzz
+        24o03B69Ok5FsHYCPpvxm8veGQ==
+X-Google-Smtp-Source: AKy350YwG1c79czrZM93aUuBkouQbuFKALrb9AUFJ2Ijplaa2Nm71Bmdzzw7+aXidzhWbr/IiqLOVQ==
+X-Received: by 2002:ac2:4c92:0:b0:4e9:6097:add3 with SMTP id d18-20020ac24c92000000b004e96097add3mr1510914lfl.61.1681427302536;
+        Thu, 13 Apr 2023 16:08:22 -0700 (PDT)
+Received: from [192.168.1.101] (abyl123.neoplus.adsl.tpnet.pl. [83.9.31.123])
+        by smtp.gmail.com with ESMTPSA id r6-20020ac252a6000000b004ec6252aa37sm499499lfm.116.2023.04.13.16.08.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Apr 2023 16:08:22 -0700 (PDT)
+Message-ID: <546d7fa4-cdb9-7d1f-98e5-065a7706ee56@linaro.org>
+Date:   Fri, 14 Apr 2023 01:08:20 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 1/3] venus: add firmware version based check
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Dikshita Agarwal <quic_dikshita@quicinc.com>,
+        linux-media@vger.kernel.org, quic_vgarodia@quicinc.com,
+        agross@kernel.org, andersson@kernel.org, mchehab@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Viswanath Boma <quic_vboma@quicinc.com>
+References: <1680848758-3947-1-git-send-email-quic_dikshita@quicinc.com>
+ <1680848758-3947-2-git-send-email-quic_dikshita@quicinc.com>
+ <6c3002ad-ff78-8818-0e68-a151d33b0fca@gmail.com>
+ <0b5d967d-b6f5-ed1e-1878-160d6e645f02@linaro.org>
+ <89fc0a9c-0eee-44c4-52a4-bfa0009b9cce@linaro.org>
+In-Reply-To: <89fc0a9c-0eee-44c4-52a4-bfa0009b9cce@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,11 +82,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023, Ackerley Tng wrote:
-> Christian Brauner <brauner@kernel.org> writes:
-> > I'm curious, is there an LSFMM session for this?
-> 
-> As far as I know, there is no LSFMM session for this.
 
-Correct, no LSFMM session.  In hindsight, that's obviously something we should
-have pursued :-(
+
+On 14.04.2023 01:01, Konrad Dybcio wrote:
+> 
+> 
+> On 11.04.2023 12:59, Konrad Dybcio wrote:
+>>
+>>
+>> On 9.04.2023 07:18, Stanimir Varbanov wrote:
+>>> Hi Dikshita,
+>>>
+>>> Thanks for the patch.
+>>>
+>>> On 7.04.23 г. 9:25 ч., Dikshita Agarwal wrote:
+>>>> Add firmware version based checks to enable/disable
+>>>> features for different SOCs.
+>>>>
+>>>> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
+>>>> Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
+>>>> Signed-off-by: Viswanath Boma <quic_vboma@quicinc.com>
+>>>> Tested-by: Nathan Hebert <nhebert@chromium.org>
+>>>> ---
+>>>>   drivers/media/platform/qcom/venus/core.h     | 20 ++++++++++++++++++++
+>>>>   drivers/media/platform/qcom/venus/hfi_msgs.c | 11 +++++++++--
+>>>>   2 files changed, 29 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
+>>>> index 32551c2..9d1e4b2 100644
+>>>> --- a/drivers/media/platform/qcom/venus/core.h
+>>>> +++ b/drivers/media/platform/qcom/venus/core.h
+>>>> @@ -202,6 +202,11 @@ struct venus_core {
+>>>>       unsigned int core0_usage_count;
+>>>>       unsigned int core1_usage_count;
+>>>>       struct dentry *root;
+>>>> +    struct venus_img_version {
+>>>> +        u32 major;
+>>>> +        u32 minor;
+>>>> +        u32 rev;
+>>>> +    } venus_ver;
+>>>>   };
+>>>>     struct vdec_controls {
+>>>> @@ -500,4 +505,19 @@ venus_caps_by_codec(struct venus_core *core, u32 codec, u32 domain)
+>>>>       return NULL;
+>>>>   }
+>>>>   +static inline int
+>>>> +is_fw_rev_or_newer(struct venus_core *core, u32 vmajor, u32 vminor, u32 vrev)
+>>>> +{
+>>>> +    return ((core)->venus_ver.major == vmajor &&
+>>>> +        (core)->venus_ver.minor == vminor &&
+>>>> +        (core)->venus_ver.rev >= vrev);
+>>>> +}
+>>>> +
+>>>> +static inline int
+>>>> +is_fw_rev_or_older(struct venus_core *core, u32 vmajor, u32 vminor, u32 vrev)
+>>>> +{
+>>>> +    return ((core)->venus_ver.major == vmajor &&
+>>>> +        (core)->venus_ver.minor == vminor &&
+>>>> +        (core)->venus_ver.rev <= vrev);
+>>>> +}
+>>>
+>>> IMO those two should return bool
+>>>
+>>>>   #endif
+>>>> diff --git a/drivers/media/platform/qcom/venus/hfi_msgs.c b/drivers/media/platform/qcom/venus/hfi_msgs.c
+>>>> index df96db3..07ac0fc 100644
+>>>> --- a/drivers/media/platform/qcom/venus/hfi_msgs.c
+>>>> +++ b/drivers/media/platform/qcom/venus/hfi_msgs.c
+>>>> @@ -248,9 +248,10 @@ static void hfi_sys_init_done(struct venus_core *core, struct venus_inst *inst,
+>>>>   }
+>>>>     static void
+>>>> -sys_get_prop_image_version(struct device *dev,
+>>>> +sys_get_prop_image_version(struct venus_core *core,
+>>>>                  struct hfi_msg_sys_property_info_pkt *pkt)
+>>>>   {
+>>>> +    struct device *dev = core->dev;
+>>>>       u8 *smem_tbl_ptr;
+>>>>       u8 *img_ver;
+>>>>       int req_bytes;
+>>>> @@ -263,6 +264,12 @@ sys_get_prop_image_version(struct device *dev,
+>>>>           return;
+>>>>         img_ver = pkt->data;
+>>>> +    if (IS_V4(core))
+>>>> +        sscanf(img_ver, "14:VIDEO.VE.%u.%u-%u-PROD",
+>>>> +               &core->venus_ver.major, &core->venus_ver.minor, &core->venus_ver.rev);
+>>>> +    else if (IS_V6(core))
+>>>> +        sscanf(img_ver, "14:VIDEO.VPU.%u.%u-%u-PROD",
+>>>> +               &core->venus_ver.major, &core->venus_ver.minor, &core->venus_ver.rev);
+>>>>   
+>>>
+>>> what about if IS_V1?
+>> Whooops, I missed that in my review as well...
+>>
+>> Looks like the 8916 and 8996 FWs fall under the VIDEO.VE case
+>> as well, that's the QC_VERSION_STRING they have..
+> On top of that, my 8350 fw reports:
+> 
+> F/W version: 14:video-firmware.1.0-3fb5add1d3ac96f8f74facd537845a6ceb5a99e4
+FWIW this cryptic version also needs fdata.device_addr = 0
+
+(for reference - failling to do so will never stop the video
+stream polling)
+
+Konrad
+> 
+> Konrad
+>>
+>> Perhaps this could be an 
+>>
+>> if (IS_V6)
+>> 	..
+>> else
+>> 	..
+>>
+>> Konrad
+>>>
+>>>>       dev_dbg(dev, VDBGL "F/W version: %s\n", img_ver);
+>>>
+>>> this will crash for v1.
+>>>
+>>>>   @@ -286,7 +293,7 @@ static void hfi_sys_property_info(struct venus_core *core,
+>>>>         switch (pkt->property) {
+>>>>       case HFI_PROPERTY_SYS_IMAGE_VERSION:
+>>>> -        sys_get_prop_image_version(dev, pkt);
+>>>> +        sys_get_prop_image_version(core, pkt);
+>>>>           break;
+>>>>       default:
+>>>>           dev_dbg(dev, VDBGL "unknown property data\n");
+>>>
