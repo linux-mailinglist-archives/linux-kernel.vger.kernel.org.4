@@ -2,38 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1079E6E0F3A
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:52:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9594B6E0F36
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:51:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbjDMNwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 09:52:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54548 "EHLO
+        id S231232AbjDMNvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 09:51:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231430AbjDMNwJ (ORCPT
+        with ESMTP id S229612AbjDMNvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 09:52:09 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559944683
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:52:03 -0700 (PDT)
-Received: from dqrubuntu.lan ([172.16.0.254])
-        (user=flno@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 33DDpasL030134-33DDpasO030134
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 13 Apr 2023 21:51:36 +0800
-From:   Qinrun Dai <flno@hust.edu.cn>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Cc:     hust-os-kernel-patches@googlegroups.com,
-        Qinrun Dai <flno@hust.edu.cn>, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] drivers: clocksource: fix memory leak in davinci_timer_register
-Date:   Thu, 13 Apr 2023 13:50:37 +0000
-Message-Id: <20230413135037.1505799-1-flno@hust.edu.cn>
-X-Mailer: git-send-email 2.37.2
+        Thu, 13 Apr 2023 09:51:13 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E5E13E;
+        Thu, 13 Apr 2023 06:51:12 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1681393870;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=f0bKLdLVP7J8X35Ksonzci2P1EUFJoVx+hqOgN0tsxo=;
+        b=vSBH5EtYDASGL4sbQBbdVCKHRPK690cHC1dsdHTPyjG4VT//EaNkuRKEwAtSykvvDutQw7
+        0lcZC+HTZrn124YvlUmIiQAUTdJ+eqXZ9GZ8sPmd7+9MB6q638ERcMgZc5Z8n/w/faNmvo
+        866vQxMMJgrd9DRN9NbeBg3fCLu1eVH6rZIAcaP9VMQ4PIzsz6o1G3hnIxyUqnPHKuGBgb
+        1TRI1oaRl6FKk2WYfP86izckZtN7bXqrsHHGtNAD+3cSUm8phLHqllSKadOfpTcWnVuKBz
+        6CA2fGH5VU35llmrQQjRf6korzcht0y1lYD9fLXje6RFsO26qg+dYI1cE7c0HQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1681393870;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=f0bKLdLVP7J8X35Ksonzci2P1EUFJoVx+hqOgN0tsxo=;
+        b=qEFdxh4tzkhcDplfs3FE965G5le5w/Cu7O/CTnyGIxlbA82PjMejT1h1+zIviWoNsNgNDN
+        SXlYHq7iyzku94CQ==
+To:     Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
+Cc:     Stanislav Kinsburskii <stanislav.kinsburskii@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] x86/hyperv: Expose an helper to map PCI interrupts
+In-Reply-To: <168079870998.14175.16015623662679754647.stgit@skinsburskii.localdomain>
+References: <168079806973.14175.17999267023207421381.stgit@skinsburskii.localdomain>
+ <168079870998.14175.16015623662679754647.stgit@skinsburskii.localdomain>
+Date:   Thu, 13 Apr 2023 15:51:09 +0200
+Message-ID: <87o7nrzy9e.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: flno@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,91 +61,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch reports:
-drivers/clocksource/timer-davinci.c:332 davinci_timer_register()
-warn: 'base' from ioremap() not released on lines: 274.
+On Thu, Apr 06 2023 at 09:33, Stanislav Kinsburskii wrote:
+> This patch moves
 
-Fix this and other potential memory leak problems
-by adding a set of corresponding exit lables.
+https://www.kernel.org/doc/html/latest/process/submitting-patches.html#submittingpatches
+https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#changelog
 
-Fixes: 721154f972aa ("clocksource/drivers/davinci: Add support for clockevents")
-Signed-off-by: Qinrun Dai <flno@hust.edu.cn>
----
- drivers/clocksource/timer-davinci.c | 30 +++++++++++++++++++++++------
- 1 file changed, 24 insertions(+), 6 deletions(-)
+> a part of currently internal logic into the new
+> hv_map_msi_interrupt function and makes it globally available helper,
+> which will be used to map PCI interrupts in case of root partition.
 
-diff --git a/drivers/clocksource/timer-davinci.c b/drivers/clocksource/timer-davinci.c
-index 9996c0542520..b1c248498be4 100644
---- a/drivers/clocksource/timer-davinci.c
-+++ b/drivers/clocksource/timer-davinci.c
-@@ -257,21 +257,25 @@ int __init davinci_timer_register(struct clk *clk,
- 				resource_size(&timer_cfg->reg),
- 				"davinci-timer")) {
- 		pr_err("Unable to request memory region\n");
--		return -EBUSY;
-+		rv = -EBUSY;
-+		goto exit_clk_disable;
- 	}
- 
- 	base = ioremap(timer_cfg->reg.start, resource_size(&timer_cfg->reg));
- 	if (!base) {
- 		pr_err("Unable to map the register range\n");
--		return -ENOMEM;
-+		rv = -ENOMEM;
-+		goto exit_mem_region;
- 	}
- 
- 	davinci_timer_init(base);
- 	tick_rate = clk_get_rate(clk);
- 
- 	clockevent = kzalloc(sizeof(*clockevent), GFP_KERNEL);
--	if (!clockevent)
--		return -ENOMEM;
-+	if (!clockevent) {
-+		rv = -ENOMEM;
-+		goto exit_iounmap_base;
-+	}
- 
- 	clockevent->dev.name = "tim12";
- 	clockevent->dev.features = CLOCK_EVT_FEAT_ONESHOT;
-@@ -296,7 +300,7 @@ int __init davinci_timer_register(struct clk *clk,
- 			 "clockevent/tim12", clockevent);
- 	if (rv) {
- 		pr_err("Unable to request the clockevent interrupt\n");
--		return rv;
-+		goto exit_free_clockevent;
- 	}
- 
- 	davinci_clocksource.dev.rating = 300;
-@@ -323,13 +327,27 @@ int __init davinci_timer_register(struct clk *clk,
- 	rv = clocksource_register_hz(&davinci_clocksource.dev, tick_rate);
- 	if (rv) {
- 		pr_err("Unable to register clocksource\n");
--		return rv;
-+		goto exit_free_irq;
- 	}
- 
- 	sched_clock_register(davinci_timer_read_sched_clock,
- 			     DAVINCI_TIMER_CLKSRC_BITS, tick_rate);
- 
- 	return 0;
-+
-+exit_free_irq:
-+	free_irq(timer_cfg->irq[DAVINCI_TIMER_CLOCKEVENT_IRQ].start,
-+			clockevent);
-+exit_free_clockevent:
-+	kfree(clockevent);
-+exit_iounmap_base:
-+	iounmap(base);
-+exit_mem_region:
-+	release_mem_region(timer_cfg->reg.start,
-+			   resource_size(&timer_cfg->reg));
-+exit_clk_disable:
-+	clk_disable_unprepare(clk);
-+	return rv;
- }
- 
- static int __init of_davinci_timer_register(struct device_node *np)
--- 
-2.37.2
+> -static int hv_map_msi_interrupt(struct pci_dev *dev, int cpu, int vector,
+> -				struct hv_interrupt_entry *entry)
+> +/**
+> + * hv_map_msi_interrupt() - "Map" the MSI IRQ in the hypervisor.
 
+So if you need to put "" on Map then maybe your function is
+misnomed. Either it maps or it does not, right?
+
+> + * @data:      Describes the IRQ
+> + * @out_entry: Hypervisor (MSI) interrupt entry (can be NULL)
+> + *
+> + * Map the IRQ in the hypervisor by issuing a MAP_DEVICE_INTERRUPT hypercall.
+> + */
+> +int hv_map_msi_interrupt(struct irq_data *data,
+> +			 struct hv_interrupt_entry *out_entry)
+>  {
+> -	union hv_device_id device_id = hv_build_pci_dev_id(dev);
+> +	struct msi_desc *msidesc;
+> +	struct pci_dev *dev;
+> +	union hv_device_id device_id;
+> +	struct hv_interrupt_entry dummy, *entry;
+> +	struct irq_cfg *cfg = irqd_cfg(data);
+> +	const cpumask_t *affinity;
+> +	int cpu, vector;
+> +
+> +	msidesc = irq_data_get_msi_desc(data);
+> +	dev = msi_desc_to_pci_dev(msidesc);
+> +	device_id = hv_build_pci_dev_id(dev);
+> +	affinity = irq_data_get_effective_affinity_mask(data);
+> +	cpu = cpumask_first_and(affinity, cpu_online_mask);
+
+The effective affinity mask of MSI interrupts consists only of online
+CPUs, to be accurate: it has exactly one online CPU set.
+
+But even if it would have only offline CPUs then the result would be:
+
+    cpu = nr_cpu_ids
+
+which is definitely invalid. While a disabled vector targeted to an
+offline CPU is not necessarily invalid.
+
+Thanks,
+
+        tglx
