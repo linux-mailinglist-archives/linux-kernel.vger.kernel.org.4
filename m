@@ -2,70 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91E996E134C
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 19:16:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EB4C6E134E
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 19:17:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbjDMRQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 13:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45650 "EHLO
+        id S229713AbjDMRRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 13:17:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbjDMRQJ (ORCPT
+        with ESMTP id S229479AbjDMRRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 13:16:09 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2097D9C
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 10:16:08 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id h198so22699514ybg.12
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 10:16:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681406167; x=1683998167;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=01u2RSetmwdr6j5URpo3R1w4ezs7Fk00UyijVasf6GU=;
-        b=oZLJ+jTrUqDJjU+ptRIzgR8blRolbPS4dtnpbHYrU1FG2egztMNAZLdnTS7zeAf7BK
-         oGAMbZheRCsTGNViFHoJxhvvQHuQ99+bmlOuzRG/COVIzezThUM9E5HGbDWddD/vVdjX
-         DuYiTVfHhKTuRKgTDwCf6sXsSbNl5LjVQ3o81BW1bj3vJI86F1c4LMHL2qotX8Sr4G6e
-         kyaYiZ5Q9uEFz+vuPMXjbTDZfm3pHS+fPeFwdZn7kBxw8vIQnmzhstx47zJsjFw7QUmg
-         ul3pKxhxxJAJpBTKPs93NCcl3YiBzlLP8NjMij8JTALuowp8rmFe+tIcsj+fmNhYqdD/
-         d6cQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681406167; x=1683998167;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=01u2RSetmwdr6j5URpo3R1w4ezs7Fk00UyijVasf6GU=;
-        b=U5Ds+UPcTtUDyZkciu6aVpeVi8Mjz9EWLvxHMYee/LcAWucevApurIlEg1W6pxQEaA
-         3ZDJjvFiFrzlgps1S8tj9m2Gjo6bqNgprzIwZqr+5jEfR7SKz08+j+dup5lByVpq0am2
-         cH4fBiGe31UJ111pwpy0t7jSKFmnMMzZ24YxSPQeJvLicVB9WEMBsOSGVYow8DUy2y+E
-         v24LD6EB6QjBPv9BJioKUGHWsTtjC3A+kQhfCC4xh3PiItaTTLg3L00PWuArg8uEPiwG
-         ZUn7+zjqsU5xi7BbslGOLe9M6w/00LK954pbdMwJayNmgPqkjzJnfa/ExMg6kaRRO7j9
-         7YHg==
-X-Gm-Message-State: AAQBX9eQMFmQ712MNZgAtpUTg/5B2KxL7TTWyfrPWHS0qV+87cimfBmP
-        ea4xT9F/ccpXzx9T42ag2oRSVh6ru9u3Lm39Ww==
-X-Google-Smtp-Source: AKy350bN9z/h6v597xP8mdXeV5hOF4vvOZNQzjaLMemAL7d9EG5xx/SK8iopAqO8uh1rjXkGdKSY9DVJwvbA4pcgrIs=
-X-Received: by 2002:a25:748e:0:b0:b6c:2d28:b3e7 with SMTP id
- p136-20020a25748e000000b00b6c2d28b3e7mr1851661ybc.9.1681406167525; Thu, 13
- Apr 2023 10:16:07 -0700 (PDT)
+        Thu, 13 Apr 2023 13:17:02 -0400
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93914EF2
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 10:17:01 -0700 (PDT)
+Received: from mail.panix.com (localhost [127.0.0.1])
+        by mailbackend.panix.com (Postfix) with ESMTPA id 4Py5q03lLmzGnY;
+        Thu, 13 Apr 2023 13:17:00 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+        t=1681406220; bh=EpKPSDY3pI5akJnTcUrdSxzpwgzwbCqQ/pqWVxZ4cNA=;
+        h=In-Reply-To:References:Date:Subject:From:To:Cc;
+        b=o0XW89jo7SzcgI9sm9nXnLB3CXXdcFig5at8ANygia74jHYxc2ALghmqTTqNw3/Sh
+         Jy/5b4v4q0F5fsNlRWCSPPb6EUOemlV4RPuDaaruYBK8RtKER2rLnrE+v+LkJSM0GD
+         unUpvaIlkbmSx6z7MGlc1l1UT4R1kmDJcPsbmw1s=
+X-Panix-Received: from 166.84.1.3
+        (SquirrelMail authenticated user pa@panix.com)
+        by mail.panix.com with HTTP;
+        Thu, 13 Apr 2023 13:17:00 -0400
+Message-ID: <84b1b88aabf7e70951d7680f05694249.squirrel@mail.panix.com>
+In-Reply-To: <87o7nsuumt.fsf@minerva.mail-host-address-is-not-set>
+References: <20230412150225.3757223-1-javierm@redhat.com>
+    <2e07f818ccdff7023a060e732d7c4ef6.squirrel@mail.panix.com>
+    <87jzyhror0.fsf@minerva.mail-host-address-is-not-set>
+    <beeff0335ab4cc244d214a7baadba371.squirrel@mail.panix.com>
+    <CAFOAJEdKBUg91pDmNYYw5xigUxjifBgOLz2YgD+xQ+WyEy=V2w@mail.gmail.com>
+    <1afd3044c2aca9322ecf304941c7df66.squirrel@mail.panix.com>
+    <87fs94stgw.fsf@minerva.mail-host-address-is-not-set>
+    <87cz48srs4.fsf@minerva.mail-host-address-is-not-set>
+    <40edb0fdb0eaff434f4872dd677923a6.squirrel@mail.panix.com>
+    <87a5zcsqg8.fsf@minerva.mail-host-address-is-not-set>
+    <9e6fff69b09b36cbdd96499cd0015154.squirrel@mail.panix.com>
+    <4PxhQn3zK1zcbc@panix1.panix.com>
+    <87o7nsuumt.fsf@minerva.mail-host-address-is-not-set>
+Date:   Thu, 13 Apr 2023 13:17:00 -0400
+Subject: Re: [PATCH] firmware/sysfb: Fix wrong stride when bits-per-pixel is
+ calculated
+From:   "Pierre Asselin" <pa@panix.com>
+To:     "Javier Martinez Canillas" <javierm@redhat.com>
+Cc:     "Pierre Asselin" <pa@panix.com>, tzimmermann@suse.de,
+        linux-kernel@vger.kernel.org, jfalempe@redhat.com,
+        hdegoede@redhat.com, dri-devel@lists.freedesktop.org,
+        daniel.vetter@ffwll.ch, ardb@kernel.org
+User-Agent: SquirrelMail/1.4.23-p1
 MIME-Version: 1.0
-References: <CALjTZvZ=Y1psyd0nmfzm6GhqMKvq5V_NQCWb_X02nasp1CpfcQ@mail.gmail.com>
- <87r0spcuvi.fsf@intel.com> <CALjTZvao=N7wxyj_DpqzWUhdJwEsWSKUo3ddi-3ubgMp8BXi_Q@mail.gmail.com>
- <CALjTZvaf1cwcZc9O8g24SnZXsoQaWB97UVQW=g6M0coaudLr6w@mail.gmail.com>
- <2495408f-a644-4e56-aaca-e6915cbda179@paulmck-laptop> <CALjTZva=JHsckrBeHgJcd-_TDMgYgmZGcXavJ=GhPr7VQCOF5g@mail.gmail.com>
- <1384f15b-228f-4a6b-8ac3-d0437db8bc1c@paulmck-laptop>
-In-Reply-To: <1384f15b-228f-4a6b-8ac3-d0437db8bc1c@paulmck-laptop>
-From:   Rui Salvaterra <rsalvaterra@gmail.com>
-Date:   Thu, 13 Apr 2023 18:15:56 +0100
-Message-ID: <CALjTZvZUmrkrnPb0=pqT8C-KsQ64bFKBdzpuaV0_O0-m2xEV7g@mail.gmail.com>
-Subject: Re: [BUG?] INFO: rcu_sched detected expedited stalls on CPUs/tasks: {
- 0-.... } 3 jiffies s: 309 root: 0x1/.
-To:     paulmck@kernel.org
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>, rodrigo.vivi@intel.com,
-        tvrtko.ursulin@linux.intel.com, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
+X-Priority: 3 (Normal)
+Importance: Normal
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,15 +68,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Paul,
-
-On Thu, 13 Apr 2023 at 17:21, Paul E. McKenney <paulmck@kernel.org> wrote:
+> diff --git a/drivers/firmware/sysfb_simplefb.c
+> b/drivers/firmware/sysfb_simplefb.c
+> index 82c64cb9f531..0ab8c542b1f5 100644
+> --- a/drivers/firmware/sysfb_simplefb.c
+> +++ b/drivers/firmware/sysfb_simplefb.c
+> @@ -55,14 +55,10 @@ __init bool sysfb_parse_mode(const struct screen_info
+> *si,
+>  	 * ignore simplefb formats with alpha bits, as EFI and VESA
+>  	 * don't specify alpha channels.
+>  	 */
+> -	if (si->lfb_depth > 8) {
+> -		bits_per_pixel = max(max3(si->red_size + si->red_pos,
+> -					  si->green_size + si->green_pos,
+> -					  si->blue_size + si->blue_pos),
+> -				     si->rsvd_size + si->rsvd_pos);
+> -	} else {
+> +	if (si->lfb_depth > 8)
+> +		bits_per_pixel = si->lfb_linelength * 8 / si->lfb_width;
+> +	else
+>  		bits_per_pixel = si->lfb_depth;
+> -	}
 >
-> Been there, done that!
+>  	for (i = 0; i < ARRAY_SIZE(formats); ++i) {
+>  		const struct simplefb_format *f = &formats[i];
 >
-> And actually, it is kind of reassuring that the Linux kernel avoids
-> tens-of-milliseocnds latency blows in the common case on your system.
+> base-commit: e62252bc55b6d4eddc6c2bdbf95a448180d6a08d
+> --
+> 2.40.0
 
-Especially since we're talking about a HZ=100 non-preemptive kernel. :)
+Patch is good on both boxes.
 
-Rui
+
