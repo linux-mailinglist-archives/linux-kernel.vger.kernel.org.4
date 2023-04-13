@@ -2,124 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB556E095D
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:53:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A33D56E0955
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:52:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbjDMIxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 04:53:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48416 "EHLO
+        id S229864AbjDMIwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 04:52:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbjDMIxT (ORCPT
+        with ESMTP id S229479AbjDMIwc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 04:53:19 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4554993CA
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 01:53:06 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id F40911FD68;
-        Thu, 13 Apr 2023 08:53:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1681375985; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Vw1ZoNwWrSTGCF9w3p1Uuiz6HkW0chKEEXorzYdcJC8=;
-        b=fdEKnQ9DznBOosiiDYeBvRSZ4TdmZiA9We57/ZfpE/tUk5DzZ+sbRtX9EEM2Ow7QBa1yQy
-        RsMvuZoF/BnCguN5YcrEaL+EsFFNu7JgdaJ0min47h6wyt7WNAafY5SMOtbLe9ZRNVS5vu
-        Gx+GoJyuW0U4Z/Z14udlXGHYTGda2xI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1681375985;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Vw1ZoNwWrSTGCF9w3p1Uuiz6HkW0chKEEXorzYdcJC8=;
-        b=mFlVifnwk8TtEc5aaOWUwgDbFirHu/qEIAW+bmbqRAvZPQphqnw9nuQeCukJIUdiuvkmMr
-        p/glk/SPaCfJ4KBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E205313421;
-        Thu, 13 Apr 2023 08:53:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id EBLyNvDCN2RyIAAAMHmgww
-        (envelope-from <iivanov@suse.de>); Thu, 13 Apr 2023 08:53:04 +0000
-From:   "Ivan T. Ivanov" <iivanov@suse.de>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Tim Gover <tim.gover@raspberrypi.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        linux-rpi-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "Ivan T . Ivanov" <iivanov@suse.de>
-Subject: [PATCH v2 2/2] ARM: dts: Add nvmem node for BCM2711 bootloader public key
-Date:   Thu, 13 Apr 2023 11:52:06 +0300
-Message-Id: <20230413085206.149730-3-iivanov@suse.de>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20230413085206.149730-1-iivanov@suse.de>
-References: <20230413085206.149730-1-iivanov@suse.de>
+        Thu, 13 Apr 2023 04:52:32 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8793E83D2
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 01:52:31 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-94a34c299d8so63777266b.1
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 01:52:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google; t=1681375950; x=1683967950;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sMMjHV++lPnl4wWzVLV07WrqF25wdRQCEiHAGrnakwo=;
+        b=INrZj4xUMYQleS3Tx0LtKxYjZNVyRan13czZwek2zaZq+oy39DSKAYUFN9zXZsSGPZ
+         IXQZK/sDw+V0IgvjzKewBgW6py3GA2DRPcWTwNYJ05NvKTvZn7J2kI4A5nD8sI9CbXlD
+         RyrJ2xSNhywHxQ3U06eSns8zC8LvAXHccrXpM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681375950; x=1683967950;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sMMjHV++lPnl4wWzVLV07WrqF25wdRQCEiHAGrnakwo=;
+        b=A+pYb44gEv569v3OdqKXvFhRsp+vLKpeIfFqQCKwQkvklLEByp41DDp+cxuvzjLqi+
+         Qi4bKvn2Osfsi6+IVkUxN5JCYuXtHNoyTBq3gwXazKlrP8sF1lQJBp3kdZYGmFWiGX4z
+         eHOVceyRCCvSFM8/Dq/3Ik55Eh3b4Kf2NwbHiYx4AZuJBfSg0j8274BF4nm9sKXyrlXj
+         HrgQy7qAFW/P5c/r4rbaTJdD/rkH+flucV1l7iQMMvcQl6yV5yfKD4XtkMpKS8CkpjRL
+         paQYJD+3eTJHO1NQ/0h7SGXhXqKVgmmSdnJiXMPLlwM9lLbXbJNYWgaYGUuoFOPIKl6c
+         v9oQ==
+X-Gm-Message-State: AAQBX9fupwGba+cyeURPeES4Qzm/lWFvecGakgn4JVqhvGVbj7YCW0/E
+        gSTJNgFom0cAPu8DVQ/jzr0eHg==
+X-Google-Smtp-Source: AKy350a1UdfdCDMoh8AkhQ+QpH0nAND8dfeQm38GUk7NQxrjob5RulYvkLQeppGy8jxDZbBiENNV6g==
+X-Received: by 2002:a05:6402:34d0:b0:506:6c2a:528f with SMTP id w16-20020a05640234d000b005066c2a528fmr2140795edc.4.1681375950078;
+        Thu, 13 Apr 2023 01:52:30 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id s4-20020aa7c544000000b004fc649481basm535310edr.58.2023.04.13.01.52.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 01:52:29 -0700 (PDT)
+Date:   Thu, 13 Apr 2023 10:52:27 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Jeffrey Hugo <quic_jhugo@quicinc.com>, daniel@ffwll.ch,
+        sfr@canb.auug.org.au, ogabbay@kernel.org,
+        jacek.lawrynowicz@linux.intel.com, quic_pkanojiy@quicinc.com,
+        mani@kernel.org, airlied@redhat.com,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org
+Subject: Re: [PATCH] Revert "accel/qaic: Add mhi_qaic_cntl"
+Message-ID: <ZDfCyyljbvTrNpeg@phenom.ffwll.local>
+Mail-Followup-To: Greg KH <gregkh@linuxfoundation.org>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>, sfr@canb.auug.org.au,
+        ogabbay@kernel.org, jacek.lawrynowicz@linux.intel.com,
+        quic_pkanojiy@quicinc.com, mani@kernel.org, airlied@redhat.com,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org
+References: <1681307864-3782-1-git-send-email-quic_jhugo@quicinc.com>
+ <2023041201-underwear-consumer-1eb8@gregkh>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2023041201-underwear-consumer-1eb8@gregkh>
+X-Operating-System: Linux phenom 6.1.0-7-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tim Gover <tim.gover@raspberrypi.com>
+On Wed, Apr 12, 2023 at 07:15:43PM +0200, Greg KH wrote:
+> On Wed, Apr 12, 2023 at 07:57:44AM -0600, Jeffrey Hugo wrote:
+> > This reverts commit 566fc96198b4bb07ca6806386956669881225271.
+> > 
+> > This exposes a userspace API that is still under debate.  Revert the
+> > change before the uAPI gets exposed to avoid making a mistake.  QAIC is
+> > otherwise still functional.
+> > 
+> > Suggested-by: Daniel Vetter <daniel@ffwll.ch>
+> > Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+> > Reviewed-by: Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>
+> 
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> 
+> And can you cc: me when you resubmit this?  It's not really correct in a
+> number of places and can be made simpler if you really want to have your
+> own class and device major.
 
-Make a copy of the bootloader secure-boot public key available to the OS
-via an nvmem node. The placement information is populated by the
-Raspberry Pi firmware if a public key is present in the BCM2711
-bootloader EEPROM.
++1 on this, in the other thread my take was that this should go through
+driver model tree in the mhi bus, and I guess needs some review there
+about safety and all that. We do a lot of funny uapi in drm/accel, but
+full generic driver-in-userspace is really not our thing :-)
 
-Signed-off-by: Tim Gover <tim.gover@raspberrypi.com>
-Signed-off-by: Ivan T. Ivanov <iivanov@suse.de>
----
- arch/arm/boot/dts/bcm2711-rpi.dtsi | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+I guess there's also the question whether this should be debugfs (like the
+usb stuff, or did that move by now) or real chardev. Might also make sense
+to integrate with vfio/mdev/iommufd depending how the security model
+works.
 
-diff --git a/arch/arm/boot/dts/bcm2711-rpi.dtsi b/arch/arm/boot/dts/bcm2711-rpi.dtsi
-index 98817a6675b9..e30fbe84f9c3 100644
---- a/arch/arm/boot/dts/bcm2711-rpi.dtsi
-+++ b/arch/arm/boot/dts/bcm2711-rpi.dtsi
-@@ -15,6 +15,7 @@ aliases {
- 		ethernet0 = &genet;
- 		pcie0 = &pcie0;
- 		blconfig = &blconfig;
-+		blpubkey = &blpubkey;
- 	};
- };
- 
-@@ -67,6 +68,19 @@ blconfig: nvram@0 {
- 		no-map;
- 		status = "disabled";
- 	};
-+
-+	/*
-+	 * RPi4 will copy the binary public key blob (if present) from the bootloader
-+	 * into memory for use by the OS.
-+	 */
-+	blpubkey: nvram@1 {
-+		compatible = "raspberrypi,bootloader-public-key", "nvmem-rmem";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		reg = <0x0 0x0 0x0>;
-+		no-map;
-+		status = "disabled";
-+	};
- };
- 
- &v3d {
+But really this is all stuff where I'm hightailing it asap :-)
+-Daniel
 -- 
-2.35.3
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
