@@ -2,132 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FD1B6E102B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:42:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E5BF6E1041
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:44:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbjDMOlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 10:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36496 "EHLO
+        id S231326AbjDMOoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 10:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbjDMOlf (ORCPT
+        with ESMTP id S231343AbjDMOoN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 10:41:35 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDF74C3C;
-        Thu, 13 Apr 2023 07:41:34 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id l16so8243372wms.1;
-        Thu, 13 Apr 2023 07:41:34 -0700 (PDT)
+        Thu, 13 Apr 2023 10:44:13 -0400
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7C9AF0F;
+        Thu, 13 Apr 2023 07:43:52 -0700 (PDT)
+Received: by mail-vs1-xe2b.google.com with SMTP id v10so13672863vsf.6;
+        Thu, 13 Apr 2023 07:43:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681396893; x=1683988893;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GGGoYKbxWkMy+yAyRRbPOAvuFmowVBSZKJ7Gz931Puk=;
-        b=F/huq0ooJSEHqJT9WfOHndjq9zpC11qu90u1BPAWqrELhBG8tdwRyEJLvkqcJtiGaO
-         d0q+pU9yznj6xZSsXQU/81jwFOrjbDE01DQx1q1OiAkf8VYvzvnTeKiIPp4Rti908oL3
-         fWmg0qXf1FFWdzqg8mFSx/vaS7K9o1eHc7ZXzi2BYx+LDvrt8hD3aqrenDh6/KcKCBXJ
-         5uC9zavRCu/RZ0tI+NUlCLfU/uVZG+aBl6D4/D6vdS9Vt4bqNHSJr+tW2gEvr2/XZ3Q4
-         djI69Zrz067gWj4Y3/PBb0H2MJWVM8OWhIZ+CxfkdCUATw1xxt+eyc9RtlikNCM2+w8O
-         aXhw==
+        d=gmail.com; s=20221208; t=1681397023; x=1683989023;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Eeh91nWUJjVxzujFyKecjRMcqdUP/e5Kpsx1SGaM6Cg=;
+        b=kf21yXJX/BSobeW10Mv2MGkr+jeLgLiCNginPFYyQoPGG0QHXGsTDB3W5VVx02sHRP
+         Ycj16DbWdWF9JiYzqm+kh4en2OH26VocsjCtUaLLH2siIqu1i0ApWldQ3S377kvOIAoJ
+         jM/I3k8/RT38GFYD/eA7gSy3MBuRjqL0pFhXFXMeP1uWFLI1UHPo90aYFXoiz8oSEjLX
+         mmOCqQdhZouaMap8NwS7HEdVyUSmFJTVUa1JVJykt/FjGf+L9VjPJilPHE+98xB1Yojs
+         uZn88gu7Ec3w5nMiwrdw0qxuIOUqOkc3/1Z/UuFGhT4lLzrGHbj7NS1UCqRNWW9GCnde
+         Vsyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681396893; x=1683988893;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GGGoYKbxWkMy+yAyRRbPOAvuFmowVBSZKJ7Gz931Puk=;
-        b=IHv+iQqzqLQtEAAINDlk0fG85+HYCYDKDWgpjbBLtrC41/e7DyJzzK5xaJ87x4WX9F
-         +jmgN7GHml8iX/fUQ85r2/lvrVEef12+dr6BhooUYR5cXNuD1dwbU7hyCH7KFYntT0M7
-         jMkCUFWWdKq9PZnyq2xr3leWxd3v6pNU0d0zBFUVs2CAzo9+QOwe7OBFvSXoLAMishj+
-         YvvKX74lnU0cYg0e/rBMc9f6X94knlPkzC+nbdaXVYhvOlJb6QnHNnKJfl1YuCDz0n3q
-         TorXluhLo+htNGId/LDdL10K/fNwE+Eqh0t0w5opbUSYNxrTUOnbU1iUlC+DkltsTThi
-         deBQ==
-X-Gm-Message-State: AAQBX9fXSLCeHozh3bloKM+gQkw79KrJ7uP5YHUVQzIVQcbH7pgdrYDg
-        v9IWO/1qZXK5ZyB8v9UQPbk=
-X-Google-Smtp-Source: AKy350ZbqJ5bWa5cYv9CC7e5p+ddl8jNr2E7cZsF9uwQaXkZpYUWcK/uhYIyXxjjItA4CApD+jtVZg==
-X-Received: by 2002:a7b:c44a:0:b0:3eb:42fc:fb30 with SMTP id l10-20020a7bc44a000000b003eb42fcfb30mr1976459wmi.32.1681396892661;
-        Thu, 13 Apr 2023 07:41:32 -0700 (PDT)
-Received: from [192.168.1.10] ([95.43.220.235])
-        by smtp.googlemail.com with ESMTPSA id n21-20020a7bc5d5000000b003e91b9a92c9sm1995217wmk.24.2023.04.13.07.41.31
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 13 Apr 2023 07:41:32 -0700 (PDT)
-Subject: Re: Motorola Droid 4 -- Stopping charger when battery is full
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     kernel list <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-omap@vger.kernel.org, tony@atomide.com, sre@kernel.org,
-        nekit1000@gmail.com, mpartap@gmx.net, merlijn@wizzup.org,
-        martin_rysavy@centrum.cz, phone-devel@vger.kernel.org,
-        maemo-leste@lists.dyne.org
-References: <ZAcvuP8kmWveLoE/@duo.ucw.cz>
- <ef4409b2-abd8-0eac-f66e-6858c3358cc1@gmail.com>
- <ZDfMlfVDdSm8mXs0@duo.ucw.cz>
-From:   Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-Message-ID: <6f3eb1b9-f6b8-f980-8fac-27b32bc1b7e6@gmail.com>
-Date:   Thu, 13 Apr 2023 17:41:23 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Firefox/60.0 Thunderbird/60.6.1
+        d=1e100.net; s=20221208; t=1681397023; x=1683989023;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Eeh91nWUJjVxzujFyKecjRMcqdUP/e5Kpsx1SGaM6Cg=;
+        b=T+aA/OL2llb/WCZ/ZOjHhpXmzc0Y9pUUSwUkKE8d2A/XV+XkD71VM56pUCZlSxesGB
+         0HCl0q28/trFR+Yr4/43tIJ9dx4FUUQ5B7GFbD9swu/7QlemLLoxZFz2JdAUO1gNTwNf
+         F9a9RnDdi+lDqZRohQz/g0QYy8erk9s+pO982nxgSixWu3na1H8K1TtVo/wJKetxu6WQ
+         yvKWl769CbstE791PoDaT7qNnU4iNZjTTNEjfVoU8Hpm5d4STSGHr9bzL6qkbk5MY7uY
+         oaTUlIc4Ev0cS4cfga2amHZdpTjr8V+Ig+WowOwryQ+GyhvjMW9SEEPT55R0jW1U9e0Z
+         QJag==
+X-Gm-Message-State: AAQBX9dMI1VUBKq+kShmYs6q15YDJijuaC0tIgoG3hGLvlHen19O1jXf
+        G/ItcgKNxUGzO8EEeEG91jg=
+X-Google-Smtp-Source: AKy350ZavVP0wGsAyJ9u6DNYBZAMvG5os9XiGqZLvy2/rsOf464i5nwJTV0qpUWGIw0azEkyy8x+5w==
+X-Received: by 2002:a05:6102:3a70:b0:412:4816:6cc3 with SMTP id bf16-20020a0561023a7000b0041248166cc3mr932227vsb.17.1681397023495;
+        Thu, 13 Apr 2023 07:43:43 -0700 (PDT)
+Received: from localhost.localdomain ([98.58.151.237])
+        by smtp.googlemail.com with ESMTPSA id w14-20020ab05a8e000000b00771d1670401sm223637uae.35.2023.04.13.07.43.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 07:43:43 -0700 (PDT)
+From:   John Clark <inindev@gmail.com>
+To:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Peter Geis <pgwipeout@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        John Clark <inindev@gmail.com>
+Subject: [PATCH] arm64: dts: rockchip: Add pinctrl gpio-ranges for rk356x
+Date:   Thu, 13 Apr 2023 10:43:16 -0400
+Message-Id: <20230413144316.4247-1-inindev@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-In-Reply-To: <ZDfMlfVDdSm8mXs0@duo.ucw.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Language: en-GB
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add gpio-range properties to the pinctrl gpio nodes in rk356x.dtsi
 
+Signed-off-by: John Clark <inindev@gmail.com>
+---
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-On 13.04.23 г. 12:34 ч., Pavel Machek wrote:
-> Hi!
-> 
->>> I complained that "battery life is very poor" with leste. It seems to
->>> be combination of several factors.
->>>
->>> 1) I was using very old battery
->>>
->>> 2) My charger is detected as "USB", not as "AC"
->>>
->>
->> And this is because there is no working charger detection in the driver, so
->> initial current limit is hard-coded to 500mA.
-> 
-> Aha, thanks, makes sense.
-> 
->>> According to my measurements "CPCAP_REG_CRM_FET_OVRD |
->>> CPCAP_REG_CRM_FET_CTRL" results in battery discharding and 0A drawn
->>> frmo the USB.  "CPCAP_REG_CRM_FET_OVRD" is phone powered from USB,
->>> with battery more or less disconnected (<12mA), which is what we want
->>> in battery full situation.
->>>
->>
->> What will happen if phone needs to draw more than N mA (N is the set charger
->> current limit)?
-> 
-> We may run over the limit, AFAICT. I guess one solution would be to
-> only do this when limit is high enough...
-> 
-> With current setup, phone will not boot if battery is empty, so this
-> needs quite urgent solution.
-> 
-> I updated my leste, and now have:
-> 
-> user@devuan-droid4:~/g/droid4-linux$ uname -a
-> Linux devuan-droid4 6.1.9 #1 SMP PREEMPT Mon Mar 20 15:16:53 UTC 2023 armv7l GNU/Linux
-> user@devuan-droid4:~/g$ apt show linux-image-omap
-> Package: linux-image-omap
-> Version: 6.1.8.0-1+m7
-> 
-> Where can I find corresponding sources?
-> 
+diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+index 802fcc96384e..793dbcb981dc 100644
+--- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+@@ -1796,11 +1796,11 @@ usb2phy1_otg: otg-port {
+ 
+ 	pinctrl: pinctrl {
+ 		compatible = "rockchip,rk3568-pinctrl";
++		ranges;
+ 		rockchip,grf = <&grf>;
+ 		rockchip,pmu = <&pmugrf>;
+ 		#address-cells = <2>;
+ 		#size-cells = <2>;
+-		ranges;
+ 
+ 		gpio0: gpio@fdd60000 {
+ 			compatible = "rockchip,gpio-bank";
+@@ -1808,6 +1808,7 @@ gpio0: gpio@fdd60000 {
+ 			interrupts = <GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&pmucru PCLK_GPIO0>, <&pmucru DBCLK_GPIO0>;
+ 			gpio-controller;
++			gpio-ranges = <&pinctrl 0 0 32>;
+ 			#gpio-cells = <2>;
+ 			interrupt-controller;
+ 			#interrupt-cells = <2>;
+@@ -1819,6 +1820,7 @@ gpio1: gpio@fe740000 {
+ 			interrupts = <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO1>, <&cru DBCLK_GPIO1>;
+ 			gpio-controller;
++			gpio-ranges = <&pinctrl 0 32 32>;
+ 			#gpio-cells = <2>;
+ 			interrupt-controller;
+ 			#interrupt-cells = <2>;
+@@ -1830,6 +1832,7 @@ gpio2: gpio@fe750000 {
+ 			interrupts = <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO2>, <&cru DBCLK_GPIO2>;
+ 			gpio-controller;
++			gpio-ranges = <&pinctrl 0 64 32>;
+ 			#gpio-cells = <2>;
+ 			interrupt-controller;
+ 			#interrupt-cells = <2>;
+@@ -1841,6 +1844,7 @@ gpio3: gpio@fe760000 {
+ 			interrupts = <GIC_SPI 36 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO3>, <&cru DBCLK_GPIO3>;
+ 			gpio-controller;
++			gpio-ranges = <&pinctrl 0 96 32>;
+ 			#gpio-cells = <2>;
+ 			interrupt-controller;
+ 			#interrupt-cells = <2>;
+@@ -1852,6 +1856,7 @@ gpio4: gpio@fe770000 {
+ 			interrupts = <GIC_SPI 37 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&cru PCLK_GPIO4>, <&cru DBCLK_GPIO4>;
+ 			gpio-controller;
++			gpio-ranges = <&pinctrl 0 128 32>;
+ 			#gpio-cells = <2>;
+ 			interrupt-controller;
+ 			#interrupt-cells = <2>;
+-- 
+2.39.2
 
-https://github.com/maemo-leste/droid4-linux/tree/maemo-6.1.y
-
-> Best regards,
-> 							Pavel
-> 
