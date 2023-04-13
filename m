@@ -2,141 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C8DF6E0B5F
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 12:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC6BF6E0B61
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 12:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230354AbjDMKZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 06:25:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43822 "EHLO
+        id S230364AbjDMK0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 06:26:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbjDMKZw (ORCPT
+        with ESMTP id S229733AbjDMK0a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 06:25:52 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE8E1BDA
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:25:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1681381551; x=1712917551;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=d6JkhJi3GMEJETeLt5/QwiarVzJRP85qpRFbz9J6gCU=;
-  b=vMHv2FaciUmkn1vu+sfN31hxTAYDuCGD159kL/jgV/nA2cL37seGvwTv
-   4F+pr9/46XFfSJTiPV14jevd2Z4fw1htUbtRMGMnmJfw4r0swBXbkG9wP
-   dyhkTM9IMduS2omNPmH4l1vzLtOMPKbnX8lUvfGXNGFWAK9VoLMEEuGNO
-   AplcLH11d37KoTTQ+8LNbST46HJWShpRp2tuod2yMrvpBxCZtd8r82C01
-   tIM/qu3JbOc2XJJnJiUFRwcZ7taAvOFmJ2GSLKf/a2dhlzhCwx8gunVPR
-   YnY4fGftjk/mF9Hym7n5rZpozO9TDHdwWZmxrviBcovWJHYr5tWw6dE2J
-   g==;
-X-IronPort-AV: E=Sophos;i="5.98,341,1673938800"; 
-   d="asc'?scan'208";a="220709105"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Apr 2023 03:25:50 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 13 Apr 2023 03:25:50 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Thu, 13 Apr 2023 03:25:48 -0700
-Date:   Thu, 13 Apr 2023 11:25:33 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Pierre Gondois <pierre.gondois@arm.com>
-CC:     <linux-kernel@vger.kernel.org>, Radu Rendec <rrendec@redhat.com>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Will Deacon <will@kernel.org>, Conor Dooley <conor@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v3 3/4] arch_topology: Remove early cacheinfo error
- message
-Message-ID: <20230413-craving-frying-59031194587e@wendy>
-References: <20230413091436.230134-1-pierre.gondois@arm.com>
- <20230413091436.230134-4-pierre.gondois@arm.com>
- <20230413-prudishly-unruly-090f5297fd54@wendy>
+        Thu, 13 Apr 2023 06:26:30 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC19319A3
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:26:28 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id d8-20020a05600c3ac800b003ee6e324b19so7733134wms.1
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:26:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1681381587; x=1683973587;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KDoTnfAPlRpqj9SVoAm5XkfAd7cBOc+KN2V9nzTfi7U=;
+        b=WpmoMmP6omfYtz0mpP8foZEOC0LazqvAJaHLmfCtRSAHUKDtUa//oK5DsjN2JIT/W5
+         95Ig7TlPcDsgiblYuSI2T1pGivEduJKz3qZ4P5XfyJzxndekrcIH1CkMHO0Mfr1oxlLX
+         lX0isxo9TSiHPFwcWDDTskf77pkBYV2U7OifEEkX0BPINNMv+CPOGIeraVH74NSPNbPz
+         7LZWqcJ7jUhsHdrGPgkqXQVMRhGZLet25k0OQACfknlFzkg2gZqnPcXZj4LI3t3aoL6J
+         kyUvpXFa2I8fvnyA5rMj6dQy5skEPGkvTiNF0VFn42OnfnVrzNt2BXYSz4a6FRt4Rj1A
+         q0Lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681381587; x=1683973587;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KDoTnfAPlRpqj9SVoAm5XkfAd7cBOc+KN2V9nzTfi7U=;
+        b=kFdYnGWA+qBfdjPCOmfbNmy8qh6hZXhzQ0CQCcInlAypoMZuSLlMA7gCw4CDh/C7EW
+         BC1/VLiWwDrfAD+EezXA38NeDDGhK/65CFg4lc088xsIAR5IjqQSDm062m7XrbrYQ6ro
+         BrOqICW5kelOQHlACw2X3jq5KB3LIZmkYXdjbf7hVPr9tDi5WNiSh/vtrF0UWEAAEGUe
+         BuFR6CODYTiY6ezkSydNoiIuhXr79IObBB3THx6n81oWVEZ6dm/orkdRhynta1e7JDC5
+         UOMIu8359laPfE5wm6O3CdgaPUC1uTovDmMmlgyrlnlL8Vl+JHOpd7ev23zn2cmR6LQF
+         F6Mw==
+X-Gm-Message-State: AAQBX9dp2KAYBy8pwXoe1HIQ8bdrudfuaz7hia2PxzjCUhBHvq1gQzRK
+        DtlJKdoMtKC+u7b/rO3Y0sbH9w==
+X-Google-Smtp-Source: AKy350ZRW2tsRDshWcYK17C407S/zMegRhx3B/kgDnrMme1klwI16DO4YDeCUxZkt3ratZA/9Enh9g==
+X-Received: by 2002:a7b:c309:0:b0:3f0:967e:2cfb with SMTP id k9-20020a7bc309000000b003f0967e2cfbmr1516961wmj.36.1681381587182;
+        Thu, 13 Apr 2023 03:26:27 -0700 (PDT)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id f16-20020a05600c155000b003f0a1c18128sm2352260wmg.29.2023.04.13.03.26.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 03:26:26 -0700 (PDT)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>
+Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Naresh Solanki <Naresh.Solanki@9elements.com>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org
+Subject: [PATCH v4] leds: max597x: Add support for max597x
+Date:   Thu, 13 Apr 2023 12:26:23 +0200
+Message-Id: <20230413102624.3561299-1-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="NuMYozQbxtD4g1AB"
-Content-Disposition: inline
-In-Reply-To: <20230413-prudishly-unruly-090f5297fd54@wendy>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---NuMYozQbxtD4g1AB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-On Thu, Apr 13, 2023 at 11:02:49AM +0100, Conor Dooley wrote:
-> On Thu, Apr 13, 2023 at 11:14:33AM +0200, Pierre Gondois wrote:
-> > fetch_cache_info() tries to get the number of cache leaves/levels
-> > for each CPU in order to pre-allocate memory for cacheinfo struct.
-> > Allocating this memory later triggers a:
-> >   'BUG: sleeping function called from invalid context'
-> > in PREEMPT_RT kernels.
-> >=20
-> > If there is no cache related information available in DT or ACPI,
-> > fetch_cache_info() fails and an error message is printed:
-> >   'Early cacheinfo failed, ret =3D ...'
-> >=20
-> > Not having cache information should be a valid configuration.
-> > Remove the error message if fetch_cache_info() fails.
-> >=20
-> > Suggested-by: Conor Dooley <conor@kernel.org>
->=20
-> Not that it really matters for suggested-by, and there's no way really
-> for you to know, but the corporate overlords prefer:
-> s/conor@kernel.org/conor.dooley@microchip.com/
->=20
-> > Link: https://lore.kernel.org/all/20230404-hatred-swimmer-6fecdf33b57a@=
-spud/
-> > Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
-> > ---
-> >  drivers/base/arch_topology.c | 4 +---
-> >  1 file changed, 1 insertion(+), 3 deletions(-)
-> >=20
-> > diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-> > index b1c1dd38ab01..1f071eaede5b 100644
-> > --- a/drivers/base/arch_topology.c
-> > +++ b/drivers/base/arch_topology.c
-> > @@ -843,10 +843,8 @@ void __init init_cpu_topology(void)
-> > =20
-> >  	for_each_possible_cpu(cpu) {
-> >  		ret =3D fetch_cache_info(cpu);
-> > -		if (ret) {
-> > -			pr_err("Early cacheinfo failed, ret =3D %d\n", ret);
->=20
-> Hmm do you really want to remove the print altogether? This can fail
-> with -EINVAL and -ENOMEM too, so should we just check for
-> | if (ret && ret !=3D -ENOENT)
-> instead, since in the other cases it really did fail?
+max597x is hot swap controller with indicator LED support.
+This driver uses DT property to configure led during boot time &
+also provide the LED control in sysfs.
 
-To save Sudeep (potentially) waiting for me when you resubmit, with that
-change:
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+DTS example:
+    i2c {
+        #address-cells = <1>;
+        #size-cells = <0>;
+        regulator@3a {
+            compatible = "maxim,max5978";
+            reg = <0x3a>;
+            vss1-supply = <&p3v3>;
 
-Thanks,
-Conor.
+            regulators {
+                sw0_ref_0: sw0 {
+                    shunt-resistor-micro-ohms = <12000>;
+                };
+            };
 
---NuMYozQbxtD4g1AB
-Content-Type: application/pgp-signature; name="signature.asc"
+            leds {
+                #address-cells = <1>;
+                #size-cells = <0>;
+                led@0 {
+                    reg = <0>;
+                    label = "led0";
+                    default-state = "on";
+                };
+                led@1 {
+                    reg = <1>;
+                    label = "led1";
+                    default-state = "on";
+                };
+            };
+        };
+    };
 
------BEGIN PGP SIGNATURE-----
+Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+...
+Changes in V4:
+- Remove unwanted preinitialise
+- Remove unneeded line breaks
+- Fix variable name to avoid confusion
+- Update module description to mention LED driver.
+Changes in V3:
+- Remove of_node_put as its handled by for loop
+- Print error if an LED fails to register.
+- Update driver name in Kconfig description
+- Remove unneeded variable assignment
+- Use devm_led_classdev_register to reget led
+Changes in V2:
+- Fix regmap update
+- Remove devm_kfree
+- Remove default-state
+- Add example dts in commit message
+- Fix whitespace in Kconfig
+- Fix comment
+---
+ drivers/leds/Kconfig        |  11 ++++
+ drivers/leds/Makefile       |   1 +
+ drivers/leds/leds-max597x.c | 112 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 124 insertions(+)
+ create mode 100644 drivers/leds/leds-max597x.c
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZDfYnAAKCRB4tDGHoIJi
-0nCwAP9e/l8OWTM6GRkGSd3WYkQ98acDHJfajdQxbnSWhfQ/igD/W5RJ/6hdRCqc
-17eqZzM0ihZNHC5RNuUIvkW81Vr5XgE=
-=ZGoq
------END PGP SIGNATURE-----
+diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
+index 9dbce09eabac..60004cb8c257 100644
+--- a/drivers/leds/Kconfig
++++ b/drivers/leds/Kconfig
+@@ -590,6 +590,17 @@ config LEDS_ADP5520
+ 	  To compile this driver as a module, choose M here: the module will
+ 	  be called leds-adp5520.
+ 
++config LEDS_MAX597X
++	tristate "LED Support for Maxim 597x"
++	depends on LEDS_CLASS
++	depends on MFD_MAX597X
++	help
++	  This option enables support for the Maxim MAX5970 & MAX5978 smart
++	  switch indication LEDs via the I2C bus.
++
++	  To compile this driver as a module, choose M here: the module will
++	  be called leds-max597x.
++
+ config LEDS_MC13783
+ 	tristate "LED Support for MC13XXX PMIC"
+ 	depends on LEDS_CLASS
+diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
+index d30395d11fd8..da1192e40268 100644
+--- a/drivers/leds/Makefile
++++ b/drivers/leds/Makefile
+@@ -53,6 +53,7 @@ obj-$(CONFIG_LEDS_LP8501)		+= leds-lp8501.o
+ obj-$(CONFIG_LEDS_LP8788)		+= leds-lp8788.o
+ obj-$(CONFIG_LEDS_LP8860)		+= leds-lp8860.o
+ obj-$(CONFIG_LEDS_LT3593)		+= leds-lt3593.o
++obj-$(CONFIG_LEDS_MAX597X)		+= leds-max597x.o
+ obj-$(CONFIG_LEDS_MAX77650)		+= leds-max77650.o
+ obj-$(CONFIG_LEDS_MAX8997)		+= leds-max8997.o
+ obj-$(CONFIG_LEDS_MC13783)		+= leds-mc13783.o
+diff --git a/drivers/leds/leds-max597x.c b/drivers/leds/leds-max597x.c
+new file mode 100644
+index 000000000000..8f34bbca7f21
+--- /dev/null
++++ b/drivers/leds/leds-max597x.c
+@@ -0,0 +1,112 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Device driver for leds in MAX5970 and MAX5978 IC
++ *
++ * Copyright (c) 2022 9elements GmbH
++ *
++ * Author: Patrick Rudolph <patrick.rudolph@9elements.com>
++ */
++
++#include <linux/leds.h>
++#include <linux/mfd/max597x.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
++#include <linux/regmap.h>
++
++#define ldev_to_maxled(c)       container_of(c, struct max597x_led, cdev)
++
++struct max597x_led {
++	struct regmap *regmap;
++	struct led_classdev cdev;
++	unsigned int index;
++};
++
++static int max597x_led_set_brightness(struct led_classdev *cdev,
++				      enum led_brightness brightness)
++{
++	struct max597x_led *ddata = ldev_to_maxled(cdev);
++	int ret, val;
++
++	if (!ddata->regmap)
++		return -ENODEV;
++
++	/* Set/Clear corresponding bit for given led index */
++	val = !brightness ? BIT(ddata->index) : 0;
++	ret = regmap_update_bits(ddata->regmap, MAX5970_REG_LED_FLASH, BIT(ddata->index), val);
++	if (ret < 0)
++		dev_err(cdev->dev, "failed to set brightness %d", ret);
++	return ret;
++}
++
++static int max597x_setup_led(struct device *dev, struct regmap *regmap, struct device_node *nc,
++			     u32 reg)
++{
++	struct max597x_led *ddata;
++	int ret;
++
++	ddata = devm_kzalloc(dev, sizeof(struct max597x_led), GFP_KERNEL);
++	if (!ddata)
++		return -ENOMEM;
++
++	if (of_property_read_string(nc, "label", &ddata->cdev.name))
++		ddata->cdev.name = nc->name;
++
++	ddata->cdev.max_brightness = 1;
++	ddata->cdev.brightness_set_blocking = max597x_led_set_brightness;
++	ddata->cdev.default_trigger = "none";
++	ddata->index = reg;
++	ddata->regmap = regmap;
++	ret = devm_led_classdev_register(dev, &ddata->cdev);
++	if (ret)
++		dev_err(dev, "Error initializing LED %s", ddata->cdev.name);
++
++	return ret;
++}
++
++static int max597x_led_probe(struct platform_device *pdev)
++{
++	struct device_node *np = dev_of_node(pdev->dev.parent);
++	struct regmap *regmap;
++	struct device_node *led_node;
++	struct device_node *child;
++	int ret = 0;
++
++	regmap = dev_get_regmap(pdev->dev.parent, NULL);
++	if (!regmap)
++		return -EPROBE_DEFER;
++
++	led_node = of_get_child_by_name(np, "leds");
++	if (!led_node)
++		return -ENODEV;
++
++	for_each_available_child_of_node(led_node, child) {
++		u32 reg;
++
++		if (of_property_read_u32(child, "reg", &reg))
++			continue;
++
++		if (reg >= MAX597X_NUM_LEDS) {
++			dev_err(&pdev->dev, "invalid LED (%u >= %d)\n", reg,
++				MAX597X_NUM_LEDS);
++			continue;
++		}
++
++		ret = max597x_setup_led(&pdev->dev, regmap, child, reg);
++		if (ret < 0)
++			dev_err(&pdev->dev, "Failed to initialize LED %u\n", reg);
++	}
++
++	return ret;
++}
++
++static struct platform_driver max597x_led_driver = {
++	.driver = {
++		.name = "max597x-led",
++	},
++	.probe = max597x_led_probe,
++};
++
++module_platform_driver(max597x_led_driver);
++MODULE_AUTHOR("Patrick Rudolph <patrick.rudolph@9elements.com>");
++MODULE_DESCRIPTION("MAX5970_hot-swap controller LED driver");
++MODULE_LICENSE("GPL");
 
---NuMYozQbxtD4g1AB--
+base-commit: 11e572d06c23d61683e20a98bd16f550ef17ac65
+prerequisite-patch-id: 456044abe991b2ff3b521d337825432789d71b29
+-- 
+2.39.1
+
