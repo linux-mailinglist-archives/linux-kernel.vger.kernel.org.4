@@ -2,89 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31D376E122E
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:24:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D28E6E1230
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:24:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbjDMQYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 12:24:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33654 "EHLO
+        id S230147AbjDMQYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 12:24:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbjDMQYD (ORCPT
+        with ESMTP id S230131AbjDMQYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 12:24:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB07A243
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:24:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C22CE60B2B
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 16:24:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E45EAC433D2;
-        Thu, 13 Apr 2023 16:23:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681403041;
-        bh=0QBSOSsFxyYPkRFs0LrG48A5TdQZmpspoIRiqn2doL0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S+LOmdTJPxOAUqVODueDkeGiPdbckmrlsLPz678m6x3CZNAwrzfZftEjLsVPDqTXg
-         SbowcuHGMFgJipj8zImC/yPJ6ydGs5esOYGEo/g2YOeb5bope+L6cZHRw043NXxU7B
-         Ax4PbN4H5IoDbIUyaT1OeC/z0m77E8r6IL56IyVgdAsIEggj95G/d6hnbxgbVS6iLA
-         YZu6/ZJQpgM6Rai8eDS8hEs89KUH7zv5jUc7b7fWWfXge/nL1pAbzFQV3kcVYxoVgy
-         Q+rIJYcy/8u6ieXa00WD2T293WS82SCFj6B2Hr6oYGPgOr5+t7Ar85+02H2AmnHkfx
-         0aagkGweJNL5w==
-Date:   Thu, 13 Apr 2023 17:23:56 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Pierre Gondois <pierre.gondois@arm.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        linux-kernel@vger.kernel.org, Radu Rendec <rrendec@redhat.com>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Will Deacon <will@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v3 3/4] arch_topology: Remove early cacheinfo error
- message
-Message-ID: <20230413-proving-carport-cbd5188e573b@spud>
-References: <20230413091436.230134-1-pierre.gondois@arm.com>
- <20230413091436.230134-4-pierre.gondois@arm.com>
- <20230413-prudishly-unruly-090f5297fd54@wendy>
- <78419d88-1114-e58e-aeec-6a991a8fdb37@arm.com>
+        Thu, 13 Apr 2023 12:24:17 -0400
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43806A5ED
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:24:14 -0700 (PDT)
+Received: from mail.panix.com (localhost [127.0.0.1])
+        by mailbackend.panix.com (Postfix) with ESMTPA id 4Py4f40vJzz4Nr7;
+        Thu, 13 Apr 2023 12:24:12 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+        t=1681403052; bh=f0+jlX/rdABvKTEWjC1C1HcKJCp0LgDbRDXkroLCAb8=;
+        h=In-Reply-To:References:Date:Subject:From:To:Cc;
+        b=h76lDEg0sRQ4cO6vBJ6SUCEuRmhlvg3FkbVuZtjLebQ5sH0ki0XA/QpaXwCiyYdl3
+         OzyV6yOm0aYrlyxxWT1UQZ0VgaoFyB1/XxW43DGE1E9fMFFdp3pZrx9U8pzRH3MNyt
+         t8oaowB6lnsLO33WNZmrjpDbsXQy9oqGvF9buU2s=
+X-Panix-Received: from 166.84.1.3
+        (SquirrelMail authenticated user pa@panix.com)
+        by mail.panix.com with HTTP;
+        Thu, 13 Apr 2023 12:24:12 -0400
+Message-ID: <ae5f6784c72e1b31cdf7766d3c6dbe0c.squirrel@mail.panix.com>
+In-Reply-To: <87o7nsuumt.fsf@minerva.mail-host-address-is-not-set>
+References: <20230412150225.3757223-1-javierm@redhat.com>
+    <2e07f818ccdff7023a060e732d7c4ef6.squirrel@mail.panix.com>
+    <87jzyhror0.fsf@minerva.mail-host-address-is-not-set>
+    <beeff0335ab4cc244d214a7baadba371.squirrel@mail.panix.com>
+    <CAFOAJEdKBUg91pDmNYYw5xigUxjifBgOLz2YgD+xQ+WyEy=V2w@mail.gmail.com>
+    <1afd3044c2aca9322ecf304941c7df66.squirrel@mail.panix.com>
+    <87fs94stgw.fsf@minerva.mail-host-address-is-not-set>
+    <87cz48srs4.fsf@minerva.mail-host-address-is-not-set>
+    <40edb0fdb0eaff434f4872dd677923a6.squirrel@mail.panix.com>
+    <87a5zcsqg8.fsf@minerva.mail-host-address-is-not-set>
+    <9e6fff69b09b36cbdd96499cd0015154.squirrel@mail.panix.com>
+    <4PxhQn3zK1zcbc@panix1.panix.com>
+    <87o7nsuumt.fsf@minerva.mail-host-address-is-not-set>
+Date:   Thu, 13 Apr 2023 12:24:12 -0400
+Subject: Re: [PATCH] firmware/sysfb: Fix wrong stride when bits-per-pixel is
+ calculated
+From:   "Pierre Asselin" <pa@panix.com>
+To:     "Javier Martinez Canillas" <javierm@redhat.com>
+Cc:     "Pierre Asselin" <pa@panix.com>, tzimmermann@suse.de,
+        linux-kernel@vger.kernel.org, jfalempe@redhat.com,
+        hdegoede@redhat.com, dri-devel@lists.freedesktop.org,
+        daniel.vetter@ffwll.ch, ardb@kernel.org
+User-Agent: SquirrelMail/1.4.23-p1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="+eOzTgcwHz5xj5a4"
-Content-Disposition: inline
-In-Reply-To: <78419d88-1114-e58e-aeec-6a991a8fdb37@arm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
+X-Priority: 3 (Normal)
+Importance: Normal
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> pa@panix.com (Pierre Asselin) writes:
+>
+>> After careful reading of the comments in f35cd3fa7729, would this
+>> be an appropriate fix ?  Does it still address all the issues raised
+>> by Thomas ?
+>>
+>> (not tested)
+>>
+>> diff --git a/drivers/firmware/sysfb_simplefb.c
+>> b/drivers/firmware/sysfb_simplefb.c
+>> index 82c64cb9f531..9f5299d54732 100644
+>> --- a/drivers/firmware/sysfb_simplefb.c
+>> +++ b/drivers/firmware/sysfb_simplefb.c
+>> @@ -56,10 +56,11 @@ __init bool sysfb_parse_mode(const struct
+>> screen_info *si,
+>>  	 * don't specify alpha channels.
+>>  	 */
+>>  	if (si->lfb_depth > 8) {
+>> -		bits_per_pixel = max(max3(si->red_size + si->red_pos,
+>> +		bits_per_pixel = max3(max3(si->red_size + si->red_pos,
+>>  					  si->green_size + si->green_pos,
+>>  					  si->blue_size + si->blue_pos),
+>> -				     si->rsvd_size + si->rsvd_pos);
+>> +				     si->rsvd_size + si->rsvd_pos,
+>> +				     si->lfb_depth);
 
---+eOzTgcwHz5xj5a4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Thu, Apr 13, 2023 at 05:25:25PM +0200, Pierre Gondois wrote:
+> I would defer to Thomas but personally I don't like it. Seems to me that
+> this is getting too complicated just to workaround buggy BIOS that are not
+> reporting consistent information about their firmware-provided
+> framebuffer.
 
-> Is it ok to do this and keep your Reviewed-by ?
+Okay, but remember, this is a regression.  The buggy BIOSes were there
+the whole time and the old code that matched f->bits_per_pixel against
+si->lfb_depth used to work against these buggy BIOSes.
 
-Yah, should be grand chief.
+And is it a bug, or is it an underspecified standard ?  "These bits aren't
+reserved, we just ignore them" or some such.
 
---+eOzTgcwHz5xj5a4
-Content-Type: application/pgp-signature; name="signature.asc"
+My reading of Thomas' comments in the code was that sometimes lfb_depth
+was reported too small but never too large ?  But I'm not sure.  It's
+true in my two cases.
 
------BEGIN PGP SIGNATURE-----
+> I would either trust the pixel channel information (what Thomas patch did)
+> + my patch to calculate the stride (since we can't trust the line lenght
+> which is based on the reported depth) + a DMI table for broken machines.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZDgsnAAKCRB4tDGHoIJi
-0jxLAP0Vc/xwI8EXMVSiMgFaFFebqsFnzHP9Dh33+KE3/X0V4gEAhC07zYnpcZzm
-WTst17jFGKfeXCTbl7DvlM29ar+6ggA=
-=0TMD
------END PGP SIGNATURE-----
+> But that will only work if your systems are the exception and not a common
+> issue, otherwise then Thomas' approach won't work if there are too many
+> buggy BIOS out there.
 
---+eOzTgcwHz5xj5a4--
+The laptop is ancient but the Dell tower is maybe 4 years old.  The
+BIOS is 09/11/2019 according to dmidecode, and the most recent for
+this box.
+
+> Another option is to do the opposite, not calculate a BPP using the pixel
+> and then use that value to calculate a new stride, but instead assume that
+> the lfb_linelength is correct and use that to calculate the BPP.
+
+Or reject (some) inconsistencies in the struct screen_info and return
+false, so the kernel falls back to e.g. vesa ?
+
+> Something like the following patch, which should also fix your regression
+> and may be enough to address Thomas' concerns of inconsistent depths too?
+
+I'll try that patch.
+
+
