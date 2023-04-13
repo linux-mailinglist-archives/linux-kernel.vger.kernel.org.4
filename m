@@ -2,74 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA50D6E118A
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 17:57:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 715496E1186
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 17:57:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231400AbjDMP5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 11:57:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40746 "EHLO
+        id S231480AbjDMP5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 11:57:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231549AbjDMP5m (ORCPT
+        with ESMTP id S231400AbjDMP53 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 11:57:42 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC15B443;
-        Thu, 13 Apr 2023 08:57:35 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33DFtiAS023380;
-        Thu, 13 Apr 2023 15:57:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=lgGwJBcQMhBKAkSJFoI9V99IVAmxurpS1N+u/QL3rq0=;
- b=ZL7n0yBY0Oge0sb3gRwX5qqw0zD+xz4ENG2rLhi/pbeAj6pO7sFQyAUWftzL8KpJXCUk
- Ogb0x/jcUuYyM2mBbomDJGTO/ZVDF+l+5uqTUy3f30skfJ4lVfwaD94/kHpMlOpwPy30
- UBzbiJof1X9wEqxWhDnTDm/EKaIfJJs9liDXe09A+JTjYpmjrJpYqilRb6Fqo1pB7diu
- sFEIRUUYmVCFCjbswdBxdASJEsr6dyblsf/mfCST5zrxbZlfE9UZrRB6hCdo5XXmmRMm
- Uo2aGYulZ8aCj71YKuAsynslIS7tpb+lOv7Vfbhxsr1C3kcVAvJFO6JHt1c37Z8MMJHd CA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3px6cnhscp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Apr 2023 15:57:27 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33DFvQPF030062
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Apr 2023 15:57:26 GMT
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 13 Apr 2023 08:56:56 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
-        <airlied@gmail.com>, <agross@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <andersson@kernel.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_khsieh@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] drm/msm/dpu: always program dsc active bits
-Date:   Thu, 13 Apr 2023 08:56:41 -0700
-Message-ID: <1681401401-15099-1-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Thu, 13 Apr 2023 11:57:29 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA3C49EE3
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 08:57:07 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 87E0E1FD66;
+        Thu, 13 Apr 2023 15:57:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1681401426; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NBwi1yRHBm7pRIVPlzb249OVTEmSayyMyhLtJn+ArrA=;
+        b=CUweODYTGOIMHVCOupHphoWQ0ETaktxHpBgU6Ibi1F/ZJCPq5OfGoNtIpJj9Q7rBpRAbeU
+        NwHBtb/yukXJibosGLc5mME+EWYXWWOeLfo2YWOGbNn07xsKGtW9+hkhF0E3T2ZefOC6OP
+        t8xGIEFx40wUBKn/GD7a8mmdMqO2Sts=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1681401426;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NBwi1yRHBm7pRIVPlzb249OVTEmSayyMyhLtJn+ArrA=;
+        b=pTMkRK3qn3QZVqPupNg25NrlA0FdK6eSFbdgToYQYhc356j1NpFCldsVdWiUDp/vtcV3YW
+        rZA7cg0tZoWGxpCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6B99213421;
+        Thu, 13 Apr 2023 15:57:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id VetAGlImOGT1aQAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 13 Apr 2023 15:57:06 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id A54A7A0732; Thu, 13 Apr 2023 17:57:05 +0200 (CEST)
+Date:   Thu, 13 Apr 2023 17:57:05 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     Jan Kara <jack@suse.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] quota: remove PRINT_QUOTA_WARNING support
+Message-ID: <20230413155705.cgmkdveu6gw7f7ii@quack3>
+References: <20230413144557.20700-1-frank.li@vivo.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: XqA7GVMGZUGk30xcLzuG4raDxlmGBVUj
-X-Proofpoint-GUID: XqA7GVMGZUGk30xcLzuG4raDxlmGBVUj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-13_10,2023-04-13_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=894
- priorityscore=1501 adultscore=0 mlxscore=0 malwarescore=0 suspectscore=0
- phishscore=0 impostorscore=0 spamscore=0 bulkscore=0 lowpriorityscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304130142
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230413144557.20700-1-frank.li@vivo.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,44 +69,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In current code, the DSC active bits are written only if cfg->dsc is set.
-However, for displays which are hot-pluggable, there can be a use-case
-of disconnecting a DSC supported sink and connecting a non-DSC sink.
+On Thu 13-04-23 22:45:57, Yangtao Li wrote:
+> It's deprecated since commit 8e8934695dfd ("quota: send messages
+> via netlink"), so let's remove it. User should use notification via
+> netlink socket instead.
+> 
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
-For those cases we need to clear DSC active bits during tear down.
+Yeah, but frankly I'm not sure whether there are not people still relying
+on this. In particular distributions still seem to enable this config
+option in their kernels. So rather than removing this config right away, we
+could maybe make it depend on CONFIG_BROKEN and see who complains...
 
-Changes in V2:
-1) correct commit text as suggested
-2) correct Fixes commit id
-3) add FIXME comment
+								Honza
 
-Fixes: 77f6da90487c ("drm/msm/disp/dpu1: Add DSC support in hw_ctl")
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-index bbdc95c..1651cd7 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-@@ -541,10 +541,10 @@ static void dpu_hw_ctl_intf_cfg_v1(struct dpu_hw_ctl *ctx,
- 	if (cfg->merge_3d)
- 		DPU_REG_WRITE(c, CTL_MERGE_3D_ACTIVE,
- 			      BIT(cfg->merge_3d - MERGE_3D_0));
--	if (cfg->dsc) {
--		DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, DSC_IDX);
--		DPU_REG_WRITE(c, CTL_DSC_ACTIVE, cfg->dsc);
--	}
-+
-+	/* FIXME: fix reset_intf_cfg to handle teardown of dsc */
-+	DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, DSC_IDX);
-+	DPU_REG_WRITE(c, CTL_DSC_ACTIVE, cfg->dsc);
- }
- 
- static void dpu_hw_ctl_intf_cfg(struct dpu_hw_ctl *ctx,
+> diff --git a/fs/quota/Kconfig b/fs/quota/Kconfig
+> index d5a85a8062d0..1b3bc0a99515 100644
+> --- a/fs/quota/Kconfig
+> +++ b/fs/quota/Kconfig
+> @@ -26,16 +26,6 @@ config QUOTA_NETLINK_INTERFACE
+>  	  hardlimit, etc.) will be reported through netlink interface. If unsure,
+>  	  say Y.
+>  
+> -config PRINT_QUOTA_WARNING
+> -	bool "Print quota warnings to console (OBSOLETE)"
+> -	depends on QUOTA
+> -	default y
+> -	help
+> -	  If you say Y here, quota warnings (about exceeding softlimit, reaching
+> -	  hardlimit, etc.) will be printed to the process' controlling terminal.
+> -	  Note that this behavior is currently deprecated and may go away in
+> -	  future. Please use notification via netlink socket instead.
+> -
+>  config QUOTA_DEBUG
+>  	bool "Additional quota sanity checks"
+>  	depends on QUOTA
+> diff --git a/fs/quota/dquot.c b/fs/quota/dquot.c
+> index a6357f728034..10b46c403bdb 100644
+> --- a/fs/quota/dquot.c
+> +++ b/fs/quota/dquot.c
+> @@ -154,7 +154,7 @@ void __quota_error(struct super_block *sb, const char *func,
+>  }
+>  EXPORT_SYMBOL(__quota_error);
+>  
+> -#if defined(CONFIG_QUOTA_DEBUG) || defined(CONFIG_PRINT_QUOTA_WARNING)
+> +#if defined(CONFIG_QUOTA_DEBUG)
+>  static char *quotatypes[] = INITQFNAMES;
+>  #endif
+>  static struct quota_format_type *quota_formats;	/* List of registered formats */
+> @@ -1171,72 +1171,6 @@ static int warning_issued(struct dquot *dquot, const int warntype)
+>  	return test_and_set_bit(flag, &dquot->dq_flags);
+>  }
+>  
+> -#ifdef CONFIG_PRINT_QUOTA_WARNING
+> -static int flag_print_warnings = 1;
+> -
+> -static int need_print_warning(struct dquot_warn *warn)
+> -{
+> -	if (!flag_print_warnings)
+> -		return 0;
+> -
+> -	switch (warn->w_dq_id.type) {
+> -		case USRQUOTA:
+> -			return uid_eq(current_fsuid(), warn->w_dq_id.uid);
+> -		case GRPQUOTA:
+> -			return in_group_p(warn->w_dq_id.gid);
+> -		case PRJQUOTA:
+> -			return 1;
+> -	}
+> -	return 0;
+> -}
+> -
+> -/* Print warning to user which exceeded quota */
+> -static void print_warning(struct dquot_warn *warn)
+> -{
+> -	char *msg = NULL;
+> -	struct tty_struct *tty;
+> -	int warntype = warn->w_type;
+> -
+> -	if (warntype == QUOTA_NL_IHARDBELOW ||
+> -	    warntype == QUOTA_NL_ISOFTBELOW ||
+> -	    warntype == QUOTA_NL_BHARDBELOW ||
+> -	    warntype == QUOTA_NL_BSOFTBELOW || !need_print_warning(warn))
+> -		return;
+> -
+> -	tty = get_current_tty();
+> -	if (!tty)
+> -		return;
+> -	tty_write_message(tty, warn->w_sb->s_id);
+> -	if (warntype == QUOTA_NL_ISOFTWARN || warntype == QUOTA_NL_BSOFTWARN)
+> -		tty_write_message(tty, ": warning, ");
+> -	else
+> -		tty_write_message(tty, ": write failed, ");
+> -	tty_write_message(tty, quotatypes[warn->w_dq_id.type]);
+> -	switch (warntype) {
+> -		case QUOTA_NL_IHARDWARN:
+> -			msg = " file limit reached.\r\n";
+> -			break;
+> -		case QUOTA_NL_ISOFTLONGWARN:
+> -			msg = " file quota exceeded too long.\r\n";
+> -			break;
+> -		case QUOTA_NL_ISOFTWARN:
+> -			msg = " file quota exceeded.\r\n";
+> -			break;
+> -		case QUOTA_NL_BHARDWARN:
+> -			msg = " block limit reached.\r\n";
+> -			break;
+> -		case QUOTA_NL_BSOFTLONGWARN:
+> -			msg = " block quota exceeded too long.\r\n";
+> -			break;
+> -		case QUOTA_NL_BSOFTWARN:
+> -			msg = " block quota exceeded.\r\n";
+> -			break;
+> -	}
+> -	tty_write_message(tty, msg);
+> -	tty_kref_put(tty);
+> -}
+> -#endif
+> -
+>  static void prepare_warning(struct dquot_warn *warn, struct dquot *dquot,
+>  			    int warntype)
+>  {
+> @@ -1259,9 +1193,6 @@ static void flush_warnings(struct dquot_warn *warn)
+>  	for (i = 0; i < MAXQUOTAS; i++) {
+>  		if (warn[i].w_type == QUOTA_NL_NOWARN)
+>  			continue;
+> -#ifdef CONFIG_PRINT_QUOTA_WARNING
+> -		print_warning(&warn[i]);
+> -#endif
+>  		quota_send_warning(warn[i].w_dq_id,
+>  				   warn[i].w_sb->s_dev, warn[i].w_type);
+>  	}
+> @@ -2936,15 +2867,6 @@ static struct ctl_table fs_dqstats_table[] = {
+>  		.mode		= 0444,
+>  		.proc_handler	= do_proc_dqstats,
+>  	},
+> -#ifdef CONFIG_PRINT_QUOTA_WARNING
+> -	{
+> -		.procname	= "warnings",
+> -		.data		= &flag_print_warnings,
+> -		.maxlen		= sizeof(int),
+> -		.mode		= 0644,
+> -		.proc_handler	= proc_dointvec,
+> -	},
+> -#endif
+>  	{ },
+>  };
+>  
+> -- 
+> 2.35.1
+> 
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
