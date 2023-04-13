@@ -2,58 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81E2D6E1737
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 00:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9706E173B
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 00:17:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbjDMWPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 18:15:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40196 "EHLO
+        id S229878AbjDMWRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 18:17:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjDMWPB (ORCPT
+        with ESMTP id S229735AbjDMWRa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 18:15:01 -0400
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD8C65BC;
-        Thu, 13 Apr 2023 15:15:00 -0700 (PDT)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-183f4efa98aso25887116fac.2;
-        Thu, 13 Apr 2023 15:15:00 -0700 (PDT)
+        Thu, 13 Apr 2023 18:17:30 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D882B6A5A
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 15:17:29 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-2f4d0fc8df4so182479f8f.0
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 15:17:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681424248; x=1684016248;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5bZnn8054aG3h8CA+Zz1uBde378B1drLJz8iS5ab/Aw=;
+        b=hBje9yK2+SX3bOttkXIzpp/K0mnsn4jtaaxMMXugNhRwvC5szwkr61hM7XshL99FYl
+         s1+XfZrxgsbe0lRubiPaWIyVR/0xDG6BJcyrIP2c3dSvBPBLBUlFqCIcQmHsDBCWSYNE
+         pWcwEVzEWxj8ozsmTd5HK0gIp9KtUbpIumquach+JBH/LGxEv+W9vEZzrLSJ+xl0p0l7
+         P2y9TiGU/Q1jmYDMTvZnFB+huqAgtAk/ibT9gij+GKcuhuse6Qu9CEmQC/cTuWBgthTA
+         LKeIdP1mJpoj9qhKVxRDQuhPR296JgevtqP+g3fV7+mEHljHFFJ0A+SgaNu9PORDwbp0
+         upGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681424099; x=1684016099;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20221208; t=1681424248; x=1684016248;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0vA+ou4WJsRaw1OEoHe47epP2tndSue81sQo33gVKxA=;
-        b=kGPSi5VpDRPy42eU26XOB1qPUropRGApy8wcz5NXYlTozZIVyv59pTPwpuBidBsgsj
-         NAFJbcxc20dqqvDSqr4iN72pLg+BSG3TnMZIABf16Vb70Yw9SwjxefpklQvp4vu3Ufib
-         pP/5bCkpz2cGhvwLQMdcWU496ZVpZq7v3TuDPzXQVlnhPsyeDWzSFoMtXQmuSnk8a52/
-         saKq6pECJpuC1qAyEF2TLYxbq40/N491Z+K+RBlLrGtQyODUheadMfOJMU6itef6iY8n
-         cQ+0SxWT0tcCaZMLYRvf+uTM0FKMD/KleOWXRUUq73rVYEU3I9vohLUCNxi3jXmFTrU8
-         H6Gw==
-X-Gm-Message-State: AAQBX9c0aD04oLSQkN/l/HCTtHuL+xSDML4ud6jYvjDq4GFd8J9Zj42P
-        1eTgrnR4NXi/No4GhX1+rv5fw6+S8w==
-X-Google-Smtp-Source: AKy350ZsrANUM75Zwz05EdX6p15MOKLlv4dq1npoVPDlpg1JN+f+v4ygyjaXqrk5mvCesiBUrdvgXg==
-X-Received: by 2002:a05:6870:808d:b0:187:9235:27c8 with SMTP id q13-20020a056870808d00b00187923527c8mr2023432oab.37.1681424099710;
-        Thu, 13 Apr 2023 15:14:59 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id y7-20020a056870e3c700b001728669a604sm1188842oad.5.2023.04.13.15.14.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 15:14:59 -0700 (PDT)
-Received: (nullmailer pid 1939789 invoked by uid 1000);
-        Thu, 13 Apr 2023 22:14:58 -0000
-Date:   Thu, 13 Apr 2023 17:14:58 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [GIT PULL] Devicetree fixes for v6.2, take 3
-Message-ID: <20230413221458.GA1938449-robh@kernel.org>
+        bh=5bZnn8054aG3h8CA+Zz1uBde378B1drLJz8iS5ab/Aw=;
+        b=Lw7UvYtRIpmlyDFRJPnKLCRvx9PjmMFX8xxLTurEPbGvpgJh5veVmhjB9cdiOKh8oI
+         0BQ2mW4oUomivSxqAFVtQ78ztWW0bvGC7bCfIJBm4Sremo6jl+8v82yjOARyU/gongRR
+         wfXxpd8abWocvb3kxtiB/6wdBiNeSjfNs0TwKSPVxBj8MN8+DKKg5cUY+4PcWi52Ht6w
+         covBdusUncFP51o7gxEqsXTRH0acX3QnTaynA3EDVwBXoG0q1NYBbN7xdm7uxsHtYgDB
+         tD36TR6fkha25w3QerfjhuMxKiK4FMSfbdHZDyWmMNJmDSkCEBBNo70qz/8fZNQAKVR9
+         Gr+A==
+X-Gm-Message-State: AAQBX9eEYrMUbMSAiEX+b/aythh687XkDJQVDTMvk1Zq4P0MSv1YFEy0
+        wepN9ZjbYsiZEqZvSu6ap6E=
+X-Google-Smtp-Source: AKy350ZB3ZtVsMxXN4uA54BlmCPeTcGuCXD8pjBkkfMzJJrcSVIAuNQ4LnuNeoFv0g5wsoRMbrSjRg==
+X-Received: by 2002:adf:e546:0:b0:2c7:940c:26f8 with SMTP id z6-20020adfe546000000b002c7940c26f8mr175096wrm.5.1681424248276;
+        Thu, 13 Apr 2023 15:17:28 -0700 (PDT)
+Received: from [192.168.0.102] (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
+        by smtp.gmail.com with ESMTPSA id z1-20020a056000110100b002efb5ef9f07sm2124516wrw.82.2023.04.13.15.17.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Apr 2023 15:17:27 -0700 (PDT)
+Message-ID: <5f2275ce-c62d-9363-32ad-58b25848119c@gmail.com>
+Date:   Fri, 14 Apr 2023 00:17:26 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [BUG] staging: rtl8192e: W_DISABLE# does not work after
+ stop/start
+To:     Dan Carpenter <error27@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <39dc735c-fd6d-e405-856c-788a52704d63@gmail.com>
+ <248ec330-b4c3-aa7b-61eb-69ce8d333b69@gmail.com>
+ <3f71b782-e52e-48cb-9a41-4097a3329ae3@kili.mountain>
+Content-Language: en-US
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <3f71b782-e52e-48cb-9a41-4097a3329ae3@kili.mountain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,45 +78,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On 4/13/23 11:34, Dan Carpenter wrote:
+> On Fri, Apr 07, 2023 at 11:02:05PM +0200, Philipp Hortmann wrote:
+>> When loading the driver for rtl8192e, the W_DISABLE# switch is working as
+>> intended. But when the WLAN is turned off in software and then turned on
+>> again the W_DISABLE# does not work anymore.
+>>
+>> Reason for this is that in the function _rtl92e_dm_check_rf_ctrl_gpio()
+>> checking this every two seconds is an conditional return.
+>>
+>> 	if (priv->bfirst_after_down) {
+>> 		priv->bfirst_after_down = true; // PH: useless line
+>> 		return;
+>> 	}
+>>
+>> 	tmp1byte = rtl92e_readb(dev, GPI); // PH: GPI for W_DISABLE#
+>>
+>> bfirst_after_down is set true when switching the WLAN off in software. But
+>> it is not set to false again when WLAN is turned on again.
+>>
+> 
+> Is there a question here?  You're like the expert on this driver and you
+> seem to have figured out the solution...  I'm confused.
+For me a bug report is always a please to the community to fix. But when 
+nobody likes to start I have to do it by myself...
+> 
+> regards,
+> dan carpenter
+> 
 
-Please pull a couple more DT fixes.
+As expected I am not even on the half way. I can set the 
+bfirst_after_down back to false. Then WLAN recovers but not the 
+connection. The os is asking me to enter the WLAN password. I can do so 
+but that does not fix the issue. I need to switch WLAN off and on in 
+software. Then the connection comes back again.
 
-Rob
+I need to find a way to reset the internal states of the driver accordingly.
 
+Thanks for your support.
 
-The following changes since commit 707344c8a188bb1d6704d3546229fc7a07c01a63:
+No response required - will work on the fix on the weekend....
 
-  dt-bindings: interrupt-controller: arm,gic-v3: Fix typo in description of msi-controller property (2023-02-02 17:10:58 -0600)
+regards,
 
-are available in the Git repository at:
+Philipp
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git tags/devicetree-fixes-for-6.2-3
-
-for you to fetch changes up to 1a50d9403fb90cbe4dea0ec9fd0351d2ecbd8924:
-
-  treewide: Fix probing of devices in DT overlays (2023-04-11 14:39:52 -0500)
-
-----------------------------------------------------------------
-Devicetree fixes for v6.2, part 3:
-
-- Fix interaction between fw_devlink and DT overlays causing
-  devices to not be probed
-
-- Fix the compatible string for loongson,cpu-interrupt-controller
-
-----------------------------------------------------------------
-Geert Uytterhoeven (1):
-      treewide: Fix probing of devices in DT overlays
-
-Liu Peibao (1):
-      dt-bindings: interrupt-controller: loongarch: Fix mismatched compatible
-
- ...rrupt-controller.yaml => loongson,cpu-interrupt-controller.yaml} | 6 +++---
- drivers/bus/imx-weim.c                                              | 6 ++++++
- drivers/i2c/i2c-core-of.c                                           | 5 +++++
- drivers/of/dynamic.c                                                | 1 +
- drivers/of/platform.c                                               | 5 +++++
- drivers/spi/spi.c                                                   | 5 +++++
- 6 files changed, 25 insertions(+), 3 deletions(-)
- rename Documentation/devicetree/bindings/interrupt-controller/{loongarch,cpu-interrupt-controller.yaml => loongson,cpu-interrupt-controller.yaml} (72%)
