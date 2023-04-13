@@ -2,687 +2,384 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B43D6E14AB
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 20:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B41F36E14AE
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 20:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbjDMSzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 14:55:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44610 "EHLO
+        id S229630AbjDMS4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 14:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbjDMSzf (ORCPT
+        with ESMTP id S229571AbjDMS4d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 14:55:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2BDC4200;
-        Thu, 13 Apr 2023 11:55:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 726FA640F9;
-        Thu, 13 Apr 2023 18:55:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81522C433D2;
-        Thu, 13 Apr 2023 18:55:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681412132;
-        bh=5KFNFdBIW2BvW60iizymJtZDW3ElqffE4eMRAKWlN0w=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=n7j4X7z7/w6hG3RTaCyYq1pNHJfwCoJ8w1/eLyoZ2Qf8Yt8OXChaykHHDdCmsz3zt
-         pioBPIS3kp2Q+GD1Z5JNFUTvFlW4gkrXxxtgdFv1MZaY5vLxrAmB0pn0VQX8UEOl5p
-         Hf3qAbHY1W2jd+vbnhIFFbCGtC7V4V0HlAIv1FW1IDNwm8QjBQI7ow3ZkpQSMAAdGq
-         TOcmXoNOpHn88qHuaTfVKozHsVmRDIG8jrYctOe1QC7GISmMcNyyUt+OJQdqBvms68
-         w8O0I1HXgHInU6ZiSrGqu4Yb5tIQE22F25RfsQu8TGq8kvnYK9BbjPnZTTE7jpfaQ8
-         e/fFJBZt43xFA==
-Message-ID: <2d848bc03aacb41a708ba2794eb043ff.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        Thu, 13 Apr 2023 14:56:33 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7E91BE6
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 11:56:31 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f05f61adbeso3471135e9.0
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 11:56:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google; t=1681412190; x=1684004190;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bkJNTvo612O3fWPNxDWPyC+FD+8b0uBSCjcq43SbtsE=;
+        b=YiUfmAiJM2xaeT7CytI2caKY70Osw04D9HzW1DTEH2IGvYMYJ7cVIh+hWKEm/YPtYs
+         sE+pqMCfcvmg3BGr33SJZpahD/md3CAWd6uDZ/9n6hq7LWjmXK+MdVBcjFXve5NqVX1a
+         Fc9XBEe0bPmUBeQYenQG39TSzDlpGHeN54n0o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681412190; x=1684004190;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bkJNTvo612O3fWPNxDWPyC+FD+8b0uBSCjcq43SbtsE=;
+        b=eva+YbfWq5ae0eSgkIYy7L/qgBQqczwCIy05PYcDhWTZOKVONHZ5T5avwLwU7ph17L
+         GyrqDqgjW9rpwtSDuFiY9xF7/AY4htDDFfzNCe5JaB+PqFGuJhvxFVfHJdSwi3oWNWxy
+         /EiDYp4D0VtLbGi/FNI+XVljcVo9uLy4wnY6MGqARe+/8AFN6FgWam4cotaXWbziy3za
+         cvC6ci3vUMVZXpkBxSvnBR3AnSoV5Ul7CpdAPC4MX4DtdSIR9IyfIWX+/q9uk5Pn0QC9
+         xxfUAJhEdmIO6IXirWrnvmh8S1kcpGdk8UUvgc7u/jaBRGMUAVvg0TecRdDvhfiBwY8f
+         k54Q==
+X-Gm-Message-State: AAQBX9cRrNK9qzAf4FnSHxdfttLw7dWEMf1Eyod8aFNlthltbhGxrMkZ
+        O94mT6ENNuTd2EPni2Wl8U8L3g==
+X-Google-Smtp-Source: AKy350Z+Pymx86muavguR0EXMVTzX6DncBOK2+EuJpP1eStBdguGNte0pXr9DSRj/ZSjARALqxBwDQ==
+X-Received: by 2002:adf:e98f:0:b0:2c9:8b81:bd04 with SMTP id h15-20020adfe98f000000b002c98b81bd04mr2046863wrm.0.1681412189731;
+        Thu, 13 Apr 2023 11:56:29 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id w16-20020a5d6810000000b002e5ff05765esm1853474wru.73.2023.04.13.11.56.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 11:56:29 -0700 (PDT)
+Date:   Thu, 13 Apr 2023 20:56:27 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Sui Jingfeng <15330273260@189.cn>
+Cc:     Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>, Li Yi <liyi@loongson.cn>,
+        Helge Deller <deller@gmx.de>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH] drm/fbdev-generic: fix potential out-of-bounds access
+Message-ID: <ZDhQW6El6ztyHK4M@phenom.ffwll.local>
+Mail-Followup-To: Sui Jingfeng <15330273260@189.cn>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>, Li Yi <liyi@loongson.cn>,
+        Helge Deller <deller@gmx.de>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
+References: <20230409132110.494630-1-15330273260@189.cn>
+ <ZDV0Te65tSh4Q/vc@phenom.ffwll.local>
+ <42f16d0d-4e1a-a016-f4cc-af24efa75f1c@189.cn>
+ <ZDbuCWKfFlWyiOGp@phenom.ffwll.local>
+ <dbac96b2-0fea-591b-517d-2a23cc36b8de@189.cn>
+ <CAKMK7uG_h7htCDARudZpHOOMG4iOOLZmz0_WskvWGf+DKGwU1w@mail.gmail.com>
+ <531f0bdf-2ae8-0361-183b-57b40df6345f@189.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230321050034.1431379-3-sergio.paracuellos@gmail.com>
-References: <20230321050034.1431379-1-sergio.paracuellos@gmail.com> <20230321050034.1431379-3-sergio.paracuellos@gmail.com>
-Subject: Re: [PATCH v2 2/9] clk: ralink: add clock and reset driver for MTMIPS SoCs
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
-        john@phrozen.org, linux-kernel@vger.kernel.org,
-        p.zabel@pengutronix.de, mturquette@baylibre.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, devicetree@vger.kernel.org,
-        arinc.unal@arinc9.com
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        linux-clk@vger.kernel.org
-Date:   Thu, 13 Apr 2023 11:55:30 -0700
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <531f0bdf-2ae8-0361-183b-57b40df6345f@189.cn>
+X-Operating-System: Linux phenom 6.1.0-7-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Sergio Paracuellos (2023-03-20 22:00:27)
-> diff --git a/drivers/clk/ralink/clk-mtmips.c b/drivers/clk/ralink/clk-mtm=
-ips.c
-> new file mode 100644
-> index 000000000000..6b4b5ae9384d
-> --- /dev/null
-> +++ b/drivers/clk/ralink/clk-mtmips.c
-> @@ -0,0 +1,985 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * MTMIPS SoCs Clock Driver
-> + * Author: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> + */
-> +
-> +#include <linux/bitops.h>
-> +#include <linux/clk-provider.h>
-> +#include <linux/clk.h>
+On Fri, Apr 14, 2023 at 01:00:07AM +0800, Sui Jingfeng wrote:
+> 
+> On 2023/4/13 23:56, Daniel Vetter wrote:
+> > On Thu, 13 Apr 2023 at 17:35, Sui Jingfeng <15330273260@189.cn> wrote:
+> > > Hi,
+> > > 
+> > > On 2023/4/13 01:44, Daniel Vetter wrote:
+> > > > On Thu, Apr 13, 2023 at 01:13:37AM +0800, Sui Jingfeng wrote:
+> > > > > Hi,
+> > > > > 
+> > > > > On 2023/4/11 22:53, Daniel Vetter wrote:
+> > > > > > On Sun, Apr 09, 2023 at 09:21:10PM +0800, Sui Jingfeng wrote:
+> > > > > > > From: Sui Jingfeng <suijingfeng@loongson.cn>
+> > > > > > > 
+> > > > > > > We should setting the screen buffer size according to the screen's actual
+> > > > > > > size, rather than the size of the GEM object backing the front framebuffer.
+> > > > > > > The size of GEM buffer is page size aligned, while the size of active area
+> > > > > > > of a specific screen is *NOT* necessarily page size aliged. For example,
+> > > > > > > 1680x1050, 1600x900, 1440x900, 800x6000 etc. In those case, the damage rect
+> > > > > > > computed by drm_fb_helper_memory_range_to_clip() goes out of bottom bounds
+> > > > > > > of the display.
+> > > > > > > 
+> > > > > > > Run fbdev test of IGT on a x86+ast2400 platform with 1680x1050 resolution
+> > > > > > > will cause the system hang with the following call trace:
+> > > > > > > 
+> > > > > > >      Oops: 0000 [#1] PREEMPT SMP PTI
+> > > > > > >      [IGT] fbdev: starting subtest eof
+> > > > > > >      Workqueue: events drm_fb_helper_damage_work [drm_kms_helper]
+> > > > > > >      [IGT] fbdev: starting subtest nullptr
+> > > > > > > 
+> > > > > > >      RIP: 0010:memcpy_erms+0xa/0x20
+> > > > > > >      RSP: 0018:ffffa17d40167d98 EFLAGS: 00010246
+> > > > > > >      RAX: ffffa17d4eb7fa80 RBX: ffffa17d40e0aa80 RCX: 00000000000014c0
+> > > > > > >      RDX: 0000000000001a40 RSI: ffffa17d40e0b000 RDI: ffffa17d4eb80000
+> > > > > > >      RBP: ffffa17d40167e20 R08: 0000000000000000 R09: ffff89522ecff8c0
+> > > > > > >      R10: ffffa17d4e4c5000 R11: 0000000000000000 R12: ffffa17d4eb7fa80
+> > > > > > >      R13: 0000000000001a40 R14: 000000000000041a R15: ffffa17d40167e30
+> > > > > > >      FS:  0000000000000000(0000) GS:ffff895257380000(0000) knlGS:0000000000000000
+> > > > > > >      CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > > > > >      CR2: ffffa17d40e0b000 CR3: 00000001eaeca006 CR4: 00000000001706e0
+> > > > > > >      Call Trace:
+> > > > > > >       <TASK>
+> > > > > > >       ? drm_fbdev_generic_helper_fb_dirty+0x207/0x330 [drm_kms_helper]
+> > > > > > >       drm_fb_helper_damage_work+0x8f/0x170 [drm_kms_helper]
+> > > > > > >       process_one_work+0x21f/0x430
+> > > > > > >       worker_thread+0x4e/0x3c0
+> > > > > > >       ? __pfx_worker_thread+0x10/0x10
+> > > > > > >       kthread+0xf4/0x120
+> > > > > > >       ? __pfx_kthread+0x10/0x10
+> > > > > > >       ret_from_fork+0x2c/0x50
+> > > > > > >       </TASK>
+> > > > > > >      CR2: ffffa17d40e0b000
+> > > > > > >      ---[ end trace 0000000000000000 ]---
+> > > > > > > 
+> > > > > > > We also add trival code in this patch to restrict the damage rect beyond
+> > > > > > > the last line of the framebuffer.
+> > > > > > Nice catch!
+> > > > >    :)
+> > > > > > > Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+> > > > > > > ---
+> > > > > > >     drivers/gpu/drm/drm_fb_helper.c     | 2 +-
+> > > > > > >     drivers/gpu/drm/drm_fbdev_generic.c | 2 ++
+> > > > > > >     2 files changed, 3 insertions(+), 1 deletion(-)
+> > > > > > > 
+> > > > > > > diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helper.c
+> > > > > > > index 64458982be40..a2b749372759 100644
+> > > > > > > --- a/drivers/gpu/drm/drm_fb_helper.c
+> > > > > > > +++ b/drivers/gpu/drm/drm_fb_helper.c
+> > > > > > > @@ -645,7 +645,7 @@ static void drm_fb_helper_memory_range_to_clip(struct fb_info *info, off_t off,
+> > > > > > >             u32 x1 = 0;
+> > > > > > >             u32 y1 = off / info->fix.line_length;
+> > > > > > >             u32 x2 = info->var.xres;
+> > > > > > > -  u32 y2 = DIV_ROUND_UP(end, info->fix.line_length);
+> > > > > > > +  u32 y2 = min_t(u32, DIV_ROUND_UP(end, info->fix.line_length), info->var.yres);
+> > > > > > So for additional robustness I think it'd be good if we change the entire
+> > > > > > computation here to use drm_framebuffer data and not fb_info data, because
+> > > > > > fundamentally that's what the drm kms code consumes. It should all match
+> > > > > > anyway, but I think it makes the code more obviously correct.
+> > > > > > 
+> > > > > > So in the entire function instead of looking at fb_info->fix we should
+> > > > > > probably look at
+> > > > > > 
+> > > > > >      struct drm_fb_helper *helper = info->par;
+> > > > > > 
+> > > > > > And then helper->fb->pitches[0] and helper->fb->height.
+> > > > > > 
+> > > > > > If you agree would be great if you can please respin with that (and the
+> > > > > > commit message augmented to explain why we do the change)?
+> > > > > Yes, I'm agree.
+> > > > > 
+> > > > > Thank you for guidance, I will refine this patch with `helper = info->par`.
+> > > > > 
+> > > > > I will send a v2 when I finished.
+> > > > > 
+> > > > > > >             if ((y2 - y1) == 1) {
+> > > > > > >                     /*
+> > > > > > > diff --git a/drivers/gpu/drm/drm_fbdev_generic.c b/drivers/gpu/drm/drm_fbdev_generic.c
+> > > > > > > index 8e5148bf40bb..a6daecb5f640 100644
+> > > > > > > --- a/drivers/gpu/drm/drm_fbdev_generic.c
+> > > > > > > +++ b/drivers/gpu/drm/drm_fbdev_generic.c
+> > > > > > > @@ -95,6 +95,8 @@ static int drm_fbdev_generic_helper_fb_probe(struct drm_fb_helper *fb_helper,
+> > > > > > >             fb_helper->fb = buffer->fb;
+> > > > > > >             screen_size = buffer->gem->size;
+> > > > > > I guess you forgot to remove this line here?
+> > > > > Yes, this line should be removed in this patch. I overlooked this, sorry.
+> > > > > 
+> > > > > > Also I'm not understanding
+> > > > > > why this matters, I think you're fix only needs the above chunk, not this
+> > > > > > one? If I got this right then please drop this part, there's drivers which
+> > > > > > only use drm_fb_helper.c but not drm_fbdev_generic.c, and from what I can
+> > > > > > tell they all still set the gem buffer size here.
+> > > > > > 
+> > > > > > If otoh we need this too, then there's a few more places that need to be
+> > > > > > fixed.
+> > > > > I think we need this line, otherwise wrapped around will be happen.
+> > > > > 
+> > > > > Because I found that the value of variable`y1` will be larger in number than
+> > > > > the variable `y2` by 1,
+> > > > > 
+> > > > > which are computed  in drm_fb_helper_memory_range_to_clip().
+> > > > > 
+> > > > > 
+> > > > > This phenomenon will emerged on platforms with large page size or
+> > > > > 
+> > > > > non page size divisiable display resolution case. Take the LoongArch and
+> > > > > Mips as an example,
+> > > > > 
+> > > > > the default page size is 16KB(to avoid cache alias).  Even with the most
+> > > > > frequently used
+> > > > > 
+> > > > > 1920x1080 screen, the screen_size can not be divided exactly.
+> > > > > 
+> > > > > The total size of the shadow buffer is 1920x1080x4 bytes, 1920x1080x4 /
+> > > > > 16384 = 506.25
+> > > > > 
+> > > > > TTM manage the vram in the term of pages, so TTM will allocate 507 pages for
+> > > > > us.
+> > > > > 
+> > > > > 507x16384 = 8306688 bytes.
+> > > > > 
+> > > > > 
+> > > > > drm_fb_helper_memory_range_to_clip() will be called when running fbdev eof
+> > > > > test in the IGT.
+> > > > > 
+> > > > > with 8306688 as its second parameter. while 8306688 / (1920x4) = 1081, this
+> > > > > cause y1 out of bound.
+> > > > > 
+> > > > > Simply restrict y2 with a min_t() function yeild 1080 in this case, but y2 -
+> > > > > y1 cause *wrap around* here.
+> > > > > 
+> > > > > because they are both unsigned number.
+> > > > > 
+> > > > > 
+> > > > > drm_rect_init() function cast this unsigned int type to int type in end of
+> > > > > drm_fb_helper_memory_range_to_clip(),
+> > > > > 
+> > > > > but the last argument of drm_fb_helper_damage() function is a u32 type,
+> > > > > 
+> > > > > it cast the return value of  drm_rect_height(&damage_area) back to unsigned
+> > > > > type.
+> > > > > 
+> > > > > Yet, another wrapped around with truncation happened in
+> > > > > drm_fb_helper_add_damage_clip()
+> > > > > 
+> > > > > called by subsequent drm_fb_helper_damage() function.
+> > > > > 
+> > > > > I finally got reject by drm_fbdev_generic_helper_fb_dirty() with follow
+> > > > > code:
+> > > > > 
+> > > > > ```
+> > > > > 
+> > > > >       /* Call damage handlers only if necessary */
+> > > > >       if (!(clip->x1 < clip->x2 && clip->y1 < clip->y2))
+> > > > >           return 0;
+> > > > > 
+> > > > > ```
+> > > > > 
+> > > > > On x86-64 platform, because 1920x1080x4 dumb buffer is lucky, it be divided
+> > > > > exactly by 4KB(page size).
+> > > > > 
+> > > > > But other resolution will not as luck as this one. Right, fbdev test will be
+> > > > > pasted, but wrap around
+> > > > > 
+> > > > > happens many time.
+> > > > > 
+> > > > > Therefore, as long as a larger buffer is allowed to exposed to the
+> > > > > user-space.
+> > > > > 
+> > > > > A chance is given to the user-space,  to go beyond of the bottom bound of
+> > > > > the actual active display area.
+> > > > > 
+> > > > > I not sure if this is intended, I feel it should not be allowable by
+> > > > > intuition.
+> > > > Ah yes, thanks for the in-depth explanation. But I think we need a
+> > > > different fix, by also limiting y1. Otherwise for really big page sizes
+> > > > (64k on arm64 iirc) and really small screens (there's i2c panels with just
+> > > > a few lines) we might still run into the issue of y1 being too large.
+> > > > 
+> > > > So we need to limit both y1 and y2. I think it's ok to let y1 == y2 slip
+> > > > through, since as you point out that's filtered later on.
+> > > > 
+> > > > The userspace api is that we should expose the full fbdev buffer and allow
+> > > > writes into the entire thing. It's just that for the explicit upload with
+> > > > damage rects we need to make sure we're staying within the real buffer.
+> > > > -Daniel
+> > > > 
+> > > Limiting y1 is easy, and this is necessary, because it is the crazy
+> > > fbdev test of IGT writing after EOF intentionally.
+> > > 
+> > > But there some difficulties for me to avoid using info->fix and info->var ,
+> > > 
+> > > I found all other functions are surrounding the info->fix and info-var.
+> > > 
+> > > There seems no good variable to replace info->var related data structure.
+> > > 
+> > > Partially replacement may introduce confusion, this somewhat beyond my
+> > > ability.
+> > > 
+> > > I'm afraid of introducing out-of-bound in horizontal direction for
+> > > multi-screen case.
+> > > 
+> > > Using fb_info->fix is still more safe.
+> > > 
+> > > Can I  respin my patch by still using fb_info->fix here?
+> > Which one do you have an issue with finding the right drm variable? I
+> > can help with that.
+> > -Daniel
+> 
+> The info->var.xres and info->var.bits_per_pixel in
+> drm_fb_helper_memory_range_to_clip() function.
 
-Drop unused include.
+This should switch the existing code over to using drm_framebuffer instead
+of fbdev:
 
-> +#include <linux/mfd/syscon.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/reset-controller.h>
-> +#include <linux/slab.h>
-> +
-[..]
-> +
-> +/*
-> + * There are drivers for these SoCs that are older than clock driver
-> + * and are not prepared for the clock. We don't want the kernel to
-> + * disable anything so we add CLK_IS_CRITICAL flag here.
-> + */
-> +#define CLK_PERIPH(_name, _parent) {                           \
-> +       .init =3D &(struct clk_init_data) {                       \
 
-const?
+diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helper.c
+index ef4eb8b12766..99ca69dd432f 100644
+--- a/drivers/gpu/drm/drm_fb_helper.c
++++ b/drivers/gpu/drm/drm_fb_helper.c
+@@ -647,22 +647,26 @@ static void drm_fb_helper_damage(struct drm_fb_helper *helper, u32 x, u32 y,
+ static void drm_fb_helper_memory_range_to_clip(struct fb_info *info, off_t off, size_t len,
+ 					       struct drm_rect *clip)
+ {
++	struct drm_fb_helper *helper = info->par;
++
+ 	off_t end = off + len;
+ 	u32 x1 = 0;
+ 	u32 y1 = off / info->fix.line_length;
+-	u32 x2 = info->var.xres;
+-	u32 y2 = DIV_ROUND_UP(end, info->fix.line_length);
++	u32 x2 = helper->fb->height;
++	unsigned stride = helper->fb->pitches[0];
++	u32 y2 = DIV_ROUND_UP(end, stride);
++	int bpp = drm_format_info_bpp(helper->fb->format, 0);
+ 
+ 	if ((y2 - y1) == 1) {
+ 		/*
+ 		 * We've only written to a single scanline. Try to reduce
+ 		 * the number of horizontal pixels that need an update.
+ 		 */
+-		off_t bit_off = (off % info->fix.line_length) * 8;
+-		off_t bit_end = (end % info->fix.line_length) * 8;
++		off_t bit_off = (off % stride) * 8;
++		off_t bit_end = (end % stride) * 8;
+ 
+-		x1 = bit_off / info->var.bits_per_pixel;
+-		x2 = DIV_ROUND_UP(bit_end, info->var.bits_per_pixel);
++		x1 = bit_off / bpp;
++		x2 = DIV_ROUND_UP(bit_end, bpp);
+ 	}
+ 
+ 	drm_rect_init(clip, x1, y1, x2 - x1, y2 - y1);
 
-> +               .name =3D _name,                                  \
-> +               .ops =3D &(const struct clk_ops) {                \
+> 
+> > > > > > > +  screen_size = sizes->surface_height * buffer->fb->pitches[0];
+> > > > > > > +
+> > > > > > >             screen_buffer = vzalloc(screen_size);
+> > > > > > >             if (!screen_buffer) {
+> > > > > > >                     ret = -ENOMEM;
+> > > > > > Cheers, Daniel
+> > > > > > 
+> > > > > > > --
+> > > > > > > 2.25.1
+> > > > > > > 
+> > 
+> > 
 
-Make this into a named variable? Otherwise I suspect the compiler will
-want to duplicate it.
-
-> +                       .recalc_rate =3D mtmips_pherip_clk_rate   \
-> +               },                                              \
-> +               .parent_data =3D &(const struct clk_parent_data) {\
-> +                       .name =3D _parent,                        \
-> +                       .fw_name =3D _parent                      \
-> +               },                                              \
-> +               .num_parents =3D 1,                               \
-> +               .flags =3D CLK_SET_RATE_PARENT | CLK_IS_CRITICAL  \
-
-Why is everything critical? Put the comment here instead of above the
-macro
-
-> +       },                                                      \
-> +}
-> +
-[...]
-> +
-> +static int mtmips_register_pherip_clocks(struct device_node *np,
-> +                                        struct clk_hw_onecell_data *clk_=
-data,
-> +                                        struct mtmips_clk_priv *priv)
-> +{
-> +       struct clk_hw **hws =3D clk_data->hws;
-> +       struct mtmips_clk *sclk;
-> +       int ret, i;
-> +
-> +       for (i =3D 0; i < priv->data->num_clk_periph; i++) {
-> +               int idx =3D (priv->data->num_clk_base - 1) + i;
-> +
-> +               sclk =3D &priv->data->clk_periph[i];
-> +               ret =3D of_clk_hw_register(np, &sclk->hw);
-> +               if (ret) {
-> +                       pr_err("Couldn't register peripheral clock %d\n",=
- idx);
-> +                       goto err_clk_unreg;
-> +               }
-> +
-> +               hws[idx] =3D &sclk->hw;
-> +       }
-> +
-> +       return 0;
-> +
-> +err_clk_unreg:
-> +       while (--i >=3D 0) {
-> +               sclk =3D &priv->data->clk_periph[i];
-> +               clk_hw_unregister(&sclk->hw);
-> +       }
-> +       return ret;
-> +}
-> +
-> +static inline struct mtmips_clk *to_mtmips_clk(struct clk_hw *hw)
-> +{
-> +       return container_of(hw, struct mtmips_clk, hw);
-> +}
-> +
-> +static unsigned long rt5350_xtal_recalc_rate(struct clk_hw *hw,
-> +                                            unsigned long parent_rate)
-> +{
-> +       struct mtmips_clk *clk =3D to_mtmips_clk(hw);
-> +       struct regmap *sysc =3D clk->priv->sysc;
-> +       u32 val;
-> +
-> +       regmap_read(sysc, SYSC_REG_SYSTEM_CONFIG, &val);
-> +       if (!(val & RT5350_CLKCFG0_XTAL_SEL))
-> +               return 20000000;
-> +
-> +       return 40000000;
-> +}
-> +
-> +static unsigned long rt5350_cpu_recalc_rate(struct clk_hw *hw,
-> +                                           unsigned long xtal_clk)
-> +{
-> +       struct mtmips_clk *clk =3D to_mtmips_clk(hw);
-> +       struct regmap *sysc =3D clk->priv->sysc;
-> +       u32 t;
-> +
-> +       regmap_read(sysc, SYSC_REG_SYSTEM_CONFIG, &t);
-> +       t =3D (t >> RT5350_SYSCFG0_CPUCLK_SHIFT) & RT5350_SYSCFG0_CPUCLK_=
-MASK;
-> +
-> +       switch (t) {
-> +       case RT5350_SYSCFG0_CPUCLK_360:
-> +               return 360000000;
-> +       case RT5350_SYSCFG0_CPUCLK_320:
-> +               return 320000000;
-> +       case RT5350_SYSCFG0_CPUCLK_300:
-> +               return 300000000;
-> +       default:
-> +               BUG();
-> +       }
-> +}
-> +
-> +static unsigned long rt5350_bus_recalc_rate(struct clk_hw *hw,
-> +                                           unsigned long parent_rate)
-> +{
-> +       if (parent_rate =3D=3D 320000000)
-> +               return parent_rate / 4;
-> +
-> +       return parent_rate / 3;
-> +}
-> +
-> +static unsigned long rt3352_cpu_recalc_rate(struct clk_hw *hw,
-> +                                           unsigned long xtal_clk)
-> +{
-> +       struct mtmips_clk *clk =3D to_mtmips_clk(hw);
-> +       struct regmap *sysc =3D clk->priv->sysc;
-> +       u32 t;
-> +
-> +       regmap_read(sysc, SYSC_REG_SYSTEM_CONFIG, &t);
-> +       t =3D (t >> RT3352_SYSCFG0_CPUCLK_SHIFT) & RT3352_SYSCFG0_CPUCLK_=
-MASK;
-> +
-> +       switch (t) {
-> +       case RT3352_SYSCFG0_CPUCLK_LOW:
-> +               return 384000000;
-> +       case RT3352_SYSCFG0_CPUCLK_HIGH:
-> +               return 400000000;
-> +       default:
-> +               BUG();
-> +       }
-> +}
-> +
-> +static unsigned long rt3352_periph_recalc_rate(struct clk_hw *hw,
-> +                                              unsigned long parent_rate)
-> +{
-> +       return 40000000;
-> +}
-> +
-> +static unsigned long rt3352_bus_recalc_rate(struct clk_hw *hw,
-> +                                           unsigned long parent_rate)
-> +{
-> +       return parent_rate / 3;
-> +}
-> +
-> +static unsigned long rt305x_xtal_recalc_rate(struct clk_hw *hw,
-> +                                            unsigned long parent_rate)
-> +{
-> +       return 40000000;
-> +}
-
-Register fixed factor and fixed rate clks in software instead of
-duplicating the code here.
-
-> +
-> +static unsigned long rt305x_cpu_recalc_rate(struct clk_hw *hw,
-> +                                           unsigned long xtal_clk)
-> +{
-> +       struct mtmips_clk *clk =3D to_mtmips_clk(hw);
-> +       struct regmap *sysc =3D clk->priv->sysc;
-> +       u32 t;
-> +
-> +       regmap_read(sysc, SYSC_REG_SYSTEM_CONFIG, &t);
-> +       t =3D (t >> RT305X_SYSCFG_CPUCLK_SHIFT) & RT305X_SYSCFG_CPUCLK_MA=
-SK;
-> +
-> +       switch (t) {
-> +       case RT305X_SYSCFG_CPUCLK_LOW:
-> +               return 320000000;
-> +       case RT305X_SYSCFG_CPUCLK_HIGH:
-> +               return 384000000;
-> +       default:
-> +               BUG();
-> +       }
-> +}
-> +
-> +static unsigned long rt3883_cpu_recalc_rate(struct clk_hw *hw,
-> +                                           unsigned long xtal_clk)
-> +{
-> +       struct mtmips_clk *clk =3D to_mtmips_clk(hw);
-> +       struct regmap *sysc =3D clk->priv->sysc;
-> +       u32 t;
-> +
-> +       regmap_read(sysc, SYSC_REG_SYSTEM_CONFIG, &t);
-> +       t =3D (t >> RT3883_SYSCFG0_CPUCLK_SHIFT) & RT3883_SYSCFG0_CPUCLK_=
-MASK;
-> +
-> +       switch (t) {
-> +       case RT3883_SYSCFG0_CPUCLK_250:
-> +               return 250000000;
-> +       case RT3883_SYSCFG0_CPUCLK_384:
-> +               return 384000000;
-> +       case RT3883_SYSCFG0_CPUCLK_480:
-> +               return 480000000;
-> +       case RT3883_SYSCFG0_CPUCLK_500:
-> +               return 500000000;
-> +       default:
-> +               BUG();
-> +       }
-> +}
-> +
-> +static unsigned long rt3883_bus_recalc_rate(struct clk_hw *hw,
-> +                                           unsigned long parent_rate)
-> +{
-> +       struct mtmips_clk *clk =3D to_mtmips_clk(hw);
-> +       struct regmap *sysc =3D clk->priv->sysc;
-> +       u32 ddr2;
-> +       u32 t;
-> +
-> +       regmap_read(sysc, SYSC_REG_SYSTEM_CONFIG, &t);
-> +       ddr2 =3D t & RT3883_SYSCFG0_DRAM_TYPE_DDR2;
-> +
-> +       switch (parent_rate) {
-> +       case 250000000:
-> +               return (ddr2) ? 125000000 : 83000000;
-> +       case 384000000:
-> +               return (ddr2) ? 128000000 : 96000000;
-> +       case 480000000:
-> +               return (ddr2) ? 160000000 : 120000000;
-> +       case 500000000:
-> +               return (ddr2) ? 166000000 : 125000000;
-> +       default:
-> +               BUG();
-
-Why? Depending on clk registration order 'parent_rate' could be 0, and
-then this will crash the system.
-
-> +       }
-> +}
-> +
-> +static unsigned long rt2880_cpu_recalc_rate(struct clk_hw *hw,
-> +                                           unsigned long xtal_clk)
-> +{
-> +       struct mtmips_clk *clk =3D to_mtmips_clk(hw);
-> +       struct regmap *sysc =3D clk->priv->sysc;
-> +       u32 t;
-> +
-> +       regmap_read(sysc, SYSC_REG_SYSTEM_CONFIG, &t);
-> +       t =3D (t >> RT2880_CONFIG_CPUCLK_SHIFT) & RT2880_CONFIG_CPUCLK_MA=
-SK;
-> +
-> +       switch (t) {
-> +       case RT2880_CONFIG_CPUCLK_250:
-> +               return 250000000;
-> +       case RT2880_CONFIG_CPUCLK_266:
-> +               return 266000000;
-> +       case RT2880_CONFIG_CPUCLK_280:
-> +               return 280000000;
-> +       case RT2880_CONFIG_CPUCLK_300:
-> +               return 300000000;
-> +       default:
-> +               BUG();
-> +       }
-> +}
-> +
-> +static unsigned long rt2880_bus_recalc_rate(struct clk_hw *hw,
-> +                                           unsigned long parent_rate)
-> +{
-> +       return parent_rate / 2;
-> +}
-
-A fixed factor clk?
-
-> +
-> +static u32 mt7620_calc_rate(u32 ref_rate, u32 mul, u32 div)
-> +{
-> +       u64 t;
-> +
-> +       t =3D ref_rate;
-> +       t *=3D mul;
-> +       do_div(t, div);
-
-Do we really need to do 64-bit math? At the least use div_u64().
-
-> +
-> +       return t;
-> +}
-> +
-> +static unsigned long mt7620_pll_recalc_rate(struct clk_hw *hw,
-> +                                           unsigned long parent_rate)
-> +{
-> +       static const u32 clk_divider[] =3D { 2, 3, 4, 8 };
-> +       struct mtmips_clk *clk =3D to_mtmips_clk(hw);
-> +       struct regmap *sysc =3D clk->priv->sysc;
-> +       unsigned long cpu_pll;
-> +       u32 t;
-> +       u32 mul;
-> +       u32 div;
-> +
-> +       regmap_read(sysc, SYSC_REG_CPLL_CONFIG0, &t);
-> +       if (t & CPLL_CFG0_BYPASS_REF_CLK) {
-> +               cpu_pll =3D parent_rate;
-> +       } else if ((t & CPLL_CFG0_SW_CFG) =3D=3D 0) {
-> +               cpu_pll =3D 600000000;
-> +       } else {
-> +               mul =3D (t >> CPLL_CFG0_PLL_MULT_RATIO_SHIFT) &
-> +                       CPLL_CFG0_PLL_MULT_RATIO_MASK;
-> +               mul +=3D 24;
-> +               if (t & CPLL_CFG0_LC_CURFCK)
-> +                       mul *=3D 2;
-> +
-> +               div =3D (t >> CPLL_CFG0_PLL_DIV_RATIO_SHIFT) &
-> +                       CPLL_CFG0_PLL_DIV_RATIO_MASK;
-> +
-> +               WARN_ON(div >=3D ARRAY_SIZE(clk_divider));
-
-WARN_ON_ONCE() so that this doesn't spam the system.
-
-> +
-> +               cpu_pll =3D mt7620_calc_rate(parent_rate, mul, clk_divide=
-r[div]);
-> +       }
-> +
-> +       regmap_read(sysc, SYSC_REG_CPLL_CONFIG1, &t);
-> +       if (t & CPLL_CFG1_CPU_AUX1)
-> +               return parent_rate;
-> +
-> +       if (t & CPLL_CFG1_CPU_AUX0)
-> +               return 480000000;
-> +
-> +       return cpu_pll;
-> +}
-> +
-> +static unsigned long mt7620_cpu_recalc_rate(struct clk_hw *hw,
-> +                                           unsigned long parent_rate)
-> +{
-> +       struct mtmips_clk *clk =3D to_mtmips_clk(hw);
-> +       struct regmap *sysc =3D clk->priv->sysc;
-> +       u32 t;
-> +       u32 mul;
-> +       u32 div;
-> +
-> +       regmap_read(sysc, SYSC_REG_CPU_SYS_CLKCFG, &t);
-> +       mul =3D t & CPU_SYS_CLKCFG_CPU_FFRAC_MASK;
-> +       div =3D (t >> CPU_SYS_CLKCFG_CPU_FDIV_SHIFT) &
-> +               CPU_SYS_CLKCFG_CPU_FDIV_MASK;
-> +
-> +       return mt7620_calc_rate(parent_rate, mul, div);
-> +}
-> +
-> +static unsigned long mt7620_bus_recalc_rate(struct clk_hw *hw,
-> +                                           unsigned long parent_rate)
-> +{
-> +       static const u32 ocp_dividers[16] =3D {
-> +               [CPU_SYS_CLKCFG_OCP_RATIO_2] =3D 2,
-> +               [CPU_SYS_CLKCFG_OCP_RATIO_3] =3D 3,
-> +               [CPU_SYS_CLKCFG_OCP_RATIO_4] =3D 4,
-> +               [CPU_SYS_CLKCFG_OCP_RATIO_5] =3D 5,
-> +               [CPU_SYS_CLKCFG_OCP_RATIO_10] =3D 10,
-> +       };
-> +       struct mtmips_clk *clk =3D to_mtmips_clk(hw);
-> +       struct regmap *sysc =3D clk->priv->sysc;
-> +       u32 t;
-> +       u32 ocp_ratio;
-> +       u32 div;
-> +
-> +       if (IS_ENABLED(CONFIG_USB)) {
-> +               /*
-> +               * When the CPU goes into sleep mode, the BUS
-> +               * clock will be too low for USB to function properly.
-> +               * Adjust the busses fractional divider to fix this
-> +               */
-> +               regmap_read(sysc, SYSC_REG_CPU_SYS_CLKCFG, &t);
-> +               t &=3D ~(CLKCFG_FDIV_MASK | CLKCFG_FFRAC_MASK);
-> +               t |=3D CLKCFG_FDIV_USB_VAL | CLKCFG_FFRAC_USB_VAL;
-> +               regmap_write(sysc, SYSC_REG_CPU_SYS_CLKCFG, t);
-
-Why can't we do this unconditionally? And recalc_rate() shouldn't be
-writing registers. It should be calculating the frequency of the clk
-based on 'parent_rate' and whatever the hardware is configured for.
-
-> +       }
-> +
-> +       regmap_read(sysc, SYSC_REG_CPU_SYS_CLKCFG, &t);
-> +       ocp_ratio =3D (t >> CPU_SYS_CLKCFG_OCP_RATIO_SHIFT) &
-> +               CPU_SYS_CLKCFG_OCP_RATIO_MASK;
-> +
-> +       if (WARN_ON(ocp_ratio >=3D ARRAY_SIZE(ocp_dividers)))
-> +               return parent_rate;
-> +
-> +       div =3D ocp_dividers[ocp_ratio];
-> +       if (WARN(!div, "invalid divider for OCP ratio %u", ocp_ratio))
-
-Missing newline.
-
-> +               return parent_rate;
-> +
-> +       return parent_rate / div;
-> +}
-> +
-> +static unsigned long mt7620_periph_recalc_rate(struct clk_hw *hw,
-> +                                              unsigned long parent_rate)
-> +{
-> +       struct mtmips_clk *clk =3D to_mtmips_clk(hw);
-> +       struct regmap *sysc =3D clk->priv->sysc;
-> +       u32 t;
-> +
-> +       regmap_read(sysc, SYSC_REG_CLKCFG0, &t);
-> +       if (t & CLKCFG0_PERI_CLK_SEL)
-> +               return parent_rate;
-> +
-> +       return 40000000;
-> +}
-> +
-> +static unsigned long mt76x8_xtal_recalc_rate(struct clk_hw *hw,
-> +                                            unsigned long parent_rate)
-> +{
-> +       struct mtmips_clk *clk =3D to_mtmips_clk(hw);
-> +       struct regmap *sysc =3D clk->priv->sysc;
-> +       u32 t;
-> +
-> +       regmap_read(sysc, SYSC_REG_SYSTEM_CONFIG, &t);
-> +       if (t & MT7620_XTAL_FREQ_SEL)
-> +               return 40000000;
-> +
-> +       return 20000000;
-> +}
-> +
-> +static unsigned long mt76x8_cpu_recalc_rate(struct clk_hw *hw,
-> +                                           unsigned long xtal_clk)
-> +{
-> +       if (xtal_clk =3D=3D 40000000)
-> +               return 580000000;
-> +
-> +       return 575000000;
-> +}
-> +
-> +static unsigned long mt76x8_pcmi2s_recalc_rate(struct clk_hw *hw,
-> +                                              unsigned long xtal_clk)
-> +{
-> +       return 480000000;
-> +}
-
-Use fixed rate clk.
-
-> +
-> +#define CLK_BASE(_name, _parent, _recalc) {                            \
-> +       .init =3D &(struct clk_init_data) {                              =
- \
-
-const
-
-> +               .name =3D _name,                                         =
- \
-> +               .ops =3D &(const struct clk_ops) {                       =
- \
-> +                       .recalc_rate =3D _recalc,                        =
- \
-> +               },                                                      \
-> +               .parent_data =3D &(const struct clk_parent_data) {       =
- \
-> +                       .name =3D _parent,                               =
- \
-> +                       .fw_name =3D _parent                             =
- \
-> +               },                                                      \
-> +               .num_parents =3D _parent ? 1 : 0                         =
- \
-> +       },                                                              \
-> +}
-> +
-[...]
-> +
-> +static void __init mtmips_clk_init(struct device_node *node)
-> +{
-> +       const struct of_device_id *match;
-> +       const struct mtmips_clk_data *data;
-> +       struct mtmips_clk_priv *priv;
-> +       struct clk_hw_onecell_data *clk_data;
-> +       int ret, i, count;
-> +
-> +       if (!of_find_property(node, "#clock-cells", NULL)) {
-> +               pr_err("No '#clock-cells' property found\n");
-
-We don't need to validate the bindings in the driver.
-
-> +               return;
-> +       }
-> +
-> +       priv =3D kzalloc(sizeof(*priv), GFP_KERNEL);
-> +       if (!priv)
-> +               return;
-> +
-> +       priv->sysc =3D syscon_node_to_regmap(node);
-> +       if (IS_ERR(priv->sysc)) {
-> +               pr_err("Could not get sysc syscon regmap\n");
-> +               goto free_clk_priv;
-> +       }
-> +
-> +       match =3D of_match_node(mtmips_of_match, node);
-> +       if (WARN_ON(!match))
-> +               return;
-> +
-> +       data =3D match->data;
-> +       priv->data =3D data;
-> +       count =3D priv->data->num_clk_base + priv->data->num_clk_periph;
-> +       clk_data =3D kzalloc(struct_size(clk_data, hws, count), GFP_KERNE=
-L);
-> +       if (!clk_data)
-> +               goto free_clk_priv;
-> +
-> +       ret =3D mtmips_register_clocks(node, clk_data, priv);
-> +       if (ret) {
-> +               pr_err("Couldn't register top clocks\n");
-> +               goto free_clk_data;
-> +       }
-> +
-> +       ret =3D mtmips_register_pherip_clocks(node, clk_data, priv);
-> +       if (ret) {
-> +               pr_err("Couldn't register peripheral clocks\n");
-> +               goto unreg_clk_top;
-> +       }
-> +
-> +       clk_data->num =3D count;
-> +
-> +       ret =3D of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_d=
-ata);
-> +       if (ret) {
-> +               pr_err("Couldn't add clk hw provider\n");
-> +               goto unreg_clk_periph;
-> +       }
-> +
-> +       return;
-> +
-> +unreg_clk_periph:
-> +       for (i =3D 0; i < priv->data->num_clk_periph; i++) {
-> +               struct mtmips_clk *sclk =3D &priv->data->clk_periph[i];
-> +
-> +               clk_hw_unregister(&sclk->hw);
-> +       }
-> +
-> +unreg_clk_top:
-> +       for (i =3D 0; i < priv->data->num_clk_base; i++) {
-> +               struct mtmips_clk *sclk =3D &priv->data->clk_base[i];
-> +
-> +               clk_hw_unregister(&sclk->hw);
-> +       }
-> +
-> +free_clk_data:
-> +       kfree(clk_data);
-> +
-> +free_clk_priv:
-> +       kfree(priv);
-> +}
-> +CLK_OF_DECLARE_DRIVER(rt2880_clk, "ralink,rt2880-sysc", mtmips_clk_init);
-> +CLK_OF_DECLARE_DRIVER(rt3050_clk, "ralink,rt3050-sysc", mtmips_clk_init);
-> +CLK_OF_DECLARE_DRIVER(rt3052_clk, "ralink,rt3052-sysc", mtmips_clk_init);
-> +CLK_OF_DECLARE_DRIVER(rt3352_clk, "ralink,rt3352-sysc", mtmips_clk_init);
-> +CLK_OF_DECLARE_DRIVER(rt3883_clk, "ralink,rt3883-sysc", mtmips_clk_init);
-> +CLK_OF_DECLARE_DRIVER(rt5350_clk, "ralink,rt5350-sysc", mtmips_clk_init);
-> +CLK_OF_DECLARE_DRIVER(mt7620_clk, "ralink,mt7620-sysc", mtmips_clk_init);
-> +CLK_OF_DECLARE_DRIVER(mt7620a_clk, "ralink,mt7620a-sysc", mtmips_clk_ini=
-t);
-> +CLK_OF_DECLARE_DRIVER(mt7628_clk, "ralink,mt7628-sysc", mtmips_clk_init);
-> +CLK_OF_DECLARE_DRIVER(mt7688_clk, "ralink,mt7688-sysc", mtmips_clk_init);
-
-Is there any reason why these can't be platform drivers?
-
-> +
-[..]
-> +
-> +static int mtmips_clk_probe(struct platform_device *pdev)
-> +{
-> +       struct device_node *np =3D pdev->dev.of_node;
-> +       struct device *dev =3D &pdev->dev;
-> +       struct mtmips_clk_priv *priv;
-> +       int ret;
-> +
-> +       priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +       if (!priv)
-> +               return -ENOMEM;
-> +
-> +       priv->sysc =3D syscon_node_to_regmap(np);
-> +       if (IS_ERR(priv->sysc)) {
-> +               ret =3D PTR_ERR(priv->sysc);
-> +               dev_err(dev, "Could not get sysc syscon regmap\n");
-
-Use dev_err_probe()?
-
-> +               return ret;
-> +       }
-> +
-> +       ret =3D mtmips_reset_init(dev, priv->sysc);
-> +       if (ret) {
-> +               dev_err(dev, "Could not init reset controller\n");
-
-Use dev_err_probe()?
-
-> +               return ret;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
