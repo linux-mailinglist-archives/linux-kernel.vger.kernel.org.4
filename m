@@ -2,131 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FEB76E0743
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 08:56:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 209476E073F
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 08:55:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjDMG4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 02:56:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54810 "EHLO
+        id S229736AbjDMGzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 02:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjDMG4B (ORCPT
+        with ESMTP id S229615AbjDMGzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 02:56:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F95B8A57
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 23:55:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681368910;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Thu, 13 Apr 2023 02:55:23 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5204683F8
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 23:55:17 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id ED36C1FD63;
+        Thu, 13 Apr 2023 06:55:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1681368915; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=EtHuO00FJiC5lOLplpzGnRuAlZl/i1NIHOiXXk9MsdA=;
-        b=dk+fTXJ4ghuCm19MHnfqebwOQO7686z5ZvklRhSS7eNQsVIQ6VjwsurPqHpAZf/jMOaze4
-        v3TjVwvG3U29tIDFFVEKE98n759z3No8OXzlp8/fMq2VMiMgti6lcRyudwat+qVz6vl2OZ
-        GsisbGacGtGiuV3KqrMj6x3cvHwtNUo=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-318-gop-xhCiOMWk3jt6_0Xfpg-1; Thu, 13 Apr 2023 02:55:01 -0400
-X-MC-Unique: gop-xhCiOMWk3jt6_0Xfpg-1
-Received: by mail-wm1-f70.google.com with SMTP id n11-20020a05600c3b8b00b003f04739b77aso17024867wms.9
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 23:55:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681368900; x=1683960900;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EtHuO00FJiC5lOLplpzGnRuAlZl/i1NIHOiXXk9MsdA=;
-        b=WKaS1ABf5wLypy+230IPliUOQeeHNBFkCHxkIQ49S32JARgTHBOwUksyv/axnzV3da
-         Zd7ieVdXU99HG9L4H817Lb8AnPvN7x2dfgsswqbSOtv3dJF77QrigIgqCoytUxX+mIB/
-         iffJUEkT6OYH4Pv+FMQSawlLtHgj6D3aQibkxET+ZCGl2O2H4CPy8eg1+9Fu6Y6pgD+Y
-         OYPP8wD3Wvg1OoEZ/vtG+wkWC4IvfJo25d8HkEPn7+CiFsV9LpIhGRvBbiAC75BDDmyx
-         lvRmV8d7/SnTqiSF/fqwUxw+EL0QHkTfKCk4Atu8m71hCW/x76sAO+Q32ytFyoqJ2vhz
-         D9Jw==
-X-Gm-Message-State: AAQBX9dYGo9cj0JOJAJJuceBfxLVGW1gnfF6H8lUdBHeyP4OpRnfaNKf
-        lweL3LCVrZFMh9TPmrxxQ6xtwd4Asq5XWdaiHSgrH/Jkp4KaP36ZSVrLNJA2MC6bXZV5qSb7M/F
-        7U4Ba9ZQFymk2ETiezFt2eXXF
-X-Received: by 2002:a05:6000:1b8c:b0:2ef:bada:2f04 with SMTP id r12-20020a0560001b8c00b002efbada2f04mr517212wru.59.1681368900062;
-        Wed, 12 Apr 2023 23:55:00 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Z0EZAgpIJMAOpMZ9YL49SvFC6ZDtVmPWTNAfJenweN0E8xHCZ6+EAumcDzrno3Pk/W5NtMoQ==
-X-Received: by 2002:a05:6000:1b8c:b0:2ef:bada:2f04 with SMTP id r12-20020a0560001b8c00b002efbada2f04mr517202wru.59.1681368899789;
-        Wed, 12 Apr 2023 23:54:59 -0700 (PDT)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id z16-20020a5d4c90000000b002c7163660a9sm560860wrs.105.2023.04.12.23.54.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 23:54:59 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Pierre Asselin <pa@panix.com>
-Cc:     Pierre Asselin <pa@panix.com>,
-        Jocelyn Falempe <jfalempe@redhat.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH] firmware/sysfb: Fix wrong stride when bits-per-pixel is
- calculated
-In-Reply-To: <9e6fff69b09b36cbdd96499cd0015154.squirrel@mail.panix.com>
-References: <20230412150225.3757223-1-javierm@redhat.com>
- <2e07f818ccdff7023a060e732d7c4ef6.squirrel@mail.panix.com>
- <87jzyhror0.fsf@minerva.mail-host-address-is-not-set>
- <beeff0335ab4cc244d214a7baadba371.squirrel@mail.panix.com>
- <CAFOAJEdKBUg91pDmNYYw5xigUxjifBgOLz2YgD+xQ+WyEy=V2w@mail.gmail.com>
- <1afd3044c2aca9322ecf304941c7df66.squirrel@mail.panix.com>
- <87fs94stgw.fsf@minerva.mail-host-address-is-not-set>
- <87cz48srs4.fsf@minerva.mail-host-address-is-not-set>
- <40edb0fdb0eaff434f4872dd677923a6.squirrel@mail.panix.com>
- <87a5zcsqg8.fsf@minerva.mail-host-address-is-not-set>
- <9e6fff69b09b36cbdd96499cd0015154.squirrel@mail.panix.com>
-Date:   Thu, 13 Apr 2023 08:54:58 +0200
-Message-ID: <87r0souv99.fsf@minerva.mail-host-address-is-not-set>
+        bh=LKj3Sa1bj1k3JK9KGPKmmqNZDHVo9Oz8P5aTGkpnMg0=;
+        b=aNUxu1hlEE5Ur9RwKUlhPDMubtfHNjPcT0xwlcHF4Lo1cwN1FHKGEjCOxGggyjwiJ54VR0
+        lELtxJuX4VlEvYgRZ3QCCv66hqvv2imSnghQz62o4mSFFLmfGZsjlA+GzQvKqZsWLa6jk5
+        LxDVmN1lk1ju08U+a3/uforkohWcRV0=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C11BB13421;
+        Thu, 13 Apr 2023 06:55:15 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id bQJ4LFOnN2TvawAAMHmgww
+        (envelope-from <mhocko@suse.com>); Thu, 13 Apr 2023 06:55:15 +0000
+Date:   Thu, 13 Apr 2023 08:55:15 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Jaewon Kim <jaewon31.kim@samsung.com>
+Cc:     "T.J. Mercier" <tjmercier@google.com>,
+        "jstultz@google.com" <jstultz@google.com>,
+        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>
+Subject: Re: [PATCH v3] dma-buf/heaps: system_heap: avoid too much allocation
+Message-ID: <ZDenU98chAfH9jSj@dhcp22.suse.cz>
+References: <CABdmKX2fA2nXaSb8k+LE1yeso=ZnboDtxhzmjzrS35GSKv73hQ@mail.gmail.com>
+ <ZDZ4j7UdBt32j28J@dhcp22.suse.cz>
+ <ZDZqYTSHBNGLq0zI@dhcp22.suse.cz>
+ <20230410073228.23043-1-jaewon31.kim@samsung.com>
+ <20230412085726epcms1p7d2bec2526e47bd10a3b6ea6a113c9cc3@epcms1p7>
+ <20230412094440epcms1p445319579ead0d0576bb616ebb07501b4@epcms1p4>
+ <ZDaP4/PYyb9tKGQi@dhcp22.suse.cz>
+ <20230412113759epcms1p8cb15b54e3a96c7616419cb030d16f804@epcms1p8>
+ <CGME20230410073304epcas1p4cf3079b096994d69472b7801bd530bc7@epcms1p6>
+ <20230413001658epcms1p611d149fcbbbd06fc17387724f4f16359@epcms1p6>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230413001658epcms1p611d149fcbbbd06fc17387724f4f16359@epcms1p6>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Pierre Asselin" <pa@panix.com> writes:
+On Thu 13-04-23 09:16:58, Jaewon Kim wrote:
+> >On Wed, Apr 12, 2023 at 4:38?AM Jaewon Kim <jaewon31.kim@samsung.com> wrote:
+> >
+> >> Yes I think you're right. As a allocator, dma-buf system heap looks to be loose
+> >> in memory allocation. Limiting dmabuf memory may be required. But I think there
+> >> is no nice and reasonable way so far. And the dma-buf system heap is being
+> >> widely used in Android mobile system. AFAIK the camera consumes huge memory
+> >> through this dma-buf system heap. I actually even looked a huge size request
+> >> over 2GB in one dma-buf request.
+> >>
+> >Hey can you point me to where you saw a request that big? That's a
+> >non-buggy request?!
+> 
+> (let me resend as plain text)
+> It was one of camera scenarios. I internally asked and heard that was not a bug
+> but normal. I think 2GB looks too big for one graphics buffer but it could be
+> for other purposes like camera. I think the system heap should support that.
 
-[...]
+Is that any of the upstream drivers or something sitting out of the
+tree.
 
-> [    3.343433] sysfb: si->rsvd_size 0 si->rsvd_pos 0
+> Regarding __GFP_RETRY_MAYFAIL, we may need to say dma-buf system heap was
+> designed to gather many pages up to a requested size. If mm returns NULL due to
+> __GFP_RETRY_MAYFAIL, dma-buf system heap will release other already allocated
+> pages, so that it may help to avoid oom.
 
-Thanks for confirming this. I was expected that as mentioned since it was
-the only reasonable explanation for your problem.
-
-[...]
-
-> What if _depth is low but the rsvd_ are right ?
-> Then _width and _linelength would be inconsistent with _depth but
-> consistent with the recomputed bits_per_pixel ?  How many ways can the
-> firmware lie ?
->
-
-I don't know. But in your case the firmware is not reporting the mode
-correctly since it is setting a framebuffer of 1024x768 and xRGB but
-is not reporting si->rsvd_size=8 and si->rsvd_pos=24 as it should.
-
-One option is to have a DMI match table similar to what we already have
-for EFI machines in drivers/firmware/efi/sysfb_efi.c but also for BIOS.
-
-The question then is if we can trust other systems to report a proper
-rsvd_size and rsvd_pos...
-
-> We need more testers, don't we ?
->
-
-It's tricky, yes.
-
+This really depends on the other activity on the system. If you have a
+more concurrent memory demand at the time then you might be just out of
+the luck. Really, claiming huge portion of the memory shouldn't be done
+nilly willy.
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
-
+Michal Hocko
+SUSE Labs
