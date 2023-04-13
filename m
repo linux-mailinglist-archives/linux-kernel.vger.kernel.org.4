@@ -2,79 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C70846E17F0
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 01:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A7DD6E17F2
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 01:13:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbjDMXNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 19:13:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43338 "EHLO
+        id S230329AbjDMXNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 19:13:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230253AbjDMXM7 (ORCPT
+        with ESMTP id S230373AbjDMXNQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 19:12:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEEA19AD
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 16:12:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681427533;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=U50mzc3x7opcua/Zq5xIU5DytHBPjAF3IuThARnv+MM=;
-        b=ZCitj2OxvSxTiK53ie/rCtYueeBNF+T4eJaCpu1Qd1x3w94OlGkZp1z4JwpytoesD2z7Sn
-        7OgBzXrSXQo0ebbkBAjXpaF48lSvEUmcDoV/J4YByVkpuQpgIPANQOY7JIhCq0WO9udDpW
-        qwzWj03kX6OtVY2oRP01gtFLmFeXsak=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-313-B-Fx5p2GNFGh9UPmRZIy7Q-1; Thu, 13 Apr 2023 19:12:12 -0400
-X-MC-Unique: B-Fx5p2GNFGh9UPmRZIy7Q-1
-Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-3eab4df3ef0so823811cf.0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 16:12:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681427532; x=1684019532;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        Thu, 13 Apr 2023 19:13:16 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7220E4ED0
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 16:12:56 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id p2-20020a170902e74200b001a64b5976a5so5925201plf.0
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 16:12:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681427574; x=1684019574;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=U50mzc3x7opcua/Zq5xIU5DytHBPjAF3IuThARnv+MM=;
-        b=NUqRgQJplkdKYiLi+dP1Rgn7rcRswOi9ovV2NfHFgLssL/1ZM5NOQgZcaaIPkYK1ZA
-         kpxXFWdpetCbJDl4mpjsyZM+J8l2huLHhP5xWpXOdKc+FLX6OhGLZh8DQ0+vqM8pYl2g
-         g+zJFhliUgBSUKDQyC7zbZa39SY/WVSHeT43NxTnS4SqdETTNZDxG0WeaW5hb8UQOd0d
-         OayFEOoR7NI+H35El0V/bMc+oSRMSdRYXmPQ06OQVivYWnn6Jo/c0n3Wn9KB1Jm+Mbjy
-         90pywEZ/t3I074pG7xW+t0tJAdY/UNLlfaBPqa3AyINzlQ3ALln9/aOYVlB7zdtek1k2
-         7/Ew==
-X-Gm-Message-State: AAQBX9cnRGT2qw2IpE3rFrkkIIfgPT9ak/R1mncpRz28ePJtgM1De9lh
-        h8yJARqU7P7q4IlX1tPoVptnG77I7exVObBGW7FqASk89HVrAZ8dDnxzIQUn/xaWwdjzSz6Mplo
-        PekUemZ31Mw0K4aduclwZXZag
-X-Received: by 2002:a05:622a:1a0b:b0:3e6:3af1:de7a with SMTP id f11-20020a05622a1a0b00b003e63af1de7amr983573qtb.4.1681427531955;
-        Thu, 13 Apr 2023 16:12:11 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YlByEGJ4UdGFBHdGvGYtpq6JVyaUGtX1ideR+y+TXFaHJemqbrxo5x6y9sTphL6VxiZhrbGw==
-X-Received: by 2002:a05:622a:1a0b:b0:3e6:3af1:de7a with SMTP id f11-20020a05622a1a0b00b003e63af1de7amr983544qtb.4.1681427531653;
-        Thu, 13 Apr 2023 16:12:11 -0700 (PDT)
-Received: from x1n.redhat.com (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
-        by smtp.gmail.com with ESMTPSA id p26-20020ac8741a000000b003dd8ad765dcsm814463qtq.76.2023.04.13.16.12.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 16:12:11 -0700 (PDT)
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     Nadav Amit <nadav.amit@gmail.com>, peterx@redhat.com,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        David Hildenbrand <david@redhat.com>
-Subject: [PATCH 6/6] selftests/mm: Add tests for RO pinning vs fork()
-Date:   Thu, 13 Apr 2023 19:12:09 -0400
-Message-Id: <20230413231209.544825-1-peterx@redhat.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230413231120.544685-1-peterx@redhat.com>
-References: <20230413231120.544685-1-peterx@redhat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        bh=ENeL1jAqmLHzOLh7E8oX4vHyWzKuNEA1DmPquvWqZ/o=;
+        b=1/jUz3cjjnaEmVc6vMszAi8neCRY5PygRQM7gXAMcH3Ql61fpq5vh6ZzztwJktW0Xn
+         gQrBaaeKTLDBpW9FYyTuJxFyK9i52UhuZ0Rjw3lgsa02l4y/a7MkIcNk8KuRppGDWWrh
+         8629JMiykGMUnC2I5s+tUueDam9gLvc5fYht/mvgwBy0r1bIxGVjRs+WoBL/YQVCICkZ
+         j5nTPV6CFzkQJ74UbdHh/9WPGz69DQpt1pqkEDiks/zIlWjvNFQX+n77EOZ/peMvF7wB
+         5D/tsREJ2E9PmBB1Sb+H0ZHffNIp6udE1jXTUMohZjUH9ywKzTIlGc9jpZw46W2hSrHz
+         viTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681427574; x=1684019574;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ENeL1jAqmLHzOLh7E8oX4vHyWzKuNEA1DmPquvWqZ/o=;
+        b=aoYRGybJ8AB8XRSChHDKm/8rfmvXMxCTSO9xNJxw1P7qLnaFl2iPMpgWlaYCVw7U+g
+         dypbprshmb+Xbk2mIFGIhNJ/rigo9a8Ev9K+o99VK6WN/OVKdY6HwyLot27AYFkKYbnX
+         sWA739y2Zgmh7fUPhaUbCXFoP+EoJ5JBDziu2t2deQdtiA0EbR3tuv/U+e2tcxX0X0aK
+         TsYC54Y6+pB/+aA/yvoSuVRJqunwJQU8Ozm8SEN3vblUwvW+626scBarmevojV/XKBNl
+         SATiPmD64dP9PiCc9bR1TlC52RnMRO5MRxrypKhyFQplwGZeLhrHWETxzigzuN56kD3Y
+         HXLQ==
+X-Gm-Message-State: AAQBX9dAHfY2Z5vCpwo4Phh424/NvnQFT6S5dovv+nwAAJhJKEIz8DrJ
+        qIAXZk3/hDljeBhYtQrHcurTM+Y7GKM=
+X-Google-Smtp-Source: AKy350Z80KsNOMB7uTpxbgTThEPLr1vkQwXDqimfoZtgKKp3fe4vzP8+kz8/xQvsRvBV6EXobcAJYefLmtA=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90a:6a87:b0:247:1c31:5419 with SMTP id
+ u7-20020a17090a6a8700b002471c315419mr984752pjj.9.1681427573758; Thu, 13 Apr
+ 2023 16:12:53 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Thu, 13 Apr 2023 16:12:51 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
+Message-ID: <20230413231251.1481410-1-seanjc@google.com>
+Subject: [PATCH] KVM: x86: Preserve TDP MMU roots until they are explicitly invalidated
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,242 +70,203 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add 10 one more test to cover RO pinning against fork() over uffd-wp.  It
-covers both:
+Preserve TDP MMU roots until they are explicitly invalidated by gifting
+the TDP MMU itself a reference to a root when it is allocated.  Keeping a
+reference in the TDP MMU fixes a flaw where the TDP MMU exhibits terrible
+performance, and can potentially even soft-hang a vCPU, if a vCPU
+frequently unloads its roots, e.g. when KVM is emulating SMI+RSM.
 
-  (1) Early CoW test in fork() when page pinned,
-  (2) page unshare due to RO longterm pin.
+When KVM emulates something that invalidates _all_ TLB entries, e.g. SMI
+and RSM, KVM unloads all of the vCPUs roots (KVM keeps a small per-vCPU
+cache of previous roots).  Unloading roots is a simple way to ensure KVM
+flushes and synchronizes all roots for the vCPU, as KVM flushes and syncs
+when allocating a "new" root (from the vCPU's perspective).
 
-They are:
+In the shadow MMU, KVM keeps track of all shadow pages, roots included, in
+a per-VM hash table.  Unloading a shadow MMU root just wipes it from the
+per-vCPU cache; the root is still tracked in the per-VM hash table.  When
+KVM loads a "new" root for the vCPU, KVM will find the old, unloaded root
+in the per-VM hash table.
 
-Testing wp-fork-pin on anon... done
-Testing wp-fork-pin on shmem... done
-Testing wp-fork-pin on shmem-private... done
-Testing wp-fork-pin on hugetlb... done
-Testing wp-fork-pin on hugetlb-private... done
-Testing wp-fork-pin-with-event on anon... done
-Testing wp-fork-pin-with-event on shmem... done
-Testing wp-fork-pin-with-event on shmem-private... done
-Testing wp-fork-pin-with-event on hugetlb... done
-Testing wp-fork-pin-with-event on hugetlb-private... done
+Unlike the shadow MMU, the TDP MMU doesn't track "inactive" roots in a
+per-VM structure, where "active" in this case means a root is either
+in-use or cached as a previous root by at least one vCPU.  When a TDP MMU
+root becomes inactive, i.e. the last vCPU reference to the root is put,
+KVM immediately frees the root (asterisk on "immediately" as the actual
+freeing may be done by a worker, but for all intents and purposes the root
+is gone).
 
-CONFIG_GUP_TEST needed or they'll be skipped.
+The TDP MMU behavior is especially problematic for 1-vCPU setups, as
+unloading all roots effectively frees all roots.  The issue is mitigated
+to some degree in multi-vCPU setups as a different vCPU usually holds a
+reference to an unloaded root and thus keeps the root alive, allowing the
+vCPU to reuse its old root after unloading (with a flush+sync).
 
-Testing wp-fork-pin on anon... skipped [reason: Possibly CONFIG_GUP_TEST missing or unprivileged]
+The TDP MMU flaw has been known for some time, as until very recently,
+KVM's handling of CR0.WP also triggered unloading of all roots.  The
+CR0.WP toggling scenario was eventually addressed by not unloading roots
+when _only_ CR0.WP is toggled, but such an approach doesn't Just Work
+for emulating SMM as KVM must emulate a full TLB flush on entry and exit
+to/from SMM.  Given that the shadow MMU plays nice with unloading roots
+at will, teaching the TDP MMU to do the same is far less complex than
+modifying KVM to track which roots need to be flushed before reuse.
 
-Note that only private pages matter here, but no hurt to also run all of
-them over shared.
+Note, preserving all possible TDP MMU roots is not a concern with respect
+to memory consumption.  Now that the role for direct MMUs doesn't include
+information about the guest, e.g. CR0.PG, CR0.WP, CR4.SMEP, etc., there
+are _at most_ six possible roots (where "guest_mode" here means L2):
 
-Signed-off-by: Peter Xu <peterx@redhat.com>
+  1. 4-level !SMM !guest_mode
+  2. 4-level  SMM !guest_mode
+  3. 5-level !SMM !guest_mode
+  4. 5-level  SMM !guest_mode
+  5. 4-level !SMM guest_mode
+  6. 5-level !SMM guest_mode
+
+And because each vCPU can track 4 valid roots, a VM can already have all
+6 root combinations live at any given time.  Not to mention that, in
+practice, no sane VMM will advertise different guest.MAXPHYADDR values
+across vCPUs, i.e. KVM won't ever use both 4-level and 5-level roots for
+a single VM.  Furthermore, the vast majority of modern hypervisors will
+utilize EPT/NPT when available, thus the guest_mode=%true cases are also
+unlikely to be utilized.
+
+Reported-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+Link: https://lore.kernel.org/all/959c5bce-beb5-b463-7158-33fc4a4f910c@linux.microsoft.com
+Link: https://lkml.kernel.org/r/20220209170020.1775368-1-pbonzini%40redhat.com
+Link: https://lore.kernel.org/all/20230322013731.102955-1-minipli@grsecurity.net
+Cc: David Matlack <dmatlack@google.com>
+Cc: Ben Gardon <bgardon@google.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- tools/testing/selftests/mm/uffd-unit-tests.c | 144 ++++++++++++++++++-
- 1 file changed, 141 insertions(+), 3 deletions(-)
+ arch/x86/kvm/mmu/tdp_mmu.c | 80 +++++++++++++-------------------------
+ 1 file changed, 28 insertions(+), 52 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
-index 739fc4d30342..269c86768a02 100644
---- a/tools/testing/selftests/mm/uffd-unit-tests.c
-+++ b/tools/testing/selftests/mm/uffd-unit-tests.c
-@@ -7,6 +7,8 @@
+diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+index b2fca11b91ff..343deccab511 100644
+--- a/arch/x86/kvm/mmu/tdp_mmu.c
++++ b/arch/x86/kvm/mmu/tdp_mmu.c
+@@ -40,7 +40,17 @@ static __always_inline bool kvm_lockdep_assert_mmu_lock_held(struct kvm *kvm,
  
- #include "uffd-common.h"
- 
-+#include "../../../../mm/gup_test.h"
-+
- #ifdef __NR_userfaultfd
- 
- /* The unit test doesn't need a large or random size, make it 32MB for now */
-@@ -247,7 +249,53 @@ static void *fork_event_consumer(void *data)
- 	return NULL;
- }
- 
--static int pagemap_test_fork(int uffd, bool with_event)
-+typedef struct {
-+	int gup_fd;
-+	bool pinned;
-+} pin_args;
-+
-+/*
-+ * Returns 0 if succeed, <0 for errors.  pin_pages() needs to be paired
-+ * with unpin_pages().  Currently it needs to be RO longterm pin to satisfy
-+ * all needs of the test cases (e.g., trigger unshare, trigger fork() early
-+ * CoW, etc.).
-+ */
-+static int pin_pages(pin_args *args, void *buffer, size_t size)
-+{
-+	struct pin_longterm_test test = {
-+		.addr = (uintptr_t)buffer,
-+		.size = size,
-+		/* Read-only pins */
-+		.flags = 0,
-+	};
-+
-+	if (args->pinned)
-+		err("already pinned");
-+
-+	args->gup_fd = open("/sys/kernel/debug/gup_test", O_RDWR);
-+	if (args->gup_fd < 0)
-+		return -errno;
-+
-+	if (ioctl(args->gup_fd, PIN_LONGTERM_TEST_START, &test)) {
-+		/* Even if gup_test existed, can be an old gup_test / kernel */
-+		close(args->gup_fd);
-+		return -errno;
-+	}
-+	args->pinned = true;
-+	return 0;
-+}
-+
-+static void unpin_pages(pin_args *args)
-+{
-+	if (!args->pinned)
-+		err("unpin without pin first");
-+	if (ioctl(args->gup_fd, PIN_LONGTERM_TEST_STOP))
-+		err("PIN_LONGTERM_TEST_STOP");
-+	close(args->gup_fd);
-+	args->pinned = false;
-+}
-+
-+static int pagemap_test_fork(int uffd, bool with_event, bool test_pin)
+ void kvm_mmu_uninit_tdp_mmu(struct kvm *kvm)
  {
- 	fork_event_args args = { .parent_uffd = uffd, .child_uffd = -1 };
- 	pthread_t thread;
-@@ -264,7 +312,17 @@ static int pagemap_test_fork(int uffd, bool with_event)
- 	child = fork();
- 	if (!child) {
- 		/* Open the pagemap fd of the child itself */
-+		pin_args args = {};
-+
- 		fd = pagemap_open();
-+
-+		if (test_pin && pin_pages(&args, area_dst, page_size))
-+			/*
-+			 * Normally when reach here we have pinned in
-+			 * previous tests, so shouldn't fail anymore
-+			 */
-+			err("pin page failed in child");
-+
- 		value = pagemap_get_entry(fd, area_dst);
- 		/*
- 		 * After fork(), we should handle uffd-wp bit differently:
-@@ -273,6 +331,8 @@ static int pagemap_test_fork(int uffd, bool with_event)
- 		 * (2) when without EVENT_FORK, it should be dropped
- 		 */
- 		pagemap_check_wp(value, with_event);
-+		if (test_pin)
-+			unpin_pages(&args);
- 		/* Succeed */
- 		exit(0);
- 	}
-@@ -352,7 +412,7 @@ static void uffd_wp_fork_test_common(uffd_test_args_t *args,
- 	wp_range(uffd, (uint64_t)area_dst, page_size, true);
- 	value = pagemap_get_entry(pagemap_fd, area_dst);
- 	pagemap_check_wp(value, true);
--	if (pagemap_test_fork(uffd, with_event)) {
-+	if (pagemap_test_fork(uffd, with_event, false)) {
- 		uffd_test_fail("Detected %s uffd-wp bit in child in present pte",
- 			       with_event ? "missing" : "stall");
- 		goto out;
-@@ -383,7 +443,7 @@ static void uffd_wp_fork_test_common(uffd_test_args_t *args,
- 	/* Uffd-wp should persist even swapped out */
- 	value = pagemap_get_entry(pagemap_fd, area_dst);
- 	pagemap_check_wp(value, true);
--	if (pagemap_test_fork(uffd, with_event)) {
-+	if (pagemap_test_fork(uffd, with_event, false)) {
- 		uffd_test_fail("Detected %s uffd-wp bit in child in zapped pte",
- 			       with_event ? "missing" : "stall");
- 		goto out;
-@@ -415,6 +475,68 @@ static void uffd_wp_fork_with_event_test(uffd_test_args_t *args)
- 	uffd_wp_fork_test_common(args, true);
- }
- 
-+static void uffd_wp_fork_pin_test_common(uffd_test_args_t *args,
-+					 bool with_event)
-+{
-+	int pagemap_fd;
-+	pin_args pin_args = {};
-+
-+	if (uffd_register(uffd, area_dst, page_size, false, true, false))
-+		err("register failed");
-+
-+	pagemap_fd = pagemap_open();
-+
-+	/* Touch the page */
-+	*area_dst = 1;
-+	wp_range(uffd, (uint64_t)area_dst, page_size, true);
+-	/* Also waits for any queued work items.  */
++	/*
++	 * Invalidate all roots, which besides the obvious, schedules all roots
++	 * for zapping and thus puts the TDP MMU's reference to each root, i.e.
++	 * ultimately frees all roots.
++	 */
++	kvm_tdp_mmu_invalidate_all_roots(kvm);
 +
 +	/*
-+	 * 1. First pin, then fork().  This tests fork() special path when
-+	 * doing early CoW if the page is private.
++	 * Destroying a workqueue also first flushes the workqueue, i.e. no
++	 * need to invoke kvm_tdp_mmu_zap_invalidated_roots().
 +	 */
-+	if (pin_pages(&pin_args, area_dst, page_size)) {
-+		uffd_test_skip("Possibly CONFIG_GUP_TEST missing "
-+			       "or unprivileged");
-+		close(pagemap_fd);
-+		uffd_unregister(uffd, area_dst, page_size);
-+		return;
-+	}
-+
-+	if (pagemap_test_fork(uffd, with_event, false)) {
-+		uffd_test_fail("Detected %s uffd-wp bit in early CoW of fork()",
-+			       with_event ? "missing" : "stall");
-+		unpin_pages(&pin_args);
-+		goto out;
-+	}
-+
-+	unpin_pages(&pin_args);
-+
-+	/*
-+	 * 2. First fork(), then pin (in the child, where test_pin==true).
-+	 * This tests COR, aka, page unsharing on private memories.
-+	 */
-+	if (pagemap_test_fork(uffd, with_event, true)) {
-+		uffd_test_fail("Detected %s uffd-wp bit when RO pin",
-+			       with_event ? "missing" : "stall");
-+		goto out;
-+	}
-+	uffd_test_pass();
-+out:
-+	if (uffd_unregister(uffd, area_dst, page_size))
-+		err("register failed");
-+	close(pagemap_fd);
-+}
-+
-+static void uffd_wp_fork_pin_test(uffd_test_args_t *args)
-+{
-+	uffd_wp_fork_pin_test_common(args, false);
-+}
-+
-+static void uffd_wp_fork_pin_with_event_test(uffd_test_args_t *args)
-+{
-+	uffd_wp_fork_pin_test_common(args, true);
-+}
-+
- static void check_memory_contents(char *p)
+ 	destroy_workqueue(kvm->arch.tdp_mmu_zap_wq);
+ 
+ 	WARN_ON(atomic64_read(&kvm->arch.tdp_mmu_pages));
+@@ -116,16 +126,6 @@ static void tdp_mmu_schedule_zap_root(struct kvm *kvm, struct kvm_mmu_page *root
+ 	queue_work(kvm->arch.tdp_mmu_zap_wq, &root->tdp_mmu_async_work);
+ }
+ 
+-static inline bool kvm_tdp_root_mark_invalid(struct kvm_mmu_page *page)
+-{
+-	union kvm_mmu_page_role role = page->role;
+-	role.invalid = true;
+-
+-	/* No need to use cmpxchg, only the invalid bit can change.  */
+-	role.word = xchg(&page->role.word, role.word);
+-	return role.invalid;
+-}
+-
+ void kvm_tdp_mmu_put_root(struct kvm *kvm, struct kvm_mmu_page *root,
+ 			  bool shared)
  {
- 	unsigned long i, j;
-@@ -923,6 +1045,22 @@ uffd_test_case_t uffd_tests[] = {
- 		/* when set, child process should inherit uffd-wp bits */
- 		UFFD_FEATURE_EVENT_FORK,
- 	},
-+	{
-+		.name = "wp-fork-pin",
-+		.uffd_fn = uffd_wp_fork_pin_test,
-+		.mem_targets = MEM_ALL,
-+		.uffd_feature_required = UFFD_FEATURE_PAGEFAULT_FLAG_WP |
-+		UFFD_FEATURE_WP_HUGETLBFS_SHMEM,
-+	},
-+	{
-+		.name = "wp-fork-pin-with-event",
-+		.uffd_fn = uffd_wp_fork_pin_with_event_test,
-+		.mem_targets = MEM_ALL,
-+		.uffd_feature_required = UFFD_FEATURE_PAGEFAULT_FLAG_WP |
-+		UFFD_FEATURE_WP_HUGETLBFS_SHMEM |
-+		/* when set, child process should inherit uffd-wp bits */
-+		UFFD_FEATURE_EVENT_FORK,
-+	},
- 	{
- 		.name = "wp-unpopulated",
- 		.uffd_fn = uffd_wp_unpopulated_test,
+@@ -134,45 +134,12 @@ void kvm_tdp_mmu_put_root(struct kvm *kvm, struct kvm_mmu_page *root,
+ 	if (!refcount_dec_and_test(&root->tdp_mmu_root_count))
+ 		return;
+ 
+-	WARN_ON(!is_tdp_mmu_page(root));
+-
+ 	/*
+-	 * The root now has refcount=0.  It is valid, but readers already
+-	 * cannot acquire a reference to it because kvm_tdp_mmu_get_root()
+-	 * rejects it.  This remains true for the rest of the execution
+-	 * of this function, because readers visit valid roots only
+-	 * (except for tdp_mmu_zap_root_work(), which however
+-	 * does not acquire any reference itself).
+-	 *
+-	 * Even though there are flows that need to visit all roots for
+-	 * correctness, they all take mmu_lock for write, so they cannot yet
+-	 * run concurrently. The same is true after kvm_tdp_root_mark_invalid,
+-	 * since the root still has refcount=0.
+-	 *
+-	 * However, tdp_mmu_zap_root can yield, and writers do not expect to
+-	 * see refcount=0 (see for example kvm_tdp_mmu_invalidate_all_roots()).
+-	 * So the root temporarily gets an extra reference, going to refcount=1
+-	 * while staying invalid.  Readers still cannot acquire any reference;
+-	 * but writers are now allowed to run if tdp_mmu_zap_root yields and
+-	 * they might take an extra reference if they themselves yield.
+-	 * Therefore, when the reference is given back by the worker,
+-	 * there is no guarantee that the refcount is still 1.  If not, whoever
+-	 * puts the last reference will free the page, but they will not have to
+-	 * zap the root because a root cannot go from invalid to valid.
++	 * The TDP MMU itself holds a reference to each root until the root is
++	 * explicitly invalidated, i.e. the final reference should be never be
++	 * put for a valid root.
+ 	 */
+-	if (!kvm_tdp_root_mark_invalid(root)) {
+-		refcount_set(&root->tdp_mmu_root_count, 1);
+-
+-		/*
+-		 * Zapping the root in a worker is not just "nice to have";
+-		 * it is required because kvm_tdp_mmu_invalidate_all_roots()
+-		 * skips already-invalid roots.  If kvm_tdp_mmu_put_root() did
+-		 * not add the root to the workqueue, kvm_tdp_mmu_zap_all_fast()
+-		 * might return with some roots not zapped yet.
+-		 */
+-		tdp_mmu_schedule_zap_root(kvm, root);
+-		return;
+-	}
++	KVM_BUG_ON(!is_tdp_mmu_page(root) || !root->role.invalid, kvm);
+ 
+ 	spin_lock(&kvm->arch.tdp_mmu_pages_lock);
+ 	list_del_rcu(&root->link);
+@@ -320,7 +287,14 @@ hpa_t kvm_tdp_mmu_get_vcpu_root_hpa(struct kvm_vcpu *vcpu)
+ 	root = tdp_mmu_alloc_sp(vcpu);
+ 	tdp_mmu_init_sp(root, NULL, 0, role);
+ 
+-	refcount_set(&root->tdp_mmu_root_count, 1);
++	/*
++	 * TDP MMU roots are kept until they are explicitly invalidated, either
++	 * by a memslot update or by the destruction of the VM.  Initialize the
++	 * refcount to two; one reference for the vCPU, and one reference for
++	 * the TDP MMU itself, which is held until the root is invalidated and
++	 * is ultimately put by tdp_mmu_zap_root_work().
++	 */
++	refcount_set(&root->tdp_mmu_root_count, 2);
+ 
+ 	spin_lock(&kvm->arch.tdp_mmu_pages_lock);
+ 	list_add_rcu(&root->link, &kvm->arch.tdp_mmu_roots);
+@@ -964,10 +938,12 @@ void kvm_tdp_mmu_invalidate_all_roots(struct kvm *kvm)
+ {
+ 	struct kvm_mmu_page *root;
+ 
+-	lockdep_assert_held_write(&kvm->mmu_lock);
++	/* No need to hold mmu_lock when the VM is being destroyed. */
++	if (refcount_read(&kvm->users_count))
++		lockdep_assert_held_write(&kvm->mmu_lock);
++
+ 	list_for_each_entry(root, &kvm->arch.tdp_mmu_roots, link) {
+-		if (!root->role.invalid &&
+-		    !WARN_ON_ONCE(!kvm_tdp_mmu_get_root(root))) {
++		if (!root->role.invalid) {
+ 			root->role.invalid = true;
+ 			tdp_mmu_schedule_zap_root(kvm, root);
+ 		}
+
+base-commit: 62cf1e941a1169a5e8016fd8683d4d888ab51e01
 -- 
-2.39.1
+2.40.0.634.g4ca3ef3211-goog
 
