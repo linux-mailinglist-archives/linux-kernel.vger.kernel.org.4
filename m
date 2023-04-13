@@ -2,107 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B0346E0DF3
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:04:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 599886E0DFD
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:06:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbjDMNEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 09:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
+        id S229951AbjDMNGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 09:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbjDMNEe (ORCPT
+        with ESMTP id S229516AbjDMNGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 09:04:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7000B6A42;
-        Thu, 13 Apr 2023 06:04:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 08E7E61574;
-        Thu, 13 Apr 2023 13:04:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C4B3C433EF;
-        Thu, 13 Apr 2023 13:04:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681391072;
-        bh=45Dth3u/C8VS64hODTY5Dhhg4w/QuvdiQ3hHX+zxnhw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BtGbMQ9T+VLC5Hz2tZj+h9EK2KX7RsXaasedk2hn9l8ca7NBMa6tjnyD9JdYaZnxH
-         GmpzQjuFwlvR74fZELsiqYV4MhOTOhlRmswSZR5o9CXgNDzdCJO0A0sbUp/LuJ5c5L
-         8UrVkagVapbfczpRG/ddGQZAp1tyIdjKleF8FFYxqDFKlw7nGlgYPhO9ENVY1xiEPz
-         WuL/JuIEmMfd0Co+O8/srSEv/G3hPPc+BZv4XnE5MqdtTasSeiz5vSupn4PEqHnvGX
-         qKfG5BCJn/c03b0ocvumaRKaR9ILH6ai9ryJtW0WM7d1QjUBLPcS1QYNyunZopT9Wj
-         sDvfs0hDHZgwg==
-Date:   Thu, 13 Apr 2023 16:04:28 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Haiyang Zhang <haiyangz@microsoft.com>
-Cc:     linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        decui@microsoft.com, kys@microsoft.com, paulros@microsoft.com,
-        olaf@aepfle.de, vkuznets@redhat.com, davem@davemloft.net,
-        wei.liu@kernel.org, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, longli@microsoft.com,
-        ssengar@linux.microsoft.com, linux-rdma@vger.kernel.org,
-        daniel@iogearbox.net, john.fastabend@gmail.com,
-        bpf@vger.kernel.org, ast@kernel.org, sharmaajay@microsoft.com,
-        hawk@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V3,net-next, 2/4] net: mana: Refactor RX buffer
- allocation code to prepare for various MTU
-Message-ID: <20230413130428.GO17993@unreal>
-References: <1681334163-31084-1-git-send-email-haiyangz@microsoft.com>
- <1681334163-31084-3-git-send-email-haiyangz@microsoft.com>
+        Thu, 13 Apr 2023 09:06:14 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D809744
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:06:03 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33D9R7j0016008;
+        Thu, 13 Apr 2023 15:05:05 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=fV8X/jR840R+J8jRG+/wDOQExdy42LB4fTNQAvYUlkA=;
+ b=paB8uU8oahuqvLfLu5n6ygwrZegvxs4PYDxEKLDQwhECPRUlH9WUP6qhW5DFgaV3IsOY
+ 5d2o9U/x58IQSIeKL6z9UlKVC4+1n7bwOQLWOtlWq4S3eKmFlQrbaxXyrKNsJpzu//Xn
+ BHIs1HfJl+cnZmUHmwiT4wOK7x9nUk67hYYQ4ucTIcEDiG34vckcgkp6/hYQk8jR7NPJ
+ lgfFNJtP4rOmd8o+CiaqGGPDLpJtPQyFXtr8TLshSY4myBw2kyHNsTlpwe67qs5ixDgb
+ +8/RYnxc2QXwohJAXz8ZudcWpfCN9lZufFRmGUAvkDxwlNA/TjopuL9gRPX5gwkm4xmM HQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pxf2q9g1g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Apr 2023 15:05:05 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 46D1010002A;
+        Thu, 13 Apr 2023 15:05:04 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node3.st.com [10.75.129.71])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 32D3D21B515;
+        Thu, 13 Apr 2023 15:05:04 +0200 (CEST)
+Received: from [10.252.20.144] (10.252.20.144) by SHFDAG1NODE3.st.com
+ (10.75.129.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 13 Apr
+ 2023 15:05:03 +0200
+Message-ID: <31659e74-661b-8bd3-e64e-33ac6d24f577@foss.st.com>
+Date:   Thu, 13 Apr 2023 15:04:37 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1681334163-31084-3-git-send-email-haiyangz@microsoft.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] drm/stm: ltdc: fix late dereference check
+To:     Raphael GALLAIS-POU <gallais1@gnb.st.com>,
+        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     <dri-devel@lists.freedesktop.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, kernel test robot <lkp@intel.com>,
+        Dan Carpenter <error27@gmail.com>
+References: <20230412092553.279185-1-raphael.gallais-pou@foss.st.com>
+Content-Language: en-US
+From:   Yannick FERTRE <yannick.fertre@foss.st.com>
+In-Reply-To: <20230412092553.279185-1-raphael.gallais-pou@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.252.20.144]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE3.st.com
+ (10.75.129.71)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-13_08,2023-04-13_01,2023-02-09_01
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 02:16:01PM -0700, Haiyang Zhang wrote:
-> Move out common buffer allocation code from mana_process_rx_cqe() and
-> mana_alloc_rx_wqe() to helper functions.
-> Refactor related variables so they can be changed in one place, and buffer
-> sizes are in sync.
-> 
-> Signed-off-by: Haiyang Zhang <haiyangz@microsoft.com>
-> Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
-> ---
-> V3:
-> Refectored to multiple patches for readability. Suggested by Jacob Keller.
-> 
-> V2:
-> Refectored to multiple patches for readability. Suggested by Yunsheng Lin.
-> 
-> ---
->  drivers/net/ethernet/microsoft/mana/mana_en.c | 154 ++++++++++--------
->  include/net/mana/mana.h                       |   6 +-
->  2 files changed, 91 insertions(+), 69 deletions(-)
+Hi Raphael,
 
-<...>
+thanks for the patch.
 
-> +static void *mana_get_rxfrag(struct mana_rxq *rxq, struct device *dev,
-> +			     dma_addr_t *da, bool is_napi)
-> +{
-> +	struct page *page;
-> +	void *va;
+Reviewed-by: Yannick Fertre <yannick.fertre@foss.st.com>
+
+
+On 4/12/23 11:25, Raphael GALLAIS-POU wrote:
+> Attention: Sender not authenticated
+> --------------------------------------------------
+>
+> In ltdc_crtc_set_crc_source(), struct drm_crtc was dereferenced in a
+> container_of() before the pointer check. This could cause a kernel panic.
+>
+> Fix this smatch warning:
+> drivers/gpu/drm/stm/ltdc.c:1124 ltdc_crtc_set_crc_source() warn: variable dereferenced before check 'crtc' (see line 1119)
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <error27@gmail.com>
+> Link: https://lore.kernel.org/lkml/202212241802.zeLFZCXB-lkp@intel.com/
+> Signed-off-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
+> ---
+>   drivers/gpu/drm/stm/ltdc.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
+> index 03c6becda795..b8be4c1db423 100644
+> --- a/drivers/gpu/drm/stm/ltdc.c
+> +++ b/drivers/gpu/drm/stm/ltdc.c
+> @@ -1145,7 +1145,7 @@ static void ltdc_crtc_disable_vblank(struct drm_crtc *crtc)
+>
+>   static int ltdc_crtc_set_crc_source(struct drm_crtc *crtc, const char *source)
+>   {
+> -       struct ltdc_device *ldev = crtc_to_ltdc(crtc);
+> +       struct ltdc_device *ldev;
+>          int ret;
+>
+>          DRM_DEBUG_DRIVER("\n");
+> @@ -1153,6 +1153,8 @@ static int ltdc_crtc_set_crc_source(struct drm_crtc *crtc, const char *source)
+>          if (!crtc)
+>                  return -ENODEV;
+>
+> +       ldev = crtc_to_ltdc(crtc);
 > +
-> +	/* Reuse XDP dropped page if available */
-> +	if (rxq->xdp_save_va) {
-> +		va = rxq->xdp_save_va;
-> +		rxq->xdp_save_va = NULL;
-> +	} else {
-> +		page = dev_alloc_page();
-
-Documentation/networking/page_pool.rst
-   10 Basic use involves replacing alloc_pages() calls with the
-   11 page_pool_alloc_pages() call.  Drivers should use page_pool_dev_alloc_pages()
-   12 replacing dev_alloc_pages().
-
-General question, is this sentence applicable to all new code or only
-for XDP related paths?
-
-Thanks
+>          if (source && strcmp(source, "auto") == 0) {
+>                  ldev->crc_active = true;
+>                  ret = regmap_set_bits(ldev->regmap, LTDC_GCR, GCR_CRCEN);
+> --
+> 2.25.1
+>
