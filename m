@@ -2,133 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98D006E0AB2
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 11:54:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C32776E0AA9
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 11:54:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbjDMJye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 05:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44154 "EHLO
+        id S229735AbjDMJyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 05:54:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbjDMJya (ORCPT
+        with ESMTP id S229728AbjDMJyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 05:54:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2DA29772;
-        Thu, 13 Apr 2023 02:54:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B67363AF8;
-        Thu, 13 Apr 2023 09:54:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC81FC433D2;
-        Thu, 13 Apr 2023 09:54:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681379666;
-        bh=0DrIy6L0mgWBKpbiTpq/w5yQJ7iegdOLGEBJBIpU3z4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EdN+myph2daeRxjNIkFWfOM2t26TzhiMQWFyoSYKoocfQSYMVwt5SRXo47+M1kbZv
-         Y1xnQKPqWNUeBYKFGYZY2NFHGl3ZzGYsbjmq3UNekcihjdKBOQ3o2mFqnNRHK8z+Kl
-         7sL78rTsa/8W3U4KnUKPRtOqGmFO1Oiha6zimkCB8s+ZZREiO1GnHvwivWaYTG+lG7
-         FGOBzjCckphv4nxlAuPtjuTDqm0MiQC9HiGE825z9qiNBlJlyBxGZxfYcNNsRp+Ssx
-         dBvCDP9AYH/khreMqUT+Fd3C3HWkjjXJAKjTswQvrt4KsDyyKru2otjlwS4cZqPyJ+
-         oHQNQ7FB0MrOg==
-Date:   Thu, 13 Apr 2023 10:54:18 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Elliot Berman <quic_eberman@quicinc.com>
-Cc:     Alex Elder <elder@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thu, 13 Apr 2023 05:54:23 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BCC5BB8
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 02:54:21 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id q23so26483624ejz.3
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 02:54:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681379660; x=1683971660;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7wf5ayKmr1Fou+brpbPgM2rBYhotkmP/5Wa8vP+iiMI=;
+        b=IR8bqG00wUwG3H3gh7CC+vy1HwrpJwjNjBNDc2wn2PRK8RL/qFvXWW8htz8n5QN/UE
+         KWTlHMIp+0mdkEHLcuWfjcwEmQcPF0yB7UMYF3UrYVNz+WWOng44nnUcK+9lCX4aa5nw
+         5Vxv5ZG/gjTGq8itcRmoIQ8e3u/Q/63UfOwMo2rfOnmcRny6pSkj7TgUSBzNfISxvYzM
+         EIs+qC/irBhFVdPCsfpVqrc1dNHIomUDngllGN1q77a+J1jlr+TIREfnPZtZ8bUJbYKf
+         jOa8m3KVbYDTa0NBvJTczcRRxOL8VzUgI48kc8eGG1tEf/EgfoEP2Xwn6OoI53/9ai0N
+         LVlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681379660; x=1683971660;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7wf5ayKmr1Fou+brpbPgM2rBYhotkmP/5Wa8vP+iiMI=;
+        b=ce8S0cgQj/WhJjkEV6o2y9TdUMblbvs4mwl+BXvMkG5kEB9tsQFPQ4Re6yUBOXyLJb
+         iEPa63zQB6Gs4RCF+PrVBWICESNJD1sg3d76GgTUWa0BhnjRAKVNztuY3o+YzrdTQVR1
+         L1qivdFLlD6B/LQiZ/0LL2Q1hdxuNp0bXFecrhSI5k3gusnqM8V+Pu6tbsPEYrXgZ8vq
+         9eHy++WYvq9jEX/veyq5nFWkUcmP8+RBUcR0IubtV9MiJ632rQjfuhyqV2Ksu0+OYrAr
+         UESfx/BY2oq9QVooYy9BBSa2x9AbiSJuv5gx76hgcUVE2tZ8OuYEnM8Dzy0mS7XPDDuE
+         cCsw==
+X-Gm-Message-State: AAQBX9eSTFowt9KA9taBOhT7WT2l5u6XX5OMNY9JZWrP/UPeVruYQ9GV
+        kzTBTdFF7IKeZqQQ8Y6ETcID6g==
+X-Google-Smtp-Source: AKy350ZTuVOmDycQipaom8xv0Y/sJrimRhWc5WFgc0W4/7l3aTbqDQ0Dh153g27t4zYbUskXiETWUA==
+X-Received: by 2002:a17:906:1488:b0:94a:4eb9:b35 with SMTP id x8-20020a170906148800b0094a4eb90b35mr2104533ejc.18.1681379659887;
+        Thu, 13 Apr 2023 02:54:19 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:ec6f:1b33:ab3f:bfd7? ([2a02:810d:15c0:828:ec6f:1b33:ab3f:bfd7])
+        by smtp.gmail.com with ESMTPSA id f10-20020a50ee8a000000b004c10b4f9ebesm605603edr.15.2023.04.13.02.54.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Apr 2023 02:54:19 -0700 (PDT)
+Message-ID: <6dbdf32e-fb45-fded-6165-c43a48d7b250@linaro.org>
+Date:   Thu, 13 Apr 2023 11:54:18 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v3 2/2] dt-bindings: usb: snps,dwc3: Add
+ 'snps,parkmode-disable-hs-quirk' quirk
+Content-Language: en-US
+To:     =?UTF-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v11 12/26] gunyah: vm_mgr: Add/remove user memory regions
-Message-ID: <20230413095418.GA25922@willie-the-truck>
-References: <20230304010632.2127470-1-quic_eberman@quicinc.com>
- <20230304010632.2127470-13-quic_eberman@quicinc.com>
- <20230324183659.GB28266@willie-the-truck>
- <5d1c6160-6bc4-5246-2a0b-de5ddcbbc2c4@quicinc.com>
- <20230411211940.GC23890@willie-the-truck>
- <67209a0d-1dc5-ce96-e916-85bfd8f6a7f8@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <67209a0d-1dc5-ce96-e916-85bfd8f6a7f8@quicinc.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Felipe Balbi <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230413085351.26808-1-stanley_chang@realtek.com>
+ <2023041346-shamrock-sterilize-9165@gregkh>
+ <6c2dae45c7ca490d889ddc7a0dab027f@realtek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <6c2dae45c7ca490d889ddc7a0dab027f@realtek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 01:48:07PM -0700, Elliot Berman wrote:
+On 13/04/2023 11:36, Stanley Chang[昌育德] wrote:
+>> This is not properly threaded with patch 1/2 for some reason, so our tools can
+>> not pick up the whole thread at once.  Please fix up your sending script, or
+>> just use git send-email directly.
+>>
+>> thanks,
+>>
+>> greg k-h
+>>
 > 
+> I send the patch by git send-email.
 > 
-> On 4/11/2023 2:19 PM, Will Deacon wrote:
-> > On Tue, Apr 11, 2023 at 01:34:34PM -0700, Elliot Berman wrote:
-> > > On 3/24/2023 11:37 AM, Will Deacon wrote:
-> > > > On Fri, Mar 03, 2023 at 05:06:18PM -0800, Elliot Berman wrote:
-> > > > > +
-> > > > > +	pinned = pin_user_pages_fast(region->userspace_addr, mapping->npages,
-> > > > > +					FOLL_WRITE | FOLL_LONGTERM, mapping->pages);
-> > > > > +	if (pinned < 0) {
-> > > > > +		ret = pinned;
-> > > > > +		mapping->npages = 0; /* update npages for reclaim */
-> > > > > +		goto reclaim;
-> > > > > +	} else if (pinned != mapping->npages) {
-> > > > > +		ret = -EFAULT;
-> > > > > +		mapping->npages = pinned; /* update npages for reclaim */
-> > > > > +		goto reclaim;
-> > > > > +	}
-> > > > 
-> > > > I think Fuad mentioned this on an older version of these patches, but it
-> > > > looks like you're failing to account for the pinned memory here which is
-> > > > a security issue depending on who is able to issue the ioctl() calling
-> > > > into here.
-> > > > 
-> > > > Specifically, I'm thinking that your kXalloc() calls should be using
-> > > > GFP_KERNEL_ACCOUNT in this function and also that you should be calling
-> > > > account_locked_vm() for the pages being pinned.
-> > > > 
-> > > 
-> > > Added the accounting for the v12.
-> > > 
-> > > > Finally, what happens if userspace passes in a file mapping?
-> > > 
-> > > Userspace will get EBADADDR (-14) back when trying to launch the VM
-> > > (pin_user_pages_fast returns this as you might have been expecting). We
-> > > haven't yet had any need to support file-backed mappings.
-> > 
-> > Hmm, no, that's actually surprising to me. I'd have thought GUP would
-> > happily pin page-cache pages for file mappings, so I'm intrigued as to
-> > which FOLL_ flag is causing you to get an error code back. Can you
-> > enlighten me on where the failure originates, please?
+> git send-email --cc="Stanley Chang <stanley_chang@realtek.com>" --to="Thinh Nguyen <Thinh.Nguyen@synopsys.com>" --cc-cmd='./scripts/get_maintainer.pl -norolestats v3-0001-usb-dwc3-core-add-support-for-disabling-High-spee.patch' --annotate v3-0001-usb-dwc3-core-add-support-for-disabling-High-spee.patch
 > 
-> Ah this ended up being an error on my part. Userspace was opening the file
-> as RO and Gunyah driver will unconditionally add FOLL_WRITE as part of the
-> gup flags. I got the flags aligned and seemed to be able to boot the VM ok
-> and it works as expected.
+> git send-email --cc="Stanley Chang <stanley_chang@realtek.com>" --to="Thinh Nguyen <Thinh.Nguyen@synopsys.com>" --cc-cmd='./scripts/get_maintainer.pl -norolesats v3-0002-dt-bindings-usb-snps-dwc3-Add-snps-parkmode-disab.patch' --annotate v3-0002-dt-bindings-usb-snps-dwc3-Add-snps-parkmode-disab.patch
+> 
+> I don't know why it can't thread with 2 patches?
 
-I suspect you can run into latent filesystem corruption issues in this case,
-as the VM can dirty pages without the filesystem knowing. That's why we
-restricted anonymous memory with pKVM for now.
+You can - git help send-email
 
-Will
+Easiest way is to: git send-email .... v3*
+
+
+
+Best regards,
+Krzysztof
+
