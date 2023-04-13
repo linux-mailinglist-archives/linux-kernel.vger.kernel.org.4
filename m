@@ -2,57 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10B376E119B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25BC96E1198
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbjDMQBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 12:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42728 "EHLO
+        id S229633AbjDMQBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 12:01:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjDMQBn (ORCPT
+        with ESMTP id S229632AbjDMQBH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 12:01:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B745BAD1B
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:00:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681401649;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iANOiZlyBrGUp2a9xJkWV6qymcBHN7RUsXY3k69I3fg=;
-        b=aXt9TcqODxrfbZm4HbIi2OiQIJw6IV3YyNoSeSaGI3L5KAuJXxY5MaEYMS6bE8jcXwi3J2
-        wPThg7uxCxALtLznQzeG8Mhs/w3DY2lVVL3sUbj7q07OcGQ0E9vJ5IcqeYwtVueDNd1EFk
-        CL+Q5CqMMOtug0Ih74r4eb8R2/Zs5j4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-82-SJv22lYFOqGq4KvU1tOIzQ-1; Thu, 13 Apr 2023 12:00:47 -0400
-X-MC-Unique: SJv22lYFOqGq4KvU1tOIzQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 25A0E29A9D56;
-        Thu, 13 Apr 2023 16:00:37 +0000 (UTC)
-Received: from mail.corp.redhat.com (unknown [10.45.224.142])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id D3C44BC88;
-        Thu, 13 Apr 2023 16:00:35 +0000 (UTC)
-Date:   Thu, 13 Apr 2023 18:00:33 +0200
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-To:     Fabio Baltieri <fabiobaltieri@chromium.org>
-Cc:     Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org,
+        Thu, 13 Apr 2023 12:01:07 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2090.outbound.protection.outlook.com [40.107.255.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A19AF35
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:00:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VdSEPbpqJPksLdsfcVKyA2TXJo4k9GDtqD0LSNl9Y5hx5DGRlIuBmsKfjuTjY9chdwFvXvfXoWfZja8tMS2+X7HofWnFUeejQ034oHyVS1nFm2JdQSCk6bEZ4SxQOrNvnM1fhsG8jwbeDXxU4umaP0N6ELHp4UX9/eU0ATbTor0JsDZ780WXQmPYt7k+fLCmlzb/jFcitPP2GHMFnAT4Z4wZXYwwexRD+f3Hubq54sKIsLsgi/UtW+zYUqJxD3Rv66EX+NwXwyaL7Fwh5gENOGI+AqY70Q9B1AkmR2PmV3C50tEDSdsX31/KW1cAO3cRfAjeoq9rbqq4IgXDGcLegQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nDYtmaGYcaX/raoc+todctYpIy049nhT0yocDifWiv4=;
+ b=ZeCqEIUNxjryISo8leWY/PV/eCiLSwSYAjaqI6tP+3bOEW+Ag5am2UqeynDJSs8OElkFTVTrCNBzRwKkRBPc3FD0bNy4CIE+SD9N23k10/q3MNzF1HEFp+bdyckGHYcjxATT9+HBQf9fFDgbfP2YlHL3jEGwOd7MUvTpoV+IDhOiMqYTx5yR3TMCMZdLd6qUD65DsHxHLtfuRXDkpZGA2BoGBzD35purOgVOeB22IjpIlvOKeSjjyQ2i5ck8nNvKY3RToLIlzmvSj14BkLejuW3mQ1AIM7b1+b2sGNlaqckQL+Jj6R041yFkFvB3SRV6gOmzwdAvHOj+N589GLhxDQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nDYtmaGYcaX/raoc+todctYpIy049nhT0yocDifWiv4=;
+ b=J8Pxl9vDGVA8+hS1XRBhvYZyPHz+w4WPAgOmmFqTR441kf8s1M3+/79RHdGsTxgum0SSp0w9JoiOd+VudH2mftqvyZ7sX+K+bY+bVP7yePnaDF0kGakNsV/NE64LexcS3NwBWri6V847RaODq+CsSntgS4M36xSSRym2+q01Qn5B7LYuHN2AhinmWqXDZMkbTVs0TYeuLLlrmUvXWBxRcwQxbfkfXYqUv0/QiMkcB2HPowLTukYmRgLV+A0evAn02RhfNshzBzI9IatbSFeibnyXyIhbKEBxiuCnmSMm09vC+5W3/MeHXkBeJdL9Gopl/BlVW7caZ5HoAVplKRUqBg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by TYZPR06MB4189.apcprd06.prod.outlook.com (2603:1096:400:26::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Thu, 13 Apr
+ 2023 16:00:56 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::a3a1:af8e:be1e:437c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::a3a1:af8e:be1e:437c%6]) with mapi id 15.20.6277.038; Thu, 13 Apr 2023
+ 16:00:55 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     chao@kernel.org
+Cc:     frank.li@vivo.com, jaegeuk@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] HID: hid-stadiaff: add support for Stadia force feedback
-Message-ID: <20230413160033.buwdbysbbc2hgu6o@mail.corp.redhat.com>
-References: <20230403103324.1746758-1-fabiobaltieri@chromium.org>
+Subject: Re: [PATCH] f2fs: introduce F2FS_SBI_RW_ATTR macro
+Date:   Fri, 14 Apr 2023 00:00:46 +0800
+Message-Id: <20230413160046.77717-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <88e48f65-a68f-6742-fe25-d05e7113c2fc@kernel.org>
+References: <88e48f65-a68f-6742-fe25-d05e7113c2fc@kernel.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR02CA0013.apcprd02.prod.outlook.com
+ (2603:1096:3:17::25) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230403103324.1746758-1-fabiobaltieri@chromium.org>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|TYZPR06MB4189:EE_
+X-MS-Office365-Filtering-Correlation-Id: 13b776ef-2c75-4e7a-5ea9-08db3c384329
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FqIgXexs8DNwxaKUwuKrsr5mq9mszsBC3zVA6b07Bz2z3uFPt104pGVo+2sLENJS9k4DZutMATUbvMznMUUkYNq2o5K982n+u/CmGMlia1CNmVwc3QZxqTI7Tz6OWA1wh+MtkbnE7p/iY1WlmDqPUzzopIGIQnfXLUmxwsvRptUcDDNKlTAG5ZofT/vdEGTCZEIJYJpWgernUY6Iz2oGvoKnxLD871S9QDQTMWAl+ctDKsLarpY9TXTCNh3UT3/3hx6E19upNzNnt6+hkV6BjeeGOURwXhsyydQoK5zkBTF3Wxj0l+Uhgrm1jXDEiaYD2CT8VabMOm/6fj9Ux8Js8Ow+Mo/ysz6kQJDLkxZap+nmnZeS77ezD/zvT1IfSRJtXJXouYXznLhwmq0/LdaF/b5vZrqFYffM+IJKG+zQYTKCRKPGfu/8tvxg2Sr3FBwxUPPqZQNm5z41/YEbUGDubtJnAsrP7VwvpJ5877RK6HbtKrXZqnRxpw1qbXUzAmGAnnsEojAGeH//Sd0NEpWdZhirL8Mwv0pzq9ZB6458upvNVTm6LU6nZwyZXjEY9bsYz39WB6CkniTGO5d3o4SLsM71TwQQPGWfhxVU0dCRaGA7MBwnwwQwupIfoaF7MB4g
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(366004)(136003)(376002)(39860400002)(451199021)(26005)(38350700002)(38100700002)(36756003)(5660300002)(4744005)(2906002)(316002)(8936002)(86362001)(66556008)(8676002)(66476007)(66946007)(41300700001)(4326008)(6916009)(6506007)(1076003)(2616005)(6512007)(186003)(52116002)(6486002)(478600001)(6666004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?09In6xLHdxAZor4ykboV2OIwT4p59P5CKcMNtqhPA0NCJtled47cDOGGOrLa?=
+ =?us-ascii?Q?ITKj067HY+hTBJ+O/kMELvngixy7oYTrmPrYEyBk+8FoLoXvJJdj+BrMAtDa?=
+ =?us-ascii?Q?kAgZ/YwKBGuV/5P0Wz+cOYVaruxnyXlZz5Mw05oc3qLLUlZHvRi2AoOMauYc?=
+ =?us-ascii?Q?/tEi/JmomXCtj9eH5taW5QzTjSFfi2Is0dNErElKPzf5grO2D3SOjeDvp2je?=
+ =?us-ascii?Q?Ye1GFqEij++oP6CZ3hmLTJj4ow3p0DKxGBnhPK3HEK7P919SRERNMNWr4ldh?=
+ =?us-ascii?Q?gTG/ueZBdJfncgXTWnMF6pktjieGoVwIQAkdvMC1vvKe01sSuH7KfUSPpQkw?=
+ =?us-ascii?Q?GsPFFnOvHa7NeFdw8mGGAz6JhvpwOuc7GaupIasQLMKSr6r7YVsGgfiMPGul?=
+ =?us-ascii?Q?eiGRwaC6pwnmPmQ3SeQi2YVqR47Ia2i16mdxzwtobgjcQB4itSeFqDHE8F0I?=
+ =?us-ascii?Q?OoFq5REoNTBTei8F2H1DepSXC5fuBtuJ79L3o+JTogpQyFicTSnrJv6wdrIh?=
+ =?us-ascii?Q?TtxPwvPpZthRV24KQLQeMDMs4o43vIVIsuoq96Sr7UjIPxSLwt4hLe6XP7DZ?=
+ =?us-ascii?Q?7FzspFeOuebcMyZkutKVNxIilz5uOTkwh1T8e+JzzmrjIk3lZ1LOFQP+6jBg?=
+ =?us-ascii?Q?VTR57v8k/zakjdQ3Omn19cpvmRJLz6IBJX5NrQgRSxI74GwJPxMvRcOcNb72?=
+ =?us-ascii?Q?8NfjNCWaAw2dUSDY4YOUfRFX+gDhn1UZ2qHtCi7dzK2q4Cj+H5L7fit2xU/+?=
+ =?us-ascii?Q?Jog7ixZhKNfKI+lFVwxO3It7LvDFluzILgvfZYofyIJSJfuYLqMnHN8unLXh?=
+ =?us-ascii?Q?Qj7XAdyK0FieoX/OsJ/n0mplclyODr+uXY36A3HJE4WuOdBW8KrJXuTL1CYh?=
+ =?us-ascii?Q?L6P0PCzbQTRndIjiuazBezHINh+WW8PCjsCBqzpLIZ0DQINd2lNr1+TAr9f0?=
+ =?us-ascii?Q?5JRqIgwBPbny4fNEbADEV/xGUq3CNi959E51LetSudsFipaY1wb0VFdsP8/Y?=
+ =?us-ascii?Q?OoqfC5B3NflPEFbhTMgnQfIA4djaanIjqwYRAmo7VA6gLY5OJIWDNU9kbBpt?=
+ =?us-ascii?Q?9z1gOoConGRR+dEFcd+U3oYO5/slCfcK8gAkRpcHzWmUwdGmbLorVgBIHkmQ?=
+ =?us-ascii?Q?Qv6ODYTGQ6x0DhNAaLETbGK1kkv/VWM5HZUImgMK3TEC/ZivK5HZbv4VmMAI?=
+ =?us-ascii?Q?DN42WzNpndJoxZTp9Zn2LQ2xtTyAKSJCmd5Z0IlzlsAp6FfRXhZ17zsew8rd?=
+ =?us-ascii?Q?Y9SsMWNbCSbfleLmxmISROUWTqF2EJX2yIgE8LNMmVzMMpognf7IvN1gaIpt?=
+ =?us-ascii?Q?jdiWvq/CyJXrTJ7TaViGtLjtI3sH1jgJo9H7h4K7a1PWljEfXEUlKU5BuPKp?=
+ =?us-ascii?Q?+/aq3ofp4ABnlG1KznlPeJKc7pE9JIfQisviD82hTX1hYXlW7zK9d9JNv7JS?=
+ =?us-ascii?Q?DNt7qDnsiYsI1EEnaIW7+63cM/RRrbUuC86NG8fj0bq9ThW+6QItB/mF//Iw?=
+ =?us-ascii?Q?1WgYXnlyiQOBKomGu6yiZcQcFVbY2vqx7DpiG8770NXnXFUUGwTSE7yTWMuH?=
+ =?us-ascii?Q?CG1hvPb0sATLNaApb+EsCpQ+9gkh3N4g8ZZTQ/Gn?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 13b776ef-2c75-4e7a-5ea9-08db3c384329
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2023 16:00:55.1316
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ReTO9WILKhHZfoK53buXTEWMubYk3jJZeqk74xa/YCSRShj9BW1UPsdQ5yPBiLjGJQVJ8vslQYDq65GJGtDOXw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB4189
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,228 +114,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+> F2FS_RW_ATTR looks more common to me.
 
-On Apr 03 2023, Fabio Baltieri wrote:
-> Add a hid-stadiaff module to support rumble based force feedback on the
-> Google Stadia controller. This works using the HID output endpoint
-> exposed on both the USB and BLE interface.
-> 
-> Signed-off-by: Fabio Baltieri <fabiobaltieri@chromium.org>
-> ---
-> 
-> Hi, this adds rumble support to the stadia controller using the input
-> interface. Up to now this has only been implemented at application level
-> using hidraw:
-> 
-> https://source.chromium.org/chromium/chromium/src/+/main:device/gamepad/hid_haptic_gamepad.cc
-> 
-> Tested with fftest, works both over USB and BLE.
-> 
->  drivers/hid/Kconfig        |   7 ++
->  drivers/hid/Makefile       |   1 +
->  drivers/hid/hid-ids.h      |   1 +
->  drivers/hid/hid-stadiaff.c | 132 +++++++++++++++++++++++++++++++++++++
+My idea is to add macro like this:
 
-Mind renaming this hid-google-stadiaff.c?
-It's hard to know that stadia is from Google otherwise.
+F2FS_SBI_GENERAL_RW_ATTR(node_io_flag);
+CPRC_INFO_GENERAL_RW_ATTR(ckpt_thread_ioprio);
+......
+F2FS_SBI_RW_ATTR(umount_discard_timeout, interval_time[UMOUNT_DISCARD_TIMEOUT]);
 
->  4 files changed, 141 insertions(+)
->  create mode 100644 drivers/hid/hid-stadiaff.c
-> 
-> diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-> index 82f64fb31fda..934f73e9b800 100644
-> --- a/drivers/hid/Kconfig
-> +++ b/drivers/hid/Kconfig
-> @@ -1031,6 +1031,13 @@ config HID_SPEEDLINK
->  	help
->  	Support for Speedlink Vicious and Divine Cezanne mouse.
->  
-> +config HID_STADIA_FF
-> +	tristate "Google Stadia force feedback"
-> +	select INPUT_FF_MEMLESS
-> +	help
-> +	Say Y here if you want to enable force feedback support for the Google
-> +	Stadia controller.
-> +
->  config HID_STEAM
->  	tristate "Steam Controller/Deck support"
->  	select POWER_SUPPLY
-> diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
-> index 5d37cacbde33..1d900fa55890 100644
-> --- a/drivers/hid/Makefile
-> +++ b/drivers/hid/Makefile
-> @@ -120,6 +120,7 @@ obj-$(CONFIG_HID_SIGMAMICRO)	+= hid-sigmamicro.o
->  obj-$(CONFIG_HID_SMARTJOYPLUS)	+= hid-sjoy.o
->  obj-$(CONFIG_HID_SONY)		+= hid-sony.o
->  obj-$(CONFIG_HID_SPEEDLINK)	+= hid-speedlink.o
-> +obj-$(CONFIG_HID_STADIA_FF)	+= hid-stadiaff.o
->  obj-$(CONFIG_HID_STEAM)		+= hid-steam.o
->  obj-$(CONFIG_HID_STEELSERIES)	+= hid-steelseries.o
->  obj-$(CONFIG_HID_SUNPLUS)	+= hid-sunplus.o
-> diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-> index 63545cd307e5..cffd4ac609a0 100644
-> --- a/drivers/hid/hid-ids.h
-> +++ b/drivers/hid/hid-ids.h
-> @@ -525,6 +525,7 @@
->  #define USB_DEVICE_ID_GOOGLE_MOONBALL	0x5044
->  #define USB_DEVICE_ID_GOOGLE_DON	0x5050
->  #define USB_DEVICE_ID_GOOGLE_EEL	0x5057
-> +#define USB_DEVICE_ID_GOOGLE_STADIA	0x9400
->  
->  #define USB_VENDOR_ID_GOTOP		0x08f2
->  #define USB_DEVICE_ID_SUPER_Q2		0x007f
-> diff --git a/drivers/hid/hid-stadiaff.c b/drivers/hid/hid-stadiaff.c
-> new file mode 100644
-> index 000000000000..f974b9e24d46
-> --- /dev/null
-> +++ b/drivers/hid/hid-stadiaff.c
-> @@ -0,0 +1,132 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Stadia controller rumble support.
-> + *
-> + * Copyright 2023 Google LLC
-> + */
-> +
-> +#include <linux/hid.h>
-> +#include <linux/input.h>
-> +#include <linux/slab.h>
-> +#include <linux/module.h>
-> +
-> +#include "hid-ids.h"
-> +
-> +#define STADIA_FF_REPORT_ID 5
-> +
-> +struct stadiaff_device {
-> +	struct hid_device *hid;
-> +	struct hid_report *report;
-> +	struct work_struct work;
-> +};
-> +
-> +static void stadiaff_work(struct work_struct *work)
-> +{
-> +	struct stadiaff_device *stadiaff =
-> +		container_of(work, struct stadiaff_device, work);
-> +
-> +	hid_hw_request(stadiaff->hid, stadiaff->report, HID_REQ_SET_REPORT);
-> +}
-> +
-> +static int stadiaff_play(struct input_dev *dev, void *data,
-> +			 struct ff_effect *effect)
-> +{
-> +	struct hid_device *hid = input_get_drvdata(dev);
-> +	struct stadiaff_device *stadiaff = hid_get_drvdata(hid);
-> +	struct hid_field *rumble_field = stadiaff->report->field[0];
-> +
-> +	rumble_field->value[0] = effect->u.rumble.strong_magnitude;
-> +	rumble_field->value[1] = effect->u.rumble.weak_magnitude;
-> +
-> +	schedule_work(&stadiaff->work);
+It seems unnecessary to repeat a bunch of the same things just to add a parameter.
+Are there any problems using the new macros?
 
-It seems weird that you don't have any locking in place here.
-What if you are sending a report (in stadiaff_work) while having your
-_play() function called at the same time?
-
-> +
-> +	return 0;
-> +}
-> +
-> +static int stadiaff_init(struct hid_device *hid)
-> +{
-> +	struct stadiaff_device *stadiaff;
-> +	struct hid_report *report;
-> +	struct hid_input *hidinput;
-> +	struct input_dev *dev;
-> +	int error;
-> +
-> +	if (list_empty(&hid->inputs)) {
-> +		hid_err(hid, "no inputs found\n");
-> +		return -ENODEV;
-> +	}
-> +	hidinput = list_entry(hid->inputs.next, struct hid_input, list);
-> +	dev = hidinput->input;
-> +
-> +	report = hid_validate_values(hid, HID_OUTPUT_REPORT,
-> +				     STADIA_FF_REPORT_ID, 0, 2);
-> +	if (!report)
-> +		return -ENODEV;
-> +
-> +	stadiaff = devm_kzalloc(&hid->dev, sizeof(struct stadiaff_device),
-> +				GFP_KERNEL);
-> +	if (!stadiaff)
-> +		return -ENOMEM;
-> +
-> +	hid_set_drvdata(hid, stadiaff);
-> +
-> +	input_set_capability(dev, EV_FF, FF_RUMBLE);
-> +
-> +	error = input_ff_create_memless(dev, NULL, stadiaff_play);
-> +	if (error)
-> +		return error;
-> +
-> +	stadiaff->hid = hid;
-> +	stadiaff->report = report;
-> +	INIT_WORK(&stadiaff->work, stadiaff_work);
-> +
-> +	hid_info(hid, "Force Feedback for Google Stadia controller\n");
-> +
-> +	return 0;
-> +}
-> +
-> +static int stadia_probe(struct hid_device *hdev, const struct hid_device_id *id)
-> +{
-> +	int ret;
-> +
-> +	ret = hid_parse(hdev);
-> +	if (ret) {
-> +		hid_err(hdev, "parse failed\n");
-> +		return ret;
-> +	}
-> +
-> +	ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT & ~HID_CONNECT_FF);
-> +	if (ret) {
-> +		hid_err(hdev, "hw start failed\n");
-> +		return ret;
-> +	}
-> +
-> +	stadiaff_init(hdev);
-> +
-> +	return 0;
-> +}
-> +
-> +static void stadia_remove(struct hid_device *hid)
-> +{
-> +	struct stadiaff_device *stadiaff = hid_get_drvdata(hid);
-> +
-> +	cancel_work_sync(&stadiaff->work);
-
-What if you have a ff play event scheduled right here? Don't you need
-some way of forcing the work to not be scheduled once again?
-
-> +	hid_hw_stop(hid);
-> +}
-> +
-> +static const struct hid_device_id stadia_devices[] = {
-> +	{ HID_USB_DEVICE(USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_STADIA) },
-> +	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_STADIA) },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(hid, stadia_devices);
-> +
-> +static struct hid_driver stadia_driver = {
-> +	.name = "stadia",
-> +	.id_table = stadia_devices,
-> +	.probe = stadia_probe,
-> +	.remove = stadia_remove,
-> +};
-> +module_hid_driver(stadia_driver);
-> +
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.40.0.348.gf938b09366-goog
-> 
-
-Cheers,
-Benjamin
-
+Thx,
+Yangtao
