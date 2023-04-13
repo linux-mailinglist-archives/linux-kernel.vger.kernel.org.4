@@ -2,194 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC1766E1627
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 22:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C58FA6E162D
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 22:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbjDMUze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 16:55:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41422 "EHLO
+        id S229676AbjDMU6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 16:58:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjDMUzc (ORCPT
+        with ESMTP id S229522AbjDMU6e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 16:55:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F05083EA;
-        Thu, 13 Apr 2023 13:55:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6AA6664087;
-        Thu, 13 Apr 2023 20:55:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3633DC433D2;
-        Thu, 13 Apr 2023 20:55:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681419329;
-        bh=t1d7XeNgX5GcZlgi+EOqXCN2JRp9UZEAZxIDR7stXlg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=NpjGVP9F/j3kBb2SYkuDj4UxY1EOCIStQoa0yfA8FzoL7o/rcspzD5AlIQluXzf1u
-         sSfVe1OKg8s7Q4P9uI6d141Isxd6ZawBdhJgCuJWkM/ew4YCSLpObBCUoRXpJMLMqx
-         +ZY6/wAnvqU8gu+eCK6fqhfnCxlgW65/PpDJ5TKzOWIOl6JakVNCmBXwUwZ0P0rS9b
-         NoSgNTAfejpi6DRsi8Er717h0XTIVuaddtLtwxOSryZD17iwFSLBZI5Ner1Pz5KSla
-         BUtZUB6/bR/bP1jB3+J2Uz+pRHKtsNKRpMT7jU47Vk5TsME/VP7Do3FhcbDIvNPSwa
-         +H+Zs4Z9JDQhw==
-From:   Stephen Boyd <sboyd@kernel.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        patches@lists.linux.dev, Tommaso Merciai <tomm.merciai@gmail.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Xingyu Wu <xingyu.wu@starfivetech.com>
-Subject: [PATCH] clk: starfive: Avoid casting iomem pointers
-Date:   Thu, 13 Apr 2023 13:55:28 -0700
-Message-ID: <20230413205528.4044216-1-sboyd@kernel.org>
-X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 13 Apr 2023 16:58:34 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09EF983EA
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 13:58:34 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-6323eb1a289so1495367b3a.1
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 13:58:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681419513; x=1684011513;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nEv2HVs1S+Egpav/jnzfzsQjcllfLnLuCFh+OUzwj8A=;
+        b=N/NxeDGiy0A3sp3zsLS3ONiWVymFkZsvGZW/ifZ+0iNpy4Cnu0yvtFO/vEmGTqLWiH
+         KXoYXslYuFxGsyEH33NwF0ERBM0GsmdjykR3Dc67bRTjpbFQ6HEMvFLZiBlBl5vRR2up
+         +3M0y1sLKYIO3HqKiayhyGXRcqPTcmkSVYAJBXoefUccwC7wXAkJ7K/acVdWDJF/zSZE
+         Ws36H1mGkrL56HIgJFH9kyVJunsDFoGM4WLNHVehJERDrCAYFDw4/1tidyOx0ddiMGCT
+         1M62BnNL7CUWlD6K+tKPpRpxO8IEQ/EADHzLI4PjUt2cbDJunv4i411h+dc9f9uqIlsy
+         KO1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681419513; x=1684011513;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=nEv2HVs1S+Egpav/jnzfzsQjcllfLnLuCFh+OUzwj8A=;
+        b=fDGE++C9a5emEk1JVBJDM1gj10AzHzTZFGSz0mnMApMBuM4A4D0nAgHXMXCnWn2pyo
+         WBgqJdrEfuN6wSrDIk+tfXXbSaze1mlrammttnAYzYbvKXffzyf1hjgSKsB/ohgeBiCV
+         aSAk0tcVWukbFoCT/lnfxZVPQKEGseiAqiV6qYCqt2vw/48z8cTpflo4kYIKKz3TWIN1
+         +g/KaNVq3wwXMtEY2Wch5KT0RY8LGCf81x7mTciTifLGQgC97/Qq8UN77W16mii7R6xe
+         tqiFTimEhcDO+obCtSguumxDcBcnuoBIXATafJHspYLWtN6GOKklapoVIr635PppC2Qc
+         bMHA==
+X-Gm-Message-State: AAQBX9dh4kei22R94qZUc9zOGnTJZOamqdAZmMtKrikj+qzJGx1nLkZM
+        awKGsWbE5J4dqO11ZdCVVBDCgqKdijY=
+X-Google-Smtp-Source: AKy350bSXma0H87PRt68CUCJhjZ6Fcq2Rn85m8fx/BXyeVGSzmlgqoQTUIRypWDhyXYiGsOUwAoC45uhcEQ=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:2d25:b0:62e:1972:fab5 with SMTP id
+ fa37-20020a056a002d2500b0062e1972fab5mr1835355pfb.4.1681419513538; Thu, 13
+ Apr 2023 13:58:33 -0700 (PDT)
+Date:   Thu, 13 Apr 2023 13:58:32 -0700
+In-Reply-To: <CALzav=dv2MhoZ1BLqJWmmJv=H6vRaRUEcAJPydjrzJf1wdYEOA@mail.gmail.com>
+Mime-Version: 1.0
+References: <20230227171751.1211786-1-jpiotrowski@linux.microsoft.com>
+ <ZAd2MRNLw1JAXmOf@google.com> <959c5bce-beb5-b463-7158-33fc4a4f910c@linux.microsoft.com>
+ <ZDSa9Bbqvh0btgQo@google.com> <ecd3d8de-859b-e5dd-c3bf-ea9c3c0aac60@linux.microsoft.com>
+ <ZDWEgXM/UILjPGiG@google.com> <61d131da-7239-6aae-753f-2eb4f1b84c24@linux.microsoft.com>
+ <ZDg6w+1v4e/uRDfF@google.com> <ZDhTeIXRdcXDaD54@google.com> <CALzav=dv2MhoZ1BLqJWmmJv=H6vRaRUEcAJPydjrzJf1wdYEOA@mail.gmail.com>
+Message-ID: <ZDhs+AnytF030DYe@google.com>
+Subject: Re: [PATCH] KVM: SVM: Disable TDP MMU when running on Hyper-V
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tianyu Lan <ltykernel@gmail.com>,
+        Michael Kelley <mikelley@microsoft.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's use a wrapper struct for the auxiliary_device made in
-jh7110_reset_controller_register() so that we can stop casting iomem
-pointers. The casts trip up tools like sparse, and make for some awkward
-casts that are largely unnecessary. While we're here, change the
-allocation from devm and actually free the auxiliary_device memory in
-the release function. This avoids any use after free problems where the
-parent device driver is unbound from the device but the
-auxiliuary_device is still in use accessing devm freed memory.
+On Thu, Apr 13, 2023, David Matlack wrote:
+> On Thu, Apr 13, 2023 at 12:10=E2=80=AFPM Sean Christopherson <seanjc@goog=
+le.com> wrote:
+> >
+> > On Thu, Apr 13, 2023, Sean Christopherson wrote:
+> > > Aha!  Idea.  There are _at most_ 4 possible roots the TDP MMU can enc=
+ounter.
+> > > 4-level non-SMM, 4-level SMM, 5-level non-SMM, and 5-level SMM.  I.e.=
+ not keeping
+> > > inactive roots on a per-VM basis is just monumentally stupid.
+> >
+> > One correction: there are 6 possible roots:
+> >
+> >   1. 4-level !SMM !guest_mode (i.e. not nested)
+> >   2. 4-level SMM !guest_mode
+> >   3. 5-level !SMM !guest_mode
+> >   4. 5-level SMM !guest_mode
+> >   5. 4-level !SMM guest_mode
+> >   6. 5-level !SMM guest_mode
+> >
+> > I forgot that KVM still uses the TDP MMU when running L2 if L1 doesn't =
+enable
+> > EPT/TDP, i.e. if L1 is using shadow paging for L2.  But that really doe=
+sn't change
+> > anything as each vCPU can already track 4 roots, i.e. userspace can sat=
+urate all
+> > 6 roots anyways.  And in practice, no sane VMM will create a VM with bo=
+th 4-level
+> > and 5-level roots (KVM keys off of guest.MAXPHYADDR for the TDP root le=
+vel).
+>=20
+> Why do we create a new root for guest_mode=3D1 if L1 disables EPT/NPT?
 
-Cc: Tommaso Merciai <tomm.merciai@gmail.com>
-Cc: Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Cc: Hal Feng <hal.feng@starfivetech.com>
-Cc: Conor Dooley <conor.dooley@microchip.com>
-Cc: Xingyu Wu <xingyu.wu@starfivetech.com>
-Fixes: edab7204afe5 ("clk: starfive: Add StarFive JH7110 system clock driver")
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
----
+Because "private", a.k.a. KVM-internal, memslots are visible to L1 but not =
+L2.
+Which for TDP means the APIC-access page.  From commit 3a2936dedd20:
 
-I can take this via clk tree.
+    kvm: mmu: Don't expose private memslots to L2
+   =20
+    These private pages have special purposes in the virtualization of L1,
+    but not in the virtualization of L2. In particular, L1's APIC access
+    page should never be entered into L2's page tables, because this
+    causes a great deal of confusion when the APIC virtualization hardware
+    is being used to accelerate L2's accesses to its own APIC.
 
- drivers/clk/starfive/clk-starfive-jh7110-sys.c | 15 ++++++++++++---
- drivers/reset/starfive/reset-starfive-jh7110.c |  9 ++++++---
- include/soc/starfive/reset-starfive-jh71x0.h   | 17 +++++++++++++++++
- 3 files changed, 35 insertions(+), 6 deletions(-)
- create mode 100644 include/soc/starfive/reset-starfive-jh71x0.h
+FWIW, I _think_ KVM could actually let L2 access the APIC-access page when =
+L1 is
+running without any APIC virtualization, i.e. when L1 is passing its APIC t=
+hrough
+to L2.  E.g. something like the below, but I ain't touching that with a 10 =
+foot pole
+unless someone explicitly asks for it :-)
 
-diff --git a/drivers/clk/starfive/clk-starfive-jh7110-sys.c b/drivers/clk/starfive/clk-starfive-jh7110-sys.c
-index 5ec210644e1d..851b93d0f371 100644
---- a/drivers/clk/starfive/clk-starfive-jh7110-sys.c
-+++ b/drivers/clk/starfive/clk-starfive-jh7110-sys.c
-@@ -11,6 +11,9 @@
- #include <linux/init.h>
- #include <linux/io.h>
- #include <linux/platform_device.h>
-+#include <linux/slab.h>
-+
-+#include <soc/starfive/reset-starfive-jh71x0.h>
- 
- #include <dt-bindings/clock/starfive,jh7110-crg.h>
- 
-@@ -335,26 +338,32 @@ static void jh7110_reset_unregister_adev(void *_adev)
- 	struct auxiliary_device *adev = _adev;
- 
- 	auxiliary_device_delete(adev);
-+	auxiliary_device_uninit(adev);
- }
- 
- static void jh7110_reset_adev_release(struct device *dev)
- {
- 	struct auxiliary_device *adev = to_auxiliary_dev(dev);
-+	struct jh71x0_reset_adev *rdev = to_jh71x0_reset_adev(adev);
- 
--	auxiliary_device_uninit(adev);
-+	kfree(rdev);
- }
- 
- int jh7110_reset_controller_register(struct jh71x0_clk_priv *priv,
- 				     const char *adev_name,
- 				     u32 adev_id)
- {
-+	struct jh71x0_reset_adev *rdev;
- 	struct auxiliary_device *adev;
- 	int ret;
- 
--	adev = devm_kzalloc(priv->dev, sizeof(*adev), GFP_KERNEL);
--	if (!adev)
-+	rdev = kzalloc(sizeof(*rdev), GFP_KERNEL);
-+	if (!rdev)
- 		return -ENOMEM;
- 
-+	rdev->base = priv->base;
-+
-+	adev = &rdev->adev;
- 	adev->name = adev_name;
- 	adev->dev.parent = priv->dev;
- 	adev->dev.release = jh7110_reset_adev_release;
-diff --git a/drivers/reset/starfive/reset-starfive-jh7110.c b/drivers/reset/starfive/reset-starfive-jh7110.c
-index c1b3a490d951..2d26ae95c8cc 100644
---- a/drivers/reset/starfive/reset-starfive-jh7110.c
-+++ b/drivers/reset/starfive/reset-starfive-jh7110.c
-@@ -7,6 +7,8 @@
- 
- #include <linux/auxiliary_bus.h>
- 
-+#include <soc/starfive/reset-starfive-jh71x0.h>
-+
- #include "reset-starfive-jh71x0.h"
- 
- #include <dt-bindings/reset/starfive,jh7110-crg.h>
-@@ -33,14 +35,15 @@ static int jh7110_reset_probe(struct auxiliary_device *adev,
- 			      const struct auxiliary_device_id *id)
- {
- 	struct jh7110_reset_info *info = (struct jh7110_reset_info *)(id->driver_data);
--	void __iomem **base = (void __iomem **)dev_get_drvdata(adev->dev.parent);
-+	struct jh71x0_reset_adev *rdev = to_jh71x0_reset_adev(adev);
-+	void __iomem *base = rdev->base;
- 
- 	if (!info || !base)
- 		return -ENODEV;
- 
- 	return reset_starfive_jh71x0_register(&adev->dev, adev->dev.parent->of_node,
--					      *base + info->assert_offset,
--					      *base + info->status_offset,
-+					      base + info->assert_offset,
-+					      base + info->status_offset,
- 					      NULL,
- 					      info->nr_resets,
- 					      NULL);
-diff --git a/include/soc/starfive/reset-starfive-jh71x0.h b/include/soc/starfive/reset-starfive-jh71x0.h
-new file mode 100644
-index 000000000000..47b486ececc5
---- /dev/null
-+++ b/include/soc/starfive/reset-starfive-jh71x0.h
-@@ -0,0 +1,17 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __SOC_STARFIVE_RESET_JH71X0_H
-+#define __SOC_STARFIVE_RESET_JH71X0_H
-+
-+#include <linux/auxiliary_bus.h>
-+#include <linux/compiler_types.h>
-+#include <linux/container_of.h>
-+
-+struct jh71x0_reset_adev {
-+	void __iomem *base;
-+	struct auxiliary_device adev;
-+};
-+
-+#define to_jh71x0_reset_adev(_adev) \
-+	container_of((_adev), struct jh71x0_reset_adev, adev)
-+
-+#endif
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 039fb16560a0..8aa12f5f2c30 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -4370,10 +4370,13 @@ static int __kvm_faultin_pfn(struct kvm_vcpu *vcpu,=
+ struct kvm_page_fault *fault
+        if (!kvm_is_visible_memslot(slot)) {
+                /* Don't expose private memslots to L2. */
+                if (is_guest_mode(vcpu)) {
+-                       fault->slot =3D NULL;
+-                       fault->pfn =3D KVM_PFN_NOSLOT;
+-                       fault->map_writable =3D false;
+-                       return RET_PF_CONTINUE;
++                       if (!slot || slot->id !=3D APIC_ACCESS_PAGE_PRIVATE=
+_MEMSLOT ||
++                           nested_cpu_has_virtual_apic(vcpu)) {
++                               fault->slot =3D NULL;
++                               fault->pfn =3D KVM_PFN_NOSLOT;
++                               fault->map_writable =3D false;
++                               return RET_PF_CONTINUE;
++                           }
+                }
+                /*
+                 * If the APIC access page exists but is disabled, go direc=
+tly
 
-base-commit: 601e5d464d535d655917c2cfb29c394d367fb676
--- 
-https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
-https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
+
+
 
