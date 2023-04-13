@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F05C6E0961
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:53:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCB556E095D
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:53:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbjDMIxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 04:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48418 "EHLO
+        id S229765AbjDMIxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 04:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbjDMIxT (ORCPT
+        with ESMTP id S229922AbjDMIxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 13 Apr 2023 04:53:19 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A90180
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4554993CA
         for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 01:53:06 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E520F218D6;
+        by smtp-out2.suse.de (Postfix) with ESMTPS id F40911FD68;
         Thu, 13 Apr 2023 08:53:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1681375984; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1681375985; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ear+cnYjNr0Xxid0IYuEKGOWEhCYOcJOGEYisWpZTKo=;
-        b=C24EABfNHbEBMqwr4/h+JHYgokjsw8ix4LML/cy29uP6URY6CKIXQsggFcmNAC9QsfJGpU
-        X52ksK0IOlpxdAss2WvoLFj1A9ykM94mO0hTAN5knLcUGqJDQD02zRLBhN+4CNc6WFmi+M
-        mRMzY4KOXbeddISQ/2wSbPa9PVCp/uo=
+        bh=Vw1ZoNwWrSTGCF9w3p1Uuiz6HkW0chKEEXorzYdcJC8=;
+        b=fdEKnQ9DznBOosiiDYeBvRSZ4TdmZiA9We57/ZfpE/tUk5DzZ+sbRtX9EEM2Ow7QBa1yQy
+        RsMvuZoF/BnCguN5YcrEaL+EsFFNu7JgdaJ0min47h6wyt7WNAafY5SMOtbLe9ZRNVS5vu
+        Gx+GoJyuW0U4Z/Z14udlXGHYTGda2xI=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1681375984;
+        s=susede2_ed25519; t=1681375985;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ear+cnYjNr0Xxid0IYuEKGOWEhCYOcJOGEYisWpZTKo=;
-        b=9NIL9C8KqTMIlIlDJ8DPR26DM/xiQezNmGfZN0od/ZvM40T5Uwn+UBLnv7nBBPtJzRfRUA
-        jWez3NnzQWfRmdBA==
+        bh=Vw1ZoNwWrSTGCF9w3p1Uuiz6HkW0chKEEXorzYdcJC8=;
+        b=mFlVifnwk8TtEc5aaOWUwgDbFirHu/qEIAW+bmbqRAvZPQphqnw9nuQeCukJIUdiuvkmMr
+        p/glk/SPaCfJ4KBA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D1664139D3;
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E205313421;
         Thu, 13 Apr 2023 08:53:04 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id EH/jMvDCN2RyIAAAMHmgww
+        id EBLyNvDCN2RyIAAAMHmgww
         (envelope-from <iivanov@suse.de>); Thu, 13 Apr 2023 08:53:04 +0000
 From:   "Ivan T. Ivanov" <iivanov@suse.de>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
@@ -58,9 +58,9 @@ Cc:     Nicolas Saenz Julienne <nsaenz@kernel.org>,
         Phil Elwell <phil@raspberrypi.com>,
         linux-rpi-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         "Ivan T . Ivanov" <iivanov@suse.de>
-Subject: [PATCH v2 1/2] nvmem: rmem: Use NVMEM_DEVID_AUTO
-Date:   Thu, 13 Apr 2023 11:52:05 +0300
-Message-Id: <20230413085206.149730-2-iivanov@suse.de>
+Subject: [PATCH v2 2/2] ARM: dts: Add nvmem node for BCM2711 bootloader public key
+Date:   Thu, 13 Apr 2023 11:52:06 +0300
+Message-Id: <20230413085206.149730-3-iivanov@suse.de>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20230413085206.149730-1-iivanov@suse.de>
 References: <20230413085206.149730-1-iivanov@suse.de>
@@ -75,33 +75,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Phil Elwell <phil@raspberrypi.com>
+From: Tim Gover <tim.gover@raspberrypi.com>
 
-It is reasonable to declare multiple nvmem blocks. Unless a unique 'id'
-is passed in for each block there may be name clashes.
+Make a copy of the bootloader secure-boot public key available to the OS
+via an nvmem node. The placement information is populated by the
+Raspberry Pi firmware if a public key is present in the BCM2711
+bootloader EEPROM.
 
-Avoid this by using the magic token NVMEM_DEVID_AUTO.
-
-Fixes: 5a3fa75a4d9cb ("nvmem: Add driver to expose reserved memory as nvmem")
-
-Signed-off-by: Phil Elwell <phil@raspberrypi.com>
+Signed-off-by: Tim Gover <tim.gover@raspberrypi.com>
 Signed-off-by: Ivan T. Ivanov <iivanov@suse.de>
 ---
- drivers/nvmem/rmem.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/boot/dts/bcm2711-rpi.dtsi | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/drivers/nvmem/rmem.c b/drivers/nvmem/rmem.c
-index 80cb187f1481..752d0bf4445e 100644
---- a/drivers/nvmem/rmem.c
-+++ b/drivers/nvmem/rmem.c
-@@ -71,6 +71,7 @@ static int rmem_probe(struct platform_device *pdev)
- 	config.dev = dev;
- 	config.priv = priv;
- 	config.name = "rmem";
-+	config.id = NVMEM_DEVID_AUTO;
- 	config.size = mem->size;
- 	config.reg_read = rmem_read;
+diff --git a/arch/arm/boot/dts/bcm2711-rpi.dtsi b/arch/arm/boot/dts/bcm2711-rpi.dtsi
+index 98817a6675b9..e30fbe84f9c3 100644
+--- a/arch/arm/boot/dts/bcm2711-rpi.dtsi
++++ b/arch/arm/boot/dts/bcm2711-rpi.dtsi
+@@ -15,6 +15,7 @@ aliases {
+ 		ethernet0 = &genet;
+ 		pcie0 = &pcie0;
+ 		blconfig = &blconfig;
++		blpubkey = &blpubkey;
+ 	};
+ };
  
+@@ -67,6 +68,19 @@ blconfig: nvram@0 {
+ 		no-map;
+ 		status = "disabled";
+ 	};
++
++	/*
++	 * RPi4 will copy the binary public key blob (if present) from the bootloader
++	 * into memory for use by the OS.
++	 */
++	blpubkey: nvram@1 {
++		compatible = "raspberrypi,bootloader-public-key", "nvmem-rmem";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		reg = <0x0 0x0 0x0>;
++		no-map;
++		status = "disabled";
++	};
+ };
+ 
+ &v3d {
 -- 
 2.35.3
 
