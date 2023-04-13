@@ -2,125 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CBD06E17A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 00:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB2FD6E17AD
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 00:48:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbjDMWsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 18:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32772 "EHLO
+        id S230303AbjDMWs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 18:48:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjDMWsG (ORCPT
+        with ESMTP id S230156AbjDMWsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 18:48:06 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB4FB10E5
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 15:48:05 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id j2-20020a170902da8200b001a055243657so8777001plx.19
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 15:48:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681426085; x=1684018085;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7De+TR6k41slfMO+agxwSRrezzAt0xmZupWS+SIbKtw=;
-        b=wripiq38optx0A61pEC4QlxbrXV9310O1yzg1yey6FDBM3X/3bgYqN6lxWXAho4x2Z
-         b6b8/UzbX9j9h1jSPKzj89XyFovpOpw/PUeQ+0GvEyzDHVuB9wwO+dRPlFUrwpcPIhI7
-         ZKFw3DZ6ofccfo/zAQ44f4r2Rnwpb31HNbaYHWZM7/iPJ8BqRh4jIGV4uQ+CkeOUZdg3
-         u48pLtetbVssXKzdARwdPIHvlDYgsEuJYGdtXo6rIARliioKNY1De8ejJNY0TMvYlSp8
-         h9hcvepeqxGnrQjEb7GXmqTSAyAJ2JP9Q5UDMfqYZgFhQHMz1CjlVzVpjKCaNG57B1z6
-         wPYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681426085; x=1684018085;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7De+TR6k41slfMO+agxwSRrezzAt0xmZupWS+SIbKtw=;
-        b=GAmbpKVwrBK5X6ukz+PNCyE7vjSE8d/eZ0qRn02IO41trQckiL8nMDN8miUfMd4Gpw
-         XHzKO8NO8F/22wqlqSQZljqDY/HSmdr65ZoVtfxzpKLynZAJRVadWRJzwKh8P5XFlCJz
-         MW6xnLF9ACvxXOTYMDPopfH7ErmB0fDO3UQws/mPV8YReXx8BMSY9UJemA9z1DcWW0sU
-         SvdHwuBFBHwvSeZwh5ZUcpPzq75LhakUyeH3BhAYvldB7Tqn0llkw5rscJP/Xfl1JYTv
-         fHpq0ur2bTkIAq5U1RhajWRPBnDof+NEvYDb6f6PCMiGfnpXgdEiURaGXrXF6CrDnR4V
-         0QGw==
-X-Gm-Message-State: AAQBX9ecTOzkIUTgWuI90N3YU1sx5PPebd2wpThHIa3q5j/Z00u9bn5a
-        A+/Wsrde5JsYlTG6q9rKa6Dm0pht3Us=
-X-Google-Smtp-Source: AKy350b/OBsmKfKzcv0b+1digNdsex0QQ/cOy6US20y18DtoSSeFH/BrW0XfTLmwilEqK6wAU2/PGGYKlM4=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:903:25d3:b0:1a4:f282:91c7 with SMTP id
- jc19-20020a17090325d300b001a4f28291c7mr216045plb.6.1681426085409; Thu, 13 Apr
- 2023 15:48:05 -0700 (PDT)
-Date:   Thu, 13 Apr 2023 15:48:04 -0700
-In-Reply-To: <ae28ce9b0c78a926c38a8c8b9694aa34b140b467.camel@intel.com>
-Mime-Version: 1.0
-References: <20230405005911.423699-1-seanjc@google.com> <d0af618169ebc17722e7019ca620ec22ee0b49c3.camel@intel.com>
- <ZC4qF90l77m3X1Ir@google.com> <20230406130119.000011fe.zhi.wang.linux@gmail.com>
- <e1e7a37a29c2c7ad22cd14181f24b06088eca451.camel@intel.com>
- <ZDbMuZKhAUbrkrc7@google.com> <ae28ce9b0c78a926c38a8c8b9694aa34b140b467.camel@intel.com>
-Message-ID: <ZDiGpCkXOcCm074O@google.com>
-Subject: Re: [PATCH 0/3] KVM: x86: SGX vs. XCR0 cleanups
-From:   Sean Christopherson <seanjc@google.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "zhi.wang.linux@gmail.com" <zhi.wang.linux@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 13 Apr 2023 18:48:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9A5469E;
+        Thu, 13 Apr 2023 15:48:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BFFDE6420C;
+        Thu, 13 Apr 2023 22:48:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 055A4C433D2;
+        Thu, 13 Apr 2023 22:48:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681426105;
+        bh=2r4AGUeUoeN45ZcBLry7NPduP3jS6MEazXMcZDx4tSk=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=fe/70YgQzYpVg7kdBUWkl/HnpAoPIowg9lpjh74s/hQdBVwFbV0I3rF+fN4y4DSqm
+         dabT3RGw7iBgtB/WE4qGpc+HigeDyVLJo6HqRwMPtNRcjTezZ5FHfd5XHMQfamtdhV
+         9CsIbkabMl4mNgzvMOaaVzR0rcMeC1Cj56/BHX0DCNxm9mXmDx+uB1AXcYZyfT/c+W
+         6jpMSLXbiavb68fmMIFBcSyfllCEG7p6CL8RUccbwyn8jGHoVmIFtTBiNWlEKeFgRC
+         qYLS2tO743qgLz0u9/KEWh46c8aNhY7LJvzf3X12P2UEUv5OcXECiUNidi4tbeuoGg
+         2T7YJSRlA6hcA==
+Message-ID: <e4cedf7608d84adb209aa889f524fc09.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230413205528.4044216-1-sboyd@kernel.org>
+References: <20230413205528.4044216-1-sboyd@kernel.org>
+Subject: Re: [PATCH] clk: starfive: Avoid casting iomem pointers
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        patches@lists.linux.dev, Tommaso Merciai <tomm.merciai@gmail.com>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Xingyu Wu <xingyu.wu@starfivetech.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Date:   Thu, 13 Apr 2023 15:48:22 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023, Kai Huang wrote:
-> On Wed, 2023-04-12 at 08:22 -0700, Sean Christopherson wrote:
-> > KVM's uAPI for initiating TDH.MNG.INIT could obviously filter out
-> > unsupported leafs, but doing so would lead to potential ABI breaks, e.g. if a leaf
-> > that KVM filters out becomes known to the TDX Module, then upgrading the TDX Module
-> > could result in previously allowed input becoming invalid.
-> 
-> How about only filtering out PV related CPUIDs when applying CPUIDs to
-> TDH.MNG.INIT?  I think we can assume they are not gonna be known to TDX module
-> anyway.
+Quoting Stephen Boyd (2023-04-13 13:55:28)
+> Let's use a wrapper struct for the auxiliary_device made in
+> jh7110_reset_controller_register() so that we can stop casting iomem
+> pointers. The casts trip up tools like sparse, and make for some awkward
+> casts that are largely unnecessary. While we're here, change the
+> allocation from devm and actually free the auxiliary_device memory in
+> the release function. This avoids any use after free problems where the
+> parent device driver is unbound from the device but the
+> auxiliuary_device is still in use accessing devm freed memory.
+>=20
+> Cc: Tommaso Merciai <tomm.merciai@gmail.com>
+> Cc: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+> Cc: Hal Feng <hal.feng@starfivetech.com>
+> Cc: Conor Dooley <conor.dooley@microchip.com>
+> Cc: Xingyu Wu <xingyu.wu@starfivetech.com>
+> Fixes: edab7204afe5 ("clk: starfive: Add StarFive JH7110 system clock dri=
+ver")
+> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+> ---
 
-Nope, not going down that road.  Fool me once[*], shame on you.  Fool me twice,
-shame on me :-)
-
-Objections to hardware vendors defining PV interfaces aside, there exist leafs
-that are neither PV related nor known to the TDX module, e.g. Centaur leafs.  I
-think it's extremely unlikely (understatement) that anyone will want to expose
-Centaur leafs to a TDX guest, but again I want to say out of the business of
-telling userspace what is and isn't sane CPUID models.
-
-[*] https://lore.kernel.org/all/20221210160046.2608762-6-chen.zhang@intel.com
-
-> > Even if that weren't the case, ignoring KVM_SET_CPUID{2} would be a bad option
-> > becuase it doesn't allow KVM to open behavior in the future, i.e. ignoring the
-> > leaf would effectively make _everything_ valid input.  If KVM were to rely solely
-> > on TDH.MNG.INIT, then KVM would want to completely disallow KVM_SET_CPUID{2}.
-> 
-> Right.  Disallowing SET_CPUID{2} probably is better, as it gives userspace a
-> more concrete result.  
-> 
-> > 
-> > Back to Zhi's question, the best thing to do for TDX and SNP is likely to require
-> > that overlap between KVM_SET_CPUID{2} and the "trusted" CPUID be consistent.  The
-> > key difference is that KVM would be enforcing consistency, not sanity.  I.e. KVM
-> > isn't making arbitrary decisions on what is/isn't sane, KVM is simply requiring
-> > that userspace provide a CPUID model that's consistent with what userspace provided
-> > earlier.
-> 
-> So IIUC, you prefer to verifying the CPUIDs in SET_CPUID{2} are a super set of
-> the CPUIDs provided in TDH.MNG.INIT?  And KVM manually verifies all CPUIDs for
-> all vcpus are consistent (the same) in SET_CPUID{2}?
-
-Yes, except KVM doesn't need to verify vCPUs are consistent with respect to each
-other, just that each vCPU is consistent with respect to what was reported to the
-TDX Module.
-
-> Looks this is over-complicated, _if_ the "only filtering out PV related CPUIDs
-> when applying CPUIDs to TDH.MNG.INIT" approach works. 
-
-It's not complicated at all.  Walk through the leafs defined during TDH.MNG.INIT,
-reject KVM_SET_CPUID if a leaf isn't present or doesn't match exactly.  Or has
-the TDX spec changed and it's no longer that simple?
+Applied to clk-next
