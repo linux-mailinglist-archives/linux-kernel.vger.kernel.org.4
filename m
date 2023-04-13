@@ -2,78 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E67866E0F3D
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:52:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D60806E0F43
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231362AbjDMNwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 09:52:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54898 "EHLO
+        id S231520AbjDMNxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 09:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231417AbjDMNwi (ORCPT
+        with ESMTP id S231524AbjDMNxK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 09:52:38 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D250713E
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:52:36 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3ee6c339cceso100865e9.0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:52:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681393955; x=1683985955;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EyiAXWi7wI/a4BXE2JS5B0l728wDK3pRrScYY1FO7uw=;
-        b=5gKTV249ZdQUcMjtng7r14BRVoCMr/7O5QnP1HvjS1/xFz/pbHBMIgw0CkNPreZ9kN
-         rz/Pc+Q270TCDhNdoJ2WrMsTFpuiFzkdzZOPkwG5AtTNQ53sMq1l+z+5vLcLUPJHtD4q
-         DaLYtGuiTys1VF8n47eVFQfVPu/bbjq/poQlam/w24jwR0PVMowKE42xoLikim73nLnM
-         LJJpUrF+XIzAcnAyt2mefRmLCwJ8XAvKydrUlqMqohjhGiPvPpjXt6f6ZyCZPmZ4IPIf
-         ex6EqIoimd5qEn5bB2PVkuqguaCQuVP4R1JitEcoGcf05asNxHyCcJWSV0WnztiJ0kYv
-         wTvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681393955; x=1683985955;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EyiAXWi7wI/a4BXE2JS5B0l728wDK3pRrScYY1FO7uw=;
-        b=PK2yjFK/i+02+dXVghbuV5jqijVdaBejd3IaRvcDEqQjDxMMt6QQKQ81Gsjx6CbeXP
-         Q79ALNzf4kJjeV4tDVA3NCNw3NkNQnoMlHPr4pE+mUsBHbTOi7blUtI0c30j1g8cUK4z
-         e8KjRWz6mtLA6XPw1w6qX+05Ev4KGbsdbzCakx8nrGyuPU+wmE2aBhIYaBgHFRCOZBOr
-         EBdKDffizOJf4KbtrpkRyvAY3uWAQu1/EeKNT08e/Xx+qKKGpOItAwwubFcTGcowNMD/
-         ketDRcn190e/Ke2I48+21M6ELrKJkSV/LYiNHByhm83lxQ7VhoMMwVvdVjrdA0JlCySm
-         /R2g==
-X-Gm-Message-State: AAQBX9e23uTb+3Hqo4Xdm7umhFXkKlCli1XhAPj3Y1EMKZBxrIXZcEjW
-        4yyL7mycbVA0G2Bb2z11Gzal7VlZbyacKvksfn90qw==
-X-Google-Smtp-Source: AKy350adPkBn07FIFFq9g/pBm0gwFTeneoYFhI/cfO7JwnQJADkCBxc40tPY+7xz0t0L6eGpXmbvBVNkl0/WvZvvRuA=
-X-Received: by 2002:a05:600c:3109:b0:3f0:9642:d410 with SMTP id
- g9-20020a05600c310900b003f09642d410mr535820wmo.3.1681393955150; Thu, 13 Apr
- 2023 06:52:35 -0700 (PDT)
+        Thu, 13 Apr 2023 09:53:10 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C85C9ED9;
+        Thu, 13 Apr 2023 06:53:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1681393985; x=1712929985;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RI5dxyny4pd6aZFj4Z1YM4GJ/8KIefexr1VJF7/pVbY=;
+  b=RkREgTExxJvehHtbjdlCpVYyXJqGDk9uQLbfhoOzhSFnTZFjZlN2/8jE
+   uVB4BFdVtquNSa3jspILzbz/w/YE1gh8Wy91p5SigOusEbgOs64vXvBBK
+   U8KhNrchxkVyyo0Iu5H00rbqV+Ygu2/0zIzj0ar731hXsAKK9Z9aA0cDr
+   4Gsv7PE+cALAvqBnX+KvaXuYJZeGI+bvihQN+/+RUoFgNZHh/mEDZVfCA
+   osqJoT/X5UiS5kJfnpY5IclUtuQrGA2YQZ7dwChzJ6UbgA+gEXL6l+CaA
+   rPdlSVkJnYVkzOHmJFcbeFwL+lROtaPndVOq4MrgRv8gr9VRLpoSwejwh
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.99,193,1677567600"; 
+   d="asc'?scan'208";a="208958686"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Apr 2023 06:53:03 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 13 Apr 2023 06:53:02 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Thu, 13 Apr 2023 06:53:00 -0700
+Date:   Thu, 13 Apr 2023 14:52:44 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Stephen Boyd <sboyd@kernel.org>
+CC:     Conor Dooley <conor@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Xingyu Wu <xingyu.wu@starfivetech.com>,
+        <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v4 07/10] clk: starfive: Add StarFive JH7110 Video-Output
+ clock driver
+Message-ID: <20230413-hardcover-ground-efbd862c5ec3@wendy>
+References: <20230411135558.44282-1-xingyu.wu@starfivetech.com>
+ <20230411135558.44282-8-xingyu.wu@starfivetech.com>
+ <683cbe934d1df9436e003466d2a419ef.sboyd@kernel.org>
+ <463ee23c-f617-bed0-27a8-56c6fb40d092@starfivetech.com>
+ <cd4a11ae65e186799145410969d40421.sboyd@kernel.org>
 MIME-Version: 1.0
-References: <20230411205622.3266490-1-irogers@google.com> <aaa41580-e30a-5a3a-7917-042ddaffe9cf@linux.intel.com>
- <CAP-5=fUnqi3KCEzu8qC8qG+g__qTmCVzc9skNb5yFzz=Fa02QQ@mail.gmail.com>
- <87eb928a-9c66-f821-0f20-22d21c96b7a5@linux.intel.com> <CAP-5=fUELu6nT8sGjkPvzKOX2qxH-w9q5mJgsjLBoYwAQ5bP6Q@mail.gmail.com>
- <2a6f6cf3-3de1-33e4-3b51-8c702c270bda@linux.intel.com>
-In-Reply-To: <2a6f6cf3-3de1-33e4-3b51-8c702c270bda@linux.intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 13 Apr 2023 06:52:22 -0700
-Message-ID: <CAP-5=fV_6Tjrc3PgEzHbXMvXJNerBOfTnrqb5eyZtjA4dRB0HQ@mail.gmail.com>
-Subject: Re: [PATCH v1] perf stat: Introduce skippable evsels
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="v0ip4bKAlPiDmbMW"
+Content-Disposition: inline
+In-Reply-To: <cd4a11ae65e186799145410969d40421.sboyd@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,40 +79,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 6:36=E2=80=AFAM Liang, Kan <kan.liang@linux.intel.c=
-om> wrote:
->
->
->
-> On 2023-04-12 2:01 p.m., Ian Rogers wrote:
-> >> - We shouldn't only rely on the event list file. We need to do runtime
-> >> check on the availability of events. Either perf_event_open() or
-> >> /sys/devices/cpu/events/ is fine (althourh personally I prefer sys way=
-,
-> >> since I think it's easier).
-> > Using perf_event_open is the status quo and the sysfs approach is
-> > impractical imo. I think the only thing that is needed in v2 is for
-> > <not counted> to be displayed for skippable evsels.
->
-> Using perf_event_open is good to check features. If the feature is not
-> supported by the kernel, it will be explicitly rejected.
-> But I'm not sure about the availability of events. The kernel doesn't
-> check every events. For example, on ICL and later platform, we have
-> event=3D0x00,umask=3D0x8X for all the topdown metrics events. If we open
-> them on SKL, the perf_event_open will also success, but return 0 value.
+--v0ip4bKAlPiDmbMW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks Kan,
+On Wed, Apr 12, 2023 at 09:04:08PM -0700, Stephen Boyd wrote:
+> Quoting Xingyu Wu (2023-04-11 23:15:26)
+> > On 2023/4/12 2:33, Stephen Boyd wrote:
+> > > Quoting Xingyu Wu (2023-04-11 06:55:55)
 
-The behavior change in perf-tools-next is to use the TopdownL1 metric
-group rather than programming the events and then having hard coded
-metrics if we spot the events enabled. On SKL the TopdownL1 metric
-group will give SKL top down metrics which don't use topdown events
-because, as you point out, they don't exist. The only way to program
-event=3D0x00,umask=3D0x8X on SKL would be through a raw event, so I don't
-think there is any issue here.
+> > >> +       if (ret < 0)
+> > >> +               return dev_err_probe(priv->dev, ret, "failed to turn=
+ on power\n");
+> > >> +
+> > >> +       ret =3D jh7110_vout_top_crg_init(priv, top);
+> > >> +       if (ret)
+> > >> +               goto err_clk;
+> > >> +
+> > >> +       top->base =3D priv->base;
+> > >> +       dev_set_drvdata(priv->dev, (void *)(&top->base));
+> > >=20
+> > > See comment later about setting this to 'top' instead. Casting away
+> > > iomem markings is not good hygiene.
+> >=20
+> > JH7110 resets as the auxiliary device of clocks use the same iomem as t=
+he clocks
+> > and the iomem will be got by dev_get_drvdata() in the 7110 reset driver=
+s when registering reset.
+> > So I follow the basic 7110 reset driver and also set the iomem not top_=
+crg struct.
+>=20
+> Oh I totally missed that this is how it's been done for the other
+> starfive driver. It's still not good hygiene to stash the iomem pointer
+> that way because the iomem marking is lost and has to be recovered. Can
+> you make a wrapper struct, either for the adev or to pass in struct
+> device::platform_data?
 
-Thanks,
-Ian
+FWIW, this did come up on an earlier version of the other starfive
+driver:
+https://lore.kernel.org/linux-clk/e0d8f9ba-5bf4-d7dd-5110-20d4196556f9@star=
+fivetech.com/
 
-> Thanks,
-> Kan
+I probably should've pushed Hal to use a struct, but evidently I didn't
+reply to his final message there, so apologies for that!
+
+
+--v0ip4bKAlPiDmbMW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZDgJLAAKCRB4tDGHoIJi
+0grQAQD5cpctgc5Bq3S7CyFGTLA6byxDhiBh5Iyvw4xFI+lLdAD/SOinBHpjM3Vf
+npC+7trX9b+0Hc7eNQTp7L341SH1nAw=
+=b8hm
+-----END PGP SIGNATURE-----
+
+--v0ip4bKAlPiDmbMW--
