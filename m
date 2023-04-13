@@ -2,50 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 938D66E0BDC
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 12:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B35856E0BE1
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 12:55:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbjDMKwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 06:52:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34482 "EHLO
+        id S230383AbjDMKzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 06:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230395AbjDMKv5 (ORCPT
+        with ESMTP id S229819AbjDMKzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 06:51:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A1D8A4B
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:51:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E1F463D90
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 10:51:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60F12C433D2;
-        Thu, 13 Apr 2023 10:51:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1681383113;
-        bh=A6jwleIi3Geg89RAm6mJf5xmtQ0hI5GwG9i4Or/UMTI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sD/uG20pU621vFpsv+bmFhbeSP0Z1sjmZ0DNaC3tg85n7hg6ewuaWbpkuYGuwP3sz
-         AVQCUDIE7mgWlh6UAKRbKSIrN6Lx7LSgGje5WLArVDPPqClT8iMElBT70HKHG8bIAw
-         Ud9zCxCDWH317CuFP+l3D/OnqDgcl1uBfXzhx/h4=
-Date:   Thu, 13 Apr 2023 12:51:44 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Chuang Zhang <zhangchuang3@xiaomi.corp-partner.google.com>
-Cc:     arve@android.com, tkjos@android.com, maco@android.com,
-        joel@joelfernandes.org, brauner@kernel.org, cmllamas@google.com,
-        surenb@google.com, linux-kernel@vger.kernel.org,
-        Chuang Zhang <zhangchuang3@xiaomi.com>
-Subject: Re: [PATCH] Binder: Add timestamp and async from pid/tid to
- transaction record
-Message-ID: <2023041302-uncut-tutor-0e6e@gregkh>
-References: <20230413104047.388861-1-zhangchuang3@xiaomi.corp-partner.google.com>
+        Thu, 13 Apr 2023 06:55:47 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DCC1FF5
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:55:46 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id n203so3049438ybg.6
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:55:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681383345; x=1683975345;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=f63QrK43XLAGHxwPs7pbyGXABSXOEiiygSrStfQWR3w=;
+        b=PvCmyfQi2PB9TWPdBz4qyWOyb1JpH1Kb+uq0wHqNrvKmZ6DgsDrwQaCFrvXm9SH8J+
+         sy0DCRolE0Mies47uvMEBEJVA1QwsNL0P2zEM8aLHN7rXFDaFQQOiekeLIXa5nlNASOb
+         cvvhboo7SBYYg2KHMDA49wRrHupIMKYtxpuCsXbAca23uF2PXDUGjfydnZHyTiWLq+BH
+         v4YsLsGjALXuFRMq7OMlS/a0YP4cIQZK6NVGe34DeW/veXYDhuvsGOlzScDVbdDLIi31
+         DCmzqBlCTxKvrx/P5rWK5h+RLfbl9BhiqZ1w8qiCMtVYmXY2wsnaSuQKFWC/mNxQWTDr
+         ukfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681383345; x=1683975345;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=f63QrK43XLAGHxwPs7pbyGXABSXOEiiygSrStfQWR3w=;
+        b=bDS5IqSS63L+2SqpyzuaO3FyXOIQ3uzcIX4prvQS/899VFsJQkjiP28tsWBvLwGRDB
+         6+7+2HtgY0/AdpNn74mqMBoZRR/aUhm5y9D5nfUwiQYc+8HxGW7y6KWOVtL+HswyAOjW
+         kbNSzlC00bqIJNh/ZGLLmeiBIjOhPsKKq7yO7fy23jBycXRRHC04vHEeV1HLZKYt/alc
+         butvuq05tZY+qCq398bSCf4HPzSzqNIgLd3BKrOduI6TNytwGxUnmrTFNdNTdFdekOlN
+         CeaUqFNvfz3hGGs+w2l+wS1wyUaCaBZ4PcLDYWoD7S4f0otjJ0YOzZ2rxGjr4pl0kgrI
+         vcKw==
+X-Gm-Message-State: AAQBX9cXW/jrh+M7N9yxP/f+5i1mvcYnBbPvxAIffAXnOMzU36cF5P4N
+        boRUW75okhiUhn8ThvWJB2692IOijlWxDnWWU5mb1Q==
+X-Google-Smtp-Source: AKy350YZzo+I/tVibIzVpunKjBUatiTbbXl4qfys2VgP4SOXlR9o9XA8jqBBapGsotgRClgOfNHkhi7is1LNbpUFQbI=
+X-Received: by 2002:a25:dad5:0:b0:b8e:de89:35a2 with SMTP id
+ n204-20020a25dad5000000b00b8ede8935a2mr1123517ybf.1.1681383345313; Thu, 13
+ Apr 2023 03:55:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230413104047.388861-1-zhangchuang3@xiaomi.corp-partner.google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+References: <20230312145305.1908607-1-zyytlz.wz@163.com> <CANDhNCr=hdhKS4c+U=+W1ONHDWv6BrwL5TovGjs0G2G+Reqc9g@mail.gmail.com>
+ <CAJedcCyJnV+KnFF5h+2-0W1R4uaUxUxXFUH3Q9HGYh-5F5LmBQ@mail.gmail.com> <CAJedcCyERP0-9DNgeKmS3C9Soqq590PteEorr_bxKzNanht=TQ@mail.gmail.com>
+In-Reply-To: <CAJedcCyERP0-9DNgeKmS3C9Soqq590PteEorr_bxKzNanht=TQ@mail.gmail.com>
+From:   Yongqin Liu <yongqin.liu@linaro.org>
+Date:   Thu, 13 Apr 2023 18:55:34 +0800
+Message-ID: <CAMSo37Vfr0DOqN+1XjH0o3pOY=BaHnSFkUbnZPOdMQ3TbfoAKg@mail.gmail.com>
+Subject: Re: [PATCH] misc: hisi_hikey_usb: Fix use after free bug in
+ hisi_hikey_usb_remove due to race condition
+To:     Zheng Hacker <hackerzheng666@gmail.com>
+Cc:     John Stultz <jstultz@google.com>, Zheng Wang <zyytlz.wz@163.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>, arnd@arndb.de,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        1395428693sheep@gmail.com, alex000young@gmail.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,123 +74,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 06:40:47PM +0800, Chuang Zhang wrote:
-> From: Chuang Zhang <zhangchuang3@xiaomi.com>
-> 
-> This patch adds a timestamp field to the binder_transaction
-> structure to track the time consumed during transmission
-> when reading binder_transaction records.
-> Additionally, it records the from pid and tid of asynchronous
-> binder. This information is printed when reading binderfs
-> related nodes to assist with debugging.
+Hi, Zheng
 
-This should be broken up into 2 patches, one for each new feature you
-are adding, right?
+On Thu, 13 Apr 2023 at 16:08, Zheng Hacker <hackerzheng666@gmail.com> wrote=
+:
+>
+> Friendly ping about the bug.
 
-> 
-> Signed-off-by: Chuang Zhang <zhangchuang3@xiaomi.com>
+Sorry, wasn't aware of this message before,
 
-Much better, thanks!
+Could you please help share the instructions to reproduce the problem
+this change fixes?
 
-Some comments on the code:
+Thanks,
+Yongqin Liu
+> Zheng Hacker <hackerzheng666@gmail.com> =E4=BA=8E2023=E5=B9=B43=E6=9C=881=
+4=E6=97=A5=E5=91=A8=E4=BA=8C 09:01=E5=86=99=E9=81=93=EF=BC=9A
+> >
+> > John Stultz <jstultz@google.com> =E4=BA=8E2023=E5=B9=B43=E6=9C=8814=E6=
+=97=A5=E5=91=A8=E4=BA=8C 03:57=E5=86=99=E9=81=93=EF=BC=9A
+> > >
+> > > On Sun, Mar 12, 2023 at 7:53=E2=80=AFAM Zheng Wang <zyytlz.wz@163.com=
+> wrote:
+> > > >
+> > > > In hisi_hikey_usb_probe, it called hisi_hikey_usb_of_role_switch
+> > > > and bound &hisi_hikey_usb->work with relay_set_role_switch.
+> > > > When it calls hub_usb_role_switch_set, it will finally call
+> > > > schedule_work to start the work.
+> > > >
+> > > > When we call hisi_hikey_usb_remove to remove the driver, there
+> > > > may be a sequence as follows:
+> > > >
+> > > > Fix it by finishing the work before cleanup in hisi_hikey_usb_remov=
+e.
+> > > >
+> > > > CPU0                  CPU1
+> > > >
+> > > >                     |relay_set_role_switch
+> > > > hisi_hikey_usb_remove|
+> > > >   usb_role_switch_put|
+> > > >     usb_role_switch_release  |
+> > > >      kfree(sw)     |
+> > > >                     | usb_role_switch_set_role
+> > > >                     |   //use
+> > > >
+> > > > Fixes: 7a6ff4c4cbc3 ("misc: hisi_hikey_usb: Driver to support onboa=
+rd USB gpio hub on Hikey960")
+> > > > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> > > > ---
+> > > >  drivers/misc/hisi_hikey_usb.c | 1 +
+> > > >  1 file changed, 1 insertion(+)
+> > > >
+> > > > diff --git a/drivers/misc/hisi_hikey_usb.c b/drivers/misc/hisi_hike=
+y_usb.c
+> > > > index 2165ec35a343..26fc895c4418 100644
+> > > > --- a/drivers/misc/hisi_hikey_usb.c
+> > > > +++ b/drivers/misc/hisi_hikey_usb.c
+> > > > @@ -242,6 +242,7 @@ static int hisi_hikey_usb_probe(struct platform=
+_device *pdev)
+> > > >  static int  hisi_hikey_usb_remove(struct platform_device *pdev)
+> > > >  {
+> > > >         struct hisi_hikey_usb *hisi_hikey_usb =3D platform_get_drvd=
+ata(pdev);
+> > > > +       cancel_work_sync(&hisi_hikey_usb->work);
+> > > >
+> > > >         if (hisi_hikey_usb->hub_role_sw) {
+> > > >                 usb_role_switch_unregister(hisi_hikey_usb->hub_role=
+_sw);
+> > >
+> > > Looks sane to me.
+> > > Pulling in Sumit and YongQin as they have hardware and can test with =
+it.
+> > >
+> > Hi John,
+> >
+> > Thanks for your reply. Thank Sumit and YongQin for being willing to
+> > test the solution with their hardware.
+> >
+> > Best regards,
+> > Zheng
 
-> ---
->  drivers/android/binder.c          | 24 ++++++++++++++++++------
->  drivers/android/binder_internal.h |  3 +++
->  2 files changed, 21 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-> index fb56bfc45096..e79f548bcbac 100644
-> --- a/drivers/android/binder.c
-> +++ b/drivers/android/binder.c
-> @@ -66,6 +66,7 @@
->  #include <linux/syscalls.h>
->  #include <linux/task_work.h>
->  #include <linux/sizes.h>
-> +#include <linux/ktime.h>
->  
->  #include <uapi/linux/android/binder.h>
->  
-> @@ -3145,6 +3146,7 @@ static void binder_transaction(struct binder_proc *proc,
->  	binder_stats_created(BINDER_STAT_TRANSACTION_COMPLETE);
->  
->  	t->debug_id = t_debug_id;
-> +	t->start_time = ktime_get();
->  
->  	if (reply)
->  		binder_debug(BINDER_DEBUG_TRANSACTION,
-> @@ -3165,10 +3167,15 @@ static void binder_transaction(struct binder_proc *proc,
->  			     (u64)tr->data_size, (u64)tr->offsets_size,
->  			     (u64)extra_buffers_size);
->  
-> -	if (!reply && !(tr->flags & TF_ONE_WAY))
-> +	if (!reply && !(tr->flags & TF_ONE_WAY)) {
->  		t->from = thread;
-> -	else
-> +		t->async_from_pid = 0;
-> +		t->async_from_tid = 0;
-> +	} else  {
->  		t->from = NULL;
-> +		t->async_from_pid = thread->proc->pid;
-> +		t->async_from_tid = thread->pid;
-> +	}
->  	t->sender_euid = task_euid(proc->tsk);
->  	t->to_proc = target_proc;
->  	t->to_thread = target_thread;
-> @@ -4963,6 +4970,8 @@ static int binder_thread_release(struct binder_proc *proc,
->  		} else if (t->from == thread) {
->  			t->from = NULL;
->  			t = t->from_parent;
-> +			t->async_from_pid = 0;
-> +			t->async_from_tid = 0;
->  		} else
->  			BUG();
->  		spin_unlock(&last_t->lock);
-> @@ -5930,17 +5939,20 @@ static void print_binder_transaction_ilocked(struct seq_file *m,
->  {
->  	struct binder_proc *to_proc;
->  	struct binder_buffer *buffer = t->buffer;
-> +	ktime_t current_time = ktime_get();
->  
->  	spin_lock(&t->lock);
->  	to_proc = t->to_proc;
->  	seq_printf(m,
-> -		   "%s %d: %pK from %d:%d to %d:%d code %x flags %x pri %ld r%d",
-> +		   "%s %d: %pK from %d:%d to %d:%d code %x elapsed %lldms flags %x pri %ld r%d",
 
-Why not add this at the end of the line instead of in the middle?  That
-way any existing code that looks at this line isn't as broken as it
-might be with your change :)
 
->  		   prefix, t->debug_id, t,
-> -		   t->from ? t->from->proc->pid : 0,
-> -		   t->from ? t->from->pid : 0,
-> +		   t->from ? t->from->proc->pid : t->async_from_pid,
-> +		   t->from ? t->from->pid : t->async_from_tid,
->  		   to_proc ? to_proc->pid : 0,
->  		   t->to_thread ? t->to_thread->pid : 0,
-> -		   t->code, t->flags, t->priority, t->need_reply);
-> +		   t->code,
-> +		   ktime_ms_delta(current_time, t->start_time),
-> +		   t->flags, t->priority, t->need_reply);
->  	spin_unlock(&t->lock);
->  
->  	if (proc != to_proc) {
-> diff --git a/drivers/android/binder_internal.h b/drivers/android/binder_internal.h
-> index 28ef5b3704b1..7e60f547abb6 100644
-> --- a/drivers/android/binder_internal.h
-> +++ b/drivers/android/binder_internal.h
-> @@ -528,6 +528,9 @@ struct binder_transaction {
->  	long    priority;
->  	long    saved_priority;
->  	kuid_t  sender_euid;
-> +	int async_from_pid;
-> +	int async_from_tid;
-
-As you are just using 0/1 for these variables, why not add them to the
-bitfield location in this structure instead of wasting a whole int for
-both of them?
-
-thanks,
-
-greg k-h
+--=20
+Best Regards,
+Yongqin Liu
+---------------------------------------------------------------
+#mailing list
+linaro-android@lists.linaro.org
+http://lists.linaro.org/mailman/listinfo/linaro-android
