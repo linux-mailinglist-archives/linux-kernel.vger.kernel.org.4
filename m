@@ -2,127 +2,350 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 376136E0332
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 02:27:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E94F06E0337
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 02:27:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbjDMA1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 20:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39938 "EHLO
+        id S229603AbjDMA1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 20:27:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjDMA1b (ORCPT
+        with ESMTP id S229633AbjDMA1n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 20:27:31 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FD4449D;
-        Wed, 12 Apr 2023 17:27:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681345651; x=1712881651;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=91ps9yc2BHF8OTu7wTRMHp/SHeLcXz0RITidFgNOBe8=;
-  b=VyhHedk361fRRuCamWpL3YDNrBQpm+1gMMlqHjBe/A4decLEgCTrYEpX
-   ilXwQCcAzQtyV6+rVIlgLuhCo1ShzadVL7tBbvfO5ItcY+0Z0H++ycQlg
-   ei0j1EXTDP4Vhu4XJHhJnNzVnKFJIgrp+QjgiHurGIuWDbf3o3djwDrMv
-   XsAaqsIIy4oZffoBRxENSlkwYyH4uPx+2RWfI6dJkqe7uefLZJtR12/JB
-   AXVoY0nqF3HFED5vvl/s2VvCvwhKarhEjrUhlvMysSO8GiLwryjQlosQI
-   fXKXqERWiSMKRY9UfSzBtD3lkgI5ftSYpTD+Auib1Jb4gk2e6q8o5i7hh
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="323676684"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="323676684"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 17:27:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="721784440"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="721784440"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 12 Apr 2023 17:27:28 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pmkoB-000YAh-14;
-        Thu, 13 Apr 2023 00:27:27 +0000
-Date:   Thu, 13 Apr 2023 08:27:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     mail@mariushoch.de, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, Hans de Goede <hdegoede@redhat.com>,
-        Marius Hoch <mail@mariushoch.de>
-Subject: Re: [PATCH] iio: st_sensors: Add ACPI support for lsm303d to the
- LSM9DS0 IMU driver
-Message-ID: <202304130858.DbtHpwcV-lkp@intel.com>
-References: <20230412223627.442963-5-mail@mariushoch.de>
+        Wed, 12 Apr 2023 20:27:43 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73D272A4
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 17:27:40 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id h37so159617lfv.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 17:27:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681345659; x=1683937659;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xDJelgOzNKd6ITIGgjXIICj67KNdoTBJg181sVqgBU0=;
+        b=m/7bHy5WjQe/exegf+eGD85VJoeZnRiHbQ1efrRTMD+0NR8lirTZ5VIQ6MtWj3WKc+
+         YSP3hlFLxcpuZmHzIyagDc+HDjadKZlng7bCEpdKDCIXA6lzz42HE/Fj1BSEzoO1P5SX
+         4xb4ir5ROZye1XoSorEzbvTSTu+6SlE5pd+NLZRIjE1sP/hyKg+ynAm3zqF45BcWXj1J
+         KDeona6hyU5dK+VDAG51Fn+Er0L3RbYeEbnBQGCMaMy7lwp59nuy7VW+M3s9zBjCHFQQ
+         2BTY4vIkUr+NyGVJowBLCXuzix3EM6F2EZq26HiHQ5ZCAErOdt2LPVywJwN5CddeILn3
+         AcdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681345659; x=1683937659;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xDJelgOzNKd6ITIGgjXIICj67KNdoTBJg181sVqgBU0=;
+        b=Ts/e5Liz4UK3XzDkAQfJT9Utr3lJA7ffvbZKDJPpP+7PWwol+fdrvHkw2lxB5CTWt5
+         WeHlIZq8bw/mPx14UJdWN47+cd3dJTDzcEtUeT1JLnoa446f86Vd0s1PCrlzPdYbiEIm
+         IC/Nv6aHw8PeBXbr1lT/lZKkvHQ9deEJc11TZZK80wi3JdMCe71pivYW20m1HnO03x7F
+         7uwYBEBFfZx1D2kN8qhnPMs+y2QEphaKPMalxApidRsTUoUILN2fHeBacL7CqbWVqVgp
+         ++NwiyAs11SZQEQ4tgPprcJ65OsDT/eHvzxtkEeBnEFVuUG5Ml9Sm7TR4FmFcdpV5Uli
+         eMAg==
+X-Gm-Message-State: AAQBX9docUQ8S9usUBv8fofeVDwhrexbhzo6hUkyC695xXlMmRSXKYJE
+        o9+UZoUKUUP0laOKRQoPBp3Mug==
+X-Google-Smtp-Source: AKy350Ysb9u40mPkatwspVxrDb/u2LiGsFXwwbrVYnqsfrzuJxMcG5YfMRc64Pkg6YBUWwT7xA1tvQ==
+X-Received: by 2002:ac2:562b:0:b0:4e8:3cf8:5d64 with SMTP id b11-20020ac2562b000000b004e83cf85d64mr210849lff.37.1681345658878;
+        Wed, 12 Apr 2023 17:27:38 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id q13-20020ac25a0d000000b004eafa060a6fsm45358lfn.145.2023.04.12.17.27.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Apr 2023 17:27:38 -0700 (PDT)
+Message-ID: <c6bad6df-c11e-edab-44d9-4ae4e17199f5@linaro.org>
+Date:   Thu, 13 Apr 2023 03:27:37 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230412223627.442963-5-mail@mariushoch.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [Freedreno] [PATCH v2 0/2] drm: fdinfo memory stats
+Content-Language: en-GB
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        dri-devel@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Christopher Healy <healych@amazon.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Sean Paul <sean@poorly.run>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        freedreno@lists.freedesktop.org
+References: <20230410210608.1873968-1-robdclark@gmail.com>
+ <CAF6AEGvs4XMggPMthiJ89SiaUj3k+nY95OhxLZ5cD-01XPco4Q@mail.gmail.com>
+ <ZDWQfbUBhyJf1Ezx@phenom.ffwll.local>
+ <CAF6AEGtYw4Dn80OtrnJESkkDXxhUdAr6Nuva+Jo3ExW8MXH++Q@mail.gmail.com>
+ <CAA8EJppnEwcHM++YUYZGrNXEha=-ZVAexBdkMVsU52PTOs4VnA@mail.gmail.com>
+ <CAF6AEGsE3NOe9TkEzrk5rr-D2PoKaxF5Yn3W8wWew8um6r2EXw@mail.gmail.com>
+ <d93f4256-4554-e031-9730-4ca2a7de6aaf@linaro.org>
+ <ZDZntP+0wG6+QyHh@phenom.ffwll.local> <ZDaoT44hqnIH4ZX3@intel.com>
+ <CAF6AEGtOEwG+Wdh_7Nox8pqmWJ=nMs-GFEqTU42Mf=wOFGKfRQ@mail.gmail.com>
+ <CAA8EJpoNc+cD9gSZx09JBiV2PFHO3teryaRqx2Ah+1R6dJbybw@mail.gmail.com>
+ <CAF6AEGtK2o6hPwTOhmFM5mncvgrCXL-fx4ukz1TQpRUZMjCV=w@mail.gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <CAF6AEGtK2o6hPwTOhmFM5mncvgrCXL-fx4ukz1TQpRUZMjCV=w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 12/04/2023 23:34, Rob Clark wrote:
+> On Wed, Apr 12, 2023 at 1:19 PM Dmitry Baryshkov
+> <dmitry.baryshkov@linaro.org> wrote:
+>>
+>> On Wed, 12 Apr 2023 at 23:09, Rob Clark <robdclark@gmail.com> wrote:
+>>>
+>>> On Wed, Apr 12, 2023 at 5:47 AM Rodrigo Vivi <rodrigo.vivi@intel.com> wrote:
+>>>>
+>>>> On Wed, Apr 12, 2023 at 10:11:32AM +0200, Daniel Vetter wrote:
+>>>>> On Wed, Apr 12, 2023 at 01:36:52AM +0300, Dmitry Baryshkov wrote:
+>>>>>> On 11/04/2023 21:28, Rob Clark wrote:
+>>>>>>> On Tue, Apr 11, 2023 at 10:36 AM Dmitry Baryshkov
+>>>>>>> <dmitry.baryshkov@linaro.org> wrote:
+>>>>>>>>
+>>>>>>>> On Tue, 11 Apr 2023 at 20:13, Rob Clark <robdclark@gmail.com> wrote:
+>>>>>>>>>
+>>>>>>>>> On Tue, Apr 11, 2023 at 9:53 AM Daniel Vetter <daniel@ffwll.ch> wrote:
+>>>>>>>>>>
+>>>>>>>>>> On Tue, Apr 11, 2023 at 09:47:32AM -0700, Rob Clark wrote:
+>>>>>>>>>>> On Mon, Apr 10, 2023 at 2:06 PM Rob Clark <robdclark@gmail.com> wrote:
+>>>>>>>>>>>>
+>>>>>>>>>>>> From: Rob Clark <robdclark@chromium.org>
+>>>>>>>>>>>>
+>>>>>>>>>>>> Similar motivation to other similar recent attempt[1].  But with an
+>>>>>>>>>>>> attempt to have some shared code for this.  As well as documentation.
+>>>>>>>>>>>>
+>>>>>>>>>>>> It is probably a bit UMA-centric, I guess devices with VRAM might want
+>>>>>>>>>>>> some placement stats as well.  But this seems like a reasonable start.
+>>>>>>>>>>>>
+>>>>>>>>>>>> Basic gputop support: https://patchwork.freedesktop.org/series/116236/
+>>>>>>>>>>>> And already nvtop support: https://github.com/Syllo/nvtop/pull/204
+>>>>>>>>>>>
+>>>>>>>>>>> On a related topic, I'm wondering if it would make sense to report
+>>>>>>>>>>> some more global things (temp, freq, etc) via fdinfo?  Some of this,
+>>>>>>>>>>> tools like nvtop could get by trawling sysfs or other driver specific
+>>>>>>>>>>> ways.  But maybe it makes sense to have these sort of things reported
+>>>>>>>>>>> in a standardized way (even though they aren't really per-drm_file)
+>>>>>>>>>>
+>>>>>>>>>> I think that's a bit much layering violation, we'd essentially have to
+>>>>>>>>>> reinvent the hwmon sysfs uapi in fdinfo. Not really a business I want to
+>>>>>>>>>> be in :-)
+>>>>>>>>>
+>>>>>>>>> I guess this is true for temp (where there are thermal zones with
+>>>>>>>>> potentially multiple temp sensors.. but I'm still digging my way thru
+>>>>>>>>> the thermal_cooling_device stuff)
+>>>>>>>>
+>>>>>>>> It is slightly ugly. All thermal zones and cooling devices are virtual
+>>>>>>>> devices (so, even no connection to the particular tsens device). One
+>>>>>>>> can either enumerate them by checking
+>>>>>>>> /sys/class/thermal/thermal_zoneN/type or enumerate them through
+>>>>>>>> /sys/class/hwmon. For cooling devices again the only enumeration is
+>>>>>>>> through /sys/class/thermal/cooling_deviceN/type.
+>>>>>>>>
+>>>>>>>> Probably it should be possible to push cooling devices and thermal
+>>>>>>>> zones under corresponding providers. However I do not know if there is
+>>>>>>>> a good way to correlate cooling device (ideally a part of GPU) to the
+>>>>>>>> thermal_zone (which in our case is provided by tsens / temp_alarm
+>>>>>>>> rather than GPU itself).
+>>>>>>>>
+>>>>>>>>>
+>>>>>>>>> But what about freq?  I think, esp for cases where some "fw thing" is
+>>>>>>>>> controlling the freq we end up needing to use gpu counters to measure
+>>>>>>>>> the freq.
+>>>>>>>>
+>>>>>>>> For the freq it is slightly easier: /sys/class/devfreq/*, devices are
+>>>>>>>> registered under proper parent (IOW, GPU). So one can read
+>>>>>>>> /sys/class/devfreq/3d00000.gpu/cur_freq or
+>>>>>>>> /sys/bus/platform/devices/3d00000.gpu/devfreq/3d00000.gpu/cur_freq.
+>>>>>>>>
+>>>>>>>> However because of the components usage, there is no link from
+>>>>>>>> /sys/class/drm/card0
+>>>>>>>> (/sys/devices/platform/soc@0/ae00000.display-subsystem/ae01000.display-controller/drm/card0)
+>>>>>>>> to /sys/devices/platform/soc@0/3d00000.gpu, the GPU unit.
+>>>>>>>>
+>>>>>>>> Getting all these items together in a platform-independent way would
+>>>>>>>> be definitely an important but complex topic.
+>>>>>>>
+>>>>>>> But I don't believe any of the pci gpu's use devfreq ;-)
+>>>>>>>
+>>>>>>> And also, you can't expect the CPU to actually know the freq when fw
+>>>>>>> is the one controlling freq.  We can, currently, have a reasonable
+>>>>>>> approximation from devfreq but that stops if IFPC is implemented.  And
+>>>>>>> other GPUs have even less direct control.  So freq is a thing that I
+>>>>>>> don't think we should try to get from "common frameworks"
+>>>>>>
+>>>>>> I think it might be useful to add another passive devfreq governor type for
+>>>>>> external frequencies. This way we can use the same interface to export
+>>>>>> non-CPU-controlled frequencies.
+>>>>>
+>>>>> Yeah this sounds like a decent idea to me too. It might also solve the fun
+>>>>> of various pci devices having very non-standard freq controls in sysfs
+>>>>> (looking at least at i915 here ...)
+>>>>
+>>>> I also like the idea of having some common infrastructure for the GPU freq.
+>>>>
+>>>> hwmon have a good infrastructure, but they are more focused on individual
+>>>> monitoring devices and not very welcomed to embedded monitoring and control.
+>>>> I still want to check the opportunity to see if at least some freq control
+>>>> could be aligned there.
+>>>>
+>>>> Another thing that complicates that is that there are multiple frequency
+>>>> domains and controls with multipliers in Intel GPU that are not very
+>>>> standard or easy to integrate.
+>>>>
+>>>> On a quick glace this devfreq seems neat because it aligns with the cpufreq
+>>>> and governors. But again it would be hard to align with the multiple domains
+>>>> and controls. But it deserves a look.
+>>>>
+>>>> I will take a look to both fronts for Xe: hwmon and devfreq. Right now on
+>>>> Xe we have a lot less controls than i915, but I can imagine soon there
+>>>> will be requirements to make that to grow and I fear that we end up just
+>>>> like i915. So I will take a look before that happens.
+>>>
+>>> So it looks like i915 (dgpu only) and nouveau already use hwmon.. so
+>>> maybe this is a good way to expose temp.  Maybe we can wire up some
+>>> sort of helper for drivers which use thermal_cooling_device (which can
+>>> be composed of multiple sensors) to give back an aggregate temp for
+>>> hwmon to report?
+>>
+>> The thermal_device already registers the hwmon, see below. The
+>> question is about linking that hwmon to the drm. Strictly speaking, I
+>> don't think that we can reexport it in a clean way.
+>>
+>> # grep gpu /sys/class/hwmon/hwmon*/name
+>> /sys/class/hwmon/hwmon15/name:gpu_top_thermal
+>> /sys/class/hwmon/hwmon24/name:gpu_bottom_thermal
+> 
+> I can't get excited about userspace relying on naming conventions or
+> other heuristics like this.  
 
-kernel test robot noticed the following build errors:
+As you can guess, me neither. We are not in 2.4 world anymore.
 
-[auto build test ERROR on jic23-iio/togreg]
-[also build test ERROR on linus/master v6.3-rc6 next-20230412]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> Also, userspace's view of the world is
+> very much that there is a "gpu card", not a collection of parts.
+> (Windows seems to have the same view of the world.)  So we have the
+> component framework to assemble the various parts together into the
+> "device" that userspace expects to deal with.  We need to do something
+> similar for exposing temp and freq.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/mail-mariushoch-de/iio-st_sensors-Add-ACPI-support-for-lsm303d-to-the-LSM9DS0-IMU-driver/20230413-064417
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-patch link:    https://lore.kernel.org/r/20230412223627.442963-5-mail%40mariushoch.de
-patch subject: [PATCH] iio: st_sensors: Add ACPI support for lsm303d to the LSM9DS0 IMU driver
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20230413/202304130858.DbtHpwcV-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/ec35631841a31e357cf4f6781b4c8f78a468a4ef
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review mail-mariushoch-de/iio-st_sensors-Add-ACPI-support-for-lsm303d-to-the-LSM9DS0-IMU-driver/20230413-064417
-        git checkout ec35631841a31e357cf4f6781b4c8f78a468a4ef
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/iio/
+I think we are lookin for something close to device links. We need to 
+create a userspace-visible link from one device to another across device 
+hierarchy. Current device_link API is tied to suspend/resume, but the 
+overall idea seems to be close enough (in my opinion).
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304130858.DbtHpwcV-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_i2c.c:38:38: error: 'LSM303D_IMU_DEV_NAME' undeclared here (not in a function); did you mean 'LSM9DS0_IMU_DEV_NAME'?
-      38 |         {"ACCL0001", (kernel_ulong_t)LSM303D_IMU_DEV_NAME},
-         |                                      ^~~~~~~~~~~~~~~~~~~~
-         |                                      LSM9DS0_IMU_DEV_NAME
---
->> drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_spi.c:38:38: error: 'LSM303D_IMU_DEV_NAME' undeclared here (not in a function); did you mean 'LSM9DS0_IMU_DEV_NAME'?
-      38 |         {"ACCL0001", (kernel_ulong_t)LSM303D_IMU_DEV_NAME},
-         |                                      ^~~~~~~~~~~~~~~~~~~~
-         |                                      LSM9DS0_IMU_DEV_NAME
-
-
-vim +38 drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_i2c.c
-
-    35	
-    36	#ifdef CONFIG_ACPI
-    37	static const struct acpi_device_id st_lsm9ds0_acpi_match[] = {
-  > 38		{"ACCL0001", (kernel_ulong_t)LSM303D_IMU_DEV_NAME},
-    39		{ },
-    40	};
-    41	MODULE_DEVICE_TABLE(acpi, st_lsm9ds0_acpi_match);
-    42	#endif
-    43	
+> 
+>> # ls /sys/class/hwmon/hwmon15/ -l
+>> lrwxrwxrwx    1 root     root             0 Jan 26 08:14 device ->
+>> ../../thermal_zone15
+>> -r--r--r--    1 root     root          4096 Jan 26 08:14 name
+>> drwxr-xr-x    2 root     root             0 Jan 26 08:15 power
+>> lrwxrwxrwx    1 root     root             0 Jan 26 08:12 subsystem ->
+>> ../../../../../class/hwmon
+>> -r--r--r--    1 root     root          4096 Jan 26 08:14 temp1_input
+>> -rw-r--r--    1 root     root          4096 Jan 26 08:12 uevent
+>>
+>>> Freq could possibly be added to hwmon (ie. seems like a reasonable
+>>> attribute to add).  Devfreq might also be an option but on arm it
+>>> isn't necessarily associated with the drm device, whereas we could
+>>> associate the hwmon with the drm device to make it easier for
+>>> userspace to find.
+>>
+>> Possibly we can register a virtual 'passive' devfreq being driven by
+>> another active devfreq device.
+> 
+> That's all fine and good, but it has the same problem that existing
+> hwmon's associated with the cooling-device have..
+> 
+> BR,
+> -R
+> 
+>>>
+>>> BR,
+>>> -R
+>>>
+>>>>>
+>>>>> I guess it would minimally be a good idea if we could document this, or
+>>>>> maybe have a reference implementation in nvtop or whatever the cool thing
+>>>>> is rn.
+>>>>> -Daniel
+>>>>>
+>>>>>>
+>>>>>>>
+>>>>>>> BR,
+>>>>>>> -R
+>>>>>>>
+>>>>>>>>>
+>>>>>>>>>> What might be needed is better glue to go from the fd or fdinfo to the
+>>>>>>>>>> right hw device and then crawl around the hwmon in sysfs automatically. I
+>>>>>>>>>> would not be surprised at all if we really suck on this, probably more
+>>>>>>>>>> likely on SoC than pci gpus where at least everything should be under the
+>>>>>>>>>> main pci sysfs device.
+>>>>>>>>>
+>>>>>>>>> yeah, I *think* userspace would have to look at /proc/device-tree to
+>>>>>>>>> find the cooling device(s) associated with the gpu.. at least I don't
+>>>>>>>>> see a straightforward way to figure it out just for sysfs
+>>>>>>>>>
+>>>>>>>>> BR,
+>>>>>>>>> -R
+>>>>>>>>>
+>>>>>>>>>> -Daniel
+>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>> BR,
+>>>>>>>>>>> -R
+>>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>>> [1] https://patchwork.freedesktop.org/series/112397/
+>>>>>>>>>>>>
+>>>>>>>>>>>> Rob Clark (2):
+>>>>>>>>>>>>     drm: Add fdinfo memory stats
+>>>>>>>>>>>>     drm/msm: Add memory stats to fdinfo
+>>>>>>>>>>>>
+>>>>>>>>>>>>    Documentation/gpu/drm-usage-stats.rst | 21 +++++++
+>>>>>>>>>>>>    drivers/gpu/drm/drm_file.c            | 79 +++++++++++++++++++++++++++
+>>>>>>>>>>>>    drivers/gpu/drm/msm/msm_drv.c         | 25 ++++++++-
+>>>>>>>>>>>>    drivers/gpu/drm/msm/msm_gpu.c         |  2 -
+>>>>>>>>>>>>    include/drm/drm_file.h                | 10 ++++
+>>>>>>>>>>>>    5 files changed, 134 insertions(+), 3 deletions(-)
+>>>>>>>>>>>>
+>>>>>>>>>>>> --
+>>>>>>>>>>>> 2.39.2
+>>>>>>>>>>>>
+>>>>>>>>>>
+>>>>>>>>>> --
+>>>>>>>>>> Daniel Vetter
+>>>>>>>>>> Software Engineer, Intel Corporation
+>>>>>>>>>> http://blog.ffwll.ch
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>
+>>>>>>>> --
+>>>>>>>> With best wishes
+>>>>>>>> Dmitry
+>>>>>>
+>>>>>> --
+>>>>>> With best wishes
+>>>>>> Dmitry
+>>>>>>
+>>>>>
+>>>>> --
+>>>>> Daniel Vetter
+>>>>> Software Engineer, Intel Corporation
+>>>>> http://blog.ffwll.ch
+>>
+>>
+>>
+>> --
+>> With best wishes
+>> Dmitry
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+With best wishes
+Dmitry
+
