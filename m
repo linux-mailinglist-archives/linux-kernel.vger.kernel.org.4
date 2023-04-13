@@ -2,333 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D876E150B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 21:17:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 840076E1500
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 21:16:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbjDMTRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 15:17:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55726 "EHLO
+        id S229729AbjDMTQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 15:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbjDMTRV (ORCPT
+        with ESMTP id S229920AbjDMTQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 15:17:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445E28697
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 12:15:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681413357;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Thu, 13 Apr 2023 15:16:44 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349D218D;
+        Thu, 13 Apr 2023 12:16:37 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id BA1801FD70;
+        Thu, 13 Apr 2023 19:16:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1681413395; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=xTgGczCO0mNwpgaEE0ax8YC4P9ZUQjVz+mrfnTw0NtY=;
-        b=MEwbCuGNArhj0FNwILgZwzUlzH+bo+ARNyjyFV5nShFo6/ZgQLHoC37OBFjgCoIEgISc+a
-        xZ3+Q4KPM8ReMqbN6g7KSowKX6Dgh+VRjlU9oUTHYaOOGlXeFLyAeAGVf+1/peuMI8Vmsq
-        s4u0VyHnMb/wwwOtnOyly+sy1RK7C5U=
-Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com
- [209.85.128.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-182-oFwq-ayTNeOnlutu9_IdBA-1; Thu, 13 Apr 2023 15:15:56 -0400
-X-MC-Unique: oFwq-ayTNeOnlutu9_IdBA-1
-Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-54fde069e4aso11362367b3.3
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 12:15:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681413355; x=1684005355;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xTgGczCO0mNwpgaEE0ax8YC4P9ZUQjVz+mrfnTw0NtY=;
-        b=dJTDhwpD7lz0S2EJ7ds0ltET9Avgjw+hsi4sej9Ql3pu11HlMlH1xUhzdqxralhzYh
-         0P/ZScicXNYjpEXnY7xtY4RiURLrhaGaW7MkV2zKnIb/lidIKfBZ2qRMJ8S0faujs6H/
-         rmDnIFsIavBYFnWVkQMPGcfu8qjEIqb+LvTDS7bU4HmCe8OqSjYkyydkBbUdjeVgcnGz
-         35S3iE03uKVeSptTajghJi6KMctA4rOnb1Dlfn46bLqJebc7I2gi/e4IUxzb9C707+af
-         wBXZsGqBHA61iKnrndKPjZ7kqiCTxyrZTIjZohne07QSNtHbOymZuDSSJo/ZXun+atKR
-         A9iQ==
-X-Gm-Message-State: AAQBX9e02aOhzWy9e9GuC/HCuZrmqjVhj1+shtMn8xU/OKSu2MArpTUQ
-        JsLbVK+dJ20D4Wwgc3q6CKpX46vHhTd/1Am9XJETUeRIuXmkiZejmtS0P81AWnJYjRPzRvTDdJY
-        vBZBM0sg+Gumh3Sy5iVL9NlNrebHTQh06c3V4JcQ69g60vNnxW11T+LTmVWjf1ImJyT8a95cIob
-        J+h+ltCslM
-X-Received: by 2002:a81:4810:0:b0:536:3451:b2ab with SMTP id v16-20020a814810000000b005363451b2abmr2997382ywa.51.1681413355476;
-        Thu, 13 Apr 2023 12:15:55 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Z+kPXa1HPrZbBVBQ9Hvi0ho/p670nRIUBtqxHPLoBYgdWfhEUIgtsd9juVQgyaVIGCkR8Wyw==
-X-Received: by 2002:a81:4810:0:b0:536:3451:b2ab with SMTP id v16-20020a814810000000b005363451b2abmr2997349ywa.51.1681413355120;
-        Thu, 13 Apr 2023 12:15:55 -0700 (PDT)
-Received: from halaney-x13s.redhat.com (104-53-165-62.lightspeed.stlsmo.sbcglobal.net. [104.53.165.62])
-        by smtp.gmail.com with ESMTPSA id t11-20020a81780b000000b00545a4ec318dsm673203ywc.13.2023.04.13.12.15.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 12:15:54 -0700 (PDT)
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        richardcochran@gmail.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        netdev@vger.kernel.org, bmasney@redhat.com, echanude@redhat.com,
-        ncai@quicinc.com, jsuraj@qti.qualcomm.com, hisunil@quicinc.com,
-        Andrew Halaney <ahalaney@redhat.com>
-Subject: [PATCH v5 3/3] arm64: dts: qcom: sa8540p-ride: Add ethernet nodes
-Date:   Thu, 13 Apr 2023 14:15:41 -0500
-Message-Id: <20230413191541.1073027-4-ahalaney@redhat.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230413191541.1073027-1-ahalaney@redhat.com>
-References: <20230413191541.1073027-1-ahalaney@redhat.com>
+        bh=UZ84NE6eHS0P+kUbcSWEbvYAi0L3z1iClyO7JQPD/Jc=;
+        b=xqNMquoXQgo7bR11bNel3jqCX+5LrtqZEpY5hWASAvpfxeE7QFFs7jv4d0uEcxyNT7NXbP
+        /VzNwTMMIIPOOG/HFEppfPTcXXQ1s3MS08P8iiLYwe5GkZM+cUecRo5Zd93c/qbUlC1flx
+        vu6u12dzYS6wqDKGJKD//pAsgqHHE7o=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1681413395;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UZ84NE6eHS0P+kUbcSWEbvYAi0L3z1iClyO7JQPD/Jc=;
+        b=qCAfbImmBE8Et0mV2OyAjUTTcKdPZrgOVL+MdLgB9FaZMgufFtRA/VqwueOxrHcLZ+CQgj
+        v/Ty5/juwcWhHhBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 606331390E;
+        Thu, 13 Apr 2023 19:16:35 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id m1cwFhNVOGRMRAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 13 Apr 2023 19:16:35 +0000
+Message-ID: <fccc494f-0e52-5fdf-0e40-acc29177c73c@suse.de>
+Date:   Thu, 13 Apr 2023 21:16:34 +0200
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2] drm/fbdev-generic: prohibit potential out-of-bounds
+ access
+To:     Sui Jingfeng <15330273260@189.cn>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sui Jingfeng <suijingfeng@loongson.cn>,
+        Li Yi <liyi@loongson.cn>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Helge Deller <deller@gmx.de>,
+        Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
+References: <20230413180622.1014016-1-15330273260@189.cn>
+Content-Language: en-US
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20230413180622.1014016-1-15330273260@189.cn>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------kw7iFhKw13vJ7UmbMcAblKY4"
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable both the MACs found on the board.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------kw7iFhKw13vJ7UmbMcAblKY4
+Content-Type: multipart/mixed; boundary="------------6vEJ0gbTbdJmFYokKbgtqE9W";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Sui Jingfeng <15330273260@189.cn>, Maxime Ripard <mripard@kernel.org>,
+ David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Sui Jingfeng <suijingfeng@loongson.cn>, Li Yi <liyi@loongson.cn>,
+ Javier Martinez Canillas <javierm@redhat.com>, Helge Deller <deller@gmx.de>,
+ Lucas De Marchi <lucas.demarchi@intel.com>
+Cc: linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
+Message-ID: <fccc494f-0e52-5fdf-0e40-acc29177c73c@suse.de>
+Subject: Re: [PATCH v2] drm/fbdev-generic: prohibit potential out-of-bounds
+ access
+References: <20230413180622.1014016-1-15330273260@189.cn>
+In-Reply-To: <20230413180622.1014016-1-15330273260@189.cn>
 
-ethernet0 and ethernet1 both ultimately go to a series of on board
-switches which aren't managed by this processor.
+--------------6vEJ0gbTbdJmFYokKbgtqE9W
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-ethernet0 is connected to a Marvell 88EA1512 phy via RGMII. That goes to
-the series of switches via SGMII on the "media" side of the phy.
-RGMII_SGMII mode is enabled via devicetree register descriptions.
-The switch on the "media" side has auto-negotiation disabled, so
-configuration from userspace similar to:
+SGksDQoNCnRoYW5rcyBmb3IgdGhlIHBhdGNoLiBUaGlzIGlzIGVmZmVjdGl2ZWx5IGEgcmV2
+ZXJ0IG9mIGNvbW1pdCANCjhmYmM5YWY1NWRlMCAoImRybS9mYmRldi1nZW5lcmljOiBTZXQg
+c2NyZWVuIHNpemUgdG8gc2l6ZSBvZiBHRU0gDQpidWZmZXIiKS4gUGxlYXNlIGFkZCBhIEZp
+eGVzIHRhZy4NCg0KQW0gMTMuMDQuMjMgdW0gMjA6MDYgc2NocmllYiBTdWkgSmluZ2Zlbmc6
+DQo+IEZyb206IFN1aSBKaW5nZmVuZyA8c3VpamluZ2ZlbmdAbG9vbmdzb24uY24+DQo+IA0K
+PiBUaGUgY3JhenkgZmJkZXYgdGVzdCBvZiBJR1QgbWF5IHdyaXRlIGFmdGVyIEVPRiwgd2hp
+Y2ggbGVhZCB0byBvdXQtb2YtYm91bmQNCg0KUGxlYXNlIGRyb3AgJ2NyYXp5Jy4gOikNCg0K
+PiBhY2Nlc3MgZm9yIHRoZSBkcm0gZHJpdmVycyB1c2luZyBmYmRldi1nZW5lcmljLiBGb3Ig
+ZXhhbXBsZSwgcnVuIGZiZGV2IHRlc3QNCj4gb24gYSB4ODYtNjQrYXN0MjQwMCBwbGF0Zm9y
+bSB3aXRoIDE2ODB4MTA1MCByZXNvbHV0aW9uIHdpbGwgY2F1c2UgdGhlIGxpbnV4DQo+IGtl
+cm5lbCBoYW5nIHdpdGggZm9sbG93aW5nIGNhbGwgdHJhY2U6DQo+IA0KPiAgICBPb3BzOiAw
+MDAwIFsjMV0gUFJFRU1QVCBTTVAgUFRJDQo+ICAgIFtJR1RdIGZiZGV2OiBzdGFydGluZyBz
+dWJ0ZXN0IGVvZg0KPiAgICBXb3JrcXVldWU6IGV2ZW50cyBkcm1fZmJfaGVscGVyX2RhbWFn
+ZV93b3JrIFtkcm1fa21zX2hlbHBlcl0NCj4gICAgW0lHVF0gZmJkZXY6IHN0YXJ0aW5nIHN1
+YnRlc3QgbnVsbHB0cg0KPiANCj4gICAgUklQOiAwMDEwOm1lbWNweV9lcm1zKzB4YS8weDIw
+DQo+ICAgIFJTUDogMDAxODpmZmZmYTE3ZDQwMTY3ZDk4IEVGTEFHUzogMDAwMTAyNDYNCj4g
+ICAgUkFYOiBmZmZmYTE3ZDRlYjdmYTgwIFJCWDogZmZmZmExN2Q0MGUwYWE4MCBSQ1g6IDAw
+MDAwMDAwMDAwMDE0YzANCj4gICAgUkRYOiAwMDAwMDAwMDAwMDAxYTQwIFJTSTogZmZmZmEx
+N2Q0MGUwYjAwMCBSREk6IGZmZmZhMTdkNGViODAwMDANCj4gICAgUkJQOiBmZmZmYTE3ZDQw
+MTY3ZTIwIFIwODogMDAwMDAwMDAwMDAwMDAwMCBSMDk6IGZmZmY4OTUyMmVjZmY4YzANCj4g
+ICAgUjEwOiBmZmZmYTE3ZDRlNGM1MDAwIFIxMTogMDAwMDAwMDAwMDAwMDAwMCBSMTI6IGZm
+ZmZhMTdkNGViN2ZhODANCj4gICAgUjEzOiAwMDAwMDAwMDAwMDAxYTQwIFIxNDogMDAwMDAw
+MDAwMDAwMDQxYSBSMTU6IGZmZmZhMTdkNDAxNjdlMzANCj4gICAgRlM6ICAwMDAwMDAwMDAw
+MDAwMDAwKDAwMDApIEdTOmZmZmY4OTUyNTczODAwMDAoMDAwMCkga25sR1M6MDAwMDAwMDAw
+MDAwMDAwMA0KPiAgICBDUzogIDAwMTAgRFM6IDAwMDAgRVM6IDAwMDAgQ1IwOiAwMDAwMDAw
+MDgwMDUwMDMzDQo+ICAgIENSMjogZmZmZmExN2Q0MGUwYjAwMCBDUjM6IDAwMDAwMDAxZWFl
+Y2EwMDYgQ1I0OiAwMDAwMDAwMDAwMTcwNmUwDQo+ICAgIENhbGwgVHJhY2U6DQo+ICAgICA8
+VEFTSz4NCj4gICAgID8gZHJtX2ZiZGV2X2dlbmVyaWNfaGVscGVyX2ZiX2RpcnR5KzB4MjA3
+LzB4MzMwIFtkcm1fa21zX2hlbHBlcl0NCj4gICAgIGRybV9mYl9oZWxwZXJfZGFtYWdlX3dv
+cmsrMHg4Zi8weDE3MCBbZHJtX2ttc19oZWxwZXJdDQo+ICAgICBwcm9jZXNzX29uZV93b3Jr
+KzB4MjFmLzB4NDMwDQo+ICAgICB3b3JrZXJfdGhyZWFkKzB4NGUvMHgzYzANCj4gICAgID8g
+X19wZnhfd29ya2VyX3RocmVhZCsweDEwLzB4MTANCj4gICAgIGt0aHJlYWQrMHhmNC8weDEy
+MA0KPiAgICAgPyBfX3BmeF9rdGhyZWFkKzB4MTAvMHgxMA0KPiAgICAgcmV0X2Zyb21fZm9y
+aysweDJjLzB4NTANCj4gICAgIDwvVEFTSz4NCj4gICAgQ1IyOiBmZmZmYTE3ZDQwZTBiMDAw
+DQo+ICAgIC0tLVsgZW5kIHRyYWNlIDAwMDAwMDAwMDAwMDAwMDAgXS0tLQ0KPiANCj4gVGhl
+IGluZGlyZWN0IHJlYXNvbiBpcyBkcm1fZmJfaGVscGVyX21lbW9yeV9yYW5nZV90b19jbGlw
+KCkgZ2VuZXJhdGUgZGFtYWdlDQo+IHJlY3RhbmdsZXMgd2hpY2ggcGFydGlhbGx5IG9yIGNv
+bXBsZXRlbHkgZ28gb3V0IG9mIHRoZSBhY3RpdmUgZGlzcGxheSBhcmVhLg0KPiBUaGUgc2Vj
+b25kIG9mIGFyZ3VtZW50ICdvZmYnIGlzIHBhc3NpbmcgZnJvbSB0aGUgdXNlci1zcGFjZSwg
+dGhpcyB3aWxsIGxlYWQNCj4gdG8gdGhlIG91dC1vZi1ib3VuZCBpZiBpdCBpcyBsYXJnZSB0
+aGFuIChmYl9oZWlnaHQgKyAxKSAqIGZiX3BpdGNoZXM7IHdoaWxlDQo+IERJVl9ST1VORF9V
+UCgpIG1heSBhbHNvIGNvbnRyb2J1dGUgdG8gZXJyb3IgYnkgMS4NCj4gDQo+IFRoaXMgcGF0
+Y2ggd2lsbCBhZGQgY29kZSB0byByZXN0cmljdCB0aGUgZGFtYWdlIHJlY3QgY29tcHV0ZWQg
+Z28gYmV5b25kIG9mDQo+IHRoZSBsYXN0IGxpbmUgb2YgdGhlIGZyYW1lYnVmZmVyLg0KPiAN
+Cj4gU2lnbmVkLW9mZi1ieTogU3VpIEppbmdmZW5nIDxzdWlqaW5nZmVuZ0Bsb29uZ3Nvbi5j
+bj4NCj4gLS0tDQo+ICAgZHJpdmVycy9ncHUvZHJtL2RybV9mYl9oZWxwZXIuYyAgICAgfCAx
+NiArKysrKysrKysrKystLS0tDQo+ICAgZHJpdmVycy9ncHUvZHJtL2RybV9mYmRldl9nZW5l
+cmljLmMgfCAgMiArLQ0KPiAgIDIgZmlsZXMgY2hhbmdlZCwgMTMgaW5zZXJ0aW9ucygrKSwg
+NSBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vZHJt
+X2ZiX2hlbHBlci5jIGIvZHJpdmVycy9ncHUvZHJtL2RybV9mYl9oZWxwZXIuYw0KPiBpbmRl
+eCA2NDQ1ODk4MmJlNDAuLjZiYjFiOGIyN2Q3YSAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9n
+cHUvZHJtL2RybV9mYl9oZWxwZXIuYw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vZHJtX2Zi
+X2hlbHBlci5jDQo+IEBAIC02NDEsMTkgKzY0MSwyNyBAQCBzdGF0aWMgdm9pZCBkcm1fZmJf
+aGVscGVyX2RhbWFnZShzdHJ1Y3QgZHJtX2ZiX2hlbHBlciAqaGVscGVyLCB1MzIgeCwgdTMy
+IHksDQo+ICAgc3RhdGljIHZvaWQgZHJtX2ZiX2hlbHBlcl9tZW1vcnlfcmFuZ2VfdG9fY2xp
+cChzdHJ1Y3QgZmJfaW5mbyAqaW5mbywgb2ZmX3Qgb2ZmLCBzaXplX3QgbGVuLA0KPiAgIAkJ
+CQkJICAgICAgIHN0cnVjdCBkcm1fcmVjdCAqY2xpcCkNCj4gICB7DQo+ICsJdTMyIGxpbmVf
+bGVuZ3RoID0gaW5mby0+Zml4LmxpbmVfbGVuZ3RoOw0KPiArCXUzMiBmYl9oZWlnaHQgPSBp
+bmZvLT52YXIueXJlczsNCj4gICAJb2ZmX3QgZW5kID0gb2ZmICsgbGVuOw0KPiAgIAl1MzIg
+eDEgPSAwOw0KPiAtCXUzMiB5MSA9IG9mZiAvIGluZm8tPmZpeC5saW5lX2xlbmd0aDsNCj4g
+Kwl1MzIgeTEgPSBvZmYgLyBsaW5lX2xlbmd0aDsNCj4gICAJdTMyIHgyID0gaW5mby0+dmFy
+LnhyZXM7DQo+IC0JdTMyIHkyID0gRElWX1JPVU5EX1VQKGVuZCwgaW5mby0+Zml4LmxpbmVf
+bGVuZ3RoKTsNCj4gKwl1MzIgeTIgPSBESVZfUk9VTkRfVVAoZW5kLCBsaW5lX2xlbmd0aCk7
+DQo+ICsNCj4gKwkvKiBEb24ndCBhbGxvdyBhbnkgb2YgdGhlbSBiZXlvbmQgdGhlIGJvdHRv
+bSBib3VuZCBvZiBkaXNwbGF5IGFyZWEgKi8NCj4gKwlpZiAoeTEgPiBmYl9oZWlnaHQpDQo+
+ICsJCXkxID0gZmJfaGVpZ2h0Ow0KPiArCWlmICh5MiA+IGZiX2hlaWdodCkNCj4gKwkJeTIg
+PSBmYl9oZWlnaHQ7DQo+ICAgDQo+ICAgCWlmICgoeTIgLSB5MSkgPT0gMSkgew0KPiAgIAkJ
+LyoNCj4gICAJCSAqIFdlJ3ZlIG9ubHkgd3JpdHRlbiB0byBhIHNpbmdsZSBzY2FubGluZS4g
+VHJ5IHRvIHJlZHVjZQ0KPiAgIAkJICogdGhlIG51bWJlciBvZiBob3Jpem9udGFsIHBpeGVs
+cyB0aGF0IG5lZWQgYW4gdXBkYXRlLg0KPiAgIAkJICovDQo+IC0JCW9mZl90IGJpdF9vZmYg
+PSAob2ZmICUgaW5mby0+Zml4LmxpbmVfbGVuZ3RoKSAqIDg7DQo+IC0JCW9mZl90IGJpdF9l
+bmQgPSAoZW5kICUgaW5mby0+Zml4LmxpbmVfbGVuZ3RoKSAqIDg7DQo+ICsJCW9mZl90IGJp
+dF9vZmYgPSAob2ZmICUgbGluZV9sZW5ndGgpICogODsNCj4gKwkJb2ZmX3QgYml0X2VuZCA9
+IChlbmQgJSBsaW5lX2xlbmd0aCkgKiA4Ow0KDQpQbGVhc2Ugc2NyYXRjaCBhbGwgdGhlc2Ug
+Y2hhbmdlcy4gVGhlIGN1cnJlbnQgY29kZSBzaG91bGQgd29yayBhcyANCmludGVuZGVkLiBP
+bmx5IHRoZSBnZW5lcmljIGZiZGV2IGVtdWxhdGlvbiB1c2VzIHRoaXMgY29kZSBhbmQgaXQg
+c2hvdWxkIA0KcmVhbGx5IGJlIG1vdmVkIHRoZXJlIGF0IHNvbWUgcG9pbnQuDQoNCj4gICAN
+Cj4gICAJCXgxID0gYml0X29mZiAvIGluZm8tPnZhci5iaXRzX3Blcl9waXhlbDsNCj4gICAJ
+CXgyID0gRElWX1JPVU5EX1VQKGJpdF9lbmQsIGluZm8tPnZhci5iaXRzX3Blcl9waXhlbCk7
+DQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vZHJtX2ZiZGV2X2dlbmVyaWMuYyBi
+L2RyaXZlcnMvZ3B1L2RybS9kcm1fZmJkZXZfZ2VuZXJpYy5jDQo+IGluZGV4IDhlNTE0OGJm
+NDBiYi4uYjA1N2NmYmJhOTM4IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vZHJt
+X2ZiZGV2X2dlbmVyaWMuYw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vZHJtX2ZiZGV2X2dl
+bmVyaWMuYw0KPiBAQCAtOTQsNyArOTQsNyBAQCBzdGF0aWMgaW50IGRybV9mYmRldl9nZW5l
+cmljX2hlbHBlcl9mYl9wcm9iZShzdHJ1Y3QgZHJtX2ZiX2hlbHBlciAqZmJfaGVscGVyLA0K
+PiAgIAlmYl9oZWxwZXItPmJ1ZmZlciA9IGJ1ZmZlcjsNCj4gICAJZmJfaGVscGVyLT5mYiA9
+IGJ1ZmZlci0+ZmI7DQo+ICAgDQo+IC0Jc2NyZWVuX3NpemUgPSBidWZmZXItPmdlbS0+c2l6
+ZTsNCj4gKwlzY3JlZW5fc2l6ZSA9IHNpemVzLT5zdXJmYWNlX2hlaWdodCAqIGJ1ZmZlci0+
+ZmItPnBpdGNoZXNbMF07DQoNCkkgZ3Vlc3Mgd2Ugc2ltcGx5IGdvIGJhY2sgdG8gdGhpcyBs
+aW5lLiBJJ2QgUi1iIGEgcGF0Y2ggdGhhdCBkb2VzIA0KZXhhY3RseSB0aGlzLg0KDQpCdXQg
+c29tZSBleHBsYW5hdGlvbiBpcyBpbiBvcmRlci4gTWF5YmUgeW91IGNhbiBhZGQgdGhpcyBh
+cyBhIGNvbW1lbnQgdG8gDQp0aGUgY29tcHV0YXRpb24sIGFzIGl0J3Mgbm90IG9idmlvdXM6
+DQoNClRoZSB2YWx1ZSBvZiBzY3JlZW5fc2l6ZSBzaG91bGQgYWN0dWFsbHkgYmUgdGhlIHNp
+emUgb2YgdGhlIGdlbSBidWZmZXIuIA0KSW4gYSBwaHlzaWNhbCBmcmFtZWJ1ZmZlciAoaS5l
+LiwgdmlkZW8gbWVtb3J5KSwgdGhlIHNpemUgd291bGQgYmUgYSANCm11bHRpcGxlIG9mIHRo
+ZSBwYWdlIHNpemUsIGJ1dCBub3QgbmVjZXNzYXJpbHkgYSBtdWx0aXBsZSBvZiB0aGUgc2Ny
+ZWVuIA0KcmVzb2x1dGlvbi4gVGhlcmUgYXJlIGFsc28gcGFuIGZiZGV2J3Mgb3BlcmF0aW9u
+cywgYW5kIHdlIGNvdWxkIHBvc3NpYmx5IA0KdXNlIERSTSBidWZmZXJzIHRoYXQgYXJlIG5v
+dCBtdWx0aXBsZXMgb2YgdGhlIHNjcmVlbiB3aWR0aC4gQnV0IHRoZSANCnVwZGF0ZSBjb2Rl
+IHJlcXVpcmVzIHRoZSB1c2Ugb2YgZHJtX2ZyYW1lYnVmZmVyX2Z1bmNzLmRpcnR5LCB3aGlj
+aCB0YWtlcyANCmEgY2xpcHBpbmcgcmVjdGFuZ2xlIGFuZCB0aGVyZWZvcmUgZG9lc24ndCB3
+b3JrIHdlbGwgd2l0aCB0aGVzZSBvZGQgDQp2YWx1ZXMgZm9yIHNjcmVlbl9zaXplLg0KDQpC
+ZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+ICAgCXNjcmVlbl9idWZmZXIgPSB2emFsbG9jKHNj
+cmVlbl9zaXplKTsNCj4gICAJaWYgKCFzY3JlZW5fYnVmZmVyKSB7DQo+ICAgCQlyZXQgPSAt
+RU5PTUVNOw0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2
+ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRz
+dHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5i
+ZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
 
-        ethtool -s eth0 autoneg off speed 1000 duplex full
+--------------6vEJ0gbTbdJmFYokKbgtqE9W--
 
-is necessary to get traffic flowing on that interface.
+--------------kw7iFhKw13vJ7UmbMcAblKY4
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-ethernet1 is in a mac2mac/fixed-link configuration going to the same
-series of switches directly via RGMII.
+-----BEGIN PGP SIGNATURE-----
 
-Tested-by: Brian Masney <bmasney@redhat.com>
-Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
----
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmQ4VRIFAwAAAAAACgkQlh/E3EQov+D5
+fhAAtlkvm3QifdYSU3GGDiC4377tsnVWUM7Pw/L9a2NQSFYF8SlXpV4cnW3+0Cdz/q47h0bGmI/+
+LfZqD44wd0JT+K4VEmlEgGulfSQPQU0F23ZZq2a2bTlCSqBS9gvSQI9mLZ8SgT6hoIKTrA9ja2La
+hJrba9LNkiwmLVICbT1BC9sZpBfPvGM6Umh5g43GLy6OOh9zSBu7XK3cBL1NhHpO9/ci7PmVPVQt
+XA89IFh/M3WJxF2ZewI2n9UFWEsvbRhQdOE5YmAAYh8Ghp+YXa1wUaNL7V0MCZJt6QDwj5kyX1lW
+vbwrRLBWJNR8W2OHx/XCqdxusXxVRK+2ILj+0atgvEzPwvjH241ZxrtsVI0iEnyM9dFGUnDv0XGH
+DVYz5njRxpykJ4yhyIczoKN4MloZiqqWuopMD+Yz8TEONXHl5EXvBIwPP9uC+Z9SaQNIUDO8Qa6E
+TVhV1M8+xQrRaNioYFMqRDmyaIBYqQKBXcKZA8YhGcT4d416Oyn6Tc7LQJTS8Y1G2AdSkzsiXSvA
+U0fQFvYJHM/cEMDi/dxKPO5UqFh19EiDP65cW4NOYdHXKTAYswPyVL6J12A5dwfPOvtsaWU7aGrF
+TNV9jQpiNttosyn0GBX8vkaZSZszGVXKRXVxzsAlfjqcYQbLrgRk9T7v8UAGyR0P4R9m4TizI96X
+UWo=
+=8CUH
+-----END PGP SIGNATURE-----
 
-This patch is why there's a v5, I couldn't ignore the needless
-interrupts-parent Konrad pointed out in the sa8155-adp.dts over at:
-https://lore.kernel.org/linux-arm-msm/88d41729-86be-95cb-2fda-1b809f07ed6b@linaro.org/
-
-Changes since v4:
-    * Remove needless interrupt-parent (Konrad)
-    * Add Tested-by (Brian)
-
-Changes since v3:
-    * Compatible goes first in node (Krzysztof)
-
-Changes since v1 and v2:
-    * None
-
- arch/arm64/boot/dts/qcom/sa8540p-ride.dts | 179 ++++++++++++++++++++++
- 1 file changed, 179 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-index 40db5aa0803c..650cd54f418e 100644
---- a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-@@ -28,6 +28,65 @@ aliases {
- 	chosen {
- 		stdout-path = "serial0:115200n8";
- 	};
-+
-+	mtl_rx_setup: rx-queues-config {
-+		snps,rx-queues-to-use = <1>;
-+		snps,rx-sched-sp;
-+
-+		queue0 {
-+			snps,dcb-algorithm;
-+			snps,map-to-dma-channel = <0x0>;
-+			snps,route-up;
-+			snps,priority = <0x1>;
-+		};
-+
-+		queue1 {
-+			snps,dcb-algorithm;
-+			snps,map-to-dma-channel = <0x1>;
-+			snps,route-ptp;
-+		};
-+
-+		queue2 {
-+			snps,avb-algorithm;
-+			snps,map-to-dma-channel = <0x2>;
-+			snps,route-avcp;
-+		};
-+
-+		queue3 {
-+			snps,avb-algorithm;
-+			snps,map-to-dma-channel = <0x3>;
-+			snps,priority = <0xc>;
-+		};
-+	};
-+
-+	mtl_tx_setup: tx-queues-config {
-+		snps,tx-queues-to-use = <1>;
-+		snps,tx-sched-sp;
-+
-+		queue0 {
-+			snps,dcb-algorithm;
-+		};
-+
-+		queue1 {
-+			snps,dcb-algorithm;
-+		};
-+
-+		queue2 {
-+			snps,avb-algorithm;
-+			snps,send_slope = <0x1000>;
-+			snps,idle_slope = <0x1000>;
-+			snps,high_credit = <0x3e800>;
-+			snps,low_credit = <0xffc18000>;
-+		};
-+
-+		queue3 {
-+			snps,avb-algorithm;
-+			snps,send_slope = <0x1000>;
-+			snps,idle_slope = <0x1000>;
-+			snps,high_credit = <0x3e800>;
-+			snps,low_credit = <0xffc18000>;
-+		};
-+	};
- };
- 
- &apps_rsc {
-@@ -151,6 +210,66 @@ vreg_l8g: ldo8 {
- 	};
- };
- 
-+&ethernet0 {
-+	snps,mtl-rx-config = <&mtl_rx_setup>;
-+	snps,mtl-tx-config = <&mtl_tx_setup>;
-+
-+	max-speed = <1000>;
-+	phy-handle = <&rgmii_phy>;
-+	phy-mode = "rgmii-txid";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&ethernet0_default>;
-+
-+	status = "okay";
-+
-+	mdio {
-+		compatible = "snps,dwmac-mdio";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		/* Marvell 88EA1512 */
-+		rgmii_phy: phy@8 {
-+			reg = <0x8>;
-+
-+			interrupts-extended = <&tlmm 127 IRQ_TYPE_EDGE_FALLING>;
-+
-+			reset-gpios = <&pmm8540c_gpios 1 GPIO_ACTIVE_LOW>;
-+			reset-assert-us = <11000>;
-+			reset-deassert-us = <70000>;
-+
-+			device_type = "ethernet-phy";
-+
-+			/* Set to RGMII_SGMII mode and soft reset. Turn off auto-negotiation
-+			 * from userspace to talk to the switch on the SGMII side of things
-+			 */
-+			marvell,reg-init =
-+				/* Set MODE[2:0] to RGMII_SGMII */
-+				<0x12 0x14 0xfff8 0x4>,
-+				/* Soft reset required after changing MODE[2:0] */
-+				<0x12 0x14 0x7fff 0x8000>;
-+		};
-+	};
-+};
-+
-+&ethernet1 {
-+	snps,mtl-rx-config = <&mtl_rx_setup>;
-+	snps,mtl-tx-config = <&mtl_tx_setup>;
-+
-+	max-speed = <1000>;
-+	phy-mode = "rgmii-txid";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&ethernet1_default>;
-+
-+	status = "okay";
-+
-+	fixed-link {
-+		speed = <1000>;
-+		full-duplex;
-+	};
-+};
-+
- &i2c0 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&i2c0_default>;
-@@ -316,6 +435,66 @@ &xo_board_clk {
- /* PINCTRL */
- 
- &tlmm {
-+	ethernet0_default: ethernet0-default-state {
-+		mdc-pins {
-+			pins = "gpio175";
-+			function = "rgmii_0";
-+			drive-strength = <16>;
-+			bias-pull-up;
-+		};
-+
-+		mdio-pins {
-+			pins = "gpio176";
-+			function = "rgmii_0";
-+			drive-strength = <16>;
-+			bias-pull-up;
-+		};
-+
-+		rgmii-tx-pins {
-+			pins = "gpio183", "gpio184", "gpio185", "gpio186", "gpio187", "gpio188";
-+			function = "rgmii_0";
-+			drive-strength = <16>;
-+			bias-pull-up;
-+		};
-+
-+		rgmii-rx-pins {
-+			pins = "gpio177", "gpio178", "gpio179", "gpio180", "gpio181", "gpio182";
-+			function = "rgmii_0";
-+			drive-strength = <16>;
-+			bias-disable;
-+		};
-+	};
-+
-+	ethernet1_default: ethernet1-default-state {
-+		mdc-pins {
-+			pins = "gpio97";
-+			function = "rgmii_1";
-+			drive-strength = <16>;
-+			bias-pull-up;
-+		};
-+
-+		mdio-pins {
-+			pins = "gpio98";
-+			function = "rgmii_1";
-+			drive-strength = <16>;
-+			bias-pull-up;
-+		};
-+
-+		rgmii-tx-pins {
-+			pins = "gpio105", "gpio106", "gpio107", "gpio108", "gpio109", "gpio110";
-+			function = "rgmii_1";
-+			drive-strength = <16>;
-+			bias-pull-up;
-+		};
-+
-+		rgmii-rx-pins {
-+			pins = "gpio99", "gpio100", "gpio101", "gpio102", "gpio103", "gpio104";
-+			function = "rgmii_1";
-+			drive-strength = <16>;
-+			bias-disable;
-+		};
-+	};
-+
- 	i2c0_default: i2c0-default-state {
- 		/* To USB7002T-I/KDXVA0 USB hub (SIP1 only) */
- 		pins = "gpio135", "gpio136";
--- 
-2.39.2
-
+--------------kw7iFhKw13vJ7UmbMcAblKY4--
