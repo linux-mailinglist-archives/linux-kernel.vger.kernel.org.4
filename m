@@ -2,78 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EA8A6E099B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 11:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00FCB6E09A2
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 11:03:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbjDMJDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 05:03:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54068 "EHLO
+        id S230323AbjDMJDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 05:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbjDMJCj (ORCPT
+        with ESMTP id S229977AbjDMJDX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 05:02:39 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE8CE7D;
-        Thu, 13 Apr 2023 02:02:29 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id v6so13455720wrv.8;
-        Thu, 13 Apr 2023 02:02:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681376548; x=1683968548;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ldTjgbcAixArTLp8Y3OwHiWDDm8sGdVLf5wYTEAfqeg=;
-        b=Sq5siWuukFu2ZV2SC5RtzEOr90Zr3KADENV26Bcj0bkBKMEDDDiM4JLiedIbsGmM6/
-         BpcIyDVkAfqs0T5sp4+dhaJ/a8fvtOtLU/dVNXQtVb6muPxOUfylQpCtAPUnf9ZDnD1N
-         OUsXuUxo4AcxJGPKCiv29bMPXUeeKmzTa5jzzYG9xelseWYh7pI/mtRJw26RhA9rqU+6
-         PQMoTZ4VJX8y2aAEA4TQrdn8lu4dKPxyjcspBIKNTkRnc21PjvOPW2Z8ABijJgHRH18k
-         VV9O2EQfumjBnwcdMIxGuo+bLSkMnncdkcRHP6m4jYcMjXXD2cjI1EktepxPYL6li4Nc
-         I5kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681376548; x=1683968548;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ldTjgbcAixArTLp8Y3OwHiWDDm8sGdVLf5wYTEAfqeg=;
-        b=UqyrWmPJViVS2lBDrhIO6sa1QqH/jdcnhhvhAcqeuCa7MFdXw/3WqGer6wdVVk+2vz
-         Qn3Hf+oGv7GEBbO6NoErP8p40Oeg9B8L/hcCUH5efV5VB6kLJCMzlHss1dM6fmKwIZKJ
-         lHhtumNd6TR749DmmhPJaDBwc8na25opacyniL5M0uUq/leUtK0ROA7bbw3XzzrxGNea
-         h32IEnnTkK9Jj2mxx0VlVjhHDsPw7UCP4is2MZOfGIeKiR8Wt4n2kcQurdrJ/zDRitzm
-         4bELhsC7MgLQVZOf4raWUkP6w26Aa/LUCSvDpwZO0eVj4y98heHToYfIHW1stKMznLsj
-         JBwA==
-X-Gm-Message-State: AAQBX9cvFPdxBH0g3i7YooZgRlXDtsTQeVICRLsxH4ln/XhbxjMPz8uV
-        Sg10xHAuVbVJJanP0lVec1w=
-X-Google-Smtp-Source: AKy350asP4+G83mAEIf1p9IarcfPfSoPgb5XVETZON+sPwEmFsRqvaVHYjROuiy2L1CPru9rX5YgVQ==
-X-Received: by 2002:a5d:4d0c:0:b0:2ce:fd37:938c with SMTP id z12-20020a5d4d0c000000b002cefd37938cmr907993wrt.50.1681376548080;
-        Thu, 13 Apr 2023 02:02:28 -0700 (PDT)
-Received: from [192.168.0.32] ([37.222.243.26])
-        by smtp.gmail.com with ESMTPSA id r16-20020a056000015000b002f21a96c161sm820964wrx.70.2023.04.13.02.02.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Apr 2023 02:02:27 -0700 (PDT)
-Message-ID: <b986d097-6cb4-cbde-3cd1-b8d68d222d9d@gmail.com>
-Date:   Thu, 13 Apr 2023 11:02:25 +0200
+        Thu, 13 Apr 2023 05:03:23 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B970193EF;
+        Thu, 13 Apr 2023 02:03:08 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id A83E48067;
+        Thu, 13 Apr 2023 17:03:00 +0800 (CST)
+Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 13 Apr
+ 2023 17:03:00 +0800
+Received: from [192.168.125.82] (183.27.97.249) by EXMBX162.cuchost.com
+ (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 13 Apr
+ 2023 17:02:59 +0800
+Message-ID: <0c94aadf-fac3-d05c-1c54-ae8337526849@starfivetech.com>
+Date:   Thu, 13 Apr 2023 17:02:58 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 2/3] drm/mediatek: Add mt8188 dsi compatible to mtk_dsi.c
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v4 1/3] dt-bindings: phy: Add starfive,jh7110-dphy-rx
 Content-Language: en-US
-To:     xinlei.lee@mediatek.com, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de, airlied@linux.ie, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        jitao.shi@mediatek.com, shuijing.li@mediatek.com
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <1681366162-4949-1-git-send-email-xinlei.lee@mediatek.com>
- <1681366162-4949-3-git-send-email-xinlei.lee@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <1681366162-4949-3-git-send-email-xinlei.lee@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Jack Zhu <jack.zhu@starfivetech.com>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+References: <20230412084540.295411-1-changhuang.liang@starfivetech.com>
+ <20230412084540.295411-2-changhuang.liang@starfivetech.com>
+ <8dd0dc63-e0df-8764-f756-da032d9d671c@linaro.org>
+ <eb47b7c7-bdbb-92d9-ba39-604ce487f297@starfivetech.com>
+ <f6a4fb28-d635-4d99-44bb-d929cb41eef2@linaro.org>
+ <b34a8d59-34e4-8358-9d2b-367f4707ca7c@starfivetech.com>
+ <f0d82428-aaa5-3dd4-bc29-f1057fe749bc@linaro.org>
+From:   Changhuang Liang <changhuang.liang@starfivetech.com>
+In-Reply-To: <f0d82428-aaa5-3dd4-bc29-f1057fe749bc@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Originating-IP: [183.27.97.249]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX162.cuchost.com
+ (172.16.6.72)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,58 +73,42 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 13/04/2023 08:09, xinlei.lee@mediatek.com wrote:
-> From: Xinlei Lee <xinlei.lee@mediatek.com>
+On 2023/4/13 16:41, Krzysztof Kozlowski wrote:
+> On 13/04/2023 04:34, Changhuang Liang wrote:
+>>>>>> +  lane_maps:
+>>>>>
+>>>>> Why did this appear? Underscores are not allowed. It looks like you
+>>>>> re-implement some standard property.
+>>>>>
+>>>>
+>>>> Will change to lane-maps.
+>>>> Yes, according to Vinod advice, lane mapping table use device tree
+>>>> to parse makes sense.
+>>>
+>>> Hm, I have a feeling that I saw such property, so you should dig into
+>>> existing and in-flight bindings.
+>>>
+>>> Best regards,
+>>> Krzysztof
+>>>
+>>
+>> A standard property? Like "clocks" or "resets"?
 > 
-> Add the compatible because there are different definitions for cmdq
-> register bit control in mt8188.
+> Like lane-polarities now submitted to one MIPI.
 > 
-> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
+> Anyway it does not look like a property of a board. You said it is fixed
+> per SoC, so it should be implied from the compatible. Otherwise please
+> explain in description and provide some rationale.
+> 
+> Best regards,
+> Krzysztof
+> 
 
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+This property is the only one used for this IP, I have compared this IP with
+other DPHY rx module, DPHY modules form the other manufacturers not have this
+configure.
+And we also have a SoC called JH7100. It DPHY rx module is the same as JH7110.
+But we don't do the upstream work on it. If it use this lane-maps will be 
+configure as "lane_maps = /bits/ 8 <0 1 2 3 4 5>;".
+So what do you think? Can this configure be implemented into a property?
 
-> ---
->   drivers/gpu/drm/mediatek/mtk_drm_drv.c | 2 ++
->   drivers/gpu/drm/mediatek/mtk_dsi.c     | 8 ++++++++
->   2 files changed, 10 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> index a13b36ac03a1..9ba05961479d 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> @@ -654,6 +654,8 @@ static const struct of_device_id mtk_ddp_comp_dt_ids[] = {
->   	  .data = (void *)MTK_DSI },
->   	{ .compatible = "mediatek,mt8186-dsi",
->   	  .data = (void *)MTK_DSI },
-> +	{ .compatible = "mediatek,mt8188-dsi",
-> +	  .data = (void *)MTK_DSI },
->   	{ }
->   };
->   
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> index 7d5250351193..500a3054282d 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> @@ -1208,6 +1208,12 @@ static const struct mtk_dsi_driver_data mt8186_dsi_driver_data = {
->   	.has_size_ctl = true,
->   };
->   
-> +static const struct mtk_dsi_driver_data mt8188_dsi_driver_data = {
-> +	.reg_cmdq_off = 0xd00,
-> +	.has_shadow_ctl = true,
-> +	.has_size_ctl = true,
-> +};
-> +
->   static const struct of_device_id mtk_dsi_of_match[] = {
->   	{ .compatible = "mediatek,mt2701-dsi",
->   	  .data = &mt2701_dsi_driver_data },
-> @@ -1217,6 +1223,8 @@ static const struct of_device_id mtk_dsi_of_match[] = {
->   	  .data = &mt8183_dsi_driver_data },
->   	{ .compatible = "mediatek,mt8186-dsi",
->   	  .data = &mt8186_dsi_driver_data },
-> +	{ .compatible = "mediatek,mt8188-dsi",
-> +	  .data = &mt8188_dsi_driver_data },
->   	{ },
->   };
->   MODULE_DEVICE_TABLE(of, mtk_dsi_of_match);
