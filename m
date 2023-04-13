@@ -2,122 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4A8B6E124F
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:31:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 775B06E125D
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:34:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbjDMQbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 12:31:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38502 "EHLO
+        id S229888AbjDMQeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 12:34:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbjDMQbA (ORCPT
+        with ESMTP id S229815AbjDMQeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 12:31:00 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382649EC2
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:30:54 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id gw13so8926120wmb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:30:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google; t=1681403452; x=1683995452;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=u0mDNWduF+pD0M3p/ZiM9mGoNceJzLF1dhOFZMxDI6Q=;
-        b=Eu76UtDGzq5jN5Gr+fDTg2a0vH+f1Q7/2/hkPjCpJyDGLBgRdWwKLk97WEPjGn0+Wp
-         4F9LImild6ICXVLfeHTTM87zMY9eoSqbKkXOugQs30xhI1q/MZeSUzcKCDa/jVVY7wL4
-         2jtWDroXSfEYT+mpPXQeEo2uCo6lnHfW+fLOI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681403452; x=1683995452;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u0mDNWduF+pD0M3p/ZiM9mGoNceJzLF1dhOFZMxDI6Q=;
-        b=Nw2Lt+yd3lRk+1gL2dwu+3cB5UGJivvL+FOgEzskI9QoS98YbUubkK237rVd87GPMJ
-         V/mma0sjUd3TLNlMxTA6/wiYMdsgf9fAbSlCdsbiD2z1fq3/uxG6PE7LAxpkey/9DMhX
-         JXuxkN8zIRYxcJmcCqgG2a7AuD8JnIIlm53TgyKMmttuPUyigRfzQ94haWkEvH9CbeQb
-         FLrdOatXtBjmRrMXDjjFGIg3Yf5aI5pDw+rQ0JYrArXQMONMIId9dpvsLcgsTQp4HEYg
-         RBeTf5LL37hNrfPqWaj7BjLs5a0AKGeNG9krqgpKsOxLqVFfVPSqj/im6wZHmrqIefgF
-         3XtQ==
-X-Gm-Message-State: AAQBX9dHen8GsDn995dU1pbtUZ0M6/9VUcqXDAEfwjpz5MNBDKdsxia3
-        XzP1SRbYQsJM6acCeuYXpRVMog==
-X-Google-Smtp-Source: AKy350Yl7Q4Uwkj91CN8S9loLio+5p511yXKikW09QVx8lhRN7MjowqEoSWYsLFUc0oeWgl2cPe/pg==
-X-Received: by 2002:a05:600c:2195:b0:3f0:a11f:26f7 with SMTP id e21-20020a05600c219500b003f0a11f26f7mr2299729wme.32.1681403452384;
-        Thu, 13 Apr 2023 09:30:52 -0700 (PDT)
-Received: from che-box ([85.88.143.70])
-        by smtp.gmail.com with ESMTPSA id c8-20020a05600c0a4800b003ee5fa61f45sm5968303wmq.3.2023.04.13.09.30.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 09:30:51 -0700 (PDT)
-Date:   Thu, 13 Apr 2023 18:31:47 +0200
-From:   Christian Ehrig <cehrig@cloudflare.com>
-To:     broonie@kernel.org
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Gavin Li <gavinl@nvidia.com>, Jakub Kicinski <kuba@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the bpf-next tree with the net-next
- tree
-Message-ID: <20230413163147.GA25768@cloudflare.com>
-References: <20230413161235.4093777-1-broonie@kernel.org>
+        Thu, 13 Apr 2023 12:34:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88013212C;
+        Thu, 13 Apr 2023 09:33:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 19D9163FF2;
+        Thu, 13 Apr 2023 16:33:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD586C433EF;
+        Thu, 13 Apr 2023 16:33:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681403638;
+        bh=EUXwuWZquNO+Y7E+kEoHBKTgHUKZXJPe1OyZlz61KFk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=sVhPo1uQa3Qhg4rzL9hKAgUPoBLIYZnATfPyf1dK8hxIUyruCdhCZWl4+PgzDIxcp
+         OUmie7uCp9rVXOAJ1RmBCDcDGA+gb/bnHS+kcPlFvU337ZuH6Zp5HYTdY8kHMAhrR4
+         b+USbYAn14i0AqxJsCb8zsRItFFF+EzbD1lzgsBEzekrdcAq86/r6fnzTkwOc7iKqn
+         6l4k3JX5AJB4V6/joC2dQQJGC9sIC53n/Lkxh6qBQPg9+70wilJFaQSmSHEfZIrbc7
+         AV6F56jEbFQjbxxKiHxlNgNGylqqrdPenu6yKwr5QifTmdwTmYFq0HS2ZpozF9jL2n
+         gaohEUwIsp7Qw==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] of: move dummy of_device_get_match_data() helper
+Date:   Thu, 13 Apr 2023 18:33:30 +0200
+Message-Id: <20230413163353.3408208-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230413161235.4093777-1-broonie@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 05:12:35PM +0100, broonie@kernel.org wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the bpf-next tree got a conflict in:
-> 
->   include/net/ip_tunnels.h
-> 
-> between commit:
-> 
->   bc9d003dc48c3 ("ip_tunnel: Preserve pointer const in ip_tunnel_info_opts")
-> 
-> from the net-next tree and commit:
-> 
->   ac931d4cdec3d ("ipip,ip_tunnel,sit: Add FOU support for externally controlled ipip devices")
-> 
-> from the bpf-next tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> diff --cc include/net/ip_tunnels.h
-> index 255b32a90850a,7912f53caae0b..0000000000000
-> --- a/include/net/ip_tunnels.h
-> +++ b/include/net/ip_tunnels.h
-> @@@ -66,15 -73,9 +73,16 @@@ struct ip_tunnel_encap 
->   #define IP_TUNNEL_OPTS_MAX					\
->   	GENMASK((sizeof_field(struct ip_tunnel_info,		\
->   			      options_len) * BITS_PER_BYTE) - 1, 0)
->  +
->  +#define ip_tunnel_info_opts(info)				\
->  +	_Generic(info,						\
->  +		 const struct ip_tunnel_info * : ((const void *)((info) + 1)),\
->  +		 struct ip_tunnel_info * : ((void *)((info) + 1))\
->  +	)
->  +
->   struct ip_tunnel_info {
->   	struct ip_tunnel_key	key;
-> + 	struct ip_tunnel_encap	encap;
->   #ifdef CONFIG_DST_CACHE
->   	struct dst_cache	dst_cache;
->   #endif
+From: Arnd Bergmann <arnd@arndb.de>
 
-This looks good to me. Thanks much.
+The previous patch only moved the regular declaration but missed
+the inline function that is used with CONFIG_OF=n:
+
+drivers/tty/serial/samsung_tty.c:2034:10: error: implicit declaration of function 'of_device_get_match_data' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+
+Fixes: f5a2dc751657 ("of: Move of_device_get_match_data() declaration")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ include/linux/of.h        | 5 +++++
+ include/linux/of_device.h | 5 -----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/include/linux/of.h b/include/linux/of.h
+index f94f9e6476c0..c0d1512f979a 100644
+--- a/include/linux/of.h
++++ b/include/linux/of.h
+@@ -815,6 +815,11 @@ static inline bool of_console_check(const struct device_node *dn, const char *na
+ 	return false;
+ }
+ 
++static inline const void *of_device_get_match_data(const struct device *dev)
++{
++	return NULL;
++}
++
+ static inline const __be32 *of_prop_next_u32(struct property *prop,
+ 		const __be32 *cur, u32 *pu)
+ {
+diff --git a/include/linux/of_device.h b/include/linux/of_device.h
+index 455c51a09091..2c7a3d4bc775 100644
+--- a/include/linux/of_device.h
++++ b/include/linux/of_device.h
+@@ -51,11 +51,6 @@ static inline int of_driver_match_device(struct device *dev,
+ static inline void of_device_uevent(const struct device *dev,
+ 			struct kobj_uevent_env *env) { }
+ 
+-static inline const void *of_device_get_match_data(const struct device *dev)
+-{
+-	return NULL;
+-}
+-
+ static inline int of_device_modalias(struct device *dev,
+ 				     char *str, ssize_t len)
+ {
+-- 
+2.39.2
+
