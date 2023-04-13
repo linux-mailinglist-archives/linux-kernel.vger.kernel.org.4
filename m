@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE8606E1815
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 01:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7231C6E1832
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 01:19:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbjDMXSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 19:18:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49970 "EHLO
+        id S230503AbjDMXTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 19:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbjDMXST (ORCPT
+        with ESMTP id S230284AbjDMXT1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 19:18:19 -0400
+        Thu, 13 Apr 2023 19:19:27 -0400
 Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0BE1BE;
-        Thu, 13 Apr 2023 16:18:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E1155A6;
+        Thu, 13 Apr 2023 16:18:59 -0700 (PDT)
 Received: from [192.168.178.23] (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 6862BD0C51;
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id B60B6D0C52;
         Thu, 13 Apr 2023 23:18:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1681427894; bh=FCBw8XDNRhE4YdMQX9/OeTPh8F87PXGZsKt/roj2lZA=;
+        t=1681427894; bh=mdBEwzgyTkn6OiQX8yDfJw3X7WbLKTich7Ekd7KwYOQ=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc;
-        b=ElRyy3/eGjLjnPL9epuoPuvJamXadHbyXW9hsax22PdmfysDyA4OxOi48PZfQZhXE
-         oTseleVrDue0VWBqM3etXSHC9KoUhgMl6lrUwynII7N4fbIHDfZoCYsFq9bI4CjPSG
-         o/tN0hkw7IeHbPRjUxMZsQ0nA1J8Twuv1v8rqOok=
+        b=ZGXKb5o2sU/8p9Z8YCDFMolWXSq8U9QaY4cOG3qFRfYEv/kZQ9nYG3eYbqPEpgpuQ
+         CvYLyE3xNIaL5dRs4Zdj9ZZpOuMMVJ7D7fkJD66wFhBfukpGqZI/8hMAh8vvanKlwT
+         ArPE5iLgeWQCx/uZ+trpn2TuOJQn9yqBC63CM70c=
 From:   Luca Weiss <luca@z3ntu.xyz>
-Date:   Fri, 14 Apr 2023 01:17:49 +0200
-Subject: [PATCH 5/8] dt-bindings: iio: adc: qcom,spmi-vadc: Allow 1/16 for
- pre-scaling
+Date:   Fri, 14 Apr 2023 01:17:50 +0200
+Subject: [PATCH 6/8] dt-bindings: mfd: qcom-spmi-pmic: Add PMI632
+ compatible
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230414-pmi632-v1-5-fe94dc414832@z3ntu.xyz>
+Message-Id: <20230414-pmi632-v1-6-fe94dc414832@z3ntu.xyz>
 References: <20230414-pmi632-v1-0-fe94dc414832@z3ntu.xyz>
 In-Reply-To: <20230414-pmi632-v1-0-fe94dc414832@z3ntu.xyz>
 To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
@@ -50,20 +50,20 @@ Cc:     linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
         linux-leds@vger.kernel.org, linux-iio@vger.kernel.org,
         Luca Weiss <luca@z3ntu.xyz>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=907; i=luca@z3ntu.xyz;
- h=from:subject:message-id; bh=FCBw8XDNRhE4YdMQX9/OeTPh8F87PXGZsKt/roj2lZA=;
- b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBkOI2xbIPcdKZh9IQXKUO+TxGTsdPhQSARWauW8
- Ej3E04fojKJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZDiNsQAKCRBy2EO4nU3X
- Vi8ZD/9dRAJu9zCMylW34QTtL3TnwNl+kPTu/AcQwhYsqwJ/R6JlAVQ1yYk/jFOjpm7Li26+4AH
- BuVTQk/Rnc9lLE82C3GhZuW3juTiTOcGAzrANhaYVB/qoVmxmnAmYwypxV7nvSF6i+eeNpM07rk
- GCNHvQ8q2TPLSse+oFNk2vU5IEnXiCHIDbvvXRe/Ua/jWF21DCRiqDHw1n82BbIJhZu/BBwNtsU
- kd690cgY/5sYpdvvNrTl6Av31+XZbnjSm5WXKG9Wy27USIQHRhHMNipm/fLVTcBmYgx4Ktz+QQq
- 7nRDKLG4vNSQi/sqTK6DfG0r6NBvPK+XGJwyOGRonC76oSPf9SOwBUSOfzSke9Vbdzjn+KRoFoM
- hVyf1dAUgjMHYX7SrbJDAzAMpX4lFeGo/24z+hFf5YcDNlmgStiV8Y8t0+fWed97BRanni93HfT
- KJy2ywoxzng7sUW8SonyAXGSL/R4Bd/70stichwVYGXVsySlT0c6ui2t8XdAKJkdGfLkFvAmat7
- TIbFIA2EOoyNUkYqj+yw6/VLdQZ6b2vFsnf8m8EUEJwz28wGYWTA/KEv/Z48nkrQiRdIC6wV0Iv
- WaqRNBUZbEt0aCTZLgt1Je0BlnO6I4yDeDgNDCc0xuPTw+KzKUl1e/cgauUzu5EeIYA5DeVw9eK
- wB+viIhCkaZoyqQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=755; i=luca@z3ntu.xyz;
+ h=from:subject:message-id; bh=mdBEwzgyTkn6OiQX8yDfJw3X7WbLKTich7Ekd7KwYOQ=;
+ b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBkOI2yhdXz4/nLXnly1oi2QAFdZkaZqnwTAd9iT
+ E0Jdt42JP6JAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZDiNsgAKCRBy2EO4nU3X
+ VmBCD/9Mxlr5zAlia3YXc8pS+dgsVr+lV0fcGqktZARJ8Ry26mAHBFpuW7gHwCKBRZlR6r3gT3v
+ MolU2FyfQjQj9gOkd2FH3zTg9mFh7gGjhbsJH9h4ZlVsHhTQPiUe4xX0mXZZpjyGXf7kaRITeSc
+ 3oeUuKQAxsfLNLD4F2fr9yy3zYB3qQZSPtViPm986bUf+/6xA+8eyJNZC1yGsYkGTR/9j7PSWER
+ DU5wjA2catOtgSuT6iuFuseAXFpEkzfXYB9Xt5LtUBu8bXiTrQvnJ/cgxR1ooTk1B31vKoctSiZ
+ H7oigK70Xrn0KUVPxdbg/BlfsUgeMErFy0N5zDnTh4WXgJ6qJ1tim/jq238kHajW7IgMXvhrPAk
+ hALCjYCtsTpUyyDakb110WdMqrnX7LIb7qShjrBBISaVXcNGP/6/vOR5gRqRWzDxkTlkK+gDrKW
+ c1QVX2/bLTQZaWqEt35n5lA/cwX5/5TS0S+8VjV3cVFBMIPXlOqjxFZ/XhNUg51lzdGVJBggkOL
+ wxY9Q4qSWW2/Aa5bHFSq8lve0EodZKBLyUBGqa7e1UvpMh8Rwyao/xX44O8NqrYpCSfhSeg4q+e
+ ZgkLENAT1cB2o2VSvSKXzraBFsasmPI2yUGxoC337s5JdXutX1PbWVzDXDEV6oarfkCo6RDQXCV
+ fED8X7FH0LoO9Rg==
 X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
  fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,27 +75,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The channel ADC5_USB_IN_V_16 is using 1/16 pre-scaling on at least
-pm7250b and pmi632. Allow that in the schema.
+Document support for the pmi632, often found with the sdm632 SoC.
 
 Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 ---
- Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml b/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml
-index bd6e0d6f6e0c..365aa3528a87 100644
---- a/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml
-+++ b/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml
-@@ -101,7 +101,7 @@ patternProperties:
-         oneOf:
-           - items:
-               - const: 1
--              - enum: [ 1, 3, 4, 6, 20, 8, 10 ]
-+              - enum: [ 1, 3, 4, 6, 20, 8, 10, 16 ]
-           - items:
-               - const: 10
-               - const: 81
+diff --git a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+index 84620ebc1efe..09e7195c622b 100644
+--- a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
++++ b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+@@ -71,6 +71,7 @@ properties:
+           - qcom,pm8998
+           - qcom,pma8084
+           - qcom,pmd9635
++          - qcom,pmi632
+           - qcom,pmi8950
+           - qcom,pmi8962
+           - qcom,pmi8994
 
 -- 
 2.40.0
