@@ -2,165 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAAA66E0E69
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:19:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FA326E0E6A
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:20:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbjDMNTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 09:19:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50366 "EHLO
+        id S231165AbjDMNUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 09:20:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbjDMNTm (ORCPT
+        with ESMTP id S229736AbjDMNTo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 09:19:42 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2082.outbound.protection.outlook.com [40.107.96.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250ABAF2F;
-        Thu, 13 Apr 2023 06:19:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=khZvM4rmaBxbfc+gsSiaGszyt2q+2E4Dk+uUsS7VyMbhy445XyPo3LnGA8kQMwnCsRee5L5m1aapqYwC3odb39/TNE+JvUVoBQWGMyVzzY5UF4rjAQLizIegTCXnaTl6upGC18ST4mJeO8/MUpXxlA9vPIsqPmdRvGJBQhoB8bOBx6kcOKEoccd7wu5lW0y7FfCHRWCPy0wiYfVSNE0fTgVjiQGbDsmPhGRUT4d6lL+iWkoqh9Mb0kka0tvYyCTjnwr4F/L05W4sNR011KHvK/VkVe32VLW5cgiKHifaVg3Na6moqz8AWmIjNSK8G6210LB+TO0LJZJ0NGlUdepWXg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cTyaz9YMwA3g4Ox5JyZGmHHc9jVCFtqgbE9UPgwQWqM=;
- b=MNnpKsZhuBYj8H/71M5y1p7at+IrWwCaF5mgeqQLT1IDgCgGIu9lMjN76wvr6Ho/XKYWoOBrhK7NoETXLZxwSBhdoHLHES2U9YL3Oo2jN00c7W2cTAAybe48u7bDYTeITPzkN+UtYmMl0TexoK5ITQpj2r+zQePdgMh7R4/p13leiwfW8O6pCzHppBL9RVotjnRc3hX38iTtzXGExfvsS5RJ3cTq1iJ0DlGneqhmpb0LMnCUrFoA9/XH1zjf//H0x7saah7PNH8s4aNMY6Q11GC+v0CmZpznE7Mt98T+Uxj0P6BkmRl66EonDUBsCEHH39Ifxi/Oitzvt6hIrGS4IA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cTyaz9YMwA3g4Ox5JyZGmHHc9jVCFtqgbE9UPgwQWqM=;
- b=ML02G3Y/jCGhDcs7cGMMrJXwSdfH6SIKFOSqd8Vq2yG36J/jyT8r0YjntvZb9mAElG3A96uJ0qp2tzJDr8Tw0Jtfnom3YtcHLGd8Y1AFg10NjrnAhqZq8mF4YWQFuYcRKaH5X7tIy85oEPZqQf+O2kLBrcutrexq6NBcIhcIvZZDHuDOwTlN+8PuncTf/mtxvzAcvdvbpEmBqPj3684ZUDiEcC53gcZkGKvhQ9VtrwjgIbD5l3jMirQh7JVwdP3staEQ515ui+Juiy1jP3eoVxhKLT9kDxemS6aEkQqnrREuOi3RWz1/70LtKFSbypBvv1Lk2vXLqGkl1BltgsYdZw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by SN7PR12MB7202.namprd12.prod.outlook.com (2603:10b6:806:2a9::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Thu, 13 Apr
- 2023 13:19:14 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::6045:ad97:10b7:62a2]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::6045:ad97:10b7:62a2%9]) with mapi id 15.20.6298.030; Thu, 13 Apr 2023
- 13:19:14 +0000
-Date:   Thu, 13 Apr 2023 10:19:12 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     ankita@nvidia.com, alex.williamson@redhat.com,
-        naoya.horiguchi@nec.com, oliver.upton@linux.dev,
-        aniketa@nvidia.com, cjia@nvidia.com, kwankhede@nvidia.com,
-        targupta@nvidia.com, vsethi@nvidia.com, acurrid@nvidia.com,
-        apopple@nvidia.com, jhubbard@nvidia.com, danw@nvidia.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org
-Subject: Re: [PATCH v3 0/6] Expose GPU memory as coherently CPU accessible
-Message-ID: <ZDgBULRSNXgs7Bmo@nvidia.com>
-References: <20230405180134.16932-1-ankita@nvidia.com>
- <86sfd5l1yf.wl-maz@kernel.org>
- <ZDapsz2QOdjhcBHJ@nvidia.com>
- <86ile0kt2t.wl-maz@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <86ile0kt2t.wl-maz@kernel.org>
-X-ClientProxiedBy: YT3PR01CA0119.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:85::24) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Thu, 13 Apr 2023 09:19:44 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E5C8A74
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:19:23 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id i8-20020a05600c354800b003ee93d2c914so9722343wmq.2
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:19:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1681391961; x=1683983961;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3uZ2L6Z2WT9YlA2M5FGrOlxdAqlFCV2dHB/1lrAHpy8=;
+        b=Ov3hk06jdZM9d+LdbrIweTCN7GSwWPVPVn8K7uK0TKIk+ttnUmCxFAYbX4B6Qow0v+
+         3yxNPHKSoX2xPg9VEAaI3ryZWdl4wWd/HpP2FFf1eXrfTpZR4R0T+KRJvq+SAkW4ypn4
+         rmgp4zxq7aKbyPsofkCGIkZkYE/9WOE9S8AlekWZERnszbZxr3jypF8yuwgsit2BKiYG
+         wJZrp/pLgjCxK0TxZCADbqdMrY/1YuvexbDG5OEcrI5YL2x7RqFPzNKG/UEEGOT9mLe/
+         bhE4rgwiO9H+h5ViytfFeTrueDyueuH0RrL/moWptinT8DITBsTLuN+LUJ2b+22rugnl
+         oHDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681391961; x=1683983961;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3uZ2L6Z2WT9YlA2M5FGrOlxdAqlFCV2dHB/1lrAHpy8=;
+        b=CdpgMYD9iWT5rjJp+okqoX/F+x1IxLBTZ+rsL5cRh93ZIM9hwRGBjBeh7tAMYtAZBW
+         ZrW21mepqSK1L/6yAq6iD9iHW8rt7F6p77jFzKC8jC5QPCeF1SP9YoFmNF9Mn7ryzGDy
+         gwxIBdBVNYZW/H1Q4xbr/JVNi31tf7ZNcyCQu2DbvXYzCpYNg/k4ZmjIhs5PV3UD8g5h
+         mhGiKoZQ/giPEctGa7bfv7tI0Fs7L6k5H3F1oOX7WlfCAosEIvx/x8Ob/63ORbmcU+zC
+         d9jAsx2jclVllQrSKrzWye9Y/Et0cyteQ2Z9UGrkZbLuJt/xhZa/4I8JgnkE8k+kS6wq
+         rKGw==
+X-Gm-Message-State: AAQBX9ck0+ADZLdyyuK723sntD8ZxLmCuMGwAQLxMBBY5qttAFC/7CWI
+        fuuEYN5glJNb+VGyjQT+KYQTFw==
+X-Google-Smtp-Source: AKy350ahHJ2R0u9+ILirA6SYvVmLljxqBN6oqzCFoHvHTKwkDlxy0i7/480WgJIzYZwsrG2RkQgdPg==
+X-Received: by 2002:a7b:cd15:0:b0:3ed:c468:ab11 with SMTP id f21-20020a7bcd15000000b003edc468ab11mr1819189wmj.28.1681391960810;
+        Thu, 13 Apr 2023 06:19:20 -0700 (PDT)
+Received: from [10.1.3.59] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id m2-20020a05600c3b0200b003f0652084b8sm5463491wms.20.2023.04.13.06.19.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Apr 2023 06:19:20 -0700 (PDT)
+Message-ID: <32450a66-78ff-8ec8-2f31-6e5d91e38a5b@baylibre.com>
+Date:   Thu, 13 Apr 2023 15:19:19 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SN7PR12MB7202:EE_
-X-MS-Office365-Filtering-Correlation-Id: 28f9feca-2ff9-4416-b5c7-08db3c21ad11
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XC8Y0UYaLwK6Vz776w4LW6tJpcDsK872jmXXzMEYRt/KbDcw84MiVlfya3MkHgT3pes66qhP6acgrascTkUMQ8+na3D4FOFicIA9t3LdrPRWtfzNw1KTGXybbZlexgC/CWrriMpCY1Ner1g9MstHsKp3ceQVSuH0/OPpyjcctY2gV1ZmMIQEcluijfTH2wvhibUE3S+JTGzfo/n7EVS5RS2HR2jI697s2j4lHcd7h7BDbR68K/iuSk1IBeIkxWUQqOV4caZlVciY+5uUHouWLsTSghXbARnm3Uztd/+FWHn0g6xD/mkQ5RSjQGUaLVwZ82JJ4PTTYq6iP47myykaSRK6aAxEsWyxseKe1LR5TtxCvbfO8CwEwz89ZrInnB672ieeyRi4YZ9dA/ngCW+Ge/PjAvPJdFjm6W/ZDz8wQSQiJn/gDd4yeGeJzAQPMwWIPG6I3s+9To80oJSkUTWXG4qQlvYDEETxdE0dTsYr8zVYNl4jNWfes8q95PPXKC62Hdh3hDy5UVTrwvqIX2MXRhNAW4E3inZtHMtO10XdOUShbb6jtdnt0Mw0TuLXGg9C
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(346002)(376002)(39860400002)(366004)(451199021)(6486002)(6916009)(66476007)(66556008)(66946007)(4326008)(36756003)(2906002)(86362001)(41300700001)(5660300002)(8676002)(8936002)(316002)(38100700002)(478600001)(6512007)(6506007)(26005)(2616005)(186003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?eNYiIi0dbCrK1dCnCVtkuQIZAeq2kWpXSoq4fmfNEoada5Lg7HCF3FKq7I6K?=
- =?us-ascii?Q?TNsWYng/4qCML0In9HWfVe1GcRGIsavPlhZ76sJcbTAsGX8Ln9GUnhevRQRk?=
- =?us-ascii?Q?oX0Z/QS7+9K77gVboAp/NGYfxuUJ65tTOijkNW60uHuhZK6Y+iFJznSONDz/?=
- =?us-ascii?Q?pqzcJAM8NqPiNyE786Bb18JNjkZ9QHAuesT58h1NgIgkRlmzauBX3NHr93Ut?=
- =?us-ascii?Q?DwUBgwXawMqdO/4k1I3niVMxQ+A/mXfWMpdivIQLkLNi0sBXwzI4qRXpdsi7?=
- =?us-ascii?Q?CF2rWD/hbGDWOZQdPFOMJDIionaNb/8gh73HynCNTv1Gn0sgzdpxMYlwlYq3?=
- =?us-ascii?Q?qX2xVUWVRkTHI2uCGU662uDVYbrJEezmz/h7jSeVZY04IzikcKly63GxA39n?=
- =?us-ascii?Q?i3CkgnbSOYVbrH4AJBCy/dp4g0NKGPpgnCpISoBZBnDqaPMAcD4UgUaQvvTe?=
- =?us-ascii?Q?Fo++TlqnDrsEtPTWSBBtUBnlu8DaxKrz6TiA5X1Ft0uomRelB1UQI0sxid+T?=
- =?us-ascii?Q?ie9/S4antxkfnN3eiyi1ghWLJFfg86ZPSqooG1rwtaoHldF7a1a0YtyLJ57w?=
- =?us-ascii?Q?22kWE0mzw1AOzZRMz7nMNxc97cj65wcFfmbTW2UcaUhWLMnWBi7lYtgktg04?=
- =?us-ascii?Q?AXRHdADL6NekE9gASUFbLcMXmDQhkOQtZYo2lQTs/xZUC4ftseUSsfnqSwjI?=
- =?us-ascii?Q?scE0SVPtHIGWlM/Vqmo7adHQeDZ3YLCpMtRcK9ZSa1ZGPPQ1Fr3QRQtrwbm8?=
- =?us-ascii?Q?GVhKeyrLJfHc/4HYqLIQryRCEYZ8Vx5OA/FgJBP2qCluJm7XiBP0sSWQTEEB?=
- =?us-ascii?Q?AQoj94kTBHEpQ9RaZ9nYZxSU2TWY3zK2azCYuSItdDWEXz3px3k07pUevmkt?=
- =?us-ascii?Q?o8F1mRQAcXmbNZjt/QIxIiXa7iD97mF8o7VGUQA7q3m/wSwiMAUQfXegT1R4?=
- =?us-ascii?Q?SJBQdUPg+k4cceXvhYS7nkO59qQq5hjFlY23A7YcP7Le1y9PMNuzjRaCA7Ut?=
- =?us-ascii?Q?vOVrRRphie2wZ+4IaGDT1BmgokqVASHXMJCtmOaX4RGlo0sYYyJPFZQQXAfE?=
- =?us-ascii?Q?/lufF5Wtw2JGa880aPqN50n+3H5Rwkp1e2yBGGux5xvU9JfWG6vJP9PYrLov?=
- =?us-ascii?Q?WiHkdjmfExJovocTKsegogEo+nhfQYVrA5i7q/a6rHC+IBEbkDi/lpbZtqxq?=
- =?us-ascii?Q?+v0IlQ6vufTu/aIJPkyz0Z2h6G9raIQ/c2p1KQtZ94wx61cPrh4+dIRLYffX?=
- =?us-ascii?Q?2w/HH40Spd4mmInDnt7T4MFaxiJJEXWkt+T01RZLCY5rz9ggzButKAWT/cHN?=
- =?us-ascii?Q?Fq1kV2rn7MKp2jv6XYRWBZAFNQKvD+sgW/nzKst4aeN0QVr12kUDHhIYfmlb?=
- =?us-ascii?Q?IF5LEBF35KKdx9Nvth6VvSUoNMUT8Ukxk6afdaxpurU6jB1UMmPJq8y0rQik?=
- =?us-ascii?Q?KXo0M+2KlKHO37V7fVxbtLeBcQjcg1Cz9LKLw5EYi1L3VBKWeIG86B922/hK?=
- =?us-ascii?Q?NWUnyJS47LZoTlMkVxayfVyJM7BcGFDlhkNsUXo2CZ0BiHovgXknD8j6CQZO?=
- =?us-ascii?Q?mX9F4B9j4isE6dq4SHQtoh9D5mycQA3SuSoCpNzv?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 28f9feca-2ff9-4416-b5c7-08db3c21ad11
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2023 13:19:14.0055
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jPgn3ZatKY27qKP9Ka7vav2sBq+OAKcfqsiegmhtqppM4NsIDcPiRzXtWDpdEDAX
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7202
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 6/7] leds: leds-mt6323: Add support for MT6331 leds
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, pavel@ucw.cz
+Cc:     lee@kernel.org, sean.wang@mediatek.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20230412153310.241046-1-angelogioacchino.delregno@collabora.com>
+ <20230412153310.241046-7-angelogioacchino.delregno@collabora.com>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+In-Reply-To: <20230412153310.241046-7-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 10:52:10AM +0100, Marc Zyngier wrote:
-
-> > IMHO, from the mm perspective, the bug is using pfn_is_map_memory() to
-> > determine the cachability or device memory status of a PFN in a
-> > VMA. That is not what that API is for.
+On 12/04/2023 17:33, AngeloGioacchino Del Regno wrote:
+> Add the register offsets for MT6331. The hwspec is the same as MT6323.
 > 
-> It is the right API for what KVM/arm64 has been designed for. RAM gets
-> a normal memory mapping, and everything else gets device. 
+> Signed-off-by: AngeloGioacchino Del Regno<angelogioacchino.delregno@collabora.com>
 
-The MM has a pretty flexible definition of "RAM" these days. For
-instance, I don't think pfn_is_map_memory() works correctly for all
-the cases we can do now with devm_memremap_pages().
+Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
 
-> That may not suit your *new* use case, but that doesn't make it
-> broken.
+Regards,
+Alexandre
 
-I've now spent alot of time working on improving VFIO and the related
-ecosystem. I would to get to a point where we have a consistent VFIO
-experience on all the platforms.
-
-Currently, real NIC and GPU HW with wide VFIO deployments on x86 do
-not work fully correctly on KVM/arm64. write-combining in the VM is
-the big problem for existing HW, and this new CXL-like stuff has
-problems with cachability.
-
-I don't really care what we call it, as long as we can agree that VFIO
-devices not working fully in VMs is a problem that should be fixed.
-
-> Only if you insist on not losing coherency between the two aliases
-> used at the same time (something that would seem pretty improbable).
-
-This is VFIO so there is DMA involved. My understanding has been that
-the SMMU is allowed to pull data out of the cache. So if the
-hypervisor cachable side has pulled a line into cache and the VM
-uncached side dirtied the physical memory, it is allowed that SMMU
-will read stale cache data? Thus the VM will experience data
-corruption on its DMAs.
-
-With VFIO live migration I expect the hypervisor qemu side to be
-actively reading from the cachable memory while the VM is running to
-migrate it, so it does not seem improbable.
-
-Jason
