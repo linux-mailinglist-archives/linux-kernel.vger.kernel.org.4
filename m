@@ -2,113 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDC0B6E1259
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:33:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 073996E1262
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:34:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbjDMQdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 12:33:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40416 "EHLO
+        id S229829AbjDMQeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 12:34:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjDMQdq (ORCPT
+        with ESMTP id S229910AbjDMQet (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 12:33:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59A926BA;
-        Thu, 13 Apr 2023 09:33:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6103763FE5;
-        Thu, 13 Apr 2023 16:33:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55E69C433EF;
-        Thu, 13 Apr 2023 16:33:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681403623;
-        bh=/Bux0X6rPJyUlWxJRs+XE116oEsnQQ9zIaaxo+qKnlo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Br6uw/IoKL9fzgy7md5eN2m7Cp6uXiot11VLwb/lLm2uYBHK40JjYzk6EfsScRDIl
-         63H4VsxFAwzK2nnO8uTQysPS4boUv+sU3KPyHcJ8NXl4rUSSYCGa7ZBWQJnMEXsEwH
-         JNwjjJTPBc/Qa1aMo/kmebDOjewQ1iUWT9b7JiXUyY7/9uD0TGNUDEXjH5K13XL8W+
-         vICerruYQz+tLCPBOD8BGJygqr3ZrpbzHZ0OpVCMsrWEbyi3nxl77MBnrS3j/tDJSO
-         jYqqZ5eiQcgzEB+QOQ88n+uvif9iZkHD52wJ9fyOc63Zi3B0aWfA+YgmdO3ap6RnJD
-         Ry70NS9KAFJbQ==
-Date:   Thu, 13 Apr 2023 18:33:39 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Cc:     Peter Korsgaard <peter@korsgaard.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Federico Vaga <federico.vaga@cern.ch>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux@ew.tq-group.com,
-        Gregor Herburger <gregor.herburger@tq-group.com>
-Subject: Re: [PATCH v2] i2c: ocores: generate stop condition after timeout in
- polling mode
-Message-ID: <ZDgu45b/tN4On+8o@sai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Peter Korsgaard <peter@korsgaard.com>, Andrew Lunn <andrew@lunn.ch>,
-        Federico Vaga <federico.vaga@cern.ch>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@ew.tq-group.com,
-        Gregor Herburger <gregor.herburger@tq-group.com>
-References: <20230413093737.15303-1-matthias.schiffer@ew.tq-group.com>
+        Thu, 13 Apr 2023 12:34:49 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B9C4697
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:34:47 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id az2so834216pgb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:34:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681403687; x=1683995687;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8HvoJ679JuZRdirnHe569ZyC5ZGOdrOnvhMCfAAv7TA=;
+        b=3AV1Vq3WEo42XDTB+pzABN4ZQGhRgzKvgGGRMpqjEY4vrCgRQLSc6nldf0HxtaKXa+
+         kD56HHiCSZzSyEZZfu2q0r+fSBzScCJ03zomGDfbTkvrRRm5KOh5FzGP1yIyr1JW0Rxq
+         mblhLqRHMs7Ag9HWqRwaLyDebTDb3XuOMG+hTbZB1ULS5r2gSRm741v8pVvzIu8TeW/7
+         Pqt7v3nQIuQxKmJ1maXy3a2ncJNhstXZ2QWwC5TyAkwUE3W2UxNwQu3T6/C7arQaUu5/
+         PYJEZ1dps6WXd/BqMAuuaeE0dsGIcgrRr+a+YWF/8/P36E/Zmbrp52oKsgGKdouWF+dm
+         +s7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681403687; x=1683995687;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8HvoJ679JuZRdirnHe569ZyC5ZGOdrOnvhMCfAAv7TA=;
+        b=KdoEkt8SVHWrKlt6Vr5I/Lxa1Jwkx+VfuzqawHwkIw3ygTFHSrDwn5LcLMl9Tbhusq
+         IiygAELsu/rCqsbXOmuhOL2JUtyu7L8VmAKDmz8rp0LQG0ouccYwBHnmmfn2SAYgXgH9
+         ngBgfpOjJwUxJSuQJvxpCQNS4DH26rZvss6/fSsP4Ezeo80bBr1kBsCQPILbluja7Vn2
+         R8RYbcfOR7qG675q+TtuSqGJ/VjaQGQ5VRP1R4t+zGdKXEsv+IeMnreBJrMG9go7qAaF
+         ebl81ZpafhiQstnN2uuAMfDEbYCcql8B/Nwk9vhpwqYnjM/a8ZtshLTG4PXFmxa5dm/A
+         W9DA==
+X-Gm-Message-State: AAQBX9df9ShmkKKd9En+wUQXLfdWNfwaX0+oDY5ALikD2XgFAcMZfmkP
+        G2Nq2CiK6q3E92YvctuFIkQxukmod4FM0pUdi7IEoA==
+X-Google-Smtp-Source: AKy350brZLSKImyACD/vTwBAWkj9JzXf2zpBwAPKP+J93fB14HCkdn9PtWI/qhlPPMVYTW639OYp4l/LOfig57cvsRQ=
+X-Received: by 2002:a63:642:0:b0:51b:fa5:7bce with SMTP id 63-20020a630642000000b0051b0fa57bcemr679747pgg.1.1681403686843;
+ Thu, 13 Apr 2023 09:34:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="y5zp1yi9Gcj7gXLr"
-Content-Disposition: inline
-In-Reply-To: <20230413093737.15303-1-matthias.schiffer@ew.tq-group.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230413032541.885238-1-yoong.siang.song@intel.com> <20230413032541.885238-3-yoong.siang.song@intel.com>
+In-Reply-To: <20230413032541.885238-3-yoong.siang.song@intel.com>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Thu, 13 Apr 2023 09:34:35 -0700
+Message-ID: <CAKH8qBsWwaGrL4X_xkqGtDB_4Qr3oM4wcFcWVtBanCEE6F9gCg@mail.gmail.com>
+Subject: Re: [PATCH net-next v4 2/3] net: stmmac: add Rx HWTS metadata to XDP
+ receive pkt
+To:     Song Yoong Siang <yoong.siang.song@intel.com>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexander Duyck <alexanderduyck@fb.com>,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, xdp-hints@xdp-project.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 12, 2023 at 8:26=E2=80=AFPM Song Yoong Siang
+<yoong.siang.song@intel.com> wrote:
+>
+> Add receive hardware timestamp metadata support via kfunc to XDP receive
+> packets.
+>
+> Suggested-by: Stanislav Fomichev <sdf@google.com>
+> Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
 
---y5zp1yi9Gcj7gXLr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Apr 13, 2023 at 11:37:37AM +0200, Matthias Schiffer wrote:
-> From: Gregor Herburger <gregor.herburger@tq-group.com>
->=20
-> In polling mode, no stop condition is generated after a timeout. This
-> causes SCL to remain low and thereby block the bus. If this happens
-> during a transfer it can cause slaves to misinterpret the subsequent
-> transfer and return wrong values.
->=20
-> To solve this, pass the ETIMEDOUT error up from ocores_process_polling()
-> instead of setting STATE_ERROR directly. The caller is adjusted to call
-> ocores_process_timeout() on error both in polling and in IRQ mode, which
-> will set STATE_ERROR and generate a stop condition.
->=20
-> Fixes: 69c8c0c0efa8 ("i2c: ocores: add polling interface")
-> Signed-off-by: Gregor Herburger <gregor.herburger@tq-group.com>
-> Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-
-Applied to for-current, thanks everyone!
+Conceptually looks good, thanks!
+Acked-by: Stanislav Fomichev <sdf@google.com>
 
 
---y5zp1yi9Gcj7gXLr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQ4LuMACgkQFA3kzBSg
-KbZMpA/5AdpLkRX/rjzS6kMU4oLlfJr7u0f9cI/LyMXSxS2BoRNr7raFFVybmVp1
-onlRFYfpwRrx8QIFXY7nIPBytQHdEhK5Ns72Psbb82XBr9gNxw+BuxIwt+X6kCfS
-sArTlXBhQpgiTHqb6M7/ORIDBYfCevxUYQ2GmhhUTX32gnQIqmwqk97CmgXTFvc0
-1au5vglKU46tPk7tpzQzixoU9LJDvzUeny9QsEWweP3UyDNIzTRqXt4+rNlD5clg
-GS4VaylPP1sX2XK53F3CkYGAg+8aJxgclll/xxLZfRVV8ZsW61yHyhjB+Bueo4f+
-1CL70KWzc41VZv3DcBELAlQf/XPK1H5i3Wh2gyNzr7YR9mvkgFNNzk7e0+CM9GvM
-pb0X+lLbPHlSzj6nDj5B6nKkvKYaeWb8uUy2atoNtcDE+4MyD3bWWag5Rv1HtV3k
-bAOrWxbFfijmqh1U5XzQXAmcFKzRxbSDfAfdHK58hNBMGK7dRHuLnltFPeWeEZa0
-usYCQd3TKaa8/X8vcOSBS3Y899WPB0/Cilgw5etjKyEF/casJewQofiIxdnnnprQ
-+h8D009dpaAuFUyXqvDzSSFwMX7bvqz6Gf5V1rwUxwyrNUXgGpUEl76t1+N1GPSh
-WrkuKO7BHpkidDy1xVIuJpjUjqt/VNLCbOtco4kA4FPT+QVK/Kw=
-=nqC2
------END PGP SIGNATURE-----
-
---y5zp1yi9Gcj7gXLr--
+> ---
+>  drivers/net/ethernet/stmicro/stmmac/stmmac.h  |  3 ++
+>  .../net/ethernet/stmicro/stmmac/stmmac_main.c | 40 ++++++++++++++++++-
+>  2 files changed, 42 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac.h b/drivers/net/e=
+thernet/stmicro/stmmac/stmmac.h
+> index ac8ccf851708..826ac0ec88c6 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+> @@ -94,6 +94,9 @@ struct stmmac_rx_buffer {
+>
+>  struct stmmac_xdp_buff {
+>         struct xdp_buff xdp;
+> +       struct stmmac_priv *priv;
+> +       struct dma_desc *p;
+> +       struct dma_desc *np;
+>  };
+>
+>  struct stmmac_rx_queue {
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/=
+net/ethernet/stmicro/stmmac/stmmac_main.c
+> index 6ffce52ca837..831a3e22e0d8 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -5313,10 +5313,15 @@ static int stmmac_rx(struct stmmac_priv *priv, in=
+t limit, u32 queue)
+>
+>                         xdp_init_buff(&ctx.xdp, buf_sz, &rx_q->xdp_rxq);
+>                         xdp_prepare_buff(&ctx.xdp, page_address(buf->page=
+),
+> -                                        buf->page_offset, buf1_len, fals=
+e);
+> +                                        buf->page_offset, buf1_len, true=
+);
+>
+>                         pre_len =3D ctx.xdp.data_end - ctx.xdp.data_hard_=
+start -
+>                                   buf->page_offset;
+> +
+> +                       ctx.priv =3D priv;
+> +                       ctx.p =3D p;
+> +                       ctx.np =3D np;
+> +
+>                         skb =3D stmmac_xdp_run_prog(priv, &ctx.xdp);
+>                         /* Due xdp_adjust_tail: DMA sync for_device
+>                          * cover max len CPU touch
+> @@ -7060,6 +7065,37 @@ void stmmac_fpe_handshake(struct stmmac_priv *priv=
+, bool enable)
+>         }
+>  }
+>
+> +static int stmmac_xdp_rx_timestamp(const struct xdp_md *_ctx, u64 *times=
+tamp)
+> +{
+> +       const struct stmmac_xdp_buff *ctx =3D (void *)_ctx;
+> +       struct stmmac_priv *priv =3D ctx->priv;
+> +       struct dma_desc *desc =3D ctx->p;
+> +       struct dma_desc *np =3D ctx->np;
+> +       struct dma_desc *p =3D ctx->p;
+> +       u64 ns =3D 0;
+> +
+> +       if (!priv->hwts_rx_en)
+> +               return -ENODATA;
+> +
+> +       /* For GMAC4, the valid timestamp is from CTX next desc. */
+> +       if (priv->plat->has_gmac4 || priv->plat->has_xgmac)
+> +               desc =3D np;
+> +
+> +       /* Check if timestamp is available */
+> +       if (stmmac_get_rx_timestamp_status(priv, p, np, priv->adv_ts)) {
+> +               stmmac_get_timestamp(priv, desc, priv->adv_ts, &ns);
+> +               ns -=3D priv->plat->cdc_error_adj;
+> +               *timestamp =3D ns_to_ktime(ns);
+> +               return 0;
+> +       }
+> +
+> +       return -ENODATA;
+> +}
+> +
+> +static const struct xdp_metadata_ops stmmac_xdp_metadata_ops =3D {
+> +       .xmo_rx_timestamp               =3D stmmac_xdp_rx_timestamp,
+> +};
+> +
+>  /**
+>   * stmmac_dvr_probe
+>   * @device: device pointer
+> @@ -7167,6 +7203,8 @@ int stmmac_dvr_probe(struct device *device,
+>
+>         ndev->netdev_ops =3D &stmmac_netdev_ops;
+>
+> +       ndev->xdp_metadata_ops =3D &stmmac_xdp_metadata_ops;
+> +
+>         ndev->hw_features =3D NETIF_F_SG | NETIF_F_IP_CSUM | NETIF_F_IPV6=
+_CSUM |
+>                             NETIF_F_RXCSUM;
+>         ndev->xdp_features =3D NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDI=
+RECT |
+> --
+> 2.34.1
+>
