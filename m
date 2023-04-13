@@ -2,137 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAD746E0834
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 09:49:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 741F86E0838
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 09:50:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbjDMHti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 03:49:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60882 "EHLO
+        id S230044AbjDMHuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 03:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbjDMHtd (ORCPT
+        with ESMTP id S230063AbjDMHuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 03:49:33 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDE1903A
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 00:49:09 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-94a9bbfe3ecso245567866b.0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 00:49:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681372144; x=1683964144;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0c4wLhFBCiAcjjbeOa5jABwRP5DFI69Pbg7hP6byo5Y=;
-        b=BceMhjYoTf/jVj4ZdOfZAmdXc1J1JKQQg2gDJBriG6HwIgqQa+TXhTrSgKSZqoDwGB
-         fxxNkkFJzz3+LPIPCcTrTXKUzkxMJKM15KMVbrHVfbNBhCLcgfhYV1M10c+aUBsJSiCt
-         6By92BXEHv2K4uCb2yNV5AQowESEtaDAb106riHjBqPBR5dXnbMbxbS2R65tGyqVEUrI
-         yhvp/oQ2CTyQUzXofZPoMMGkZTiH398qKqWOrfWU5M2rj8Cj/GGsudekAFQtnto+GRWt
-         B7nJbvo5WYPQQjH38U2tCqAOXitUQPyyxU36VtV8LtG4it4DbZL5PnPdj6iIg8vvKzNJ
-         vE7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681372144; x=1683964144;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0c4wLhFBCiAcjjbeOa5jABwRP5DFI69Pbg7hP6byo5Y=;
-        b=YCATrpsUKehixfO3Inm+XzVB0pG9yrQxqkXf5VtgJSHobRGI6BzHFgK4gIlUL9LXte
-         ns/OPUoh04WA1Lignw/e4OGh7lW8i1HU1dkfkEfCA5zOyWI0Mv9OgnfmtphyLwy9qetJ
-         6QAU8h0jTn55FIvXDvaVqwMkS51GyegGFVQre6dJFcDEsYjWt9lqAdDdQ/0631OfUOzm
-         UOBbmzGsuMiKcIAYe+nfGi8MYrvAQ5rwOQdVZ0glcWZ5Gya9HP7DzNjzfUS+Iqhxpmxx
-         uSkEy2FVOevqGY3pVHHgJNwTUj3CMtu5c6OQwoi+43gtrZTgtul5P1F/SO8HhLEkfN0l
-         zFFA==
-X-Gm-Message-State: AAQBX9fRGbz7miUQzQlJqixNpp5yyRBNeA/N4iYWIveJbPFPZsncSKPu
-        HQxACpciFDy95YIl5eAXp5uJ0w==
-X-Google-Smtp-Source: AKy350YbuGbPy57eqcdQLbG1h6GrL64vwjvVuJuqM/r/TYOQUCL0VheUuXgUL2yMgaNE1GwSq69GUA==
-X-Received: by 2002:aa7:c2d4:0:b0:501:fe52:d301 with SMTP id m20-20020aa7c2d4000000b00501fe52d301mr1684934edp.23.1681372144162;
-        Thu, 13 Apr 2023 00:49:04 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:ec6f:1b33:ab3f:bfd7? ([2a02:810d:15c0:828:ec6f:1b33:ab3f:bfd7])
-        by smtp.gmail.com with ESMTPSA id s2-20020aa7cb02000000b004bd6e3ed196sm463252edt.86.2023.04.13.00.49.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Apr 2023 00:49:03 -0700 (PDT)
-Message-ID: <342b3e6c-fd1b-d256-bcc2-2b9bda206b60@linaro.org>
-Date:   Thu, 13 Apr 2023 09:49:02 +0200
+        Thu, 13 Apr 2023 03:50:19 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.216])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1238B9EC9;
+        Thu, 13 Apr 2023 00:49:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=6TtIQ
+        g09ZmPHNc7fwNMyG9gkvYgQeJ5WuDUEisBpScU=; b=RxNbs3Gjyl9cXI5OkfVXy
+        i7frEY3tkxOjz4VRLt/2cmcaWumZfqF4VnegiLRG3Cih6M4EiasHMBn2cyYnzYwu
+        NM8sXTsNYFv5foRQDP0rXxlHRUFLcnop0tbmwGHiENR/H4NRow+pxscTn5Wdycc9
+        NZmQ8yp4VGmPzdrlbuJy9w=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g4-1 (Coremail) with SMTP id _____wDXGOwItDdkTX8uBQ--.1680S2;
+        Thu, 13 Apr 2023 15:49:28 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     gregkh@linuxfoundation.org
+Cc:     p.zabel@pengutronix.de, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        1395428693sheep@gmail.com, alex000young@gmail.com,
+        Zheng Wang <zyytlz.wz@163.com>
+Subject: [RESEND PATCH] usb: renesas_usbhs: Fix use after free bug in usbhs_remove due to race condition
+Date:   Thu, 13 Apr 2023 15:49:26 +0800
+Message-Id: <20230413074926.239605-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2 1/2] [PATCH v1 1/2] dt-bindings: hwmon: add MAX31827
-Content-Language: en-US
-To:     Daniel Matyas <daniel.matyas@analog.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20230412153334.181852-1-daniel.matyas@analog.com>
- <20230412153334.181852-2-daniel.matyas@analog.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230412153334.181852-2-daniel.matyas@analog.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: _____wDXGOwItDdkTX8uBQ--.1680S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Ww13Gw1rKw47WF1UAw15CFg_yoW8JF4xpa
+        15JFy8G3yrGrWjgan2qr4UXFyrCayqgr17WrZ7WwsxuwnxAa18Za4FqF4j9r13Xa93Ja1Y
+        v3Wvyr95CaykCFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zi0tC3UUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbBzglQU2I0YqBUwwAAsH
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/04/2023 17:33, Daniel Matyas wrote:
-> MAX31827 is a low-power temperature switch with I2C interface.
-> 
-> The device is a ±1°C accuracy from -40°C to +125°C
-> (12 bits) local temperature switch and sensor with I2C/SM-
-> Bus interface. The combination of small 6-bump wafer-lev-
-> el package (WLP) and high accuracy makes this temper-
-> ature sensor/switch ideal for a wide range of applications.
-> 
-> Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
-> ---
->  .../bindings/hwmon/adi,max31827.yaml          | 51 +++++++++++++++++++
->  MAINTAINERS                                   |  7 +++
->  2 files changed, 58 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
-> new file mode 100644
-> index 000000000000..37177eb9c039
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
-> @@ -0,0 +1,51 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/adi,max31827.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Analog Devices MAX31827, MAX31828, MAX31829 Low-Power Temperature Switch
-> +
-> +maintainers:
-> +  - Daniel Matyas <daniel.matyas@analog.com>
-> +
-> +description: |
-> +  Analog Devices MAX31827, MAX31828, MAX31829 Low-Power Temperature Switch with
-> +  I2C Interface
-> +  https://www.analog.com/media/en/technical-documentation/data-sheets/MAX31827-MAX31829.pdf
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - adi,max31827
-> +      - adi,max31828
-> +      - adi,max31829
+In usbhs_probe, &priv->notify_hotplug_work is bound with
+usbhsc_notify_hotplug. It will be started then.
 
-Why suddenly these are all incompatible? This is not what I suggested.
+If we remove the driver which will call usbhs_remove
+  to make cleanup, there may be a unfinished work.
 
-> +
-> +  reg:
-> +    maxItems: 1
-> +
+The possible sequence is as follows:
 
-Best regards,
-Krzysztof
+Fix it by finishing the work before cleanup in the usbhs_remove
+
+CPU0                  CPU1
+
+                    |usbhsc_notify_hotplug
+usbhs_remove         |
+usbhs_mod_remove     |
+usbhs_mod_gadget_remove|
+kfree(gpriv);       |
+                    |usbhsc_hotplug
+                    |usbhs_mod_call start
+                    |usbhsg_start
+                    |usbhsg_try_start
+                    |//use gpriv
+Fixes: bc57381e6347 ("usb: renesas_usbhs: use delayed_work instead of work_struct")
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+---
+ drivers/usb/renesas_usbhs/common.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/usb/renesas_usbhs/common.c b/drivers/usb/renesas_usbhs/common.c
+index 96f3939a65e2..17a0987ef4f5 100644
+--- a/drivers/usb/renesas_usbhs/common.c
++++ b/drivers/usb/renesas_usbhs/common.c
+@@ -768,6 +768,7 @@ static int usbhs_remove(struct platform_device *pdev)
+ 
+ 	dev_dbg(&pdev->dev, "usb remove\n");
+ 
++	cancel_delayed_work_sync(&priv->notify_hotplug_work);
+ 	/* power off */
+ 	if (!usbhs_get_dparam(priv, runtime_pwctrl))
+ 		usbhsc_power_ctrl(priv, 0);
+-- 
+2.25.1
 
