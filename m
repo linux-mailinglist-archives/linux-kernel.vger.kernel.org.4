@@ -2,97 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA9B06E149B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 20:50:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2000D6E14A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 20:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbjDMSub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 14:50:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42266 "EHLO
+        id S229997AbjDMSwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 14:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjDMSuZ (ORCPT
+        with ESMTP id S229950AbjDMSwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 14:50:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D27F8689;
-        Thu, 13 Apr 2023 11:50:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 13 Apr 2023 14:52:50 -0400
+Received: from bee.tesarici.cz (bee.tesarici.cz [IPv6:2a03:3b40:fe:2d4::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B5AFA
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 11:52:48 -0700 (PDT)
+Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C20464117;
-        Thu, 13 Apr 2023 18:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE51DC433D2;
-        Thu, 13 Apr 2023 18:50:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681411816;
-        bh=PbL5LVxYWgnidihBNDKgX44XtLeAt25eZkCG+K3ymgA=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=kTBvfbHQelMgXq8VBR7p4b1anEo1Ef9sdSdLxYDbAdJgPZ+x8KDYjyYnk1dnOIqtA
-         NmgF6kpadzpiOhKV6nXUq2bNxSTqaE1gkeMWeCGDfuHxPUFwPnpO+buUPmfUWKO0pE
-         mr+DP+aAiCt3yH0ISNXg/DWwmT+8oZm2sGxE1mQa3W79gLP/XNIDzCsXgrhYrl9Q09
-         KEhBh+iVipHLePO8M3wkThW+FewCWHBhhrxOXD6lx/NK9QIVbLOoJvMiThQQcHEme+
-         j6eb/SL5MAhHeZehhECphAGTBg1oMhbRrSpTTty+JFLl32HGc0BcAg+O9ZKGmPIDLm
-         eUwhm4stMFtAg==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 4FD9F15404B3; Thu, 13 Apr 2023 11:50:16 -0700 (PDT)
-Date:   Thu, 13 Apr 2023 11:50:16 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Uladzislau Rezki <urezki@gmail.com>
-Cc:     Zqiang <qiang1.zhang@intel.com>, frederic@kernel.org,
-        joel@joelfernandes.org, qiang.zhang1211@gmail.com,
-        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rcu/kvfree: Make fill page cache start from
- krcp->nr_bkv_objs
-Message-ID: <56ffa1b8-578b-402c-86eb-2d3a05235896@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230412143127.1062367-1-qiang1.zhang@intel.com>
- <ZDfGPQfFhMdajJRC@pc636>
+        by bee.tesarici.cz (Postfix) with ESMTPSA id B4FCF150E63;
+        Thu, 13 Apr 2023 20:52:45 +0200 (CEST)
+Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
+        t=1681411965; bh=T3J6sKps25KKWmuAgEarvwY0olnBOLjyVBhRaYTbnfE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=0k3lIFnhSDnMBra+p1TD+bRXV2Vxpt3FEsvSM+SUokyQrBmm6dzPq3prZGEKrEmWk
+         bYLlIR1RL/p3poOVU7K5qiHWuCke1r9rjbuZhiMeqfLesccMelbNg1U5BBJeV/hhly
+         mg5ub3TCp7u3I3H9mp94H/GidUMraw/7VwzkI3SdorTAfv68jd0A0CvBkUbOHyJI/7
+         cVUZK4j4bgOFK7qoyFBkhl/4wINI7GRh2YpKxxB9cdvOhsgJcw1XPwnr8kBkU2GMpM
+         w/ejQ9To4eDjF16fayze5YUCsIWfMuQyEH5BvkX5aE02C4B5/exAgTns1vLNjd5l73
+         F9dK1QnMA92HA==
+Date:   Thu, 13 Apr 2023 20:52:44 +0200
+From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+To:     Michael Kelley <mikelley@microsoft.com>
+Cc:     hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        decui@microsoft.com, tiala@microsoft.com,
+        petr.tesarik.ext@huawei.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] swiotlb: Fix debugfs reporting of reserved memory
+ pools
+Message-ID: <20230413205244.70dcbdeb@meshulam.tesarici.cz>
+In-Reply-To: <1681400250-2032-1-git-send-email-mikelley@microsoft.com>
+References: <1681400250-2032-1-git-send-email-mikelley@microsoft.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZDfGPQfFhMdajJRC@pc636>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 11:07:09AM +0200, Uladzislau Rezki wrote:
-> On Wed, Apr 12, 2023 at 10:31:27PM +0800, Zqiang wrote:
-> > The fill_page_cache_func() is invoked and start from zero to
-> > allocate nr_pages of page, if the kfree_rcu_work() executes before
-> > the fill_page_cache_func(), the krcp->nr_bkv_objs is updated before
-> > enter for-loop and equal to nr_pages, since the page is allocated
-> > first, and then check the krcp->nr_bkv_objs in put_cached_bnode(),
-> > this produces a meaningless __get_free_page() call, this commit
-> > therefore make allocate page start from krcp->nr_bkv_objs and
-> > check krcp->nr_bkv_objs before allocate page.
-> > 
-> > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> > ---
-> >  kernel/rcu/tree.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> > index 41daae3239b5..dcb86f9f2dd6 100644
-> > --- a/kernel/rcu/tree.c
-> > +++ b/kernel/rcu/tree.c
-> > @@ -3223,7 +3223,7 @@ static void fill_page_cache_func(struct work_struct *work)
-> >  	nr_pages = atomic_read(&krcp->backoff_page_cache_fill) ?
-> >  		1 : rcu_min_cached_objs;
-> >  
-> > -	for (i = 0; i < nr_pages; i++) {
-> > +	for (i = READ_ONCE(krcp->nr_bkv_objs); i < nr_pages; i++) {
-> >  		bnode = (struct kvfree_rcu_bulk_data *)
-> >  			__get_free_page(GFP_KERNEL | __GFP_NORETRY | __GFP_NOMEMALLOC | __GFP_NOWARN);
-> >  
-> > -- 
-> > 2.32.0
-> > 
-> Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+On Thu, 13 Apr 2023 08:37:30 -0700
+Michael Kelley <mikelley@microsoft.com> wrote:
 
-Queued and pushed, thank you both!
+> For io_tlb_nslabs, the debugfs code reports the correct value for a
+> specific reserved memory pool.  But for io_tlb_used, the value reported
+> is always for the default pool, not the specific reserved pool. Fix this.
+> 
+> Fixes: 5c850d31880e ("swiotlb: fix passing local variable to debugfs_create_ulong()")
+> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+> ---
+> 
+> I don't have a way to test this directly with OF reserved memory, but I
+> cobbled together a hack to call rmem_swiotlb_device_init() multiple times
+> for different size reserved pools. I verified that reserved pool debugfs entries
+> are created as expected and that the value of io_tlb_used is *not* the value
+> from the default pool.
 
-							Thanx, Paul
+Yeah, the only in-tree user is Mediatek Asurada, and I don't have one
+either...
+
+The patch looks good to me. But you know, I'm now well-known for
+breaking things because of insufficient testing. ;-)
+
+Petr T
+
+>  kernel/dma/swiotlb.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
+> index dac42a2..db43de82 100644
+> --- a/kernel/dma/swiotlb.c
+> +++ b/kernel/dma/swiotlb.c
+> @@ -930,7 +930,9 @@ bool is_swiotlb_active(struct device *dev)
+>  
+>  static int io_tlb_used_get(void *data, u64 *val)
+>  {
+> -	*val = mem_used(&io_tlb_default_mem);
+> +	struct io_tlb_mem *mem = data;
+> +
+> +	*val = mem_used(mem);
+>  	return 0;
+>  }
+>  DEFINE_DEBUGFS_ATTRIBUTE(fops_io_tlb_used, io_tlb_used_get, NULL,
+> "%llu\n"); @@ -943,7 +945,7 @@ static void
+> swiotlb_create_debugfs_files(struct io_tlb_mem *mem, return;
+>  
+>  	debugfs_create_ulong("io_tlb_nslabs", 0400, mem->debugfs,
+> &mem->nslabs);
+> -	debugfs_create_file("io_tlb_used", 0400, mem->debugfs, NULL,
+> +	debugfs_create_file("io_tlb_used", 0400, mem->debugfs, mem,
+>  			&fops_io_tlb_used);
+>  }
+>  
+
