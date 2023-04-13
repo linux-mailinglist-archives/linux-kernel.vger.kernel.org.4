@@ -2,97 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1C066E039D
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 03:22:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CEDD6E03A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 03:22:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbjDMBWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 21:22:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59640 "EHLO
+        id S229555AbjDMBWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 21:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjDMBWW (ORCPT
+        with ESMTP id S229441AbjDMBWm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 21:22:22 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C3D8CF;
-        Wed, 12 Apr 2023 18:22:21 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-504eb1155d3so5855438a12.1;
-        Wed, 12 Apr 2023 18:22:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681348939; x=1683940939;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=yuLz9iUc1y0EzGD8AvN7Y9hf2MbqyBOWJrZZ7t76bGM=;
-        b=Qm1WsHGG7Yawgtzf4UmTBwdzPBribr4bXLa944+d8dBqQyTYUQfDHQZajmMCidQnYP
-         xxG5hyrsJ2DK2CdZYveJeig/i6zy/sZrjcBmabkbeSIMyEFp++itkqfydZVNXe1Xwalf
-         GwmnvJaELevvy9wCBHSGrGpeZy3su2Ctk+vz0EeQ1emZnnqtL8VPrGgjv+EOD4tVAZKw
-         K6KcRffpQddB4a3aHCnM2MLlY4SMpNcrxIF6I/VByUKw7OBIzoCx18lRrzYobBBdisIz
-         9efZAtqGXAEit6kb/SQ9r3xk8M9yDb40noKlzK+qv9CqBfC3IYeinDiA16mzgJPo4cEZ
-         MlAA==
+        Wed, 12 Apr 2023 21:22:42 -0400
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D490A2D73;
+        Wed, 12 Apr 2023 18:22:37 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id i3so3313043wrc.4;
+        Wed, 12 Apr 2023 18:22:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681348939; x=1683940939;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yuLz9iUc1y0EzGD8AvN7Y9hf2MbqyBOWJrZZ7t76bGM=;
-        b=LHeTI464stjRjhrLgobNmtCK07ZfoRDcS+78P0/1tSvFKQQ6y8yA0CH1udLSuiVlS7
-         ppL+9MOMgEtMsS57Zgmxv6h650OW+Me8E05BYXpm2H+ciK0JUomb0N66Nebj/104lvnQ
-         V7QLPkau8nW1mSBx+kY+ewB2Fdd3J2GYXxqGlHOs92ysTtPvwji0Im603HoVvAdVSsRf
-         heKtXKKR3zkKebXp3s0k39Whz84PCXg411otIUiw4OZ/KfvAwkIj9FTff3HZJdDOC/ZF
-         2fWLc8wauGpZB/2hwMtYgBcC0F7CKKI1gvqknnP080NFYTQk85ZfjV2ZISme5DDLawOu
-         q8Lw==
-X-Gm-Message-State: AAQBX9fKAERSlqE44QWre7mOk74ChOXarYnWsMj0oFkpChKWsCrD/wTy
-        r1C1QXNM6f6eY4TatgQjn/uQl3LUkF5xxjS3DLTbrPthuBFenQ==
-X-Google-Smtp-Source: AKy350ZCR0yfocrqiPD3KEzhJCl6DyZlu182JEmGvxfQAyWt9sTVsY/SoXRTXbWHu6sO0LksY8uE4weJ/1iG5eFv5RI=
-X-Received: by 2002:a05:6402:22f2:b0:506:6a99:ef53 with SMTP id
- dn18-20020a05640222f200b005066a99ef53mr949787edb.2.1681348939015; Wed, 12 Apr
- 2023 18:22:19 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681348956; x=1683940956;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gv5zi7cMpM4A9Na3PQSkA4yff+YisIpjv+F3gYNEUW8=;
+        b=LBhzMtxnhlwBRN/relcKzQIwggelztDK5QFUTE39+tDO6tX2kNQ03lDnfoRGJ+mg4p
+         KDeHcAYBadA8jsLN+N8yOdPT2F+bZ0bJjB92UOFs5qKquP+2IIW4kllDf1bHDC6UryKK
+         9ddZmFjP2UwO4uDCtv2zHFK+7I9uXTZHVF+upUtWc+1dpv4uXIoYQR2/9e7ekSL4MCPD
+         6v5CCGjijjomX66aiF2CB2Pm6uwcecEoBHRBmeSLjeUi8vku7mSTqkb4/re7O9NxQRDd
+         zRQzG7NDUtfWMQ/QpQz83xRrYN6gf6pWH/rAnj7ohSASwPbXLWvYwO09Zg0tcnH2Rpcm
+         crUQ==
+X-Gm-Message-State: AAQBX9fbfDefoE+iDDnVaexZkN8tUSDUjtYwwqxcsso0B1BXl4sZX0a8
+        V/pSsdkfZuMDFDD9+KGVTe4=
+X-Google-Smtp-Source: AKy350ZecMWgDPbDG08J3TZNwzEe/vq86IE6279renZo8RE8amcLVUe8n34Z/RXML3+mbbjxW/OZAA==
+X-Received: by 2002:a5d:45c3:0:b0:2e0:f63a:2324 with SMTP id b3-20020a5d45c3000000b002e0f63a2324mr118469wrs.23.1681348956220;
+        Wed, 12 Apr 2023 18:22:36 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id r4-20020a5d4984000000b002db1b66ea8fsm119267wrq.57.2023.04.12.18.22.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Apr 2023 18:22:35 -0700 (PDT)
+Date:   Thu, 13 Apr 2023 01:22:31 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Jinank Jain <jinankjain@linux.microsoft.com>,
+        g@liuwe-devbox-debian-v2
+Cc:     jinankjain@microsoft.com, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
+        bhelgaas@google.com, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        nunodasneves@linux.microsoft.com
+Subject: Re: [PATCH] PCI: hv: Use nested hypercall for retargeting interrupts
+Message-ID: <ZDdZVw9Y0q7oT1FG@liuwe-devbox-debian-v2>
+References: <20230404113546.856813-1-jinankjain@linux.microsoft.com>
 MIME-Version: 1.0
-From:   Michael Honaker <mchonaker@gmail.com>
-Date:   Wed, 12 Apr 2023 21:22:07 -0400
-Message-ID: <CAAKLMZ1fM1d4Drw0D2AkEwAG9iFOyT9qboy1REWtwS6Q00BA6Q@mail.gmail.com>
-Subject: cgroup: Clarification around usage_in_bytes and its relation to the
- page counter
-To:     cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230404113546.856813-1-jinankjain@linux.microsoft.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Apr 04, 2023 at 11:35:46AM +0000, Jinank Jain wrote:
+> In case of nested MSHV, retargeting interrupt hypercall should be sent
+> to L0 hypervisor instead of L1 hypervisor.
+> 
+> Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
 
-This is my first posting to the LKML, so please let me know if this
-should be asked
-elsewhere or if there is anything else wrong with my email. I'd like
-to confirm my understanding on an issue
-I've been encountering.
-
-I have been trying to get an accurate measurement of memory usage of a
-non-root cgroup, specifically a Kubernetes container, and noticed some
-inconsistencies when comparing the
-value of `memory.usage_in_bytes` with the information in
-`memory.stat`. After further investigation of
-the cgroup docs (/admin-guide/cgroups/memory.rst#usage_in_bytes) and
-an old LMKL thread ("real meaning
-of memory.usage_in_bytes"), I came to the understanding that
-`usage_in_bytes` actually shows the value
-of the resource counter which is an overestimation due to the counter
-being split into per-cpu chunks
-for caching, and that the real usage can be calculated from RSS+Cache
-gathered from `memory.stat`.
-I've created cadvisor issue #3286
-(https://github.com/google/cadvisor/issues/3286) which goes into
-greater detail on my investigation with examples.
-
-Is the above understanding still correct with the new page counters?
-If so, could any memory
-allocations be reflected in `usage_in_bytes` but not in `stat` for
-child cgroups? I want to ensure I'm not
-missing anything by only monitoring the `stat` file.
-
-Thank you for any clarification or corrections.
+Applied to hyperv-next. Thanks.
