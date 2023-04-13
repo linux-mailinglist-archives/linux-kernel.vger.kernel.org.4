@@ -2,99 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D8A76E0B4A
+	by mail.lfdr.de (Postfix) with ESMTP id E8A926E0B4B
 	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 12:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbjDMKRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 06:17:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37234 "EHLO
+        id S230502AbjDMKRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 06:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbjDMKRf (ORCPT
+        with ESMTP id S230153AbjDMKRf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 13 Apr 2023 06:17:35 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB7D8A46;
-        Thu, 13 Apr 2023 03:17:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681381048; x=1712917048;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=REU7xvvp4/yPLj0SRKMympYAFmOVApNx2qAjvW28LKk=;
-  b=KJr+rEQfFZJgaXBtRqwLASYY0Y8r3f/buzgZ2r5e/D31hkxXiLxb8+MB
-   JtfIzFgulMfm4+04fSottbq5h/VTWR0v7bWSoBfEqtp/6DW7MYhmP40CW
-   aySjnjJNHwAqCOSxvHtTAm/Y+P9SimW+zOQ0NLBJxa9FxV8uNEt6ywLvJ
-   O8pik4OJzplpP6SfUwG1gKYtYjl7v+yOmZJFloLonCu+qBY2Mu7l6A8zc
-   0Fsr4XDccBzP93xjnp5g9ZzinBhWza8kryrF1/6qzEGA6ZGF8VhZrjMhu
-   hFSGaIWsyBwPC0g/L/qvWpa0adls8OL00nR2WFAJZMxB1JOad0JUTYCHL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="324503422"
-X-IronPort-AV: E=Sophos;i="5.98,341,1673942400"; 
-   d="scan'208";a="324503422"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 03:17:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="813409927"
-X-IronPort-AV: E=Sophos;i="5.98,341,1673942400"; 
-   d="scan'208";a="813409927"
-Received: from pkudryav-mobl1.ger.corp.intel.com ([10.252.45.220])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 03:17:20 -0700
-Date:   Thu, 13 Apr 2023 13:17:18 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     "David E. Box" <david.e.box@linux.intel.com>
-cc:     hdegoede@redhat.com, markgross@kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] platform/x86/intel/sdsi: Change mailbox timeout
-In-Reply-To: <20230413013230.1521584-1-david.e.box@linux.intel.com>
-Message-ID: <66b5cf7-391-8d63-b7da-267fe8a639bd@linux.intel.com>
-References: <20230413013230.1521584-1-david.e.box@linux.intel.com>
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E30B9004
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:17:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 936EB63BF0
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 10:17:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77312C433D2;
+        Thu, 13 Apr 2023 10:17:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1681381048;
+        bh=8fiaQqlHp6vGBy60Or+G4VAsffLp1a8Nn+RofsmWQv8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pdzqXB8rJTqVOnTrS3OLgfVmdWh7q2wqgdRXL/BBdqDyum58D9NjLxtXxV+ktKJxb
+         k8jxDHfFvcYK9qStaJ7T+2f7CUBuRa3+MUl+g2WKXqsDosSk7G6lgArcSr1VUkq7Gv
+         FJQ08bNM38JMh0Z+DkOkR/lnczxxTnP29ZDDFGRw=
+Date:   Thu, 13 Apr 2023 12:17:25 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Chuang Zhang <zhangchuang1909@gmail.com>
+Cc:     arve@android.com, tkjos@android.com, maco@android.com,
+        joel@joelfernandes.org, brauner@kernel.org, cmllamas@google.com,
+        surenb@google.com, linux-kernel@vger.kernel.org,
+        zhangchuang3 <zhangchuang3@xiaomi.com>
+Subject: Re: [PATCH] Binder: Add timestamp and async from pid/tid to
+ transaction record
+Message-ID: <2023041338-survey-broker-ba63@gregkh>
+References: <20230413093805.385284-1-zhangchuang1909@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1122177158-1681381042=:1987"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230413093805.385284-1-zhangchuang1909@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1122177158-1681381042=:1987
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-
-On Wed, 12 Apr 2023, David E. Box wrote:
-
-> On some platforms, it may take up to 400ms for the ready bit to be set in a
-> successful mailbox transaction. Set the timeout to 500ms to cover the worst
-> case.
+On Thu, Apr 13, 2023 at 05:38:05PM +0800, Chuang Zhang wrote:
+> From: zhangchuang3 <zhangchuang3@xiaomi.com>
 > 
-> Signed-off-by: David E. Box <david.e.box@linux.intel.com>
-> ---
->  drivers/platform/x86/intel/sdsi.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> This patch adds a timestamp field to the binder_transaction
+> structure to track the time consumed during transmission
+> when reading binder_transaction records.
+> Additionally, it records the from pid and tid of asynchronous
+> binder. This information is printed when reading binderfs
+> related nodes to assist with debugging.
 > 
-> diff --git a/drivers/platform/x86/intel/sdsi.c b/drivers/platform/x86/intel/sdsi.c
-> index 9e0ea2cdd704..556e7c6dbb05 100644
-> --- a/drivers/platform/x86/intel/sdsi.c
-> +++ b/drivers/platform/x86/intel/sdsi.c
-> @@ -49,7 +49,7 @@
->  #define SDSI_MBOX_CMD_SUCCESS		0x40
->  #define SDSI_MBOX_CMD_TIMEOUT		0x80
->  
-> -#define MBOX_TIMEOUT_US			2000
-> +#define MBOX_TIMEOUT_US			500000
->  #define MBOX_TIMEOUT_ACQUIRE_US		1000
->  #define MBOX_POLLING_PERIOD_US		100
->  #define MBOX_ACQUIRE_NUM_RETRIES	5
+> Signed-off-by: zhangchuang3 <zhangchuang3@xiaomi.com>
 
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+As I said before, use your hame, not your email alias.
 
--- 
- i.
+And do NOT send the patch from a gmail account, otherwise I have no way
+to verify that you really are a developer at xiaomi.com, right?
 
---8323329-1122177158-1681381042=:1987--
+thanks,
+
+greg k-h
