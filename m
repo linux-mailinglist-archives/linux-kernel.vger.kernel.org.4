@@ -2,321 +2,378 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 991996E1682
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 23:32:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 726716E1688
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 23:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbjDMVcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 17:32:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52396 "EHLO
+        id S230056AbjDMViQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 17:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjDMVcV (ORCPT
+        with ESMTP id S229567AbjDMViN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 17:32:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E37AA;
-        Thu, 13 Apr 2023 14:32:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 166F960B33;
-        Thu, 13 Apr 2023 21:32:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22776C433EF;
-        Thu, 13 Apr 2023 21:32:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681421538;
-        bh=JH02kp/JlRAvsOQvqVWjT2LTMuLyWCZapLkYg5zS0Rw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=KQpL2Y5/LK6Wg/EoYyslu8ttdQMr66uUgRuawIA6Y+9Y5RfOMcNw/Ag241aJcAyja
-         cr46YMxgfZ+IeECbiDm5UltUxOwEle+KwdkwgIMSC3QFc/4LU5F8Au+JpXKFgaGhL9
-         oHFNtB5yw+285FE+ShfMY4T0P5r5Focl03ll9RDVFr8bAguHWpuAEcpzL5FEtmeUcw
-         DBzQ5vIWEC8cVr1jhbz4BBfBeXkezeMAQQGP5KD/xKhcUHHpWMqFqyxQgiQbjLwIZm
-         v76Xg+I1FDBvufzNony7/xSnmyxEMSCZlOcDEAJ/GWJOzyY1Avv4DuDBV73PASrhoO
-         jYXlZ6kqCXvtQ==
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     torvalds@linux-foundation.org
-Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pabeni@redhat.com
-Subject: [GIT PULL] Networking for v6.3-rc7
-Date:   Thu, 13 Apr 2023 14:32:17 -0700
-Message-Id: <20230413213217.822550-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Thu, 13 Apr 2023 17:38:13 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C13C4489;
+        Thu, 13 Apr 2023 14:38:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681421892; x=1712957892;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=j7giw7ZrY9bWE4dEKBFE7sFTTPSHkLB9jG9Dp2090+8=;
+  b=AMyMxhhJGIogdkyyaX9WrwQ44nQXJQT/eC6qJ51MAqky83uij2qAu+Po
+   Hjy0mrvFeaSxZP59OfpJ3Vey2bxtrH/j4y04jNgAEwGDdxdLehJVSOCsM
+   inM7CIW4+mF84ZM0Yo9VHilmchaoltuyJpVjDYkqB5wma+Rkj6FJsuL4w
+   5/v/T+VjRdD1p24Dv4NblAG8M+vLNRse7COH3LvA9alMk9yRikTP/saho
+   waFZH856aqrsIpdcWMW38rMcPs2lwgMmIAUi3d6n4fuAKeRC+kypgjxws
+   5bFYSpQ+NS7wJYB4HnkUJAKrlpf0p9x+CoMDqsCgh1sNe6UY0mgTIfQe+
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="409499864"
+X-IronPort-AV: E=Sophos;i="5.99,194,1677571200"; 
+   d="scan'208";a="409499864"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 14:38:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="754170478"
+X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
+   d="scan'208";a="754170478"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga008.fm.intel.com with ESMTP; 13 Apr 2023 14:38:11 -0700
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH v2] thermal/drivers/intel/int340x: Add DLVR support
+Date:   Thu, 13 Apr 2023 14:37:53 -0700
+Message-Id: <20230413213753.129962-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus!
+Add support for DLVR (Digital Linear Voltage Regulator) attributes,
+which can be used to control RFIM.
+Here instead of "fivr" another directory "dlvr" is created with DLVR
+attributes:
 
-The following changes since commit f2afccfefe7be1f7346564fe619277110d341f9b:
+/sys/bus/pci/devices/0000:00:04.0/dlvr
+├── dlvr_freq_mhz
+├── dlvr_freq_select
+├── dlvr_hardware_rev
+├── dlvr_pll_busy
+├── dlvr_rfim_enable
+└── dlvr_spread_spectrum_pct
+└── dlvr_control_mode
+└── dlvr_control_lock
 
-  Merge tag 'net-6.3-rc6-2' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2023-04-06 11:39:07 -0700)
+Attributes
+dlvr_freq_mhz (RO):
+Current DLVR PLL frequency in MHz.
 
-are available in the Git repository at:
+dlvr_freq_select (RW):
+Sets DLVR PLL clock frequency.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git net-6.3-rc7
+dlvr_hardware_rev (RO):
+DLVR hardware revision.
 
-for you to fetch changes up to d0f89c4c1d4e7614581d4fe7caebb3ce6bceafe6:
+dlvr_pll_busy (RO):
+PLL can't accept frequency change when set.
 
-  Merge tag 'for-netdev' of https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf (2023-04-13 13:04:44 -0700)
+dlvr_rfim_enable (RW):
+0: Disable RF frequency hopping, 1: Enable RF frequency hopping.
 
-----------------------------------------------------------------
-Including fixes from bpf, and bluetooth.
+dlvr_control_mode (RW):
+Specifies how frequencies are spread. 0: Down spread, 1: Spread in Center.
 
-Not all that quiet given spring celebrations, but "current" fixes
-are thinning out, which is encouraging. One outstanding regression
-in the mlx5 driver when using old FW, not blocking but we're pushing
-for a fix.
+dlvr_control_lock (RW):
+1: future writes are ignored.
 
-Current release - new code bugs:
+dlvr_spread_spectrum_pct (RW)
+A write to this register updates the DLVR spread spectrum percent value.
 
- - eth: enetc: workaround for unresponsive pMAC after receiving
-   express traffic
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+v2
+- Updated documentation
+- Added dlvr_control_lock attribute
 
-Previous releases - regressions:
+ .../driver-api/thermal/intel_dptf.rst         | 46 +++++++++-
+ .../processor_thermal_device.c                |  3 +-
+ .../processor_thermal_device.h                |  1 +
+ .../processor_thermal_device_pci.c            |  2 +-
+ .../int340x_thermal/processor_thermal_rfim.c  | 92 ++++++++++++++++++-
+ 5 files changed, 135 insertions(+), 9 deletions(-)
 
- - rtnetlink: restore RTM_NEW/DELLINK notification behavior,
-   keep the pid/seq fields 0 for backward compatibility
+diff --git a/Documentation/driver-api/thermal/intel_dptf.rst b/Documentation/driver-api/thermal/intel_dptf.rst
+index f5c193cccbda..9ab4316322a1 100644
+--- a/Documentation/driver-api/thermal/intel_dptf.rst
++++ b/Documentation/driver-api/thermal/intel_dptf.rst
+@@ -184,8 +184,9 @@ ABI.
+ DPTF Processor thermal RFIM interface
+ --------------------------------------------
+ 
+-RFIM interface allows adjustment of FIVR (Fully Integrated Voltage Regulator)
+-and DDR (Double Data Rate)frequencies to avoid RF interference with WiFi and 5G.
++RFIM interface allows adjustment of FIVR (Fully Integrated Voltage Regulator),
++DDR (Double Data Rate) and DLVR (Digital Linear Voltage Regulator)
++frequencies to avoid RF interference with WiFi and 5G.
+ 
+ Switching voltage regulators (VR) generate radiated EMI or RFI at the
+ fundamental frequency and its harmonics. Some harmonics may interfere
+@@ -196,6 +197,15 @@ small % and shift away the switching noise harmonic interference from
+ radio channels.  OEM or ODMs can use the driver to control SOC IVR
+ operation within the range where it does not impact IVR performance.
+ 
++Some products use DLVR instead of FIVR as switching voltage regulator.
++In this case attributes of DLVR must be adjusted instead of FIVR.
++
++While shifting the frequencies additional clock noise can be introduced,
++which is compensated by adjusting Spread spectrum percent. This helps
++to reduce the clock noise to meet regulatory compliance. This spreading
++% increases bandwidth of signal transmission and hence reduces the
++effects of interference, noise and signal fading.
++
+ DRAM devices of DDR IO interface and their power plane can generate EMI
+ at the data rates. Similar to IVR control mechanism, Intel offers a
+ mechanism by which DDR data rates can be changed if several conditions
+@@ -264,6 +274,38 @@ DVFS attributes
+ ``rfi_disable (RW)``
+ 	Disable DDR rate change feature
+ 
++DLVR attributes
++
++:file:`/sys/bus/pci/devices/0000\:00\:04.0/dlvr/`
++
++``dlvr_hardware_rev`` (RO)
++	DLVR hardware revision.
++
++``dlvr_freq_mhz`` (RO)
++	Current DLVR PLL frequency in MHz.
++
++``dlvr_freq_select`` (RW)
++	Sets DLVR PLL clock frequency. Once set, and enabled via
++	dlvr_rfim_enable, the dlvr_freq_mhz will show the current
++	DLVR PLL frequency.
++
++``dlvr_pll_busy`` (RO)
++	PLL can't accept frequency change when set.
++
++``dlvr_rfim_enable`` (RW)
++	0: Disable RF frequency hopping, 1: Enable RF frequency hopping.
++
++``dlvr_spread_spectrum_pct`` (RW)
++	Sets DLVR spread spectrum percent value.
++
++``dlvr_control_mode`` (RW)
++        Specifies how frequencies are spread using spread spectrum.
++        0: Down spread,
++        1: Spread in the Center.
++
++``dlvr_control_lock`` (RW)
++    1: future writes are ignored.
++
+ DPTF Power supply and Battery Interface
+ ----------------------------------------
+ 
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+index a1dc18be7609..3ca0a2f5937f 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+@@ -337,7 +337,8 @@ int proc_thermal_mmio_add(struct pci_dev *pdev,
+ 	}
+ 
+ 	if (feature_mask & PROC_THERMAL_FEATURE_FIVR ||
+-	    feature_mask & PROC_THERMAL_FEATURE_DVFS) {
++	    feature_mask & PROC_THERMAL_FEATURE_DVFS ||
++	    feature_mask & PROC_THERMAL_FEATURE_DLVR) {
+ 		ret = proc_thermal_rfim_add(pdev, proc_priv);
+ 		if (ret) {
+ 			dev_err(&pdev->dev, "failed to add RFIM interface\n");
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+index 7d52fcff4937..7acaa8f1b896 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+@@ -60,6 +60,7 @@ struct rapl_mmio_regs {
+ #define PROC_THERMAL_FEATURE_FIVR	0x02
+ #define PROC_THERMAL_FEATURE_DVFS	0x04
+ #define PROC_THERMAL_FEATURE_MBOX	0x08
++#define PROC_THERMAL_FEATURE_DLVR	0x10
+ 
+ #if IS_ENABLED(CONFIG_PROC_THERMAL_MMIO_RAPL)
+ int proc_thermal_rapl_add(struct pci_dev *pdev, struct proc_thermal_device *proc_priv);
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+index d71ee50e7878..8b260dd9221b 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+@@ -351,7 +351,7 @@ static SIMPLE_DEV_PM_OPS(proc_thermal_pci_pm, proc_thermal_pci_suspend,
+ 
+ static const struct pci_device_id proc_thermal_pci_ids[] = {
+ 	{ PCI_DEVICE_DATA(INTEL, ADL_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
+-	{ PCI_DEVICE_DATA(INTEL, MTLP_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
++	{ PCI_DEVICE_DATA(INTEL, MTLP_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX | PROC_THERMAL_FEATURE_DLVR) },
+ 	{ PCI_DEVICE_DATA(INTEL, RPL_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
+ 	{ },
+ };
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
+index 92ed1213fe37..546b70434004 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
+@@ -39,6 +39,29 @@ static const struct mmio_reg tgl_fivr_mmio_regs[] = {
+ 	{ 1, 0x5A14, 2, 0x3, 1}, /* fivr_fffc_rev */
+ };
+ 
++static const char * const dlvr_strings[] = {
++	"dlvr_spread_spectrum_pct",
++	"dlvr_control_mode",
++	"dlvr_control_lock",
++	"dlvr_rfim_enable",
++	"dlvr_freq_select",
++	"dlvr_hardware_rev",
++	"dlvr_freq_mhz",
++	"dlvr_pll_busy",
++	NULL
++};
++
++static const struct mmio_reg dlvr_mmio_regs[] = {
++	{ 0, 0x15A08, 5, 0x1F, 0}, /* dlvr_spread_spectrum_pct */
++	{ 0, 0x15A08, 1, 0x1, 5}, /* dlvr_control_mode */
++	{ 0, 0x15A08, 1, 0x1, 6}, /* dlvr_control_lock */
++	{ 0, 0x15A08, 1, 0x1, 7}, /* dlvr_rfim_enable */
++	{ 0, 0x15A08, 12, 0xFFF, 8}, /* dlvr_freq_select */
++	{ 1, 0x15A10, 2, 0x3, 30}, /* dlvr_hardware_rev */
++	{ 1, 0x15A10, 16, 0xFFFF, 0}, /* dlvr_freq_mhz */
++	{ 1, 0x15A10, 1, 0x1, 16}, /* dlvr_pll_busy */
++};
++
+ /* These will represent sysfs attribute names */
+ static const char * const dvfs_strings[] = {
+ 	"rfi_restriction_run_busy",
+@@ -78,14 +101,16 @@ static ssize_t suffix##_show(struct device *dev,\
+ 	int ret;\
+ \
+ 	proc_priv = pci_get_drvdata(pdev);\
+-	if (table) {\
++	if (table == 1) {\
+ 		match_strs = (const char **)dvfs_strings;\
+ 		mmio_regs = adl_dvfs_mmio_regs;\
+-	} else { \
++	} else if (table == 2) { \
++		match_strs = (const char **)dlvr_strings;\
++		mmio_regs = dlvr_mmio_regs;\
++	} else {\
+ 		match_strs = (const char **)fivr_strings;\
+ 		mmio_regs = tgl_fivr_mmio_regs;\
+ 	} \
+-	\
+ 	ret = match_string(match_strs, -1, attr->attr.name);\
+ 	if (ret < 0)\
+ 		return ret;\
+@@ -109,10 +134,13 @@ static ssize_t suffix##_store(struct device *dev,\
+ 	u32 mask;\
+ \
+ 	proc_priv = pci_get_drvdata(pdev);\
+-	if (table) {\
++	if (table == 1) {\
+ 		match_strs = (const char **)dvfs_strings;\
+ 		mmio_regs = adl_dvfs_mmio_regs;\
+-	} else { \
++	} else if (table == 2) { \
++		match_strs = (const char **)dlvr_strings;\
++		mmio_regs = dlvr_mmio_regs;\
++	} else {\
+ 		match_strs = (const char **)fivr_strings;\
+ 		mmio_regs = tgl_fivr_mmio_regs;\
+ 	} \
+@@ -147,6 +175,47 @@ RFIM_STORE(spread_spectrum_clk_enable, 0)
+ RFIM_STORE(rfi_vco_ref_code, 0)
+ RFIM_STORE(fivr_fffc_rev, 0)
+ 
++RFIM_SHOW(dlvr_spread_spectrum_pct, 2)
++RFIM_SHOW(dlvr_control_mode, 2)
++RFIM_SHOW(dlvr_control_lock, 2)
++RFIM_SHOW(dlvr_hardware_rev, 2)
++RFIM_SHOW(dlvr_freq_mhz, 2)
++RFIM_SHOW(dlvr_pll_busy, 2)
++RFIM_SHOW(dlvr_freq_select, 2)
++RFIM_SHOW(dlvr_rfim_enable, 2)
++
++RFIM_STORE(dlvr_spread_spectrum_pct, 2)
++RFIM_STORE(dlvr_rfim_enable, 2)
++RFIM_STORE(dlvr_freq_select, 2)
++RFIM_STORE(dlvr_control_mode, 2)
++RFIM_STORE(dlvr_control_lock, 2)
++
++static DEVICE_ATTR_RW(dlvr_spread_spectrum_pct);
++static DEVICE_ATTR_RW(dlvr_control_mode);
++static DEVICE_ATTR_RW(dlvr_control_lock);
++static DEVICE_ATTR_RW(dlvr_freq_select);
++static DEVICE_ATTR_RO(dlvr_hardware_rev);
++static DEVICE_ATTR_RO(dlvr_freq_mhz);
++static DEVICE_ATTR_RO(dlvr_pll_busy);
++static DEVICE_ATTR_RW(dlvr_rfim_enable);
++
++static struct attribute *dlvr_attrs[] = {
++	&dev_attr_dlvr_spread_spectrum_pct.attr,
++	&dev_attr_dlvr_control_mode.attr,
++	&dev_attr_dlvr_control_lock.attr,
++	&dev_attr_dlvr_freq_select.attr,
++	&dev_attr_dlvr_hardware_rev.attr,
++	&dev_attr_dlvr_freq_mhz.attr,
++	&dev_attr_dlvr_pll_busy.attr,
++	&dev_attr_dlvr_rfim_enable.attr,
++	NULL
++};
++
++static const struct attribute_group dlvr_attribute_group = {
++	.attrs = dlvr_attrs,
++	.name = "dlvr"
++};
++
+ static DEVICE_ATTR_RW(vco_ref_code_lo);
+ static DEVICE_ATTR_RW(vco_ref_code_hi);
+ static DEVICE_ATTR_RW(spread_spectrum_pct);
+@@ -277,12 +346,22 @@ int proc_thermal_rfim_add(struct pci_dev *pdev, struct proc_thermal_device *proc
+ 			return ret;
+ 	}
+ 
++	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DLVR) {
++		ret = sysfs_create_group(&pdev->dev.kobj, &dlvr_attribute_group);
++		if (ret)
++			return ret;
++	}
++
+ 	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DVFS) {
+ 		ret = sysfs_create_group(&pdev->dev.kobj, &dvfs_attribute_group);
+ 		if (ret && proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_FIVR) {
+ 			sysfs_remove_group(&pdev->dev.kobj, &fivr_attribute_group);
+ 			return ret;
+ 		}
++		if (ret && proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DLVR) {
++			sysfs_remove_group(&pdev->dev.kobj, &dlvr_attribute_group);
++			return ret;
++		}
+ 	}
+ 
+ 	return 0;
+@@ -296,6 +375,9 @@ void proc_thermal_rfim_remove(struct pci_dev *pdev)
+ 	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_FIVR)
+ 		sysfs_remove_group(&pdev->dev.kobj, &fivr_attribute_group);
+ 
++	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DLVR)
++		sysfs_remove_group(&pdev->dev.kobj, &dlvr_attribute_group);
++
+ 	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DVFS)
+ 		sysfs_remove_group(&pdev->dev.kobj, &dvfs_attribute_group);
+ }
+-- 
+2.38.1
 
-Previous releases - always broken:
-
- - sctp: fix a potential overflow in sctp_ifwdtsn_skip
-
- - mptcp:
-   - use mptcp_schedule_work instead of open-coding it and make
-     the worker check stricter, to avoid scheduling work on closed
-     sockets
-   - fix NULL pointer dereference on fastopen early fallback
-
- - skbuff: fix memory corruption due to a race between skb coalescing
-   and releasing clones confusing page_pool reference counting
-
- - bonding: fix neighbor solicitation validation on backup slaves
-
- - bpf: tcp: use sock_gen_put instead of sock_put in bpf_iter_tcp
-
- - bpf: arm64: fixed a BTI error on returning to patched function
-
- - openvswitch: fix race on port output leading to inf loop
-
- - sfp: initialize sfp->i2c_block_size at sfp allocation to avoid
-   returning a different errno than expected
-
- - phy: nxp-c45-tja11xx: unregister PTP, purge queues on remove
-
- - Bluetooth: fix printing errors if LE Connection times out
-
- - Bluetooth: assorted UaF, deadlock and data race fixes
-
- - eth: macb: fix memory corruption in extended buffer descriptor mode
-
-Misc:
-
- - adjust the XDP Rx flow hash API to also include the protocol layers
-   over which the hash was computed
-
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-
-----------------------------------------------------------------
-Aaron Conole (1):
-      selftests: openvswitch: adjust datapath NL message declaration
-
-Ahmed Zaki (2):
-      iavf: refactor VLAN filter states
-      iavf: remove active_cvlans and active_svlans bitmaps
-
-Alexei Starovoitov (1):
-      Merge branch 'XDP-hints: change RX-hash kfunc bpf_xdp_metadata_rx_hash'
-
-Claudia Draghicescu (1):
-      Bluetooth: Set ISO Data Path on broadcast sink
-
-David S. Miller (2):
-      Merge branch 'bonding-ns-validation-fixes'
-      Merge branch 'sfp-eeprom'
-
-Denis Plotnikov (1):
-      qlcnic: check pci_reset_function result
-
-Douglas Anderson (1):
-      r8152: Add __GFP_NOWARN to big allocations
-
-Eric Dumazet (1):
-      udp6: fix potential access to stale information
-
-Felix Huettner (1):
-      net: openvswitch: fix race on port output
-
-George Guo (1):
-      LoongArch, bpf: Fix jit to skip speculation barrier opcode
-
-Hangbin Liu (3):
-      bonding: fix ns validation on backup slaves
-      selftests: bonding: re-format bond option tests
-      selftests: bonding: add arp validate test
-
-Harshit Mogalapalli (2):
-      niu: Fix missing unwind goto in niu_alloc_channels()
-      net: wwan: iosm: Fix error handling path in ipc_pcie_probe()
-
-Ivan Bornyakov (2):
-      net: sfp: initialize sfp->i2c_block_size at sfp allocation
-      net: sfp: avoid EEPROM read of absent SFP module
-
-Jakub Kicinski (5):
-      Merge tag 'for-netdev' of https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf
-      Merge tag 'for-net-2023-04-10' of git://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth
-      Merge branch '40GbE' of git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/net-queue
-      Merge branch 'mptcp-more-fixes-for-6-3'
-      Merge tag 'for-netdev' of https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf
-
-Jesper Dangaard Brouer (6):
-      selftests/bpf: xdp_hw_metadata remove bpf_printk and add counters
-      xdp: rss hash types representation
-      mlx5: bpf_xdp_metadata_rx_hash add xdp rss hash type
-      veth: bpf_xdp_metadata_rx_hash add xdp rss hash type
-      mlx4: bpf_xdp_metadata_rx_hash add xdp rss hash type
-      selftests/bpf: Adjust bpf_xdp_metadata_rx_hash for new arg
-
-Kuniyuki Iwashima (1):
-      smc: Fix use-after-free in tcp_write_timer_handler().
-
-Liang Chen (1):
-      skbuff: Fix a race between coalescing and releasing SKBs
-
-Lorenzo Bianconi (1):
-      selftests/bpf: fix xdp_redirect xdp-features selftest for veth driver
-
-Luiz Augusto von Dentz (6):
-      Bluetooth: hci_conn: Fix not cleaning up on LE Connection failure
-      Bluetooth: Fix printing errors if LE Connection times out
-      Bluetooth: SCO: Fix possible circular locking dependency on sco_connect_cfm
-      Bluetooth: SCO: Fix possible circular locking dependency sco_sock_getsockopt
-      Bluetooth: hci_conn: Fix possible UAF
-      Bluetooth: L2CAP: Fix use-after-free in l2cap_disconnect_{req,rsp}
-
-Martin KaFai Lau (1):
-      bpf: tcp: Use sock_gen_put instead of sock_put in bpf_iter_tcp
-
-Martin Willi (1):
-      rtnetlink: Restore RTM_NEW/DELLINK notification behavior
-
-Matthieu Baerts (1):
-      selftests: mptcp: userspace pm: uniform verify events
-
-Min Li (1):
-      Bluetooth: Fix race condition in hidp_session_thread
-
-Paolo Abeni (3):
-      mptcp: use mptcp_schedule_work instead of open-coding it
-      mptcp: stricter state check in mptcp_worker
-      mptcp: fix NULL pointer dereference on fastopen early fallback
-
-Radu Pirea (OSS) (2):
-      net: phy: nxp-c45-tja11xx: fix unsigned long multiplication overflow
-      net: phy: nxp-c45-tja11xx: add remove callback
-
-Rob Herring (1):
-      net: ti/cpsw: Add explicit platform_device.h and of_platform.h includes
-
-Roman Gushchin (1):
-      net: macb: fix a memory corruption in extended buffer descriptor mode
-
-Sasha Finkelstein (1):
-      bluetooth: btbcm: Fix logic error in forming the board name.
-
-Vladimir Oltean (1):
-      net: enetc: workaround for unresponsive pMAC after receiving express traffic
-
-Xin Long (2):
-      sctp: fix a potential overflow in sctp_ifwdtsn_skip
-      selftests: add the missing CONFIG_IP_SCTP in net config
-
-Xu Kuohai (1):
-      bpf, arm64: Fixed a BTI error on returning to patched function
-
-YueHaibing (1):
-      tcp: restrict net.ipv4.tcp_app_win
-
-Zheng Wang (1):
-      Bluetooth: btsdio: fix use after free bug in btsdio_remove due to race condition
-
-Ziyang Xuan (1):
-      net: qrtr: Fix an uninit variable access bug in qrtr_tx_resume()
-
- Documentation/networking/ip-sysctl.rst             |   2 +
- arch/arm64/net/bpf_jit.h                           |   4 +
- arch/arm64/net/bpf_jit_comp.c                      |   3 +-
- arch/loongarch/net/bpf_jit.c                       |   4 +
- drivers/bluetooth/btbcm.c                          |   2 +-
- drivers/bluetooth/btsdio.c                         |   1 +
- drivers/net/bonding/bond_main.c                    |   5 +-
- drivers/net/ethernet/cadence/macb_main.c           |   4 +
- .../net/ethernet/freescale/enetc/enetc_ethtool.c   |  16 ++
- drivers/net/ethernet/intel/iavf/iavf.h             |  20 +-
- drivers/net/ethernet/intel/iavf/iavf_main.c        |  44 ++--
- drivers/net/ethernet/intel/iavf/iavf_virtchnl.c    |  68 +++---
- drivers/net/ethernet/mellanox/mlx4/en_rx.c         |  22 +-
- drivers/net/ethernet/mellanox/mlx4/mlx4_en.h       |   3 +-
- drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c   |  63 ++++-
- drivers/net/ethernet/qlogic/qlcnic/qlcnic_ctx.c    |   8 +-
- drivers/net/ethernet/sun/niu.c                     |   2 +-
- drivers/net/ethernet/ti/cpsw.c                     |   2 +-
- drivers/net/ethernet/ti/cpsw_new.c                 |   3 +-
- drivers/net/phy/nxp-c45-tja11xx.c                  |  14 +-
- drivers/net/phy/sfp.c                              |  19 +-
- drivers/net/usb/r8152.c                            |   2 +-
- drivers/net/veth.c                                 |  10 +-
- drivers/net/wwan/iosm/iosm_ipc_pcie.c              |   3 +-
- include/linux/mlx5/device.h                        |  14 +-
- include/linux/netdevice.h                          |   3 +-
- include/linux/rtnetlink.h                          |   3 +-
- include/net/bluetooth/hci_core.h                   |   1 +
- include/net/bonding.h                              |   8 +-
- include/net/xdp.h                                  |  47 ++++
- net/bluetooth/hci_conn.c                           |  89 ++++---
- net/bluetooth/hci_event.c                          |  18 +-
- net/bluetooth/hci_sync.c                           |  13 +-
- net/bluetooth/hidp/core.c                          |   2 +-
- net/bluetooth/l2cap_core.c                         |  24 +-
- net/bluetooth/sco.c                                |  85 ++++---
- net/core/dev.c                                     |   3 +-
- net/core/rtnetlink.c                               |  11 +-
- net/core/skbuff.c                                  |  16 +-
- net/core/xdp.c                                     |  10 +-
- net/ipv4/sysctl_net_ipv4.c                         |   3 +
- net/ipv4/tcp_ipv4.c                                |   4 +-
- net/ipv6/udp.c                                     |   8 +-
- net/mptcp/fastopen.c                               |  11 +-
- net/mptcp/options.c                                |   5 +-
- net/mptcp/protocol.c                               |   2 +-
- net/mptcp/subflow.c                                |  18 +-
- net/openvswitch/actions.c                          |   2 +-
- net/qrtr/af_qrtr.c                                 |   8 +-
- net/sctp/stream_interleave.c                       |   3 +-
- net/smc/af_smc.c                                   |  11 +
- .../selftests/bpf/prog_tests/xdp_do_redirect.c     |  30 ++-
- .../selftests/bpf/prog_tests/xdp_metadata.c        |   2 +
- .../testing/selftests/bpf/progs/xdp_hw_metadata.c  |  42 ++--
- tools/testing/selftests/bpf/progs/xdp_metadata.c   |   6 +-
- tools/testing/selftests/bpf/progs/xdp_metadata2.c  |   7 +-
- tools/testing/selftests/bpf/xdp_hw_metadata.c      |  10 +-
- tools/testing/selftests/bpf/xdp_metadata.h         |   4 +
- .../testing/selftests/drivers/net/bonding/Makefile |   3 +-
- .../selftests/drivers/net/bonding/bond_options.sh  | 264 +++++++++++++++++++++
- .../drivers/net/bonding/bond_topo_3d1c.sh          | 143 +++++++++++
- .../selftests/drivers/net/bonding/option_prio.sh   | 245 -------------------
- tools/testing/selftests/net/config                 |   1 +
- tools/testing/selftests/net/mptcp/userspace_pm.sh  |   2 +
- .../testing/selftests/net/openvswitch/ovs-dpctl.py |   2 +-
- 65 files changed, 990 insertions(+), 517 deletions(-)
- create mode 100755 tools/testing/selftests/drivers/net/bonding/bond_options.sh
- create mode 100644 tools/testing/selftests/drivers/net/bonding/bond_topo_3d1c.sh
- delete mode 100755 tools/testing/selftests/drivers/net/bonding/option_prio.sh
