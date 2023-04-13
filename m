@@ -2,266 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 802AE6E0F8A
+	by mail.lfdr.de (Postfix) with ESMTP id F2EF66E0F8B
 	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbjDMOES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 10:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38000 "EHLO
+        id S231709AbjDMOEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 10:04:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231602AbjDMOEN (ORCPT
+        with ESMTP id S229899AbjDMOEN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 13 Apr 2023 10:04:13 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F409B45A;
-        Thu, 13 Apr 2023 07:04:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F73A243
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 07:04:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F2DED63EFC;
-        Thu, 13 Apr 2023 14:04:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C977C433EF;
-        Thu, 13 Apr 2023 14:04:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6968663EEB
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 14:04:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B0B2C433D2;
+        Thu, 13 Apr 2023 14:04:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681394648;
-        bh=AnBfZOKGqi02z/9lTTmzdYjX61iV7nenxjeikKK91LQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k86tzkWI4vLKlulb7IHdBQPx/4gobbE4wjOhofI/saJoONkSvYeqSAhY8Cuo7OB17
-         zBFhGBOJqGUkzPxJma82qMXAQ6Yzb8c6lclH+QSCK80WpQzwEqnv20NdFdHQtiZApH
-         fx1VJTgck7Kui+UHYpqAntmEevzFT7SYFAbnhJx8Ys4rl0/gU843/JKyckj8sFtu1m
-         ju6wPhjWKzH13PWwgWrJOVTU3VwuRsJo6bAgC1OMxno0aYfFbD8ZWfU9uGZ8iPRep/
-         j7HIW90TzsD4dq+1kCY2BUZnjys2hguVJdf1t7DMnZT4A9Dw6O2UUwLtbACdnk5DIR
-         6jPMJer3eKUGw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id A450D403B5; Thu, 13 Apr 2023 11:04:05 -0300 (-03)
-Date:   Thu, 13 Apr 2023 11:04:05 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Edward Baker <edward.baker@intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v3 00/21] Update uncore topics, 1x event updates, 2x new
- archs.
-Message-ID: <ZDgL1Qca7N+Wilm6@kernel.org>
-References: <20230413132949.3487664-1-irogers@google.com>
+        s=k20201202; t=1681394649;
+        bh=Ahx2IXPmgRvW3Kytgy7tTXDRUFlVeZwHebwdBqNN2CM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=H+CUkiL5VYYP3GYAQiplu72EifG+opq0EChsi7A90f9IDZur/fgTtuuKNDFVSWfnW
+         PVPr1FbWbLNDPnr7NFsujmbf/2jDac9N7E6cv1MyiH0sz7GFBwOMxVSqcqDGBk39/y
+         +txKnvP2rkegLrqYTT/wOgwuJw5YX6AXcGPu339MqLm0AjVWvG/wJqJGeEC455EmRO
+         z38M/Wi1m/+ApQVwBLMS9rTG8BH80EV193nEL18ULLznXFUJ6GQg5LeaggFUpIKfuO
+         SiVoQiHIIsyREnJRV9qbfX/CEEgjNwIGx0EdJKW72z8dUD/kTYCUOxGR2xe/Se6VE7
+         UpLvVxCLRiEPQ==
+Date:   Thu, 13 Apr 2023 07:04:08 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     mst@redhat.com, davem@davemloft.net, edumazet@google.com,
+        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, maxime.coquelin@redhat.com,
+        alvaro.karsz@solid-run.com, eperezma@redhat.com,
+        xuanzhuo@linux.alibaba.com, david.marchand@redhat.com
+Subject: Re: [PATCH net-next V2 0/2] virtio-net: don't busy poll for cvq
+ command
+Message-ID: <20230413070408.630fa731@kernel.org>
+In-Reply-To: <20230413064027.13267-1-jasowang@redhat.com>
+References: <20230413064027.13267-1-jasowang@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230413132949.3487664-1-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Apr 13, 2023 at 06:29:28AM -0700, Ian Rogers escreveu:
-> Update the uncore PMUs and topic classification as created by:
-> https://github.com/intel/perfmon/pull/70
+On Thu, 13 Apr 2023 14:40:25 +0800 Jason Wang wrote:
+> The code used to busy poll for cvq command which turns out to have
+> several side effects:
 > 
-> Event updates stem from:
-> https://github.com/intel/perfmon/pull/68
-> impacting alderlake, icelakex and sapphirerapids.
+> 1) infinite poll for buggy devices
+> 2) bad interaction with scheduler
 > 
-> Grand Ridge and Sierra Forest events stem from:
-> https://github.com/intel/perfmon/pull/69
-> 
-> Changes generated by with PR70 in place:
-> https://github.com/intel/perfmon/blob/main/scripts/create_perf_json.py
-> 
-> v3. Rebase over the update of alderlake and icelakex events.
-> v2. Adds improvements to uncore topics, uncore PMU name fixes and
->     fixes a trigraph issue from ??? being in the json.
+> So this series tries to use sleep instead of busy polling. In this
+> version, I take a step back: the hardening part is not implemented and
+> leave for future investigation. We use to aggree to use interruptible
+> sleep but it doesn't work for a general workqueue.
 
-b4 isn't liking it:
-
-⬢[acme@toolbox perf-tools-next]$ b4 am -ctsl --cc-trailers 20230413132949.3487664-1-irogers@google.com
-Grabbing thread from lore.kernel.org/all/20230413132949.3487664-1-irogers%40google.com/t.mbox.gz
-Checking for newer revisions
-Grabbing search results from lore.kernel.org
-Analyzing 14 messages in the thread
-Checking attestation on all messages, may take a moment...
----
-  ERROR: missing [1/21]!
-  ✓ [PATCH v3 2/21] perf vendor events intel: Add grandridge
-    ✓ Signed: DKIM/google.com
-    + Link: https://lore.kernel.org/r/20230413132949.3487664-3-irogers@google.com
-    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-  ✓ [PATCH v3 3/21] perf vendor events intel: Add sierraforest
-    ✓ Signed: DKIM/google.com
-    + Link: https://lore.kernel.org/r/20230413132949.3487664-3-irogers@google.com
-    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-  ✓ [PATCH v3 4/21] perf vendor events intel: Fix uncore topics for alderlake
-    ✓ Signed: DKIM/google.com
-    + Link: https://lore.kernel.org/r/20230413132949.3487664-3-irogers@google.com
-    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-  ✓ [PATCH v3 5/21] perf vendor events intel: Fix uncore topics for broadwell
-    ✓ Signed: DKIM/google.com
-    + Link: https://lore.kernel.org/r/20230413132949.3487664-3-irogers@google.com
-    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-  ✓ [PATCH v3 6/21] perf vendor events intel: Fix uncore topics for broadwellde
-    ✓ Signed: DKIM/google.com
-    + Link: https://lore.kernel.org/r/20230413132949.3487664-3-irogers@google.com
-    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-  ERROR: missing [7/21]!
-  ERROR: missing [8/21]!
-  ✓ [PATCH v3 9/21] perf vendor events intel: Fix uncore topics for haswell
-    ✓ Signed: DKIM/google.com
-    + Link: https://lore.kernel.org/r/20230413132949.3487664-3-irogers@google.com
-    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-  ERROR: missing [10/21]!
-  ✓ [PATCH v3 11/21] perf vendor events intel: Fix uncore topics for icelake
-    ✓ Signed: DKIM/google.com
-    + Link: https://lore.kernel.org/r/20230413132949.3487664-3-irogers@google.com
-    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-  ERROR: missing [12/21]!
-  ✓ [PATCH v3 13/21] perf vendor events intel: Fix uncore topics for ivybridge
-    ✓ Signed: DKIM/google.com
-    + Link: https://lore.kernel.org/r/20230413132949.3487664-3-irogers@google.com
-    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-  ERROR: missing [14/21]!
-  ✓ [PATCH v3 15/21] perf vendor events intel: Fix uncore topics for jaketown
-    ✓ Signed: DKIM/google.com
-    + Link: https://lore.kernel.org/r/20230413132949.3487664-3-irogers@google.com
-    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-  ✓ [PATCH v3 16/21] perf vendor events intel: Fix uncore topics for knightslanding
-    ✓ Signed: DKIM/google.com
-    + Link: https://lore.kernel.org/r/20230413132949.3487664-3-irogers@google.com
-    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-  ✓ [PATCH v3 17/21] perf vendor events intel: Fix uncore topics for sandybridge
-    ✓ Signed: DKIM/google.com
-    + Link: https://lore.kernel.org/r/20230413132949.3487664-3-irogers@google.com
-    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-  ✓ [PATCH v3 18/21] perf vendor events intel: Fix uncore topics for skylake
-    ✓ Signed: DKIM/google.com
-    + Link: https://lore.kernel.org/r/20230413132949.3487664-3-irogers@google.com
-    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-  ERROR: missing [19/21]!
-  ERROR: missing [20/21]!
-  ✓ [PATCH v3 21/21] perf vendor events intel: Fix uncore topics for tigerlake
-    ✓ Signed: DKIM/google.com
-    + Link: https://lore.kernel.org/r/20230413132949.3487664-3-irogers@google.com
-    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
-Total patches: 13
----
-WARNING: Thread incomplete!
-Cover: ./v3_20230413_irogers_update_uncore_topics_1x_event_updates_2x_new_archs.cover
- Link: https://lore.kernel.org/r/20230413132949.3487664-1-irogers@google.com
- Base: not specified
-       git am ./v3_20230413_irogers_update_uncore_topics_1x_event_updates_2x_new_archs.mbx
-⬢[acme@toolbox perf-tools-next]$
-
-
-Lemme try to update it to see if it copes... nope:
-
-⬢[acme@toolbox b4]$ git pull
-Updating 041d10b7f628fa08..00303592f25693cb
-Fast-forward
- b4/__init__.py                                             | 54 ++++++++++++++++++++++++++++++++----------------------
- b4/command.py                                              |  4 ++--
- b4/ez.py                                                   | 15 ++++++++++++---
- b4/ty.py                                                   | 10 ++++++----
- docs/config.rst                                            | 19 +++++++++++++++++++
- man/b4.5                                                   |  6 +++++-
- man/b4.5.rst                                               |  2 ++
- tests/samples/trailers-followup-with-cover-ref-addlink.txt | 67 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- tests/test___init__.py                                     |  1 +
- 9 files changed, 146 insertions(+), 32 deletions(-)
- create mode 100644 tests/samples/trailers-followup-with-cover-ref-addlink.txt
-⬢[acme@toolbox b4]$ git diff
-⬢[acme@toolbox b4]$ cd -
-/var/home/acme/git/perf-tools-next
-⬢[acme@toolbox perf-tools-next]$ b4 am -ctsl --cc-trailers 20230413132949.3487664-1-irogers@google.com
-Grabbing thread from lore.kernel.org/all/20230413132949.3487664-1-irogers%40google.com/t.mbox.gz
-Checking for newer revisions
-Grabbing search results from lore.kernel.org
-Analyzing 14 messages in the thread
-Checking attestation on all messages, may take a moment...
----
-  ERROR: missing [1/21]!
-  ✓ [PATCH v3 2/21] perf vendor events intel: Add grandridge
-    ✓ Signed: DKIM/google.com
-    + Link: https://lore.kernel.org/r/20230413132949.3487664-3-irogers@google.com
-    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-  ✓ [PATCH v3 3/21] perf vendor events intel: Add sierraforest
-    ✓ Signed: DKIM/google.com
-    + Link: https://lore.kernel.org/r/20230413132949.3487664-4-irogers@google.com
-    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-  ✓ [PATCH v3 4/21] perf vendor events intel: Fix uncore topics for alderlake
-    ✓ Signed: DKIM/google.com
-    + Link: https://lore.kernel.org/r/20230413132949.3487664-5-irogers@google.com
-    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-  ✓ [PATCH v3 5/21] perf vendor events intel: Fix uncore topics for broadwell
-    ✓ Signed: DKIM/google.com
-    + Link: https://lore.kernel.org/r/20230413132949.3487664-6-irogers@google.com
-    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-  ✓ [PATCH v3 6/21] perf vendor events intel: Fix uncore topics for broadwellde
-    ✓ Signed: DKIM/google.com
-    + Link: https://lore.kernel.org/r/20230413132949.3487664-7-irogers@google.com
-    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-  ERROR: missing [7/21]!
-  ERROR: missing [8/21]!
-  ✓ [PATCH v3 9/21] perf vendor events intel: Fix uncore topics for haswell
-    ✓ Signed: DKIM/google.com
-    + Link: https://lore.kernel.org/r/20230413132949.3487664-10-irogers@google.com
-    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-  ERROR: missing [10/21]!
-  ✓ [PATCH v3 11/21] perf vendor events intel: Fix uncore topics for icelake
-    ✓ Signed: DKIM/google.com
-    + Link: https://lore.kernel.org/r/20230413132949.3487664-12-irogers@google.com
-    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-  ERROR: missing [12/21]!
-  ✓ [PATCH v3 13/21] perf vendor events intel: Fix uncore topics for ivybridge
-    ✓ Signed: DKIM/google.com
-    + Link: https://lore.kernel.org/r/20230413132949.3487664-14-irogers@google.com
-    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-  ERROR: missing [14/21]!
-  ✓ [PATCH v3 15/21] perf vendor events intel: Fix uncore topics for jaketown
-    ✓ Signed: DKIM/google.com
-    + Link: https://lore.kernel.org/r/20230413132949.3487664-16-irogers@google.com
-    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-  ✓ [PATCH v3 16/21] perf vendor events intel: Fix uncore topics for knightslanding
-    ✓ Signed: DKIM/google.com
-    + Link: https://lore.kernel.org/r/20230413132949.3487664-17-irogers@google.com
-    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-  ✓ [PATCH v3 17/21] perf vendor events intel: Fix uncore topics for sandybridge
-    ✓ Signed: DKIM/google.com
-    + Link: https://lore.kernel.org/r/20230413132949.3487664-18-irogers@google.com
-    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-  ✓ [PATCH v3 18/21] perf vendor events intel: Fix uncore topics for skylake
-    ✓ Signed: DKIM/google.com
-    + Link: https://lore.kernel.org/r/20230413132949.3487664-19-irogers@google.com
-    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-  ERROR: missing [19/21]!
-  ERROR: missing [20/21]!
-  ✓ [PATCH v3 21/21] perf vendor events intel: Fix uncore topics for tigerlake
-    ✓ Signed: DKIM/google.com
-    + Link: https://lore.kernel.org/r/20230413132949.3487664-22-irogers@google.com
-    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
-Total patches: 13
----
-WARNING: Thread incomplete!
-Cover: ./v3_20230413_irogers_update_uncore_topics_1x_event_updates_2x_new_archs.cover
- Link: https://lore.kernel.org/r/20230413132949.3487664-1-irogers@google.com
- Base: not specified
-       git am ./v3_20230413_irogers_update_uncore_topics_1x_event_updates_2x_new_archs.mbx
-⬢[acme@toolbox perf-tools-next]$
-
-
+CC: netdev missing?
