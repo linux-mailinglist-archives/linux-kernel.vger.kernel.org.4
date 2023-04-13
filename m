@@ -2,118 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64F5F6E0D56
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 14:17:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 750A36E0D58
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 14:18:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbjDMMQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 08:16:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37648 "EHLO
+        id S229833AbjDMMSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 08:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbjDMMQV (ORCPT
+        with ESMTP id S229821AbjDMMRs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 08:16:21 -0400
-Received: from progateway7-pub.mail.pro1.eigbox.com (gproxy5-pub.mail.unifiedlayer.com [67.222.38.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875B64EFD
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 05:16:20 -0700 (PDT)
-Received: from cmgw10.mail.unifiedlayer.com (unknown [10.0.90.125])
-        by progateway7.mail.pro1.eigbox.com (Postfix) with ESMTP id 3C13D100484AF
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 12:16:20 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id mvsCphO40qNnFmvsCpyzq9; Thu, 13 Apr 2023 12:16:20 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=D5KCltdj c=1 sm=1 tr=0 ts=6437f294
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=dKHAf1wccvYA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=wwr025VLPom+kwYQpLnukilx+EvXo5OYuUtoHiDnz3A=; b=vw+pmagzTzcZYlF2X0j3o4yAQb
-        Jw5hYL5wIC+azxgjrKYGm3V+Pz3oKPQQ8HzNWMTxv7IQLSmD0zTE7OlVOjl8lmOaVwEWr7NEOIYKf
-        yqlDpgIDqpkT6HCKNuaJ4t/dMcDnl7yYYp5pOOPPv6D1oW9mb/BjjRnfF+F1NWvamtcweI4l2yFCH
-        nRfcX7krsh9KfeGjHbc7eXmx5P0V91naESbNWITtXGoUOaKDpAuW2qj3oenjMLTtSRHFYd6eSzsQv
-        zAQVEToiaGJj3KqWRrPntkmG65pYzuOWkOqNVrm2V+T/d9fCKpc0htpp98a3flEClHfiZFcqwVxFN
-        bL6StbaA==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:34858 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1pmvsB-002jlK-9j;
-        Thu, 13 Apr 2023 06:16:19 -0600
-Subject: Re: [PATCH 6.1 000/164] 6.1.24-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230412082836.695875037@linuxfoundation.org>
-In-Reply-To: <20230412082836.695875037@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <98534055-5871-59f2-5ff3-d011859102ee@w6rz.net>
-Date:   Thu, 13 Apr 2023 05:16:17 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 13 Apr 2023 08:17:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B163584
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 05:17:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CC0C363AD1
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 12:17:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A79FFC433EF;
+        Thu, 13 Apr 2023 12:17:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1681388266;
+        bh=n5nOoo2W9g0u+tk13LjYJcEYuamfw6LN0szQR/FuK2c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sWizl+bwmAmIkW6Bv/FAJIKZumpVPjhixarTV6F+dfe+gosK5FvDS4dKlOaxDOFUi
+         4uSLPKSMhXeRWZr69HyKjuZZO36++KuriRQXK1Ob72ZW0aDHdPAVu8O+wVoD0KBKBS
+         GC+QfgwcKpybsPhKaiw22bIsjBtCDu2G0zFgq9Ho=
+Date:   Thu, 13 Apr 2023 14:17:43 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Chuang Zhang <zhangchuang3@xiaomi.corp-partner.google.com>
+Cc:     arve@android.com, tkjos@android.com, maco@android.com,
+        joel@joelfernandes.org, brauner@kernel.org, cmllamas@google.com,
+        surenb@google.com, linux-kernel@vger.kernel.org,
+        Chuang Zhang <zhangchuang3@xiaomi.com>
+Subject: Re: [PATCH] Binder: Add timestamp and async from pid/tid to
+ transaction record
+Message-ID: <2023041359-marine-uninsured-bae9@gregkh>
+References: <20230413104047.388861-1-zhangchuang3@xiaomi.corp-partner.google.com>
+ <2023041302-uncut-tutor-0e6e@gregkh>
+ <CAO+dPF9KFJe5h4wO47ypL2-__3+1mnzurdRcj6OCQ1wdku_7cA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1pmvsB-002jlK-9j
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:34858
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAO+dPF9KFJe5h4wO47ypL2-__3+1mnzurdRcj6OCQ1wdku_7cA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/12/23 1:32 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.24 release.
-> There are 164 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 14 Apr 2023 08:28:02 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.24-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Thu, Apr 13, 2023 at 07:33:26PM +0800, Chuang Zhang wrote:
+> On Thu, Apr 13, 2023 at 6:51 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > >       spin_lock(&t->lock);
+> > >       to_proc = t->to_proc;
+> > >       seq_printf(m,
+> > > -                "%s %d: %pK from %d:%d to %d:%d code %x flags %x pri
+> > %ld r%d",
+> > > +                "%s %d: %pK from %d:%d to %d:%d code %x elapsed %lldms
+> > flags %x pri %ld r%d",
+> >
+> > Why not add this at the end of the line instead of in the middle?  That
+> > way any existing code that looks at this line isn't as broken as it
+> > might be with your change :)
+> >
+> >> [chuang] Ok, so move it after t->need_reply or buffer->user_data?
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+After need_reply?
 
-Tested-by: Ron Economos <re@w6rz.net>
+> > > --- a/drivers/android/binder_internal.h
+> > > +++ b/drivers/android/binder_internal.h
+> > > @@ -528,6 +528,9 @@ struct binder_transaction {
+> > >       long    priority;
+> > >       long    saved_priority;
+> > >       kuid_t  sender_euid;
+> > > +     int async_from_pid;
+> > > +     int async_from_tid;
+> >
+> > As you are just using 0/1 for these variables, why not add them to the
+> > bitfield location in this structure instead of wasting a whole int for
+> > both of them?
+> >
+> >> [chuang] They are used to store the caller's process ID and thread ID,
+> not just 1 or 0, so I understand that integers are still needed to save
+> them. thanks!
 
+Ah, I missed that these really were the pid itself.  Then an int will
+not work at all, it has to be pid_t, right?
+
+And how are pid namespaces being handled here?  I know it's just
+debugging data but showing a pid from the wrong namespace probably would
+not be a good idea as it might get confusing quickly.
+
+thanks,
+
+greg k-h
