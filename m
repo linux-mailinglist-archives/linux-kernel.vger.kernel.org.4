@@ -2,101 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F25006E105B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BC126E105F
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:50:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231251AbjDMOsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 10:48:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45018 "EHLO
+        id S230032AbjDMOuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 10:50:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbjDMOsi (ORCPT
+        with ESMTP id S229888AbjDMOuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 10:48:38 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803A4A253;
-        Thu, 13 Apr 2023 07:48:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=I1L0Qp2sckfsIBhqUGSZAv87RBu9UChWVeSXNNEVCCg=; b=qjqaLyGI7RXtv0daQN4+J6UUp6
-        vjFwp9dg0vL6T9I+80Ockz/HfJhyoSXUn3hPGg1ig8MOC178Gpj0MrxrcBxzf/+2bovLIfMl/Ja2R
-        FyRQk/E4CFAp1EXQjDYFAzqvTSuP+2dDLG7ccH23GOZ+bOCsGA0q4XO6rgCQjMYcbWXQ=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pmyFJ-00ACLu-AF; Thu, 13 Apr 2023 16:48:21 +0200
-Date:   Thu, 13 Apr 2023 16:48:21 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Christian Marangi <ansuelsmth@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        John Crispin <john@phrozen.org>, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [net-next PATCH v6 06/16] net: phy: phy_device: Call into the
- PHY driver to set LED brightness
-Message-ID: <9603636f-3296-4c6a-96ca-c522e91c1c4c@lunn.ch>
-References: <20230327141031.11904-1-ansuelsmth@gmail.com>
- <20230327141031.11904-7-ansuelsmth@gmail.com>
- <202ae4b9-8995-474a-1282-876078e15e47@gmail.com>
+        Thu, 13 Apr 2023 10:50:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BDBF138
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 07:49:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681397369;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hbFNJTv0qfkPb9XC0xNSdP4hsv4qoCxGv3/G33VhjFQ=;
+        b=Cd8dOmoncYD50h4em9jyjTK9X+FOqVXcFsEro4vg4xVmrjP/2caGim/PKPCJx+AxAcU5N/
+        Sc6Yc+S9bj14+uybjsyF2NXxciF7PFkJ0qRb9doPAeiNrPKe4wgimpThDQQwUb+kmrbUCX
+        7JSc1cX0RBVyOiSw65sYCZ9Qn1dJP/U=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-371-SPOsv6bYN_a5HiGuG7qDcA-1; Thu, 13 Apr 2023 10:49:19 -0400
+X-MC-Unique: SPOsv6bYN_a5HiGuG7qDcA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 827D9855304;
+        Thu, 13 Apr 2023 14:49:17 +0000 (UTC)
+Received: from mail.corp.redhat.com (unknown [10.45.224.142])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 12DF140B3ED9;
+        Thu, 13 Apr 2023 14:49:15 +0000 (UTC)
+Date:   Thu, 13 Apr 2023 16:49:13 +0200
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     Louis Morhet <lmorhet@kalrayinc.com>
+Cc:     gupt21@gmail.com, jikos@kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] Fixes for the mcp2221 gpiochip get_* calls
+Message-ID: <20230413144913.53a22nat4s6i2mib@mail.corp.redhat.com>
+References: <cover.1680602387.git.lmorhet@kalrayinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202ae4b9-8995-474a-1282-876078e15e47@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <cover.1680602387.git.lmorhet@kalrayinc.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 06:57:51AM -0700, Florian Fainelli wrote:
+On Apr 04 2023, Louis Morhet wrote:
+> The mcp2221 HID driver exposes a gpiochip device.
+> While gpioset seemed to work fine, gpioget always returned 1 on all 4
+> GPIOs of the component (0x01 for input in the field "direction",
+> according to the documentation).
 > 
-> 
-> On 3/27/2023 7:10 AM, Christian Marangi wrote:
-> > From: Andrew Lunn <andrew@lunn.ch>
-> > 
-> > Linux LEDs can be software controlled via the brightness file in /sys.
-> > LED drivers need to implement a brightness_set function which the core
-> > will call. Implement an intermediary in phy_device, which will call
-> > into the phy driver if it implements the necessary function.
-> > 
-> > Signed-off-by: Andrew Lunn <andrew@lunn.ch>
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> 
-> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-> 
-> > +	int (*led_brightness_set)(struct phy_device *dev,
-> > +				  u32 index, enum led_brightness value);
-> 
-> I think I would have made this an u8, 4 billion LEDs, man, that's a lot!
+> This patch series addresses this issue by fixing the order of the fields
+> in the driver's representation of the chip answer, and adding
+> consistency to the way the callbacks prepare their command and the way
+> the hid event handler gets these fields.
+> The set callbacks use a similar mechanism, but work for now because
+> setting a direction/value only requires gpio-specific positioning in the
+> command preparation, and not in the raw_event handler.
 
-That can be done. We need to change:
+As you should have seen in the automatic replied, I took that series in
+because it seems to fix a rather worrying bug.
 
-        err = of_property_read_u32(led, "reg", &phyled->index);
-        if (err)
-                return err;
 
-to a u8, to avoid overflow problems in other places. It looks like
-of_property_read_u8() does the correct thing if somebody tried to use
-4 billion - 1.
+> 
+> The core of this issue being a discrepancy in the way the command and
+> the answer fetch their fields of interest, I would also like to ask if
+> we should uniformize a bit the way this driver handles gpio, and how.
+> I thought about several possible implementations for that:
+> Use mcp->gp_idx as the base offset of the gpio for set too, and modify
+> the raw_event handler to fetch all relevant data based on that; or set
+> the buffers in the mcp structure as unions of the various commands
+> handled and use gp_idx simply as the gpio index to access relevant data
+> directly from the structured representation everywhere; or go back to ye
+> old defines to ensure portability...
 
-  Andrew
+Honestly, it's hard to make a choice here. You haven't got a replied
+from the other mcp2221 folks in almost 10 days so I am not sure you'll
+get feedback directly.
+
+May I suggest that you work on any one of these idea, and then submit a
+series? Generally, having the code ready makes it way easier to decide
+if this is a good solution or not, while having 3 different vague
+suggestions makes it hard to see the implications of them.
+
+Also, just a side note, this driver is very limited in term of scope, as
+it only touches one dedicated device. Which means that whatever solution
+feels the more elegant to you has a good chance of being accepted :)
+
+Cheers,
+Benjamin
+
+> 
+> Louis Morhet (2):
+>   HID: mcp2221: fix report layout for gpio get
+>   HID: mcp2221: fix get and get_direction for gpio
+> 
+>  drivers/hid/hid-mcp2221.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> -- 
+> 2.17.1
+> 
+> 
+> 
+> 
+> 
+
