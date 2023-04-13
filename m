@@ -2,296 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B82C46E1121
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 17:28:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 909656E1122
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 17:29:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbjDMP2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 11:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47920 "EHLO
+        id S230404AbjDMP3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 11:29:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbjDMP2L (ORCPT
+        with ESMTP id S229967AbjDMP3F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 11:28:11 -0400
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33ECFB46B
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 08:27:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1681399667;
-        bh=vxnscmk2AV7AafQMCxpPQV6/uIZsABW3bteoP3ZX2I0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Nzw2y9TPIQxCjZ6uhttgWGtdGXMa2VUgUOK0mP4xYyrUz/P2A6QML7kmLUbX69y1U
-         EO+zoYSCgNOFcNWcfXL7cCZ9gTfuRvq7D00GL+PyLZAbzuq8gCUnaKU0FwzoClQgRt
-         pN/q2ERs25suXq2/hW804W2rLwakrx81e6O+VV4nHCOpYFCYY6qa6nRB9UEFtMY8+5
-         YhTSKEBEF5Q5393FOBtP0Q0+8twvvh7kyY6c3cDvVQO+kwLUGeRO8L4vTET6/VjSvj
-         pzjIq1OH8sAkgfpNt2sVVx0yLi9u2b6OlV6DxCzNGFUjozgaSBnl1YvVlxYJxx9fJj
-         EGgZX+uv9jYag==
-Received: from [172.16.0.188] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4Py3Nz1K7Pzvf4;
-        Thu, 13 Apr 2023 11:27:47 -0400 (EDT)
-Message-ID: <7c8703c3-7e47-c880-6215-00cc830bd913@efficios.com>
-Date:   Thu, 13 Apr 2023 11:27:47 -0400
+        Thu, 13 Apr 2023 11:29:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9782910F3
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 08:29:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 29B416182A
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 15:29:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 329FBC433D2;
+        Thu, 13 Apr 2023 15:29:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681399742;
+        bh=SbY4cgzPfRHfySIlq6Z98QogrSfw3n716DdbqzyZ3AI=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=roxE3wZlWsu6I92M2tndR+hD1mYLGKDdnpBO7elo3D3XGuItF06TZeCgJaeBizQUP
+         Mye1jmF0gT7bg9xuK/df8jsihs2IthFf3DueAF/ODv6Czg3wqOCzkaLnlTOkhvJeeA
+         Q9IQP65MJPwf/6bTHWLFtAw7XyFC85Ys8onT8RLf2Dq2eMGgfGTUieod+Tt8Ej+3HZ
+         a9RPQ4j9u+6iSu1mOmxcGzbzRtDsqw4WHLQySv2lyN6o88LTthgvmWfpahCH8w6f7J
+         npGeUAqGHQOa4+QK3FmOIgvUW1jCk9FKdx4sUkI+gQa8IEdNRMdhHGOYrIc+FIzYCB
+         kMnl6HVsBNRMQ==
+Message-ID: <82ecc91f-a739-4744-29da-227daf5e45a2@kernel.org>
+Date:   Thu, 13 Apr 2023 23:28:59 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC PATCH v5] sched: Fix performance regression introduced by
- mm_cid
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [f2fs-dev] [PATCH v2] f2fs: relax sanity check if checkpoint is
+ corrupted
 Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Aaron Lu <aaron.lu@intel.com>,
-        Olivier Dion <odion@efficios.com>, michael.christie@oracle.com
-References: <20230413140248.230479-1-mathieu.desnoyers@efficios.com>
- <20230413151055.GN4253@hirez.programming.kicks-ass.net>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <20230413151055.GN4253@hirez.programming.kicks-ass.net>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+References: <20230407181539.4136580-1-jaegeuk@kernel.org>
+ <ZDbZlwH5u3/nOTwL@google.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <ZDbZlwH5u3/nOTwL@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-13 11:10, Peter Zijlstra wrote:
-> On Thu, Apr 13, 2023 at 10:02:48AM -0400, Mathieu Desnoyers wrote:
+On 2023/4/13 0:17, Jaegeuk Kim wrote:
+> 1. extent_cache
+>   - let's drop the largest extent_cache
+> 2. invalidate_block
+>   - don't show the warnings
 > 
->> +static inline void __mm_cid_put(struct mm_struct *mm, int cid)
->> +{
->> +	if (cid < 0)
->> +		return;
->> +	cpumask_clear_cpu(cid, mm_cidmask(mm));
->> +}
->> +
->> +/*
->> + * The per-mm/cpu cid can have the MM_CID_LAZY_PUT flag set or transition to the
->> + * MM_CID_UNSET state without holding the rq lock, but the rq lock needs to be
->> + * held to transition to other states.
->> + */
->> +static inline void mm_cid_put_lazy(struct task_struct *t)
->> +{
->> +	struct mm_struct *mm = t->mm;
->> +	int *pcpu_cid, cid;
->> +
->> +	lockdep_assert_rq_held(this_rq());
->> +	pcpu_cid = this_cpu_ptr(mm->pcpu_cid);
->> +	cid = READ_ONCE(*pcpu_cid);
->> +	if (!mm_cid_is_lazy_put(cid))
->> +		return;
->> +	if (!try_cmpxchg(pcpu_cid, &cid, MM_CID_UNSET))
->> +		return;
->> +	__mm_cid_put(mm, mm_cid_clear_lazy_put(cid));
->> +}
->> +
->> +static inline void mm_cid_put(struct task_struct *t)
->> +{
->> +	struct mm_struct *mm = t->mm;
->> +	int *pcpu_cid, cid, res;
->> +
->> +	lockdep_assert_rq_held(this_rq());
->> +	WARN_ON_ONCE(t->mm_cid < 0);
->> +	pcpu_cid = this_cpu_ptr(mm->pcpu_cid);
->> +	cid = READ_ONCE(*pcpu_cid);
->> +	for (;;) {
->> +		if (mm_cid_is_unset(cid))
->> +			return;
->> +		WARN_ON_ONCE(mm_cid_clear_lazy_put(cid) != t->mm_cid);
->> +		/*
->> +		 * Attempt transition from valid or lazy-put to unset.
->> +		 */
->> +		res = cmpxchg(pcpu_cid, cid, MM_CID_UNSET);
->> +		if (res == cid)
->> +			break;
->> +		cid = res;
+> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> ---
 > 
-> 		if (try_cmpxchg(pcpu_cid, &cid, MM_CID_UNSET))
-> 			break;
+>   Change log from v1:
+>    - add one more case to skip the error message
+> 
+>   fs/f2fs/checkpoint.c   | 10 ++++++++++
+>   fs/f2fs/extent_cache.c | 22 +++++++++++++++-------
+>   2 files changed, 25 insertions(+), 7 deletions(-)
+> 
+> diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
+> index 448ecf5000b8..64b3860f50ee 100644
+> --- a/fs/f2fs/checkpoint.c
+> +++ b/fs/f2fs/checkpoint.c
+> @@ -152,6 +152,11 @@ static bool __is_bitmap_valid(struct f2fs_sb_info *sbi, block_t blkaddr,
+>   	se = get_seg_entry(sbi, segno);
+>   
+>   	exist = f2fs_test_bit(offset, se->cur_valid_map);
+> +
+> +	/* skip data, if we already have an error in checkpoint. */
+> +	if (unlikely(f2fs_cp_error(sbi)))
+> +		return exist;
+> +
+>   	if (exist && type == DATA_GENERIC_ENHANCE_UPDATE) {
+>   		f2fs_err(sbi, "Inconsistent error blkaddr:%u, sit bitmap:%d",
+>   			 blkaddr, exist);
+> @@ -202,6 +207,11 @@ bool f2fs_is_valid_blkaddr(struct f2fs_sb_info *sbi,
+>   	case DATA_GENERIC_ENHANCE_UPDATE:
+>   		if (unlikely(blkaddr >= MAX_BLKADDR(sbi) ||
+>   				blkaddr < MAIN_BLKADDR(sbi))) {
+> +
+> +			/* Skip to emit an error message. */
+> +			if (unlikely(f2fs_cp_error(sbi)))
+> +				return false;
+> +
+>   			f2fs_warn(sbi, "access invalid blkaddr:%u",
+>   				  blkaddr);
+>   			set_sbi_flag(sbi, SBI_NEED_FSCK);
+> diff --git a/fs/f2fs/extent_cache.c b/fs/f2fs/extent_cache.c
+> index 9a8153895d20..bea6ab9d846a 100644
+> --- a/fs/f2fs/extent_cache.c
+> +++ b/fs/f2fs/extent_cache.c
+> @@ -23,18 +23,26 @@ bool sanity_check_extent_cache(struct inode *inode)
+>   {
+>   	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+>   	struct f2fs_inode_info *fi = F2FS_I(inode);
+> +	struct extent_tree *et = fi->extent_tree[EX_READ];
+>   	struct extent_info *ei;
+>   
+> -	if (!fi->extent_tree[EX_READ])
+> +	if (!et)
+> +		return true;
+> +
+> +	ei = &et->largest;
+> +	if (!ei->len)
+>   		return true;
+>   
+> -	ei = &fi->extent_tree[EX_READ]->largest;
+> +	/* Let's drop, if checkpoint got corrupted. */
+> +	if (is_set_ckpt_flags(sbi, CP_ERROR_FLAG)) {
+> +		ei->len = 0;
+> +		et->largest_updated = true;
 
-I left this as a cmpxchg on purpose: it acts as a read for the next 
-loop. Or is it better to move the "cid = READ_ONCE(*pcpu_cid);" at the 
-beginning of the loop and use try_cmpxchg ?
-
-> 
->> +	}
-> 
-> 
-> 
->> +	__mm_cid_put(mm, mm_cid_clear_lazy_put(cid));
->> +}
->> +
->> +static inline int __mm_cid_try_get(struct mm_struct *mm)
->>   {
->>   	struct cpumask *cpumask;
->>   	int cid;
->>   
->>   	cpumask = mm_cidmask(mm);
->> +	/*
->> +	 * Retry finding first zero bit if the mask is temporarily
->> +	 * filled. This only happens during concurrent migrate-from
->> +	 * which owns a cid without holding a rq lock.
->> +	 */
->> +	do {
->> +		cid = cpumask_first_zero(cpumask);
->> +	} while (cid >= nr_cpu_ids);
-> 
-> Urgh..
-> 	for (;;) {
-> 		cid = cpumask_first_zero(cpumask);
-> 		if (cid < nr_cpu_ids)
-> 			break;
-> 		cpu_relax();
-> 	}
-
-OK
-
-> 
-> 
->> +	if (!cpumask_test_and_set_cpu(cid, cpumask))
->> +		return cid;
->> +	/*
->> +	 * If initial find-then-test-and-set fails due to concurrent updates,
->> +	 * attempt a brute-force test-and-set from 0 to nr_cpu_ids-1 to
->> +	 * eliminate the race between find and test-and-set. This does not
->> +	 * strictly provide forward-progress guarantees, because we could
->> +	 * theoretically be racing against concurrent updates of the mask, but
->> +	 * it does have much better odds to succeed in contended cases than
->> +	 * the find-then-test-and-set approach.
->> +	 */
->> +	for (cid = 0; cid < nr_cpu_ids; cid++) {
->> +		if (!cpumask_test_and_set_cpu(cid, cpumask))
->> +			return cid;
->> +	}
-> 
-> Yikes, we have IRQs disabled and hold rq->lock, this is a very expensive
-> proposition. Also, afaict all *should* just work without this on.
-
-Yes, I'll remove this.
-
-> 
->> +	return -1;
->>   }
->>   
->> +static inline int __mm_cid_get(struct mm_struct *mm)
->>   {
->> +	int cid;
->> +
->> +	if (!READ_ONCE(use_cid_lock)) {
-> 
-> This all hurts my brain, but shouldn't you be able to replace
-> use_cid_lock with raw_spin_is_locked(&cid_lock) ?
-
-No, because we only want the thread which observed the find/test-and-set 
-race to set the use_cid_lock bit. We don't want all other threads which 
-end up using the lock because they see use_cid_lock set to also 
-themselves cause other threads to use the lock. This could cause a 
-scenario where we always keep using the lock and never revert back to 
-lock-free in a very contended case.
-
-> 
->> +		cid = __mm_cid_try_get(mm);
->> +		if (cid >= 0)
->> +			goto end;
->> +		raw_spin_lock(&cid_lock);
->> +	} else {
->> +		raw_spin_lock(&cid_lock);
->> +		cid = __mm_cid_try_get(mm);
->> +		if (cid >= 0)
->> +			goto unlock;
->> +	}
->> +
->> +	/*
->> +	 * cid concurrently allocated. Retry while forcing following
->> +	 * allocations to use the cid_lock to ensure forward progress.
->> +	 */
->> +	WRITE_ONCE(use_cid_lock, 1);
->> +	/*
->> +	 * Set use_cid_lock before allocation. Only care about program order
->> +	 * because this is for forward progress.
->> +	 */
->> +	barrier();
->> +	/*
->> +	 * Retry until it succeeds. It is guaranteed to eventually
->> +	 * succeed once all newcoming allocations observe the
->> +	 * use_cid_lock flag set.
->> +	 */
->> +	do {
->> +		cid = __mm_cid_try_get(mm);
->> +	} while (cid < 0);
->> +	/*
->> +	 * Allocate before clearing use_cid_lock. Only care about
->> +	 * program order because this is for forward progress.
->> +	 */
->> +	barrier();
->> +	WRITE_ONCE(use_cid_lock, 0);
->> +unlock:
->> +	raw_spin_unlock(&cid_lock);
->> +end:
->> +	return cid;
->>   }
-> 
-> 
-> Anyway, I ran the thing and __schedule()'s dropped from around 11% to 5%
-
-That's a good start!
-
-> 
-> 4.98%     0.04%  swapper          [kernel.vmlinux]            [k] schedule_idle
->         |
->         --4.95%--schedule_idle
->                  |
->                  --4.94%--__schedule
->                           |
->                           |--2.36%--mm_cid_get
->                           |
->                           |--0.72%--finish_task_switch.isra.0
->                           |          |
->                           |           --0.61%--asm_sysvec_call_function_single
->                           |                     |
->                           |                      --0.51%--sysvec_call_function_single
->                           |
->                           --0.59%--switch_mm_irqs_off
-> 
-> So improved, but not as good as my glorious hack ;-)
-
-Yeah, we still need to touch the bitmap and suffer from cache line bouncing.
-
-> 
-> Also, I see that even migrate_from is visible
-> 
-> 5.26%     0.74%  sched-messaging  [kernel.vmlinux]            [k] try_to_wake_up
->         |
->         |--4.52%--try_to_wake_up
->         |          |
->         |          |--1.49%--set_task_cpu
->         |          |          |
->         |          |           --1.18%--sched_mm_cid_migrate_from
->         |          |
->         |          |--1.24%--select_task_rq_fair
->         |          |
->         |          |--0.73%--ttwu_do_activate
->         |          |          |
->         |          |           --0.57%--enqueue_task_fair
->         |          |
->         |           --0.50%--ttwu_queue_wakelist
->         |
->         --0.74%--start_thread
-
-One tradeoff we can consider is that we could afford to delay compaction 
-of cids to much later. One way to achieve this would be to update a 
-timestamp along with each per-mm/cpu cid value keeping track of its last 
-use on context switch. Then we could implement a worker thread which 
-would periodically iterate over all mm and figure out if it needs to 
-compact things because per-mm/cpu cids were unused for too long.
-
-Thoughts ?
+Thsi field indicates whether it is needed to update largest extent into
+inode page, since cp_error is unrecoverable, it seems we don't needed to
+update it.
 
 Thanks,
 
-Mathieu
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+> +		return true;
+> +	}
+>   
+> -	if (ei->len &&
+> -		(!f2fs_is_valid_blkaddr(sbi, ei->blk,
+> -					DATA_GENERIC_ENHANCE) ||
+> -		!f2fs_is_valid_blkaddr(sbi, ei->blk + ei->len - 1,
+> -					DATA_GENERIC_ENHANCE))) {
+> +	if (!f2fs_is_valid_blkaddr(sbi, ei->blk, DATA_GENERIC_ENHANCE) ||
+> +	    !f2fs_is_valid_blkaddr(sbi, ei->blk + ei->len - 1,
+> +					DATA_GENERIC_ENHANCE)) {
+>   		set_sbi_flag(sbi, SBI_NEED_FSCK);
+>   		f2fs_warn(sbi, "%s: inode (ino=%lx) extent info [%u, %u, %u] is incorrect, run fsck to fix",
+>   			  __func__, inode->i_ino,
