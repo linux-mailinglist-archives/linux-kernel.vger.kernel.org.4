@@ -2,114 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 831986E1207
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:16:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BBD76E120B
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:17:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbjDMQQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 12:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56316 "EHLO
+        id S230160AbjDMQRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 12:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjDMQQx (ORCPT
+        with ESMTP id S230128AbjDMQRO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 12:16:53 -0400
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD6BCF;
-        Thu, 13 Apr 2023 09:16:51 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0Vg0Kxv8_1681402607;
-Received: from 192.168.3.7(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0Vg0Kxv8_1681402607)
-          by smtp.aliyun-inc.com;
-          Fri, 14 Apr 2023 00:16:48 +0800
-Message-ID: <699f01a7-8c0e-98d9-d2c7-eaf08552f543@linux.alibaba.com>
-Date:   Fri, 14 Apr 2023 00:16:46 +0800
+        Thu, 13 Apr 2023 12:17:14 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E9117280
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:17:13 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id f26so32675193ejb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:17:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681402631; x=1683994631;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZEOFxKNy3U0Hgu4EBIZNIx+9mDifLsjK29cZX/KJbkA=;
+        b=K0rAxBszub74dCkhRGXZMGBJaRQlKup6HorTTNc5AbEVh92+AAOVjPcB4sEghRoSAx
+         MqSP4jfNxZI2LffWurhn8/y0fBzGzT4mRT+XzJVCDAvBjuR+tdMkfC9fiMz+1/rQOAkY
+         hKngEF6/jLVK8K43aw065epwWgILkqwbZ0ZaQ89+ojx8DlbE7kzuvSBopGOUK4A7idIc
+         8LLyn25iqgsK6ArjS3oPJbqf8LDkVtjRfkIqFmu/vUUamfnGGiEm+hTuzV6Tw22F2DQV
+         6yEF72MtFX+hmZ+So85NDphM2zUZnZfW8e1398WZpOBK+UfkRy0wIbKyEBHX0SYXpswn
+         Pi3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681402631; x=1683994631;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZEOFxKNy3U0Hgu4EBIZNIx+9mDifLsjK29cZX/KJbkA=;
+        b=WmUlSpEzGiNfzy8HyGPjQtcGfwS3EHQaizDHhvRScDG3aivKhv/HUFBypc5KVrpA0r
+         PPwO9sYmy1yOAXMeQq1PCacs/X59gZAJwGMlM/WjzYUN6VYGE3eN738Qlbyuo4arG3jh
+         FV75vZuVV84t3ncMYpdMzJ0JUhwk2Fx5x+emEIWj0+RL8Zzqg4cVNxZHu4jg/k78+YIV
+         7xtQwcwa2ufvVROsg0a2nsRB/08pzjrlV9dyo4oJJMtAvBKgfb4NIFhpqeEqqq05aksg
+         O9+Zkl59UWZpiFmdZvfz0BE7Qr9nJkde/E1QrtjUx1eDdv7hNmIrYHG1E2TtL0vmyRgv
+         cBiQ==
+X-Gm-Message-State: AAQBX9c0EBF5TQopGCV3Xrii47enl8ea6UTW0NZm4S1ho8aMLE5rvWbV
+        3eHh7u6IDmgSG5/v3l2V++DRQQ==
+X-Google-Smtp-Source: AKy350Zeo4tNvuyj8lC6EBUYcdMn48Z6g3oSrpCwSIcWdbZYsDPng5J86Mqq3pWEbgJqhj5TZTigiw==
+X-Received: by 2002:a17:906:3cf2:b0:94a:74b7:43e4 with SMTP id d18-20020a1709063cf200b0094a74b743e4mr3151258ejh.69.1681402631579;
+        Thu, 13 Apr 2023 09:17:11 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:5032:d2d4:ece5:b035? ([2a02:810d:15c0:828:5032:d2d4:ece5:b035])
+        by smtp.gmail.com with ESMTPSA id c1-20020a17090603c100b00882f9130eafsm1170488eja.26.2023.04.13.09.17.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Apr 2023 09:17:11 -0700 (PDT)
+Message-ID: <653a9c34-7699-13d4-7599-f64e43345b14@linaro.org>
+Date:   Thu, 13 Apr 2023 18:17:09 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.1
-Subject: Re: linux-next: manual merge of the erofs tree with the vfs-idmapping
- tree
-To:     Mark Brown <broonie@kernel.org>, Gao Xiang <xiang@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Jingbo Xu <jefflexu@linux.alibaba.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230413144651.3519980-1-broonie@kernel.org>
- <4f9fdec2-cc2a-4bc7-9ddc-87809395f493@sirena.org.uk>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <4f9fdec2-cc2a-4bc7-9ddc-87809395f493@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v9 1/2 RESEND] dt-bindings: i2c: aspeed: support for
+ AST2600-i2cv2
+Content-Language: en-US
+To:     Ryan Chen <ryan_chen@aspeedtech.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-i2c@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        William Zhang <william.zhang@broadcom.com>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        openbmc@lists.ozlabs.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20230413075327.1397306-1-ryan_chen@aspeedtech.com>
+ <20230413075327.1397306-2-ryan_chen@aspeedtech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230413075327.1397306-2-ryan_chen@aspeedtech.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
-
-On 2023/4/13 23:49, Mark Brown wrote:
-> On Thu, Apr 13, 2023 at 03:46:51PM +0100, broonie@kernel.org wrote:
+On 13/04/2023 09:53, Ryan Chen wrote:
+> Add ast2600-i2cv2 compatible and aspeed,global-regs, aspeed,enable-dma
+> and description for ast2600-i2cv2.
 > 
->> I fixed it up (see below) and can carry the fix as necessary. This
->> is now fixed as far as linux-next is concerned, but any non trivial
->> conflicts should be mentioned to your upstream maintainer when your tree
->> is submitted for merging.  You may also want to consider cooperating
->> with the maintainer of the conflicting tree to minimise any particularly
->> complex conflicts.
-> 
-> No, that's wrong.  This:
+> Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
 
-Thanks.  Actually I didn't update the corresponind xattr patches (just
-rebase some older commits, also I'd like to avoid in the future, but
-sometimes it's impossible at least if some RVB is added...)
+>  required:
+>    - reg
+>    - compatible
+> @@ -57,6 +73,26 @@ required:
+>  
+>  unevaluatedProperties: false
+>  
+> +allOf:
 
-I think it could be resolved as before by Stephen:
-https://lore.kernel.org/r/20230412101942.75e3efa9@canb.auug.org.au
+allOf goes before unevaluatedProperties. Use example-schema.yaml as your
+template/guidance.
 
-And which looks the same as below:
-
-> 
-> diff --cc fs/erofs/xattr.c
-> index 015462763bdd5,a04724c816e5f..0000000000000
-> --- a/fs/erofs/xattr.c
-> +++ b/fs/erofs/xattr.c
-> @@@ -483,12 -517,28 +513,25 @@@ static int xattr_entrylist(struct xattr
->    {
->    	struct listxattr_iter *it =
->    		container_of(_it, struct listxattr_iter, it);
-> - 	unsigned int prefix_len;
-> - 	const char *prefix;
-> + 	unsigned int base_index = entry->e_name_index;
-> + 	unsigned int prefix_len, infix_len = 0;
-> + 	const char *prefix, *infix = NULL;
->   -	const struct xattr_handler *h;
+> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: aspeed,ast2600-i2cv2
 > +
-> + 	if (entry->e_name_index & EROFS_XATTR_LONG_PREFIX) {
-> + 		struct erofs_sb_info *sbi = EROFS_SB(_it->sb);
-> + 		struct erofs_xattr_prefix_item *pf = sbi->xattr_prefixes +
-> + 			(entry->e_name_index & EROFS_XATTR_LONG_PREFIX_MASK);
+> +    then:
+> +      properties:
+> +        reg:
+> +          minItems: 2
+> +      required:
+> +        - aspeed,global-regs
+> +    else:
+> +      properties:
+> +        aspeed,global-regs: false
+> +        aspeed,enable-dma: false
 > +
-> + 		if (pf >= sbi->xattr_prefixes + sbi->xattr_prefix_count)
-> + 			return 1;
-> + 		infix = pf->prefix->infix;
-> + 		infix_len = pf->infix_len;
-> + 		base_index = pf->prefix->base_index;
-> + 	}
->    
-> - 	prefix = erofs_xattr_prefix(entry->e_name_index, it->dentry);
->   -	h = erofs_xattr_handler(base_index);
->   -	if (!h || (h->list && !h->list(it->dentry)))
-> ++	prefix = erofs_xattr_prefix(base_index, it->dentry);
->   +	if (!prefix)
->    		return 1;
->   -
->   -	prefix = xattr_prefix(h);
->    	prefix_len = strlen(prefix);
->    
->    	if (!it->buffer) {
+> +
 
-Thanks,
-Gao Xiang
+Only one blank line.
+
+Best regards,
+Krzysztof
 
