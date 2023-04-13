@@ -2,131 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 223A06E1517
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 21:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E6816E151A
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 21:20:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230081AbjDMTTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 15:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59622 "EHLO
+        id S230085AbjDMTUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 15:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjDMTTW (ORCPT
+        with ESMTP id S229638AbjDMTU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 15:19:22 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F594EEC
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 12:19:01 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id z3so7013085qvs.8
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 12:19:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681413535; x=1684005535;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tW0Gt1r0g4k2K6ZdZ463Ef3Kv7HUGKoVv34mqVCJvuA=;
-        b=jh/TAtYWti9xKU1XRJWHWFQtAwlydQNhkC6355HtwquNGCcMBwXTq+/OqkZTZqq1Fg
-         DDXKK2S2mRuuaCzrJHdaf0fQwuVF7WKW211tLNW7ZwPvk+hHDjgn4OvF2U3BfTzeq4R6
-         y3rxKvhvzSdFGuxF+3DIhpL+JFQMZ7k167dlHRGCh07UDyyUbe7+GQ2+Bi6NUwrQfGFO
-         AVhIDyNnP4WmHpB34y3AZ2WlyQsb3nw6ubQhCaGtL9GBybyUlxI3WMs7d7T+dHD7JyII
-         ok6IjcsOpDMAxJWkpDOwsp7ShDg72XfPthwA/HS9A75y8bxwCePwv2wLkYydgE8okXCL
-         wi+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681413535; x=1684005535;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tW0Gt1r0g4k2K6ZdZ463Ef3Kv7HUGKoVv34mqVCJvuA=;
-        b=Dr9nrw79ihEhyg5E1az2ZyRirH+Hd8He+eTr9xTuJ5BI9LR3N4ggVA0Fs4R9EUmt/j
-         iTMRCq1HrRWLtwa4BITCh/2KdLFTqH1nURHeAEVkqKHqESC1BuEuraHywGPZivqZaWBi
-         ARdrBlmN7zM882RQ3OIHlt/n4/HVmnz9ysPCRJUAtGOblNvoyn8lo+5cKU5UktvwBNvR
-         9nFpNrDo/prv6lR4KLqM3mws4dc9kSRSVO7pTWzFv/5s3hOThKpjupG42w83aDjTwIVH
-         tWUJu0jCLkUw8vKui9av+YeD33nd0pzWAIlaAOt0yVXJ1kgjROoy53afxTfK72t3sgRI
-         XLyQ==
-X-Gm-Message-State: AAQBX9fWIWWz4drwqcVINVEL3mr7liXoJ8mngxwQbokpOvqjz9+wOg59
-        FCfAiKZYrwnaZ7iu6JCnGAL+VSDNaMRfVw==
-X-Google-Smtp-Source: AKy350a7TX+7/dt7geJe+ymge3tp1h1MZdsV+J38vCFWTk/+hDg6M/yz3uR4uIEDwnXErZ2JCvpY0g==
-X-Received: by 2002:a05:6214:494:b0:5ef:486a:505e with SMTP id pt20-20020a056214049400b005ef486a505emr5920164qvb.41.1681413535123;
-        Thu, 13 Apr 2023 12:18:55 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id z17-20020a0cf251000000b005e90a67a687sm617855qvl.65.2023.04.13.12.18.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 12:18:54 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     corbet@lwn.net, Florian Fainelli <f.fainelli@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH] firmware_loader: Strip off \n from customized path
-Date:   Thu, 13 Apr 2023 12:17:57 -0700
-Message-Id: <20230413191757.1949088-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 13 Apr 2023 15:20:29 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B25818D;
+        Thu, 13 Apr 2023 12:20:28 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0CFEB1FD72;
+        Thu, 13 Apr 2023 19:20:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1681413625; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nbqARjeHd1//MBj7hADKQRHDq0K548anuKS8lmWYJvQ=;
+        b=ODC1rcTgzwvJN3TtSP4LxF/Rjyy5eu7XRg3+Rigd/b9vUNkoQIq30e+boBatcweKK+JeLD
+        jYHuKHexdUCuD+KbUVzxt3YK1PZzToI08MTqSp6C+JkD3fFlS812XWqZCKUX643gu9MBXx
+        Vm/htOBkqowLmDqy0k1bt0+WaZJmvDU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1681413625;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nbqARjeHd1//MBj7hADKQRHDq0K548anuKS8lmWYJvQ=;
+        b=bjpxSNdmwWp52OCRH+tsTINdKfBTHDWDDi+zzeDnALsg3v7z2hndjtUOEg7Noqiq/U+GeH
+        7K7sLTML3Q3pzKBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AC6FF1390E;
+        Thu, 13 Apr 2023 19:20:24 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id st7tGvhVOGTaRQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 13 Apr 2023 19:20:24 +0000
+Message-ID: <1bbc7228-c2fe-0af0-c15c-b378bc4d111c@suse.de>
+Date:   Thu, 13 Apr 2023 21:20:23 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] drm/fbdev-generic: fix potential out-of-bounds access
+Content-Language: en-US
+To:     Sui Jingfeng <15330273260@189.cn>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>, Li Yi <liyi@loongson.cn>,
+        Helge Deller <deller@gmx.de>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
+References: <20230409132110.494630-1-15330273260@189.cn>
+ <ZDV0Te65tSh4Q/vc@phenom.ffwll.local>
+ <42f16d0d-4e1a-a016-f4cc-af24efa75f1c@189.cn>
+ <ZDbuCWKfFlWyiOGp@phenom.ffwll.local>
+ <dbac96b2-0fea-591b-517d-2a23cc36b8de@189.cn>
+ <CAKMK7uG_h7htCDARudZpHOOMG4iOOLZmz0_WskvWGf+DKGwU1w@mail.gmail.com>
+ <531f0bdf-2ae8-0361-183b-57b40df6345f@189.cn>
+ <ZDhQW6El6ztyHK4M@phenom.ffwll.local>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <ZDhQW6El6ztyHK4M@phenom.ffwll.local>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------pgvBM7074Br404IT7p6s9CzS"
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Having helped an user recently figure out why the customized path being
-specified was not taken into account landed on a subtle difference
-between using:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------pgvBM7074Br404IT7p6s9CzS
+Content-Type: multipart/mixed; boundary="------------tGm6EbuekSzi29quXttoaFCO";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Sui Jingfeng <15330273260@189.cn>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
+ Li Yi <liyi@loongson.cn>, Helge Deller <deller@gmx.de>,
+ Lucas De Marchi <lucas.demarchi@intel.com>, linux-kernel@vger.kernel.org,
+ linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ loongson-kernel@lists.loongnix.cn
+Message-ID: <1bbc7228-c2fe-0af0-c15c-b378bc4d111c@suse.de>
+Subject: Re: [PATCH] drm/fbdev-generic: fix potential out-of-bounds access
+References: <20230409132110.494630-1-15330273260@189.cn>
+ <ZDV0Te65tSh4Q/vc@phenom.ffwll.local>
+ <42f16d0d-4e1a-a016-f4cc-af24efa75f1c@189.cn>
+ <ZDbuCWKfFlWyiOGp@phenom.ffwll.local>
+ <dbac96b2-0fea-591b-517d-2a23cc36b8de@189.cn>
+ <CAKMK7uG_h7htCDARudZpHOOMG4iOOLZmz0_WskvWGf+DKGwU1w@mail.gmail.com>
+ <531f0bdf-2ae8-0361-183b-57b40df6345f@189.cn>
+ <ZDhQW6El6ztyHK4M@phenom.ffwll.local>
+In-Reply-To: <ZDhQW6El6ztyHK4M@phenom.ffwll.local>
 
-echo "/xyz/firmware" > /sys/module/firmware_class/parameters/path
+--------------tGm6EbuekSzi29quXttoaFCO
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-which inserts an additional newline which is passed as is down to
-fw_get_filesystem_firmware() and ultimately kernel_read_file_from_path()
-and fails.
+SGkNCg0KQW0gMTMuMDQuMjMgdW0gMjA6NTYgc2NocmllYiBEYW5pZWwgVmV0dGVyOg0KWy4u
+Ll0NCj4gDQo+IFRoaXMgc2hvdWxkIHN3aXRjaCB0aGUgZXhpc3RpbmcgY29kZSBvdmVyIHRv
+IHVzaW5nIGRybV9mcmFtZWJ1ZmZlciBpbnN0ZWFkDQo+IG9mIGZiZGV2Og0KPiANCj4gDQo+
+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vZHJtX2ZiX2hlbHBlci5jIGIvZHJpdmVy
+cy9ncHUvZHJtL2RybV9mYl9oZWxwZXIuYw0KPiBpbmRleCBlZjRlYjhiMTI3NjYuLjk5Y2E2
+OWRkNDMyZiAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL2RybV9mYl9oZWxwZXIu
+Yw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vZHJtX2ZiX2hlbHBlci5jDQo+IEBAIC02NDcs
+MjIgKzY0NywyNiBAQCBzdGF0aWMgdm9pZCBkcm1fZmJfaGVscGVyX2RhbWFnZShzdHJ1Y3Qg
+ZHJtX2ZiX2hlbHBlciAqaGVscGVyLCB1MzIgeCwgdTMyIHksDQo+ICAgc3RhdGljIHZvaWQg
+ZHJtX2ZiX2hlbHBlcl9tZW1vcnlfcmFuZ2VfdG9fY2xpcChzdHJ1Y3QgZmJfaW5mbyAqaW5m
+bywgb2ZmX3Qgb2ZmLCBzaXplX3QgbGVuLA0KPiAgIAkJCQkJICAgICAgIHN0cnVjdCBkcm1f
+cmVjdCAqY2xpcCkNCj4gICB7DQo+ICsJc3RydWN0IGRybV9mYl9oZWxwZXIgKmhlbHBlciA9
+IGluZm8tPnBhcjsNCj4gKw0KPiAgIAlvZmZfdCBlbmQgPSBvZmYgKyBsZW47DQo+ICAgCXUz
+MiB4MSA9IDA7DQo+ICAgCXUzMiB5MSA9IG9mZiAvIGluZm8tPmZpeC5saW5lX2xlbmd0aDsN
+Cj4gLQl1MzIgeDIgPSBpbmZvLT52YXIueHJlczsNCj4gLQl1MzIgeTIgPSBESVZfUk9VTkRf
+VVAoZW5kLCBpbmZvLT5maXgubGluZV9sZW5ndGgpOw0KPiArCXUzMiB4MiA9IGhlbHBlci0+
+ZmItPmhlaWdodDsNCj4gKwl1bnNpZ25lZCBzdHJpZGUgPSBoZWxwZXItPmZiLT5waXRjaGVz
+WzBdOw0KPiArCXUzMiB5MiA9IERJVl9ST1VORF9VUChlbmQsIHN0cmlkZSk7DQo+ICsJaW50
+IGJwcCA9IGRybV9mb3JtYXRfaW5mb19icHAoaGVscGVyLT5mYi0+Zm9ybWF0LCAwKTsNCg0K
+UGxlYXNlIERPTlQgZG8gdGhhdC4gVGhlIGNvZGUgaGVyZSBpcyBmYmRldiBjb2RlIGFuZCBz
+aG91bGRuJ3QgYm90aGVyIA0KYWJvdXQgRFJNIGRhdGEgc3RydWN0dXJlcy4gQWN0dWFsbHks
+IGl0IHNob3VsZG4ndCBiZSBoZXJlOiBhIG51bWJlciBvZiANCmZiZGV2IGRyaXZlcnMgd2l0
+aCBkZWZlcnJlZCBJL08gY29udGFpbiBzaW1pbGFyIGNvZGUgYW5kIHRoZSBmYmRldiANCm1v
+ZHVsZSBzaG91bGQgcHJvdmlkZSB1cyB3aXRoIGEgaGVscGVyLiAoSSB0aGluayBJIGV2ZW4g
+aGFkIHNvbWUgcGF0Y2hlcyANCnNvbWV3aGVyZS4pDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFz
+DQoNCj4gICANCj4gICAJaWYgKCh5MiAtIHkxKSA9PSAxKSB7DQo+ICAgCQkvKg0KPiAgIAkJ
+ICogV2UndmUgb25seSB3cml0dGVuIHRvIGEgc2luZ2xlIHNjYW5saW5lLiBUcnkgdG8gcmVk
+dWNlDQo+ICAgCQkgKiB0aGUgbnVtYmVyIG9mIGhvcml6b250YWwgcGl4ZWxzIHRoYXQgbmVl
+ZCBhbiB1cGRhdGUuDQo+ICAgCQkgKi8NCj4gLQkJb2ZmX3QgYml0X29mZiA9IChvZmYgJSBp
+bmZvLT5maXgubGluZV9sZW5ndGgpICogODsNCj4gLQkJb2ZmX3QgYml0X2VuZCA9IChlbmQg
+JSBpbmZvLT5maXgubGluZV9sZW5ndGgpICogODsNCj4gKwkJb2ZmX3QgYml0X29mZiA9IChv
+ZmYgJSBzdHJpZGUpICogODsNCj4gKwkJb2ZmX3QgYml0X2VuZCA9IChlbmQgJSBzdHJpZGUp
+ICogODsNCj4gICANCj4gLQkJeDEgPSBiaXRfb2ZmIC8gaW5mby0+dmFyLmJpdHNfcGVyX3Bp
+eGVsOw0KPiAtCQl4MiA9IERJVl9ST1VORF9VUChiaXRfZW5kLCBpbmZvLT52YXIuYml0c19w
+ZXJfcGl4ZWwpOw0KPiArCQl4MSA9IGJpdF9vZmYgLyBicHA7DQo+ICsJCXgyID0gRElWX1JP
+VU5EX1VQKGJpdF9lbmQsIGJwcCk7DQo+ICAgCX0NCj4gICANCj4gICAJZHJtX3JlY3RfaW5p
+dChjbGlwLCB4MSwgeTEsIHgyIC0geDEsIHkyIC0geTEpOw0KPiANCj4+DQo+Pj4+Pj4+PiAr
+ICBzY3JlZW5fc2l6ZSA9IHNpemVzLT5zdXJmYWNlX2hlaWdodCAqIGJ1ZmZlci0+ZmItPnBp
+dGNoZXNbMF07DQo+Pj4+Pj4+PiArDQo+Pj4+Pj4+PiAgICAgICAgICAgICAgc2NyZWVuX2J1
+ZmZlciA9IHZ6YWxsb2Moc2NyZWVuX3NpemUpOw0KPj4+Pj4+Pj4gICAgICAgICAgICAgIGlm
+ICghc2NyZWVuX2J1ZmZlcikgew0KPj4+Pj4+Pj4gICAgICAgICAgICAgICAgICAgICAgcmV0
+ID0gLUVOT01FTTsNCj4+Pj4+Pj4gQ2hlZXJzLCBEYW5pZWwNCj4+Pj4+Pj4NCj4+Pj4+Pj4+
+IC0tDQo+Pj4+Pj4+PiAyLjI1LjENCj4+Pj4+Pj4+DQo+Pj4NCj4+Pg0KPiANCg0KLS0gDQpU
+aG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0
+d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xy
+bmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNm
+w7xocmVyOiBJdm8gVG90ZXYNCg==
 
-Strip off \n from the customized firmware path such that users do not
-run into these hard to debug situations.
+--------------tGm6EbuekSzi29quXttoaFCO--
 
-Link: https://lore.kernel.org/all/20230402135423.3235-1-f.fainelli@gmail.com/
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- drivers/base/firmware_loader/main.c | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+--------------pgvBM7074Br404IT7p6s9CzS
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_loader/main.c
-index 017c4cdb219e..10b7d8fc5d07 100644
---- a/drivers/base/firmware_loader/main.c
-+++ b/drivers/base/firmware_loader/main.c
-@@ -493,9 +493,9 @@ fw_get_filesystem_firmware(struct device *device, struct fw_priv *fw_priv,
- 					     const void *in_buffer))
- {
- 	size_t size;
--	int i, len;
-+	int i, len, maxlen = 0;
- 	int rc = -ENOENT;
--	char *path;
-+	char *path, *nt = NULL;
- 	size_t msize = INT_MAX;
- 	void *buffer = NULL;
- 
-@@ -518,8 +518,17 @@ fw_get_filesystem_firmware(struct device *device, struct fw_priv *fw_priv,
- 		if (!fw_path[i][0])
- 			continue;
- 
--		len = snprintf(path, PATH_MAX, "%s/%s%s",
--			       fw_path[i], fw_priv->fw_name, suffix);
-+		/* strip off \n from customized path */
-+		maxlen = strlen(fw_path[i]);
-+		if (i == 0) {
-+			nt = strchr(fw_path[i], '\n');
-+			if (nt)
-+				maxlen = nt - fw_path[i];
-+		}
-+
-+		len = snprintf(path, PATH_MAX, "%.*s/%s%s",
-+			       maxlen, fw_path[i],
-+			       fw_priv->fw_name, suffix);
- 		if (len >= PATH_MAX) {
- 			rc = -ENAMETOOLONG;
- 			break;
--- 
-2.34.1
+-----BEGIN PGP SIGNATURE-----
 
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmQ4VfcFAwAAAAAACgkQlh/E3EQov+Bo
+Wg/8Cxx7Tn6g7+XPUBRkRrxSmTsA3CdibJ7iya3BC+6BOqUWTbIJhi5zU5zPqRYxKmg57WD+Zn0l
+Bt1WWts73ghr4iq2LvZGkO0QdxuC/LOZdJrp2ezMcsUtjYoDN3MBNim0VytF4De/rpjk9IdxNbxN
+wzCGCw/yVwoxdpc0+glRMRJQoCtoGrUsbSqdrP+kikMvxIVdHfg9+9ef5Ztty4ITnehOx1fKwPuu
+JYMt/GFDuoTbvISOYxcMbZIJpGXJpns1U2u1YduyRYEGQlGr8z2HByF/43aKD/iJaoqVYDxwjgQk
+fJ6gkGaRJ6O2lkGukQLQ7WLa5csSbirg8w2itdbOAXvJ/V8PxXIZeMAWKQOYLM5K2acYNP22HJUo
+f3KrG6SsS9vADSXAMzTxJvROVThlQk9kzbcN+pc+JPo4A4PsMim11aaz9Q3Atq73C4kdgXpg+vi3
+fneqvTwPOyLPXKDFgcFt+A/pP5OzDbaRWAMK/diG3UlXvQJb1iGPc9zbR8EA39KMpKqDB/puBKDt
+8tp4DvB7NcPP2n/su/vxlr75bH7Zo+TFiHOR1JvHVoiKu3raL1OdrWJc6kbQ5qGH7EdNH0wAzXBU
+PPUNYXyo3AemU9KeiC803L0Fs+d7BCsYFVFIDijJPQoDr2ftydHCqrIxknKb/aMlsgRNVmBlNchH
+ils=
+=WuX9
+-----END PGP SIGNATURE-----
+
+--------------pgvBM7074Br404IT7p6s9CzS--
