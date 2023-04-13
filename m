@@ -2,84 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C0826E0E8E
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:27:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2758B6E0E97
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:28:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbjDMN1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 09:27:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53922 "EHLO
+        id S231251AbjDMN2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 09:28:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231176AbjDMN1G (ORCPT
+        with ESMTP id S229870AbjDMN2H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 09:27:06 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55D52697;
-        Thu, 13 Apr 2023 06:27:00 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33DDOdE1031521;
-        Thu, 13 Apr 2023 13:26:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=lACip7+EkKWDEeQBT2iYREjHR0TDo6jILmW0mTPMejc=;
- b=r9qLy0K1CkxZy/9wcPgtoMVR8QXHLuHlDj2XWWZtmCvyLLxXECnrI7eYkXT5PXutJTZk
- cYhqeXMSBStKVd0cVBvQK3ssnY+Rw5e7BlNvv6za9EzI928Ga8oVH7jUiIwHDLSSoJfE
- nIQirsMlCEuSCDBOHhFun3OiWe6DoGr2/jOxbQVPHFhZktjpFp7p6gCl8pEm/xHngpV1
- eMPHgTwg9TbCDRBJQlbUVcp2utRLsjbegW2tzcCYn1d4o2KW0v/yTDe6jHaL0OijI6o/
- C9yngNJ6eAdpR6T00SexjqwsWKOP/nZzdUkUOOvupBEyroAANsfkgLY/DvIzqjbcox0h MQ== 
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pxgvn43t5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Apr 2023 13:26:37 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33DCuweE028289;
-        Thu, 13 Apr 2023 13:26:36 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3pu0frbq6m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Apr 2023 13:26:36 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33DDQZGt38404466
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 13 Apr 2023 13:26:35 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 41F165806F;
-        Thu, 13 Apr 2023 13:26:35 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 321B95806D;
-        Thu, 13 Apr 2023 13:26:35 +0000 (GMT)
-Received: from gfwa600.aus.stglabs.ibm.com (unknown [9.3.84.101])
-        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTPS;
-        Thu, 13 Apr 2023 13:26:35 +0000 (GMT)
-Received: by gfwa600.aus.stglabs.ibm.com (Postfix, from userid 181152)
-        id B3719745150; Thu, 13 Apr 2023 08:26:34 -0500 (CDT)
-From:   Lakshmi Yadlapati <lakshmiy@us.ibm.com>
-To:     robh+dt@kernel.org, linux@roeck-us.net, jdelvare@suse.com,
-        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
-        eajames@linux.ibm.com
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, Lakshmi Yadlapati <lakshmiy@us.ibm.com>
-Subject: [PATCH v7 5/5] ARM: dts: aspeed: p10bmc: Change power supply info
-Date:   Thu, 13 Apr 2023 08:26:27 -0500
-Message-Id: <20230413132627.3444119-6-lakshmiy@us.ibm.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230413132627.3444119-1-lakshmiy@us.ibm.com>
-References: <20230413132627.3444119-1-lakshmiy@us.ibm.com>
+        Thu, 13 Apr 2023 09:28:07 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1F1AD17
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:27:38 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f0ad695487so205915e9.0
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:27:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google; t=1681392454; x=1683984454;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=i+E9NsuYGFtDze59BVKJOEvHYy/5++4XsWsMmoJ6GJI=;
+        b=W5OAvjDzLiQ6drDXOw0z1t03f+0qmDOVB6QlkoKfFslqD21QY//WUH7m3pcNno3sKb
+         OT2lFiVvN1m4pw2NMz6QM6Qbem9ra2hll9sAP0yP2dmU1J07kJ86YTTfkSHep4goeFgO
+         caC5P7p9ZM4yAp2gA3Iw3VO3hr9ul4utmMy98=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681392454; x=1683984454;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i+E9NsuYGFtDze59BVKJOEvHYy/5++4XsWsMmoJ6GJI=;
+        b=UvjvBS/o20y2bS84Ia3HIFqbo9caKS6gqM4AtHVdw517h1BU5cQGZZoOLHw6Cwi+S/
+         QjNaGezBcEoB6nLz8GQpM9g9no2vnmBpdzrU8xqCAEDSplnWA/4Leq0IHggGowS9+uf2
+         I4Vn48gWTfk6Yw/cR5NHrNLjYorTcT/Ze+CRpZ16E+1z2+lfTWmg5k1HcRQBmBA2UHhI
+         ufVXMqpvlS9zrDW03OtaqPsacpCVp3bfthDMY7kc6jmvIEWfhutIKGsVzbbIU2apucI6
+         s6sRgEtE90Bd6N0I7LS5DSo0Yr5mQk+gv7otsnSFEBXhLPSjh1TpKTa5lYs9be53meM9
+         +Npw==
+X-Gm-Message-State: AAQBX9fZLu2aQWqsaJG2k2p+hgMuYDmIeluZL8zGWx5BaJb1k46lXUUT
+        w++7xfgVq/ZGbwT6etEnNzfmjA==
+X-Google-Smtp-Source: AKy350ZXwkokURnf5v8+OhRVl+Qois7VYoneoAYjrSJkyFEWB0p5NQXCGKcFaXrawfI/+61JQeoBwg==
+X-Received: by 2002:a05:600c:1c99:b0:3f0:9df8:81e1 with SMTP id k25-20020a05600c1c9900b003f09df881e1mr2004496wms.2.1681392454021;
+        Thu, 13 Apr 2023 06:27:34 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id l7-20020a05600c1d0700b003ee443bf0c7sm5498788wms.16.2023.04.13.06.27.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 06:27:33 -0700 (PDT)
+Date:   Thu, 13 Apr 2023 15:27:31 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Christopher Healy <healych@amazon.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Rob Clark <robdclark@chromium.org>,
+        David Airlie <airlied@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 6/7] drm: Add fdinfo memory stats
+Message-ID: <ZDgDQ1PqtXwu8zqA@phenom.ffwll.local>
+Mail-Followup-To: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Christopher Healy <healych@amazon.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Rob Clark <robdclark@chromium.org>,
+        David Airlie <airlied@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230411225725.2032862-1-robdclark@gmail.com>
+ <20230411225725.2032862-7-robdclark@gmail.com>
+ <29a8d9aa-c6ea-873f-ce0b-fb8199b13068@linux.intel.com>
+ <CAF6AEGsZsMx+Vy+4UQSx3X7w_QNvvjLqWxx=PnCLAOC9f-X2CQ@mail.gmail.com>
+ <ZDb1phnddSne79iN@phenom.ffwll.local>
+ <CAF6AEGvBeDVM12ac0j_PKSdcY83hNDhyrQs9-=h=dx_7AoMXLw@mail.gmail.com>
+ <ZDcEGoSPGr/oRLas@phenom.ffwll.local>
+ <c82fd8fa-9f4b-f62f-83be-25853f9ecf5e@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: R4Hj-2SDmrpHUTXwHqKx7w8ezevAHEdu
-X-Proofpoint-ORIG-GUID: R4Hj-2SDmrpHUTXwHqKx7w8ezevAHEdu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-13_08,2023-04-13_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- impostorscore=0 bulkscore=0 adultscore=0 mlxscore=0 mlxlogscore=852
- lowpriorityscore=0 suspectscore=0 priorityscore=1501 clxscore=1015
- phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304130116
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <c82fd8fa-9f4b-f62f-83be-25853f9ecf5e@linux.intel.com>
+X-Operating-System: Linux phenom 6.1.0-7-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,41 +104,390 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bonnell system supports new ACBEL FSG032 power supply on
-I2C addresses 5A and 5B. Update the device tree with new
-power supply information and device addresses.
+On Thu, Apr 13, 2023 at 01:58:34PM +0100, Tvrtko Ursulin wrote:
+> 
+> On 12/04/2023 20:18, Daniel Vetter wrote:
+> > On Wed, Apr 12, 2023 at 11:42:07AM -0700, Rob Clark wrote:
+> > > On Wed, Apr 12, 2023 at 11:17 AM Daniel Vetter <daniel@ffwll.ch> wrote:
+> > > > 
+> > > > On Wed, Apr 12, 2023 at 10:59:54AM -0700, Rob Clark wrote:
+> > > > > On Wed, Apr 12, 2023 at 7:42 AM Tvrtko Ursulin
+> > > > > <tvrtko.ursulin@linux.intel.com> wrote:
+> > > > > > 
+> > > > > > 
+> > > > > > On 11/04/2023 23:56, Rob Clark wrote:
+> > > > > > > From: Rob Clark <robdclark@chromium.org>
+> > > > > > > 
+> > > > > > > Add support to dump GEM stats to fdinfo.
+> > > > > > > 
+> > > > > > > v2: Fix typos, change size units to match docs, use div_u64
+> > > > > > > v3: Do it in core
+> > > > > > > 
+> > > > > > > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > > > > > > Reviewed-by: Emil Velikov <emil.l.velikov@gmail.com>
+> > > > > > > ---
+> > > > > > >    Documentation/gpu/drm-usage-stats.rst | 21 ++++++++
+> > > > > > >    drivers/gpu/drm/drm_file.c            | 76 +++++++++++++++++++++++++++
+> > > > > > >    include/drm/drm_file.h                |  1 +
+> > > > > > >    include/drm/drm_gem.h                 | 19 +++++++
+> > > > > > >    4 files changed, 117 insertions(+)
+> > > > > > > 
+> > > > > > > diff --git a/Documentation/gpu/drm-usage-stats.rst b/Documentation/gpu/drm-usage-stats.rst
+> > > > > > > index b46327356e80..b5e7802532ed 100644
+> > > > > > > --- a/Documentation/gpu/drm-usage-stats.rst
+> > > > > > > +++ b/Documentation/gpu/drm-usage-stats.rst
+> > > > > > > @@ -105,6 +105,27 @@ object belong to this client, in the respective memory region.
+> > > > > > >    Default unit shall be bytes with optional unit specifiers of 'KiB' or 'MiB'
+> > > > > > >    indicating kibi- or mebi-bytes.
+> > > > > > > 
+> > > > > > > +- drm-shared-memory: <uint> [KiB|MiB]
+> > > > > > > +
+> > > > > > > +The total size of buffers that are shared with another file (ie. have more
+> > > > > > > +than a single handle).
+> > > > > > > +
+> > > > > > > +- drm-private-memory: <uint> [KiB|MiB]
+> > > > > > > +
+> > > > > > > +The total size of buffers that are not shared with another file.
+> > > > > > > +
+> > > > > > > +- drm-resident-memory: <uint> [KiB|MiB]
+> > > > > > > +
+> > > > > > > +The total size of buffers that are resident in system memory.
+> > > > > > 
+> > > > > > I think this naming maybe does not work best with the existing
+> > > > > > drm-memory-<region> keys.
+> > > > > 
+> > > > > Actually, it was very deliberate not to conflict with the existing
+> > > > > drm-memory-<region> keys ;-)
+> > > > > 
+> > > > > I wouldn't have preferred drm-memory-{active,resident,...} but it
+> > > > > could be mis-parsed by existing userspace so my hands were a bit tied.
+> > > > > 
+> > > > > > How about introduce the concept of a memory region from the start and
+> > > > > > use naming similar like we do for engines?
+> > > > > > 
+> > > > > > drm-memory-$CATEGORY-$REGION: ...
+> > > > > > 
+> > > > > > Then we document a bunch of categories and their semantics, for instance:
+> > > > > > 
+> > > > > > 'size' - All reachable objects
+> > > > > > 'shared' - Subset of 'size' with handle_count > 1
+> > > > > > 'resident' - Objects with backing store
+> > > > > > 'active' - Objects in use, subset of resident
+> > > > > > 'purgeable' - Or inactive? Subset of resident.
+> > > > > > 
+> > > > > > We keep the same semantics as with process memory accounting (if I got
+> > > > > > it right) which could be desirable for a simplified mental model.
+> > > > > > 
+> > > > > > (AMD needs to remind me of their 'drm-memory-...' keys semantics. If we
+> > > > > > correctly captured this in the first round it should be equivalent to
+> > > > > > 'resident' above. In any case we can document no category is equal to
+> > > > > > which category, and at most one of the two must be output.)
+> > > > > > 
+> > > > > > Region names we at most partially standardize. Like we could say
+> > > > > > 'system' is to be used where backing store is system RAM and others are
+> > > > > > driver defined.
+> > > > > > 
+> > > > > > Then discrete GPUs could emit N sets of key-values, one for each memory
+> > > > > > region they support.
+> > > > > > 
+> > > > > > I think this all also works for objects which can be migrated between
+> > > > > > memory regions. 'Size' accounts them against all regions while for
+> > > > > > 'resident' they only appear in the region of their current placement, etc.
+> > > > > 
+> > > > > I'm not too sure how to rectify different memory regions with this,
+> > > > > since drm core doesn't really know about the driver's memory regions.
+> > > > > Perhaps we can go back to this being a helper and drivers with vram
+> > > > > just don't use the helper?  Or??
+> > > > 
+> > > > I think if you flip it around to drm-$CATEGORY-memory{-$REGION}: then it
+> > > > all works out reasonably consistently?
+> > > 
+> > > That is basically what we have now.  I could append -system to each to
+> > > make things easier to add vram/etc (from a uabi standpoint)..
+> > 
+> > What you have isn't really -system, but everything. So doesn't really make
+> > sense to me to mark this -system, it's only really true for integrated (if
+> > they don't have stolen or something like that).
+> > 
+> > Also my comment was more in reply to Tvrtko's suggestion.
+> 
+> Right so my proposal was drm-memory-$CATEGORY-$REGION which I think aligns
+> with the current drm-memory-$REGION by extending, rather than creating
+> confusion with different order of key name components.
 
-Signed-off-by: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
-Reviewed-by: Eddie James <eajames@linux.ibm.com>
----
- arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Oh my comment was pretty much just bikeshed, in case someone creates a
+$REGION that other drivers use for $CATEGORY. Kinda Rob's parsing point.
+So $CATEGORY before the -memory.
 
-diff --git a/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts b/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts
-index a5be0ee048ec..4f959a4f8b58 100644
---- a/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts
-@@ -552,14 +552,14 @@ ucd90160@64 {
- &i2c3 {
- 	status = "okay";
- 
--	power-supply@58 {
--		compatible = "ibm,cffps";
--		reg = <0x58>;
-+	power-supply@5a {
-+		compatible = "acbel,fsg032";
-+		reg = <0x5a>;
- 	};
- 
--	power-supply@59 {
--		compatible = "ibm,cffps";
--		reg = <0x59>;
-+	power-supply@5b {
-+		compatible = "acbel,fsg032";
-+		reg = <0x5b>;
- 	};
- };
- 
+Otoh I don't think that'll happen, so I guess we can go with whatever more
+folks like :-) I don't really care much personally.
+
+> AMD currently has (among others) drm-memory-vram, which we could define in
+> the spec maps to category X, if category component is not present.
+> 
+> Some examples:
+> 
+> drm-memory-resident-system:
+> drm-memory-size-lmem0:
+> drm-memory-active-vram:
+> 
+> Etc.. I think it creates a consistent story.
+> 
+> Other than this, my two I think significant opens which haven't been
+> addressed yet are:
+> 
+> 1)
+> 
+> Why do we want totals (not per region) when userspace can trivially
+> aggregate if they want. What is the use case?
+> 
+> 2)
+> 
+> Current proposal limits the value to whole objects and fixates that by
+> having it in the common code. If/when some driver is able to support sub-BO
+> granularity they will need to opt out of the common printer at which point
+> it may be less churn to start with a helper rather than mid-layer. Or maybe
+> some drivers already support this, I don't know. Given how important VM BIND
+> is I wouldn't be surprised.
+
+I feel like for drivers using ttm we want a ttm helper which takes care of
+the region printing in hopefully a standard way. And that could then also
+take care of all kinds of of partial binding and funny rules (like maybe
+we want a standard vram region that addds up all the lmem regions on
+intel, so that all dgpu have a common vram bucket that generic tools
+understand?).
+
+It does mean we walk the bo list twice, but *shrug*. People have been
+complaining about procutils for decades, they're still horrible, I think
+walking bo lists twice internally in the ttm case is going to be ok. If
+not, it's internals, we can change them again.
+
+Also I'd lean a lot more towards making ttm a helper and not putting that
+into core, exactly because it's pretty clear we'll need more flexibility
+when it comes to accurate stats for multi-region drivers.
+
+But for a first "how much gpu space does this app use" across everything I
+think this is a good enough starting point.
+-Daniel
+
+> 
+> Regards,
+> 
+> Tvrtko
+> 
+> > > > And ttm could/should perhaps provide a helper to dump the region specific
+> > > > version of this. Or we lift the concept of regions out of ttm a bit
+> > > > higher, that's kinda needed for cgroups eventually anyway I think.
+> > > > -Daniel
+> > > > 
+> > > > > 
+> > > > > BR,
+> > > > > -R
+> > > > > 
+> > > > > > Userspace can aggregate if it wishes to do so but kernel side should not.
+> > > > > > 
+> > > > > > > +
+> > > > > > > +- drm-purgeable-memory: <uint> [KiB|MiB]
+> > > > > > > +
+> > > > > > > +The total size of buffers that are purgeable.
+> > > > > > > +
+> > > > > > > +- drm-active-memory: <uint> [KiB|MiB]
+> > > > > > > +
+> > > > > > > +The total size of buffers that are active on one or more rings.
+> > > > > > > +
+> > > > > > >    - drm-cycles-<str> <uint>
+> > > > > > > 
+> > > > > > >    Engine identifier string must be the same as the one specified in the
+> > > > > > > diff --git a/drivers/gpu/drm/drm_file.c b/drivers/gpu/drm/drm_file.c
+> > > > > > > index 37dfaa6be560..46fdd843bb3a 100644
+> > > > > > > --- a/drivers/gpu/drm/drm_file.c
+> > > > > > > +++ b/drivers/gpu/drm/drm_file.c
+> > > > > > > @@ -42,6 +42,7 @@
+> > > > > > >    #include <drm/drm_client.h>
+> > > > > > >    #include <drm/drm_drv.h>
+> > > > > > >    #include <drm/drm_file.h>
+> > > > > > > +#include <drm/drm_gem.h>
+> > > > > > >    #include <drm/drm_print.h>
+> > > > > > > 
+> > > > > > >    #include "drm_crtc_internal.h"
+> > > > > > > @@ -871,6 +872,79 @@ void drm_send_event(struct drm_device *dev, struct drm_pending_event *e)
+> > > > > > >    }
+> > > > > > >    EXPORT_SYMBOL(drm_send_event);
+> > > > > > > 
+> > > > > > > +static void print_size(struct drm_printer *p, const char *stat, size_t sz)
+> > > > > > > +{
+> > > > > > > +     const char *units[] = {"", " KiB", " MiB"};
+> > > > > > > +     unsigned u;
+> > > > > > > +
+> > > > > > > +     for (u = 0; u < ARRAY_SIZE(units) - 1; u++) {
+> > > > > > > +             if (sz < SZ_1K)
+> > > > > > > +                     break;
+> > > > > > > +             sz = div_u64(sz, SZ_1K);
+> > > > > > > +     }
+> > > > > > > +
+> > > > > > > +     drm_printf(p, "%s:\t%zu%s\n", stat, sz, units[u]);
+> > > > > > > +}
+> > > > > > > +
+> > > > > > > +static void print_memory_stats(struct drm_printer *p, struct drm_file *file)
+> > > > > > > +{
+> > > > > > > +     struct drm_gem_object *obj;
+> > > > > > > +     struct {
+> > > > > > > +             size_t shared;
+> > > > > > > +             size_t private;
+> > > > > > > +             size_t resident;
+> > > > > > > +             size_t purgeable;
+> > > > > > > +             size_t active;
+> > > > > > > +     } size = {0};
+> > > > > > > +     bool has_status = false;
+> > > > > > > +     int id;
+> > > > > > > +
+> > > > > > > +     spin_lock(&file->table_lock);
+> > > > > > > +     idr_for_each_entry (&file->object_idr, obj, id) {
+> > > > > > > +             enum drm_gem_object_status s = 0;
+> > > > > > > +
+> > > > > > > +             if (obj->funcs && obj->funcs->status) {
+> > > > > > > +                     s = obj->funcs->status(obj);
+> > > > > > > +                     has_status = true;
+> > > > > > > +             }
+> > > > > > > +
+> > > > > > > +             if (obj->handle_count > 1) {
+> > > > > > > +                     size.shared += obj->size;
+> > > > > > > +             } else {
+> > > > > > > +                     size.private += obj->size;
+> > > > > > > +             }
+> > > > > > > +
+> > > > > > > +             if (s & DRM_GEM_OBJECT_RESIDENT) {
+> > > > > > > +                     size.resident += obj->size;
+> > > > > > > +             } else {
+> > > > > > > +                     /* If already purged or not yet backed by pages, don't
+> > > > > > > +                      * count it as purgeable:
+> > > > > > > +                      */
+> > > > > > > +                     s &= ~DRM_GEM_OBJECT_PURGEABLE;
+> > > > > > 
+> > > > > > Side question - why couldn't resident buffers be purgeable? Did you mean
+> > > > > > for the if branch check to be active here? But then it wouldn't make
+> > > > > > sense for a driver to report active _and_ purgeable..
+> > > > > > 
+> > > > > > > +             }
+> > > > > > > +
+> > > > > > > +             if (!dma_resv_test_signaled(obj->resv, dma_resv_usage_rw(true))) {
+> > > > > > > +                     size.active += obj->size;
+> > > > > > > +
+> > > > > > > +                     /* If still active, don't count as purgeable: */
+> > > > > > > +                     s &= ~DRM_GEM_OBJECT_PURGEABLE;
+> > > > > > 
+> > > > > > Another side question - I guess this tidies a race in reporting? If so
+> > > > > > not sure it matters given the stats are all rather approximate.
+> > > > > > 
+> > > > > > > +             }
+> > > > > > > +
+> > > > > > > +             if (s & DRM_GEM_OBJECT_PURGEABLE)
+> > > > > > > +                     size.purgeable += obj->size;
+> > > > > > > +     }
+> > > > > > 
+> > > > > > One concern I have here is that it is all based on obj->size. That is,
+> > > > > > there is no provision for drivers to implement page level granularity.
+> > > > > > So correct reporting in use cases such as VM BIND in the future wouldn't
+> > > > > > work unless it was a driver hook to get almost all of the info above. At
+> > > > > > which point common code is just a loop. TBF I don't know if any drivers
+> > > > > > do sub obj->size backing store granularity today, but I think it is
+> > > > > > sometimes to be sure of before proceeding.
+> > > > > > 
+> > > > > > Second concern is what I touched upon in the first reply block - if the
+> > > > > > common code blindly loops over all objects then on discrete GPUs it
+> > > > > > seems we get an 'aggregate' value here which is not what I think we
+> > > > > > want. We rather want to have the ability for drivers to list stats per
+> > > > > > individual memory region.
+> > > > > > 
+> > > > > > > +     spin_unlock(&file->table_lock);
+> > > > > > > +
+> > > > > > > +     print_size(p, "drm-shared-memory", size.shared);
+> > > > > > > +     print_size(p, "drm-private-memory", size.private);
+> > > > > > > +     print_size(p, "drm-active-memory", size.active);
+> > > > > > > +
+> > > > > > > +     if (has_status) {
+> > > > > > > +             print_size(p, "drm-resident-memory", size.resident);
+> > > > > > > +             print_size(p, "drm-purgeable-memory", size.purgeable);
+> > > > > > > +     }
+> > > > > > > +}
+> > > > > > > +
+> > > > > > >    /**
+> > > > > > >     * drm_fop_show_fdinfo - helper for drm file fops
+> > > > > > >     * @seq_file: output stream
+> > > > > > > @@ -904,6 +978,8 @@ void drm_fop_show_fdinfo(struct seq_file *m, struct file *f)
+> > > > > > > 
+> > > > > > >        if (dev->driver->show_fdinfo)
+> > > > > > >                dev->driver->show_fdinfo(&p, file);
+> > > > > > > +
+> > > > > > > +     print_memory_stats(&p, file);
+> > > > > > >    }
+> > > > > > >    EXPORT_SYMBOL(drm_fop_show_fdinfo);
+> > > > > > > 
+> > > > > > > diff --git a/include/drm/drm_file.h b/include/drm/drm_file.h
+> > > > > > > index dfa995b787e1..e5b40084538f 100644
+> > > > > > > --- a/include/drm/drm_file.h
+> > > > > > > +++ b/include/drm/drm_file.h
+> > > > > > > @@ -41,6 +41,7 @@
+> > > > > > >    struct dma_fence;
+> > > > > > >    struct drm_file;
+> > > > > > >    struct drm_device;
+> > > > > > > +struct drm_printer;
+> > > > > > >    struct device;
+> > > > > > >    struct file;
+> > > > > > > 
+> > > > > > > diff --git a/include/drm/drm_gem.h b/include/drm/drm_gem.h
+> > > > > > > index 189fd618ca65..213917bb6b11 100644
+> > > > > > > --- a/include/drm/drm_gem.h
+> > > > > > > +++ b/include/drm/drm_gem.h
+> > > > > > > @@ -42,6 +42,14 @@
+> > > > > > >    struct iosys_map;
+> > > > > > >    struct drm_gem_object;
+> > > > > > > 
+> > > > > > > +/**
+> > > > > > > + * enum drm_gem_object_status - bitmask of object state for fdinfo reporting
+> > > > > > > + */
+> > > > > > > +enum drm_gem_object_status {
+> > > > > > > +     DRM_GEM_OBJECT_RESIDENT  = BIT(0),
+> > > > > > > +     DRM_GEM_OBJECT_PURGEABLE = BIT(1),
+> > > > > > > +};
+> > > > > > > +
+> > > > > > >    /**
+> > > > > > >     * struct drm_gem_object_funcs - GEM object functions
+> > > > > > >     */
+> > > > > > > @@ -174,6 +182,17 @@ struct drm_gem_object_funcs {
+> > > > > > >         */
+> > > > > > >        int (*evict)(struct drm_gem_object *obj);
+> > > > > > > 
+> > > > > > > +     /**
+> > > > > > > +      * @status:
+> > > > > > > +      *
+> > > > > > > +      * The optional status callback can return additional object state
+> > > > > > > +      * which determines which stats the object is counted against.  The
+> > > > > > > +      * callback is called under table_lock.  Racing against object status
+> > > > > > > +      * change is "harmless", and the callback can expect to not race
+> > > > > > > +      * against object destruction.
+> > > > > > > +      */
+> > > > > > > +     enum drm_gem_object_status (*status)(struct drm_gem_object *obj);
+> > > > > > 
+> > > > > > Does this needs to be in object funcs and couldn't be consolidated to
+> > > > > > driver level?
+> > > > > > 
+> > > > > > Regards,
+> > > > > > 
+> > > > > > Tvrtko
+> > > > > > 
+> > > > > > > +
+> > > > > > >        /**
+> > > > > > >         * @vm_ops:
+> > > > > > >         *
+> > > > 
+> > > > --
+> > > > Daniel Vetter
+> > > > Software Engineer, Intel Corporation
+> > > > http://blog.ffwll.ch
+> > 
+
 -- 
-2.37.2
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
