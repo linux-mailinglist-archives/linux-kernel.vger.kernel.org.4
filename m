@@ -2,129 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89AF06E1133
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 17:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0165B6E1136
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 17:34:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231467AbjDMPdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 11:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52114 "EHLO
+        id S230483AbjDMPeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 11:34:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231347AbjDMPdn (ORCPT
+        with ESMTP id S229640AbjDMPeO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 11:33:43 -0400
-Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6DD2D40
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 08:33:41 -0700 (PDT)
-Received: by mail-io1-f80.google.com with SMTP id c5-20020a6bcc05000000b00760af68ad63so1936059iog.3
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 08:33:41 -0700 (PDT)
+        Thu, 13 Apr 2023 11:34:14 -0400
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6AD1735;
+        Thu, 13 Apr 2023 08:34:13 -0700 (PDT)
+Received: by mail-wm1-f44.google.com with SMTP id v20-20020a05600c471400b003ed8826253aso3971977wmo.0;
+        Thu, 13 Apr 2023 08:34:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681400020; x=1683992020;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CH/wnFKEHw/ZuUNinYZbwxexwZCPvWpvfmRYHTUngNI=;
-        b=KwzHpJbNQfUqEkvGPYcFdGWxtJyzTgoN+VEoxKv+KkXRr+RLpiW1cEVnIDcklK7BeY
-         4KmaY7sqcEl5HZL0ZzuRBXtgympljqeeJoPFJL4dpB7dcDfVnCWi4i+TTm9UGpuSS9Cv
-         XRVBfa7n+MNIvtP1NQVx4Nd6lVStKCvfJu/qkZmnPDJVUgl2Y6no57dR2jQOngdXR9W5
-         wbyLvghSsczQb+rjzBoFzS4EXWowaQ07jleOgCrojedTiLHB38f7sk9ziyyc84XAnxkO
-         zZaNpLzVzmgNCor5JmpNTxoRWl/mnpjjBofyvXmC4nmMaLn+fMJAoVdkwOUIrRW44tqU
-         WdNg==
-X-Gm-Message-State: AAQBX9fboyBkwaYhoRfqHqvgoAxIaa0eAfTjIlWzqB0PiuPqhjy27qEl
-        RNMJZ/si32FpkvDBu0+JHJRb/w02Qw0Cdtlvu7rUPhXfoZFb
-X-Google-Smtp-Source: AKy350a3x3f7fQO9a3dq+ppYo28D+FGUOcXxPn1gj+dUywbekZ0BiR2BfdVO3s1CGK1hpLHwcx9y6soegnGf2R8EFT4KerjA14Lx
+        d=1e100.net; s=20221208; t=1681400052; x=1683992052;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fL7l8rFrlcpe/xiNSpGTIsY2ITjrB7+gQWfKwecs0Zk=;
+        b=J/x/D1qwiC8QULuqAIUApMTkALgb+hmGAXP5QJcj/hT83Vjmw4Y72JckJnzCglM7ro
+         T7zueBw/H50h8RYrGLCyq6R2WiH/CakU2Cb9UuauWnL9icxcrbq67XQykGOgfluRbZNN
+         nOFswHtlU1fOr1G8Fum3r4eWb34rL5Q4swGif1lOs0urXT8lrzaC6HgpH4NXYO0BHTSb
+         AiBn1DdNU+M1LlvFjq9e/Gg94IJbPgrtT9rotIkKF2dJkup92alnfGqSeu/I5w+YVmCE
+         D3cmfguo03vepQ9KHvanZbYkAZLQHBlpnSxQDhWFjsb/UeWc8rbA3UuNV1wW7FVg0YbJ
+         ptYQ==
+X-Gm-Message-State: AAQBX9cvOTBNKrWr29+0UPlECyEAK30LZ+2NGxHnZwC0HRqZSLIMdMno
+        dqguEpfR56vLNMmNKl4BdUY=
+X-Google-Smtp-Source: AKy350ZXINt7MAa6jIBI5IRWUmAG08Cv4/HGMeCXYz3QbS43jFGtd7EOBtgtIhVhrIZEEAarFjXTDQ==
+X-Received: by 2002:a1c:7312:0:b0:3f0:9f9b:1665 with SMTP id d18-20020a1c7312000000b003f09f9b1665mr2361796wmb.3.1681400052184;
+        Thu, 13 Apr 2023 08:34:12 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id u10-20020a7bc04a000000b003f09d7b6e20sm2136546wmc.2.2023.04.13.08.34.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 08:34:11 -0700 (PDT)
+Date:   Thu, 13 Apr 2023 15:34:06 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Wei Liu <wei.liu@kernel.org>,
+        Jinank Jain <jinankjain@linux.microsoft.com>,
+        "g@liuwe-devbox-debian-v2" <g@liuwe-devbox-debian-v2>,
+        Jinank Jain <jinankjain@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "kw@linux.com" <kw@linux.com>, "robh@kernel.org" <robh@kernel.org>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "nunodasneves@linux.microsoft.com" <nunodasneves@linux.microsoft.com>
+Subject: Re: [PATCH] PCI: hv: Use nested hypercall for retargeting interrupts
+Message-ID: <ZDgg7sq4mXk8025W@liuwe-devbox-debian-v2>
+References: <20230404113546.856813-1-jinankjain@linux.microsoft.com>
+ <ZDdZVw9Y0q7oT1FG@liuwe-devbox-debian-v2>
+ <BYAPR21MB168827DA138ADE39298FFB37D7989@BYAPR21MB1688.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:850e:0:b0:40b:d54d:e5d6 with SMTP id
- g14-20020a02850e000000b0040bd54de5d6mr849776jai.5.1681400020453; Thu, 13 Apr
- 2023 08:33:40 -0700 (PDT)
-Date:   Thu, 13 Apr 2023 08:33:40 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f1db9605f939720e@google.com>
-Subject: [syzbot] [bpf?] [net?] WARNING in sock_map_del_link
-From:   syzbot <syzbot+49f6cef45247ff249498@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com,
-        jakub@cloudflare.com, john.fastabend@gmail.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BYAPR21MB168827DA138ADE39298FFB37D7989@BYAPR21MB1688.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Apr 13, 2023 at 03:05:09AM +0000, Michael Kelley (LINUX) wrote:
+> From: Wei Liu <wei.liu@kernel.org> Sent: Wednesday, April 12, 2023 6:23 PM
+> > 
+> > On Tue, Apr 04, 2023 at 11:35:46AM +0000, Jinank Jain wrote:
+> > > In case of nested MSHV, retargeting interrupt hypercall should be sent
+> > > to L0 hypervisor instead of L1 hypervisor.
+> > >
+> > > Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
+> > 
+> > Applied to hyperv-next. Thanks.
+> 
+> I'd like to hold off on taking this change.  Nuno and I are discussing
+> how best to handle nested hypercalls.  In addition to the proposed
+> nested changes,  we have hypercall changes coming as part of the
+> TDX and fully enlightened SNP patch sets.  If possible, I'd like to
+> avoid adding logic at the hv_do_hypercall() call sites.  It's not clear
+> whether avoiding such logic will really be feasible, but I'd like to
+> think about it for a bit before reaching that conclusion.
 
-syzbot found the following issue on:
+I thought that discussion will go on for a while but this patch fixed a
+real bug.
 
-HEAD commit:    d319f344561d mm: Fix copy_from_user_nofault().
-git tree:       bpf-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=15930c9dc80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=78c9d875f0a80d33
-dashboard link: https://syzkaller.appspot.com/bug?extid=49f6cef45247ff249498
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Holding off is fine too. I will remove this patch from hyperv-next.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Thanks,
+Wei.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/229f3623b7df/disk-d319f344.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/6da0db75c9aa/vmlinux-d319f344.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/01f022fb9a13/bzImage-d319f344.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+49f6cef45247ff249498@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 7921 at kernel/softirq.c:376 __local_bh_enable_ip+0xbe/0x130 kernel/softirq.c:376
-Modules linked in:
-CPU: 1 PID: 7921 Comm: syz-executor.4 Not tainted 6.2.0-syzkaller-13249-gd319f344561d #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
-RIP: 0010:__local_bh_enable_ip+0xbe/0x130 kernel/softirq.c:376
-Code: 45 bf 01 00 00 00 e8 b1 44 0a 00 e8 9c 41 3d 00 fb 65 8b 05 2c 61 b5 7e 85 c0 74 58 5b 5d c3 65 8b 05 12 2f b4 7e 85 c0 75 a2 <0f> 0b eb 9e e8 e9 41 3d 00 eb 9f 48 89 ef e8 ff 30 18 00 eb a8 0f
-RSP: 0018:ffffc90007bffbe8 EFLAGS: 00010046
-RAX: 0000000000000000 RBX: 0000000000000201 RCX: 1ffffffff1cf0736
-RDX: 0000000000000000 RSI: 0000000000000201 RDI: ffffffff882bf40a
-RBP: ffffffff882bf40a R08: 0000000000000000 R09: ffff88801cc6327b
-R10: ffffed100398c64f R11: 1ffffffff21917f0 R12: ffff88801cc63268
-R13: ffff88801cc63268 R14: ffff8880188ef500 R15: 0000000000000000
-FS:  00007f378f724700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fbbc57831b8 CR3: 00000000210ad000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- spin_unlock_bh include/linux/spinlock.h:395 [inline]
- sock_map_del_link+0x2ea/0x510 net/core/sock_map.c:165
- sock_map_unref+0xb0/0x1d0 net/core/sock_map.c:184
- sock_hash_delete_elem+0x1ec/0x2a0 net/core/sock_map.c:945
- map_delete_elem kernel/bpf/syscall.c:1536 [inline]
- __sys_bpf+0x2edc/0x53e0 kernel/bpf/syscall.c:5053
- __do_sys_bpf kernel/bpf/syscall.c:5166 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5164 [inline]
- __x64_sys_bpf+0x79/0xc0 kernel/bpf/syscall.c:5164
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f378ea8c169
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f378f724168 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 00007f378ebabf80 RCX: 00007f378ea8c169
-RDX: 0000000000000020 RSI: 0000000020000140 RDI: 0000000000000003
-RBP: 00007f378eae7ca1 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffe9737aebf R14: 00007f378f724300 R15: 0000000000022000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> 
+> Michael
+> 
