@@ -2,143 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A346E0B33
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 12:14:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99DAA6E0B2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 12:13:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbjDMKOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 06:14:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59442 "EHLO
+        id S229716AbjDMKNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 06:13:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230403AbjDMKM3 (ORCPT
+        with ESMTP id S230344AbjDMKNJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 06:12:29 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D929750;
-        Thu, 13 Apr 2023 03:12:04 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 585052183F;
-        Thu, 13 Apr 2023 10:12:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1681380722; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hf55BhKINP1L+Xd3BxYZAkmZBMcD2m94S6WBz92mpIY=;
-        b=UIfw/TRhEbPKpHQsYQvxYyuOxsr68jxK5JLtJqz5eBjNtjnyaIZ94sUB5vEh+hltzgan64
-        FuU1jHF9DzYL/owjiSSO12TP7OpCn9ES7lNdnBw700UtT096fcoq+j1ZrCkiqtd9oSgXoq
-        DxYXN6yaT2DxWVO8nfv91MeRuEg3TOc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1681380722;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hf55BhKINP1L+Xd3BxYZAkmZBMcD2m94S6WBz92mpIY=;
-        b=1H90D2HdSCUPQAnZmtD5OifPVpItgik2eloaM60sMcy3xMIKBTqWQtueinX1bR/hz93qR+
-        28g9IoiiYLYnlTDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 39B971390E;
-        Thu, 13 Apr 2023 10:12:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id jXGMDXLVN2TyQwAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 13 Apr 2023 10:12:02 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 932CAA0732; Thu, 13 Apr 2023 12:12:01 +0200 (CEST)
-Date:   Thu, 13 Apr 2023 12:12:01 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Guoqing Cai <u202112087@hust.edu.cn>
-Cc:     Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.com>,
-        HUST OS Kernel Contribution 
-        <hust-os-kernel-patches@googlegroups.com>,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] fs: jbd2: fix an incorrect warn log
-Message-ID: <20230413101201.gqtqhuecra3fk7x4@quack3>
-References: <20230413095740.2222066-1-u202112087@hust.edu.cn>
+        Thu, 13 Apr 2023 06:13:09 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21ABB9EF5;
+        Thu, 13 Apr 2023 03:12:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681380755; x=1712916755;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=/3k6r7D074PJRZk84hYx9S21xi/ERnExtP9WJloOvro=;
+  b=KnfpTgpGWLIB714e3Eb0XZnLVpuPMd0QarydJl0hYb01okfCHH/M0EzC
+   9fxyhyjB/iUeeVewrc3R9M+yccDnC7n38/Mo8Vmg/TPBzqGS+3zhgnAGs
+   se+vzx87jliZaTGc+zWxXoDMgtCE8QSlkNIKKY1QFFfXPiwmOF+TjxuS3
+   4rNVeazgy2nN05Vl6dT9sI7j5grsMQbgOo2M6lPYTB8KXB40W1shfKgxV
+   MmQm4cRXWrFcl+8AeQmYgkeCLfsnoGyW6kw+ru+Zuq77VoxXihS9PRVBs
+   R37b+cRZwUM17AwwyDuKrgsZNQExlmrEMmitD5gRZDOAtnQojMJmqrXyb
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="346827758"
+X-IronPort-AV: E=Sophos;i="5.98,341,1673942400"; 
+   d="scan'208";a="346827758"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 03:12:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="719785391"
+X-IronPort-AV: E=Sophos;i="5.98,341,1673942400"; 
+   d="scan'208";a="719785391"
+Received: from pkudryav-mobl1.ger.corp.intel.com ([10.252.45.220])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 03:12:32 -0700
+Date:   Thu, 13 Apr 2023 13:12:30 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-kselftest@vger.kernel.org
+cc:     LKML <linux-kernel@vger.kernel.org>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+Subject: Re: [PATCH 22/22] selftests/resctrl: Rewrite Cache Allocation
+ Technology (CAT) test
+In-Reply-To: <20230412132122.29452-23-ilpo.jarvinen@linux.intel.com>
+Message-ID: <9912c0bd-f1c8-1f27-17a0-2a3d48279e75@linux.intel.com>
+References: <20230412132122.29452-1-ilpo.jarvinen@linux.intel.com> <20230412132122.29452-23-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230413095740.2222066-1-u202112087@hust.edu.cn>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1640494227-1681380754=:1987"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 13-04-23 17:57:39, Guoqing Cai wrote:
-> In jbd2_journal_load(), when journal_reset fails, it prints an incorrect
-> warn log.
-> 
-> Fix this by changing the goto statement to return statement.
-> 
-> Also, return actual error code from jbd2_journal_recover() and journal_reset().
-> 
-> Signed-off-by: Guoqing Cai <u202112087@hust.edu.cn>
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Looks good. Feel free to add:
+--8323329-1640494227-1681380754=:1987
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+On Wed, 12 Apr 2023, Ilpo Järvinen wrote:
 
-								Honza
+> Rewrite the CAT test to allocated a buffer sized to half of LLC. Then
+> perform a sequence of tests with different LLC block sizes starting
+> from 1-bit CBM to half of the CBM bits. Flush the buffer before each
+> test and read the buffer twice. Observe the LLC misses on the second
+> read through the buffer. As the allocated LLC block gets larger and
+> larger, the LLC misses will become smaller and smaller giving a strong
+> signal on CAT working properly.
 
-> ---
-> changelog:
-> - Add a warning log when journal_reset failed.
-> - Return the actual error code.
-> ---
->  fs/jbd2/journal.c | 18 ++++++++++--------
->  1 file changed, 10 insertions(+), 8 deletions(-)
-> 
-> diff --git a/fs/jbd2/journal.c b/fs/jbd2/journal.c
-> index e80c781731f8..147733dd5cc3 100644
-> --- a/fs/jbd2/journal.c
-> +++ b/fs/jbd2/journal.c
-> @@ -2082,8 +2082,11 @@ int jbd2_journal_load(journal_t *journal)
->  
->  	/* Let the recovery code check whether it needs to recover any
->  	 * data from the journal. */
-> -	if (jbd2_journal_recover(journal))
-> -		goto recovery_error;
-> +	err = jbd2_journal_recover(journal);
-> +	if (err) {
-> +		pr_warn("JBD2: journal recovery failed\n");
-> +		return err;
-> +	}
->  
->  	if (journal->j_failed_commit) {
->  		printk(KERN_ERR "JBD2: journal transaction %u on %s "
-> @@ -2100,15 +2103,14 @@ int jbd2_journal_load(journal_t *journal)
->  	/* OK, we've finished with the dynamic journal bits:
->  	 * reinitialise the dynamic contents of the superblock in memory
->  	 * and reset them on disk. */
-> -	if (journal_reset(journal))
-> -		goto recovery_error;
-> +	err = journal_reset(journal);
-> +	if (err) {
-> +		pr_warn("JBD2: journal reset failed\n");
-> +		return err;
-> +	}
->  
->  	journal->j_flags |= JBD2_LOADED;
->  	return 0;
-> -
-> -recovery_error:
-> -	printk(KERN_WARNING "JBD2: recovery failed\n");
-> -	return -EIO;
->  }
->  
->  /**
-> -- 
-> 2.40.0
-> 
+I realized this description is now wrong way around as I at one point 
+reversed the cache allocation mask to go from half of CBM bits to 1-bit 
+but didn't remember to update the changelog (in case somebody ends up 
+wondering why it doesn't match to what the code does). V2 will contain the 
+correct way around description.
+
+
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+ i.
+
+--8323329-1640494227-1681380754=:1987--
