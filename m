@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A95196E0ED9
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:35:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FD566E0ECF
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231414AbjDMNfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 09:35:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58866 "EHLO
+        id S231540AbjDMNfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 09:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbjDMNdv (ORCPT
+        with ESMTP id S231496AbjDMNdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 09:33:51 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D16B45A
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:32:25 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id c193-20020a25c0ca000000b00b868826cdfeso33963208ybf.0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:32:25 -0700 (PDT)
+        Thu, 13 Apr 2023 09:33:55 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB5CAD09
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:32:31 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id c67-20020a254e46000000b00b88f1fd158fso31262564ybb.17
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:32:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681392742; x=1683984742;
+        d=google.com; s=20221208; t=1681392750; x=1683984750;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DjePygWNzjikF1/0wL8IG/xpima8j1eK/Y93rEybJLQ=;
-        b=GS6jV3v+fTQxf304pBmtb2QF6+oAf40aGTJB7CItdb905njsjwjrRvziffQ/PUKkP1
-         rGhSGBUr6RtTfAUEx0YtRvCiMACNYn4aRNtQR2X1CjhaO8HrmJZo7I7dM4FfKmN17vMH
-         F4tk6PW71DGeQ8IwQwQ5AUhnwl1CuEYKVzQD2We2s4f8opAhBkwmiUslE03yCiRBo2Tz
-         pOZtVWQDW5sJ5ZD4zmxyzrrjjQi7G3HXIF8J+dh83HP+Etll7u15paYlOC6QqBP7wPxl
-         AVPDmrKoZRYZp0UNyt63RbMpN14XQo3xwe5aVEHUZqFE6VL4UyQGIDQdU0Poi60MkAaX
-         sj0w==
+        bh=pUfPUvLoShzw1K1BISvJjLxFPJ+s9EqCiRDe+diC2OM=;
+        b=HncV5JMqwu/eslVmWJFNt1vbGo/I79ZOjHk16mqN3sNZ9nr7NzPJB/WDAXA5FUZFkb
+         Gi5S9XCohLjnlEs3RDOUK6zL1iW6iosXxMUnZvvC8tGgfZNtR8pbrSkyViRBHSr4JTdJ
+         9ZCsTzXt07sm2ZZT+DUYejLfxPa4KPIoF6Gh+zP5f86cL4NfOdSZ5rMMFqnd+hD4PNC1
+         CEHfR19yjURUqKpqoahTXyCVR8ZSY8RDXtYf5UhEE+NBP3UiRtDLqRyzxYZev7pdep1o
+         wuop+DxY4Pg/8ou99tLVg2k3+uOk3nwPTryKsBJ10+V1eLpR5Xdp69UlNLO8zOZzrTUn
+         l9LA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681392742; x=1683984742;
+        d=1e100.net; s=20221208; t=1681392750; x=1683984750;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DjePygWNzjikF1/0wL8IG/xpima8j1eK/Y93rEybJLQ=;
-        b=Q4qnnFdNpeHJwM5ldYBQPtO51hBBCdTGe8vI5m4cjIezoZDrh1xIa/IZKekfmu8pO/
-         jgdvvmHfA8sE82FG8xWriilggNdPPUzWl4kPtcWz5WrUhoMer9JJsrIwwLvrH3T2sycM
-         jbLeFzZ2LbIEy7V3y/09hzLS5mtBbWbmLwGZb07qijhf4RRrFRUrVZqpmn8ufLNZeDqI
-         gow+N12DzMMf4TCRAX73Iav+uQ7hUpuQ+sYF4oUY9IOS+UMhVntnq5hvsQ1oTyKn+6NH
-         OAFD23KKByPYDBHUjhYRgc3ReId/nROr0SWiAzIyv+LJwN8/VJVpzSV0m367gnChcRM4
-         3DOA==
-X-Gm-Message-State: AAQBX9fhlXcdZfLDYzaHCcuu4en344r7d/+pLS4BtaiQJyXuBKxwcDzH
-        dXVUkE6dlxPaMK5m+NY6yxSLrVtYcEQd
-X-Google-Smtp-Source: AKy350bxdZvQmjXxNMx6pAHLjGhcAaAi1/DkKsTzlpyd3XrnwzP0CUw1FNDebdnn/d16oj0SdSekQhff517X
+        bh=pUfPUvLoShzw1K1BISvJjLxFPJ+s9EqCiRDe+diC2OM=;
+        b=EcDQpyz2Vhqm1S84Y8ELDM3cm/r2iGFq5lfW+i0NU5kfN681humSQg/ml8ZT2m5C1S
+         xty/SiEunCTJC+u5dujHwX1JRd4UaEuDbTZKG15h1IVr8BUoqesOeteX3rrZWdlGnreA
+         7xKrUPB6hcfs7NpvslppJWmFezC/qJ6C17DPbquauDdSNGLsuVVzcg4071cS+a5VNtap
+         7n+tEbK1JA7L3O38n6XN9u5bpZujKXTEvtysgOdGom5P5NSqBMPh6zlQ0sjnhU9y2xQ3
+         l61/Q9gLtgltWJR4EOfs+CQNEHOkjWjVA7rNabVRQAwMKzMwWyiMOeuk6xgsmTM5EuIH
+         iE6A==
+X-Gm-Message-State: AAQBX9f/j1bDOJeLXSn7B7g2k+peQQpxbMsTblXlJQ///qvn71uaZM8P
+        QYPA/nSgh5fAPlHrzq9/SnBncnwcrmat
+X-Google-Smtp-Source: AKy350aQ6Jewz4zJvJWLFqY2mzftBnR5EJR9IPPP2Z+QWVEdma4wF8BNApqoaG3nsn8Wty19sMs1yTfQcRhf
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:c8fe:b894:ec92:d5cd])
- (user=irogers job=sendgmr) by 2002:a0d:ec47:0:b0:54e:e490:d190 with SMTP id
- r7-20020a0dec47000000b0054ee490d190mr1366137ywn.4.1681392742282; Thu, 13 Apr
- 2023 06:32:22 -0700 (PDT)
-Date:   Thu, 13 Apr 2023 06:29:45 -0700
+ (user=irogers job=sendgmr) by 2002:a81:9846:0:b0:544:bbd2:74be with SMTP id
+ p67-20020a819846000000b00544bbd274bemr4805857ywg.4.1681392750564; Thu, 13 Apr
+ 2023 06:32:30 -0700 (PDT)
+Date:   Thu, 13 Apr 2023 06:29:46 -0700
 In-Reply-To: <20230413132949.3487664-1-irogers@google.com>
-Message-Id: <20230413132949.3487664-18-irogers@google.com>
+Message-Id: <20230413132949.3487664-19-irogers@google.com>
 Mime-Version: 1.0
 References: <20230413132949.3487664-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Subject: [PATCH v3 17/21] perf vendor events intel: Fix uncore topics for sandybridge
+Subject: [PATCH v3 18/21] perf vendor events intel: Fix uncore topics for skylake
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -80,183 +80,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove 'uncore-other' topic classification, move to cache and
+Move events from 'uncore-other' topic classification to cache and
 interconnect.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- .../arch/x86/sandybridge/uncore-cache.json    | 50 +++++++++----------
- ...re-other.json => uncore-interconnect.json} |  0
- 2 files changed, 25 insertions(+), 25 deletions(-)
- rename tools/perf/pmu-events/arch/x86/sandybridge/{uncore-other.json => uncore-interconnect.json} (100%)
+ .../arch/x86/skylake/uncore-cache.json        | 28 ++++----
+ .../arch/x86/skylake/uncore-interconnect.json | 67 +++++++++++++++++++
+ .../arch/x86/skylake/uncore-other.json        | 65 ------------------
+ 3 files changed, 81 insertions(+), 79 deletions(-)
+ create mode 100644 tools/perf/pmu-events/arch/x86/skylake/uncore-interconnect.json
 
-diff --git a/tools/perf/pmu-events/arch/x86/sandybridge/uncore-cache.json b/tools/perf/pmu-events/arch/x86/sandybridge/uncore-cache.json
-index c538557ba4c0..be9a3ed1a940 100644
---- a/tools/perf/pmu-events/arch/x86/sandybridge/uncore-cache.json
-+++ b/tools/perf/pmu-events/arch/x86/sandybridge/uncore-cache.json
-@@ -5,7 +5,7 @@
-         "EventName": "UNC_CBO_CACHE_LOOKUP.ANY_ES",
+diff --git a/tools/perf/pmu-events/arch/x86/skylake/uncore-cache.json b/tools/perf/pmu-events/arch/x86/skylake/uncore-cache.json
+index ec9463c94ffe..b4e061477c1a 100644
+--- a/tools/perf/pmu-events/arch/x86/skylake/uncore-cache.json
++++ b/tools/perf/pmu-events/arch/x86/skylake/uncore-cache.json
+@@ -6,7 +6,7 @@
          "PerPkg": "1",
+         "PublicDescription": "L3 Lookup any request that access cache and found line in E or S-state.",
          "UMask": "0x86",
 -        "Unit": "CBO"
 +        "Unit": "CBOX"
      },
      {
-         "BriefDescription": "L3 Lookup any request that access cache and found line in I-state.",
-@@ -13,7 +13,7 @@
-         "EventName": "UNC_CBO_CACHE_LOOKUP.ANY_I",
+         "BriefDescription": "L3 Lookup any request that access cache and found line in I-state",
+@@ -15,7 +15,7 @@
          "PerPkg": "1",
+         "PublicDescription": "L3 Lookup any request that access cache and found line in I-state.",
          "UMask": "0x88",
 -        "Unit": "CBO"
 +        "Unit": "CBOX"
      },
      {
-         "BriefDescription": "L3 Lookup any request that access cache and found line in M-state.",
-@@ -21,7 +21,7 @@
-         "EventName": "UNC_CBO_CACHE_LOOKUP.ANY_M",
+         "BriefDescription": "L3 Lookup any request that access cache and found line in M-state",
+@@ -24,7 +24,7 @@
          "PerPkg": "1",
+         "PublicDescription": "L3 Lookup any request that access cache and found line in M-state.",
          "UMask": "0x81",
 -        "Unit": "CBO"
 +        "Unit": "CBOX"
      },
      {
-         "BriefDescription": "L3 Lookup any request that access cache and found line in MESI-state.",
-@@ -29,7 +29,7 @@
-         "EventName": "UNC_CBO_CACHE_LOOKUP.ANY_MESI",
+         "BriefDescription": "L3 Lookup any request that access cache and found line in MESI-state",
+@@ -33,7 +33,7 @@
          "PerPkg": "1",
+         "PublicDescription": "L3 Lookup any request that access cache and found line in MESI-state.",
          "UMask": "0x8f",
 -        "Unit": "CBO"
 +        "Unit": "CBOX"
      },
      {
-         "BriefDescription": "L3 Lookup external snoop request that access cache and found line in E or S-state.",
-@@ -37,7 +37,7 @@
-         "EventName": "UNC_CBO_CACHE_LOOKUP.EXTSNP_ES",
+         "BriefDescription": "L3 Lookup read request that access cache and found line in E or S-state",
+@@ -42,7 +42,7 @@
          "PerPkg": "1",
-         "UMask": "0x46",
--        "Unit": "CBO"
-+        "Unit": "CBOX"
-     },
-     {
-         "BriefDescription": "L3 Lookup external snoop request that access cache and found line in I-state.",
-@@ -45,7 +45,7 @@
-         "EventName": "UNC_CBO_CACHE_LOOKUP.EXTSNP_I",
-         "PerPkg": "1",
-         "UMask": "0x48",
--        "Unit": "CBO"
-+        "Unit": "CBOX"
-     },
-     {
-         "BriefDescription": "L3 Lookup external snoop request that access cache and found line in M-state.",
-@@ -53,7 +53,7 @@
-         "EventName": "UNC_CBO_CACHE_LOOKUP.EXTSNP_M",
-         "PerPkg": "1",
-         "UMask": "0x41",
--        "Unit": "CBO"
-+        "Unit": "CBOX"
-     },
-     {
-         "BriefDescription": "L3 Lookup external snoop request that access cache and found line in MESI-state.",
-@@ -61,7 +61,7 @@
-         "EventName": "UNC_CBO_CACHE_LOOKUP.EXTSNP_MESI",
-         "PerPkg": "1",
-         "UMask": "0x4f",
--        "Unit": "CBO"
-+        "Unit": "CBOX"
-     },
-     {
-         "BriefDescription": "L3 Lookup read request that access cache and found line in E or S-state.",
-@@ -69,7 +69,7 @@
-         "EventName": "UNC_CBO_CACHE_LOOKUP.READ_ES",
-         "PerPkg": "1",
+         "PublicDescription": "L3 Lookup read request that access cache and found line in E or S-state.",
          "UMask": "0x16",
 -        "Unit": "CBO"
 +        "Unit": "CBOX"
      },
      {
-         "BriefDescription": "L3 Lookup read request that access cache and found line in I-state.",
-@@ -77,7 +77,7 @@
-         "EventName": "UNC_CBO_CACHE_LOOKUP.READ_I",
+         "BriefDescription": "L3 Lookup read request that access cache and found line in I-state",
+@@ -51,7 +51,7 @@
          "PerPkg": "1",
+         "PublicDescription": "L3 Lookup read request that access cache and found line in I-state.",
          "UMask": "0x18",
 -        "Unit": "CBO"
 +        "Unit": "CBOX"
      },
      {
-         "BriefDescription": "L3 Lookup read request that access cache and found line in M-state.",
-@@ -85,7 +85,7 @@
-         "EventName": "UNC_CBO_CACHE_LOOKUP.READ_M",
+         "BriefDescription": "L3 Lookup read request that access cache and found line in any MESI-state",
+@@ -60,7 +60,7 @@
          "PerPkg": "1",
-         "UMask": "0x11",
--        "Unit": "CBO"
-+        "Unit": "CBOX"
-     },
-     {
-         "BriefDescription": "L3 Lookup read request that access cache and found line in any MESI-state.",
-@@ -93,7 +93,7 @@
-         "EventName": "UNC_CBO_CACHE_LOOKUP.READ_MESI",
-         "PerPkg": "1",
+         "PublicDescription": "L3 Lookup read request that access cache and found line in any MESI-state.",
          "UMask": "0x1f",
 -        "Unit": "CBO"
 +        "Unit": "CBOX"
      },
      {
-         "BriefDescription": "L3 Lookup write request that access cache and found line in E or S-state.",
-@@ -101,7 +101,7 @@
-         "EventName": "UNC_CBO_CACHE_LOOKUP.WRITE_ES",
+         "BriefDescription": "L3 Lookup write request that access cache and found line in E or S-state",
+@@ -69,7 +69,7 @@
          "PerPkg": "1",
+         "PublicDescription": "L3 Lookup write request that access cache and found line in E or S-state.",
          "UMask": "0x26",
 -        "Unit": "CBO"
 +        "Unit": "CBOX"
      },
      {
-         "BriefDescription": "L3 Lookup write request that access cache and found line in I-state.",
-@@ -109,7 +109,7 @@
-         "EventName": "UNC_CBO_CACHE_LOOKUP.WRITE_I",
+         "BriefDescription": "L3 Lookup write request that access cache and found line in M-state",
+@@ -78,7 +78,7 @@
          "PerPkg": "1",
-         "UMask": "0x28",
--        "Unit": "CBO"
-+        "Unit": "CBOX"
-     },
-     {
-         "BriefDescription": "L3 Lookup write request that access cache and found line in M-state.",
-@@ -117,7 +117,7 @@
-         "EventName": "UNC_CBO_CACHE_LOOKUP.WRITE_M",
-         "PerPkg": "1",
+         "PublicDescription": "L3 Lookup write request that access cache and found line in M-state.",
          "UMask": "0x21",
 -        "Unit": "CBO"
 +        "Unit": "CBOX"
      },
      {
-         "BriefDescription": "L3 Lookup write request that access cache and found line in MESI-state.",
-@@ -125,7 +125,7 @@
-         "EventName": "UNC_CBO_CACHE_LOOKUP.WRITE_MESI",
+         "BriefDescription": "L3 Lookup write request that access cache and found line in MESI-state",
+@@ -87,7 +87,7 @@
          "PerPkg": "1",
+         "PublicDescription": "L3 Lookup write request that access cache and found line in MESI-state.",
          "UMask": "0x2f",
 -        "Unit": "CBO"
 +        "Unit": "CBOX"
      },
      {
-         "BriefDescription": "A cross-core snoop resulted from L3 Eviction which hits a modified line in some processor core.",
-@@ -133,7 +133,7 @@
-         "EventName": "UNC_CBO_XSNP_RESPONSE.HITM_EVICTION",
-         "PerPkg": "1",
-         "UMask": "0x88",
--        "Unit": "CBO"
-+        "Unit": "CBOX"
-     },
-     {
-         "BriefDescription": "An external snoop hits a modified line in some processor core.",
-@@ -141,7 +141,7 @@
-         "EventName": "UNC_CBO_XSNP_RESPONSE.HITM_EXTERNAL",
-         "PerPkg": "1",
-         "UMask": "0x28",
--        "Unit": "CBO"
-+        "Unit": "CBOX"
-     },
-     {
          "BriefDescription": "A cross-core snoop initiated by this Cbox due to processor core memory request which hits a modified line in some processor core.",
-@@ -149,7 +149,7 @@
+@@ -95,7 +95,7 @@
          "EventName": "UNC_CBO_XSNP_RESPONSE.HITM_XCORE",
          "PerPkg": "1",
          "UMask": "0x48",
@@ -264,26 +193,8 @@ index c538557ba4c0..be9a3ed1a940 100644
 +        "Unit": "CBOX"
      },
      {
-         "BriefDescription": "A cross-core snoop resulted from L3 Eviction which hits a non-modified line in some processor core.",
-@@ -157,7 +157,7 @@
-         "EventName": "UNC_CBO_XSNP_RESPONSE.HIT_EVICTION",
-         "PerPkg": "1",
-         "UMask": "0x84",
--        "Unit": "CBO"
-+        "Unit": "CBOX"
-     },
-     {
-         "BriefDescription": "An external snoop hits a non-modified line in some processor core.",
-@@ -165,7 +165,7 @@
-         "EventName": "UNC_CBO_XSNP_RESPONSE.HIT_EXTERNAL",
-         "PerPkg": "1",
-         "UMask": "0x24",
--        "Unit": "CBO"
-+        "Unit": "CBOX"
-     },
-     {
          "BriefDescription": "A cross-core snoop initiated by this Cbox due to processor core memory request which hits a non-modified line in some processor core.",
-@@ -173,7 +173,7 @@
+@@ -103,7 +103,7 @@
          "EventName": "UNC_CBO_XSNP_RESPONSE.HIT_XCORE",
          "PerPkg": "1",
          "UMask": "0x44",
@@ -292,7 +203,7 @@ index c538557ba4c0..be9a3ed1a940 100644
      },
      {
          "BriefDescription": "A cross-core snoop resulted from L3 Eviction which misses in some processor core.",
-@@ -181,7 +181,7 @@
+@@ -111,7 +111,7 @@
          "EventName": "UNC_CBO_XSNP_RESPONSE.MISS_EVICTION",
          "PerPkg": "1",
          "UMask": "0x81",
@@ -300,17 +211,8 @@ index c538557ba4c0..be9a3ed1a940 100644
 +        "Unit": "CBOX"
      },
      {
-         "BriefDescription": "An external snoop misses in some processor core.",
-@@ -189,7 +189,7 @@
-         "EventName": "UNC_CBO_XSNP_RESPONSE.MISS_EXTERNAL",
-         "PerPkg": "1",
-         "UMask": "0x21",
--        "Unit": "CBO"
-+        "Unit": "CBOX"
-     },
-     {
          "BriefDescription": "A cross-core snoop initiated by this Cbox due to processor core memory request which misses in some processor core.",
-@@ -197,6 +197,6 @@
+@@ -119,6 +119,6 @@
          "EventName": "UNC_CBO_XSNP_RESPONSE.MISS_XCORE",
          "PerPkg": "1",
          "UMask": "0x41",
@@ -318,10 +220,153 @@ index c538557ba4c0..be9a3ed1a940 100644
 +        "Unit": "CBOX"
      }
  ]
-diff --git a/tools/perf/pmu-events/arch/x86/sandybridge/uncore-other.json b/tools/perf/pmu-events/arch/x86/sandybridge/uncore-interconnect.json
-similarity index 100%
-rename from tools/perf/pmu-events/arch/x86/sandybridge/uncore-other.json
-rename to tools/perf/pmu-events/arch/x86/sandybridge/uncore-interconnect.json
+diff --git a/tools/perf/pmu-events/arch/x86/skylake/uncore-interconnect.json b/tools/perf/pmu-events/arch/x86/skylake/uncore-interconnect.json
+new file mode 100644
+index 000000000000..fe7e19717371
+--- /dev/null
++++ b/tools/perf/pmu-events/arch/x86/skylake/uncore-interconnect.json
+@@ -0,0 +1,67 @@
++[
++    {
++        "BriefDescription": "Number of entries allocated. Account for Any type: e.g. Snoop, Core aperture, etc.",
++        "EventCode": "0x84",
++        "EventName": "UNC_ARB_COH_TRK_REQUESTS.ALL",
++        "PerPkg": "1",
++        "UMask": "0x1",
++        "Unit": "ARB"
++    },
++    {
++        "BriefDescription": "Number of all Core entries outstanding for the memory controller. The outstanding interval starts after LLC miss till return of first data chunk. Accounts for Coherent and non-coherent traffic.",
++        "EventCode": "0x80",
++        "EventName": "UNC_ARB_TRK_OCCUPANCY.ALL",
++        "PerPkg": "1",
++        "UMask": "0x1",
++        "Unit": "ARB"
++    },
++    {
++        "BriefDescription": "Cycles with at least one request outstanding is waiting for data return from memory controller. Account for coherent and non-coherent requests initiated by IA Cores, Processor Graphics Unit, or LLC.",
++        "CounterMask": "1",
++        "EventCode": "0x80",
++        "EventName": "UNC_ARB_TRK_OCCUPANCY.CYCLES_WITH_ANY_REQUEST",
++        "PerPkg": "1",
++        "UMask": "0x1",
++        "Unit": "ARB"
++    },
++    {
++        "BriefDescription": "Number of Core Data Read entries outstanding for the memory controller. The outstanding interval starts after LLC miss till return of first data chunk.",
++        "EventCode": "0x80",
++        "EventName": "UNC_ARB_TRK_OCCUPANCY.DATA_READ",
++        "PerPkg": "1",
++        "UMask": "0x2",
++        "Unit": "ARB"
++    },
++    {
++        "BriefDescription": "UNC_ARB_TRK_REQUESTS.ALL",
++        "EventCode": "0x81",
++        "EventName": "UNC_ARB_TRK_REQUESTS.ALL",
++        "PerPkg": "1",
++        "UMask": "0x1",
++        "Unit": "ARB"
++    },
++    {
++        "BriefDescription": "Number of Core coherent Data Read requests sent to memory controller whose data is returned directly to requesting agent.",
++        "EventCode": "0x81",
++        "EventName": "UNC_ARB_TRK_REQUESTS.DATA_READ",
++        "PerPkg": "1",
++        "UMask": "0x2",
++        "Unit": "ARB"
++    },
++    {
++        "BriefDescription": "Number of Core coherent Data Read requests sent to memory controller whose data is returned directly to requesting agent.",
++        "EventCode": "0x81",
++        "EventName": "UNC_ARB_TRK_REQUESTS.DRD_DIRECT",
++        "PerPkg": "1",
++        "UMask": "0x2",
++        "Unit": "ARB"
++    },
++    {
++        "BriefDescription": "Number of Writes allocated - any write transactions: full/partials writes and evictions.",
++        "EventCode": "0x81",
++        "EventName": "UNC_ARB_TRK_REQUESTS.WRITES",
++        "PerPkg": "1",
++        "UMask": "0x20",
++        "Unit": "ARB"
++    }
++]
+diff --git a/tools/perf/pmu-events/arch/x86/skylake/uncore-other.json b/tools/perf/pmu-events/arch/x86/skylake/uncore-other.json
+index ef804df3f41e..58be90d7cc93 100644
+--- a/tools/perf/pmu-events/arch/x86/skylake/uncore-other.json
++++ b/tools/perf/pmu-events/arch/x86/skylake/uncore-other.json
+@@ -1,69 +1,4 @@
+ [
+-    {
+-        "BriefDescription": "Number of entries allocated. Account for Any type: e.g. Snoop, Core aperture, etc.",
+-        "EventCode": "0x84",
+-        "EventName": "UNC_ARB_COH_TRK_REQUESTS.ALL",
+-        "PerPkg": "1",
+-        "UMask": "0x1",
+-        "Unit": "ARB"
+-    },
+-    {
+-        "BriefDescription": "Number of all Core entries outstanding for the memory controller. The outstanding interval starts after LLC miss till return of first data chunk. Accounts for Coherent and non-coherent traffic.",
+-        "EventCode": "0x80",
+-        "EventName": "UNC_ARB_TRK_OCCUPANCY.ALL",
+-        "PerPkg": "1",
+-        "UMask": "0x1",
+-        "Unit": "ARB"
+-    },
+-    {
+-        "BriefDescription": "Cycles with at least one request outstanding is waiting for data return from memory controller. Account for coherent and non-coherent requests initiated by IA Cores, Processor Graphics Unit, or LLC.",
+-        "CounterMask": "1",
+-        "EventCode": "0x80",
+-        "EventName": "UNC_ARB_TRK_OCCUPANCY.CYCLES_WITH_ANY_REQUEST",
+-        "PerPkg": "1",
+-        "UMask": "0x1",
+-        "Unit": "ARB"
+-    },
+-    {
+-        "BriefDescription": "Number of Core Data Read entries outstanding for the memory controller. The outstanding interval starts after LLC miss till return of first data chunk.",
+-        "EventCode": "0x80",
+-        "EventName": "UNC_ARB_TRK_OCCUPANCY.DATA_READ",
+-        "PerPkg": "1",
+-        "UMask": "0x2",
+-        "Unit": "ARB"
+-    },
+-    {
+-        "BriefDescription": "UNC_ARB_TRK_REQUESTS.ALL",
+-        "EventCode": "0x81",
+-        "EventName": "UNC_ARB_TRK_REQUESTS.ALL",
+-        "PerPkg": "1",
+-        "UMask": "0x1",
+-        "Unit": "ARB"
+-    },
+-    {
+-        "BriefDescription": "Number of Core coherent Data Read requests sent to memory controller whose data is returned directly to requesting agent.",
+-        "EventCode": "0x81",
+-        "EventName": "UNC_ARB_TRK_REQUESTS.DATA_READ",
+-        "PerPkg": "1",
+-        "UMask": "0x2",
+-        "Unit": "ARB"
+-    },
+-    {
+-        "BriefDescription": "Number of Core coherent Data Read requests sent to memory controller whose data is returned directly to requesting agent.",
+-        "EventCode": "0x81",
+-        "EventName": "UNC_ARB_TRK_REQUESTS.DRD_DIRECT",
+-        "PerPkg": "1",
+-        "UMask": "0x2",
+-        "Unit": "ARB"
+-    },
+-    {
+-        "BriefDescription": "Number of Writes allocated - any write transactions: full/partials writes and evictions.",
+-        "EventCode": "0x81",
+-        "EventName": "UNC_ARB_TRK_REQUESTS.WRITES",
+-        "PerPkg": "1",
+-        "UMask": "0x20",
+-        "Unit": "ARB"
+-    },
+     {
+         "BriefDescription": "This 48-bit fixed counter counts the UCLK cycles",
+         "EventCode": "0xff",
 -- 
 2.40.0.577.gac1e443424-goog
 
