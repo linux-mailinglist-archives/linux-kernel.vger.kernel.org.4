@@ -2,143 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C657A6E152B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 21:27:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E6B6E152E
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 21:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbjDMT1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 15:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
+        id S229681AbjDMT26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 15:28:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbjDMT1x (ORCPT
+        with ESMTP id S229493AbjDMT25 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 15:27:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31E55B9A;
-        Thu, 13 Apr 2023 12:27:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7AA5363D93;
-        Thu, 13 Apr 2023 19:27:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1166AC433EF;
-        Thu, 13 Apr 2023 19:27:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681414071;
-        bh=b94MZJk9di3vyZrDudjAp4+A7p5kQn0chF+PSIoN2MM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=REkiwTzrsbIwp9lbm9IIEtnlHfuPLTa1FkgkEF+K5OQmH6vY/83Z8E4qVWRvrm5cS
-         nG2ljqycdJHgdjNy3wXDCv7RzEcNs3Ttbmm5XNKgf6loApfQvJoEJDhBarkA8L2Zbh
-         VuitD+HJojjZS1dVZ7Jtpb1VD605nwcaLWC3T1IhWhhap+GSw2QhGOWDQuV/PHyo0a
-         +tHXolUoSmXtJxHzOChPmvE6LKWLAajdw5x+Zd01XfvMDk3A9WU4UBbOKst+NBI4uN
-         IiroTHlcsqpN8+rBqlDYs0Wncxr4Ax94Zy9E6gTDhd+6Ao25VQ6QLk1ZWnb+yKdMyF
-         5ybujo0izWVjQ==
-Date:   Thu, 13 Apr 2023 21:27:48 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Jean-Marie Verdun <verdun@hpe.com>,
-        Nick Hawkins <nick.hawkins@hpe.com>,
-        Joel Stanley <joel@jms.id.au>, Arnd Bergmann <arnd@arndb.de>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: gxp: fix build failure without CONFIG_I2C_SLAVE
-Message-ID: <ZDhXtDLiTtm2iXGW@sai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>, Jean-Marie Verdun <verdun@hpe.com>,
-        Nick Hawkins <nick.hawkins@hpe.com>, Joel Stanley <joel@jms.id.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230403074939.3785593-1-arnd@kernel.org>
+        Thu, 13 Apr 2023 15:28:57 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5186A2
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 12:28:55 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id bs70so7945778pgb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 12:28:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=raspberrypi.com; s=google; t=1681414135; x=1684006135;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=k/owY4mvJye7p0v+ne1bcGdPR7zZGvCD2rKYaG4godE=;
+        b=Ke4xzhCwH3sUAprbBW59xNAypk0Fk1toJ1iQKBdNYbUFTS5XDMc1gET/Fg0DoMsB/V
+         jqPxWPYgVVI9P2Ga9B5cpUdNM3SXTm22pU3dRBoA5cDHytQbWzbB018KOWQprE7vL2PA
+         Fs8G7iqv0ojRtUrKzOlvMw1df3CTZmFAh394vpsVvh6NKZLSSeMrniQbNkEDbPF5NHwm
+         cQIy1+r5n5mOP7U+xqFxiKyk/6jxJqo5mqtOKuQSVj0wUIYft5WbaepZIe2iYZRcudAo
+         tUu3Usejx5dQkgXut8J3kAc2938Fi8DFig2DZmSkeEg1OcSLRjOrE9hCwenjFB9RrWlm
+         cTSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681414135; x=1684006135;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=k/owY4mvJye7p0v+ne1bcGdPR7zZGvCD2rKYaG4godE=;
+        b=MnQCA3F3Azs08MI+opztqo8hCpSDHGxHtLwKh9YwOSthpOcYF9+cjPMRyL3HvjrvVZ
+         hyd2GhZAIITOaYnxqyIdbikiEbr3A010vGIF3kNk9mNRWwVOuo/mfpdTJU2kUDOrBN0v
+         7hwz6wsufIkOFMYHieNYugeSU4XqjDZcf2UkHpEsMA/o2SimgvBLXMKsI4yimiKAq/qL
+         4OE4mkmIzqdr7Gy3Hb9r5Aie01dvk1lYNBXiJEHNoxFss03XXtlD18MsNgYB2O/GbXVy
+         /vaJbqtvKnjGjgzjxHOki/0MkIjxB2tmWJRdhdTGgxE/vqiHOaHYFZHmrulKPQSN9o8E
+         zL6g==
+X-Gm-Message-State: AAQBX9dkPnyztp6rVKnH9GsRDyOpsSdgrit4YyZ6OgjxlKzpQaM0qLq5
+        oFzEcjM90gwOvp5rvD76VP9m+clCunow300CoNTWTg==
+X-Google-Smtp-Source: AKy350ZvcynFOTI0vNXbHNNrkwfyvIqzDj+xMZMJFaPDZ1bx+dUQLOfRxKAyDO2ht4EiFV67iIZltiL6dHISQ0dim9s=
+X-Received: by 2002:a65:6289:0:b0:513:a24c:f45a with SMTP id
+ f9-20020a656289000000b00513a24cf45amr25095pgv.11.1681414135164; Thu, 13 Apr
+ 2023 12:28:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="YSLKM2vUjZb+N5Xo"
-Content-Disposition: inline
-In-Reply-To: <20230403074939.3785593-1-arnd@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230413085206.149730-1-iivanov@suse.de> <20230413085206.149730-3-iivanov@suse.de>
+ <9b03551a-278d-16dc-08ed-1ef0f89dc79c@i2se.com> <duuhz5pju4q7lnvzwndcnruqwqzbwy4jhrfn42vov2rfct4i7c@qh55cifhoud7>
+ <9de62851-73a6-0070-4e64-94b6614c11fd@i2se.com>
+In-Reply-To: <9de62851-73a6-0070-4e64-94b6614c11fd@i2se.com>
+From:   Tim Gover <tim.gover@raspberrypi.com>
+Date:   Thu, 13 Apr 2023 20:28:43 +0100
+Message-ID: <CAAvKZ64KyXJ2QPjRnj3i-8AKh7jGCUw=HNi76XG-a9K-+_JiYQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] ARM: dts: Add nvmem node for BCM2711 bootloader
+ public key
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     "Ivan T. Ivanov" <iivanov@suse.de>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Phil Elwell <phil@raspberrypi.com>,
+        linux-rpi-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 13 Apr 2023 at 19:44, Stefan Wahren <stefan.wahren@i2se.com> wrote:
+>
+> Hi Ivan,
+>
+> Am 13.04.23 um 20:18 schrieb Ivan T. Ivanov:
+> > On 04-13 18:15, Stefan Wahren wrote:
+> >>
+> >> Hi Ivan,
+> >>
+> >> Am 13.04.23 um 10:52 schrieb Ivan T. Ivanov:
+> >>> From: Tim Gover <tim.gover@raspberrypi.com>
+> >>>
+> >>> Make a copy of the bootloader secure-boot public key available to the OS
+> >>> via an nvmem node. The placement information is populated by the
+> >>> Raspberry Pi firmware if a public key is present in the BCM2711
+> >>> bootloader EEPROM.
+> >>
+> >> It would be nice to have a helpful link like:
+> >> https://www.raspberrypi.com/documentation/computers/configuration.html#nvmem-nodes
+> >
+> > Yep, make sense.
+> >
+> >>> +
+> >>> +   /*
+> >>> +    * RPi4 will copy the binary public key blob (if present) from the bootloader
+> >>> +    * into memory for use by the OS.
+> >>> +    */
+> >>> +   blpubkey: nvram@1 {
+> >>> +           compatible = "raspberrypi,bootloader-public-key", "nvmem-rmem";
+> >>
+> >> Yes this looks better, but this introduce a new dtbs_check issue. The new
+> >
+> > Oops, yes, I forgot to make this check.
+> >
+> >> compatible must be documented in
+> >> Documentation/devicetree/bindings/nvmem/rmem.yaml in a separate patch and
+> >> reviewed by the DT guys.
+> >
+> > Or I can drop the new compatible string altogether? It looks like
+> > only alias is strictly required?! Tim Gover is this correct?
+>
+> i cannot speak for the firmware side, but i think we should try to keep
+> it compatible with the vendor DTB here.
+>
 
---YSLKM2vUjZb+N5Xo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The firmware doesn't look at the compatible string. It locates the
+nodes to update using the 'blconfig' and 'blpubkey' aliases. Userspace
+scripts (including the documentation example) should also use these
+aliases.
+Therefore, I don't think it matters if the compatible strings is
+modified, but I won't pretend to know what the correct DT style is
+here :)
 
-Hi Arnd,
-
-> The gxp_i2c_slave_irq_handler() is hidden in an #ifdef, but the
-> caller uses an IS_ENABLED() check:
->=20
-> drivers/i2c/busses/i2c-gxp.c: In function 'gxp_i2c_irq_handler':
-> drivers/i2c/busses/i2c-gxp.c:467:29: error: implicit declaration of funct=
-ion 'gxp_i2c_slave_irq_handler'; did you mean 'gxp_i2c_irq_handler'? [-Werr=
-or=3Dimplicit-function-declaration]
->=20
-> It has to consistently use one method or the other to avoid warnings,
-> so move to IS_ENABLED() here for readability and build coverage, and
-> move the #ifdef in linux/i2c.h to allow building it as dead code.
-
-Can't we have a solution which modifies this driver only (maybe by
-defining an empty irq handler for the non-IS_ENABLED part?)? Doesn't
-feel good to touch i2c.h only because of this...
-
-> -#if IS_ENABLED(CONFIG_I2C_SLAVE)
->  enum i2c_slave_event {
->  	I2C_SLAVE_READ_REQUESTED,
->  	I2C_SLAVE_WRITE_REQUESTED,
-> @@ -396,9 +395,10 @@ enum i2c_slave_event {
-> =20
->  int i2c_slave_register(struct i2c_client *client, i2c_slave_cb_t slave_c=
-b);
->  int i2c_slave_unregister(struct i2c_client *client);
-
-=2E.. especially with moving these two prototypes out of the protected
-block. The functions themselves are also protected by the same symbol
-via the Makefile. I'd rather get a build error right away than a linker
-error later if a driver misses to select I2C_SLAVE. Or do I miss
-something?
-
-> -bool i2c_detect_slave_mode(struct device *dev);
->  int i2c_slave_event(struct i2c_client *client,
->  		    enum i2c_slave_event event, u8 *val);
-> +#if IS_ENABLED(CONFIG_I2C_SLAVE)
-> +bool i2c_detect_slave_mode(struct device *dev);
->  #else
->  static inline bool i2c_detect_slave_mode(struct device *dev) { return fa=
-lse; }
->  #endif
-
-All the best,
-
-   Wolfram
-
-
---YSLKM2vUjZb+N5Xo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQ4V68ACgkQFA3kzBSg
-KbbCbg/+KMqGcmARpv4WTOLrw8dNeL7kGcYB8y8JBS5rZNf6WFS/suaqj5KGTon6
-+4x9oSnNvDzcZIdcgaTuggayelF33q90mKiuctnXd3uRc4bEzfS2sEgdHsOOoDkj
-Qazub13ObNSHM3nzfquGyCOde/wPWNazwdurQYU/EDmCz1uhe32vjZJx8YlW1RwV
-u3VtH3ur2k5g2p50oY677jnTUsw23DY0AhFFRNRFHcTk0SKnb+2we8NzcvRYX0J7
-CgXzjm7xvkJ2vwdwjzbTIcTxbHs9y1pPhwpQVB+xE06t+jk6aYkXPCKx2KWQo5in
-LZD2prPO/L0sqRYZci9AfQSyfe1j4ctihTjRPps/xO0Tdfbh3d7mavL5FtpU/hdH
-zrYyUGJ66kB1hp5NzHXMLyLEAroEPsIIy666z0R3JwAKy0T5/gbEASN3r60io/l7
-l/35pXnj6E4mBQRc7V7OShi+jloZAUhDRBWpq5vnZAXm799hbIMpoYUuqBdt6OhO
-K4ny9xlEczj+6MPJOwTYt5p8bZa5trRTsupm7J0eQifiIiR0IS0ABGkHydq4BrdJ
-3/PDgNcGT6mHVi4vcFOWoFuqciGBUpwiSAAp/S0lKwcjAj1dKYsTEjh1F6cHslCC
-tBBikemwBHscnDmJBQ4Ob4peTNE/EIUtY7P2gCI5NBENg+U8cT8=
-=1Kzt
------END PGP SIGNATURE-----
-
---YSLKM2vUjZb+N5Xo--
+Tim
