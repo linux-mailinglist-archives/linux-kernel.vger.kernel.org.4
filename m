@@ -2,59 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F1986E0E61
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:18:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD45D6E0F04
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:40:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbjDMNSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 09:18:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48744 "EHLO
+        id S231649AbjDMNkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 09:40:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjDMNSb (ORCPT
+        with ESMTP id S231928AbjDMNkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 09:18:31 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392EC8695;
-        Thu, 13 Apr 2023 06:18:00 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Thu, 13 Apr 2023 09:40:23 -0400
+X-Greylist: delayed 634 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 13 Apr 2023 06:37:48 PDT
+Received: from vulcan.natalenko.name (vulcan.natalenko.name [104.207.131.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4081BBBB;
+        Thu, 13 Apr 2023 06:37:47 -0700 (PDT)
+Received: from spock.localnet (unknown [83.148.33.151])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 593C66603219;
-        Thu, 13 Apr 2023 14:17:44 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681391865;
-        bh=R+bkS6zf4+ohM4HlMQeBjxGdxTHQFqSnwecyrY1S5ws=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=N0n+Y06N3L8jygZ9qjWTM90m84pqe5Pa1r6GAp0jKx9i7ETrEDHJM/DCzOdGCfBOA
-         gWCJuInYXSh2NGi+6MrZwjEW33TUsdwYY7H3QYFBFhlBwOfgMvCOWgYhPLYTWAUVwo
-         1gbus8SY+zVHg7EewxoLiuxMatP0Kt8tFM1b+l/fCd3teiYyvEQRdDpVyDJFZaLhkd
-         IdCuJKsSoLMePHf0GhGvlToBw/N23DR+FCDyywWmc3pHCeVqTuJbwcp/6iAE+S7WxW
-         ihNoZ/88DAtPwSE82kR4IJfAY0Eeoq0+t2hYenPg+fr6oT1C1lm1RrBddwNP8Grv3L
-         AUv1fKL13TyTg==
-Message-ID: <e36598dd-4f83-90b4-1744-61d18744b02d@collabora.com>
-Date:   Thu, 13 Apr 2023 15:17:41 +0200
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id 615C112BE4A8;
+        Thu, 13 Apr 2023 15:18:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1681391881;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9Oao65Nki1CkTSME8kkBazOhgfBe66eQgZrsXuv+svs=;
+        b=qX36+PaXql+aoU/beJqTsUREkn+4kc+qQU6s/chL9k3xUpF6drO8NNecm4P9BkEExGAYe7
+        fxLCmGtaOQFBl8dqY1Tbxzrt/M1+QszOI+3QQQTagSpV682ZkH81jWve1wL5HygeTeOi+N
+        EXFJ1EDitD2DPnzQtZlhk3Kl+R7P/1I=
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     linux-kernel@vger.kernel.org,
+        K Prateek Nayak <kprateek.nayak@amd.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, corbet@lwn.net,
+        jgross@suse.com, andrew.cooper3@citrix.com, peterz@infradead.org,
+        Jason@zx2c4.com, thomas.lendacky@amd.com, puwen@hygon.cn,
+        x86@kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH 0/2] arch/x86: Set L2 Cache ID on AMD processors
+Date:   Thu, 13 Apr 2023 15:17:59 +0200
+Message-ID: <1730486.opmyjpaWMg@natalenko.name>
+In-Reply-To: <20230410163527.1626-1-kprateek.nayak@amd.com>
+References: <20230410163527.1626-1-kprateek.nayak@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 3/7] ASoC: mediatek: mt8188: revise ETDM control flow
-Content-Language: en-US
-To:     Trevor Wu <trevor.wu@mediatek.com>, broonie@kernel.org,
-        lgirdwood@gmail.com, tiwai@suse.com, perex@perex.cz,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com
-Cc:     alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230413104713.7174-1-trevor.wu@mediatek.com>
- <20230413104713.7174-4-trevor.wu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230413104713.7174-4-trevor.wu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,226 +57,242 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 13/04/23 12:47, Trevor Wu ha scritto:
-> Replace register controls in snd_soc_dai_ops with snd_soc_dapm_widgets.
-> startup, shutdown and trigger ops are removed, and create DAPM_SUPPLY
-> to handle mclk, clock gating and etdm enabling. Additionally, mclk setup
-> sequence is also updated because of new supply enabling sequence.
-> 
-> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
+Hello.
+
+On pond=C4=9Bl=C3=AD 10. dubna 2023 18:35:25 CEST K Prateek Nayak wrote:
+> commit 66558b730f253 ("sched: Add cluster scheduler level for x86")
+> defined cluster on x86 as the set of threads sharing the same L2 cache.
+> cluster_id on x86, maps to the l2c_id which currently only Intel
+> processors set.
+>=20
+> This series sets the l2c_id on AMD processors with X86_FEATURE_TOPOEXT,
+> using the extended APIC ID and the "Cache Properties (L2)" CPUID
+> (0x8000001D EAX). On AMD processors without X86_FEATURE_TOPOEXT, current
+> behavior will continue.
+>=20
+> Following are the changes in value reported by
+> "/sys/devices/system/cpu/cpuX/topology/cluster_id" on a 2P Milan system
+> (2 x 64C/128T) where L2 is per-core level and SMT sibling of CPU (X) is
+> CPU ((X + 128) % 256).
+>=20
+> - tip:x86/core
+>=20
+>   $ for i in {0..255}; do\
+>       echo -n "CPU$i cluster_id: ";\
+>       cat /sys/devices/system/cpu/cpu$i/topology/cluster_id;\
+>     done;
+>=20
+>     CPU0 cluster_id: 65535
+>     CPU1 cluster_id: 65535
+>     CPU2 cluster_id: 65535
+>     CPU3 cluster_id: 65535
+>     CPU4 cluster_id: 65535
+>     ...
+>     CPU254 cluster_id: 65535
+>     CPU255 cluster_id: 65535
+>=20
+> - tip:x86/core + this series
+>=20
+>   $ for i in {0..255}; do\
+>       echo -n "CPU$i cluster_id: ";\
+>       cat /sys/devices/system/cpu/cpu$i/topology/cluster_id;\
+>     done;
+>=20
+>     CPU0 cluster_id: 0
+>     CPU1 cluster_id: 1
+>     CPU2 cluster_id: 2
+>     CPU3 cluster_id: 3
+>     CPU4 cluster_id: 4
+>     CPU5 cluster_id: 5
+>     CPU6 cluster_id: 6
+>     CPU7 cluster_id: 7
+>     CPU8 cluster_id: 8
+>     ...
+>     CPU126 cluster_id: 126
+>     CPU127 cluster_id: 127
+>     CPU128 cluster_id: 0
+>     CPU129 cluster_id: 1
+>     CPU130 cluster_id: 2
+>     CPU131 cluster_id: 3
+>     CPU132 cluster_id: 4
+>     CPU133 cluster_id: 5
+>     CPU134 cluster_id: 6
+>     CPU135 cluster_id: 7
+>     CPU136 cluster_id: 8
+>     ...
+>     CPU254 cluster_id: 126
+>     CPU255 cluster_id: 127
+>=20
+> Note: Hygon, theoretically, should be able to set the l2c_id using the
+> same cacheinfo_amd_init_l2c_id() function being added in Patch 1. Since
+> I do not have access to a Hygon machine to verify my theory, ccing Hygon
+> maintainer Pu Wen <puwen@hygon.cn> for l2c_id enablement on Hygon.
+>=20
+> The series also adds documentation for clusters on x86 platforms and
+> applies cleanly on top of tip:x86/core at commit ce3ba2af9695
+> ("x86: Suppress KMSAN reports in arch_within_stack_frames()")
+>=20
 > ---
->   sound/soc/mediatek/mt8188/mt8188-dai-etdm.c | 790 ++++++++++----------
->   sound/soc/mediatek/mt8188/mt8188-reg.h      |   2 +
->   2 files changed, 406 insertions(+), 386 deletions(-)
-> 
-> diff --git a/sound/soc/mediatek/mt8188/mt8188-dai-etdm.c b/sound/soc/mediatek/mt8188/mt8188-dai-etdm.c
-> index fddecf5bf7c6..c276687630ee 100644
-> --- a/sound/soc/mediatek/mt8188/mt8188-dai-etdm.c
-> +++ b/sound/soc/mediatek/mt8188/mt8188-dai-etdm.c
-> @@ -21,6 +21,13 @@
->   #define ETDM_TO_DAI_ID(x) ((x) + MT8188_AFE_IO_ETDM_START)
->   #define ENUM_TO_STR(x)	#x
->   
-> +enum {
-> +	SUPPLY_SEQ_ETDM_MCLK,
-> +	SUPPLY_SEQ_ETDM_CG,
-> +	SUPPLY_SEQ_DPTX_EN,
-> +	SUPPLY_SEQ_ETDM_EN,
-> +};
-> +
->   enum {
->   	MTK_DAI_ETDM_FORMAT_I2S = 0,
->   	MTK_DAI_ETDM_FORMAT_LJ,
-> @@ -84,7 +91,6 @@ struct mtk_dai_etdm_rate {
->   };
->   
->   struct mtk_dai_etdm_priv {
-> -	unsigned int clock_mode;
->   	unsigned int data_mode;
->   	bool slave_mode;
->   	bool lrck_inv;
-> @@ -100,8 +106,6 @@ struct mtk_dai_etdm_priv {
->   	unsigned int cowork_slv_count;
->   	int cowork_slv_id[MT8188_AFE_IO_ETDM_NUM - 1]; //dai_id
->   	bool in_disable_ch[MT8188_ETDM_MAX_CHANNELS];
-> -	unsigned int en_ref_cnt;
-> -	bool is_prepared;
->   };
->   
->   static const struct mtk_dai_etdm_rate mt8188_etdm_rates[] = {
-> @@ -345,14 +349,82 @@ static int mtk_dai_etdm_get_clkdiv_id_by_dai_id(int dai_id)
->   	}
->   }
->   
-> +static int get_etdm_id_by_name(struct mtk_base_afe *afe,
-> +			       const char *name)
-> +{
-> +	if (!strncmp(name, "ETDM1_IN", strlen("ETDM1_IN")))
-> +		return MT8188_AFE_IO_ETDM1_IN;
-> +	else if (!strncmp(name, "ETDM2_IN", strlen("ETDM2_IN")))
-> +		return MT8188_AFE_IO_ETDM2_IN;
-> +	else if (!strncmp(name, "ETDM1_OUT", strlen("ETDM1_OUT")))
-> +		return MT8188_AFE_IO_ETDM1_OUT;
-> +	else if (!strncmp(name, "ETDM2_OUT", strlen("ETDM2_OUT")))
-> +		return MT8188_AFE_IO_ETDM2_OUT;
-> +	else
-> +		return -EINVAL;
-> +}
-> +
-> +static struct mtk_dai_etdm_priv *get_etdm_priv_by_name(struct mtk_base_afe *afe,
-> +						       const char *name)
-> +{
-> +	struct mt8188_afe_private *afe_priv = afe->platform_priv;
-> +	int dai_id = get_etdm_id_by_name(afe, name);
-> +
-> +	if (dai_id < MT8188_AFE_IO_ETDM_START ||
-> +	    dai_id >= MT8188_AFE_IO_ETDM_END)
-> +		return NULL;
-> +
-> +	return afe_priv->dai_priv[dai_id];
-> +}
-> +
->   static int mtk_dai_etdm_enable_mclk(struct mtk_base_afe *afe, int dai_id)
->   {
->   	struct mt8188_afe_private *afe_priv = afe->platform_priv;
-> +	struct mtk_dai_etdm_priv *etdm_data;
-> +	struct etdm_con_reg etdm_reg;
-> +	unsigned int val = 0;
-> +	unsigned int mask;
-> +	int clkmux_id = mtk_dai_etdm_get_clk_id_by_dai_id(dai_id);
->   	int clkdiv_id = mtk_dai_etdm_get_clkdiv_id_by_dai_id(dai_id);
-> +	int apll_clk_id;
-> +	int apll;
-> +	int ret;
-> +
-> +	if (!is_valid_etdm_dai(dai_id))
-> +		return -EINVAL;
-> +	etdm_data = afe_priv->dai_priv[dai_id];
->   
-> -	if (clkdiv_id < 0)
-> +	apll = etdm_data->mclk_apll;
-> +	apll_clk_id = mt8188_afe_get_mclk_source_clk_id(apll);
-> +
-> +	if (clkmux_id < 0 || clkdiv_id < 0)
->   		return -EINVAL;
->   
-> +	if (apll_clk_id < 0)
-> +		return apll_clk_id;
-> +
-> +	ret = get_etdm_reg(dai_id, &etdm_reg);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	mask = ETDM_CON1_MCLK_OUTPUT;
-> +	if (etdm_data->mclk_dir == SND_SOC_CLOCK_OUT)
-> +		val = ETDM_CON1_MCLK_OUTPUT;
-> +	regmap_update_bits(afe->regmap, etdm_reg.con1, mask, val);
-> +
-> +	/* enable parent clock before select apll*/
-> +	mt8188_afe_enable_clk(afe, afe_priv->clk[clkmux_id]);
-> +
-> +	/* select apll */
-> +	ret = mt8188_afe_set_clk_parent(afe, afe_priv->clk[clkmux_id],
-> +					afe_priv->clk[apll_clk_id]);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* set rate */
-> +	ret = mt8188_afe_set_clk_rate(afe, afe_priv->clk[clkdiv_id],
-> +				      etdm_data->mclk_freq);
-> +
->   	mt8188_afe_enable_clk(afe, afe_priv->clk[clkdiv_id]);
->   
->   	return 0;
-> @@ -361,12 +433,207 @@ static int mtk_dai_etdm_enable_mclk(struct mtk_base_afe *afe, int dai_id)
->   static int mtk_dai_etdm_disable_mclk(struct mtk_base_afe *afe, int dai_id)
->   {
->   	struct mt8188_afe_private *afe_priv = afe->platform_priv;
-> +	int clkmux_id = mtk_dai_etdm_get_clk_id_by_dai_id(dai_id);
->   	int clkdiv_id = mtk_dai_etdm_get_clkdiv_id_by_dai_id(dai_id);
->   
-> -	if (clkdiv_id < 0)
-> +	if (clkmux_id < 0 || clkdiv_id < 0)
->   		return -EINVAL;
->   
->   	mt8188_afe_disable_clk(afe, afe_priv->clk[clkdiv_id]);
-> +	mt8188_afe_disable_clk(afe, afe_priv->clk[clkmux_id]);
-> +
-> +	return 0;
-> +}
-> +
-> +static int mtk_etdm_mclk_connect(struct snd_soc_dapm_widget *source,
-> +				 struct snd_soc_dapm_widget *sink)
-> +{
-> +	struct snd_soc_dapm_widget *w = sink;
-> +	struct snd_soc_component *cmpnt = snd_soc_dapm_to_component(w->dapm);
-> +	struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
-> +	struct mt8188_afe_private *afe_priv = afe->platform_priv;
-> +	struct mtk_dai_etdm_priv *etdm_priv;
-> +	int mclk_id;
-> +
-> +	mclk_id = get_etdm_id_by_name(afe, source->name);
-> +	if (mclk_id < 0) {
-> +		dev_info(afe->dev, "mclk_id < 0");
+> K Prateek Nayak (2):
+>   arch/x86: Set L2 Cache ID on AMD and Hygon processors
+>   x86/Documentation: Add documentation about cluster
+>=20
+>  Documentation/x86/topology.rst   | 31 +++++++++++++++++++++
+>  arch/x86/include/asm/cacheinfo.h |  1 +
+>  arch/x86/kernel/cpu/amd.c        |  1 +
+>  arch/x86/kernel/cpu/cacheinfo.c  | 47 ++++++++++++++++++++++++++++++++
+>  arch/x86/kernel/cpu/hygon.c      |  1 +
+>  5 files changed, 81 insertions(+)
 
-Since you're returning 0, this doesn't appear to be an error and this print is
-useless unless it is used for debugging purposes.
+Having the following CPU:
 
-Please change it to dev_dbg().
+```
+Architecture:            x86_64
+CPU op-mode(s):        32-bit, 64-bit
+Address sizes:         48 bits physical, 48 bits virtual
+Byte Order:            Little Endian
+CPU(s):                  32
+On-line CPU(s) list:   0-31
+Vendor ID:               AuthenticAMD
+Model name:            AMD Ryzen 9 5950X 16-Core Processor
+CPU family:          25
+Model:               33
+Thread(s) per core:  2
+Core(s) per socket:  16
+Socket(s):           1
+Stepping:            2
+=46requency boost:     enabled
+CPU(s) scaling MHz:  37%
+CPU max MHz:         5084,0000
+CPU min MHz:         550,0000
+BogoMIPS:            6789,07
+=46lags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge=
+ mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt=
+ pdpe1gb rdtscp lm constant_
+tsc rep_good nopl nonstop_tsc cpuid extd_apicid aperfmperf rapl pni pclmulq=
+dq monitor ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f=
+16c r
+drand lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnow=
+prefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bpext perf=
+ctr_l
+lc mwaitx cpb cat_l3 cdp_l3 hw_pstate ssbd mba ibrs ibpb stibp vmmcall fsgs=
+base bmi1 avx2 smep bmi2 erms invpcid cqm rdt_a rdseed adx smap clflushopt =
+clwb
+sha_ni xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total c=
+qm_mbm_local clzero irperf xsaveerptr rdpru wbnoinvd arat npt lbrv svm_lock=
+ nrip
+_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshol=
+d avic v_vmsave_vmload vgif v_spec_ctrl umip pku ospke vaes vpclmulqdq rdpi=
+d ove
+rflow_recov succor smca fsrm
+Virtualization features:
+Virtualization:        AMD-V
+Caches (sum of all):
+L1d:                   512 KiB (16 instances)
+L1i:                   512 KiB (16 instances)
+L2:                    8 MiB (16 instances)
+L3:                    64 MiB (2 instances)
+NUMA:
+NUMA node(s):          1
+NUMA node0 CPU(s):     0-31
+Vulnerabilities:
+Itlb multihit:         Not affected
+L1tf:                  Not affected
+Mds:                   Not affected
+Meltdown:              Not affected
+Mmio stale data:       Not affected
+Retbleed:              Not affected
+Spec store bypass:     Mitigation; Speculative Store Bypass disabled via pr=
+ctl
+Spectre v1:            Mitigation; usercopy/swapgs barriers and __user poin=
+ter sanitization
+Spectre v2:            Mitigation; Retpolines, IBPB conditional, IBRS_FW, S=
+TIBP always-on, RSB filling, PBRSB-eIBRS Not affected
+Srbds:                 Not affected
+Tsx async abort:       Not affected
+```
 
-> +		return 0;
-> +	}
-> +
-> +	etdm_priv = get_etdm_priv_by_name(afe, w->name);
-> +	if (!etdm_priv) {
-> +		dev_info(afe->dev, "etdm_priv == NULL");
+Without the series:
 
-dev_dbg()
+```
+/sys/devices/system/cpu/cpu0/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu1/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu2/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu3/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu4/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu5/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu6/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu7/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu8/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu9/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu10/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu11/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu12/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu13/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu14/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu15/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu16/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu17/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu18/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu19/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu20/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu21/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu22/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu23/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu24/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu25/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu26/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu27/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu28/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu29/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu30/topology/cluster_id:65535
+/sys/devices/system/cpu/cpu31/topology/cluster_id:65535
+```
 
-> +		return 0;
-> +	}
-> +
-> +	if (get_etdm_id_by_name(afe, sink->name) == mclk_id)
-> +		return !!(etdm_priv->mclk_freq > 0);
-> +
-> +	if (etdm_priv->cowork_source_id == mclk_id) {
-> +		etdm_priv = afe_priv->dai_priv[mclk_id];
-> +		return !!(etdm_priv->mclk_freq > 0);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int mtk_etdm_cowork_connect(struct snd_soc_dapm_widget *source,
-> +				   struct snd_soc_dapm_widget *sink)
-> +{
-> +	struct snd_soc_dapm_widget *w = sink;
-> +	struct snd_soc_component *cmpnt = snd_soc_dapm_to_component(w->dapm);
-> +	struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
-> +	struct mt8188_afe_private *afe_priv = afe->platform_priv;
-> +	struct mtk_dai_etdm_priv *etdm_priv;
-> +	int source_id;
-> +	int i;
-> +
-> +	source_id = get_etdm_id_by_name(afe, source->name);
-> +	if (source_id < 0) {
-> +		dev_info(afe->dev, "%s() source_id < 0\n", __func__);
+With the series:
 
-dev_dbg() please
+```
+/sys/devices/system/cpu/cpu0/topology/cluster_id:0
+/sys/devices/system/cpu/cpu1/topology/cluster_id:1
+/sys/devices/system/cpu/cpu2/topology/cluster_id:2
+/sys/devices/system/cpu/cpu3/topology/cluster_id:3
+/sys/devices/system/cpu/cpu4/topology/cluster_id:4
+/sys/devices/system/cpu/cpu5/topology/cluster_id:5
+/sys/devices/system/cpu/cpu6/topology/cluster_id:6
+/sys/devices/system/cpu/cpu7/topology/cluster_id:7
+/sys/devices/system/cpu/cpu8/topology/cluster_id:8
+/sys/devices/system/cpu/cpu9/topology/cluster_id:9
+/sys/devices/system/cpu/cpu10/topology/cluster_id:10
+/sys/devices/system/cpu/cpu11/topology/cluster_id:11
+/sys/devices/system/cpu/cpu12/topology/cluster_id:12
+/sys/devices/system/cpu/cpu13/topology/cluster_id:13
+/sys/devices/system/cpu/cpu14/topology/cluster_id:14
+/sys/devices/system/cpu/cpu15/topology/cluster_id:15
+/sys/devices/system/cpu/cpu16/topology/cluster_id:0
+/sys/devices/system/cpu/cpu17/topology/cluster_id:1
+/sys/devices/system/cpu/cpu18/topology/cluster_id:2
+/sys/devices/system/cpu/cpu19/topology/cluster_id:3
+/sys/devices/system/cpu/cpu20/topology/cluster_id:4
+/sys/devices/system/cpu/cpu21/topology/cluster_id:5
+/sys/devices/system/cpu/cpu22/topology/cluster_id:6
+/sys/devices/system/cpu/cpu23/topology/cluster_id:7
+/sys/devices/system/cpu/cpu24/topology/cluster_id:8
+/sys/devices/system/cpu/cpu25/topology/cluster_id:9
+/sys/devices/system/cpu/cpu26/topology/cluster_id:10
+/sys/devices/system/cpu/cpu27/topology/cluster_id:11
+/sys/devices/system/cpu/cpu28/topology/cluster_id:12
+/sys/devices/system/cpu/cpu29/topology/cluster_id:13
+/sys/devices/system/cpu/cpu30/topology/cluster_id:14
+/sys/devices/system/cpu/cpu31/topology/cluster_id:15
+```
 
-> +		return 0;
-> +	}
-> +
-> +	etdm_priv = get_etdm_priv_by_name(afe, w->name);
-> +	if (!etdm_priv) {
-> +		dev_info(afe->dev, "%s() etdm_priv == NULL\n", __func__);
+Hence,
 
-...again... and everywhere else.
+Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
 
-> +		return 0;
-> +	}
-> +
+Thanks.
 
-Regards,
-Angelo
+=2D-=20
+Oleksandr Natalenko (post-factum)
+
 
