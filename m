@@ -2,100 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C12E6E0FCC
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:19:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 938696E0FD5
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:20:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbjDMOTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 10:19:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
+        id S230404AbjDMOUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 10:20:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjDMOTN (ORCPT
+        with ESMTP id S229840AbjDMOUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 10:19:13 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1382D43
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 07:19:12 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id D64E61FD63;
-        Thu, 13 Apr 2023 14:19:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1681395550; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zVZLnS1EpbXZplSa6VV3xfGtTLtoH3BSWk8A4KkMbCA=;
-        b=YBhbY/3vFNXi8j8bU1pNbYOhFS8prEw9r4a+SZAsPY3dcbCSIkOfIqz3VNWZmJVdawjoJj
-        PnlRM+blX4/efBHAtwHqSygLYYEjw2h8fxAEOfKs1Hu53XuF5QIkV8ZMxz1X58O+G/fGBw
-        nSwoiyS6Uww9QZmlV/00ce/9dzLXKnY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1681395550;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zVZLnS1EpbXZplSa6VV3xfGtTLtoH3BSWk8A4KkMbCA=;
-        b=6kT95XokIuxAoLmmRLAXb0rO/iGLYr+iDmPDYC1ER9a9dPMI/WJ+5jHmAbHQJpf3vEawLS
-        JKoClyrxbYdSovCg==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
+        Thu, 13 Apr 2023 10:20:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3788C2D43;
+        Thu, 13 Apr 2023 07:20:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id BAC302C143;
-        Thu, 13 Apr 2023 14:19:10 +0000 (UTC)
-Date:   Thu, 13 Apr 2023 16:19:10 +0200 (CEST)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2 8/9] objtool: Detect missing __noreturn annotations
-In-Reply-To: <0f630a0eb4585ab4114e4eecaa6f166a1fd81d49.1681325924.git.jpoimboe@kernel.org>
-Message-ID: <alpine.LSU.2.21.2304131613490.27633@pobox.suse.cz>
-References: <cover.1681325924.git.jpoimboe@kernel.org> <0f630a0eb4585ab4114e4eecaa6f166a1fd81d49.1681325924.git.jpoimboe@kernel.org>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C42ED615A5;
+        Thu, 13 Apr 2023 14:20:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9298FC433EF;
+        Thu, 13 Apr 2023 14:20:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681395621;
+        bh=7uOcMqCC9rFXgBG3LAgel2H2tG/3b3XSmuVAeWOxrKo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iJsu63SBsFVSnYBMAf9wX3lmjUgPYCPEgPI/ivavhli99al2TavQQBX/rNtyMs9za
+         DFJmpRyqWsImEg5x3xTcwSwSbdElPmK4AmBCZXzBMGG632lrsfJZueF9iajq7sCg+x
+         jzMcLSkgdPBnd0FmQPXc3Tu6uXv8oTlVZXxbZ2cnAxzYgnuIT7CFX+UoJVytZ+EzBe
+         8aDi8qqs8SoXbLGqWV2iZcy6JKZbEyASympouPxGUsvy4pwQMl3j9CoYKGqMGUS4zR
+         8YCbsJPjaSzthkVkg+VcR/3mu2VH/2CgMtb1D0jzJAYpgktfQP6TQa7p+jF4icmhoT
+         M5XxJTxucw5WQ==
+Date:   Thu, 13 Apr 2023 15:20:16 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     linux@weissschuh.net
+Cc:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-next@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] tools/nolibc: implement fd-based FILE streams
+Message-ID: <189e27d5-f58f-4d97-9d4d-f1d88c9ebda1@sirena.org.uk>
+References: <20230328-nolibc-printf-test-v3-0-ddc79f92efd5@weissschuh.net>
+ <20230328-nolibc-printf-test-v3-3-ddc79f92efd5@weissschuh.net>
+ <f28e3c85-84a4-4b30-a3f5-c2efad311fe7@sirena.org.uk>
+ <a91f0fe9-fcca-4009-b34d-0c58542d9765@weissschuh.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="DAtBsIIT0GO5kgGm"
+Content-Disposition: inline
+In-Reply-To: <a91f0fe9-fcca-4009-b34d-0c58542d9765@weissschuh.net>
+X-Cookie: Idleness is the holiday of fools.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> --- a/tools/objtool/check.c
-> +++ b/tools/objtool/check.c
-> @@ -4485,7 +4485,8 @@ static int validate_sls(struct objtool_file *file)
->  
->  static int validate_reachable_instructions(struct objtool_file *file)
->  {
-> -	struct instruction *insn;
-> +	struct instruction *insn, *prev_insn;
-> +	struct symbol *call_dest;
->  	int warnings = 0;
->  
->  	if (file->ignore_unreachables)
-> @@ -4495,6 +4496,17 @@ static int validate_reachable_instructions(struct objtool_file *file)
->  		if (insn->visited || ignore_unreachable_insn(file, insn))
->  			continue;
->  
-> +		prev_insn = prev_insn_same_sec(file, insn);
-> +		if (prev_insn && prev_insn->dead_end) {
-> +			call_dest = insn_call_dest(prev_insn);
-> +			if (call_dest) {
-> +				WARN_INSN(insn, "%s() is missing a __noreturn annotation",
-> +					  call_dest->name);
-> +				warnings++;
-> +				continue;
 
-A nit but this and
+--DAtBsIIT0GO5kgGm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +			}
-> +		}
-> +
->  		WARN_INSN(insn, "unreachable instruction");
->  		warnings++;
+On Thu, Apr 13, 2023 at 03:09:27PM +0200, linux@weissschuh.net wrote:
+> Apr 12, 2023 17:58:45 Mark Brown <broonie@kernel.org>:
 
-this makes me thinking. Wouldn't it be confusing to anyone that there is 
-no correspondence between warnings and a number of actual reported 
-warnings through WARN_INSN()? In the future when there would be a usage 
-for warnings. It does not really matter now.
+> > Nothing in this change (or anything else in the series AFAICT) causes
+> > STDx_FILENO to be declared so we get errors like below in -next when a
+> > kselftest is built with this version of nolibc:
 
-Miroslav
+> These definitions come from
+> "tools/nolibc: add definitions for standard fds".
+> This patch was part of the nolibc stack protector series which is older t=
+han this series and went through the same channels.
+> So I'm not sure how one series made it into next and the other didn't.
+
+> This would also have been noticed by Willy and Paul running their tests.
+
+Hrm, that commit is actually in -next and Paul's pull request, not sure
+why it wasn't showing up in greps.  The issue is that you've added a
+dependency from nolibc's stdio.h to unistd.h but nolibc.h includes
+unistd.h last and there's no other include, meaning that at the time
+that stdio.h is compiled there's no definition of the constants visible.
+
+The below fixes the issue, I'll submit it properly later today:
+
+diff --git a/tools/include/nolibc/nolibc.h b/tools/include/nolibc/nolibc.h
+index 04739a6293c4..05a228a6ee78 100644
+--- a/tools/include/nolibc/nolibc.h
++++ b/tools/include/nolibc/nolibc.h
+@@ -99,11 +99,11 @@
+ #include "sys.h"
+ #include "ctype.h"
+ #include "signal.h"
++#include "unistd.h"
+ #include "stdio.h"
+ #include "stdlib.h"
+ #include "string.h"
+ #include "time.h"
+-#include "unistd.h"
+ #include "stackprotector.h"
+=20
+ /* Used by programs to avoid std includes */
+
+--DAtBsIIT0GO5kgGm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ4D58ACgkQJNaLcl1U
+h9A2SQgAgm17E78aM1sfqCFI9oXDemFsJn6JP25Tu96o/SY+kML0iOMqqldEG/WL
+DxlSZpcC0cXr9U6cFcV3Ct4Y4Kbjq8iuHxUH9oV1fpokbO9NOUgTGphRTM/T7mhQ
+zwXpSDsk0oKlUSLA/jx6WVGRIT0AfFn01CjVndG9UONpBUmnwJDX+AQaczsNm9cd
+nzg0Zr0SpNMCn5pOI1WlxkRSkEXB1WzE2wIcrUdj/QRN7397pdZWh4VYmGHil2Sk
+x/m2WY5FE0FtAYENe0XUxnzwrKGGAqq2R6KrZuAmjO574qgJeoMulKBQWZRor3tx
+C54U7GP61IleXB1wWwPKcsHZoDMM1A==
+=FQ+a
+-----END PGP SIGNATURE-----
+
+--DAtBsIIT0GO5kgGm--
