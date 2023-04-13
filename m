@@ -2,67 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 187E36E1340
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 19:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 415196E1343
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 19:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbjDMRNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 13:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44104 "EHLO
+        id S230242AbjDMRNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 13:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbjDMRNA (ORCPT
+        with ESMTP id S230206AbjDMRNC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 13:13:00 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F8606592
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 10:12:57 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1878504c22aso5178563fac.8
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 10:12:57 -0700 (PDT)
+        Thu, 13 Apr 2023 13:13:02 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F3524EF6
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 10:13:01 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id v6so14913874wrv.8
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 10:13:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681405977; x=1683997977;
+        d=google.com; s=20221208; t=1681405979; x=1683997979;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LSXwkXBchEWpt1wH2gWLxy2J6syLDyFSqFiB87bgTpo=;
-        b=jEmtFVkUS3Ob3wdx5Jrd1VDyz8/zN9P1pb+U/syVnZMxt3VAyIcBlrMSaWOo5N2XTh
-         9BphMJwTvf4Jw0q2Do8IR+8Mkskrq1hhUJev4swSH1fHyZW1eSgU2fOZ/NxITwM1p3mR
-         2hqKOQ/DA3hX90PiumR0wh90Eb6F5hZzbkvq45dG/aN4DjLrtHADmGTlGfzBmWf16QMR
-         2cWcZMHA6VAkY4ZwxN06j8ZZ8qf1+wK7IxGC2IaWDYmpd0AqeojYXSS1iyR+Xiicvlfi
-         GbBQ4RR2o9CtasPVMsT8l89a0+cMnIx72nkLVUJGAl6teGrRgxJUub9h3BGXFThu7XK0
-         o2Bw==
+        bh=C+FOcVtrauGavkqeapsQUvV5l07pjdAtC6oPi4RZzFQ=;
+        b=j+VH1iNZWqjXmS3+7tDbVgP7esu3h0D3XU1Saiv5tHD3GyBEL6bC7b4Vd8TJhw0QOq
+         vxqeFGmDVT0cxNiSksBRym6+FwYAx/WesPAfJ2s2jz8MKUDhoX+WpEqAZyMXmAaydjRw
+         gQ2g46UH+N60ApsGFv8BY70yyg4XYVVZO1+A/SqshPGNuA24Ta56ZFklWVQX0HgYF5J2
+         S9BXyXuybF93xBK+djOI9rpfpWTSpVud8k5mlMzKkwVR8iBP+doSh7/86dcvhF4mQJPE
+         L51Xqw1UGbY3GlC3dZ457WZWuieCxZRG1aOTvgIuxv3o7FZMUzBY0IPt+++ZDHZ0uT3V
+         /npg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681405977; x=1683997977;
+        d=1e100.net; s=20221208; t=1681405979; x=1683997979;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=LSXwkXBchEWpt1wH2gWLxy2J6syLDyFSqFiB87bgTpo=;
-        b=g3VWLcNdJocwklfzpVgkkHaNCWrVObfAw8L5qSt8TCMpEU++n08309QGjloWZqebws
-         AC2w9RHk5TUUxL0dnQOKgohKZU4IW+NK+8Bj0PNZs4zLaPjbm02NZZzDtnzP0OspqvPQ
-         DdF7ZKKjcpwttKcy+4l8LlWx7++ZXqNbKEUYKXPNVY4EE+Hmoq+PpJU3DZt87/bUZ4rl
-         JjKBdOWtKdrCINMDFQ0g2tyxT7yPXPjvIMxThMxQ7yzl6R/7bVU+WbT9PjLDCUsxbzWT
-         w45ER/jP85As33cz4wstyIadmkH17r9e+P1LuyLv3SMSkBr4wq1Uu8F35MZ/CBIBbr4+
-         jKUQ==
-X-Gm-Message-State: AAQBX9e085Ont6GVmpX1cNHyp1EeK5SdAQmwd5hHHIEt73AxiYGBnwYm
-        hR5X7vuLGzJSHGVtsJ2SmCvX5FoNV5/xvF54+JJqdg==
-X-Google-Smtp-Source: AKy350Z6CgGBT8geQanGD2h8Z3itr4+w1XNFvcel+aEVGIuDu05Ea+ygaFlkoZh6baRZP7YH+OMYmsLQQRmFfuvLZvU=
-X-Received: by 2002:a05:6870:40d3:b0:187:88f8:e9b5 with SMTP id
- l19-20020a05687040d300b0018788f8e9b5mr1581575oal.6.1681405976861; Thu, 13 Apr
- 2023 10:12:56 -0700 (PDT)
+        bh=C+FOcVtrauGavkqeapsQUvV5l07pjdAtC6oPi4RZzFQ=;
+        b=RGOOSxmkw/uMVnNhGsbaKQImaHfHrW6cZiSS+Qgxl5lZsEyhA8eEMnX+xc5reG1UEQ
+         ee/1M7w6H7tSHPsCe6QmVggoUWJGy61UdtF3Dv+QYeVZtCcGl/B0KL+KG77E85zIDBUc
+         E7qtfGYa1C8COp9p08mus/sZo2xaj2978/kuMWRNkIePiWmBI+shEBkNFh6noHxGOQW7
+         daAUnLLSBMmkWmD4Xt1VTb544B5tt8AW97iwMpuoiDoVnp8APfEzCl0C7uty0isgInO1
+         kYW221KsfB05J6tqfZxYnqjAdTwipBUydT9AFO4e6S/Y05F4Tp7+To4Tp272q6Zy9zt+
+         K1pQ==
+X-Gm-Message-State: AAQBX9eI7P9s4J4WfoK3uZmWw1tSUWg34j6wkI8qDjVwBW9C+mXHnPbK
+        iJ3i40dVAWmkBoezf1ZS9LgGHhF340tsesicUThTNMqpF16NXWAX45U=
+X-Google-Smtp-Source: AKy350bTQbDoNKIbxE6adRwcuataNMOj/xqDkMYGf4f4RKRZ4x5eVnwYFxjdMKI9fwBPSmKo0RM78CmlM1i63DavlsA=
+X-Received: by 2002:a5d:4b87:0:b0:2f1:c72f:fa43 with SMTP id
+ b7-20020a5d4b87000000b002f1c72ffa43mr547318wrt.14.1681405979130; Thu, 13 Apr
+ 2023 10:12:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230412114402.1119956-1-slark_xiao@163.com> <CAMZdPi9gHzPaKcwoRR8-gQtiSxQupL=QickXqNE2owVs-nOrxg@mail.gmail.com>
- <5372bdf6.533d.1877981651f.Coremail.slark_xiao@163.com>
-In-Reply-To: <5372bdf6.533d.1877981651f.Coremail.slark_xiao@163.com>
-From:   Loic Poulain <loic.poulain@linaro.org>
-Date:   Thu, 13 Apr 2023 19:12:20 +0200
-Message-ID: <CAMZdPi98JvDdOAS9Ft6udkxZTMW57yQ4mqXMTsa1ySc4UZYqvQ@mail.gmail.com>
-Subject: Re: Re: [PATCH net] wwan: core: add print for wwan port attach/disconnect
-To:     Slark Xiao <slark_xiao@163.com>
-Cc:     ryazanov.s.a@gmail.com, johannes@sipsolutions.net,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20230407203456.27141-1-quic_johmoo@quicinc.com>
+ <20230407203456.27141-2-quic_johmoo@quicinc.com> <CAK7LNAQQmoyUx+0Jk3c7iqY20KokrHEOPwHNb2doZOOA8RWBDA@mail.gmail.com>
+ <2023041015-lunar-dandelion-1b4e@gregkh> <ae44540f-8947-8efb-fb8d-45a84bd3fef3@quicinc.com>
+ <2023041136-donator-faceplate-5f91@gregkh> <bcdcee9b-f213-bc3c-d300-92a1e0138187@quicinc.com>
+ <2023041209-armed-overlaid-3d3d@gregkh> <d34a6b09-8244-49e2-2d7a-eee5fd5ca5b7@quicinc.com>
+ <718c102205750a00b86e8d33748e9bfb3c485ee1.camel@klomp.org>
+In-Reply-To: <718c102205750a00b86e8d33748e9bfb3c485ee1.camel@klomp.org>
+From:   Giuliano Procida <gprocida@google.com>
+Date:   Thu, 13 Apr 2023 18:12:21 +0100
+Message-ID: <CAGvU0HnepJwhUdMPDPY7q8nAnMNU=2_XaZHkPhFO0hmaseSPEQ@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] check-uapi: Introduce check-uapi.sh
+To:     Mark Wielaard <mark@klomp.org>
+Cc:     John Moon <quic_johmoo@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Todd Kjos <tkjos@google.com>,
+        Matthias Maennich <maennich@google.com>,
+        kernel-team@android.com, libabigail@sourceware.org,
+        Jordan Crouse <jorcrous@amazon.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,52 +91,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 13 Apr 2023 at 09:26, Slark Xiao <slark_xiao@163.com> wrote:
->
-> At 2023-04-13 15:07:21, "Loic Poulain" <loic.poulain@linaro.org> wrote:
-> >On Wed, 12 Apr 2023 at 13:45, Slark Xiao <slark_xiao@163.com> wrote:
-> >>
-> >> Refer to USB serial device or net device, there is notice to
-> >> let end user know the status of device, like attached or
-> >> disconnected. Add attach/disconnect print for wwan device as
-> >> well. This change works for MHI device and USB device.
-> >
-> >This change works for wwan port devices, whatever the bus is.
-> >
-> Sure. Since wwan support USB device as well after integrating
-> WWAN framework into cdc-wdm.
-> >>
-> >> Signed-off-by: Slark Xiao <slark_xiao@163.com>
-> >> ---
-> >>  drivers/net/wwan/wwan_core.c | 5 +++++
-> >>  1 file changed, 5 insertions(+)
-> >>
-> >> diff --git a/drivers/net/wwan/wwan_core.c b/drivers/net/wwan/wwan_core.c
-> >> index 2e1c01cf00a9..d3ac6c5b0b26 100644
-> >> --- a/drivers/net/wwan/wwan_core.c
-> >> +++ b/drivers/net/wwan/wwan_core.c
-> >> @@ -492,6 +492,8 @@ struct wwan_port *wwan_create_port(struct device *parent,
-> >>         if (err)
-> >>                 goto error_put_device;
-> >>
-> >> +       dev_info(&wwandev->dev, "%s converter now attached to %s\n",
-> >> +                wwan_port_dev_type.name, port->dev.kobj.name);
-> >
-> >You should use `dev_name()` instead of direct reference to kobj.
-> >
-> Will update this in v2.
-> >Why 'converter' ? If you really want to print, it should be something like:
-> >wwan0: wwan0at1 port attached
-> This refer to USB device attached info:
->   696.444511] usb 2-3: GSM modem (1-port) converter now attached to ttyUSB0
-> [  696.444877] usb 2-3: GSM modem (1-port) converter now attached to ttyUSB1
-> [  696.445065] usb 2-3: GSM modem (1-port) converter now attached to ttyUSB2
-> currently, we will print it as below with above patch:
-> [  233.192123] wwan wwan0: wwan_port converter now attached to wwan0mbim0
-> [  694.530781] wwan wwan0: wwan_port converter now disconnected from wwan0mbim0
+Hi all.
 
-Ok, but we don't have to mimic USB, and it's not a converter, keep
-that simple (e.g. 'port %s attached').
+On Thu, 13 Apr 2023 at 15:37, Mark Wielaard <mark@klomp.org> wrote:
+>
+> Hi,
+>
+> On Wed, 2023-04-12 at 09:37 -0700, John Moon via Libabigail wrote:
+> > On 4/11/2023 11:14 PM, Greg Kroah-Hartman wrote:
+> > > > Would you find the tool more useful if it simply filtered out all instances
+> > > > where the size of the type did not change? This would filter out the
+> > > > following which the tool currently flags:
+> > > >
+> > > > - enum expansions
+> > > > - reserved field expansions
+> > > > - expansions of a struct with a flex array at the end
+> > > > - type changes
+> > > > - re-ordering of existing members
+> > > > - ...others?
+> > >
+> > > Obviously not, as some of those are real breakages, and some are not at
+> > > all.
+> > >
+> > > Please understand what is an abi breakage.  Adding new enums is not.
+> > > Using a reserved field is not.  Reording existing members IS.
+> > >
+> >
+> > Yes, understood that method would miss certain classes of breakages. I
+> > was suggesting it as a way to improve the signal-to-noise ratio of the
+> > tool since we don't currently have an algorithm for determining
+> > breakages with 100% accuracy.
+>
+> Note that you can check the exit code of libabigail's abidiff to see
+> whether something is an incompatible abi change or not, see:
+> https://sourceware.org/libabigail/manual/abidiff.html#return-values
+>
+> You can also of course use suppressions to instruct abidiff to avoid
+> reporting changes involving certain ABI artifacts:
+> https://sourceware.org/libabigail/manual/libabigail-concepts.html#suppr-spec-label
+
+libabigail's abidiff already hides certain differences by default.
+You can turn this behaviour off with --harmless.
+
+Note that abidiff without --harmless treats certain ABI differences
+asymmetrically,
+hiding them one way around but not the other.
+
+The ABI diff tool I designed for Android always treats differences symmetrically
+and will only suppress certain kinds of diff if specially requested
+(which we don't
+do any more in production). [Technically, we also ignore qualifier changes on
+function parameter and return types, but we achieve that by stripping them out
+unconditionally.]
+
+Once we get around to UAPI monitoring, we'll do the same there. We can always
+review the SNR later.
 
 Regards,
-Loic
+Giuliano.
+
+> Cheers,
+>
+> Mark
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+>
