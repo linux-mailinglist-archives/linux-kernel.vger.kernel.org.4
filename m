@@ -2,90 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 538266E173E
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 00:20:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DFAB6E1747
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 00:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjDMWUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 18:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41878 "EHLO
+        id S230200AbjDMWWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 18:22:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjDMWUX (ORCPT
+        with ESMTP id S229853AbjDMWV4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 18:20:23 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F10226BE
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 15:20:21 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id q23so31597647ejz.3
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 15:20:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1681424419; x=1684016419;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QXzUcxPP626cgc8CdfapvJZ46tgsC0UFbGeqvzuoYnU=;
-        b=L+kmTBG6Ktzt2fMXak5DKnXkUk4b/fuoUwKatOd0CGhdkI5rJMYFQkItVv+QO7WD3/
-         lIEZLMXxIr8qcpf7usgaN9uXi7R5VJW2qW1ZDwt2xIv0aEClUscfrb/WbpQZC2v90EPI
-         AE4UOhJb7UHfgjWEkxDP02QcthcuI/rNwgRCw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681424419; x=1684016419;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QXzUcxPP626cgc8CdfapvJZ46tgsC0UFbGeqvzuoYnU=;
-        b=l95vWg8d/x7690s2lVOyjRDobokEu+PzgTqLAfx3O9ALuhZAN5W6YJkFi2hmUu/GRP
-         RSET+HcB3Fha3F6aTDtUQOSzDxoCsAhyd3vyEhPJwZOYCrYHEK+YoIJBI7bU8addD1MD
-         /2XyscTc2TuJF8/MchyODQns9LOuLxL9ngOQFHmAOK8SZgga8nAIFaUCz5TIbwhIgoYg
-         R+bFZD6czstKLWc3uIPGayI/mzKaBbAbSMZ3hauA8i6HCsBy+h/cMe/FDTfpPdJoogJ0
-         Tq77OzXFEVWbXsOdVtFqvT9hvasXsQ3rMsxfu8KnbyN6bH2nw0ciUny++OcnHEwzuRaZ
-         Phew==
-X-Gm-Message-State: AAQBX9f9mU/lkgxPdr8FyfTUNPsQhiMpy/f1u1376rcU7NOMStC4seRN
-        64I/bO4eCnn0eNRj+LFvLRPv0jTs7MCntxASTUd8Kg==
-X-Google-Smtp-Source: AKy350auIb57JJe1ChVkJp3HeT4e+6OKovaMeOtJH8F0wJukKNbi8Se9d1Froa/c3PAywwWLCPuhCA==
-X-Received: by 2002:a17:906:a142:b0:94a:98a2:d10c with SMTP id bu2-20020a170906a14200b0094a98a2d10cmr3902149ejb.65.1681424418797;
-        Thu, 13 Apr 2023 15:20:18 -0700 (PDT)
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com. [209.85.218.48])
-        by smtp.gmail.com with ESMTPSA id l4-20020a170906a40400b00946be16f725sm1528630ejz.153.2023.04.13.15.20.17
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Apr 2023 15:20:17 -0700 (PDT)
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-94a35b11c08so385777066b.3
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 15:20:17 -0700 (PDT)
-X-Received: by 2002:a50:9e85:0:b0:505:50a:a4d0 with SMTP id
- a5-20020a509e85000000b00505050aa4d0mr2029706edf.2.1681424417227; Thu, 13 Apr
- 2023 15:20:17 -0700 (PDT)
+        Thu, 13 Apr 2023 18:21:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E00A38A78;
+        Thu, 13 Apr 2023 15:21:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7675664202;
+        Thu, 13 Apr 2023 22:21:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C75E0C433EF;
+        Thu, 13 Apr 2023 22:21:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681424505;
+        bh=LHf3EdbUfTHiiFAiofVbn0QT35RrzQGBC8v1K1+GCk8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dp0T5VJURoF7M0+EMhR4DY3owQX2XHIcBn191ytxWsQ3VtGxGbO45reUl1USj9c3j
+         XGiieKLaPGOoBMaAFEp2BdJ/RXwajsp8JkwV88hNKu16Bh6cEsHbtmYtEYBVTBgAFk
+         +jJ58cx8Ck6ykfJYC7T1N70hfOZPrf3s4S9Axlzy2++FPvnsoVRBz1cUtf/vg42PDo
+         i/nGU1YzjqIsiqYNXePWOqecQnOoXyjHVJv8kIUBlhXASNUxrPK7LRBpKLC5nDYyZb
+         bNAzXfVNvx2cqDpYqvaCGtuzoTPMXW8dzuyGW0y9vmq9ntuiENjvymlCiv28GezIca
+         TsiEOgbuYa7tQ==
+From:   Conor Dooley <conor@kernel.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     conor@kernel.org, Conor Dooley <conor.dooley@microchip.com>,
+        stable@vger.kernel.org,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1] clk: microchip: fix potential UAF in auxdev release callback
+Date:   Thu, 13 Apr 2023 23:20:45 +0100
+Message-Id: <20230413-critter-synopsis-dac070a86cb4@spud>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <CACRpkdZsoGihp-cVVKTMPFBPBj_7_ScaYJZFU6jZNugucyx3qg@mail.gmail.com>
-In-Reply-To: <CACRpkdZsoGihp-cVVKTMPFBPBj_7_ScaYJZFU6jZNugucyx3qg@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 13 Apr 2023 15:20:00 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wioXgXLB1XcxU_f_kmVwfDd+EoOX7KLtJh7fnPMZx4RBA@mail.gmail.com>
-Message-ID: <CAHk-=wioXgXLB1XcxU_f_kmVwfDd+EoOX7KLtJh7fnPMZx4RBA@mail.gmail.com>
-Subject: Re: [GIT PULL] Pin control fix for AMD laptops
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        =?UTF-8?Q?Kornel_Dul=C4=99ba?= <korneld@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1803; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=4o5FqEparnIFOIeeg2rKzW8byGnby2Xg9Ye2UA6HtQY=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDCkWDZbXVvqGiJ3V3JfLUmQ16bfqZK+A53I7Dz7/vbXzy /ZXFtxnO0pZGMQ4GGTFFFkSb/e1SK3/47LDuectzBxWJpAhDFycAjARgxkM/4NzF4pxpEXah75X Ck/mVKi/v6D2+dU3/AYLRNJ+WmzrfMLwv1jLb+mXz38vOvs+OLLyG6/IrMc/ja8UfucT5Vpvdch rBw8A
+X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 1:10=E2=80=AFPM Linus Walleij <linus.walleij@linaro=
-.org> wrote:
->
-> This is just a revert of the AMD fix, because the fix fixed
-> broken some laptops. We are working on a proper solution.
+From: Conor Dooley <conor.dooley@microchip.com>
 
-ENOPARSE. "the fix fixed broken"
+Similar to commit 1c11289b34ab ("peci: cpu: Fix use-after-free in
+adev_release()"), the auxiliary device is not torn down in the correct
+order. If auxiliary_device_add() fails, the release callback will be
+called twice, resulting in a UAF. Due to timing, the auxdev code in this
+driver "took inspiration" from the aforementioned commit, and thus its
+bugs too!
 
-I tried to fix fixed broken it up.
+Moving auxiliary_device_uninit() to the unregister callback instead
+avoids the issue.
 
-             Linus
+CC: stable@vger.kernel.org
+Fixes: b56bae2dd6fd ("clk: microchip: mpfs: add reset controller")
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
+Stephen,
+Claudiu is on leave at the moment, and although I can push stuff to the
+at-91 tree etc, it's probably simpler if you just take this yourself?
+
+CC: Stephen Boyd <sboyd@kernel.org>
+CC: Conor Dooley <conor.dooley@microchip.com>
+CC: Daire McNamara <daire.mcnamara@microchip.com>
+CC: Michael Turquette <mturquette@baylibre.com>
+CC: Stephen Boyd <sboyd@kernel.org>
+CC: Claudiu Beznea <claudiu.beznea@microchip.com>
+CC: linux-clk@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
+---
+ drivers/clk/microchip/clk-mpfs.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/clk/microchip/clk-mpfs.c b/drivers/clk/microchip/clk-mpfs.c
+index 4f0a19db7ed7..cc5d7dee59f0 100644
+--- a/drivers/clk/microchip/clk-mpfs.c
++++ b/drivers/clk/microchip/clk-mpfs.c
+@@ -374,14 +374,13 @@ static void mpfs_reset_unregister_adev(void *_adev)
+ 	struct auxiliary_device *adev = _adev;
+ 
+ 	auxiliary_device_delete(adev);
++	auxiliary_device_uninit(adev);
+ }
+ 
+ static void mpfs_reset_adev_release(struct device *dev)
+ {
+ 	struct auxiliary_device *adev = to_auxiliary_dev(dev);
+ 
+-	auxiliary_device_uninit(adev);
+-
+ 	kfree(adev);
+ }
+ 
+-- 
+2.39.2
+
