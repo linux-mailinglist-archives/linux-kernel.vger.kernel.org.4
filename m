@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA9C16E0EEC
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 077AB6E0EEE
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:38:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231634AbjDMNhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 09:37:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37072 "EHLO
+        id S231652AbjDMNiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 09:38:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231181AbjDMNhT (ORCPT
+        with ESMTP id S231555AbjDMNh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 09:37:19 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C252C153
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:35:06 -0700 (PDT)
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        Thu, 13 Apr 2023 09:37:29 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFB3CC3B
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:35:15 -0700 (PDT)
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 0D9C23F4A5
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 13:34:42 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 261953F550
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 13:34:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1681392882;
-        bh=tINNpmFGgSXRr6eO7vUL42OoLzt52EnFT+KFr84tTSM=;
+        s=20210705; t=1681392885;
+        bh=9OFnG70DkKWiYI7WkrGxo4LXdZLPfs21Ye1s1GRVjTU=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=IWDXicU2IQ9anwvlt41gLsLZbPZ1unCTVWeeM7Up+nwwE+5OIiswt8+tchFOFGrpi
-         pveAeyfsJTBEivTaXTd85UCCbRhLx1gMYxi4aBH3GStjvwl5Cg1CmahWFbZGkGNJoH
-         1xuIhnVWOQgNylub289HfbcFlGKHZgiJQygBmYIzLZSUw3tv34JYlekk71isGeEm4o
-         Ht1z/+wpVNypgc/A5ELZB1zmKY6MMLztwD0YuIavb21KxOWGZfHgPGZ/RQLMO1sohs
-         BHgp1O+dRWB/X8eVoJtejN3GE9sM83UNe0c7WhpgCd6aiPwmfpgD1vGBYpd87MyaP9
-         CRCYbVg30oVDA==
-Received: by mail-ed1-f69.google.com with SMTP id x5-20020a50d605000000b005066c2aa22aso1456211edi.17
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:34:42 -0700 (PDT)
+        b=QBV+oG6leDNv74fYZb4pNK9FeAhu43ARYt+VaUiHTD8Rdl7tKxrfZPsIpFnRfnBiB
+         MRr/IlxBxydeQmrvfC7OmXQYQbqhcMoOWKjtoQ6pcvQS5n8ciN87T/49Oubf8uvQUe
+         DaLmT7wAz4ADMFJ+Of0yymHqP7kNQi2Bjg3oB7fRiUWJncH4Fw6CjrnDgJWkZcN+ei
+         9p96IXYLlhoSIy+BYrBVdS/ZANxZEqy9KJxMlj4mVJ5EYQEkVxNQ6f0BJcCpiaOflK
+         unfhkASPDGx0AAvYftQ5oH5XcnXgDHoPrK59BTB0ToabJ3t3m3wUHSt1iIUUV0BJgj
+         lW4INvtg438oQ==
+Received: by mail-ed1-f71.google.com with SMTP id m17-20020a509991000000b0050463defdabso10943603edb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:34:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681392879; x=1683984879;
+        d=1e100.net; s=20221208; t=1681392883; x=1683984883;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tINNpmFGgSXRr6eO7vUL42OoLzt52EnFT+KFr84tTSM=;
-        b=P8wOmmtMh6Koh5Y1jw7ZqkLJJx/0iMLT6xJepAQ2Cu3t/2zeAzIPMVW9/QY4YldW2u
-         W+fMGOmk/4pj0xer9ASq9Jxo4m+uz3Oz4QyeLVhPKgo3Mfr6QCnCHy04lrS8BfVu8tZd
-         RwjNhgRRyZxTsE4v+wa8btNk4csAYwpEIu3Q4vFX6vFHOkqfTUIsZH0w8UUMDyhgjV46
-         uZaq0qN3f9oDgK1J4NmIrBZxMWFKNNZ5Kgdny5rLqfFf8t1KUPaXiNEiuqiTPKAz8GbQ
-         rn5gtjouuGGsh1Oy0ww14ZVTmY+tDukz1aeEBqEWe2+hJyMstZdzihHUqXPyUkwCctEH
-         gi7A==
-X-Gm-Message-State: AAQBX9chijo4Yq+61s3QMxJxqL8rc8vNvD1iR8Q3/BiN7AcwBlW3hIXV
-        CL3+m3+Q4vKpDtSF9U7cyJtCXOA7LleB+OOkhEx8zkL50XfQEH0ihEiQgHRnLEkqQEnwK3ASZzG
-        O6+q3gNg8W8SqCXtXKudmgh06DlLmW1YDmKrMGY2LVQ==
-X-Received: by 2002:a17:906:57d0:b0:94a:62e7:70e1 with SMTP id u16-20020a17090657d000b0094a62e770e1mr2718806ejr.68.1681392879595;
-        Thu, 13 Apr 2023 06:34:39 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bWyh1fpNfKciV+c7c09q66s0vrF8zu0AQeMYpVtpd/3rM0AMu+N1JJw82j5x6TBlII2M7uJA==
-X-Received: by 2002:a17:906:57d0:b0:94a:62e7:70e1 with SMTP id u16-20020a17090657d000b0094a62e770e1mr2718777ejr.68.1681392879298;
-        Thu, 13 Apr 2023 06:34:39 -0700 (PDT)
+        bh=9OFnG70DkKWiYI7WkrGxo4LXdZLPfs21Ye1s1GRVjTU=;
+        b=kXVFqwKpAbv9y3mI3oGwgjuV/id9JJ0j6gmY7y2jxQH+0u2g9VjX3FidhUBZRA+s5Q
+         QusrsJl4234gbloyH04bPPXsS4uPw3ZNFZcOzmav6p3EEMECSvC6dsipG20hM2txlieM
+         a8J/nziAY6lt10md83K9kpMFuXzZEaGXjReTuEIhKT+h608SMKoislpGHk1VacLqG3Qv
+         WBukVQONmQVIQQ9QiFf+tUP21FRv9uJBVPbb0vXsrSX0JN6PIHeaxyT9PWObRMLuJQgZ
+         5XVGe3NY5OIG2QG0Po6sfmLOspaNaK+AefDSUjpzHUX2Eqh1fpFUj0FNH0OIzWwAVRPb
+         EArw==
+X-Gm-Message-State: AAQBX9cIbRCnpFBB3wc+83EaLWCPAAEBYDvorc16qgMslA/N2Gnka2Kk
+        5LGTUUYvJswB6CcuMMaqDTQTqN7KZO7G0d7nYEY83Zpk3RDezxw46Vhcztf+U2TzNZcLFvnzze5
+        QAzZfkJc4M1GybfkndX2RlfVsJaP0xJajCdJyOfr2Pw==
+X-Received: by 2002:a17:906:ae8a:b0:882:cdd4:14d9 with SMTP id md10-20020a170906ae8a00b00882cdd414d9mr2639508ejb.46.1681392883229;
+        Thu, 13 Apr 2023 06:34:43 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Y8Ak1AMedhDxrX0Hch7Jn9DeuDHTYqN/ZQLJbSNTNoYaDS8nhCmAWBIfXbaLlh1gAdP/aUGA==
+X-Received: by 2002:a17:906:ae8a:b0:882:cdd4:14d9 with SMTP id md10-20020a170906ae8a00b00882cdd414d9mr2639484ejb.46.1681392883023;
+        Thu, 13 Apr 2023 06:34:43 -0700 (PDT)
 Received: from amikhalitsyn.. ([95.91.208.118])
-        by smtp.gmail.com with ESMTPSA id et22-20020a170907295600b0094a966330fdsm976806ejc.211.2023.04.13.06.34.38
+        by smtp.gmail.com with ESMTPSA id et22-20020a170907295600b0094a966330fdsm976806ejc.211.2023.04.13.06.34.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 06:34:38 -0700 (PDT)
+        Thu, 13 Apr 2023 06:34:42 -0700 (PDT)
 From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
 To:     davem@davemloft.net
 Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
@@ -72,11 +72,10 @@ Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         Kees Cook <keescook@chromium.org>,
         Christian Brauner <brauner@kernel.org>,
         Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Luca Boccassi <bluca@debian.org>, linux-arch@vger.kernel.org
-Subject: [PATCH net-next v4 3/4] net: core: add getsockopt SO_PEERPIDFD
-Date:   Thu, 13 Apr 2023 15:33:54 +0200
-Message-Id: <20230413133355.350571-4-aleksandr.mikhalitsyn@canonical.com>
+        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next v4 4/4] selftests: net: add SCM_PIDFD / SO_PEERPIDFD test
+Date:   Thu, 13 Apr 2023 15:33:55 +0200
+Message-Id: <20230413133355.350571-5-aleksandr.mikhalitsyn@canonical.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230413133355.350571-1-aleksandr.mikhalitsyn@canonical.com>
 References: <20230413133355.350571-1-aleksandr.mikhalitsyn@canonical.com>
@@ -92,8 +91,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add SO_PEERPIDFD which allows to get pidfd of peer socket holder pidfd.
-This thing is direct analog of SO_PEERCRED which allows to get plain PID.
+Basic test to check consistency between:
+- SCM_CREDENTIALS and SCM_PIDFD
+- SO_PEERCRED and SO_PEERPIDFD
 
 Cc: "David S. Miller" <davem@davemloft.net>
 Cc: Eric Dumazet <edumazet@google.com>
@@ -105,168 +105,479 @@ Cc: Arnd Bergmann <arnd@arndb.de>
 Cc: Kees Cook <keescook@chromium.org>
 Cc: Christian Brauner <brauner@kernel.org>
 Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc: Lennart Poettering <mzxreary@0pointer.de>
-Cc: Luca Boccassi <bluca@debian.org>
 Cc: linux-kernel@vger.kernel.org
 Cc: netdev@vger.kernel.org
 Cc: linux-arch@vger.kernel.org
-Tested-by: Luca Boccassi <bluca@debian.org>
+Cc: linux-kselftest@vger.kernel.org
 Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
 ---
-v4:
-	- return -ESRCH if sk->sk_peer_pid is NULL from getsockopt() syscall
-	- return errors from pidfd_prepare() as it is from getsockopt() syscall
 v3:
-	- fixed possible fd leak (thanks to Christian Brauner)
-v2:
-	According to review comments from Kuniyuki Iwashima and Christian Brauner:
-	- use pidfd_create(..) retval as a result
-	- whitespace change
+	- started using kselftest lib (thanks to Kuniyuki Iwashima for suggestion/review)
+	- now test covers abstract sockets too and SOCK_DGRAM sockets
 ---
- arch/alpha/include/uapi/asm/socket.h    |  1 +
- arch/mips/include/uapi/asm/socket.h     |  1 +
- arch/parisc/include/uapi/asm/socket.h   |  1 +
- arch/sparc/include/uapi/asm/socket.h    |  1 +
- include/uapi/asm-generic/socket.h       |  1 +
- net/core/sock.c                         | 33 +++++++++++++++++++++++++
- net/socket.c                            |  7 ++++++
- tools/include/uapi/asm-generic/socket.h |  1 +
- 8 files changed, 46 insertions(+)
+ tools/testing/selftests/net/.gitignore        |   1 +
+ tools/testing/selftests/net/af_unix/Makefile  |   2 +-
+ .../testing/selftests/net/af_unix/scm_pidfd.c | 430 ++++++++++++++++++
+ 3 files changed, 432 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/net/af_unix/scm_pidfd.c
 
-diff --git a/arch/alpha/include/uapi/asm/socket.h b/arch/alpha/include/uapi/asm/socket.h
-index ff310613ae64..e94f621903fe 100644
---- a/arch/alpha/include/uapi/asm/socket.h
-+++ b/arch/alpha/include/uapi/asm/socket.h
-@@ -138,6 +138,7 @@
- #define SO_RCVMARK		75
+diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
+index 80f06aa62034..83fd1ebd34ec 100644
+--- a/tools/testing/selftests/net/.gitignore
++++ b/tools/testing/selftests/net/.gitignore
+@@ -26,6 +26,7 @@ reuseport_bpf_cpu
+ reuseport_bpf_numa
+ reuseport_dualstack
+ rxtimestamp
++scm_pidfd
+ sk_bind_sendto_listen
+ sk_connect_zero_addr
+ socket
+diff --git a/tools/testing/selftests/net/af_unix/Makefile b/tools/testing/selftests/net/af_unix/Makefile
+index 1e4b397cece6..f5ca9da8c4d5 100644
+--- a/tools/testing/selftests/net/af_unix/Makefile
++++ b/tools/testing/selftests/net/af_unix/Makefile
+@@ -1,3 +1,3 @@
+-TEST_GEN_PROGS := diag_uid test_unix_oob unix_connect
++TEST_GEN_PROGS := diag_uid test_unix_oob unix_connect scm_pidfd
  
- #define SO_PASSPIDFD		76
-+#define SO_PEERPIDFD		77
- 
- #if !defined(__KERNEL__)
- 
-diff --git a/arch/mips/include/uapi/asm/socket.h b/arch/mips/include/uapi/asm/socket.h
-index 762dcb80e4ec..60ebaed28a4c 100644
---- a/arch/mips/include/uapi/asm/socket.h
-+++ b/arch/mips/include/uapi/asm/socket.h
-@@ -149,6 +149,7 @@
- #define SO_RCVMARK		75
- 
- #define SO_PASSPIDFD		76
-+#define SO_PEERPIDFD		77
- 
- #if !defined(__KERNEL__)
- 
-diff --git a/arch/parisc/include/uapi/asm/socket.h b/arch/parisc/include/uapi/asm/socket.h
-index df16a3e16d64..be264c2b1a11 100644
---- a/arch/parisc/include/uapi/asm/socket.h
-+++ b/arch/parisc/include/uapi/asm/socket.h
-@@ -130,6 +130,7 @@
- #define SO_RCVMARK		0x4049
- 
- #define SO_PASSPIDFD		0x404A
-+#define SO_PEERPIDFD		0x404B
- 
- #if !defined(__KERNEL__)
- 
-diff --git a/arch/sparc/include/uapi/asm/socket.h b/arch/sparc/include/uapi/asm/socket.h
-index 6e2847804fea..682da3714686 100644
---- a/arch/sparc/include/uapi/asm/socket.h
-+++ b/arch/sparc/include/uapi/asm/socket.h
-@@ -131,6 +131,7 @@
- #define SO_RCVMARK               0x0054
- 
- #define SO_PASSPIDFD             0x0055
-+#define SO_PEERPIDFD             0x0056
- 
- #if !defined(__KERNEL__)
- 
-diff --git a/include/uapi/asm-generic/socket.h b/include/uapi/asm-generic/socket.h
-index b76169fdb80b..8ce8a39a1e5f 100644
---- a/include/uapi/asm-generic/socket.h
-+++ b/include/uapi/asm-generic/socket.h
-@@ -133,6 +133,7 @@
- #define SO_RCVMARK		75
- 
- #define SO_PASSPIDFD		76
-+#define SO_PEERPIDFD		77
- 
- #if !defined(__KERNEL__)
- 
-diff --git a/net/core/sock.c b/net/core/sock.c
-index 3f974246ba3e..49531c0dc57f 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -1763,6 +1763,39 @@ int sk_getsockopt(struct sock *sk, int level, int optname,
- 		goto lenout;
- 	}
- 
-+	case SO_PEERPIDFD:
-+	{
-+		struct pid *peer_pid;
-+		struct file *pidfd_file = NULL;
-+		int pidfd;
+ include ../../lib.mk
+diff --git a/tools/testing/selftests/net/af_unix/scm_pidfd.c b/tools/testing/selftests/net/af_unix/scm_pidfd.c
+new file mode 100644
+index 000000000000..a86222143d79
+--- /dev/null
++++ b/tools/testing/selftests/net/af_unix/scm_pidfd.c
+@@ -0,0 +1,430 @@
++// SPDX-License-Identifier: GPL-2.0 OR MIT
++#define _GNU_SOURCE
++#include <error.h>
++#include <limits.h>
++#include <stddef.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <sys/socket.h>
++#include <linux/socket.h>
++#include <unistd.h>
++#include <string.h>
++#include <errno.h>
++#include <sys/un.h>
++#include <sys/signal.h>
++#include <sys/types.h>
++#include <sys/wait.h>
 +
-+		if (len > sizeof(pidfd))
-+			len = sizeof(pidfd);
++#include "../../kselftest_harness.h"
 +
-+		spin_lock(&sk->sk_peer_lock);
-+		peer_pid = get_pid(sk->sk_peer_pid);
-+		spin_unlock(&sk->sk_peer_lock);
++#define clean_errno() (errno == 0 ? "None" : strerror(errno))
++#define log_err(MSG, ...)                                                   \
++	fprintf(stderr, "(%s:%d: errno: %s) " MSG "\n", __FILE__, __LINE__, \
++		clean_errno(), ##__VA_ARGS__)
 +
-+		if (!peer_pid)
-+			return -ESRCH;
++#ifndef SCM_PIDFD
++#define SCM_PIDFD 0x04
++#endif
 +
-+		pidfd = pidfd_prepare(peer_pid, 0, &pidfd_file);
-+		put_pid(peer_pid);
-+		if (pidfd < 0)
-+			return pidfd;
++static void child_die()
++{
++	exit(1);
++}
 +
-+		if (copy_to_sockptr(optval, &pidfd, len) ||
-+		    copy_to_sockptr(optlen, &len, sizeof(int))) {
-+			put_unused_fd(pidfd);
-+			fput(pidfd_file);
++static int safe_int(const char *numstr, int *converted)
++{
++	char *err = NULL;
++	long sli;
 +
-+			return -EFAULT;
-+		}
++	errno = 0;
++	sli = strtol(numstr, &err, 0);
++	if (errno == ERANGE && (sli == LONG_MAX || sli == LONG_MIN))
++		return -ERANGE;
 +
-+		fd_install(pidfd, pidfd_file);
-+		return 0;
++	if (errno != 0 && sli == 0)
++		return -EINVAL;
++
++	if (err == numstr || *err != '\0')
++		return -EINVAL;
++
++	if (sli > INT_MAX || sli < INT_MIN)
++		return -ERANGE;
++
++	*converted = (int)sli;
++	return 0;
++}
++
++static int char_left_gc(const char *buffer, size_t len)
++{
++	size_t i;
++
++	for (i = 0; i < len; i++) {
++		if (buffer[i] == ' ' || buffer[i] == '\t')
++			continue;
++
++		return i;
 +	}
 +
- 	case SO_PEERGROUPS:
- 	{
- 		const struct cred *cred;
-diff --git a/net/socket.c b/net/socket.c
-index 9c1ef11de23f..505b85489354 100644
---- a/net/socket.c
-+++ b/net/socket.c
-@@ -2248,6 +2248,13 @@ static bool sockopt_installs_fd(int level, int optname)
- 		default:
- 			return false;
- 		}
-+	} else if (level == SOL_SOCKET) {
-+		switch (optname) {
-+		case SO_PEERPIDFD:
-+			return true;
-+		default:
-+			return false;
++	return 0;
++}
++
++static int char_right_gc(const char *buffer, size_t len)
++{
++	int i;
++
++	for (i = len - 1; i >= 0; i--) {
++		if (buffer[i] == ' ' || buffer[i] == '\t' ||
++		    buffer[i] == '\n' || buffer[i] == '\0')
++			continue;
++
++		return i + 1;
++	}
++
++	return 0;
++}
++
++static char *trim_whitespace_in_place(char *buffer)
++{
++	buffer += char_left_gc(buffer, strlen(buffer));
++	buffer[char_right_gc(buffer, strlen(buffer))] = '\0';
++	return buffer;
++}
++
++/* borrowed (with all helpers) from pidfd/pidfd_open_test.c */
++static pid_t get_pid_from_fdinfo_file(int pidfd, const char *key, size_t keylen)
++{
++	int ret;
++	char path[512];
++	FILE *f;
++	size_t n = 0;
++	pid_t result = -1;
++	char *line = NULL;
++
++	snprintf(path, sizeof(path), "/proc/self/fdinfo/%d", pidfd);
++
++	f = fopen(path, "re");
++	if (!f)
++		return -1;
++
++	while (getline(&line, &n, f) != -1) {
++		char *numstr;
++
++		if (strncmp(line, key, keylen))
++			continue;
++
++		numstr = trim_whitespace_in_place(line + 4);
++		ret = safe_int(numstr, &result);
++		if (ret < 0)
++			goto out;
++
++		break;
++	}
++
++out:
++	free(line);
++	fclose(f);
++	return result;
++}
++
++static int cmsg_check(int fd)
++{
++	struct msghdr msg = { 0 };
++	struct cmsghdr *cmsg;
++	struct iovec iov;
++	struct ucred *ucred = NULL;
++	int data = 0;
++	char control[CMSG_SPACE(sizeof(struct ucred)) +
++		     CMSG_SPACE(sizeof(int))] = { 0 };
++	int *pidfd = NULL;
++	pid_t parent_pid;
++	int err;
++
++	iov.iov_base = &data;
++	iov.iov_len = sizeof(data);
++
++	msg.msg_iov = &iov;
++	msg.msg_iovlen = 1;
++	msg.msg_control = control;
++	msg.msg_controllen = sizeof(control);
++
++	err = recvmsg(fd, &msg, 0);
++	if (err < 0) {
++		log_err("recvmsg");
++		return 1;
++	}
++
++	if (msg.msg_flags & (MSG_TRUNC | MSG_CTRUNC)) {
++		log_err("recvmsg: truncated");
++		return 1;
++	}
++
++	for (cmsg = CMSG_FIRSTHDR(&msg); cmsg != NULL;
++	     cmsg = CMSG_NXTHDR(&msg, cmsg)) {
++		if (cmsg->cmsg_level == SOL_SOCKET &&
++		    cmsg->cmsg_type == SCM_PIDFD) {
++			if (cmsg->cmsg_len < sizeof(*pidfd)) {
++				log_err("CMSG parse: SCM_PIDFD wrong len");
++				return 1;
++			}
++
++			pidfd = (void *)CMSG_DATA(cmsg);
 +		}
- 	}
- 
- 	return false;
-diff --git a/tools/include/uapi/asm-generic/socket.h b/tools/include/uapi/asm-generic/socket.h
-index fbbc4bf53ee3..54d9c8bf7c55 100644
---- a/tools/include/uapi/asm-generic/socket.h
-+++ b/tools/include/uapi/asm-generic/socket.h
-@@ -122,6 +122,7 @@
- #define SO_RCVMARK		75
- 
- #define SO_PASSPIDFD		76
-+#define SO_PEERPIDFD		77
- 
- #if !defined(__KERNEL__)
- 
++
++		if (cmsg->cmsg_level == SOL_SOCKET &&
++		    cmsg->cmsg_type == SCM_CREDENTIALS) {
++			if (cmsg->cmsg_len < sizeof(*ucred)) {
++				log_err("CMSG parse: SCM_CREDENTIALS wrong len");
++				return 1;
++			}
++
++			ucred = (void *)CMSG_DATA(cmsg);
++		}
++	}
++
++	/* send(pfd, "x", sizeof(char), 0) */
++	if (data != 'x') {
++		log_err("recvmsg: data corruption");
++		return 1;
++	}
++
++	if (!pidfd) {
++		log_err("CMSG parse: SCM_PIDFD not found");
++		return 1;
++	}
++
++	if (!ucred) {
++		log_err("CMSG parse: SCM_CREDENTIALS not found");
++		return 1;
++	}
++
++	/* pidfd from SCM_PIDFD should point to the parent process PID */
++	parent_pid =
++		get_pid_from_fdinfo_file(*pidfd, "Pid:", sizeof("Pid:") - 1);
++	if (parent_pid != getppid()) {
++		log_err("wrong SCM_PIDFD %d != %d", parent_pid, getppid());
++		return 1;
++	}
++
++	return 0;
++}
++
++struct sock_addr {
++	char sock_name[32];
++	struct sockaddr_un listen_addr;
++	socklen_t addrlen;
++};
++
++FIXTURE(scm_pidfd)
++{
++	int server;
++	pid_t client_pid;
++	int startup_pipe[2];
++	struct sock_addr server_addr;
++	struct sock_addr *client_addr;
++};
++
++FIXTURE_VARIANT(scm_pidfd)
++{
++	int type;
++	bool abstract;
++};
++
++FIXTURE_VARIANT_ADD(scm_pidfd, stream_pathname)
++{
++	.type = SOCK_STREAM,
++	.abstract = 0,
++};
++
++FIXTURE_VARIANT_ADD(scm_pidfd, stream_abstract)
++{
++	.type = SOCK_STREAM,
++	.abstract = 1,
++};
++
++FIXTURE_VARIANT_ADD(scm_pidfd, dgram_pathname)
++{
++	.type = SOCK_DGRAM,
++	.abstract = 0,
++};
++
++FIXTURE_VARIANT_ADD(scm_pidfd, dgram_abstract)
++{
++	.type = SOCK_DGRAM,
++	.abstract = 1,
++};
++
++FIXTURE_SETUP(scm_pidfd)
++{
++	self->client_addr = mmap(NULL, sizeof(*self->client_addr), PROT_READ | PROT_WRITE,
++				 MAP_SHARED | MAP_ANONYMOUS, -1, 0);
++	ASSERT_NE(MAP_FAILED, self->client_addr);
++}
++
++FIXTURE_TEARDOWN(scm_pidfd)
++{
++	close(self->server);
++
++	kill(self->client_pid, SIGKILL);
++	waitpid(self->client_pid, NULL, 0);
++
++	if (!variant->abstract) {
++		unlink(self->server_addr.sock_name);
++		unlink(self->client_addr->sock_name);
++	}
++}
++
++static void fill_sockaddr(struct sock_addr *addr, bool abstract)
++{
++	char *sun_path_buf = (char *)&addr->listen_addr.sun_path;
++
++	addr->listen_addr.sun_family = AF_UNIX;
++	addr->addrlen = offsetof(struct sockaddr_un, sun_path);
++	snprintf(addr->sock_name, sizeof(addr->sock_name), "scm_pidfd_%d", getpid());
++	addr->addrlen += strlen(addr->sock_name);
++	if (abstract) {
++		*sun_path_buf = '\0';
++		addr->addrlen++;
++		sun_path_buf++;
++	} else {
++		unlink(addr->sock_name);
++	}
++	memcpy(sun_path_buf, addr->sock_name, strlen(addr->sock_name));
++}
++
++static void client(FIXTURE_DATA(scm_pidfd) *self,
++		   const FIXTURE_VARIANT(scm_pidfd) *variant)
++{
++	int err;
++	int cfd;
++	socklen_t len;
++	struct ucred peer_cred;
++	int peer_pidfd;
++	pid_t peer_pid;
++	int on = 0;
++
++	cfd = socket(AF_UNIX, variant->type, 0);
++	if (cfd < 0) {
++		log_err("socket");
++		child_die();
++	}
++
++	if (variant->type == SOCK_DGRAM) {
++		fill_sockaddr(self->client_addr, variant->abstract);
++
++		if (bind(cfd, (struct sockaddr *)&self->client_addr->listen_addr, self->client_addr->addrlen)) {
++			log_err("bind");
++			child_die();
++		}
++	}
++
++	if (connect(cfd, (struct sockaddr *)&self->server_addr.listen_addr,
++		    self->server_addr.addrlen) != 0) {
++		log_err("connect");
++		child_die();
++	}
++
++	on = 1;
++	if (setsockopt(cfd, SOL_SOCKET, SO_PASSCRED, &on, sizeof(on))) {
++		log_err("Failed to set SO_PASSCRED");
++		child_die();
++	}
++
++	if (setsockopt(cfd, SOL_SOCKET, SO_PASSPIDFD, &on, sizeof(on))) {
++		log_err("Failed to set SO_PASSPIDFD");
++		child_die();
++	}
++
++	close(self->startup_pipe[1]);
++
++	if (cmsg_check(cfd)) {
++		log_err("cmsg_check failed");
++		child_die();
++	}
++
++	/* skip further for SOCK_DGRAM as it's not applicable */
++	if (variant->type == SOCK_DGRAM)
++		return;
++
++	len = sizeof(peer_cred);
++	if (getsockopt(cfd, SOL_SOCKET, SO_PEERCRED, &peer_cred, &len)) {
++		log_err("Failed to get SO_PEERCRED");
++		child_die();
++	}
++
++	len = sizeof(peer_pidfd);
++	if (getsockopt(cfd, SOL_SOCKET, SO_PEERPIDFD, &peer_pidfd, &len)) {
++		log_err("Failed to get SO_PEERPIDFD");
++		child_die();
++	}
++
++	/* pid from SO_PEERCRED should point to the parent process PID */
++	if (peer_cred.pid != getppid()) {
++		log_err("peer_cred.pid != getppid(): %d != %d", peer_cred.pid, getppid());
++		child_die();
++	}
++
++	peer_pid = get_pid_from_fdinfo_file(peer_pidfd,
++					    "Pid:", sizeof("Pid:") - 1);
++	if (peer_pid != peer_cred.pid) {
++		log_err("peer_pid != peer_cred.pid: %d != %d", peer_pid, peer_cred.pid);
++		child_die();
++	}
++}
++
++TEST_F(scm_pidfd, test)
++{
++	int err;
++	int pfd;
++	int child_status = 0;
++
++	self->server = socket(AF_UNIX, variant->type, 0);
++	ASSERT_NE(-1, self->server);
++
++	fill_sockaddr(&self->server_addr, variant->abstract);
++
++	err = bind(self->server, (struct sockaddr *)&self->server_addr.listen_addr, self->server_addr.addrlen);
++	ASSERT_EQ(0, err);
++
++	if (variant->type == SOCK_STREAM) {
++		err = listen(self->server, 1);
++		ASSERT_EQ(0, err);
++	}
++
++	err = pipe(self->startup_pipe);
++	ASSERT_NE(-1, err);
++
++	self->client_pid = fork();
++	ASSERT_NE(-1, self->client_pid);
++	if (self->client_pid == 0) {
++		close(self->server);
++		close(self->startup_pipe[0]);
++		client(self, variant);
++		exit(0);
++	}
++	close(self->startup_pipe[1]);
++
++	if (variant->type == SOCK_STREAM) {
++		pfd = accept(self->server, NULL, NULL);
++		ASSERT_NE(-1, pfd);
++	} else {
++		pfd = self->server;
++	}
++
++	/* wait until the child arrives at checkpoint */
++	read(self->startup_pipe[0], &err, sizeof(int));
++	close(self->startup_pipe[0]);
++
++	if (variant->type == SOCK_DGRAM) {
++		err = sendto(pfd, "x", sizeof(char), 0, (struct sockaddr *)&self->client_addr->listen_addr, self->client_addr->addrlen);
++		ASSERT_NE(-1, err);
++	} else {
++		err = send(pfd, "x", sizeof(char), 0);
++		ASSERT_NE(-1, err);
++	}
++
++	close(pfd);
++	waitpid(self->client_pid, &child_status, 0);
++	ASSERT_EQ(0, WIFEXITED(child_status) ? WEXITSTATUS(child_status) : 1);
++}
++
++TEST_HARNESS_MAIN
 -- 
 2.34.1
 
