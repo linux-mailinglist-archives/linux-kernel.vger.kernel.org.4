@@ -2,95 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1E0D6E05C8
+	by mail.lfdr.de (Postfix) with ESMTP id EBA536E05C9
 	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 06:08:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjDMEIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 00:08:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36994 "EHLO
+        id S230019AbjDMEIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 00:08:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbjDMEHO (ORCPT
+        with ESMTP id S229989AbjDMEHY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 00:07:14 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C877D96
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 21:07:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681358833; x=1712894833;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=fGa6nb2+nmNFRDt+vgd1O06FQw1KI1Dbhhp5ECOkeNE=;
-  b=m/l4SloRW02cg0IHjvYjHDRsYzbCoY76LH7oiEC9oQmbAqYAszTVGjtq
-   xGd4gqsJt/A38Btl0nYTW/tIMCoRj79Bc5MSD2qsvfOiakifuSdvXFZs/
-   oJTcWVSWbuHx+6/5If/EuZ0Ika/AWqHFkaWPG5ECbdzJ/zGpdiWAflSS9
-   vlUQPZ/8n6R8SeLhvAZneaXI29MUH4QknJA+g0X/QzUrz8E3PyszW/ESO
-   Bx+ODtUgnAqeYJpREgtyqP5GM2BXcKksx9mV7olgxeqdmnwFGW5Re0hfY
-   seLRFwrSdQK4fwMvUGKIjAiCxh2qjp1fVNIcFzn/t2+6ITHu8UrSohbSN
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="332786676"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="332786676"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 21:07:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="935361128"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="935361128"
-Received: from allen-box.sh.intel.com ([10.239.159.127])
-  by fmsmga006.fm.intel.com with ESMTP; 12 Apr 2023 21:07:11 -0700
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-To:     Joerg Roedel <joro@8bytes.org>
-Cc:     Tina Zhang <tina.zhang@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 17/17] iommu/vt-d: Remove BUG_ON in dmar_insert_dev_scope()
-Date:   Thu, 13 Apr 2023 12:06:45 +0800
-Message-Id: <20230413040645.46157-18-baolu.lu@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230413040645.46157-1-baolu.lu@linux.intel.com>
-References: <20230413040645.46157-1-baolu.lu@linux.intel.com>
+        Thu, 13 Apr 2023 00:07:24 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5AAC5B88;
+        Wed, 12 Apr 2023 21:07:23 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id c10-20020a17090abf0a00b0023d1bbd9f9eso16933737pjs.0;
+        Wed, 12 Apr 2023 21:07:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681358843; x=1683950843;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PO+vdvsIJNOaWSleJ6Y04GDPWKMtg3yaaz87ocesbmM=;
+        b=FDADdNbB8g5KFVSWjjoPntbHQk+UV8Hhw+3P3aGQbJWLqA3np5d+LEp2SI3ExlJvNC
+         MIENsd01RUW3NVrtIHjIfARMjLywWUqTNk2+Yp0bh62eZn9edzUFC4kX9AmX0pyADJ/c
+         NMEbV4zEVI0dq/dRJrbeCZIBtfr93VwWDq5vzA5Pu43ylhL+eMbgHEM60EzkGiOppogF
+         UomSrOZs2MvJQV7aLdtAfa+V11anglEMn1EbkYKi/Copb5OxSEHId1hcIR1+c8na4Lnq
+         8WAIzc/V9nRUhmadNjMlHD646noj7J14ztmC6M5ju1XWKg8rvvYFplhEz3oi7lU3qR7K
+         uPOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681358843; x=1683950843;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PO+vdvsIJNOaWSleJ6Y04GDPWKMtg3yaaz87ocesbmM=;
+        b=NFXX5gV0gTNQX6Nebet2O1FSrJ6vgI2p6OLnzJe1UM6Lp1zMcLyooyfZrHsqvH3rKn
+         yQIN4MQfP4Wc1JZnRddwdjDTlb8OwDTqSl1mdOb2irZqESBvDUNHot6OXD71IPiEWHZn
+         P+TWJgZR1qN9bRzkx542KbfP0B5L2fPyLv9nllTU1q0dGzXkwChYS7JljlnI+NNIUTz/
+         EbZIxpFiNdkX3R5AmBJRixgHKI39CNsyz0Yn8CFeCZRX4JuLjF87Gi7aZJaey7TFvgPJ
+         d4wZzYqiJBe9uVmzElQaKcFGkeJoUGtxf5HjunQANroxebgjV+MEttd/ypFJaHUHmBXz
+         9KjQ==
+X-Gm-Message-State: AAQBX9fzb3N7kyZlFy6/7NbZezo6aBPU+2cOYXiLWZw5D8Oe82o75wAl
+        A675elzJQ7echH8DGokWNjU=
+X-Google-Smtp-Source: AKy350a4BPiDFFLqA6Z2k5yhYxWCmS2S5JDKkXycfKyuzADWf1WaDNcmu/oS6W4w88/4uCRN5UWrOw==
+X-Received: by 2002:a05:6a20:e94:b0:c2:b6cf:96db with SMTP id fk20-20020a056a200e9400b000c2b6cf96dbmr752512pzb.39.1681358843069;
+        Wed, 12 Apr 2023 21:07:23 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-66.three.co.id. [180.214.233.66])
+        by smtp.gmail.com with ESMTPSA id v6-20020aa78506000000b006227c3d5e29sm272859pfn.16.2023.04.12.21.07.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Apr 2023 21:07:22 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id D8D6D10681D; Thu, 13 Apr 2023 11:07:18 +0700 (WIB)
+Date:   Thu, 13 Apr 2023 11:07:18 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.2 000/173] 6.2.11-rc1 review
+Message-ID: <ZDd/9j+H8C1rBo87@debian.me>
+References: <20230412082838.125271466@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yRolHaZ1TJc5Bwrm"
+Content-Disposition: inline
+In-Reply-To: <20230412082838.125271466@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tina Zhang <tina.zhang@intel.com>
 
-The dmar_insert_dev_scope() could fail if any unexpected condition is
-encountered. However, in this situation, the kernel should attempt
-recovery and proceed with execution. Remove BUG_ON with WARN_ON, so that
-kernel can avoid being crashed when an unexpected condition occurs.
+--yRolHaZ1TJc5Bwrm
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Tina Zhang <tina.zhang@intel.com>
-Link: https://lore.kernel.org/r/20230406065944.2773296-8-tina.zhang@intel.com
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
----
- drivers/iommu/intel/dmar.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On Wed, Apr 12, 2023 at 10:32:06AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.2.11 release.
+> There are 173 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
 
-diff --git a/drivers/iommu/intel/dmar.c b/drivers/iommu/intel/dmar.c
-index 9346c6e7ebae..e35be3786bde 100644
---- a/drivers/iommu/intel/dmar.c
-+++ b/drivers/iommu/intel/dmar.c
-@@ -262,7 +262,8 @@ int dmar_insert_dev_scope(struct dmar_pci_notify_info *info,
- 						   get_device(dev));
- 				return 1;
- 			}
--		BUG_ON(i >= devices_cnt);
-+		if (WARN_ON(i >= devices_cnt))
-+			return -EINVAL;
- 	}
- 
- 	return 0;
--- 
-2.34.1
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.2.0).
 
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--yRolHaZ1TJc5Bwrm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZDd/8gAKCRD2uYlJVVFO
+o6GBAQCcDE8+tD7AojGenlulHtVV7sbZE7pU6bf7sNjRuirv5QD/fw6Ma87ZMybJ
+tF3p305nGASkudNazE4iPxsdL5cR2QY=
+=OkXz
+-----END PGP SIGNATURE-----
+
+--yRolHaZ1TJc5Bwrm--
