@@ -2,229 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C24E6E0A30
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 11:27:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36F096E0A3D
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 11:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjDMJ1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 05:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52838 "EHLO
+        id S229908AbjDMJ3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 05:29:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjDMJ1L (ORCPT
+        with ESMTP id S229615AbjDMJ3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 05:27:11 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFE81A4
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 02:27:08 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 29ED85FD08;
-        Thu, 13 Apr 2023 12:27:07 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1681378027;
-        bh=UPszp2OFslVfFwAvzppwKty8Ue+mKSOF7e8ZAshB5Po=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=sHqHMmIj7lSBOCLj5u2JmiqPTfQ5hL8vVVjVkoEp+f2+Viw46+yc0CWLoFnZKho+v
-         ToB8ZA8kNgJjATvS6gbe2JZQ2xnmd6s099W7B9PN+GN3FncW+q1pQTuqwDsQtO+T+Y
-         6Jyho/giCySUB7XfF4PyEwxeMVeKgB5a4aCGm2zKtUKjI5YacQmKJvrFN4DFtrqwIL
-         +uUk4ptfMNDfuQO/q6jyzMkVt4p6/d6Z+valLgjLi8gInqzHVzGc1VYcjVrsxYcOY5
-         nMsJMjQ1ad3CQlAUWaDIJ9oehI+biHYHIjipfmTjrMJBOq/WbEGmMWaEh8NwdL3rAv
-         VHgjuacUe0tPQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Thu, 13 Apr 2023 12:27:06 +0300 (MSK)
-Date:   Thu, 13 Apr 2023 12:27:06 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     Liang Yang <liang.yang@amlogic.com>,
-        Arseniy Krasnov <avkrasnov@sberdevices.ru>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Yixun Lan <yixun.lan@amlogic.com>, <oxffffaa@gmail.com>,
-        <kernel@sberdevices.ru>, <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 4/5] mtd: rawnand: meson: clear OOB buffer before read
-Message-ID: <20230413092706.mzopdszyirnwnjnl@CAB-WSD-L081021>
-References: <20230412094400.3c82f631@xps-13>
- <ac4b66da-6a76-c2ec-7e21-31632f3448d5@sberdevices.ru>
- <20230412113654.183350d0@xps-13>
- <4eace0a0-f6af-7d99-a52f-7913a2139330@sberdevices.ru>
- <20230412141824.755b2bca@xps-13>
- <eedaaed9-0a41-2c18-9eb2-792613566986@sberdevices.ru>
- <20230412145715.58c2be4a@xps-13>
- <7c996832-258f-001c-56bd-87bbdf23eeaa@amlogic.com>
- <20230412191548.ov5fufxkwqvdgrz2@CAB-WSD-L081021>
- <20230412225603.5fba1a9e@xps-13>
+        Thu, 13 Apr 2023 05:29:00 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64E783D7;
+        Thu, 13 Apr 2023 02:28:58 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33D8OOEZ014484;
+        Thu, 13 Apr 2023 09:28:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=TKycKhFoY6LQdxyTYRpsdzInoISBxNj5VWfRiqDg+s0=;
+ b=iYEVGOciszQupjMHNrzJMHAIdpJIrW2R8DEN70IgitN/4rrxYR3wm8SRFZduNZrR/daq
+ sVkXS7npNzRsVWKecwzXCdou5rp52LOjga/cxDdHxF18aZaNvgD2wa9yR129RxS7fFjX
+ eZ0qgJQ0+a8e00uC/UaIXvMN//6Rz/hvlG1h6GLwiP9ERcR/awUdhin6F44kQaLz/MOO
+ my/DpofoiX3mp/XxEkZ3Tq8Fcbr64w+U8OL0jOWkYwShavOShPxIAsareh4Aiw7/cJOy
+ Z8qo0VS9LG3oDOV5GjFSH4hvl3gm62sL+nc3AgYTwFaYohkPYJFNgJWI351p7bhUE/7B Hg== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3px6cngyxk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Apr 2023 09:28:45 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33D9SiOw031591
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Apr 2023 09:28:44 GMT
+Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 13 Apr 2023 02:28:40 -0700
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Subject: [PATCH V3 0/3] soc: qcom: boot_stats: Add driver support for boot_stats
+Date:   Thu, 13 Apr 2023 14:58:15 +0530
+Message-ID: <cover.1681375949.git.quic_schowdhu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230412225603.5fba1a9e@xps-13>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/12 22:40:00 #21096401
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: D5PJrmX-As2kP8ku_wlI0ZbCOHHE2PUX
+X-Proofpoint-GUID: D5PJrmX-As2kP8ku_wlI0ZbCOHHE2PUX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-13_06,2023-04-12_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ priorityscore=1501 adultscore=0 mlxscore=0 malwarescore=0 suspectscore=0
+ phishscore=0 impostorscore=0 spamscore=0 bulkscore=0 lowpriorityscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304130086
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 10:56:03PM +0200, Miquel Raynal wrote:
-> Hi Dmitry,
-> 
-> ddrokosov@sberdevices.ru wrote on Wed, 12 Apr 2023 22:15:48 +0300:
-> 
-> > On Wed, Apr 12, 2023 at 10:04:28PM +0800, Liang Yang wrote:
-> > > Hi Miquel and Arseniy,
-> > > 
-> > > On 2023/4/12 20:57, Miquel Raynal wrote:  
-> > > > [ EXTERNAL EMAIL ]
-> > > > 
-> > > > Hi Arseniy,
-> > > > 
-> > > > avkrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 15:22:26 +0300:
-> > > >   
-> > > > > On 12.04.2023 15:18, Miquel Raynal wrote:  
-> > > > > > Hi Arseniy,
-> > > > > > 
-> > > > > > avkrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 13:14:52 +0300:  
-> > > > > > > On 12.04.2023 12:36, Miquel Raynal wrote:  
-> > > > > > > > Hi Arseniy,
-> > > > > > > > 
-> > > > > > > > avkrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 12:20:55 +0300:  
-> > > > > > > > > On 12.04.2023 10:44, Miquel Raynal wrote:  
-> > > > > > > > > > Hi Arseniy,
-> > > > > > > > > > 
-> > > > > > > > > > AVKrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 09:16:58 +0300:  
-> > > > > > > > > > > This NAND reads only few user's bytes in ECC mode (not full OOB), so  
-> > > > > > > > > > 
-> > > > > > > > > > "This NAND reads" does not look right, do you mean "Subpage reads do
-> > > > > > > > > > not retrieve all the OOB bytes,"?  
-> > > > > > > > > > > fill OOB buffer with zeroes to not return garbage from previous reads
-> > > > > > > > > > > to user.
-> > > > > > > > > > > Otherwise 'nanddump' utility prints something like this for just erased
-> > > > > > > > > > > page:
-> > > > > > > > > > > 
-> > > > > > > > > > > ...
-> > > > > > > > > > > 0x000007f0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-> > > > > > > > > > >    OOB Data: ff ff ff ff 00 00 ff ff 80 cf 22 99 cb ad d3 be
-> > > > > > > > > > >    OOB Data: 63 27 ae 06 16 0a 2f eb bb dd 46 74 41 8e 88 6e
-> > > > > > > > > > >    OOB Data: 38 a1 2d e6 77 d4 05 06 f2 a5 7e 25 eb 34 7c ff
-> > > > > > > > > > >    OOB Data: 38 ea de 14 10 de 9b 40 33 16 6a cc 9d aa 2f 5e
-> > > > > > > > > > > 
-> > > > > > > > > > > Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-> > > > > > > > > > > ---
-> > > > > > > > > > >   drivers/mtd/nand/raw/meson_nand.c | 5 +++++
-> > > > > > > > > > >   1 file changed, 5 insertions(+)
-> > > > > > > > > > > 
-> > > > > > > > > > > diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
-> > > > > > > > > > > index f84a10238e4d..f2f2472cb511 100644
-> > > > > > > > > > > --- a/drivers/mtd/nand/raw/meson_nand.c
-> > > > > > > > > > > +++ b/drivers/mtd/nand/raw/meson_nand.c
-> > > > > > > > > > > @@ -858,9 +858,12 @@ static int meson_nfc_read_page_sub(struct nand_chip *nand,
-> > > > > > > > > > >   static int meson_nfc_read_page_raw(struct nand_chip *nand, u8 *buf,
-> > > > > > > > > > >   				   int oob_required, int page)
-> > > > > > > > > > >   {
-> > > > > > > > > > > +	struct mtd_info *mtd = nand_to_mtd(nand);
-> > > > > > > > > > >   	u8 *oob_buf = nand->oob_poi;
-> > > > > > > > > > >   	int ret;
-> > > > > > > > > > > +	memset(oob_buf, 0, mtd->oobsize);  
-> > > > > > > > > > 
-> > > > > > > > > > I'm surprised raw reads do not read the entire OOB?  
-> > > > > > > > > 
-> > > > > > > > > Yes! Seems in case of raw access (what i see in this driver) number of OOB bytes read
-> > > > > > > > > still depends on ECC parameters: for each portion of data covered with ECC code we can
-> > > > > > > > > read it's ECC code and "user bytes" from OOB - it is what i see by dumping DMA buffer by
-> > > > > > > > > printk(). For example I'm working with 2K NAND pages, each page has 2 x 1K ECC blocks.
-> > > > > > > > > For each ECC block I have 16 OOB bytes which I can access by read/write. Each 16 bytes
-> > > > > > > > > contains 2 bytes of user's data and 14 bytes ECC codes. So when I read page in raw mode
-> > > > > > > > > controller returns 32 bytes (2 x (2 + 14)) of OOB. While OOB is reported as 64 bytes.  
-> > > > > > > > 
-> > > > > > > > In all modes, when you read OOB, you should get the full OOB. The fact
-> > > > > > > > that ECC correction is enabled or disabled does not matter. If the NAND
-> > > > > > > > features OOB sections of 64 bytes, you should get the 64 bytes.
-> > > > > > > > 
-> > > > > > > > What happens sometimes, is that some of the bytes are not protected
-> > > > > > > > against bitflips, but the policy is to return the full buffer.  
-> > > > > > > 
-> > > > > > > Ok, so to clarify case for this NAND controller:
-> > > > > > > 1) In both ECC and raw modes i need to return the same raw OOB data (e.g. user bytes
-> > > > > > >     + ECC codes)?  
-> > > > > > 
-> > > > > > Well, you need to cover the same amount of data, yes. But in the ECC
-> > > > > > case the data won't be raw (at least not all of it).  
-> > > > > 
-> > > > > So "same amount of data", in ECC mode current implementation returns only user OOB bytes (e.g.
-> > > > > OOB data excluding ECC codes), in raw it returns user bytes + ECC codes. IIUC correct
-> > > > > behaviour is to always return user bytes + ECC codes as OOB data even in ECC mode ?  
-> > > > 
-> > > > If the page are 2k+64B you should read 2k+64B when OOB are requested.
-> > > > 
-> > > > If the controller only returns 2k+32B, then perform a random read to
-> > > > just move the read pointer to mtd->size + mtd->oobsize - 32 and
-> > > > retrieve the missing 32 bytes?  
-> > > 
-> > > 1) raw read can read out the whole page data 2k+64B, decided by the len in
-> > > the controller raw read command:
-> > > 	cmd = (len & GENMASK(5, 0)) | scrambler | DMA_DIR(dir);
-> > > after that, the missing oob bytes(not used) can be copied from
-> > > meson_chip->data_buf. so the implementation of meson_nfc_read_page_raw() is
-> > > like this if need.
-> > > 	{
-> > > 		......
-> > > 		meson_nfc_read_page_sub(nand, page, 1);
-> > > 		meson_nfc_get_data_oob(nand, buf, oob_buf);
-> > > 		oob_len = (nand->ecc.bytes + 2) * nand->ecc.steps;
-> > > 		memcpy(oob_buf + oob_len, meson_chip->data_buf + oob_len, mtd->oobsize -
-> > > oob_len);
-> > > 
-> > > 	}
-> > > 2) In ECC mode, the controller can't bring back the missing OOB bytes. it
-> > > can read out the user bytes and ecc bytes per meson_ooblayout_ops define.
-> > >   
-> > 
-> > How does the Meson controller know the actual NAND flash layout when the
-> > OOB is split into protected and unprotected areas, such as Free and ECC
-> > areas? If the controller has a static OOB layout, where is the mapping
-> > located?
-> 
-> It's usually a set of values hardcoded in the driver. It's a per
-> geometry set.
-> 
+Qualcomm's proprietary Android boot-loaders capture boot time
+stats, like the time when the bootloader started execution and at what
+point the bootloader handed over control to the kernel etc. in the IMEM
+region. This information is captured in a specific format by this driver
+by mapping a structure to the IMEM memory region and then accessing the
+members of the structure to log the information in a debugfs file.
+This information is useful in verifying if existing boot KPIs have
+regressed or not.
 
-Sorry, I'm still confused. Before I developed spinand drivers, the OOB layout
-was located on the flash driver side.
-Do you mean if the OOB geometry in the rawnand subsystem is under the
-responsibility of the controller driver?
+A sample log in SM8450(waipio) device is as follows:-
 
-> > 
-> > > > 
-> > > > This applies to the two modes, the only difference is:
-> > > > - with correction (commonly named "ECC mode"): the user bytes and ECC
-> > > >    bytes should be fixed if there are any bitflips
-> > > > - without correction (commonly referred as "raw mode"): no correction
-> > > >    applies, if there are bitflips, give them
-> > > > 
-> > > > Please mind the raw mode can be slow, it's meant for debugging and
-> > > > testing, mainly. Page reads however should be fast, so if just moving
-> > > > the column pointer works, then do it, otherwise we'll consider
-> > > > returning FFs.  
-> > 
+/sys/kernel/debug/146aa6b0.boot_stats # cat abl_time
+17898 ms
+/sys/kernel/debug/146aa6b0.boot_stats # cat pre_abl_time
+2879 ms
 
--- 
-Thank you,
-Dmitry
+The Module Power Manager(MPM) sleep counter starts ticking at the PBL
+stage and the timestamp generated by the sleep counter is logged by
+the Qualcomm proprietary bootloader(ABL) at two points-> First when it
+starts execution which is logged here as "pre_abl_time" and the second
+when it is about to load the kernel logged as "abl_time". Both these
+values are read up by the driver from IMEM region and printed as above.
+
+Souradeep Chowdhury (3):
+  dt-bindings: sram: qcom,imem: Add Boot Stat region within IMEM
+  soc: qcom: boot_stat: Add Driver Support for Boot Stats
+  MAINTAINERS: Add the entry for boot_stats driver support
+
+ Documentation/ABI/testing/debugfs-driver-bootstat  |  17 ++++
+ .../devicetree/bindings/sram/qcom,imem.yaml        |  22 +++++
+ MAINTAINERS                                        |   7 ++
+ drivers/soc/qcom/Kconfig                           |   9 ++
+ drivers/soc/qcom/Makefile                          |   1 +
+ drivers/soc/qcom/boot_stats.c                      | 109 +++++++++++++++++++++
+ 6 files changed, 165 insertions(+)
+ create mode 100644 Documentation/ABI/testing/debugfs-driver-bootstat
+ create mode 100644 drivers/soc/qcom/boot_stats.c
+
+--
+2.7.4
+
