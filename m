@@ -2,176 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16F9F6E0951
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9C4E6E0964
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbjDMIul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 04:50:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46444 "EHLO
+        id S230020AbjDMIxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 04:53:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjDMIuj (ORCPT
+        with ESMTP id S229951AbjDMIxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 04:50:39 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244198A61
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 01:50:37 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-94771f05e20so467055166b.1
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 01:50:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681375835; x=1683967835;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=L6mAVmlSqBlK97GI+OBS2IQeOpH152LcbvquHB//CeQ=;
-        b=qBQKxSkg0B1ny6AKrI2JM4J00sV4tr5wSjLIsSLHqWeQQNThrxkz1/uKK/G9InUVv3
-         Mo9x25u7mcDVhg5j0KTpldXUooJrhuQMu9fWJRuU1TabACrIJAyhQc5mVRnL7X5Uoitm
-         P9QyyIG+y7m4LQKs9IOqTgK0s32MG7zK+bjkVAkIMlsuoZysL2zZJ69/62SRFxPsLe72
-         0574RRl69Mu0UlKDgx2dWy8U4pPdqpvFPrOZMnsDNhnHhbvg+ejuzIkwlo7RD98E1Zuy
-         guBIsYHfrix5W5BmScoNRt33NO+lBOC12YQofsDel11ibeE2tf9AlvIOe1YTH7tB32Q2
-         Olow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681375835; x=1683967835;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=L6mAVmlSqBlK97GI+OBS2IQeOpH152LcbvquHB//CeQ=;
-        b=J2zuKNqhwqxjwjhK9SQjjVdBJe9zPGz6KLeP5knULrsZFkyUGY9CxRjct3zSqg3XpU
-         ColjtaJwbYMjDDyBfwkCqXC+pq5yfUMN0jK7LXNJ4Fs7j9g2iOTWPYlX3cCiVAMAzFlJ
-         dTsuZmgKFeu576f9/zcy9Wt3l1ZX0vS+dwsZZJeisq4hLNgvy1d5qUTTdWcJ7elszMNW
-         pFzUZYkU0h/r7JxM5nnPT46g1jZWwF5GVkY1OZydBASjF2rcJXRaCPuDmT9h9zbyjktp
-         tN5Us/LietUq06EKhhjPw95XtrSFT7VN1Jb4clD8vhyqJd4pHOQCS61WRMp2ACq5Ujlg
-         AQfw==
-X-Gm-Message-State: AAQBX9c+vxIwAnZGgQFZzWknyp0e43cnWo64hlY7z6Dv8NXqIp1yg81S
-        QuVuSyTh7icC+tlP4bn+g3O3Hg==
-X-Google-Smtp-Source: AKy350ams2Rhgtj5ld9eUc37t1b+SyClKLb5d8tFO/xWnlQN/71bN5uirU2rOp0PEk4y8rjT+Aca6A==
-X-Received: by 2002:aa7:d74d:0:b0:4fb:aa0a:5b72 with SMTP id a13-20020aa7d74d000000b004fbaa0a5b72mr1546251eds.5.1681375835504;
-        Thu, 13 Apr 2023 01:50:35 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:ec6f:1b33:ab3f:bfd7? ([2a02:810d:15c0:828:ec6f:1b33:ab3f:bfd7])
-        by smtp.gmail.com with ESMTPSA id v15-20020aa7dbcf000000b00501d51c23fbsm555672edt.6.2023.04.13.01.50.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Apr 2023 01:50:34 -0700 (PDT)
-Message-ID: <6a9b1c25-2e17-a657-3a58-b2ff8d1c86d7@linaro.org>
-Date:   Thu, 13 Apr 2023 10:50:33 +0200
+        Thu, 13 Apr 2023 04:53:19 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 454288A64
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 01:53:06 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D3F131FD67;
+        Thu, 13 Apr 2023 08:53:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1681375984; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=bObO9oz/A9/0Sku2QXFt+M3BWDj0PJVpuCBGz+UzEfY=;
+        b=U8D7w7I6lw4UxMtNivguYMGF+UVO9IPesvxKm5adMC2mHL97GUdLnQopN0y2UNt/z1ppq1
+        OhpJVcsdljhA6eJjoCZ52fK/YJtZzd74GOR+ieITbYskOSEEyOM7ivHJqCgyLh7fYZ20sZ
+        hVZu8in6xKZ1zyVlOpQDMOLxotW4IJI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1681375984;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=bObO9oz/A9/0Sku2QXFt+M3BWDj0PJVpuCBGz+UzEfY=;
+        b=22QvBKE18kaMf4Fyhj1tegWaNmCpG/0cNjsRhh6rkiQUUhJ27qOOVxNzRLvTu/IY42EznS
+        Fmu8hs0BU1jCPvBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BE27313421;
+        Thu, 13 Apr 2023 08:53:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ymT2LfDCN2RyIAAAMHmgww
+        (envelope-from <iivanov@suse.de>); Thu, 13 Apr 2023 08:53:04 +0000
+From:   "Ivan T. Ivanov" <iivanov@suse.de>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Tim Gover <tim.gover@raspberrypi.com>,
+        Phil Elwell <phil@raspberrypi.com>,
+        linux-rpi-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "Ivan T. Ivanov" <iivanov@suse.de>
+Subject: [PATCH v2 0/2] nvmem: rmem: Make reserved region name unique
+Date:   Thu, 13 Apr 2023 11:52:04 +0300
+Message-Id: <20230413085206.149730-1-iivanov@suse.de>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2 1/2] dt-bindings: interrupt-controller: mpm: Pass MSG
- RAM slice through phandle
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>
-Cc:     Rob Herring <robh@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230328-topic-msgram_mpm-v2-0-e24a48e57f0d@linaro.org>
- <20230328-topic-msgram_mpm-v2-1-e24a48e57f0d@linaro.org>
- <168069726278.2356075.14351594478003012447.robh@kernel.org>
- <20230405134727.GA2461305-robh@kernel.org>
- <1e6e2590-ac78-400b-35ce-321d5e52f385@linaro.org>
- <9df12111-ec84-c4f7-fbcb-bccaef91b048@linaro.org>
- <3ce9b5ec-8b02-537a-c663-c849e80cab66@linaro.org>
- <ZDAAToSzNLVo6le8@gerhold.net>
- <198523f5-d06f-15cd-af6c-f391c02bcaa9@linaro.org>
- <1f8fc036-380b-0a42-bb29-a3e275ed6a33@linaro.org>
- <2e648a97-083e-8ee2-1695-4af299bb222a@linaro.org>
- <15f48b06-a6be-1295-5deb-d3594bce6699@linaro.org>
- <ec32fc8e-56e0-51a5-dd96-c7cc8b9cf71f@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ec32fc8e-56e0-51a5-dd96-c7cc8b9cf71f@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/04/2023 19:06, Konrad Dybcio wrote:
-> 
-> 
-> On 12.04.2023 18:53, Krzysztof Kozlowski wrote:
->> On 12/04/2023 14:09, Konrad Dybcio wrote:
->>>
->>>
->>> On 12.04.2023 13:55, Krzysztof Kozlowski wrote:
->>>> On 12/04/2023 13:47, Konrad Dybcio wrote:
->>>>>> For unrelated reasons I actually have some patches for this, that switch
->>>>>> the /smd top-level node to a "remoteproc-like" node dedicated to the
->>>>>> RPM, similar to how WCNSS/ADSP/Modem/etc are represented. I need this to
->>>>>> add additional (optional) properties like "resets" and "iommus" for the
->>>>>> RPM, but it would allow adding arbitrary subnodes as well:
->>>>>>
->>>>>> https://github.com/msm8916-mainline/linux/commit/35231ac28703805daa8220f1233847c7df34589e
->>>>>>
->>>>>> I could finish those up and post them if that would help...
->>>>> Krzysztof, what do you think?
->>>>
->>>> I don't know what is there in MSM8916 and how it should be represented.
->>> Similarly to other Qualcomm SoCs, MSM8916 has a RPM (Cortex-M3) core,
->>> which communicates over the SMD protocol (or G-LINK on >=8996).
->>>
->>> The Qualcomm firmware loads the RPM fw blob and sets it up early in
->>> the boot process, but msm8916-mainline folks managed to get TF-A
->>> going and due to it being less.. invasive.. than the Qualcomm TZ,
->>> RPM needs a bit more handling to be accessible.
->>>
->>> The M3 core is wired up through the CNoC bus and we communicate
->>> with it through the MSG RAM and the "APCS mailbox".
->>
->> Thanks, that's actually good description. Yet I still do not know what
->> is exactly the problem and the question. Linking some out of tree
->> commits does not give me the answer, at least I cannot get that answer
->> form the link.
->>
->> For example what I don't understand is: why additional resources (like
->> resets) can be provided only in new binding, but not in the old.
-> The old binding dictates that the rpm node (which in turn
-> holds all "devices" that only interface with RPM, like RPMCC) is
-> a child of smd{}, which does not make sense logically, as SMD is
-> a protocol (e.g. we don't place devices connected over i2c under
-> /i2c{}).
+They could be multiple reserved memory regions,
+so let's make their names unique.
 
-We do. All devices connected over I2C are under i2c node which is the
-controller. The example is different than what you have here...
+This fixes following kernel error:
 
->  The rpm node lacks a compatible, as it's representing
-> an "smd channel", so there's no driver so there's no way to assert
-> resets etc.
+[    9.831285] sysfs: cannot create duplicate filename '/bus/nvmem/devices/rmem0'
+[    9.831304] CPU: 3 PID: 467 Comm: (udev-worker) Not tainted 6.2.9-1-default #1 openSUSE Tumbleweed a4aeb3a90c0f23041a8a7944b12739b07585f009
+[    9.831326] Hardware name: raspberrypi rpi/rpi, BIOS 2023.01 01/01/2023
+[    9.831335] Call trace:
+[    9.831343]  dump_backtrace+0xe4/0x140
+[    9.831366]  show_stack+0x20/0x30
+[    9.831379]  dump_stack_lvl+0x64/0x80
+[    9.831398]  dump_stack+0x18/0x34
+[    9.831410]  sysfs_warn_dup+0x6c/0x90
+[    9.831424]  sysfs_do_create_link_sd+0xf8/0x100
+[    9.831437]  sysfs_create_link+0x28/0x50
+[    9.831449]  bus_add_device+0x70/0x190
+[    9.831468]  device_add+0x3e8/0x84c
+[    9.831481]  nvmem_register+0x85c/0x9f0
+[    9.831500]  devm_nvmem_register+0x24/0x70
+[    9.831517]  rmem_probe+0xa0/0xf4 [nvmem_rmem 649243b01e5e28ee94e4dd53bd13b6ececa836f8]
+[    9.831555]  platform_probe+0x70/0xd0
+[    9.831566]  really_probe+0xc8/0x3e4
+[    9.831582]  __driver_probe_device+0x84/0x190
+[    9.831598]  driver_probe_device+0x44/0x11c
+[    9.831613]  __driver_attach+0xf8/0x200
+[    9.831629]  bus_for_each_dev+0x78/0xd0
+[    9.831643]  driver_attach+0x2c/0x40
+[    9.831657]  bus_add_driver+0x188/0x250
+[    9.831672]  driver_register+0x80/0x13c
+[    9.831688]  __platform_driver_register+0x30/0x40
+[    9.831699]  rmem_driver_init+0x28/0x1000 [nvmem_rmem 649243b01e5e28ee94e4dd53bd13b6ececa836f8]
+[    9.831727]  do_one_initcall+0x48/0x2bc
+[    9.831740]  do_init_module+0x50/0x1f0
+[    9.831753]  load_module+0x1e54/0x2250
+[    9.831763]  __do_sys_init_module+0x2ac/0x2f0
+[    9.831774]  __arm64_sys_init_module+0x24/0x30
+[    9.831785]  invoke_syscall+0x78/0x100
+[    9.831803]  el0_svc_common.constprop.0+0x15c/0x180
+[    9.831820]  do_el0_svc+0x40/0xb0
+[    9.831836]  el0_svc+0x34/0x134
+[    9.831850]  el0t_64_sync_handler+0x114/0x120
+[    9.831865]  el0t_64_sync+0x1a4/0x1a8
+[    9.831956] rmem: probe of 3ef62ce0.nvram failed with error -17
 
-You have rpm-requests which has compatible. These are not its resources?
+Some background information about the issue could be found here:
+https://bugzilla.suse.com/show_bug.cgi?id=1206846
 
-> 
-> On newer SoCs that still implement SMD RPM (like 8996), we do
-> actually have a driver and a parent node which it binds to
-> (rpm-glink).
+Changes since v1
 
-You want to add RPM resets to rpm-glink node? This also does not look right.
+I dig into Raspberry Github repository and found original patches
+from Tim and Phil which add new region and fix rmem driver.
 
-> 
-> AFAIU:
-> In both cases, the "final" drivers (rpmcc, rpmpd..) are bound
-> after hitting a SMD/GLINK callback that tells Linux we're ready
-> to rock. That's an issue for Stephan, as these callbacks won't
-> ever happen if the RPM core is not initialized (and TF-A doesn't
-> do that).
+Patch 1 - use NVMEM_DEVID_AUTO instead making region name unique from
+the driver itself.
 
-To me half or almost all of Qualcomm remote-proc-related bindings, like
-SMD, GLINK and associated processors, are difficult to read, half-baked
-and developed to match the current Linux/SW need. When the Linux drivers
-changed, new bindings were added... If you want to fix it, sure go
-ahead, but design everything to match something rational, not again to
-match one specific SW/FW implementation.
+Patch 2 - New one.
 
-Best regards,
-Krzysztof
+Phil Elwell (1):
+  nvmem: rmem: Use NVMEM_DEVID_AUTO
+
+Tim Gover (1):
+  ARM: dts: Add nvmem node for BCM2711 bootloader public key
+
+ arch/arm/boot/dts/bcm2711-rpi.dtsi | 14 ++++++++++++++
+ drivers/nvmem/rmem.c               |  1 +
+ 2 files changed, 15 insertions(+)
+
+-- 
+2.35.3
 
