@@ -2,86 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F946E0AFC
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 12:02:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54BB66E0AFD
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 12:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbjDMKCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 06:02:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52630 "EHLO
+        id S230149AbjDMKDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 06:03:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjDMKC3 (ORCPT
+        with ESMTP id S229580AbjDMKDJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 06:02:29 -0400
-X-Greylist: delayed 3953 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 13 Apr 2023 03:02:24 PDT
-Received: from mail-40133.protonmail.ch (mail-40133.protonmail.ch [185.70.40.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F69769F
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:02:24 -0700 (PDT)
-Date:   Thu, 13 Apr 2023 10:02:17 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-        s=protonmail; t=1681380142; x=1681639342;
-        bh=/LzrCvKWuttehRbr4lZ5bedwD/eeW7ZCBjqk7BUNs+k=;
-        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-         Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-        b=Xn5XEEgYc1xZID1fuj344NeCVTTfaQ56EKzp+TREShH8fUdswG1dNguf1vEBJfjIm
-         7SsZADL3IhkWKFRTQ1S92wSHIh6fwxWljZFn9QKmu8Bf30Bi4UbJ3p5rja22y8tgkV
-         Q7UKKKX+0S+5v6x9mI92EM4WF7Bsoh8ePyuoRoLyq4OrorvzpocLm9EqLbLKmRqeKy
-         fDAiaFXlgnmUljLmLkNRzCvIWbpHEEHgPAXBUKrLbK3vKGQ8+0LGjWKL91rNnJTCm5
-         66//yBv3ZMDx4Ct77hsN12n5OxMLlVN2l4jMHX6+eVEf9mQpZX//aPCTb0Q01kv+f9
-         i+HBgf55RXPfg==
-To:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-From:   Benno Lossin <benno.lossin@proton.me>
-Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Benno Lossin <benno.lossin@proton.me>
-Subject: [PATCH] rust: init: broaden the blanket impl of `Init`
-Message-ID: <20230413100157.740697-1-benno.lossin@proton.me>
-Feedback-ID: 71780778:user:proton
+        Thu, 13 Apr 2023 06:03:09 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1835FE5
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:03:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1681380190; x=1712916190;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4MzuhZHBbPmQVbijtFmXO+9tVxRJdViVCL5UWZqqFdA=;
+  b=kh6UdKuUDoS5BCnJ0a7dV1NoSKJEx9OK3slGPAALJQeL3kg7s5Dnn2NQ
+   dtRJNLh6mMuAXmUD81O7ZZmLTWP5RCRulOlzlkS3eHP5TIcpjVexiYtlo
+   mvT3Io5vjsHzQFRJ6/3VqmRv26F9sqk/50TEJxCqtvHeZj9L+evrjdFnC
+   3exPA/H80KNSjEi0DNIVqwcBDblKwaqb2qsUd3qokffB6EONJ0pkVl1oU
+   6qj0H6OUzZXzzTsS7pO/EZK4F5SXQOa/VBtiWIOnI/KvDSb9foeYtPtJY
+   my0D1B9Z+BbrqIa5catngBdDNGpQEnyDMYzEebH0Nk05qkBZRq951yKPj
+   g==;
+X-IronPort-AV: E=Sophos;i="5.98,341,1673938800"; 
+   d="asc'?scan'208";a="209373248"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Apr 2023 03:03:09 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 13 Apr 2023 03:03:02 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Thu, 13 Apr 2023 03:03:00 -0700
+Date:   Thu, 13 Apr 2023 11:02:44 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Pierre Gondois <pierre.gondois@arm.com>
+CC:     <linux-kernel@vger.kernel.org>, Radu Rendec <rrendec@redhat.com>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Will Deacon <will@kernel.org>, Conor Dooley <conor@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v3 3/4] arch_topology: Remove early cacheinfo error
+ message
+Message-ID: <20230413-prudishly-unruly-090f5297fd54@wendy>
+References: <20230413091436.230134-1-pierre.gondois@arm.com>
+ <20230413091436.230134-4-pierre.gondois@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Ual3BbTya047iMjD"
+Content-Disposition: inline
+In-Reply-To: <20230413091436.230134-4-pierre.gondois@arm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This makes it possible to use `T` as a `impl Init<T, E>` for every error
-type `E` instead of just `Infallible`.
+--Ual3BbTya047iMjD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Benno Lossin <benno.lossin@proton.me>
----
+On Thu, Apr 13, 2023 at 11:14:33AM +0200, Pierre Gondois wrote:
+> fetch_cache_info() tries to get the number of cache leaves/levels
+> for each CPU in order to pre-allocate memory for cacheinfo struct.
+> Allocating this memory later triggers a:
+>   'BUG: sleeping function called from invalid context'
+> in PREEMPT_RT kernels.
+>=20
+> If there is no cache related information available in DT or ACPI,
+> fetch_cache_info() fails and an error message is printed:
+>   'Early cacheinfo failed, ret =3D ...'
+>=20
+> Not having cache information should be a valid configuration.
+> Remove the error message if fetch_cache_info() fails.
+>=20
+> Suggested-by: Conor Dooley <conor@kernel.org>
 
-@Miguel: you can squash this patch into 90e53c5e70a69 or put it on top of
-rust-next.
+Not that it really matters for suggested-by, and there's no way really
+for you to know, but the corporate overlords prefer:
+s/conor@kernel.org/conor.dooley@microchip.com/
 
- rust/kernel/init.rs | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> Link: https://lore.kernel.org/all/20230404-hatred-swimmer-6fecdf33b57a@sp=
+ud/
+> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+> ---
+>  drivers/base/arch_topology.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+> index b1c1dd38ab01..1f071eaede5b 100644
+> --- a/drivers/base/arch_topology.c
+> +++ b/drivers/base/arch_topology.c
+> @@ -843,10 +843,8 @@ void __init init_cpu_topology(void)
+> =20
+>  	for_each_possible_cpu(cpu) {
+>  		ret =3D fetch_cache_info(cpu);
+> -		if (ret) {
+> -			pr_err("Early cacheinfo failed, ret =3D %d\n", ret);
 
-diff --git a/rust/kernel/init.rs b/rust/kernel/init.rs
-index a1298c8bbda0..4ebfb08dab11 100644
---- a/rust/kernel/init.rs
-+++ b/rust/kernel/init.rs
-@@ -1190,8 +1190,8 @@ pub fn uninit<T, E>() -> impl Init<MaybeUninit<T>, E>=
- {
- }
+Hmm do you really want to remove the print altogether? This can fail
+with -EINVAL and -ENOMEM too, so should we just check for
+| if (ret && ret !=3D -ENOENT)
+instead, since in the other cases it really did fail?
 
- // SAFETY: Every type can be initialized by-value.
--unsafe impl<T> Init<T> for T {
--    unsafe fn __init(self, slot: *mut T) -> Result<(), Infallible> {
-+unsafe impl<T, E> Init<T, E> for T {
-+    unsafe fn __init(self, slot: *mut T) -> Result<(), E> {
-         unsafe { slot.write(self) };
-         Ok(())
-     }
+Cheers,
+Conor.
 
-base-commit: 1944caa8e8dcb2d93d99d8364719ad8d07aa163f
---
-2.39.2
+--Ual3BbTya047iMjD
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZDfTRAAKCRB4tDGHoIJi
+0tYkAP9yLlzQHvQg1adZ0A+5pW0ajLaHO2FY8QNfvn4cQFWuWAEAvznI8IVt+o8u
+oUW6Cwfdejb70Uknvd2u4ISyC6AcuQc=
+=5ghb
+-----END PGP SIGNATURE-----
+
+--Ual3BbTya047iMjD--
