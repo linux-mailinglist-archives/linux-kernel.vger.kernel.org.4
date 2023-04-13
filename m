@@ -2,123 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 938696E0FD5
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 324916E0FDC
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230404AbjDMOUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 10:20:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51490 "EHLO
+        id S230347AbjDMOWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 10:22:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbjDMOUX (ORCPT
+        with ESMTP id S230210AbjDMOWB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 10:20:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3788C2D43;
-        Thu, 13 Apr 2023 07:20:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C42ED615A5;
-        Thu, 13 Apr 2023 14:20:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9298FC433EF;
-        Thu, 13 Apr 2023 14:20:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681395621;
-        bh=7uOcMqCC9rFXgBG3LAgel2H2tG/3b3XSmuVAeWOxrKo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iJsu63SBsFVSnYBMAf9wX3lmjUgPYCPEgPI/ivavhli99al2TavQQBX/rNtyMs9za
-         DFJmpRyqWsImEg5x3xTcwSwSbdElPmK4AmBCZXzBMGG632lrsfJZueF9iajq7sCg+x
-         jzMcLSkgdPBnd0FmQPXc3Tu6uXv8oTlVZXxbZ2cnAxzYgnuIT7CFX+UoJVytZ+EzBe
-         8aDi8qqs8SoXbLGqWV2iZcy6JKZbEyASympouPxGUsvy4pwQMl3j9CoYKGqMGUS4zR
-         8YCbsJPjaSzthkVkg+VcR/3mu2VH/2CgMtb1D0jzJAYpgktfQP6TQa7p+jF4icmhoT
-         M5XxJTxucw5WQ==
-Date:   Thu, 13 Apr 2023 15:20:16 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     linux@weissschuh.net
-Cc:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-next@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] tools/nolibc: implement fd-based FILE streams
-Message-ID: <189e27d5-f58f-4d97-9d4d-f1d88c9ebda1@sirena.org.uk>
-References: <20230328-nolibc-printf-test-v3-0-ddc79f92efd5@weissschuh.net>
- <20230328-nolibc-printf-test-v3-3-ddc79f92efd5@weissschuh.net>
- <f28e3c85-84a4-4b30-a3f5-c2efad311fe7@sirena.org.uk>
- <a91f0fe9-fcca-4009-b34d-0c58542d9765@weissschuh.net>
+        Thu, 13 Apr 2023 10:22:01 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B7493D2
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 07:22:00 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-5491fa028adso608378327b3.10
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 07:21:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681395719; x=1683987719;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8VkXx3MwA5LRGwzJIwL5RFqYfkVgM3VjyEag+q2YqrU=;
+        b=p/rPO5OT9jf0z5yXRSmrTLDoSIUepPZb11UDvDwuXp0EPGmz+QZuALKz8izmoVHVYS
+         /rMDYmIJLs4IQHTnFkUSyK0v6X7bIr5NPle7P8+EDsN/RNdVSRNzVDDaVUkJ9S3lf6YD
+         kTqa9QCLHGwTI9/fiDcuUmY99CapyntFhF4wgEOid05HBPSs6KmXYyYrOsA6x7fxXQND
+         adyVYw/VeCPd8L8P29K+AEk9c82liGqfoLWi7l3fRH/yQtCNVduKPYRb6fgqig1bRLbc
+         hNLGBr3hJUQbrR6cHpeqyuBlzBXXK+cVNxpFEIlcj+wY1NJbxum3s0lTm+Q3HxbBZRQo
+         fyAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681395719; x=1683987719;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8VkXx3MwA5LRGwzJIwL5RFqYfkVgM3VjyEag+q2YqrU=;
+        b=AQCRkTS48n/EzfulQhijtFVJrhW4Ck9TvaZ70yzNI99W5kQdqqRgwfg8Jekz50xoKn
+         L7VPu5tySrH6l//GwGg4zNHQRsq1sE6pZtypuama0ChOZ/wKpFI4ZbDC+QbXw2yF2l7U
+         hybfgyqnd9fmotr44Au3oey5PUlXUrNe2tcLpSWyckZfVaPbq2pULdZTa+qdOwnNjNMH
+         l9ooUOnPkKEdrIABBJxiC4D6fahkXgSnvT+4AztdqO17cAz2H//kBLXmfZQmnGLX+2NY
+         izkUScTw7AJgmjz5Z/1vFf3ZXKH3UZZYTQwlR4WeUEUhaCBwzu1vP9qxC3uPmEVilZ37
+         Mbng==
+X-Gm-Message-State: AAQBX9cK8AG1dOgArKCdnY/fNNGRs8jtjMOLH3qCGo87bl5+B1WT+mnh
+        mmUfoX3668N0GR79YNbIdMIY3zj1Cx/DrwOqD808zAds6tmcy/Ar4yemxg==
+X-Google-Smtp-Source: AKy350aWLdSfLFnbU2dOD+LgGjl5FiO8H6fvc5f3Kk0Ef5grktsOqGaj+SF5L1Q0CPDWiWqjjTDuDi6S0gJr9BpqgO4=
+X-Received: by 2002:a81:4323:0:b0:549:1e80:41f9 with SMTP id
+ q35-20020a814323000000b005491e8041f9mr1492277ywa.10.1681395718858; Thu, 13
+ Apr 2023 07:21:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="DAtBsIIT0GO5kgGm"
-Content-Disposition: inline
-In-Reply-To: <a91f0fe9-fcca-4009-b34d-0c58542d9765@weissschuh.net>
-X-Cookie: Idleness is the holiday of fools.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230413133355.350571-1-aleksandr.mikhalitsyn@canonical.com> <20230413133355.350571-3-aleksandr.mikhalitsyn@canonical.com>
+In-Reply-To: <20230413133355.350571-3-aleksandr.mikhalitsyn@canonical.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 13 Apr 2023 16:21:47 +0200
+Message-ID: <CANn89iLuLkUvX-dDC=rJhtFcxjnVmfn_-crOevbQe+EjaEDGbg@mail.gmail.com>
+Subject: Re: [PATCH net-next v4 2/4] net: socket: add sockopts blacklist for
+ BPF cgroup hook
+To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, daniel@iogearbox.net,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Apr 13, 2023 at 3:35=E2=80=AFPM Alexander Mikhalitsyn
+<aleksandr.mikhalitsyn@canonical.com> wrote:
+>
+> During work on SO_PEERPIDFD, it was discovered (thanks to Christian),
+> that bpf cgroup hook can cause FD leaks when used with sockopts which
+> install FDs into the process fdtable.
+>
+> After some offlist discussion it was proposed to add a blacklist of
 
---DAtBsIIT0GO5kgGm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+We try to replace this word by either denylist or blocklist, even in change=
+logs.
 
-On Thu, Apr 13, 2023 at 03:09:27PM +0200, linux@weissschuh.net wrote:
-> Apr 12, 2023 17:58:45 Mark Brown <broonie@kernel.org>:
+> socket options those can cause troubles when BPF cgroup hook is enabled.
+>
 
-> > Nothing in this change (or anything else in the series AFAICT) causes
-> > STDx_FILENO to be declared so we get errors like below in -next when a
-> > kselftest is built with this version of nolibc:
+Can we find the appropriate Fixes: tag to help stable teams ?
 
-> These definitions come from
-> "tools/nolibc: add definitions for standard fds".
-> This patch was part of the nolibc stack protector series which is older t=
-han this series and went through the same channels.
-> So I'm not sure how one series made it into next and the other didn't.
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Leon Romanovsky <leon@kernel.org>
+> Cc: David Ahern <dsahern@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Christian Brauner <brauner@kernel.org>
+> Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
+> Cc: Lennart Poettering <mzxreary@0pointer.de>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-arch@vger.kernel.org
+> Suggested-by: Daniel Borkmann <daniel@iogearbox.net>
+> Suggested-by: Christian Brauner <brauner@kernel.org>
+> Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com=
+>
 
-> This would also have been noticed by Willy and Paul running their tests.
-
-Hrm, that commit is actually in -next and Paul's pull request, not sure
-why it wasn't showing up in greps.  The issue is that you've added a
-dependency from nolibc's stdio.h to unistd.h but nolibc.h includes
-unistd.h last and there's no other include, meaning that at the time
-that stdio.h is compiled there's no definition of the constants visible.
-
-The below fixes the issue, I'll submit it properly later today:
-
-diff --git a/tools/include/nolibc/nolibc.h b/tools/include/nolibc/nolibc.h
-index 04739a6293c4..05a228a6ee78 100644
---- a/tools/include/nolibc/nolibc.h
-+++ b/tools/include/nolibc/nolibc.h
-@@ -99,11 +99,11 @@
- #include "sys.h"
- #include "ctype.h"
- #include "signal.h"
-+#include "unistd.h"
- #include "stdio.h"
- #include "stdlib.h"
- #include "string.h"
- #include "time.h"
--#include "unistd.h"
- #include "stackprotector.h"
-=20
- /* Used by programs to avoid std includes */
-
---DAtBsIIT0GO5kgGm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ4D58ACgkQJNaLcl1U
-h9A2SQgAgm17E78aM1sfqCFI9oXDemFsJn6JP25Tu96o/SY+kML0iOMqqldEG/WL
-DxlSZpcC0cXr9U6cFcV3Ct4Y4Kbjq8iuHxUH9oV1fpokbO9NOUgTGphRTM/T7mhQ
-zwXpSDsk0oKlUSLA/jx6WVGRIT0AfFn01CjVndG9UONpBUmnwJDX+AQaczsNm9cd
-nzg0Zr0SpNMCn5pOI1WlxkRSkEXB1WzE2wIcrUdj/QRN7397pdZWh4VYmGHil2Sk
-x/m2WY5FE0FtAYENe0XUxnzwrKGGAqq2R6KrZuAmjO574qgJeoMulKBQWZRor3tx
-C54U7GP61IleXB1wWwPKcsHZoDMM1A==
-=FQ+a
------END PGP SIGNATURE-----
-
---DAtBsIIT0GO5kgGm--
+Thanks.
