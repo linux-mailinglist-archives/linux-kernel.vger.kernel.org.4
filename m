@@ -2,825 +2,318 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06FC46E06CE
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 08:17:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 020F66E06D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 08:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbjDMGRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 02:17:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37268 "EHLO
+        id S229747AbjDMGU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 02:20:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjDMGRB (ORCPT
+        with ESMTP id S229506AbjDMGUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 02:17:01 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C10D5FDE
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 23:16:58 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pmqGD-0000f0-9t; Thu, 13 Apr 2023 08:16:45 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pmqGB-00AuJd-0S; Thu, 13 Apr 2023 08:16:43 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pmqGA-00CntW-6A; Thu, 13 Apr 2023 08:16:42 +0200
-Date:   Thu, 13 Apr 2023 08:16:42 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Anatolij Gustschin <agust@denx.de>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] powerpc: Drop MPC5200 LocalPlus bus FIFO driver
-Message-ID: <20230413061642.kqkor4wkt7lp2mhp@pengutronix.de>
-References: <20221228145129.31700-1-u.kleine-koenig@pengutronix.de>
- <20230412150524.ojsvukh47hing6db@pengutronix.de>
- <87zg7cabf6.fsf@mpe.ellerman.id.au>
+        Thu, 13 Apr 2023 02:20:54 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2065.outbound.protection.outlook.com [40.107.102.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1085461A1;
+        Wed, 12 Apr 2023 23:20:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CDMI6+7s4NHEImzSqHZCQlJSFg2NbonyEPzOEZMODnYKb5gDTnDs79EH8V4FV2izisAxuMHrh47fJRhmfCFuKIoXXyegSqpoy7e213oeYT0JrSYXQe50fMKC/ZLUdNjhFv08jgC3lF2C18jSfLGUsKgt9weNfPamMwoUchwwMeSiEzy1IkfkbbBdEOiSVFKZYadbqbn17OoTLWdVISN7VpscRWYel8oP8ZUWyL1HN8eCWtZV/j109d8IgRfG2lgAWoHMkK3Onov0B2BIKdv3/vUtpl/zo48oKPAAXRb1R33ZFVe0yUwhOdEFgmrkVSf/ZfeVtHKlYz39c6sqkqwWZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=21YHanjLxM0ampZmmLBra4F/ALAss7aoP1ckwCyGPRE=;
+ b=amA/MTAex3BXSHjRJfqaP4AySVefjkgpMSlvzkPhj/2p50kEIQ2YRFTt7hdOmr9F1kxOofv7eo0uFRZZJzVo4pO4bD75mGXBs2G18yrvqqEfcedALKTO8xIxGWDK+Sokiv9pnc7sJh+/2g3UBXba5BMpckcMWjTbiQMFZydKbqECAF6y3sWbw/9odYZgoHI13atocjbAWR5qsEZFMzDM2p4krAbc/gmfHJ1SuPV5iJurjd6+CGLls4/1+QZcaGa6ZU50NWMZS0g0olD8jwZSt3zDichqJ+UNiBxGOmWUu2g3Xg0xnBMeiGl4Ee3brsQZ390RhcAMlMTddzFkAkxubg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=21YHanjLxM0ampZmmLBra4F/ALAss7aoP1ckwCyGPRE=;
+ b=qh0i64Qxs06WrBZvUd7hZ7+1IZGAmKJv74LXBWAuea5bc6s61kOBUw/RnoFEFiC2I17OLyIv7evzUM6rtnTGeBOstaInfydsg7vtKot9I8bbp9YBCzK8WOKCFyb9srfu+O8LOQX803oqqrTNl9F3NRa+L4Wvp3BtmBFXTy5jGfA=
+Received: from MW4P221CA0026.NAMP221.PROD.OUTLOOK.COM (2603:10b6:303:8b::31)
+ by MN2PR12MB4405.namprd12.prod.outlook.com (2603:10b6:208:26d::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Thu, 13 Apr
+ 2023 06:20:49 +0000
+Received: from CO1NAM11FT043.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8b::4) by MW4P221CA0026.outlook.office365.com
+ (2603:10b6:303:8b::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30 via Frontend
+ Transport; Thu, 13 Apr 2023 06:20:48 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT043.mail.protection.outlook.com (10.13.174.193) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6298.31 via Frontend Transport; Thu, 13 Apr 2023 06:20:48 +0000
+Received: from BLR5CG134614W.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 13 Apr
+ 2023 01:20:19 -0500
+From:   K Prateek Nayak <kprateek.nayak@amd.com>
+To:     <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <acme@kernel.org>, <peterz@infradead.org>, <mingo@redhat.com>,
+        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@kernel.org>, <namhyung@kernel.org>
+CC:     <ravi.bangoria@amd.com>, <sandipan.das@amd.com>,
+        <ananth.narayan@amd.com>, <gautham.shenoy@amd.com>,
+        <eranian@google.com>, <puwen@hygon.cn>
+Subject: [RFC PATCH v3 0/2] perf stat: Add option to aggregate data based on the cache topology
+Date:   Thu, 13 Apr 2023 11:50:04 +0530
+Message-ID: <20230413062006.1056-1-kprateek.nayak@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4z3dj3khfkyi65vz"
-Content-Disposition: inline
-In-Reply-To: <87zg7cabf6.fsf@mpe.ellerman.id.au>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT043:EE_|MN2PR12MB4405:EE_
+X-MS-Office365-Filtering-Correlation-Id: 41ac79a9-875f-4399-defd-08db3be7393f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: o6iIGkk4k2NqQTq8RBIRetYuH1iun7M1+pbl72wAzhY7TQ/fPoo4WnIr8X3tqs+On7h6ciy09zBVH3OuCvA33wUljptrfhxwdZtGED9X/YI7FdGnGor4K0ZyM20G9n9NBIH0LmtAK570wo3Qc/8ufuiAc0+HzJCvQDD5ijbv27duj1hGi8Ukwmf7tgQ56ecZi0z4qawngkR3mxgfSB0yFKVrMyIe6EcOMVZ50iVQvT2wQsd6ozlWb7Qtebrj1i5VYcVNQVvDHGk6Gxm4cE9kCdypQM7H5NgIwtHtlQb8aHdTpNTPPJPUbdsoNDE8W1lCGhLBwKALE6XcMbdUBnpuXmkp00NOVKTqDIkwH1JpiHjf9kNBcOjJFCufrqK/ZsDflzaHHP8g5B+pnhMAWIggJog5ZvqPiD/kW2Lv8DX7tVfC0FMqtp/BGitBTB1iWlzh52j34m7cslg+n1wcbqj/AxuS4cCQAEt6rqSHcfHgXUDuGxwU9yWBiFjPlv90YsABj5OvoCjJXVoLbJkjQ8PiMfthePDtWZT361eb4yLWWoDttBGg7nlr0BrODjAaceyrjaro47JeMA2xLRw3WdcPHSmBKLQ953AxbGIDv0+YX/p55eIaBhpyTZgHKK6FVkQ8Jf66pfxLm9k9ZSaDL7L5d6mtXDK1CySo3VXPTCImTBZYi468AYFmhHmDOKTtsQV9nxeSmVn6PZ9gRKesjqdOHNbZFA26eTVZqDBAetwZNEs+GvQ86m1J90hOZlEsLUUm
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(136003)(346002)(396003)(451199021)(40470700004)(36840700001)(46966006)(40460700003)(316002)(41300700001)(81166007)(16526019)(1076003)(7696005)(26005)(186003)(86362001)(6666004)(47076005)(356005)(36860700001)(107886003)(2616005)(82310400005)(426003)(336012)(83380400001)(82740400003)(4326008)(54906003)(36756003)(40480700001)(110136005)(70206006)(70586007)(8676002)(8936002)(5660300002)(2906002)(7416002)(478600001)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2023 06:20:48.5309
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 41ac79a9-875f-4399-defd-08db3be7393f
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT043.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4405
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Motivation behind this feature is to aggregate the data at the LLC level
+for chiplet based processors which currently do not expose the chiplet
+details in sysfs cpu topology information.
 
---4z3dj3khfkyi65vz
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+For the completeness of the feature, the series adds ability to
+aggregate data at any cache level. Following is the example of the
+output on a dual socket Zen3 processor with 2 x 64C/128T containing 8
+chiplet per socket.
 
-While mpc5200b.dtsi contains a device that this driver can bind to, the
-only purpose of a bound device is to be used by the four exported functions
-mpc52xx_lpbfifo_submit(), mpc52xx_lpbfifo_abort(), mpc52xx_lpbfifo_poll()
-and mpc52xx_lpbfifo_start_xfer(). However there are no callers to this
-function and so the driver is effectively superfluous and can be deleted.
-Also drop some defines and a struct from <asm/mpc52xx.h> that are unused
-now together with the declarations of the four mentioned functions.
+  $ sudo perf stat --per-cache -a -e ls_dmnd_fills_from_sys.ext_cache_remote --\
+    taskset -c 0-15,64-79,128-143,192-207\
+    perf bench sched messaging -p -t -l 100000 -g 8
 
-Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
----
+    # Running 'sched/messaging' benchmark:
+    # 20 sender and receiver threads per group
+    # 8 groups == 320 threads run
+    
+    Total time: 7.648 [sec]
+    
+    Performance counter stats for 'system wide':
+    
+    S0-D0-L3-ID0             16         17,145,912      ls_dmnd_fills_from_sys.ext_cache_remote
+    S0-D0-L3-ID8             16         14,977,628      ls_dmnd_fills_from_sys.ext_cache_remote
+    S0-D0-L3-ID16            16            262,539      ls_dmnd_fills_from_sys.ext_cache_remote
+    S0-D0-L3-ID24            16              3,140      ls_dmnd_fills_from_sys.ext_cache_remote
+    S0-D0-L3-ID32            16             27,403      ls_dmnd_fills_from_sys.ext_cache_remote
+    S0-D0-L3-ID40            16             17,026      ls_dmnd_fills_from_sys.ext_cache_remote
+    S0-D0-L3-ID48            16              7,292      ls_dmnd_fills_from_sys.ext_cache_remote
+    S0-D0-L3-ID56            16              2,464      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L3-ID64            16         22,489,306      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L3-ID72            16         21,455,257      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L3-ID80            16             11,619      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L3-ID88            16             30,978      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L3-ID96            16             37,628      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L3-ID104           16             13,594      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L3-ID112           16             10,164      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L3-ID120           16             11,259      ls_dmnd_fills_from_sys.ext_cache_remote
+    
+          7.779171484 seconds time elapsed
 
-Hello Michael,
+The series also adds support for perf stat record and perf stat report
+to aggregate data at various cache levels. Following is an example of
+recording with aggregation at L2 level and reporting the same data with
+aggregation at L3 level.
 
-On Thu, Apr 13, 2023 at 10:11:25AM +1000, Michael Ellerman wrote:
-> Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de> writes:
-> > On Wed, Dec 28, 2022 at 03:51:29PM +0100, Uwe Kleine-K=F6nig wrote:
-> >> The four exported functions mpc52xx_lpbfifo_submit(),
-> >> mpc52xx_lpbfifo_abort(), mpc52xx_lpbfifo_poll(), and
-> >> mpc52xx_lpbfifo_start_xfer() are not used. So they can be dropped and =
-the
-> >> definitions needed to call them can be moved into the driver file.
-> >>=20
-> >> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> >
-> > I never got feedback about this driver and it has not appeared in next
-> > up to now. Did it fell through the cracks?
->=20
-> Yeah. I was hoping someone would explain what's going on with the
-> driver.
->=20
-> Presumably there are some out-of-tree drivers that use the routines
-> provided by this driver?
+  $ sudo perf stat record --per-cache=L2 -a -e ls_dmnd_fills_from_sys.ext_cache_remote --\
+    taskset -c 0-15,64-79,128-143,192-207\
+    perf bench sched messaging -p -t -l 100000 -g 8
+  
+    # Running 'sched/messaging' benchmark:
+    # 20 sender and receiver threads per group
+    # 8 groups == 320 threads run
+    
+    Total time: 7.318 [sec]
+    
+    Performance counter stats for 'system wide':
+    
+    S0-D0-L2-ID0              2          2,171,980      ls_dmnd_fills_from_sys.ext_cache_remote
+    S0-D0-L2-ID1              2          2,048,494      ls_dmnd_fills_from_sys.ext_cache_remote
+    S0-D0-L2-ID2              2          2,120,293      ls_dmnd_fills_from_sys.ext_cache_remote
+    S0-D0-L2-ID3              2          2,224,725      ls_dmnd_fills_from_sys.ext_cache_remote
+    S0-D0-L2-ID4              2          2,021,618      ls_dmnd_fills_from_sys.ext_cache_remote
+    S0-D0-L2-ID5              2          1,995,331      ls_dmnd_fills_from_sys.ext_cache_remote
+    S0-D0-L2-ID6              2          2,163,029      ls_dmnd_fills_from_sys.ext_cache_remote
+    S0-D0-L2-ID7              2          2,104,623      ls_dmnd_fills_from_sys.ext_cache_remote
+    S0-D0-L2-ID8              2          1,948,776      ls_dmnd_fills_from_sys.ext_cache_remote
+    ...
+    S0-D0-L2-ID63             2              2,648      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L2-ID64             2          2,963,323      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L2-ID65             2          2,856,629      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L2-ID66             2          2,901,725      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L2-ID67             2          3,046,120      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L2-ID68             2          2,637,971      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L2-ID69             2          2,680,029      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L2-ID70             2          2,672,259      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L2-ID71             2          2,638,768      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L2-ID72             2          3,308,642      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L2-ID73             2          3,064,473      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L2-ID74             2          3,023,379      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L2-ID75             2          2,975,119      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L2-ID76             2          2,952,677      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L2-ID77             2          2,981,695      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L2-ID78             2          3,455,916      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L2-ID79             2          2,959,540      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L2-ID80             2              4,977      ls_dmnd_fills_from_sys.ext_cache_remote
+    ...
+    S1-D1-L2-ID127            2              3,359      ls_dmnd_fills_from_sys.ext_cache_remote
+    
+          7.451725897 seconds time elapsed
 
-I googled for the function names but the only related hits were
-references to this thread :-)
+  $ sudo perf stat report --per-cache=L3
 
-> I think rather than merging this patch, which keeps the code but makes
-> it completely useless, do you mind sending a patch to remove the whole
-> driver? Maybe that will get someone's attention.
+    Performance counter stats for '...':
 
-fair enough, here it is.
+    S0-D0-L3-ID0             16         16,850,093      ls_dmnd_fills_from_sys.ext_cache_remote
+    S0-D0-L3-ID8             16         16,001,493      ls_dmnd_fills_from_sys.ext_cache_remote
+    S0-D0-L3-ID16            16            301,011      ls_dmnd_fills_from_sys.ext_cache_remote
+    S0-D0-L3-ID24            16             26,276      ls_dmnd_fills_from_sys.ext_cache_remote
+    S0-D0-L3-ID32            16             48,958      ls_dmnd_fills_from_sys.ext_cache_remote
+    S0-D0-L3-ID40            16             43,799      ls_dmnd_fills_from_sys.ext_cache_remote
+    S0-D0-L3-ID48            16             16,771      ls_dmnd_fills_from_sys.ext_cache_remote
+    S0-D0-L3-ID56            16             12,544      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L3-ID64            16         22,396,824      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L3-ID72            16         24,721,441      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L3-ID80            16             29,426      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L3-ID88            16             54,348      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L3-ID96            16             41,557      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L3-ID104           16             10,084      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L3-ID112           16             14,361      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L3-ID120           16             24,446      ls_dmnd_fills_from_sys.ext_cache_remote
+    
+           7.451725897 seconds time elapsed
 
-Best regards
-Uwe
+The aggregate at S0-D0-L3-ID0 is the sum of S0-D0-L2-ID0 to S0-D0-L3-ID7
+as L3 containing CPU0 contains the L2 instance of CPU0 to CPU7.
 
- arch/powerpc/include/asm/mpc52xx.h            |  41 --
- arch/powerpc/platforms/52xx/Kconfig           |   5 -
- arch/powerpc/platforms/52xx/Makefile          |   2 -
- arch/powerpc/platforms/52xx/mpc52xx_lpbfifo.c | 594 ------------------
- 4 files changed, 642 deletions(-)
- delete mode 100644 arch/powerpc/platforms/52xx/mpc52xx_lpbfifo.c
+[New in v3 - Handling IDs differently compared to v2]
+Cache IDs are now derived from the shared_cpus_list file in the cache
+topology. This allows for --per-cache aggregation of data on a kernel
+which does not expose the cache instance ID in the sysfs. Running perf
+stat will give the following output on the same system with cache
+instance ID hidden:
 
-diff --git a/arch/powerpc/include/asm/mpc52xx.h b/arch/powerpc/include/asm/=
-mpc52xx.h
-index 5ea16a71c2f0..01ae6c351e50 100644
---- a/arch/powerpc/include/asm/mpc52xx.h
-+++ b/arch/powerpc/include/asm/mpc52xx.h
-@@ -285,47 +285,6 @@ extern int mpc52xx_gpt_start_timer(struct mpc52xx_gpt_=
-priv *gpt, u64 period,
- extern u64 mpc52xx_gpt_timer_period(struct mpc52xx_gpt_priv *gpt);
- extern int mpc52xx_gpt_stop_timer(struct mpc52xx_gpt_priv *gpt);
-=20
--/* mpc52xx_lpbfifo.c */
--#define MPC52XX_LPBFIFO_FLAG_READ		(0)
--#define MPC52XX_LPBFIFO_FLAG_WRITE		(1<<0)
--#define MPC52XX_LPBFIFO_FLAG_NO_INCREMENT	(1<<1)
--#define MPC52XX_LPBFIFO_FLAG_NO_DMA		(1<<2)
--#define MPC52XX_LPBFIFO_FLAG_POLL_DMA		(1<<3)
--
--struct mpc52xx_lpbfifo_request {
--	struct list_head list;
--
--	/* localplus bus address */
--	unsigned int cs;
--	size_t offset;
--
--	/* Memory address */
--	void *data;
--	phys_addr_t data_phys;
--
--	/* Details of transfer */
--	size_t size;
--	size_t pos;	/* current position of transfer */
--	int flags;
--	int defer_xfer_start;
--
--	/* What to do when finished */
--	void (*callback)(struct mpc52xx_lpbfifo_request *);
--
--	void *priv;		/* Driver private data */
--
--	/* statistics */
--	int irq_count;
--	int irq_ticks;
--	u8 last_byte;
--	int buffer_not_done_cnt;
--};
--
--extern int mpc52xx_lpbfifo_submit(struct mpc52xx_lpbfifo_request *req);
--extern void mpc52xx_lpbfifo_abort(struct mpc52xx_lpbfifo_request *req);
--extern void mpc52xx_lpbfifo_poll(void);
--extern int mpc52xx_lpbfifo_start_xfer(struct mpc52xx_lpbfifo_request *req);
--
- /* mpc52xx_pic.c */
- extern void mpc52xx_init_irq(void);
- extern unsigned int mpc52xx_get_irq(void);
-diff --git a/arch/powerpc/platforms/52xx/Kconfig b/arch/powerpc/platforms/5=
-2xx/Kconfig
-index b72ed2950ca8..384e4bef2c28 100644
---- a/arch/powerpc/platforms/52xx/Kconfig
-+++ b/arch/powerpc/platforms/52xx/Kconfig
-@@ -54,8 +54,3 @@ config PPC_MPC5200_BUGFIX
- 	  for MPC5200B based boards.
-=20
- 	  It is safe to say 'Y' here
--
--config PPC_MPC5200_LPBFIFO
--	tristate "MPC5200 LocalPlus bus FIFO driver"
--	depends on PPC_MPC52xx && PPC_BESTCOMM
--	select PPC_BESTCOMM_GEN_BD
-diff --git a/arch/powerpc/platforms/52xx/Makefile b/arch/powerpc/platforms/=
-52xx/Makefile
-index f40d48eab779..1b1f72d83342 100644
---- a/arch/powerpc/platforms/52xx/Makefile
-+++ b/arch/powerpc/platforms/52xx/Makefile
-@@ -14,5 +14,3 @@ obj-$(CONFIG_PM)		+=3D mpc52xx_sleep.o mpc52xx_pm.o
- ifdef CONFIG_PPC_LITE5200
- 	obj-$(CONFIG_PM)	+=3D lite5200_sleep.o lite5200_pm.o
- endif
--
--obj-$(CONFIG_PPC_MPC5200_LPBFIFO)	+=3D mpc52xx_lpbfifo.o
-diff --git a/arch/powerpc/platforms/52xx/mpc52xx_lpbfifo.c b/arch/powerpc/p=
-latforms/52xx/mpc52xx_lpbfifo.c
-deleted file mode 100644
-index 6d1dd6e87478..000000000000
---- a/arch/powerpc/platforms/52xx/mpc52xx_lpbfifo.c
-+++ /dev/null
-@@ -1,594 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * LocalPlus Bus FIFO driver for the Freescale MPC52xx.
-- *
-- * Copyright (C) 2009 Secret Lab Technologies Ltd.
-- *
-- * Todo:
-- * - Add support for multiple requests to be queued.
-- */
--
--#include <linux/interrupt.h>
--#include <linux/kernel.h>
--#include <linux/of.h>
--#include <linux/of_address.h>
--#include <linux/of_irq.h>
--#include <linux/of_platform.h>
--#include <linux/spinlock.h>
--#include <linux/module.h>
--#include <asm/io.h>
--#include <asm/mpc52xx.h>
--#include <asm/time.h>
--
--#include <linux/fsl/bestcomm/bestcomm.h>
--#include <linux/fsl/bestcomm/bestcomm_priv.h>
--#include <linux/fsl/bestcomm/gen_bd.h>
--
--MODULE_AUTHOR("Grant Likely <grant.likely@secretlab.ca>");
--MODULE_DESCRIPTION("MPC5200 LocalPlus FIFO device driver");
--MODULE_LICENSE("GPL");
--
--#define LPBFIFO_REG_PACKET_SIZE		(0x00)
--#define LPBFIFO_REG_START_ADDRESS	(0x04)
--#define LPBFIFO_REG_CONTROL		(0x08)
--#define LPBFIFO_REG_ENABLE		(0x0C)
--#define LPBFIFO_REG_BYTES_DONE_STATUS	(0x14)
--#define LPBFIFO_REG_FIFO_DATA		(0x40)
--#define LPBFIFO_REG_FIFO_STATUS		(0x44)
--#define LPBFIFO_REG_FIFO_CONTROL	(0x48)
--#define LPBFIFO_REG_FIFO_ALARM		(0x4C)
--
--struct mpc52xx_lpbfifo {
--	struct device *dev;
--	phys_addr_t regs_phys;
--	void __iomem *regs;
--	int irq;
--	spinlock_t lock;
--
--	struct bcom_task *bcom_tx_task;
--	struct bcom_task *bcom_rx_task;
--	struct bcom_task *bcom_cur_task;
--
--	/* Current state data */
--	struct mpc52xx_lpbfifo_request *req;
--	int dma_irqs_enabled;
--};
--
--/* The MPC5200 has only one fifo, so only need one instance structure */
--static struct mpc52xx_lpbfifo lpbfifo;
--
--/**
-- * mpc52xx_lpbfifo_kick - Trigger the next block of data to be transferred
-- *
-- * @req: Pointer to request structure
-- */
--static void mpc52xx_lpbfifo_kick(struct mpc52xx_lpbfifo_request *req)
--{
--	size_t transfer_size =3D req->size - req->pos;
--	struct bcom_bd *bd;
--	void __iomem *reg;
--	u32 *data;
--	int i;
--	int bit_fields;
--	int dma =3D !(req->flags & MPC52XX_LPBFIFO_FLAG_NO_DMA);
--	int write =3D req->flags & MPC52XX_LPBFIFO_FLAG_WRITE;
--	int poll_dma =3D req->flags & MPC52XX_LPBFIFO_FLAG_POLL_DMA;
--
--	/* Set and clear the reset bits; is good practice in User Manual */
--	out_be32(lpbfifo.regs + LPBFIFO_REG_ENABLE, 0x01010000);
--
--	/* set master enable bit */
--	out_be32(lpbfifo.regs + LPBFIFO_REG_ENABLE, 0x00000001);
--	if (!dma) {
--		/* While the FIFO can be setup for transfer sizes as large as
--		 * 16M-1, the FIFO itself is only 512 bytes deep and it does
--		 * not generate interrupts for FIFO full events (only transfer
--		 * complete will raise an IRQ).  Therefore when not using
--		 * Bestcomm to drive the FIFO it needs to either be polled, or
--		 * transfers need to constrained to the size of the fifo.
--		 *
--		 * This driver restricts the size of the transfer
--		 */
--		if (transfer_size > 512)
--			transfer_size =3D 512;
--
--		/* Load the FIFO with data */
--		if (write) {
--			reg =3D lpbfifo.regs + LPBFIFO_REG_FIFO_DATA;
--			data =3D req->data + req->pos;
--			for (i =3D 0; i < transfer_size; i +=3D 4)
--				out_be32(reg, *data++);
--		}
--
--		/* Unmask both error and completion irqs */
--		out_be32(lpbfifo.regs + LPBFIFO_REG_ENABLE, 0x00000301);
--	} else {
--		/* Choose the correct direction
--		 *
--		 * Configure the watermarks so DMA will always complete correctly.
--		 * It may be worth experimenting with the ALARM value to see if
--		 * there is a performance impact.  However, if it is wrong there
--		 * is a risk of DMA not transferring the last chunk of data
--		 */
--		if (write) {
--			out_be32(lpbfifo.regs + LPBFIFO_REG_FIFO_ALARM, 0x1e4);
--			out_8(lpbfifo.regs + LPBFIFO_REG_FIFO_CONTROL, 7);
--			lpbfifo.bcom_cur_task =3D lpbfifo.bcom_tx_task;
--		} else {
--			out_be32(lpbfifo.regs + LPBFIFO_REG_FIFO_ALARM, 0x1ff);
--			out_8(lpbfifo.regs + LPBFIFO_REG_FIFO_CONTROL, 0);
--			lpbfifo.bcom_cur_task =3D lpbfifo.bcom_rx_task;
--
--			if (poll_dma) {
--				if (lpbfifo.dma_irqs_enabled) {
--					disable_irq(bcom_get_task_irq(lpbfifo.bcom_rx_task));
--					lpbfifo.dma_irqs_enabled =3D 0;
--				}
--			} else {
--				if (!lpbfifo.dma_irqs_enabled) {
--					enable_irq(bcom_get_task_irq(lpbfifo.bcom_rx_task));
--					lpbfifo.dma_irqs_enabled =3D 1;
--				}
--			}
--		}
--
--		bd =3D bcom_prepare_next_buffer(lpbfifo.bcom_cur_task);
--		bd->status =3D transfer_size;
--		if (!write) {
--			/*
--			 * In the DMA read case, the DMA doesn't complete,
--			 * possibly due to incorrect watermarks in the ALARM
--			 * and CONTROL regs. For now instead of trying to
--			 * determine the right watermarks that will make this
--			 * work, just increase the number of bytes the FIFO is
--			 * expecting.
--			 *
--			 * When submitting another operation, the FIFO will get
--			 * reset, so the condition of the FIFO waiting for a
--			 * non-existent 4 bytes will get cleared.
--			 */
--			transfer_size +=3D 4; /* BLECH! */
--		}
--		bd->data[0] =3D req->data_phys + req->pos;
--		bcom_submit_next_buffer(lpbfifo.bcom_cur_task, NULL);
--
--		/* error irq & master enabled bit */
--		bit_fields =3D 0x00000201;
--
--		/* Unmask irqs */
--		if (write && (!poll_dma))
--			bit_fields |=3D 0x00000100; /* completion irq too */
--		out_be32(lpbfifo.regs + LPBFIFO_REG_ENABLE, bit_fields);
--	}
--
--	/* Set transfer size, width, chip select and READ mode */
--	out_be32(lpbfifo.regs + LPBFIFO_REG_START_ADDRESS,
--		 req->offset + req->pos);
--	out_be32(lpbfifo.regs + LPBFIFO_REG_PACKET_SIZE, transfer_size);
--
--	bit_fields =3D req->cs << 24 | 0x000008;
--	if (!write)
--		bit_fields |=3D 0x010000; /* read mode */
--	out_be32(lpbfifo.regs + LPBFIFO_REG_CONTROL, bit_fields);
--
--	/* Kick it off */
--	if (!lpbfifo.req->defer_xfer_start)
--		out_8(lpbfifo.regs + LPBFIFO_REG_PACKET_SIZE, 0x01);
--	if (dma)
--		bcom_enable(lpbfifo.bcom_cur_task);
--}
--
--/**
-- * mpc52xx_lpbfifo_irq - IRQ handler for LPB FIFO
-- * @irq: IRQ number to be handled
-- * @dev_id: device ID cookie
-- *
-- * On transmit, the dma completion irq triggers before the fifo completion
-- * triggers.  Handle the dma completion here instead of the LPB FIFO Bestc=
-omm
-- * task completion irq because everything is not really done until the LPB=
- FIFO
-- * completion irq triggers.
-- *
-- * In other words:
-- * For DMA, on receive, the "Fat Lady" is the bestcom completion irq. on
-- * transmit, the fifo completion irq is the "Fat Lady". The opera (or in t=
-his
-- * case the DMA/FIFO operation) is not finished until the "Fat Lady" sings.
-- *
-- * Reasons for entering this routine:
-- * 1) PIO mode rx and tx completion irq
-- * 2) DMA interrupt mode tx completion irq
-- * 3) DMA polled mode tx
-- *
-- * Exit conditions:
-- * 1) Transfer aborted
-- * 2) FIFO complete without DMA; more data to do
-- * 3) FIFO complete without DMA; all data transferred
-- * 4) FIFO complete using DMA
-- *
-- * Condition 1 can occur regardless of whether or not DMA is used.
-- * It requires executing the callback to report the error and exiting
-- * immediately.
-- *
-- * Condition 2 requires programming the FIFO with the next block of data
-- *
-- * Condition 3 requires executing the callback to report completion
-- *
-- * Condition 4 means the same as 3, except that we also retrieve the bcom
-- * buffer so DMA doesn't get clogged up.
-- *
-- * To make things trickier, the spinlock must be dropped before
-- * executing the callback, otherwise we could end up with a deadlock
-- * or nested spinlock condition.  The out path is non-trivial, so
-- * extra fiddling is done to make sure all paths lead to the same
-- * outbound code.
-- *
-- * Return: irqreturn code (%IRQ_HANDLED)
-- */
--static irqreturn_t mpc52xx_lpbfifo_irq(int irq, void *dev_id)
--{
--	struct mpc52xx_lpbfifo_request *req;
--	u32 status =3D in_8(lpbfifo.regs + LPBFIFO_REG_BYTES_DONE_STATUS);
--	void __iomem *reg;
--	u32 *data;
--	int count, i;
--	int do_callback =3D 0;
--	u32 ts;
--	unsigned long flags;
--	int dma, write, poll_dma;
--
--	spin_lock_irqsave(&lpbfifo.lock, flags);
--	ts =3D mftb();
--
--	req =3D lpbfifo.req;
--	if (!req) {
--		spin_unlock_irqrestore(&lpbfifo.lock, flags);
--		pr_err("bogus LPBFIFO IRQ\n");
--		return IRQ_HANDLED;
--	}
--
--	dma =3D !(req->flags & MPC52XX_LPBFIFO_FLAG_NO_DMA);
--	write =3D req->flags & MPC52XX_LPBFIFO_FLAG_WRITE;
--	poll_dma =3D req->flags & MPC52XX_LPBFIFO_FLAG_POLL_DMA;
--
--	if (dma && !write) {
--		spin_unlock_irqrestore(&lpbfifo.lock, flags);
--		pr_err("bogus LPBFIFO IRQ (dma and not writing)\n");
--		return IRQ_HANDLED;
--	}
--
--	if ((status & 0x01) =3D=3D 0) {
--		goto out;
--	}
--
--	/* check abort bit */
--	if (status & 0x10) {
--		out_be32(lpbfifo.regs + LPBFIFO_REG_ENABLE, 0x01010000);
--		do_callback =3D 1;
--		goto out;
--	}
--
--	/* Read result from hardware */
--	count =3D in_be32(lpbfifo.regs + LPBFIFO_REG_BYTES_DONE_STATUS);
--	count &=3D 0x00ffffff;
--
--	if (!dma && !write) {
--		/* copy the data out of the FIFO */
--		reg =3D lpbfifo.regs + LPBFIFO_REG_FIFO_DATA;
--		data =3D req->data + req->pos;
--		for (i =3D 0; i < count; i +=3D 4)
--			*data++ =3D in_be32(reg);
--	}
--
--	/* Update transfer position and count */
--	req->pos +=3D count;
--
--	/* Decide what to do next */
--	if (req->size - req->pos)
--		mpc52xx_lpbfifo_kick(req); /* more work to do */
--	else
--		do_callback =3D 1;
--
-- out:
--	/* Clear the IRQ */
--	out_8(lpbfifo.regs + LPBFIFO_REG_BYTES_DONE_STATUS, 0x01);
--
--	if (dma && (status & 0x11)) {
--		/*
--		 * Count the DMA as complete only when the FIFO completion
--		 * status or abort bits are set.
--		 *
--		 * (status & 0x01) should always be the case except sometimes
--		 * when using polled DMA.
--		 *
--		 * (status & 0x10) {transfer aborted}: This case needs more
--		 * testing.
--		 */
--		bcom_retrieve_buffer(lpbfifo.bcom_cur_task, &status, NULL);
--	}
--	req->last_byte =3D ((u8 *)req->data)[req->size - 1];
--
--	/* When the do_callback flag is set; it means the transfer is finished
--	 * so set the FIFO as idle */
--	if (do_callback)
--		lpbfifo.req =3D NULL;
--
--	if (irq !=3D 0) /* don't increment on polled case */
--		req->irq_count++;
--
--	req->irq_ticks +=3D mftb() - ts;
--	spin_unlock_irqrestore(&lpbfifo.lock, flags);
--
--	/* Spinlock is released; it is now safe to call the callback */
--	if (do_callback && req->callback)
--		req->callback(req);
--
--	return IRQ_HANDLED;
--}
--
--/**
-- * mpc52xx_lpbfifo_bcom_irq - IRQ handler for LPB FIFO Bestcomm task
-- * @irq: IRQ number to be handled
-- * @dev_id: device ID cookie
-- *
-- * Only used when receiving data.
-- *
-- * Return: irqreturn code (%IRQ_HANDLED)
-- */
--static irqreturn_t mpc52xx_lpbfifo_bcom_irq(int irq, void *dev_id)
--{
--	struct mpc52xx_lpbfifo_request *req;
--	unsigned long flags;
--	u32 status;
--	u32 ts;
--
--	spin_lock_irqsave(&lpbfifo.lock, flags);
--	ts =3D mftb();
--
--	req =3D lpbfifo.req;
--	if (!req || (req->flags & MPC52XX_LPBFIFO_FLAG_NO_DMA)) {
--		spin_unlock_irqrestore(&lpbfifo.lock, flags);
--		return IRQ_HANDLED;
--	}
--
--	if (irq !=3D 0) /* don't increment on polled case */
--		req->irq_count++;
--
--	if (!bcom_buffer_done(lpbfifo.bcom_cur_task)) {
--		spin_unlock_irqrestore(&lpbfifo.lock, flags);
--
--		req->buffer_not_done_cnt++;
--		if ((req->buffer_not_done_cnt % 1000) =3D=3D 0)
--			pr_err("transfer stalled\n");
--
--		return IRQ_HANDLED;
--	}
--
--	bcom_retrieve_buffer(lpbfifo.bcom_cur_task, &status, NULL);
--
--	req->last_byte =3D ((u8 *)req->data)[req->size - 1];
--
--	req->pos =3D status & 0x00ffffff;
--
--	/* Mark the FIFO as idle */
--	lpbfifo.req =3D NULL;
--
--	/* Release the lock before calling out to the callback. */
--	req->irq_ticks +=3D mftb() - ts;
--	spin_unlock_irqrestore(&lpbfifo.lock, flags);
--
--	if (req->callback)
--		req->callback(req);
--
--	return IRQ_HANDLED;
--}
--
--/**
-- * mpc52xx_lpbfifo_poll - Poll for DMA completion
-- */
--void mpc52xx_lpbfifo_poll(void)
--{
--	struct mpc52xx_lpbfifo_request *req =3D lpbfifo.req;
--	int dma =3D !(req->flags & MPC52XX_LPBFIFO_FLAG_NO_DMA);
--	int write =3D req->flags & MPC52XX_LPBFIFO_FLAG_WRITE;
--
--	/*
--	 * For more information, see comments on the "Fat Lady"=20
--	 */
--	if (dma && write)
--		mpc52xx_lpbfifo_irq(0, NULL);
--	else=20
--		mpc52xx_lpbfifo_bcom_irq(0, NULL);
--}
--EXPORT_SYMBOL(mpc52xx_lpbfifo_poll);
--
--/**
-- * mpc52xx_lpbfifo_submit - Submit an LPB FIFO transfer request.
-- * @req: Pointer to request structure
-- *
-- * Return: %0 on success, -errno code on error
-- */
--int mpc52xx_lpbfifo_submit(struct mpc52xx_lpbfifo_request *req)
--{
--	unsigned long flags;
--
--	if (!lpbfifo.regs)
--		return -ENODEV;
--
--	spin_lock_irqsave(&lpbfifo.lock, flags);
--
--	/* If the req pointer is already set, then a transfer is in progress */
--	if (lpbfifo.req) {
--		spin_unlock_irqrestore(&lpbfifo.lock, flags);
--		return -EBUSY;
--	}
--
--	/* Setup the transfer */
--	lpbfifo.req =3D req;
--	req->irq_count =3D 0;
--	req->irq_ticks =3D 0;
--	req->buffer_not_done_cnt =3D 0;
--	req->pos =3D 0;
--
--	mpc52xx_lpbfifo_kick(req);
--	spin_unlock_irqrestore(&lpbfifo.lock, flags);
--	return 0;
--}
--EXPORT_SYMBOL(mpc52xx_lpbfifo_submit);
--
--int mpc52xx_lpbfifo_start_xfer(struct mpc52xx_lpbfifo_request *req)
--{
--	unsigned long flags;
--
--	if (!lpbfifo.regs)
--		return -ENODEV;
--
--	spin_lock_irqsave(&lpbfifo.lock, flags);
--
--	/*
--	 * If the req pointer is already set and a transfer was
--	 * started on submit, then this transfer is in progress
--	 */
--	if (lpbfifo.req && !lpbfifo.req->defer_xfer_start) {
--		spin_unlock_irqrestore(&lpbfifo.lock, flags);
--		return -EBUSY;
--	}
--
--	/*
--	 * If the req was previously submitted but not
--	 * started, start it now
--	 */
--	if (lpbfifo.req && lpbfifo.req =3D=3D req &&
--	    lpbfifo.req->defer_xfer_start) {
--		out_8(lpbfifo.regs + LPBFIFO_REG_PACKET_SIZE, 0x01);
--	}
--
--	spin_unlock_irqrestore(&lpbfifo.lock, flags);
--	return 0;
--}
--EXPORT_SYMBOL(mpc52xx_lpbfifo_start_xfer);
--
--void mpc52xx_lpbfifo_abort(struct mpc52xx_lpbfifo_request *req)
--{
--	unsigned long flags;
--
--	spin_lock_irqsave(&lpbfifo.lock, flags);
--	if (lpbfifo.req =3D=3D req) {
--		/* Put it into reset and clear the state */
--		bcom_gen_bd_rx_reset(lpbfifo.bcom_rx_task);
--		bcom_gen_bd_tx_reset(lpbfifo.bcom_tx_task);
--		out_be32(lpbfifo.regs + LPBFIFO_REG_ENABLE, 0x01010000);
--		lpbfifo.req =3D NULL;
--	}
--	spin_unlock_irqrestore(&lpbfifo.lock, flags);
--}
--EXPORT_SYMBOL(mpc52xx_lpbfifo_abort);
--
--static int mpc52xx_lpbfifo_probe(struct platform_device *op)
--{
--	struct resource res;
--	int rc =3D -ENOMEM;
--
--	if (lpbfifo.dev !=3D NULL)
--		return -ENOSPC;
--
--	lpbfifo.irq =3D irq_of_parse_and_map(op->dev.of_node, 0);
--	if (!lpbfifo.irq)
--		return -ENODEV;
--
--	if (of_address_to_resource(op->dev.of_node, 0, &res))
--		return -ENODEV;
--	lpbfifo.regs_phys =3D res.start;
--	lpbfifo.regs =3D of_iomap(op->dev.of_node, 0);
--	if (!lpbfifo.regs)
--		return -ENOMEM;
--
--	spin_lock_init(&lpbfifo.lock);
--
--	/* Put FIFO into reset */
--	out_be32(lpbfifo.regs + LPBFIFO_REG_ENABLE, 0x01010000);
--
--	/* Register the interrupt handler */
--	rc =3D request_irq(lpbfifo.irq, mpc52xx_lpbfifo_irq, 0,
--			 "mpc52xx-lpbfifo", &lpbfifo);
--	if (rc)
--		goto err_irq;
--
--	/* Request the Bestcomm receive (fifo --> memory) task and IRQ */
--	lpbfifo.bcom_rx_task =3D
--		bcom_gen_bd_rx_init(2, res.start + LPBFIFO_REG_FIFO_DATA,
--				    BCOM_INITIATOR_SCLPC, BCOM_IPR_SCLPC,
--				    16*1024*1024);
--	if (!lpbfifo.bcom_rx_task)
--		goto err_bcom_rx;
--
--	rc =3D request_irq(bcom_get_task_irq(lpbfifo.bcom_rx_task),
--			 mpc52xx_lpbfifo_bcom_irq, 0,
--			 "mpc52xx-lpbfifo-rx", &lpbfifo);
--	if (rc)
--		goto err_bcom_rx_irq;
--
--	lpbfifo.dma_irqs_enabled =3D 1;
--
--	/* Request the Bestcomm transmit (memory --> fifo) task and IRQ */
--	lpbfifo.bcom_tx_task =3D
--		bcom_gen_bd_tx_init(2, res.start + LPBFIFO_REG_FIFO_DATA,
--				    BCOM_INITIATOR_SCLPC, BCOM_IPR_SCLPC);
--	if (!lpbfifo.bcom_tx_task)
--		goto err_bcom_tx;
--
--	lpbfifo.dev =3D &op->dev;
--	return 0;
--
-- err_bcom_tx:
--	free_irq(bcom_get_task_irq(lpbfifo.bcom_rx_task), &lpbfifo);
-- err_bcom_rx_irq:
--	bcom_gen_bd_rx_release(lpbfifo.bcom_rx_task);
-- err_bcom_rx:
--	free_irq(lpbfifo.irq, &lpbfifo);
-- err_irq:
--	iounmap(lpbfifo.regs);
--	lpbfifo.regs =3D NULL;
--
--	dev_err(&op->dev, "mpc52xx_lpbfifo_probe() failed\n");
--	return -ENODEV;
--}
--
--
--static int mpc52xx_lpbfifo_remove(struct platform_device *op)
--{
--	if (lpbfifo.dev !=3D &op->dev)
--		return 0;
--
--	/* Put FIFO in reset */
--	out_be32(lpbfifo.regs + LPBFIFO_REG_ENABLE, 0x01010000);
--
--	/* Release the bestcomm transmit task */
--	free_irq(bcom_get_task_irq(lpbfifo.bcom_tx_task), &lpbfifo);
--	bcom_gen_bd_tx_release(lpbfifo.bcom_tx_task);
--=09
--	/* Release the bestcomm receive task */
--	free_irq(bcom_get_task_irq(lpbfifo.bcom_rx_task), &lpbfifo);
--	bcom_gen_bd_rx_release(lpbfifo.bcom_rx_task);
--
--	free_irq(lpbfifo.irq, &lpbfifo);
--	iounmap(lpbfifo.regs);
--	lpbfifo.regs =3D NULL;
--	lpbfifo.dev =3D NULL;
--
--	return 0;
--}
--
--static const struct of_device_id mpc52xx_lpbfifo_match[] =3D {
--	{ .compatible =3D "fsl,mpc5200-lpbfifo", },
--	{},
--};
--MODULE_DEVICE_TABLE(of, mpc52xx_lpbfifo_match);
--
--static struct platform_driver mpc52xx_lpbfifo_driver =3D {
--	.driver =3D {
--		.name =3D "mpc52xx-lpbfifo",
--		.of_match_table =3D mpc52xx_lpbfifo_match,
--	},
--	.probe =3D mpc52xx_lpbfifo_probe,
--	.remove =3D mpc52xx_lpbfifo_remove,
--};
--module_platform_driver(mpc52xx_lpbfifo_driver);
+  $ ls /sys/devices/system/cpu/cpu0/cache/index0/
 
-base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
---=20
-2.39.2
+    coherency_line_size  level  number_of_sets  physical_line_partition
+    shared_cpu_list  shared_cpu_map  size  type  uevent
+    ways_of_associativity
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+  $ sudo perf stat --per-cache -a -e ls_dmnd_fills_from_sys.ext_cache_remote --\
+    taskset -c 0-15,64-79,128-143,192-207\
+    perf bench sched messaging -p -t -l 100000 -g 8
 
---4z3dj3khfkyi65vz
-Content-Type: application/pgp-signature; name="signature.asc"
+    # Running 'sched/messaging' benchmark:
+    # 20 sender and receiver threads per group
+    # 8 groups == 320 threads run
 
------BEGIN PGP SIGNATURE-----
+         Total time: 6.949 [sec]
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmQ3nkkACgkQj4D7WH0S
-/k613gf/WNUDPjEdEoJ04g3K05ek9O6RQ9W6rVTnioKuJU9wsojSXkEuJow4962C
-JcuxKoGixBnCS+s38cKKX5qQzwg1L2suH9eHSRvS5nIIbHy+r+QrdzPIfkfL/png
-htKBs/svEsD5FIVPOs7oJojQ253FUKPjooXcEFjQjY6qH5aKUuzhgTJit8Me9rJ6
-5AtgmWO/SFsL5OVHd0yZ24x0nZNQXhe23twrK2C3rJvKXS8yx7AwQexfZgfZlgNj
-P7jaYGzYPg3HMV/uyF1yU7dIRdzbPIt4t+z+BGSy53w2DDe9yNmJnji8DGVMWEuC
-0//PWGHAhKEVBdUEVLh1DCAS3dzBqg==
-=tMmk
------END PGP SIGNATURE-----
+     Performance counter stats for 'system wide':
 
---4z3dj3khfkyi65vz--
+    S0-D0-L3-ID0             16          5,297,615      ls_dmnd_fills_from_sys.ext_cache_remote
+    S0-D0-L3-ID8             16          4,347,868      ls_dmnd_fills_from_sys.ext_cache_remote
+    S0-D0-L3-ID16            16            416,593      ls_dmnd_fills_from_sys.ext_cache_remote
+    S0-D0-L3-ID24            16              4,346      ls_dmnd_fills_from_sys.ext_cache_remote
+    S0-D0-L3-ID32            16              5,506      ls_dmnd_fills_from_sys.ext_cache_remote
+    S0-D0-L3-ID40            16             15,845      ls_dmnd_fills_from_sys.ext_cache_remote
+    S0-D0-L3-ID48            16             24,164      ls_dmnd_fills_from_sys.ext_cache_remote
+    S0-D0-L3-ID56            16              4,543      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L3-ID64            16         41,610,374      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L3-ID72            16         38,393,688      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L3-ID80            16             22,188      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L3-ID88            16             22,918      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L3-ID96            16             39,230      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L3-ID104           16              6,236      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L3-ID112           16             66,846      ls_dmnd_fills_from_sys.ext_cache_remote
+    S1-D1-L3-ID120           16             72,713      ls_dmnd_fills_from_sys.ext_cache_remote
+
+           7.098471410 seconds time elapsed
+
+This series makes breaking change when saving the aggregation details as
+the cache level needs to be saved along with the aggregation method.
+
+This RFC assumes that caches at same level will be shared by same set of
+threads. The implementation will run into an issue if, say L1i is thread
+local, but L1d is shared by the SMT siblings on the core. I'm seeking
+clarification from the community about the same and potential solutions
+if processors where such a scenario exist.
+
+This series cleanly applies on top perf-tool branch from Arnaldo's tree
+(https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/log/?h=perf-tools)
+at:
+
+commit e8d018dd0257 ("Linux 6.3-rc3")
+
+--
+Changelog:
+o v2->v3:
+  - Dropped patches 1 and 2 that saved and retrieved the cache instance
+    ID when saving the cache data.
+  - The above is unnecessary as the IDs are being derived from the first
+    online CPU in the cache domain for a given cache instance.
+  - Improvements to handling cases where a cache level is not present
+    but the level is allowed by MAX_CACHE_LVL.
+  - Updated details in cover letter.
+
+o v1->v2
+  - Set cache instance ID to 0 if the file cannot be read.
+  - Fix cache level parsing function.
+  - Updated details in cover letter.
+--
+K Prateek Nayak (2):
+  perf: Extract building cache level for a CPU into separate function
+  perf: Add option for --per-cache aggregation
+
+ tools/lib/perf/include/perf/cpumap.h          |   5 +
+ tools/lib/perf/include/perf/event.h           |   3 +-
+ tools/perf/Documentation/perf-stat.txt        |  16 ++
+ tools/perf/builtin-stat.c                     | 144 +++++++++++++++++-
+ .../tests/shell/lib/perf_json_output_lint.py  |   4 +-
+ tools/perf/tests/shell/stat+csv_output.sh     |  14 ++
+ tools/perf/tests/shell/stat+json_output.sh    |  13 ++
+ tools/perf/util/cpumap.c                      | 118 ++++++++++++++
+ tools/perf/util/cpumap.h                      |  28 ++++
+ tools/perf/util/event.c                       |   7 +-
+ tools/perf/util/header.c                      |  62 +++++---
+ tools/perf/util/header.h                      |   4 +
+ tools/perf/util/stat-display.c                |  17 +++
+ tools/perf/util/stat-shadow.c                 |   1 +
+ tools/perf/util/stat.h                        |   2 +
+ tools/perf/util/synthetic-events.c            |   1 +
+ 16 files changed, 409 insertions(+), 30 deletions(-)
+
+-- 
+2.34.1
+
