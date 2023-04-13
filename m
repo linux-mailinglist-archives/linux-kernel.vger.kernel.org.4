@@ -2,97 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D6B26E12AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:47:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B026E12B5
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbjDMQro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 12:47:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52420 "EHLO
+        id S230004AbjDMQsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 12:48:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbjDMQrm (ORCPT
+        with ESMTP id S229647AbjDMQsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 12:47:42 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18824AD12
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:47:32 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id z9so11976128ejx.11
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:47:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681404450; x=1683996450;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=51DVCd/h3/cJO7cjSlyrYI32aoEqdT9dgNs9Eih2opE=;
-        b=nwu0GWON8U6TXZ3AT7gmRhnXNlY7lxqUiwgRLU2Uw3ieZXA+uUVn8nCJ7nbTT46IVu
-         wwLwRAaXeAkQoRk45Ctu06Gj5+w2VTE0sNRhlPVtvb+AVprqq6Mdk+suH2aNI6BYPsiB
-         6cNLN8+zEtGyNX/KyEoBvn46OtTtt2tlVT85GHip2cSO1/PBq/JhKMCRQNv9eIztyRY5
-         w0q2os13wwQcZx6p0frcHHUtOiYimZakYu6fNc8RLvh0Y24ZX/hjuJYP7ELV1yb5wJJC
-         25g8s6YrMZYnPPeLL4eVKHQqkfBw8CBaCSw83aYue3fTj6hcTSKEfMrhPzS81jXREH2C
-         PvUA==
+        Thu, 13 Apr 2023 12:48:19 -0400
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DA7AD11;
+        Thu, 13 Apr 2023 09:48:01 -0700 (PDT)
+Received: by mail-wm1-f54.google.com with SMTP id j16so1544226wms.0;
+        Thu, 13 Apr 2023 09:48:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681404450; x=1683996450;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=51DVCd/h3/cJO7cjSlyrYI32aoEqdT9dgNs9Eih2opE=;
-        b=koSOk2h6XbldtKLlM+RJyj3pbkB2JbzojoaCF7thJ4YVFtgUhrbxiZtqT0B4lWYSyY
-         XitvdgMgbdxXJJm0poYK8snzkCXg0Qrf4OGU3OoDnNu9HLt1xBjavN2qzf+worUsF/34
-         ITSeniAKTW7+JG/zNzzqOjgiy9xYCdC2IYaqQskZ2sKbxaud0vLu5HXRmeEb7HF8z5nR
-         8f40DG/Q14CPIcpQW0DHNNKvWal65vdJlKulHKBAK9bilTOQ6WTZetm5fX0q2qjGGWEv
-         q6kT/Fk2Wp8J8U7jFdaTIjSzdpq5sb9eFpn9LAbBpdG4WEIbqEKFFczjhkl+dg2DwEm7
-         sJOw==
-X-Gm-Message-State: AAQBX9fXTdmFl/iW2+Hsyw/a3Ikygs3Yl4KLkHykuGD8gwBn8T2vqmGz
-        /mpjEsUh2qCCULYcwkiDobQA2A==
-X-Google-Smtp-Source: AKy350b4Jz7APW0X824PXsHeC5e1sHTqjV9UgCwCrxjufPBWxBtgGffJCq1hAMMiXPCq9xLeN0mhEA==
-X-Received: by 2002:a17:907:3f16:b0:930:f953:962c with SMTP id hq22-20020a1709073f1600b00930f953962cmr4155726ejc.1.1681404450522;
-        Thu, 13 Apr 2023 09:47:30 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:5032:d2d4:ece5:b035? ([2a02:810d:15c0:828:5032:d2d4:ece5:b035])
-        by smtp.gmail.com with ESMTPSA id ka20-20020a170907991400b0094c67e537c8sm1208815ejc.38.2023.04.13.09.47.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Apr 2023 09:47:29 -0700 (PDT)
-Message-ID: <d11b6acb-b072-9496-5ad6-0635357394f1@linaro.org>
-Date:   Thu, 13 Apr 2023 18:47:28 +0200
+        d=1e100.net; s=20221208; t=1681404480; x=1683996480;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jCpgFka1BgdgEY+0DayOyo6Vcm/YOc5P4OYz7TLB5yc=;
+        b=arlLyv3XTe3oSRhCJKt0ZnifAS4z+zzt4UuIGKvzC8sRytt3szwTNFpgF1xSzlHGa8
+         Y4ctEdpQzjXZv6Dl7fc/v4fZFHr1MLEt4Y9HmjG+QFkoEtdmZ+4VLJ3NngP+9Z/6FlYB
+         fapvOTOj6WrNphsZGIwKZZpOHT+kPquv5BGdqoU5SLAdYe/2Yv4xMviq7r/HytrCP0o1
+         KwUI40/nwW13/mytNfxXx+3RETHnjbOnorTIqSa/Oe9CyY2Wy44qa/xwV8meBPEj/zpO
+         ahiBh2jDc3QJUmi33sbvStZHQsCyZ1CQJ7VDydDx/a9uJSmXfYLQjDV3xlEwDSumOT89
+         tcgQ==
+X-Gm-Message-State: AAQBX9eEsxoqJkyDC7Xl/+a13e033s0k5YLdFyaaUZOYcrK8LtJsekEV
+        76JK5QBs/+7jJP8zBNY0+D9atbOGz6V+Vw==
+X-Google-Smtp-Source: AKy350ZdQPQ3cXX00NpaTx1MkBt3f8xuBSIA/dEDB7p2hTM+xW52IAI5JJyva9D/4uoTyXif85pzPA==
+X-Received: by 2002:a05:600c:2144:b0:3f0:a098:f4ff with SMTP id v4-20020a05600c214400b003f0a098f4ffmr2398926wml.35.1681404479703;
+        Thu, 13 Apr 2023 09:47:59 -0700 (PDT)
+Received: from gmail.com (fwdproxy-cln-116.fbsv.net. [2a03:2880:31ff:74::face:b00c])
+        by smtp.gmail.com with ESMTPSA id k6-20020a05600c1c8600b003f034c76e85sm6002542wms.38.2023.04.13.09.47.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 09:47:58 -0700 (PDT)
+Date:   Thu, 13 Apr 2023 09:47:56 -0700
+From:   Breno Leitao <leitao@debian.org>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     asml.silence@gmail.com, axboe@kernel.dk, davem@davemloft.net,
+        dccp@vger.kernel.org, dsahern@kernel.org, edumazet@google.com,
+        io-uring@vger.kernel.org, kuba@kernel.org, leit@fb.com,
+        linux-kernel@vger.kernel.org, marcelo.leitner@gmail.com,
+        matthieu.baerts@tessares.net, mptcp@lists.linux.dev,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        willemdebruijn.kernel@gmail.com
+Subject: Re: [PATCH RFC] io_uring: Pass whole sqe to commands
+Message-ID: <ZDgyPL6UrX/MaBR4@gmail.com>
+References: <20230406144330.1932798-1-leitao@debian.org>
+ <20230406165705.3161734-1-leitao@debian.org>
+ <ZDdvcSKLa6ZEAhRW@ovpn-8-18.pek2.redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v7 05/12] dt-bindings: mfd: syscon: Add nuvoton,ma35d1-sys
- compatible
-Content-Language: en-US
-To:     Jacky Huang <ychuang570808@gmail.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        arnd@arndb.de, schung@nuvoton.com, mjchen@nuvoton.com,
-        Jacky Huang <ychuang3@nuvoton.com>
-References: <20230412053824.106-1-ychuang570808@gmail.com>
- <20230412053824.106-6-ychuang570808@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230412053824.106-6-ychuang570808@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZDdvcSKLa6ZEAhRW@ovpn-8-18.pek2.redhat.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/04/2023 07:38, Jacky Huang wrote:
-> From: Jacky Huang <ychuang3@nuvoton.com>
+Hello Ming,
+
+On Thu, Apr 13, 2023 at 10:56:49AM +0800, Ming Lei wrote:
+> On Thu, Apr 06, 2023 at 09:57:05AM -0700, Breno Leitao wrote:
+> > Currently uring CMD operation relies on having large SQEs, but future
+> > operations might want to use normal SQE.
+> > 
+> > The io_uring_cmd currently only saves the payload (cmd) part of the SQE,
+> > but, for commands that use normal SQE size, it might be necessary to
+> > access the initial SQE fields outside of the payload/cmd block.  So,
+> > saves the whole SQE other than just the pdu.
+> > 
+> > This changes slighlty how the io_uring_cmd works, since the cmd
+> > structures and callbacks are not opaque to io_uring anymore. I.e, the
+> > callbacks can look at the SQE entries, not only, in the cmd structure.
+> > 
+> > The main advantage is that we don't need to create custom structures for
+> > simple commands.
+> > 
+> > Suggested-by: Pavel Begunkov <asml.silence@gmail.com>
+> > Signed-off-by: Breno Leitao <leitao@debian.org>
+> > ---
 > 
-> Add Nuvoton ma35d1 system registers compatible.
+> ...
 > 
-> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+> > diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+> > index 2e4c483075d3..9648134ccae1 100644
+> > --- a/io_uring/uring_cmd.c
+> > +++ b/io_uring/uring_cmd.c
+> > @@ -63,14 +63,15 @@ EXPORT_SYMBOL_GPL(io_uring_cmd_done);
+> >  int io_uring_cmd_prep_async(struct io_kiocb *req)
+> >  {
+> >  	struct io_uring_cmd *ioucmd = io_kiocb_to_cmd(req, struct io_uring_cmd);
+> > -	size_t cmd_size;
+> > +	size_t size = sizeof(struct io_uring_sqe);
+> >  
+> >  	BUILD_BUG_ON(uring_cmd_pdu_size(0) != 16);
+> >  	BUILD_BUG_ON(uring_cmd_pdu_size(1) != 80);
+> >  
+> > -	cmd_size = uring_cmd_pdu_size(req->ctx->flags & IORING_SETUP_SQE128);
+> > +	if (req->ctx->flags & IORING_SETUP_SQE128)
+> > +		size <<= 1;
+> >  
+> > -	memcpy(req->async_data, ioucmd->cmd, cmd_size);
+> > +	memcpy(req->async_data, ioucmd->sqe, size);
+> 
+> The copy will make some fields of sqe become READ TWICE, and driver may see
+> different sqe field value compared with the one observed in io_init_req().
 
-What about the tag? Why did you ignore it?
+This copy only happens if the operation goes to the async path
+(calling io_uring_cmd_prep_async()).  This only happens if
+f_op->uring_cmd() returns -EAGAIN.
 
-Also, wasn't this applied? Why do you resend (incorrect version)?
+          ret = file->f_op->uring_cmd(ioucmd, issue_flags);
+          if (ret == -EAGAIN) {
+                  if (!req_has_async_data(req)) {
+                          if (io_alloc_async_data(req))
+                                  return -ENOMEM;
+                          io_uring_cmd_prep_async(req);
+                  }
+                  return -EAGAIN;
+          }
 
-Best regards,
-Krzysztof
+Are you saying that after this copy, the operation is still reading from
+sqe instead of req->async_data?
 
+If you have an example of the two copes flow, that would be great.
+
+Thanks for the review,
+Breno
