@@ -2,53 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80B4F6E06FC
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 08:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90CA86E06FF
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 08:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbjDMG3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 02:29:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44698 "EHLO
+        id S229637AbjDMGbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 02:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbjDMG3g (ORCPT
+        with ESMTP id S229492AbjDMGbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 02:29:36 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 907168692;
-        Wed, 12 Apr 2023 23:29:13 -0700 (PDT)
+        Thu, 13 Apr 2023 02:31:15 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384505FD4;
+        Wed, 12 Apr 2023 23:31:12 -0700 (PDT)
 Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 6ED30E0003;
-        Thu, 13 Apr 2023 06:29:09 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id B34B4FF80B;
+        Thu, 13 Apr 2023 06:31:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1681367351;
+        t=1681367471;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Ufigrtll2LsomfD3AP3JdEfTe0zBhYWtr1xKGKqWwjc=;
-        b=ZZkUN93N/S4/U+vml+lG1BIFbjOhkyPH6Bg2TTdw1zc/zSwMaEaz8cvzDYOVt4DOGZNjaY
-        h+3YuYe8s7jC9zBtZa2cFjWxSw7wWqlctzidA/1v3jHDTVHXFHK48zKJeA9VnMhpS9j4k+
-        fILC8vEyzWQceLG9PSDXSKmwAkagWOu8rksVscAgSHcWDhcCBxj3zQWIE8Tvc6NlRY5ZtZ
-        hIbIA27vuiVyN8F4pUW9UuYDbyzXlt9wTY6IDaDEiXiOSEEynRueWqhZREjxVXBF/nOusl
-        bwHTXx8Bgx11ai5H+TbyiYeHrCr+MI6b/FTg9iy5pmNB4N+40c2fthGAv3VpMw==
-Date:   Thu, 13 Apr 2023 08:29:08 +0200
+        bh=wFZjlYbqAXEdbzIOL/Z8LZvjFBauGqMFBal3K99vt78=;
+        b=NQMQq46Vn4bBbnwNQgUO5Euut2Wezby0IgtPuKGUC7b8AyOrmEpZtnxtZTjJ+XQznjvjj0
+        wVpiTMKGeUGMPsElUI9TZbd6ZDXmF46hqfK/eYuS0RvIB3RkNFXCHkR7dshNZXmFqTrNqC
+        /nrRuNgCUqX+bkBnX44RKoJItPIl2rg+TA+/uEx5UoWHmMxL+n8nJdEHE/ol0DrRP/Xyo1
+        aCZmaXekhzWpyXLSF7EVOZ7h2pfLzwckZqQ37J1LyFyFk1wxiq5MjUfFkFuzQNxaMQWg56
+        G/BiXhzPaJIfEtwqfqurv8Eo3Clao0B+4LQKmsxuprnTAo18hqF2Kat3OLWbMQ==
+Date:   Thu, 13 Apr 2023 08:31:09 +0200
 From:   Herve Codina <herve.codina@bootlin.com>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-phy@lists.infradead.org,
+To:     Lee Jones <lee@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [RFC PATCH 2/4] phy: Extend API to support 'status' get and
- notification
-Message-ID: <20230413082908.4cd44966@bootlin.com>
-In-Reply-To: <ZDbg7HMj+x88QXwN@matsya>
-References: <20230323103154.264546-1-herve.codina@bootlin.com>
-        <20230323103154.264546-3-herve.codina@bootlin.com>
-        <ZDbg7HMj+x88QXwN@matsya>
+Subject: Re: [PATCH v5 2/5] mfd: Add support for the Lantiq PEF2256 framer
+Message-ID: <20230413083109.5ad09d2a@bootlin.com>
+In-Reply-To: <20230412095918.GZ8371@google.com>
+References: <a642e653-e3e2-c3d2-68cb-1efc92be05bb@linaro.org>
+        <20230331165904.4e7f46a1@bootlin.com>
+        <20230403142822.GA8371@google.com>
+        <20230404092036.2d1cd5d9@bootlin.com>
+        <f7ab2fcc-93fc-ce87-8767-579d33907225@linaro.org>
+        <20230404100759.5bc9cd20@bootlin.com>
+        <143754c2-9e37-4386-af92-174c0df2eb0a@linaro.org>
+        <20230405135450.GF8371@google.com>
+        <20230405180023.4aebaa08@bootlin.com>
+        <20230411181640.50c19d4e@bootlin.com>
+        <20230412095918.GZ8371@google.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
@@ -63,339 +71,165 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vinod,
+On Wed, 12 Apr 2023 10:59:18 +0100
+Lee Jones <lee@kernel.org> wrote:
 
-On Wed, 12 Apr 2023 22:18:44 +0530
-Vinod Koul <vkoul@kernel.org> wrote:
-
-> On 23-03-23, 11:31, Herve Codina wrote:
-> > The PHY API provides functions to control and pass information from the
-> > PHY consumer to the PHY provider.
-> > There is no way for the consumer to get direct information from the PHY
-> > or be notified by the PHY.
-> > 
-> > To fill this hole, two API function are provided:
-> > 
-> > - phy_get_status()
-> >   This function can be used to get a "status" from the PHY. It is built
-> >   as the same ways as the configure() function. The status information
-> >   present in the status retrieved depends on the PHY's phy_mode.
-> >   This allows to get a "status" depending on the kind of PHY.  
+> On Tue, 11 Apr 2023, Herve Codina wrote:
 > 
-> what does 'status' mean and communicate to used? How does having this
-> help?
+> > Hi Lee,
+> >
+> > On Wed, 5 Apr 2023 18:00:23 +0200
+> > Herve Codina <herve.codina@bootlin.com> wrote:
+> >  
+> > > Hi Lee,
+> > > On Wed, 5 Apr 2023 14:54:50 +0100
+> > > Lee Jones <lee@kernel.org> wrote:
+> > >  
+> > > > On Tue, 04 Apr 2023, Krzysztof Kozlowski wrote:
+> > > >  
+> > > > > On 04/04/2023 10:07, Herve Codina wrote:
+> > > > >  
+> > > > > >>> So, the structure I have in mind:
+> > > > > >>> - pef2256.c (MFD)
+> > > > > >>>   implement and do the setup at probe()
+> > > > > >>>   Add the children at probe():
+> > > > > >>>     - pef2256-pinctrl (pinctrl) added using mfd_add_devices()
+> > > > > >>>     - pef2256-codec (ASoC codec) added using devm_of_platform_populate()
+> > > > > >>>
+> > > > > >>> Lee, with this in mind, can the core pef2256.c be a MFD driver ?  
+> > > > > >>
+> > > > > >> You do not use MFD here, so why do you want to keep it in MFD? If you
+> > > > > >> disagree, please tell me where is the MFD code in your patch?  
+> > > > > >
+> > > > > > I don't want to absolutely use MFD.
+> > > > > > I just want to put my driver somewhere and I don't know the right location
+> > > > > > between MFD and Misc.
+> > > > > >
+> > > > > > Basically, the driver needs to do (little simplified and error path removed):
+> > > > > >
+> > > > > >   static const struct mfd_cell pef2256_devs[] = {
+> > > > > >   	{ .name = "lantiq-pef2256-pinctrl", },
+> > > > > >   };
+> > > > > >
+> > > > > >   static int pef2256_probe(struct platform_device *pdev)
+> > > > > >   {
+> > > > > > 	struct pef2256 *pef2256;
+> > > > > > 	void __iomem *iomem;
+> > > > > > 	int ret;
+> > > > > > 	int irq;
+> > > > > >
+> > > > > > 	pef2256 = devm_kzalloc(&pdev->dev, sizeof(*pef2256), GFP_KERNEL);
+> > > > > > 	if (!pef2256)
+> > > > > > 		return -ENOMEM;
+> > > > > >
+> > > > > > 	pef2256->dev = &pdev->dev;
+> > > > > >
+> > > > > > 	iomem = devm_platform_ioremap_resource(pdev, 0);
+> > > > > >
+> > > > > > 	pef2256->regmap = devm_regmap_init_mmio(&pdev->dev, iomem,
+> > > > > > 						&pef2256_regmap_config);
+> > > > > >
+> > > > > > 	pef2256->mclk = devm_clk_get_enabled(&pdev->dev, "mclk");
+> > > > > > 	pef2256->sclkr = devm_clk_get_enabled(&pdev->dev, "sclkr");
+> > > > > > 	pef2256->sclkx = devm_clk_get_enabled(&pdev->dev, "sclkx");
+> > > > > >
+> > > > > > 	pef2256->reset_gpio = devm_gpiod_get_optional(&pdev->dev, "reset", GPIOD_OUT_LOW);
+> > > > > > 	if (pef2256->reset_gpio) {
+> > > > > > 		gpiod_set_value_cansleep(pef2256->reset_gpio, 1);
+> > > > > > 		udelay(10);
+> > > > > > 		gpiod_set_value_cansleep(pef2256->reset_gpio, 0);
+> > > > > > 		udelay(10);
+> > > > > > 	}
+> > > > > >
+> > > > > > 	pef2556_of_parse(pef2256, np);
+> > > > > >
+> > > > > > 	irq = platform_get_irq(pdev, 0);
+> > > > > > 	ret = devm_request_irq(pef2256->dev, irq, pef2256_irq_handler, 0, "pef2256", pef2256);
+> > > > > >
+> > > > > > 	platform_set_drvdata(pdev, pef2256);
+> > > > > >
+> > > > > > 	mfd_add_devices(pef2256->dev, PLATFORM_DEVID_NONE, pef2256_devs,
+> > > > > > 	      		ARRAY_SIZE(pef2256_devs), NULL, 0, NULL);  
+> > > > >
+> > > > > Wait, now you use MFD framework, so the driver is suitable for MFD.
+> > > > > Before there was nothing like that in your code.  
+> > > >
+> > > > Agree, the above is suitable for MFD, since it does all the things I
+> > > > said your last one did not.  You *can* also use of_platform_populate()
+> > > > here, since you are *also* requesting and initialising shared resources.
+> > > > You cannot do *both* however.
+> > > >  
+> > >
+> > > Thanks for having confirmed that this driver can be a MFD driver.
+> > >
+> > > Related to of_platform_populate() / mfd_add_devices(), I wanted to use both
+> > > because:
+> > > - the pinctrl part does not have (and does not need to have) a specific node
+> > >   with a specific compatible property. In order to instantiate the related
+> > >   driver mfd_add_devices() is the only way I know.
+> > > - the audio component nodes have a compatible string and several components
+> > >   (ie several nodes) can be present. of_platform_populate() call seems the
+> > >   simple way to instantiate them.
+> > >
+> > > Is there a way to use mfd_add_devices() in this case without the need to
+> > > count the audio component nodes in order to allocate as much mfd_cell as
+> > > nodes having a matching compatible property ? Is there an other API to do
+> > > it ?
+> > >  
+> >
+> > I looked deeper for using mfd_add_devices() only and found an issue (related
+> > to my use-case).
+> >
+> > mfd_add_devices() calls mfd_add_device() and in this function we have:
+> > ---- 8< ----
+> > 	if (IS_ENABLED(CONFIG_OF) && parent->of_node && cell->of_compatible) {
+> > 		for_each_child_of_node(parent->of_node, np) {
+> > 			if (of_device_is_compatible(np, cell->of_compatible)) {
+> > 				/* Ignore 'disabled' devices error free */
+> > 				if (!of_device_is_available(np)) {
+> > 					of_node_put(np);
+> > 					ret = 0;
+> > 					goto fail_alias;
+> > 				}
+> >
+> > 				ret = mfd_match_of_node_to_dev(pdev, np, cell);
+> > 				if (ret == -EAGAIN)
+> > 					continue;
+> > 				of_node_put(np);
+> > 				if (ret)
+> > 					goto fail_alias;
+> >
+> > 				break;
+> > 			}
+> > 		}
+> >
+> > 		if (!pdev->dev.of_node)
+> > 			pr_warn("%s: Failed to locate of_node [id: %d]\n",
+> > 				cell->name, platform_id);
+> > 	}
+> > ---- 8< ----
+> >
+> > My issue is related to the loop.
+> > The loop is aborted if the device is not available (typically 'Disabled' in the
+> > DT node).
+> >
+> > My full pef2256 node can have several pef2256 audio subnodes with compatible
+> > set to "lantiq,pef2256-codec" and some of them can have 'status = "Disabled";'
+> > As soon as one device (with my expected compatible) is found 'Disabled', there
+> > is no way to look at other children.
+> >
+> > Having 'continue' in case of device not available in the loop to look at the
+> > next child will change the behavior of mfd_add_device().
+> > Do you think that looking at next child if we find a 'not available' child
+> > can be correct for mfd_add_device() ?
+> > This probably will have impacts on other MFD drivers.  
+> 
+> Looks like a bug.  Encountering one disabled cell should not prevent the
+> others from registering IMHO.
+> 
 
-'status' can be some information that the PHY can provide to the consumer.
-The existing API does not provide a generic way to get some information from
-the PHY and 'status' with phy_get_status() provides this generic way.
-Its exact meaning depends on the kind of PHY. For the PHY_MODE_BASIC,
-introduced in this series, 'status' contains information related to the link
-state.
-And so, the consumer using a PHY_MODE_BASIC PHY can retreive the link state
-getting the 'status' from the PHY.
+Thanks for your confirmation.
+I will propose a fix in the next iteration of this series.
 
-The patch 3 in this RFC details a consumer usage. An HDLC driver uses a
-PHY_MODE_BASIC PHY status to know the PHY link state and calls 
-netif_carrier_{on,off}() accordingly.
-
-Best regards,
+Regards,
 Hervé
-
-> 
-> > 
-> > - phy_atomic_notifier_(un)register()
-> >   These functions can be used to register/unregister an atomic notifier
-> >   block. The event available at this time is the PHY_EVENT_STATUS status
-> >   event which purpose is to signal some changes in the status available
-> >   using phy_get_status().
-> > 
-> > An new kind of PHY is added: PHY_MODE_BASIC.
-> > This new kind of PHY represents a basic PHY offering a basic status This
-> > status contains a link state indication.
-> > With the new API, a link state indication can be retrieve using
-> > phy_get_status() and link state changes can be notified.
-> > 
-> > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> > ---
-> >  drivers/phy/phy-core.c        | 88 ++++++++++++++++++++++++++++++++++
-> >  include/linux/phy/phy-basic.h | 27 +++++++++++
-> >  include/linux/phy/phy.h       | 89 ++++++++++++++++++++++++++++++++++-
-> >  3 files changed, 203 insertions(+), 1 deletion(-)
-> >  create mode 100644 include/linux/phy/phy-basic.h
-> > 
-> > diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
-> > index 9951efc03eaa..c7b568b99dce 100644
-> > --- a/drivers/phy/phy-core.c
-> > +++ b/drivers/phy/phy-core.c
-> > @@ -551,6 +551,94 @@ int phy_validate(struct phy *phy, enum phy_mode mode, int submode,
-> >  }
-> >  EXPORT_SYMBOL_GPL(phy_validate);
-> >  
-> > +/**
-> > + * phy_get_status() - Gets the phy status
-> > + * @phy: the phy returned by phy_get()
-> > + * @status: the status to retrieve
-> > + *
-> > + * Used to get the PHY status. phy_init() must have been called
-> > + * on the phy. The status will be retrieved from the current phy mode,
-> > + * that can be changed using phy_set_mode().
-> > + *
-> > + * Return: %0 if successful, a negative error code otherwise
-> > + */
-> > +int phy_get_status(struct phy *phy, union phy_status *status)
-> > +{
-> > +	int ret;
-> > +
-> > +	if (!phy)
-> > +		return -EINVAL;
-> > +
-> > +	if (!phy->ops->get_status)
-> > +		return -EOPNOTSUPP;
-> > +
-> > +	mutex_lock(&phy->mutex);
-> > +	ret = phy->ops->get_status(phy, status);
-> > +	mutex_unlock(&phy->mutex);
-> > +
-> > +	return ret;
-> > +}
-> > +EXPORT_SYMBOL_GPL(phy_get_status);
-> > +
-> > +/**
-> > + * phy_atomic_notifier_register() - Registers an atomic notifier
-> > + * @phy: the phy returned by phy_get()
-> > + * @nb: the notifier block to register
-> > + *
-> > + * Used to register a notifier block on PHY events. phy_init() must have
-> > + * been called on the phy.
-> > + * The notifier function given in the notifier_block must not sleep.
-> > + * The available PHY events are present in enum phy_events
-> > + *
-> > + * Return: %0 if successful, a negative error code otherwise
-> > + */
-> > +int phy_atomic_notifier_register(struct phy *phy, struct notifier_block *nb)
-> > +{
-> > +	int ret;
-> > +
-> > +	if (!phy)
-> > +		return -EINVAL;
-> > +
-> > +	if (!phy->ops->atomic_notifier_register ||
-> > +	    !phy->ops->atomic_notifier_unregister)
-> > +		return -EOPNOTSUPP;
-> > +
-> > +	mutex_lock(&phy->mutex);
-> > +	ret = phy->ops->atomic_notifier_register(phy, nb);
-> > +	mutex_unlock(&phy->mutex);
-> > +
-> > +	return ret;
-> > +}
-> > +EXPORT_SYMBOL_GPL(phy_atomic_notifier_register);
-> > +
-> > +/**
-> > + * phy_atomic_notifier_unregister() - Unregisters an atomic notifier
-> > + * @phy: the phy returned by phy_get()
-> > + * @nb: the notifier block to unregister
-> > + *
-> > + * Used to unregister a notifier block. phy_init() must have
-> > + * been called on the phy.
-> > + *
-> > + * Return: %0 if successful, a negative error code otherwise
-> > + */
-> > +int phy_atomic_notifier_unregister(struct phy *phy, struct notifier_block *nb)
-> > +{
-> > +	int ret;
-> > +
-> > +	if (!phy)
-> > +		return -EINVAL;
-> > +
-> > +	if (!phy->ops->atomic_notifier_unregister)
-> > +		return -EOPNOTSUPP;
-> > +
-> > +	mutex_lock(&phy->mutex);
-> > +	ret = phy->ops->atomic_notifier_unregister(phy, nb);
-> > +	mutex_unlock(&phy->mutex);
-> > +
-> > +	return ret;
-> > +}
-> > +EXPORT_SYMBOL_GPL(phy_atomic_notifier_unregister);
-> > +
-> >  /**
-> >   * _of_phy_get() - lookup and obtain a reference to a phy by phandle
-> >   * @np: device_node for which to get the phy
-> > diff --git a/include/linux/phy/phy-basic.h b/include/linux/phy/phy-basic.h
-> > new file mode 100644
-> > index 000000000000..95668c610c78
-> > --- /dev/null
-> > +++ b/include/linux/phy/phy-basic.h
-> > @@ -0,0 +1,27 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * Copyright 2023 CS GROUP France
-> > + *
-> > + * Author: Herve Codina <herve.codina@bootlin.com>
-> > + */
-> > +
-> > +#ifndef __PHY_BASIC_H_
-> > +#define __PHY_BASIC_H_
-> > +
-> > +#include <linux/types.h>
-> > +
-> > +/**
-> > + * struct phy_status_basic - Basic PHY status
-> > + *
-> > + * This structure is used to represent the status of a Basic phy.
-> > + */
-> > +struct phy_status_basic {
-> > +	/**
-> > +	 * @link_state:
-> > +	 *
-> > +	 * Link state. true, the link is on, false, the link is off.
-> > +	 */
-> > +	bool link_is_on;
-> > +};
-> > +
-> > +#endif /* __PHY_DP_H_ */
-> > diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
-> > index 3a570bc59fc7..40370d41012b 100644
-> > --- a/include/linux/phy/phy.h
-> > +++ b/include/linux/phy/phy.h
-> > @@ -16,6 +16,7 @@
-> >  #include <linux/pm_runtime.h>
-> >  #include <linux/regulator/consumer.h>
-> >  
-> > +#include <linux/phy/phy-basic.h>
-> >  #include <linux/phy/phy-dp.h>
-> >  #include <linux/phy/phy-lvds.h>
-> >  #include <linux/phy/phy-mipi-dphy.h>
-> > @@ -42,7 +43,8 @@ enum phy_mode {
-> >  	PHY_MODE_MIPI_DPHY,
-> >  	PHY_MODE_SATA,
-> >  	PHY_MODE_LVDS,
-> > -	PHY_MODE_DP
-> > +	PHY_MODE_DP,
-> > +	PHY_MODE_BASIC,
-> >  };
-> >  
-> >  enum phy_media {
-> > @@ -67,6 +69,22 @@ union phy_configure_opts {
-> >  	struct phy_configure_opts_lvds		lvds;
-> >  };
-> >  
-> > +/**
-> > + * union phy_status - Opaque generic phy status
-> > + *
-> > + * @basic:	Status availbale phys supporting the Basic phy mode.
-> > + */
-> > +union phy_status {
-> > +	struct phy_status_basic		basic;
-> > +};
-> > +
-> > +/**
-> > + * phy_event - event available for notification
-> > + */
-> > +enum phy_event {
-> > +	PHY_EVENT_STATUS,	/* Event notified on phy_status changes */
-> > +};
-> > +
-> >  /**
-> >   * struct phy_ops - set of function pointers for performing phy operations
-> >   * @init: operation to be performed for initializing phy
-> > @@ -120,6 +138,45 @@ struct phy_ops {
-> >  	 */
-> >  	int	(*validate)(struct phy *phy, enum phy_mode mode, int submode,
-> >  			    union phy_configure_opts *opts);
-> > +
-> > +	/**
-> > +	 * @get_status:
-> > +	 *
-> > +	 * Optional.
-> > +	 *
-> > +	 * Used to get the PHY status. phy_init() must have
-> > +	 * been called on the phy.
-> > +	 *
-> > +	 * Returns: 0 if successful, an negative error code otherwise
-> > +	 */
-> > +	int	(*get_status)(struct phy *phy, union phy_status *status);
-> > +
-> > +	/**
-> > +	 * @atomic_notifier_register:
-> > +	 *
-> > +	 * Optional.
-> > +	 *
-> > +	 * Used to register a notifier block on PHY events. phy_init() must have
-> > +	 * been called on the phy.
-> > +	 * The notifier function given in the notifier_block must not sleep.
-> > +	 * The available PHY events are present in enum phy_events
-> > +	 *
-> > +	 * Returns: 0 if successful, an negative error code otherwise
-> > +	 */
-> > +	int	(*atomic_notifier_register)(struct phy *phy, struct notifier_block *nb);
-> > +
-> > +	/**
-> > +	 * @atomic_notifier_unregister:
-> > +	 *
-> > +	 * Mandatoty if @atomic_notifier_register is set.
-> > +	 *
-> > +	 * Used to unregister a notifier block on PHY events. phy_init() must have
-> > +	 * been called on the phy.
-> > +	 *
-> > +	 * Returns: 0 if successful, an negative error code otherwise
-> > +	 */
-> > +	int	(*atomic_notifier_unregister)(struct phy *phy, struct notifier_block *nb);
-> > +
-> >  	int	(*reset)(struct phy *phy);
-> >  	int	(*calibrate)(struct phy *phy);
-> >  	void	(*release)(struct phy *phy);
-> > @@ -234,6 +291,10 @@ int phy_set_speed(struct phy *phy, int speed);
-> >  int phy_configure(struct phy *phy, union phy_configure_opts *opts);
-> >  int phy_validate(struct phy *phy, enum phy_mode mode, int submode,
-> >  		 union phy_configure_opts *opts);
-> > +int phy_get_status(struct phy *phy, union phy_status *status);
-> > +int phy_atomic_notifier_register(struct phy *phy, struct notifier_block *nb);
-> > +int phy_atomic_notifier_unregister(struct phy *phy, struct notifier_block *nb);
-> > +
-> >  
-> >  static inline enum phy_mode phy_get_mode(struct phy *phy)
-> >  {
-> > @@ -412,6 +473,32 @@ static inline int phy_validate(struct phy *phy, enum phy_mode mode, int submode,
-> >  	return -ENOSYS;
-> >  }
-> >  
-> > +static inline int phy_get_status(struct phy *phy, union phy_status *status)
-> > +{
-> > +	if (!phy)
-> > +		return 0;
-> > +
-> > +	return -ENOSYS;
-> > +}
-> > +
-> > +static inline int phy_atomic_notifier_register(struct phy *phy,
-> > +					       struct notifier_block *nb)
-> > +{
-> > +	if (!phy)
-> > +		return 0;
-> > +
-> > +	return -ENOSYS;
-> > +}
-> > +
-> > +static inline int phy_atomic_notifier_unregister(struct phy *phy,
-> > +						 struct notifier_block *nb)
-> > +{
-> > +	if (!phy)
-> > +		return 0;
-> > +
-> > +	return -ENOSYS;
-> > +}
-> > +
-> >  static inline int phy_get_bus_width(struct phy *phy)
-> >  {
-> >  	return -ENOSYS;
-> > -- 
-> > 2.39.2
-> > 
-> > 
-> > -- 
-> > linux-phy mailing list
-> > linux-phy@lists.infradead.org
-> > https://lists.infradead.org/mailman/listinfo/linux-phy  
-> 
