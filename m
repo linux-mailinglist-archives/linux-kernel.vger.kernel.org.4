@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C6F6E1406
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 20:23:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C8966E1410
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 20:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbjDMSXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 14:23:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49326 "EHLO
+        id S229878AbjDMSYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 14:24:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjDMSXx (ORCPT
+        with ESMTP id S229674AbjDMSXy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 14:23:53 -0400
+        Thu, 13 Apr 2023 14:23:54 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45BD59FF;
-        Thu, 13 Apr 2023 11:23:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126C06181;
+        Thu, 13 Apr 2023 11:23:53 -0700 (PDT)
 Received: from jupiter.universe (dyndsl-091-248-212-251.ewe-ip-backbone.de [91.248.212.251])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 57910660321D;
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6A0516603220;
         Thu, 13 Apr 2023 19:23:51 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1681410231;
-        bh=KE/Qh2dz/391cip/CPeIBTyPxaiySIGR7XU//jF9HQ0=;
+        bh=zAjmL1BsGoOklDz1it3NJmReakUPeGQCam58Z7IsTXQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BLL+poNly6f3IBlk3AcHxjpOJ8gIQE2cGE4I6Xg1ZFICMpx1DyZUTlpHA+IUtO4hJ
-         kCZbWdMjfXNjAgcx/JbDOatnmGbyWSZXPW5qG54p7HUJHRqE4deVIBld/FouDB2Ki0
-         M0uO0E06O/+8f+ROutsz3y42AeShpdj/HORVnBWjn/5K9k91zRQ/TC//tvP8w11COD
-         HKG7PivvGp93lzC9lqw6xk+mIOIX7gaIG1/yBJQ3XVUWflmgBdxsASaN2clW4zfaq3
-         sxyPYMDcFM80u21UXU2UzLqLucuLRXRoCz2siDHI/1q5EvtMuOCp9dd4xROp6dRgGK
-         68pN6ewd0rHMA==
+        b=G7ZQvrSFBMb0jXOSMCMBBP5lIgdeFmRUiJLqNmPe16V5VkkuL/e94NdSeKrbtxBhr
+         C/dOfzTpPbuMCGuXA3YzTV1A5fKgFfqR0vAK48ytk1H1//LWADehUjHfuLfoqCyGK4
+         O5oaxj1juSox7QkYE7D1B4nPtfXLqNWBIys6qws3JUG6VDrvaLP2LBq/cM6j0A84Tu
+         FOkYRDpK3BbxCmfxxeyycBgduMYc2/bf+kfNavs9KmiJruMxrlyn33L6pP0VuaaS3o
+         BvCz1iiDZRYUrUl3nB7TAem6bKgrn3PNyRXkSViM30XrbaxvJZasGY/iIZb/6tDXVC
+         sniDnVZACTxiw==
 Received: by jupiter.universe (Postfix, from userid 1000)
-        id 8CA424807EF; Thu, 13 Apr 2023 20:23:48 +0200 (CEST)
+        id 8ED504807F0; Thu, 13 Apr 2023 20:23:48 +0200 (CEST)
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Heiko Stuebner <heiko@sntech.de>
 Cc:     Rob Herring <robh+dt@kernel.org>,
@@ -47,9 +47,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-kernel@vger.kernel.org,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         kernel@collabora.com
-Subject: [PATCHv1 2/5] dt-bindings: ata: ahci: add RK3588 AHCI controller
-Date:   Thu, 13 Apr 2023 20:23:42 +0200
-Message-Id: <20230413182345.92557-3-sebastian.reichel@collabora.com>
+Subject: [PATCHv1 3/5] dt-bindings: phy: rockchip: rk3588 has two reset lines
+Date:   Thu, 13 Apr 2023 20:23:43 +0200
+Message-Id: <20230413182345.92557-4-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230413182345.92557-1-sebastian.reichel@collabora.com>
 References: <20230413182345.92557-1-sebastian.reichel@collabora.com>
@@ -64,62 +64,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just like RK3568, the RK3588 has a DWC based AHCI controller.
+The RK3588 has two reset lines for the combphy. One for the
+APB interface and one for the actual PHY.
 
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
-FWIW IDK what exactly the ASIC clock is. The TRM does not provide any
-details unfortunately. It is required for functional SATA, though.
----
- .../devicetree/bindings/ata/snps,dwc-ahci-common.yaml       | 6 ++++--
- Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml    | 6 ++++--
- 2 files changed, 8 insertions(+), 4 deletions(-)
+ .../bindings/phy/phy-rockchip-naneng-combphy.yaml          | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/ata/snps,dwc-ahci-common.yaml b/Documentation/devicetree/bindings/ata/snps,dwc-ahci-common.yaml
-index c1457910520b..0df8f49431eb 100644
---- a/Documentation/devicetree/bindings/ata/snps,dwc-ahci-common.yaml
-+++ b/Documentation/devicetree/bindings/ata/snps,dwc-ahci-common.yaml
-@@ -31,11 +31,11 @@ properties:
-       PM-alive clock, RxOOB detection clock, embedded PHYs reference (Rx/Tx)
-       clock, etc.
-     minItems: 1
--    maxItems: 4
-+    maxItems: 5
- 
-   clock-names:
-     minItems: 1
--    maxItems: 4
-+    maxItems: 5
-     items:
-       oneOf:
-         - description: Application APB/AHB/AXI BIU clock
-@@ -50,6 +50,8 @@ properties:
-           const: rxoob
-         - description: SATA Ports reference clock
-           const: ref
-+        - description: Rockchip ASIC clock
-+          const: asic
+diff --git a/Documentation/devicetree/bindings/phy/phy-rockchip-naneng-combphy.yaml b/Documentation/devicetree/bindings/phy/phy-rockchip-naneng-combphy.yaml
+index 9ae514fa7533..bac1aae07555 100644
+--- a/Documentation/devicetree/bindings/phy/phy-rockchip-naneng-combphy.yaml
++++ b/Documentation/devicetree/bindings/phy/phy-rockchip-naneng-combphy.yaml
+@@ -31,8 +31,13 @@ properties:
+       - const: pipe
  
    resets:
-     description:
-diff --git a/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml b/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
-index 5afa4b57ce20..c6a0d6c8b62c 100644
---- a/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
-+++ b/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
-@@ -23,9 +23,11 @@ properties:
-         const: snps,dwc-ahci
-       - description: SPEAr1340 AHCI SATA device
-         const: snps,spear-ahci
--      - description: Rockhip RK3568 AHCI controller
-+      - description: Rockhip AHCI controller
-         items:
--          - const: rockchip,rk3568-dwc-ahci
-+          - enum:
-+              - rockchip,rk3568-dwc-ahci
-+              - rockchip,rk3588-dwc-ahci
-           - const: snps,dwc-ahci
++    minItems: 1
++    maxItems: 2
++
++  reset-names:
+     items:
+-      - description: exclusive PHY reset line
++      - const: phy
++      - const: apb
  
- patternProperties:
+   rockchip,enable-ssc:
+     type: boolean
 -- 
 2.39.2
 
