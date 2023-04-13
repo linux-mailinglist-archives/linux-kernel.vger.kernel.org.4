@@ -2,102 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C09116E15AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 22:12:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15DD86E15B4
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 22:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjDMUMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 16:12:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55274 "EHLO
+        id S229869AbjDMUT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 16:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjDMUMT (ORCPT
+        with ESMTP id S229571AbjDMUT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 16:12:19 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097471FCC
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 13:12:19 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-5491fa028adso627964467b3.10
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 13:12:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681416738; x=1684008738;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=huT4FujcHXScyzhCCiWxC6Qo3dKvB4TLtzgLZuY6bg4=;
-        b=loF2Zs/MUL5DZEttkHR48HL2G4xLa7co1JZa/ZjsBPFQ94c2xdNrhQdAVvBxoYq1rU
-         lH+xnCOZe//rfTcRCgZb5PR2dsQAKsf72k9TViqafM5wtRFdrJ2dihjPAywS30NEN1LJ
-         gj2yEiEVnZ9d2U//PgtjyxWF7DUTOnRQ6igXlwfy+2NwbVxCtrCSWt54xRZZAvqLletA
-         8QQwxTskeQseWSevoIv235O8iagmTnWehYeDlZ+B4RN9CWBKNiHEe4pVn4ZftvLhvWXp
-         tqXYrZ8CytHTnpNa/tewuMt3e1wbCVOkb9TKRNZ1vr0EHrDXwoYqXiwjaEAyFaWUw8qM
-         yw1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681416738; x=1684008738;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=huT4FujcHXScyzhCCiWxC6Qo3dKvB4TLtzgLZuY6bg4=;
-        b=U23AEbzC7mmbevn0ij05LBhfwhd3mM0fVZYs1Sqf0H//ccZP6OmATvfYdYAxj2enaW
-         AofFSh/QiXsHxlf3i6dzPo5U5O1FYwj7yEVj9gBpjqA/8qeecAye/hq97kxubbzx48b3
-         pYX9zv2nyEQsMTzR3ooLN/AF1oyzxERLykJgIlWn7XiT+NUEISIhJ/GPZIwjxs3Vtcn7
-         NRFRt+PfsbVEh40mRPap3lzR8TVtUnH9e//iL1Yoof3xrj6FX40yc4KspwPCkHOdNQz+
-         hkGcW2Ks1WpCVtLPRRh2/FaN1gYL0sQ2uWMcFPOqHM3U1IfaHiTxp5vVgni9ogMtwp/B
-         NCMQ==
-X-Gm-Message-State: AAQBX9eYr9LeFRnMJRBInGXwKhEsh9FLpw0aA2VS35BWN8xTY5tTOo2N
-        Y/0N34BLfPRTdO651s3KTS0NRuHRIVkDT7izO6uenn2gXvW5+77X
-X-Google-Smtp-Source: AKy350bJXLu0gVkdee3XTye1rjXA9u/btZu7MnQNaZUQ3umViEaPtAxZrgeXwB+pnPtVn6JPDmnFmoHbMCAWioBMEUQ=
-X-Received: by 2002:a81:e503:0:b0:54f:40fe:10cc with SMTP id
- s3-20020a81e503000000b0054f40fe10ccmr2233268ywl.9.1681416737751; Thu, 13 Apr
- 2023 13:12:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <37694343f8b89dc0469d4a1718dad8f5f8c765bd.camel@linux.intel.com> <ZDJtc7C6YBgknbTq@gondor.apana.org.au>
-In-Reply-To: <ZDJtc7C6YBgknbTq@gondor.apana.org.au>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 13 Apr 2023 22:12:06 +0200
-Message-ID: <CACRpkdYnXdFky0z0EEsmbQ5hbs=J=oRb+3vAcuDpWaLTh1kxmQ@mail.gmail.com>
-Subject: Re: [PATCH] crypto: ixp4xx - Do not check word size when compile testing
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Tom Zanussi <tom.zanussi@linux.intel.com>, clabbe@baylibre.com,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 13 Apr 2023 16:19:57 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341E47683;
+        Thu, 13 Apr 2023 13:19:56 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 7B58132009AA;
+        Thu, 13 Apr 2023 16:19:47 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 13 Apr 2023 16:19:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1681417187; x=1681503587; bh=F/
+        l2Q91+I+7QRSyzEwveBN2Jb8cIeTST0fly+XtN9JM=; b=k9CvmUcFqGteu6NUVH
+        8vX/N9Cv+LZRUAnu0NZuM+9ywGp8RiOP8HbtbkYKwooP9Iv9ZMKI7Yx1PJjY8Nli
+        TMkd2VuPx2KOyBl71U3g+JPb+wPimLExtLMxoM5wKdWkTJPhxlelXFa5WOSvKEmd
+        pcvii9c9UyiLdKqyt0/ER6XSQI1GjyatF4XNDAdBxuE8EqRF0k+0gMh1wMqdySld
+        3MaB78qqMZizn0zt67li2M0CYLBYQZre3FZW5SYzAwfeonfZOUdSiUy++WBPfWdd
+        H1izSYdd8PL0w/SbI9AFDljpMaSqgRcPVkzRa641Run2oT2BayPIJCNkIsZJ9qug
+        UEIQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1681417187; x=1681503587; bh=F/l2Q91+I+7QR
+        SyzEwveBN2Jb8cIeTST0fly+XtN9JM=; b=aEu54th8lPVwPejuTgCfv4BiTL62U
+        S7QduGrbemnZpckXb64u9C0/nREHPVhAHwISKKTMGjGf8yk/SW7mJHQLeuM+P8Qu
+        fw8sXqciOCeGB4CmS8bv7YZjNmSXeaWffjoO7EtJyJNJoDxhsKdSj3bcndIUO6ef
+        T3EmzssC0NRJrJy6M+9k50cRf1qzP06osOv/DJ8Oh9BtrgRTB9s8GRKuexQQdONm
+        QnjyFTBNiUvgBn7kOQL9lLdYt5J0HTPE60UZNQfpZRNIzoXcPhPfy9l5YTSC1VoF
+        viT9R2F5eH0zZfWI9Gujw6DsFerK3Ml8GzTWPQcecy3b4bMHBqBmF7iIQ==
+X-ME-Sender: <xms:4mM4ZDK-DSaLE9EDuay6xq--Ou5wClj2oj8BLzg0IcU89JaINJdRQA>
+    <xme:4mM4ZHIDyYb0yH2PICy0h3gVzaEbT47y8A4N_SFFDCiQGXChW-pHnNPQS3nR2wfKj
+    oKFLF2U5Upj9aijJmY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekkedgudeglecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:4mM4ZLs7J_2htnn3QwHU8FJ0CeMAZvinNvYvqmpfww-U-5AJPK9j8Q>
+    <xmx:4mM4ZMbcpYhch3zHMa3SPf_QmsBq0XppHv8DLngBie24MLO9C35Zbg>
+    <xmx:4mM4ZKaoxKlwoCqFw2FSQrVsswZ1Wxyj60R-Q2h-0LMj1J7su5qA-w>
+    <xmx:42M4ZPMTD1-2z4q-qnVpWw-LufOrdwxYGGkMgU_g2C1NgneO1cNeKA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 4F96FB60086; Thu, 13 Apr 2023 16:19:46 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-334-g8c072af647-fm-20230330.001-g8c072af6
+Mime-Version: 1.0
+Message-Id: <c84eee23-1a25-4367-9588-6cfd27a4345f@app.fastmail.com>
+In-Reply-To: <ZDhXtDLiTtm2iXGW@sai>
+References: <20230403074939.3785593-1-arnd@kernel.org> <ZDhXtDLiTtm2iXGW@sai>
+Date:   Thu, 13 Apr 2023 22:19:26 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Wolfram Sang" <wsa@kernel.org>, "Arnd Bergmann" <arnd@kernel.org>
+Cc:     "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "Hawkins, Nick" <nick.hawkins@hpe.com>,
+        "Joel Stanley" <joel@jms.id.au>,
+        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: gxp: fix build failure without CONFIG_I2C_SLAVE
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 9, 2023 at 9:47=E2=80=AFAM Herbert Xu <herbert@gondor.apana.org=
-.au> wrote:
-> On Fri, Apr 07, 2023 at 02:37:44PM -0500, Tom Zanussi wrote:
-> > COMPILE_TEST was added during the move to drivers/crypto/intel/ but
-> > shouldn't have been as it triggers a build bug when not compiled by
-> > the target compiler.  So remove it to match the original.
-> >
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Link: https://lore.kernel.org/oe-kbuild-all/202304061846.G6cpPXiQ-lkp@i=
-ntel.com/
-> > Signed-off-by: Tom Zanussi <tom.zanussi@linux.intel.com>
-> > ---
-> >  drivers/crypto/intel/ixp4xx/Kconfig | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
+On Thu, Apr 13, 2023, at 21:27, Wolfram Sang wrote:
+>> The gxp_i2c_slave_irq_handler() is hidden in an #ifdef, but the
+>> caller uses an IS_ENABLED() check:
+>> 
+>> drivers/i2c/busses/i2c-gxp.c: In function 'gxp_i2c_irq_handler':
+>> drivers/i2c/busses/i2c-gxp.c:467:29: error: implicit declaration of function 'gxp_i2c_slave_irq_handler'; did you mean 'gxp_i2c_irq_handler'? [-Werror=implicit-function-declaration]
+>> 
+>> It has to consistently use one method or the other to avoid warnings,
+>> so move to IS_ENABLED() here for readability and build coverage, and
+>> move the #ifdef in linux/i2c.h to allow building it as dead code.
 >
-> We could also fix it by making the BUILD_BUG_ON conditional:
->
-> ---8<---
-> The BUILD_BUG_ON preventing compilation on foreign architectures
-> should be disabled when we're doing compile testing.
->
-> Fixes: 1bc7fdbf2677 ("crypto: ixp4xx - Move driver to...")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202304061846.G6cpPXiQ-lkp@int=
-el.com/
-> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+> Can't we have a solution which modifies this driver only (maybe by
+> defining an empty irq handler for the non-IS_ENABLED part?)? Doesn't
+> feel good to touch i2c.h only because of this...
 
-This fix is more elegant I think, as it keeps the compile coverage.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+The idea was to avoid the problem for the next driver as well. At the
+moment, there are #ifdef checks like this one in three more drivers,
+and I suspect we could clean them all up the same way.
 
-Yours,
-Linus Walleij
+>> -#if IS_ENABLED(CONFIG_I2C_SLAVE)
+>>  enum i2c_slave_event {
+>>  	I2C_SLAVE_READ_REQUESTED,
+>>  	I2C_SLAVE_WRITE_REQUESTED,
+>> @@ -396,9 +395,10 @@ enum i2c_slave_event {
+>>  
+>>  int i2c_slave_register(struct i2c_client *client, i2c_slave_cb_t slave_cb);
+>>  int i2c_slave_unregister(struct i2c_client *client);
+>
+> ... especially with moving these two prototypes out of the protected
+> block. The functions themselves are also protected by the same symbol
+> via the Makefile. I'd rather get a build error right away than a linker
+> error later if a driver misses to select I2C_SLAVE. Or do I miss
+> something?
+
+I usually prefer having greater build coverage by allowing symbols
+to be referenced by dead code that gets eliminated during the compile
+stage. It helps find issues in the unused code paths at compile
+time, and tends to be easier to read. than a group of #ifdef checks.
+
+The only time I would put a declaration in an #ifdef is when
+there is an #else path with an empty inline function.
+
+     Arnd
