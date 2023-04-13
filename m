@@ -2,205 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1BFD6E05BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 06:08:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 512C06E05AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 06:06:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbjDMEHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 00:07:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36782 "EHLO
+        id S229630AbjDMEGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 00:06:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbjDMEG4 (ORCPT
+        with ESMTP id S229451AbjDMEGp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 00:06:56 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A447687;
-        Wed, 12 Apr 2023 21:06:53 -0700 (PDT)
-X-UUID: 9bba2e70d9b011eda9a90f0bb45854f4-20230413
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=3KOKcXA4BrgWj4MAEjaQanirD/sgJJEqHU3KajlNX+A=;
-        b=KfV6nqa5P2i7gf9Od3z6U6XlRJMWR+LK8OeO/yeB7ZgWt4GVYPTrP7sUFTDCxJPJSBJQtOyX1wfN7VUNIUm/KeQOEUtRd+yT4x1fHuEIOmk2rfO65Lz6CPnBcJvnyEsNYzU56aukqT14jNlDLB81Wk/e3nll1VdYqHY5k5nJjsI=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:df8592e8-5ba8-45a0-97cc-a791c0b31747,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-        ON:release,TS:70
-X-CID-INFO: VERSION:1.1.22,REQID:df8592e8-5ba8-45a0-97cc-a791c0b31747,IP:0,URL
-        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
-        ON:quarantine,TS:70
-X-CID-META: VersionHash:120426c,CLOUDID:bf222ba1-8fcb-430b-954a-ba3f00fa94a5,B
-        ulkID:230413120649TTNZIZNZ,BulkQuantity:0,Recheck:0,SF:17|19|48|38|29|28,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-        ,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: 9bba2e70d9b011eda9a90f0bb45854f4-20230413
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
-        (envelope-from <xinlei.lee@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 16016973; Thu, 13 Apr 2023 12:06:46 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Thu, 13 Apr 2023 12:06:45 +0800
-Received: from mszsdaap41.gcn.mediatek.inc (10.16.6.141) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Thu, 13 Apr 2023 12:06:45 +0800
-From:   <xinlei.lee@mediatek.com>
-To:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
-        <airlied@linux.ie>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
-        <jitao.shi@mediatek.com>
-CC:     <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Xinlei Lee <xinlei.lee@mediatek.com>
-Subject: [PATCH 2/2] drm/mediatek: dp: Add the audio control to mtk_dp_data struct
-Date:   Thu, 13 Apr 2023 12:06:25 +0800
-Message-ID: <1681358785-6930-3-git-send-email-xinlei.lee@mediatek.com>
-X-Mailer: git-send-email 2.6.4
-In-Reply-To: <1681358785-6930-1-git-send-email-xinlei.lee@mediatek.com>
-References: <1681358785-6930-1-git-send-email-xinlei.lee@mediatek.com>
+        Thu, 13 Apr 2023 00:06:45 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0C15B88
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 21:06:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681358804; x=1712894804;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=s73Dwcw/j+M9Z+7wT2sD+XtVqUA+ffONLeb/NudPzz8=;
+  b=gF431WTOQLtv4icy0snUZ0/hjeZBM7/y57UWJKLJfF9iNxLh/xaFCWpq
+   8qW9cDaoSOQ5br/zR/qKqRZXuca8hDNjtt0VeBbo468CyW+mShePTIPVE
+   4DKOObgY5w5fPKENDm1fgBro8Pkn8aldBVogk+Nr58iErcMcM4iYOqo6Z
+   OD+rKmhnfuF2eks5tGqCXnNgBJXUbmniIn+vTnOXkYZWQoeFeyIq8hXKy
+   8nfBMJxxN0FLI2SakeXV+IPxhMt89hGlI8SZd/bv5CITqQDD7P8vSwIuD
+   jtJjHkAmm/w+JgR8zkXHzngXKHBB3gSekdC1niDX/ZojyF7WO7L0UvAIw
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="323702318"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="323702318"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 21:06:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="935360955"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="935360955"
+Received: from allen-box.sh.intel.com ([10.239.159.127])
+  by fmsmga006.fm.intel.com with ESMTP; 12 Apr 2023 21:06:42 -0700
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+To:     Joerg Roedel <joro@8bytes.org>
+Cc:     Tina Zhang <tina.zhang@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 00/17] [PULL REQUEST] Intel IOMMU updates for Linux v6.4
+Date:   Thu, 13 Apr 2023 12:06:28 +0800
+Message-Id: <20230413040645.46157-1-baolu.lu@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xinlei Lee <xinlei.lee@mediatek.com>
+Hi Joerg,
 
-Mainly add the following two flag:
+This includes patches queued for v6.4. They are:
 
-1.The audio packet arrangement function is to only arrange audio
-packets into the Hblanking area. In order to align with the HW
-default setting of g1200, this function needs to be turned off.
+ - Allow the VT-d driver to support non-PRI IOPF
+ - Remove PASID supervisor request support
+ - Various small and misc cleanups
 
-2.Due to the difference of HW, different dividers need to be set.
+This series also includes an idxd patch to avoid driver regression after
+changes in the IOMMU driver. It has been reviewed and acked by the
+maintainers.
 
-Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
----
- drivers/gpu/drm/mediatek/mtk_dp.c     | 32 ++++++++++++++++++++++++++-
- drivers/gpu/drm/mediatek/mtk_dp_reg.h |  5 +++++
- 2 files changed, 36 insertions(+), 1 deletion(-)
+The whole series is based on v6.3-rc6 and also available at:
+https://github.com/LuBaolu/intel-iommu/commits/vtd-update-for-v6.4
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c b/drivers/gpu/drm/mediatek/mtk_dp.c
-index 767b71da31a4..65a9984eac81 100644
---- a/drivers/gpu/drm/mediatek/mtk_dp.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dp.c
-@@ -139,6 +139,8 @@ struct mtk_dp_data {
- 	unsigned int smc_cmd;
- 	const struct mtk_dp_efuse_fmt *efuse_fmt;
- 	bool audio_supported;
-+	const bool arrange;
-+	const u8 audio_m_div2;
- };
- 
- static const struct mtk_dp_efuse_fmt mt8195_edp_efuse_fmt[MTK_DP_CAL_MAX] = {
-@@ -646,8 +648,10 @@ static void mtk_dp_audio_sdp_asp_set_channels(struct mtk_dp *mtk_dp,
- 
- static void mtk_dp_audio_set_divider(struct mtk_dp *mtk_dp)
- {
-+	u8 div2_id = mtk_dp->data->audio_m_div2;
-+
- 	mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_30BC,
--			   AUDIO_M_CODE_MULT_DIV_SEL_DP_ENC0_P0_DIV_2,
-+			   div2_id << AUDIO_M_CODE_MULT_DIV_SEL_DP_ENC0_P0_SHIFT,
- 			   AUDIO_M_CODE_MULT_DIV_SEL_DP_ENC0_P0_MASK);
- }
- 
-@@ -1362,6 +1366,14 @@ static void mtk_dp_sdp_set_down_cnt_init_in_hblank(struct mtk_dp *mtk_dp)
- 			   SDP_DOWN_CNT_INIT_IN_HBLANK_DP_ENC1_P0_MASK);
- }
- 
-+static void mtk_dp_audio_sample_arrange(struct mtk_dp *mtk_dp)
-+{
-+	if (mtk_dp->data->arrange) {
-+		mtk_dp_update_bits(mtk_dp, MTK_DP_ENC1_P0_3374, 0, BIT(12));
-+		mtk_dp_update_bits(mtk_dp, MTK_DP_ENC1_P0_3374, 0, 0xFFF);
-+	}
-+}
-+
- static void mtk_dp_setup_tu(struct mtk_dp *mtk_dp)
- {
- 	u32 sram_read_start = min_t(u32, MTK_DP_TBC_BUF_READ_START_ADDR,
-@@ -1371,6 +1383,7 @@ static void mtk_dp_setup_tu(struct mtk_dp *mtk_dp)
- 				    MTK_DP_PIX_PER_ADDR);
- 	mtk_dp_set_sram_read_start(mtk_dp, sram_read_start);
- 	mtk_dp_setup_encoder(mtk_dp);
-+	mtk_dp_audio_sample_arrange(mtk_dp);
- 	mtk_dp_sdp_set_down_cnt_init_in_hblank(mtk_dp);
- 	mtk_dp_sdp_set_down_cnt_init(mtk_dp, sram_read_start);
- }
-@@ -2615,11 +2628,22 @@ static int mtk_dp_resume(struct device *dev)
- 
- static SIMPLE_DEV_PM_OPS(mtk_dp_pm_ops, mtk_dp_suspend, mtk_dp_resume);
- 
-+static const struct mtk_dp_data mt8188_dp_data = {
-+	.bridge_type = DRM_MODE_CONNECTOR_DisplayPort,
-+	.smc_cmd = MTK_DP_SIP_ATF_VIDEO_UNMUTE,
-+	.efuse_fmt = mt8195_dp_efuse_fmt,
-+	.audio_supported = true,
-+	.arrange = true,
-+	.audio_m_div2 = 4,
-+};
-+
- static const struct mtk_dp_data mt8195_edp_data = {
- 	.bridge_type = DRM_MODE_CONNECTOR_eDP,
- 	.smc_cmd = MTK_DP_SIP_ATF_EDP_VIDEO_UNMUTE,
- 	.efuse_fmt = mt8195_edp_efuse_fmt,
- 	.audio_supported = false,
-+	.arrange = false,
-+	.audio_m_div2 = 5,
- };
- 
- static const struct mtk_dp_data mt8195_dp_data = {
-@@ -2627,9 +2651,15 @@ static const struct mtk_dp_data mt8195_dp_data = {
- 	.smc_cmd = MTK_DP_SIP_ATF_VIDEO_UNMUTE,
- 	.efuse_fmt = mt8195_dp_efuse_fmt,
- 	.audio_supported = true,
-+	.arrange = false,
-+	.audio_m_div2 = 5,
- };
- 
- static const struct of_device_id mtk_dp_of_match[] = {
-+	{
-+		.compatible = "mediatek,mt8188-dp-tx",
-+		.data = &mt8188_dp_data,
-+	},
- 	{
- 		.compatible = "mediatek,mt8195-edp-tx",
- 		.data = &mt8195_edp_data,
-diff --git a/drivers/gpu/drm/mediatek/mtk_dp_reg.h b/drivers/gpu/drm/mediatek/mtk_dp_reg.h
-index 84e38cef03c2..4dc4f7cd0ef2 100644
---- a/drivers/gpu/drm/mediatek/mtk_dp_reg.h
-+++ b/drivers/gpu/drm/mediatek/mtk_dp_reg.h
-@@ -158,6 +158,7 @@
- #define MTK_DP_ENC0_P0_30A8			0x30a8
- #define MTK_DP_ENC0_P0_30BC			0x30bc
- #define ISRC_CONT_DP_ENC0_P0				BIT(0)
-+#define AUDIO_M_CODE_MULT_DIV_SEL_DP_ENC0_P0_SHIFT	8
- #define AUDIO_M_CODE_MULT_DIV_SEL_DP_ENC0_P0_MASK	GENMASK(10, 8)
- #define AUDIO_M_CODE_MULT_DIV_SEL_DP_ENC0_P0_MUL_2	(1 << 8)
- #define AUDIO_M_CODE_MULT_DIV_SEL_DP_ENC0_P0_MUL_4	(2 << 8)
-@@ -228,6 +229,10 @@
- 							 VIDEO_STABLE_CNT_THRD_DP_ENC1_P0 | \
- 							 SDP_DP13_EN_DP_ENC1_P0 | \
- 							 BS2BS_MODE_DP_ENC1_P0)
-+
-+#define MTK_DP_ENC1_P0_3374			0x3374
-+#define AU_ASP_PACKET_ONLY_IN_HBLANK_ENABLE_MASK	0x1000
-+
- #define MTK_DP_ENC1_P0_33F4			0x33f4
- #define DP_ENC_DUMMY_RW_1_AUDIO_RST_EN			BIT(0)
- #define DP_ENC_DUMMY_RW_1				BIT(9)
+Please pull them for x86/vt-d branch.
+
+Best regards,
+Baolu
+
+Change log:
+ - v2:
+   - Avoid using "fix" wording in the commit message of a cleanup patch,
+     no functional change. [David Laight]
+   - Add Acked-by from Vinod Koul to the idxd patch.
+
+ - v1: https://lore.kernel.org/linux-iommu/20230411064815.31456-1-baolu.lu@linux.intel.com/
+
+Christophe JAILLET (1):
+  iommu/vt-d: Do not use GFP_ATOMIC when not needed
+
+Jacob Pan (2):
+  iommu/vt-d: Use non-privileged mode for all PASIDs
+  iommu/vt-d: Remove PASID supervisor request support
+
+Lu Baolu (7):
+  dmaengine: idxd: Add enable/disable device IOPF feature
+  iommu/vt-d: Allow SVA with device-specific IOPF
+  iommu/vt-d: Move iopf code from SVA to IOPF enabling path
+  iommu/vt-d: Move pfsid and ats_qdep calculation to device probe path
+  iommu/vt-d: Move PRI handling to IOPF feature path
+  iommu/vt-d: Remove unnecessary checks in iopf disabling path
+  iommu/vt-d: Remove extern from function prototypes
+
+Tina Zhang (7):
+  iommu/vt-d: Make size of operands same in bitwise operations
+  iommu/vt-d: Remove BUG_ON on checking valid pfn range
+  iommu/vt-d: Remove BUG_ON in handling iotlb cache invalidation
+  iommu/vt-d: Remove BUG_ON when domain->pgd is NULL
+  iommu/vt-d: Remove BUG_ON in map/unmap()
+  iommu/vt-d: Remove a useless BUG_ON(dev->is_virtfn)
+  iommu/vt-d: Remove BUG_ON in dmar_insert_dev_scope()
+
+ drivers/iommu/intel/iommu.h         |  36 +++---
+ drivers/iommu/intel/pasid.h         |   7 --
+ drivers/dma/idxd/init.c             |  31 ++++-
+ drivers/iommu/intel/dmar.c          |   7 +-
+ drivers/iommu/intel/iommu.c         | 173 +++++++++++++++++-----------
+ drivers/iommu/intel/irq_remapping.c |   2 +-
+ drivers/iommu/intel/pasid.c         |  43 -------
+ 7 files changed, 155 insertions(+), 144 deletions(-)
+
 -- 
-2.18.0
+2.34.1
 
