@@ -2,174 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE9CA6E03F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 04:01:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F5396E03F2
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 04:03:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbjDMCBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 22:01:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51424 "EHLO
+        id S229822AbjDMCDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 22:03:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjDMCBC (ORCPT
+        with ESMTP id S229506AbjDMCDf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 22:01:02 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B2530C7;
-        Wed, 12 Apr 2023 19:00:59 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PxjSP6M86zrbGf;
-        Thu, 13 Apr 2023 09:59:33 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 13 Apr 2023 10:00:57 +0800
-Message-ID: <22b3bfef-7a47-036d-125b-180040a0c743@huawei.com>
-Date:   Thu, 13 Apr 2023 10:00:56 +0800
+        Wed, 12 Apr 2023 22:03:35 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 568925599;
+        Wed, 12 Apr 2023 19:03:34 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id cm18-20020a17090afa1200b0024713adf69dso1134891pjb.3;
+        Wed, 12 Apr 2023 19:03:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681351414;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=txKXh4wrdWgZPXoWJyQNrYSeqmxrC6VLhn9OwDe5xzI=;
+        b=c8XnjtGZdkmKrJPY85IPYQxCp/coLXG4/EPy3q8A8w6qGL+W/X5WlkSlxLcxNxFrg5
+         XZtyZklnRfovwB1SgtBUiHCpKYdtVbNMMcFHv5ME6PtdwsRRBVaabUKc1f844PcFbMpq
+         ncLgCfbkBXN5gdi991MCI6B7AH9GNB23xRCj1QR/+58iKP6fkEjIsBwAN2/9l6PxlKYc
+         KDu1Y92ZRuI+/bJmfXFQc07+P6iGqIuC3P/4Lnrzp0raum5QCamKsogZxD2Lld61g43O
+         SRV8rqYKx2+J0infozLmC+m0K/Hh2WMsR/oF0CmQqZP27HOD/MD0fLPAZWIr3s7ezClG
+         mfTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681351414;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=txKXh4wrdWgZPXoWJyQNrYSeqmxrC6VLhn9OwDe5xzI=;
+        b=UdhPp19Gyqo7kv3tcRycLWIBWKnIj00+r5V1yAHbrTUOgPDvs/bvNurkJIZv+eYWyt
+         T502WXfO9OE1SdLxWI1q7ayhCRnKzwqVqOQUfShlNkEBk5boa3du67Bgh7d6OkLnRoLp
+         l5VXKPE+96XUGQKN35iAbSSsp2gS5bhqQWafJ3kXcq2Brl0W8JL613x/3+yHDCaS4vgT
+         eNSeZzfsYiP6LKdWWbS+v8xsOmzV8Fusxq2REF3hsVMVOGKsC7VUsIzOvGSIiP5GcKNA
+         dMWyUv4S4hYLU4lsG7MS31/VgSrjnkSzzhtWMtjpRkPZm/2GvRZF0csGf1Grju7WwzSr
+         YVNg==
+X-Gm-Message-State: AAQBX9f84HmxivKYGgOBaG7EaRxWl6OIafKRZeLWi/B6r++2YWmPog1m
+        JK78Ma182TaHq9f1Us2Is2c=
+X-Google-Smtp-Source: AKy350auSXqCVk+faIi1r+2x0Tjq68wARrPpXKccPY6IJ41zfANEUiTGSME/ILJ3z1Zs4abUNQ422w==
+X-Received: by 2002:a17:903:2449:b0:1a2:c05b:151c with SMTP id l9-20020a170903244900b001a2c05b151cmr490202pls.34.1681351413734;
+        Wed, 12 Apr 2023 19:03:33 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-2.three.co.id. [180.214.232.2])
+        by smtp.gmail.com with ESMTPSA id je13-20020a170903264d00b001a1b808c1d8sm222317plb.245.2023.04.12.19.03.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Apr 2023 19:03:33 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 08E8E106823; Thu, 13 Apr 2023 09:03:24 +0700 (WIB)
+Date:   Thu, 13 Apr 2023 09:03:24 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 000/164] 6.1.24-rc1 review
+Message-ID: <ZDdi7JVDytc8nOi8@debian.me>
+References: <20230412082836.695875037@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v3 2/8] ext4: add a new helper to check if es must be kept
-Content-Language: en-US
-To:     Jan Kara <jack@suse.cz>
-CC:     <linux-ext4@vger.kernel.org>, <tytso@mit.edu>,
-        <adilger.kernel@dilger.ca>, <ritesh.list@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
-        <yangerkun@huawei.com>, <yukuai3@huawei.com>,
-        Baokun Li <libaokun1@huawei.com>
-References: <20230412124126.2286716-1-libaokun1@huawei.com>
- <20230412124126.2286716-3-libaokun1@huawei.com>
- <20230412185300.rpfwdlxeiptqaxes@quack3>
-From:   Baokun Li <libaokun1@huawei.com>
-In-Reply-To: <20230412185300.rpfwdlxeiptqaxes@quack3>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7o9GAVR9jzCLmd38"
+Content-Disposition: inline
+In-Reply-To: <20230412082836.695875037@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/13 2:53, Jan Kara wrote:
-> On Wed 12-04-23 20:41:20, Baokun Li wrote:
->> A helper function is added to help determine if the current extent can
->> be dropped, although only ext4_es_is_delayed() extents cannot be dropped
->> currently.
->>
->> Suggested-by: Jan Kara <jack@suse.cz>
->> Signed-off-by: Baokun Li <libaokun1@huawei.com>
-> Looks good. Just some small suggestions below...
-Thank you very much for your review!
->
->> diff --git a/fs/ext4/extents_status.c b/fs/ext4/extents_status.c
->> index 7bc221038c6c..f9dab2510bdc 100644
->> --- a/fs/ext4/extents_status.c
->> +++ b/fs/ext4/extents_status.c
->> @@ -448,6 +448,20 @@ static void ext4_es_list_del(struct inode *inode)
->>   	spin_unlock(&sbi->s_es_lock);
->>   }
->>   
->> +/*
->> + * Returns 1 indicates that we cannot fail to allocate memory for this
->> + * extent_status and cannot reclaim, clear, or free the extent until
->> + * its status changes.
->> + */
->> +static inline int ext4_es_must_keep(struct extent_status *es)
-> Maybe we can return bool? Also I'd rephrase the comment as:
 
-Totally agree! I tried to move it to fs/ext4/extents_status.h before, so I
-changed the function type to int, but later I realized that it was not 
-necessary
-to move it to the header file, but the function type was not changed back.
+--7o9GAVR9jzCLmd38
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->
-> /*
->   * Returns true if we cannot fail to allocate memory for this extent_status
->   * entry and cannot reclaim it until its status changes.
->   */
-OK, looks good, thanks!
->> +{
->> +	/* filemap, bigalloc, and seek_data/hole need to use it. */
->> +	if (ext4_es_is_delayed(es))
->> +		return 1;
->> +
->> +	return 0;
->> +}
->> +
->>   static struct extent_status *
->>   ext4_es_alloc_extent(struct inode *inode, ext4_lblk_t lblk, ext4_lblk_t len,
->>   		     ext4_fsblk_t pblk)
->> @@ -460,10 +474,8 @@ ext4_es_alloc_extent(struct inode *inode, ext4_lblk_t lblk, ext4_lblk_t len,
->>   	es->es_len = len;
->>   	es->es_pblk = pblk;
->>   
->> -	/*
->> -	 * We don't count delayed extent because we never try to reclaim them
->> -	 */
->> -	if (!ext4_es_is_delayed(es)) {
->> +	/* We never try to reclaim a must kept extent, so we don't count it. */
->> +	if (!ext4_es_must_keep(es)) {
->>   		if (!EXT4_I(inode)->i_es_shk_nr++)
->>   			ext4_es_list_add(inode);
->>   		percpu_counter_inc(&EXT4_SB(inode->i_sb)->
->> @@ -481,8 +493,8 @@ static void ext4_es_free_extent(struct inode *inode, struct extent_status *es)
->>   	EXT4_I(inode)->i_es_all_nr--;
->>   	percpu_counter_dec(&EXT4_SB(inode->i_sb)->s_es_stats.es_stats_all_cnt);
->>   
->> -	/* Decrease the shrink counter when this es is not delayed */
->> -	if (!ext4_es_is_delayed(es)) {
->> +	/* Decrease the shrink counter when this es is not a must be kept */
-> Let's rephrase the comment as:
-> 	/* Decrease the shrink counter when we can reclaim the extent */
+On Wed, Apr 12, 2023 at 10:32:02AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.24 release.
+> There are 164 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
 
-Okay, this is very nice!
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.2.0).
 
->
->> +	if (!ext4_es_must_keep(es)) {
->>   		BUG_ON(EXT4_I(inode)->i_es_shk_nr == 0);
->>   		if (!--EXT4_I(inode)->i_es_shk_nr)
->>   			ext4_es_list_del(inode);
->> @@ -853,7 +865,7 @@ int ext4_es_insert_extent(struct inode *inode, ext4_lblk_t lblk,
->>   	if (err == -ENOMEM && __es_shrink(EXT4_SB(inode->i_sb),
->>   					  128, EXT4_I(inode)))
->>   		goto retry;
->> -	if (err == -ENOMEM && !ext4_es_is_delayed(&newes))
->> +	if (err == -ENOMEM && !ext4_es_must_keep(&newes))
->>   		err = 0;
->>   
->>   	if (sbi->s_cluster_ratio > 1 && test_opt(inode->i_sb, DELALLOC) &&
->> @@ -1706,11 +1718,8 @@ static int es_do_reclaim_extents(struct ext4_inode_info *ei, ext4_lblk_t end,
->>   
->>   		(*nr_to_scan)--;
->>   		node = rb_next(&es->rb_node);
->> -		/*
->> -		 * We can't reclaim delayed extent from status tree because
->> -		 * fiemap, bigallic, and seek_data/hole need to use it.
->> -		 */
->> -		if (ext4_es_is_delayed(es))
->> +		/* We can't reclaim a must be kept extent from status tree. */
-> I guess we can just drop this comment. The function name explains enough...
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-Totally agree!
+--=20
+An old man doll... just what I always wanted! - Clara
 
->
->> +		if (ext4_es_must_keep(es))
->>   			goto next;
->>   		if (ext4_es_is_referenced(es)) {
->>   			ext4_es_clear_referenced(es);
-> 								Honza
+--7o9GAVR9jzCLmd38
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Can you please help review the remaining patches for any problems?
-If you have any suggestions, I'll fix them together and post another 
-version of v4.
+-----BEGIN PGP SIGNATURE-----
 
-Thanks again for your review!
--- 
-With Best Regards,
-Baokun Li
-.
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZDdi5wAKCRD2uYlJVVFO
+o2iqAP0WnutWnNBVz4DDXjKsMQ2GVRUSAFg8ckAdcmFuJnL/0QD+KOTIZrSE0FvW
+B/RmZX8TnNXesrVJRxHdIGVEfpEC3w4=
+=Q+aH
+-----END PGP SIGNATURE-----
+
+--7o9GAVR9jzCLmd38--
