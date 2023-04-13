@@ -2,87 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DB156E13FA
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 20:19:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AADE96E13FE
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 20:22:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbjDMSTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 14:19:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47286 "EHLO
+        id S229689AbjDMSWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 14:22:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbjDMSTt (ORCPT
+        with ESMTP id S229561AbjDMSWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 14:19:49 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3B4E6F;
-        Thu, 13 Apr 2023 11:19:48 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 857315C00DF;
-        Thu, 13 Apr 2023 14:19:47 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Thu, 13 Apr 2023 14:19:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1681409987; x=1681496387; bh=Kh4f8LOv/N05w
-        e0ingeowtI9oIpu6/dYXCFm4olQziw=; b=GtkijS530SN0bfZi1gNOnrfH3GICi
-        NQJ3rNhhFMefopocSkog5wqCHL9fOc4MIVdYAxi9Zb6SFBcZKRpqNSS1M3x9EI2m
-        xe7iEXn80cY7TzfrpayDmRVc51E3wQdjasJ46kW9D0iYNOvxpJK7R8KXu8e83Nty
-        +AsMNIg3locCcAOHZa6WE5Unkuq5c0THjPXpJpgw1qJYNo+iOddRaum0Xez7aBxp
-        11rKFyEnpS4c3JB8p5zMw1CNJs8DjX//mbEIrqrIJFMemYwbNR9z0lJq/gqqCqBn
-        WZDqiA54yynqyEvn+MpDXZM5flNEUDiE4fPL0u+RwXEFhfURTxy6ajgzg==
-X-ME-Sender: <xms:wkc4ZPiYE6uPOml8mrvjMZWki9SNq1cbmq-YGm2zEHbXOiOvC_9dRQ>
-    <xme:wkc4ZMANXc91d213JjWYnYL1WgP33sQ501YdHzjrv0M6v95GblpLbJDlNabRhbsP9
-    zy9SDaEVH4TZ-8>
-X-ME-Received: <xmr:wkc4ZPGyWQkxYuYBAq-d_Fp4w9YMzwz0K-tDWEPrMvBPHGpfDYj2H4U828Zx1fycFVZ-0AUfrqcFZwpWOPpioDyi3GM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekkedguddvhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkugho
-    ucfutghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrg
-    htthgvrhhnpeevieevgfeuleejgfeghefhuddviefhgeejhfehgeekgeevfefggefgudef
-    hfelgfenucffohhmrghinhepihhpvhegrdhpihhnghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiughoshgthhesihguohhstghhrdhorhhg
-X-ME-Proxy: <xmx:wkc4ZMQiBcst42AZLOfVV6OE_SNPj9OAMsKmQYFSS1uufjgycRS1sg>
-    <xmx:wkc4ZMypX0-Ryq4nZKKLQaUtrZBARAvK8KBkkX05VlbmjgrujwfBww>
-    <xmx:wkc4ZC4wP69ORHXfRFEhsD2LRhAkRkcc3if8ViWSfZqqmatZzy8k8g>
-    <xmx:w0c4ZAlCdU3UHHFCZquoxV7TCjtNKBaqG6-G6fG63MnLWbEmCjETLg>
-Feedback-ID: i494840e7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 13 Apr 2023 14:19:45 -0400 (EDT)
-Date:   Thu, 13 Apr 2023 21:19:41 +0300
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hangbin Liu <liuhangbin@gmail.com>,
-        Petr Machata <petrm@nvidia.com>, Jiri Pirko <jiri@resnulli.us>,
-        Xin Long <lucien.xin@gmail.com>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Jay Vosburgh <j.vosburgh@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>
-Subject: Re: [BUG] [FIXED: TESTED] kmemleak in rtnetlink_rcv() triggered by
- selftests/drivers/net/team in build cdc9718d5e59
-Message-ID: <ZDhHvUrkua8gLMfZ@shredder>
-References: <78a8a03b-6070-3e6b-5042-f848dab16fb8@alu.unizg.hr>
- <ZDLyZX545Cw+aLhE@shredder>
- <67b3fa90-ad29-29f1-e6f3-fb674d255a1e@alu.unizg.hr>
- <7650b2eb-0aee-a2b0-2e64-c9bc63210f67@alu.unizg.hr>
+        Thu, 13 Apr 2023 14:22:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60664680;
+        Thu, 13 Apr 2023 11:22:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 68387640B2;
+        Thu, 13 Apr 2023 18:22:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 191A2C433EF;
+        Thu, 13 Apr 2023 18:22:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1681410137;
+        bh=Hd8IcoblSRP4QvKpc1PPwu3BTSDjkQ2bWVKjm6hZBm8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fr5pupMj7IiONRvpaQeU1jNbceEGxtjzHL8SUM3oXDDXV+76SrmSVxyLmms1eUbop
+         9MY+KsqEbnMAiQGkZTJQhFU3rVs1feiVwoCGcThSvuV4C1k8uM/nUPRYDuBqJO2y3c
+         Th6fu034Y2iZ0MfIqoYomL2m3Ot8VSsUHSXKCQps=
+Date:   Thu, 13 Apr 2023 20:22:14 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     John Moon <quic_johmoo@quicinc.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Todd Kjos <tkjos@google.com>,
+        Matthias Maennich <maennich@google.com>,
+        Giuliano Procida <gprocida@google.com>,
+        kernel-team@android.com, libabigail@sourceware.org,
+        Jordan Crouse <jorcrous@amazon.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>
+Subject: Re: [PATCH v5 1/2] check-uapi: Introduce check-uapi.sh
+Message-ID: <2023041322-stopwatch-ungraded-a08b@gregkh>
+References: <20230407203456.27141-2-quic_johmoo@quicinc.com>
+ <CAK7LNAQQmoyUx+0Jk3c7iqY20KokrHEOPwHNb2doZOOA8RWBDA@mail.gmail.com>
+ <2023041015-lunar-dandelion-1b4e@gregkh>
+ <ae44540f-8947-8efb-fb8d-45a84bd3fef3@quicinc.com>
+ <2023041136-donator-faceplate-5f91@gregkh>
+ <bcdcee9b-f213-bc3c-d300-92a1e0138187@quicinc.com>
+ <2023041209-armed-overlaid-3d3d@gregkh>
+ <d34a6b09-8244-49e2-2d7a-eee5fd5ca5b7@quicinc.com>
+ <2023041216-antitoxic-finch-dd14@gregkh>
+ <dc2f4e9d-2e7e-a4af-5513-1d25eaba40a8@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7650b2eb-0aee-a2b0-2e64-c9bc63210f67@alu.unizg.hr>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+In-Reply-To: <dc2f4e9d-2e7e-a4af-5513-1d25eaba40a8@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,113 +77,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 07:34:09PM +0200, Mirsad Goran Todorovac wrote:
-> I've ran "make kselftest" with vanilla torvalds tree 6.3-rc5 + your patch.
+On Thu, Apr 13, 2023 at 10:07:23AM -0700, John Moon wrote:
+> On 4/12/2023 9:43 AM, Greg Kroah-Hartman wrote:
+> > On Wed, Apr 12, 2023 at 09:37:16AM -0700, John Moon wrote:
+> > > On 4/11/2023 11:14 PM, Greg Kroah-Hartman wrote:
+> > > > > Would you find the tool more useful if it simply filtered out all instances
+> > > > > where the size of the type did not change? This would filter out the
+> > > > > following which the tool currently flags:
+> > > > > 
+> > > > > - enum expansions
+> > > > > - reserved field expansions
+> > > > > - expansions of a struct with a flex array at the end
+> > > > > - type changes
+> > > > > - re-ordering of existing members
+> > > > > - ...others?
+> > > > 
+> > > > Obviously not, as some of those are real breakages, and some are not at
+> > > > all.
+> > > > 
+> > > > Please understand what is an abi breakage.  Adding new enums is not.
+> > > > Using a reserved field is not.  Reording existing members IS.
+> > > > 
+> > > 
+> > > Yes, understood that method would miss certain classes of breakages. I was
+> > > suggesting it as a way to improve the signal-to-noise ratio of the tool
+> > > since we don't currently have an algorithm for determining breakages with
+> > > 100% accuracy.
+> > 
+> > Why not?  You know the different types of things here based on the
+> > differences between the dwarf data, and they fall into different
+> > categories, and those different categories mean different things.
+> > 
+> > If you have questions as to which type of change is allowed and which is
+> > not, just ask us, the rules are not complex, nor impossible to describe,
+> > otherwise we wouldn't have a stable api at all, right?
+> > 
 > 
-> It failed two lines after "enslaved device client - ns-A IP" which passed OK.
+> Right, it's currently a limitation of parsing the abidiff output.
 > 
-> Is this hang for 5 hours in selftests: net: fcnal-test.sh test, at the line
-> (please see to the end):
-
-It's not clear to me if the test failed for you or just got stuck. The
-output below is all "[ OK ]".
-
-I ran the test with my patch and got:
-
-Tests passed: 875
-Tests failed:   5
-
-I don't believe the failures are related to my patch given the test
-doesn't use bonding.
-
-See more below.
-
+> Even in trivial situations like an enum expansion, the tool knows that a
+> variant was added and another variant had its offset changed. There's not a
+> good way to say for sure that the variant whose offset changed is a "*_MAX"
+> variant. So if we simply ignored enum expansion, we'd miss breakages like
+> this:
 > 
-> # ###########################################################################
-> # IPv4 address binds
-> # ###########################################################################
-> # 
-> # 
-> # #################################################################
-> # No VRF
-> # 
-> # SYSCTL: net.ipv4.ping_group_range=0 2147483647
-> # 
-> # TEST: Raw socket bind to local address - ns-A IP                              [ OK ]
-> # TEST: Raw socket bind to local address after device bind - ns-A IP            [ OK ]
-> # TEST: Raw socket bind to local address - ns-A loopback IP                     [ OK ]
-> # TEST: Raw socket bind to local address after device bind - ns-A loopback IP   [ OK ]
-> # TEST: Raw socket bind to nonlocal address - nonlocal IP                       [ OK ]
-> # TEST: TCP socket bind to nonlocal address - nonlocal IP                       [ OK ]
-> # TEST: ICMP socket bind to nonlocal address - nonlocal IP                      [ OK ]
-> # TEST: ICMP socket bind to broadcast address - broadcast                       [ OK ]
-> # TEST: ICMP socket bind to multicast address - multicast                       [ OK ]
-> # TEST: TCP socket bind to local address - ns-A IP                              [ OK ]
-> # TEST: TCP socket bind to local address after device bind - ns-A IP            [ OK ]
-> # 
-> # #################################################################
-> # With VRF
-> # 
-> # SYSCTL: net.ipv4.ping_group_range=0 2147483647
-> # 
-> # TEST: Raw socket bind to local address - ns-A IP                              [ OK ]
-> # TEST: Raw socket bind to local address after device bind - ns-A IP            [ OK ]
-> # TEST: Raw socket bind to local address after VRF bind - ns-A IP               [ OK ]
-> # TEST: Raw socket bind to local address - VRF IP                               [ OK ]
-> # TEST: Raw socket bind to local address after device bind - VRF IP             [ OK ]
-> # TEST: Raw socket bind to local address after VRF bind - VRF IP                [ OK ]
-> # TEST: Raw socket bind to out of scope address after VRF bind - ns-A loopback IP  [ OK ]
-> # TEST: Raw socket bind to nonlocal address after VRF bind - nonlocal IP        [ OK ]
-> # TEST: TCP socket bind to nonlocal address after VRF bind - nonlocal IP        [ OK ]
-> # TEST: ICMP socket bind to nonlocal address after VRF bind - nonlocal IP       [ OK ]
-> # TEST: ICMP socket bind to broadcast address after VRF bind - broadcast        [ OK ]
-> # TEST: ICMP socket bind to multicast address after VRF bind - multicast        [ OK ]
-> # TEST: TCP socket bind to local address - ns-A IP                              [ OK ]
-> # TEST: TCP socket bind to local address after device bind - ns-A IP            [ OK ]
-> # TEST: TCP socket bind to local address - VRF IP                               [ OK ]
-> # TEST: TCP socket bind to local address after device bind - VRF IP             [ OK ]
-> # TEST: TCP socket bind to invalid local address for VRF - ns-A loopback IP     [ OK ]
-> # TEST: TCP socket bind to invalid local address for device bind - ns-A loopback IP  [ OK ]
-> # 
-> # ###########################################################################
-> # Run time tests - ipv4
-> # ###########################################################################
-> # 
-> # TEST: Device delete with active traffic - ping in - ns-A IP                   [ OK ]
-> # TEST: Device delete with active traffic - ping in - VRF IP                    [ OK ]
-> # TEST: Device delete with active traffic - ping out - ns-B IP                  [ OK ]
-> # TEST: TCP active socket, global server - ns-A IP                              [ OK ]
-> # TEST: TCP active socket, global server - VRF IP                               [ OK ]
-> # TEST: TCP active socket, VRF server - ns-A IP                                 [ OK ]
-> # TEST: TCP active socket, VRF server - VRF IP                                  [ OK ]
-> # TEST: TCP active socket, enslaved device server - ns-A IP                     [ OK ]
-> # TEST: TCP active socket, VRF client - ns-A IP                                 [ OK ]
-> # TEST: TCP active socket, enslaved device client - ns-A IP                     [ OK ]
-> # TEST: TCP active socket, global server, VRF client, local - ns-A IP           [ OK ]
-> # TEST: TCP active socket, global server, VRF client, local - VRF IP            [ OK ]
-> # TEST: TCP active socket, VRF server and client, local - ns-A IP               [ OK ]
-> # TEST: TCP active socket, VRF server and client, local - VRF IP                [ OK ]
-> # TEST: TCP active socket, global server, enslaved device client, local - ns-A IP  [ OK ]
-> # TEST: TCP active socket, VRF server, enslaved device client, local - ns-A IP  [ OK ]
-> # TEST: TCP active socket, enslaved device server and client, local - ns-A IP   [ OK ]
-> # TEST: TCP passive socket, global server - ns-A IP                             [ OK ]
-> # TEST: TCP passive socket, global server - VRF IP                              [ OK ]
-> # TEST: TCP passive socket, VRF server - ns-A IP                                [ OK ]
-> # TEST: TCP passive socket, VRF server - VRF IP                                 [ OK ]
-> # TEST: TCP passive socket, enslaved device server - ns-A IP                    [ OK ]
-> # TEST: TCP passive socket, VRF client - ns-A IP                                [ OK ]
-> # TEST: TCP passive socket, enslaved device client - ns-A IP                    [ OK ]
-> # TEST: TCP passive socket, global server, VRF client, local - ns-A IP          [ OK ]
+> enum foo {
+> 	FLAG_A,
+> +       FLAG_B,
+> 	FLAG_C,
+> 	FLAG_MAX
+> }
 > 
-> Hope this helps.
+> Maybe we can ignore an enum expansion if only the last variant's offset
+> changed, but then we'd miss cases where enums don't have a MAX variant.
+> Maybe we could limit the check to last variant's offset whose name contains
+> string "MAX", but what if someone calls it "LAST" instead? It gets fragile.
+
+That's what the regexes are for, you can make them on a per-file basis,
+right?
+
+> Or situations like expanding into reserved fields. How can we detect the
+> difference between this:
 > 
-> I also have a iwlwifi DEADLOCK and I don't know if these should be reported independently.
-> (I don't think it is related to the patch.)
+> struct foo {
+> 	__u32 x;
+> 	__u32 y;
+> +       __u32 z;
+> +       __u8  padding[12];
+> -	__u8  padding[16];
+> }
+> 
+> And this:
+> 
+> struct foo {
+> 	__u32 x;
+> 	__u32 y;
+> +       __u32 z;
+> +       char  codename[4]; /* Takes "NAME" */
+> -	char  codename[8]; /* Takes "CODENAME" */
+> }
+> 
+> Maybe we grep for "pad" or "reserved", but again... fragile.
 
-If the test got stuck, then it might be related to the deadlock in
-iwlwifi. Try running the test without iwlwifi and see if it helps. If
-not, I suggest starting a different thread about this issue.
+Again, regexes.
 
-Will submit the bonding patch over the weekend.
+But if this is too fragile, then yes, it's going to be useless as those
+are obviously allowed changes and you are giving us a tool that would
+say they are forbidden.
 
-Thanks for testing
+> Another idea is to add some sort of in-line comment to give the checker a
+> hint that the field is intentionally unstable. It could be implicit for
+> "*_MAX" enum variants or "*padding" at the end of structs, but if you wanted
+> to have something like "end[]" (like in the rseq change), you could add /*
+> ABI-unstable */ next to it and the script would ignore it.
+
+The abi isn't "unstable", it's "extensible".  Those are two very
+different things.
+
+> Beyond those issues, we have non-trivial situations like when it's safe to
+> add members to a struct. We know the kernel will zero-extend mismatches
+> between kernel and userspace, but how do we know the driver properly handles
+> the case of an old userspace passing an old struct?
+
+Then flag it to make sure as the "driver" is the "kernel".
+
+> So far, we've erred on the side of flagging it if it _could_ be a break and
+> relied on the reviewer to make the final determination.
+
+But don't give us loads of "this could be broken" if it really isn't
+please.
+
+You have decades of code history to run the tool on to get these things
+worked out.  Please do so before expecting us to use it and complain
+about things it flags that are not actual breakages.
+
+In it's current form, would you use this tool if you were the maintainer
+of a subsystem?
+
+thanks,
+
+greg k-h
