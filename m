@@ -2,187 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2316E0687
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 07:48:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9E786E068C
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 07:50:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjDMFsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 01:48:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52700 "EHLO
+        id S229853AbjDMFup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 01:50:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjDMFsM (ORCPT
+        with ESMTP id S229492AbjDMFuo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 01:48:12 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367014490;
-        Wed, 12 Apr 2023 22:48:11 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id h37so838315lfv.0;
-        Wed, 12 Apr 2023 22:48:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681364889; x=1683956889;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2J3hZLfv4Ais2nnWyi587H3aSP1FPUxtsM5ow+18kMQ=;
-        b=hScxUxQrvFBaYjsK+DYKLVYeuf9dgqHaXSmHyX0lFVolQ5paLNlhSsKloQwcYkE4is
-         Vv5V5MoCWp5utMwzKEhvD9vTvfRFcqXU68GZtfTypkBJ+/5vY8UhJep/uaMOa0gh4og6
-         WMNCkic2SBgh8d78SYdLKd3zfFfjIYp4RopADKQ4rGwLQpqvnwlFkLCQhTMxJcx/fFJX
-         4akIywPcyE8SUPkRL6lwqSwq7Bx4NbZHSLkTKl3kQwgClcYMzL5IOY8RxJjzE2Zcrr6/
-         E+XQ2bSIn6p8aDMzmklLKC4Aju5ghQFI2xkh1gWx8GWRIc+tGz2ITEGeXqLqai+185f2
-         c62A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681364889; x=1683956889;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2J3hZLfv4Ais2nnWyi587H3aSP1FPUxtsM5ow+18kMQ=;
-        b=bLRZWG2f3zbe8KloF/8aM4ymszgpqnQ2YG6r82xgwHIDzGchO41oSOHhdUHmTl4pcg
-         vAr1ASsGJDU+JYCOPmfLsg0oQp1BCQcEbkPVHTEwBvdaG11dmFHojtnSNQK/u57WJ9hS
-         yNmnhpPuUsFy7a6gMpHb75cZf8Xf2nFu8Dhlossd3KKmA6LWrOMiue440JNj14EnGQLF
-         HwoQLfR7Avv7oNKneC21wDfnmPnI2mOEPix9oUMoqIPU8bsr0owOSPigP/L9sh0GQqDe
-         dEC7eFR1PPkwN0Dcl3/35/U2w48AijHvbmAciMrqLK7gjRPZqXc9JxTlLFvzRFY7nuMk
-         G6BQ==
-X-Gm-Message-State: AAQBX9fBf/FJdOoD6eTIqjc6h0pc0Qold/BVUrHjy7xqLlFuoqFHdfNj
-        5JZ+on1sNTC5lGBAZMg10tDCkoDM+sE=
-X-Google-Smtp-Source: AKy350b+T6IbAxGnjRNP6MjoVLxKkqo8NKoudf6X692ixGh2iWr+CWtOOYQU0aP/FSigREJUVdXyIw==
-X-Received: by 2002:ac2:4c1a:0:b0:4db:513f:fe2a with SMTP id t26-20020ac24c1a000000b004db513ffe2amr489970lfq.23.1681364889154;
-        Wed, 12 Apr 2023 22:48:09 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id o15-20020ac2494f000000b004d3d43c7569sm154792lfi.3.2023.04.12.22.48.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Apr 2023 22:48:08 -0700 (PDT)
-Message-ID: <6b0e2cd2-b419-8474-c53c-81449b8f6325@gmail.com>
-Date:   Thu, 13 Apr 2023 08:48:08 +0300
+        Thu, 13 Apr 2023 01:50:44 -0400
+Received: from ubuntu20 (unknown [193.203.214.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20283449C
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 22:50:42 -0700 (PDT)
+Received: by ubuntu20 (Postfix, from userid 1003)
+        id 6F655E04C3; Thu, 13 Apr 2023 05:50:41 +0000 (UTC)
+From:   Yang Yang <yang.yang29@zte.com.cn>
+To:     akpm@linux-foundation.org, david@redhat.com
+Cc:     yang.yang29@zte.com.cn, imbrenda@linux.ibm.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        ran.xiaokai@zte.com.cn, xu.xin.sc@gmail.com, xu.xin16@zte.com.cn,
+        Xuexin Jiang <jiang.xuexin@zte.com.cn>
+Subject: [PATCH v7 1/6] ksm: support unsharing KSM-placed zero pages
+Date:   Thu, 13 Apr 2023 13:50:38 +0800
+Message-Id: <20230413055038.180952-1-yang.yang29@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <202304131346489021903@zte.com.cn>
+References: <202304131346489021903@zte.com.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Content-Language: en-US, en-GB
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>
-References: <cover.1681301472.git.mazziesaccount@gmail.com>
- <d31f2ebf08837337d3bbc6a00fd4b5eb3c86a04e.1681301472.git.mazziesaccount@gmail.com>
- <20230412213208.49912897@jic23-huawei>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCH 1/3] iio: core: add IIO_VAL_INT_MICRO
-In-Reply-To: <20230412213208.49912897@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=3.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FSL_HELO_NON_FQDN_1,
+        HEADER_FROM_DIFFERENT_DOMAINS,HELO_NO_DOMAIN,NO_DNS_FOR_FROM,
+        RCVD_IN_PBL,RDNS_NONE,SPF_SOFTFAIL,SPOOFED_FREEMAIL_NO_RDNS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jonathan,
+From: xu xin <xu.xin16@zte.com.cn>
 
-On 4/12/23 23:32, Jonathan Cameron wrote:
-> On Wed, 12 Apr 2023 15:27:14 +0300
-> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
-> 
->> There are a few cases like light sensor integration times, where values
->> returned from *_available() and read_raw() are smaller than 1 and often
->> in the units of micro. (Like micro second scale integration times,
->> always smaller than 1 second). Currently those are often handled using
->> IIO_VAL_INT_PLUS_MICRO, which requires drivers to initialize the integer
->> part to zero. Furthermore, using IIO_VAL_INT_PLUS_MICRO in iio lists
->> requires one to always allocate the 'dummy' integer part too.
->>
->> Introduce IIO_VAL_INT_MICRO which allows omitting the always zero integer.
->>
->> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-> Hi Matti,
-> 
-> I'm not keen on adding yet another case just to avoid having to
-> have the integer part for IIO_VAL_INT_PLUS_MICRO.
-> Seems like the wrong trade off of maintainability vs ease of use.
+When use_zero_pages of ksm is enabled, madvise(addr, len, MADV_UNMERGEABLE)
+and other ways (like write 2 to /sys/kernel/mm/ksm/run) to trigger
+unsharing will *not* actually unshare the shared zeropage as placed by KSM
+(which is against the MADV_UNMERGEABLE documentation). As these KSM-placed
+zero pages are out of the control of KSM, the related counts of ksm pages
+don't expose how many zero pages are placed by KSM (these special zero
+pages are different from those initially mapped zero pages, because the
+zero pages mapped to MADV_UNMERGEABLE areas are expected to be a complete
+and unshared page)
 
-I see your point. I would still argue that adding the IIO_VAL_INT_MICRO 
-was not really an intrusive change and I'd expect the maintenance effort 
-should not be increased that much.
+To not blindly unshare all shared zero_pages in applicable VMAs, the patch
+use pte_mkdirty (related with architecture) to mark KSM-placed zero pages.
+Thus, MADV_UNMERGEABLE will only unshare those KSM-placed zero pages.
 
-While the inconvenience for users in read_raw (initializing the *val = 
-0) is minor (meaning the benefit of adding IIO_VAL_INT_MICRO is also 
-minor in this regard), iio_lists are stronger reason to consider this. 
-With IIO_VAL_INT_MICRO the iio-list memory footprint will be halved. In 
-my opinion, this benefit would exceed the cost of maintenance effort 
-increase - sure thing it's easy for me to say as I am not the maintainer 
-;) (And as I wrote, this series was cooked in a hurry - I had no time to 
-go through existing drivers to see how many could benefit from the new 
-IIO_VAL_INT_MICRO. I may do this later when I get some pretty urgent 
-things off my shoulders - assuming you're not opposing this change so 
-strongly that this is out of the question no matter how many existing 
-users could benefit from IIO_VAL_INT_MICRO).
+The architecture must guarantee that pte_mkdirty won't treat the pte as
+writable. Otherwise, it will break KSM pages state (wrprotect) and affect
+the KSM functionality. For safety, we restrict this feature only to the
+tested and known-working architechtures fow now.
 
-Anyways, if this is your final stance, then I need to rework the 
-integration time list allocations in the gts helper, but I am most 
-likely not able to do this until a week or two from now - meaning it 
-might be better to revert the bu27034 and iio-gts-helpers until this 
-gets fixed. (I reserve the right to do this during some night if I can't 
-get sleep though.)
+The patch will not degrade the performance of use_zero_pages as it doesn't
+change the way of merging empty pages in use_zero_pages's feature.
 
-Yours,
-	-- Matti
+Signed-off-by: xu xin <xu.xin16@zte.com.cn>
+Suggested-by: David Hildenbrand <david@redhat.com>
+Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc: Xuexin Jiang <jiang.xuexin@zte.com.cn>
+Reviewed-by: Xiaokai Ran <ran.xiaokai@zte.com.cn>
+Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
+---
+ include/linux/ksm.h |  9 +++++++++
+ mm/Kconfig          | 24 +++++++++++++++++++++++-
+ mm/ksm.c            |  5 +++--
+ 3 files changed, 35 insertions(+), 3 deletions(-)
 
-> Jonathan
-> 
->> ---
->>   drivers/iio/industrialio-core.c | 4 ++++
->>   include/linux/iio/types.h       | 1 +
->>   2 files changed, 5 insertions(+)
->>
->> diff --git a/drivers/iio/industrialio-core.c b/drivers/iio/industrialio-core.c
->> index c117f50d0cf3..c5ae965e9961 100644
->> --- a/drivers/iio/industrialio-core.c
->> +++ b/drivers/iio/industrialio-core.c
->> @@ -628,6 +628,8 @@ static ssize_t __iio_format_value(char *buf, size_t offset, unsigned int type,
->>   	switch (type) {
->>   	case IIO_VAL_INT:
->>   		return sysfs_emit_at(buf, offset, "%d", vals[0]);
->> +	case IIO_VAL_INT_MICRO:
->> +		return sysfs_emit_at(buf, offset, "0.%06u", vals[0]);
->>   	case IIO_VAL_INT_PLUS_MICRO_DB:
->>   		scale_db = true;
->>   		fallthrough;
->> @@ -758,6 +760,7 @@ static ssize_t iio_format_list(char *buf, const int *vals, int type, int length,
->>   
->>   	switch (type) {
->>   	case IIO_VAL_INT:
->> +	case IIO_VAL_INT_MICRO:
->>   		stride = 1;
->>   		break;
->>   	default:
->> @@ -952,6 +955,7 @@ static ssize_t iio_write_channel_info(struct device *dev,
->>   		case IIO_VAL_INT_PLUS_MICRO_DB:
->>   			scale_db = true;
->>   			fallthrough;
->> +		case IIO_VAL_INT_MICRO:
->>   		case IIO_VAL_INT_PLUS_MICRO:
->>   			fract_mult = 100000;
->>   			break;
->> diff --git a/include/linux/iio/types.h b/include/linux/iio/types.h
->> index 82faa98c719a..b4e316172c7f 100644
->> --- a/include/linux/iio/types.h
->> +++ b/include/linux/iio/types.h
->> @@ -30,6 +30,7 @@ enum iio_event_info {
->>   #define IIO_VAL_FRACTIONAL 10
->>   #define IIO_VAL_FRACTIONAL_LOG2 11
->>   #define IIO_VAL_CHAR 12
->> +#define IIO_VAL_INT_MICRO 13 /* val is micro <units>. Integer part is 0 */
->>   
->>   enum iio_available_type {
->>   	IIO_AVAIL_LIST,
-> 
-
+diff --git a/include/linux/ksm.h b/include/linux/ksm.h
+index d5f69f18ee5a..f0cc085be42a 100644
+--- a/include/linux/ksm.h
++++ b/include/linux/ksm.h
+@@ -95,4 +95,13 @@ static inline void folio_migrate_ksm(struct folio *newfolio, struct folio *old)
+ #endif /* CONFIG_MMU */
+ #endif /* !CONFIG_KSM */
+ 
++#ifdef CONFIG_KSM_ZERO_PAGES_TRACK
++/* use pte_mkdirty to track a KSM-placed zero page */
++#define set_pte_ksm_zero(pte)	pte_mkdirty(pte_mkspecial(pte))
++#define is_ksm_zero_pte(pte)	(is_zero_pfn(pte_pfn(pte)) && pte_dirty(pte))
++#else /* !CONFIG_KSM_ZERO_PAGES_TRACK */
++#define set_pte_ksm_zero(pte)	pte_mkspecial(pte)
++#define is_ksm_zero_pte(pte)	0
++#endif /* CONFIG_KSM_ZERO_PAGES_TRACK */
++
+ #endif /* __LINUX_KSM_H */
+diff --git a/mm/Kconfig b/mm/Kconfig
+index 3894a6309c41..42f69f421a03 100644
+--- a/mm/Kconfig
++++ b/mm/Kconfig
+@@ -666,7 +666,7 @@ config MMU_NOTIFIER
+ 	bool
+ 	select INTERVAL_TREE
+ 
+-config KSM
++menuconfig KSM
+ 	bool "Enable KSM for page merging"
+ 	depends on MMU
+ 	select XXHASH
+@@ -681,6 +681,28 @@ config KSM
+ 	  until a program has madvised that an area is MADV_MERGEABLE, and
+ 	  root has set /sys/kernel/mm/ksm/run to 1 (if CONFIG_SYSFS is set).
+ 
++if KSM
++
++config KSM_ZERO_PAGES_TRACK
++	bool "support tracking KSM-placed zero pages"
++	depends on KSM
++	depends on ARM || ARM64 || X86
++	default y
++	help
++		This allows KSM to track KSM-placed zero pages, including supporting
++		unsharing and counting the KSM-placed zero pages. if say N, then
++		madvise(,,UNMERGEABLE) can't unshare the KSM-placed zero pages, and
++		users can't know how many zero pages are placed by KSM. This feature
++		depends on pte_mkdirty (related with architecture) to mark KSM-placed
++		zero pages.
++
++		The architecture must guarantee that pte_mkdirty won't treat the pte
++		as writable. Otherwise, it will break KSM pages state (wrprotect) and
++		affect the KSM functionality. For safety, we restrict this feature only
++		to the tested and known-working architechtures.
++
++endif # KSM
++
+ config DEFAULT_MMAP_MIN_ADDR
+ 	int "Low address space to protect from user allocation"
+ 	depends on MMU
+diff --git a/mm/ksm.c b/mm/ksm.c
+index 7cd7e12cd3df..1d1771a6b3fe 100644
+--- a/mm/ksm.c
++++ b/mm/ksm.c
+@@ -447,7 +447,8 @@ static int break_ksm_pmd_entry(pmd_t *pmd, unsigned long addr, unsigned long nex
+ 		if (is_migration_entry(entry))
+ 			page = pfn_swap_entry_to_page(entry);
+ 	}
+-	ret = page && PageKsm(page);
++	/* return 1 if the page is an normal ksm page or KSM-placed zero page */
++	ret = (page && PageKsm(page)) || is_ksm_zero_pte(*pte);
+ 	pte_unmap_unlock(pte, ptl);
+ 	return ret;
+ }
+@@ -1240,7 +1241,7 @@ static int replace_page(struct vm_area_struct *vma, struct page *page,
+ 		page_add_anon_rmap(kpage, vma, addr, RMAP_NONE);
+ 		newpte = mk_pte(kpage, vma->vm_page_prot);
+ 	} else {
+-		newpte = pte_mkspecial(pfn_pte(page_to_pfn(kpage),
++		newpte = set_pte_ksm_zero(pfn_pte(page_to_pfn(kpage),
+ 					       vma->vm_page_prot));
+ 		/*
+ 		 * We're replacing an anonymous page with a zero page, which is
 -- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
+2.15.2
