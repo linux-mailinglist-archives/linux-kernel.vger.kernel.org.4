@@ -2,105 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 625936E082B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 09:48:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB97C6E0830
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 09:49:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbjDMHsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 03:48:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60512 "EHLO
+        id S230289AbjDMHtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 03:49:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjDMHsp (ORCPT
+        with ESMTP id S230263AbjDMHtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 03:48:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1E48A4F;
-        Thu, 13 Apr 2023 00:48:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 415EF638E9;
-        Thu, 13 Apr 2023 07:47:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 514B0C433EF;
-        Thu, 13 Apr 2023 07:47:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1681372073;
-        bh=Ds+MxkKs0/lIPSgCrnQJry+1qiKWouiibiaJxitKFcY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FrJeJ2G8SKvoCPcCuWPYZfhj7odZs0u6zB+pSOYFbSjaOjrkw2lp9Rkh+OIsLrqLg
-         TgOeFPkMtSawjkV3w9hZCqvUVNiJLX0fyjuxo6El0ujvZuaSkcsHVqZNWYuiBV+0Rr
-         QBNbcEvB0EkFQRN5DwlQGLEfZVGK1IdQiDloMXjY=
-Date:   Thu, 13 Apr 2023 09:47:50 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     Thinh.Nguyen@synopsys.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_ugoswami@quicinc.com
-Subject: Re: [PATCH v3 2/3] usb: dwc3: gadget: Stall and restart EP0 if host
- is unresponsive
-Message-ID: <2023041310-absolute-task-8ba6@gregkh>
-References: <20230410231954.437-1-quic_wcheng@quicinc.com>
- <20230410231954.437-3-quic_wcheng@quicinc.com>
+        Thu, 13 Apr 2023 03:49:06 -0400
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82DE78681;
+        Thu, 13 Apr 2023 00:48:43 -0700 (PDT)
+Received: (Authenticated sender: kamel.bouhara@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id AE60524000B;
+        Thu, 13 Apr 2023 07:48:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1681372108;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LG1yvbZ/8Ykm65T3A7p+0iJ7bw5PRw9QVbZEYZc/EXQ=;
+        b=Kogai0N/yCTSPArbOnvsxufaMcuZAOB27I9JvCpiq1PkCkzAE5EtEL5fdkxvevopLbAMg6
+        PqcI3u/1VgRh+cWCJDUzMcHJT+1IJkDDWTI9bEv1dDVlxnNKGWmbYpZcI9+EIFjRngAMs/
+        VbbzGMSc34QXaAdazdNWbE8ogQKpS7PHiZ/Up2ie3RuCtftO13bCrXABp9WMdqIMjmQlyx
+        PnvIhevU3Dc1QCZVTOENGT6SfjGLSFcAgYaPRkotdvC568nWmcCDvcCqu+goW7w1waU6JE
+        36jTEN3Djk9L2Q4bCevsziT6q+Kc0UUnP7POHvqihv7fIp0HGGdWP+C3O3QP9A==
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230410231954.437-3-quic_wcheng@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Date:   Thu, 13 Apr 2023 09:48:26 +0200
+From:   kamel.bouhara@bootlin.com
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        metux IT consult <lkml@metux.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@kernel.org>, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-renesas-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        stratos-dev@op-lists.linaro.org
+Subject: Re: [PATCH] gpio: aggregator: Add interrupt support
+In-Reply-To: <c987d0bf744150ca05bd952f5f9e5fb3244d27b0.1633350340.git.geert+renesas@glider.be>
+References: <c987d0bf744150ca05bd952f5f9e5fb3244d27b0.1633350340.git.geert+renesas@glider.be>
+Message-ID: <58f91e983ac95b7f252606ecac12f016@bootlin.com>
+X-Sender: kamel.bouhara@bootlin.com
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 04:19:53PM -0700, Wesley Cheng wrote:
-> It was observed that there are hosts that may complete pending SETUP
-> transactions before the stop active transfers and controller halt occurs,
-> leading to lingering endxfer commands on DEPs on subsequent pullup/gadget
-> start iterations.
-> 
->   dwc3_gadget_ep_disable   name=ep8in flags=0x3009  direction=1
->   dwc3_gadget_ep_disable   name=ep4in flags=1  direction=1
->   dwc3_gadget_ep_disable   name=ep3out flags=1  direction=0
->   usb_gadget_disconnect   deactivated=0  connected=0  ret=0
-> 
-> The sequence shows that the USB gadget disconnect (dwc3_gadget_pullup(0))
-> routine completed successfully, allowing for the USB gadget to proceed with
-> a USB gadget connect.  However, if this occurs the system runs into an
-> issue where:
-> 
->   BUG: spinlock already unlocked on CPU
->   spin_bug+0x0
->   dwc3_remove_requests+0x278
->   dwc3_ep0_out_start+0xb0
->   __dwc3_gadget_start+0x25c
-> 
-> This is due to the pending endxfers, leading to gadget start (w/o lock
-> held) to execute the remove requests, which will unlock the dwc3
-> spinlock as part of giveback.
-> 
-> To mitigate this, resolve the pending endxfers on the pullup disable
-> path by re-locating the SETUP phase check after stop active transfers, since
-> that is where the DWC3_EP_DELAY_STOP is potentially set.  This also allows
-> for handling of a host that may be unresponsive by using the completion
-> timeout to trigger the stall and restart for EP0.
-> 
-> Fixes: c96683798e27 ("usb: dwc3: ep0: Don't prepare beyond Setup stage")
+Le 2021-10-04 14:44, Geert Uytterhoeven a écrit :
 
-I'm confused.  You have a Fixes: tag here, yet this patch depends on
-patch 1/3, right?  This implies that you do not want or need this to be
-backported to any stable kernels, right?
+Hello,
 
-Or do you?  If so, put the bug fixes first, and properly add a cc:
-stable tag, so that they will get backported correctly.
+What is the status for this patch, is there any remaining
+changes to be made ?
 
-If not, then don't even put a fixes tag on it as obviously it isn't a
-bugfix that is relevant to track anywhere, and then this is just a
-normal new feature to be added to the driver.
+Kind regards,
+--
+Kamel Bouhara, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
 
-Please resolve this and submit a new series based on your decision.
-
-thanks,
-
-greg k-h
+> Currently the GPIO Aggregator does not support interrupts.  This means
+> that kernel drivers going from a GPIO to an IRQ using gpiod_to_irq(),
+> and userspace applications using line events do not work.
+> 
+> Add interrupt support by providing a gpio_chip.to_irq() callback, which
+> just calls into the parent GPIO controller.
+> 
+> Note that this does not implement full interrupt controller (irq_chip)
+> support, so using e.g. gpio-keys with "interrupts" instead of "gpios"
+> still does not work.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+> I would prefer to avoid implementing irq_chip support, until there is a
+> real use case for this.
+> 
+> This has been tested with gpio-keys and gpiomon on the Koelsch
+> development board:
+> 
+>   - gpio-keys, using a DT overlay[1]:
+> 
+> 	$ overlay add r8a7791-koelsch-keyboard-controlled-led
+> 	$ echo gpio-aggregator > 
+> /sys/devices/platform/frobnicator/driver_override
+> 	$ echo frobnicator > /sys/bus/platform/drivers/gpio-aggregator/bind
+> 
+> 	$ gpioinfo frobnicator
+> 	gpiochip12 - 3 lines:
+> 		line   0:      "light"      "light"  output  active-high [used]
+> 		line   1:         "on"         "On"   input   active-low [used]
+> 		line   2:        "off"        "Off"   input   active-low [used]
+> 
+> 	$ echo 255 > /sys/class/leds/light/brightness
+> 	$ echo 0 > /sys/class/leds/light/brightness
+> 
+> 	$ evtest /dev/input/event0
+> 
+>   - gpiomon, using the GPIO sysfs API:
+> 
+> 	$ echo keyboard > /sys/bus/platform/drivers/gpio-keys/unbind
+> 	$ echo e6055800.gpio 2,6 > 
+> /sys/bus/platform/drivers/gpio-aggregator/new_device
+> 	$ gpiomon gpiochip12 0 1
+> 
+> [1] "ARM: dts: koelsch: Add overlay for keyboard-controlled LED"
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git/commit/?h=topic/renesas-overlays&id=c78d817869e63a3485bb4ab98aeea6ce368a396e
+> ---
+>  drivers/gpio/gpio-aggregator.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpio/gpio-aggregator.c 
+> b/drivers/gpio/gpio-aggregator.c
+> index 34e35b64dcdc0581..2ff867d2a3630d3b 100644
+> --- a/drivers/gpio/gpio-aggregator.c
+> +++ b/drivers/gpio/gpio-aggregator.c
+> @@ -374,6 +374,13 @@ static int gpio_fwd_set_config(struct gpio_chip
+> *chip, unsigned int offset,
+>  	return gpiod_set_config(fwd->descs[offset], config);
+>  }
+> 
+> +static int gpio_fwd_to_irq(struct gpio_chip *chip, unsigned int 
+> offset)
+> +{
+> +	struct gpiochip_fwd *fwd = gpiochip_get_data(chip);
+> +
+> +	return gpiod_to_irq(fwd->descs[offset]);
+> +}
+> +
+>  /**
+>   * gpiochip_fwd_create() - Create a new GPIO forwarder
+>   * @dev: Parent device pointer
+> @@ -414,7 +421,8 @@ static struct gpiochip_fwd
+> *gpiochip_fwd_create(struct device *dev,
+>  	for (i = 0; i < ngpios; i++) {
+>  		struct gpio_chip *parent = gpiod_to_chip(descs[i]);
+> 
+> -		dev_dbg(dev, "%u => gpio-%d\n", i, desc_to_gpio(descs[i]));
+> +		dev_dbg(dev, "%u => gpio %d irq %d\n", i,
+> +			desc_to_gpio(descs[i]), gpiod_to_irq(descs[i]));
+> 
+>  		if (gpiod_cansleep(descs[i]))
+>  			chip->can_sleep = true;
+> @@ -432,6 +440,7 @@ static struct gpiochip_fwd
+> *gpiochip_fwd_create(struct device *dev,
+>  	chip->get_multiple = gpio_fwd_get_multiple_locked;
+>  	chip->set = gpio_fwd_set;
+>  	chip->set_multiple = gpio_fwd_set_multiple_locked;
+> +	chip->to_irq = gpio_fwd_to_irq;
+>  	chip->base = -1;
+>  	chip->ngpio = ngpios;
+>  	fwd->descs = descs;
