@@ -2,52 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DFAB6E1747
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 00:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5F2B6E1740
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 00:21:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbjDMWWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 18:22:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43172 "EHLO
+        id S230117AbjDMWVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 18:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbjDMWV4 (ORCPT
+        with ESMTP id S230034AbjDMWVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 18:21:56 -0400
+        Thu, 13 Apr 2023 18:21:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E00A38A78;
-        Thu, 13 Apr 2023 15:21:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2791D26BE;
+        Thu, 13 Apr 2023 15:21:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7675664202;
-        Thu, 13 Apr 2023 22:21:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C75E0C433EF;
-        Thu, 13 Apr 2023 22:21:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B3CE26097C;
+        Thu, 13 Apr 2023 22:21:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0C3C8C4339B;
+        Thu, 13 Apr 2023 22:21:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681424505;
-        bh=LHf3EdbUfTHiiFAiofVbn0QT35RrzQGBC8v1K1+GCk8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=dp0T5VJURoF7M0+EMhR4DY3owQX2XHIcBn191ytxWsQ3VtGxGbO45reUl1USj9c3j
-         XGiieKLaPGOoBMaAFEp2BdJ/RXwajsp8JkwV88hNKu16Bh6cEsHbtmYtEYBVTBgAFk
-         +jJ58cx8Ck6ykfJYC7T1N70hfOZPrf3s4S9Axlzy2++FPvnsoVRBz1cUtf/vg42PDo
-         i/nGU1YzjqIsiqYNXePWOqecQnOoXyjHVJv8kIUBlhXASNUxrPK7LRBpKLC5nDYyZb
-         bNAzXfVNvx2cqDpYqvaCGtuzoTPMXW8dzuyGW0y9vmq9ntuiENjvymlCiv28GezIca
-         TsiEOgbuYa7tQ==
-From:   Conor Dooley <conor@kernel.org>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     conor@kernel.org, Conor Dooley <conor.dooley@microchip.com>,
-        stable@vger.kernel.org,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1] clk: microchip: fix potential UAF in auxdev release callback
-Date:   Thu, 13 Apr 2023 23:20:45 +0100
-Message-Id: <20230413-critter-synopsis-dac070a86cb4@spud>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1803; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=4o5FqEparnIFOIeeg2rKzW8byGnby2Xg9Ye2UA6HtQY=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDCkWDZbXVvqGiJ3V3JfLUmQ16bfqZK+A53I7Dz7/vbXzy /ZXFtxnO0pZGMQ4GGTFFFkSb/e1SK3/47LDuectzBxWJpAhDFycAjARgxkM/4NzF4pxpEXah75X Ck/mVKi/v6D2+dU3/AYLRNJ+WmzrfMLwv1jLb+mXz38vOvs+OLLyG6/IrMc/ja8UfucT5Vpvdch rBw8A
-X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
-Content-Transfer-Encoding: 8bit
+        s=k20201202; t=1681424477;
+        bh=0rrr7OdSB9qE/D5AdQXC5z3zw4NJw/nKCU+KXyu3Z/M=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=VE+wT2xQPlVha5tPRejIf99t3E8olk45TWRwgDSArwzo9t9JTFWgW7wb3BQJBvzUs
+         QBy5DC8UMtLnZvuFse3IIoS0g6V5Gu5YyJXyJhBiNAFLX9x29j+jU5XDP4u3EToJKl
+         OuJLM+Sq69QJIg+VD48taOb6pflL2lKvQjpHXK8OHDtL7A2BLeD3aAUAbR3b5pfmeA
+         zr1t6T0Y/om80ck3W3ClMs1FXBAL6Ig8hbBLlIYCL8Fpu3csAk6YA/0DcAujrOCeMa
+         E1GMWFvdr0j4CK2yyEmFzxvuBxuSvk/cUpVu6QtyAFyAlfauIoRLXmcG653z4awlC/
+         m/D2voeavzR5Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EE692E29F3B;
+        Thu, 13 Apr 2023 22:21:16 +0000 (UTC)
+Subject: Re: [GIT PULL] Pin control fix for AMD laptops
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CACRpkdZsoGihp-cVVKTMPFBPBj_7_ScaYJZFU6jZNugucyx3qg@mail.gmail.com>
+References: <CACRpkdZsoGihp-cVVKTMPFBPBj_7_ScaYJZFU6jZNugucyx3qg@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-gpio.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CACRpkdZsoGihp-cVVKTMPFBPBj_7_ScaYJZFU6jZNugucyx3qg@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git tags/pinctrl-v6.3-3
+X-PR-Tracked-Commit-Id: 534e465845ebfb4a97eb5459d3931a0b35e3b9a5
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 531f27ad5e3a85128a9668c9063c58fc35d4e89b
+Message-Id: <168142447696.24378.12217055712296399050.pr-tracker-bot@kernel.org>
+Date:   Thu, 13 Apr 2023 22:21:16 +0000
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?Kornel_Dul=C4=99ba?= <korneld@chromium.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,58 +63,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+The pull request you sent on Thu, 13 Apr 2023 22:09:58 +0200:
 
-Similar to commit 1c11289b34ab ("peci: cpu: Fix use-after-free in
-adev_release()"), the auxiliary device is not torn down in the correct
-order. If auxiliary_device_add() fails, the release callback will be
-called twice, resulting in a UAF. Due to timing, the auxdev code in this
-driver "took inspiration" from the aforementioned commit, and thus its
-bugs too!
+> git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git tags/pinctrl-v6.3-3
 
-Moving auxiliary_device_uninit() to the unregister callback instead
-avoids the issue.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/531f27ad5e3a85128a9668c9063c58fc35d4e89b
 
-CC: stable@vger.kernel.org
-Fixes: b56bae2dd6fd ("clk: microchip: mpfs: add reset controller")
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
-Stephen,
-Claudiu is on leave at the moment, and although I can push stuff to the
-at-91 tree etc, it's probably simpler if you just take this yourself?
+Thank you!
 
-CC: Stephen Boyd <sboyd@kernel.org>
-CC: Conor Dooley <conor.dooley@microchip.com>
-CC: Daire McNamara <daire.mcnamara@microchip.com>
-CC: Michael Turquette <mturquette@baylibre.com>
-CC: Stephen Boyd <sboyd@kernel.org>
-CC: Claudiu Beznea <claudiu.beznea@microchip.com>
-CC: linux-clk@vger.kernel.org
-CC: linux-kernel@vger.kernel.org
----
- drivers/clk/microchip/clk-mpfs.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/clk/microchip/clk-mpfs.c b/drivers/clk/microchip/clk-mpfs.c
-index 4f0a19db7ed7..cc5d7dee59f0 100644
---- a/drivers/clk/microchip/clk-mpfs.c
-+++ b/drivers/clk/microchip/clk-mpfs.c
-@@ -374,14 +374,13 @@ static void mpfs_reset_unregister_adev(void *_adev)
- 	struct auxiliary_device *adev = _adev;
- 
- 	auxiliary_device_delete(adev);
-+	auxiliary_device_uninit(adev);
- }
- 
- static void mpfs_reset_adev_release(struct device *dev)
- {
- 	struct auxiliary_device *adev = to_auxiliary_dev(dev);
- 
--	auxiliary_device_uninit(adev);
--
- 	kfree(adev);
- }
- 
 -- 
-2.39.2
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
