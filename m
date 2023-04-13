@@ -2,143 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 778706E07BE
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 09:31:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BADC66E07B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 09:27:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbjDMHbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 03:31:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44478 "EHLO
+        id S229742AbjDMH1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 03:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbjDMHbP (ORCPT
+        with ESMTP id S229637AbjDMH1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 03:31:15 -0400
-Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3824B59D2
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 00:31:14 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R421e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0Vg-SPvB_1681371070;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Vg-SPvB_1681371070)
-          by smtp.aliyun-inc.com;
-          Thu, 13 Apr 2023 15:31:11 +0800
-Message-ID: <1681370820.0675354-2-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH net-next V2 2/2] virtio-net: sleep instead of busy waiting for cvq command
-Date:   Thu, 13 Apr 2023 15:27:00 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, maxime.coquelin@redhat.com,
-        alvaro.karsz@solid-run.com, eperezma@redhat.com,
-        david.marchand@redhat.com, mst@redhat.com, jasowang@redhat.com
-References: <20230413064027.13267-1-jasowang@redhat.com>
- <20230413064027.13267-3-jasowang@redhat.com>
-In-Reply-To: <20230413064027.13267-3-jasowang@redhat.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 13 Apr 2023 03:27:47 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C55F28A72
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 00:27:41 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id a13so14428948ybl.11
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 00:27:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681370861; x=1683962861;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=abfJHn7ZwvAozrqfG1qVzD8XD4gBACYbJZHJhuhNXQE=;
+        b=d7BTv/vmtNhnXAx+Il+EBpfKR/J/Xb1OCcaQ/NruFP/cYDcdWB/2E2u7Yjcre+P1L0
+         q/ksHFqnvT2cNKvoyzTw8JCJg0lEwsJAHBg/WTWpuo6SIKh3vcIkF0tahvIOwaJQuF3F
+         20SyDVfYmgMDtQHUexfuymfONHFU0z3nrJKzHb+NMT3X4ibGYWWcM5Bq1dWq9iZPLEVF
+         reubUDf1O3UiX+YdFhAgb3y46zeH2OtiUqqoFWdJAK8LbODr71Pe/8R8hyYeOsfp6GD7
+         MdpPSFFaJe2BCftQWFoOesmh85zqtgItDJqcPGT2JLoP93gtVT1he/kkNkedFDfXNsNb
+         Wgxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681370861; x=1683962861;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=abfJHn7ZwvAozrqfG1qVzD8XD4gBACYbJZHJhuhNXQE=;
+        b=EgZAyAPdFNnhoA0Tkn5vr44ukGciLe9EMNWCTtM524dTWFztKTWgqrmqmlt8Ny4WEL
+         p4Sx+IpYp5fgCN7qH4vl+APLXVfXyZhRKF7GKnU/zfvtlDkzRgZe0aSY2LRxB+c8wRxq
+         qoWsywWeMyNB4azENvDlSoPIdH0IRJ2rFX9OZv+4C4hfHcwiSLrSNA89zMvZjn9toyqL
+         EzAt5e+zcVj0WXOCdDYiCvbh8BC0to2kXNZaotbuJ1PgrnV9ETNvQbw6PtXD3K5tq6xH
+         WbC4pqr0cZ6j1k1Kh/rzPMg4WXNZ1RQxoLDVqqTMr34t41DLwahOxwmTNkVkQ/+C2jWY
+         DyWA==
+X-Gm-Message-State: AAQBX9er7f9E097AX9sLGomTSEUr5SkUJzpZakDs71orkhv+o2qj86w4
+        0KaVDiO9fjJQKnuULUsXYxiZU5mhxLLavX5qETp+Hw==
+X-Google-Smtp-Source: AKy350bH+ZiTXauAcVY8vTc+xQLvbz0J9sGd7KTjoAKKs3btY4h4QHUcD0S5ToJ0HGl5nKUCZ1NU6OZPPf3mLTTVNZ4=
+X-Received: by 2002:a25:748b:0:b0:b8f:567f:4352 with SMTP id
+ p133-20020a25748b000000b00b8f567f4352mr548520ybc.3.1681370860855; Thu, 13 Apr
+ 2023 00:27:40 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230412-topic-lenovopanel-v1-0-00b25df46824@linaro.org> <20230412-topic-lenovopanel-v1-2-00b25df46824@linaro.org>
+In-Reply-To: <20230412-topic-lenovopanel-v1-2-00b25df46824@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 13 Apr 2023 09:27:29 +0200
+Message-ID: <CACRpkdb8DqeKHMSQQoNvJKiuUG2rZtHTbyo8rGMJ=L8FY4Y_ow@mail.gmail.com>
+Subject: Re: [PATCH 2/5] dt-bindings: display: panel: nt36523: Add Lenovo
+ J606F panel
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Jianhua Lu <lujianhua000@gmail.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 13 Apr 2023 14:40:27 +0800, Jason Wang <jasowang@redhat.com> wrote:
-> We used to busy waiting on the cvq command this tends to be
-> problematic since there no way for to schedule another process which
-> may serve for the control virtqueue. This might be the case when the
-> control virtqueue is emulated by software. This patch switches to use
-> completion to allow the CPU to sleep instead of busy waiting for the
-> cvq command.
->
-> Signed-off-by: Jason Wang <jasowang@redhat.com>
-> ---
-> Changes since V1:
-> - use completion for simplicity
-> - don't try to harden the CVQ command which requires more thought
-> Changes since RFC:
-> - break the device when timeout
-> - get buffer manually since the virtio core check more_used() instead
-> ---
->  drivers/net/virtio_net.c | 21 ++++++++++++++-------
->  1 file changed, 14 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> index 2e56bbf86894..d3eb8fd6c9dc 100644
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@ -19,6 +19,7 @@
->  #include <linux/average.h>
->  #include <linux/filter.h>
->  #include <linux/kernel.h>
-> +#include <linux/completion.h>
->  #include <net/route.h>
->  #include <net/xdp.h>
->  #include <net/net_failover.h>
-> @@ -295,6 +296,8 @@ struct virtnet_info {
->
->  	/* failover when STANDBY feature enabled */
->  	struct failover *failover;
-> +
-> +	struct completion completion;
->  };
->
->  struct padded_vnet_hdr {
-> @@ -1709,6 +1712,13 @@ static bool try_fill_recv(struct virtnet_info *vi, struct receive_queue *rq,
->  	return !oom;
->  }
->
-> +static void virtnet_cvq_done(struct virtqueue *cvq)
-> +{
-> +	struct virtnet_info *vi = cvq->vdev->priv;
-> +
-> +	complete(&vi->completion);
-> +}
-> +
->  static void skb_recv_done(struct virtqueue *rvq)
->  {
->  	struct virtnet_info *vi = rvq->vdev->priv;
-> @@ -2169,12 +2179,8 @@ static bool virtnet_send_command(struct virtnet_info *vi, u8 class, u8 cmd,
->  	if (unlikely(!virtqueue_kick(vi->cvq)))
->  		return vi->ctrl->status == VIRTIO_NET_OK;
->
-> -	/* Spin for a response, the kick causes an ioport write, trapping
-> -	 * into the hypervisor, so the request should be handled immediately.
-> -	 */
-> -	while (!virtqueue_get_buf(vi->cvq, &tmp) &&
-> -	       !virtqueue_is_broken(vi->cvq))
-> -		cpu_relax();
-> +	wait_for_completion(&vi->completion);
-> +	virtqueue_get_buf(vi->cvq, &tmp);
->
->  	return vi->ctrl->status == VIRTIO_NET_OK;
->  }
-> @@ -3672,7 +3678,7 @@ static int virtnet_find_vqs(struct virtnet_info *vi)
->
->  	/* Parameters for control virtqueue, if any */
->  	if (vi->has_cvq) {
-> -		callbacks[total_vqs - 1] = NULL;
-> +		callbacks[total_vqs - 1] = virtnet_cvq_done;
+On Wed, Apr 12, 2023 at 9:46=E2=80=AFPM Konrad Dybcio <konrad.dybcio@linaro=
+.org> wrote:
 
-This depends the interrupt, right?
-
-I worry that there may be some devices that may not support interruption on cvq.
-Although this may not be in line with SPEC, it may cause problem on the devices
-that can work normally at present.
-
-Thanks.
-
-
->  		names[total_vqs - 1] = "control";
->  	}
+> Some Lenovo J606F tablets come with a 2K (2000x1200) 60Hz 11" 5:3
+> video mode display. Document it and allow rotation while at it (Lenovo
+> mounted it upside down!).
 >
-> @@ -4122,6 +4128,7 @@ static int virtnet_probe(struct virtio_device *vdev)
->  	if (vi->has_rss || vi->has_rss_hash_report)
->  		virtnet_init_default_rss(vi);
->
-> +	init_completion(&vi->completion);
->  	enable_rx_mode_work(vi);
->
->  	/* serialize netdev register + virtio_device_ready() with ndo_open() */
-> --
-> 2.25.1
->
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Looks good to me!
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+
+Yours,
+Linus Walleij
