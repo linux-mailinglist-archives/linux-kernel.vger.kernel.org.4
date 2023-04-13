@@ -2,582 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 077AB6E0EEE
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:38:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6FBD6E0FA6
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:07:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231652AbjDMNiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 09:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37468 "EHLO
+        id S231698AbjDMOHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 10:07:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231555AbjDMNh3 (ORCPT
+        with ESMTP id S230305AbjDMOHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 09:37:29 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFB3CC3B
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:35:15 -0700 (PDT)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 261953F550
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 13:34:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1681392885;
-        bh=9OFnG70DkKWiYI7WkrGxo4LXdZLPfs21Ye1s1GRVjTU=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=QBV+oG6leDNv74fYZb4pNK9FeAhu43ARYt+VaUiHTD8Rdl7tKxrfZPsIpFnRfnBiB
-         MRr/IlxBxydeQmrvfC7OmXQYQbqhcMoOWKjtoQ6pcvQS5n8ciN87T/49Oubf8uvQUe
-         DaLmT7wAz4ADMFJ+Of0yymHqP7kNQi2Bjg3oB7fRiUWJncH4Fw6CjrnDgJWkZcN+ei
-         9p96IXYLlhoSIy+BYrBVdS/ZANxZEqy9KJxMlj4mVJ5EYQEkVxNQ6f0BJcCpiaOflK
-         unfhkASPDGx0AAvYftQ5oH5XcnXgDHoPrK59BTB0ToabJ3t3m3wUHSt1iIUUV0BJgj
-         lW4INvtg438oQ==
-Received: by mail-ed1-f71.google.com with SMTP id m17-20020a509991000000b0050463defdabso10943603edb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:34:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681392883; x=1683984883;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9OFnG70DkKWiYI7WkrGxo4LXdZLPfs21Ye1s1GRVjTU=;
-        b=kXVFqwKpAbv9y3mI3oGwgjuV/id9JJ0j6gmY7y2jxQH+0u2g9VjX3FidhUBZRA+s5Q
-         QusrsJl4234gbloyH04bPPXsS4uPw3ZNFZcOzmav6p3EEMECSvC6dsipG20hM2txlieM
-         a8J/nziAY6lt10md83K9kpMFuXzZEaGXjReTuEIhKT+h608SMKoislpGHk1VacLqG3Qv
-         WBukVQONmQVIQQ9QiFf+tUP21FRv9uJBVPbb0vXsrSX0JN6PIHeaxyT9PWObRMLuJQgZ
-         5XVGe3NY5OIG2QG0Po6sfmLOspaNaK+AefDSUjpzHUX2Eqh1fpFUj0FNH0OIzWwAVRPb
-         EArw==
-X-Gm-Message-State: AAQBX9cIbRCnpFBB3wc+83EaLWCPAAEBYDvorc16qgMslA/N2Gnka2Kk
-        5LGTUUYvJswB6CcuMMaqDTQTqN7KZO7G0d7nYEY83Zpk3RDezxw46Vhcztf+U2TzNZcLFvnzze5
-        QAzZfkJc4M1GybfkndX2RlfVsJaP0xJajCdJyOfr2Pw==
-X-Received: by 2002:a17:906:ae8a:b0:882:cdd4:14d9 with SMTP id md10-20020a170906ae8a00b00882cdd414d9mr2639508ejb.46.1681392883229;
-        Thu, 13 Apr 2023 06:34:43 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Y8Ak1AMedhDxrX0Hch7Jn9DeuDHTYqN/ZQLJbSNTNoYaDS8nhCmAWBIfXbaLlh1gAdP/aUGA==
-X-Received: by 2002:a17:906:ae8a:b0:882:cdd4:14d9 with SMTP id md10-20020a170906ae8a00b00882cdd414d9mr2639484ejb.46.1681392883023;
-        Thu, 13 Apr 2023 06:34:43 -0700 (PDT)
-Received: from amikhalitsyn.. ([95.91.208.118])
-        by smtp.gmail.com with ESMTPSA id et22-20020a170907295600b0094a966330fdsm976806ejc.211.2023.04.13.06.34.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 06:34:42 -0700 (PDT)
-From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-To:     davem@davemloft.net
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        daniel@iogearbox.net,
-        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v4 4/4] selftests: net: add SCM_PIDFD / SO_PEERPIDFD test
-Date:   Thu, 13 Apr 2023 15:33:55 +0200
-Message-Id: <20230413133355.350571-5-aleksandr.mikhalitsyn@canonical.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230413133355.350571-1-aleksandr.mikhalitsyn@canonical.com>
-References: <20230413133355.350571-1-aleksandr.mikhalitsyn@canonical.com>
+        Thu, 13 Apr 2023 10:07:17 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D52E2;
+        Thu, 13 Apr 2023 07:07:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681394836; x=1712930836;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=o3ui4+B9QONrA1DxR7CqtVx0f1GoF/Cuz8I+r7IyAkc=;
+  b=NPHSldpaqA+quQpdXwfcscHG2bdMX2MitIjReA2H4IiJWc8OiI2I1bUK
+   m2eOgy2nYfyfjhyYGRnxaRscVYpJntHRVyIjNKwTg/uPLvipMnuJykBr7
+   UcNySSudqCXuJ2pVWSXuGL1q3JMCi21AXt11ZUdQEZXUqOJxRLj3QxIZM
+   1lPXgM4hFsbsc1SAheKkvF4pyJM+JhLLiZIHjIImRgr4PWmrP61YIhiYE
+   wrl30KGotx8P4IxZeSoFB011Orq1CxXZpTdDlRGr9oGLlldinWKj4gcqg
+   nSqpiKabMcSRm/lH9KA7u+NW0cHillIa2ak3a1Y6dEsytzSH82rS32rQ8
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="409359221"
+X-IronPort-AV: E=Sophos;i="5.99,193,1677571200"; 
+   d="scan'208";a="409359221"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 06:34:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="833154339"
+X-IronPort-AV: E=Sophos;i="5.99,193,1677571200"; 
+   d="scan'208";a="833154339"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 13 Apr 2023 06:34:50 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pmx69-000YiI-2u;
+        Thu, 13 Apr 2023 13:34:49 +0000
+Date:   Thu, 13 Apr 2023 21:34:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yi-De Wu <yi-de.wu@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Yingshiuan Pan <yingshiuan.pan@mediatek.com>
+Cc:     oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Jades Shih <jades.shih@mediatek.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Ivan Tseng <ivan.tseng@mediatek.com>,
+        My Chuang <my.chuang@mediatek.com>,
+        Shawn Hsiao <shawn.hsiao@mediatek.com>,
+        PeiLun Suei <peilun.suei@mediatek.com>,
+        Ze-Yu Wang <ze-yu.wang@mediatek.com>,
+        Liju Chen <liju-clr.chen@mediatek.com>,
+        Yi-De Wu <yi-de.wu@mediatek.com>
+Subject: Re: [PATCH v1 6/6] soc: mediatek: virt: geniezone: Add irqfd support
+Message-ID: <202304132123.rrVq3AEP-lkp@intel.com>
+References: <20230413090735.4182-7-yi-de.wu@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230413090735.4182-7-yi-de.wu@mediatek.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Basic test to check consistency between:
-- SCM_CREDENTIALS and SCM_PIDFD
-- SO_PEERCRED and SO_PEERPIDFD
+Hi Yi-De,
 
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Leon Romanovsky <leon@kernel.org>
-Cc: David Ahern <dsahern@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc: linux-kernel@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Cc: linux-arch@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
----
-v3:
-	- started using kselftest lib (thanks to Kuniyuki Iwashima for suggestion/review)
-	- now test covers abstract sockets too and SOCK_DGRAM sockets
----
- tools/testing/selftests/net/.gitignore        |   1 +
- tools/testing/selftests/net/af_unix/Makefile  |   2 +-
- .../testing/selftests/net/af_unix/scm_pidfd.c | 430 ++++++++++++++++++
- 3 files changed, 432 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/net/af_unix/scm_pidfd.c
+kernel test robot noticed the following build warnings:
 
-diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
-index 80f06aa62034..83fd1ebd34ec 100644
---- a/tools/testing/selftests/net/.gitignore
-+++ b/tools/testing/selftests/net/.gitignore
-@@ -26,6 +26,7 @@ reuseport_bpf_cpu
- reuseport_bpf_numa
- reuseport_dualstack
- rxtimestamp
-+scm_pidfd
- sk_bind_sendto_listen
- sk_connect_zero_addr
- socket
-diff --git a/tools/testing/selftests/net/af_unix/Makefile b/tools/testing/selftests/net/af_unix/Makefile
-index 1e4b397cece6..f5ca9da8c4d5 100644
---- a/tools/testing/selftests/net/af_unix/Makefile
-+++ b/tools/testing/selftests/net/af_unix/Makefile
-@@ -1,3 +1,3 @@
--TEST_GEN_PROGS := diag_uid test_unix_oob unix_connect
-+TEST_GEN_PROGS := diag_uid test_unix_oob unix_connect scm_pidfd
- 
- include ../../lib.mk
-diff --git a/tools/testing/selftests/net/af_unix/scm_pidfd.c b/tools/testing/selftests/net/af_unix/scm_pidfd.c
-new file mode 100644
-index 000000000000..a86222143d79
---- /dev/null
-+++ b/tools/testing/selftests/net/af_unix/scm_pidfd.c
-@@ -0,0 +1,430 @@
-+// SPDX-License-Identifier: GPL-2.0 OR MIT
-+#define _GNU_SOURCE
-+#include <error.h>
-+#include <limits.h>
-+#include <stddef.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <sys/socket.h>
-+#include <linux/socket.h>
-+#include <unistd.h>
-+#include <string.h>
-+#include <errno.h>
-+#include <sys/un.h>
-+#include <sys/signal.h>
-+#include <sys/types.h>
-+#include <sys/wait.h>
-+
-+#include "../../kselftest_harness.h"
-+
-+#define clean_errno() (errno == 0 ? "None" : strerror(errno))
-+#define log_err(MSG, ...)                                                   \
-+	fprintf(stderr, "(%s:%d: errno: %s) " MSG "\n", __FILE__, __LINE__, \
-+		clean_errno(), ##__VA_ARGS__)
-+
-+#ifndef SCM_PIDFD
-+#define SCM_PIDFD 0x04
-+#endif
-+
-+static void child_die()
-+{
-+	exit(1);
-+}
-+
-+static int safe_int(const char *numstr, int *converted)
-+{
-+	char *err = NULL;
-+	long sli;
-+
-+	errno = 0;
-+	sli = strtol(numstr, &err, 0);
-+	if (errno == ERANGE && (sli == LONG_MAX || sli == LONG_MIN))
-+		return -ERANGE;
-+
-+	if (errno != 0 && sli == 0)
-+		return -EINVAL;
-+
-+	if (err == numstr || *err != '\0')
-+		return -EINVAL;
-+
-+	if (sli > INT_MAX || sli < INT_MIN)
-+		return -ERANGE;
-+
-+	*converted = (int)sli;
-+	return 0;
-+}
-+
-+static int char_left_gc(const char *buffer, size_t len)
-+{
-+	size_t i;
-+
-+	for (i = 0; i < len; i++) {
-+		if (buffer[i] == ' ' || buffer[i] == '\t')
-+			continue;
-+
-+		return i;
-+	}
-+
-+	return 0;
-+}
-+
-+static int char_right_gc(const char *buffer, size_t len)
-+{
-+	int i;
-+
-+	for (i = len - 1; i >= 0; i--) {
-+		if (buffer[i] == ' ' || buffer[i] == '\t' ||
-+		    buffer[i] == '\n' || buffer[i] == '\0')
-+			continue;
-+
-+		return i + 1;
-+	}
-+
-+	return 0;
-+}
-+
-+static char *trim_whitespace_in_place(char *buffer)
-+{
-+	buffer += char_left_gc(buffer, strlen(buffer));
-+	buffer[char_right_gc(buffer, strlen(buffer))] = '\0';
-+	return buffer;
-+}
-+
-+/* borrowed (with all helpers) from pidfd/pidfd_open_test.c */
-+static pid_t get_pid_from_fdinfo_file(int pidfd, const char *key, size_t keylen)
-+{
-+	int ret;
-+	char path[512];
-+	FILE *f;
-+	size_t n = 0;
-+	pid_t result = -1;
-+	char *line = NULL;
-+
-+	snprintf(path, sizeof(path), "/proc/self/fdinfo/%d", pidfd);
-+
-+	f = fopen(path, "re");
-+	if (!f)
-+		return -1;
-+
-+	while (getline(&line, &n, f) != -1) {
-+		char *numstr;
-+
-+		if (strncmp(line, key, keylen))
-+			continue;
-+
-+		numstr = trim_whitespace_in_place(line + 4);
-+		ret = safe_int(numstr, &result);
-+		if (ret < 0)
-+			goto out;
-+
-+		break;
-+	}
-+
-+out:
-+	free(line);
-+	fclose(f);
-+	return result;
-+}
-+
-+static int cmsg_check(int fd)
-+{
-+	struct msghdr msg = { 0 };
-+	struct cmsghdr *cmsg;
-+	struct iovec iov;
-+	struct ucred *ucred = NULL;
-+	int data = 0;
-+	char control[CMSG_SPACE(sizeof(struct ucred)) +
-+		     CMSG_SPACE(sizeof(int))] = { 0 };
-+	int *pidfd = NULL;
-+	pid_t parent_pid;
-+	int err;
-+
-+	iov.iov_base = &data;
-+	iov.iov_len = sizeof(data);
-+
-+	msg.msg_iov = &iov;
-+	msg.msg_iovlen = 1;
-+	msg.msg_control = control;
-+	msg.msg_controllen = sizeof(control);
-+
-+	err = recvmsg(fd, &msg, 0);
-+	if (err < 0) {
-+		log_err("recvmsg");
-+		return 1;
-+	}
-+
-+	if (msg.msg_flags & (MSG_TRUNC | MSG_CTRUNC)) {
-+		log_err("recvmsg: truncated");
-+		return 1;
-+	}
-+
-+	for (cmsg = CMSG_FIRSTHDR(&msg); cmsg != NULL;
-+	     cmsg = CMSG_NXTHDR(&msg, cmsg)) {
-+		if (cmsg->cmsg_level == SOL_SOCKET &&
-+		    cmsg->cmsg_type == SCM_PIDFD) {
-+			if (cmsg->cmsg_len < sizeof(*pidfd)) {
-+				log_err("CMSG parse: SCM_PIDFD wrong len");
-+				return 1;
-+			}
-+
-+			pidfd = (void *)CMSG_DATA(cmsg);
-+		}
-+
-+		if (cmsg->cmsg_level == SOL_SOCKET &&
-+		    cmsg->cmsg_type == SCM_CREDENTIALS) {
-+			if (cmsg->cmsg_len < sizeof(*ucred)) {
-+				log_err("CMSG parse: SCM_CREDENTIALS wrong len");
-+				return 1;
-+			}
-+
-+			ucred = (void *)CMSG_DATA(cmsg);
-+		}
-+	}
-+
-+	/* send(pfd, "x", sizeof(char), 0) */
-+	if (data != 'x') {
-+		log_err("recvmsg: data corruption");
-+		return 1;
-+	}
-+
-+	if (!pidfd) {
-+		log_err("CMSG parse: SCM_PIDFD not found");
-+		return 1;
-+	}
-+
-+	if (!ucred) {
-+		log_err("CMSG parse: SCM_CREDENTIALS not found");
-+		return 1;
-+	}
-+
-+	/* pidfd from SCM_PIDFD should point to the parent process PID */
-+	parent_pid =
-+		get_pid_from_fdinfo_file(*pidfd, "Pid:", sizeof("Pid:") - 1);
-+	if (parent_pid != getppid()) {
-+		log_err("wrong SCM_PIDFD %d != %d", parent_pid, getppid());
-+		return 1;
-+	}
-+
-+	return 0;
-+}
-+
-+struct sock_addr {
-+	char sock_name[32];
-+	struct sockaddr_un listen_addr;
-+	socklen_t addrlen;
-+};
-+
-+FIXTURE(scm_pidfd)
-+{
-+	int server;
-+	pid_t client_pid;
-+	int startup_pipe[2];
-+	struct sock_addr server_addr;
-+	struct sock_addr *client_addr;
-+};
-+
-+FIXTURE_VARIANT(scm_pidfd)
-+{
-+	int type;
-+	bool abstract;
-+};
-+
-+FIXTURE_VARIANT_ADD(scm_pidfd, stream_pathname)
-+{
-+	.type = SOCK_STREAM,
-+	.abstract = 0,
-+};
-+
-+FIXTURE_VARIANT_ADD(scm_pidfd, stream_abstract)
-+{
-+	.type = SOCK_STREAM,
-+	.abstract = 1,
-+};
-+
-+FIXTURE_VARIANT_ADD(scm_pidfd, dgram_pathname)
-+{
-+	.type = SOCK_DGRAM,
-+	.abstract = 0,
-+};
-+
-+FIXTURE_VARIANT_ADD(scm_pidfd, dgram_abstract)
-+{
-+	.type = SOCK_DGRAM,
-+	.abstract = 1,
-+};
-+
-+FIXTURE_SETUP(scm_pidfd)
-+{
-+	self->client_addr = mmap(NULL, sizeof(*self->client_addr), PROT_READ | PROT_WRITE,
-+				 MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-+	ASSERT_NE(MAP_FAILED, self->client_addr);
-+}
-+
-+FIXTURE_TEARDOWN(scm_pidfd)
-+{
-+	close(self->server);
-+
-+	kill(self->client_pid, SIGKILL);
-+	waitpid(self->client_pid, NULL, 0);
-+
-+	if (!variant->abstract) {
-+		unlink(self->server_addr.sock_name);
-+		unlink(self->client_addr->sock_name);
-+	}
-+}
-+
-+static void fill_sockaddr(struct sock_addr *addr, bool abstract)
-+{
-+	char *sun_path_buf = (char *)&addr->listen_addr.sun_path;
-+
-+	addr->listen_addr.sun_family = AF_UNIX;
-+	addr->addrlen = offsetof(struct sockaddr_un, sun_path);
-+	snprintf(addr->sock_name, sizeof(addr->sock_name), "scm_pidfd_%d", getpid());
-+	addr->addrlen += strlen(addr->sock_name);
-+	if (abstract) {
-+		*sun_path_buf = '\0';
-+		addr->addrlen++;
-+		sun_path_buf++;
-+	} else {
-+		unlink(addr->sock_name);
-+	}
-+	memcpy(sun_path_buf, addr->sock_name, strlen(addr->sock_name));
-+}
-+
-+static void client(FIXTURE_DATA(scm_pidfd) *self,
-+		   const FIXTURE_VARIANT(scm_pidfd) *variant)
-+{
-+	int err;
-+	int cfd;
-+	socklen_t len;
-+	struct ucred peer_cred;
-+	int peer_pidfd;
-+	pid_t peer_pid;
-+	int on = 0;
-+
-+	cfd = socket(AF_UNIX, variant->type, 0);
-+	if (cfd < 0) {
-+		log_err("socket");
-+		child_die();
-+	}
-+
-+	if (variant->type == SOCK_DGRAM) {
-+		fill_sockaddr(self->client_addr, variant->abstract);
-+
-+		if (bind(cfd, (struct sockaddr *)&self->client_addr->listen_addr, self->client_addr->addrlen)) {
-+			log_err("bind");
-+			child_die();
-+		}
-+	}
-+
-+	if (connect(cfd, (struct sockaddr *)&self->server_addr.listen_addr,
-+		    self->server_addr.addrlen) != 0) {
-+		log_err("connect");
-+		child_die();
-+	}
-+
-+	on = 1;
-+	if (setsockopt(cfd, SOL_SOCKET, SO_PASSCRED, &on, sizeof(on))) {
-+		log_err("Failed to set SO_PASSCRED");
-+		child_die();
-+	}
-+
-+	if (setsockopt(cfd, SOL_SOCKET, SO_PASSPIDFD, &on, sizeof(on))) {
-+		log_err("Failed to set SO_PASSPIDFD");
-+		child_die();
-+	}
-+
-+	close(self->startup_pipe[1]);
-+
-+	if (cmsg_check(cfd)) {
-+		log_err("cmsg_check failed");
-+		child_die();
-+	}
-+
-+	/* skip further for SOCK_DGRAM as it's not applicable */
-+	if (variant->type == SOCK_DGRAM)
-+		return;
-+
-+	len = sizeof(peer_cred);
-+	if (getsockopt(cfd, SOL_SOCKET, SO_PEERCRED, &peer_cred, &len)) {
-+		log_err("Failed to get SO_PEERCRED");
-+		child_die();
-+	}
-+
-+	len = sizeof(peer_pidfd);
-+	if (getsockopt(cfd, SOL_SOCKET, SO_PEERPIDFD, &peer_pidfd, &len)) {
-+		log_err("Failed to get SO_PEERPIDFD");
-+		child_die();
-+	}
-+
-+	/* pid from SO_PEERCRED should point to the parent process PID */
-+	if (peer_cred.pid != getppid()) {
-+		log_err("peer_cred.pid != getppid(): %d != %d", peer_cred.pid, getppid());
-+		child_die();
-+	}
-+
-+	peer_pid = get_pid_from_fdinfo_file(peer_pidfd,
-+					    "Pid:", sizeof("Pid:") - 1);
-+	if (peer_pid != peer_cred.pid) {
-+		log_err("peer_pid != peer_cred.pid: %d != %d", peer_pid, peer_cred.pid);
-+		child_die();
-+	}
-+}
-+
-+TEST_F(scm_pidfd, test)
-+{
-+	int err;
-+	int pfd;
-+	int child_status = 0;
-+
-+	self->server = socket(AF_UNIX, variant->type, 0);
-+	ASSERT_NE(-1, self->server);
-+
-+	fill_sockaddr(&self->server_addr, variant->abstract);
-+
-+	err = bind(self->server, (struct sockaddr *)&self->server_addr.listen_addr, self->server_addr.addrlen);
-+	ASSERT_EQ(0, err);
-+
-+	if (variant->type == SOCK_STREAM) {
-+		err = listen(self->server, 1);
-+		ASSERT_EQ(0, err);
-+	}
-+
-+	err = pipe(self->startup_pipe);
-+	ASSERT_NE(-1, err);
-+
-+	self->client_pid = fork();
-+	ASSERT_NE(-1, self->client_pid);
-+	if (self->client_pid == 0) {
-+		close(self->server);
-+		close(self->startup_pipe[0]);
-+		client(self, variant);
-+		exit(0);
-+	}
-+	close(self->startup_pipe[1]);
-+
-+	if (variant->type == SOCK_STREAM) {
-+		pfd = accept(self->server, NULL, NULL);
-+		ASSERT_NE(-1, pfd);
-+	} else {
-+		pfd = self->server;
-+	}
-+
-+	/* wait until the child arrives at checkpoint */
-+	read(self->startup_pipe[0], &err, sizeof(int));
-+	close(self->startup_pipe[0]);
-+
-+	if (variant->type == SOCK_DGRAM) {
-+		err = sendto(pfd, "x", sizeof(char), 0, (struct sockaddr *)&self->client_addr->listen_addr, self->client_addr->addrlen);
-+		ASSERT_NE(-1, err);
-+	} else {
-+		err = send(pfd, "x", sizeof(char), 0);
-+		ASSERT_NE(-1, err);
-+	}
-+
-+	close(pfd);
-+	waitpid(self->client_pid, &child_status, 0);
-+	ASSERT_EQ(0, WIFEXITED(child_status) ? WEXITSTATUS(child_status) : 1);
-+}
-+
-+TEST_HARNESS_MAIN
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on krzk-dt/for-next arm64/for-next/core lwn/docs-next linus/master v6.3-rc6 next-20230412]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Yi-De-Wu/docs-geniezone-Introduce-GenieZone-hypervisor/20230413-170932
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230413090735.4182-7-yi-de.wu%40mediatek.com
+patch subject: [PATCH v1 6/6] soc: mediatek: virt: geniezone: Add irqfd support
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20230413/202304132123.rrVq3AEP-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/ae996a1c7d12837f16f28975712a8bf63525cac4
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yi-De-Wu/docs-geniezone-Introduce-GenieZone-hypervisor/20230413-170932
+        git checkout ae996a1c7d12837f16f28975712a8bf63525cac4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/soc/mediatek/virt/geniezone/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304132123.rrVq3AEP-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/soc/mediatek/virt/geniezone/gzvm_eventfd.c:463:6: warning: no previous prototype for 'gzvm_irqfd_release' [-Wmissing-prototypes]
+     463 | void gzvm_irqfd_release(struct gzvm *gzvm)
+         |      ^~~~~~~~~~~~~~~~~~
+
+
+vim +/gzvm_irqfd_release +463 drivers/soc/mediatek/virt/geniezone/gzvm_eventfd.c
+
+   458	
+   459	/*
+   460	 * This function is called as the gzvm VM fd is being released. Shutdown all
+   461	 * irqfds that still remain open
+   462	 */
+ > 463	void gzvm_irqfd_release(struct gzvm *gzvm)
+   464	{
+   465		struct gzvm_kernel_irqfd *irqfd, *tmp;
+   466	
+   467		spin_lock_irq(&gzvm->irqfds.lock);
+   468	
+   469		list_for_each_entry_safe(irqfd, tmp, &gzvm->irqfds.items, list)
+   470			irqfd_deactivate(irqfd);
+   471	
+   472		spin_unlock_irq(&gzvm->irqfds.lock);
+   473	
+   474		/*
+   475		 * Block until we know all outstanding shutdown jobs have completed.
+   476		 */
+   477		flush_workqueue(irqfd_cleanup_wq);
+   478	}
+   479	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
