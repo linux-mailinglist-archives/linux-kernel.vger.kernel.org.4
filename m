@@ -2,83 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B647B6E038E
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 03:17:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E46D6E0397
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 03:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbjDMBR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 21:17:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56962 "EHLO
+        id S229847AbjDMBR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 21:17:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjDMBR1 (ORCPT
+        with ESMTP id S229597AbjDMBRu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 21:17:27 -0400
-Received: from unicom145.biz-email.net (unicom145.biz-email.net [210.51.26.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7313E2D73;
-        Wed, 12 Apr 2023 18:17:25 -0700 (PDT)
-Received: from unicom145.biz-email.net
-        by unicom145.biz-email.net ((D)) with ASMTP (SSL) id IVE00021;
-        Thu, 13 Apr 2023 09:17:21 +0800
-Received: from localhost.localdomain.com (10.200.104.82) by
- jtjnmail201603.home.langchao.com (10.100.2.3) with Microsoft SMTP Server id
- 15.1.2507.21; Thu, 13 Apr 2023 09:17:21 +0800
-From:   Deming Wang <wangdeming@inspur.com>
-To:     <akpm@linux-foundation.org>, <shuah@kernel.org>
-CC:     <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Deming Wang <wangdeming@inspur.com>
-Subject: [PATCH] mm: huge_memory: Replace obsolete memalign() with posix_memalign()
-Date:   Wed, 12 Apr 2023 21:17:19 -0400
-Message-ID: <20230413011719.4355-1-wangdeming@inspur.com>
-X-Mailer: git-send-email 2.31.1
+        Wed, 12 Apr 2023 21:17:50 -0400
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B85047684;
+        Wed, 12 Apr 2023 18:17:48 -0700 (PDT)
+Received: by mail-wm1-f47.google.com with SMTP id n19-20020a05600c501300b003f064936c3eso12217354wmr.0;
+        Wed, 12 Apr 2023 18:17:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681348667; x=1683940667;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m2Et2YcVTo5xUyvh2X7Aphr8Wh2NR6RLykrvrM2pcjc=;
+        b=cGCJjhtGJVSx09NE6gyLgjQ7O8WDy9OCQ091Fcj1VFfkk3rolxbZw66uLxDbGVztV8
+         9IQbW2cNWSRC/JC5ubZqU0vQcWKlSiBQ+Mf9gy4Ek5WB9ZUMRg2Ea8Dhlrn4WNDD58bV
+         njdQRF0TMpBQUfCaUt3caqZd0ID1ekwruaWfC1S5c8Gbo4GBqxEMuWBwirnxLkqlEBS/
+         pjs+lFZ2vutxHGkcsVeSgalWiBUnJqDI9VarErF/WTqPAZKDSRL3lPBPImLFJVdjro0g
+         3v9kpO4I0BoZcztL9M9zpewgkootBvbiI8gyg6mvzeeXWq/O27xSEz048ecSEC6ZMLLo
+         4Frw==
+X-Gm-Message-State: AAQBX9ep7xSoqrg9UUwZ5Dr33FG9E61youGsScu2jEXMuBF0Q1koI1tf
+        2rY+HRuhc6VdB+3udfDmP5U=
+X-Google-Smtp-Source: AKy350asQiATAwQQ3ffHggu6sM4MK7QMNIzV+BulfMMwvTqHEtexI00wBeUdpLl4aSQ/b2ws+m9z1w==
+X-Received: by 2002:a7b:cc84:0:b0:3f0:46d4:b391 with SMTP id p4-20020a7bcc84000000b003f046d4b391mr429644wma.6.1681348667103;
+        Wed, 12 Apr 2023 18:17:47 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id e6-20020adff346000000b002efac42ff35sm120131wrp.37.2023.04.12.18.17.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Apr 2023 18:17:46 -0700 (PDT)
+Date:   Thu, 13 Apr 2023 01:17:42 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Dexuan Cui <decui@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] clocksource: hyper-v: make sure Invariant-TSC is used if
+ it is available
+Message-ID: <ZDdYNgPxdkXScB+C@liuwe-devbox-debian-v2>
+References: <20230408210339.15085-1-decui@microsoft.com>
+ <BYAPR21MB16884AD46D83DB91CECB34EED79A9@BYAPR21MB1688.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.200.104.82]
-tUid:   202341309172112133dcf85e55cc2f0c8dd986110b309
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BYAPR21MB16884AD46D83DB91CECB34EED79A9@BYAPR21MB1688.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-memalign() is obsolete according to its manpage.
+On Tue, Apr 11, 2023 at 05:28:39PM +0000, Michael Kelley (LINUX) wrote:
+> From: Dexuan Cui <decui@microsoft.com> Sent: Saturday, April 8, 2023 2:04 PM
+> Reviewed-by:  Michael Kelley <mikelley@microsoft.com>
+> 
 
-Replace memalign() with posix_memalign()
-
-As a pointer is passed into posix_memalign(), initialize *one_page
-to NULL to silence a warning about the function's return value being
-used as uninitialized (which is not valid anyway because the error
-is properly checked before one_page is returned).
-
-Signed-off-by: Deming Wang <wangdeming@inspur.com>
----
- tools/testing/selftests/mm/split_huge_page_test.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
-index cbb5e6893cbf..94c7dffc4d7d 100644
---- a/tools/testing/selftests/mm/split_huge_page_test.c
-+++ b/tools/testing/selftests/mm/split_huge_page_test.c
-@@ -96,10 +96,10 @@ void split_pmd_thp(void)
- 	char *one_page;
- 	size_t len = 4 * pmd_pagesize;
- 	size_t i;
-+	int ret;
- 
--	one_page = memalign(pmd_pagesize, len);
--
--	if (!one_page) {
-+	ret = posix_memalign((void **)&one_page, pmd_pagesize, len);
-+	if (ret < 0) {
- 		printf("Fail to allocate memory\n");
- 		exit(EXIT_FAILURE);
- 	}
--- 
-2.27.0
-
+Applied to hyperv-next. Thanks.
