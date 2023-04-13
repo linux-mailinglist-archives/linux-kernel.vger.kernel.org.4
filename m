@@ -2,89 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A3C6E0A5B
+	by mail.lfdr.de (Postfix) with ESMTP id D52246E0A5D
 	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 11:37:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbjDMJhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 05:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60008 "EHLO
+        id S230235AbjDMJhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 05:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbjDMJhO (ORCPT
+        with ESMTP id S230214AbjDMJhN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 05:37:14 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E113903C;
-        Thu, 13 Apr 2023 02:37:13 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33D9aanG7025474, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33D9aanG7025474
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Thu, 13 Apr 2023 17:36:36 +0800
-Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 13 Apr 2023 17:36:58 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 13 Apr 2023 17:36:58 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
- RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
- 15.01.2375.007; Thu, 13 Apr 2023 17:36:58 +0800
-From:   =?big5?B?U3RhbmxleSBDaGFuZ1up96h8vHdd?= <stanley_chang@realtek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v3 2/2] dt-bindings: usb: snps,dwc3: Add 'snps,parkmode-disable-hs-quirk' quirk
-Thread-Topic: [PATCH v3 2/2] dt-bindings: usb: snps,dwc3: Add
- 'snps,parkmode-disable-hs-quirk' quirk
-Thread-Index: AQHZbeV4n9ISXGFxX0ujqFU22ysHaK8oboUAgACKbHA=
-Date:   Thu, 13 Apr 2023 09:36:58 +0000
-Message-ID: <6c2dae45c7ca490d889ddc7a0dab027f@realtek.com>
-References: <20230413085351.26808-1-stanley_chang@realtek.com>
- <2023041346-shamrock-sterilize-9165@gregkh>
-In-Reply-To: <2023041346-shamrock-sterilize-9165@gregkh>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXDAG01.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="big5"
-Content-Transfer-Encoding: base64
+        Thu, 13 Apr 2023 05:37:13 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D2DA9029;
+        Thu, 13 Apr 2023 02:37:12 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id DC35E1C0AB2; Thu, 13 Apr 2023 11:37:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1681378630;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9wrW6YGw8zbV9hu3HkqEIo4AIU6igjIAt3TgYcW6MwI=;
+        b=a8IIaAFL4FqtpWf6HBY2PxrERchI+NaIFKt20D9iP7ZjXhFcy5S+4trQTkqsMW9tJwn8lk
+        cHVLYR2eZXFvrsgof+dq+Gz7m7F2IRf/0fnUeRQULozJszHWfHsLjp0RgCngEwlHHYAoGj
+        h/Hf0q7pP/stqUI/8MkkTs3bIMihvbg=
+Date:   Thu, 13 Apr 2023 11:37:10 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-omap@vger.kernel.org, sre@kernel.org, nekit1000@gmail.com,
+        mpartap@gmx.net, merlijn@wizzup.org, martin_rysavy@centrum.cz,
+        phone-devel@vger.kernel.org, maemo-leste@lists.dyne.org
+Subject: Re: Motorola Droid 4 -- Stopping charger when battery is full
+Message-ID: <ZDfNRogC4ruBE4Xy@duo.ucw.cz>
+References: <ZAcvuP8kmWveLoE/@duo.ucw.cz>
+ <ef4409b2-abd8-0eac-f66e-6858c3358cc1@gmail.com>
+ <20230309071443.GF7501@atomide.com>
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="CsuhVVL0901ty7WX"
+Content-Disposition: inline
+In-Reply-To: <20230309071443.GF7501@atomide.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBUaGlzIGlzIG5vdCBwcm9wZXJseSB0aHJlYWRlZCB3aXRoIHBhdGNoIDEvMiBmb3Igc29tZSBy
-ZWFzb24sIHNvIG91ciB0b29scyBjYW4NCj4gbm90IHBpY2sgdXAgdGhlIHdob2xlIHRocmVhZCBh
-dCBvbmNlLiAgUGxlYXNlIGZpeCB1cCB5b3VyIHNlbmRpbmcgc2NyaXB0LCBvcg0KPiBqdXN0IHVz
-ZSBnaXQgc2VuZC1lbWFpbCBkaXJlY3RseS4NCj4gDQo+IHRoYW5rcywNCj4gDQo+IGdyZWcgay1o
-DQo+IA0KDQpJIHNlbmQgdGhlIHBhdGNoIGJ5IGdpdCBzZW5kLWVtYWlsLg0KDQpnaXQgc2VuZC1l
-bWFpbCAtLWNjPSJTdGFubGV5IENoYW5nIDxzdGFubGV5X2NoYW5nQHJlYWx0ZWsuY29tPiIgLS10
-bz0iVGhpbmggTmd1eWVuIDxUaGluaC5OZ3V5ZW5Ac3lub3BzeXMuY29tPiIgLS1jYy1jbWQ9Jy4v
-c2NyaXB0cy9nZXRfbWFpbnRhaW5lci5wbCAtbm9yb2xlc3RhdHMgdjMtMDAwMS11c2ItZHdjMy1j
-b3JlLWFkZC1zdXBwb3J0LWZvci1kaXNhYmxpbmctSGlnaC1zcGVlLnBhdGNoJyAtLWFubm90YXRl
-IHYzLTAwMDEtdXNiLWR3YzMtY29yZS1hZGQtc3VwcG9ydC1mb3ItZGlzYWJsaW5nLUhpZ2gtc3Bl
-ZS5wYXRjaA0KDQpnaXQgc2VuZC1lbWFpbCAtLWNjPSJTdGFubGV5IENoYW5nIDxzdGFubGV5X2No
-YW5nQHJlYWx0ZWsuY29tPiIgLS10bz0iVGhpbmggTmd1eWVuIDxUaGluaC5OZ3V5ZW5Ac3lub3Bz
-eXMuY29tPiIgLS1jYy1jbWQ9Jy4vc2NyaXB0cy9nZXRfbWFpbnRhaW5lci5wbCAtbm9yb2xlc2F0
-cyB2My0wMDAyLWR0LWJpbmRpbmdzLXVzYi1zbnBzLWR3YzMtQWRkLXNucHMtcGFya21vZGUtZGlz
-YWIucGF0Y2gnIC0tYW5ub3RhdGUgdjMtMDAwMi1kdC1iaW5kaW5ncy11c2Itc25wcy1kd2MzLUFk
-ZC1zbnBzLXBhcmttb2RlLWRpc2FiLnBhdGNoDQoNCkkgZG9uJ3Qga25vdyB3aHkgaXQgY2FuJ3Qg
-dGhyZWFkIHdpdGggMiBwYXRjaGVzPw0KRG8gSSBuZWVkIHRvIHJlc2VuZCB2NCBwYXRjaD8NCk9y
-IGhvdyBjYW4gSSB0byByZXNvbHZlIHRoaXMgcHJvYmxlbT8NCg0KDQoNCg==
+
+--CsuhVVL0901ty7WX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+
+> * Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com> [230307 14:10]:
+> > Also, some guys have concerns about charging (and keeping it charged) @=
+4.35,
+> > because of the possibly reduced battery life.
+>=20
+> Yes for devices connected to a charger for long periods the battery will
+> bloat up within some weeks or months. This happens easily when using a
+> lapdock for example.
+>=20
+> A simple and safe solution here might be that we allow charging up to
+> 4.35V only once when the charger is connected. Then we let the voltage
+> decrease to 4.2V (or whatever known good maintenance voltage) if the
+> charger stays connected.
+
+Optimum solution would be user specifying "I want battery full
+tommorow at 8am" and doing the right thing.
+
+> For folks wanting to force the charge voltage higher we have the sysfs
+> interface.
+
+Yep, we just need to make sure it is usable for this.
+
+Best regards,
+								Pavel
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
+
+--CsuhVVL0901ty7WX
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZDfNRgAKCRAw5/Bqldv6
+8rHTAJ47T4HAPVY9l4k4nX7luvp4XtaSZQCguz3x4BEbsKm8f0ZDhRxxbHDDKXk=
+=vAab
+-----END PGP SIGNATURE-----
+
+--CsuhVVL0901ty7WX--
