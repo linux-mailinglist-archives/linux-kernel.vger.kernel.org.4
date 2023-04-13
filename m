@@ -2,77 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 258296E0ECC
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:35:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 228816E0EA6
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbjDMNfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 09:35:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58828 "EHLO
+        id S231466AbjDMNaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 09:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231627AbjDMNet (ORCPT
+        with ESMTP id S231454AbjDMNai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 09:34:49 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39CA8A5C4
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:32:57 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54c17fb245dso208094907b3.21
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:32:57 -0700 (PDT)
+        Thu, 13 Apr 2023 09:30:38 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2639755;
+        Thu, 13 Apr 2023 06:30:13 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id l18so14198099wrb.9;
+        Thu, 13 Apr 2023 06:30:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681392776; x=1683984776;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=D/wMb40ntUrrtEKX0pWRjZNO+TlYXtCqLFbV8EoKRtw=;
-        b=meip9PgF8IZZiyBu0FD+9kxzuz+MDvUH1o6CpbJdGOCKvpJkqZ6hazSJCGAZywHUXO
-         cbKAvLshlEY9FLdMtiuDArcXE1BtKENOWZvyGwNnNUkgr7Dwk61YSK182wTOTmV9/+kV
-         kHGoUcCEnZHcVJ+Ej+drWqn5jADYtFWQVmpr5a5KRMEd9YvccXFW3g3pdy9WlL0qa7w6
-         /Gf5ieDyAkhcsNf7sAfik3l6iIgIF43wZSv5HNsfDN6gIQVIbNmzHiHb0RI1og0Iro0o
-         HLrS6isrgN6o9hsqrwfOoPDFgRNHeIu8DAH9PQXfKTtfcgRyJLcSpeT0o7FHTHkX1dEX
-         LKSg==
+        d=gmail.com; s=20221208; t=1681392611; x=1683984611;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7vuUepV4dAJ+nkaSvL/ErL7Y/nu4CyeJdvToecRq5Q8=;
+        b=GO3KIgO1Au7XBl//B835y3fVl6xQs3EDJoDX72iO1VBi+gafdvC8Jrj47R96KSpGTR
+         GEoA49VUWHWXW1k2k9/KzCWjymdqVctxdUGMl/3VyAbjiDSKzo5oJ59GtF4P+B0VTRF0
+         +wrXtMVM1/gZGRKcgpZk0qdi6FiCwIlWFMqIQaMJIOAzq/MuBq0i+3pD6+t/gJ5VR/sE
+         8Wf+o2wlWcDHTH7BwaJ9uyhpW713f+Bv7+4Pb5Nj4RcSIp57S3f6lt+eoGfR0+Jyh07/
+         v7zR4U5vFg6burt5kbGfG6LUGMW6Jx0UIp7Mw033DPT6BAA1kuzuxQidFGdQZYHLWexj
+         APtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681392776; x=1683984776;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D/wMb40ntUrrtEKX0pWRjZNO+TlYXtCqLFbV8EoKRtw=;
-        b=eZhUwFa+WXbdH38u0slTQPzh51Cj2Y9EBUleIMvSb4Kdi7GL/0b65xNc7mDwb26t59
-         HanxL7PLh0TBB+VkSIu3yGQGlQtiwNl0RHeXYuyi8DOa9k3FYUIDxGrb1ucblI4OzseP
-         Ttnj5uYVoNpfOKJBdQoYZtNeWoxtLA6baGmAahJEmNZIignlRIpmgB/dy9QfBGMZ3gVF
-         2P5HhddhIqAIDT3cSBzWk7qldOBdjf8t9Vw8y7GA56XVVt7+7Fe8OhoQzvVBBvb1ooe5
-         Ybr8IZlF/A2Y1sTKZQpuv8GA65Dghtism4oRYV0w1jbHox0BePs3vkYxSSZJ5vMmkgRX
-         9lGw==
-X-Gm-Message-State: AAQBX9fPGfJGXTzjfn/Rd1cLEvyhkpUhXPGVi7EeWaV8IeBPPrPkc9TZ
-        tDF462ZFZ7oB+AwVuz8HN4+i1cpjMef9
-X-Google-Smtp-Source: AKy350Z6mxMLtzGWnCheL4tm7o3Tk9j27ZFOMJO97LE6vtyxY2iB37ARs4wdyNNy/55Qwi8LbH59Zvu3E7Vd
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:c8fe:b894:ec92:d5cd])
- (user=irogers job=sendgmr) by 2002:a25:ca44:0:b0:b8e:7771:f424 with SMTP id
- a65-20020a25ca44000000b00b8e7771f424mr1461457ybg.0.1681392775967; Thu, 13 Apr
- 2023 06:32:55 -0700 (PDT)
-Date:   Thu, 13 Apr 2023 06:29:49 -0700
-In-Reply-To: <20230413132949.3487664-1-irogers@google.com>
-Message-Id: <20230413132949.3487664-22-irogers@google.com>
-Mime-Version: 1.0
-References: <20230413132949.3487664-1-irogers@google.com>
-X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Subject: [PATCH v3 21/21] perf vendor events intel: Fix uncore topics for tigerlake
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Edward Baker <edward.baker@intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        d=1e100.net; s=20221208; t=1681392611; x=1683984611;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7vuUepV4dAJ+nkaSvL/ErL7Y/nu4CyeJdvToecRq5Q8=;
+        b=bkN0Z4clxWELo9CEsLYoXeHlKhaDyNXRC4nIi7/NuEC6AH73Y/SxLIl2eWW2nJ37OX
+         OS5lkGU9QbMXr2QKAVSTCi9Ctz9ER1AD9PytDSlJeEKzUWFdvcn3yQpwQ3gVBIgbPA1A
+         Xi1tavayNFuTBpCvx7zN0LMncfNXmbeTHEDyiEv6NrshHiWxtjOZ4sJRfHCchcYeBur+
+         LS0zh8oJJqBVKrNDCgt8dMxclMFyrxc8n9MxkWgBB2R17aiBsCT1fvfzkdfB+4UJayYG
+         DtO5BlmNwpbd0OVDv7YN1xZdLEjMe4dtF0OkJLHdGZMKLEN0cslyjcg1C9w6/sawJFwU
+         +9/Q==
+X-Gm-Message-State: AAQBX9dW5Hij/YZUSx8ghoPI6Ij9VuXYwHc6S1hoZwVgwwphHb80FwbY
+        Ojl3RpLGHq0QWVMdp5fNuZk=
+X-Google-Smtp-Source: AKy350bLYbMF89ZC+MJVjwk3fnMTGMycUXZjXTHbi9DZpOpVl1PLukpxYkHqByWwrepviu7nhYpAnQ==
+X-Received: by 2002:a05:6000:1365:b0:2c7:1e16:57cf with SMTP id q5-20020a056000136500b002c71e1657cfmr1500704wrz.67.1681392610996;
+        Thu, 13 Apr 2023 06:30:10 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id b11-20020a5d4d8b000000b002c7066a6f77sm1315780wru.31.2023.04.13.06.30.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 06:30:10 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Paolo Valente <paolo.valente@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] block, bfq: Fix division by zero error on zero wsum
+Date:   Thu, 13 Apr 2023 14:30:09 +0100
+Message-Id: <20230413133009.1605335-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,208 +70,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move events from 'uncore-other' topic classification to interconnect.
+When the weighted sum is zero the calculation of limit causes
+a division by zero error. Fix this by continuing to the next level.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
+This was discovered by running as root:
+
+stress-ng --ioprio 0
+
+Fixes divison by error oops:
+
+[  521.450556] divide error: 0000 [#1] SMP NOPTI
+[  521.450766] CPU: 2 PID: 2684464 Comm: stress-ng-iopri Not tainted 6.2.1-1280.native #1
+[  521.451117] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.1-0-g3208b098f51a-prebuilt.qemu.org 04/01/2014
+[  521.451627] RIP: 0010:bfqq_request_over_limit+0x207/0x400
+[  521.451875] Code: 01 48 8d 0c c8 74 0b 48 8b 82 98 00 00 00 48 8d 0c c8 8b 85 34 ff ff ff 48 89 ca 41 0f af 41 50 48 d1 ea 48 98 48 01 d0 31 d2 <48> f7 f1 41 39 41 48 89 85 34 ff ff ff 0f 8c 7b 01 00 00 49 8b 44
+[  521.452699] RSP: 0018:ffffb1af84eb3948 EFLAGS: 00010046
+[  521.452938] RAX: 000000000000003c RBX: 0000000000000000 RCX: 0000000000000000
+[  521.453262] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffb1af84eb3978
+[  521.453584] RBP: ffffb1af84eb3a30 R08: 0000000000000001 R09: ffff8f88ab8a4ba0
+[  521.453905] R10: 0000000000000000 R11: 0000000000000001 R12: ffff8f88ab8a4b18
+[  521.454224] R13: ffff8f8699093000 R14: 0000000000000001 R15: ffffb1af84eb3970
+[  521.454549] FS:  00005640b6b0b580(0000) GS:ffff8f88b3880000(0000) knlGS:0000000000000000
+[  521.454912] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  521.455170] CR2: 00007ffcbcae4e38 CR3: 00000002e46de001 CR4: 0000000000770ee0
+[  521.455491] PKRU: 55555554
+[  521.455619] Call Trace:
+[  521.455736]  <TASK>
+[  521.455837]  ? bfq_request_merge+0x3a/0xc0
+[  521.456027]  ? elv_merge+0x115/0x140
+[  521.456191]  bfq_limit_depth+0xc8/0x240
+[  521.456366]  __blk_mq_alloc_requests+0x21a/0x2c0
+[  521.456577]  blk_mq_submit_bio+0x23c/0x6c0
+[  521.456766]  __submit_bio+0xb8/0x140
+[  521.457236]  submit_bio_noacct_nocheck+0x212/0x300
+[  521.457748]  submit_bio_noacct+0x1a6/0x580
+[  521.458220]  submit_bio+0x43/0x80
+[  521.458660]  ext4_io_submit+0x23/0x80
+[  521.459116]  ext4_do_writepages+0x40a/0xd00
+[  521.459596]  ext4_writepages+0x65/0x100
+[  521.460050]  do_writepages+0xb7/0x1c0
+[  521.460492]  __filemap_fdatawrite_range+0xa6/0x100
+[  521.460979]  file_write_and_wait_range+0xbf/0x140
+[  521.461452]  ext4_sync_file+0x105/0x340
+[  521.461882]  __x64_sys_fsync+0x67/0x100
+[  521.462305]  ? syscall_exit_to_user_mode+0x2c/0x1c0
+[  521.462768]  do_syscall_64+0x3b/0xc0
+[  521.463165]  entry_SYSCALL_64_after_hwframe+0x5a/0xc4
+[  521.463621] RIP: 0033:0x5640b6c56590
+[  521.464006] Code: 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 80 3d 71 70 0e 00 00 74 17 b8 4a 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 48 c3 0f 1f 80 00 00 00 00 48 83 ec 18 89 7c
+
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- .../x86/tigerlake/uncore-interconnect.json    | 90 +++++++++++++++++++
- .../arch/x86/tigerlake/uncore-other.json      | 88 ------------------
- 2 files changed, 90 insertions(+), 88 deletions(-)
- create mode 100644 tools/perf/pmu-events/arch/x86/tigerlake/uncore-interconnect.json
+ block/bfq-iosched.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/perf/pmu-events/arch/x86/tigerlake/uncore-interconnect.json b/tools/perf/pmu-events/arch/x86/tigerlake/uncore-interconnect.json
-new file mode 100644
-index 000000000000..eed1b90a2779
---- /dev/null
-+++ b/tools/perf/pmu-events/arch/x86/tigerlake/uncore-interconnect.json
-@@ -0,0 +1,90 @@
-+[
-+    {
-+        "BriefDescription": "UNC_ARB_COH_TRK_REQUESTS.ALL",
-+        "EventCode": "0x84",
-+        "EventName": "UNC_ARB_COH_TRK_REQUESTS.ALL",
-+        "PerPkg": "1",
-+        "UMask": "0x1",
-+        "Unit": "ARB"
-+    },
-+    {
-+        "BriefDescription": "Each cycle counts number of any coherent request at memory controller that were issued by any core.",
-+        "EventCode": "0x85",
-+        "EventName": "UNC_ARB_DAT_OCCUPANCY.ALL",
-+        "PerPkg": "1",
-+        "UMask": "0x1",
-+        "Unit": "ARB"
-+    },
-+    {
-+        "BriefDescription": "Each cycle counts number of coherent reads pending on data return from memory controller that were issued by any core.",
-+        "EventCode": "0x85",
-+        "EventName": "UNC_ARB_DAT_OCCUPANCY.RD",
-+        "PerPkg": "1",
-+        "UMask": "0x2",
-+        "Unit": "ARB"
-+    },
-+    {
-+        "BriefDescription": "This event is deprecated. Refer to new event UNC_ARB_REQ_TRK_REQUEST.DRD",
-+        "EventCode": "0x81",
-+        "EventName": "UNC_ARB_DAT_REQUESTS.RD",
-+        "PerPkg": "1",
-+        "UMask": "0x2",
-+        "Unit": "ARB"
-+    },
-+    {
-+        "BriefDescription": "This event is deprecated. Refer to new event UNC_ARB_DAT_OCCUPANCY.ALL",
-+        "EventCode": "0x85",
-+        "EventName": "UNC_ARB_IFA_OCCUPANCY.ALL",
-+        "PerPkg": "1",
-+        "UMask": "0x1",
-+        "Unit": "ARB"
-+    },
-+    {
-+        "BriefDescription": "Each cycle count number of 'valid' coherent Data Read entries . Such entry is defined as valid when it is allocated till deallocation. Doesn't include prefetches [This event is alias to UNC_ARB_TRK_OCCUPANCY.RD]",
-+        "EventCode": "0x80",
-+        "EventName": "UNC_ARB_REQ_TRK_OCCUPANCY.DRD",
-+        "PerPkg": "1",
-+        "UMask": "0x2",
-+        "Unit": "ARB"
-+    },
-+    {
-+        "BriefDescription": "Number of all coherent Data Read entries. Doesn't include prefetches [This event is alias to UNC_ARB_TRK_REQUESTS.RD]",
-+        "EventCode": "0x81",
-+        "EventName": "UNC_ARB_REQ_TRK_REQUEST.DRD",
-+        "PerPkg": "1",
-+        "UMask": "0x2",
-+        "Unit": "ARB"
-+    },
-+    {
-+        "BriefDescription": "Each cycle count number of all outgoing valid entries in ReqTrk. Such entry is defined as valid from it's allocation in ReqTrk till deallocation. Accounts for Coherent and non-coherent traffic.",
-+        "EventCode": "0x80",
-+        "EventName": "UNC_ARB_TRK_OCCUPANCY.ALL",
-+        "PerPkg": "1",
-+        "UMask": "0x1",
-+        "Unit": "ARB"
-+    },
-+    {
-+        "BriefDescription": "Each cycle count number of 'valid' coherent Data Read entries . Such entry is defined as valid when it is allocated till deallocation. Doesn't include prefetches [This event is alias to UNC_ARB_REQ_TRK_OCCUPANCY.DRD]",
-+        "EventCode": "0x80",
-+        "EventName": "UNC_ARB_TRK_OCCUPANCY.RD",
-+        "PerPkg": "1",
-+        "UMask": "0x2",
-+        "Unit": "ARB"
-+    },
-+    {
-+        "BriefDescription": "UNC_ARB_TRK_REQUESTS.ALL",
-+        "EventCode": "0x81",
-+        "EventName": "UNC_ARB_TRK_REQUESTS.ALL",
-+        "PerPkg": "1",
-+        "UMask": "0x1",
-+        "Unit": "ARB"
-+    },
-+    {
-+        "BriefDescription": "Number of all coherent Data Read entries. Doesn't include prefetches [This event is alias to UNC_ARB_REQ_TRK_REQUEST.DRD]",
-+        "EventCode": "0x81",
-+        "EventName": "UNC_ARB_TRK_REQUESTS.RD",
-+        "PerPkg": "1",
-+        "UMask": "0x2",
-+        "Unit": "ARB"
-+    }
-+]
-diff --git a/tools/perf/pmu-events/arch/x86/tigerlake/uncore-other.json b/tools/perf/pmu-events/arch/x86/tigerlake/uncore-other.json
-index 6e43aaf64e28..c6596ba09195 100644
---- a/tools/perf/pmu-events/arch/x86/tigerlake/uncore-other.json
-+++ b/tools/perf/pmu-events/arch/x86/tigerlake/uncore-other.json
-@@ -1,92 +1,4 @@
- [
--    {
--        "BriefDescription": "UNC_ARB_COH_TRK_REQUESTS.ALL",
--        "EventCode": "0x84",
--        "EventName": "UNC_ARB_COH_TRK_REQUESTS.ALL",
--        "PerPkg": "1",
--        "UMask": "0x1",
--        "Unit": "ARB"
--    },
--    {
--        "BriefDescription": "Each cycle counts number of any coherent request at memory controller that were issued by any core.",
--        "EventCode": "0x85",
--        "EventName": "UNC_ARB_DAT_OCCUPANCY.ALL",
--        "PerPkg": "1",
--        "UMask": "0x1",
--        "Unit": "ARB"
--    },
--    {
--        "BriefDescription": "Each cycle counts number of coherent reads pending on data return from memory controller that were issued by any core.",
--        "EventCode": "0x85",
--        "EventName": "UNC_ARB_DAT_OCCUPANCY.RD",
--        "PerPkg": "1",
--        "UMask": "0x2",
--        "Unit": "ARB"
--    },
--    {
--        "BriefDescription": "This event is deprecated. Refer to new event UNC_ARB_REQ_TRK_REQUEST.DRD",
--        "EventCode": "0x81",
--        "EventName": "UNC_ARB_DAT_REQUESTS.RD",
--        "PerPkg": "1",
--        "UMask": "0x2",
--        "Unit": "ARB"
--    },
--    {
--        "BriefDescription": "This event is deprecated. Refer to new event UNC_ARB_DAT_OCCUPANCY.ALL",
--        "EventCode": "0x85",
--        "EventName": "UNC_ARB_IFA_OCCUPANCY.ALL",
--        "PerPkg": "1",
--        "UMask": "0x1",
--        "Unit": "ARB"
--    },
--    {
--        "BriefDescription": "Each cycle count number of 'valid' coherent Data Read entries . Such entry is defined as valid when it is allocated till deallocation. Doesn't include prefetches [This event is alias to UNC_ARB_TRK_OCCUPANCY.RD]",
--        "EventCode": "0x80",
--        "EventName": "UNC_ARB_REQ_TRK_OCCUPANCY.DRD",
--        "PerPkg": "1",
--        "UMask": "0x2",
--        "Unit": "ARB"
--    },
--    {
--        "BriefDescription": "Number of all coherent Data Read entries. Doesn't include prefetches [This event is alias to UNC_ARB_TRK_REQUESTS.RD]",
--        "EventCode": "0x81",
--        "EventName": "UNC_ARB_REQ_TRK_REQUEST.DRD",
--        "PerPkg": "1",
--        "UMask": "0x2",
--        "Unit": "ARB"
--    },
--    {
--        "BriefDescription": "Each cycle count number of all outgoing valid entries in ReqTrk. Such entry is defined as valid from it's allocation in ReqTrk till deallocation. Accounts for Coherent and non-coherent traffic.",
--        "EventCode": "0x80",
--        "EventName": "UNC_ARB_TRK_OCCUPANCY.ALL",
--        "PerPkg": "1",
--        "UMask": "0x1",
--        "Unit": "ARB"
--    },
--    {
--        "BriefDescription": "Each cycle count number of 'valid' coherent Data Read entries . Such entry is defined as valid when it is allocated till deallocation. Doesn't include prefetches [This event is alias to UNC_ARB_REQ_TRK_OCCUPANCY.DRD]",
--        "EventCode": "0x80",
--        "EventName": "UNC_ARB_TRK_OCCUPANCY.RD",
--        "PerPkg": "1",
--        "UMask": "0x2",
--        "Unit": "ARB"
--    },
--    {
--        "BriefDescription": "UNC_ARB_TRK_REQUESTS.ALL",
--        "EventCode": "0x81",
--        "EventName": "UNC_ARB_TRK_REQUESTS.ALL",
--        "PerPkg": "1",
--        "UMask": "0x1",
--        "Unit": "ARB"
--    },
--    {
--        "BriefDescription": "Number of all coherent Data Read entries. Doesn't include prefetches [This event is alias to UNC_ARB_REQ_TRK_REQUEST.DRD]",
--        "EventCode": "0x81",
--        "EventName": "UNC_ARB_TRK_REQUESTS.RD",
--        "PerPkg": "1",
--        "UMask": "0x2",
--        "Unit": "ARB"
--    },
-     {
-         "BriefDescription": "UNC_CLOCK.SOCKET",
-         "EventCode": "0xff",
+diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+index d9ed3108c17a..bac977da4eb5 100644
+--- a/block/bfq-iosched.c
++++ b/block/bfq-iosched.c
+@@ -649,6 +649,8 @@ static bool bfqq_request_over_limit(struct bfq_queue *bfqq, int limit)
+ 					sched_data->service_tree[i].wsum;
+ 			}
+ 		}
++		if (!wsum)
++			continue;
+ 		limit = DIV_ROUND_CLOSEST(limit * entity->weight, wsum);
+ 		if (entity->allocated >= limit) {
+ 			bfq_log_bfqq(bfqq->bfqd, bfqq,
 -- 
-2.40.0.577.gac1e443424-goog
+2.30.2
 
