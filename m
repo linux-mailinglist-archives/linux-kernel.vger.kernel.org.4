@@ -2,103 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BEDF6E1600
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 22:39:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2D36E1603
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 22:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbjDMUjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 16:39:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35782 "EHLO
+        id S229879AbjDMUkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 16:40:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjDMUjG (ORCPT
+        with ESMTP id S229493AbjDMUkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 16:39:06 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 313FB7ED6;
-        Thu, 13 Apr 2023 13:39:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=XWU1TSQ6EOSCyHR4PqujH3tZSHPeiwOeWBbnCTQsrgk=; b=NT8RHiLOa3gIdeqzNXIMLjWqQ8
-        6wsa1JmK7i4y2HoC+OnEu3zAu1FiAq5V5tp1e+Soj5ZMG4v+GxtZygekxp7HC1cYl6sOPHGxHaPmX
-        FwWBLVjJb+SPXKjCKTNb++EBk2VaAiObeTDtXgCz+AxK8Z+8lQqw8/vVTXqOuyfiZ2nqjl+4JYa/F
-        55cP0/gn0n9bsKJ7VCTt1wvnx7sIDYpjMqp6Oxo5juwL1evFXOo+avLv17qFpZnCBjdaNYmkGZ/gh
-        xhvPSPAeOWB+8j2H5wZTbCimdRLq0GqlrtuvfvaJZzJSOBkfk/1wifqnBothFbKBATPQ+3gfQLXGB
-        LksbYtbw==;
-Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pn3ie-0076lX-1d;
-        Thu, 13 Apr 2023 20:39:00 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
+        Thu, 13 Apr 2023 16:40:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1065E8685
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 13:39:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681418372;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Quj1iiD9LgkSGI0NKmJzsno1BF3Rj6KCB6GiyGlg2P0=;
+        b=i4FI52LlCl8aJnFnX1b3ulIR+ttzOKN601nbw1TRZaklJuBjQmve+2t2RioYze5jLwrVOw
+        cuXDpeda4jtW+d6znOC9R8YVeDeKUhtFZ7rQIyuHozLOoIkzWsAKgUho5uK1YBbQhI8V9L
+        HA9Ii9WlkJHe6ZsgYidRDYsHaAHkW1E=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-192-U6VXJyF_P7SHq6_28nlFzw-1; Thu, 13 Apr 2023 16:39:27 -0400
+X-MC-Unique: U6VXJyF_P7SHq6_28nlFzw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BA11C2814255;
+        Thu, 13 Apr 2023 20:39:25 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.177])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6CA6340C6E70;
+        Thu, 13 Apr 2023 20:39:23 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20230413042917.GA3390869@ZenIV>
+References: <20230413042917.GA3390869@ZenIV> <20230411160902.4134381-1-dhowells@redhat.com> <20230411160902.4134381-2-dhowells@redhat.com> <20230413005129.GZ3390869@ZenIV>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     dhowells@redhat.com, netdev@vger.kernel.org,
         "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v3] sparc: unify sparc32/sparc64 archhelp
-Date:   Thu, 13 Apr 2023 13:38:57 -0700
-Message-Id: <20230413203857.2629-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.40.0
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Chuck Lever III <chuck.lever@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Willem de Bruijn <willemb@google.com>
+Subject: Re: [PATCH net-next v6 01/18] net: Declare MSG_SPLICE_PAGES internal sendmsg() flag
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1147765.1681418362.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Thu, 13 Apr 2023 21:39:22 +0100
+Message-ID: <1147766.1681418362@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, entering
-$ make ARCH=sparc32 help
-prints the archhelp text for sparc64.
-["sparc32" is documented (Documentation/kbuild/kbuild.rst)
-to be a recognized alias for 32-bit sparc.]
+Al Viro <viro@zeniv.linux.org.uk> wrote:
 
-Instead of handling ARCH=sparc or ARCH=sparc32 or ARCH=sparc64,
-just unify all SPARC archhelp text in one place.
+> Note that io_sendmsg_prep() handles both IORING_OP_SENDMSG and IORING_OP=
+_SEND,
+> so this pair of functions can hit the same request.  And sqe->msg_flags =
+is
+> not sanitized at all - it comes straight from user buffer.
 
-Fixes: 5e53879008b9 ("sparc,sparc64: unify Makefile")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Sam Ravnborg <sam@ravnborg.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: sparclinux@vger.kernel.org
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
----
-v2: rebase/resend; add Masahiro to Cc: list
-v3: merge (unify) 32/64-bit help text (Masahiro);
-    remove Sam's Ack since the patch has changed;
+Assuming ____sys_sendmsg() is fixed, I think it should be sufficient to ma=
+ke
+io_send() and io_send_zc().  io_sendmsg() and io_sendmsg_zc() will go thro=
+ugh
+____sys_sendmsg().
 
- arch/sparc/Makefile |   15 ++++-----------
- 1 file changed, 4 insertions(+), 11 deletions(-)
+David
 
-diff -- a/arch/sparc/Makefile b/arch/sparc/Makefile
---- a/arch/sparc/Makefile
-+++ b/arch/sparc/Makefile
-@@ -83,18 +83,11 @@ vdso_install:
- KBUILD_IMAGE := $(boot)/zImage
- 
- # Don't use tabs in echo arguments.
--ifeq ($(ARCH),sparc)
- define archhelp
--  echo  '* image        - kernel image ($(boot)/image)'
--  echo  '* zImage       - stripped kernel image ($(boot)/zImage)'
-+  echo  '  vmlinux      - standard SPARC kernel'
-+  echo  '  image        - kernel image ($(boot)/image)'
-+  echo  '* zImage       - stripped/compressed kernel image ($(boot)/zImage)'
-   echo  '  uImage       - U-Boot SPARC32 Image (only for LEON)'
-+  echo  '  vmlinux.aout - a.out kernel for SPARC64'
-   echo  '  tftpboot.img - image prepared for tftp'
- endef
--else
--define archhelp
--  echo  '* vmlinux      - standard sparc64 kernel'
--  echo  '* zImage       - stripped and compressed sparc64 kernel ($(boot)/zImage)'
--  echo  '  vmlinux.aout - a.out kernel for sparc64'
--  echo  '  tftpboot.img - image prepared for tftp'
--endef
--endif
