@@ -2,184 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E3036E0D05
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 13:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA8916E0CFC
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 13:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbjDMLsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 07:48:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47754 "EHLO
+        id S231134AbjDMLre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 07:47:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231137AbjDMLr6 (ORCPT
+        with ESMTP id S231217AbjDMLrQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 07:47:58 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9AA60AD09;
-        Thu, 13 Apr 2023 04:47:34 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7EC3211FB;
-        Thu, 13 Apr 2023 04:48:03 -0700 (PDT)
-Received: from e123572-lin.arm.com (e123572-lin.cambridge.arm.com [10.1.194.65])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0E2C93F73F;
-        Thu, 13 Apr 2023 04:47:17 -0700 (PDT)
-From:   Kevin Brodsky <kevin.brodsky@arm.com>
-To:     netdev@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH v2 1/3] net: Ensure ->msg_control_user is used for user buffers
-Date:   Thu, 13 Apr 2023 12:47:03 +0100
-Message-Id: <20230413114705.157046-2-kevin.brodsky@arm.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230413114705.157046-1-kevin.brodsky@arm.com>
-References: <20230413114705.157046-1-kevin.brodsky@arm.com>
+        Thu, 13 Apr 2023 07:47:16 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702BDA5D0;
+        Thu, 13 Apr 2023 04:47:07 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id z8so20545148lfb.12;
+        Thu, 13 Apr 2023 04:47:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681386426; x=1683978426;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Z3v/g1+YK4ohjxNpY7X/EAjO3Cvna/Uxm2/iuGIHV0o=;
+        b=Z+BPO5+eqiznWawGagxUVRp9ax2e9DRkcHqyZt5OsK+LNa2rKyorWho7ZWRYq1U3Uc
+         aU8uJ9lNldPgMlP+nW9laXMGoA2zoGKA3Uv1Qe7wlS/eoevdGleUVHyeEpEEvR4egW/U
+         Ziat+ldE5jUvwLztLtiep5+tjhBYIIhqe+YR1SlKydKyZWuvhFF9kpcEm4dEWY6RNkJk
+         xMRPXV+rZwNvGhk+LnJz1NLwBG4Nyjy4QEhEYXJOWvLbY6oUNzyGQjGo4ttHUUi1qFlA
+         yCQSnBwZV92iLLdygfLwUaKqIrxDcuDlIrfJaiZ1ZQKtcO8okuvVYiRXZoLjIbNNFrl4
+         +krA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681386426; x=1683978426;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z3v/g1+YK4ohjxNpY7X/EAjO3Cvna/Uxm2/iuGIHV0o=;
+        b=St00qEdFqr5NmJB5R4MO1G9xi4hgALP0N6G9imKgj6U2k6iUMA7OBC6QXxm59tjFLy
+         zJr3I+RXuvtS9Fv65j1vq+AHITIE60R9fVB7IxgXjzLqPRkpLeP5ZvDHbS5nRqBt6hfl
+         rvdtdZG8YlnI53a7wqtFwCMW0TbEknQB/oCYIRUjseA5zlAYgmvBatpOEh4heHHL2+P4
+         sGDMrBgHQskDA1r467SFnP7Y+v5A1EhdlRs0Ef2T+1TsV5T/BrbG7r+lj//BkfE87lcu
+         FbHbzcvnfvuOWnO/O6/ZUuCfcOomAsgZUechV+TnpIEag9bpmFbp8Bn6PU2bxhnmaWu5
+         d/zg==
+X-Gm-Message-State: AAQBX9ded23EgKRcCA9UZnQR5PyZVjb0JOq6LKmlDVRAfDrr7FshUJf2
+        MV0KaDeDgSjLBovb2TWMgRI=
+X-Google-Smtp-Source: AKy350b83BiwhY/ARiBiqr7RAaIjdxIB4n41CUt1Vnh2IVdKu6EVHfUfM4Y6LsQWXnFGf+YQeWQFpg==
+X-Received: by 2002:a05:6512:50f:b0:4eb:4002:a5ca with SMTP id o15-20020a056512050f00b004eb4002a5camr906727lfb.66.1681386425552;
+        Thu, 13 Apr 2023 04:47:05 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
+        by smtp.gmail.com with ESMTPSA id s12-20020ac25fec000000b004ec55ac6cd1sm277523lfg.136.2023.04.13.04.47.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Apr 2023 04:47:05 -0700 (PDT)
+Message-ID: <b259e7fc-130b-1158-00b6-934861a41aaa@gmail.com>
+Date:   Thu, 13 Apr 2023 14:47:04 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 1/2] dt-bindings: leds: Add ROHM BD2606MVV LED driver
+Content-Language: en-US, en-GB
+To:     Andreas Kemnade <andreas@kemnade.info>, pavel@ucw.cz,
+        lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230413110307.310944-1-andreas@kemnade.info>
+ <20230413110307.310944-2-andreas@kemnade.info>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <20230413110307.310944-2-andreas@kemnade.info>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 1f466e1f15cf ("net: cleanly handle kernel vs user
-buffers for ->msg_control"), pointers to user buffers should be
-stored in struct msghdr::msg_control_user, instead of the
-msg_control field.  Most users of msg_control have already been
-converted (where user buffers are involved), but not all of them.
+On 4/13/23 14:03, Andreas Kemnade wrote:
+> Document ROHM BD2606MVV LED driver devicetree bindings.
+> 
+> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
 
-This patch attempts to address the remaining cases. An exception is
-made for null checks, as it should be safe to use msg_control
-unconditionally for that purpose.
+Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
----
- net/compat.c   | 12 ++++++------
- net/core/scm.c |  9 ++++++---
- net/ipv4/tcp.c |  4 ++--
- 3 files changed, 14 insertions(+), 11 deletions(-)
 
-diff --git a/net/compat.c b/net/compat.c
-index 161b7bea1f62..000a2e054d4c 100644
---- a/net/compat.c
-+++ b/net/compat.c
-@@ -113,7 +113,7 @@ int get_compat_msghdr(struct msghdr *kmsg,
- 
- #define CMSG_COMPAT_FIRSTHDR(msg)			\
- 	(((msg)->msg_controllen) >= sizeof(struct compat_cmsghdr) ?	\
--	 (struct compat_cmsghdr __user *)((msg)->msg_control) :		\
-+	 (struct compat_cmsghdr __user *)((msg)->msg_control_user) :	\
- 	 (struct compat_cmsghdr __user *)NULL)
- 
- #define CMSG_COMPAT_OK(ucmlen, ucmsg, mhdr) \
-@@ -126,7 +126,7 @@ static inline struct compat_cmsghdr __user *cmsg_compat_nxthdr(struct msghdr *ms
- 		struct compat_cmsghdr __user *cmsg, int cmsg_len)
- {
- 	char __user *ptr = (char __user *)cmsg + CMSG_COMPAT_ALIGN(cmsg_len);
--	if ((unsigned long)(ptr + 1 - (char __user *)msg->msg_control) >
-+	if ((unsigned long)(ptr + 1 - (char __user *)msg->msg_control_user) >
- 			msg->msg_controllen)
- 		return NULL;
- 	return (struct compat_cmsghdr __user *)ptr;
-@@ -225,7 +225,7 @@ int cmsghdr_from_user_compat_to_kern(struct msghdr *kmsg, struct sock *sk,
- 
- int put_cmsg_compat(struct msghdr *kmsg, int level, int type, int len, void *data)
- {
--	struct compat_cmsghdr __user *cm = (struct compat_cmsghdr __user *) kmsg->msg_control;
-+	struct compat_cmsghdr __user *cm = (struct compat_cmsghdr __user *) kmsg->msg_control_user;
- 	struct compat_cmsghdr cmhdr;
- 	struct old_timeval32 ctv;
- 	struct old_timespec32 cts[3];
-@@ -274,7 +274,7 @@ int put_cmsg_compat(struct msghdr *kmsg, int level, int type, int len, void *dat
- 	cmlen = CMSG_COMPAT_SPACE(len);
- 	if (kmsg->msg_controllen < cmlen)
- 		cmlen = kmsg->msg_controllen;
--	kmsg->msg_control += cmlen;
-+	kmsg->msg_control_user += cmlen;
- 	kmsg->msg_controllen -= cmlen;
- 	return 0;
- }
-@@ -289,7 +289,7 @@ static int scm_max_fds_compat(struct msghdr *msg)
- void scm_detach_fds_compat(struct msghdr *msg, struct scm_cookie *scm)
- {
- 	struct compat_cmsghdr __user *cm =
--		(struct compat_cmsghdr __user *)msg->msg_control;
-+		(struct compat_cmsghdr __user *)msg->msg_control_user;
- 	unsigned int o_flags = (msg->msg_flags & MSG_CMSG_CLOEXEC) ? O_CLOEXEC : 0;
- 	int fdmax = min_t(int, scm_max_fds_compat(msg), scm->fp->count);
- 	int __user *cmsg_data = CMSG_COMPAT_DATA(cm);
-@@ -313,7 +313,7 @@ void scm_detach_fds_compat(struct msghdr *msg, struct scm_cookie *scm)
- 			cmlen = CMSG_COMPAT_SPACE(i * sizeof(int));
- 			if (msg->msg_controllen < cmlen)
- 				cmlen = msg->msg_controllen;
--			msg->msg_control += cmlen;
-+			msg->msg_control_user += cmlen;
- 			msg->msg_controllen -= cmlen;
- 		}
- 	}
-diff --git a/net/core/scm.c b/net/core/scm.c
-index acb7d776fa6e..3cd7dd377e53 100644
---- a/net/core/scm.c
-+++ b/net/core/scm.c
-@@ -250,7 +250,10 @@ int put_cmsg(struct msghdr * msg, int level, int type, int len, void *data)
- 	}
- 
- 	cmlen = min(CMSG_SPACE(len), msg->msg_controllen);
--	msg->msg_control += cmlen;
-+	if (msg->msg_control_is_user)
-+		msg->msg_control_user += cmlen;
-+	else
-+		msg->msg_control += cmlen;
- 	msg->msg_controllen -= cmlen;
- 	return 0;
- 
-@@ -299,7 +302,7 @@ static int scm_max_fds(struct msghdr *msg)
- void scm_detach_fds(struct msghdr *msg, struct scm_cookie *scm)
- {
- 	struct cmsghdr __user *cm =
--		(__force struct cmsghdr __user *)msg->msg_control;
-+		(__force struct cmsghdr __user *)msg->msg_control_user;
- 	unsigned int o_flags = (msg->msg_flags & MSG_CMSG_CLOEXEC) ? O_CLOEXEC : 0;
- 	int fdmax = min_t(int, scm_max_fds(msg), scm->fp->count);
- 	int __user *cmsg_data = CMSG_USER_DATA(cm);
-@@ -332,7 +335,7 @@ void scm_detach_fds(struct msghdr *msg, struct scm_cookie *scm)
- 			cmlen = CMSG_SPACE(i * sizeof(int));
- 			if (msg->msg_controllen < cmlen)
- 				cmlen = msg->msg_controllen;
--			msg->msg_control += cmlen;
-+			msg->msg_control_user += cmlen;
- 			msg->msg_controllen -= cmlen;
- 		}
- 	}
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 288693981b00..6fa7a3fa9abd 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -2164,7 +2164,7 @@ static void tcp_zc_finalize_rx_tstamp(struct sock *sk,
- 	struct msghdr cmsg_dummy;
- 
- 	msg_control_addr = (unsigned long)zc->msg_control;
--	cmsg_dummy.msg_control = (void *)msg_control_addr;
-+	cmsg_dummy.msg_control_user = (void __user *)msg_control_addr;
- 	cmsg_dummy.msg_controllen =
- 		(__kernel_size_t)zc->msg_controllen;
- 	cmsg_dummy.msg_flags = in_compat_syscall()
-@@ -2175,7 +2175,7 @@ static void tcp_zc_finalize_rx_tstamp(struct sock *sk,
- 	    zc->msg_controllen == cmsg_dummy.msg_controllen) {
- 		tcp_recv_timestamp(&cmsg_dummy, sk, tss);
- 		zc->msg_control = (__u64)
--			((uintptr_t)cmsg_dummy.msg_control);
-+			((uintptr_t)cmsg_dummy.msg_control_user);
- 		zc->msg_controllen =
- 			(__u64)cmsg_dummy.msg_controllen;
- 		zc->msg_flags = (__u32)cmsg_dummy.msg_flags;
 -- 
-2.38.1
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
 
