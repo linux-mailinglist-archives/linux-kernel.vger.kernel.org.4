@@ -2,99 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67C006E0DB7
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 14:49:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E972A6E0DBC
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 14:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbjDMMtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 08:49:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54278 "EHLO
+        id S230028AbjDMMvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 08:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230044AbjDMMtu (ORCPT
+        with ESMTP id S229604AbjDMMvf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 08:49:50 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60420AD10
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 05:49:43 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-6324024411aso840490b3a.1
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 05:49:43 -0700 (PDT)
+        Thu, 13 Apr 2023 08:51:35 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B00A8A74
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 05:51:34 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id qb20so36723974ejc.6
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 05:51:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1681390183; x=1683982183;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=chPnl8Mv5KXZq4yhNcjhEego6Gn/IkEJkBYC5Nsft1o=;
-        b=n9n/9LPPtKwIJ41ocSYVaM7cPpKBO3Qcmc9Dot62ShK5jStwhmJ6In8nvzUsWRrBDO
-         BSXX4+OeuR2licrgEGhWJ82EXMvWg2ao9QoAnss8Lv3tL86cmYZe6hrTvrpXDzyPeoCm
-         DHI1C8UT8Y7ehTZP+Mw+bpgD+44Trf1ENcyQ0xRGi6miLfBQTB/SbiN43gj0IeqoGvjb
-         dSLTH44Eh4efnjmvwU50c+PHRlt5MW4+S/1g2+8Zw45DANXQRm8M2uvniAL9kdnw/+iM
-         d1g6Ek7N2QypGMFGVkRH2l0mcDCWIa4PhivcNL82TWTtRhGqNflTKkDKSRhCOZOmKC4b
-         eItg==
+        d=linaro.org; s=google; t=1681390293; x=1683982293;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5a6F6EjtpQuuYBrblyKkvpovTCgK9Ou6bwQuEFgzR0c=;
+        b=TIY/GXedrjbai91Z7jH/yVbScack8jNXsScEJjGfsCLHK5G7RJmn83IgTMZxILZDHs
+         7Zp4bXPKQH5BFzscNfj3NPRTY3e0luXwEP/Bpcwou5Ll4ODXnPWOm0MwMwyMrHQrkPin
+         pTWADuu7lDmkOugcnFjNs4prBD2D/ki39Pnjra1xMoOihaHDN9pteBQ+7Fn1549mDQLo
+         cWOq0srGd+VBxB1C3g/IcmqyAiKckNqcGx6UQv/AclTiqzj+Bh9LQbAR107+Y4AujtTG
+         2C4kmiQj/2FRse0scGrKIBUWvhsi3I4ToPwWfw6Sa/s24q8yHMm9y5KJlAr6w3ur4GOe
+         Bd4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681390183; x=1683982183;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=chPnl8Mv5KXZq4yhNcjhEego6Gn/IkEJkBYC5Nsft1o=;
-        b=WOPEKeYBcg0Xgss5KJ/wy43krJ2q+BKkEFdKAgeYJ5Mgx8PPoem5v6OZuxsiL1CDBt
-         SCs8HgP3t6xW1RpPzLSat1nKVam8RNSBCvnRdGpPWZYHOHY+K+NRJFVelSeSZJ9z572n
-         kPmlqP8OZl1RFnp8yX0ssXP1/jMN26PgXrVGu4NlpK+hPdfS5yP1pxWKcD63AwgcrbCW
-         a/GzsdI1CQQHBnGhk2cEDlYjyIenuVVoTultjHtBno+Z/5x31Wq4rPpojbTMbXoek3hP
-         ajq0Ec9oCbZQIWRZ9zAGxz1fbmaPkR7micEOC/ZNXuPpjbgx9zN/dl5ZcD8D8EBr9BVl
-         Qw/w==
-X-Gm-Message-State: AAQBX9c2d5IvWVaXGwXt3D2ESr5t/uGUGsebUgWeo/AyYSD+miMJNVx/
-        YPqG1G5OSqNF40tffqOR9gfwgZ+ACjUWHef12HM=
-X-Google-Smtp-Source: AKy350antEwnFS0M8iO0GabDUmSQ1squlED1hTPFxzkhV3oVQldHP4wuiQqO+e3zVnRbS/X3SRm8Yw==
-X-Received: by 2002:aa7:88c6:0:b0:624:bf7e:9d8c with SMTP id k6-20020aa788c6000000b00624bf7e9d8cmr2869192pff.1.1681390183084;
-        Thu, 13 Apr 2023 05:49:43 -0700 (PDT)
-Received: from [127.0.0.1] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
-        by smtp.gmail.com with ESMTPSA id x14-20020aa784ce000000b0062bada5db75sm1365480pfn.172.2023.04.13.05.49.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 05:49:42 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     tj@kernel.org, chengming.zhou@linux.dev
-Cc:     josef@toxicpanda.com, osandov@fb.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        Chengming Zhou <zhouchengming@bytedance.com>,
-        stable@vger.kernel.org
-In-Reply-To: <20230413062805.2081970-1-chengming.zhou@linux.dev>
-References: <20230413062805.2081970-1-chengming.zhou@linux.dev>
-Subject: Re: [PATCH v2 1/2] blk-stat: fix QUEUE_FLAG_STATS clear
-Message-Id: <168139018203.8989.17731261770336366712.b4-ty@kernel.dk>
-Date:   Thu, 13 Apr 2023 06:49:42 -0600
+        d=1e100.net; s=20221208; t=1681390293; x=1683982293;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5a6F6EjtpQuuYBrblyKkvpovTCgK9Ou6bwQuEFgzR0c=;
+        b=hl0Yxuba4eOwV4O5yz1cNJxxske0ln58TuVFa2DGh3qthOch7uKB9au4dNQK79gux4
+         C5w+sKVM7I6Nmt5y2eyuVVSYEO/RCnsOM3sQr+5CUVNdRQ6+Ec2oT97LWpgtSGDuWnzf
+         rKecnYyh9TZ7hpejNUY6f+vvhsQSKEh159//crsRzd7uI2D5uTqJUcI1pKLVUrxCJsGe
+         XgPZdQUYMNpGKAEtAhpa7RMKrR2CgU21RFtIaXJZX1nzEnEb2UrUZJv3np538fN+zIGN
+         gzKCwBWgQ/e5j/2U4YOZ+Q37rvCvNEFH4JCiUZ0+JmCshFDMQzD8C+pZa+TNgw/KJDgy
+         /CEg==
+X-Gm-Message-State: AAQBX9drhZORMMDceoacQPsPRN9LXaMr7hnD9xY3WTbXBrCO04BPqA/M
+        J71sdOJHXrBsN0vjr+hQ2QQGDg==
+X-Google-Smtp-Source: AKy350Y8Lx5KHyZTys6FEbU91WQWHhK91LDJm3beK+Q/g1N1/oNpYDNhHXpWLTy+hVXx3aApKAaNJQ==
+X-Received: by 2002:a17:906:5008:b0:88f:a236:69e6 with SMTP id s8-20020a170906500800b0088fa23669e6mr2637763ejj.7.1681390292745;
+        Thu, 13 Apr 2023 05:51:32 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:5032:d2d4:ece5:b035? ([2a02:810d:15c0:828:5032:d2d4:ece5:b035])
+        by smtp.gmail.com with ESMTPSA id b22-20020a1709062b5600b009306ebc79d3sm953937ejg.59.2023.04.13.05.51.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Apr 2023 05:51:32 -0700 (PDT)
+Message-ID: <081a71b2-951b-76bc-82d5-687a9942450a@linaro.org>
+Date:   Thu, 13 Apr 2023 14:51:31 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-00303
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: Unclear what to do with compatibility
+Content-Language: en-US
+To:     Daniel Matyas <daniel.matyas@analog.com>
+Cc:     corbet@lwn.net, devicetree@vger.kernel.org, jdelvare@suse.com,
+        krzysztof.kozlowski+dt@linaro.org, linux-doc@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux@roeck-us.net, robh+dt@kernel.org
+References: <342b3e6c-fd1b-d256-bcc2-2b9bda206b60@linaro.org>
+ <20230413123039.22473-1-daniel.matyas@analog.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230413123039.22473-1-daniel.matyas@analog.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 13/04/2023 14:30, Daniel Matyas wrote:
+> MAX31827 is a low-power temperature switch with I2C interface.
 
-On Thu, 13 Apr 2023 14:28:04 +0800, chengming.zhou@linux.dev wrote:
-> We need to set QUEUE_FLAG_STATS for two cases:
-> 1. blk_stat_enable_accounting()
-> 2. blk_stat_add_callback()
+You sent a new patch. With a weird subject. I don't understand exactly
+what is this.
+
 > 
-> So we should clear it only when ((q->stats->accounting == 0) &&
-> list_empty(&q->stats->callbacks)).
+> The device is a ±1°C accuracy from -40°C to +125°C
+> (12 bits) local temperature switch and sensor with I2C/SM-
+> Bus interface. The combination of small 6-bump wafer-lev-
+> el package (WLP) and high accuracy makes this temper-
+> ature sensor/switch ideal for a wide range of applications.
 > 
-> [...]
+> Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
+> ---
+>  .../bindings/hwmon/adi,max31827.yaml          | 51 +++++++++++++++++++
+>  MAINTAINERS                                   |  7 +++
+>  2 files changed, 58 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+> new file mode 100644
+> index 000000000000..37177eb9c039
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+> @@ -0,0 +1,51 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/adi,max31827.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Analog Devices MAX31827, MAX31828, MAX31829 Low-Power Temperature Switch
+> +
+> +maintainers:
+> +  - Daniel Matyas <daniel.matyas@analog.com>
+> +
+> +description: |
+> +  Analog Devices MAX31827, MAX31828, MAX31829 Low-Power Temperature Switch with
+> +  I2C Interface
+> +  https://www.analog.com/media/en/technical-documentation/data-sheets/MAX31827-MAX31829.pdf
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - adi,max31827
+> +      - adi,max31828
+> +      - adi,max31829
+> +
+> 
+> I am really sorry, but I do not understand what I should do.
+> 
+> Should I add oneOf or items to the compatibility property?
 
-Applied, thanks!
+The devices should be marked as compatible with each other, so you can
+drop useless match table entries.
 
-[1/2] blk-stat: fix QUEUE_FLAG_STATS clear
-      commit: 20de765f6d9da0c47b756429c60b41063b990a10
-[2/2] blk-throttle: only enable blk-stat when BLK_DEV_THROTTLING_LOW
-      commit: 8e15dfbd9ae21e518979e3823e335073e725f445
+https://elixir.bootlin.com/linux/v6.3-rc6/source/Documentation/devicetree/bindings/sound/nvidia,tegra210-ope.yaml#L31
+
+and fix this in the driver.
+
 
 Best regards,
--- 
-Jens Axboe
-
-
+Krzysztof
 
