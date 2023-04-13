@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D029A6E17EC
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 01:12:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BE176E17EA
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 01:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbjDMXMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 19:12:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43002 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230253AbjDMXMS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230261AbjDMXMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 13 Apr 2023 19:12:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42994 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229578AbjDMXMQ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Apr 2023 19:12:16 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1254488
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 16:11:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD91B4EDC
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 16:11:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681427487;
+        s=mimecast20190719; t=1681427489;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=yQk3ShNsJBmwBAeq1XAgk+wt78LOM0H1LyrpvOkMJhI=;
-        b=Pj0oA1VaVaTBz7Co/mHv7+3QEOlqTk/prCxWkwerwaFt1yDy7Lzmj6IrjslmO3Ryyht08R
-        gXKCHMXs9YK4YXdNU3KJWOLEWNgbLW7MKsnBHcu7bjdShCWi8ngSFoVT7nW1fkKCyjuD/N
-        9SvoktEMDqwxidZFnkQ/vOQor1M73Os=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=sPrSeNO5Sj4btD4u1XV4AOohfTbtE2i2MNiZ002Yg6Y=;
+        b=TxD/o0u7U68RMOA2/AfI3LifWOajGaY68YTF2MzlsvYbyB6MvURc0mMGIgaNhBTVWw7yJK
+        oaPIRPUBZ2hBwduJT8Uy4s+aJ9MOqpiCH010ALqP2eTj7ub5Pwiqgf1Ag2L8wZfS4n9Ahh
+        fOVP02A3J0jJUiKvvdEzM9/6jvMFAg8=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-177-MrpqThBnNPWN7iSdYw2WJA-1; Thu, 13 Apr 2023 19:11:26 -0400
-X-MC-Unique: MrpqThBnNPWN7iSdYw2WJA-1
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-3e699015faeso6672201cf.0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 16:11:25 -0700 (PDT)
+ us-mta-623-EideDlK8PiyjdhCIELtpxA-1; Thu, 13 Apr 2023 19:11:28 -0400
+X-MC-Unique: EideDlK8PiyjdhCIELtpxA-1
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-74a25fcda05so96963885a.1
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 16:11:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681427484; x=1684019484;
+        d=1e100.net; s=20221208; t=1681427487; x=1684019487;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yQk3ShNsJBmwBAeq1XAgk+wt78LOM0H1LyrpvOkMJhI=;
-        b=g8b6WmadfC2NmQDbfmDyPceJY6eYY8V/U0OXh5egq63F2Vi85m8TrTmvIX1nhzMMmx
-         lmH5Eczde+rCPvVtYl/uHuYJtTDMEWT6b+ZbG02iT6pfGa60aDvBfVjyRbK308LxPAMx
-         Au35nep0E8WRqfAre1eqEP/rfOjJwM2uNc8UgAxLIEb+fi8wJp/tcrIQvpsJt2iGtPv8
-         wwTAh0RLnL2YwyXD6ZDC5kp41UhbsoUvv425gCgu6/WjjaDom3Qs7JNyxZr2r5+AevLD
-         62dZGy6IXgnVB7+PHLd4X727R3b5oZjd3JWfLB5KeP0XEuvSwM8fZXYY5qYpBImOFsul
-         c59Q==
-X-Gm-Message-State: AAQBX9fi2rMT9jOGElttwPmEz6hSo3i98VCN+NY5jLzyMMER5SMUD/N9
-        72onLwON3IAnE8Vjpe4tkxNmVhKYnhQvTrkYnmU7ONqAn1qIoiN7XqKQdTU9Xzec1m70cQdILbN
-        yupi8hCvZExDzY1l7auVbfShV2AY2bqJxKko8hhEasbOwjyuPDnzfaf+eFrs/Tx1qazMQUrL+c7
-        +XWDtl4w==
-X-Received: by 2002:a05:622a:19a1:b0:3e3:98cf:68ae with SMTP id u33-20020a05622a19a100b003e398cf68aemr1101164qtc.2.1681427484669;
-        Thu, 13 Apr 2023 16:11:24 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bljVojz9f9gM3R2vNG1p3GyeG+24EcdnppJPHidpEMFzohOSepYYLSiIIjIIlL/AyTNhMu9Q==
-X-Received: by 2002:a05:622a:19a1:b0:3e3:98cf:68ae with SMTP id u33-20020a05622a19a100b003e398cf68aemr1101122qtc.2.1681427484321;
-        Thu, 13 Apr 2023 16:11:24 -0700 (PDT)
+        bh=sPrSeNO5Sj4btD4u1XV4AOohfTbtE2i2MNiZ002Yg6Y=;
+        b=ajSe9Jeopvr4p5OhnF1eBu3Gn8Pq+wZJFB0LdqZq3tdXaI1wkDKWkw2T2sfYRJbwER
+         MT5h06LcmwR0l9tkGr4/9KYncLr2Da9ynEFpciRMwdKBhkoMDr1dCZKloMI7uP6OGGN8
+         161bMOQloJde/2M5IVmgXAFWjgcGYAw+0ClboIyDU7/2Fe9uO0th0wtpiKlD3Zywo8Mu
+         m6k0JznqhfphOqmMsl0yLnKAp3p8FO7LRrrMvcFFF9mdwL5EX7Mixrvi/SMk8eZ9oMbB
+         bvOS7e48LyYAIU3SM8we9HY2zkgdXZYNV4isMwzWzwFVFhbft0sm9+nA71sCafUWb/Pe
+         vPDw==
+X-Gm-Message-State: AAQBX9eeYnzBR4RpGvQ3dAeeu+DFqZCTMhMJ/lSJlbV4UnJJp6f6pZ++
+        XPUy7MT/Ut0Yg16TMxudZM5d4AGagjttxx9hXZtvA1lHGD9NpfKbMBnSn07AD9UgSQ7QUo3ZdX4
+        qlnm/3mlXPN+YmAuNwha0dJRi40e8UfkALLq6oSEtQ+bUh0lPzioDFPDya0QvEXBSfWjgfjQw3m
+        NUPHFjCA==
+X-Received: by 2002:a05:622a:1aa6:b0:3e2:be32:cb74 with SMTP id s38-20020a05622a1aa600b003e2be32cb74mr1006409qtc.3.1681427487047;
+        Thu, 13 Apr 2023 16:11:27 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ay1srzjNEubUa8Bu2M4QrSigXg05em6AqIPROuVf3uz6yCOvlGUBFyb0XrOhaExs1Nao5lxA==
+X-Received: by 2002:a05:622a:1aa6:b0:3e2:be32:cb74 with SMTP id s38-20020a05622a1aa600b003e2be32cb74mr1006377qtc.3.1681427486764;
+        Thu, 13 Apr 2023 16:11:26 -0700 (PDT)
 Received: from x1n.redhat.com (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
-        by smtp.gmail.com with ESMTPSA id g3-20020ac81243000000b003ea1b97acfasm612446qtj.49.2023.04.13.16.11.22
+        by smtp.gmail.com with ESMTPSA id g3-20020ac81243000000b003ea1b97acfasm612446qtj.49.2023.04.13.16.11.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 16:11:23 -0700 (PDT)
+        Thu, 13 Apr 2023 16:11:25 -0700 (PDT)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Cc:     Axel Rasmussen <axelrasmussen@google.com>,
@@ -66,9 +66,9 @@ Cc:     Axel Rasmussen <axelrasmussen@google.com>,
         Nadav Amit <nadav.amit@gmail.com>,
         Andrea Arcangeli <aarcange@redhat.com>,
         linux-stable <stable@vger.kernel.org>
-Subject: [PATCH 1/6] mm/hugetlb: Fix uffd-wp during fork()
-Date:   Thu, 13 Apr 2023 19:11:15 -0400
-Message-Id: <20230413231120.544685-2-peterx@redhat.com>
+Subject: [PATCH 2/6] mm/hugetlb: Fix uffd-wp bit lost when unsharing happens
+Date:   Thu, 13 Apr 2023 19:11:16 -0400
+Message-Id: <20230413231120.544685-3-peterx@redhat.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230413231120.544685-1-peterx@redhat.com>
 References: <20230413231120.544685-1-peterx@redhat.com>
@@ -84,102 +84,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There're a bunch of things that were wrong:
+When we try to unshare a pinned page for a private hugetlb, uffd-wp bit can
+get lost during unsharing.  Fix it by carrying it over.
 
-  - Reading uffd-wp bit from a swap entry should use pte_swp_uffd_wp()
-    rather than huge_pte_uffd_wp().
-
-  - When copying over a pte, we should drop uffd-wp bit when
-    !EVENT_FORK (aka, when !userfaultfd_wp(dst_vma)).
-
-  - When doing early CoW for private hugetlb (e.g. when the parent page was
-    pinned), uffd-wp bit should be properly carried over if necessary.
-
-No bug reported probably because most people do not even care about these
-corner cases, but they are still bugs and can be exposed by the recent unit
-tests introduced, so fix all of them in one shot.
+This should be very rare, only if an unsharing happened on a private
+hugetlb page with uffd-wp protected (e.g. in a child which shares the same
+page with parent with UFFD_FEATURE_EVENT_FORK enabled).
 
 Cc: linux-stable <stable@vger.kernel.org>
-Fixes: bc70fbf269fd ("mm/hugetlb: handle uffd-wp during fork()")
+Fixes: 166f3ecc0daf ("mm/hugetlb: hook page faults for uffd write protection")
+Reported-by: Mike Kravetz <mike.kravetz@oracle.com>
 Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- mm/hugetlb.c | 26 ++++++++++++++++----------
- 1 file changed, 16 insertions(+), 10 deletions(-)
+ mm/hugetlb.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index f16b25b1a6b9..7320e64aacc6 100644
+index 7320e64aacc6..083aae35bff8 100644
 --- a/mm/hugetlb.c
 +++ b/mm/hugetlb.c
-@@ -4953,11 +4953,15 @@ static bool is_hugetlb_entry_hwpoisoned(pte_t pte)
- 
- static void
- hugetlb_install_folio(struct vm_area_struct *vma, pte_t *ptep, unsigned long addr,
--		     struct folio *new_folio)
-+		      struct folio *new_folio, pte_t old)
- {
-+	pte_t newpte = make_huge_pte(vma, &new_folio->page, 1);
+@@ -5637,13 +5637,16 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
+ 	spin_lock(ptl);
+ 	ptep = hugetlb_walk(vma, haddr, huge_page_size(h));
+ 	if (likely(ptep && pte_same(huge_ptep_get(ptep), pte))) {
++		pte_t newpte = make_huge_pte(vma, &new_folio->page, !unshare);
 +
- 	__folio_mark_uptodate(new_folio);
- 	hugepage_add_new_anon_rmap(new_folio, vma, addr);
--	set_huge_pte_at(vma->vm_mm, addr, ptep, make_huge_pte(vma, &new_folio->page, 1));
-+	if (userfaultfd_wp(vma) && huge_pte_uffd_wp(old))
-+		newpte = huge_pte_mkuffd_wp(newpte);
-+	set_huge_pte_at(vma->vm_mm, addr, ptep, newpte);
- 	hugetlb_count_add(pages_per_huge_page(hstate_vma(vma)), vma->vm_mm);
- 	folio_set_hugetlb_migratable(new_folio);
- }
-@@ -5032,14 +5036,11 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 			 */
- 			;
- 		} else if (unlikely(is_hugetlb_entry_hwpoisoned(entry))) {
--			bool uffd_wp = huge_pte_uffd_wp(entry);
--
--			if (!userfaultfd_wp(dst_vma) && uffd_wp)
-+			if (!userfaultfd_wp(dst_vma))
- 				entry = huge_pte_clear_uffd_wp(entry);
- 			set_huge_pte_at(dst, addr, dst_pte, entry);
- 		} else if (unlikely(is_hugetlb_entry_migration(entry))) {
- 			swp_entry_t swp_entry = pte_to_swp_entry(entry);
--			bool uffd_wp = huge_pte_uffd_wp(entry);
- 
- 			if (!is_readable_migration_entry(swp_entry) && cow) {
- 				/*
-@@ -5049,11 +5050,12 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 				swp_entry = make_readable_migration_entry(
- 							swp_offset(swp_entry));
- 				entry = swp_entry_to_pte(swp_entry);
--				if (userfaultfd_wp(src_vma) && uffd_wp)
--					entry = huge_pte_mkuffd_wp(entry);
-+				if (userfaultfd_wp(src_vma) &&
-+				    pte_swp_uffd_wp(entry))
-+					entry = pte_swp_mkuffd_wp(entry);
- 				set_huge_pte_at(src, addr, src_pte, entry);
- 			}
--			if (!userfaultfd_wp(dst_vma) && uffd_wp)
-+			if (!userfaultfd_wp(dst_vma))
- 				entry = huge_pte_clear_uffd_wp(entry);
- 			set_huge_pte_at(dst, addr, dst_pte, entry);
- 		} else if (unlikely(is_pte_marker(entry))) {
-@@ -5114,7 +5116,8 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 					/* huge_ptep of dst_pte won't change as in child */
- 					goto again;
- 				}
--				hugetlb_install_folio(dst_vma, dst_pte, addr, new_folio);
-+				hugetlb_install_folio(dst_vma, dst_pte, addr,
-+						      new_folio, src_pte_old);
- 				spin_unlock(src_ptl);
- 				spin_unlock(dst_ptl);
- 				continue;
-@@ -5132,6 +5135,9 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 				entry = huge_pte_wrprotect(entry);
- 			}
- 
-+			if (!userfaultfd_wp(dst_vma))
-+				entry = huge_pte_clear_uffd_wp(entry);
-+
- 			set_huge_pte_at(dst, addr, dst_pte, entry);
- 			hugetlb_count_add(npages, dst);
- 		}
+ 		/* Break COW or unshare */
+ 		huge_ptep_clear_flush(vma, haddr, ptep);
+ 		mmu_notifier_invalidate_range(mm, range.start, range.end);
+ 		page_remove_rmap(old_page, vma, true);
+ 		hugepage_add_new_anon_rmap(new_folio, vma, haddr);
+-		set_huge_pte_at(mm, haddr, ptep,
+-				make_huge_pte(vma, &new_folio->page, !unshare));
++		if (huge_pte_uffd_wp(pte))
++			newpte = huge_pte_mkuffd_wp(newpte);
++		set_huge_pte_at(mm, haddr, ptep, newpte);
+ 		folio_set_hugetlb_migratable(new_folio);
+ 		/* Make the old page be freed below */
+ 		new_folio = page_folio(old_page);
 -- 
 2.39.1
 
