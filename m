@@ -2,56 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC6B96E122D
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:23:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31D376E122E
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbjDMQX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 12:23:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33460 "EHLO
+        id S230220AbjDMQYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 12:24:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjDMQXy (ORCPT
+        with ESMTP id S230131AbjDMQYD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 12:23:54 -0400
+        Thu, 13 Apr 2023 12:24:03 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D0DC869E;
-        Thu, 13 Apr 2023 09:23:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB07A243
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:24:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D60A60C92;
-        Thu, 13 Apr 2023 16:23:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83C64C433D2;
-        Thu, 13 Apr 2023 16:23:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C22CE60B2B
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 16:24:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E45EAC433D2;
+        Thu, 13 Apr 2023 16:23:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681403033;
-        bh=63ksHATfE+J5PG5GH23Gfmun9q/zhyYaJcyPhs9226A=;
+        s=k20201202; t=1681403041;
+        bh=0QBSOSsFxyYPkRFs0LrG48A5TdQZmpspoIRiqn2doL0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jsHIQbINJ2+esLoKal0Ert4zH7CcoIm8NMcGSVLF6YHVqNi8dxIfnYOw+zs7GZeLN
-         Bjst3jIqhjTiTJWJZP23X0Pne6Xq6sV5swycdVf/dMZ6nKNnS3ts0tF02iBBiENWP2
-         NUTZA/jOrwiUDnOFcR4Nz8ZYhCdngyEUYKGy3UIWTkNItNfWI0m/8pi7Sw3U+h3DnR
-         ecGA4rcQ6EGY217jj/aalPFhWfuZ0cGwm+jH4mOf6XAPQq5+y5mFyNgNm1O/QmiqbG
-         vLATOJE7wwXJ+p3FnnviwNFJa5lDyp5nPJSy4qa42JEz49JBxr8fgNEBozIDvPlo0Q
-         9pR6ZIDTFgcgQ==
-Date:   Thu, 13 Apr 2023 17:23:48 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>
-Cc:     Gao Xiang <xiang@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Jingbo Xu <jefflexu@linux.alibaba.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the erofs tree with the
- vfs-idmapping tree
-Message-ID: <664140af-3d95-416c-8f89-cad7beeaac19@sirena.org.uk>
-References: <20230413144651.3519980-1-broonie@kernel.org>
- <4f9fdec2-cc2a-4bc7-9ddc-87809395f493@sirena.org.uk>
- <699f01a7-8c0e-98d9-d2c7-eaf08552f543@linux.alibaba.com>
+        b=S+LOmdTJPxOAUqVODueDkeGiPdbckmrlsLPz678m6x3CZNAwrzfZftEjLsVPDqTXg
+         SbowcuHGMFgJipj8zImC/yPJ6ydGs5esOYGEo/g2YOeb5bope+L6cZHRw043NXxU7B
+         Ax4PbN4H5IoDbIUyaT1OeC/z0m77E8r6IL56IyVgdAsIEggj95G/d6hnbxgbVS6iLA
+         YZu6/ZJQpgM6Rai8eDS8hEs89KUH7zv5jUc7b7fWWfXge/nL1pAbzFQV3kcVYxoVgy
+         Q+rIJYcy/8u6ieXa00WD2T293WS82SCFj6B2Hr6oYGPgOr5+t7Ar85+02H2AmnHkfx
+         0aagkGweJNL5w==
+Date:   Thu, 13 Apr 2023 17:23:56 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Pierre Gondois <pierre.gondois@arm.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        linux-kernel@vger.kernel.org, Radu Rendec <rrendec@redhat.com>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Will Deacon <will@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v3 3/4] arch_topology: Remove early cacheinfo error
+ message
+Message-ID: <20230413-proving-carport-cbd5188e573b@spud>
+References: <20230413091436.230134-1-pierre.gondois@arm.com>
+ <20230413091436.230134-4-pierre.gondois@arm.com>
+ <20230413-prudishly-unruly-090f5297fd54@wendy>
+ <78419d88-1114-e58e-aeec-6a991a8fdb37@arm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7zx0GPVmMMe9mQfB"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="+eOzTgcwHz5xj5a4"
 Content-Disposition: inline
-In-Reply-To: <699f01a7-8c0e-98d9-d2c7-eaf08552f543@linux.alibaba.com>
-X-Cookie: Idleness is the holiday of fools.
+In-Reply-To: <78419d88-1114-e58e-aeec-6a991a8fdb37@arm.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,38 +66,25 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---7zx0GPVmMMe9mQfB
+--+eOzTgcwHz5xj5a4
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Fri, Apr 14, 2023 at 12:16:46AM +0800, Gao Xiang wrote:
+On Thu, Apr 13, 2023 at 05:25:25PM +0200, Pierre Gondois wrote:
 
-> Thanks.  Actually I didn't update the corresponind xattr patches (just
-> rebase some older commits, also I'd like to avoid in the future, but
-> sometimes it's impossible at least if some RVB is added...)
+> Is it ok to do this and keep your Reviewed-by ?
 
-> I think it could be resolved as before by Stephen:
-> https://lore.kernel.org/r/20230412101942.75e3efa9@canb.auug.org.au
+Yah, should be grand chief.
 
-> And which looks the same as below:
-
-Probably some context changed which caused me to have to reresolve the
-conflict?  Or perhaps just rerere not syncing properly from Stephen's
-work.
-
---7zx0GPVmMMe9mQfB
+--+eOzTgcwHz5xj5a4
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEyBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ4LJMACgkQJNaLcl1U
-h9DslwfzBamgEmLUmCZ4y5gdXu1QHH54PrmzE16k2M/L7HDRV5YTPbENhFsdL1sL
-DYho+9l1dHi+qm0LDIsf4VvIMy1DSvubfZwYIzT5JFSDYKDQbnEHsrPMurxQWZd2
-f13uZmzjrnPUJx9MbGH74ZRHQvFlPNYDj9xI1ygK9+KNcZIcEfm45UYrLjq0jS9L
-ucpz59PGPeRIXR8X3Z72J2jizPzGEgLIyB8/Yy0L8o0Enzhx8fUBIPUGQZD0pJde
-PunTB2L+Fde3Z1VArmi2IvVjNG4/GS1FI1n5UFbHG0WphtX0KX//+aLGSf+9Y/JX
-/GIm1juZpYiPFdsbv3vHn/w7Fbp3
-=2jsS
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZDgsnAAKCRB4tDGHoIJi
+0jxLAP0Vc/xwI8EXMVSiMgFaFFebqsFnzHP9Dh33+KE3/X0V4gEAhC07zYnpcZzm
+WTst17jFGKfeXCTbl7DvlM29ar+6ggA=
+=0TMD
 -----END PGP SIGNATURE-----
 
---7zx0GPVmMMe9mQfB--
+--+eOzTgcwHz5xj5a4--
