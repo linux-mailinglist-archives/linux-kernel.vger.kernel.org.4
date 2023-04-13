@@ -2,103 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E27C26E1309
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 19:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D2616E1311
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 19:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbjDMRBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 13:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33618 "EHLO
+        id S230003AbjDMRCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 13:02:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbjDMRBm (ORCPT
+        with ESMTP id S229622AbjDMRCW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 13:01:42 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298679753
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 10:01:32 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-94771f05e20so492726766b.1
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 10:01:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681405290; x=1683997290;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rdBERnTqK1roUhz4M48CjDijMxlhU9ynjjBVOpaKKeM=;
-        b=n+W2XGdtFMFTvQ5mKqxeIFE4wzQN0FAF+XlWI5pBX8A5jYFCiUOJEwYTZt3thO6+iv
-         zLt2GAAG2U29q6n9cfv35M+tNURW5y29EJxudLgrEHF/+ZA4f/KJaYEXJjvIjg68ez1s
-         D/Z6XH3QOTzG8QSsDRyYf+trkRW9pqrBgvGhipN6COdur483FqXveBe5DZVRXMgjiVjO
-         rIDINjEDPf74tpIIx78AJhSll+PNSomdpOlj3iFlYcY48ob2u2lhEYUk3K9ez9ozUEJv
-         fwgdCFI4vRhLqvpiGAs6IXTa/pUcOediBQEWNjYmvW8/D9vhPd+d1Jeb2muh3s0L3y9a
-         Y2uQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681405290; x=1683997290;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rdBERnTqK1roUhz4M48CjDijMxlhU9ynjjBVOpaKKeM=;
-        b=JjvKA0nkgtqP/YbeaASTPELGSU2bUimhSdOe0TNqjG/QzTtn7d0QbH0Q7Eqqdz8u2j
-         KGHzYs1moJDg6MCBqRGH22K2wrN5ubULvrf8vScLpd1QvPkBaj5tCQY9TbhT/JVsevqz
-         67i4MBWOzhbwRZsCfjP9XAawCLO60JdNi7Ces+rXLvgrrs1sQdealRBB+F77qY2s2lTM
-         ysN6ZiHNPhuEH/1FDQz2ehSQTjL6jHs1E6RwGiT8BY9mcntHFN2e+V21RQoDrs+OclwZ
-         JCq50kyuivs+za453nNdSk2M1YfCcSXaVEyc0SxD5q4fAvjiIep9+ALEVcLogueFCSrz
-         Mkzg==
-X-Gm-Message-State: AAQBX9fWFPxa0L6HzlRMTE0hZE1Mxrcr4SFXkNTl8y2gdSFCa0RWhP34
-        nyo08dJ4tHCqP3JyhRne+GvzmA==
-X-Google-Smtp-Source: AKy350Ypvjtjph348wtuafD2AQwoYMfapNWNmvnPjLWTwvuRwjrgz0Ggd2TxQNw3M8d90qz68zxNLw==
-X-Received: by 2002:a05:6402:156:b0:506:6002:da69 with SMTP id s22-20020a056402015600b005066002da69mr3573577edu.15.1681405290494;
-        Thu, 13 Apr 2023 10:01:30 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:5032:d2d4:ece5:b035? ([2a02:810d:15c0:828:5032:d2d4:ece5:b035])
-        by smtp.gmail.com with ESMTPSA id y2-20020aa7c242000000b00504937654f8sm1063485edo.21.2023.04.13.10.01.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Apr 2023 10:01:29 -0700 (PDT)
-Message-ID: <241f6cb1-193f-d372-0eda-157946b15780@linaro.org>
-Date:   Thu, 13 Apr 2023 19:01:28 +0200
+        Thu, 13 Apr 2023 13:02:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FEE1AF33;
+        Thu, 13 Apr 2023 10:02:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 02A3E64054;
+        Thu, 13 Apr 2023 17:02:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 464F6C433D2;
+        Thu, 13 Apr 2023 17:02:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681405321;
+        bh=h3WMjK4zl6JofyMg5vsqpodV2pRvhxWvgIjrDOjPmzI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CyveBJUAuDYUQqq8O9sYdhz5DO3ddDFO57gXRAwDFmUCu/iojQb0HOpxO2KsYLvgb
+         ttY5s/8G1bt1AYx+DLZyvXluZdyhONVlHTvGL3lEysljNyGV09O3vhqY0oPJgP7Fd1
+         F1rERwcl+cn4TO1P4ThYS7If1UfwsdX+ZItN7V508YGmAjtJE/8ZIXppXb+QaLBOCc
+         Do/xh9/zasqJbu6WBaFaUdYcqs54HM4N3MEDPnm9u/SEx7zAmfdI4hPxwmLZ+7H/Nx
+         Rmj1kQZUj6stsl3c3vhal4inRxWNHUuhPPCZXLOxLmcpQBJ0zuoUaQE1xOe3aHgLPS
+         NNPAs/GJo8e9A==
+Date:   Thu, 13 Apr 2023 10:01:59 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Haiyang Zhang <haiyangz@microsoft.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Paul Rosswurm <paulros@microsoft.com>,
+        "olaf@aepfle.de" <olaf@aepfle.de>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        Long Li <longli@microsoft.com>,
+        "ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        Ajay Sharma <sharmaajay@microsoft.com>,
+        "hawk@kernel.org" <hawk@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V3,net-next, 2/4] net: mana: Refactor RX buffer
+ allocation code to prepare for various MTU
+Message-ID: <20230413100159.078bdf18@kernel.org>
+In-Reply-To: <20230413165929.GU17993@unreal>
+References: <1681334163-31084-1-git-send-email-haiyangz@microsoft.com>
+        <1681334163-31084-3-git-send-email-haiyangz@microsoft.com>
+        <20230413130428.GO17993@unreal>
+        <PH7PR21MB3116194E8F7D56EB434B56A6CA989@PH7PR21MB3116.namprd21.prod.outlook.com>
+        <20230413163059.GS17993@unreal>
+        <20230413094003.3fa4cd8c@kernel.org>
+        <20230413165929.GU17993@unreal>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v7 12/12] MAINTAINERS: Add entry for NUVOTON MA35
-Content-Language: en-US
-To:     Jacky Huang <ychuang570808@gmail.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        arnd@arndb.de, schung@nuvoton.com, mjchen@nuvoton.com,
-        Jacky Huang <ychuang3@nuvoton.com>
-References: <20230412053824.106-1-ychuang570808@gmail.com>
- <20230412053824.106-13-ychuang570808@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230412053824.106-13-ychuang570808@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/04/2023 07:38, Jacky Huang wrote:
-> From: Jacky Huang <ychuang3@nuvoton.com>
+On Thu, 13 Apr 2023 19:59:29 +0300 Leon Romanovsky wrote:
+>> Maybe we should update the doc.  
 > 
-> Add entry for Nuvoton ma35d1 maintainer and files.
-> In addition, update board binding paths of NUVOTON NPCM.
+> The last sentence is always true :)
 
-
->  ARM/NUVOTON NPCM ARCHITECTURE
->  M:	Avi Fishman <avifishman70@gmail.com>
->  M:	Tomer Maimon <tmaimon77@gmail.com>
-> @@ -2512,7 +2522,8 @@ L:	openbmc@lists.ozlabs.org (moderated for non-subscribers)
->  S:	Supported
->  F:	Documentation/devicetree/bindings/*/*/*npcm*
->  F:	Documentation/devicetree/bindings/*/*npcm*
-> -F:	Documentation/devicetree/bindings/arm/npcm/*
-
-It is not a bisectable change.
-
-Best regards,
-Krzysztof
-
+Yeah, I felt bad when writing it :)
