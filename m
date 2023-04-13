@@ -2,90 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB14F6E112E
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 17:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FC596E112D
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 17:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbjDMPcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 11:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50854 "EHLO
+        id S230098AbjDMPcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 11:32:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbjDMPcp (ORCPT
+        with ESMTP id S229821AbjDMPcp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 13 Apr 2023 11:32:45 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60A210F3
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73AAA106
         for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 08:32:44 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-54fb615ac3dso76263967b3.2
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 08:32:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681399964; x=1683991964;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4Nc75iyNukd0UR0rxIxhX/z29BaqR72KzPmAyeHJwIc=;
-        b=JAHnYmaeyTzRiLuZOeQwhE+KlzFkog2WLQuO5+Xkls1cIPq0GtTSILEI+jyF9oM1Lp
-         7nliktTEq54GI2VPALYRdUSraMquQlNFMdAo10UETOI+Tz1TPQy6EV3j6fHm0vYHezZB
-         o5hmHMXOcLAAW74yS2QsvKxM3CSBad619AN+HW1nXsfgeDb9NLbg4X4hDL7VMKmmAVol
-         285REognpebbHdRDxuM9at/5EbEQLUN+x0k5pWd3yDm7e7DutIMVTPbEmSEzpCoF0yRC
-         ijz9NVP7AkftSMBuH9k9IKN/kg8xJV1VAd5DzjidgGCZi9rkXWOOAwe3ziCQwGLAR6kt
-         cbrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681399964; x=1683991964;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4Nc75iyNukd0UR0rxIxhX/z29BaqR72KzPmAyeHJwIc=;
-        b=GgJ6Zlr4+DAPWBr9v1tcnQ3yO2si60hmnTDm53pwiQDiRjIJtGrGmMPCDnXveLeitb
-         SnULeY0YQql8lkskEFnLnVXZVEKom1PHiRsF3Cn4DQF1orz31gInNsS81Kw9ZW/0ZcWJ
-         kdywH7PXiWC8VtfZvSRhaaNBbgtTzzC+2G2kO9THTxUUQS1beIfbLMcxkItT3LSG00aw
-         fowyvrUSnjhLmVOEMsD5WOH3UirdOx8ShCwGGqXFBFfO7PzgZ0Ka/w9oqu4yldiMmLMh
-         3TFswGOS4ZkSLG54WX1HZh5/6IuqVqPl7nAfkVAi4aHj0PcMV8nzv5K4Zr/3gCwLzOUK
-         ycww==
-X-Gm-Message-State: AAQBX9diFDIo5Q5N1IPvhUvqaZOs8bdzk1x8T6BvFmU6VuStCUznIJjZ
-        y28ZjCwlt3UVjj9rC2UGPO/Mp88yQTf0f1PdgPo1gmBXsQ==
-X-Google-Smtp-Source: AKy350aW7/Rt5uV9WGKym2asTJbmxp7nWKlm8h8QUtBJ9JRBKTw2Rz6Yer8O3p7N71ttmVpgZM2dMRD0CuuQdndOY0g=
-X-Received: by 2002:a81:1b8e:0:b0:533:a15a:d33e with SMTP id
- b136-20020a811b8e000000b00533a15ad33emr5024977ywb.5.1681399964024; Thu, 13
- Apr 2023 08:32:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1186F60ACB
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 15:32:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B5BCC433D2;
+        Thu, 13 Apr 2023 15:32:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681399963;
+        bh=jvDJT0KYQoI4eIX6amiF0FcIWVm6lzaDbd1cH+1uAfg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GeH7JhYVErt/5e1JvrmaC1z4t1vHFASQhZfV/VNm2IbyXl/CcFhmErtYhzbzZ54SM
+         CBcrqY35tdtma8IDMjSGeFbIO2dzUK0PAGOL8dv05YMq6dUEqUT97HKbF8zJi5xzlV
+         2LyrjFcogYMWLxmAEUJqsBvRQyKj4KR9smfaN06dbSZ7RQhB5NjTMM1WfdL1pB47VJ
+         OOhwvDGBpnbkudBCJEKwMnqtRse4gJ1NdZGQbzSKBvF8o3zj9BgrYr51rtJU8Qpgr+
+         lCRGgXn4X2GYQn+PFqgPd2oud2kY5cf81CdFvt1lNJAhQAbIZPVf5yWl0ieI3ZUcn0
+         tPNGWVsKenq+g==
+Date:   Thu, 13 Apr 2023 08:32:41 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Miroslav Benes <mbenes@suse.cz>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v2 8/9] objtool: Detect missing __noreturn annotations
+Message-ID: <20230413153241.7px5x2w6jvkpmes7@treble>
+References: <cover.1681325924.git.jpoimboe@kernel.org>
+ <0f630a0eb4585ab4114e4eecaa6f166a1fd81d49.1681325924.git.jpoimboe@kernel.org>
+ <alpine.LSU.2.21.2304131613490.27633@pobox.suse.cz>
 MIME-Version: 1.0
-References: <CALjTZvZ=Y1psyd0nmfzm6GhqMKvq5V_NQCWb_X02nasp1CpfcQ@mail.gmail.com>
- <87r0spcuvi.fsf@intel.com> <CALjTZvao=N7wxyj_DpqzWUhdJwEsWSKUo3ddi-3ubgMp8BXi_Q@mail.gmail.com>
- <CALjTZvaf1cwcZc9O8g24SnZXsoQaWB97UVQW=g6M0coaudLr6w@mail.gmail.com> <2495408f-a644-4e56-aaca-e6915cbda179@paulmck-laptop>
-In-Reply-To: <2495408f-a644-4e56-aaca-e6915cbda179@paulmck-laptop>
-From:   Rui Salvaterra <rsalvaterra@gmail.com>
-Date:   Thu, 13 Apr 2023 16:32:32 +0100
-Message-ID: <CALjTZva=JHsckrBeHgJcd-_TDMgYgmZGcXavJ=GhPr7VQCOF5g@mail.gmail.com>
-Subject: Re: [BUG?] INFO: rcu_sched detected expedited stalls on CPUs/tasks: {
- 0-.... } 3 jiffies s: 309 root: 0x1/.
-To:     paulmck@kernel.org
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>, rodrigo.vivi@intel.com,
-        tvrtko.ursulin@linux.intel.com, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <alpine.LSU.2.21.2304131613490.27633@pobox.suse.cz>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Paul,
+On Thu, Apr 13, 2023 at 04:19:10PM +0200, Miroslav Benes wrote:
+> > --- a/tools/objtool/check.c
+> > +++ b/tools/objtool/check.c
+> > @@ -4485,7 +4485,8 @@ static int validate_sls(struct objtool_file *file)
+> >  
+> >  static int validate_reachable_instructions(struct objtool_file *file)
+> >  {
+> > -	struct instruction *insn;
+> > +	struct instruction *insn, *prev_insn;
+> > +	struct symbol *call_dest;
+> >  	int warnings = 0;
+> >  
+> >  	if (file->ignore_unreachables)
+> > @@ -4495,6 +4496,17 @@ static int validate_reachable_instructions(struct objtool_file *file)
+> >  		if (insn->visited || ignore_unreachable_insn(file, insn))
+> >  			continue;
+> >  
+> > +		prev_insn = prev_insn_same_sec(file, insn);
+> > +		if (prev_insn && prev_insn->dead_end) {
+> > +			call_dest = insn_call_dest(prev_insn);
+> > +			if (call_dest) {
+> > +				WARN_INSN(insn, "%s() is missing a __noreturn annotation",
+> > +					  call_dest->name);
+> > +				warnings++;
+> > +				continue;
+> 
+> A nit but this and
+> 
+> > +			}
+> > +		}
+> > +
+> >  		WARN_INSN(insn, "unreachable instruction");
+> >  		warnings++;
+> 
+> this makes me thinking. Wouldn't it be confusing to anyone that there is 
+> no correspondence between warnings and a number of actual reported 
+> warnings through WARN_INSN()? In the future when there would be a usage 
+> for warnings. It does not really matter now.
 
-On Thu, 13 Apr 2023 at 15:43, Paul E. McKenney <paulmck@kernel.org> wrote:
->
-> My guess would be that you have CONFIG_RCU_EXP_CPU_STALL_TIMEOUT set to
-> some small non-zero number, for example, you might have set up a recent
-> Android .config or some such.  The default of zero would give you about
-> 21 seconds rather than the three jiffies that you are seeing.
->
-> Could you please check your .config?
+True, maybe we need WARN_INSN_ONCE_PER_FUNC() or so ;-)
 
-Well, this is embarrassing. I can't fathom why/how, but I had it set
-to 20, on this machine. That is, 20 millisseconds. I guess its a
-miracle I haven't seen *more* expedited RCU traces. Sorry for the
-noise, everyone.
-
-Kind regards,
-Rui
+-- 
+Josh
