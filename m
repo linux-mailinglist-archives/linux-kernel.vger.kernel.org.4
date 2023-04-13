@@ -2,124 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6737C6E0C78
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 13:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C79A36E0C73
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 13:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230172AbjDMLaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 07:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58944 "EHLO
+        id S229990AbjDML3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 07:29:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230032AbjDMLaW (ORCPT
+        with ESMTP id S229593AbjDML3w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 07:30:22 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DEE49749
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 04:30:21 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id si1so6413286ejb.10
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 04:30:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681385419; x=1683977419;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r9VZRy+ALIrbnuoSe0PNBBfvqUV9FWtMpLqMl4pVQlE=;
-        b=FawizVY7HhksSlM/EXpzcpXldi+yCz4HZxgMXFrA0D7TY4SooKByYRyl/PrpnGtURT
-         U6ZKsSzk7dtuHBeRnU6ubUixkbtyvQKJMGIGlbSWvMmR+qYeXlDB7bsjXKsp0vUodqxS
-         m++tC1HwAEMoJw2Z8Byx/zXZc0awaueEJ+rjFerBgu6BSFlkLZ5kDARUp5jMzmZuP+2R
-         YavPMLdiDbZj4QeI9567bpyOc7Su1ZUmVqDBnoD3ih8M3yTN3z81SNKoOCn9/EFVOzkE
-         xLRdq6Jac5+YtYp0Wtfjk1nyUNJJIKHH7MXAgKQriYtIcNy2davJ3g7H0KNWCGx5h1ZK
-         SLZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681385419; x=1683977419;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=r9VZRy+ALIrbnuoSe0PNBBfvqUV9FWtMpLqMl4pVQlE=;
-        b=HNeOigpsgWQlHdmM0Ry+ZfUSVNGIkWQXHjaTH9nqtqmAzXwHFGuaR5v1taBlGbpvbL
-         bxmtpbkxkGtCscLy+V1yGGSWJWDtq1OX3mkzzHt7ckxS6tTZ6OSpUwxqklmvW6Tq3MEB
-         eslP29956IcdPVp2z08cJoy9rYpA1gpchJjENsCps8hUvuL6QnL/tpe8oJvtM541G/+A
-         Sv9Qr/aKBsa/BwXW6YcXkq8Oh2G2/nQ5mt+yVSD5xwC90fu6BCimMjIOHtlmjz195Z56
-         npOJXQbNJPWRjYxwHt/vEkSda82r8eGzQyyRos71ip9dj3aWdYTq26x1AGp18xnJ0UlN
-         Z5LQ==
-X-Gm-Message-State: AAQBX9f+cdhzsUPa8TU2trK7x4k3C38MWicn0DlmlafYI0e8T+G1bz4s
-        CI38zAYXkeST0hyOXRq2NnuXa/d5vFGtz7AEIC76EA==
-X-Google-Smtp-Source: AKy350YGfS9e19HP05Oiznjy9Mfa8a36DWz+4bhJqVxRh8Sp9QjK9ffjx1ux2/OVFijfQ9Nymg9OabFJJrpzaJeAblM=
-X-Received: by 2002:a17:906:f753:b0:933:1967:a984 with SMTP id
- jp19-20020a170906f75300b009331967a984mr1014820ejb.15.1681385419329; Thu, 13
- Apr 2023 04:30:19 -0700 (PDT)
+        Thu, 13 Apr 2023 07:29:52 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4289740;
+        Thu, 13 Apr 2023 04:29:51 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A5D446603212;
+        Thu, 13 Apr 2023 12:29:49 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1681385390;
+        bh=bvenpCUXdyjjQEZArC0d3YuEErYsBVLrl7zmm7hLLgU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Bm0jDJcBNEQXa1Ue8FRql2CVOwseKGKuXaSAt56oxwcwKKfMJ5mWYSTO+Afclx9Uh
+         Cp+YADPst8MAbWzan1Vaz0Zt2LjLK9Yx2/+uQaFfO6DreqPEwBI3MnnzgqFN84TdSz
+         Ze5TZBYW6zQ8ALWAA/b9KgqguuGe1kuP1PbGl2V/eWzJrTtrIQJPd489fcC3TlGHOP
+         rJ/FY3ljHLAxXd1Z4RVu9hUqkOQcIzKV1v92BPGoiEPWCjZvYlCsx7EI2AEice40RU
+         0prTs0NN2AOGbT2R4HVI6mkgqftOrE/W4u+PXzbNChFKLsAyQ7RTo3r+3cslonBtjS
+         9Uz5SVc5lJD2Q==
+Message-ID: <04d2b53e-4f5e-81ec-3397-e58898b7039e@collabora.com>
+Date:   Thu, 13 Apr 2023 13:29:46 +0200
 MIME-Version: 1.0
-References: <20230413104034.1086717-1-yosryahmed@google.com>
- <20230413104034.1086717-4-yosryahmed@google.com> <b7fe839d-d914-80f7-6b96-f5f3a9d0c9b0@redhat.com>
-In-Reply-To: <b7fe839d-d914-80f7-6b96-f5f3a9d0c9b0@redhat.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Thu, 13 Apr 2023 04:29:43 -0700
-Message-ID: <CAJD7tkae0uDuRG77nQEtzkV1abGstjF-1jfsCguR3jLNW=Cg5w@mail.gmail.com>
-Subject: Re: [PATCH v6 3/3] mm: vmscan: refactor updating current->reclaim_state
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        Michal Hocko <mhocko@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 7/7] leds: leds-mt6323: Add support for WLEDs and
+ MT6332
+Content-Language: en-US
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     lee@kernel.org, sean.wang@mediatek.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20230412153310.241046-1-angelogioacchino.delregno@collabora.com>
+ <20230412153310.241046-8-angelogioacchino.delregno@collabora.com>
+ <ZDfiNSAs3Bc7xe1l@duo.ucw.cz>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <ZDfiNSAs3Bc7xe1l@duo.ucw.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 4:21=E2=80=AFAM David Hildenbrand <david@redhat.com=
-> wrote:
->
-> On 13.04.23 12:40, Yosry Ahmed wrote:
-> > During reclaim, we keep track of pages reclaimed from other means than
-> > LRU-based reclaim through scan_control->reclaim_state->reclaimed_slab,
-> > which we stash a pointer to in current task_struct.
-> >
-> > However, we keep track of more than just reclaimed slab pages through
-> > this. We also use it for clean file pages dropped through pruned inodes=
-,
-> > and xfs buffer pages freed. Rename reclaimed_slab to reclaimed, and add
->
-> Would "reclaimed_non_lru" be more expressive? Then,
->
-> mm_account_reclaimed_pages() -> mm_account_non_lru_reclaimed_pages()
->
->
-> Apart from that LGTM.
+Il 13/04/23 13:06, Pavel Machek ha scritto:
+> Hi!
+> 
+>> Add basic code to turn on and off WLEDs and wire up MT6332 support
+>> to take advantage of it.
+>> This is a simple approach due to to the aforementioned PMIC supporting
+>> only on/off status so, at the time of writing, it is impossible for me
+>> to validate more advanced functionality due to lack of hardware.
+> 
+> 
+>> @@ -467,14 +590,24 @@ static int mt6323_led_probe(struct platform_device *pdev)
+>>   			goto put_child_node;
+>>   		}
+>>   
+>> +		is_wled = of_property_read_bool(child, "mediatek,is-wled");
+>> +
+> 
+> This needs documenting in the binding, no?
+> 
+>> +static const struct mt6323_hwspec mt6332_spec = {
+>> +	/* There are no LEDs in MT6332. Only WLEDs are present. */
+> 
+> "Only WLED is present"?
+> 
+>> +	.max_leds = 0,
+>> +	.max_wleds = 1,
+>> +	.max_brightness = 1024,
+>> +};
+>> +
+> 
+> Is there chip with both LED and WLEDs? (I'm wondering if this makes
+> sense in single driver).
+> 
 
-Thanks!
+Some PMICs have got both LED(s) and WLED(s), yes - this is only on smartphone
+designs though.
 
-I suck at naming things. If you think "reclaimed_non_lru" is better,
-then we can do that. FWIW mm_account_reclaimed_pages() was taken from
-a suggestion from Dave Chinner. My initial version had a terrible
-name: report_freed_pages(), so I am happy with whatever you see fit.
+Regards,
+Angelo
 
-Should I re-spin for this or can we change it in place?
-
->
-> --
-> Thanks,
->
-> David / dhildenb
->
