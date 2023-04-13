@@ -2,142 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A8E56E0B93
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 12:41:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D657D6E0B97
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 12:41:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbjDMKlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 06:41:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51046 "EHLO
+        id S230502AbjDMKln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 06:41:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231143AbjDMKkz (ORCPT
+        with ESMTP id S231326AbjDMKla (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 06:40:55 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1AE8A51
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:40:46 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id q6so2282673wrc.3
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:40:46 -0700 (PDT)
+        Thu, 13 Apr 2023 06:41:30 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA949EF2
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:41:06 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-63b1e92ce21so178738b3a.0
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:41:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681382445; x=1683974445;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wt8QYWYgXcWDb0H4PzSCSB86AxQEfmL5GXKTxvwufWc=;
-        b=vgr124BoHwdFxO+8XR7kdg8rVvjTn0NVgvqh2IRic5l3kYQUOHhoQTaVNENat3MtFT
-         m04F+OZzwB9jdXFcnIsy4aWQ3aKr0ztkHTOY6lQZ0EIMXvg5dVLnUFVklSWIiXyUg4so
-         TPyVIYoQ1qePdYzwdUatim3ab6+GMl+0NJj8xfSvKLwJQnSK51k2RUJ7jcnHU8E/hRB/
-         BKNyh1LoGZg8FGwx9Hl1BU7tjqrmd6G8BpbRurNdgS7Iv9KFU3t9Z9C/31kJSRwapfUb
-         Cgvxo+ND0LV1gCZDa3V6SUHKfqXrfdHaqn3DoKaK9742YoxMJDoe4T2PQI3CKdzzH6ru
-         7PvA==
+        d=xiaomi-corp-partner-google-com.20221208.gappssmtp.com; s=20221208; t=1681382466; x=1683974466;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oiYTZRIwk9ROTIrblLNUMUDt3W83vsBb+YQOnYk2aRE=;
+        b=Cmcl+/DH2y0iFsEmNAa74QiO1a14FsXYAL7Xxw+ptKQK/MSmrSa9t7UimZ4PTfjnYF
+         HkTtKC8dhkRKn3ZGRy+qOY2yztsEtGCQ4xXZPWgOGUNp0V97c1+32Mbvi7Tu9T4MyHSx
+         JstY0PCBOC4oPuD8SFOJjU/psnqP4NB9I4Yh03RpjY+dwc8s/tOHYT0rKtlKQLIFKWk4
+         IrLTEFTu8Rjc2Qaoe6ZTfrcublW4yTXtOxTWVb00fURzm/S1USIyV5ToDiWH4aISMAQX
+         Ioy/5l4TNgGXovyM4ZvLFCrWNyeNEyqfHhJ++5KPqp7T6Ha1RX9jq2igjKbK0Qfbp34t
+         vrLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681382445; x=1683974445;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Wt8QYWYgXcWDb0H4PzSCSB86AxQEfmL5GXKTxvwufWc=;
-        b=BQFYi0umPpm50lqmQrDm/fABE8axhQBWRSig6+7j5VDboSzu1E/9CNKamjKfi27dRP
-         uemuixnlWGpfPmCm5ovg5PjxhS1t849QmoXK5BGSaAfVcwVuAKNrcx+S1vemFtUkgI+U
-         yX8gQbacyEIxXYHKz+W/x0f1Qm8vXo9zdvppNjQ7z6ZmS4xFn3hpgwdtcA0/rWNfu4r0
-         E4mGHum39tQUAUWbsfS8qN5DXGk3/i+rjZ4OkZO+9Ep+zQioENqrVUFmNNQkAuIreoZB
-         Ur2JGv7QQnZZ2vrwE3XuMJt3sUSSRXQD9eAcre7sNXdHkOXcELp+yXdCNd1kmrwOSdjn
-         yptg==
-X-Gm-Message-State: AAQBX9cuT95hVKiEqMNQzmpyxT1HA1Vb5HawfU/iLH7Z9reH02XsbLiQ
-        hjY2uyLmjvtFPKZ437X25nsFYg==
-X-Google-Smtp-Source: AKy350ZKTDVRuGJL5YYI5HJoiDXvklp7EVihRfgojTs66okpvLm6QBr1zfRfZkA+Oait71i9Hok2BQ==
-X-Received: by 2002:adf:e352:0:b0:2ef:b1bd:786 with SMTP id n18-20020adfe352000000b002efb1bd0786mr1002307wrj.13.1681382444786;
-        Thu, 13 Apr 2023 03:40:44 -0700 (PDT)
-Received: from myrica ([5.69.146.176])
-        by smtp.gmail.com with ESMTPSA id z1-20020a5d4d01000000b002e5f6f8fc4fsm990119wrt.100.2023.04.13.03.40.44
+        d=1e100.net; s=20221208; t=1681382466; x=1683974466;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oiYTZRIwk9ROTIrblLNUMUDt3W83vsBb+YQOnYk2aRE=;
+        b=PJKuIMj2eGA68wJiN27aW5z8+OX2LuOLuFfWQgeVCiyLR0EuwsvRnrznIR6vwz/HKi
+         i1Gxv/WCiW+y56ccnBgICKICGvGu3HTHBV3M2lEQHSJBIezQw9uNBAtAKVorkjd62TWV
+         +VamA62SWNq2/feSC/ajN9go2IWgD/g/YvZKPvwZPYf2ppn0q1ZEUKFQfjwb2blfmPA/
+         ZffGqfPmvAo/f+NgwW1D2tUAl4cNLGFTvJL6V6e7vueTZ7Y4n3X+6YaKdUNsoCTt23Cv
+         j5wzvzMeayHIMorVkRBwoFZqQ4iBv9Eqjvf37DKvHpOTasFDGJ2iVsnOqknRTI8l+PkS
+         8NVA==
+X-Gm-Message-State: AAQBX9d2lHW2Fz/kxTLNEWeaOM/iXnuxev/wtgf8Hikt1ujhVVOH6/oq
+        CZWKO6UMTK8eoxIhUEnjrFJJBw==
+X-Google-Smtp-Source: AKy350aLyA6znkshYqfjEX/OMTptkJfQsb2J51rA72fh6WMd6ucgg5v4bMp7qTJW/2wHwIu36J/lzQ==
+X-Received: by 2002:a05:6a20:8e19:b0:d9:a977:fae with SMTP id y25-20020a056a208e1900b000d9a9770faemr1781568pzj.3.1681382465739;
+        Thu, 13 Apr 2023 03:41:05 -0700 (PDT)
+Received: from mi-HP-Pro-Tower-480-G9-PCI-Desktop-PC.. ([43.224.245.246])
+        by smtp.gmail.com with ESMTPSA id p6-20020aa78606000000b0063486255a87sm1152124pfn.142.2023.04.13.03.41.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 03:40:44 -0700 (PDT)
-Date:   Thu, 13 Apr 2023 11:40:41 +0100
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Akihiko Odaki <akihiko.odaki@daynix.com>
-Cc:     Eric Auger <eric.auger@redhat.com>,
-        virtio-dev@lists.oasis-open.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, qemu-devel@nongnu.org
-Subject: Re: virtio-iommu hotplug issue
-Message-ID: <20230413104041.GA3295191@myrica>
-References: <15bf1b00-3aa0-973a-3a86-3fa5c4d41d2c@daynix.com>
+        Thu, 13 Apr 2023 03:41:05 -0700 (PDT)
+From:   Chuang Zhang <zhangchuang3@xiaomi.corp-partner.google.com>
+To:     gregkh@linuxfoundation.org
+Cc:     arve@android.com, tkjos@android.com, maco@android.com,
+        joel@joelfernandes.org, brauner@kernel.org, cmllamas@google.com,
+        surenb@google.com, linux-kernel@vger.kernel.org,
+        Chuang Zhang <zhangchuang3@xiaomi.com>
+Subject: [PATCH] Binder: Add timestamp and async from pid/tid to transaction record
+Date:   Thu, 13 Apr 2023 18:40:47 +0800
+Message-Id: <20230413104047.388861-1-zhangchuang3@xiaomi.corp-partner.google.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <15bf1b00-3aa0-973a-3a86-3fa5c4d41d2c@daynix.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: Chuang Zhang <zhangchuang3@xiaomi.com>
 
-On Thu, Apr 13, 2023 at 01:49:43PM +0900, Akihiko Odaki wrote:
-> Hi,
-> 
-> Recently I encountered a problem with the combination of Linux's
-> virtio-iommu driver and QEMU when a SR-IOV virtual function gets disabled.
-> I'd like to ask you what kind of solution is appropriate here and implement
-> the solution if possible.
-> 
-> A PCIe device implementing the SR-IOV specification exports a virtual
-> function, and the guest can enable or disable it at runtime by writing to a
-> configuration register. This effectively looks like a PCI device is
-> hotplugged for the guest.
+This patch adds a timestamp field to the binder_transaction
+structure to track the time consumed during transmission
+when reading binder_transaction records.
+Additionally, it records the from pid and tid of asynchronous
+binder. This information is printed when reading binderfs
+related nodes to assist with debugging.
 
-Just so I understand this better: the guest gets a whole PCIe device PF
-that implements SR-IOV, and so the guest can dynamically create VFs?  Out
-of curiosity, is that a hardware device assigned to the guest with VFIO,
-or a device emulated by QEMU?
+Signed-off-by: Chuang Zhang <zhangchuang3@xiaomi.com>
+---
+ drivers/android/binder.c          | 24 ++++++++++++++++++------
+ drivers/android/binder_internal.h |  3 +++
+ 2 files changed, 21 insertions(+), 6 deletions(-)
 
-> In such a case, the kernel assumes the endpoint is
-> detached from the virtio-iommu domain, but QEMU actually does not detach it.
-> 
-> This inconsistent view of the removed device sometimes prevents the VM from
-> correctly performing the following procedure, for example:
-> 1. Enable a VF.
-> 2. Disable the VF.
-> 3. Open a vfio container.
-> 4. Open the group which the PF belongs to.
-> 5. Add the group to the vfio container.
-> 6. Map some memory region.
-> 7. Close the group.
-> 8. Close the vfio container.
-> 9. Repeat 3-8
-> 
-> When the VF gets disabled, the kernel assumes the endpoint is detached from
-> the IOMMU domain, but QEMU actually doesn't detach it. Later, the domain
-> will be reused in step 3-8.
-> 
-> In step 7, the PF will be detached, and the kernel thinks there is no
-> endpoint attached and the mapping the domain holds is cleared, but the VF
-> endpoint is still attached and the mapping is kept intact.
-> 
-> In step 9, the same domain will be reused again, and the kernel requests to
-> create a new mapping, but it will conflict with the existing mapping and
-> result in -EINVAL.
-> 
-> This problem can be fixed by either of:
-> - requesting the detachment of the endpoint from the guest when the PCI
-> device is unplugged (the VF is disabled)
+diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+index fb56bfc45096..e79f548bcbac 100644
+--- a/drivers/android/binder.c
++++ b/drivers/android/binder.c
+@@ -66,6 +66,7 @@
+ #include <linux/syscalls.h>
+ #include <linux/task_work.h>
+ #include <linux/sizes.h>
++#include <linux/ktime.h>
+ 
+ #include <uapi/linux/android/binder.h>
+ 
+@@ -3145,6 +3146,7 @@ static void binder_transaction(struct binder_proc *proc,
+ 	binder_stats_created(BINDER_STAT_TRANSACTION_COMPLETE);
+ 
+ 	t->debug_id = t_debug_id;
++	t->start_time = ktime_get();
+ 
+ 	if (reply)
+ 		binder_debug(BINDER_DEBUG_TRANSACTION,
+@@ -3165,10 +3167,15 @@ static void binder_transaction(struct binder_proc *proc,
+ 			     (u64)tr->data_size, (u64)tr->offsets_size,
+ 			     (u64)extra_buffers_size);
+ 
+-	if (!reply && !(tr->flags & TF_ONE_WAY))
++	if (!reply && !(tr->flags & TF_ONE_WAY)) {
+ 		t->from = thread;
+-	else
++		t->async_from_pid = 0;
++		t->async_from_tid = 0;
++	} else  {
+ 		t->from = NULL;
++		t->async_from_pid = thread->proc->pid;
++		t->async_from_tid = thread->pid;
++	}
+ 	t->sender_euid = task_euid(proc->tsk);
+ 	t->to_proc = target_proc;
+ 	t->to_thread = target_thread;
+@@ -4963,6 +4970,8 @@ static int binder_thread_release(struct binder_proc *proc,
+ 		} else if (t->from == thread) {
+ 			t->from = NULL;
+ 			t = t->from_parent;
++			t->async_from_pid = 0;
++			t->async_from_tid = 0;
+ 		} else
+ 			BUG();
+ 		spin_unlock(&last_t->lock);
+@@ -5930,17 +5939,20 @@ static void print_binder_transaction_ilocked(struct seq_file *m,
+ {
+ 	struct binder_proc *to_proc;
+ 	struct binder_buffer *buffer = t->buffer;
++	ktime_t current_time = ktime_get();
+ 
+ 	spin_lock(&t->lock);
+ 	to_proc = t->to_proc;
+ 	seq_printf(m,
+-		   "%s %d: %pK from %d:%d to %d:%d code %x flags %x pri %ld r%d",
++		   "%s %d: %pK from %d:%d to %d:%d code %x elapsed %lldms flags %x pri %ld r%d",
+ 		   prefix, t->debug_id, t,
+-		   t->from ? t->from->proc->pid : 0,
+-		   t->from ? t->from->pid : 0,
++		   t->from ? t->from->proc->pid : t->async_from_pid,
++		   t->from ? t->from->pid : t->async_from_tid,
+ 		   to_proc ? to_proc->pid : 0,
+ 		   t->to_thread ? t->to_thread->pid : 0,
+-		   t->code, t->flags, t->priority, t->need_reply);
++		   t->code,
++		   ktime_ms_delta(current_time, t->start_time),
++		   t->flags, t->priority, t->need_reply);
+ 	spin_unlock(&t->lock);
+ 
+ 	if (proc != to_proc) {
+diff --git a/drivers/android/binder_internal.h b/drivers/android/binder_internal.h
+index 28ef5b3704b1..7e60f547abb6 100644
+--- a/drivers/android/binder_internal.h
++++ b/drivers/android/binder_internal.h
+@@ -528,6 +528,9 @@ struct binder_transaction {
+ 	long    priority;
+ 	long    saved_priority;
+ 	kuid_t  sender_euid;
++	int async_from_pid;
++	int async_from_tid;
++	ktime_t start_time;
+ 	struct list_head fd_fixups;
+ 	binder_uintptr_t security_ctx;
+ 	/**
+-- 
+2.34.1
 
-Yes, I think this is an issue in the virtio-iommu driver, which should be
-sending a DETACH request when the VF is disabled, likely from
-viommu_release_device(). I'll work on a fix unless you would like to do it
-
-> - detecting that the PCI device is gone and automatically detach it on
-> QEMU-side.
-> 
-> It is not completely clear for me which solution is more appropriate as the
-> virtio-iommu specification is written in a way independent of the endpoint
-> mechanism and does not say what should be done when a PCI device is
-> unplugged.
-
-Yes, I'm not sure it's in scope for the specification, it's more about
-software guidance
-
-Thanks,
-Jean
