@@ -2,159 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 503FC6E05E3
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 06:20:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C966E05F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 06:24:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjDMEUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 00:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47928 "EHLO
+        id S229630AbjDMEYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 00:24:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbjDMETs (ORCPT
+        with ESMTP id S229501AbjDMEYa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 00:19:48 -0400
-Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6FC2A4
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 21:19:21 -0700 (PDT)
-Received: from authenticated-user (box.trvn.ru [194.87.146.52])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by box.trvn.ru (Postfix) with ESMTPSA id 82FD14137A;
-        Thu, 13 Apr 2023 09:19:18 +0500 (+05)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
-        t=1681359558; bh=EACh0p8x8TBQcC+xIl40sDZ9sHJ0nPKMt/fNm93r6ts=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=0esRjPOG+1XrN5sgTC+MdhEiL05H1pBvZD0Z2aG20oXfW/RYRR9HMYxn1BhrGY8ql
-         U335OCrrHdVfczRMXLEtduafK/pirEXfDmDUkRzsIWkK5/9u1DEsHnvpl9DmsZysSr
-         UzFS5LNa6iL+L4+a7EHMk9eZC2wu7pZaJpW/PaNzAulULzxKcGap14Q9vW4uAO22FS
-         YN9kRbI8CY9TxZKwApu8mLGuu6VWzn/ubXyiPnrsFNGBeBm9ZbDxFMoyqLraFeT9LV
-         bGfh0w+TzRSTNk6W+zSFGCEsgHW7C0VqY1fxEJv5C9jm4NquY/3KlpWqhVM0D1ffWW
-         dOg/PfjGvyjDA==
+        Thu, 13 Apr 2023 00:24:30 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA77BB;
+        Wed, 12 Apr 2023 21:24:29 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33D4O0VC0024180, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33D4O0VC0024180
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Thu, 13 Apr 2023 12:24:00 +0800
+Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Thu, 13 Apr 2023 12:24:22 +0800
+Received: from RTEXH36505.realtek.com.tw (172.21.6.25) by
+ RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Thu, 13 Apr 2023 12:24:22 +0800
+Received: from localhost.localdomain (172.21.252.101) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server id
+ 15.1.2375.32 via Frontend Transport; Thu, 13 Apr 2023 12:24:22 +0800
+From:   Stanley Chang <stanley_chang@realtek.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     Stanley Chang <stanley_chang@realtek.com>,
+        <linux-usb@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 1/2] usb: dwc3: core: add support for remapping global register start address
+Date:   Thu, 13 Apr 2023 12:24:22 +0800
+Message-ID: <20230413042422.3723-1-stanley_chang@realtek.com>
+X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230412033006.10859-1-stanley_chang@realtek.com>
+References: <20230412033006.10859-1-stanley_chang@realtek.com>
 MIME-Version: 1.0
-Date:   Thu, 13 Apr 2023 09:19:17 +0500
-From:   Nikita Travkin <nikita@trvn.ru>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
-        rfoss@kernel.org, airlied@gmail.com, daniel@ffwll.ch,
-        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/bridge: ti-sn65dsi86: Implement wait_hpd_asserted
-In-Reply-To: <CAD=FV=XEQS9MB4e52B4yLjiP8ksYmeos_emiH4=-adCOwzfGUA@mail.gmail.com>
-References: <20230408082014.235425-1-nikita@trvn.ru>
- <CAD=FV=XEQS9MB4e52B4yLjiP8ksYmeos_emiH4=-adCOwzfGUA@mail.gmail.com>
-Message-ID: <905403377ec62914a2fbe21a6b4a6c8e@trvn.ru>
-X-Sender: nikita@trvn.ru
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-KSE-ServerInfo: RTEXMBS05.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Doug Anderson писал(а) 13.04.2023 01:22:
-> Hi,
-> 
-> On Sat, Apr 8, 2023 at 1:20 AM Nikita Travkin <nikita@trvn.ru> wrote:
->>
->> This bridge doesn't actually implement HPD due to it being way too slow
->> but instead expects the panel driver to wait enough to assume HPD is
->> asserted. However some panels (such as the generic 'edp-panel') expect
->> the bridge to deal with the delay and pass maximum delay to the aux
->> instead.
->>
->> In order to support such panels, add a dummy implementation of wait
->> that would just sleep the maximum delay and assume no failure has
->> happened.
->>
->> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
->> ---
->> This was suggested in [1] to make sure DT users can be semantically
->> correct (not adding no-hpd when the line is actually there) while
->> still using a hard delay to be faster than waiting the long debounce
->> time.
->>
->> [1] - https://lore.kernel.org/all/CAD=FV=VR7sKsquE25eF7joc7gPApu-vqwduZzjE=wFCoXjMYnQ@mail.gmail.com/
->> ---
->>  drivers/gpu/drm/bridge/ti-sn65dsi86.c | 19 +++++++++++++++++++
->>  1 file changed, 19 insertions(+)
->>
->> diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi86.c b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
->> index 7a748785c545..260cad1fd1da 100644
->> --- a/drivers/gpu/drm/bridge/ti-sn65dsi86.c
->> +++ b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
->> @@ -618,6 +618,24 @@ static ssize_t ti_sn_aux_transfer(struct drm_dp_aux *aux,
->>         return len;
->>  }
->>
->> +static int ti_sn_aux_wait_hpd_asserted(struct drm_dp_aux *aux, unsigned long wait_us)
->> +{
->> +       /*
->> +        * The HPD in this chip is a bit useless (See comment in
->> +        * ti_sn65dsi86_enable_comms) so if our driver is expected to wait
->> +        * for HPD, we just assume it's asserted after the wait_us delay.
->> +        *
->> +        * In case we are asked to wait forever (wait_us=0) take conservative
->> +        * 500ms delay.
->> +        */
->> +       if (wait_us == 0)
->> +               wait_us = 500000;
->> +
->> +       usleep_range(wait_us, wait_us + 1000);
->> +
->> +       return 0;
->> +}
->> +
->>  static int ti_sn_aux_probe(struct auxiliary_device *adev,
->>                            const struct auxiliary_device_id *id)
->>  {
->> @@ -627,6 +645,7 @@ static int ti_sn_aux_probe(struct auxiliary_device *adev,
->>         pdata->aux.name = "ti-sn65dsi86-aux";
->>         pdata->aux.dev = &adev->dev;
->>         pdata->aux.transfer = ti_sn_aux_transfer;
->> +       pdata->aux.wait_hpd_asserted = ti_sn_aux_wait_hpd_asserted;
-> 
-> This looks reasonable to me, but I think you only want this
-> implementation if the "no-hpd" property _isn't_ present. In other
-> words:
-> 
-> if (!of_property_read_bool(np, "no-hpd"))
->   pdata->aux.wait_hpd_asserted = ti_sn_aux_wait_hpd_asserted;
-> 
-> Essentially:
-> 
-> * If "no-hpd" is present in ti-sn65dsi86 then we'll assume that HPD is
-> handled by the panel driver via a GPIO or a "no-hpd" there (which will
-> cause the panel driver to wait the maximum duration).
-> 
-> * If "no-hpd" isn't present in ti-sn65dsi86 then HPD is actually
-> hooked up and thus the panel driver _won't_ handle it.
-> 
-> Does that seem right? Presumably this should be explained by comments.
-> 
+The RTK DHC SoCs were designed the global register address offset at
+0x8100. The default address is at DWC3_GLOBALS_REGS_START (0xc100).
+Therefore, add the property of device-tree to adjust this start address.
 
-This does sound reasonable indeed, I didn't think to add it
-conditionally because, looking at the current users of
-wait_hpd_asserted, they will first try the "no-hpd" paths
-and will only call the bridge when they think it's on the
-bridge to wait.
+Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+---
+ v1 to v2 change:
+1. Change the name of the property "snps,global-regs-starting-offset".
+2. Adjust the format of comment.
+3. Add initial value of the global_regs_starting_offset
+4. Remove the log of dev_info.
+---
+ drivers/usb/dwc3/core.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-Thus, if DT is modeled properly - Panel has no-hpd or a gpio,
-wait_hpd_asserted will never be called anyway. Other bridges
-seem to also unconditionally enable the method.
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 476b63618511..8c1d1afbdc65 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1785,6 +1785,21 @@ static int dwc3_probe(struct platform_device *pdev)
+ 	dwc_res = *res;
+ 	dwc_res.start += DWC3_GLOBALS_REGS_START;
+ 
++	/*
++	 * For some dwc3 controller, the dwc3 global register start address is
++	 * not at DWC3_GLOBALS_REGS_START (0xc100).
++	 */
++	if (dev->of_node) {
++		int global_regs_starting_offset = 0;
++
++		device_property_read_u32(dev, "snps,global-regs-starting-offset",
++			    &global_regs_starting_offset);
++		if (global_regs_starting_offset) {
++			dwc_res.start -= DWC3_GLOBALS_REGS_START;
++			dwc_res.start += global_regs_starting_offset;
++		}
++	}
++
+ 	regs = devm_ioremap_resource(dev, &dwc_res);
+ 	if (IS_ERR(regs))
+ 		return PTR_ERR(regs);
+-- 
+2.34.1
 
-For this to be a trouble, a panel driver has to be "broken"
-with some form of calling wait_hpd_asserted despite knowing
-the HPD line is not hooked up...
-
-So I feel like guarding the wait_hpd_asserted for no-hpd
-users should not actually change much, but if you think
-I should add the check anyway, please let me know.
-
-Thanks for taking a look!
-Nikita
-
-> -Doug
