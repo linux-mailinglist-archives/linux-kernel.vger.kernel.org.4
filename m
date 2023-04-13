@@ -2,53 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E62DD6E186A
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 01:40:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53E846E187A
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 01:45:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbjDMXk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 19:40:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34378 "EHLO
+        id S230203AbjDMXpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 19:45:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjDMXkW (ORCPT
+        with ESMTP id S229933AbjDMXpP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 19:40:22 -0400
+        Thu, 13 Apr 2023 19:45:15 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41EBEDF
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 16:40:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084DB35B1;
+        Thu, 13 Apr 2023 16:45:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B1C8A64282
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 23:40:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F3324C433A0;
-        Thu, 13 Apr 2023 23:40:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 908C66428A;
+        Thu, 13 Apr 2023 23:45:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B2FD6C433EF;
+        Thu, 13 Apr 2023 23:45:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681429219;
-        bh=y1tsCDiR9PB0QaZqwPHvaqN4LWmaz9Wyb/y9A7Tkf5Q=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ZE0jiYJYP3cQM56F74mfHvqsS8Bkl2etzHgJ+mhyvwgEFuNYXzWCXxabfjm8Up+tu
-         amXve31PQc2ZY+SKmEDoaDyRkR+MkD8lqU4+WTNTC6GXiOhUNTn+VPmtpNr+Y1UEaW
-         2yeipsDYoiTcpA10S2vkDWsubTSGQK3euLBKDn+6CVG4//QNhRCApbsLmaf/Dy7k2i
-         swIRPhPMKGAJ2VXrcu6FdFwJEPP+Hf/WOjFyWXXDN1zBBhp2+ztgODOWDUPzICGTYl
-         4OPGgAMJSyqsejovCPxp5PrYhddY16ob788ybkaUKzBNEiAQH7RPcIOYxyaATYqqES
-         y9QuQUC7AlEmw==
+        s=k20201202; t=1681429513;
+        bh=SjndJN9h7+r/dIQeKYTVRWL3UjFPyhDljk21Mjk1fJU=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=H06UHAt2aiJxr3CrSYJkI4P0N9TdQXMeWBeKS9BRpzbE0IPcj2gzb/dU1HDI7vDMZ
+         Fot8aMVKLYxKDPx10F3hWl5V+XGSHiTGI34iBMjRLiyNN2YqdeXCRmq/rYZr0ebL//
+         3Jte9z0UD4Ve7SWzu6l9HVsdASdoLzubkpvzHwdvWyJsWGOYJ4d+0wnIa9Tc2d06x6
+         ySdze3mFYn5SihSafF1H0INP+jP8TYbt7qbXnSZAEaY3iWo2y4nEImcz6n8jUaMTFN
+         iZzBDwxNQBkCY7Hd+gRkEzrkRm8rhYxrJg+yqrQ5ONTdRv2pof3hkLFFrpyxhMUZzk
+         RXbHmZqYcYElQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D0646E52505;
-        Thu, 13 Apr 2023 23:40:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [f2fs-dev] [PATCH] f2fs: fix to check return value of
- inc_valid_block_count()
-From:   patchwork-bot+f2fs@kernel.org
-Message-Id: <168142921884.31957.17494916129948763212.git-patchwork-notify@kernel.org>
-Date:   Thu, 13 Apr 2023 23:40:18 +0000
-References: <20230405144536.930370-1-chao@kernel.org>
-In-Reply-To: <20230405144536.930370-1-chao@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     jaegeuk@kernel.org, daehojeong@google.com,
-        linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9E937E5244F;
+        Thu, 13 Apr 2023 23:45:13 +0000 (UTC)
+Subject: Re: [GIT PULL] clk fixes for v6.3-rc6
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230413224047.4086269-1-sboyd@kernel.org>
+References: <20230413224047.4086269-1-sboyd@kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230413224047.4086269-1-sboyd@kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-fixes-for-linus
+X-PR-Tracked-Commit-Id: 632e04739c8f45c2d9ca4d4c5bd18d80c2ac9296
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: e44f45fee8d5520c6a72e308054fc627e8e38619
+Message-Id: <168142951364.2357.1414765178289555260.pr-tracker-bot@kernel.org>
+Date:   Thu, 13 Apr 2023 23:45:13 +0000
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,30 +61,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+The pull request you sent on Thu, 13 Apr 2023 15:40:47 -0700:
 
-This patch was applied to jaegeuk/f2fs.git (dev)
-by Jaegeuk Kim <jaegeuk@kernel.org>:
+> https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-fixes-for-linus
 
-On Wed,  5 Apr 2023 22:45:36 +0800 you wrote:
-> In __replace_atomic_write_block(), we missed to check return value
-> of inc_valid_block_count(), for extreme testcase that f2fs image is
-> run out of space, it may cause inconsistent status in between SIT
-> table and total valid block count.
-> 
-> Cc: Daeho Jeong <daehojeong@google.com>
-> Fixes: 3db1de0e582c ("f2fs: change the current atomic write way")
-> Signed-off-by: Chao Yu <chao@kernel.org>
-> 
-> [...]
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/e44f45fee8d5520c6a72e308054fc627e8e38619
 
-Here is the summary with links:
-  - [f2fs-dev] f2fs: fix to check return value of inc_valid_block_count()
-    https://git.kernel.org/jaegeuk/f2fs/c/935fc6fa6466
+Thank you!
 
-You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+https://korg.docs.kernel.org/prtracker.html
