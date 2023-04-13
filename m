@@ -2,105 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 331EE6E076D
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 09:14:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B59D6E076F
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 09:15:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbjDMHOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 03:14:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34330 "EHLO
+        id S229811AbjDMHPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 03:15:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjDMHOp (ORCPT
+        with ESMTP id S229579AbjDMHPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 03:14:45 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.214])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 206F14C19;
-        Thu, 13 Apr 2023 00:14:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=J68ms
-        hiUh+tWg8G3Lc53Yvgg2fGvMvWtMKcuYE3nO5I=; b=HYlqsnyLgt0bx1UIy1aiM
-        wH6Co+vP7KviGJW3OVaGOAMb5Jz78biTlarSH91awvBVN6DOoOQTErvQA23S11SS
-        KYe8XTHds+cg+cZQHqth+V1JTQG3q7n67l2ltf26CyrxGbZF+o3LiTd4RzORTSAi
-        YRIlr/WWIq4+sQh2XrhQQU=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g4-1 (Coremail) with SMTP id _____wDXGOy7qzdkZEIsBQ--.1078S2;
-        Thu, 13 Apr 2023 15:14:03 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     davem@davemloft.net
-Cc:     edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hackerzheng666@gmail.com, 1395428693sheep@gmail.com,
-        alex000young@gmail.com, Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH net v2] net: ethernet: fix use after free bug in ns83820_remove_one due to race condition
-Date:   Thu, 13 Apr 2023 15:14:01 +0800
-Message-Id: <20230413071401.210599-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 13 Apr 2023 03:15:16 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1945FFE
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 00:15:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681370115; x=1712906115;
+  h=from:to:subject:in-reply-to:references:date:message-id:
+   mime-version;
+  bh=jypqQHoHc1mLtlBqinklOeRtPPtMmrLDMLbma0WWA0Q=;
+  b=S8rtmBcKIarOqpIc9w9a6wixY0VOyVyk9COQdZzRKQNurBsL7vP2BS2E
+   bIrLnIEcjQ5RfW+sj903/A4Dim5DXmt0ndxAJSH83m+bde/unmC5Xc2Ka
+   h811K9zyQXnxcCoRT1ae5F8Mnma58dFDU6sR/U3xCug2CtJA2Cso3Z5f+
+   eOptYvCNqwyLCSTRZK9NUb7Y+0SVhgPItrVVVDD1PFqyCnoP2ULC5YYBZ
+   R2wS+dHDkFZteTS2h94wA4GZyIrEvdztsYziua9o3RZ426L5QQ4u9XDB4
+   5FtTjPD6ra31cA7B6wXl1O/rMO1PSQ62ZAx8t1AldHBdOjrJkqZ2Ad4Fd
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="332813202"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="332813202"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 00:15:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="666698005"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="666698005"
+Received: from svadali-mobl1.amr.corp.intel.com (HELO localhost) ([10.252.55.23])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 00:15:09 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Cong Liu <liucong2@kylinos.cn>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Nirmoy Das <nirmoy.das@intel.com>,
+        Matthew Brost <matthew.brost@intel.com>,
+        Jonathan Cavitt <jonathan.cavitt@intel.com>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/i915: Fix memory leaks in i915 selftests
+In-Reply-To: <71ba4962-14fd-887f-1d40-31089dd1cf50@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230413031349.9026-1-liucong2@kylinos.cn>
+ <71ba4962-14fd-887f-1d40-31089dd1cf50@intel.com>
+Date:   Thu, 13 Apr 2023 10:15:07 +0300
+Message-ID: <874jpkckxw.fsf@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wDXGOy7qzdkZEIsBQ--.1078S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7AFykCw1xJr1UWw47Zr1DZFb_yoW8Xw1rp3
-        90kFyfuF1ktw4UWw1UJr40qry5XFs8t3yYgayIyw4avas5Zr4vgF4UKFWUZr18GrWqvr4f
-        Aw45Zw43uas8ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziFAprUUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiGg1QU1aEE4gpSgAEs6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In ns83820_init_one, dev->tq_refill was bound with queue_refill.
+On Thu, 13 Apr 2023, Andrzej Hajda <andrzej.hajda@intel.com> wrote:
+> On 13.04.2023 05:13, Cong Liu wrote:
 
-If irq happens, it will call ns83820_irq->ns83820_do_isr.
-Then it invokes tasklet_schedule(&dev->rx_tasklet) to start
-rx_action function. And rx_action will call ns83820_rx_kick
-and finally start queue_refill function.
+A commit message is still needed.
 
-If we remove the driver without finishing the work, there
-may be a race condition between ndev, which may cause UAF
-bug.
+>> Fixes: c3bfba9a2225 ("drm/i915: Check for integer truncation on scatterlist creation")
+>>
 
-CPU0                  CPU1
+No blank line here.
 
-                     |queue_refill
-ns83820_remove_one   |
-free_netdev	 		 |
-put_device			 |
-free ndev			 |
-                     |rx_refill
-                     |//use ndev
+BR,
+Jani.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
----
-v2:
-- cancel the work after unregister_netdev to make sure there 
-is no more request suggested by Jakub Kicinski
----
- drivers/net/ethernet/natsemi/ns83820.c | 5 +++++
- 1 file changed, 5 insertions(+)
+>> Signed-off-by: Cong Liu <liucong2@kylinos.cn>
+>> ---
+>
+> Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
+>
+> Regards
+> Andrzej
+>>   drivers/gpu/drm/i915/selftests/i915_gem_gtt.c | 4 +++-
+>>   1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c b/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c
+>> index 5361ce70d3f2..154801f1c468 100644
+>> --- a/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c
+>> +++ b/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c
+>> @@ -69,8 +69,10 @@ static int fake_get_pages(struct drm_i915_gem_object *obj)
+>>   
+>>   	rem = round_up(obj->base.size, BIT(31)) >> 31;
+>>   	/* restricted by sg_alloc_table */
+>> -	if (overflows_type(rem, unsigned int))
+>> +	if (overflows_type(rem, unsigned int)) {
+>> +		kfree(pages);
+>>   		return -E2BIG;
+>> +	}
+>>   
+>>   	if (sg_alloc_table(pages, rem, GFP)) {
+>>   		kfree(pages);
+>
 
-diff --git a/drivers/net/ethernet/natsemi/ns83820.c b/drivers/net/ethernet/natsemi/ns83820.c
-index 998586872599..2e84b9fcd8e9 100644
---- a/drivers/net/ethernet/natsemi/ns83820.c
-+++ b/drivers/net/ethernet/natsemi/ns83820.c
-@@ -2208,8 +2208,13 @@ static void ns83820_remove_one(struct pci_dev *pci_dev)
- 
- 	ns83820_disable_interrupts(dev); /* paranoia */
- 
-+	netif_carrier_off(ndev);
-+	netif_tx_disable(ndev);
-+
- 	unregister_netdev(ndev);
- 	free_irq(dev->pci_dev->irq, ndev);
-+	cancel_work_sync(&dev->tq_refill);
-+
- 	iounmap(dev->base);
- 	dma_free_coherent(&dev->pci_dev->dev, 4 * DESC_SIZE * NR_TX_DESC,
- 			  dev->tx_descs, dev->tx_phy_descs);
 -- 
-2.25.1
-
+Jani Nikula, Intel Open Source Graphics Center
