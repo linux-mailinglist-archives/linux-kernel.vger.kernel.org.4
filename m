@@ -2,85 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CF056E185E
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 01:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F2A26E1861
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 01:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbjDMXgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 19:36:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60120 "EHLO
+        id S230028AbjDMXhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 19:37:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjDMXgo (ORCPT
+        with ESMTP id S229493AbjDMXhr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 19:36:44 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A51C419AB
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 16:36:42 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id o1so21305530lfc.2
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 16:36:42 -0700 (PDT)
+        Thu, 13 Apr 2023 19:37:47 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6FB010C1
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 16:37:45 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id l7so2918584ljq.11
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 16:37:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681429001; x=1684021001;
+        d=linaro.org; s=google; t=1681429064; x=1684021064;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=r9ajKjdjmVKYZR0o2RYS00gCwWXzx+OByS0IkZ5vWrg=;
-        b=SVEjyBOGaxj1mckia8+8F4tBz1UaxMbdTgcRhw3El6pgcSSVVULIgBzGaISjFEobmy
-         7Op5etGGtc7DIeL/p/C9F6/9iiyv5+0EMT9PawHnseed2spJ62pcQR3F6SxwPZVGMPBG
-         JL9uX9mVXLQYa3bK+ZfNJv4rJNlH+EUBJZrT3/ck3yaJWv6py781rpgZrk4w49itUKck
-         GH37nQ5NHr5WAn1z3tlVFiar3bOZrTX55x3zEm1ujXpjmrN46OFDXwhbk/yW0lNg8MST
-         IrLLXnQTT8LFYMmjBLa7Bjuc5fr4PJXga0qXvOHLLFwHTtLglYDWmLGCVrTobGV9oHqW
-         ixxw==
+        bh=5AafloAaxeZRD4LLJdC1yw0kj6AD0tdhsxKykvaaIVc=;
+        b=xUoniySlUzRQIazAjxqLUfeVBpuo0Mte07vi45CAvlPpvO5GcqPX7ZxWiCKnPKEye2
+         1j5+53ItSa1I/khp3dzaFOKtm3hYPNx+946IdO4Y48Ce87SRr7L+yvgYMKhSvyvbjzP0
+         lNlwPc9GbC7lCkfmx5oQo/nWcQhcMcHUbkAfMUT8MW6F1OUeyHTp5x2V2UU4tIZgVxgV
+         dUi5c4L4Nu+zDQrWqFAtCqzbwkqyJ7S9nWzm6qeL/LxacrPbBk0mHK8HRZ9aAk8aORfw
+         veO7jKItwFQI18VPIE3qI8GAbEMQcFd8FiRmV3A4uEyFhkrRkOogESwfihzPQ+GuXbcz
+         V9vQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681429001; x=1684021001;
+        d=1e100.net; s=20221208; t=1681429064; x=1684021064;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=r9ajKjdjmVKYZR0o2RYS00gCwWXzx+OByS0IkZ5vWrg=;
-        b=CAAY1tboBr4F/Us/Sef2W4eZHzRAZ19+K8KKKzGqbjWkbephLwvAVHQzJcQfxK+toG
-         yCe4R/iK9aXQpS3dO0JyT9VoZprJlB4oocwGnL4e9qHP8C169C5pYjJdGCTcM6eT1HSc
-         8uujqnx2zR3jFLLNATUQ9UnNuzvimo6gR4BG46g432S2fgFBBtLCFg4jyrmAFFUNZwsj
-         ZuDaruVNEuYN/l5yALVRVy+gI4clluDepuJHce7YtTDV+ZOZ+99ko2f/a7oKEdBarZrk
-         lHiTeXWXVOuBhVXqCEYy8JD7CjVV7KVGKdcv/TvDxfwRvPOFJ1QH4NTj+gOPDmNM83Nz
-         fvww==
-X-Gm-Message-State: AAQBX9dkxg+VGilLEx4rmCdJwVs1NwUX9E/yOBsd/7lRSSXx1R07btN+
-        qxXvZ2m6+WqG6r8NPat9PRp7qQ==
-X-Google-Smtp-Source: AKy350Zo99hWzMgWvX+LgY/9CK+7rZVz2nOI2ypxTsltEFwJGq7j79xeqJ8GdXR+H5DJke5A5SynGg==
-X-Received: by 2002:ac2:51a2:0:b0:4de:ca63:b2d2 with SMTP id f2-20020ac251a2000000b004deca63b2d2mr1316274lfk.26.1681429000930;
-        Thu, 13 Apr 2023 16:36:40 -0700 (PDT)
+        bh=5AafloAaxeZRD4LLJdC1yw0kj6AD0tdhsxKykvaaIVc=;
+        b=UAq8gMSqf2AfDj9eOKeluHtDILnskeW2aSc1xv/K25SW+aWl/SwmL+18Fp6B0FOuri
+         X4N5NEiXw7B44en/dc1wTVx4yQkwHCv/MRZFeiNKB0OvhYi7sxXzEUHf2sF+QfEsWlpT
+         Y4g5ACxRLEDFMgjMm14lcBIOaa2J0Qh97nVON/tnDWwO0X5y9G+Ctb0a5jpBg/03qofi
+         Hv59bRH90oJ67/X0Ibr8Ma+Kds7tLZKj6ArsoqXypealorL9P9bXts6CVmGlDpAPzGY6
+         0QmZQM9xYMkaQKzCsUqW0kov/x7sGDWqEsoFQ7iNY4JEE5cgMgy5zi65Fbz5o5xmGQ/t
+         bo5g==
+X-Gm-Message-State: AAQBX9defcbNiYZ1hGPSkVLKT2bAfOq/RXg3BvspfqA36yXU2faFPE2q
+        7R02XxQHlX0PCgPZyWxvubFAFA==
+X-Google-Smtp-Source: AKy350YzefABtmdd4c/J9wdM6De/dDMPBMCyWuq0bEMfkf8lnM4kWxIJwn6NcZManUvoSktT0gsn0g==
+X-Received: by 2002:a2e:8189:0:b0:2a7:afb7:da6a with SMTP id e9-20020a2e8189000000b002a7afb7da6amr1282105ljg.15.1681429064196;
+        Thu, 13 Apr 2023 16:37:44 -0700 (PDT)
 Received: from [192.168.1.101] (abyl123.neoplus.adsl.tpnet.pl. [83.9.31.123])
-        by smtp.gmail.com with ESMTPSA id i15-20020ac25d2f000000b004e26bd0a533sm510735lfb.288.2023.04.13.16.36.39
+        by smtp.gmail.com with ESMTPSA id z15-20020a05651c022f00b002a79f22a03dsm502963ljn.0.2023.04.13.16.37.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Apr 2023 16:36:40 -0700 (PDT)
-Message-ID: <96180862-6dbf-77e1-4aca-9a3b9ee39294@linaro.org>
-Date:   Fri, 14 Apr 2023 01:36:38 +0200
+        Thu, 13 Apr 2023 16:37:43 -0700 (PDT)
+Message-ID: <a1d0767e-7f5e-2322-81d3-6f7abad454f9@linaro.org>
+Date:   Fri, 14 Apr 2023 01:37:42 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
-Subject: Re: [PATCH 8/8] arm64: dts: qcom: sdm632-fairphone-fp3: Add
- notification LED
+Subject: Re: [PATCH v2 2/3] arm64: dts: qcom: sa8155p-adp: Make -cells decimal
 Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-iio@vger.kernel.org
-References: <20230414-pmi632-v1-0-fe94dc414832@z3ntu.xyz>
- <20230414-pmi632-v1-8-fe94dc414832@z3ntu.xyz>
+To:     Andrew Halaney <ahalaney@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230413194020.1077857-1-ahalaney@redhat.com>
+ <20230413194020.1077857-2-ahalaney@redhat.com>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230414-pmi632-v1-8-fe94dc414832@z3ntu.xyz>
+In-Reply-To: <20230413194020.1077857-2-ahalaney@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -89,65 +79,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 14.04.2023 01:17, Luca Weiss wrote:
-> The phone features a notification LED connected to the pmi632. Configure
-> the RGB led found on it.
+On 13.04.2023 21:40, Andrew Halaney wrote:
+> The property logically makes sense in decimal, and is the standard used
+> elsewhere.
 > 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> Suggested-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
 > ---
->  arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts | 29 +++++++++++++++++++++++
->  1 file changed, 29 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts b/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
-> index 70e683b7e4fc..301eca9a4f31 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
-> +++ b/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
-> @@ -4,8 +4,10 @@
->   */
->  /dts-v1/;
->  
-> +#include <dt-bindings/leds/common.h>
->  #include "sdm632.dtsi"
->  #include "pm8953.dtsi"
-> +#include "pmi632.dtsi"
->  
->  / {
->  	model = "Fairphone 3";
-> @@ -83,6 +85,33 @@ &pm8953_resin {
->  	linux,code = <KEY_VOLUMEDOWN>;
->  };
->  
-> +&pmi632_lpg {
-qcom,power-source?
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
 Konrad
-> +	status = "okay";
-> +
-> +	multi-led {
-> +		color = <LED_COLOR_ID_RGB>;
-> +		function = LED_FUNCTION_STATUS;
-> +
+> 
+> Changes since v1:
+>     * New patch (Konrad)
+> 
+>  arch/arm64/boot/dts/qcom/sa8155p-adp.dts | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sa8155p-adp.dts b/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
+> index 029b23198b3a..ac52a8dfeba1 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
+> +++ b/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
+> @@ -353,8 +353,8 @@ &ethernet {
+>  
+>  	mdio {
+>  		compatible = "snps,dwmac-mdio";
+> -		#address-cells = <0x1>;
+> -		#size-cells = <0x0>;
 > +		#address-cells = <1>;
 > +		#size-cells = <0>;
-> +
-> +		led@1 {
-> +			reg = <1>;
-> +			color = <LED_COLOR_ID_RED>;
-> +		};
-> +
-> +		led@2 {
-> +			reg = <2>;
-> +			color = <LED_COLOR_ID_GREEN>;
-> +		};
-> +
-> +		led@3 {
-> +			reg = <3>;
-> +			color = <LED_COLOR_ID_BLUE>;
-> +		};
-> +	};
-> +};
-> +
->  &sdhc_1 {
->  	status = "okay";
->  	vmmc-supply = <&pm8953_l8>;
-> 
+>  
+>  		/* Micrel KSZ9031RNZ PHY */
+>  		rgmii_phy: phy@7 {
