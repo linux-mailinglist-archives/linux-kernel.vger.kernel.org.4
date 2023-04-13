@@ -2,94 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AD8A6E12B1
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:47:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D6B26E12AF
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:47:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbjDMQrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 12:47:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52432 "EHLO
+        id S229990AbjDMQro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 12:47:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230031AbjDMQrn (ORCPT
+        with ESMTP id S229902AbjDMQrm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 12:47:43 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34BA59019;
-        Thu, 13 Apr 2023 09:47:33 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id jg21so38662620ejc.2;
-        Thu, 13 Apr 2023 09:47:33 -0700 (PDT)
+        Thu, 13 Apr 2023 12:47:42 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18824AD12
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:47:32 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id z9so11976128ejx.11
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:47:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681404451; x=1683996451;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=76ETY+isIx7iYwEUo1JeENf2CaVjYZp8DI5NXMOw9dU=;
-        b=VAIcFvvB5t3517nDf/y3JgH3G4uDmP+oWS2Sf2BguvxrgLsglHqpkpzrzuSIbV9aZ9
-         MgWWpZqAd3FceBNaQLpqKbd3PYUcctI5+fnSuBCtiS7K5K4TAdyRxJL73qIumwp0fdpq
-         1PAfm2fNnYUV+rpnyeFXVEHnCxFRuVFJlJGyPh8FiRLrUWMK9wr98R35eaDgTYhaVEAp
-         v3nbqmdzzzlnBztD6uxC1wuiwOZ3gr6Lhkdwil5YeZSWTdo2QKgwBkHfFnliyKqmKVJO
-         T0mrVst4lCqaii/J8gjXN9rn6jSEf5hw2tqJSBq+/7BjEfXK8gtugdEGAsPSN1hPsVTi
-         qRFw==
+        d=linaro.org; s=google; t=1681404450; x=1683996450;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=51DVCd/h3/cJO7cjSlyrYI32aoEqdT9dgNs9Eih2opE=;
+        b=nwu0GWON8U6TXZ3AT7gmRhnXNlY7lxqUiwgRLU2Uw3ieZXA+uUVn8nCJ7nbTT46IVu
+         wwLwRAaXeAkQoRk45Ctu06Gj5+w2VTE0sNRhlPVtvb+AVprqq6Mdk+suH2aNI6BYPsiB
+         6cNLN8+zEtGyNX/KyEoBvn46OtTtt2tlVT85GHip2cSO1/PBq/JhKMCRQNv9eIztyRY5
+         w0q2os13wwQcZx6p0frcHHUtOiYimZakYu6fNc8RLvh0Y24ZX/hjuJYP7ELV1yb5wJJC
+         25g8s6YrMZYnPPeLL4eVKHQqkfBw8CBaCSw83aYue3fTj6hcTSKEfMrhPzS81jXREH2C
+         PvUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681404451; x=1683996451;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=76ETY+isIx7iYwEUo1JeENf2CaVjYZp8DI5NXMOw9dU=;
-        b=TUVwr4hgf66GKH1Wz3mi9QKDvbg0E+f4fAZ8eYOjb/NQYTBqP71OO8y/TW3CFy5Ib2
-         5bZoFR/sRwlsM1BcFNxjA9BlnOkJwZmBT2r59RLnDNzMeGZqslV8F9mwPRdnodct2G+S
-         QW7IuCiGuPS+k/9a6IyWm5PZsRWR/DURz5KwFPYbNzgkkVvgxCWm2NhmJ77aKazJDSzq
-         kDDw+Bz1IIBe+E8JM1Tkm9og0RYvHf03iv2FrVbrQc4UkMOUmks43t+C3D+kFfIYJOJd
-         CvQ4qZqMRP3F2eUvsQyvfWytQYVySgUnfkcY9HwVX5yIqj0OWluKsJGra1mqSONdITuv
-         J0zQ==
-X-Gm-Message-State: AAQBX9c5L9C+5skKtPOIiwkDVnUjy+vPugFnB57hF35+ZlG2LqIQLxfK
-        gqlGmj6xgRAC4CViLtllPu30Fx/QWYxFCCiI
-X-Google-Smtp-Source: AKy350ZLk2fm2QSC7ajwa9op45CcCMbRw55CnTViYrBzQ81vBh1WX4In1LxxrQGfaTBE+Z59AJe24g==
-X-Received: by 2002:a17:906:5849:b0:94e:4c8f:759 with SMTP id h9-20020a170906584900b0094e4c8f0759mr3267506ejs.38.1681404451118;
-        Thu, 13 Apr 2023 09:47:31 -0700 (PDT)
-Received: from localhost.localdomain ([45.35.56.2])
-        by smtp.gmail.com with ESMTPSA id a10-20020a1709064a4a00b0094a4e970508sm1218744ejv.57.2023.04.13.09.47.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        d=1e100.net; s=20221208; t=1681404450; x=1683996450;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=51DVCd/h3/cJO7cjSlyrYI32aoEqdT9dgNs9Eih2opE=;
+        b=koSOk2h6XbldtKLlM+RJyj3pbkB2JbzojoaCF7thJ4YVFtgUhrbxiZtqT0B4lWYSyY
+         XitvdgMgbdxXJJm0poYK8snzkCXg0Qrf4OGU3OoDnNu9HLt1xBjavN2qzf+worUsF/34
+         ITSeniAKTW7+JG/zNzzqOjgiy9xYCdC2IYaqQskZ2sKbxaud0vLu5HXRmeEb7HF8z5nR
+         8f40DG/Q14CPIcpQW0DHNNKvWal65vdJlKulHKBAK9bilTOQ6WTZetm5fX0q2qjGGWEv
+         q6kT/Fk2Wp8J8U7jFdaTIjSzdpq5sb9eFpn9LAbBpdG4WEIbqEKFFczjhkl+dg2DwEm7
+         sJOw==
+X-Gm-Message-State: AAQBX9fXTdmFl/iW2+Hsyw/a3Ikygs3Yl4KLkHykuGD8gwBn8T2vqmGz
+        /mpjEsUh2qCCULYcwkiDobQA2A==
+X-Google-Smtp-Source: AKy350b4Jz7APW0X824PXsHeC5e1sHTqjV9UgCwCrxjufPBWxBtgGffJCq1hAMMiXPCq9xLeN0mhEA==
+X-Received: by 2002:a17:907:3f16:b0:930:f953:962c with SMTP id hq22-20020a1709073f1600b00930f953962cmr4155726ejc.1.1681404450522;
         Thu, 13 Apr 2023 09:47:30 -0700 (PDT)
-From:   Yixin Shen <bobankhshen@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     rdunlap@infradead.org, akpm@linux-foundation.org,
-        netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        ncardwell@google.com, Yixin Shen <bobankhshen@gmail.com>
-Subject: [PATCH net-next] lib/win_minmax: export symbol of minmax_running_min
-Date:   Thu, 13 Apr 2023 16:47:26 +0000
-Message-Id: <20230413164726.59019-1-bobankhshen@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Received: from ?IPV6:2a02:810d:15c0:828:5032:d2d4:ece5:b035? ([2a02:810d:15c0:828:5032:d2d4:ece5:b035])
+        by smtp.gmail.com with ESMTPSA id ka20-20020a170907991400b0094c67e537c8sm1208815ejc.38.2023.04.13.09.47.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Apr 2023 09:47:29 -0700 (PDT)
+Message-ID: <d11b6acb-b072-9496-5ad6-0635357394f1@linaro.org>
+Date:   Thu, 13 Apr 2023 18:47:28 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v7 05/12] dt-bindings: mfd: syscon: Add nuvoton,ma35d1-sys
+ compatible
+Content-Language: en-US
+To:     Jacky Huang <ychuang570808@gmail.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        arnd@arndb.de, schung@nuvoton.com, mjchen@nuvoton.com,
+        Jacky Huang <ychuang3@nuvoton.com>
+References: <20230412053824.106-1-ychuang570808@gmail.com>
+ <20230412053824.106-6-ychuang570808@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230412053824.106-6-ychuang570808@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit export the symbol of the function minmax_running_min
-to make it accessible to dynamically loaded modules. It can make
-this library more general, especially for those congestion
-control algorithm modules who wants to implement a windowed min
-filter.
+On 12/04/2023 07:38, Jacky Huang wrote:
+> From: Jacky Huang <ychuang3@nuvoton.com>
+> 
+> Add Nuvoton ma35d1 system registers compatible.
+> 
+> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
 
-Signed-off-by: Yixin Shen <bobankhshen@gmail.com>
----
- lib/win_minmax.c | 1 +
- 1 file changed, 1 insertion(+)
+What about the tag? Why did you ignore it?
 
-diff --git a/lib/win_minmax.c b/lib/win_minmax.c
-index ec10506834b6..1682e614309c 100644
---- a/lib/win_minmax.c
-+++ b/lib/win_minmax.c
-@@ -97,3 +97,4 @@ u32 minmax_running_min(struct minmax *m, u32 win, u32 t, u32 meas)
- 
- 	return minmax_subwin_update(m, win, &val);
- }
-+EXPORT_SYMBOL(minmax_running_min);
--- 
-2.25.1
+Also, wasn't this applied? Why do you resend (incorrect version)?
+
+Best regards,
+Krzysztof
 
