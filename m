@@ -2,905 +2,580 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24C076E0706
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 08:35:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A126E070D
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 08:38:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbjDMGfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 02:35:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46856 "EHLO
+        id S229794AbjDMGii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 02:38:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjDMGfX (ORCPT
+        with ESMTP id S229482AbjDMGig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 02:35:23 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41BFF7DB3;
-        Wed, 12 Apr 2023 23:35:20 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33D6Aok5011867;
-        Thu, 13 Apr 2023 06:35:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=kHljZwQNcB0AQdTvYs4LRPjVSW98AdrwT5glQ9gXvDA=;
- b=BaqSj02S+QtfnmOptZ+th+QjzS0IH6GeC8f+ho0fepvP0pl8mYI/n9TJ1aeywv7I6yke
- pCMSla217sHSdbglVvNdEwuXT8X9AaiHl8AtIclqQbtspcWrQDohwBPQI9qPRC+g4N4g
- llonhVxjIXHZHxGmUdRlSoEAIGhUtATZVWjVjyOJkPsb2uqRGy3gYODaJv+zPAcruf3B
- n/WqrbbO0n9RZYzOEuJRkCpCnLWIpX2LmoOXXPSEhrxymjACMXk5jZhDuXNG7gP3R/cI
- Wt9RwuzdPSY/mY7tAHN47ttauR1WXca3hcIB1Y0aKfYyh50EATRK94PXP8NA0yWVl66X pA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pwsx6a8g6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Apr 2023 06:35:02 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33D6Z1qL009310
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Apr 2023 06:35:01 GMT
-Received: from [10.239.133.9] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 12 Apr
- 2023 23:34:58 -0700
-Message-ID: <2a491e07-9a02-b077-07a6-9bed30a9175a@quicinc.com>
-Date:   Thu, 13 Apr 2023 14:34:55 +0800
+        Thu, 13 Apr 2023 02:38:36 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9DB7EFB;
+        Wed, 12 Apr 2023 23:38:29 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id EE7B0604F6;
+        Thu, 13 Apr 2023 08:38:26 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1681367906; bh=vxGGEG7u6NbcQ4pqG9vgSpAxccBKg2fLHKIKcpuXE4g=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=DrlazDMKu0Q8d9WvK67bIFWxA9FcwD3a0lkPpuqA//ckEGWWvRh/BIGqRczV61e0z
+         WrAbNHHJepvobjMvk2ODxHpMW3GpDBjeTCold6kOFCdyDNw5hFe2hyuldz7fnwpq03
+         CW/VvX6LYf/tDbgEpCfwLLa8mabcA7cKgVJ9LY/Q3qpwDVPVw89F7F/aCXgLbrE8gW
+         FjTL5U4ONHrmVwejVbA2b2S3qg7KRfUMvUzK6GnFgjFvFwyb34Lp+tQF+nZMhI0AVC
+         i8RVcjKpN4PjoKGrKJhMGojFnwGGdnaeaqqWDuRL+qpL3GP5efFdr3ZTnPchSSS9Kt
+         eFkMtK9eTynKw==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id bxTAh7tasZoJ; Thu, 13 Apr 2023 08:38:22 +0200 (CEST)
+Received: from [10.0.1.96] (grf-nat.grf.hr [161.53.83.23])
+        by domac.alu.hr (Postfix) with ESMTPSA id B887A604ED;
+        Thu, 13 Apr 2023 08:38:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1681367902; bh=vxGGEG7u6NbcQ4pqG9vgSpAxccBKg2fLHKIKcpuXE4g=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=k7uZkRcb8fuFZIKamH7FXAo4Ns6nhleo3mr9cwRq/LSvGXjZ5Uj84iRwp+oTVsbRO
+         yk9O3WgxU8TKHu9bMDmxF0tL2ZqU06+qq4VsOcgHa8M4ZlB5RaWBapJ6uuI9VJn3VL
+         8uc+G8avK2qvJHzBs8fkbfJ+NLpTIn8ws8RjNdkFSGhJqGPbh2wl9DJUlIzlbAVqu6
+         82B2lFQwhXIcDuBT7fr4wMeoCNZ1lyTEEelx1agnCtgPJkfg35Ralz3xdn5RvfcVyu
+         /4luI1wlqupXkt8JEwgVmjRRy644p0uMlM5qeRsPF/rJe2cU7jxn04P8WIo+yguyLL
+         kerY5l0DD/wEw==
+Message-ID: <358b1501-1d76-1a30-d893-ab119111a76f@alu.unizg.hr>
+Date:   Thu, 13 Apr 2023 08:38:15 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] coresight: Add support of setting trace id
-Content-Language: en-US
-To:     Mike Leach <mike.leach@linaro.org>
-CC:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-msm@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>
-References: <20230410133930.30519-1-quic_jinlmao@quicinc.com>
- <CAJ9a7VjgpkfYFUQtB3drZdgjaSk9PzWbJfvgZfuFf5y5WR0eQQ@mail.gmail.com>
- <375d6c20-3264-8892-7365-a012bf6b0346@quicinc.com>
- <CAJ9a7Vis-Vsi=J9i1XHF0PTkLs1OzD9-xjedGAT447KiDdY-NA@mail.gmail.com>
- <8875164b-f0f4-f444-dfec-673fc115ab8f@quicinc.com>
- <CAJ9a7Vg6mYuWDgQ0-bTh_wA-DQpTHKr0x6dDtZK1HQ-_-LtUNg@mail.gmail.com>
-From:   Jinlong Mao <quic_jinlmao@quicinc.com>
-In-Reply-To: <CAJ9a7Vg6mYuWDgQ0-bTh_wA-DQpTHKr0x6dDtZK1HQ-_-LtUNg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+ Thunderbird/102.9.1
+Subject: Re: BUG: drivers/net/wireless: iwlwifi: IWL Error: "BUG: kernel NULL
+ pointer dereference, address: 0000000000000150"
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+To:     "Greenman, Gregory" <gregory.greenman@intel.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Cc:     "kvalo@kernel.org" <kvalo@kernel.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <1f58a0d1-d2b9-d851-73c3-93fcc607501c@alu.unizg.hr>
+ <4008aff6-c432-dd0f-fcf6-1d384b809cd4@alu.unizg.hr>
+ <c6bbca2a83353423a95a80cf0e6c93ccb6652847.camel@intel.com>
+ <f13514c5-5289-4b7d-a0ef-1f861d87cb25@alu.unizg.hr>
+Content-Language: en-US, hr
+In-Reply-To: <f13514c5-5289-4b7d-a0ef-1f861d87cb25@alu.unizg.hr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: yi6njQmlHzxTM46O6LDJWFiXx129pE5Y
-X-Proofpoint-ORIG-GUID: yi6njQmlHzxTM46O6LDJWFiXx129pE5Y
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-13_03,2023-04-12_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- phishscore=0 spamscore=0 clxscore=1015 priorityscore=1501 suspectscore=0
- impostorscore=0 bulkscore=0 mlxlogscore=999 mlxscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304130059
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mike,
-
-On 4/12/2023 5:50 PM, Mike Leach wrote:
-> Hi,
->
-> On Wed, 12 Apr 2023 at 10:30, Jinlong Mao <quic_jinlmao@quicinc.com> wrote:
->> Hi Mike,
->>
->> On 4/12/2023 4:45 PM, Mike Leach wrote:
->>> Hi
->>>
->>> On Wed, 12 Apr 2023 at 03:53, Jinlong Mao <quic_jinlmao@quicinc.com> wrote:
->>>> Hi Mike,
+On 12.4.2023. 13:46, Mirsad Todorovac wrote:
+> On 4/11/23 10:47, Greenman, Gregory wrote:
+>> On Mon, 2023-04-10 at 01:43 +0200, Mirsad Goran Todorovac wrote:
+>>> On 10. 04. 2023. 00:21, Mirsad Goran Todorovac wrote:
+>>>> Hi all,
 >>>>
->>>> On 4/11/2023 10:09 PM, Mike Leach wrote:
->>>>> Hi,
->>>>>
->>>>> On Mon, 10 Apr 2023 at 14:40, Mao Jinlong <quic_jinlmao@quicinc.com> wrote:
->>>>>> With a growing number of trace sources, the number of source could
->>>>>> be greater than 127 in future. There will be lack of ids. There could
->>>>>> be also trace id reserved for some trace HW. With this change,
->>>>>> trace id will be only configured when enable the source. Trace id
->>>>>> will be dynamically allocated when traceid of driver data is not
->>>>>> set when enable source. Once traceid of driver data is set when
->>>>>> enable source, the traceid will be set as the specific value.
->>>>>>
->>>>>> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
->>>> This change is to add trace id support for the following two cases:
->>>> 1. There are more than 127 sources like there are 200 sources which need
->>>> the trace id.
->>>> then 127 is not enough to allocate the ids for all the trace sources.
->>> Agreed - and that is precisely why we introduced the dynamic
->>> allocation patch set.
->>>
->>> (The actual number is slightly less than 127 as IDs 0x0 and 0x70 to
->>> 0x7F are reserved.)
->>>
->>> However, there is no need for your changes in this case. The dynamic
->>> allocator will allocate up to the maximum IDs, then will return an
->>> error. The design is such that the allocator controls the available
->>> IDs and the requestor must always use the assigned ID. Devices should
->>> never be setting their own ID (other than the case of trace Id
->>> hardwired into a device below).
->>>
->>> IDs are returned to the pool either:-
->>>
->>> a) in the perf case, once the perf session is complete. We must
->>> maintain a CPU / Trace ID relationship throughout the perf session to
->>> correctly associate trace data in the perf file to the relevant CPU
->>> for decode. perf can cause multiple enable / disable events per CPU
->>> during a single trace session.
->>>
->>> b) in the sysfs case, once the sysfs device is reset. (in the ETM4
->>> case for example when the sysfs reset file is written). The reason for
->>> this is that the user can enable the ETM via sysfs, which will then
->>> allocate an ID. This may be read by the user who will assume it is
->>> constant throughout the lifetime of a trace session (which again may
->>> be multiple enable / disable events). This maintains the original
->>> functionality of the previous static allocation mechanism. The only
->>> change with the dynamic mechanism is that the ID is released on reset.
->>>
->>> Your change merely replicates the functionality of the allocator that
->>> assigns an ID to the CPU, and always maintains the ID for that CPU
->>> throughout the trace session. You are calling the read/allocate call,
->>> then setting the same ID each time we enable - this is precisely the
->>> exisiting functionality - with the added race condition that you may
->>> be setting an ID already in use if you have previously released it.
->>> This is not desireable.
->>>
->>> Moreover, this potentially breaks the perf case which requries that
->>> the IDs remain constant for a given CPU for the duration of the perf
->>> sessions, which may result in many enable/disable cycles for a
->>> CPU/ETM. Any allocation system must work for both the perf and sysfs
->>> cases.
->>>
->>> So any trace session that has sources in access of the number of
->>> available IDs, must choose carefully the sources to be involved in the
->>> trace session. This is an unavoidable limitation of trace where
->>> multiple sources trace into a single trace buffer. This problem is
->>> significantly reduced in v9 / ETE cases where each ETE / cpu
->>> combination has its own TRBE buffer and does not need a trace ID.
->>>
->>>> 2. HW component that has a specific trace id hard-coded into the HW that
->>>> cannot be changed.
+>>>> This is an error is the syslog found after investigating a Youtube FF chirping hang
+>>>> while running kseftest of 6.3-rc6 torvalds tree kernel.
 >>>>
->>> Then this must be managed with by allocating an ID at the device probe
->>> time, and release once the driver is unloaded. Otherwise there could
->>> be a potential clash if the hard coded value is taken by another
->>> device while the hard coded device is not in use, or is enabled before
->>> the hard coded device.
->>>
->>> If this is actually needed on your system, then the preferred method
->>> would be a coresight_reserve_id(id) API function, to ensure that the
->>> hardcoded ID is removed from the pool of IDs as soon as possible., and
->>> unreserved on device unload.
->>>
->>> It is not advisable to have many hard coded devices in a system as
->>> this will deplete the pool of available trace IDs.
->>>
->>>
->>>> To support cases above, I think we need to make following changes:
->>>> Each driver can call trace id set funnction
->>>> (coresight_trace_id_set_system_id/coresight_trace_id_set_cpu_id)
->>>> to set the id.
->>>> Set the id when enable the source and release the id when disable the
->>>> source.
+>>>> Running multimedia and kselftest might seem off, but multimedia performance on Linux
+>>>> and open source software is a very interesting research area.
 >>>>
->>> See my explanation above - IDs are only released when the trace
->>> session is complete, as some sessions can result in multiple
->>> enable/disable cycles where the ID/ CPU is maintained as constant.
->>>
->>> Best Regards
->>>
->>> Mike
->> Thanks for your clarification.
->>
->> We also have case that decode tool can set the trace id of source by
->> sysfs node so that tool
->> can control the source's traceid.
->>
-> Unfortunately this is not compatible with the allocator mechanisms
-> detailed above - due to potential races introduced by any API to allow
-> the devices to set their own Trace IDs.
->
-> Your tool needs to read the IDs allocated  to devices via sysfs.
->
-> Regards
->
-> Mike
-
-It is possible that user loses the trace id info during a long time test 
-with lots of enbaling/disabling source
-and device reboot.  We can use a boot up service to configure the trace 
-id of some special source for test.
-Then the trace id of the source will be static during enabling/disable 
-and reboot.
-
-Allocating the id dynamically in code and assigning the trace id by 
-sysfs node can be coexisting.
-
-Best Regards
-Jinlong Mao
-
->
->> Best Regards
->> Jinlong Mao
->>
->>>> Please help to provide your comments.
+>>>> Here is the trace from the log:
 >>>>
->>>> Thanks
->>>> Jinlong Mao
+>>>> Apr  9 23:01:11 marvin-IdeaPad-3-15ITL6 kernel: [  615.957145] mmiotrace: disabled.
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.881758] iwlwifi 0000:00:14.3: Error sending STATISTICS_CMD: time out 
+>>>> after 2000ms.
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.882332] iwlwifi 0000:00:14.3: Current CMD queue read_ptr 67 write_ptr 68
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.884299] iwlwifi 0000:00:14.3: Start IWL Error Log Dump:
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.884373] iwlwifi 0000:00:14.3: Transport status: 0x0000004A, valid: 6
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.884446] iwlwifi 0000:00:14.3: Loaded firmware version: 73.35c0a2c6.0 
+>>>> QuZ-a0-jf-b0-73.ucode
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.884520] iwlwifi 0000:00:14.3: 0x00000084 | NMI_INTERRUPT_UNKNOWN
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.884624] iwlwifi 0000:00:14.3: 0x000022F0 | trm_hw_status0
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.884695] iwlwifi 0000:00:14.3: 0x00000000 | trm_hw_status1
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.884766] iwlwifi 0000:00:14.3: 0x004C352E | branchlink2
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.884837] iwlwifi 0000:00:14.3: 0x004BA12A | interruptlink1
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.884907] iwlwifi 0000:00:14.3: 0x004BA12A | interruptlink2
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.885309] iwlwifi 0000:00:14.3: 0x0000CEEA | data1
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.885444] iwlwifi 0000:00:14.3: 0x01000000 | data2
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.885526] iwlwifi 0000:00:14.3: 0x00000000 | data3
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.885598] iwlwifi 0000:00:14.3: 0x840075C7 | beacon time
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.885670] iwlwifi 0000:00:14.3: 0x5282AA44 | tsf low
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.885741] iwlwifi 0000:00:14.3: 0x00000082 | tsf hi
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.885812] iwlwifi 0000:00:14.3: 0x00000000 | time gp1
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.885885] iwlwifi 0000:00:14.3: 0x24D400DC | time gp2
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.885963] iwlwifi 0000:00:14.3: 0x00000001 | uCode revision type
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.886040] iwlwifi 0000:00:14.3: 0x00000049 | uCode version major
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.886117] iwlwifi 0000:00:14.3: 0x35C0A2C6 | uCode version minor
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.886193] iwlwifi 0000:00:14.3: 0x00000351 | hw version
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.886268] iwlwifi 0000:00:14.3: 0x00489001 | board version
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.886344] iwlwifi 0000:00:14.3: 0x80B3F400 | hcmd
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.886420] iwlwifi 0000:00:14.3: 0x00020000 | isr0
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.886496] iwlwifi 0000:00:14.3: 0x00000000 | isr1
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.886632] iwlwifi 0000:00:14.3: 0x08F00002 | isr2
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.886750] iwlwifi 0000:00:14.3: 0x00C3028C | isr3
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.886889] iwlwifi 0000:00:14.3: 0x00000000 | isr4
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.887035] iwlwifi 0000:00:14.3: 0x05C8001C | last cmd Id
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.887180] iwlwifi 0000:00:14.3: 0x0000CEEA | wait_event
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.887326] iwlwifi 0000:00:14.3: 0x00000854 | l2p_control
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.887467] iwlwifi 0000:00:14.3: 0x00000020 | l2p_duration
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.887610] iwlwifi 0000:00:14.3: 0x0000000F | l2p_mhvalid
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.887756] iwlwifi 0000:00:14.3: 0x00000000 | l2p_addr_match
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.887895] iwlwifi 0000:00:14.3: 0x00000009 | lmpm_pmg_sel
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.888150] iwlwifi 0000:00:14.3: 0x00000000 | timestamp
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.888288] iwlwifi 0000:00:14.3: 0x00006868 | flow_handler
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.888730] iwlwifi 0000:00:14.3: Start IWL Error Log Dump:
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.888867] iwlwifi 0000:00:14.3: Transport status: 0x0000004A, valid: 7
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.889159] iwlwifi 0000:00:14.3: 0x20000066 | NMI_INTERRUPT_HOST
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.889306] iwlwifi 0000:00:14.3: 0x00000000 | umac branchlink1
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.889450] iwlwifi 0000:00:14.3: 0x80453B88 | umac branchlink2
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.889594] iwlwifi 0000:00:14.3: 0x8046FE32 | umac interruptlink1
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.889740] iwlwifi 0000:00:14.3: 0x8046FE32 | umac interruptlink2
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.889886] iwlwifi 0000:00:14.3: 0x01000000 | umac data1
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.890033] iwlwifi 0000:00:14.3: 0x8046FE32 | umac data2
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.890176] iwlwifi 0000:00:14.3: 0x00000000 | umac data3
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.890323] iwlwifi 0000:00:14.3: 0x00000049 | umac major
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.890468] iwlwifi 0000:00:14.3: 0x35C0A2C6 | umac minor
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.890613] iwlwifi 0000:00:14.3: 0x24D400DA | frame pointer
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.890759] iwlwifi 0000:00:14.3: 0xC0886264 | stack pointer
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.890905] iwlwifi 0000:00:14.3: 0x0043019C | last host cmd
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.891050] iwlwifi 0000:00:14.3: 0x00000000 | isr status reg
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.891323] iwlwifi 0000:00:14.3: IML/ROM dump:
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.891469] iwlwifi 0000:00:14.3: 0x00000003 | IML/ROM error/state
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.891731] iwlwifi 0000:00:14.3: 0x000053F8 | IML/ROM data1
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.891997] iwlwifi 0000:00:14.3: 0x00000080 | IML/ROM WFPM_AUTH_KEY_0
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.892216] iwlwifi 0000:00:14.3: Fseq Registers:
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.893775] iwlwifi 0000:00:14.3: 0x60000000 | FSEQ_ERROR_CODE
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.893927] iwlwifi 0000:00:14.3: 0x80260000 | FSEQ_TOP_INIT_VERSION
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.894077] iwlwifi 0000:00:14.3: 0x00020006 | FSEQ_CNVIO_INIT_VERSION
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.894227] iwlwifi 0000:00:14.3: 0x0000A384 | FSEQ_OTP_VERSION
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.894374] iwlwifi 0000:00:14.3: 0x3D544A68 | FSEQ_TOP_CONTENT_VERSION
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.894526] iwlwifi 0000:00:14.3: 0x4552414E | FSEQ_ALIVE_TOKEN
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.894675] iwlwifi 0000:00:14.3: 0x20000302 | FSEQ_CNVI_ID
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.894826] iwlwifi 0000:00:14.3: 0x01300202 | FSEQ_CNVR_ID
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.894976] iwlwifi 0000:00:14.3: 0x20000302 | CNVI_AUX_MISC_CHIP
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.895129] iwlwifi 0000:00:14.3: 0x01300202 | CNVR_AUX_MISC_CHIP
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.895282] iwlwifi 0000:00:14.3: 0x0000485B | 
+>>>> CNVR_SCU_SD_REGS_SD_REG_DIG_DCDC_VTRIM
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.895463] iwlwifi 0000:00:14.3: 0xA5A5A5A2 | 
+>>>> CNVR_SCU_SD_REGS_SD_REG_ACTIVE_VDIG_MIRROR
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.898477] iwlwifi 0000:00:14.3: WRT: Collecting data: ini trigger 4 fired 
+>>>> (delay=0ms).
+>>>> Apr  9 23:01:25 marvin-IdeaPad-3-15ITL6 kernel: [  629.899785] ieee80211 phy0: Hardware restart was requested
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.878162] iwlwifi 0000:00:14.3: HCMD_ACTIVE already clear for command 
+>>>> STATISTICS_CMD
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.878273] iwlwifi 0000:00:14.3: Hardware error detected. Restarting.
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.881860] ------------[ cut here ]------------
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.882201] WARNING: CPU: 5 PID: 47 at 
+>>>> drivers/net/wireless/intel/iwlwifi/mvm/../iwl-trans.h:1200 iwl_mvm_rx_tx_cmd+0xc65/0xd50 [iwlmvm]
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.882380] Modules linked in: ftrace_direct ccm rfcomm snd_seq_dummy 
+>>>> snd_hrtimer cmac algif_skcipher snd_ctl_led snd_soc_skl_hda_dsp
+>>>> snd_soc_intel_hda_dsp_common snd_soc_hdac_hdmi snd_sof_probes snd_hda_codec_hdmi snd_hda_codec_realtek snd_hda_codec_generic 
+>>>> ledtrig_audio bnep joydev uvcvideo videobuf2_vmalloc btusb uvc
+>>>> videobuf2_memops btrtl videobuf2_v4l2 btbcm videodev btintel btmtk usbhid videobuf2_common bluetooth mc ecdh_generic ecc 
+>>>> snd_soc_dmic snd_sof_pci_intel_tgl snd_sof_intel_hda_common soundwire_intel
+>>>> soundwire_generic_allocation soundwire_cadence hid_multitouch snd_sof_intel_hda snd_sof_pci snd_sof_xtensa_dsp snd_sof 
+>>>> hid_generic snd_sof_utils snd_soc_hdac_hda snd_hda_ext_core
+>>>> snd_soc_acpi_intel_match snd_soc_acpi intel_tcc_cooling soundwire_bus x86_pkg_temp_thermal sunrpc mei_pxp intel_powerclamp 
+>>>> mei_hdcp snd_soc_core snd_compress coretemp ac97_bus spi_pxa2xx_platform
+>>>> crct10dif_pclmul snd_pcm_dmaengine dw_dmac crc32_pclmul dw_dmac_core ghash_clmulni_intel snd_hda_intel sha512_ssse3 8250_dw
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.885849]  snd_intel_dspcfg snd_intel_sdw_acpi aesni_intel crypto_simd 
+>>>> wmi_bmof snd_hda_codec cryptd binfmt_misc snd_hda_core rapl snd_hwdep
+>>>> pmt_telemetry intel_rapl_msr pmt_class intel_cstate snd_pcm i2c_hid_acpi i915 iwlmvm i2c_hid snd_seq_midi snd_seq_midi_event 
+>>>> nls_iso8859_1 snd_rawmidi mac80211 drm_buddy libarc4 ttm snd_seq
+>>>> drm_display_helper processor_thermal_device_pci_legacy cec snd_seq_device ideapad_laptop snd_timer btrfs sparse_keymap 
+>>>> processor_thermal_device drm_kms_helper iwlwifi platform_profile
+>>>> processor_thermal_rfim processor_thermal_mbox int3400_thermal mei_me blake2b_generic xhci_pci xor processor_thermal_rapl video 
+>>>> wmi acpi_thermal_rel mei acpi_tad i2c_algo_bit acpi_pad
+>>>> int3403_thermal intel_rapl_common snd xhci_pci_renesas i2c_i801 syscopyarea ahci cfg80211 intel_vsec int340x_thermal_zone 
+>>>> intel_lpss_pci sysfillrect soundcore i2c_smbus intel_lpss sysimgblt
+>>>> intel_soc_dts_iosf libahci igen6_edac idma64 raid6_pq msr parport_pc ppdev lp parport ramoops pstore_blk reed_solomon 
+>>>> pstore_zone drm
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.886823]  efi_pstore ip_tables x_tables autofs4 nvme nvme_core input_leds 
+>>>> vmd serio_raw mac_hid pinctrl_tigerlake [last unloaded:
+>>>> ftrace_direct]
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.886986] CPU: 5 PID: 47 Comm: ksoftirqd/5 Not tainted 
+>>>> 6.3.0-rc6-mt-20230401-00001-gf86822a1170f #4
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.887006] Hardware name: LENOVO 82H8/LNVNB161216, BIOS GGCN51WW 11/16/2022
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.887022] RIP: 0010:iwl_mvm_rx_tx_cmd+0xc65/0xd50 [iwlmvm]
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.887096] Code: 85 c0 74 0d 0f b6 40 27 89 f1 21 c1 84 c0 0f 45 f1 40 0f b6 
+>>>> f6 4c 89 ff e8 e8 3f ff ff 41 88 84 24 7e 14 00 00 e9 7c fe ff ff
+>>>> <0f> 0b 48 8b 7f 40 48 c7 c1 10 ba fa c0 48 c7 c2 58 ce fb c0 31 f6
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.887114] RSP: 0018:ffffb60200267b70 EFLAGS: 00010293
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.887142] RAX: 0000000000001c80 RBX: ffff8b5af378c000 RCX: 0000000000000005
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.887159] RDX: 0000000000000000 RSI: ffffb60200267bb0 RDI: ffff8b5a8ff20028
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.887174] RBP: ffffb60200267c40 R08: 0000000000000000 R09: 0000000000000001
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.887189] R10: ffffb60200267c58 R11: 0000000000000000 R12: 0000000000000000
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.887205] R13: 0000000000000030 R14: ffffb60200267d18 R15: ffff8b5aa39d33e8
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.887221] FS:  0000000000000000(0000) GS:ffff8b5c27a80000(0000) 
+>>>> knlGS:0000000000000000
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.887238] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.887255] CR2: 00007f49f4dfe008 CR3: 000000017d850001 CR4: 0000000000f70ee0
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.887271] PKRU: 55555554
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.887286] Call Trace:
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.887302]  <TASK>
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.887359]  ? __pfx_iwl_mvm_rx_tx_cmd+0x10/0x10 [iwlmvm]
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.887446]  ? iwl_mvm_rx_tx_cmd+0x9/0xd50 [iwlmvm]
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.887540]  ftrace_regs_caller_end+0x66/0x66
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.887563]  ? ftrace_regs_caller_end+0x66/0x66
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.887582]  ? iwl_mvm_rx_common+0xde/0x390 [iwlmvm]
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.887650]  ? iwl_mvm_rx_mq+0x9/0xc0 [iwlmvm]
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.887739]  ? ftrace_regs_caller_end+0x66/0x66
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.887757]  iwl_mvm_rx_mq+0x79/0xc0 [iwlmvm]
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.887821]  ? ftrace_regs_caller_end+0x66/0x66
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.887839]  iwl_pcie_rx_handle+0x402/0xaa0 [iwlwifi]
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.887979]  ? ftrace_regs_caller_end+0x66/0x66
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.887997]  iwl_pcie_napi_poll_msix+0x39/0xf0 [iwlwifi]
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.888086]  ? ftrace_regs_caller_end+0x66/0x66
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.888105]  __napi_poll+0x2e/0x1f0
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.888146]  ? ftrace_regs_caller_end+0x66/0x66
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.888164]  net_rx_action+0x1a5/0x330
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.888240]  ? ftrace_regs_caller_end+0x66/0x66
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.888258]  __do_softirq+0xb4/0x3a4
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.888311]  ? smpboot_thread_fn+0x2a/0x290
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.888340]  ? ftrace_regs_caller_end+0x66/0x66
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.888358]  run_ksoftirqd+0x44/0x80
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.888382]  ? ftrace_regs_caller_end+0x66/0x66
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.888400]  smpboot_thread_fn+0x1d9/0x290
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.888435]  ? __pfx_smpboot_thread_fn+0x10/0x10
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.888458]  kthread+0x10f/0x140
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.888481]  ? __pfx_kthread+0x10/0x10
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.888517]  ret_from_fork+0x29/0x50
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.888609]  </TASK>
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.888623] irq event stamp: 4206602
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.888636] hardirqs last  enabled at (4206608): [<ffffffffb9a51c98>] 
+>>>> __up_console_sem+0x68/0x80
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.888657] hardirqs last disabled at (4206613): [<ffffffffb9a51c7d>] 
+>>>> __up_console_sem+0x4d/0x80
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.888676] softirqs last  enabled at (4196852): [<ffffffffb9965b60>] 
+>>>> return_to_handler+0x0/0x40
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.888695] softirqs last disabled at (4196891): [<ffffffffb9965b60>] 
+>>>> return_to_handler+0x0/0x40
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.888714] ---[ end trace 0000000000000000 ]---
+>>>> Apr  9 23:01:26 marvin-IdeaPad-3-15ITL6 kernel: [  630.888732] iwlwifi 0000:00:14.3: iwl_trans_reclaim bad state = 0
 >>>>
->>>>>> ---
->>>>>>     .../coresight/coresight-etm4x-core.c          |  35 +++---
->>>>>>     .../coresight/coresight-etm4x-sysfs.c         |  30 +++++
->>>>>>     drivers/hwtracing/coresight/coresight-stm.c   |  67 ++++++++---
->>>>>>     drivers/hwtracing/coresight/coresight-tpda.c  | 107 ++++++++++++++----
->>>>>>     drivers/hwtracing/coresight/coresight-tpda.h  |   4 +-
->>>>>>     .../hwtracing/coresight/coresight-trace-id.c  |  56 +++++++++
->>>>>>     .../hwtracing/coresight/coresight-trace-id.h  |  24 ++++
->>>>>>     7 files changed, 274 insertions(+), 49 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
->>>>>> index 1ea8f173cca0..8f2e4d2b0fc2 100644
->>>>>> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
->>>>>> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
->>>>>> @@ -233,25 +233,32 @@ static int etm4_cpu_id(struct coresight_device *csdev)
->>>>>>
->>>>>>     int etm4_read_alloc_trace_id(struct etmv4_drvdata *drvdata)
->>>>>>     {
->>>>>> -       int trace_id;
->>>>>> +       int trace_id, ret = 0;
->>>>>>
->>>>>> -       /*
->>>>>> -        * This will allocate a trace ID to the cpu,
->>>>>> -        * or return the one currently allocated.
->>>>>> -        * The trace id function has its own lock
->>>>>> -        */
->>>>>> -       trace_id = coresight_trace_id_get_cpu_id(drvdata->cpu);
->>>>>> -       if (IS_VALID_CS_TRACE_ID(trace_id))
->>>>>> -               drvdata->trcid = (u8)trace_id;
->>>>>> -       else
->>>>>> -               dev_err(&drvdata->csdev->dev,
->>>>>> -                       "Failed to allocate trace ID for %s on CPU%d\n",
->>>>>> -                       dev_name(&drvdata->csdev->dev), drvdata->cpu);
->>>>>> -       return trace_id;
->>>>>> +       if (!drvdata->trcid) {
->>>>>> +               /*
->>>>>> +                * This will allocate a trace ID to the cpu,
->>>>>> +                * or return the one currently allocated.
->>>>>> +                * The trace id function has its own lock
->>>>>> +                */
->>>>>> +               trace_id = coresight_trace_id_get_cpu_id(drvdata->cpu);
->>>>>> +               if (IS_VALID_CS_TRACE_ID(trace_id))
->>>>>> +                       drvdata->trcid = (u8)trace_id;
->>>>>> +               else {
->>>>>> +                       ret = -EINVAL;
->>>>>> +                       dev_err(&drvdata->csdev->dev,
->>>>>> +                               "Failed to allocate trace ID for %s on CPU%d\n",
->>>>>> +                               dev_name(&drvdata->csdev->dev), drvdata->cpu);
->>>>>> +               }
->>>>>> +       } else
->>>>>> +               ret = coresight_trace_id_set_cpu_id(drvdata->cpu, drvdata->trcid);
->>>>>> +
->>>>>> +       return ret;
->>>>>>     }
->>>>> This change is redundant. coresight_trace_id_get_cpu_id() will
->>>>> allocate a trace id to the cpu if none is currently mapped, otherwise
->>>>> it will return the currently mapped trace id.
->>>>> There is no need to remap the id to the cpu every time.
->>>>>
->>>>>>     void etm4_release_trace_id(struct etmv4_drvdata *drvdata)
->>>>>>     {
->>>>>> +       drvdata->trcid = 0;
->>>>>>            coresight_trace_id_put_cpu_id(drvdata->cpu);
->>>>>>     }
->>>>>>
->>>>>> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
->>>>>> index 5e62aa40ecd0..bd342e63868c 100644
->>>>>> --- a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
->>>>>> +++ b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
->>>>>> @@ -2335,6 +2335,35 @@ static ssize_t ts_source_show(struct device *dev,
->>>>>>     }
->>>>>>     static DEVICE_ATTR_RO(ts_source);
->>>>>>
->>>>>> +static ssize_t traceid_show(struct device *dev,
->>>>>> +                           struct device_attribute *attr, char *buf)
->>>>>> +{
->>>>>> +       int val;
->>>>>> +       struct etmv4_drvdata *drvdata = dev_get_drvdata(dev->parent);
->>>>>> +
->>>>>> +       val = drvdata->trcid;
->>>>>> +       return sysfs_emit(buf, "0x%x\n", val);
->>>>>> +}
->>>>>> +
->>>>> This is also redundant. It replicates the trctraceid_show function
->>>>>
->>>>>> +static ssize_t traceid_store(struct device *dev,
->>>>>> +                           struct device_attribute *attr,
->>>>>> +                           const char *buf, size_t size)
->>>>>> +{
->>>>>> +       int ret;
->>>>>> +       unsigned long val;
->>>>>> +       struct etmv4_drvdata *drvdata = dev_get_drvdata(dev->parent);
->>>>>> +
->>>>>> +       ret = kstrtoul(buf, 16, &val);
->>>>>> +       if (ret)
->>>>>> +               return ret;
->>>>>> +
->>>>>> +       if (!drvdata->csdev->enable)
->>>>>> +               drvdata->trcid = val;
->>>>>> +
->>>>>> +       return size;
->>>>>> +}
->>>>>> +static DEVICE_ATTR_RW(traceid);
->>>>>> +
->>>>> Users are not permitted to set trace id values manually in this way.
->>>>> This will potentially set an ID that is already used for another
->>>>> device.
->>>>>
->>>>>
->>>>>>     static struct attribute *coresight_etmv4_attrs[] = {
->>>>>>            &dev_attr_nr_pe_cmp.attr,
->>>>>>            &dev_attr_nr_addr_cmp.attr,
->>>>>> @@ -2390,6 +2419,7 @@ static struct attribute *coresight_etmv4_attrs[] = {
->>>>>>            &dev_attr_vmid_masks.attr,
->>>>>>            &dev_attr_cpu.attr,
->>>>>>            &dev_attr_ts_source.attr,
->>>>>> +       &dev_attr_traceid.attr,
->>>>>>            NULL,
->>>>>>     };
->>>>>>
->>>>>> diff --git a/drivers/hwtracing/coresight/coresight-stm.c b/drivers/hwtracing/coresight/coresight-stm.c
->>>>>> index 66a614c5492c..1291f5f39ab1 100644
->>>>>> --- a/drivers/hwtracing/coresight/coresight-stm.c
->>>>>> +++ b/drivers/hwtracing/coresight/coresight-stm.c
->>>>>> @@ -192,10 +192,29 @@ static void stm_enable_hw(struct stm_drvdata *drvdata)
->>>>>>            CS_LOCK(drvdata->base);
->>>>>>     }
->>>>>>
->>>>>> +static int stm_configure_trace_id(struct stm_drvdata *drvdata)
->>>>>> +{
->>>>>> +       int traceid, ret = 0;
->>>>>> +
->>>>>> +       if (!drvdata->traceid) {
->>>>>> +               traceid = coresight_trace_id_get_system_id();
->>>>>> +               if (traceid < 0)
->>>>>> +                       return traceid;
->>>>>> +
->>>>>> +               drvdata->traceid = traceid;
->>>>>> +       } else
->>>>>> +               ret = coresight_trace_id_set_system_id(drvdata->traceid);
->>>>>> +
->>>>>> +       return ret;
->>>>>> +
->>>>>> +}
->>>>>> +
->>>>> again the mapping function remain with the id reserved till the put id
->>>>> is called, so no need to set the id every time once allocated.
->>>>>
->>>>>>     static int stm_enable(struct coresight_device *csdev,
->>>>>>                          struct perf_event *event, u32 mode)
->>>>>>     {
->>>>>>            u32 val;
->>>>>> +       int ret;
->>>>>> +
->>>>>>            struct stm_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
->>>>>>
->>>>>>            if (mode != CS_MODE_SYSFS)
->>>>>> @@ -207,6 +226,10 @@ static int stm_enable(struct coresight_device *csdev,
->>>>>>            if (val)
->>>>>>                    return -EBUSY;
->>>>>>
->>>>>> +       ret = stm_configure_trace_id(drvdata);
->>>>>> +       if (ret)
->>>>>> +               return ret;
->>>>>> +
->>>>>>            pm_runtime_get_sync(csdev->dev.parent);
->>>>>>
->>>>>>            spin_lock(&drvdata->spinlock);
->>>>>> @@ -261,6 +284,8 @@ static void stm_disable(struct coresight_device *csdev,
->>>>>>            struct stm_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
->>>>>>            struct csdev_access *csa = &csdev->access;
->>>>>>
->>>>>> +
->>>>>> +       coresight_trace_id_put_system_id(drvdata->traceid);
->>>>> Enabling and releasing trace Ids in this way is potentially
->>>>> problematical if the device is enabled and disabled multiple times
->>>>> during a single trace recording session. Differnt IDs could be used.
->>>>>
->>>>> We enable this ID at probe time as we expect there to be only a single
->>>>> STM on any system - so allocating an ID for the lifetime of the driver
->>>>> is reasonable.
->>>>> If this change is required, then the sysfs model of allovate on read
->>>>> or enable, release on sysfs reset should be followed.
->>>>>
->>>>>>            /*
->>>>>>             * For as long as the tracer isn't disabled another entity can't
->>>>>>             * change its status.  As such we can read the status here without
->>>>>> @@ -268,6 +293,7 @@ static void stm_disable(struct coresight_device *csdev,
->>>>>>             */
->>>>>>            if (local_read(&drvdata->mode) == CS_MODE_SYSFS) {
->>>>>>                    spin_lock(&drvdata->spinlock);
->>>>>> +               drvdata->traceid = 0;
->>>>>>                    stm_disable_hw(drvdata);
->>>>>>                    spin_unlock(&drvdata->spinlock);
->>>>>>
->>>>>> @@ -608,7 +634,33 @@ static ssize_t traceid_show(struct device *dev,
->>>>>>            val = drvdata->traceid;
->>>>>>            return sprintf(buf, "%#lx\n", val);
->>>>>>     }
->>>>>> -static DEVICE_ATTR_RO(traceid);
->>>>>> +
->>>>>> +static ssize_t traceid_store(struct device *dev,
->>>>>> +                            struct device_attribute *attr,
->>>>>> +                            const char *buf, size_t size)
->>>>>> +{
->>>>>> +       int ret;
->>>>>> +       unsigned long val;
->>>>>> +       struct stm_drvdata *drvdata = dev_get_drvdata(dev->parent);
->>>>>> +
->>>>>> +       ret = kstrtoul(buf, 16, &val);
->>>>>> +       if (ret)
->>>>>> +               return ret;
->>>>>> +
->>>>>> +       if (!IS_VALID_CS_TRACE_ID(val)) {
->>>>>> +               dev_err(&drvdata->csdev->dev, "Invalid trace id\n");
->>>>>> +               return -EINVAL;
->>>>>> +       }
->>>>>> +
->>>>>> +       if (!drvdata->csdev->enable)
->>>>>> +               drvdata->traceid = val;
->>>>>> +       else
->>>>>> +               dev_err(&drvdata->csdev->dev, "Device must be enabled! %s\n",
->>>>>> +                               __func__);
->>>>>> +
->>>>>> +       return size;
->>>>>> +}
->>>>>> +static DEVICE_ATTR_RW(traceid);
->>>>>>
->>>>> Again do not do this - you are overriding the trace id mapping. Users
->>>>> are not permitted to set arbitrary trace id values in this way
->>>>>
->>>>>>     static struct attribute *coresight_stm_attrs[] = {
->>>>>>            &dev_attr_hwevent_enable.attr,
->>>>>> @@ -806,7 +858,7 @@ static void stm_init_generic_data(struct stm_drvdata *drvdata,
->>>>>>
->>>>>>     static int stm_probe(struct amba_device *adev, const struct amba_id *id)
->>>>>>     {
->>>>>> -       int ret, trace_id;
->>>>>> +       int ret;
->>>>>>            void __iomem *base;
->>>>>>            struct device *dev = &adev->dev;
->>>>>>            struct coresight_platform_data *pdata = NULL;
->>>>>> @@ -890,22 +942,12 @@ static int stm_probe(struct amba_device *adev, const struct amba_id *id)
->>>>>>                    goto stm_unregister;
->>>>>>            }
->>>>>>
->>>>>> -       trace_id = coresight_trace_id_get_system_id();
->>>>>> -       if (trace_id < 0) {
->>>>>> -               ret = trace_id;
->>>>>> -               goto cs_unregister;
->>>>>> -       }
->>>>>> -       drvdata->traceid = (u8)trace_id;
->>>>>> -
->>>>>>            pm_runtime_put(&adev->dev);
->>>>>>
->>>>>>            dev_info(&drvdata->csdev->dev, "%s initialized\n",
->>>>>>                     (char *)coresight_get_uci_data(id));
->>>>>>            return 0;
->>>>>>
->>>>>> -cs_unregister:
->>>>>> -       coresight_unregister(drvdata->csdev);
->>>>>> -
->>>>>>     stm_unregister:
->>>>>>            stm_unregister_device(&drvdata->stm);
->>>>>>            return ret;
->>>>>> @@ -915,7 +957,6 @@ static void stm_remove(struct amba_device *adev)
->>>>>>     {
->>>>>>            struct stm_drvdata *drvdata = dev_get_drvdata(&adev->dev);
->>>>>>
->>>>>> -       coresight_trace_id_put_system_id(drvdata->traceid);
->>>>>>            coresight_unregister(drvdata->csdev);
->>>>>>
->>>>>>            stm_unregister_device(&drvdata->stm);
->>>>>> diff --git a/drivers/hwtracing/coresight/coresight-tpda.c b/drivers/hwtracing/coresight/coresight-tpda.c
->>>>>> index f712e112ecff..41f83a5de3f2 100644
->>>>>> --- a/drivers/hwtracing/coresight/coresight-tpda.c
->>>>>> +++ b/drivers/hwtracing/coresight/coresight-tpda.c
->>>>>> @@ -21,6 +21,28 @@
->>>>>>
->>>>>>     DEFINE_CORESIGHT_DEVLIST(tpda_devs, "tpda");
->>>>>>
->>>>>> +static int tpda_configure_trace_id(struct tpda_drvdata *drvdata)
->>>>>> +{
->>>>>> +       int traceid, ret;
->>>>>> +       /*
->>>>>> +        * TPDA must has a unique atid. This atid can uniquely
->>>>>> +        * identify the TPDM trace source connected to the TPDA.
->>>>>> +        * The TPDMs which are connected to same TPDA share the
->>>>>> +        * same trace-id. When TPDA does packetization, different
->>>>>> +        * port will have unique channel number for decoding.
->>>>>> +        */
->>>>>> +       if (!drvdata->traceid) {
->>>>>> +               traceid = coresight_trace_id_get_system_id();
->>>>>> +               if (traceid < 0)
->>>>>> +                       return traceid;
->>>>>> +
->>>>>> +               drvdata->traceid = traceid;
->>>>>> +       } else
->>>>>> +               ret = coresight_trace_id_set_system_id(drvdata->traceid);
->>>>>> +
->>>>> redundant call - system ids are reserved till put system id is called.
->>>>>
->>>>>> +       return ret;
->>>>>> +}
->>>>>> +
->>>>> See above comments get_system_id is sufficient. If you choose to do
->>>>> this on enable, then simply do not call the put till the trace session
->>>>> is finished.
->>>>>
->>>>> You have a potential race here between devices using the system id
->>>>> calls trying to re-claim an id previously released.
->>>>>
->>>>>>     /* Settings pre enabling port control register */
->>>>>>     static void tpda_enable_pre_port(struct tpda_drvdata *drvdata)
->>>>>>     {
->>>>>> @@ -28,8 +50,9 @@ static void tpda_enable_pre_port(struct tpda_drvdata *drvdata)
->>>>>>
->>>>>>            val = readl_relaxed(drvdata->base + TPDA_CR);
->>>>>>            val &= ~TPDA_CR_ATID;
->>>>>> -       val |= FIELD_PREP(TPDA_CR_ATID, drvdata->atid);
->>>>>> +       val |= FIELD_PREP(TPDA_CR_ATID, drvdata->traceid);
->>>>>>            writel_relaxed(val, drvdata->base + TPDA_CR);
->>>>>> +
->>>>>>     }
->>>>>>
->>>>>>     static void tpda_enable_port(struct tpda_drvdata *drvdata, int port)
->>>>>> @@ -52,11 +75,17 @@ static void __tpda_enable(struct tpda_drvdata *drvdata, int port)
->>>>>>            tpda_enable_port(drvdata, port);
->>>>>>
->>>>>>            CS_LOCK(drvdata->base);
->>>>>> +
->>>>>>     }
->>>>>>
->>>>>>     static int tpda_enable(struct coresight_device *csdev, int inport, int outport)
->>>>>>     {
->>>>>>            struct tpda_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
->>>>>> +       int ret;
->>>>>> +
->>>>>> +       ret = tpda_configure_trace_id(drvdata);
->>>>>> +       if (ret)
->>>>>> +               return ret;
->>>>>>
->>>>>>            spin_lock(&drvdata->spinlock);
->>>>>>            if (atomic_read(&csdev->refcnt[inport]) == 0)
->>>>>> @@ -87,7 +116,11 @@ static void tpda_disable(struct coresight_device *csdev, int inport,
->>>>>>     {
->>>>>>            struct tpda_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
->>>>>>
->>>>>> +       coresight_trace_id_put_system_id(drvdata->traceid);
->>>>>>            spin_lock(&drvdata->spinlock);
->>>>>> +
->>>>>> +       drvdata->traceid = 0;
->>>>>> +
->>>>>>            if (atomic_dec_return(&csdev->refcnt[inport]) == 0)
->>>>>>                    __tpda_disable(drvdata, inport);
->>>>>>
->>>>>> @@ -105,27 +138,63 @@ static const struct coresight_ops tpda_cs_ops = {
->>>>>>            .link_ops       = &tpda_link_ops,
->>>>>>     };
->>>>>>
->>>>>> -static int tpda_init_default_data(struct tpda_drvdata *drvdata)
->>>>>> +static ssize_t traceid_show(struct device *dev,
->>>>>> +                           struct device_attribute *attr, char *buf)
->>>>>>     {
->>>>>> -       int atid;
->>>>>> -       /*
->>>>>> -        * TPDA must has a unique atid. This atid can uniquely
->>>>>> -        * identify the TPDM trace source connected to the TPDA.
->>>>>> -        * The TPDMs which are connected to same TPDA share the
->>>>>> -        * same trace-id. When TPDA does packetization, different
->>>>>> -        * port will have unique channel number for decoding.
->>>>>> -        */
->>>>>> -       atid = coresight_trace_id_get_system_id();
->>>>>> -       if (atid < 0)
->>>>>> -               return atid;
->>>>>> +       int val;
->>>>>> +       struct tpda_drvdata *drvdata = dev_get_drvdata(dev->parent);
->>>>>>
->>>>>> -       drvdata->atid = atid;
->>>>>> -       return 0;
->>>>>> +       val = drvdata->traceid;
->>>>>> +       return sysfs_emit(buf, "0x%x\n", val);
->>>>>>     }
->>>>>>
->>>>>> -static int tpda_probe(struct amba_device *adev, const struct amba_id *id)
->>>>>> +static ssize_t traceid_store(struct device *dev,
->>>>>> +                                           struct device_attribute *attr,
->>>>>> +                                           const char *buf, size_t size)
->>>>>>     {
->>>>>>            int ret;
->>>>>> +       unsigned long val;
->>>>>> +       struct tpda_drvdata *drvdata = dev_get_drvdata(dev->parent);
->>>>>> +
->>>>>> +       ret = kstrtoul(buf, 16, &val);
->>>>>> +       if (ret)
->>>>>> +               return ret;
->>>>>> +
->>>>>> +       if (!IS_VALID_CS_TRACE_ID(val)) {
->>>>>> +               dev_err(drvdata->dev, "Invalid trace id\n");
->>>>>> +               return -EINVAL;
->>>>>> +       }
->>>>>> +
->>>>>> +       if (!drvdata->csdev->enable)
->>>>>> +               drvdata->traceid = val;
->>>>>> +       else
->>>>>> +               dev_err(drvdata->dev, "Device must be enabled! %s\n", __func__);
->>>>>> +
->>>>>> +       return size;
->>>>>> +}
->>>>>> +static DEVICE_ATTR_RW(traceid);
->>>>> This may override the mapping from the trace id API - there is no
->>>>> guarantee that the value here will be available.
->>>>> In general setting trace IDs via sysfs is prohibited.
->>>>>
->>>>> The CPU / ETM4 sysfs will allocate on traceid read, or enable, and
->>>>> then release the ID on sysfs reset on the device. This ensures that
->>>>> teh user can read a sysfs id value that will be retained over the
->>>>> trace session and viewable before or after the session is complete
->>>>>
->>>>>> +
->>>>>> +static struct attribute *coresight_tpda_attrs[] = {
->>>>>> +       &dev_attr_traceid.attr,
->>>>>> +       NULL,
->>>>>> +};
->>>>>> +
->>>>>> +static const struct attribute_group coresight_tpda_group = {
->>>>>> +       .attrs = coresight_tpda_attrs,
->>>>>> +};
->>>>>> +
->>>>>> +static const struct attribute_group *coresight_tpda_groups[] = {
->>>>>> +       &coresight_tpda_group,
->>>>>> +       NULL,
->>>>>> +};
->>>>>> +
->>>>>> +static void tpda_init_default_data(struct tpda_drvdata *drvdata)
->>>>>> +{
->>>>>> +       drvdata->traceid = 0;
->>>>>> +}
->>>>>> +
->>>>>> +static int tpda_probe(struct amba_device *adev, const struct amba_id *id)
->>>>>> +{
->>>>>>            struct device *dev = &adev->dev;
->>>>>>            struct coresight_platform_data *pdata;
->>>>>>            struct tpda_drvdata *drvdata;
->>>>>> @@ -151,9 +220,7 @@ static int tpda_probe(struct amba_device *adev, const struct amba_id *id)
->>>>>>
->>>>>>            spin_lock_init(&drvdata->spinlock);
->>>>>>
->>>>>> -       ret = tpda_init_default_data(drvdata);
->>>>>> -       if (ret)
->>>>>> -               return ret;
->>>>>> +       tpda_init_default_data(drvdata);
->>>>>>
->>>>>>            desc.name = coresight_alloc_device_name(&tpda_devs, dev);
->>>>>>            if (!desc.name)
->>>>>> @@ -164,6 +231,7 @@ static int tpda_probe(struct amba_device *adev, const struct amba_id *id)
->>>>>>            desc.pdata = adev->dev.platform_data;
->>>>>>            desc.dev = &adev->dev;
->>>>>>            desc.access = CSDEV_ACCESS_IOMEM(base);
->>>>>> +       desc.groups = coresight_tpda_groups;
->>>>>>            drvdata->csdev = coresight_register(&desc);
->>>>>>            if (IS_ERR(drvdata->csdev))
->>>>>>                    return PTR_ERR(drvdata->csdev);
->>>>>> @@ -178,7 +246,6 @@ static void tpda_remove(struct amba_device *adev)
->>>>>>     {
->>>>>>            struct tpda_drvdata *drvdata = dev_get_drvdata(&adev->dev);
->>>>>>
->>>>>> -       coresight_trace_id_put_system_id(drvdata->atid);
->>>>>>            coresight_unregister(drvdata->csdev);
->>>>>>     }
->>>>>>
->>>>>> diff --git a/drivers/hwtracing/coresight/coresight-tpda.h b/drivers/hwtracing/coresight/coresight-tpda.h
->>>>>> index 0399678df312..5de6dc92f450 100644
->>>>>> --- a/drivers/hwtracing/coresight/coresight-tpda.h
->>>>>> +++ b/drivers/hwtracing/coresight/coresight-tpda.h
->>>>>> @@ -22,14 +22,14 @@
->>>>>>      * @dev:        The device entity associated to this component.
->>>>>>      * @csdev:      component vitals needed by the framework.
->>>>>>      * @spinlock:   lock for the drvdata value.
->>>>>> - * @enable:     enable status of the component.
->>>>>> + * @traceid:    the atid value of TPDA.
->>>>>>      */
->>>>>>     struct tpda_drvdata {
->>>>>>            void __iomem            *base;
->>>>>>            struct device           *dev;
->>>>>>            struct coresight_device *csdev;
->>>>>>            spinlock_t              spinlock;
->>>>>> -       u8                      atid;
->>>>>> +       u8                      traceid;
->>>>>>     };
->>>>>>
->>>>>>     #endif  /* _CORESIGHT_CORESIGHT_TPDA_H */
->>>>>> diff --git a/drivers/hwtracing/coresight/coresight-trace-id.c b/drivers/hwtracing/coresight/coresight-trace-id.c
->>>>>> index af5b4ef59cea..192626efcb01 100644
->>>>>> --- a/drivers/hwtracing/coresight/coresight-trace-id.c
->>>>>> +++ b/drivers/hwtracing/coresight/coresight-trace-id.c
->>>>>> @@ -110,6 +110,19 @@ static int coresight_trace_id_alloc_new_id(struct coresight_trace_id_map *id_map
->>>>>>            return id;
->>>>>>     }
->>>>>>
->>>>>> +static int coresight_trace_id_set(int id, struct coresight_trace_id_map *id_map)
->>>>>> +{
->>>>>> +       if (WARN(!IS_VALID_CS_TRACE_ID(id), "Invalid Trace ID %d\n", id))
->>>>>> +               return -EINVAL;
->>>>>> +       if (WARN(test_bit(id, id_map->used_ids), "ID is already used: %d\n", id))
->>>>>> +               return -EINVAL;
->>>>>> +       set_bit(id, id_map->used_ids);
->>>>>> +
->>>>>> +       DUMP_ID_MAP(id_map);
->>>>>> +
->>>>>> +       return 0;
->>>>>> +}
->>>>>> +
->>>>>>     static void coresight_trace_id_free(int id, struct coresight_trace_id_map *id_map)
->>>>>>     {
->>>>>>            if (WARN(!IS_VALID_CS_TRACE_ID(id), "Invalid Trace ID %d\n", id))
->>>>>> @@ -195,6 +208,37 @@ static int coresight_trace_id_map_get_cpu_id(int cpu, struct coresight_trace_id_
->>>>>>            return id;
->>>>>>     }
->>>>>>
->>>>>> +static int coresight_trace_id_map_set_cpu_id(int cpu, int id, struct coresight_trace_id_map *id_map)
->>>>>> +{
->>>>>> +       unsigned long flags;
->>>>>> +
->>>>>> +       spin_lock_irqsave(&id_map_lock, flags);
->>>>>> +
->>>>>> +       if (WARN(!IS_VALID_CS_TRACE_ID(id), "Invalid Trace ID %d\n", id)) {
->>>>>> +               spin_unlock_irqrestore(&id_map_lock, flags);
->>>>>> +               return -EINVAL;
->>>>>> +       }
->>>>>> +
->>>>>> +       if (WARN(test_bit(id, id_map->used_ids), "ID is already used: %d\n", id)) {
->>>>>> +               spin_unlock_irqrestore(&id_map_lock, flags);
->>>>>> +               return -EINVAL;
->>>>>> +       }
->>>>>> +
->>>>>> +       set_bit(id, id_map->used_ids);
->>>>>> +
->>>>>> +       /* allocate the new id to the cpu */
->>>>>> +       atomic_set(&per_cpu(cpu_id, cpu), id);
->>>>>> +
->>>>>> +       cpumask_clear_cpu(cpu, &cpu_id_release_pending);
->>>>>> +       clear_bit(id, id_map->pend_rel_ids);
->>>>>> +
->>>>>> +       spin_unlock_irqrestore(&id_map_lock, flags);
->>>>>> +       DUMP_ID_CPU(cpu, id);
->>>>>> +       DUMP_ID_MAP(id_map);
->>>>>> +
->>>>>> +       return 0;
->>>>>> +}
->>>>>> +
->>>>> This is redundant and simply replicates the existing code. cpu mapped
->>>>> IDs are retained for the full trace session, across multiple
->>>>> enable/disable operations.
->>>>> For perf, the IDs will be retained for the entire perf trace session,
->>>>> during which the etm can be enabled and disabled multiple times.
->>>>> For sysfs, the ids will be allocated on enable and retained till the
->>>>> user writes to the sysfs reset function in the ETM4X.
->>>>>
->>>>>
->>>>>>     static void coresight_trace_id_map_put_cpu_id(int cpu, struct coresight_trace_id_map *id_map)
->>>>>>     {
->>>>>>            unsigned long flags;
->>>>>> @@ -251,6 +295,12 @@ static void coresight_trace_id_map_put_system_id(struct coresight_trace_id_map *
->>>>>>
->>>>>>     /* API functions */
->>>>>>
->>>>>> +int coresight_trace_id_set_cpu_id(int cpu, int id)
->>>>>> +{
->>>>>> +       return coresight_trace_id_map_set_cpu_id(cpu, id, &id_map_default);
->>>>>> +}
->>>>>> +EXPORT_SYMBOL_GPL(coresight_trace_id_set_cpu_id);
->>>>>> +
->>>>> Redundant API, Ids are allocated and persistent as described above.
->>>>>
->>>>>>     int coresight_trace_id_get_cpu_id(int cpu)
->>>>>>     {
->>>>>>            return coresight_trace_id_map_get_cpu_id(cpu, &id_map_default);
->>>>>> @@ -269,6 +319,12 @@ int coresight_trace_id_read_cpu_id(int cpu)
->>>>>>     }
->>>>>>     EXPORT_SYMBOL_GPL(coresight_trace_id_read_cpu_id);
->>>>>>
->>>>>> +int coresight_trace_id_set_system_id(int id)
->>>>>> +{
->>>>>> +       return coresight_trace_id_set(id, &id_map_default);
->>>>>> +}
->>>>>> +EXPORT_SYMBOL_GPL(coresight_trace_id_set_system_id);
->>>>>> +
->>>>> This is unnecessary unless you have a device that has a specific trace
->>>>> id hardcoded into the device that cannot be changed.
->>>>>
->>>>> If there is such a case then we will have to implement a reservation
->>>>> mechanism that reserves an ID to that specific device. To prevent race
->>>>> conditions this would have to occur at device probe time and be
->>>>> retained throughout the lifetime of the device driver.
->>>>>
->>>>> If you need to retain system Ids across multiple enable / disable
->>>>> cycles for sysfs then follow the model in the ETM4x driver.
->>>>>
->>>>> Regards
->>>>>
->>>>> Mike
->>>>>
->>>>>
->>>>>>     int coresight_trace_id_get_system_id(void)
->>>>>>     {
->>>>>>            return coresight_trace_id_map_get_system_id(&id_map_default);
->>>>>> diff --git a/drivers/hwtracing/coresight/coresight-trace-id.h b/drivers/hwtracing/coresight/coresight-trace-id.h
->>>>>> index 3797777d367e..5dab9a473266 100644
->>>>>> --- a/drivers/hwtracing/coresight/coresight-trace-id.h
->>>>>> +++ b/drivers/hwtracing/coresight/coresight-trace-id.h
->>>>>> @@ -61,8 +61,21 @@ struct coresight_trace_id_map {
->>>>>>            DECLARE_BITMAP(pend_rel_ids, CORESIGHT_TRACE_IDS_MAX);
->>>>>>     };
->>>>>>
->>>>>> +
->>>>>>     /* Allocate and release IDs for a single default trace ID map */
->>>>>>
->>>>>> +/**
->>>>>> + * Set the CoreSight Trace Id for the CPU.
->>>>>> + *
->>>>>> + * Set CoreSight Trace Id associated with the CPU.
->>>>>> + *
->>>>>> + * @cpu: The CPU index for the id.
->>>>>> + * @id: Coresight Trace ID value.
->>>>>> + *
->>>>>> + * return: 0 if set successfully or -EINVAL if fail to set.
->>>>>> + */
->>>>>> +int coresight_trace_id_set_cpu_id(int cpu, int id);
->>>>>> +
->>>>>>     /**
->>>>>>      * Read and optionally allocate a CoreSight trace ID and associate with a CPU.
->>>>>>      *
->>>>>> @@ -111,6 +124,17 @@ void coresight_trace_id_put_cpu_id(int cpu);
->>>>>>      */
->>>>>>     int coresight_trace_id_read_cpu_id(int cpu);
->>>>>>
->>>>>> +/**
->>>>>> + * Set trace id for a system component.
->>>>>> + *
->>>>>> + * Set the trace id if system component needs a static id for the trace.
->>>>>> + *
->>>>>> + * @id: value of trace ID.
->>>>>> + *
->>>>>> + * return: 0 if set successfully or -EINVAL if fail to set.
->>>>>> + */
->>>>>> +int coresight_trace_id_set_system_id(int id);
->>>>>> +
->>>>>>     /**
->>>>>>      * Allocate a CoreSight trace ID for a system component.
->>>>>>      *
->>>>>> --
->>>>>> 2.39.0
->>>>>>
+>>>> Hope this helps.
+>>>>
+>>>> The platform is Ubuntu 22.10 kinetic kudu on Lenovo IdeaPad 3 15ITL6,
+>>>> the above mentioned 6.3-rc6 torvalds tree kernel and GGCN51WW original
+>>>> Lenovo BIOS.
+>>>>
+>>>> Please find the config and the lshw output and this listing at the URL:
+>>>>
+>>>> → https://domac.alu.unizg.hr/~mtodorov/linux/bugreports/intel/iwlwifi/
 >>>
->
->
+>>> The fault was reproduced while running complete "make kselftest" and having
+>>> at the same time Firefox with 100+ tabs and 2 Youtube tabs running.
+>>>
+>>> Apr 10 00:32:16 marvin-IdeaPad-3-15ITL6 kernel: mmiotrace: disabled.
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: Error sending STATISTICS_CMD: time out after 2000ms.
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: Current CMD queue read_ptr 54 write_ptr 55
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: Start IWL Error Log Dump:
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: Transport status: 0x0000004A, valid: 6
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: Loaded firmware version: 73.35c0a2c6.0 QuZ-a0-jf-b0-73.ucode
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000084 | NMI_INTERRUPT_UNKNOWN
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x1080A200 | trm_hw_status0
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00010000 | trm_hw_status1
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x004C352E | branchlink2
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x0000638C | interruptlink1
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x0000638C | interruptlink2
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00011864 | data1
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x01000000 | data2
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000000 | data3
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x5F008D9F | beacon time
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x9892726D | tsf low
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000083 | tsf hi
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00008D3B | time gp1
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x2124C243 | time gp2
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000001 | uCode revision type
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000049 | uCode version major
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x35C0A2C6 | uCode version minor
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000351 | hw version
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00489001 | board version
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x0489001C | hcmd
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0xE682B000 | isr0
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x09040000 | isr1
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x08F0011A | isr2
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00C3028C | isr3
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000000 | isr4
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x0488001C | last cmd Id
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00011864 | wait_event
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x000000C4 | l2p_control
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00018034 | l2p_duration
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000007 | l2p_mhvalid
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000081 | l2p_addr_match
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000009 | lmpm_pmg_sel
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000000 | timestamp
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000808 | flow_handler
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: Start IWL Error Log Dump:
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: Transport status: 0x0000004A, valid: 7
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x20000066 | NMI_INTERRUPT_HOST
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000000 | umac branchlink1
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x80453B88 | umac branchlink2
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x8046FE32 | umac interruptlink1
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x8046FE32 | umac interruptlink2
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x01000000 | umac data1
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x8046FE32 | umac data2
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000000 | umac data3
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000049 | umac major
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x35C0A2C6 | umac minor
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x2124C241 | frame pointer
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0xC0886264 | stack pointer
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x0036019C | last host cmd
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000000 | isr status reg
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: IML/ROM dump:
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000003 | IML/ROM error/state
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00005404 | IML/ROM data1
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000080 | IML/ROM WFPM_AUTH_KEY_0
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: Fseq Registers:
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x60000000 | FSEQ_ERROR_CODE
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x80260000 | FSEQ_TOP_INIT_VERSION
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00020006 | FSEQ_CNVIO_INIT_VERSION
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x0000A384 | FSEQ_OTP_VERSION
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x3D544A68 | FSEQ_TOP_CONTENT_VERSION
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x4552414E | FSEQ_ALIVE_TOKEN
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x20000302 | FSEQ_CNVI_ID
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x01300202 | FSEQ_CNVR_ID
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x20000302 | CNVI_AUX_MISC_CHIP
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x01300202 | CNVR_AUX_MISC_CHIP
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x0000485B | CNVR_SCU_SD_REGS_SD_REG_DIG_DCDC_VTRIM
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0xA5A5A5A2 | CNVR_SCU_SD_REGS_SD_REG_ACTIVE_VDIG_MIRROR
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: WRT: Collecting data: ini trigger 4 fired (delay=0ms).
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: ieee80211 phy0: Hardware restart was requested
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: Hardware error detected. Restarting.
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: BUG: Apr 10 00:32:16 marvin-IdeaPad-3-15ITL6 kernel: mmiotrace: disabled.
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: Error sending STATISTICS_CMD: time out after 2000ms.
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: Current CMD queue read_ptr 54 write_ptr 55
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: Start IWL Error Log Dump:
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: Transport status: 0x0000004A, valid: 6
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: Loaded firmware version: 73.35c0a2c6.0 QuZ-a0-jf-b0-73.ucode
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000084 | NMI_INTERRUPT_UNKNOWN
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x1080A200 | trm_hw_status0
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00010000 | trm_hw_status1
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x004C352E | branchlink2
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x0000638C | interruptlink1
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x0000638C | interruptlink2
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00011864 | data1
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x01000000 | data2
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000000 | data3
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x5F008D9F | beacon time
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x9892726D | tsf low
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000083 | tsf hi
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00008D3B | time gp1
+>>> Apr 10 00:32:36 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x2124C243 | time gp2
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000001 | uCode revision type
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000049 | uCode version major
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x35C0A2C6 | uCode version minor
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000351 | hw version
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00489001 | board version
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x0489001C | hcmd
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0xE682B000 | isr0
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x09040000 | isr1
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x08F0011A | isr2
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00C3028C | isr3
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000000 | isr4
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x0488001C | last cmd Id
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00011864 | wait_event
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x000000C4 | l2p_control
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00018034 | l2p_duration
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000007 | l2p_mhvalid
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000081 | l2p_addr_match
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000009 | lmpm_pmg_sel
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000000 | timestamp
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000808 | flow_handler
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: Start IWL Error Log Dump:
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: Transport status: 0x0000004A, valid: 7
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x20000066 | NMI_INTERRUPT_HOST
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000000 | umac branchlink1
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x80453B88 | umac branchlink2
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x8046FE32 | umac interruptlink1
+>>> Apr 10 00:32:37 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x8046FE32 | umac interruptlink2
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x01000000 | umac data1
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x8046FE32 | umac data2
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000000 | umac data3
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000049 | umac major
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x35C0A2C6 | umac minor
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x2124C241 | frame pointer
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0xC0886264 | stack pointer
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x0036019C | last host cmd
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000000 | isr status reg
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: IML/ROM dump:
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000003 | IML/ROM error/state
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00005404 | IML/ROM data1
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00000080 | IML/ROM WFPM_AUTH_KEY_0
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: Fseq Registers:
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x60000000 | FSEQ_ERROR_CODE
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x80260000 | FSEQ_TOP_INIT_VERSION
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x00020006 | FSEQ_CNVIO_INIT_VERSION
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x0000A384 | FSEQ_OTP_VERSION
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x3D544A68 | FSEQ_TOP_CONTENT_VERSION
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x4552414E | FSEQ_ALIVE_TOKEN
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x20000302 | FSEQ_CNVI_ID
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x01300202 | FSEQ_CNVR_ID
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x20000302 | CNVI_AUX_MISC_CHIP
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x01300202 | CNVR_AUX_MISC_CHIP
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0x0000485B | CNVR_SCU_SD_REGS_SD_REG_DIG_DCDC_VTRIM
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: 0xA5A5A5A2 | CNVR_SCU_SD_REGS_SD_REG_ACTIVE_VDIG_MIRROR
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: WRT: Collecting data: ini trigger 4 fired (delay=0ms).
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: ieee80211 phy0: Hardware restart was requested
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: iwlwifi 0000:00:14.3: Hardware error detected. Restarting.
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: BUG: kernel NULL pointer dereference, address: 0000000000000150
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: #PF: supervisor read access in kernel mode
+>>> -- Boot 60997fcc74c1448a967138e3f6d00cbf --
+>>> Apr 10 00:34:49 marvin-IdeaPad-3-15ITL6 kernel: microcode: updated early: 0xa4 -> 0xa6, date = 2022-06-28
+>>>
+>>> Apr 10 00:32:38 marvin-IdeaPad-3-15ITL6 kernel: #PF: supervisor read access in kernel mode
+>>> -- Boot 60997fcc74c1448a967138e3f6d00cbf --
+>>> Apr 10 00:34:49 marvin-IdeaPad-3-15ITL6 kernel: microcode: updated early: 0xa4 -> 0xa6, date = 2022-06-28
+>>>
+>>> I will add "make kselftest" log to the directory with lshw and config.
+>>>
+>>> Best regards,
+>>> Mirsad
+>>>
+>> Thanks for the report!
+>> The kernel stack there is not a real kernel crash, but is a result of a WARN_ON() in the code.
+>> However, there's a kernel NULL pointer deref later. Can I ask you to collect a log of the
+>> crash itself? Maybe with netconsole if the machine completely crashes?
+> 
+> Hi, Mr. Greenman,
+> 
+> Did you see the provided journalctl at the link?
+> 
+> I have found this interesting information:
+> 
+>                                                  other info that might help us debug this:
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  Possible unsafe locking scenario:
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:        CPU0
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:        ----
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:   lock(&local->queue_stop_reason_lock);
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:   <Interrupt>
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:     lock(&local->queue_stop_reason_lock);
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:
+>                                                   *** DEADLOCK ***
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel: 8 locks held by kworker/5:0/25656:
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  #0: ffff9d618009d138 ((wq_completion)events_freezable){+.+.}-{0:0}, at: 
+> process_one_work+0x1ca/0x530
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  #1: ffffb1ef4637fe68 ((work_completion)(&local->restart_work)){+.+.}-{0:0}, at: 
+> process_one_work+0x1ce/0x530
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  #2: ffffffff9f166548 (rtnl_mutex){+.+.}-{3:3}, at: return_to_handler+0x0/0x40
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  #3: ffff9d6190778728 (&rdev->wiphy.mtx){+.+.}-{3:3}, at: return_to_handler+0x0/0x40
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  #4: ffff9d619077b480 (&mvm->mutex){+.+.}-{3:3}, at: return_to_handler+0x0/0x40
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  #5: ffff9d61907bacd8 (&trans_pcie->mutex){+.+.}-{3:3}, at: return_to_handler+0x0/0x40
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  #6: ffffffff9ef9cda0 (rcu_read_lock){....}-{1:2}, at: 
+> iwl_mvm_queue_state_change+0x59/0x3a0 [iwlmvm]
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  #7: ffffffff9ef9cda0 (rcu_read_lock){....}-{1:2}, at: 
+> iwl_mvm_mac_itxq_xmit+0x42/0x210 [iwlmvm]
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:
+>                                                  stack backtrace:
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel: CPU: 5 PID: 25656 Comm: kworker/5:0 Tainted: G        W 
+> 6.3.0-rc6-mt-20230401-00001-gf86822a1170f #4
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel: Hardware name: LENOVO 82H8/LNVNB161216, BIOS GGCN51WW 11/16/2022
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel: Workqueue: events_freezable ieee80211_restart_work [mac80211]
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel: Call Trace:
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  <TASK>
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? ftrace_regs_caller_end+0x66/0x66
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  dump_stack_lvl+0x5f/0xa0
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  dump_stack+0x14/0x20
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  print_usage_bug.part.46+0x208/0x2a0
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  mark_lock.part.47+0x605/0x630
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? sched_clock+0xd/0x20
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? trace_clock_local+0x14/0x30
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? __rb_reserve_next+0x5f/0x490
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? _raw_spin_lock+0x1b/0x50
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  __lock_acquire+0x464/0x1990
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? mark_held_locks+0x4e/0x80
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  lock_acquire+0xc7/0x2d0
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? ftrace_regs_caller_end+0x66/0x66
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? ftrace_return_to_handler+0x8b/0x100
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? preempt_count_add+0x4/0x70
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  _raw_spin_lock+0x36/0x50
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? ftrace_regs_caller_end+0x66/0x66
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? ftrace_regs_caller_end+0x66/0x66
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ieee80211_tx_dequeue+0xb4/0x1330 [mac80211]
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? prepare_ftrace_return+0xc5/0x190
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? ftrace_graph_func+0x16/0x20
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? 0xffffffffc02ab0b1
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? lock_acquire+0xc7/0x2d0
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? iwl_mvm_mac_itxq_xmit+0x42/0x210 [iwlmvm]
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? ieee80211_tx_dequeue+0x9/0x1330 [mac80211]
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? __rcu_read_lock+0x4/0x40
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? ftrace_regs_caller_end+0x66/0x66
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  iwl_mvm_mac_itxq_xmit+0xae/0x210 [iwlmvm]
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? ftrace_regs_caller_end+0x66/0x66
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  iwl_mvm_queue_state_change+0x311/0x3a0 [iwlmvm]
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? ftrace_regs_caller_end+0x66/0x66
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  iwl_mvm_wake_sw_queue+0x17/0x20 [iwlmvm]
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? ftrace_regs_caller_end+0x66/0x66
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  iwl_txq_gen2_unmap+0x1c9/0x1f0 [iwlwifi]
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? ftrace_regs_caller_end+0x66/0x66
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  iwl_txq_gen2_free+0x55/0x130 [iwlwifi]
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? ftrace_regs_caller_end+0x66/0x66
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  iwl_txq_gen2_tx_free+0x63/0x80 [iwlwifi]
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? ftrace_regs_caller_end+0x66/0x66
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  _iwl_trans_pcie_gen2_stop_device+0x3f3/0x5b0 [iwlwifi]
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? _iwl_trans_pcie_gen2_stop_device+0x9/0x5b0 [iwlwifi]
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? mutex_lock_nested+0x4/0x30
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? ftrace_regs_caller_end+0x66/0x66
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  iwl_trans_pcie_gen2_stop_device+0x5f/0x90 [iwlwifi]
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? ftrace_regs_caller_end+0x66/0x66
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  iwl_mvm_stop_device+0x78/0xd0 [iwlmvm]
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? ftrace_regs_caller_end+0x66/0x66
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  __iwl_mvm_mac_start+0x114/0x210 [iwlmvm]
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? ftrace_regs_caller_end+0x66/0x66
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  iwl_mvm_mac_start+0x76/0x150 [iwlmvm]
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? ftrace_regs_caller_end+0x66/0x66
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  drv_start+0x79/0x180 [mac80211]
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? ftrace_regs_caller_end+0x66/0x66
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ieee80211_reconfig+0x1523/0x1ce0 [mac80211]
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? synchronize_net+0x4/0x50
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? ftrace_regs_caller_end+0x66/0x66
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ieee80211_restart_work+0x108/0x170 [mac80211]
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? ftrace_regs_caller_end+0x66/0x66
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  process_one_work+0x250/0x530
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? ftrace_regs_caller_end+0x66/0x66
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  worker_thread+0x48/0x3a0
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? __pfx_worker_thread+0x10/0x10
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  kthread+0x10f/0x140
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ? __pfx_kthread+0x10/0x10
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  ret_from_fork+0x29/0x50
+> Apr 10 00:58:33 marvin-IdeaPad-3-15ITL6 kernel:  </TASK>
+> 
+> Other than this, I am not technically savvy enough to give the other possible logs
+> than /var/log/syslog and journalctl ...
+> 
+> Could you please give additional instructions.
+> 
+> Thank you very much.
+
+Hi, Gregory,
+
+I have browsed through the material I provided, and somehow the NULL pointer dereference is not
+there in the logs. But I am certain that I have copied this line with the kernel BUG from the
+logs. I haven't erased any logs yet, so I believe I will be able to recover these log lines
+as soon as I get physically to the device.
+
+Best regards,
+Mirsad
+
+-- 
+Mirsad Todorovac
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb
+Republic of Croatia, the European Union
+
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+
+
