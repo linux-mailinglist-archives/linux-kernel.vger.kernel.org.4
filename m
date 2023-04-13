@@ -2,103 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC1C76E1082
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:58:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00EDF6E1085
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbjDMO6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 10:58:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52080 "EHLO
+        id S231395AbjDMO7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 10:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbjDMO6W (ORCPT
+        with ESMTP id S229870AbjDMO66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 10:58:22 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546AEA260;
-        Thu, 13 Apr 2023 07:58:17 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33DEvePkB015836, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33DEvePkB015836
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Thu, 13 Apr 2023 22:57:40 +0800
-Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Thu, 13 Apr 2023 22:58:02 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 13 Apr 2023 22:58:02 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
- RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
- 15.01.2375.007; Thu, 13 Apr 2023 22:58:02 +0800
-From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>
-Subject: RE: [PATCH v2 2/2] dt-bindings: usb: snps,dwc3: Add 'snps,global-regs-starting-offset' quirk
-Thread-Topic: [PATCH v2 2/2] dt-bindings: usb: snps,dwc3: Add
- 'snps,global-regs-starting-offset' quirk
-Thread-Index: AQHZbO8UV6MphwFb1U6iZXdc0JZwLK8oH9uAgAA0XICAAQIqgA==
-Date:   Thu, 13 Apr 2023 14:58:01 +0000
-Message-ID: <9f6abbe7a6fd479c98e2fd6c1080ad8a@realtek.com>
-References: <20230412033006.10859-2-stanley_chang@realtek.com>
- <20230413042503.4047-1-stanley_chang@realtek.com>
- <167e4a8c-3ebd-92b7-1481-947f08901f97@kernel.org>
-In-Reply-To: <167e4a8c-3ebd-92b7-1481-947f08901f97@kernel.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS02.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 13 Apr 2023 10:58:58 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F6072A8;
+        Thu, 13 Apr 2023 07:58:56 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id qh25so4948175qvb.1;
+        Thu, 13 Apr 2023 07:58:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681397935; x=1683989935;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bi0ZXm2Z4hEXGu7AXo9I7wdFqHb+LKKssxUJNJqQof4=;
+        b=SE3cEYIfy8hcWC7ZEnRIKIXPAdbW032ZvvJsErhXn+8adREO8f2fLkKFUgp8S8sL3O
+         dglAVbWiKYif3OfGZ+ktWe6pDGLHeD4GBi4NX1188rfR+iz2StNFIG346gF1TQh58eL5
+         fArzTEmUDjhHsqWsJmUBbUJJbwv480zxAE+vcK9qOECq6Y4bD2DzKHHQ8qoKyGUlWAx6
+         YOrUibmkP0Cltdlt9rcX+aWayzE43X5EifeFoJQG6C4S7b2rt8GPDZyjEc/OVfB4zwNc
+         lMJN9Fkw1VhPVFSPgZGLlCOqDcvDE/pxrxX8/Sw4DpzuPZtswW/wrTze0TcPFnTWhUAO
+         aX1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681397935; x=1683989935;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bi0ZXm2Z4hEXGu7AXo9I7wdFqHb+LKKssxUJNJqQof4=;
+        b=fVN61Xm6ZMTFMpnr8ufzwtHfxLkzfymsDVO2I3fiKftDlOmiCxFUDeK9alaYO6si6z
+         s3wLSmc8Rl5HRDAEcuLLPFdESmCqTWQbvhBIyUKGxapDhBMvCzzaPerHlfXvHR0T0FfR
+         5Mf7qBYp8NfkXhaEQMxZwFX8XxAJitLGfjzCULz5kORRz0CEYqvF+JY/V57FrGxmR5N7
+         Lo0t4IoqzwEZbK5DX/IB/MhOoNOgRfa38HnIBtUBSOMm2rHd+RMYFjpGX8KEfG66TW6u
+         jP0Wy/qMjAXYoYLVv/VD3jHVA2w7U85P1NjEapP9y69mUzqAXKtVSRxg076/exBoxNJ+
+         yxxQ==
+X-Gm-Message-State: AAQBX9fEvjXuItHAVRpFV00w0LuvLth+08PkxIFig04vD/UgGcBMPoKH
+        qtX+wkTVjWL/s5+xq+oJVB8=
+X-Google-Smtp-Source: AKy350ZPWCS7Da7sP9dwBbn1kRK1VZHZUMhhTx3bnSjdl6WRWMTcZ1GoyQudNKhIZWGVhlp9Qd8HZw==
+X-Received: by 2002:a05:6214:20e2:b0:5a5:ba90:3b5f with SMTP id 2-20020a05621420e200b005a5ba903b5fmr3407667qvk.14.1681397935280;
+        Thu, 13 Apr 2023 07:58:55 -0700 (PDT)
+Received: from [192.168.1.105] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id b7-20020a0cfb47000000b005ef49a5a3e6sm483173qvq.40.2023.04.13.07.58.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Apr 2023 07:58:54 -0700 (PDT)
+Message-ID: <ff2c73b7-3654-d871-de8b-7180c123f05d@gmail.com>
+Date:   Thu, 13 Apr 2023 07:58:51 -0700
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 2/3] PCI: brcmstb: CLKREQ# accomodations of downstream
+ device
+To:     Cyril Brulebois <kibi@debian.org>,
+        Jim Quinlan <jim2101024@gmail.com>
+Cc:     linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Phil Elwell <phil@raspberrypi.com>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230411165919.23955-1-jim2101024@gmail.com>
+ <20230411165919.23955-3-jim2101024@gmail.com>
+ <20230413143935.pmbyjk2boxl3rwne@mraw.org>
+Content-Language: en-US
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230413143935.pmbyjk2boxl3rwne@mraw.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBPbiAxMy8wNC8yMDIzIDA2OjI1LCBTdGFubGV5IENoYW5nIHdyb3RlOg0KPiA+IEFkZCBhIG5l
-dyAnc25wcyxnbG9iYWwtcmVncy1zdGFydGluZy1vZmZzZXQnIERUIHRvIGR3YzMgY29yZSB0byBy
-ZW1hcA0KPiA+IHRoZSBnbG9iYWwgcmVnaXN0ZXIgc3RhcnQgYWRkcmVzcw0KPiA+DQo+ID4gVGhl
-IFJUSyBESEMgU29DcyB3ZXJlIGRlc2lnbmVkIHRoZSBnbG9iYWwgcmVnaXN0ZXIgYWRkcmVzcyBv
-ZmZzZXQgYXQNCj4gPiAweDgxMDAuIFRoZSBkZWZhdWx0IGFkZHJlc3MgaXMgYXQgRFdDM19HTE9C
-QUxTX1JFR1NfU1RBUlQgKDB4YzEwMCkuDQo+ID4gVGhlcmVmb3JlLCBhZGQgdGhlIHByb3BlcnR5
-IG9mIGRldmljZS10cmVlIHRvIGFkanVzdCB0aGlzIHN0YXJ0IGFkZHJlc3MuDQo+ID4NCj4gPiBT
-aWduZWQtb2ZmLWJ5OiBTdGFubGV5IENoYW5nIDxzdGFubGV5X2NoYW5nQHJlYWx0ZWsuY29tPg0K
-PiA+IC0tLQ0KPiA+ICB2MSB0byB2MiBjaGFuZ2U6DQo+ID4gMS4gQ2hhbmdlIHRoZSBuYW1lIG9m
-IHRoZSBwcm9wZXJ0eSAic25wcyxnbG9iYWwtcmVncy1zdGFydGluZy1vZmZzZXQiLg0KPiA+IC0t
-LQ0KPiANCj4gRGlkbid0IHlvdSBnb3QgYWxyZWFkeSBjb21tZW50IGZvciB0aGlzIHBhdGNoPyBI
-b3cgZGlkIHlvdSBpbXBsZW1lbnQgaXQ/DQo+IA0KPiBBbHNvLCBJIGFza2VkIHlvdSBtdWx0aXBs
-ZSB0aW1lczoNCj4gDQo+IFBsZWFzZSB1c2Ugc2NyaXB0cy9nZXRfbWFpbnRhaW5lcnMucGwgdG8g
-Z2V0IGEgbGlzdCBvZiBuZWNlc3NhcnkgcGVvcGxlIGFuZCBsaXN0cw0KPiB0byBDQy4gIEl0IG1p
-Z2h0IGhhcHBlbiwgdGhhdCBjb21tYW5kIHdoZW4gcnVuIG9uIGFuIG9sZGVyIGtlcm5lbCwgZ2l2
-ZXMNCj4geW91IG91dGRhdGVkIGVudHJpZXMuICBUaGVyZWZvcmUgcGxlYXNlIGJlIHN1cmUgeW91
-IGJhc2UgeW91ciBwYXRjaGVzIG9uDQo+IHJlY2VudCBMaW51eCBrZXJuZWwuDQo+IA0KPiBJIGRv
-bid0IHVuZGVyc3RhbmQgd2h5IHlvdSBpZ25vcmUgdGhpcy4NCj4gDQo+IE5BSywgcGF0Y2ggaXMg
-bm90IGNvcnJlY3QuDQo+IA0KPiBCZXN0IHJlZ2FyZHMsDQo+IEtyenlzenRvZg0KPiANCg0KVGhh
-bmsgeW91IGZvciB5b3VyIHBhdGllbnQgZ3VpZGFuY2UuDQpCZWNhdXNlIEknbSBub3QgZmFtaWxp
-YXIgd2l0aCB0aGUgcmV2aWV3IHByb2Nlc3MgYW5kIGRpZG4ndCB1c2Ugc2NyaXB0cy9nZXRfbWFp
-bnRhaW5lcnMucGwgcHJvcGVybHkgaW4gdGhlIGluaXRpYWwgZW1haWwgdGhyZWFkLg0KVGhlcmVm
-b3JlLCB0aGlzIHNlcmllcyBvZiBlcnJvcnMgd2FzIGNhdXNlZC4gU29ycnkgZm9yIHRoZSBjb25m
-dXNpb24uDQpOb3cgSSBrbm93IGhvdyB0byB1c2UgdGhlIHNjcmlwdCBwcm9wZXJseS4NCkFmdGVy
-IGNvcnJlY3RpbmcgdGhlIG1haW50YWluZXIncyBzdWdnZXN0aW9uLCBJJ2xsIHJlc3RhcnQgYSBu
-ZXcgZW1haWwgdGhyZWFkIGFuZCByZXZpZXcgYWdhaW4uDQoNCg==
+
+
+On 4/13/2023 7:39 AM, Cyril Brulebois wrote:
+> Hi Jim,
+> 
+> Jim Quinlan <jim2101024@gmail.com> (2023-04-11):
+>> […]
+>> This property has already been in use by Raspian Linux, but this
+>> immplementation adds more details and discerns between (a) and (b)
+>    ^^^^^^^^^^^^^^^
+>    implementation
+> 
+>> automatically.
+>>
+>> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217276
+>> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
+> 
+> Sorry, it seems like my initial tests with v1 (applied on top of
+> v6.3-rc5-137-gf2afccfefe7b) weren't thorough enough, and I'm seeing the
+> same problems with v2 (applied on top of v6.3-rc6-46-gde4664485abb):
+>   - same setup as in https://bugzilla.kernel.org/show_bug.cgi?id=217276
+>   - the kernel panic is indeed gone;
+>   - a USB keyboard connected on that SupaHub PCIe-to-multiple-USB adapter
+>     isn't seen by the kernel;
+>   - a USB memory stick connected on the same adapter isn't seen by the
+>     kernel either;
+>   - of course both USB devices are confirmed to work fine if they're
+>     plugged directly on the CM4's USB ports.
+> 
+> Logs with v2:
+> 
+>      root@cm4:~# dmesg|grep -i pci
+>      [    0.610997] PCI: CLS 0 bytes, default 64
+>      [    1.664886] shpchp: Standard Hot Plug PCI Controller Driver version: 0.4
+>      [    1.672083] brcm-pcie fd500000.pcie: host bridge /scb/pcie@7d500000 ranges:
+>      [    1.679125] brcm-pcie fd500000.pcie:   No bus range found for /scb/pcie@7d500000, using [bus 00-ff]
+>      [    1.688279] brcm-pcie fd500000.pcie:      MEM 0x0600000000..0x0603ffffff -> 0x00f8000000
+>      [    1.696463] brcm-pcie fd500000.pcie:   IB MEM 0x0000000000..0x00ffffffff -> 0x0400000000
+>      [    1.705282] brcm-pcie fd500000.pcie: PCI host bridge to bus 0000:00
+>      [    1.711629] pci_bus 0000:00: root bus resource [bus 00-ff]
+>      [    1.717172] pci_bus 0000:00: root bus resource [mem 0x600000000-0x603ffffff] (bus address [0xf8000000-0xfbffffff])
+>      [    1.727653] pci 0000:00:00.0: [14e4:2711] type 01 class 0x060400
+>      [    1.733768] pci 0000:00:00.0: PME# supported from D0 D3hot
+>      [    1.740235] pci 0000:00:00.0: bridge configuration invalid ([bus 00-00]), reconfiguring
+>      [    1.855826] brcm-pcie fd500000.pcie: CLKREQ# ignored; no ASPM
+>      [    1.863666] brcm-pcie fd500000.pcie: link up, 5.0 GT/s PCIe x1 (SSC)
+>      [    1.870115] pci 0000:01:00.0: [1912:0014] type 00 class 0x0c0330
+>      [    1.876205] pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x00001fff 64bit]
+>      [    1.883177] pci 0000:01:00.0: PME# supported from D0 D3hot
+>      [    1.888881] pci_bus 0000:01: busn_res: [bus 01-ff] end is updated to 01
+>      [    1.895581] pci 0000:00:00.0: BAR 14: assigned [mem 0x600000000-0x6000fffff]
+>      [    1.902707] pci 0000:01:00.0: BAR 0: assigned [mem 0x600000000-0x600001fff 64bit]
+>      [    1.910279] pci 0000:00:00.0: PCI bridge to [bus 01]
+>      [    1.915293] pci 0000:00:00.0:   bridge window [mem 0x600000000-0x6000fffff]
+>      [    1.922412] pcieport 0000:00:00.0: enabling device (0000 -> 0002)
+>      [    1.928633] pcieport 0000:00:00.0: PME: Signaling with IRQ 23
+>      [    1.934609] pcieport 0000:00:00.0: AER: enabled with IRQ 23
+>      [    1.940340] pci 0000:01:00.0: enabling device (0000 -> 0002)
+>      [    6.946090] pci 0000:01:00.0: xHCI HW not ready after 5 sec (HC bug?) status = 0x1801
+>      [    6.954026] pci 0000:01:00.0: quirk_usb_early_handoff+0x0/0x968 took 4896180 usecs
+> 
+> Please let me know what I can do to help.
+
+Could you please attach your .config so we can check a few things?
+-- 
+Florian
