@@ -2,109 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF1CC6E053E
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 05:32:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5146F6E0534
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 05:28:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbjDMDcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 23:32:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47622 "EHLO
+        id S229546AbjDMD2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 23:28:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbjDMDcH (ORCPT
+        with ESMTP id S229831AbjDMD21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 23:32:07 -0400
-X-Greylist: delayed 484 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 12 Apr 2023 20:32:06 PDT
-Received: from out-1.mta1.migadu.com (out-1.mta1.migadu.com [95.215.58.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF36212C
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 20:32:05 -0700 (PDT)
-Message-ID: <2c5d4e9b-ec7d-dbfc-7e95-e75b66b68d3c@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1681356237;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SZZA5T91TnAzL69LK031bioqqsWD859qJR93vJBrvfE=;
-        b=Fu7DtGRKCCChMSJx7TqN/FEyNOi14o8+joZ1seqjSZVe2hGT5OtJ+o9uXSBXWpzlZTNcij
-        jI6GZAFr7dXw11Dq3ayXX9WnqPXFqb5zxhbbcXXbNMgApmabNiRidO2XjEbnqSRZ8HnAq7
-        2DqudkmbITa57FLXnmUaOOiPhfdYVps=
-Date:   Thu, 13 Apr 2023 11:23:21 +0800
+        Wed, 12 Apr 2023 23:28:27 -0400
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F402E139;
+        Wed, 12 Apr 2023 20:28:25 -0700 (PDT)
+Received: from localhost.localdomain ([172.16.0.254])
+        (user=u201911681@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 33D3PeWP002793-33D3PeWQ002793
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 13 Apr 2023 11:25:48 +0800
+From:   Zhou Shide <u201911681@hust.edu.cn>
+To:     Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Bai Ping <ping.bai@nxp.com>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        Zhou Shide <u201911681@hust.edu.cn>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] clk: imx: clk-imx8mm: fix memory leak issue in 'imx8mm_clocks_probe'
+Date:   Thu, 13 Apr 2023 03:24:39 +0000
+Message-Id: <20230413032439.1706448-1-u201911681@hust.edu.cn>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: Re: [PATCH 1/2] blk-stat: fix QUEUE_FLAG_STATS clear
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     axboe@kernel.dk, josef@toxicpanda.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        Chengming Zhou <zhouchengming@bytedance.com>
-References: <20230412160754.1981705-1-chengming.zhou@linux.dev>
- <ZDbmlYIrRpkWRZla@slm.duckdns.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Chengming Zhou <chengming.zhou@linux.dev>
-In-Reply-To: <ZDbmlYIrRpkWRZla@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: u201911681@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/13 01:12, Tejun Heo wrote:
-> On Thu, Apr 13, 2023 at 12:07:53AM +0800, chengming.zhou@linux.dev wrote:
->> From: Chengming Zhou <zhouchengming@bytedance.com>
->>
->> We need to set QUEUE_FLAG_STATS for two cases:
->> 1. blk_stat_enable_accounting()
->> 2. blk_stat_add_callback()
->>
->> So we should clear it only when ((q->stats->accounting == 0) &&
->> list_empty(&q->stats->callbacks)).
->>
->> blk_stat_disable_accounting() only check if q->stats->accounting
->> is 0 before clear the flag, this patch fix it.
->>
->> Also add list_empty(&q->stats->callbacks)) check when enable, or
->> the flag is already set.
->>
->> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-> 
-> Acked-by: Tejun Heo <tj@kernel.org>
-> 
-> It'd be useful to explicitly illustrate the buggy behavior in the
-> description (e.g. if you do X, Y and then Z, then X incorrectly loses
+The function imx8mm_clocks_probe() has two main issues:
+- The of_iomap() function may cause a memory leak.
+- Memory allocated for 'clk_hw_data' may not be freed properly
+in some paths.
 
-Yes, I will add below buggy behavior in the next version:
+To fix these issues, this commit replaces the use of of_iomap()
+with devm_of_iomap() and replaces kzalloc() with devm_kzalloc().
+This ensures that all memory is properly managed and automatically
+freed when the device is removed.
 
-This bug can be reproduced as below on kernel without BLK_DEV_THROTTLING
-(since it will unconditionally enable accounting, see the second patch).
+In addition, when devm_of_iomap() allocates memory with an error,
+it will first jump to label "unregister_hws" and
+then return PTR_ ERR(base).
 
-# cat /sys/block/sr0/queue/scheduler
-none mq-deadline [bfq]
+Fixes: 9c71f9ea35d7 ("clk: imx: imx8mm: Switch to clk_hw based API")
+Fixes: ba5625c3e272 ("clk: imx: Add clock driver support for imx8mm")
+Signed-off-by: Zhou Shide <u201911681@hust.edu.cn>
+---
+The issue is discovered by static analysis, and the patch is not tested yet.
 
-# cat /sys/kernel/debug/block/sr0/state
-SAME_COMP|IO_STAT|INIT_DONE|STATS|REGISTERED|NOWAIT|30
+ drivers/clk/imx/clk-imx8mm.c | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
-# echo none > /sys/block/sr0/queue/scheduler
+diff --git a/drivers/clk/imx/clk-imx8mm.c b/drivers/clk/imx/clk-imx8mm.c
+index b618892170f2..e6e0bb4805a6 100644
+--- a/drivers/clk/imx/clk-imx8mm.c
++++ b/drivers/clk/imx/clk-imx8mm.c
+@@ -303,7 +303,7 @@ static int imx8mm_clocks_probe(struct platform_device *pdev)
+ 	void __iomem *base;
+ 	int ret;
+ 
+-	clk_hw_data = kzalloc(struct_size(clk_hw_data, hws,
++	clk_hw_data = devm_kzalloc(dev, struct_size(clk_hw_data, hws,
+ 					  IMX8MM_CLK_END), GFP_KERNEL);
+ 	if (WARN_ON(!clk_hw_data))
+ 		return -ENOMEM;
+@@ -320,10 +320,12 @@ static int imx8mm_clocks_probe(struct platform_device *pdev)
+ 	hws[IMX8MM_CLK_EXT4] = imx_get_clk_hw_by_name(np, "clk_ext4");
+ 
+ 	np = of_find_compatible_node(NULL, NULL, "fsl,imx8mm-anatop");
+-	base = of_iomap(np, 0);
++	base = devm_of_iomap(dev, np, 0, NULL);
+ 	of_node_put(np);
+-	if (WARN_ON(!base))
+-		return -ENOMEM;
++	if (WARN_ON(IS_ERR(base))) {
++		ret = PTR_ERR(base);
++		goto unregister_hws;
++	}
+ 
+ 	hws[IMX8MM_AUDIO_PLL1_REF_SEL] = imx_clk_hw_mux("audio_pll1_ref_sel", base + 0x0, 0, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
+ 	hws[IMX8MM_AUDIO_PLL2_REF_SEL] = imx_clk_hw_mux("audio_pll2_ref_sel", base + 0x14, 0, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
+@@ -399,8 +401,10 @@ static int imx8mm_clocks_probe(struct platform_device *pdev)
+ 
+ 	np = dev->of_node;
+ 	base = devm_platform_ioremap_resource(pdev, 0);
+-	if (WARN_ON(IS_ERR(base)))
+-		return PTR_ERR(base);
++	if (WARN_ON(IS_ERR(base))) {
++		ret = PTR_ERR(base);
++		goto unregister_hws;
++	}
+ 
+ 	/* Core Slice */
+ 	hws[IMX8MM_CLK_A53_DIV] = imx8m_clk_hw_composite_core("arm_a53_div", imx8mm_a53_sels, base + 0x8000);
+-- 
+2.34.1
 
-# cat /sys/kernel/debug/block/sr0/state
-SAME_COMP|IO_STAT|INIT_DONE|REGISTERED|NOWAIT
-
-# cat /sys/block/sr0/queue/wbt_lat_usec
-75000
-
-We can see that after changing elevator from "bfq" to "none", "STATS" flag
-is lost even though WBT callback still need it.
-
-
-> accounting). Can you also please add the appropriate stable cc?
-
-Ok, will do.
-
-Thanks.
-
-> 
-> Thanks.
-> 
