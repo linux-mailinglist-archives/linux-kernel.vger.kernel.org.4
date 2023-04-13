@@ -2,119 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F09BB6E0D9D
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 14:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 206FF6E0CE3
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 13:45:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbjDMMn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 08:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50732 "EHLO
+        id S230392AbjDMLpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 07:45:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbjDMMn4 (ORCPT
+        with ESMTP id S229853AbjDMLpk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 08:43:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E9893D1
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 05:43:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A9E476146C
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 12:43:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 629DDC433D2;
-        Thu, 13 Apr 2023 12:43:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681389834;
-        bh=yOCVEPTkqmwzrbgaO4trLtk8j+cugrX7CunNTUSAF4o=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=eo/swswdEMkWLuTPtC+XSfNe7DxDo2uPvkry0F0awj0Xy5GYN62lRckycHDCOCMu7
-         xTfmUHC881NkN6xEPSTxJs6G5rwPTk/OUcFxbKzYP8kJyp0q6BJrFAjtE0YVg52dGa
-         l93ocDixpnNZVssYz3IIvocuBFfTq0t72K+VZEeibMLvktwDqj3HLCz/2iA+6z3HW4
-         MyiaNaKS4VNCyx0+U8BzxmodHPMZM8Tf0Vnee8zXIaaAPUUcYamTPCurR1YXn2X/Wc
-         JUiXEaMgYxyt1j25oDps/VYxBPIEa4XhDa1xKZFX4xJMaXtguQe0XbjNSael1HYD+u
-         ONyEslOtsuPag==
-Message-ID: <cc3ceecef10fabf6856e29c2dd22b040b3ea757b.camel@kernel.org>
-Subject: Re: [PATCH] drm: make drm_dp_add_payload_part2 gracefully handle
- NULL state pointer
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Harry Wentland <harry.wentland@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Date:   Thu, 13 Apr 2023 08:43:52 -0400
-In-Reply-To: <87edooarpq.fsf@intel.com>
-References: <20230413111254.22458-1-jlayton@kernel.org>
-         <87edooarpq.fsf@intel.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Thu, 13 Apr 2023 07:45:40 -0400
+Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A096D2729;
+        Thu, 13 Apr 2023 04:45:19 -0700 (PDT)
+Received: from mgb4.digiteq.red (unknown [62.77.71.229])
+        by mx.gpxsee.org (Postfix) with ESMTPSA id 0F981232A0;
+        Thu, 13 Apr 2023 13:45:17 +0200 (CEST)
+From:   tumic@gpxsee.org
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Martin=20T=C5=AFma?= <martin.tuma@digiteqautomotive.com>
+Subject: [RESEND PATCH v6 0/1] Digiteq Automotive MGB4 driver
+Date:   Thu, 13 Apr 2023 14:45:33 +0200
+Message-Id: <20230413124534.7147-1-tumic@gpxsee.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,T_SPF_HELO_TEMPERROR,
+        T_SPF_TEMPERROR,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-04-13 at 15:31 +0300, Jani Nikula wrote:
-> On Thu, 13 Apr 2023, Jeff Layton <jlayton@kernel.org> wrote:
-> > I've been experiencing some intermittent crashes down in the display
-> > driver code. The symptoms are ususally a line like this in dmesg:
-> >=20
-> >     amdgpu 0000:30:00.0: [drm] Failed to create MST payload for port 00=
-0000006d3a3885: -5
-> >=20
-> > ...followed by an Oops due to a NULL pointer dereference.
-> >=20
-> > The real bug is probably in the caller of this function, which is
-> > passing it a NULL state pointer, but this patch at least keeps my
-> > machine from oopsing when this occurs.
->=20
-> My fear is that papering over this makes the root cause harder to find.
->=20
-> Cc: Harry, Alex
->=20
->=20
-> BR,
-> Jani.
->=20
->=20
+From: Martin Tůma <martin.tuma@digiteqautomotive.com>
 
-I'm happy to help track down the root cause. Display drivers are
-somewhat outside my wheelhouse though.
+Hi,
+This patch adds a driver for the Digiteq Automotive MGB4 grabber card.
+MGB4 is a modular frame grabber PCIe card for automotive video interfaces
+(FPD-Link and GMSL for now). It is based on a Xilinx FPGA and uses their
+XDMA IP core for DMA transfers. Additionally, Xilinx I2C and SPI IP cores
+which already have drivers in linux are used in the design.
 
-Maybe we can throw a WARNING when this happens? I'd just like it to not
-crash my machine.
+The driver is a quite standard v4l2 driver, with one exception - there are
+a lot of sysfs options that may/must be set before opening the v4l2 device
+to adapt the card on a specific signal (see mgb4.rst for details)
+as the card must be able to work with various signal sources (or displays)
+that can not be auto-detected.
+
+I have run the driver through the v4l2-compliance test suite for both the
+input and the output and the results look fine to me (I can provide the
+output if required).
+
+Changes in v6:
+* Rebased to current master that includes the Xilinx XDMA driver.
+
+Changes in v5:
+* Removed unused <linux/version.h> includes
+
+Changes in v4:
+* Redesigned the signal change handling logic. Now using the propper timings
+  API in the video input driver and a propper open() syscall check/logic in
+  the video output driver.
+* Fixed all minor issues from v3 review.
+* 'checkpatch.pl --strict' used for checking the code.
+
+Changes in v3:
+* Rebased the DMA transfers part to use the new XDMA driver from Xilinx/AMD
+
+Changes in v2:
+* Completely rewritten the original Xilinx's XDMA driver to meet kernel code
+  standards.
+* Added all required "to" and "cc" mail addresses.
+
+Martin Tůma (1):
+  Added Digiteq Automotive MGB4 driver
+
+ Documentation/admin-guide/media/mgb4.rst      | 352 ++++++++
+ .../admin-guide/media/pci-cardlist.rst        |   1 +
+ .../admin-guide/media/v4l-drivers.rst         |   1 +
+ MAINTAINERS                                   |   7 +
+ drivers/media/pci/Kconfig                     |   1 +
+ drivers/media/pci/Makefile                    |   1 +
+ drivers/media/pci/mgb4/Kconfig                |  17 +
+ drivers/media/pci/mgb4/Makefile               |   6 +
+ drivers/media/pci/mgb4/mgb4_cmt.c             | 247 ++++++
+ drivers/media/pci/mgb4/mgb4_cmt.h             |  16 +
+ drivers/media/pci/mgb4/mgb4_core.c            | 641 ++++++++++++++
+ drivers/media/pci/mgb4/mgb4_core.h            |  65 ++
+ drivers/media/pci/mgb4/mgb4_dma.c             | 123 +++
+ drivers/media/pci/mgb4/mgb4_dma.h             |  18 +
+ drivers/media/pci/mgb4/mgb4_i2c.c             | 140 +++
+ drivers/media/pci/mgb4/mgb4_i2c.h             |  35 +
+ drivers/media/pci/mgb4/mgb4_io.h              |  39 +
+ drivers/media/pci/mgb4/mgb4_regs.c            |  30 +
+ drivers/media/pci/mgb4/mgb4_regs.h            |  35 +
+ drivers/media/pci/mgb4/mgb4_sysfs.h           |  18 +
+ drivers/media/pci/mgb4/mgb4_sysfs_in.c        | 780 ++++++++++++++++
+ drivers/media/pci/mgb4/mgb4_sysfs_out.c       | 732 +++++++++++++++
+ drivers/media/pci/mgb4/mgb4_sysfs_pci.c       |  86 ++
+ drivers/media/pci/mgb4/mgb4_trigger.c         | 208 +++++
+ drivers/media/pci/mgb4/mgb4_trigger.h         |   8 +
+ drivers/media/pci/mgb4/mgb4_vin.c             | 830 ++++++++++++++++++
+ drivers/media/pci/mgb4/mgb4_vin.h             |  63 ++
+ drivers/media/pci/mgb4/mgb4_vout.c            | 501 +++++++++++
+ drivers/media/pci/mgb4/mgb4_vout.h            |  58 ++
+ 29 files changed, 5059 insertions(+)
+ create mode 100644 Documentation/admin-guide/media/mgb4.rst
+ create mode 100644 drivers/media/pci/mgb4/Kconfig
+ create mode 100644 drivers/media/pci/mgb4/Makefile
+ create mode 100644 drivers/media/pci/mgb4/mgb4_cmt.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_cmt.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_core.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_core.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_dma.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_dma.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_i2c.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_i2c.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_io.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_regs.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_regs.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_in.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_out.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_pci.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_trigger.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_trigger.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vin.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vin.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vout.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vout.h
 
 
-> >=20
-> > Link: https://bugzilla.redhat.com/show_bug.cgi?id=3D2184855
-> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> > ---
-> >  drivers/gpu/drm/display/drm_dp_mst_topology.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/gpu/drm/display/drm_dp_mst_topology.c b/drivers/gp=
-u/drm/display/drm_dp_mst_topology.c
-> > index 38dab76ae69e..87ad406c50f9 100644
-> > --- a/drivers/gpu/drm/display/drm_dp_mst_topology.c
-> > +++ b/drivers/gpu/drm/display/drm_dp_mst_topology.c
-> > @@ -3404,7 +3404,8 @@ int drm_dp_add_payload_part2(struct drm_dp_mst_to=
-pology_mgr *mgr,
-> > =20
-> >  	/* Skip failed payloads */
-> >  	if (payload->vc_start_slot =3D=3D -1) {
-> > -		drm_dbg_kms(state->dev, "Part 1 of payload creation for %s failed, s=
-kipping part 2\n",
-> > +		drm_dbg_kms(state ? state->dev : NULL,
-> > +			    "Part 1 of payload creation for %s failed, skipping part 2\n",
-> >  			    payload->port->connector->name);
-> >  		return -EIO;
-> >  	}
->=20
+base-commit: de4664485abbc0529b1eec44d0061bbfe58a28fb
+-- 
+2.40.0
 
---=20
-Jeff Layton <jlayton@kernel.org>
