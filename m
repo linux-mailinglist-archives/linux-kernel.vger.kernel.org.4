@@ -2,162 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFCC56E10AB
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 17:11:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 573386E10A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 17:11:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbjDMPLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 11:11:17 -0400
+        id S230010AbjDMPLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 11:11:13 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbjDMPLO (ORCPT
+        with ESMTP id S229522AbjDMPLM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 11:11:14 -0400
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B02210DF;
-        Thu, 13 Apr 2023 08:11:11 -0700 (PDT)
+        Thu, 13 Apr 2023 11:11:12 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D93E55
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 08:11:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
-        MIME-Version:Date:Message-ID:content-disposition;
-        bh=UYgY+Jc5tV+vuRR3xCQtdYSUVhJdL1c0C1D9hQyQ6oA=; b=fVq1Zr0KPw6l5hQ7aPS0u5EKaP
-        uLzu13KNBK5cCj4yldrOwlmYpZ/8CKIKkiFB38/2E0DFvR7sIA5R2IEa6QXSuRV3ULEHyJL/8X/yV
-        W3a/L6USOqP90Nt6Zz6u+bmTyhskRTOq+3H4cp0wnS4RnXm6XBi+jbHKadt1A10BWxErVPAXORqBu
-        w36cbfdeJnmqD1Rb9640OCSxWYJfNhu8Z3pziZdJR7ozrfeYWvL52WJw888lBH6pyHwyVU/T2F5EY
-        /yfG/ozqF3OjQmCDkrgssSmmRgR8JuZBrCtAabSeF9hQ+P/FfSWbxRfmSxchgvbaFSStOvvjMYgSh
-        s9CjMkTA==;
-Received: from s0106a84e3fe8c3f3.cg.shawcable.net ([24.64.144.200] helo=[192.168.0.10])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1pmyb1-007m0l-TO; Thu, 13 Apr 2023 09:10:48 -0600
-Message-ID: <961691d0-7224-caad-6c19-d9c8ca07a801@deltatee.com>
-Date:   Thu, 13 Apr 2023 09:10:45 -0600
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=oN2WyCXZ74bahdqn9nb+GnHcWbtR5YsHBVv1xso685M=; b=HCIeR8SNYb+9dDhH0hV4OlGugn
+        /eguTNW6K/W0UiLDsjsyhY6WOIPuwT5G1RDgr8YFWb0vW4QZlpAh6E50QcmVpUJjFvPTlfGiE0WjJ
+        V0bcPPe0wyaF76jg01Q5zgSmrf9Bcfj+D2fL77jO8WmxJmhqyB0792EFAXwwx1leAJGTroe4bPXuE
+        ffvNPOH22a+jordWPsj5aWahdJlNFeeboy06ayYYsMispHCBIPkTAQ0VHidDdX5E1Z0H3TvQjCoM5
+        s5lKW8Q/IOh75lnMZfuHuFkt00XqPpJ4E07wl8eZxOrT0n9SdhUj4IT75ve2wIRrobJzO1I4gLHg3
+        ARhQPUHQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pmybB-00ElfV-1F;
+        Thu, 13 Apr 2023 15:10:57 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CEC2D3002A6;
+        Thu, 13 Apr 2023 17:10:55 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 989C72023D643; Thu, 13 Apr 2023 17:10:55 +0200 (CEST)
+Date:   Thu, 13 Apr 2023 17:10:55 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     linux-kernel@vger.kernel.org, Aaron Lu <aaron.lu@intel.com>,
+        Olivier Dion <odion@efficios.com>, michael.christie@oracle.com
+Subject: Re: [RFC PATCH v5] sched: Fix performance regression introduced by
+ mm_cid
+Message-ID: <20230413151055.GN4253@hirez.programming.kicks-ass.net>
+References: <20230413140248.230479-1-mathieu.desnoyers@efficios.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-To:     Yu Kuai <yukuai1@huaweicloud.com>, dm-devel@redhat.com,
-        song@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-        yukuai3@huawei.com, yi.zhang@huawei.com, yangerkun@huawei.com
-References: <20230413113217.1934353-1-yukuai1@huaweicloud.com>
- <20230413113217.1934353-6-yukuai1@huaweicloud.com>
-Content-Language: en-CA
-From:   Logan Gunthorpe <logang@deltatee.com>
-In-Reply-To: <20230413113217.1934353-6-yukuai1@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 24.64.144.200
-X-SA-Exim-Rcpt-To: yukuai1@huaweicloud.com, dm-devel@redhat.com, song@kernel.org, linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org, yukuai3@huawei.com, yi.zhang@huawei.com, yangerkun@huawei.com
-X-SA-Exim-Mail-From: logang@deltatee.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230413140248.230479-1-mathieu.desnoyers@efficios.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH -next v6 5/5] md: protect md_thread with rcu
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Apr 13, 2023 at 10:02:48AM -0400, Mathieu Desnoyers wrote:
+
+> +static inline void __mm_cid_put(struct mm_struct *mm, int cid)
+> +{
+> +	if (cid < 0)
+> +		return;
+> +	cpumask_clear_cpu(cid, mm_cidmask(mm));
+> +}
+> +
+> +/*
+> + * The per-mm/cpu cid can have the MM_CID_LAZY_PUT flag set or transition to the
+> + * MM_CID_UNSET state without holding the rq lock, but the rq lock needs to be
+> + * held to transition to other states.
+> + */
+> +static inline void mm_cid_put_lazy(struct task_struct *t)
+> +{
+> +	struct mm_struct *mm = t->mm;
+> +	int *pcpu_cid, cid;
+> +
+> +	lockdep_assert_rq_held(this_rq());
+> +	pcpu_cid = this_cpu_ptr(mm->pcpu_cid);
+> +	cid = READ_ONCE(*pcpu_cid);
+> +	if (!mm_cid_is_lazy_put(cid))
+> +		return;
+> +	if (!try_cmpxchg(pcpu_cid, &cid, MM_CID_UNSET))
+> +		return;
+> +	__mm_cid_put(mm, mm_cid_clear_lazy_put(cid));
+> +}
+> +
+> +static inline void mm_cid_put(struct task_struct *t)
+> +{
+> +	struct mm_struct *mm = t->mm;
+> +	int *pcpu_cid, cid, res;
+> +
+> +	lockdep_assert_rq_held(this_rq());
+> +	WARN_ON_ONCE(t->mm_cid < 0);
+> +	pcpu_cid = this_cpu_ptr(mm->pcpu_cid);
+> +	cid = READ_ONCE(*pcpu_cid);
+> +	for (;;) {
+> +		if (mm_cid_is_unset(cid))
+> +			return;
+> +		WARN_ON_ONCE(mm_cid_clear_lazy_put(cid) != t->mm_cid);
+> +		/*
+> +		 * Attempt transition from valid or lazy-put to unset.
+> +		 */
+> +		res = cmpxchg(pcpu_cid, cid, MM_CID_UNSET);
+> +		if (res == cid)
+> +			break;
+> +		cid = res;
+
+		if (try_cmpxchg(pcpu_cid, &cid, MM_CID_UNSET))
+			break;
+
+> +	}
 
 
-On 2023-04-13 05:32, Yu Kuai wrote:
-> From: Yu Kuai <yukuai3@huawei.com>
-> 
-> Our test reports a uaf for 'mddev->sync_thread':
-> 
-> T1                      T2
-> md_start_sync
->  md_register_thread
->  // mddev->sync_thread is set
-> 			raid1d
-> 			 md_check_recovery
-> 			  md_reap_sync_thread
-> 			   md_unregister_thread
-> 			    kfree
-> 
->  md_wakeup_thread
->   wake_up
->   ->sync_thread was freed
-> 
-> Root cause is that there is a small windown between register thread and
-> wake up thread, where the thread can be freed concurrently.
-> 
-> Currently, a global spinlock 'pers_lock' is borrowed to protect
-> 'mddev->thread', this problem can be fixed likewise, however, there are
-> similar problems elsewhere, and use a global lock for all the cases is
-> not good.
-> 
-> This patch protect all md_thread with rcu.
-> 
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> ---
->  drivers/md/md-bitmap.c    | 10 ++++--
->  drivers/md/md-cluster.c   |  7 ++--
->  drivers/md/md-multipath.c |  4 +--
->  drivers/md/md.c           | 69 ++++++++++++++++++---------------------
->  drivers/md/md.h           |  8 ++---
->  drivers/md/raid1.c        |  7 ++--
->  drivers/md/raid1.h        |  2 +-
->  drivers/md/raid10.c       | 21 +++++++-----
->  drivers/md/raid10.h       |  2 +-
->  drivers/md/raid5-cache.c  | 22 ++++++++-----
->  drivers/md/raid5.c        | 15 +++++----
->  drivers/md/raid5.h        |  2 +-
->  12 files changed, 91 insertions(+), 78 deletions(-)
-> 
-> diff --git a/drivers/md/md-bitmap.c b/drivers/md/md-bitmap.c
-> index 29fd41ef55a6..ab27f66dbb1f 100644
-> --- a/drivers/md/md-bitmap.c
-> +++ b/drivers/md/md-bitmap.c
-> @@ -1221,13 +1221,19 @@ static bitmap_counter_t *md_bitmap_get_counter(struct bitmap_counts *bitmap,
->  static void mddev_set_timeout(struct mddev *mddev, unsigned long timeout,
->  			      bool force)
+
+> +	__mm_cid_put(mm, mm_cid_clear_lazy_put(cid));
+> +}
+> +
+> +static inline int __mm_cid_try_get(struct mm_struct *mm)
 >  {
-> -	struct md_thread *thread = mddev->thread;
-> +	struct md_thread *thread;
-> +
-> +	rcu_read_lock();
-> +	thread = rcu_dereference(mddev->thread);
+>  	struct cpumask *cpumask;
+>  	int cid;
 >  
->  	if (!thread)
-> -		return;
-> +		goto out;
->  
->  	if (force || thread->timeout < MAX_SCHEDULE_TIMEOUT)
->  		thread->timeout = timeout;
-> +
-> +out:
-> +	rcu_read_unlock();
+>  	cpumask = mm_cidmask(mm);
+> +	/*
+> +	 * Retry finding first zero bit if the mask is temporarily
+> +	 * filled. This only happens during concurrent migrate-from
+> +	 * which owns a cid without holding a rq lock.
+> +	 */
+> +	do {
+> +		cid = cpumask_first_zero(cpumask);
+> +	} while (cid >= nr_cpu_ids);
+
+Urgh..
+	for (;;) {
+		cid = cpumask_first_zero(cpumask);
+		if (cid < nr_cpu_ids)
+			break;
+		cpu_relax();
+	}
+
+
+> +	if (!cpumask_test_and_set_cpu(cid, cpumask))
+> +		return cid;
+> +	/*
+> +	 * If initial find-then-test-and-set fails due to concurrent updates,
+> +	 * attempt a brute-force test-and-set from 0 to nr_cpu_ids-1 to
+> +	 * eliminate the race between find and test-and-set. This does not
+> +	 * strictly provide forward-progress guarantees, because we could
+> +	 * theoretically be racing against concurrent updates of the mask, but
+> +	 * it does have much better odds to succeed in contended cases than
+> +	 * the find-then-test-and-set approach.
+> +	 */
+> +	for (cid = 0; cid < nr_cpu_ids; cid++) {
+> +		if (!cpumask_test_and_set_cpu(cid, cpumask))
+> +			return cid;
+> +	}
+
+Yikes, we have IRQs disabled and hold rq->lock, this is a very expensive
+proposition. Also, afaict all *should* just work without this on.
+
+> +	return -1;
 >  }
 >  
->  /*
-> diff --git a/drivers/md/md-cluster.c b/drivers/md/md-cluster.c
-> index 10e0c5381d01..672dfa6a40ec 100644
-> --- a/drivers/md/md-cluster.c
-> +++ b/drivers/md/md-cluster.c
-> @@ -362,8 +362,8 @@ static void __recover_slot(struct mddev *mddev, int slot)
->  
->  	set_bit(slot, &cinfo->recovery_map);
->  	if (!cinfo->recovery_thread) {
-> -		cinfo->recovery_thread = md_register_thread(recover_bitmaps,
-> -				mddev, "recover");
-> +		rcu_assign_pointer(cinfo->recovery_thread,
-> +			md_register_thread(recover_bitmaps, mddev, "recover"));
->  		if (!cinfo->recovery_thread) {
->  			pr_warn("md-cluster: Could not create recovery thread\n");
->  			return;
-> @@ -889,7 +889,8 @@ static int join(struct mddev *mddev, int nodes)
->  	}
->  	/* Initiate the communication resources */
->  	ret = -ENOMEM;
-> -	cinfo->recv_thread = md_register_thread(recv_daemon, mddev, "cluster_recv");
-> +	rcu_assign_pointer(cinfo->recv_thread,
-> +			md_register_thread(recv_daemon, mddev, "cluster_recv"));
->  	if (!cinfo->recv_thread) {
+> +static inline int __mm_cid_get(struct mm_struct *mm)
+>  {
+> +	int cid;
+> +
+> +	if (!READ_ONCE(use_cid_lock)) {
 
-This looks like it'll hit sparse warnings. without an
-rcu_access_pointer(). Might be nicer to use a temporary variable, check
-that it's not null, then call rcu_assign_pointer().
+This all hurts my brain, but shouldn't you be able to replace
+use_cid_lock with raw_spin_is_locked(&cid_lock) ?
+
+> +		cid = __mm_cid_try_get(mm);
+> +		if (cid >= 0)
+> +			goto end;
+> +		raw_spin_lock(&cid_lock);
+> +	} else {
+> +		raw_spin_lock(&cid_lock);
+> +		cid = __mm_cid_try_get(mm);
+> +		if (cid >= 0)
+> +			goto unlock;
+> +	}
+> +
+> +	/*
+> +	 * cid concurrently allocated. Retry while forcing following
+> +	 * allocations to use the cid_lock to ensure forward progress.
+> +	 */
+> +	WRITE_ONCE(use_cid_lock, 1);
+> +	/*
+> +	 * Set use_cid_lock before allocation. Only care about program order
+> +	 * because this is for forward progress.
+> +	 */
+> +	barrier();
+> +	/*
+> +	 * Retry until it succeeds. It is guaranteed to eventually
+> +	 * succeed once all newcoming allocations observe the
+> +	 * use_cid_lock flag set.
+> +	 */
+> +	do {
+> +		cid = __mm_cid_try_get(mm);
+> +	} while (cid < 0);
+> +	/*
+> +	 * Allocate before clearing use_cid_lock. Only care about
+> +	 * program order because this is for forward progress.
+> +	 */
+> +	barrier();
+> +	WRITE_ONCE(use_cid_lock, 0);
+> +unlock:
+> +	raw_spin_unlock(&cid_lock);
+> +end:
+> +	return cid;
+>  }
+
+
+Anyway, I ran the thing and __schedule()'s dropped from around 11% to 5%
+
+4.98%     0.04%  swapper          [kernel.vmlinux]            [k] schedule_idle
+       |
+       --4.95%--schedule_idle
+                |
+                --4.94%--__schedule
+                         |
+                         |--2.36%--mm_cid_get
+                         |
+                         |--0.72%--finish_task_switch.isra.0
+                         |          |
+                         |           --0.61%--asm_sysvec_call_function_single
+                         |                     |
+                         |                      --0.51%--sysvec_call_function_single
+                         |
+                         --0.59%--switch_mm_irqs_off
+
+So improved, but not as good as my glorious hack ;-)
+
+Also, I see that even migrate_from is visible
+
+5.26%     0.74%  sched-messaging  [kernel.vmlinux]            [k] try_to_wake_up
+       |
+       |--4.52%--try_to_wake_up
+       |          |
+       |          |--1.49%--set_task_cpu
+       |          |          |
+       |          |           --1.18%--sched_mm_cid_migrate_from
+       |          |
+       |          |--1.24%--select_task_rq_fair
+       |          |
+       |          |--0.73%--ttwu_do_activate
+       |          |          |
+       |          |           --0.57%--enqueue_task_fair
+       |          |
+       |           --0.50%--ttwu_queue_wakelist
+       |
+       --0.74%--start_thread
+
+
+
