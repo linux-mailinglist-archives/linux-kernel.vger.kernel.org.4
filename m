@@ -2,89 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 885D96E1521
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 21:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C0266E1522
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 21:25:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbjDMTY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 15:24:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33598 "EHLO
+        id S229839AbjDMTZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 15:25:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjDMTY5 (ORCPT
+        with ESMTP id S229546AbjDMTZq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 15:24:57 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56EFF6A62
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 12:24:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=IHc6XnCkNX2Kn8L3W9jTWAcrwTarHbGJNtz2K6OiM0A=; b=O9Qlz2F5rPuvsV4ey3fsUUchnh
-        dJ1p9DcMrOOSfg3USY7OMeXQSEE0owsygytdTlgtPdhlUui8IdTkV2vlaq8As+w9zjaKR7fUzkP/v
-        vpd5ZmsIJNO5r7FSeeYm5LQpMo6oVYx6+bnAUKijlG6rJaWvtcFGNeGF14bdj7JcyiZ9RPvoHRt4W
-        v3vrAlbiy9OwGBY25DdaDIdmvPdxStkA3zajmNh1Kn6pNolAusGxQJKSPyAk6FYQSmjPiLbr5/8N3
-        9rJaxN1B/Of9P2V8bTdJVDD4I7bAz3CH702ajBAyMHCMl0f5wPfrd2HiAeiohKkzeukj1FZt+ZXhN
-        8b0U1tfw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pn2Yt-0085Bu-F1; Thu, 13 Apr 2023 19:24:51 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1343A3001E4;
-        Thu, 13 Apr 2023 21:24:50 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E08F924C37001; Thu, 13 Apr 2023 21:24:49 +0200 (CEST)
-Date:   Thu, 13 Apr 2023 21:24:49 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Miroslav Benes <mbenes@suse.cz>
-Subject: Re: [PATCH 3/3] objtool: Generate ORC data for __pfx code
-Message-ID: <20230413192449.GQ4253@hirez.programming.kicks-ass.net>
-References: <cover.1681331135.git.jpoimboe@kernel.org>
- <bc3344e51f3e87102f1301a0be0f72a7689ea4a4.1681331135.git.jpoimboe@kernel.org>
- <20230413112426.GM4253@hirez.programming.kicks-ass.net>
- <20230413152933.cxhmocvbdlucvizx@treble>
+        Thu, 13 Apr 2023 15:25:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 005FD5FE4
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 12:25:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D60560F8B
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 19:25:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86386C433EF;
+        Thu, 13 Apr 2023 19:25:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681413942;
+        bh=v2u5oYGNyJxsqoJq7fHElU/OCH8U1BXBn6+cfSORKYA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UefcNkeBeZA2V7UO619RutpO7ZpB+ffNqzOa2ZR7QMMx560EHAdLqZjNKAc7gUqrJ
+         8elF0zE6VUf7u7ti776W2wVRqsaj1ozhryqTuQxLaq3La2u1SO0yZPdYh5XUfQ3cBc
+         cVPqnj4AgVZW+mj7rghuP2hWt0B2bOaWOWletfRCpit2cVb7XuCeLvhr1CyXBhrs9M
+         QAHBaZmUcBI6OAWvxkTlXuyiGdCisetRvCkPaFAN3F64bVMWgJ6bUo3Tvc/gizm6Ww
+         umzNAbfG202q1sJ+S0VdDW99ks0L4dnzp4fsSGj1rGKwroPgmmofkfGQvFTxJvwqWU
+         lqzsmcOa+16sg==
+Date:   Thu, 13 Apr 2023 12:25:40 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Subject: Re: [f2fs-dev] [PATCH] f2fs: fix to trigger a checkpoint in the end
+ of foreground garbage collection
+Message-ID: <ZDhXNMkgnmjccIhF@google.com>
+References: <20230324071028.336982-1-chao@kernel.org>
+ <ZCyZGgf4RSEjyHTF@google.com>
+ <a4e49177-3959-eb2b-996c-5d07b7390495@kernel.org>
+ <ZC2aA+i5+HpdJ6M2@google.com>
+ <f4ae2b3a-0aff-8941-4081-9dc53334c590@kernel.org>
+ <ZDSaCsLSYLyzUxBQ@google.com>
+ <6c9abd05-297a-ea4f-fd5c-9f4d9fb488ab@kernel.org>
+ <ZDgmGoWx2bHNO1zP@google.com>
+ <ZDgmvf6O488GG7tH@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230413152933.cxhmocvbdlucvizx@treble>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZDgmvf6O488GG7tH@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 08:29:33AM -0700, Josh Poimboeuf wrote:
-> On Thu, Apr 13, 2023 at 01:24:26PM +0200, Peter Zijlstra wrote:
-> > > +	if (!insn->cfi) {
-> > > +		/*
-> > > +		 * This can happen if stack validation isn't enabled or the
-> > > +		 * function is annotated with STACK_FRAME_NON_STANDARD.
-> > > +		 */
-> > > +		return 0;
-> > > +	}
-> > > +
-> > > +	/* Propagate insn->cfi to the prefix code */
-> > > +	cfi = cfi_hash_find_or_add(insn->cfi);
-> > > +	for (; prev != insn; prev = next_insn_same_sec(file, prev))
-> > > +		prev->cfi = cfi;
-> > > +
-> > >  	return 0;
-> > >  }
-> > 
-> > FWIW, this makes the whole thing hard rely on the prefix being single
-> > byte NOPs -- which they are, but perhaps we should assert this?
-> 
-> Couldn't they be any stack-invariant instructions?
+Fixed a xfstests failure.
 
-Hmm, I was thikning that since we don't know the size of the
-instructions being written, we need CFI for all offsets. But perhaps,
-since we do a left-match on IP, only one entry at the __pfx+0 location
-would work?
+From 400c722c2117660b83190c88e5442d63fbbffe6e Mon Sep 17 00:00:00 2001
+From: Jaegeuk Kim <jaegeuk@kernel.org>
+Date: Mon, 10 Apr 2023 14:48:50 -0700
+Subject: [PATCH] f2fs: refactor f2fs_gc to call checkpoint in urgent condition
+
+The major change is to call checkpoint, if there's not enough space while having
+some prefree segments in FG_GC case.
+
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+---
+ fs/f2fs/gc.c | 27 +++++++++++++--------------
+ 1 file changed, 13 insertions(+), 14 deletions(-)
+
+diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+index c748cdfb0501..ba5775dcade6 100644
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -1829,7 +1829,10 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+ 		goto stop;
+ 	}
+ 
+-	if (gc_type == BG_GC && has_not_enough_free_secs(sbi, 0, 0)) {
++	/* Let's run FG_GC, if we don't have enough space. */
++	if (has_not_enough_free_secs(sbi, 0, 0)) {
++		gc_type = FG_GC;
++
+ 		/*
+ 		 * For example, if there are many prefree_segments below given
+ 		 * threshold, we can make them free by checkpoint. Then, we
+@@ -1840,8 +1843,6 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+ 			if (ret)
+ 				goto stop;
+ 		}
+-		if (has_not_enough_free_secs(sbi, 0, 0))
+-			gc_type = FG_GC;
+ 	}
+ 
+ 	/* f2fs_balance_fs doesn't need to do BG_GC in critical path. */
+@@ -1868,19 +1869,15 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+ 	if (seg_freed == f2fs_usable_segs_in_sec(sbi, segno))
+ 		sec_freed++;
+ 
+-	if (gc_type == FG_GC)
++	if (gc_type == FG_GC) {
+ 		sbi->cur_victim_sec = NULL_SEGNO;
+ 
+-	if (gc_control->init_gc_type == FG_GC ||
+-	    !has_not_enough_free_secs(sbi,
+-				(gc_type == FG_GC) ? sec_freed : 0, 0)) {
+-		if (gc_type == FG_GC && sec_freed < gc_control->nr_free_secs)
+-			goto go_gc_more;
+-		goto stop;
+-	}
+-
+-	/* FG_GC stops GC by skip_count */
+-	if (gc_type == FG_GC) {
++		if (!has_not_enough_free_secs(sbi, sec_freed, 0)) {
++			if (!gc_control->no_bg_gc &&
++			    sec_freed < gc_control->nr_free_secs)
++				goto go_gc_more;
++			goto stop;
++		}
+ 		if (sbi->skipped_gc_rwsem)
+ 			skipped_round++;
+ 		round++;
+@@ -1889,6 +1886,8 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+ 			ret = f2fs_write_checkpoint(sbi, &cpc);
+ 			goto stop;
+ 		}
++	} else if (!has_not_enough_free_secs(sbi, 0, 0)) {
++		goto stop;
+ 	}
+ 
+ 	__get_secs_required(sbi, NULL, &upper_secs, NULL);
+-- 
+2.40.0.634.g4ca3ef3211-goog
 
