@@ -2,69 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 177026E0D47
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 14:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20C836E0D53
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 14:15:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbjDMMN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 08:13:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35950 "EHLO
+        id S229954AbjDMMP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 08:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbjDMMNx (ORCPT
+        with ESMTP id S230009AbjDMMPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 08:13:53 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21BA83C21;
-        Thu, 13 Apr 2023 05:13:53 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id i8so5763449plt.10;
-        Thu, 13 Apr 2023 05:13:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681388032; x=1683980032;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Saxvl5qt1Z3mQFBq5MXm2iUi65BPeDQQ5SDFNrUre9o=;
-        b=gKtVWu7VtuYe88jEQCtkngg30vFAmje93vdtPc3bXPUi9GOek82Mrnk8gBEFqQx7KJ
-         gBrFFS2Xfm8DqKSLVALwXY+AHamirnUqoOcPwAFzzYNw5eQq6vdVMIve6pExAMC2JeYg
-         S6/U/zHwA3Nu8KRavzJd5xTL1uVI/PnPQ/aYhp+IY1xcP11GQkC6ue6dWIHSmkknoZ+5
-         rwhkUa1Hqoyio6/wN4ijQKJXwIT+WBrxu3wjp5hJjsxmeyNmkwZ5YcvaQVOpg6taaXH1
-         byqqA4AIohMbzXtelx9tdhN5nCG/I+CuQue+fJYekekfB7MsYoJtONNaT90+57BhomIQ
-         D7pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681388032; x=1683980032;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Saxvl5qt1Z3mQFBq5MXm2iUi65BPeDQQ5SDFNrUre9o=;
-        b=UAegpZlGVHX5RvvGiRMSZvbI/zuje3UsY86RfoIKN5lQ2p0mNL5Nz1bAVlGVxXDHdn
-         4tA0ShxikfEWBFdW2aakb8+5VfJRCEb9sYnFsh8oUMLJ1VPOUxiO0N+dalIz2HfO/do0
-         3kOL+MYki0NV9NI/NMiaEsjonUMJb1YJiefhVZ+yOurRCjEcJFy6Z9d/Ws+YQi0S5raV
-         6YVzeXH5IuTupxRh6Y7nGb/TGvf/ol096U+Rjo1upRROZS6GKyxK11mDEYZ+kdm+Duri
-         snJFPMHbqFelbpAmSDyac5/NMB4d8cOXbbplowubYuslWIBPoR90cPVAbXASFwYc6NSO
-         9Igw==
-X-Gm-Message-State: AAQBX9eyVImTaOb7HML2/YQEb88Jg/Hsn8ffyck4j7+CUUvm/eECbK/X
-        RO8vGSiuldni006MmG4MmP4=
-X-Google-Smtp-Source: AKy350bBVj+ORBDiZvhDO7M1UqGIqAQF/FMKhs9LQK9n2UWpXzFGiiUx15Ge519tXB6tIKzlQWobBA==
-X-Received: by 2002:a17:90a:2a02:b0:246:d1ae:5fce with SMTP id i2-20020a17090a2a0200b00246d1ae5fcemr1662514pjd.35.1681388032339;
-        Thu, 13 Apr 2023 05:13:52 -0700 (PDT)
-Received: from localhost.localdomain ([43.132.141.9])
-        by smtp.gmail.com with ESMTPSA id ep13-20020a17090ae64d00b00246a7401d23sm1212814pjb.41.2023.04.13.05.13.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 05:13:51 -0700 (PDT)
-From:   alexjlzheng@gmail.com
-X-Google-Original-From: alexjlzheng@tencent.com
-To:     seanjc@google.com, pbonzini@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jinliang Zheng <alexjlzheng@tencent.com>
-Subject: [PATCH v2] KVM: x86: Fix poll command
-Date:   Thu, 13 Apr 2023 20:11:14 +0800
-Message-Id: <20230413121112.2563319-1-alexjlzheng@tencent.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 13 Apr 2023 08:15:14 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 330F072A8
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 05:15:08 -0700 (PDT)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1681388106;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=B8+nVKITZkaZhX5qchviUfDT0l6q7J7IjVYSeriSWWc=;
+        b=MyKYLr2XbSRKxtTEtLuQUkdmgKnD5AMrgY7jJTpbo9QzkQ1909ga/hQSzXP7bxY1gMNcl/
+        O9zwRy2ltwTn6uuImxUrdrtrQW2BXD4LZ2b3UykAP7j6E26A5YYi/WRrWKgF5TwKFBfefZ
+        vlmTfPurVJWuJh7nXcrCL6HOJ6wsc0rDRPYZ/wKe58Y0deQTDtKOO6972BlELV/Cgs7Oxu
+        H1cgIkLhH5e9WzcYgoDu7eul7lthsw+G59ptr4KSyaSI1Bhu8VS220zLi3Ij/uHVofw3eJ
+        Hi9vrOASZTZNS4NecD4NTnb77vZqcvJ9UsEf9PBV+Du200rbzQsEiRlg+be9GQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1681388106;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=B8+nVKITZkaZhX5qchviUfDT0l6q7J7IjVYSeriSWWc=;
+        b=1PrtC0cyfYTClBUFVLuQoUrdmL2kQfcddFGeh3Zf8vjzYqbPRseemYhEPoSJRr33tHzTRr
+        m5vBhvtB8iUMhuBQ==
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        David Gow <davidgow@google.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        tangmeng <tangmeng@uniontech.com>
+Subject: Re: [PATCH printk v1 16/18] kernel/panic: Add atomic write
+ enforcement to warn/panic
+In-Reply-To: <ZDfUiB55jE25kmv5@alley>
+References: <20230302195618.156940-1-john.ogness@linutronix.de>
+ <20230302195618.156940-17-john.ogness@linutronix.de>
+ <ZDfUiB55jE25kmv5@alley>
+Date:   Thu, 13 Apr 2023 14:19:13 +0206
+Message-ID: <87h6tk3rqe.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,41 +67,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jinliang Zheng <alexjlzheng@tencent.com>
+On 2023-04-13, Petr Mladek <pmladek@suse.com> wrote:
+>> --- a/kernel/panic.c
+>> +++ b/kernel/panic.c
+>> @@ -329,6 +332,8 @@ void panic(const char *fmt, ...)
+>>  	if (_crash_kexec_post_notifiers)
+>>  		__crash_kexec(NULL);
+>>  
+>> +	cons_atomic_flush(NULL, true);
+>
+> Do we need to explicitly flush the messages here?
 
-According to the hardware manual, when the Poll command is issued, the
-byte returned by the I/O read is 1 in Bit 7 when there is an interrupt,
-and the highest priority binary code in Bits 2:0. The current pic
-simulation code is not implemented strictly according to the above
-expression.
+This is where the atomic printing actually starts (after the full dump
+has been inserted into the ringbuffer).
 
-Fix the implementation of pic_poll_read():
-1. Set Bit 7 when there is an interrupt
-2. Return 0 when there is no interrupt
+> cons_atomic_flush() is called also from vprintk_emit(). And there are
+> many messages printed with the PANIC priority above.
 
-Signed-off-by: Jinliang Zheng <alexjlzheng@tencent.com>
----
-Changes since Version V2:
-- Keep the logic of pic_poll_read(), only fix the return value
----
- arch/x86/kvm/i8259.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+vprintk_emit() does not print in this case. From cons_atomic_flush():
 
-diff --git a/arch/x86/kvm/i8259.c b/arch/x86/kvm/i8259.c
-index 4756bcb5724f..6627f8a52f23 100644
---- a/arch/x86/kvm/i8259.c
-+++ b/arch/x86/kvm/i8259.c
-@@ -411,8 +411,9 @@ static u32 pic_poll_read(struct kvm_kpic_state *s, u32 addr1)
- 		pic_clear_isr(s, ret);
- 		if (addr1 >> 7 || ret != 2)
- 			pic_update_irq(s->pics_state);
-+		ret |= 0x80;
- 	} else {
--		ret = 0x07;
-+		ret = 0x00;
- 		pic_update_irq(s->pics_state);
- 	}
- 
--- 
-2.31.1
+        /*
+         * When in an elevated priority, the printk() calls are not
+         * individually flushed. This is to allow the full output to
+         * be dumped to the ringbuffer before starting with printing
+         * the backlog.
+         */
+        if (cpu_state->prio > NBCON_PRIO_NORMAL && printk_caller_wctxt)
+                return;
 
+> This makes an assumption that either printk() in PANIC context
+> does not try to show the messages immediately or that this
+> explicit console_atomic_flush() tries harder. I think
+> that both assumptions are wrong.
+
+Both assumptions are correct, because until this point there has been no
+effort to print.
+
+>> @@ -353,6 +358,7 @@ void panic(const char *fmt, ...)
+>>  		 * We can't use the "normal" timers since we just panicked.
+>>  		 */
+>>  		pr_emerg("Rebooting in %d seconds..\n", panic_timeout);
+>> +		cons_atomic_flush(NULL, true);
+>
+> Same here.
+
+This flush is just to make sure the rebooting message is
+output. For nbcon consoles printk() calls are never synchronous except
+for during early boot (before kthreads are ready).
+
+The same goes for the other cons_atomic_flush() calls in this function.
+
+>>  	disabled_wait();
+>>  #endif
+>>  	pr_emerg("---[ end Kernel panic - not syncing: %s ]---\n", buf);
+>>  
+>>  	/* Do not scroll important messages printed above */
+>>  	suppress_printk = 1;
+>> +
+>> +	cons_atomic_exit(CONS_PRIO_PANIC, prev_prio);
+>
+> On the contrary, I would explicitly call cons_atomic_flush(NULL, false)
+> here instead of hiding it in cons_atomic_exit().
+
+It is not hiding there. That is the semantic. After entering an atomic
+block all printk's are only writing to the ringbuffer. On exiting the
+atomic block the ringbuffer is flushed via atomic printing.
+
+Exiting CONS_PRIO_PANIC has a special condition that it first tries to
+safely flush all consoles, then will try the unsafe variant for consoles
+that were not flushed.
+
+> Also I think that we want to set the EMERGENCY prio also in
+> oops_enter()?
+
+Agreed.
+
+John
