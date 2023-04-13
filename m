@@ -2,128 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 526396E0903
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F3636E0909
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:36:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbjDMIfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 04:35:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37496 "EHLO
+        id S230184AbjDMIgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 04:36:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbjDMIff (ORCPT
+        with ESMTP id S230099AbjDMIgQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 04:35:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A31974A;
-        Thu, 13 Apr 2023 01:35:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CACAE61330;
-        Thu, 13 Apr 2023 08:35:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EEFDC433D2;
-        Thu, 13 Apr 2023 08:35:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681374924;
-        bh=6XyAh0pAa5/U3o8RmwkLViJEBMG2Z80E16mGNXFsjFE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lhFpLyE4u0KZ+ao1upYPqpKZr7IxgVLUBuYgRRP/dIvWVMY29yyMnoPPS7oWqc1OV
-         /Lw3+mmCfLLvY0dmRq36uecuEcvmgibOqPNcGqz+axZtcSOCka6XxZLRI6TvDhNpwB
-         q8KCGFZCuRIMZABeZx8yZCAd0/ICgfzbZAPj1ne8SbVf6aLWd7gzlOh6QA8SRkkCq2
-         AEyKf7Xc0ApVT6NgYQmn/fbgMPByFKL4JY1iPNPhmB6h0QviIBQNJ0YqvAg7Nrkmrv
-         cigXh6dWC2e9T7haPTdSRpzbQn9jcwEUoRYsqVr3jQB9da+v6HTvsIMOLM5Bxer2TI
-         dRthIwzFkYseA==
-Date:   Thu, 13 Apr 2023 10:35:18 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH] fs: fix sysctls.c built
-Message-ID: <20230413-kufen-infekt-02c7eb2a9adc@brauner>
-References: <20230331084502.155284-1-wangkefeng.wang@huawei.com>
- <66c0e8b6-64d1-5be6-cd4d-9700d84e1b84@huawei.com>
- <20230412-sympathie-haltbar-da2d2183067b@brauner>
- <a01a789c-8965-d1dc-cb45-ea9901a9af34@huawei.com>
+        Thu, 13 Apr 2023 04:36:16 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3176993EA
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 01:35:58 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id v27so4179832wra.13
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 01:35:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1681374956; x=1683966956;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FjH7nhGdWOv9qeyX+wHaW2Tx80LijSTnzNr+7mKBAuk=;
+        b=W73ulSQRJKYT4gJUb7YNAcstBidLbTyQ3w6d+J/2HWLLSJsGIqpO8cBwjCTh/y3CP+
+         djCQqgwfz+UZYPS2FGWs6PUFDq4ogwwJqLWJPCItRQ2TDYN2zQ83Vd8UaQbXRXpKJQlz
+         pYdY/Kjv0RfjbBvvl9BEJYGGJdzmXZU78u9GhxDNwG12qDlz9qx18/GaAHUboSdEMb0v
+         Zi7j3tJpml46h4/0KRWefPFAtEyhBDfFYPcu/KDsfYqDY08T6Sfk9k9NHPsmu47HLCuk
+         xKMCGIkq5fD0zwaMlrAI+o2T7jRCG0lAMmNON+0sLquyBJ6O8GPmq+lGt4WaU8nOJsJj
+         uLPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681374956; x=1683966956;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FjH7nhGdWOv9qeyX+wHaW2Tx80LijSTnzNr+7mKBAuk=;
+        b=DjKFq72rkgJnuqGFXWiFjc73UZdkT2aqTtYMqunUijnf7qFfdMu7v/XQXzK3A+uk/J
+         dNXENAQPzbv+O2zEo+TojfPUVm2eMhYgjoyTiLk+U01Q7srrfzXGCoSkOcvgEeGNt1QE
+         rKaS+dZJRdLsnphtg/GTbWyCDfeGjEXmTOfow24v1erDOH0D14dVVSzpK9++Z/Ev+uvT
+         tk6RnqEPHBI6oLqpTAhE1hy6cIlVCdDGpbDc1n7iWnM1WcjQDNbNJ3Sdlts8wL6E/Rqw
+         eUuT2oqAsBdB9kkuClmcWIGlmtdrcYCGxfuCu8kLfOv0N4/JFsnhAgTqWjBYEF9D7k4z
+         vd6w==
+X-Gm-Message-State: AAQBX9fhAEG90whX0lsAm7c4Mx4y14rwZMnajM6D2fW+YVPSpK8vro1P
+        SzEjFiFGquztrp9JIVZrz4SHAw==
+X-Google-Smtp-Source: AKy350Z+TlsVs6i2UnAW4a5xD8ts3Fbq8yFX7GeMxaxMkTqOmJx/k1gtnqvpgXLJJDILOXj63b0c2w==
+X-Received: by 2002:a05:6000:1a52:b0:2ef:b63d:6a6a with SMTP id t18-20020a0560001a5200b002efb63d6a6amr851327wry.61.1681374956602;
+        Thu, 13 Apr 2023 01:35:56 -0700 (PDT)
+Received: from [10.1.3.59] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id x4-20020a5d54c4000000b002c3f81c51b6sm747306wrv.90.2023.04.13.01.35.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Apr 2023 01:35:56 -0700 (PDT)
+Message-ID: <54d7444e-26ff-da2d-833b-57dd5b8ca679@baylibre.com>
+Date:   Thu, 13 Apr 2023 10:35:55 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <a01a789c-8965-d1dc-cb45-ea9901a9af34@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 2/7] dt-bindings: leds: leds-mt6323: Document mt6332
+ compatible
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, pavel@ucw.cz
+Cc:     lee@kernel.org, sean.wang@mediatek.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20230412153310.241046-1-angelogioacchino.delregno@collabora.com>
+ <20230412153310.241046-3-angelogioacchino.delregno@collabora.com>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+In-Reply-To: <20230412153310.241046-3-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 09:34:54AM +0800, Kefeng Wang wrote:
+On 12/04/2023 17:33, AngeloGioacchino Del Regno wrote:
+> Add support for MT6332 LEDs/WLEDs with compatible "mediatek,mt6332-led".
 > 
-> 
-> On 2023/4/12 17:19, Christian Brauner wrote:
-> > On Tue, Apr 11, 2023 at 12:14:44PM +0800, Kefeng Wang wrote:
-> > > /proc/sys/fs/overflowuid and overflowgid  will be lost without
-> > > building this file, kindly ping, any comments, thanks.
-> > > 
-> > > 
-> > > On 2023/3/31 16:45, Kefeng Wang wrote:
-> > > > 'obj-$(CONFIG_SYSCTL) += sysctls.o' must be moved after "obj-y :=",
-> > > > or it won't be built as it is overwrited.
-> 
-> ...
-> 
-> > Given the description in
-> > ab171b952c6e ("fs: move namespace sysctls and declare fs base directory")
-> > you probably want to move this earlier.
-> 
-> Oh, missing that part, but the /proc/sys/fs/overflowuid and overflowgid are
-> lost after it, is it expected? Luis, could you take a look? thanks.
+> Signed-off-by: AngeloGioacchino Del Regno<angelogioacchino.delregno@collabora.com>
+> Acked-by: Krzysztof Kozlowski<krzysztof.kozlowski@linaro.org>
 
-No, /proc/sys/fs/overflow{g,u}id need to be there of course. What I mean
-is something like the following (similar to how net/core/ does it):
+Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
 
-UNTESTED
----
- fs/Makefile | 24 +++++++++++++-----------
- 1 file changed, 13 insertions(+), 11 deletions(-)
-
-diff --git a/fs/Makefile b/fs/Makefile
-index 05f89b5c962f..dfaea8a28d92 100644
---- a/fs/Makefile
-+++ b/fs/Makefile
-@@ -6,17 +6,19 @@
- # Rewritten to use lists instead of if-statements.
- #
-
--obj-$(CONFIG_SYSCTL)           += sysctls.o
--
--obj-y :=       open.o read_write.o file_table.o super.o \
--               char_dev.o stat.o exec.o pipe.o namei.o fcntl.o \
--               ioctl.o readdir.o select.o dcache.o inode.o \
--               attr.o bad_inode.o file.o filesystems.o namespace.o \
--               seq_file.o xattr.o libfs.o fs-writeback.o \
--               pnode.o splice.o sync.o utimes.o d_path.o \
--               stack.o fs_struct.o statfs.o fs_pin.o nsfs.o \
--               fs_types.o fs_context.o fs_parser.o fsopen.o init.o \
--               kernel_read_file.o mnt_idmapping.o remap_range.o
-+obj-y                  := fs_types.o
-+obj-$(CONFIG_SYSCTL)   += sysctls.o
-+obj-y                  += open.o read_write.o file_table.o super.o \
-+                          char_dev.o stat.o exec.o pipe.o namei.o \
-+                          fcntl.o ioctl.o readdir.o select.o dcache.o \
-+                          inode.o attr.o bad_inode.o file.o \
-+                          filesystems.o namespace.o seq_file.o \
-+                          xattr.o libfs.o fs-writeback.o pnode.o \
-+                          splice.o sync.o utimes.o d_path.o stack.o \
-+                          fs_struct.o statfs.o fs_pin.o nsfs.o \
-+                          fs_types.o fs_context.o fs_parser.o \
-+                          fsopen.o init.o kernel_read_file.o \
-+                          mnt_idmapping.o remap_range.o
-
- ifeq ($(CONFIG_BLOCK),y)
- obj-y +=       buffer.o mpage.o
---
-2.34.1
+Regards,
+Alexandre
 
