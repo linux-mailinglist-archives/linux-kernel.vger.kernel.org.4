@@ -2,82 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E2A6E126A
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:36:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72D6A6E126E
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:36:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbjDMQgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 12:36:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42794 "EHLO
+        id S229965AbjDMQgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 12:36:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjDMQgj (ORCPT
+        with ESMTP id S229962AbjDMQgp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 12:36:39 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C014697
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:36:36 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f04275b2bdso104305e9.1
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:36:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681403795; x=1683995795;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Luz0Qw0w9ZqnvhFtzZjcXX6GzM1RqYDZy0O1Aw36Dho=;
-        b=KJY7IATIbGi514kJ7FRgfvPH9tgEmqo9KPyiQPUGil2KvhdD62ffqRe6SWY/E8f+nR
-         S9h5/DMAAqtdcMbcCeInOxViyL44v/SfjGY6qWFOHzFeQ/KkU+AtC+3VOuya8yMueOK9
-         xZPJCTNC90XXxwGYH39hDdxdpNWd2Tnj2RPHh0Z6v55AXv5V54kc0pZeC0gRamAwz8EC
-         hPjPXG1ofsaZd7/0LBlKWDFKWTAL0E852Y7mm9gmvneulSccFEuR4lR3/0PAFq7GHqQl
-         5VdAaFoTnOFCtQ7EOYfeSlNF8bM2FS2qbo7GwRxiK1+KUN2v6u1R1rlEwUaOf38EV0D9
-         3Edw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681403795; x=1683995795;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Luz0Qw0w9ZqnvhFtzZjcXX6GzM1RqYDZy0O1Aw36Dho=;
-        b=AxgvRCFrkM5vNtYKemyB8lJ9DxLfO2AeIzUQPKnTypWBNnVokICSm+uVPvWwLQxhHr
-         lFzi5CwNDkx64moi0XyxB+3yV5CHnpN2/jNBrEYm5xFjyKaOljqaWLlZg2V0DNPmLIml
-         Aq+ZwEFARP3JlLqYsJeP+9ejOpU1RfyzAIr37SqdrB1xTL3ijlCGlsVKO9I4gTetHdU7
-         lNf5L3OnqjXMYez3Z2f5wKRvbo0jqWYAB65TDFyuAG4UbZF3GtXRMe1x2qfFJS1tynZl
-         RbF+HjNCttd/x9hJHRFYeDcDGgftsqfiz8eNmM9EZ2NFme0GX1AXZef0A3gDgJ38/cvc
-         iu+A==
-X-Gm-Message-State: AAQBX9dm4z3R3NwJ100BxdtHJx9KiXBme1RV3IKtqYgrdLgwEb7lSJ35
-        sYMN+CubaX7sZanJMd8ICSD/+Sd0BawVPlJhwz+mwA==
-X-Google-Smtp-Source: AKy350ZSieiPnZr/0KXmH0IDRFEF/xE3INgqlezSfSLD/+T+SJfaTt5JUaP752jfm5RWRYGlsgxizNdw/mr0/RvNokw=
-X-Received: by 2002:a05:600c:5405:b0:3df:f3cb:e8ce with SMTP id
- he5-20020a05600c540500b003dff3cbe8cemr709159wmb.7.1681403795029; Thu, 13 Apr
- 2023 09:36:35 -0700 (PDT)
+        Thu, 13 Apr 2023 12:36:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A709753;
+        Thu, 13 Apr 2023 09:36:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A775663FE5;
+        Thu, 13 Apr 2023 16:36:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33D79C4339E;
+        Thu, 13 Apr 2023 16:36:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681403801;
+        bh=zpXOE8O6tskJByG5O5xUZJa+iFGZLEGodc5DA9SzF90=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=pTBQfrdmKxrEodLYWrlZETofTOnwil+BcO8ESlnogLiYI3w7Zy6/7iKTKGxO4CD5v
+         W+8Mw27ujy/nsj3gWOV0eBZzrR3a9pnsuJyyp3lbfeMSlPJ1cL0DZF+JJooheUwCwN
+         6Zi4a/++kltwjfPk4I6jUu/YnCH5ABzzZgbS8p6gTF7BfjkkrkliVZVMsmQX34iBC/
+         pbKdJb3CK1/Mdqe04S0SxQoOZWqSfYec7mBl+cH/ItR4tprgiqmDLZIKRWdSq18ONH
+         mpOhh0dMw8XnzluvCIQYwJEZosS/lTqaSQHVXJf31pjNg65AJpBTYhwJpvtdMhe5vP
+         ILyEZDQKswo4g==
+Message-ID: <19946f94-db48-fe0d-722c-cbb45b8bd0ba@kernel.org>
+Date:   Thu, 13 Apr 2023 18:36:37 +0200
 MIME-Version: 1.0
-References: <20230413161725.195417-1-alexghiti@rivosinc.com>
-In-Reply-To: <20230413161725.195417-1-alexghiti@rivosinc.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 13 Apr 2023 09:36:23 -0700
-Message-ID: <CAP-5=fW3wf8wQ2DyQbKnbsKJhZSdjomxnEp6GGF4Ar7qykZTjQ@mail.gmail.com>
-Subject: Re: [PATCH 0/4] riscv: Allow userspace to directly access perf counters
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, paranlee <p4ranlee@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 2/2] dt-bindings: usb: snps,dwc3: Add
+ 'snps,global-regs-starting-offset' quirk
+Content-Language: en-US
+To:     =?UTF-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>
+References: <20230412033006.10859-2-stanley_chang@realtek.com>
+ <20230413042503.4047-1-stanley_chang@realtek.com>
+ <167e4a8c-3ebd-92b7-1481-947f08901f97@kernel.org>
+ <9f6abbe7a6fd479c98e2fd6c1080ad8a@realtek.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <9f6abbe7a6fd479c98e2fd6c1080ad8a@realtek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,47 +67,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 9:17=E2=80=AFAM Alexandre Ghiti <alexghiti@rivosinc=
-.com> wrote:
->
-> riscv used to allow direct access to cycle/time/instret counters,
-> bypassing the perf framework, this patchset intends to allow the user to
-> mmap any counter when accessed through perf. But we can't break the
-> existing behaviour so we introduce a sysctl perf_user_access like arm64
-> does, which defaults to the legacy mode described above.
->
-> The core of this patchset lies in patch 4, the first 3 patches are
-> simple fixes.
->
-> base-commit-tag: v6.3-rc1
->
-> Alexandre Ghiti (4):
->   perf: Fix wrong comment about default event_idx
->   include: riscv: Fix wrong include guard in riscv_pmu.h
->   riscv: Make legacy counter enum match the HW numbering
->   riscv: Enable perf counters user access only through perf
+On 13/04/2023 16:58, Stanley Chang[昌育德] wrote:
+>> On 13/04/2023 06:25, Stanley Chang wrote:
+>>> Add a new 'snps,global-regs-starting-offset' DT to dwc3 core to remap
+>>> the global register start address
+>>>
+>>> The RTK DHC SoCs were designed the global register address offset at
+>>> 0x8100. The default address is at DWC3_GLOBALS_REGS_START (0xc100).
+>>> Therefore, add the property of device-tree to adjust this start address.
+>>>
+>>> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+>>> ---
+>>>  v1 to v2 change:
+>>> 1. Change the name of the property "snps,global-regs-starting-offset".
+>>> ---
+>>
+>> Didn't you got already comment for this patch? How did you implement it?
+>>
+>> Also, I asked you multiple times:
+>>
+>> Please use scripts/get_maintainers.pl to get a list of necessary people and lists
+>> to CC.  It might happen, that command when run on an older kernel, gives
+>> you outdated entries.  Therefore please be sure you base your patches on
+>> recent Linux kernel.
+>>
+>> I don't understand why you ignore this.
+>>
+>> NAK, patch is not correct.
+>>
+>> Best regards,
+>> Krzysztof
+>>
+> 
+> Thank you for your patient guidance.
+> Because I'm not familiar with the review process and didn't use scripts/get_maintainers.pl properly in the initial email thread.
+> Therefore, this series of errors was caused. Sorry for the confusion.
+> Now I know how to use the script properly.
+> After correcting the maintainer's suggestion, I'll restart a new email thread and review again.
 
-Presumably the test also needs patching:
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/p=
-erf/tests/mmap-basic.c?h=3Dperf-tools-next#n287
+Did you respond to feedback you got about the property? Did reviewer
+agreed on your view after your feedback?
 
-Thanks,
-Ian
+If not, then why resending this patch?
 
+Best regards,
+Krzysztof
 
->  Documentation/admin-guide/sysctl/kernel.rst |  23 +++-
->  arch/riscv/include/asm/perf_event.h         |   3 +
->  arch/riscv/kernel/Makefile                  |   2 +-
->  arch/riscv/kernel/perf_event.c              |  65 +++++++++++
->  drivers/perf/riscv_pmu.c                    |  42 ++++++++
->  drivers/perf/riscv_pmu_legacy.c             |  24 ++++-
->  drivers/perf/riscv_pmu_sbi.c                | 113 ++++++++++++++++++--
->  include/linux/perf/riscv_pmu.h              |   9 +-
->  include/linux/perf_event.h                  |   3 +-
->  tools/lib/perf/mmap.c                       |  65 +++++++++++
->  10 files changed, 332 insertions(+), 17 deletions(-)
->  create mode 100644 arch/riscv/kernel/perf_event.c
->
-> --
-> 2.37.2
->
