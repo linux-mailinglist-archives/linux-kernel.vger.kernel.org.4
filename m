@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8651B6E03D0
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 03:42:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 720026E03D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 03:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbjDMBmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 21:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43120 "EHLO
+        id S229791AbjDMBtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 21:49:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjDMBmW (ORCPT
+        with ESMTP id S229451AbjDMBtg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 21:42:22 -0400
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE6C30CB;
-        Wed, 12 Apr 2023 18:42:20 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R401e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=23;SR=0;TI=SMTPD_---0VfyAdXe_1681350134;
-Received: from 30.240.113.14(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VfyAdXe_1681350134)
-          by smtp.aliyun-inc.com;
-          Thu, 13 Apr 2023 09:42:15 +0800
-Message-ID: <d0a60ef4-ec09-91bb-f62a-6d4c612a664d@linux.alibaba.com>
-Date:   Thu, 13 Apr 2023 09:42:13 +0800
+        Wed, 12 Apr 2023 21:49:36 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291785599
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 18:49:34 -0700 (PDT)
+Received: from dggpemm100009.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Pxj8j21Qkz17SGR;
+        Thu, 13 Apr 2023 09:45:57 +0800 (CST)
+Received: from [10.174.179.24] (10.174.179.24) by
+ dggpemm100009.china.huawei.com (7.185.36.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 13 Apr 2023 09:49:31 +0800
+Subject: Re: [PATCH -next] mm: hwpoison: support recovery from HugePage
+ copy-on-write faults
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+References: <20230411092741.780679-1-liushixin2@huawei.com>
+ <20230412181350.GA22818@monkey>
+ <20230412145718.0bcb7dd98112a3010711ad0b@linux-foundation.org>
+CC:     Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Muchun Song <muchun.song@linux.dev>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+From:   Liu Shixin <liushixin2@huawei.com>
+Message-ID: <28bf1701-d2c6-ee2a-d92d-a603e1a1b3dd@huawei.com>
+Date:   Thu, 13 Apr 2023 09:49:31 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH v5 1/2] ACPI: APEI: set memory failure flags as
- MF_ACTION_REQUIRED on synchronous events
-To:     Xiaofei Tan <tanxiaofei@huawei.com>, mawupeng1@huawei.com,
-        tony.luck@intel.com, naoya.horiguchi@nec.com
-Cc:     linux-acpi@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, justin.he@arm.com,
-        akpm@linux-foundation.org, ardb@kernel.org, ashish.kalra@amd.com,
-        baolin.wang@linux.alibaba.com, bp@alien8.de,
-        cuibixuan@linux.alibaba.com, dave.hansen@linux.intel.com,
-        james.morse@arm.com, jarkko@kernel.org, lenb@kernel.org,
-        linmiaohe@huawei.com, lvying6@huawei.com, rafael@kernel.org,
-        xiexiuqi@huawei.com, zhuo.song@linux.alibaba.com
-References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
- <20230411104842.37079-2-xueshuai@linux.alibaba.com>
- <3dda3629-3623-ad63-9d9d-73706aacbcc0@huawei.com>
-Content-Language: en-US
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <3dda3629-3623-ad63-9d9d-73706aacbcc0@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230412145718.0bcb7dd98112a3010711ad0b@linux-foundation.org>
+Content-Type: text/plain; charset="windows-1252"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.24]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -56,135 +58,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2023/4/12 AM11:55, Xiaofei Tan wrote:
-> 
-> Reviewed-by: Xiaofei Tan <tanxiaofei@huawei.com>
+On 2023/4/13 5:57, Andrew Morton wrote:
+> On Wed, 12 Apr 2023 11:13:50 -0700 Mike Kravetz <mike.kravetz@oracle.com> wrote:
+>
+>> On 04/11/23 17:27, Liu Shixin wrote:
+>>> Patch a873dfe1032a ("mm, hwpoison: try to recover from copy-on write faults")
+>>> introduced a new copy_user_highpage_mc() function, and fix the kernel crash
+>>> when the kernel is copying a normal page as the result of a copy-on-write
+>>> fault and runs into an uncorrectable error. But it doesn't work for HugeTLB.
+>> Andrew asked about user-visible effects.  Perhaps, a better way of
+>> stating this in the commit message might be:
+>>
+>> Commit a873dfe1032a ("mm, hwpoison: try to recover from copy-on write
+>> faults") introduced the routine copy_user_highpage_mc() to gracefully
+>> handle copying of user pages with uncorrectable errors.  Previously,
+>> such copies would result in a kernel crash.  hugetlb has separate code
+>> paths for copy-on-write and does not benefit from the changes made in
+>> commit a873dfe1032a.
+>>
+>> Modify hugetlb copy-on-write code paths to use copy_mc_user_highpage()
+>> so that they can also gracefully handle uncorrectable errors in user
+>> pages.  This involves changing the hugetlb specific routine
+>> ?copy_user_folio()? from type void to int so that it can return an error.
+>> Modify the hugetlb userfaultfd code in the same way so that it can return
+>> -EHWPOISON if it encounters an uncorrectable error.
+> Thanks, but...  what are the runtime effects?  What does hugetlb
+> presently do when encountering these uncorrectable error?
+I have tested the HugeTLB case by using tony's testcase[1](need add a MAP_HUGETLB).
+Before this patch, the kernel will crash due to the uncorrectable errors. After this patch,
+if the error occurs in copy-on-write, the process will be killed, if the errors occurs in
+userfaultfd, it will return -EHWPOISON.
 
-Thank you :)
+Link: https://git.kernel.org/pub/scm/linux/kernel/git/aegl/ras-tools.git [1]
+>
+>
+> .
+>
 
-Cheers,
-Shuai
-
-> 
-> 在 2023/4/11 18:48, Shuai Xue 写道:
->> There are two major types of uncorrected recoverable (UCR) errors :
->>
->> - Action Required (AR): The error is detected and the processor already
->>    consumes the memory. OS requires to take action (for example, offline
->>    failure page/kill failure thread) to recover this uncorrectable error.
->>
->> - Action Optional (AO): The error is detected out of processor execution
->>    context. Some data in the memory are corrupted. But the data have not
->>    been consumed. OS is optional to take action to recover this
->>    uncorrectable error.
->>
->> The essential difference between AR and AO errors is that AR is a
->> synchronous event, while AO is an asynchronous event. The hardware will
->> signal a synchronous exception (Machine Check Exception on X86 and
->> Synchronous External Abort on Arm64) when an error is detected and the
->> memory access has been architecturally executed.
->>
->> When APEI firmware first is enabled, a platform may describe one error
->> source for the handling of synchronous errors (e.g. MCE or SEA notification
->> ), or for handling asynchronous errors (e.g. SCI or External Interrupt
->> notification). In other words, we can distinguish synchronous errors by
->> APEI notification. For AR errors, kernel will kill current process
->> accessing the poisoned page by sending SIGBUS with BUS_MCEERR_AR. In
->> addition, for AO errors, kernel will notify the process who owns the
->> poisoned page by sending SIGBUS with BUS_MCEERR_AO in early kill mode.
->> However, the GHES driver always sets mf_flags to 0 so that all UCR errors
->> are handled as AO errors in memory failure.
->>
->> To this end, set memory failure flags as MF_ACTION_REQUIRED on synchronous
->> events.
->>
->> Fixes: ba61ca4aab47 ("ACPI, APEI, GHES: Add hardware memory error recovery support")'
->> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
->> Tested-by: Ma Wupeng <mawupeng1@huawei.com>
->> ---
->>   drivers/acpi/apei/ghes.c | 29 +++++++++++++++++++++++------
->>   1 file changed, 23 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
->> index 34ad071a64e9..c479b85899f5 100644
->> --- a/drivers/acpi/apei/ghes.c
->> +++ b/drivers/acpi/apei/ghes.c
->> @@ -101,6 +101,20 @@ static inline bool is_hest_type_generic_v2(struct ghes *ghes)
->>       return ghes->generic->header.type == ACPI_HEST_TYPE_GENERIC_ERROR_V2;
->>   }
->>   +/*
->> + * A platform may describe one error source for the handling of synchronous
->> + * errors (e.g. MCE or SEA), or for handling asynchronous errors (e.g. SCI
->> + * or External Interrupt). On x86, the HEST notifications are always
->> + * asynchronous, so only SEA on ARM is delivered as a synchronous
->> + * notification.
->> + */
->> +static inline bool is_hest_sync_notify(struct ghes *ghes)
->> +{
->> +    u8 notify_type = ghes->generic->notify.type;
->> +
->> +    return notify_type == ACPI_HEST_NOTIFY_SEA;
->> +}
->> +
->>   /*
->>    * This driver isn't really modular, however for the time being,
->>    * continuing to use module_param is the easiest way to remain
->> @@ -477,7 +491,7 @@ static bool ghes_do_memory_failure(u64 physical_addr, int flags)
->>   }
->>     static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
->> -                       int sev)
->> +                       int sev, bool sync)
->>   {
->>       int flags = -1;
->>       int sec_sev = ghes_severity(gdata->error_severity);
->> @@ -491,7 +505,7 @@ static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
->>           (gdata->flags & CPER_SEC_ERROR_THRESHOLD_EXCEEDED))
->>           flags = MF_SOFT_OFFLINE;
->>       if (sev == GHES_SEV_RECOVERABLE && sec_sev == GHES_SEV_RECOVERABLE)
->> -        flags = 0;
->> +        flags = sync ? MF_ACTION_REQUIRED : 0;
->>         if (flags != -1)
->>           return ghes_do_memory_failure(mem_err->physical_addr, flags);
->> @@ -499,9 +513,11 @@ static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
->>       return false;
->>   }
->>   -static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata, int sev)
->> +static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata,
->> +                       int sev, bool sync)
->>   {
->>       struct cper_sec_proc_arm *err = acpi_hest_get_payload(gdata);
->> +    int flags = sync ? MF_ACTION_REQUIRED : 0;
->>       bool queued = false;
->>       int sec_sev, i;
->>       char *p;
->> @@ -526,7 +542,7 @@ static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata, int s
->>            * and don't filter out 'corrected' error here.
->>            */
->>           if (is_cache && has_pa) {
->> -            queued = ghes_do_memory_failure(err_info->physical_fault_addr, 0);
->> +            queued = ghes_do_memory_failure(err_info->physical_fault_addr, flags);
->>               p += err_info->length;
->>               continue;
->>           }
->> @@ -647,6 +663,7 @@ static bool ghes_do_proc(struct ghes *ghes,
->>       const guid_t *fru_id = &guid_null;
->>       char *fru_text = "";
->>       bool queued = false;
->> +    bool sync = is_hest_sync_notify(ghes);
->>         sev = ghes_severity(estatus->error_severity);
->>       apei_estatus_for_each_section(estatus, gdata) {
->> @@ -664,13 +681,13 @@ static bool ghes_do_proc(struct ghes *ghes,
->>               atomic_notifier_call_chain(&ghes_report_chain, sev, mem_err);
->>                 arch_apei_report_mem_error(sev, mem_err);
->> -            queued = ghes_handle_memory_failure(gdata, sev);
->> +            queued = ghes_handle_memory_failure(gdata, sev, sync);
->>           }
->>           else if (guid_equal(sec_type, &CPER_SEC_PCIE)) {
->>               ghes_handle_aer(gdata);
->>           }
->>           else if (guid_equal(sec_type, &CPER_SEC_PROC_ARM)) {
->> -            queued = ghes_handle_arm_hw_error(gdata, sev);
->> +            queued = ghes_handle_arm_hw_error(gdata, sev, sync);
->>           } else {
->>               void *err = acpi_hest_get_payload(gdata);
->>   
