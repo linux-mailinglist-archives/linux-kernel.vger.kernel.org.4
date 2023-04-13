@@ -2,209 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E31C6E1338
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 19:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF4AA6E1337
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 19:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbjDMRKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 13:10:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41754 "EHLO
+        id S230289AbjDMRK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 13:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbjDMRKb (ORCPT
+        with ESMTP id S230085AbjDMRKV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 13:10:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90C349FF
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 10:09:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681405789;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=O5dv4XAyW10/07F5EnvMKRPv3TLobZcUlN4bcbi+kaA=;
-        b=fIKGaOGaC1XkGwTcSQHcS3m60Bv41dD9LtF4cbZHk6+e+p1jXwFqsI7PHV/ekDQeJ+2ssG
-        ripKB7xBdfYc2zTVoZ4Ui5esMIhJ5qBqQnYob5XZc7wm+j/L6+M6tTrV8o7I69JMncpxvd
-        +NtF1Y800XKQO3mYm2fybC+9OlwOdeA=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-646-7MMqoOqMOcGrFdZmwxQk-A-1; Thu, 13 Apr 2023 13:09:48 -0400
-X-MC-Unique: 7MMqoOqMOcGrFdZmwxQk-A-1
-Received: by mail-ed1-f69.google.com with SMTP id z34-20020a509e25000000b00504ed11e0c5so3424028ede.1
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 10:09:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681405787; x=1683997787;
-        h=content-transfer-encoding:in-reply-to:references:to
-         :content-language:subject:cc:user-agent:mime-version:date:message-id
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O5dv4XAyW10/07F5EnvMKRPv3TLobZcUlN4bcbi+kaA=;
-        b=ApQ15Xshd5oUXSVpW5CDTLhavD1Q+uDDy0NJ3s2l44MCc04bV0YqGmMh6I0xF4ZY6y
-         SwGkxfmJ+k5/N5/2107WWmVfRFPzpmI1f+S24vBxAbtD2OLFG0DN04XsfJbWNpSzdmOA
-         W0nf55bTyApVui6JF4yvvzgUd3CL0jFZBUB4KeG5QG2nPWzfKNBURhsV2YXgZrBBfU/k
-         3joJfYDMWiaOxEG54W00vNlwG8uynqp5dd8EGW2RszlzeV06O4HniOHVvF3Fo/VBiTRO
-         EY//hqtedyG2eaK456ggh2eMvDOgwYYuG/+oxa8YyBczZs0bEd99UZKHL1n8ygh8CQbL
-         /nVg==
-X-Gm-Message-State: AAQBX9eKXiSwtxw4NPDpNKxHovtr8dSDkEVZRvnhZYQsKUTguNEXOQpR
-        A6SfJoE0A128Zvvd5uTwS49CAR49jFIu5dmru1ikngyisllyMET4Hu8EQpTqyK8OwqL5xMSpDH1
-        rUGJEAoRsZIAHTlVOkPfEnSI6
-X-Received: by 2002:a17:906:2a56:b0:94c:6762:e20d with SMTP id k22-20020a1709062a5600b0094c6762e20dmr2839493eje.12.1681405787185;
-        Thu, 13 Apr 2023 10:09:47 -0700 (PDT)
-X-Google-Smtp-Source: AKy350auwQSXJLuDYzIzYzD6jbuy2PcON1aKDR6Ey77ueObIYZvvDUCwgZNOif1QefTp6UAXXc042g==
-X-Received: by 2002:a17:906:2a56:b0:94c:6762:e20d with SMTP id k22-20020a1709062a5600b0094c6762e20dmr2839449eje.12.1681405786887;
-        Thu, 13 Apr 2023 10:09:46 -0700 (PDT)
-Received: from [192.168.42.222] (194-45-78-10.static.kviknet.net. [194.45.78.10])
-        by smtp.gmail.com with ESMTPSA id p8-20020a17090664c800b0094b360a281dsm1221750ejn.123.2023.04.13.10.09.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Apr 2023 10:09:46 -0700 (PDT)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Message-ID: <203ab7d9-3695-f734-92b5-503118444108@redhat.com>
-Date:   Thu, 13 Apr 2023 19:09:45 +0200
+        Thu, 13 Apr 2023 13:10:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7195F7D85;
+        Thu, 13 Apr 2023 10:10:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B9BC64031;
+        Thu, 13 Apr 2023 17:10:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DF8C8C433D2;
+        Thu, 13 Apr 2023 17:10:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681405818;
+        bh=TTMPY+VYyqCQUJ6Kf3OMi0XvWsEMpitS3xIlaYntt/o=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=rNALsve5zDHrmp3o0aYNfmHMpYblt/hhzFFUmRj+5rvF9o6cdFXAq2IVoqHfBTqDd
+         AvXiIvPSABYQr1o47YBnhfI062hxDaVpltx+azxLFd2CMwLPggXGX3P4PN8UCtbW5c
+         vgSn0luMIByakBX8BAvgCB+Uqgw47gKiwMUynVVFny0RDJPFasFEnDJzQr89cZvOh4
+         gsJbT5JtR13DiX3Gt+FdyXHEpTtHXXqPZvjIQcaTJU/mlTya6SdfpPukNItplp2Cfs
+         oQu+mrd3iGpizzS+OOfAMsEUhds4wRDe6UDCoBW/gm9YHZdppH8cpbHPHavki6RUH+
+         agQD6/C5gfniA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BF7B1E21ED9;
+        Thu, 13 Apr 2023 17:10:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Cc:     brouer@redhat.com, netdev@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, xdp-hints@xdp-project.net
-Subject: Re: [PATCH net-next v4 1/3] net: stmmac: introduce wrapper for struct
- xdp_buff
-Content-Language: en-US
-To:     Song Yoong Siang <yoong.siang.song@intel.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        Ong Boon Leong <boon.leong.ong@intel.com>
-References: <20230413032541.885238-1-yoong.siang.song@intel.com>
- <20230413032541.885238-2-yoong.siang.song@intel.com>
-In-Reply-To: <20230413032541.885238-2-yoong.siang.song@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 0/4] mptcp: more fixes for 6.3
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168140581877.3344.4926518348735216178.git-patchwork-notify@kernel.org>
+Date:   Thu, 13 Apr 2023 17:10:18 +0000
+References: <20230411-upstream-net-20230411-mptcp-fixes-v1-0-ca540f3ef986@tessares.net>
+In-Reply-To: <20230411-upstream-net-20230411-mptcp-fixes-v1-0-ca540f3ef986@tessares.net>
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>
+Cc:     mptcp@lists.linux.dev, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, dcaratti@redhat.com,
+        dmytro@shytyi.net, shuah@kernel.org, martineau@kernel.org,
+        geliang.tang@suse.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        stable@vger.kernel.org, cpaasch@apple.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
-On 13/04/2023 05.25, Song Yoong Siang wrote:
-> Introduce struct stmmac_xdp_buff as a preparation to support XDP Rx
-> metadata via kfuncs.
+This series was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Tue, 11 Apr 2023 22:42:08 +0200 you wrote:
+> Patch 1 avoids scheduling the MPTCP worker on a closed socket on some
+> edge cases. It fixes issues that can be visible from v5.11.
 > 
-> Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
-> Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
-> ---
->   drivers/net/ethernet/stmicro/stmmac/stmmac.h   |  4 ++++
->   .../net/ethernet/stmicro/stmmac/stmmac_main.c  | 18 +++++++++---------
->   2 files changed, 13 insertions(+), 9 deletions(-)
+> Patch 2 makes sure the MPTCP worker doesn't try to manipulate
+> disconnected sockets. This is also a fix for an issue that can be
+> visible from v5.11.
 > 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac.h b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
-> index 3d15e1e92e18..ac8ccf851708 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac.h
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
-> @@ -92,6 +92,10 @@ struct stmmac_rx_buffer {
->   	dma_addr_t sec_addr;
->   };
->   
-> +struct stmmac_xdp_buff {
-> +	struct xdp_buff xdp;
-> +};
-> +
->   struct stmmac_rx_queue {
->   	u32 rx_count_frames;
->   	u32 queue_index;
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> index d7fcab057032..6ffce52ca837 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> @@ -5188,9 +5188,9 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
->   	int status = 0, coe = priv->hw->rx_csum;
->   	unsigned int next_entry = rx_q->cur_rx;
->   	enum dma_data_direction dma_dir;
-> +	struct stmmac_xdp_buff ctx = {};
+> [...]
 
-This code trick {} will zero out the struct.
+Here is the summary with links:
+  - [net,1/4] mptcp: use mptcp_schedule_work instead of open-coding it
+    https://git.kernel.org/netdev/net/c/a5cb752b1257
+  - [net,2/4] mptcp: stricter state check in mptcp_worker
+    https://git.kernel.org/netdev/net/c/d6a044373343
+  - [net,3/4] mptcp: fix NULL pointer dereference on fastopen early fallback
+    https://git.kernel.org/netdev/net/c/c0ff6f6da66a
+  - [net,4/4] selftests: mptcp: userspace pm: uniform verify events
+    https://git.kernel.org/netdev/net/c/711ae788cbbb
 
-Is this done purpose and really needed?
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-On x86_64 this unfortunately generates an asm instruction: rep stos
-
-A repeated store string operation, for zeroing out memory, which is
-slow. (Because[1] it supports be suspended by an exception or interrupt,
-which requires it to store/restore CPU flags).
-
-[1] https://www.felixcloutier.com/x86/rep:repe:repz:repne:repnz#tbl-4-22
-
-
->   	unsigned int desc_size;
->   	struct sk_buff *skb = NULL;
-> -	struct xdp_buff xdp;
->   	int xdp_status = 0;
->   	int buf_sz;
->   
-> @@ -5311,17 +5311,17 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
->   			dma_sync_single_for_cpu(priv->device, buf->addr,
->   						buf1_len, dma_dir);
->   
-> -			xdp_init_buff(&xdp, buf_sz, &rx_q->xdp_rxq);
-> -			xdp_prepare_buff(&xdp, page_address(buf->page),
-> +			xdp_init_buff(&ctx.xdp, buf_sz, &rx_q->xdp_rxq);
-> +			xdp_prepare_buff(&ctx.xdp, page_address(buf->page),
->   					 buf->page_offset, buf1_len, false);
->   
-> -			pre_len = xdp.data_end - xdp.data_hard_start -
-> +			pre_len = ctx.xdp.data_end - ctx.xdp.data_hard_start -
->   				  buf->page_offset;
-> -			skb = stmmac_xdp_run_prog(priv, &xdp);
-> +			skb = stmmac_xdp_run_prog(priv, &ctx.xdp);
->   			/* Due xdp_adjust_tail: DMA sync for_device
->   			 * cover max len CPU touch
->   			 */
-> -			sync_len = xdp.data_end - xdp.data_hard_start -
-> +			sync_len = ctx.xdp.data_end - ctx.xdp.data_hard_start -
->   				   buf->page_offset;
->   			sync_len = max(sync_len, pre_len);
->   
-> @@ -5331,7 +5331,7 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
->   
->   				if (xdp_res & STMMAC_XDP_CONSUMED) {
->   					page_pool_put_page(rx_q->page_pool,
-> -							   virt_to_head_page(xdp.data),
-> +							   virt_to_head_page(ctx.xdp.data),
->   							   sync_len, true);
->   					buf->page = NULL;
->   					priv->dev->stats.rx_dropped++;
-> @@ -5359,7 +5359,7 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
->   
->   		if (!skb) {
->   			/* XDP program may expand or reduce tail */
-> -			buf1_len = xdp.data_end - xdp.data;
-> +			buf1_len = ctx.xdp.data_end - ctx.xdp.data;
->   
->   			skb = napi_alloc_skb(&ch->rx_napi, buf1_len);
->   			if (!skb) {
-> @@ -5369,7 +5369,7 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
->   			}
->   
->   			/* XDP program may adjust header */
-> -			skb_copy_to_linear_data(skb, xdp.data, buf1_len);
-> +			skb_copy_to_linear_data(skb, ctx.xdp.data, buf1_len);
->   			skb_put(skb, buf1_len);
->   
->   			/* Data payload copied into SKB, page ready for recycle */
 
