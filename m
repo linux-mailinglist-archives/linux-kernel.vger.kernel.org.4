@@ -2,129 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC1986E0976
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:56:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 557456E097B
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230309AbjDMI4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 04:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49014 "EHLO
+        id S230063AbjDMI5O convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 13 Apr 2023 04:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbjDMIzf (ORCPT
+        with ESMTP id S230032AbjDMI4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 04:55:35 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129C09750;
-        Thu, 13 Apr 2023 01:54:32 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33D8rThtD028776, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33D8rThtD028776
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Thu, 13 Apr 2023 16:53:29 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Thu, 13 Apr 2023 16:53:51 +0800
-Received: from RTEXH36506.realtek.com.tw (172.21.6.27) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 13 Apr 2023 16:53:51 +0800
-Received: from localhost.localdomain (172.21.252.101) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server id
- 15.1.2507.17 via Frontend Transport; Thu, 13 Apr 2023 16:53:51 +0800
-From:   Stanley Chang <stanley_chang@realtek.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Stanley Chang <stanley_chang@realtek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 2/2] dt-bindings: usb: snps,dwc3: Add 'snps,parkmode-disable-hs-quirk' quirk
-Date:   Thu, 13 Apr 2023 16:53:50 +0800
-Message-ID: <20230413085351.26808-1-stanley_chang@realtek.com>
-X-Mailer: git-send-email 2.40.0
+        Thu, 13 Apr 2023 04:56:40 -0400
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5882BAD32;
+        Thu, 13 Apr 2023 01:55:11 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-54fb615ac3dso56381957b3.2;
+        Thu, 13 Apr 2023 01:55:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681376089; x=1683968089;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=P/2r5n3qVynI/hX8mONBVdeZonUO/+YUa7xUJZQBOn8=;
+        b=Eciy9S2H2pgGN47zJLfNfpFr61Mz7oVpOsd3/sGadhBrRIZfWaVWLH6RMK3CwCAxxm
+         xHjcyS0Yql4htyfw+GT3YBzY3U3UfzlEQg5wfrrVcihC6VsMEFSbtmiXWWZn4mcpCWPo
+         wzRdivTGGho9wpVKFXggwarbKfyOBNiLnSHxcBlulEYB8k+tKqDbadMa35PrI6/zHwbn
+         bqt2t1U7Y/shL4fkF6JQOkAz6YvlZR4GyktV2ixyMnoqcB4dPQkhiSiJHypzfLQUxyCG
+         cZtKs+djrXZaDPYJywbPZMamWAnbGFf36R0MSPUL28VmeFEFI/z7nsT9dR6N1UILqpa0
+         vrlw==
+X-Gm-Message-State: AAQBX9dz6Dc5vs0pze5rNv2rsZEkGL8+KkCsUFg19wlLkhPwZ/e7+z80
+        9hyevCtlnmGHD9slsigLTiG/Hq5cYAJC8hzK
+X-Google-Smtp-Source: AKy350ZcNqUumZkXFoyFiTc4zOBGrDgH7ifCk2ByIsB57ZcdO6Os/NZaTfFej6Sr5XtE+wc63XTvlA==
+X-Received: by 2002:a81:5ac1:0:b0:54f:d816:8963 with SMTP id o184-20020a815ac1000000b0054fd8168963mr78192ywb.19.1681376089225;
+        Thu, 13 Apr 2023 01:54:49 -0700 (PDT)
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
+        by smtp.gmail.com with ESMTPSA id 10-20020a81010a000000b0054662f7b42dsm315253ywb.63.2023.04.13.01.54.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Apr 2023 01:54:47 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id j10so4379312ybj.1;
+        Thu, 13 Apr 2023 01:54:47 -0700 (PDT)
+X-Received: by 2002:a25:d057:0:b0:b8f:5c64:cc2e with SMTP id
+ h84-20020a25d057000000b00b8f5c64cc2emr459363ybg.12.1681376087527; Thu, 13 Apr
+ 2023 01:54:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-KSE-ServerInfo: RTEXMBS03.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 04/13/2023 08:33:39
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 0
-X-KSE-AntiSpam-Info: Lua profiles 176677 [Apr 13 2023]
-X-KSE-AntiSpam-Info: Version: 5.9.59.0
-X-KSE-AntiSpam-Info: Envelope from: stanley_chang@realtek.com
-X-KSE-AntiSpam-Info: LuaCore: 509 509 b12bcaa7ba85624b485f2b6b92324b70964a1c65
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;realtek.com:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
-X-KSE-AntiSpam-Info: Rate: 0
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 04/13/2023 08:36:00
-X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
- rules found
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIzLzQvMTMgpFekyCAwNjozODowMA==?=
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <c987d0bf744150ca05bd952f5f9e5fb3244d27b0.1633350340.git.geert+renesas@glider.be>
+ <58f91e983ac95b7f252606ecac12f016@bootlin.com>
+In-Reply-To: <58f91e983ac95b7f252606ecac12f016@bootlin.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 13 Apr 2023 10:54:34 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVqyY=tg6iU4feRwQhPt9c7ZZK9ifBCYf5AAgkxWjYOBA@mail.gmail.com>
+Message-ID: <CAMuHMdVqyY=tg6iU4feRwQhPt9c7ZZK9ifBCYf5AAgkxWjYOBA@mail.gmail.com>
+Subject: Re: [PATCH] gpio: aggregator: Add interrupt support
+To:     kamel.bouhara@bootlin.com
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        metux IT consult <lkml@metux.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@kernel.org>, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-renesas-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        stratos-dev@op-lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a new 'snps,parkmode-disable-hs-quirk' DT quirk to dwc3 core for
-disable the high-speed parkmode.
+Hi Kamel,
 
-For some USB wifi devices, if enable this feature it will reduce the
-performance. Therefore, add an option for disabling HS park mode by
-device-tree.
+On Thu, Apr 13, 2023 at 9:48 AM <kamel.bouhara@bootlin.com> wrote:
+> Le 2021-10-04 14:44, Geert Uytterhoeven a écrit :
+> What is the status for this patch, is there any remaining
+> changes to be made ?
 
-In Synopsys's dwc3 data book:
-In a few high speed devices when an IN request is sent within 900ns of the
-ACK of the previous packet, these devices send a NAK. When connected to
-these devices, if required, the software can disable the park mode if you
-see performance drop in your system. When park mode is disabled,
-pipelining of multiple packet is disabled and instead one packet at a time
-is requested by the scheduler. This allows up to 12 NAKs in a micro-frame
-and improves performance of these slow devices.
+You mean commit a00128dfc8fc0cc8 ("gpio: aggregator: Add interrupt
+support") in v5.17?
 
-Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
----
-v2 to v3 change:
-1. Add the comment message.
-2. cc the right maintainers.
----
- Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
+Gr{oetje,eeting}s,
 
-diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-index be36956af53b..45ca967b8d14 100644
---- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-@@ -232,6 +232,11 @@ properties:
-       When set, all SuperSpeed bus instances in park mode are disabled.
-     type: boolean
- 
-+  snps,parkmode-disable-hs-quirk:
-+    description:
-+      When set, all HighSpeed bus instances in park mode are disabled.
-+    type: boolean
-+
-   snps,dis_metastability_quirk:
-     description:
-       When set, disable metastability workaround. CAUTION! Use only if you are
+                        Geert
+
 -- 
-2.34.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
