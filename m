@@ -2,108 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58ADA6E123B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:27:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 527AD6E1241
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:27:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbjDMQ1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 12:27:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36118 "EHLO
+        id S229709AbjDMQ1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 12:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjDMQ1C (ORCPT
+        with ESMTP id S230251AbjDMQ1f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 12:27:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9C89EC9;
-        Thu, 13 Apr 2023 09:27:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 726A160C92;
-        Thu, 13 Apr 2023 16:27:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64C6EC433EF;
-        Thu, 13 Apr 2023 16:26:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681403219;
-        bh=i7GBvPvooG+tmzW0Ins3MeH/7xGbUl62e/AeD/7Wy8M=;
-        h=From:Date:Subject:To:Cc:From;
-        b=faoA6LtQxa3jIalaOFgMr3e2UnmQ+8FXLnCVpK7QOP0gOGoIS4hEV/pAgrQY9MPZL
-         Ytq04l74NhcKDDeowu3al8TY6oi9GQhQx26tDUeFyr8Te22b6ivCUDAURdFi3IeVdM
-         Nvv8xLLrPhBXyGWdGbC1cILw3XguJzAnH6M5q9UpeQfEtlYqM4JnLpeRu1qf7Tn4Ax
-         zee8MXOGg6GKbefU/zE00OWog/VJwclzSLDJP9Qc0LaP/lGu/3miTptUUHkL42VQ/A
-         QDl6TIJQ41+/bMsfernHFUlPMgNSJ1pMOcGtHMmtjuVgwTY7X07LIm+nT0t4WYL+2n
-         zAyimj+1e7axA==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Thu, 13 Apr 2023 17:26:32 +0100
-Subject: [PATCH] tools/nolibc: Fix build of stdio.h due to header ordering
+        Thu, 13 Apr 2023 12:27:35 -0400
+Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27C70AD27;
+        Thu, 13 Apr 2023 09:27:31 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0Vg0L.NG_1681403248;
+Received: from 192.168.3.7(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0Vg0L.NG_1681403248)
+          by smtp.aliyun-inc.com;
+          Fri, 14 Apr 2023 00:27:29 +0800
+Message-ID: <c52808f1-0f4d-9bc3-9faa-0e262d28dac1@linux.alibaba.com>
+Date:   Fri, 14 Apr 2023 00:27:28 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: linux-next: manual merge of the erofs tree with the vfs-idmapping
+ tree
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Gao Xiang <xiang@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Jingbo Xu <jefflexu@linux.alibaba.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20230413144651.3519980-1-broonie@kernel.org>
+ <4f9fdec2-cc2a-4bc7-9ddc-87809395f493@sirena.org.uk>
+ <699f01a7-8c0e-98d9-d2c7-eaf08552f543@linux.alibaba.com>
+ <664140af-3d95-416c-8f89-cad7beeaac19@sirena.org.uk>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <664140af-3d95-416c-8f89-cad7beeaac19@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230413-nolibc-stdio-fix-v1-1-fa05fc3ba1fe@kernel.org>
-X-B4-Tracking: v=1; b=H4sIADctOGQC/x2NywqDMBBFf0Vm7UBM3KS/UlzkMepgScqM2IL47
- 41dnsM93BOUhEnh0Z0gdLByLQ2GvoO0hrIQcm4M1lhnxsFhqS+OCXXPXHHmL85xtJmcz8Z7aFk
- MShgllLTe4afKduu3UFv/n57Tdf0ADmykM3kAAAA=
-To:     Willy Tarreau <w@1wt.eu>, "Paul E. McKenney" <paulmck@kernel.org>,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-00303
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1225; i=broonie@kernel.org;
- h=from:subject:message-id; bh=i7GBvPvooG+tmzW0Ins3MeH/7xGbUl62e/AeD/7Wy8M=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkOC1RARCbU+msmqb0fQxiZmjW+8hUcwDrICPJZOGk
- GBy2AUKJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZDgtUQAKCRAk1otyXVSH0EQiB/
- 0WVVRlcV3AOi3rF1c+bUbo+NqWkqSAJswpAXeXAZQaNyN7zr35bCf8TPdSB+2QG6kvF24wVTxgIteP
- m9v2NOM/Z1B//AjhJSkUMJq3v5WOMp7zG8i/GNW3roDDe3DJhIm+7aRRG2Saw+rJOxHxBQ9wwD939+
- 9CdFXzdPmfoT4k4+9v7MvHyZzprE2U3eS2WzWbUxNR2+4AgdzCEUbs4mhhwPhKkV5VjWx6+AoSYXEL
- 0ypqSU9FXmIuiaksj1pCXefGbnUZ037ooYEllEhIfNUNYX6ywnU9VpKnM1DbT/qPK1CBOqy/q6O9gE
- iTZ/MzuTbqLYIy4HXc1RADsnZl3Fjf
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When we added fd based file streams we created references to STx_FILENO in
-stdio.h but these constants are declared in unistd.h which is the last file
-included by the top level nolibc.h meaning those constants are not defined
-when we try to build stdio.h. This causes programs using nolibc.h to fail
-to build.
 
-Reorder the headers to avoid this issue.
 
-Fixes: d449546c957f ("tools/nolibc: implement fd-based FILE streams")
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/include/nolibc/nolibc.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 2023/4/14 00:23, Mark Brown wrote:
+> On Fri, Apr 14, 2023 at 12:16:46AM +0800, Gao Xiang wrote:
+> 
+>> Thanks.  Actually I didn't update the corresponind xattr patches (just
+>> rebase some older commits, also I'd like to avoid in the future, but
+>> sometimes it's impossible at least if some RVB is added...)
+> 
+>> I think it could be resolved as before by Stephen:
+>> https://lore.kernel.org/r/20230412101942.75e3efa9@canb.auug.org.au
+> 
+>> And which looks the same as below:
+> 
+> Probably some context changed which caused me to have to reresolve the
+> conflict?  Or perhaps just rerere not syncing properly from Stephen's
+> work.
 
-diff --git a/tools/include/nolibc/nolibc.h b/tools/include/nolibc/nolibc.h
-index 04739a6293c4..05a228a6ee78 100644
---- a/tools/include/nolibc/nolibc.h
-+++ b/tools/include/nolibc/nolibc.h
-@@ -99,11 +99,11 @@
- #include "sys.h"
- #include "ctype.h"
- #include "signal.h"
-+#include "unistd.h"
- #include "stdio.h"
- #include "stdlib.h"
- #include "string.h"
- #include "time.h"
--#include "unistd.h"
- #include "stackprotector.h"
- 
- /* Used by programs to avoid std includes */
+Not sure.. I didn't change the file itself.
 
----
-base-commit: 7d8214bba44c1aa6a75921a09a691945d26a8d43
-change-id: 20230413-nolibc-stdio-fix-fb42de39d099
+Anyway, thanks for the efforts and time!
 
-Best regards,
--- 
-Mark Brown <broonie@kernel.org>
-
+Thanks,
+Gao Xiang
