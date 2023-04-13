@@ -2,257 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55A0E6E104F
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:47:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 671B46E1052
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:47:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbjDMOrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 10:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42112 "EHLO
+        id S231400AbjDMOrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 10:47:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230271AbjDMOqt (ORCPT
+        with ESMTP id S231349AbjDMOrD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 10:46:49 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2136.outbound.protection.outlook.com [40.107.117.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59BC5B47C
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 07:46:27 -0700 (PDT)
+        Thu, 13 Apr 2023 10:47:03 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2050.outbound.protection.outlook.com [40.107.92.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA674B446;
+        Thu, 13 Apr 2023 07:46:38 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aMlxuw9gJlk1m7uCzSdAKy7nIxatprI1RRUKSqApwaehT3Cp4sIKPgYlQ3pPCdUyWqRUrf3rKwysFQB7yI7lFPdVUpWX0k3c/zVhiZ+BIg11JlLCOc/1XyG5ck+GiW/Dt2LVrOw7BAbjPPrTxI/c8RaVVAfruWnqnkZBtIW3sSOwyPRg0/Twp8f+YqUxp8FaEt24R7UtxTaWr5Eh12HiuNUHnypLgpK0uoiwUWNBuIAb68PLtKuSUaiPLNUj8LlgMcNLUjyQ4BKH/ARKAmQJs/I09emPYcaAXnXHqmVdT3D0s7Run87QtpDXmOdr3AthWs7Dy5b8Z65tCHM8l+6mFw==
+ b=fVyhiBZLem0Er8D2BnASVFcTvGZNMb7wOeYLuM226qyDUn2s9NMHhuDEhZzdZ4g27u0JA4v+ox36e4s2cE1MMeM+E5/fIMSRkyAZ/ALyC+nLeLp3VXTSL/L46YmMBGBSOrYp6zrn5lv0Gg3tRM2YMzViZg2j8eCp6yWedU/G3Xsm4f2NJwe9GfonIhaQBVQE3wTb9zwK2cKyZOvXmMGZr2E7ZXsV1RpNWE2XPAbPbOZtwpf1JTfLtjqjCKMvFNV/xazZ/CWnuuP4GtViOTPZD4J/MJ/6kb9IhozedrgO6VA8Mfs24M3Lr7HwKrcHkMZ3mQ7iZZcBVnz0WkXulLS0wg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k0bIwNHFqHscET6v4z8CkEnz4mga98wkRk8u5Vg9I8U=;
- b=BvYOa+CfzJX8+50K0LVYMYtg3xQE7kHIeQWEqUfDS0FcqYsYBYbO6TKzJsWuZ0mtPmM5VidOlgJq7rXFfP7oAh7TDtHFaAJFXFw7qcX3roEhQtONogU+JG5KclEpBPEktkes23IctUCUU5JyiYSdeq5aIt4PZALnPYMXL5fBPseCRP1KMxkpRgUSQhKHI2dL8ik9WYrGX2aMqCQiUZ8OWL15guSoDc1A/uWW5MwavexH1ttGMKJzDQxBn/+YdU9uP0sTmmaxmMKOCXupaq6Z1PjwvE1zkCi5cTourjqWlY+lDiu5TGHLHV+chEuEvwBkJ3RPhFbLwv0hpG3jQS5MgA==
+ bh=hg0TVVSVmHoCSq09o8YMzNbDqlSes+QBzk9rIF6C8xY=;
+ b=AEQtHKU0dVO2/qNHGLcbAEyCyHVTLsY/mdiBxDswp86wsLbAQcaaHfnpdH7xtc3pn8PxWELy4HZmTe17B46tGWMqKMAuj1NnHYLw0vpQIqo0NiQvDhPLlo0kg0umXtv0eJNYbdHZNf3bY0DrRMpC0hGV2MvutMPshQsJ6GZgzm0GxWPps/+lvu+nc82SWwkf+12dyY0pO+ApRjcVCYIq0wycYDZz82le5fnEM8maqXI4fFFu27MU1LRLyql+O2zFz+aGqBTuci7dyM4m1GSPFJIi1437CLTVSGGkg+ZLKYJS7ogN/bf7swixlGwuOdWRTaZvHtbvgRiOvsXbdE/tcQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k0bIwNHFqHscET6v4z8CkEnz4mga98wkRk8u5Vg9I8U=;
- b=Njv2ccRZYhZfdkTjViLOKbnal80OTnFuo5JyolyxVATPPV1O8JvVn6siLfAaIfVduux0njWjoo4LjxyRbH7NbmMyj5M3YDtaLhsJzlp+3ZIFIrMSxqNKcu+EE4dig+KhFElL0zNTU4XlZwgDCs4FJAFF+Y1qWQoCrZJNWpTAIIeuCp5hh5J3RXYxHLChkg/outgea2y4+V/vEDzlKibSoY89k15KB/3Rd1RJSenRjSbx9pxWLF0LEdqiDLcefbMN3CWjKWzOKQB3At1dzQJpCXPf5Ha63MLHYzV+jK3Ho0r1Mcczp/SH/G0gx4TV1+LCNSoBYtd8IZiQ2AR1okTckw==
+ bh=hg0TVVSVmHoCSq09o8YMzNbDqlSes+QBzk9rIF6C8xY=;
+ b=Z2adElvWUdQfnx4UuIK195UHkBzHEGALffcGI+FwiQYt3QL20eJX6au+XT6pD0fyi/8Az76I4MSuIG+E9LA0SyVH4BqbOZjTA6IcGi72Uca2PxXiyPCfyjrKWna1bcEQZYgdSmmLZMeTtt4yiSLh47R4QAjd7amYL6sR8xkphqHccDgg3M/wHr6e1d3cMwMqW6y2K6ROUansuO5yRkGdJv89pG3UTR96nPbp1bU9PP7GJja+FCJ4cnqWkiu/6+MH4SR1bs8Dcy50L/Mw73s/vaQ2lVZQIRfx7tqihAabBP+zB8qNTcRXM/ihQtwwi0WztHmOIuYdgNBWSniEztcYQw==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by PUZPR06MB6067.apcprd06.prod.outlook.com (2603:1096:301:115::15) with
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by BY5PR12MB4210.namprd12.prod.outlook.com (2603:10b6:a03:203::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Thu, 13 Apr
- 2023 14:46:08 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::a3a1:af8e:be1e:437c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::a3a1:af8e:be1e:437c%6]) with mapi id 15.20.6277.038; Thu, 13 Apr 2023
- 14:46:08 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     Jan Kara <jack@suse.com>
-Cc:     Yangtao Li <frank.li@vivo.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH] quota: remove PRINT_QUOTA_WARNING support
-Date:   Thu, 13 Apr 2023 22:45:57 +0800
-Message-Id: <20230413144557.20700-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.35.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR04CA0190.apcprd04.prod.outlook.com
- (2603:1096:4:14::28) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Thu, 13 Apr
+ 2023 14:46:20 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::6045:ad97:10b7:62a2]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::6045:ad97:10b7:62a2%9]) with mapi id 15.20.6298.030; Thu, 13 Apr 2023
+ 14:46:19 +0000
+Date:   Thu, 13 Apr 2023 11:46:16 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Jacob Keller <jacob.e.keller@intel.com>,
+        Avihai Horon <avihaih@nvidia.com>, Aya Levin <ayal@nvidia.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, Meir Lichtinger <meirl@mellanox.com>,
+        Michael Guralnik <michaelgur@mellanox.com>,
+        netdev@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Shay Drory <shayd@nvidia.com>
+Subject: Re: [PATCH rdma-next 0/4] Allow relaxed ordering read in VFs and VMs
+Message-ID: <ZDgVuIbnTCPYVVpa@nvidia.com>
+References: <cover.1681131553.git.leon@kernel.org>
+ <ZDVoH0W27xo6mAbW@nvidia.com>
+ <7c5eb785-0fe7-e0e5-8232-403e1d3538ac@intel.com>
+ <20230413124929.GN17993@unreal>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230413124929.GN17993@unreal>
+X-ClientProxiedBy: BYAPR21CA0013.namprd21.prod.outlook.com
+ (2603:10b6:a03:114::23) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|PUZPR06MB6067:EE_
-X-MS-Office365-Filtering-Correlation-Id: fa75566b-f17a-433f-78c3-08db3c2dd128
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BY5PR12MB4210:EE_
+X-MS-Office365-Filtering-Correlation-Id: 35d65baa-9e13-450d-3b8f-08db3c2dd7e3
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XX+89oImxuIWK5GLHoJwsD3H+U88DnOQJdVoGDuQgFut5rdAJnsxFNdVeApfv8KTrnJCvrHfxz94fVq7gx7OZPEyouJePivmPDYY9yQeLjYiKzQ1yM8Ij9S5LuJapc/0fCn9buM3E3rnHw5zSqiSG7R7RtMzF90YflR9M+I+WSsKQbrVvci27Jp25pOB1HdEO0EF0zIairjkNPlpPMPLkDJUTTceSxUW1wAOupUiJtOkMY4ndpdqf62QPox7r/ykZTyxlgzxdi3pGZnZtlqzRyJQx57B/37b4xczjN0dj6GuwQ+8D+s6YgxnNX4nYeqtHqTutJrE10RXeeGzHKQVs0p1RL9VMeqoWOIHFrtlP21QKMhS0Ld/SCVNQw/HfYRXg8bwq2qZbtzv2/g52F9YjSsi3/iUwsGFIzuo5MuX0yljZ/xZq/xKEMS+b2ePm1V1YzXgI1ze966HrpuSculHPvZwnvBWJsCoTEBgOZyzy7kj2Rj/mIDJFbUNKAvo2uA6u0qh7yGgKiRSplTSaDyntVQCe4qOVv3YLSQq13cSdD5qap+Rmec6rVmUweKPnY11zJm9F+Rt43JMWbPWLm4yQOAzXy2PcDgYwkoO2k6PRwgoh58SvpMbgakjMo6PaSLE
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(136003)(366004)(396003)(39860400002)(451199021)(86362001)(8676002)(15650500001)(8936002)(41300700001)(66946007)(2906002)(66476007)(66556008)(4326008)(38350700002)(38100700002)(6916009)(5660300002)(6486002)(478600001)(316002)(83380400001)(52116002)(2616005)(6666004)(36756003)(6512007)(1076003)(186003)(6506007)(26005);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: l7w+Z1zC5j4eOg3C3G1p6vKDxKxvqedJVtcNSFBNAdEecKQOHq1q+6D7uaxhv2D6l9TuOBOovYdaJyjrhKSmu7cIOcRwsgvSET6txF0OwotIk0ingmXued6OwdpMGjpN7RaJX6EnnLsQt+z1HmalKJIQel7WKnFOlt1I9PmY/qdw74AwzPDuUW5RiaNuMO49RBtW5AeQbygm3ST30VkInfZDb01nW5cQKfKy1nWdPT0ueM5eaX09QyjErDB9l6lZmSsMF/peAjBHJmMZDUCUR2//18Mnc9Zsin7cL9fqi+z8X0vkKpq3UXWsmFBqsiM3UW4tN9FvEN02We8v/b+OSWHp4lpn5ZPNGtfI/BSb2Tsr6vfBpwZKvFcojZ9bBw4+wWii+jUYbh9oCBeVAbugo4z9k81lcKQK+QYxqDAwkU1wfpWTVtJYkN2MR99ryaVvEgU5WItDdh+0lLyJT8KD6eYkrs1QtHpwlFNzJi/98jHIFrX0wqGrD1+L/OrXRueakyoY0DK83V7Et33zYKReQt61wi6/UMuP0cPizBAGmG5IStnbjVGmig2eEHflEgek
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(39860400002)(366004)(136003)(396003)(451199021)(38100700002)(5660300002)(36756003)(2906002)(316002)(8676002)(8936002)(86362001)(66556008)(41300700001)(66946007)(6916009)(66476007)(4326008)(2616005)(83380400001)(54906003)(107886003)(6506007)(186003)(478600001)(26005)(6512007)(6486002)(6666004);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?AMGwoyW7rYH9kibcaxCnb4/XzcqKx7gXEHOBzMYadMnHtJi9uRhkBVytl9KG?=
- =?us-ascii?Q?K/+hdNBprRwgsdfLefd390Fu11JyVU79VbPRrq/WaqJd/xTEk303au35PD9M?=
- =?us-ascii?Q?GzcxfdGGLgLk4choKQerGh1sDSSIQcZxA/qQ2PXIRrTasn8aRBOFO6VSdmiA?=
- =?us-ascii?Q?TiFoH9bVP3t5j30kKubzNwGTCtxp4D3bu4YSgWIoC5J/Gx/s64LslQTBe+mX?=
- =?us-ascii?Q?3xfs3YHad5Pd4EDKdkOVyZ8NtaDvtl1ovN42TVEIWe+rLv5gn2dgPkJ6VauE?=
- =?us-ascii?Q?0ALWEJLlRC9nshAmBrjMnilYvSpaKa3//R5evsXOlHOqP7FV1YkjZzBrYDe/?=
- =?us-ascii?Q?yrIXZciYgfVVE0J3Vhz+spHIJjF5ghJoYqBtknQQxUSIYnoIHn95fJXobSn5?=
- =?us-ascii?Q?wxBtnjQn9OHoD35GaMZoZoN/iZcoMcl3Plz/IKbSrnkTbXyaDRwt9fLSaT4E?=
- =?us-ascii?Q?yNDiDEHA19fNZM2nLj4xBWccMr8rUyCQhlgB5kmfRMo8qricY+ygY1Ho30Fm?=
- =?us-ascii?Q?XbXn8rxBTR3eeyiX2usZR91LKCP9tI9XJfFxhNaUGXBcg49MUVQIaBCYkw/Y?=
- =?us-ascii?Q?1AqzHtuuV85gjFYwiqwv4jjiHQTRy7nTST3i9s0hEQ67xvC8CHlkzydLeawj?=
- =?us-ascii?Q?/k4c67oRqtIFE+Qwa5XA5/AG6PWxk2Xked8ym1vB4WItHSxK/rjhbinjN0J4?=
- =?us-ascii?Q?9Z/WHiNcfIfW446RIqTHCTbz/PYHVEKn9ZIKrbwFr3qO8gmpmC5Aor40m2b5?=
- =?us-ascii?Q?7GWC5n3K9JDGmHUySNCcubZXM5iQ6bAj6TyPjNYyggVrR+oIE4HHbUf8jg4V?=
- =?us-ascii?Q?YJFrAx7zeslv0rD/sYrZWefojtFVw48F1yb8Ek9P3iimi8DCZFt0t3kbuJOh?=
- =?us-ascii?Q?7Mbtd8+jsN7L3nS1g+8iGnU7DezvbI43qxxo0JySLdKaMZnvl/cI8cUIEwYZ?=
- =?us-ascii?Q?h1alekTTSedGHc8tzq58ejmeUf18O35x6GsD5PhbYviCy6HOW4WmVJYJLWVH?=
- =?us-ascii?Q?7XJ8bynlkSVAu0Pw36wKYLyGgKsWhP5ycGZLyedO2kPYsc9MqB3t8FZehSpi?=
- =?us-ascii?Q?CAx3sem/n7dH3LF46sfhClGf9jzq2dKm9XWenrH9fKNdvyAWaTB8veneB1eX?=
- =?us-ascii?Q?m07jAdOq5rdSIJxUvnjGG3+RTMfdWyiIen5ufTG0hwXwhuGH++x6Fuisavp+?=
- =?us-ascii?Q?zuyaa3+pCvJsgmLlp6j9GayRkgkbLpiu0nBW2UhINVMW8cjbNOAjMKH8VIFP?=
- =?us-ascii?Q?2R4tzmjjGjVeDNgQRYL2CKIpR+zHi/pCSRK2OXDozrJtHUqhVBCVUQ21fSqe?=
- =?us-ascii?Q?85HmOJ91SZVCjyIfwtroZZQ5PBLgjaRr3rdUh5dIs8Nx/UMczmyxp3jLLOSa?=
- =?us-ascii?Q?Q7qM1NB0CezZWE4tGxi+QgxX7frC7Niv4cZoL1k5UJag9iIrg32NIxha/9p8?=
- =?us-ascii?Q?GA2p17shABLyTESPPry1hNRD7aRhfEO82Nm+LOHYQerHBc2tyAf/gpCZ0QqP?=
- =?us-ascii?Q?fVwb6ze84uJr08HZwcBY7aCQ+8fvkxqZiG00qpZ00uMhpZkB9REzjMBUye7W?=
- =?us-ascii?Q?rHd9HkwZSHjkBcFTAcs209ZSHVliZh6Sn1s0IIVE?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fa75566b-f17a-433f-78c3-08db3c2dd128
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lw5n2a4D4Wc8rAcYqGZC7zZ4hM6ONzVHUTqepsGcWoilgtZ4ceDE3VAMFM6p?=
+ =?us-ascii?Q?sjcT6Xc0Hy6kWL5kt/T3NLKi5fXh4y9ZtZvpXE750zlq1ZoAmN7gaFh7gLg1?=
+ =?us-ascii?Q?9aHeiZdV+6Q5aDQB0Fw5iuzFDBm550m3h/cck5cyIzex/y1osGGyi6KwA0jf?=
+ =?us-ascii?Q?IZkaz+3m7PKWFDzmn+fJ5FmsVogRKl52Lvx761zGPUqJobzmB/EYyM9h2K6w?=
+ =?us-ascii?Q?Y2J0NtTeyU+ll7ywA6Kg6OLOqHGE8GZxA+y0zNYZCP8fzyOBh/fFWUKrRvE7?=
+ =?us-ascii?Q?eJGhX1vaClsveXicZ/2N+X0H70gaW6iiogHJ5YFAfUKT4TrPKw+7x64pUniG?=
+ =?us-ascii?Q?cSWnHduJ8zHuMPcEJ1EFZEiJ/naDhkUY28etxvRKA+ilWQrzmuG3KzOuX9vI?=
+ =?us-ascii?Q?WHt7tgd3aXdoTKMWtI3N4OVsgVpnkZpCt7rqT14SstvjVEkPfXZ3SoGq/25Z?=
+ =?us-ascii?Q?9uYDEvHpzI8/5Ufe7sWJG/4HJ/0saCdXgwwzFwoztODBXpqKYsIN0yuq2pjA?=
+ =?us-ascii?Q?vD95MlGskl9x+8FT2qj4jpwOdYrxkUO6iLU8zgdNbeg8jOkSin6maZZ4kmsM?=
+ =?us-ascii?Q?20V9IZmdiI3bRZLNJvVOu2+C9m0nv9sd4uLiRyAnvyrhWjzfGspJS4prMVJK?=
+ =?us-ascii?Q?7VsM2ikd7S2EcJdN1d0DLAbpQthtDHyFi5OjprllRa9m3BuDGonFOnhAhuZh?=
+ =?us-ascii?Q?JOBeAZBUTEYUdBd3P/bHjZO1VcnDmoUysgHwlkRVcktTTeGU1tmjHS2WbVId?=
+ =?us-ascii?Q?3vL8zO7etdzKooenkox1EDC9EeYhMyLFrM2WahIn1oMdmieL+GrszqBpPya/?=
+ =?us-ascii?Q?9LoNDr4mRZdfhNTTpFQwW6ad6xxCByg8sAKkH7Ha8MR2enBYl9nFO+quY5AW?=
+ =?us-ascii?Q?zrkjEeWNpQG/WinqfnMQpV1W3UgkmXXGUHJPyyp0bAArVGodS0+YWfHUV+SN?=
+ =?us-ascii?Q?urGLl+eOcqbqmHcPxg2SinKPyU0OhtD3YwXgbxXeB6FaA/DmrhCaM7AOl83w?=
+ =?us-ascii?Q?XcdsciQpfWQ+pu5SXUuX4LhTC0EV0l56rze0Ek/ViMsF7PgIrSJ4azSt01ee?=
+ =?us-ascii?Q?Fka7sdI2DfpH4UAcE2JcjA4oT86gbO0XjPNBcbWcV8Ic9WEiAyvU7I840+EX?=
+ =?us-ascii?Q?PPm76QzkOhEV+peumkZpLLeB8NX14pLlMM8AuScHgkl5qR78HF7CJnq0D9i/?=
+ =?us-ascii?Q?ryZXytKkdOF11Bvi+y6C7ce6Xm6V993JytOYArr5aFvGBbda3LqpnI2YlcVb?=
+ =?us-ascii?Q?SFSGU7x2YRl8rmM36Mqs1Cl9QC52Zt/PE4ichyXoUq3mcPBeDVVFCmzCK2Lg?=
+ =?us-ascii?Q?KiSFBZrn0deYskzgTU4X+i16MWIquByQs5M9aWAzzdFI6JEm/w6JGB6Bi9SO?=
+ =?us-ascii?Q?bs0UTMq43WU7ypuRD/CR0fFbOGg31S7VmBUZScYwtlN4wLSKzxo9UWta6aMT?=
+ =?us-ascii?Q?DSsotQmv6Y8rvKAqgDmGNuB7Rso32U936nctWcOiLK4J8e/EHEoGJIX5AFCW?=
+ =?us-ascii?Q?oi1gDqA2HLGivN8ARYzJVsNEjpQB2V5A8VtK6SxJLlVPRgkuU9Vekpdrb9p2?=
+ =?us-ascii?Q?HlO2bOeasIFihnOgiHC6Yr7M5O8NBFDe0LVsPXWT?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 35d65baa-9e13-450d-3b8f-08db3c2dd7e3
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2023 14:46:08.4750
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2023 14:46:19.7766
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6OKRGooNYca2cGmSvxCsKSVPdchlgq3MiBo58HNBH1GBZEAfN18aDV7/bGmJtDeDG/NULG30vaMgA3BIq8FDHw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PUZPR06MB6067
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: uMysEmbYXft9Nmky4kka+Tn2IuGU1OoTQqlzwgFEB7GKpubH4Kq2LTP/pilbiDJZ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4210
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's deprecated since commit 8e8934695dfd ("quota: send messages
-via netlink"), so let's remove it. User should use notification via
-netlink socket instead.
+On Thu, Apr 13, 2023 at 03:49:29PM +0300, Leon Romanovsky wrote:
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- fs/quota/Kconfig | 10 ------
- fs/quota/dquot.c | 80 +-----------------------------------------------
- 2 files changed, 1 insertion(+), 89 deletions(-)
+> > that it fixes a setup with VF and VM, so I think thats an ok thing to
+> > call out as the goal.
+> 
+> VF or VM came from user perspective of where this behavior is not
+> correct. Avihai saw this in QEMU, so he described it in terms which
+> are more clear to the end user.
 
-diff --git a/fs/quota/Kconfig b/fs/quota/Kconfig
-index d5a85a8062d0..1b3bc0a99515 100644
---- a/fs/quota/Kconfig
-+++ b/fs/quota/Kconfig
-@@ -26,16 +26,6 @@ config QUOTA_NETLINK_INTERFACE
- 	  hardlimit, etc.) will be reported through netlink interface. If unsure,
- 	  say Y.
- 
--config PRINT_QUOTA_WARNING
--	bool "Print quota warnings to console (OBSOLETE)"
--	depends on QUOTA
--	default y
--	help
--	  If you say Y here, quota warnings (about exceeding softlimit, reaching
--	  hardlimit, etc.) will be printed to the process' controlling terminal.
--	  Note that this behavior is currently deprecated and may go away in
--	  future. Please use notification via netlink socket instead.
--
- config QUOTA_DEBUG
- 	bool "Additional quota sanity checks"
- 	depends on QUOTA
-diff --git a/fs/quota/dquot.c b/fs/quota/dquot.c
-index a6357f728034..10b46c403bdb 100644
---- a/fs/quota/dquot.c
-+++ b/fs/quota/dquot.c
-@@ -154,7 +154,7 @@ void __quota_error(struct super_block *sb, const char *func,
- }
- EXPORT_SYMBOL(__quota_error);
- 
--#if defined(CONFIG_QUOTA_DEBUG) || defined(CONFIG_PRINT_QUOTA_WARNING)
-+#if defined(CONFIG_QUOTA_DEBUG)
- static char *quotatypes[] = INITQFNAMES;
- #endif
- static struct quota_format_type *quota_formats;	/* List of registered formats */
-@@ -1171,72 +1171,6 @@ static int warning_issued(struct dquot *dquot, const int warntype)
- 	return test_and_set_bit(flag, &dquot->dq_flags);
- }
- 
--#ifdef CONFIG_PRINT_QUOTA_WARNING
--static int flag_print_warnings = 1;
--
--static int need_print_warning(struct dquot_warn *warn)
--{
--	if (!flag_print_warnings)
--		return 0;
--
--	switch (warn->w_dq_id.type) {
--		case USRQUOTA:
--			return uid_eq(current_fsuid(), warn->w_dq_id.uid);
--		case GRPQUOTA:
--			return in_group_p(warn->w_dq_id.gid);
--		case PRJQUOTA:
--			return 1;
--	}
--	return 0;
--}
--
--/* Print warning to user which exceeded quota */
--static void print_warning(struct dquot_warn *warn)
--{
--	char *msg = NULL;
--	struct tty_struct *tty;
--	int warntype = warn->w_type;
--
--	if (warntype == QUOTA_NL_IHARDBELOW ||
--	    warntype == QUOTA_NL_ISOFTBELOW ||
--	    warntype == QUOTA_NL_BHARDBELOW ||
--	    warntype == QUOTA_NL_BSOFTBELOW || !need_print_warning(warn))
--		return;
--
--	tty = get_current_tty();
--	if (!tty)
--		return;
--	tty_write_message(tty, warn->w_sb->s_id);
--	if (warntype == QUOTA_NL_ISOFTWARN || warntype == QUOTA_NL_BSOFTWARN)
--		tty_write_message(tty, ": warning, ");
--	else
--		tty_write_message(tty, ": write failed, ");
--	tty_write_message(tty, quotatypes[warn->w_dq_id.type]);
--	switch (warntype) {
--		case QUOTA_NL_IHARDWARN:
--			msg = " file limit reached.\r\n";
--			break;
--		case QUOTA_NL_ISOFTLONGWARN:
--			msg = " file quota exceeded too long.\r\n";
--			break;
--		case QUOTA_NL_ISOFTWARN:
--			msg = " file quota exceeded.\r\n";
--			break;
--		case QUOTA_NL_BHARDWARN:
--			msg = " block limit reached.\r\n";
--			break;
--		case QUOTA_NL_BSOFTLONGWARN:
--			msg = " block quota exceeded too long.\r\n";
--			break;
--		case QUOTA_NL_BSOFTWARN:
--			msg = " block quota exceeded.\r\n";
--			break;
--	}
--	tty_write_message(tty, msg);
--	tty_kref_put(tty);
--}
--#endif
--
- static void prepare_warning(struct dquot_warn *warn, struct dquot *dquot,
- 			    int warntype)
- {
-@@ -1259,9 +1193,6 @@ static void flush_warnings(struct dquot_warn *warn)
- 	for (i = 0; i < MAXQUOTAS; i++) {
- 		if (warn[i].w_type == QUOTA_NL_NOWARN)
- 			continue;
--#ifdef CONFIG_PRINT_QUOTA_WARNING
--		print_warning(&warn[i]);
--#endif
- 		quota_send_warning(warn[i].w_dq_id,
- 				   warn[i].w_sb->s_dev, warn[i].w_type);
- 	}
-@@ -2936,15 +2867,6 @@ static struct ctl_table fs_dqstats_table[] = {
- 		.mode		= 0444,
- 		.proc_handler	= do_proc_dqstats,
- 	},
--#ifdef CONFIG_PRINT_QUOTA_WARNING
--	{
--		.procname	= "warnings",
--		.data		= &flag_print_warnings,
--		.maxlen		= sizeof(int),
--		.mode		= 0644,
--		.proc_handler	= proc_dointvec,
--	},
--#endif
- 	{ },
- };
- 
--- 
-2.35.1
+Except it is not clear, the VF/VM issue is more properly solved by
+showing the real relaxed order cap to the VM.
 
+This series really is about fixing the FW mistake that had a dynamic
+cap bit for relaxed ordering. The driver does not support cap bits
+that change during runtime.
+
+mlx5 racily bodged around the broken cap by by protecting the feature
+with the same test the FW was using to make the cap dynamic, but this
+is all just wrong.
+
+The new cap bit is static, doesn't change like a cap bit should, and
+so we don't need the bodge anymore.
+
+That the bodge didn't work in VMs because of a qmeu/vfio issue is
+another bad side effect, but it isn't really the point of this series.
+
+This is why I'd like it if the code was more closely organized to make
+it clear that the old cap is OLD and that the bodge that goes along
+with it is part of making the cap bit work. It kind of gets lost in
+the way things are organized what is old/new.
+
+Jason
