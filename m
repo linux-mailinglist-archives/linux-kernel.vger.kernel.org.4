@@ -2,52 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0B9D6E088B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:03:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E6016E088C
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:03:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbjDMID1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 04:03:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46012 "EHLO
+        id S229744AbjDMIDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 04:03:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbjDMIDY (ORCPT
+        with ESMTP id S230328AbjDMIDi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 04:03:24 -0400
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0102D1FE0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 01:03:21 -0700 (PDT)
-Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-32826e5172aso2719365ab.3
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 01:03:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681373001; x=1683965001;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Oz4mjXpmd6bVlAuJwX4qtDfoS0M+5mzeYmp+fqBB2yU=;
-        b=RX9Od/PpA9VfJVzSXboIQ9gAtgQcEv7HT+hxnuqLDuJBVrBb7gIiKBtrRJlu3yxwoV
-         HT3u6mNo2R1+FmzeTdft6Algg8BkBnwdFD09eRurvU3fFow3C8mzNQOKk1zlMKNp+zex
-         arL76pbGpfKTSPsxZgxrDE/AU+wBx9rwL/0NG4gP0LzIC8cSFOejHZrUZsIuVRwzjkaM
-         kfh9ZtYvAem4Jw1haFCRXkQXxzPV5aU3lOYQ2Y2vWhqvuq9Hrirxj+0PELHtN0CsYsH0
-         le5rsZLeWocS0CN0f7KVPPA0HNj+wXMlKZ1+TaFdxL6En1IuidhJNRKKBWy0SyJV1EXv
-         IrgQ==
-X-Gm-Message-State: AAQBX9dUAhhkIpuWuJnVLIOAQaN7Z73S0JYNPEc9ZZuwNhWJ6fjSPH9I
-        5QkVlAoCxmFnvruTjOBZlOLwYzpeByR/LzZeC8MIbJ2U22ma
-X-Google-Smtp-Source: AKy350YUbJEJXImeZ2lEdV+8FNAI09xbtCA/OPyIC20PmG1Eb2xx0V27CtoxQKHs5zs8AaZ8zN8M74b/SdgOhcXjddcpLc+VU07R
+        Thu, 13 Apr 2023 04:03:38 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06840EA
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 01:03:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681373014; x=1712909014;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=WDRV1iBzE4EEIpV6bHZCFMy0qXEgId9A/h+09bFK5Z0=;
+  b=hK3LrBVrQkWNFuoB548jibetQ1A+nGX2fyuMMPWJot+VXN/Zk08ZRFTV
+   MWlgHwKuV0OWKxeq584VQh+mieyCtco7Cn6LJg5L5xROckwn4zAhiKo+i
+   t33D95ESMw1vMwtF2fEhSfn0GN8Wky44FXWasMyXPG9RRgtaU0Ku0rR7n
+   K+PVh9R0TnVuI1styn1jE6Pwij2J/lKVQm/t7TvyfVCUnVuFQhFrfB7Sl
+   sb9h1E34BDOMZv6ZY0Hmo5pCYx0LvtajHXEFBo0NTtNpbkJD7gHYmqXjI
+   SL6/xv0Nh9rquriDRqTCF1xovoCz6mTia2k3VpOipXkgIy2ochT4zvfrI
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="341615321"
+X-IronPort-AV: E=Sophos;i="5.98,341,1673942400"; 
+   d="scan'208";a="341615321"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 01:02:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="778668877"
+X-IronPort-AV: E=Sophos;i="5.98,341,1673942400"; 
+   d="scan'208";a="778668877"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by FMSMGA003.fm.intel.com with ESMTP; 13 Apr 2023 01:02:22 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 13 Apr 2023 01:02:21 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Thu, 13 Apr 2023 01:02:21 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.109)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Thu, 13 Apr 2023 01:02:21 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Y6sT00IXVn7aHYpzl1VzF2/3lGKuO/nh0cWw5X1nkBs+TubvMLet/0f1+pnD8Xm0Wlnq5BmwwfJFiPDH7bo8w0HNMfAXdzB6nopedYFh7CGs5MoWIHWl7DmpZ3Xc0pNOuGCA4F71RYI5/hTZDFKsYWKvBxyMpxWslkfFyPMe0MJGybAZgXyc+mRMZOiKGBlcfNuThVSR6B8hq2hP26k4GPBPy7lG38JfZDG3Gj7VtFWsSU4QO9CtnunZJgIWwuezeZVvjDVscRlHfA2Y9fN6W0bVZL3VOFBEaQ4oOGMaIRxfthhqhyrjI76YhzaBJVojyM1iCN3Tj4W2KKoixL/s+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iETgVSkyyq7+liDv5Mrl+ZXin2CBIApheDwt/LsMDgo=;
+ b=XAi+5yaIQNrnI03jzG/BcxzFcWZglFBQr7gaP+b4rez7S3EmrogDeJD2QvmkrT0v+csE+WFa2kTwKBp5xqwAsGdb47JQkcK8CizsuimJJaBK6K1Py3RQEmSE0rr6GDfeVTK+RL3nl/62Hg8sDWXR7jzXlVf+LXYXTgM+AF1pi6WSNGCEC1t360eQXQxrdp9KXSihy0sNFNtmZ/zptXjhVvCQHCAz2NPfi9Jrp/XPkC6osH08SkfeuBJ+/zmW8nTu6OvnTgyZtAYQiiliuqEz9SoomGbSoKXljttbc6mQyOUL6yXTByZXev5mJmYkNNQWQj+j0YzUODeXinu57XK6Rg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH0PR11MB4839.namprd11.prod.outlook.com (2603:10b6:510:42::18)
+ by PH8PR11MB6804.namprd11.prod.outlook.com (2603:10b6:510:1bc::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Thu, 13 Apr
+ 2023 08:02:18 +0000
+Received: from PH0PR11MB4839.namprd11.prod.outlook.com
+ ([fe80::60e0:f0a8:dd17:88ab]) by PH0PR11MB4839.namprd11.prod.outlook.com
+ ([fe80::60e0:f0a8:dd17:88ab%6]) with mapi id 15.20.6298.030; Thu, 13 Apr 2023
+ 08:02:18 +0000
+Date:   Thu, 13 Apr 2023 16:03:51 +0800
+From:   Pengfei Xu <pengfei.xu@intel.com>
+To:     Hillf Danton <hdanton@sina.com>
+CC:     <lihuafei1@huawei.com>, <rostedt@goodmis.org>,
+        <linux-kernel@vger.kernel.org>, <lkp@intel.com>,
+        <frederic@kernel.org>, <quic_neeraju@quicinc.com>,
+        <paulmck@kernel.org>, <heng.su@intel.com>
+Subject: Re: [Syzkaller & bisect] There is "task hung in synchronize_rcu
+ bisect" in v6.3-rc2 kernel
+Message-ID: <ZDe3Z2WD5hxeQFTn@xpf.sh.intel.com>
+References: <ZBG4HOCQIlGFFcIn@xpf.sh.intel.com>
+ <20230413070042.1479-1-hdanton@sina.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230413070042.1479-1-hdanton@sina.com>
+X-ClientProxiedBy: SG2PR03CA0125.apcprd03.prod.outlook.com
+ (2603:1096:4:91::29) To PH0PR11MB4839.namprd11.prod.outlook.com
+ (2603:10b6:510:42::18)
 MIME-Version: 1.0
-X-Received: by 2002:a92:d03:0:b0:329:5114:eb1f with SMTP id
- 3-20020a920d03000000b003295114eb1fmr494385iln.3.1681373001314; Thu, 13 Apr
- 2023 01:03:21 -0700 (PDT)
-Date:   Thu, 13 Apr 2023 01:03:21 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007a779505f9332827@google.com>
-Subject: [syzbot] [xfs?] KASAN: slab-use-after-free Read in iomap_finish_ioend
-From:   syzbot <syzbot+9c656068e71c1b06dc1f@syzkaller.appspotmail.com>
-To:     djwong@kernel.org, hch@infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR11MB4839:EE_|PH8PR11MB6804:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8b487040-3982-4b9d-d41f-08db3bf566ad
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yPYInga72SRYWAB2z6CGKrO0m5HXtj9bZH0HYTr1KdPYa0etzV/M/t5cquXtMuNCWoBKsJ0bm35VyCiWfhrB7RptyQIqOv41EDiX15Kp8EU2hGojH5uOOUcT4+kWLmdQSxGiOLpUC8krbrGGA7Jnol4+RDz6n5M+qlM5JpxJFuyQS+VHIyNjk4LeM7m/QmlOt9uOm2UXEVYpLssp6+/dlaPBOu1AZgonTp1sRaN8YdQoWJJGnqnoPbTIJ5CsGWD77yhvVqrOvP8wE0+VmQlDpFD+ywnC5md4RJpDI3UR71l8uo5VcXys7vuLgMUguKj85D3IH2mWqyxt1Wn40SZBExGnL0MYbqRtvZDN5trkPPzXdoYUUjJK0JxV2MwiBCihkk+XT1pVRJuhDsl27z9X76HTrMtILT0C0/C9XNwzrAscwamhREymEaThqnQBdqly6vb0PW3GyrJ8zdh6XNpeHnBqyuHqFGbh6mdwPj2uLUzCv6S53UG6jMNNANvY2PK17esmn+YLJYacZwCdWIgqxf29hXY3z1mTvqQzUYFpFWbPnrXq+RXxBui3MkL3x97+/YGAMawwRMJVFpLFtmObLw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4839.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(136003)(346002)(366004)(376002)(39860400002)(451199021)(478600001)(6666004)(83380400001)(86362001)(82960400001)(38100700002)(2906002)(6486002)(966005)(44832011)(6506007)(53546011)(26005)(6512007)(316002)(5660300002)(186003)(107886003)(4326008)(8676002)(8936002)(41300700001)(6916009)(66476007)(66946007)(66556008);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?s4XoR7WqEKzf02YjYOX0zOPCcV56TY8A4/GWn0ZOAVT7z5wQy32aw4YMlooU?=
+ =?us-ascii?Q?poV/2gs4EY9Vd8Cafs+4Cpr7HTvo0KwhawLjj/qzrPEbHTGyPLX0SpbpaYAf?=
+ =?us-ascii?Q?giW+lTMPSRfT7T6+Ejc0vEWLgGB0WwL0qRJkPx6Zs0MdYCmqRjpXREHD+xT0?=
+ =?us-ascii?Q?J2iWFHChS4M6vEmJfpS/jjVzTdW0XQY15QxFw4EBZK9/14BY9qsgFUcg2xyq?=
+ =?us-ascii?Q?G923Uf8xYhhxh5zClCDxBfB54KY6udprA761XCd4G/QoXsrfO70ev5B9a7uW?=
+ =?us-ascii?Q?tT1Tvt1jdkmI6gHzrodPBD5B34M02MSoG67eHcr/++EOwRcY8izENesBw9Zs?=
+ =?us-ascii?Q?2C6+bgqA78hV73UZShF0GHQA+bsY3uGA9AZUcWd7jeN41Njjwa9OCu1YwTg5?=
+ =?us-ascii?Q?daN3IExtZzgVIRLSehMCXLfUNrWGVI4zVfmXm8uP6a8pK6K9j5LSAkrEBKjB?=
+ =?us-ascii?Q?YwIhpxHg97LGH9sxRwsMlc9lQz23vXNjMCjf6A1jwPKP1PRscbL7MoeUZQ9V?=
+ =?us-ascii?Q?YM21C3B+NepkOt+1SbVASN0HblSYZzQJsw14DCynTZ7e4ke7vhc3nvXqxgHl?=
+ =?us-ascii?Q?gPx19eTX3Q2YqHFaQWnqOO6cft5Jfsce1pofvGsQ8T4DJARnBnMVW8cH4n5R?=
+ =?us-ascii?Q?b2NlILCXiEoXdhwRtc12GiiZNEqhsakvfYIi96zwLjyyQYu8lsMJ1thiZXKZ?=
+ =?us-ascii?Q?vfV3kJkUxl519BzEXl2KrnhS6uwxcHa06+FmASfh7w0cctEAJJEGA6+GaqjR?=
+ =?us-ascii?Q?VkCx2ZZCg8AmPKX5akuL1obqYk7q0v5zd84UEXQAfgdCGOCNG9drwqLCGN9P?=
+ =?us-ascii?Q?wMbsZxuA57y6dIvSH39eyEYc40kozBMPmUuoXBw0KV+mbPQkd23qg7SeSBgE?=
+ =?us-ascii?Q?byS8CxqQvgAwziPF9F00kJlyDQPgHiXOc/aqcfvLmC/4I/HWdOI3Os9VFzr/?=
+ =?us-ascii?Q?AvW+We8AypnIBrT2mDMsJY5grLS+7mXfgOXtzw+5bFQ8jPE6ebHoEpeViy6h?=
+ =?us-ascii?Q?/domWfDRNWUsCMmP3cKD9m3HXwfSXIeRzpUtDdqGBvN6giXShKGWYm+0l+K8?=
+ =?us-ascii?Q?BCODCM9AjAhqmUZC/NEXdJtotIQL7ckwBpqdSWR5DpbMkw9PlyEjZqzwDvTR?=
+ =?us-ascii?Q?OXUL3sYrQJ/BBPSxwZZb+ftJ+EGJEDz4MRGxmxxfwAwy0NMa4yePK6p7o25v?=
+ =?us-ascii?Q?bydiYOdD6G1y71qWZDH0Aa6HaJPkNjsb7yaZexjD41fslE18zZjJH3SojP5G?=
+ =?us-ascii?Q?NwSe7k/wGHUd6h1oQQoR9n3+EIeaFpZw4aVZnOZvlzyslGj4R1+UEE+sTydK?=
+ =?us-ascii?Q?AP8QBZcaA9RCueQHfcuQwgtxKcIPhLcJNwqL803+Uzn6tPnsGbFpBsmFg5Lc?=
+ =?us-ascii?Q?/VzLyvDK9Er5x2mylbaljNUob2/nS4wJmvNB96qjNibm2TJAzela7sFK07Es?=
+ =?us-ascii?Q?8KeFKdPC6TyhtYXIiENFgnwc/Y58iLmoENe0IW5Lzk29clPtvpHqQ4yfwmd0?=
+ =?us-ascii?Q?VHOWfCBAhzCt26O0gQz73b7NLxmBg/BaeVVTq4mWIJfDlclufNUcokKOWCCz?=
+ =?us-ascii?Q?NGwFUSvw2drekxfluCAQ3VzAkitCz29RYxTKCBaI?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8b487040-3982-4b9d-d41f-08db3bf566ad
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4839.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2023 08:02:18.1225
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LI3zgda1YJvvxSGrW9fUyNu/ocqibMkKbAdQbTMhCAJptcTtKsPwhTJWiN6Hqad/LeCeWh/9M8PBkB03ORWxYg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB6804
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,219 +149,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Danton,
 
-syzbot found the following issue on:
+On 2023-04-13 at 15:00:42 +0800, Hillf Danton wrote:
+> On 13 Apr 2023 10:45:35 +0800 Pengfei Xu <pengfei.xu@intel.com>
+> > Hi Huafei and kernel experts,
+> > 
+> > It's a soft remind.
+> > This issue could be reproduced in v6.3-rc6 kernel.
+> > It could be reproduced on Alder lake, Raptor lake and so on x86 platforms.
+> > After reverted the commit "0e792b89e6800c:ftrace: Fix use-after-free for
+> > dynamic ftrace_ops" on top of v6.3-rc6 kernel, this issue was gone.
+> > 
+> > New syzkaller reproduced code, repro.report, bisect_info.log and detailed logs
+> > are in link: https://github.com/xupengfe/syzkaller_logs/tree/main/230412_031722_synchronize_rcu
+> > 
+> > Thanks!
+> > BR.
+> > 
+> > On 2023-03-15 at 20:20:44 +0800, Pengfei Xu wrote:
+> > > Hi Li Huafei and kernel experts,
+> > > 
+> > > Greeting!
+> > > 
+> > > Platform: x86 platforms
+> > > There is "task hung in synchronize_rcu bisect" in v6.3-rc2 kernel in guest:
+> > > 
+> > > All detailed info: https://github.com/xupengfe/syzkaller_logs/tree/main/230315_023443_synchronize_rcu
+> > > Reproduced code: https://github.com/xupengfe/syzkaller_logs/blob/main/230315_023443_synchronize_rcu/repro.c
+> > > Kconfig: https://github.com/xupengfe/syzkaller_logs/blob/main/230315_023443_synchronize_rcu/kconfig_origin
+> > > Bisect info: https://github.com/xupengfe/syzkaller_logs/blob/main/230315_023443_synchronize_rcu/bisect_info.log
+> > > v6.3-rc2 issue dmesg: https://github.com/xupengfe/syzkaller_logs/blob/main/230315_023443_synchronize_rcu/eeac8ede17557680855031c6f305ece2378af326_dmesg.log
+> > > "
+> > > [   24.844767] memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=330 'systemd'
+> > > [   31.392668] hrtimer: interrupt took 10726570 ns
+> 
+> What hrtimer/s triggered this print? And for what? The hrtimer trace helps here.
+> Info like that helps work out the cause of the task hang.
+> Feel free to fold in the debug diff below if it makes sense to you.
+> 
+  Thanks for your debug patch.
 
-HEAD commit:    a79d5c76f705 Merge tag 'scsi-fixes' of git://git.kernel.or..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=10e54345c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5666fa6aca264e42
-dashboard link: https://syzkaller.appspot.com/bug?extid=9c656068e71c1b06dc1f
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+  I newly updated previous alder lake S reproduced syzkaller repro.prog and
+  machineInfo0(vm info) info in log link:
+https://github.com/xupengfe/syzkaller_logs/tree/main/230315_023443_synchronize_rcu
 
-Unfortunately, I don't have any reproducer for this issue yet.
+And tried debug kernel on alder lake S, there were 2 cpu in guest, and
+CPU1 reported "interrupt took 331596 ns", then kernel should not trigger
+"rcu_tasks_wait_gp" for this issue.
+"
+[  104.171591] memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=334 'systemd'
+[  126.770981] hrtimer CPU1: interrupt took 331596 ns      //  "rcu_tasks_wait_gp" after 15s
+[  141.127282] rcu_tasks_wait_gp: rcu_tasks grace period number 9 (since boot) is 2571 jiffies old.
+[  171.272100] rcu_tasks_wait_gp: rcu_tasks grace period number 9 (since boot) is 10107 jiffies old.
+[  261.767189] rcu_tasks_wait_gp: rcu_tasks grace period number 9 (since boot) is 32731 jiffies old.
+[  300.102911] INFO: task repro_rcu:398 blocked for more than 147 seconds.
+[  300.103408]       Not tainted 6.3.0-rc6-dbg-dirty #1
+[  300.103743] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+[  300.104230] task:repro_rcu       state:D stack:0     pid:398   ppid:396    flags:0x00004006
+[  300.104780] Call Trace:
+[  300.104992]  <TASK>
+[  300.105265]  __schedule+0x40a/0xc30
+[  300.105706]  ? wait_for_completion+0x7b/0x180
+[  300.106041]  schedule+0x5b/0xe0
+[  300.106330]  schedule_timeout+0x4db/0x5b0
+[  300.106959]  ? schedule_timeout+0x9/0x5b0
+[  300.107364]  ? wait_for_completion+0x7b/0x180
+[  300.107698]  wait_for_completion+0xa6/0x180
+[  300.108141]  __wait_rcu_gp+0x136/0x160
+[  300.108474]  ? __pfx_arch_ftrace_ops_list_func+0x10/0x10
+[  300.108875]  synchronize_rcu_tasks_generic.part.24+0x3b/0x60
+[  300.109263]  ? __pfx_call_rcu_tasks+0x10/0x10
+[  300.109592]  ? __pfx_wakeme_after_rcu+0x10/0x10
+[  300.110020]  ? verify_cpu+0x10/0x100
+[  300.110353]  synchronize_rcu_tasks_generic+0x24/0x70
+[  300.110840]  synchronize_rcu_tasks+0x19/0x20
+[  300.111173]  ftrace_shutdown+0x1cc/0x410
+[  300.111564]  unregister_ftrace_function+0x35/0x230
+[  300.111950]  ? __sanitizer_cov_trace_switch+0x57/0xa0
+[  300.112380]  perf_ftrace_event_register+0x95/0xf0
+[  300.112733]  ? __pfx_tp_perf_event_destroy+0x10/0x10
+[  300.113092]  perf_trace_destroy+0x3a/0xa0
+[  300.113410]  ? __pfx_tp_perf_event_destroy+0x10/0x10
+[  300.113768]  tp_perf_event_destroy+0x1e/0x30
+[  300.114109]  _free_event+0x101/0x810
+[  300.114470]  put_event+0x3c/0x50
+[  300.114920]  perf_event_release_kernel+0x2de/0x360
+[  300.115266]  ? perf_event_release_kernel+0x9/0x360
+[  300.115685]  ? __pfx_perf_release+0x10/0x10
+[  300.116036]  perf_release+0x22/0x30
+[  300.116344]  __fput+0x11f/0x450
+[  300.116739]  ____fput+0x1e/0x30
+[  300.117031]  task_work_run+0xb6/0x120
+[  300.117407]  do_exit+0x547/0x12b0
+[  300.117739]  ? write_comp_data+0x2f/0x90
+[  300.118141]  do_group_exit+0x5e/0xf0
+[  300.118498]  get_signal+0x1465/0x14a0
+[  300.119142]  arch_do_signal_or_restart+0x33/0x280
+[  300.119697]  exit_to_user_mode_prepare+0x13b/0x210
+[  300.120078]  syscall_exit_to_user_mode+0x2d/0x60
+[  300.120439]  do_syscall_64+0x4a/0x90
+[  300.120748]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+[  300.121102] RIP: 0033:0x7f2c55b8a59d
+[  300.121389] RSP: 002b:00007ffc6ea72078 EFLAGS: 00000246 ORIG_RAX: 000000000000012a
+[  300.121894] RAX: 0000000000000003 RBX: 0000000000000000 RCX: 00007f2c55b8a59d
+[  300.122332] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000080
+[  300.122890] RBP: 00007ffc6ea72090 R08: 0000000000000000 R09: 00007ffc6ea72090
+[  300.123327] R10: 00000000ffffffff R11: 0000000000000246 R12: 00000000004011c0
+[  300.123765] R13: 00007ffc6ea721b0 R14: 0000000000000000 R15: 0000000000000000
+[  300.124479]  </TASK>
+[  300.124676] 
+               Showing all locks held in the system:
+[  300.125063] 1 lock held by rcu_tasks_kthre/11:
+[  300.125370]  #0: ffffffff83d63450 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x31/0x420
+[  300.126170] 1 lock held by rcu_tasks_rude_/12:
+[  300.126476]  #0: ffffffff83d631d0 (rcu_tasks_rude.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x31/0x420
+[  300.127421] 1 lock held by rcu_tasks_trace/13:
+[  300.127728]  #0: ffffffff83d62f10 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x31/0x420
+[  300.128551] 1 lock held by khungtaskd/29:
+[  300.128834]  #0: ffffffff83d63e60 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x1b/0x1e0
+[  300.129607] 1 lock held by systemd-journal/124:
+[  300.129921] 2 locks held by repro_rcu/398:
+[  300.130209]  #0: ffffffff83e20668 (event_mutex){+.+.}-{3:3}, at: perf_trace_destroy+0x21/0xa0
+[  300.131083]  #1: ffffffff83e1cd28 (ftrace_lock){+.+.}-{3:3}, at: unregister_ftrace_function+0x2b/0x230
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/adf61ecd5810/disk-a79d5c76.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/8192876ea15a/vmlinux-a79d5c76.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/80c6e54ddbe7/bzImage-a79d5c76.xz
+[  300.132040] =============================================
+"
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9c656068e71c1b06dc1f@syzkaller.appspotmail.com
+Thanks!
+BR.
 
-==================================================================
-BUG: KASAN: slab-use-after-free in iomap_finish_ioend+0x8a4/0x960 fs/iomap/buffered-io.c:1353
-Read of size 8 at addr ffff88807925b090 by task kworker/1:0/22
-
-CPU: 1 PID: 22 Comm: kworker/1:0 Not tainted 6.3.0-rc5-syzkaller-00202-ga79d5c76f705 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
-Workqueue: xfs-conv/loop2 xfs_end_io
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:319 [inline]
- print_report+0x163/0x540 mm/kasan/report.c:430
- kasan_report+0x176/0x1b0 mm/kasan/report.c:536
- iomap_finish_ioend+0x8a4/0x960 fs/iomap/buffered-io.c:1353
- iomap_finish_ioends+0x1af/0x3a0 fs/iomap/buffered-io.c:1377
- xfs_end_ioend+0x36e/0x4d0 fs/xfs/xfs_aops.c:136
- xfs_end_io+0x2e5/0x370 fs/xfs/xfs_aops.c:173
- process_one_work+0x8a0/0x10e0 kernel/workqueue.c:2390
- worker_thread+0xa63/0x1210 kernel/workqueue.c:2537
- kthread+0x270/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-
-Allocated by task 12928:
- kasan_save_stack mm/kasan/common.c:45 [inline]
- kasan_set_track+0x4f/0x70 mm/kasan/common.c:52
- __kasan_slab_alloc+0x66/0x70 mm/kasan/common.c:328
- kasan_slab_alloc include/linux/kasan.h:186 [inline]
- slab_post_alloc_hook+0x68/0x3a0 mm/slab.h:769
- slab_alloc_node mm/slub.c:3452 [inline]
- slab_alloc mm/slub.c:3460 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
- kmem_cache_alloc_lru+0x11f/0x2e0 mm/slub.c:3483
- alloc_inode_sb include/linux/fs.h:2686 [inline]
- xfs_inode_alloc+0x88/0x6c0 fs/xfs/xfs_icache.c:81
- xfs_iget_cache_miss fs/xfs/xfs_icache.c:585 [inline]
- xfs_iget+0xad2/0x2fd0 fs/xfs/xfs_icache.c:751
- xfs_init_new_inode+0x1ca/0x10a0 fs/xfs/xfs_inode.c:815
- xfs_create+0x8ce/0x1240 fs/xfs/xfs_inode.c:1023
- xfs_generic_create+0x491/0xd70 fs/xfs/xfs_iops.c:199
- lookup_open fs/namei.c:3416 [inline]
- open_last_lookups fs/namei.c:3484 [inline]
- path_openat+0x13df/0x3170 fs/namei.c:3712
- do_filp_open+0x234/0x490 fs/namei.c:3742
- do_sys_openat2+0x13f/0x500 fs/open.c:1348
- do_sys_open fs/open.c:1364 [inline]
- __do_sys_openat fs/open.c:1380 [inline]
- __se_sys_openat fs/open.c:1375 [inline]
- __x64_sys_openat+0x247/0x290 fs/open.c:1375
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Freed by task 15:
- kasan_save_stack mm/kasan/common.c:45 [inline]
- kasan_set_track+0x4f/0x70 mm/kasan/common.c:52
- kasan_save_free_info+0x2b/0x40 mm/kasan/generic.c:521
- ____kasan_slab_free+0xd6/0x120 mm/kasan/common.c:236
- kasan_slab_free include/linux/kasan.h:162 [inline]
- slab_free_hook mm/slub.c:1781 [inline]
- slab_free_freelist_hook mm/slub.c:1807 [inline]
- slab_free mm/slub.c:3787 [inline]
- kmem_cache_free+0x297/0x520 mm/slub.c:3809
- rcu_do_batch kernel/rcu/tree.c:2112 [inline]
- rcu_core+0xa4d/0x16f0 kernel/rcu/tree.c:2372
- __do_softirq+0x2ab/0x908 kernel/softirq.c:571
-
-Last potentially related work creation:
- kasan_save_stack+0x3f/0x60 mm/kasan/common.c:45
- __kasan_record_aux_stack+0xb0/0xc0 mm/kasan/generic.c:491
- __call_rcu_common kernel/rcu/tree.c:2622 [inline]
- call_rcu+0x167/0xa70 kernel/rcu/tree.c:2736
- __xfs_inode_free fs/xfs/xfs_icache.c:161 [inline]
- xfs_reclaim_inode fs/xfs/xfs_icache.c:953 [inline]
- xfs_icwalk_process_inode fs/xfs/xfs_icache.c:1635 [inline]
- xfs_icwalk_ag+0x1366/0x1a60 fs/xfs/xfs_icache.c:1717
- xfs_icwalk fs/xfs/xfs_icache.c:1766 [inline]
- xfs_reclaim_inodes+0x1f7/0x310 fs/xfs/xfs_icache.c:986
- xfs_unmount_flush_inodes+0xaf/0xc0 fs/xfs/xfs_mount.c:594
- xfs_unmountfs+0xc4/0x280 fs/xfs/xfs_mount.c:1071
- xfs_fs_put_super+0x74/0x2d0 fs/xfs/xfs_super.c:1126
- generic_shutdown_super+0x134/0x340 fs/super.c:500
- kill_block_super+0x7e/0xe0 fs/super.c:1407
- deactivate_locked_super+0xa4/0x110 fs/super.c:331
- cleanup_mnt+0x426/0x4c0 fs/namespace.c:1177
- task_work_run+0x24a/0x300 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop+0xd9/0x100 kernel/entry/common.c:171
- exit_to_user_mode_prepare+0xb1/0x140 kernel/entry/common.c:204
- __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
- syscall_exit_to_user_mode+0x64/0x280 kernel/entry/common.c:297
- do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Second to last potentially related work creation:
- kasan_save_stack+0x3f/0x60 mm/kasan/common.c:45
- __kasan_record_aux_stack+0xb0/0xc0 mm/kasan/generic.c:491
- insert_work+0x54/0x3d0 kernel/workqueue.c:1361
- __queue_work+0xb37/0xf10 kernel/workqueue.c:1524
- queue_work_on+0x14f/0x250 kernel/workqueue.c:1552
- queue_work include/linux/workqueue.h:504 [inline]
- xfs_end_bio+0xf6/0x1e0 fs/xfs/xfs_aops.c:188
- req_bio_endio block/blk-mq.c:795 [inline]
- blk_update_request+0x4d7/0xfe0 block/blk-mq.c:927
- blk_mq_end_request+0x3e/0x70 block/blk-mq.c:1054
- blk_complete_reqs block/blk-mq.c:1132 [inline]
- blk_done_softirq+0xfc/0x150 block/blk-mq.c:1137
- __do_softirq+0x2ab/0x908 kernel/softirq.c:571
-
-The buggy address belongs to the object at ffff88807925ae80
- which belongs to the cache xfs_inode of size 1808
-The buggy address is located 528 bytes inside of
- freed 1808-byte region [ffff88807925ae80, ffff88807925b590)
-
-The buggy address belongs to the physical page:
-page:ffffea0001e49600 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x79258
-head:ffffea0001e49600 order:3 entire_mapcount:0 nr_pages_mapped:0 pincount:0
-memcg:ffff888034708001
-flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000010200 ffff888145f6e780 ffffea0000ecce00 dead000000000002
-raw: 0000000000000000 0000000080100010 00000001ffffffff ffff888034708001
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 3, migratetype Reclaimable, gfp_mask 0x1d2050(__GFP_IO|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL|__GFP_RECLAIMABLE), pid 30191, tgid 30185 (syz-executor.2), ts 2829909820429, free_ts 2816156356992
- prep_new_page mm/page_alloc.c:2553 [inline]
- get_page_from_freelist+0x3246/0x33c0 mm/page_alloc.c:4326
- __alloc_pages+0x255/0x670 mm/page_alloc.c:5592
- alloc_slab_page+0x6a/0x160 mm/slub.c:1851
- allocate_slab mm/slub.c:1998 [inline]
- new_slab+0x84/0x2f0 mm/slub.c:2051
- ___slab_alloc+0xa85/0x10a0 mm/slub.c:3193
- __slab_alloc mm/slub.c:3292 [inline]
- __slab_alloc_node mm/slub.c:3345 [inline]
- slab_alloc_node mm/slub.c:3442 [inline]
- slab_alloc mm/slub.c:3460 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
- kmem_cache_alloc_lru+0x1b9/0x2e0 mm/slub.c:3483
- alloc_inode_sb include/linux/fs.h:2686 [inline]
- xfs_inode_alloc+0x88/0x6c0 fs/xfs/xfs_icache.c:81
- xfs_iget_cache_miss fs/xfs/xfs_icache.c:585 [inline]
- xfs_iget+0xad2/0x2fd0 fs/xfs/xfs_icache.c:751
- xfs_init_new_inode+0x1ca/0x10a0 fs/xfs/xfs_inode.c:815
- xfs_symlink+0xb7b/0x1e80 fs/xfs/xfs_symlink.c:234
- xfs_vn_symlink+0x1f5/0x740 fs/xfs/xfs_iops.c:419
- vfs_symlink+0x12f/0x2a0 fs/namei.c:4398
- do_symlinkat+0x201/0x610 fs/namei.c:4424
- __do_sys_symlink fs/namei.c:4445 [inline]
- __se_sys_symlink fs/namei.c:4443 [inline]
- __x64_sys_symlink+0x7e/0x90 fs/namei.c:4443
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1454 [inline]
- free_pcp_prepare mm/page_alloc.c:1504 [inline]
- free_unref_page_prepare+0xe2f/0xe70 mm/page_alloc.c:3388
- free_unref_page+0x37/0x3f0 mm/page_alloc.c:3483
- qlist_free_all+0x22/0x60 mm/kasan/quarantine.c:187
- kasan_quarantine_reduce+0x14b/0x160 mm/kasan/quarantine.c:294
- __kasan_slab_alloc+0x23/0x70 mm/kasan/common.c:305
- kasan_slab_alloc include/linux/kasan.h:186 [inline]
- slab_post_alloc_hook+0x68/0x3a0 mm/slab.h:769
- slab_alloc_node mm/slub.c:3452 [inline]
- slab_alloc mm/slub.c:3460 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
- kmem_cache_alloc+0x11f/0x2e0 mm/slub.c:3476
- getname_flags+0xbc/0x4e0 fs/namei.c:140
- do_sys_openat2+0xd6/0x500 fs/open.c:1342
- do_sys_open fs/open.c:1364 [inline]
- __do_sys_open fs/open.c:1372 [inline]
- __se_sys_open fs/open.c:1368 [inline]
- __x64_sys_open+0x225/0x270 fs/open.c:1368
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Memory state around the buggy address:
- ffff88807925af80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88807925b000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff88807925b080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                         ^
- ffff88807925b100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88807925b180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> +++ b/kernel/time/hrtimer.c
+> @@ -1866,7 +1866,7 @@ retry:
+>  	else
+>  		expires_next = ktime_add(now, delta);
+>  	tick_program_event(expires_next, 1);
+> -	pr_warn_once("hrtimer: interrupt took %llu ns\n", ktime_to_ns(delta));
+> +	pr_warn_once("hrtimer CPU%u: interrupt took %llu ns\n", cpu_base->cpu, ktime_to_ns(delta));
+>  }
+>  
+>  /* called with interrupts disabled */
