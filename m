@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8AE36E13BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 19:52:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 739C86E13BE
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 19:52:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbjDMRwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 13:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35416 "EHLO
+        id S230184AbjDMRwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 13:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjDMRws (ORCPT
+        with ESMTP id S230112AbjDMRwt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 13:52:48 -0400
+        Thu, 13 Apr 2023 13:52:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F5E5B82;
-        Thu, 13 Apr 2023 10:52:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42CD5B82;
+        Thu, 13 Apr 2023 10:52:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EBB1E63BF3;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 59CEF63FEA;
+        Thu, 13 Apr 2023 17:52:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 897EDC433EF;
         Thu, 13 Apr 2023 17:52:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10C93C433D2;
-        Thu, 13 Apr 2023 17:52:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681408366;
-        bh=LCzKofwLOiSwAfZihSLFgN+hzyIGSTBPOrKf5+PrROk=;
+        s=k20201202; t=1681408367;
+        bh=qyS91PanHzUMeAfQVgrySxY+HrWjuWNS+hGwyw6sQYI=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=LaJiNxk5sDcXUE3Sgb0WJcGxKY4LJvbXt+eLDDAj5Y85zNqhvIWkcikRuMCjJz7hg
-         Zqvj9kRmrw2lVA+qi/+ZQSV+FkXYmYLPAjPckODiB55ny0OKDGksjma6Pwvyyy1stj
-         +ky/F9WNHedom2Q5j7ecRNAQ5/G1yOwH1oaqwLhR94czYchFifF+Zi6q/8FS0kBuE1
-         Y0voDzon3zf/eMw3iovzdv7lLKkS+eJRDKFEqGhKdjG5FOtTHLFYDmmJB6qw/SGYh8
-         wiCHUoD/5eyGU4Yn+grYtcqk8PdBGzpcjnCxM3P8txVldhs5FKDszsBuTmv0e+0uw0
-         YPxQIjhNprMDw==
+        b=koRJE3om4iIi5S70DPfJu+Iwl5ocTun+J7QPwivsMwDNP+M1Je8Lcy0BtURnPm4uS
+         6f+A8/1oNs0d1Oyhn8RRFU4Jw8TAXrTho+964bAhg5Ls1jKLwK7UZRppXl1V8aUTfl
+         UBRDFiGFWfYASUueo6eEhzaiz/FF27Rl/b5Sq3RNbHwn7p6I7aKiguL25PxXniM9Qp
+         giAGeSSUB9ON9NzmQdBaHLreKvBXr62WHrnGy3OyWDY7OGryMmurpFwrhh9rKl7h3w
+         KBNLmO/BzwmqkYdhC+4/FVI6gUM/aA9v8U8GsIZFOY/9gZqR5kgWX1+hIninRemouj
+         oOaeqYM7sTFYw==
 From:   Mark Brown <broonie@kernel.org>
 To:     Rohit Ner <rohitner@google.com>
 Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <manugautam@google.com>,
-        Joy Chakraborty <joychakr@google.com>
-In-Reply-To: <CAGt9f=TBi3qcbhUPymFGjCFeNNZZ0KQoXSUOT5uA6Dn8PMmnWw@mail.gmail.com>
-References: <CAGt9f=TBi3qcbhUPymFGjCFeNNZZ0KQoXSUOT5uA6Dn8PMmnWw@mail.gmail.com>
-Subject: Re: [PATCH] spi: spi-loopback-test: Add module param for iteration
- length
-Message-Id: <168140836477.1052939.3678951813615163039.b4-ty@kernel.org>
-Date:   Thu, 13 Apr 2023 18:52:44 +0100
+        manugautam@google.com, joychakr@google.com
+In-Reply-To: <20230412202009.3750955-1-rohitner@google.com>
+References: <20230412202009.3750955-1-rohitner@google.com>
+Subject: Re: [PATCH v2 0/1] SPI loopback testing framework updates
+Message-Id: <168140836629.1052939.12481894863365636618.b4-ty@kernel.org>
+Date:   Thu, 13 Apr 2023 18:52:46 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -56,11 +54,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 03 Apr 2023 09:39:10 +0530, Rohit Ner wrote:
-> SPI test framework is designed to run each test case for
-> a list of lengths.
-> Introduce a module parameter to limit the iterations
-> to a single value among the list of lengths.
+On Wed, 12 Apr 2023 13:20:08 -0700, Rohit Ner wrote:
 > 
 > 
 
