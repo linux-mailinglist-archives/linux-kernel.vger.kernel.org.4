@@ -2,287 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49B156E089D
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 725966E089F
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbjDMIH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 04:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48668 "EHLO
+        id S230306AbjDMIIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 04:08:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbjDMIHY (ORCPT
+        with ESMTP id S229917AbjDMIIJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 04:07:24 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2047.outbound.protection.outlook.com [40.107.212.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4479BEA;
-        Thu, 13 Apr 2023 01:07:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UEQfOzW/ekgWqtRSzTUzdF7HjAoZcVQU002y0r8mF0KX+T7sOL0ixEoUaDminMkBYUlKGnxbn8t2y5jm8w5E3JV1lsx6/0gxoeqeLeKa+jyo0kxDbhYDkQRXMOLMxnK8vAkdtfyVi8koVpwxAGsoodBzXw0rjfLZ4qqz3dlXNXV+VC+YViXqXnO0WgJEtooeoGmnLbtFP1UTFAaTCUVAadkBeddKdH4EIvexb9cHLnyPpMviZ0T+N035Ni/wqscuoMV+FsJSnvUDOXzQQKjAd50cWD9lt4eFL+YghFnH/jP82iXl+IU2kOz19P+rZTuxyT9LtCJLwZDsvfvHJnRjvw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zmYPGX7a3DVg773g9dEOwSKlcNsxuADMeZDyFmu/1Bg=;
- b=GMx9NhZpE7ByDRMby6E3/fKIasu22ZqiYgsLy3RRLly1ES8ygnofyFDlw3h8aqvXjNxCPDIYeBdqBhv90JebiM2k6ItbUQtWKre0VlLoqmH1fIG2/u9+T0OCBm1dpox/cL6BJbT2HF0m6LpcLQJq8ZWwXJU20BbU5lexGE7pmIXIE0V4GdR61L1ReYQcSEw7vae5xakdLwGkYujOuUhHmMT+dRZmaUSVS0Tu5ZhTMonGaoratJCLjDMvtbxnA4QhhQ5loHv32TPpFlyJRaXW6RY6V90ilzHWWf7gOLyeG1zRwc9mubbSAMTW/2YLJEL/ipIYue273jCMxqvtOQbi7g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zmYPGX7a3DVg773g9dEOwSKlcNsxuADMeZDyFmu/1Bg=;
- b=HEHnPgiueAMbCeHxnqxPYNK3QYK1tS0pVQdDXcJXhFeytSaWBx/AagqdpTIWTzIGgURzENKrH8KO4xCtq7Gl2r8M/HFR5YKhYzpeLBTxWlf2hlDKrhYq8myf0d4R+lInkh9WQw/DbCBuNzOZC07+d7srtpO/Xtnlp2xMpyqUqxQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by PH7PR12MB6859.namprd12.prod.outlook.com (2603:10b6:510:1b5::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Thu, 13 Apr
- 2023 08:07:18 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::4624:dc39:943e:6ae]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::4624:dc39:943e:6ae%5]) with mapi id 15.20.6277.036; Thu, 13 Apr 2023
- 08:07:18 +0000
-Message-ID: <ce87917c-6cf1-b1e7-4782-61a7e47aa92d@amd.com>
-Date:   Thu, 13 Apr 2023 10:07:11 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v4 1/6] drm: Add common fdinfo helper
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Christopher Healy <healych@amazon.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Clark <robdclark@chromium.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230412224311.23511-1-robdclark@gmail.com>
- <20230412224311.23511-2-robdclark@gmail.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20230412224311.23511-2-robdclark@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM0PR10CA0002.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:208:17c::12) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Thu, 13 Apr 2023 04:08:09 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659654228
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 01:08:01 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id y63so6995435pgd.13
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 01:08:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681373281; x=1683965281;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=83F1tjfFHvgT9fzCBaIpX/yc7Lcytfnr4LaCjC62oaI=;
+        b=j87Ph7CDab2iyR0s/bOXIE4o6k2T75GCUsVETgWUkJtwo4nu4bJsixiqqnNsGKrJpq
+         f/sAahuDNmEh+4FFJiwk0sNWmavB+1KOjpY2PhaFp7H6JwQUd0VabuBqaV5h3S3vKeR/
+         KYD0QszcZkHq1KfOUkEEJ5a1kD6iFl3IcEzIQDuia9IpCQuKoK8l6LMaI/SzShclQnJR
+         N2Ec5kJT8k/nar6KEfTFP3yR20zXyOioc5Q7ry0cclXmT+wo51fMqqV1Dzm0b8+2XgnG
+         3dtMG+SrY5VYjbRXQsYmYEHKX+BKAgZJlVOlQq6feKDMBMQ+OKzSQoapV3OlIwDpiZTV
+         hWhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681373281; x=1683965281;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=83F1tjfFHvgT9fzCBaIpX/yc7Lcytfnr4LaCjC62oaI=;
+        b=BKHWUMxT45KUE6E7gm0oeV98g9DYAGsZODkvgQ/eBFF0fSMYma70UYqAuSzW+zgQ5/
+         AT/28veLVSEWtLY7Azrt8pkt5rxtOqDMmDFx/3gplQHrYtC3wXzsxM/IyYsVl9KfZTHJ
+         acD8DxOJ5FL8KdoSHK1mXPNQrFrRImDfksiGQ7Juv01M25uRTt/lo0c4yMX3jEMcbB2j
+         MIcnaBgI90GlHlRvY1PfAtNzzpOpiEoYtpAqeBiB6a0J/L1cGIeGf5j2DeWi8cBW0u++
+         nSggiO6o+ZW9Z7P+HypjjpobzZYuPxtW9og45ESfASEOaL8Omzsx0NsssU/zJNKO0msC
+         Tj7Q==
+X-Gm-Message-State: AAQBX9cStDPftWC4ebpChrCxKOT2AqFLDo+oSg+qJQ2LkARYzzdz9YN3
+        PhdV1M0r9fcQ1AzB3N934pzDNS/qksWTZC1IL6Y=
+X-Google-Smtp-Source: AKy350YokbYq+xEENfm9Q9vx0MO6Q/05KyrBo3y7b3sL33KtuY/LSnMzhmfxUaWy7lDzZnI5ut+noXJCUWkTBHJeDAs=
+X-Received: by 2002:a65:6183:0:b0:503:a7:d244 with SMTP id c3-20020a656183000000b0050300a7d244mr244067pgv.9.1681373280810;
+ Thu, 13 Apr 2023 01:08:00 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|PH7PR12MB6859:EE_
-X-MS-Office365-Filtering-Correlation-Id: b4004af5-0e6b-4d9b-3a9d-08db3bf619e4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0CePvwG8FqyKJ8xoZ6OVaFvBD+fbrq16HA/vp+12dqDrbvDGVNg3SF2Vf/Q3nFcbX5qPiF+KzlrQO5KhtWO7UFgptxTAJSnt7v1ul9d4fUkOiUGEaxL7mhueKN1YLvJ3VocUaNswEaSOp1V/8c9PoDvVOmIn02ckzlC3QqzG1I7RENuvgYg9gFOs/+CUSV4OwHLkPl8WrBUNRBOtsZICJ1e67Uerq4WDeennR2PI4pzQeYvM0B6xFX4lhs64D+0+KXM1qkfApdVBqBy5QXWErhAb+Gj+uWCM3hPY3A17P9iabh6DmdzmE+icXP5mRFioXduLVPENmQYFN3Sc1yOCju6CeqhYPlmzsGrP3lff6VqKeYxP7a8adg9RSbUuvY7gOB+HCHyBTNKyq7orRxBK8e6Tffz13eQthQ/Ad8HmKSLqhCiJGYWiIkMs4BYtLb3Ig+yqqRxEX5e+iKu9WYQvStJmefA00GZi4iYy3k+hay0M/h3id427x96neJTKUPx0M9GmtU8fE5N9ZsW7XkPE5H/SNckJnuJiwJwkkrRoiiUy4K8DgrFwrhfHxqaWxRhSWn4PZlI2P4QElu4CUHLPrLM6l3geH7UYpgLkEbVEyROqJ9yDlM/Sz95PaRo7ruVLLZXF02WAVQf1XiEKQqDZOQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(39860400002)(136003)(366004)(346002)(451199021)(54906003)(478600001)(316002)(2616005)(186003)(6512007)(26005)(31686004)(6506007)(6666004)(6486002)(83380400001)(66556008)(66946007)(66476007)(4326008)(41300700001)(5660300002)(7416002)(8676002)(8936002)(2906002)(38100700002)(86362001)(31696002)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OGFmeDVjWmNjME9MWG9UY2ZvcU9id2ZEU083VXEwQWhQc1huNTUzTzUyb3ht?=
- =?utf-8?B?anM1Y092bjdNSFBxRnp1c3pweFRaUkJ6TGpNZzZtQk1BaW5mZlhiWmw0NW9R?=
- =?utf-8?B?SDVwVGtlYmNUeW05QTVxNXNPdVh5L01oanNCQmVWa2c5SXV2bjJRcnV4NFo1?=
- =?utf-8?B?dVh0bXVGTGlFd0lTeTJQNFhtWUhrRWNabmJXV21HeHdZMjY2YS83WmNFcGw0?=
- =?utf-8?B?cmRQZzNNZDYyYm14SVhzOGlmMnliNUZlSVhjWTFGa1Q0NXdPSDdpODU1Y1VF?=
- =?utf-8?B?cnF3aXdjZUVxeStOcE1hMzk5aUE5WlQ4d3d4blBKM1R0Uko4WmpaNjE0K3Zw?=
- =?utf-8?B?TjM1dXhMWHlpT1dnbVNkT2h5c3pEVzU1NHVxYTFtVTJzeFp5TkdnMW5Vb3lO?=
- =?utf-8?B?STRaS0JLTlhnU3RjVjhzNG52cGJNUGdoQUJOSGlxb1dUWFpnNHhhTFMyNEh2?=
- =?utf-8?B?RmFmNXpkZWVoSUhNbmRsOTRkS1paeG1uR3k4S0hPM1I4RWMvQjVyQ0tIaVkr?=
- =?utf-8?B?K0dOUzQwQWdYa25sTnNVUUE5dWUwVVgrRXhaaXk2OERMTi83MSt1OG93cEor?=
- =?utf-8?B?ZkRpcFlHTlRZT1BBQWYzWCsrYTcxbXZwOFREUEVaU050eTZudHRLcTZXSzBS?=
- =?utf-8?B?N0hFcTRJS25vZzk4eTQ3YWUvS2Q3WktPU1hqY1dsd2tnVk1Nd1RrcnkzSFVq?=
- =?utf-8?B?QjlHRldTUitSSTFhaGFHdlhCeDBxRnRwQXBaanRqOWNsMjlOaDlvUFRHc3lW?=
- =?utf-8?B?Wko2UGJhczAvamtCeHpRdThRelZnVVQvQ3NKWW9wZjdPaHNNYitHOHpIM0FM?=
- =?utf-8?B?RHBrOTBsaHFkalJ4aW1FR0hKNEVZbU9pMDVvV0NOcWU5Z05Ta3k3T0lyWDAx?=
- =?utf-8?B?S1htaGlXOWF5eHpPVFZja0lhd0JOR2JlMi9HUDhSeE0zYTBWNVpPdXdoanUw?=
- =?utf-8?B?S3VsV2hNMUVseEVPbllrWFJUc2hoSjdxTFZUUm9RSGhLOC9pdUNRd2FBVW9C?=
- =?utf-8?B?VUVqMUhISi8zZm4vaGsxSWFmZlp0WEhVOEpPdVFpUDZCV2ovWTE2Q3luUVVt?=
- =?utf-8?B?SWRKbk9vampEMlVPMVhFZFU2OFRUd0pNK1FQT2lMRFdFUzQ4dWo1VjRvR3BE?=
- =?utf-8?B?cVFORkhBbVZJQVZESU5UNGs0U1N4NDE4WVJxc1lLUzBoRXVTRkpSMjY0L2tI?=
- =?utf-8?B?TDB1QlJROWorZGtFZHh0K0RwbWwxYllmU1hzMWJSUkNOV0tiMFJxdVYrWjNl?=
- =?utf-8?B?TC9QMllxMDZBdS8wcXBFS2dPZXhSOWtwd011VHZmRjhTSWRhbWhOZFV3eTkz?=
- =?utf-8?B?SVd4VThVVmNLMFpMdGNDYTBGN2NZQXMrekUyaEFWVDhLRW9mak1USTZEK0pS?=
- =?utf-8?B?UTcxVmpGbG1hZzhXWkJUU3BOcGEwQkRFblBKT1VZaDlOcTk4S2QyaGh2Nzl3?=
- =?utf-8?B?aVU1MEUwQWhyZWVIdWtOb0tNVXBwYmVndDZSYTJwVDJ0aC9Rb2tzTkZ5VXFj?=
- =?utf-8?B?NHIvc0Zhc0FvWC9PZTd2RDIxaFN6NEM0VjErMldreWVpelF3c3Jia2NlNW8z?=
- =?utf-8?B?V3hxdGJYMWg2SWQvZmltU0VSSXdkV3BDazhYckFUZmR4OFBMcXRBRmdnV0J0?=
- =?utf-8?B?dkdUVTBDT1Mya0JrdUhabTFISVJDcFgxeGdac2ZZR3R3S0VqV3BHcURsZ0ZC?=
- =?utf-8?B?SXYyL2lydE1qdUVmcUxvQy9lVkltaFZSVXJrMDFsbit5V2dHRWg1UVUxcmgx?=
- =?utf-8?B?eFRyeU8zRzZIMGEwRkxFdGNCNjlZWlpFVmdFYkpiUmdCdXZYTXVqYTFjWDZj?=
- =?utf-8?B?a0VKeUliTjNoTGhpUFZ0Z0lqSDMwV2ppaWUzcENOT1V2b1NWRUdXVk1yRzly?=
- =?utf-8?B?dDVNRGVYWUhFZzB6N3QrTkdpaXFMRE1heWtrcTJweUw5dW9VcGFsTk5oaXI3?=
- =?utf-8?B?N2JjbTZsUnpCUDBRNmgzS0ltWTY5RWhjckp6VEsxL3FMSzhTVmxheFF5aXRW?=
- =?utf-8?B?M01DVS9tVDQ4TjhTbFZtbmdBdTVHdWo3RUdwcUtrajZZQyt0RDZwS1hEQnVl?=
- =?utf-8?B?RWtNaldpcHBHSkhsTXg5NkQrMlBONDloTUZzZ3pQTGtmQlp0emR3NjJuZVQy?=
- =?utf-8?Q?rpZM=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b4004af5-0e6b-4d9b-3a9d-08db3bf619e4
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2023 08:07:18.7561
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ulLoPqh0nNbh8bpQB3d/ndLIhPyjYUuJOwXOmhPjLD6Bo8WAiIdpIg/UVAXQzOND
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6859
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230312145305.1908607-1-zyytlz.wz@163.com> <CANDhNCr=hdhKS4c+U=+W1ONHDWv6BrwL5TovGjs0G2G+Reqc9g@mail.gmail.com>
+ <CAJedcCyJnV+KnFF5h+2-0W1R4uaUxUxXFUH3Q9HGYh-5F5LmBQ@mail.gmail.com>
+In-Reply-To: <CAJedcCyJnV+KnFF5h+2-0W1R4uaUxUxXFUH3Q9HGYh-5F5LmBQ@mail.gmail.com>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Thu, 13 Apr 2023 16:07:49 +0800
+Message-ID: <CAJedcCyERP0-9DNgeKmS3C9Soqq590PteEorr_bxKzNanht=TQ@mail.gmail.com>
+Subject: Re: [PATCH] misc: hisi_hikey_usb: Fix use after free bug in
+ hisi_hikey_usb_remove due to race condition
+To:     John Stultz <jstultz@google.com>
+Cc:     Zheng Wang <zyytlz.wz@163.com>,
+        Yongqin Liu <yongqin.liu@linaro.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>, arnd@arndb.de,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        1395428693sheep@gmail.com, alex000young@gmail.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 13.04.23 um 00:42 schrieb Rob Clark:
-> From: Rob Clark <robdclark@chromium.org>
+Friendly ping about the bug.
+
+Thanks,
+Zheng
+
+Zheng Hacker <hackerzheng666@gmail.com> =E4=BA=8E2023=E5=B9=B43=E6=9C=8814=
+=E6=97=A5=E5=91=A8=E4=BA=8C 09:01=E5=86=99=E9=81=93=EF=BC=9A
 >
-> Handle a bit of the boiler-plate in a single case, and make it easier to
-> add some core tracked stats.
+> John Stultz <jstultz@google.com> =E4=BA=8E2023=E5=B9=B43=E6=9C=8814=E6=97=
+=A5=E5=91=A8=E4=BA=8C 03:57=E5=86=99=E9=81=93=EF=BC=9A
+> >
+> > On Sun, Mar 12, 2023 at 7:53=E2=80=AFAM Zheng Wang <zyytlz.wz@163.com> =
+wrote:
+> > >
+> > > In hisi_hikey_usb_probe, it called hisi_hikey_usb_of_role_switch
+> > > and bound &hisi_hikey_usb->work with relay_set_role_switch.
+> > > When it calls hub_usb_role_switch_set, it will finally call
+> > > schedule_work to start the work.
+> > >
+> > > When we call hisi_hikey_usb_remove to remove the driver, there
+> > > may be a sequence as follows:
+> > >
+> > > Fix it by finishing the work before cleanup in hisi_hikey_usb_remove.
+> > >
+> > > CPU0                  CPU1
+> > >
+> > >                     |relay_set_role_switch
+> > > hisi_hikey_usb_remove|
+> > >   usb_role_switch_put|
+> > >     usb_role_switch_release  |
+> > >      kfree(sw)     |
+> > >                     | usb_role_switch_set_role
+> > >                     |   //use
+> > >
+> > > Fixes: 7a6ff4c4cbc3 ("misc: hisi_hikey_usb: Driver to support onboard=
+ USB gpio hub on Hikey960")
+> > > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> > > ---
+> > >  drivers/misc/hisi_hikey_usb.c | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/drivers/misc/hisi_hikey_usb.c b/drivers/misc/hisi_hikey_=
+usb.c
+> > > index 2165ec35a343..26fc895c4418 100644
+> > > --- a/drivers/misc/hisi_hikey_usb.c
+> > > +++ b/drivers/misc/hisi_hikey_usb.c
+> > > @@ -242,6 +242,7 @@ static int hisi_hikey_usb_probe(struct platform_d=
+evice *pdev)
+> > >  static int  hisi_hikey_usb_remove(struct platform_device *pdev)
+> > >  {
+> > >         struct hisi_hikey_usb *hisi_hikey_usb =3D platform_get_drvdat=
+a(pdev);
+> > > +       cancel_work_sync(&hisi_hikey_usb->work);
+> > >
+> > >         if (hisi_hikey_usb->hub_role_sw) {
+> > >                 usb_role_switch_unregister(hisi_hikey_usb->hub_role_s=
+w);
+> >
+> > Looks sane to me.
+> > Pulling in Sumit and YongQin as they have hardware and can test with it=
+.
+> >
+> Hi John,
 >
-> v2: Update drm-usage-stats.rst, 64b client-id, rename drm_show_fdinfo
+> Thanks for your reply. Thank Sumit and YongQin for being willing to
+> test the solution with their hardware.
 >
-> Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> ---
->   Documentation/gpu/drm-usage-stats.rst | 10 +++++++-
->   drivers/gpu/drm/drm_file.c            | 35 +++++++++++++++++++++++++++
->   include/drm/drm_drv.h                 |  7 ++++++
->   include/drm/drm_file.h                |  4 +++
->   4 files changed, 55 insertions(+), 1 deletion(-)
->
-> diff --git a/Documentation/gpu/drm-usage-stats.rst b/Documentation/gpu/drm-usage-stats.rst
-> index b46327356e80..2ab32c40e93c 100644
-> --- a/Documentation/gpu/drm-usage-stats.rst
-> +++ b/Documentation/gpu/drm-usage-stats.rst
-> @@ -126,7 +126,15 @@ percentage utilization of the engine, whereas drm-engine-<str> only reflects
->   time active without considering what frequency the engine is operating as a
->   percentage of it's maximum frequency.
->   
-> +Implementation Details
-> +======================
-> +
-> +Drivers should use drm_show_fdinfo() in their `struct file_operations`, and
-> +implement &drm_driver.show_fdinfo if they wish to provide any stats which
-> +are not provided by drm_show_fdinfo().  But even driver specific stats should
-> +be documented above and where possible, aligned with other drivers.
-
-I'm really wondering if it wouldn't be less mid-layering if we let the 
-drivers call the drm function to print the common values instead of the 
-other way around?
-
-Apart from that question the patch looks good to me.
-
-Christian.
-
-> +
->   Driver specific implementations
-> -===============================
-> +-------------------------------
->   
->   :ref:`i915-usage-stats`
-> diff --git a/drivers/gpu/drm/drm_file.c b/drivers/gpu/drm/drm_file.c
-> index a51ff8cee049..6d5bdd684ae2 100644
-> --- a/drivers/gpu/drm/drm_file.c
-> +++ b/drivers/gpu/drm/drm_file.c
-> @@ -148,6 +148,7 @@ bool drm_dev_needs_global_mutex(struct drm_device *dev)
->    */
->   struct drm_file *drm_file_alloc(struct drm_minor *minor)
->   {
-> +	static atomic64_t ident = ATOMIC_INIT(0);
->   	struct drm_device *dev = minor->dev;
->   	struct drm_file *file;
->   	int ret;
-> @@ -156,6 +157,8 @@ struct drm_file *drm_file_alloc(struct drm_minor *minor)
->   	if (!file)
->   		return ERR_PTR(-ENOMEM);
->   
-> +	/* Get a unique identifier for fdinfo: */
-> +	file->client_id = atomic64_inc_return(&ident);
->   	file->pid = get_pid(task_pid(current));
->   	file->minor = minor;
->   
-> @@ -868,6 +871,38 @@ void drm_send_event(struct drm_device *dev, struct drm_pending_event *e)
->   }
->   EXPORT_SYMBOL(drm_send_event);
->   
-> +/**
-> + * drm_show_fdinfo - helper for drm file fops
-> + * @seq_file: output stream
-> + * @f: the device file instance
-> + *
-> + * Helper to implement fdinfo, for userspace to query usage stats, etc, of a
-> + * process using the GPU.  See also &drm_driver.show_fdinfo.
-> + *
-> + * For text output format description please see Documentation/gpu/drm-usage-stats.rst
-> + */
-> +void drm_show_fdinfo(struct seq_file *m, struct file *f)
-> +{
-> +	struct drm_file *file = f->private_data;
-> +	struct drm_device *dev = file->minor->dev;
-> +	struct drm_printer p = drm_seq_file_printer(m);
-> +
-> +	drm_printf(&p, "drm-driver:\t%s\n", dev->driver->name);
-> +	drm_printf(&p, "drm-client-id:\t%llu\n", file->client_id);
-> +
-> +	if (dev_is_pci(dev->dev)) {
-> +		struct pci_dev *pdev = to_pci_dev(dev->dev);
-> +
-> +		drm_printf(&p, "drm-pdev:\t%04x:%02x:%02x.%d\n",
-> +			   pci_domain_nr(pdev->bus), pdev->bus->number,
-> +			   PCI_SLOT(pdev->devfn), PCI_FUNC(pdev->devfn));
-> +	}
-> +
-> +	if (dev->driver->show_fdinfo)
-> +		dev->driver->show_fdinfo(&p, file);
-> +}
-> +EXPORT_SYMBOL(drm_show_fdinfo);
-> +
->   /**
->    * mock_drm_getfile - Create a new struct file for the drm device
->    * @minor: drm minor to wrap (e.g. #drm_device.primary)
-> diff --git a/include/drm/drm_drv.h b/include/drm/drm_drv.h
-> index 5b86bb7603e7..5edf2a13733b 100644
-> --- a/include/drm/drm_drv.h
-> +++ b/include/drm/drm_drv.h
-> @@ -401,6 +401,13 @@ struct drm_driver {
->   			       struct drm_device *dev, uint32_t handle,
->   			       uint64_t *offset);
->   
-> +	/**
-> +	 * @show_fdinfo:
-> +	 *
-> +	 * Print device specific fdinfo.  See Documentation/gpu/drm-usage-stats.rst.
-> +	 */
-> +	void (*show_fdinfo)(struct drm_printer *p, struct drm_file *f);
-> +
->   	/** @major: driver major number */
->   	int major;
->   	/** @minor: driver minor number */
-> diff --git a/include/drm/drm_file.h b/include/drm/drm_file.h
-> index 0d1f853092ab..6de6d0e9c634 100644
-> --- a/include/drm/drm_file.h
-> +++ b/include/drm/drm_file.h
-> @@ -258,6 +258,9 @@ struct drm_file {
->   	/** @pid: Process that opened this file. */
->   	struct pid *pid;
->   
-> +	/** @client_id: A unique id for fdinfo */
-> +	u64 client_id;
-> +
->   	/** @magic: Authentication magic, see @authenticated. */
->   	drm_magic_t magic;
->   
-> @@ -437,6 +440,7 @@ void drm_send_event(struct drm_device *dev, struct drm_pending_event *e);
->   void drm_send_event_timestamp_locked(struct drm_device *dev,
->   				     struct drm_pending_event *e,
->   				     ktime_t timestamp);
-> +void drm_show_fdinfo(struct seq_file *m, struct file *f);
->   
->   struct file *mock_drm_getfile(struct drm_minor *minor, unsigned int flags);
->   
-
+> Best regards,
+> Zheng
