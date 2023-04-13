@@ -2,77 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3C466E0BDB
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 12:51:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A58F6E0BE5
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 12:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjDMKvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 06:51:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32922 "EHLO
+        id S230503AbjDMK4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 06:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbjDMKvr (ORCPT
+        with ESMTP id S229819AbjDMK4n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 06:51:47 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC4292708
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:51:37 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-50672fbf83eso1532338a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:51:37 -0700 (PDT)
+        Thu, 13 Apr 2023 06:56:43 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C189D1FF5
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:56:42 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id dd8so2124709qvb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:56:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1681383096; x=1683975096;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RxeMOwbpGENb+weUS3Q3c1MqA2boB5pRuOKSrr+VKMA=;
-        b=olAgFLXV5pQj078BxZmSCdSLqKQ8QJvL1YxmQNcD4ubNdFmVEZtp0Tj+74ZMtWMOcI
-         DE+D3UQfYz/CR4E02hxL+0SMwxIGuIjRO1xaMbbjRWm4tXfmZNgoQWlWlrPAoPHccj6O
-         VWdvaFir8HjPgBX+IRWFrxCNRDsXY7R42iz1Y=
+        d=gmail.com; s=20221208; t=1681383402; x=1683975402;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YgsQjPYSA4x9EUAST26pLIMgzwk5/fmUNEDBBVE+P4A=;
+        b=otgyPboMq8mFvcDWKPydNF+pMqrQBiNKG9vAuo1BgvubjWTwJwxWsaEcLxd2cshybO
+         h1D9dKIuW+Zw1tvjJu7k1IVqNKyLkAIcmf9Fl78Usvy48Qwx0wm2hcnod235hFjzsQha
+         xs010QoT975By0orIVNWVCPPq8qxsHGVjyqhz75B8/X/8ukxM8ZJQSDxNu0AMELOlpqF
+         AsEZydxCiClQIaOAqT96K7sV7dks5Bht+CIunmsyKzZaoDop2id8TuAH/NHnd4g5SQNQ
+         J4E/J1A7O3O4aWfdPjEroh+PiJXiWsIDn++sYZgkw4R6XAbyFYSG/RvfvJClIB5nG+KL
+         9SAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681383096; x=1683975096;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RxeMOwbpGENb+weUS3Q3c1MqA2boB5pRuOKSrr+VKMA=;
-        b=Af1NYGMX4f6x5Wck1f7x5a/d7o86WdDXVbGSXFlSFQ/akQ6PeqPvgBlwfCQiPM6oVx
-         SAYjij5iWk6sg2GBG37twGAE2It/y5l8QTVuK7e4FWh1rbmEXfR2eSqZKWo5aV6Z8Yif
-         EwGr9cJmxg5jiFwZIyy1Qz014Ne9294nino+KQc/8PwhjvURBd2oQ+JT7HBnw1FEMc6M
-         J1xcRUc9Akelw+93Ljeb/5wDH+Q5SFdLz/MmXedQRDXKSwCm0G3PUE9IPigYvvEPCWP/
-         R9n4a/GVIRQX2eSTs+c3NPMUphJ+cUWhYjgZqNXKf9RAFzP3goKoUncNl7fDFvEQtucn
-         1+gw==
-X-Gm-Message-State: AAQBX9fmp1qUlSsvnEq3FpoavXFuorqLg2M5D07Mzbs+2M1qlTp2rfaA
-        hbtTGbOHn0PimvxTUSkskHH/9/3W2HuTyFFuijRGgA==
-X-Google-Smtp-Source: AKy350aJVHJsIM/7Cw5RRVLHjyYZYMjj/wfkGRiEzVOfWIvLI+ptJr0GOC68cQM7cPhDCwcJUYGEhLI0zZpYDF8aKKM=
-X-Received: by 2002:a50:bb25:0:b0:502:7551:86c7 with SMTP id
- y34-20020a50bb25000000b00502755186c7mr738815ede.4.1681383096281; Thu, 13 Apr
- 2023 03:51:36 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681383402; x=1683975402;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YgsQjPYSA4x9EUAST26pLIMgzwk5/fmUNEDBBVE+P4A=;
+        b=lv73YEf9bxu7sWMF1jCSWSjknpdJAvTDyY1okgbyL9EzkB2zBfSEskD2LuhbNHvL18
+         9180O28yKRNQI8lTU8AX8EkEOraEfMlJYSJF28V0Pa2ujVOCHZVfrIsYLvD4SbGCNEuw
+         6H9NgkzRn/FrnSPQ88I+OUhpQI8e/gl3X2m0cRwwaDKCSvcg04nmMsjIvarMS44AaYQ2
+         dPfWs6vzYPJ7BnTqi/GniAEm1h/BlqoC39MVF705tNl2/QGVy8ycGyOYp75Mh6dmykbQ
+         v/V3lmTm5Hx41Za/Q90dlJ32Po+NV8fROGB5xt/cZDr0CLFzIK6kf9vI5amSb9Ybdaoz
+         ZFvA==
+X-Gm-Message-State: AAQBX9f/CJLTz4oe/2P9AsZlRqaSuzHnembVFIDu/R+O+zz++Qvz1bLZ
+        VrWu9idGa1hg1odgPN4cMs/HZnTs3JlQnSAOzrs=
+X-Google-Smtp-Source: AKy350ZaEXxAwUvxRh1Up0yCLBX2A8H3PYy6cILL1HU0ISIYiOR7vhjxfwibCiDxIB6JOwSMsfBl9+JORQrrKx67jT8=
+X-Received: by 2002:ad4:4f91:0:b0:5ef:181e:2e53 with SMTP id
+ em17-20020ad44f91000000b005ef181e2e53mr377910qvb.10.1681383401692; Thu, 13
+ Apr 2023 03:56:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230406130205.49996-1-kal.conley@dectris.com>
- <20230406130205.49996-2-kal.conley@dectris.com> <87sfdckgaa.fsf@toke.dk>
- <ZDBEng1KEEG5lOA6@boxer> <CAHApi-nuD7iSY7fGPeMYiNf8YX3dG27tJx1=n8b_i=ZQdZGZbw@mail.gmail.com>
- <875ya12phx.fsf@toke.dk>
-In-Reply-To: <875ya12phx.fsf@toke.dk>
-From:   Kal Cutter Conley <kal.conley@dectris.com>
-Date:   Thu, 13 Apr 2023 12:56:20 +0200
-Message-ID: <CAHApi-=rMHt7uR8Sw1Vw+MHDrtkyt=jSvTvwz8XKV7SEb01CmQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/3] xsk: Support UMEM chunk_size > PAGE_SIZE
-To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Cc:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Sender: hbruunmrsanna@gmail.com
+Received: by 2002:a0c:dd06:0:b0:5ef:44a4:999e with HTTP; Thu, 13 Apr 2023
+ 03:56:40 -0700 (PDT)
+From:   Dr Lisa Williams <lw4666555@gmail.com>
+Date:   Thu, 13 Apr 2023 03:56:40 -0700
+X-Google-Sender-Auth: AsjGu-i7TXiUQRz_3sTMDr54yT0
+Message-ID: <CAFVNgy3sqtdG42sb=TB6BNTRG=XgTp7txjsdnuk5n_ur-utYXw@mail.gmail.com>
+Subject: Hi,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,29 +66,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> Well, I'm mostly concerned with having two different operation and
-> configuration modes for the same thing. We'll probably need to support
-> multibuf for AF_XDP anyway for the non-ZC path, which means we'll need
-> to create a UAPI for that in any case. And having two APIs is just going
-> to be more complexity to handle at both the documentation and
-> maintenance level.
+Hi,
 
-I don't know if I would call this another "API". This patchset doesn't
-change the semantics of anything. It only lifts the chunk size
-restriction when hugepages are used. Furthermore, the changes here are
-quite small and easy to understand. The four sentences added to the
-documentation shouldn't be too concerning either. :-)
+My name is Dr. Lisa Williams, from the United States, currently living
+in the United Kingdom.
 
-In 30 years when everyone finally migrates to page sizes >= 64K the
-maintenance burden will drop to zero. Knock wood. :-)
+I hope you consider my friend request. I will share some of my photos
+and more details about me when I get your reply.
 
->
-> It *might* be worth it to do this if the performance benefit is really
-> compelling, but, well, you'd need to implement both and compare directly
-> to know that for sure :)
-
-What about use-cases that require incoming packet data to be
-contiguous? Without larger chunk sizes, the user is forced to allocate
-extra space per packet and copy the data. This defeats the purpose of
-ZC.
+With love
+Lisa
