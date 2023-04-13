@@ -2,75 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 253E86E1485
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 20:45:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E59126E1488
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 20:46:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbjDMSpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 14:45:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36690 "EHLO
+        id S230321AbjDMSqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 14:46:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230265AbjDMSpp (ORCPT
+        with ESMTP id S229967AbjDMSpw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 14:45:45 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBA87A85
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 11:45:19 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-54f6a796bd0so185259067b3.12
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 11:45:19 -0700 (PDT)
+        Thu, 13 Apr 2023 14:45:52 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2093F7EE4
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 11:45:28 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-517baf1c496so860650a12.0
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 11:45:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1681411518; x=1684003518;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MGVZNEf7lrdlhRrTeBd55Bww7LzB9MuzQSkzPr2CJBo=;
-        b=Mz//iVq0iLRUBDqdpSQTRzwsSpaxXCXjqS6RHv1d1VOHtRY8fs4AypBj+EWV7f0QYU
-         37jxWb3BGNYK9Qk9NR+k2FL2bIBIdnvzdO3XHfdeFkDh0XDZVVqguEtOXVbFbz83aVMD
-         ZWN44QC57IVfG7F5tkht1YHW4f90qGBMYyWldECPJcq0FCcywI8Di4pXvbGWTq2nKTTN
-         id0/gUslCuCUKW4JYz3nLAh0/2bltS/FFpyoS0TxOkwoV+NWQsEb9C03CTMZWUp1nYuy
-         2znjWxpwX+mJ7abVCJi+Ea3ISlkSjo51iqyzEbQVJqo43csY/pIyfSJJWoRdsVUmywn1
-         pkVg==
+        d=linaro.org; s=google; t=1681411527; x=1684003527;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ilhF4EuumFMH4IHLujABizpeZdmDh6YEm0MuyZvH8P8=;
+        b=NloZRIfB0hYZtPR0Lj3VEmzeizzPxCGNLGfgmk5TDL69rpW48TKXsoD9BJ2oGStZVx
+         hdcUkIqdPLs+LSD8qZWAyOAUMMxi9VfYDI7Xc+IGgh30xIfqU5M9+ZsCuSmbZaSDoi7r
+         wBQyEkZENkJ2NwKbiT01ZFesqFIeux8zsVLaIGxLBLKlJ1zLbsmxLDRIXXODGnuwb8BL
+         WG3Zy4JK40aT0NwSQMEqIETjY3f2sl/Eo5Ij/c3l1mVcQnmcKTuRJZO5p7B1Mw0pNAJ/
+         3RRXWTmK+yBWpSqA6VIq3oskfhCOuRFhGfaQgAaKhm7JJ8jU9hw3CVxV/YPUGzf5mNbr
+         HXjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681411518; x=1684003518;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MGVZNEf7lrdlhRrTeBd55Bww7LzB9MuzQSkzPr2CJBo=;
-        b=a6i/KcLIMnZwrWFktlK7ykA3xxwtxMc2AlNNvaUWt4Y6DQqfu9gH4wSe2BL3nmpuX2
-         jWa+1KsigZEyfOlBa73fSZeoNHNpryr8yaPtB67/ac+yTUWBxNp0FXKniGoGi/vq1blX
-         +up7an1/wnUkwCrDHLFrsfMG8VL49aZ2f+jrk+/a2wtZbAJX8zzH9U1I0nRwNe7GoPZa
-         7HkQfZRLdz4rEOELGVwR7l1f8GAooWXbQJB+5sHkMi7IydW9j5L3fqeBcBw4wW34EAO/
-         2TZi6T/jKhpfD4mm7btnA108Bz2G9lHWJJ4whWBPAIveH053vGqoWd7oaCSiw/KP62/T
-         23hA==
-X-Gm-Message-State: AAQBX9ezOOzmfulL++5M2L9ZdjhOdsnBFOYOor36OM0Ss4Ya2L82rUC0
-        BEtKl8g3ySEHDbS1rhwXau4Wwzlp9UApna23TI+B
-X-Google-Smtp-Source: AKy350ZSG4ZQ++QqMTXNV8xFD2qqYaKbcU1NDBLoxRwPk1AbUSa/40FcxEeI1OBDZ0AsmT83U2FNdY17CZtIHnOARvk=
-X-Received: by 2002:a81:ad0e:0:b0:545:6106:5334 with SMTP id
- l14-20020a81ad0e000000b0054561065334mr2002041ywh.8.1681411517875; Thu, 13 Apr
- 2023 11:45:17 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681411527; x=1684003527;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ilhF4EuumFMH4IHLujABizpeZdmDh6YEm0MuyZvH8P8=;
+        b=Jcg9pNJOJc0hYgtbVA/P3KsC6wx+Fx+bFCR/Ji7ykma+c/AELcCcFIlRKZiDaUTrCV
+         2xw7ovQwIL3k3qW/5NchW/uBxTrQ4F+ASv4CGo3LrzU3iSTlIKmSVWwalWQR6j56MCU+
+         q6o8iBY2sEqSX6swOTF3m7cC9BjoMHkpXl/Ik2CX5vzdSq0/xa4159DT+tNdt+3wtaxb
+         KJxYuSZQExVZhPMzpcVesXV2J5c99arO2w8kqYqwsGwil2uYSyubX/DTHg5LKtmvU965
+         3B1Hm6gRSx255XoXDaGiVJQfTEADDIiGWa6q1ytxQyHs4hM83cTMnzvFUhyKR38Fe2E5
+         8ASg==
+X-Gm-Message-State: AAQBX9dYbNEFFB0Mf8UlKi9MmZz5c8ZPxM13bwCru8BRrsYsFro5T02l
+        65Pj7u7QBUk6pR9R8B7pNV4A
+X-Google-Smtp-Source: AKy350YxKRM2oX9tMPViXFlTDZ0wPs+QdQqcMoS9YWTjEADAk0mR83ZyYRI3TiKNlfGzukQN7eLcUQ==
+X-Received: by 2002:a05:6a00:1707:b0:633:5c46:5a69 with SMTP id h7-20020a056a00170700b006335c465a69mr5552572pfc.31.1681411527046;
+        Thu, 13 Apr 2023 11:45:27 -0700 (PDT)
+Received: from thinkpad ([59.97.52.67])
+        by smtp.gmail.com with ESMTPSA id m5-20020aa79005000000b0063989aab89fsm1714604pfo.23.2023.04.13.11.45.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 11:45:26 -0700 (PDT)
+Date:   Fri, 14 Apr 2023 00:15:20 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Cai Huoqing <cai.huoqing@linux.dev>
+Cc:     fancer.lancer@gmail.com,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH RESEND v9 4/4] dmaengine: dw-edma: Add HDMA DebugFS
+ support
+Message-ID: <20230413184520.GF13020@thinkpad>
+References: <20230413033156.93751-1-cai.huoqing@linux.dev>
+ <20230413033156.93751-5-cai.huoqing@linux.dev>
 MIME-Version: 1.0
-References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
- <1675119451-23180-6-git-send-email-wufan@linux.microsoft.com>
- <CAHC9VhRa+NwKzLfQBmHfMgUp6_d5soQG7JBq-Vn=MUeUAt4tuQ@mail.gmail.com>
- <20230410191035.GB18827@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
- <CAHC9VhQDvWDshaZvJrHmjcwyHFxv9oYTN9bn0xiTtFZQRp+GPg@mail.gmail.com> <20230412233606.GA16658@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-In-Reply-To: <20230412233606.GA16658@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 13 Apr 2023 14:45:07 -0400
-Message-ID: <CAHC9VhTs3Njfg=1baQ6=58rPLBmyB3cW0R-MfAaEcRF-jAaYBw@mail.gmail.com>
-Subject: Re: [RFC PATCH v9 05/16] ipe: add userspace interface
-To:     Fan Wu <wufan@linux.microsoft.com>
-Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
-        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
-        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
-        eparis@redhat.com, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
-        dm-devel@redhat.com, linux-audit@redhat.com,
-        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
-        Deven Bowers <deven.desai@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230413033156.93751-5-cai.huoqing@linux.dev>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -81,40 +83,275 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 7:36=E2=80=AFPM Fan Wu <wufan@linux.microsoft.com> =
-wrote:
-> On Tue, Apr 11, 2023 at 05:45:41PM -0400, Paul Moore wrote:
-> > On Mon, Apr 10, 2023 at 3:10???PM Fan Wu <wufan@linux.microsoft.com> wr=
-ote:
-> > > On Thu, Mar 02, 2023 at 02:04:42PM -0500, Paul Moore wrote:
-> > > > On Mon, Jan 30, 2023 at 5:58???PM Fan Wu <wufan@linux.microsoft.com=
-> wrote:
+On Thu, Apr 13, 2023 at 11:31:55AM +0800, Cai Huoqing wrote:
+> From: Cai huoqing <cai.huoqing@linux.dev>
+> 
+> Add HDMA DebugFS support to show registers content
+> 
+> Signed-off-by: Cai huoqing <cai.huoqing@linux.dev>
 
-...
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-> > I guess this does make me wonder about keeping a non-active policy
-> > loaded in the kernel, what purpose does that serve?
-> >
->
-> The non-active policy doesn't serve anything unless it is activated. User=
- can
-> even delete a policy if that is no longer needed. Non-active is just the =
-default
-> state when a new policy is loaded.
->
-> If IPE supports namespace, there is another use case where different cont=
-ainers
-> can select different policies as the active policy from among multiple lo=
-aded
-> policies. Deven has presented a demo of this during LSS 2021. But this go=
-es
-> beyond the scope of this version.
+- Mani
 
-Do you plan to add namespace support at some point in the
-not-too-distant future?  If so, I'm okay with keeping support for
-multiple policies, but if you think you're only going to support one
-active policy at a time, it might be better to remove support for
-multiple (inactive) policies.
+> Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+> ---
+> v8->v9:
+>   1.Update commit log.
+>   2.Remove unused macro
+> 
+> v8 link:
+>   https://lore.kernel.org/lkml/20230323034944.78357-5-cai.huoqing@linux.dev/
+> 
+>  drivers/dma/dw-edma/Makefile             |   3 +-
+>  drivers/dma/dw-edma/dw-hdma-v0-core.c    |   2 +
+>  drivers/dma/dw-edma/dw-hdma-v0-debugfs.c | 170 +++++++++++++++++++++++
+>  drivers/dma/dw-edma/dw-hdma-v0-debugfs.h |  22 +++
+>  4 files changed, 196 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
+>  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
+> 
+> diff --git a/drivers/dma/dw-edma/Makefile b/drivers/dma/dw-edma/Makefile
+> index b1c91ef2c63d..83ab58f87760 100644
+> --- a/drivers/dma/dw-edma/Makefile
+> +++ b/drivers/dma/dw-edma/Makefile
+> @@ -1,7 +1,8 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+>  obj-$(CONFIG_DW_EDMA)		+= dw-edma.o
+> -dw-edma-$(CONFIG_DEBUG_FS)	:= dw-edma-v0-debugfs.o
+> +dw-edma-$(CONFIG_DEBUG_FS)	:= dw-edma-v0-debugfs.o	\
+> +				   dw-hdma-v0-debugfs.o
+>  dw-edma-objs			:= dw-edma-core.o	\
+>  				   dw-edma-v0-core.o	\
+>  				   dw-hdma-v0-core.o $(dw-edma-y)
+> diff --git a/drivers/dma/dw-edma/dw-hdma-v0-core.c b/drivers/dma/dw-edma/dw-hdma-v0-core.c
+> index 22b7b0410deb..00b735a0202a 100644
+> --- a/drivers/dma/dw-edma/dw-hdma-v0-core.c
+> +++ b/drivers/dma/dw-edma/dw-hdma-v0-core.c
+> @@ -11,6 +11,7 @@
+>  #include "dw-edma-core.h"
+>  #include "dw-hdma-v0-core.h"
+>  #include "dw-hdma-v0-regs.h"
+> +#include "dw-hdma-v0-debugfs.h"
+>  
+>  enum dw_hdma_control {
+>  	DW_HDMA_V0_CB					= BIT(0),
+> @@ -276,6 +277,7 @@ static void dw_hdma_v0_core_ch_config(struct dw_edma_chan *chan)
+>  /* HDMA debugfs callbacks */
+>  static void dw_hdma_v0_core_debugfs_on(struct dw_edma *dw)
+>  {
+> +	dw_hdma_v0_debugfs_on(dw);
+>  }
+>  
+>  static const struct dw_edma_core_ops dw_hdma_v0_core = {
+> diff --git a/drivers/dma/dw-edma/dw-hdma-v0-debugfs.c b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
+> new file mode 100644
+> index 000000000000..520c81978b08
+> --- /dev/null
+> +++ b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
+> @@ -0,0 +1,170 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2023 Cai Huoqing
+> + * Synopsys DesignWare HDMA v0 debugfs
+> + *
+> + * Author: Cai Huoqing <cai.huoqing@linux.dev>
+> + */
+> +
+> +#include <linux/debugfs.h>
+> +#include <linux/bitfield.h>
+> +
+> +#include "dw-hdma-v0-debugfs.h"
+> +#include "dw-hdma-v0-regs.h"
+> +#include "dw-edma-core.h"
+> +
+> +#define REGS_ADDR(dw, name)						       \
+> +	({								       \
+> +		struct dw_hdma_v0_regs __iomem *__regs = (dw)->chip->reg_base; \
+> +									       \
+> +		(void __iomem *)&__regs->name;				       \
+> +	})
+> +
+> +#define REGS_CH_ADDR(dw, name, _dir, _ch)				       \
+> +	({								       \
+> +		struct dw_hdma_v0_ch_regs __iomem *__ch_regs;		       \
+> +									       \
+> +		if (_dir == EDMA_DIR_READ)				       \
+> +			__ch_regs = REGS_ADDR(dw, ch[_ch].rd);		       \
+> +		else							       \
+> +			__ch_regs = REGS_ADDR(dw, ch[_ch].wr);		       \
+> +									       \
+> +		(void __iomem *)&__ch_regs->name;			       \
+> +	})
+> +
+> +#define CTX_REGISTER(dw, name, dir, ch) \
+> +	{#name, REGS_CH_ADDR(dw, name, dir, ch)}
+> +
+> +#define WRITE_STR				"write"
+> +#define READ_STR				"read"
+> +#define CHANNEL_STR				"channel"
+> +#define REGISTERS_STR				"registers"
+> +
+> +struct dw_hdma_debugfs_entry {
+> +	const char				*name;
+> +	void __iomem				*reg;
+> +};
+> +
+> +static int dw_hdma_debugfs_u32_get(void *data, u64 *val)
+> +{
+> +	struct dw_hdma_debugfs_entry *entry = data;
+> +	void __iomem *reg = entry->reg;
+> +
+> +	*val = readl(reg);
+> +
+> +	return 0;
+> +}
+> +DEFINE_DEBUGFS_ATTRIBUTE(fops_x32, dw_hdma_debugfs_u32_get, NULL, "0x%08llx\n");
+> +
+> +static void dw_hdma_debugfs_create_x32(struct dw_edma *dw,
+> +				       const struct dw_hdma_debugfs_entry ini[],
+> +				       int nr_entries, struct dentry *dent)
+> +{
+> +	struct dw_hdma_debugfs_entry *entries;
+> +	int i;
+> +
+> +	entries = devm_kcalloc(dw->chip->dev, nr_entries, sizeof(*entries),
+> +			       GFP_KERNEL);
+> +	if (!entries)
+> +		return;
+> +
+> +	for (i = 0; i < nr_entries; i++) {
+> +		entries[i] = ini[i];
+> +
+> +		debugfs_create_file_unsafe(entries[i].name, 0444, dent,
+> +					   &entries[i], &fops_x32);
+> +	}
+> +}
+> +
+> +static void dw_hdma_debugfs_regs_ch(struct dw_edma *dw, enum dw_edma_dir dir,
+> +				    u16 ch, struct dentry *dent)
+> +{
+> +	const struct dw_hdma_debugfs_entry debugfs_regs[] = {
+> +		CTX_REGISTER(dw, ch_en, dir, ch),
+> +		CTX_REGISTER(dw, doorbell, dir, ch),
+> +		CTX_REGISTER(dw, prefetch, dir, ch),
+> +		CTX_REGISTER(dw, handshake, dir, ch),
+> +		CTX_REGISTER(dw, llp.lsb, dir, ch),
+> +		CTX_REGISTER(dw, llp.msb, dir, ch),
+> +		CTX_REGISTER(dw, cycle_sync, dir, ch),
+> +		CTX_REGISTER(dw, transfer_size, dir, ch),
+> +		CTX_REGISTER(dw, sar.lsb, dir, ch),
+> +		CTX_REGISTER(dw, sar.msb, dir, ch),
+> +		CTX_REGISTER(dw, dar.lsb, dir, ch),
+> +		CTX_REGISTER(dw, dar.msb, dir, ch),
+> +		CTX_REGISTER(dw, watermark_en, dir, ch),
+> +		CTX_REGISTER(dw, control1, dir, ch),
+> +		CTX_REGISTER(dw, func_num, dir, ch),
+> +		CTX_REGISTER(dw, qos, dir, ch),
+> +		CTX_REGISTER(dw, ch_stat, dir, ch),
+> +		CTX_REGISTER(dw, int_stat, dir, ch),
+> +		CTX_REGISTER(dw, int_setup, dir, ch),
+> +		CTX_REGISTER(dw, int_clear, dir, ch),
+> +		CTX_REGISTER(dw, msi_stop.lsb, dir, ch),
+> +		CTX_REGISTER(dw, msi_stop.msb, dir, ch),
+> +		CTX_REGISTER(dw, msi_watermark.lsb, dir, ch),
+> +		CTX_REGISTER(dw, msi_watermark.msb, dir, ch),
+> +		CTX_REGISTER(dw, msi_abort.lsb, dir, ch),
+> +		CTX_REGISTER(dw, msi_abort.msb, dir, ch),
+> +		CTX_REGISTER(dw, msi_msgdata, dir, ch),
+> +	};
+> +	int nr_entries = ARRAY_SIZE(debugfs_regs);
+> +
+> +	dw_hdma_debugfs_create_x32(dw, debugfs_regs, nr_entries, dent);
+> +}
+> +
+> +static void dw_hdma_debugfs_regs_wr(struct dw_edma *dw, struct dentry *dent)
+> +{
+> +	struct dentry *regs_dent, *ch_dent;
+> +	char name[16];
+> +	int i;
+> +
+> +	regs_dent = debugfs_create_dir(WRITE_STR, dent);
+> +
+> +	for (i = 0; i < dw->wr_ch_cnt; i++) {
+> +		snprintf(name, sizeof(name), "%s:%d", CHANNEL_STR, i);
+> +
+> +		ch_dent = debugfs_create_dir(name, regs_dent);
+> +
+> +		dw_hdma_debugfs_regs_ch(dw, EDMA_DIR_WRITE, i, ch_dent);
+> +	}
+> +}
+> +
+> +static void dw_hdma_debugfs_regs_rd(struct dw_edma *dw, struct dentry *dent)
+> +{
+> +	struct dentry *regs_dent, *ch_dent;
+> +	char name[16];
+> +	int i;
+> +
+> +	regs_dent = debugfs_create_dir(READ_STR, dent);
+> +
+> +	for (i = 0; i < dw->rd_ch_cnt; i++) {
+> +		snprintf(name, sizeof(name), "%s:%d", CHANNEL_STR, i);
+> +
+> +		ch_dent = debugfs_create_dir(name, regs_dent);
+> +
+> +		dw_hdma_debugfs_regs_ch(dw, EDMA_DIR_READ, i, ch_dent);
+> +	}
+> +}
+> +
+> +static void dw_hdma_debugfs_regs(struct dw_edma *dw)
+> +{
+> +	struct dentry *regs_dent;
+> +
+> +	regs_dent = debugfs_create_dir(REGISTERS_STR, dw->dma.dbg_dev_root);
+> +
+> +	dw_hdma_debugfs_regs_wr(dw, regs_dent);
+> +	dw_hdma_debugfs_regs_rd(dw, regs_dent);
+> +}
+> +
+> +void dw_hdma_v0_debugfs_on(struct dw_edma *dw)
+> +{
+> +	if (!debugfs_initialized())
+> +		return;
+> +
+> +	debugfs_create_u32("mf", 0444, dw->dma.dbg_dev_root, &dw->chip->mf);
+> +	debugfs_create_u16("wr_ch_cnt", 0444, dw->dma.dbg_dev_root, &dw->wr_ch_cnt);
+> +	debugfs_create_u16("rd_ch_cnt", 0444, dw->dma.dbg_dev_root, &dw->rd_ch_cnt);
+> +
+> +	dw_hdma_debugfs_regs(dw);
+> +}
+> diff --git a/drivers/dma/dw-edma/dw-hdma-v0-debugfs.h b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
+> new file mode 100644
+> index 000000000000..e6842c83777d
+> --- /dev/null
+> +++ b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
+> @@ -0,0 +1,22 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (c) 2023 Cai Huoqing
+> + * Synopsys DesignWare HDMA v0 debugfs
+> + *
+> + * Author: Cai Huoqing <cai.huoqing@linux.dev>
+> + */
+> +
+> +#ifndef _DW_HDMA_V0_DEBUG_FS_H
+> +#define _DW_HDMA_V0_DEBUG_FS_H
+> +
+> +#include <linux/dma/edma.h>
+> +
+> +#ifdef CONFIG_DEBUG_FS
+> +void dw_hdma_v0_debugfs_on(struct dw_edma *dw);
+> +#else
+> +static inline void dw_hdma_v0_debugfs_on(struct dw_edma *dw)
+> +{
+> +}
+> +#endif /* CONFIG_DEBUG_FS */
+> +
+> +#endif /* _DW_HDMA_V0_DEBUG_FS_H */
+> -- 
+> 2.34.1
+> 
 
---=20
-paul-moore.com
+-- 
+மணிவண்ணன் சதாசிவம்
