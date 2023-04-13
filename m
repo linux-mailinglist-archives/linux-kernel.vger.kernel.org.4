@@ -2,50 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 982B66E056D
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 05:44:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C2A6E0569
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 05:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbjDMDov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 23:44:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54972 "EHLO
+        id S229671AbjDMDoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 23:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjDMDoq (ORCPT
+        with ESMTP id S229522AbjDMDoU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 23:44:46 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.216])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73F824EE5;
-        Wed, 12 Apr 2023 20:44:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=H3yhF
-        Avyem7KDnFlCyJY7TE1lpzbuiAFzAh4R+WP3vc=; b=OmXjSMzZAcLSWJjrO0K6n
-        99GE4FRsIuCiQcmAwg5q0ppzOqfKJaGZ36k8ayMHG6DiAjoHaGQvBw7I6anqHlYw
-        aPAnaz0HLbEgLqekAdBYYHlTkmEtpYP7CZgDEzLmnibMr5b8RU9g5hzJLHEfx65b
-        560AvmpQXT0927I3B3CPYo=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g1-2 (Coremail) with SMTP id _____wCXt2eGejdkzWFfBQ--.36620S2;
-        Thu, 13 Apr 2023 11:44:06 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     mchehab@kernel.org
-Cc:     laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alex000young@gmail.com, hackerzheng666@gmail.com,
-        security@kernel.org, hdanton@sina.com,
-        Zheng Wang <zyytlz.wz@163.com>
-Subject: [RESEND PATCH v2] media: bttv: fix use after free error due to btv->timeout  timer
-Date:   Thu, 13 Apr 2023 11:44:05 +0800
-Message-Id: <20230413034405.36037-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 12 Apr 2023 23:44:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2146126B3;
+        Wed, 12 Apr 2023 20:44:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B1749618A8;
+        Thu, 13 Apr 2023 03:44:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF756C433EF;
+        Thu, 13 Apr 2023 03:44:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681357456;
+        bh=1PPvIHWJLWZaXeNwvxpCYgYBMdUgCOq4oAMZ+tDARSA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YC81KQbSbeIOZfW6h1vmXukqtShmRR80MyHthILoel5t8xoWmf3bzgUZlv3/FMQRJ
+         34vEK6xEQJgzScb7rjYU4HUEc1k0JVsWYmh4/musAxPl+s000Voke0qAST4xdBSowd
+         y+V507Af9Cv6g2L5fBBlnuorLfsZskrlYZ5j0mqPpP/7Usat6krJeVv/rf+VI1/TvG
+         sWWemgBGufShxUtWDHJ73MxJXSGc1s2sXirMEceQwA/THEOT6bISjfRvITgb46UXuz
+         GFGjWg1IlFSosY2VqrZ77PCz3mJnfQidg9oK9rUXMo5RQ3jMS1zPe+6d0FNclebm9G
+         vm3WqAiI4R78w==
+Date:   Wed, 12 Apr 2023 20:44:14 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     "Radu Pirea (OSS)" <radu-nicolae.pirea@oss.nxp.com>
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH net] net: phy: nxp-c45-tja11xx: fix the PTP interrupt
+ enabling/disabling
+Message-ID: <20230412204414.72e89e5b@kernel.org>
+In-Reply-To: <20230410124856.287753-1-radu-nicolae.pirea@oss.nxp.com>
+References: <20230410124856.287753-1-radu-nicolae.pirea@oss.nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wCXt2eGejdkzWFfBQ--.36620S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7ZFy7GF43Zr1xXFykur43Awb_yoW8Jw1kpa
-        ySka43CFy8Xr4UtFyUAF4kZFy3A398XrWFg34xG3ZavF4fZF92vF4jyFWqvF17XF92qrya
-        qa4Fqr13J3WkCFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zinjjPUUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbBzgFQU2I0Yp2FlgABs3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,46 +56,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There may be some a race condition between timer function
-bttv_irq_timeout and bttv_remove. The timer is setup in
-probe and there is no timer_delete operation in remove
-function. When it hit kfree btv, the function might still be
-invoked, which will cause use after free bug.
+On Mon, 10 Apr 2023 15:48:56 +0300 Radu Pirea (OSS) wrote:
+> -	if (phydev->interrupts == PHY_INTERRUPT_ENABLED)
+> +	if (phydev->interrupts == PHY_INTERRUPT_ENABLED) {
+> +		phy_set_bits_mmd(phydev, MDIO_MMD_VEND1, PTP_IRQS, PTP_IRQS);
 
-This bug is found by static analysis, it may be false positive.
+Isn't the third argument supposed to be the address?
+Am I missing something or this patch was no tested properly?
 
-Fix it by adding del_timer_sync invoking to the remove function.
+Also why ignore the return value?
 
-cpu0                cpu1
-                  bttv_probe
-                    ->timer_setup
-                      ->bttv_set_dma
-                        ->mod_timer;
-bttv_remove
-  ->kfree(btv);
-                  ->bttv_irq_timeout
-                    ->USE btv
-
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
----
-v2:
-- stop replacing del_timer with del_timer_sync suggested by Hillf Danton
----
- drivers/media/pci/bt8xx/bttv-driver.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
-index d40b537f4e98..24ba5729969d 100644
---- a/drivers/media/pci/bt8xx/bttv-driver.c
-+++ b/drivers/media/pci/bt8xx/bttv-driver.c
-@@ -4248,6 +4248,7 @@ static void bttv_remove(struct pci_dev *pci_dev)
- 
- 	/* free resources */
- 	free_irq(btv->c.pci->irq,btv);
-+	del_timer_sync(&btv->timeout);
- 	iounmap(btv->bt848_mmio);
- 	release_mem_region(pci_resource_start(btv->c.pci,0),
- 			   pci_resource_len(btv->c.pci,0));
--- 
-2.25.1
-
+>  		return phy_set_bits_mmd(phydev, MDIO_MMD_VEND1,
+>  					VEND1_PHY_IRQ_EN, PHY_IRQ_LINK_EVENT);
+> -	else
+> +	} else {
+> +		phy_clear_bits_mmd(phydev, MDIO_MMD_VEND1, PTP_IRQS, PTP_IRQS);
+>  		return phy_clear_bits_mmd(phydev, MDIO_MMD_VEND1,
+>  					  VEND1_PHY_IRQ_EN, PHY_IRQ_LINK_EVENT);
+> +	}
