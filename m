@@ -2,205 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 707DA6E14E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 21:11:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C843D6E14E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 21:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbjDMTLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 15:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52598 "EHLO
+        id S229867AbjDMTMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 15:12:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjDMTLL (ORCPT
+        with ESMTP id S229492AbjDMTMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 15:11:11 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB297AB3
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 12:11:10 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-54ee0b73e08so303943507b3.0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 12:11:10 -0700 (PDT)
+        Thu, 13 Apr 2023 15:12:46 -0400
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D863C7D81;
+        Thu, 13 Apr 2023 12:12:45 -0700 (PDT)
+Received: by mail-ua1-x92d.google.com with SMTP id r10so2543808uat.6;
+        Thu, 13 Apr 2023 12:12:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1681413068; x=1684005068;
+        d=gmail.com; s=20221208; t=1681413165; x=1684005165;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/n5rfNu1HowE7oAZejmf2ckXvzQnhKf+e7UaYPPXJgI=;
-        b=Ewn2hF1Ptsh4vbimiMWYAv2F0hDUpOXiTczRDUKAd8AjKUmYzu+u7aH/ND1d+M0auW
-         ZLPwlEirOObbffnHmnjT320ALvj96WAqEplTUZx6C+kFJFh7xkOMFSrRNw65HcxZmdfl
-         VsGTatz/DxjQ6JaGT7ltrfcNJLAupFJvyzOrY=
+        bh=rmZ0O+sn7kZQc+bw7Jf0vK7+WNBVnZzD5f3dYdmxU6w=;
+        b=DGBtb62pYjawglwT2CcAlDMdolYBtCrl1+AHi5BgemglSjjwFb+eQo1dZoBX+Ou6zU
+         1SJ8caR0vs4mmuLRd1ouTI9wc8jye7tkIMbMUAqnyA4+rTpUOHQvWV2Ty3FTxdKYqdCQ
+         1Vkfp6khPGY0gHDC5RtFBzGMirLgWSal4j6UNTFmA2konA4u59uTF5E0ZNTg/9q80UDu
+         fGJJnK8pM1Lx3EWyx/hQl7uydc3WwbNoHTkDjmFyOW4pfhDAHb9MRdV1FUX4+rkSk/9q
+         UMtGY4ON/vdR6WQ/omPq2ZCWrFe7wKog5F9S1+C8vL4LG059qmHTcXnrYGg+sDp6kmHB
+         l1yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681413068; x=1684005068;
+        d=1e100.net; s=20221208; t=1681413165; x=1684005165;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/n5rfNu1HowE7oAZejmf2ckXvzQnhKf+e7UaYPPXJgI=;
-        b=en88l6pE6lerGsEmJllutDQZO00JewBPumIabEhWz/QWRbqXH/adlU/hhY2AOCFwf2
-         Ff1CKVV8vwWzAK6xyxlALfhR2dBp2LAFNoq5uoZR0hx7Wr1QwzQPtE2UMR5NReSN8gQ3
-         7sRpG1LqiXRj+X+9CNqSa6HIlTeEWGy6PdtYCtqa0H8S67d3HlteFH0Kp0xF6xsn1p6L
-         9lzvFLHsG0RZpv4E9XM3j2VAyRNyLSR3QTvxCqe0M1OjLKYLF8AO5ysaUcC8dhx/K2b8
-         XqIBKsgcfrXGXgWQ/1h2547+h46RUAtwThcLLhxVsLrBpZuEu4xIYj/dyu+ftPYaVwrJ
-         yWQA==
-X-Gm-Message-State: AAQBX9e9ivPsfpBsOmQv5CKTXUYYCoWlHycgE4+G2DqpJw0liRiMUGr1
-        X7B9sVDIdiPXNugxb3fn3euZyO5zrN/xGAkonIE=
-X-Google-Smtp-Source: AKy350aN0CE6Sv6nHjKPTCMG0AOUvGW7bVuQKH91JgbT8A9qZtvpm675xrNU1xjDhKzMXKrK3/Xx3Q==
-X-Received: by 2002:a0d:ea4f:0:b0:54f:bc13:202d with SMTP id t76-20020a0dea4f000000b0054fbc13202dmr3218123ywe.28.1681413068352;
-        Thu, 13 Apr 2023 12:11:08 -0700 (PDT)
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
-        by smtp.gmail.com with ESMTPSA id 72-20020a81054b000000b00545a08184edsm655574ywf.125.2023.04.13.12.11.06
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Apr 2023 12:11:07 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id n203so4779337ybg.6
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 12:11:06 -0700 (PDT)
-X-Received: by 2002:a25:cc05:0:b0:b8b:eea7:525a with SMTP id
- l5-20020a25cc05000000b00b8beea7525amr1725774ybf.7.1681413066412; Thu, 13 Apr
- 2023 12:11:06 -0700 (PDT)
+        bh=rmZ0O+sn7kZQc+bw7Jf0vK7+WNBVnZzD5f3dYdmxU6w=;
+        b=KiTFWnSIEEkILsvjzoG4oEtgwhsPYcQL6sJsEKO/RmPB2B7YN8NZtmsoFDUBWJsy7I
+         NIySIGnxVQJA4hzTL7QxCvGUUu2REalCksZisq+aENZqBmLsF85W1oli49q12iKe4U57
+         iX+PCERuDA+Xfn6Eh7hSYHoLxhadRfoQsnKb9NhVpJL8f7c+KYJKdU9aFCuJjp5LruVL
+         Z/HNGGmsTGb33R0aFNG4xqFvfc0jlsMkshP7zRJoSzkDJvNE8Q2KRFiSfsJyqAp52xXN
+         Ix1KQEI4hYwY3QdCCUXODzkOo+MUAw6VaGSOgqkfpuNKIdr5O7hpQT6tSAQDDaqf1hT+
+         +uHQ==
+X-Gm-Message-State: AAQBX9dHYPCriH3TNsNvayKHUC9qaCda7yOthCjgd2UEWOMQpZ5abQjw
+        ylcA1Zq813bWrSJRbweJhyTDKtCnvXdmj/E+KFuu9AUN
+X-Google-Smtp-Source: AKy350adCRi60QJXZb5icO9EL7KmKwKPUNkUPxrzQUDIMbacwLKJJCempvcVFMPCJqrATmpMttviOkb1C1UBme69Zng=
+X-Received: by 2002:a1f:2957:0:b0:440:380f:fc20 with SMTP id
+ p84-20020a1f2957000000b00440380ffc20mr1716539vkp.0.1681413164900; Thu, 13 Apr
+ 2023 12:12:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230408082014.235425-1-nikita@trvn.ru> <CAD=FV=XEQS9MB4e52B4yLjiP8ksYmeos_emiH4=-adCOwzfGUA@mail.gmail.com>
- <905403377ec62914a2fbe21a6b4a6c8e@trvn.ru>
-In-Reply-To: <905403377ec62914a2fbe21a6b4a6c8e@trvn.ru>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 13 Apr 2023 12:10:53 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=X_NUNXgY-9p6CUvNwYte+aPjjZPLV4oZRXR5zdEn0Kjg@mail.gmail.com>
-Message-ID: <CAD=FV=X_NUNXgY-9p6CUvNwYte+aPjjZPLV4oZRXR5zdEn0Kjg@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge: ti-sn65dsi86: Implement wait_hpd_asserted
-To:     Nikita Travkin <nikita@trvn.ru>
-Cc:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
-        rfoss@kernel.org, airlied@gmail.com, daniel@ffwll.ch,
-        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
+References: <20230412025737.20280-1-mibodhi@gmail.com> <20230412025737.20280-2-mibodhi@gmail.com>
+ <168130276446.1439316.3427548118074442016.robh@kernel.org>
+ <CAJaLiFxNbz+EygSy8OMKafZ667ingeiTw8Z17p3dwtPTpiH40g@mail.gmail.com> <799bd591-0f9a-e8fc-85f6-093314b6af23@linaro.org>
+In-Reply-To: <799bd591-0f9a-e8fc-85f6-093314b6af23@linaro.org>
+From:   Tony Dinh <mibodhi@gmail.com>
+Date:   Thu, 13 Apr 2023 12:12:33 -0700
+Message-ID: <CAJaLiFyqQumh4dnQ1UY0s5jqK+5pPYO50vPu+dGTtUC5UvhSTA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] ARM: dts: mvebu: Add device tree binding for
+ Marvell Armada 38x
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Krzysztof,
 
-On Wed, Apr 12, 2023 at 9:19=E2=80=AFPM Nikita Travkin <nikita@trvn.ru> wro=
-te:
+On Thu, Apr 13, 2023 at 12:51=E2=80=AFAM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
-> Doug Anderson =D0=BF=D0=B8=D1=81=D0=B0=D0=BB(=D0=B0) 13.04.2023 01:22:
-> > Hi,
+> On 12/04/2023 21:05, Tony Dinh wrote:
+> > Hi Rob,
+> > Hi Krzysztof,
 > >
-> > On Sat, Apr 8, 2023 at 1:20=E2=80=AFAM Nikita Travkin <nikita@trvn.ru> =
-wrote:
+> > On Wed, Apr 12, 2023 at 5:36=E2=80=AFAM Rob Herring <robh@kernel.org> w=
+rote:
 > >>
-> >> This bridge doesn't actually implement HPD due to it being way too slo=
-w
-> >> but instead expects the panel driver to wait enough to assume HPD is
-> >> asserted. However some panels (such as the generic 'edp-panel') expect
-> >> the bridge to deal with the delay and pass maximum delay to the aux
-> >> instead.
 > >>
-> >> In order to support such panels, add a dummy implementation of wait
-> >> that would just sleep the maximum delay and assume no failure has
-> >> happened.
+> >> On Tue, 11 Apr 2023 19:57:35 -0700, Tony Dinh wrote:
+> >>> Add device tree binding for Marvell Armada 38x.
+> >>>
+> >>> Signed-off-by: Tony Dinh <mibodhi@gmail.com>
+> >>> ---
+> >>>
+> >>> Changes in v2:
+> >>> - Add marvell,38x.yaml. For now, add this binding to the Marvell
+> >>> directory to keep it consistent with other Marvell yaml files.
+> >>> At a later date and a separate patch, consolidate the Marvell
+> >>> yaml files into  marvell.yaml.
+> >>>
+> >>>  .../bindings/arm/marvell/armada-38x.yaml      | 27 +++++++++++++++++=
+++
+> >>>  1 file changed, 27 insertions(+)
+> >>>  create mode 100644 Documentation/devicetree/bindings/arm/marvell/arm=
+ada-38x.yaml
+> >>>
 > >>
-> >> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
-> >> ---
-> >> This was suggested in [1] to make sure DT users can be semantically
-> >> correct (not adding no-hpd when the line is actually there) while
-> >> still using a hard delay to be faster than waiting the long debounce
-> >> time.
+> >> My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_che=
+ck'
+> >> on your patch (DT_CHECKER_FLAGS is new in v5.13):
 > >>
-> >> [1] - https://lore.kernel.org/all/CAD=3DFV=3DVR7sKsquE25eF7joc7gPApu-v=
-qwduZzjE=3DwFCoXjMYnQ@mail.gmail.com/
-> >> ---
-> >>  drivers/gpu/drm/bridge/ti-sn65dsi86.c | 19 +++++++++++++++++++
-> >>  1 file changed, 19 insertions(+)
+> >> yamllint warnings/errors:
 > >>
-> >> diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi86.c b/drivers/gpu/drm/b=
-ridge/ti-sn65dsi86.c
-> >> index 7a748785c545..260cad1fd1da 100644
-> >> --- a/drivers/gpu/drm/bridge/ti-sn65dsi86.c
-> >> +++ b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
-> >> @@ -618,6 +618,24 @@ static ssize_t ti_sn_aux_transfer(struct drm_dp_a=
-ux *aux,
-> >>         return len;
-> >>  }
+> >> dtschema/dtc warnings/errors:
+> >> ./Documentation/devicetree/bindings/arm/marvell/armada-38x.yaml: $id: =
+relative path/filename doesn't match actual path or filename
+> >>         expected: http://devicetree.org/schemas/arm/marvell/armada-38x=
+.yaml#
 > >>
-> >> +static int ti_sn_aux_wait_hpd_asserted(struct drm_dp_aux *aux, unsign=
-ed long wait_us)
-> >> +{
-> >> +       /*
-> >> +        * The HPD in this chip is a bit useless (See comment in
-> >> +        * ti_sn65dsi86_enable_comms) so if our driver is expected to =
-wait
-> >> +        * for HPD, we just assume it's asserted after the wait_us del=
-ay.
-> >> +        *
-> >> +        * In case we are asked to wait forever (wait_us=3D0) take con=
-servative
-> >> +        * 500ms delay.
-> >> +        */
-> >> +       if (wait_us =3D=3D 0)
-> >> +               wait_us =3D 500000;
-> >> +
-> >> +       usleep_range(wait_us, wait_us + 1000);
-> >> +
-> >> +       return 0;
-> >> +}
-> >> +
-> >>  static int ti_sn_aux_probe(struct auxiliary_device *adev,
-> >>                            const struct auxiliary_device_id *id)
-> >>  {
-> >> @@ -627,6 +645,7 @@ static int ti_sn_aux_probe(struct auxiliary_device=
- *adev,
-> >>         pdata->aux.name =3D "ti-sn65dsi86-aux";
-> >>         pdata->aux.dev =3D &adev->dev;
-> >>         pdata->aux.transfer =3D ti_sn_aux_transfer;
-> >> +       pdata->aux.wait_hpd_asserted =3D ti_sn_aux_wait_hpd_asserted;
+> >> doc reference errors (make refcheckdocs):
+> >>
+> >> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/202=
+30412025737.20280-2-mibodhi@gmail.com
+> >>
+> >> The base for the series is generally the latest rc1. A different depen=
+dency
+> >> should be noted in *this* patch.
+> >>
+> >> If you already ran 'make dt_binding_check' and didn't see the above
+> >> error(s), then make sure 'yamllint' is installed and dt-schema is up t=
+o
+> >> date:
+> >>
+> >> pip3 install dtschema --upgrade
+> >>
+> >> Please check and re-submit after running the above command yourself. N=
+ote
+> >> that DT_SCHEMA_FILES can be set to your schema file to speed up checki=
+ng
+> >> your schema. However, it must be unset to test all examples with your =
+schema.
+> >>
 > >
-> > This looks reasonable to me, but I think you only want this
-> > implementation if the "no-hpd" property _isn't_ present. In other
-> > words:
+> > Thanks for the reviews. After running make dt_binding_check for it
+> > seems like hours (on a dual-core 1.8GHz ARM box), I got impatient and
+> > used
+> > make CHECK_DTBS=3Dy armada-385-thecus-n2350.dtb
 > >
-> > if (!of_property_read_bool(np, "no-hpd"))
-> >   pdata->aux.wait_hpd_asserted =3D ti_sn_aux_wait_hpd_asserted;
-> >
-> > Essentially:
-> >
-> > * If "no-hpd" is present in ti-sn65dsi86 then we'll assume that HPD is
-> > handled by the panel driver via a GPIO or a "no-hpd" there (which will
-> > cause the panel driver to wait the maximum duration).
-> >
-> > * If "no-hpd" isn't present in ti-sn65dsi86 then HPD is actually
-> > hooked up and thus the panel driver _won't_ handle it.
-> >
-> > Does that seem right? Presumably this should be explained by comments.
-> >
+> > I'll move this to another faster box and run make dt_binding_check.
 >
-> This does sound reasonable indeed, I didn't think to add it
-> conditionally because, looking at the current users of
-> wait_hpd_asserted, they will first try the "no-hpd" paths
-> and will only call the bridge when they think it's on the
-> bridge to wait.
->
-> Thus, if DT is modeled properly - Panel has no-hpd or a gpio,
-> wait_hpd_asserted will never be called anyway. Other bridges
-> seem to also unconditionally enable the method.
->
-> For this to be a trouble, a panel driver has to be "broken"
-> with some form of calling wait_hpd_asserted despite knowing
-> the HPD line is not hooked up...
->
-> So I feel like guarding the wait_hpd_asserted for no-hpd
-> users should not actually change much, but if you think
-> I should add the check anyway, please let me know.
+> So many questions...
+> 1. Why do you have to run it on arm? Not on regular machine for work? No
+> one of us does like that...
 
-Ah, true, it shouldn't actually matter. I guess I still like it
-slightly better with the extra check but not enough that I'll insist
-on it. Thus:
+It's just more convenient for me to run on ARM (I also build ARM
+kernels natively with distcc). This is not work related, so I cannot
+use machines at work. I can use my personal 4-core laptop, though.
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> 2. You are now mixing now two different commands. You were asked to run
+> DT_SCHEMA_FILES
 
-I can commit this to drm-misc-next, but I'll plan to wait ~1 week to
-see if anyone else has any comments about it.
+OK. As you can see, I have no experience with schema before.
 
--Doug
+> 3. Read the provided guide how to speed it up. It runs within few seconds=
+.
+
+Good to know there is a way. Thanks for the advice!
+
+All the best,
+Tony
+
+>
+>
+> Best regards,
+> Krzysztof
+>
