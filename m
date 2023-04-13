@@ -2,102 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C811C6E0409
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 04:18:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 801046E040C
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 04:19:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbjDMCSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 22:18:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57082 "EHLO
+        id S229615AbjDMCTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 22:19:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbjDMCSp (ORCPT
+        with ESMTP id S229878AbjDMCTU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 22:18:45 -0400
-Received: from ci74p00im-qukt09082302.me.com (ci74p00im-qukt09082302.me.com [17.57.156.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51645B1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 19:18:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sladewatkins.net;
-        s=sig1; t=1681352323;
-        bh=UmL6fMhjU+c1FvBuhRm+zZmRZCPUcuT6L5z367nRwoE=;
-        h=Content-Type:Mime-Version:Subject:From:Date:Message-Id:To;
-        b=awVlLCSFyPT2dCMdKibT+G6Tr1euL2+AEvYx68y8EV4g1c56/39W3kk9McFL7CFj7
-         rjcdNqXJJzeadvJ5ijIMesv9UpSw/3oeE+g749HV+f1Qv44s+lo21TppLNg/a6Y5Wp
-         9jnIZlqstAN2pZ/Srt1Jn/xUFqOIawtkzV0cJ/b4i1exMaq5/ntH2OzUHqBvst8xgk
-         utiUlaZ34oub3dvK4gbYPG8FVD5i2XyySqYaM53FpVICISn06/HybMzaOmXrM+eM1y
-         ug7Jo1fW7t85eDfp0UH0U2M6UMF6zvuEZmDLIOS/PaKvzaHOO6E8YJtdxe10vFwMW3
-         3MxcEbeaONryw==
-Received: from smtpclient.apple (ci77p00im-dlb-asmtp-mailmevip.me.com [17.57.156.26])
-        by ci74p00im-qukt09082302.me.com (Postfix) with ESMTPSA id 725882FC01EA;
-        Thu, 13 Apr 2023 02:18:40 +0000 (UTC)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: [PATCH 6.2 000/173] 6.2.11-rc1 review
-From:   Slade Watkins <srw@sladewatkins.net>
-In-Reply-To: <20230412082838.125271466@linuxfoundation.org>
-Date:   Wed, 12 Apr 2023 22:18:40 -0400
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, rwarsow@gmx.de
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <8DA42803-580A-41F6-B80F-45AE269EC38D@sladewatkins.net>
-References: <20230412082838.125271466@linuxfoundation.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-X-Mailer: Apple Mail (2.3731.500.231)
-X-Proofpoint-GUID: diOa4PNWSrXGajGtsNDKza-HQnvqCva2
-X-Proofpoint-ORIG-GUID: diOa4PNWSrXGajGtsNDKza-HQnvqCva2
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.572,17.11.62.513.0000000_definitions?=
- =?UTF-8?Q?=3D2020-02-14=5F11:2020-02-14=5F02,2020-02-14=5F11,2021-12-02?=
- =?UTF-8?Q?=5F01_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 clxscore=1030 adultscore=0
- phishscore=0 malwarescore=0 mlxlogscore=546 suspectscore=0 mlxscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2304130019
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 12 Apr 2023 22:19:20 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3859F10FA;
+        Wed, 12 Apr 2023 19:19:19 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id kh6so11931855plb.0;
+        Wed, 12 Apr 2023 19:19:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681352358;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AoNmsypXyoGXGjxp2QCOVLgkPqEcooZxqGiyUVMKORY=;
+        b=rtdAp8pUT1xeg+sHdseeSi2PZY0w0SeedN1oAzlwW5ZUu/Fkk7aztNCQIC7GGRORFv
+         bsF6FJKfM5iHaAP7mGZ3+dnt1Hg4I5NkOf03Yfv2JfUAN5/eAHHkuvI0wBnH/Cl51H5i
+         inNYkFkw70g6f7DhVtyQ8LgvcShxD7gl5qfKiY/mEAVDOHF7hv91KM/UhfkJaU6jNuW/
+         Uu2WGdzqmZUMTkXbnAKo/u/Pq1TUNAYNTj6Z8t13eHtYIPCIsH8qf0zFhyxwkUJqv7Hu
+         v4hFWeO5/dOk7cW6B3qxtLq8f4cen3yHq+6RaGsafxB3h6ykTB4p4qVG4b7iFx5CHUPA
+         fw/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681352358;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AoNmsypXyoGXGjxp2QCOVLgkPqEcooZxqGiyUVMKORY=;
+        b=SvkAHlo3yeXKYyWc/mzxJqOknlHU9ViHOTsjqMPVVohpLsQg4NA1ynGd01mSpWuLAu
+         TdF/KMRIr0Oy0tcJ7+6j3an7bCW9bcoFhPGd9TCaYIY72PsF2o834BUlf8EOP9i6mCvS
+         icDLEXlHI7SHsBbhiJWt+/Q0tHPfS0MbO1aqSPyqJgFMsPvVez6JASFNsyWfjqUmIo+x
+         gTEqKVBfIVsC8lNuEoOBR3yViEpmBI/U8mKonA4uDh4YwxsARMBOftdLu/yWbumFpOjU
+         mIlps342+2d9DmR1yv6P/qX10TT2Ovcl0TCdLdHRNS+wbiBGqZMBs9tYNAGxqh4YRzQx
+         yubQ==
+X-Gm-Message-State: AAQBX9etqyQVE/sdV0OVrLap2wivk1tVfvsa6d8u2nHTF109V3AzxdeZ
+        327QsJbnk/Py1sZIAo2UtHmF62hGpA+z4g==
+X-Google-Smtp-Source: AKy350YgBaYDqEgM2C+hmFCOpT123hc0nY43RIYnzC6A630tQkk4BC4RLyqpIAO9bCFs69jp7CRlAw==
+X-Received: by 2002:a17:902:d54a:b0:1a6:5fa2:aa50 with SMTP id z10-20020a170902d54a00b001a65fa2aa50mr597498plf.1.1681352358584;
+        Wed, 12 Apr 2023 19:19:18 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-2.three.co.id. [180.214.232.2])
+        by smtp.gmail.com with ESMTPSA id j12-20020a170902c3cc00b0019edc1b9eb2sm235003plj.238.2023.04.12.19.19.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Apr 2023 19:19:18 -0700 (PDT)
+Message-ID: <4b17c67c-4b3d-4326-37e7-949a08d03f55@gmail.com>
+Date:   Thu, 13 Apr 2023 09:19:12 +0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] docs: trace: Fix typo in ftrace.rst
+To:     Lin Yu Chen <starpt.official@gmail.com>, corbet@lwn.net
+Cc:     rostedt@goodmis.org, mhiramat@kernel.org, mark.rutland@arm.com,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20230412183739.89894-1-starpt.official@gmail.com>
+Content-Language: en-US
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20230412183739.89894-1-starpt.official@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 4/13/23 01:37, Lin Yu Chen wrote:
+> There is a typo in the sentence "A kernel developer must be
+> conscience ...". The word conscience should be conscious.
+> This patch fixes it.
+> 
 
-> On Apr 12, 2023, at 4:32 AM, Greg Kroah-Hartman =
-<gregkh@linuxfoundation.org> wrote:
->=20
-> This is the start of the stable review cycle for the 6.2.11 release.
-> There are 173 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, =
-please
-> let me know.
->=20
-> Responses should be made by Fri, 14 Apr 2023 08:28:02 +0000.
-> Anything received after that time might be too late.
->=20
-> The whole patch series can be found in one patch at:
-> =
-https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.11-rc=
-1.gz
-> or in the git tree and branch at:
-> =
-git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git =
-linux-6.2.y
-> and the diffstat can be found below.
->=20
-> thanks,
->=20
-> greg k-h
+Please don't say "This patch does foo".
+ 
+> -waste it in functions. A kernel developer must be conscience of
+> +waste it in functions. A kernel developer must be conscious of
 
+Alternatively, what about "aware of"?
 
-Compiled & booted on two of my x86_64 test systems, no errors or =
-regressions.
+-- 
+An old man doll... just what I always wanted! - Clara
 
-Tested-by: Slade Watkins <srw@sladewatkins.net>
-
-Slade=
