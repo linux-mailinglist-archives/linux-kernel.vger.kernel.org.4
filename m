@@ -2,165 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 047356E0363
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 02:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C0B6E0365
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 02:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbjDMAv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 20:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48834 "EHLO
+        id S229853AbjDMAwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 20:52:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbjDMAv5 (ORCPT
+        with ESMTP id S229685AbjDMAwG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 20:51:57 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2059.outbound.protection.outlook.com [40.107.223.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04655768D;
-        Wed, 12 Apr 2023 17:51:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mJjmLT4C4c/996swhLDsPKF73MuVXzYDA5TAL58djn/kGYsCLWj/aeNfVS10imqulnuyP0E7pSWZALokI/fopLPkZlmeBxiSYqHfFh9tLrhWgqF+ygTrl7oTKnPuEmb3B+LgQ//X8ZHwsSFJ4iEXoWEAJq3Ja/zX8N7Qh4gr7Swijl9d1YsAzsC0mLWEMc6SIZQPCMpWt/4yHlZfvRX5DlezlTeIbqrDQV4xGsF6HCwf0GKhFHi9mmvarqx/CbqKVdXuNsA9iUyrLRW257HUqC0w/HNA0CjgZgEUUVvkazIFk38gppUhvraZxVrIgDOki2/kBFqlnhWrI89uSyF/dA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8MLusmjcGjP+39M7KJ7m84BNI+8wxd1cRnzSmqWvnhg=;
- b=Kxf4Z+wF+QKroYnybeOk+HECFCvCFMZQwAlPKWTGSybTED0jQrBt5JR1wnJmBag1D+MDfSwUE/adEm/LLKwhovLDTjBFqvbljA7xCUH4D+o59S+MUrb//00rdtoumcBDmuz6gIFpAcku6K7ZV6RShakv/1C/T7+D56g1Q4GWZPO3Kt1R0HTQFIf3O+7fyBy/4QxtFbwoSVfZjFKTRj/tbdENd64U0R/Ntpyh1iHanYqK1pgAOVtkJa8miUTdGaV/rU+/pQTL8E8SNwIizilMITBqaEawrkAVku3WoWn7vKr21QS7uJQ/IWrk169e6d3pvmgZhnpKzx6y3qAOz5M5Tg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8MLusmjcGjP+39M7KJ7m84BNI+8wxd1cRnzSmqWvnhg=;
- b=f1cVRKGcDuG/RCuZ1UA8+sBmH2L6q9sBldc2eAsvhvN8y+fvoBBm6K8pC0/O0AI1Qu61JE2/52kHbpfZzcrDrodvikWz2NBt7kcxlpGfzkxvNnITiGedDoRrNpt/rr7UTmiimWD1nVEuozojjEuMfgUJHUOevBnZatC31wTY8gI=
-Received: from BN0PR04CA0142.namprd04.prod.outlook.com (2603:10b6:408:ed::27)
- by DM4PR12MB6661.namprd12.prod.outlook.com (2603:10b6:8:bb::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Thu, 13 Apr
- 2023 00:51:51 +0000
-Received: from BN8NAM11FT064.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:ed:cafe::33) by BN0PR04CA0142.outlook.office365.com
- (2603:10b6:408:ed::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30 via Frontend
- Transport; Thu, 13 Apr 2023 00:51:50 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT064.mail.protection.outlook.com (10.13.176.160) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6298.31 via Frontend Transport; Thu, 13 Apr 2023 00:51:50 +0000
-Received: from platform-dev1.pensando.io (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Wed, 12 Apr 2023 19:51:47 -0500
-From:   Brad Larson <blarson@amd.com>
-To:     <robh@kernel.org>
-CC:     <adrian.hunter@intel.com>, <alcooperx@gmail.com>,
-        <andy.shevchenko@gmail.com>, <arnd@arndb.de>, <blarson@amd.com>,
-        <brendan.higgins@linux.dev>, <briannorris@chromium.org>,
-        <brijeshkumar.singh@amd.com>, <broonie@kernel.org>,
-        <catalin.marinas@arm.com>, <davidgow@google.com>,
-        <devicetree@vger.kernel.org>, <fancer.lancer@gmail.com>,
-        <gerg@linux-m68k.org>, <gsomlo@gmail.com>, <krzk@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <lee.jones@linaro.org>,
-        <lee@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <p.yadav@ti.com>,
-        <p.zabel@pengutronix.de>, <piotrs@cadence.com>,
-        <rdunlap@infradead.org>, <samuel@sholland.org>,
-        <skhan@linuxfoundation.org>, <suravee.suthikulpanit@amd.com>,
-        <thomas.lendacky@amd.com>, <tonyhuang.sunplus@gmail.com>,
-        <ulf.hansson@linaro.org>, <vaishnav.a@ti.com>, <will@kernel.org>,
-        <yamada.masahiro@socionext.com>
-Subject: Re: [PATCH v13 08/15] arm64: dts: Add AMD Pensando Elba SoC support
-Date:   Wed, 12 Apr 2023 17:51:41 -0700
-Message-ID: <20230413005141.24632-1-blarson@amd.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230411135518.GA2952600-robh@kernel.org>
-References: <20230411135518.GA2952600-robh@kernel.org>
+        Wed, 12 Apr 2023 20:52:06 -0400
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4485729A;
+        Wed, 12 Apr 2023 17:51:57 -0700 (PDT)
+Received: by mail-pl1-f174.google.com with SMTP id lh8so339273plb.1;
+        Wed, 12 Apr 2023 17:51:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681347117; x=1683939117;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=J2YsOnNMLvy/s09ui3ik3WufFA8bZNHkf1/NJw8wPa0=;
+        b=MtRhEfLw2GPgeW2uHx5LUf2fl2L9w7dxu9yhzRgh11o6oucVLhC5elG+ZnEE/T8v6R
+         l29zzH3r4msCEn+3Tnr6Hks89TLLUpJstwL7u1ovthXg4gvBVyS/MWrVseAb+lzuu1zv
+         DgkTHznByDGY5MqlHANizZzH43HRZGbdwYQYD/wr6BMFU0egW/oXMqqVZaPWgY6HBlDs
+         FmRq+9NGv+A6IlUU+P+ohAKSFLdHDYMtK8UojjXUYFqCPAR7e9yQrjR/AbqTASpUBm+f
+         VwIXRz+GsbxiK408bCnh+uymfI6VMk+ODaDyM4yFZ0+9xkybZ7bcUb0UgnTx8H6tvQnT
+         tKsg==
+X-Gm-Message-State: AAQBX9c910lA/yBqd/GgDzK2apQ5iqtZfkz5iOcvnjFCRJ4kKNfeyBr0
+        3GwNotXnwuniQslNtqQGBqM=
+X-Google-Smtp-Source: AKy350ZRJ2va9yPx8S9CYEIjX6o6bLnyj+t5NChCwfCIw6KVozEmidyq0/T5xClL7m4tsJawZggEvg==
+X-Received: by 2002:a17:902:f30d:b0:19e:e001:6a75 with SMTP id c13-20020a170902f30d00b0019ee0016a75mr299671ple.6.1681347117040;
+        Wed, 12 Apr 2023 17:51:57 -0700 (PDT)
+Received: from localhost ([116.128.244.169])
+        by smtp.gmail.com with ESMTPSA id o12-20020a1709026b0c00b001a229e52c1asm167658plk.231.2023.04.12.17.51.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Apr 2023 17:51:56 -0700 (PDT)
+From:   Hongyu Xie <xiehongyu1@kylinos.cn>
+To:     mathias.nyman@linux.intel.com, mathias.nyman@intel.com,
+        gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hongyu Xie <xiehongyu1@kylinos.cn>, stable@vger.kernel.org,
+        sunke <sunke@kylinos.cn>
+Subject: [RESEND PATCH -next v2] usb: xhci: do not free an empty cmd ring
+Date:   Thu, 13 Apr 2023 08:51:52 +0800
+Message-Id: <20230413005152.30505-1-xiehongyu1@kylinos.cn>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT064:EE_|DM4PR12MB6661:EE_
-X-MS-Office365-Filtering-Correlation-Id: 38a00faa-67d1-4710-38b0-08db3bb9447b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aUtr4RKa16428CXi34Gxrs+UUBSXBc6rUFTdJKXGFs3GuurKi5+YJ3jqjgNolVIaFlLLNLLjWdWusm9fEdypN0D6JpQsk2xNC920yagdus6hTNdT4l9KKFQA8dz+eGaxuSRnQkPVyobAFoj/8RC7xtftS/zC/2PsWrDW8E4JxZ8OEdKHMVN9p4vPtkKWz3lpRw357Q8WV9pAFl1pTru4lE0my1dFFLFtpZIazXIiHyPxqfeL1nLtD1WtQM4I/QbB/2HOJ+ElKLOjYXn5kNZ5kc9lPcpowW+LJnGCqFrt+lBRFqqLKiSnveJQIdn9n7uUkIyUZbzv1TtmGKIHi7QOW5iIDgFgK+7LXtq5xo/Wou3x79uce4RlBTWu2T/EFPavg/wT2JeSS9xPMBJMnP45pQpjdQDLIMTNMVCE9icP1HpGvpKl3vjIQ0pXdyod6JHZkXsHRRBfw+9mHeWBM6QBaip345hRGfWAjgTH2n7nVKkgmGhHIjJPalkE6tOHpEOaD2H/kaEHFYZog1fanmVfFdTSHRq0UIKixuuZHlNbDcnpKKCfFp0QPYd3zmRtNplwRY7fV0r63SPe4RgUX09Df2b1hw5Psk7j459YdLj7+3mpyC1f2Ml4d2+2NqJVWlOFCtiE+JGCu/G9PL+2LFCK8E328/mnGv2WxCJGjGqr5QADuAvYYTqgtb/xi94+j/68hFhGnZEYo9a9OlhA6UMUUSTPRqtdoEez16AIKydcZZA=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(376002)(346002)(136003)(451199021)(36840700001)(46966006)(40470700004)(6916009)(316002)(81166007)(26005)(82740400003)(186003)(53546011)(1076003)(6666004)(83380400001)(36860700001)(2616005)(47076005)(426003)(336012)(16526019)(8936002)(82310400005)(7416002)(5660300002)(7406005)(36756003)(2906002)(41300700001)(8676002)(40460700003)(356005)(478600001)(40480700001)(54906003)(70586007)(4326008)(70206006)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2023 00:51:50.6503
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 38a00faa-67d1-4710-38b0-08db3bb9447b
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT064.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6661
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+It was first found on HUAWEI Kirin 9006C platform with a builtin xhci
+controller during stress cycle test(stress-ng, glmark2, x11perf, S4...).
 
-On Tue, Apr 11, 2023 at 08:55:18, Rob Herring wrote:
-> On Mon, Apr 10, 2023 at 11:45:19AM -0700, Brad Larson wrote:
->> Add AMD Pensando common and Elba SoC specific device nodes
->> 
->> Signed-off-by: Brad Larson <blarson@amd.com>
->> ---
->> 
->> v11 changes:
->> - Delete reset-names
->> - Fix spi0 compatible to be specific 'amd,pensando-elba-ctrl'
->> 
->> v9 changes:
->> - Single node for spi0 system-controller and squash
->>   the reset-controller child into parent
->
-> Have you run this thru 'make dtbs_check'? I see at least one issue that 
-> should report.
-
-Yes and no warnings or errors with these checks 
-
-make ARCH=arm64 dtbs_check
-make DT_CHECKER_FLAGS=-m dt_binding_check 
-
-but I did find a couple relevant packages have been updated
-
-dtschema Version: 2023.1  ==> 2023.4
-yamllint Version: 1.26.3  ==> 1.30.0
-
-and then running again I get below 
-
-$ make ARCH=arm64 dtbs_check 
+phase one:
+[26788.706878] PM: dpm_run_callback(): platform_pm_thaw+0x0/0x68 returns -12
+[26788.706878] PM: Device xhci-hcd.1.auto failed to thaw async: error -12
 ...
-/home/brad/linux.v13/arch/arm64/boot/dts/amd/elba-asic.dtb: l2-cache0: 'cache-level' is a required property
-/home/brad/linux.v13/arch/arm64/boot/dts/amd/elba-asic.dtb: l2-cache0: 'cache-level' is a required property
-/home/brad/linux.v13/arch/arm64/boot/dts/amd/elba-asic.dtb: l2-cache0: 'cache-unified' is a required property
-/home/brad/linux.v13/arch/arm64/boot/dts/amd/elba-asic.dtb: l2-cache1: 'cache-level' is a required property
-/home/brad/linux.v13/arch/arm64/boot/dts/amd/elba-asic.dtb: l2-cache1: 'cache-level' is a required property
-/home/brad/linux.v13/arch/arm64/boot/dts/amd/elba-asic.dtb: l2-cache1: 'cache-unified' is a required property
-/home/brad/linux.v13/arch/arm64/boot/dts/amd/elba-asic.dtb: l2-cache2: 'cache-level' is a required property
-/home/brad/linux.v13/arch/arm64/boot/dts/amd/elba-asic.dtb: l2-cache2: 'cache-level' is a required property
-/home/brad/linux.v13/arch/arm64/boot/dts/amd/elba-asic.dtb: l2-cache2: 'cache-unified' is a required property
-/home/brad/linux.v13/arch/arm64/boot/dts/amd/elba-asic.dtb: l2-cache3: 'cache-level' is a required property
-/home/brad/linux.v13/arch/arm64/boot/dts/amd/elba-asic.dtb: l2-cache3: 'cache-level' is a required property
-/home/brad/linux.v13/arch/arm64/boot/dts/amd/elba-asic.dtb: l2-cache3: 'cache-unified' is a required property
+phase two:
+[28650.583496] [2023:01:19 04:43:29]Unable to handle kernel NULL pointer dereference at virtual address 0000000000000028
+...
+[28650.583526] user pgtable: 4k pages, 39-bit VAs, pgdp=000000027862a000
+[28650.583557] [0000000000000028] pgd=0000000000000000
+...
+[28650.583587] pc : xhci_suspend+0x154/0x5b0
+[28650.583618] lr : xhci_suspend+0x148/0x5b0
+[28650.583618] sp : ffffffc01c7ebbd0
+[28650.583618] x29: ffffffc01c7ebbd0 x28: ffffffec834d0000
+[28650.583618] x27: ffffffc0106a3cc8 x26: ffffffb2c540c848
+[28650.583618] x25: 0000000000000000 x24: ffffffec82ee30b0
+[28650.583618] x23: ffffffb43b31c2f8 x22: 0000000000000000
+[28650.583618] x21: 0000000000000000 x20: ffffffb43b31c000
+[28650.583648] x19: ffffffb43b31c2a8 x18: 0000000000000001
+[28650.583648] x17: 0000000000000803 x16: 00000000fffffffe
+[28650.583648] x15: 0000000000001000 x14: ffffffb150b67e00
+[28650.583648] x13: 00000000f0000000 x12: 0000000000000001
+[28650.583648] x11: 0000000000000000 x10: 0000000000000a80
+[28650.583648] x9 : ffffffc01c7eba00 x8 : ffffffb43ad10ae0
+[28650.583648] x7 : ffffffb84cd98dc0 x6 : 0000000cceb6a101
+[28650.583679] x5 : 00ffffffffffffff x4 : 0000000000000001
+[28650.583679] x3 : 0000000000000011 x2 : 0000000000e2cfa8
+[28650.583679] x1 : 00000000823535e1 x0 : 0000000000000000
 
-I'll fix this in the next spin.
+gdb:
+(gdb) l *(xhci_suspend+0x154)
+0xffffffc010b6cd44 is in xhci_suspend (/.../drivers/usb/host/xhci.c:854).
+849	{
+850		struct xhci_ring *ring;
+851		struct xhci_segment *seg;
+852
+853		ring = xhci->cmd_ring;
+854		seg = ring->deq_seg;
+(gdb) disassemble 0xffffffc010b6cd44
+...
+0xffffffc010b6cd40 <+336>:	ldr	x22, [x19, #160]
+0xffffffc010b6cd44 <+340>:	ldr	x20, [x22, #40]
+0xffffffc010b6cd48 <+344>:	mov	w1, #0x0                   	// #0
 
-Regards,
-Brad
+During phase one, platform_pm_thaw called xhci_plat_resume which called
+xhci_resume. The rest possible calling routine might be
+xhci_resume->xhci_init->xhci_mem_init, and xhci->cmd_ring was cleaned in
+xhci_mem_cleanup before xhci_mem_init returned -ENOMEM.
+
+During phase two, systemd was tring to hibernate again and called
+xhci_suspend, then xhci_clear_command_ring dereferenced xhci->cmd_ring
+which was already NULL.
+
+So if xhci->cmd_ring is NULL, xhci_clear_command_ring just return.
+
+Fixes: 898213200cba ("xhci: Fix command ring replay after resume.")
+Cc: stable@vger.kernel.org # 2.6.27+
+Co-developed-by: sunke <sunke@kylinos.cn>
+Signed-off-by: sunke <sunke@kylinos.cn>
+Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
+---
+ drivers/usb/host/xhci.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 6183ce8574b1..faa0a63671f6 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -920,6 +920,11 @@ static void xhci_clear_command_ring(struct xhci_hcd *xhci)
+ 	struct xhci_ring *ring;
+ 	struct xhci_segment *seg;
+ 
++	if (!xhci->cmd_ring) {
++		xhci_err(xhci, "Empty cmd ring");
++		return;
++	}
++
+ 	ring = xhci->cmd_ring;
+ 	seg = ring->deq_seg;
+ 	do {
+-- 
+2.34.1
+
