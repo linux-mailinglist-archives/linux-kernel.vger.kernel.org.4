@@ -2,97 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE5DA6E08A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:11:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D86486E08AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbjDMILh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 04:11:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51752 "EHLO
+        id S230306AbjDMIME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 04:12:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjDMILf (ORCPT
+        with ESMTP id S229561AbjDMIMC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 04:11:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC355FC6
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 01:10:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681373448;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BicKsHmWZzac/YBlZAspRK8qzvBfIdiX2v+jxSpHdUc=;
-        b=NpqyWQ90AXUD9xS7thB1IFECNM5IayuitQV6EWlmj6MrwVfTBy0kECP2SlP0Um5dRBDI/a
-        WYKswSJviCdrJ3OAicjlwX4/oqkWcYcP3MUpAsf5oOMoSoHttSWoBjttJS9lUXL5O1t8gm
-        K8RSSIk4IeuRNRvMxop7t31PuxjZ/Qs=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-326-H3gvGvDcOteoE_qYu8KIQg-1; Thu, 13 Apr 2023 04:10:47 -0400
-X-MC-Unique: H3gvGvDcOteoE_qYu8KIQg-1
-Received: by mail-wm1-f70.google.com with SMTP id bh18-20020a05600c3d1200b003f05a99b571so10030187wmb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 01:10:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681373446; x=1683965446;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :content-language:references:cc:to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BicKsHmWZzac/YBlZAspRK8qzvBfIdiX2v+jxSpHdUc=;
-        b=fijnq/vqkw+M/mPINUBCf+fHeGAaTJZvoOZee/ovCtQ9672F0ckfx2Dhzn8I0zyAb8
-         co9fUWslLP8j3LF27+NbqAh8C+w1Od2ZfwCcBXoP9d6OnZkXODJotzTiHoF7QTf9LTd/
-         s/FyDBcAIIO28k04a0faKRt+xGYrb9zD2c9/0S0sf94hJkz6R1omsP7KXljW8lWplqcA
-         kOM98wrstkG0XV+DKXVgaawoqhpHCVc/tY03EI+Eg9sfwHxTwkl+mVzOiFem2w0cpY2a
-         Xe0x2eX4AyQDurD+RSnNJRdsJhHTZKdyqPoESUMbUt5tlYi0lzy+fU2fi08fsQYmlbiI
-         7w9w==
-X-Gm-Message-State: AAQBX9fitY6CQ+OnH04G+m5oPojsEGMlxFTactID0U+vJ859rKhzQvOt
-        UDSfsi3cO7ppfA3lbLq251LmwApYbcSUixyQuh6MMJgJKcsL/orNUip3YlXMC1HsyiHImDU6HcF
-        yzn9TwUt7CTpWVf/JChsAz4aW
-X-Received: by 2002:a5d:4241:0:b0:2e4:cc81:8a80 with SMTP id s1-20020a5d4241000000b002e4cc818a80mr751828wrr.26.1681373446205;
-        Thu, 13 Apr 2023 01:10:46 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Z+1v6fqv73Ez8CQYOt3Gxgg06TKHkadfH9tvU0savFWMLQFBC/hyWk7Box+pdqdLyncGNB2Q==
-X-Received: by 2002:a5d:4241:0:b0:2e4:cc81:8a80 with SMTP id s1-20020a5d4241000000b002e4cc818a80mr751805wrr.26.1681373445820;
-        Thu, 13 Apr 2023 01:10:45 -0700 (PDT)
-Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
-        by smtp.gmail.com with ESMTPSA id v10-20020a05600c470a00b003ef36ef3833sm4836553wmo.8.2023.04.13.01.10.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Apr 2023 01:10:45 -0700 (PDT)
-Message-ID: <3059388f-1604-c326-c66f-c2e0f9bb6cbf@redhat.com>
-Date:   Thu, 13 Apr 2023 10:10:44 +0200
+        Thu, 13 Apr 2023 04:12:02 -0400
+Received: from mail-m11875.qiye.163.com (mail-m11875.qiye.163.com [115.236.118.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141C05FC6;
+        Thu, 13 Apr 2023 01:11:55 -0700 (PDT)
+Received: from [0.0.0.0] (unknown [172.96.223.238])
+        by mail-m11875.qiye.163.com (Hmail) with ESMTPA id 2212A280D4D;
+        Thu, 13 Apr 2023 16:11:46 +0800 (CST)
+Message-ID: <3921e44e-3cb4-4016-5e6b-1dd52656b7a6@sangfor.com.cn>
+Date:   Thu, 13 Apr 2023 16:11:30 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Lokesh Gidra <lokeshgidra@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Brian Geffon <bgeffon@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Nicolas Geoffray <ngeoffray@google.com>,
-        Jared Duke <jdduke@google.com>,
-        android-mm <android-mm@google.com>,
-        Blake Caldwell <blake.caldwell@colorado.edu>,
-        Mike Rapoport <rppt@kernel.org>
-References: <CA+EESO4uO84SSnBhArH4HvLNhaUQ5nZKNKXqxRCyjniNVjp0Aw@mail.gmail.com>
- <ZC8BgFSFC3cDcAcS@x1n> <27ac2f51-e2bf-7645-7a76-0684248a5902@redhat.com>
- <ZDbVMk0trT5UaqaA@x1n>
+Subject: Re: [RFC PATCH net] sfc: Fix use-after-free due to selftest_work
 Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: RFC for new feature to move pages from one vma to another without
- split
-In-Reply-To: <ZDbVMk0trT5UaqaA@x1n>
+To:     Jacob Keller <jacob.e.keller@intel.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        ecree.xilinx@gmail.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pengdonglin@sangfor.com.cn,
+        huangcun@sangfor.com.cn
+References: <20230412005013.30456-1-dinghui@sangfor.com.cn>
+ <30e4bf50-7950-0b3c-67b5-6028b7114da2@intel.com> <ZDe02xqrX/pP0vEN@gmail.com>
+From:   Ding Hui <dinghui@sangfor.com.cn>
+In-Reply-To: <ZDe02xqrX/pP0vEN@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCHR9CVkoeSxgeSkpKGRhIHlUTARMWGhIXJBQOD1
+        lXWRgSC1lBWUpMSVVCTVVJSUhVSUhDWVdZFhoPEhUdFFlBWU9LSFVKSktPSEhVSktLVUtZBg++
+X-HM-Tid: 0a8779abbf712eb1kusn2212a280d4d
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Nkk6ISo*UT0QLCw1TTgwEhNW
+        Ey8KFCFVSlVKTUNKSExITkpJT0lLVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
+        QVlKTElVQk1VSUlIVUlIQ1lXWQgBWUFPQ01MNwY+
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,114 +53,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12.04.23 17:58, Peter Xu wrote:
-> On Wed, Apr 12, 2023 at 10:47:52AM +0200, David Hildenbrand wrote:
->>> Personally it was always a mistery to me on how vm_pgoff works with
->>> anonymous vmas and why it needs to be setup with vm_start >> PAGE_SHIFT.
->>>
->>> Just now I tried to apply below oneliner change:
->>>
->>> @@ -1369,7 +1369,7 @@ unsigned long do_mmap(struct file *file, unsigned long addr,
->>>                           /*
->>>                            * Set pgoff according to addr for anon_vma.
->>>                            */
->>> -                       pgoff = addr >> PAGE_SHIFT;
->>> +                       pgoff = 0;
->>>                           break;
->>>                   default:
->>>                           return -EINVAL;
->>>
->>> The kernel even boots without a major problem so far..
+On 2023/4/13 15:52, Martin Habets wrote:
+> On Wed, Apr 12, 2023 at 03:34:51PM -0700, Jacob Keller wrote:
 >>
->> I think it's for RMAP purposes.
 >>
->> Take a look at linear_page_index() and how it's, for example, used in
->> ksm_might_need_to_copy() alongside page->index.
+>> On 4/11/2023 5:50 PM, Ding Hui wrote:
+>>> There is a use-after-free scenario that is:
+>>>
+>>> When netif_running() is false, user set mac address or vlan tag to VF,
+>>> the xxx_set_vf_mac() or xxx_set_vf_vlan() will invoke efx_net_stop()
+>>> and efx_net_open(), since netif_running() is false, the port will not
+>>> start and keep port_enabled false, but selftest_worker is scheduled
+>>> in efx_net_open().
+>>>
+>>> If we remove the device before selftest_worker run, the efx is freed,
+>>> then we will get a UAF in run_timer_softirq() like this:
+>>>
+>>> [ 1178.907941] ==================================================================
+>>> [ 1178.907948] BUG: KASAN: use-after-free in run_timer_softirq+0xdea/0xe90
+>>> [ 1178.907950] Write of size 8 at addr ff11001f449cdc80 by task swapper/47/0
+>>> [ 1178.907950]
+>>> [ 1178.907953] CPU: 47 PID: 0 Comm: swapper/47 Kdump: loaded Tainted: G           O     --------- -t - 4.18.0 #1
+>>> [ 1178.907954] Hardware name: SANGFOR X620G40/WI2HG-208T1061A, BIOS SPYH051032-U01 04/01/2022
+>>> [ 1178.907955] Call Trace:
+>>> [ 1178.907956]  <IRQ>
+>>> [ 1178.907960]  dump_stack+0x71/0xab
+>>> [ 1178.907963]  print_address_description+0x6b/0x290
+>>> [ 1178.907965]  ? run_timer_softirq+0xdea/0xe90
+>>> [ 1178.907967]  kasan_report+0x14a/0x2b0
+>>> [ 1178.907968]  run_timer_softirq+0xdea/0xe90
+>>> [ 1178.907971]  ? init_timer_key+0x170/0x170
+>>> [ 1178.907973]  ? hrtimer_cancel+0x20/0x20
+>>> [ 1178.907976]  ? sched_clock+0x5/0x10
+>>> [ 1178.907978]  ? sched_clock_cpu+0x18/0x170
+>>> [ 1178.907981]  __do_softirq+0x1c8/0x5fa
+>>> [ 1178.907985]  irq_exit+0x213/0x240
+>>> [ 1178.907987]  smp_apic_timer_interrupt+0xd0/0x330
+>>> [ 1178.907989]  apic_timer_interrupt+0xf/0x20
+>>> [ 1178.907990]  </IRQ>
+>>> [ 1178.907991] RIP: 0010:mwait_idle+0xae/0x370
+>>>
+>>> I am thinking about several ways to fix the issue:
+>>>
+>>> [1] In this RFC, I cancel the selftest_worker unconditionally in
+>>> efx_pci_remove().
+>>>
+>>> [2] Add a test condition, only invoke efx_selftest_async_start() when
+>>> efx->port_enabled is true in efx_net_open().
+>>>
+>>> [3] Move invoking efx_selftest_async_start() from efx_net_open() to
+>>> efx_start_all() or efx_start_port(), that matching cancel action in
+>>> efx_stop_port().
+>>>
+>>> [4] However, I also notice that in efx_ef10_set_mac_address(), the
+>>> efx_net_open() depends on original port_enabled, but others are not,
+>>> if we change all efx_net_open() depends on old state like
+>>> efx_ef10_set_mac_address() does, the UAF can also be fixed in theory.
+>>>
+>>> But I'm not sure which is better, is there any suggestions? Thanks.
+>>>
+>>
+>> I think this fix makes the most sense to me.
 > 
->  From what I read, the vma's vm_pgoff is set before setup any page->index
-> within the vma, while the latter will be calculated out of the vma pgoff
-> with linear_page_index() (in __page_set_anon_rmap()).
+> For me this is too late. It leaves a gap where the selftest timer is still running
+> but the NIC has already stopped sending events. So we could still get a
+> failure "channel %d timed out waiting for event queue" from the selftest.
 > 
-> 	folio->index = linear_page_index(vma, address);
-> 
-> I think I missed something, but it seems to me any comparisions between
-> page->index and linear_page_index() will just keep working for anonymous
-> even if we change vma pgoff to 0 when vma is mapped.
-> 
-> Do you perhaps mean this is needed for ksm only?  I really am not familiar
-> enough with ksm, especially when it's swapped out.  I do see that
-> ksm_might_need_to_copy() wants to avoid reusing a page if anon_vma is setup
-> not for current vma, but I don't know when it'll happen.
-> 
-> 	if (PageKsm(page)) {
-> 		if (page_stable_node(page) &&
-> 		    !(ksm_run & KSM_RUN_UNMERGE))
-> 			return page;	/* no need to copy it */
-> 	} else if (!anon_vma) {
-> 		return page;		/* no need to copy it */
-> 	} else if (page->index == linear_page_index(vma, address) &&
-> 			anon_vma->root == vma->anon_vma->root) {
-> 		return page;		/* still no need to copy it */
-> 	}
-> 
-> I think when all these paths don't trigger (aka, we need to copy) it means
-> there's anon_vma assigned to the page but not the right one (even though I
-> don't know how that could happen..).  Meanwhile I don't see either on how
-> vma pg_off affects this (and I assume a real KSM page ignores page->index
-> completely).
 
-I think you are right with folio->index = linear_page_index(vma, address).
-
-I did not check the code yet, but thinking about it I figured out why we 
-want to set pgoff to the start of the VMA in the address space for 
-anonymous memory:
-
-For RMAP and friends (relying on linear_page_index), folio->index has to 
-match the index within the VMA. If would set pgoff to something else, 
-we'd have less VMA merging opportunities. So your system might work, but 
-you'd end up with many anon VMAs.
-
-
-Imagine the following:
-
-[ anon0 ][  fd   ][ anon1 ]
-
-Unmap the fd:
-
-[ anon0 ][ hole  ][ anon1 ]
-
-Mmap anon:
-
-[ anon0 ][ anon2 ][ anon1 ]
-
-
-We can now merge all 3 VMAs into one, even if the first and latter 
-already map pages.
-
-
-A simpler and more common example is probably:
-
-[ anon0 ]
-
-Mmmap anon1 before the existing one
-
-[ anon1 ][ anon0 ]
-
-Which we can merge into a single one.
-
-
-
-Mapping after an existing one could work, but one would have to 
-carefully set pgoff based on the size of the previous anon VMA ... which 
-is more complicated
-
-So instead, we consider the whole address space as a virtual, anon file, 
-starting at offset 0. The pgoff of a VMA is then simply the offset in 
-that virtual file (easily computed from the start of the VMA), and VMA 
-merging is just the same as for an ordinary file.
+Yes, assuming not consider removing, scheduled selftest_work if NIC not
+brought up actually, we will also get this failure log.
 
 -- 
 Thanks,
+- Ding Hui
 
-David / dhildenb
+
+
 
