@@ -2,249 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E41C6E0768
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 09:12:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06D256E0769
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 09:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbjDMHMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 03:12:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
+        id S229795AbjDMHMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 03:12:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjDMHMK (ORCPT
+        with ESMTP id S229742AbjDMHMM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 03:12:10 -0400
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0DC71BD;
-        Thu, 13 Apr 2023 00:12:08 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PxrB85ycHz9v7Hp;
-        Thu, 13 Apr 2023 15:02:40 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwCnWD8hqzdksikbAg--.862S2;
-        Thu, 13 Apr 2023 08:11:42 +0100 (CET)
-Message-ID: <82ee6ddf66bb34470aa7b591df4d70783fdb2422.camel@huaweicloud.com>
-Subject: Re: [PATCH] Smack modifications for: security: Allow all LSMs to
- provide xattrs for inode_init_security hook
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org
-Cc:     reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Thu, 13 Apr 2023 09:11:24 +0200
-In-Reply-To: <72b46d0f-75c7-ac18-4984-2bf1d6dad352@schaufler-ca.com>
-References: <c7f38789-fe47-8289-e73a-4d07fbaf791d@schaufler-ca.com>
-         <20230411172337.340518-1-roberto.sassu@huaweicloud.com>
-         <2dc6486f-ce9b-f171-14fe-48a90386e1b7@schaufler-ca.com>
-         <8e7705972a0f306922d8bc4893cf940e319abb19.camel@huaweicloud.com>
-         <72b46d0f-75c7-ac18-4984-2bf1d6dad352@schaufler-ca.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Thu, 13 Apr 2023 03:12:12 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA4110DA
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 00:12:11 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-947abd74b10so569740466b.2
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 00:12:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ionos.com; s=google; t=1681369929; x=1683961929;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FrU1/6FGBsaWkU0MemRZM16XuJhnrKXnokW32u+b/8E=;
+        b=NNBai9c0FfGQ7Pqe1/1ahr3+l0IvNDRecIXEod0aoafOJmtm47IKfbefuklf/CZyT0
+         NkCUCcCjeIUXuqQtYmUejBgEUOAoZqpgRMfBAC7sExW40nFvhG0BF7O3vs2zG+Q2HunD
+         O9Zmmvn3405rHnETAvL4NrZz1nlDp4jLSfx90cd5cEa6W/PN/i1KMvwfJTDr7u7UTtZO
+         1WNg32cOqnc2ZcpAvs/vB5mW7JT4zHOD2IzspUH8qcG4TLzjJHqPR9qGf+fT/HDXw+BK
+         QfvYHQ7svNAKr/AhWI7b8wnUTSP/Npfnhe+kYmbYpXuCwKHPDs3hUWokJVQ0YowTszwv
+         7sjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681369929; x=1683961929;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FrU1/6FGBsaWkU0MemRZM16XuJhnrKXnokW32u+b/8E=;
+        b=RwEXprKRSKuq6oYc/nrPGn6AeOjw8tJA9eVAO/dzBn9Oi1jaITopwjsq054/P4kLoX
+         lIb2cUxw/H3SXO9tSKZ783H/shxcaFPw6I/UzWM4rivznhY3AkaiHRe9TAXCj0LlfNJG
+         rJCAdvgTlMEu8ZpY+qHkdQgnO9iyYVR80EVocSanRNcTtxry/lIm3cwePHU2Rof/Pl3T
+         ZuhZoj1dkpmfhWhNVOGAptPPTxCcOByaxNt5D0fSoeWkVpt+ojLO+CLgbX0DtjID9nUd
+         Mq8aazANzcDmXxeWNSdesArjde5CviZMXdC+QFhizmCZi2LErMUqfpqKXcHmfyss1brS
+         nZQQ==
+X-Gm-Message-State: AAQBX9f2Jkg30WjzDBrL6/mJuHi8adKfU30ghxTMxjpbILkEW+Eiy5NX
+        kuVhaOzzrtsaQAU7vjrJtOuD1yquWfFeR9sxeU5StQ==
+X-Google-Smtp-Source: AKy350ZftQl1aqhbZHw5kLHiPZlGEfdDqLKFlBkihfsQ7Brgi/yfddSGyZ0OzqKGnS96WZjPEBlMLh+/FI8meNL4qEM=
+X-Received: by 2002:a50:cd55:0:b0:504:fcf5:63ee with SMTP id
+ d21-20020a50cd55000000b00504fcf563eemr686408edj.0.1681369929622; Thu, 13 Apr
+ 2023 00:12:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwCnWD8hqzdksikbAg--.862S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3GrWxCF4DJrW8AF18uFyDKFg_yoWxCFy7pF
-        WUK3Wakr40qFyDGrySva1UWa4ak3yrKr4UWwnxJw1fZF1qqrn7KrykXr15uF1xXr1kZrnY
-        vr4jqry3uFn0y37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAGBF1jj4ftKgADsy
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230411230650.1760757-1-pranavpp@google.com>
+In-Reply-To: <20230411230650.1760757-1-pranavpp@google.com>
+From:   Jinpu Wang <jinpu.wang@ionos.com>
+Date:   Thu, 13 Apr 2023 09:11:58 +0200
+Message-ID: <CAMGffEmrHRJjRLiMAsq0K43JcN571Es9xg=wtr=CO-j1ts_SRA@mail.gmail.com>
+Subject: Re: [PATCH] scsi: pm80xx: Log device registration
+To:     Pranav Prasad <pranavpp@google.com>
+Cc:     Jack Wang <jinpu.wang@cloud.ionos.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Akshat Jain <akshatzen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-04-12 at 13:29 -0700, Casey Schaufler wrote:
-> On 4/12/2023 12:22 AM, Roberto Sassu wrote:
-> > On Tue, 2023-04-11 at 10:54 -0700, Casey Schaufler wrote:
-> > > On 4/11/2023 10:23 AM, Roberto Sassu wrote:
-> > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > 
-> > > > Very very quick modification. Not tested.
-> > > > 
-> > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > ---
-> > > >  security/smack/smack.h     |  2 +-
-> > > >  security/smack/smack_lsm.c | 42 ++++++++++++++++++++------------------
-> > > >  2 files changed, 23 insertions(+), 21 deletions(-)
-> > > > 
-> > > > diff --git a/security/smack/smack.h b/security/smack/smack.h
-> > > > index e2239be7bd6..f00c8498c60 100644
-> > > > --- a/security/smack/smack.h
-> > > > +++ b/security/smack/smack.h
-> > > > @@ -127,7 +127,7 @@ struct task_smack {
-> > > >  
-> > > >  #define	SMK_INODE_INSTANT	0x01	/* inode is instantiated */
-> > > >  #define	SMK_INODE_TRANSMUTE	0x02	/* directory is transmuting */
-> > > > -#define	SMK_INODE_CHANGED	0x04	/* smack was transmuted */
-> > > > +#define	SMK_INODE_CHANGED	0x04	/* smack was transmuted (unused) */
-> > > See below ...
-> > > 
-> > > >  #define	SMK_INODE_IMPURE	0x08	/* involved in an impure transaction */
-> > > >  
-> > > >  /*
-> > > > diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-> > > > index 8392983334b..b43820bdbd0 100644
-> > > > --- a/security/smack/smack_lsm.c
-> > > > +++ b/security/smack/smack_lsm.c
-> > > > @@ -54,12 +54,12 @@
-> > > >  
-> > > >  /*
-> > > >   * Smack uses multiple xattrs.
-> > > > - * SMACK64 - for access control, SMACK64EXEC - label for the program,
-> > > > - * SMACK64MMAP - controls library loading,
-> > > > + * SMACK64 - for access control,
-> > > >   * SMACK64TRANSMUTE - label initialization,
-> > > > - * Not saved on files - SMACK64IPIN and SMACK64IPOUT
-> > > > + * Not saved on files - SMACK64IPIN and SMACK64IPOUT,
-> > > > + * Must be set explicitly - SMACK64EXEC and SMACK64MMAP
-> > > >   */
-> > > > -#define SMACK_INODE_INIT_XATTRS 4
-> > > > +#define SMACK_INODE_INIT_XATTRS 2
-> > > >  
-> > > >  #ifdef SMACK_IPV6_PORT_LABELING
-> > > >  static DEFINE_MUTEX(smack_ipv6_lock);
-> > > > @@ -957,11 +957,11 @@ static int smack_inode_init_security(struct inode *inode, struct inode *dir,
-> > > >  				     const struct qstr *qstr,
-> > > >  				     struct xattr *xattrs, int *xattr_count)
-> > > >  {
-> > > > -	struct inode_smack *issp = smack_inode(inode);
-> > > >  	struct smack_known *skp = smk_of_current();
-> > > >  	struct smack_known *isp = smk_of_inode(inode);
-> > > >  	struct smack_known *dsp = smk_of_inode(dir);
-> > > >  	struct xattr *xattr = lsm_get_xattr_slot(xattrs, xattr_count);
-> > > > +	struct xattr *xattr2;
-> > > I'm going to channel Paul and suggest this be xattr_transmute instead of xattr2.
-> > > It also looks like it could move to be declared in the if clause.
-> > > 
-> > > >  	int may;
-> > > >  
-> > > >  	if (xattr) {
-> > > > @@ -979,7 +979,17 @@ static int smack_inode_init_security(struct inode *inode, struct inode *dir,
-> > > >  		if (may > 0 && ((may & MAY_TRANSMUTE) != 0) &&
-> > > >  		    smk_inode_transmutable(dir)) {
-> > > >  			isp = dsp;
-> > > > -			issp->smk_flags |= SMK_INODE_CHANGED;
-> > > I think you need to keep this. More below.
-> > > 
-> > > > +			xattr2 = lsm_get_xattr_slot(xattrs, xattr_count);
-> > > > +			if (xattr2) {
-> > > > +				xattr2->value = kmemdup(TRANS_TRUE,
-> > > > +							TRANS_TRUE_SIZE,
-> > > > +							GFP_NOFS);
-> > > > +				if (xattr2->value == NULL)
-> > > > +					return -ENOMEM;
-> > > > +
-> > > > +				xattr2->value_len = TRANS_TRUE_SIZE;
-> > > > +				xattr2->name = XATTR_NAME_SMACKTRANSMUTE;
-> > > > +			}
-> > > >  		}
-> > > >  
-> > > >  		xattr->value = kstrdup(isp->smk_known, GFP_NOFS);
-> > > > @@ -3512,20 +3522,12 @@ static void smack_d_instantiate(struct dentry *opt_dentry, struct inode *inode)
-> > > >  			 * If there is a transmute attribute on the
-> > > >  			 * directory mark the inode.
-> > > >  			 */
-> > > > -			if (isp->smk_flags & SMK_INODE_CHANGED) {
-> > > > -				isp->smk_flags &= ~SMK_INODE_CHANGED;
-> > > > -				rc = __vfs_setxattr(&nop_mnt_idmap, dp, inode,
-> > > > -					XATTR_NAME_SMACKTRANSMUTE,
-> > > > -					TRANS_TRUE, TRANS_TRUE_SIZE,
-> > > > -					0);
-> > > > -			} else {
-> > > > -				rc = __vfs_getxattr(dp, inode,
-> > > > -					XATTR_NAME_SMACKTRANSMUTE, trattr,
-> > > > -					TRANS_TRUE_SIZE);
-> > > > -				if (rc >= 0 && strncmp(trattr, TRANS_TRUE,
-> > > > -						       TRANS_TRUE_SIZE) != 0)
-> > > > -					rc = -EINVAL;
-> > > > -			}
-> > > > +			rc = __vfs_getxattr(dp, inode,
-> > > > +					    XATTR_NAME_SMACKTRANSMUTE, trattr,
-> > > > +					    TRANS_TRUE_SIZE);
-> > > > +			if (rc >= 0 && strncmp(trattr, TRANS_TRUE,
-> > > > +					       TRANS_TRUE_SIZE) != 0)
-> > > > +				rc = -EINVAL;
-> > > Where is the SMACK64_TRANSMUTE attribute going to get set on the file?
-> > > It's not going to get set in smack_init_inode_security(). The inode will
-> > Isn't that the purpose of the inode_init_security hook?
-> 
-> No. It initializes the in-memory inode. 
-
-I hope I'm not mistaken here...
-
-I make a small example. Filesystems call
-security_inode_init_security(). Ext4 does:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/fs/ext4/xattr_security.c?h=v6.3-rc6#n54
-
-security_inode_init_security() allocates new_xattrs. Each LSM fills
-new_xattrs. At the end of the loop, if there is at least one xattr
-filled, the initxattrs() callback passed by the caller of
-security_inode_init_security() is called.
-
-The ext4 initxattrs() callback is:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/fs/ext4/xattr_security.c?h=v6.3-rc6#n35
-
-which scans the xattr array and, for each xattr,
-calls ext4_xattr_set_handle().
-
-Maybe I'm overlooking it, but ext4_xattr_set_handle() is setting xattrs
-on the disk. Am I wrong?
-
-Thanks
-
-Roberto
-
-> > After all LSMs provide one or multiple xattrs, xattrs are going to be
-> > written to the disk with the initxattr() callback of filesystems.
-> > 
-> > There is a small mistake above (XATTR_SMACK_TRANSMUTE instead
-> > of XATTR_NAME_SMACKTRANSMUTE, as we are providing just the suffix).
-> > 
-> > After fixing that, Smack tests succeed:
-> 
-> It's over a decade since I seriously looked at this code path,
-> but I'm pretty sure the __vfs_setxattr() call is necessary to get
-> the attribute written out. With your change the in-memory inode will
-> get the attribute, but if you reboot it won't be on the directory.
-> 
-> > 95 Passed, 0 Failed, 100% Success rate
-> > 
-> > There was a test failing in dir-transmute.sh, before I fixed the xattr
-> > name.
-> > 
-> > Thanks
-> > 
-> > Roberto
-> > 
-> > > know it's transmuting, but it won't get to disk without the __vfs_setxattr()
-> > > here in smack_d_instantiate(). Now, it's been a long time since that code
-> > > was written, so I could be wrong, but I'm pretty sure about that.
-> > > 
-> > > I think that you should be fine with the changes in smack_init_inode_security(),
-> > > and leaving smack_d_instantiate() untouched. 
-> > > 
-> > > >  			if (rc >= 0)
-> > > >  				transflag = SMK_INODE_TRANSMUTE;
-> > > >  		}
-
+On Wed, Apr 12, 2023 at 1:09=E2=80=AFAM Pranav Prasad <pranavpp@google.com>=
+ wrote:
+>
+> From: Akshat Jain <akshatzen@google.com>
+>
+> Log combination of phy_id and device_id in device registration
+> response.
+>
+> Signed-off-by: Akshat Jain <akshatzen@google.com>
+> Signed-off-by: Pranav Prasad <pranavpp@google.com>
+Acked-by: Jack Wang <jinpu.wang@ionos.com>
+> ---
+>  drivers/scsi/pm8001/pm8001_hwi.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm800=
+1_hwi.c
+> index ec1a9ab61814..73cd25f30ca5 100644
+> --- a/drivers/scsi/pm8001/pm8001_hwi.c
+> +++ b/drivers/scsi/pm8001/pm8001_hwi.c
+> @@ -3362,8 +3362,9 @@ int pm8001_mpi_reg_resp(struct pm8001_hba_info *pm8=
+001_ha, void *piomb)
+>         pm8001_dev =3D ccb->device;
+>         status =3D le32_to_cpu(registerRespPayload->status);
+>         device_id =3D le32_to_cpu(registerRespPayload->device_id);
+> -       pm8001_dbg(pm8001_ha, MSG, " register device is status =3D %d\n",
+> -                  status);
+> +       pm8001_dbg(pm8001_ha, INIT,
+> +                  "register device status %d phy_id 0x%x device_id %d\n"=
+,
+> +                  status, pm8001_dev->attached_phy, device_id);
+>         switch (status) {
+>         case DEVREG_SUCCESS:
+>                 pm8001_dbg(pm8001_ha, MSG, "DEVREG_SUCCESS\n");
+> @@ -4278,7 +4279,7 @@ int pm8001_chip_dereg_dev_req(struct pm8001_hba_inf=
+o *pm8001_ha,
+>         memset(&payload, 0, sizeof(payload));
+>         payload.tag =3D cpu_to_le32(1);
+>         payload.device_id =3D cpu_to_le32(device_id);
+> -       pm8001_dbg(pm8001_ha, MSG, "unregister device device_id =3D %d\n"=
+,
+> +       pm8001_dbg(pm8001_ha, INIT, "unregister device device_id %d\n",
+>                    device_id);
+>
+>         return pm8001_mpi_build_cmd(pm8001_ha, 0, opc, &payload,
+> --
+> 2.40.0.577.gac1e443424-goog
+>
