@@ -2,183 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF2D66E03DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 03:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A23A6E03DE
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 03:51:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbjDMBvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 21:51:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45884 "EHLO
+        id S229811AbjDMBvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 21:51:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDMBvp (ORCPT
+        with ESMTP id S229722AbjDMBvt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 21:51:45 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12EB3527A;
-        Wed, 12 Apr 2023 18:51:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681350704; x=1712886704;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lMinR9VexdNji8lruIldsVGJQj5Z8Jw3IyU7JoubiqQ=;
-  b=mnfJkzbSY5t2Ddhd1bbcNBGGaqgW9rDbycTqgxxsEpkG9nF6mmAn5IFg
-   /eR6VnTWt36wr3hCNMDtHar6WLOgTctR6T1boY0PpuH25e+082Wz/2N/S
-   ndWSCKMcrCX8JWLwm1usQKsWP4HJhKn2u3mlI+CrlB3srYYBCAv35iwQX
-   gyVDuahX/uGbUHchb/vJORGAWFhn/Vkl4faJsFn0uAzQxZDfmWDRF0GAc
-   PXpX19gFvQer1lh3DEVmhW2GOQ042YMnQEkd/OSzxwhx8fK7J/ZgwaYSh
-   9obAhXgMo9HXQ4gZIp7SPe2kOdYadHUVweufHKZxxQ9ugWCS4VqL+Rihi
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="323687177"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="323687177"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 18:51:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="719619863"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="719619863"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 12 Apr 2023 18:51:31 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pmm7W-000YF3-26;
-        Thu, 13 Apr 2023 01:51:30 +0000
-Date:   Thu, 13 Apr 2023 09:50:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Box David E <david.e.box@intel.com>, jstultz@google.com,
-        pavel@ucw.cz, svenva@chromium.org,
-        Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Shyam-sundar.S-k@amd.com, rrangel@chromium.org,
-        Jain Rajat <rajatja@google.com>, hdegoede@redhat.com,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 4/4] platform/x86/intel/pmc: core: Report duration of
- time in HW sleep state
-Message-ID: <202304130908.LOiMWRYR-lkp@intel.com>
-References: <20230412194917.7164-5-mario.limonciello@amd.com>
+        Wed, 12 Apr 2023 21:51:49 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521FB7281
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 18:51:48 -0700 (PDT)
+Received: from dggpemm100009.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PxjGY0KpjzDsgD;
+        Thu, 13 Apr 2023 09:51:01 +0800 (CST)
+Received: from [10.174.179.24] (10.174.179.24) by
+ dggpemm100009.china.huawei.com (7.185.36.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 13 Apr 2023 09:51:45 +0800
+Subject: Re: [PATCH -next] mm: hwpoison: support recovery from HugePage
+ copy-on-write faults
+To:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20230411092741.780679-1-liushixin2@huawei.com>
+ <20230412181350.GA22818@monkey>
+ <20230412145718.0bcb7dd98112a3010711ad0b@linux-foundation.org>
+ <20230412222138.GB4759@monkey>
+CC:     Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Muchun Song <muchun.song@linux.dev>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+From:   Liu Shixin <liushixin2@huawei.com>
+Message-ID: <6a5f3acb-bbc5-9e36-e194-84ec15b059b5@huawei.com>
+Date:   Thu, 13 Apr 2023 09:51:44 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230412194917.7164-5-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230412222138.GB4759@monkey>
+Content-Type: text/plain; charset="windows-1252"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.24]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mario,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/PM-Add-sysfs-files-to-represent-time-spent-in-hardware-sleep-state/20230413-035220
-base:   09a9639e56c01c7a00d6c0ca63f4c7c41abe075d
-patch link:    https://lore.kernel.org/r/20230412194917.7164-5-mario.limonciello%40amd.com
-patch subject: [PATCH v8 4/4] platform/x86/intel/pmc: core: Report duration of time in HW sleep state
-config: i386-randconfig-a004-20230410 (https://download.01.org/0day-ci/archive/20230413/202304130908.LOiMWRYR-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/315b1dd23cbedfd2848c8ac8ec1f77c3610b955e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mario-Limonciello/PM-Add-sysfs-files-to-represent-time-spent-in-hardware-sleep-state/20230413-035220
-        git checkout 315b1dd23cbedfd2848c8ac8ec1f77c3610b955e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/platform/x86/intel/pmc/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304130908.LOiMWRYR-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/platform/x86/intel/pmc/core.c:1156:31: warning: shift count >= width of type [-Wshift-count-overflow]
-           pm_report_max_hw_sleep(((1UL << 32) - 1) * pmc_core_adjust_slp_s0_step(pmcdev, 1));
-                                        ^  ~~
-   1 warning generated.
 
 
-vim +1156 drivers/platform/x86/intel/pmc/core.c
+On 2023/4/13 6:21, Mike Kravetz wrote:
+> On 04/12/23 14:57, Andrew Morton wrote:
+>> On Wed, 12 Apr 2023 11:13:50 -0700 Mike Kravetz <mike.kravetz@oracle.com> wrote:
+>>
+>>> On 04/11/23 17:27, Liu Shixin wrote:
+>>>> Patch a873dfe1032a ("mm, hwpoison: try to recover from copy-on write faults")
+>>>> introduced a new copy_user_highpage_mc() function, and fix the kernel crash
+>>>> when the kernel is copying a normal page as the result of a copy-on-write
+>>>> fault and runs into an uncorrectable error. But it doesn't work for HugeTLB.
+>>> Andrew asked about user-visible effects.  Perhaps, a better way of
+>>> stating this in the commit message might be:
+>>>
+>>> Commit a873dfe1032a ("mm, hwpoison: try to recover from copy-on write
+>>> faults") introduced the routine copy_user_highpage_mc() to gracefully
+>>> handle copying of user pages with uncorrectable errors.  Previously,
+>>> such copies would result in a kernel crash.  hugetlb has separate code
+>>> paths for copy-on-write and does not benefit from the changes made in
+>>> commit a873dfe1032a.
+> I was just going to suggest adding the line,
+>
+> Hence, copy-on-write of hugetlb user pages with uncorrectable errors            
+> will result in a kernel crash as was the case with 'normal' pages before        
+> commit a873dfe1032a.
+>
+> However, I'm guessing it might be more clear if we start with the
+> runtime effects.  Something like:
+>
+> copy-on-write of hugetlb user pages with uncorrectable errors will result
+> in a kernel crash.  This is because the copy is performed in kernel mode
+> and in general we can not handle accessing memory with such errors while
+> in kernel mode.  Commit a873dfe1032a ("mm, hwpoison: try to recover from
+> copy-on write faults") introduced the routine copy_user_highpage_mc() to
+> gracefully handle copying of user pages with uncorrectable errors.  However,
+> the separate hugetlb copy-on-write code paths were not modified as part
+> of commit a873dfe1032a.
+Thanks for your advice, I will add these explaination.
+>
+>>> Modify hugetlb copy-on-write code paths to use copy_mc_user_highpage()
+>>> so that they can also gracefully handle uncorrectable errors in user
+>>> pages.  This involves changing the hugetlb specific routine
+>>> ?copy_user_folio()? from type void to int so that it can return an error.
+>>> Modify the hugetlb userfaultfd code in the same way so that it can return
+>>> -EHWPOISON if it encounters an uncorrectable error.
+>> Thanks, but...  what are the runtime effects?  What does hugetlb
+>> presently do when encountering these uncorrectable error?
 
-  1097	
-  1098	static int pmc_core_probe(struct platform_device *pdev)
-  1099	{
-  1100		static bool device_initialized;
-  1101		struct pmc_dev *pmcdev;
-  1102		const struct x86_cpu_id *cpu_id;
-  1103		void (*core_init)(struct pmc_dev *pmcdev);
-  1104		u64 slp_s0_addr;
-  1105	
-  1106		if (device_initialized)
-  1107			return -ENODEV;
-  1108	
-  1109		pmcdev = devm_kzalloc(&pdev->dev, sizeof(*pmcdev), GFP_KERNEL);
-  1110		if (!pmcdev)
-  1111			return -ENOMEM;
-  1112	
-  1113		platform_set_drvdata(pdev, pmcdev);
-  1114		pmcdev->pdev = pdev;
-  1115	
-  1116		cpu_id = x86_match_cpu(intel_pmc_core_ids);
-  1117		if (!cpu_id)
-  1118			return -ENODEV;
-  1119	
-  1120		core_init = (void  (*)(struct pmc_dev *))cpu_id->driver_data;
-  1121	
-  1122		/*
-  1123		 * Coffee Lake has CPU ID of Kaby Lake and Cannon Lake PCH. So here
-  1124		 * Sunrisepoint PCH regmap can't be used. Use Cannon Lake PCH regmap
-  1125		 * in this case.
-  1126		 */
-  1127		if (core_init == spt_core_init && !pci_dev_present(pmc_pci_ids))
-  1128			core_init = cnp_core_init;
-  1129	
-  1130		mutex_init(&pmcdev->lock);
-  1131		core_init(pmcdev);
-  1132	
-  1133	
-  1134		if (lpit_read_residency_count_address(&slp_s0_addr)) {
-  1135			pmcdev->base_addr = PMC_BASE_ADDR_DEFAULT;
-  1136	
-  1137			if (page_is_ram(PHYS_PFN(pmcdev->base_addr)))
-  1138				return -ENODEV;
-  1139		} else {
-  1140			pmcdev->base_addr = slp_s0_addr - pmcdev->map->slp_s0_offset;
-  1141		}
-  1142	
-  1143		pmcdev->regbase = ioremap(pmcdev->base_addr,
-  1144					  pmcdev->map->regmap_length);
-  1145		if (!pmcdev->regbase)
-  1146			return -ENOMEM;
-  1147	
-  1148		if (pmcdev->core_configure)
-  1149			pmcdev->core_configure(pmcdev);
-  1150	
-  1151		pmcdev->pmc_xram_read_bit = pmc_core_check_read_lock_bit(pmcdev);
-  1152		pmc_core_get_low_power_modes(pdev);
-  1153		pmc_core_do_dmi_quirks(pmcdev);
-  1154	
-  1155		pmc_core_dbgfs_register(pmcdev);
-> 1156		pm_report_max_hw_sleep(((1UL << 32) - 1) * pmc_core_adjust_slp_s0_step(pmcdev, 1));
-  1157	
-  1158		device_initialized = true;
-  1159		dev_info(&pdev->dev, " initialized\n");
-  1160	
-  1161		return 0;
-  1162	}
-  1163	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
