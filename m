@@ -2,105 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1307A6E0552
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 05:35:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A62156E0556
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 05:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbjDMDfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 23:35:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50118 "EHLO
+        id S229902AbjDMDf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 23:35:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbjDMDeh (ORCPT
+        with ESMTP id S229870AbjDMDfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 23:34:37 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.216])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9510772BB;
-        Wed, 12 Apr 2023 20:34:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=lIcVf
-        dDOG5loBmiWhCLSBqSRWz3dIU8sdeChu5hTPJE=; b=Z4NDFiWAEX/oY3sAbcKf8
-        f/uZQI44HOhZ+dKeMudg4EHiU4h8+fBE9LtBSVGtKEQjZpcQyUjLXLS9bvo0nsqZ
-        p2I1uIfe7I++JOkWrWfRjj4aXt5GRC51tcJ3b/e/uK5rW+axmzlGOUd2UsiQqxPI
-        v43chJJnWtRddW+1vkA4ik=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g2-4 (Coremail) with SMTP id _____wBXFM0_eDdkjKocBQ--.60991S2;
-        Thu, 13 Apr 2023 11:34:23 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     njavali@marvell.com
-Cc:     mrangankar@marvell.com, GR-QLogic-Storage-Upstream@marvell.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hackerzheng666@gmail.com, 1395428693sheep@gmail.com,
-        alex000young@gmail.com, Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH v2] scsi: qedi: Fix use after free bug in qedi_remove due to race  condition
-Date:   Thu, 13 Apr 2023 11:34:22 +0800
-Message-Id: <20230413033422.28003-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 12 Apr 2023 23:35:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD7283CC;
+        Wed, 12 Apr 2023 20:35:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5ABA463A1E;
+        Thu, 13 Apr 2023 03:35:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DF10C433EF;
+        Thu, 13 Apr 2023 03:35:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681356901;
+        bh=rpTOShEt7WFV/HeS+ADKohhQwe6BCzAr5M17MqUv1dA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=W+CnNi477tF3vvqQ6Ih+bxmmazTbxa9lmbVi8Ay548kvHACzhv2CShqr/sQyGkqVg
+         eEiS1rGwu1fEoCF7QHqVhBv28G7Q76Zzb5JRTfMYmnb+BUvOClOu59MQAo/icW5oqr
+         y2SdR/a9fZjInpPrHgB+YH53i/7j2s9aYHiyvACBtDhXgRPl0HLRx46bspRRZkoLQC
+         Fom2cvuRRCx+jwJjsvev6Wt/e8BQBoJ9QlOcHgBSzMoZ03evZrDkL2VNW06RMgsdzV
+         5Nb7bxuJ6h0ajdkTpJgzmqKhyP15Wj8nsnytSrVd3oz4iBUgynJwnE1ZB20pBQEkG5
+         Xaza7QZqi0GgQ==
+Date:   Wed, 12 Apr 2023 20:35:00 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
+Cc:     jiri@resnulli.us, davem@davemloft.net, edumazet@google.com,
+        pabeni@redhat.com, corbet@lwn.net, jesse.brandeburg@intel.com,
+        anthony.l.nguyen@intel.com, richardcochran@gmail.com,
+        netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org
+Subject: Re: [RFC PATCH v1] ice: add CGU info to devlink info callback
+Message-ID: <20230412203500.36fb7c36@kernel.org>
+In-Reply-To: <20230412133811.2518336-1-arkadiusz.kubalewski@intel.com>
+References: <20230412133811.2518336-1-arkadiusz.kubalewski@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wBXFM0_eDdkjKocBQ--.60991S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Kw17Gry3WFWUtFWUWr4UArb_yoW8Wr48pr
-        ZxGa4Fkw45KFyrXFn8JF10qFy0kayDtFW0ga97W3y7X3Wa93ykZFySka4jgFyUJFs2va17
-        tF1kXFy3W3WDGaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zimFAAUUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiQgRPU1aEE9wfvgACsk
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In qedi_probe, it calls __qedi_probe, which bound &qedi->recovery_work
-with qedi_recovery_handler and bound &qedi->board_disable_work
-with qedi_board_disable_work.
+On Wed, 12 Apr 2023 15:38:11 +0200 Arkadiusz Kubalewski wrote:
+> If Clock Generation Unit and dplls are present on NIC board user shall
+> know its details.
+> Provide the devlink info callback with a new:
+> - fixed type object `cgu.id` - hardware variant of onboard CGU
+> - running type object `fw.cgu` - CGU firmware version
+> - running type object `fw.cgu.build` - CGU configuration build version
+> 
+> These information shall be known for debugging purposes.
+> 
+> Test (on NIC board with CGU)
+> $ devlink dev info <bus_name>/<dev_name> | grep cgu
+>         cgu.id 8032
+>         fw.cgu 6021
+>         fw.cgu.build 0x1030001
+> 
+> Test (on NIC board without CGU)
+> $ devlink dev info <bus_name>/<dev_name> | grep cgu -c
+> 0
+> 
+> Signed-off-by: Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
 
-When it calls qedi_schedule_recovery_handler, it will finally
-call schedule_delayed_work to start the work.
-
-When we call qedi_remove to remove the driver, there
-may be a sequence as follows:
-
-Fix it by finishing the work before cleanup in qedi_remove.
-
-CPU0                  CPU1
-
-                     |qedi_recovery_handler
-qedi_remove          |
-  __qedi_remove      |
-iscsi_host_free      |
-scsi_host_put        |
-//free shost         |
-                     |iscsi_host_for_each_session
-                     |//use qedi->shost
-
-Fixes: 4b1068f5d74b ("scsi: qedi: Add MFW error recovery process")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
----
-v2:
-- remove unnecessary comment suggested by Mike Christie and cancel the work
-after qedi_ops->stop and qedi_ops->ll2->stop which ensure there is no more
-work suggested by Manish Rangankar
----
- drivers/scsi/qedi/qedi_main.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/scsi/qedi/qedi_main.c b/drivers/scsi/qedi/qedi_main.c
-index f2ee49756df8..45d359554182 100644
---- a/drivers/scsi/qedi/qedi_main.c
-+++ b/drivers/scsi/qedi/qedi_main.c
-@@ -2450,6 +2450,9 @@ static void __qedi_remove(struct pci_dev *pdev, int mode)
- 		qedi_ops->ll2->stop(qedi->cdev);
- 	}
- 
-+	cancel_delayed_work_sync(&qedi->recovery_work);
-+	cancel_delayed_work_sync(&qedi->board_disable_work);
-+
- 	qedi_free_iscsi_pf_param(qedi);
- 
- 	rval = qedi_ops->common->update_drv_state(qedi->cdev, false);
--- 
-2.25.1
-
+Is it flashed together with the rest of the FW components of the NIC?
+Or the update method is different?
