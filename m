@@ -2,53 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 610FB6E0F61
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:58:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9CD36E0F67
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231654AbjDMN6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 09:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59242 "EHLO
+        id S231644AbjDMN6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 09:58:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231510AbjDMN6I (ORCPT
+        with ESMTP id S231510AbjDMN6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 09:58:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E456793E4
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:58:05 -0700 (PDT)
+        Thu, 13 Apr 2023 09:58:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097FF109;
+        Thu, 13 Apr 2023 06:58:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F4E763EDE
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 13:58:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 281B9C433D2;
-        Thu, 13 Apr 2023 13:58:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90B1163EDE;
+        Thu, 13 Apr 2023 13:58:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A999C433EF;
+        Thu, 13 Apr 2023 13:58:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681394284;
-        bh=jgYJ22d0VugCNoyfbfuik0EWw1aUpMuR4wxj3654MxY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ngZoJJH9BfenVHPQojG43eB7ZAQ02gqndJm1Kl7BskhUkN+7KbMclKQmHAX1SSLaH
-         Ax5BXyGz0yoCPYBk3S7N0FnX2rzBjcqBLfocgbUanAhqcxQfvfGlIg2m2DtBignWAi
-         /HRv2uJLDK5Ja9jJ04K2COyvpia9BxMrIqtscCkOKGDcIEDIwkP7+hpoWISr+bJAwI
-         OJIclxHjfMgkAI5NOm41cSr2kd6p1hCHfB1gSKMW1iYi6GcJMg7htKEa82+vOrBmJ0
-         qRg3KGtqOTdurrdoLkrwdehbHZ2VdeMv89zU/eR5Ey/hxu3opfx6SI1S/FY6NRYXLp
-         yA8oJ+U7AHKtQ==
-Date:   Thu, 13 Apr 2023 15:58:01 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>, paulmck@kernel.org,
-        keescook@chromium.org
-Subject: Re: [PATCH 1/3] context_tracking: Fix KCSAN noinstr violation
-Message-ID: <ZDgKaUxIZTMlb1di@localhost.localdomain>
-References: <cover.1681320026.git.jpoimboe@kernel.org>
- <dc93f45abdec90c171108b4b590b7fff5790963c.1681320026.git.jpoimboe@kernel.org>
+        s=k20201202; t=1681394305;
+        bh=ELNGDv+vluokZUPB3x+lMCFicXn8cWCZyU4JxAkwrmI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DLUR65kiTyXZH7YRuyl+sc/Y1zv72Zb16a6IEFdQlf2n6bKdkeHqNlOV/PRo8VJF5
+         olvRJQS6yZGbWIX7lxt61HsrKtH/JTJ49jmAppmR/gt8K1+Zjo0Bu1K1zwEVFCaHx3
+         QNhRF7sClLbboWq+8BSjsR2kPie7lde3OiL9yj8iXQja4MN0JalIyRxh35f6AHudEx
+         dTXFJFqWCVSM2QgQ2jZr/SDjn+5LGWRe5nClmJLYgAV2Psmjj91j7vI+jAshSWjtCd
+         ZbsDxNHKEm4d57ZbonLqyerhEbdMMoDImUEXyxYpQeEIygfN4Ci2bjAclZZhS6AFnV
+         vAEZ02Cqe8aIQ==
+From:   broonie@kernel.org
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Peter Xu <peterx@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: linux-next: manual merge of the sh tree with the mm-unstable tree
+Date:   Thu, 13 Apr 2023 14:58:15 +0100
+Message-Id: <20230413135815.3254620-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <dc93f45abdec90c171108b4b590b7fff5790963c.1681320026.git.jpoimboe@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,18 +54,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Wed, Apr 12, 2023 at 10:24:06AM -0700, Josh Poimboeuf a écrit :
-> With KCSAN enabled, even empty inline stubs can be out-of-lined.
-> 
-> Force the context_tracking_guest_exit() stub inline.
-> 
-> Fixes the following warnings:
-> 
->   vmlinux.o: warning: objtool: vmx_vcpu_enter_exit+0x1be: call to context_tracking_guest_exit() leaves .noinstr.text section
->   vmlinux.o: warning: objtool: svm_vcpu_enter_exit+0x85: call to context_tracking_guest_exit() leaves .noinstr.text section
-> 
-> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Hi all,
 
-Acked-by: Frederic Weisbecker <frederic@kernel.org>
+Today's linux-next merge of the sh tree got a conflict in:
 
-Thanks!
+  tools/testing/selftests/mm/Makefile
+
+between commit:
+
+  14940f545c315 ("selftests/mm: use TEST_GEN_PROGS where proper")
+
+from the mm-unstable tree and commit:
+
+  644a9cf0d2a83 ("sh: remove sh5/sh64 last fragments")
+
+from the sh tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc tools/testing/selftests/mm/Makefile
+index 5a34344194035,fc35050b5542f..0000000000000
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@@ -93,10 -90,10 +93,10 @@@ endi
+  
+  endif
+  
+- ifneq (,$(filter $(MACHINE),arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x sh64 sparc64 x86_64))
++ ifneq (,$(filter $(MACHINE),arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x sparc64 x86_64))
+ -TEST_GEN_FILES += va_128TBswitch
+ -TEST_GEN_FILES += virtual_address_range
+ -TEST_GEN_FILES += write_to_hugetlbfs
+ +TEST_GEN_PROGS += va_128TBswitch
+ +TEST_GEN_PROGS += virtual_address_range
+ +TEST_GEN_PROGS += write_to_hugetlbfs
+  endif
+  
+  TEST_PROGS := run_vmtests.sh
