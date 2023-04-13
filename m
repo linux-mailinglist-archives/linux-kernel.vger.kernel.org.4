@@ -2,167 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 708F36E133C
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 19:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 187E36E1340
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 19:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbjDMRMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 13:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
+        id S230177AbjDMRNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 13:13:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbjDMRMR (ORCPT
+        with ESMTP id S230099AbjDMRNA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 13:12:17 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E501B4
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 10:12:16 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id gb12so13987031qtb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 10:12:16 -0700 (PDT)
+        Thu, 13 Apr 2023 13:13:00 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F8606592
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 10:12:57 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1878504c22aso5178563fac.8
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 10:12:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1681405935; x=1683997935;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wdGAVmsoTCF3y26q/e3koPed6S+/37Tv/FP0omN5R7Y=;
-        b=T74YjVxwFqqN3Mb1q5sKlJ/s1SnH+lFUVXw/YHomlGgEWk49qZcRP6beva7bsmFp4w
-         JWFavkFHyIaFs167FzL4d2e77LAAevZ0a+Y8qmBlTRZtHC7AdX/DjhQEzNE5vTfYAURa
-         mg2Av0rzj/wf5j3hOlaWeZUjhWcJqpqVak+psV6huOF+rOq8oCrojWQih72o2BcV2rzQ
-         ql0SueYX+7r+k/KZLdvzjK6cGqse7gmlGj3PDAsxZuK+5wVOXGIFuUhZMrXUAHcIzwgK
-         GWuo5uVCKEExaCSvcJkP+ozQIrXkzGirXsgsBjsOK1Ze03hJiGkm1g4HTaTBo9m1K40G
-         RZPQ==
+        d=linaro.org; s=google; t=1681405977; x=1683997977;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LSXwkXBchEWpt1wH2gWLxy2J6syLDyFSqFiB87bgTpo=;
+        b=jEmtFVkUS3Ob3wdx5Jrd1VDyz8/zN9P1pb+U/syVnZMxt3VAyIcBlrMSaWOo5N2XTh
+         9BphMJwTvf4Jw0q2Do8IR+8Mkskrq1hhUJev4swSH1fHyZW1eSgU2fOZ/NxITwM1p3mR
+         2hqKOQ/DA3hX90PiumR0wh90Eb6F5hZzbkvq45dG/aN4DjLrtHADmGTlGfzBmWf16QMR
+         2cWcZMHA6VAkY4ZwxN06j8ZZ8qf1+wK7IxGC2IaWDYmpd0AqeojYXSS1iyR+Xiicvlfi
+         GbBQ4RR2o9CtasPVMsT8l89a0+cMnIx72nkLVUJGAl6teGrRgxJUub9h3BGXFThu7XK0
+         o2Bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681405935; x=1683997935;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wdGAVmsoTCF3y26q/e3koPed6S+/37Tv/FP0omN5R7Y=;
-        b=kyQjrDKsE2OBuX6jgzJOOzK96PTm1eZ+AOO0SHEEkQnX6RjBJyJuLIb2Z5nCSWMVNf
-         bZOgsCSuRMls1zjZ2lVL0/vAuIxpfYGs+v4ZNdmzNLK1YdPk/OU2F4CqVptwcsxDJHhS
-         ruDoIDcpwk3e0ifOALCQAsjDDmgcKuxpJxHF7NcilNE/tuJcCBKa6+UJTeNSh1HnkFQe
-         qgleZrFlpcrhd2lFQaSUMksMHOJZMFDqWrp5CJXTnhRDMjarOHwCHzpc8NRnq9GA+pNt
-         ZR24j6p4zjndqM5khNPNQ0K6d+gHnzxTE3afpf5tVV4vZsxusGoxkPUc5Bc5vyxemWfY
-         Xpcw==
-X-Gm-Message-State: AAQBX9dMz7BNNhFccBhDtOLWVR9NBCVhGpY0D9VyOTbBvGN83ZhgzsU/
-        Jxpfu0VVWP6BNwYz0GZR6xRR5KSG6uX9md1Tn6kzrA==
-X-Google-Smtp-Source: AKy350YzqrdtZMK5jVV0DcosmEslCmJ1WSRul9YGMh6Fq0NYh7iqJb6N1OWRXPNdm35IvX9AZCfPtmhhe4y1hZ8d43U=
-X-Received: by 2002:ac8:5945:0:b0:3e6:970e:a405 with SMTP id
- 5-20020ac85945000000b003e6970ea405mr889280qtz.6.1681405935505; Thu, 13 Apr
- 2023 10:12:15 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681405977; x=1683997977;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LSXwkXBchEWpt1wH2gWLxy2J6syLDyFSqFiB87bgTpo=;
+        b=g3VWLcNdJocwklfzpVgkkHaNCWrVObfAw8L5qSt8TCMpEU++n08309QGjloWZqebws
+         AC2w9RHk5TUUxL0dnQOKgohKZU4IW+NK+8Bj0PNZs4zLaPjbm02NZZzDtnzP0OspqvPQ
+         DdF7ZKKjcpwttKcy+4l8LlWx7++ZXqNbKEUYKXPNVY4EE+Hmoq+PpJU3DZt87/bUZ4rl
+         JjKBdOWtKdrCINMDFQ0g2tyxT7yPXPjvIMxThMxQ7yzl6R/7bVU+WbT9PjLDCUsxbzWT
+         w45ER/jP85As33cz4wstyIadmkH17r9e+P1LuyLv3SMSkBr4wq1Uu8F35MZ/CBIBbr4+
+         jKUQ==
+X-Gm-Message-State: AAQBX9e085Ont6GVmpX1cNHyp1EeK5SdAQmwd5hHHIEt73AxiYGBnwYm
+        hR5X7vuLGzJSHGVtsJ2SmCvX5FoNV5/xvF54+JJqdg==
+X-Google-Smtp-Source: AKy350Z6CgGBT8geQanGD2h8Z3itr4+w1XNFvcel+aEVGIuDu05Ea+ygaFlkoZh6baRZP7YH+OMYmsLQQRmFfuvLZvU=
+X-Received: by 2002:a05:6870:40d3:b0:187:88f8:e9b5 with SMTP id
+ l19-20020a05687040d300b0018788f8e9b5mr1581575oal.6.1681405976861; Thu, 13 Apr
+ 2023 10:12:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230412195939.1242462-1-pasha.tatashin@soleen.com>
- <20230412131302.cf42a7f4b710db8c18b7b676@linux-foundation.org>
- <ZDcSG2t3/sVuZc67@dhcp22.suse.cz> <CA+CK2bCZEKsocuwN4Na1+YyviERztGdGDoQgWhxQF-9WxVVW5Q@mail.gmail.com>
- <ZDge+eM67WzVzB9V@dhcp22.suse.cz>
-In-Reply-To: <ZDge+eM67WzVzB9V@dhcp22.suse.cz>
-From:   Pasha Tatashin <pasha.tatashin@soleen.com>
-Date:   Thu, 13 Apr 2023 13:11:39 -0400
-Message-ID: <CA+CK2bDCKUDJu+Vx1PF9hsBGzbrN05fkyw7AHAKd0YYfTkhp5g@mail.gmail.com>
-Subject: Re: [PATCH v2] mm: hugetlb_vmemmap: provide stronger vmemmap
- allocation guarantees
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        mike.kravetz@oracle.com, muchun.song@linux.dev,
-        rientjes@google.com, souravpanda@google.com
+References: <20230412114402.1119956-1-slark_xiao@163.com> <CAMZdPi9gHzPaKcwoRR8-gQtiSxQupL=QickXqNE2owVs-nOrxg@mail.gmail.com>
+ <5372bdf6.533d.1877981651f.Coremail.slark_xiao@163.com>
+In-Reply-To: <5372bdf6.533d.1877981651f.Coremail.slark_xiao@163.com>
+From:   Loic Poulain <loic.poulain@linaro.org>
+Date:   Thu, 13 Apr 2023 19:12:20 +0200
+Message-ID: <CAMZdPi98JvDdOAS9Ft6udkxZTMW57yQ4mqXMTsa1ySc4UZYqvQ@mail.gmail.com>
+Subject: Re: Re: [PATCH net] wwan: core: add print for wwan port attach/disconnect
+To:     Slark Xiao <slark_xiao@163.com>
+Cc:     ryazanov.s.a@gmail.com, johannes@sipsolutions.net,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 11:25=E2=80=AFAM Michal Hocko <mhocko@suse.com> wro=
-te:
+On Thu, 13 Apr 2023 at 09:26, Slark Xiao <slark_xiao@163.com> wrote:
 >
-> On Thu 13-04-23 11:05:20, Pavel Tatashin wrote:
-> > On Wed, Apr 12, 2023 at 4:18=E2=80=AFPM Michal Hocko <mhocko@suse.com> =
-wrote:
-> > >
-> > > On Wed 12-04-23 13:13:02, Andrew Morton wrote:
-> > > > Lots of questions (ie, missing information!)
-> > > >
-> > > > On Wed, 12 Apr 2023 19:59:39 +0000 Pasha Tatashin <pasha.tatashin@s=
-oleen.com> wrote:
-> > > >
-> > > > > HugeTLB pages have a struct page optimizations where struct pages=
- for tail
-> > > > > pages are freed. However, when HugeTLB pages are destroyed, the m=
-emory for
-> > > > > struct pages (vmemmap) need to be allocated again.
-> > > > >
-> > > > > Currently, __GFP_NORETRY flag is used to allocate the memory for =
-vmemmap,
-> > > > > but given that this flag makes very little effort to actually rec=
-laim
-> > > > > memory the returning of huge pages back to the system can be prob=
-lem.
-> > > >
-> > > > Are there any reports of this happening in the real world?
-> > > >
-> > > > > Lets
-> > > > > use __GFP_RETRY_MAYFAIL instead. This flag is also performs grace=
-ful
-> > > > > reclaim without causing ooms, but at least it may perform a few r=
-etries,
-> > > > > and will fail only when there is genuinely little amount of unuse=
-d memory
-> > > > > in the system.
-> > > >
-> > > > If so, does this change help?
-> > > >
-> > > > If the allocation attempt fails, what are the consequences?
-> > > >
-> > > > What are the potential downsides to this change?  Why did we choose
-> > > > __GFP_NORETRY in the first place?
-> > > >
-> > > > What happens if we try harder (eg, GFP_KERNEL)?
-> > >
-> > > Mike was generous enough to make me remember
-> > > https://lore.kernel.org/linux-mm/YCafit5ruRJ+SL8I@dhcp22.suse.cz/.
-> > > GFP_KERNEL wouldn't make much difference becauset this is
-> > > __GFP_THISNODE. But I do agree that the changelog should go into more
-> > > details about why do we want to try harder now. I can imagine that
-> > > shrinking hugetlb pool by a large amount of hugetlb pages might becom=
-e a
-> > > problem but is this really happening or is this a theoretical concern=
-?
+> At 2023-04-13 15:07:21, "Loic Poulain" <loic.poulain@linaro.org> wrote:
+> >On Wed, 12 Apr 2023 at 13:45, Slark Xiao <slark_xiao@163.com> wrote:
+> >>
+> >> Refer to USB serial device or net device, there is notice to
+> >> let end user know the status of device, like attached or
+> >> disconnected. Add attach/disconnect print for wwan device as
+> >> well. This change works for MHI device and USB device.
 > >
-> > This is a theoretical concern. Freeing a 1G page requires 16M of free
-> > memory. A machine might need to be reconfigured from one task to
-> > another, and release a large number of 1G pages back to the system if
-> > allocating 16M fails, the release won't work.
->
-> This is really an important "detail" changelog should mention. While I
-> am not really against that change I would much rather see that as a
-> result of a real world fix rather than a theoretical concern. Mostly
-> because a real life scenario would allow us to test the
-> __GFP_RETRY_MAYFAIL effectivness. As that request might fail as well we
-> just end up with a theoretical fix for a theoretical problem. Something
-> that is easy to introduce but much harder to get rid of should we ever
-> need to change __GFP_RETRY_MAYFAIL implementation for example.
+> >This change works for wwan port devices, whatever the bus is.
+> >
+> Sure. Since wwan support USB device as well after integrating
+> WWAN framework into cdc-wdm.
+> >>
+> >> Signed-off-by: Slark Xiao <slark_xiao@163.com>
+> >> ---
+> >>  drivers/net/wwan/wwan_core.c | 5 +++++
+> >>  1 file changed, 5 insertions(+)
+> >>
+> >> diff --git a/drivers/net/wwan/wwan_core.c b/drivers/net/wwan/wwan_core.c
+> >> index 2e1c01cf00a9..d3ac6c5b0b26 100644
+> >> --- a/drivers/net/wwan/wwan_core.c
+> >> +++ b/drivers/net/wwan/wwan_core.c
+> >> @@ -492,6 +492,8 @@ struct wwan_port *wwan_create_port(struct device *parent,
+> >>         if (err)
+> >>                 goto error_put_device;
+> >>
+> >> +       dev_info(&wwandev->dev, "%s converter now attached to %s\n",
+> >> +                wwan_port_dev_type.name, port->dev.kobj.name);
+> >
+> >You should use `dev_name()` instead of direct reference to kobj.
+> >
+> Will update this in v2.
+> >Why 'converter' ? If you really want to print, it should be something like:
+> >wwan0: wwan0at1 port attached
+> This refer to USB device attached info:
+>   696.444511] usb 2-3: GSM modem (1-port) converter now attached to ttyUSB0
+> [  696.444877] usb 2-3: GSM modem (1-port) converter now attached to ttyUSB1
+> [  696.445065] usb 2-3: GSM modem (1-port) converter now attached to ttyUSB2
+> currently, we will print it as below with above patch:
+> [  233.192123] wwan wwan0: wwan_port converter now attached to wwan0mbim0
+> [  694.530781] wwan wwan0: wwan_port converter now disconnected from wwan0mbim0
 
-I will add this to changelog in v3. If  __GFP_RETRY_MAYFAIL is
-ineffective we will receive feedback once someone hits this problem.
-Otherwise, we will never hear about it. I think overall it is safer to
-keep this code with __GFP_RETRY_MAYFAIL flag.
+Ok, but we don't have to mimic USB, and it's not a converter, keep
+that simple (e.g. 'port %s attached').
 
->
-> > In an ideal scenario we should guarantee that this never fails: that
-> > we always can free HugeTLB pages back to the system. At the very least
-> > we could steal the memory for vmemmap from the page that is being
-> > released.
->
-> Yes, this really bothered me when the concept was introduced initially.
-> I am always concerned when you need to allocate in order to free memory.
-> Practically speaking we haven't heard about bug reports so maybe this is
-> not such a big deal as I thought.
-
-I suspect this is because at the moment it is not that frequent when a
-machine is reconfigured from having a lot of HugeTLB based workload to
-non-HugeTLB workload.
-
-Pasha
+Regards,
+Loic
