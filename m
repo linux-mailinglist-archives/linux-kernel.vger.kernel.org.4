@@ -2,124 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4326B6E1370
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 19:24:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A9F76E137A
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 19:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjDMRY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 13:24:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52008 "EHLO
+        id S230046AbjDMR3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 13:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbjDMRYz (ORCPT
+        with ESMTP id S229506AbjDMR3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 13:24:55 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A788688
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 10:24:53 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id j9-20020a056e02218900b0032966644c32so1303023ila.23
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 10:24:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681406693; x=1683998693;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=het8HlJMdVytErwlzObZICB1SroiwS2yUvlml5Qdc98=;
-        b=hmBnLihTw4YMcZK9JWbAIkjr4dlMMPtTOArNRZ3xn9h2xjyYhXlulotGJcxkX0Qs0D
-         hlMRoXqyjyv6BiybVijl9PSwKPz0/BUk0G66tdCUhtMAof+74QGOPc2sXRE8fQg7wRwl
-         Key97VLu1ZKkmm/AOA1eY+pdNnysIyS5Fwhb9bSqFZIk05U1+mZyfkfrqRBgTyf8KupX
-         UJBP06UwShf6afP69h16Z9vGta+UlM3KWP57euu6C4z1Ims5ZnilfIaLLSax4hzPA0zr
-         jvwI7OLjvtSe9WlbanuGwM8Ak1LUxXj7YW6gsFNfHlrftsuUkFxYevpVJSuLDCSfjVGN
-         3Phg==
-X-Gm-Message-State: AAQBX9eoo5XxoIy59d1Ui6slMJleKrkcRwxt3CNSo7L04yk0GsFzDf8A
-        ZpeP46bGn6XGPlsQSOFo6gG7tmaTGsKNDbKY8Ic/6ryrwokw
-X-Google-Smtp-Source: AKy350Y+zTXUXP8+Olm4yxgeHugP3Wwji8D+h9ozFpiwrKT4vPdDjy9AwaZXRAKMLcA3csFnDBkbG1ekHnOs/rdE+4fo+kSjNZOQ
+        Thu, 13 Apr 2023 13:29:40 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2042.outbound.protection.outlook.com [40.107.223.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 218BA8A7A;
+        Thu, 13 Apr 2023 10:29:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jjZxOVDHW441/hR0NTOiL4r5gPp2+ltJtVflgEDssOkI2ciUl0X0TooY6zrsw7jf1yXdc1ikYr/HI51s7IheW1xs+LTzrDm8SM0lHWswCNWPKrfGdRp/HPJ9/p2QmNCFy3jCyDTg3QyCy3K9dcpfV9K7zRNTdv8B5bQ1BiGlCCVzHP2EmuaTQXNCSCULBFmvHlpe+VfhAa1lXsJ6ZB4yyVTPseAoCFG4RzMvdqKsE0AIZegeAserKBki38TdkmSfBh76UKvCkC77hGZDi0kf2goeB1PtPVfqcAUZSdHcVD9LMqtDB9QsK13mEatpNWuHLf0ucyAyARpSj6tBl1n70Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=x4nhJEVhTwdPuTHkgabLg98XiCAyDoO1eU/L2MHXdQ8=;
+ b=IHiRHsAWhdRSlf/wuhpbiETIVCrdcobuysWqaLozAp3+T4IeTFB+rl3o8sVyhArFTjgdCyIN+OiRD+smwhao48mcAYNJQbowM+AJDqopg2WFr2f2r76c6u5klC2lbIhu3TOXR6zdL8MRaI4lEQVRK++H8z4cu8lWVbGdSOGItYBXhutl3bgXxxrVlRnY/x4L3JeTJcIQAmjRpDZ5vwHYK+82yG58GE2XHyh9GA+h1EcI/OMIwr9SHncEdXYAjut1vHDWdnLQdi4CFu7RZQ6YbHfRg+WTrXglmzoHMtJIGZcfiiFPU2067I0c8h8zzK6kV54FR1vqOjE9mUf5COAH3g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=x4nhJEVhTwdPuTHkgabLg98XiCAyDoO1eU/L2MHXdQ8=;
+ b=hNO/PCbFvzbgHuITl/dGZmSdm9swIstuHub+CbXq9tsExFr1b0qOv+kOH/YHhM3Lrb581DyGN43j6qqaegy2lLSEztVswDRokImCPhjjQidtPd1XvhC3nFX7nKlLPiublnN3vwgNg1BWT6KGrJBkZTIIfJVG5OgqLyiC9ZTB2mA=
+Received: from DM6PR02CA0161.namprd02.prod.outlook.com (2603:10b6:5:332::28)
+ by CH2PR12MB5003.namprd12.prod.outlook.com (2603:10b6:610:68::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Thu, 13 Apr
+ 2023 17:29:36 +0000
+Received: from DS1PEPF0000E63A.namprd02.prod.outlook.com
+ (2603:10b6:5:332:cafe::a3) by DM6PR02CA0161.outlook.office365.com
+ (2603:10b6:5:332::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.32 via Frontend
+ Transport; Thu, 13 Apr 2023 17:29:36 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DS1PEPF0000E63A.mail.protection.outlook.com (10.167.17.72) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6298.27 via Frontend Transport; Thu, 13 Apr 2023 17:29:36 +0000
+Received: from BLR5CG134614W.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 13 Apr
+ 2023 12:29:31 -0500
+From:   K Prateek Nayak <kprateek.nayak@amd.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <hpa@zytor.com>, <corbet@lwn.net>,
+        <jgross@suse.com>, <andrew.cooper3@citrix.com>,
+        <peterz@infradead.org>, <Jason@zx2c4.com>,
+        <thomas.lendacky@amd.com>, <puwen@hygon.cn>, <x86@kernel.org>,
+        <linux-doc@vger.kernel.org>, <oleksandr@natalenko.name>,
+        <bagasdotme@gmail.com>
+Subject: [PATCH v2 0/2] arch/x86: Set L2 Cache ID on AMD and Hygon processors
+Date:   Thu, 13 Apr 2023 22:59:16 +0530
+Message-ID: <20230413172918.1500-1-kprateek.nayak@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a02:7a4a:0:b0:406:29c8:2d7c with SMTP id
- z10-20020a027a4a000000b0040629c82d7cmr974631jad.5.1681406693287; Thu, 13 Apr
- 2023 10:24:53 -0700 (PDT)
-Date:   Thu, 13 Apr 2023 10:24:53 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ad319d05f93b0045@google.com>
-Subject: [syzbot] [block?] WARNING in fd_locked_ioctl
-From:   syzbot <syzbot+641182a53d64479c27e7@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, efremov@linux.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0000E63A:EE_|CH2PR12MB5003:EE_
+X-MS-Office365-Filtering-Correlation-Id: c210a5a0-b2ba-48dc-05b2-08db3c44a789
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: eO1lcTUNk6MKGVPhAD4D0nJ9Zx83m+FNmn2MjQpVPOqjKbYcH+pdW9CFl+qtsY7/PLHUHZBkQTXyG/VD/VttUOU4YcgooNKxnkH6oyfqE9I25mbO8KQf3YFBLGqTUzKUkvq0HniOgWYN72WqU9AFBodzUfxxk7fMDL4yi2YPlR9LF2MZb5J2QNZCygg0XuJ0Dl55tiEhsCP6D645xyOkHt/jBjKsNCpeC8xlIkFgjqFb7RgturZpW42BJx67+3jTwSF5hcyutbzVYqiXTFVBpOz3qxq1c6Lw+8DyAlF7IoNZh9/hTUAKcExnofSuDFNzLCvW0cc878/ydHRrOwc/WcwyuHbD0Urgh6D6gF0qlkW32Q2rHnVMzmJvFx2kZ9S5K9RxHkRXL+NK30bn3zpiNj1SKQxLkBJtrFyR/bvrSnDJ9AiqzwS575hC+XjWtNMzVxt7eCl7ua3j8o1s0qnah4KLzU6tX5JythCGYFdhjs7WeuE+nvf2bPrk8ZduDC+MChbvWqFsNyqoylybN3RcOGvt90dCyIRPtSDawM+zAByrICk7dfKJ9d6+DL9DN+/44+8IfgWCtrTj26HD3pj3e1aZex6E4DFanZspkYa+jUIH7Ejhbkd2wwif6DnTZqzcVRvOJr/inChPjNkbAYYstmtseOCMECaoxSJDh/Tnul/rm7ITets14BYzdaQJHrXvLHVchxPDUVyTqeVa8vPbvEqs9I7aUmnXy1xEvk/Q6KU=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(346002)(376002)(39860400002)(451199021)(40470700004)(36840700001)(46966006)(6666004)(7696005)(40460700003)(6916009)(70206006)(70586007)(4326008)(36756003)(2906002)(7416002)(86362001)(81166007)(82740400003)(356005)(41300700001)(5660300002)(82310400005)(8676002)(8936002)(316002)(478600001)(40480700001)(54906003)(1076003)(26005)(336012)(426003)(36860700001)(2616005)(186003)(16526019)(47076005)(83380400001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2023 17:29:36.8493
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c210a5a0-b2ba-48dc-05b2-08db3c44a789
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E63A.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB5003
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+commit 66558b730f253 ("sched: Add cluster scheduler level for x86")
+defined cluster on x86 as the set of threads sharing the same L2 cache.
+cluster_id on x86, maps to the l2c_id which currently only Intel
+processors set.
 
-syzbot found the following issue on:
+This series sets the l2c_id on AMD and Hygon processors with
+X86_FEATURE_TOPOEXT, using the extended APIC ID and the
+"Cache Properties (L2)" CPUID (0x8000001D EAX). On AMD and Hygon
+processors without X86_FEATURE_TOPOEXT, current behavior will continue.
 
-HEAD commit:    cdc9718d5e59 Merge tag '6.3-rc5-smb3-cifs-client-fixes' of..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1276f863c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=adfc55aec6afccdd
-dashboard link: https://syzkaller.appspot.com/bug?extid=641182a53d64479c27e7
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Following are the changes in value reported by
+"/sys/devices/system/cpu/cpuX/topology/cluster_id" on a 2P Milan system
+(2 x 64C/128T) where L2 is per-core and SMT sibling of CPU (X) is
+CPU ((X + 128) % 256).
 
-Unfortunately, I don't have any reproducer for this issue yet.
+- tip:x86/core
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+641182a53d64479c27e7@syzkaller.appspotmail.com
+  $ for i in {0..255}; do\
+      echo -n "CPU$i cluster_id: ";\
+      cat /sys/devices/system/cpu/cpu$i/topology/cluster_id;\
+    done;
 
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 29187 at drivers/block/floppy.c:999 schedule_bh drivers/block/floppy.c:999 [inline]
-WARNING: CPU: 0 PID: 29187 at drivers/block/floppy.c:999 process_fd_request drivers/block/floppy.c:2847 [inline]
-WARNING: CPU: 0 PID: 29187 at drivers/block/floppy.c:999 do_format drivers/block/floppy.c:2239 [inline]
-WARNING: CPU: 0 PID: 29187 at drivers/block/floppy.c:999 fd_locked_ioctl+0x1607/0x1990 drivers/block/floppy.c:3501
-Modules linked in:
-CPU: 0 PID: 29187 Comm: syz-executor.0 Not tainted 6.3.0-rc5-syzkaller-00247-gcdc9718d5e59 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-RIP: 0010:schedule_bh drivers/block/floppy.c:999 [inline]
-RIP: 0010:process_fd_request drivers/block/floppy.c:2847 [inline]
-RIP: 0010:do_format drivers/block/floppy.c:2239 [inline]
-RIP: 0010:fd_locked_ioctl+0x1607/0x1990 drivers/block/floppy.c:3501
-Code: 3d f8 ff ff 41 bf f0 ff ff ff e9 e3 ee ff ff e8 9f d8 65 fc 0f 0b e9 c9 f2 ff ff e8 93 d8 65 fc e9 68 ee ff ff e8 89 d8 65 fc <0f> 0b e9 93 ee ff ff 48 8b 34 24 48 c7 c7 80 47 44 8d e8 92 03 22
-RSP: 0018:ffffc90025edfcd8 EFLAGS: 00010212
-RAX: 00000000000023eb RBX: 0000000000000001 RCX: ffffc90008501000
-RDX: 0000000000040000 RSI: ffffffff851c2227 RDI: 0000000000000001
-RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000004
-R13: 000000000000000c R14: 0000000000000001 R15: 0000000000000007
-FS:  00007f8e9362f700(0000) GS:ffff88802ca00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f79a81ad988 CR3: 000000007486d000 CR4: 0000000000150ef0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- fd_ioctl+0x39/0x60 drivers/block/floppy.c:3574
- blkdev_ioctl+0x372/0x800 block/ioctl.c:615
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f8e9288c169
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f8e9362f168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f8e929abf80 RCX: 00007f8e9288c169
-RDX: 0000000020000000 RSI: 00000000400c0248 RDI: 0000000000000003
-RBP: 00007f8e928e7ca1 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fff829ac3cf R14: 00007f8e9362f300 R15: 0000000000022000
- </TASK>
+    CPU0 cluster_id: 65535
+    CPU1 cluster_id: 65535
+    CPU2 cluster_id: 65535
+    CPU3 cluster_id: 65535
+    CPU4 cluster_id: 65535
+    ...
+    CPU254 cluster_id: 65535
+    CPU255 cluster_id: 65535
 
+- tip:x86/core + this series
+
+  $ for i in {0..255}; do\
+      echo -n "CPU$i cluster_id: ";\
+      cat /sys/devices/system/cpu/cpu$i/topology/cluster_id;\
+    done;
+
+    CPU0 cluster_id: 0
+    CPU1 cluster_id: 1
+    CPU2 cluster_id: 2
+    CPU3 cluster_id: 3
+    CPU4 cluster_id: 4
+    CPU5 cluster_id: 5
+    CPU6 cluster_id: 6
+    CPU7 cluster_id: 7
+    CPU8 cluster_id: 8
+    ...
+    CPU126 cluster_id: 126
+    CPU127 cluster_id: 127
+    CPU128 cluster_id: 0
+    CPU129 cluster_id: 1
+    CPU130 cluster_id: 2
+    CPU131 cluster_id: 3
+    CPU132 cluster_id: 4
+    CPU133 cluster_id: 5
+    CPU134 cluster_id: 6
+    CPU135 cluster_id: 7
+    CPU136 cluster_id: 8
+    ...
+    CPU254 cluster_id: 126
+    CPU255 cluster_id: 127
+
+Note: Hygon maintainer Pu Wen <puwen@hygon.cn> has confirmed that the
+same strategy of setting l2c_id works for Hygon as well without
+requiring any change to the function
+(https://lore.kernel.org/lkml/20230411122348.GAZDVRVNvbbS8F5NUB@fat_crate.local/)
+Call to the same function has been added in the Hygon topology init path
+too. Pu Wen, can you please test this version too and let me know if the
+behavior is still as expected.
+
+The series also adds documentation for clusters on x86 platforms and
+applies cleanly on top of tip:x86/core at commit ce3ba2af9695
+("x86: Suppress KMSAN reports in arch_within_stack_frames()")
 
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+o v1->v2
+  - Improved documentation of cluster based on Peter's suggestion.
+  - Renamed cacheinfo_amd_init_l2c_id() to
+    cacheinfo_topoext_init_l2c_id() and added the call to same in
+    Hygon's topology init path.
+  - Collected tags for Patch 1.
+---
+K Prateek Nayak (2):
+  arch/x86: Set L2 Cache ID on AMD and Hygon processors
+  x86/Documentation: Add documentation about cluster
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+ Documentation/x86/topology.rst   | 27 ++++++++++++++++++++++++
+ arch/x86/include/asm/cacheinfo.h |  1 +
+ arch/x86/kernel/cpu/amd.c        |  1 +
+ arch/x86/kernel/cpu/cacheinfo.c  | 36 ++++++++++++++++++++++++++++++++
+ arch/x86/kernel/cpu/hygon.c      |  1 +
+ 5 files changed, 66 insertions(+)
+
+-- 
+2.34.1
+
