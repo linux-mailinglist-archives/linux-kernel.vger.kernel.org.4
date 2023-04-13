@@ -2,260 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69FE86E16C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 23:57:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 211A36E16CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 23:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbjDMV5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 17:57:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33718 "EHLO
+        id S229810AbjDMV7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 17:59:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjDMV5s (ORCPT
+        with ESMTP id S229672AbjDMV7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 17:57:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EBEB5BA2;
-        Thu, 13 Apr 2023 14:57:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 15FE960B41;
-        Thu, 13 Apr 2023 21:57:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0214BC433EF;
-        Thu, 13 Apr 2023 21:57:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681423065;
-        bh=1pPvUOxywGTO44J7xT9Smvn+LkgN4FSSXGN9uBkTURQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PASZcrol2jPLZYpHsHNs6D67WzFWT8n+2eAuYPkgOGXItZL7Ur68ikmuWOljxWZ1D
-         6+VPPcE1tRU3sn5iC2UbARgA0qGiAgn+5aViDk9Q6HJYl3wb9Gi8Y0Zk3kEqNPKzOI
-         M1gk2xnMg66lcU+vhHEiKkPVFDB86xdbez+nIEdLrr1OgUyPLBBuA7xHtypQjnG/c8
-         UC+A0/t5SZeluk54m6VFoIEOqNmp3T28Ph83lG60fcTmHcsmZ7j9OPHCmwHxWkJ5qs
-         ZUfO6Y+rSdAx2hHfIbCNVML2MZImMTKIteX4gwYyP12MYVL1gFlhAPhTvGRYIAKoX3
-         f/WpWWxo9m2Xg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id EAC1E403B5; Thu, 13 Apr 2023 18:57:41 -0300 (-03)
-Date:   Thu, 13 Apr 2023 18:57:41 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Edward Baker <edward.baker@intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v3 00/21] Update uncore topics, 1x event updates, 2x new
- archs.
-Message-ID: <ZDh61aQCR/yrD8xx@kernel.org>
-References: <20230413132949.3487664-1-irogers@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230413132949.3487664-1-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 13 Apr 2023 17:59:04 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430D419D;
+        Thu, 13 Apr 2023 14:59:03 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id m21so6700079qtg.0;
+        Thu, 13 Apr 2023 14:59:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681423142; x=1684015142;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PDgsmvntZxPx62gk3cawBNyY3nzlrOuECA/cAlSvltE=;
+        b=LUVd9p0rYEZN8Tf5nzU3LuwRs/F7Gq2jnHW8IcmlWHGCzF4zLuJz9GB/Waw94kkCKa
+         y9fsdIaf1JjSMJv38CVkBrZ/eh7r6P2wVodLZZb0j5zNJZ+rpJB0zqp7fjgT6duDyUPG
+         r6qxmlNx5OEhj0l9Mo/OzKxSDTJaWZEKy+HdwcE42zIpvQvyZn77J1TEovR9dPtsKrIG
+         etEueHXKd/RmM104QfEGq1N4c+8G3ghjUXOqusTiVUi18tpLFYox0kv1QhyiHsXVT6OJ
+         5CAqEsjFnqJ2SdLsKQN+JMB5vBZBJrkNvi+IvOJ+DKet8RelDQvdno5T/45b4vs10o8T
+         6i1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681423142; x=1684015142;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=PDgsmvntZxPx62gk3cawBNyY3nzlrOuECA/cAlSvltE=;
+        b=VbngxCk6H7vesSkUnhV0HKxsPFHDWIN2NgPyHVkGXbRm95vRurigRymrcQbqoxBVZA
+         fXl4bJvjcOizO7GKzt/Qs+Hr0JBnV55jtHNti+W5oWQHj5VyjIBHeZAfVCw75EpC2QNu
+         QaYaLW0Zn+ViWvnV5edyxQuF36rJVWwkc1C83j/tS2Z840kb+qUDGsdEZsu6dqFIHboz
+         gLh/S6wKWkU/HU+ARy3IUUqTy2DQn1GQLy8Bh9oH5oTHKnGsmLNZyfmrLO+AFGY7HWH4
+         Vv+4FGw4VvO0xO1ZA/LaZNEObnjZEBB81oKj3p+p7fYzRbrz8nvZL2ye3ZLaf/gZRWW5
+         iQsA==
+X-Gm-Message-State: AAQBX9clwokE/vRhbQiGtYlkPgYRzHGDxWhIw/0nYTvbFLds2Thgfk5+
+        rXJIW18m6Dq9clnudX3PSWs=
+X-Google-Smtp-Source: AKy350Zrl2sfZ8kixrcnme9nha9a0qrx+Tbo+zinjcSzVT9lgARqCBlOpt1PxAmNqvrD4DakrUHAIA==
+X-Received: by 2002:a05:622a:8a:b0:3e3:7c94:7270 with SMTP id o10-20020a05622a008a00b003e37c947270mr5444222qtw.59.1681423142239;
+        Thu, 13 Apr 2023 14:59:02 -0700 (PDT)
+Received: from localhost (240.157.150.34.bc.googleusercontent.com. [34.150.157.240])
+        by smtp.gmail.com with ESMTPSA id l18-20020ac87252000000b003bf9f9f1844sm772549qtp.71.2023.04.13.14.59.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 14:59:01 -0700 (PDT)
+Date:   Thu, 13 Apr 2023 17:59:01 -0400
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To:     =?UTF-8?B?5rKI5a6J55CqKOWHm+eOpSk=?= <amy.saq@antgroup.com>,
+        linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?B?6LCI6Ym06ZSL?= <henry.tjf@antgroup.com>,
+        =?UTF-8?B?5rKI5a6J55CqKOWHm+eOpSk=?= <amy.saq@antgroup.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Message-ID: <64387b25619ba_1479cd29457@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20230413114402.50225-1-amy.saq@antgroup.com>
+References: <20230413114402.50225-1-amy.saq@antgroup.com>
+Subject: RE: [PATCH v8] net/packet: support mergeable feature of virtio
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Apr 13, 2023 at 06:29:28AM -0700, Ian Rogers escreveu:
-> Update the uncore PMUs and topic classification as created by:
-> https://github.com/intel/perfmon/pull/70
-> 
-> Event updates stem from:
-> https://github.com/intel/perfmon/pull/68
-> impacting alderlake, icelakex and sapphirerapids.
-> 
-> Grand Ridge and Sierra Forest events stem from:
-> https://github.com/intel/perfmon/pull/69
-> 
-> Changes generated by with PR70 in place:
-> https://github.com/intel/perfmon/blob/main/scripts/create_perf_json.py
+=E6=B2=88=E5=AE=89=E7=90=AA(=E5=87=9B=E7=8E=A5) wrote:
+> From: Jianfeng Tan <henry.tjf@antgroup.com>
+> =
 
-Thanks, pulling teeth but applied,
+> Packet sockets, like tap, can be used as the backend for kernel vhost.
+> In packet sockets, virtio net header size is currently hardcoded to be
+> the size of struct virtio_net_hdr, which is 10 bytes; however, it is no=
+t
+> always the case: some virtio features, such as mrg_rxbuf, need virtio
+> net header to be 12-byte long.
+> =
 
-- Arnaldo
- 
-> v3. Rebase over the update of alderlake and icelakex events.
-> v2. Adds improvements to uncore topics, uncore PMU name fixes and
->     fixes a trigraph issue from ??? being in the json.
-> 
-> Ian Rogers (21):
->   perf vendor events intel: Update sapphirerapids to v1.12
->   perf vendor events intel: Add grandridge
->   perf vendor events intel: Add sierraforest
->   perf vendor events intel: Fix uncore topics for alderlake
->   perf vendor events intel: Fix uncore topics for broadwell
->   perf vendor events intel: Fix uncore topics for broadwellde
->   perf vendor events intel: Fix uncore topics for broadwellx
->   perf vendor events intel: Fix uncore topics for cascadelakex
->   perf vendor events intel: Fix uncore topics for haswell
->   perf vendor events intel: Fix uncore topics for haswellx
->   perf vendor events intel: Fix uncore topics for icelake
->   perf vendor events intel: Fix uncore topics for icelakex
->   perf vendor events intel: Fix uncore topics for ivybridge
->   perf vendor events intel: Fix uncore topics for ivytown
->   perf vendor events intel: Fix uncore topics for jaketown
->   perf vendor events intel: Fix uncore topics for knightslanding
->   perf vendor events intel: Fix uncore topics for sandybridge
->   perf vendor events intel: Fix uncore topics for skylake
->   perf vendor events intel: Fix uncore topics for skylakex
->   perf vendor events intel: Fix uncore topics for snowridgex
->   perf vendor events intel: Fix uncore topics for tigerlake
-> 
->  .../x86/alderlake/uncore-interconnect.json    |    90 +
->  .../arch/x86/alderlake/uncore-other.json      |    88 -
->  .../x86/alderlaken/uncore-interconnect.json   |    26 +
->  .../arch/x86/alderlaken/uncore-other.json     |    24 -
->  .../arch/x86/broadwell/uncore-cache.json      |    30 +-
->  .../x86/broadwell/uncore-interconnect.json    |    61 +
->  .../arch/x86/broadwell/uncore-other.json      |    59 -
->  .../arch/x86/broadwellde/uncore-cache.json    |   324 +-
->  .../x86/broadwellde/uncore-interconnect.json  |   614 +
->  .../{uncore-other.json => uncore-io.json}     |   612 -
->  .../arch/x86/broadwellx/uncore-cache.json     |   358 +-
->  .../x86/broadwellx/uncore-interconnect.json   |  4297 +-
->  .../arch/x86/broadwellx/uncore-io.json        |   555 +
->  .../arch/x86/broadwellx/uncore-other.json     |  3242 --
->  .../arch/x86/cascadelakex/uncore-cache.json   | 10764 +++++
->  .../x86/cascadelakex/uncore-interconnect.json | 11334 ++++++
->  .../arch/x86/cascadelakex/uncore-io.json      |  4250 ++
->  .../arch/x86/cascadelakex/uncore-memory.json  |     2 +-
->  .../arch/x86/cascadelakex/uncore-other.json   | 26344 ------------
->  .../pmu-events/arch/x86/grandridge/cache.json |   155 +
->  .../arch/x86/grandridge/frontend.json         |    16 +
->  .../arch/x86/grandridge/memory.json           |    20 +
->  .../pmu-events/arch/x86/grandridge/other.json |    20 +
->  .../arch/x86/grandridge/pipeline.json         |    96 +
->  .../arch/x86/grandridge/virtual-memory.json   |    24 +
->  .../arch/x86/haswell/uncore-cache.json        |    50 +-
->  .../arch/x86/haswell/uncore-interconnect.json |    52 +
->  .../arch/x86/haswell/uncore-other.json        |    50 -
->  .../arch/x86/haswellx/uncore-cache.json       |   360 +-
->  .../x86/haswellx/uncore-interconnect.json     |  4242 +-
->  .../arch/x86/haswellx/uncore-io.json          |   528 +
->  .../arch/x86/haswellx/uncore-other.json       |  3160 --
->  .../arch/x86/icelake/uncore-interconnect.json |    74 +
->  .../arch/x86/icelake/uncore-other.json        |    72 -
->  .../arch/x86/icelakex/uncore-cache.json       |  9860 +++++
->  .../x86/icelakex/uncore-interconnect.json     | 14571 +++++++
->  .../arch/x86/icelakex/uncore-io.json          |  9270 +++++
->  .../arch/x86/icelakex/uncore-other.json       | 33697 ----------------
->  .../arch/x86/ivybridge/uncore-cache.json      |    50 +-
->  ...re-other.json => uncore-interconnect.json} |     0
->  .../arch/x86/ivytown/uncore-cache.json        |   314 +-
->  .../arch/x86/ivytown/uncore-interconnect.json |  2025 +-
->  .../arch/x86/ivytown/uncore-io.json           |   549 +
->  .../arch/x86/ivytown/uncore-other.json        |  2174 -
->  .../arch/x86/jaketown/uncore-cache.json       |   194 +-
->  .../x86/jaketown/uncore-interconnect.json     |  1237 +-
->  .../arch/x86/jaketown/uncore-io.json          |   324 +
->  .../arch/x86/jaketown/uncore-other.json       |  1393 -
->  .../{uncore-other.json => uncore-cache.json}  |   260 -
->  .../arch/x86/knightslanding/uncore-io.json    |   194 +
->  .../x86/knightslanding/uncore-memory.json     |    68 +
->  tools/perf/pmu-events/arch/x86/mapfile.csv    |     4 +-
->  .../arch/x86/sandybridge/uncore-cache.json    |    50 +-
->  ...re-other.json => uncore-interconnect.json} |     0
->  .../arch/x86/sapphirerapids/other.json        |     3 +-
->  .../arch/x86/sapphirerapids/pipeline.json     |     4 +-
->  .../arch/x86/sapphirerapids/uncore-cache.json |  5644 +++
->  .../arch/x86/sapphirerapids/uncore-cxl.json   |   450 +
->  .../sapphirerapids/uncore-interconnect.json   |  6199 +++
->  .../arch/x86/sapphirerapids/uncore-io.json    |  3651 ++
->  .../x86/sapphirerapids/uncore-memory.json     |  3283 +-
->  .../arch/x86/sapphirerapids/uncore-other.json |  4525 ---
->  .../arch/x86/sapphirerapids/uncore-power.json |   107 +
->  .../arch/x86/sierraforest/cache.json          |   155 +
->  .../arch/x86/sierraforest/frontend.json       |    16 +
->  .../arch/x86/sierraforest/memory.json         |    20 +
->  .../arch/x86/sierraforest/other.json          |    20 +
->  .../arch/x86/sierraforest/pipeline.json       |    96 +
->  .../arch/x86/sierraforest/virtual-memory.json |    24 +
->  .../arch/x86/skylake/uncore-cache.json        |    28 +-
->  .../arch/x86/skylake/uncore-interconnect.json |    67 +
->  .../arch/x86/skylake/uncore-other.json        |    65 -
->  .../arch/x86/skylakex/uncore-cache.json       | 10649 +++++
->  .../x86/skylakex/uncore-interconnect.json     | 11248 ++++++
->  .../arch/x86/skylakex/uncore-io.json          |  4250 ++
->  .../arch/x86/skylakex/uncore-memory.json      |     2 +-
->  .../arch/x86/skylakex/uncore-other.json       | 26143 ------------
->  .../arch/x86/snowridgex/uncore-cache.json     |  7100 ++++
->  .../x86/snowridgex/uncore-interconnect.json   |  6016 +++
->  .../arch/x86/snowridgex/uncore-io.json        |  8944 ++++
->  .../arch/x86/snowridgex/uncore-other.json     | 22056 ----------
->  .../x86/tigerlake/uncore-interconnect.json    |    90 +
->  .../arch/x86/tigerlake/uncore-other.json      |    88 -
->  83 files changed, 142122 insertions(+), 127048 deletions(-)
->  create mode 100644 tools/perf/pmu-events/arch/x86/alderlake/uncore-interconnect.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/alderlaken/uncore-interconnect.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/broadwell/uncore-interconnect.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/broadwellde/uncore-interconnect.json
->  rename tools/perf/pmu-events/arch/x86/broadwellde/{uncore-other.json => uncore-io.json} (53%)
->  create mode 100644 tools/perf/pmu-events/arch/x86/broadwellx/uncore-io.json
->  delete mode 100644 tools/perf/pmu-events/arch/x86/broadwellx/uncore-other.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/cascadelakex/uncore-cache.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/cascadelakex/uncore-interconnect.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/cascadelakex/uncore-io.json
->  delete mode 100644 tools/perf/pmu-events/arch/x86/cascadelakex/uncore-other.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/grandridge/cache.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/grandridge/frontend.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/grandridge/memory.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/grandridge/other.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/grandridge/pipeline.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/grandridge/virtual-memory.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/haswell/uncore-interconnect.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/haswellx/uncore-io.json
->  delete mode 100644 tools/perf/pmu-events/arch/x86/haswellx/uncore-other.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/icelake/uncore-interconnect.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/icelakex/uncore-cache.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/icelakex/uncore-interconnect.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/icelakex/uncore-io.json
->  delete mode 100644 tools/perf/pmu-events/arch/x86/icelakex/uncore-other.json
->  rename tools/perf/pmu-events/arch/x86/ivybridge/{uncore-other.json => uncore-interconnect.json} (100%)
->  create mode 100644 tools/perf/pmu-events/arch/x86/ivytown/uncore-io.json
->  delete mode 100644 tools/perf/pmu-events/arch/x86/ivytown/uncore-other.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/jaketown/uncore-io.json
->  delete mode 100644 tools/perf/pmu-events/arch/x86/jaketown/uncore-other.json
->  rename tools/perf/pmu-events/arch/x86/knightslanding/{uncore-other.json => uncore-cache.json} (91%)
->  create mode 100644 tools/perf/pmu-events/arch/x86/knightslanding/uncore-io.json
->  rename tools/perf/pmu-events/arch/x86/sandybridge/{uncore-other.json => uncore-interconnect.json} (100%)
->  create mode 100644 tools/perf/pmu-events/arch/x86/sapphirerapids/uncore-cache.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/sapphirerapids/uncore-cxl.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/sapphirerapids/uncore-interconnect.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/sapphirerapids/uncore-io.json
->  delete mode 100644 tools/perf/pmu-events/arch/x86/sapphirerapids/uncore-other.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/sierraforest/cache.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/sierraforest/frontend.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/sierraforest/memory.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/sierraforest/other.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/sierraforest/pipeline.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/sierraforest/virtual-memory.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/skylake/uncore-interconnect.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/skylakex/uncore-cache.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/skylakex/uncore-interconnect.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/skylakex/uncore-io.json
->  delete mode 100644 tools/perf/pmu-events/arch/x86/skylakex/uncore-other.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/snowridgex/uncore-cache.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/snowridgex/uncore-interconnect.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/snowridgex/uncore-io.json
->  delete mode 100644 tools/perf/pmu-events/arch/x86/snowridgex/uncore-other.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/tigerlake/uncore-interconnect.json
-> 
-> -- 
-> 2.40.0.577.gac1e443424-goog
-> 
+> Mergeable buffers, as a virtio feature, is worthy of supporting: packet=
+s
+> that are larger than one-mbuf size will be dropped in vhost worker's
+> handle_rx if mrg_rxbuf feature is not used, but large packets
+> cannot be avoided and increasing mbuf's size is not economical.
+> =
 
--- 
+> With this virtio feature enabled by virtio-user, packet sockets with
+> hardcoded 10-byte virtio net header will parse mac head incorrectly in
+> packet_snd by taking the last two bytes of virtio net header as part of=
 
-- Arnaldo
+> mac header.
+> This incorrect mac header parsing will cause packet to be dropped due t=
+o
+> invalid ether head checking in later under-layer device packet receivin=
+g.
+> =
+
+> By adding extra field vnet_hdr_sz with utilizing holes in struct
+> packet_sock to record currently used virtio net header size and support=
+ing
+> extra sockopt PACKET_VNET_HDR_SZ to set specified vnet_hdr_sz, packet
+> sockets can know the exact length of virtio net header that virtio user=
+
+> gives.
+> In packet_snd, tpacket_snd and packet_recvmsg, instead of using
+> hardcoded virtio net header size, it can get the exact vnet_hdr_sz from=
+
+> corresponding packet_sock, and parse mac header correctly based on this=
+
+> information to avoid the packets being mistakenly dropped.
+> =
+
+> Signed-off-by: Jianfeng Tan <henry.tjf@antgroup.com>
+> Co-developed-by: Anqi Shen <amy.saq@antgroup.com>
+> Signed-off-by: Anqi Shen <amy.saq@antgroup.com>
+> ---
+> =
+
+> Changelog
+> =
+
+> V7 -> V8:
+> * remove redundant variables;
+> * resolve KCSAN warning.
+> =
+
+> V6 -> V7:
+> * addresses coding style comments.
+> =
+
+> V5 -> V6:
+> * rebase patch based on 6.3-rc2.
+> =
+
+> V4 -> V5:
+> * add READ_ONCE() macro when initializing local vnet_hdr_sz variable;
+> * fix some nits. =
+
+> =
+
+> V3 -> V4:
+> * read po->vnet_hdr_sz once during vnet_hdr_sz and use vnet_hdr_sz loca=
+lly =
+
+> to avoid race condition;
+> * modify how to check non-zero po->vnet_hdr_sz;
+> * separate vnet_hdr_sz as a u8 field in struct packet_sock instead of 8=
+-bit
+> in an int field.
+> =
+
+> V2 -> V3:
+> * remove has_vnet_hdr field and use vnet_hdr_sz to indicate whether
+> there is a vnet header;
+> * refactor PACKET_VNET_HDR and PACKET_VNET_HDR_SZ sockopt to remove
+> redundant code.
+> =
+
+> V1 -> V2:
+> * refactor the implementation of PACKET_VNET_HDR and PACKET_VNET_HDR_SZ=
+
+> socketopts to get rid of redundate code;
+> * amend packet_rcv_vnet in af_packet.c to avoid extra function invocati=
+on.
+> =
+
+>  include/uapi/linux/if_packet.h |  1 +
+>  net/packet/af_packet.c         | 93 ++++++++++++++++++++--------------=
+
+>  net/packet/diag.c              |  2 +-
+>  net/packet/internal.h          |  2 +-
+>  4 files changed, 58 insertions(+), 40 deletions(-)
+> =
+
+> @@ -2250,7 +2250,7 @@ static int tpacket_rcv(struct sk_buff *skb, struc=
+t net_device *dev,
+>  	__u32 ts_status;
+>  	bool is_drop_n_account =3D false;
+>  	unsigned int slot_id =3D 0;
+> -	bool do_vnet =3D false;
+> +	int vnet_hdr_sz =3D 0;
+>  =
+
+>  	/* struct tpacket{2,3}_hdr is aligned to a multiple of TPACKET_ALIGNM=
+ENT.
+>  	 * We may add members to them until current aligned size without forc=
+ing
+> @@ -2308,10 +2308,9 @@ static int tpacket_rcv(struct sk_buff *skb, stru=
+ct net_device *dev,
+>  		netoff =3D TPACKET_ALIGN(po->tp_hdrlen +
+>  				       (maclen < 16 ? 16 : maclen)) +
+>  				       po->tp_reserve;
+> -		if (packet_sock_flag(po, PACKET_SOCK_HAS_VNET_HDR)) {
+> -			netoff +=3D sizeof(struct virtio_net_hdr);
+> -			do_vnet =3D true;
+> -		}
+> +		vnet_hdr_sz =3D READ_ONCE(po->vnet_hdr_sz);
+> +		if (vnet_hdr_sz)
+> +			netoff +=3D vnet_hdr_sz;
+>  		macoff =3D netoff - maclen;
+>  	}
+>  	if (netoff > USHRT_MAX) {
+> @@ -2337,7 +2336,6 @@ static int tpacket_rcv(struct sk_buff *skb, struc=
+t net_device *dev,
+>  			snaplen =3D po->rx_ring.frame_size - macoff;
+>  			if ((int)snaplen < 0) {
+>  				snaplen =3D 0;
+> -				do_vnet =3D false;
+>  			}
+>  		}
+>  	} else if (unlikely(macoff + snaplen >
+> @@ -2351,7 +2349,6 @@ static int tpacket_rcv(struct sk_buff *skb, struc=
+t net_device *dev,
+>  		if (unlikely((int)snaplen < 0)) {
+>  			snaplen =3D 0;
+>  			macoff =3D GET_PBDQC_FROM_RB(&po->rx_ring)->max_frame_len;
+> -			do_vnet =3D false;
+
+here and in the block above the existing behavior must be maintained:
+vnet_hdr_sz must be reset to zero in these cases.
+
+>  		}
+>  	}
+>  	spin_lock(&sk->sk_receive_queue.lock);
+> @@ -2367,7 +2364,7 @@ static int tpacket_rcv(struct sk_buff *skb, struc=
+t net_device *dev,
+>  		__set_bit(slot_id, po->rx_ring.rx_owner_map);
+>  	}
+>  =
+
+> -	if (do_vnet &&
+> +	if (vnet_hdr_sz &&
+>  	    virtio_net_hdr_from_skb(skb, h.raw + macoff -
+>  				    sizeof(struct virtio_net_hdr),
+>  				    vio_le(), true, 0)) {
