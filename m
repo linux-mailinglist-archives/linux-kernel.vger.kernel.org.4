@@ -2,287 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F2136E17F4
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 01:14:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F6B46E17F7
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 01:15:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbjDMXOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 19:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45958 "EHLO
+        id S230396AbjDMXPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 19:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230372AbjDMXOF (ORCPT
+        with ESMTP id S230372AbjDMXP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 19:14:05 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510331FFE
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 16:13:44 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id i8-20020a05600c354800b003ee93d2c914so10694362wmq.2
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 16:13:44 -0700 (PDT)
+        Thu, 13 Apr 2023 19:15:26 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281F2E7
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 16:15:25 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33DLf2w6006517;
+        Thu, 13 Apr 2023 23:15:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=corp-2023-03-30;
+ bh=i6Rxw7iIk0J/BNeOkIYTtnUfRW44qfOmHGQyWjvMfk4=;
+ b=aLwSS6dEKw7VsVMpI1gDHveksUFC98FH27M2+BYm/eX/KtP+3uTUpsjoHNxbtPyKk1GR
+ xtFHNnAZt2lHtisuV+txiRPMGu+XoIROUS9txCWx3YXrCm3wznF4CBQBpFs0y9eqG0f3
+ aLSaCItlXWbhYqSADLrPZf4VT9IPePLGv9daBMCrWooZhMZ0pQg58XisfZYkwTLu6u3W
+ BuxPJGxZ4PlEadoLP91wzyAz5a0c+PIryiY+OWIkCSxEQCNw/wt+DbMYFbC9J0yv8Ng/
+ 5d3WWTuPCNFgaPVkCHZD8GasbCFd4xMJsBzseHnMZCnwuHSL6CrE3mXrB9AnEgyynOEp eg== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3pu0hcct74-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 13 Apr 2023 23:14:59 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 33DL4bgN013123;
+        Thu, 13 Apr 2023 23:14:59 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2042.outbound.protection.outlook.com [104.47.66.42])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3puw95ffh2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 13 Apr 2023 23:14:59 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Hbv51cRzgxmRktH2vz9Bo9fJy8kGWycJBBCs9SEoTa4Mst6okMB4lFzQuVIaIVq6T2UpMjlGZWG57a/KzoX3mSZQcCHlQ3y+ZJOIFkmI8/pLiwIRq4Lnz3mVbGWbqU7RMGDV34vxV4y2b2WAPcpzKLy0M+6chpvQ1UyQO0k1OeUZmpjTvXeGNfompCLnkVl5Gb0dsb5SXi6V0akzCEnJnCUQ+ZwHa1+G0g39bzamu/XjzU3pRFQLDt/cGEx68UVttWJQ98c6QUc9bpOcridZVQ4W+fJ9EvSbiEyFudLTWF1WHwIzgawE89rKa4Sa6fv29gwBJPnMw8Wzng+mF/Da2Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=i6Rxw7iIk0J/BNeOkIYTtnUfRW44qfOmHGQyWjvMfk4=;
+ b=kE+mggcVrjv31D4XphigbTTb0PNJlSEyf7tFvCC0zxv652QfjAY8S+hcAkUhzjPVUgGE0uDSlyXvMdrhzsry24zo133wAjJ9BtFWJF2Avqq9HfScpDvkR99gjQGyrOsLowy4tVSP/dtjAABQ04Oy3urhyDa2J0d/oRvHVZhcxoJpnodszKQG2pldvYL/Ts9qn/MBhhzTs2mKvLgyXsryIF18HeuQN34jwYit8m8TBSa8ABxUG5qVzkN9T12XCp1KGK+scglpHdmCRLYvE54JhB4jcx+C70Dn9s5TwgRwWrHOHpKUuXShgWKSrubK6CBK4XjSSXvMZhp4WFIfiO6ywA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681427616; x=1684019616;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZF8rvg1z5XANVIBt+ONfTikNhwE8ybaWY9TqUuiseLs=;
-        b=h2tPn6d/Yo41LiRgzT5eH3i1q4UiJBoq9n+iQNY+pqcbUwZpAmNN/OBK7vMY0rbegX
-         tNlx1GtJjLlJMoT7P3c3VUTOUwgtr58boeVZ/HH8BoRebbQXPPwTEyrjVDRSciPf5728
-         EVgtpIPT+mWH26oT844S7KnNgjcbfTPDcLQcDq5w93LrL9OUStGAtWQs2oJyCOlMB1QT
-         ohR/zC7TOnL4Zxzxnj1dPzL/8tsQe/sQU/J+YKXPoLa3GYl6fQTSanLVpFCpOpQwe2Kr
-         Dem92Jc0cm58+amqk1sxqcUxr7gRpWsJlrtzvtek4GNibndgHfb750sgJO7O+OQ5qEVr
-         05Yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681427616; x=1684019616;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZF8rvg1z5XANVIBt+ONfTikNhwE8ybaWY9TqUuiseLs=;
-        b=WEGXxlvzKuXghtEmBXQ8jmejytG+FPFHIlCrD/+BwVwZ8TpNOK4cDonI63WdE1EMeJ
-         i6O1DKX3314kxzg4NMd61piO83nTIue4wKgTJAl1P+hN6RRJMPmHNDsA/ilXn3OaxTUR
-         Zu+vnIqOCfzUu8iTURmqN5KD6Xe3ccWiU4yKV/MBnhnXXdR0O2x8mBZVv1zYcSlbKXGh
-         iGj8qyL9iEEcIaxRQboucX3cCUybfvzmILAbr2mbj+Puoq4Lb3gdZLemsh+AhmzmfDBm
-         lrTnc0RxGw5JDOuuraaiYh91Xi0Jl35NCo0JLfXW3XolV94U+wne6Mrzv/2RnHoX8/Op
-         fJtQ==
-X-Gm-Message-State: AAQBX9fsC31L7P6F65LzzdQiUV7X3PLYUpCwF+iO/vxRArSyAfmSwdQU
-        Qb5KaGIKulnKRENv6OVw96h03w==
-X-Google-Smtp-Source: AKy350bqdhKSwq5RaBwZeO+d7otFOJSHYreipwNsXOnW9lfHqFxRIvkJdNPyxXZQXXmshoGx/VPMtw==
-X-Received: by 2002:a7b:c3cc:0:b0:3ef:128d:7167 with SMTP id t12-20020a7bc3cc000000b003ef128d7167mr3057727wmj.13.1681427615924;
-        Thu, 13 Apr 2023 16:13:35 -0700 (PDT)
-Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:7529:f7da:b8df:f1dd])
-        by smtp.gmail.com with ESMTPSA id n5-20020a05600c4f8500b003f0ad98522bsm1831588wmq.28.2023.04.13.16.13.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 16:13:35 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org
-Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        linux-pm@vger.kernel.org (open list:THERMAL),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [RFC PATCH] thermal/core: Update the generic trip points
-Date:   Fri, 14 Apr 2023 01:13:18 +0200
-Message-Id: <20230413231318.143135-1-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=i6Rxw7iIk0J/BNeOkIYTtnUfRW44qfOmHGQyWjvMfk4=;
+ b=f3CObmAKqtx9D7pO/CvOJCpxwRj+uTrLbew2pa9vQxyWLwakLytJTXWsbL3nZzylcWSzzXUAW9PM7HT4JfMWcwMsothlGagUtzKEpu77fKVzXW9zFVvNNVUvPeG/z29Qj4Aq5ADC4i5mg4YdpqDdPGy70BNSqKVGshBTwAxyeVA=
+Received: from CH0PR10MB5113.namprd10.prod.outlook.com (2603:10b6:610:c9::8)
+ by SJ2PR10MB7058.namprd10.prod.outlook.com (2603:10b6:a03:4c5::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.28; Thu, 13 Apr
+ 2023 23:14:57 +0000
+Received: from CH0PR10MB5113.namprd10.prod.outlook.com
+ ([fe80::12d3:3f71:5b55:c342]) by CH0PR10MB5113.namprd10.prod.outlook.com
+ ([fe80::12d3:3f71:5b55:c342%6]) with mapi id 15.20.6298.030; Thu, 13 Apr 2023
+ 23:14:57 +0000
+From:   Sidhartha Kumar <sidhartha.kumar@oracle.com>
+To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Cc:     akpm@linux-foundation.org, songmuchun@bytedance.com,
+        mike.kravetz@oracle.com, willy@infradead.org,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>
+Subject: [RFC PATCH 0/4] change ->index to PAGE_SIZE for hugetlb pages
+Date:   Thu, 13 Apr 2023 16:14:48 -0700
+Message-Id: <20230413231452.84529-1-sidhartha.kumar@oracle.com>
+X-Mailer: git-send-email 2.39.2
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR03CA0387.namprd03.prod.outlook.com
+ (2603:10b6:a03:3a1::32) To CH0PR10MB5113.namprd10.prod.outlook.com
+ (2603:10b6:610:c9::8)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH0PR10MB5113:EE_|SJ2PR10MB7058:EE_
+X-MS-Office365-Filtering-Correlation-Id: 95fd6791-fa4b-4e99-2ca6-08db3c74e590
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ItVQXUua0hz3zeemh2vA6KmxvA7DIE1fQkjj1yphI1H7SwgZGSAl1gzpiUp/siCvEPbmn3HaG0Hl6s3wL+L1Q5rHDpGtwEPdhbgFeoXyd3BG2emsyPDdfN9iAqudidpND3rzV5ShpMRSI7R3CP1EBSf+64EB0yJFZMYHTh+ubTzW20ysM/Dk6moFVq8IaAyS+11/eN/x2AEl4VKDY3mH1n/7HI10mxvDRMpGFRhacgAvW82e6yZOYbb1hD3BKTQrWvCCtpjQ9qoBLBfWrFJ6drm4HyPkzRHb8xTBgerfQ06jI6HpiM1eYZ4qbiNxVPLcohfvWl6C61y5bqR1w2Qu1Ff1sqldP6maVGxC40lcVBqFkOqueDx0DudTsxKeZn7MiBsUCA65wcJeLD3CQ+Ej2UuH1hhTHZ/l3UlQOmeYp0A7mXXHoWn1lRKR2AUNbU6VqxKSYprANgreVx6MScxJqB5Hj6RAuRYAZNluzIM95wAxZeGze8BjozAYqeO+ZQPlIcmh7X1hbnnAV4Aki17zkoD70wDFKkA9xjj84c9XHzknc98EwNUoGe7ygrFyj+Dq
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR10MB5113.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(396003)(376002)(136003)(366004)(346002)(451199021)(83380400001)(2616005)(6512007)(6666004)(1076003)(478600001)(6506007)(107886003)(6486002)(186003)(44832011)(36756003)(38100700002)(5660300002)(4326008)(66556008)(66946007)(66476007)(8676002)(316002)(86362001)(41300700001)(8936002)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TdgrKNTrpnVbKV4E6IASNF4HqfbeMNagk6O27oeFNS9YoUgJlz3APQDX2t0B?=
+ =?us-ascii?Q?4D2vTJym+uMBUTRJIRCX3ArgMKjxUgDfDznfqOHSCtC8H0qdWE5QduTSL1nM?=
+ =?us-ascii?Q?AMToa1EVJCWZm94J05Z97NXc9K327dpW+b8NPALIZxqL2Fqn5qkCLZ0SXJLV?=
+ =?us-ascii?Q?T04duI4qH6ajTPJ2OTtr4Is51VjbRcOUER8/MaypC1x0wKAdHiBzSl4kGO3E?=
+ =?us-ascii?Q?jWiryIFeNYYo9fFCe2bJjUiuTqXaM0ObFyWnLn/rCxLwoRwzKV6g4pbF5INB?=
+ =?us-ascii?Q?otNVJ/BPBRymkXD5H0oXAF4wyrWdDm/Rdq96QdZVpCZ0bX78tCNruivaCqYG?=
+ =?us-ascii?Q?UfhJi4ytMauOCd4wdJ+uxl/Iv/w+MOrwALpthj0puAHeZ/yZdjcfrCuZVyRU?=
+ =?us-ascii?Q?eD9YvNkLRFua1EiwS0+JQZ+t91JUJ3bm3CDhkgEPntyr0gg9VQ/lEEdqsLf1?=
+ =?us-ascii?Q?//Ehx2US/iBnav5u0xqQjLoFZI+KZhohTwMQxQu0QyMt8yjWmT+NiQmenkTM?=
+ =?us-ascii?Q?O82dCX8C1MBEd3sJAy4Xp3xqo1dbNIuzZZDcKhEJfLbXuD2G21Wa0AC61yDX?=
+ =?us-ascii?Q?aCxHxCUTPyha9PrmZmPK982pzhXDM+GR8jvYfJq02TX0R8JpGwx778zcYcYV?=
+ =?us-ascii?Q?bBqJ9qWz9CyaZpnkw/Ikk9D/j1XifN5GoNyJbfMhth0lmDrNOQO+lG5GtP80?=
+ =?us-ascii?Q?X0l9hpn40Bmna+chDWs8a8yjR3YxBDVXC2hxTLB7hS++MAMKHFvOWlOowrww?=
+ =?us-ascii?Q?lM8KW3BcWW2KHQ4PqqpGi9ZYPdcipPP+FzmhgOYFLvduvsaL6sX/C0hzvP/S?=
+ =?us-ascii?Q?dNT1qkjQR2kG/Wl83mGZhl0IuISCRV9rh3pGDrXlR8VgUj0ad5G3I5RYC4hz?=
+ =?us-ascii?Q?GoODphYPsz2I3fgKDoXqNpBgEu1tRHBTEG530vSX8BbLoEVJxsVodUGBhoS0?=
+ =?us-ascii?Q?8jVErmfa2YPyd8xZhevrcY6ql0WVVIaQFGWXWkieX+7cAE1naY3lExDSGjuh?=
+ =?us-ascii?Q?KSeHbTl4Igl8KUXYdiULYlAmhlI6jrkvjybnchXraBo0M53GKwjJzeU/49KE?=
+ =?us-ascii?Q?l0dfSqiXcmvfW/T9+afIHdTd4yt6V0qnjTXBmFkiBk/+/SO+eNi0Jbgo7u8E?=
+ =?us-ascii?Q?ddCQ9sky3SKQpftaDbfttp9/5b8lQb6v9QSe7D/tdRn2/WeYlq914DUrL7Ei?=
+ =?us-ascii?Q?QE7zGYk4kVluZ3UK1mEnSaqYBgPqwLc59Gt2dNb7HJwlS6Mbi172WeruNQ4E?=
+ =?us-ascii?Q?GKq1nO+Sz9uBb8mHvX3zCCK9ee/T78OarMp/W2S1ii7ONiiUg7u9WjL1Pvlg?=
+ =?us-ascii?Q?A+8N6W1jaEd5SVECjhidptCJt52f7TIiNdF4ZpLzzh5NSeFvdeFvsxujlrSa?=
+ =?us-ascii?Q?9ZWDMrA/vEEa9dHKsWWy8/ejgy5//7GKlZSL+y4Z1ky/VNCPQBV4DHhthmDz?=
+ =?us-ascii?Q?kOPSnTQG1yqYE+fFshyrr+nDsweSMzcUxccFfmVOsXjig64k+h3MeQ5pzsY4?=
+ =?us-ascii?Q?t6k6HlXn+pTJrbawRI5/eZoeb227IVK/gjyAY8r8oY8XWlOf3eoH3sE4S1f+?=
+ =?us-ascii?Q?XWdx/PZDH1f+KnP/2PUwiyFmTHptORvM3dLJkBm5IPPIE5si5icdQIpNZqIY?=
+ =?us-ascii?Q?IM1kc3iZjCN0hlg4b29uAZg=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: lccaK+n21MTLCeRCGN/CA9TaxuNaO2H8S8mouqTjD/65KhiGmreAfY1oxnSuH2FnSNEyTKVGo1BppsOTHT5JFfvQ1aWxU+Vqs9YvpQgP2zrx0N3aZoHap779AIhngu2JLNU8Eod5mZHg69WhmQRfkCD9dGPDGn6ErgKJ3n5plEyvKejtbCruW8C6E+40t0JuyPBVhCal4fzAvrFa0oWl06+EqAzZD8zN1bh3llgO8JC9vXLgyoLpoA0hrACy5vwr5JOsO8OQ1gZuyZx1Fze7VT6qHVhWxNrw9iTslUW/p9Qlvx2EhdeXaQAI5fjLBqQDMobU+rdsfKnXyHKsgy/+7naW3hRbfYNBtP+g7OGQilnAQ0+ABHdqE4dK1FOaJOFRZksWSsThkA2TgevoZpZ0ziaJnQxROwhivyjdTdQMWMe8nF0uE71PC6C8JQ+jGbocaGIa2ylucoSGhXmJN1ExPkWo+/IrnXQUP5kswxil8N3Ii7akRRxINdd70kI8uiyBNsO1bn6nuqiirlS2Ly/BlknHu5UTQqgRetV5G+Wi/WSldgeN6ThpVdlY6ADt4nO0qgVZTl5SBtxlGWdJ1NEPlapeVc4zfZtc99cQhi5g3HWkx98bofjQd1eNHSTQYxsgvZfWMrZoGerrSmLEiRq5uiRgQevCMqjpyaBzkx7gihCIhWzK+y8wUFwb/l6pIS7pr1UufJF4rYCf816iXtdm3UJVgfjLPEN0ky0vR/rKDeAFk9S8tlXebr/cvX7J9uPjsWr5YuL0jp2JnI7+ICwoNaK7MWZTa8wv5r/hgfUG/ySCDwN8NZeWgtMoG52kY2zffGgYD9h3VvxUFL/OYWOJ5qY+pi6DpPAbOBYSqSeKxFQeDZAdwuxJs4FIn43F6o70NMT6MUEO5em7pYAisIDhpyEhL6NBYAzfTHmprddwYCw=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 95fd6791-fa4b-4e99-2ca6-08db3c74e590
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR10MB5113.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2023 23:14:57.0740
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1XLzHZVC0iEHweYE47XqljKqZqTqAEkaVOj4/QA/LcXrieTlmtgyA5sjqTkLzVDGgt/6TBSLNoAWHzMfkl7TxZUO+9LVkqB+6UI5MqZQpBI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR10MB7058
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-13_16,2023-04-13_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
+ suspectscore=0 mlxscore=0 bulkscore=0 malwarescore=0 phishscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304130207
+X-Proofpoint-GUID: oHCLgvQLJ1N5evcdA-f8YuZd_dBNqYni
+X-Proofpoint-ORIG-GUID: oHCLgvQLJ1N5evcdA-f8YuZd_dBNqYni
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At this point, the generic trip points rework allows to create a
-thermal zone with a fixed number of trip points. This usage satisfy
-almost all of the existing drivers.
+This RFC patch series attempts to simplify the page cache code by removing
+special casing code for hugetlb pages. Normal pages in the page cache are
+indexed by PAGE_SIZE while hugetlb pages are indexed by their huge page
+size. This was previously tried but the xarray was not performant enough
+for the changes.
 
-A few remaining drivers have a mechanism where the firmware updates
-the trip points. But there is no such update mechanism for the generic
-trip points, thus those drivers can not be converted to the generic
-approach.
+This series fails many of the hugetlb LTP test cases due to bugs in
+accounting and I was hoping to get help/suggestions about why the page
+accounting breaks from my changes. The basic mmap tests pass but the
+advanced ones which involve overcommiting pages fail.
 
-This patch provides a function 'thermal_zone_trips_update()' allowing
-to change the trip points of a thermal zone.
+rebased on mm-unstable 4/13/2023
 
-At the same time, with the logic the trip points array is passed as a
-parameter to the thermal zone at creation time, we make our own
-private trip points array by copying the one passed as parameter.
+Sidhartha Kumar (4):
+  mm/filemap: remove hugetlb special casing in filemap.c
+  mm/hugetlb: remove hugetlb_basepage_index()
+  mm/hugetlbfs: remove huge_page_shift in hugetlbfs_file_mmap
+  mm/hugetlb: add hpage_shift to alloc_hugetlb_folio
 
-Note, no code has been found where the trip points update leads to a
-refresh of the trip points in sysfs, so it is very unlikey the number
-of trip points changes. However, for the sake of consistency it would
-be nicer to have the trip points being refreshed in sysfs also, but
-that could be done in a separate set of changes.
+ fs/hugetlbfs/inode.c    |  4 +--
+ include/linux/pagemap.h | 13 --------
+ mm/filemap.c            | 36 +++++++---------------
+ mm/hugetlb.c            | 68 ++++++++++++-----------------------------
+ 4 files changed, 33 insertions(+), 88 deletions(-)
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/thermal_core.c | 40 ++++++++----------
- drivers/thermal/thermal_core.h |  3 ++
- drivers/thermal/thermal_trip.c | 76 ++++++++++++++++++++++++++++++++++
- include/linux/thermal.h        |  4 ++
- 4 files changed, 100 insertions(+), 23 deletions(-)
-
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index afcd4197babd..3688b06401c8 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -1224,32 +1224,11 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
- 		return ERR_PTR(-EINVAL);
- 	}
- 
--	/*
--	 * Max trip count can't exceed 31 as the "mask >> num_trips" condition.
--	 * For example, shifting by 32 will result in compiler warning:
--	 * warning: right shift count >= width of type [-Wshift-count- overflow]
--	 *
--	 * Also "mask >> num_trips" will always be true with 32 bit shift.
--	 * E.g. mask = 0x80000000 for trip id 31 to be RW. Then
--	 * mask >> 32 = 0x80000000
--	 * This will result in failure for the below condition.
--	 *
--	 * Check will be true when the bit 31 of the mask is set.
--	 * 32 bit shift will cause overflow of 4 byte integer.
--	 */
--	if (num_trips > (BITS_PER_TYPE(int) - 1) || num_trips < 0 || mask >> num_trips) {
--		pr_err("Incorrect number of thermal trips\n");
--		return ERR_PTR(-EINVAL);
--	}
--
- 	if (!ops) {
- 		pr_err("Thermal zone device ops not defined\n");
- 		return ERR_PTR(-EINVAL);
- 	}
- 
--	if (num_trips > 0 && (!ops->get_trip_type || !ops->get_trip_temp) && !trips)
--		return ERR_PTR(-EINVAL);
--
- 	if (!thermal_class)
- 		return ERR_PTR(-ENODEV);
- 
-@@ -1283,8 +1262,22 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
- 	tz->ops = ops;
- 	tz->device.class = thermal_class;
- 	tz->devdata = devdata;
--	tz->trips = trips;
--	tz->num_trips = num_trips;
-+
-+	if (trips) {
-+		result = __thermal_zone_trips_update(tz, trips, num_trips, mask);
-+		if (result)
-+			goto remove_id;
-+	} else {
-+		/*
-+		 * Legacy trip point handling
-+		 */
-+		if ((!tz->ops->get_trip_type || !tz->ops->get_trip_temp) && num_trips) {
-+			result = -EINVAL;
-+			goto remove_id;
-+		}
-+
-+		tz->num_trips = num_trips;
-+	}
- 
- 	thermal_set_delay_jiffies(&tz->passive_delay_jiffies, passive_delay);
- 	thermal_set_delay_jiffies(&tz->polling_delay_jiffies, polling_delay);
-@@ -1451,6 +1444,7 @@ void thermal_zone_device_unregister(struct thermal_zone_device *tz)
- 	mutex_unlock(&tz->lock);
- 
- 	kfree(tz->tzp);
-+	kfree(tz->trips);
- 
- 	put_device(&tz->device);
- 
-diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
-index d9182fb8dd11..9fc7d9e9debd 100644
---- a/drivers/thermal/thermal_core.h
-+++ b/drivers/thermal/thermal_core.h
-@@ -203,6 +203,9 @@ void __thermal_zone_device_update(struct thermal_zone_device *tz,
- void __thermal_zone_set_trips(struct thermal_zone_device *tz);
- int __thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
- 			    struct thermal_trip *trip);
-+int __thermal_zone_trips_update(struct thermal_zone_device *tz,
-+				struct thermal_trip *trips,
-+				int num_trips, int mask);
- int __thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp);
- 
- /* sysfs I/F */
-diff --git a/drivers/thermal/thermal_trip.c b/drivers/thermal/thermal_trip.c
-index a12980a8bac5..e05384c3e557 100644
---- a/drivers/thermal/thermal_trip.c
-+++ b/drivers/thermal/thermal_trip.c
-@@ -227,3 +227,79 @@ int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
- 
- 	return 0;
- }
-+
-+int __thermal_zone_trips_update(struct thermal_zone_device *tz, struct thermal_trip *trips,
-+				int num_trips, int mask)
-+{
-+	struct thermal_trip *new_trips;
-+
-+	/*
-+	 * Legacy trip point handling is incompatible with this
-+	 * function
-+	 */
-+	if (tz->ops->get_trip_type || tz->ops->get_trip_temp) {
-+		pr_err("Legacy trip points use incompatible function '%s'\n", __func__);
-+		return -ENOSYS;
-+	}
-+	
-+	/*
-+	 * Max trip count can't exceed 31 as the "mask >> num_trips" condition.
-+	 * For example, shifting by 32 will result in compiler warning:
-+	 * warning: right shift count >= width of type [-Wshift-count- overflow]
-+	 *
-+	 * Also "mask >> num_trips" will always be true with 32 bit shift.
-+	 * E.g. mask = 0x80000000 for trip id 31 to be RW. Then
-+	 * mask >> 32 = 0x80000000
-+	 * This will result in failure for the below condition.
-+	 *
-+	 * Check will be true when the bit 31 of the mask is set.
-+	 * 32 bit shift will cause overflow of 4 byte integer.
-+	 */
-+	if (num_trips > (BITS_PER_TYPE(int) - 1) || num_trips < 0 || mask >> num_trips) {
-+		pr_err("Incorrect number of thermal trips\n");
-+		return -EINVAL;
-+	}
-+
-+	/*
-+	 * New generic trip point handling
-+	 */
-+	if (num_trips > 0 && !trips) {
-+		pr_err("Inconsistent parameters\n");
-+		return -EINVAL;
-+	}
-+
-+	/*
-+	 * Allocate our private trip points array structure
-+	 */
-+	new_trips = kmemdup(trips, sizeof(*trips) * num_trips, GFP_KERNEL);
-+	if (!new_trips)
-+		return -ENOMEM;
-+	
-+	/*
-+	 * Newly allocated thermal zone will have the 'trips' field
-+	 * NULL, kfree() is immune against that
-+	 */
-+	kfree(tz->trips);
-+	tz->trips = new_trips;
-+	tz->num_trips = num_trips;
-+
-+	return 0;
-+}
-+
-+int thermal_zone_trips_update(struct thermal_zone_device *tz, struct thermal_trip *trips,
-+			      int num_trips, int mask)
-+{
-+	int ret;
-+
-+	mutex_lock(&tz->lock);
-+	ret = __thermal_zone_trips_update(tz, trips, num_trips, mask);
-+	mutex_unlock(&tz->lock);
-+
-+	if (ret)
-+		return ret;
-+
-+	__thermal_zone_device_update(tz, THERMAL_TRIP_CHANGED);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(thermal_zone_trips_update);
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index 3e8bedb21755..0ea2da5c33ac 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -216,6 +216,10 @@ int thermal_zone_get_num_trips(struct thermal_zone_device *tz);
- 
- int thermal_zone_get_crit_temp(struct thermal_zone_device *tz, int *temp);
- 
-+int thermal_zone_trips_update(struct thermal_zone_device *tz,
-+			      struct thermal_trip *trips,
-+			      int num_trips, int mask);
-+
- #ifdef CONFIG_THERMAL_ACPI
- int thermal_acpi_active_trip_temp(struct acpi_device *adev, int id, int *ret_temp);
- int thermal_acpi_passive_trip_temp(struct acpi_device *adev, int *ret_temp);
 -- 
-2.34.1
+2.39.2
 
