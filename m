@@ -2,234 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90CA86E06FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 08:31:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 321DC6E0703
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 08:34:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbjDMGbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 02:31:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45560 "EHLO
+        id S229732AbjDMGe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 02:34:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjDMGbP (ORCPT
+        with ESMTP id S229482AbjDMGeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 02:31:15 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384505FD4;
-        Wed, 12 Apr 2023 23:31:12 -0700 (PDT)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id B34B4FF80B;
-        Thu, 13 Apr 2023 06:31:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1681367471;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wFZjlYbqAXEdbzIOL/Z8LZvjFBauGqMFBal3K99vt78=;
-        b=NQMQq46Vn4bBbnwNQgUO5Euut2Wezby0IgtPuKGUC7b8AyOrmEpZtnxtZTjJ+XQznjvjj0
-        wVpiTMKGeUGMPsElUI9TZbd6ZDXmF46hqfK/eYuS0RvIB3RkNFXCHkR7dshNZXmFqTrNqC
-        /nrRuNgCUqX+bkBnX44RKoJItPIl2rg+TA+/uEx5UoWHmMxL+n8nJdEHE/ol0DrRP/Xyo1
-        aCZmaXekhzWpyXLSF7EVOZ7h2pfLzwckZqQ37J1LyFyFk1wxiq5MjUfFkFuzQNxaMQWg56
-        G/BiXhzPaJIfEtwqfqurv8Eo3Clao0B+4LQKmsxuprnTAo18hqF2Kat3OLWbMQ==
-Date:   Thu, 13 Apr 2023 08:31:09 +0200
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Lee Jones <lee@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v5 2/5] mfd: Add support for the Lantiq PEF2256 framer
-Message-ID: <20230413083109.5ad09d2a@bootlin.com>
-In-Reply-To: <20230412095918.GZ8371@google.com>
-References: <a642e653-e3e2-c3d2-68cb-1efc92be05bb@linaro.org>
-        <20230331165904.4e7f46a1@bootlin.com>
-        <20230403142822.GA8371@google.com>
-        <20230404092036.2d1cd5d9@bootlin.com>
-        <f7ab2fcc-93fc-ce87-8767-579d33907225@linaro.org>
-        <20230404100759.5bc9cd20@bootlin.com>
-        <143754c2-9e37-4386-af92-174c0df2eb0a@linaro.org>
-        <20230405135450.GF8371@google.com>
-        <20230405180023.4aebaa08@bootlin.com>
-        <20230411181640.50c19d4e@bootlin.com>
-        <20230412095918.GZ8371@google.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        Thu, 13 Apr 2023 02:34:25 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13617DB3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 23:34:24 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id ke16so13952084plb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 23:34:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=smartx-com.20221208.gappssmtp.com; s=20221208; t=1681367664; x=1683959664;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ux89XlsyFK7f2HcxESYLkY+feFhS2ro/LkG4L+aicTM=;
+        b=LtC+9EwMzJbtSHFZIQviDd1y3nzmCThnC0E1KOYAmdnfuZCqEJ9qi/6IS751ntRkYv
+         KHR3ymKcBOnQ7oH2NDGGW68XPIVEBc22qXn968J8kbS1nWU54o0M63DHUdfpdYn36BEK
+         MahOSjk0y8xRIZNfZapEdJ48np/WVezsqnsEuD2KAgp+s1h9uEZlveYyggePUkrrANAB
+         04jMQDlAOppFQ3zTxHB2d85Up3YrN4uPx4U4TpgTTrRE2d1xKTNOoA2Ns2fVgANslCv4
+         aGa66sKTZUsDOJiy3jQsBlx2iYA5gA/CZoVBG0wuLc7WI3vrkiU/SQ2cfKrGIOtamjeq
+         Zv4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681367664; x=1683959664;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ux89XlsyFK7f2HcxESYLkY+feFhS2ro/LkG4L+aicTM=;
+        b=gOgs0d67r+zCXuSiPj2BJvt7W9vmUsQ7yginTm7yzLJzJnWAM/lFVAx2iPHvpnwkQN
+         EcOBxXDqCRlq7mC5217XT5ajaNoluXc6FLFrWG0bGgPHqQi7QO5JWFQtlfujflk+93uW
+         QvANFsiwOd1IoIXB5UPHe9MZwK1T0xRjn+pDf6LW5zsZ7AqLBar5kmP629Aq9uilPZl9
+         A3ui7eVt1hrBTQDOHkG730lER5HdP5WbfL+TAVQqrY5hG2n+zrW0q/hsorFNw1NGa8l+
+         pOBP0EYyANmI9rmv3TDLGdfn2Myl/KC1DUXXGdQ9B0u3YNVejemz/c/bbS49HpLwQoev
+         /RGA==
+X-Gm-Message-State: AAQBX9d1ai+XtQQAyWkhxkL4u/ZQdNGamIvrbp95Jo92XXGa/pZpXfUU
+        xRGQ+tzM/Te6MBXEvW+UsrtKIw==
+X-Google-Smtp-Source: AKy350bXyTEx3noUhrYt3iXoek2M9Hy6O2MKG8caOPBdyazZul+2hfnEF8nCHJnvZEg+ScZzsE/3SQ==
+X-Received: by 2002:a17:903:1211:b0:19a:9890:eac6 with SMTP id l17-20020a170903121100b0019a9890eac6mr1212997plh.24.1681367663912;
+        Wed, 12 Apr 2023 23:34:23 -0700 (PDT)
+Received: from bogon.gitgo.cc ([1.202.18.10])
+        by smtp.gmail.com with ESMTPSA id p24-20020a1709028a9800b001a66c4afe0asm649896plo.255.2023.04.12.23.34.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Apr 2023 23:34:23 -0700 (PDT)
+From:   Li Feng <fengli@smartx.com>
+To:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme@lists.infradead.org (open list:NVM EXPRESS DRIVER),
+        linux-kernel@vger.kernel.org (open list)
+Cc:     lifeng1519@gmail.com, Li Feng <fengli@smartx.com>
+Subject: [PATCH] nvme/tcp: Add support to set the tcp worker cpu affinity
+Date:   Thu, 13 Apr 2023 14:33:17 +0800
+Message-Id: <20230413063317.2455680-1-fengli@smartx.com>
+X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230413062339.2454616-1-fengli@smartx.com>
+References: <20230413062339.2454616-1-fengli@smartx.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Apr 2023 10:59:18 +0100
-Lee Jones <lee@kernel.org> wrote:
+The default worker affinity policy is using all online cpus, e.g. from 0
+to N-1. However, some cpus are busy for other jobs, then the nvme-tcp will
+have a bad performance.
 
-> On Tue, 11 Apr 2023, Herve Codina wrote:
-> 
-> > Hi Lee,
-> >
-> > On Wed, 5 Apr 2023 18:00:23 +0200
-> > Herve Codina <herve.codina@bootlin.com> wrote:
-> >  
-> > > Hi Lee,
-> > > On Wed, 5 Apr 2023 14:54:50 +0100
-> > > Lee Jones <lee@kernel.org> wrote:
-> > >  
-> > > > On Tue, 04 Apr 2023, Krzysztof Kozlowski wrote:
-> > > >  
-> > > > > On 04/04/2023 10:07, Herve Codina wrote:
-> > > > >  
-> > > > > >>> So, the structure I have in mind:
-> > > > > >>> - pef2256.c (MFD)
-> > > > > >>>   implement and do the setup at probe()
-> > > > > >>>   Add the children at probe():
-> > > > > >>>     - pef2256-pinctrl (pinctrl) added using mfd_add_devices()
-> > > > > >>>     - pef2256-codec (ASoC codec) added using devm_of_platform_populate()
-> > > > > >>>
-> > > > > >>> Lee, with this in mind, can the core pef2256.c be a MFD driver ?  
-> > > > > >>
-> > > > > >> You do not use MFD here, so why do you want to keep it in MFD? If you
-> > > > > >> disagree, please tell me where is the MFD code in your patch?  
-> > > > > >
-> > > > > > I don't want to absolutely use MFD.
-> > > > > > I just want to put my driver somewhere and I don't know the right location
-> > > > > > between MFD and Misc.
-> > > > > >
-> > > > > > Basically, the driver needs to do (little simplified and error path removed):
-> > > > > >
-> > > > > >   static const struct mfd_cell pef2256_devs[] = {
-> > > > > >   	{ .name = "lantiq-pef2256-pinctrl", },
-> > > > > >   };
-> > > > > >
-> > > > > >   static int pef2256_probe(struct platform_device *pdev)
-> > > > > >   {
-> > > > > > 	struct pef2256 *pef2256;
-> > > > > > 	void __iomem *iomem;
-> > > > > > 	int ret;
-> > > > > > 	int irq;
-> > > > > >
-> > > > > > 	pef2256 = devm_kzalloc(&pdev->dev, sizeof(*pef2256), GFP_KERNEL);
-> > > > > > 	if (!pef2256)
-> > > > > > 		return -ENOMEM;
-> > > > > >
-> > > > > > 	pef2256->dev = &pdev->dev;
-> > > > > >
-> > > > > > 	iomem = devm_platform_ioremap_resource(pdev, 0);
-> > > > > >
-> > > > > > 	pef2256->regmap = devm_regmap_init_mmio(&pdev->dev, iomem,
-> > > > > > 						&pef2256_regmap_config);
-> > > > > >
-> > > > > > 	pef2256->mclk = devm_clk_get_enabled(&pdev->dev, "mclk");
-> > > > > > 	pef2256->sclkr = devm_clk_get_enabled(&pdev->dev, "sclkr");
-> > > > > > 	pef2256->sclkx = devm_clk_get_enabled(&pdev->dev, "sclkx");
-> > > > > >
-> > > > > > 	pef2256->reset_gpio = devm_gpiod_get_optional(&pdev->dev, "reset", GPIOD_OUT_LOW);
-> > > > > > 	if (pef2256->reset_gpio) {
-> > > > > > 		gpiod_set_value_cansleep(pef2256->reset_gpio, 1);
-> > > > > > 		udelay(10);
-> > > > > > 		gpiod_set_value_cansleep(pef2256->reset_gpio, 0);
-> > > > > > 		udelay(10);
-> > > > > > 	}
-> > > > > >
-> > > > > > 	pef2556_of_parse(pef2256, np);
-> > > > > >
-> > > > > > 	irq = platform_get_irq(pdev, 0);
-> > > > > > 	ret = devm_request_irq(pef2256->dev, irq, pef2256_irq_handler, 0, "pef2256", pef2256);
-> > > > > >
-> > > > > > 	platform_set_drvdata(pdev, pef2256);
-> > > > > >
-> > > > > > 	mfd_add_devices(pef2256->dev, PLATFORM_DEVID_NONE, pef2256_devs,
-> > > > > > 	      		ARRAY_SIZE(pef2256_devs), NULL, 0, NULL);  
-> > > > >
-> > > > > Wait, now you use MFD framework, so the driver is suitable for MFD.
-> > > > > Before there was nothing like that in your code.  
-> > > >
-> > > > Agree, the above is suitable for MFD, since it does all the things I
-> > > > said your last one did not.  You *can* also use of_platform_populate()
-> > > > here, since you are *also* requesting and initialising shared resources.
-> > > > You cannot do *both* however.
-> > > >  
-> > >
-> > > Thanks for having confirmed that this driver can be a MFD driver.
-> > >
-> > > Related to of_platform_populate() / mfd_add_devices(), I wanted to use both
-> > > because:
-> > > - the pinctrl part does not have (and does not need to have) a specific node
-> > >   with a specific compatible property. In order to instantiate the related
-> > >   driver mfd_add_devices() is the only way I know.
-> > > - the audio component nodes have a compatible string and several components
-> > >   (ie several nodes) can be present. of_platform_populate() call seems the
-> > >   simple way to instantiate them.
-> > >
-> > > Is there a way to use mfd_add_devices() in this case without the need to
-> > > count the audio component nodes in order to allocate as much mfd_cell as
-> > > nodes having a matching compatible property ? Is there an other API to do
-> > > it ?
-> > >  
-> >
-> > I looked deeper for using mfd_add_devices() only and found an issue (related
-> > to my use-case).
-> >
-> > mfd_add_devices() calls mfd_add_device() and in this function we have:
-> > ---- 8< ----
-> > 	if (IS_ENABLED(CONFIG_OF) && parent->of_node && cell->of_compatible) {
-> > 		for_each_child_of_node(parent->of_node, np) {
-> > 			if (of_device_is_compatible(np, cell->of_compatible)) {
-> > 				/* Ignore 'disabled' devices error free */
-> > 				if (!of_device_is_available(np)) {
-> > 					of_node_put(np);
-> > 					ret = 0;
-> > 					goto fail_alias;
-> > 				}
-> >
-> > 				ret = mfd_match_of_node_to_dev(pdev, np, cell);
-> > 				if (ret == -EAGAIN)
-> > 					continue;
-> > 				of_node_put(np);
-> > 				if (ret)
-> > 					goto fail_alias;
-> >
-> > 				break;
-> > 			}
-> > 		}
-> >
-> > 		if (!pdev->dev.of_node)
-> > 			pr_warn("%s: Failed to locate of_node [id: %d]\n",
-> > 				cell->name, platform_id);
-> > 	}
-> > ---- 8< ----
-> >
-> > My issue is related to the loop.
-> > The loop is aborted if the device is not available (typically 'Disabled' in the
-> > DT node).
-> >
-> > My full pef2256 node can have several pef2256 audio subnodes with compatible
-> > set to "lantiq,pef2256-codec" and some of them can have 'status = "Disabled";'
-> > As soon as one device (with my expected compatible) is found 'Disabled', there
-> > is no way to look at other children.
-> >
-> > Having 'continue' in case of device not available in the loop to look at the
-> > next child will change the behavior of mfd_add_device().
-> > Do you think that looking at next child if we find a 'not available' child
-> > can be correct for mfd_add_device() ?
-> > This probably will have impacts on other MFD drivers.  
-> 
-> Looks like a bug.  Encountering one disabled cell should not prevent the
-> others from registering IMHO.
-> 
+This patch adds a module parameter to set the cpu affinity for the nvme-tcp
+socket worker threads.  The parameter is a comma separated list of CPU
+numbers.  The list is parsed and the resulting cpumask is used to set the
+affinity of the socket worker threads.  If the list is empty or the
+parsing fails, the default affinity is used.
 
-Thanks for your confirmation.
-I will propose a fix in the next iteration of this series.
+Signed-off-by: Li Feng <fengli@smartx.com>
+---
+ drivers/nvme/host/tcp.c | 54 ++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 53 insertions(+), 1 deletion(-)
 
-Regards,
-Hervé
+diff --git a/drivers/nvme/host/tcp.c b/drivers/nvme/host/tcp.c
+index 49c9e7bc9116..a82c50adb12b 100644
+--- a/drivers/nvme/host/tcp.c
++++ b/drivers/nvme/host/tcp.c
+@@ -31,6 +31,18 @@ static int so_priority;
+ module_param(so_priority, int, 0644);
+ MODULE_PARM_DESC(so_priority, "nvme tcp socket optimize priority");
+ 
++/* Support for specifying the CPU affinity for the nvme-tcp socket worker
++ * threads.  This is a comma separated list of CPU numbers.  The list is
++ * parsed and the resulting cpumask is used to set the affinity of the
++ * socket worker threads.  If the list is empty or the parsing fails, the
++ * default affinity is used.
++ */
++static char *cpu_affinity_list;
++module_param(cpu_affinity_list, charp, 0644);
++MODULE_PARM_DESC(cpu_affinity_list, "nvme tcp socket worker cpu affinity list");
++
++struct cpumask cpu_affinity_mask;
++
+ #ifdef CONFIG_DEBUG_LOCK_ALLOC
+ /* lockdep can detect a circular dependency of the form
+  *   sk_lock -> mmap_lock (page fault) -> fs locks -> sk_lock
+@@ -1483,6 +1495,41 @@ static bool nvme_tcp_poll_queue(struct nvme_tcp_queue *queue)
+ 			  ctrl->io_queues[HCTX_TYPE_POLL];
+ }
+ 
++static ssize_t update_cpu_affinity(const char *buf)
++{
++	cpumask_var_t new_value;
++	cpumask_var_t dst_value;
++	int err = 0;
++
++	if (!zalloc_cpumask_var(&new_value, GFP_KERNEL))
++		return -ENOMEM;
++
++	err = bitmap_parselist(buf, cpumask_bits(new_value), nr_cpumask_bits);
++	if (err)
++		goto free_new_cpumask;
++
++	if (!zalloc_cpumask_var(&dst_value, GFP_KERNEL)) {
++		err = -ENOMEM;
++		goto free_new_cpumask;
++	}
++
++	/*
++	 * If the new_value does not have any intersection with the cpu_online_mask,
++	 * the dst_value will be empty, then keep the cpu_affinity_mask as cpu_online_mask.
++	 */
++	if (cpumask_and(dst_value, new_value, cpu_online_mask))
++		cpu_affinity_mask = *dst_value;
++
++	free_cpumask_var(dst_value);
++
++free_new_cpumask:
++	free_cpumask_var(new_value);
++	if (err)
++		pr_err("failed to update cpu affinity mask, bad affinity list [%s], err %d\n",
++			buf, err);
++	return err;
++}
++
+ static void nvme_tcp_set_queue_io_cpu(struct nvme_tcp_queue *queue)
+ {
+ 	struct nvme_tcp_ctrl *ctrl = queue->ctrl;
+@@ -1496,7 +1543,12 @@ static void nvme_tcp_set_queue_io_cpu(struct nvme_tcp_queue *queue)
+ 	else if (nvme_tcp_poll_queue(queue))
+ 		n = qid - ctrl->io_queues[HCTX_TYPE_DEFAULT] -
+ 				ctrl->io_queues[HCTX_TYPE_READ] - 1;
+-	queue->io_cpu = cpumask_next_wrap(n - 1, cpu_online_mask, -1, false);
++
++	if (!cpu_affinity_list || update_cpu_affinity(cpu_affinity_list) != 0) {
++		// Set the default cpu_affinity_mask to cpu_online_mask
++		cpu_affinity_mask = *cpu_online_mask;
++	}
++	queue->io_cpu = cpumask_next_wrap(n - 1, &cpu_affinity_mask, -1, false);
+ }
+ 
+ static int nvme_tcp_alloc_queue(struct nvme_ctrl *nctrl, int qid)
+-- 
+2.40.0
+
