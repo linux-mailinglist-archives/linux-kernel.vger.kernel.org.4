@@ -2,58 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82BCA6E1043
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 964146E104C
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:46:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229457AbjDMOoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 10:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39584 "EHLO
+        id S230281AbjDMOqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 10:46:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbjDMOoe (ORCPT
+        with ESMTP id S230235AbjDMOqB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 10:44:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8327CB741
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 07:44:07 -0700 (PDT)
+        Thu, 13 Apr 2023 10:46:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC80DB765;
+        Thu, 13 Apr 2023 07:45:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FEFC63F27
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 14:43:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76C7CC433D2;
-        Thu, 13 Apr 2023 14:43:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99C7C62EA3;
+        Thu, 13 Apr 2023 14:45:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B4F5C433D2;
+        Thu, 13 Apr 2023 14:45:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681397038;
-        bh=AjYMdKM0hDHqTLI9N4QN9XTQwY63MI6AowdWFYWZDpY=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=NIw322gwUkbyFgo8Gw3qWZMwUCesB2sEM5PNyElM1qFYdILWfzTZH1dWuZBydHWEE
-         BbjNtJozTeIP/HbD1p9xXxkAJkKBiPOlZ+dVDK9K9a2o7Dzbk41XhmMv9RWzq9HMrn
-         HqmvYb50jE6PHEM8vveylyuP2MEGjbqwQcRFLwZRjGhcjBO8w7hR3padOck6X5oTzi
-         T8GuayEigD/kq8Fh11D78DzlZFdjTTCKJKFeryxkUuc6oEtvr2AXxcv/lGmvpYewg8
-         eYuu1B2AlVZgWrW6UEdAVW6yDumwDa1yQ2gOzJWa7kiSHcPaW3HNqxQn0nNhYenZPr
-         01HuJBruh0wAA==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 0C11C15404B3; Thu, 13 Apr 2023 07:43:58 -0700 (PDT)
-Date:   Thu, 13 Apr 2023 07:43:58 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Rui Salvaterra <rsalvaterra@gmail.com>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>, rodrigo.vivi@intel.com,
-        tvrtko.ursulin@linux.intel.com, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [BUG?] INFO: rcu_sched detected expedited stalls on CPUs/tasks:
- { 0-.... } 3 jiffies s: 309 root: 0x1/.
-Message-ID: <2495408f-a644-4e56-aaca-e6915cbda179@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <CALjTZvZ=Y1psyd0nmfzm6GhqMKvq5V_NQCWb_X02nasp1CpfcQ@mail.gmail.com>
- <87r0spcuvi.fsf@intel.com>
- <CALjTZvao=N7wxyj_DpqzWUhdJwEsWSKUo3ddi-3ubgMp8BXi_Q@mail.gmail.com>
- <CALjTZvaf1cwcZc9O8g24SnZXsoQaWB97UVQW=g6M0coaudLr6w@mail.gmail.com>
+        s=k20201202; t=1681397116;
+        bh=sX0ILxKB40aVIHVtanZ71F6ffVCczqDh1NoDUTg9TcU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=oOI3GROGSv+NZ9aIpTgQ5QONb+xK3/SN9ZkKPY55I8keVqio62umJtoqKXdlCzHIm
+         MumhHzUphie1wGydfLT4ePGgiprxHfJxMZYuaOGsANhT58IjSP4ksMWSkyTuGZMhL2
+         XYjrZ7vF1h6uXjIkJdkiGRUbSgRmkwyglwKf0Xs4FjLOTrO8vTm5et4Suyq9AUAf5t
+         MA4Crm9Sh78uJ5Y8xx7sVxXFk4wg+MQ20l8/0J3bAz8DcpaZ06XXUnYHN0T8UbZ2Wx
+         HRXqFysIJ2Fkl9Zk7V6XCFF+giS9tmMvLKS9ilttzgC11ddB3zJKu43urhBJNJ2tva
+         jewCP/Q3+bZPg==
+Date:   Thu, 13 Apr 2023 07:45:14 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc:     Breno Leitao <leitao@debian.org>, Jens Axboe <axboe@kernel.dk>,
+        David Ahern <dsahern@kernel.org>,
+        Willem de Bruijn <willemb@google.com>,
+        io-uring@vger.kernel.org, netdev@vger.kernel.org,
+        asml.silence@gmail.com, leit@fb.com, edumazet@google.com,
+        pabeni@redhat.com, davem@davemloft.net, dccp@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
+        matthieu.baerts@tessares.net, marcelo.leitner@gmail.com
+Subject: Re: [PATCH 0/5] add initial io_uring_cmd support for sockets
+Message-ID: <20230413074514.79cc036e@kernel.org>
+In-Reply-To: <6438109fe8733_13361929472@willemb.c.googlers.com.notmuch>
+References: <75e3c434-eb8b-66e5-5768-ca0f906979a1@kernel.org>
+        <67831406-8d2f-feff-f56b-d0f002a95d96@kernel.dk>
+        <643573df81e20_11117c2942@willemb.c.googlers.com.notmuch>
+        <036c80e5-4844-5c84-304c-7e553fe17a9b@kernel.dk>
+        <64357608c396d_113ebd294ba@willemb.c.googlers.com.notmuch>
+        <19c69021-dce3-1a4a-00eb-920d1f404cfc@kernel.dk>
+        <64357bb97fb19_114b22294c4@willemb.c.googlers.com.notmuch>
+        <20cb4641-c765-e5ef-41cb-252be7721ce5@kernel.dk>
+        <ZDa32u9RNI4NQ7Ko@gmail.com>
+        <6436c01979c9b_163b6294b4@willemb.c.googlers.com.notmuch>
+        <ZDdGl/JGDoRDL8ja@gmail.com>
+        <6438109fe8733_13361929472@willemb.c.googlers.com.notmuch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALjTZvaf1cwcZc9O8g24SnZXsoQaWB97UVQW=g6M0coaudLr6w@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,72 +70,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 08:30:02AM +0100, Rui Salvaterra wrote:
-> Hi again, everyone.
-> 
-> So, while preparing to file the bug report with the requested
-> information, I got a trace completely unrelated to DRM (on a swapon
-> call, it seems).
-> 
-> [    4.868340] rcu: INFO: rcu_sched detected expedited stalls on
-> CPUs/tasks: { 4-.... } 3 jiffies s: 265 root: 0x10/.
-> [    4.868349] rcu: blocking rcu_node structures (internal RCU debug):
-> [    4.868351] Sending NMI from CPU 3 to CPUs 4:
-> [    4.868355] NMI backtrace for cpu 4
-> [    4.868357] CPU: 4 PID: 462 Comm: swapon Not tainted 6.3.0-rc6-debug+ #57
-> [    4.868359] Hardware name: Apple Inc.
-> Macmini6,2/Mac-F65AE981FFA204ED, BIOS 429.0.0.0.0 03/18/2022
-> [    4.868360] RIP: 0010:zram_submit_bio+0x57c/0x940
-> [    4.868365] Code: 04 4c 01 f0 48 8d 48 08 f0 48 0f ba 68 08 0d 0f
-> 82 80 00 00 00 4c 89 ef e8 01 eb ff ff 49 8b 45 00 4a 8d 44 30 09 f0
-> 80 20 df <f0> 48 ff 45 00 48 81 eb 00 10 00 00 41 83 c4 01 48 81 fb ff
-> 0f 00
-> [    4.868366] RSP: 0018:ffff8881057dbcd8 EFLAGS: 00000246
-> [    4.868368] RAX: ffffc90001c186d9 RBX: 000000003e893000 RCX: ffffc90001c186d8
-> [    4.868369] RDX: ffffc90001c186d0 RSI: 0000000000000000 RDI: ffff88810083b400
-> [    4.868369] RBP: ffff88810083b470 R08: 0000000000027e40 R09: 0000000000025850
-> [    4.868370] R10: 000000000014b212 R11: ffff88810ba03180 R12: 00000000000c176d
-> [    4.868371] R13: ffff88810083b400 R14: 0000000000c176d0 R15: 0000000000000000
-> [    4.868372] FS:  00007fbd8f8ce800(0000) GS:ffff888266100000(0000)
-> knlGS:0000000000000000
-> [    4.868373] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    4.868374] CR2: 0000563005371000 CR3: 000000010355c003 CR4: 00000000001706e0
-> [    4.868375] Call Trace:
-> [    4.868377]  <TASK>
-> [    4.868378]  ? block_read_full_folio+0x23e/0x2e0
-> [    4.868383]  ? kmem_cache_alloc+0x1b/0x110
-> [    4.868385]  ? mempool_alloc+0x37/0x140
-> [    4.868388]  ? pcpu_block_update_hint_alloc+0xce/0x2f0
-> [    4.868390]  __submit_bio+0x41/0xd0
-> [    4.868394]  submit_bio_noacct_nocheck+0xc4/0x2b0
-> [    4.868396]  blk_next_bio+0x55/0x70
-> [    4.868398]  __blkdev_issue_discard+0xc8/0x180
-> [    4.868401]  blkdev_issue_discard+0x3c/0x80
-> [    4.868403]  __x64_sys_swapon+0xb71/0x1120
-> [    4.868407]  do_syscall_64+0x2b/0x50
-> [    4.868410]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> [    4.868414] RIP: 0033:0x7fbd8f712d5b
-> [    4.868416] Code: 73 01 c3 48 8b 0d bd 30 0e 00 f7 d8 64 89 01 48
-> 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa b8 a7 00 00
-> 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 8d 30 0e 00 f7 d8 64 89
-> 01 48
-> [    4.868417] RSP: 002b:00007ffcaf9a3448 EFLAGS: 00000246 ORIG_RAX:
-> 00000000000000a7
-> [    4.868418] RAX: ffffffffffffffda RBX: 0000000000018064 RCX: 00007fbd8f712d5b
-> [    4.868419] RDX: 0000000000018064 RSI: 0000000000018064 RDI: 000056300535fb10
-> [    4.868420] RBP: 00007ffcaf9a3530 R08: 000000014b213000 R09: 00007fbd8f7f70f0
-> [    4.868420] R10: 0000000000001000 R11: 0000000000000246 R12: 000056300535fb10
-> [    4.868421] R13: 0000000000000064 R14: 00007ffcaf9a3530 R15: 0000000000000000
-> [    4.868423]  </TASK>
-> 
-> Could it be that RCU is reporting expedited stalls too eagerly? And,
-> if so, why only on this machine?
+On Thu, 13 Apr 2023 10:24:31 -0400 Willem de Bruijn wrote:
+> Probably also relevant is whether/how the approach can be extended
+> to [gs]etsockopt, as that was another example given, with the same
+> challenge.
 
-My guess would be that you have CONFIG_RCU_EXP_CPU_STALL_TIMEOUT set to
-some small non-zero number, for example, you might have set up a recent
-Android .config or some such.  The default of zero would give you about
-21 seconds rather than the three jiffies that you are seeing.
-
-Could you please check your .config?
-
-							Thanx, Paul
+I had the same thought, given BPF filtering/integration with *etsockopt
+is repeatedly giving us grief.
+The only lesson from that I can think of is that we should perhaps
+suffer thru the one-by-one conversions for a while. Pulling the cases
+we inspected out into common code, rather than hope we can cover
+everything in one fell swoop.
