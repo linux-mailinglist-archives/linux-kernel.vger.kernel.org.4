@@ -2,167 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DBCA6E0D94
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 14:42:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D80A6E0D96
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 14:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbjDMMmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 08:42:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49144 "EHLO
+        id S229818AbjDMMm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 08:42:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbjDMMm3 (ORCPT
+        with ESMTP id S229793AbjDMMm5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 08:42:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78D993D1
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 05:41:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681389707;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=t3dYaUxw3D2j5vjazPvcJJsjf7qa/tkOt/AsUugtvjw=;
-        b=ZbwGg8PJkMryusvRRo5KWnKEZAE3BRJaNbTjlu9UvG1EsoaXcUB5m4AiFXCpZDmSaM+43M
-        BL8da3kv33w3dOYkrjfHJ0mOtzNXPY5wGUoEoXebgftWcN72G441MD1Peg5oEvZ1NCeI5x
-        hbO2735vqbwLvKggM/mGQ6jkeWc72EM=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-617-qYSwLccAMvOAqRZM698WNQ-1; Thu, 13 Apr 2023 08:41:46 -0400
-X-MC-Unique: qYSwLccAMvOAqRZM698WNQ-1
-Received: by mail-wr1-f70.google.com with SMTP id d30-20020adfa35e000000b002f53b0a3377so752710wrb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 05:41:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681389705; x=1683981705;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t3dYaUxw3D2j5vjazPvcJJsjf7qa/tkOt/AsUugtvjw=;
-        b=lKYek9S7fk9eXwi1NssdvIfFYeKG88eXpasqFSGra9CXljthcr+Y56xAHdZt/qwz+P
-         EcNsyco1sZdfu1UJ9P5DpGEge/mKgYpTHhw1IUlvvFzlSEbQ9mZZxtNIRxK87m0VDDu+
-         XxvhlMkcvMmye983tArIg3pmV0D49H6e7UPz9pNM0eUhlSgHevT08kswqMiheoJ0Umiz
-         8DvWIF6udBNXVpbyxNqwWzJYw7twn9gRa9+bBkojw6q7qmz++qQEuCd1K/fm4sCwUuFz
-         5NisYQ/igbBwDL4v23xGMWdtW5odv3JOP0BKUqe1r5+pTR5ns16yB+JDtziZlwuEwwQD
-         /Yjg==
-X-Gm-Message-State: AAQBX9drPwc33CuQIpwTcD2hsSwuky6XfBI/iz5DuHlkoniqD+WK1RSB
-        XklDk2f2w00Uml43N/fhbuewfrFJthv94rS69zvxj/FoZwfqEyYaK9BCUgVpi+Z6if6E84fLEWz
-        kcZp8fDw+IpB3LliZRqSTenSx
-X-Received: by 2002:a05:6000:182:b0:2c9:b9bf:e20c with SMTP id p2-20020a056000018200b002c9b9bfe20cmr1384301wrx.2.1681389705393;
-        Thu, 13 Apr 2023 05:41:45 -0700 (PDT)
-X-Google-Smtp-Source: AKy350aTY91v5mpZFzN5+r31N2yPV2YStw3MrraVcnXey4pmNW0tl7fgMD6B90YOR+GLQRT9XfAbNA==
-X-Received: by 2002:a05:6000:182:b0:2c9:b9bf:e20c with SMTP id p2-20020a056000018200b002c9b9bfe20cmr1384276wrx.2.1681389705044;
-        Thu, 13 Apr 2023 05:41:45 -0700 (PDT)
-Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
-        by smtp.gmail.com with ESMTPSA id b7-20020adfde07000000b002f3fcb1869csm1222217wrm.64.2023.04.13.05.41.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Apr 2023 05:41:44 -0700 (PDT)
-Message-ID: <c1902449-ab9d-4e26-c532-5df0a73dc1f9@redhat.com>
-Date:   Thu, 13 Apr 2023 14:41:43 +0200
+        Thu, 13 Apr 2023 08:42:57 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4928793D1
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 05:42:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681389772; x=1712925772;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=VoD4HZCtF2eoEZicpjj2XlYJmJxVn/JnvwmNPYON1x8=;
+  b=NzSzO4X1kjn1zmZMAWmbgAIKFk4k5LaQja87Hkae2zcQWBt+K+ImYPwd
+   xKp1xPWTwSFfvi3FswfpyBAtcydlQq20cJMKNslU8I0d2bV3mIXy5D1nL
+   rcJZW20d5SZzGQ9EaG/eT1Dl+KAJ2X503XsPuwZBRSARkVVBWKvQHj/+T
+   MFRf4gsmfvWy2z4u8a54qnjEnjUT1Y+omn3QETbf/9K4qoHkwXnpoPlSl
+   Wsslnb5ycKv+kmNDnPuIOyeURNJU9MqZnZ2pFWarUom2QRrhCXPhZCUh6
+   IjwQ3hANV0OPyTVVU0dLlPD3I9cXKEGLTyo/YcVvFmAKcSoNE+kYSWJ/j
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="344166427"
+X-IronPort-AV: E=Sophos;i="5.99,193,1677571200"; 
+   d="scan'208";a="344166427"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 05:42:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="722041266"
+X-IronPort-AV: E=Sophos;i="5.99,193,1677571200"; 
+   d="scan'208";a="722041266"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 13 Apr 2023 05:42:49 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pmwHo-000Ygc-2P;
+        Thu, 13 Apr 2023 12:42:48 +0000
+Date:   Thu, 13 Apr 2023 20:42:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: arch/mips/bcm47xx/prom.c:129:6: warning: no previous prototype for
+ function 'early_tlb_init'
+Message-ID: <202304132001.mawtrQpw-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>
-Cc:     "Teterevkov, Ivan" <Ivan.Teterevkov@amd.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "jhubbard@nvidia.com" <jhubbard@nvidia.com>,
-        "jack@suse.cz" <jack@suse.cz>,
-        "rppt@linux.ibm.com" <rppt@linux.ibm.com>,
-        "jglisse@redhat.com" <jglisse@redhat.com>,
-        "ira.weiny@intel.com" <ira.weiny@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Matthew Wilcox <willy@infradead.org>
-References: <93f2614e-4521-8bc8-2eca-e7ad03e7e399@redhat.com>
- <PH0PR12MB5606D4611050BC8B1CC430FEF09A9@PH0PR12MB5606.namprd12.prod.outlook.com>
- <37946.1681288867@warthog.procyon.org.uk>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: find_get_page() VS pin_user_pages()
-In-Reply-To: <37946.1681288867@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12.04.23 10:41, David Howells wrote:
-> David Hildenbrand <david@redhat.com> wrote:
-> 
->> I suspect that find_get_page() is not the kind of interface you want to use
->> for the purpose you describe. find_get_page() is a wrapper around
->> pagecache_get_page() and seems more like a helper for implementing an fs
->> (looking at the users and the fact that it only considers pages that are in
->> the pagecache).
-> 
-> Btw, at some point we're going to need public functions to get extra pins on
-> pages.  vmsplice() should be pinning the pages it pushes into a pipe - so all
-> pages in a pipe should probably be pinned - and anyone who splices a page out
-> of a pipe and retains it (skbuffs spring strongly to mind) should also get a
-> pin on the page.
+Hi Paul,
 
-As discussed, vmsplice() is a bit special, because it has 
-longterm-pinning semantics: we'd want to migrate the page out of 
-ZONE_MOVABLE/MIGRATE_CMA/... because the page might remain pinned in the 
-pipe possibly forever, controlled by user space. 
-pin_user_pages(FOLL_LONGTERM) would do the right thing, but we might 
-ahve to be careful with extra pins.
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   de4664485abbc0529b1eec44d0061bbfe58a28fb
+commit: c434b9f80b0923e6460031b0fd964f8b0bf3c6a6 MIPS: Kconfig: add MIPS_GENERIC_KERNEL symbol
+date:   2 years, 7 months ago
+config: mips-buildonly-randconfig-r005-20230413 (https://download.01.org/0day-ci/archive/20230413/202304132001.mawtrQpw-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c434b9f80b0923e6460031b0fd964f8b0bf3c6a6
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout c434b9f80b0923e6460031b0fd964f8b0bf3c6a6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/bcm47xx/ drivers/gpio/ drivers/mfd/ drivers/regulator/ drivers/soc/mediatek/ drivers/thermal/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304132001.mawtrQpw-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> arch/mips/bcm47xx/prom.c:129:6: warning: no previous prototype for function 'early_tlb_init' [-Wmissing-prototypes]
+   void early_tlb_init(void)
+        ^
+   arch/mips/bcm47xx/prom.c:129:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void early_tlb_init(void)
+   ^
+   static 
+>> arch/mips/bcm47xx/prom.c:137:13: warning: no previous prototype for function 'bcm47xx_prom_highmem_init' [-Wmissing-prototypes]
+   void __init bcm47xx_prom_highmem_init(void)
+               ^
+   arch/mips/bcm47xx/prom.c:137:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init bcm47xx_prom_highmem_init(void)
+   ^
+   static 
+   2 warnings generated.
+--
+>> drivers/gpio/gpio-zx.c:275:34: warning: unused variable 'zx_gpio_match' [-Wunused-const-variable]
+   static const struct of_device_id zx_gpio_match[] = {
+                                    ^
+   1 warning generated.
+--
+>> drivers/mfd/max77686.c:148:34: warning: unused variable 'max77686_pmic_dt_match' [-Wunused-const-variable]
+   static const struct of_device_id max77686_pmic_dt_match[] = {
+                                    ^
+   1 warning generated.
+--
+>> drivers/regulator/mp886x.c:258:34: warning: unused variable 'mp886x_dt_ids' [-Wunused-const-variable]
+   static const struct of_device_id mp886x_dt_ids[] = {
+                                    ^
+   1 warning generated.
+--
+>> drivers/thermal/thermal_mmio.c:103:34: warning: unused variable 'thermal_mmio_id_table' [-Wunused-const-variable]
+   static const struct of_device_id thermal_mmio_id_table[] = {
+                                    ^
+   1 warning generated.
+--
+>> drivers/soc/mediatek/mtk-pmic-wrap.c:1842:34: warning: unused variable 'of_slave_match_tbl' [-Wunused-const-variable]
+   static const struct of_device_id of_slave_match_tbl[] = {
+                                    ^
+>> drivers/soc/mediatek/mtk-pmic-wrap.c:1988:34: warning: unused variable 'of_pwrap_match_tbl' [-Wunused-const-variable]
+   static const struct of_device_id of_pwrap_match_tbl[] = {
+                                    ^
+   2 warnings generated.
 
 
-I guess it depends on what we want to achieve. Let's discuss what would 
-happen when we want to pin some page (and not going via pin_user_page()) 
-that's definitely not an anon page -- so let's assume a pagecache page:
+vim +/early_tlb_init +129 arch/mips/bcm47xx/prom.c
 
-(a) Short-term pinning when already pinned (extra pins): easy.
-(b) Short-term pinning when not pinned yet: should be fairly easy
-     (pin_user_pages() doesn't do anything special for pagecache pages
-      either).
-(c) Long-term pinning when already long-term pinned (extra long-term
-     pinnings): easy
-(d) Long-term pinning when already short-term pinned: problematic,
-     because we might have to migrate the page first, but it's already
-     pinned ... and if we obtained the page via pin_user_page() from a
-     MAP_PRIVATE VMA, we'd  have to do another
-     pin_user_page(FOLL_LONGTERM) that would properly break COW and give
-     us an anon page ...
-(e) Long-term pinning when not pinned yet: fairly easy, but we might
-     have to migrate the page first (like FOLL_LONGTERM would).
+6ee1d93455384ce Rafał Miłecki  2014-07-17  125  
+6ee1d93455384ce Rafał Miłecki  2014-07-17  126  /* Stripped version of tlb_init, with the call to build_tlb_refill_handler
+6ee1d93455384ce Rafał Miłecki  2014-07-17  127   * dropped. Calling it at this stage causes a hang.
+6ee1d93455384ce Rafał Miłecki  2014-07-17  128   */
+b1f7e1129097cdb Paul Gortmaker 2015-04-27 @129  void early_tlb_init(void)
+6ee1d93455384ce Rafał Miłecki  2014-07-17  130  {
+6ee1d93455384ce Rafał Miłecki  2014-07-17  131  	write_c0_pagemask(PM_DEFAULT_MASK);
+6ee1d93455384ce Rafał Miłecki  2014-07-17  132  	write_c0_wired(0);
+6ee1d93455384ce Rafał Miłecki  2014-07-17  133  	temp_tlb_entry = current_cpu_data.tlbsize - 1;
+6ee1d93455384ce Rafał Miłecki  2014-07-17  134  	local_flush_tlb_all();
+6ee1d93455384ce Rafał Miłecki  2014-07-17  135  }
+6ee1d93455384ce Rafał Miłecki  2014-07-17  136  
+6ee1d93455384ce Rafał Miłecki  2014-07-17 @137  void __init bcm47xx_prom_highmem_init(void)
+6ee1d93455384ce Rafał Miłecki  2014-07-17  138  {
+6ee1d93455384ce Rafał Miłecki  2014-07-17  139  	unsigned long off = (unsigned long)prom_init;
+6ee1d93455384ce Rafał Miłecki  2014-07-17  140  	unsigned long extmem = 0;
+6ee1d93455384ce Rafał Miłecki  2014-07-17  141  	bool highmem_region = false;
+6ee1d93455384ce Rafał Miłecki  2014-07-17  142  
+6ee1d93455384ce Rafał Miłecki  2014-07-17  143  	if (WARN_ON(bcm47xx_bus_type != BCM47XX_BUS_TYPE_BCMA))
+6ee1d93455384ce Rafał Miłecki  2014-07-17  144  		return;
+6ee1d93455384ce Rafał Miłecki  2014-07-17  145  
+6ee1d93455384ce Rafał Miłecki  2014-07-17  146  	if (bcm47xx_bus.bcma.bus.chipinfo.id == BCMA_CHIP_ID_BCM4706)
+6ee1d93455384ce Rafał Miłecki  2014-07-17  147  		highmem_region = true;
+6ee1d93455384ce Rafał Miłecki  2014-07-17  148  
+6ee1d93455384ce Rafał Miłecki  2014-07-17  149  	if (lowmem != 128 << 20 || !highmem_region)
+6ee1d93455384ce Rafał Miłecki  2014-07-17  150  		return;
+6ee1d93455384ce Rafał Miłecki  2014-07-17  151  
+6ee1d93455384ce Rafał Miłecki  2014-07-17  152  	early_tlb_init();
+6ee1d93455384ce Rafał Miłecki  2014-07-17  153  
+6ee1d93455384ce Rafał Miłecki  2014-07-17  154  	/* Add one temporary TLB entry to map SDRAM Region 2.
+6ee1d93455384ce Rafał Miłecki  2014-07-17  155  	 *      Physical        Virtual
+6ee1d93455384ce Rafał Miłecki  2014-07-17  156  	 *      0x80000000      0xc0000000      (1st: 256MB)
+6ee1d93455384ce Rafał Miłecki  2014-07-17  157  	 *      0x90000000      0xd0000000      (2nd: 256MB)
+6ee1d93455384ce Rafał Miłecki  2014-07-17  158  	 */
+6ee1d93455384ce Rafał Miłecki  2014-07-17  159  	add_temporary_entry(ENTRYLO(0x80000000),
+6ee1d93455384ce Rafał Miłecki  2014-07-17  160  			    ENTRYLO(0x80000000 + (256 << 20)),
+6ee1d93455384ce Rafał Miłecki  2014-07-17  161  			    EXTVBASE, PM_256M);
+6ee1d93455384ce Rafał Miłecki  2014-07-17  162  
+6ee1d93455384ce Rafał Miłecki  2014-07-17  163  	off = EXTVBASE + __pa(off);
+6ee1d93455384ce Rafał Miłecki  2014-07-17  164  	for (extmem = 128 << 20; extmem < 512 << 20; extmem <<= 1) {
+6ee1d93455384ce Rafał Miłecki  2014-07-17  165  		if (!memcmp(prom_init, (void *)(off + extmem), 16))
+6ee1d93455384ce Rafał Miłecki  2014-07-17  166  			break;
+6ee1d93455384ce Rafał Miłecki  2014-07-17  167  	}
+6ee1d93455384ce Rafał Miłecki  2014-07-17  168  	extmem -= lowmem;
+6ee1d93455384ce Rafał Miłecki  2014-07-17  169  
+6ee1d93455384ce Rafał Miłecki  2014-07-17  170  	early_tlb_init();
+6ee1d93455384ce Rafał Miłecki  2014-07-17  171  
+6ee1d93455384ce Rafał Miłecki  2014-07-17  172  	if (!extmem)
+6ee1d93455384ce Rafał Miłecki  2014-07-17  173  		return;
+6ee1d93455384ce Rafał Miłecki  2014-07-17  174  
+6ee1d93455384ce Rafał Miłecki  2014-07-17  175  	pr_warn("Found %lu MiB of extra memory, but highmem is unsupported yet!\n",
+6ee1d93455384ce Rafał Miłecki  2014-07-17  176  		extmem >> 20);
+6ee1d93455384ce Rafał Miłecki  2014-07-17  177  
+6ee1d93455384ce Rafał Miłecki  2014-07-17  178  	/* TODO: Register extra memory */
+6ee1d93455384ce Rafał Miłecki  2014-07-17  179  }
+6ee1d93455384ce Rafał Miłecki  2014-07-17  180  
 
+:::::: The code at line 129 was first introduced by commit
+:::::: b1f7e1129097cdb5cf2d6ef5d365dc94d13e3c76 MIPS: BCM77xx: Remove legacy __cpuinit{,data} sections that crept in
 
-Regarding anon pages, we should pin only via pin_user_page(), so the 
-"not pinned" case does not apply. Replicating pins -- (a) and (c) -- is 
-usually easy, but (d) is similarly problematic.
-
-Focusing again on !anon pages: if it's just "get another short-term pin 
-on an already pinned page", it's easy (and I recall John H. had 
-patches). If it's "get a long-term pin on an already pinned page", it 
-can be problematic.
-
-Any pages that will never have to be migrated when long-term pinning 
-(just some allocated kernel page without MOVABLE semantics) are super 
-easy to pin, and to add extra pins to.
-
-> 
-> So should all pages held by an skbuff be pinned rather than ref'd?  I have a
-> patch to use the bottom two bits of an skb frag's page pointer to keep track
-> of whether the page it points to is ref'd, pinned or neither, but if we can
-> make it pin/not-pin them, I only need one bit for that.
-
-It might possibly be the right thing. But ref'd vs. pinned really only 
-makes a difference to (a) pages mapped into user space or (b) pages in 
-the pageache. Of course, in any case, long-term semantics have to be 
-respected if the page to pin might have been allocated with MOVABLE 
-semantics.
+:::::: TO: Paul Gortmaker <paul.gortmaker@windriver.com>
+:::::: CC: Ralf Baechle <ralf@linux-mips.org>
 
 -- 
-Thanks,
-
-David / dhildenb
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
