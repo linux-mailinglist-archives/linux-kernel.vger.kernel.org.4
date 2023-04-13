@@ -2,129 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 300B46E0AF8
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 12:01:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2D286E0AF9
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 12:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbjDMKBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 06:01:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51498 "EHLO
+        id S230183AbjDMKBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 06:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbjDMKBh (ORCPT
+        with ESMTP id S230149AbjDMKBo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 06:01:37 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0B77AA0;
-        Thu, 13 Apr 2023 03:01:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1681380090; x=1712916090;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uz4KE9ShWEG/KYQWIZ19a/8EmBDeITrEkJ7Sdq+pOqk=;
-  b=IMljj3sR7wX4LDmmL/l3FBFBCnZQjyAZ/vSWQlM7ef7GZpLWmRCm7tzb
-   uoJYn8vgLHZE5fyngqILz7EHlx038MfZoOasokwxs0uq5y4BcwvyzBUL4
-   Tm3vjNQDoffStYfTxexwJfVGnfLXC8hTYpsxtSBgGcyi76j+BRnr5n/YV
-   FAGi1WFPOym1yuXH3TLoge5OfLqH/Eerx5Oo+MBIhrqtWyZCahcCo9lHb
-   E3SwEO1Wn+zZ0mRl9ZDaRlaE3/l7vbdGMgu4RlMI8VCp8FciHeZjSeiV/
-   HmoP4OI94uZwaFlXuqEhNWFGxklRnOV9fVFH0/79x4vQMfHiotJEdeRtg
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.98,341,1673938800"; 
-   d="scan'208";a="220707414"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Apr 2023 03:01:29 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 13 Apr 2023 03:01:29 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Thu, 13 Apr 2023 03:01:29 -0700
-Date:   Thu, 13 Apr 2023 12:01:28 +0200
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Zheng Wang <zyytlz.wz@163.com>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <hackerzheng666@gmail.com>,
-        <1395428693sheep@gmail.com>, <alex000young@gmail.com>
-Subject: Re: [PATCH net v2] net: ethernet: fix use after free bug in
- ns83820_remove_one due to race condition
-Message-ID: <20230413100128.bcnqvdpu6hgilws4@soft-dev3-1>
-References: <20230413071401.210599-1-zyytlz.wz@163.com>
+        Thu, 13 Apr 2023 06:01:44 -0400
+Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A246293E4
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:01:43 -0700 (PDT)
+Received: from 8bytes.org (p200300c27714bc0086ad4f9d2505dd0d.dip0.t-ipconnect.de [IPv6:2003:c2:7714:bc00:86ad:4f9d:2505:dd0d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.8bytes.org (Postfix) with ESMTPSA id 4528F242D84;
+        Thu, 13 Apr 2023 12:01:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+        s=default; t=1681380103;
+        bh=YIak5Ldwe/BQilh0WkfdYryog/OSRH+LRu60YHJ+tEs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=8u7cNWzkEM9x44hyALL5DgvudKz18EWanw3czcYdVmfsHb+39iLlXSpcheFsYkYSA
+         Hpiu5a/IL18EJw8xbx3gHzzg/7uxkMVRbr8x53DTq5DCHgTFuKAWjiMteM0Y4s+ud1
+         69M5VGnuN+VSs1sY+Knk2NuAFPk6RfDlzIWzgnD6qaz/tnlAyFwKErx6DFgz5Dg59l
+         Oq7OOJpRt1jV3nif07c7wA0M4j7+mLUvMM2h4kbTspNKvUhmiwsyB62EANd9+Ht65G
+         6eWomZpBMsKXakjzwh/COCE5xEum3ALZVaxSId2hkgvIdO7y+Vl3shFpUBM8DKh0hL
+         hwi6JVX79W0pQ==
+Date:   Thu, 13 Apr 2023 12:01:40 +0200
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, robin.murphy@arm.com,
+        kernel-team@android.com
+Subject: Re: [GIT PULL] iommu/arm-smmu: Updates for 6.4
+Message-ID: <ZDfTBOoBrxxnMWAS@8bytes.org>
+References: <20230411142600.GA22971@willie-the-truck>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230413071401.210599-1-zyytlz.wz@163.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230411142600.GA22971@willie-the-truck>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 04/13/2023 15:14, Zheng Wang wrote:
+On Tue, Apr 11, 2023 at 03:26:01PM +0100, Will Deacon wrote:
+>   git://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git tags/arm-smmu-updates
 
-Hi Zheng,
-
-> 
-> In ns83820_init_one, dev->tq_refill was bound with queue_refill.
-> 
-> If irq happens, it will call ns83820_irq->ns83820_do_isr.
-> Then it invokes tasklet_schedule(&dev->rx_tasklet) to start
-> rx_action function. And rx_action will call ns83820_rx_kick
-> and finally start queue_refill function.
-> 
-> If we remove the driver without finishing the work, there
-> may be a race condition between ndev, which may cause UAF
-> bug.
-> 
-> CPU0                  CPU1
-> 
->                      |queue_refill
-> ns83820_remove_one   |
-> free_netdev                      |
-> put_device                       |
-> free ndev                        |
->                      |rx_refill
->                      |//use ndev
-
-Will you not have the same issue if you remove the driver after you
-schedule rx_tasklet? Because rx_action will use also ndev.
-
-> 
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-> ---
-> v2:
-> - cancel the work after unregister_netdev to make sure there
-> is no more request suggested by Jakub Kicinski
-> ---
->  drivers/net/ethernet/natsemi/ns83820.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/net/ethernet/natsemi/ns83820.c b/drivers/net/ethernet/natsemi/ns83820.c
-> index 998586872599..2e84b9fcd8e9 100644
-> --- a/drivers/net/ethernet/natsemi/ns83820.c
-> +++ b/drivers/net/ethernet/natsemi/ns83820.c
-> @@ -2208,8 +2208,13 @@ static void ns83820_remove_one(struct pci_dev *pci_dev)
-> 
->         ns83820_disable_interrupts(dev); /* paranoia */
-> 
-> +       netif_carrier_off(ndev);
-> +       netif_tx_disable(ndev);
-> +
->         unregister_netdev(ndev);
->         free_irq(dev->pci_dev->irq, ndev);
-> +       cancel_work_sync(&dev->tq_refill);
-> +
->         iounmap(dev->base);
->         dma_free_coherent(&dev->pci_dev->dev, 4 * DESC_SIZE * NR_TX_DESC,
->                           dev->tx_descs, dev->tx_phy_descs);
-> --
-> 2.25.1
-> 
-
--- 
-/Horatiu
+Pulled, thanks Will.
