@@ -2,79 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5BD6E0901
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:35:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A20BA6E0905
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:36:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbjDMIfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 04:35:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36892 "EHLO
+        id S229925AbjDMIf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 04:35:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbjDMIfN (ORCPT
+        with ESMTP id S229492AbjDMIf5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 04:35:13 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341FC8A77
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 01:35:08 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id q5so7976395wmo.4
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 01:35:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1681374906; x=1683966906;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bgpZO9AIe8VGZCUKnUlH/UpTwMfShkzNFnZzlAbDLio=;
-        b=ByBF+Pah2Cf9Dw7TTELtEmi4QeLJUvfUQwiZWnhovu38hGZVegX3B8g0TQYPDqTWV/
-         Zfu53nju26Z+aw9vrigaoL3FNPNvf2t/hqxRcavJffON7yb/Z+RDgjSIwwr2Gv0g7hYT
-         9FOjlaDuvpSZpmIWYaDET1uDFRpmbeYIxxH2SpeHWO2mtxffwwVOPcsN7MU+Hs2MHbH1
-         uOXeR5foBmzEOk5l1VYxRu+KeMsOfKesYF+GBBQg6bWatvKNh0fA70YvPYxBa18aLRiE
-         QaZBfzFaSF3xH7oVE6AFCKYjqEbbeiD4rbUQgnorOXSaSlL6emOYNklczk4IyHNsqfEm
-         t2aA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681374906; x=1683966906;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bgpZO9AIe8VGZCUKnUlH/UpTwMfShkzNFnZzlAbDLio=;
-        b=Pd/NMglu60UL9KjC3836XId5mlVddQNbOpQ+j6XgmEPPPPD5fgVgOlqCnRXCfwALVz
-         GKlC3B4Iq/8KBm5bRyJ0QszH/u1EzIHgP1ainyZi7vbkbwB6zTdJJtrnS9vsZN2MzEFS
-         DYzvF7VyR3eDluHa2Xx9AAc7Dtva0QFE7Ep1sHDU6vB+f+bHr/9Yv/w5xYgQb1CoqfFF
-         TpvA6KRIu5Jsewtb6qFqJMhbaPXy+13tycnWtUBYcuMdy0sUIQzz9RNTVJ7j7PJH2tmR
-         wioqW2eTMZ/24SQHXnhkvh1q7giCPwjMsP91i1Qi6Kfmei2+ucNPxzA4rHjn0kiC3HCw
-         mRlQ==
-X-Gm-Message-State: AAQBX9fmCFpx4XN/iFnJdRNiLrBBuuBI+HCoomYcyDBDDGg8enoVrSAM
-        bd/QolkJTC1M34euIoeKXHfxbQ==
-X-Google-Smtp-Source: AKy350YyIRH/26Jq8AL749rYqtIOUqj06Hs2snEnIripo+iwHCpV8X7IlqPvWdD8xla04mFPT4eT3A==
-X-Received: by 2002:a05:600c:348e:b0:3ee:93d2:c915 with SMTP id a14-20020a05600c348e00b003ee93d2c915mr821131wmq.6.1681374906602;
-        Thu, 13 Apr 2023 01:35:06 -0700 (PDT)
-Received: from [10.1.3.59] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id 7-20020a05600c028700b003f09a9503b5sm1182407wmk.23.2023.04.13.01.35.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Apr 2023 01:35:06 -0700 (PDT)
-Message-ID: <470d8376-6232-66a7-30f4-561245cf0c07@baylibre.com>
-Date:   Thu, 13 Apr 2023 10:35:04 +0200
+        Thu, 13 Apr 2023 04:35:57 -0400
+Received: from mail-m11875.qiye.163.com (mail-m11875.qiye.163.com [115.236.118.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93BB793F8;
+        Thu, 13 Apr 2023 01:35:32 -0700 (PDT)
+Received: from [0.0.0.0] (unknown [172.96.223.238])
+        by mail-m11875.qiye.163.com (Hmail) with ESMTPA id 4535B280E07;
+        Thu, 13 Apr 2023 16:35:24 +0800 (CST)
+Message-ID: <7a1de6be-8956-b1d5-6351-c7c2fb3bf9f4@sangfor.com.cn>
+Date:   Thu, 13 Apr 2023 16:35:08 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 1/7] dt-bindings: leds: leds-mt6323: Document mt6331
- compatible
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, pavel@ucw.cz
-Cc:     lee@kernel.org, sean.wang@mediatek.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20230412153310.241046-1-angelogioacchino.delregno@collabora.com>
- <20230412153310.241046-2-angelogioacchino.delregno@collabora.com>
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [RFC PATCH net] sfc: Fix use-after-free due to selftest_work
 Content-Language: en-US
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-In-Reply-To: <20230412153310.241046-2-angelogioacchino.delregno@collabora.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, ecree.xilinx@gmail.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pengdonglin@sangfor.com.cn,
+        huangcun@sangfor.com.cn
+References: <20230412005013.30456-1-dinghui@sangfor.com.cn>
+ <ZDew+TqjrcK+zSgW@gmail.com>
+From:   Ding Hui <dinghui@sangfor.com.cn>
+In-Reply-To: <ZDew+TqjrcK+zSgW@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkaSk5DVh9OQ01PHUodSEoeTlUTARMWGhIXJBQOD1
+        lXWRgSC1lBWUpMSVVCTVVJSUhVSUhDWVdZFhoPEhUdFFlBWU9LSFVKSktPSEhVSktLVUtZBg++
+X-HM-Tid: 0a8779c161762eb1kusn4535b280e07
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OE06Ojo4KD0OEiw8DxlDAw4y
+        DzkaCjJVSlVKTUNKSExPQkhLSEhKVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
+        QVlKTElVQk1VSUlIVUlIQ1lXWQgBWUFPSktINwY+
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,16 +52,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/04/2023 17:33, AngeloGioacchino Del Regno wrote:
-> Add mediatek,mt6331-led compatible for the LED controller found
-> in the MT6331 PMIC.
+On 2023/4/13 15:37, Martin Habets wrote:
+> On Wed, Apr 12, 2023 at 08:50:13AM +0800, Ding Hui wrote:
+>> There is a use-after-free scenario that is:
+>>
+>> When netif_running() is false, user set mac address or vlan tag to VF,
+>> the xxx_set_vf_mac() or xxx_set_vf_vlan() will invoke efx_net_stop()
+>> and efx_net_open(), since netif_running() is false, the port will not
+>> start and keep port_enabled false, but selftest_worker is scheduled
+>> in efx_net_open().
+>>
+>> If we remove the device before selftest_worker run, the efx is freed,
+>> then we will get a UAF in run_timer_softirq() like this:
+>>
+>> [ 1178.907941] ==================================================================
+>> [ 1178.907948] BUG: KASAN: use-after-free in run_timer_softirq+0xdea/0xe90
+>> [ 1178.907950] Write of size 8 at addr ff11001f449cdc80 by task swapper/47/0
+>> [ 1178.907950]
+>> [ 1178.907953] CPU: 47 PID: 0 Comm: swapper/47 Kdump: loaded Tainted: G           O     --------- -t - 4.18.0 #1
+>> [ 1178.907954] Hardware name: SANGFOR X620G40/WI2HG-208T1061A, BIOS SPYH051032-U01 04/01/2022
+>> [ 1178.907955] Call Trace:
+>> [ 1178.907956]  <IRQ>
+>> [ 1178.907960]  dump_stack+0x71/0xab
+>> [ 1178.907963]  print_address_description+0x6b/0x290
+>> [ 1178.907965]  ? run_timer_softirq+0xdea/0xe90
+>> [ 1178.907967]  kasan_report+0x14a/0x2b0
+>> [ 1178.907968]  run_timer_softirq+0xdea/0xe90
+>> [ 1178.907971]  ? init_timer_key+0x170/0x170
+>> [ 1178.907973]  ? hrtimer_cancel+0x20/0x20
+>> [ 1178.907976]  ? sched_clock+0x5/0x10
+>> [ 1178.907978]  ? sched_clock_cpu+0x18/0x170
+>> [ 1178.907981]  __do_softirq+0x1c8/0x5fa
+>> [ 1178.907985]  irq_exit+0x213/0x240
+>> [ 1178.907987]  smp_apic_timer_interrupt+0xd0/0x330
+>> [ 1178.907989]  apic_timer_interrupt+0xf/0x20
+>> [ 1178.907990]  </IRQ>
+>> [ 1178.907991] RIP: 0010:mwait_idle+0xae/0x370
+>>
+>> I am thinking about several ways to fix the issue:
+>>
+>> [1] In this RFC, I cancel the selftest_worker unconditionally in
+>> efx_pci_remove().
+>>
+>> [2] Add a test condition, only invoke efx_selftest_async_start() when
+>> efx->port_enabled is true in efx_net_open().
+>>
+>> [3] Move invoking efx_selftest_async_start() from efx_net_open() to
+>> efx_start_all() or efx_start_port(), that matching cancel action in
+>> efx_stop_port().
 > 
-> Signed-off-by: AngeloGioacchino Del Regno<angelogioacchino.delregno@collabora.com>
-> Acked-by: Krzysztof Kozlowski<krzysztof.kozlowski@linaro.org>
+> I think moving this to efx_start_port() is best, as you say to match
+> the cancel in efx_stop_port().
+> 
 
-Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
+If moving to efx_start_port(), should we worry about that IRQ_TIMEOUT
+is still enough?
+
+I'm not sure if there is a long time waiting from starting of schedule
+selftest_work to the ending of efx_net_open().
 
 -- 
-Regards,
-Alexandre
+Thanks,
+- Ding Hui
 
