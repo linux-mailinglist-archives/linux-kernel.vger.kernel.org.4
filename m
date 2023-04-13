@@ -2,57 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 721DE6E0F74
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:00:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 355F46E0F77
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231715AbjDMOAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 10:00:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33988 "EHLO
+        id S231721AbjDMOAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 10:00:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231706AbjDMOAA (ORCPT
+        with ESMTP id S231713AbjDMOAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 10:00:00 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D32B463;
-        Thu, 13 Apr 2023 06:59:35 -0700 (PDT)
-Received: from [192.168.2.90] (109-252-119-170.nat.spd-mgts.ru [109.252.119.170])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D90DB660321A;
-        Thu, 13 Apr 2023 14:59:32 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681394374;
-        bh=KI9YBaRt8ASIsye9tPXU0vjnJoJMseoh4hyAWR6zhE8=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=dUwpNxz24XFCK16wl6jtcEmAY6QkzNOjA5FdwL/7l4ArWcq+npmxK/x0ePoy/WI1E
-         TWM5rQF6XVsnZwVcztdMdm2Vj15GJW68EGuCugDt15dr7PczHpEX5c0GbdCBsagaGk
-         D7I67EvjPkTKsv4gagdMwiolw2m8Y5knwGQCOdEIxqadcL6MTzEGJSUNJi3UJVrR9t
-         D1iV41n21ssny6ccvrYL5bwQWQC1i5Zon4HFpKNHKmHrox+awA1YN9NrZFr1e1k4eA
-         Po3KrZKn9seymBVNDR1a3prAoOHnGnZQoEaK7T3qKaDXlxLtIYYXuc8zqAj3zPKvsi
-         KFIcUnyvtx4CQ==
-Message-ID: <5492c5cc-c93a-fde3-cd77-a598b2b67af5@collabora.com>
-Date:   Thu, 13 Apr 2023 16:59:29 +0300
+        Thu, 13 Apr 2023 10:00:43 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1428811B
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 07:00:40 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id j8so13578048pjy.4
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 07:00:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681394439; x=1683986439;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=eU7u0EkiQfnb6V3VFY3Ec1E3n975+Yez3QLaf1ODnhY=;
+        b=WQ71X16q30n1tfqSkTXLlQP4ewh0QXuSldlKGsgCOLGrpfK1U+iWXINSZ41KbS696t
+         IJLy7kBz6Koc+UIges8Fe2I5IRoERd7DiuEEVRsLfMxMwqrCRKDOG9qx3l9OVWUYsMg/
+         uysCWsUliRa3GCRm4vAiZzx5Wlt6MSdmyGqXBs8vOAry5UTX1xBj9uG/S1NcRoXweGkM
+         Ujv02Pxyiz94IX2mLjsVQdtXbY17BJX1+CnjROuH9dkI2w1mg+tPZPSfiXEOr444x3lh
+         8xV5MSlznYobKS/ii7vMwF/SR9nF1wviAWzACQTCbviOWEVuW5MZJtLVUfY6q/ts8tyg
+         VY5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681394439; x=1683986439;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eU7u0EkiQfnb6V3VFY3Ec1E3n975+Yez3QLaf1ODnhY=;
+        b=BNWe7g6LckB7LdFaMQ72DkkqsVBUyoec3EBGRsj9sXtqYU+IFsJrzwPNtFQN10Lx9J
+         YG6DAfKIqafjld6mJOmoe8VcchJ7iaEj6sw7HgmBzO6Eeos45VPyFI3qNdVLCfC2BBBF
+         ZuVG7Fkuxs+N10JcrplrBH8UzgnKw2xMM/elqd8fQ9NMMRn6VOw7SeKG0P14hXn/sNLx
+         jD8ydk1ekkCSnv2tKBt5vJDRr9Abo+UwCrXNyKq+fQgOvRrH21TK2MHI7DNbLJXVgYb5
+         lX6ympyy8oZv2zDBakLolOXPP9wbp2mzEMnQ8fWl/IaTEFT+WPMHuqAtP4IkctaPNV2M
+         14TQ==
+X-Gm-Message-State: AAQBX9fjo4PAyQd7D8zCz70nBBjnEP2/XVu/aW6Wb9+yguIH8HjSj4g9
+        lZMTjxpD3aeuBGXwvym/hdA+
+X-Google-Smtp-Source: AKy350a+RE5Hskp2Ss1xXf+Z4HSXMhew7c9wbH+dJHlwg2B0agWdmevsupoTrImu8QKwix9q4MHvZA==
+X-Received: by 2002:a17:903:90d:b0:1a1:e93c:8937 with SMTP id ll13-20020a170903090d00b001a1e93c8937mr2606863plb.35.1681394439278;
+        Thu, 13 Apr 2023 07:00:39 -0700 (PDT)
+Received: from thinkpad ([59.97.52.67])
+        by smtp.gmail.com with ESMTPSA id a1-20020a170902900100b001a6756a36f6sm1524223plp.101.2023.04.13.07.00.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 07:00:38 -0700 (PDT)
+Date:   Thu, 13 Apr 2023 19:30:24 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Vinod Koul <vkoul@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Rob Herring <robh@kernel.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v3 00/10] PCI: dwc: Relatively simple fixes and
+ cleanups
+Message-ID: <20230413140024.GA13020@thinkpad>
+References: <20230411033928.30397-1-Sergey.Semin@baikalelectronics.ru>
+ <20230411110240.GB5333@thinkpad>
+ <20230411165924.4zfwhwxacxxeg7rk@mobilestation>
+ <ZDbjHTenZMxfziZD@matsya>
+ <20230413133454.ef7f5s34ysyequfz@mobilestation>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v5 1/2] i2c: tegra: Fix PEC support for SMBUS block read
-To:     Akhil R <akhilrajeev@nvidia.com>, christian.koenig@amd.com,
-        digetx@gmail.com, jonathanh@nvidia.com, ldewangan@nvidia.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, sumit.semwal@linaro.org,
-        thierry.reding@gmail.com, wsa@kernel.org
-References: <20230413130849.2894-1-akhilrajeev@nvidia.com>
- <20230413130849.2894-2-akhilrajeev@nvidia.com>
-Content-Language: en-US
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20230413130849.2894-2-akhilrajeev@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230413133454.ef7f5s34ysyequfz@mobilestation>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,16 +88,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/13/23 16:08, Akhil R wrote:
-> @@ -279,6 +280,7 @@ struct tegra_i2c_dev {
->  	size_t msg_buf_remaining;
->  	int msg_err;
->  	u8 *msg_buf;
-> +	__u16 msg_len;
+On Thu, Apr 13, 2023 at 04:34:54PM +0300, Serge Semin wrote:
+> On Wed, Apr 12, 2023 at 10:28:05PM +0530, Vinod Koul wrote:
+> > On 11-04-23, 19:59, Serge Semin wrote:
+> > > On Tue, Apr 11, 2023 at 04:32:40PM +0530, Manivannan Sadhasivam wrote:
+> > > > On Tue, Apr 11, 2023 at 06:39:18AM +0300, Serge Semin wrote:
+> > > > > It turns out the recent DW PCIe-related patchset was merged in with
+> > > > > several relatively trivial issues left unsettled (noted by Bjorn and
+> > > > > Manivannan). All of these lefovers have been fixed in this patchset.
+> > > > > Namely the series starts with two bug-fixes. The first one concerns the
+> > > > > improper link-mode initialization in case if the CDM-check is enabled. The
+> > > > > second unfortunate mistake I made in the IP-core version type helper. In
+> > > > > particular instead of testing the IP-core version type the macro function
+> > > > > referred to the just IP-core version which obviously wasn't what I
+> > > > > intended.
+> > > > > 
+> > > > > Afterwards two @Mani-noted fixes follow. Firstly the dma-ranges related warning
+> > > > > message is fixed to start with "DMA-ranges" word instead of "Dma-ranges".
+> > > > > Secondly the Baikal-T1 PCIe Host driver is converted to perform the
+> > > > > asynchronous probe type which saved us of about 15% of bootup time if no any
+> > > > > PCIe peripheral device attached to the port.
+> > > > > 
+> > > > > Then the patchset contains the Baikal-T1 PCIe driver fix. The
+> > > > > corresponding patch removes the false error message printed during the
+> > > > > controller probe procedure. I accidentally added the unconditional
+> > > > > dev_err_probe() method invocation. It was obviously wrong.
+> > > > > 
+> > > > > Then two trivial cleanups are introduced. The first one concerns the
+> > > > > duplicated fast-link-mode flag unsetting. The second one implies
+> > > > > dropping a redundant empty line from the dw_pcie_link_set_max_speed()
+> > > > > function.
+> > > > > 
+> > > > > The series continues with a patch inspired by the last @Bjorn note
+> > > > > regarding the generic resources request interface. As @Bjorn correctly
+> > > > > said it would be nice to have the new interface used wider in the DW PCIe
+> > > > > subsystem. Aside with the Baikal-T1 PCIe Host driver the Toshiba Visconti
+> > > > > PCIe driver can be easily converted to using the generic clock names.
+> > > > > That's what is done in the noted patch.
+> > > > > 
+> > > > > The patchset is closed with a series of MAINTAINERS-list related patches.
+> > > > > Firstly after getting the DW PCIe RP/EP DT-schemas refactored I forgot to
+> > > > > update the MAINTAINER-list with the new files added in the framework of
+> > > > > that procedure. All the snps,dw-pcie* schemas shall be maintained by the
+> > > > > DW PCIe core driver maintainers. Secondly seeing how long it took for my
+> > > > > patchsets to review and not having any comments from the original driver
+> > > > > maintainers I'd suggest to add myself as the reviewer to the DW PCIe and
+> > > > > eDMA drivers. Thus hopefully the new updates review process will be
+> > > > > performed with much less latencies. For the same reason I would also like
+> > > > > to suggest to add @Manivannan as the DW PCIe/eDMA drivers maintainer if
+> > > > > he isn't against that idea. What do you think about the last suggestion?
+> > > > > 
+> > > > 
+> > > > I'm willing to co-maintain the drivers.
+> > > 
+> > > Awesome! @Bjorn, @Lorenzo, @Vinod what do you think about this? If you
+> > > are ok with that shall I resubmit the series with @Mani added to the
+> > > DW PCIe/eDMA maintainers list or will you create the respective
+> > > patches yourself?
+> > 
+> 
+> > Pls send the patch, that is preferred.
+> 
+> Ok. I'll resubmit the series with the new patches replacing @Gustavo with
+> @Mani as the DW PCIe/eDMA drivers maintainer.
+> 
 
-It's still __u16
+I talked to Vinod about the non-responsive maintainers and he suggested first
+demoting them as Reviewers instead of dropping altogether. So you can move
+Gustavo as a Reviewer.
+
+- Mani
+
+> -Serge(y)
+> 
+> > 
+> > -- 
+> > ~Vinod
 
 -- 
-Best regards,
-Dmitry
-
+மணிவண்ணன் சதாசிவம்
