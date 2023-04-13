@@ -2,126 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 307D26E09DC
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 11:15:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1657D6E09DE
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 11:15:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbjDMJO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 05:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38446 "EHLO
+        id S230204AbjDMJPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 05:15:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230293AbjDMJOx (ORCPT
+        with ESMTP id S230044AbjDMJPB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 05:14:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB8786BC
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 02:14:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681377249;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dyzRm431VL1Fbej5RMckdPouF+WGu3yZlZlqm5Jr8zA=;
-        b=bwNdvtUOhYmfIbecP/aF6s+667NqY4OGovuKOwkxFGd2PCqiqAEYbZbKrxjoLrpBg6mmeY
-        CBijLd0IjhH7OaJNNsF5/TsQs9ml4B6L5HtqUazSzDu2AnoG3oyEgQpa6d3mOhFvBS7Xpk
-        PXY6xb1o9TwctTfGk9Fwe2oXdU4u4QI=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-413-aCCOm1cCMm60rCOs0HQjhA-1; Thu, 13 Apr 2023 05:14:07 -0400
-X-MC-Unique: aCCOm1cCMm60rCOs0HQjhA-1
-Received: by mail-qt1-f199.google.com with SMTP id t30-20020a05622a181e00b003e37dd114e3so10559137qtc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 02:14:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681377247; x=1683969247;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dyzRm431VL1Fbej5RMckdPouF+WGu3yZlZlqm5Jr8zA=;
-        b=aViIXvY3yC+1srfH1TOAPEP9mGHut7EJmwM+ejAOFW1/6Ya4h5MIpEom1CBty9nOgM
-         HxPPg8oa0IldB9nMf0TK2bhme6GY8ec9SWc724ALUMVAa889JGRs0AbF1mpm5Gb4Se8t
-         ACB8WLuO4h8vfRYt8GgnYEKRKRTpFL8T+FLolK4ylALykJgTqrCEoeC8IQB7yxJS2VLP
-         Jn4Frpsz18a8QZTCPTV6MrOibT3lS6an/bqXBQpani08enLrKbTYmREHztsgsTJdQ3kj
-         83nsF2ufao68neHlGwahrxiH43sLAsVdGzFELmmVQ217cWpyQXbdKf+pcO0vu157zUYb
-         NVzA==
-X-Gm-Message-State: AAQBX9dh1L9nZHgEprXdHoYCPCa30gdRtV62Avr5uwpDNNP05TqPCLgu
-        l/3Ytj7oysHNCZYHph8aSFJVb4CWv7wxv9/Htr5NyJV7/zUMOuNNak8sjBIlF3lKg4dfw14lWLn
-        Xq7gH8Oi3OQ2sT0nSA6i+t3/1
-X-Received: by 2002:ac8:7e95:0:b0:3e3:8e55:1e64 with SMTP id w21-20020ac87e95000000b003e38e551e64mr2377948qtj.14.1681377247474;
-        Thu, 13 Apr 2023 02:14:07 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YIU+TgyV60nszZOUUj8q3myAkq179cnjkKyv9e28PXemEbrxintxbe43QqEzW46gKSh3J/rw==
-X-Received: by 2002:ac8:7e95:0:b0:3e3:8e55:1e64 with SMTP id w21-20020ac87e95000000b003e38e551e64mr2377935qtj.14.1681377247280;
-        Thu, 13 Apr 2023 02:14:07 -0700 (PDT)
-Received: from sgarzare-redhat (host-82-53-134-157.retail.telecomitalia.it. [82.53.134.157])
-        by smtp.gmail.com with ESMTPSA id l22-20020ac81496000000b003e4c6b2cc35sm359795qtj.24.2023.04.13.02.14.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 02:14:06 -0700 (PDT)
-Date:   Thu, 13 Apr 2023 11:14:01 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@sberdevices.ru,
-        oxffffaa@gmail.com
-Subject: Re: [RFC PATCH v1] vsock/loopback: don't disable irqs for queue
- access
-Message-ID: <m6zafomiasxi7fdlejxqebvq5lkjwo3wvpkc7xa6tzfa7ywfy6@bswd76cx772g>
-References: <b6dd26b3-97d7-ef8e-d8f8-a0e728fa2b02@sberdevices.ru>
+        Thu, 13 Apr 2023 05:15:01 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5484C6EB7
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 02:15:00 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4EF5ED75;
+        Thu, 13 Apr 2023 02:15:44 -0700 (PDT)
+Received: from pierre123.nice.arm.com (pierre123.nice.arm.com [10.34.100.129])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 30DCF3F6C4;
+        Thu, 13 Apr 2023 02:14:58 -0700 (PDT)
+From:   Pierre Gondois <pierre.gondois@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Radu Rendec <rrendec@redhat.com>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Will Deacon <will@kernel.org>,
+        Pierre Gondois <pierre.gondois@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Gavin Shan <gshan@redhat.com>
+Subject: [PATCH v3 0/4] cacheinfo: Correctly fallback to using clidr_el1's information
+Date:   Thu, 13 Apr 2023 11:14:30 +0200
+Message-Id: <20230413091436.230134-1-pierre.gondois@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <b6dd26b3-97d7-ef8e-d8f8-a0e728fa2b02@sberdevices.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 09, 2023 at 10:17:51PM +0300, Arseniy Krasnov wrote:
->This replaces 'skb_queue_tail()' with 'virtio_vsock_skb_queue_tail()'.
->The first one uses 'spin_lock_irqsave()', second uses 'spin_lock_bh()'.
->There is no need to disable interrupts in the loopback transport as
->there is no access to the queue with skbs from interrupt context. Both
->virtio and vhost transports work in the same way.
+v3:
+cacheinfo: Check sib_leaf in cache_leaves_are_shared():
+- Reformulate commit message
+- Fix rebase issue and move '&&' condition which was in the last patch
+  to this patch.
+cacheinfo: Add use_arch[|_cache]_info field/function:
+- Put the function declaration in one line.
+arch_topology: Remove early cacheinfo error message:
+- New patch.
 
-Yep, this is a good point!
+v2:
+cacheinfo: Check sib_leaf in cache_leaves_are_shared()
+- Reformulate commit message
+- Add 'Fixes: f16d1becf96f ("cacheinfo: Use cache identifiers [...]'
+cacheinfo: Check cache properties are present in DT
+- Use of_property_present()
+- Add 'Reported-by: Alexandre Ghiti <alexghiti@rivosinc.com>'
+cacheinfo: Add use_arch[|_cache]_info field/function:
+- Make use_arch_cache_info() a static inline function
 
->
->Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->---
-> net/vmw_vsock/vsock_loopback.c | 3 +--
-> 1 file changed, 1 insertion(+), 2 deletions(-)
+The cache information can be extracted from either a Device
+Tree (DT), the PPTT ACPI table, or arch registers (clidr_el1
+for arm64).
 
-LGTM! (net-next material)
+When the DT is used but no cache properties are advertised,
+the current code doesn't correctly fallback to using arch information.
 
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+Correct this. Also use the assumption that L1 data/instruction caches
+are private and L2/higher caches are shared when the cache information
+is coming form clidr_el1.
 
-Thanks,
-Stefano
+As suggested by Alexandre, this serie should ideally go to 6.3 fixes.
 
->
->diff --git a/net/vmw_vsock/vsock_loopback.c b/net/vmw_vsock/vsock_loopback.c
->index e3afc0c866f5..5c6360df1f31 100644
->--- a/net/vmw_vsock/vsock_loopback.c
->+++ b/net/vmw_vsock/vsock_loopback.c
->@@ -31,8 +31,7 @@ static int vsock_loopback_send_pkt(struct sk_buff *skb)
-> 	struct vsock_loopback *vsock = &the_vsock_loopback;
-> 	int len = skb->len;
->
->-	skb_queue_tail(&vsock->pkt_queue, skb);
->-
->+	virtio_vsock_skb_queue_tail(&vsock->pkt_queue, skb);
-> 	queue_work(vsock->workqueue, &vsock->pkt_work);
->
-> 	return len;
->-- 
->2.25.1
->
+Pierre Gondois (4):
+  cacheinfo: Check sib_leaf in cache_leaves_are_shared()
+  cacheinfo: Check cache properties are present in DT
+  arch_topology: Remove early cacheinfo error message
+  cacheinfo: Add use_arch[|_cache]_info field/function
+
+ drivers/base/arch_topology.c |  4 +--
+ drivers/base/cacheinfo.c     | 48 +++++++++++++++++++++++++++++++++---
+ include/linux/cacheinfo.h    | 10 ++++++++
+ 3 files changed, 55 insertions(+), 7 deletions(-)
+
+-- 
+2.25.1
 
