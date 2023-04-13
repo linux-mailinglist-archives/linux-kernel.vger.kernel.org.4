@@ -2,323 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16EC16E08D1
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 502396E08D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:22:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbjDMIWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 04:22:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
+        id S230224AbjDMIWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 04:22:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbjDMIWI (ORCPT
+        with ESMTP id S230156AbjDMIWS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 04:22:08 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3AC2717
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 01:22:05 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id A20A2FF811;
-        Thu, 13 Apr 2023 08:22:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1681374123;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jKDwU6qCHx/OiJp9i/J/E9UgrqMYtUFZ9YIKoZ1nLA8=;
-        b=obZyPhFvxzqi67rpClmp0uemQXyhVAptA6qC/rrXQTaglZY2VEyf5HOIB7FCK9RuBfzBKT
-        zk1MIWguaqNh1YOHX8S3cLrG1n/bgicF4qneiQ7i8C0G8HCGz7ro0P1LVzg+FkFupcagfb
-        afl7CYSwEei68bXZzXGEaQdM9ITYEkkSBhIXkx6uvvtu9H3QiYm8dfYCcNCIoX916v8OH+
-        pdNj8u3khEZDhKrdmwQM2nVCUnXcJdOnzk8W30TfDECn2UMyBIfgdgghszeg1S53eFYYRu
-        dpD4oSTKojdF4owiFKp+aloV2FerZ/1nOOmEJLNAxIFBtGJJdaXQrG1IZ+m2Zw==
-Date:   Thu, 13 Apr 2023 10:22:00 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Cc:     Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Yixun Lan <yixun.lan@amlogic.com>, <oxffffaa@gmail.com>,
-        <kernel@sberdevices.ru>, <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        "yonghui.yu" <yonghui.yu@amlogic.com>
-Subject: Re: [PATCH v1 4/5] mtd: rawnand: meson: clear OOB buffer before
- read
-Message-ID: <20230413102200.309fbe9c@xps-13>
-In-Reply-To: <7520e512-8a19-ff04-364c-b5be0a579ef0@sberdevices.ru>
-References: <20230412061700.1492474-1-AVKrasnov@sberdevices.ru>
-        <20230412061700.1492474-5-AVKrasnov@sberdevices.ru>
-        <20230412094400.3c82f631@xps-13>
-        <ac4b66da-6a76-c2ec-7e21-31632f3448d5@sberdevices.ru>
-        <20230412113654.183350d0@xps-13>
-        <4eace0a0-f6af-7d99-a52f-7913a2139330@sberdevices.ru>
-        <20230412141824.755b2bca@xps-13>
-        <eedaaed9-0a41-2c18-9eb2-792613566986@sberdevices.ru>
-        <20230412145715.58c2be4a@xps-13>
-        <7c996832-258f-001c-56bd-87bbdf23eeaa@amlogic.com>
-        <20230412163214.0c764bb3@xps-13>
-        <0c61eaae-053e-5768-a533-70b2ff0cc95d@amlogic.com>
-        <fbb8cb2b-0996-3029-b368-f67087d73487@amlogic.com>
-        <7520e512-8a19-ff04-364c-b5be0a579ef0@sberdevices.ru>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Thu, 13 Apr 2023 04:22:18 -0400
+Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2FD8695;
+        Thu, 13 Apr 2023 01:22:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
+        s=20161220; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=KKG30S28GcImO9fjjiMWJCrRczwA06I44fh0HArJMdw=; b=cFxLsR4NhRubxrLXp8YIRnE+ty
+        EaYZ+AUsoa+HvlKjdoHKeOOoIWGllAe2t4mW7TN2rs0sCcY1z0E7GgARvD29MNZ0Phb/4L3oW0cD5
+        kCNvHprgvJthYCVCv7ejDkx7snyOuCp2F+PtZO7Vym6s9V3lFjGUZNkf/IFOrvE/6nqX715LSmUt/
+        +jKYmqmU7S/pSPBMoyijhVaBGeWKdfuWsckjjOfwK1ru9w+tCVP+hjYjoLNBIl5aDFiyd787WARJE
+        FCxOEZnWn4bE5eHHky4DyxZq188/LHvEFbrJ6t7ACkFOAeWHuUB8p6MoQLg7mTqZB9+g0wT1aD5Zl
+        JLzm3FNw==;
+Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=toshino.localdomain)
+        by mail.kapsi.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <cyndis@kapsi.fi>)
+        id 1pmsDc-008oPu-3l; Thu, 13 Apr 2023 11:22:12 +0300
+From:   Mikko Perttunen <cyndis@kapsi.fi>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Mikko Perttunen <mperttunen@nvidia.com>,
+        Dan Carpenter <error27@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] drm/tegra: Add error check for NVDEC firmware memory allocation
+Date:   Thu, 13 Apr 2023 11:22:01 +0300
+Message-Id: <20230413082202.114721-1-cyndis@kapsi.fi>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 91.158.25.70
+X-SA-Exim-Mail-From: cyndis@kapsi.fi
+X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arseniy,
+From: Mikko Perttunen <mperttunen@nvidia.com>
 
-avkrasnov@sberdevices.ru wrote on Thu, 13 Apr 2023 10:00:24 +0300:
+The return value for tegra_drm_alloc was missing an error check.
+Add one.
 
-> On 13.04.2023 09:11, Liang Yang wrote:
-> >=20
-> > On 2023/4/13 13:32, Liang Yang wrote: =20
-> >> Hi Miquel,
-> >>
-> >> On 2023/4/12 22:32, Miquel Raynal wrote: =20
-> >>> [ EXTERNAL EMAIL ]
-> >>>
-> >>> Hello,
-> >>>
-> >>> liang.yang@amlogic.com wrote on Wed, 12 Apr 2023 22:04:28 +0800:
-> >>> =20
-> >>>> Hi Miquel and Arseniy,
-> >>>>
-> >>>> On 2023/4/12 20:57, Miquel Raynal wrote: =20
-> >>>>> [ EXTERNAL EMAIL ]
-> >>>>>
-> >>>>> Hi Arseniy,
-> >>>>>
-> >>>>> avkrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 15:22:26 +0300: =
-=20
-> >>>>>> On 12.04.2023 15:18, Miquel Raynal wrote: =20
-> >>>>>>> Hi Arseniy,
-> >>>>>>>
-> >>>>>>> avkrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 13:14:52 +0300:
-> >>>>>>> =C2=A0=C2=A0=C2=A0 >>>> On 12.04.2023 12:36, Miquel Raynal wrote:=
- =20
-> >>>>>>>>> Hi Arseniy,
-> >>>>>>>>>
-> >>>>>>>>> avkrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 12:20:55 +03=
-00:
-> >>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 >>>>>> On 12.04.2023 10:44, Miqu=
-el Raynal wrote: =20
-> >>>>>>>>>>> Hi Arseniy,
-> >>>>>>>>>>>
-> >>>>>>>>>>> AVKrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 09:16:58 +=
-0300:
-> >>>>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 >>>>>>>> This NAND=
- reads only few user's bytes in ECC mode (not full OOB), so
-> >>>>>>>>>>>
-> >>>>>>>>>>> "This NAND reads" does not look right, do you mean "Subpage r=
-eads do
-> >>>>>>>>>>> not retrieve all the OOB bytes,"?
-> >>>>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 >>>>>>>> fill OOB =
-buffer with zeroes to not return garbage from previous reads =20
-> >>>>>>>>>>>> to user.
-> >>>>>>>>>>>> Otherwise 'nanddump' utility prints something like this for =
-just erased
-> >>>>>>>>>>>> page:
-> >>>>>>>>>>>>
-> >>>>>>>>>>>> ...
-> >>>>>>>>>>>> 0x000007f0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-> >>>>>>>>>>>> =C2=A0=C2=A0=C2=A0 OOB Data: ff ff ff ff 00 00 ff ff 80 cf 2=
-2 99 cb ad d3 be
-> >>>>>>>>>>>> =C2=A0=C2=A0=C2=A0 OOB Data: 63 27 ae 06 16 0a 2f eb bb dd 4=
-6 74 41 8e 88 6e
-> >>>>>>>>>>>> =C2=A0=C2=A0=C2=A0 OOB Data: 38 a1 2d e6 77 d4 05 06 f2 a5 7=
-e 25 eb 34 7c ff
-> >>>>>>>>>>>> =C2=A0=C2=A0=C2=A0 OOB Data: 38 ea de 14 10 de 9b 40 33 16 6=
-a cc 9d aa 2f 5e
-> >>>>>>>>>>>>
-> >>>>>>>>>>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-> >>>>>>>>>>>> ---
-> >>>>>>>>>>>> =C2=A0=C2=A0 drivers/mtd/nand/raw/meson_nand.c | 5 +++++
-> >>>>>>>>>>>> =C2=A0=C2=A0 1 file changed, 5 insertions(+)
-> >>>>>>>>>>>>
-> >>>>>>>>>>>> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd=
-/nand/raw/meson_nand.c
-> >>>>>>>>>>>> index f84a10238e4d..f2f2472cb511 100644
-> >>>>>>>>>>>> --- a/drivers/mtd/nand/raw/meson_nand.c
-> >>>>>>>>>>>> +++ b/drivers/mtd/nand/raw/meson_nand.c
-> >>>>>>>>>>>> @@ -858,9 +858,12 @@ static int meson_nfc_read_page_sub(stru=
-ct nand_chip *nand,
-> >>>>>>>>>>>> =C2=A0=C2=A0 static int meson_nfc_read_page_raw(struct nand_=
-chip *nand, u8 *buf,
-> >>>>>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int oob_=
-required, int page)
-> >>>>>>>>>>>> =C2=A0=C2=A0 {
-> >>>>>>>>>>>> +=C2=A0=C2=A0=C2=A0 struct mtd_info *mtd =3D nand_to_mtd(nan=
-d);
-> >>>>>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u8 *oob_buf =3D nand->o=
-ob_poi;
-> >>>>>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int ret;
-> >>>>>>>>>>>> =C2=A0=C2=A0 >>>>>>>> +=C2=A0=C2=A0=C2=A0 memset(oob_buf, 0,=
- mtd->oobsize); =20
-> >>>>>>>>>>>
-> >>>>>>>>>>> I'm surprised raw reads do not read the entire OOB? =20
-> >>>>>>>>>>
-> >>>>>>>>>> Yes! Seems in case of raw access (what i see in this driver) n=
-umber of OOB bytes read
-> >>>>>>>>>> still depends on ECC parameters: for each portion of data cove=
-red with ECC code we can
-> >>>>>>>>>> read it's ECC code and "user bytes" from OOB - it is what i se=
-e by dumping DMA buffer by
-> >>>>>>>>>> printk(). For example I'm working with 2K NAND pages, each pag=
-e has 2 x 1K ECC blocks.
-> >>>>>>>>>> For each ECC block I have 16 OOB bytes which I can access by r=
-ead/write. Each 16 bytes
-> >>>>>>>>>> contains 2 bytes of user's data and 14 bytes ECC codes. So whe=
-n I read page in raw mode
-> >>>>>>>>>> controller returns 32 bytes (2 x (2 + 14)) of OOB. While OOB i=
-s reported as 64 bytes. =20
-> >>>>>>>>>
-> >>>>>>>>> In all modes, when you read OOB, you should get the full OOB. T=
-he fact
-> >>>>>>>>> that ECC correction is enabled or disabled does not matter. If =
-the NAND
-> >>>>>>>>> features OOB sections of 64 bytes, you should get the 64 bytes.
-> >>>>>>>>>
-> >>>>>>>>> What happens sometimes, is that some of the bytes are not prote=
-cted
-> >>>>>>>>> against bitflips, but the policy is to return the full buffer. =
-=20
-> >>>>>>>>
-> >>>>>>>> Ok, so to clarify case for this NAND controller:
-> >>>>>>>> 1) In both ECC and raw modes i need to return the same raw OOB d=
-ata (e.g. user bytes
-> >>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0 + ECC codes)? =20
-> >>>>>>>
-> >>>>>>> Well, you need to cover the same amount of data, yes. But in the =
-ECC
-> >>>>>>> case the data won't be raw (at least not all of it). =20
-> >>>>>>
-> >>>>>> So "same amount of data", in ECC mode current implementation retur=
-ns only user OOB bytes (e.g.
-> >>>>>> OOB data excluding ECC codes), in raw it returns user bytes + ECC =
-codes. IIUC correct
-> >>>>>> behaviour is to always return user bytes + ECC codes as OOB data e=
-ven in ECC mode ? =20
-> >>>>>
-> >>>>> If the page are 2k+64B you should read 2k+64B when OOB are requeste=
-d.
-> >>>>>
-> >>>>> If the controller only returns 2k+32B, then perform a random read to
-> >>>>> just move the read pointer to mtd->size + mtd->oobsize - 32 and
-> >>>>> retrieve the missing 32 bytes? =20
-> >>>>
-> >>>> 1) raw read can read out the whole page data 2k+64B, decided by the =
-len in the controller raw read command:
-> >>>> =C2=A0=C2=A0=C2=A0=C2=A0cmd =3D (len & GENMASK(5, 0)) | scrambler | =
-DMA_DIR(dir);
-> >>>> after that, the missing oob bytes(not used) can be copied from meson=
-_chip->data_buf. so the implementation of meson_nfc_read_page_raw() is like=
- this if need.
-> >>>> =C2=A0=C2=A0=C2=A0=C2=A0{
-> >>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ......
-> >>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 meson_nfc_read_page_sub(n=
-and, page, 1);
-> >>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 meson_nfc_get_data_oob(na=
-nd, buf, oob_buf);
-> >>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 oob_len =3D (nand->ecc.by=
-tes + 2) * nand->ecc.steps;
-> >>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 memcpy(oob_buf + oob_len,=
- meson_chip->data_buf + oob_len, mtd->oobsize - oob_len);
-> >>>>
-> >>>> =C2=A0=C2=A0=C2=A0=C2=A0}
-> >>>> 2) In ECC mode, the controller can't bring back the missing OOB byte=
-s. it can read out the user bytes and ecc bytes per meson_ooblayout_ops def=
-ine. =20
-> >>>
-> >>> And then (if oob_required) you can bring the missing bytes with
-> >>> something along:
-> >>> nand_change_read_column_op(chip, mtd->writesize + oob_len,
-> >>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 oob_buf + oob_len,
-> >>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 mtd->oobsize - oob_len,
-> >>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 false);
-> >>> Should not be a huge performance hit. =20
-> >>
-> >> After finishing ECC mode reading, the column address internal in NAND =
-device should be the right pos; it doesn't need to change the column again.=
- so adding controller raw read for the missing bytes after ECC reading may =
-works.
-> >> =20
-> > use raw read for the missing bytes, but they are not protected by host =
-ECC. to the NAND type of storage, is it ok or missing bytes better to be fi=
-lled with 0xff? =20
->=20
-> IIUC Miqu=C3=A8l's reply, valid behaviour is to return full OOB data in b=
-oth modes. So in:
-> ECC mode it is user bytes(corrected by ECC, read from info buffer) + ECC =
-+ missing bytes. ECC and missing bytes read in RAW mode.
+Reported-by: Dan Carpenter <error27@gmail.com>
+Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
+---
+ drivers/gpu/drm/tegra/nvdec.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-I believe the ECC bytes you'll get will be corrected.
-You can check this by using nandflipbits in mtd-utils.
+diff --git a/drivers/gpu/drm/tegra/nvdec.c b/drivers/gpu/drm/tegra/nvdec.c
+index ae78a81e5eef..15ce5e89fad4 100644
+--- a/drivers/gpu/drm/tegra/nvdec.c
++++ b/drivers/gpu/drm/tegra/nvdec.c
+@@ -276,6 +276,8 @@ static int nvdec_load_falcon_firmware(struct nvdec *nvdec)
+ 			return err;
+ 	} else {
+ 		virt = tegra_drm_alloc(tegra, size, &iova);
++		if (IS_ERR(virt))
++			return PTR_ERR(virt);
+ 	}
+ 
+ 	nvdec->falcon.firmware.virt = virt;
+-- 
+2.39.2
 
-> RAW mode it is user bytes(not corrected by ECC) + ECC + missing bytes
->=20
->=20
-> Also @Liang, is this valid code (drivers/mtd/nand/raw/meson_nand.c)?
->=20
-> 	ret =3D nand_check_erased_ecc_chunk(data, ecc->size,
->                                           oob, ecc->bytes + 2,
->                                           NULL, 0,     =20
->                                           ecc->strength);
->=20
-> It confused me, because 'oob' buffer contains both user bytes and ECC cod=
-e,
-> 'ecc->bytes + 2' is 16. May be it should be:
->=20
-> 	ret =3D nand_check_erased_ecc_chunk(data, ecc->size,
->                                           oob + 2, ecc->bytes,
->                                           NULL, 0,     =20
->                                           ecc->strength);
-
-When you check for an erased chunk you should probably check the whole
-OOB area.
-
->=20
-> For example let's look on Tegra's driver (drivers/mtd/nand/raw/tegra_nand=
-.c):
->=20
->                         u8 *oob =3D chip->oob_poi + nand->ecc.offset +   =
-=20
->                                   (chip->ecc.bytes * bit);             =20
->                                                                        =20
->                         ret =3D nand_check_erased_ecc_chunk(data, chip->e=
-cc.size,
->                                                           oob, chip->ecc.=
-bytes,
->                                                           NULL, 0,     =20
->                                                           chip->ecc.stren=
-gth);
->=20
-> 'oob' contains 'nand->ecc.offset', and ECC length does not account user b=
-ytes length
-> (e.g. 2) - it is just 'chip->ecc.bytes'
-
-I haven't looked carefully, but be aware there are two user bytes
-reserved at the beginning of the OOB area for marking bad blocks. There
-*may* be a confusion somewhere. I am not saying there is one, just a
-hint if you can't find an explanation.
-
-
-Thanks,
-Miqu=C3=A8l
