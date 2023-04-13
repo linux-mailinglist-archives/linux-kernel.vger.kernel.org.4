@@ -2,78 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A5896E1097
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 17:06:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC3886E1093
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 17:05:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbjDMPGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 11:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56174 "EHLO
+        id S230404AbjDMPFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 11:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230463AbjDMPFt (ORCPT
+        with ESMTP id S231251AbjDMPFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 11:05:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E6A8A4D
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 08:04:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681398298;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yJgyw2CXQSH4cqUvLiXLNVt/tWYZtij7Uerp9ANT68M=;
-        b=GKRVJ4wHma1zDfm+z7umEbHWvmJ4aQ2yBGnc7TpGy9o8Vv2dP2zJ72KTYTMLSz4mLdOm9E
-        xHBYUSORsW364TCFDFE6AMBRolG7G8lhlAUOKQnABwIptvjYqqVioI09lIRa+mBhqesZQx
-        krQcqfpgHywIBGp1/M3RA/DfV/nmQYY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-589-av4fE8hIO3G5pkYJ8IQJyQ-1; Thu, 13 Apr 2023 11:04:47 -0400
-X-MC-Unique: av4fE8hIO3G5pkYJ8IQJyQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EAD382807D71;
-        Thu, 13 Apr 2023 15:04:22 +0000 (UTC)
-Received: from plouf.local (unknown [10.45.224.142])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 010E61415117;
-        Thu, 13 Apr 2023 15:04:21 +0000 (UTC)
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-To:     Jiri Kosina <jikos@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230215-power_supply-leds-hid-v1-0-35b6f1dcee8a@weissschuh.net>
-References: <20230215-power_supply-leds-hid-v1-0-35b6f1dcee8a@weissschuh.net>
-Subject: Re: (subset) [PATCH 0/4] HID: explicitly include linux/leds.h
-Message-Id: <168139826149.850074.8414740251523173187.b4-ty@redhat.com>
-Date:   Thu, 13 Apr 2023 17:04:21 +0200
+        Thu, 13 Apr 2023 11:05:11 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4099386A9
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 08:05:09 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 562BE11FB;
+        Thu, 13 Apr 2023 08:05:53 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D91603F73F;
+        Thu, 13 Apr 2023 08:05:07 -0700 (PDT)
+Date:   Thu, 13 Apr 2023 16:05:05 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     Radu Rendec <rrendec@redhat.com>, linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Pierre Gondois <Pierre.Gondois@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 2/3] cacheinfo: Add arm64 early level initializer
+ implementation
+Message-ID: <20230413150505.75g2dp6ra2ytfvpu@bogus>
+References: <20230412185759.755408-1-rrendec@redhat.com>
+ <20230412185759.755408-3-rrendec@redhat.com>
+ <20230413102226.yzzd6iccqeamheas@bogus>
+ <20230413144519.GA26421@willie-the-truck>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230413144519.GA26421@willie-the-truck>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Feb 2023 01:03:33 +0000, Thomas Weißschuh wrote:
-> Instead of relying on an accidental, transitive inclusion of linux/leds.h
-> use it directly.
+On Thu, Apr 13, 2023 at 03:45:22PM +0100, Will Deacon wrote:
+> On Thu, Apr 13, 2023 at 11:22:26AM +0100, Sudeep Holla wrote:
+> > Hi Will,
+> > 
+> > On Wed, Apr 12, 2023 at 02:57:58PM -0400, Radu Rendec wrote:
+> > > This patch adds an architecture specific early cache level detection
+> > > handler for arm64. This is basically the CLIDR_EL1 based detection that
+> > > was previously done (only) in init_cache_level().
+> > > 
+> > > This is part of a patch series that attempts to further the work in
+> > > commit 5944ce092b97 ("arch_topology: Build cacheinfo from primary CPU").
+> > > Previously, in the absence of any DT/ACPI cache info, architecture
+> > > specific cache detection and info allocation for secondary CPUs would
+> > > happen in non-preemptible context during early CPU initialization and
+> > > trigger a "BUG: sleeping function called from invalid context" splat on
+> > > an RT kernel.
+> > > 
+> > > This patch does not solve the problem completely for RT kernels. It
+> > > relies on the assumption that on most systems, the CPUs are symmetrical
+> > > and therefore have the same number of cache leaves. The cacheinfo memory
+> > > is allocated early (on the primary CPU), relying on the new handler. If
+> > > later (when CLIDR_EL1 based detection runs again on the secondary CPU)
+> > > the initial assumption proves to be wrong and the CPU has in fact more
+> > > leaves, the cacheinfo memory is reallocated, and that still triggers a
+> > > splat on an RT kernel.
+> > > 
+> > > In other words, asymmetrical CPU systems *must* still provide cacheinfo
+> > > data in DT/ACPI to avoid the splat on RT kernels (unless secondary CPUs
+> > > happen to have less leaves than the primary CPU). But symmetrical CPU
+> > > systems (the majority) can now get away without the additional DT/ACPI
+> > > data and rely on CLIDR_EL1 based detection.
+> > > 
+> > 
+> > If you are okay with the change, can I have your Acked-by, so that I can
+> > route this via Greg's tree ?
 > 
-> 
+> I really dislike the profileration of __weak functions in this file,
 
-Applied to hid/hid.git (for-6.4/apple), thanks!
+You mean in the generic cacheinfo.c right ? Coz arm64 version must not have
+any and that is the file in this patch.
 
-[4/4] HID: apple: explicitly include linux/leds.h
-      https://git.kernel.org/hid/hid/c/6c89c1160321
+> rather than the usual approach of having arch-specific static inlines in
+> a header file but it seems that nobody has the appetite to clean that up :(
+>
 
-Cheers,
--- 
-Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Yes, I will try that when I get sometime. I had not seen or touched this
+for longtime until recently when new requirements around this are coming.
 
+> So I'm fine for Greg to queue this if he wants to, but I'd be a lot more
+> excited if somebody tidied things up a bit first.
+>
+
+Agreed. One reason for such weak functions was to avoid conditional
+compilation based on arch at that time with the aim to include couple
+of more archs but that hasn't happened and perhaps it is time that it
+needs a refresh.
+
+--
+Regards,
+Sudeep
