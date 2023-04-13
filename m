@@ -2,107 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3D8E6E08EA
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:28:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B7ED6E08EF
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbjDMI2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 04:28:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34494 "EHLO
+        id S229728AbjDMId1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 04:33:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbjDMI2j (ORCPT
+        with ESMTP id S229546AbjDMId0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 04:28:39 -0400
-X-Greylist: delayed 146627 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 13 Apr 2023 01:28:38 PDT
-Received: from gofer.mess.org (gofer.mess.org [88.97.38.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4172697;
-        Thu, 13 Apr 2023 01:28:38 -0700 (PDT)
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id B447C10006C; Thu, 13 Apr 2023 09:28:36 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-        t=1681374516; bh=/bsXNdu/Px3r4xTemFbWe8G4OVPi4dsB2MIJrch1uwg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gFCcgMfz6a7VwtaL0Vy/FlNJOG9emcw5CvB+GLcPe1qgDQbAtoq1ubec9JakUsa7f
-         KyL/lNbHYgMEAsbftRJEwousF4acaYL4j+ulcNwg4V9Mhd83xnODBSIo3VWnFxgX7d
-         QEPJRqCnlqtC6cUBguppMWXSAfBv8VTZ47GL6Us29eKK3sxkkBa/2PLP7NH/snM9u/
-         Wm97DtvhSzx0r+cM6pxHTtAD5y3QEsKwz3Bgvma519IzU03P5nQI3z2FUb0YDyAuS9
-         TGuPwiphfPZkO9Q2pu+wpYgx0sDpiM/4lZ3enELPj6ay1ySevfjnfHjrbtd81ghepi
-         WzeUt7/18rRrw==
-Date:   Thu, 13 Apr 2023 09:28:36 +0100
-From:   Sean Young <sean@mess.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH] bpf: lirc program type should not require SYS_CAP_ADMIN
-Message-ID: <ZDe9ND/M4I9ll1xV@gofer.mess.org>
-References: <ZDWAcN6wfeXzipHz@gofer.mess.org>
- <CAADnVQJ-zzzTxDj8_7WKW-o3BDsU=DNAnvSEZGNHswbhGA8xhA@mail.gmail.com>
+        Thu, 13 Apr 2023 04:33:26 -0400
+Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F3810E5;
+        Thu, 13 Apr 2023 01:33:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1681374801;
+        bh=SD8a8KFvnCSwbVV6zTztQabyB1P9t20ITTiwlQmT/kI=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=mMPkg7kd9d75I9RqubzvixZuTjV6gCBc24cVfdissGsaD546SzMl6lHKKk97MVXY5
+         arvvJFZE2+2piTELSwG6ZBV1DkuEVUCc2DKc0j+J9gj7LBWUK6Z8sGFRvYUzstmWX3
+         d+Vs220AH4XoU20omhJFRsciXnyPUKhuCS76xOX0=
+Received: from [192.168.124.11] (unknown [113.140.11.5])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id 772AE65C44;
+        Thu, 13 Apr 2023 04:33:18 -0400 (EDT)
+Message-ID: <ee3b287c78d9fbbbc996a787053b4c37fe365c2c.camel@xry111.site>
+Subject: Re: [PATCH v6 29/30] LoongArch: KVM: Enable kvm config and add the
+ makefile
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     kernel test robot <lkp@intel.com>,
+        Tianrui Zhao <zhaotianrui@loongson.cn>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     oe-kbuild-all@lists.linux.dev, Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn
+Date:   Thu, 13 Apr 2023 16:33:10 +0800
+In-Reply-To: <202304131526.iXfLaVZc-lkp@intel.com>
+References: <20230412083023.1693910-30-zhaotianrui@loongson.cn>
+         <202304131526.iXfLaVZc-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.0 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQJ-zzzTxDj8_7WKW-o3BDsU=DNAnvSEZGNHswbhGA8xhA@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LOTS_OF_MONEY,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 04:14:05PM -0700, Alexei Starovoitov wrote:
-> On Tue, Apr 11, 2023 at 8:45 AM Sean Young <sean@mess.org> wrote:
-> >
-> > Make it possible to load lirc program type with just CAP_BPF.
-> 
-> Is it safe?
-> If the user can load with just CAP_BPF the FD to the prog and target_fd
-> will allow attach as well.
+On Thu, 2023-04-13 at 15:32 +0800, kernel test robot wrote:
 
-Exactly, that's the $1m question of course. 
+> vim +/asm +244 arch/loongarch/include/asm/loongarch.h
+>=20
+> f2ac457a61389b Huacai Chen=C2=A0 2022-05-31=C2=A0 238=C2=A0=20
+> 2c87b678639d25 Tianrui Zhao 2023-04-12=C2=A0 239=C2=A0 /* GCSR */
+> 2c87b678639d25 Tianrui Zhao 2023-04-12=C2=A0 240=C2=A0 static inline u64 =
+gcsr_read(u32 reg)
 
-I think it's safe from a lirc perspective because you need to be able to
-open the /dev/lirc0 device in the first place; if you can open it, you
-alter all sorts of lirc receiving options already. Changing the IR protocol
-decoder is no different in that perspective.
+Try __always_inline instead of inline because this "function" will
+definitely break up if it's not inlined.
 
-The other side of course, is it save to load a bpf lirc program as a normal
-user. I don't see any issue with this; I guess this depends on whether the
-subset of functions in lirc_mode2_func_proto() is safe. I am hoping that
-the expert opinion everyone here can help answer that question.
+And I guess we should have something like:
 
-Thanks,
+extern u64 __compiletime_error("gcsr_read parameter is not a constant")=20
+__gcsr_read_non_const(void);
 
-Sean
+static __always_inline u64 gcsr_read(u32 reg)
+{
+	u64 val =3D 0;
 
-> 
-> 
-> > Signed-off-by: Sean Young <sean@mess.org>
-> > ---
-> >  kernel/bpf/syscall.c | 1 -
-> >  1 file changed, 1 deletion(-)
-> >
-> > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> > index adc83cb82f37..19d9265270b3 100644
-> > --- a/kernel/bpf/syscall.c
-> > +++ b/kernel/bpf/syscall.c
-> > @@ -2439,7 +2439,6 @@ static bool is_net_admin_prog_type(enum bpf_prog_type prog_type)
-> >         case BPF_PROG_TYPE_LWT_SEG6LOCAL:
-> >         case BPF_PROG_TYPE_SK_SKB:
-> >         case BPF_PROG_TYPE_SK_MSG:
-> > -       case BPF_PROG_TYPE_LIRC_MODE2:
-> >         case BPF_PROG_TYPE_FLOW_DISSECTOR:
-> >         case BPF_PROG_TYPE_CGROUP_DEVICE:
-> >         case BPF_PROG_TYPE_CGROUP_SOCK:
-> > --
-> > 2.39.2
-> >
+	if (!__builtin_constant_p(reg))
+		return __gcsr_read_non_const();
+
+	asm volatile (
+... ...
+
+Or perhaps we should just rewrite gcsr_read to a macro.
+
+> 2c87b678639d25 Tianrui Zhao 2023-04-12=C2=A0 241=C2=A0 {
+> 2c87b678639d25 Tianrui Zhao 2023-04-12=C2=A0 242=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0u64 val =3D 0;
+> 2c87b678639d25 Tianrui Zhao 2023-04-12=C2=A0 243=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0/* Instructions will be available in binutils later */
+> 2c87b678639d25 Tianrui Zhao 2023-04-12 @244=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+asm volatile (
+> 2c87b678639d25 Tianrui Zhao 2023-04-12=C2=A0 245=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0"parse_r __reg, %[val=
+]\n\t"
+> 2c87b678639d25 Tianrui Zhao 2023-04-12=C2=A0 246=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*
+> 2c87b678639d25 Tianrui Zhao 2023-04-12=C2=A0 247=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * read val from gues=
+t csr register %[reg]
+> 2c87b678639d25 Tianrui Zhao 2023-04-12=C2=A0 248=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * gcsrrd %[val], %[r=
+eg]
+> 2c87b678639d25 Tianrui Zhao 2023-04-12=C2=A0 249=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+> 2c87b678639d25 Tianrui Zhao 2023-04-12=C2=A0 250=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0".word 0x5 << 24 | %[=
+reg] << 10 | 0 << 5 | __reg\n\t"
+> 2c87b678639d25 Tianrui Zhao 2023-04-12=C2=A0 251=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0: [val] "+r" (val)
+> 2c87b678639d25 Tianrui Zhao 2023-04-12=C2=A0 252=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0: [reg] "i" (reg)
+> 2c87b678639d25 Tianrui Zhao 2023-04-12=C2=A0 253=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0: "memory");
+> 2c87b678639d25 Tianrui Zhao 2023-04-12=C2=A0 254=C2=A0=20
+> 2c87b678639d25 Tianrui Zhao 2023-04-12=C2=A0 255=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0return val;
+> 2c87b678639d25 Tianrui Zhao 2023-04-12=C2=A0 256=C2=A0 }
+> 2c87b678639d25 Tianrui Zhao 2023-04-12=C2=A0 257=C2=A0=20
+>=20
+
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
