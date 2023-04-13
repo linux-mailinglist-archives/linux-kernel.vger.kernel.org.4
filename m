@@ -2,656 +2,306 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB53F6E0B57
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 12:23:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC2536E0B58
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 12:23:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbjDMKXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 06:23:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41814 "EHLO
+        id S230359AbjDMKXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 06:23:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbjDMKW7 (ORCPT
+        with ESMTP id S229479AbjDMKXA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 06:22:59 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7FAE9;
-        Thu, 13 Apr 2023 03:22:56 -0700 (PDT)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33D7qO4E009154;
-        Thu, 13 Apr 2023 03:22:32 -0700
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2168.outbound.protection.outlook.com [104.47.58.168])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3px3fwax5k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Apr 2023 03:22:32 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=I2weGcl2vWX93S54bAyDDvB/8BK2DalWpTguN3KQOIsCA8LdC/IjVU5RGgzLVtEvfq9Qn9fAEIeQ6kBP8p0RFRMVs2uhdLAnBYijcviKCtP6EGRtvW+I9ylSIVAs0UULFQaj9+NCiR+7O/unZZ788PSBkaWlu2PpEhI6vpHYhnL4BXwc8L//5YlCg11DNZkBD4Mail8+LODcB/ARpYEWFWSidXHVTXMOoxd9v6vi9B6blEq7fdWMHdYTQ2qk+zLk1btLHq1AN1rg332fgJXZxcKJHHTqpIYrdUI9D7n0qOlQ4B3u1UKOurYSzbMvQlxVUfY2xglsHObNylWj4p15wg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3arxttnbQrtnHTiBmQWa6VAIKZcYu7K5z8WdkmGanO0=;
- b=Qyujnd9u3N2+S8F3lOyq4LDF9rQD2gJ2Q9duYNBFckWTwzuPE3fSAvgRGDAgzyXK/2SKOwYeH/zYyhlFLX+0p53LJXAeP4sbpd7pCuEUCJyDTrmjHuSitL6IX848y6I4oY9B9LephTvU0b5xuYEhJ7P2HMdGwGE/es4ZnB7yrqoiElpGsWzqU5Dbw46KQtvLFPU5xa8hecvcSpPeMknMc008+0FlMZtmpxx4M8GLwl9YcLRqvNCtfwYHbwSAKz7PNHkIuRPXDQlcxA6e1jTRqyH10OFnBU/d+pSIlYN4akVY4reoFWxGwaZFphMu93KLph3pzSukmfQehaBYFT0Jsg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
- dkim=pass header.d=marvell.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3arxttnbQrtnHTiBmQWa6VAIKZcYu7K5z8WdkmGanO0=;
- b=G3TgRq3fgoPUrL2HKta6turRFs+ux3jAUFXQTkQJ9C3E/t46+hjf+zB5Oo1UDzUeH0GSCgmk13GJJ7B48I+RsGaOJyNrHV8fhRN3rmhO3VgA2J2JdVUgOFdHIXbm1ijnnPOV7tgwGgLKQlzpi6iqwYekWbFaQZKUbZCs0x5jGi0=
-Received: from DM5PR1801MB1883.namprd18.prod.outlook.com (2603:10b6:4:62::23)
- by BYAPR18MB2966.namprd18.prod.outlook.com (2603:10b6:a03:10d::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.33; Thu, 13 Apr
- 2023 10:22:29 +0000
-Received: from DM5PR1801MB1883.namprd18.prod.outlook.com
- ([fe80::539a:cb03:47cd:9551]) by DM5PR1801MB1883.namprd18.prod.outlook.com
- ([fe80::539a:cb03:47cd:9551%5]) with mapi id 15.20.6254.033; Thu, 13 Apr 2023
- 10:22:29 +0000
-From:   Bharat Bhushan <bbhushan2@marvell.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [EXT] Re: [PATCH 2/2] Watchdog: octeontx2: Add Pseudo-NMI GTI
- watchdog driver
-Thread-Topic: [EXT] Re: [PATCH 2/2] Watchdog: octeontx2: Add Pseudo-NMI GTI
- watchdog driver
-Thread-Index: AQHZXmDnieHT6oIyl0uEPZQVd86ruq8KfB8AgB6qO8A=
-Date:   Thu, 13 Apr 2023 10:22:29 +0000
-Message-ID: <DM5PR1801MB1883A33DF87B30008041660CE3989@DM5PR1801MB1883.namprd18.prod.outlook.com>
-References: <20230324145652.19221-1-bbhushan2@marvell.com>
- <20230324145652.19221-2-bbhushan2@marvell.com>
- <b5c3fe52-63fa-4fa2-b500-6233297c01c4@roeck-us.net>
-In-Reply-To: <b5c3fe52-63fa-4fa2-b500-6233297c01c4@roeck-us.net>
-Accept-Language: en-IN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: =?us-ascii?Q?PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcYmJodXNoYW4y?=
- =?us-ascii?Q?XGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0?=
- =?us-ascii?Q?YmEyOWUzNWJcbXNnc1xtc2ctMTYyNTY0NzMtZDllNS0xMWVkLWFlNzktMDRi?=
- =?us-ascii?Q?OWUzMzM4ZjZlXGFtZS10ZXN0XDE2MjU2NDc1LWQ5ZTUtMTFlZC1hZTc5LTA0?=
- =?us-ascii?Q?YjllMzMzOGY2ZWJvZHkudHh0IiBzej0iMTQ5NDQiIHQ9IjEzMzI1ODU0OTQ3?=
- =?us-ascii?Q?MDkxNjE1MCIgaD0ic3VTSEdwSWF5QUtpN3ptZkJwMmZKbC9CNWlvPSIgaWQ9?=
- =?us-ascii?Q?IiIgYmw9IjAiIGJvPSIxIiBjaT0iY0FBQUFFUkhVMVJTUlVGTkNnVUFBSFlJ?=
- =?us-ascii?Q?QUFBMmJuL1k4VzNaQVdtZEhLay9DRWZGYVowY3FUOElSOFVOQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUhBQUFBQUdDQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUVBQVFBQkFBQUExRkgzYUFBQUFBQUFBQUFBQUFBQUFKNEFBQUJoQUdR?=
- =?us-ascii?Q?QVpBQnlBR1VBY3dCekFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBRUFBQUFBQUFBQUFnQUFBQUFBbmdBQUFHTUFkUUJ6QUhRQWJ3QnRBRjhB?=
- =?us-ascii?Q?Y0FCbEFISUFjd0J2QUc0QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQVFBQUFBQUFBQUFD?=
- =?us-ascii?Q?QUFBQUFBQ2VBQUFBWXdCMUFITUFkQUJ2QUcwQVh3QndBR2dBYndCdUFHVUFi?=
- =?us-ascii?Q?Z0IxQUcwQVlnQmxBSElBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUJBQUFBQUFBQUFBSUFBQUFBQUo0QUFBQmpB?=
- =?us-ascii?Q?SFVBY3dCMEFHOEFiUUJmQUhNQWN3QnVBRjhBWkFCaEFITUFhQUJmQUhZQU1B?=
- =?us-ascii?Q?QXlBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
-x-dg-refone: =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFFQUFBQUFBQUFBQWdBQUFBQUFuZ0FB?=
- =?us-ascii?Q?QUdNQWRRQnpBSFFBYndCdEFGOEFjd0J6QUc0QVh3QnJBR1VBZVFCM0FHOEFj?=
- =?us-ascii?Q?Z0JrQUhNQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBUUFBQUFBQUFBQUNBQUFBQUFDZUFBQUFZd0IxQUhNQWRBQnZB?=
- =?us-ascii?Q?RzBBWHdCekFITUFiZ0JmQUc0QWJ3QmtBR1VBYkFCcEFHMEFhUUIwQUdVQWNn?=
- =?us-ascii?Q?QmZBSFlBTUFBeUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQkFBQUFB?=
- =?us-ascii?Q?QUFBQUFJQUFBQUFBSjRBQUFCakFIVUFjd0IwQUc4QWJRQmZBSE1BY3dCdUFG?=
- =?us-ascii?Q?OEFjd0J3QUdFQVl3QmxBRjhBZGdBd0FESUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUVBQUFBQUFBQUFBZ0FBQUFBQW5n?=
- =?us-ascii?Q?QUFBR1FBYkFCd0FGOEFjd0JyQUhrQWNBQmxBRjhBWXdCb0FHRUFkQUJmQUcw?=
- =?us-ascii?Q?QVpRQnpBSE1BWVFCbkFHVUFYd0IyQURBQU1nQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFRQUFBQUFBQUFBQ0FBQUFBQUNlQUFBQVpBQnNBSEFBWHdC?=
- =?us-ascii?Q?ekFHd0FZUUJqQUdzQVh3QmpBR2dBWVFCMEFGOEFiUUJsQUhNQWN3QmhBR2NB?=
- =?us-ascii?Q?WlFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
-x-dg-reftwo: =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFCQUFBQUFBQUFBQUlBQUFBQUFKNEFBQUJrQUd3QWNB?=
- =?us-ascii?Q?QmZBSFFBWlFCaEFHMEFjd0JmQUc4QWJnQmxBR1FBY2dCcEFIWUFaUUJmQUdZ?=
- =?us-ascii?Q?QWFRQnNBR1VBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?RUFBQUFBQUFBQUFnQUFBQUFBbmdBQUFHVUFiUUJoQUdrQWJBQmZBR0VBWkFC?=
- =?us-ascii?Q?a0FISUFaUUJ6QUhNQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFDZ0FBQUFBQUFBQUFBQUFBQVFBQUFBQUFBQUFDQUFB?=
- =?us-ascii?Q?QUFBQ2VBQUFBYlFCaEFISUFkZ0JsQUd3QWJBQmZBSEFBY2dCdkFHb0FaUUJq?=
- =?us-ascii?Q?QUhRQVh3QmpBRzhBWkFCbEFITUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUJBQUFBQUFBQUFBSUFBQUFBQUo0QUFBQnRBR0VB?=
- =?us-ascii?Q?Y2dCMkFHVUFiQUJzQUY4QWRBQmxBSElBYlFCcEFHNEFkUUJ6QUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFFQUFBQUFBQUFBQWdBQUFBQUEiLz48L21ldGE+?=
-x-dg-rorf: true
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM5PR1801MB1883:EE_|BYAPR18MB2966:EE_
-x-ms-office365-filtering-correlation-id: d058b33a-a045-46db-1ad7-08db3c08fc73
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: a7ZUTCi4Su/2CyMEHTUnEa8wTHWpYSogf97pBMGWSW8Y56wozoImC2wgx9qDGgSM3lIEWnwt6uxaa5whH12o20rSCwRJouZZBol9HzvZj1Kmls7eqkJfOHAEWbXG+G8Cg7gBYGthCbPPo8tXhNN0e7Nt+UrYWnly62yCc08NQevk4rm54fO2nnxagw5JVG6LmTCcIrJ5DXLQIW+uJ52ZGXPcOmQB/98ToTyGy3Jgy0gH3mWzzUuCBTZhf3d1sUdhmqOizrj9Pg+zV374zNL+dARthwuKEhyHAakQAGno1iIhxHvlV4QgQjfpeCRMtkeewVvB1IEN4RmLT83mlHJi0OpRqQ+gal8LJc9ak6lfFRptw9uPZRqKgT0MxV39Eo/WaDuEjjFKipqlpWoz+eba5VJHjqF9pBbqgH72rwc9b/a4U9jqZQ3BrZ2c7DnkoBJWCXEvVE10T0dDVKzNVFbXvb51JGDYEpmSF4RHCwQ7g6cVXHcaPuKtLVB9yy7VwEoo4OeFMbK/xzytBR41fllsEJM16zvBUyBCr7nkBpnAa1GumUQV3LA7NyyfmpBAFlaTwC2lHZ4vLpo/oLI1Fv/q/Q7ba3LOi4t+MlGEv6HdVYLnst6Q8INt+sjaRGFOZfdvOIto2EecGpw22JvDHfJfDQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR1801MB1883.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(376002)(39860400002)(366004)(136003)(451199021)(55016003)(8676002)(64756008)(83380400001)(71200400001)(6506007)(55236004)(316002)(186003)(26005)(54906003)(478600001)(9686003)(53546011)(7696005)(5660300002)(52536014)(30864003)(2906002)(4326008)(33656002)(38100700002)(76116006)(8936002)(122000001)(6916009)(66556008)(66476007)(66446008)(86362001)(66946007)(38070700005)(41300700001)(2004002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?1ODkSCfLth22jHEAit9SlDB6qIvfOhTSW85VQf8PJy29l5Yq4/GqimdRPmuu?=
- =?us-ascii?Q?6kXWQx134GwMoO8s5p8DyHbKUQabYulDXMjAllfbiCJQ4fDrq1s26Yy3Mdo0?=
- =?us-ascii?Q?hA2rvZT+/lYkwUtDcHHCbv1sIYlAkkYNYPto9tAGdH7/ub1hoTEzV751nIHP?=
- =?us-ascii?Q?NDbJbaZiiAzFs8z70w7ms6I7rE7YDDSHHHKTfWz6k3ZZbfWokH1gcF0liVAf?=
- =?us-ascii?Q?qhmZGtElIeq9qHlnU4cSumhrhwU1OVxTmxjYax8oV/2m2otuF+aQqIcsKvlo?=
- =?us-ascii?Q?LOrnHOEqFhD1BkubrEgR0BTOQD090NgEFZVHuxcoXrJs79qBhYTphCQLjZ6r?=
- =?us-ascii?Q?Rk6EXRc3SchV5PGdM3m0S7FXt9I6PS9mlG78HAPhyWyrEGdvslePS6TNolip?=
- =?us-ascii?Q?vw/nfo4q22FR30xPqHAy3fZlKTcjSxg4yhUGlaaU1aV+g3ktmxxY52csx88L?=
- =?us-ascii?Q?sz3bkzQvzbhGhi6HItiDCQ+YPPOaxBpyYs/cF3ZChCgeWyidf+fOxyUkK7iZ?=
- =?us-ascii?Q?jDO78AwGoPQnc+iLYc5mp5NsL6fFMHr0eb7QThuEipb1nq7cIRhng/SA0aLZ?=
- =?us-ascii?Q?cx/FnqPMSNT0Q7qfDndNLhpecaBn2CcPcJYBrickq9RR8EddLaCud6rDGHRP?=
- =?us-ascii?Q?5FKEzqljMiNVTM/rrk5EuHeCXZBymNw4Neecpr9FyDutmlNm5igM5DfN4HQG?=
- =?us-ascii?Q?Cxo5rzexJRoDTSS6ydAmsJKOa2aGhTfsWvSFwJD8FFhnWX55lDd92zR/v7/U?=
- =?us-ascii?Q?g7zu9G8REoWvFXSc7sZbRuyYdf5slohiN3+2iU2zinF4GyJZZ7x3fVl7KhkX?=
- =?us-ascii?Q?AE8A4KXxLVl5pBlgP31apHSpipejQNRhdbuD+99bWTNVWVJgub6KOFeocj3q?=
- =?us-ascii?Q?MXeeZ0t6OLAVs3kjlNR5IF0PM7vWrxfRFRramfWZnYQpkC1O+Tb/GV4t0PIS?=
- =?us-ascii?Q?AFy6pGjxSArycMMev8lSc4onfJ5FPCh7aYT+p8lPRuBVun6BMKpiLyTctKDv?=
- =?us-ascii?Q?DLrqnyvCistYOWaKMKZdvyjoqSWOg4v0z2exUQkgpOYbr8Yc+YkK9RTkG8S7?=
- =?us-ascii?Q?PQMTNoSnsW4LuQMNJH+e979GVm2mb3j4gT2giTvNbfJU7pfgH46HuIbOQ3ws?=
- =?us-ascii?Q?iEGXCyK9yobNdUWyNc2/ZlUZ0b4ii8r/oUaAL1FUpIZZ3ZUxWW22Cv8EdI38?=
- =?us-ascii?Q?GOuYuReZVtL6CT9jmkonKsIDMh9JmZCZKCsB9NWVNdIVm/YF5y1kQIyYYQeE?=
- =?us-ascii?Q?GvBUkNmqKl6rycfx0HLLoXjdYtD5wLMXIwIxzSPK/AfTD6qAiYvqEh0wy6bA?=
- =?us-ascii?Q?zF+MgSUMIOal+RYsXtyOOCouvv0msURcKMHao6l0RJ7yKmRn5nnX3NlHVyLM?=
- =?us-ascii?Q?/oXtUv1rzpsF65IS+5b6VT5z7k+nbGvVWj7scoNTHCa9orUQHZYdhOTofNhw?=
- =?us-ascii?Q?l4gA10T9ZGjQcAK+B7mZimTLrOAD7NqwzYdiRsrxSscQV7LbqV6stOqEqpAf?=
- =?us-ascii?Q?pm2e8kIvPERlkaDskbLl72VeqXgoCUCuCKfcFEgF7M02OpZfOI2ht76CKaHn?=
- =?us-ascii?Q?JARfXeTh+y8Ajp30mFIoAR1vmJg22P2tHOmA7czh?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 13 Apr 2023 06:23:00 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1E8EB
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:22:57 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 762D06000B;
+        Thu, 13 Apr 2023 10:22:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1681381376;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sjeuKuQdJ32SSnMHoEKVcjD6pzbnJXHzPlVz49ABF44=;
+        b=CVNzH2+6mP8oVST5TzUyPTk9Esauby0BOmNGbo4eBa3KbQRo6sqqokjx2R4DoTqEITC6Fc
+        6hpRwvkuVpbAO7tCWjsWIRZ5C9wfs9oCwIY7kcBc5ZflYvnGAYW2T+11/bxaquTIsXXV/x
+        oGFLJFn7iBuPwf+vnnTV/9+bukjV5CzOeJRSz3muC0HMq1uDLzDrKgd+KYKVfR9sI7gKTN
+        nt1EvZxGLMyjQmihY11vNSDVAWejvtw2Wsl/g07MzFTPkzLZIGusfRpwfqqX4Pr2vtGpEX
+        GXLVNSpkTxO5a9LJ1tIwO8x7H5+YiNg1nB5CCckttpemNB459+CPiz4CpZENtQ==
+Date:   Thu, 13 Apr 2023 12:22:52 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Cc:     Liang Yang <liang.yang@amlogic.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Yixun Lan <yixun.lan@amlogic.com>, <oxffffaa@gmail.com>,
+        <kernel@sberdevices.ru>, <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "yonghui.yu" <yonghui.yu@amlogic.com>
+Subject: Re: [PATCH v1 4/5] mtd: rawnand: meson: clear OOB buffer before
+ read
+Message-ID: <20230413122252.0a8efcd8@xps-13>
+In-Reply-To: <b3279de4-e89d-db03-a515-a6aa52ab90d3@sberdevices.ru>
+References: <20230412061700.1492474-1-AVKrasnov@sberdevices.ru>
+        <20230412061700.1492474-5-AVKrasnov@sberdevices.ru>
+        <20230412094400.3c82f631@xps-13>
+        <ac4b66da-6a76-c2ec-7e21-31632f3448d5@sberdevices.ru>
+        <20230412113654.183350d0@xps-13>
+        <4eace0a0-f6af-7d99-a52f-7913a2139330@sberdevices.ru>
+        <20230412141824.755b2bca@xps-13>
+        <eedaaed9-0a41-2c18-9eb2-792613566986@sberdevices.ru>
+        <20230412145715.58c2be4a@xps-13>
+        <7c996832-258f-001c-56bd-87bbdf23eeaa@amlogic.com>
+        <20230412163214.0c764bb3@xps-13>
+        <0c61eaae-053e-5768-a533-70b2ff0cc95d@amlogic.com>
+        <fbb8cb2b-0996-3029-b368-f67087d73487@amlogic.com>
+        <7520e512-8a19-ff04-364c-b5be0a579ef0@sberdevices.ru>
+        <20230413102200.309fbe9c@xps-13>
+        <b3279de4-e89d-db03-a515-a6aa52ab90d3@sberdevices.ru>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-OriginatorOrg: marvell.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR1801MB1883.namprd18.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d058b33a-a045-46db-1ad7-08db3c08fc73
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Apr 2023 10:22:29.5862
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: X6R1NP5EIO9wO6qRS9gIvkiTu4FH6QeIDnk7Rr6pQFyTgG03XGNij44MpgGVkC/bFO5K8joI/97Z0yg+TRtIxA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR18MB2966
-X-Proofpoint-ORIG-GUID: 9EMNbTwo0-JG9VSusvnrwZj-ZWRg0dFt
-X-Proofpoint-GUID: 9EMNbTwo0-JG9VSusvnrwZj-ZWRg0dFt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-13_06,2023-04-13_01,2023-02-09_01
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please see inline
+Hi Arseniy,
 
-> -----Original Message-----
-> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
-> Sent: Saturday, March 25, 2023 3:33 AM
-> To: Bharat Bhushan <bbhushan2@marvell.com>
-> Cc: wim@linux-watchdog.org; robh+dt@kernel.org;
-> krzysztof.kozlowski+dt@linaro.org; linux-watchdog@vger.kernel.org;
-> devicetree@vger.kernel.org; linux-kernel@vger.kernel.org
-> Subject: [EXT] Re: [PATCH 2/2] Watchdog: octeontx2: Add Pseudo-NMI GTI
-> watchdog driver
->=20
-> External Email
->=20
-> ----------------------------------------------------------------------
-> On Fri, Mar 24, 2023 at 08:26:52PM +0530, Bharat Bhushan wrote:
-> > GTI hardware supports per-core watchdog timer which are programmed in
-> > "interrupt + del3t + reset mode" and del3t traps are not enabled.
-> > This driver uses ARM64 pseudo-nmi interrupt support.
-> > GTI watchdog exception flow is:
-> >  - 1st timer expiration generates pseudo-nmi interrupt.
-> >    NMI exception handler dumps register/context state on all cpu's.
-> >  - 2nd timer expiration is ignored
-> >
-> >  - On 3rd timer expiration will trigger a system-wide core reset.
-> >
-> > Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
-> > ---
-> >  drivers/watchdog/Kconfig                  |   9 +
-> >  drivers/watchdog/Makefile                 |   1 +
-> >  drivers/watchdog/octeontx2_gti_watchdog.c | 352
-> > ++++++++++++++++++++++
-> >  3 files changed, 362 insertions(+)
-> >  create mode 100644 drivers/watchdog/octeontx2_gti_watchdog.c
-> >
-> > diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig index
-> > f0872970daf9..9607d36645f6 100644
-> > --- a/drivers/watchdog/Kconfig
-> > +++ b/drivers/watchdog/Kconfig
-> > @@ -2212,4 +2212,13 @@ config KEEMBAY_WATCHDOG
-> >  	  To compile this driver as a module, choose M here: the
-> >  	  module will be called keembay_wdt.
-> >
-> > +config OCTEON_GTI_WATCHDOG
-> > +	tristate "OCTEONTX2 GTI Watchdog driver"
-> > +	depends on ARM64
-> > +	help
-> > +	 OCTEONTX2 GTI hardware supports per-core watchdog timer which
-> > +	 are programmed in "interrupt + del3t + reset mode" and del3t
-> > +	 traps are not enabled.
-> > +	 This driver uses ARM64 pseudo-nmi interrupt support.
-> > +
-> >  endif # WATCHDOG
-> > diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-> > index 9cbf6580f16c..11af3db62fec 100644
-> > --- a/drivers/watchdog/Makefile
-> > +++ b/drivers/watchdog/Makefile
-> > @@ -230,3 +230,4 @@ obj-$(CONFIG_MENZ069_WATCHDOG) +=3D
-> menz69_wdt.o
-> >  obj-$(CONFIG_RAVE_SP_WATCHDOG) +=3D rave-sp-wdt.o
-> >  obj-$(CONFIG_STPMIC1_WATCHDOG) +=3D stpmic1_wdt.o
-> >  obj-$(CONFIG_SL28CPLD_WATCHDOG) +=3D sl28cpld_wdt.o
-> > +obj-$(CONFIG_OCTEON_GTI_WATCHDOG) +=3D octeontx2_gti_watchdog.o
-> > diff --git a/drivers/watchdog/octeontx2_gti_watchdog.c
-> > b/drivers/watchdog/octeontx2_gti_watchdog.c
-> > new file mode 100644
-> > index 000000000000..766b7d41defe
-> > --- /dev/null
-> > +++ b/drivers/watchdog/octeontx2_gti_watchdog.c
-> > @@ -0,0 +1,352 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/* Marvell GTI Watchdog driver
-> > + *
-> > + * Copyright (C) 2023 Marvell International Ltd.
-> > + *
-> > + * This program is free software; you can redistribute it and/or
-> > +modify
-> > + * it under the terms of the GNU General Public License version 2 as
-> > + * published by the Free Software Foundation.
-> > + */
-> > +
-> > +#include <linux/module.h>
-> > +#include <linux/cpu.h>
-> > +#include <linux/interrupt.h>
-> > +#include <linux/of_platform.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/watchdog.h>
-> > +#include <linux/sched/debug.h>
-> > +
-> > +#include <asm/arch_timer.h>
-> > +
-> > +/* GTI CWD Watchdog Registers */
-> > +#define GTI_CWD_WDOG(cpu)		(0x8 * cpu)
-> > +#define GTI_CWD_WDOG_MODE_INT_DEL3T_RST	(0x3)
-> > +#define GTI_CWD_WDOG_MODE_MASK		(0x3)
-> > +#define GTI_CWD_WDOG_LEN_SHIFT		(4)
-> > +#define GTI_CWD_WDOG_CNT_SHIFT		(20)
-> > +
-> > +/* GTI Per-core Watchdog Interrupt Register */
-> > +#define GTI_CWD_INT			0x200
-> > +
-> > +/* GTI Per-core Watchdog Interrupt Enable Clear Register */
-> > +#define GTI_CWD_INT_ENA_CLR		0x210
-> > +
-> > +/* GTI Per-core Watchdog Interrupt Enable Set Register */
-> > +#define GTI_CWD_INT_ENA_SET		0x218
-> > +
-> > +/* GTI Per-core Watchdog Poke Registers */
-> > +#define GTI_CWD_POKE(cpu)		(0x10000 + 0x8 * cpu)
-> > +
-> > +struct octeontx2_gti_wdt_percpu_priv {
-> > +	struct watchdog_device wdev;
-> > +	int irq;
-> > +};
-> > +
-> > +struct octeontx2_gti_wdt_priv {
-> > +	void __iomem *base;
-> > +	u64 clock_freq;
-> > +	int is_nmi;
-> > +	struct octeontx2_gti_wdt_percpu_priv __percpu *percpu_priv; };
-> > +
-> > +static int octeontx2_gti_wdt_get_cpuid(struct watchdog_device *wdev)
-> > +{
-> > +	struct octeontx2_gti_wdt_priv *priv =3D watchdog_get_drvdata(wdev);
-> > +	struct octeontx2_gti_wdt_percpu_priv *percpu_priv;
-> > +	int cpu;
-> > +
-> > +	for_each_online_cpu(cpu) {
-> > +		percpu_priv =3D per_cpu_ptr(priv->percpu_priv, cpu);
-> > +		if (&percpu_priv->wdev =3D=3D wdev)
-> > +			return cpu;
-> > +	}
-> > +
-> > +	return -1;
-> > +}
-> > +
-> > +void octeontx2_gti_wdt_callback_other_cpus(void *unused) {
-> > +	struct pt_regs *regs =3D get_irq_regs();
-> > +
-> > +	pr_emerg("GTI Watchdog CPU:%d\n", raw_smp_processor_id());
-> > +
-> > +	if (regs)
-> > +		show_regs(regs);
-> > +	else
-> > +		dump_stack();
-> > +}
-> > +
-> > +static irqreturn_t octeontx2_gti_wdt_interrupt(int irq, void *data) {
-> > +	struct octeontx2_gti_wdt_priv *priv =3D (struct octeontx2_gti_wdt_pri=
-v
-> *)data;
-> > +	int cpu =3D smp_processor_id();
-> > +
-> > +	/* Clear interrupt to fire again if delayed poke happens */
-> > +	writeq(1 << cpu, priv->base + GTI_CWD_INT);
-> > +	dump_stack();
-> > +
-> > +	for_each_online_cpu(cpu) {
-> > +		if (cpu =3D=3D raw_smp_processor_id())
-> > +			continue;
-> > +
-> > +		smp_call_function_single(cpu,
-> > +
-> octeontx2_gti_wdt_callback_other_cpus,
-> > +					 NULL, 1);
-> > +	}
-> > +
-> > +	return IRQ_HANDLED;
-> > +}
-> > +
-> > +static int octeontx2_gti_wdt_ping(struct watchdog_device *wdev) {
-> > +	struct octeontx2_gti_wdt_priv *priv =3D watchdog_get_drvdata(wdev);
-> > +	int cpu =3D octeontx2_gti_wdt_get_cpuid(wdev);
-> > +
-> > +	if (cpu < 0)
-> > +		return -EINVAL;
-> > +
-> > +	writeq(1, priv->base + GTI_CWD_POKE(cpu));
-> > +	return 0;
-> > +}
-> > +
-> > +static int octeontx2_gti_wdt_start(struct watchdog_device *wdev) {
-> > +	struct octeontx2_gti_wdt_priv *priv =3D watchdog_get_drvdata(wdev);
-> > +	int cpu =3D octeontx2_gti_wdt_get_cpuid(wdev);
-> > +	u64 regval;
-> > +
-> > +	if (cpu < 0)
-> > +		return -EINVAL;
-> > +
-> > +	set_bit(WDOG_HW_RUNNING, &wdev->status);
-> > +
-> > +	/* Clear any pending interrupt */
-> > +	writeq(1 << cpu, priv->base + GTI_CWD_INT);
-> > +
-> > +	/* Enable Interrupt */
-> > +	writeq(1 << cpu, priv->base + GTI_CWD_INT_ENA_SET);
-> > +
-> > +	/* Set (Interrupt + SCP interrupt (DEL3T) + core domain reset) Mode *=
-/
-> > +	regval =3D readq(priv->base + GTI_CWD_WDOG(cpu));
-> > +	regval |=3D GTI_CWD_WDOG_MODE_INT_DEL3T_RST;
-> > +	writeq(regval, priv->base + GTI_CWD_WDOG(cpu));
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int octeontx2_gti_wdt_stop(struct watchdog_device *wdev) {
-> > +	struct octeontx2_gti_wdt_priv *priv =3D watchdog_get_drvdata(wdev);
-> > +	u64 regval;
-> > +	int cpu =3D octeontx2_gti_wdt_get_cpuid(wdev);
-> > +
-> > +	if (cpu < 0)
-> > +		return -EINVAL;
-> > +
-> > +	/* Disable Interrupt */
-> > +	writeq(1 << cpu, priv->base + GTI_CWD_INT_ENA_CLR);
-> > +
-> > +	/* Set GTI_CWD_WDOG.Mode =3D 0 to stop the timer */
-> > +	regval =3D readq(priv->base + GTI_CWD_WDOG(cpu));
-> > +	regval &=3D ~GTI_CWD_WDOG_MODE_MASK;
-> > +	writeq(regval, priv->base + GTI_CWD_WDOG(cpu));
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int octeontx2_gti_wdt_settimeout(struct watchdog_device *wdev,
-> > +					unsigned int timeout)
-> > +{
-> > +	struct octeontx2_gti_wdt_priv *priv =3D watchdog_get_drvdata(wdev);
-> > +	int cpu =3D octeontx2_gti_wdt_get_cpuid(wdev);
-> > +	u64 timeout_wdog, regval;
-> > +
-> > +	if (cpu < 0)
-> > +		return -EINVAL;
-> > +
-> > +	/* Update new timeout */
-> > +	wdev->timeout =3D timeout;
-> > +
-> > +	/* Get clock cycles from timeout in second */
-> > +	timeout_wdog =3D (u64)timeout * priv->clock_freq;
-> > +
-> > +	/* Watchdog counts in 1024 cycle steps */
-> > +	timeout_wdog =3D timeout_wdog >> 10;
-> > +
-> > +	/*
-> > +	 * Hardware allows programming of upper 16-bits of 24-bits cycles
-> > +	 * Round up and use upper 16-bits only.
-> > +	 * Set max if timeout more than h/w supported
-> > +	 */
-> > +	timeout_wdog =3D (timeout_wdog + 0xff) >> 8;
-> > +	if (timeout_wdog >=3D 0x10000)
-> > +		timeout_wdog =3D 0xffff;
-> > +
-> > +	/*
-> > +	 * GTI_CWD_WDOG.LEN have only upper 16-bits of 24-bits
-> > +	 * GTI_CWD_WDOG.CNT, need addition shift of 8.
-> > +	 */
-> > +	regval =3D readq(priv->base + GTI_CWD_WDOG(cpu));
-> > +	regval &=3D GTI_CWD_WDOG_MODE_MASK;
-> > +	regval |=3D ((timeout_wdog) << (GTI_CWD_WDOG_CNT_SHIFT + 8)) |
-> > +		   (timeout_wdog << GTI_CWD_WDOG_LEN_SHIFT);
-> > +	writeq(regval, priv->base + GTI_CWD_WDOG(cpu));
-> > +	return 0;
-> > +}
-> > +
-> > +static const struct watchdog_info octeontx2_gti_wdt_ident =3D {
-> > +	.identity =3D "OcteonTX2 GTI watchdog",
-> > +	.options	=3D WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING |
-> WDIOF_MAGICCLOSE |
-> > +			  WDIOF_CARDRESET,
-> > +};
-> > +
-> > +static const struct watchdog_ops octeontx2_gti_wdt_ops =3D {
-> > +	.owner =3D THIS_MODULE,
-> > +	.start =3D octeontx2_gti_wdt_start,
-> > +	.stop =3D octeontx2_gti_wdt_stop,
-> > +	.ping =3D octeontx2_gti_wdt_ping,
-> > +	.set_timeout =3D octeontx2_gti_wdt_settimeout, };
-> > +
-> > +static void octeontx2_gti_wdt_free_irqs(struct octeontx2_gti_wdt_priv
-> > +*priv) {
-> > +	struct octeontx2_gti_wdt_percpu_priv *percpu_priv;
-> > +	int irq, cpu =3D 0;
-> > +
-> > +	for_each_online_cpu(cpu) {
-> > +		percpu_priv =3D per_cpu_ptr(priv->percpu_priv, cpu);
-> > +		irq =3D percpu_priv->irq;
-> > +		if (irq) {
-> > +			if (priv->is_nmi) {
-> > +				disable_nmi_nosync(irq);
-> > +				free_nmi(irq, priv);
-> > +			} else {
-> > +				disable_irq_nosync(irq);
-> > +				free_irq(irq, priv);
-> > +			}
-> > +
-> > +			percpu_priv->irq =3D 0;
-> > +		}
-> > +	}
-> > +}
-> > +
-> > +static int octeontx2_gti_wdt_probe(struct platform_device *pdev) {
-> > +	struct octeontx2_gti_wdt_percpu_priv *percpu_priv;
-> > +	struct octeontx2_gti_wdt_priv *priv;
-> > +	struct device *dev =3D &pdev->dev;
-> > +	struct watchdog_device *wdog_dev;
-> > +	unsigned long irq_flags;
-> > +	int irq, cpu, num_irqs;
-> > +	int err;
-> > +
-> > +	priv =3D devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-> > +	if (!priv)
-> > +		return -ENOMEM;
-> > +
-> > +	priv->percpu_priv =3D devm_alloc_percpu(&pdev->dev, *priv-
-> >percpu_priv);
-> > +	if (!priv->percpu_priv)
-> > +		return -ENOMEM;
-> > +
-> > +	priv->base =3D devm_platform_ioremap_resource(pdev, 0);
-> > +	if (IS_ERR(priv->base))
-> > +		return dev_err_probe(&pdev->dev, PTR_ERR(priv->base),
-> > +			      "reg property not valid/found\n");
-> > +
-> > +	num_irqs =3D platform_irq_count(pdev);
-> > +	if (num_irqs < 0)
-> > +		return dev_err_probe(dev, num_irqs, "GTI CWD no IRQs\n");
-> > +
-> > +	if (num_irqs < num_online_cpus())
-> > +		return dev_err_probe(dev, -EINVAL, "IRQs (%d) < CPUs (%d)\n",
-> > +				     num_irqs, num_online_cpus());
-> > +
-> > +	priv->clock_freq =3D arch_timer_get_cntfrq();
-> > +
-> > +	for_each_online_cpu(cpu) {
->=20
-> Watchdogs are supposed to be per system, not per CPU. The Linux kernel ha=
-s
-> other means to detect hung CPUs, and the watchdog subsystem should be
-> (ab)used to bypass or replace those methods.
+avkrasnov@sberdevices.ru wrote on Thu, 13 Apr 2023 12:36:24 +0300:
 
-Sorry for late reply, just returned from vacation.
-
-Okay, will remove the per core watchdog and submit next patch for global wa=
-tchdog.
-
-Thanks
--Bharat
-
+> On 13.04.2023 11:22, Miquel Raynal wrote:
+> > Hi Arseniy,
+> >=20
+> > avkrasnov@sberdevices.ru wrote on Thu, 13 Apr 2023 10:00:24 +0300:
+> >  =20
+> >> On 13.04.2023 09:11, Liang Yang wrote: =20
+> >>>
+> >>> On 2023/4/13 13:32, Liang Yang wrote:   =20
+> >>>> Hi Miquel,
+> >>>>
+> >>>> On 2023/4/12 22:32, Miquel Raynal wrote:   =20
+> >>>>> [ EXTERNAL EMAIL ]
+> >>>>>
+> >>>>> Hello,
+> >>>>>
+> >>>>> liang.yang@amlogic.com wrote on Wed, 12 Apr 2023 22:04:28 +0800:
+> >>>>>   =20
+> >>>>>> Hi Miquel and Arseniy,
+> >>>>>>
+> >>>>>> On 2023/4/12 20:57, Miquel Raynal wrote:   =20
+> >>>>>>> [ EXTERNAL EMAIL ]
+> >>>>>>>
+> >>>>>>> Hi Arseniy,
+> >>>>>>>
+> >>>>>>> avkrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 15:22:26 +0300=
+:   =20
+> >>>>>>>> On 12.04.2023 15:18, Miquel Raynal wrote:   =20
+> >>>>>>>>> Hi Arseniy,
+> >>>>>>>>>
+> >>>>>>>>> avkrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 13:14:52 +03=
+00:
+> >>>>>>>>> =C2=A0=C2=A0=C2=A0 >>>> On 12.04.2023 12:36, Miquel Raynal wrot=
+e:   =20
+> >>>>>>>>>>> Hi Arseniy,
+> >>>>>>>>>>>
+> >>>>>>>>>>> avkrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 12:20:55 +=
+0300:
+> >>>>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 >>>>>> On 12.04.2023 10:44, Mi=
+quel Raynal wrote:   =20
+> >>>>>>>>>>>>> Hi Arseniy,
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>> AVKrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 09:16:58=
+ +0300:
+> >>>>>>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 >>>>>>>> This NA=
+ND reads only few user's bytes in ECC mode (not full OOB), so
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>> "This NAND reads" does not look right, do you mean "Subpage=
+ reads do
+> >>>>>>>>>>>>> not retrieve all the OOB bytes,"?
+> >>>>>>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 >>>>>>>> fill OO=
+B buffer with zeroes to not return garbage from previous reads   =20
+> >>>>>>>>>>>>>> to user.
+> >>>>>>>>>>>>>> Otherwise 'nanddump' utility prints something like this fo=
+r just erased
+> >>>>>>>>>>>>>> page:
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>> ...
+> >>>>>>>>>>>>>> 0x000007f0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+> >>>>>>>>>>>>>> =C2=A0=C2=A0=C2=A0 OOB Data: ff ff ff ff 00 00 ff ff 80 cf=
+ 22 99 cb ad d3 be
+> >>>>>>>>>>>>>> =C2=A0=C2=A0=C2=A0 OOB Data: 63 27 ae 06 16 0a 2f eb bb dd=
+ 46 74 41 8e 88 6e
+> >>>>>>>>>>>>>> =C2=A0=C2=A0=C2=A0 OOB Data: 38 a1 2d e6 77 d4 05 06 f2 a5=
+ 7e 25 eb 34 7c ff
+> >>>>>>>>>>>>>> =C2=A0=C2=A0=C2=A0 OOB Data: 38 ea de 14 10 de 9b 40 33 16=
+ 6a cc 9d aa 2f 5e
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+> >>>>>>>>>>>>>> ---
+> >>>>>>>>>>>>>> =C2=A0=C2=A0 drivers/mtd/nand/raw/meson_nand.c | 5 +++++
+> >>>>>>>>>>>>>> =C2=A0=C2=A0 1 file changed, 5 insertions(+)
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/m=
+td/nand/raw/meson_nand.c
+> >>>>>>>>>>>>>> index f84a10238e4d..f2f2472cb511 100644
+> >>>>>>>>>>>>>> --- a/drivers/mtd/nand/raw/meson_nand.c
+> >>>>>>>>>>>>>> +++ b/drivers/mtd/nand/raw/meson_nand.c
+> >>>>>>>>>>>>>> @@ -858,9 +858,12 @@ static int meson_nfc_read_page_sub(st=
+ruct nand_chip *nand,
+> >>>>>>>>>>>>>> =C2=A0=C2=A0 static int meson_nfc_read_page_raw(struct nan=
+d_chip *nand, u8 *buf,
+> >>>>>>>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int o=
+ob_required, int page)
+> >>>>>>>>>>>>>> =C2=A0=C2=A0 {
+> >>>>>>>>>>>>>> +=C2=A0=C2=A0=C2=A0 struct mtd_info *mtd =3D nand_to_mtd(n=
+and);
+> >>>>>>>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u8 *oob_buf =3D nand-=
+>oob_poi;
+> >>>>>>>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int ret;
+> >>>>>>>>>>>>>> =C2=A0=C2=A0 >>>>>>>> +=C2=A0=C2=A0=C2=A0 memset(oob_buf, =
+0, mtd->oobsize);   =20
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>> I'm surprised raw reads do not read the entire OOB?   =20
+> >>>>>>>>>>>>
+> >>>>>>>>>>>> Yes! Seems in case of raw access (what i see in this driver)=
+ number of OOB bytes read
+> >>>>>>>>>>>> still depends on ECC parameters: for each portion of data co=
+vered with ECC code we can
+> >>>>>>>>>>>> read it's ECC code and "user bytes" from OOB - it is what i =
+see by dumping DMA buffer by
+> >>>>>>>>>>>> printk(). For example I'm working with 2K NAND pages, each p=
+age has 2 x 1K ECC blocks.
+> >>>>>>>>>>>> For each ECC block I have 16 OOB bytes which I can access by=
+ read/write. Each 16 bytes
+> >>>>>>>>>>>> contains 2 bytes of user's data and 14 bytes ECC codes. So w=
+hen I read page in raw mode
+> >>>>>>>>>>>> controller returns 32 bytes (2 x (2 + 14)) of OOB. While OOB=
+ is reported as 64 bytes.   =20
+> >>>>>>>>>>>
+> >>>>>>>>>>> In all modes, when you read OOB, you should get the full OOB.=
+ The fact
+> >>>>>>>>>>> that ECC correction is enabled or disabled does not matter. I=
+f the NAND
+> >>>>>>>>>>> features OOB sections of 64 bytes, you should get the 64 byte=
+s.
+> >>>>>>>>>>>
+> >>>>>>>>>>> What happens sometimes, is that some of the bytes are not pro=
+tected
+> >>>>>>>>>>> against bitflips, but the policy is to return the full buffer=
+.   =20
+> >>>>>>>>>>
+> >>>>>>>>>> Ok, so to clarify case for this NAND controller:
+> >>>>>>>>>> 1) In both ECC and raw modes i need to return the same raw OOB=
+ data (e.g. user bytes
+> >>>>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0 + ECC codes)?   =20
+> >>>>>>>>>
+> >>>>>>>>> Well, you need to cover the same amount of data, yes. But in th=
+e ECC
+> >>>>>>>>> case the data won't be raw (at least not all of it).   =20
+> >>>>>>>>
+> >>>>>>>> So "same amount of data", in ECC mode current implementation ret=
+urns only user OOB bytes (e.g.
+> >>>>>>>> OOB data excluding ECC codes), in raw it returns user bytes + EC=
+C codes. IIUC correct
+> >>>>>>>> behaviour is to always return user bytes + ECC codes as OOB data=
+ even in ECC mode ?   =20
+> >>>>>>>
+> >>>>>>> If the page are 2k+64B you should read 2k+64B when OOB are reques=
+ted.
+> >>>>>>>
+> >>>>>>> If the controller only returns 2k+32B, then perform a random read=
+ to
+> >>>>>>> just move the read pointer to mtd->size + mtd->oobsize - 32 and
+> >>>>>>> retrieve the missing 32 bytes?   =20
+> >>>>>>
+> >>>>>> 1) raw read can read out the whole page data 2k+64B, decided by th=
+e len in the controller raw read command:
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0cmd =3D (len & GENMASK(5, 0)) | scrambler =
+| DMA_DIR(dir);
+> >>>>>> after that, the missing oob bytes(not used) can be copied from mes=
+on_chip->data_buf. so the implementation of meson_nfc_read_page_raw() is li=
+ke this if need.
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0{
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ......
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 meson_nfc_read_page_sub=
+(nand, page, 1);
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 meson_nfc_get_data_oob(=
+nand, buf, oob_buf);
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 oob_len =3D (nand->ecc.=
+bytes + 2) * nand->ecc.steps;
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 memcpy(oob_buf + oob_le=
+n, meson_chip->data_buf + oob_len, mtd->oobsize - oob_len);
+> >>>>>>
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0}
+> >>>>>> 2) In ECC mode, the controller can't bring back the missing OOB by=
+tes. it can read out the user bytes and ecc bytes per meson_ooblayout_ops d=
+efine.   =20
+> >>>>>
+> >>>>> And then (if oob_required) you can bring the missing bytes with
+> >>>>> something along:
+> >>>>> nand_change_read_column_op(chip, mtd->writesize + oob_len,
+> >>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 oob_buf + oob_len,
+> >>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 mtd->oobsize - oob_len,
+> >>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 false);
+> >>>>> Should not be a huge performance hit.   =20
+> >>>>
+> >>>> After finishing ECC mode reading, the column address internal in NAN=
+D device should be the right pos; it doesn't need to change the column agai=
+n. so adding controller raw read for the missing bytes after ECC reading ma=
+y works.
+> >>>>   =20
+> >>> use raw read for the missing bytes, but they are not protected by hos=
+t ECC. to the NAND type of storage, is it ok or missing bytes better to be =
+filled with 0xff?   =20
+> >>
+> >> IIUC Miqu=C3=A8l's reply, valid behaviour is to return full OOB data i=
+n both modes. So in:
+> >> ECC mode it is user bytes(corrected by ECC, read from info buffer) + E=
+CC + missing bytes. ECC and missing bytes read in RAW mode. =20
+> >=20
+> > I believe the ECC bytes you'll get will be corrected.
+> > You can check this by using nandflipbits in mtd-utils. =20
 >=20
-> I am not inclined to accept this patch.
->=20
-> Guenter
->=20
-> > +		percpu_priv =3D per_cpu_ptr(priv->percpu_priv, cpu);
-> > +		wdog_dev =3D &percpu_priv->wdev;
-> > +		wdog_dev->info =3D &octeontx2_gti_wdt_ident,
-> > +		wdog_dev->ops =3D &octeontx2_gti_wdt_ops,
-> > +		wdog_dev->parent =3D dev;
-> > +		wdog_dev->min_timeout =3D 1;
-> > +		wdog_dev->max_timeout =3D 16;
-> > +		wdog_dev->max_hw_heartbeat_ms =3D 16000;
-> > +		wdog_dev->timeout =3D 8;
-> > +
-> > +		irq =3D platform_get_irq(pdev, cpu);
-> > +		if (irq < 0) {
-> > +			dev_err(&pdev->dev, "IRQ resource not found\n");
-> > +			err =3D -ENODEV;
-> > +			goto out;
-> > +		}
-> > +
-> > +		err =3D irq_force_affinity(irq, cpumask_of(cpu));
-> > +		if (err) {
-> > +			pr_warn("unable to set irq affinity (irq=3D%d, cpu=3D%u)\n",
-> irq, cpu);
-> > +			goto out;
-> > +		}
-> > +
-> > +		irq_flags =3D IRQF_PERCPU | IRQF_NOBALANCING |
-> IRQF_NO_AUTOEN |
-> > +			    IRQF_NO_THREAD;
-> > +		err =3D request_nmi(irq, octeontx2_gti_wdt_interrupt, irq_flags,
-> > +				  pdev->name, priv);
-> > +		if (err) {
-> > +			err =3D request_irq(irq, octeontx2_gti_wdt_interrupt,
-> irq_flags,
-> > +					  pdev->name, priv);
-> > +			if (err) {
-> > +				dev_err(dev, "cannot register interrupt handler
-> %d\n", err);
-> > +				goto out;
-> > +			}
-> > +			enable_irq(irq);
-> > +		} else {
-> > +			priv->is_nmi =3D 1;
-> > +			enable_nmi(irq);
-> > +		}
-> > +
-> > +		percpu_priv->irq =3D irq;
-> > +		watchdog_set_drvdata(wdog_dev, priv);
-> > +		platform_set_drvdata(pdev, priv);
-> > +		watchdog_init_timeout(wdog_dev, wdog_dev->timeout, dev);
-> > +		octeontx2_gti_wdt_settimeout(wdog_dev, wdog_dev-
-> >timeout);
-> > +		watchdog_stop_on_reboot(wdog_dev);
-> > +		watchdog_stop_on_unregister(wdog_dev);
-> > +
-> > +		err =3D devm_watchdog_register_device(dev, wdog_dev);
-> > +		if (unlikely(err))
-> > +			goto out;
-> > +		dev_info(dev, "Watchdog enabled (timeout=3D%d sec)",
-> wdog_dev->timeout);
-> > +	}
-> > +	return 0;
-> > +
-> > +out:
-> > +	octeontx2_gti_wdt_free_irqs(priv);
-> > +	return err;
-> > +}
-> > +
-> > +static int octeontx2_gti_wdt_remove(struct platform_device *pdev) {
-> > +	struct octeontx2_gti_wdt_priv *priv =3D platform_get_drvdata(pdev);
-> > +
-> > +	octeontx2_gti_wdt_free_irqs(priv);
-> > +	return 0;
-> > +}
-> > +
-> > +static const struct of_device_id octeontx2_gti_wdt_of_match[] =3D {
-> > +	{ .compatible =3D "mrvl,octeontx2-gti-wdt", },
-> > +	{ },
-> > +};
-> > +MODULE_DEVICE_TABLE(of, octeontx2_gti_wdt_of_match);
-> > +
-> > +static struct platform_driver octeontx2_gti_wdt_driver =3D {
-> > +	.driver =3D {
-> > +		.name =3D "octeontx2-gti-wdt",
-> > +		.of_match_table =3D octeontx2_gti_wdt_of_match,
-> > +	},
-> > +	.probe =3D octeontx2_gti_wdt_probe,
-> > +	.remove =3D octeontx2_gti_wdt_remove,
-> > +};
-> > +module_platform_driver(octeontx2_gti_wdt_driver);
-> > +
-> > +MODULE_AUTHOR("Bharat Bhushan <bbhushan2@marvell.com>");
-> > +MODULE_DESCRIPTION("OcteonTX2 GTI per cpu watchdog driver");
-> > --
-> > 2.17.1
-> >
+> Sorry, didn't get it, i'm new in NAND area. Bytes of ECC codes are availa=
+ble only in raw mode (at least in this NAND
+> driver) also as missing bytes of OOB.
+
+Gasp. Yeah that's a controller limitation, okay.
+
+> So IIUC ECC codes are metadata to correct data bytes, and thus
+> couldn't be corrected.
+
+We consider them metadata, but they are fully part of the ECC scheme
+and thus their correction is part of the process, bitflips in the ECC
+bytes will count as data bitflips actually.
+
+I talked a bit about ECC engines at a previous conference if it can
+help:
+https://elinux.org/ELC_Europe_2020_Presentations
+'Understand ECC Support for NAND Flash Devices in Linux'
+And also wrote a blog post with a chapter about ECC engines:
+https://bootlin.com/blog/supporting-a-misbehaving-nand-ecc-engine/
+
+Thanks,
+Miqu=C3=A8l
