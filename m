@@ -2,161 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E6FF6E1232
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:24:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34F356E1233
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbjDMQY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 12:24:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34612 "EHLO
+        id S230188AbjDMQY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 12:24:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbjDMQYt (ORCPT
+        with ESMTP id S230033AbjDMQY5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 12:24:49 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E29A8A5F;
-        Thu, 13 Apr 2023 09:24:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1681403081; x=1712939081;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=jVY1i24b8wmguS7lTARjG/b+rm7QVdbGV2S7Z0o8Omg=;
-  b=Mqa/MR5Sr4sTzBbKNgD8PeqQtrrkWJwPLD2EINC0h1IgNp9xJk4Ezmka
-   b7ERUy09i/iw1gewZoKg8OVbkXgv3ZLSa+D3C4VJ5e78sZkN25TB1xIYS
-   7y6fv4a/j1D4tFyvUI7KLfdBmnDHFcK/XFYtpKnRmEw+l254DgvO25Ku1
-   4oURpaNeshS/6y8mBSueDhk465Lui0kabhgHSlc0OcpQL05CY/Reoi+xe
-   WuZQ/yeL/qXwv+Qk44+0XobLqMZQKRm7stjJsha0EE291Zhx/EpB5IchO
-   2z1RdrfaXDa96q8Q18u1a1Jr0bsqhhlIWItEk1uMGbWpLkepIOsDwBJLi
-   w==;
-X-IronPort-AV: E=Sophos;i="5.99,194,1677567600"; 
-   d="scan'208";a="208983650"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Apr 2023 09:24:40 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 13 Apr 2023 09:24:40 -0700
-Received: from [10.12.72.144] (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Thu, 13 Apr 2023 09:24:38 -0700
-Message-ID: <9338a2c2-fda5-d1d6-e4ad-c37de6bb5636@microchip.com>
-Date:   Thu, 13 Apr 2023 18:24:38 +0200
+        Thu, 13 Apr 2023 12:24:57 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978CB869E
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:24:56 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33DFKhNB013427;
+        Thu, 13 Apr 2023 16:24:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=ARLRHoHpS55qm8rtlTvlDCPA8/zgmyitwtHhAXty57Y=;
+ b=Nw3CFdosSJauPwZ+kJ1fDELgGtLK+7iarPCCjCJ2tovsY25hbyhXMlRpYtVEm2/4LApT
+ 6ZTZUn2hPZiqfT89BzdwOrCkk2IsSP45i1n3NsYpRQevmkoqPGVwfDYtY2JxcLnk95AB
+ /CDTrRbLOaG4V6ERziRkiekxAHNJIymvM7H/p1uxRKzgodVz77WRwUCS+yCDnZpH1RK2
+ 9ek4k31LmO/x1y2ez3Rs2RopTtAq38drCqgzPX2CD1cU5ArwNoucalL2E2AOfKm+I0z+
+ pqkFmzZoVKoaCHzCYbFNRG1QJacv+9eCSnphFdTqVjgWFf1T7QEY64CHXVt3Vup73oGa Ng== 
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pxma1tseg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Apr 2023 16:24:45 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33DD1IW9020744;
+        Thu, 13 Apr 2023 16:24:45 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([9.208.129.117])
+        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3pu0jhccm6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Apr 2023 16:24:45 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+        by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33DGOhEI20775570
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 13 Apr 2023 16:24:44 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D544258059;
+        Thu, 13 Apr 2023 16:24:43 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0DC3B58055;
+        Thu, 13 Apr 2023 16:24:43 +0000 (GMT)
+Received: from slate16.aus.stglabs.ibm.com (unknown [9.160.69.135])
+        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 13 Apr 2023 16:24:42 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-fsi@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, joel@jms.id.au, jk@ozlabs.org,
+        alistair@popple.id.au, Eddie James <eajames@linux.ibm.com>
+Subject: [PATCH] fsi: core: Fix legacy minor numbering
+Date:   Thu, 13 Apr 2023 11:24:40 -0500
+Message-Id: <20230413162440.3313036-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [linux][PATCH] pinctrl: at91-pio4: Add push-pull drive
- configuration
-Content-Language: en-US
-To:     <Ryan.Wanner@microchip.com>, <ludovic.desroches@microchip.com>,
-        <linus.walleij@linaro.org>, <alexandre.belloni@bootlin.com>,
-        <claudiu.beznea@microchip.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230412175146.886684-1-Ryan.Wanner@microchip.com>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <20230412175146.886684-1-Ryan.Wanner@microchip.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 4jQ0wmQ9Wh3-EPjZLpc_WUzFThzE6xT9
+X-Proofpoint-GUID: 4jQ0wmQ9Wh3-EPjZLpc_WUzFThzE6xT9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-13_11,2023-04-13_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 impostorscore=0 lowpriorityscore=0 suspectscore=0
+ mlxscore=0 phishscore=0 spamscore=0 mlxlogscore=999 clxscore=1015
+ adultscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2304130143
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/04/2023 at 19:51, Ryan.Wanner@microchip.com wrote:
-> From: Ryan Wanner <Ryan.Wanner@microchip.com>
-> 
-> The PIO4 does support push-pull configuration as this is the default
-> state of the open-drain register. Adapt the driver for this.
-> 
-> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
-> ---
-> This patch also fixes the warning of unsupported
-> configuration param 8.
-> 
-> This was tested on both sama5d2-som1-ek and sama7g5ek. I used dbg_show
-> fucntion to test if the configuration was correct when adding
-> drive-open-drain or drive-push-pull to the dts file.
-> 
->   drivers/pinctrl/pinctrl-at91-pio4.c | 17 ++++++++++++-----
->   1 file changed, 12 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/pinctrl/pinctrl-at91-pio4.c b/drivers/pinctrl/pinctrl-at91-pio4.c
-> index a30c6f7c9016..9a0cddfeaf92 100644
-> --- a/drivers/pinctrl/pinctrl-at91-pio4.c
-> +++ b/drivers/pinctrl/pinctrl-at91-pio4.c
-> @@ -776,6 +776,11 @@ static int atmel_conf_pin_config_group_get(struct pinctrl_dev *pctldev,
->   			return -EINVAL;
->   		arg = 1;
->   		break;
-> +	case PIN_CONFIG_DRIVE_PUSH_PULL:
-> +		if ((res & ATMEL_PIO_OPD_MASK))
-> +			return -EINVAL;
-> +		arg = 1;
-> +		break;
->   	case PIN_CONFIG_INPUT_SCHMITT_ENABLE:
->   		if (!(res & ATMEL_PIO_SCHMITT_MASK))
->   			return -EINVAL;
-> @@ -839,10 +844,10 @@ static int atmel_conf_pin_config_group_set(struct pinctrl_dev *pctldev,
->   			conf &= (~ATMEL_PIO_PUEN_MASK);
->   			break;
->   		case PIN_CONFIG_DRIVE_OPEN_DRAIN:
-> -			if (arg == 0)
-> -				conf &= (~ATMEL_PIO_OPD_MASK);
-> -			else
-> -				conf |= ATMEL_PIO_OPD_MASK;
-> +			conf |= ATMEL_PIO_OPD_MASK;
-> +			break;
+FSI reserves the first 64 minor numbers for the legacy numbering
+based on the chip id. However the legacy number shifts the chip
+id too much, resulting in overlap between legacy and non-legacy
+numbers. Reduce the chip id bit shift since the type field only
+takes 2 bits.
 
-This chunk seems to change the behavior of the driver in case of 
-OPEN_DRAIN by ignoring the "arg" encoded parameter.
+Signed-off-by: Eddie James <eajames@linux.ibm.com>
+---
+ drivers/fsi/fsi-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-It seems that arg was used equal to 0 at least here:
-https://elixir.bootlin.com/linux/latest/source/drivers/gpio/gpiolib.c#L2504
-
-(we talked about this internally, but I didn't see it this way: sorry Ryan)
-
-Now we set the OPD bit unconditionally, which seems the proper way, but 
-it changes things: I would advice to separate this change into another 
-patch.
-
-I'm very surprised we didn't see this "bug" earlier because it seems to 
-be present since the creation of the file.
-
-The rest of the addition looks good to me.
-
-> +		case PIN_CONFIG_DRIVE_PUSH_PULL:
-> +			conf &= (~ATMEL_PIO_OPD_MASK);
->   			break;
->   		case PIN_CONFIG_INPUT_SCHMITT_ENABLE:
->   			if (arg == 0)
-> @@ -937,8 +942,10 @@ static void atmel_conf_pin_config_dbg_show(struct pinctrl_dev *pctldev,
->   		seq_printf(s, "%s ", "pull-down");
->   	if (conf & ATMEL_PIO_IFEN_MASK)
->   		seq_printf(s, "%s ", "debounce");
-> -	if (conf & ATMEL_PIO_OPD_MASK)
-> +	if ((conf & ATMEL_PIO_OPD_MASK) > 0)
-
-The 2 lines are equivalent, keep the former one.
-
->   		seq_printf(s, "%s ", "open-drain");
-> +	if ((conf & ATMEL_PIO_OPD_MASK) == 0)
-
-here, simply a "else" does the trick
-
-> +		seq_printf(s, "%s ", "push-pull");
->   	if (conf & ATMEL_PIO_SCHMITT_MASK)
->   		seq_printf(s, "%s ", "schmitt");
->   	if (atmel_pioctrl->slew_rate_support && (conf & ATMEL_PIO_SR_MASK))
-
-Thanks, best regards,
-   Nicolas
-
+diff --git a/drivers/fsi/fsi-core.c b/drivers/fsi/fsi-core.c
+index 0b927c9f4267..b9f410170655 100644
+--- a/drivers/fsi/fsi-core.c
++++ b/drivers/fsi/fsi-core.c
+@@ -950,7 +950,7 @@ static int __fsi_get_new_minor(struct fsi_slave *slave, enum fsi_dev_type type,
+ 	/* Check if we qualify for legacy numbering */
+ 	if (cid >= 0 && cid < 16 && type < 4) {
+ 		/* Try reserving the legacy number */
+-		id = (cid << 4) | type;
++		id = (cid << 2) | type;
+ 		id = ida_simple_get(&fsi_minor_ida, id, id + 1, GFP_KERNEL);
+ 		if (id >= 0) {
+ 			*out_index = fsi_adjust_index(cid);
 -- 
-Nicolas Ferre
+2.31.1
 
