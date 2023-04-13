@@ -2,107 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C101C6E09FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 11:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C17F6E0A00
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 11:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjDMJTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 05:19:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45054 "EHLO
+        id S230241AbjDMJTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 05:19:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbjDMJS5 (ORCPT
+        with ESMTP id S230352AbjDMJTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 05:18:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008E59753;
-        Thu, 13 Apr 2023 02:18:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C43563C90;
-        Thu, 13 Apr 2023 09:18:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3618C433D2;
-        Thu, 13 Apr 2023 09:18:29 +0000 (UTC)
-Message-ID: <078e3a48-acdb-e6e4-8963-84ecf1c1429d@xs4all.nl>
-Date:   Thu, 13 Apr 2023 11:18:28 +0200
+        Thu, 13 Apr 2023 05:19:12 -0400
+Received: from mail-40134.protonmail.ch (mail-40134.protonmail.ch [185.70.40.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222F99768
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 02:19:09 -0700 (PDT)
+Date:   Thu, 13 Apr 2023 09:19:00 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+        s=protonmail; t=1681377547; x=1681636747;
+        bh=TV/Ywtf2zqhc2JmzZp1z4jc7r7gspEQExHyrYAkbvS0=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=CnKqm9MdAl2DaU4KRYPheRwn7e/sI4yoCyT8kjzPbpYUOEmGaDSNrDMWDo72P24f2
+         ryt+GA/C1eB9OXlfeDtIAwrRxB2Zu41KoxBjB89+5l6cy+3EtkWIOqzSom10O46PEH
+         S5wmrzz2tjqV6TlB1AfcUGQVXy9rOrk2Z2l+p814BlvakKT9JUhcydH8PjGVHKhgUX
+         s+Qf1PdAYsaaPaeGKocUxVoIkP5lFX2RYDdogrY8061Q3lr8DXSnPzBdctb8cS7+yq
+         Yd0tW8ALtRKS4iZxdcioyU3DlpJJM8Fr9M7NLlU2KOXBXoH0gTKXSvceIyiTLzGwhh
+         cb/EBvXzpOIww==
+To:     Wedson Almeida Filho <wedsonaf@gmail.com>,
+        rust-for-linux@vger.kernel.org
+From:   Benno Lossin <benno.lossin@proton.me>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org,
+        Wedson Almeida Filho <walmeida@microsoft.com>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Subject: Re: [PATCH v4 08/13] rust: introduce `ARef`
+Message-ID: <f8575380-e710-d505-837c-bfcabe0eff00@proton.me>
+In-Reply-To: <20230411054543.21278-8-wedsonaf@gmail.com>
+References: <20230411054543.21278-1-wedsonaf@gmail.com> <20230411054543.21278-8-wedsonaf@gmail.com>
+Feedback-ID: 71780778:user:proton
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3] media: bttv: fix use after free error due to
- btv->timeout timer
-Content-Language: en-US
-To:     Zheng Wang <zyytlz.wz@163.com>,
-        Deborah Brouwer <deborahbrouwer3563@gmail.com>
-Cc:     laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alex000young@gmail.com, hackerzheng666@gmail.com,
-        security@kernel.org, hdanton@sina.com, mchehab@kernel.org
-References: <20230413034942.40831-1-zyytlz.wz@163.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20230413034942.40831-1-zyytlz.wz@163.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zheng,
-
-Deb Brouwer is working on converting bttv to the vb2 framework, so I want to
-wait for that to finish before taking other bttv patches.
-
-I suspect this is still valid post-vb2 conversion, but I'm not certain.
-
-Regards,
-
-	Hans
-
-On 13/04/2023 05:49, Zheng Wang wrote:
-> There may be some a race condition between timer function
-> bttv_irq_timeout and bttv_remove. The timer is setup in
-> probe and there is no timer_delete operation in remove
-> function. When it hit kfree btv, the function might still be
-> invoked, which will cause use after free bug.
-> 
-> This bug is found by static analysis, it may be false positive.
-> 
-> Fix it by adding del_timer_sync invoking to the remove function.
-> 
-> cpu0                cpu1
->                   bttv_probe
->                     ->timer_setup
->                       ->bttv_set_dma
->                         ->mod_timer;
-> bttv_remove
->   ->kfree(btv);
->                   ->bttv_irq_timeout
->                     ->USE btv
-> 
-> Fixes: 162e6376ac58 ("media: pci: Convert timers to use timer_setup()")
-> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+On 11.04.23 07:45, Wedson Almeida Filho wrote:
+> From: Wedson Almeida Filho <walmeida@microsoft.com>
+>
+> This is an owned reference to an object that is always ref-counted. This
+> is meant to be used in wrappers for C types that have their own ref
+> counting functions, for example, tasks, files, inodes, dentries, etc.
+>
+> Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+> Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
 > ---
-> v3:
-> - Add Fix label
-> v2:
-> - stop replacing del_timer with del_timer_sync suggested by Hillf Danton
-> ---
->  drivers/media/pci/bt8xx/bttv-driver.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
-> index d40b537f4e98..24ba5729969d 100644
-> --- a/drivers/media/pci/bt8xx/bttv-driver.c
-> +++ b/drivers/media/pci/bt8xx/bttv-driver.c
-> @@ -4248,6 +4248,7 @@ static void bttv_remove(struct pci_dev *pci_dev)
->  
->  	/* free resources */
->  	free_irq(btv->c.pci->irq,btv);
-> +	del_timer_sync(&btv->timeout);
->  	iounmap(btv->bt848_mmio);
->  	release_mem_region(pci_resource_start(btv->c.pci,0),
->  			   pci_resource_len(btv->c.pci,0));
+> v1 -> v2: No changes
+> v2 -> v3: No changes
+> v3 -> v4: No changes
+>
+>   rust/kernel/types.rs | 107 +++++++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 107 insertions(+)
+>
+> diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
+> index a4b1e3778da7..29db59d6119a 100644
+> --- a/rust/kernel/types.rs
+> +++ b/rust/kernel/types.rs
+> @@ -6,8 +6,10 @@ use crate::init::{self, PinInit};
+>   use alloc::boxed::Box;
+>   use core::{
+>       cell::UnsafeCell,
+> +    marker::PhantomData,
+>       mem::MaybeUninit,
+>       ops::{Deref, DerefMut},
+> +    ptr::NonNull,
+>   };
+>
+>   /// Used to transfer ownership to and from foreign (non-Rust) languages=
+.
+> @@ -268,6 +270,111 @@ impl<T> Opaque<T> {
+>       }
+>   }
+>
+> +/// Types that are _always_ reference counted.
+> +///
+> +/// It allows such types to define their own custom ref increment and de=
+crement functions.
+> +/// Additionally, it allows users to convert from a shared reference `&T=
+` to an owned reference
+> +/// [`ARef<T>`].
+> +///
+> +/// This is usually implemented by wrappers to existing structures on th=
+e C side of the code. For
+> +/// Rust code, the recommendation is to use [`Arc`](crate::sync::Arc) to=
+ create reference-counted
+> +/// instances of a type.
+> +///
+> +/// # Safety
+> +///
+> +/// Implementers must ensure that increments to the reference count keep=
+ the object alive in memory
+> +/// at least until matching decrements are performed.
+> +///
+> +/// Implementers must also ensure that all instances are reference-count=
+ed. (Otherwise they
+> +/// won't be able to honour the requirement that [`AlwaysRefCounted::inc=
+_ref`] keep the object
+> +/// alive.)
+
+`dec_ref` states below that it 'Frees the object when the count reaches
+zero.', this should also be stated here, since implementers should adhere
+to that when implementing `dec_ref`.
+
+> +pub unsafe trait AlwaysRefCounted {
+> +    /// Increments the reference count on the object.
+> +    fn inc_ref(&self);
+
+
+
+> +
+> +    /// Decrements the reference count on the object.
+> +    ///
+> +    /// Frees the object when the count reaches zero.
+> +    ///
+> +    /// # Safety
+> +    ///
+> +    /// Callers must ensure that there was a previous matching increment=
+ to the reference count,
+> +    /// and that the object is no longer used after its reference count =
+is decremented (as it may
+> +    /// result in the object being freed), unless the caller owns anothe=
+r increment on the refcount
+> +    /// (e.g., it calls [`AlwaysRefCounted::inc_ref`] twice, then calls
+> +    /// [`AlwaysRefCounted::dec_ref`] once).
+> +    unsafe fn dec_ref(obj: NonNull<Self>);
+> +}
+> +
+> +/// An owned reference to an always-reference-counted object.
+> +///
+> +/// The object's reference count is automatically decremented when an in=
+stance of [`ARef`] is
+> +/// dropped. It is also automatically incremented when a new instance is=
+ created via
+> +/// [`ARef::clone`].
+> +///
+> +/// # Invariants
+> +///
+> +/// The pointer stored in `ptr` is non-null and valid for the lifetime o=
+f the [`ARef`] instance. In
+> +/// particular, the [`ARef`] instance owns an increment on the underlyin=
+g object's reference count.
+> +pub struct ARef<T: AlwaysRefCounted> {
+> +    ptr: NonNull<T>,
+> +    _p: PhantomData<T>,
+> +}
+> +
+> +impl<T: AlwaysRefCounted> ARef<T> {
+> +    /// Creates a new instance of [`ARef`].
+> +    ///
+> +    /// It takes over an increment of the reference count on the underly=
+ing object.
+> +    ///
+> +    /// # Safety
+> +    ///
+> +    /// Callers must ensure that the reference count was incremented at =
+least once, and that they
+> +    /// are properly relinquishing one increment. That is, if there is o=
+nly one increment, callers
+> +    /// must not use the underlying object anymore -- it is only safe to=
+ do so via the newly
+> +    /// created [`ARef`].
+> +    pub unsafe fn from_raw(ptr: NonNull<T>) -> Self {
+> +        // INVARIANT: The safety requirements guarantee that the new ins=
+tance now owns the
+> +        // increment on the refcount.
+> +        Self {
+> +            ptr,
+> +            _p: PhantomData,
+> +        }
+> +    }
+> +}
+> +
+> +impl<T: AlwaysRefCounted> Clone for ARef<T> {
+> +    fn clone(&self) -> Self {
+> +        self.inc_ref();
+> +        // SAFETY: We just incremented the refcount above.
+> +        unsafe { Self::from_raw(self.ptr) }
+> +    }
+> +}
+> +
+> +impl<T: AlwaysRefCounted> Deref for ARef<T> {
+> +    type Target =3D T;
+> +
+> +    fn deref(&self) -> &Self::Target {
+> +        // SAFETY: The type invariants guarantee that the object is vali=
+d.
+> +        unsafe { self.ptr.as_ref() }
+> +    }
+> +}
+> +
+> +impl<T: AlwaysRefCounted> From<&T> for ARef<T> {
+> +    fn from(b: &T) -> Self {
+> +        b.inc_ref();
+> +        // SAFETY: We just incremented the refcount above.
+> +        unsafe { Self::from_raw(NonNull::from(b)) }
+> +    }
+> +}
+
+This impl seems unsound to me, as we can do this:
+
+     struct MyStruct {
+         raw: Opaque<bindings::my_struct>, // This has a `refcount_t` insid=
+e.
+     }
+
+     impl MyStruct {
+         fn new() -> Self { ... }
+     }
+
+     unsafe impl AlwaysRefCounted for MyStruct { ... } // Implemented corre=
+ctly.
+
+     fn evil() -> ARef<MyStruct> {
+         let my_struct =3D MyStruct::new();
+         ARef::from(&my_struct) // We return a pointer to the stack!
+     }
+
+similarly, this can also be done with a `Box`:
+
+     fn evil2() -> ARef<MyStruct> {
+         let my_struct =3D Box::new(MyStruct::new());
+         ARef::from(&*my_struct)
+         // Box is freed here, even just dropping the `ARef` will result in
+         // a UAF.
+     }
+
+Additionally, I think that `AlwaysRefCounted::inc_ref` should not be safe,
+as the caller must not deallocate the memory until the refcount is zero.
+
+Another pitfall of `ARef`: it does not deallocate the memory when the
+refcount reaches zero. People might expect that this code would not leak
+memory:
+
+     let foo =3D Box::try_new(Foo::new())?;
+     let foo =3D Box::leak(foo); // Leak the box, such that we do not
+                               // deallocate the memory too early.
+     let foo =3D ARef::from(foo);
+     drop(foo); // refcount is now zero, but the memory is never deallocate=
+d.
+
+
+> +
+> +impl<T: AlwaysRefCounted> Drop for ARef<T> {
+> +    fn drop(&mut self) {
+> +        // SAFETY: The type invariants guarantee that the `ARef` owns th=
+e reference we're about to
+> +        // decrement.
+> +        unsafe { T::dec_ref(self.ptr) };
+> +    }
+> +}
+> +
+>   /// A sum type that always holds either a value of type `L` or `R`.
+>   pub enum Either<L, R> {
+>       /// Constructs an instance of [`Either`] containing a value of type=
+ `L`.
+> --
+> 2.34.1
+>
 
