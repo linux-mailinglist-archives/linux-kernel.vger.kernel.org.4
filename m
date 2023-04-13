@@ -2,303 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6EF06E03D9
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 03:50:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF2D66E03DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 03:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbjDMBuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 21:50:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45130 "EHLO
+        id S229712AbjDMBvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 21:51:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDMBuC (ORCPT
+        with ESMTP id S229451AbjDMBvp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 21:50:02 -0400
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104AC5599;
-        Wed, 12 Apr 2023 18:49:59 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=23;SR=0;TI=SMTPD_---0Vfy7mto_1681350593;
-Received: from 30.240.113.14(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0Vfy7mto_1681350593)
-          by smtp.aliyun-inc.com;
-          Thu, 13 Apr 2023 09:49:55 +0800
-Message-ID: <cdf60454-c026-def4-b582-0ff894f98acf@linux.alibaba.com>
-Date:   Thu, 13 Apr 2023 09:49:53 +0800
+        Wed, 12 Apr 2023 21:51:45 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12EB3527A;
+        Wed, 12 Apr 2023 18:51:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681350704; x=1712886704;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lMinR9VexdNji8lruIldsVGJQj5Z8Jw3IyU7JoubiqQ=;
+  b=mnfJkzbSY5t2Ddhd1bbcNBGGaqgW9rDbycTqgxxsEpkG9nF6mmAn5IFg
+   /eR6VnTWt36wr3hCNMDtHar6WLOgTctR6T1boY0PpuH25e+082Wz/2N/S
+   ndWSCKMcrCX8JWLwm1usQKsWP4HJhKn2u3mlI+CrlB3srYYBCAv35iwQX
+   gyVDuahX/uGbUHchb/vJORGAWFhn/Vkl4faJsFn0uAzQxZDfmWDRF0GAc
+   PXpX19gFvQer1lh3DEVmhW2GOQ042YMnQEkd/OSzxwhx8fK7J/ZgwaYSh
+   9obAhXgMo9HXQ4gZIp7SPe2kOdYadHUVweufHKZxxQ9ugWCS4VqL+Rihi
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="323687177"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="323687177"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 18:51:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="719619863"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="719619863"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 12 Apr 2023 18:51:31 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pmm7W-000YF3-26;
+        Thu, 13 Apr 2023 01:51:30 +0000
+Date:   Thu, 13 Apr 2023 09:50:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        Box David E <david.e.box@intel.com>, jstultz@google.com,
+        pavel@ucw.cz, svenva@chromium.org,
+        Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Shyam-sundar.S-k@amd.com, rrangel@chromium.org,
+        Jain Rajat <rajatja@google.com>, hdegoede@redhat.com,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 4/4] platform/x86/intel/pmc: core: Report duration of
+ time in HW sleep state
+Message-ID: <202304130908.LOiMWRYR-lkp@intel.com>
+References: <20230412194917.7164-5-mario.limonciello@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH v5 2/2] ACPI: APEI: handle synchronous exceptions in task
- work
-Content-Language: en-US
-To:     Xiaofei Tan <tanxiaofei@huawei.com>, mawupeng1@huawei.com,
-        tony.luck@intel.com, naoya.horiguchi@nec.com
-Cc:     linux-acpi@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, justin.he@arm.com,
-        akpm@linux-foundation.org, ardb@kernel.org, ashish.kalra@amd.com,
-        baolin.wang@linux.alibaba.com, bp@alien8.de,
-        cuibixuan@linux.alibaba.com, dave.hansen@linux.intel.com,
-        james.morse@arm.com, jarkko@kernel.org, lenb@kernel.org,
-        linmiaohe@huawei.com, lvying6@huawei.com, rafael@kernel.org,
-        xiexiuqi@huawei.com, zhuo.song@linux.alibaba.com
-References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
- <20230411104842.37079-3-xueshuai@linux.alibaba.com>
- <e52f39f9-3a36-869e-b321-55dfc8a44ad0@huawei.com>
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <e52f39f9-3a36-869e-b321-55dfc8a44ad0@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230412194917.7164-5-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Mario,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/PM-Add-sysfs-files-to-represent-time-spent-in-hardware-sleep-state/20230413-035220
+base:   09a9639e56c01c7a00d6c0ca63f4c7c41abe075d
+patch link:    https://lore.kernel.org/r/20230412194917.7164-5-mario.limonciello%40amd.com
+patch subject: [PATCH v8 4/4] platform/x86/intel/pmc: core: Report duration of time in HW sleep state
+config: i386-randconfig-a004-20230410 (https://download.01.org/0day-ci/archive/20230413/202304130908.LOiMWRYR-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/315b1dd23cbedfd2848c8ac8ec1f77c3610b955e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Mario-Limonciello/PM-Add-sysfs-files-to-represent-time-spent-in-hardware-sleep-state/20230413-035220
+        git checkout 315b1dd23cbedfd2848c8ac8ec1f77c3610b955e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/platform/x86/intel/pmc/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304130908.LOiMWRYR-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/platform/x86/intel/pmc/core.c:1156:31: warning: shift count >= width of type [-Wshift-count-overflow]
+           pm_report_max_hw_sleep(((1UL << 32) - 1) * pmc_core_adjust_slp_s0_step(pmcdev, 1));
+                                        ^  ~~
+   1 warning generated.
 
 
-On 2023/4/12 PM12:05, Xiaofei Tan wrote:
-> 
-> 在 2023/4/11 18:48, Shuai Xue 写道:
->> Hardware errors could be signaled by synchronous interrupt, e.g.  when an
->> error is detected by a background scrubber, or signaled by synchronous
->> exception, e.g. when an uncorrected error is consumed. Both synchronous and
->> asynchronous error are queued and handled by a dedicated kthread in
->> workqueue.
->>
->> commit 7f17b4a121d0 ("ACPI: APEI: Kick the memory_failure() queue for
->> synchronous errors") keep track of whether memory_failure() work was
->> queued, and make task_work pending to flush out the workqueue so that the
->> work for synchronous error is processed before returning to user-space.
->> The trick ensures that the corrupted page is unmapped and poisoned. And
->> after returning to user-space, the task starts at current instruction which
->> triggering a page fault in which kernel will send SIGBUS to current process
->> due to VM_FAULT_HWPOISON.
->>
->> However, the memory failure recovery for hwpoison-aware mechanisms does not
->> work as expected. For example, hwpoison-aware user-space processes like
->> QEMU register their customized SIGBUS handler and enable early kill mode by
->> seting PF_MCE_EARLY at initialization. Then the kernel will directy notify
->> the process by sending a SIGBUS signal in memory failure with wrong
->> si_code: the actual user-space process accessing the corrupt memory
->> location, but its memory failure work is handled in a kthread context, so
->> it will send SIGBUS with BUS_MCEERR_AO si_code to the actual user-space
->> process instead of BUS_MCEERR_AR in kill_proc().
->>
->> To this end, separate synchronous and asynchronous error handling into
->> different paths like X86 platform does:
->>
->> - valid synchronous errors: queue a task_work to synchronously send SIGBUS
->>    before ret_to_user.
->> - valid asynchronous errors: queue a work into workqueue to asynchronously
->>    handle memory failure.
->> - abnormal branches such as invalid PA, unexpected severity, no memory
->>    failure config support, invalid GUID section, OOM, etc.
->>
->> Then for valid synchronous errors, the current context in memory failure is
->> exactly belongs to the task consuming poison data and it will send SIBBUS
->> with proper si_code.
->>
->> Fixes: 7f17b4a121d0 ("ACPI: APEI: Kick the memory_failure() queue for synchronous errors")
->> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
->> Tested-by: Ma Wupeng <mawupeng1@huawei.com>
->> ---
->>   drivers/acpi/apei/ghes.c | 91 +++++++++++++++++++++++++++-------------
->>   include/acpi/ghes.h      |  3 --
->>   mm/memory-failure.c      | 13 ------
->>   3 files changed, 61 insertions(+), 46 deletions(-)
->>
->> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
->> index c479b85899f5..4b70955e25f9 100644
->> --- a/drivers/acpi/apei/ghes.c
->> +++ b/drivers/acpi/apei/ghes.c
->> @@ -452,28 +452,51 @@ static void ghes_clear_estatus(struct ghes *ghes,
->>   }
->>     /*
->> - * Called as task_work before returning to user-space.
->> - * Ensure any queued work has been done before we return to the context that
->> - * triggered the notification.
->> + * struct sync_task_work - for synchronous RAS event
->> + *
->> + * @twork:                callback_head for task work
->> + * @pfn:                  page frame number of corrupted page
->> + * @flags:                fine tune action taken
->> + *
->> + * Structure to pass task work to be handled before
->> + * ret_to_user via task_work_add().
->>    */
->> -static void ghes_kick_task_work(struct callback_head *head)
->> +struct sync_task_work {
->> +    struct callback_head twork;
->> +    u64 pfn;
->> +    int flags;
->> +};
->> +
->> +static void memory_failure_cb(struct callback_head *twork)
->>   {
->> -    struct acpi_hest_generic_status *estatus;
->> -    struct ghes_estatus_node *estatus_node;
->> -    u32 node_len;
->> +    int ret;
->> +    struct sync_task_work *twcb =
->> +        container_of(twork, struct sync_task_work, twork);
->>   -    estatus_node = container_of(head, struct ghes_estatus_node, task_work);
->> -    if (IS_ENABLED(CONFIG_ACPI_APEI_MEMORY_FAILURE))
->> -        memory_failure_queue_kick(estatus_node->task_work_cpu);
->> +    ret = memory_failure(twcb->pfn, twcb->flags);
->> +    kfree(twcb);
->>   -    estatus = GHES_ESTATUS_FROM_NODE(estatus_node);
->> -    node_len = GHES_ESTATUS_NODE_LEN(cper_estatus_len(estatus));
->> -    gen_pool_free(ghes_estatus_pool, (unsigned long)estatus_node, node_len);
->> +    if (!ret)
->> +        return;
->> +
->> +    /*
->> +     * -EHWPOISON from memory_failure() means that it already sent SIGBUS
->> +     * to the current process with the proper error info,
->> +     * -EOPNOTSUPP means hwpoison_filter() filtered the error event,
->> +     *
->> +     * In both cases, no further processing is required.
->> +     */
->> +    if (ret == -EHWPOISON || ret == -EOPNOTSUPP)
->> +        return;
->> +
->> +    pr_err("Memory error not recovered");
-> 
-> The print could add the following SIGBUS signal sending.
-> Such as "Sending SIGBUS to current task due to memory error not recovered"
-> 
->> +    force_sig(SIGBUS);
->>   }
->>     static bool ghes_do_memory_failure(u64 physical_addr, int flags)
->>   {
->>       unsigned long pfn;
->> +    struct sync_task_work *twcb;
->>         if (!IS_ENABLED(CONFIG_ACPI_APEI_MEMORY_FAILURE))
->>           return false;
->> @@ -486,6 +509,18 @@ static bool ghes_do_memory_failure(u64 physical_addr, int flags)
->>           return false;
->>       }
->>   +    if (flags == MF_ACTION_REQUIRED && current->mm) {
->> +        twcb = kmalloc(sizeof(*twcb), GFP_ATOMIC);
->> +        if (!twcb)
->> +            return false;
->> +
->> +        twcb->pfn = pfn;
->> +        twcb->flags = flags;
->> +        init_task_work(&twcb->twork, memory_failure_cb);
->> +        task_work_add(current, &twcb->twork, TWA_RESUME);
->> +        return true;
->> +    }
->> +
->>       memory_failure_queue(pfn, flags);
->>       return true;
->>   }
->> @@ -1000,9 +1035,8 @@ static void ghes_proc_in_irq(struct irq_work *irq_work)
->>       struct ghes_estatus_node *estatus_node;
->>       struct acpi_hest_generic *generic;
->>       struct acpi_hest_generic_status *estatus;
->> -    bool task_work_pending;
->> +    bool queued, sync;
->>       u32 len, node_len;
->> -    int ret;
->>         llnode = llist_del_all(&ghes_estatus_llist);
->>       /*
->> @@ -1015,27 +1049,25 @@ static void ghes_proc_in_irq(struct irq_work *irq_work)
->>           estatus_node = llist_entry(llnode, struct ghes_estatus_node,
->>                          llnode);
->>           estatus = GHES_ESTATUS_FROM_NODE(estatus_node);
->> +        sync = is_hest_sync_notify(estatus_node->ghes);
->>           len = cper_estatus_len(estatus);
->>           node_len = GHES_ESTATUS_NODE_LEN(len);
->> -        task_work_pending = ghes_do_proc(estatus_node->ghes, estatus);
->> +
->> +        queued = ghes_do_proc(estatus_node->ghes, estatus);
->> +        /*
->> +         * If no memory failure work is queued for abnormal synchronous
->> +         * errors, do a force kill.
->> +         */
->> +        if (sync && !queued)
->> +            force_sig(SIGBUS);
-> 
-> Could also add one similar print here as above
-> Apart from this,
-> Reviewed-by: Xiaofei Tan <tanxiaofei@huawei.com>
+vim +1156 drivers/platform/x86/intel/pmc/core.c
 
-Thanks :)
+  1097	
+  1098	static int pmc_core_probe(struct platform_device *pdev)
+  1099	{
+  1100		static bool device_initialized;
+  1101		struct pmc_dev *pmcdev;
+  1102		const struct x86_cpu_id *cpu_id;
+  1103		void (*core_init)(struct pmc_dev *pmcdev);
+  1104		u64 slp_s0_addr;
+  1105	
+  1106		if (device_initialized)
+  1107			return -ENODEV;
+  1108	
+  1109		pmcdev = devm_kzalloc(&pdev->dev, sizeof(*pmcdev), GFP_KERNEL);
+  1110		if (!pmcdev)
+  1111			return -ENOMEM;
+  1112	
+  1113		platform_set_drvdata(pdev, pmcdev);
+  1114		pmcdev->pdev = pdev;
+  1115	
+  1116		cpu_id = x86_match_cpu(intel_pmc_core_ids);
+  1117		if (!cpu_id)
+  1118			return -ENODEV;
+  1119	
+  1120		core_init = (void  (*)(struct pmc_dev *))cpu_id->driver_data;
+  1121	
+  1122		/*
+  1123		 * Coffee Lake has CPU ID of Kaby Lake and Cannon Lake PCH. So here
+  1124		 * Sunrisepoint PCH regmap can't be used. Use Cannon Lake PCH regmap
+  1125		 * in this case.
+  1126		 */
+  1127		if (core_init == spt_core_init && !pci_dev_present(pmc_pci_ids))
+  1128			core_init = cnp_core_init;
+  1129	
+  1130		mutex_init(&pmcdev->lock);
+  1131		core_init(pmcdev);
+  1132	
+  1133	
+  1134		if (lpit_read_residency_count_address(&slp_s0_addr)) {
+  1135			pmcdev->base_addr = PMC_BASE_ADDR_DEFAULT;
+  1136	
+  1137			if (page_is_ram(PHYS_PFN(pmcdev->base_addr)))
+  1138				return -ENODEV;
+  1139		} else {
+  1140			pmcdev->base_addr = slp_s0_addr - pmcdev->map->slp_s0_offset;
+  1141		}
+  1142	
+  1143		pmcdev->regbase = ioremap(pmcdev->base_addr,
+  1144					  pmcdev->map->regmap_length);
+  1145		if (!pmcdev->regbase)
+  1146			return -ENOMEM;
+  1147	
+  1148		if (pmcdev->core_configure)
+  1149			pmcdev->core_configure(pmcdev);
+  1150	
+  1151		pmcdev->pmc_xram_read_bit = pmc_core_check_read_lock_bit(pmcdev);
+  1152		pmc_core_get_low_power_modes(pdev);
+  1153		pmc_core_do_dmi_quirks(pmcdev);
+  1154	
+  1155		pmc_core_dbgfs_register(pmcdev);
+> 1156		pm_report_max_hw_sleep(((1UL << 32) - 1) * pmc_core_adjust_slp_s0_step(pmcdev, 1));
+  1157	
+  1158		device_initialized = true;
+  1159		dev_info(&pdev->dev, " initialized\n");
+  1160	
+  1161		return 0;
+  1162	}
+  1163	
 
-Sorry, I missed your replies, because Thunderbird marks an email as Junk,
-just move it to the Junk folder.
-
-I'd like to add above warning message and pick up your reviewed-by tag.
-
-Cheers,
-Shuai
-
-
-
-> 
->> +
->>           if (!ghes_estatus_cached(estatus)) {
->>               generic = estatus_node->generic;
->>               if (ghes_print_estatus(NULL, generic, estatus))
->>                   ghes_estatus_cache_add(generic, estatus);
->>           }
->> -
->> -        if (task_work_pending && current->mm) {
->> -            estatus_node->task_work.func = ghes_kick_task_work;
->> -            estatus_node->task_work_cpu = smp_processor_id();
->> -            ret = task_work_add(current, &estatus_node->task_work,
->> -                        TWA_RESUME);
->> -            if (ret)
->> -                estatus_node->task_work.func = NULL;
->> -        }
->> -
->> -        if (!estatus_node->task_work.func)
->> -            gen_pool_free(ghes_estatus_pool,
->> -                      (unsigned long)estatus_node, node_len);
->> +        gen_pool_free(ghes_estatus_pool, (unsigned long)estatus_node,
->> +                  node_len);
->>             llnode = next;
->>       }
->> @@ -1096,7 +1128,6 @@ static int ghes_in_nmi_queue_one_entry(struct ghes *ghes,
->>         estatus_node->ghes = ghes;
->>       estatus_node->generic = ghes->generic;
->> -    estatus_node->task_work.func = NULL;
->>       estatus = GHES_ESTATUS_FROM_NODE(estatus_node);
->>         if (__ghes_read_estatus(estatus, buf_paddr, fixmap_idx, len)) {
->> diff --git a/include/acpi/ghes.h b/include/acpi/ghes.h
->> index 3c8bba9f1114..e5e0c308d27f 100644
->> --- a/include/acpi/ghes.h
->> +++ b/include/acpi/ghes.h
->> @@ -35,9 +35,6 @@ struct ghes_estatus_node {
->>       struct llist_node llnode;
->>       struct acpi_hest_generic *generic;
->>       struct ghes *ghes;
->> -
->> -    int task_work_cpu;
->> -    struct callback_head task_work;
->>   };
->>     struct ghes_estatus_cache {
->> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
->> index fae9baf3be16..6ea8c325acb3 100644
->> --- a/mm/memory-failure.c
->> +++ b/mm/memory-failure.c
->> @@ -2355,19 +2355,6 @@ static void memory_failure_work_func(struct work_struct *work)
->>       }
->>   }
->>   -/*
->> - * Process memory_failure work queued on the specified CPU.
->> - * Used to avoid return-to-userspace racing with the memory_failure workqueue.
->> - */
->> -void memory_failure_queue_kick(int cpu)
->> -{
->> -    struct memory_failure_cpu *mf_cpu;
->> -
->> -    mf_cpu = &per_cpu(memory_failure_cpu, cpu);
->> -    cancel_work_sync(&mf_cpu->work);
->> -    memory_failure_work_func(&mf_cpu->work);
->> -}
->> -
->>   static int __init memory_failure_init(void)
->>   {
->>       struct memory_failure_cpu *mf_cpu;
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
