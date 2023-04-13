@@ -2,136 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37F2F6E1106
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 17:25:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A159D6E111D
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 17:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjDMPZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 11:25:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45204 "EHLO
+        id S230483AbjDMP1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 11:27:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230369AbjDMPZv (ORCPT
+        with ESMTP id S230161AbjDMP13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 11:25:51 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9441B458
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 08:25:47 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 78C10218EC;
-        Thu, 13 Apr 2023 15:25:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1681399546; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Thu, 13 Apr 2023 11:27:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B78FB46A
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 08:26:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681399580;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Q8qWv6lbQrmiYVPxlfAYsRxNyuhBzv0qM6z/DYPvLY8=;
-        b=nIUV0xHFYLmN/NjQ6MlbvuHk2NlfIglNqJSc8i+EZ7qROM0EATg8BrNQCfnckWBPcBFTk+
-        dR5tvdO1lQMOsPltm2Xs06ZhfqpXKfwr+M/TmGGBNL6EfwuM3OniPCwe4M1kKPzpZ/GUy3
-        x3dJG3tVQbA3gADt9pJCnk+mwRg1fU4=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=qnisOiASzz3Ky676tiXq26Q5vpI4gZTcHYzh0pOGNiI=;
+        b=PrqvO6FwqSkrMgWaWgwhsMxEry5KHna7UN9pfOCwC7IzqL6Y0h9rIRmqslEcm394Khffbu
+        JAVyybtWhLMkrr0/VRxdxMUYQgMgtc439BbM7i7cR82CFBH3Y7tisEN0qlUJhmklrlrneP
+        Kg36ORM19jOlnyHEpXiWbIlqoHEGlHM=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-54-SOo6UQapNYGK4BTKl_Rr8g-1; Thu, 13 Apr 2023 11:26:18 -0400
+X-MC-Unique: SOo6UQapNYGK4BTKl_Rr8g-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 517381390E;
-        Thu, 13 Apr 2023 15:25:46 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 6qcFEfoeOGSDWQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 13 Apr 2023 15:25:46 +0000
-Date:   Thu, 13 Apr 2023 17:25:45 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        mike.kravetz@oracle.com, muchun.song@linux.dev,
-        rientjes@google.com, souravpanda@google.com
-Subject: Re: [PATCH v2] mm: hugetlb_vmemmap: provide stronger vmemmap
- allocation guarantees
-Message-ID: <ZDge+eM67WzVzB9V@dhcp22.suse.cz>
-References: <20230412195939.1242462-1-pasha.tatashin@soleen.com>
- <20230412131302.cf42a7f4b710db8c18b7b676@linux-foundation.org>
- <ZDcSG2t3/sVuZc67@dhcp22.suse.cz>
- <CA+CK2bCZEKsocuwN4Na1+YyviERztGdGDoQgWhxQF-9WxVVW5Q@mail.gmail.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6DB591C27D80;
+        Thu, 13 Apr 2023 15:26:18 +0000 (UTC)
+Received: from plouf.local (unknown [10.45.224.142])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5EF4E1121320;
+        Thu, 13 Apr 2023 15:26:17 +0000 (UTC)
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     jikos@kernel.org, weiliang1503 <weiliang1503@gmail.com>
+Cc:     rydberg@bitmath.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230330115638.16146-1-weiliang1503@gmail.com>
+References: <20230330115638.16146-1-weiliang1503@gmail.com>
+Subject: Re: [PATCH v1] HID: Ignore battery for ELAN touchscreen on ROG
+ Flow X13 GV301RA
+Message-Id: <168139957700.866676.9713953819672177941.b4-ty@redhat.com>
+Date:   Thu, 13 Apr 2023 17:26:17 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+CK2bCZEKsocuwN4Na1+YyviERztGdGDoQgWhxQF-9WxVVW5Q@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 13-04-23 11:05:20, Pavel Tatashin wrote:
-> On Wed, Apr 12, 2023 at 4:18 PM Michal Hocko <mhocko@suse.com> wrote:
-> >
-> > On Wed 12-04-23 13:13:02, Andrew Morton wrote:
-> > > Lots of questions (ie, missing information!)
-> > >
-> > > On Wed, 12 Apr 2023 19:59:39 +0000 Pasha Tatashin <pasha.tatashin@soleen.com> wrote:
-> > >
-> > > > HugeTLB pages have a struct page optimizations where struct pages for tail
-> > > > pages are freed. However, when HugeTLB pages are destroyed, the memory for
-> > > > struct pages (vmemmap) need to be allocated again.
-> > > >
-> > > > Currently, __GFP_NORETRY flag is used to allocate the memory for vmemmap,
-> > > > but given that this flag makes very little effort to actually reclaim
-> > > > memory the returning of huge pages back to the system can be problem.
-> > >
-> > > Are there any reports of this happening in the real world?
-> > >
-> > > > Lets
-> > > > use __GFP_RETRY_MAYFAIL instead. This flag is also performs graceful
-> > > > reclaim without causing ooms, but at least it may perform a few retries,
-> > > > and will fail only when there is genuinely little amount of unused memory
-> > > > in the system.
-> > >
-> > > If so, does this change help?
-> > >
-> > > If the allocation attempt fails, what are the consequences?
-> > >
-> > > What are the potential downsides to this change?  Why did we choose
-> > > __GFP_NORETRY in the first place?
-> > >
-> > > What happens if we try harder (eg, GFP_KERNEL)?
-> >
-> > Mike was generous enough to make me remember
-> > https://lore.kernel.org/linux-mm/YCafit5ruRJ+SL8I@dhcp22.suse.cz/.
-> > GFP_KERNEL wouldn't make much difference becauset this is
-> > __GFP_THISNODE. But I do agree that the changelog should go into more
-> > details about why do we want to try harder now. I can imagine that
-> > shrinking hugetlb pool by a large amount of hugetlb pages might become a
-> > problem but is this really happening or is this a theoretical concern?
+On Thu, 30 Mar 2023 19:56:38 +0800, weiliang1503 wrote:
+> Ignore the reported battery level of the built-in touchscreen to suppress
+> battery warnings when a stylus is used. The device ID was added and the
+> battery ignore quirk was enabled.
 > 
-> This is a theoretical concern. Freeing a 1G page requires 16M of free
-> memory. A machine might need to be reconfigured from one task to
-> another, and release a large number of 1G pages back to the system if
-> allocating 16M fails, the release won't work.
+> 
 
-This is really an important "detail" changelog should mention. While I
-am not really against that change I would much rather see that as a
-result of a real world fix rather than a theoretical concern. Mostly
-because a real life scenario would allow us to test the
-__GFP_RETRY_MAYFAIL effectivness. As that request might fail as well we
-just end up with a theoretical fix for a theoretical problem. Something
-that is easy to introduce but much harder to get rid of should we ever
-need to change __GFP_RETRY_MAYFAIL implementation for example.
+Applied to hid/hid.git (for-6.4/core), thanks!
 
-> In an ideal scenario we should guarantee that this never fails: that
-> we always can free HugeTLB pages back to the system. At the very least
-> we could steal the memory for vmemmap from the page that is being
-> released.
+[1/1] HID: Ignore battery for ELAN touchscreen on ROG Flow X13 GV301RA
+      https://git.kernel.org/hid/hid/c/35903009dbde
 
-Yes, this really bothered me when the concept was introduced initially.
-I am always concerned when you need to allocate in order to free memory.
-Practically speaking we haven't heard about bug reports so maybe this is
-not such a big deal as I thought.
+Cheers,
 -- 
-Michal Hocko
-SUSE Labs
+Benjamin Tissoires <benjamin.tissoires@redhat.com>
+
