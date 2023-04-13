@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D823D6E0EA7
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5AB66E0EA8
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:31:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbjDMNa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 09:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58832 "EHLO
+        id S231420AbjDMNbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 09:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjDMNan (ORCPT
+        with ESMTP id S230374AbjDMNap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 09:30:43 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8DEEA5ED
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:30:19 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-54f9df9ebc5so47692467b3.13
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:30:19 -0700 (PDT)
+        Thu, 13 Apr 2023 09:30:45 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531C1A5D4
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:30:27 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 79-20020a250b52000000b00b8f5ff4719fso1047132ybl.18
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 06:30:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681392619; x=1683984619;
+        d=google.com; s=20221208; t=1681392626; x=1683984626;
         h=content-transfer-encoding:cc:to:from:subject:references
          :mime-version:message-id:in-reply-to:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xTPnQm9bXBOZrjOsPaeX+PW/pu2n7sFV4FVI7qhmzso=;
-        b=jkUnltS4TdxLAyH9uRVx3eXFDVrq59dAdNcHEfdE8gUYB5zkxH3RgPJZ/o8rZ1/v/R
-         pUSD+Cp6N4gZ17/mmvp3JFtr8Xbr0LvLG2HDEIykXhMdR+taFaUMdY3fbelb6wYSna4W
-         GAj6aHa84Kwf7h11s9esyeEitijOsCBkeooQZkgdkfUr9sb+iVLNpy8xx5WGn8eRd0Ny
-         NYFNCS19wg2QMTBr7E1JHOYBPFKB2d1rlW4RcincG2nrNpP+IRlyK9zcKf47ZRom5zQI
-         O7YEk13TJgSAQtAL2r7BQE2qnnJ552TiDLCVm+snW30z0tCLNkiC5ZmQXyEPtWmcbrL9
-         mOdA==
+        bh=KgMwbxSUQID3k3D8Wbp+xYSiKdQghaOLOPgjGV+co4c=;
+        b=XtqjswYJEyxMKDEu0gc2spwgmDpd0eCeBCqMqtfvzGRy8b65jVHmJA1+7L3TuBtZQE
+         ZqyJFwkwUHBHB1HtvLgKyOf1Ulnc1SvhKkZ1w8PnLrDaEJE1Md3BOvccnp0PNKLi8je0
+         6t8F7V+mddS8L6AoowTllDTZyfSqTlpFF+v/V7K37dOy6wdIhjqrFdQpKZymhWOuv+OS
+         DqLxSZXDcuUTBuuidcgH5o6TM2nuq1BACM5F7HtbrCD27EDBNbrsjVMXPTfkvtHf51rO
+         gSBc7hpExO2iQTsI6yBIcLqf6iuvN5qYZj8UZUsmx+YRqFF4kLWRYaVXHAw2hBcD+qoq
+         SLAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681392619; x=1683984619;
+        d=1e100.net; s=20221208; t=1681392626; x=1683984626;
         h=content-transfer-encoding:cc:to:from:subject:references
          :mime-version:message-id:in-reply-to:date:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=xTPnQm9bXBOZrjOsPaeX+PW/pu2n7sFV4FVI7qhmzso=;
-        b=Tik6+4pgU1994kVfk2tfVBoBeIdJr+14YJlckcSlRT41tOs38CGn8z0BoRspihF2UR
-         LDunrbBBvOx9v0kz4i/9DFm7GcgrFECkWa4+ATXOo9uVOqyVbXv16LK4pAmFeBFIfkKe
-         H5iO5Ay3DubwGynNwPvLmDvlk5/YRsI+pwv6HOmiKqqhDasNa7vqDh9hW7R7X/erWpL7
-         rUGHDmEU3gv/Zy/sJyLpTPEctReTC7AsqcWiZ8pjz426/QDW6E6CndqnozNh8F8P1eE/
-         vQf/7KgBAby2fRje/PHdN+7HlU9+w+8V5TqwHPFCQRA5NWm4dGLhvJOGPU8tUlRTmm0x
-         2ARg==
-X-Gm-Message-State: AAQBX9dlTEXKg7sjfrnR/9TbcxY0xkGIhNb9bMb9O5r3nwus/WOhUBEo
-        yTiy8ar6iX5la+2clRMlGyc9K+jX2eW6
-X-Google-Smtp-Source: AKy350a81ruBZT7OlZtvDutS4uUtAVCE3Gp5WylbvG4nG7RdUQzUnpKPSYqkzn6VjWFlyK3mBaXsONDhUWwh
+        bh=KgMwbxSUQID3k3D8Wbp+xYSiKdQghaOLOPgjGV+co4c=;
+        b=AFaRR5LUj+wTJl27Q09TJRm6hEC/zqjRUdlLVA6ZegjoLHWvve4bYim0S01GzU2UBp
+         QjWPaeoWvSd8u+pt0lEzseLIQ1nmk/BnpLpPnWscgRVFCnpr3CAn+vna7swZD0TLuBRr
+         ywZetjCtOl5YOUiDHVjkotobD+n+Vl3aEM+W1WqEtK1osaGElz1DBY2qzy5pXFr8VN+V
+         gPnJrsQBGFqTHIqmbyujlMz87ek1Ck7WO8sNU6ZauymjPuzVOd+ZoDcNai/L3d87EtRY
+         0cKYtxLu5ZVmYmoXJWYKnD5ZKzvFpdbbPbz7flk2A0Mh4zY1KtZIw19rrjcf4ypB5u6j
+         HaGw==
+X-Gm-Message-State: AAQBX9fpOuf/t2PKCeECFBV/m30mAJf+RdHgB/wHI5vBAHqb0i5F7yqS
+        vg8yUbuBJ54EXMd6tTxS8WIuJkj9X1/z
+X-Google-Smtp-Source: AKy350bj9fdJE0QSWSrZ0El4m83hrDlkFmoyDIcSYszm0aAIiqpc/etByfexgbUTrVYR8Dr+JkbdH5YlH++F
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:c8fe:b894:ec92:d5cd])
- (user=irogers job=sendgmr) by 2002:a25:cc07:0:b0:b8b:fe5f:2eaa with SMTP id
- l7-20020a25cc07000000b00b8bfe5f2eaamr1152271ybf.2.1681392619121; Thu, 13 Apr
- 2023 06:30:19 -0700 (PDT)
-Date:   Thu, 13 Apr 2023 06:29:30 -0700
+ (user=irogers job=sendgmr) by 2002:a25:73c1:0:b0:b76:3e1:c42d with SMTP id
+ o184-20020a2573c1000000b00b7603e1c42dmr1376888ybc.13.1681392626455; Thu, 13
+ Apr 2023 06:30:26 -0700 (PDT)
+Date:   Thu, 13 Apr 2023 06:29:31 -0700
 In-Reply-To: <20230413132949.3487664-1-irogers@google.com>
-Message-Id: <20230413132949.3487664-3-irogers@google.com>
+Message-Id: <20230413132949.3487664-4-irogers@google.com>
 Mime-Version: 1.0
 References: <20230413132949.3487664-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Subject: [PATCH v3 02/21] perf vendor events intel: Add grandridge
+Subject: [PATCH v3 03/21] perf vendor events intel: Add sierraforest
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -75,7 +75,7 @@ Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,28 +88,43 @@ https://github.com/intel/perfmon/pull/69
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- .../pmu-events/arch/x86/grandridge/cache.json | 155 ++++++++++++++++++
- .../arch/x86/grandridge/frontend.json         |  16 ++
- .../arch/x86/grandridge/memory.json           |  20 +++
- .../pmu-events/arch/x86/grandridge/other.json |  20 +++
- .../arch/x86/grandridge/pipeline.json         |  96 +++++++++++
- .../arch/x86/grandridge/virtual-memory.json   |  24 +++
  tools/perf/pmu-events/arch/x86/mapfile.csv    |   1 +
+ .../arch/x86/sierraforest/cache.json          | 155 ++++++++++++++++++
+ .../arch/x86/sierraforest/frontend.json       |  16 ++
+ .../arch/x86/sierraforest/memory.json         |  20 +++
+ .../arch/x86/sierraforest/other.json          |  20 +++
+ .../arch/x86/sierraforest/pipeline.json       |  96 +++++++++++
+ .../arch/x86/sierraforest/virtual-memory.json |  24 +++
  7 files changed, 332 insertions(+)
- create mode 100644 tools/perf/pmu-events/arch/x86/grandridge/cache.json
- create mode 100644 tools/perf/pmu-events/arch/x86/grandridge/frontend.json
- create mode 100644 tools/perf/pmu-events/arch/x86/grandridge/memory.json
- create mode 100644 tools/perf/pmu-events/arch/x86/grandridge/other.json
- create mode 100644 tools/perf/pmu-events/arch/x86/grandridge/pipeline.json
- create mode 100644 tools/perf/pmu-events/arch/x86/grandridge/virtual-memor=
-y.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/sierraforest/cache.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/sierraforest/frontend.js=
+on
+ create mode 100644 tools/perf/pmu-events/arch/x86/sierraforest/memory.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/sierraforest/other.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/sierraforest/pipeline.js=
+on
+ create mode 100644 tools/perf/pmu-events/arch/x86/sierraforest/virtual-mem=
+ory.json
 
-diff --git a/tools/perf/pmu-events/arch/x86/grandridge/cache.json b/tools/p=
-erf/pmu-events/arch/x86/grandridge/cache.json
+diff --git a/tools/perf/pmu-events/arch/x86/mapfile.csv b/tools/perf/pmu-ev=
+ents/arch/x86/mapfile.csv
+index c2b83cbae225..66c37a3cbf43 100644
+--- a/tools/perf/pmu-events/arch/x86/mapfile.csv
++++ b/tools/perf/pmu-events/arch/x86/mapfile.csv
+@@ -24,6 +24,7 @@ GenuineIntel-6-1[AEF],v3,nehalemep,core
+ GenuineIntel-6-2E,v3,nehalemex,core
+ GenuineIntel-6-2A,v19,sandybridge,core
+ GenuineIntel-6-(8F|CF),v1.12,sapphirerapids,core
++GenuineIntel-6-AF,v1.00,sierraforest,core
+ GenuineIntel-6-(37|4A|4C|4D|5A),v15,silvermont,core
+ GenuineIntel-6-(4E|5E|8E|9E|A5|A6),v55,skylake,core
+ GenuineIntel-6-55-[01234],v1.29,skylakex,core
+diff --git a/tools/perf/pmu-events/arch/x86/sierraforest/cache.json b/tools=
+/perf/pmu-events/arch/x86/sierraforest/cache.json
 new file mode 100644
 index 000000000000..7f0dc65a55d2
 --- /dev/null
-+++ b/tools/perf/pmu-events/arch/x86/grandridge/cache.json
++++ b/tools/perf/pmu-events/arch/x86/sierraforest/cache.json
 @@ -0,0 +1,155 @@
 +[
 +    {
@@ -297,12 +312,12 @@ e as MEM_UOPS_RETIRED.ALL_STORES",
 +        "UMask": "0x6"
 +    }
 +]
-diff --git a/tools/perf/pmu-events/arch/x86/grandridge/frontend.json b/tool=
-s/perf/pmu-events/arch/x86/grandridge/frontend.json
+diff --git a/tools/perf/pmu-events/arch/x86/sierraforest/frontend.json b/to=
+ols/perf/pmu-events/arch/x86/sierraforest/frontend.json
 new file mode 100644
 index 000000000000..be8f1c7e195c
 --- /dev/null
-+++ b/tools/perf/pmu-events/arch/x86/grandridge/frontend.json
++++ b/tools/perf/pmu-events/arch/x86/sierraforest/frontend.json
 @@ -0,0 +1,16 @@
 +[
 +    {
@@ -325,12 +340,12 @@ irected by a jump and the instruction cache registers bytes are not present=
 +        "UMask": "0x2"
 +    }
 +]
-diff --git a/tools/perf/pmu-events/arch/x86/grandridge/memory.json b/tools/=
-perf/pmu-events/arch/x86/grandridge/memory.json
+diff --git a/tools/perf/pmu-events/arch/x86/sierraforest/memory.json b/tool=
+s/perf/pmu-events/arch/x86/sierraforest/memory.json
 new file mode 100644
 index 000000000000..79d8af45100c
 --- /dev/null
-+++ b/tools/perf/pmu-events/arch/x86/grandridge/memory.json
++++ b/tools/perf/pmu-events/arch/x86/sierraforest/memory.json
 @@ -0,0 +1,20 @@
 +[
 +    {
@@ -355,12 +370,12 @@ ed by the L3 cache.",
 +        "UMask": "0x1"
 +    }
 +]
-diff --git a/tools/perf/pmu-events/arch/x86/grandridge/other.json b/tools/p=
-erf/pmu-events/arch/x86/grandridge/other.json
+diff --git a/tools/perf/pmu-events/arch/x86/sierraforest/other.json b/tools=
+/perf/pmu-events/arch/x86/sierraforest/other.json
 new file mode 100644
 index 000000000000..2414f6ff53b0
 --- /dev/null
-+++ b/tools/perf/pmu-events/arch/x86/grandridge/other.json
++++ b/tools/perf/pmu-events/arch/x86/sierraforest/other.json
 @@ -0,0 +1,20 @@
 +[
 +    {
@@ -385,12 +400,12 @@ f response.",
 +        "UMask": "0x1"
 +    }
 +]
-diff --git a/tools/perf/pmu-events/arch/x86/grandridge/pipeline.json b/tool=
-s/perf/pmu-events/arch/x86/grandridge/pipeline.json
+diff --git a/tools/perf/pmu-events/arch/x86/sierraforest/pipeline.json b/to=
+ols/perf/pmu-events/arch/x86/sierraforest/pipeline.json
 new file mode 100644
 index 000000000000..41212957ef21
 --- /dev/null
-+++ b/tools/perf/pmu-events/arch/x86/grandridge/pipeline.json
++++ b/tools/perf/pmu-events/arch/x86/sierraforest/pipeline.json
 @@ -0,0 +1,96 @@
 +[
 +    {
@@ -527,12 +542,12 @@ s.  Similar to UOPS_RETIRED.ALL",
 +        "SampleAfterValue": "1000003"
 +    }
 +]
-diff --git a/tools/perf/pmu-events/arch/x86/grandridge/virtual-memory.json =
-b/tools/perf/pmu-events/arch/x86/grandridge/virtual-memory.json
+diff --git a/tools/perf/pmu-events/arch/x86/sierraforest/virtual-memory.jso=
+n b/tools/perf/pmu-events/arch/x86/sierraforest/virtual-memory.json
 new file mode 100644
 index 000000000000..bd5f2b634c98
 --- /dev/null
-+++ b/tools/perf/pmu-events/arch/x86/grandridge/virtual-memory.json
++++ b/tools/perf/pmu-events/arch/x86/sierraforest/virtual-memory.json
 @@ -0,0 +1,24 @@
 +[
 +    {
@@ -564,19 +579,6 @@ s page walks that page fault.",
 +        "UMask": "0xe"
 +    }
 +]
-diff --git a/tools/perf/pmu-events/arch/x86/mapfile.csv b/tools/perf/pmu-ev=
-ents/arch/x86/mapfile.csv
-index 437eeecfaf64..c2b83cbae225 100644
---- a/tools/perf/pmu-events/arch/x86/mapfile.csv
-+++ b/tools/perf/pmu-events/arch/x86/mapfile.csv
-@@ -9,6 +9,7 @@ GenuineIntel-6-55-[56789ABCDEF],v1.17,cascadelakex,core
- GenuineIntel-6-9[6C],v1.03,elkhartlake,core
- GenuineIntel-6-5[CF],v13,goldmont,core
- GenuineIntel-6-7A,v1.01,goldmontplus,core
-+GenuineIntel-6-B6,v1.00,grandridge,core
- GenuineIntel-6-A[DE],v1.01,graniterapids,core
- GenuineIntel-6-(3C|45|46),v33,haswell,core
- GenuineIntel-6-3F,v27,haswellx,core
 --=20
 2.40.0.577.gac1e443424-goog
 
