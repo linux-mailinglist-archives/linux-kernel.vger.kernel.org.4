@@ -2,68 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5A1E6E056B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 05:44:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA996E057A
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 05:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbjDMDor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 23:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54784 "EHLO
+        id S229628AbjDMDuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 23:50:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjDMDon (ORCPT
+        with ESMTP id S229522AbjDMDuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 23:44:43 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC3559F0;
-        Wed, 12 Apr 2023 20:44:41 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33D3i5i55007128, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33D3i5i55007128
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Thu, 13 Apr 2023 11:44:05 +0800
-Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Thu, 13 Apr 2023 11:44:27 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 13 Apr 2023 11:44:27 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
- RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
- 15.01.2375.007; Thu, 13 Apr 2023 11:44:27 +0800
-From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 1/2] usb: dwc3: core: add support for remapping global register start address
-Thread-Topic: [PATCH v2 1/2] usb: dwc3: core: add support for remapping global
- register start address
-Thread-Index: AQHZbO8TMZxQ6xFEbEmr471D6ePiYq8npgYAgADcPhCAABJZoA==
-Date:   Thu, 13 Apr 2023 03:44:27 +0000
-Message-ID: <651b2e92a400411f80823aa01635acb5@realtek.com>
-References: <20230412033006.10859-1-stanley_chang@realtek.com>
- <20230412210856.xcbp3crhbedjvnix@synopsys.com> 
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXDAG01.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 12 Apr 2023 23:50:17 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1737610EB;
+        Wed, 12 Apr 2023 20:50:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=p7a8t
+        xy1BJ4nm/iFKntdPMWHPe8SSuw9rmT+BpB8/qQ=; b=UbKAb1QmIiulzv/HeAq6J
+        wYe1Mzhfh8H5XdMiq7ADF2jGzoy270y/sQKgJUnkf2V9K4j07Q6KNtfQMl6pvhZx
+        GizW0aBqQDwJWID1SJM0Ml0fiRenyr9wzOpZN9frVX5slC+sc7PvdpIMM1gKXKkz
+        pCUMx8XWCHztFlibR9vzZ0=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g5-3 (Coremail) with SMTP id _____wDHzRbXezdkJthZBQ--.61026S2;
+        Thu, 13 Apr 2023 11:49:43 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     mchehab@kernel.org
+Cc:     laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alex000young@gmail.com, hackerzheng666@gmail.com,
+        security@kernel.org, hdanton@sina.com,
+        Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH v3] media: bttv: fix use after free error due to btv->timeout  timer
+Date:   Thu, 13 Apr 2023 11:49:42 +0800
+Message-Id: <20230413034942.40831-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wDHzRbXezdkJthZBQ--.61026S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ZFy7GF43Zr1xXFykur43Awb_yoW8GFyfpa
+        yIkFy3Cry8Xr4UtryUAF4kWFW3A398XrWUKr97WanavF4fAr92vF4jvFyqyF17JryqqrWa
+        qa4Fqw13Ja4DCFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zinjjPUUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXBtQU1Xl6PMRVAAAsq
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,27 +53,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQo+ID4gPiArICAgICAvKg0KPiA+ID4gKyAgICAgICogRm9yIHNvbWUgZHdjMyBjb250cm9sbGVy
-LCB0aGUgZHdjMyBnbG9iYWwgcmVnaXN0ZXIgc3RhcnQgYWRkcmVzcw0KPiBpcw0KPiA+ID4gKyAg
-ICAgICogbm90IGF0IERXQzNfR0xPQkFMU19SRUdTX1NUQVJUICgweGMxMDApLg0KPiA+ID4gKyAg
-ICAgICovDQo+ID4gPiArICAgICBpZiAoZGV2LT5vZl9ub2RlKSB7DQo+ID4gPiArICAgICAgICAg
-ICAgIGludCBnbG9iYWxfcmVnc19zdGFydGluZ19vZmZzZXQgPSAwOw0KPiA+ID4gKw0KPiA+ID4g
-KyAgICAgICAgICAgICBkZXZpY2VfcHJvcGVydHlfcmVhZF91MzIoZGV2LA0KPiA+ICJzbnBzLGds
-b2JhbC1yZWdzLXN0YXJ0aW5nLW9mZnNldCIsDQo+ID4gPiArICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgJmdsb2JhbF9yZWdzX3N0YXJ0aW5nX29mZnNldCk7DQo+ID4NCj4gPiBJIHN1Z2dl
-c3RlZCB0byB1c2UgY29tcGF0aWJsZSBzdHJpbmcgaW5zdGVhZCBzaW5jZSB0aGlzIGlzbid0IGNv
-bW1vbg0KPiA+IGFuZCBvbmx5IHVuaXF1ZSB0byB5b3VyIHBsYXRmb3JtLiBBbnkgcmVhc29uIHdl
-IHNob3VsZG4ndCBkbyB0aGF0Pw0KPiA+DQo+ID4gaWUuIHNvbWV0aGluZyBsaWtlIHRoaXM6DQo+
-ID4NCj4gPiBpZiAoZGV2LT5vZl9ub2RlICYmIG9mX2RldmljZV9pc19jb21wYXRpYWJsZShkZXYt
-Pm9mX25vZGUsDQo+ID4gInlvdXItcGxhdGZvcm0iKSkNCj4gPiAgICAgICAgIGR3Y19yZXMuc3Rh
-cnQgKz0geW91cl9wbGF0Zm9ybV9vZmZzZXQ7IGVsc2UNCj4gPiAgICAgICAgIGR3Y19yZXMuc3Rh
-cnQgPSBEV0MzX0dMT0JBTFNfUkVHU19TVEFSVDsNCj4gPg0KPiANCj4gSSB3aWxsIHRyeSB0aGlz
-IHN1Z2dlc3Rpb24uDQo+IA0KPiBUaGFua3MsDQo+IFN0YW5sZXkNCg0KVGhlIGR3YzMvY29yZSBp
-cyBhIGdlbmVyYWwgZHJpdmVyIGZvciBldmVyeSBkd2MzIElQIG9mIFNvQ3MsDQphbmQgdmVuZG9y
-J3MgZGVmaW5pdGlvbiBhbmQgY29tcGF0aWJsZSBzaG91bGQgc3BlY2lmeSBvbiBpdHMgcGFyZW50
-Lg0KVGhpcyBzaG91bGQgYmUgaW5hcHByb3ByaWF0ZSBpZiB3ZSBhZGQgYSBzcGVjaWFsIHBsYXRm
-b3JtIGNvbXBhdGlibGUgdG8gZHdjMy9jb3JlIGRyaXZlci4NClRoZXJlZm9yZSwgSSBkZWZpbmUg
-dGhpcyBwcm9wZXJ0eSB0byBhZGp1c3QgdGhpcyB2YWx1ZS4gVGhpcyBpcyBtb3JlIHJlc2lsaWVu
-dC4NCklmIHRoZXJlIGFyZSBvdGhlciBwbGF0Zm9ybXMgdGhhdCBhbHNvIGhhdmUgbm9uLXN0YW5k
-YXJkIG9mZnNldCwgdGhpcyBwcm9wZXJ0eSBpcyBhbHNvIGFwcGxpY2FibGUuDQoNClRoYW5rLA0K
-U3RhbmxleQ0K
+There may be some a race condition between timer function
+bttv_irq_timeout and bttv_remove. The timer is setup in
+probe and there is no timer_delete operation in remove
+function. When it hit kfree btv, the function might still be
+invoked, which will cause use after free bug.
+
+This bug is found by static analysis, it may be false positive.
+
+Fix it by adding del_timer_sync invoking to the remove function.
+
+cpu0                cpu1
+                  bttv_probe
+                    ->timer_setup
+                      ->bttv_set_dma
+                        ->mod_timer;
+bttv_remove
+  ->kfree(btv);
+                  ->bttv_irq_timeout
+                    ->USE btv
+
+Fixes: 162e6376ac58 ("media: pci: Convert timers to use timer_setup()")
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+---
+v3:
+- Add Fix label
+v2:
+- stop replacing del_timer with del_timer_sync suggested by Hillf Danton
+---
+ drivers/media/pci/bt8xx/bttv-driver.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
+index d40b537f4e98..24ba5729969d 100644
+--- a/drivers/media/pci/bt8xx/bttv-driver.c
++++ b/drivers/media/pci/bt8xx/bttv-driver.c
+@@ -4248,6 +4248,7 @@ static void bttv_remove(struct pci_dev *pci_dev)
+ 
+ 	/* free resources */
+ 	free_irq(btv->c.pci->irq,btv);
++	del_timer_sync(&btv->timeout);
+ 	iounmap(btv->bt848_mmio);
+ 	release_mem_region(pci_resource_start(btv->c.pci,0),
+ 			   pci_resource_len(btv->c.pci,0));
+-- 
+2.25.1
+
