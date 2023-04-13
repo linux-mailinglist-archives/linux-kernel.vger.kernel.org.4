@@ -2,67 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D657D6E0B97
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 12:41:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D525E6E0B9D
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 12:42:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbjDMKln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 06:41:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51978 "EHLO
+        id S229636AbjDMKmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 06:42:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231326AbjDMKla (ORCPT
+        with ESMTP id S229792AbjDMKms (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 06:41:30 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA949EF2
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:41:06 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-63b1e92ce21so178738b3a.0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:41:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=xiaomi-corp-partner-google-com.20221208.gappssmtp.com; s=20221208; t=1681382466; x=1683974466;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oiYTZRIwk9ROTIrblLNUMUDt3W83vsBb+YQOnYk2aRE=;
-        b=Cmcl+/DH2y0iFsEmNAa74QiO1a14FsXYAL7Xxw+ptKQK/MSmrSa9t7UimZ4PTfjnYF
-         HkTtKC8dhkRKn3ZGRy+qOY2yztsEtGCQ4xXZPWgOGUNp0V97c1+32Mbvi7Tu9T4MyHSx
-         JstY0PCBOC4oPuD8SFOJjU/psnqP4NB9I4Yh03RpjY+dwc8s/tOHYT0rKtlKQLIFKWk4
-         IrLTEFTu8Rjc2Qaoe6ZTfrcublW4yTXtOxTWVb00fURzm/S1USIyV5ToDiWH4aISMAQX
-         Ioy/5l4TNgGXovyM4ZvLFCrWNyeNEyqfHhJ++5KPqp7T6Ha1RX9jq2igjKbK0Qfbp34t
-         vrLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681382466; x=1683974466;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oiYTZRIwk9ROTIrblLNUMUDt3W83vsBb+YQOnYk2aRE=;
-        b=PJKuIMj2eGA68wJiN27aW5z8+OX2LuOLuFfWQgeVCiyLR0EuwsvRnrznIR6vwz/HKi
-         i1Gxv/WCiW+y56ccnBgICKICGvGu3HTHBV3M2lEQHSJBIezQw9uNBAtAKVorkjd62TWV
-         +VamA62SWNq2/feSC/ajN9go2IWgD/g/YvZKPvwZPYf2ppn0q1ZEUKFQfjwb2blfmPA/
-         ZffGqfPmvAo/f+NgwW1D2tUAl4cNLGFTvJL6V6e7vueTZ7Y4n3X+6YaKdUNsoCTt23Cv
-         j5wzvzMeayHIMorVkRBwoFZqQ4iBv9Eqjvf37DKvHpOTasFDGJ2iVsnOqknRTI8l+PkS
-         8NVA==
-X-Gm-Message-State: AAQBX9d2lHW2Fz/kxTLNEWeaOM/iXnuxev/wtgf8Hikt1ujhVVOH6/oq
-        CZWKO6UMTK8eoxIhUEnjrFJJBw==
-X-Google-Smtp-Source: AKy350aLyA6znkshYqfjEX/OMTptkJfQsb2J51rA72fh6WMd6ucgg5v4bMp7qTJW/2wHwIu36J/lzQ==
-X-Received: by 2002:a05:6a20:8e19:b0:d9:a977:fae with SMTP id y25-20020a056a208e1900b000d9a9770faemr1781568pzj.3.1681382465739;
-        Thu, 13 Apr 2023 03:41:05 -0700 (PDT)
-Received: from mi-HP-Pro-Tower-480-G9-PCI-Desktop-PC.. ([43.224.245.246])
-        by smtp.gmail.com with ESMTPSA id p6-20020aa78606000000b0063486255a87sm1152124pfn.142.2023.04.13.03.41.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 03:41:05 -0700 (PDT)
-From:   Chuang Zhang <zhangchuang3@xiaomi.corp-partner.google.com>
-To:     gregkh@linuxfoundation.org
-Cc:     arve@android.com, tkjos@android.com, maco@android.com,
-        joel@joelfernandes.org, brauner@kernel.org, cmllamas@google.com,
-        surenb@google.com, linux-kernel@vger.kernel.org,
-        Chuang Zhang <zhangchuang3@xiaomi.com>
-Subject: [PATCH] Binder: Add timestamp and async from pid/tid to transaction record
-Date:   Thu, 13 Apr 2023 18:40:47 +0800
-Message-Id: <20230413104047.388861-1-zhangchuang3@xiaomi.corp-partner.google.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 13 Apr 2023 06:42:48 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9813A198;
+        Thu, 13 Apr 2023 03:42:37 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 6A80224E2AE;
+        Thu, 13 Apr 2023 18:42:30 +0800 (CST)
+Received: from EXMBX171.cuchost.com (172.16.6.91) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 13 Apr
+ 2023 18:42:30 +0800
+Received: from [192.168.125.108] (183.27.97.249) by EXMBX171.cuchost.com
+ (172.16.6.91) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 13 Apr
+ 2023 18:42:29 +0800
+Message-ID: <fc30ac6c-7103-f601-429f-c9a180869284@starfivetech.com>
+Date:   Thu, 13 Apr 2023 18:42:28 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v4 5/7] dt-bindings: usb: Add StarFive JH7110 USB Bindings
+ YAML schemas
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Conor Dooley <conor@kernel.org>,
+        "Vinod Koul" <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-usb@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Mason Huo" <mason.huo@starfivetech.com>
+References: <20230406015216.27034-1-minda.chen@starfivetech.com>
+ <20230406015216.27034-6-minda.chen@starfivetech.com>
+ <a22dff0a-56e6-be1b-10b2-ce3b31f420c5@linaro.org>
+From:   Minda Chen <minda.chen@starfivetech.com>
+In-Reply-To: <a22dff0a-56e6-be1b-10b2-ce3b31f420c5@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [183.27.97.249]
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX171.cuchost.com
+ (172.16.6.91)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,107 +73,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chuang Zhang <zhangchuang3@xiaomi.com>
 
-This patch adds a timestamp field to the binder_transaction
-structure to track the time consumed during transmission
-when reading binder_transaction records.
-Additionally, it records the from pid and tid of asynchronous
-binder. This information is printed when reading binderfs
-related nodes to assist with debugging.
 
-Signed-off-by: Chuang Zhang <zhangchuang3@xiaomi.com>
----
- drivers/android/binder.c          | 24 ++++++++++++++++++------
- drivers/android/binder_internal.h |  3 +++
- 2 files changed, 21 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-index fb56bfc45096..e79f548bcbac 100644
---- a/drivers/android/binder.c
-+++ b/drivers/android/binder.c
-@@ -66,6 +66,7 @@
- #include <linux/syscalls.h>
- #include <linux/task_work.h>
- #include <linux/sizes.h>
-+#include <linux/ktime.h>
- 
- #include <uapi/linux/android/binder.h>
- 
-@@ -3145,6 +3146,7 @@ static void binder_transaction(struct binder_proc *proc,
- 	binder_stats_created(BINDER_STAT_TRANSACTION_COMPLETE);
- 
- 	t->debug_id = t_debug_id;
-+	t->start_time = ktime_get();
- 
- 	if (reply)
- 		binder_debug(BINDER_DEBUG_TRANSACTION,
-@@ -3165,10 +3167,15 @@ static void binder_transaction(struct binder_proc *proc,
- 			     (u64)tr->data_size, (u64)tr->offsets_size,
- 			     (u64)extra_buffers_size);
- 
--	if (!reply && !(tr->flags & TF_ONE_WAY))
-+	if (!reply && !(tr->flags & TF_ONE_WAY)) {
- 		t->from = thread;
--	else
-+		t->async_from_pid = 0;
-+		t->async_from_tid = 0;
-+	} else  {
- 		t->from = NULL;
-+		t->async_from_pid = thread->proc->pid;
-+		t->async_from_tid = thread->pid;
-+	}
- 	t->sender_euid = task_euid(proc->tsk);
- 	t->to_proc = target_proc;
- 	t->to_thread = target_thread;
-@@ -4963,6 +4970,8 @@ static int binder_thread_release(struct binder_proc *proc,
- 		} else if (t->from == thread) {
- 			t->from = NULL;
- 			t = t->from_parent;
-+			t->async_from_pid = 0;
-+			t->async_from_tid = 0;
- 		} else
- 			BUG();
- 		spin_unlock(&last_t->lock);
-@@ -5930,17 +5939,20 @@ static void print_binder_transaction_ilocked(struct seq_file *m,
- {
- 	struct binder_proc *to_proc;
- 	struct binder_buffer *buffer = t->buffer;
-+	ktime_t current_time = ktime_get();
- 
- 	spin_lock(&t->lock);
- 	to_proc = t->to_proc;
- 	seq_printf(m,
--		   "%s %d: %pK from %d:%d to %d:%d code %x flags %x pri %ld r%d",
-+		   "%s %d: %pK from %d:%d to %d:%d code %x elapsed %lldms flags %x pri %ld r%d",
- 		   prefix, t->debug_id, t,
--		   t->from ? t->from->proc->pid : 0,
--		   t->from ? t->from->pid : 0,
-+		   t->from ? t->from->proc->pid : t->async_from_pid,
-+		   t->from ? t->from->pid : t->async_from_tid,
- 		   to_proc ? to_proc->pid : 0,
- 		   t->to_thread ? t->to_thread->pid : 0,
--		   t->code, t->flags, t->priority, t->need_reply);
-+		   t->code,
-+		   ktime_ms_delta(current_time, t->start_time),
-+		   t->flags, t->priority, t->need_reply);
- 	spin_unlock(&t->lock);
- 
- 	if (proc != to_proc) {
-diff --git a/drivers/android/binder_internal.h b/drivers/android/binder_internal.h
-index 28ef5b3704b1..7e60f547abb6 100644
---- a/drivers/android/binder_internal.h
-+++ b/drivers/android/binder_internal.h
-@@ -528,6 +528,9 @@ struct binder_transaction {
- 	long    priority;
- 	long    saved_priority;
- 	kuid_t  sender_euid;
-+	int async_from_pid;
-+	int async_from_tid;
-+	ktime_t start_time;
- 	struct list_head fd_fixups;
- 	binder_uintptr_t security_ctx;
- 	/**
--- 
-2.34.1
-
+On 2023/4/12 16:32, Krzysztof Kozlowski wrote:
+> On 06/04/2023 03:52, Minda Chen wrote:
+>> StarFive JH7110 platforms USB have a wrapper module around
+>> the Cadence USBSS-DRD controller. Add binding information doc
+>> for that.
+> 
+> That's one of the most redundant subjects I saw. You basically used four
+> words for one meaning. These are not exactly synonyms, but they all are
+> either imprecise or meaning the same.
+> 
+> Subject: drop second/last, redundant "Bindings YAML schemas". The
+> "dt-bindings" prefix is already stating that these are bindings.
+> 
+> 
+ok
+> 
+>> 
+>> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+>> Reviewed-by: Peter Chen <peter.chen@kernel.org>
+>> ---
+>>  .../bindings/usb/starfive,jh7110-usb.yaml     | 136 ++++++++++++++++++
+>>  1 file changed, 136 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
+>> 
+>> diff --git a/Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml b/Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
+>> new file mode 100644
+>> index 000000000000..c8b30b583854
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
+>> @@ -0,0 +1,136 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/usb/starfive,jh7110-usb.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: StarFive JH7110 wrapper module for the Cadence USBSS-DRD controller
+> 
+> What do you wrap here? Are you sure this is a wrapper? I think this is
+> just USB controller?
+> 
+Since the previous version is wrapper module. I forgot change this.
+I will change to "StarFive JH7110 Cadence USBSS-DRD SoC controller"
+>> +
+>> +maintainers:
+>> +  - Minda Chen <minda.chen@starfivetech.com>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: starfive,jh7110-usb
+>> +
+>> +  reg:
+>> +    items:
+>> +      - description: OTG controller registers
+>> +      - description: XHCI Host controller registers
+>> +      - description: DEVICE controller registers
+>> +
+>> +  reg-names:
+>> +    items:
+>> +      - const: otg
+>> +      - const: xhci
+>> +      - const: dev
+>> +
+>> +  interrupts:
+>> +    items:
+>> +      - description: XHCI host controller interrupt
+>> +      - description: Device controller interrupt
+>> +      - description: OTG/DRD controller interrupt
+>> +
+>> +  interrupt-names:
+>> +    items:
+>> +      - const: host
+>> +      - const: peripheral
+>> +      - const: otg
+>> +
+>> +  clocks:
+>> +    items:
+>> +      - description: lpm clock
+>> +      - description: stb clock
+>> +      - description: apb clock
+>> +      - description: axi clock
+>> +      - description: utmi apb clock
+>> +
+>> +  clock-names:
+>> +    items:
+>> +      - const: lpm
+>> +      - const: stb
+>> +      - const: apb
+>> +      - const: axi
+>> +      - const: utmi_apb
+>> +
+>> +  resets:
+>> +    items:
+>> +      - description: PWRUP reset
+>> +      - description: APB clock reset
+>> +      - description: AXI clock reset
+>> +      - description: UTMI_APB clock reset
+>> +
+>> +  reset-names:
+>> +    items:
+>> +      - const: pwrup
+>> +      - const: apb
+>> +      - const: axi
+>> +      - const: utmi
+>> +
+>> +  starfive,stg-syscon:
+>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+>> +    items:
+>> +      items:
+> 
+> Same problem as for other patches.
+> 
+I am sorry about this. I should change this in this version.
+PCIe PHY dt-binding doc will be also changed. 
+>> +        - description: phandle to System Register Controller stg_syscon node.
+>> +        - description: register offset of STG_SYSCONSAIF__SYSCFG register for USB.
+>> +    description:
+>> +      The phandle to System Register Controller syscon node and the offset
+>> +      of STG_SYSCONSAIF__SYSCFG register for USB.
+>> +
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
