@@ -2,90 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D016E103B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FEE36E1039
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:44:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230522AbjDMOoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 10:44:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37528 "EHLO
+        id S230429AbjDMOoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 10:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjDMOoB (ORCPT
+        with ESMTP id S229784AbjDMOnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 10:44:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A785260
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 07:43:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681397000;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EOEz3AcKRLNIsRiC1VQJ7UUhN+DnVClixWyNnz405l8=;
-        b=UhBdwZhp468YMgD5kfHa2YjDY0GzhUe0EjgJwINLb/aVHWAAPqHZTrpVa49HLpZRBUS9Wd
-        n82jplYaGiNNhb3hlnrReIbU0F19yRALHRQwlxF4U/N2YRF1nh+KpPNSfnKNkkzJpXr8Vt
-        CBhXFOAnPfnQ76ArwD85ODqHAz+Thic=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-453-QTNC2kVkMMS4JGdOhRkg3g-1; Thu, 13 Apr 2023 10:43:18 -0400
-X-MC-Unique: QTNC2kVkMMS4JGdOhRkg3g-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7AFB185A5B1;
-        Thu, 13 Apr 2023 14:43:18 +0000 (UTC)
-Received: from plouf.local (unknown [10.45.224.142])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5DF5D40B3EDA;
-        Thu, 13 Apr 2023 14:43:17 +0000 (UTC)
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-To:     gupt21@gmail.com, jikos@kernel.org,
-        Louis Morhet <lmorhet@kalrayinc.com>
-Cc:     linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <cover.1680602387.git.lmorhet@kalrayinc.com>
-References: <cover.1680602387.git.lmorhet@kalrayinc.com>
-Subject: Re: [PATCH 0/2] Fixes for the mcp2221 gpiochip get_* calls
-Message-Id: <168139699700.841342.7338433386549146014.b4-ty@redhat.com>
-Date:   Thu, 13 Apr 2023 16:43:17 +0200
+        Thu, 13 Apr 2023 10:43:50 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4DBFB76E;
+        Thu, 13 Apr 2023 07:43:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=J5w0b8Fobg2W9RujUD13uGJH7vRMN8dHc0B4sOAwikM=; b=5TjbN28trjt5HISvTlm95p0A9G
+        D9M1FUwIBttbFB3gbsuaO9mbk3vXv4+yRqyZZ19apAILewifcs3qVozNt1PG9U/NozW0WFJ5NF4Mn
+        26Hx/eLWptWB7cbOupRNhwJelVtjvJ+RY33Xa4ZQEc6x6adDxZx3Gjac/K9aKr2J/KXA=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pmyAb-00ACJL-AV; Thu, 13 Apr 2023 16:43:29 +0200
+Date:   Thu, 13 Apr 2023 16:43:29 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Christian Marangi <ansuelsmth@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        John Crispin <john@phrozen.org>, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [net-next PATCH v6 06/16] net: phy: phy_device: Call into the
+ PHY driver to set LED brightness
+Message-ID: <60d5bad7-e7c1-4ffe-be6c-5d92e482b1ba@lunn.ch>
+References: <20230327141031.11904-1-ansuelsmth@gmail.com>
+ <20230327141031.11904-7-ansuelsmth@gmail.com>
+ <202ae4b9-8995-474a-1282-876078e15e47@gmail.com>
+ <64380b46.7b0a0220.978a.1eb4@mx.google.com>
+ <7ea465d9-95eb-d158-632a-a2aa892fd2bf@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7ea465d9-95eb-d158-632a-a2aa892fd2bf@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 04 Apr 2023 14:14:58 +0200, Louis Morhet wrote:
-> The mcp2221 HID driver exposes a gpiochip device.
-> While gpioset seemed to work fine, gpioget always returned 1 on all 4
-> GPIOs of the component (0x01 for input in the field "direction",
-> according to the documentation).
-> 
-> This patch series addresses this issue by fixing the order of the fields
-> in the driver's representation of the chip answer, and adding
-> consistency to the way the callbacks prepare their command and the way
-> the hid event handler gets these fields.
-> The set callbacks use a similar mechanism, but work for now because
-> setting a direction/value only requires gpio-specific positioning in the
-> command preparation, and not in the raw_event handler.
-> 
-> [...]
+> Humm just thought of something else, is it OK for led_brightness_set and
+> led_blink_set to call into functions that might require sleeping (MDIO, I2C,
+> SPI, etc.)?
 
-Applied to https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git (for-6.4/mcp2221), thanks!
+Hi Florian
 
-[1/2] HID: mcp2221: fix report layout for gpio get
-      https://git.kernel.org/hid/hid/c/e36c31f8cac5
-[2/2] HID: mcp2221: fix get and get_direction for gpio
-      https://git.kernel.org/hid/hid/c/ca6961d8a851
+That is fine. The LED class is similar to GPIOs. There is a can sleep
+version, and an atomic version. For phylib we are using the can sleep
+version. The LED core then hides the differences from the users.
 
-Cheers,
--- 
-Benjamin Tissoires <benjamin.tissoires@redhat.com>
-
+    Andrew
