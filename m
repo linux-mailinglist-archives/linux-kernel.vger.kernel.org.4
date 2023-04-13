@@ -2,153 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D12D6E14D4
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 21:06:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 306286E14D7
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 21:07:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbjDMTG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 15:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50144 "EHLO
+        id S229840AbjDMTHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 15:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjDMTGY (ORCPT
+        with ESMTP id S229546AbjDMTHE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 15:06:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C6D7AB3
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 12:05:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681412738;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UCBVyFd5BBmA+6Xv/IIgNhhtsz0B8DYXHt8AQVnFyEY=;
-        b=NprwkHAm1DRAYaBaeeyvKZiyRfzBk0KR8Kjgn9fc75G8YOiu7iDQPSdi6hDQ2gQRJQQPBS
-        vzIMjVIdunzqbHM3JETIejogU2HtJCnKD9AHLbrg0ZbwFzaxLp/u1QO8cn35tZRBPSbjJE
-        DLyHd7AFygrUYNBaiHkuCLVS7vPIEWE=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-670-SnVObUheO12Xwp7S2nBavw-1; Thu, 13 Apr 2023 15:05:35 -0400
-X-MC-Unique: SnVObUheO12Xwp7S2nBavw-1
-Received: by mail-ed1-f72.google.com with SMTP id 6-20020a508e46000000b0050676a243d2so971642edx.21
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 12:05:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681412734; x=1684004734;
-        h=content-transfer-encoding:in-reply-to:references:to
-         :content-language:subject:cc:user-agent:mime-version:date:message-id
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UCBVyFd5BBmA+6Xv/IIgNhhtsz0B8DYXHt8AQVnFyEY=;
-        b=Thz1xQkxVgng/88Gakv5nWqr91YanNefYg5ttH3f3csO/lZfBSA8iFRqJ3czZaqUXH
-         vL0rqArp5eZgJ0vq4N4bdCXfMAMIdV+BAt2W+UMqm5bJilzn8ndr0rT2Nkagiddcyj+8
-         ERbZGPAb6bSXho8v1B8vF0PGtJCzwEIi77P2nPKEh3E2qsPkLNRJMC1EXnR+Qg0OrrCv
-         HRZ34MRLY+kqj1QQ+OL5F67JrnV/NJOkQ1f9cMHM1bDneYABiAghLxHeKi7jJFGWokcF
-         l496v47HZcq386U2lG/9lnS8CWyxzqoIdnB3kpM+f2PdUPspfcusbAHNuku3cW892lyW
-         OkyA==
-X-Gm-Message-State: AAQBX9c8v3r7l+Yk/WIx7ne/JukqyyGoIdYjyw11od1GwIxFfx6qtwRA
-        0Uq+AlYRI/074sj9qp9SQXUFt22003GTkGg00tIs/gIrQKyNHEppT/klAogMfjd3vULjMr8W16F
-        61/9NbGK+/SYeDFLSMWhSUiRb
-X-Received: by 2002:a17:907:7783:b0:92b:f118:ef32 with SMTP id ky3-20020a170907778300b0092bf118ef32mr3344076ejc.48.1681412734064;
-        Thu, 13 Apr 2023 12:05:34 -0700 (PDT)
-X-Google-Smtp-Source: AKy350b0NoeyqPTndxzzpsGhufBoItrSucdDKVSwz86SIeJfM9Bqvf0Y1jAxX92P52cAl7P9mNqd0A==
-X-Received: by 2002:a17:907:7783:b0:92b:f118:ef32 with SMTP id ky3-20020a170907778300b0092bf118ef32mr3344059ejc.48.1681412733732;
-        Thu, 13 Apr 2023 12:05:33 -0700 (PDT)
-Received: from [192.168.42.222] (194-45-78-10.static.kviknet.net. [194.45.78.10])
-        by smtp.gmail.com with ESMTPSA id gz1-20020a170907a04100b0094a6ba1f5ccsm1368474ejc.22.2023.04.13.12.05.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Apr 2023 12:05:33 -0700 (PDT)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Message-ID: <e7d81a89-da60-1da6-7966-7739ad545834@redhat.com>
-Date:   Thu, 13 Apr 2023 21:05:32 +0200
+        Thu, 13 Apr 2023 15:07:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDB07AB3;
+        Thu, 13 Apr 2023 12:07:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AED060C92;
+        Thu, 13 Apr 2023 19:07:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CB8CC433D2;
+        Thu, 13 Apr 2023 19:07:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681412821;
+        bh=oojxmeg84uBgy5mEglQuFVEA6UgalGkZRPBKKPKhBFo=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=A9ga6TkO9EMOZPFaQ75gllB5vx3pE6c4bPHHnSNDa2fzU+civgoKu5AQoFGHHPlxU
+         OBSDwiy82lW4uZq9YTsWeB4jlmVvKxIUVE16FFibdydX2tNTXq51bd52lpA8zhKpYL
+         qFOMFzYi4ObKq+4uxPXpBOvQlCp7d+xlFyOTU15EpgX9Y3b2wqQYA+Q+T76T36XFco
+         t7zjYQXHMcs0D8T9EbJZmKPJr6032MyAinfTe8Kqp3KC1a1J4KbAEgDIEufSRDZvlP
+         2SMQ0PElL1kTdD0Bn8qz6Sxmg8BAgPzEh4a+vs9/N3H5gX+kKn7IVNR7b65n3XdZjR
+         a2gbnGqdCpJPA==
+Message-ID: <25b06794ffb595229019640e10f256fd.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Cc:     brouer@redhat.com, intel-wired-lan@lists.osuosl.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, xdp-hints@xdp-project.net,
-        stable@vger.kernel.org
-Subject: Re: [PATCH net 1/1] igc: read before write to SRRCTL register
-Content-Language: en-US
-To:     Song Yoong Siang <yoong.siang.song@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Vedang Patel <vedang.patel@intel.com>,
-        Jithu Joseph <jithu.joseph@intel.com>,
-        Andre Guedes <andre.guedes@intel.com>,
-        Stanislav Fomichev <sdf@google.com>
-References: <20230413151222.1864307-1-yoong.siang.song@intel.com>
-In-Reply-To: <20230413151222.1864307-1-yoong.siang.song@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230413032439.1706448-1-u201911681@hust.edu.cn>
+References: <20230413032439.1706448-1-u201911681@hust.edu.cn>
+Subject: Re: [PATCH] clk: imx: clk-imx8mm: fix memory leak issue in 'imx8mm_clocks_probe'
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        Zhou Shide <u201911681@hust.edu.cn>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Hao Luo <m202171776@hust.edu.cn>
+To:     Abel Vesa <abelvesa@kernel.org>, Bai Ping <ping.bai@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Zhou Shide <u201911681@hust.edu.cn>
+Date:   Thu, 13 Apr 2023 12:06:59 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Quoting Zhou Shide (2023-04-12 20:24:39)
+> The function imx8mm_clocks_probe() has two main issues:
+> - The of_iomap() function may cause a memory leak.
+> - Memory allocated for 'clk_hw_data' may not be freed properly
+> in some paths.
+>=20
+> To fix these issues, this commit replaces the use of of_iomap()
+> with devm_of_iomap() and replaces kzalloc() with devm_kzalloc().
+> This ensures that all memory is properly managed and automatically
+> freed when the device is removed.
+>=20
+> In addition, when devm_of_iomap() allocates memory with an error,
+> it will first jump to label "unregister_hws" and
+> then return PTR_ ERR(base).
+>=20
+> Fixes: 9c71f9ea35d7 ("clk: imx: imx8mm: Switch to clk_hw based API")
+> Fixes: ba5625c3e272 ("clk: imx: Add clock driver support for imx8mm")
+> Signed-off-by: Zhou Shide <u201911681@hust.edu.cn>
+> ---
+> The issue is discovered by static analysis, and the patch is not tested y=
+et.
 
-On 13/04/2023 17.12, Song Yoong Siang wrote:
-> igc_configure_rx_ring() function will be called as part of XDP program
-> setup. If Rx hardware timestamp is enabled prio to XDP program setup,
-> this timestamp enablement will be overwritten when buffer size is
-> written into SRRCTL register.
-> 
-> Thus, this commit read the register value before write to SRRCTL
-> register. This commit is tested by using xdp_hw_metadata bpf selftest
-> tool. The tool enables Rx hardware timestamp and then attach XDP program
-> to igc driver. It will display hardware timestamp of UDP packet with
-> port number 9092. Below are detail of test steps and results.
-[...]
-> diff --git a/drivers/net/ethernet/intel/igc/igc_base.h b/drivers/net/ethernet/intel/igc/igc_base.h
-> index 7a992befca24..b95007d51d13 100644
-> --- a/drivers/net/ethernet/intel/igc/igc_base.h
-> +++ b/drivers/net/ethernet/intel/igc/igc_base.h
-> @@ -87,8 +87,11 @@ union igc_adv_rx_desc {
->   #define IGC_RXDCTL_SWFLUSH		0x04000000 /* Receive Software Flush */
->   
->   /* SRRCTL bit definitions */
-> -#define IGC_SRRCTL_BSIZEPKT_SHIFT		10 /* Shift _right_ */
-> -#define IGC_SRRCTL_BSIZEHDRSIZE_SHIFT		2  /* Shift _left_ */
-> +#define IGC_SRRCTL_BSIZEPKT_MASK	GENMASK(6, 0)
-> +#define IGC_SRRCTL_BSIZEPKT_SHIFT	10 /* Shift _right_ */
-> +#define IGC_SRRCTL_BSIZEHDRSIZE_MASK	GENMASK(13, 8)
-> +#define IGC_SRRCTL_BSIZEHDRSIZE_SHIFT	2  /* Shift _left_ */
-> +#define IGC_SRRCTL_DESCTYPE_MASK	GENMASK(27, 25)
->   #define IGC_SRRCTL_DESCTYPE_ADV_ONEBUF	0x02000000
->   
->   #endif /* _IGC_BASE_H */
-> diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-> index 25fc6c65209b..de7b21c2ccd6 100644
-> --- a/drivers/net/ethernet/intel/igc/igc_main.c
-> +++ b/drivers/net/ethernet/intel/igc/igc_main.c
-> @@ -641,7 +641,10 @@ static void igc_configure_rx_ring(struct igc_adapter *adapter,
->   	else
->   		buf_size = IGC_RXBUFFER_2048;
->   
-> -	srrctl = IGC_RX_HDR_LEN << IGC_SRRCTL_BSIZEHDRSIZE_SHIFT;
-> +	srrctl = rd32(IGC_SRRCTL(reg_idx));
-> +	srrctl &= ~(IGC_SRRCTL_BSIZEPKT_MASK | IGC_SRRCTL_BSIZEHDRSIZE_MASK |
-> +		  IGC_SRRCTL_DESCTYPE_MASK);
-                   ^^
-Please fix indention, moving IGC_SRRCTL_DESCTYPE_MASK such that it
-aligns with IGC_SRRCTL_BSIZEPKT_MASK.  This make is easier for the eye
-to spot that it is part of the negation (~).
-
-> +	srrctl |= IGC_RX_HDR_LEN << IGC_SRRCTL_BSIZEHDRSIZE_SHIFT;
->   	srrctl |= buf_size >> IGC_SRRCTL_BSIZEPKT_SHIFT;
->   	srrctl |= IGC_SRRCTL_DESCTYPE_ADV_ONEBUF;
->   
-
+And you're not coordinating with each other?
