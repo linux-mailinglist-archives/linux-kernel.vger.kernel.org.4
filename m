@@ -2,73 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D93E46E187B
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 01:45:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26E316E1881
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 01:54:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbjDMXpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 19:45:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37210 "EHLO
+        id S229782AbjDMXyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 19:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbjDMXpP (ORCPT
+        with ESMTP id S229530AbjDMXyf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 19:45:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392E63A84;
-        Thu, 13 Apr 2023 16:45:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BEA4C64293;
-        Thu, 13 Apr 2023 23:45:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E26C0C4339B;
-        Thu, 13 Apr 2023 23:45:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681429513;
-        bh=2UbDLK18wBx03HYCt5hAWTESta7MQFVyDxq6aWeEDjc=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=acyZMvvK4eidxgFEukud1gjynXBz4y727Fv5oRD38++IKi+Yc/qyl0ln2T1uXgF6W
-         r5BCxlqFEZHhY4xQ8RC+Nzj/nfeYI5ddosuRp9lTHInlG0O13/9y1wbir2cMa5qPu6
-         elRZpvV2SS6as13pxgY43GsoH0hVclOMRECQifzkoicvw0J7xLHfjosNGwAVD8MRXw
-         nlh36swdLxfHWGnEIj0NqiNbLXLnQYswZZ3l7+6UnPLUXOQvaUwQfTteWV8OoRvYbF
-         fpLz4BT1Ft5mOFSQKkYQ+VzGj8JQIJ62K9OqzqLgvm0VIQIfFx36yG58xhF/xjM6gG
-         uXbeRYfhUjW5A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C63CFC395C5;
-        Thu, 13 Apr 2023 23:45:13 +0000 (UTC)
-Subject: Re: [GIT PULL] cgroup fixes for v6.3-rc6
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <ZDiKQ7Bia-ki3Vmh@slm.duckdns.org>
-References: <ZDiKQ7Bia-ki3Vmh@slm.duckdns.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZDiKQ7Bia-ki3Vmh@slm.duckdns.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/ tags/cgroup-for-6.3-rc6-fixes
-X-PR-Tracked-Commit-Id: 7e27cb6ad4d85fc8bac2a2a896da62ef66b8598e
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 44149752e9987a9eac5ad78e6d3a20934b5e018d
-Message-Id: <168142951380.2357.469077170664556111.pr-tracker-bot@kernel.org>
-Date:   Thu, 13 Apr 2023 23:45:13 +0000
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 13 Apr 2023 19:54:35 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5AB120;
+        Thu, 13 Apr 2023 16:54:34 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id kt6so3344731ejb.0;
+        Thu, 13 Apr 2023 16:54:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681430073; x=1684022073;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JWvjWk4I7oc6dibDy+yZ1HnfJOmElV8h8gzVVqmgQHg=;
+        b=lA//TTbrxMuf+RtLbXQDgO4FDlYsguGdpLEAqEUy1fDjyiwB23DoaHo7S4YdVh1FNo
+         wglzWEGejSBWMuiUIAYJ2cSsH+zzluQ0icAD8Kwb3iYLxpWIv8Ec1+J4KWpQTKI9Ve4C
+         gK+u0G4J7lkRj4YI4zuQE9kCpFCbiL+CzEEZXjVczK50s41pQlRLo6E05iaFYWYE9rlr
+         INkZ+rD7vq52Pz4c8qEa1JvrNCKmybJJxMzL90areN7eiJ6hBUnRs+uCKfYuNykkoeng
+         4rr5FHHMldUCEv+MQ68NNLay2w9sDb0eDfUYarCSx/sVB5914hDeVg3wNicgPhqbUllo
+         CYaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681430073; x=1684022073;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JWvjWk4I7oc6dibDy+yZ1HnfJOmElV8h8gzVVqmgQHg=;
+        b=Ni8Djt4SX/sLE9lBVb/uxvOXiExDkQyzqurXiq+xcDNxkBqXGnuIynKNrKZmCMCPe+
+         NHiYlLz/EM3/cnORqN6PiIObCDe1O8Rw7I+ubXcsgEAhTuHzFvVkHFHqR7p11k4rIDbu
+         qZziuJDflpV73qhdhfoDFVQiHwHKQ/Hj8K2dI5I0eNDmqOohlRJGs7bVIwA4gO4KtXDp
+         dl4tMI8X1hJiAmf1ltl+qNkxx+lSBmdhMMte7qGSoyeD/a4TiJIi5p1iSsSKXqYQOA8X
+         y43O/rJ4WWLt4EjsilWNrVxRzlz1qHOj9HE1hNjpC2CarK6OMdg5dO0MR6BVA0loGrzD
+         2NrQ==
+X-Gm-Message-State: AAQBX9dpD+wrW5EKPNkZ3FdNrjVSRZBNvDLOB9ZuIP5Ws6wYcFCxfBa4
+        QhJrMhPOpmDX6QRRZHNA+ltfjGr+fZ9YLRnxUUQ=
+X-Google-Smtp-Source: AKy350b4CoEwB7jArQnIrPMYgyL3cdsVhg3mhG7UHPDCFw43nx0iPj0YuocPDq5JuaNgM6B6LnTgreYIb8SV7JUlVJk=
+X-Received: by 2002:a17:906:3c3:b0:931:3a19:d835 with SMTP id
+ c3-20020a17090603c300b009313a19d835mr2130172eja.3.1681430072621; Thu, 13 Apr
+ 2023 16:54:32 -0700 (PDT)
+MIME-Version: 1.0
+References: <ZDWAcN6wfeXzipHz@gofer.mess.org> <CAADnVQJ-zzzTxDj8_7WKW-o3BDsU=DNAnvSEZGNHswbhGA8xhA@mail.gmail.com>
+ <ZDe9ND/M4I9ll1xV@gofer.mess.org>
+In-Reply-To: <ZDe9ND/M4I9ll1xV@gofer.mess.org>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 13 Apr 2023 16:54:21 -0700
+Message-ID: <CAADnVQLOmDEQsHX4XfgETXUte9mJ+-qphR_E7dcjXB2PMDaZnA@mail.gmail.com>
+Subject: Re: [PATCH] bpf: lirc program type should not require SYS_CAP_ADMIN
+To:     Sean Young <sean@mess.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 13 Apr 2023 13:03:31 -1000:
+On Thu, Apr 13, 2023 at 1:28=E2=80=AFAM Sean Young <sean@mess.org> wrote:
+>
+> On Wed, Apr 12, 2023 at 04:14:05PM -0700, Alexei Starovoitov wrote:
+> > On Tue, Apr 11, 2023 at 8:45=E2=80=AFAM Sean Young <sean@mess.org> wrot=
+e:
+> > >
+> > > Make it possible to load lirc program type with just CAP_BPF.
+> >
+> > Is it safe?
+> > If the user can load with just CAP_BPF the FD to the prog and target_fd
+> > will allow attach as well.
+>
+> Exactly, that's the $1m question of course.
+>
+> I think it's safe from a lirc perspective because you need to be able to
+> open the /dev/lirc0 device in the first place; if you can open it, you
+> alter all sorts of lirc receiving options already. Changing the IR protoc=
+ol
+> decoder is no different in that perspective.
+>
+> The other side of course, is it save to load a bpf lirc program as a norm=
+al
+> user. I don't see any issue with this; I guess this depends on whether th=
+e
+> subset of functions in lirc_mode2_func_proto() is safe. I am hoping that
+> the expert opinion everyone here can help answer that question.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/ tags/cgroup-for-6.3-rc6-fixes
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/44149752e9987a9eac5ad78e6d3a20934b5e018d
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+That part is fine under CAP_BPF.
+I don't know how lirc devices are typically setup.
+If they need root to open them
+then why bother relaxing bpf loading part?
