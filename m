@@ -2,297 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD45D6E0F04
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:40:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C121A6E0E64
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 15:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231649AbjDMNkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 09:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37072 "EHLO
+        id S229709AbjDMNTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 09:19:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231928AbjDMNkX (ORCPT
+        with ESMTP id S229954AbjDMNTI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 09:40:23 -0400
-X-Greylist: delayed 634 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 13 Apr 2023 06:37:48 PDT
-Received: from vulcan.natalenko.name (vulcan.natalenko.name [104.207.131.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4081BBBB;
-        Thu, 13 Apr 2023 06:37:47 -0700 (PDT)
-Received: from spock.localnet (unknown [83.148.33.151])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by vulcan.natalenko.name (Postfix) with ESMTPSA id 615C112BE4A8;
-        Thu, 13 Apr 2023 15:18:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-        s=dkim-20170712; t=1681391881;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9Oao65Nki1CkTSME8kkBazOhgfBe66eQgZrsXuv+svs=;
-        b=qX36+PaXql+aoU/beJqTsUREkn+4kc+qQU6s/chL9k3xUpF6drO8NNecm4P9BkEExGAYe7
-        fxLCmGtaOQFBl8dqY1Tbxzrt/M1+QszOI+3QQQTagSpV682ZkH81jWve1wL5HygeTeOi+N
-        EXFJ1EDitD2DPnzQtZlhk3Kl+R7P/1I=
-From:   Oleksandr Natalenko <oleksandr@natalenko.name>
-To:     linux-kernel@vger.kernel.org,
-        K Prateek Nayak <kprateek.nayak@amd.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, corbet@lwn.net,
-        jgross@suse.com, andrew.cooper3@citrix.com, peterz@infradead.org,
-        Jason@zx2c4.com, thomas.lendacky@amd.com, puwen@hygon.cn,
-        x86@kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH 0/2] arch/x86: Set L2 Cache ID on AMD processors
-Date:   Thu, 13 Apr 2023 15:17:59 +0200
-Message-ID: <1730486.opmyjpaWMg@natalenko.name>
-In-Reply-To: <20230410163527.1626-1-kprateek.nayak@amd.com>
-References: <20230410163527.1626-1-kprateek.nayak@amd.com>
+        Thu, 13 Apr 2023 09:19:08 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CAF6A5CB;
+        Thu, 13 Apr 2023 06:18:42 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33DCeE6M027748;
+        Thu, 13 Apr 2023 13:18:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=RRTkCQ0l6XYgsz/wyT39D6/1Wcr56Eh0Y911JQcgA2o=;
+ b=dQ9PN1bxJrETx4FWj4QEYEgaLuxJSBasp4NBHn6LZIGlp9IZBnM9mbbdawMwH7GUzIfd
+ 7DzsB/e1tNE8/Uk4KcDih9jOp8SLH81ensuMZinFznCH/jgDeZ0PAvyeYKqnk6HWy+vT
+ tFGsxXq8GgxKGoEVFcb1NI84ZL5QHWYmLsSMo36LLTu4Mpp+XB6+4SPDF6T56EXEi99M
+ WBsDkxrTYZvrebbtKzwz+KJbHHi7iaoRrGOJPqEYKLH6ssaiwBQ2xwuilFHto6HUBgUe
+ 9ZMvN7jIs8lu5Man2G0bcsnUI99lK2Azgt/QAgfFbN4PCRDPkf307MCrCw3QVk9JuHAL Nw== 
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pxf129d5r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Apr 2023 13:18:16 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33DC7L9E029751;
+        Thu, 13 Apr 2023 13:18:16 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
+        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3pu0fqtex9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Apr 2023 13:18:15 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33DDIDmP36635248
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 13 Apr 2023 13:18:14 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C7CE858055;
+        Thu, 13 Apr 2023 13:18:13 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E59DB58043;
+        Thu, 13 Apr 2023 13:18:12 +0000 (GMT)
+Received: from [9.65.220.56] (unknown [9.65.220.56])
+        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 13 Apr 2023 13:18:12 +0000 (GMT)
+Message-ID: <71c63813-bbf1-8baa-3b94-f5184cc5e872@linux.ibm.com>
+Date:   Thu, 13 Apr 2023 08:18:12 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH] Remove POWER10_CPU dependency and move
+ PPC_MODULE_FEATURE_P10.
+Content-Language: en-US
+To:     Michael Ellerman <mpe@ellerman.id.au>, linux-crypto@vger.kernel.org
+Cc:     herbert@gondor.apana.org.au, leitao@debian.org,
+        nayna@linux.ibm.com, appro@cryptogams.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        ltcgcw@linux.vnet.ibm.com, dtsen@us.ibm.com
+References: <20230412181232.2051-1-dtsen@linux.ibm.com>
+ <87wn2g9b9l.fsf@mpe.ellerman.id.au>
+From:   Danny Tsen <dtsen@linux.ibm.com>
+In-Reply-To: <87wn2g9b9l.fsf@mpe.ellerman.id.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: l1U5v_9VpvbIi5deTL7wF5J4Yqnxt5cQ
+X-Proofpoint-GUID: l1U5v_9VpvbIi5deTL7wF5J4Yqnxt5cQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-13_08,2023-04-13_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
+ adultscore=0 mlxscore=0 spamscore=0 suspectscore=0 priorityscore=1501
+ malwarescore=0 lowpriorityscore=0 impostorscore=0 mlxlogscore=999
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304130116
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,TVD_SUBJ_WIPE_DEBT autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello.
+Hi Michael,
 
-On pond=C4=9Bl=C3=AD 10. dubna 2023 18:35:25 CEST K Prateek Nayak wrote:
-> commit 66558b730f253 ("sched: Add cluster scheduler level for x86")
-> defined cluster on x86 as the set of threads sharing the same L2 cache.
-> cluster_id on x86, maps to the l2c_id which currently only Intel
-> processors set.
->=20
-> This series sets the l2c_id on AMD processors with X86_FEATURE_TOPOEXT,
-> using the extended APIC ID and the "Cache Properties (L2)" CPUID
-> (0x8000001D EAX). On AMD processors without X86_FEATURE_TOPOEXT, current
-> behavior will continue.
->=20
-> Following are the changes in value reported by
-> "/sys/devices/system/cpu/cpuX/topology/cluster_id" on a 2P Milan system
-> (2 x 64C/128T) where L2 is per-core level and SMT sibling of CPU (X) is
-> CPU ((X + 128) % 256).
->=20
-> - tip:x86/core
->=20
->   $ for i in {0..255}; do\
->       echo -n "CPU$i cluster_id: ";\
->       cat /sys/devices/system/cpu/cpu$i/topology/cluster_id;\
->     done;
->=20
->     CPU0 cluster_id: 65535
->     CPU1 cluster_id: 65535
->     CPU2 cluster_id: 65535
->     CPU3 cluster_id: 65535
->     CPU4 cluster_id: 65535
->     ...
->     CPU254 cluster_id: 65535
->     CPU255 cluster_id: 65535
->=20
-> - tip:x86/core + this series
->=20
->   $ for i in {0..255}; do\
->       echo -n "CPU$i cluster_id: ";\
->       cat /sys/devices/system/cpu/cpu$i/topology/cluster_id;\
->     done;
->=20
->     CPU0 cluster_id: 0
->     CPU1 cluster_id: 1
->     CPU2 cluster_id: 2
->     CPU3 cluster_id: 3
->     CPU4 cluster_id: 4
->     CPU5 cluster_id: 5
->     CPU6 cluster_id: 6
->     CPU7 cluster_id: 7
->     CPU8 cluster_id: 8
->     ...
->     CPU126 cluster_id: 126
->     CPU127 cluster_id: 127
->     CPU128 cluster_id: 0
->     CPU129 cluster_id: 1
->     CPU130 cluster_id: 2
->     CPU131 cluster_id: 3
->     CPU132 cluster_id: 4
->     CPU133 cluster_id: 5
->     CPU134 cluster_id: 6
->     CPU135 cluster_id: 7
->     CPU136 cluster_id: 8
->     ...
->     CPU254 cluster_id: 126
->     CPU255 cluster_id: 127
->=20
-> Note: Hygon, theoretically, should be able to set the l2c_id using the
-> same cacheinfo_amd_init_l2c_id() function being added in Patch 1. Since
-> I do not have access to a Hygon machine to verify my theory, ccing Hygon
-> maintainer Pu Wen <puwen@hygon.cn> for l2c_id enablement on Hygon.
->=20
-> The series also adds documentation for clusters on x86 platforms and
-> applies cleanly on top of tip:x86/core at commit ce3ba2af9695
-> ("x86: Suppress KMSAN reports in arch_within_stack_frames()")
->=20
-> ---
-> K Prateek Nayak (2):
->   arch/x86: Set L2 Cache ID on AMD and Hygon processors
->   x86/Documentation: Add documentation about cluster
->=20
->  Documentation/x86/topology.rst   | 31 +++++++++++++++++++++
->  arch/x86/include/asm/cacheinfo.h |  1 +
->  arch/x86/kernel/cpu/amd.c        |  1 +
->  arch/x86/kernel/cpu/cacheinfo.c  | 47 ++++++++++++++++++++++++++++++++
->  arch/x86/kernel/cpu/hygon.c      |  1 +
->  5 files changed, 81 insertions(+)
-
-Having the following CPU:
-
-```
-Architecture:            x86_64
-CPU op-mode(s):        32-bit, 64-bit
-Address sizes:         48 bits physical, 48 bits virtual
-Byte Order:            Little Endian
-CPU(s):                  32
-On-line CPU(s) list:   0-31
-Vendor ID:               AuthenticAMD
-Model name:            AMD Ryzen 9 5950X 16-Core Processor
-CPU family:          25
-Model:               33
-Thread(s) per core:  2
-Core(s) per socket:  16
-Socket(s):           1
-Stepping:            2
-=46requency boost:     enabled
-CPU(s) scaling MHz:  37%
-CPU max MHz:         5084,0000
-CPU min MHz:         550,0000
-BogoMIPS:            6789,07
-=46lags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge=
- mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt=
- pdpe1gb rdtscp lm constant_
-tsc rep_good nopl nonstop_tsc cpuid extd_apicid aperfmperf rapl pni pclmulq=
-dq monitor ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f=
-16c r
-drand lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnow=
-prefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bpext perf=
-ctr_l
-lc mwaitx cpb cat_l3 cdp_l3 hw_pstate ssbd mba ibrs ibpb stibp vmmcall fsgs=
-base bmi1 avx2 smep bmi2 erms invpcid cqm rdt_a rdseed adx smap clflushopt =
-clwb
-sha_ni xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total c=
-qm_mbm_local clzero irperf xsaveerptr rdpru wbnoinvd arat npt lbrv svm_lock=
- nrip
-_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshol=
-d avic v_vmsave_vmload vgif v_spec_ctrl umip pku ospke vaes vpclmulqdq rdpi=
-d ove
-rflow_recov succor smca fsrm
-Virtualization features:
-Virtualization:        AMD-V
-Caches (sum of all):
-L1d:                   512 KiB (16 instances)
-L1i:                   512 KiB (16 instances)
-L2:                    8 MiB (16 instances)
-L3:                    64 MiB (2 instances)
-NUMA:
-NUMA node(s):          1
-NUMA node0 CPU(s):     0-31
-Vulnerabilities:
-Itlb multihit:         Not affected
-L1tf:                  Not affected
-Mds:                   Not affected
-Meltdown:              Not affected
-Mmio stale data:       Not affected
-Retbleed:              Not affected
-Spec store bypass:     Mitigation; Speculative Store Bypass disabled via pr=
-ctl
-Spectre v1:            Mitigation; usercopy/swapgs barriers and __user poin=
-ter sanitization
-Spectre v2:            Mitigation; Retpolines, IBPB conditional, IBRS_FW, S=
-TIBP always-on, RSB filling, PBRSB-eIBRS Not affected
-Srbds:                 Not affected
-Tsx async abort:       Not affected
-```
-
-Without the series:
-
-```
-/sys/devices/system/cpu/cpu0/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu1/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu2/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu3/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu4/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu5/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu6/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu7/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu8/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu9/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu10/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu11/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu12/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu13/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu14/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu15/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu16/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu17/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu18/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu19/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu20/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu21/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu22/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu23/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu24/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu25/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu26/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu27/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu28/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu29/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu30/topology/cluster_id:65535
-/sys/devices/system/cpu/cpu31/topology/cluster_id:65535
-```
-
-With the series:
-
-```
-/sys/devices/system/cpu/cpu0/topology/cluster_id:0
-/sys/devices/system/cpu/cpu1/topology/cluster_id:1
-/sys/devices/system/cpu/cpu2/topology/cluster_id:2
-/sys/devices/system/cpu/cpu3/topology/cluster_id:3
-/sys/devices/system/cpu/cpu4/topology/cluster_id:4
-/sys/devices/system/cpu/cpu5/topology/cluster_id:5
-/sys/devices/system/cpu/cpu6/topology/cluster_id:6
-/sys/devices/system/cpu/cpu7/topology/cluster_id:7
-/sys/devices/system/cpu/cpu8/topology/cluster_id:8
-/sys/devices/system/cpu/cpu9/topology/cluster_id:9
-/sys/devices/system/cpu/cpu10/topology/cluster_id:10
-/sys/devices/system/cpu/cpu11/topology/cluster_id:11
-/sys/devices/system/cpu/cpu12/topology/cluster_id:12
-/sys/devices/system/cpu/cpu13/topology/cluster_id:13
-/sys/devices/system/cpu/cpu14/topology/cluster_id:14
-/sys/devices/system/cpu/cpu15/topology/cluster_id:15
-/sys/devices/system/cpu/cpu16/topology/cluster_id:0
-/sys/devices/system/cpu/cpu17/topology/cluster_id:1
-/sys/devices/system/cpu/cpu18/topology/cluster_id:2
-/sys/devices/system/cpu/cpu19/topology/cluster_id:3
-/sys/devices/system/cpu/cpu20/topology/cluster_id:4
-/sys/devices/system/cpu/cpu21/topology/cluster_id:5
-/sys/devices/system/cpu/cpu22/topology/cluster_id:6
-/sys/devices/system/cpu/cpu23/topology/cluster_id:7
-/sys/devices/system/cpu/cpu24/topology/cluster_id:8
-/sys/devices/system/cpu/cpu25/topology/cluster_id:9
-/sys/devices/system/cpu/cpu26/topology/cluster_id:10
-/sys/devices/system/cpu/cpu27/topology/cluster_id:11
-/sys/devices/system/cpu/cpu28/topology/cluster_id:12
-/sys/devices/system/cpu/cpu29/topology/cluster_id:13
-/sys/devices/system/cpu/cpu30/topology/cluster_id:14
-/sys/devices/system/cpu/cpu31/topology/cluster_id:15
-```
-
-Hence,
-
-Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+If I do separate patch for moving PPC_MODULE_FEATURE_P10, this will 
+break the build since it is currently defined in aes-gcm-p10-glue.c.  
+And the p10 will be detected when loading the module in 
+module_cpu_feature_match(PPC_MODULE_FEATURE_P10, p10_init); so it won't 
+load if it's not P10.
 
 Thanks.
 
-=2D-=20
-Oleksandr Natalenko (post-factum)
+-Danny
 
-
+On 4/13/23 8:12 AM, Michael Ellerman wrote:
+> Danny Tsen <dtsen@linux.ibm.com> writes:
+>> Remove Power10 dependency in Kconfig and detect Power10 feature at runtime.
+>> Move PPC_MODULE_FEATURE_P10 definition to be in
+>> arch/powerpc/include/asm/cpufeature.h.
+> This should be two patches, one for the Kconfig change and one moving
+> the feature flag.
+>
+> Also don't you need a cpu feature check in p10_init()? Otherwise the
+> driver can be loaded on non-P10 CPUs, either by being built-in, or
+> manually.
+>
+> cheers
+>
+>> Signed-off-by: Danny Tsen <dtsen@linux.ibm.com>
+>> ---
+>>   arch/powerpc/crypto/Kconfig            | 2 +-
+>>   arch/powerpc/crypto/aes-gcm-p10-glue.c | 1 -
+>>   arch/powerpc/include/asm/cpufeature.h  | 1 +
+>>   3 files changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/arch/powerpc/crypto/Kconfig b/arch/powerpc/crypto/Kconfig
+>> index 1f8f02b494e1..7113f9355165 100644
+>> --- a/arch/powerpc/crypto/Kconfig
+>> +++ b/arch/powerpc/crypto/Kconfig
+>> @@ -96,7 +96,7 @@ config CRYPTO_AES_PPC_SPE
+>>   
+>>   config CRYPTO_AES_GCM_P10
+>>   	tristate "Stitched AES/GCM acceleration support on P10 or later CPU (PPC)"
+>> -	depends on PPC64 && POWER10_CPU && CPU_LITTLE_ENDIAN
+>> +	depends on PPC64 && CPU_LITTLE_ENDIAN
+>>   	select CRYPTO_LIB_AES
+>>   	select CRYPTO_ALGAPI
+>>   	select CRYPTO_AEAD
+>> diff --git a/arch/powerpc/crypto/aes-gcm-p10-glue.c b/arch/powerpc/crypto/aes-gcm-p10-glue.c
+>> index 1533c8cdd26f..bd3475f5348d 100644
+>> --- a/arch/powerpc/crypto/aes-gcm-p10-glue.c
+>> +++ b/arch/powerpc/crypto/aes-gcm-p10-glue.c
+>> @@ -22,7 +22,6 @@
+>>   #include <linux/module.h>
+>>   #include <linux/types.h>
+>>   
+>> -#define PPC_MODULE_FEATURE_P10	(32 + ilog2(PPC_FEATURE2_ARCH_3_1))
+>>   #define	PPC_ALIGN		16
+>>   #define GCM_IV_SIZE		12
+>>   
+>> diff --git a/arch/powerpc/include/asm/cpufeature.h b/arch/powerpc/include/asm/cpufeature.h
+>> index f6f790a90367..2dcc66225e7f 100644
+>> --- a/arch/powerpc/include/asm/cpufeature.h
+>> +++ b/arch/powerpc/include/asm/cpufeature.h
+>> @@ -22,6 +22,7 @@
+>>    */
+>>   
+>>   #define PPC_MODULE_FEATURE_VEC_CRYPTO			(32 + ilog2(PPC_FEATURE2_VEC_CRYPTO))
+>> +#define PPC_MODULE_FEATURE_P10				(32 + ilog2(PPC_FEATURE2_ARCH_3_1))
+>>   
+>>   #define cpu_feature(x)		(x)
+>>   
+>> -- 
+>> 2.31.1
