@@ -2,128 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74ED36E12DC
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C207A6E12EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230247AbjDMQzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 12:55:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56362 "EHLO
+        id S230149AbjDMQ6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 12:58:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbjDMQzH (ORCPT
+        with ESMTP id S229804AbjDMQ6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 12:55:07 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7311559F9
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:55:04 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id rp27so2046924ejb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:55:04 -0700 (PDT)
+        Thu, 13 Apr 2023 12:58:09 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F392565AE
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:58:07 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id dm2so39181441ejc.8
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:58:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681404903; x=1683996903;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yaaw//EbAt4NWXvmiMmr3k4gEQRN54OZznnAXNyHyME=;
-        b=ZeXrXrEMEs/QAmKjGHz1fjrmD5tvTmiXbSFoLXkpa2D8kGf4guB1SFyFJtEC0Ua6Bz
-         iUzEDrAqb6p8BXiKXyvOhPW7KxSkNEhPlKv3OALYF4K8kv3zXQUm+PZRPizD0ZqNVlyM
-         1WqISRDKmxMZqUr5uYlDNBOdLc7Vsmv7EzAiA3hqomJGSRp3gUQrLpik18z+HembWowS
-         xNAlvZw9rv66QRYtx1uaeqa8fLh6r8ndMVdlo06PyZjLOLXLFBZM9KQShjRpwb4CTPw3
-         ZhOpum9sIU8Q5biwwYpQ3SffxncWbWkVFO9DrOjuD+ZOOHroop+Y73dta6JOc1YXk4Z5
-         oVOw==
+        d=linaro.org; s=google; t=1681405086; x=1683997086;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VOvW4mc+Adn5JNUnhy7fUIfCKucKwegcOVM7PDNewLA=;
+        b=AZBDp3T+IHGru7JMWkdCyaz3OWKW510Y4b9D1dv2ghoo37qwxzu8jc1tdVKMuGsfUN
+         HcX/eMomIWlqJdThCe+/BSunvvzL1/mIS8W4Iivq7JIjyUmPeD682Bj+mBLRz+li8XgT
+         O+uRU6LTRIiK1ZHJLqMgUgGPA/VKbQxYc6T33KsXjHl3Xp6QZk6qGYNEpqyEyQy8tkbL
+         e0krGeXVq6WTEA/OQRQlbH/7JT1tcqOhNLmqNAGHaZmrDSeNMysZGiZLfgC5Uly7EA9a
+         H6kgSQ39hiGUnKTNmTjbNfdhnVoOcCLWYBW9SwUt6rTc3cTAtFVjXH+4Slqo8goNd+xW
+         CgcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681404903; x=1683996903;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Yaaw//EbAt4NWXvmiMmr3k4gEQRN54OZznnAXNyHyME=;
-        b=FmsCBNu0L4cOBM0kv+sxqDs2l4hBnvYipiuINpgb3yvjoyoP8keCEoDjNumNxz4l1L
-         Lrr2pDfA0cD1mp+k66nxsFIDRAVQzw9p0AyxwnicWjHHm9GdfgufoeiRzTLoDqHW8VB2
-         GlhvbfM36paYMa/EvQud9uhjcBD233Yc4cprtTcsPQnfjgwCZ6r+N5kiP9dW5pbdJ74l
-         Gy9sWmAl3z9lrELwyTPvqVVAXwuoA5IGMAZjtvhtD9Mj9AWtsqQSh2pnBCWgRejc7HKJ
-         ew5H2yFN2FDGM6JhrbXOgnNmYWUs8H/DgfSE77q3K3A0MoCvU+Irz00vPOwvTwzshfjy
-         QQRg==
-X-Gm-Message-State: AAQBX9cOGNBGzO5gyFFvYsAlmETVdnyNDhInBtdyhIu2Dx4ukGSiiYmi
-        Zw3XVtBdvfNMvrNdQjyhIia+IQ==
-X-Google-Smtp-Source: AKy350YYMcLNDEracut3HPq7w8j0sIYcfOgS5va9Sd7zxos+V/vtZyEDRRFO2koITXrE5n3gE48sAA==
-X-Received: by 2002:a17:906:6b0e:b0:932:cec7:6801 with SMTP id q14-20020a1709066b0e00b00932cec76801mr2986931ejr.54.1681404902875;
-        Thu, 13 Apr 2023 09:55:02 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:5032:d2d4:ece5:b035])
-        by smtp.gmail.com with ESMTPSA id j14-20020a17090686ce00b0094a57f50d7csm1195083ejy.200.2023.04.13.09.55.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 09:55:02 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Markus Schneider-Pargmann <msp@baylibre.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2] Documentation/process: always CC responsible lists
-Date:   Thu, 13 Apr 2023 18:55:01 +0200
-Message-Id: <20230413165501.47442-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20221208; t=1681405086; x=1683997086;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VOvW4mc+Adn5JNUnhy7fUIfCKucKwegcOVM7PDNewLA=;
+        b=AtIh9eX/AMBo833k5Zal8XklBl+/2DAP3krSbXJbAU7AAeXB59iHo5McovriJh0sFJ
+         9IYz5WlgfX/CMJgyaEPt9wYBAWsq6xY6qauWimvbQsosHrozPfU6j5Qkfd2LH6ae8yvu
+         qaYOMgh8rDUfuRxqRz0se8zTbjUW+jUSPQh5cSg0014I5L3X+eJtzJdZV84FD54PvNlt
+         JxundQGlpDXEoXbI9zNdzvZ6FkOCjfKEMjC6+ix1fBfEu5VaQcSkDnu+0au2KFqCLZKr
+         HlFiDDHBt/S7ZN7FMkXeW2nOIspgmes50d9dlA1Oed3C1xHLN3eMubbESSAlMpBcP/FG
+         9vEg==
+X-Gm-Message-State: AAQBX9dDa5z3X1+PPFrR6fG9szIDhKrbGx4VWtcmIEP6FI+C8b5jPLwr
+        GFLrTQweWadbArtlfUb+OFYISw==
+X-Google-Smtp-Source: AKy350bHD7VKurQrDdawyURsqGsSO5MZnMsQ0rEB82XLdb+FGtNO429BOBRc3muudH40tLgcU3ypdw==
+X-Received: by 2002:a17:906:2009:b0:94a:4cba:3302 with SMTP id 9-20020a170906200900b0094a4cba3302mr3326808ejo.64.1681405086326;
+        Thu, 13 Apr 2023 09:58:06 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:5032:d2d4:ece5:b035? ([2a02:810d:15c0:828:5032:d2d4:ece5:b035])
+        by smtp.gmail.com with ESMTPSA id tg4-20020a1709078dc400b0094ea3a32694sm1139944ejc.190.2023.04.13.09.58.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Apr 2023 09:58:05 -0700 (PDT)
+Message-ID: <874a1e5c-f82e-68d7-3617-042deb928071@linaro.org>
+Date:   Thu, 13 Apr 2023 18:58:04 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v7 04/12] dt-bindings: reset: nuvoton: Document ma35d1
+ reset control
+Content-Language: en-US
+To:     Jacky Huang <ychuang570808@gmail.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        arnd@arndb.de, schung@nuvoton.com, mjchen@nuvoton.com,
+        Jacky Huang <ychuang3@nuvoton.com>
+References: <20230412053824.106-1-ychuang570808@gmail.com>
+ <20230412053824.106-5-ychuang570808@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230412053824.106-5-ychuang570808@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "Select the recipients for your patch" part about CC-ing mailing
-lists is a bit vague and might be understood that only some lists should
-be Cc-ed.  That's not what most of the maintainers expect.  For given
-code, associated mailing list must always be CC-ed, because the list is
-used for reviewing and testing patches.  Example are the Devicetree
-bindings patches, which are tested iff Devicetree mailing list is CC-ed.
+On 12/04/2023 07:38, Jacky Huang wrote:
+> From: Jacky Huang <ychuang3@nuvoton.com>
+> 
+> Add the dt-bindings header for Nuvoton ma35d1, that gets shared
+> between the reset controller and reset references in the dts.
+> Add documentation to describe nuvoton ma35d1 reset driver.
+> 
+> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
----
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-At least one person was arguing with me that CC-ing selective lists for
-his patch (e.g. skipping list X for code X) is okay, thus let's be more
-specific here.
 
-Changes since v1:
-1. Fix typos in commit msg, a bit improve it.
----
- Documentation/process/submitting-patches.rst | 19 ++++++++-----------
- 1 file changed, 8 insertions(+), 11 deletions(-)
+This is an automated instruction, just in case, because many review tags
+are being ignored. If you do not know the process, here is a short
+explanation:
 
-diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
-index 12d58ddc2b8a..486875fd73c0 100644
---- a/Documentation/process/submitting-patches.rst
-+++ b/Documentation/process/submitting-patches.rst
-@@ -231,20 +231,17 @@ patch.
- Select the recipients for your patch
- ------------------------------------
- 
--You should always copy the appropriate subsystem maintainer(s) on any patch
--to code that they maintain; look through the MAINTAINERS file and the
--source code revision history to see who those maintainers are.  The
--script scripts/get_maintainer.pl can be very useful at this step (pass paths to
--your patches as arguments to scripts/get_maintainer.pl).  If you cannot find a
-+You should always copy the appropriate subsystem maintainer(s) and list(s) on
-+any patch to code that they maintain; look through the MAINTAINERS file and the
-+source code revision history to see who those maintainers are.  The script
-+scripts/get_maintainer.pl can be very useful at this step (pass paths to your
-+patches as arguments to scripts/get_maintainer.pl).  If you cannot find a
- maintainer for the subsystem you are working on, Andrew Morton
- (akpm@linux-foundation.org) serves as a maintainer of last resort.
- 
--You should also normally choose at least one mailing list to receive a copy
--of your patch set.  linux-kernel@vger.kernel.org should be used by default
--for all patches, but the volume on that list has caused a number of
--developers to tune it out.  Look in the MAINTAINERS file for a
--subsystem-specific list; your patch will probably get more attention there.
--Please do not spam unrelated lists, though.
-+linux-kernel@vger.kernel.org should be used by default for all patches, but the
-+volume on that list has caused a number of developers to tune it out.  Please
-+do not spam unrelated lists and unrelated people, though.
- 
- Many kernel-related lists are hosted on vger.kernel.org; you can find a
- list of them at http://vger.kernel.org/vger-lists.html.  There are
--- 
-2.34.1
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions, under or above your Signed-off-by tag. Tools like b4 can help
+here. However, there's no need to repost patches *only* to add the tags.
+The upstream maintainer will do that for acks received on the version
+they apply.
+
+https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+
+Best regards,
+Krzysztof
 
