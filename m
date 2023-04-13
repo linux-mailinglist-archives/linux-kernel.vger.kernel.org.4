@@ -2,197 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 502016E155E
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 21:45:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D5566E1562
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 21:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjDMTpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 15:45:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41278 "EHLO
+        id S229818AbjDMTrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 15:47:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjDMTpj (ORCPT
+        with ESMTP id S229628AbjDMTrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 15:45:39 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F656E91
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 12:45:37 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-504dfc87927so2195144a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 12:45:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681415136; x=1684007136;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=88EFnL+Iup5e+05FhvL6jyNeiQTCaWgRGCFvR1JP38o=;
-        b=ZtCKQZrLgkgivZRPYxzDX2JQp/+IFqVi/4GqLXx5xrMw8e5J1faiKuLAd37SML1gUr
-         atW417I1a9aS5z45tNWN234ACP9BudUAv3atS/FdmuCWdtXBaJ+vF4zY3rp2EjKWYsb6
-         1VjGiOIP6r6pUeWELZh6W0OoSgGYm+K+Urf6MRbgzL0ccP8UuNsO3s6JXzpa6Z45ftgk
-         mKNPc5MCpOhdrjinEtpd9JIDlPeEUKbmoqG5tmrmFDcoHnY9kBjmZy0J9HVxzDll2An9
-         ves5Jraa7wXtv5aryYv3w3EdR5uIbmky7k787yhI9T5NRfNKDx8PAwXh8Ld2CnwtzYHx
-         k3TQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681415136; x=1684007136;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=88EFnL+Iup5e+05FhvL6jyNeiQTCaWgRGCFvR1JP38o=;
-        b=CkJ598q0v3O2F8pANvV6dXRF5dnCCwulLWtW0hzqEnuF5QXUEcimbxJiuHyiGMatUz
-         toLXVh7O+J1FGXzBtM2D2/9BOhnW/Z75NJvr9bLtRuXx+vOyesVihK5U8p5MvZ/CptVL
-         HH5gIh/sAG/+cF26obvRhEMlAihP6jjMmhP8QITzjdSPUNg2Jq7Pt8w4zGf7r4n1FwCS
-         LrDAqDzwyfRKqR45utVsYazn4ExW2K8di8PMxayaCvJQNjFkxKJmJB1X2yS9BSNisAZj
-         UDu1FcXd9NuBj3ME8+XikQY85c5749+pRH7uP5rYNrHiYqgRnnCeMN+8dHycDHYpnUfy
-         dqDg==
-X-Gm-Message-State: AAQBX9fGTu6ieLAqnDr1rVIuco+Rw3GJ7rNRChNmGda9Ou8m5iBREqZU
-        W4btUOP/YTzRJ/Ok3LCoBTCfEJgrX7fQ1z6nUQOCgA==
-X-Google-Smtp-Source: AKy350Yau9Uf2g3DEINeSuj0OVv5i5Z1SKO/3AzTPErsOaG/BCkUgsFxi51PEgNXrD9GsG0de0ZZVRKWhnWphmvdxLI=
-X-Received: by 2002:a50:aa84:0:b0:504:7094:2b59 with SMTP id
- q4-20020a50aa84000000b0050470942b59mr1796723edc.7.1681415135796; Thu, 13 Apr
- 2023 12:45:35 -0700 (PDT)
+        Thu, 13 Apr 2023 15:47:02 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865D665B6;
+        Thu, 13 Apr 2023 12:47:00 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33DJkde9010136;
+        Thu, 13 Apr 2023 19:46:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=9bXJxQDpqf1FHLqGzpmDLwhqgj0ZIvKATcvCppLD37c=;
+ b=r0GRWg6onBfCy+Ud/Ja+kk63Q68i4wgCjw68rZfbSVHGeLCdP0OLL8apQzbXMYxGqkTY
+ Lad0Dv7Fmj3YK3Uf4pTTpzs9BGU61zkuiHQbIqnJAM+L4Ff4o34HoG52I5LIndL25Km1
+ yvCkBGZtlEo3ALzAuhooNTLqlzAhTj75l8orUnrm/GFc5xrO+c0vPTRpJtH8+nbqeArT
+ 0e7g7iaw4YfMvhI+IWm3DKgm8kJt4PEjNfM4sEQsI2Y5vSfAm0xFIhWEiCaySOxTMHFN
+ f71Q7IqWw2vEBq/YTvMKu0077GXtMvWt1v7IEfyt4ZbNPi6H0q7wjo+hAnZx8mansaiZ Bw== 
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pxmf6hruc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Apr 2023 19:46:40 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33DGbSCn020774;
+        Thu, 13 Apr 2023 19:46:39 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
+        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3pu0jhd4qx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Apr 2023 19:46:39 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33DJkbYm22151704
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 13 Apr 2023 19:46:37 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A35715803F;
+        Thu, 13 Apr 2023 19:46:37 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 16C1A58054;
+        Thu, 13 Apr 2023 19:46:37 +0000 (GMT)
+Received: from ltcden12-lp3.aus.stglabs.ibm.com (unknown [9.40.195.53])
+        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 13 Apr 2023 19:46:37 +0000 (GMT)
+From:   Danny Tsen <dtsen@linux.ibm.com>
+To:     linux-crypto@vger.kernel.org
+Cc:     herbert@gondor.apana.org.au, leitao@debian.org,
+        nayna@linux.ibm.com, appro@cryptogams.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        mpe@ellerman.id.au, ltcgcw@linux.vnet.ibm.com, dtsen@us.ibm.com,
+        Danny Tsen <dtsen@linux.ibm.com>
+Subject: [PATCH v2 0/2] Remove POWER10_CPU dependency and move PPC_MODULE_FEATURE_P10.
+Date:   Thu, 13 Apr 2023 15:46:23 -0400
+Message-Id: <20230413194625.10631-1-dtsen@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <cover.1676378702.git.quic_charante@quicinc.com>
-In-Reply-To: <cover.1676378702.git.quic_charante@quicinc.com>
-From:   Frank van der Linden <fvdl@google.com>
-Date:   Thu, 13 Apr 2023 12:45:24 -0700
-Message-ID: <CAPTztWYgRORXKp83Spm3DX8qJsi1rw5s=WbPcjUYfOxFXxRAwg@mail.gmail.com>
-Subject: Re: [PATCH V7 0/2] mm: shmem: support POSIX_FADV_[WILL|DONT]NEED for
- shmem files
-To:     Charan Teja Kalla <quic_charante@quicinc.com>
-Cc:     akpm@linux-foundation.org, hughd@google.com, willy@infradead.org,
-        markhemm@googlemail.com, rientjes@google.com, surenb@google.com,
-        shakeelb@google.com, quic_pkondeti@quicinc.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: kkHix0dOBNVrQxcEppfrkjkeKkloETFL
+X-Proofpoint-ORIG-GUID: kkHix0dOBNVrQxcEppfrkjkeKkloETFL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-13_14,2023-04-13_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=639
+ impostorscore=0 clxscore=1015 priorityscore=1501 spamscore=0
+ malwarescore=0 bulkscore=0 adultscore=0 lowpriorityscore=0 mlxscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304130174
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        TVD_SUBJ_WIPE_DEBT autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 4:53=E2=80=AFAM Charan Teja Kalla
-<quic_charante@quicinc.com> wrote:
->
-> This patch aims to implement POSIX_FADV_WILLNEED and POSIX_FADV_DONTNEED
-> advices to shmem files which can be helpful for the drivers who may want
-> to manage the pages of shmem files on their own, like, that are created
-> through shmem_file_setup[_with_mnt]().
->
-> Changes in V7:
->  -- Use folio based interface, shmem_read_folio(), for FADV_WILLNEED.
->  -- Don't swap the SHM_LOCK'ed pages.
->
-> Changes in V6:
->  -- Replaced the pages with folio's for shmem changes.
->  -- https://lore.kernel.org/all/cover.1675690847.git.quic_charante@quicin=
-c.com/
->
-> Changes in V5:
->  -- Moved the 'endbyte' calculations to a header function for use by shme=
-m_fadvise().
->  -- Addressed comments from suren.
->  -- No changes in resend. Retested on the latest tip.
->  -- https://lore.kernel.org/all/cover.1648706231.git.quic_charante@quicin=
-c.com/
->
-> Changes in V4:
->   -- Changed the code to use reclaim_pages() to writeout the shmem pages =
-to swap and then reclaim.
->   -- Addressed comments from Mark Hemment and Matthew.
->   -- fadvise() on shmem file may even unmap a page.
->   -- https://patchwork.kernel.org/project/linux-mm/patch/1644572051-24091=
--1-git-send-email-quic_charante@quicinc.com/
->
-> Changes in V3:
->   -- Considered THP pages while doing FADVISE_[DONT|WILL]NEED, identified=
- by Matthew.
->   -- xarray used properly, as identified by Matthew.
->   -- Excluded mapped pages as it requires unmapping and the man pages of =
-fadvise don't talk about them.
->   -- RESEND: Fixed the compilation issue when CONFIG_TMPFS is not defined=
-.
->   -- https://patchwork.kernel.org/project/linux-mm/patch/1641488717-13865=
--1-git-send-email-quic_charante@quicinc.com/
->
-> Changes in V2:
->   -- Rearranged the code to not to sleep with rcu_lock while using xas_()=
- functionality.
->   -- Addressed the comments from Suren.
->   -- https://patchwork.kernel.org/project/linux-mm/patch/1638442253-1591-=
-1-git-send-email-quic_charante@quicinc.com/
->
-> changes in V1:
->   -- Created the interface for fadvise(2) to work on shmem files.
->   -- https://patchwork.kernel.org/project/linux-mm/patch/1633701982-22302=
--1-git-send-email-charante@codeaurora.org/
->
->
-> Charan Teja Kalla (2):
->   mm: fadvise: move 'endbyte' calculations to helper function
->   mm: shmem: implement POSIX_FADV_[WILL|DONT]NEED for shmem
->
->  mm/fadvise.c  |  11 +-----
->  mm/internal.h |  21 +++++++++++
->  mm/shmem.c    | 116 ++++++++++++++++++++++++++++++++++++++++++++++++++++=
-++++++
->  3 files changed, 138 insertions(+), 10 deletions(-)
->
-> --
-> 2.7.4
->
->
+Remove Power10 dependency in Kconfig and detect Power10 feature at runtime.
+Move PPC_MODULE_FEATURE_P10 definition to be in
+arch/powerpc/include/asm/cpufeature.h.
 
-I didn't see this patch before, so I looked a bit at the history. At
-some point, in v3, dealing with mapped pages for DONTNEED was left
-out, they are now skipped. Unfortunately, that makes this patch no
-longer usable for a case that we have: restoring the (approximate)
-swap state of a tmpfs file. This involves walking a potentially large
-number of regions, and explicitly pushing them out to swap. This can
-be used to e.g. restore the state VM memory that is backed by a tmpfs
-file, avoiding memory usage by cold VM pages after resume.
+Signed-off-by: Danny Tsen <dtsen@linux.ibm.com>
 
-If DONTNEED also reclaims mapped pages (e.g. they get pushed out to
-swap, if any), implementing the above use case efficiently is simple:
-use io_uring with a vector that contains each region and the fadvise
-method.
+Danny Tsen (2):
+  Kconfig: Remove POWER10_CPU dependency.
+  aes-gcm-p10-glue.c, cpufeature.h: Move Power10 feature, PPC_MODULE_FEATURE_P10.
 
-Without DONTNEED reclaiming mapped pages, you'd have to do mmap +
-madvise(MADV_PAGEOUT) for each region that you want swapped out, which
-is rather inefficient.
+ arch/powerpc/crypto/Kconfig            | 2 +-
+ arch/powerpc/crypto/aes-gcm-p10-glue.c | 1 -
+ arch/powerpc/include/asm/cpufeature.h  | 1 +
+ 3 files changed, 2 insertions(+), 2 deletions(-)
 
-I understand that the semantics for POSIX_FADV_DONTNEED on shmem/tmpfs
-files are open to interpretation, as it is a special case. And you can
-certainly make the argument that relying on behavior caused by what
-can be considered an implementation detail is bad.
+-- 
+2.31.1
 
-So, is there any way we can make this use case work efficiently using
-this patch?
-
-You state in the commit message:
-
-> So, FADV_DONTNEED also covers the semantics of MADV_PAGEOUT for file page=
-s
-> and there is no purpose of PAGEOUT for file pages.
-
-But that doesn't seem correct: for shmem file pages, there actually
-can be a purpose, and the FADV_DONTNEED as implemented for shmem in
-this patch set does not cover the semantics.
-
-You can say that it doesn't need to cover the pageout case of mapped
-shmem pages, and that's fair. But I don't think you can claim that it
-covers the case as currently implemented.
-
-I suppose there are three options here:
-
-1) Do nothing, this use case will just have to spend more time doing
-mmap+madvise
-2) Don't skip mapped pages for POSIX_FADV_DONTNEED in shmem_fadvise
-3) Implement something like POSIX_FADV_PAGEOUT_NP, which would include
-mapped pages.
-
-What do people think?
-
-- Frank
