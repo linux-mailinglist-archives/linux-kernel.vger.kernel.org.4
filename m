@@ -2,114 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30CED6E13C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 19:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8AE36E13BC
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 19:52:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbjDMR4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 13:56:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38132 "EHLO
+        id S230126AbjDMRwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 13:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjDMR4c (ORCPT
+        with ESMTP id S229498AbjDMRws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 13:56:32 -0400
-X-Greylist: delayed 349 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 13 Apr 2023 10:56:30 PDT
-Received: from smtp-out1.aaront.org (smtp-out1.aaront.org [52.0.59.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C06113
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 10:56:30 -0700 (PDT)
-Received: by smtp-out1.aaront.org (Postfix) with ESMTP id 4Py6Yq5dKpzTQ;
-        Thu, 13 Apr 2023 17:50:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aaront.org; h=
-    from:to:cc:subject:date:message-id:mime-version
-    :content-transfer-encoding; s=qkjur4vrxk6kmqfk; bh=NASh0ELdjVlYA
-    TWtGAhESwP0/qGYU3DPBNFRmdeYc2w=; b=bk+yB+y5g7aNNe+qVcdAAAAlBOrtE
-    vYkhugGif5L11b2RlrpDktHU7rSCHqJdY3BTY2B1uaTxYGD77QkuQDtuJpcykS0k
-    yUrL3DblVMRoxOPM2STXhponLNBelov46c/kBc8WbIS+HzWqDXGYxA5dc9Q2qAaK
-    bIeao0IcchM4TCR+86gg91CgoVygkwidd3dR9DeZTeTIkeDENgyoDpucDEHFO8Jr
-    5/iA+JNXRfz5hmw7FkKzLsXs0wL9PJinVqKgI59NbqM6AzdfG+jyYrJsDcMKf54W
-    pf6r7faAqW3PZspgxK4mC51MTZzXpeWH1Agx6R85U4dqrb9Ang74md6mw==
-From:   Aaron Thompson <dev@aaront.org>
-To:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
-        Aaron Thompson <dev@aaront.org>
-Subject: [RESEND PATCH] sched/clock: Fix local_clock() before sched_clock_init()
-Date:   Thu, 13 Apr 2023 17:50:12 +0000
-Message-Id: <20230413175012.2201-1-dev@aaront.org>
-X-Mailer: git-send-email 2.39.2
+        Thu, 13 Apr 2023 13:52:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F5E5B82;
+        Thu, 13 Apr 2023 10:52:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EBB1E63BF3;
+        Thu, 13 Apr 2023 17:52:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10C93C433D2;
+        Thu, 13 Apr 2023 17:52:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681408366;
+        bh=LCzKofwLOiSwAfZihSLFgN+hzyIGSTBPOrKf5+PrROk=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=LaJiNxk5sDcXUE3Sgb0WJcGxKY4LJvbXt+eLDDAj5Y85zNqhvIWkcikRuMCjJz7hg
+         Zqvj9kRmrw2lVA+qi/+ZQSV+FkXYmYLPAjPckODiB55ny0OKDGksjma6Pwvyyy1stj
+         +ky/F9WNHedom2Q5j7ecRNAQ5/G1yOwH1oaqwLhR94czYchFifF+Zi6q/8FS0kBuE1
+         Y0voDzon3zf/eMw3iovzdv7lLKkS+eJRDKFEqGhKdjG5FOtTHLFYDmmJB6qw/SGYh8
+         wiCHUoD/5eyGU4Yn+grYtcqk8PdBGzpcjnCxM3P8txVldhs5FKDszsBuTmv0e+0uw0
+         YPxQIjhNprMDw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Rohit Ner <rohitner@google.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <manugautam@google.com>,
+        Joy Chakraborty <joychakr@google.com>
+In-Reply-To: <CAGt9f=TBi3qcbhUPymFGjCFeNNZZ0KQoXSUOT5uA6Dn8PMmnWw@mail.gmail.com>
+References: <CAGt9f=TBi3qcbhUPymFGjCFeNNZZ0KQoXSUOT5uA6Dn8PMmnWw@mail.gmail.com>
+Subject: Re: [PATCH] spi: spi-loopback-test: Add module param for iteration
+ length
+Message-Id: <168140836477.1052939.3678951813615163039.b4-ty@kernel.org>
+Date:   Thu, 13 Apr 2023 18:52:44 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-00303
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Have local_clock() return sched_clock() if sched_clock_init() has not
-yet run. sched_clock_cpu() has this check but it was not included in the
-new noinstr implementation of local_clock().
+On Mon, 03 Apr 2023 09:39:10 +0530, Rohit Ner wrote:
+> SPI test framework is designed to run each test case for
+> a list of lengths.
+> Introduce a module parameter to limit the iterations
+> to a single value among the list of lengths.
+> 
+> 
 
-The effect can be seen on x86 with CONFIG_PRINTK_TIME enabled, for
-instance. scd->clock quickly reaches the value of TICK_NSEC and that
-value is returned until sched_clock_init() runs.
+Applied to
 
-dmesg without this patch:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-    [    0.000000] kvm-clock: ...
-    [    0.000002] kvm-clock: ...
-    [    0.000672] clocksource: ...
-    [    0.001000] tsc: ...
-    [    0.001000] e820: ...
-    [    0.001000] e820: ...
-     ...
-    [    0.001000] ..TIMER: ...
-    [    0.001000] clocksource: ...
-    [    0.378956] Calibrating delay loop ...
-    [    0.379955] pid_max: ...
+Thanks!
 
-dmesg with this patch:
+[1/1] spi: spi-loopback-test: Add module param for iteration length
+      commit: 6d87552c0b86b9677d762002082df5f5b7e3c33f
 
-    [    0.000000] kvm-clock: ...
-    [    0.000001] kvm-clock: ...
-    [    0.000675] clocksource: ...
-    [    0.002685] tsc: ...
-    [    0.003331] e820: ...
-    [    0.004190] e820: ...
-     ...
-    [    0.421939] ..TIMER: ...
-    [    0.422842] clocksource: ...
-    [    0.424582] Calibrating delay loop ...
-    [    0.425580] pid_max: ...
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Fixes: 776f22913b8e ("sched/clock: Make local_clock() noinstr")
-Signed-off-by: Aaron Thompson <dev@aaront.org>
----
- kernel/sched/clock.c | 3 +++
- 1 file changed, 3 insertions(+)
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-diff --git a/kernel/sched/clock.c b/kernel/sched/clock.c
-index 5732fa75ebab..b5cc2b53464d 100644
---- a/kernel/sched/clock.c
-+++ b/kernel/sched/clock.c
-@@ -300,6 +300,9 @@ noinstr u64 local_clock(void)
- 	if (static_branch_likely(&__sched_clock_stable))
- 		return sched_clock() + __sched_clock_offset;
- 
-+	if (!static_branch_likely(&sched_clock_running))
-+		return sched_clock();
-+
- 	preempt_disable_notrace();
- 	clock = sched_clock_local(this_scd());
- 	preempt_enable_notrace();
--- 
-2.39.2
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
