@@ -2,123 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5129F6E10DB
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 17:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1964D6E10DC
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 17:19:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231562AbjDMPTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 11:19:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40324 "EHLO
+        id S231576AbjDMPTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 11:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231487AbjDMPTU (ORCPT
+        with ESMTP id S231566AbjDMPTd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 11:19:20 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAEBFA5FD
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 08:19:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681399157; x=1712935157;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=w2FFtpO5DEBChuRt+TW37OBBKHgn5gXrtnZG1SijWfM=;
-  b=ICWJL+m8FH4H831Pxrer0WZEL+RrW/8uT4I+6b+O3N/LaQZiKYS/Vla8
-   WjgGD+oqA0DQjN/JNMIWb04GvZCzeBD9ttn3DdwpSZ7zgOPoh3hAiGV0t
-   gWincSu+EzduquPOdgWyDAcdYjqeD0XttZXZ3OsS/UE2oq9iAfQzbs5Wc
-   0La1OXd4rammgyKmiVV6y35GUMceBLGcC8DsBaRG+kMlYADN2Vlnn+vQH
-   mDqVrvZIO70rmLaw08iHs4482xSAKWhhQ7OyD36A9Fc6KLVvZK4fVmNtE
-   w/uBmLW8/kcEuzU5qhfGS2kQSMQHRbZaMF8zFcsQzBdR13vnqEOWxMrFg
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="324564500"
-X-IronPort-AV: E=Sophos;i="5.99,194,1677571200"; 
-   d="scan'208";a="324564500"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 08:18:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="719891682"
-X-IronPort-AV: E=Sophos;i="5.99,194,1677571200"; 
-   d="scan'208";a="719891682"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 13 Apr 2023 08:18:53 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pmyiq-000Ylp-1a;
-        Thu, 13 Apr 2023 15:18:52 +0000
-Date:   Thu, 13 Apr 2023 23:18:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tanmay Shah <tanmay.shah@amd.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Ben Levinsky <ben.levinsky@amd.com>
-Subject: drivers/remoteproc/xlnx_r5_remoteproc.c:209:20: sparse: sparse: cast
- removes address space '__iomem' of expression
-Message-ID: <202304132306.utSmesDI-lkp@intel.com>
+        Thu, 13 Apr 2023 11:19:33 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DA3A5E1
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 08:19:31 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7E1EE2189B;
+        Thu, 13 Apr 2023 15:19:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1681399169; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mG40i2zm3vZGS3htibJ+KR1FgLBJvqBG7htHHhKQLY8=;
+        b=s1KVB38jF6oRg4QaT0tJDVD3/XKuNCAzUd582kt3/K1wys75RiAfTUUdV1cY8zKW1e/Num
+        hfYD79Ey5epH0pnTdgmSoxaseLFUbLHII03AriR1mmS8YTFUYPDEBwvI4TPlTnYhzop9Gf
+        rFtCh7tKZ3olU7fS7l8mDfDShr4kwuI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1681399169;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mG40i2zm3vZGS3htibJ+KR1FgLBJvqBG7htHHhKQLY8=;
+        b=rKVmid54ByMlEe6NqPHEPYW1JlkHS7t7E3Np8JK15gcxQ0ar3cUZhiCOb3jg6xpGj/PE7h
+        xhQHGPZyoU2NRAAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 67BDC1390E;
+        Thu, 13 Apr 2023 15:19:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 69s9GYEdOGQaVgAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 13 Apr 2023 15:19:29 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id ADEBFA0732; Thu, 13 Apr 2023 17:19:28 +0200 (CEST)
+Date:   Thu, 13 Apr 2023 17:19:28 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     Jan Kara <jack@suse.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] quota: update Kconfig comment
+Message-ID: <20230413151928.cugxsv56eikx6fgb@quack3>
+References: <20230413151412.30059-1-frank.li@vivo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230413151412.30059-1-frank.li@vivo.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   de4664485abbc0529b1eec44d0061bbfe58a28fb
-commit: 6b291e8020a8bd90e94ee13d61f251040425c90d drivers: remoteproc: Add Xilinx r5 remoteproc driver
-date:   5 months ago
-config: arm64-randconfig-s052-20230413 (https://download.01.org/0day-ci/archive/20230413/202304132306.utSmesDI-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6b291e8020a8bd90e94ee13d61f251040425c90d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 6b291e8020a8bd90e94ee13d61f251040425c90d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/remoteproc/
+On Thu 13-04-23 23:14:12, Yangtao Li wrote:
+> f2fs support quota since commit 0abd675e97e6 ("f2fs: support plain
+> user/group quota"), let's document it.
+> 
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+>  fs/quota/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304132306.utSmesDI-lkp@intel.com/
+Thanks, I've added the patch to my tree.
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/remoteproc/xlnx_r5_remoteproc.c:209:20: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/remoteproc/xlnx_r5_remoteproc.c:315:20: sparse: sparse: cast removes address space '__iomem' of expression
+								Honza
 
-vim +/__iomem +209 drivers/remoteproc/xlnx_r5_remoteproc.c
-
-   190	
-   191	/*
-   192	 * zynqmp_r5_mem_region_map()
-   193	 * @rproc: single R5 core's corresponding rproc instance
-   194	 * @mem: mem descriptor to map reserved memory-regions
-   195	 *
-   196	 * Callback to map va for memory-region's carveout.
-   197	 *
-   198	 * return 0 on success, otherwise non-zero value on failure
-   199	 */
-   200	static int zynqmp_r5_mem_region_map(struct rproc *rproc,
-   201					    struct rproc_mem_entry *mem)
-   202	{
-   203		void __iomem *va;
-   204	
-   205		va = ioremap_wc(mem->dma, mem->len);
-   206		if (IS_ERR_OR_NULL(va))
-   207			return -ENOMEM;
-   208	
- > 209		mem->va = (void *)va;
-   210	
-   211		return 0;
-   212	}
-   213	
-
+> 
+> diff --git a/fs/quota/Kconfig b/fs/quota/Kconfig
+> index 1b3bc0a99515..9286037e1dbd 100644
+> --- a/fs/quota/Kconfig
+> +++ b/fs/quota/Kconfig
+> @@ -9,7 +9,7 @@ config QUOTA
+>  	help
+>  	  If you say Y here, you will be able to set per user limits for disk
+>  	  usage (also called disk quotas). Currently, it works for the
+> -	  ext2, ext3, ext4, jfs, ocfs2 and reiserfs file systems.
+> +	  ext2, ext3, ext4, f2fs, jfs, ocfs2 and reiserfs file systems.
+>  	  Note that gfs2 and xfs use their own quota system.
+>  	  Ext3, ext4 and reiserfs also support journaled quotas for which
+>  	  you don't need to run quotacheck(8) after an unclean shutdown.
+> -- 
+> 2.35.1
+> 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
