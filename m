@@ -2,167 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 139336E0A8C
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 11:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7DB06E0A90
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 11:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbjDMJuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 05:50:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39518 "EHLO
+        id S229604AbjDMJu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 05:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjDMJt6 (ORCPT
+        with ESMTP id S229766AbjDMJuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 05:49:58 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B8ABE7AB3
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 02:49:56 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DE4E8D75;
-        Thu, 13 Apr 2023 02:50:40 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F39E03F6C4;
-        Thu, 13 Apr 2023 02:49:54 -0700 (PDT)
-Date:   Thu, 13 Apr 2023 10:49:52 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Pierre Gondois <pierre.gondois@arm.com>
-Cc:     linux-kernel@vger.kernel.org, Radu Rendec <rrendec@redhat.com>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
+        Thu, 13 Apr 2023 05:50:24 -0400
+Received: from mail.8bytes.org (mail.8bytes.org [IPv6:2a01:238:42d9:3f00:e505:6202:4f0c:f051])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2146155AB;
+        Thu, 13 Apr 2023 02:50:21 -0700 (PDT)
+Received: from 8bytes.org (p200300c27714bc0086ad4f9d2505dd0d.dip0.t-ipconnect.de [IPv6:2003:c2:7714:bc00:86ad:4f9d:2505:dd0d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.8bytes.org (Postfix) with ESMTPSA id 08FAA242A7C;
+        Thu, 13 Apr 2023 11:50:17 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+        s=default; t=1681379419;
+        bh=khKX1Kt8U0Nb+s4cjAnuHj6Kz00rGwbDEtCwE44xwB4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VAoH/0AhRaB1YmsjIYUgU1WtUxL7vKegIm2zyUKEp3pJe93JO4iM2A9ZE2xMxfz1V
+         NDGSb2hthiXRMuJhLEPiH7FtsPYCLkSKol/dEx9B0evxW+VmVr/rsqEh6ssGmdvh9W
+         S6ZrTgAg8yC/FzSOMzgA/lbc1DsfbttFOYQgf5p6lT0LsAiUNsvP53y+tfOs5SR29S
+         /1YUcmPcOtFT0xrbgdPYOVDkg5UYcIhL48IDpzBc3UAMiovcMlQwj2gkrgshYD25uI
+         XGt4y1j7nHdkuuqewckE5rukVRcRw3w29UNEq22xlJRUtuoWIjvqLu7vSQn6DmU8HF
+         kH7RXlCDGu2vg==
+Date:   Thu, 13 Apr 2023 11:50:15 +0200
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
         Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v3 4/4] cacheinfo: Add use_arch[|_cache]_info
- field/function
-Message-ID: <20230413094952.ncdldvv2ysjqwbsv@bogus>
-References: <20230413091436.230134-1-pierre.gondois@arm.com>
- <20230413091436.230134-5-pierre.gondois@arm.com>
+        Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH] iommu/exynos: Use the devm_clk_get_optional() helper
+Message-ID: <ZDfQV2Vbbaa4fRI4@8bytes.org>
+References: <99c0d5ce643737ee0952df41fd60433a0bbeb447.1679834256.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230413091436.230134-5-pierre.gondois@arm.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <99c0d5ce643737ee0952df41fd60433a0bbeb447.1679834256.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 11:14:34AM +0200, Pierre Gondois wrote:
-> The cache information can be extracted from either a Device
-> Tree (DT), the PPTT ACPI table, or arch registers (clidr_el1
-> for arm64).
+On Sun, Mar 26, 2023 at 02:37:50PM +0200, Christophe JAILLET wrote:
+> Use devm_clk_get_optional() instead of hand writing it.
+> This saves some loC and improves the semantic.
 > 
-> The clidr_el1 register is used only if DT/ACPI information is not
-> available. It does not states how caches are shared among CPUs.
-> 
-> Add a use_arch_cache_info field/function to identify when the
-> DT/ACPI doesn't provide cache information. Use this information
-> to assume L1 caches are privates and L2 and higher are shared among
-> all CPUs.
->
-
-I have tentatively merged first 3 patches along with Radu's series(waiting
-for build tests still before confirming). I am not yet sure on this.
-
-> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 > ---
->  drivers/base/cacheinfo.c  | 13 ++++++++++++-
->  include/linux/cacheinfo.h | 10 ++++++++++
->  2 files changed, 22 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/base/cacheinfo.c b/drivers/base/cacheinfo.c
-> index 06de9a468958..49dbb4357911 100644
-> --- a/drivers/base/cacheinfo.c
-> +++ b/drivers/base/cacheinfo.c
-> @@ -40,7 +40,8 @@ static inline bool cache_leaves_are_shared(struct cacheinfo *this_leaf,
->  	 * For non DT/ACPI systems, assume unique level 1 caches,
->  	 * system-wide shared caches for all other levels.
->  	 */
-> -	if (!(IS_ENABLED(CONFIG_OF) || IS_ENABLED(CONFIG_ACPI)))
-> +	if (!(IS_ENABLED(CONFIG_OF) || IS_ENABLED(CONFIG_ACPI)) ||
-> +	    this_leaf->use_arch_info)
+>  drivers/iommu/exynos-iommu.c | 24 ++++++++----------------
+>  1 file changed, 8 insertions(+), 16 deletions(-)
 
-Can't we just use use_arch_cache_info() here ?
-
->  		return (this_leaf->level != 1) && (sib_leaf->level != 1);
->  
->  	if ((sib_leaf->attributes & CACHE_ID) &&
-> @@ -349,6 +350,7 @@ static int cache_shared_cpu_map_setup(unsigned int cpu)
->  	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
->  	struct cacheinfo *this_leaf, *sib_leaf;
->  	unsigned int index, sib_index;
-> +	bool use_arch_info = false;
->  	int ret = 0;
->  
->  	if (this_cpu_ci->cpu_map_populated)
-> @@ -361,6 +363,12 @@ static int cache_shared_cpu_map_setup(unsigned int cpu)
->  	 */
->  	if (!last_level_cache_is_valid(cpu)) {
->  		ret = cache_setup_properties(cpu);
-> +		if (ret && use_arch_cache_info()) {
-> +			// Possibility to rely on arch specific information.
-> +			use_arch_info = true;
-> +			ret = 0;
-> +		}
-> +
->  		if (ret)
->  			return ret;
->  	}
-> @@ -370,6 +378,9 @@ static int cache_shared_cpu_map_setup(unsigned int cpu)
->  
->  		this_leaf = per_cpu_cacheinfo_idx(cpu, index);
->  
-> +		if (use_arch_info)
-> +			this_leaf->use_arch_info = true;
-> +
->  		cpumask_set_cpu(cpu, &this_leaf->shared_cpu_map);
->  		for_each_online_cpu(i) {
->  			struct cpu_cacheinfo *sib_cpu_ci = get_cpu_cacheinfo(i);
-> diff --git a/include/linux/cacheinfo.h b/include/linux/cacheinfo.h
-> index 908e19d17f49..fed675b251a2 100644
-> --- a/include/linux/cacheinfo.h
-> +++ b/include/linux/cacheinfo.h
-> @@ -66,6 +66,7 @@ struct cacheinfo {
->  #define CACHE_ALLOCATE_POLICY_MASK	\
->  	(CACHE_READ_ALLOCATE | CACHE_WRITE_ALLOCATE)
->  #define CACHE_ID		BIT(4)
-> +	bool use_arch_info;
-
-Do you see the need to stash this value as it is either globally true or
-false based on the arch ?
-
->  	void *fw_token;
->  	bool disable_sysfs;
->  	void *priv;
-> @@ -129,4 +130,13 @@ static inline int get_cpu_cacheinfo_id(int cpu, int level)
->  	return -1;
->  }
->  
-> +static inline bool use_arch_cache_info(void)
-> +{
-> +#if defined(CONFIG_ARM64)
-> +	return true;
-> +#else
-> +	return false;
-> +#endif
-> +}
-> +
-
-Can we just have it as:
-#ifdef CONFIG_ARM64
-#define use_arch_cache_info()	(true)
-#else
-#define use_arch_cache_info()	(false)
-#endif
-
->  #endif /* _LINUX_CACHEINFO_H */
-> -- 
-> 2.25.1
-> 
-
--- 
-Regards,
-Sudeep
+Applied, thanks.
