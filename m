@@ -2,75 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9706E173B
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 00:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 538266E173E
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 00:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbjDMWRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 18:17:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40816 "EHLO
+        id S229958AbjDMWUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 18:20:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbjDMWRa (ORCPT
+        with ESMTP id S229522AbjDMWUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 18:17:30 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D882B6A5A
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 15:17:29 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-2f4d0fc8df4so182479f8f.0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 15:17:29 -0700 (PDT)
+        Thu, 13 Apr 2023 18:20:23 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F10226BE
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 15:20:21 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id q23so31597647ejz.3
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 15:20:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681424248; x=1684016248;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5bZnn8054aG3h8CA+Zz1uBde378B1drLJz8iS5ab/Aw=;
-        b=hBje9yK2+SX3bOttkXIzpp/K0mnsn4jtaaxMMXugNhRwvC5szwkr61hM7XshL99FYl
-         s1+XfZrxgsbe0lRubiPaWIyVR/0xDG6BJcyrIP2c3dSvBPBLBUlFqCIcQmHsDBCWSYNE
-         pWcwEVzEWxj8ozsmTd5HK0gIp9KtUbpIumquach+JBH/LGxEv+W9vEZzrLSJ+xl0p0l7
-         P2y9TiGU/Q1jmYDMTvZnFB+huqAgtAk/ibT9gij+GKcuhuse6Qu9CEmQC/cTuWBgthTA
-         LKeIdP1mJpoj9qhKVxRDQuhPR296JgevtqP+g3fV7+mEHljHFFJ0A+SgaNu9PORDwbp0
-         upGQ==
+        d=linux-foundation.org; s=google; t=1681424419; x=1684016419;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QXzUcxPP626cgc8CdfapvJZ46tgsC0UFbGeqvzuoYnU=;
+        b=L+kmTBG6Ktzt2fMXak5DKnXkUk4b/fuoUwKatOd0CGhdkI5rJMYFQkItVv+QO7WD3/
+         lIEZLMXxIr8qcpf7usgaN9uXi7R5VJW2qW1ZDwt2xIv0aEClUscfrb/WbpQZC2v90EPI
+         AE4UOhJb7UHfgjWEkxDP02QcthcuI/rNwgRCw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681424248; x=1684016248;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5bZnn8054aG3h8CA+Zz1uBde378B1drLJz8iS5ab/Aw=;
-        b=Lw7UvYtRIpmlyDFRJPnKLCRvx9PjmMFX8xxLTurEPbGvpgJh5veVmhjB9cdiOKh8oI
-         0BQ2mW4oUomivSxqAFVtQ78ztWW0bvGC7bCfIJBm4Sremo6jl+8v82yjOARyU/gongRR
-         wfXxpd8abWocvb3kxtiB/6wdBiNeSjfNs0TwKSPVxBj8MN8+DKKg5cUY+4PcWi52Ht6w
-         covBdusUncFP51o7gxEqsXTRH0acX3QnTaynA3EDVwBXoG0q1NYBbN7xdm7uxsHtYgDB
-         tD36TR6fkha25w3QerfjhuMxKiK4FMSfbdHZDyWmMNJmDSkCEBBNo70qz/8fZNQAKVR9
-         Gr+A==
-X-Gm-Message-State: AAQBX9eEYrMUbMSAiEX+b/aythh687XkDJQVDTMvk1Zq4P0MSv1YFEy0
-        wepN9ZjbYsiZEqZvSu6ap6E=
-X-Google-Smtp-Source: AKy350ZB3ZtVsMxXN4uA54BlmCPeTcGuCXD8pjBkkfMzJJrcSVIAuNQ4LnuNeoFv0g5wsoRMbrSjRg==
-X-Received: by 2002:adf:e546:0:b0:2c7:940c:26f8 with SMTP id z6-20020adfe546000000b002c7940c26f8mr175096wrm.5.1681424248276;
-        Thu, 13 Apr 2023 15:17:28 -0700 (PDT)
-Received: from [192.168.0.102] (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
-        by smtp.gmail.com with ESMTPSA id z1-20020a056000110100b002efb5ef9f07sm2124516wrw.82.2023.04.13.15.17.27
+        d=1e100.net; s=20221208; t=1681424419; x=1684016419;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QXzUcxPP626cgc8CdfapvJZ46tgsC0UFbGeqvzuoYnU=;
+        b=l95vWg8d/x7690s2lVOyjRDobokEu+PzgTqLAfx3O9ALuhZAN5W6YJkFi2hmUu/GRP
+         RSET+HcB3Fha3F6aTDtUQOSzDxoCsAhyd3vyEhPJwZOYCrYHEK+YoIJBI7bU8addD1MD
+         /2XyscTc2TuJF8/MchyODQns9LOuLxL9ngOQFHmAOK8SZgga8nAIFaUCz5TIbwhIgoYg
+         R+bFZD6czstKLWc3uIPGayI/mzKaBbAbSMZ3hauA8i6HCsBy+h/cMe/FDTfpPdJoogJ0
+         Tq77OzXFEVWbXsOdVtFqvT9hvasXsQ3rMsxfu8KnbyN6bH2nw0ciUny++OcnHEwzuRaZ
+         Phew==
+X-Gm-Message-State: AAQBX9f9mU/lkgxPdr8FyfTUNPsQhiMpy/f1u1376rcU7NOMStC4seRN
+        64I/bO4eCnn0eNRj+LFvLRPv0jTs7MCntxASTUd8Kg==
+X-Google-Smtp-Source: AKy350auIb57JJe1ChVkJp3HeT4e+6OKovaMeOtJH8F0wJukKNbi8Se9d1Froa/c3PAywwWLCPuhCA==
+X-Received: by 2002:a17:906:a142:b0:94a:98a2:d10c with SMTP id bu2-20020a170906a14200b0094a98a2d10cmr3902149ejb.65.1681424418797;
+        Thu, 13 Apr 2023 15:20:18 -0700 (PDT)
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com. [209.85.218.48])
+        by smtp.gmail.com with ESMTPSA id l4-20020a170906a40400b00946be16f725sm1528630ejz.153.2023.04.13.15.20.17
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Apr 2023 15:17:27 -0700 (PDT)
-Message-ID: <5f2275ce-c62d-9363-32ad-58b25848119c@gmail.com>
-Date:   Fri, 14 Apr 2023 00:17:26 +0200
+        Thu, 13 Apr 2023 15:20:17 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-94a35b11c08so385777066b.3
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 15:20:17 -0700 (PDT)
+X-Received: by 2002:a50:9e85:0:b0:505:50a:a4d0 with SMTP id
+ a5-20020a509e85000000b00505050aa4d0mr2029706edf.2.1681424417227; Thu, 13 Apr
+ 2023 15:20:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [BUG] staging: rtl8192e: W_DISABLE# does not work after
- stop/start
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <39dc735c-fd6d-e405-856c-788a52704d63@gmail.com>
- <248ec330-b4c3-aa7b-61eb-69ce8d333b69@gmail.com>
- <3f71b782-e52e-48cb-9a41-4097a3329ae3@kili.mountain>
-Content-Language: en-US
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <3f71b782-e52e-48cb-9a41-4097a3329ae3@kili.mountain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <CACRpkdZsoGihp-cVVKTMPFBPBj_7_ScaYJZFU6jZNugucyx3qg@mail.gmail.com>
+In-Reply-To: <CACRpkdZsoGihp-cVVKTMPFBPBj_7_ScaYJZFU6jZNugucyx3qg@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 13 Apr 2023 15:20:00 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wioXgXLB1XcxU_f_kmVwfDd+EoOX7KLtJh7fnPMZx4RBA@mail.gmail.com>
+Message-ID: <CAHk-=wioXgXLB1XcxU_f_kmVwfDd+EoOX7KLtJh7fnPMZx4RBA@mail.gmail.com>
+Subject: Re: [GIT PULL] Pin control fix for AMD laptops
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?Kornel_Dul=C4=99ba?= <korneld@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,48 +78,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/13/23 11:34, Dan Carpenter wrote:
-> On Fri, Apr 07, 2023 at 11:02:05PM +0200, Philipp Hortmann wrote:
->> When loading the driver for rtl8192e, the W_DISABLE# switch is working as
->> intended. But when the WLAN is turned off in software and then turned on
->> again the W_DISABLE# does not work anymore.
->>
->> Reason for this is that in the function _rtl92e_dm_check_rf_ctrl_gpio()
->> checking this every two seconds is an conditional return.
->>
->> 	if (priv->bfirst_after_down) {
->> 		priv->bfirst_after_down = true; // PH: useless line
->> 		return;
->> 	}
->>
->> 	tmp1byte = rtl92e_readb(dev, GPI); // PH: GPI for W_DISABLE#
->>
->> bfirst_after_down is set true when switching the WLAN off in software. But
->> it is not set to false again when WLAN is turned on again.
->>
-> 
-> Is there a question here?  You're like the expert on this driver and you
-> seem to have figured out the solution...  I'm confused.
-For me a bug report is always a please to the community to fix. But when 
-nobody likes to start I have to do it by myself...
-> 
-> regards,
-> dan carpenter
-> 
+On Thu, Apr 13, 2023 at 1:10=E2=80=AFPM Linus Walleij <linus.walleij@linaro=
+.org> wrote:
+>
+> This is just a revert of the AMD fix, because the fix fixed
+> broken some laptops. We are working on a proper solution.
 
-As expected I am not even on the half way. I can set the 
-bfirst_after_down back to false. Then WLAN recovers but not the 
-connection. The os is asking me to enter the WLAN password. I can do so 
-but that does not fix the issue. I need to switch WLAN off and on in 
-software. Then the connection comes back again.
+ENOPARSE. "the fix fixed broken"
 
-I need to find a way to reset the internal states of the driver accordingly.
+I tried to fix fixed broken it up.
 
-Thanks for your support.
-
-No response required - will work on the fix on the weekend....
-
-regards,
-
-Philipp
-
+             Linus
