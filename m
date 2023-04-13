@@ -2,129 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25BC96E1198
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:01:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3D2F6E11A5
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:04:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbjDMQBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 12:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42936 "EHLO
+        id S229878AbjDMQEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 12:04:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjDMQBH (ORCPT
+        with ESMTP id S229481AbjDMQER (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 12:01:07 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2090.outbound.protection.outlook.com [40.107.255.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A19AF35
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 09:00:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VdSEPbpqJPksLdsfcVKyA2TXJo4k9GDtqD0LSNl9Y5hx5DGRlIuBmsKfjuTjY9chdwFvXvfXoWfZja8tMS2+X7HofWnFUeejQ034oHyVS1nFm2JdQSCk6bEZ4SxQOrNvnM1fhsG8jwbeDXxU4umaP0N6ELHp4UX9/eU0ATbTor0JsDZ780WXQmPYt7k+fLCmlzb/jFcitPP2GHMFnAT4Z4wZXYwwexRD+f3Hubq54sKIsLsgi/UtW+zYUqJxD3Rv66EX+NwXwyaL7Fwh5gENOGI+AqY70Q9B1AkmR2PmV3C50tEDSdsX31/KW1cAO3cRfAjeoq9rbqq4IgXDGcLegQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nDYtmaGYcaX/raoc+todctYpIy049nhT0yocDifWiv4=;
- b=ZeCqEIUNxjryISo8leWY/PV/eCiLSwSYAjaqI6tP+3bOEW+Ag5am2UqeynDJSs8OElkFTVTrCNBzRwKkRBPc3FD0bNy4CIE+SD9N23k10/q3MNzF1HEFp+bdyckGHYcjxATT9+HBQf9fFDgbfP2YlHL3jEGwOd7MUvTpoV+IDhOiMqYTx5yR3TMCMZdLd6qUD65DsHxHLtfuRXDkpZGA2BoGBzD35purOgVOeB22IjpIlvOKeSjjyQ2i5ck8nNvKY3RToLIlzmvSj14BkLejuW3mQ1AIM7b1+b2sGNlaqckQL+Jj6R041yFkFvB3SRV6gOmzwdAvHOj+N589GLhxDQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nDYtmaGYcaX/raoc+todctYpIy049nhT0yocDifWiv4=;
- b=J8Pxl9vDGVA8+hS1XRBhvYZyPHz+w4WPAgOmmFqTR441kf8s1M3+/79RHdGsTxgum0SSp0w9JoiOd+VudH2mftqvyZ7sX+K+bY+bVP7yePnaDF0kGakNsV/NE64LexcS3NwBWri6V847RaODq+CsSntgS4M36xSSRym2+q01Qn5B7LYuHN2AhinmWqXDZMkbTVs0TYeuLLlrmUvXWBxRcwQxbfkfXYqUv0/QiMkcB2HPowLTukYmRgLV+A0evAn02RhfNshzBzI9IatbSFeibnyXyIhbKEBxiuCnmSMm09vC+5W3/MeHXkBeJdL9Gopl/BlVW7caZ5HoAVplKRUqBg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by TYZPR06MB4189.apcprd06.prod.outlook.com (2603:1096:400:26::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Thu, 13 Apr
- 2023 16:00:56 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::a3a1:af8e:be1e:437c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::a3a1:af8e:be1e:437c%6]) with mapi id 15.20.6277.038; Thu, 13 Apr 2023
- 16:00:55 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     chao@kernel.org
-Cc:     frank.li@vivo.com, jaegeuk@kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] f2fs: introduce F2FS_SBI_RW_ATTR macro
-Date:   Fri, 14 Apr 2023 00:00:46 +0800
-Message-Id: <20230413160046.77717-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <88e48f65-a68f-6742-fe25-d05e7113c2fc@kernel.org>
-References: <88e48f65-a68f-6742-fe25-d05e7113c2fc@kernel.org>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR02CA0013.apcprd02.prod.outlook.com
- (2603:1096:3:17::25) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+        Thu, 13 Apr 2023 12:04:17 -0400
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6903E7AB0;
+        Thu, 13 Apr 2023 09:04:16 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id D8DC95821BE;
+        Thu, 13 Apr 2023 12:04:12 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Thu, 13 Apr 2023 12:04:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1681401852; x=
+        1681409052; bh=yaqCPjOmT4SPOlCAxznT+4NGON1tEotsmgkNB1VGB30=; b=g
+        StG2nxVku9iBD1WQagIAjbs9eRtIqZQ4YJ7OEYoZjd8lDxrtEdHK9TqLOIeSqwI/
+        aRHxz87Qz45IxYCW54qgzCDISNjcqUTZEpEk1pt3VfmLnVVwuAPniOJ3FRodfKpI
+        DEMHWreitIkO4k4mgbAot366VgZ2vWimK9fKuI1RKhuY+/rU3uUPOowpp+5JdmEA
+        GgTYoBTSrgFdi7qpYlbquOANjGur+Ee0B0x1e9mN71cQweG+Ik8UL5j2jOOOdlxN
+        wytXUgUVh1bYTkhj1s4j/Imizt257d5R/RoBcvHrgEciqzigMyAbV50wz4zIs+/h
+        ZvAAYdSwUpPn20YgAC9eA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1681401852; x=1681409052; bh=yaqCPjOmT4SPO
+        lCAxznT+4NGON1tEotsmgkNB1VGB30=; b=ZhPxOavXVNafxjBvoz0rHGSKV5lrB
+        lBBeFJbThUiGvUr6dkUdUFPZBpFZ459KtreUM8/tmgj+GOIkARrz+/dxN2rCFKeh
+        IpN6sEvHrSODWjpvtdkpXDz1uk3XIMGrQ83IpXODAFKPMkKNE1syCCeenvY3ochU
+        sFkgoLNTQaB5KIJLTO17KkMdHMrJ9E9VdZJo8sSy642MoVNJ5ikM5yQQ28lztjFD
+        TiMX1SDBBjQlQM4qnK05EPhjiIvKgDfGSNZek/aZtbj2uyFA98dRfxTSn3BEVOR9
+        95NphpJRdnFA0NLiN2ijCyMAXgwwHtzwaDSgo3Z/2Vu+j3IZFBGr1TvRQ==
+X-ME-Sender: <xms:-ic4ZN0HN98HMEwtW8V9mlbqa3gz5isroMmfB9qBPPUsWB8piPSjvA>
+    <xme:-ic4ZEEDMamcIgksjdbPM69xhaMG7daCyWg7mg9Z0r1MEEvqt4e-SesCeEw7fqteb
+    w_a7Jc6p1dt-60d7rk>
+X-ME-Received: <xmr:-ic4ZN4gF2ji4V6weIhkOL3DDxAjJ1Xt75lynoODK2-gh23ltHDhlYoOj9gaEs0WxajnZA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekkedgleejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpeetvdehffelffeiveeikeduffetudeuheeiiefg
+    ueduvdevtdejhedvhfffffehfeenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuve
+    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkhhirhhilhhl
+    sehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:-ic4ZK3e6y7eAfhmn4e66gu0PUt85Z-wcC5DNlSWhilhhk6w4t8EXQ>
+    <xmx:-ic4ZAECPW4s4BS3PWmFxf2t0_QIrnIg3FFBNPFHB4jha8PCamTX0A>
+    <xmx:-ic4ZL9cmfcyroxf89k4ficZUhl3J7t6abTqqTh77eZahq7_J0-qYA>
+    <xmx:_Cc4ZFJhth32jA7Up6aLA2dV58F_PmFV92-rLLWAX260cMRlG903Wg>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 13 Apr 2023 12:04:09 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id B267B10D7C6; Thu, 13 Apr 2023 19:04:05 +0300 (+03)
+Date:   Thu, 13 Apr 2023 19:04:05 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Liam Merwick <liam.merwick@oracle.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com
+Subject: Re: [PATCH v10 0/9] KVM: mm: fd-based approach for supporting KVM
+Message-ID: <20230413160405.h6ov2yl6l3i7mvsj@box.shutemov.name>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <Y8H5Z3e4hZkFxAVS@google.com>
+ <48953bf2-cee9-f818-dc50-5fb5b9b410bf@oracle.com>
+ <Y9B1yiRR8DpANAEo@google.com>
+ <20230125125321.yvsivupbbaqkb7a5@box.shutemov.name>
+ <ZDdV0Fh7nDEnY/eW@google.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|TYZPR06MB4189:EE_
-X-MS-Office365-Filtering-Correlation-Id: 13b776ef-2c75-4e7a-5ea9-08db3c384329
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FqIgXexs8DNwxaKUwuKrsr5mq9mszsBC3zVA6b07Bz2z3uFPt104pGVo+2sLENJS9k4DZutMATUbvMznMUUkYNq2o5K982n+u/CmGMlia1CNmVwc3QZxqTI7Tz6OWA1wh+MtkbnE7p/iY1WlmDqPUzzopIGIQnfXLUmxwsvRptUcDDNKlTAG5ZofT/vdEGTCZEIJYJpWgernUY6Iz2oGvoKnxLD871S9QDQTMWAl+ctDKsLarpY9TXTCNh3UT3/3hx6E19upNzNnt6+hkV6BjeeGOURwXhsyydQoK5zkBTF3Wxj0l+Uhgrm1jXDEiaYD2CT8VabMOm/6fj9Ux8Js8Ow+Mo/ysz6kQJDLkxZap+nmnZeS77ezD/zvT1IfSRJtXJXouYXznLhwmq0/LdaF/b5vZrqFYffM+IJKG+zQYTKCRKPGfu/8tvxg2Sr3FBwxUPPqZQNm5z41/YEbUGDubtJnAsrP7VwvpJ5877RK6HbtKrXZqnRxpw1qbXUzAmGAnnsEojAGeH//Sd0NEpWdZhirL8Mwv0pzq9ZB6458upvNVTm6LU6nZwyZXjEY9bsYz39WB6CkniTGO5d3o4SLsM71TwQQPGWfhxVU0dCRaGA7MBwnwwQwupIfoaF7MB4g
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(366004)(136003)(376002)(39860400002)(451199021)(26005)(38350700002)(38100700002)(36756003)(5660300002)(4744005)(2906002)(316002)(8936002)(86362001)(66556008)(8676002)(66476007)(66946007)(41300700001)(4326008)(6916009)(6506007)(1076003)(2616005)(6512007)(186003)(52116002)(6486002)(478600001)(6666004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?09In6xLHdxAZor4ykboV2OIwT4p59P5CKcMNtqhPA0NCJtled47cDOGGOrLa?=
- =?us-ascii?Q?ITKj067HY+hTBJ+O/kMELvngixy7oYTrmPrYEyBk+8FoLoXvJJdj+BrMAtDa?=
- =?us-ascii?Q?kAgZ/YwKBGuV/5P0Wz+cOYVaruxnyXlZz5Mw05oc3qLLUlZHvRi2AoOMauYc?=
- =?us-ascii?Q?/tEi/JmomXCtj9eH5taW5QzTjSFfi2Is0dNErElKPzf5grO2D3SOjeDvp2je?=
- =?us-ascii?Q?Ye1GFqEij++oP6CZ3hmLTJj4ow3p0DKxGBnhPK3HEK7P919SRERNMNWr4ldh?=
- =?us-ascii?Q?gTG/ueZBdJfncgXTWnMF6pktjieGoVwIQAkdvMC1vvKe01sSuH7KfUSPpQkw?=
- =?us-ascii?Q?GsPFFnOvHa7NeFdw8mGGAz6JhvpwOuc7GaupIasQLMKSr6r7YVsGgfiMPGul?=
- =?us-ascii?Q?eiGRwaC6pwnmPmQ3SeQi2YVqR47Ia2i16mdxzwtobgjcQB4itSeFqDHE8F0I?=
- =?us-ascii?Q?OoFq5REoNTBTei8F2H1DepSXC5fuBtuJ79L3o+JTogpQyFicTSnrJv6wdrIh?=
- =?us-ascii?Q?TtxPwvPpZthRV24KQLQeMDMs4o43vIVIsuoq96Sr7UjIPxSLwt4hLe6XP7DZ?=
- =?us-ascii?Q?7FzspFeOuebcMyZkutKVNxIilz5uOTkwh1T8e+JzzmrjIk3lZ1LOFQP+6jBg?=
- =?us-ascii?Q?VTR57v8k/zakjdQ3Omn19cpvmRJLz6IBJX5NrQgRSxI74GwJPxMvRcOcNb72?=
- =?us-ascii?Q?8NfjNCWaAw2dUSDY4YOUfRFX+gDhn1UZ2qHtCi7dzK2q4Cj+H5L7fit2xU/+?=
- =?us-ascii?Q?Jog7ixZhKNfKI+lFVwxO3It7LvDFluzILgvfZYofyIJSJfuYLqMnHN8unLXh?=
- =?us-ascii?Q?Qj7XAdyK0FieoX/OsJ/n0mplclyODr+uXY36A3HJE4WuOdBW8KrJXuTL1CYh?=
- =?us-ascii?Q?L6P0PCzbQTRndIjiuazBezHINh+WW8PCjsCBqzpLIZ0DQINd2lNr1+TAr9f0?=
- =?us-ascii?Q?5JRqIgwBPbny4fNEbADEV/xGUq3CNi959E51LetSudsFipaY1wb0VFdsP8/Y?=
- =?us-ascii?Q?OoqfC5B3NflPEFbhTMgnQfIA4djaanIjqwYRAmo7VA6gLY5OJIWDNU9kbBpt?=
- =?us-ascii?Q?9z1gOoConGRR+dEFcd+U3oYO5/slCfcK8gAkRpcHzWmUwdGmbLorVgBIHkmQ?=
- =?us-ascii?Q?Qv6ODYTGQ6x0DhNAaLETbGK1kkv/VWM5HZUImgMK3TEC/ZivK5HZbv4VmMAI?=
- =?us-ascii?Q?DN42WzNpndJoxZTp9Zn2LQ2xtTyAKSJCmd5Z0IlzlsAp6FfRXhZ17zsew8rd?=
- =?us-ascii?Q?Y9SsMWNbCSbfleLmxmISROUWTqF2EJX2yIgE8LNMmVzMMpognf7IvN1gaIpt?=
- =?us-ascii?Q?jdiWvq/CyJXrTJ7TaViGtLjtI3sH1jgJo9H7h4K7a1PWljEfXEUlKU5BuPKp?=
- =?us-ascii?Q?+/aq3ofp4ABnlG1KznlPeJKc7pE9JIfQisviD82hTX1hYXlW7zK9d9JNv7JS?=
- =?us-ascii?Q?DNt7qDnsiYsI1EEnaIW7+63cM/RRrbUuC86NG8fj0bq9ThW+6QItB/mF//Iw?=
- =?us-ascii?Q?1WgYXnlyiQOBKomGu6yiZcQcFVbY2vqx7DpiG8770NXnXFUUGwTSE7yTWMuH?=
- =?us-ascii?Q?CG1hvPb0sATLNaApb+EsCpQ+9gkh3N4g8ZZTQ/Gn?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 13b776ef-2c75-4e7a-5ea9-08db3c384329
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2023 16:00:55.1316
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ReTO9WILKhHZfoK53buXTEWMubYk3jJZeqk74xa/YCSRShj9BW1UPsdQ5yPBiLjGJQVJ8vslQYDq65GJGtDOXw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB4189
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZDdV0Fh7nDEnY/eW@google.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> F2FS_RW_ATTR looks more common to me.
+On Wed, Apr 12, 2023 at 06:07:28PM -0700, Sean Christopherson wrote:
+> On Wed, Jan 25, 2023, Kirill A. Shutemov wrote:
+> > On Wed, Jan 25, 2023 at 12:20:26AM +0000, Sean Christopherson wrote:
+> > > On Tue, Jan 24, 2023, Liam Merwick wrote:
+> > > > On 14/01/2023 00:37, Sean Christopherson wrote:
+> > > > > On Fri, Dec 02, 2022, Chao Peng wrote:
+> > > > > > This patch series implements KVM guest private memory for confidential
+> > > > > > computing scenarios like Intel TDX[1]. If a TDX host accesses
+> > > > > > TDX-protected guest memory, machine check can happen which can further
+> > > > > > crash the running host system, this is terrible for multi-tenant
+> > > > > > configurations. The host accesses include those from KVM userspace like
+> > > > > > QEMU. This series addresses KVM userspace induced crash by introducing
+> > > > > > new mm and KVM interfaces so KVM userspace can still manage guest memory
+> > > > > > via a fd-based approach, but it can never access the guest memory
+> > > > > > content.
+> > > > > > 
+> > > > > > The patch series touches both core mm and KVM code. I appreciate
+> > > > > > Andrew/Hugh and Paolo/Sean can review and pick these patches. Any other
+> > > > > > reviews are always welcome.
+> > > > > >    - 01: mm change, target for mm tree
+> > > > > >    - 02-09: KVM change, target for KVM tree
+> > > > > 
+> > > > > A version with all of my feedback, plus reworked versions of Vishal's selftest,
+> > > > > is available here:
+> > > > > 
+> > > > >    git@github.com:sean-jc/linux.git x86/upm_base_support
+> > > > > 
+> > > > > It compiles and passes the selftest, but it's otherwise barely tested.  There are
+> > > > > a few todos (2 I think?) and many of the commits need changelogs, i.e. it's still
+> > > > > a WIP.
+> > > > > 
+> > > > 
+> > > > When running LTP (https://github.com/linux-test-project/ltp) on the v10
+> > > > bits (and also with Sean's branch above) I encounter the following NULL
+> > > > pointer dereference with testcases/kernel/syscalls/madvise/madvise01
+> > > > (100% reproducible).
+> > > > 
+> > > > It appears that in restrictedmem_error_page()
+> > > > inode->i_mapping->private_data is NULL in the
+> > > > list_for_each_entry_safe(inode, next, &sb->s_inodes, i_sb_list) but I
+> > > > don't know why.
+> > > 
+> > > Kirill, can you take a look?  Or pass the buck to someone who can? :-)
+> > 
+> > The patch below should help.
+> > 
+> > diff --git a/mm/restrictedmem.c b/mm/restrictedmem.c
+> > index 15c52301eeb9..39ada985c7c0 100644
+> > --- a/mm/restrictedmem.c
+> > +++ b/mm/restrictedmem.c
+> > @@ -307,14 +307,29 @@ void restrictedmem_error_page(struct page *page, struct address_space *mapping)
+> >  
+> >  	spin_lock(&sb->s_inode_list_lock);
+> >  	list_for_each_entry_safe(inode, next, &sb->s_inodes, i_sb_list) {
+> > -		struct restrictedmem *rm = inode->i_mapping->private_data;
+> >  		struct restrictedmem_notifier *notifier;
+> > -		struct file *memfd = rm->memfd;
+> > +		struct restrictedmem *rm;
+> >  		unsigned long index;
+> > +		struct file *memfd;
+> >  
+> > -		if (memfd->f_mapping != mapping)
+> > +		if (atomic_read(&inode->i_count))
+> 
+> Kirill, should this be
+> 
+> 		if (!atomic_read(&inode->i_count))
+> 			continue;
+> 
+> i.e. skip unreferenced inodes, not skip referenced inodes?
 
-My idea is to add macro like this:
+Ouch. Yes.
 
-F2FS_SBI_GENERAL_RW_ATTR(node_io_flag);
-CPRC_INFO_GENERAL_RW_ATTR(ckpt_thread_ioprio);
-......
-F2FS_SBI_RW_ATTR(umount_discard_timeout, interval_time[UMOUNT_DISCARD_TIMEOUT]);
+But looking at other instances of s_inodes usage, I think we can drop the
+check altogether. inode cannot be completely free until it is removed from
+s_inodes list.
 
-It seems unnecessary to repeat a bunch of the same things just to add a parameter.
-Are there any problems using the new macros?
+While there, replace list_for_each_entry_safe() with
+list_for_each_entry() as we don't remove anything from the list.
 
-Thx,
-Yangtao
+diff --git a/mm/restrictedmem.c b/mm/restrictedmem.c
+index 55e99e6c09a1..8e8a4420d3d1 100644
+--- a/mm/restrictedmem.c
++++ b/mm/restrictedmem.c
+@@ -194,22 +194,19 @@ static int restricted_error_remove_page(struct address_space *mapping,
+ 					struct page *page)
+ {
+ 	struct super_block *sb = restrictedmem_mnt->mnt_sb;
+-	struct inode *inode, *next;
++	struct inode *inode;
+ 	pgoff_t start, end;
+ 
+ 	start = page->index;
+ 	end = start + thp_nr_pages(page);
+ 
+ 	spin_lock(&sb->s_inode_list_lock);
+-	list_for_each_entry_safe(inode, next, &sb->s_inodes, i_sb_list) {
++	list_for_each_entry(inode, &sb->s_inodes, i_sb_list) {
+ 		struct restrictedmem_notifier *notifier;
+ 		struct restrictedmem *rm;
+ 		unsigned long index;
+ 		struct file *memfd;
+ 
+-		if (atomic_read(&inode->i_count))
+-			continue;
+-
+ 		spin_lock(&inode->i_lock);
+ 		if (inode->i_state & (I_NEW | I_FREEING | I_WILL_FREE)) {
+ 			spin_unlock(&inode->i_lock);
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
