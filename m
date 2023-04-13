@@ -2,98 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C00A26E082D
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 09:49:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 625936E082B
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 09:48:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbjDMHtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 03:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60880 "EHLO
+        id S230070AbjDMHsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 03:48:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbjDMHs4 (ORCPT
+        with ESMTP id S229492AbjDMHsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 03:48:56 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9699083FA;
-        Thu, 13 Apr 2023 00:48:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=4Zscu
-        iQPwnHKfbAbpvcHFmQ/w/W3FQBM8Le/KlBVmX8=; b=OqoNaQIYuk9GQjrKGTqFb
-        y40Lu2Tr6qvWr7iLUmFWo/K0o8h6ReWDgrmcn7w85RPfGUPzQlEKMbis1A5SHFAz
-        JzW3w3RaLCxd0PtcBUQC8HGlSwlB+zLJxF/MOsUwJ0ZINmrlghJBDLSXQ/iZmvqv
-        X+Ie+SZ3728uGNA5Ohxv2M=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g3-3 (Coremail) with SMTP id _____wA3nmaFszdkGDBrBQ--.49914S2;
-        Thu, 13 Apr 2023 15:47:17 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     sathya.prakash@broadcom.com
-Cc:     sreekanth.reddy@broadcom.com,
-        suganath-prabu.subramani@broadcom.com,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        1395428693sheep@gmail.com, alex000young@gmail.com,
-        Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH RESEND] scsi: message: mptlan: Fix use after free bug in mptlan_remove due to race condition
-Date:   Thu, 13 Apr 2023 15:47:15 +0800
-Message-Id: <20230413074715.237471-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 13 Apr 2023 03:48:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1E48A4F;
+        Thu, 13 Apr 2023 00:48:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 415EF638E9;
+        Thu, 13 Apr 2023 07:47:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 514B0C433EF;
+        Thu, 13 Apr 2023 07:47:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1681372073;
+        bh=Ds+MxkKs0/lIPSgCrnQJry+1qiKWouiibiaJxitKFcY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FrJeJ2G8SKvoCPcCuWPYZfhj7odZs0u6zB+pSOYFbSjaOjrkw2lp9Rkh+OIsLrqLg
+         TgOeFPkMtSawjkV3w9hZCqvUVNiJLX0fyjuxo6El0ujvZuaSkcsHVqZNWYuiBV+0Rr
+         QBNbcEvB0EkFQRN5DwlQGLEfZVGK1IdQiDloMXjY=
+Date:   Thu, 13 Apr 2023 09:47:50 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Wesley Cheng <quic_wcheng@quicinc.com>
+Cc:     Thinh.Nguyen@synopsys.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_ugoswami@quicinc.com
+Subject: Re: [PATCH v3 2/3] usb: dwc3: gadget: Stall and restart EP0 if host
+ is unresponsive
+Message-ID: <2023041310-absolute-task-8ba6@gregkh>
+References: <20230410231954.437-1-quic_wcheng@quicinc.com>
+ <20230410231954.437-3-quic_wcheng@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wA3nmaFszdkGDBrBQ--.49914S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWrurykGF4Dur1fWry5Wr13CFg_yoW8Jry7pr
-        ZFka48CrZ5Jw1Iy3WDtFy8AFyrC3WIgrWkKrWSg342vr1FkFyYq340kFy2kw1xXFs5Ga13
-        Zr4DJFs7GayDKFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziYFAtUUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiQgdQU1aEE+PxogAAs3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230410231954.437-3-quic_wcheng@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In mptlan_probe, it called mpt_register_lan_device and bound 
-&priv->post_buckets_task with mpt_lan_post_receive_buckets_work.
-When it calls lan_reply, it will finally call 
-mpt_lan_wake_post_buckets_task to start the work.
+On Mon, Apr 10, 2023 at 04:19:53PM -0700, Wesley Cheng wrote:
+> It was observed that there are hosts that may complete pending SETUP
+> transactions before the stop active transfers and controller halt occurs,
+> leading to lingering endxfer commands on DEPs on subsequent pullup/gadget
+> start iterations.
+> 
+>   dwc3_gadget_ep_disable   name=ep8in flags=0x3009  direction=1
+>   dwc3_gadget_ep_disable   name=ep4in flags=1  direction=1
+>   dwc3_gadget_ep_disable   name=ep3out flags=1  direction=0
+>   usb_gadget_disconnect   deactivated=0  connected=0  ret=0
+> 
+> The sequence shows that the USB gadget disconnect (dwc3_gadget_pullup(0))
+> routine completed successfully, allowing for the USB gadget to proceed with
+> a USB gadget connect.  However, if this occurs the system runs into an
+> issue where:
+> 
+>   BUG: spinlock already unlocked on CPU
+>   spin_bug+0x0
+>   dwc3_remove_requests+0x278
+>   dwc3_ep0_out_start+0xb0
+>   __dwc3_gadget_start+0x25c
+> 
+> This is due to the pending endxfers, leading to gadget start (w/o lock
+> held) to execute the remove requests, which will unlock the dwc3
+> spinlock as part of giveback.
+> 
+> To mitigate this, resolve the pending endxfers on the pullup disable
+> path by re-locating the SETUP phase check after stop active transfers, since
+> that is where the DWC3_EP_DELAY_STOP is potentially set.  This also allows
+> for handling of a host that may be unresponsive by using the completion
+> timeout to trigger the stall and restart for EP0.
+> 
+> Fixes: c96683798e27 ("usb: dwc3: ep0: Don't prepare beyond Setup stage")
 
-When we call mptlan_remove to remove the driver, there
-may be a sequence as follows:
+I'm confused.  You have a Fixes: tag here, yet this patch depends on
+patch 1/3, right?  This implies that you do not want or need this to be
+backported to any stable kernels, right?
 
-Fix it by finishing the work before cleanup in mptlan_remove
+Or do you?  If so, put the bug fixes first, and properly add a cc:
+stable tag, so that they will get backported correctly.
 
-CPU0                  CPU1
+If not, then don't even put a fixes tag on it as obviously it isn't a
+bugfix that is relevant to track anywhere, and then this is just a
+normal new feature to be added to the driver.
 
-                    |mpt_lan_post_receive_buckets_work
-mptlan_remove       |
-  free_netdev       |
-    kfree(dev);     |
-                    |
-                    | dev->mtu
-                    |   //use
+Please resolve this and submit a new series based on your decision.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
----
- drivers/message/fusion/mptlan.c | 2 ++
- 1 file changed, 2 insertions(+)
+thanks,
 
-diff --git a/drivers/message/fusion/mptlan.c b/drivers/message/fusion/mptlan.c
-index 142eb5d5d9df..de2e7bcf4784 100644
---- a/drivers/message/fusion/mptlan.c
-+++ b/drivers/message/fusion/mptlan.c
-@@ -1433,7 +1433,9 @@ mptlan_remove(struct pci_dev *pdev)
- {
- 	MPT_ADAPTER 		*ioc = pci_get_drvdata(pdev);
- 	struct net_device	*dev = ioc->netdev;
-+	struct mpt_lan_priv *priv = netdev_priv(dev);
- 
-+	cancel_delayed_work_sync(&priv->post_buckets_task);
- 	if(dev != NULL) {
- 		unregister_netdev(dev);
- 		free_netdev(dev);
--- 
-2.25.1
-
+greg k-h
