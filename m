@@ -2,102 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D8806E07D7
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 09:35:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 762356E07D8
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 09:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbjDMHe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 03:34:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47170 "EHLO
+        id S229636AbjDMHf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 03:35:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbjDMHex (ORCPT
+        with ESMTP id S229597AbjDMHfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 03:34:53 -0400
+        Thu, 13 Apr 2023 03:35:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63C69012;
-        Thu, 13 Apr 2023 00:34:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9C693CF
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 00:35:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7237663B06;
-        Thu, 13 Apr 2023 07:34:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2076DC433D2;
-        Thu, 13 Apr 2023 07:34:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C494614D0
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 07:35:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71BE9C433D2;
+        Thu, 13 Apr 2023 07:35:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681371291;
-        bh=XsH7jura9OPQFYo3OyLRFLTN61f+7bAgwp8frJCnGj8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=VBqOmgS9htmYEKpii6xW2yRgl5Cpr4O9+spNPUM9aS18UsxuqGCGCke82wB1XT2Xg
-         deiW5odzuE3NZbyJ1U7r76VitOR1ormOxBJHkHaqiZ8od+LPHK2p947npwkYhnmlXM
-         pXlGX7SIAHj5FlnDAmvFmbO6dzGhe3lewNr0xAdSXyov6BpScb+CSTyWS1F6+JuoKo
-         wiB9DJ+EZZRYfrtbg1TBKX1uSWhDvc6bRVMQFbfJ/trNlPncZNJHgpnShsV3FmUhok
-         9mIPSZ+Vh4ApUCa7FIVIgTYpNN80ZJDDlKIn8wheaXEk3SoosOD8ib1PNEOo02EDdm
-         Fa7leT0SQJ9+g==
-Message-ID: <2d058629-bd97-5e4d-8630-598cc22e5c58@kernel.org>
-Date:   Thu, 13 Apr 2023 09:34:48 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2 2/2] dt-bindings: usb: snps,dwc3: Add
- 'snps,parkmode-disable-hs-quirk' quirk
-Content-Language: en-US
-To:     Stanley Chang <stanley_chang@realtek.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230411053550.16360-2-stanley_chang@realtek.com>
- <20230413030344.13483-1-stanley_chang@realtek.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20230413030344.13483-1-stanley_chang@realtek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        s=k20201202; t=1681371307;
+        bh=wdR1ZCPGB+immJ4jeOOX3FET2VbmRaEVHHP0Z9AB6fM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Lc/yIjOvBWgQJExW1iM/oEskSUVwlJ9MbLB3HOIPi7A5fIo2ZPz/WuCRo+12vEZXF
+         HRrSJLB95SqKzt0OvXPKyCdwyMWMGfF+M5k/SND4UQ9GY5TCWtdgNp7l2wWAHCuY/1
+         37rS0EubKdgEgTsHwAs4fx1HINWSxDzp2D16nnS7XGdYtRV+WZDAUJpanjknsNYUAm
+         7+IJJi1nE8MzRUicAG6x/qXKLvFjxf05MxUO35ADNAH0SdURqzD7TE6ce7dNjffKmF
+         6mn7Te0n2EUzbT2Rk5qQnJIoOXst0PGU1mYvwOTdPMvNEyd4yIA7ERECv7qvGm4uAc
+         DF3tiJ/smAbug==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pmrU1-0082KM-5t;
+        Thu, 13 Apr 2023 08:35:05 +0100
+Date:   Thu, 13 Apr 2023 08:35:04 +0100
+Message-ID: <86mt3ckzfb.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Kunkun Jiang <jiangkunkun@huawei.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        "open list:IRQCHIP DRIVERS" <linux-kernel@vger.kernel.org>,
+        <wanghaibin.wang@huawei.com>, <chenxiang66@hisilicon.com>,
+        <tangnianyao@huawei.com>
+Subject: Re: [PATCH] irqchipi/gic-v4: Ensure accessing the correct RD when and writing INVLPIR
+In-Reply-To: <f618c540-879c-ca5b-31af-e55472d8208c@huawei.com>
+References: <20230412041510.497-1-jiangkunkun@huawei.com>
+        <86y1mxl9m4.wl-maz@kernel.org>
+        <f618c540-879c-ca5b-31af-e55472d8208c@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: jiangkunkun@huawei.com, tglx@linutronix.de, yuzenghui@huawei.com, linux-kernel@vger.kernel.org, wanghaibin.wang@huawei.com, chenxiang66@hisilicon.com, tangnianyao@huawei.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/04/2023 05:03, Stanley Chang wrote:
-> Add a new 'snps,parkmode-disable-hs-quirk' DT quirk to dwc3 core for
-> disable the high-speed parkmode.
+On Thu, 13 Apr 2023 04:57:17 +0100,
+Kunkun Jiang <jiangkunkun@huawei.com> wrote:
+> 
+> Hi Marc,
+> 
+> On 2023/4/12 17:42, Marc Zyngier wrote:
+> > On Wed, 12 Apr 2023 05:15:10 +0100,
+> > Kunkun Jiang <jiangkunkun@huawei.com> wrote:
+> >> commit f3a059219bc7 ("irqchip/gic-v4.1: Ensure mutual exclusion between
+> >> vPE affinity change and RD access") tried to address the race
+> >> between the RD accesses and the vPE affinity change, but somehow
+> >> forgot to take GICR_INVLPIR into account. Let's take the vpe_lock
+> >> before evaluating vpe->col_idx to fix it.
+> >> 
+> >> Fixes: f3a059219bc7 ("irqchip/gic-v4.1: Ensure mutual exclusion between vPE affinity change and RD access")
+> >> Signed-off-by: Kunkun Jiang <jiangkunkun@huawei.com>
+> >> Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
+> >> Signed-off-by: Nianyao Tang <tangnianyao@huawei.com>
+> > Yup, nice catch. A few remarks though:
+> > 
+> > - the subject looks odd: there is a spurious 'and' there, and it
+> >    doesn't say this is all about VPE doorbell invalidation (the code
+> >    that deals with direct LPI is otherwise fine)
+> > 
+> > - the SoB chain is also odd. You should be last in the chain, and all
+> >    the others have Co-developed-by tags in addition to the SoB, unless
+> >    you wanted another tag
+> Thanks for your guidance.
+> > 
+> > - I'm curious about how you triggered the issue. Could you please
+> >    elaborate on that>
+> 
+> I will detail it here:
+> 1. a multi-core VM with a pass-through device, enable GICv4
+> 2. insmod the device driver in guest
+> then,the following two call trace information is displayed occasionally:
+> 
+> > [ 1055.683978] BUG: spinlock already unlocked on CPU#1,
 
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC.  It might happen, that command when run on an older
-kernel, gives you outdated entries.  Therefore please be sure you base
-your patches on recent Linux kernel.
+[...]
 
-It's the second time I am writing it. I don't understand why you keep
-ignoring it.
+> After analysis, I found that when insmod the device driver in guest,
+> its_map_vm will be executed on the host and map all vPEs to the
+> first possible CPU(pCPU0). When dealing with WFI, its_vpe_send_inv
+> will access RD, obtain and release the 'rd_lock' through 'vpe->col_idx'.
 
-Your commit msg does not explain why do we need it.
+[...]
+
+> So something like this happens:
+> After obtaining the 'rd_lock' through 'vpe->col_idx', its_map_vm
+> modifies 'vpe->col_idx'.
+> This is also the cause of the preceding call trace.
+
+Right. I figured this out, but the key information is that you get it
+at boot time due to moving the VPEs away from CPU0
+
+> There's a little question I haven't figured out here. Why map all vPEs
+> to the first possible CPU in its_map_vm? In addition, vpe_lock is not
+> used here. Will concurrency problems occur in the future?
+
+Where would you like to map them? Any physical CPU would do the
+trick. We could take the current CPU, but the fact is that we don't
+always know where the VPEs are running.
+
+As for holding vpe_lock, I don't think we need to. This only happens
+on the first VLPI being forwarded, so there should be no real GIC
+context for anything.
+
+But I must admit that I haven't looked at this code in a long time,
+and have no way to test it anymore.
 
 > 
-> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
-> ---
->  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
+> > 
+> > Finally, I think we can fix it in a better way, see below:
+> > 
+> >> ---
+> >>   drivers/irqchip/irq-gic-v3-its.c | 10 +++++++---
+> >>   1 file changed, 7 insertions(+), 3 deletions(-)
+> >> 
+> >> diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+> >> index 586271b8aa39..041f06922587 100644
+> >> --- a/drivers/irqchip/irq-gic-v3-its.c
+> >> +++ b/drivers/irqchip/irq-gic-v3-its.c
+> >> @@ -3943,13 +3943,17 @@ static void its_vpe_send_inv(struct irq_data *d)
+> >>     	if (gic_rdists->has_direct_lpi) {
+> >>   		void __iomem *rdbase;
+> >> +		unsigned long flags;
+> >> +		int cpu;
+> >>     		/* Target the redistributor this VPE is currently
+> >> known on */
+> >> -		raw_spin_lock(&gic_data_rdist_cpu(vpe->col_idx)->rd_lock);
+> >> -		rdbase = per_cpu_ptr(gic_rdists->rdist, vpe->col_idx)->rd_base;
+> >> +		cpu = vpe_to_cpuid_lock(vpe, &flags);
+> >> +		raw_spin_lock(&gic_data_rdist_cpu(cpu)->rd_lock);
+> >> +		rdbase = per_cpu_ptr(gic_rdists->rdist, cpu)->rd_base;
+> >>   		gic_write_lpir(d->parent_data->hwirq, rdbase + GICR_INVLPIR);
+> >>   		wait_for_syncr(rdbase);
+> >> -		raw_spin_unlock(&gic_data_rdist_cpu(vpe->col_idx)->rd_lock);
+> >> +		raw_spin_unlock(&gic_data_rdist_cpu(cpu)->rd_lock);
+> >> +		vpe_to_cpuid_unlock(vpe, flags);
+> >>   	} else {
+> >>   		its_vpe_send_cmd(vpe, its_send_inv);
+> >>   	}
+> > The main reason this bug crept in is that we have a some pretty silly
+> > code duplication going on.
+> > 
+> > Wouldn't it be nice if irq_to_cpuid() could work out whether it is
+> > dealing with a LPI or a VLPI like it does today, but also directly
+> > with a VPE? We could then use the same code as derect_lpi_inv(). I
+> > came up with this the hack below, which is totally untested as I don't
+> > have access to GICv4.1 HW.
+> > 
+> > Could you give it a spin?
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> index be36956af53b..45ca967b8d14 100644
-> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> @@ -232,6 +232,11 @@ properties:
->        When set, all SuperSpeed bus instances in park mode are disabled.
->      type: boolean
->  
-> +  snps,parkmode-disable-hs-quirk:
-> +    description:
-> +      When set, all HighSpeed bus instances in park mode are disabled.
+> Nice, I will test it as soon as possible.
 
-Why?
+Cool, please let me know when you get a chance.
 
+Thanks,
 
-Best regards,
-Krzysztof
+	M.
 
+-- 
+Without deviation from the norm, progress is not possible.
