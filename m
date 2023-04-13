@@ -2,159 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00EDF6E1085
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:59:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE28A6E1089
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 17:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbjDMO7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 10:59:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52804 "EHLO
+        id S230176AbjDMPAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 11:00:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbjDMO66 (ORCPT
+        with ESMTP id S231454AbjDMPAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 10:58:58 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F6072A8;
-        Thu, 13 Apr 2023 07:58:56 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id qh25so4948175qvb.1;
-        Thu, 13 Apr 2023 07:58:56 -0700 (PDT)
+        Thu, 13 Apr 2023 11:00:11 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7CF5A27D
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 08:00:07 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id z1so5923408qti.5
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 08:00:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681397935; x=1683989935;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bi0ZXm2Z4hEXGu7AXo9I7wdFqHb+LKKssxUJNJqQof4=;
-        b=SE3cEYIfy8hcWC7ZEnRIKIXPAdbW032ZvvJsErhXn+8adREO8f2fLkKFUgp8S8sL3O
-         dglAVbWiKYif3OfGZ+ktWe6pDGLHeD4GBi4NX1188rfR+iz2StNFIG346gF1TQh58eL5
-         fArzTEmUDjhHsqWsJmUBbUJJbwv480zxAE+vcK9qOECq6Y4bD2DzKHHQ8qoKyGUlWAx6
-         YOrUibmkP0Cltdlt9rcX+aWayzE43X5EifeFoJQG6C4S7b2rt8GPDZyjEc/OVfB4zwNc
-         lMJN9Fkw1VhPVFSPgZGLlCOqDcvDE/pxrxX8/Sw4DpzuPZtswW/wrTze0TcPFnTWhUAO
-         aX1w==
+        d=soleen.com; s=google; t=1681398006; x=1683990006;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dvfniPNSYeUesS1D9MOm6MMuLm1MqhhGVDilAjS1vec=;
+        b=TjNkwnrEuHeLO4D4dAwwTEmHxXJkFC0by55qNpsV/oAIKf7rlJnhDa5IrpF4xcieTf
+         yiGTsuYYbSshvI6dhUBEoBoWrWmX/YRhLBHsA0FiN31ekZ4kigJwpBCbDU1Q41jCe8AH
+         en8oWQxY9e8NgSnyV0jfHh31fH8mEK53VeBtyzG6OJaKf2a5KgQo+dzJAAR3L0jK+3iO
+         /q9uEd1m5sNz9645OA9Rc//hoPYfS8YDV3FsNV5nWexeug9xf6NC2oSW/XPfPws1H1E1
+         gokmVGgUEAh9XY1X9wy2wBsj1Ff8KtJdY5TYMVnF0TnPFgfIRis++++OCpqBgJRCNbO0
+         0G5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681397935; x=1683989935;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bi0ZXm2Z4hEXGu7AXo9I7wdFqHb+LKKssxUJNJqQof4=;
-        b=fVN61Xm6ZMTFMpnr8ufzwtHfxLkzfymsDVO2I3fiKftDlOmiCxFUDeK9alaYO6si6z
-         s3wLSmc8Rl5HRDAEcuLLPFdESmCqTWQbvhBIyUKGxapDhBMvCzzaPerHlfXvHR0T0FfR
-         5Mf7qBYp8NfkXhaEQMxZwFX8XxAJitLGfjzCULz5kORRz0CEYqvF+JY/V57FrGxmR5N7
-         Lo0t4IoqzwEZbK5DX/IB/MhOoNOgRfa38HnIBtUBSOMm2rHd+RMYFjpGX8KEfG66TW6u
-         jP0Wy/qMjAXYoYLVv/VD3jHVA2w7U85P1NjEapP9y69mUzqAXKtVSRxg076/exBoxNJ+
-         yxxQ==
-X-Gm-Message-State: AAQBX9fEvjXuItHAVRpFV00w0LuvLth+08PkxIFig04vD/UgGcBMPoKH
-        qtX+wkTVjWL/s5+xq+oJVB8=
-X-Google-Smtp-Source: AKy350ZPWCS7Da7sP9dwBbn1kRK1VZHZUMhhTx3bnSjdl6WRWMTcZ1GoyQudNKhIZWGVhlp9Qd8HZw==
-X-Received: by 2002:a05:6214:20e2:b0:5a5:ba90:3b5f with SMTP id 2-20020a05621420e200b005a5ba903b5fmr3407667qvk.14.1681397935280;
-        Thu, 13 Apr 2023 07:58:55 -0700 (PDT)
-Received: from [192.168.1.105] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id b7-20020a0cfb47000000b005ef49a5a3e6sm483173qvq.40.2023.04.13.07.58.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Apr 2023 07:58:54 -0700 (PDT)
-Message-ID: <ff2c73b7-3654-d871-de8b-7180c123f05d@gmail.com>
-Date:   Thu, 13 Apr 2023 07:58:51 -0700
+        d=1e100.net; s=20221208; t=1681398006; x=1683990006;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dvfniPNSYeUesS1D9MOm6MMuLm1MqhhGVDilAjS1vec=;
+        b=cJ4FnAZ48S4AT0LKDWk3B0aFiJMi+HjtCvu9H+oDG5tWNTaY40SZ5esJy7IO5ipsuD
+         bTbYg35jm6zHdOUqWrsPChWJxcEvVEqc1kRy40EtuXK5V+LD1epJBJp4yk0ggAM2UgLk
+         aLfoCixPiyoYIOFTiT5Tu4SjoO0NJyjYaRr68TXnDuf5WgLWP+pVSn2Hi4xgQafp8a05
+         3bhauWjW18ms4lrk5bLUg4YUaRUJfdWpJHD54OdQEgemzp7CEHrQJczJ9RX9V5uWHhfv
+         fR7HZxtV4Mqtc8ELCIz6o0+tWPf/ZwJtDmOmFz/0YAw9wuNF2EwuROmhsN3EUDX+bswn
+         04SA==
+X-Gm-Message-State: AAQBX9eRU9zzWMIYWa4IKnIbIcS2d/vPi599e3/GjJNmJHKj8xIu5UYu
+        1C3G3GWyjW2lxcAwPPsbjclG4HxPpwotOA0hMbVNWbw6g3dRXJVxXck=
+X-Google-Smtp-Source: AKy350Z+XXHie6JNtWSAJzbOSOZ0nv5M81HQwB6e4FcGZgFrbRezqaZzU/ePj56MENMRYkEO9BAbN4/uRAct2SHD7hc=
+X-Received: by 2002:ac8:7f81:0:b0:3db:cd1b:e227 with SMTP id
+ z1-20020ac87f81000000b003dbcd1be227mr665460qtj.6.1681398006396; Thu, 13 Apr
+ 2023 08:00:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 2/3] PCI: brcmstb: CLKREQ# accomodations of downstream
- device
-To:     Cyril Brulebois <kibi@debian.org>,
-        Jim Quinlan <jim2101024@gmail.com>
-Cc:     linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230411165919.23955-1-jim2101024@gmail.com>
- <20230411165919.23955-3-jim2101024@gmail.com>
- <20230413143935.pmbyjk2boxl3rwne@mraw.org>
-Content-Language: en-US
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230413143935.pmbyjk2boxl3rwne@mraw.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230412195939.1242462-1-pasha.tatashin@soleen.com> <20230412131302.cf42a7f4b710db8c18b7b676@linux-foundation.org>
+In-Reply-To: <20230412131302.cf42a7f4b710db8c18b7b676@linux-foundation.org>
+From:   Pasha Tatashin <pasha.tatashin@soleen.com>
+Date:   Thu, 13 Apr 2023 10:59:29 -0400
+Message-ID: <CA+CK2bBGNTxvWi=99Z0DLOmNd=JWG3E-mOnx1MqxoziGdTEqYg@mail.gmail.com>
+Subject: Re: [PATCH v2] mm: hugetlb_vmemmap: provide stronger vmemmap
+ allocation guarantees
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        mike.kravetz@oracle.com, mhocko@suse.com, muchun.song@linux.dev,
+        rientjes@google.com, souravpanda@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 12, 2023 at 4:13=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
+n.org> wrote:
+>
+> Lots of questions (ie, missing information!)
+>
+> On Wed, 12 Apr 2023 19:59:39 +0000 Pasha Tatashin <pasha.tatashin@soleen.=
+com> wrote:
+>
+> > HugeTLB pages have a struct page optimizations where struct pages for t=
+ail
+> > pages are freed. However, when HugeTLB pages are destroyed, the memory =
+for
+> > struct pages (vmemmap) need to be allocated again.
+> >
+> > Currently, __GFP_NORETRY flag is used to allocate the memory for vmemma=
+p,
+> > but given that this flag makes very little effort to actually reclaim
+> > memory the returning of huge pages back to the system can be problem.
+>
+> Are there any reports of this happening in the real world?
+>
+> > Lets
+> > use __GFP_RETRY_MAYFAIL instead. This flag is also performs graceful
+> > reclaim without causing ooms, but at least it may perform a few retries=
+,
+> > and will fail only when there is genuinely little amount of unused memo=
+ry
+> > in the system.
+>
+> If so, does this change help?
 
+It helps to avoid transient allocation problems. In general it is not
+a good idea to fail because we are trying to free gigantic pages back
+to the system.
 
-On 4/13/2023 7:39 AM, Cyril Brulebois wrote:
-> Hi Jim,
-> 
-> Jim Quinlan <jim2101024@gmail.com> (2023-04-11):
->> […]
->> This property has already been in use by Raspian Linux, but this
->> immplementation adds more details and discerns between (a) and (b)
->    ^^^^^^^^^^^^^^^
->    implementation
-> 
->> automatically.
->>
->> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217276
->> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
-> 
-> Sorry, it seems like my initial tests with v1 (applied on top of
-> v6.3-rc5-137-gf2afccfefe7b) weren't thorough enough, and I'm seeing the
-> same problems with v2 (applied on top of v6.3-rc6-46-gde4664485abb):
->   - same setup as in https://bugzilla.kernel.org/show_bug.cgi?id=217276
->   - the kernel panic is indeed gone;
->   - a USB keyboard connected on that SupaHub PCIe-to-multiple-USB adapter
->     isn't seen by the kernel;
->   - a USB memory stick connected on the same adapter isn't seen by the
->     kernel either;
->   - of course both USB devices are confirmed to work fine if they're
->     plugged directly on the CM4's USB ports.
-> 
-> Logs with v2:
-> 
->      root@cm4:~# dmesg|grep -i pci
->      [    0.610997] PCI: CLS 0 bytes, default 64
->      [    1.664886] shpchp: Standard Hot Plug PCI Controller Driver version: 0.4
->      [    1.672083] brcm-pcie fd500000.pcie: host bridge /scb/pcie@7d500000 ranges:
->      [    1.679125] brcm-pcie fd500000.pcie:   No bus range found for /scb/pcie@7d500000, using [bus 00-ff]
->      [    1.688279] brcm-pcie fd500000.pcie:      MEM 0x0600000000..0x0603ffffff -> 0x00f8000000
->      [    1.696463] brcm-pcie fd500000.pcie:   IB MEM 0x0000000000..0x00ffffffff -> 0x0400000000
->      [    1.705282] brcm-pcie fd500000.pcie: PCI host bridge to bus 0000:00
->      [    1.711629] pci_bus 0000:00: root bus resource [bus 00-ff]
->      [    1.717172] pci_bus 0000:00: root bus resource [mem 0x600000000-0x603ffffff] (bus address [0xf8000000-0xfbffffff])
->      [    1.727653] pci 0000:00:00.0: [14e4:2711] type 01 class 0x060400
->      [    1.733768] pci 0000:00:00.0: PME# supported from D0 D3hot
->      [    1.740235] pci 0000:00:00.0: bridge configuration invalid ([bus 00-00]), reconfiguring
->      [    1.855826] brcm-pcie fd500000.pcie: CLKREQ# ignored; no ASPM
->      [    1.863666] brcm-pcie fd500000.pcie: link up, 5.0 GT/s PCIe x1 (SSC)
->      [    1.870115] pci 0000:01:00.0: [1912:0014] type 00 class 0x0c0330
->      [    1.876205] pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x00001fff 64bit]
->      [    1.883177] pci 0000:01:00.0: PME# supported from D0 D3hot
->      [    1.888881] pci_bus 0000:01: busn_res: [bus 01-ff] end is updated to 01
->      [    1.895581] pci 0000:00:00.0: BAR 14: assigned [mem 0x600000000-0x6000fffff]
->      [    1.902707] pci 0000:01:00.0: BAR 0: assigned [mem 0x600000000-0x600001fff 64bit]
->      [    1.910279] pci 0000:00:00.0: PCI bridge to [bus 01]
->      [    1.915293] pci 0000:00:00.0:   bridge window [mem 0x600000000-0x6000fffff]
->      [    1.922412] pcieport 0000:00:00.0: enabling device (0000 -> 0002)
->      [    1.928633] pcieport 0000:00:00.0: PME: Signaling with IRQ 23
->      [    1.934609] pcieport 0000:00:00.0: AER: enabled with IRQ 23
->      [    1.940340] pci 0000:01:00.0: enabling device (0000 -> 0002)
->      [    6.946090] pci 0000:01:00.0: xHCI HW not ready after 5 sec (HC bug?) status = 0x1801
->      [    6.954026] pci 0000:01:00.0: quirk_usb_early_handoff+0x0/0x968 took 4896180 usecs
-> 
-> Please let me know what I can do to help.
+>
+> If the allocation attempt fails, what are the consequences?
 
-Could you please attach your .config so we can check a few things?
--- 
-Florian
+The gigantic page is not going to be returned to the system. The use
+will have to free some memory before returning them back to the
+system.
+
+>
+> What are the potential downsides to this change?  Why did we choose
+> __GFP_NORETRY in the first place?
+>
+> What happens if we try harder (eg, GFP_KERNEL)?
+
+MIchal answered this question, that it won't do much difference due to
+__GFP_THISNODE
