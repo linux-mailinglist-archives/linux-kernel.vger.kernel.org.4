@@ -2,92 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A08F6E12F7
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 18:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6443F6E12FB
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 19:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbjDMQ7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 12:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59348 "EHLO
+        id S229778AbjDMRAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 13:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjDMQ7f (ORCPT
+        with ESMTP id S229728AbjDMRAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 12:59:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0DDD59F9;
-        Thu, 13 Apr 2023 09:59:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 69BC864035;
-        Thu, 13 Apr 2023 16:59:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4F3DC433D2;
-        Thu, 13 Apr 2023 16:59:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681405173;
-        bh=bSkSu7wJY6E12OzsXzraNJfB/SMGar8eC+xZrs3OlPI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KqbhC+LEKt2Ua+orMMdfXcL18ruziKNhKLS3lM8nbujW159cmI7wEgKp2Ca04iFDX
-         1ZVKuI616uAVTOPTl1lgZxNvbuZ8l9x07alJP4D/tPdb9glEFip1eV/MzNiLNHBVJa
-         IkFJeukK81mc4BdKwm0BvE550kHSFAcpbUgGHJlJNsdN6LdbbTxxIdq6yp3FAE4Ws3
-         Mb04+184eVcJU3PWtr+nqlDhBvVmwoKLSDLAn1HHAcelheRJGjzraSCO+xFbXDMVzz
-         FLQKbMn6KToVDBDUDEkiXkGJUl3MxZMiqTuJmY8U3AHkUlpHmpbc2jvODu8lsiFkG3
-         MkKqkkoRSSYag==
-Date:   Thu, 13 Apr 2023 19:59:29 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Haiyang Zhang <haiyangz@microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Paul Rosswurm <paulros@microsoft.com>,
-        "olaf@aepfle.de" <olaf@aepfle.de>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        Long Li <longli@microsoft.com>,
-        "ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        Ajay Sharma <sharmaajay@microsoft.com>,
-        "hawk@kernel.org" <hawk@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V3,net-next, 2/4] net: mana: Refactor RX buffer
- allocation code to prepare for various MTU
-Message-ID: <20230413165929.GU17993@unreal>
-References: <1681334163-31084-1-git-send-email-haiyangz@microsoft.com>
- <1681334163-31084-3-git-send-email-haiyangz@microsoft.com>
- <20230413130428.GO17993@unreal>
- <PH7PR21MB3116194E8F7D56EB434B56A6CA989@PH7PR21MB3116.namprd21.prod.outlook.com>
- <20230413163059.GS17993@unreal>
- <20230413094003.3fa4cd8c@kernel.org>
+        Thu, 13 Apr 2023 13:00:22 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2096.outbound.protection.outlook.com [40.107.255.96])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E8DAD1B
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 10:00:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Nt73Ordig8I2fmxH8O0icn2ikuw2rGJsUpKYk+ZWZEGoY2fuNH6p82Wo4oj3OZbbeWPA6WOYPEdJZhKO9Ia7D/z2l/UCCtmeWxpbA44cIAVNbM7oq5NlYv3syT+BF/RN/WGThXFOZpXp+L9WsvAHUpdiiLoLNzXSxUWzpezpeSFNtKGheX0SwK0ciSskf1STD94s9v+GbFsgcjTPc93VT5810gRI3h8nlaybVvPidVFrsb0skRPn7ewJk3taAHSi6yj58k93QjJEskYMdv/et3MkyegF93G9xPM888eaa4p7f/l4VdNJqw9HEgN+R6jhXBhNGVRDfQ8j620CxyjMQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KIy2/Ql2VbmGn5JLo7/7JEGdi3FIBsu/zp0wLdA/Alc=;
+ b=a61M/7NkfWweWNlvK5XJznJ9qfA1LaaShkyU+89y1EZakuh/FN+3WXEP12VnEIiSQAnxzyQR8vdfi5kQlqXV1xPnlL8k9e2U4CR9Wf9F9Jr6M1YctiPhe9PdoA6g2l8j76A35UUNpLE8ns/5ob2U0/kd2s0OIux0HcgovhJcarVREeQc3UlPhA7f2mtA1H5H+57+mL4M4tZaOJBsqQlxeypvlkiAzxX9QvKEtBunAnPXP8bn1mJ2l3wokzbmWybCuFPbJiV1obCU7Bizuyn3h9PU8i3VqmCRGSPvXH//f9c3zHt0ob3pacLptUOzOi6GCxJIbLRRVnZD97ZcYRPR/A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KIy2/Ql2VbmGn5JLo7/7JEGdi3FIBsu/zp0wLdA/Alc=;
+ b=V74WlcxP36vDBl+aUvk356vZuVMP/GX7PO7kBDsXz3VEf/C6veqMeARJwXn881HKDgqyDpjM1ZX4YIPgZxpNdxNf+VCAzEFlWAE86khbgWhrt3QRn4SEQoRtXxI3prdwUGWSW7+Sezyqlf1FKQ9uaWLad19u0MVyETFoV+AR5ASvMqA/Gq1qd8rqNaYek/zwNqMDwPjkDLG1rwrLeKmTWc9fM1LXaopSD3thf/1llVZ1s6BM6ak5V5Oqby7tY5QavMG9yCiLa4V70h2WN37qIfrsJ0Qicdrf6D4nSjiIimD4Mu5VoKyhKdUdvOMHoXzJnHq4hvnH6MHLdriDu9aA+Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by SG2PR06MB5359.apcprd06.prod.outlook.com (2603:1096:4:1d7::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.34; Thu, 13 Apr
+ 2023 17:00:01 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::a3a1:af8e:be1e:437c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::a3a1:af8e:be1e:437c%6]) with mapi id 15.20.6277.038; Thu, 13 Apr 2023
+ 17:00:01 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
+Cc:     Yangtao Li <frank.li@vivo.com>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] f2fs: add has_enough_free_secs()
+Date:   Fri, 14 Apr 2023 00:59:51 +0800
+Message-Id: <20230413165951.54051-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR04CA0202.apcprd04.prod.outlook.com
+ (2603:1096:4:187::20) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230413094003.3fa4cd8c@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SG2PR06MB5359:EE_
+X-MS-Office365-Filtering-Correlation-Id: a6e58605-5212-4402-d8d1-08db3c408554
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Byv/3yeKOQ/GasG3lFGKB4f2G/0zMClEJWfnw5rmZGF9FxWrq8yypDGeoUdtd3duvuGGXXtBWHniKGzpUKyeDYtZo8mKU5hCjZRe0Zx8ApLqYSUqHghh59UEcvC6W0AnDeG/ojLruM3W/Q2Mj7qB9tBRep+1e3cKQPGW6zJ4HJDPG7rufIGGl//an7zs/22Qbr8jZVbmHBSGilqJ5fOQFImM5+Rlfd3qFkOazPhG7KnNHkgqoGsXUnbD3D6oWZlL7FhuEhs5QnZLXL1Y3bJXH84y10c0oiV9gBs1WRdfiqxCWgb/HkGPNx71lPabskmHpop9gPvTBrubJB4p5m3yGyL5vHS0nwA8g2zck32frd2eNYZuFIxapDqSgTkR1bGC7Ih/Kai9IhLdP/ihgX+s7RcE+b1qAFhu4EHW/LoYrpzRhieri45rf9tqJ3xlvljOLOh65zpfegZE7xq1rmyVH7PX9VNwJJxXEEopbf6flABAkQCBjjDGDN3F9rQRN0BusPenEGDTgGjmzP4RhwjA17MP1IxPOMbDsg6n+8CUTYYVu6VTDRO6eQEhqGLzaZkq347qH2pjpswq/M56Rud/hb5Ci1a4nYLLq+Hm2giX+CagiUv2COP3bebYD4n93ks8
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(39860400002)(136003)(376002)(396003)(451199021)(316002)(6506007)(1076003)(86362001)(186003)(6512007)(83380400001)(2616005)(36756003)(26005)(110136005)(6486002)(478600001)(52116002)(6666004)(4326008)(66476007)(2906002)(8676002)(41300700001)(8936002)(66946007)(66556008)(5660300002)(38100700002)(38350700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dPjYlz1nNKdq2nv0gPIs74X3554UGJlopip/m/QRgv6irXLufzZG7yyWxTaX?=
+ =?us-ascii?Q?PNktS0D2SksRVRu/pHGVCnJF88JA8xoldJZcatm39e2hT4jWKvAyWS/X01an?=
+ =?us-ascii?Q?9/qV3UylV8Xda2v7uErwqlYfB2CXbnx10WeoF2ejfp5w//Mmwsa027VJc1Gs?=
+ =?us-ascii?Q?yew5E2u94T9uNQeZxCH3+xthlvR+iOc/ZTm+aUvPsXFxTpk8hyrtjN9/JPsu?=
+ =?us-ascii?Q?LomFJX6K5SdJFPKv9HTqrcTJ2dcFu8QIQ9NoJ7sErZNZdq71zRT7jQpo7aoN?=
+ =?us-ascii?Q?bIso0X9XB/5bqytKk3CZO2yY6oYZjXdI2F3dJZ4S6jJE3OPDxj+VUvP8ntpN?=
+ =?us-ascii?Q?SzIrRFyF2QwdgZXZk5fNQDVw7z3RpwIuBewiLKBSyF/t0OH6HtqzdRG9BCZh?=
+ =?us-ascii?Q?Dc/4VlRoXLTFAYizqk+1mhaZO8tSdncOYrP4oC5JLWHAGwR29J61ayYENsPA?=
+ =?us-ascii?Q?NOHp1p2CP/Yx38KMQy2b5C4tqzry9i+qPzblCkcHjMEbtBYrFIvjUxgMb5n1?=
+ =?us-ascii?Q?v/6NCvJGD9K9Rb0i9XKJk3QqRj/W5oTgr6axRmWah1Q9D5+TrUJqV0G64RYv?=
+ =?us-ascii?Q?FsPS3ID58pQjel6pXUHl73uq0P2w5gwRcXvvBkPLxD3RhZwcR6SFVACIWX98?=
+ =?us-ascii?Q?mxooJfeOElW6Wk+hDLOlrokY8VRWAou70gqdUfepxT28WQPbxIhoUBU3/H18?=
+ =?us-ascii?Q?Xk76m/WDSl7UWT7PAOW6RZqKkUdFQHT5qPrUJiWFhbkYP3K9mBaFmnNkCtAY?=
+ =?us-ascii?Q?IkOq3VMIxYiC6CDdhac2aulec+KLqv4EzduwMv4ByDSZSwVqEGhH52zSco4i?=
+ =?us-ascii?Q?1dKxKlHwemO6d5p5lb9qY08DjlHOqgXeOb0I72OZewSzVYNNM2tYqIexM3+z?=
+ =?us-ascii?Q?T6b2FBO7noh3svdqbJQmJqkMp+YA6Qzid7xxuQTfcXYWGERvFKW5law5Z/gG?=
+ =?us-ascii?Q?f0XhKe28CaUjJgpeQZ+9Ta3IIXoOdLZCliSQTIoLt9/efZMEWxwiagVBSg5H?=
+ =?us-ascii?Q?el+9AY8A1qcVzfw79cLZsVB2b0fMIZAlV1qdK2FuygaKDkVg+zVkjjawcMrM?=
+ =?us-ascii?Q?xmN/NQxvk6Vd4KHzCrUxufjQCuOJM/ycSZj4MAwdpO08k+zbWiEC/oEvsYhs?=
+ =?us-ascii?Q?uUtCfedAngKtzre6U2tX1XuuhVx/kOQE5bUyaeVuvr9dJk4G5RFjpcopL5me?=
+ =?us-ascii?Q?Ub0amr9A7oxutCXPNpy+/0a36aiiHnHLmsu9usLpMQuXS41cK02z1cbU2baU?=
+ =?us-ascii?Q?duCMagctgdfJA6g7Capn8SLaKwkR7L0TlWxeY1ylt/ysbawEELDH8wOYMsjI?=
+ =?us-ascii?Q?Y2+V4tTiSlvV/5yUuUbvyjDjeKPOcA36fekgGlG3dzwnWzLEVvAxR8ou1ImK?=
+ =?us-ascii?Q?6+7zbyZz+vR00p3khxE8001vLfhHBS2/wB0g8LDhNWz0IFvojBcxSkVM56hN?=
+ =?us-ascii?Q?WNK+GRPbjJhlpeM7F9hOJcit4hvVZlbxbMjWIov/B1JCtcKChm5LkTCONLsq?=
+ =?us-ascii?Q?OTsmo90kF3GGWCz6/Vc9t/TUiavqQarfEPmBpm+DN6OJTKkiDKS31ZSl+GKB?=
+ =?us-ascii?Q?S8E0FUa0VrdNZa4CxgK8gbx6JOp5FiYviHqKCN9U?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a6e58605-5212-4402-d8d1-08db3c408554
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2023 17:00:01.7397
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pBhJzwYXQDCp1etCwiEsWd+Ql14HhuzQDCYue94MdLbf4HuSPQp9FsKy+qqqgaoCciZX/P+tWnwel+4XKHI/wQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB5359
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 09:40:03AM -0700, Jakub Kicinski wrote:
-> On Thu, 13 Apr 2023 19:30:59 +0300 Leon Romanovsky wrote:
-> > > So the page pool is optimized for the XDP, and that sentence is applicable to drivers
-> > > that have set up page pool for XDP optimization.  
-> > 
-> > "but it can fallback on the regular page allocator APIs."
-> 
-> The XDP thing is historic AFAIU, page_pool has been expanded to cover
-> all uses cases, and is "just better" (tm) than using page allocator
-> directly. Maybe we should update the doc.
+Replace !has_not_enough_free_secs w/ has_enough_free_secs.
+BTW avoid nested 'if' statements in f2fs_balance_fs().
 
-The last sentence is always true :)
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+ fs/f2fs/gc.c      |  2 +-
+ fs/f2fs/segment.c | 43 ++++++++++++++++++++++---------------------
+ fs/f2fs/segment.h |  8 +++++++-
+ 3 files changed, 30 insertions(+), 23 deletions(-)
+
+diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+index c748cdfb0501..79a7b4e31672 100644
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -1872,7 +1872,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+ 		sbi->cur_victim_sec = NULL_SEGNO;
+ 
+ 	if (gc_control->init_gc_type == FG_GC ||
+-	    !has_not_enough_free_secs(sbi,
++	    has_enough_free_secs(sbi,
+ 				(gc_type == FG_GC) ? sec_freed : 0, 0)) {
+ 		if (gc_type == FG_GC && sec_freed < gc_control->nr_free_secs)
+ 			goto go_gc_more;
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index 82430f80c5da..c35476b3c075 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -412,27 +412,28 @@ void f2fs_balance_fs(struct f2fs_sb_info *sbi, bool need)
+ 	 * We should do GC or end up with checkpoint, if there are so many dirty
+ 	 * dir/node pages without enough free segments.
+ 	 */
+-	if (has_not_enough_free_secs(sbi, 0, 0)) {
+-		if (test_opt(sbi, GC_MERGE) && sbi->gc_thread &&
+-					sbi->gc_thread->f2fs_gc_task) {
+-			DEFINE_WAIT(wait);
+-
+-			prepare_to_wait(&sbi->gc_thread->fggc_wq, &wait,
+-						TASK_UNINTERRUPTIBLE);
+-			wake_up(&sbi->gc_thread->gc_wait_queue_head);
+-			io_schedule();
+-			finish_wait(&sbi->gc_thread->fggc_wq, &wait);
+-		} else {
+-			struct f2fs_gc_control gc_control = {
+-				.victim_segno = NULL_SEGNO,
+-				.init_gc_type = BG_GC,
+-				.no_bg_gc = true,
+-				.should_migrate_blocks = false,
+-				.err_gc_skipped = false,
+-				.nr_free_secs = 1 };
+-			f2fs_down_write(&sbi->gc_lock);
+-			f2fs_gc(sbi, &gc_control);
+-		}
++	if (has_enough_free_secs(sbi, 0, 0))
++		return;
++
++	if (test_opt(sbi, GC_MERGE) && sbi->gc_thread &&
++				sbi->gc_thread->f2fs_gc_task) {
++		DEFINE_WAIT(wait);
++
++		prepare_to_wait(&sbi->gc_thread->fggc_wq, &wait,
++					TASK_UNINTERRUPTIBLE);
++		wake_up(&sbi->gc_thread->gc_wait_queue_head);
++		io_schedule();
++		finish_wait(&sbi->gc_thread->fggc_wq, &wait);
++	} else {
++		struct f2fs_gc_control gc_control = {
++			.victim_segno = NULL_SEGNO,
++			.init_gc_type = BG_GC,
++			.no_bg_gc = true,
++			.should_migrate_blocks = false,
++			.err_gc_skipped = false,
++			.nr_free_secs = 1 };
++		f2fs_down_write(&sbi->gc_lock);
++		f2fs_gc(sbi, &gc_control);
+ 	}
+ }
+ 
+diff --git a/fs/f2fs/segment.h b/fs/f2fs/segment.h
+index ac2e35170f2d..2ca8fb5d0dc4 100644
+--- a/fs/f2fs/segment.h
++++ b/fs/f2fs/segment.h
+@@ -643,11 +643,17 @@ static inline bool has_not_enough_free_secs(struct f2fs_sb_info *sbi,
+ 	return !curseg_space;
+ }
+ 
++static inline bool has_enough_free_secs(struct f2fs_sb_info *sbi,
++					int freed, int needed)
++{
++	return !has_not_enough_free_secs(sbi, freed, needed);
++}
++
+ static inline bool f2fs_is_checkpoint_ready(struct f2fs_sb_info *sbi)
+ {
+ 	if (likely(!is_sbi_flag_set(sbi, SBI_CP_DISABLED)))
+ 		return true;
+-	if (likely(!has_not_enough_free_secs(sbi, 0, 0)))
++	if (likely(has_enough_free_secs(sbi, 0, 0)))
+ 		return true;
+ 	return false;
+ }
+-- 
+2.35.1
+
