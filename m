@@ -2,76 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C70E6E04C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 04:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47BC16E04E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 04:53:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231436AbjDMCmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 22:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
+        id S229997AbjDMCxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 22:53:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjDMClo (ORCPT
+        with ESMTP id S229733AbjDMCxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 22:41:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD38D6EA1;
-        Wed, 12 Apr 2023 19:39:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 12 Apr 2023 22:53:47 -0400
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2F52D68;
+        Wed, 12 Apr 2023 19:53:34 -0700 (PDT)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F20263ABE;
-        Thu, 13 Apr 2023 02:38:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AA1EC433D2;
-        Thu, 13 Apr 2023 02:38:36 +0000 (UTC)
-Date:   Wed, 12 Apr 2023 22:38:35 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Lin Yu Chen <starpt.official@gmail.com>, corbet@lwn.net,
-        mhiramat@kernel.org, mark.rutland@arm.com,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH] docs: trace: Fix typo in ftrace.rst
-Message-ID: <20230412223835.3da23ab5@gandalf.local.home>
-In-Reply-To: <4b17c67c-4b3d-4326-37e7-949a08d03f55@gmail.com>
-References: <20230412183739.89894-1-starpt.official@gmail.com>
-        <4b17c67c-4b3d-4326-37e7-949a08d03f55@gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4PxkN03xR9z9sps;
+        Thu, 13 Apr 2023 04:40:48 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mariushoch.de;
+        s=MBO0001; t=1681353648;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Nzv5St2LkPkiUBI6mDf96N5hsFtzefwwnleNs4L5yxQ=;
+        b=OhtXS1XDbEN5LZ4wYMksGpJgmdzoXmXscrfyibQFLTV/SY+dN0NopHlBaCroT1f5eEhQd8
+        VCfN1MNVQ3oo1Ox5Qfu5DO5QGGd3L2gKepsYPH29LJGP7nl06X7fQQ96zqN5QyF/mXUZOb
+        m9GPOs/w23FR404liYbsPGuPjX5ILYCDF6mxt9Wz1L9elsnbIVrMbDh0c4K+bDIDqUOxAu
+        aQ+2SNc+WmEPN+YXmr7zvEN9/ApvD0IDSEPZh1/yXJOci9NnvndV5ZLmqZYIKZkDU5pGcB
+        lJCzBzjAR/59NI/et5/77sipu9WtWDNrWifuL6mr9sgDKlpWjdD85/bjSuNssQ==
+From:   Marius Hoch <mail@mariushoch.de>
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Marius Hoch <mail@mariushoch.de>
+Subject: [PATCH v2 0/6] iio: st_sensors: Add lsm303d support
+Date:   Thu, 13 Apr 2023 04:40:07 +0200
+Message-Id: <20230413024013.450165-1-mail@mariushoch.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 4PxkN03xR9z9sps
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 13 Apr 2023 09:19:12 +0700
-Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+Hi!
 
-> On 4/13/23 01:37, Lin Yu Chen wrote:
-> > There is a typo in the sentence "A kernel developer must be
-> > conscience ...". The word conscience should be conscious.
-> > This patch fixes it.
-> >   
-> 
-> Please don't say "This patch does foo".
+This patch series adds support for the LSM303D accelerometer and
+magnetometer. As the LSM303D is basically, as far as I can tell,
+the LSM9DS0 without gyroscope, we can easily re-use its definitions.
 
-Yes, that part can be left out.
+This was tested on a Lenovo Yoga Tablet 2 1051-F.
 
->  
-> > -waste it in functions. A kernel developer must be conscience of
-> > +waste it in functions. A kernel developer must be conscious of  
-> 
-> Alternatively, what about "aware of"?
-> 
+Cheers,
+Marius
 
-As the author of this document, and the one that doesn't have a conscience
-about using conscious correctly, I approve of Lin Yu's change.
+Marius Hoch (6):
+  iio: accel: st_accel: Add LSM303D
+  iio: magnetometer: st_accel: Add LSM303D
+  iio: st_sensors: Add lsm303d support to the LSM9DS0 IMU driver
+  iio: st_sensors: Add ACPI support for lsm303d to the LSM9DS0 IMU
+    driver
+  iio: Comment that the LSM303D also has the Magnetometer DRDY
+  dt-bindings: iio: st-sensors: Add LSM303D accelerometer+magnetometer
 
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+ .../devicetree/bindings/iio/st,st-sensors.yaml    |  1 +
+ drivers/iio/accel/st_accel_core.c                 |  1 +
+ drivers/iio/imu/st_lsm9ds0/Kconfig                |  3 ++-
+ drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_i2c.c       | 15 +++++++++++++++
+ drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_spi.c       | 15 +++++++++++++++
+ drivers/iio/magnetometer/st_magn_core.c           |  1 +
+ include/linux/iio/common/st_sensors.h             |  1 +
+ include/linux/platform_data/st_sensors_pdata.h    |  2 +-
+ 8 files changed, 37 insertions(+), 2 deletions(-)
 
-Thanks!
 
--- Steve
+base-commit: e62252bc55b6d4eddc6c2bdbf95a448180d6a08d
+-- 
+2.39.2
+
