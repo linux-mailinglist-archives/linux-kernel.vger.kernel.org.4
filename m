@@ -2,101 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAE086E08AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 10:12:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 778706E07BE
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 09:31:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230323AbjDMIMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 04:12:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53020 "EHLO
+        id S229895AbjDMHbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 03:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230293AbjDMIMd (ORCPT
+        with ESMTP id S229853AbjDMHbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 04:12:33 -0400
-X-Greylist: delayed 1805 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 13 Apr 2023 01:12:31 PDT
-Received: from m13101.mail.163.com (m13101.mail.163.com [220.181.13.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 826BE5FC6;
-        Thu, 13 Apr 2023 01:12:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
-        Message-ID; bh=E6HHa+EW/H7LizN+yMuSv+QRz6F6NX0Zorf2OBzHy54=; b=X
-        fGT9eq8gVNZJF83gDEX/sJkbVs2gMUMDsYBH984AmRAjQZ0uSEV7Il+HhYsMjY9S
-        6s+anbaqIrn0yBV2jMe9Cyz/McF6YHz8aYDLU+bZSXHTa5cT5IXbgLucWbsGTUmT
-        R1U1TUpVqRM6KTO3lfLjd0J19ZZf8QPih4uMtovegc=
-Received: from slark_xiao$163.com ( [223.104.77.216] ) by
- ajax-webmail-wmsvr101 (Coremail) ; Thu, 13 Apr 2023 15:25:35 +0800 (CST)
-X-Originating-IP: [223.104.77.216]
-Date:   Thu, 13 Apr 2023 15:25:35 +0800 (CST)
-From:   "Slark Xiao" <slark_xiao@163.com>
-To:     "Loic Poulain" <loic.poulain@linaro.org>
-Cc:     ryazanov.s.a@gmail.com, johannes@sipsolutions.net,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re:Re: [PATCH net] wwan: core: add print for wwan port
- attach/disconnect
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20230109(dcb5de15)
- Copyright (c) 2002-2023 www.mailtech.cn 163com
-In-Reply-To: <CAMZdPi9gHzPaKcwoRR8-gQtiSxQupL=QickXqNE2owVs-nOrxg@mail.gmail.com>
-References: <20230412114402.1119956-1-slark_xiao@163.com>
- <CAMZdPi9gHzPaKcwoRR8-gQtiSxQupL=QickXqNE2owVs-nOrxg@mail.gmail.com>
-X-NTES-SC: AL_QuyTA/+cv08o4ymYZekXnkoShO85W8a1s/0m3INTOZ00vSvMyB06cUJOPWP1+96CGguSjSWSXihHzP9Xb4xTQZMDrenJFR7PT2MY6idbEuep
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
-MIME-Version: 1.0
-Message-ID: <5372bdf6.533d.1877981651f.Coremail.slark_xiao@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: ZcGowACnxsJvrjdk420JAA--.30659W
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiMA9QZFWB1j9fjwAAsm
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Thu, 13 Apr 2023 03:31:15 -0400
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3824B59D2
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 00:31:14 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R421e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0Vg-SPvB_1681371070;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Vg-SPvB_1681371070)
+          by smtp.aliyun-inc.com;
+          Thu, 13 Apr 2023 15:31:11 +0800
+Message-ID: <1681370820.0675354-2-xuanzhuo@linux.alibaba.com>
+Subject: Re: [PATCH net-next V2 2/2] virtio-net: sleep instead of busy waiting for cvq command
+Date:   Thu, 13 Apr 2023 15:27:00 +0800
+From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, maxime.coquelin@redhat.com,
+        alvaro.karsz@solid-run.com, eperezma@redhat.com,
+        david.marchand@redhat.com, mst@redhat.com, jasowang@redhat.com
+References: <20230413064027.13267-1-jasowang@redhat.com>
+ <20230413064027.13267-3-jasowang@redhat.com>
+In-Reply-To: <20230413064027.13267-3-jasowang@redhat.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-QXQgMjAyMy0wNC0xMyAxNTowNzoyMSwgIkxvaWMgUG91bGFpbiIgPGxvaWMucG91bGFpbkBsaW5h
-cm8ub3JnPiB3cm90ZToKPk9uIFdlZCwgMTIgQXByIDIwMjMgYXQgMTM6NDUsIFNsYXJrIFhpYW8g
-PHNsYXJrX3hpYW9AMTYzLmNvbT4gd3JvdGU6Cj4+Cj4+IFJlZmVyIHRvIFVTQiBzZXJpYWwgZGV2
-aWNlIG9yIG5ldCBkZXZpY2UsIHRoZXJlIGlzIG5vdGljZSB0bwo+PiBsZXQgZW5kIHVzZXIga25v
-dyB0aGUgc3RhdHVzIG9mIGRldmljZSwgbGlrZSBhdHRhY2hlZCBvcgo+PiBkaXNjb25uZWN0ZWQu
-IEFkZCBhdHRhY2gvZGlzY29ubmVjdCBwcmludCBmb3Igd3dhbiBkZXZpY2UgYXMKPj4gd2VsbC4g
-VGhpcyBjaGFuZ2Ugd29ya3MgZm9yIE1ISSBkZXZpY2UgYW5kIFVTQiBkZXZpY2UuCj4KPlRoaXMg
-Y2hhbmdlIHdvcmtzIGZvciB3d2FuIHBvcnQgZGV2aWNlcywgd2hhdGV2ZXIgdGhlIGJ1cyBpcy4K
-PgpTdXJlLiBTaW5jZSB3d2FuIHN1cHBvcnQgVVNCIGRldmljZSBhcyB3ZWxsIGFmdGVyIGludGVn
-cmF0aW5nCldXQU4gZnJhbWV3b3JrIGludG8gY2RjLXdkbS4KPj4KPj4gU2lnbmVkLW9mZi1ieTog
-U2xhcmsgWGlhbyA8c2xhcmtfeGlhb0AxNjMuY29tPgo+PiAtLS0KPj4gIGRyaXZlcnMvbmV0L3d3
-YW4vd3dhbl9jb3JlLmMgfCA1ICsrKysrCj4+ICAxIGZpbGUgY2hhbmdlZCwgNSBpbnNlcnRpb25z
-KCspCj4+Cj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL25ldC93d2FuL3d3YW5fY29yZS5jIGIvZHJp
-dmVycy9uZXQvd3dhbi93d2FuX2NvcmUuYwo+PiBpbmRleCAyZTFjMDFjZjAwYTkuLmQzYWM2YzVi
-MGIyNiAxMDA2NDQKPj4gLS0tIGEvZHJpdmVycy9uZXQvd3dhbi93d2FuX2NvcmUuYwo+PiArKysg
-Yi9kcml2ZXJzL25ldC93d2FuL3d3YW5fY29yZS5jCj4+IEBAIC00OTIsNiArNDkyLDggQEAgc3Ry
-dWN0IHd3YW5fcG9ydCAqd3dhbl9jcmVhdGVfcG9ydChzdHJ1Y3QgZGV2aWNlICpwYXJlbnQsCj4+
-ICAgICAgICAgaWYgKGVycikKPj4gICAgICAgICAgICAgICAgIGdvdG8gZXJyb3JfcHV0X2Rldmlj
-ZTsKPj4KPj4gKyAgICAgICBkZXZfaW5mbygmd3dhbmRldi0+ZGV2LCAiJXMgY29udmVydGVyIG5v
-dyBhdHRhY2hlZCB0byAlc1xuIiwKPj4gKyAgICAgICAgICAgICAgICB3d2FuX3BvcnRfZGV2X3R5
-cGUubmFtZSwgcG9ydC0+ZGV2LmtvYmoubmFtZSk7Cj4KPllvdSBzaG91bGQgdXNlIGBkZXZfbmFt
-ZSgpYCBpbnN0ZWFkIG9mIGRpcmVjdCByZWZlcmVuY2UgdG8ga29iai4KPgpXaWxsIHVwZGF0ZSB0
-aGlzIGluIHYyLgo+V2h5ICdjb252ZXJ0ZXInID8gSWYgeW91IHJlYWxseSB3YW50IHRvIHByaW50
-LCBpdCBzaG91bGQgYmUgc29tZXRoaW5nIGxpa2U6Cj53d2FuMDogd3dhbjBhdDEgcG9ydCBhdHRh
-Y2hlZApUaGlzIHJlZmVyIHRvIFVTQiBkZXZpY2UgYXR0YWNoZWQgaW5mbzoKICA2OTYuNDQ0NTEx
-XSB1c2IgMi0zOiBHU00gbW9kZW0gKDEtcG9ydCkgY29udmVydGVyIG5vdyBhdHRhY2hlZCB0byB0
-dHlVU0IwClsgIDY5Ni40NDQ4NzddIHVzYiAyLTM6IEdTTSBtb2RlbSAoMS1wb3J0KSBjb252ZXJ0
-ZXIgbm93IGF0dGFjaGVkIHRvIHR0eVVTQjEKWyAgNjk2LjQ0NTA2NV0gdXNiIDItMzogR1NNIG1v
-ZGVtICgxLXBvcnQpIGNvbnZlcnRlciBub3cgYXR0YWNoZWQgdG8gdHR5VVNCMgpjdXJyZW50bHks
-IHdlIHdpbGwgcHJpbnQgaXQgYXMgYmVsb3cgd2l0aCBhYm92ZSBwYXRjaDoKWyAgMjMzLjE5MjEy
-M10gd3dhbiB3d2FuMDogd3dhbl9wb3J0IGNvbnZlcnRlciBub3cgYXR0YWNoZWQgdG8gd3dhbjBt
-YmltMApbICA2OTQuNTMwNzgxXSB3d2FuIHd3YW4wOiB3d2FuX3BvcnQgY29udmVydGVyIG5vdyBk
-aXNjb25uZWN0ZWQgZnJvbSB3d2FuMG1iaW0wCj4KPj4gICAgICAgICByZXR1cm4gcG9ydDsKPj4K
-Pj4gIGVycm9yX3B1dF9kZXZpY2U6Cj4+IEBAIC01MTcsNiArNTE5LDkgQEAgdm9pZCB3d2FuX3Jl
-bW92ZV9wb3J0KHN0cnVjdCB3d2FuX3BvcnQgKnBvcnQpCj4+Cj4+ICAgICAgICAgc2tiX3F1ZXVl
-X3B1cmdlKCZwb3J0LT5yeHEpOwo+PiAgICAgICAgIGRldl9zZXRfZHJ2ZGF0YSgmcG9ydC0+ZGV2
-LCBOVUxMKTsKPj4gKwo+PiArICAgICAgIGRldl9pbmZvKCZ3d2FuZGV2LT5kZXYsICIlcyBjb252
-ZXJ0ZXIgbm93IGRpc2Nvbm5lY3RlZCBmcm9tICVzXG4iLAo+PiArICAgICAgICAgICAgICAgIHd3
-YW5fcG9ydF9kZXZfdHlwZS5uYW1lLCBwb3J0LT5kZXYua29iai5uYW1lKTsKPj4gICAgICAgICBk
-ZXZpY2VfdW5yZWdpc3RlcigmcG9ydC0+ZGV2KTsKPj4KPj4gICAgICAgICAvKiBSZWxlYXNlIHJl
-bGF0ZWQgd3dhbiBkZXZpY2UgKi8KPj4gLS0KPj4gMi4zNC4xCj4+Cj4KPlJlZ2FyZHMsCj5Mb2lj
-Cg==
+On Thu, 13 Apr 2023 14:40:27 +0800, Jason Wang <jasowang@redhat.com> wrote:
+> We used to busy waiting on the cvq command this tends to be
+> problematic since there no way for to schedule another process which
+> may serve for the control virtqueue. This might be the case when the
+> control virtqueue is emulated by software. This patch switches to use
+> completion to allow the CPU to sleep instead of busy waiting for the
+> cvq command.
+>
+> Signed-off-by: Jason Wang <jasowang@redhat.com>
+> ---
+> Changes since V1:
+> - use completion for simplicity
+> - don't try to harden the CVQ command which requires more thought
+> Changes since RFC:
+> - break the device when timeout
+> - get buffer manually since the virtio core check more_used() instead
+> ---
+>  drivers/net/virtio_net.c | 21 ++++++++++++++-------
+>  1 file changed, 14 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 2e56bbf86894..d3eb8fd6c9dc 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -19,6 +19,7 @@
+>  #include <linux/average.h>
+>  #include <linux/filter.h>
+>  #include <linux/kernel.h>
+> +#include <linux/completion.h>
+>  #include <net/route.h>
+>  #include <net/xdp.h>
+>  #include <net/net_failover.h>
+> @@ -295,6 +296,8 @@ struct virtnet_info {
+>
+>  	/* failover when STANDBY feature enabled */
+>  	struct failover *failover;
+> +
+> +	struct completion completion;
+>  };
+>
+>  struct padded_vnet_hdr {
+> @@ -1709,6 +1712,13 @@ static bool try_fill_recv(struct virtnet_info *vi, struct receive_queue *rq,
+>  	return !oom;
+>  }
+>
+> +static void virtnet_cvq_done(struct virtqueue *cvq)
+> +{
+> +	struct virtnet_info *vi = cvq->vdev->priv;
+> +
+> +	complete(&vi->completion);
+> +}
+> +
+>  static void skb_recv_done(struct virtqueue *rvq)
+>  {
+>  	struct virtnet_info *vi = rvq->vdev->priv;
+> @@ -2169,12 +2179,8 @@ static bool virtnet_send_command(struct virtnet_info *vi, u8 class, u8 cmd,
+>  	if (unlikely(!virtqueue_kick(vi->cvq)))
+>  		return vi->ctrl->status == VIRTIO_NET_OK;
+>
+> -	/* Spin for a response, the kick causes an ioport write, trapping
+> -	 * into the hypervisor, so the request should be handled immediately.
+> -	 */
+> -	while (!virtqueue_get_buf(vi->cvq, &tmp) &&
+> -	       !virtqueue_is_broken(vi->cvq))
+> -		cpu_relax();
+> +	wait_for_completion(&vi->completion);
+> +	virtqueue_get_buf(vi->cvq, &tmp);
+>
+>  	return vi->ctrl->status == VIRTIO_NET_OK;
+>  }
+> @@ -3672,7 +3678,7 @@ static int virtnet_find_vqs(struct virtnet_info *vi)
+>
+>  	/* Parameters for control virtqueue, if any */
+>  	if (vi->has_cvq) {
+> -		callbacks[total_vqs - 1] = NULL;
+> +		callbacks[total_vqs - 1] = virtnet_cvq_done;
+
+This depends the interrupt, right?
+
+I worry that there may be some devices that may not support interruption on cvq.
+Although this may not be in line with SPEC, it may cause problem on the devices
+that can work normally at present.
+
+Thanks.
+
+
+>  		names[total_vqs - 1] = "control";
+>  	}
+>
+> @@ -4122,6 +4128,7 @@ static int virtnet_probe(struct virtio_device *vdev)
+>  	if (vi->has_rss || vi->has_rss_hash_report)
+>  		virtnet_init_default_rss(vi);
+>
+> +	init_completion(&vi->completion);
+>  	enable_rx_mode_work(vi);
+>
+>  	/* serialize netdev register + virtio_device_ready() with ndo_open() */
+> --
+> 2.25.1
+>
