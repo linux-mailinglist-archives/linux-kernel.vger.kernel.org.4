@@ -2,108 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AA756E1436
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 20:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C4BB6E1439
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 20:38:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbjDMShH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 14:37:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56104 "EHLO
+        id S229738AbjDMSiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 14:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjDMShF (ORCPT
+        with ESMTP id S229597AbjDMSiu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 14:37:05 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17A97AB0;
-        Thu, 13 Apr 2023 11:37:02 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id ud9so39543837ejc.7;
-        Thu, 13 Apr 2023 11:37:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681411021; x=1684003021;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ctjyu73iM54aIyhlbCG/deKG/CTsP8kAywi8XWV3uyI=;
-        b=OA4zI3Uq/q5iAEVUQDYMIt2ftZ72Y3PEesQ3ZnQbkiO1nXrM2v/+xv14KbO86QfJF2
-         KStCCliQ4dXztgQa1hVtVmqCS+2s0X/8kN7OfqiTph9SynNXPanELDUmg2eZEoX5MbCO
-         zI8W4RMkc8NZMhzmvVSy6EF43NI0yXTn9LQWUcIcLi+Y9ZuDbMCiCShWhBiFEyFZlPx+
-         IllgFY2zc3TM8h00+q/QRA3v81ANYuwdi+jJg69HsgnoJiKYN2jq7T8qMi3u2oqmKEyO
-         ka3wfkSrvzwh35aUsCAMmytOqqx9HI/DOXDpO1EUcNCEn2vAHZsNRTxGyi+doJ2h6RI7
-         BYTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681411021; x=1684003021;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ctjyu73iM54aIyhlbCG/deKG/CTsP8kAywi8XWV3uyI=;
-        b=d7e4Duvy/73gObUvm3hp6Hu4AxVmIqeBOh0CJkB2ZkdTzNBWEewVUStJso2xfTKjd9
-         uIOPlBu2PVqtLnmnEySj5jiPWdXkA+rFzogYeZDf6/xAcsfwuoJ2RykdHAe+mIkBSHCI
-         HQeXcnGHpmM/xedHfVjGIRzO7EqdEoxL6+DNtgkFWxYJ0IafEa3WMBGW2n7jwhLUI8jx
-         4avMVLq4Gj61tv8rSc3MFJrlfC43pgykvEGTKxOUHCBBK9EBlihSTFPQzdR/reg9rS1l
-         20lQp0q7gRQD7t2z0Kv2nG8e0Hi3gkfvE4WM1CE5pxaB8//sPdfdcoVxB6U4ltWO0Ec+
-         OboA==
-X-Gm-Message-State: AAQBX9f0/F4gfDkp1UkYhxdz2Iu0QtlVpEr+CiSdKT+jSKMAGRRIqdcZ
-        kVW0eXtRMdQRVLYl7Zwwqnk0fmDfsg==
-X-Google-Smtp-Source: AKy350bW9uOb3WYUA3v/brxo+veLe07VYr/JDy+8LcWabxZ1ztGNMbox44ItKnSuTbK7wm7zGKYm6Q==
-X-Received: by 2002:a17:907:20b2:b0:94e:6b12:caab with SMTP id pw18-20020a17090720b200b0094e6b12caabmr3593954ejb.51.1681411021214;
-        Thu, 13 Apr 2023 11:37:01 -0700 (PDT)
-Received: from p183 ([46.53.248.76])
-        by smtp.gmail.com with ESMTPSA id mh21-20020a170906eb9500b0094e4d197160sm1281817ejb.202.2023.04.13.11.37.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 11:37:00 -0700 (PDT)
-Date:   Thu, 13 Apr 2023 21:36:58 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Chunguang Wu <aman2008@qq.com>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH] fs/proc: add Kthread flag to /proc/$pid/status
-Message-ID: <59774223-680e-4b64-87ea-ab7e524be369@p183>
-References: <tencent_3E1CBD85D91AD4CDDCB5F429A3948EB94306@qq.com>
- <20230412141216.c8f2c1313f34ee0100ac9ae4@linux-foundation.org>
+        Thu, 13 Apr 2023 14:38:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE02940E7;
+        Thu, 13 Apr 2023 11:38:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 46B26640CF;
+        Thu, 13 Apr 2023 18:38:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BBE7C433EF;
+        Thu, 13 Apr 2023 18:38:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681411128;
+        bh=dzjuCgvj32gFNE1zyb8VjhG7HjDoQx2QthY/c2I2Lpg=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=iwJvM8gYpu2NK3VPMKGHwKdDmGZiFn5eJ3XrHZUH00mPtJ5Cum9Rb/YsWI2GCjjxh
+         +037VF3OBpkjeEqhoutZ7cvsZSPH1tAVQsOwLf2FkUcI/MoD2BU/BJMdrnn1Egx245
+         aWZ1RLbknn9BvgxDVUI5cC7yn+oz8f59i6+/9588tFGnaZpiD7lg8o+KDhPmZs4cB2
+         uNj/Mww9nsbepDK6X1rV81xlz+yiBTr4Uso9tGeaAxNTbypavIAArg5Z4VpQqeEUj6
+         td2BEgRsAuRxsqzGoNJY9gBCntBELonP42VwdDhR0gVC5wOxkPRwreWM/gkpU/IP24
+         tw52FMK+b25Mw==
+Message-ID: <d70886f6ee13e70845a72354fe9a2b7d.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230412141216.c8f2c1313f34ee0100ac9ae4@linux-foundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <4ed4d0e6-8da5-7eef-8713-44854b8d4a9b@starfivetech.com>
+References: <20230411135558.44282-1-xingyu.wu@starfivetech.com> <20230411135558.44282-8-xingyu.wu@starfivetech.com> <683cbe934d1df9436e003466d2a419ef.sboyd@kernel.org> <463ee23c-f617-bed0-27a8-56c6fb40d092@starfivetech.com> <cd4a11ae65e186799145410969d40421.sboyd@kernel.org> <4ed4d0e6-8da5-7eef-8713-44854b8d4a9b@starfivetech.com>
+Subject: Re: [PATCH v4 07/10] clk: starfive: Add StarFive JH7110 Video-Output clock driver
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+To:     Conor Dooley <conor@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Xingyu Wu <xingyu.wu@starfivetech.com>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org
+Date:   Thu, 13 Apr 2023 11:38:45 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 02:12:16PM -0700, Andrew Morton wrote:
-> On Wed, 12 Apr 2023 22:34:02 +0800 Chunguang Wu <aman2008@qq.com> wrote:
-> 
-> > user can know that a process is kernel thread or not.
-> > 
-> > ...
-> >
-> > --- a/fs/proc/array.c
-> > +++ b/fs/proc/array.c
-> > @@ -434,6 +434,12 @@ int proc_pid_status(struct seq_file *m, struct pid_namespace *ns,
-> >  
-> >  	task_state(m, ns, pid, task);
-> >  
-> > +	if ((mm == NULL) || (task->flags & PF_KTHREAD)) {
-> > +		seq_puts(m, "Kthread:\tYes\n");
-> > +	} else {
-> > +		seq_puts(m, "Kthread:\tNo\n");
-> > +	}
+Quoting Xingyu Wu (2023-04-13 06:31:12)
+> On 2023/4/13 12:04, Stephen Boyd wrote:
+> > diff --git a/drivers/clk/starfive/clk-starfive-jh7110-sys.c b/drivers/c=
+lk/starfive/clk-starfive-jh7110-sys.c
+> > index 5ec210644e1d..851b93d0f371 100644
+> > --- a/drivers/clk/starfive/clk-starfive-jh7110-sys.c
+> > +++ b/drivers/clk/starfive/clk-starfive-jh7110-sys.c
+> > @@ -11,6 +11,9 @@
+> >  #include <linux/init.h>
+> >  #include <linux/io.h>
+> >  #include <linux/platform_device.h>
+> > +#include <linux/slab.h>
+> > +
+> > +#include <soc/starfive/reset-starfive-jh71x0.h>
+> > =20
+> >  #include <dt-bindings/clock/starfive,jh7110-crg.h>
+> > =20
+> > @@ -335,26 +338,32 @@ static void jh7110_reset_unregister_adev(void *_a=
+dev)
+> >       struct auxiliary_device *adev =3D _adev;
+> > =20
+> >       auxiliary_device_delete(adev);
+> > +     auxiliary_device_uninit(adev);
+> >  }
+> > =20
+> >  static void jh7110_reset_adev_release(struct device *dev)
+> >  {
+> >       struct auxiliary_device *adev =3D to_auxiliary_dev(dev);
+> > +     struct jh71x0_reset_adev *rdev =3D to_jh71x0_reset_adev(adev);
+> > =20
+> > -     auxiliary_device_uninit(adev);
+> > +     kfree(rdev);
+> >  }
+> > =20
+> >  int jh7110_reset_controller_register(struct jh71x0_clk_priv *priv,
+> >                                    const char *adev_name,
+> >                                    u32 adev_id)
+> >  {
+> > +     struct jh71x0_reset_adev *rdev;
+> >       struct auxiliary_device *adev;
+> >       int ret;
+> > =20
+> > -     adev =3D devm_kzalloc(priv->dev, sizeof(*adev), GFP_KERNEL);
+> > -     if (!adev)
+> > +     rdev =3D kzalloc(sizeof(*rdev), GFP_KERNEL);
+>=20
+> Can there use 'devm_kzalloc'? Are you not using this because the struct i=
+s public and clock driver
+> and reset driver both use it. But I think the both clock driver and reset=
+ driver are the same
+> device and can use 'devm_kzalloc'.
 
-"mm" check is redundant. PF_KTHREAD should be enough.
-If you're doing this, just print 0/1. 
-
-> >  	if (mm) {
-> >  		task_mem(m, mm);
-> >  		task_core_dumping(m, task);
-> 
-> Well..   Why is this information useful?
-
-I want to add: for a shell script.
-Real programs can read /proc/*/stat .
-
-> What is the use case?
-> 
-> There are many ways of working this out from the existing output - why
-> is this change required?
+No. The release function for the auxiliary_device is supposed to free
+the memory. It shouldn't be tied to the lifetime of anything like the
+lifetime of the clk driver being bound.
