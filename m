@@ -2,100 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 742BE6E0B04
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 12:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55C5D6E0B05
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 12:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbjDMKHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 06:07:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55426 "EHLO
+        id S230019AbjDMKHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 06:07:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjDMKG6 (ORCPT
+        with ESMTP id S229888AbjDMKHx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 06:06:58 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3131C7285;
-        Thu, 13 Apr 2023 03:06:54 -0700 (PDT)
-Received: (Authenticated sender: kamel.bouhara@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 2955EE000B;
-        Thu, 13 Apr 2023 10:06:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1681380413;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Thu, 13 Apr 2023 06:07:53 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561317AB3
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:07:52 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id DA9462188C;
+        Thu, 13 Apr 2023 10:07:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1681380470; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=st4qOHiye8rh9wqwQDVyg+uFBmH5X7ITDgsye87N3g4=;
-        b=Qb00LY/g3Bucveqz/5gM1XOjLEV9wlcJTs/BegrboLcmNrmf+/QW5X+4ugFFt/cQjkGowt
-        wHxIZiFqH9CDYX/Cm3/Oqz4Vqhb4aZWAC60b18nKtAo8W4EX+sbSsRMfa6CWkWnGEYR8a2
-        Oe1/iwkudW/uIQPRdaIJrnX97MTXTPJUQ/8JjvM0+sn9dQP50tPLhr3uHz0aDytteV8su1
-        mOHOVoNXyKfjPgx52zmz8W9aKk0tSbHKYBApGORN8br3zrK3S3Y4BqtJFTGnDa/ilIskIP
-        ZD+HQXZQL+8GH84PuX2ouC3lPjxaSN4/8GL3wv2snqBy3uo8PhHMNaakK/wJEQ==
-Date:   Thu, 13 Apr 2023 12:06:50 +0200
-From:   Kamel Bouhara <kamel.bouhara@bootlin.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        metux IT consult <lkml@metux.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@kernel.org>, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-renesas-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        stratos-dev@op-lists.linaro.org
-Subject: Re: [PATCH] gpio: aggregator: Add interrupt support
-Message-ID: <20230413100650.GC16381@kb-xps>
-References: <c987d0bf744150ca05bd952f5f9e5fb3244d27b0.1633350340.git.geert+renesas@glider.be>
- <58f91e983ac95b7f252606ecac12f016@bootlin.com>
- <CAMuHMdVqyY=tg6iU4feRwQhPt9c7ZZK9ifBCYf5AAgkxWjYOBA@mail.gmail.com>
+        bh=c4lR6e2MbLEUvWR/WBB2YgH6o1+uEgh/2e859QgdDEI=;
+        b=EP6f4n8gWUhSRLbzLNsU3Z/EqH3Urv+mwsDMrfPwBiXLkcYytAa+jdUGjxmczuM88dMFXu
+        sLZ3h1FKhFyh9M+rZZd/p0GAZeRB8AVz8jmSpeWlphZ96prw0G0WSKHKckJ7Eg1gNbo4Hg
+        sAiK8o9TjybbnypT8FwC8mRMTQq4zFk=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9C51A1390E;
+        Thu, 13 Apr 2023 10:07:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id uhLIJHbUN2QwQgAAMHmgww
+        (envelope-from <jgross@suse.com>); Thu, 13 Apr 2023 10:07:50 +0000
+Message-ID: <490999cf-81d0-d6a3-9677-8de529be38a5@suse.com>
+Date:   Thu, 13 Apr 2023 12:07:50 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMuHMdVqyY=tg6iU4feRwQhPt9c7ZZK9ifBCYf5AAgkxWjYOBA@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v5 09/15] x86/mtrr: allocate mtrr_value array dynamically
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Michael Kelley <mikelley@microsoft.com>
+References: <20230401063652.23522-1-jgross@suse.com>
+ <20230401063652.23522-10-jgross@suse.com>
+ <20230412211153.GKZDcemdxs2mhhwuiF@fat_crate.local>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <20230412211153.GKZDcemdxs2mhhwuiF@fat_crate.local>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------aQ3ZyjEExXRi4kAij0AdnW52"
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Thu, Apr 13, 2023 at 10:54:34AM +0200, Geert Uytterhoeven a écrit :
-> Hi Kamel,
->
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------aQ3ZyjEExXRi4kAij0AdnW52
+Content-Type: multipart/mixed; boundary="------------MYdxcP7013jgXYi0eyrufAkD";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
+ Michael Kelley <mikelley@microsoft.com>
+Message-ID: <490999cf-81d0-d6a3-9677-8de529be38a5@suse.com>
+Subject: Re: [PATCH v5 09/15] x86/mtrr: allocate mtrr_value array dynamically
+References: <20230401063652.23522-1-jgross@suse.com>
+ <20230401063652.23522-10-jgross@suse.com>
+ <20230412211153.GKZDcemdxs2mhhwuiF@fat_crate.local>
+In-Reply-To: <20230412211153.GKZDcemdxs2mhhwuiF@fat_crate.local>
 
-Hello Geert,
+--------------MYdxcP7013jgXYi0eyrufAkD
+Content-Type: multipart/mixed; boundary="------------Sz8jnp0E4UTDXzcHrt0X72bC"
 
-> On Thu, Apr 13, 2023 at 9:48 AM <kamel.bouhara@bootlin.com> wrote:
-> > Le 2021-10-04 14:44, Geert Uytterhoeven a écrit :
-> > What is the status for this patch, is there any remaining
-> > changes to be made ?
->
-> You mean commit a00128dfc8fc0cc8 ("gpio: aggregator: Add interrupt
-> support") in v5.17?
->
+--------------Sz8jnp0E4UTDXzcHrt0X72bC
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Sorry, I was checking on a v5.15 :) and based on the thread, I tough it
-was still not applied !
+T24gMTIuMDQuMjMgMjM6MTEsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gU2F0LCBB
+cHIgMDEsIDIwMjMgYXQgMDg6MzY6NDZBTSArMDIwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
+Cj4+ICsjaWZkZWYgQ09ORklHX1g4Nl8zMg0KPiANCj4gVEJILCBJJ20gbm90IHJlYWxseSBj
+cmF6eSBhYm91dCBhZGRpbmcgbW9yZSBpZmRlZmZlcnkuDQo+IA0KPiBXb25kZXJpbmcgaWYg
+YWRkaW5nIGEgMzItYml0IG9ubHkgYnVpbGQgb2JqZWN0Og0KPiANCj4gb2JqLSQoQ09ORklH
+X1g4Nl8zMikgKz0gYW1kLm8gY3lyaXgubyBjZW50YXVyLm8gbGVnYWN5Lm8NCj4gDQo+IHRv
+IGFyY2gveDg2L2tlcm5lbC9jcHUvbXRyci9NYWtlZmlsZSBhbmQgbW92aW5nIGFsbCB0aGF0
+IGd1bmsgb3Zlcg0KPiB0aGVyZSwgb3V0IG9mIHRoZSB3YXksIHdvdWxkIGJlIGV2ZW4gY2xl
+YW5lci4uLg0KDQpZZXMsIHRoYXQgc2hvdWxkIGJlIHJhdGhlciBzaW1wbGUuDQoNCldpbGwg
+YWRkIGEgcGF0Y2ggdG8gZG8gdGhhdC4NCg0KDQpKdWVyZ2VuDQo=
+--------------Sz8jnp0E4UTDXzcHrt0X72bC
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-Thanks.
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-Cheers,
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
 
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+--------------Sz8jnp0E4UTDXzcHrt0X72bC--
 
---
-Kamel Bouhara, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
+--------------MYdxcP7013jgXYi0eyrufAkD--
+
+--------------aQ3ZyjEExXRi4kAij0AdnW52
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmQ31HYFAwAAAAAACgkQsN6d1ii/Ey88
+vQf/dAmM2rDFX4+90S/PBDdG5SuB7E20kYULH9sL2MPDOcwqUnJA89+ISR9Uk+xv0WOU1pqnlqYP
+KDfUOg/9yFRJjiCHDQTDXwJ5K6CPvIbSHrRAKyiGZnTGB3ygin6lwD1dfxsDVdaaEibWLfvb2Twp
+GZ0/EM2CJgFeelIbJzHBGZFjvZ3DE/+dSYuEfyVomyVXmXBXYfHVgKYmQold9z3LEjTLLuMlpnkd
+AeaNBUCNj4mp0ju8XzznCC1KsPKqjRoXn6Is+pFVLEKAZs/83AFzGbNDyQubAObCts/Ek/8xCm7y
+Ej3CMr5cyPwuON5Ip0AbsYxO5KHV40UMfiP0qLqFKA==
+=CtTs
+-----END PGP SIGNATURE-----
+
+--------------aQ3ZyjEExXRi4kAij0AdnW52--
