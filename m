@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EAEF6E0B12
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 12:10:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E7316E0B18
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 12:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbjDMKKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 06:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58432 "EHLO
+        id S230327AbjDMKKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 06:10:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbjDMKJ7 (ORCPT
+        with ESMTP id S230204AbjDMKKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 06:09:59 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F6093FA
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:09:48 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id z26so14363488ljq.3
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:09:48 -0700 (PDT)
+        Thu, 13 Apr 2023 06:10:01 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325118A74
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:09:50 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id bx15so12904834ljb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 03:09:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681380587; x=1683972587;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ff/HJj5Bp66DbVLI+nypfoRfFF1jrHWVoqmFfRJlC2I=;
-        b=ICOg9tn8uB8MYJaCPLZtvj5NLO3g75xdfrT7pTbQlihxuXxHR2UTFYfivUJSSjqtty
-         crS6scMY8FiKrKLMQS781ozN1Z9tuecQvcSN3pRra2t/9M1lWWUZ6iweQD7SxgRw5eiE
-         I0dH+jq+1olkX4jhu7F8oPep6jS393wo1EG2uv/VUHcpEAR/NCXEjgIE6kAdcmgb22Vi
-         ie8JyJieOHJckE4ijQC6C0Nh67S2uTA2uTkGGSCsguoX+lJDET5nVb91FNE1Bh8exRfB
-         i9SaOUr66n/jVVgYpHD7fUL9gMe8q7e6h//trCZO2XwyC7OOpW6Y3Lz0YKya29Isf0pV
-         p1SQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681380587; x=1683972587;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=linaro.org; s=google; t=1681380588; x=1683972588;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ff/HJj5Bp66DbVLI+nypfoRfFF1jrHWVoqmFfRJlC2I=;
-        b=Gj9DIAdQYAoZXeV4p1iy54/e0Mat4Sos2nrnbp9rfiQE38qHHwvgjs38y1gbmAiIY7
-         SvTSIhmivApyDGMLuN5q2E3c/REzdt+nMksnnWPEYSHy9vPP9WWOAk/Z/RRXwjsRIJds
-         SJ/CB3lBKkOySThGySstWhmKIyNzwKhV4MDwqFs8LWhSNiA3K+gHHVWKveUSzWBootPN
-         XIiLvyD82L4EGWcJhBx/KoZnoNST6kKZ/AlAM05ueFn4BgyK6vM4vUJ7z4ic1Kfic0y4
-         TbpoMPVCgK9EGvrwXulNycyUDu31YXZSqXGFSuuUQh5Eugh5O73Kfu07/YzZ5OYesLv9
-         qLtQ==
-X-Gm-Message-State: AAQBX9edPEaSbaSne2L9cdbpFT7MXx6bIWCIG8D2lzZesTeAViQbE5do
-        4BPfm2Mqs4OSjXGBDzFtX8vVyA==
-X-Google-Smtp-Source: AKy350aU21tbuXy959wLVaRqTEyTpLkUrrRHgfrmsF1nmQcAIslHo/zCIPA7yRlzZh0TWIsygQA5Pw==
-X-Received: by 2002:a2e:808f:0:b0:2a7:7e8d:986f with SMTP id i15-20020a2e808f000000b002a77e8d986fmr790128ljg.51.1681380587235;
-        Thu, 13 Apr 2023 03:09:47 -0700 (PDT)
+        bh=DEAnat5PSJjsxQAWB7/SpZ+xwfK/Fj2JlbHtk3HNvoA=;
+        b=ltTzPvxhvo3ZlgIQh10MfEpSaxyzcEAkSMAeImGiz864Hk+fEhbQ0LBYTl2tPSAMzv
+         ab1LF0jIAHCyWSFQHQAPE5RsNQrBf7QUL10601PtdgwXHZgXZX6SmagLER5KjFeycGbU
+         Tn1zqwIgboWmT5uTM98zj+zv1iLv4EQv3BV3StMfIXzzjTyE/rb3qRcf8zYfu6JtIPSk
+         zSZ7/Jy0lHHCEV12vsYu00BDiERMME3VWk+g53uOSCfATYHP4XEKxgzEMZqCPinFLuSr
+         QkXOAnq24uM2s1mGb3lQYwPpkeH1uS6wRGzzQeqmXaHWp9Czo7eQ2hzQ8vxjX6l4hEmf
+         Rnug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681380588; x=1683972588;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DEAnat5PSJjsxQAWB7/SpZ+xwfK/Fj2JlbHtk3HNvoA=;
+        b=OFIQV83sRnyPo0lEgUiPVGn6U64RwlwIfzkF2QjKw2PnQrGK9gf6F9Pit7xa5xd6hw
+         p+l2nMvxSz4Bo0Knfa7/r6lkghkdaG+QmOoMzI/8mwQQfKPwR8kqeFxbZRIA278+4dlQ
+         0diFsHcEjZe5NElEixFhG2kQRUtfxfVggBAkSD1nhxustBjM1G+cXkgjoI6VaqMUhek1
+         b+ngwf/r+IJBkgdfLE2zd4Lm1rQjyRsc4O0MwRgCxY0w+eNVZQOQWm8x3fWKTEGb4Lf4
+         xSkoy4dU06F+1bLsHtCioWz0x6DRRcrYaeSU/jvOBzhOXOyg7Y0kKSuRW355kVP3g52h
+         xpRA==
+X-Gm-Message-State: AAQBX9cf066TLy4m1LeH3YhZ3nJtKE2iwGyJOFqWU4zwvQHA90yE6/GI
+        /DnRUvUY96X0o7yqvQgQIVZX7w==
+X-Google-Smtp-Source: AKy350asL51EeQDLbOK2ZbUFavRJIn/bPYE8P0PHMi+LSEUZ/Jv99YCh3KyhcP4BfchERSh094e26A==
+X-Received: by 2002:a2e:9e19:0:b0:29b:d471:c80f with SMTP id e25-20020a2e9e19000000b0029bd471c80fmr907501ljk.36.1681380588424;
+        Thu, 13 Apr 2023 03:09:48 -0700 (PDT)
 Received: from [192.168.1.101] (abyl123.neoplus.adsl.tpnet.pl. [83.9.31.123])
-        by smtp.gmail.com with ESMTPSA id t20-20020a2e9d14000000b002a2e931fc48sm200482lji.140.2023.04.13.03.09.45
+        by smtp.gmail.com with ESMTPSA id t20-20020a2e9d14000000b002a2e931fc48sm200482lji.140.2023.04.13.03.09.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 03:09:46 -0700 (PDT)
+        Thu, 13 Apr 2023 03:09:48 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: [PATCH v2 0/5] Lenovo Tab P11 panel
-Date:   Thu, 13 Apr 2023 12:09:34 +0200
-Message-Id: <20230412-topic-lenovopanel-v2-0-055c3649788e@linaro.org>
+Date:   Thu, 13 Apr 2023 12:09:35 +0200
+Subject: [PATCH v2 1/5] dt-bindings: display: panel: nt36523: Allow 'port'
+ instead of 'ports'
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAN7UN2QC/32NQQ6CMBAAv0J6ds3SghpP/sNwKGWBTZqWbLHRE
- P5u5QEeZ5LJbCqRMCV1rzYllDlxDAX0qVJutmEi4KGw0qgNNrWGNS7swFOIOS42kAccjMX2SsZ
- po0rX20TQiw1uLmV4eV/kIjTy+xg9u8IzpzXK5/jm+mf/LXINCIi9boexudx08/AcrMRzlEl1+
- 75/AQS+zkzIAAAA
+Message-Id: <20230412-topic-lenovopanel-v2-1-055c3649788e@linaro.org>
+References: <20230412-topic-lenovopanel-v2-0-055c3649788e@linaro.org>
+In-Reply-To: <20230412-topic-lenovopanel-v2-0-055c3649788e@linaro.org>
 To:     Jianhua Lu <lujianhua000@gmail.com>,
         Neil Armstrong <neil.armstrong@linaro.org>,
         Sam Ravnborg <sam@ravnborg.org>,
@@ -70,55 +70,67 @@ To:     Jianhua Lu <lujianhua000@gmail.com>,
 Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>
+        Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1681380585; l=1131;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1681380585; l=1187;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=6PmzWn6dAXfVvXwy6DSd1z7BrTFh80L9gsPMzLfKnmY=;
- b=8Ocdd2+e91ythzoVKk4uu8GgAXpfJPmCdwjyOPTS8WMlp7zgOw3C7dqwyR/73k/dDVkSzN+5uxog
- 2ED203s2C5Kx0np5ThLRF2T+77c0mGmhNBgvW1BkDD4rgNuQFxz4
+ bh=FMgShhUTMaYzSy2Me7Gv1xSXp92sIQsWFZ0aqhhoJn8=;
+ b=9J88Z5LuF95gqkV+HSGcOJ5UC/2WCV8vVvuzNlssYzVIvrv/8ehvUa53oIMtzftb/pqyOx/rHMmu
+ dOWMlYA7DWmYNYzxksbhUTQJ36XooRkA8E19xmPb9BFG36Q4wp1V
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v1 -> v2:
-- Remove dsi_info (unused for single DSI) [5/5]
-- Add backlight.scale [3/5]
-- pick up tags
-
-v1: https://lore.kernel.org/r/20230412-topic-lenovopanel-v1-0-00b25df46824@linaro.org
-
-Continuation of:
-https://lore.kernel.org/lkml/20230217-topic-lenovo-panel-v2-0-2e2c64729330@linaro.org/
-
-I rolled back the versioning, as this has been remade from scratch.
+Using 'port' instead of 'ports' for single-DSI usecases allows for saving
+a couple of DTS LoC, including a level of indentation. Allow that.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
-Konrad Dybcio (5):
-      dt-bindings: display: panel: nt36523: Allow 'port' instead of 'ports'
-      dt-bindings: display: panel: nt36523: Add Lenovo J606F panel
-      drm/panel: nt36523: Add DCS backlight support
-      drm/panel: nt36523: Get orientation from OF
-      drm/panel: nt36523: Add Lenovo J606F panel
+ .../bindings/display/panel/novatek,nt36523.yaml           | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
- .../bindings/display/panel/novatek,nt36523.yaml    |  31 +-
- drivers/gpu/drm/panel/panel-novatek-nt36523.c      | 569 ++++++++++++++++++++-
- 2 files changed, 590 insertions(+), 10 deletions(-)
----
-base-commit: 7d8214bba44c1aa6a75921a09a691945d26a8d43
-change-id: 20230412-topic-lenovopanel-0d3a057e3c23
+diff --git a/Documentation/devicetree/bindings/display/panel/novatek,nt36523.yaml b/Documentation/devicetree/bindings/display/panel/novatek,nt36523.yaml
+index 0039561ef04c..38f4f986aef1 100644
+--- a/Documentation/devicetree/bindings/display/panel/novatek,nt36523.yaml
++++ b/Documentation/devicetree/bindings/display/panel/novatek,nt36523.yaml
+@@ -33,15 +33,26 @@ properties:
+     description: regulator that supplies the I/O voltage
+ 
+   reg: true
+-  ports: true
+   backlight: true
+ 
++oneOf:
++  - allOf:
++      - properties:
++          ports: true
++      - required:
++          - ports
++
++  - allOf:
++      - properties:
++          port: true
++      - required:
++          - port
++
+ required:
+   - compatible
+   - reg
+   - vddio-supply
+   - reset-gpios
+-  - ports
+ 
+ unevaluatedProperties: false
+ 
 
-Best regards,
 -- 
-Konrad Dybcio <konrad.dybcio@linaro.org>
+2.40.0
 
