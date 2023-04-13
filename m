@@ -2,185 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7AD76E10C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 17:15:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43FCD6E10CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 17:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231549AbjDMPPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 11:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37522 "EHLO
+        id S231557AbjDMPQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 11:16:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231540AbjDMPPF (ORCPT
+        with ESMTP id S230413AbjDMPQB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 11:15:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38A1B752;
-        Thu, 13 Apr 2023 08:14:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 13 Apr 2023 11:16:01 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EEEDAD
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 08:15:59 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 7A6851FD66;
+        Thu, 13 Apr 2023 15:15:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1681398958; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1ncar6WxFuoBBNk0Hs6qIbWy5Bwe1mGIBpSePZJMnvQ=;
+        b=NuM6YxfBuXbF2b55v2j2WcH+4cF2iry9n4bE+Ix83D8E8c3RqYovDiQIIms7ERwJCqdJz8
+        VmE3sb0U2zGh0oSLfqLIdFfTLsRdEA3VcK+VLUI9NMGjPlFyRhfDL844X8E1gTYQWcC4hI
+        aF7R9WvmzEVZq5NzTyGKyDKsiGPULQ0=
+Received: from suse.cz (pmladek.udp.ovpn2.prg.suse.de [10.100.201.202])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30F3663F83;
-        Thu, 13 Apr 2023 15:14:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 952DEC433D2;
-        Thu, 13 Apr 2023 15:14:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681398888;
-        bh=p2EzDGmg/AcSHNxl1kEdsuBAxx5NhTDeYv8wVb1k7uA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H6RcOHZ7pOBPIF2i0Rfg0SGnH4+xpSgeYzGgITNEkgVUIqttW6V6p7f66pAt0+tR3
-         Gjz8MsfxaalcuHIEUcH561epYQovzYHGITipJbp8j8Al4Ao5sT/g9oebINoWhxLW9o
-         M/J9HHOzgLzf30AEYLnMTd7ZskBawJo/Ou+tbQP4haqXHdp9xinFniZP/tkdxyePVK
-         MVwOH2h0WBLGmsacEqAcGdHVva5QWnWnbuu7ZRSKBo4P5l6h823Tf2Z81JLo7+j/cI
-         Le3SgKf9tT397kWhs4tca1kOCqTB/2WVIbPFdEv95cnJ9VbwQuGQdWDXbP6Pv/mtBR
-         qYY62WUcFCPGA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pmyex-0001xE-WD; Thu, 13 Apr 2023 17:14:52 +0200
-Date:   Thu, 13 Apr 2023 17:14:51 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     arinc9.unal@gmail.com
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        =?utf-8?B?QmrDuHJu?= Mork <bjorn@mork.no>, me@1conan.com,
-        erkin.bozoglu@xeront.com, linux-usb@vger.kernel.org,
+        by relay2.suse.de (Postfix) with ESMTPS id 25FAC2C143;
+        Thu, 13 Apr 2023 15:15:58 +0000 (UTC)
+Date:   Thu, 13 Apr 2023 17:15:54 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: add UNISOC vendor and TOZED LT70C
- product
-Message-ID: <ZDgca7wgfGlK/9cZ@hovoldconsulting.com>
-References: <20230406055004.8216-1-arinc.unal@arinc9.com>
+Subject: Re: [PATCH printk v1 03/18] printk: Consolidate console deferred
+ printing
+Message-ID: <ZDgcqqLNZuvsbgET@alley>
+References: <20230302195618.156940-1-john.ogness@linutronix.de>
+ <20230302195618.156940-4-john.ogness@linutronix.de>
+ <ZAiKhAA37/jehmD7@alley>
+ <871qln7cle.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230406055004.8216-1-arinc.unal@arinc9.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <871qln7cle.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 08:50:04AM +0300, arinc9.unal@gmail.com wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+On Fri 2023-03-17 14:11:01, John Ogness wrote:
+> On 2023-03-08, Petr Mladek <pmladek@suse.com> wrote:
+> >> --- a/kernel/printk/printk.c
+> >> +++ b/kernel/printk/printk.c
+> >> @@ -2321,7 +2321,10 @@ asmlinkage int vprintk_emit(int facility, int level,
+> >>  		preempt_enable();
+> >>  	}
+> >>  
+> >> -	wake_up_klogd();
+> >> +	if (in_sched)
+> >> +		defer_console_output();
+> >> +	else
+> >> +		wake_up_klogd();
+> >
+> > Nit: I would add an empty line here. Or I would move this up into the
+> >      previous if (in_sched()) condition.
 > 
-> Add UNISOC vendor ID and TOZED LT70-C modem which is based from UNISOC
-> SL8563. The modem supports the NCM mode.
-
-Thanks for the patch. Looks mostly good, but see my comments below.
-
-> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  6 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=1782 ProdID=4055 Rev=04.04
-> S:  Manufacturer=Unisoc Phone
-> S:  Product=Unisoc Phone
-> S:  SerialNumber=<redacted>
-> C:  #Ifs=14 Cfg#= 1 Atr=c0 MxPwr=500mA
-> I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0d Prot=00 Driver=cdc_ncm
-> E:  Ad=82(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
-> I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=01 Driver=cdc_ncm
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:  If#=10 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=8b(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:  If#=11 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=08(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=8c(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:  If#=12 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=option
-> E:  Ad=09(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=8d(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-
-This looks like an ADB interface which should be blacklisted (reserved)
-so that the driver does not bind to it.
-
-> I:  If#=13 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=0a(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:  If#= 2 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0d Prot=00 Driver=cdc_ncm
-> E:  Ad=84(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
-> I:  If#= 3 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=01 Driver=cdc_ncm
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:  If#= 4 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0d Prot=00 Driver=cdc_ncm
-> E:  Ad=86(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
-> I:  If#= 5 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=01 Driver=cdc_ncm
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:  If#= 6 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0d Prot=00 Driver=cdc_ncm
-> E:  Ad=88(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
-> I:  If#= 7 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=01 Driver=cdc_ncm
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:  If#= 8 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:  If#= 9 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=8a(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> Empty line is ok. I do not want to move it up because the above
+> condition gets more complicated later. IMHO a simple if/else for
+> specifying what the irq_work should do is the most straight forward
+> here.
 > 
-> Bus 001 Device 002: ID 1782:4055 Unisoc Phone Unisoc Phone
-> Device Descriptor:
->   bLength                18
->   bDescriptorType         1
->   bcdUSB               2.00
->   bDeviceClass            0
->   bDeviceSubClass         0
->   bDeviceProtocol         0
->   bMaxPacketSize0        64
->   idVendor           0x1782
->   idProduct          0x4055
->   bcdDevice            4.04
->   iManufacturer           1 Unisoc Phone
->   iProduct                2 Unisoc Phone
->   iSerial                 3 <redacted>
->   bNumConfigurations      1
-
-When resending you can put the verbose lsusb output below the cut-off
-line (---) so that we have it in the mail archives if ever needed.
-
-Could you also add something what the various serial interfaces are used
-for?
-
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> ---
+> >> @@ -3811,11 +3814,30 @@ static void __wake_up_klogd(int val)
+> >>  	preempt_enable();
+> >>  }
+> >>  
+> >> +/**
+> >> + * wake_up_klogd - Wake kernel logging daemon
+> >> + *
+> >> + * Use this function when new records have been added to the ringbuffer
+> >> + * and the console printing for those records is handled elsewhere. In
+> >
+> > "elsewhere" is ambiguous. I would write:
+> >
+> > "and the console printing for those records maybe handled in this context".
 > 
-> I did not receive any comments on RFC so I'm sending this as is.
+> The reason for using the word "elsewhere" is because in later patches it
+> is also the printing threads that can handle it. I can change it to
+> "this context" for this patch, but then after adding threads I will need
+> to adjust the comment again. How about:
 > 
-> Arınç
-> 
-> ---
->  drivers/usb/serial/option.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index f31cc3c76329..65a050a9ca39 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -595,6 +595,11 @@ static void option_instat_callback(struct urb *urb);
->  #define SIERRA_VENDOR_ID			0x1199
->  #define SIERRA_PRODUCT_EM9191			0x90d3
->  
-> +/* UNISOC (Spreadtrum) products */
-> +#define UNISOC_VENDOR_ID			0x1782
-> +/* TOZED TL70-C based on UNISOC SL8563 uses UNISOC's vendor ID */
-> +#define TOZED_PRODUCT_LT70C			0x4055
-> +
->  /* Device flags */
->  
->  /* Highest interface number which can be used with NCTRL() and RSVD() */
-> @@ -2225,6 +2230,7 @@ static const struct usb_device_id option_ids[] = {
->  	{ USB_DEVICE_AND_INTERFACE_INFO(OPPO_VENDOR_ID, OPPO_PRODUCT_R11, 0xff, 0xff, 0x30) },
->  	{ USB_DEVICE_AND_INTERFACE_INFO(SIERRA_VENDOR_ID, SIERRA_PRODUCT_EM9191, 0xff, 0xff, 0x30) },
->  	{ USB_DEVICE_AND_INTERFACE_INFO(SIERRA_VENDOR_ID, SIERRA_PRODUCT_EM9191, 0xff, 0, 0) },
-> +	{ USB_DEVICE(UNISOC_VENDOR_ID, TOZED_PRODUCT_LT70C) },
+> "and the console printing for those records should not be handled by the
+> irq_work context because another context will handle it."
 
-You should match also on the interface class so that you don't try to
-bind to the cdc interfaces. See USB_DEVICE_INTERFACE_CLASS() (and
-RSVD() for the ADB interface).
+It is better but still a bit hard to follow. As a reader, I see three
+contexts:
 
->  	{ } /* Terminating entry */
->  };
->  MODULE_DEVICE_TABLE(usb, option_ids);
+   + context that calls wake_up_klogd()
+   + irq_work context
+   + another context that would handle the console printing
 
-Johan
+The confusing part is that the "another context". It might be the
+context calling wake_up_klogd(). If feels like scratching
+right ear by left hand ;-)
+
+In fact, also the next sentence "In this case only the logging
+daemon needs to be woken." is misleading. Also the printk
+kthreads need to be woken but it is done by another function.
+
+OK, what about?
+
+ * wake_up_klogd - Wake kernel logging daemon
+ *
+ * Use this function when new records have been added to the ringbuffer
+ * and the console printing does not have to be deferred to irq_work
+ * context. This function will only wake the logging daemons.
+
+
+Heh, the "wake_up_klogd_work" has became confusing since it started
+handling deferred console output. And it is even more confusing now
+when it does not handle the kthreads which are yet another deferred
+output. But I can't think of any reasonable solution at the moment.
+
+Maybe, we should somehow distinguish the API that will handle only
+the legacy consoles. For example, suspend_console() handles both
+but console_flush_all() will handle only the legacy ones.
+
+I think that we are going to use nbcon_ prefix for the API
+handling the new consoles. Maybe we could use another prefix
+for the legacy-consoles-specific API.
+
+Hmm, what about?
+
+    + "bcon_" like the opposite of "nbcon_" but it might be
+      confused with boot console
+
+    + "lcon_" like "legacy" or "locked" consoles
+
+    + "scon" like synchronized or serialized consoles.
+
+
+Honestly, I am not sure how much important this is. But it might
+be pretty helpful for anyone who would try to understand the code
+in the future. And this rework might be really challenging for
+future archaeologists. Not to say, that legacy consoles will
+likely stay with us many years, maybe decades.
+
+Best Regards,
+Petr
