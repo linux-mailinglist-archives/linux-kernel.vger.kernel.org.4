@@ -2,73 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 093BB6E13AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 19:42:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21B846E13B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 19:44:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbjDMRmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 13:42:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33214 "EHLO
+        id S229869AbjDMRoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 13:44:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjDMRml (ORCPT
+        with ESMTP id S229498AbjDMRoM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 13:42:41 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3453919A3;
-        Thu, 13 Apr 2023 10:42:39 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 33DHgYws004366;
-        Thu, 13 Apr 2023 19:42:34 +0200
-Date:   Thu, 13 Apr 2023 19:42:34 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] tools/nolibc: Fix build of stdio.h due to header ordering
-Message-ID: <ZDg/CsWixum2DdUM@1wt.eu>
-References: <20230413-nolibc-stdio-fix-v1-1-fa05fc3ba1fe@kernel.org>
- <ZDg3K2nI+5l6as/L@1wt.eu>
- <c8021d03-4da0-4956-8744-4a3a1f8dd533@paulmck-laptop>
+        Thu, 13 Apr 2023 13:44:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E2D1FFB
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 10:44:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90F53601C3
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 17:44:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2B89C433EF;
+        Thu, 13 Apr 2023 17:44:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681407850;
+        bh=7nllnwi5Bvs+lC/6EvS35s1XAnlHHreApPviCo1OV3I=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=E6V/IA1y42AOqx96tKePxJWoQDctTP6OVhYHzW8ymvILjgu0KiR2CQhelYTYugZWc
+         MyiRojthSi/9Zflzi6tfjD0oMmceYZIL9RKz2z0nSJHXdW25d9z7Xt70OGl5tDyXkB
+         hN+Pkf5VSLADtXjaxtezeBr41SLoBTh40rGXWXXWHnP7BMGdrsryNwJkZz3g6SbikE
+         +4yCXykhdGSLD6lnCbqOrNy2uXI3KKDOJjPxMZ/qgG8fy5zpXahhlXXvR1y7HIZX3p
+         aUsNTFUIjldeNc3IbDXpMM70Njt0JX8Rk6ArHydIktJUun77eqyX85Ie1SRnsoTUDL
+         +yUEt+ZlmxbyA==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 43B7415404B3; Thu, 13 Apr 2023 10:44:10 -0700 (PDT)
+Date:   Thu, 13 Apr 2023 10:44:10 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     stern@rowland.harvard.edu, boqun.feng@gmail.com
+Cc:     linux-kernel@vger.kernel.org
+Subject: LKMM for next week
+Message-ID: <c49a72c4-a392-49d9-9ff6-2af7b947b11f@paulmck-laptop>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c8021d03-4da0-4956-8744-4a3a1f8dd533@paulmck-laptop>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+Hello!
 
-On Thu, Apr 13, 2023 at 10:33:54AM -0700, Paul E. McKenney wrote:
-> Queued and pushed, thank you both!
+I will be on travel for a week starting tomorrow, and may be off the
+grid at times.  My guess is that nothing particularly earthshaking will
+happen with LKMM during that week anyway, Mr. Murphy notwithstanding.
 
-Thanks!
+Either way, if you wonder why I am slow to respond during that time,
+that might be why.  ;-)
 
-> With respect to -next, travel plans next week are causing me to instead
-> update my rcu/next branch to the merge point of all of this coming
-> merge window's pull requests.  Though it only makes a difference of a
-> few days, as I would normally pull rcu/next back the Monday before the
-> merge window opens.
-> 
-> There is some possibility that I will be off the grid for extended periods
-> next week, which shouldn't make any difference for nolibc, aside from my
-> possibly being unresponsive during that time.  The odds of an emergency
-> fix to last merge window's changes are quite low this late in cycle,
-> and I will be back before the next merge window opens.
-> 
-> Just let me know what I need to pull in, and I will do that early the
-> week after this coming one.  Or you can buffer it up and send me one
-> big series upon my return, your choice.  Either way works for me.  ;-)
-
-Thanks for letting us know! Anyway there shouldn't be anything urgent
-with nolibc. And if anyone would be blocked I would go back to the old
-method where I queue that in a branch in my repo, so please travel in
-peace ;-)
-
-Thank you!
-Willy
+							Thanx, Paul
