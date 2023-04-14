@@ -2,153 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F05186E1A10
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 04:14:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B1CA6E1A16
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 04:18:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbjDNCOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 22:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42146 "EHLO
+        id S229804AbjDNCSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 22:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbjDNCOE (ORCPT
+        with ESMTP id S229685AbjDNCSc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 22:14:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327D82D74
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 19:13:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681438396;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xU5po7bo+0f7mtpnyY2arS5aqu7vRvq3JKh8xv5QFh4=;
-        b=LiZE1eswDu85yHULt1HyUFEqmcRxOOJfuu0PgCYkeWpYltboKi1/bJ1kkt4Qal/NSIcSNL
-        NkxCs6AsGW9In+s4OdJ7x8pvOKYYsdjPbsJz0cIFUKsLhgrDxGo7XS1u0tDo3/lyLkUVVE
-        Gm0bZRLpUb7oHH6DSd9X8BuWNKKPLLg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-551-VKX7xa-EOl-aq5sktc-3bA-1; Thu, 13 Apr 2023 22:13:10 -0400
-X-MC-Unique: VKX7xa-EOl-aq5sktc-3bA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 814258996F5;
-        Fri, 14 Apr 2023 02:13:09 +0000 (UTC)
-Received: from ovpn-8-21.pek2.redhat.com (ovpn-8-21.pek2.redhat.com [10.72.8.21])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id F1F9214171B6;
-        Fri, 14 Apr 2023 02:12:58 +0000 (UTC)
-Date:   Fri, 14 Apr 2023 10:12:52 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Breno Leitao <leitao@debian.org>
-Cc:     asml.silence@gmail.com, axboe@kernel.dk, davem@davemloft.net,
-        dccp@vger.kernel.org, dsahern@kernel.org, edumazet@google.com,
-        io-uring@vger.kernel.org, kuba@kernel.org, leit@fb.com,
-        linux-kernel@vger.kernel.org, marcelo.leitner@gmail.com,
-        matthieu.baerts@tessares.net, mptcp@lists.linux.dev,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        willemdebruijn.kernel@gmail.com, ming.lei@redhat.com
-Subject: Re: [PATCH RFC] io_uring: Pass whole sqe to commands
-Message-ID: <ZDi2pP4jgHwCvJRm@ovpn-8-21.pek2.redhat.com>
-References: <20230406144330.1932798-1-leitao@debian.org>
- <20230406165705.3161734-1-leitao@debian.org>
- <ZDdvcSKLa6ZEAhRW@ovpn-8-18.pek2.redhat.com>
- <ZDgyPL6UrX/MaBR4@gmail.com>
+        Thu, 13 Apr 2023 22:18:32 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC25430D5
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 19:18:30 -0700 (PDT)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PyKl901X5zSs8R;
+        Fri, 14 Apr 2023 10:14:28 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.125) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 14 Apr 2023 10:18:27 +0800
+From:   Longlong Xia <xialonglong1@huawei.com>
+To:     <akpm@linux-foundation.org>, <naoya.horiguchi@nec.com>
+CC:     <linmiaohe@huawei.com>, <wangkefeng.wang@huawei.com>,
+        <sunnanyong@huawei.com>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, Longlong Xia <xialonglong1@huawei.com>
+Subject: [PATCH v2 0/2] mm: ksm: support hwpoison for ksm page
+Date:   Fri, 14 Apr 2023 10:17:39 +0800
+Message-ID: <20230414021741.2597273-1-xialonglong1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZDgyPL6UrX/MaBR4@gmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 09:47:56AM -0700, Breno Leitao wrote:
-> Hello Ming,
-> 
-> On Thu, Apr 13, 2023 at 10:56:49AM +0800, Ming Lei wrote:
-> > On Thu, Apr 06, 2023 at 09:57:05AM -0700, Breno Leitao wrote:
-> > > Currently uring CMD operation relies on having large SQEs, but future
-> > > operations might want to use normal SQE.
-> > > 
-> > > The io_uring_cmd currently only saves the payload (cmd) part of the SQE,
-> > > but, for commands that use normal SQE size, it might be necessary to
-> > > access the initial SQE fields outside of the payload/cmd block.  So,
-> > > saves the whole SQE other than just the pdu.
-> > > 
-> > > This changes slighlty how the io_uring_cmd works, since the cmd
-> > > structures and callbacks are not opaque to io_uring anymore. I.e, the
-> > > callbacks can look at the SQE entries, not only, in the cmd structure.
-> > > 
-> > > The main advantage is that we don't need to create custom structures for
-> > > simple commands.
-> > > 
-> > > Suggested-by: Pavel Begunkov <asml.silence@gmail.com>
-> > > Signed-off-by: Breno Leitao <leitao@debian.org>
-> > > ---
-> > 
-> > ...
-> > 
-> > > diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-> > > index 2e4c483075d3..9648134ccae1 100644
-> > > --- a/io_uring/uring_cmd.c
-> > > +++ b/io_uring/uring_cmd.c
-> > > @@ -63,14 +63,15 @@ EXPORT_SYMBOL_GPL(io_uring_cmd_done);
-> > >  int io_uring_cmd_prep_async(struct io_kiocb *req)
-> > >  {
-> > >  	struct io_uring_cmd *ioucmd = io_kiocb_to_cmd(req, struct io_uring_cmd);
-> > > -	size_t cmd_size;
-> > > +	size_t size = sizeof(struct io_uring_sqe);
-> > >  
-> > >  	BUILD_BUG_ON(uring_cmd_pdu_size(0) != 16);
-> > >  	BUILD_BUG_ON(uring_cmd_pdu_size(1) != 80);
-> > >  
-> > > -	cmd_size = uring_cmd_pdu_size(req->ctx->flags & IORING_SETUP_SQE128);
-> > > +	if (req->ctx->flags & IORING_SETUP_SQE128)
-> > > +		size <<= 1;
-> > >  
-> > > -	memcpy(req->async_data, ioucmd->cmd, cmd_size);
-> > > +	memcpy(req->async_data, ioucmd->sqe, size);
-> > 
-> > The copy will make some fields of sqe become READ TWICE, and driver may see
-> > different sqe field value compared with the one observed in io_init_req().
-> 
-> This copy only happens if the operation goes to the async path
-> (calling io_uring_cmd_prep_async()).  This only happens if
-> f_op->uring_cmd() returns -EAGAIN.
-> 
->           ret = file->f_op->uring_cmd(ioucmd, issue_flags);
->           if (ret == -EAGAIN) {
->                   if (!req_has_async_data(req)) {
->                           if (io_alloc_async_data(req))
->                                   return -ENOMEM;
->                           io_uring_cmd_prep_async(req);
->                   }
->                   return -EAGAIN;
->           }
-> 
-> Are you saying that after this copy, the operation is still reading from
-> sqe instead of req->async_data?
+Currently, ksm does not support hwpoison. As ksm is being used more widely
+for deduplication at the system level, container level, and process level, 
+supporting hwpoison for ksm has become increasingly important. However, ksm
+pages were not processed by hwpoison in 2009 [1].
 
-I meant that the 2nd read is on the sqe copy(req->aync_data), but same
-fields can become different between the two READs(first is done on original
-SQE during io_init_req(), and second is done on sqe copy in driver).
+The main method of implementation:
+1. Refactor add_to_kill() and add new add_to_kill_*() to better accommodate
+the handling of different types of pages.
+2. Add collect_procs_ksm() to collect processes when the error hit an ksm 
+page.
+3. Add task_in_to_kill_list() to avoid duplicate addition of tsk to the 
+to_kill list. 
+4. Try_to_unmap ksm page (already supported).
+5. Handle related processes such as sending SIGBUS.
 
-Will this kind of inconsistency cause trouble for driver? Cause READ
-TWICE becomes possible with this patch.
+Tested with poisoning to ksm page from
+1) different process
+2) one process
 
-> 
-> If you have an example of the two copes flow, that would be great.
+and with/without memory_failure_early_kill set, the processes
+are killed as expected with the patchset. 
 
-Not any example yet, but also not see any access on cmd->sqe(except for cmd_op)
-in your patches too.
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+commit/?h=01e00f880ca700376e1845cf7a2524ebe68e47d6
 
+v2:
+- Rename the "addr" argument to "ksm_addr" in both the 
+"__add__add_to_kill()" and "add_to_kill_ksm()"
+- Collect RB/TB
 
-Thanks,
-Ming
+Longlong Xia (2):
+  mm: memory-failure: Refactor add_to_kill()
+  mm: ksm: Support hwpoison for ksm page
+
+ include/linux/ksm.h | 11 ++++++++
+ include/linux/mm.h  |  7 +++++
+ mm/ksm.c            | 45 ++++++++++++++++++++++++++++++++
+ mm/memory-failure.c | 63 +++++++++++++++++++++++++++++++++------------
+ 4 files changed, 109 insertions(+), 17 deletions(-)
+
+-- 
+2.25.1
 
