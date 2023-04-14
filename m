@@ -2,64 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B9616E1C3E
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 08:14:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0325C6E1C3A
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 08:13:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbjDNGOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 02:14:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47326 "EHLO
+        id S230029AbjDNGNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 02:13:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjDNGOt (ORCPT
+        with ESMTP id S229476AbjDNGNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 02:14:49 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D54240F1;
-        Thu, 13 Apr 2023 23:14:48 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-94e8cdbc8ebso118085366b.2;
-        Thu, 13 Apr 2023 23:14:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681452887; x=1684044887;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SSpS3E1S1nYKNPJCN4kTXWUVOYv1fhq7FSwOkeeQFww=;
-        b=ISgWTdiyNpFBy7MuqU0pcBtm8u4GyGxkGdFBiXH0rzYJsuDeVevS8CwtN8hvZkOB3d
-         Y7P+os7CF/gZfTJ1P1qsefQmWNRdj1rMeK4FKNJQQzW5Zg8ftHX4UsRIDak+AXOAk1/Y
-         HHjlfyUAMV0/LCzVMqb0OkNGsqSx7bHhw4KKrMMlqZD/Qyp9xBY4pnYNUTvAnCglnBlr
-         iNRgZxK32sILPM+SVdvshzZpiHFSiny5ZonEuOr7IFXgEa/NPn2qvuQU8nnO4WsQwBWm
-         q40jA03hKMsgn3AJBQv5alIYN8l2otYMFkRYYhLix10SY9/hUHdW3Xf+OuOgjg1SU3+l
-         dfoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681452887; x=1684044887;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SSpS3E1S1nYKNPJCN4kTXWUVOYv1fhq7FSwOkeeQFww=;
-        b=URS6+mQPpht9Rsp0y4NU0a/I6jH8dTFQjoQgB4SyFTwAAj+1XyHH3XhBOfuaSTNdhB
-         vMvVRlQ4vEcaSh/FLniaKQBMW6/Sal+wEdfNGQy1GiHXksG2do2NLYWHTFp70scdxJZM
-         DbBUTnpG7gSwpht/ggK/nxLrhjgTvTXbxYkNdiVxeIUhiKA8L6UCoJd391xCSdtuS4HJ
-         vQjhqQsPv/KSNcJuFFSpflSGk+rBJxCxZBidjYoXGXD7IrPFZuA1pPKplLFSOxp1+GPt
-         cHW8Q0ZJoeml0WuhsCrYv75yoUx3NKMgWG6WyAWab/IgqruTIVzesef+v2IspeRsk2vb
-         92yw==
-X-Gm-Message-State: AAQBX9fRpPF29ij7WejtTHmjyVM0UaR7QseW5dFKPoi69Wc+omyQVi7Q
-        3d8DoJr0S/GCcE252Icxc4c=
-X-Google-Smtp-Source: AKy350bX9VkTffd+1wd2KOcfBuyy5KFxp45M9mzaVbuj84Ms9sEoq7RAIMJdfCiwdLCF2Y0jk4OEyw==
-X-Received: by 2002:aa7:c38a:0:b0:504:8b5c:a961 with SMTP id k10-20020aa7c38a000000b005048b5ca961mr4954397edq.18.1681452886588;
-        Thu, 13 Apr 2023 23:14:46 -0700 (PDT)
-Received: from felia.fritz.box ([188.193.217.32])
-        by smtp.gmail.com with ESMTPSA id j19-20020a508a93000000b00501c2a9e16dsm1751294edj.74.2023.04.13.23.14.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 23:14:46 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] docs: kmemleak: adjust to config renaming
-Date:   Fri, 14 Apr 2023 08:12:41 +0200
-Message-Id: <20230414061241.12754-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Fri, 14 Apr 2023 02:13:14 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8314C2D;
+        Thu, 13 Apr 2023 23:13:12 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33E6CvUM121911;
+        Fri, 14 Apr 2023 01:12:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1681452777;
+        bh=5fzgEE5rhEgibICZ0O25CWXhfNZmGZDqlt0vq4RXvyM=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=URVsDq7rIRMqNYXlhoOuQJmyn0xTjbHWqn4Juvnls0SIrvnYAYRllnFPrDu4Dfc3S
+         yiiWHAEWiLDp0Ad9P77YDV7rBeWPdsTR6xVd1nHgBSocBpBDY7SysXraIGnRnNMWvu
+         qooD9ng3eJxu0rTDOE686cgGhxfV085TkyWawdPg=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33E6CvA9027034
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 14 Apr 2023 01:12:57 -0500
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 14
+ Apr 2023 01:12:57 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Fri, 14 Apr 2023 01:12:57 -0500
+Received: from [172.24.145.182] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33E6CrH8054033;
+        Fri, 14 Apr 2023 01:12:53 -0500
+Message-ID: <8552c377-b2e9-749a-9f0c-7c444fe012c6@ti.com>
+Date:   Fri, 14 Apr 2023 11:42:52 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH 0/5] Enable multiple MCAN on AM62x
+Content-Language: en-US
+To:     Judith Mendez <jm@ti.com>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>
+CC:     Nishanth Menon <nm@ti.com>, Andrew Davis <afd@ti.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-can@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <netdev@vger.kernel.org>,
+        Schuyler Patton <spatton@ti.com>
+References: <20230413223051.24455-1-jm@ti.com>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+In-Reply-To: <20230413223051.24455-1-jm@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,30 +73,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit c87db8ca0902 ("kmemleak-test: fix kmemleak_test.c build logic")
-essentially renames the config DEBUG_KMEMLEAK_TEST to SAMPLE_KMEMLEAK, but
-misses to adjust the documentation.
+Hi Judith,
 
-Adjust kmemleak documentation to this config renaming.
+On 14/04/23 04:00, Judith Mendez wrote:
+> Judith Mendez (5):
+>   arm64: dts: ti: Add AM62x MCAN MAIN domain transceiver overlay
+>   arm64: defconfig: Enable MCAN driver
+>   dt-binding: can: m_can: Remove required interrupt attributes
+>   arm64: dts: ti: Enable multiple MCAN for AM62x in MCU MCAN overlay
+>   can: m_can: Add hrtimer to generate software interrupt
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- Documentation/dev-tools/kmemleak.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This is fine for RFC, but next time, please split DT and defconfig
+changes (1/5,2/5, and 4/5) to separate series as they have to go via
+arm64 tree.
 
-diff --git a/Documentation/dev-tools/kmemleak.rst b/Documentation/dev-tools/kmemleak.rst
-index 5483fd39ef29..2cb00b53339f 100644
---- a/Documentation/dev-tools/kmemleak.rst
-+++ b/Documentation/dev-tools/kmemleak.rst
-@@ -227,7 +227,7 @@ Testing with kmemleak-test
- --------------------------
- 
- To check if you have all set up to use kmemleak, you can use the kmemleak-test
--module, a module that deliberately leaks memory. Set CONFIG_DEBUG_KMEMLEAK_TEST
-+module, a module that deliberately leaks memory. Set CONFIG_SAMPLE_KMEMLEAK
- as module (it can't be used as built-in) and boot the kernel with kmemleak
- enabled. Load the module and perform a scan with::
- 
 -- 
-2.17.1
-
+Regards
+Vignesh
