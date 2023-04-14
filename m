@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 190246E1D3F
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 09:34:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFBA46E1D3B
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 09:34:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbjDNHeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 03:34:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54818 "EHLO
+        id S229805AbjDNHeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 03:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbjDNHdy (ORCPT
+        with ESMTP id S229681AbjDNHdx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 03:33:54 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044794C22;
+        Fri, 14 Apr 2023 03:33:53 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A454C0A;
         Fri, 14 Apr 2023 00:33:51 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33E7XZlS112600;
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33E7XZBg007121;
         Fri, 14 Apr 2023 02:33:35 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
         s=ti-com-17Q1; t=1681457615;
-        bh=sTUbTlFTXOqwhpfaXx9tn5PeuqA2wdP24f3uhSq1EVA=;
+        bh=tPUKjQ1mBYZ+SHjWQTbDlmMG4gzB/yZ4MV77kTLSEmI=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=O26B/A7bDsGkIsBNmu+5tlE0s1OEk8ezlsrvkm35h/daMnxYCIn2yVZbnkVr1rBr/
-         9PCo/aQT4ezvJB7l82naA33f8sRYGt7C4s65MbsnZ785p6TRlyG0g98BorUFM3eSgt
-         cL+FoB2lelPAvN1KseWiMIFye28jgor3EXjEzZ4U=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33E7XYYt053544
+        b=QNqVh0KV/lEosrQRqarKMJH+Lmqk8/xp/NkU8ZzZvm8cUu9PcKhIamQRzCNDbcnlQ
+         SVTOSpE5p+YojBrk0xy7liAAg2Ur5uoRzPS8N6tz5Tg/cwxVYJosEPD7BOkzLgGpw7
+         8X0IiQWtIZMJMm8SkeiSgyS+iMfA+v6W5b8OqNpU=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33E7XYIo031617
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
         Fri, 14 Apr 2023 02:33:34 -0500
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 14
  Apr 2023 02:33:34 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
  Frontend Transport; Fri, 14 Apr 2023 02:33:34 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33E7XY88021418;
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33E7XYAU020518;
         Fri, 14 Apr 2023 02:33:34 -0500
 From:   Nishanth Menon <nm@ti.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -50,9 +50,9 @@ CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         Nishanth Menon <nm@ti.com>,
         Neha Malcom Francis <n-francis@ti.com>,
         Nikhil M Jain <n-jain1@ti.com>, Tom Rini <trini@konsulko.com>
-Subject: [PATCH 03/10] arm64: dts: ti: k3-am642-sk: Enable main_i2c0 and eeprom
-Date:   Fri, 14 Apr 2023 02:33:21 -0500
-Message-ID: <20230414073328.381336-4-nm@ti.com>
+Subject: [PATCH 04/10] arm64: dts: ti: k3-am642-sk: Describe main_uart1 pins
+Date:   Fri, 14 Apr 2023 02:33:22 -0500
+Message-ID: <20230414073328.381336-5-nm@ti.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230414073328.381336-1-nm@ti.com>
 References: <20230414073328.381336-1-nm@ti.com>
@@ -69,50 +69,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable AT24C512C on the base board.
+Describe the main_uart1 pins even though it is a reserved node for
+hardware complete description. This is used by other users of device
+tree to help configure the SoC per board requirements.
 
 Signed-off-by: Nishanth Menon <nm@ti.com>
 ---
- arch/arm64/boot/dts/ti/k3-am642-sk.dts | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ arch/arm64/boot/dts/ti/k3-am642-sk.dts | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/ti/k3-am642-sk.dts b/arch/arm64/boot/dts/ti/k3-am642-sk.dts
-index 9a65f9b1c9ab..3e16942c0add 100644
+index 3e16942c0add..da4121b2e2c6 100644
 --- a/arch/arm64/boot/dts/ti/k3-am642-sk.dts
 +++ b/arch/arm64/boot/dts/ti/k3-am642-sk.dts
-@@ -251,6 +251,13 @@ AM64X_IOPAD(0x02a8, PIN_OUTPUT, 0) /* (E19) USB0_DRVVBUS */
+@@ -245,6 +245,15 @@ AM64X_IOPAD(0x0234, PIN_OUTPUT, 0) /* (C16) UART0_TXD */
  		>;
  	};
  
-+	main_i2c0_pins_default: main-i2c0-pins-default {
++	main_uart1_pins_default: main-uart1-pins-default {
 +		pinctrl-single,pins = <
-+			AM64X_IOPAD(0x0260, PIN_INPUT_PULLUP, 0) /* (A18) I2C0_SCL */
-+			AM64X_IOPAD(0x0264, PIN_INPUT_PULLUP, 0) /* (B18) I2C0_SDA */
++			AM64X_IOPAD(0x0248, PIN_INPUT, 0) /* (D16) UART1_CTSn */
++			AM64X_IOPAD(0x024c, PIN_OUTPUT, 0) /* (E16) UART1_RTSn */
++			AM64X_IOPAD(0x0240, PIN_INPUT, 0) /* (E15) UART1_RXD */
++			AM64X_IOPAD(0x0244, PIN_OUTPUT, 0) /* (E14) UART1_TXD */
 +		>;
 +	};
 +
- 	main_i2c1_pins_default: main-i2c1-pins-default {
+ 	main_usb0_pins_default: main-usb0-pins-default {
  		pinctrl-single,pins = <
- 			AM64X_IOPAD(0x0268, PIN_INPUT_PULLUP, 0) /* (C18) I2C1_SCL */
-@@ -350,6 +357,18 @@ &main_uart1 {
+ 			AM64X_IOPAD(0x02a8, PIN_OUTPUT, 0) /* (E19) USB0_DRVVBUS */
+@@ -355,6 +364,8 @@ &main_uart0 {
+ &main_uart1 {
+ 	/* main_uart1 is reserved for firmware usage */
  	status = "reserved";
++	pinctrl-names = "default";
++	pinctrl-0 = <&main_uart1_pins_default>;
  };
  
-+&main_i2c0 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_i2c0_pins_default>;
-+	clock-frequency = <400000>;
-+
-+	eeprom@51 {
-+		compatible = "atmel,24c512";
-+		reg = <0x51>;
-+	};
-+};
-+
- &main_i2c1 {
- 	status = "okay";
- 	pinctrl-names = "default";
+ &main_i2c0 {
 -- 
 2.40.0
 
