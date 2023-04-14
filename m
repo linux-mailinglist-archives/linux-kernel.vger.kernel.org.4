@@ -2,209 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 956576E196E
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 03:11:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83EFE6E1971
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 03:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbjDNBL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 21:11:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42250 "EHLO
+        id S229775AbjDNBLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 21:11:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjDNBL1 (ORCPT
+        with ESMTP id S229754AbjDNBLv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 21:11:27 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A5AD30E5
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 18:11:26 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id i20so21058862ybg.10
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 18:11:26 -0700 (PDT)
+        Thu, 13 Apr 2023 21:11:51 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B71130F3;
+        Thu, 13 Apr 2023 18:11:50 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id 21so8715246plg.12;
+        Thu, 13 Apr 2023 18:11:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1681434685; x=1684026685;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7e9/bDdYQAc83BC4MHDH3UDjIiFTqWrXhp7UGil91Hk=;
-        b=m0I1OAhWKDHDBZQTvnG6xsnO8mMGI98gmBYjuyRMurhRwBnzUlYwgnKaAFqkss5g6o
-         fBZH1Buv3LgFfK2v4g/v/+d0hkF6wnnrsBVD0RoTbW8svuo/yQQ3mwtzeUZ/pycBU11g
-         X/wQyVR92Y0GAu1dNqKtQp9jmySHLDnLsSMxY=
+        d=gmail.com; s=20221208; t=1681434710; x=1684026710;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+r3aux4yucH9SfhX2QxRIhHkcAuFbVjbJD90j5NQDME=;
+        b=LTiTK/swZV7NKEl/gDQ0Kwa8lG0QRiTNpM1bhk4UU41HQuNi9JvxoHuDzJapEkGiIc
+         blCXwG1azwi7xwTxv9JdkUjPiaEHYdfrDPfkGAll4qwo8RzViZDWtaJ++2ZlZ57+6QfN
+         l92H1aSvlNf55kdN/jJg3bSceXHk+7ExmBszbvjg9gV9W74dT6OjUgpGUlAY7eSnJR6N
+         wjkOarxQXE6IucpxP+Y0m8+M9p47ONQS++51wdNvgMPVVCY1Jb/5tkzEboDUcxINpDtS
+         W5vESFC/L20aEt0ijgh7o3pz8Qf26NJlWX9KSNOdal/6hNzQYpEfHmWRMfCty40vsYH5
+         ns7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681434685; x=1684026685;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7e9/bDdYQAc83BC4MHDH3UDjIiFTqWrXhp7UGil91Hk=;
-        b=iT4xsUvCpO3j8aIW+RBMM7kFKSrYNmlWHyMqYwnNOxEa2DxCYzEk4rN7rCtcv6nuc3
-         cAVIBKAmudDIBMXi/7H4CivGy3J7UBBBnJgc5/HwmiLHxeUZvUfk+v0CifKpe160YZ3G
-         JuGJN174OOKY6Y91gVwRHEd9QzapWdBsSTit7jRZYVI/2j60JOZtX6gKdUAkBwrkJP7u
-         qtAGrn2qFNMUI2vjppQyP7XqBCMSJieKaisW4pWv5ojgExdmr3Ru9zaH0LSL3qI2vGDj
-         HDP7l8LxGZ1+7scPdLH3ifXAGcn72Wol3TYjkO04dxYIuPzkeljj9moGXDhCZoQelFzG
-         xM7w==
-X-Gm-Message-State: AAQBX9flM5y3IX5/mT9rvzIEcKUN0Bs8x41HqXFP2Zzgj9t51CgR4SQq
-        ZVNgdeUrLY96BmUo4uoS8llYGjjyZmJfAlZEEPXU0w==
-X-Google-Smtp-Source: AKy350YPjhOs/a0tAHLcIqdFYyG6No7a5BIJAJagNLInoVfFY0LHcLiTAtVRduj956RTfEfpx+pbyV5ufn1zwDDaOEw=
-X-Received: by 2002:a25:d08d:0:b0:b8f:5492:852f with SMTP id
- h135-20020a25d08d000000b00b8f5492852fmr2637618ybg.2.1681434685270; Thu, 13
- Apr 2023 18:11:25 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681434710; x=1684026710;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+r3aux4yucH9SfhX2QxRIhHkcAuFbVjbJD90j5NQDME=;
+        b=bkvJLZBgEtobCIfQaE/BF2tEJzAoDs4UN+Ha5rm6VdwDvh5rEy4G0sxlIsvwPhlOEA
+         7Jr/p3ywuaaxNXhNQdJufG8U0XZbqmAB0QflHHyESVm2ewYJRe9RszAwDfUScvotocyL
+         Kj5UPDAsOGIajvzHXl0oUfPdSO/Cnu3M9DVj87jZKdsYIPNrRedV2L+QRQ36cHuTE243
+         c3Kx4tt1zuNIhcFG/RviJqGoxRVV2vlGPczu/v4yNDXrBkh7LrAoR7zuOUJTi0AE3r1u
+         vOgSSPhUVrruZ0wk8Ek9QcMofoFIn/SAMoYKir3afhiHoI/ovuFzDXv6akBGCc5M4+zP
+         p/Bg==
+X-Gm-Message-State: AAQBX9enm73TV2EliM6D040mAAVa23T8hgzlFqw3bqbZn1+i9TEXwzaN
+        EdYgcZ4eJdLtrjfDhdUMGko=
+X-Google-Smtp-Source: AKy350alZnXk2cEN2Fxwx4ap7KVspTrFpi0rTKMdrKoiKVa0Y51FgzPgsfTKRY54nCDiY47kD8MhqQ==
+X-Received: by 2002:a17:903:4281:b0:1a1:bf22:2b6e with SMTP id ju1-20020a170903428100b001a1bf222b6emr891939plb.43.1681434709602;
+        Thu, 13 Apr 2023 18:11:49 -0700 (PDT)
+Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id jw19-20020a170903279300b0019f3cc463absm2074638plb.0.2023.04.13.18.11.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Apr 2023 18:11:49 -0700 (PDT)
+Message-ID: <69b0aa3a-f5d2-8310-81ae-61d379db0d3b@gmail.com>
+Date:   Fri, 14 Apr 2023 09:11:46 +0800
 MIME-Version: 1.0
-References: <20230414005309.GA2198310@google.com>
-In-Reply-To: <20230414005309.GA2198310@google.com>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Thu, 13 Apr 2023 21:11:14 -0400
-Message-ID: <CAEXW_YRm62XHtpw4Ubp7x3n9jZJNGezRp0ymOGbQ3e62mysz1w@mail.gmail.com>
-Subject: Re: clangd cannot handle tree_nocb.h
-To:     rcu@vger.kernel.org, ndesaulniers@google.com, nathan@kernel.org,
-        trix@redhat.com, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, paulmck@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v7 05/12] dt-bindings: mfd: syscon: Add nuvoton,ma35d1-sys
+ compatible
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        arnd@arndb.de, schung@nuvoton.com, mjchen@nuvoton.com,
+        Jacky Huang <ychuang3@nuvoton.com>
+References: <20230412053824.106-1-ychuang570808@gmail.com>
+ <20230412053824.106-6-ychuang570808@gmail.com>
+ <d11b6acb-b072-9496-5ad6-0635357394f1@linaro.org>
+From:   Jacky Huang <ychuang570808@gmail.com>
+In-Reply-To: <d11b6acb-b072-9496-5ad6-0635357394f1@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-One way to fix this could be to add this to the beginning of tree_nocb.h
-
-/* Make clangd understand tree_nocb.h */
-+#ifdef CLANGD_PARSER_ACTIVE
-+#define TREE_NOCB_H_CLANGD
-+#include "tree.c"
-+#endif
-
-And then at the end of tree.c, do this to prevent recursion:
-+#ifndef TREE_NOCB_H_CLANGD
- #include "tree_nocb.h"
--#include "tree_plugin.h"
-+#endif
-+#include "tree_plugin.h"
-
-Then in scripts/clang-tools/gen_compile_commands.py, we can just make
-it add "-DCLANGD_PARSER_ACTIVE" to all compile command entries in the
-JSON file.
-
-Would that be an acceptable solution? Let me know your opinion (both
-Paul and clangd people :)) so I can work on a patch to do this.
-
- - Joel
+Dear Krzysztof,
 
 
+On 2023/4/14 上午 12:47, Krzysztof Kozlowski wrote:
+> On 12/04/2023 07:38, Jacky Huang wrote:
+>> From: Jacky Huang <ychuang3@nuvoton.com>
+>>
+>> Add Nuvoton ma35d1 system registers compatible.
+>>
+>> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+> What about the tag? Why did you ignore it?
+>
+> Also, wasn't this applied? Why do you resend (incorrect version)?
+>
+> Best regards,
+> Krzysztof
+>
 
-On Thu, Apr 13, 2023 at 8:53=E2=80=AFPM Joel Fernandes <joel@joelfernandes.=
-org> wrote:
->
-> Hello!
->
-> I have been trying to get clangd working properly with tree_nocb.h. clang=
-d
-> trips quite badly when trying to build tree_nocb.h to generate ASTs.
->
-> I get something like this in the clangd logs showing it 'infers' how to b=
-uild
-> tree_nocb.h because it could not find a command in compile_commands.json:
->
-> ASTWorker building file [..]/tree_nocb.h version 9 with command inferred =
-from
-> [..]/kernel/rcu/tree.c
->
-> This leads to all hell breaking lose with complaints about missing rcu_da=
-ta
-> struct definition and so forth.
->
-> So far I came up with a workaround as follows, but is there a better way?
->
-> 1. Open compile_commands.json and add a new entry as follows, with a
-> definition "-DNOCB_H_CLANGD_PARSE". Otherwise the entry is indentical to =
-how
-> tree.c is built.
->
->   {
->     "arguments": [
->       "/usr/bin/clang",
->       "-Wp,-MMD,kernel/rcu/.treenocb.o.d",
->       "-nostdinc",
->       "-I./arch/x86/include",
->       "-I./arch/x86/include/generated",
->       "-I./include",
->       "-I./arch/x86/include/uapi",
-> [...]
->       "-Wformat-zero-length",
->       "-Wnonnull",
->       "-Wformat-insufficient-args",
->       "-Wno-sign-compare",
->       "-Wno-pointer-to-enum-cast",
->       "-Wno-tautological-constant-out-of-range-compare",
->       "-Wno-unaligned-access",
->       "-DKBUILD_MODFILE=3D\"kernel/rcu/tree\"",
->       "-DKBUILD_BASENAME=3D\"tree\"",
->       "-DKBUILD_MODNAME=3D\"tree\"",
->       "-D__KBUILD_MODNAME=3Dkmod_tree",
->       "-DNOCB_H_CLANGD_PARSE",
->       "-c",
->       "-I",
->       "/s/",
->       "-I",
->       "/s/",
->       "-o",
->       "kernel/rcu/tree_nocb.h.o",
->       "kernel/rcu/tree_nocb.h"
->     ],
->     "directory": "/usr/local/google/home/joelaf/repo/linux-master",
->     "file": "/usr/local/google/home/joelaf/repo/linux-master/kernel/rcu/t=
-ree_nocb.h",
->     "output": "/usr/local/google/home/joelaf/repo/linux-master/kernel/rcu=
-/tree_nocb.h.o"
->   },
->
-> 2.
-> Then in kernel/tree/tree_nocb.h, I do the following right in the beginnin=
-g.
-> (Thanks to paulmck@ for this idea).
->
-> #ifdef NOCB_H_CLANGD_PARSE
-> #include "tree.c"
-> #endif
->
-> 3. To prevent the above inclusion of tree.c from recursively including
-> tree_nocb.h, I do the following at the end of tree.c
->
-> +#ifndef NOCB_H_CLANGD_PARSE
->  #include "tree_nocb.h"
-> -#include "tree_plugin.h"
-> +#endif
-> +#include "tree_plugin.h"
->
-> With that it works, but if I ever generate compile_commands.json again, t=
-hen
-> I'll have to again modify compile_commands.json manually to make my edito=
-r
-> work again with clangd.
->
-> So I guess my questions are:
->
-> 1. Is there a 'standard' procedure to solve something like this?
->
-> 2. How do we fix this the right way?
->    One way would be for scripts/clang-tools/gen_compile_commands.py to pa=
-rse
->    header files and generate suitable compile_commands.json based on
->    meta-data in the header file.
->
-> 3. How do we fix this for other header files in general? Do we have to ma=
-ke hacks like
->    above (sad face) or can we come up with a standard way to make it work=
- for kernel
->    sources?
->
-> Thank you!
->
->  - Joel
->
->
->
->
->
->
+When I was making this patchset, this patch was still not merged.
+So I'm not sure if I should remove it.
+This is just a resend with no updates. And I will remove this patch
+in the next version as it was applied.
+If possible, please add the following tags for this patch.
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Lee Jones <lee@kernel.org>
+
+
+Thank you,
+Jacky Huang
+
