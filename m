@@ -2,123 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E1806E1E9C
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08CD76E1E8A
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:42:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbjDNInc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 04:43:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52146 "EHLO
+        id S230130AbjDNImk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 04:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbjDNIn1 (ORCPT
+        with ESMTP id S229542AbjDNImh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 04:43:27 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA765FC2;
-        Fri, 14 Apr 2023 01:43:10 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33E7hfNq006573;
-        Fri, 14 Apr 2023 10:42:59 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=QpPXBtsHkQMuvY0n+wqW+FRbWvmIB4mawMzRJpA2Fyc=;
- b=QpH6BKok8SHoDwYCoSNTKCRyI601Ah8gxDv1zfAoLQXiyEyu3E3DC8a8h+JW4vTh69i3
- lm4+8+OVs6YJxXL8fMOqb4H4+aj9wXj35HMzQ/Ul+K8MN4BRyaLWjVMOfn01racUb23+
- 2T5JmyCNbJxdQy9Ox68N4Y4Vd6mfhOPnmgcDlvu9FHerrGKNcbzzCwfUGCZ6XYawrsH5
- ekWDOOw9mK0h8Im42t9Qi9ddDjK9hfpo6GRKGBSiV+HnVK6tAGl7aNaXlyDcGpcev9Yf
- X3OS91Q7t03VG+uUG9qDLhl04e0sJajjoc2L6+oTeiilCwxXK1DWWEjtZ80FtjSciTW/ gQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pwsgpq3qe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Apr 2023 10:42:58 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 286A7100034;
-        Fri, 14 Apr 2023 10:42:13 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 10B8720BE6D;
-        Fri, 14 Apr 2023 10:42:13 +0200 (CEST)
-Received: from localhost (10.252.1.127) by SHFDAG1NODE2.st.com (10.75.129.70)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Fri, 14 Apr
- 2023 10:42:11 +0200
-From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-To:     <hminas@synopsys.com>, <gregkh@linuxfoundation.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <alexandre.torgue@foss.st.com>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <amelie.delaunay@foss.st.com>, <fabrice.gasnier@foss.st.com>
-Subject: [PATCH v2 4/4] ARM: dts: stm32: add USB OTG UTMI clock on stm32mp151
-Date:   Fri, 14 Apr 2023 10:41:37 +0200
-Message-ID: <20230414084137.1050487-5-fabrice.gasnier@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230414084137.1050487-1-fabrice.gasnier@foss.st.com>
-References: <20230414084137.1050487-1-fabrice.gasnier@foss.st.com>
+        Fri, 14 Apr 2023 04:42:37 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0149D7284
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 01:42:35 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id c9so4955653ejz.1
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 01:42:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681461754; x=1684053754;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nHq+EupaWK5MJtpxLFtvDP9vBRUE48Hn964Cl/uitPU=;
+        b=Ep7aohUyYcWRl/kaTHamdzHff2u5f5xcZ4Iw5ooCnS7pkFckU+HODvocte84UBAcEj
+         B1qq0r+9M6SeYwxDKaYx3kTNnUiqZkTtdf6EKjZLQ+BGWxs+5+723Emh57fV0rGZplgn
+         4GFWscqRr2bPu4rdn+ro8jCf2djKEocC3bsBn5c0OvTSpj6m6fRuFtShyHyofArr4rn7
+         GFodPaUxzuP4ddXKJeyzjJf05HpbEvZQADKGP+QROzeHGCg9nKHKcVKjss9jeuXdX/EB
+         lUoQPyX61cB8TvYJD+YQlGsANyOJfOQ9urNlf2lJa9kLbGatI6BJw/9rezk8eUTv5NRC
+         3H6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681461754; x=1684053754;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nHq+EupaWK5MJtpxLFtvDP9vBRUE48Hn964Cl/uitPU=;
+        b=dRR29J08rQVDIle9zVmXaTypbDY6VtZAJGdKFNr96UICup6QmZ9uwxhaA0QZtBHYti
+         p92WAmHX/TSjyVGCvUmGUbpvbLjTXpLzD56w2r1lJL4mng0SCeUy7+sv92zUGrELhQMR
+         8yJnC3tCFFQ4wfOrSBOTh+mHgz00OtlletjfV44Ywl/6WQ15AGiiJZ2ZyMDs2/WrI1Ns
+         4Pu757LFLGU9kj3suPyWdud/xoAHSctpHx+sl1aONDnLo2lQpeLlhKaxDRaXr+fjMDUx
+         IycpxDocy1dLdgUZygz3WhUaSw8IIVT/GfSNl4xRqOSbC92JA3/zZj3OTM1RrkQ20PvD
+         a85g==
+X-Gm-Message-State: AAQBX9cnWE3dYUoa9jHjlrOinaZb2Xtugm3c7M8BeHuZ8fuhZXyjRI2U
+        MJqv9JIa1uOh6YzmVVznrYN6AQ==
+X-Google-Smtp-Source: AKy350ZPDeveGvHXCmasWX26jHul6oEoRldmgbv23zwBWv8n/OHBKJ910AjH/aWaKTzDvBSS1nAuXQ==
+X-Received: by 2002:a17:906:da8c:b0:94e:aa09:1b4d with SMTP id xh12-20020a170906da8c00b0094eaa091b4dmr4495805ejb.36.1681461754336;
+        Fri, 14 Apr 2023 01:42:34 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:8a60:6b0f:105a:eefb? ([2a02:810d:15c0:828:8a60:6b0f:105a:eefb])
+        by smtp.gmail.com with ESMTPSA id v15-20020aa7dbcf000000b00501d51c23fbsm1878762edt.6.2023.04.14.01.42.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Apr 2023 01:42:33 -0700 (PDT)
+Message-ID: <759c3b60-07f8-99c8-6ac2-73256538370e@linaro.org>
+Date:   Fri, 14 Apr 2023 10:42:32 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v1 2/6] dt-bindings: hypervisor: Add binding for MediaTek
+ GenieZone hypervisor
+Content-Language: en-US
+To:     =?UTF-8?B?WWktRGUgV3UgKOWQs+S4gOW+tyk=?= <Yi-De.Wu@mediatek.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        =?UTF-8?B?WWluZ3NoaXVhbiBQYW4gKOa9mOepjui7kik=?= 
+        <Yingshiuan.Pan@mediatek.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        "will@kernel.org" <will@kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        =?UTF-8?B?TVkgQ2h1YW5nICjojormmI7ouo0p?= <MY.Chuang@mediatek.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        =?UTF-8?B?UGVpTHVuIFN1ZWkgKOmai+WfueWAqyk=?= 
+        <PeiLun.Suei@mediatek.com>,
+        =?UTF-8?B?TGlqdS1jbHIgQ2hlbiAo6Zmz6bqX5aaCKQ==?= 
+        <Liju-clr.Chen@mediatek.com>,
+        =?UTF-8?B?SmFkZXMgU2hpaCAo5pa95ZCR546oKQ==?= 
+        <jades.shih@mediatek.com>,
+        "dbrazdil@google.com" <dbrazdil@google.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        =?UTF-8?B?U2hhd24gSHNpYW8gKOiVreW/l+elpSk=?= 
+        <shawn.hsiao@mediatek.com>,
+        =?UTF-8?B?TWlsZXMgQ2hlbiAo6Zmz5rCR5qi6KQ==?= 
+        <Miles.Chen@mediatek.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        =?UTF-8?B?SXZhbiBUc2VuZyAo5pu+5b+X6LuSKQ==?= 
+        <ivan.tseng@mediatek.com>,
+        =?UTF-8?B?WmUteXUgV2FuZyAo546L5r6k5a6HKQ==?= 
+        <Ze-yu.Wang@mediatek.com>
+References: <20230413090735.4182-1-yi-de.wu@mediatek.com>
+ <20230413090735.4182-3-yi-de.wu@mediatek.com>
+ <8ace9b0f-742a-7ebc-555f-1f8be04a5955@linaro.org>
+ <7b4492efa4a1becbdfb79d23a0a0c0fe11dba5f4.camel@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <7b4492efa4a1becbdfb79d23a0a0c0fe11dba5f4.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.252.1.127]
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-14_03,2023-04-13_01,2023-02-09_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's needed on STM32MP15, when using the integrated full-speed PHY. This
-clock is an output of USBPHYC, and the HS USBPHYC is not attached as PHY
-in this case (managed directly by dwc2 ggpio glue):
+On 14/04/2023 10:35, Yi-De Wu (吳一德) wrote:
+>> I don't know if we actually want to support proprietary hypervisors.
+>> There can be hundreds of them, one per each SoC manufacturer, and
+>> they
+>> can come with many ridiculous ideas.
+>>
+> MediaTek, as a partner of Android, our GenieZone hypervisor has been
+> one of the backend options under Android Virtualization Framework(AVF)
+> now.
+> Thus, we'd like to donate these patches for better supporting the
+> Linux/Android ecosystem.
 
-    &usbotg_hs {
-    	compatible = "st,stm32mp15-fsotg", "snps,dwc2";
-    	pinctrl-names = "default";
-    	pinctrl-0 = <&usbotg_hs_pins_a &usbotg_fs_dp_dm_pins_a>;
-    	vbus-supply = <&vbus_otg>;
-    	status = "okay";
-    };
+If it is proprietary, I don't have much interests in it. Make it
+open-source. :)
 
-USBPHYC clock output must be used, so it can be properly enabled as a
-clock provider.
-
-Without this, currently, when the dualport High-Speed USBPHYC isn't
-requested by either USBH or OTG, it remains uninitialized when probing
-OTG: OTG configured with full-speed PHY isn't properly clocked, resulting
-in error log like:
-[    2.383138] dwc2 49000000.usb-otg: dwc2_core_reset: HANG! Soft Reset
-timeout GRSTCTL_CSFTRST.
-
-Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
----
-Changes in v2:
-- "utmi_clk" renamed "utmi" as per Krzysztof comment on dt-bindings
----
- arch/arm/boot/dts/stm32mp151.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
-index 4e437d3f2ed6..63f4c78fcc1d 100644
---- a/arch/arm/boot/dts/stm32mp151.dtsi
-+++ b/arch/arm/boot/dts/stm32mp151.dtsi
-@@ -1130,8 +1130,8 @@ sdmmc3: mmc@48004000 {
- 		usbotg_hs: usb-otg@49000000 {
- 			compatible = "st,stm32mp15-hsotg", "snps,dwc2";
- 			reg = <0x49000000 0x10000>;
--			clocks = <&rcc USBO_K>;
--			clock-names = "otg";
-+			clocks = <&rcc USBO_K>, <&usbphyc>;
-+			clock-names = "otg", "utmi";
- 			resets = <&rcc USBO_R>;
- 			reset-names = "dwc2";
- 			interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
--- 
-2.25.1
+Best regards,
+Krzysztof
 
