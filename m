@@ -2,190 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58B7F6E2A16
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 20:29:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 754826E2A19
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 20:32:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbjDNS3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 14:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57978 "EHLO
+        id S229866AbjDNScW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 14:32:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbjDNS3l (ORCPT
+        with ESMTP id S229647AbjDNScV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 14:29:41 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCED44A9;
-        Fri, 14 Apr 2023 11:29:39 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33EITPnC119329;
-        Fri, 14 Apr 2023 13:29:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1681496966;
-        bh=duGXWm/j3nBzRl2n2W7pepgTfc6KT76GkKbo6Tam8xY=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=QoAvJ3muQZL9qdd4rCvaaAubB6BtMFkEeJx+PYr7uIp1IbEt7rDO1fn2gW2tCkkRg
-         s3IGCovqkgj+ywn5JVjsEXgBwHC/WgVDK8I8CldrdvTP9YZYsjZEEvSdnp+qEDNvlb
-         RLwBVC9axPLUc6qVFcZbqcNXCCjt74l2gRWR/B5I=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33EITPmn032250
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 14 Apr 2023 13:29:25 -0500
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 14
- Apr 2023 13:29:25 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 14 Apr 2023 13:29:25 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33EITPdd040108;
-        Fri, 14 Apr 2023 13:29:25 -0500
-Date:   Fri, 14 Apr 2023 13:29:25 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     Judith Mendez <jm@ti.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Andrew Davis <afd@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-can@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <netdev@vger.kernel.org>,
-        Schuyler Patton <spatton@ti.com>
-Subject: Re: [RFC PATCH 4/5] arm64: dts: ti: Enable multiple MCAN for AM62x
- in MCU MCAN overlay
-Message-ID: <20230414182925.ya3fe2n6mtyuqotb@detached>
-References: <20230413223051.24455-1-jm@ti.com>
- <20230413223051.24455-5-jm@ti.com>
- <9ab56180-328e-1416-56cb-bbf71af0c26d@linaro.org>
+        Fri, 14 Apr 2023 14:32:21 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23244EDD
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 11:32:20 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id t16so6972068ybi.13
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 11:32:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681497139; x=1684089139;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2R5kWy896vjoesu4O0RFZZzRsEx8VcqeAkJsUgFCRL0=;
+        b=Ul6jEmOGCg1c3Ihk12V0PQAuS1Bk9LAP66eWiedesgOMFnNLIHcata9Vf96fQ/AL0v
+         c1EDsgGWvKZex15KRoLvZ6Mb2a0lIvYxmJLUEViyOwBT5ap8l6wDqOEjFxZ8HuKKjQgI
+         Va3A/rpo6T1yG6sgzHfLXhlQbAHQC9cP5j+O4Gb+0QpDFF/A7DR85vHLr4ZTXMMtM0Ge
+         +dOrvVa3N93oFr19YuljSDF9Y5efKW6fqEThzuU1pLQl048K58ZCjT5nGig9B57NWtQK
+         hYhv5n0/2uNEdthA/KhH06hTSopgwV/PcaFiJuf83uBZKJNnJ8+Z1SwipjQVHTnQyiCZ
+         NQqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681497139; x=1684089139;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2R5kWy896vjoesu4O0RFZZzRsEx8VcqeAkJsUgFCRL0=;
+        b=Doh4dcHm3dgp4fM14zgCd8va/kq0TobOk6CXXm2nP9vc3D9ARAtd/jzIbEpEfZQJ3x
+         7v44bH9g0ctklzBG+GVU/zfUEK0kkiWqOj6b+lfb3izGW7LwyRNpZN+nboN9qeTWzQ80
+         yaseP+FD2WG72GGyp7VXBfbbTuFBW94ENKuEX92jFleBTaUhXEbzQ3LOUkw6mUz+P+qH
+         taQZwQygP3j/ESGX0gI7oXpeIYfXR6h9ohH1eVr5AfTOrGop86cHqzkP4zReT6GIVLqe
+         XW79QZ1KnYc56rkAq4pqgsXu9i662yUNgS+ZfgoUPbOQMP3xd+7RiZMSnnYpoo4tX6xQ
+         K7mg==
+X-Gm-Message-State: AAQBX9cj3k0J6llFtqLoxK0uB7Jj1Vsi8chirFQ7oAeZkSqiPFHQFcDa
+        bgro0aWA8UOeIjJt1M5i4XAcujYp+TYW0I1ztvrwFQ==
+X-Google-Smtp-Source: AKy350YDghSfb9CJEUH62FyYCXzTg2oCqrdREQ+EUBJ6LuVV+B8OSqGENxuxWXX2ErxGsRZROj0sUJreyqv67SwRBIU=
+X-Received: by 2002:a25:d2d2:0:b0:b8f:480c:ba49 with SMTP id
+ j201-20020a25d2d2000000b00b8f480cba49mr4004954ybg.4.1681497139125; Fri, 14
+ Apr 2023 11:32:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <9ab56180-328e-1416-56cb-bbf71af0c26d@linaro.org>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230414180043.1839745-1-surenb@google.com>
+In-Reply-To: <20230414180043.1839745-1-surenb@google.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Fri, 14 Apr 2023 11:32:08 -0700
+Message-ID: <CAJuCfpFwFxYo22to73bi6WwOtrSZNCQrF4PGD65wjEroRKoK5g@mail.gmail.com>
+Subject: Re: [PATCH 1/1] mm: handle swap page faults if the faulting page can
+ be locked
+To:     akpm@linux-foundation.org
+Cc:     willy@infradead.org, hannes@cmpxchg.org, mhocko@suse.com,
+        josef@toxicpanda.com, jack@suse.cz, ldufour@linux.ibm.com,
+        laurent.dufour@fr.ibm.com, michel@lespinasse.org,
+        liam.howlett@oracle.com, jglisse@google.com, vbabka@suse.cz,
+        minchan@google.com, dave@stgolabs.net, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10:01-20230414, Krzysztof Kozlowski wrote:
-> On 14/04/2023 00:30, Judith Mendez wrote:
-> > Enable two MCAN in MCU domain. AM62x does not have on-board CAN
-> > transcievers, so instead of changing the DTB permanently, add
-> > MCU MCAN nodes and transceiver nodes to a MCU MCAN overlay.
-> > 
-> > If there are no hardware interrupts rounted to the GIC interrupt
-> > controller for MCAN IP, A53 Linux will not receive hardware
-> > interrupts. If an hrtimer is used to generate software interrupts,
-> > the two required interrupt attributes in the MCAN node do not have
-> > to be included.
-> > 
-> > Signed-off-by: Judith Mendez <jm@ti.com>
-> > ---
-> >  arch/arm64/boot/dts/ti/Makefile               |  2 +-
-> >  .../boot/dts/ti/k3-am625-sk-mcan-mcu.dtso     | 75 +++++++++++++++++++
-> >  2 files changed, 76 insertions(+), 1 deletion(-)
-> >  create mode 100644 arch/arm64/boot/dts/ti/k3-am625-sk-mcan-mcu.dtso
-> > 
-> > diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
-> > index abe15e76b614..c76be3888e4d 100644
-> > --- a/arch/arm64/boot/dts/ti/Makefile
-> > +++ b/arch/arm64/boot/dts/ti/Makefile
-> > @@ -9,7 +9,7 @@
-> >  # alphabetically.
-> >  
-> >  # Boards with AM62x SoC
-> > -k3-am625-sk-mcan-dtbs := k3-am625-sk.dtb k3-am625-sk-mcan-main.dtbo
-> > +k3-am625-sk-mcan-dtbs := k3-am625-sk.dtb k3-am625-sk-mcan-main.dtbo k3-am625-sk-mcan-mcu.dtbo
-> >  dtb-$(CONFIG_ARCH_K3) += k3-am625-beagleplay.dtb
-> >  dtb-$(CONFIG_ARCH_K3) += k3-am625-sk.dtb
-> >  dtb-$(CONFIG_ARCH_K3) += k3-am625-sk-mcan.dtb
-> > diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk-mcan-mcu.dtso b/arch/arm64/boot/dts/ti/k3-am625-sk-mcan-mcu.dtso
-> > new file mode 100644
-> > index 000000000000..777705aea546
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/ti/k3-am625-sk-mcan-mcu.dtso
-> > @@ -0,0 +1,75 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/**
-> > + * DT overlay for MCAN in MCU domain on AM625 SK
-> > + *
-> > + * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
-> > + */
-> > +
-> > +/dts-v1/;
-> > +/plugin/;
-> > +
-> > +#include <dt-bindings/pinctrl/k3.h>
-> > +#include <dt-bindings/soc/ti,sci_pm_domain.h>
+On Fri, Apr 14, 2023 at 11:00=E2=80=AFAM Suren Baghdasaryan <surenb@google.=
+com> wrote:
+>
+> When page fault is handled under VMA lock protection, all swap page
+> faults are retried with mmap_lock because folio_lock_or_retry
+> implementation has to drop and reacquire mmap_lock if folio could
+> not be immediately locked.
+> Instead of retrying all swapped page faults, retry only when folio
+> locking fails.
 
-NAK.
+I just realized that the title of the patch is misleading. It's about
+handling page fault under VMA lock. A better title would be something
+like:
 
-> > +
-> > +
-> > +&{/} {
-> > +	transceiver2: can-phy1 {
-> > +		compatible = "ti,tcan1042";
-> > +		#phy-cells = <0>;
-> > +		max-bitrate = <5000000>;
-> > +	};
-> > +
-> > +	transceiver3: can-phy2 {
-> > +		compatible = "ti,tcan1042";
-> > +		#phy-cells = <0>;
-> > +		max-bitrate = <5000000>;
-> > +	};
-> > +};
-> > +
-> > +&mcu_pmx0 {
-> > +	mcu_mcan1_pins_default: mcu-mcan1-pins-default {
-> > +		pinctrl-single,pins = <
-> > +			AM62X_IOPAD(0x038, PIN_INPUT, 0) /* (B3) MCU_MCAN0_RX */
-> > +			AM62X_IOPAD(0x034, PIN_OUTPUT, 0) /* (D6) MCU_MCAN0_TX */
-> > +		>;
-> > +	};
-> > +
-> > +	mcu_mcan2_pins_default: mcu-mcan2-pins-default {
-> > +		pinctrl-single,pins = <
-> > +			AM62X_IOPAD(0x040, PIN_INPUT, 0) /* (D4) MCU_MCAN1_RX */
-> > +			AM62X_IOPAD(0x03C, PIN_OUTPUT, 0) /* (E5) MCU_MCAN1_TX */
-> > +		>;
-> > +	};
-> > +};
-> > +
-> > +&cbass_mcu {
-> > +	mcu_mcan1: can@4e00000 {
-> > +		compatible = "bosch,m_can";
-> > +		reg = <0x00 0x4e00000 0x00 0x8000>,
-> > +			  <0x00 0x4e08000 0x00 0x200>;
-> > +		reg-names = "message_ram", "m_can";
-> > +		power-domains = <&k3_pds 188 TI_SCI_PD_EXCLUSIVE>;
-> > +		clocks = <&k3_clks 188 6>, <&k3_clks 188 1>;
-> > +		clock-names = "hclk", "cclk";
-> > +		bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
-> > +		pinctrl-names = "default";
-> > +		pinctrl-0 = <&mcu_mcan1_pins_default>;
-> > +		phys = <&transceiver2>;
-> > +		status = "okay";
-> 
-> okay is by default. Why do you need it?
+"mm: handle swap page faults under vma lock if page is uncontended"
 
-mcan is not functional without pinmux, so it has been disabled by
-default in SoC. this overlay is supposed to enable it. But this is done
-entirely wrongly.
-
-
-The mcu_mcan1 should first be added to the SoC.dtsi as disabled, then
-set to okay with pinctrl and  transciever in the overlay.
-
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+>
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> ---
+> Patch applies cleanly over linux-next and mm-unstable
+>
+>  mm/filemap.c | 6 ++++++
+>  mm/memory.c  | 5 -----
+>  2 files changed, 6 insertions(+), 5 deletions(-)
+>
+> diff --git a/mm/filemap.c b/mm/filemap.c
+> index 6f3a7e53fccf..67b937b0f436 100644
+> --- a/mm/filemap.c
+> +++ b/mm/filemap.c
+> @@ -1706,6 +1706,8 @@ static int __folio_lock_async(struct folio *folio, =
+struct wait_page_queue *wait)
+>   *     mmap_lock has been released (mmap_read_unlock(), unless flags had=
+ both
+>   *     FAULT_FLAG_ALLOW_RETRY and FAULT_FLAG_RETRY_NOWAIT set, in
+>   *     which case mmap_lock is still held.
+> + *     If flags had FAULT_FLAG_VMA_LOCK set, meaning the operation is pe=
+rformed
+> + *     with VMA lock only, the VMA lock is still held.
+>   *
+>   * If neither ALLOW_RETRY nor KILLABLE are set, will always return true
+>   * with the folio locked and the mmap_lock unperturbed.
+> @@ -1713,6 +1715,10 @@ static int __folio_lock_async(struct folio *folio,=
+ struct wait_page_queue *wait)
+>  bool __folio_lock_or_retry(struct folio *folio, struct mm_struct *mm,
+>                          unsigned int flags)
+>  {
+> +       /* Can't do this if not holding mmap_lock */
+> +       if (flags & FAULT_FLAG_VMA_LOCK)
+> +               return false;
+> +
+>         if (fault_flag_allow_retry_first(flags)) {
+>                 /*
+>                  * CAUTION! In this case, mmap_lock is not released
+> diff --git a/mm/memory.c b/mm/memory.c
+> index d88f370eacd1..3301a8d01820 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -3715,11 +3715,6 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+>         if (!pte_unmap_same(vmf))
+>                 goto out;
+>
+> -       if (vmf->flags & FAULT_FLAG_VMA_LOCK) {
+> -               ret =3D VM_FAULT_RETRY;
+> -               goto out;
+> -       }
+> -
+>         entry =3D pte_to_swp_entry(vmf->orig_pte);
+>         if (unlikely(non_swap_entry(entry))) {
+>                 if (is_migration_entry(entry)) {
+> --
+> 2.40.0.634.g4ca3ef3211-goog
+>
