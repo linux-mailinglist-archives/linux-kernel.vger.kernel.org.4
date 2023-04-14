@@ -2,151 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B77796E265F
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 17:01:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36AF96E2662
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 17:03:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230514AbjDNPB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 11:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54350 "EHLO
+        id S230287AbjDNPDE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 14 Apr 2023 11:03:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbjDNPBy (ORCPT
+        with ESMTP id S230163AbjDNPDC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 11:01:54 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8664365A8
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 08:01:51 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230414150150euoutp02e376699b6263a5393f42b731331d4bbf~V1UDGoCjs0307903079euoutp02C
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 15:01:50 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230414150150euoutp02e376699b6263a5393f42b731331d4bbf~V1UDGoCjs0307903079euoutp02C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1681484510;
-        bh=k2KMSY3rEPC/l3wXRBxqdB3ENhOA3GWRhLXn6UokrYg=;
-        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
-        b=Ncz0YzLo1qqj+ch4v7bUvJJXCgwLKsEPK9l45RyoZdy6Re9wKeeWsAPS7OUvNr9Tb
-         hluSI+0SskDxTDzCmAZpz3CVupM3qtk4E5ZHB3E1ymr06yODepqJ5QyRugAKxXnBdr
-         9NjW7NC41M1IBrwiAU1NtRlDHH0+AD7CaoecEfdY=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20230414150149eucas1p28c28debfd8970a58a0f7aad4911ed40e~V1UC3sMaI3175731757eucas1p2W;
-        Fri, 14 Apr 2023 15:01:49 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 19.16.09966.DDA69346; Fri, 14
-        Apr 2023 16:01:49 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20230414150149eucas1p2530c12531599e6fd376a19f8a7d59740~V1UCcvLn-1376713767eucas1p21;
-        Fri, 14 Apr 2023 15:01:49 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230414150149eusmtrp2ffa4c4747cf08e810cdb7586e9c84a38~V1UCcMMtp2102421024eusmtrp2t;
-        Fri, 14 Apr 2023 15:01:49 +0000 (GMT)
-X-AuditID: cbfec7f4-d39ff700000026ee-3a-64396add5e29
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 0B.E9.34412.DDA69346; Fri, 14
-        Apr 2023 16:01:49 +0100 (BST)
-Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20230414150149eusmtip2609769cecb935de635342ecd39098ad9~V1UCPooxn2857528575eusmtip2U;
-        Fri, 14 Apr 2023 15:01:49 +0000 (GMT)
-Received: from [106.110.32.65] (106.110.32.65) by CAMSVWEXC02.scsc.local
-        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Fri, 14 Apr 2023 16:01:48 +0100
-Message-ID: <505f1aac-8348-56c2-b925-6a905af9be24@samsung.com>
-Date:   Fri, 14 Apr 2023 17:01:47 +0200
+        Fri, 14 Apr 2023 11:03:02 -0400
+Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD0DE171F
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 08:03:00 -0700 (PDT)
+Received: from omf01.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay04.hostedemail.com (Postfix) with ESMTP id AA2BE1A0334;
+        Fri, 14 Apr 2023 15:02:58 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf01.hostedemail.com (Postfix) with ESMTPA id 90F8F60010;
+        Fri, 14 Apr 2023 15:02:54 +0000 (UTC)
+Message-ID: <20fea31d91329f44181dc74443359494e5baeac4.camel@perches.com>
+Subject: Re: [PATCH v5] checkpatch: introduce proper bindings license check
+From:   Joe Perches <joe@perches.com>
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     krzysztof.kozlowski@linaro.org, apw@canonical.com,
+        dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
+        kernel@sberdevices.ru, linux-kernel@vger.kernel.org,
+        rockosov@gmail.com, robh@kernel.org
+Date:   Fri, 14 Apr 2023 08:02:53 -0700
+In-Reply-To: <20230414113907.xzjxp4233f35ja6t@CAB-WSD-L081021>
+References: <20230404191715.7319-1-ddrokosov@sberdevices.ru>
+         <CAL_Jsq+o452r9SzyT=9XPTYKu0hPkHWZWH8Og3VjKdxaGxDKRA@mail.gmail.com>
+         <20230414113907.xzjxp4233f35ja6t@CAB-WSD-L081021>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
-        Thunderbird/102.10.0
-Subject: Re: [RFC 2/4] buffer: add alloc_folio_buffers() helper
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>
-CC:     <brauner@kernel.org>, <viro@zeniv.linux.org.uk>,
-        <akpm@linux-foundation.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <mcgrof@kernel.org>,
-        <gost.dev@samsung.com>, <hare@suse.de>
-From:   Pankaj Raghav <p.raghav@samsung.com>
-In-Reply-To: <ZDlP2fevtfD5gMPd@casper.infradead.org>
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [106.110.32.65]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrMKsWRmVeSWpSXmKPExsWy7djPc7p3syxTDM691rWYs34Nm8Xrw58Y
-        LfYsmsRksWfvSRaLy7vmsFncmPCU0eL83+OsFr9/zGFz4PDYvELLY9OqTjaPEzN+s3hsPl3t
-        8XmTnMemJ2+ZAtiiuGxSUnMyy1KL9O0SuDK2zHvDWPCHrWJ+g1oD4yXWLkZODgkBE4nfc6Yy
-        dzFycQgJrGCUOP3zFwuE84VRYv7Tm+wQzmdGif+t/UwwLWsfvGWCSCxnlJj36CMjXNWMVQ/A
-        BgsJ7GSU+HcrF8TmFbCTWHmtkR3EZhFQlbj8so8RIi4ocXLmExYQW1QgWmLxvilgtrCAvUTH
-        iY3MIDazgLjErSfzgbZxcIgIaEi82WIEsotZ4AqjxNM7R1hA4mwCWhKNnWDjOYGOa1v4G6pV
-        XmL72znMEEcrSky6+R7q51qJU1tugT0gIdDNKfF5xkp2iISLxN8THxghbGGJV8e3QMVlJP7v
-        nA/1fbXE0xu/mSGaWxgl+neuZwM5QkLAWqLvTA6IySygKbF+lz5E1FHixFoeCJNP4sZbQYjL
-        +CQmbZvOPIFRdRZSOMxC8u8sJA/MQpi5gJFlFaN4amlxbnpqsVFearlecWJucWleul5yfu4m
-        RmA6Ov3v+JcdjMtffdQ7xMjEwXiIUYKDWUmEt8rSMkWINyWxsiq1KD++qDQntfgQozQHi5I4
-        r7btyWQhgfTEktTs1NSC1CKYLBMHp1QDk87CGwpHS45v+SqmPTFTba704n8vX05Wrb0rknP/
-        bUSd+pOoA8VnyqasKbWMWvrqjovIlGlairNcs3jF7GYsk7ax7/b9Kn9UuYytMcv12zs3kx6+
-        lV0JDTqc67l/Tnp9boPi4XvCeit8YtYtvWtq3vJhhZKB/pbeORbb3Beu4pz53CBC9kqnzZ0L
-        827a12kIKc3McGC2zPTcIhe6vmWH9zThP9uka3Ll9atFv24x2Xmv4xDH/VeFR0umZqpUNwh/
-        7xBuW7c8e5Lu74dMR02Wdly8/dL8tjjDons9mc9r1O1lA+68O//Ms+KK+LasoErnA3tZvS/O
-        us+mJxr7zULtrc6rPeWpRa2T57F0X519QYmlOCPRUIu5qDgRAOzELsa2AwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDIsWRmVeSWpSXmKPExsVy+t/xe7p3syxTDM694reYs34Nm8Xrw58Y
-        LfYsmsRksWfvSRaLy7vmsFncmPCU0eL83+OsFr9/zGFz4PDYvELLY9OqTjaPEzN+s3hsPl3t
-        8XmTnMemJ2+ZAtii9GyK8ktLUhUy8otLbJWiDS2M9AwtLfSMTCz1DI3NY62MTJX07WxSUnMy
-        y1KL9O0S9DK2zHvDWPCHrWJ+g1oD4yXWLkZODgkBE4m1D94ydTFycQgJLGWU2P79O1RCRmLj
-        l6tQtrDEn2tdbBBFHxklFq0EKQJxdjJKTL63nBGkilfATmLltUZ2EJtFQFXi8ss+qLigxMmZ
-        T1hAbFGBaIkby78xgdjCAvYSHSc2MoPYzALiEreezAeKc3CICGhIvNliBDKfWeAKo8TTO0dY
-        IJY9Z5S4+2wmG0gRm4CWRGMn2C5OoBfaFv6GmqMp0br9NzuELS+x/e0cZogPFCUm3XwP9U2t
-        xOe/zxgnMIrOQnLeLCRnzEIyahaSUQsYWVYxiqSWFuem5xYb6RUn5haX5qXrJefnbmIERvO2
-        Yz+37GBc+eqj3iFGJg7GQ4wSHMxKIrxVlpYpQrwpiZVVqUX58UWlOanFhxhNgWE0kVlKNDkf
-        mE7ySuINzQxMDU3MLA1MLc2MlcR5PQs6EoUE0hNLUrNTUwtSi2D6mDg4pRqYmOsTFhQdVZm6
-        WPOmSqBVaNTP6EiTG2u+vrQKOvT5pPjlT73yer7+OnO+9OmuV835eGC90vmgHQsf/n9w4pDe
-        3p7ZR0TZd0ucL5/ffXxe/ZYWBT5mwaJXtUuDnd5+vfbvw7ZE32Oc6o8udTnZt4tkSH25pxtS
-        6j93EpPS1679t4yduRaeafXedydmkZjHfOdXyxZ/uOFnOu9i+oLMU/8Cd/iqvfxZbpQ7Yauf
-        vkPi1GIJuwkLP+5lsG7LuTDp8e17gu29W00ZpTy/sylZebtsuG3otjTg3Ku3HzeaSj3VzJAJ
-        qk5I+jxrglbGm8yI3cUtLJ03O+K3pei+KHYpihW+urTl9v9vHOJPy2btDli3VYmlOCPRUIu5
-        qDgRACVJkUxvAwAA
-X-CMS-MailID: 20230414150149eucas1p2530c12531599e6fd376a19f8a7d59740
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20230414110826eucas1p2c5afcbd64c536a803751b41d03eb9e99
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20230414110826eucas1p2c5afcbd64c536a803751b41d03eb9e99
-References: <20230414110821.21548-1-p.raghav@samsung.com>
-        <CGME20230414110826eucas1p2c5afcbd64c536a803751b41d03eb9e99@eucas1p2.samsung.com>
-        <20230414110821.21548-3-p.raghav@samsung.com>
-        <ZDlP2fevtfD5gMPd@casper.infradead.org>
-X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Rspamd-Queue-Id: 90F8F60010
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Rspamd-Server: rspamout03
+X-Stat-Signature: z4iesttwif9q956wqyid546gf5he3koe
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+Jg29Z37Uv3bDXFMDTCGCbwtoHOtAWMFo=
+X-HE-Tag: 1681484574-674280
+X-HE-Meta: U2FsdGVkX1/M/EiZPSYCqwziK0C0WEBaCRNgRW7i5FxWOX9tnSeaETsdeR+oZu14diEOZFh7K5Th37/mBz6cwA==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-14 15:06, Matthew Wilcox wrote:
-> On Fri, Apr 14, 2023 at 01:08:19PM +0200, Pankaj Raghav wrote:
->> Folio version of alloc_page_buffers() helper. This is required to convert
->> create_page_buffers() to create_folio_buffers() later in the series.
->>
->> It removes one call to compound_head() compared to alloc_page_buffers().
+On Fri, 2023-04-14 at 14:39 +0300, Dmitry Rokosov wrote:
+> Hello Joe,
 > 
-> I would convert alloc_page_buffers() to folio_alloc_buffers() and
-> add
+> On Tue, Apr 11, 2023 at 09:29:36AM -0500, Rob Herring wrote:
+> > On Tue, Apr 4, 2023 at 2:17 PM Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
+> > > 
+> > > All headers from 'include/dt-bindings/' must be verified by checkpatch
+> > > together with Documentation bindings, because all of them are part of
+> > > the whole DT bindings system.
+> > > 
+> > > The requirement is dual licensed and matching patterns:
+> > > * Schemas:
+> > >     /GPL-2\.0(?:-only)? OR BSD-2-Clause/
+> > > * Headers:
+> > >     /GPL-2\.0(?:-only)? OR \S+/
+> > > 
+> > > Above patterns suggested by Rob at:
+> > > https://lore.kernel.org/all/CAL_Jsq+-YJsBO+LuPJ=ZQ=eb-monrwzuCppvReH+af7hYZzNaQ@mail.gmail.com
+> > > 
+> > > The issue was found during patch review:
+> > > https://lore.kernel.org/all/20230313201259.19998-4-ddrokosov@sberdevices.ru/
+> > > 
+> > > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> > > ---
+> > > Changes v5 since v4 at [4]:
+> > >     - only capital OR is acceptable for SPDX per Rob's suggestion
+[]
+> > Reviewed-by: Rob Herring <robh@kernel.org>
 > 
-> static struct buffer_head *alloc_page_buffers(struct page *page,
-> 		unsigned long size, bool retry)
-> {
-> 	return folio_alloc_buffers(page_folio(page), size, retry);
-> }
-> 
-> in buffer_head.h
-> 
-> (there are only five callers, so this feels like a better tradeoff
-> than creating a new function)
-> 
-That is a good idea and follows the usual pattern for folio conversion. I will
-send a new version soon with your other comments as well.
+> Are you okay with this patch version? Rob is good with that, so please
+> advise what the next step is.
 
---
-Pankaj
+Yes, I'm fine with it.  Andrew Morton can apply it at his leisure.
+
