@@ -2,51 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EC986E24E8
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 15:58:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEB526E24F5
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 16:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbjDNN6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 09:58:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47966 "EHLO
+        id S230106AbjDNOAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 10:00:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbjDNN6C (ORCPT
+        with ESMTP id S230034AbjDNOAK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 09:58:02 -0400
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD74FBB;
-        Fri, 14 Apr 2023 06:58:01 -0700 (PDT)
-Received: by mail-ej1-f45.google.com with SMTP id jg21so45431053ejc.2;
-        Fri, 14 Apr 2023 06:58:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681480680; x=1684072680;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9McAPUtQ4wyOQZnb9f0/u2YiMiGyJU422JGspd0jX2g=;
-        b=Cbr+ANfGYbbt/NvfhpY3db1rtk6MSxCea3gelp15ajOO/EhRSxPFuOSe2SVDPXoqAO
-         lTEqye+v9/JTnQZoULVYuFCkpijjwWgOmXPSeZ65KYaOn9wmBtyIf2643uX6fHn8cVjs
-         PF3m0gUmi7+XneBQJg9apq+uFldD0F5/taadxhDPq4xj7B9Yuee6ZLqOBgBYd4ZHkatu
-         xFuUv18e5dWzk90fAwviZNH1AoHxNG0WOXaRDfViIdV/hiEdjnnnMMrNz1+nWXHX59BS
-         dCzzkSh41v4WZ8hx0SiS9d0ckx6BeuR4gDRUhSbWbDRCveFTlcACDc1Os8LsOgHKibQp
-         QlBg==
-X-Gm-Message-State: AAQBX9cNNiuhyJdoz8KhOz7Urk5RUmkSxcnTs9YaGwQ5zfDzISm87+ON
-        W68VHKywvebdyyjG3jNJm6HAzdU3R+CGpwVHr9zXfgAP93o=
-X-Google-Smtp-Source: AKy350YtTO8PZixXKyq5XWALpgvl39l9Ru9+tNzYLKqbDk9wIw77y2O7ap4obkS529kQpjEnICT/W3GBDdr9y13wMnA=
-X-Received: by 2002:a17:906:37d3:b0:94e:fd2c:f829 with SMTP id
- o19-20020a17090637d300b0094efd2cf829mr358715ejc.2.1681480680130; Fri, 14 Apr
- 2023 06:58:00 -0700 (PDT)
+        Fri, 14 Apr 2023 10:00:10 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90860AF35;
+        Fri, 14 Apr 2023 07:00:05 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33EBncAD009442;
+        Fri, 14 Apr 2023 13:59:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=Tooml1hhLwti7ZYgYj0Dz0aeb5Hl0ADPmtkWfv01SEM=;
+ b=OgWYCfxO+qrcF6YEoyqoLRPiJw2tC8FhZQzGWbkHAnvAeEay0APqGZyFGoV1GKSFMTgH
+ hDTrfhfaQcZmHuw3+ZWZU5X7DsyW+0zVEQf7fXxgPwcptN1DvT0NFy2wAW7AVOc9nigA
+ 0diBeLkRjhs12rVhnaVs7+YtQQlpYWCpW8c70feCsOFwProENoS+Ts1iqL9DJNmaN3sC
+ Jbsyu32f9qIy6MxrUuJwlNpBfspr3197Mvivcx080Q7u/vO5s1oguROrNJUCIGLrTfT8
+ wRjXA1GELBciuqqkoZpMXe0PQpAxw1N+vGbx/M9yxGiOobraP1OkEmWqnLu6//TqMH2A Yw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pxe66k7cw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 13:59:50 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33EDxnCe017102
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 13:59:49 GMT
+Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Fri, 14 Apr 2023 06:59:44 -0700
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Alex Elder <elder@ieee.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Subject: [PATCH V1 0/3] Add Data Capture and Compare(DCC) driver to new location
+Date:   Fri, 14 Apr 2023 19:29:10 +0530
+Message-ID: <cover.1681480351.git.quic_schowdhu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 14 Apr 2023 15:57:49 +0200
-Message-ID: <CAJZ5v0jVJ+7XLZtv6YE0O0PUB9OSzf7c2qN=eESVHUCni8xjrQ@mail.gmail.com>
-Subject: [GIT PULL] Power management fix for v6.3-rc7
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: fi3kkEBL1f0Ym8N3tGJiXn5uQn6AH8tC
+X-Proofpoint-ORIG-GUID: fi3kkEBL1f0Ym8N3tGJiXn5uQn6AH8tC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-14_07,2023-04-14_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=625 phishscore=0
+ lowpriorityscore=0 spamscore=0 impostorscore=0 adultscore=0 clxscore=1011
+ mlxscore=0 suspectscore=0 bulkscore=0 malwarescore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304140126
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,36 +82,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+DCC(Data Capture and Compare) is a DMA engine designed for debugging purposes.
+In case of a system crash or manual software triggers by the user the DCC hardware
+stores the value at the register addresses which can be used for debugging purposes.
+The DCC driver provides the user with debugfs interface to configure the register
+addresses. The options that the DCC hardware provides include reading from registers,
+writing to registers, first reading and then writing to registers and looping
+through the values of the same register.
 
-Please pull from the tag
+This patch series is a continuation of the previous series
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-6.3-rc7
+https://lore.kernel.org/linux-arm-kernel/20221228172825.r32vpphbdulaldvv@builder.lan/T/
 
-with top-most commit 4654e9f9f43993eb9ce383fa7c88d14b052b8cc3
+The dcc driver is moved to a new location drivers/misc along with the binding
+as per discussions.
 
- amd-pstate: Fix amd_pstate mode switch
+Souradeep Chowdhury (3):
+  dt-bindings: misc: qcom,dcc: Add the dtschema
+  drivers: misc: dcc: Add driver support for Data Capture and Compare
+    unit(DCC)
+  MAINTAINERS: Add the entry for DCC(Data Capture and Compare) driver
+    support
 
-on top of commit 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d
+ .../devicetree/bindings/misc/qcom,dcc.yaml         |   44 +
+ MAINTAINERS                                        |    8 +
+ drivers/misc/Kconfig                               |    8 +
+ drivers/misc/Makefile                              |    1 +
+ drivers/misc/dcc.c                                 | 1305 ++++++++++++++++++++
+ 5 files changed, 1366 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/misc/qcom,dcc.yaml
+ create mode 100644 drivers/misc/dcc.c
 
- Linux 6.3-rc6
+--
+2.7.4
 
-to receive a power management fix for 6.3-rc7.
-
-Make the amd-pstate cpufreq driver take all of the possible combinations
-of the "old" and "new" status values correctly while changing the
-operation mode via sysfs (Wyes Karny).
-
-Thanks!
-
-
----------------
-
-Wyes Karny (1):
-      amd-pstate: Fix amd_pstate mode switch
-
----------------
-
- drivers/cpufreq/amd-pstate.c | 18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
