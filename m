@@ -2,168 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19B3D6E2A79
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 21:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FADA6E2A7C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 21:09:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbjDNTJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 15:09:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43906 "EHLO
+        id S229967AbjDNTJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 15:09:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjDNTJc (ORCPT
+        with ESMTP id S229938AbjDNTJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 15:09:32 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C4D1991
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 12:09:28 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id u12so6950130lfu.5
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 12:09:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681499367; x=1684091367;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jVnUlhBA6jdlz83dcJuvBqHrUvd0hrnnS1oyxuPo19o=;
-        b=n+f05nLeF9RRty+4PwYX2MJg35RU6XoRr+aQ19NimDsWDexyxXCssREQrw7SW0a+os
-         Iiyatkx5HMRAITqlMSWlD250jp074ZpMQTZFA9Vky6cBe5M6L6C/uopa5mUK/zjuNVJb
-         mClWHu6XEOn0ft7bPzsulddypbIq4+JXVkzb3TDdSYLGoxD0G7qLgrfaKJwrR+rC3UXG
-         7n5F9ieBZ4jJ+6Hm4PAmAL+JEDjSlXNfjMTDTg+bc390JlShIvanch/UD0BJlrQFiWrM
-         ZzRil+jfJNwT5qx/fUzCxC2Ye7qfT8f+Z7Hq9HvjsbyRoiW4q+v5DRRf1TX7TOPQmfRL
-         69WQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681499367; x=1684091367;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jVnUlhBA6jdlz83dcJuvBqHrUvd0hrnnS1oyxuPo19o=;
-        b=Dwutmq2lg0W5EQe5BNnDFLEdoVpS5C8xUlWmVoeUat/2+WObSXmuGo767C2SvtBgeS
-         rmin0NmoGQ0J5z/cNs/ho9S6IkeHEAuiAuZuQytCEkGsBAnAciwNgKoY/t5b20dRzh4j
-         eR4XLzE0NvYNOrJjS/+I56daWr6k++2fPCkBrRpS1dbCrjjIkNNqgV3tbEO2biBKtMOO
-         sMMBpspDh9povwN1C17+2tEIeFipwUTTW2jwfBQa6MNQhpZOjCzmZouMPhi27fqPpEIj
-         0AtiXX6KDzjtw+eqPN82cUHkYxcq813HGPbpXHlRB9JXNEikn6pDE+hDTFhLFTUH3j4H
-         GwMg==
-X-Gm-Message-State: AAQBX9eNtI9WUhjn899MLUNmpP5Pqql5GzapGAisiif6dojf3IYxKpcy
-        lzuLU+SdoME0KJTJcHnlge/nApMJxpvUfwcYsGOadA==
-X-Google-Smtp-Source: AKy350b8TidBfwv6qQzVGUQWXE7sAbTgCZlg7xzVKfrDkf6OsFRioS7iHXlH0PzzFYOYdb1JlfpxYyihqWlf6Tu7heA=
-X-Received: by 2002:ac2:454e:0:b0:4db:1c2a:a96e with SMTP id
- j14-20020ac2454e000000b004db1c2aa96emr39617lfm.9.1681499366734; Fri, 14 Apr
- 2023 12:09:26 -0700 (PDT)
+        Fri, 14 Apr 2023 15:09:34 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB232106;
+        Fri, 14 Apr 2023 12:09:32 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33EIp1Fa025687;
+        Fri, 14 Apr 2023 19:09:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=0xo8Q85DhaZ6cn2f24vuxxrNvX84J8bkmq4G06xCL+U=;
+ b=aMlM1JEDKLA96zQ1EQcg6lsJ7y5YlJiZG9RitpXJjtQFKgrx5y4qBdsaRW4bpXKjFAiv
+ 3lqnmh7gEfsVOMqJnb9kkjpkHhlm8AAR6DA8sBtxmmSM8EGrdTk/ShlezGn8GWWk+fVq
+ mYm2hnphatILAo0o9Z+wvw0vIvTg7yvPvXpz+66vhstneB2mcXGkzFsuU0KWJvQRp7yl
+ 6wSi//uMI4QqmNdCxYDJEhptVsiIYmMU3bQhFMPF9Lg6ZDsHiDA07Em+B2k17bR5i1VZ
+ JinB/LlrxYrCTNj1PdnVeoL2cV9YidXSjbV9ykSLrc61+euJGa26K2/ENr+E7zs78Rlc Xw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3py1wphhcp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 19:09:22 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33EJ9L6C030385
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 19:09:21 GMT
+Received: from [10.110.73.215] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 14 Apr
+ 2023 12:09:19 -0700
+Message-ID: <2183185d-1f95-ab76-d84f-2d9d1c083146@quicinc.com>
+Date:   Fri, 14 Apr 2023 12:09:19 -0700
 MIME-Version: 1.0
-References: <20230407201921.2703758-1-sagis@google.com> <20230414100350.00000955.zhi.wang.linux@gmail.com>
-In-Reply-To: <20230414100350.00000955.zhi.wang.linux@gmail.com>
-From:   Sagi Shahar <sagis@google.com>
-Date:   Fri, 14 Apr 2023 12:09:15 -0700
-Message-ID: <CAAhR5DEdX0SOfRTwzCdBSNvfUwf_z6BT6TGaaCY-Uuis=URqiQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/5] Add TDX intra host migration support
-To:     Zhi Wang <zhi.wang.linux@gmail.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v2] drm/msm/dpu: always program dsc active bits
+Content-Language: en-US
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <andersson@kernel.org>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1681401401-15099-1-git-send-email-quic_khsieh@quicinc.com>
+ <tgfbdk6q3uool365jqddibnbgq66clsmsm6tldxpm5toqghxpq@m2ic3oonv2s5>
+ <aac210da-dec1-aab8-3f48-c33d9e7687d6@quicinc.com>
+ <3oaangxh7gmie3cdd6rmujm7dd3hagsrnwiq3bascdtamvfn3a@bn6ou5hbsgxv>
+ <c09725ff-771c-35d1-adc9-4bb1b7c1c334@quicinc.com>
+In-Reply-To: <c09725ff-771c-35d1-adc9-4bb1b7c1c334@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: PhQ-gN2yCIXE03sxt7ICxR5mAPRtySkQ
+X-Proofpoint-ORIG-GUID: PhQ-gN2yCIXE03sxt7ICxR5mAPRtySkQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-14_11,2023-04-14_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
+ adultscore=0 priorityscore=1501 mlxscore=0 phishscore=0 impostorscore=0
+ mlxlogscore=853 malwarescore=0 lowpriorityscore=0 clxscore=1015
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304140169
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 14, 2023 at 12:04=E2=80=AFAM Zhi Wang <zhi.wang.linux@gmail.com=
-> wrote:
->
-> On Fri,  7 Apr 2023 20:19:16 +0000
-> Sagi Shahar <sagis@google.com> wrote:
->
-> Hi:
->
-> Is there any userspace using these APIs? I cant find them in AMD-QEMU rep=
-o
-> and upstream QEMU repo. It would nice to first take a look on how userspa=
-ce
-> is going to use it.
->
-We are using a different userspace VMM internally so we didn't make
-changes to QEMU.
-I've uploaded our selftests which exercise these APIs to our public
-GitHub so you can take a look there:
-https://github.com/googleprodkernel/linux-cc/commit/62c8dba4c3cf06e37501807=
-7a6d9f491c933dc6d
 
-Note that these are a slightly older version based on TDX V10 API.
-They also use the
-KVM_CAP_VM_COPY_ENC_CONTEXT_FROM instead of KVM_CAP_VM_MOVE_ENC_CONTEXT_FRO=
-M
 
-> > This patchset adds support for TDX intra host migration using the same
-> > API which was added for SEV intra host migration here:
-> > https://lore.kernel.org/all/20211021174303.385706-1-pgonda@google.com/
-> >
-> > This patchset relies on the latest TDX patches from Intel:
-> > - fd-based approach for supporing KVM v10 and
-> >   https://lore.kernel.org/lkml/20221202061347.1070246-1-chao.p.peng@lin=
-ux.intel.com/
-> > - TDX host kernel support v10
-> >   https://lore.kernel.org/lkml/cover.1678111292.git.kai.huang@intel.com=
-/
-> > - KVM TDX basic feature support v13
-> >   https://lore.kernel.org/cover.1678643051.git.isaku.yamahata@intel.com
-> >
-> > The tree can be found at https://github.com/googleprodkernel/linux-cc/t=
-ree/copyless
-> > and is based on Intel's tdx tree at https://github.com/intel/tdx/tree/k=
-vm-upstream
-> >
-> > In the TDX case, we need to transfer the VM state from multiple sources=
-:
-> >
-> >  * HKID and encrypted VM state is transfered between the kvm_tdx
-> >    objects.
-> >  * Encrypted and runtime state is transfered between the vcpu_tdx
-> >    objects.
-> >  * The EPT table backing TD's private memory is transfered at the
-> >    kvm-mmu level. This is needed since the secure EPT table managed by
-> >    the TD module remains the same after the migration so moving the
-> >    current private EPT table eliminates the need to rebuild the private
-> >    EPT table to match the secure EPT table on the destination.
-> >  * Information regarding the current shared/private memory is trasfered
-> >    using the mem_attr_array stored at the kvm object.
-> >  * Additional information derived from shared/private memory state is
-> >    trasfered at the memslot level.
-> >
-> > Tested with selftests locally. I will attach the self test in the next
-> > version after we send the new TDX selftest framework patches based on
-> > KVM TDX basic feature support v13.
-> >
-> > Sagi Shahar (5):
-> >   KVM: Split tdp_mmu_pages to private and shared lists
-> >   KVM: SEV: Refactor common code out of sev_vm_move_enc_context_from
-> >   KVM: TDX: Add base implementation for tdx_vm_move_enc_context_from
-> >   KVM: TDX: Implement moving private pages between 2 TDs
-> >   KVM: TDX: Add core logic for TDX intra-host migration
-> >
-> >  arch/x86/include/asm/kvm_host.h |   5 +-
-> >  arch/x86/kvm/mmu.h              |   2 +
-> >  arch/x86/kvm/mmu/mmu.c          |  60 ++++++++
-> >  arch/x86/kvm/mmu/tdp_mmu.c      |  88 +++++++++++-
-> >  arch/x86/kvm/mmu/tdp_mmu.h      |   3 +
-> >  arch/x86/kvm/svm/sev.c          | 175 +++--------------------
-> >  arch/x86/kvm/vmx/main.c         |  10 ++
-> >  arch/x86/kvm/vmx/tdx.c          | 245 ++++++++++++++++++++++++++++++++
-> >  arch/x86/kvm/vmx/tdx.h          |   2 +
-> >  arch/x86/kvm/vmx/x86_ops.h      |   5 +
-> >  arch/x86/kvm/x86.c              | 166 ++++++++++++++++++++++
-> >  arch/x86/kvm/x86.h              |  16 +++
-> >  12 files changed, 613 insertions(+), 164 deletions(-)
-> >
->
+On 4/14/2023 11:55 AM, Abhinav Kumar wrote:
+> 
+> 
+> On 4/14/2023 10:28 AM, Marijn Suijten wrote:
+>> On 2023-04-14 08:41:37, Abhinav Kumar wrote:
+>>>
+>>> On 4/14/2023 12:48 AM, Marijn Suijten wrote:
+>>>> Capitalize DSC in the title, as discussed in v1.
+>>>>
+>>>> On 2023-04-13 08:56:41, Kuogee Hsieh wrote:
+>>>>> In current code, the DSC active bits are written only if cfg->dsc 
+>>>>> is set.
+>>>>> However, for displays which are hot-pluggable, there can be a use-case
+>>>>> of disconnecting a DSC supported sink and connecting a non-DSC sink.
+>>>>>
+>>>>> For those cases we need to clear DSC active bits during tear down.
+>>>>>
+>>>>> Changes in V2:
+>>>>> 1) correct commit text as suggested
+>>>>> 2) correct Fixes commit id
+>>>>> 3) add FIXME comment
+>>>>>
+>>>>> Fixes: 77f6da90487c ("drm/msm/disp/dpu1: Add DSC support in hw_ctl")
+>>>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>>>>> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+>>>>
+>>>> By default git send-email should pick this up in the CC line...  but I
+>>>> had to download this patch from lore once again.
+>>>>
+>>>
+>>> Yes, I think what happened here is, he didnt git am the prev rev and
+>>> make changes on top of that so git send-email didnt pick up. We should
+>>> fix that process.
+>>
+>> The mail was sent so it must have gone through git send-email, unless a
+>> different mail client was used to send the .patch file.  I think you are
+>> confusing this with git am (which doesn't need to be used if editing a
+>> commit on a local branch) and subsequently git format-patch, which takes
+>> a commit from a git repository and turns it into a .patch file: neither
+>> of these "converts" r-b's (and other tags) to cc, that's happening in
+>> git send-email (see `--suppress-cc` documentation in `man
+>> git-send-email`).
+>>
+> 
+> Yes, ofcourse git send-email was used to send the patch, not any other 
+> mail client.
+> 
+> Yes i am also aware that send-email converts rb to CC.
+> 
+> But if you keep working on the local branch, then you would have to 
+> manually add the r-bs. If you use am of the prev version and develop on 
+> that, it will automatically add the r-bs.
+> 
+
+just a minor point, in case you didnt notice, my r-b was dropped too :)
+due to manual propagation.
+
+> 
+>> I can recommend b4: it has lots of useful features including
+>> automatically picking up reviews and processing revisions.  It even
+>> requires a changelog to be edited ;).  However, finding the right flags
+>> and trusting it'll "do as ordered" is a bit daunting at first.
+>>
+
+Ack.
+
+>>>>> ---
+>>>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c | 8 ++++----
+>>>>>    1 file changed, 4 insertions(+), 4 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c 
+>>>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+>>>>> index bbdc95c..1651cd7 100644
+>>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+>>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+>>>>> @@ -541,10 +541,10 @@ static void dpu_hw_ctl_intf_cfg_v1(struct 
+>>>>> dpu_hw_ctl *ctx,
+>>>>>        if (cfg->merge_3d)
+>>>>>            DPU_REG_WRITE(c, CTL_MERGE_3D_ACTIVE,
+>>>>>                      BIT(cfg->merge_3d - MERGE_3D_0));
+>>>>> -    if (cfg->dsc) {
+>>>>> -        DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, DSC_IDX);
+>>>>> -        DPU_REG_WRITE(c, CTL_DSC_ACTIVE, cfg->dsc);
+>>>>> -    }
+>>>>> +
+>>>>> +    /* FIXME: fix reset_intf_cfg to handle teardown of dsc */
+>>>>
+>>>> There's more wrong than just moving (not "fix"ing) this bit of code 
+>>>> into
+>>>> reset_intf_cfg.  And this will have to be re-wrapped in `if (cfg->dsc)`
+>>>> again by reverting this patch.  Perhaps that can be explained, or link
+>>>> to Abhinav's explanation to make it clear to readers what this FIXME
+>>>> actually means?  Let's wait for Abhinav and Dmitry to confirm the
+>>>> desired communication here.
+>>>>
+>>>> https://lore.kernel.org/linux-arm-msm/ec045d6b-4ffd-0f8c-4011-8db45edc6978@quicinc.com/ 
+>>>>
+>>>>
+>>>
+>>> Yes, I am fine with linking this explanation in the commit text and
+>>> mentioning that till thats fixed, we need to go with this solution. The
+>>> FIXME itself is fine, I will work on it and I remember this context 
+>>> well.
+>>
+>> Looks like it was removed entirely in v3, in favour of only describing
+>> it in the patch body.  The wording seems a bit off but that's fine by me
+>> if you're picking this up soon anyway.
+>>
+>> - Marijn
