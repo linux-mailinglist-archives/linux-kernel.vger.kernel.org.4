@@ -2,96 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEF356E28D4
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 18:58:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 577046E28DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 18:59:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbjDNQ6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 12:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57678 "EHLO
+        id S230149AbjDNQ7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 12:59:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjDNQ6B (ORCPT
+        with ESMTP id S229461AbjDNQ7I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 12:58:01 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E2D346A6
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 09:58:00 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id rp27so10196185ejb.12
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 09:58:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681491478; x=1684083478;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cLuHyW+oToWSMJF/7yNdvhI6vBh6/Geuch2BcgJwQ+s=;
-        b=p9jcxsu5QbhKFz/zEToMWOzWt4NlQFv/ocvksXuo79xWMN9r4zmYmzFuOuaGZxcPBz
-         Bn9tdeRrraErGBUFG9HDf0ubFG+vlvtmtZ0TY4JgT6Bq7pyiOdUmLt3yTwyceZJsdzSr
-         5yOlGNO46IkUnpG2VxOblDidTidYX75Jk80/Em/p3D4iJ50Ue5KWUhRlBDCWbwRHLUUT
-         amskfEa6yTYjo40P3pvzl35iHmSyJ0PkK6UTzuRQL76sUGxYL5hA7734a8+6JuVan/q6
-         l5jE7RvaHDQ73AsP0fQ5sruExM0suuYGq5Ir7UgDjty9tThT3wcnzhYgrmczrb2vpjHP
-         xASg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681491478; x=1684083478;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cLuHyW+oToWSMJF/7yNdvhI6vBh6/Geuch2BcgJwQ+s=;
-        b=MMUTApnkBf3NyCIVbQVot08do/fhCyfSk3+RItsa+6QCPSKseH0956wIrD9pKSnzE6
-         TXP8y84c8fQFv4DpgZe01I8H17nDH5iYa2NR+EifRQ3mIHdkX8eW8GKWT1u0Y1H8d3zF
-         1VJeMPoXy/VmwvNl9QzSr1waAkQbEncEKSQmD+WbxVapzIecPE9C2pTevLvEgkjCDKRz
-         /B+evvvJPknpk6sAK0jvyiEqnTuM21H/GBD2XzYjOkiwbmbvOY1+XZhC59IMV2RLeig/
-         m/+6uqq0JxVwkWPPPwOALw3FnRYBRFNngVyJzLrrmqTmuKVnexJYMHGM8P9nCk8sxh7O
-         PWIQ==
-X-Gm-Message-State: AAQBX9fKojLAEn27g+WmMc49V3ksY8rqzbv+mdV0YlK8RfLbcjAbGfhV
-        DXnh597tLyJk120WHtMIx6CtrQ==
-X-Google-Smtp-Source: AKy350YQ1HKGT+ViKDuqS5nsV9zqTPyR2y8jAfhlwKBUAhpwzMu5YdZluLXysFoxFAEZSZMgaTQwww==
-X-Received: by 2002:a17:907:9873:b0:94e:887f:a083 with SMTP id ko19-20020a170907987300b0094e887fa083mr6847292ejc.57.1681491478620;
-        Fri, 14 Apr 2023 09:57:58 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:39b7:81a0:bd41:17b1? ([2a02:810d:15c0:828:39b7:81a0:bd41:17b1])
-        by smtp.gmail.com with ESMTPSA id i7-20020a170906698700b0094a9eb7598esm2620895ejr.120.2023.04.14.09.57.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 09:57:58 -0700 (PDT)
-Message-ID: <b12f305e-ba53-bbab-1d0d-121b76d8b5f6@linaro.org>
-Date:   Fri, 14 Apr 2023 18:57:56 +0200
+        Fri, 14 Apr 2023 12:59:08 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C2149F5;
+        Fri, 14 Apr 2023 09:59:06 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33E71o1D025312;
+        Fri, 14 Apr 2023 11:59:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=Kzw+l8cqcJr1TSQ6WJDIEKu8YNtPoQdgFhRljLL9mF4=;
+ b=amLmWAZyTN6xFf01M5r/rlOYGl34RaKJVyHU/pz+jNvvrtwcCkUeRWBKJQ7GARU9yI9e
+ y1zkwkpgeq6s538/VXeB4msynI/mGVi8H1tQbDYlsGPu0Hn6NYqXH/64mKvd3aLCDd5N
+ S97ZXFz/5XpJvxZvg6j+JLHXrwa2dy47h05v2SrnSWXxjyeH2EJuJTHQKZnUQYR8I+JK
+ XlXjPOSP15did1kDfwjm3C0vSETiZQX209YQR7p88kNzTZk+yX3nf87gmY4TfjFA7qf4
+ R9qK+7kONata0oOB+S5VKNO69uKTDyu0q2r+HoLZa6iBPBRAODbickRLGP+dldZbP7h1 nw== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3pxm3qa7gk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 11:59:04 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Fri, 14 Apr
+ 2023 11:59:02 -0500
+Received: from aus-sw-rshr002.ad.cirrus.com (141.131.206.14) by
+ ediex01.ad.cirrus.com (198.61.84.80) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26 via Frontend Transport; Fri, 14 Apr 2023 11:59:02 -0500
+Received: by aus-sw-rshr002.ad.cirrus.com (Postfix, from userid 46936)
+        id D50CA4C0B82; Fri, 14 Apr 2023 16:59:01 +0000 (UTC)
+From:   James Ogletree <james.ogletree@cirrus.com>
+To:     <dmitry.torokhov@gmail.com>
+CC:     <linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "James Ogletree" <james.ogletree@cirrus.com>
+Subject: [PATCH] Input: support pre-stored effects
+Date:   Fri, 14 Apr 2023 16:58:42 +0000
+Message-ID: <20230414165842.478748-1-james.ogletree@cirrus.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 1/9] ASoC: Add Chameleon v3 audio
-To:     =?UTF-8?Q?Pawe=c5=82_Anikiel?= <pan@semihalf.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lgirdwood@gmail.com,
-        broonie@kernel.org
-Cc:     perex@perex.cz, tiwai@suse.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, dinguyen@kernel.org,
-        lars@metafoo.de, nuno.sa@analog.com, upstream@semihalf.com
-References: <20230414140203.707729-1-pan@semihalf.com>
- <20230414140203.707729-2-pan@semihalf.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230414140203.707729-2-pan@semihalf.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: aFRE67FGRKhxA_-eARugV2aovNS1HNVc
+X-Proofpoint-GUID: aFRE67FGRKhxA_-eARugV2aovNS1HNVc
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/04/2023 16:01, Paweł Anikiel wrote:
-> Add machine and platform drivers for ASoC audio on Chameleon v3.
-> 
-> The board has two audio sources: HDMI audio from the it68051 chip
-> (RX only), and analog audio from the ssm2603 chip (RX and TX).
-> 
-> Signed-off-by: Paweł Anikiel <pan@semihalf.com>
-> ---
->  .../boot/dts/socfpga_arria10_chameleonv3.dts  |  28 ++
+At present, the best way to define effects that
+pre-exist in device memory is by utilizing
+the custom_data field, which it was not intended
+for, and requires arbitrary interpretation by
+the driver to make meaningful.
 
-No way. DTS is always, always separate.
+Provide option for defining pre-stored effects in
+device memory.
 
-Best regards,
-Krzysztof
+Signed-off-by: James Ogletree <james.ogletree@cirrus.com>
+---
+ include/uapi/linux/input.h | 32 ++++++++++++++++++++++----------
+ 1 file changed, 22 insertions(+), 10 deletions(-)
+
+diff --git a/include/uapi/linux/input.h b/include/uapi/linux/input.h
+index 2557eb7b0561..689e5fa10647 100644
+--- a/include/uapi/linux/input.h
++++ b/include/uapi/linux/input.h
+@@ -428,17 +428,27 @@ struct ff_rumble_effect {
+ 	__u16 weak_magnitude;
+ };
+ 
++/**
++ * struct ff_prestored_effect - defines parameters of a pre-stored force-feedback effect
++ * @index: index of effect
++ * @bank: memory bank of effect
++ */
++struct ff_prestored_effect {
++	__u16 index;
++	__u16 bank;
++};
++
+ /**
+  * struct ff_effect - defines force feedback effect
+  * @type: type of the effect (FF_CONSTANT, FF_PERIODIC, FF_RAMP, FF_SPRING,
+- *	FF_FRICTION, FF_DAMPER, FF_RUMBLE, FF_INERTIA, or FF_CUSTOM)
++ *	FF_FRICTION, FF_DAMPER, FF_RUMBLE, FF_INERTIA, FF_PRESTORED, or FF_CUSTOM)
+  * @id: an unique id assigned to an effect
+  * @direction: direction of the effect
+  * @trigger: trigger conditions (struct ff_trigger)
+  * @replay: scheduling of the effect (struct ff_replay)
+  * @u: effect-specific structure (one of ff_constant_effect, ff_ramp_effect,
+- *	ff_periodic_effect, ff_condition_effect, ff_rumble_effect) further
+- *	defining effect parameters
++ *	ff_periodic_effect, ff_condition_effect, ff_rumble_effect, ff_prestored_effect)
++ *	further defining effect parameters
+  *
+  * This structure is sent through ioctl from the application to the driver.
+  * To create a new effect application should set its @id to -1; the kernel
+@@ -464,6 +474,7 @@ struct ff_effect {
+ 		struct ff_periodic_effect periodic;
+ 		struct ff_condition_effect condition[2]; /* One for each axis */
+ 		struct ff_rumble_effect rumble;
++		struct ff_prestored_effect prestored;
+ 	} u;
+ };
+ 
+@@ -479,20 +490,21 @@ struct ff_effect {
+ #define FF_DAMPER	0x55
+ #define FF_INERTIA	0x56
+ #define FF_RAMP		0x57
++#define FF_PRESTORED	0x58
+ 
+ #define FF_EFFECT_MIN	FF_RUMBLE
+-#define FF_EFFECT_MAX	FF_RAMP
++#define FF_EFFECT_MAX	FF_PRESTORED
+ 
+ /*
+  * Force feedback periodic effect types
+  */
+ 
+-#define FF_SQUARE	0x58
+-#define FF_TRIANGLE	0x59
+-#define FF_SINE		0x5a
+-#define FF_SAW_UP	0x5b
+-#define FF_SAW_DOWN	0x5c
+-#define FF_CUSTOM	0x5d
++#define FF_SQUARE	0x59
++#define FF_TRIANGLE	0x5a
++#define FF_SINE		0x5b
++#define FF_SAW_UP	0x5c
++#define FF_SAW_DOWN	0x5d
++#define FF_CUSTOM	0x5e
+ 
+ #define FF_WAVEFORM_MIN	FF_SQUARE
+ #define FF_WAVEFORM_MAX	FF_CUSTOM
+-- 
+2.25.1
 
