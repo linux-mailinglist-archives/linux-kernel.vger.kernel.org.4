@@ -2,132 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51DF26E1DE9
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78DE26E1DDF
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:15:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbjDNIQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 04:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53196 "EHLO
+        id S229947AbjDNIPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 04:15:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbjDNIPp (ORCPT
+        with ESMTP id S229446AbjDNIPK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 04:15:45 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 39C0083F6
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 01:15:40 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5F9B94B3;
-        Fri, 14 Apr 2023 01:16:24 -0700 (PDT)
-Received: from pierre123.arm.com (unknown [10.57.19.162])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 684ED3F6C4;
-        Fri, 14 Apr 2023 01:15:37 -0700 (PDT)
-From:   Pierre Gondois <pierre.gondois@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Radu Rendec <rrendec@redhat.com>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Will Deacon <will@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Gavin Shan <gshan@redhat.com>
-Subject: [PATCH v4 4/4] cacheinfo: Add use_arch[|_cache]_info field/function
-Date:   Fri, 14 Apr 2023 10:14:52 +0200
-Message-Id: <20230414081453.244787-5-pierre.gondois@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230414081453.244787-1-pierre.gondois@arm.com>
-References: <20230414081453.244787-1-pierre.gondois@arm.com>
+        Fri, 14 Apr 2023 04:15:10 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25532738;
+        Fri, 14 Apr 2023 01:15:08 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id he11-20020a05600c540b00b003ef6d684102so7771463wmb.3;
+        Fri, 14 Apr 2023 01:15:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681460107; x=1684052107;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=M+Mc35jdz5ILBLcNMehInkGDuRlm3RaMqvJWFISS8Gs=;
+        b=fJ6ou34jHaiMWNLtuawX7mHBaqkK6TXuLS+mClgQDS/pCt6KBhXf50G1/KigCySkKo
+         sf9RjSIdLKZDzrtaMUYG8QUUtsz7nSeHHvA0F+J2yiZWQ+E77OsbxUc/RR4ab+2Mb2A5
+         QZrf9MncKZDfePc6Pg5SU3zri17h8UxPzct9b4AJ/E4GOaisshApKiqVStv9y+Y5C69e
+         0bDHoyJMCFPBUis4g0zs7y8xN3g6CYIVkqJmXyohO8uoaa430a3NxlDiZ1W/cGCjlPeM
+         wodSxpSb3knU5WHQsbxVwDQweKfVFUe1SFMAkwlO6Jf3ESWfZHHg/H7ZE/qi8CdyFToA
+         Wyiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681460107; x=1684052107;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=M+Mc35jdz5ILBLcNMehInkGDuRlm3RaMqvJWFISS8Gs=;
+        b=S/caZTcN7DfV41BP34DKQkzl0xzU41RBD8yTPIHJirIw7tmbM2zu8hcCNQA8IiBVjH
+         HGzpeWvTgijwQTHOt0dB/VSH+4Nz0wfEoS1nYoh+jGgz02tKhh2RYD+T6BvNscskJ7At
+         eD57d03Dz9ehrG5ZI7O9gT+IKbje2d5sj1Zu+OcnTOrnwGIk5Uz2DImUwXywGj2jQpiv
+         RgwzCsFv2UWB4MqPTu2+W2BZG5CZsVuh81CdX6f/NNgT7kiQHgBrt4pE20kDBZPhlJ7p
+         93ShxRyjaEXBV6h2ULhVQlUwFPxsls3PLlsY8+6psZcb2qzxaN3Btz9F4DmMzmWzGjGR
+         jnvQ==
+X-Gm-Message-State: AAQBX9dzWKqq8pWvK3HEPWWXk3m1UD/Dtmnn9HvfNPA42HhFPKmTtXmN
+        4tedUB1jlyGE2KegsxQd0K0=
+X-Google-Smtp-Source: AKy350bOMdDp96BK15a3UYiXi665269oi3btXKvL7ZjK1c9ND3w1cT12/3oW2EflVwF3Ue0hqJ+6Jg==
+X-Received: by 2002:a1c:4b0b:0:b0:3ef:4138:9eef with SMTP id y11-20020a1c4b0b000000b003ef41389eefmr3813109wma.36.1681460107213;
+        Fri, 14 Apr 2023 01:15:07 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id y1-20020a1c4b01000000b003ef5f77901dsm3678924wma.45.2023.04.14.01.15.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Apr 2023 01:15:06 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] selftests/mm: Fix spelling mistake "priviledge" -> "privilege"
+Date:   Fri, 14 Apr 2023 09:15:06 +0100
+Message-Id: <20230414081506.1678998-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The cache information can be extracted from either a Device
-Tree (DT), the PPTT ACPI table, or arch registers (clidr_el1
-for arm64).
+There is a spelling mistake in an error message string. Fix it.
 
-The clidr_el1 register is used only if DT/ACPI information is not
-available. It does not states how caches are shared among CPUs.
-
-Add a use_arch_cache_info field/function to identify when the
-DT/ACPI doesn't provide cache information. Use this information
-to assume L1 caches are privates and L2 and higher are shared among
-all CPUs.
-
-Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- drivers/base/cacheinfo.c  | 12 ++++++++++--
- include/linux/cacheinfo.h |  6 ++++++
- 2 files changed, 16 insertions(+), 2 deletions(-)
+ tools/testing/selftests/mm/uffd-common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/base/cacheinfo.c b/drivers/base/cacheinfo.c
-index ea8f416852bd..8120ac1ddbe4 100644
---- a/drivers/base/cacheinfo.c
-+++ b/drivers/base/cacheinfo.c
-@@ -28,6 +28,9 @@ static DEFINE_PER_CPU(struct cpu_cacheinfo, ci_cpu_cacheinfo);
- #define per_cpu_cacheinfo_idx(cpu, idx)		\
- 				(per_cpu_cacheinfo(cpu) + (idx))
+diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/selftests/mm/uffd-common.c
+index 61c6250adf93..54dfd92d86cf 100644
+--- a/tools/testing/selftests/mm/uffd-common.c
++++ b/tools/testing/selftests/mm/uffd-common.c
+@@ -311,7 +311,7 @@ int uffd_test_ctx_init(uint64_t features, const char **errmsg)
+ 	ret = userfaultfd_open(&features);
+ 	if (ret) {
+ 		if (errmsg)
+-			*errmsg = "possible lack of priviledge";
++			*errmsg = "possible lack of privilege";
+ 		return ret;
+ 	}
  
-+/* Set if no cache information is found in DT/ACPI. */
-+static bool use_arch_info;
-+
- struct cpu_cacheinfo *get_cpu_cacheinfo(unsigned int cpu)
- {
- 	return ci_cacheinfo(cpu);
-@@ -40,7 +43,8 @@ static inline bool cache_leaves_are_shared(struct cacheinfo *this_leaf,
- 	 * For non DT/ACPI systems, assume unique level 1 caches,
- 	 * system-wide shared caches for all other levels.
- 	 */
--	if (!(IS_ENABLED(CONFIG_OF) || IS_ENABLED(CONFIG_ACPI)))
-+	if (!(IS_ENABLED(CONFIG_OF) || IS_ENABLED(CONFIG_ACPI)) ||
-+	    use_arch_info)
- 		return (this_leaf->level != 1) && (sib_leaf->level != 1);
- 
- 	if ((sib_leaf->attributes & CACHE_ID) &&
-@@ -343,6 +347,10 @@ static int cache_setup_properties(unsigned int cpu)
- 	else if (!acpi_disabled)
- 		ret = cache_setup_acpi(cpu);
- 
-+	// Assume there is no cache information available in DT/ACPI from now.
-+	if (ret && use_arch_cache_info())
-+		use_arch_info = true;
-+
- 	return ret;
- }
- 
-@@ -361,7 +369,7 @@ static int cache_shared_cpu_map_setup(unsigned int cpu)
- 	 * to update the shared cpu_map if the cache attributes were
- 	 * populated early before all the cpus are brought online
- 	 */
--	if (!last_level_cache_is_valid(cpu)) {
-+	if (!last_level_cache_is_valid(cpu) && !use_arch_info) {
- 		ret = cache_setup_properties(cpu);
- 		if (ret)
- 			return ret;
-diff --git a/include/linux/cacheinfo.h b/include/linux/cacheinfo.h
-index 908e19d17f49..b91cc9991c7c 100644
---- a/include/linux/cacheinfo.h
-+++ b/include/linux/cacheinfo.h
-@@ -129,4 +129,10 @@ static inline int get_cpu_cacheinfo_id(int cpu, int level)
- 	return -1;
- }
- 
-+#ifdef CONFIG_ARM64
-+#define use_arch_cache_info()	(true)
-+#else
-+#define use_arch_cache_info()	(false)
-+#endif
-+
- #endif /* _LINUX_CACHEINFO_H */
 -- 
-2.25.1
+2.30.2
 
