@@ -2,203 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AABB6E21EC
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 13:19:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B02E6E21EF
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 13:21:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbjDNLTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 07:19:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53368 "EHLO
+        id S230096AbjDNLVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 07:21:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbjDNLTS (ORCPT
+        with ESMTP id S229722AbjDNLVi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 07:19:18 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770377EC3
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 04:19:17 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 2FAF9219D6;
-        Fri, 14 Apr 2023 11:19:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1681471156; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CZUPV6pvekn40maEI+d6rlcYC8PK3Q9/JIUXWlP6fAA=;
-        b=w9LeYM/Q58ccqbrL9dE7O08byimshZocrbvRnOHJ+AYITEdf9YzDa4vvq/fd1FqYMVUp0l
-        lHCLT+HkeAE0AXka1m+LYlKEw5KH544rKNd0dY3nhAtsQaLr3RswnsNMlzk/5ZvOT5l0Lc
-        vSETGlGHFru3yJUQX6QVQjHOJCpaOA0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1681471156;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CZUPV6pvekn40maEI+d6rlcYC8PK3Q9/JIUXWlP6fAA=;
-        b=l2W7I7U1WfPo+HxoNATaOUkbgXialypbm9FH3wNuCBHkEidLnaA3oQuhtMLrOx5BIgaLPz
-        3ug9QVipKx8ZCIDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1C0F513498;
-        Fri, 14 Apr 2023 11:19:16 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id BQbUBrQ2OWRlQwAAMHmgww
-        (envelope-from <jack@suse.cz>); Fri, 14 Apr 2023 11:19:16 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id A234DA0732; Fri, 14 Apr 2023 13:19:15 +0200 (CEST)
-Date:   Fri, 14 Apr 2023 13:19:15 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     Jan Kara <jack@suse.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] quota: add ALLQUOTA macro
-Message-ID: <20230414111915.7tovgyisqrru3amn@quack3>
-References: <20230413154151.72935-1-frank.li@vivo.com>
+        Fri, 14 Apr 2023 07:21:38 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1770D3A88
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 04:21:37 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-94cfe3db2aaso270850366b.0
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 04:21:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681471295; x=1684063295;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hWP16bG6uUr4pZjxU30nkO7zZOcUfB3YuG/344uIKNQ=;
+        b=RS8Qhvt0joORbhPMbnrHe/IfmdjZ0uOTbrgCAmyBIgJ5m26eaqgonnlIyIeCxGL9Ry
+         Sl5gOj9wsiAhkE1cmGC6DaE34pv5pyCSiV/ZeNaM0JMVh1ECH85kt4poSz76UCYPNF1O
+         HI74UMYeOXFuaN5HwrTSGIMBX6C1tsDTKffPckyIBy4eNsgM3gfRRVmcd2Q9PfPUs9Ly
+         nf0LEgk3MucrjFbylGBnuuPseNh6ewCWhS8Q25+/VTqwf6eo3Eex062iKP4pMjEq1AVQ
+         z8DaOgVsAh1uAMsr4HY5m+nIVMOF7FyVIcgoLkMSxKQfSthOyXohvPvW/gSwIQMb0TzF
+         TN5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681471295; x=1684063295;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hWP16bG6uUr4pZjxU30nkO7zZOcUfB3YuG/344uIKNQ=;
+        b=hdo12/ajDXz/4VY+deJsOsgaqAO+LbIEYa/OR6zOElQslfIs9r3Rxft/VSKik0Ti8j
+         lmwv5kfN1Su/T5FUq4FKCcMj72ZZKqqWhFSH8t6UZlpRdwlxdgymZKKC2+yyG6Z2Qage
+         YkM1r/CtfWVIUvYhm+dZLe5vdZGH/uAN062t6oC/QMOXQRr6EdRzrK1Gp9yTPgkzfXXj
+         WlsWLMHjjvcFUafYnmvSSwSP01hss3ZHvL1kbfaw9yRqSjOwcBPNElzuqBpQmGGhbLPo
+         DMknqbHKIsOLjo+lNyffbTKhNWu/2RCOS3VW3ibmldS3DupmjbN6slZhFdar6nvZbpd9
+         0Kjw==
+X-Gm-Message-State: AAQBX9dzVnDlrLAXYB0Etxb1zF4LXRZUMrzDgvbEc1w5RMz3eXlmsdrT
+        0dejII3NAcLJPy8/3H7rbd01ZVzT0pw1Yo+TOWQ=
+X-Google-Smtp-Source: AKy350aEZXq5vhpbcuIVMGc02L1mtWNHGPAkZUnP5pk7APNWBHnrMhr1AOTOpXrDzGDBYgbb0dLnkA==
+X-Received: by 2002:a50:ec84:0:b0:506:74d6:45aa with SMTP id e4-20020a50ec84000000b0050674d645aamr5212418edr.24.1681471295533;
+        Fri, 14 Apr 2023 04:21:35 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:40b9:8c57:b112:651d? ([2a02:810d:15c0:828:40b9:8c57:b112:651d])
+        by smtp.gmail.com with ESMTPSA id b11-20020a17090636cb00b00930aa50372csm2326194ejc.43.2023.04.14.04.21.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Apr 2023 04:21:35 -0700 (PDT)
+Message-ID: <a5aa1be1-f98d-af04-9879-b924a5bcb14c@linaro.org>
+Date:   Fri, 14 Apr 2023 13:21:34 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230413154151.72935-1-frank.li@vivo.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 1/2] dt-bindings: watchdog: marvell octeonTX2 GTI system
+ atchdog driver
+Content-Language: en-US
+To:     Bharat Bhushan <bbhushan2@marvell.com>, wim@linux-watchdog.org,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230414102342.23696-1-bbhushan2@marvell.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230414102342.23696-1-bbhushan2@marvell.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 13-04-23 23:41:51, Yangtao Li wrote:
-> Convert to use macro instead of raw number.
+On 14/04/2023 12:23, Bharat Bhushan wrote:
+> Add binding documentation for the Marvell octeonTX2
+> GTI system watchdog driver.
+
+Subject: typo: atchdog
+
 > 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-
-Um, I agree the iteration over quota types would use some cleanup (like
-clearly distinguishing which functions can handle multiple types, which can
-handle only one) but your change does not really help much towards that
-cleanup. -1 is clearly special value and shorter to type than ALLQUOTA.
-
-If you are interested in doing larger cleanup of quota type handling, tell
-me and we can discuss how it should look like.
-
-								Honza
-
+> Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
 > ---
->  fs/quota/dquot.c           | 20 ++++++++++----------
->  include/uapi/linux/quota.h |  1 +
->  2 files changed, 11 insertions(+), 10 deletions(-)
+>  .../watchdog/marvell-octeontx2-wdt.yaml       | 49 +++++++++++++++++++
+>  1 file changed, 49 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/marvell-octeontx2-wdt.yaml
 > 
-> diff --git a/fs/quota/dquot.c b/fs/quota/dquot.c
-> index 10b46c403bdb..62ee6cb32e57 100644
-> --- a/fs/quota/dquot.c
-> +++ b/fs/quota/dquot.c
-> @@ -640,7 +640,7 @@ int dquot_writeback_dquots(struct super_block *sb, int type)
->  	WARN_ON_ONCE(!rwsem_is_locked(&sb->s_umount));
->  
->  	for (cnt = 0; cnt < MAXQUOTAS; cnt++) {
-> -		if (type != -1 && cnt != type)
-> +		if (type != ALLQUOTA && cnt != type)
->  			continue;
->  		if (!sb_has_quota_active(sb, cnt))
->  			continue;
-> @@ -675,7 +675,7 @@ int dquot_writeback_dquots(struct super_block *sb, int type)
->  	}
->  
->  	for (cnt = 0; cnt < MAXQUOTAS; cnt++)
-> -		if ((cnt == type || type == -1) && sb_has_quota_active(sb, cnt)
-> +		if ((cnt == type || type == ALLQUOTA) && sb_has_quota_active(sb, cnt)
->  		    && info_dirty(&dqopt->info[cnt]))
->  			sb->dq_op->write_info(sb, cnt);
->  	dqstats_inc(DQST_SYNCS);
-> @@ -714,7 +714,7 @@ int dquot_quota_sync(struct super_block *sb, int type)
->  	 * that userspace sees the changes.
->  	 */
->  	for (cnt = 0; cnt < MAXQUOTAS; cnt++) {
-> -		if (type != -1 && cnt != type)
-> +		if (type != ALLQUOTA && cnt != type)
->  			continue;
->  		if (!sb_has_quota_active(sb, cnt))
->  			continue;
-> @@ -948,7 +948,7 @@ static int dqinit_needed(struct inode *inode, int type)
->  		return 0;
->  
->  	dquots = i_dquot(inode);
-> -	if (type != -1)
-> +	if (type != ALLQUOTA)
->  		return !dquots[type];
->  	for (cnt = 0; cnt < MAXQUOTAS; cnt++)
->  		if (!dquots[cnt])
-> @@ -1391,7 +1391,7 @@ static int __dquot_initialize(struct inode *inode, int type)
->  		int rc;
->  		struct dquot *dquot;
->  
-> -		if (type != -1 && cnt != type)
-> +		if (type != ALLQUOTA && cnt != type)
->  			continue;
->  		/*
->  		 * The i_dquot should have been initialized in most cases,
-> @@ -1440,7 +1440,7 @@ static int __dquot_initialize(struct inode *inode, int type)
->  	if (IS_NOQUOTA(inode))
->  		goto out_lock;
->  	for (cnt = 0; cnt < MAXQUOTAS; cnt++) {
-> -		if (type != -1 && cnt != type)
-> +		if (type != ALLQUOTA && cnt != type)
->  			continue;
->  		/* Avoid races with quotaoff() */
->  		if (!sb_has_quota_active(sb, cnt))
-> @@ -1478,7 +1478,7 @@ static int __dquot_initialize(struct inode *inode, int type)
->  
->  int dquot_initialize(struct inode *inode)
->  {
-> -	return __dquot_initialize(inode, -1);
-> +	return __dquot_initialize(inode, ALLQUOTA);
->  }
->  EXPORT_SYMBOL(dquot_initialize);
->  
-> @@ -2131,7 +2131,7 @@ static void vfs_cleanup_quota_inode(struct super_block *sb, int type)
->  }
->  
->  /*
-> - * Turn quota off on a device. type == -1 ==> quotaoff for all types (umount)
-> + * Turn quota off on a device. type == ALLQUOTA ==> quotaoff for all types (umount)
->   */
->  int dquot_disable(struct super_block *sb, int type, unsigned int flags)
->  {
-> @@ -2158,7 +2158,7 @@ int dquot_disable(struct super_block *sb, int type, unsigned int flags)
->  		return 0;
->  
->  	for (cnt = 0; cnt < MAXQUOTAS; cnt++) {
-> -		if (type != -1 && cnt != type)
-> +		if (type != ALLQUOTA && cnt != type)
->  			continue;
->  		if (!sb_has_quota_loaded(sb, cnt))
->  			continue;
-> @@ -2392,7 +2392,7 @@ int dquot_resume(struct super_block *sb, int type)
->  		up_read(&sb->s_umount);
->  
->  	for (cnt = 0; cnt < MAXQUOTAS; cnt++) {
-> -		if (type != -1 && cnt != type)
-> +		if (type != ALLQUOTA && cnt != type)
->  			continue;
->  		if (!sb_has_quota_suspended(sb, cnt))
->  			continue;
-> diff --git a/include/uapi/linux/quota.h b/include/uapi/linux/quota.h
-> index f17c9636a859..1707ed43365a 100644
-> --- a/include/uapi/linux/quota.h
-> +++ b/include/uapi/linux/quota.h
-> @@ -38,6 +38,7 @@
->  #define __DQUOT_VERSION__	"dquot_6.6.0"
->  
->  #define MAXQUOTAS 3
-> +#define ALLQUOTA -1
->  #define USRQUOTA  0		/* element used for user quotas */
->  #define GRPQUOTA  1		/* element used for group quotas */
->  #define PRJQUOTA  2		/* element used for project quotas */
-> -- 
-> 2.35.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> diff --git a/Documentation/devicetree/bindings/watchdog/marvell-octeontx2-wdt.yaml b/Documentation/devicetree/bindings/watchdog/marvell-octeontx2-wdt.yaml
+> new file mode 100644
+> index 000000000000..e509f26c61b9
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/marvell-octeontx2-wdt.yaml
+> @@ -0,0 +1,49 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/marvell-octeontx2-wdt.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Marvell OcteonTX2 GTI system watchdog
+> +
+> +allOf:
+> +  - $ref: watchdog.yaml#
+> +
+> +maintainers:
+> +  - Bharat Bhushan <bbhushan2@marvell.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: marvell-octeontx2-wdt
+
+That's not correct compatible. marvell is a vendor prefix.
+
+Did you test the bindings before sending?
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +    description:
+> +      OcteonTX2 GTI system watchdog register space
+
+Drop description, it is obvious.
+
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +    description:
+> +      OcteonTX2 GTI system watchdog interrupt number
+
+Ditto
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: false
+
+unevaluatedProperties: false instead
+
+> +
+> +examples:
+> +  - |
+> +    soc {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        watchdog@802000040000 {
+> +          compatible = "marvell-octeontx2-wdt";
+> +          reg = <0x8020 0x40000 0x0 0x20000>;
+
+Are you sure that this is correct DTS? 32-bit numbers are usually
+8-digit long. Plus size of 0x20000 is crazy huge. And the unit address
+is a bit unusual. Are you sure dtc W=1 does not say about any errors in
+your DTS?
+
+
+> +          interrupts = <0 38 1>;
+
+Use defines for common flags.
+
+> +        };
+> +    };
+> +
+> +...
+
+Best regards,
+Krzysztof
+
