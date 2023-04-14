@@ -2,79 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B0876E1CE7
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 09:04:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CE6D6E1CE9
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 09:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbjDNHEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 03:04:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42432 "EHLO
+        id S229736AbjDNHEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 03:04:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbjDNHEI (ORCPT
+        with ESMTP id S229663AbjDNHER (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 03:04:08 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5370358A;
-        Fri, 14 Apr 2023 00:04:05 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2a76c29675bso873301fa.1;
-        Fri, 14 Apr 2023 00:04:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681455844; x=1684047844;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SNC6c0xQ2h1SpIFbxyMVPWbgAESPX8VkOwXJK9TQscE=;
-        b=Al0TNUDmjboO7Q4Izn7ycGOoqkwkwEmlDsdtpcYn712dPRdWz1T/g56hZWkt6s1o7A
-         KIbzSRi/ynOHYyAVnGn+6U1mmtoiryWLnEAuo/4rN+uxv0CDoGzlz/O+BnOa01BzHp/x
-         CTOUW79JVretRDDXQp15NwQdk21G3jAs2e6/tqVF/6hQCFEh8S9uZ7Nif1PK0cXHo/jV
-         XG5VFNyQ28Ln6tjSQ5XAaCWmmFte5KNBtJhFgmHgMmWBbG9OSXg9ZjzjyqaUeIRWken2
-         szNFZCB/mGI7mRpuMGRY4Kf6xhICoQQFjvtlwNMnCr/2J5TB8UPvIan2ljArTAwRP05e
-         e7Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681455844; x=1684047844;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SNC6c0xQ2h1SpIFbxyMVPWbgAESPX8VkOwXJK9TQscE=;
-        b=PSrXQP8oCfkn7wNC6uTaWC1IDxav1SAMzsgW7V25nAYSg+oF04nSW3FNXTzYPpvr7R
-         fGrMXEY236BJeVlejt4Dya8WYYEvhaFDsCpbdL4Y5UOnOVy2hS8s71gZKWBxeNXBLv73
-         qjhrvUGdDKfe92lglnOHCUwCAZS11eJFft58krAfrQjZnaHx4f17w2KKJ2UKli3UulkV
-         tnRA7Ix2OWmvNvdgyC1Zocg0ygXCM59cNoxh5mbyL15Bpx2HS7vbSCXN9AXTpZNgpt48
-         YsCqWd0kGXi/VqB7hLJzUAbxAOkLZxUya5lPYyadQ7N+Na3nQLUJrRGnhJH1gIFh8zN3
-         3ZQw==
-X-Gm-Message-State: AAQBX9cwR71GwbymF7Jr7HAJq52EamxyNt1EVZBduyUyBtjux82pzUr2
-        Zu1lzLmJKh1OiGS5p092JHg=
-X-Google-Smtp-Source: AKy350aRdZiS3Z9ue+txSP8VFrS8uHtMXjH4JMhqAFyBHrSJ8HDcAjWgTCWzvh6Znqk46OFjrXXvOQ==
-X-Received: by 2002:ac2:5a0a:0:b0:4e8:586c:f13 with SMTP id q10-20020ac25a0a000000b004e8586c0f13mr363211lfn.6.1681455843741;
-        Fri, 14 Apr 2023 00:04:03 -0700 (PDT)
-Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
-        by smtp.gmail.com with ESMTPSA id q5-20020ac24a65000000b004eae7890269sm658148lfp.138.2023.04.14.00.04.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Apr 2023 00:04:03 -0700 (PDT)
-Date:   Fri, 14 Apr 2023 10:03:50 +0300
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-To:     Sagi Shahar <sagis@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [RFC PATCH 0/5] Add TDX intra host migration support
-Message-ID: <20230414100350.00000955.zhi.wang.linux@gmail.com>
-In-Reply-To: <20230407201921.2703758-1-sagis@google.com>
-References: <20230407201921.2703758-1-sagis@google.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Fri, 14 Apr 2023 03:04:17 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BF93A84;
+        Fri, 14 Apr 2023 00:04:15 -0700 (PDT)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PyS6R54MLzKxvD;
+        Fri, 14 Apr 2023 15:01:35 +0800 (CST)
+Received: from [10.67.111.205] (10.67.111.205) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 14 Apr 2023 15:04:11 +0800
+Subject: Re: [PATCH RESEND v3] perf/core: Fix hardlockup failure caused by
+ perf throttle
+From:   Yang Jihong <yangjihong1@huawei.com>
+To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@kernel.org>, <namhyung@kernel.org>, <irogers@google.com>,
+        <eranian@google.com>, <linux-perf-users@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230227023508.102230-1-yangjihong1@huawei.com>
+ <12782722-103e-88a9-df3e-6815b4734bc3@huawei.com>
+ <37d019af-191c-9955-2417-b7cfa5e5efa3@huawei.com>
+Message-ID: <56cc5b4f-3cbd-c265-36fc-fedab16b8cff@huawei.com>
+Date:   Fri, 14 Apr 2023 15:04:11 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <37d019af-191c-9955-2417-b7cfa5e5efa3@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.111.205]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,69 +55,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  7 Apr 2023 20:19:16 +0000
-Sagi Shahar <sagis@google.com> wrote:
+Hello,
 
-Hi:
+PING again.
+Look forward the review.
 
-Is there any userspace using these APIs? I cant find them in AMD-QEMU repo
-and upstream QEMU repo. It would nice to first take a look on how userspace
-is going to use it.
+Thanks,
+Yang.
 
-> This patchset adds support for TDX intra host migration using the same
-> API which was added for SEV intra host migration here:
-> https://lore.kernel.org/all/20211021174303.385706-1-pgonda@google.com/
+On 2023/3/22 15:36, Yang Jihong wrote:
+> Hello,
 > 
-> This patchset relies on the latest TDX patches from Intel:
-> - fd-based approach for supporing KVM v10 and
->   https://lore.kernel.org/lkml/20221202061347.1070246-1-chao.p.peng@linux.intel.com/
-> - TDX host kernel support v10
->   https://lore.kernel.org/lkml/cover.1678111292.git.kai.huang@intel.com/
-> - KVM TDX basic feature support v13
->   https://lore.kernel.org/cover.1678643051.git.isaku.yamahata@intel.com
+> PING.
 > 
-> The tree can be found at https://github.com/googleprodkernel/linux-cc/tree/copyless
-> and is based on Intel's tdx tree at https://github.com/intel/tdx/tree/kvm-upstream
+> This patch has not been responded.
+> Please take time to check whether the fix solution is OK.
+> Look forward to reviewing the patch. Thanks :)
 > 
-> In the TDX case, we need to transfer the VM state from multiple sources:
+> Thanks,
+> Yang.
 > 
->  * HKID and encrypted VM state is transfered between the kvm_tdx
->    objects.
->  * Encrypted and runtime state is transfered between the vcpu_tdx
->    objects.
->  * The EPT table backing TD's private memory is transfered at the
->    kvm-mmu level. This is needed since the secure EPT table managed by
->    the TD module remains the same after the migration so moving the
->    current private EPT table eliminates the need to rebuild the private
->    EPT table to match the secure EPT table on the destination.
->  * Information regarding the current shared/private memory is trasfered
->    using the mem_attr_array stored at the kvm object.
->  * Additional information derived from shared/private memory state is
->    trasfered at the memslot level.
+> On 2023/3/6 9:14, Yang Jihong wrote:
+>> Hello,
+>>
+>> PING.
+>>
+>> Thanks,
+>> Yang.
+>>
+>> On 2023/2/27 10:35, Yang Jihong wrote:
+>>> commit e050e3f0a71bf ("perf: Fix broken interrupt rate throttling")
+>>> introduces a change in throttling threshold judgment. Before this,
+>>> compare hwc->interrupts and max_samples_per_tick, then increase
+>>> hwc->interrupts by 1, but this commit reverses order of these two
+>>> behaviors, causing the semantics of max_samples_per_tick to change.
+>>> In literal sense of "max_samples_per_tick", if hwc->interrupts ==
+>>> max_samples_per_tick, it should not be throttled, therefore, the 
+>>> judgment
+>>> condition should be changed to "hwc->interrupts > max_samples_per_tick".
+>>>
+>>> In fact, this may cause the hardlockup to fail, The minimum value of
+>>> max_samples_per_tick may be 1, in this case, the return value of
+>>> __perf_event_account_interrupt function is 1.
+>>> As a result, nmi_watchdog gets throttled, which would stop PMU (Use x86
+>>> architecture as an example, see x86_pmu_handle_irq).
+>>>
+>>> Fixes: e050e3f0a71b ("perf: Fix broken interrupt rate throttling")
+>>> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+>>> ---
+>>>
+>>> Changes since v2:
+>>>    - Add fixed commit.
+>>>
+>>> Changes since v1:
+>>>    - Modify commit title.
+>>>
+>>>   kernel/events/core.c | 2 +-
+>>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/kernel/events/core.c b/kernel/events/core.c
+>>> index f79fd8b87f75..0540a8653906 100644
+>>> --- a/kernel/events/core.c
+>>> +++ b/kernel/events/core.c
+>>> @@ -9434,7 +9434,7 @@ __perf_event_account_interrupt(struct 
+>>> perf_event *event, int throttle)
+>>>       } else {
+>>>           hwc->interrupts++;
+>>>           if (unlikely(throttle
+>>> -                 && hwc->interrupts >= max_samples_per_tick)) {
+>>> +                 && hwc->interrupts > max_samples_per_tick)) {
+>>>               __this_cpu_inc(perf_throttled_count);
+>>>               tick_dep_set_cpu(smp_processor_id(), 
+>>> TICK_DEP_BIT_PERF_EVENTS);
+>>>               hwc->interrupts = MAX_INTERRUPTS;
+>>>
+>>
+>> .
 > 
-> Tested with selftests locally. I will attach the self test in the next
-> version after we send the new TDX selftest framework patches based on
-> KVM TDX basic feature support v13.
-> 
-> Sagi Shahar (5):
->   KVM: Split tdp_mmu_pages to private and shared lists
->   KVM: SEV: Refactor common code out of sev_vm_move_enc_context_from
->   KVM: TDX: Add base implementation for tdx_vm_move_enc_context_from
->   KVM: TDX: Implement moving private pages between 2 TDs
->   KVM: TDX: Add core logic for TDX intra-host migration
-> 
->  arch/x86/include/asm/kvm_host.h |   5 +-
->  arch/x86/kvm/mmu.h              |   2 +
->  arch/x86/kvm/mmu/mmu.c          |  60 ++++++++
->  arch/x86/kvm/mmu/tdp_mmu.c      |  88 +++++++++++-
->  arch/x86/kvm/mmu/tdp_mmu.h      |   3 +
->  arch/x86/kvm/svm/sev.c          | 175 +++--------------------
->  arch/x86/kvm/vmx/main.c         |  10 ++
->  arch/x86/kvm/vmx/tdx.c          | 245 ++++++++++++++++++++++++++++++++
->  arch/x86/kvm/vmx/tdx.h          |   2 +
->  arch/x86/kvm/vmx/x86_ops.h      |   5 +
->  arch/x86/kvm/x86.c              | 166 ++++++++++++++++++++++
->  arch/x86/kvm/x86.h              |  16 +++
->  12 files changed, 613 insertions(+), 164 deletions(-)
-> 
-
+> .
