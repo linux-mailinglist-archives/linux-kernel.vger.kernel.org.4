@@ -2,166 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2D2C6E2503
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 16:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BA1D6E2506
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 16:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbjDNOBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 10:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50088 "EHLO
+        id S230167AbjDNOBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 10:01:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbjDNOBh (ORCPT
+        with ESMTP id S230137AbjDNOBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 10:01:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D1F26BA
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 07:00:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681480816;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=27YyBi9hssfCHBO7/PKix6vU7A+oXZmvyq6RpUloX40=;
-        b=CCXKElCVgHwbX+tqq0RCI9ipEl1pQSkMoAJBwmiQTB/YYs3TYWQDJXRegheEFRKFRV7CJI
-        b7DSi5mvSHwG2sAhB0Pp/BHu94seSNcZ+5V78BRCb7Rpzy9WE8u8op4joEWaLUsdA9Qmiq
-        9SfiR8pZnH8cG9zX93jOpY6Ab/gmGDg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-630-BcRvrHRHMtmqZL31AExtOw-1; Fri, 14 Apr 2023 10:00:14 -0400
-X-MC-Unique: BcRvrHRHMtmqZL31AExtOw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 14 Apr 2023 10:01:41 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95FABB440;
+        Fri, 14 Apr 2023 07:01:16 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id 6fe70f731cfbdbc4; Fri, 14 Apr 2023 16:00:49 +0200
+Received: from kreacher.localnet (unknown [213.134.188.177])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3F8F41C0691B;
-        Fri, 14 Apr 2023 14:00:13 +0000 (UTC)
-Received: from ovpn-8-21.pek2.redhat.com (ovpn-8-21.pek2.redhat.com [10.72.8.21])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0A3E6404DC40;
-        Fri, 14 Apr 2023 14:00:02 +0000 (UTC)
-Date:   Fri, 14 Apr 2023 21:59:57 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Pavel Begunkov <asml.silence@gmail.com>
-Cc:     Breno Leitao <leitao@debian.org>, axboe@kernel.dk,
-        davem@davemloft.net, dccp@vger.kernel.org, dsahern@kernel.org,
-        edumazet@google.com, io-uring@vger.kernel.org, kuba@kernel.org,
-        leit@fb.com, linux-kernel@vger.kernel.org,
-        marcelo.leitner@gmail.com, matthieu.baerts@tessares.net,
-        mptcp@lists.linux.dev, netdev@vger.kernel.org, pabeni@redhat.com,
-        willemdebruijn.kernel@gmail.com, ming.lei@redhat.com
-Subject: Re: [PATCH RFC] io_uring: Pass whole sqe to commands
-Message-ID: <ZDlcXd4K+a2iGbnv@ovpn-8-21.pek2.redhat.com>
-References: <20230406144330.1932798-1-leitao@debian.org>
- <20230406165705.3161734-1-leitao@debian.org>
- <ZDdvcSKLa6ZEAhRW@ovpn-8-18.pek2.redhat.com>
- <ZDgyPL6UrX/MaBR4@gmail.com>
- <ZDi2pP4jgHwCvJRm@ovpn-8-21.pek2.redhat.com>
- <44420e92-f629-f56e-f930-475be6f6a83a@gmail.com>
+        by v370.home.net.pl (Postfix) with ESMTPSA id CD86681B369;
+        Fri, 14 Apr 2023 16:00:48 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: [PATCH v1] ACPI: bus: Ensure that notify handlers are not running after removal
+Date:   Fri, 14 Apr 2023 16:00:48 +0200
+Message-ID: <5688433.DvuYhMxLoT@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <44420e92-f629-f56e-f930-475be6f6a83a@gmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.188.177
+X-CLIENT-HOSTNAME: 213.134.188.177
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeltddgjedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffffffekgfehheffleetieevfeefvefhleetjedvvdeijeejledvieehueevueffnecukfhppedvudefrddufeegrddukeekrddujeejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekkedrudejjedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepfedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehhuggvghhovgguvgesrhgvughhrghtrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 14, 2023 at 02:12:10PM +0100, Pavel Begunkov wrote:
-> On 4/14/23 03:12, Ming Lei wrote:
-> > On Thu, Apr 13, 2023 at 09:47:56AM -0700, Breno Leitao wrote:
-> > > Hello Ming,
-> > > 
-> > > On Thu, Apr 13, 2023 at 10:56:49AM +0800, Ming Lei wrote:
-> > > > On Thu, Apr 06, 2023 at 09:57:05AM -0700, Breno Leitao wrote:
-> > > > > Currently uring CMD operation relies on having large SQEs, but future
-> > > > > operations might want to use normal SQE.
-> > > > > 
-> > > > > The io_uring_cmd currently only saves the payload (cmd) part of the SQE,
-> > > > > but, for commands that use normal SQE size, it might be necessary to
-> > > > > access the initial SQE fields outside of the payload/cmd block.  So,
-> > > > > saves the whole SQE other than just the pdu.
-> > > > > 
-> > > > > This changes slighlty how the io_uring_cmd works, since the cmd
-> > > > > structures and callbacks are not opaque to io_uring anymore. I.e, the
-> > > > > callbacks can look at the SQE entries, not only, in the cmd structure.
-> > > > > 
-> > > > > The main advantage is that we don't need to create custom structures for
-> > > > > simple commands.
-> > > > > 
-> > > > > Suggested-by: Pavel Begunkov <asml.silence@gmail.com>
-> > > > > Signed-off-by: Breno Leitao <leitao@debian.org>
-> > > > > ---
-> > > > 
-> > > > ...
-> > > > 
-> > > > > diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-> > > > > index 2e4c483075d3..9648134ccae1 100644
-> > > > > --- a/io_uring/uring_cmd.c
-> > > > > +++ b/io_uring/uring_cmd.c
-> > > > > @@ -63,14 +63,15 @@ EXPORT_SYMBOL_GPL(io_uring_cmd_done);
-> > > > >   int io_uring_cmd_prep_async(struct io_kiocb *req)
-> > > > >   {
-> > > > >   	struct io_uring_cmd *ioucmd = io_kiocb_to_cmd(req, struct io_uring_cmd);
-> > > > > -	size_t cmd_size;
-> > > > > +	size_t size = sizeof(struct io_uring_sqe);
-> > > > >   	BUILD_BUG_ON(uring_cmd_pdu_size(0) != 16);
-> > > > >   	BUILD_BUG_ON(uring_cmd_pdu_size(1) != 80);
-> > > > > -	cmd_size = uring_cmd_pdu_size(req->ctx->flags & IORING_SETUP_SQE128);
-> > > > > +	if (req->ctx->flags & IORING_SETUP_SQE128)
-> > > > > +		size <<= 1;
-> > > > > -	memcpy(req->async_data, ioucmd->cmd, cmd_size);
-> > > > > +	memcpy(req->async_data, ioucmd->sqe, size);
-> > > > 
-> > > > The copy will make some fields of sqe become READ TWICE, and driver may see
-> > > > different sqe field value compared with the one observed in io_init_req().
-> > > 
-> > > This copy only happens if the operation goes to the async path
-> > > (calling io_uring_cmd_prep_async()).  This only happens if
-> > > f_op->uring_cmd() returns -EAGAIN.
-> > > 
-> > >            ret = file->f_op->uring_cmd(ioucmd, issue_flags);
-> > >            if (ret == -EAGAIN) {
-> > >                    if (!req_has_async_data(req)) {
-> > >                            if (io_alloc_async_data(req))
-> > >                                    return -ENOMEM;
-> > >                            io_uring_cmd_prep_async(req);
-> > >                    }
-> > >                    return -EAGAIN;
-> > >            }
-> > > 
-> > > Are you saying that after this copy, the operation is still reading from
-> > > sqe instead of req->async_data?
-> > 
-> > I meant that the 2nd read is on the sqe copy(req->aync_data), but same
-> > fields can become different between the two READs(first is done on original
-> > SQE during io_init_req(), and second is done on sqe copy in driver).
-> > 
-> > Will this kind of inconsistency cause trouble for driver? Cause READ
-> > TWICE becomes possible with this patch.
-> 
-> Right it might happen, and I was keeping that in mind, but it's not
-> specific to this patch. It won't reload core io_uring bits, and all
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-It depends if driver reloads core bits or not, anyway the patch exports
-all fields and opens the window.
+Currently, acpi_device_remove_notify_handler() may return while the
+notify handler being removed is still running which may allow the
+module holding that handler to be torn down prematurely.
 
-> fields cmds use already have this problem.
+Address this issue by making acpi_device_remove_notify_handler() wait
+for the handling of all the ACPI events in progress to complete before
+returning.
 
-driver is supposed to load cmds field just once too, right?
+Fixes: 5894b0c46e49 ("ACPI / scan: Move bus operations and notification routines to bus.c")
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/acpi/bus.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-> 
-> Unless there is a better option, the direction we'll be moving in is
-> adding a preparation step that should read and stash parts of SQE
-> it cares about, which should also make full SQE copy not
-> needed / optional.
-
-Sounds good.
+Index: linux-pm/drivers/acpi/bus.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/bus.c
++++ linux-pm/drivers/acpi/bus.c
+@@ -589,6 +589,7 @@ static void acpi_device_remove_notify_ha
+ 		acpi_remove_notify_handler(device->handle, type,
+ 					   acpi_notify_device);
+ 	}
++	acpi_os_wait_events_complete();
+ }
+ 
+ /* Handle events targeting \_SB device (at present only graceful shutdown) */
 
 
-Thanks,
-Ming
 
