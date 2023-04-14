@@ -2,147 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88AAE6E1CB3
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 08:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 883876E1CB9
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 08:33:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbjDNGdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 02:33:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34626 "EHLO
+        id S230033AbjDNGdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 02:33:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjDNGdA (ORCPT
+        with ESMTP id S229989AbjDNGdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 02:33:00 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BAEA1FFD;
-        Thu, 13 Apr 2023 23:32:57 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id w24so6793525wra.10;
-        Thu, 13 Apr 2023 23:32:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681453976; x=1684045976;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wu9t9qkvRho3a2+VOvYAw+ny13P5sPBLocJ00Zos1+0=;
-        b=i63ZUmiwp2QsF62nyzrRiuqkcWRkBgu7ZE8QFGne5qA0EbAWUXmsXYiwkglPOu2+cy
-         qR/z8rlRj8h6RysuwTOHiT2yl/0MD6ZmPKvSZxLDTp6uavfTYO/rnH0IkqUr+b9Mn5sD
-         97XiWJJdD0nBIYcTpdy97CkOzOelbBMjj4Veedlc8kV9FIGcV6Z0MCapKrm5gCz4MQNH
-         FU7okbbo/sZC8PIoD2ELnt+/udpzRtwk8xFAyoO9dUzKV/3FUMeCL78EENTUNL/pX1HI
-         qutoq/8j7SEf66WZzYPbuYhVbYukC7amlqka7D5f2Hl0IV9pYkkntCr9L3LNc9CYDy6/
-         CvUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681453976; x=1684045976;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wu9t9qkvRho3a2+VOvYAw+ny13P5sPBLocJ00Zos1+0=;
-        b=MywIC9loIKJsAPDQ1eYnEkJX/BO6L52km7H0yiOmazNHFeAEimpUoW+r2gPhUgXXSn
-         kBSvKrVfDlF23/R7245/UclDvno93XRVSooU4FU1DL7qRTE+q9QON63OxWM3IVu75t/k
-         0klNPqmFbANxPinRwu5dshZvCuwQuBwaKk1AfAQyFSE/cGCPVcRwB2Z36YoW/Q+3VTwd
-         bYhGPIhJ4vEWloYCFckMdBg45VnwigKf0keTexomKy0kHCa0rcLd4wtZWy5+8hYd9T7k
-         Kvkx1zexR7KcMjCAn+B5l/nuyZmPCWvDWqM/w7XPV2wok2xD2UoGbLbdvdkqzaZO/CHz
-         WG+w==
-X-Gm-Message-State: AAQBX9cKxyfewZiOQqfxragkZwMmJG/6EIrqpJjb7UG8DObcwL3PPa54
-        4C71wpoe+65HQ/FB5NRPZ28=
-X-Google-Smtp-Source: AKy350ZAC/ZKvfRKMwL4WNCGIl+3kXoSut0GX7Q8mBQCMiu8Rxu9pJXuSdeX+M49NzprIM6KcWBQsA==
-X-Received: by 2002:a5d:43c4:0:b0:2c5:5687:5ed5 with SMTP id v4-20020a5d43c4000000b002c556875ed5mr3220704wrr.18.1681453975545;
-        Thu, 13 Apr 2023 23:32:55 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id j11-20020a05600c190b00b003f09c34fa4csm7283184wmq.40.2023.04.13.23.32.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 23:32:55 -0700 (PDT)
-Date:   Fri, 14 Apr 2023 09:32:51 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     David Ahern <dsahern@kernel.org>
-Cc:     Haoyi Liu <iccccc@hust.edu.cn>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        hust-os-kernel-patches@googlegroups.com, yalongz@hust.edu.cn,
-        Dongliang Mu <dzm91@hust.edu.cn>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2] net/ipv6: silence 'passing zero to
- ERR_PTR()' warning
-Message-ID: <11c76aa6-4c19-4f1d-86dd-e94e683dbd64@kili.mountain>
-References: <20230413101005.7504-1-iccccc@hust.edu.cn>
- <a3e202ed-a50f-2a0f-082b-ec0313be096e@kernel.org>
+        Fri, 14 Apr 2023 02:33:15 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4369455B4;
+        Thu, 13 Apr 2023 23:33:10 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D950D219BF;
+        Fri, 14 Apr 2023 06:33:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1681453988; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xslQPF17zT9apx+cU2US+PpxMshzU35IKYkk2wpIDLg=;
+        b=DJN+y564b8swWIzIhMyoJZmTzvSqa6m/5QtSbnrPb54+xfDbvOpGA38sWt+1Iy8fdfPh8j
+        /+hfnbGVW18WolgOUyQInIsmtDRk1oPV2dCNEN5y/6IV7iJSpAtkQDgSz9Z+XWZ5eKGQbL
+        /2OIoGOXmGQ9yUAigxFE1FWMOYCh4zM=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B0322139FC;
+        Fri, 14 Apr 2023 06:33:08 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id YpWfKqTzOGQiNgAAMHmgww
+        (envelope-from <mhocko@suse.com>); Fri, 14 Apr 2023 06:33:08 +0000
+Date:   Fri, 14 Apr 2023 08:33:08 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Ackerley Tng <ackerleytng@google.com>
+Cc:     kvm@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, qemu-devel@nongnu.org, aarcange@redhat.com,
+        ak@linux.intel.com, akpm@linux-foundation.org, arnd@arndb.de,
+        bfields@fieldses.org, bp@alien8.de, chao.p.peng@linux.intel.com,
+        corbet@lwn.net, dave.hansen@intel.com, david@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com, hpa@zytor.com,
+        hughd@google.com, jlayton@kernel.org, jmattson@google.com,
+        joro@8bytes.org, jun.nakajima@intel.com,
+        kirill.shutemov@linux.intel.com, linmiaohe@huawei.com,
+        luto@kernel.org, mail@maciej.szmigiero.name, michael.roth@amd.com,
+        mingo@redhat.com, naoya.horiguchi@nec.com, pbonzini@redhat.com,
+        qperret@google.com, rppt@kernel.org, seanjc@google.com,
+        shuah@kernel.org, steven.price@arm.com, tabba@google.com,
+        tglx@linutronix.de, vannapurve@google.com, vbabka@suse.cz,
+        vkuznets@redhat.com, wanpengli@tencent.com, wei.w.wang@intel.com,
+        x86@kernel.org, yu.c.zhang@linux.intel.com, muchun.song@linux.dev,
+        feng.tang@intel.com, brgerst@gmail.com, rdunlap@infradead.org,
+        masahiroy@kernel.org, mailhol.vincent@wanadoo.fr
+Subject: Re: [RFC PATCH 0/6] Setting memory policy for restrictedmem file
+Message-ID: <ZDjzpKL9Omcox991@dhcp22.suse.cz>
+References: <cover.1681430907.git.ackerleytng@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <a3e202ed-a50f-2a0f-082b-ec0313be096e@kernel.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cover.1681430907.git.ackerleytng@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 06:32:24PM -0600, David Ahern wrote:
-> On 4/13/23 4:10 AM, Haoyi Liu wrote:
-> > Smatch complains that if xfrm_lookup() returns NULL then this does a
-> > weird thing with "err":
+On Fri 14-04-23 00:11:49, Ackerley Tng wrote:
+> Hello,
 > 
-> xfrm_lookup is a wrapper around xfrm_lookup_with_ifid which returns
-> either either a valid dst or ERR_PTR(err).
+> This patchset builds upon the memfd_restricted() system call that was
+> discussed in the 'KVM: mm: fd-based approach for supporting KVM' patch
+> series [1].
+> 
+> The tree can be found at:
+> https://github.com/googleprodkernel/linux-cc/tree/restrictedmem-set-memory-policy
+> 
+> In this patchset, a new syscall is introduced, which allows userspace
+> to set the memory policy (e.g. NUMA bindings) for a restrictedmem
+> file, to the granularity of offsets within the file.
+> 
+> The offset/length tuple is termed a file_range which is passed to the
+> kernel via a pointer to get around the limit of 6 arguments for a
+> syscall.
+> 
+> The following other approaches were also considered:
+> 
+> 1. Pre-configuring a mount with a memory policy and providing that
+>    mount to memfd_restricted() as proposed at [2].
+>     + Pro: It allows choice of a specific backing mount with custom
+>       memory policy configurations
+>     + Con: Will need to create an entire new mount just to set memory
+>       policy for a restrictedmem file; files on the same mount cannot
+>       have different memory policies.
 
-Also it can return NULL.
+Could you expand on this some more please? How many restricted
+files/mounts do we expect? My understanding was that this would be
+essentially a backing store for guest memory so it would scale with the
+number of guests.
 
-net/xfrm/xfrm_policy.c
-  3229                  dst = dst_orig;
-  3230          }
-  3231  ok:
-  3232          xfrm_pols_put(pols, drop_pols);
-  3233          if (dst && dst->xfrm &&
-                    ^^^
-"dst" is NULL.
+> 2. Passing memory policy to the memfd_restricted() syscall at creation time.
+>     + Pro: Only need to make a single syscall to create a file with a
+>       given memory policy
+>     + Con: At creation time, the kernel doesn’t know the size of the
+>       restrictedmem file. Given that memory policy is stored in the
+>       inode based on ranges (start, end), it is awkward for the kernel
+>       to store the memory policy and then add hooks to set the memory
+>       policy when allocation is done.
+> 
+> 3. A more generic fbind(): it seems like this new functionality is
+>    really only needed for restrictedmem files, hence a separate,
+>    specific syscall was proposed to avoid complexities with handling
+>    conflicting policies that may be specified via other syscalls like
+>    mbind()
 
-  3234              dst->xfrm->props.mode == XFRM_MODE_TUNNEL)
-  3235                  dst->flags |= DST_XFRM_TUNNEL;
-  3236          return dst;
-                ^^^^^^^^^^^
-  3237  
+I do not think it is a good idea to make the syscall restrict mem
+specific. History shows that users are much more creative when it comes
+to usecases than us. I do understand that the nature of restricted
+memory is that it is not mapable but memory policies without a mapping
+are a reasonable concept in genereal. After all this just tells where
+the memory should be allocated from. Do we need to implement that for
+any other fs? No, you can safely return EINVAL for anything but
+memfd_restricted fd for now but you shouldn't limit usecases upfront.
 
-So in the original code what happened here was:
+> 
+> TODOs
 
-net/ipv6/icmp.c
-   395          dst2 = xfrm_lookup(net, dst2, flowi6_to_flowi(&fl2), sk, XFRM_LOOKUP_ICMP);
-   396          if (!IS_ERR(dst2)) {
+How do you query a policy for the specific fd? Are there any plans to
+add a syscall for that as well but you just wait for the direction for
+the set method?
 
-xfrm_lookup() returns NULL.  NULL is not an error pointer.
+> + Return -EINVAL if file_range is not within the size of the file and
+>   tests for this
+> 
+> Dependencies:
+> 
+> + Chao’s work on UPM [3]
+> 
+> [1] https://lore.kernel.org/lkml/20221202061347.1070246-1-chao.p.peng@linux.intel.com/T/
+> [2] https://lore.kernel.org/lkml/cover.1681176340.git.ackerleytng@google.com/T/
+> [3] https://github.com/chao-p/linux/commits/privmem-v11.5
+> 
+> ---
+> 
+> Ackerley Tng (6):
+>   mm: shmem: Refactor out shmem_shared_policy() function
+>   mm: mempolicy: Refactor out mpol_init_from_nodemask
+>   mm: mempolicy: Refactor out __mpol_set_shared_policy()
+>   mm: mempolicy: Add and expose mpol_create
+>   mm: restrictedmem: Add memfd_restricted_bind() syscall
+>   selftests: mm: Add selftest for memfd_restricted_bind()
+> 
+>  arch/x86/entry/syscalls/syscall_32.tbl        |   1 +
+>  arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
+>  include/linux/mempolicy.h                     |   4 +
+>  include/linux/shmem_fs.h                      |   7 +
+>  include/linux/syscalls.h                      |   5 +
+>  include/uapi/asm-generic/unistd.h             |   5 +-
+>  include/uapi/linux/mempolicy.h                |   7 +-
+>  kernel/sys_ni.c                               |   1 +
+>  mm/mempolicy.c                                | 100 ++++++++++---
+>  mm/restrictedmem.c                            |  75 ++++++++++
+>  mm/shmem.c                                    |  10 +-
+>  scripts/checksyscalls.sh                      |   1 +
+>  tools/testing/selftests/mm/.gitignore         |   1 +
+>  tools/testing/selftests/mm/Makefile           |   8 +
+>  .../selftests/mm/memfd_restricted_bind.c      | 139 ++++++++++++++++++
+>  .../mm/restrictedmem_testmod/Makefile         |  21 +++
+>  .../restrictedmem_testmod.c                   |  89 +++++++++++
+>  tools/testing/selftests/mm/run_vmtests.sh     |   6 +
+>  18 files changed, 454 insertions(+), 27 deletions(-)
+>  create mode 100644 tools/testing/selftests/mm/memfd_restricted_bind.c
+>  create mode 100644 tools/testing/selftests/mm/restrictedmem_testmod/Makefile
+>  create mode 100644 tools/testing/selftests/mm/restrictedmem_testmod/restrictedmem_testmod.c
+> 
+> --
+> 2.40.0.634.g4ca3ef3211-goog
 
-   397                  dst_release(dst);
-   398                  dst = dst2;
-
-We set "dst" to NULL.
-
-   399          } else {
-   400                  err = PTR_ERR(dst2);
-   401                  if (err == -EPERM) {
-   402                          dst_release(dst);
-   403                          return dst2;
-   404                  } else
-   405                          goto relookup_failed;
-   406          }
-   407  
-   408  relookup_failed:
-   409          if (dst)
-   410                  return dst;
-
-dst is not NULL so we don't return it.
-
-   411          return ERR_PTR(err);
-
-However "err" is not set so we do return NULL and Smatch complains about
-that.
-
-Returning ERR_PTR(0); is not necessarily a bug, however 80% of the time
-in newly introduced code it is a bug.  Here, returning NULL is correct.
-So this is a false positive, but the code is just wibbly winding and so
-difficult to read.
-
-   412  }
-
-regards,
-dan carpenter
+-- 
+Michal Hocko
+SUSE Labs
