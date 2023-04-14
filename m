@@ -2,67 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AFB96E1BCB
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 07:36:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 145756E1B96
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 07:19:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbjDNFgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 01:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57260 "EHLO
+        id S229553AbjDNFTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 01:19:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjDNFgi (ORCPT
+        with ESMTP id S229636AbjDNFTP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 01:36:38 -0400
-X-Greylist: delayed 145930 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 13 Apr 2023 22:36:36 PDT
-Received: from baidu.com (mx20.baidu.com [111.202.115.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0262B35A1;
-        Thu, 13 Apr 2023 22:36:35 -0700 (PDT)
-From:   "Li,Rongqing" <lirongqing@baidu.com>
-To:     Wei Liu <wei.liu@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>
-CC:     Sean Christopherson <seanjc@google.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] clockevents/drivers/i8253: Do not zero timer counter in
- shutdown
-Thread-Topic: [PATCH] clockevents/drivers/i8253: Do not zero timer counter in
- shutdown
-Thread-Index: AQHZOpLxLW8Whz5HbUGqx7zeXRG6Ia7EObywgABoMQCAY1X+0IAAW1iAgAJXbhA=
-Date:   Fri, 14 Apr 2023 05:17:01 +0000
-Message-ID: <f6e1bb3243354dd9bc78522f8c119e43@baidu.com>
-References: <1675732476-14401-1-git-send-email-lirongqing@baidu.com>
- <BYAPR21MB168840B3814336ED510845C0D7D89@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y+O56OXIuARBhsg2@google.com> <3b8496c071214bda9e5ecfa048f18ab9@baidu.com>
- <1311175816673.202304.ZDdawTGHoa/UH20U@liuwe-devbox-debian-v2>
-In-Reply-To: <1311175816673.202304.ZDdawTGHoa/UH20U@liuwe-devbox-debian-v2>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.22.204.50]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 14 Apr 2023 01:19:15 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4A61FD2;
+        Thu, 13 Apr 2023 22:19:10 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-18779252f7fso8467430fac.12;
+        Thu, 13 Apr 2023 22:19:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681449549; x=1684041549;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V99wgKb499+9VrSvxbUr6s15Psglq894fCu8CZq/rEU=;
+        b=WqKAAp1l5pn4CHAIORc/ME3DhmRJPzTL5tDeqPvveDFoafEWulN/voiYR+d+Xo1xfg
+         qLdcg/NgoMMgZU45ER4cMCVQlUboDz83vyLgTP4dKoQ8d5BzJyVE2aVxsnlrOLuBmQBz
+         LOc6tFbv3x+d7pRQ1P8ml4jY5LriVr9zjwWP9IrR+xjeVoqDTq1GrJE9+C0ptquOgtc4
+         PoymooWoSG2zOLu7WySxweEMUgO701ODcbWjXapsQhmGLv10bS0Fe+ec5bMDv9XJu2y6
+         ufuGIjLE+QJJzGs3+wzs+mumdVeBcSzerjm/ZJSmKJ0BAL1qSWdNG83OLNkTm7Q8eJ/W
+         8EsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681449549; x=1684041549;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=V99wgKb499+9VrSvxbUr6s15Psglq894fCu8CZq/rEU=;
+        b=DxJebhu1nCRiXpgNwMCoZdNxYOqIDHM6WoEzVYaqsHx75MiHj+dGFbcXOkgNEoCwzJ
+         YWQHC+sbzb8KMclYbXl6yx37KQoSihOfHQeE3q0hrSTwNpsd8FzEdFt9dgyTbV0osx8W
+         9t+mj8igmp7TbQnCnrqvQKZQ32ZxwRCH+WSvMjMVu/6KrLvH3s0XPa1v5afRtIXW9YCU
+         EsL7EK/PZA509766UJvMmRJFkcifsUrdS/9gZ5VqN+Sx20L6D+jWCN1ThlugvcNYOiEs
+         FAhvsOaeqRQ6Qj6x6hQyexzX7QdukwyCkDuY1YQH3dpXjYhgNpaVcc0gAcTkXHkA18o8
+         wm5g==
+X-Gm-Message-State: AAQBX9ewtxT2i1RPelAMrWYOQuVLKt5Zq73GtnGz4KBrkyzbnkAZa1h5
+        4aVPgtUHpwSrs6oK2dV/qXjMje1jPHOPFHmTkRjCx7L/ByU=
+X-Google-Smtp-Source: AKy350YhFKBqyd5LScqou206ROnoHlD0S94N0EvVsdQvoyPVyih2qSotfVh+hMqqvnyqnB46Z4LPjnWW+M09FqSEOJc=
+X-Received: by 2002:a05:6870:e9aa:b0:187:7f01:7e74 with SMTP id
+ r42-20020a056870e9aa00b001877f017e74mr2428531oao.0.1681449549348; Thu, 13 Apr
+ 2023 22:19:09 -0700 (PDT)
 MIME-Version: 1.0
-X-FEAS-Client-IP: 172.31.51.56
-X-FE-Last-Public-Client-IP: 100.100.100.38
-X-FE-Policy-ID: 15:10:21:SYSTEM
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230321050034.1431379-1-sergio.paracuellos@gmail.com>
+ <CAMhs-H-0Upz--k0tkm7BFCTd0b0Gso-c_uPyzeAjOigZowbK1Q@mail.gmail.com> <d20a8910675be9acab3b2f4ac123fbf3.sboyd@kernel.org>
+In-Reply-To: <d20a8910675be9acab3b2f4ac123fbf3.sboyd@kernel.org>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Fri, 14 Apr 2023 07:18:57 +0200
+Message-ID: <CAMhs-H-BfZb3mD8E=LeJ4vT22uibQ1DnaZsfTrtRxSiv=8L5RA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/9] mips: ralink: add complete clock and reset driver
+ for mtmips SoCs
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+        tsbogend@alpha.franken.de, john@phrozen.org,
+        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
+        mturquette@baylibre.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        devicetree@vger.kernel.org, arinc.unal@arinc9.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiA+DQo+ID4NCj4gPiBQaW5nDQo+IA0KPiBJIGd1ZXNzIHlvdSB3YW50IFRob21hcyBHbGVpeG5l
-ciBhbmQgRGFuaWVsIExlemNhbm8ncyBhdHRlbnRpb24uDQo+IA0KDQpZZXMsIA0KDQpUaGFua3Mg
-eW91DQoNCi1MaQ0KDQo=
+On Thu, Apr 13, 2023 at 8:56=E2=80=AFPM Stephen Boyd <sboyd@kernel.org> wro=
+te:
+>
+> Quoting Sergio Paracuellos (2023-04-13 01:44:56)
+> >
+> > Gentle ping on this series :-)
+>
+> Please trim replies. I had marked the whole series as superseded because
+> of the first patch discussions. I reviewed the clk driver now. In
+> general, use the fixed rate and fixed factor basic clk types. Don't
+> change hardware in recalc_rate().
+
+Thanks, Stephen. I was expecting an answer in my request of
+Reviewed-by of the bindings after the discussion about the first patch
+between Arinc and Rob before resending anything [0].
+
+I will reply to your review comments shortly.
+
+Thanks,
+    Sergio Paracuellos
+
+[0]: https://lore.kernel.org/linux-mips/d20a8910675be9acab3b2f4ac123fbf3.sb=
+oyd@kernel.org/T/#m6ae224c084b5b482ccfe0cfd0d936fb9ce1354b0
