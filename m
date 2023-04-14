@@ -2,758 +2,387 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F6656E206E
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 12:12:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE0AD6E207C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 12:13:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230265AbjDNKMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 06:12:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49596 "EHLO
+        id S229893AbjDNKNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 06:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbjDNKM1 (ORCPT
+        with ESMTP id S229636AbjDNKNr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 06:12:27 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E2E1FF3
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 03:12:22 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id o6-20020a05600c4fc600b003ef6e6754c5so7780835wmq.5
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 03:12:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1681467141; x=1684059141;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RAp7HkGOPrIFNV4BaQGFLm26HsWW4F8lJIGFGvqG9Rg=;
-        b=QJsSvWyvESRlJ1MftdKXWdx4D8XqCatZAvPyTjrSzZlI1fSWddcmoqqGtsTsrM8azp
-         gET19TXitucbirP5Ou9ENl0osUyzb6QM4vT10uNFB8GH9c/jFT+m/5x2YYp1Mx5Q/x+G
-         ksMc/JKkb4Z42SQajMBSGlyQZNtmj4/QUeoGMgJJ7DSrkHRW84PjDqu0UqgIJl+4Wluz
-         JI2frBbhQL/Eq0rpEEFpkBnf0GG7JbjmVd3qUnA3QgFIkZFcaTHoT3+1jxdMTmYHBTGo
-         mgtRIXEFUiK26hrRk8rqgPD7RbodiThtySv9NBClNAbCnMrkLO1SXYkT7bRMyTqhUKAb
-         FdBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681467141; x=1684059141;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RAp7HkGOPrIFNV4BaQGFLm26HsWW4F8lJIGFGvqG9Rg=;
-        b=gnldeYz7bjt8hzDNl9J/MUUd0QH3eZLpEo5I2D7rEuVbVwkBtL+TzGJ6mrYAEulgIg
-         v8TNTA0aJaD828GlUpTLDTlwyDxK0HQjyHqBpLlYBWTGw0grl69eaYJQAA/7YryzElkV
-         TXT/2ESEK1pMOHzunLxY+83Lt6EfTXjxEwDkGfCRUIaqaNGXte7GaTAUUNvjw/4citp/
-         oZp66tWtYSbq81fJFFtqKsPHoDQFoznvMHYarBVdwwg4/YKfeQdtZ06k/p8/pKh7W57f
-         Am3ZkPeEgmdr5cekBhi+frWqJC9ZdsLLpobYDC1fO2LTEYDRnQwSDauFjwZaXirfOqko
-         JfqQ==
-X-Gm-Message-State: AAQBX9dG5mMTRVO3Gl3PRKLbBbpXIpEUfLXXKz7DTLSxf2/+4aO/HsCb
-        o0mEvDLK6uVPb73T7ezxpY5V7A==
-X-Google-Smtp-Source: AKy350a3nsL6cqsqoLRhhXfE323NWuDhKAc7oNSz7RM2KEb1/TQ9miceAtnm9rnVWurfgMeJodMmrw==
-X-Received: by 2002:a05:600c:ad2:b0:3ef:61a5:b172 with SMTP id c18-20020a05600c0ad200b003ef61a5b172mr4111554wmr.29.1681467140972;
-        Fri, 14 Apr 2023 03:12:20 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:e34:eca6:27f0:42a5:8f07:826a:465d])
-        by smtp.gmail.com with ESMTPSA id m10-20020a05600c3b0a00b003ef5e5f93f5sm7612923wms.19.2023.04.14.03.12.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Apr 2023 03:12:20 -0700 (PDT)
-From:   Esteban Blanc <eblanc@baylibre.com>
-To:     linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
-        a.zummo@towertech.it, alexandre.belloni@bootlin.com
-Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, jpanis@baylibre.com,
-        jneanne@baylibre.com, aseketeli@baylibre.com, sterzik@ti.com,
-        u-kumar1@ti.com
-Subject: [PATCH v3 3/3] regulator: tps6594-regulator: Add driver for TI TPS6594 regulators
-Date:   Fri, 14 Apr 2023 12:12:17 +0200
-Message-Id: <20230414101217.1342891-4-eblanc@baylibre.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230414101217.1342891-1-eblanc@baylibre.com>
-References: <20230414101217.1342891-1-eblanc@baylibre.com>
+        Fri, 14 Apr 2023 06:13:47 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BFA67ECD;
+        Fri, 14 Apr 2023 03:13:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681467188; x=1713003188;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=cjLLIMHR+d6qP/BhWUSCR4eoe5tVu5Gp1jVzvOoek7o=;
+  b=imAitqjZ70M1xLGZO4XgJsr0yUhTiU/N5f1solxz1zHBDmRRhuRXqcm2
+   b1yGct7fWGetL428vdWykExadrnD8qXIkWBdSm0smqHrKBKg4jO7snyC9
+   tDkUNNVegqtA7+KGbS5VqpsLJNkrtsQWVviFt5xbn6mPCBynrJdCFI7eI
+   0zB+2LJiL/02X93oREz/CcnT1ubB9MWsxGPZAR3pH0xKOKpl4OI4dWRWc
+   6qRR9bnZELg6WTcqAV+UyL1U5N/5+Sk8uK3wN8CpsWVKP/FGAqopadaLA
+   lW5KscKqIaNs8xAdwoXEIT7Bnd5s76HWoYXUvgm1Dt8TLiA+sCXWp96oY
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="333202132"
+X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
+   d="scan'208";a="333202132"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 03:12:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="667148528"
+X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
+   d="scan'208";a="667148528"
+Received: from sokeeffe-mobl.ger.corp.intel.com (HELO [10.213.222.60]) ([10.213.222.60])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 03:12:40 -0700
+Message-ID: <5278c52a-b69a-ef7b-bbf2-b65bba2bac64@linux.intel.com>
+Date:   Fri, 14 Apr 2023 11:12:38 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 6/7] drm: Add fdinfo memory stats
+Content-Language: en-US
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Christopher Healy <healych@amazon.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Rob Clark <robdclark@chromium.org>,
+        David Airlie <airlied@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230411225725.2032862-1-robdclark@gmail.com>
+ <20230411225725.2032862-7-robdclark@gmail.com>
+ <29a8d9aa-c6ea-873f-ce0b-fb8199b13068@linux.intel.com>
+ <CAF6AEGsZsMx+Vy+4UQSx3X7w_QNvvjLqWxx=PnCLAOC9f-X2CQ@mail.gmail.com>
+ <ZDb1phnddSne79iN@phenom.ffwll.local>
+ <CAF6AEGvBeDVM12ac0j_PKSdcY83hNDhyrQs9-=h=dx_7AoMXLw@mail.gmail.com>
+ <ZDcEGoSPGr/oRLas@phenom.ffwll.local>
+ <c82fd8fa-9f4b-f62f-83be-25853f9ecf5e@linux.intel.com>
+ <ZDgDQ1PqtXwu8zqA@phenom.ffwll.local>
+ <ad8f2793-c1b3-a505-e93f-6cc52fded86d@linux.intel.com>
+ <ZDhgcqiOtJi6//TS@phenom.ffwll.local>
+ <8893ad56-8807-eb69-2185-b338725f0b18@linux.intel.com>
+ <CAKMK7uE+wxFFezLjZESvO+CyZjc9suptq9V2kC=ra3oB0wtDtA@mail.gmail.com>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <CAKMK7uE+wxFFezLjZESvO+CyZjc9suptq9V2kC=ra3oB0wtDtA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jerome Neanne <jneanne@baylibre.com>
 
-This patch adds support for TPS6594 regulators (bucks and LDOs).
-The output voltages are configurable and are meant to supply power
-to the main processor and other components.
-Bucks can be used in single or multiphase mode, depending on PMIC
-part number.
+On 14/04/2023 10:07, Daniel Vetter wrote:
+> On Fri, 14 Apr 2023 at 10:57, Tvrtko Ursulin
+> <tvrtko.ursulin@linux.intel.com> wrote:
+>> On 13/04/2023 21:05, Daniel Vetter wrote:
+>>> On Thu, Apr 13, 2023 at 05:40:21PM +0100, Tvrtko Ursulin wrote:
+>>>>
+>>>> On 13/04/2023 14:27, Daniel Vetter wrote:
+>>>>> On Thu, Apr 13, 2023 at 01:58:34PM +0100, Tvrtko Ursulin wrote:
+>>>>>>
+>>>>>> On 12/04/2023 20:18, Daniel Vetter wrote:
+>>>>>>> On Wed, Apr 12, 2023 at 11:42:07AM -0700, Rob Clark wrote:
+>>>>>>>> On Wed, Apr 12, 2023 at 11:17 AM Daniel Vetter <daniel@ffwll.ch> wrote:
+>>>>>>>>>
+>>>>>>>>> On Wed, Apr 12, 2023 at 10:59:54AM -0700, Rob Clark wrote:
+>>>>>>>>>> On Wed, Apr 12, 2023 at 7:42 AM Tvrtko Ursulin
+>>>>>>>>>> <tvrtko.ursulin@linux.intel.com> wrote:
+>>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>> On 11/04/2023 23:56, Rob Clark wrote:
+>>>>>>>>>>>> From: Rob Clark <robdclark@chromium.org>
+>>>>>>>>>>>>
+>>>>>>>>>>>> Add support to dump GEM stats to fdinfo.
+>>>>>>>>>>>>
+>>>>>>>>>>>> v2: Fix typos, change size units to match docs, use div_u64
+>>>>>>>>>>>> v3: Do it in core
+>>>>>>>>>>>>
+>>>>>>>>>>>> Signed-off-by: Rob Clark <robdclark@chromium.org>
+>>>>>>>>>>>> Reviewed-by: Emil Velikov <emil.l.velikov@gmail.com>
+>>>>>>>>>>>> ---
+>>>>>>>>>>>>       Documentation/gpu/drm-usage-stats.rst | 21 ++++++++
+>>>>>>>>>>>>       drivers/gpu/drm/drm_file.c            | 76 +++++++++++++++++++++++++++
+>>>>>>>>>>>>       include/drm/drm_file.h                |  1 +
+>>>>>>>>>>>>       include/drm/drm_gem.h                 | 19 +++++++
+>>>>>>>>>>>>       4 files changed, 117 insertions(+)
+>>>>>>>>>>>>
+>>>>>>>>>>>> diff --git a/Documentation/gpu/drm-usage-stats.rst b/Documentation/gpu/drm-usage-stats.rst
+>>>>>>>>>>>> index b46327356e80..b5e7802532ed 100644
+>>>>>>>>>>>> --- a/Documentation/gpu/drm-usage-stats.rst
+>>>>>>>>>>>> +++ b/Documentation/gpu/drm-usage-stats.rst
+>>>>>>>>>>>> @@ -105,6 +105,27 @@ object belong to this client, in the respective memory region.
+>>>>>>>>>>>>       Default unit shall be bytes with optional unit specifiers of 'KiB' or 'MiB'
+>>>>>>>>>>>>       indicating kibi- or mebi-bytes.
+>>>>>>>>>>>>
+>>>>>>>>>>>> +- drm-shared-memory: <uint> [KiB|MiB]
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +The total size of buffers that are shared with another file (ie. have more
+>>>>>>>>>>>> +than a single handle).
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +- drm-private-memory: <uint> [KiB|MiB]
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +The total size of buffers that are not shared with another file.
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +- drm-resident-memory: <uint> [KiB|MiB]
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +The total size of buffers that are resident in system memory.
+>>>>>>>>>>>
+>>>>>>>>>>> I think this naming maybe does not work best with the existing
+>>>>>>>>>>> drm-memory-<region> keys.
+>>>>>>>>>>
+>>>>>>>>>> Actually, it was very deliberate not to conflict with the existing
+>>>>>>>>>> drm-memory-<region> keys ;-)
+>>>>>>>>>>
+>>>>>>>>>> I wouldn't have preferred drm-memory-{active,resident,...} but it
+>>>>>>>>>> could be mis-parsed by existing userspace so my hands were a bit tied.
+>>>>>>>>>>
+>>>>>>>>>>> How about introduce the concept of a memory region from the start and
+>>>>>>>>>>> use naming similar like we do for engines?
+>>>>>>>>>>>
+>>>>>>>>>>> drm-memory-$CATEGORY-$REGION: ...
+>>>>>>>>>>>
+>>>>>>>>>>> Then we document a bunch of categories and their semantics, for instance:
+>>>>>>>>>>>
+>>>>>>>>>>> 'size' - All reachable objects
+>>>>>>>>>>> 'shared' - Subset of 'size' with handle_count > 1
+>>>>>>>>>>> 'resident' - Objects with backing store
+>>>>>>>>>>> 'active' - Objects in use, subset of resident
+>>>>>>>>>>> 'purgeable' - Or inactive? Subset of resident.
+>>>>>>>>>>>
+>>>>>>>>>>> We keep the same semantics as with process memory accounting (if I got
+>>>>>>>>>>> it right) which could be desirable for a simplified mental model.
+>>>>>>>>>>>
+>>>>>>>>>>> (AMD needs to remind me of their 'drm-memory-...' keys semantics. If we
+>>>>>>>>>>> correctly captured this in the first round it should be equivalent to
+>>>>>>>>>>> 'resident' above. In any case we can document no category is equal to
+>>>>>>>>>>> which category, and at most one of the two must be output.)
+>>>>>>>>>>>
+>>>>>>>>>>> Region names we at most partially standardize. Like we could say
+>>>>>>>>>>> 'system' is to be used where backing store is system RAM and others are
+>>>>>>>>>>> driver defined.
+>>>>>>>>>>>
+>>>>>>>>>>> Then discrete GPUs could emit N sets of key-values, one for each memory
+>>>>>>>>>>> region they support.
+>>>>>>>>>>>
+>>>>>>>>>>> I think this all also works for objects which can be migrated between
+>>>>>>>>>>> memory regions. 'Size' accounts them against all regions while for
+>>>>>>>>>>> 'resident' they only appear in the region of their current placement, etc.
+>>>>>>>>>>
+>>>>>>>>>> I'm not too sure how to rectify different memory regions with this,
+>>>>>>>>>> since drm core doesn't really know about the driver's memory regions.
+>>>>>>>>>> Perhaps we can go back to this being a helper and drivers with vram
+>>>>>>>>>> just don't use the helper?  Or??
+>>>>>>>>>
+>>>>>>>>> I think if you flip it around to drm-$CATEGORY-memory{-$REGION}: then it
+>>>>>>>>> all works out reasonably consistently?
+>>>>>>>>
+>>>>>>>> That is basically what we have now.  I could append -system to each to
+>>>>>>>> make things easier to add vram/etc (from a uabi standpoint)..
+>>>>>>>
+>>>>>>> What you have isn't really -system, but everything. So doesn't really make
+>>>>>>> sense to me to mark this -system, it's only really true for integrated (if
+>>>>>>> they don't have stolen or something like that).
+>>>>>>>
+>>>>>>> Also my comment was more in reply to Tvrtko's suggestion.
+>>>>>>
+>>>>>> Right so my proposal was drm-memory-$CATEGORY-$REGION which I think aligns
+>>>>>> with the current drm-memory-$REGION by extending, rather than creating
+>>>>>> confusion with different order of key name components.
+>>>>>
+>>>>> Oh my comment was pretty much just bikeshed, in case someone creates a
+>>>>> $REGION that other drivers use for $CATEGORY. Kinda Rob's parsing point.
+>>>>> So $CATEGORY before the -memory.
+>>>>>
+>>>>> Otoh I don't think that'll happen, so I guess we can go with whatever more
+>>>>> folks like :-) I don't really care much personally.
+>>>>
+>>>> Okay I missed the parsing problem.
+>>>>
+>>>>>> AMD currently has (among others) drm-memory-vram, which we could define in
+>>>>>> the spec maps to category X, if category component is not present.
+>>>>>>
+>>>>>> Some examples:
+>>>>>>
+>>>>>> drm-memory-resident-system:
+>>>>>> drm-memory-size-lmem0:
+>>>>>> drm-memory-active-vram:
+>>>>>>
+>>>>>> Etc.. I think it creates a consistent story.
+>>>>>>
+>>>>>> Other than this, my two I think significant opens which haven't been
+>>>>>> addressed yet are:
+>>>>>>
+>>>>>> 1)
+>>>>>>
+>>>>>> Why do we want totals (not per region) when userspace can trivially
+>>>>>> aggregate if they want. What is the use case?
+>>>>>>
+>>>>>> 2)
+>>>>>>
+>>>>>> Current proposal limits the value to whole objects and fixates that by
+>>>>>> having it in the common code. If/when some driver is able to support sub-BO
+>>>>>> granularity they will need to opt out of the common printer at which point
+>>>>>> it may be less churn to start with a helper rather than mid-layer. Or maybe
+>>>>>> some drivers already support this, I don't know. Given how important VM BIND
+>>>>>> is I wouldn't be surprised.
+>>>>>
+>>>>> I feel like for drivers using ttm we want a ttm helper which takes care of
+>>>>> the region printing in hopefully a standard way. And that could then also
+>>>>> take care of all kinds of of partial binding and funny rules (like maybe
+>>>>> we want a standard vram region that addds up all the lmem regions on
+>>>>> intel, so that all dgpu have a common vram bucket that generic tools
+>>>>> understand?).
+>>>>
+>>>> First part yes, but for the second I would think we want to avoid any
+>>>> aggregation in the kernel which can be done in userspace just as well. Such
+>>>> total vram bucket would be pretty useless on Intel even since userspace
+>>>> needs to be region aware to make use of all resources. It could even be
+>>>> counter productive I think - "why am I getting out of memory when half of my
+>>>> vram is unused!?".
+>>>
+>>> This is not for intel-aware userspace. This is for fairly generic "gputop"
+>>> style userspace, which might simply have no clue or interest in what lmemX
+>>> means, but would understand vram.
+>>>
+>>> Aggregating makes sense.
+>>
+>> Lmem vs vram is now an argument not about aggregation but about
+>> standardizing regions names.
+>>
+>> One detail also is a change in philosophy compared to engine stats where
+>> engine names are not centrally prescribed and it was expected userspace
+>> will have to handle things generically and with some vendor specific
+>> knowledge.
+>>
+>> Like in my gputop patches. It doesn't need to understand what is what,
+>> it just finds what's there and presents it to the user.
+>>
+>> Come some accel driver with local memory it wouldn't be vram any more.
+>> Or even a headless data center GPU. So I really don't think it is good
+>> to hardcode 'vram' in the spec, or midlayer, or helpers.
+>>
+>> And for aggregation.. again, userspace can do it just as well. If we do
+>> it in kernel then immediately we have multiple sets of keys to output
+>> for any driver which wants to show the region view. IMO it is just
+>> pointless work in the kernel and more code in the kernel, when userspace
+>> can do it.
+>>
+>> Proposal A (one a discrete gpu, one category only):
+>>
+>> drm-resident-memory: x KiB
+>> drm-resident-memory-system: x KiB
+>> drm-resident-memory-vram: x KiB
+>>
+>> Two loops in the kernel, more parsing in userspace.
+>>
+>> Proposal B:
+>>
+>> drm-resident-memory-system: x KiB
+>> drm-resident-memory-vram: x KiB
+>>
+>> Can be one loop, one helper, less text for userspace to parse and it can
+>> still trivially show the total if so desired.
+>>
+>> For instance a helper (or two) with a common struct containing region
+>> names and totals, where a callback into the driver tallies under each
+>> region, as the drm helper is walking objects.
+> 
+> The difference is that Rob's patches exist, and consistently roll this
+> out across all drm drivers.
+> > You're patches don't exist, and encourage further fragmentation. And
+> my take here is that "the good enough, and real" wins above "perfect,
+> but maybe in a few years and inconsitently across drivers".
 
-Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
-Signed-off-by: Esteban Blanc <eblanc@baylibre.com>
----
- drivers/regulator/Kconfig             |  13 +
- drivers/regulator/Makefile            |   1 +
- drivers/regulator/tps6594-regulator.c | 620 ++++++++++++++++++++++++++
- 3 files changed, 634 insertions(+)
- create mode 100644 drivers/regulator/tps6594-regulator.c
+There is fragmentation in this series already since two categories 
+depend on drivers implementing them. Resident is even IMO one of the 
+more interesting ones.
 
-diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-index aae28d0a489c..5f01132b04e1 100644
---- a/drivers/regulator/Kconfig
-+++ b/drivers/regulator/Kconfig
-@@ -1440,6 +1440,19 @@ config REGULATOR_TPS65219
- 	  voltage regulators. It supports software based voltage control
- 	  for different voltage domains.
- 
-+config REGULATOR_TPS6594
-+	tristate "TI TPS6594 Power regulators"
-+	depends on MFD_TPS6594 && OF
-+	default MFD_TPS6594
-+	help
-+	  This driver supports TPS6594 voltage regulator chips.
-+	  TPS6594 series of PMICs have 5 BUCKs and 4 LDOs
-+	  voltage regulators.
-+	  BUCKs 1,2,3,4 can be used in single phase or multiphase mode.
-+	  Part number defines which single or multiphase mode is i used.
-+	  It supports software based voltage control
-+	  for different voltage domains.
-+
- config REGULATOR_TPS6524X
- 	tristate "TI TPS6524X Power regulators"
- 	depends on SPI
-diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
-index ee383d8fc835..cb420adf7670 100644
---- a/drivers/regulator/Makefile
-+++ b/drivers/regulator/Makefile
-@@ -172,6 +172,7 @@ obj-$(CONFIG_REGULATOR_TPS6524X) += tps6524x-regulator.o
- obj-$(CONFIG_REGULATOR_TPS6586X) += tps6586x-regulator.o
- obj-$(CONFIG_REGULATOR_TPS65910) += tps65910-regulator.o
- obj-$(CONFIG_REGULATOR_TPS65912) += tps65912-regulator.o
-+obj-$(CONFIG_REGULATOR_TPS6594) += tps6594-regulator.o
- obj-$(CONFIG_REGULATOR_TPS65132) += tps65132-regulator.o
- obj-$(CONFIG_REGULATOR_TPS68470) += tps68470-regulator.o
- obj-$(CONFIG_REGULATOR_TWL4030) += twl-regulator.o twl6030-regulator.o
-diff --git a/drivers/regulator/tps6594-regulator.c b/drivers/regulator/tps6594-regulator.c
-new file mode 100644
-index 000000000000..f01685dec87a
---- /dev/null
-+++ b/drivers/regulator/tps6594-regulator.c
-@@ -0,0 +1,620 @@
-+// SPDX-License-Identifier: GPL-2.0
-+//
-+// Regulator driver for tps6594 PMIC
-+//
-+// Copyright (C) 2023 BayLibre Incorporated - https://www.baylibre.com/
-+
-+#include <linux/device.h>
-+#include <linux/err.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/regulator/driver.h>
-+#include <linux/regulator/machine.h>
-+#include <linux/regulator/of_regulator.h>
-+
-+#include <linux/mfd/tps6594.h>
-+
-+#define BUCK_NB		5
-+#define LDO_NB		4
-+#define MULTI_PHASE_NB	4
-+#define REGS_INT_NB	4
-+
-+enum tps6594_regulator_id {
-+	/* DCDC's */
-+	TPS6594_BUCK_1,
-+	TPS6594_BUCK_2,
-+	TPS6594_BUCK_3,
-+	TPS6594_BUCK_4,
-+	TPS6594_BUCK_5,
-+
-+	/* LDOs */
-+	TPS6594_LDO_1,
-+	TPS6594_LDO_2,
-+	TPS6594_LDO_3,
-+	TPS6594_LDO_4,
-+};
-+
-+enum tps6594_multi_regulator_id {
-+	/* Multi-phase DCDC's */
-+	TPS6594_BUCK_12,
-+	TPS6594_BUCK_34,
-+	TPS6594_BUCK_123,
-+	TPS6594_BUCK_1234,
-+};
-+
-+struct tps6594_regulator_irq_type {
-+	const char *irq_name;
-+	const char *regulator_name;
-+	const char *event_name;
-+	unsigned long event;
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_ext_regulator_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_VCCA_OV, "VCCA", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_VCCA_UV, "VCCA", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_VMON1_OV, "VMON1", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_VMON1_UV, "VMON1", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_VMON1_RV, "VMON1", "residual voltage",
-+	  REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_VMON2_OV, "VMON2", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_VMON2_UV, "VMON2", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_VMON2_RV, "VMON2", "residual voltage",
-+	  REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+};
-+
-+struct tps6594_regulator_irq_data {
-+	struct device *dev;
-+	struct tps6594_regulator_irq_type *type;
-+	struct regulator_dev *rdev;
-+};
-+
-+struct tps6594_ext_regulator_irq_data {
-+	struct device *dev;
-+	struct tps6594_regulator_irq_type *type;
-+};
-+
-+#define TPS6594_REGULATOR(_name, _of, _id, _type, _ops, _n, _vr, _vm, _er, \
-+			   _em, _cr, _cm, _lr, _nlr, _delay, _fuv, \
-+			   _ct, _ncl, _bpm) \
-+	{								\
-+		.name			= _name,			\
-+		.of_match		= _of,				\
-+		.regulators_node	= of_match_ptr("regulators"),	\
-+		.supply_name		= _of,				\
-+		.id			= _id,				\
-+		.ops			= &(_ops),			\
-+		.n_voltages		= _n,				\
-+		.type			= _type,			\
-+		.owner			= THIS_MODULE,			\
-+		.vsel_reg		= _vr,				\
-+		.vsel_mask		= _vm,				\
-+		.csel_reg		= _cr,				\
-+		.csel_mask		= _cm,				\
-+		.curr_table		= _ct,				\
-+		.n_current_limits	= _ncl,				\
-+		.enable_reg		= _er,				\
-+		.enable_mask		= _em,				\
-+		.volt_table		= NULL,				\
-+		.linear_ranges		= _lr,				\
-+		.n_linear_ranges	= _nlr,				\
-+		.ramp_delay		= _delay,			\
-+		.fixed_uV		= _fuv,				\
-+		.bypass_reg		= _vr,				\
-+		.bypass_mask		= _bpm,				\
-+	}								\
-+
-+static const struct linear_range bucks_ranges[] = {
-+	REGULATOR_LINEAR_RANGE(300000, 0x0, 0xe, 20000),
-+	REGULATOR_LINEAR_RANGE(600000, 0xf, 0x72, 5000),
-+	REGULATOR_LINEAR_RANGE(1100000, 0x73, 0xaa, 10000),
-+	REGULATOR_LINEAR_RANGE(1660000, 0xab, 0xff, 20000),
-+};
-+
-+static const struct linear_range ldos_1_2_3_ranges[] = {
-+	REGULATOR_LINEAR_RANGE(600000, 0x4, 0x3a, 50000),
-+};
-+
-+static const struct linear_range ldos_4_ranges[] = {
-+	REGULATOR_LINEAR_RANGE(1200000, 0x20, 0x74, 25000),
-+};
-+
-+/* Operations permitted on BUCK1/2/3/4/5 */
-+static const struct regulator_ops tps6594_bucks_ops = {
-+	.is_enabled		= regulator_is_enabled_regmap,
-+	.enable			= regulator_enable_regmap,
-+	.disable		= regulator_disable_regmap,
-+	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
-+	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
-+	.list_voltage		= regulator_list_voltage_linear_range,
-+	.map_voltage		= regulator_map_voltage_linear_range,
-+	.set_voltage_time_sel	= regulator_set_voltage_time_sel,
-+
-+};
-+
-+/* Operations permitted on LDO1/2/3 */
-+static const struct regulator_ops tps6594_ldos_1_2_3_ops = {
-+	.is_enabled		= regulator_is_enabled_regmap,
-+	.enable			= regulator_enable_regmap,
-+	.disable		= regulator_disable_regmap,
-+	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
-+	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
-+	.list_voltage		= regulator_list_voltage_linear_range,
-+	.map_voltage		= regulator_map_voltage_linear_range,
-+	.set_bypass		= regulator_set_bypass_regmap,
-+	.get_bypass		= regulator_get_bypass_regmap,
-+};
-+
-+/* Operations permitted on LDO4 */
-+static const struct regulator_ops tps6594_ldos_4_ops = {
-+	.is_enabled		= regulator_is_enabled_regmap,
-+	.enable			= regulator_enable_regmap,
-+	.disable		= regulator_disable_regmap,
-+	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
-+	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
-+	.list_voltage		= regulator_list_voltage_linear_range,
-+	.map_voltage		= regulator_map_voltage_linear_range,
-+};
-+
-+static const struct regulator_desc buck_regs[] = {
-+	TPS6594_REGULATOR("BUCK1", "buck1", TPS6594_BUCK_1,
-+			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_VOUT_1(0),
-+			  TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_CTRL(0),
-+			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
-+			  4, 0, 0, NULL, 0, 0),
-+	TPS6594_REGULATOR("BUCK2", "buck2", TPS6594_BUCK_2,
-+			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_VOUT_1(1),
-+			  TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_CTRL(1),
-+			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
-+			  4, 0, 0, NULL, 0, 0),
-+	TPS6594_REGULATOR("BUCK3", "buck3", TPS6594_BUCK_3,
-+			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_VOUT_1(2),
-+			  TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_CTRL(2),
-+			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
-+			  4, 0, 0, NULL, 0, 0),
-+	TPS6594_REGULATOR("BUCK4", "buck4", TPS6594_BUCK_4,
-+			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_VOUT_1(3),
-+			  TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_CTRL(3),
-+			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
-+			  4, 0, 0, NULL, 0, 0),
-+	TPS6594_REGULATOR("BUCK5", "buck5", TPS6594_BUCK_5,
-+			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_VOUT_1(4),
-+			  TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_CTRL(4),
-+			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
-+			  4, 0, 0, NULL, 0, 0),
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_buck1_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_BUCK1_OV, "BUCK1", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_BUCK1_UV, "BUCK1", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_BUCK1_SC, "BUCK1", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
-+	{ TPS6594_IRQ_NAME_BUCK1_ILIM, "BUCK1", "reach ilim, overcurrent",
-+	  REGULATOR_EVENT_OVER_CURRENT },
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_buck2_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_BUCK2_OV, "BUCK2", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_BUCK2_UV, "BUCK2", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_BUCK2_SC, "BUCK2", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
-+	{ TPS6594_IRQ_NAME_BUCK2_ILIM, "BUCK2", "reach ilim, overcurrent",
-+	  REGULATOR_EVENT_OVER_CURRENT },
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_buck3_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_BUCK3_OV, "BUCK3", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_BUCK3_UV, "BUCK3", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_BUCK3_SC, "BUCK3", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
-+	{ TPS6594_IRQ_NAME_BUCK3_ILIM, "BUCK3", "reach ilim, overcurrent",
-+	  REGULATOR_EVENT_OVER_CURRENT },
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_buck4_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_BUCK4_OV, "BUCK4", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_BUCK4_UV, "BUCK4", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_BUCK4_SC, "BUCK4", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
-+	{ TPS6594_IRQ_NAME_BUCK4_ILIM, "BUCK4", "reach ilim, overcurrent",
-+	  REGULATOR_EVENT_OVER_CURRENT },
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_buck5_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_BUCK5_OV, "BUCK5", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_BUCK5_UV, "BUCK5", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_BUCK5_SC, "BUCK5", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
-+	{ TPS6594_IRQ_NAME_BUCK5_ILIM, "BUCK5", "reach ilim, overcurrent",
-+	  REGULATOR_EVENT_OVER_CURRENT },
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_ldo1_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_LDO1_OV, "LDO1", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_LDO1_UV, "LDO1", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_LDO1_SC, "LDO1", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
-+	{ TPS6594_IRQ_NAME_LDO1_ILIM, "LDO1", "reach ilim, overcurrent",
-+	  REGULATOR_EVENT_OVER_CURRENT },
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_ldo2_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_LDO2_OV, "LDO2", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_LDO2_UV, "LDO2", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_LDO2_SC, "LDO2", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
-+	{ TPS6594_IRQ_NAME_LDO2_ILIM, "LDO2", "reach ilim, overcurrent",
-+	  REGULATOR_EVENT_OVER_CURRENT },
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_ldo3_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_LDO3_OV, "LDO3", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_LDO3_UV, "LDO3", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_LDO3_SC, "LDO3", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
-+	{ TPS6594_IRQ_NAME_LDO3_ILIM, "LDO3", "reach ilim, overcurrent",
-+	  REGULATOR_EVENT_OVER_CURRENT },
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_ldo4_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_LDO4_OV, "LDO4", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_LDO4_UV, "LDO4", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_LDO4_SC, "LDO4", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
-+	{ TPS6594_IRQ_NAME_LDO4_ILIM, "LDO4", "reach ilim, overcurrent",
-+	  REGULATOR_EVENT_OVER_CURRENT },
-+};
-+
-+static struct tps6594_regulator_irq_type *tps6594_bucks_irq_types[] = {
-+	tps6594_buck1_irq_types,
-+	tps6594_buck2_irq_types,
-+	tps6594_buck3_irq_types,
-+	tps6594_buck4_irq_types,
-+	tps6594_buck5_irq_types,
-+};
-+
-+static struct tps6594_regulator_irq_type *tps6594_ldos_irq_types[] = {
-+	tps6594_ldo1_irq_types,
-+	tps6594_ldo2_irq_types,
-+	tps6594_ldo3_irq_types,
-+	tps6594_ldo4_irq_types,
-+};
-+
-+static const struct regulator_desc multi_regs[] = {
-+	TPS6594_REGULATOR("BUCK12", "buck12", TPS6594_BUCK_1,
-+			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_VOUT_1(1),
-+			  TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_CTRL(1),
-+			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
-+			  4, 4000, 0, NULL, 0, 0),
-+	TPS6594_REGULATOR("BUCK34", "buck34", TPS6594_BUCK_3,
-+			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_VOUT_1(3),
-+			  TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_CTRL(3),
-+			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
-+			  4, 0, 0, NULL, 0, 0),
-+	TPS6594_REGULATOR("BUCK123", "buck123", TPS6594_BUCK_1,
-+			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_VOUT_1(1),
-+			  TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_CTRL(1),
-+			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
-+			  4, 4000, 0, NULL, 0, 0),
-+	TPS6594_REGULATOR("BUCK1234", "buck1234", TPS6594_BUCK_1,
-+			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_VOUT_1(1),
-+			  TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_CTRL(1),
-+			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
-+			  4, 4000, 0, NULL, 0, 0),
-+};
-+
-+static const struct regulator_desc ldo_regs[] = {
-+	TPS6594_REGULATOR("LDO1", "ldo1", TPS6594_LDO_1,
-+			  REGULATOR_VOLTAGE, tps6594_ldos_1_2_3_ops, TPS6594_MASK_LDO123_VSET,
-+			  TPS6594_REG_LDOX_VOUT(0),
-+			  TPS6594_MASK_LDO123_VSET,
-+			  TPS6594_REG_LDOX_CTRL(0),
-+			  TPS6594_BIT_LDO_EN, 0, 0, ldos_1_2_3_ranges,
-+			  1, 0, 0, NULL, 0, TPS6594_BIT_LDO_BYPASS),
-+	TPS6594_REGULATOR("LDO2", "ldo2", TPS6594_LDO_2,
-+			  REGULATOR_VOLTAGE, tps6594_ldos_1_2_3_ops, TPS6594_MASK_LDO123_VSET,
-+			  TPS6594_REG_LDOX_VOUT(1),
-+			  TPS6594_MASK_LDO123_VSET,
-+			  TPS6594_REG_LDOX_CTRL(1),
-+			  TPS6594_BIT_LDO_EN, 0, 0, ldos_1_2_3_ranges,
-+			  1, 0, 0, NULL, 0, TPS6594_BIT_LDO_BYPASS),
-+	TPS6594_REGULATOR("LDO3", "ldo3", TPS6594_LDO_3,
-+			  REGULATOR_VOLTAGE, tps6594_ldos_1_2_3_ops, TPS6594_MASK_LDO123_VSET,
-+			  TPS6594_REG_LDOX_VOUT(2),
-+			  TPS6594_MASK_LDO123_VSET,
-+			  TPS6594_REG_LDOX_CTRL(2),
-+			  TPS6594_BIT_LDO_EN, 0, 0, ldos_1_2_3_ranges,
-+			  1, 0, 0, NULL, 0, TPS6594_BIT_LDO_BYPASS),
-+	TPS6594_REGULATOR("LDO4", "ldo4", TPS6594_LDO_4,
-+			  REGULATOR_VOLTAGE, tps6594_ldos_4_ops, TPS6594_MASK_LDO4_VSET >> 1,
-+			  TPS6594_REG_LDOX_VOUT(3),
-+			  TPS6594_MASK_LDO4_VSET,
-+			  TPS6594_REG_LDOX_CTRL(3),
-+			  TPS6594_BIT_LDO_EN, 0, 0, ldos_4_ranges,
-+			  1, 0, 0, NULL, 0, 0),
-+};
-+
-+static irqreturn_t tps6594_regulator_irq_handler(int irq, void *data)
-+{
-+	struct tps6594_regulator_irq_data *irq_data = data;
-+
-+	if (irq_data->type->event_name[0] == '\0') {
-+		/* This is the timeout interrupt no specific regulator */
-+		dev_err(irq_data->dev,
-+			"System was put in shutdown due to timeout during an active or standby transition.\n");
-+		return IRQ_HANDLED;
-+	}
-+
-+	dev_err(irq_data->dev, "Error IRQ trap %s for %s\n",
-+		irq_data->type->event_name, irq_data->type->regulator_name);
-+
-+	regulator_notifier_call_chain(irq_data->rdev,
-+				      irq_data->type->event, NULL);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int tps6594_request_reg_irqs(struct platform_device *pdev,
-+				    struct regulator_dev *rdev,
-+				    struct tps6594_regulator_irq_data *irq_data,
-+				    struct tps6594_regulator_irq_type *tps6594_regs_irq_types,
-+				    int *irq_idx)
-+{
-+	struct tps6594_regulator_irq_type *irq_type;
-+	struct tps6594 *tps = dev_get_drvdata(pdev->dev.parent);
-+	int j;
-+	int irq;
-+	int error;
-+
-+	for (j = 0; j < REGS_INT_NB; j++) {
-+		irq_type = &tps6594_regs_irq_types[j];
-+		irq = platform_get_irq_byname(pdev, irq_type->irq_name);
-+		if (irq < 0)
-+			return -EINVAL;
-+
-+		irq_data[*irq_idx + j].dev = tps->dev;
-+		irq_data[*irq_idx + j].type = irq_type;
-+		irq_data[*irq_idx + j].rdev = rdev;
-+
-+		error = devm_request_threaded_irq(tps->dev, irq, NULL,
-+						  tps6594_regulator_irq_handler,
-+						  IRQF_ONESHOT,
-+						  irq_type->irq_name,
-+						  &irq_data[*irq_idx]);
-+		(*irq_idx)++;
-+		if (error) {
-+			dev_err(tps->dev, "tps6594 failed to request %s IRQ %d: %d\n",
-+				irq_type->irq_name, irq, error);
-+			return error;
-+		}
-+	}
-+	return 0;
-+}
-+
-+static int tps6594_regulator_probe(struct platform_device *pdev)
-+{
-+	struct tps6594 *tps = dev_get_drvdata(pdev->dev.parent);
-+	struct regulator_dev *rdev;
-+	struct device_node *np = NULL;
-+	struct device_node *np_pmic_parent = NULL;
-+	struct regulator_config config = {};
-+	struct tps6594_regulator_irq_data *irq_data;
-+	struct tps6594_ext_regulator_irq_data *irq_ext_reg_data;
-+	struct tps6594_regulator_irq_type *irq_type;
-+	u8 buck_configured[BUCK_NB] = { 0 };
-+	u8 buck_multi[MULTI_PHASE_NB] = { 0 };
-+	static const char *multiphases[] = {"buck12", "buck123", "buck1234", "buck34"};
-+	static const char *npname;
-+	int error, i, irq, multi, delta;
-+	int irq_idx = 0;
-+	int buck_idx = 0;
-+	int ext_reg_irq_nb = 2;
-+
-+	enum {
-+	MULTI_BUCK12,
-+	MULTI_BUCK123,
-+	MULTI_BUCK1234,
-+	MULTI_BUCK12_34,
-+	MULTI_FIRST = MULTI_BUCK12,
-+	MULTI_LAST = MULTI_BUCK12_34,
-+	MULTI_NUM = MULTI_LAST - MULTI_FIRST + 1
-+	};
-+
-+	config.dev = tps->dev;
-+	config.driver_data = tps;
-+	config.regmap = tps->regmap;
-+
-+	/*
-+	 * Switch case defines different possible multi phase config
-+	 * This is based on dts buck node name.
-+	 * Buck node name must be chosen accordingly.
-+	 * Default case is no Multiphase buck.
-+	 * In case of Multiphase configuration, value should be defined for
-+	 * buck_configured to avoid creating bucks for every buck in multiphase
-+	 */
-+	for (multi = MULTI_FIRST ; multi < MULTI_NUM ; multi++) {
-+		np = of_find_node_by_name(tps->dev->of_node, multiphases[multi]);
-+		npname = of_node_full_name(np);
-+		np_pmic_parent = of_get_parent(of_get_parent(np));
-+		if (strcmp((of_node_full_name(np_pmic_parent)), tps->dev->of_node->full_name))
-+			continue;
-+		delta = strcmp(npname, multiphases[multi]);
-+		if (!delta) {
-+			switch (multi) {
-+			case MULTI_BUCK12:
-+				buck_multi[0] = 1;
-+				buck_configured[0] = 1;
-+				buck_configured[1] = 1;
-+				break;
-+			/* multiphase buck34 is supported only with buck12 */
-+			case MULTI_BUCK12_34:
-+				buck_multi[0] = 1;
-+				buck_configured[0] = 1;
-+				buck_configured[1] = 1;
-+				buck_multi[1] = 1;
-+				buck_configured[2] = 1;
-+				buck_configured[3] = 1;
-+				break;
-+			case MULTI_BUCK123:
-+				buck_multi[2] = 1;
-+				buck_configured[0] = 1;
-+				buck_configured[1] = 1;
-+				buck_configured[2] = 1;
-+				break;
-+			case MULTI_BUCK1234:
-+				buck_multi[3] = 1;
-+				buck_configured[0] = 1;
-+				buck_configured[1] = 1;
-+				buck_configured[2] = 1;
-+				buck_configured[3] = 1;
-+				break;
-+			}
-+		}
-+	}
-+
-+	if (tps->chip_id == LP8764)
-+		/* There is only 4 buck on LP8764 */
-+		buck_configured[4] = 1;
-+
-+	irq_data = devm_kmalloc(tps->dev,
-+				ARRAY_SIZE(tps6594_bucks_irq_types) *
-+				REGS_INT_NB *
-+				sizeof(struct tps6594_regulator_irq_data) +
-+				ARRAY_SIZE(tps6594_ldos_irq_types) *
-+				REGS_INT_NB *
-+				sizeof(struct tps6594_regulator_irq_data),
-+				GFP_KERNEL);
-+	if (!irq_data)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < MULTI_PHASE_NB; i++) {
-+		if (buck_multi[i] == 0)
-+			continue;
-+
-+		rdev = devm_regulator_register(&pdev->dev, &multi_regs[i], &config);
-+		if (IS_ERR(rdev)) {
-+			dev_err(tps->dev, "failed to register %s regulator\n",
-+				pdev->name);
-+			return PTR_ERR(rdev);
-+		}
-+		/* config multiphase buck12+buck34 */
-+		if (i == 1)
-+			buck_idx = 2;
-+		error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
-+						 tps6594_bucks_irq_types[buck_idx], &irq_idx);
-+		if (error)
-+			return error;
-+		error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
-+						 tps6594_bucks_irq_types[buck_idx + 1], &irq_idx);
-+		if (error)
-+			return error;
-+
-+		if (i == 2 || i == 3) {
-+			error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
-+							 tps6594_bucks_irq_types[buck_idx + 2],
-+							 &irq_idx);
-+			if (error)
-+				return error;
-+		}
-+		if (i == 3) {
-+			error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
-+							 tps6594_bucks_irq_types[buck_idx + 3],
-+							 &irq_idx);
-+			if (error)
-+				return error;
-+		}
-+	}
-+
-+	for (i = 0; i < BUCK_NB; i++) {
-+		if (buck_configured[i] == 1)
-+			continue;
-+
-+		rdev = devm_regulator_register(&pdev->dev, &buck_regs[i], &config);
-+		if (IS_ERR(rdev)) {
-+			dev_err(tps->dev, "failed to register %s regulator\n",
-+				pdev->name);
-+			return PTR_ERR(rdev);
-+		}
-+		error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
-+						 tps6594_bucks_irq_types[i], &irq_idx);
-+		if (error)
-+			return error;
-+	}
-+
-+	/* LP8764 dosen't have LDO */
-+	if (tps->chip_id != LP8764) {
-+		for (i = 0; i < ARRAY_SIZE(ldo_regs); i++) {
-+			rdev = devm_regulator_register(&pdev->dev, &ldo_regs[i], &config);
-+			if (IS_ERR(rdev)) {
-+				dev_err(tps->dev,
-+					"failed to register %s regulator\n",
-+					pdev->name);
-+				return PTR_ERR(rdev);
-+			}
-+			error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
-+							 tps6594_ldos_irq_types[i],
-+							 &irq_idx);
-+			if (error)
-+				return error;
-+		}
-+	}
-+
-+	if (tps->chip_id == LP8764)
-+		ext_reg_irq_nb = ARRAY_SIZE(tps6594_ext_regulator_irq_types);
-+
-+	irq_ext_reg_data = devm_kmalloc(tps->dev,
-+					ext_reg_irq_nb *
-+					sizeof(struct tps6594_ext_regulator_irq_data),
-+					GFP_KERNEL);
-+	if (!irq_ext_reg_data)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < ext_reg_irq_nb; ++i) {
-+		irq_type = &tps6594_ext_regulator_irq_types[i];
-+
-+		irq = platform_get_irq_byname(pdev, irq_type->irq_name);
-+		if (irq < 0)
-+			return -EINVAL;
-+
-+		irq_ext_reg_data[i].dev = tps->dev;
-+		irq_ext_reg_data[i].type = irq_type;
-+
-+		error = devm_request_threaded_irq(tps->dev, irq, NULL,
-+						  tps6594_regulator_irq_handler,
-+						  IRQF_ONESHOT,
-+						  irq_type->irq_name,
-+						  &irq_ext_reg_data[i]);
-+		if (error) {
-+			dev_err(tps->dev, "failed to request %s IRQ %d: %d\n",
-+				irq_type->irq_name, irq, error);
-+			return error;
-+		}
-+	}
-+	return 0;
-+}
-+
-+static struct platform_driver tps6594_regulator_driver = {
-+	.driver = {
-+		.name = "tps6594-regulator",
-+	},
-+	.probe = tps6594_regulator_probe,
-+};
-+
-+module_platform_driver(tps6594_regulator_driver);
-+
-+MODULE_ALIAS("platform:tps6594-regulator");
-+MODULE_AUTHOR("Jerome Neanne <jneanne@baylibre.com>");
-+MODULE_DESCRIPTION("TPS6594 voltage regulator driver");
-+MODULE_LICENSE("GPL");
--- 
-2.39.2
+> No one is stopping you from writing a ton of patches to get towards
+> the perfect state, and we still want to get there. But I don't see the
+> point in rejecting the good enough for now for that.
 
+I argued a few times already on what I see as problems and discussed 
+pros and cons, but I can write patches too.
+
+Regards,
+
+Tvrtko
+
+> It's kinda the same idea with scheduler stats, but the other way
+> round: Sure it'd have been great if we could have this consistently
+> across all drivers, but right now the scheduler situation just isn't
+> there to support that. I'm pushing a bit, but it's definitely years
+> away. So the pragmatic option there was to just roll things out
+> driver-by-driver, to get things going. It's not perfect at all, and it
+> would have been easy to nuke that entire fdinfo effort on those
+> grounds.
+> 
+> If you want maybe a todo.rst entry to cover this discussion and make
+> sure we do record the rough consensus of where we eventually want to
+> end up at?
+> 
+>>>>> It does mean we walk the bo list twice, but *shrug*. People have been
+>>>>> complaining about procutils for decades, they're still horrible, I think
+>>>>> walking bo lists twice internally in the ttm case is going to be ok. If
+>>>>> not, it's internals, we can change them again.
+>>>>>
+>>>>> Also I'd lean a lot more towards making ttm a helper and not putting that
+>>>>> into core, exactly because it's pretty clear we'll need more flexibility
+>>>>> when it comes to accurate stats for multi-region drivers.
+>>>>
+>>>> Exactly.
+>>>>
+>>>>> But for a first "how much gpu space does this app use" across everything I
+>>>>> think this is a good enough starting point.
+>>>>
+>>>> Okay so we agree this would be better as a helper and not in the core.
+>>>
+>>> Nope, if you mean with this = Rob's patch. I was talking about a
+>>> hypothetical region-aware extension for ttm-using drivers.
+>>>
+>>>> On the point are keys/semantics good enough as a starting point I am still
+>>>> not convinced kernel should aggregate and that instead we should start from
+>>>> day one by appending -system (or something) to Rob's proposed keys.
+>>>
+>>> It should imo. Inflicting driver knowledge on generic userspace makes not
+>>> much sense, we should start with the more generally useful stuff imo.
+>>> That's why there's the drm fdinfo spec and all that so it's not a
+>>> free-for-all.
+>>>
+>>> Also Rob's stuff is _not_ system. Check on a i915 dgpu if you want :-)
+>>
+>> I am well aware it adds up everything, that is beside the point.
+>>
+>> Drm-usage-stats.rst text needs to be more precise across all keys at least:
+>>
+>> +- drm-resident-memory: <uint> [KiB|MiB]
+>> +
+>> +The total size of buffers that are resident in system memory.
+>>
+>> But as said, I don't see the point in providing aggregated values.
+> 
+> The choice isn't between aggregated values and split values.
+> 
+> The choice is between no values (for most drivers) and split values on
+> some drivers, vs aggregated values for everyone (and still split
+> values for some).
+> -Daniel
