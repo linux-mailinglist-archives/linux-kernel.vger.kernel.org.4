@@ -2,74 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 948816E29AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 19:50:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 895A36E29AE
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 19:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbjDNRuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 13:50:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39410 "EHLO
+        id S229908AbjDNRuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 13:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbjDNRuO (ORCPT
+        with ESMTP id S229461AbjDNRuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 13:50:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26699210C
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 10:50:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B708B6496D
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 17:50:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 24012C433D2;
-        Fri, 14 Apr 2023 17:50:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681494613;
-        bh=WZRbQRqH4e7yc4/ZQrSWpzr2f88IPovT0DbH8l99Snw=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=UmcYVTAzw1IhuwnjGb12LSV+QmjMvvp0jAUDg+U3LH1WJr8RLBYE+/DKYjXyjdnHL
-         CyKv5J88aGjeOi6CRNYNqCcoE5+DNdPy/jYuLP0i9YzFzIvZl8ie62bm9cklYOeQO/
-         otU0xK1+soJXs4J48ShE1VrgE3uHRMRsNoej4YZIBjoebi0YqgCbUhknmX2DhNgC90
-         idq0spx2WvVRtoy62B1ZVgo/V3ZhRrNvcNKzf0sbcLfUeDMfosUv+JTFXoG2nuoxvK
-         jSUMB14XvPuu7322mB6JCfB77gqcexwRpRn9vRsiRdwHWdB2vb45CL7/oaMfNMKUJg
-         oH8f37ejfRtxg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0186AE52446;
-        Fri, 14 Apr 2023 17:50:12 +0000 (UTC)
-Subject: Re: [GIT PULL] RISC-V Fixes for 6.3-rc7
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <mhng-f47ee915-bbee-4c49-92ea-1d598355a0f3@palmer-ri-x1c9>
-References: <mhng-f47ee915-bbee-4c49-92ea-1d598355a0f3@palmer-ri-x1c9>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <mhng-f47ee915-bbee-4c49-92ea-1d598355a0f3@palmer-ri-x1c9>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-6.3-rc7
-X-PR-Tracked-Commit-Id: 1b50f956c8fe9082bdee4a9cfd798149c52f7043
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 7a934f4bd7d6f9da84c8812da3ba42ee10f5778e
-Message-Id: <168149461293.15164.16774872103556012068.pr-tracker-bot@kernel.org>
-Date:   Fri, 14 Apr 2023 17:50:12 +0000
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 14 Apr 2023 13:50:20 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88AE1FE2
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 10:50:18 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id k7-20020a170902c40700b001a20f75cd40so10110945plk.22
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 10:50:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681494618; x=1684086618;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=a6CeTamdicyLZ/7s+LRWUZBxqdL0LQPjD0XtZ5cm3WQ=;
+        b=GIuDJQhWQ/FtuCo2i0jZVWT/d40dUYkLnmOK5AUkIoTJJ0V0/tfwq8nNp2nENlpMFO
+         gDF41f2YEp1ZOoa6KxDnq87H+eE3iAI6HP58bZMfIF8vPPALAo5YJRmQk3vo1WlgE0mV
+         pom/AfgnsCswwZarRdhsqWVVTYSg5s3MO/ebBbM+51AVnltHA9FwVTqy52c2kAdwTJNe
+         xATaGURVoaIOwDoG5NI5k5K8ZBllSm3Kv3PzuRESGkzuKkYzqW/30tdFW+9wAcELN+Um
+         MWWiVleY3A3XbT86Xk3m6X9X+2jMCaeQ/tUMxF+LwEG/nFONMmXJw3G/Xkbb8CBueUWa
+         h92Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681494618; x=1684086618;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a6CeTamdicyLZ/7s+LRWUZBxqdL0LQPjD0XtZ5cm3WQ=;
+        b=fR7mT8DmtU9RKzt5795AVGuNxgZJlQxPrjW9PG3bYIGka++fZJKmc5nLZ851K2ApEY
+         yXPYvVoU5/+r0rv9NZUfW/DnFOvVBLAXLNuEOfAf7/mrhwWSzjuOo14M8XEaP77XtPRH
+         A0azv4tmLP3u1f/iY+EEE92F+MMIGsHt++UWEvVfEvf+OOu5U9auV/DfMM7joywFNkat
+         sKwtbCquUBp7gdI7jw/pAWwFuCpH24YrvNLr3h+y/CL+ZSz+CTPNfrPADiRokUhdcpIA
+         YHlrDKqQcwIP2yW/wc+azk7qTluZd2Wt6MYuqeY/Ousewr8i4eLeW9mzkqg1BdxkZ87B
+         xN4Q==
+X-Gm-Message-State: AAQBX9fYgKrV6v1PyHq2CkCjXQnnVw48Aa72y00elOKB+ztjZPvZBLGy
+        eaOgYtz5t6Ir5wNh8/ZtKzp+xLw8fxA=
+X-Google-Smtp-Source: AKy350bVjNQlfCmuGcgyBmDBirokb5vdFwa9K+zgeLvg8xG7Vaq/gPeOKn/mmbUdIZJrJveHW6y5x7HzN78=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:903:3348:b0:1a2:1fd0:226b with SMTP id
+ ka8-20020a170903334800b001a21fd0226bmr1183636plb.5.1681494618211; Fri, 14 Apr
+ 2023 10:50:18 -0700 (PDT)
+Date:   Fri, 14 Apr 2023 17:50:16 +0000
+In-Reply-To: <20230413121112.2563319-1-alexjlzheng@tencent.com>
+Mime-Version: 1.0
+References: <20230413121112.2563319-1-alexjlzheng@tencent.com>
+Message-ID: <ZDmSWIEOTYo3qHf7@google.com>
+Subject: Re: [PATCH v2] KVM: x86: Fix poll command
+From:   Sean Christopherson <seanjc@google.com>
+To:     alexjlzheng@gmail.com
+Cc:     pbonzini@redhat.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jinliang Zheng <alexjlzheng@tencent.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 14 Apr 2023 07:47:26 -0700 (PDT):
+On Thu, Apr 13, 2023, alexjlzheng@gmail.com wrote:
+> From: Jinliang Zheng <alexjlzheng@tencent.com>
+> 
+> According to the hardware manual, when the Poll command is issued, the
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-6.3-rc7
+Please add "8259", i.e. "According to the 8259 hardware manual".
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/7a934f4bd7d6f9da84c8812da3ba42ee10f5778e
+> byte returned by the I/O read is 1 in Bit 7 when there is an interrupt,
+> and the highest priority binary code in Bits 2:0. The current pic
+> simulation code is not implemented strictly according to the above
+> expression.
+> 
+> Fix the implementation of pic_poll_read():
+> 1. Set Bit 7 when there is an interrupt
+> 2. Return 0 when there is no interrupt
 
-Thank you!
+I don't think #2 is justified.  The spec says:
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+  The interrupt requests are ordered in priority from 0 through 7 (0 highest).
+
+I.e. the current code enumerates the _lowest_ priority when there is no interrupt,
+which seems more correct than reporting the highest priority possible.
