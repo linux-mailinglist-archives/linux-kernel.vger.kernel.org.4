@@ -2,306 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C45D6E225B
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 13:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 283276E226A
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 13:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbjDNLhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 07:37:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41134 "EHLO
+        id S229894AbjDNLjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 07:39:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230382AbjDNLh0 (ORCPT
+        with ESMTP id S229540AbjDNLjV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 07:37:26 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903B276B3
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 04:37:23 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id x4so3071067lfr.8
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 04:37:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681472242; x=1684064242;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ISD1jIsYhapCYWWcz+5k3pAzTGPESmv5s/eS+sFm/Hg=;
-        b=Yn+a8wJ8gv1qZmhb+z/wE+fuvt/rcYbb8kz7kfkqSXFgHRc0BgsLC0q8O4NMiEzR7o
-         pKgUHRdqp+8IGGPNH8Ywgbf7DWpaI8ggAiibJFFIlaU5cRR3j2I5xbUHFtjDuKFTfzB5
-         s20M5Ut1nHBArSCleX9AuBS07MaGJQLckXs9R7D9DCULQPN6sAA8bHp6l4OVgDRDZweH
-         eF3XGQrwpxNgEttPBBrGAOfAz799scOk9U/AwVvXdDISPWBzr/sD2GGpfu+p04B7QpZO
-         eMQz3qifremBL3yejGU5B8aznbnJfAJ6+73aEobu+dzwNvYZup+v1f92XXdyonajb/jH
-         YCbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681472242; x=1684064242;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ISD1jIsYhapCYWWcz+5k3pAzTGPESmv5s/eS+sFm/Hg=;
-        b=lC4XksvbhxJbZUIyTM70YBYvXW+c/sP6P64ukHXTK8iIJ774Eeq+DOGPFllKRCl0yv
-         VesrMq+eUk8BWaFJtV58Q/ydi0aRR1LoWH8RUREiQZBaKITX8zYrf3hfK8/tyh9MXD0G
-         MNy5cCE+37h6gvn0ZFZqzokqHRcbK9sqCwSdRF5VVoGdVsRFs6yUZ1o3BndoCDYNCpET
-         9680fUei3Dq0/zmXdWAjtE5SL49td+wmhw/2Xup8tZwEA8WpZO6NR27XSNf0oJV80U/V
-         9Sh7A72FQmRueBCBvHvMeXYxaeHuB2FPvREdyW9epI7qEUWrUPVb3POed3gCcl5TtQgR
-         HBog==
-X-Gm-Message-State: AAQBX9fts+3BjS1pVipT2eGmW5awYM5oPHwI8SFcQFgwfRKrQ0utJSqk
-        Mjqh7vMeDoqe3PF565Qx/84xMH6ttU0ohiI4oiE=
-X-Google-Smtp-Source: AKy350b/2Yd4GqLCpCTDVzD36MwXnIdkHJ777ub6Yn9XcKuAxZJRDQeHd4i9F9FU7ufFiAN4N74nUg==
-X-Received: by 2002:a05:6512:75:b0:4db:3927:e2bc with SMTP id i21-20020a056512007500b004db3927e2bcmr2007693lfo.50.1681472241922;
-        Fri, 14 Apr 2023 04:37:21 -0700 (PDT)
-Received: from [192.168.1.101] (abyl123.neoplus.adsl.tpnet.pl. [83.9.31.123])
-        by smtp.gmail.com with ESMTPSA id y5-20020ac24e65000000b004ec83bc3e43sm756946lfs.192.2023.04.14.04.37.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Apr 2023 04:37:21 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Fri, 14 Apr 2023 13:37:18 +0200
-Subject: [PATCH v3 2/2] soc: qcom: Introduce RPM master stats driver
+        Fri, 14 Apr 2023 07:39:21 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278F81A4
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 04:39:18 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id BE2FD5FD22;
+        Fri, 14 Apr 2023 14:39:14 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1681472354;
+        bh=oAmm4S4lepCFCmNjwz8gpkUJJ8vjdtIQRSsp3NHrAVs=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=U9b9iI8y6au7fQpKj8dBLvaAkuvwlxly+tTQMp3RlVkiCCSsWgcRmVGQaxs74Svim
+         Gd5/phUNQR7F4GBm6EUdvW2CNT1ql150KViq8KbShco5Rr0wGc2vA93uxmNoUI5/ts
+         712sM+R2PzI07WJ8gq6uuvEQTY2OigUDOM6ZYZcBh0/EB7S5FKTw1gCKXlBOEb2XRF
+         FejMe+bdXW/Jx12geM4TxI5imXRFGWU8amhTotPl7c7I5wDUYQCl27UC3cPel+bxtJ
+         bJWYgfEklvLXNeNeyTbxhISGGEBG7+XEXKE2NhiIhAzl8hkMTmGUH7VoMbcUpVowws
+         amNFJwYRe4reA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Fri, 14 Apr 2023 14:39:13 +0300 (MSK)
+Date:   Fri, 14 Apr 2023 14:39:07 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     <joe@perches.com>
+CC:     <krzysztof.kozlowski@linaro.org>, <apw@canonical.com>,
+        <dwaipayanray1@gmail.com>, <lukas.bulwahn@gmail.com>,
+        <kernel@sberdevices.ru>, <linux-kernel@vger.kernel.org>,
+        <rockosov@gmail.com>, <robh@kernel.org>
+Subject: Re: [PATCH v5] checkpatch: introduce proper bindings license check
+Message-ID: <20230414113907.xzjxp4233f35ja6t@CAB-WSD-L081021>
+References: <20230404191715.7319-1-ddrokosov@sberdevices.ru>
+ <CAL_Jsq+o452r9SzyT=9XPTYKu0hPkHWZWH8Og3VjKdxaGxDKRA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230405-topic-master_stats-v3-2-2cb2ba4f2092@linaro.org>
-References: <20230405-topic-master_stats-v3-0-2cb2ba4f2092@linaro.org>
-In-Reply-To: <20230405-topic-master_stats-v3-0-2cb2ba4f2092@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1681472238; l=7204;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=hb0oyhgLV35bIH5MUQG7WNpjMFfzdLIJfQqifL30BjY=;
- b=uUDbYx+s7nKX8/aLuRZUv8bje+vhs+kkDvgeYYX6mxdcN+8NbMTdggTUm4S/k97zgE+Axldis6gL
- v5e7WnwNCxuthqP7wyPeR2H40Gi5wss157ApgLKUCPoR6ijpz3GU
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAL_Jsq+o452r9SzyT=9XPTYKu0hPkHWZWH8Og3VjKdxaGxDKRA@mail.gmail.com>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/14 08:08:00 #21104846
+X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce a driver to query and expose detailed, per-subsystem (as opposed
-to the existing qcom_stats driver which exposes SoC-wide data) about low
-power mode states of a given RPM master. That includes the APSS (ARM),
-MPSS (modem) and other remote cores, depending on the platform
-configuration.
+Hello Joe,
 
-This is a vastly cleaned up and restructured version of a similar
-driver found in msm-5.4.
+On Tue, Apr 11, 2023 at 09:29:36AM -0500, Rob Herring wrote:
+> On Tue, Apr 4, 2023 at 2:17 PM Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
+> >
+> > All headers from 'include/dt-bindings/' must be verified by checkpatch
+> > together with Documentation bindings, because all of them are part of
+> > the whole DT bindings system.
+> >
+> > The requirement is dual licensed and matching patterns:
+> > * Schemas:
+> >     /GPL-2\.0(?:-only)? OR BSD-2-Clause/
+> > * Headers:
+> >     /GPL-2\.0(?:-only)? OR \S+/
+> >
+> > Above patterns suggested by Rob at:
+> > https://lore.kernel.org/all/CAL_Jsq+-YJsBO+LuPJ=ZQ=eb-monrwzuCppvReH+af7hYZzNaQ@mail.gmail.com
+> >
+> > The issue was found during patch review:
+> > https://lore.kernel.org/all/20230313201259.19998-4-ddrokosov@sberdevices.ru/
+> >
+> > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> > ---
+> > Changes v5 since v4 at [4]:
+> >     - only capital OR is acceptable for SPDX per Rob's suggestion
+> >
+> > Changes v4 since v3 at [3]:
+> >     - introduce separate pattern for dt-bindings headers following Rob's
+> >       suggestion
+> >
+> > Changes v3 since v2 at [2]:
+> >     - replace 'not =~' expression with '!~' to be aligned with other
+> >       checkpatch lines
+> >
+> > Changes v2 since v1 at [1]:
+> >     - include/dt-bindings check is aligned to open parens
+> >     - introduce more strict pattern for bindings license:
+> >       /GPL-2\.0(?:-only|-or-later|\+)? (?:OR|or) BSD-2-Clause/
+> >
+> > Links:
+> >     [1] https://lore.kernel.org/all/20230317201621.15518-1-ddrokosov@sberdevices.ru/
+> >     [2] https://lore.kernel.org/all/20230320100027.27788-1-ddrokosov@sberdevices.ru/
+> >     [3] https://lore.kernel.org/all/20230320203350.13696-1-ddrokosov@sberdevices.ru/
+> >     [4] https://lore.kernel.org/all/20230331121017.14324-1-ddrokosov@sberdevices.ru/
+> > ---
+> >  scripts/checkpatch.pl | 7 ++++++-
+> >  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/soc/qcom/Kconfig            |  11 +++
- drivers/soc/qcom/Makefile           |   1 +
- drivers/soc/qcom/rpm_master_stats.c | 160 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 172 insertions(+)
-
-diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
-index a491718f8064..e597799e8121 100644
---- a/drivers/soc/qcom/Kconfig
-+++ b/drivers/soc/qcom/Kconfig
-@@ -135,6 +135,17 @@ config QCOM_RMTFS_MEM
- 
- 	  Say y here if you intend to boot the modem remoteproc.
- 
-+config QCOM_RPM_MASTER_STATS
-+	tristate "Qualcomm RPM Master stats"
-+	depends on ARCH_QCOM || COMPILE_TEST
-+	help
-+	  The RPM Master sleep stats driver provides detailed per-subsystem
-+	  sleep/wake data, read from the RPM message RAM. It can be used to
-+	  assess whether all the low-power modes available are entered as
-+	  expected or to check which part of the SoC prevents it from sleeping.
-+
-+	  Say y here if you intend to debug or monitor platform sleep.
-+
- config QCOM_RPMH
- 	tristate "Qualcomm RPM-Hardened (RPMH) Communication"
- 	depends on ARCH_QCOM || COMPILE_TEST
-diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
-index 0f43a88b4894..7349371fdea1 100644
---- a/drivers/soc/qcom/Makefile
-+++ b/drivers/soc/qcom/Makefile
-@@ -14,6 +14,7 @@ obj-$(CONFIG_QCOM_QMI_HELPERS)	+= qmi_helpers.o
- qmi_helpers-y	+= qmi_encdec.o qmi_interface.o
- obj-$(CONFIG_QCOM_RAMP_CTRL)	+= ramp_controller.o
- obj-$(CONFIG_QCOM_RMTFS_MEM)	+= rmtfs_mem.o
-+obj-$(CONFIG_QCOM_RPM_MASTER_STATS)	+= rpm_master_stats.o
- obj-$(CONFIG_QCOM_RPMH)		+= qcom_rpmh.o
- qcom_rpmh-y			+= rpmh-rsc.o
- qcom_rpmh-y			+= rpmh.o
-diff --git a/drivers/soc/qcom/rpm_master_stats.c b/drivers/soc/qcom/rpm_master_stats.c
-new file mode 100644
-index 000000000000..73080c92bf89
---- /dev/null
-+++ b/drivers/soc/qcom/rpm_master_stats.c
-@@ -0,0 +1,160 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2012-2020, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2023, Linaro Limited
-+ *
-+ * This driver supports what is known as "Master Stats v2", which seems to be
-+ * the only version which has ever shipped, all the way from 2013 to 2023.
-+ */
-+
-+#include <linux/debugfs.h>
-+#include <linux/io.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_address.h>
-+#include <linux/platform_device.h>
-+
-+struct master_stats_data {
-+	void __iomem *base;
-+	const char *label;
-+};
-+
-+struct rpm_master_stats {
-+	uint32_t active_cores;
-+	uint32_t num_shutdowns;
-+	uint64_t shutdown_req;
-+	uint64_t wakeup_idx;
-+	uint64_t bringup_req;
-+	uint64_t bringup_ack;
-+	uint32_t wakeup_reason; /* 0 = "rude wakeup", 1 = scheduled wakeup */
-+	uint32_t last_sleep_trans_dur;
-+	uint32_t last_wake_trans_dur;
-+
-+	/* Per-subsystem (*not necessarily* SoC-wide) XO shutdown stats */
-+	uint32_t xo_count;
-+	uint64_t xo_last_enter;
-+	uint64_t last_exit;
-+	uint64_t xo_total_dur;
-+};
-+
-+static int master_stats_show(struct seq_file *s, void *unused)
-+{
-+	struct master_stats_data *d = s->private;
-+	struct rpm_master_stats stat;
-+
-+	memcpy_fromio(&stat, d->base, sizeof(stat));
-+
-+	seq_printf(s, "%s:\n", d->label);
-+
-+	seq_printf(s, "\tLast shutdown @ %llu\n", stat.shutdown_req);
-+	seq_printf(s, "\tLast bringup req @ %llu\n", stat.bringup_req);
-+	seq_printf(s, "\tLast bringup ack @ %llu\n", stat.bringup_ack);
-+	seq_printf(s, "\tLast wakeup idx: %llu\n", stat.wakeup_idx);
-+	seq_printf(s, "\tLast XO shutdown enter @ %llu\n", stat.xo_last_enter);
-+	seq_printf(s, "\tLast XO shutdown exit @ %llu\n", stat.last_exit);
-+	seq_printf(s, "\tXO total duration: %llu\n", stat.xo_total_dur);
-+	seq_printf(s, "\tLast sleep transition duration: %u\n", stat.last_sleep_trans_dur);
-+	seq_printf(s, "\tLast wake transition duration: %u\n", stat.last_wake_trans_dur);
-+	seq_printf(s, "\tXO shutdown count: %u\n", stat.xo_count);
-+	seq_printf(s, "\tWakeup reason: 0x%x\n", stat.wakeup_reason);
-+	seq_printf(s, "\tShutdown count: %u\n", stat.num_shutdowns);
-+	seq_printf(s, "\tActive cores bitmask: 0x%x\n", stat.active_cores);
-+
-+	return 0;
-+}
-+DEFINE_SHOW_ATTRIBUTE(master_stats);
-+
-+static int master_stats_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct device_node *msgram_np;
-+	struct master_stats_data *d;
-+	struct dentry *dent, *root;
-+	struct resource res;
-+	int count, i, ret;
-+
-+	count = of_property_count_strings(dev->of_node, "qcom,master-names");
-+	if (count < 0)
-+		return count;
-+
-+	d = devm_kzalloc(dev, count * sizeof(*d), GFP_KERNEL);
-+	if (!d)
-+		return -ENOMEM;
-+
-+	root = debugfs_create_dir("rpm_master_stats", NULL);
-+	platform_set_drvdata(pdev, root);
-+
-+	for (i = 0; i < count; i++) {
-+		msgram_np = of_parse_phandle(dev->of_node, "qcom,rpm-msg-ram", i);
-+		if (!msgram_np) {
-+			debugfs_remove_recursive(root);
-+			return dev_err_probe(dev, -EINVAL,
-+					     "Couldn't parse MSG RAM phandle idx %d", i);
-+		}
-+
-+		/*
-+		 * Purposefully skip devm_platform helpers as we're using a
-+		 * shared resource.
-+		 */
-+		ret = of_address_to_resource(msgram_np, 0, &res);
-+		if (ret < 0) {
-+			debugfs_remove_recursive(root);
-+			return ret;
-+		}
-+
-+		d[i].base = devm_ioremap(dev, res.start, resource_size(&res));
-+		if (IS_ERR(d[i].base)) {
-+			debugfs_remove_recursive(root);
-+			return dev_err_probe(dev, -EINVAL,
-+					     "Could not map the MSG RAM slice idx %d!\n", i);
-+		}
-+
-+		ret = of_property_read_string_index(dev->of_node, "qcom,master-names", i,
-+						    &d[i].label);
-+		if (ret < 0) {
-+			debugfs_remove_recursive(root);
-+			return dev_err_probe(dev, ret,
-+					     "Could not read name idx %d!\n", i);
-+		}
-+
-+		/*
-+		 * Generally it's not advised to fail on debugfs errors, but this
-+		 * driver's only job is exposing data therein.
-+		 */
-+		dent = debugfs_create_file(d[i].label, 0444, root,
-+					   &d[i], &master_stats_fops);
-+		if (!dent) {
-+			debugfs_remove_recursive(root);
-+			return -EINVAL;
-+		}
-+	}
-+
-+	device_set_pm_not_required(dev);
-+
-+	return 0;
-+}
-+
-+static void master_stats_remove(struct platform_device *pdev)
-+{
-+	struct dentry *root = platform_get_drvdata(pdev);
-+
-+	debugfs_remove_recursive(root);
-+}
-+
-+static const struct of_device_id rpm_master_table[] = {
-+	{ .compatible = "qcom,rpm-master-stats" },
-+	{ },
-+};
-+
-+static struct platform_driver master_stats_driver = {
-+	.probe = master_stats_probe,
-+	.remove_new = master_stats_remove,
-+	.driver = {
-+		.name = "rpm_master_stats",
-+		.of_match_table = rpm_master_table,
-+	},
-+};
-+module_platform_driver(master_stats_driver);
-+
-+MODULE_DESCRIPTION("RPM Master Statistics driver");
-+MODULE_LICENSE("GPL");
+Are you okay with this patch version? Rob is good with that, so please
+advise what the next step is.
 
 -- 
-2.40.0
-
+Thank you,
+Dmitry
