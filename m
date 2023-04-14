@@ -2,93 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C38536E2B98
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 23:17:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7234E6E2B9B
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 23:18:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbjDNVRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 17:17:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59018 "EHLO
+        id S229939AbjDNVSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 17:18:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjDNVRD (ORCPT
+        with ESMTP id S229947AbjDNVSA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 17:17:03 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDAB55A6
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 14:17:02 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id hg12so5219888pjb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 14:17:02 -0700 (PDT)
+        Fri, 14 Apr 2023 17:18:00 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BFB2E48
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 14:17:59 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-5027e589e20so7675721a12.3
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 14:17:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681507022; x=1684099022;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mPkvmmSyj4e4vDoidDyXobHQ8LlXiYWdlanORfc48jE=;
-        b=UMTgWb1SbTr5bA6MkUojrBec3NNP1gf1qfTS6rNecbxRXPpT31TQw+oziIRhLQKOTm
-         LWK9yKFKra8QAtomC9/sk8JpGSDpbFmtIeE/8jIG+QZhYdV/1/2su67vOqeJ8k99w5Aj
-         KlmNLpFW6tzp2GN2E8QpNTKDRikbR23FZ7QXfEgUOjVSUzaCVkWov5H8s8Y/THw8pEA3
-         wGtTlwAjJw7lSC/Bga7Lw3G6PgmIsTcwWPZHJGbUMi7x11iR7iGDr5UBFWJzJv3u0sWe
-         lxBhj3oeNsoP11YJPd0gSsRu8YINIPK3aqDTf8WTNlyBEs3Pnv4Ys98b1AS7Ashz9WmY
-         QvPA==
+        d=linaro.org; s=google; t=1681507078; x=1684099078;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=V5AvGPmA06/gJPA23TlBPBxIabrtbwIccItOyaREqzg=;
+        b=LIlyQWrYrfeVSSKeAHC81R3C5F66XFNiLs/MbPyBP0i7sY/4Xm38+exM4gF4BXXD/A
+         1LAbkURHeMTjND1m7+yc2fr3tSmxps4VB752pvv5ZpvcDDgDwucpemOscHqWt18ytXX+
+         mNlAkNJhljTvCxKGmxLJALwf40ZeQePtVANwZwX9Z72LDGu5TfeHVGwDcf4cJvslO4Jp
+         Vgq/V2ev/b11kUWrPVVHc90IcvELY1bv+/LajBWUukuBeWix5hec6Frn/vjg7JCRS0Ad
+         BKGP5Y7z1BvmfVxt+kwTjh643jeeIz+0fV19Vq1aWcFYeEMbzTlu4dAveZwQenApTCcL
+         fn9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681507022; x=1684099022;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mPkvmmSyj4e4vDoidDyXobHQ8LlXiYWdlanORfc48jE=;
-        b=KIvZjpqCZRUaIUcQ0ZB73OmGZKn3gVaidEWouiCfHa4azjedZfi5TnAx5Hf2HLIgnR
-         kNt9tCuSqKogEa3IMkTpU/zfXUkv9bw1jm3MeflrOCJHNz/V+8KIjQsFbNgc86fHEkAV
-         SFAXt5VWaYK84/Io9eJJauQmZpK31hvDOt/2k9Y2zUY0c1KijGN0JEGhYcUEWUQONObM
-         lIarmrnkZbWV8CYXF19FJWJVzKyZVxtc4O4C16m7CKD6luSNfLRZGDVwOuzXTQDyHwQd
-         QL39O2kdHe5omxjVBp7rt/AlzEIuYTDxlYSR9T9xBKLbUgOW/J3effzXb2VOKpr0LiTG
-         V/Cg==
-X-Gm-Message-State: AAQBX9cs5dV167m6LQ5TA3hoYsZK1hRHtIP7C1uMrTL6A5rKjtoOBWho
-        DrlZcLhTjWOy6cNAb/o+nPXMnhLRZ8kK04qlY+3etw==
-X-Google-Smtp-Source: AKy350Y7I2wMdc6/0r67Vr/pOgw2zrHFBfkTPduES8B/+1mPbhzeGAM23TfAAG78L1Pmn3ZVZTrkqYUietC6/9ijZEM=
-X-Received: by 2002:a17:90a:ea89:b0:247:1131:dcd2 with SMTP id
- h9-20020a17090aea8900b002471131dcd2mr7018016pjz.23.1681507022160; Fri, 14 Apr
- 2023 14:17:02 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681507078; x=1684099078;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=V5AvGPmA06/gJPA23TlBPBxIabrtbwIccItOyaREqzg=;
+        b=iEafC3opniZ2Q4Yx7zXtR9f63rVilkD+siwpwkSgt2V9o3ymMH6EpRxbqvQFESltOA
+         2ovrjzquvF9bSnJqzG3bsLNVeHZm/socA5Xm6TVE8NjpctqxE1qFmF1st7Vp6+C7yX1e
+         udqsiPRpGJPz05eNT5ZPDHP9AlS4C6r7TPNqRTc1OvcolEr3JXGpeLlQlFQsvWyjyUfZ
+         uLFDDUY1Cor4zp9UMM/ZZFh9Mrgr2oMiXCeWst9agXKln91IvofSqXkoGGezMdLPef2z
+         y5W/wzJ9etwTg/+U8YmN/IiGAykEbx/iqqqffpZkstvcxdOq0SLgoPatxOI2k/h6uyG4
+         6wmQ==
+X-Gm-Message-State: AAQBX9c/PvTv/bmVt48Wbn0Eoce7VnHLSK0X359ZIZ+slDgsv1YZezYt
+        ENE/d3dI5S93GgIBKVPGGOrqdA==
+X-Google-Smtp-Source: AKy350YN+OC0BFkBYPm3KjRADVMUYORFXY1F7qNYllRDePU1n+HT4uyiBbYoAt5DsXmxzFYFrpw/Kg==
+X-Received: by 2002:a50:ff02:0:b0:506:7cc8:7420 with SMTP id a2-20020a50ff02000000b005067cc87420mr4657401edu.31.1681507078029;
+        Fri, 14 Apr 2023 14:17:58 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:ffae:8aab:ae5a:4688? ([2a02:810d:15c0:828:ffae:8aab:ae5a:4688])
+        by smtp.gmail.com with ESMTPSA id s11-20020a056402164b00b00504adfd77f6sm2486049edx.29.2023.04.14.14.17.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Apr 2023 14:17:57 -0700 (PDT)
+Message-ID: <7fe8d6f5-ab0f-c6d5-2551-7beb3dfb16d7@linaro.org>
+Date:   Fri, 14 Apr 2023 23:17:56 +0200
 MIME-Version: 1.0
-References: <cover.1681325924.git.jpoimboe@kernel.org> <683214828d8b2ad732dab1a74e858087519d8c8b.1681325924.git.jpoimboe@kernel.org>
- <20230413092409.GJ4253@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230413092409.GJ4253@hirez.programming.kicks-ass.net>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 14 Apr 2023 14:16:50 -0700
-Message-ID: <CAKwvOdn9r96UznjbghdceDXyZxsrsvwj99Noxw=u3Ak_kBvacQ@mail.gmail.com>
-Subject: Re: [PATCH v2 9/9] objtool: Ignore exc_double_fault() __noreturn warnings
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v4 1/2] dt-bindings: leds: Add ROHM BD2606MVV LED driver
+Content-Language: en-US
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     pavel@ucw.cz, lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matti Vaittinen <mazziesaccount@gmail.com>
+References: <20230414055341.335456-1-andreas@kemnade.info>
+ <20230414055341.335456-2-andreas@kemnade.info>
+ <f9da7499-3fb3-1ce6-db0b-d87febee2052@linaro.org>
+ <20230414175412.37a15572@aktux>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230414175412.37a15572@aktux>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 2:24=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
->
-> On Wed, Apr 12, 2023 at 12:03:24PM -0700, Josh Poimboeuf wrote:
-> > +      *   - have compiler communicate __noreturn functions somehow
+On 14/04/2023 17:54, Andreas Kemnade wrote:
+> On Fri, 14 Apr 2023 17:28:49 +0200
+> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> 
+>> On 14/04/2023 07:53, Andreas Kemnade wrote:
+>>> Document ROHM BD2606MVV LED driver devicetree bindings.  
+>>
+>> Subject: no improvements and no comments from your side. Why?
+>>
+> old subject (v2):
+> 
+> dt-bindings: leds: ROHM BD2606MVV LED driver
+> 
+> Your comment:
+> Subject: maybe drop "driver" (suggests it is for Linux drivers, although
+> maybe it matches the actual hardware here?) and add missing verb, e.g.
+> "Add ROHM ..."
+> 
+> New Subject (v3/4):
+> dt-bindings: leds: Add ROHM BD2606MVV LED driver
+> 
+> What is still missing?
 
-Could probably stuff these in some kind of "noreturn function symbol
-table"/custom elf section; DWARF tags are nice but we don't always
-want debug info.  (I should ask colleagues if there's anything like
-this in DWARF already, perhaps for DWARFv6).
+There is still "driver". Comment was: drop "driver". Where is it dropped?
 
->
-> This, we're going to have to do that -- because keeping that (ever
-> growing) list in sync is going to be a pain in the backside.
->
+If you do not agree, sure, just respond with something.
 
+Best regards,
+Krzysztof
 
---=20
-Thanks,
-~Nick Desaulniers
