@@ -2,86 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC3786E1E04
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:22:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B5076E1E0B
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:23:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229528AbjDNIWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 04:22:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60300 "EHLO
+        id S230175AbjDNIXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 04:23:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbjDNIWp (ORCPT
+        with ESMTP id S230103AbjDNIXY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 04:22:45 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B48630C4
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 01:22:43 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id kt6so5536096ejb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 01:22:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681460561; x=1684052561;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fw2soPX7gkqG1zLnlaxy4FPoDJm7h7PV5yPHWD0C8dE=;
-        b=FrBtZn2JPfKSOizoc16x5zv6L6PMF/VKB3Zn5fwahF9n7Jh1kc0XqQRTqeKxD9x9MS
-         3uUfhNpR4PY5Kx29WjjWcfkqmKDBR94YExPe0ZH82Vf5ApF1qG2Ln4aRvBFZysOhrsSz
-         cp9lzWGm/qZIsDkxdC/6azitmGvqhEEhiGtu2Tp26b1y9oIoMgyuyekv6/h9SCepMtLG
-         64hYxN8UllvZXSxqrgG4JOHoHVHRxyZY+HaYyquJuxGIltrOgiwix7JcE/jmYz1AbghW
-         uEYXHqWhsbwiGhusGQgkORggwjpKOyE2AFwQp2bR6w3KIy7eWhE1jCL1KENx2B5S5BnO
-         OTxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681460561; x=1684052561;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fw2soPX7gkqG1zLnlaxy4FPoDJm7h7PV5yPHWD0C8dE=;
-        b=FzLgYJfALZiteVJiVFjCEJoxtfeBnjyBuL/fqxycTBki1ShleMTbiByyhJ5y/rXV++
-         3xZJ6Dsy3hW3RkuWPHlOXrgDk3AZwrg/LVomRlmAE7Ez7ajx0uZxX0XprMU0EqUgCd4T
-         3YHYPPAq0RdYqSEXXSCbcqUNTREfqagUewY9f7q/CObOJDNbKEoP3EV5HzWOxhcHV+cA
-         STIANTbYi1XUoytRvy4oy8YOksxcQIfat4RQaXPQtJvjOxuav+ML2G09M4Yj4dhso1yu
-         af80ejBKKz27ZuGv6wEz8/SrBio/VOYOwBiJ7RJNe2extxIs6YKtnAr+RAx+jd4FtdQE
-         1lQg==
-X-Gm-Message-State: AAQBX9dd5ismlAYYY7v7CPT87SyUnHVW8x1WXSj10sJiSrQUMwrrgVVw
-        ORc2TUyCqbfZsF1XT8NOsE+hEQ==
-X-Google-Smtp-Source: AKy350ZR6VwGjvDTaRekH/cO9thuWBVNaSAvMXwGsd/aK6bK6v5XYCzSR5T9UaWUz/jtJ7hPHs8cFg==
-X-Received: by 2002:a17:906:925a:b0:94a:a77b:363a with SMTP id c26-20020a170906925a00b0094aa77b363amr5558646ejx.3.1681460561618;
-        Fri, 14 Apr 2023 01:22:41 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:8a60:6b0f:105a:eefb? ([2a02:810d:15c0:828:8a60:6b0f:105a:eefb])
-        by smtp.gmail.com with ESMTPSA id oz19-20020a1709077d9300b0094ebd376fadsm1486449ejc.144.2023.04.14.01.22.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 01:22:41 -0700 (PDT)
-Message-ID: <223fcf60-25aa-e45d-159e-6290eeeb6a55@linaro.org>
-Date:   Fri, 14 Apr 2023 10:22:39 +0200
+        Fri, 14 Apr 2023 04:23:24 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CAF95B9F;
+        Fri, 14 Apr 2023 01:23:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681460602; x=1712996602;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=IR3enTULW+0dSiranrN8ej6IJa0hU4y3yttWFJiFMng=;
+  b=N4IhTVO/7jObHl/8HIZGX3wzi4lDwHtiMS/oRc5UGtvUX6Vrep1abd17
+   ryLnFdzGo7dJNyYJCeVCaJ2lvq7Fbqs5N8ukTaaCRId1gJHsG2Ms83/ig
+   1+ivbjD4wnF+lKyth1yasmasvuCfRNwdzqyj1ZNkqB5/Pkv/kCU7WEyte
+   I8EDuq4Zr+1Cf/peSm+x3Pg/L9so6Ot1VhfIMIGrKrJbCANRD0HZUWuTA
+   dUluisUxj5byJaeOuOAeID5MEHNVlqq18RiFPNuQfQgF5256eckxYYoFv
+   QKmv+tBqLBzJUOhXK/R8qGJeqqZh3lFzdlHLluG3G7AvgO31OOr+I8SYk
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="430708078"
+X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
+   d="scan'208";a="430708078"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 01:23:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="683267437"
+X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
+   d="scan'208";a="683267437"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO ahunter-VirtualBox.home\044ger.corp.intel.com) ([10.249.34.252])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 01:23:16 -0700
+From:   Adrian Hunter <adrian.hunter@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH RFC 0/5] perf: Add ioctl to emit sideband events
+Date:   Fri, 14 Apr 2023 11:22:55 +0300
+Message-Id: <20230414082300.34798-1-adrian.hunter@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 02/27] dt-bindings: phy: mediatek,dsi-phy: Add compatible
- for MT6795 Helio X10
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, matthias.bgg@gmail.com
-Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        jassisinghbrar@gmail.com, chunfeng.yun@mediatek.com,
-        vkoul@kernel.org, kishon@kernel.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, chunkuang.hu@kernel.org,
-        ck.hu@mediatek.com, jitao.shi@mediatek.com,
-        xinlei.lee@mediatek.com, houlong.wei@mediatek.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-pwm@vger.kernel.org,
-        kernel@collabora.com, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20230412112739.160376-1-angelogioacchino.delregno@collabora.com>
- <20230412112739.160376-3-angelogioacchino.delregno@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230412112739.160376-3-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,17 +66,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/04/2023 13:27, AngeloGioacchino Del Regno wrote:
-> Add a compatible string for MediaTek Helio X10 MT6795: this SoC uses
-> the same DSI PHY as MT8173.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
+Hi
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Here is a stab at adding an ioctl for sideband events.
 
-Best regards,
-Krzysztof
+This is to overcome races when reading the same information
+from /proc.
 
+To keep it simple, the ioctl is limited to emitting existing
+sideband events (fork, namespaces, comm, mmap) to an already
+active context.
+
+There are not yet any perf tools patches at this stage.
+
+
+Adrian Hunter (5):
+      perf: Add ioctl to emit sideband events
+      perf: Add fork to the sideband ioctl
+      perf: Add namespaces to the sideband ioctl
+      perf: Add comm to the sideband ioctl
+      perf: Add mmap to the sideband ioctl
+
+ include/uapi/linux/perf_event.h |  19 ++-
+ kernel/events/core.c            | 315 +++++++++++++++++++++++++++++++++-------
+ 2 files changed, 280 insertions(+), 54 deletions(-)
+
+
+Regards
+Adrian
