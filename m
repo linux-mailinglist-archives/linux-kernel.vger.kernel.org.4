@@ -2,97 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE8B6E25CF
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 16:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4546E25D4
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 16:34:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230495AbjDNOcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 10:32:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57168 "EHLO
+        id S230372AbjDNOe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 10:34:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbjDNOci (ORCPT
+        with ESMTP id S229544AbjDNOe1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 10:32:38 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56B1BC;
-        Fri, 14 Apr 2023 07:32:33 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 87B181FD9F;
-        Fri, 14 Apr 2023 14:32:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1681482751; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+2bJ2CDuzKgRDleC5QFa89hSVX8wMNuFKrzbNXKA+J0=;
-        b=KpggDlsCb8TvDf5jIHfQV87cGQJbmVXRVuaeUhIwsYxPqDVDB+MmMOiZiD2Kd9WPcN6vCN
-        J4o6vwen0NUZuruK+WC3Fj1llq7KqPZQ9/v6TeKJ46OU2msIe1p0iD3pe+iE8b0aaHLo4J
-        yifoN87zLsUcPCX1cYvU6xbILcxaycI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1681482751;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+2bJ2CDuzKgRDleC5QFa89hSVX8wMNuFKrzbNXKA+J0=;
-        b=VsOY+QudtAh46N4cxi61iAktwoWceCn0R0HL2afVTWHB2Ei1BFIx2OOULLlyb6Y9UKDize
-        /oZJM52bhJqqMyAg==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
+        Fri, 14 Apr 2023 10:34:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A766BC
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 07:34:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id C5D1D2C15A;
-        Fri, 14 Apr 2023 14:32:30 +0000 (UTC)
-Date:   Fri, 14 Apr 2023 16:32:30 +0200 (CEST)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-btrfs@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        linux-scsi@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2 07/11] objtool: Include weak functions in global_noreturns
- check
-In-Reply-To: <ede3460d63f4a65d282c86f1175bd2662c2286ba.1681342859.git.jpoimboe@kernel.org>
-Message-ID: <alpine.LSU.2.21.2304141631490.4426@pobox.suse.cz>
-References: <cover.1681342859.git.jpoimboe@kernel.org> <ede3460d63f4a65d282c86f1175bd2662c2286ba.1681342859.git.jpoimboe@kernel.org>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D2DC6420C
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 14:34:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E683C433D2;
+        Fri, 14 Apr 2023 14:34:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681482861;
+        bh=d0iC7roleDI04oHJIwtWDATxuxnM5ASBnX6PRX+duzY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tDqpVX6rIICqZGNhn3rMgK3VZbfqOkWwStqI7SukeZhca0g7UEY0KBY4pkYHechq+
+         D4VVpG047EwsF4tUVcVo9NUQdyqoYI1Ft63c+ZFqRuR1XMavgFb0HTsc1R6N+P6zvk
+         TW4AIUVfYed7fR8bHyNinoFWhx0SWUx21OiyhJyQSVLQHW+6kzP9p43EN5D46hUhcc
+         /F74Ht+k1pGaOBciSviM0+TEYWnBsn/C2q2lSWc3H3fHeq/25xfbfUDCTYhXh0BEbW
+         C4QrLEmYK1ZTzswpX4N9Wo11cHOH4WL2/6ezPivGm4qzJCH1ZezSnM0//LKdEzGFsc
+         mPYrJlfbHE/9g==
+Date:   Fri, 14 Apr 2023 15:34:16 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, catalin.marinas@arm.com,
+        horms@kernel.org, thunder.leizhen@huawei.com,
+        John.p.donnelly@oracle.com, kexec@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5] arm64: kdump: simplify the reservation behaviour of
+ crashkernel=,high
+Message-ID: <20230414143413.GA27911@willie-the-truck>
+References: <20230407022419.19412-1-bhe@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230407022419.19412-1-bhe@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Apr 2023, Josh Poimboeuf wrote:
+Hi,
 
-> If a global function doesn't return, and its prototype has the
-> __noreturn attribute, its weak counterpart must also not return so that
-> it matches the prototype and meets call site expectations.
-> 
-> To properly follow the compiled control flow at the call sites, change
-> the global_noreturns check to include both global and weak functions.
-> 
-> On the other hand, if a weak function isn't in global_noreturns, assume
-> the prototype doesn't have __noreturn.  Even if the weak function
-> doesn't return, call sites treat it like a returnable function.
-> 
-> Fixes the following warning:
-> 
->   kernel/sched/build_policy.o: warning: objtool: do_idle() falls through to next function play_idle_precise()
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202304090346.erhqxnlt-lkp@intel.com/
-> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+On Fri, Apr 07, 2023 at 10:24:19AM +0800, Baoquan He wrote:
+> On arm64, reservation for 'crashkernel=xM,high' is taken by searching for
+> suitable memory region top down. If the 'xM' of crashkernel high memory
+> is reserved from high memory successfully, it will try to reserve
+> crashkernel low memory later accoringly. Otherwise, it will try to search
+> low memory area for the 'xM' suitable region. Please see the details in
+> Documentation/admin-guide/kernel-parameters.txt.
 
-Reviewed-by: Miroslav Benes <mbenes@suse.cz>
+[...]
 
-The rest of the patch set looks good to me too.
+>  arch/arm64/mm/init.c | 44 ++++++++++++++++++++++++++++++++++----------
+>  1 file changed, 34 insertions(+), 10 deletions(-)
 
-M
+I tried to apply this, but smatch is unhappy with the result:
+
+  | arch/arm64/mm/init.c:153 reserve_crashkernel() error: uninitialized symbol 'search_base'.
+
+I _think_ this is a false positive, but I must say that the control flow
+in reserve_crashkernel() is extremely hard to follow so I couldn't be
+sure. If the static checker is struggling, then so will humans!
+
+Ideally, this would all be restructured to make it easier to follow,
+but in the short term we need something to squash the warning.
+
+Cheers,
+
+Will
