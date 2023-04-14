@@ -2,121 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 105DA6E2371
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 14:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6AFC6E237E
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 14:39:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbjDNMhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 08:37:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54836 "EHLO
+        id S229638AbjDNMjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 08:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbjDNMhO (ORCPT
+        with ESMTP id S229534AbjDNMjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 08:37:14 -0400
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77369113;
-        Fri, 14 Apr 2023 05:37:11 -0700 (PDT)
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-187a1387021so4137441fac.3;
-        Fri, 14 Apr 2023 05:37:11 -0700 (PDT)
+        Fri, 14 Apr 2023 08:39:14 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16EC026B8
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 05:39:13 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id f2so9663324pjs.3
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 05:39:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=igel-co-jp.20221208.gappssmtp.com; s=20221208; t=1681475952; x=1684067952;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6HYNyUUEorOF+isbH7MLUIuEp6e49eMyp3D2Mh/QBec=;
+        b=sX9xudieMQAT6uk2HyEujcuXLPGCVhLkbBS1MEggluyv2/BWsKTprUIhVNVt6ta/eD
+         d98sadGF1z6Q/jfpnFqkVPTHYZbJI2PTpdLqsBjTS7+cCgAdc/8BOQHqNNqHPuJr6K89
+         87mCXFZ5OFk1G0Jl7vPpBXS5iv9eOBQMlapv1bOtbl1ZPPBN/KZ/TRyvmmbjUZWP/MRM
+         ytMhjPizvYkw5flS0uc35OUOggApRHBcgNjjhj1zHv+91dP05JQx/leVr7yL4zJaZQlt
+         fUjct8dYbxDSu67+/cDb8jqZBQTwXnEGzsPNa4WogomhoENfUXiaDEPgIRaNfJ3nTQww
+         BkGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681475831; x=1684067831;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=6z6SiSjyhsFruKlyCgEKdQS6ZzvvI8xprJYhm7mvty8=;
-        b=LF+DN9Gmo4MXx2w7MzNZ8KcDzonbl8TQRacKnTeYJQugt6ehCgpko+vNcC3M2IRGn8
-         ePx4TmcUOh7I1mjATbEwc0T57ufIwLtQbOxwHxdykq9C0zmpO/iOdbRlb9dWblm5J2QT
-         HwiRi3i7P2HJTPOU416xaA+NK6tM0RvNb4kF9aNya82h+tS344wS5cpPGjKmwdSVVI4A
-         1SMnM803aU5NCxTauVbJifAUQ8gMAJYraLHKjjoDR/tZbH7poy65+uVDFHEOOYz0IQxm
-         y3uftL1gBWwUoWPhiaSWAYD67l6s56tEQTAQLFVLbn2UBzFDTpEqCZFUTEpaMX2Xn3ip
-         lb3w==
-X-Gm-Message-State: AAQBX9cMiXptWn6rDZ7RVysBVM+KbS3nAakxzj+hzp0Gv/gDvuE4Xf5I
-        b12A5IjKinOzv+k+7g9DwQ==
-X-Google-Smtp-Source: AKy350YLDnEij/+RT5c4VrdY69H0Gh8fljimJpXny4beHt4miLXMxpH9HeP14Yzjux4b6P2LXQXbUg==
-X-Received: by 2002:a05:6870:32d5:b0:187:9718:4070 with SMTP id r21-20020a05687032d500b0018797184070mr2818930oac.39.1681475830703;
-        Fri, 14 Apr 2023 05:37:10 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s6-20020acadb06000000b00383eaf88e75sm1629875oig.39.2023.04.14.05.37.08
+        d=1e100.net; s=20221208; t=1681475952; x=1684067952;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6HYNyUUEorOF+isbH7MLUIuEp6e49eMyp3D2Mh/QBec=;
+        b=kQkdTty2xhTdvjoXpd80d9ISwmvQo01yIj1TE3IM15zXe11fnIYNP/cknBwj0CNpN0
+         Z38aDhCK8sY/MDhPKenhYQliId7/CsKyTBlc/2jHNPQB06ehxaylfNltRKaAqtbOXlxw
+         bgUjoOcORt7JEvxuvY3sDNyjbKP7ezcIwElcj69v+XpS1TV8JyyFoHSGq7JXMCIj5v0o
+         cY9hylCiEL3ghJJGE8FJiCBfp+V4i4PZPPKQcw+TAY+Rh/65aG+SCaQ54VMxpR6kSEr3
+         3NEGMtF7Z0w/AqWf2xrgGZn6QHXP+2Avv0Q1L3Uy+9wBl63O8Ds7GRx/s/KH3qGWKXcL
+         qY/Q==
+X-Gm-Message-State: AAQBX9fto0M1XvBk2UiceacOnabVc0y6kTtWvHqXkjo+VAHhGWLPOZ3L
+        e7H39jXWxVvTBzpS4JMZpz4uDg==
+X-Google-Smtp-Source: AKy350YpGxzPLIwor8+DKH5UMTOv8E83Zu2LeKHX4c7FkRKlCbIlCR8cBym6UhA2y6HclkSFaFD8Zg==
+X-Received: by 2002:a17:903:24d:b0:1a6:4a25:c7f7 with SMTP id j13-20020a170903024d00b001a64a25c7f7mr2653035plh.6.1681475952405;
+        Fri, 14 Apr 2023 05:39:12 -0700 (PDT)
+Received: from tyrell.hq.igel.co.jp (napt.igel.co.jp. [219.106.231.132])
+        by smtp.gmail.com with ESMTPSA id v21-20020a1709028d9500b001a527761c31sm3015366plo.79.2023.04.14.05.39.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Apr 2023 05:37:09 -0700 (PDT)
-Received: (nullmailer pid 3600816 invoked by uid 1000);
-        Fri, 14 Apr 2023 12:37:05 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+        Fri, 14 Apr 2023 05:39:12 -0700 (PDT)
+From:   Shunsuke Mie <mie@igel.co.jp>
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Shunsuke Mie <mie@igel.co.jp>, Frank Li <Frank.Li@nxp.com>,
+        Jon Mason <jdmason@kudzu.us>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Ren Zhijie <renzhijie2@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: [RFC PATCH 0/3] Introduce a PCIe endpoint virtio console
+Date:   Fri, 14 Apr 2023 21:39:00 +0900
+Message-Id: <20230414123903.896914-1-mie@igel.co.jp>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>
-Cc:     Nitheesh Sekar <quic_nsekar@quicinc.com>, mturquette@baylibre.com,
-        konrad.dybcio@linaro.org, ulf.hansson@linaro.org,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Varadarajan Narayanan <quic_varada@quicinc.com>,
-        krzysztof.kozlowski+dt@linaro.org, will@kernel.org,
-        linus.walleij@linaro.org, agross@kernel.org,
-        p.zabel@pengutronix.de, robh+dt@kernel.org,
-        catalin.marinas@arm.com, sboyd@kernel.org,
-        linux-gpio@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        andersson@kernel.org, linux-arm-kernel@lists.infradead.org
-In-Reply-To: <1681468167-11689-4-git-send-email-quic_srichara@quicinc.com>
-References: <1681468167-11689-1-git-send-email-quic_srichara@quicinc.com>
- <1681468167-11689-4-git-send-email-quic_srichara@quicinc.com>
-Message-Id: <168147485085.3576485.2274318981675565621.robh@kernel.org>
-Subject: Re: [PATCH V3 3/9] dt-bindings: pinctrl: qcom: Add support for
- ipq5018
-Date:   Fri, 14 Apr 2023 07:37:05 -0500
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+PCIe endpoint framework provides APIs to implement PCIe endpoint function.
+This framework allows defining various PCIe endpoint function behaviors in
+software. This patch extend the framework for virtio pci device. The
+virtio is defined to communicate guest on virtual machine and host side.
+Advantage of the virtio is the efficiency of data transfer and the conciseness
+of implementation device using software. It also be applied to PCIe
+endpoint function.
 
-On Fri, 14 Apr 2023 15:59:21 +0530, Sricharan Ramabadhran wrote:
-> Add device tree binding Documentation details for ipq5018
-> pinctrl driver.
-> 
-> Co-developed-by: Nitheesh Sekar <quic_nsekar@quicinc.com>
-> Signed-off-by: Nitheesh Sekar <quic_nsekar@quicinc.com>
-> Co-developed-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> ---
->  [v3] Fixed review comments and DTS schema warnings
-> 
->  .../bindings/pinctrl/qcom,ipq5018-tlmm.yaml        | 129 +++++++++++++++++++++
->  1 file changed, 129 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-tlmm.yaml
-> 
+We designed and implemented a PCIe EP virtio console function driver using
+the extended PCIe endpoint framework for virtio. It can be communicate
+host and endpoint over virtio as console.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+An architecture of the function driver is following:
 
-yamllint warnings/errors:
+ ┌────────────┐         ┌──────────────────────┬────────────┐
+ │virtio      │         │                      │virtio      │
+ │console drv │         ├───────────────┐      │console drv │
+ ├────────────┤         │(virtio console│      ├────────────┤
+ │ virtio bus │         │ device)       │◄────►│ virtio bus │
+ ├────────────┤         ├---------------┤      └────────────┤
+ │            │         │ pci ep virtio │                   │
+ │  pci bus   │         │  console drv  │                   │
+ │            │  pcie   ├───────────────┤                   │
+ │            │ ◄─────► │  pci ep Bus   │                   │
+ └────────────┘         └───────────────┴───────────────────┘
+   PCIe Root              PCIe Endpoint
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-tlmm.example.dtb: pinctrl@1000000: uart2-state: 'oneOf' conditional failed, one must be fixed:
-	'bias-pull-down', 'drive-strength', 'function', 'pins' do not match any of the regexes: '-pins$', 'pinctrl-[0-9]+'
-	'blsp2_uart' is not one of ['atest_char', 'audio_pdm0', 'audio_pdm1', 'audio_rxbclk', 'audio_rxd', 'audio_rxfsync', 'audio_rxmclk', 'audio_txbclk', 'audio_txd', 'audio_txfsync', 'audio_txmclk', 'blsp0_i2c', 'blsp0_spi', 'blsp0_uart0', 'blsp0_uart1', 'blsp1_i2c0', 'blsp1_i2c1', 'blsp1_spi0', 'blsp1_spi1', 'blsp1_uart0', 'blsp1_uart1', 'blsp1_uart2', 'blsp2_i2c0', 'blsp2_i2c1', 'blsp2_spi', 'blsp2_spi0', 'blsp2_spi1', 'btss', 'burn0', 'burn1', 'cri_trng', 'cri_trng0', 'cri_trng1', 'cxc_clk', 'cxc_data', 'dbg_out', 'eud_gpio', 'gcc_plltest', 'gcc_tlmm', 'gpio', 'led0', 'led2', 'mac0', 'mac1', 'mdc', 'mdio', 'pcie0_clk', 'pcie0_wake', 'pcie1_clk', 'pcie1_wake', 'pll_test', 'prng_rosc', 'pwm0', 'pwm1', 'pwm2', 'pwm3', 'qdss_cti_trig_in_a0', 'qdss_cti_trig_in_a1', 'qdss_cti_trig_in_b0', 'qdss_cti_trig_in_b1', 'qdss_cti_trig_out_a0', 'qdss_cti_trig_out_a1', 'qdss_cti_trig_out_b0', 'qdss_cti_trig_out_b1', 'qdss_traceclk_a', 'qdss_traceclk_b', 'qdss_tracectl_a', 'qdss_tracectl_b', 'qdss_trac
- edata_a', 'qdss_tracedata_b', 'qspi_clk', 'qspi_cs', 'qspi_data', 'reset_out', 'sdc1_clk', 'sdc1_cmd', 'sdc1_data', 'wci_txd', 'wci_rxd', 'wsa_swrm', 'wsi_clk3', 'wsi_data3', 'wsis_reset', 'xfem']
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-tlmm.yaml
+Introduced driver is `pci ep virtio console drv` in the figure. It works
+as ep function for PCIe root and virtual virtio console device for PCIe
+endpoint. Each side of virtio console driver has virtqueue, and
+introduced driver transfers data on the virtqueue to each other. A data
+on root tx queue is transfered to endpoint rx queue and vice versa.
 
-doc reference errors (make refcheckdocs):
+This patchset is depend follwing patches which are under discussion.
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/1681468167-11689-4-git-send-email-quic_srichara@quicinc.com
+- [RFC PATCH 0/3] Deal with alignment restriction on EP side
+link: https://lore.kernel.org/linux-pci/20230113090350.1103494-1-mie@igel.co.jp/
+- [RFC PATCH v2 0/7] Introduce a vringh accessor for IO memory
+link: https://lore.kernel.org/virtualization/20230202090934.549556-1-mie@igel.co.jp/
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+First of this patchset is introduce a helper function to realize pci
+virtio function using PCIe endpoint framework. The second one is adding
+a missing definition for virtio pci header. The last one is for PCIe
+endpoint virtio console driver.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+This is tested on linux-20230406 and RCar S4 board as PCIe endpoint.
 
-pip3 install dtschema --upgrade
+Shunsuke Mie (3):
+  PCI: endpoint: introduce a helper to implement pci ep virtio function
+  virtio_pci: add a definition of queue flag in ISR
+  PCI: endpoint: Add EP function driver to provide virtio-console
+    functionality
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+ drivers/pci/endpoint/functions/Kconfig        |  19 +
+ drivers/pci/endpoint/functions/Makefile       |   2 +
+ drivers/pci/endpoint/functions/pci-epf-vcon.c | 554 ++++++++++++++++++
+ .../pci/endpoint/functions/pci-epf-virtio.c   | 469 +++++++++++++++
+ .../pci/endpoint/functions/pci-epf-virtio.h   | 123 ++++
+ include/uapi/linux/virtio_pci.h               |   3 +
+ 6 files changed, 1170 insertions(+)
+ create mode 100644 drivers/pci/endpoint/functions/pci-epf-vcon.c
+ create mode 100644 drivers/pci/endpoint/functions/pci-epf-virtio.c
+ create mode 100644 drivers/pci/endpoint/functions/pci-epf-virtio.h
+
+-- 
+2.25.1
 
