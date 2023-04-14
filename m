@@ -2,85 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAA9F6E2C6F
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 00:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D7006E2C70
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 00:26:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbjDNWV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 18:21:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55702 "EHLO
+        id S229784AbjDNW0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 18:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjDNWVz (ORCPT
+        with ESMTP id S229462AbjDNW0Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 18:21:55 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3602140F1
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 15:21:54 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id cm18-20020a17090afa1200b0024713adf69dso7775452pjb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 15:21:54 -0700 (PDT)
+        Fri, 14 Apr 2023 18:26:16 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955AEB4
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 15:26:15 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-54fe82d8bf5so54538517b3.3
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 15:26:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681510913; x=1684102913;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SLqNGLosZovkrXAf3+SwfrjNlS64/xyQZTbyCVO0BxQ=;
-        b=flSWtgEcFQWRDJSgY5ws8HrxttLbvh3ovwpwZnYrGWuKspM9na62YBx+L+YsSiaAf8
-         MQWiBW7jm2QgpahDO83ysoM0CsGRGNbLZayUQ8XFgvjvXuboORHk1P6YBcKQxFiJhp5Z
-         Z4BiwfXGdxnNtuM9CwLg+pHtWEn2tFKMfOt5fkMmjKXhaNW1ab6xuRiF9Y+3a5UYDUwL
-         sOKGEwKEtVU4vP/3oEV7z12zFTEhJ60peVcCG6WAoz7uq2htk2S6z8ODYMhHcceBAxVW
-         rknMhE1wbR77/R8iSpH+YMXQaXKujxoSK2Mf1ysgDv2vfxMerJTBIC2hUYhclijt4X2e
-         +IeA==
+        d=google.com; s=20221208; t=1681511175; x=1684103175;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3Zo5vi/OUyjW18FHtcym6cirbr2/eIzRlQ1LRqhG3GY=;
+        b=GWKNzmUVOGiLIAfUwSiBRxsKt4GwKIfy+0j6OAsN0mqsgAgWNRJ9wlEjLL3ugCNS78
+         6hxjzhZxO3qRxioyxewdPISwbWiGfGAsDaO69CseW+1hR0N7sOz9BCAhxYqQfhy/5VI/
+         +QyBz7BkxLno38LWBDkV4GYqen4AXCI+v7IllOan2OEZUTWT5ZGe+DeaMborbwZeDG/D
+         Wa7RR9O+TCtZhLqlf+Pj5pfwks+oFcVghutImp63URcO+O9eIul/3M0xdw2LwNf7Rk6u
+         5i7YXqH2cD1FUPsFakkd9pQnPmT6hyX71kWbHJWgzzJzzb22lMl3RJY+ivzBmKWEbYjG
+         YN/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681510913; x=1684102913;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SLqNGLosZovkrXAf3+SwfrjNlS64/xyQZTbyCVO0BxQ=;
-        b=eiz4JN33cZ++tYrMUGFKfFVvZMptDWZiBfa46edolWRDPZfVUNnNBAGPe+C7LDi2pQ
-         5tb/YTSUoebUb6EhMsmPVv2Q2X3O16jKW7Rnh1bYu/UicDqiFrEfiX5CqJ4+lc48/gZw
-         paJrk/FgPN/fYwP8DzfqqAHDy/l37uqwBcvosG3sPsql/GD3WqN4S5KiHwcxn9X1fOuJ
-         Xxhf/C7DQOHuWoG4R7YYlfW7WgL678+7jUPrN/us4C/BbTFmaz181FUsWD9NV8nf7CeT
-         ObOFAeJtQUnrTReorm3/5JnfvMuCsoTxsYpR9qSgtqAIpgl4kHUXuwbvA3v4rjpLBO1m
-         amkw==
-X-Gm-Message-State: AAQBX9ctDlh27OLXS/UaC1IGXyk1EXW+/6NKhtPeJLKIs54IHOSybFFW
-        h8lL31VYa6pC+6/+qTii1+o=
-X-Google-Smtp-Source: AKy350awc9s1TJQHmTDe0ROiljhHv3b+u2EkXnYUi86wXlrw50nRxW1EAPbTfiOCRdqYwBLLQnZniQ==
-X-Received: by 2002:a05:6a21:32a2:b0:ee:7fb0:da51 with SMTP id yt34-20020a056a2132a200b000ee7fb0da51mr2089028pzb.31.1681510913591;
-        Fri, 14 Apr 2023 15:21:53 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id k12-20020aa7820c000000b00634dde2992bsm3470658pfi.132.2023.04.14.15.21.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 15:21:52 -0700 (PDT)
-Message-ID: <18da7eec-3898-06fb-2746-c201450389ac@gmail.com>
-Date:   Fri, 14 Apr 2023 15:21:47 -0700
+        d=1e100.net; s=20221208; t=1681511175; x=1684103175;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3Zo5vi/OUyjW18FHtcym6cirbr2/eIzRlQ1LRqhG3GY=;
+        b=AzZ6NmWtWVlUULbdzpiSg1Kd0CtGHE5k2qnLFzsfvEV/2Kg04X6GCvq3uXHtKWKkyv
+         97gPVLoeByvTkrveMTCLqoj0pGAVseaJfslNcoGlAEwLq+zGG6C3ijZtCnZcFM+m4UwM
+         meZdM2FgR8N69nn+IO5ghVJiRR+Ek2MYU8yT4lJu7BfgHbeyhPVc5oTT+E9eWvdbnVaS
+         4i7w5vWrdR3i7RCmsgSwWAd1pzggil6FtOqqQlYqp6xywQfCgL4wPu6kx9ZzIR8TwGA8
+         Ce7Ac9umHJ/i+F5qG2+dVLLaclGY4w6JzKXaBAwVHrjmAQq2WdP8XP87VbUEOE/oNyIv
+         5+fw==
+X-Gm-Message-State: AAQBX9fdx8W6FU4EAEvyz+ZlWFyoShYA73eK+AA+qbFwAkeIKCtjDBEF
+        hchFA5yc655EGJseTjZbtp7VnUQR3rWh+DHl0IZX7A==
+X-Google-Smtp-Source: AKy350a6izrIjhN/n8CfqBd++qEYoiOYfIqd1Czw5zeeiDH3YQmm42V3W+2ubr9idRCr1myaN3sI9FZr9eUCHvlZrIA=
+X-Received: by 2002:a81:d44c:0:b0:54e:d618:f86c with SMTP id
+ g12-20020a81d44c000000b0054ed618f86cmr4751086ywl.1.1681511174586; Fri, 14 Apr
+ 2023 15:26:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 2/4] cacheinfo: Check cache properties are present in
- DT
-Content-Language: en-US
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Pierre Gondois <pierre.gondois@arm.com>,
-        linux-kernel@vger.kernel.org, Radu Rendec <rrendec@redhat.com>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Gavin Shan <gshan@redhat.com>
-References: <20230413091436.230134-1-pierre.gondois@arm.com>
- <20230413091436.230134-3-pierre.gondois@arm.com>
- <4da53918-839b-4d28-0634-66fd7f38c8bd@gmail.com>
- <20230413195032.bw3yu7a6puqziinx@bogus>
- <d44baa58-8c39-407c-db94-390bc0d12dbe@gmail.com>
- <20230414090542.rbidu45cx4halja4@bogus>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230414090542.rbidu45cx4halja4@bogus>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20230414175444.1837474-1-surenb@google.com> <ZDnJ1dOU2tpK6l68@x1n>
+ <CAJuCfpFc2SohkkJnEFqZD-uCpSS9sUzToPcQXOR6dHTTE0Ty5w@mail.gmail.com>
+In-Reply-To: <CAJuCfpFc2SohkkJnEFqZD-uCpSS9sUzToPcQXOR6dHTTE0Ty5w@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Fri, 14 Apr 2023 15:26:03 -0700
+Message-ID: <CAJuCfpFq0N2BZi5tQRacw2+SSaxwyfLXsPGLMXDyuBt3cqffxA@mail.gmail.com>
+Subject: Re: [PATCH 1/1] mm: do not increment pgfault stats when page fault
+ handler retries
+To:     Peter Xu <peterx@redhat.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
+        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
+        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,67 +78,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/14/23 02:05, Sudeep Holla wrote:
-> On Thu, Apr 13, 2023 at 01:06:46PM -0700, Florian Fainelli wrote:
->> On 4/13/23 12:50, Sudeep Holla wrote:
->>> On Thu, Apr 13, 2023 at 11:16:37AM -0700, Florian Fainelli wrote:
->>>> On 4/13/23 02:14, Pierre Gondois wrote:
->>>>> If a Device Tree (DT) is used, the presence of cache properties is
->>>>> assumed. Not finding any is not considered. For arm64 platforms,
->>>>> cache information can be fetched from the clidr_el1 register.
->>>>> Checking whether cache information is available in the DT
->>>>> allows to switch to using clidr_el1.
->>>>>
->>>>> init_of_cache_level()
->>>>> \-of_count_cache_leaves()
->>>>> will assume there a 2 cache leaves (L1 data/instruction caches), which
->>>>> can be different from clidr_el1 information.
->>>>>
->>>>> cache_setup_of_node() tries to read cache properties in the DT.
->>>>> If there are none, this is considered a success. Knowing no
->>>>> information was available would allow to switch to using clidr_el1.
->>>>>
->>>>> Fixes: de0df442ee49 ("cacheinfo: Check 'cache-unified' property to count cache leaves")
->>>>> Reported-by: Alexandre Ghiti <alexghiti@rivosinc.com>
->>>>> Link: https://lore.kernel.org/all/20230404-hatred-swimmer-6fecdf33b57a@spud/
->>>>> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
->>>>
->>>> Humm, it would appear that the cache levels and topology is still provided,
->>>> despite the lack of cache properties in the Device Tree which is intended by
->>>> this patch set however we lost the size/ways/sets information, could we not
->>>> complement the missing properties here?
->>>>
->>>
->>> I am confused. How and from where the information was fetched before this
->>> change ?
->>
->> I applied Pierre's patches to my tree and then did the following:
->>
->> - before means booting with the patches applied and the Device Tree
->> providing cache information: {d,i}-cache-{size,line-size,sets} and
->> next-level-cache
->>
->> - after means removing all of those properties still with the patches
->> applied
->>
-> 
-> Ah okay, I assumed something totally different and hence thought patches
-> broke something.
-> 
->> My expectation is that if we omit the properties in the Device Tree, we will
->> fallback to reading that information out of clidr_el1. However as can be
->> seen from the "before" and "after" outputs, there is loss of information, as
->> we no longer have the cacheline size, number of sets/ways, the rest is valid
->> though.
->>
-> 
-> Correct and that is expected. We dropped ccsidr_el1 support to fetch cache
-> geometry with the commit a8d4636f96ad ("arm64: cacheinfo: Remove CCSIDR-based
-> cache information probing") after Arm ARM added wordings not to infer the
-> information. However clidr_el1 info still holds except it may not include
-> transparent system level caches. Hope that clarifies.
+On Fri, Apr 14, 2023 at 3:14=E2=80=AFPM Suren Baghdasaryan <surenb@google.c=
+om> wrote:
+>
+> On Fri, Apr 14, 2023 at 2:47=E2=80=AFPM Peter Xu <peterx@redhat.com> wrot=
+e:
+> >
+> > Hi, Suren,
+>
+> Hi Peter,
+>
+> >
+> > On Fri, Apr 14, 2023 at 10:54:44AM -0700, Suren Baghdasaryan wrote:
+> > > If the page fault handler requests a retry, we will count the fault
+> > > multiple times.  This is a relatively harmless problem as the retry p=
+aths
+> > > are not often requested, and the only user-visible problem is that th=
+e
+> > > fault counter will be slightly higher than it should be.  Nevertheles=
+s,
+> > > userspace only took one fault, and should not see the fact that the
+> > > kernel had to retry the fault multiple times.
+> > >
+> > > Fixes: 6b4c9f446981 ("filemap: drop the mmap_sem for all blocking ope=
+rations")
+> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > > Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> > > ---
+> > > Patch applies cleanly over linux-next and mm-unstable
+> > >
+> > >  mm/memory.c | 16 ++++++++++------
+> > >  1 file changed, 10 insertions(+), 6 deletions(-)
+> > >
+> > > diff --git a/mm/memory.c b/mm/memory.c
+> > > index 1c5b231fe6e3..d88f370eacd1 100644
+> > > --- a/mm/memory.c
+> > > +++ b/mm/memory.c
+> > > @@ -5212,17 +5212,16 @@ vm_fault_t handle_mm_fault(struct vm_area_str=
+uct *vma, unsigned long address,
+> > >
+> > >       __set_current_state(TASK_RUNNING);
+> > >
+> > > -     count_vm_event(PGFAULT);
+> > > -     count_memcg_event_mm(vma->vm_mm, PGFAULT);
+> > > -
+> > >       ret =3D sanitize_fault_flags(vma, &flags);
+> > >       if (ret)
+> > > -             return ret;
+> > > +             goto out;
+> > >
+> > >       if (!arch_vma_access_permitted(vma, flags & FAULT_FLAG_WRITE,
+> > >                                           flags & FAULT_FLAG_INSTRUCT=
+ION,
+> > > -                                         flags & FAULT_FLAG_REMOTE))
+> > > -             return VM_FAULT_SIGSEGV;
+> > > +                                         flags & FAULT_FLAG_REMOTE))=
+ {
+> > > +             ret =3D VM_FAULT_SIGSEGV;
+> > > +             goto out;
+> > > +     }
+> > >
+> > >       /*
+> > >        * Enable the memcg OOM handling for faults triggered in user
+> > > @@ -5253,6 +5252,11 @@ vm_fault_t handle_mm_fault(struct vm_area_stru=
+ct *vma, unsigned long address,
+> > >       }
+> > >
+> > >       mm_account_fault(regs, address, flags, ret);
+> >
+> > Here is the mm_account_fault() function taking care of some other
+> > accountings.  Perhaps good to put things into it?
+>
+> That seems appropriate. Let me take a closer look.
+>
+> >
+> > It also already ignores invalid faults:
+> >
+> >         if (ret & (VM_FAULT_ERROR | VM_FAULT_RETRY))
+> >                 return;
+>
+> Can there be a case of (!VM_FAULT_ERROR && VM_FAULT_RETRY) - basically
+> we need to retry but no errors happened? If so then this condition
+> would double-count pagefaults in such cases. If such return code is
+> impossible then it's the same as checking for VM_FAULT_RETRY.
+>
+> >
+> > I see that you may also want to account for sigbus, however I really do=
+n't
+> > know why.  Explanations would be great when it would matter.  So far it
+> > makes sense to me if we skip both RETRY or ERROR cases.
+>
+> Accounting in case of a sigbus is not affected by this patch I think.
+> We account for sigbus or any other error cases because there was a
+> pagefault and we need to account for it. Whether we failed to handle
+> it or not should not affect the count. We skip the retry case because
+> we know the same fault will be retried. If we don't skip then we will
+> double-count this fault.
 
-Yes it definitively does, thanks a lot for the refresher.
--- 
-Florian
+mm_account_fault() has a nice comment explaining why it skips errors
+and that now makes sense to me. Let me move the accounting there and
+see if others agree that's the right place.
 
+>
+> >
+> > > +out:
+> > > +     if (!(ret & VM_FAULT_RETRY)) {
+> > > +             count_vm_event(PGFAULT);
+> > > +             count_memcg_event_mm(vma->vm_mm, PGFAULT);
+> >
+> > There is one thing worth noticing is here vma may or may not be valid
+> > depending on the retval of the fault.
+> >
+> > RETRY is exactly one of the cases that accessing vma may be unsafe due =
+to
+> > releasing of mmap read lock.  The other one is the recently added
+> > VM_FAULT_COMPLETE.  So if we want to move this chunk (or any vma refere=
+nce)
+> > to be later we need to consider a valid vma / mm being there first, or
+> > we're prone to accessing a vma that has already been released, I think.
+>
+> Good catch! I think you are right and I should have stored vma->vm_mm
+> in the beginning and used it when calling count_memcg_event_mm().
+> I'll prepare a new patch which handles this correctly.
+> Thanks,
+> Suren.
+>
+> >
+> > > +     }
+> > >
+> > >       return ret;
+> > >  }
+> > > --
+> > > 2.40.0.634.g4ca3ef3211-goog
+> > >
+> > >
+> >
+> > Thanks,
+> >
+> > --
+> > Peter Xu
+> >
+> > --
+> > To unsubscribe from this group and stop receiving emails from it, send =
+an email to kernel-team+unsubscribe@android.com.
+> >
