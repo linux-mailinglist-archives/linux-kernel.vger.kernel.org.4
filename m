@@ -2,103 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7026E2166
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 12:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58B556E2169
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 12:59:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbjDNK6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 06:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60018 "EHLO
+        id S230092AbjDNK7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 06:59:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjDNK6x (ORCPT
+        with ESMTP id S230151AbjDNK7C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 06:58:53 -0400
-Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0BC35B1;
-        Fri, 14 Apr 2023 03:58:51 -0700 (PDT)
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 1F8B110006C; Fri, 14 Apr 2023 11:58:49 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-        t=1681469929; bh=xKiD6D1LLlILVuQ63mXofNbz+Er3mjpqtu6nPh1Rix4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DASlhFii98NU/JfhobCC0DOl9M0BmHu4kE4MAY2cThrVTDyYDK0/h7yuHUT31E/gj
-         Ir66Tf09vvBeXCOMvv4sfg68RdeM3+hweFIqWv7M/dfIDLtUEQiXogUcAr+uuLoMVA
-         xiaGVNmnWU0s9+g/gMPNaNkMSJUCwkIU+iZRKFJtUUNcJDi8YNggyaFU4/it3D6+BP
-         4qBXgc0ecSLvTKab3fBjj+Rlu4Pq0wfQ0Qd/dfj3ZQit/a2D31yKLxtIjU9BwRxO1q
-         l/6HmButEPLq2NV9CnoFMitN+cpV6JUSDilPngcEBmlHOjYCf87+Ac16OPP/DokbTw
-         brmBhlGK9qDrg==
-Date:   Fri, 14 Apr 2023 11:58:49 +0100
-From:   Sean Young <sean@mess.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH] bpf: lirc program type should not require SYS_CAP_ADMIN
-Message-ID: <ZDkx6WAWmwHpBJ6m@gofer.mess.org>
-References: <ZDWAcN6wfeXzipHz@gofer.mess.org>
- <CAADnVQJ-zzzTxDj8_7WKW-o3BDsU=DNAnvSEZGNHswbhGA8xhA@mail.gmail.com>
- <ZDe9ND/M4I9ll1xV@gofer.mess.org>
- <CAADnVQLOmDEQsHX4XfgETXUte9mJ+-qphR_E7dcjXB2PMDaZnA@mail.gmail.com>
+        Fri, 14 Apr 2023 06:59:02 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BDCDE59C5;
+        Fri, 14 Apr 2023 03:58:59 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.43:42156.1962834727
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
+        by 189.cn (HERMES) with SMTP id 8444610029C;
+        Fri, 14 Apr 2023 18:58:55 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-7b48884fd-tj646 with ESMTP id 20d9f539d4bf418d80c5123a73ddff62 for tzimmermann@suse.de;
+        Fri, 14 Apr 2023 18:58:57 CST
+X-Transaction-ID: 20d9f539d4bf418d80c5123a73ddff62
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <32a1510e-d38a-ffb6-8e8d-026f8b3aa17a@189.cn>
+Date:   Fri, 14 Apr 2023 18:58:53 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2] drm/fbdev-generic: prohibit potential out-of-bounds
+ access
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sui Jingfeng <suijingfeng@loongson.cn>,
+        Li Yi <liyi@loongson.cn>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Helge Deller <deller@gmx.de>,
+        Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
+References: <20230413180622.1014016-1-15330273260@189.cn>
+ <fccc494f-0e52-5fdf-0e40-acc29177c73c@suse.de>
+Content-Language: en-US
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <fccc494f-0e52-5fdf-0e40-acc29177c73c@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQLOmDEQsHX4XfgETXUte9mJ+-qphR_E7dcjXB2PMDaZnA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LOTS_OF_MONEY,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 04:54:21PM -0700, Alexei Starovoitov wrote:
-> On Thu, Apr 13, 2023 at 1:28 AM Sean Young <sean@mess.org> wrote:
-> >
-> > On Wed, Apr 12, 2023 at 04:14:05PM -0700, Alexei Starovoitov wrote:
-> > > On Tue, Apr 11, 2023 at 8:45 AM Sean Young <sean@mess.org> wrote:
-> > > >
-> > > > Make it possible to load lirc program type with just CAP_BPF.
-> > >
-> > > Is it safe?
-> > > If the user can load with just CAP_BPF the FD to the prog and target_fd
-> > > will allow attach as well.
-> >
-> > Exactly, that's the $1m question of course.
-> >
-> > I think it's safe from a lirc perspective because you need to be able to
-> > open the /dev/lirc0 device in the first place; if you can open it, you
-> > alter all sorts of lirc receiving options already. Changing the IR protocol
-> > decoder is no different in that perspective.
-> >
-> > The other side of course, is it save to load a bpf lirc program as a normal
-> > user. I don't see any issue with this; I guess this depends on whether the
-> > subset of functions in lirc_mode2_func_proto() is safe. I am hoping that
-> > the expert opinion everyone here can help answer that question.
-> 
-> That part is fine under CAP_BPF.
-> I don't know how lirc devices are typically setup.
-> If they need root to open them
-> then why bother relaxing bpf loading part?
+Hi,
 
-I'd like to get a point where /dev/lircN can have the same permissions as
-for example /dev/videoN devices: group read/write, so that local users
-don't have to become root to use them.
+On 2023/4/14 03:16, Thomas Zimmermann wrote:
+> Hi,
+>
+> thanks for the patch. This is effectively a revert of commit 
+> 8fbc9af55de0 ("drm/fbdev-generic: Set screen size to size of GEM 
+> buffer"). Please add a Fixes tag.
+>
+> Am 13.04.23 um 20:06 schrieb Sui Jingfeng:
+>> From: Sui Jingfeng <suijingfeng@loongson.cn>
+>>
+>> The crazy fbdev test of IGT may write after EOF, which lead to 
+>> out-of-bound
+>
+> Please drop 'crazy'. :)
 
-Without relaxing the bpf side, this seems like a chicken and egg problem
-(tiktaalik and egg?).
+This is OK.
 
-Also - the CAP_NET_ADMIN requirement seems completely arbitrary compared
-to other program types.
+By using the world 'crazy',
+
+I meant that the test is very good and maybe it is written by 
+professional  peoples
+
+with the guidance by  experienced  engineer. So that even the corner get 
+tested.
 
 
-Sean
+>
+>> access for the drm drivers using fbdev-generic. For example, run 
+>> fbdev test
+>> on a x86-64+ast2400 platform with 1680x1050 resolution will cause the 
+>> linux
+>> kernel hang with following call trace:
+>>
+>>    Oops: 0000 [#1] PREEMPT SMP PTI
+>>    [IGT] fbdev: starting subtest eof
+>>    Workqueue: events drm_fb_helper_damage_work [drm_kms_helper]
+>>    [IGT] fbdev: starting subtest nullptr
+>>
+>>    RIP: 0010:memcpy_erms+0xa/0x20
+>>    RSP: 0018:ffffa17d40167d98 EFLAGS: 00010246
+>>    RAX: ffffa17d4eb7fa80 RBX: ffffa17d40e0aa80 RCX: 00000000000014c0
+>>    RDX: 0000000000001a40 RSI: ffffa17d40e0b000 RDI: ffffa17d4eb80000
+>>    RBP: ffffa17d40167e20 R08: 0000000000000000 R09: ffff89522ecff8c0
+>>    R10: ffffa17d4e4c5000 R11: 0000000000000000 R12: ffffa17d4eb7fa80
+>>    R13: 0000000000001a40 R14: 000000000000041a R15: ffffa17d40167e30
+>>    FS:  0000000000000000(0000) GS:ffff895257380000(0000) 
+>> knlGS:0000000000000000
+>>    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>    CR2: ffffa17d40e0b000 CR3: 00000001eaeca006 CR4: 00000000001706e0
+>>    Call Trace:
+>>     <TASK>
+>>     ? drm_fbdev_generic_helper_fb_dirty+0x207/0x330 [drm_kms_helper]
+>>     drm_fb_helper_damage_work+0x8f/0x170 [drm_kms_helper]
+>>     process_one_work+0x21f/0x430
+>>     worker_thread+0x4e/0x3c0
+>>     ? __pfx_worker_thread+0x10/0x10
+>>     kthread+0xf4/0x120
+>>     ? __pfx_kthread+0x10/0x10
+>>     ret_from_fork+0x2c/0x50
+>>     </TASK>
+>>    CR2: ffffa17d40e0b000
+>>    ---[ end trace 0000000000000000 ]---
+>>
+>> The indirect reason is drm_fb_helper_memory_range_to_clip() generate 
+>> damage
+>> rectangles which partially or completely go out of the active display 
+>> area.
+>> The second of argument 'off' is passing from the user-space, this 
+>> will lead
+>> to the out-of-bound if it is large than (fb_height + 1) * fb_pitches; 
+>> while
+>> DIV_ROUND_UP() may also controbute to error by 1.
+>>
+>> This patch will add code to restrict the damage rect computed go 
+>> beyond of
+>> the last line of the framebuffer.
+>>
+>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+>> ---
+>>   drivers/gpu/drm/drm_fb_helper.c     | 16 ++++++++++++----
+>>   drivers/gpu/drm/drm_fbdev_generic.c |  2 +-
+>>   2 files changed, 13 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/drm_fb_helper.c 
+>> b/drivers/gpu/drm/drm_fb_helper.c
+>> index 64458982be40..6bb1b8b27d7a 100644
+>> --- a/drivers/gpu/drm/drm_fb_helper.c
+>> +++ b/drivers/gpu/drm/drm_fb_helper.c
+>> @@ -641,19 +641,27 @@ static void drm_fb_helper_damage(struct 
+>> drm_fb_helper *helper, u32 x, u32 y,
+>>   static void drm_fb_helper_memory_range_to_clip(struct fb_info 
+>> *info, off_t off, size_t len,
+>>                              struct drm_rect *clip)
+>>   {
+>> +    u32 line_length = info->fix.line_length;
+>> +    u32 fb_height = info->var.yres;
+>>       off_t end = off + len;
+>>       u32 x1 = 0;
+>> -    u32 y1 = off / info->fix.line_length;
+>> +    u32 y1 = off / line_length;
+>>       u32 x2 = info->var.xres;
+>> -    u32 y2 = DIV_ROUND_UP(end, info->fix.line_length);
+>> +    u32 y2 = DIV_ROUND_UP(end, line_length);
+>> +
+>> +    /* Don't allow any of them beyond the bottom bound of display 
+>> area */
+>> +    if (y1 > fb_height)
+>> +        y1 = fb_height;
+>> +    if (y2 > fb_height)
+>> +        y2 = fb_height;
+>>         if ((y2 - y1) == 1) {
+>>           /*
+>>            * We've only written to a single scanline. Try to reduce
+>>            * the number of horizontal pixels that need an update.
+>>            */
+>> -        off_t bit_off = (off % info->fix.line_length) * 8;
+>> -        off_t bit_end = (end % info->fix.line_length) * 8;
+>> +        off_t bit_off = (off % line_length) * 8;
+>> +        off_t bit_end = (end % line_length) * 8;
+>
+> Please scratch all these changes. The current code should work as 
+> intended. Only the generic fbdev emulation uses this code and it 
+> should really be moved there at some point.
+
+
+Are you meant  that we should remove all these changes in 
+drivers/gpu/drm/drm_fb_helper.c ?
+
+
+But this changes are helps to prevent the damage box computed go out of 
+bound,
+
+the bound of the displayable shadow buffer on multiple display case.
+
+It is the minimum width x height which could be fit in for all 
+display/minotor.
+
+
+For example, one is 1920x1080 monitor, another is 1280x800 monitor.
+
+connected to the motherboard simultaneously.
+
+
+Then, 1920x1080x4 (suppose we are using the XRGB) scanout buffer will be
+
+allocate by the  GEM backend. But the the actual display area is 1280x800.
+
+This is true at least for my driver on my platform, In this case,
+
+```
+
+    info->var.xres ==1280;
+
+    info->var.yres == 800;
+
+```
+
+If don't restrict this, the damage box computed out of the bound of  (0, 
+0) ~ (1280, 800) rectangle.
+
+a 1920x1080 damage box will came out.
+
+
+When running fbdev test of IGT, the smaller screen display will be OK.
+
+but the larger screen, the area outsize of 1280x800 will also be written.
+
+The background color became completely white from completely black 
+before carry out the test,
+
+luckily, linux kernel do not hung, this time.
+
+
+On multi-screen case, we still need to restrict the damage box computed,
+
+Do not go out of 1280x800,  right?
+
+
+>
+>>             x1 = bit_off / info->var.bits_per_pixel;
+>>           x2 = DIV_ROUND_UP(bit_end, info->var.bits_per_pixel);
+>> diff --git a/drivers/gpu/drm/drm_fbdev_generic.c 
+>> b/drivers/gpu/drm/drm_fbdev_generic.c
+>> index 8e5148bf40bb..b057cfbba938 100644
+>> --- a/drivers/gpu/drm/drm_fbdev_generic.c
+>> +++ b/drivers/gpu/drm/drm_fbdev_generic.c
+>> @@ -94,7 +94,7 @@ static int drm_fbdev_generic_helper_fb_probe(struct 
+>> drm_fb_helper *fb_helper,
+>>       fb_helper->buffer = buffer;
+>>       fb_helper->fb = buffer->fb;
+>>   -    screen_size = buffer->gem->size;
+>> +    screen_size = sizes->surface_height * buffer->fb->pitches[0];
+>
+> I guess we simply go back to this line. I'd R-b a patch that does 
+> exactly this.
+>
+> But some explanation is in order. Maybe you can add this as a comment 
+> to the computation, as it's not obvious:
+>
+> The value of screen_size should actually be the size of the gem 
+> buffer. In a physical framebuffer (i.e., video memory), the size would 
+> be a multiple of the page size, but not necessarily a multiple of the 
+> screen resolution. There are also pan fbdev's operations, and we could 
+> possibly use DRM buffers that are not multiples of the screen width. 
+> But the update code requires the use of drm_framebuffer_funcs.dirty, 
+> which takes a clipping rectangle and therefore doesn't work well with 
+> these odd values for screen_size.
+>
+> Best regards
+> Thomas
+>
+>>       screen_buffer = vzalloc(screen_size);
+>>       if (!screen_buffer) {
+>>           ret = -ENOMEM;
+>
