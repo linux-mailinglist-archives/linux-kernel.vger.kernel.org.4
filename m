@@ -2,59 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1E286E22B4
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 13:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED9576E22B6
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 13:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbjDNLzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 07:55:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51250 "EHLO
+        id S229752AbjDNL4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 07:56:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbjDNLzs (ORCPT
+        with ESMTP id S230211AbjDNLz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 07:55:48 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02FFA3A8D;
-        Fri, 14 Apr 2023 04:55:47 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PyZXj4Qc2z67Ct2;
-        Fri, 14 Apr 2023 19:51:17 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 14 Apr
- 2023 12:55:44 +0100
-Date:   Fri, 14 Apr 2023 12:55:43 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Robert Richter <rrichter@amd.com>
-CC:     Ira Weiny <ira.weiny@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Terry Bowman <terry.bowman@amd.com>,
-        <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
-        <bwidawsk@kernel.org>, <dan.j.williams@intel.com>,
-        <dave.jiang@intel.com>, <linux-cxl@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        "Mahesh J Salgaonkar" <mahesh@linux.ibm.com>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH v3 6/6] PCI/AER: Unmask RCEC internal errors to enable
- RCH downstream port error handling
-Message-ID: <20230414125543.000021f6@Huawei.com>
-In-Reply-To: <ZDk3QeWZDOP8sr4s@rric.localdomain>
-References: <20230411180302.2678736-7-terry.bowman@amd.com>
-        <20230412212901.GA81099@bhelgaas>
-        <20230413180122.00007471@Huawei.com>
-        <643887b44b2d4_3a1882949d@iweiny-mobl.notmuch>
-        <ZDk3QeWZDOP8sr4s@rric.localdomain>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Fri, 14 Apr 2023 07:55:57 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E52AEA25D;
+        Fri, 14 Apr 2023 04:55:54 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DBB1F2F4;
+        Fri, 14 Apr 2023 04:56:38 -0700 (PDT)
+Received: from [10.57.19.162] (unknown [10.57.19.162])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2365E3F587;
+        Fri, 14 Apr 2023 04:55:52 -0700 (PDT)
+Message-ID: <9ee941ae-ae22-f14b-4e69-f81b29bbba4b@arm.com>
+Date:   Fri, 14 Apr 2023 13:55:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [ANNOUNCE] v6.3-rc2-rt3
+Content-Language: en-US
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <20230314170502.OHw1_FK3@linutronix.de>
+ <20230314171231.jwtham4a@linutronix.de>
+From:   Pierre Gondois <pierre.gondois@arm.com>
+In-Reply-To: <20230314171231.jwtham4a@linutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,121 +48,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Apr 2023 13:21:37 +0200
-Robert Richter <rrichter@amd.com> wrote:
+Hello Sebastian,
+The following appears between v6.3-rc2-rt2 and v6.3-rc2-rt3,
+it is probably due to b111e33ae076 ("printk: Update John's printk series.")
 
-> On 13.04.23 15:52:36, Ira Weiny wrote:
-> > Jonathan Cameron wrote:  
-> > > On Wed, 12 Apr 2023 16:29:01 -0500
-> > > Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > >   
-> > > > On Tue, Apr 11, 2023 at 01:03:02PM -0500, Terry Bowman wrote:  
-> > > > > From: Robert Richter <rrichter@amd.com>
-> > > > >   
+=============================
+[ BUG: Invalid wait context ]
+6.3.0-rc5-rt8-gacb52bd349a2 #417 Not tainted
+-----------------------------
+swapper/0/1 is trying to lock:
+ffff00097eea1180 (cpu){....}-{3:3}, at: __printk_safe_enter (kernel/printk/printk_safe.c:28 (discriminator 3))
+other info that might help us debug this:
+context-{5:5}
+1 lock held by swapper/0/1:
+#0: ffff80000ba77028 (rcu_tasks_rude.cbs_gbl_lock){....}-{2:2}, at: cblist_init_generic (kernel/rcu/tasks.h:233)
+stack backtrace:
+CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.3.0-rc5-rt8-gacb52bd349a2 #417
+Hardware name: ARM Juno development board (r2) (DT)
+Call trace:
+dump_backtrace (arch/arm64/kernel/stacktrace.c:160)
+show_stack (arch/arm64/kernel/stacktrace.c:167)
+dump_stack_lvl (lib/dump_stack.c:107)
+dump_stack (lib/dump_stack.c:114)
+__lock_acquire (kernel/locking/lockdep.c:4710)
+lock_acquire (./arch/arm64/include/asm/percpu.h:40)
+__printk_safe_enter (./include/linux/local_lock_internal.h:30 (discriminator 3))
+__down_trylock_console_sem (kernel/printk/printk.c:327)
+console_trylock (kernel/printk/printk.c:2710 (discriminator 4))
+vprintk_emit (kernel/printk/printk.c:1960)
+vprintk_default (kernel/printk/printk.c:2367)
+vprintk (kernel/printk/printk_safe.c:69)
+_printk (kernel/printk/printk.c:2380)
+cblist_init_generic (kernel/rcu/tasks.h:236)
+rcu_init_tasks_generic (kernel/rcu/tasks.h:1142)
+kernel_init_freeable (./arch/arm64/include/asm/jump_label.h:21)
+kernel_init (init/main.c:1530)
+ret_from_fork (arch/arm64/kernel/entry.S:871)
+
+Regards,
+Pierre
+
+On 3/14/23 18:12, Sebastian Andrzej Siewior wrote:
+> On 2023-03-14 18:05:04 [+0100], To Thomas Gleixner wrote:
+>> Dear RT folks!
+>>
+>> I'm pleased to announce the v6.3-rc2-rt3 patch set.
+>>
+>> Changes since v6.3-rc2-rt2:
+>>
+>>    - The i915 and other driver using io_mapping_map_atomic_wc() function
+>>      could deadlock. Reported by Richard Weinberger.
+>>
+>>    - A larger printk rework by John Ogness. This printk series is based
+>>      on the latest work by John and most of the patches have been
+>>      submitted for upstream review.
+>>      As in the previous version the concept of an atomic console
+>>      remained. That means a crash (BUG(), panic(), …) without a atomic
+>>      console driver remains invisible on PREEMPT_RT. The only available
+>>      atomic console driver is the 8250 UART and has been tested on X86.
+>>
+>> Known issues
+>>       - Crystal Wood reported that a filesystem (XFS) may deadlock while
+>>         flushing during schedule.
+>>
+>> The delta patch against v6.3-rc2-rt2 is appended below and can be found here:
+>>   
+>>       https://cdn.kernel.org/pub/linux/kernel/projects/rt/6.3/incr/patch-6.3-rc2-rt2-rt3.patch.xz
+>>
+>> You can get this release via the git tree at:
+>>
+>>      git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git v6.3-rc2-rt3
+>>
+>> The RT patch against v6.3-rc2 can be found here:
+>>
+>>      https://cdn.kernel.org/pub/linux/kernel/projects/rt/6.3/older/patch-6.3-rc2-rt3.patch.xz
+>>
+>> The split quilt queue is available at:
+>>
+>>      https://cdn.kernel.org/pub/linux/kernel/projects/rt/6.3/older/patches-6.3-rc2-rt3.tar.xz
 > 
-> > > > > +static int __cxl_unmask_internal_errors(struct pci_dev *rcec)
-> > > > > +{
-> > > > > +	int aer, rc;
-> > > > > +	u32 mask;
-> > > > > +
-> > > > > +	/*
-> > > > > +	 * Internal errors are masked by default, unmask RCEC's here
-> > > > > +	 * PCI6.0 7.8.4.3 Uncorrectable Error Mask Register (Offset 08h)
-> > > > > +	 * PCI6.0 7.8.4.6 Correctable Error Mask Register (Offset 14h)
-> > > > > +	 */    
-> > > > 
-> > > > Unmasking internal errors doesn't have anything specific to do with
-> > > > CXL, so I don't think it should have "cxl" in the function name.
-> > > > Maybe something like "pci_aer_unmask_internal_errors()".  
-> > > 
-> > > This reminds me.  Not sure we resolved earlier discussion on changing
-> > > the system wide policy to turn these on 
-> > > https://lore.kernel.org/linux-cxl/20221229172731.GA611562@bhelgaas/
-> > > which needs pretty much the same thing.
-> > > 
-> > > Ira, I think you were picking this one up?
-> > > https://lore.kernel.org/linux-cxl/63e5fb533f304_13244829412@iweiny-mobl.notmuch/  
-> > 
-> > After this discussion I posted an RFC to enable those errors.
-> > 
-> > https://lore.kernel.org/all/20230209-cxl-pci-aer-v1-1-f9a817fa4016@intel.com/
-> > 
-
-Ah. I'd forgotten that thread. Thanks!
-
-> > Unfortunately the prevailing opinion was that this was unsafe.  And no one
-> > piped up with a reason to pursue the alternative of a pci core call to enable
-> > them as needed.
-> > 
-> > So I abandoned the work.
-> > 
-> > I think the direction things where headed was to have a call like:
-> > 
-> > int pci_enable_pci_internal_errors(struct pci_dev *dev)
-> > {
-> > 	int pos_cap_err;
-> > 	u32 reg;
-> > 
-> > 	if (!pcie_aer_is_native(dev))
-> > 		return -EIO;
-> > 
-> > 	pos_cap_err = dev->aer_cap;
-> > 
-> > 	/* Unmask correctable and uncorrectable (non-fatal) internal errors */
-> > 	pci_read_config_dword(dev, pos_cap_err + PCI_ERR_COR_MASK, &reg);
-> > 	reg &= ~PCI_ERR_COR_INTERNAL;
-> > 	pci_write_config_dword(dev, pos_cap_err + PCI_ERR_COR_MASK, reg);
-> > 	
-> > 	pci_read_config_dword(dev, pos_cap_err + PCI_ERR_UNCOR_SEVER, &reg);
-> > 	reg &= ~PCI_ERR_UNC_INTN;
-> > 	pci_write_config_dword(dev, pos_cap_err + PCI_ERR_UNCOR_SEVER, reg);
-> > 	
-> > 	pci_read_config_dword(dev, pos_cap_err + PCI_ERR_UNCOR_MASK, &reg);
-> > 	reg &= ~PCI_ERR_UNC_INTN;
-> > 	pci_write_config_dword(dev, pos_cap_err + PCI_ERR_UNCOR_MASK, reg);
-> > 
-> > 	return 0;
-> > }
-> > 
-> > ... and call this from the cxl code where it is needed.  
+> This email didn't pass the size restriction on linux-rt-users@ so this
+> is just a small ping that this release happened. The whole email is in
+> the archive:
+> 	https://lore.kernel.org/20230314170502.OHw1_FK3@linutronix.de
+>   
+> Sebastian
 > 
-> The version I have ready after addressing Bjorn's comments is pretty
-> much the same, apart from error checking of the read/writes.
-> 
-> From your patch proposed you will need it in aer.c too and we do not
-> need to export it.
-
-I think for the other components we'll want to call it from cxl_pci_ras_unmask()
-so an export needed.
-
-I also wonder if a more generic function would be better as seems likely
-similar code will be needed for errors other than this pair.
-
-
-> 
-> This patch only enables it for (CXL) RCECs. You might want to extend
-> this for CXL endpoints (and ports?) then.
-
-Definitely.  We have the same limitation you are seeing.  No errors
-without turning this on.
-
-Jonathan
-
-
-
-> 
-> > 
-> > Is this an acceptable direction?  Terry is welcome to steal the above from my
-> > patch and throw it into the PCI core.
-> > 
-> > Looking at the current state of things I think cxl_pci_ras_unmask() may
-> > actually be broken now without calling something like the above.  For that I
-> > dropped the ball.  
-> 
-> Thanks,
-> 
-> -Robert
-> 
-> > 
-> > Ira  
-
