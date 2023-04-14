@@ -2,149 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E20136E2135
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 12:45:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 426FC6E2112
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 12:38:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbjDNKo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 06:44:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51254 "EHLO
+        id S229744AbjDNKiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 06:38:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbjDNKo4 (ORCPT
+        with ESMTP id S229754AbjDNKiA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 06:44:56 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CEFE98
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 03:44:55 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50674656309so1009535a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 03:44:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681469094; x=1684061094;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=99/2Xzq1k3jGcxmT1pTlyb+0p5jdof1SmGadkZ956E8=;
-        b=gjpb92BJlyi8AdRk2tXb6yIbRjNjmhPIjGoUt2NuU0q+EpYqyo3wONGmRD1PvavfsD
-         3EMTmNpcRpfwkCowxOmjE+xlw7lf9vxOMlVAldE5s1EDeZcUPR4udR2V5FXv/lVgTU/a
-         OIKwB7dOGs+wSZw6Cv/dE8mXplb70MkLuDyhswOglpMEgRd9GkBuewhN+8oaW9urSnNk
-         rKYjQlFyRam2rXBVRQZ6Hu1fxxH9VWK5AxxvWPXVeGNQ6evxRnM3DaWxY1slE9kzT2ir
-         iyKN3Ql0FWU47U5IFa9tz4j3s9ROVKl37k+PnvumIYZONanbc84xGAnXCMu7sZw2fMv3
-         kpWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681469094; x=1684061094;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=99/2Xzq1k3jGcxmT1pTlyb+0p5jdof1SmGadkZ956E8=;
-        b=avouc+XHRXLWxDkwAlQyTvbvjuxB/iHKOrGp45RsfNPSVrTUosvVPPJJbQ6UYuTJ/h
-         nEnKJZwa7ipqTTuRpmsx56BYWp0q9dXoguuNU42SGEzuKqKJSHnPK9Cvhu4eh61VqW6P
-         K88Z+eWNYoB1WFw6gs6L09d11RorvnwYx/CUCrTbqpjBubLgggIO1x1xDFVzIxieUqXO
-         8DdzgxUEjecv9cVo8SV6UmvLBEUA9KB+mwC3NWKJBGqXo2wQEr7MJyf3d2AQHLFsmGQ4
-         Q1aA8LSAMAGUSioNklHrLr5ceorro7QohElYo8Aun2IILC3sTPOxihRWcNAlgXcM26v+
-         0gsw==
-X-Gm-Message-State: AAQBX9e1CIU9XHJIXr35S3Ui+tXEI1zvz7uhkrzfJ6pWuTFhvlikYru3
-        9cRSx0GFR+BKmqNmaq/MfIViSA==
-X-Google-Smtp-Source: AKy350YAZ4ObREDPTqX+3sDjKddkzxLRFtcc0tjO/9BvuuaM+s0ApmwT+Uw7xC7rJqvbc3fYPtVPzQ==
-X-Received: by 2002:aa7:c04f:0:b0:504:aae4:a034 with SMTP id k15-20020aa7c04f000000b00504aae4a034mr5907943edo.31.1681469094005;
-        Fri, 14 Apr 2023 03:44:54 -0700 (PDT)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id o24-20020aa7c7d8000000b005067d089aafsm1003061eds.11.2023.04.14.03.44.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 03:44:53 -0700 (PDT)
-Message-ID: <6c01d2fc-3155-0dcd-f473-9cbd75dd69ec@linaro.org>
-Date:   Fri, 14 Apr 2023 11:44:51 +0100
+        Fri, 14 Apr 2023 06:38:00 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B254A9EDD
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 03:37:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681468647; x=1713004647;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CFmbTNZab9I7ir2+O5evjGn+3mmBidb0nlh8n5NmjpY=;
+  b=lZXwMaKFl3ROHVlfAfbpDdrbLtCg/JNpS4S4p1sYAT2N1zRoj7qjw4na
+   GjFuPltVvpZLmFqpoRK/a/chUo8sI3NCd8qnS+Q1tRpWzsWkJOUHp/wO5
+   HhjLKDxJ+/ety0mxu0ZUp8XyeTOVxYg5c1I0rvP/He7KVfNpBAfR9L8Oq
+   3m9wMU8sKx3OoKsTLUVB2Mw/w2Wf7erRsyw/iDJkGXmuW7JNmsfZuP33v
+   xPF1BQuDMOA8yejxDHPzwfHGw9T43iIP9D/Z+yy59+jxOJE1Zu0SD8jNf
+   fb29gb5VJo/ys2senc50420F7qVTIpJdSWO9FnJZ/8wnjwW4njWDvsSyM
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="344433719"
+X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
+   d="scan'208";a="344433719"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 03:37:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="864170782"
+X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
+   d="scan'208";a="864170782"
+Received: from liuzhao-optiplex-7080.sh.intel.com (HELO localhost) ([10.239.160.28])
+  by orsmga005.jf.intel.com with ESMTP; 14 Apr 2023 03:37:07 -0700
+Date:   Fri, 14 Apr 2023 18:45:57 +0800
+From:   Zhao Liu <zhao1.liu@linux.intel.com>
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Thomas =?iso-8859-1?Q?Hellstr=F6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Nirmoy Das <nirmoy.das@intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Zhenyu Wang <zhenyu.z.wang@intel.com>,
+        Zhao Liu <zhao1.liu@intel.com>
+Subject: Re: [PATCH v2 9/9] drm/i915: Use kmap_local_page() in
+ gem/i915_gem_execbuffer.c
+Message-ID: <ZDku5SJhl2Ve51UC@liuzhao-OptiPlex-7080>
+References: <20230329073220.3982460-1-zhao1.liu@linux.intel.com>
+ <64265ef8725fe_375f7e294a@iweiny-mobl.notmuch>
+ <fdc8a470-1e6b-815d-e367-a9df1b0b14dd@linux.intel.com>
+ <2177327.1BCLMh4Saa@suse>
+ <1b341218-f0e2-a613-2ac6-107064a813ca@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 6/6] remoterproc: qcom: refactor to leverage exported
- minidump symbol
-Content-Language: en-US
-To:     Mukesh Ojha <quic_mojha@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, corbet@lwn.net,
-        keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
-        catalin.marinas@arm.com, will@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org
-References: <1679491817-2498-1-git-send-email-quic_mojha@quicinc.com>
- <1679491817-2498-7-git-send-email-quic_mojha@quicinc.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <1679491817-2498-7-git-send-email-quic_mojha@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1b341218-f0e2-a613-2ac6-107064a813ca@linux.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Tvrtko,
 
+On Wed, Apr 12, 2023 at 04:45:13PM +0100, Tvrtko Ursulin wrote:
 
-On 22/03/2023 13:30, Mukesh Ojha wrote:
-> qcom_minidump driver provides qcom_minidump_subsystem_desc()
-> exported API which other driver can use it query subsystem
-> descriptor. Refactor qcom_minidump() to use this symbol.
+[snip]
+
+> > 
+> > [snip]
+> > > However I am unsure if disabling pagefaulting is needed or not. Thomas,
+> > > Matt, being the last to touch this area, perhaps you could have a look?
+> > > Because I notice we have a fallback iomap path which still uses
+> > > io_mapping_map_atomic_wc. So if kmap_atomic to kmap_local conversion is
+> > > safe, does the iomap side also needs converting to
+> > > io_mapping_map_local_wc? Or they have separate requirements?
+> > 
+> > AFAIK, the requirements for io_mapping_map_local_wc() are the same as for
+> > kmap_local_page(): the kernel virtual address is _only_ valid in the caller
+> > context, and map/unmap nesting must be done in stack-based ordering (LIFO).
+> > 
+> > I think a follow up patch could safely switch to io_mapping_map_local_wc() /
+> > io_mapping_unmap_local_wc since the address is local to context.
+> > 
+> > However, not being an expert, reading your note now I suspect that I'm missing
+> > something. Can I ask why you think that page-faults disabling might be
+> > necessary?
 > 
-> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> ---
->   drivers/remoteproc/qcom_common.c | 13 ++-----------
->   1 file changed, 2 insertions(+), 11 deletions(-)
+> I am not saying it is, was just unsure and wanted some people who worked on this code most recently to take a look and confirm.
 > 
-> diff --git a/drivers/remoteproc/qcom_common.c b/drivers/remoteproc/qcom_common.c
-> index 88fc984..240e9f7 100644
-> --- a/drivers/remoteproc/qcom_common.c
-> +++ b/drivers/remoteproc/qcom_common.c
-> @@ -94,19 +94,10 @@ void qcom_minidump(struct rproc *rproc, unsigned int minidump_id,
->   {
->   	int ret;
->   	struct minidump_subsystem *subsystem;
-> -	struct minidump_global_toc *toc;
->   
-> -	/* Get Global minidump ToC*/
-> -	toc = qcom_smem_get(QCOM_SMEM_HOST_ANY, SBL_MINIDUMP_SMEM_ID, NULL);
-> -
-> -	/* check if global table pointer exists and init is set */
-> -	if (IS_ERR(toc) || !toc->status) {
-> -		dev_err(&rproc->dev, "Minidump TOC not found in SMEM\n");
-> +	subsystem = qcom_minidump_subsystem_desc(minidump_id);
-> +	if (IS_ERR(subsystem))
->   		return;
+> I guess it will work since the copying is done like this anyway:
+> 
+> 		/*
+> 		 * This is the fast path and we cannot handle a pagefault
+> 		 * whilst holding the struct mutex lest the user pass in the
+> 		 * relocations contained within a mmaped bo. For in such a case
+> 		 * we, the page fault handler would call i915_gem_fault() and
+> 		 * we would try to acquire the struct mutex again. Obviously
+> 		 * this is bad and so lockdep complains vehemently.
+> 		 */
+> 		pagefault_disable();
+> 		copied = __copy_from_user_inatomic(r, urelocs, count * sizeof(r[0]));
+> 		pagefault_enable();
+> 		if (unlikely(copied)) {
+> 			remain = -EFAULT;
+> 			goto out;
+> 		}
+> 
+> Comment is a bit outdated since we don't use that global "struct mutex" any longer, but in any case, if there is a page fault on the mapping where we need to recurse into i915 again to satisfy if, we seem to have code already to handle it. So kmap_local conversion I *think* can't regress anything.
 
-Sorry If I am missing something but I got lost looking at the below code 
-snippet in drivers/remoteproc/qcom_common.c
+Thanks for your explanation!
 
+> 
+> Patch to convert the io_mapping_map_atomic_wc can indeed come later.
 
--------------------->cut<-----------------------------
-	subsystem = qcom_minidump_subsystem_desc(minidump_id);
-	if (IS_ERR(subsystem))
-		return;
+Okay, I will also look at this.
 
-	/**
-	 * Collect minidump if SS ToC is valid and segment table
-	 * is initialized in memory and encryption status is set.
-	 */
-	if (subsystem->regions_baseptr == 0 ||
-	    le32_to_cpu(subsystem->status) != 1 ||
-	    le32_to_cpu(subsystem->enabled) != MINIDUMP_SS_ENABLED ||
-	    le32_to_cpu(subsystem->encryption_status) != MINIDUMP_SS_ENCR_DONE) {
-		dev_err(&rproc->dev, "Minidump not ready, skipping\n");
-		return;
-	}
--------------------->cut<-----------------------------
+> 
+> In terms of logistics - if we landed this series to out branch it would be queued only for 6.5. Would that work for you?
 
-where does "subsystem->regions_baseptr" for this ADSP minidump 
-descriptor get set?
+Yeah, it's ok for me. But could I ask, did I miss the 6.4 merge time?
 
+Thanks,
+Zhao
 
---srini
-
-> -	}
-> -
-> -	/* Get subsystem table of contents using the minidump id */
-> -	subsystem = &toc->subsystems[minidump_id];
->   
->   	/**
->   	 * Collect minidump if SS ToC is valid and segment table
+> 
+> Regards,
+> 
+> Tvrtko
