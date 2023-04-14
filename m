@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BAA66E26D3
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 17:24:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D9926E26DB
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 17:25:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbjDNPYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 11:24:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
+        id S231265AbjDNPYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 11:24:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbjDNPYh (ORCPT
+        with ESMTP id S230182AbjDNPYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 14 Apr 2023 11:24:37 -0400
 Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B15AD37;
-        Fri, 14 Apr 2023 08:24:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD30AF25;
+        Fri, 14 Apr 2023 08:24:36 -0700 (PDT)
 Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 211AC5FD26;
+        by mx.sberdevices.ru (Postfix) with ESMTP id ECF2C5FD27;
         Fri, 14 Apr 2023 18:24:34 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1681485874;
-        bh=C6RAhM5A4BPHpRvqPC3ioWTgfct9Luzmkm/GQUTL3y8=;
+        s=mail; t=1681485875;
+        bh=LsFSCOE/U7ctFiRSO+kttWX/RvhA2tL+4PMkcrQ5e54=;
         h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-        b=CkyiC5UmgoUazTCGzdnnbsZ1pUZ0e/fl8OQhoq4l4f4JFm6e1MN3YKe81/0NaZycv
-         2yUexAzAxh4o0hqFRzrMT2NFjbqywU3XnzTfdqI5tqKfPVfwKp9dFuCJ8/jsRUE+eM
-         qnBVd+4Ddbkwp8StXJqDlSvl1LZHA7bpgU3cAmZ9Q3EJrbOwKknyKA7gHxSkiHHh/N
-         eNmROGlk0ILOQNtPQjvGBTq4OvL0C7+R7Rf8DVBBMR/QX1BuKdCIE+CaX06aZZEww6
-         xoIy35K14SXnltaFUikrxeX/WTpDaCGhfmTiMfo89BtMWR8+FFqkkdfgoIYYg2t62M
-         tDm104Yj+iB4w==
+        b=DCPYUaMz60Nl/RmT7yM88Yzy3adQ6G3ZPztlvKLMMHmWigHQ74VVmrsOIRibpLc2m
+         cCwojrhnuzPzkEay4O5INDE2OsrP+FNrLfxgBV+GDOfP9YpUYQSuyX2p5yMux2crDp
+         8srpJotp+JwjAzegvx1/WjvvuR/MlcKPrgfEZZ04+XLMSuCRHiENWA9jIfWIrOAa9m
+         eQJ/Mho4V+V6Hk4yCrseev6BCxZyc0+0vwTxFX2mJLXmGUnw9NZ8aOGK4xByKUNVnI
+         M2uVFDtZkSCjSzLx4V2L9OoWsk7v9ogaueGA+/bEeK4rF/W7tTGLfnJBSRu0g6UX8T
+         tfik05VQ2pe1A==
 Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
         by mx.sberdevices.ru (Postfix) with ESMTP;
         Fri, 14 Apr 2023 18:24:34 +0300 (MSK)
@@ -46,9 +46,9 @@ CC:     <yue.wang@amlogic.com>, <hanjie.lin@amlogic.com>,
         <linux-amlogic@lists.infradead.org>,
         <linux-phy@lists.infradead.org>,
         Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Subject: [PATCH v1 3/5] dt-bindings: usb: dwc2: add support for Amlogic A1 SoC USB peripheral
-Date:   Fri, 14 Apr 2023 18:24:21 +0300
-Message-ID: <20230414152423.19842-4-ddrokosov@sberdevices.ru>
+Subject: [PATCH v1 4/5] usb: dwc3-meson-g12a: support OTG switch
+Date:   Fri, 14 Apr 2023 18:24:22 +0300
+Message-ID: <20230414152423.19842-5-ddrokosov@sberdevices.ru>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20230414152423.19842-1-ddrokosov@sberdevices.ru>
 References: <20230414152423.19842-1-ddrokosov@sberdevices.ru>
@@ -74,26 +74,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Provide the appropriate compatible string for the DWC2 IP that is found
-inside the Amlogic A1 SoC and used in peripheral mode.
+From now, the Amlogic A1 USB controller is capable of switching between
+host and gadget modes, based on the status of the OTG_ID signal or
+by manual usb role changing.
 
 Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
 ---
- Documentation/devicetree/bindings/usb/dwc2.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/dwc3/dwc3-meson-g12a.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml b/Documentation/devicetree/bindings/usb/dwc2.yaml
-index 371ba93f3ce5..f70be397dac0 100644
---- a/Documentation/devicetree/bindings/usb/dwc2.yaml
-+++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
-@@ -53,6 +53,7 @@ properties:
-               - amlogic,meson8b-usb
-               - amlogic,meson-gxbb-usb
-               - amlogic,meson-g12a-usb
-+              - amlogic,meson-a1-usb
-               - intel,socfpga-agilex-hsotg
-           - const: snps,dwc2
-       - const: amcc,dwc-otg
+diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
+index b282ad0e69c6..10469b95deb9 100644
+--- a/drivers/usb/dwc3/dwc3-meson-g12a.c
++++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
+@@ -242,7 +242,7 @@ static const struct dwc3_meson_g12a_drvdata g12a_drvdata = {
+ };
+ 
+ static const struct dwc3_meson_g12a_drvdata a1_drvdata = {
+-	.otg_switch_supported = false,
++	.otg_switch_supported = true,
+ 	.clks = meson_a1_clocks,
+ 	.num_clks = ARRAY_SIZE(meson_a1_clocks),
+ 	.phy_names = meson_a1_phy_names,
 -- 
 2.36.0
 
