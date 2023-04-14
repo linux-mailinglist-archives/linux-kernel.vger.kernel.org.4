@@ -2,126 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E4E96E2DB0
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 01:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 954ED6E2DB9
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 01:54:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbjDNXvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 19:51:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35224 "EHLO
+        id S230260AbjDNXyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 19:54:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbjDNXvp (ORCPT
+        with ESMTP id S229992AbjDNXyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 19:51:45 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57C2A5F2
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 16:51:08 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-54c12009c30so477184827b3.9
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 16:51:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681516171; x=1684108171;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=No46jFhwGzkRNUpDWHs00ERh1TJYKH/sOU4hg7TOFIE=;
-        b=Y/0uIWDs7JruwuGPhftvVUvAzBHjysvv1C0uwnnnVgunNCWugJF0fxx/j8VtpL3PC7
-         9BXu7sZfji0Pu6jLEcV/0u29Xo1y2q1nj0v/aNx3D/ypJm9uYLeZF9jXSsvWJdUBYspV
-         673r1xgprfwfvd6GClwVeNSByKcn6KXpd9QvzA0L5jMD5f4c/VAOJuCL/tiQvGkONU0s
-         RgNUrvI9FzV6Xx2agJunBEoHwNpTHpKkHtVgH0itjcK/lrCwUK36Zd0VHREE40zNJd4v
-         dFNu7TbC2ag8TlFU5sPT5DKIJV3d5ifyvVGn+4PjLrRDzpaLjo5fUK/3uFUA7gViZyDe
-         cBaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681516171; x=1684108171;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=No46jFhwGzkRNUpDWHs00ERh1TJYKH/sOU4hg7TOFIE=;
-        b=Q//lpKPeHJ/1AIceBHHR1oVnIyXGHLSWHAk3QTip7+GkMiqpKz74mLzTgrgWYbnIbf
-         mmXVULL9ZqCDbPs3v+L/SJAlbfXux0y0YGBafZzLT7LiGrFfZ6vX6Js9Qj9EXWQxcZ/6
-         glrrlov2qCV4u6Xwz9mhqE0tkrGAsVv1Pc5nMOrIfesNk6scNQO7JL/8MM4esBAMzNp2
-         qwMI9aILr0hQoWDuxJZmsPcFohMTMPOTXw3WS0mKHQYWenQTnNyQaUUjeOZX+IJBx4GO
-         ZbE/wQNDESHa68bVK7jsp9ZprXVQlKPZ/lOjDinHQ2qD3H1RiKHgVwTR1npCwhLg16pF
-         O10Q==
-X-Gm-Message-State: AAQBX9eb1IZcJNer2QDj0kk0MZ6ewY7XIlunj+zlsXaJowiKQPmy9Fuy
-        fJxco/POCsGo3gHg4X79SmAg1+s/qDfDLhRuNSeECg==
-X-Google-Smtp-Source: AKy350bSj1CSWDY36bOsJSsoidHfrQ6bQV1QcvO4pqangbXIyw9XYy4patdK5PqOcIhIsOqfrXxeZSv8RhGW+y1n/iA=
-X-Received: by 2002:a81:af0c:0:b0:54f:8566:495 with SMTP id
- n12-20020a81af0c000000b0054f85660495mr4919497ywh.1.1681516170910; Fri, 14 Apr
- 2023 16:49:30 -0700 (PDT)
+        Fri, 14 Apr 2023 19:54:17 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF0793D1;
+        Fri, 14 Apr 2023 16:53:46 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33ENptmX011152;
+        Fri, 14 Apr 2023 23:51:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=jHvAxjkdL/HjWOyVkv+jOZ+uyiOMVqkZtrZjxFJDsMI=;
+ b=Xe9iIcAssZ6zEHMU3av53ux9RcThmIpf0m4Pfad9oOa8BVLIJdVbWb/VvLcYoitm4g0u
+ vBcAR3dvzQ1TyFWEKrdzMWou9zQm28V8HQM0R4NB73CyjT+LkFdy6habgKVG8yy4Ya7J
+ hTu/+COLVBler97rak68KQSW8/IDAcYJPSDhqqcLn0Nxj6DVIL+Y5RPV9iLPjgts/9Bm
+ o++UlFK+MaF0h3lKUlm2uiTSaKXp993zAP+x/tasHGIpNliHCWyNzv9Z+wJFfMUEDAjX
+ e+NfEf+O3UyjgeiRWec7AXFUUWKItngH9W5Q/Uuxbu9Vqo9dEbgocnNjAvyUur24OPPg sQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3py4ghsh0q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 23:51:55 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33ENpsim007919
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 23:51:54 GMT
+Received: from [10.110.73.215] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 14 Apr
+ 2023 16:51:52 -0700
+Message-ID: <8c3a210a-200b-eb1d-e39a-8aad15d790f4@quicinc.com>
+Date:   Fri, 14 Apr 2023 16:51:52 -0700
 MIME-Version: 1.0
-References: <20230414175444.1837474-1-surenb@google.com> <ZDnJ1dOU2tpK6l68@x1n>
- <CAJuCfpFc2SohkkJnEFqZD-uCpSS9sUzToPcQXOR6dHTTE0Ty5w@mail.gmail.com> <ZDnVETTFus3BFLxH@x1n>
-In-Reply-To: <ZDnVETTFus3BFLxH@x1n>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Fri, 14 Apr 2023 16:49:19 -0700
-Message-ID: <CAJuCfpH278ozvhz=z4W0d6TxY6HhrORbsBPFM5d4x1M=EM23WQ@mail.gmail.com>
-Subject: Re: [PATCH 1/1] mm: do not increment pgfault stats when page fault
- handler retries
-To:     Peter Xu <peterx@redhat.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
-        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
-        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [Freedreno] [PATCH] drm/msm/dpu: always program dsc active bits
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+CC:     <freedreno@lists.freedesktop.org>, <quic_sbillaka@quicinc.com>,
+        <dianders@chromium.org>, <airlied@gmail.com>,
+        <andersson@kernel.org>, <robdclark@gmail.com>,
+        <dri-devel@lists.freedesktop.org>, <swboyd@chromium.org>,
+        <vkoul@kernel.org>, <agross@kernel.org>, <daniel@ffwll.ch>,
+        <linux-arm-msm@vger.kernel.org>, <dmitry.baryshkov@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>, <sean@poorly.run>,
+        <linux-kernel@vger.kernel.org>
+References: <1681247095-1201-1-git-send-email-quic_khsieh@quicinc.com>
+ <z7wj2lcgcdxsqh7ylhec3ig6o4p6q37zqvpzoxp4bd4vid2z2n@ubsgt3ebqrwr>
+ <83f9a438-52c5-83f3-1767-92d16518d8f0@quicinc.com>
+ <feedv4isliterjtwyicqfarwuvzhtov3jkmvjcwqvt7itkyh7y@e2jq5t6r3lxc>
+ <e78e576a-2a04-e7ca-f6c4-701d508541ad@quicinc.com>
+ <mfzi535qsjtcznwdvgb7qyzk25rcsrkwozah6ji4thqsj73n3m@asybxllomisg>
+ <049697ba-d997-62c0-6e21-ffb287ac3100@quicinc.com>
+ <6s42sutrd2c6tme46t6tchd6y6wonmpwokseqqz2frkrfext7v@vnv44tzwyva4>
+ <82bf6167-d621-1a4e-86f0-7a8567347722@quicinc.com>
+ <2e6dwt74oyy7rroxyus6ebfbylbbtinsi7bccpqazjm64owiv4@gfs52kkq47c3>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <2e6dwt74oyy7rroxyus6ebfbylbbtinsi7bccpqazjm64owiv4@gfs52kkq47c3>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: PZLiaLD6EH7fWozWA3HtMZB7Tg6axn4-
+X-Proofpoint-ORIG-GUID: PZLiaLD6EH7fWozWA3HtMZB7Tg6axn4-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-14_15,2023-04-14_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ mlxlogscore=999 malwarescore=0 bulkscore=0 phishscore=0 suspectscore=0
+ adultscore=0 mlxscore=0 clxscore=1015 lowpriorityscore=0
+ priorityscore=1501 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2304140210
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 14, 2023 at 3:35=E2=80=AFPM Peter Xu <peterx@redhat.com> wrote:
->
-> Hi, Suren,
->
-> On Fri, Apr 14, 2023 at 03:14:23PM -0700, Suren Baghdasaryan wrote:
-> > > It also already ignores invalid faults:
-> > >
-> > >         if (ret & (VM_FAULT_ERROR | VM_FAULT_RETRY))
-> > >                 return;
-> >
-> > Can there be a case of (!VM_FAULT_ERROR && VM_FAULT_RETRY) - basically
-> > we need to retry but no errors happened? If so then this condition
-> > would double-count pagefaults in such cases.
->
-> If ret=3D=3DVM_FAULT_RETRY it should return here already, so I assume
-> mm_account_fault() itself is fine regarding fault retries?
->
-> Note that I think "ret & (VM_FAULT_ERROR | VM_FAULT_RETRY)" above means
-> "either ERROR or RETRY we'll skip the accounting".
->
-> IMHO we should have 3 cases here:
->
->   - ERROR && !RETRY
->     error triggered of any kind
->
->   - RETRY && !ERROR
->     we need to try one more time
->
->   - !RETRY && !ERROR
->     we finished the fault
 
-After looking some more into mm_account_fault(), I think it would be
-fine to count the faults which produced errors. IIUC these counters
-represent the total number of faults, not the number of valid and
-successful faults. If so then I think simply using VM_FAULT_RETRY
-should be ok without considering all possible combinations. WDYT?
 
->
-> I don't think ERROR & RETRY can even be set at the same time so I assume
-> there's no option 4) - a RETRY should imply no ERROR already, even though
-> it's still incomplete so need another attempt.
->
-> Thanks,
->
-> --
-> Peter Xu
->
+On 4/14/2023 4:11 PM, Marijn Suijten wrote:
+> On 2023-04-14 10:57:45, Abhinav Kumar wrote:
+>> On 4/14/2023 10:34 AM, Marijn Suijten wrote:
+>>> On 2023-04-14 08:48:43, Abhinav Kumar wrote:
+>>>> On 4/14/2023 12:35 AM, Marijn Suijten wrote:
+>>>>> On 2023-04-12 10:33:15, Abhinav Kumar wrote:
+>>>>> [..]
+>>>>>>> What happens if a device boots without DSC panel connected?  Will
+>>>>>>> CTL_DSC_FLUSH be zero and not (unnecessarily, I assume) flush any of the
+>>>>>>> DSC blocks?  Or could this flush uninitialized state to the block?
+>>>>>>
+>>>>>> If we bootup without DSC panel connected, the kernel's cfg->dsc will be
+>>>>>> 0 and default register value of CTL_DSC_FLUSH will be 0 so it wont flush
+>>>>>> any DSC blocks.
+>>>>>
+>>>>> Ack, that makes sense.  However, if I connect a DSC panel, then
+>>>>> disconnect it (now the register should be non-zero, but cfg->dsc will be
+>>>>> zero), and then replug a non-DSC panel multiple times, it'll get flushed
+>>>>> every time because we never clear CTL_DSC_FLUSH after that?
+>>>>
+>>>> If we remove it after kernel starts, that issue is there even today
+>>>> without that change because DSI is not a hot-pluggable display so a
+>>>> teardown wont happen when you plug out the panel. How will cfg->dsc be 0
+>>>> then? In that case, its not a valid test as there was no indication to
+>>>> DRM that display was disconnected so we cannot tear it down.
+>>>
+>>> The patch description itself describes hot-pluggable displays, which I
+>>> believe is the upcoming DSC support for DP?  You ask how cfg->dsc can
+>>> become zero, but this is **exactly** what the patch description
+>>> describes, and what this patch is removing the `if` for.  If we are not
+>>> allowed to discuss that scenario because it is not currently supported,
+>>> neither should we allow to apply this patch.
+>>>
+>>> With that in mind, can you re-answer the question?
+>>
+>> I didnt follow what needs to be re-answered.
+>>
+>> This patch is being sent in preparation of the DSC over DP support. This
+>> does not handle non-hotpluggable displays.
+> 
+> Good, because my question is specifically about *hotpluggable*
+> displays/panels like the upcoming DSC support for DP.  After all there
+> would be no point in me suggesting to connect and disconnect
+> non-hotpluggable displays and expect something sensible to happen,
+> wouldn't it?  Allow me to copy-paste the question again for convenience,
+> with some minor wording changes:
+> 
+> 	However, if I connect a DSC DP display, then disconnect it (now the
+> 	register should be non-zero, but cfg->dsc will be zero), and then
+> 	connect and reconnect a non-DSC DP display multiple times, it'll get
+> 	flushed every time because we never clear CTL_DSC_FLUSH after that?
+> 
+> And the missing part is: would multiple flushes be harmful in this case?
+
+Well, you kept asking about "DSC panel" , that made me think you were 
+asking about a non-hotpluggable MIPI DSI DSC panel and not DP DSC 
+monitor. On many boards, panels can be removed/connected back to their 
+daughter card. The term "panel" confused me a bit.
+
+Now answering your question.
+
+Yes, it will get flushed once every hotplug thats not too bad but 
+importantly DSC wont be active as CTL_DSC_ACTIVE will be set to 0 so it 
+wont cause any issue.
+
+
+>> I do not think dynamic switch
+>> between DSC and non-DSC of non-hotpluggable displays needs to be
+>> discussed here as its not handled at all with or without this patch.
+>>
+>> We wanted to get early reviews on the patch. If you want this patch to
+>> be absorbed when rest of DSC over DP lands, I have no concerns with
+>> that. I wont pick this up for fixes and we will land this together with
+>> the rest of DP over DSC.
+> 
+> I don't mind when and where this lands, just want to have the semantics
+> clear around persisting the value of CTL_DSC_FLUSh in the register.
+> 
+> Regardless, this patch doesn't sound like a fix but a workaround until
+> reset_intf_cfg() is fixed to be called at the right point, and extended
+> to clear CTL_DSC_ACTIVE and flush the DSCs.  Perhaps it shouldn't have a
+> Fixes: tag for that reason, as you intend to reinstate this
+> if (cfg->dsc) condition when that is done?
+> 
+
+Its certainly fixing the use-case of DSC to non-DSC switching. So it is 
+a fix.
+
+But yes not the best fix possible. We have to improve it by moving this 
+to reset_intf_cfg() as I already committed to.
+
+
+> - Marijn
