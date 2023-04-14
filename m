@@ -2,72 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D7C6E19E7
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 03:58:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAFCD6E19EB
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 03:59:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbjDNB6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 21:58:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35320 "EHLO
+        id S229753AbjDNB7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 21:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjDNB6q (ORCPT
+        with ESMTP id S229601AbjDNB7s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 21:58:46 -0400
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E6E3C15;
-        Thu, 13 Apr 2023 18:58:44 -0700 (PDT)
-Received: by mail-vs1-xe33.google.com with SMTP id bs12so4110372vsb.1;
-        Thu, 13 Apr 2023 18:58:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681437523; x=1684029523;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dl2518gfS/Q1UTQTLUFTF13BLaNUhIq99/jZxFoVTE8=;
-        b=dbFOmnvXWendtqHNWAnIIVQIAq5jJpuLDcEXgMFqI9KaQWq7P5E/IYMfFyG4lMrryj
-         GWiDAIG7yiXx2GbkQLiJcfm4WP7f+TG/jGVIdYV4/kv7atqDhOZwQiQEEhLBFxEJyNNJ
-         Uf0nPRy0nNqI7zzcmYYtMATxZgrJhhcrCAWm0USCkRQvkzupQVv5xNqjv00vGBGzSE2Q
-         zU2QSSe4VhBo9fed9Z8lkZpM4K/6vsxBRt2jyGtFITzTK1Z3nvQ0gj/IY2wt7L4ugiog
-         xaGZQ+lkOAvAYeCxylJ7eET8v7HZVcFKyXIbKBsD9gkpBaDNBRcLaAtdYGlp12okckka
-         JRkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681437523; x=1684029523;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Dl2518gfS/Q1UTQTLUFTF13BLaNUhIq99/jZxFoVTE8=;
-        b=M9/Aqie5qRcpA8PFnzrnOe7NxNCodM+qwdu8qK5gYyVq2Hq/FJwjc6Ps5w7uh5cLbZ
-         Y/OFx1e2bkuRIeLD05/V8SZNakFx5yLWy2Mt6pfyau1mjSwfiaHz3zIk/yMQtxO9xRNO
-         Rfxk9bQXg9HkAh124kW7NMjqdBmjRArnBDowF4gqBbj9CKBrgiWxTW/jm1Nwkqgaei3l
-         60P8TnSHFVXg6Qz0Zwf+JxizaNGeTdQInM/VR/Y+ykmKL/cSD2KE9JutOeg39Lf3YcBV
-         KoD3UOTD38CXS1scCYJ+DU47J6e+w1/9bHImYGqHUaHLOTZKNJi1BT9ryXuaest/9Qtk
-         xMtA==
-X-Gm-Message-State: AAQBX9dWqLf9nlajDB5Of7HzDSKu5zd74PnkwptHgaNlKiIHruI9m6qP
-        4jAiEPt7fnDED6wBKZ0sTaihH5UcRpA4PJDIV0M=
-X-Google-Smtp-Source: AKy350aH2AiuehJLLHPE1eL6DWbiGgRPxKkogH1PjK+GLiQpdjGXhs2/nf2wZfpm5URgPMnp+kW/pzZBtynhNAxrCSM=
-X-Received: by 2002:a67:d496:0:b0:42e:3c2e:10bd with SMTP id
- g22-20020a67d496000000b0042e3c2e10bdmr590487vsj.1.1681437523577; Thu, 13 Apr
- 2023 18:58:43 -0700 (PDT)
+        Thu, 13 Apr 2023 21:59:48 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB6F3C30;
+        Thu, 13 Apr 2023 18:59:46 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id F27E48022;
+        Fri, 14 Apr 2023 09:59:44 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 14 Apr
+ 2023 09:59:45 +0800
+Received: from [192.168.125.131] (183.27.97.249) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 14 Apr
+ 2023 09:59:44 +0800
+Message-ID: <b41d8cf4-70aa-3b64-5254-46d92a188f63@starfivetech.com>
+Date:   Fri, 14 Apr 2023 09:58:47 +0800
 MIME-Version: 1.0
-References: <20230412-increase_ipvs_conn_tab_bits-v1-1-60a4f9f4c8f2@gmail.com> <d2519ce3-e49b-a544-b79d-42905f4a2a9a@ssi.bg>
-In-Reply-To: <d2519ce3-e49b-a544-b79d-42905f4a2a9a@ssi.bg>
-From:   Abhijeet Rastogi <abhijeet.1989@gmail.com>
-Date:   Thu, 13 Apr 2023 18:58:06 -0700
-Message-ID: <CACXxYfxLU0jWmq0W7YxX=44XFCGvgMX2HwTFUUHCUMjO28g5BA@mail.gmail.com>
-Subject: Re: [PATCH] ipvs: change ip_vs_conn_tab_bits range to [8,31]
-To:     Julian Anastasov <ja@ssi.bg>
-Cc:     Simon Horman <horms@verge.net.au>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, linux-kernel@vger.kernel.org
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] clk: starfive: Avoid casting iomem pointers
+Content-Language: en-US
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <patches@lists.linux.dev>,
+        Tommaso Merciai <tomm.merciai@gmail.com>,
+        "Emil Renner Berthing" <emil.renner.berthing@canonical.com>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        Conor Dooley <conor.dooley@microchip.com>
+References: <20230413205528.4044216-1-sboyd@kernel.org>
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+In-Reply-To: <20230413205528.4044216-1-sboyd@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [183.27.97.249]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,57 +59,171 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Simon, Andrea and Julian,
+On 2023/4/14 4:55, Stephen Boyd wrote:
+> Let's use a wrapper struct for the auxiliary_device made in
+> jh7110_reset_controller_register() so that we can stop casting iomem
+> pointers. The casts trip up tools like sparse, and make for some awkward
+> casts that are largely unnecessary. While we're here, change the
+> allocation from devm and actually free the auxiliary_device memory in
+> the release function. This avoids any use after free problems where the
+> parent device driver is unbound from the device but the
+> auxiliuary_device is still in use accessing devm freed memory.
+> 
+> Cc: Tommaso Merciai <tomm.merciai@gmail.com>
+> Cc: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+> Cc: Hal Feng <hal.feng@starfivetech.com>
+> Cc: Conor Dooley <conor.dooley@microchip.com>
+> Cc: Xingyu Wu <xingyu.wu@starfivetech.com>
+> Fixes: edab7204afe5 ("clk: starfive: Add StarFive JH7110 system clock driver")
+> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+> ---
+> 
+> I can take this via clk tree.
+> 
+>  drivers/clk/starfive/clk-starfive-jh7110-sys.c | 15 ++++++++++++---
+>  drivers/reset/starfive/reset-starfive-jh7110.c |  9 ++++++---
+>  include/soc/starfive/reset-starfive-jh71x0.h   | 17 +++++++++++++++++
+>  3 files changed, 35 insertions(+), 6 deletions(-)
+>  create mode 100644 include/soc/starfive/reset-starfive-jh71x0.h
+> 
+> diff --git a/drivers/clk/starfive/clk-starfive-jh7110-sys.c b/drivers/clk/starfive/clk-starfive-jh7110-sys.c
+> index 5ec210644e1d..851b93d0f371 100644
+> --- a/drivers/clk/starfive/clk-starfive-jh7110-sys.c
+> +++ b/drivers/clk/starfive/clk-starfive-jh7110-sys.c
+> @@ -11,6 +11,9 @@
+>  #include <linux/init.h>
+>  #include <linux/io.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/slab.h>
+> +
+> +#include <soc/starfive/reset-starfive-jh71x0.h>
+>  
+>  #include <dt-bindings/clock/starfive,jh7110-crg.h>
+>  
+> @@ -335,26 +338,32 @@ static void jh7110_reset_unregister_adev(void *_adev)
+>  	struct auxiliary_device *adev = _adev;
+>  
+>  	auxiliary_device_delete(adev);
+> +	auxiliary_device_uninit(adev);
+>  }
+>  
+>  static void jh7110_reset_adev_release(struct device *dev)
+>  {
+>  	struct auxiliary_device *adev = to_auxiliary_dev(dev);
+> +	struct jh71x0_reset_adev *rdev = to_jh71x0_reset_adev(adev);
+>  
+> -	auxiliary_device_uninit(adev);
+> +	kfree(rdev);
+>  }
+>  
+>  int jh7110_reset_controller_register(struct jh71x0_clk_priv *priv,
+>  				     const char *adev_name,
+>  				     u32 adev_id)
+>  {
+> +	struct jh71x0_reset_adev *rdev;
+>  	struct auxiliary_device *adev;
+>  	int ret;
+>  
+> -	adev = devm_kzalloc(priv->dev, sizeof(*adev), GFP_KERNEL);
+> -	if (!adev)
+> +	rdev = kzalloc(sizeof(*rdev), GFP_KERNEL);
+> +	if (!rdev)
+>  		return -ENOMEM;
+>  
+> +	rdev->base = priv->base;
+> +
+> +	adev = &rdev->adev;
+>  	adev->name = adev_name;
+>  	adev->dev.parent = priv->dev;
+>  	adev->dev.release = jh7110_reset_adev_release;
+> diff --git a/drivers/reset/starfive/reset-starfive-jh7110.c b/drivers/reset/starfive/reset-starfive-jh7110.c
+> index c1b3a490d951..2d26ae95c8cc 100644
+> --- a/drivers/reset/starfive/reset-starfive-jh7110.c
+> +++ b/drivers/reset/starfive/reset-starfive-jh7110.c
+> @@ -7,6 +7,8 @@
+>  
+>  #include <linux/auxiliary_bus.h>
+>  
+> +#include <soc/starfive/reset-starfive-jh71x0.h>
+> +
+>  #include "reset-starfive-jh71x0.h"
+>  
+>  #include <dt-bindings/reset/starfive,jh7110-crg.h>
+> @@ -33,14 +35,15 @@ static int jh7110_reset_probe(struct auxiliary_device *adev,
+>  			      const struct auxiliary_device_id *id)
+>  {
+>  	struct jh7110_reset_info *info = (struct jh7110_reset_info *)(id->driver_data);
+> -	void __iomem **base = (void __iomem **)dev_get_drvdata(adev->dev.parent);
 
-I really appreciate you taking the time to respond to my patch. Some follow up
-questions that I'll appreciate a response for.
+Thank you for doing that. BTW, if drop the dev_get_drvdata(), the dev_set_drvdata() should also be dropped.
 
-@Simon Horman
->In any case, I think this patch is an improvement on the current situation.
+diff --git a/drivers/clk/starfive/clk-starfive-jh7110-aon.c b/drivers/clk/starfive/clk-starfive-jh7110-aon.c
+index a2799fe8a234..62954eb7b50a 100644
+--- a/drivers/clk/starfive/clk-starfive-jh7110-aon.c
++++ b/drivers/clk/starfive/clk-starfive-jh7110-aon.c
+@@ -83,8 +83,6 @@ static int jh7110_aoncrg_probe(struct platform_device *pdev)
+        if (IS_ERR(priv->base))
+                return PTR_ERR(priv->base);
 
-+1 to this. I wanted to add that, we're not changing the defaults
-here, the default still stays at 2^12. If a kernel user changes the
-default, they probably already know what the limitations are, so I
-personally don't think it is a big concern.
+-       dev_set_drvdata(priv->dev, (void *)(&priv->base));
+-
+        for (idx = 0; idx < JH7110_AONCLK_END; idx++) {
+                u32 max = jh7110_aonclk_data[idx].max;
+                struct clk_parent_data parents[4] = {};
+diff --git a/drivers/clk/starfive/clk-starfive-jh7110-sys.c b/drivers/clk/starfive/clk-starfive-jh7110-sys.c
+index 5ec210644e1d..0cda33fd47f8 100644
+--- a/drivers/clk/starfive/clk-starfive-jh7110-sys.c
++++ b/drivers/clk/starfive/clk-starfive-jh7110-sys.c
+@@ -393,8 +393,6 @@ static int __init jh7110_syscrg_probe(struct platform_device *pdev)
+        if (IS_ERR(priv->base))
+                return PTR_ERR(priv->base);
 
-@Andrea Claudi
->for the record, RHEL ships with CONFIG_IP_VS_TAB_BITS set to 12 as
-default.
+-       dev_set_drvdata(priv->dev, (void *)(&priv->base));
+-
+        /*
+         * These PLL clocks are not actually fixed factor clocks and can be
+         * controlled by the syscon registers of JH7110. They will be dropped
 
-Sorry, I should have been clearer. RHEL ships with the same default,
-yes, but it doesn't have the range check, at least, on the version I'm
-using right now (3.10.0-1160.62.1.el7.x86_64).
 
-On this version, I'm able to load with bit size 30, 31 gives me error
-regarding allocating memory (64GB host) and anything beyond 31 is
-mysteriously switched to a lower number. The following dmesg on my
-host confirms that the bitsize 30 worked, which is not possible
-without a patch on the current kernel version.
+> +	struct jh71x0_reset_adev *rdev = to_jh71x0_reset_adev(adev);
+> +	void __iomem *base = rdev->base;
+>  
+>  	if (!info || !base)
+>  		return -ENODEV;
+>  
+>  	return reset_starfive_jh71x0_register(&adev->dev, adev->dev.parent->of_node,
+> -					      *base + info->assert_offset,
+> -					      *base + info->status_offset,
+> +					      base + info->assert_offset,
+> +					      base + info->status_offset,
+>  					      NULL,
+>  					      info->nr_resets,
+>  					      NULL);
+> diff --git a/include/soc/starfive/reset-starfive-jh71x0.h b/include/soc/starfive/reset-starfive-jh71x0.h
+> new file mode 100644
+> index 000000000000..47b486ececc5
+> --- /dev/null
+> +++ b/include/soc/starfive/reset-starfive-jh71x0.h
+> @@ -0,0 +1,17 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef __SOC_STARFIVE_RESET_JH71X0_H
+> +#define __SOC_STARFIVE_RESET_JH71X0_H
+> +
+> +#include <linux/auxiliary_bus.h>
+> +#include <linux/compiler_types.h>
+> +#include <linux/container_of.h>
+> +
+> +struct jh71x0_reset_adev {
+> +	void __iomem *base;
+> +	struct auxiliary_device adev;
+> +};
+> +
+> +#define to_jh71x0_reset_adev(_adev) \
+> +	container_of((_adev), struct jh71x0_reset_adev, adev)
+> +
+> +#endif
+> 
+> base-commit: 601e5d464d535d655917c2cfb29c394d367fb676
 
-"[Fri Apr 14 01:14:51 2023] IPVS: Connection hash table configured (size=1073741
-824, memory=16777216Kbytes)"
-
-@Julian Anastasov,
->This is not a limit of number of connections. I prefer
-not to allow value above 24 without adding checks for the
-available memory,
-
-Interesting that you brought up that number 24, that is exactly what
-we use in production today. One IPVS node is able to handle spikes of
-10M active connections without issues. This patch idea originated as
-my company is migrating from the ancient RHEL version to a somewhat
-newer CentOS (5.* kernel) and noticed that we were unable to load the
-ip_vs kernel module with anything greater than 20 bits. Another
-motivation for kernel upgrade is utilizing maglev to reduce table size
-but that's out of context in this discussion.
-
-My request is, can we increase the range from 20 to something larger?
-If 31 seems a bit excessive, maybe, we can settle for something like
-[8,30] or even lower. With conn_tab_bits=30, it allocates 16GB at
-initialization time, it is not entirely absurd by today's standards.
-
-I can revise my patch to a lower range as you guys see fit.
-
---
-Cheers,
-Abhijeet (https://abhi.host)
+Best regards,
+Xingyu Wu
