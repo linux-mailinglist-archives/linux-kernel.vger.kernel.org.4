@@ -2,82 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D25F6E29A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 19:48:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F36D6E29B2
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 19:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229464AbjDNRsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 13:48:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38246 "EHLO
+        id S230040AbjDNRvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 13:51:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbjDNRsU (ORCPT
+        with ESMTP id S229994AbjDNRvC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 13:48:20 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5622CAF01
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 10:48:08 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id e11so24351353lfc.10
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 10:48:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681494486; x=1684086486;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=q8j1jr5BkH9v0KQPH+g+TSZh3RFTw5oSiPfNJDMkbUI=;
-        b=eFVLbYGIciacDsJBsokCs+zDUEpRfZe/mbufuCA7rjpl8voW1F8fW+mDemas8NMbQB
-         U+2rhs7A/DGfQBE+5bCXo9w4Vw3mKbqiSDg/qRSx/mZug/YPNnD/f0y3nrqYQJeKlT0R
-         xnm8Ipc4zKrkWklZQeU6uIORyrZvw/hnq33b9gNN6dBUcq3bu/Z/fgt7hWFVhug2PYvH
-         pSoAE+gz7Gky2f5sev3FQb32VcUO/8BmEcuzEAGMDCZCLe9nsvaNyW1jHuJo8T1ABF3K
-         P5HMB5LD/D83HIzJY+7wSBCeDtS9pC54TsViwQSnjELHdeMy0zHq6oc8dfdTrp/DL2xr
-         dR1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681494486; x=1684086486;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q8j1jr5BkH9v0KQPH+g+TSZh3RFTw5oSiPfNJDMkbUI=;
-        b=Jt8RuYnkkLm4BVRW4SeDfxctQjHUwMTxnOdcUNnYBIBt5hdf4bOeqc45PeOdYKulyg
-         YCNrnjxlWjSLGzh0jueN32XDz9iiHmycX5N5lEVwYqznLig88DEon5uZukFSTS6CCz2q
-         gPRmUN67e3B3pkbOkLumw9Dcu9PNUZOT6koTTw4IAI0NZt0MkFdudCFbDKuSqDeObQmx
-         F6Ou7MLnsYfVJnF4aulDyH0p73v7FdBCIY56ny2J8cu1xkCsO2ThuiawfjE7iIQoDFJ1
-         pzkESewy5vkC0CS1N9FnPdaIMXHRQIZCcq7MDX2xGjWbC+oNN7z+zlEAh0nXf5CYD3uj
-         OcRQ==
-X-Gm-Message-State: AAQBX9cm26Hg7Dcdh7PEh+NjGa8fGjzHzJ0OpWsZJMpbVXGGJWGY7p7E
-        pykSewiZA5y/WISdESq1w6GYZA==
-X-Google-Smtp-Source: AKy350Y8qOhfBv0DEfMa0AOWbSWbMI2Avxvvgkp83SOAZx+cTkGCMDntuL3v/WIQVj/hLPyMQFsvAw==
-X-Received: by 2002:a19:ae17:0:b0:4ec:5607:9055 with SMTP id f23-20020a19ae17000000b004ec56079055mr1962569lfc.31.1681494486467;
-        Fri, 14 Apr 2023 10:48:06 -0700 (PDT)
-Received: from [192.168.1.101] (abyk99.neoplus.adsl.tpnet.pl. [83.9.30.99])
-        by smtp.gmail.com with ESMTPSA id r13-20020ac252ad000000b004d5a6dcb94fsm901536lfm.33.2023.04.14.10.48.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 10:48:06 -0700 (PDT)
-Message-ID: <34797b11-b654-a9a4-ac26-5287ca582a82@linaro.org>
-Date:   Fri, 14 Apr 2023 19:48:03 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2 2/2] clk: qcom: Introduce SM8350 VIDEOCC
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        Fri, 14 Apr 2023 13:51:02 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E6EB45B
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 10:50:52 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pnNZ1-0007g5-WD; Fri, 14 Apr 2023 19:50:24 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 2FC941AF3A6;
+        Fri, 14 Apr 2023 17:49:16 +0000 (UTC)
+Date:   Fri, 14 Apr 2023 19:49:13 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Judith Mendez <jm@ti.com>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Andrew Davis <afd@ti.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Taniya Das <tdas@codeaurora.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230413-topic-lahaina_vidcc-v2-0-f721d507e555@linaro.org>
- <20230413-topic-lahaina_vidcc-v2-2-f721d507e555@linaro.org>
- <CAA8EJpoxvjWrvJENkFSimfU=CG7C3jZ=ToZep1tnJbtPzCcS9Q@mail.gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <CAA8EJpoxvjWrvJENkFSimfU=CG7C3jZ=ToZep1tnJbtPzCcS9Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        Schuyler Patton <spatton@ti.com>
+Subject: Re: [RFC PATCH 0/5] Enable multiple MCAN on AM62x
+Message-ID: <20230414-tubular-service-3404c64c6c62-mkl@pengutronix.de>
+References: <20230413223051.24455-1-jm@ti.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="faqeusbrotl4pfoh"
+Content-Disposition: inline
+In-Reply-To: <20230413223051.24455-1-jm@ti.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,168 +62,78 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--faqeusbrotl4pfoh
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 14.04.2023 18:31, Dmitry Baryshkov wrote:
-> On Fri, 14 Apr 2023 at 14:26, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->>
->> Add support for the Video Clock Controller found on the SM8350 SoC.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
+On 13.04.2023 17:30:46, Judith Mendez wrote:
+> On AM62x there is one MCAN in MAIN domain and two in MCU domain.
+> The MCANs in MCU domain were not enabled since there is no
+> hardware interrupt routed to A53 GIC interrupt controller.
+> Therefore A53 Linux cannot be interrupted by MCU MCANs.
 
-[...]
+Is this a general hardware limitation, that effects all MCU domain
+peripherals? Is there a mailbox mechanism between the MCU and the MAIN
+domain, would it be possible to pass the IRQ with a small firmware on
+the MCU? Anyways, that's future optimization.
 
->> +static struct clk_rcg2 video_cc_ahb_clk_src = {
->> +       .cmd_rcgr = 0xbd4,
->> +       .mnd_width = 0,
->> +       .hid_width = 5,
->> +       .parent_map = video_cc_parent_map_0,
->> +       .freq_tbl = ftbl_video_cc_ahb_clk_src,
->> +       .clkr.hw.init = &(const struct clk_init_data) {
->> +               .name = "video_cc_ahb_clk_src",
->> +               .parent_data = video_cc_parent_data_0,
->> +               .num_parents = ARRAY_SIZE(video_cc_parent_data_0),
->> +               .flags = CLK_SET_RATE_PARENT,
->> +               .ops = &clk_rcg2_shared_ops,
->> +       },
->> +};
-> 
-> Do we need this clock at all? We don't have the child
-> video_cc_ahb_clk, so potentially CCF can try disabling or modifying
-> this clock.
-Hm.. I see a few things:
+> This solution instantiates a hrtimer with 1 ms polling interval
+> for a MCAN when there is no hardware interrupt. This hrtimer
+> generates a recurring software interrupt which allows to call the
+> isr. The isr will check if there is pending transaction by reading
+> a register and proceed normally if there is.
+>=20
+> On AM62x this series enables two MCU MCAN which will use the hrtimer
+> implementation. MCANs with hardware interrupt routed to A53 Linux
+> will continue to use the hardware interrupt as expected.
+>=20
+> Timer polling method was tested on both classic CAN and CAN-FD
+> at 125 KBPS, 250 KBPS, 1 MBPS and 2.5 MBPS with 4 MBPS bitrate
+> switching.
+>=20
+> Letency and CPU load benchmarks were tested on 3x MCAN on AM62x.
+> 1 MBPS timer polling interval is the better timer polling interval
+> since it has comparable latency to hardware interrupt with the worse
+> case being 1ms + CAN frame propagation time and CPU load is not
+> substantial. Latency can be improved further with less than 1 ms
+> polling intervals, howerver it is at the cost of CPU usage since CPU
+> load increases at 0.5 ms and lower polling periods than 1ms.
 
-1. downstream kona has it, upstream does not
-2. it's shared so we never actually hard-shut it off..
-2a. ..but it'd be good to ensure it's on when it's ready..
-2b. ..but we never do anyway..
-2c. ..but should we even? doesn't Venus govern it internally?
+Some Linux input drivers have the property poll-interval, would it make
+sense to ass this here too?
 
+> Note that in terms of power, enabling MCU MCANs with timer-polling
+> implementation might have negative impact since we will have to wake
+> up every 1 ms whether there are CAN packets pending in the RX FIFO or
+> not. This might prevent the CPU from entering into deeper idle states
+> for extended periods of time.
+>=20
+> This patch series depends on 'Enable CAN PHY transceiver driver':
+> https://lore.kernel.org/lkml/775ec9ce-7668-429c-a977-6c8995968d6e@app.fas=
+tmail.com/T/
 
-> 
->> +
->> +static const struct freq_tbl ftbl_video_cc_mvs0_clk_src[] = {
->> +       F(720000000, P_VIDEO_PLL0_OUT_MAIN, 1, 0, 0),
->> +       F(1014000000, P_VIDEO_PLL0_OUT_MAIN, 1, 0, 0),
->> +       F(1098000000, P_VIDEO_PLL0_OUT_MAIN, 1, 0, 0),
->> +       F(1332000000, P_VIDEO_PLL0_OUT_MAIN, 1, 0, 0),
->> +       { }
->> +};
->> +
+Marc
 
-[...]
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
->> +static struct clk_branch video_cc_mvs1_clk = {
->> +       .halt_reg = 0xdb4,
->> +       .halt_check = BRANCH_HALT_VOTED,
-> 
-> As a note, sm8250 has BRANCH_HALT here.
-No, it does on the div2 clk, and so do we:
-[...]
+--faqeusbrotl4pfoh
+Content-Type: application/pgp-signature; name="signature.asc"
 
->> +};
->> +
->> +static struct clk_branch video_cc_mvs1_div2_clk = {
->> +       .halt_reg = 0xdf4,
->> +       .halt_check = BRANCH_HALT_VOTED,
->> +       .hwcg_reg = 0xdf4,
+-----BEGIN PGP SIGNATURE-----
 
-[...]
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQ5kgYACgkQvlAcSiqK
+BOi8yAf+NQ1sGpY+JsIDIIU5iJz6hTu6JRL8rVVwXcJ0IuXgW9D877Gep4/5bAwF
+GA1yEfBwJYq/6WzYe5flkwNeHAZ9aiiyrLPtKLY2NHlOjqpHY5j+0skKLeOU9nrD
+Vn4eEBqPevkKPTrObp8WqFYEIGJ8upuRduBNDCkygc1mPjZxW8APaSvBLDhLKd4I
+kRi8iMi6xv7kzSgi/lj+n3dDCTRCs6A4ireI3Yz1KpRx/2KujAef5HuDRma0xunv
+FgqYz1GUPO6hCBBD4xpv80RyfL06Li4i6nkIOgjIIqPlbUtl0YMVDfceMtsOxaXu
+l9ewAD+YepbkU542Luj6WaHP1oI9Ww==
+=3Y9X
+-----END PGP SIGNATURE-----
 
->> +
->> +static const struct qcom_reset_map video_cc_sm8350_resets[] = {
->> +       [CVP_VIDEO_CC_INTERFACE_BCR] = { 0xe54 },
->> +       [CVP_VIDEO_CC_MVS0_BCR] = { 0xd14 },
-> 
-> Would it be better to use common VIDEO_CC prefix here (IOW:
-> VIDEO_CC_CVP_MVS0_BCR, VIDEO_CC_CVP_INTERFACE_BCR), etc.
-My best guess would be that the ones prefixed with CVP_
-are actual INTF/INSTANCEn(CORE) reset lines whereas
-the ones containing _CLK_ reset their clock sub-branches.
-
-> 
->> +       [VIDEO_CC_MVS0C_CLK_ARES] = { 0xc34, 2 },
->> +       [CVP_VIDEO_CC_MVS0C_BCR] = { 0xbf4 },
->> +       [CVP_VIDEO_CC_MVS1_BCR] = { 0xd94 },
->> +       [VIDEO_CC_MVS1C_CLK_ARES] = { 0xcd4, 2 },
->> +       [CVP_VIDEO_CC_MVS1C_BCR] = { 0xc94 },
->> +};
-
-[...]
-
->> +       ret = pm_runtime_resume_and_get(&pdev->dev);
->> +       if (ret)
->> +               return ret;
->> +
->> +       regmap = qcom_cc_map(pdev, &video_cc_sm8350_desc);
->> +       if (IS_ERR(regmap)) {
->> +               pm_runtime_put(&pdev->dev);
->> +               return PTR_ERR(regmap);
->> +       };
-> 
-> Extra semicolon
-Ooeh!
-
-> 
->> +
->> +       clk_lucid_pll_configure(&video_pll0, regmap, &video_pll0_config);
->> +       clk_lucid_pll_configure(&video_pll1, regmap, &video_pll1_config);
->> +
->> +       /*
->> +        * Keep clocks always enabled:
->> +        *      video_cc_ahb_clk
->> +        *      video_cc_xo_clk
->> +        */
->> +       regmap_update_bits(regmap, 0xe58, BIT(0), BIT(0));
->> +       regmap_update_bits(regmap, 0xeec, BIT(0), BIT(0));
->> +
->> +       ret = qcom_cc_really_probe(pdev, &video_cc_sm8350_desc, regmap);
->> +       pm_runtime_put(&pdev->dev);
->> +
->> +       return ret;
->> +}
->> +
->> +static const struct dev_pm_ops video_cc_sm8350_pm_ops = {
->> +       SET_RUNTIME_PM_OPS(pm_clk_suspend, pm_clk_resume, NULL)
-> 
-> The driver doesn't use pm_clk at all. Are these PM_OPS correct?
-I'm unsure. I see the pm state changing in debugfs when the clocks are
-(not) consumed. But let's continue our discussion about using pm_clks
-for AHB.
-
-> 
->> +};
->> +
->> +static const struct of_device_id video_cc_sm8350_match_table[] = {
->> +       { .compatible = "qcom,sm8350-videocc" },
->> +       { }
->> +};
->> +MODULE_DEVICE_TABLE(of, video_cc_sm8350_match_table);
->> +
->> +static struct platform_driver video_cc_sm8350_driver = {
->> +       .probe = video_cc_sm8350_probe,
->> +       .driver = {
->> +               .name = "sm8350-videocc",
->> +               .of_match_table = video_cc_sm8350_match_table,
->> +               .pm = &video_cc_sm8350_pm_ops,
->> +       },
->> +};
->> +module_platform_driver(video_cc_sm8350_driver);
->> +
->> +MODULE_DESCRIPTION("QTI SM8350 VIDEOCC Driver");
->> +MODULE_LICENSE("GPL");
->>
->> --
->> 2.40.0
->>
-> 
-> Generic note: the register layout follows closely sm8250. However the
-> existing differences probably do not warrant merging them.
-No, I don't think merging any designs that are farther away
-than 8150 and 8155 or 8992 and 8994 etc. is a good idea..
-
-I don't want to ever look at something like dispcc-sm8[123]50.c
-again!
-
-Konrad
-> 
+--faqeusbrotl4pfoh--
