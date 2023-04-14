@@ -2,111 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D81946E20B4
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 12:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0B646E20B9
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 12:28:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbjDNK00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 06:26:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60690 "EHLO
+        id S229814AbjDNK2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 06:28:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbjDNK0X (ORCPT
+        with ESMTP id S229596AbjDNK2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 06:26:23 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962E54C22
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 03:26:22 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-504eb1155d3so11352079a12.1
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 03:26:22 -0700 (PDT)
+        Fri, 14 Apr 2023 06:28:31 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD93E57
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 03:28:28 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id i8so8905102plt.10
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 03:28:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681467981; x=1684059981;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8BUA25suHxulD4h8h8Ed5YSUpG0AWCiE6eu6o5CSqZQ=;
-        b=r+9GrPNHUWonE+1iJu8Gj9vKbD8RASLQeG/VSb3udb6n//Vmg6VLrDb1neA11Pp+e+
-         10pdWhXL/0O4OYnvs1fX041x+4LCIPgnF36cgKp5MChMJ65PXPeX38yaM7WANtztw2zO
-         7WaQBf2q5KA0tZyGMqV8gc8gpZ6oCzo1WC9Sh2TyDyQjpOx3SXqVfueS9La3cvN2HEOA
-         0JVFc9A+jd7QSILSvawjv7Zhx7i67a2574kW6xBywufRn4GjdNmBuzPH05ysnJ/OXkfr
-         oxjjjqfz30OjQL/JyjIFucnDumiNuy1QBkXai19eiCfW63lH1lD/MClsHsISHCmsyeIr
-         /9mA==
+        d=mechatrax-com.20221208.gappssmtp.com; s=20221208; t=1681468108; x=1684060108;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1Hoqg9PT2dw5gAcaoud/8G0yli71lPUri/20PXRlKVs=;
+        b=QWekuhVNVuPy18llgcFdz0XtXgFv3BcC99Cbp8mjeVlXIx5sYad7UNNe88KLDxzuoo
+         zi/BLS5dZo3glevzOI0AkE2tFzU8hl3tiEii5GEwoJ1gtPCGXIaYTcsxse535MpfuaKs
+         lT7DCMha3HURgsWztU6wwM9ZYHi4ap7qHtAxpL/4EnDJcWxfvqHT3bA8Jkoct0DdEOeQ
+         e/al5lQevPVLEqKnRzqxklxKhd8J6EguN84yCHxINbKW5pFCTgsyu6aUKlT/xR3xAEXe
+         0Kb8lspyF2YDtEwrhdgbttYEzhSoU8jK/0lzY5oz2T0HiniE1cghRVRU5ea8jA8KHPhu
+         t67w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681467981; x=1684059981;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8BUA25suHxulD4h8h8Ed5YSUpG0AWCiE6eu6o5CSqZQ=;
-        b=f8k+Z1QOnb5ZvJ0uLtk2UpJcFH/UuGB9b52LsZFh3+vMPp4BY9mteAWQCgKmvpA2sf
-         eLgB5Cwb3zBT5p+RWERsEwqagXyvMbr3BKQq3ysHiZKf5NZlQUYWWqIAU7VY3HyVCzJT
-         l+gjQER5XtneUQA06QdMmJSMSF5JbG/jstD/bUPpspjOy2vxwbSVBfFgyVFG9Q29Yda4
-         0XGIXoKpSrKw9tQesGjHA4Lp8pWK6562BE9ZU2fP1e1dE5Xig5Dj56ophbu4N+mCK1PK
-         4z8OIvsiGdOzOLnObfrEw/HIWKEy3DEALUtm1Bfr1NzmraoOF6boWRVqpJ4sAmEouvne
-         IHzA==
-X-Gm-Message-State: AAQBX9d1T5qts544vKa64eVr1imv2y3Fv+bfXXFd+/MulBV1t/CQKjqr
-        8cwNu8cu+57gFAKe86X4APkLIw==
-X-Google-Smtp-Source: AKy350bmKBLAazy18u092/q4UOoH8FGLrv5xZiozb2JD87u6Jz8fplX4+HuDdSHDOgiARsXEVdaxvw==
-X-Received: by 2002:a05:6402:42d6:b0:506:70a3:2aa0 with SMTP id i22-20020a05640242d600b0050670a32aa0mr5511669edc.3.1681467981125;
-        Fri, 14 Apr 2023 03:26:21 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:40b9:8c57:b112:651d? ([2a02:810d:15c0:828:40b9:8c57:b112:651d])
-        by smtp.gmail.com with ESMTPSA id l12-20020a056402344c00b00504803f4071sm1962444edc.44.2023.04.14.03.26.20
+        d=1e100.net; s=20221208; t=1681468108; x=1684060108;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1Hoqg9PT2dw5gAcaoud/8G0yli71lPUri/20PXRlKVs=;
+        b=FKdy3mF1Nt4monl4zIZLd91uY18quLCMWftJ+pFZ2GZOMCvZRcG8UvMqaPCKH919Zi
+         C6QfCoKOYMLNJIG+TY3F7JFb7UuEUrt7DNDfGxXamxRu1pUvMRaDzMVmSjuW6POk5oic
+         5ylJ6FXZnkHyvCG/EqxAlbCmTPM/gz/CdpvdMaaXPtGKWiDIDWtcQe8p5ggv/eekrKkY
+         yynaerREmQhdP5PlDLabaQBq61YU4lOGifDazP479z72XrhfD808vEYKq3jKpjyGqBK/
+         xd2GPm9ssOReLkqltpnCOWtA72ifQzXf1GETveeyFfp3xAmUZ88xcALhp4z2N1fXggGb
+         rxCg==
+X-Gm-Message-State: AAQBX9eFc1Gmb5tSRgGUDB+YgmFBas6Ay3Z86AHBbYiyPXXV0y3b33P9
+        4YVbxog/fWuf7vpU3kya+MbNsI32NVFkZ5ShfNA=
+X-Google-Smtp-Source: AKy350YVOz4Nfh6+PimgQxz5h6bnLGiPwbxVtqq5GYBiuCieLnBJdbHpDiuz89skTI3UU/yl1sB/Gw==
+X-Received: by 2002:a05:6a20:2896:b0:eb:bbd1:6d6c with SMTP id q22-20020a056a20289600b000ebbbd16d6cmr5142757pzf.21.1681468107966;
+        Fri, 14 Apr 2023 03:28:27 -0700 (PDT)
+Received: from localhost ([2400:4152:be0:9900:cc28:70ed:6925:f8a1])
+        by smtp.gmail.com with UTF8SMTPSA id q11-20020a65684b000000b0051b1aef8032sm2662248pgt.38.2023.04.14.03.28.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 03:26:20 -0700 (PDT)
-Message-ID: <fe746692-fed3-6635-8658-4e91d30f2aa8@linaro.org>
-Date:   Fri, 14 Apr 2023 12:26:17 +0200
+        Fri, 14 Apr 2023 03:28:27 -0700 (PDT)
+From:   Masahiro Honda <honda@mechatrax.com>
+To:     Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Masahiro Honda <honda@mechatrax.com>
+Subject: [PATCH v2] Fix IRQ issue by setting IRQ_DISABLE_UNLAZY flag
+Date:   Fri, 14 Apr 2023 19:27:44 +0900
+Message-Id: <20230414102744.150-1-honda@mechatrax.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 2/3] arm64: dts: rockchip: Use generic name for es8316 on
- rk3588-rock-5b
-To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Christopher Obbard <chris.obbard@collabora.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20230414093411.113787-1-cristian.ciocaltea@collabora.com>
- <20230414093411.113787-3-cristian.ciocaltea@collabora.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230414093411.113787-3-cristian.ciocaltea@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/04/2023 11:34, Cristian Ciocaltea wrote:
-> Use generic 'audio-codec' name for es8316 node on Rock 5B board.
-> 
-> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-> ---
->  arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-> index 62750beb12aa..8cc97d146a73 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-> +++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-> @@ -72,7 +72,7 @@ hym8563: rtc@51 {
->  &i2c7 {
->  	status = "okay";
->  
-> -	es8316: es8316@11 {
-> +	es8316: audio-codec@11 {
+The Sigma-Delta ADCs supported by this driver can use SDO as an interrupt
+line to indicate the completion of a conversion. However, some devices
+cannot properly detect the completion of a conversion by an interrupt.
+This is for the reason mentioned in the following commit.
 
-This is a trivial change. Fix all instances in all subarch/platform DTS.
-Not board-per-board.
+commit e9849777d0e2 ("genirq: Add flag to force mask in
+                      disable_irq[_nosync]()")
 
-Best regards,
-Krzysztof
+A read operation is performed by an extra interrupt before the complete
+conversion. This patch provides an option to fix the issue by setting
+IRQ_DISABLE_UNLAZY flag.
+
+Signed-off-by: Masahiro Honda <honda@mechatrax.com>
+---
+v2:
+ - Rework commit message.
+ - Add a new entry in the Kconfig.
+ - Call irq_clear_status_flags(irq, IRQ_DISABLE_UNLAZY) when freeing the IRQ.
+v1: https://lore.kernel.org/linux-iio/20230306044737.862-1-honda@mechatrax.com/
+
+ drivers/iio/adc/Kconfig          | 14 ++++++++++++++
+ drivers/iio/adc/ad_sigma_delta.c | 31 ++++++++++++++++++++++++++-----
+ 2 files changed, 40 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
+index 45af2302b..78ab6e2d8 100644
+--- a/drivers/iio/adc/Kconfig
++++ b/drivers/iio/adc/Kconfig
+@@ -21,6 +21,20 @@ config AD_SIGMA_DELTA
+ 	select IIO_BUFFER
+ 	select IIO_TRIGGERED_BUFFER
+ 
++if AD_SIGMA_DELTA
++
++config AD_SIGMA_DELTA_USE_LAZY_IRQ
++	bool "Use lazy IRQ for sigma-delta ADCs"
++	depends on AD_SIGMA_DELTA
++	default n
++	help
++	  Some interrupt controllers have data read problem with ADCs depends on
++	  AD_SIGMA_DELTA.
++	  Say yes here to avoid the problem at the cost of performance overhead.
++	  If unsure, say N (but it's safe to say "Y").
++
++endif # if AD_SIGMA_DELTA
++
+ config AD4130
+ 	tristate "Analog Device AD4130 ADC Driver"
+ 	depends on SPI
+diff --git a/drivers/iio/adc/ad_sigma_delta.c b/drivers/iio/adc/ad_sigma_delta.c
+index d8570f620..b9eae1e80 100644
+--- a/drivers/iio/adc/ad_sigma_delta.c
++++ b/drivers/iio/adc/ad_sigma_delta.c
+@@ -565,6 +565,16 @@ int ad_sd_validate_trigger(struct iio_dev *indio_dev, struct iio_trigger *trig)
+ }
+ EXPORT_SYMBOL_NS_GPL(ad_sd_validate_trigger, IIO_AD_SIGMA_DELTA);
+ 
++static void ad_sd_free_irq(void *sd)
++{
++	struct ad_sigma_delta *sigma_delta = sd;
++
++#ifdef CONFIG_AD_SIGMA_DELTA_USE_LAZY_IRQ
++	irq_clear_status_flags(sigma_delta->spi->irq, IRQ_DISABLE_UNLAZY);
++#endif
++	free_irq(sigma_delta->spi->irq, sigma_delta);
++}
++
+ static int devm_ad_sd_probe_trigger(struct device *dev, struct iio_dev *indio_dev)
+ {
+ 	struct ad_sigma_delta *sigma_delta = iio_device_get_drvdata(indio_dev);
+@@ -584,11 +594,22 @@ static int devm_ad_sd_probe_trigger(struct device *dev, struct iio_dev *indio_de
+ 	init_completion(&sigma_delta->completion);
+ 
+ 	sigma_delta->irq_dis = true;
+-	ret = devm_request_irq(dev, sigma_delta->spi->irq,
+-			       ad_sd_data_rdy_trig_poll,
+-			       sigma_delta->info->irq_flags | IRQF_NO_AUTOEN,
+-			       indio_dev->name,
+-			       sigma_delta);
++#ifdef CONFIG_AD_SIGMA_DELTA_USE_LAZY_IRQ
++	irq_set_status_flags(sigma_delta->spi->irq, IRQ_DISABLE_UNLAZY);
++#endif
++	ret = request_irq(sigma_delta->spi->irq,
++			  ad_sd_data_rdy_trig_poll,
++			  sigma_delta->info->irq_flags | IRQF_NO_AUTOEN,
++			  indio_dev->name,
++			  sigma_delta);
++	if (ret) {
++#ifdef CONFIG_AD_SIGMA_DELTA_USE_LAZY_IRQ
++		irq_clear_status_flags(sigma_delta->spi->irq, IRQ_DISABLE_UNLAZY);
++#endif
++		return ret;
++	}
++
++	ret = devm_add_action_or_reset(dev, ad_sd_free_irq, sigma_delta);
+ 	if (ret)
+ 		return ret;
+ 
+-- 
+2.34.1
 
