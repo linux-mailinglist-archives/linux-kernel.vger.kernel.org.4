@@ -2,123 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 339406E221E
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 13:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 477516E2222
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 13:28:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbjDNL2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 07:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59538 "EHLO
+        id S230329AbjDNL2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 07:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbjDNL2n (ORCPT
+        with ESMTP id S229596AbjDNL2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 07:28:43 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 429375B93
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 04:28:40 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-5050497df77so1848948a12.1
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 04:28:40 -0700 (PDT)
+        Fri, 14 Apr 2023 07:28:48 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BA730F3
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 04:28:46 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id n9-20020a05600c4f8900b003f05f617f3cso16365210wmq.2
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 04:28:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681471719; x=1684063719;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4aiRpESCbLxQk+SHaAMEqLmff7Uno7K02X/hy0RYyko=;
-        b=dl3Hg++Qv6HfQT/L9JjS5DV2rWbm0glWZt1wU9yWmWgajcJZlOzZzJLa+8AONcugzk
-         7pS5VpouSIAQ3edfaPssbx5NVRdQbtCjDh5YISgKCabxnDoLPq93amDKmL1mQpOjIBBN
-         MFwdFn2f6zQ9PDGvEDiM5GVPXZqzMJUQPrnSHVeMPzIlC7mUptjMKlEe0ZXHFK5PMFGV
-         zznUTSnKxEmIjt01wKa0FyQdcdD5Apmo+kePLjt0EysiN+++oq5u/8XfOZl9wVmn70WK
-         5qw+oPQCyJpbo5IO0ML3LsNRW11hsI19uepOIwSn2ZZjQh3cVKslxbKkUHGVXWoq7EDd
-         Qg5g==
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1681471725; x=1684063725;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BIDUQVJxCuBLvWEmo5PDPRKv9hp0CiYs1b9iDMKkYME=;
+        b=wVyHZo1fvuH4nbWYIxEUdT4xBU51XI3N0E11+IFjIoGEHEHUXhT7wiQZL66qA83o6b
+         mo/McjvdNE+fpKdf4BlSEcZXSwe2Ywv3HwS0t/f7gFeSIVooOJaLpw9G2ofCqEww91v6
+         Mm979Ck1CSsQ42aWOF+BccfAbWP8qBgN1ghKWpqnsC4MyF2xGcPO83wOrWU4BiFhrpkZ
+         4RBkn/8JXWPcKeONcK9l32Of+I4j+zm+wpzKYw5PnVMw88C3/dZxIoPHHiQx2rt75bNn
+         8VcyNclc0f6xmW+HgGsIOMVqkuxghCwuJCYm8QaKQPGL+S5t7JFYI+OpiaPsVE4Pm/Ji
+         1DMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681471719; x=1684063719;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4aiRpESCbLxQk+SHaAMEqLmff7Uno7K02X/hy0RYyko=;
-        b=AF0W7HNe1NNimN+I0CBuAhHfmOVq/Kzxh8RKEm5B5V0oQjPpxqLA5UrBAVEhnQA6PR
-         Ira/+Rl55FgMUN+TbpKDAM4SDERgQ0bt+FQeVYJDIg+A6aFY8JwHjRS9YsIOFZMSlmX2
-         6VHGXXi0outVkRqnG82yW9P192ZLsB4ROkVwPm7fUV3Qhc+fr9QvhUV6v4UqLudnTLvE
-         wOcBHEdPfDCTh+mFjmigU1yGqQ7I8vfKZjKVyaZY6IiSgiYKkjtiRqa8d9FmkfBO9joo
-         rLB+cq2/Zr2VNTzjWs5rlHaK681Qy7Bfudke2f+VuKX5Ygeyd0xCdiRYrzTBlypeIAoC
-         W0ng==
-X-Gm-Message-State: AAQBX9eWOni1DTO9LEwANpwZOjdYdVB2z6+DNHwynXCDBXEWu4t2zXCl
-        1YINqkW5kQqCaEktrd9+jkHUhQ==
-X-Google-Smtp-Source: AKy350a3Sy2CqykR/sk8IhliNFf2Djv54ny9JClOEK+yPtCZ5o7ogUd06Gii/jIrfmuVUmcNljWjSw==
-X-Received: by 2002:aa7:d7d4:0:b0:504:8c1a:70db with SMTP id e20-20020aa7d7d4000000b005048c1a70dbmr6581398eds.32.1681471718716;
-        Fri, 14 Apr 2023 04:28:38 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:40b9:8c57:b112:651d? ([2a02:810d:15c0:828:40b9:8c57:b112:651d])
-        by smtp.gmail.com with ESMTPSA id w15-20020aa7da4f000000b00504890a0de5sm2023467eds.34.2023.04.14.04.28.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 04:28:38 -0700 (PDT)
-Message-ID: <3f6d77cc-5a9b-47b4-db41-5fd172d2ecb6@linaro.org>
-Date:   Fri, 14 Apr 2023 13:28:37 +0200
+        d=1e100.net; s=20221208; t=1681471725; x=1684063725;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BIDUQVJxCuBLvWEmo5PDPRKv9hp0CiYs1b9iDMKkYME=;
+        b=G8UFlRLU2z6lZwPXS5azvxJAL4x70ffrl0HQMWRPBbMzPqv/Qelc0ocDA/ykft169I
+         xlXMkluLo8p84umVDp/3K6lvuyzubjGgf5ZRxp3PzexQ6fwjST0G3g9q6QG7LAnD81CQ
+         wDRM6bGNtqWW2utgqn3ChDUI/2XP+PIdDOXr5kH72g7XrfPeyu+dZ7mVTx1+flUQWabk
+         WUjXWvsnUqdVskzoQPzoCFQPC366xx4XYw2YqFUT0jLIpNZX9xGIg/EAji4svxc37YuM
+         fpdggiZxUORS/uda9fDfRpHBjVU0i60UlOC/EqV9fPA2CGr0KqgF2GNaWGAngZVwhH0y
+         /y3w==
+X-Gm-Message-State: AAQBX9fEhMDLFoP/ppynEmet8j2aSbiw0m/qfGF9gpwTC34GNwZHZkjU
+        rPvnJ4+uzdfaqFp7+NjfI7qUww==
+X-Google-Smtp-Source: AKy350bUbeyHl/w0ojt5yCD+9eE5/S9aYBE+HqX2QoNgWBxNNynfQ8iwJfdcevEA9IcduoXqjzqQMQ==
+X-Received: by 2002:a1c:4b0b:0:b0:3ef:4138:9eef with SMTP id y11-20020a1c4b0b000000b003ef41389eefmr4284414wma.36.1681471725203;
+        Fri, 14 Apr 2023 04:28:45 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:e34:eca6:27f0:42a5:8f07:826a:465d])
+        by smtp.gmail.com with ESMTPSA id t1-20020a1c7701000000b003ede06f3178sm4063745wmi.31.2023.04.14.04.28.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Apr 2023 04:28:44 -0700 (PDT)
+From:   Esteban Blanc <eblanc@baylibre.com>
+To:     nm@ti.com, vigneshr@ti.com, kristo@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sterzik@ti.com, u-kumar1@ti.com,
+        eblanc@baylibre.com, jneanne@baylibre.com, jpanis@baylibre.com,
+        aseketeli@baylibre.com
+Subject: [PATCH v2 0/5] arm64: dts: ti: k3-j7200-som-p0: Add TP6594 family PMICs
+Date:   Fri, 14 Apr 2023 13:28:38 +0200
+Message-Id: <20230414112843.1358067-1-eblanc@baylibre.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 2/3] arm64: dts: rockchip: Use generic name for es8316 on
- rk3588-rock-5b
-Content-Language: en-US
-To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Christopher Obbard <chris.obbard@collabora.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20230414093411.113787-1-cristian.ciocaltea@collabora.com>
- <20230414093411.113787-3-cristian.ciocaltea@collabora.com>
- <fe746692-fed3-6635-8658-4e91d30f2aa8@linaro.org>
- <4d66fb01-76da-be30-26dd-908ee1a22eb1@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <4d66fb01-76da-be30-26dd-908ee1a22eb1@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/04/2023 12:53, Cristian Ciocaltea wrote:
-> On 4/14/23 13:26, Krzysztof Kozlowski wrote:
->> On 14/04/2023 11:34, Cristian Ciocaltea wrote:
->>> Use generic 'audio-codec' name for es8316 node on Rock 5B board.
->>>
->>> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
->>> ---
->>>  arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts | 2 +-
->>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
->>> index 62750beb12aa..8cc97d146a73 100644
->>> --- a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
->>> +++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
->>> @@ -72,7 +72,7 @@ hym8563: rtc@51 {
->>>  &i2c7 {
->>>  	status = "okay";
->>>  
->>> -	es8316: es8316@11 {
->>> +	es8316: audio-codec@11 {
->>
->> This is a trivial change. Fix all instances in all subarch/platform DTS.
->> Not board-per-board.
-> 
-> Looks like only the rockchip DTS are affected, but not quite sure how to 
-> proceed in the case of 'es8316: codec@', should I change them to 
-> 'es8316: audio-codec@' as well?
-> 
-> arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dts:   es8316: es8316@11 {
+TPS6594 is a Power Management IC which provides regulators and others
+features like GPIOs, RTC, watchdog, ESMs (Error Signal Monitor), and
+PFSM (Pre-configurable Finite State Machine). The SoC and the PMIC can
+communicate through the I2C or SPI interfaces.
+TPS6594 is the super-set device while TPS6593 and LP8764 are derivatives.
 
-No, fix only this.
+This should be applied on top of other patch series:
+- https://lore.kernel.org/all/20230406075622.8990-1-jpanis@baylibre.com/
+  For core MFD driver
+- https://lore.kernel.org/lkml/20230414101217.1342891-1-eblanc@baylibre.com/
+  For regulator driver
 
-Best regards,
-Krzysztof
+This serie adds device tree nodes for TI TPS6594 PMICs found in the
+following boards:
+- J721EXSOMXEVM:
+  Link: https://www.ti.com/tool/J721EXSOMXEVM
+- J721S2XSOMXEVM:
+  Link: https://www.ti.com/tool/J721S2XSOMXEVM
+- J7200XSOMXEVM:
+  Link: https://www.ti.com/tool/J7200XSOMXEVM
+- AM62A-SKEVM:
+  Link: https://www.ti.com/tool/SK-AM62A-LP
+- J784S4XEVM
+  Link: https://www.ti.com/tool/J784S4XEVM
+
+Changes since v1:
+https://lore.kernel.org/lkml/20230329142948.833800-1-eblanc@baylibre.com/
+- Harmonize regulators names across the different boards
+- Adjust AVS voltage range
+- Remove some outdated comments
+
+Esteban Blanc (2):
+  arm64: dts: ti: k3-j7200-som-p0: Add TP6594 family PMICs
+  arm64: dts: ti: k3-j721s2-som-p0: Add TP6594 family PMICs
+
+Jerome Neanne (2):
+  arm64: dts: ti: k3-j721e-som-p0: Add TP6594 family PMICs
+  arm64: dts: ti: k3-j784s4-evm: Add support for TPS6593 PMIC
+
+Julien Panis (1):
+  arm64: dts: ti: k3-am62a7-sk: Add support for TPS6593 PMIC
+
+ arch/arm64/boot/dts/ti/k3-am62a7-sk.dts      |  95 +++++++++
+ arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi  | 175 +++++++++++++++
+ arch/arm64/boot/dts/ti/k3-j721e-som-p0.dtsi  | 171 +++++++++++++++
+ arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi | 213 +++++++++++++++++++
+ arch/arm64/boot/dts/ti/k3-j784s4-evm.dts     | 116 ++++++++++
+ 5 files changed, 770 insertions(+)
+
+-- 
+2.39.2
 
