@@ -2,192 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 251596E2927
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 19:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE4546E2929
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 19:20:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbjDNRTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 13:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43720 "EHLO
+        id S230036AbjDNRUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 13:20:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjDNRTi (ORCPT
+        with ESMTP id S229542AbjDNRUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 13:19:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EABE3A9C;
-        Fri, 14 Apr 2023 10:19:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C3CD464960;
-        Fri, 14 Apr 2023 17:19:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 752ACC433EF;
-        Fri, 14 Apr 2023 17:19:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681492775;
-        bh=WPtkUT7O1f55KPb6oOybgN9Tg6E75bDydYtfxWgTN/w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=glJ277C+LuPAikNUJQuYBszIJGakPuY6wVnTigqVgnUZZLx8jgsOqsunB16jvAwVw
-         xCQbPMtk3eozq0F6Syg82E3D3pYCNS+SAsN+9327/no12x7RMVvuOthJ+DWuzoURF8
-         XFMbNiMyJpoxcPZdb5Tzoyw8WAz0C0UAXQAY0986CnthcXwkukAK6PA2gNpTGHWyrG
-         s6BPKPsWED0kzCuGAsx69VjMKSbl1uExIxZSkG8U6bDRR7kYXmMGPzTkW86sgVo0d6
-         ljQQCqQjpODCC5LpbL2FnDdM0y/vJR7xCdSkX9BmQLBqsM3nuGEnKeq7K9lnlmHyUC
-         if+ZcIzmgCStg==
-Date:   Fri, 14 Apr 2023 18:19:29 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     =?utf-8?B?UGF3ZcWC?= Anikiel <pan@semihalf.com>
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lgirdwood@gmail.com, perex@perex.cz,
-        tiwai@suse.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, dinguyen@kernel.org,
-        lars@metafoo.de, nuno.sa@analog.com, upstream@semihalf.com
-Subject: Re: [PATCH 1/9] ASoC: Add Chameleon v3 audio
-Message-ID: <e64b438e-1205-4e54-b8c0-1b9a5d074752@sirena.org.uk>
-References: <20230414140203.707729-1-pan@semihalf.com>
- <20230414140203.707729-2-pan@semihalf.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jeKa2KZqsPnAadPJ"
-Content-Disposition: inline
-In-Reply-To: <20230414140203.707729-2-pan@semihalf.com>
-X-Cookie: One Bell System - it works.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 14 Apr 2023 13:20:15 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF7BF1BD6;
+        Fri, 14 Apr 2023 10:20:13 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id o7so14896374qvs.0;
+        Fri, 14 Apr 2023 10:20:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681492813; x=1684084813;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=anVanRqRAMLkondoY3FgX8UFzTsrcBKenJMcpkQ/ghs=;
+        b=kcZmgmLRpmwfYUtTgGBhF7ybS2GbzLgHDq2aY6iRrU3XVia8lX6gahyxfdBdjccnr1
+         dLHO+T6ZuPcHK2L4vFuOstUVpFYPjQJVgEYu6GN3qSYSJuj7TdjpzDf3cXEN/vmWyzrW
+         n50HGQ4gDeOtv3edzgAhb4V6DLd90S8SVkX3SCsB95Up+QEpDaGbLPG+SthZxPVgkOPk
+         2C8IL4XD/JqKMOUYTrVedfgcZUmIriAiA756pbLxSlbs0PIHhg1J9pyjwQL2rbiE/OMc
+         G9CMwr3CPt6LiMiK9uj+T8/4/1szyvx8K/YXXO3NjDY+kZbcRO8oJDkX9wR3S4/Xy7BL
+         /5Wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681492813; x=1684084813;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=anVanRqRAMLkondoY3FgX8UFzTsrcBKenJMcpkQ/ghs=;
+        b=bigbSW65Y/ISsBS0PMEMjVyO3183QG5tb+PJwJ5NBfB+3X/KkoixQltQ+EwgCPTGYh
+         2xiBJOaJKEz6XCqMk1m6haJ23hf305gLFKJivn5p3QAG+W1O7MovsPod04Z0/3QUru4f
+         BuGBNlFwji9oi9G8pMUPFUl7ESKNPgHKpb1pMHvg8GtWtAfBXrf640v/Wrpfk61Y1hdT
+         U2gT0LNBD6dWLFH5Ly/dg2AAPRl8lFBMpmHd3cXscCdaLG8o31OdevcKFilOlZlZ0Jsy
+         VmLBx0S5Vg4bRfVbCUPfLbmaN+hO2j3fDk7DOIi+eFB5cCYK9uV1D90i4j69vUOCxEDD
+         WKnw==
+X-Gm-Message-State: AAQBX9eW54+p4auPDHEPa0Gwe7tnm8OXN/0wXxvnAxaQkJsBA8nXGWI2
+        jcgKOPawFASq6ceFwwQEhUA=
+X-Google-Smtp-Source: AKy350bXI6yV0maPBDVpcT3ONykGzvmgxlEIb4TPKU7k7saEceSRFYGrHUogheeac1Nl8ciMcygyXQ==
+X-Received: by 2002:a05:6214:e6f:b0:5ef:4455:fd24 with SMTP id jz15-20020a0562140e6f00b005ef4455fd24mr4552747qvb.1.1681492813006;
+        Fri, 14 Apr 2023 10:20:13 -0700 (PDT)
+Received: from localhost (240.157.150.34.bc.googleusercontent.com. [34.150.157.240])
+        by smtp.gmail.com with ESMTPSA id z17-20020a0cf251000000b005e90a67a687sm1228581qvl.65.2023.04.14.10.20.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Apr 2023 10:20:12 -0700 (PDT)
+Date:   Fri, 14 Apr 2023 13:20:12 -0400
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        "luwei (O)" <luwei32@huawei.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Eric Dumazet <edumazet@google.com>
+Cc:     "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "asml.silence@gmail.com" <asml.silence@gmail.com>,
+        "imagedong@tencent.com" <imagedong@tencent.com>,
+        "brouer@redhat.com" <brouer@redhat.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "jbenc@redhat.com" <jbenc@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Message-ID: <64398b4c4585f_17abe429442@willemb.c.googlers.com.notmuch>
+In-Reply-To: <643983f69b440_17854f2948c@willemb.c.googlers.com.notmuch>
+References: <20230410022152.4049060-1-luwei32@huawei.com>
+ <CANn89iKFLREJV_cfHEk6wz6xXVv_jSrZ_UyXAB8VpH7gMXacxQ@mail.gmail.com>
+ <643447ba5224a_83e69294b6@willemb.c.googlers.com.notmuch>
+ <450994d7-4a77-99df-6317-b535ea73e01d@huawei.com>
+ <CANn89iLOcvDRMi9kVr86xNp5=h4JWpx9yYWicVxCwSMgAJGf_g@mail.gmail.com>
+ <c90abe8c-ffa0-f986-11eb-bde65c84d18b@huawei.com>
+ <6436b5ba5c005_41e2294dd@willemb.c.googlers.com.notmuch>
+ <a30a8ffaa8dd4cb6a84103eecf0c3338@huawei.com>
+ <643983f69b440_17854f2948c@willemb.c.googlers.com.notmuch>
+Subject: =?UTF-8?Q?RE:_=E7=AD=94=E5=A4=8D:_[PATCH_net]_net:_Add_check_for?=
+ =?UTF-8?Q?_csum=5Fstart_in_skb=5Fpartial=5Fcsum=5Fset=28=29?=
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Willem de Bruijn wrote:
+> luwei (O) wrote:
+> > yes, here is the vnet_hdr:
+> > 
+> >     flags: 3
+> >     gso_type: 3
+> >     hdr_len: 23
+> >     gso_size: 58452
+> >     csum_start: 5
+> >     csum_offset: 16
+> > 
+> > and the packet:
+> > 
+> > | vnet_hdr | mac header | network header | data ... |
+> > 
+> >   memcpy((void*)0x20000200,
+> >          "\x03\x03\x02\x00\x54\xe4\x05\x00\x10\x00\x80\x00\x00\x53\xcc\x9c\x2b"
+> >          "\x19\x3b\x00\x00\x00\x89\x4f\x08\x03\x83\x81\x04",
+> >          29);
+> >   *(uint16_t*)0x200000c0 = 0x11;
+> >   *(uint16_t*)0x200000c2 = htobe16(0);
+> >   *(uint32_t*)0x200000c4 = r[3];
+> >   *(uint16_t*)0x200000c8 = 1;
+> >   *(uint8_t*)0x200000ca = 0;
+> >   *(uint8_t*)0x200000cb = 6;
+> >   memset((void*)0x200000cc, 170, 5);
+> >   *(uint8_t*)0x200000d1 = 0;
+> >   memset((void*)0x200000d2, 0, 2);
+> >   syscall(__NR_sendto, r[1], 0x20000200ul, 0xe45ful, 0ul, 0x200000c0ul, 0x14ul);
+> 
+> Thanks. So this can happen whenever a packet is injected into the tx
+> path with a virtio_net_hdr.
+> 
+> Even if we add bounds checking for the link layer header in pf_packet,
+> it can still point to the network header.
+> 
+> If packets are looped to the tx path, skb_pull is common if a packet
+> traverses tunnel devices. But csum_start does not directly matter in
+> the rx path (CHECKSUM_PARTIAL is just seen as CHECKSUM_UNNECESSARY).
+> Until it is forwarded again to the tx path.
+> 
+> So the question is which code calls skb_checksum_start_offset on the
+> tx path. Clearly, skb_checksum_help. Also a lot of drivers. Which
+> may cast the signed int return value to an unsigned. Even an u8 in 
+> the first driver I spotted (alx).
+> 
+> skb_postpull_rcsum anticipates a negative return value, as do other
+> core functions. So it clearly allowed in certain cases. We cannot
+> just bound it.
+> 
+> Summary after a long story: an initial investigation, but I don't have
+> a good solution so far. Maybe others have a good suggestiong based on
+> this added context.
 
---jeKa2KZqsPnAadPJ
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Specific to skb_checksum_help, it appears that skb_checksum will
+work with negative offset just fine.
 
-On Fri, Apr 14, 2023 at 04:01:55PM +0200, Pawe=C5=82 Anikiel wrote:
-
-> ---
->  .../boot/dts/socfpga_arria10_chameleonv3.dts  |  28 ++
-
-Updates to the DT should be in a separate patch.
-
->  sound/soc/chameleonv3/chv3-audio.c            | 111 ++++++
->  sound/soc/chameleonv3/chv3-i2s.c              | 347 ++++++++++++++++++
->  sound/soc/chameleonv3/chv3-it68051.c          |  41 +++
-
-The machine driver and board drivers (if needed) should also be separate
-patches - one patch per driver.
-
-> +config SND_SOC_CHV3
-> +       tristate "SoC Audio support for Chameleon v3"
-> +       select SND_SOC_SSM2602
-> +       select SND_SOC_SSM2602_I2C
-> +       help
-> +         Say Y if you want to add audio support for the Chameleon v3.
-
-It woudl be better to have a separate selectable symbol for each drier.
-
-> +static int chv3_ssm2603_hw_params(struct snd_pcm_substream *substream,
-> +			  struct snd_pcm_hw_params *params)
-> +{
-> +	struct snd_soc_pcm_runtime *rtd =3D asoc_substream_to_rtd(substream);
-> +	struct snd_soc_dai *dai =3D asoc_rtd_to_codec(rtd, 0);
-> +
-> +	return snd_soc_dai_set_sysclk(dai, 0, 22579200, SND_SOC_CLOCK_IN);
-> +}
-
-This could be done once at init, though in general I can't tell why this
-isn't audio-graph-card.
-
-> + * Because of the two pointer design, the ring buffer can never be full.=
- With
-> + * capture this isn't a problem, because the hardware being the producer
-> + * will wait for the consumer index to move out of the way.  With playba=
-ck,
-> + * however, this is problematic, because ALSA wants to fill up the buffer
-> + * completely when waiting for hardware. In the .ack callback, the driver
-> + * would have to wait for the consumer index to move out of the way by
-> + * busy-waiting, which would keep stalling the kernel for quite a long t=
-ime.
-> + *
-> + * The workaround to this problem is to "lie" to ALSA that the hw_pointer
-> + * is one period behind what it actually is (see chv3_dma_pointer). This
-> + * way, ALSA will not try to fill up the entire buffer, and all callbacks
-> + * are wait-free.
-
-Would it not be better to just lag by one (or some small number of)
-sample instead?
-
-> +static irqreturn_t chv3_i2s_isr(int irq, void *data)
-> +{
-> +	struct chv3_i2s_dev *i2s =3D data;
-> +	u32 reg;
-> +
-> +	reg =3D readl(i2s->iobase_irq + I2S_IRQ_CLR);
-> +	if (!reg)
-> +		return IRQ_NONE;
-> +
-> +	if (reg & I2S_IRQ_RX_BIT)
-> +		snd_pcm_period_elapsed(i2s->rx_substream);
-> +
-> +	if (reg & I2S_IRQ_TX_BIT) {
-> +		if (i2s->tx_ready)
-> +			snd_pcm_period_elapsed(i2s->tx_substream);
-> +		i2s->tx_ready =3D 1;
-> +	}
-> +
-> +	writel(reg, i2s->iobase_irq + I2S_IRQ_CLR);
-> +
-> +	return IRQ_HANDLED;
-> +}
-
-Really we should only ack things that were handled here and report
-appropriately, that's defensive against bugs causing interrupts to
-scream and shared interrupts.
-
-> +	dev_info(&pdev->dev, "probed\n");
-
-This is just noise, remove it.
-
-> +++ b/sound/soc/chameleonv3/chv3-it68051.c
-> @@ -0,0 +1,41 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +#include <linux/module.h>
-> +#include <sound/soc.h>
-> +
-> +static struct snd_soc_dai_driver it68051_dai =3D {
-> +	.name =3D "it68051-hifi",
-> +	.capture =3D {
-> +		.stream_name =3D "Capture",
-> +		.channels_min =3D 8,
-> +		.channels_max =3D 8,
-> +		.rates =3D SNDRV_PCM_RATE_CONTINUOUS,
-> +		.formats =3D SNDRV_PCM_FMTBIT_S32_LE,
-> +	},
-> +};
-> +
-> +static const struct snd_soc_component_driver soc_component_dev_it68051 =
-=3D {
-> +};
-
-This looks awfully like it's a generic CODEC driver for a device with no
-control available, why is it not being added as a CODEC?
-
---jeKa2KZqsPnAadPJ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ5iyAACgkQJNaLcl1U
-h9CRYwf/eql00ml/jymz2c8qytH+GabFGfmGxl54E6dEJDIlm1F7zjcjN3wBFv0f
-SlcAt0eEc638oW3fTS6H9ptaC5QOPuldeDPDDH2XNizJ0NrCghPv41FANC3qG+GS
-7z21BGGnz92BI1a4TdHfgLLw3ux7kOjrdPL07eRMWyh0A2aeyfkeIlb/rVMlxt9j
-20oLEnVHJBVlarEcSmTl4ibfYE9zKajlYCHuM5mzjvIHCc/bFqWSxKF55Q2IkVtr
-SEbtZKU3W7/SOnKAuwEKMWwkXhbyrsxVQMjmGvXsSDu1w/ew6N28/Pksav90v06K
-j2zejPnplf0eCJBmxfvktdY0p1JQUQ==
-=aTr6
------END PGP SIGNATURE-----
-
---jeKa2KZqsPnAadPJ--
+Perhaps the only issue is that the WARN_ON_ONCE compares signed to
+unsigned, and thus incorrectly interprets a negative offset as
+ >= skb_headlen(skb)
