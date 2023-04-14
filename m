@@ -2,86 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3566E258B
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 16:22:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8C8B6E258C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 16:23:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230265AbjDNOWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 10:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46644 "EHLO
+        id S229866AbjDNOW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 10:22:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbjDNOWw (ORCPT
+        with ESMTP id S229636AbjDNOWw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 14 Apr 2023 10:22:52 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4381990;
-        Fri, 14 Apr 2023 07:22:51 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33E8iuCU012876;
-        Fri, 14 Apr 2023 14:22:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=S8yPLcc/DhepKmZpiqS9c+UDelmwpK6V+/QMPM0EkkI=;
- b=kk5I7tUI3XP1Du2g8ajwzFzAn7uxjlotV72TrkgSDZ75KTfbG+xIu+uF5m4O+fu1nCXk
- M3HnOSvHBkbS5kBZ9A1fuQvsPcta6P0lPt17dCJAApjAR1w9b00/B09J9L+h7k+szxf+
- dgAn1xUCLYEATB6GgxcnCMV7LuvdsDEYp+iPw5T1OTjBtaRFcNn9Sx+dI8NXqyFfoMCx
- hBbfRA+Vws+e2ZsiQpYvXPhlfK+U0nusnM4AKU2fDSuhQ99Sk/6tdkBqPxN3REBEaWs+
- TW+6jjF4i5YDiQWPHTPYz81KtxbkhDPQTKCm3YHBVoxioyjQznbVkVS0w3Fc8a7Umaio yg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pxe66k912-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Apr 2023 14:22:47 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33EEMkYa012326
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Apr 2023 14:22:46 GMT
-Received: from [10.216.10.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 14 Apr
- 2023 07:22:40 -0700
-Message-ID: <aca7b808-51ce-1921-2ee2-0e82cf19d960@quicinc.com>
-Date:   Fri, 14 Apr 2023 19:52:37 +0530
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87981709
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 07:22:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681482170; x=1713018170;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ti0rTmfDkYPhg39eIph+WMRiRDY2DhR53PBDAW/VO/M=;
+  b=ILTwYcf41clS9ek2wTVFh/b9NDF9Wi3C69LEjijzrg+B6VNnd/YIYHdH
+   G/FjTTyaOLgbu/kQtrQ6hf028FKXRcravNJz1ZRhbpfkyd9RUIQkzKUSs
+   OcnnOuVo7/OeIFmhkQMMJa4dVgvgVuqxXrYGUzPeXvSpd1aOQ2DDa1vEQ
+   /u3GKxUbifVq7Q0Jimb0Aazk6ztwJ1MxA4keSEa29SOkM6nDg8tq8BntU
+   2cKsw1bqMd1D0QAv9w+4RjcKqZMc0DaxOClo5CsgtxtloP2xQMmWIb0PJ
+   ceZn92NrvG/dRzftHZKwhNRMwONUJzIfnbSGVIMDmNf/iJ9vDBckY/d0Y
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="324102197"
+X-IronPort-AV: E=Sophos;i="5.99,197,1677571200"; 
+   d="scan'208";a="324102197"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 07:22:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="936027772"
+X-IronPort-AV: E=Sophos;i="5.99,197,1677571200"; 
+   d="scan'208";a="936027772"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga006.fm.intel.com with ESMTP; 14 Apr 2023 07:22:50 -0700
+Received: from [10.212.165.245] (kliang2-mobl1.ccr.corp.intel.com [10.212.165.245])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 96E3E5805EE;
+        Fri, 14 Apr 2023 07:22:49 -0700 (PDT)
+Message-ID: <49b6f5fb-665b-2857-788b-e5082bb7374b@linux.intel.com>
+Date:   Fri, 14 Apr 2023 10:22:48 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH V1 1/4] dt-bindings: clock: qcom,ipq9574-gcc: Drop the
- Bias PLL ubi clock source
+Subject: Re: [PATCH V3] perf/x86/intel/ds: Flush the PEBS buffer in PEBS
+ enable
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-CC:     <quic_srichara@quicinc.com>, <quic_sjaganat@quicinc.com>,
-        <quic_kathirav@quicinc.com>, <quic_arajkuma@quicinc.com>,
-        <quic_anusha@quicinc.com>, <quic_poovendh@quicinc.com>
-References: <20230414134812.16812-1-quic_devipriy@quicinc.com>
- <20230414134812.16812-2-quic_devipriy@quicinc.com>
- <dc48d390-9c8b-d3b7-9c5e-6cbddb0e1306@linaro.org>
-From:   Devi Priya <quic_devipriy@quicinc.com>
-In-Reply-To: <dc48d390-9c8b-d3b7-9c5e-6cbddb0e1306@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org, eranian@google.com,
+        ak@linux.intel.com
+References: <20230410181309.827175-1-kan.liang@linux.intel.com>
+ <20230414102908.GC83892@hirez.programming.kicks-ass.net>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20230414102908.GC83892@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: lkULD-TxMqd_5xkqmQZ8amF_bFhth--D
-X-Proofpoint-ORIG-GUID: lkULD-TxMqd_5xkqmQZ8amF_bFhth--D
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-14_07,2023-04-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=576 phishscore=0
- lowpriorityscore=0 spamscore=0 impostorscore=0 adultscore=0 clxscore=1015
- mlxscore=0 suspectscore=0 bulkscore=0 malwarescore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304140127
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,22 +73,123 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 4/14/2023 7:47 PM, Krzysztof Kozlowski wrote:
-> On 14/04/2023 15:48, Devi Priya wrote:
->> Remove bias_pll_ubi_nc_clk from the binding as it has been removed from
->> the Device Tree. Also added Bjorn Andersson to the maintainers list.
+On 2023-04-14 6:29 a.m., Peter Zijlstra wrote:
+> On Mon, Apr 10, 2023 at 11:13:09AM -0700, kan.liang@linux.intel.com wrote:
 > 
-> Was it really removed? Where?
+>>  arch/x86/events/intel/ds.c | 39 ++++++++++++++++++++++++++------------
+>>  1 file changed, 27 insertions(+), 12 deletions(-)
+>>
+>> diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
+>> index 3a77f4336df7..4639d4c1e98d 100644
+>> --- a/arch/x86/events/intel/ds.c
+>> +++ b/arch/x86/events/intel/ds.c
+>> @@ -1257,20 +1257,18 @@ pebs_update_state(bool needed_cb, struct cpu_hw_events *cpuc,
+>>  	if (x86_pmu.intel_cap.pebs_baseline && add) {
+>>  		u64 pebs_data_cfg;
+>>  
+>> -		/* Clear pebs_data_cfg and pebs_record_size for first PEBS. */
+>> -		if (cpuc->n_pebs == 1) {
+>> +		/* Clear pebs_data_cfg for first PEBS. */
+>> +		if (cpuc->n_pebs == 1)
+>>  			cpuc->pebs_data_cfg = 0;
+>> -			cpuc->pebs_record_size = sizeof(struct pebs_basic);
+>> -		}
+>>  
+>>  		pebs_data_cfg = pebs_update_adaptive_cfg(event);
+>>  
+>> -		/* Update pebs_record_size if new event requires more data. */
+>> -		if (pebs_data_cfg & ~cpuc->pebs_data_cfg) {
+>> +		/*
+>> +		 * Only update the pebs_data_cfg here. The pebs_record_size
+>> +		 * will be updated later when the new pebs_data_cfg takes effect.
+>> +		 */
+>> +		if (pebs_data_cfg & ~cpuc->pebs_data_cfg)
+>>  			cpuc->pebs_data_cfg |= pebs_data_cfg;
+>> -			adaptive_pebs_record_size_update();
+>> -			update = true;
+>> -		}
+>>  	}
+>>  
+>>  	if (update)
+> 		pebs_update_threshold(cpuc);
 > 
-It has been removed from the Device tree and binding in V11
-https://lore.kernel.org/linux-arm-msm/20230404101622.5394-1-quic_devipriy@quicinc.com/
+> Now, pebs_update_threshold() will actually use
+> ->pebs_record_size, but afaict the above now has a path through (for
+> example for the first event) where update is true but ->pebs_record_size
+> is unset/stale.
+> 
+> I think it all works out, but it is quite a mess and hard to follow.
+
+With this patch, the pebs_update_threshold() will be delayed to
+intel_pmu_pebs_enable() for the adaptive PEBS.
+
+I think we may reuse the pebs_data_cfg method for the previous fixed
+PEBS as well and delay the DS update to intel_pmu_pebs_enable() as well.
+So everything will be consistent.
+
+I will do more tests and probably send a clean up patch later separately.
+
+
+> 
+>> @@ -1331,6 +1329,13 @@ static void intel_pmu_pebs_via_pt_enable(struct perf_event *event)
+>>  	wrmsrl(base + idx, value);
+>>  }
+>>  
+>> +static inline void intel_pmu_drain_large_pebs(struct cpu_hw_events *cpuc)
+>> +{
+>> +	if (cpuc->n_pebs == cpuc->n_large_pebs &&
+>> +	    cpuc->n_pebs != cpuc->n_pebs_via_pt)
+>> +		intel_pmu_drain_pebs_buffer();
+>> +}
+> 
+> Its been a minute since I looked at this code; but why only for large
+> pebs? Surely flushing is quick when the DS is actually empty and that
+> stops us having to worry if there's races where there might be a single
+> entry in.
+
+The AUTO_RELOAD is a separate feature. It should be always enabled when
+a fixed period is set. That's not the case for the large PEBS, which
+only supports partial sample type.
+
+There should be some overhead for the AUTO_RELOAD + single PEBS case. We
+have to update the event count.
+
+> 
+>>  void intel_pmu_pebs_enable(struct perf_event *event)
+>>  {
+>>  	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+>> @@ -1350,6 +1355,18 @@ void intel_pmu_pebs_enable(struct perf_event *event)
+>>  	if (x86_pmu.intel_cap.pebs_baseline) {
+>>  		hwc->config |= ICL_EVENTSEL_ADAPTIVE;
+>>  		if (cpuc->pebs_data_cfg != cpuc->active_pebs_data_cfg) {
+>> +			/*
+>> +			 * A system-wide PEBS event with the large PEBS
+>> +			 * config may still be enabled when switching the
+>> +			 * context. Some PEBS records for the system-wide
+>> +			 * PEBS may be generated while the old event has
+>> +			 * been scheduled out but the new one hasn't been
+>> +			 * scheduled in. It's not enough to only flush the
+>> +			 * buffer when a PEBS event is disable.
+>> +			 */
+> 
+> Perhaps just:
+> 
+> 			/*
+> 			 * drain_pebs() assumes uniform record size;
+> 			 * hence we need to drain when changing said
+> 			 * size.
+> 			 */
+> 
+
+Sure, I will update in V4.
 
 Thanks,
-Devi Priya
->>
->> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+Kan
+
 > 
-> 
-> Best regards,
-> Krzysztof
-> 
+>> +			intel_pmu_drain_large_pebs(cpuc);
+>> +			adaptive_pebs_record_size_update();
+>> +			pebs_update_threshold(cpuc);
+>>  			wrmsrl(MSR_PEBS_DATA_CFG, cpuc->pebs_data_cfg);
+>>  			cpuc->active_pebs_data_cfg = cpuc->pebs_data_cfg;
+>>  		}
