@@ -2,111 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72DB86E1BC2
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 07:30:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A69F6E1BC6
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 07:34:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbjDNFap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 01:30:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55124 "EHLO
+        id S229579AbjDNFe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 01:34:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbjDNFaj (ORCPT
+        with ESMTP id S229493AbjDNFe0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 01:30:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7AB659C5;
-        Thu, 13 Apr 2023 22:30:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E8E764428;
-        Fri, 14 Apr 2023 05:30:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 816B4C4339C;
-        Fri, 14 Apr 2023 05:30:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681450222;
-        bh=amiEszvsisGwIWBvP31HENcYzKgXoVYVT4ZU1EWAtSo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=qHffbMfqtunWiB8VXBDSEQoxr/GCTU4NifX8zXJ1Zf/95NTYg1eWMwCpGr8scDLQy
-         y9zeMUZdWTDRdGIf3o+InXOBechNl8192B5QSe78uRQHvXJrEnqhLilX8tjLWwvMzj
-         sNRW6t+Ssd+/jwwnRro8LtFUIIk1TrLrw1wIrkXcYem5tFcLGba31YU5A1sgjlXQ4y
-         VbQQNUhnU7b1nrRoPAZk2o54XPh548p29aURJ8u8IyAjiwzWBi08rXrzi0HQ0z+pNA
-         JgC37J04vtz0cqgLOBMK8x0sogtwtj7nfrJC1Jyt387/OjAJd94lf8gSeKzCmIYxKo
-         2eADINQ5C2L8g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 678F2E52446;
-        Fri, 14 Apr 2023 05:30:22 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 14 Apr 2023 01:34:26 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92A7212C;
+        Thu, 13 Apr 2023 22:34:25 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33E4cBhn022763;
+        Fri, 14 Apr 2023 05:33:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=qcppdkim1;
+ bh=lPzv2b2QjmMlKcM058Y7tzEULz14qWMr4jT/EeSqvwI=;
+ b=TlE3LFtQhPCNUXVif3BTTD1satObR7WdQ6QIZ+e04fRQ10AhskjvLimyvRtMLbX3KuJG
+ XVkLYKXFwbIwjjX98xKgkzC/s7spDxNg+Myoms5sDZ2S2riFKGxN3BollmgMrbt6j/DZ
+ USPpHbKmrTAnMxysljaqF6R7olKqk1t7G/JGKaRoKkzMuYOYUkevu75Ayo0Ynfwv0TCV
+ rMCJVA5QSZO8pL2gpovs4Pv0iLQQTp7zZC0Jmaelt1ghXOXCUDgXvioPu2C5jqWJVPui
+ aZROi5SOJmVzWyjdPrctAwEHGvoRRA9CZ5gNCLKLcS4rL2d3ufkeK2SAG1//nGqRBLmQ ng== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pxxhkg7r6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 05:33:49 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33E5XmJm028978
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 05:33:49 GMT
+Received: from nasanex01a.na.qualcomm.com (10.52.223.231) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 13 Apr 2023 22:33:48 -0700
+Received: from nasanex01a.na.qualcomm.com ([fe80::c03c:fa3e:4516:3243]) by
+ nasanex01a.na.qualcomm.com ([fe80::c03c:fa3e:4516:3243%12]) with mapi id
+ 15.02.0986.042; Thu, 13 Apr 2023 22:33:48 -0700
+From:   "Sarthak Garg (QUIC)" <quic_sartgarg@quicinc.com>
+To:     Christoph Hellwig <hch@infradead.org>
+CC:     "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "Ram Prakash Gupta (QUIC)" <quic_rampraka@quicinc.com>,
+        "Bhaskar Valaboju (QUIC)" <quic_bhaskarv@quicinc.com>,
+        "Sachin Gupta (QUIC)" <quic_sachgupt@quicinc.com>,
+        "Pradeep Pragallapati (QUIC)" <quic_pragalla@quicinc.com>,
+        "Sayali Lokhande (QUIC)" <quic_sayalil@quicinc.com>,
+        Brian Norris <briannorris@chromium.org>,
+        "Wolfram Sang" <wsa+renesas@sang-engineering.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: RE: [PATCH V1 1/2] mmc: core: Define new vendor ops to enable
+ internal features
+Thread-Topic: [PATCH V1 1/2] mmc: core: Define new vendor ops to enable
+ internal features
+Thread-Index: AQHZZLsSreM1n2UsG0iOAGSJueq9468bFEYAgA9GsjA=
+Date:   Fri, 14 Apr 2023 05:33:48 +0000
+Message-ID: <e492e234b3ec4624ae2f905bdae78785@quicinc.com>
+References: <20230401165723.19762-1-quic_sartgarg@quicinc.com>
+ <20230401165723.19762-2-quic_sartgarg@quicinc.com>
+ <ZCux+gsR8Nz4Epxw@infradead.org>
+In-Reply-To: <ZCux+gsR8Nz4Epxw@infradead.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.216.5.147]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v5 net-next 0/9] Add kernel tc-mqprio and tc-taprio support
- for preemptible traffic classes
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168145022242.29714.235263981866322641.git-patchwork-notify@kernel.org>
-Date:   Fri, 14 Apr 2023 05:30:22 +0000
-References: <20230411180157.1850527-1-vladimir.oltean@nxp.com>
-In-Reply-To: <20230411180157.1850527-1-vladimir.oltean@nxp.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, jhs@mojatatu.com,
-        xiyou.wangcong@gmail.com, jiri@resnulli.us,
-        vinicius.gomes@intel.com, kurt@linutronix.de,
-        gerhard@engleder-embedded.com, amritha.nambiar@intel.com,
-        ferenc.fejes@ericsson.com, xiaoliang.yang_1@nxp.com,
-        rogerq@kernel.org, pranavi.somisetty@amd.com,
-        harini.katakam@amd.com, peppe.cavallaro@st.com,
-        alexandre.torgue@foss.st.com, michael.wei.hong.sit@intel.com,
-        mohammad.athari.ismail@intel.com, linux@rempel-privat.de,
-        jacob.e.keller@intel.com, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: ITnVEBb8CIZ5IGmmbnV24JLS3QMru6TB
+X-Proofpoint-GUID: ITnVEBb8CIZ5IGmmbnV24JLS3QMru6TB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-14_02,2023-04-13_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 adultscore=0 clxscore=1011 bulkscore=0 spamscore=0
+ suspectscore=0 phishscore=0 mlxlogscore=989 impostorscore=0
+ lowpriorityscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2304140050
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi christoph,
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Thanks for your comments.
 
-On Tue, 11 Apr 2023 21:01:48 +0300 you wrote:
-> The last RFC in August 2022 contained a proposal for the UAPI of both
-> TSN standards which together form Frame Preemption (802.1Q and 802.3):
-> https://lore.kernel.org/netdev/20220816222920.1952936-1-vladimir.oltean@nxp.com/
-> 
-> It wasn't clear at the time whether the 802.1Q portion of Frame Preemption
-> should be exposed via the tc qdisc (mqprio, taprio) or via some other
-> layer (perhaps also ethtool like the 802.3 portion, or dcbnl), even
-> though the options were discussed extensively, with pros and cons:
-> https://lore.kernel.org/netdev/20220816222920.1952936-3-vladimir.oltean@nxp.com/
-> 
-> [...]
+As mentioned in the cover letter that these ops are needed to implement clo=
+ck scaling and partial init features for which we already had below discuss=
+ions but faced strong resistance from community. Since these were huge code=
+ changes so maintainability was the main concern. Hence we have redesigned =
+our entire logic and moved complete code to vendor specific file and to sup=
+port this new design now we just need these two hooks in suspend and resume=
+ functions along with few symbols to be exported so that we can use those s=
+ymbols in our vendor files. I will push the vendor specific changes in the =
+next patchset.
 
-Here is the summary with links:
-  - [v5,net-next,1/9] net: ethtool: create and export ethtool_dev_mm_supported()
-    https://git.kernel.org/netdev/net-next/c/d54151aa0f4b
-  - [v5,net-next,2/9] net/sched: mqprio: simplify handling of nlattr portion of TCA_OPTIONS
-    https://git.kernel.org/netdev/net-next/c/3dd0c16ec93e
-  - [v5,net-next,3/9] net/sched: mqprio: add extack to mqprio_parse_nlattr()
-    https://git.kernel.org/netdev/net-next/c/57f21bf85400
-  - [v5,net-next,4/9] net/sched: mqprio: add an extack message to mqprio_parse_opt()
-    https://git.kernel.org/netdev/net-next/c/ab277d2084ba
-  - [v5,net-next,5/9] net/sched: pass netlink extack to mqprio and taprio offload
-    https://git.kernel.org/netdev/net-next/c/c54876cd5961
-  - [v5,net-next,6/9] net/sched: mqprio: allow per-TC user input of FP adminStatus
-    https://git.kernel.org/netdev/net-next/c/f62af20bed2d
-  - [v5,net-next,7/9] net/sched: taprio: allow per-TC user input of FP adminStatus
-    https://git.kernel.org/netdev/net-next/c/a721c3e54b80
-  - [v5,net-next,8/9] net: enetc: rename "mqprio" to "qopt"
-    https://git.kernel.org/netdev/net-next/c/50764da37cbe
-  - [v5,net-next,9/9] net: enetc: add support for preemptible traffic classes
-    https://git.kernel.org/netdev/net-next/c/01e23b2b3bad
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Old discussion for Clock scaling feature :
+https://patchwork.kernel.org/project/linux-mmc/cover/1571668177-3766-1-git-=
+send-email-rampraka@codeaurora.org/
 
+Old discussion for Partial init feature :
+https://patchwork.kernel.org/project/linux-mmc/patch/1650963852-4173-1-git-=
+send-email-quic_spathi@quicinc.com/
+
+Thanks,
+Sarthak
+
+> -----Original Message-----
+> From: Christoph Hellwig <hch@infradead.org>
+> Sent: Tuesday, April 4, 2023 10:44 AM
+> To: Sarthak Garg (QUIC) <quic_sartgarg@quicinc.com>
+> Cc: adrian.hunter@intel.com; ulf.hansson@linaro.org; linux-
+> mmc@vger.kernel.org; linux-kernel@vger.kernel.org; linux-arm-
+> msm@vger.kernel.org; Ram Prakash Gupta (QUIC)
+> <quic_rampraka@quicinc.com>; Bhaskar Valaboju (QUIC)
+> <quic_bhaskarv@quicinc.com>; Sachin Gupta (QUIC)
+> <quic_sachgupt@quicinc.com>; Pradeep Pragallapati (QUIC)
+> <quic_pragalla@quicinc.com>; Sayali Lokhande (QUIC)
+> <quic_sayalil@quicinc.com>; Brian Norris <briannorris@chromium.org>;
+> Wolfram Sang <wsa+renesas@sang-engineering.com>; Linus Walleij
+> <linus.walleij@linaro.org>
+> Subject: Re: [PATCH V1 1/2] mmc: core: Define new vendor ops to enable
+> internal features
+>=20
+> On Sat, Apr 01, 2023 at 10:27:22PM +0530, Sarthak Garg wrote:
+> > Define new ops to let vendor enable internal features in
+> > mmc_suspend/resume paths like partial init feature.
+>=20
+> 1) vendors have absolutely no business doing anything, you might be
+>    doing either something entirely wrong or use the wrong terminology
+>    here.
+>=20
+> 2) any kind of core hook not only needs a very good description, but
+>    also an actual user that goes along in the same series.
 
