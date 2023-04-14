@@ -2,134 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D54C6E1F08
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 11:08:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 556A46E1EF2
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 11:04:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbjDNJIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 05:08:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42144 "EHLO
+        id S229773AbjDNJEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 05:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbjDNJIx (ORCPT
+        with ESMTP id S229596AbjDNJEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 05:08:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6906B59FF;
-        Fri, 14 Apr 2023 02:08:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 02982645AC;
-        Fri, 14 Apr 2023 09:08:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45B10C433D2;
-        Fri, 14 Apr 2023 09:08:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681463331;
-        bh=NxHhNyO59Sno8DPKEVsgy8IRR2jb7JLYYAGWJQ0o1jk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=S22X7WQPAuZ12nmRcg3Rf64pzpx51yTVa48kdudRbsLtAFON2ElyZv/Jdpzu3CEr0
-         tDC9sJAinjGmM8lE7s31slyQktikjbZ/BKnvpMaZ8+OsMrFHIHQnqiHn/fQpaTHj0z
-         wL62Y83dOd0OUBafpwSmf8+R/eyQsRq83qznv9mR8MvLcW9wSsVhIIM+DQ6szqW43s
-         axWSeEOn6HbmekoQHUBb9ECjnoTIzuHTT7PF1vTivE1hBPm8EQ7FCHQsGLBXWXgsj0
-         9KAitdl1eOcXV9Gdr5zlaH+DO+Xruae/vy+R5dDpZQ3VRtwRRXnVXDNO1V3qRxk5ds
-         WFZMi6Anbthhg==
-Message-ID: <94db291f-6d93-548b-92ad-3a9f480783e2@kernel.org>
-Date:   Fri, 14 Apr 2023 11:08:46 +0200
+        Fri, 14 Apr 2023 05:04:14 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6567E525A
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 02:04:11 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id qb20so43526205ejc.6
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 02:04:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dectris.com; s=google; t=1681463050; x=1684055050;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BZMgCcf0+fxLcOwKjw3Au4d2n4Vk5uVRWfcU7aLG2ig=;
+        b=Yn1F7CgBNrgmAxnsA0PUp8yE8phRcPg60L7TzSsR4ckDpB1PIl0PRtJdYq1TxPrIWb
+         Q9NPnVFJlljDjF4yFpt5sQfTXHOYy4jCqXNqyY+kFNVgFuSyUpReYUnKauUwN46uY2Pu
+         tnMyNY3fzysgj6eUFcjGlm/uMCw3IlpDr4IP4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681463050; x=1684055050;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BZMgCcf0+fxLcOwKjw3Au4d2n4Vk5uVRWfcU7aLG2ig=;
+        b=aeNcebaShhdt+DVgXSJo7bQz+vbG99Cjgk7zlZobXkELlbdlZlKMIT4kdwczwetqzO
+         X+dOqWgx72JOM5zRi8ox5Hmnz5dr1YlZhqUpVJpTnC+pT6CT3S/usBNIgRl+hh2V0uQe
+         BzMXq3BCEolLczhSChYrTuLXxiuTmxi4S+a/l1kW7cWW09gG0CysFHc+yW8owGcLHtaT
+         ZNUyrjjMJvNTjj9ns8vwZgUN9sLpi5DlyJJM6lCTVp7G6fbo8X2ZHJWRnP4lWQOt4rRi
+         xXlluY07kBi6etLbeMHUOHCFMVmDhtWaue73sor4Bf9kySnwcG7NgnLKk6JlhDJs28Bj
+         zZrA==
+X-Gm-Message-State: AAQBX9eHodFKi5CXLf8pOQ0DRmNyTRGa9cjIocezjrlSyCqNp0I5A6wv
+        A4LsIW6IUYWT8mx+cO7w+lze3/LzIv1gvSGybdv3Mw==
+X-Google-Smtp-Source: AKy350Y3UQEHIQfpEyvYeIjNHaxlUM9VL08op1D/9x+f0EOfp5oa424EwhbmZrhIJuNLi7Pl7M7Rw8ibVi/1mm2LGXY=
+X-Received: by 2002:a17:907:3da9:b0:8f1:4cc5:f14c with SMTP id
+ he41-20020a1709073da900b008f14cc5f14cmr2953696ejc.0.1681463049818; Fri, 14
+ Apr 2023 02:04:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2 2/2] dt-bindings: usb: snps,dwc3: Add
- 'snps,global-regs-starting-offset' quirk
-Content-Language: en-US
-To:     =?UTF-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>, Rob Herring <robh+dt@kernel.org>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230412033006.10859-1-stanley_chang@realtek.com>
- <20230412033006.10859-2-stanley_chang@realtek.com>
- <CAL_JsqLqTHbHjB1qiLduhzvTaO7EBMgL6KYqZJtgStGVGtX1vQ@mail.gmail.com>
- <5ae89b563e234acdb36a4ae253cec869@realtek.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <5ae89b563e234acdb36a4ae253cec869@realtek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230406130205.49996-1-kal.conley@dectris.com>
+ <20230406130205.49996-2-kal.conley@dectris.com> <87sfdckgaa.fsf@toke.dk>
+ <ZDBEng1KEEG5lOA6@boxer> <CAHApi-nuD7iSY7fGPeMYiNf8YX3dG27tJx1=n8b_i=ZQdZGZbw@mail.gmail.com>
+ <875ya12phx.fsf@toke.dk> <CAHApi-=rMHt7uR8Sw1Vw+MHDrtkyt=jSvTvwz8XKV7SEb01CmQ@mail.gmail.com>
+ <87ile011kz.fsf@toke.dk> <CAHApi-m4gu8SX_1rBtUwrw+1-Q3ERFEX-HPMcwcCK1OceirwuA@mail.gmail.com>
+ <87o7nrzeww.fsf@toke.dk> <CAHApi-=BcdTD7KvE0OEzYya0RmDLDBS19NgtZsESADYXbySLOQ@mail.gmail.com>
+ <87edonzaac.fsf@toke.dk>
+In-Reply-To: <87edonzaac.fsf@toke.dk>
+From:   Kal Cutter Conley <kal.conley@dectris.com>
+Date:   Fri, 14 Apr 2023 11:08:53 +0200
+Message-ID: <CAHApi-mKCmvrcKk1Q3RsTJ+28LYg3cz0cetp3TBD+bqicga28Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/3] xsk: Support UMEM chunk_size > PAGE_SIZE
+To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
+Cc:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/04/2023 04:53, Stanley Chang[昌育德] wrote:
-> 
->>
->> On Tue, Apr 11, 2023 at 10:30 PM Stanley Chang
->> <stanley_chang@realtek.com> wrote:
->>>
->>> Add a new 'snps,global-regs-starting-offset' DT to dwc3 core to remap
->>> the global register start address
->>>
->>> The RTK DHC SoCs were designed the global register address offset at
->>> 0x8100. The default address is at DWC3_GLOBALS_REGS_START (0xc100).
->>> Therefore, add the property of device-tree to adjust this start address.
->>>
->>> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
->>> ---
->>>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 7 +++++++
->>>  1 file changed, 7 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->>> b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->>> index be36956af53b..5cbf3b7ded04 100644
->>> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->>> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->>> @@ -359,6 +359,13 @@ properties:
->>>      items:
->>>        enum: [1, 4, 8, 16, 32, 64, 128, 256]
->>>
->>> +  snps,global-regs-starting-offset:
->>> +    description:
->>> +      value for remapping global register start address. For some dwc3
->>> +      controller, the dwc3 global register start address is not at
->>> +      default DWC3_GLOBALS_REGS_START (0xc100). This property is
->> added to
->>> +      adjust the address.
->>
->> We already have 'reg' or using a specific compatible to handle differences. Use
->> one of those, not a custom property. Generally, properties should be used for
->> things that vary per board, not fixed in a given SoC.
->>
->> Rob
->>
-> 
-> The default offset is fixed by macro DWC3_GLOBALS_REGS_START, and it is not specified by reg.
+> >> "More annoying" is not a great argument, though. You're basically saying
+> >> "please complicate your code so I don't have to complicate mine". And
+> >> since kernel API is essentially frozen forever, adding more of them
+> >> carries a pretty high cost, which is why kernel developers tend not to
+> >> be easily swayed by convenience arguments (if all you want is a more
+> >> convenient API, just build one on top of the kernel primitives and wrap
+> >> it into a library).
+> >
+> > I was trying to make a fair comparison from the user's perspective
+> > between having to allocate huge pages and deal with discontiguous
+> > buffers. That was all.
+> >
+> > I think the "your code" distinction is a bit harsh. The kernel is a
+> > community project. Why isn't it "our" code? I am trying to add a
+> > feature that I think is generally useful to people. The kernel only
+> > exists to serve its users.
+>
+> Oh, I'm sorry if that came across as harsh, that was not my intention! I
+> was certainly not trying to make a "you vs us" distinction; I was just
+> trying to explain why making changes on the kernel side carries a higher
+> cost than an equivalent (or even slightly more complex) change on the
+> userspace side, because of the UAPI consideration.
 
-Are you saying that reg points to XHCI registers and the gap between
-them and DWC3_GLOBALS_REGS_START is different on some implementations of
-this IP?
+No problem! I agree. I am just somewhat confused by the "slightly more
+complex" view of the situation. Currently, packets > 4K are not
+supported _at all_ with AF_XDP. So this patchset adds something that
+is not possible _at all_ today. We have been patiently waiting since
+2018 for AF_XDP jumbo packet support. It seems that interest in this
+feature from maintainers has been... lacking. :-) Now, if I understand
+the situation correctly, you are asking for benchmarks to compare this
+implementation with AF_XDP multi-buffer which doesn't exist yet? I am
+glad it's being worked on but until there is a patchset, AF_XDP
+multi-buffer is still VAPORWARE. :-)
 
-> The dwc3/core is a general driver for every dwc3 IP of SoCs,
-> and vendor's definition and compatible should specify on its parent.
+Now in our case, we are primarily interested in throughput and
+reducing total system load (so we have more compute budget for other
+tasks). The faster we can receive packets the better. The packets we
+need to receive are (almost) all 8000-9000 bytes... Using AF_XDP
+multi-buffer would mean either (1) allocating extra space per packet
+and copying the data to linearize it or (2) rewriting a significant
+amount of code to handle segmented packets efficiently. If you want
+benchmarks for (1) just use xdpsock and compare -z with -c. I think
+that is a good approximation...
 
-Not entirely. It's how currently it is written, but not necessarily
-correct representation. The parent is only glue part which for some
-non-IP resources.
+Hopefully, the HFT crowd can save this patchset in the end. :-)
 
-> If we add a specific compatible to dwc3/core driver, then it will break this rule.
-
-What rule? The rule is to have specific compatibles, so now you are
-breaking it.
-
-> Therefore, I use a property to adjust this offset. 
-> If no define this property, it will use default offset. So it will not affect other board.
-
-
-Best regards,
-Krzysztof
-
+-Kal
