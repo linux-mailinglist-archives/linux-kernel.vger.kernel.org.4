@@ -2,99 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2A136E2BDC
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 23:49:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 162C16E2BE2
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 23:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbjDNVtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 17:49:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
+        id S229920AbjDNVwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 17:52:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjDNVtV (ORCPT
+        with ESMTP id S229720AbjDNVwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 17:49:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6459819A2;
-        Fri, 14 Apr 2023 14:49:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A960264998;
-        Fri, 14 Apr 2023 21:49:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDAA5C433EF;
-        Fri, 14 Apr 2023 21:49:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681508959;
-        bh=1x7EeM3VZ+EADcoA4/MQ8ManxznxDJ06SrvK/B28czY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=buZL1sGMoy9FUtbGI+SKPAjVXE/ApbZRPVdEhzF5fgwsrF+S5TyVwqkdw1ffvFIhv
-         d7kJg+pZpaE/I8r5dztw0BY9z3yT5AcfzB9enLYzZ5dtfm//nJSyOkf4X2Fx22yR/4
-         RNwGj7CSMBBvAaq4NptWIRn5GlMvi5HWe+i8p3KsMDT8L71rv3py005BUOgMr5l9Qa
-         AHVMVeih/iJM2dikBR0OoPsc4oY8s5H6JfcZtvL4kvUPJgLVoJy5JIS1x2VYe0ipag
-         iX9G2b1kOubjkeH8LZ9uX2+FUFv/N7C/r0lzuLwJsXTIOrRCzuNCJ9WsKX9WzFL16T
-         oa6Ri90e7zJZQ==
-Date:   Fri, 14 Apr 2023 16:49:17 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Robert Richter <rrichter@amd.com>
-Cc:     Terry Bowman <terry.bowman@amd.com>, alison.schofield@intel.com,
-        vishal.l.verma@intel.com, ira.weiny@intel.com, bwidawsk@kernel.org,
-        dan.j.williams@intel.com, dave.jiang@intel.com,
-        Jonathan.Cameron@huawei.com, linux-cxl@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bhelgaas@google.com,
-        Oliver O'Halloran <oohall@gmail.com>,
-        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v3 6/6] PCI/AER: Unmask RCEC internal errors to enable
- RCH downstream port error handling
-Message-ID: <20230414214917.GA221407@bhelgaas>
+        Fri, 14 Apr 2023 17:52:13 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480211FF0
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 14:52:11 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id h198so26876897ybg.12
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 14:52:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681509130; x=1684101130;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=46Ec7uFiIfmRmN61V1bJw83NzlxVzPRXSYdLuJ40kFQ=;
+        b=20XlelL+jChK79ShTU3jIFYMVYsTy4bydr0eghQ0sbN+vYBGl2mvjANHKs+gvvmfNd
+         behIfmNJuGLYbs0EZCP3B1qIKL30mKS2+TMMsC+6goZ8ht6B4engzIc7LOewjic8jlcm
+         bJBeh2n/L8L4jM4iuQZ1hrB+694ETnuacFgJ+PLl48YhPn8X9Iz+XeWu5Ud2EeCEdHNJ
+         4seUQwlqrRZ2XLAwOoH0X9uuj8qKAdU5krgXfhVau1I88bqzByQMo9ntrZuPDwF6bkb9
+         sOrFsppnzMHHEuCTAsWkpgx6Hq2VPnrojC2GAbQn7fk1KHNO3i2HjuK1vMZcMz3SFBDL
+         GuYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681509130; x=1684101130;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=46Ec7uFiIfmRmN61V1bJw83NzlxVzPRXSYdLuJ40kFQ=;
+        b=lYJa+hjqcVGvg0blABUxzDgjpD9tsNxMTE+YUO76MD/CLMsXLr6pVXUFvlsmxmAfXm
+         hYGdwyu/EuSE9u1WAovx5U64o4ZZ/wO21EY6CLPaBAg96wIOEYz/UaRj0UqWcagrDepq
+         eRFFI3hxepcIYjugtmp8XgKzo4UUZM/PvmGbv2ojFgmk5tBheswFs2W1IE0ORVnxOovU
+         Oc+Z/pw7jSFrf5whv7jDy7cTtC/3YsA16cYiCQb3pz8KkE/6V6knuhTVBXZq5EWk7X/N
+         8a4/FrUAj/QuZFAqViDgAGgFC9bxjpyYsKs8brHK4cZ7RaTvKO8dMQRpW+cuIOsTFlsg
+         vL/g==
+X-Gm-Message-State: AAQBX9cGmkEdxW+V2a/YJSNwSURD9tyWxz0L+6t+QtmS6LB0GwqPeiRu
+        8FIhtbRJGmtTxfIx43KQMVJRS8ZV70zJ7TGMnm4o5A==
+X-Google-Smtp-Source: AKy350ab6zATiyZGtaIhEWr8kb6QJ/jqLf1DxG2XPENo2+Qz94wtYQds9/wct2ztRxrJLixMF3T2qCyEYoN2GfJz8Ho=
+X-Received: by 2002:a25:308a:0:b0:b8e:e0db:5b9d with SMTP id
+ w132-20020a25308a000000b00b8ee0db5b9dmr3918724ybw.12.1681509130246; Fri, 14
+ Apr 2023 14:52:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZDgFv6AtCXkVl8IQ@rric.localdomain>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230414180043.1839745-1-surenb@google.com> <ZDmetaUdmlEz/W8Q@casper.infradead.org>
+ <CAJuCfpFPNiZmqQPP+K7CAuiFP5qLdd6W9T84VQNdRsN-9ggm1w@mail.gmail.com> <ZDm4P37XXyMBOMdZ@casper.infradead.org>
+In-Reply-To: <ZDm4P37XXyMBOMdZ@casper.infradead.org>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Fri, 14 Apr 2023 14:51:59 -0700
+Message-ID: <CAJuCfpF2idZUjON6TZw4NV+himmACMGGE=2jgmt=fgAXv6L5Pg@mail.gmail.com>
+Subject: Re: [PATCH 1/1] mm: handle swap page faults if the faulting page can
+ be locked
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, mhocko@suse.com,
+        josef@toxicpanda.com, jack@suse.cz, ldufour@linux.ibm.com,
+        laurent.dufour@fr.ibm.com, michel@lespinasse.org,
+        liam.howlett@oracle.com, jglisse@google.com, vbabka@suse.cz,
+        minchan@google.com, dave@stgolabs.net, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 03:38:07PM +0200, Robert Richter wrote:
-> On 12.04.23 16:29:01, Bjorn Helgaas wrote:
-> > On Tue, Apr 11, 2023 at 01:03:02PM -0500, Terry Bowman wrote:
-> > > From: Robert Richter <rrichter@amd.com>
-> > > 
-> > > RCEC AER corrected and uncorrectable internal errors (CIE/UIE) are
-> > > disabled by default.
+On Fri, Apr 14, 2023 at 1:32=E2=80=AFPM Matthew Wilcox <willy@infradead.org=
+> wrote:
+>
+> On Fri, Apr 14, 2023 at 12:48:54PM -0700, Suren Baghdasaryan wrote:
+> > >  - We can call migration_entry_wait().  This will wait for PG_locked =
+to
+> > >    become clear (in migration_entry_wait_on_locked()).  As previously
+> > >    discussed offline, I think this is safe to do while holding the VM=
+A
+> > >    locked.
+>
+> Just to be clear, this particular use of PG_locked is not during I/O,
+> it's during page migration.  This is a few orders of magnitude
+> different.
+>
+> > >  - We can call swap_readpage() if we allocate a new folio.  I haven't
+> > >    traced through all this code to tell if it's OK.
+>
+> ... whereas this will wait for I/O.  If we decide that's not OK, we'll
+> need to test for FAULT_FLAG_VMA_LOCK and bail out of this path.
+>
+> > > So ... I believe this is all OK, but we're definitely now willing to
+> > > wait for I/O from the swap device while holding the VMA lock when we
+> > > weren't before.  And maybe we should make a bigger deal of it in the
+> > > changelog.
+> > >
+> > > And maybe we shouldn't just be failing the folio_lock_or_retry(),
+> > > maybe we should be waiting for the folio lock with the VMA locked.
+> >
+> > Wouldn't that cause holding the VMA lock for the duration of swap I/O
+> > (something you said we want to avoid in the previous paragraph) and
+> > effectively undo d065bd810b6d ("mm: retry page fault when blocking on
+> > disk transfer") for VMA locks?
+>
+> I'm not certain we want to avoid holding the VMA lock for the duration
+> of an I/O.  Here's how I understand the rationale for avoiding holding
+> the mmap_lock while we perform I/O (before the existence of the VMA lock)=
+:
+>
+>  - If everybody is doing page faults, there is no specific problem;
+>    we all hold the lock for read and multiple page faults can be handled
+>    in parallel.
+>  - As soon as one thread attempts to manipulate the tree (eg calls
+>    mmap()), all new readers must wait (as the rwsem is fair), and the
+>    writer must wait for all existing readers to finish.  That's
+>    potentially milliseconds for an I/O during which time all page faults
+>    stop.
+>
+> Now we have the per-VMA lock, faults which can be handled without taking
+> the mmap_lock can still be satisfied, as long as that VMA is not being
+> modified.  It is rare for a real application to take a page fault on a
+> VMA which is being modified.
+>
+> So modifications to the tree will generally not take VMA locks on VMAs
+> which are currently handling faults, and new faults will generally not
+> find a VMA which is write-locked.
+>
+> When we find a locked folio (presumably for I/O, although folios are
+> locked for other reasons), if we fall back to taking the mmap_lock
+> for read, we increase contention on the mmap_lock and make the page
+> fault wait on any mmap() operation.
 
-> > > +static void cxl_unmask_internal_errors(struct pci_dev *rcec)
-> 
-> Also renaming this to cxl_enable_rcec() to more generalize the
-> function.
+Do you mean we increase mmap_lock contention by holding the mmap_lock
+between the start of pagefault retry and until we drop it in
+__folio_lock_or_retry?
 
-I didn't follow this.  "cxl_enable_rcec" doesn't say anything about
-"unmasking" or "internal errors", which seems like the whole point.
-And the function doesn't actually *enable* and RCEC.
+> If we simply sleep waiting for the
+> I/O, we make any mmap() operation _which touches this VMA_ wait for
+> the I/O to complete.  But I think that's OK, because new page faults
+> can continue to be serviced ... as long as they don't need to take
+> the mmap_lock.
 
-> > > +{
-> > > +	if (!handles_cxl_errors(rcec))
-> > > +		return;
-> > > +
-> > > +	if (__cxl_unmask_internal_errors(rcec))
-> > > +		dev_err(&rcec->dev, "cxl: Failed to unmask internal errors");
-> > > +	else
-> > > +		dev_dbg(&rcec->dev, "cxl: Internal errors unmasked");
-> 
-> I am going to change this to a pci_info() for alignment with other
-> messages around:
-> 
-> [   14.200265] pcieport 0000:40:00.3: PME: Signaling with IRQ 44
-> [   14.213925] pcieport 0000:40:00.3: AER: cxl: Internal errors unmasked
-> [   14.228413] pcieport 0000:40:00.3: AER: enabled with IRQ 44
-> 
-> Plus, using pci_err() instead of dev_err().
+Ok, so we will potentially block VMA writers for the duration of the I/O...
+Stupid question: why was this a bigger problem for mmap_lock?
+Potentially our address space can consist of only one anon VMA, so
+locking that VMA vs mmap_lock should be the same from swap pagefault
+POV. Maybe mmap_lock is taken for write in some other important cases
+when VMA lock is not needed?
 
-Thanks for that!
-
-Bjorn
+>
+> So ... I think what we _really_ want here is ...
+>
+> +++ b/mm/filemap.c
+> @@ -1690,7 +1690,8 @@ static int __folio_lock_async(struct folio *folio, =
+struct wait_page_queue *wait)
+>  bool __folio_lock_or_retry(struct folio *folio, struct mm_struct *mm,
+>                          unsigned int flags)
+>  {
+> -       if (fault_flag_allow_retry_first(flags)) {
+> +       if (!(flags & FAULT_FLAG_VMA_LOCK) &&
+> +           fault_flag_allow_retry_first(flags)) {
+>                 /*
+>                  * CAUTION! In this case, mmap_lock is not released
+>                  * even though return 0.
+> @@ -1710,7 +1711,8 @@ bool __folio_lock_or_retry(struct folio *folio, str=
+uct mm_struct *mm,
+>
+>                 ret =3D __folio_lock_killable(folio);
+>                 if (ret) {
+> -                       mmap_read_unlock(mm);
+> +                       if (!(flags & FAULT_FLAG_VMA_LOCK))
+> +                               mmap_read_unlock(mm);
+>                         return false;
+>                 }
+>         } else {
+>
