@@ -2,157 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A14546E26C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 17:22:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F596E26C8
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 17:24:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbjDNPWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 11:22:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42078 "EHLO
+        id S230273AbjDNPX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 11:23:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbjDNPWi (ORCPT
+        with ESMTP id S229469AbjDNPX5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 11:22:38 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28EEAD36;
-        Fri, 14 Apr 2023 08:22:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681485757; x=1713021757;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=B0jHdxZzYwrgZFCx/7w9FS8F32WExkZ7+uG6frX+Lvc=;
-  b=V83k496Rx1j1geu0WtVEaz8fhj3D+3u5qTjZ1Jnk/WdR+WjrxRRK5ZN0
-   VyEmFkOpT6UENcbgpQyCE/cQQNxvp7LcPrR3aaGu5VAfRmZ1NAGGd/1GU
-   9FY4TDhPMUyu1V2Ttd1JSyHgKmYbwsIEa7lrlO5Cr6gCt6xK9Aq1ASjpO
-   8+LMIPc1b2s4X3SJTTQM2R8m/qKaXTT+lwPbBQO3VThMF9mAOHHTwHKYz
-   yOwrbmTOgyo0A8wiT06hQwgQeElWOUNcF7Q5O2BMqwNppp6PBxysO0Gz2
-   NHH/PSqfvHv4YJkamnqe3GpoNdZFxUUtohajHoiQ9c4rBIHHRWCV1RQeS
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="324116538"
-X-IronPort-AV: E=Sophos;i="5.99,197,1677571200"; 
-   d="scan'208";a="324116538"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 08:22:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="667220419"
-X-IronPort-AV: E=Sophos;i="5.99,197,1677571200"; 
-   d="scan'208";a="667220419"
-Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.243.67])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 08:22:36 -0700
-Date:   Fri, 14 Apr 2023 08:22:34 -0700
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     kernel-janitors@vger.kernel.org, nvdimm@lists.linux.dev,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Vishal Verma <vishal.l.verma@intel.com>, cocci@inria.fr,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] nvdimm: Replace the usage of a variable by a direct
- function call in nd_pfn_validate()
-Message-ID: <ZDlvunCNe9yWykIE@aschofie-mobl2>
-References: <40c60719-4bfe-b1a4-ead7-724b84637f55@web.de>
- <1a11455f-ab57-dce0-1677-6beb8492a257@web.de>
- <d2403b7a-c6cd-4ee9-2a35-86ea57554eec@web.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d2403b7a-c6cd-4ee9-2a35-86ea57554eec@web.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 14 Apr 2023 11:23:57 -0400
+Received: from mail-m11875.qiye.163.com (mail-m11875.qiye.163.com [115.236.118.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5B3AD29;
+        Fri, 14 Apr 2023 08:23:55 -0700 (PDT)
+Received: from localhost.localdomain (unknown [IPV6:240e:3b7:3271:b060:b145:6016:5b08:4ebc])
+        by mail-m11875.qiye.163.com (Hmail) with ESMTPA id C120D281066;
+        Fri, 14 Apr 2023 23:23:48 +0800 (CST)
+From:   Ding Hui <dinghui@sangfor.com.cn>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, ecree.xilinx@gmail.com, habetsm.xilinx@gmail.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pengdonglin@sangfor.com.cn, huangcun@sangfor.com.cn,
+        Ding Hui <dinghui@sangfor.com.cn>
+Subject: [PATCH net v2] sfc: Fix use-after-free due to selftest_work
+Date:   Fri, 14 Apr 2023 23:23:06 +0800
+Message-Id: <20230414152306.18150-1-dinghui@sangfor.com.cn>
+X-Mailer: git-send-email 2.17.1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCSExPVh5PTU0fQx8YGkMaSFUTARMWGhIXJBQOD1
+        lXWRgSC1lBWUlPSx5BSBlMQUhJTEpBGUtNS0EZSk9OQU1LSk1BThlLQ0FPHhkYWVdZFhoPEhUdFF
+        lBWU9LSFVKSktISkxVSktLVUtZBg++
+X-HM-Tid: 0a87805d94042eb1kusnc120d281066
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NRA6PRw6Az0cHhpPDjU3C08i
+        DAMwCS1VSlVKTUNKT0NOQ0lCTkNMVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
+        QVlJT0seQUgZTEFISUxKQRlLTUtBGUpPTkFNS0pNQU4ZS0NBTx4ZGFlXWQgBWUFPSEhJNwY+
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 14, 2023 at 12:12:37PM +0200, Markus Elfring wrote:
-> Date: Fri, 14 Apr 2023 12:01:15 +0200
-> 
-> The address of a data structure member was determined before
-> a corresponding null pointer check in the implementation of
-> the function “nd_pfn_validate”.
-> 
-> Thus avoid the risk for undefined behaviour by replacing the usage of
-> the local variable “parent_uuid” by a direct function call within
-> a later condition check.
+There is a use-after-free scenario that is:
 
-Hi Markus,
+When the NIC is down, user set mac address or vlan tag to VF,
+the xxx_set_vf_mac() or xxx_set_vf_vlan() will invoke efx_net_stop()
+and efx_net_open(), since netif_running() is false, the port will not
+start and keep port_enabled false, but selftest_work is scheduled
+in efx_net_open().
 
-I think I understand what you are saying above, but I don't follow
-how that applies here. This change seems to be a nice simplification,
-parent_uuid, is used once, just grab it when needed.
+If we remove the device before selftest_work run, the efx_stop_port()
+will not be called since the NIC is down, and then efx is freed,
+we will soon get a UAF in run_timer_softirq() like this:
 
-What is the risk of undefined behavior?
+[ 1178.907941] ==================================================================
+[ 1178.907948] BUG: KASAN: use-after-free in run_timer_softirq+0xdea/0xe90
+[ 1178.907950] Write of size 8 at addr ff11001f449cdc80 by task swapper/47/0
+[ 1178.907950]
+[ 1178.907953] CPU: 47 PID: 0 Comm: swapper/47 Kdump: loaded Tainted: G           O     --------- -t - 4.18.0 #1
+[ 1178.907954] Hardware name: SANGFOR X620G40/WI2HG-208T1061A, BIOS SPYH051032-U01 04/01/2022
+[ 1178.907955] Call Trace:
+[ 1178.907956]  <IRQ>
+[ 1178.907960]  dump_stack+0x71/0xab
+[ 1178.907963]  print_address_description+0x6b/0x290
+[ 1178.907965]  ? run_timer_softirq+0xdea/0xe90
+[ 1178.907967]  kasan_report+0x14a/0x2b0
+[ 1178.907968]  run_timer_softirq+0xdea/0xe90
+[ 1178.907971]  ? init_timer_key+0x170/0x170
+[ 1178.907973]  ? hrtimer_cancel+0x20/0x20
+[ 1178.907976]  ? sched_clock+0x5/0x10
+[ 1178.907978]  ? sched_clock_cpu+0x18/0x170
+[ 1178.907981]  __do_softirq+0x1c8/0x5fa
+[ 1178.907985]  irq_exit+0x213/0x240
+[ 1178.907987]  smp_apic_timer_interrupt+0xd0/0x330
+[ 1178.907989]  apic_timer_interrupt+0xf/0x20
+[ 1178.907990]  </IRQ>
+[ 1178.907991] RIP: 0010:mwait_idle+0xae/0x370
 
-> 
-> This issue was detected by using the Coccinelle software.
-Which cocci script?
+If the NIC is not actually brought up, there is no need to schedule
+selftest_work, so let's move invoking efx_selftest_async_start()
+into efx_start_all(), and it will be canceled by broughting down.
 
-> 
-> Fixes: d1c6e08e7503649e4a4f3f9e700e2c05300b6379 ("libnvdimm/labels: Add uuid helpers")
+Fixes: dd40781e3a4e ("sfc: Run event/IRQ self-test asynchronously when interface is brought up")
+Fixes: e340be923012 ("sfc: add ndo_set_vf_mac() function for EF10")
+Debugged-by: Huang Cun <huangcun@sangfor.com.cn>
+Cc: Donglin Peng <pengdonglin@sangfor.com.cn>
+Suggested-by: Martin Habets <habetsm.xilinx@gmail.com>
+Signed-off-by: Ding Hui <dinghui@sangfor.com.cn>
+---
+ drivers/net/ethernet/sfc/efx.c        | 1 -
+ drivers/net/ethernet/sfc/efx_common.c | 2 ++
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-This fixes tag seems to be the wrong tag. It is a tag from when the
-uuid helpers were introduce, not where parent_uuid was first introduced
-and used. I'm not clear this warrants a Fixes tag anyway. Is there
-really a bug here? Perhaps I'm missing something in the previous
-explanation of risk.
+diff --git a/drivers/net/ethernet/sfc/efx.c b/drivers/net/ethernet/sfc/efx.c
+index 884d8d168862..1eceffa02b55 100644
+--- a/drivers/net/ethernet/sfc/efx.c
++++ b/drivers/net/ethernet/sfc/efx.c
+@@ -541,7 +541,6 @@ int efx_net_open(struct net_device *net_dev)
+ 	else
+ 		efx->state = STATE_NET_UP;
+ 
+-	efx_selftest_async_start(efx);
+ 	return 0;
+ }
+ 
+diff --git a/drivers/net/ethernet/sfc/efx_common.c b/drivers/net/ethernet/sfc/efx_common.c
+index cc30524c2fe4..361687de308d 100644
+--- a/drivers/net/ethernet/sfc/efx_common.c
++++ b/drivers/net/ethernet/sfc/efx_common.c
+@@ -544,6 +544,8 @@ void efx_start_all(struct efx_nic *efx)
+ 	/* Start the hardware monitor if there is one */
+ 	efx_start_monitor(efx);
+ 
++	efx_selftest_async_start(efx);
++
+ 	/* Link state detection is normally event-driven; we have
+ 	 * to poll now because we could have missed a change
+ 	 */
+-- 
+2.17.1
 
-checkpatch is WARNING on the tag format:
-WARNING: Please use correct Fixes: style 'Fixes: <12 chars of sha1> ("<title line>")' - ie: 'Fixes: d1c6e08e7503 ("libnvdimm/labels: Add uuid helpers")'
-#17:
-    Fixes: d1c6e08e7503649e4a4f3f9e700e2c05300b6379 ("libnvdimm/labels: Add uuid helpers")
-
-checkpatch is also WARNING on the commit msg:
-WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
-#5:
-    nvdimm: Replace the usage of a variable by a direct function call in nd_pfn_validate()
-
-Also, possible only my pet peeve, the long commit message spoils my
-pretty 80 column view. Please trim it to not wrap here:
-
-$git log --oneline pfn_devs.c
-52b639e56a46 nvdimm: Replace the usage of a variable by a direct function call in nd_pfn_validate()
-c91d71363084 nvdimm: Support sizeof(struct page) > MAX_STRUCT_PAGE_SIZE
-6e9f05dc66f9 libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE
-81beea55cb74 nvdimm: Drop nd_device_lock()
-4a0079bc7aae nvdimm: Replace lockdep_mutex with local lock classes
-322cbb50de71 block: remove genhd.h
-
-Alison
-
-
-> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-> ---
->  drivers/nvdimm/pfn_devs.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/nvdimm/pfn_devs.c b/drivers/nvdimm/pfn_devs.c
-> index af7d9301520c..f14cbfa500ed 100644
-> --- a/drivers/nvdimm/pfn_devs.c
-> +++ b/drivers/nvdimm/pfn_devs.c
-> @@ -456,7 +456,6 @@ int nd_pfn_validate(struct nd_pfn *nd_pfn, const char *sig)
->  	unsigned long align, start_pad;
->  	struct nd_pfn_sb *pfn_sb = nd_pfn->pfn_sb;
->  	struct nd_namespace_common *ndns = nd_pfn->ndns;
-> -	const uuid_t *parent_uuid = nd_dev_to_uuid(&ndns->dev);
-> 
->  	if (!pfn_sb || !ndns)
->  		return -ENODEV;
-> @@ -476,7 +475,7 @@ int nd_pfn_validate(struct nd_pfn *nd_pfn, const char *sig)
->  		return -ENODEV;
->  	pfn_sb->checksum = cpu_to_le64(checksum);
-> 
-> -	if (memcmp(pfn_sb->parent_uuid, parent_uuid, 16) != 0)
-> +	if (memcmp(pfn_sb->parent_uuid, nd_dev_to_uuid(&ndns->dev), 16) != 0)
->  		return -ENODEV;
-> 
->  	if (__le16_to_cpu(pfn_sb->version_minor) < 1) {
-> --
-> 2.40.0
-> 
