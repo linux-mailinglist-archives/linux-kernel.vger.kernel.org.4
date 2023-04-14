@@ -2,77 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE456E233E
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 14:28:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53F166E2337
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 14:27:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230487AbjDNM2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 08:28:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47970 "EHLO
+        id S229922AbjDNM1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 08:27:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230301AbjDNM2X (ORCPT
+        with ESMTP id S229668AbjDNM1I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 08:28:23 -0400
-Received: from sender3-op-o18.zoho.com (sender3-op-o18.zoho.com [136.143.184.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443FD5260;
-        Fri, 14 Apr 2023 05:28:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1681475224; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=muEMiNc6X4kpwNuB2j+lTCvzYfl6q+EGl/it36G5HLiA3/9geCnrIwoZS+5IMBjFrMD6I9JS3J/QHnPeqgWqlsKMWC4PTc0XHqhXpI4GcfCtWDB6eFUWkU1omEqhge7ytalffWzH/IKHufx79x5QLPriEoPt1K7VFJooQ1SfnuE=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1681475224; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=z2XOASLEKsa7wqjYtuo8NoqmkS3+OiypWGH4rl3hN5o=; 
-        b=DAUZoXsgTbfo69eoDV4OtSGZn5XHU3YCDAInDfEWFcmX9w13n8n/2kyMXSBe46FopoaxOr6IvRxO1SZYot+8vsqpHjtkZPnlrmM0DnqrwxA+cQsELSrw6GWjuG7vJWpHkxry7BKHSANntEO9M1iIYdbzQ+d8I6YegrwoKUxFXA0=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1681475224;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=z2XOASLEKsa7wqjYtuo8NoqmkS3+OiypWGH4rl3hN5o=;
-        b=DjqWN6YlqTqNN4n1AGNJz1sT6czOolvvH75qmlhf+KpyMwkRDxemDPPSA5W3UUcW
-        RJbXmLviSSPQr62y2I1GQA8farT0tSXq82a9RW6Ib6zTCt+TSqvGI2uF5LrM8tkP2Jc
-        ntCwcyFDSZJvuWb3h4eh0+mxQDnS7BGuk0DkUqFM=
-Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
-        with SMTPS id 1681475222132610.1878987362392; Fri, 14 Apr 2023 05:27:02 -0700 (PDT)
-Message-ID: <60d11eba-9532-48ea-b4ce-28a332f2b7df@arinc9.com>
-Date:   Fri, 14 Apr 2023 15:26:52 +0300
+        Fri, 14 Apr 2023 08:27:08 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62FEA5DE;
+        Fri, 14 Apr 2023 05:27:06 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id l11so19161449qtj.4;
+        Fri, 14 Apr 2023 05:27:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681475226; x=1684067226;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lOLnLUyWsueTcuj2HNW2KGjMx5SMzfhFbviIP3xXYOo=;
+        b=OrBfzxeofaBx3S6TatIutjwAt0TpdUSnm9rchMg3fvcJeOVr4wCpnKFvlgST5vx7Kr
+         +EMNAPLBYF1RlDljKKQ+bKtK4QZ65wZgZNhnJQKk+a5/nievSQPdWLl61pDPxV8P33zL
+         JmXXiklPMqcDIH1vqM7noklxBajEsV40yzCEdLoqZTWogyPy8Q03tKrFrIClPfMju5rd
+         M1sQrBUk3ntc4hpp4VOYoiHBMH3qeZjb6ShTCDjqyHsVHiV1mgAtkqyl9MzyM5h7zk0l
+         VzI/sORklNb8YHNqAiS+9ffJl9uJ9GfFnUgG8IFZ+lC6jg7UFHETPftqVuc0PN/5pz+i
+         4iEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681475226; x=1684067226;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lOLnLUyWsueTcuj2HNW2KGjMx5SMzfhFbviIP3xXYOo=;
+        b=DYgi+xQXlgunH/fUkF7fuiQO/wMtAAe4jBKv1Vv1q5NI8CDwwS9uS3G6c3pMPIo/J/
+         ilJ6ElaEfH9vagm5EjmbCS3njfRgpgevOLwZ37CjNnqFXchf2nYMUDQEZwVbnN/oH4dl
+         dAElE8ey7t4uZ4IX3V3ci1Qgvi48p1y/vPKPrn0vbVHI0IEMCG5PzShfgQkZvFrPNs/v
+         vm3g9JAey215D4/oFfUwDj0qeuLe60for62ixVBhUvX14wLfcFfn2AWs8LMUTATzhOj7
+         JwUiY3ypXJfzFhygJe4mhYtvFERVS2SVnDyci9V2UHbCxxE8MtKkIUVbNQ+RQwSbAd2+
+         9xZg==
+X-Gm-Message-State: AAQBX9dtJ3aNIBBux0MzPv8Ep2s5SN0wvIArUAualVCGH9GXoopaaDMb
+        7hVQ2y5RiRI3Q1K942DWVmfkr3Xz+vWpFQ==
+X-Google-Smtp-Source: AKy350aqZ8F8Upq3pSjo9kCKeDEwex0PMvg1Zgjwk2kanisFlrJRxt9NGtqdtNpjhAWYlLIvYUIfpw==
+X-Received: by 2002:a05:622a:1114:b0:3ea:abb2:23c8 with SMTP id e20-20020a05622a111400b003eaabb223c8mr4893335qty.42.1681475225750;
+        Fri, 14 Apr 2023 05:27:05 -0700 (PDT)
+Received: from [192.168.1.105] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id q11-20020a05620a2a4b00b0074a3c282c7dsm1183844qkp.97.2023.04.14.05.27.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Apr 2023 05:27:05 -0700 (PDT)
+Message-ID: <85a1cca1-f59b-6a0c-dee3-9d9ed5d6b6d1@gmail.com>
+Date:   Fri, 14 Apr 2023 05:27:01 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH net] net: dsa: mt7530: permit port 5 to work without port
- 6 on MT7621 SoC
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 2/3] PCI: brcmstb: CLKREQ# accomodations of downstream
+ device
 Content-Language: en-US
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+To:     Jim Quinlan <jim2101024@gmail.com>,
+        Cyril Brulebois <kibi@debian.org>
+Cc:     linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Phil Elwell <phil@raspberrypi.com>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
         Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
-        Alexander Couzens <lynxis@fe80.eu>,
-        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
-        Richard van Schagen <richard@routerhints.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        erkin.bozoglu@xeront.com, Greg Ungerer <gerg@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, arinc9.unal@gmail.com
-References: <20230307155411.868573-1-vladimir.oltean@nxp.com>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <20230307155411.868573-1-vladimir.oltean@nxp.com>
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230411165919.23955-1-jim2101024@gmail.com>
+ <20230411165919.23955-3-jim2101024@gmail.com>
+ <20230413143935.pmbyjk2boxl3rwne@mraw.org>
+ <CANCKTBtXKAYf1LxR4qN+dVyxsWgyDztUVB4EdG=xhHbuhNCq5w@mail.gmail.com>
+ <20230413200646.ddgsoqgmaae343nl@mraw.org>
+ <CANCKTBuZ=Hxy9WgnjbauhHqXGx4QU_t8pgX=3che2K89=2BT9A@mail.gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <CANCKTBuZ=Hxy9WgnjbauhHqXGx4QU_t8pgX=3che2K89=2BT9A@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,30 +95,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7.03.2023 18:54, Vladimir Oltean wrote:
-> The MT7530 switch from the MT7621 SoC has 2 ports which can be set up as
-> internal: port 5 and 6. Arınç reports that the GMAC1 attached to port 5
-> receives corrupted frames, unless port 6 (attached to GMAC0) has been
-> brought up by the driver. This is true regardless of whether port 5 is
-> used as a user port or as a CPU port (carrying DSA tags).
+
+
+On 4/14/2023 5:14 AM, Jim Quinlan wrote:
+> On Thu, Apr 13, 2023 at 4:06 PM Cyril Brulebois <kibi@debian.org> wrote:
+>>
+>> Hi Jim,
+>>
+>> Jim Quinlan <jim2101024@gmail.com> (2023-04-13):
+>>> Can you provide (a) the full boot log prior to applying the patch
+>>> series and (b) full boot log after applying the series, using an
+>>> IDENTICAL setup. If it fails on both then it has little to do with my
+>>> patch series.
+>>
+>> Just to be clear, the issue I reported was with:
+>>   - Raspberry Pi Compute Module 4 (Rev 1.1, 4G RAM, 32G storage)
+>>   - Raspberry Pi Compute Module 4 IO Board
+>>   - SupaHub PCIe-to-multiple-USB adapter, reference PCE6U1C-R02, VER 006S
+>>
+>> This was my minimal reproducer for the kernel panic at boot-up, which
+>> goes away with either v1 or v2. When I realized I didn't actually check
+>> whether the SupaHub board was working correctly, I plugged 2 devices to
+>> obtain this setup:
+>>   - Raspberry Pi Compute Module 4 (Rev 1.1, 4G RAM, 32G storage)
+>>   - Raspberry Pi Compute Module 4 IO Board
+>>   - SupaHub PCIe-to-multiple-USB adapter, reference PCE6U1C-R02, VER 006S
+>>   - Kingston DataTraveler G4 32GB on USB-A port #1 of the SupaHub board.
+>>   - Logitech K120 keyboard on USB-A port #2 of the SupaHub board.
+>>
+>> It turns out that this particular revision of the SupaHub board isn't
+>> supported by xhci_hcd directly (failing to probe with error -110) and
+>> one needs to enable CONFIG_USB_XHCI_PCI_RENESAS=m and also ship its
+>> accompanying firmware (/lib/firmware/renesas_usb_fw.mem). With this
+>> updated kernel config, I'm able to use the keyboard and to read data
+>> from the memory stick without problems (70 MB/s).
+>>
+>>> In my last series your testing somehow conflated the effect of an
+>>> unrelated MMC interrupt issue so please be precise.
+>>
+>> I wish things would be simpler and didn't involve combinatorics, let
+>> alone other bugs/regressions at times, but I'm really trying my best to
+>> navigate and report issues and test patches when I can spare some time…
 > 
-> Offline debugging (blind for me) which began in the linked thread showed
-> experimentally that the configuration done by the driver for port 6
-> contains a step which is needed by port 5 as well - the write to
-> CORE_GSWPLL_GRP2 (note that I've no idea as to what it does, apart from
-> the comment "Set core clock into 500Mhz"). Prints put by Arınç show that
-> the reset value of CORE_GSWPLL_GRP2 is RG_GSWPLL_POSDIV_500M(1) |
-> RG_GSWPLL_FBKDIV_500M(40) (0x128), both on the MCM MT7530 from the
-> MT7621 SoC, as well as on the standalone MT7530 from MT7623NI Bananapi
-> BPI-R2. Apparently, port 5 on the standalone MT7530 can work under both
-> values of the register, while on the MT7621 SoC it cannot.
+> Hi Cyril,
+> 
+> I want to encourage you and others doing testing and bug reporting:
+> everyone wins when a bug or issue is reported, fixed, and tested.
+> I'm just asking that when you have negative results, that you provide
+> information on the "before" and "after" test results of
+> the patch series, and run both on the same test environment.
 
-I finally found out why. Looking at gsw_mt7623.c [0], setting the core 
-clock into 500Mhz is done for 40MHz XTAL. With some dev_info code, I was 
-able to confirm that the MCM MT7530 on my MT7621 board runs at 40MHz 
-whilst the standalone MT7530 on my Bananapi BPI-R2 runs at 25MHz.
+Cyril, based upon the table and logs you provided whereby you have used 
+the following:
 
-[0] 
-https://github.com/BPI-SINOVOIP/BPI-R2-bsp/blob/master/linux-mt/drivers/net/ethernet/mediatek/gsw_mt7623.c#L1039
+- Raspberry Pi Compute Module 4 (Rev 1.0, 8G RAM, 32G storage)
+- Raspberry Pi Compute Module 4 IO Board
+- SupaHub PCIe-to-multiple-USB adapter, reference PCE6U1C-R02, VER 006S
 
-Arınç
+in the before/unpatched case we have a PCIe link down and in the 
+after/patched we have a PCIe link up but a kernel panic. Neither are 
+great nor resulting in a fully functional PCIe device.
+
+Looking at:
+
+https://www.amazon.co.uk/SupaHub-Express-BandWidth-Capable-Expanding/dp/B092ZQWG5B
+
+it would appear that it can accept an external power supply, do you have 
+one connected to that USB expansion card by any chance? Are you able to 
+boot the kernel before/after if you disconnect any USB peripheral?
+
+This looks like a broader electrical problem than the scope of this 
+patch, though it would be neat if we could find a combination that 
+works. At least with Jim's patch we have a PCIe link with 
+uni-directional CLKREQ# so we could try a variety of things.
+
+Does that SupaHub board plugged to the CM4 1.0 system work fine in the 
+Raspberry Pi kernel tree?
+-- 
+Florian
