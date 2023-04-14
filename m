@@ -2,58 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F036E1EBC
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D45376E1EB4
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbjDNIsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 04:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58528 "EHLO
+        id S230064AbjDNIrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 04:47:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229958AbjDNIsG (ORCPT
+        with ESMTP id S229920AbjDNIrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 04:48:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1122786AA
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 01:47:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BDD5E6459B
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 08:47:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E51F5C433EF;
-        Fri, 14 Apr 2023 08:47:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681462050;
-        bh=xw5UWuO5hoCUdGrcFe+54+dstkTJi6Khjey9N+AhacI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=BOHfu+Pfr4XbeColxttlDahpgJulwCsmF6zbAAZoR2tRpPDTHXQc+1U/3X2avhSGs
-         VyC3Qp7r9O/y6U0xz67dWjDRGDbS5HYywzwuFbVEJsqdlANmFVRASbR7ga0qJ5NXJz
-         HFfStk16/nZkUSu4soM4IgXcG3N/Xjuj4XyIneLP2dZ3R3fsSW6tzbbXmcsM8/DytZ
-         6rl9j5k/64FfayUr6KzB0QAZnktQzpIzI1c5VKVHdunlbDHG+fPqgUcI68SDbnc+un
-         i1C4jR4SF8JqXt8ObvA2Rla4SMtuNAWuL0QwKtbogaN0L2sGGOQgwqpKCxilA9ijSa
-         LRBM8CJIv6hCA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1pnF5i-0008DN-LJ; Fri, 14 Apr 2023 10:47:35 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH RESEND v2] firmware/psci: demote suspend-mode warning to info level
-Date:   Fri, 14 Apr 2023 10:46:19 +0200
-Message-Id: <20230414084619.31524-1-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Fri, 14 Apr 2023 04:47:02 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99623A5DA
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 01:46:29 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id xi5so43818207ejb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 01:46:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681461984; x=1684053984;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wl3Btv+PwNxWwtewM+dP8afRzoBywyqwx59JWQAoqUA=;
+        b=xp9uWY+38EX8iXKhDxwuf/8P6/uzkYqJiZSNi9vbejNbCSdunJ1Q9htZtm13dmHSwZ
+         eB2ixQjldDhVwyuix6HrldPkLC68my3bBZD1+VnwEJYIEqao34hsl9FKzJhaqbncEL3k
+         /KmdhyM5haVIHZSXu9JatbD4YRave9CEPpq90sLNHZvf9sW6wBpDPzjaSX+WnuQwT6Us
+         silZOQPudvwxoBZsEswx2cagU4lJtHv+hGWoQ6PsUugjiC08giCkVUTO/lm19lCPilgW
+         E1f808oQegKlCwXB4Qm2/bYW5g5Cs/6JKEFvAraCZ2Qt5rX7g9UAPhvFrP8zZfj27pql
+         c0MA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681461984; x=1684053984;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wl3Btv+PwNxWwtewM+dP8afRzoBywyqwx59JWQAoqUA=;
+        b=hkRo13YmAopxOGvJX3h9OOmnV4tvz7+FYNz3Qi/384xp78vyWL7Z1u7KQEGMarycOK
+         awZZe3DPYmQzKc1luKB0tMUzac8fZwNEWJr6fep5ayH0C7EpNMa3lNnYDFvTY+nWYtEW
+         ZqOhAF4xggvIkDX7OSKZ4SkkZrgPfrDevysvr8hlq28r3i2RqFsG2WYCt4rtyMT2P3zG
+         i97kn1SKYcwAxxQ8wxMNj1E2wtSrwqvgUNdwYApmNtvrnz0veyiEpaLnRrTFL4cnhoQH
+         wIqCK6zp9xm8laXW7xXu7sab7TdfauBRvQe3lPQVsS+oFi0B85bdRm6+EBTy0ZfjCKQk
+         cNeA==
+X-Gm-Message-State: AAQBX9eZv/9zEHH36rdXS+jeh0YJIHVFe4IVEPJNeT+so+P60oaYeIYH
+        GqnTpEMJdfMZQfRAzo/v/1yGTA==
+X-Google-Smtp-Source: AKy350Zv7NbHUiKpmnlHoLbQyKG9G9zKPHkXSd3wH7bVQzjdvDDsKYYR9UPKlRsG7vTDe9V2aEOkog==
+X-Received: by 2002:a17:907:25c9:b0:94e:ef09:544c with SMTP id ae9-20020a17090725c900b0094eef09544cmr659459ejc.10.1681461984189;
+        Fri, 14 Apr 2023 01:46:24 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:8a60:6b0f:105a:eefb? ([2a02:810d:15c0:828:8a60:6b0f:105a:eefb])
+        by smtp.gmail.com with ESMTPSA id h7-20020a170906584700b0094e597f0e4dsm2087436ejs.121.2023.04.14.01.46.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Apr 2023 01:46:23 -0700 (PDT)
+Message-ID: <6fc26e38-ac45-b4a3-32f0-2bae686371db@linaro.org>
+Date:   Fri, 14 Apr 2023 10:46:22 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 22/27] arm64: dts: mediatek: mt6795: Copyright header
+ additions
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, matthias.bgg@gmail.com
+Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        jassisinghbrar@gmail.com, chunfeng.yun@mediatek.com,
+        vkoul@kernel.org, kishon@kernel.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, chunkuang.hu@kernel.org,
+        ck.hu@mediatek.com, jitao.shi@mediatek.com,
+        xinlei.lee@mediatek.com, houlong.wei@mediatek.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-pwm@vger.kernel.org,
+        kernel@collabora.com, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <20230412112739.160376-1-angelogioacchino.delregno@collabora.com>
+ <20230412112739.160376-23-angelogioacchino.delregno@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230412112739.160376-23-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,48 +89,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some Qualcomm platforms, like SC8280XP, the attempt to set PC mode
-during boot fails with PSCI_RET_DENIED and since commit 998fcd001feb
-("firmware/psci: Print a warning if PSCI doesn't accept PC mode") this
-is now logged at warning level:
+On 12/04/2023 13:27, AngeloGioacchino Del Regno wrote:
+> I have added more than 800 lines to this devicetree: adding myself to
+> the copyright header.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  arch/arm64/boot/dts/mediatek/mt6795.dtsi | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt6795.dtsi b/arch/arm64/boot/dts/mediatek/mt6795.dtsi
+> index 29ca9a7bf0b3..a4c950b65006 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt6795.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt6795.dtsi
+> @@ -2,6 +2,9 @@
+>  /*
+>   * Copyright (c) 2015 MediaTek Inc.
+>   * Author: Mars.C <mars.cheng@mediatek.com>
+> + *
+> + * Copyright (C) 2023 Collabora Ltd.
+> + *                    AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-	psci: failed to set PC mode: -3
+Copyright is a result of significant changes, thus it is a part of
+commit(s) making these changes. Adding copyrights in separate commits
+looks like you are spreading them unjustified. Squash it.
 
-As there is nothing users can do about the firmware behaving this way,
-demote the warning to info level and clearly mark it as a firmware bug:
-
-	psci: [Firmware Bug]: failed to set PC mode: -3
-
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-Acked-by: Mark Rutland <mark.rutland@arm.com>
-Acked-by: Sudeep Holla <sudeep.holla@arm.com>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
-
-This one fell between the cracks so resending with tags added.
-
-Mark or Lorenzo, is this something you can pick up?
-
-Johan
-
-
- drivers/firmware/psci/psci.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
-index 29619f49873a..d9629ff87861 100644
---- a/drivers/firmware/psci/psci.c
-+++ b/drivers/firmware/psci/psci.c
-@@ -167,7 +167,8 @@ int psci_set_osi_mode(bool enable)
- 
- 	err = invoke_psci_fn(PSCI_1_0_FN_SET_SUSPEND_MODE, suspend_mode, 0, 0);
- 	if (err < 0)
--		pr_warn("failed to set %s mode: %d\n", enable ? "OSI" : "PC", err);
-+		pr_info(FW_BUG "failed to set %s mode: %d\n",
-+				enable ? "OSI" : "PC", err);
- 	return psci_to_linux_errno(err);
- }
- 
--- 
-2.39.2
+Best regards,
+Krzysztof
 
