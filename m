@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BBBC6E20BE
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 12:29:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2BF26E20A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 12:24:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjDNK3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 06:29:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34782 "EHLO
+        id S230303AbjDNKYa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 14 Apr 2023 06:24:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjDNK3V (ORCPT
+        with ESMTP id S230266AbjDNKY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 06:29:21 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D314510FC
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 03:29:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=mabrkjJN0IeQKhxInoEIAYe6rjhJQoOGlkU97HBs3Fo=; b=olAEilK25HkCq4rMrRoXo/KjK4
-        +CHuqZTrBYRivlqpmQ/gbNuoBLwgETiuAsXdy1zfjgBeM17IDKN98jswwkJtB7qmNS6t3J+UIrGun
-        buYNcZinwg/StlfEpfSe1em+utA9cNRdrtYU+A01PoM82ph/c3UctYu3x7hM3MHILQ5IK5Ps08anS
-        mXVW6r/Wlfv173+gZztQujyFwSIxzMcwvwVtRSWPKvmh7ntYoFukcr9inEKKLjt0WPy9x0geGkDsr
-        YIDJNfpMCPnIkaw5PcrThh7K2r3R8nZcMqACUAISixTTXYt9zCRZC4ugdKoDNRun+n66VTA2f4TLL
-        uOYTcQnA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pnGg3-008fen-Bv; Fri, 14 Apr 2023 10:29:11 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4CDD83002A3;
-        Fri, 14 Apr 2023 12:29:09 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E517E265F26D4; Fri, 14 Apr 2023 12:29:08 +0200 (CEST)
-Date:   Fri, 14 Apr 2023 12:29:08 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     kan.liang@linux.intel.com
-Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org, eranian@google.com,
-        ak@linux.intel.com
-Subject: Re: [PATCH V3] perf/x86/intel/ds: Flush the PEBS buffer in PEBS
- enable
-Message-ID: <20230414102908.GC83892@hirez.programming.kicks-ass.net>
-References: <20230410181309.827175-1-kan.liang@linux.intel.com>
+        Fri, 14 Apr 2023 06:24:26 -0400
+Received: from gfmail1.glenfly.com (gfmail1.glenfly.com [113.31.180.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6DA1B7ED2
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 03:24:23 -0700 (PDT)
+X-ASG-Debug-ID: 1681467861-196b4b150c9b860001-xx1T2L
+Received: from GFSHEXCH02.glenfly.com (GFSHEXCH02.glenfly.com [10.5.250.52]) by gfmail1.glenfly.com with ESMTP id aYqEOfrwdPHEYi3L; Fri, 14 Apr 2023 18:24:21 +0800 (CST)
+X-Barracuda-Envelope-From: ReaperLi@glenfly.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.5.250.52
+Received: from sqa-PC.glenfly.com (10.30.16.40) by GFSHEXCH02.glenfly.com
+ (10.5.250.52) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 14 Apr
+ 2023 18:24:23 +0800
+From:   ReaperLi <ReaperLi@glenfly.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.5.250.52
+To:     <perex@perex.cz>, <tiwai@suse.com>
+CC:     <linux-kernel@vger.kernel.org>, jasontao <jasontao@glenfly.com>,
+        ReaperLi <ReaperLi@glenfly.com>
+Subject: [PATCH v2] ALSA: hda: Glenfly: add HD Audio PCI IDs and HDMI Codec Vendor IDs.
+Date:   Fri, 14 Apr 2023 18:29:12 +0800
+X-ASG-Orig-Subj: [PATCH v2] ALSA: hda: Glenfly: add HD Audio PCI IDs and HDMI Codec Vendor IDs.
+Message-ID: <20230414102912.798-1-ReaperLi@glenfly.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230410181309.827175-1-kan.liang@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain
+X-Originating-IP: [10.30.16.40]
+X-ClientProxiedBy: GFSHEXCH02.glenfly.com (10.5.250.52) To
+ GFSHEXCH02.glenfly.com (10.5.250.52)
+X-Barracuda-Connect: GFSHEXCH02.glenfly.com[10.5.250.52]
+X-Barracuda-Start-Time: 1681467861
+X-Barracuda-URL: https://10.5.252.51:443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at glenfly.com
+X-Barracuda-Scan-Msg-Size: 4777
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.5000 1.0000 0.0100
+X-Barracuda-Spam-Score: 0.01
+X-Barracuda-Spam-Status: No, SCORE=0.01 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.107401
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,97 +60,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 11:13:09AM -0700, kan.liang@linux.intel.com wrote:
+From: jasontao <jasontao@glenfly.com>
 
->  arch/x86/events/intel/ds.c | 39 ++++++++++++++++++++++++++------------
->  1 file changed, 27 insertions(+), 12 deletions(-)
-> 
-> diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
-> index 3a77f4336df7..4639d4c1e98d 100644
-> --- a/arch/x86/events/intel/ds.c
-> +++ b/arch/x86/events/intel/ds.c
-> @@ -1257,20 +1257,18 @@ pebs_update_state(bool needed_cb, struct cpu_hw_events *cpuc,
->  	if (x86_pmu.intel_cap.pebs_baseline && add) {
->  		u64 pebs_data_cfg;
->  
-> -		/* Clear pebs_data_cfg and pebs_record_size for first PEBS. */
-> -		if (cpuc->n_pebs == 1) {
-> +		/* Clear pebs_data_cfg for first PEBS. */
-> +		if (cpuc->n_pebs == 1)
->  			cpuc->pebs_data_cfg = 0;
-> -			cpuc->pebs_record_size = sizeof(struct pebs_basic);
-> -		}
->  
->  		pebs_data_cfg = pebs_update_adaptive_cfg(event);
->  
-> -		/* Update pebs_record_size if new event requires more data. */
-> -		if (pebs_data_cfg & ~cpuc->pebs_data_cfg) {
-> +		/*
-> +		 * Only update the pebs_data_cfg here. The pebs_record_size
-> +		 * will be updated later when the new pebs_data_cfg takes effect.
-> +		 */
-> +		if (pebs_data_cfg & ~cpuc->pebs_data_cfg)
->  			cpuc->pebs_data_cfg |= pebs_data_cfg;
-> -			adaptive_pebs_record_size_update();
-> -			update = true;
-> -		}
->  	}
->  
->  	if (update)
-		pebs_update_threshold(cpuc);
+Add a set of HD Audio PCI IDS, and the HDMI codec vendor IDs for
+Glenfly Arise.
 
-Now, pebs_update_threshold() will actually use
-->pebs_record_size, but afaict the above now has a path through (for
-example for the first event) where update is true but ->pebs_record_size
-is unset/stale.
+Signed-off-by: jasontao <jasontao@glenfly.com>
+Signed-off-by: ReaperLi <ReaperLi@glenfly.com>
+---
+Changes in v2:
+  - use tab instead of space.
+  - change the codec name.
 
-I think it all works out, but it is quite a mess and hard to follow.
+ sound/pci/hda/hda_intel.c  | 14 ++++++++++++++
+ sound/pci/hda/patch_hdmi.c | 18 ++++++++++++++++++
+ 2 files changed, 32 insertions(+)
 
-> @@ -1331,6 +1329,13 @@ static void intel_pmu_pebs_via_pt_enable(struct perf_event *event)
->  	wrmsrl(base + idx, value);
->  }
->  
-> +static inline void intel_pmu_drain_large_pebs(struct cpu_hw_events *cpuc)
-> +{
-> +	if (cpuc->n_pebs == cpuc->n_large_pebs &&
-> +	    cpuc->n_pebs != cpuc->n_pebs_via_pt)
-> +		intel_pmu_drain_pebs_buffer();
-> +}
+diff --git a/sound/pci/hda/hda_intel.c b/sound/pci/hda/hda_intel.c
+index 77a592f21..6c4a559d9 100644
+--- a/sound/pci/hda/hda_intel.c
++++ b/sound/pci/hda/hda_intel.c
+@@ -227,6 +227,7 @@ enum {
+        AZX_DRIVER_ATI,
+        AZX_DRIVER_ATIHDMI,
+        AZX_DRIVER_ATIHDMI_NS,
++       AZX_DRIVER_GFHDMI,
+        AZX_DRIVER_VIA,
+        AZX_DRIVER_SIS,
+        AZX_DRIVER_ULI,
+@@ -349,6 +350,7 @@ static const char * const driver_short_names[] = {
+        [AZX_DRIVER_ATI] = "HDA ATI SB",
+        [AZX_DRIVER_ATIHDMI] = "HDA ATI HDMI",
+        [AZX_DRIVER_ATIHDMI_NS] = "HDA ATI HDMI",
++       [AZX_DRIVER_GFHDMI] = "HDA GF HDMI",
+        [AZX_DRIVER_VIA] = "HDA VIA VT82xx",
+        [AZX_DRIVER_SIS] = "HDA SIS966",
+        [AZX_DRIVER_ULI] = "HDA ULI M5461",
+@@ -1743,6 +1745,8 @@ static int default_bdl_pos_adj(struct azx *chip)
+        }
 
-Its been a minute since I looked at this code; but why only for large
-pebs? Surely flushing is quick when the DS is actually empty and that
-stops us having to worry if there's races where there might be a single
-entry in.
+        switch (chip->driver_type) {
++       case AZX_DRIVER_GFHDMI:
++               return 128;
+        case AZX_DRIVER_ICH:
+        case AZX_DRIVER_PCH:
+                return 1;
+@@ -1859,6 +1863,9 @@ static int azx_first_init(struct azx *chip)
+        }
+ #endif
 
->  void intel_pmu_pebs_enable(struct perf_event *event)
->  {
->  	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
-> @@ -1350,6 +1355,18 @@ void intel_pmu_pebs_enable(struct perf_event *event)
->  	if (x86_pmu.intel_cap.pebs_baseline) {
->  		hwc->config |= ICL_EVENTSEL_ADAPTIVE;
->  		if (cpuc->pebs_data_cfg != cpuc->active_pebs_data_cfg) {
-> +			/*
-> +			 * A system-wide PEBS event with the large PEBS
-> +			 * config may still be enabled when switching the
-> +			 * context. Some PEBS records for the system-wide
-> +			 * PEBS may be generated while the old event has
-> +			 * been scheduled out but the new one hasn't been
-> +			 * scheduled in. It's not enough to only flush the
-> +			 * buffer when a PEBS event is disable.
-> +			 */
++       if (chip->driver_type == AZX_DRIVER_GFHDMI)
++               bus->polling_mode = 1;
++
+        err = pcim_iomap_regions(pci, 1 << 0, "ICH HD audio");
+        if (err < 0)
+                return err;
+@@ -1959,6 +1966,7 @@ static int azx_first_init(struct azx *chip)
+                        chip->playback_streams = ATIHDMI_NUM_PLAYBACK;
+                        chip->capture_streams = ATIHDMI_NUM_CAPTURE;
+                        break;
++               case AZX_DRIVER_GFHDMI:
+                case AZX_DRIVER_GENERIC:
+                default:
+                        chip->playback_streams = ICH6_NUM_PLAYBACK;
+@@ -2724,6 +2732,12 @@ static const struct pci_device_id azx_ids[] = {
+        { PCI_DEVICE(0x1002, 0xab38),
+          .driver_data = AZX_DRIVER_ATIHDMI_NS | AZX_DCAPS_PRESET_ATI_HDMI_NS |
+          AZX_DCAPS_PM_RUNTIME },
++       /* GLENFLY */
++       { PCI_DEVICE(0x6766, PCI_ANY_ID),
++         .class = PCI_CLASS_MULTIMEDIA_HD_AUDIO << 8,
++         .class_mask = 0xffffff,
++         .driver_data = AZX_DRIVER_GFHDMI | AZX_DCAPS_POSFIX_LPIB |
++         AZX_DCAPS_NO_MSI | AZX_DCAPS_NO_64BIT },
+        /* VIA VT8251/VT8237A */
+        { PCI_DEVICE(0x1106, 0x3288), .driver_data = AZX_DRIVER_VIA },
+        /* VIA GFX VT7122/VX900 */
+diff --git a/sound/pci/hda/patch_hdmi.c b/sound/pci/hda/patch_hdmi.c
+index 4ffa3a59f..e51c610a2 100644
+--- a/sound/pci/hda/patch_hdmi.c
++++ b/sound/pci/hda/patch_hdmi.c
+@@ -4489,6 +4489,18 @@ static int patch_via_hdmi(struct hda_codec *codec)
+        return patch_simple_hdmi(codec, VIAHDMI_CVT_NID, VIAHDMI_PIN_NID);
+ }
 
-Perhaps just:
++static int patch_gf_hdmi(struct hda_codec *codec)
++{
++       int err;
++
++       err = patch_generic_hdmi(codec);
++       if (err)
++               return err;
++
++       codec->no_sticky_stream = 1;
++       return 0;
++}
++
+ /*
+  * patch entries
+  */
+@@ -4579,6 +4591,12 @@ HDA_CODEC_ENTRY(0x10de009f, "GPU 9f HDMI/DP",    patch_nvhdmi),
+ HDA_CODEC_ENTRY(0x10de00a0, "GPU a0 HDMI/DP",  patch_nvhdmi),
+ HDA_CODEC_ENTRY(0x10de8001, "MCP73 HDMI",      patch_nvhdmi_2ch),
+ HDA_CODEC_ENTRY(0x10de8067, "MCP67/68 HDMI",   patch_nvhdmi_2ch),
++HDA_CODEC_ENTRY(0x67663d82, "Arise 82 HDMI/DP",        patch_gf_hdmi),
++HDA_CODEC_ENTRY(0x67663d83, "Arise 83 HDMI/DP",        patch_gf_hdmi),
++HDA_CODEC_ENTRY(0x67663d84, "Arise 84 HDMI/DP",        patch_gf_hdmi),
++HDA_CODEC_ENTRY(0x67663d85, "Arise 85 HDMI/DP",        patch_gf_hdmi),
++HDA_CODEC_ENTRY(0x67663d86, "Arise 86 HDMI/DP",        patch_gf_hdmi),
++HDA_CODEC_ENTRY(0x67663d87, "Arise 87 HDMI/DP",        patch_gf_hdmi),
+ HDA_CODEC_ENTRY(0x11069f80, "VX900 HDMI/DP",   patch_via_hdmi),
+ HDA_CODEC_ENTRY(0x11069f81, "VX900 HDMI/DP",   patch_via_hdmi),
+ HDA_CODEC_ENTRY(0x11069f84, "VX11 HDMI/DP",    patch_generic_hdmi),
+--
+2.20.1
 
-			/*
-			 * drain_pebs() assumes uniform record size;
-			 * hence we need to drain when changing said
-			 * size.
-			 */
 
 
-> +			intel_pmu_drain_large_pebs(cpuc);
-> +			adaptive_pebs_record_size_update();
-> +			pebs_update_threshold(cpuc);
->  			wrmsrl(MSR_PEBS_DATA_CFG, cpuc->pebs_data_cfg);
->  			cpuc->active_pebs_data_cfg = cpuc->pebs_data_cfg;
->  		}
+保密声明：
+本邮件含有保密或专有信息，仅供指定收件人使用。严禁对本邮件或其内容做任何未经授权的查阅、使用、复制或转发。
+CONFIDENTIAL NOTE:
+This email contains confidential or legally privileged information and is for the sole use of its intended recipient. Any unauthorized review, use, copying or forwarding of this email or the content of this email is strictly prohibited.
