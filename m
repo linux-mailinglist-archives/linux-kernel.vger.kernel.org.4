@@ -2,120 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 509656E2B17
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 22:27:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3DEE6E2B19
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 22:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbjDNU1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 16:27:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39168 "EHLO
+        id S229853AbjDNU3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 16:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjDNU1Y (ORCPT
+        with ESMTP id S229703AbjDNU3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 16:27:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B12640DF;
-        Fri, 14 Apr 2023 13:27:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 25E8A60BBF;
-        Fri, 14 Apr 2023 20:27:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DAB6C433EF;
-        Fri, 14 Apr 2023 20:27:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681504042;
-        bh=mGto9gKSSTTM0gjfPcNOwu+t1VdaM4q/g495do+Uqt8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=NvptJXJfYZg8rRDRCNDqhhIXYMXWrNT6H/HO3Adt5dsfOmgNJDBm4RxAjf1RfS/c4
-         XzKK7VN/DJow762nJWUJh1ECAEVuljiC1xdR64Z5T4YNrT5R9cMjedIcWsJHO5eZBr
-         0x0rL2c8pf4fLTcAeHUkXmnrQ8HM/AjxDXo6HxQYg5jq49mSX3utwdWL0odxkt4n+2
-         gnPwFo65d1LHJsEjImH5PZcJt1KqE2B5+QUkofBHcOgZIPfrdPwkLpg2cz9ZCYqPDq
-         y5cegzB+mg5DN9vK6TF35erBUchLXLC2YltXCwOlkiC4kAwLpIwHZc3+ryoa3JHff6
-         v0hTSj+rCxYdg==
-Date:   Fri, 14 Apr 2023 15:27:20 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jim Quinlan <jim2101024@gmail.com>
-Cc:     linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/3] PCI: brcmstb: CLKREQ# accomodations of downstream
- device
-Message-ID: <20230414202720.GA215111@bhelgaas>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230411165919.23955-3-jim2101024@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 14 Apr 2023 16:29:30 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBEBC6E9B
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 13:29:29 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54f8d4f1ca1so102825517b3.20
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 13:29:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681504169; x=1684096169;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DLToSh8SFFWLZRyFSn4i7JQlNzNszta4xTWyY36zPEY=;
+        b=dpmv8GYPJG9Y6ih8+TvcQ+edTHglKG2Js/rYBcWjl6NW+0M+pqgW39ylCfa60dexZi
+         DcikGg0YcUK//c4DDFSsXjVyBtKVstj55BDa4latJZZfT6BZXQdFKZur+CF1NiYnfv1r
+         Ar3WhQ0JRYTCKTGlxXqJipp203cmSB1iWZAMC+pOHuds04YM74nbogb2hDxmdW8Ls8d2
+         m25JHxXb9tbOm6r+h9sfHSfr79rvJoEqQ1bxRGN3yrhvn6941TNduBebF8CUwf92Eot2
+         vkhRoqGuQW+iAMTUW+reMvp6CjV3n2Bx/CxA3aVlKcQjdI2FlYFi2kqbdG1tyYwGxr5v
+         LIIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681504169; x=1684096169;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DLToSh8SFFWLZRyFSn4i7JQlNzNszta4xTWyY36zPEY=;
+        b=DVmyeMEY//WwBzRLWICOC/bZH5Lovp+ePdsXgaUw219ilHmb2Fvm4tNnS0C5jmZPcW
+         1pUlYeIeBZhEfA6RY840eLyIVhU5iPIMARPjvv6Rjk0AM9FIOYswYa+S9L3GY0A4XVDi
+         mxvHpjQkn8+Fjl9tweZJKgyXAmqyUdDYWlMBlfV6nTnzdZk/sAnbaLnHv2btnMf0dSFm
+         JnNlUjCE//FjdRpxpOzYGGh4r9qUojYXwvGJaoocRFp6TItXDrpaaSMT5I4I/ZgLAqXT
+         Uvrh34Nay8NBYP7xK1bW3ackwsQkWYkNZnA02hGVazbzMn8ki+Jdf6HTuLgz2ixrwFMJ
+         ReUQ==
+X-Gm-Message-State: AAQBX9f57gQH23aEH+VqLH36vI2y6MxYjzLcqiR544pZ/obwCfFNBPSB
+        3AwAZSTIWBCemayO2Yf2SxM/54tYiwc=
+X-Google-Smtp-Source: AKy350YGjJSkhSWbMFiapNaVp2vMMOdjYO4P14f48+AuxLsAITPxtQITPLvVcWwdaknrUYlaSrf7ZfMHlGk=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:da0b:0:b0:b8f:6f3f:ed20 with SMTP id
+ n11-20020a25da0b000000b00b8f6f3fed20mr2167663ybf.5.1681504169043; Fri, 14 Apr
+ 2023 13:29:29 -0700 (PDT)
+Date:   Fri, 14 Apr 2023 13:29:21 -0700
+In-Reply-To: <20230407233254.957013-1-seanjc@google.com>
+Mime-Version: 1.0
+References: <20230407233254.957013-1-seanjc@google.com>
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
+Message-ID: <168150370438.1550830.5816847574112858499.b4-ty@google.com>
+Subject: Re: [PATCH v4 0/6] KVM: selftests: Add "instructions required" testcase
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Aaron Lewis <aaronlewis@google.com>
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This subject line no verb.  Can you add a leading verb to suggest what
-this patch does?
-
-s/accomodations/accommodations/
-
-On Tue, Apr 11, 2023 at 12:59:17PM -0400, Jim Quinlan wrote:
-> The Broadcom STB/CM PCIe HW core, which is also used in RPi SOCs, must be
-> deliberately set by the probe() into one of three mutually exclusive modes:
+On Fri, 07 Apr 2023 16:32:48 -0700, Sean Christopherson wrote:
+> This is the selftests portion of Aaron's series[*] to fix incorrect
+> "instructions required" counting.  The big change from v3 is to use a
+> common struct to copy counter values to/from the guest instead of smushing
+> the values into a single 64-bit value.
 > 
->   (a) No CLKREQ# expected or required, refclk is always available.
->   (b) CLKREQ# is expected to be driven by downstream device when needed.
->   (c) Bidirectional CLKREQ# for L1SS capable devices.
+> [*] https://lkml.kernel.org/r/20230307141400.1486314-1-aaronlewis%40google.com
 > 
-> Previously, only (b) was supported by the driver, as almost all STB/CM
-> boards operate in this mode.  But now there is interest in activating L1SS
-> power savings from STB/CM customers, and also interest in accomodating mode
-> (a) for designs such as the RPi CM4 with IO board.
+> [...]
 
-accommodating
+Applied to kvm-x86 pmu, thanks!
 
-> The HW+driver is able to tell us when mode (a) mode is needed.  But there
-> is no easy way to tell if L1SS mode should be configured.  In certain
-> situations, getting this wrong may cause a panic during boot time.  So we
-> rely on the DT prop "brcm,enable-l1ss" to tell us when mode (c) is desired.
-> Using this mode only makes sense when the downstream device is L1SS-capable
-> and the OS has been configured to activate L1SS
-> (e.g. policy==powersupersave).
+[1/6] KVM: selftests: Add a common helper for the PMU event filter guest code
+      https://github.com/kvm-x86/linux/commit/33ef1411a36b
+[2/6] KVM: selftests: Add helpers for PMC asserts in PMU event filter test
+      https://github.com/kvm-x86/linux/commit/fa32233d51b9
+[3/6] KVM: selftests: Print detailed info in PMU event filter asserts
+      https://github.com/kvm-x86/linux/commit/c140e93a0c11
+[4/6] KVM: selftests: Use error codes to signal errors in PMU event filter test
+      https://github.com/kvm-x86/linux/commit/c02c74428288
+[5/6] KVM: selftests: Copy full counter values from guest in PMU event filter test
+      https://github.com/kvm-x86/linux/commit/e9f322bd2396
+[6/6] KVM: selftests: Test the PMU event "Instructions retired"
+      https://github.com/kvm-x86/linux/commit/457bd7af1a17
 
-I'm really concerned about the user experience here.  I assume users
-do not want to edit the DT based on what device they plug in.  They
-shouldn't need to (and probably won't) know whether the device
-supports L1SS.
-
-I hate kernel/module parameters, but I think even that would be better
-then having to edit the DT.
-
-There's obviously a period of time when L1SS is supported but not yet
-enabled, so I'm *guessing* the "OS has been configured to activate
-L1SS" is not actually a requirement, and choosing (c) really just
-opens the possibility that L1SS can be used?
-
-Would be nice to have a hint (maybe a line or two of the panic
-message) to help users find the fix for a problem they're seeing.
-
-Obviously the ideal would be if we could use (c) in all cases, so I
-assume that's where a panic might happen.  What situation would that
-be?  An endpoint that doesn't support L1SS?  One that supports L1SS
-but it's not enabled?  Maybe if L1SS isn't configured correctly, e.g.,
-LTR values programmed wrong?
-
-Bjorn
+--
+https://github.com/kvm-x86/linux/tree/next
+https://github.com/kvm-x86/linux/tree/fixes
