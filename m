@@ -2,139 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B3666E21EB
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 13:19:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 627B56E2A0A
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 20:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbjDNLTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 07:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52654 "EHLO
+        id S230114AbjDNS1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 14:27:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjDNLTE (ORCPT
+        with ESMTP id S230107AbjDNS1M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 07:19:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF9DCF
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 04:18:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681471099;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5Q6BebmPe2/qdtHTdDBDGMsvLr38IhHc0NaBD2QrMNc=;
-        b=A3QDPi+kQEUNe+mmfYblsCaly0LkucTjXOmKTW6eTk7noKADb8RQgIBaSS1wHtZFFQXne1
-        AsIcA/eMC4n3def2xoG02rPXYg/GH7qwbNo5xb8mJGb6Is9zAK9MXZRaDkr1YCDS+Fsmpl
-        FuJCAq3wd7Ss0OLgerMA3/8hIqbFkro=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-386-KJDgE1gYMPKxtSJZ8rxr8g-1; Fri, 14 Apr 2023 07:18:14 -0400
-X-MC-Unique: KJDgE1gYMPKxtSJZ8rxr8g-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CC7783813F4B;
-        Fri, 14 Apr 2023 11:18:12 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (unknown [10.22.8.167])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4500C1121320;
-        Fri, 14 Apr 2023 11:18:11 +0000 (UTC)
-Date:   Fri, 14 Apr 2023 07:18:08 -0400
-From:   Phil Auld <pauld@redhat.com>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>, mingo@kernel.org,
-        linux-kernel@vger.kernel.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, corbet@lwn.net,
-        qyousef@layalina.io, chris.hyser@oracle.com,
-        patrick.bellasi@matbug.net, pjt@google.com, pavel@ucw.cz,
-        qperret@google.com, tim.c.chen@linux.intel.com, joshdon@google.com,
-        timj@gnu.org, kprateek.nayak@amd.com, yu.c.chen@intel.com,
-        youssefesmat@chromium.org, efault@gmx.de
-Subject: Re: [PATCH 14/17] sched/eevdf: Better handle mixed slice length
-Message-ID: <20230414111808.GA144166@lorien.usersys.redhat.com>
-References: <20230328092622.062917921@infradead.org>
- <20230328110354.562078801@infradead.org>
- <CAKfTPtAkFBw5zt0+WK7dWBUE9OrbOOExG8ueUE6ogdCEQZhpXQ@mail.gmail.com>
- <20230404092936.GD284733@hirez.programming.kicks-ass.net>
- <20230404135050.GA471948@google.com>
- <20230405083543.GZ4253@hirez.programming.kicks-ass.net>
- <CAEXW_YQmG83_Yb9JgXapt9RgAs4m=fHnrOKRqfG9N_VMYcA88A@mail.gmail.com>
+        Fri, 14 Apr 2023 14:27:12 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9224586A2;
+        Fri, 14 Apr 2023 11:27:06 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id o2so19142840plg.4;
+        Fri, 14 Apr 2023 11:27:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681496826; x=1684088826;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bpftedxp8jeFPMvDMIoV1HPkN6D0PvJ16pfk4P2dQHE=;
+        b=esApBxUs/84XebznSe4FFLGbRHMG4Av/upMd7S77ikHRPiq47kPV3vVuJnlk7W52J1
+         PLVudqB1Xq1EB2BuMXEOhq1POOEkrtTvwrgJxpbyPL4wrWtKHL1IecEhibakkJqgyMEF
+         W3WBFrkpLQH6n7NcY1lXGz7kWa3u43rKiJ2bBFuon4zTCvSqQczLa1b53z6uA7IKwx0c
+         mbCO7Dx1b6axUnmBDJhYzznve4COPU/MsjcJ6RBfpa7WSAMOwNqB1yxmn1K15mKc1VR4
+         DvcEUHOW9VibuDISFC7pj9igu5O0N+Z81Phc29AQer8uclch7A27Qm6ceJ9n5PSvtjL7
+         vMiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681496826; x=1684088826;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bpftedxp8jeFPMvDMIoV1HPkN6D0PvJ16pfk4P2dQHE=;
+        b=M1uR6+kQhJ4iVnm0ciCLFmRWojAsDPqvS0d/z6TDguKnTzK6jk+lYETvfDbFSbpnQ4
+         KRyf2rE02YpWm+0n/VrEGFJNlvKD9CII2xmHiD0e+fqxGnUdbu3Nhk9ftWmhB1iBQEkz
+         6qUKce4q8HsIcjjPlqkDDGI1UAUJVJH8Avr3Dfor/HXDtbUlIm2ICpjGsFEY4lP3gXrn
+         RXBD7NxSfuLxRjU1TS0QZywL+VQ5tBKc1iBM+4UBQ7NhMPZQh51nSY155Qeg+ZNRO98s
+         tMRMUI3Fh616JbjjHo/g7tLre4I6XPtdlGF5M/O/pa7esdgTauVwl+2Y1293JtwHGRcH
+         dalQ==
+X-Gm-Message-State: AAQBX9d75J02O5TGiMkRJWQY4u+ETbkBzb6Q/e+BFOGqMo9DHL3UZMXe
+        Yr7jId4CcaTHME1cMLrhTHOpkkPYij/TuNUj
+X-Google-Smtp-Source: AKy350YIEj4rEG1EPpsminI4Kv7uGYBzXeHfnaySOOVGTGgxYWCKp7MpsXrU8m+2j6P73y+pvbmeoA==
+X-Received: by 2002:a17:902:e749:b0:1a6:81b5:9137 with SMTP id p9-20020a170902e74900b001a681b59137mr4364139plf.68.1681496825708;
+        Fri, 14 Apr 2023 11:27:05 -0700 (PDT)
+Received: from localhost (ec2-54-67-115-33.us-west-1.compute.amazonaws.com. [54.67.115.33])
+        by smtp.gmail.com with ESMTPSA id be5-20020a170902aa0500b001a65575c13asm3356193plb.48.2023.04.14.11.27.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Apr 2023 11:27:05 -0700 (PDT)
+Date:   Fri, 14 Apr 2023 11:18:40 +0000
+From:   Bobby Eshleman <bobbyeshleman@gmail.com>
+To:     Bobby Eshleman <bobby.eshleman@bytedance.com>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Vishnu Dasa <vdasa@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org,
+        Jiang Wang <jiang.wang@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>
+Subject: Re: [PATCH RFC net-next v2 0/4] virtio/vsock: support datagrams
+Message-ID: <ZDk2kOVnUvyLMLKE@bullseye>
+References: <20230413-b4-vsock-dgram-v2-0-079cc7cee62e@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEXW_YQmG83_Yb9JgXapt9RgAs4m=fHnrOKRqfG9N_VMYcA88A@mail.gmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230413-b4-vsock-dgram-v2-0-079cc7cee62e@bytedance.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 04:05:55PM -0400 Joel Fernandes wrote:
-> On Wed, Apr 5, 2023 at 4:36 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Tue, Apr 04, 2023 at 01:50:50PM +0000, Joel Fernandes wrote:
-> > > On Tue, Apr 04, 2023 at 11:29:36AM +0200, Peter Zijlstra wrote:
-> >
-> > > > Heh, this is actually the correct behaviour. If you have a u=1 and a
-> > > > u=.5 task, you should distribute time on a 2:1 basis, eg. 67% vs 33%.
-> > >
-> > > Splitting like that sounds like starvation of the sleeper to me. If something
-> > > sleeps a lot, it will get even less CPU time on an average than it would if
-> > > there was no contention from the u=1 task.
-> >
-> > No, sleeping, per definition, means you're not contending for CPU. What
-> > CFS does, giving them a little boost, is strictly yuck and messes with
-> > latency -- because suddenly you have a task that said it wasn't
-> > competing appear as if it were, but you didn't run it (how could you, it
-> > wasn't there to run) -- but it still needs to catch up.
-> >
-> > The reason it does that, is mostly because at the time we didn't want to
-> > do the whole lag thing -- it's somewhat heavy on the u64 mults and 32bit
-> > computing was still a thing :/ So hacks happened.
-> 
-> Also you have the whole "boost tasks" that sleep a lot with CFS right?
->  Like a task handling user input sleeps a lot, but when it wakes up,
-> it gets higher dynamic priority as its vruntime did not advance. I
-> guess EEVDF also gets you the same thing but still messes with the CPU
-> usage?
-> 
-> > That said; I'm starting to regret not pushing the EEVDF thing harder
-> > back in 2010 when I first wrote it :/
-> >
-> > > And also CGroups will be even more weird than it already is in such a world,
-> > > 2 different containers will not get CPU time distributed properly- say if
-> > > tasks in one container sleep a lot and tasks in another container are CPU
-> > > bound.
-> >
-> > Cgroups are an abomination anyway :-) /me runs like hell. But no, I
-> > don't actually expect too much trouble there.
-> 
-> So, with 2 equally weighted containers, if one has a task that sleeps
-> 50% of the time, and another has a 100% task, then the sleeper will
-> only run 33% of the time? I can see people running containers having a
-> problem with that (a customer running one container gets less CPU than
-> the other.). Sorry if I missed something.
->
+CC'ing Cong.
 
-But the 50% sleeper is _asking_ for less CPU.  Doing 50% for each would
-mean that when the sleeper task was awake it always ran, always won, to
-the exclusion of any one else. (Assuming 1 CPU...)
-
-Cheers,
-Phil
-
-> But yeah I do find the whole EEVDF idea interesting but I admit I have
-> to research it more.
+On Fri, Apr 14, 2023 at 12:25:56AM +0000, Bobby Eshleman wrote:
+> Hey all!
 > 
->  - Joel
+> This series introduces support for datagrams to virtio/vsock.
 > 
-
--- 
-
+> It is a spin-off (and smaller version) of this series from the summer: 
+>   https://lore.kernel.org/all/cover.1660362668.git.bobby.eshleman@bytedance.com/
+> 
+> Please note that this is an RFC and should not be merged until
+> associated changes are made to the virtio specification, which will
+> follow after discussion from this series.
+> 
+> This series first supports datagrams in a basic form for virtio, and
+> then optimizes the sendpath for all transports.
+> 
+> The result is a very fast datagram communication protocol that
+> outperforms even UDP on multi-queue virtio-net w/ vhost on a variety
+> of multi-threaded workload samples.
+> 
+> For those that are curious, some summary data comparing UDP and VSOCK
+> DGRAM (N=5):
+> 
+> 	vCPUS: 16
+> 	virtio-net queues: 16
+> 	payload size: 4KB
+> 	Setup: bare metal + vm (non-nested)
+> 
+> 	UDP: 287.59 MB/s
+> 	VSOCK DGRAM: 509.2 MB/s
+> 
+> Some notes about the implementation...
+> 
+> This datagram implementation forces datagrams to self-throttle according
+> to the threshold set by sk_sndbuf. It behaves similar to the credits
+> used by streams in its effect on throughput and memory consumption, but
+> it is not influenced by the receiving socket as credits are.
+> 
+> The device drops packets silently. There is room for improvement by
+> building into the device and driver some intelligence around how to
+> reduce frequency of kicking the virtqueue when packet loss is high. I
+> think there is a good discussion to be had on this.
+> 
+> In this series I am also proposing that fairness be reexamined as an
+> issue separate from datagrams, which differs from my previous series
+> that coupled these issues. After further testing and reflection on the
+> design, I do not believe that these need to be coupled and I do not
+> believe this implementation introduces additional unfairness or
+> exacerbates pre-existing unfairness.
+> 
+> I attempted to characterize vsock fairness by using a pool of processes
+> to stress test the shared resources while measuring the performance of a
+> lone stream socket. Given unfair preference for datagrams, we would
+> assume that a lone stream socket would degrade much more when a pool of
+> datagram sockets was stressing the system than when a pool of stream
+> sockets are stressing the system. The result, however, showed no
+> significant difference between the degradation of throughput of the lone
+> stream socket when using a pool of datagrams to stress the queue over
+> using a pool of streams. The absolute difference in throughput actually
+> favored datagrams as interfering least as the mean difference was +16%
+> compared to using streams to stress test (N=7), but it was not
+> statistically significant. Workloads were matched for payload size and
+> buffer size (to approximate memory consumption) and process count, and
+> stress workloads were configured to start before and last long after the
+> lifetime of the "lone" stream socket flow to ensure that competing flows
+> were continuously hot.
+> 
+> Given the above data, I propose that vsock fairness be addressed
+> independent of datagrams and to defer its implementation to a future
+> series.
+> 
+> Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+> ---
+> Bobby Eshleman (3):
+>       virtio/vsock: support dgram
+>       virtio/vsock: add VIRTIO_VSOCK_F_DGRAM feature bit
+>       vsock: Add lockless sendmsg() support
+> 
+> Jiang Wang (1):
+>       tests: add vsock dgram tests
+> 
+>  drivers/vhost/vsock.c                   |  17 +-
+>  include/net/af_vsock.h                  |  20 ++-
+>  include/uapi/linux/virtio_vsock.h       |   2 +
+>  net/vmw_vsock/af_vsock.c                | 287 ++++++++++++++++++++++++++++----
+>  net/vmw_vsock/diag.c                    |  10 +-
+>  net/vmw_vsock/hyperv_transport.c        |  15 +-
+>  net/vmw_vsock/virtio_transport.c        |  10 +-
+>  net/vmw_vsock/virtio_transport_common.c | 221 ++++++++++++++++++++----
+>  net/vmw_vsock/vmci_transport.c          |  70 ++++++--
+>  tools/testing/vsock/util.c              | 105 ++++++++++++
+>  tools/testing/vsock/util.h              |   4 +
+>  tools/testing/vsock/vsock_test.c        | 193 +++++++++++++++++++++
+>  12 files changed, 859 insertions(+), 95 deletions(-)
+> ---
+> base-commit: ed72bd5a6790a0c3747cb32b0427f921bd03bb71
+> change-id: 20230413-b4-vsock-dgram-3b6eba6a64e5
+> 
+> Best regards,
+> -- 
+> Bobby Eshleman <bobby.eshleman@bytedance.com>
+> 
