@@ -2,64 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 111706E25C7
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 16:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE8B6E25CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 16:32:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbjDNOcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 10:32:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56196 "EHLO
+        id S230495AbjDNOcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 10:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjDNOb6 (ORCPT
+        with ESMTP id S230366AbjDNOci (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 10:31:58 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D2E196;
-        Fri, 14 Apr 2023 07:31:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1681482711; x=1713018711;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=xPULitwJp6+DmysWFbEIuihcneSUosBP3Pul4LIysT8=;
-  b=mQ73Ke7olemveOcUU5hIiMwEOYzCqPmh4uiAEAERJIvovsSLNYSTx4MJ
-   JbLXIE/vGu/8Z5Bt/0SD0XfG6NHTGVF/1a1wNfrveiokjplBkRbidxzLP
-   eT9LsDBETqa78eiyWO3Afz0WpD2n0vRZdzOgRRIO7wlytlyKR5TyNse5+
-   NvnPcsLMcP6QZ8ihZzJ/vuYMJtFjex10+tSioV6GmLiQSJnqk2tcP3xMq
-   wqFY7d3ftyS2014YQC4bpVvezst4yqh2pOAZ4bDEZJozQa4JPBfS9pvw4
-   C5Bf76DNwI2vUuC0XbmcaNv8Ri0ZeBpfILsDpGnYtYg92F8nWgXrUSi+0
-   w==;
-X-IronPort-AV: E=Sophos;i="5.99,197,1677567600"; 
-   d="scan'208";a="209115974"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Apr 2023 07:31:50 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 14 Apr 2023 07:31:44 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Fri, 14 Apr 2023 07:31:44 -0700
-Date:   Fri, 14 Apr 2023 16:31:44 +0200
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Zheng Hacker <hackerzheng666@gmail.com>
-CC:     Zheng Wang <zyytlz.wz@163.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <1395428693sheep@gmail.com>, <alex000young@gmail.com>
-Subject: Re: [PATCH net v2] net: ethernet: fix use after free bug in
- ns83820_remove_one due to race condition
-Message-ID: <20230414143144.2e5hf6iokcbcrf5a@soft-dev3-1>
-References: <20230413071401.210599-1-zyytlz.wz@163.com>
- <20230413100128.bcnqvdpu6hgilws4@soft-dev3-1>
- <CAJedcCyLXuqMEWt6f+_HFEzAdgEcq5oQc-hRtt0k=rd_vrz6ew@mail.gmail.com>
+        Fri, 14 Apr 2023 10:32:38 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56B1BC;
+        Fri, 14 Apr 2023 07:32:33 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 87B181FD9F;
+        Fri, 14 Apr 2023 14:32:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1681482751; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+2bJ2CDuzKgRDleC5QFa89hSVX8wMNuFKrzbNXKA+J0=;
+        b=KpggDlsCb8TvDf5jIHfQV87cGQJbmVXRVuaeUhIwsYxPqDVDB+MmMOiZiD2Kd9WPcN6vCN
+        J4o6vwen0NUZuruK+WC3Fj1llq7KqPZQ9/v6TeKJ46OU2msIe1p0iD3pe+iE8b0aaHLo4J
+        yifoN87zLsUcPCX1cYvU6xbILcxaycI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1681482751;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+2bJ2CDuzKgRDleC5QFa89hSVX8wMNuFKrzbNXKA+J0=;
+        b=VsOY+QudtAh46N4cxi61iAktwoWceCn0R0HL2afVTWHB2Ei1BFIx2OOULLlyb6Y9UKDize
+        /oZJM52bhJqqMyAg==
+Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id C5D1D2C15A;
+        Fri, 14 Apr 2023 14:32:30 +0000 (UTC)
+Date:   Fri, 14 Apr 2023 16:32:30 +0200 (CEST)
+From:   Miroslav Benes <mbenes@suse.cz>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-btrfs@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        linux-scsi@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2 07/11] objtool: Include weak functions in global_noreturns
+ check
+In-Reply-To: <ede3460d63f4a65d282c86f1175bd2662c2286ba.1681342859.git.jpoimboe@kernel.org>
+Message-ID: <alpine.LSU.2.21.2304141631490.4426@pobox.suse.cz>
+References: <cover.1681342859.git.jpoimboe@kernel.org> <ede3460d63f4a65d282c86f1175bd2662c2286ba.1681342859.git.jpoimboe@kernel.org>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJedcCyLXuqMEWt6f+_HFEzAdgEcq5oQc-hRtt0k=rd_vrz6ew@mail.gmail.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,101 +70,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 04/13/2023 18:49, Zheng Hacker wrote:
+On Wed, 12 Apr 2023, Josh Poimboeuf wrote:
 
-Hi Zheng,
+> If a global function doesn't return, and its prototype has the
+> __noreturn attribute, its weak counterpart must also not return so that
+> it matches the prototype and meets call site expectations.
+> 
+> To properly follow the compiled control flow at the call sites, change
+> the global_noreturns check to include both global and weak functions.
+> 
+> On the other hand, if a weak function isn't in global_noreturns, assume
+> the prototype doesn't have __noreturn.  Even if the weak function
+> doesn't return, call sites treat it like a returnable function.
+> 
+> Fixes the following warning:
+> 
+>   kernel/sched/build_policy.o: warning: objtool: do_idle() falls through to next function play_idle_precise()
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/oe-kbuild-all/202304090346.erhqxnlt-lkp@intel.com/
+> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 
-> 
-> Horatiu Vultur <horatiu.vultur@microchip.com> 于2023年4月13日周四 18:01写道：
-> >
-> > The 04/13/2023 15:14, Zheng Wang wrote:
-> >
-> > Hi Zheng,
-> >
-> > >
-> > > In ns83820_init_one, dev->tq_refill was bound with queue_refill.
-> > >
-> > > If irq happens, it will call ns83820_irq->ns83820_do_isr.
-> > > Then it invokes tasklet_schedule(&dev->rx_tasklet) to start
-> > > rx_action function. And rx_action will call ns83820_rx_kick
-> > > and finally start queue_refill function.
-> > >
-> > > If we remove the driver without finishing the work, there
-> > > may be a race condition between ndev, which may cause UAF
-> > > bug.
-> > >
-> > > CPU0                  CPU1
-> > >
-> > >                      |queue_refill
-> > > ns83820_remove_one   |
-> > > free_netdev                      |
-> > > put_device                       |
-> > > free ndev                        |
-> > >                      |rx_refill
-> > >                      |//use ndev
-> >
-> > Will you not have the same issue if you remove the driver after you
-> > schedule rx_tasklet? Because rx_action will use also ndev.
-> >
-> 
-> Hello Horatiu,
-> 
-> Thanks for your reply. In ns83820_remove_one, there is an invoking:
-> 
-> free_irq(dev->pci_dev->irq, ndev);
-> 
-> This will prevent the driver from handling more irq, But it couldn't prevent
-> the rx_tasklet from being scheduled. So I think we should add the
-> following code:
-> 
-> tasklet_kill(&dev->rx_tasklet);
-> 
-> after free_irq invoking. Is there anything wrong about my analysis?
+Reviewed-by: Miroslav Benes <mbenes@suse.cz>
 
-I think you are right, I don't see a problem.
+The rest of the patch set looks good to me too.
 
-> 
-> Thanks again for pointing the mistake out.
-> 
-> Best regards,
-> Zheng
-> 
-> 
-> > >
-> > > Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> > > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-> > > ---
-> > > v2:
-> > > - cancel the work after unregister_netdev to make sure there
-> > > is no more request suggested by Jakub Kicinski
-> > > ---
-> > >  drivers/net/ethernet/natsemi/ns83820.c | 5 +++++
-> > >  1 file changed, 5 insertions(+)
-> > >
-> > > diff --git a/drivers/net/ethernet/natsemi/ns83820.c b/drivers/net/ethernet/natsemi/ns83820.c
-> > > index 998586872599..2e84b9fcd8e9 100644
-> > > --- a/drivers/net/ethernet/natsemi/ns83820.c
-> > > +++ b/drivers/net/ethernet/natsemi/ns83820.c
-> > > @@ -2208,8 +2208,13 @@ static void ns83820_remove_one(struct pci_dev *pci_dev)
-> > >
-> > >         ns83820_disable_interrupts(dev); /* paranoia */
-> > >
-> > > +       netif_carrier_off(ndev);
-> > > +       netif_tx_disable(ndev);
-> > > +
-> > >         unregister_netdev(ndev);
-> > >         free_irq(dev->pci_dev->irq, ndev);
-> > > +       cancel_work_sync(&dev->tq_refill);
-> > > +
-> > >         iounmap(dev->base);
-> > >         dma_free_coherent(&dev->pci_dev->dev, 4 * DESC_SIZE * NR_TX_DESC,
-> > >                           dev->tx_descs, dev->tx_phy_descs);
-> > > --
-> > > 2.25.1
-> > >
-> >
-> > --
-> > /Horatiu
-
--- 
-/Horatiu
+M
