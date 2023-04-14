@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B958F6E2D04
+	by mail.lfdr.de (Postfix) with ESMTP id 5DF986E2D03
 	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 01:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbjDNXo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 19:44:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
+        id S229899AbjDNXoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 19:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjDNXoU (ORCPT
+        with ESMTP id S229780AbjDNXoV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 19:44:20 -0400
+        Fri, 14 Apr 2023 19:44:21 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601595260;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46655243;
         Fri, 14 Apr 2023 16:44:19 -0700 (PDT)
-Message-ID: <20230414232309.323016954@linutronix.de>
+Message-ID: <20230414232309.385574446@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1681515856;
+        s=2020; t=1681515858;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=sDTci1v+H+1hOBnO3MWKNQ4KSM/+mxYEdJGIWDEKpYw=;
-        b=y8O+iHOImdrEQNmtF7SapUaot3V0yy8b8Ub9SUl+OgGsTaIJZhbZjtiR4PN4V5WCNemOca
-        Ob8ttIQs2lYzofVI5dy3T9RFKAux9iKX/Rkv+VPjfOqV4T6XWGHXuY9IFhwqlXBTVc5Nsl
-        KK4n8ce7YmA5TsutXdcfdM52VSR98OW8mCNQWFGg6cY3Yq6KC99p69q2+p9erXW8Qg/qAb
-        ceQeWzd0QJGBxdpwT1wRPfHvVdxLxyyhgH/r2Dl9U2nA2Jo/APevn/jIIjbNa3EFkc7Pxb
-        zX0dOALraGxj/DlefvHJr1NZVmMqpk/+HdfNk32Kc/stZp2q/WmPtDMIe6OaIQ==
+         references:references; bh=IHNUiYT/aa+9U/QrFpO4u8KQro95rDNTw6iEEK5ze9o=;
+        b=1GGWgmKl+Z16YESLBwfkaJ8pYvl0ibRrRLZ//qbrV6Rn4ejq8Bvi6vo9cC/d06/jSPEXR4
+        hvZPrEqwgB1nXc44jqzGpA3g8UhwvIHA09SMd8L91BmwlYgaP2m77BjOpifPA2Jp8FR9F+
+        c0G0jy+fXRMuNBDQtZn5Uv5VCIUDjwdIxXIzMKcFSmEiflIS9qbg0CEGaA9Azgv3qTSjMh
+        2Q6Nmfsfu+SPkBhJwKselmJZVd9FCtpTg9fyXFZ6j2n8kUoisHbXRgCmcH48m/s4qcThpJ
+        o2FriQZJckk/vdgmu5g5vmRYvkI+K74QUFnLD6JN3zpP58uh1nfGpXn5o7XkuA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1681515856;
+        s=2020e; t=1681515858;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=sDTci1v+H+1hOBnO3MWKNQ4KSM/+mxYEdJGIWDEKpYw=;
-        b=HMWjVuC1heTl6ACr7VnRkYnxnf9HNU4lYZlkNOeO1jQ9uLiC6+ocCzTSyzyWZjYVjiCgZf
-        cRj6X0w+T3BbGTBA==
+         references:references; bh=IHNUiYT/aa+9U/QrFpO4u8KQro95rDNTw6iEEK5ze9o=;
+        b=cHgI8T+6dl0c5QvmY+jPTGI3Fml5ooLABkADGz2XWt8RyEwXHfElCQYbWkrIndZHTvvRK5
+        Onzbq0bjdDoTP8Dg==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, David Woodhouse <dwmw@infradead.org>,
@@ -67,12 +67,12 @@ Cc:     x86@kernel.org, David Woodhouse <dwmw@infradead.org>,
         linux-riscv@lists.infradead.org,
         Mark Rutland <mark.rutland@arm.com>,
         Sabin Rapan <sabrapan@amazon.com>
-Subject: [patch 02/37] cpu/hotplug: Mark arch_disable_smp_support() and
- bringup_nonboot_cpus() __init
+Subject: [patch 03/37] x86/smpboot: Avoid pointless delay calibration is TSC
+ is synchronized
 References: <20230414225551.858160935@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Sat, 15 Apr 2023 01:44:16 +0200 (CEST)
+Date:   Sat, 15 Apr 2023 01:44:18 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -83,49 +83,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No point in keeping them around.
+When TSC is synchronized across sockets then there is no reason in
+calibrating the delay for the first CPU which comes up on a socket.
+
+Just reuse the existing calibration value.
+
+This removes 100ms pointlessly wasted time from CPU hotplug.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- arch/x86/kernel/smpboot.c |    4 ++--
- kernel/cpu.c              |    2 +-
- kernel/smp.c              |    2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ arch/x86/kernel/smpboot.c |   38 ++++++++++++++++++++++++--------------
+ arch/x86/kernel/tsc.c     |   20 ++++++++++++++++----
+ 2 files changed, 40 insertions(+), 18 deletions(-)
 
 --- a/arch/x86/kernel/smpboot.c
 +++ b/arch/x86/kernel/smpboot.c
-@@ -1269,9 +1269,9 @@ int native_cpu_up(unsigned int cpu, stru
+@@ -178,10 +178,7 @@ static void smp_callin(void)
+ 	 */
+ 	apic_ap_setup();
+ 
+-	/*
+-	 * Save our processor parameters. Note: this information
+-	 * is needed for clock calibration.
+-	 */
++	/* Save our processor parameters. */
+ 	smp_store_cpu_info(cpuid);
+ 
+ 	/*
+@@ -192,14 +189,6 @@ static void smp_callin(void)
+ 
+ 	ap_init_aperfmperf();
+ 
+-	/*
+-	 * Get our bogomips.
+-	 * Update loops_per_jiffy in cpu_data. Previous call to
+-	 * smp_store_cpu_info() stored a value that is close but not as
+-	 * accurate as the value just calculated.
+-	 */
+-	calibrate_delay();
+-	cpu_data(cpuid).loops_per_jiffy = loops_per_jiffy;
+ 	pr_debug("Stack at about %p\n", &cpuid);
+ 
+ 	wmb();
+@@ -212,8 +201,24 @@ static void smp_callin(void)
+ 	cpumask_set_cpu(cpuid, cpu_callin_mask);
  }
  
- /**
-- * arch_disable_smp_support() - disables SMP support for x86 at runtime
-+ * arch_disable_smp_support() - Disables SMP support for x86 at boottime
++static void ap_calibrate_delay(void)
++{
++	/*
++	 * Calibrate the delay loop and update loops_per_jiffy in cpu_data.
++	 * smp_store_cpu_info() stored a value that is close but not as
++	 * accurate as the value just calculated.
++	 *
++	 * As this is invoked after the TSC synchronization check,
++	 * calibrate_delay_is_known() will skip the calibration routine
++	 * when TSC is synchronized across sockets.
++	 */
++	calibrate_delay();
++	cpu_data(smp_processor_id()).loops_per_jiffy = loops_per_jiffy;
++}
++
+ static int cpu0_logical_apicid;
+ static int enable_start_cpu0;
++
+ /*
+  * Activate a secondary processor.
   */
--void arch_disable_smp_support(void)
-+void __init arch_disable_smp_support(void)
- {
- 	disable_ioapic_support();
- }
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -1502,7 +1502,7 @@ int bringup_hibernate_cpu(unsigned int s
- 	return 0;
- }
+@@ -240,10 +245,15 @@ static void notrace start_secondary(void
  
--void bringup_nonboot_cpus(unsigned int setup_max_cpus)
-+void __init bringup_nonboot_cpus(unsigned int setup_max_cpus)
- {
- 	unsigned int cpu;
+ 	/* otherwise gcc will move up smp_processor_id before the cpu_init */
+ 	barrier();
++	/* Check TSC synchronization with the control CPU: */
++	check_tsc_sync_target();
++
+ 	/*
+-	 * Check TSC synchronization with the boot CPU:
++	 * Calibrate the delay loop after the TSC synchronization check.
++	 * This allows to skip the calibration when TSC is synchronized
++	 * across sockets.
+ 	 */
+-	check_tsc_sync_target();
++	ap_calibrate_delay();
  
---- a/kernel/smp.c
-+++ b/kernel/smp.c
-@@ -1051,7 +1051,7 @@ EXPORT_SYMBOL(setup_max_cpus);
-  * SMP mode to <NUM>.
+ 	speculative_store_bypass_ht_init();
+ 
+--- a/arch/x86/kernel/tsc.c
++++ b/arch/x86/kernel/tsc.c
+@@ -1598,10 +1598,7 @@ void __init tsc_init(void)
+ 
+ #ifdef CONFIG_SMP
+ /*
+- * If we have a constant TSC and are using the TSC for the delay loop,
+- * we can skip clock calibration if another cpu in the same socket has already
+- * been calibrated. This assumes that CONSTANT_TSC applies to all
+- * cpus in the socket - this should be a safe assumption.
++ * Check whether existing calibration data can be reused.
   */
- 
--void __weak arch_disable_smp_support(void) { }
-+void __weak __init arch_disable_smp_support(void) { }
- 
- static int __init nosmp(char *str)
+ unsigned long calibrate_delay_is_known(void)
  {
+@@ -1609,6 +1606,21 @@ unsigned long calibrate_delay_is_known(v
+ 	int constant_tsc = cpu_has(&cpu_data(cpu), X86_FEATURE_CONSTANT_TSC);
+ 	const struct cpumask *mask = topology_core_cpumask(cpu);
+ 
++	/*
++	 * If TSC has constant frequency and TSC is synchronized across
++	 * sockets then reuse CPU0 calibration.
++	 */
++	if (constant_tsc && !tsc_unstable)
++		return cpu_data(0).loops_per_jiffy;
++
++	/*
++	 * If TSC has constant frequency and TSC is not synchronized across
++	 * sockets and this is not the first CPU in the socket, then reuse
++	 * the calibration value of an already online CPU on that socket.
++	 *
++	 * This assumes that CONSTANT_TSC is consistent for all CPUs in a
++	 * socket.
++	 */
+ 	if (!constant_tsc || !mask)
+ 		return 0;
+ 
 
