@@ -2,134 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DBF56E298B
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 19:35:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0C516E299C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 19:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbjDNRfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 13:35:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58344 "EHLO
+        id S229766AbjDNRnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 13:43:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjDNRf3 (ORCPT
+        with ESMTP id S229870AbjDNRm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 13:35:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A17F355AB;
-        Fri, 14 Apr 2023 10:35:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 14 Apr 2023 13:42:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CA3AD25
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 10:42:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681494121;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YShER/83lVY8rjvwP0DGbgGKGuajPMgVY3SrTBvwiQg=;
+        b=ShtqYcVOexYvxplIvzi2LqBsgjJQStcvCTkzS/vsWaH22BVwANZRdH+tNnUiCaHxl0FuaV
+        7MskSre5LAlb8twMxIHyAiccYOHdrG7Z2B21PWIEpC8JxdvC887lAF1gzUmNZoj5u7sRgZ
+        hAobfmNIrOhXQgcGM8/3IBjhFtA6mwc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-47-S2cIwDP4MLWRPH72GQb-OQ-1; Fri, 14 Apr 2023 13:41:20 -0400
+X-MC-Unique: S2cIwDP4MLWRPH72GQb-OQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C35F6497A;
-        Fri, 14 Apr 2023 17:35:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD973C433EF;
-        Fri, 14 Apr 2023 17:35:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681493724;
-        bh=PdlPchlBqq3ipIe1/5avWeUUYeo8hYM1C6FOgpJVePE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FHyrqHeYFDR408+DVbywqdFdI5GZKpRRQe+rslBVGoCMgTxqF+CAtyTC9jcAKomNz
-         PfFasrHSeJp341AxUycZArVFXHXCW5TKn0Xb7ZilD+q0ehTk+irIq11PYbUZ9zGrLp
-         6ThJGCgMv0RNeESv03yDmCQkKpWF5K+DteXEi1L5vP5NsKJD66qxtdJMwmyuIzqsPm
-         QOlGK2hVNdQjwc0VTI3v9X5qNkB/wJe46FODMI+uKTk2DaWJWNqm7N7Ku5hkZzfgUm
-         hHItTYOL1nkJ/zA7/RHzNc0O/EnkLC5HZIV0/fiT8fJce/ObiPD6Z1SxOrlqOjQIoa
-         mQtJQBmKqECTg==
-Date:   Fri, 14 Apr 2023 18:35:18 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     =?utf-8?B?UGF3ZcWC?= Anikiel <pan@semihalf.com>
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lgirdwood@gmail.com, perex@perex.cz,
-        tiwai@suse.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, dinguyen@kernel.org,
-        lars@metafoo.de, nuno.sa@analog.com, upstream@semihalf.com
-Subject: Re: [PATCH 5/9] ASoC: ssm2602: Add workaround for playback with
- external MCLK
-Message-ID: <cb35f3f2-4dc9-4d56-96bd-bcffb33b7aaf@sirena.org.uk>
-References: <20230414140203.707729-1-pan@semihalf.com>
- <20230414140203.707729-6-pan@semihalf.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C2CFE3C184EE;
+        Fri, 14 Apr 2023 17:38:49 +0000 (UTC)
+Received: from [10.22.18.140] (unknown [10.22.18.140])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 32B53492B01;
+        Fri, 14 Apr 2023 17:38:49 +0000 (UTC)
+Message-ID: <60ec12dc-943c-b8f0-8b6f-97c5d332144c@redhat.com>
+Date:   Fri, 14 Apr 2023 13:38:49 -0400
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="EH6yRfJ9i6hhIpAh"
-Content-Disposition: inline
-In-Reply-To: <20230414140203.707729-6-pan@semihalf.com>
-X-Cookie: One Bell System - it works.
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>
+References: <e38f72aa-9705-cf0c-a565-fb790f16c53e@redhat.com>
+ <ZDdG1K0kTETZMTCu@slm.duckdns.org>
+ <cd4c3f92-4a01-e636-7390-8c6a3d0cfe6c@redhat.com>
+ <ZDdNy2NAfj2_1CbW@slm.duckdns.org>
+ <1b8d9128-d076-7d37-767d-11d6af314662@redhat.com>
+ <ZDdYOI9LB87ra2t_@slm.duckdns.org>
+ <9862da55-5f41-24c3-f3bb-4045ccf24b2e@redhat.com>
+ <226cb2da-e800-6531-4e57-cbf991022477@redhat.com>
+ <ZDmFLfII8EUX_ocY@slm.duckdns.org>
+ <c61ca9d0-c514-fb07-c2f2-3629e8898984@redhat.com>
+ <ZDmOjeBVsIcgSLIV@slm.duckdns.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <ZDmOjeBVsIcgSLIV@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 4/14/23 13:34, Tejun Heo wrote:
+> On Fri, Apr 14, 2023 at 01:29:25PM -0400, Waiman Long wrote:
+>> On 4/14/23 12:54, Tejun Heo wrote:
+>>> On Thu, Apr 13, 2023 at 09:22:19PM -0400, Waiman Long wrote:
+>>>> I now have a slightly different idea of how to do that. We already have an
+>>>> internal cpumask for partitioning - subparts_cpus. I am thinking about
+>>>> exposing it as cpuset.cpus.reserve. The current way of creating
+>>>> subpartitions will be called automatic reservation and require a direct
+>>>> parent/child partition relationship. But as soon as a user write anything to
+>>>> it, it will break automatic reservation and require manual reservation going
+>>>> forward.
+>>>>
+>>>> In that way, we can keep the old behavior, but also support new use cases. I
+>>>> am going to work on that.
+>>> I'm not sure I fully understand the proposed behavior but it does sound more
+>>> quirky.
+>> The idea is to use the existing subparts_cpus for cpu reservation instead of
+>> adding a new cpumask for that purpose. The current way of partition creation
+>> does cpus reservation (setting subparts_cpus) automatically with the
+>> constraint that the parent of a partition must be a partition root itself.
+>> One way to relax this constraint is to allow a new manual reservation mode
+>> where users can set reserve cpus manually and distribute them down the
+>> hierarchy before activating a partition to use those cpus.
+>>
+>> Now the question is how to enable this new manual reservation mode. One way
+>> to do it is to enable it whenever the new cpuset.cpus.reserve file is
+>> modified. Alternatively, we may enable it by a cgroupfs mount option or a
+>> boot command line option.
+> It'd probably be best if we can keep the behavior within cgroupfs if
+> possible. Would you mind writing up the documentation section describing the
+> behavior beforehand? I think things would be clearer if we look at it from
+> the interface documentation side.
 
---EH6yRfJ9i6hhIpAh
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Sure, will do that. I need some time and so it will be early next week.
 
-On Fri, Apr 14, 2023 at 04:01:59PM +0200, Pawe=C5=82 Anikiel wrote:
+Cheers,
+Longman
 
-> Apply a workaround for what seems to be a hardware quirk: when using
-> an external MCLK signal, powering on Output and DAC for the first time
-> produces output distortions unless they're powered together with whole
-> chip power.
-
-This doesn't seem coherent, these are multiple register writes so
-clearly can't be done at the same moment as initial power on.  Clearly
-there's some other constraint here.
-
-> The workaround powers them on in probe for the first time, as doing it
-> later may be impossible (e.g. when starting playback while recording,
-> whole chip power will already be on).
-
-It doesn't do that, it powers them on at component probe.
-
-> Here are some sequences run at the very start before a sw reset (and
-> later using one of the NOT OK sequences from above):
->=20
->   ssmset 0x09 0x01 # core
->   ssmset 0x06 0x07 # chip, out, dac
->   OK
-
-I can't tell what any of this is trying to say, especially given all the
-magic numbers, and obviously no actual use of the driver should be
-writing directly to the register map.
-
-> +	/* Workaround for what seems to be a hardware quirk: when using an
-> +	 * external MCLK signal, powering on Output and DAC for the first
-> +	 * time produces output distortions unless they're powered together
-> +	 * with whole chip power. We power them here for the first time,
-> +	 * as doing it later may be impossible (e.g. when starting playback
-> +	 * while recording, whole chip power will already be on)
-> +	 */
-> +	regmap_write(ssm2602->regmap, SSM2602_ACTIVE, 0x01);
-> +	regmap_write(ssm2602->regmap, SSM2602_PWR,    0x07);
-> +	regmap_write(ssm2602->regmap, SSM2602_RESET,  0x00);
-> +
-
-The rest of the driver uses symbolic names for register values, this
-code should too. =20
-
-This also seems buggy in that it writes non-default values to the
-hardware then does a reset, meaning that the cache and hardware values
-will be out of sync, and since it only happens on probe there will be an
-issue after suspend if power is removed.  It looks like this would be
-most comfortably implemented as a register patch applied as soon as the
-regmap is instantiated.  See regmap_register_patch().
-
---EH6yRfJ9i6hhIpAh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ5jtUACgkQJNaLcl1U
-h9Ajkwf+ODUCBkDtTHlEW7Kmhees6SWhoER3fk+u//I4yyeodw2AopWmhSQaUs0m
-k5/cPXokWbQaCDic+hod7YejaAtDGHj3lDH9s4CAsE9SRtuYV1SCL8N94LN6ZETG
-/3MlDr+ScZ+ga+8OsSQVvGMfYZlSuRlTiUJmocRWO5dJ/thyDzh/89QdgGfQt0eo
-g6asIK+pLjG4N7Pl20E/bAG5sG1AHGkYiAxOLVD6vsXzcBZT+GoI5xYxD2rleRNi
-cAN5Og3SghfLXhZNQeDBZ4/7mjCF/AwymoAsPuYwQRkWeWdZh29gOhPqSUD/Mzss
-EtMguFBBN3y1NPRsMRBqzvmFV4TkcQ==
-=zZC1
------END PGP SIGNATURE-----
-
---EH6yRfJ9i6hhIpAh--
