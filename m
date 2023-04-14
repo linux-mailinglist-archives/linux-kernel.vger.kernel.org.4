@@ -2,73 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAFDE6E2B8C
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 23:12:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB7F6E2B96
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 23:15:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbjDNVMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 17:12:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57486 "EHLO
+        id S229799AbjDNVPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 17:15:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbjDNVMR (ORCPT
+        with ESMTP id S229647AbjDNVPc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 17:12:17 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23844EF2
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 14:12:14 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id dm2so48922368ejc.8
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 14:12:14 -0700 (PDT)
+        Fri, 14 Apr 2023 17:15:32 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F94C59C6
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 14:15:31 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id rp27so11816660ejb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 14:15:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681506733; x=1684098733;
+        d=linaro.org; s=google; t=1681506930; x=1684098930;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=jpwwM8DbcXGtGGGpWXw5xEbGhldxgCUGXxIxcQVNp8s=;
-        b=g8xmMN8znp0OpiHnPEW9iZCKhziK0nNa18QIsSq1/RmlLHdR9uxF1QnjiXP/thmKuB
-         /1Db5lm8pS3+oq0auA0j3hQYzz0gtuAW3wsJsX3pfCtZBANdtst1Uw9ktsHWyRg0Y7l9
-         4gVmitqDwbA+ngkon06cDvZphQQQSW+DKWhENCtcLv1fdAAfOWyRiyxsJcfyT0frS5qM
-         11jG6NvozqoQjEvHQVCqcqhjGjrf1623DrtQFauZsDPepAlTwUWkcPMjq9ty6JOqaUEi
-         MOzKhN33keYrB6kcLcP1y3duxvV3zTfI8D4jqwBsz4Lz6MAhqnLn3VcjQyQLhxN/7CZx
-         G6ZA==
+        bh=VUauNqUH8SviMCLNAJv5IYrg5F5Bu+FptiwoslQ+xFI=;
+        b=u/PGfiDBOFJUjYl65eSqzMszDrdR8JFXGwqrpwriYGiTMhJcF0P45hDrI2cGYRhfmW
+         JRb8WrMvFl7r0IpWl3IJygjQnhvk8iHDUVUyVuBPeegSvyKBeOPZGvBvXZECWYzWAz4f
+         oqqWu7sv34M+xIHqF/IVb0LlDcp1Ia6sENPOXnzmL9TCp8zb9NFQTjBFx2yXyRwUgDmg
+         TwQ/djrb9Uav+Ye621lSVehiWCo3u8Rc/KEeMP8ZUb0W7vSxLD1DpPiNHqgK6NKYOdK3
+         VG/UV+RsOz0y24RfW3STKPklYzSakSz9e7ROnyXGY5ku9XG5qti7D58H9SEb+Sthp72v
+         OT0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681506733; x=1684098733;
+        d=1e100.net; s=20221208; t=1681506930; x=1684098930;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jpwwM8DbcXGtGGGpWXw5xEbGhldxgCUGXxIxcQVNp8s=;
-        b=FQjKKfNq3PSVUCCWVEE5x4oulVq+WCD9norMStmznBH2cmbTckTa1NCjNcE8zCVW9J
-         CfLP8FvcRitC9qrksLfCdoSyiJZLk3WZTGPUSuYrfLv6pp2wRdPI/v7C3ufeum/V6n1O
-         t/0HcBKKfS5HokieNMtOOh82pf6t7uD4+3ChciqZHzQEskJ3uRGuombS1QGm/wfXBaZ2
-         JjdM97C0VBKmwvPcdFMDAqVDYnflqUbn9HiP88OT7U1wKRhUBKwFYuTIeaVzD/G49I6S
-         j3OLlRZ7SuMnp8wJs7LDAQDfPxnrzEIBbdbp/2kVOQEvzZHfZf8rdeOuSuTO9AHFBzB8
-         j+Sw==
-X-Gm-Message-State: AAQBX9eYA74OSTJ259WorhElO50dI2jNVw0bXC8V+18NwuN+lBSjtsNa
-        CiNIUTB8JymuwcXOzckbQgoOcwFCtlqA+pp0rgw=
-X-Google-Smtp-Source: AKy350biCvKQBwZA5r1WJE7zZK4OAppLAmWqrl+pC5eQnrCjfaW5vLswwMFckdRh/585lBvG6TCGkA==
-X-Received: by 2002:a17:906:2c44:b0:94a:70ba:70ee with SMTP id f4-20020a1709062c4400b0094a70ba70eemr520804ejh.32.1681506733182;
-        Fri, 14 Apr 2023 14:12:13 -0700 (PDT)
+        bh=VUauNqUH8SviMCLNAJv5IYrg5F5Bu+FptiwoslQ+xFI=;
+        b=lZ7uVTA60N7keQ9XmDg5A/t82mUAzwhlthmT/MLbGc7uWgDUz8nb7Miy2sr4W80rwb
+         H8pQiZxNWvEPFaLsX9MxyuZbGI+3uzcTWx7+1ONy0CLDE8UTu6MDo5/CCjO3Kwo9aXAV
+         5JqseaHm1qPQE5tsj98eUiPaDMEw1G1P75Dh/LiM0Z0jBnDuLL4EyyZ5JQKClYLGv6L7
+         YYAV0HSDoVY+mmkQMgGIiopwIP7yNt9n5UxGwvo0R5xOJnoFFc24AUn5Fwbsywf81Kfu
+         zJ6/9dbQ/s3wJIx+hIuEVQVNC2BfRPfyzpjS8dknTQnynXdPTXSCcfM8F4qcKwAw6Bsk
+         wz1Q==
+X-Gm-Message-State: AAQBX9eSGjSkfvtDluIaWPbWsvqwEBI8i1OFaodtNeUX4gdxgwaUz1kZ
+        TXIfUl5Kph86rxZLZwxjDPLLnQ==
+X-Google-Smtp-Source: AKy350YlQjI78vTkasGK6ZSDTKkQK+7zwh4Z1p8TbImh92gDODRqJJmS+18XluAV/XwAwn2lo8kYYg==
+X-Received: by 2002:a17:906:5e02:b0:94a:6966:7b45 with SMTP id n2-20020a1709065e0200b0094a69667b45mr621291eju.39.1681506930157;
+        Fri, 14 Apr 2023 14:15:30 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:ffae:8aab:ae5a:4688? ([2a02:810d:15c0:828:ffae:8aab:ae5a:4688])
-        by smtp.gmail.com with ESMTPSA id v8-20020a1709067d8800b0094a98a175cesm2903287ejo.80.2023.04.14.14.12.12
+        by smtp.gmail.com with ESMTPSA id wv13-20020a170907080d00b0094ee21fe943sm1354903ejb.116.2023.04.14.14.15.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 14:12:12 -0700 (PDT)
-Message-ID: <83947c77-de8c-fc39-6721-e1e1cb5fc3fc@linaro.org>
-Date:   Fri, 14 Apr 2023 23:12:11 +0200
+        Fri, 14 Apr 2023 14:15:29 -0700 (PDT)
+Message-ID: <add2ccfa-d811-d76b-342f-a2204f7e87b0@linaro.org>
+Date:   Fri, 14 Apr 2023 23:15:28 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
-Subject: Re: [PATCH v11 1/3] dt-bindings: i2c: Add Maxim MAX735x/MAX736x
- variants
+Subject: Re: [PATCH v2 2/4] dt-bindings: usb: dwc2: add utmi optional clock
 Content-Language: en-US
-To:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Peter Rosin <peda@axentia.se>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230414110137.401356-1-patrick.rudolph@9elements.com>
- <20230414110137.401356-2-patrick.rudolph@9elements.com>
+To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>, hminas@synopsys.com,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, alexandre.torgue@foss.st.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        amelie.delaunay@foss.st.com
+References: <20230414084137.1050487-1-fabrice.gasnier@foss.st.com>
+ <20230414084137.1050487-3-fabrice.gasnier@foss.st.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230414110137.401356-2-patrick.rudolph@9elements.com>
+In-Reply-To: <20230414084137.1050487-3-fabrice.gasnier@foss.st.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,108 +80,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/04/2023 13:01, Patrick Rudolph wrote:
-> Update the pca954x bindings to add support for the Maxim MAX735x/MAX736x
-> chips. The functionality will be provided by the exisintg pca954x driver.
-
-Typo: existing
-
-
+On 14/04/2023 10:41, Fabrice Gasnier wrote:
+> utmi clock is typically provided by PHY output. Add this optional clock,
+> as the core could use other clocks depending on the SoC where it's used.
+> This is needed on stm32mp15, when using the integrated full-speed PHY.
 > 
-> While on it make the interrupts support conditionally as not all of the
-> existing chips have interrupts.
-> 
-> For chips that are powered off by default add an optional regulator
-> called vdd-supply.
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> ---
->  .../bindings/i2c/i2c-mux-pca954x.yaml         | 45 ++++++++++++++++---
->  1 file changed, 39 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> index 9f1726d0356b..6fed6eae9c9b 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> @@ -4,21 +4,29 @@
->  $id: http://devicetree.org/schemas/i2c/i2c-mux-pca954x.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
-> -title: NXP PCA954x I2C bus switch
-> +title: NXP PCA954x I2C and compatible bus switches
->  
->  maintainers:
->    - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->  
->  description:
-> -  The binding supports NXP PCA954x and PCA984x I2C mux/switch devices.
-> -
-> -allOf:
-> -  - $ref: /schemas/i2c/i2c-mux.yaml#
-> +  The NXP PCA954x and compatible devices are I2C bus
-> +  multiplexer/switches that share the same functionality
-> +  and register layout.
-> +  The devices usually have 4 or 8 child buses, which are
-> +  attached to the parent bus by using the SMBus "Send Byte"
-> +  command.
->  
->  properties:
->    compatible:
->      oneOf:
->        - enum:
-> +          - maxim,max7356
-> +          - maxim,max7357
-> +          - maxim,max7358
-> +          - maxim,max7367
-> +          - maxim,max7368
-> +          - maxim,max7369
->            - nxp,pca9540
->            - nxp,pca9542
->            - nxp,pca9543
-> @@ -59,10 +67,33 @@ properties:
->      description: if present, overrides i2c-mux-idle-disconnect
->      $ref: /schemas/mux/mux-controller.yaml#/properties/idle-state
->  
-> +  vdd-supply:
-> +    description: A voltage regulator supplying power to the chip.
-> +
->  required:
->    - compatible
->    - reg
->  
-> +allOf:
-> +  - $ref: /schemas/i2c/i2c-mux.yaml#
-> +  - if:
-> +      not:
-> +        properties:
-> +          compatible:
-> +            contains:
-> +              enum:
-> +                - maxim,max7367
-> +                - maxim,max7369
-> +                - nxp,pca9542
-> +                - nxp,pca9543
-> +                - nxp,pca9544
-> +                - nxp,pca9545
+> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
 
-That's independent change. You add here support for Maxim devices, not
-customize PCA. Please split it to new patch (first in the series).
-
-> +    then:
-> +      properties:
-> +        interrupts: false
-> +        "#interrupt-cells": false
-> +        interrupt-controller: false
-> +
->  unevaluatedProperties: false
->  
->  examples:
-> @@ -74,11 +105,13 @@ examples:
->          #size-cells = <0>;
->  
->          i2c-mux@74 {
-> -            compatible = "nxp,pca9548";
-> +            compatible = "nxp,pca9545";
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
