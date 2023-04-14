@@ -2,39 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D1E46E1DAB
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 09:58:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 373076E1DBD
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:04:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbjDNH6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 03:58:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43590 "EHLO
+        id S229845AbjDNIE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 04:04:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjDNH55 (ORCPT
+        with ESMTP id S229625AbjDNIE1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 03:57:57 -0400
-X-Greylist: delayed 363 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 14 Apr 2023 00:57:56 PDT
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996A37280
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 00:57:56 -0700 (PDT)
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 1DDA21A114E;
-        Fri, 14 Apr 2023 09:51:52 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id DA38D1A1152;
-        Fri, 14 Apr 2023 09:51:51 +0200 (CEST)
-Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 9B7B4183486C;
-        Fri, 14 Apr 2023 15:51:50 +0800 (+08)
-From:   Zhiqiang Hou <Zhiqiang.Hou@nxp.com>
-To:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org, hch@lst.de,
-        m.szyprowski@samsung.com, robin.murphy@arm.com
-Cc:     Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
-Subject: [RFC PATCH] dma: coherent: respect to device 'dma-coherent' property
-Date:   Fri, 14 Apr 2023 16:03:07 +0800
-Message-Id: <20230414080307.35114-1-Zhiqiang.Hou@nxp.com>
-X-Mailer: git-send-email 2.17.1
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        Fri, 14 Apr 2023 04:04:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E811FF3
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 01:04:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B20061610
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 08:04:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1904C433D2;
+        Fri, 14 Apr 2023 08:04:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681459465;
+        bh=kIJ6lK/Lc6cAvvvb9aZuILfOuK0T9xQHpTLzt8A9dFI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=e6CSSlSynnb8/8SQwximjDYsEgO3iB37cizeXObEuBX6UeZi8PxJbes/BFDKFHl1r
+         J845+gmamcoMiwEHZXspDymX/EUrJ1c0x2LpLkUaRUwb6c4sSDKK9Lu9lzza8abojD
+         RuKF8Ji5sBj5MXlRir50HWDq3CKnkFPF18u8iPwydZ2QdJMV1Oc4gP38WMyZgvAFAw
+         bSzc8eH4UpRLtxV1eCsP8mnq61xV61x6SEdQd8P0WPIzpHETQ62DyT0FuRhFfBlMA8
+         VFn8ZB8lzhZGvQZooZ11s139afw6PGuEVJO6I/2qXWP+S+ACcTnOg0CGC4JK84r2mZ
+         5BgtQeI+xEWQQ==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Vineet Gupta <vgupta@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        David Hildenbrand <david@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>
+Cc:     Arnd Bergmann <arnd@arndb.de>, llvm@lists.linux.dev,
+        Tom Rix <trix@redhat.com>,
+        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH] mm: make arch_has_descending_max_zone_pfns() static
+Date:   Fri, 14 Apr 2023 10:03:53 +0200
+Message-Id: <20230414080418.110236-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,75 +63,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+From: Arnd Bergmann <arnd@arndb.de>
 
-Currently, the coherent DMA memory is always mapped as writecombine
-and uncached, ignored the 'dma-coherent' property in device node,
-this patch is to map the memory as writeback and cached when the
-device has 'dma-coherent' property.
+clang produces a build failure on x86 for some randconfig builds
+after a change that moves around code to mm/mm_init.c:
 
-Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+Cannot find symbol for section 2: .text.
+mm/mm_init.o: failed
+
+I have not been able to figure out why this happens, but the __weak
+annotation on arch_has_descending_max_zone_pfns() is the trigger here.
+
+Removing the weak function in favor of an open-coded Kconfig option
+check avoids the problem and becomes clearer as well as better to
+optimize by the compiler.
+
+Fixes: 9420f89db2dd ("mm: move most of core MM initialization to mm/mm_init.c")
+Cc: llvm@lists.linux.dev
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- kernel/dma/coherent.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ arch/arc/mm/init.c | 5 -----
+ include/linux/mm.h | 1 -
+ mm/mm_init.c       | 4 ++--
+ 3 files changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/kernel/dma/coherent.c b/kernel/dma/coherent.c
-index c21abc77c53e..f15ba6c6358e 100644
---- a/kernel/dma/coherent.c
-+++ b/kernel/dma/coherent.c
-@@ -36,7 +36,8 @@ static inline dma_addr_t dma_get_device_base(struct device *dev,
+diff --git a/arch/arc/mm/init.c b/arch/arc/mm/init.c
+index ce4e939a7f07..2b89b6c53801 100644
+--- a/arch/arc/mm/init.c
++++ b/arch/arc/mm/init.c
+@@ -74,11 +74,6 @@ void __init early_init_dt_add_memory_arch(u64 base, u64 size)
+ 		base, TO_MB(size), !in_use ? "Not used":"");
  }
  
- static struct dma_coherent_mem *dma_init_coherent_memory(phys_addr_t phys_addr,
--		dma_addr_t device_addr, size_t size, bool use_dma_pfn_offset)
-+		dma_addr_t device_addr, size_t size, bool use_dma_pfn_offset,
-+		bool cacheable)
+-bool arch_has_descending_max_zone_pfns(void)
+-{
+-	return !IS_ENABLED(CONFIG_ARC_HAS_PAE40);
+-}
+-
+ /*
+  * First memory setup routine called from setup_arch()
+  * 1. setup swapper's mm @init_mm
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index ada57b11bb5a..a13cc121841d 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -3061,7 +3061,6 @@ extern void setup_per_cpu_pageset(void);
+ extern int min_free_kbytes;
+ extern int watermark_boost_factor;
+ extern int watermark_scale_factor;
+-extern bool arch_has_descending_max_zone_pfns(void);
+ 
+ /* nommu.c */
+ extern atomic_long_t mmap_pages_allocated;
+diff --git a/mm/mm_init.c b/mm/mm_init.c
+index 35302b7bca83..f6165747fd3e 100644
+--- a/mm/mm_init.c
++++ b/mm/mm_init.c
+@@ -1754,9 +1754,9 @@ static void __init free_area_init_memoryless_node(int nid)
+  * Some architectures, e.g. ARC may have ZONE_HIGHMEM below ZONE_NORMAL. For
+  * such cases we allow max_zone_pfn sorted in the descending order
+  */
+-bool __weak arch_has_descending_max_zone_pfns(void)
++static bool arch_has_descending_max_zone_pfns(void)
  {
- 	struct dma_coherent_mem *dma_mem;
- 	int pages = size >> PAGE_SHIFT;
-@@ -45,7 +46,8 @@ static struct dma_coherent_mem *dma_init_coherent_memory(phys_addr_t phys_addr,
- 	if (!size)
- 		return ERR_PTR(-EINVAL);
+-	return false;
++	return !IS_ENABLED(CONFIG_ARC_HAS_PAE40);
+ }
  
--	mem_base = memremap(phys_addr, size, MEMREMAP_WC);
-+	mem_base = memremap(phys_addr, size, cacheable ? MEMREMAP_WB :
-+			    MEMREMAP_WC);
- 	if (!mem_base)
- 		return ERR_PTR(-EINVAL);
- 
-@@ -119,8 +121,10 @@ int dma_declare_coherent_memory(struct device *dev, phys_addr_t phys_addr,
- {
- 	struct dma_coherent_mem *mem;
- 	int ret;
-+	bool cacheable = dev_is_dma_coherent(dev);
- 
--	mem = dma_init_coherent_memory(phys_addr, device_addr, size, false);
-+	mem = dma_init_coherent_memory(phys_addr, device_addr, size, false,
-+				       cacheable);
- 	if (IS_ERR(mem))
- 		return PTR_ERR(mem);
- 
-@@ -310,7 +314,7 @@ int dma_init_global_coherent(phys_addr_t phys_addr, size_t size)
- {
- 	struct dma_coherent_mem *mem;
- 
--	mem = dma_init_coherent_memory(phys_addr, phys_addr, size, true);
-+	mem = dma_init_coherent_memory(phys_addr, phys_addr, size, true, false);
- 	if (IS_ERR(mem))
- 		return PTR_ERR(mem);
- 	dma_coherent_default_memory = mem;
-@@ -335,9 +339,10 @@ static int rmem_dma_device_init(struct reserved_mem *rmem, struct device *dev)
- {
- 	if (!rmem->priv) {
- 		struct dma_coherent_mem *mem;
-+		bool cacheable = dev_is_dma_coherent(dev);
- 
- 		mem = dma_init_coherent_memory(rmem->base, rmem->base,
--					       rmem->size, true);
-+					       rmem->size, true, cacheable);
- 		if (IS_ERR(mem))
- 			return PTR_ERR(mem);
- 		rmem->priv = mem;
+ /**
 -- 
-2.17.1
+2.39.2
 
