@@ -2,608 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9EB6E19BF
+	by mail.lfdr.de (Postfix) with ESMTP id B78BC6E19C0
 	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 03:34:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjDNBeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 21:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56384 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbjDNBd7 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229879AbjDNBd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 13 Apr 2023 21:33:59 -0400
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB3FCA;
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56378 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229724AbjDNBd5 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Apr 2023 21:33:57 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCCFC1707;
         Thu, 13 Apr 2023 18:33:56 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PyJrG4xWyz4f3yq2;
-        Fri, 14 Apr 2023 09:33:50 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.104.67])
-        by APP4 (Coremail) with SMTP id gCh0CgBnHbF+rThkxkdqHQ--.18468S4;
-        Fri, 14 Apr 2023 09:33:52 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     song@kernel.org, logang@deltatee.com
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com,
-        yangerkun@huawei.com
-Subject: [PATCH -next v7 5/5] md: protect md_thread with rcu
-Date:   Fri, 14 Apr 2023 09:32:46 +0800
-Message-Id: <20230414013246.1969224-1-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <961691d0-7224-caad-6c19-d9c8ca07a801@deltatee.com>
-References: <961691d0-7224-caad-6c19-d9c8ca07a801@deltatee.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681436036; x=1712972036;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=wbNBBcI/JI0xgJYdKZj5Lzk39FXHiUUByEF8YHZHV/M=;
+  b=bAzfV05ailzZWoScCAlMrn+GQHZU8HlGS9YgVD3jZpbQmoQ/Mzac9kLU
+   doM5dP+j9k9k0w1o4+WF0U8dVt9BZDN0ZIjZYzz5n4NgSdSM+e+e5zC0P
+   mOnErPI4b6qaOfNQ+TyA088+gqCvxIdEMMQwwBsnBGEE0x1hoWii2DdYY
+   Mgss7G7hFw1b+W3GUkJ/J8leN11KrVE5xWF2nGiarwBEFCA0dvfwFE0eV
+   fdeWNEXbw/RP7P4lJlLiy6Os2eQNcRRe0n2Ft6Fv52X3QPsR0j9uWzcir
+   VelvlpbvKReqjv8mzS0o46sExuChHg68ug3YqV8IlE2cmZ74qM1oRfOhZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="344353928"
+X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
+   d="scan'208";a="344353928"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 18:33:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="864022389"
+X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
+   d="scan'208";a="864022389"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga005.jf.intel.com with ESMTP; 13 Apr 2023 18:33:22 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 13 Apr 2023 18:33:22 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Thu, 13 Apr 2023 18:33:22 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.47) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Thu, 13 Apr 2023 18:33:22 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=f7GOIWkksv9GsifY3rHgfhSnRnYC5dPIRI0sUWNVRTgn2PqE0eySs48s6X6eCEPCGxPOAlUDxujGbjIVYCCzAGlLTC8AQiJJRvyo5bstnVVQecvSp8zP9im9QTT189XH4BE22ODodkMOg9ZQHtDVQ03vfc9hsc9ZeP3Z5sAhKLgiQRU9Cyglx0oaIKIjvkoq5h+qMSQb7BmRyJ09hsYTOglfJVjbyb+2MUjQwTTU+zkNCU030fLoaezoOEHPWWUUhe2heD8fTFqbLKs30K24ryyQr+Kh79MSFbFXLi11UX3BF5jfOh1vQtDJdQvMjYwd+wsH2cySmNt5zw1Pix98yg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wbNBBcI/JI0xgJYdKZj5Lzk39FXHiUUByEF8YHZHV/M=;
+ b=PHrgtyRrwzM219sbOUJWm5GpCYPDXnVgamM7JbOFM0c6IFum1PYhi+wi16rRVDqLkKWW7Ng4TMEEx3i6tbcHRD0gDeYSClN21xlPVvqKjrTmz0rCHyYJkw1+tO1CM5Rj/KNSyGf3x84mKkUiy8u/sMHjJ1WVyL4wcZIll9wh7GG+fykCnWHTFUi5egrD73Sv/Hco33pBWzQ3tcTMZ4r7BPqPX+QJrPUZfxIh7QQByisnfIk6uLyW2/DkrYAeedAmTe1xQhjwzfkeEQpUcBIAPZAisAMANtt9mVB12rscndzrPmCc77LuRHEyE2T2I5vWrrZ7e3jR57+AzrtKfjUmvA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from PH0PR11MB5830.namprd11.prod.outlook.com (2603:10b6:510:129::20)
+ by PH0PR11MB4790.namprd11.prod.outlook.com (2603:10b6:510:40::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Fri, 14 Apr
+ 2023 01:33:15 +0000
+Received: from PH0PR11MB5830.namprd11.prod.outlook.com
+ ([fe80::1c4e:86ae:810d:1fee]) by PH0PR11MB5830.namprd11.prod.outlook.com
+ ([fe80::1c4e:86ae:810d:1fee%2]) with mapi id 15.20.6277.036; Fri, 14 Apr 2023
+ 01:33:15 +0000
+From:   "Song, Yoong Siang" <yoong.siang.song@intel.com>
+To:     Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        "John Fastabend" <john.fastabend@gmail.com>,
+        "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>,
+        Vedang Patel <vedang.patel@intel.com>,
+        "Joseph, Jithu" <jithu.joseph@intel.com>,
+        Andre Guedes <andre.guedes@intel.com>,
+        Stanislav Fomichev <sdf@google.com>
+CC:     "Brouer, Jesper" <brouer@redhat.com>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "xdp-hints@xdp-project.net" <xdp-hints@xdp-project.net>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH net 1/1] igc: read before write to SRRCTL register
+Thread-Topic: [PATCH net 1/1] igc: read before write to SRRCTL register
+Thread-Index: AQHZbhp1VdIm3fVCg0ugMsk8Zltg9K8pkyEAgABse+A=
+Date:   Fri, 14 Apr 2023 01:33:15 +0000
+Message-ID: <PH0PR11MB5830186580A5A1AD15AD5961D8999@PH0PR11MB5830.namprd11.prod.outlook.com>
+References: <20230413151222.1864307-1-yoong.siang.song@intel.com>
+ <07a88087-bee8-e549-c069-63d52268aef1@redhat.com>
+In-Reply-To: <07a88087-bee8-e549-c069-63d52268aef1@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR11MB5830:EE_|PH0PR11MB4790:EE_
+x-ms-office365-filtering-correlation-id: 5b3f69e1-36d2-4ebc-d675-08db3c8837b1
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: qAm098mLSumby8WtiSW1LAzMa8wxPDe0JcPwpFOqTlMRrOLb6nRcTtUoZaYnnURbLyLIiF/ZaA7897sLuC98ysc5Dv+xMbMW9O/ZErw2GFpZG4gJrDE2YRHhFHMUUZYCYi4hEBilktLqKYkl7UuwYA+eyOc/yluuEoK0/o+cY/oPzNZWE5qw9Q4UADREtxa32mq3no2X0BBxoEPzsZkiGXBmvCoYG2eJ0SfYp+/u813E8m9QfJ5Bo17o4p0ylZYeINHNSv6RZi3R5HjhvPZD4sHsN9jkqvKtDWom6YCgOY+eD6fKZwWGrhq/HxjfSuhv9s+iPr8wGtZxe7ZFjaThbndEFgm+oNRXNGaYlL6mBNU0iywOrQuDaBeSyzr32Lb/mpmqBzC17gdAMzZLQj2gq2xv2YI4RWGsvH6KtN9YfjHEcOemX9TvbyTEU7sDoy7DlETMuPFaZUDlBhO0E5v8CLYyfCpqht5ixw2nJxp2VFoagdewWcYYsN0k8Dd9sU15KKntSBUC+58m8OmSDSQrEw/3D06HaIR0WasHHLUFTLYj9qTi0KwUEPGvcDZzKWvQIVv4nmN0bFm894eguDNZEwbfKkd4NysOMRIVdV7Xt+qz+gMlsWJWzQDK5pSdQSkfPQPF3RFJGGNboLJ+WpH7RQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5830.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(39860400002)(136003)(346002)(366004)(396003)(451199021)(38070700005)(55236004)(9686003)(26005)(186003)(6506007)(53546011)(54906003)(33656002)(478600001)(55016003)(110136005)(122000001)(921005)(2906002)(7416002)(8676002)(8936002)(83380400001)(41300700001)(5660300002)(52536014)(38100700002)(316002)(4326008)(66946007)(66556008)(76116006)(66476007)(64756008)(66446008)(82960400001)(86362001)(71200400001)(7696005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YWp2dWYwNVRFeDhsMWcvaTZLeTZxYWNnZU1iMENMQ1VkQ2JpT01iWEpLNWM0?=
+ =?utf-8?B?a2RkRTRldUtKVzJSekZOTExwVDIrMCtVbDNVeDJNbVFzMU9rc1lWOVhzVTA4?=
+ =?utf-8?B?dGVsUTVjMmxmZmFuQ1c5ZEExKy80YjA2NDZJMUdsbmFrblRMNi9aVjNkTEw3?=
+ =?utf-8?B?VThrUVQ0TllITkJQdEErbGFGK1o3QlhCcWFIeFNTcm1jdDZ0ODc4OWh2ZkQz?=
+ =?utf-8?B?Y1JMUjZnZXR0RVo5NGd4ci81blJsb29Jb1VQVHllQ1I0bXJldU8va0o1RXo4?=
+ =?utf-8?B?N0dnTlFmUHJwWU1VaTE1WUhhblBYM2x2TUdPS29GYmdOVWJuNmZmMDkrZnBY?=
+ =?utf-8?B?d0V0bDJ5ZHFaL0w2WUVQZlFYVExFMU40c2x6NWJKdUhjSE50L3YrYUo4cUVp?=
+ =?utf-8?B?U3pCVXoxblA2N3NDK1JKYnI1L1ZRTVlRbDNMMjZHeThONTZYTlJOV3ZRTlRm?=
+ =?utf-8?B?azgreEVmQVNtRkltUnZ3Si81bDlkVmVDYlppK0diekZGdDFQUVdpcCs4K1Jn?=
+ =?utf-8?B?S25UTzB0WEhmSzQ2dk5mVitxa1FpcUZQSWZROVJ5aDk3ektuUmNlaHJNcFA2?=
+ =?utf-8?B?SWhzTWU4NDZHcjVMZ3N0ZkdOeEc1eUJleEFVSWlzUVowSmdMOGV0M0RsK1Y5?=
+ =?utf-8?B?bVh2ZzVDRUFkMkFHRTkxRVJmRXFrK1JnMDg5Y1QvbGdiZHUxYzQ1QWNkaGZo?=
+ =?utf-8?B?ck5IN1BWTDJwSXI0K1M5VER5SmlFTmgrVkppSE5EbmY2dGkzUGJ1T0NwUmg4?=
+ =?utf-8?B?SXE5SlZOcGMyZm10L1FETkVESW9KMk0ydndkc0s2L0FVVDlQdkdpcVlkaUNP?=
+ =?utf-8?B?RFk1eTdIZUpNZTUvRGlqOUZVbjdMTitIUyt6aVNOd2NLUXg2RW9MWWNHQ0dW?=
+ =?utf-8?B?SjVsbUQ4aHYzVG1pU3pISytDNE85SnBtckJxTFhKZWZ6LzNZSUxCUjJ2NnFj?=
+ =?utf-8?B?RnFreHJhT1hhVWd6bXlsaEczMFZwcjNtNXBzazAxaHdlT2kwTms4aTExZXpS?=
+ =?utf-8?B?dHFTZ3oxMVlOVEVIcmphWEtrMXZONWdIWjhKRW5Ld2pydmJMeWVqaUtmOHBz?=
+ =?utf-8?B?enJ3bkMvOEFIL1NxeW9FeURSaFVOMlhTcEQ3SGZJSVFROG5OM0syc2hqdFdZ?=
+ =?utf-8?B?VGhDM3hYaTFLOStrVmZPVHNZaklmbHNWV2FlbERHcjkyZ0hUNk5tdDdKaEM2?=
+ =?utf-8?B?b0MxOEVkcmVuOUExL1JLNnJoYU1nVnlUOStyUng0d2FldkpkN0g0Rk9LRjN2?=
+ =?utf-8?B?M1JEa2FKQjMvUGp4dEdhRzRvYUFSV1Z3Wk5rak5Ubk0ydnZYUHBVUlUrbk4y?=
+ =?utf-8?B?THNqUWVQS0J2NnN5NTB2K2tVU1g3VlpiYlp3c0Q5SXVlTVdPbUdyQSt0eGlI?=
+ =?utf-8?B?WlZPYUxiaFBXcktWamNLazhZVjFXT2FkMkREOUtMc09raWFuc0hyaXhCSzRR?=
+ =?utf-8?B?ZXh3NVBSWUViUFZuN2Foc1c0TFd1TXlkbDBoYk9yN1QxUWFteXk0RWFxc3hC?=
+ =?utf-8?B?NGltOFVPbU80QUR4YUVxU2VUVFhpR0pNSkV5R3BoYWdPbkRrZmpQUkNEUzMw?=
+ =?utf-8?B?SVp6UWlCd0Ewb2RNcEhwV2dFS1ZtVUZNUlBSMDFOdlBxenBFQVpWQW05cWQ4?=
+ =?utf-8?B?OWtJQWRoZ09iSjNGOVRuVitoSXR4VDgyK0R0K1REOEFmNmZtdEhpM1d4M1o0?=
+ =?utf-8?B?RElVYjdhWEltdUJXN056b1hwbEZFd1RQZ2lKcHg2TTh1OWpJN3JFdUdpbm5y?=
+ =?utf-8?B?dk43UGVGMFI2NFovbVZSaVZXcStLSlhvQmk2blNIanpxcGJ5OW5FZm5PTTRj?=
+ =?utf-8?B?MkZ0aWlPaUd2bWtOL1pRVzFMOHY0K0NTdlhob3c1OVJrTnBpK1MvUVdKdG9G?=
+ =?utf-8?B?YUpvNVh4dUNxaTltbCtoVjY3eExCcWRDOW4yN2IwNW10L0V4aytCb1p0Q0Rs?=
+ =?utf-8?B?YkJadzlUbW1CTytoaGRRVDRtejNVa2JyMFZwT3FXdnIxTTE1MXp5bExTalVP?=
+ =?utf-8?B?VlNIeUtXTUZHOE1BdTBDdUlkSGU5eFh5TDcwSjZuUnVpTHZ6d1ZRRXZ1aFRV?=
+ =?utf-8?B?RjZYZ0NJSytaZDdmNm1ZejdhV25oZko3cHhHRGdsS1l5M0ZkT0xBRmdZOFhx?=
+ =?utf-8?Q?B/uyc1aDcz+XehlcbqKM86hdu?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgBnHbF+rThkxkdqHQ--.18468S4
-X-Coremail-Antispam: 1UD129KBjvAXoWfJFWkWrWkXw17uF15KFyUZFb_yoW8CFWxKo
-        Z3Cw13Zr18GF1rZFy8tFsxtFZxX34DG3yfta15ZFs8WFn7Zws5Zr13XFW3JF1jqF13WF48
-        Zw1DXw48KFW8Kw48n29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-        AaLaJ3UjIYCTnIWjp_UUU5i7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20EY4v20xva
-        j40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2
-        x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8
-        Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
-        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAK
-        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
-        xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
-        jxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw2
-        0EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5830.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5b3f69e1-36d2-4ebc-d675-08db3c8837b1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Apr 2023 01:33:15.0340
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6nnHCtaMNGZTba7gNJ3GXiu3SYA2RonHl6KRsOlbd95mzpB1/J/58lExXZbUM5LQaRKV7qLn2ph7+YS5Z3YS3kr27UDqRe++Hul5Z5uW6os=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4790
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
-
-Our test reports a uaf for 'mddev->sync_thread':
-
-T1                      T2
-md_start_sync
- md_register_thread
- // mddev->sync_thread is set
-			raid1d
-			 md_check_recovery
-			  md_reap_sync_thread
-			   md_unregister_thread
-			    kfree
-
- md_wakeup_thread
-  wake_up
-  ->sync_thread was freed
-
-Root cause is that there is a small windown between register thread and
-wake up thread, where the thread can be freed concurrently.
-
-Currently, a global spinlock 'pers_lock' is borrowed to protect
-'mddev->thread', this problem can be fixed likewise, however, there are
-similar problems elsewhere, and use a global lock for all the cases is
-not good.
-
-This patch protect all md_thread with rcu.
-
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
- drivers/md/md-bitmap.c    | 10 ++++--
- drivers/md/md-cluster.c   | 17 ++++++----
- drivers/md/md-multipath.c |  4 +--
- drivers/md/md.c           | 69 ++++++++++++++++++---------------------
- drivers/md/md.h           |  8 ++---
- drivers/md/raid1.c        |  7 ++--
- drivers/md/raid1.h        |  2 +-
- drivers/md/raid10.c       | 21 +++++++-----
- drivers/md/raid10.h       |  2 +-
- drivers/md/raid5-cache.c  | 22 ++++++++-----
- drivers/md/raid5.c        | 15 +++++----
- drivers/md/raid5.h        |  2 +-
- 12 files changed, 98 insertions(+), 81 deletions(-)
-
-diff --git a/drivers/md/md-bitmap.c b/drivers/md/md-bitmap.c
-index 29fd41ef55a6..ab27f66dbb1f 100644
---- a/drivers/md/md-bitmap.c
-+++ b/drivers/md/md-bitmap.c
-@@ -1221,13 +1221,19 @@ static bitmap_counter_t *md_bitmap_get_counter(struct bitmap_counts *bitmap,
- static void mddev_set_timeout(struct mddev *mddev, unsigned long timeout,
- 			      bool force)
- {
--	struct md_thread *thread = mddev->thread;
-+	struct md_thread *thread;
-+
-+	rcu_read_lock();
-+	thread = rcu_dereference(mddev->thread);
- 
- 	if (!thread)
--		return;
-+		goto out;
- 
- 	if (force || thread->timeout < MAX_SCHEDULE_TIMEOUT)
- 		thread->timeout = timeout;
-+
-+out:
-+	rcu_read_unlock();
- }
- 
- /*
-diff --git a/drivers/md/md-cluster.c b/drivers/md/md-cluster.c
-index 10e0c5381d01..bd2e0c61b2e6 100644
---- a/drivers/md/md-cluster.c
-+++ b/drivers/md/md-cluster.c
-@@ -75,14 +75,14 @@ struct md_cluster_info {
- 	sector_t suspend_hi;
- 	int suspend_from; /* the slot which broadcast suspend_lo/hi */
- 
--	struct md_thread *recovery_thread;
-+	struct md_thread __rcu *recovery_thread;
- 	unsigned long recovery_map;
- 	/* communication loc resources */
- 	struct dlm_lock_resource *ack_lockres;
- 	struct dlm_lock_resource *message_lockres;
- 	struct dlm_lock_resource *token_lockres;
- 	struct dlm_lock_resource *no_new_dev_lockres;
--	struct md_thread *recv_thread;
-+	struct md_thread __rcu *recv_thread;
- 	struct completion newdisk_completion;
- 	wait_queue_head_t wait;
- 	unsigned long state;
-@@ -362,8 +362,8 @@ static void __recover_slot(struct mddev *mddev, int slot)
- 
- 	set_bit(slot, &cinfo->recovery_map);
- 	if (!cinfo->recovery_thread) {
--		cinfo->recovery_thread = md_register_thread(recover_bitmaps,
--				mddev, "recover");
-+		rcu_assign_pointer(cinfo->recovery_thread,
-+			md_register_thread(recover_bitmaps, mddev, "recover"));
- 		if (!cinfo->recovery_thread) {
- 			pr_warn("md-cluster: Could not create recovery thread\n");
- 			return;
-@@ -526,11 +526,15 @@ static void process_add_new_disk(struct mddev *mddev, struct cluster_msg *cmsg)
- static void process_metadata_update(struct mddev *mddev, struct cluster_msg *msg)
- {
- 	int got_lock = 0;
-+	struct md_thread *thread;
- 	struct md_cluster_info *cinfo = mddev->cluster_info;
- 	mddev->good_device_nr = le32_to_cpu(msg->raid_slot);
- 
- 	dlm_lock_sync(cinfo->no_new_dev_lockres, DLM_LOCK_CR);
--	wait_event(mddev->thread->wqueue,
-+
-+	/* demaon thread must exist */
-+	thread = rcu_dereference_protected(mddev->thread, true);
-+	wait_event(thread->wqueue,
- 		   (got_lock = mddev_trylock(mddev)) ||
- 		    test_bit(MD_CLUSTER_HOLDING_MUTEX_FOR_RECVD, &cinfo->state));
- 	md_reload_sb(mddev, mddev->good_device_nr);
-@@ -889,7 +893,8 @@ static int join(struct mddev *mddev, int nodes)
- 	}
- 	/* Initiate the communication resources */
- 	ret = -ENOMEM;
--	cinfo->recv_thread = md_register_thread(recv_daemon, mddev, "cluster_recv");
-+	rcu_assign_pointer(cinfo->recv_thread,
-+			md_register_thread(recv_daemon, mddev, "cluster_recv"));
- 	if (!cinfo->recv_thread) {
- 		pr_err("md-cluster: cannot allocate memory for recv_thread!\n");
- 		goto err;
-diff --git a/drivers/md/md-multipath.c b/drivers/md/md-multipath.c
-index 66edf5e72bd6..92c45be203d7 100644
---- a/drivers/md/md-multipath.c
-+++ b/drivers/md/md-multipath.c
-@@ -400,8 +400,8 @@ static int multipath_run (struct mddev *mddev)
- 	if (ret)
- 		goto out_free_conf;
- 
--	mddev->thread = md_register_thread(multipathd, mddev,
--					   "multipath");
-+	rcu_assign_pointer(mddev->thread,
-+			   md_register_thread(multipathd, mddev, "multipath"));
- 	if (!mddev->thread)
- 		goto out_free_conf;
- 
-diff --git a/drivers/md/md.c b/drivers/md/md.c
-index e3c30500bd15..f680eccf4197 100644
---- a/drivers/md/md.c
-+++ b/drivers/md/md.c
-@@ -70,11 +70,7 @@
- #include "md-bitmap.h"
- #include "md-cluster.h"
- 
--/* pers_list is a list of registered personalities protected
-- * by pers_lock.
-- * pers_lock does extra service to protect accesses to
-- * mddev->thread when the mutex cannot be held.
-- */
-+/* pers_list is a list of registered personalities protected by pers_lock. */
- static LIST_HEAD(pers_list);
- static DEFINE_SPINLOCK(pers_lock);
- 
-@@ -92,7 +88,7 @@ static struct workqueue_struct *md_rdev_misc_wq;
- static int remove_and_add_spares(struct mddev *mddev,
- 				 struct md_rdev *this);
- static void mddev_detach(struct mddev *mddev);
--static void md_wakeup_thread_directly(struct md_thread *thread);
-+static void md_wakeup_thread_directly(struct md_thread __rcu *thread);
- 
- enum md_ro_state {
- 	MD_RDWR,
-@@ -458,8 +454,10 @@ static void md_submit_bio(struct bio *bio)
-  */
- void mddev_suspend(struct mddev *mddev)
- {
--	WARN_ON_ONCE(mddev->thread && current == mddev->thread->tsk);
--	lockdep_assert_held(&mddev->reconfig_mutex);
-+	struct md_thread *thread = rcu_dereference_protected(mddev->thread,
-+			lockdep_is_held(&mddev->reconfig_mutex));
-+
-+	WARN_ON_ONCE(thread && current == thread->tsk);
- 	if (mddev->suspended++)
- 		return;
- 	wake_up(&mddev->sb_wait);
-@@ -801,13 +799,8 @@ void mddev_unlock(struct mddev *mddev)
- 	} else
- 		mutex_unlock(&mddev->reconfig_mutex);
- 
--	/* As we've dropped the mutex we need a spinlock to
--	 * make sure the thread doesn't disappear
--	 */
--	spin_lock(&pers_lock);
- 	md_wakeup_thread(mddev->thread);
- 	wake_up(&mddev->sb_wait);
--	spin_unlock(&pers_lock);
- }
- EXPORT_SYMBOL_GPL(mddev_unlock);
- 
-@@ -7891,19 +7884,29 @@ static int md_thread(void *arg)
- 	return 0;
- }
- 
--static void md_wakeup_thread_directly(struct md_thread *thread)
-+static void md_wakeup_thread_directly(struct md_thread __rcu *thread)
- {
--	if (thread)
--		wake_up_process(thread->tsk);
-+	struct md_thread *t;
-+
-+	rcu_read_lock();
-+	t = rcu_dereference(thread);
-+	if (t)
-+		wake_up_process(t->tsk);
-+	rcu_read_unlock();
- }
- 
--void md_wakeup_thread(struct md_thread *thread)
-+void md_wakeup_thread(struct md_thread __rcu *thread)
- {
--	if (thread) {
--		pr_debug("md: waking up MD thread %s.\n", thread->tsk->comm);
--		set_bit(THREAD_WAKEUP, &thread->flags);
--		wake_up(&thread->wqueue);
-+	struct md_thread *t;
-+
-+	rcu_read_lock();
-+	t = rcu_dereference(thread);
-+	if (t) {
-+		pr_debug("md: waking up MD thread %s.\n", t->tsk->comm);
-+		set_bit(THREAD_WAKEUP, &t->flags);
-+		wake_up(&t->wqueue);
- 	}
-+	rcu_read_unlock();
- }
- EXPORT_SYMBOL(md_wakeup_thread);
- 
-@@ -7933,22 +7936,15 @@ struct md_thread *md_register_thread(void (*run) (struct md_thread *),
- }
- EXPORT_SYMBOL(md_register_thread);
- 
--void md_unregister_thread(struct md_thread **threadp)
-+void md_unregister_thread(struct md_thread __rcu **threadp)
- {
--	struct md_thread *thread;
-+	struct md_thread *thread = rcu_dereference_protected(*threadp, true);
- 
--	/*
--	 * Locking ensures that mddev_unlock does not wake_up a
--	 * non-existent thread
--	 */
--	spin_lock(&pers_lock);
--	thread = *threadp;
--	if (!thread) {
--		spin_unlock(&pers_lock);
-+	if (!thread)
- 		return;
--	}
--	*threadp = NULL;
--	spin_unlock(&pers_lock);
-+
-+	rcu_assign_pointer(*threadp, NULL);
-+	synchronize_rcu();
- 
- 	pr_debug("interrupting MD-thread pid %d\n", task_pid_nr(thread->tsk));
- 	kthread_stop(thread->tsk);
-@@ -9210,9 +9206,8 @@ static void md_start_sync(struct work_struct *ws)
- {
- 	struct mddev *mddev = container_of(ws, struct mddev, del_work);
- 
--	mddev->sync_thread = md_register_thread(md_do_sync,
--						mddev,
--						"resync");
-+	rcu_assign_pointer(mddev->sync_thread,
-+			   md_register_thread(md_do_sync, mddev, "resync"));
- 	if (!mddev->sync_thread) {
- 		pr_warn("%s: could not start resync thread...\n",
- 			mdname(mddev));
-diff --git a/drivers/md/md.h b/drivers/md/md.h
-index e148e3c83b0d..324558c3fa06 100644
---- a/drivers/md/md.h
-+++ b/drivers/md/md.h
-@@ -367,8 +367,8 @@ struct mddev {
- 	int				new_chunk_sectors;
- 	int				reshape_backwards;
- 
--	struct md_thread		*thread;	/* management thread */
--	struct md_thread		*sync_thread;	/* doing resync or reconstruct */
-+	struct md_thread __rcu		*thread;	/* management thread */
-+	struct md_thread __rcu		*sync_thread;	/* doing resync or reconstruct */
- 
- 	/* 'last_sync_action' is initialized to "none".  It is set when a
- 	 * sync operation (i.e "data-check", "requested-resync", "resync",
-@@ -734,8 +734,8 @@ extern struct md_thread *md_register_thread(
- 	void (*run)(struct md_thread *thread),
- 	struct mddev *mddev,
- 	const char *name);
--extern void md_unregister_thread(struct md_thread **threadp);
--extern void md_wakeup_thread(struct md_thread *thread);
-+extern void md_unregister_thread(struct md_thread __rcu **threadp);
-+extern void md_wakeup_thread(struct md_thread __rcu *thread);
- extern void md_check_recovery(struct mddev *mddev);
- extern void md_reap_sync_thread(struct mddev *mddev);
- extern int mddev_init_writes_pending(struct mddev *mddev);
-diff --git a/drivers/md/raid1.c b/drivers/md/raid1.c
-index 68a9e2d9985b..2f1011ffdf09 100644
---- a/drivers/md/raid1.c
-+++ b/drivers/md/raid1.c
-@@ -3084,7 +3084,8 @@ static struct r1conf *setup_conf(struct mddev *mddev)
- 	}
- 
- 	err = -ENOMEM;
--	conf->thread = md_register_thread(raid1d, mddev, "raid1");
-+	rcu_assign_pointer(conf->thread,
-+			   md_register_thread(raid1d, mddev, "raid1"));
- 	if (!conf->thread)
- 		goto abort;
- 
-@@ -3177,8 +3178,8 @@ static int raid1_run(struct mddev *mddev)
- 	/*
- 	 * Ok, everything is just fine now
- 	 */
--	mddev->thread = conf->thread;
--	conf->thread = NULL;
-+	rcu_assign_pointer(mddev->thread, conf->thread);
-+	rcu_assign_pointer(conf->thread, NULL);
- 	mddev->private = conf;
- 	set_bit(MD_FAILFAST_SUPPORTED, &mddev->flags);
- 
-diff --git a/drivers/md/raid1.h b/drivers/md/raid1.h
-index ebb6788820e7..468f189da7a0 100644
---- a/drivers/md/raid1.h
-+++ b/drivers/md/raid1.h
-@@ -130,7 +130,7 @@ struct r1conf {
- 	/* When taking over an array from a different personality, we store
- 	 * the new thread here until we fully activate the array.
- 	 */
--	struct md_thread	*thread;
-+	struct md_thread __rcu	*thread;
- 
- 	/* Keep track of cluster resync window to send to other
- 	 * nodes.
-diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-index 6c66357f92f5..6590aa49598c 100644
---- a/drivers/md/raid10.c
-+++ b/drivers/md/raid10.c
-@@ -980,6 +980,7 @@ static void lower_barrier(struct r10conf *conf)
- static bool stop_waiting_barrier(struct r10conf *conf)
- {
- 	struct bio_list *bio_list = current->bio_list;
-+	struct md_thread *thread;
- 
- 	/* barrier is dropped */
- 	if (!conf->barrier)
-@@ -995,8 +996,11 @@ static bool stop_waiting_barrier(struct r10conf *conf)
- 	    (!bio_list_empty(&bio_list[0]) || !bio_list_empty(&bio_list[1])))
- 		return true;
- 
-+	/* daemon thread must exist while handling io */
-+	thread = rcu_dereference_protected(conf->mddev->thread, true);
-+
- 	/* move on if recovery thread is blocked by us */
--	if (conf->mddev->thread->tsk == current &&
-+	if (thread->tsk == current &&
- 	    test_bit(MD_RECOVERY_RUNNING, &conf->mddev->recovery) &&
- 	    conf->nr_queued > 0)
- 		return true;
-@@ -4078,7 +4082,8 @@ static struct r10conf *setup_conf(struct mddev *mddev)
- 	atomic_set(&conf->nr_pending, 0);
- 
- 	err = -ENOMEM;
--	conf->thread = md_register_thread(raid10d, mddev, "raid10");
-+	rcu_assign_pointer(conf->thread,
-+			   md_register_thread(raid10d, mddev, "raid10"));
- 	if (!conf->thread)
- 		goto out;
- 
-@@ -4141,8 +4146,8 @@ static int raid10_run(struct mddev *mddev)
- 		}
- 	}
- 
--	mddev->thread = conf->thread;
--	conf->thread = NULL;
-+	rcu_assign_pointer(mddev->thread, conf->thread);
-+	rcu_assign_pointer(conf->thread, NULL);
- 
- 	if (mddev->queue) {
- 		blk_queue_max_write_zeroes_sectors(mddev->queue, 0);
-@@ -4273,8 +4278,8 @@ static int raid10_run(struct mddev *mddev)
- 		clear_bit(MD_RECOVERY_CHECK, &mddev->recovery);
- 		set_bit(MD_RECOVERY_RESHAPE, &mddev->recovery);
- 		set_bit(MD_RECOVERY_RUNNING, &mddev->recovery);
--		mddev->sync_thread = md_register_thread(md_do_sync, mddev,
--							"reshape");
-+		rcu_assign_pointer(mddev->sync_thread,
-+			md_register_thread(md_do_sync, mddev, "reshape"));
- 		if (!mddev->sync_thread)
- 			goto out_free_conf;
- 	}
-@@ -4686,8 +4691,8 @@ static int raid10_start_reshape(struct mddev *mddev)
- 	set_bit(MD_RECOVERY_RESHAPE, &mddev->recovery);
- 	set_bit(MD_RECOVERY_RUNNING, &mddev->recovery);
- 
--	mddev->sync_thread = md_register_thread(md_do_sync, mddev,
--						"reshape");
-+	rcu_assign_pointer(mddev->sync_thread,
-+			   md_register_thread(md_do_sync, mddev, "reshape"));
- 	if (!mddev->sync_thread) {
- 		ret = -EAGAIN;
- 		goto abort;
-diff --git a/drivers/md/raid10.h b/drivers/md/raid10.h
-index 8c072ce0bc54..63e48b11b552 100644
---- a/drivers/md/raid10.h
-+++ b/drivers/md/raid10.h
-@@ -100,7 +100,7 @@ struct r10conf {
- 	/* When taking over an array from a different personality, we store
- 	 * the new thread here until we fully activate the array.
- 	 */
--	struct md_thread	*thread;
-+	struct md_thread __rcu	*thread;
- 
- 	/*
- 	 * Keep track of cluster resync window to send to other nodes.
-diff --git a/drivers/md/raid5-cache.c b/drivers/md/raid5-cache.c
-index 46182b955aef..040f5d6e1298 100644
---- a/drivers/md/raid5-cache.c
-+++ b/drivers/md/raid5-cache.c
-@@ -120,7 +120,7 @@ struct r5l_log {
- 	struct bio_set bs;
- 	mempool_t meta_pool;
- 
--	struct md_thread *reclaim_thread;
-+	struct md_thread __rcu *reclaim_thread;
- 	unsigned long reclaim_target;	/* number of space that need to be
- 					 * reclaimed.  if it's 0, reclaim spaces
- 					 * used by io_units which are in
-@@ -1576,17 +1576,18 @@ void r5l_wake_reclaim(struct r5l_log *log, sector_t space)
- 
- void r5l_quiesce(struct r5l_log *log, int quiesce)
- {
--	struct mddev *mddev;
-+	struct mddev *mddev = log->rdev->mddev;
-+	struct md_thread *thread = rcu_dereference_protected(
-+		log->reclaim_thread, lockdep_is_held(&mddev->reconfig_mutex));
- 
- 	if (quiesce) {
- 		/* make sure r5l_write_super_and_discard_space exits */
--		mddev = log->rdev->mddev;
- 		wake_up(&mddev->sb_wait);
--		kthread_park(log->reclaim_thread->tsk);
-+		kthread_park(thread->tsk);
- 		r5l_wake_reclaim(log, MaxSector);
- 		r5l_do_reclaim(log);
- 	} else
--		kthread_unpark(log->reclaim_thread->tsk);
-+		kthread_unpark(thread->tsk);
- }
- 
- bool r5l_log_disk_error(struct r5conf *conf)
-@@ -3063,6 +3064,7 @@ void r5c_update_on_rdev_error(struct mddev *mddev, struct md_rdev *rdev)
- int r5l_init_log(struct r5conf *conf, struct md_rdev *rdev)
- {
- 	struct r5l_log *log;
-+	struct md_thread *thread;
- 	int ret;
- 
- 	pr_debug("md/raid:%s: using device %pg as journal\n",
-@@ -3121,11 +3123,13 @@ int r5l_init_log(struct r5conf *conf, struct md_rdev *rdev)
- 	spin_lock_init(&log->tree_lock);
- 	INIT_RADIX_TREE(&log->big_stripe_tree, GFP_NOWAIT | __GFP_NOWARN);
- 
--	log->reclaim_thread = md_register_thread(r5l_reclaim_thread,
--						 log->rdev->mddev, "reclaim");
--	if (!log->reclaim_thread)
-+	thread = md_register_thread(r5l_reclaim_thread, log->rdev->mddev,
-+				    "reclaim");
-+	if (!thread)
- 		goto reclaim_thread;
--	log->reclaim_thread->timeout = R5C_RECLAIM_WAKEUP_INTERVAL;
-+
-+	thread->timeout = R5C_RECLAIM_WAKEUP_INTERVAL;
-+	rcu_assign_pointer(log->reclaim_thread, thread);
- 
- 	init_waitqueue_head(&log->iounit_wait);
- 
-diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
-index 7b820b81d8c2..1f68bba9d0b9 100644
---- a/drivers/md/raid5.c
-+++ b/drivers/md/raid5.c
-@@ -7665,7 +7665,8 @@ static struct r5conf *setup_conf(struct mddev *mddev)
- 	}
- 
- 	sprintf(pers_name, "raid%d", mddev->new_level);
--	conf->thread = md_register_thread(raid5d, mddev, pers_name);
-+	rcu_assign_pointer(conf->thread,
-+			   md_register_thread(raid5d, mddev, pers_name));
- 	if (!conf->thread) {
- 		pr_warn("md/raid:%s: couldn't allocate thread.\n",
- 			mdname(mddev));
-@@ -7889,8 +7890,8 @@ static int raid5_run(struct mddev *mddev)
- 	}
- 
- 	conf->min_offset_diff = min_offset_diff;
--	mddev->thread = conf->thread;
--	conf->thread = NULL;
-+	rcu_assign_pointer(mddev->thread, conf->thread);
-+	rcu_assign_pointer(conf->thread, NULL);
- 	mddev->private = conf;
- 
- 	for (i = 0; i < conf->raid_disks && conf->previous_raid_disks;
-@@ -7989,8 +7990,8 @@ static int raid5_run(struct mddev *mddev)
- 		clear_bit(MD_RECOVERY_CHECK, &mddev->recovery);
- 		set_bit(MD_RECOVERY_RESHAPE, &mddev->recovery);
- 		set_bit(MD_RECOVERY_RUNNING, &mddev->recovery);
--		mddev->sync_thread = md_register_thread(md_do_sync, mddev,
--							"reshape");
-+		rcu_assign_pointer(mddev->sync_thread,
-+			md_register_thread(md_do_sync, mddev, "reshape"));
- 		if (!mddev->sync_thread)
- 			goto abort;
- 	}
-@@ -8567,8 +8568,8 @@ static int raid5_start_reshape(struct mddev *mddev)
- 	clear_bit(MD_RECOVERY_DONE, &mddev->recovery);
- 	set_bit(MD_RECOVERY_RESHAPE, &mddev->recovery);
- 	set_bit(MD_RECOVERY_RUNNING, &mddev->recovery);
--	mddev->sync_thread = md_register_thread(md_do_sync, mddev,
--						"reshape");
-+	rcu_assign_pointer(mddev->sync_thread,
-+			   md_register_thread(md_do_sync, mddev, "reshape"));
- 	if (!mddev->sync_thread) {
- 		mddev->recovery = 0;
- 		spin_lock_irq(&conf->device_lock);
-diff --git a/drivers/md/raid5.h b/drivers/md/raid5.h
-index e873938a6125..f19707189a7b 100644
---- a/drivers/md/raid5.h
-+++ b/drivers/md/raid5.h
-@@ -679,7 +679,7 @@ struct r5conf {
- 	/* When taking over an array from a different personality, we store
- 	 * the new thread here until we fully activate the array.
- 	 */
--	struct md_thread	*thread;
-+	struct md_thread __rcu	*thread;
- 	struct list_head	temp_inactive_list[NR_STRIPE_HASH_LOCKS];
- 	struct r5worker_group	*worker_groups;
- 	int			group_cnt;
--- 
-2.39.2
-
+T24gRnJpZGF5LCBBcHJpbCAxNCwgMjAyMyAyOjQyIEFNLCBKZXNwZXIgRGFuZ2FhcmQgQnJvdWVy
+IDxqYnJvdWVyQHJlZGhhdC5jb20+IHdyb3RlOg0KPk9uIDEzLzA0LzIwMjMgMTcuMTIsIFNvbmcg
+WW9vbmcgU2lhbmcgd3JvdGU6DQo+PiBpZ2NfY29uZmlndXJlX3J4X3JpbmcoKSBmdW5jdGlvbiB3
+aWxsIGJlIGNhbGxlZCBhcyBwYXJ0IG9mIFhEUCBwcm9ncmFtDQo+PiBzZXR1cC4gSWYgUnggaGFy
+ZHdhcmUgdGltZXN0YW1wIGlzIGVuYWJsZWQgcHJpbyB0byBYRFAgcHJvZ3JhbSBzZXR1cCwNCj4+
+IHRoaXMgdGltZXN0YW1wIGVuYWJsZW1lbnQgd2lsbCBiZSBvdmVyd3JpdHRlbiB3aGVuIGJ1ZmZl
+ciBzaXplIGlzDQo+PiB3cml0dGVuIGludG8gU1JSQ1RMIHJlZ2lzdGVyLg0KPj4NCj4NCj5BaCwg
+SSBiZWxpZXZlIEkgaGF2ZSBoaXQgdGhpcyBidWcgd2l0aCBteSBpZ2MgcGF0Y2hlcy4NCj5UaGFu
+a3MgZm9yIGZpeGluZy4NCk5vIHByb2JsZW0uIEkgZm91bmQgaXQgd2hlbiB0ZXN0aW5nIHlvdXIg
+cGF0Y2hlcyB0b28uDQo+DQo+PiBUaHVzLCB0aGlzIGNvbW1pdCByZWFkIHRoZSByZWdpc3RlciB2
+YWx1ZSBiZWZvcmUgd3JpdGUgdG8gU1JSQ1RMDQo+PiByZWdpc3Rlci4gVGhpcyBjb21taXQgaXMg
+dGVzdGVkIGJ5IHVzaW5nIHhkcF9od19tZXRhZGF0YSBicGYgc2VsZnRlc3QNCj4+IHRvb2wuIFRo
+ZSB0b29sIGVuYWJsZXMgUnggaGFyZHdhcmUgdGltZXN0YW1wIGFuZCB0aGVuIGF0dGFjaCBYRFAN
+Cj4+IHByb2dyYW0gdG8gaWdjIGRyaXZlci4gSXQgd2lsbCBkaXNwbGF5IGhhcmR3YXJlIHRpbWVz
+dGFtcCBvZiBVRFANCj4+IHBhY2tldCB3aXRoIHBvcnQgbnVtYmVyIDkwOTIuIEJlbG93IGFyZSBk
+ZXRhaWwgb2YgdGVzdCBzdGVwcyBhbmQgcmVzdWx0cy4NCj4+DQo+PiBDb21tYW5kIG9uIERVVDoN
+Cj4+ICAgIHN1ZG8gLi94ZHBfaHdfbWV0YWRhdGEgPGludGVyZmFjZSBuYW1lPg0KPj4NCj4NCj5X
+aHkgcG9ydCA5MDkyID8NCj5UaGUgLi94ZHBfaHdfbWV0YWRhdGEgcHJvZyB3aWxsIHJlZGlyZWN0
+IHBvcnQgOTA5MQ0KWWVzLCB5b3UgYXJlIHJpZ2h0LiBCdXQgdGhpcyBwYXRjaCBpcyB0ZXN0ZWQg
+d2l0aG91dCB5b3VyIHBhdGNoZXMuIFNvLCBpZ2MgUngNClhEUCBtZXRhZGF0YSBzdXBwb3J0IGlz
+IG5vdCB0aGVyZS4gV2Ugb25seSBjYW4gdGVzdCBYRFBfUEFTUyB3aGljaA0KdGhlIHRpbWVzdGFt
+cCBpcyBwdXQgaW50byBza2IuIHhkcF9od19tZXRhZGF0YSB0b29sIHdpbGwgb3BlbiBhIFNPQ0tf
+REdSQU0NCnNlcnZlciBvbiBwb3J0IDkwOTIgdG8gZHVtcCBvdXQgdGltZXN0YW1wIGluIHNrYi4N
+Cg0KSSB1c2UgeGRwX2h3X21ldGFkYXRhIHRvb2wgdG8gdGVzdCBiZWNhdXNlIGl0IGNhbiByZXBy
+b2R1Y2UgdGhlIGlzc3VlIHdlbGwuDQpUaGlzIGlzc3VlIGhhcHBlbnMgb25seSB3aGVuIHdlIGVu
+YWJsZSBodyB0aW1lc3RhbXAgYmVmb3JlIGF0dGFjaCBYRFAgcHJvZy4NCk5vIGlzc3VlIGlmIGVu
+YWJsZSBodyB0aW1lc3RhbXAgYWZ0ZXIgYXR0YWNoIFhEUCBwcm9nLg0KPg0KPg0KPj4gQ29tbWFu
+ZCBvbiBMaW5rIFBhcnRuZXI6DQo+PiAgICBlY2hvIC1uIHNrYiB8IG5jIC11IC1xMSA8ZGVzdGlu
+YXRpb24gSVB2NCBhZGRyPiA5MDkyDQo+Pg0KPg0KPkFnYWluIHBvcnQgOTA5MiA/DQo+DQo+PiBS
+ZXN1bHQgYmVmb3JlIHRoaXMgcGF0Y2g6DQo+PiAgICBza2IgaHd0c3RhbXAgaXMgbm90IGZvdW5k
+IQ0KPj4NCj4+IFJlc3VsdCBhZnRlciB0aGlzIHBhdGNoOg0KPj4gICAgZm91bmQgc2tiIGh3dHN0
+YW1wID0gMTY3Nzc2MjIxMi41OTA2OTYyMjYNCj4NCj5JIHVzdWFsbHkgdXNlIHRoaXMgY21kIHRv
+IHNlZSBpZiBudW1iZXIgaXMgc2FuZToNCj4NCj4kIGRhdGUgLWQgQDE2Nzc3NjIyMTINCj4yMDIz
+LTAzLTAyVDE0OjAzOjMyIENFVA0KPg0KU2luY2UgdGhpcyBwYXRjaCBpcyBmb2N1c2luZyBvbiBo
+dyB0aW1lc3RhbXAgZW5hYmxlbWVudC4gU28gSQ0KdGhpbmsgY2hlY2tpbmcgb24gd2hldGhlciBS
+eCBIVyB0aW1lc3RhbXAgaXMgdGhlcmUgd2hlbg0KcnhfZmlsdGVyID0gSFdUU1RBTVBfRklMVEVS
+X0FMTCBpcyBnb29kIGVub3VnaC4NCg0KVGhhbmtzICYgUmVnYXJkcw0KU2lhbmcNCg0KPg0KPj4N
+Cj4+IEZpeGVzOiBmYzlkZjJhMGI1MjAgKCJpZ2M6IEVuYWJsZSBSWCB2aWEgQUZfWERQIHplcm8t
+Y29weSIpDQo+PiBDYzogPHN0YWJsZUB2Z2VyLmtlcm5lbC5vcmc+ICMgNS4xNCsNCj4+IFNpZ25l
+ZC1vZmYtYnk6IFNvbmcgWW9vbmcgU2lhbmcgPHlvb25nLnNpYW5nLnNvbmdAaW50ZWwuY29tPg0K
+Pj4gLS0tDQo+PiAgIGRyaXZlcnMvbmV0L2V0aGVybmV0L2ludGVsL2lnYy9pZ2NfYmFzZS5oIHwg
+NyArKysrKy0tDQo+PiAgIGRyaXZlcnMvbmV0L2V0aGVybmV0L2ludGVsL2lnYy9pZ2NfbWFpbi5j
+IHwgNSArKysrLQ0KPj4gICAyIGZpbGVzIGNoYW5nZWQsIDkgaW5zZXJ0aW9ucygrKSwgMyBkZWxl
+dGlvbnMoLSkNCj4+DQo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQvZXRoZXJuZXQvaW50ZWwv
+aWdjL2lnY19iYXNlLmgNCj4+IGIvZHJpdmVycy9uZXQvZXRoZXJuZXQvaW50ZWwvaWdjL2lnY19i
+YXNlLmgNCj4+IGluZGV4IDdhOTkyYmVmY2EyNC4uYjk1MDA3ZDUxZDEzIDEwMDY0NA0KPj4gLS0t
+IGEvZHJpdmVycy9uZXQvZXRoZXJuZXQvaW50ZWwvaWdjL2lnY19iYXNlLmgNCj4+ICsrKyBiL2Ry
+aXZlcnMvbmV0L2V0aGVybmV0L2ludGVsL2lnYy9pZ2NfYmFzZS5oDQo+PiBAQCAtODcsOCArODcs
+MTEgQEAgdW5pb24gaWdjX2Fkdl9yeF9kZXNjIHsNCj4+ICAgI2RlZmluZSBJR0NfUlhEQ1RMX1NX
+RkxVU0gJCTB4MDQwMDAwMDAgLyogUmVjZWl2ZQ0KPlNvZnR3YXJlIEZsdXNoICovDQo+Pg0KPj4g
+ICAvKiBTUlJDVEwgYml0IGRlZmluaXRpb25zICovDQo+PiAtI2RlZmluZSBJR0NfU1JSQ1RMX0JT
+SVpFUEtUX1NISUZUCQkxMCAvKiBTaGlmdCBfcmlnaHRfICovDQo+PiAtI2RlZmluZSBJR0NfU1JS
+Q1RMX0JTSVpFSERSU0laRV9TSElGVAkJMiAgLyogU2hpZnQgX2xlZnRfICovDQo+PiArI2RlZmlu
+ZSBJR0NfU1JSQ1RMX0JTSVpFUEtUX01BU0sJR0VOTUFTSyg2LCAwKQ0KPj4gKyNkZWZpbmUgSUdD
+X1NSUkNUTF9CU0laRVBLVF9TSElGVAkxMCAvKiBTaGlmdCBfcmlnaHRfICovDQo+PiArI2RlZmlu
+ZSBJR0NfU1JSQ1RMX0JTSVpFSERSU0laRV9NQVNLCUdFTk1BU0soMTMsIDgpDQo+PiArI2RlZmlu
+ZSBJR0NfU1JSQ1RMX0JTSVpFSERSU0laRV9TSElGVAkyICAvKiBTaGlmdCBfbGVmdF8gKi8NCj4+
+ICsjZGVmaW5lIElHQ19TUlJDVExfREVTQ1RZUEVfTUFTSwlHRU5NQVNLKDI3LCAyNSkNCj4+ICAg
+I2RlZmluZSBJR0NfU1JSQ1RMX0RFU0NUWVBFX0FEVl9PTkVCVUYJMHgwMjAwMDAwMA0KPj4NCj4+
+ICAgI2VuZGlmIC8qIF9JR0NfQkFTRV9IICovDQo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQv
+ZXRoZXJuZXQvaW50ZWwvaWdjL2lnY19tYWluLmMNCj4+IGIvZHJpdmVycy9uZXQvZXRoZXJuZXQv
+aW50ZWwvaWdjL2lnY19tYWluLmMNCj4+IGluZGV4IDI1ZmM2YzY1MjA5Yi4uZGU3YjIxYzJjY2Q2
+IDEwMDY0NA0KPj4gLS0tIGEvZHJpdmVycy9uZXQvZXRoZXJuZXQvaW50ZWwvaWdjL2lnY19tYWlu
+LmMNCj4+ICsrKyBiL2RyaXZlcnMvbmV0L2V0aGVybmV0L2ludGVsL2lnYy9pZ2NfbWFpbi5jDQo+
+PiBAQCAtNjQxLDcgKzY0MSwxMCBAQCBzdGF0aWMgdm9pZCBpZ2NfY29uZmlndXJlX3J4X3Jpbmco
+c3RydWN0IGlnY19hZGFwdGVyDQo+KmFkYXB0ZXIsDQo+PiAgIAllbHNlDQo+PiAgIAkJYnVmX3Np
+emUgPSBJR0NfUlhCVUZGRVJfMjA0ODsNCj4+DQo+PiAtCXNycmN0bCA9IElHQ19SWF9IRFJfTEVO
+IDw8IElHQ19TUlJDVExfQlNJWkVIRFJTSVpFX1NISUZUOw0KPj4gKwlzcnJjdGwgPSByZDMyKElH
+Q19TUlJDVEwocmVnX2lkeCkpOw0KPj4gKwlzcnJjdGwgJj0gfihJR0NfU1JSQ1RMX0JTSVpFUEtU
+X01BU0sgfA0KPklHQ19TUlJDVExfQlNJWkVIRFJTSVpFX01BU0sgfA0KPj4gKwkJICBJR0NfU1JS
+Q1RMX0RFU0NUWVBFX01BU0spOw0KPj4gKwlzcnJjdGwgfD0gSUdDX1JYX0hEUl9MRU4gPDwgSUdD
+X1NSUkNUTF9CU0laRUhEUlNJWkVfU0hJRlQ7DQo+PiAgIAlzcnJjdGwgfD0gYnVmX3NpemUgPj4g
+SUdDX1NSUkNUTF9CU0laRVBLVF9TSElGVDsNCj4+ICAgCXNycmN0bCB8PSBJR0NfU1JSQ1RMX0RF
+U0NUWVBFX0FEVl9PTkVCVUY7DQo+Pg0KDQo=
