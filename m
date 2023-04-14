@@ -2,171 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2866E2AB3
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 21:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D27B6E2ABD
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 21:46:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbjDNTi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 15:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50980 "EHLO
+        id S229784AbjDNTqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 15:46:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjDNTiw (ORCPT
+        with ESMTP id S229468AbjDNTqV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 15:38:52 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBEE49EA;
-        Fri, 14 Apr 2023 12:38:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=CbWN6qJHp6Pc/X56x9EHRwm7uGLwhKUh3lgTwYDnlFA=; b=SCHVqNXhLeGLbbKmp0dlZceMfA
-        qRvQjXsE6Ldl5/v8TDiRoTKvpKOJY5xc5dLRs0ThddMp7Km8v1L0X3ipoFmsbXB6UYSzqQiM6U3oG
-        dgIjh/zmGsTkwxbPaybtp8/dBU8eZLciRwqnGLw4uNirHDuTm4i12t1a6SqCtN+LOFHykTiH3PwtL
-        qX0gLZMeTcPJ//h9Z01G3UnXvdt2czbnK0HRWLXhEjPlc5UNIfQhMJJubv5wm+40EUH5fU5uZGUFO
-        w8nuchHTqmL1v3Jh5TVoyIKJQspv0fy++z1S4Ea0I63CN3tn2uwntxb0ru7w+0d7yUc9z2XJdxtIj
-        ZCO6RXIA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pnPFu-00ASpr-0k;
-        Fri, 14 Apr 2023 19:38:46 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     shuah@kernel.org, linux-kselftest@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, tiwai@suse.de, tianfei.zhang@intel.com,
-        russell.h.weight@intel.com, keescook@chromium.org,
-        tweek@google.com, a.manzanares@samsung.com, dave@stgolabs.net,
-        vincenzopalazzodev@gmail.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH] selftests: allow runners to override the timeout
-Date:   Fri, 14 Apr 2023 12:38:45 -0700
-Message-Id: <20230414193845.2494120-1-mcgrof@kernel.org>
-X-Mailer: git-send-email 2.38.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 14 Apr 2023 15:46:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01CB422A
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 12:46:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A70064448
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 19:46:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64C61C433EF;
+        Fri, 14 Apr 2023 19:46:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1681501578;
+        bh=zewFkR9CTXAmbKrqBvDqFQw5lqpR+BJt79rpHFOXU2g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=0I8xZsrNKj7OBFHOzz7WfdL8mYbG3v9DBNn4AR1hoDn7CwaMQhreC19smS7QI8DGX
+         b95jA27HyHKo7FU/9JP5kJmWwosf1pTZUxHGfoCmZUi1DB3DvTormSAF3O/JdZYato
+         AbRNNLDi9gHkDJEU4ziPRG3ho3m7M2o/2DVp2J58=
+Date:   Fri, 14 Apr 2023 12:46:17 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Vlastimil Babka <vbabka@suse.cz>, Michal Hocko <mhocko@suse.com>,
+        Oscar Salvador <OSalvador@suse.com>,
+        Yuanxi Liu <y.liu@naruida.com>,
+        David Hildenbrand <david@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mm: page_alloc: Skip regions with hugetlbfs pages when
+ allocating 1G pages
+Message-Id: <20230414124617.c53cf4ce606cdcba54f65aa2@linux-foundation.org>
+In-Reply-To: <20230414141429.pwgieuwluxwez3rj@techsingularity.net>
+References: <20230414141429.pwgieuwluxwez3rj@techsingularity.net>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The default timeout for selftests tests is 45 seconds. Although
-we already have 13 settings for tests of about 96 sefltests which
-use a timeout greater than this, we want to try to avoid encouraging
-more tests to forcing a higher test timeout as selftests strives to
-run all tests quickly. Selftests also uses the timeout as a non-fatal
-error. Only tests runners which have control over a system would know
-if to treat a timeout as fatal or not.
+On Fri, 14 Apr 2023 15:14:29 +0100 Mel Gorman <mgorman@techsingularity.net> wrote:
 
-To help with all this:
+> A bug was reported by Yuanxi Liu where allocating 1G pages at runtime is
+> taking an excessive amount of time for large amounts of memory.
+>
+> ...
+>
+>                    6.3.0-rc6   6.3.0-rc6   6.3.0-rc6
+>                      vanilla   revert-v1   hugeallocfix-v2
+> Duration User           0.28        0.27        0.30
+> Duration System       808.66       17.77       35.99
+> Duration Elapsed      830.87       18.08       36.33
+> 
 
-  o Enhance documentation to avoid future increases of insane timeouts
-  o Add the option to allow overriding the default timeout with test
-    runners with a command line option
-
-Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
----
- Documentation/dev-tools/kselftest.rst       | 22 +++++++++++++++++++++
- tools/testing/selftests/kselftest/runner.sh | 11 ++++++++++-
- tools/testing/selftests/run_kselftest.sh    |  5 +++++
- 3 files changed, 37 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
-index 12b575b76b20..dd214af7b7ff 100644
---- a/Documentation/dev-tools/kselftest.rst
-+++ b/Documentation/dev-tools/kselftest.rst
-@@ -168,6 +168,28 @@ the `-t` option for specific single tests. Either can be used multiple times::
- 
- For other features see the script usage output, seen with the `-h` option.
- 
-+Timeout for selftests
-+=====================
-+
-+Selftests are designed to be quick and so a default timeout is used of 45
-+seconds for each test. Tests can override the default timeout by adding
-+a settings file in their directory and set a timeout variable there to the
-+configured a desired upper timeout for the test. Only a few tests override
-+the timeout with a value higher than 45 seconds, selftests strives to keep
-+it that way. Timeouts in selftests are not considered fatal because the
-+system under which a test runs may change and this can also modify the
-+expected time it takes to run a test. If you have control over the systems
-+which will run the tests you can configure a test runner on those systems to
-+use a greater or lower timeout on the command line as with the `-o` or
-+the `--override-timeout` argument. For example to use 165 seconds instead
-+one would use:
-+
-+   $ ./run_kselftest.sh --override-timeout 165
-+
-+You can look at the TAP output to see if you ran into the timeout. Test
-+runners which know a test must run under a specific time can then optionally
-+treat these timeouts then as fatal.
-+
- Packaging selftests
- ===================
- 
-diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
-index 294619ade49f..1c952d1401d4 100644
---- a/tools/testing/selftests/kselftest/runner.sh
-+++ b/tools/testing/selftests/kselftest/runner.sh
-@@ -8,7 +8,8 @@ export logfile=/dev/stdout
- export per_test_logging=
- 
- # Defaults for "settings" file fields:
--# "timeout" how many seconds to let each test run before failing.
-+# "timeout" how many seconds to let each test run before running
-+# over our soft timeout limit.
- export kselftest_default_timeout=45
- 
- # There isn't a shell-agnostic way to find the path of a sourced file,
-@@ -90,6 +91,14 @@ run_one()
- 		done < "$settings"
- 	fi
- 
-+	# Command line timeout overrides the settings file
-+	if [ -n "$kselftest_override_timeout" ]; then
-+		kselftest_timeout="$kselftest_override_timeout"
-+		echo "# overriding timeout to $kselftest_timeout" >> "$logfile"
-+	else
-+		echo "# timeout set to $kselftest_timeout" >> "$logfile"
-+	fi
-+
- 	TEST_HDR_MSG="selftests: $DIR: $BASENAME_TEST"
- 	echo "# $TEST_HDR_MSG"
- 	if [ ! -e "$TEST" ]; then
-diff --git a/tools/testing/selftests/run_kselftest.sh b/tools/testing/selftests/run_kselftest.sh
-index 97165a83df63..9a981b36bd7f 100755
---- a/tools/testing/selftests/run_kselftest.sh
-+++ b/tools/testing/selftests/run_kselftest.sh
-@@ -26,6 +26,7 @@ Usage: $0 [OPTIONS]
-   -l | --list			List the available collection:test entries
-   -d | --dry-run		Don't actually run any tests
-   -h | --help			Show this usage info
-+  -o | --override-timeout	Number of seconds after which we timeout
- EOF
- 	exit $1
- }
-@@ -33,6 +34,7 @@ EOF
- COLLECTIONS=""
- TESTS=""
- dryrun=""
-+kselftest_override_timeout=""
- while true; do
- 	case "$1" in
- 		-s | --summary)
-@@ -51,6 +53,9 @@ while true; do
- 		-d | --dry-run)
- 			dryrun="echo"
- 			shift ;;
-+		-o | --override-timeout)
-+			kselftest_override_timeout="$2"
-+			shift 2 ;;
- 		-h | --help)
- 			usage 0 ;;
- 		"")
--- 
-2.39.2
-
+I'll put a cc:stable on this.
