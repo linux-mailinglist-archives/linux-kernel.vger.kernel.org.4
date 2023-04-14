@@ -2,164 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D80A6E2ACA
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 21:53:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00E9C6E2ACF
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 21:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbjDNTxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 15:53:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54692 "EHLO
+        id S229829AbjDNT4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 15:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjDNTxg (ORCPT
+        with ESMTP id S229650AbjDNT4o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 15:53:36 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A67B64C39;
-        Fri, 14 Apr 2023 12:53:32 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id gw13so10936279wmb.3;
-        Fri, 14 Apr 2023 12:53:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681502011; x=1684094011;
-        h=in-reply-to:from:references:cc:to:content-language:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UWXPfkHIdx+FJmYAkBJsOZzbgSV6XnN2u5PkiZkzUTY=;
-        b=GVjmlEq1EFjEhIe8MWj2JF2T06yXmfN5xb4iMUPHiUnyrEhZNpO0og0QRMGEvKGuAd
-         zg3EUgDxWnI8VeRpaDglKDKXx/RFlf2mGlOhXL6akgRH7MaqqOYwwR3+0BZ4ruNfkGAq
-         nVp4h5ZIpM2k4Jx3NLcmM9870A9azbI8V2Tlop5i4t8LXPxOcyB5CzNyjM7T80IG2Aht
-         /P7sJG6hZPy/C1ZswqsbEyLQxBI3PFRrzX+S6Bf+EPxf9qHp0PkUTzS+rSQw7xVRULdK
-         GMObQgDdublXU1HQqSAlgUKzOhOm+mvAcpROqfadJhkE9kKwYR1tGxQGmpgJRFdCXSV+
-         LtMw==
+        Fri, 14 Apr 2023 15:56:44 -0400
+Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E067D4C39
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 12:56:41 -0700 (PDT)
+Received: by mail-io1-f79.google.com with SMTP id t2-20020a6bc302000000b00760c588931aso932826iof.22
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 12:56:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681502011; x=1684094011;
-        h=in-reply-to:from:references:cc:to:content-language:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=UWXPfkHIdx+FJmYAkBJsOZzbgSV6XnN2u5PkiZkzUTY=;
-        b=IX2jpToSCK5QgTwK0zGaAgYWG59QTMe8qPsS2DyLPrfjNoFgbbnSdEyVu2Px5UO7ZM
-         t1blBMnReA5mD+X+OYFbAUiKrCzORHGkizuAGBHiTvM8trgMMIlv1QxujidVl/J43+aW
-         yDwTPRykOuwbRe9qbGGQBHSw940a7Ft2Htl9Y+xZJj3RD9Ta0+QIDVYK84/ybK9/AjNe
-         NNr3miLYRN8fU0TujxpULKXr514MivJLHOziO4CGRQYUQiV3C3Q/v6p0K0lmPgfpZZui
-         qw6DwVmGhq0VaLWcJF5dekXrkuRodRf7DNE4pbiBiLFhwH6dgMJRTUSPHAIYjyYwAafB
-         WbSw==
-X-Gm-Message-State: AAQBX9eUozJkX3mu7k8OQuZE+NN0WgWckBse6ody3nqdmPFJrPPZRkm6
-        U/HMQ2GYyjwwrSh9Fjcizeo=
-X-Google-Smtp-Source: AKy350Z15s78qOdDPta8LS3ODBN10ICElywGuD+ijEAFvvh58rYVE5xYOFXiRrpE5DGrkZy3fuYSWg==
-X-Received: by 2002:a7b:c40a:0:b0:3dc:4b87:a570 with SMTP id k10-20020a7bc40a000000b003dc4b87a570mr5328772wmi.35.1681502011066;
-        Fri, 14 Apr 2023 12:53:31 -0700 (PDT)
-Received: from [192.168.0.160] ([170.253.51.134])
-        by smtp.gmail.com with ESMTPSA id v3-20020a1cf703000000b003f04646838esm5003112wmh.39.2023.04.14.12.53.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 12:53:30 -0700 (PDT)
-Message-ID: <0d95a96b-dd49-db45-ab3c-1d9cee51381d@gmail.com>
-Date:   Fri, 14 Apr 2023 21:53:22 +0200
+        d=1e100.net; s=20221208; t=1681502201; x=1684094201;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mtNyJU7opl/X5r0f9B+P211YtBrbp1eSIxo/w5hCQrE=;
+        b=QxnezJldfnrJbS1pgSOQnqEKrpbS+goaXLThvx4+DAbfdnZWg7xcTIfoUQxec5vYX7
+         W9ok0PYr5NN4xmYWNpzCWbdDm69ksLSCuvrrjiAf0vYkJ8qSm5zUaafPX4R+BdlruT9P
+         doIVXL0tqxu9atCElclo+Jlhw4sFzkvHkXFEtSaMQKTj/vZMnikVst/HFLyr/X8uX51b
+         xIVW+CvSsJ3Z78aUykfP5Z4lHjF5rl8tFDCWTAn5ROx/ZJ9COUSZPSgGEKT3FhU/SXWz
+         CSpzk+7/BN6iFtCC+5OlacvtJPxdPazCizFyXoG3zVfQLOguzrB7njI/PUQdGYEqQq9W
+         L1sw==
+X-Gm-Message-State: AAQBX9efxeIMGCnOPCzuRfcznftZvfN3JWLGCzQyCNKPCKAmciM+cHSs
+        kPu6CFt8yRnw/JPMhKrx+qzdyzyxdYS6TPngEUMTZt01K9Yb
+X-Google-Smtp-Source: AKy350b5V1+SPa2Y/FrYgxpYzFWnAdt31CYFlL1xMYpkYmmrGo9g/qrmO8OmB3Vuby3nb6lvWBaatOLJEPeJehyuAJ5i3FPYPCwu
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: Checking for support of ptrace(PTRACE_SEIZE,...) on older kernels
-Content-Language: en-US
-To:     Sergei Zhirikov <sfzhi@yahoo.com>, Oleg Nesterov <oleg@redhat.com>
-Cc:     linux-man@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-References: <997950238.3486335.1681414225118.ref@mail.yahoo.com>
- <997950238.3486335.1681414225118@mail.yahoo.com>
-From:   Alejandro Colomar <alx.manpages@gmail.com>
-In-Reply-To: <997950238.3486335.1681414225118@mail.yahoo.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------RgM6wphRtTIER0lTot2cUfDu"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:380d:b0:40d:97fe:8399 with SMTP id
+ i13-20020a056638380d00b0040d97fe8399mr5682505jav.0.1681502201177; Fri, 14 Apr
+ 2023 12:56:41 -0700 (PDT)
+Date:   Fri, 14 Apr 2023 12:56:41 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000063ec4705f9513d4f@google.com>
+Subject: [syzbot] [mm?] WARNING in unmap_page_range
+From:   syzbot <syzbot+78c74557d14e8d51e013@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------RgM6wphRtTIER0lTot2cUfDu
-Content-Type: multipart/mixed; boundary="------------voYPYiFG8IDLaQduQaOQE9xm";
- protected-headers="v1"
-From: Alejandro Colomar <alx.manpages@gmail.com>
-To: Sergei Zhirikov <sfzhi@yahoo.com>, Oleg Nesterov <oleg@redhat.com>
-Cc: linux-man@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Message-ID: <0d95a96b-dd49-db45-ab3c-1d9cee51381d@gmail.com>
-Subject: Re: Checking for support of ptrace(PTRACE_SEIZE,...) on older kernels
-References: <997950238.3486335.1681414225118.ref@mail.yahoo.com>
- <997950238.3486335.1681414225118@mail.yahoo.com>
-In-Reply-To: <997950238.3486335.1681414225118@mail.yahoo.com>
+Hello,
 
---------------voYPYiFG8IDLaQduQaOQE9xm
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+syzbot found the following issue on:
 
-Hi Sergei,
+HEAD commit:    e134c93f788f Add linux-next specific files for 20230406
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=13b57c17c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7a0548c6ce6e9842
+dashboard link: https://syzkaller.appspot.com/bug?extid=78c74557d14e8d51e013
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-On 4/13/23 21:30, Sergei Zhirikov wrote:
-> Hello,
->=20
-> I've been studying the ptrace(2) man page and experimenting with ptrace=
-() recently and came across this unexpected aspect of its behavior that I=
- think would be good to have documented.
->=20
-> I would like to use PTRACE_SEIZE in my project because of the advantage=
-s it offers, but I would also like to support kernels older than 3.4 (whe=
-re it was fully introduced). My thinking was that I would call ptrace(PTR=
-ACE_SEIZE, ...) and if it fails with the appropriate error code indicatin=
-g that it's not supported I would fall back to PTRACE_ATTACH. That is whe=
-re a little surprise was waiting for me. According to the man page, ptrac=
-e will fail with errno=3DEIO if called with an invalid request code. Logi=
-cally, that was the error code I expected to get when PTRACE_SEIZE is not=
- supported. In reality I got ESRCH instead. In my attempts to make sense =
-of it I had to resort to reading the kernel source. Apparently, the logic=
- in the kernel (=C2=A0https://elixir.bootlin.com/linux/v3.0.101/source/ke=
-rnel/ptrace.c#L944=C2=A0) seems to assume that any request other than PTR=
-ACE_ATTACH must come for an already existing tracee. So it proceeds to lo=
-ok for such a tracee (by calling ptrace_check_attach) before trying to in=
-terpret the request code. Obviously, in case of PTRACE_SEIZE, the target =
-process/thread is not being traced yet, so ESRCH is returned. As far as I=
- can tell by looking at the source code, that will happen for any request=
- code (with a couple of exceptions), valid or otherwise. The relevant pie=
-ce of logic seems to remain unchanged to this day, so this isn't just a p=
-roblem with an ancient kernel that nobody cares about. I am not sure whet=
-her this behavior is intentional (I would guess it's not), but in any cas=
-e it's probably good to have it documented in the man page.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-I've added some CCs.  Feel free to send a patch.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/b617d686938d/disk-e134c93f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/3ac3406cd427/vmlinux-e134c93f.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/6b08a19acadb/bzImage-e134c93f.xz
 
-Cheers,
-Alex
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+78c74557d14e8d51e013@syzkaller.appspotmail.com
 
->=20
-> Thanks and regards,
-> Sergei.
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 24899 at mm/memory.c:1491 zap_pte_range mm/memory.c:1491 [inline]
+WARNING: CPU: 1 PID: 24899 at mm/memory.c:1491 zap_pmd_range mm/memory.c:1564 [inline]
+WARNING: CPU: 1 PID: 24899 at mm/memory.c:1491 zap_pud_range mm/memory.c:1593 [inline]
+WARNING: CPU: 1 PID: 24899 at mm/memory.c:1491 zap_p4d_range mm/memory.c:1614 [inline]
+WARNING: CPU: 1 PID: 24899 at mm/memory.c:1491 unmap_page_range+0x1c07/0x39b0 mm/memory.c:1635
+Modules linked in:
+CPU: 1 PID: 24899 Comm: syz-executor.0 Not tainted 6.3.0-rc5-next-20230406-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+RIP: 0010:zap_pte_range mm/memory.c:1491 [inline]
+RIP: 0010:zap_pmd_range mm/memory.c:1564 [inline]
+RIP: 0010:zap_pud_range mm/memory.c:1593 [inline]
+RIP: 0010:zap_p4d_range mm/memory.c:1614 [inline]
+RIP: 0010:unmap_page_range+0x1c07/0x39b0 mm/memory.c:1635
+Code: 83 fb 02 0f 86 ff 0c 00 00 e8 85 4b c2 ff 44 89 e6 bf 1f 00 00 00 e8 98 47 c2 ff 41 83 fc 1f 0f 84 38 0e 00 00 e8 69 4b c2 ff <0f> 0b e9 da ef ff ff e8 5d 4b c2 ff 4c 89 e5 31 ff 4c 89 e3 81 e5
+RSP: 0018:ffffc90004ef76f8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000007 RCX: 0000000000000000
+RDX: ffff8880829f0000 RSI: ffffffff81c10c67 RDI: 0000000000000007
+RBP: 0000000000000000 R08: 0000000000000007 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 000000000000001f
+R13: 0000000020679000 R14: dffffc0000000000 R15: 0000000000000000
+FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b33523000 CR3: 000000007b6c6000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ unmap_single_vma+0x19a/0x2b0 mm/memory.c:1681
+ unmap_vmas+0x234/0x380 mm/memory.c:1720
+ exit_mmap+0x190/0x930 mm/mmap.c:3063
+ __mmput+0x13a/0x540 kernel/fork.c:1344
+ mmput+0x60/0x70 kernel/fork.c:1366
+ exit_mm kernel/exit.c:564 [inline]
+ do_exit+0x9d7/0x29f0 kernel/exit.c:858
+ do_group_exit+0xd4/0x2a0 kernel/exit.c:1021
+ get_signal+0x2315/0x25b0 kernel/signal.c:2859
+ arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:307
+ exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+ exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+ syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
+ do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f80caa8c169
+Code: Unable to access opcode bytes at 0x7f80caa8c13f.
+RSP: 002b:00007f80c95fe218 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
+RAX: fffffffffffffe00 RBX: 00007f80cababf88 RCX: 00007f80caa8c169
+RDX: 0000000000000000 RSI: 0000000000000080 RDI: 00007f80cababf88
+RBP: 00007f80cababf80 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f80cababf8c
+R13: 00007ffc884fac6f R14: 00007f80c95fe300 R15: 0000000000022000
+ </TASK>
 
---=20
-<http://www.alejandro-colomar.es/>
-GPG key fingerprint: A9348594CE31283A826FBDD8D57633D441E25BB5
 
---------------voYPYiFG8IDLaQduQaOQE9xm--
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
---------------RgM6wphRtTIER0lTot2cUfDu
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE6jqH8KTroDDkXfJAnowa+77/2zIFAmQ5rzIACgkQnowa+77/
-2zK1lQ//d/swWXkNyq0QLyf0fKC7PMLwdxy/ZP4ZOesekitkafRYOsirR0XYdObK
-rVMWll3kHOx3MqIPQ0w5iwDVCXOzlPGlqM32MycHvK6byP/p6n4/TXVwz1NyjiwO
-M9KDK0MXkEBq52QR7G0WqJhIbpuPi40uDVdUEl61tVQZQBvasM2dXWAlBzjW5/QN
-uXHKmwHoJPoI4RQ//t2WimKD6eZHcX2TY9mKzprZ0aHuoOAld7/POLn8v6OtwBCx
-1sqDx6fJFW5Lop8kvpNJxXF8JDGYcxfqaUwsGSFZTP4ou3qIqjzieGShXwvQ1GSZ
-GNq4zATnyVz/l8QGhZIuG8KKFfkvJ1xAet8q9f7KRPWZ8mt6jvyQJAFNWdOJ7X/m
-2s5T6aBtjbZZ4BR9eRROk+ngOcsqjySn4VoBmT74qm1vUCo/e9xQ843pQiCxOGQb
-4BLpBN3dYfzig2ybT1jiJZS7LzW56ab2wIjfQuPc/DiZPEtYEGq0JZF2KqKBCsDD
-F2aFCl4e4/HZj/Gth3ySXwPpnKXG72aKunP5s7YpYzuoFx6ZssPCMd82KN3ICL0l
-VQppmv9kb5y9vh13QjjrD8dZ+xhlRka7q3KlvApxkx190oWEdueI/o8SoQX3cM9O
-PnK4Ws6D2HfK/XTh8YrIPxbspAAga/73buRGnKJFH46kuJP41cA=
-=Qc0s
------END PGP SIGNATURE-----
-
---------------RgM6wphRtTIER0lTot2cUfDu--
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
