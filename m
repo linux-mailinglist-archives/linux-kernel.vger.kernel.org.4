@@ -2,64 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B20FC6E269E
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 17:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C89A6E26AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 17:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbjDNPQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 11:16:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35798 "EHLO
+        id S231235AbjDNPSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 11:18:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbjDNPQJ (ORCPT
+        with ESMTP id S229826AbjDNPR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 11:16:09 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFBD993CE;
-        Fri, 14 Apr 2023 08:16:07 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33EFG1U3078381;
-        Fri, 14 Apr 2023 10:16:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1681485361;
-        bh=EOgCsQnaeS9zQrffcGPnXqDTNjAS2noKZ3EEPUQeYWg=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=KrA2ggloZc3O0wCUXi1SdMJ/IOQ1VucP3kmYQ+8704CHgN5w/6LQX2B7TyQ2cjnWo
-         gvNTOdUk4A7WGeNc3OXoCdXu8E1sB3icF2gKc1+ZltSpPezpw3Jql7FQO02O+swI+U
-         vsGhCxutsgNCuUhwX8t8dJ7wUJuvv3S9h5JPYre4=
-Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33EFG17u048699
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 14 Apr 2023 10:16:01 -0500
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 14
- Apr 2023 10:16:01 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 14 Apr 2023 10:16:01 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33EFG04L096252;
-        Fri, 14 Apr 2023 10:16:01 -0500
-From:   Jayesh Choudhary <j-choudhary@ti.com>
-To:     <nm@ti.com>, <vigneshr@ti.com>, <afd@ti.com>
-CC:     <s-vadapalli@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <j-choudhary@ti.com>
-Subject: [PATCH v2 5/5] arm64: dts: ti: k3-j784s4-evm: Enable DisplayPort-0
-Date:   Fri, 14 Apr 2023 20:45:53 +0530
-Message-ID: <20230414151553.339599-6-j-choudhary@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230414151553.339599-1-j-choudhary@ti.com>
-References: <20230414151553.339599-1-j-choudhary@ti.com>
+        Fri, 14 Apr 2023 11:17:59 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0AA2737
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 08:17:36 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id n19-20020a05600c501300b003f064936c3eso15048042wmr.0
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 08:17:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681485454; x=1684077454;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LiiGjyqX4o159cvbNlKsXJAHA/ueLUd6Q3sCWwwpz5Y=;
+        b=DOaKY7KMiuRzv77phiJcAAJ0NvzAbTEawUceJCq6OubBbrOFy3Y2WowDMWM1MdGYR3
+         qnxbuVikIfwiaWU3C/6stDlcrBYUtEJPZC6mXfRzfuRNK1brACCZs8MqXBEc8IqMZheI
+         OoWJkk6gu7SDNrsmn4lCNzIOyj6jABoMy3GDDBFa1fJz40ZVsCmKSbFNvSbb1MHdqYlp
+         782o1F334MH2N07jMwV2b4JQVr9ztDdcdcwufcgZ2rq0bOXHMrWvDwQWE1kepwuQKTvG
+         iu5v4ZDskKltIMbH1D19AeTWfSDxUKF4ulyKN1T/UUaFGah5Elk+bCXeFQyc7lmYPPJd
+         EIbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681485454; x=1684077454;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LiiGjyqX4o159cvbNlKsXJAHA/ueLUd6Q3sCWwwpz5Y=;
+        b=gGbeYRKd8AffB0B6Ib0iam8j0RUfGp6N+tzZ5jkWAtbYs49nxcZUOCTrpGmqswty9W
+         oqZuaarjQ8aqmMcvltGlVGtioeBwX5wRe4HYHjkkqSVPKOgyUlgGETE+9W+wkoMlkXVU
+         f+RAgpMb/GiZNRX6YhPtaEdyPjoajNo2zYRv+I+q35FES80uqjzkxopzG0RcDy1l+v9w
+         egfdjMFTg8jws1w3Kg3uMnr/uGIdtq2o/VZjeyiTv+9SO7vpSZCSLHNqd4vloclnhhcm
+         VTbkcG+H1Yw2yPITorejMQ9IpxZpZNm5SSaXweXu1hpLibOiCfWuSYp72Ok182GR+4XU
+         0qOw==
+X-Gm-Message-State: AAQBX9crYdVJYo6mUI9w3OUVuGfx+e7Fk/PEISFIYrWbEiSjM8rV5qZE
+        7lTCspzaKrjlnufUqn4/ECV8Sg==
+X-Google-Smtp-Source: AKy350bQFzW/yiQUVEbMS8iwEGtjIIv6F3QJDvhfsmxOMugGGxPwOpR0bNIgwlJINtCCORADLPrWlg==
+X-Received: by 2002:a05:600c:21cf:b0:3ef:3ce6:7c54 with SMTP id x15-20020a05600c21cf00b003ef3ce67c54mr4860044wmj.35.1681485454655;
+        Fri, 14 Apr 2023 08:17:34 -0700 (PDT)
+Received: from myrica (054592b0.skybroadband.com. [5.69.146.176])
+        by smtp.gmail.com with ESMTPSA id 8-20020a05600c228800b003edef091b17sm4508021wmf.37.2023.04.14.08.17.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Apr 2023 08:17:34 -0700 (PDT)
+Date:   Fri, 14 Apr 2023 16:17:35 +0100
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc:     Eric Auger <eric.auger@redhat.com>,
+        virtio-dev@lists.oasis-open.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, qemu-devel@nongnu.org
+Subject: Re: virtio-iommu hotplug issue
+Message-ID: <20230414151735.GA4145625@myrica>
+References: <15bf1b00-3aa0-973a-3a86-3fa5c4d41d2c@daynix.com>
+ <20230413104041.GA3295191@myrica>
+ <c6fb5a06-aa7e-91f9-7001-f456b2769595@daynix.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c6fb5a06-aa7e-91f9-7001-f456b2769595@daynix.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,161 +75,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rahul T R <r-ravikumar@ti.com>
+On Thu, Apr 13, 2023 at 08:01:54PM +0900, Akihiko Odaki wrote:
+> Yes, that's right. The guest can dynamically create and delete VFs. The
+> device is emulated by QEMU: igb, an Intel NIC recently added to QEMU and
+> projected to be released as part of QEMU 8.0.
 
-Enable display for J784S4 EVM.
+Ah great, that's really useful, I'll add it to my tests
 
-Add assigned clocks for DSS, DT node for DisplayPort PHY and pinmux for DP
-HPD.
+> > Yes, I think this is an issue in the virtio-iommu driver, which should be
+> > sending a DETACH request when the VF is disabled, likely from
+> > viommu_release_device(). I'll work on a fix unless you would like to do it
+> 
+> It will be nice if you prepare a fix. I will test your patch with my
+> workload if you share it with me.
 
-Add the endpoint nodes to describe connection from:
-DSS => MHDP => DisplayPort connector.
+I sent a fix:
+https://lore.kernel.org/linux-iommu/20230414150744.562456-1-jean-philippe@linaro.org/
 
-Also add the GPIO expander-4 node and pinmux for main_i2c4 which is
-required for controlling DP power. Set status for all required nodes
-for DP-0 as "okay".
+Thank you for reporting this, it must have been annoying to debug
 
-Signed-off-by: Rahul T R <r-ravikumar@ti.com>
-[j-choudhary@ti.com: move all the changes together to enable DP-0 in EVM]
-Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
----
- arch/arm64/boot/dts/ti/k3-j784s4-evm.dts | 112 +++++++++++++++++++++++
- 1 file changed, 112 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-index b1445b7c2aa8..03c9bf34cb1b 100644
---- a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-+++ b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-@@ -102,6 +102,28 @@ vdd_sd_dv: regulator-TLV71033 {
- 		states = <1800000 0x0>,
- 			 <3300000 0x1>;
- 	};
-+
-+	dp0_pwr_3v3: regulator-dp0-prw {
-+		compatible = "regulator-fixed";
-+		regulator-name = "dp0-pwr";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		gpio = <&exp4 0 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+	};
-+
-+	dp0: dp0-connector {
-+		compatible = "dp-connector";
-+		label = "DP0";
-+		type = "full-size";
-+		dp-pwr-supply = <&dp0_pwr_3v3>;
-+
-+		port {
-+			dp0_connector_in: endpoint {
-+				remote-endpoint = <&dp0_out>;
-+			};
-+		};
-+	};
- };
- 
- &main_pmx0 {
-@@ -163,6 +185,19 @@ vdd_sd_dv_pins_default: vdd-sd-dv-pins-default {
- 			J784S4_IOPAD(0x020, PIN_INPUT, 7) /* (AJ35) MCAN15_RX.GPIO0_8 */
- 		>;
- 	};
-+
-+	dp0_pins_default: dp0-pins-default {
-+		pinctrl-single,pins = <
-+			J784S4_IOPAD(0x0cc, PIN_INPUT, 12) /* (AM37) SPI0_CS0.DP0_HPD */
-+		>;
-+	};
-+
-+	main_i2c4_pins_default: main-i2c4-pins-default {
-+		pinctrl-single,pins = <
-+			J784S4_IOPAD(0x014, PIN_INPUT_PULLUP, 8) /* (AG33) MCAN14_TX.I2C4_SCL */
-+			J784S4_IOPAD(0x010, PIN_INPUT_PULLUP, 8) /* (AH33) MCAN13_RX.I2C4_SDA */
-+		>;
-+	};
- };
- 
- &wkup_pmx0 {
-@@ -305,3 +340,80 @@ &main_cpsw1_port1 {
- &serdes_refclk {
- 	clock-frequency = <100000000>;
- };
-+
-+&dss {
-+	status = "okay";
-+	assigned-clocks = <&k3_clks 218 2>,
-+			  <&k3_clks 218 5>,
-+			  <&k3_clks 218 14>,
-+			  <&k3_clks 218 18>;
-+	assigned-clock-parents = <&k3_clks 218 3>,
-+				 <&k3_clks 218 7>,
-+				 <&k3_clks 218 16>,
-+				 <&k3_clks 218 22>;
-+};
-+
-+&serdes_wiz4 {
-+	status = "okay";
-+};
-+
-+&serdes4 {
-+	status = "okay";
-+	serdes4_dp_link: phy@0 {
-+		reg = <0>;
-+		cdns,num-lanes = <4>;
-+		#phy-cells = <0>;
-+		cdns,phy-type = <PHY_TYPE_DP>;
-+		resets = <&serdes_wiz4 1>, <&serdes_wiz4 2>,
-+			 <&serdes_wiz4 3>, <&serdes_wiz4 4>;
-+	};
-+};
-+
-+&mhdp {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&dp0_pins_default>;
-+	phys = <&serdes4_dp_link>;
-+	phy-names = "dpphy";
-+};
-+
-+&dss_ports {
-+	port {
-+		dpi0_out: endpoint {
-+			remote-endpoint = <&dp0_in>;
-+		};
-+	};
-+};
-+
-+&main_i2c4 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_i2c4_pins_default>;
-+	clock-frequency = <400000>;
-+
-+	exp4: gpio@20 {
-+		compatible = "ti,tca6408";
-+		reg = <0x20>;
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+	};
-+};
-+
-+&dp0_ports {
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	port@0 {
-+		reg = <0>;
-+		dp0_in: endpoint {
-+			remote-endpoint = <&dpi0_out>;
-+		};
-+	};
-+
-+	port@4 {
-+		reg = <4>;
-+		dp0_out: endpoint {
-+			remote-endpoint = <&dp0_connector_in>;
-+		};
-+	};
-+};
--- 
-2.25.1
+Thanks,
+Jean
 
