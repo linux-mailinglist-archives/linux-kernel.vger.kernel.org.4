@@ -2,116 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A3F6E1E0D
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:23:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2CAF6E1DFA
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:21:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbjDNIXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 04:23:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33030 "EHLO
+        id S230134AbjDNIVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 04:21:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbjDNIX2 (ORCPT
+        with ESMTP id S230096AbjDNIVB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 04:23:28 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D646E1BC9;
-        Fri, 14 Apr 2023 01:23:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=4/OedsHNECWMdb1O/5CmBXIMhKWxTMAD8xpCzvQiWk4=; b=cJt80wV5U63xn0tju0Jh0AUTJp
-        AW758NvMDPN4Eh2BgK4wm+ZoWVv7qdmVGZ2/4ZXuB6mHDoMACsiJfOlyVp3ZDgra439Vn/DR+wzMY
-        GUKXVlFDW+LuV1S61mOEQVTYdXdwkM+2rN1CMvRIjwhtLZTnlXuUrl6yr9fkfX79nD3bD2nY86Rji
-        PxYrYjrNcb6vNav4NU3sjbKOCk23dY4MnRGB90RFbCNk1Yzn5OUVrjfWCLFZzLYLMQOEUU3WcAox7
-        PC/XwRv88/y5GK/P4jno8z/sfwzPbwH3lHDJs1lFQFa6/K1LhOrMCo1busLSiZpK1d9k+9YTN57Mo
-        HG1G36nQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pnEfg-00FWn9-0h;
-        Fri, 14 Apr 2023 08:22:42 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2598430002F;
-        Fri, 14 Apr 2023 10:20:39 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0BC1520248CE4; Fri, 14 Apr 2023 10:20:39 +0200 (CEST)
-Date:   Fri, 14 Apr 2023 10:20:39 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     Liang Kan <kan.liang@linux.intel.com>, linux-cxl@vger.kernel.org,
-        mark.rutland@arm.com, will@kernel.org, mingo@redhat.com,
-        acme@kernel.org, dan.j.williams@intel.com, linuxarm@huawei.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Dave Jiang <dave.jiang@intel.com>
-Subject: Re: [PATCH v6 1/5] perf: Allow a PMU to have a parent
-Message-ID: <20230414082039.GT4253@hirez.programming.kicks-ass.net>
-References: <20230413142617.15995-1-Jonathan.Cameron@huawei.com>
- <20230413142617.15995-2-Jonathan.Cameron@huawei.com>
+        Fri, 14 Apr 2023 04:21:01 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F3830C4;
+        Fri, 14 Apr 2023 01:20:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1681460457; x=1712996457;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=rtLuS5HdkkGf6K1pvoN/8HXKoYmlRrjzY3AWTl9DpU8=;
+  b=vZxv27T7W4bK5nlitQzwDF5X6zK27TwiWKgxlWMNOLsG/qLXZTwxnEWl
+   wXJI79CKFFCRfHTyYxqvwVMoOGMwnyhoGoXYdJPLu5fEG+cKW3k+6z1t9
+   RVx2ao1QDSOimY105W7iYKPhSsTCu1FIq5Rg686/KPMPVPh3fseJzPrHB
+   Ey2nkShEbben+2y0tRDqBVFboH+AgEcz0MaUBrIjrvHkXMWRQ3rBvh4Nl
+   wC/sI14BnJ4ILhPLRQN6RKSNofGhq9Fnvfl66HApgmByfkDGwRN0ugELD
+   rrm06xzF65n0MUgsSQGGJXTniw3eBbqKa2V2pMYdsPxnEklz22He6YT9D
+   w==;
+X-IronPort-AV: E=Sophos;i="5.99,195,1677567600"; 
+   d="scan'208,223";a="210429983"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Apr 2023 01:20:55 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 14 Apr 2023 01:20:52 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Fri, 14 Apr 2023 01:20:51 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <UNGLinuxDriver@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next] net: lan966x: Fix lan966x_ifh_get
+Date:   Fri, 14 Apr 2023 10:20:47 +0200
+Message-ID: <20230414082047.1320947-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230413142617.15995-2-Jonathan.Cameron@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 03:26:13PM +0100, Jonathan Cameron wrote:
-> Some PMUs have well defined parents such as PCI devices.
-> As the device_initialize() and device_add() are all within
-> pmu_dev_alloc() which is called from perf_pmu_register()
-> there is no opportunity to set the parent from within a driver.
-> 
-> Add a struct device *parent field to struct pmu and use that
-> to set the parent.
-> 
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From time to time, it was observed that the nanosecond part of the
+received timestamp, which is extracted from the IFH, it was actually
+bigger than 1 second. So then when actually calculating the full
+received timestamp, based on the nanosecond part from IFH and the second
+part which is read from HW, it was actually wrong.
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+The issue seems to be inside the function lan966x_ifh_get, which
+extracts information from an IFH(which is an byte array) and returns the
+value in a u64. When extracting the timestamp value from the IFH, which
+starts at bit 192 and have the size of 32 bits, then if the most
+significant bit was set in the timestamp, then this bit was extended
+then the return value became 0xffffffff... . To fix this, make sure to
+clear all the other bits before returning the value.
 
-> ---
-> v6: No change
-> v5: Move to head of series as may merge as part of:
-> https://lore.kernel.org/all/20230404134225.13408-1-Jonathan.Cameron@huawei.com/
-> ---
->  include/linux/perf_event.h | 1 +
->  kernel/events/core.c       | 1 +
->  2 files changed, 2 insertions(+)
-> 
-> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-> index d5628a7b5eaa..b99db1eda72c 100644
-> --- a/include/linux/perf_event.h
-> +++ b/include/linux/perf_event.h
-> @@ -303,6 +303,7 @@ struct pmu {
->  
->  	struct module			*module;
->  	struct device			*dev;
-> +	struct device			*parent;
->  	const struct attribute_group	**attr_groups;
->  	const struct attribute_group	**attr_update;
->  	const char			*name;
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index 435815d3be3f..32079a332480 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -11367,6 +11367,7 @@ static int pmu_dev_alloc(struct pmu *pmu)
->  
->  	dev_set_drvdata(pmu->dev, pmu);
->  	pmu->dev->bus = &pmu_bus;
-> +	pmu->dev->parent = pmu->parent;
->  	pmu->dev->release = pmu_dev_release;
->  
->  	ret = dev_set_name(pmu->dev, "%s", pmu->name);
-> -- 
-> 2.37.2
-> 
+Fixes: fd7627833ddf ("net: lan966x: Stop using packing library")
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+---
+ drivers/net/ethernet/microchip/lan966x/lan966x_main.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+index 80e2ea7e6ce8a..508e494dcc342 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+@@ -608,6 +608,7 @@ static u64 lan966x_ifh_get(u8 *ifh, size_t pos, size_t length)
+ 			val |= (1 << i);
+ 	}
+ 
++	val &= GENMASK(length, 0);
+ 	return val;
+ }
+ 
+-- 
+2.38.0
+
