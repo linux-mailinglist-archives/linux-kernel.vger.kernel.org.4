@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FE836E2D76
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 01:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C65856E2D96
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 01:48:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbjDNXqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 19:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55132 "EHLO
+        id S231162AbjDNXsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 19:48:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbjDNXqI (ORCPT
+        with ESMTP id S230392AbjDNXsK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 19:46:08 -0400
+        Fri, 14 Apr 2023 19:48:10 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B0FFA5E6;
-        Fri, 14 Apr 2023 16:45:25 -0700 (PDT)
-Message-ID: <20230414232311.254849089@linutronix.de>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61211A249;
+        Fri, 14 Apr 2023 16:46:55 -0700 (PDT)
+Message-ID: <20230414232311.316352541@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1681515907;
+        s=2020; t=1681515909;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=qlj4H3ejL+vBUDG3NY1lMMcGFIiTzrSNA2aqLKlihDE=;
-        b=1GQ0vgasLWqRcJWgIXPbXDmKUvXohkJnXHYow4+Gk18ZVkMCsGTyrDjPv1CmK6RbyQU3xy
-        sZOnCBi1gUZHMhyRrfBhTMtqyNFDPJ6vIKz6V9GUUqs40cNvVEv7vD+CBHvRT0wd1gUl1d
-        6b2tSiphU+RGH9LMrzC1SBAlXe4ncrHHHmvCSojPNfdfYrCZOS3cqdN5dvg1mrwkF+zHKS
-        ZggDxsStwqH0PgeAnVkNUSmrn0NxE/MFHr8xTSF8rH/8cE10sWA0KKqw6/zjLrvWcuBEms
-        WRc4LjINHUoNtUJjSQE1O0a6vHatkwkifR+Lal+9Qf7z5SXlNpUbZu7h4WPnRg==
+         references:references; bh=2PTnDdSuwes/9NjD8Pm7hXlACOxFTN9vJCNjWOfgGXM=;
+        b=Jh6ZM0Us9GGh285BMnb5fEm77rslh++J6j/QuRkHBnu0IJ3u2WPmnGe/3gdgkhs+Itn6YC
+        EYm2JHM+HCoiKXud+mnLR3pzE3sn62xS6OTtxoSRYTybybUo7HLhqrcnKqV1RwxPAi5wc5
+        OBp150tG8AHyoMw6+86zMyjFChURpnILiUkhTuUlpHCRtOIbCa3VMT62a8kcqkB8R+gKQ4
+        U9tfXpB5IVu1MhpvFCVN68arP6yea+vniJ2RVD3n3fNQwQKszlDZIcpnpbeZf4M7nBLa8W
+        ZFeGomntJTFI5LAn96fL2tniH8jRiNy2rM7ZxO27HO46gpoe/qq365pH/j/4pA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1681515907;
+        s=2020e; t=1681515909;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=qlj4H3ejL+vBUDG3NY1lMMcGFIiTzrSNA2aqLKlihDE=;
-        b=QX/aw2ZRTXXvpaXqpLyn2DL7d4KHZGqZGPQ3AUK084YoY4i+oS2d15EjnpvV8yHLp9Q5Sc
-        902bNwcd/YuBSyBA==
+         references:references; bh=2PTnDdSuwes/9NjD8Pm7hXlACOxFTN9vJCNjWOfgGXM=;
+        b=JDEmTRQRnlWI2RxVIaPHzb6Y3x+BSeHE+/1j/fasD5aAeXT8ZfKeZ96xHuB6wXG5qxyGWZ
+        eqmeypWBVFC7DyAA==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, David Woodhouse <dwmw@infradead.org>,
@@ -67,11 +67,12 @@ Cc:     x86@kernel.org, David Woodhouse <dwmw@infradead.org>,
         linux-riscv@lists.infradead.org,
         Mark Rutland <mark.rutland@arm.com>,
         Sabin Rapan <sabrapan@amazon.com>
-Subject: [patch 33/37] x86/topology: Store extended topology leaf information
+Subject: [patch 34/37] x86/cpu/amd; Invoke detect_extended_topology_early() on
+ boot CPU
 References: <20230414225551.858160935@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Sat, 15 Apr 2023 01:45:07 +0200 (CEST)
+Date:   Sat, 15 Apr 2023 01:45:08 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -82,42 +83,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Save the extended topology leaf number if it exists and is valid in
-preparation of parallel CPU bringup.
+The early detection stores the extended topology leaf number which is
+required for parallel hotplug.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- arch/x86/include/asm/topology.h |    1 +
- arch/x86/kernel/cpu/topology.c  |    3 +++
- 2 files changed, 4 insertions(+)
+ arch/x86/kernel/cpu/amd.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/arch/x86/include/asm/topology.h
-+++ b/arch/x86/include/asm/topology.h
-@@ -121,6 +121,7 @@ extern unsigned int __max_die_per_packag
- #define topology_core_cpumask(cpu)		(per_cpu(cpu_core_map, cpu))
- #define topology_sibling_cpumask(cpu)		(per_cpu(cpu_sibling_map, cpu))
+--- a/arch/x86/kernel/cpu/amd.c
++++ b/arch/x86/kernel/cpu/amd.c
+@@ -692,6 +692,8 @@ static void early_init_amd(struct cpuinf
+ 		}
+ 	}
  
-+extern unsigned int topology_extended_leaf;
- extern unsigned int __max_logical_packages;
- #define topology_max_packages()			(__max_logical_packages)
- 
---- a/arch/x86/kernel/cpu/topology.c
-+++ b/arch/x86/kernel/cpu/topology.c
-@@ -29,6 +29,8 @@ unsigned int __max_die_per_package __rea
- EXPORT_SYMBOL(__max_die_per_package);
- 
- #ifdef CONFIG_SMP
-+unsigned int topology_extended_leaf __read_mostly;
++	detect_extended_topology_early(c);
 +
- /*
-  * Check if given CPUID extended topology "leaf" is implemented
-  */
-@@ -72,6 +74,7 @@ int detect_extended_topology_early(struc
- 	if (leaf < 0)
- 		return -1;
- 
-+	topology_extended_leaf = leaf;
- 	set_cpu_cap(c, X86_FEATURE_XTOPOLOGY);
- 
- 	cpuid_count(leaf, SMT_LEVEL, &eax, &ebx, &ecx, &edx);
+ 	if (cpu_has(c, X86_FEATURE_TOPOEXT))
+ 		smp_num_siblings = ((cpuid_ebx(0x8000001e) >> 8) & 0xff) + 1;
+ }
 
