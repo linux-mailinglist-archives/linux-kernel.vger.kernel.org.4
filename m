@@ -2,174 +2,333 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F166E2337
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 14:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF446E2339
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 14:28:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbjDNM1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 08:27:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46298 "EHLO
+        id S229797AbjDNM2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 08:28:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbjDNM1I (ORCPT
+        with ESMTP id S229668AbjDNM2G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 08:27:08 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62FEA5DE;
-        Fri, 14 Apr 2023 05:27:06 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id l11so19161449qtj.4;
-        Fri, 14 Apr 2023 05:27:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681475226; x=1684067226;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lOLnLUyWsueTcuj2HNW2KGjMx5SMzfhFbviIP3xXYOo=;
-        b=OrBfzxeofaBx3S6TatIutjwAt0TpdUSnm9rchMg3fvcJeOVr4wCpnKFvlgST5vx7Kr
-         +EMNAPLBYF1RlDljKKQ+bKtK4QZ65wZgZNhnJQKk+a5/nievSQPdWLl61pDPxV8P33zL
-         JmXXiklPMqcDIH1vqM7noklxBajEsV40yzCEdLoqZTWogyPy8Q03tKrFrIClPfMju5rd
-         M1sQrBUk3ntc4hpp4VOYoiHBMH3qeZjb6ShTCDjqyHsVHiV1mgAtkqyl9MzyM5h7zk0l
-         VzI/sORklNb8YHNqAiS+9ffJl9uJ9GfFnUgG8IFZ+lC6jg7UFHETPftqVuc0PN/5pz+i
-         4iEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681475226; x=1684067226;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lOLnLUyWsueTcuj2HNW2KGjMx5SMzfhFbviIP3xXYOo=;
-        b=DYgi+xQXlgunH/fUkF7fuiQO/wMtAAe4jBKv1Vv1q5NI8CDwwS9uS3G6c3pMPIo/J/
-         ilJ6ElaEfH9vagm5EjmbCS3njfRgpgevOLwZ37CjNnqFXchf2nYMUDQEZwVbnN/oH4dl
-         dAElE8ey7t4uZ4IX3V3ci1Qgvi48p1y/vPKPrn0vbVHI0IEMCG5PzShfgQkZvFrPNs/v
-         vm3g9JAey215D4/oFfUwDj0qeuLe60for62ixVBhUvX14wLfcFfn2AWs8LMUTATzhOj7
-         JwUiY3ypXJfzFhygJe4mhYtvFERVS2SVnDyci9V2UHbCxxE8MtKkIUVbNQ+RQwSbAd2+
-         9xZg==
-X-Gm-Message-State: AAQBX9dtJ3aNIBBux0MzPv8Ep2s5SN0wvIArUAualVCGH9GXoopaaDMb
-        7hVQ2y5RiRI3Q1K942DWVmfkr3Xz+vWpFQ==
-X-Google-Smtp-Source: AKy350aqZ8F8Upq3pSjo9kCKeDEwex0PMvg1Zgjwk2kanisFlrJRxt9NGtqdtNpjhAWYlLIvYUIfpw==
-X-Received: by 2002:a05:622a:1114:b0:3ea:abb2:23c8 with SMTP id e20-20020a05622a111400b003eaabb223c8mr4893335qty.42.1681475225750;
-        Fri, 14 Apr 2023 05:27:05 -0700 (PDT)
-Received: from [192.168.1.105] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id q11-20020a05620a2a4b00b0074a3c282c7dsm1183844qkp.97.2023.04.14.05.27.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 05:27:05 -0700 (PDT)
-Message-ID: <85a1cca1-f59b-6a0c-dee3-9d9ed5d6b6d1@gmail.com>
-Date:   Fri, 14 Apr 2023 05:27:01 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 2/3] PCI: brcmstb: CLKREQ# accomodations of downstream
- device
-Content-Language: en-US
-To:     Jim Quinlan <jim2101024@gmail.com>,
-        Cyril Brulebois <kibi@debian.org>
-Cc:     linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230411165919.23955-1-jim2101024@gmail.com>
- <20230411165919.23955-3-jim2101024@gmail.com>
- <20230413143935.pmbyjk2boxl3rwne@mraw.org>
- <CANCKTBtXKAYf1LxR4qN+dVyxsWgyDztUVB4EdG=xhHbuhNCq5w@mail.gmail.com>
- <20230413200646.ddgsoqgmaae343nl@mraw.org>
- <CANCKTBuZ=Hxy9WgnjbauhHqXGx4QU_t8pgX=3che2K89=2BT9A@mail.gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <CANCKTBuZ=Hxy9WgnjbauhHqXGx4QU_t8pgX=3che2K89=2BT9A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Fri, 14 Apr 2023 08:28:06 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0C9193
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 05:28:04 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 36BF7219CC;
+        Fri, 14 Apr 2023 12:28:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1681475283; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=ZCY5sSzc5YLH8JVf0PBzeoRKtJrYEB5KWFMsKYoKfOk=;
+        b=aPxnZb2V781Aap+4Wsxm+2JpLvGA2HPRBFGCUmQ4G3axpAbKtn2KVnGjh+Ay5oMUWnLHma
+        l9t44fxmXxYbI1Ltoh0qDgH+LF5H7ziq5gpFtH/kzpdUgu5zorxOELVigCTj7TZVMKG7xg
+        ATZ4IwqTkav0edr6QIqwRZ8eVi0pjJ4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1681475283;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=ZCY5sSzc5YLH8JVf0PBzeoRKtJrYEB5KWFMsKYoKfOk=;
+        b=Rq4gSaRZpGZ+JmPFYQz/tWdHpVIeUjJSB60e3GM9SVOnr8X5lng6jGTli3bG5//Xtqui8d
+        Cf5cFlZ7BlJlglCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1EFD8139FC;
+        Fri, 14 Apr 2023 12:28:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id cSrWBtNGOWSFZwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 14 Apr 2023 12:28:03 +0000
+Date:   Fri, 14 Apr 2023 14:28:02 +0200
+Message-ID: <87v8hylkbx.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] sound fixes for 6.3-rc7
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Linus,
 
+please pull sound fixes for v6.3-rc7 from:
 
-On 4/14/2023 5:14 AM, Jim Quinlan wrote:
-> On Thu, Apr 13, 2023 at 4:06 PM Cyril Brulebois <kibi@debian.org> wrote:
->>
->> Hi Jim,
->>
->> Jim Quinlan <jim2101024@gmail.com> (2023-04-13):
->>> Can you provide (a) the full boot log prior to applying the patch
->>> series and (b) full boot log after applying the series, using an
->>> IDENTICAL setup. If it fails on both then it has little to do with my
->>> patch series.
->>
->> Just to be clear, the issue I reported was with:
->>   - Raspberry Pi Compute Module 4 (Rev 1.1, 4G RAM, 32G storage)
->>   - Raspberry Pi Compute Module 4 IO Board
->>   - SupaHub PCIe-to-multiple-USB adapter, reference PCE6U1C-R02, VER 006S
->>
->> This was my minimal reproducer for the kernel panic at boot-up, which
->> goes away with either v1 or v2. When I realized I didn't actually check
->> whether the SupaHub board was working correctly, I plugged 2 devices to
->> obtain this setup:
->>   - Raspberry Pi Compute Module 4 (Rev 1.1, 4G RAM, 32G storage)
->>   - Raspberry Pi Compute Module 4 IO Board
->>   - SupaHub PCIe-to-multiple-USB adapter, reference PCE6U1C-R02, VER 006S
->>   - Kingston DataTraveler G4 32GB on USB-A port #1 of the SupaHub board.
->>   - Logitech K120 keyboard on USB-A port #2 of the SupaHub board.
->>
->> It turns out that this particular revision of the SupaHub board isn't
->> supported by xhci_hcd directly (failing to probe with error -110) and
->> one needs to enable CONFIG_USB_XHCI_PCI_RENESAS=m and also ship its
->> accompanying firmware (/lib/firmware/renesas_usb_fw.mem). With this
->> updated kernel config, I'm able to use the keyboard and to read data
->> from the memory stick without problems (70 MB/s).
->>
->>> In my last series your testing somehow conflated the effect of an
->>> unrelated MMC interrupt issue so please be precise.
->>
->> I wish things would be simpler and didn't involve combinatorics, let
->> alone other bugs/regressions at times, but I'm really trying my best to
->> navigate and report issues and test patches when I can spare some time…
-> 
-> Hi Cyril,
-> 
-> I want to encourage you and others doing testing and bug reporting:
-> everyone wins when a bug or issue is reported, fixed, and tested.
-> I'm just asking that when you have negative results, that you provide
-> information on the "before" and "after" test results of
-> the patch series, and run both on the same test environment.
+  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.3-rc7
 
-Cyril, based upon the table and logs you provided whereby you have used 
-the following:
+The topmost commit is 6ab6f98fcdc9d4fbe245aa67de03542deea65322
 
-- Raspberry Pi Compute Module 4 (Rev 1.0, 8G RAM, 32G storage)
-- Raspberry Pi Compute Module 4 IO Board
-- SupaHub PCIe-to-multiple-USB adapter, reference PCE6U1C-R02, VER 006S
+----------------------------------------------------------------
 
-in the before/unpatched case we have a PCIe link down and in the 
-after/patched we have a PCIe link up but a kernel panic. Neither are 
-great nor resulting in a fully functional PCIe device.
+sound fixes for 6.3-rc7
 
-Looking at:
+A collection of small fixes.  At this time, quite a few fixes for
+the old PCI drivers are found.  Although they are no regression
+fixes, I took these as they are materials for stable kernels.
+In addition, a couple of regression fixes and another couple of
+HD-audio quirks are included.
 
-https://www.amazon.co.uk/SupaHub-Express-BandWidth-Capable-Expanding/dp/B092ZQWG5B
+----------------------------------------------------------------
 
-it would appear that it can accept an external power supply, do you have 
-one connected to that USB expansion card by any chance? Are you able to 
-boot the kernel before/after if you disconnect any USB peripheral?
+Kai Vehmanen (1):
+      ALSA: hda/hdmi: disable KAE for Intel DG2
 
-This looks like a broader electrical problem than the scope of this 
-patch, though it would be neat if we could find a combination that 
-works. At least with Jim's patch we have a PCIe link with 
-uni-directional CLKREQ# so we could try a variety of things.
+Oswald Buddenhagen (5):
+      ALSA: i2c/cs8427: fix iec958 mixer control deactivation
+      ALSA: hda/sigmatel: add pin overrides for Intel DP45SG motherboard
+      ALSA: hda/sigmatel: fix S/PDIF out on Intel D*45* motherboards
+      ALSA: emu10k1: fix capture interrupt handler unlinking
+      ALSA: emu10k1: don't create old pass-through playback device on Audigy
 
-Does that SupaHub board plugged to the CM4 1.0 system work fine in the 
-Raspberry Pi kernel tree?
--- 
-Florian
+Pierre-Louis Bossart (1):
+      ALSA: hda: patch_realtek: add quirk for Asus N7601ZM
+
+Stefan Binding (1):
+      ALSA: hda/realtek: Add quirks for Lenovo Z13/Z16 Gen2
+
+Xu Biang (1):
+      ALSA: firewire-tascam: add missing unwind goto in snd_tscm_stream_start_duplex()
+
+---
+ Documentation/sound/hd-audio/models.rst |  2 +-
+ sound/firewire/tascam/tascam-stream.c   |  2 +-
+ sound/i2c/cs8427.c                      |  7 +++++--
+ sound/pci/emu10k1/emupcm.c              | 14 +++++++++-----
+ sound/pci/hda/patch_hdmi.c              |  2 +-
+ sound/pci/hda/patch_realtek.c           | 29 +++++++++++++++++++++++++++++
+ sound/pci/hda/patch_sigmatel.c          | 10 ++++++++++
+ 7 files changed, 56 insertions(+), 10 deletions(-)
+
+diff --git a/Documentation/sound/hd-audio/models.rst b/Documentation/sound/hd-audio/models.rst
+index 9b52f50a6854..120430450014 100644
+--- a/Documentation/sound/hd-audio/models.rst
++++ b/Documentation/sound/hd-audio/models.rst
+@@ -704,7 +704,7 @@ ref
+ no-jd
+     BIOS setup but without jack-detection
+ intel
+-    Intel DG45* mobos
++    Intel D*45* mobos
+ dell-m6-amic
+     Dell desktops/laptops with analog mics
+ dell-m6-dmic
+diff --git a/sound/firewire/tascam/tascam-stream.c b/sound/firewire/tascam/tascam-stream.c
+index 53e094cc411f..dfe783d01d7d 100644
+--- a/sound/firewire/tascam/tascam-stream.c
++++ b/sound/firewire/tascam/tascam-stream.c
+@@ -490,7 +490,7 @@ int snd_tscm_stream_start_duplex(struct snd_tscm *tscm, unsigned int rate)
+ 		// packet is important for media clock recovery.
+ 		err = amdtp_domain_start(&tscm->domain, tx_init_skip_cycles, true, true);
+ 		if (err < 0)
+-			return err;
++			goto error;
+ 
+ 		if (!amdtp_domain_wait_ready(&tscm->domain, READY_TIMEOUT_MS)) {
+ 			err = -ETIMEDOUT;
+diff --git a/sound/i2c/cs8427.c b/sound/i2c/cs8427.c
+index 65012af6a36e..f58b14b49045 100644
+--- a/sound/i2c/cs8427.c
++++ b/sound/i2c/cs8427.c
+@@ -561,10 +561,13 @@ int snd_cs8427_iec958_active(struct snd_i2c_device *cs8427, int active)
+ 	if (snd_BUG_ON(!cs8427))
+ 		return -ENXIO;
+ 	chip = cs8427->private_data;
+-	if (active)
++	if (active) {
+ 		memcpy(chip->playback.pcm_status,
+ 		       chip->playback.def_status, 24);
+-	chip->playback.pcm_ctl->vd[0].access &= ~SNDRV_CTL_ELEM_ACCESS_INACTIVE;
++		chip->playback.pcm_ctl->vd[0].access &= ~SNDRV_CTL_ELEM_ACCESS_INACTIVE;
++	} else {
++		chip->playback.pcm_ctl->vd[0].access |= SNDRV_CTL_ELEM_ACCESS_INACTIVE;
++	}
+ 	snd_ctl_notify(cs8427->bus->card,
+ 		       SNDRV_CTL_EVENT_MASK_VALUE | SNDRV_CTL_EVENT_MASK_INFO,
+ 		       &chip->playback.pcm_ctl->id);
+diff --git a/sound/pci/emu10k1/emupcm.c b/sound/pci/emu10k1/emupcm.c
+index 48af77ae8020..6ec394fb1846 100644
+--- a/sound/pci/emu10k1/emupcm.c
++++ b/sound/pci/emu10k1/emupcm.c
+@@ -1236,7 +1236,7 @@ static int snd_emu10k1_capture_mic_close(struct snd_pcm_substream *substream)
+ {
+ 	struct snd_emu10k1 *emu = snd_pcm_substream_chip(substream);
+ 
+-	emu->capture_interrupt = NULL;
++	emu->capture_mic_interrupt = NULL;
+ 	emu->pcm_capture_mic_substream = NULL;
+ 	return 0;
+ }
+@@ -1344,7 +1344,7 @@ static int snd_emu10k1_capture_efx_close(struct snd_pcm_substream *substream)
+ {
+ 	struct snd_emu10k1 *emu = snd_pcm_substream_chip(substream);
+ 
+-	emu->capture_interrupt = NULL;
++	emu->capture_efx_interrupt = NULL;
+ 	emu->pcm_capture_efx_substream = NULL;
+ 	return 0;
+ }
+@@ -1781,17 +1781,21 @@ int snd_emu10k1_pcm_efx(struct snd_emu10k1 *emu, int device)
+ 	struct snd_kcontrol *kctl;
+ 	int err;
+ 
+-	err = snd_pcm_new(emu->card, "emu10k1 efx", device, 8, 1, &pcm);
++	err = snd_pcm_new(emu->card, "emu10k1 efx", device, emu->audigy ? 0 : 8, 1, &pcm);
+ 	if (err < 0)
+ 		return err;
+ 
+ 	pcm->private_data = emu;
+ 
+-	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK, &snd_emu10k1_fx8010_playback_ops);
++	if (!emu->audigy)
++		snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK, &snd_emu10k1_fx8010_playback_ops);
+ 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_emu10k1_capture_efx_ops);
+ 
+ 	pcm->info_flags = 0;
+-	strcpy(pcm->name, "Multichannel Capture/PT Playback");
++	if (emu->audigy)
++		strcpy(pcm->name, "Multichannel Capture");
++	else
++		strcpy(pcm->name, "Multichannel Capture/PT Playback");
+ 	emu->pcm_efx = pcm;
+ 
+ 	/* EFX capture - record the "FXBUS2" channels, by default we connect the EXTINs 
+diff --git a/sound/pci/hda/patch_hdmi.c b/sound/pci/hda/patch_hdmi.c
+index 4ffa3a59f419..5c6980394dce 100644
+--- a/sound/pci/hda/patch_hdmi.c
++++ b/sound/pci/hda/patch_hdmi.c
+@@ -4604,7 +4604,7 @@ HDA_CODEC_ENTRY(0x80862814, "DG1 HDMI",	patch_i915_tgl_hdmi),
+ HDA_CODEC_ENTRY(0x80862815, "Alderlake HDMI",	patch_i915_tgl_hdmi),
+ HDA_CODEC_ENTRY(0x80862816, "Rocketlake HDMI",	patch_i915_tgl_hdmi),
+ HDA_CODEC_ENTRY(0x80862818, "Raptorlake HDMI",	patch_i915_tgl_hdmi),
+-HDA_CODEC_ENTRY(0x80862819, "DG2 HDMI",	patch_i915_adlp_hdmi),
++HDA_CODEC_ENTRY(0x80862819, "DG2 HDMI",	patch_i915_tgl_hdmi),
+ HDA_CODEC_ENTRY(0x8086281a, "Jasperlake HDMI",	patch_i915_icl_hdmi),
+ HDA_CODEC_ENTRY(0x8086281b, "Elkhartlake HDMI",	patch_i915_icl_hdmi),
+ HDA_CODEC_ENTRY(0x8086281c, "Alderlake-P HDMI", patch_i915_adlp_hdmi),
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 26187f5d56b5..3b9f077a227f 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -6960,6 +6960,8 @@ enum {
+ 	ALC269_FIXUP_DELL_M101Z,
+ 	ALC269_FIXUP_SKU_IGNORE,
+ 	ALC269_FIXUP_ASUS_G73JW,
++	ALC269_FIXUP_ASUS_N7601ZM_PINS,
++	ALC269_FIXUP_ASUS_N7601ZM,
+ 	ALC269_FIXUP_LENOVO_EAPD,
+ 	ALC275_FIXUP_SONY_HWEQ,
+ 	ALC275_FIXUP_SONY_DISABLE_AAMIX,
+@@ -7256,6 +7258,29 @@ static const struct hda_fixup alc269_fixups[] = {
+ 			{ }
+ 		}
+ 	},
++	[ALC269_FIXUP_ASUS_N7601ZM_PINS] = {
++		.type = HDA_FIXUP_PINS,
++		.v.pins = (const struct hda_pintbl[]) {
++			{ 0x19, 0x03A11050 },
++			{ 0x1a, 0x03A11C30 },
++			{ 0x21, 0x03211420 },
++			{ }
++		}
++	},
++	[ALC269_FIXUP_ASUS_N7601ZM] = {
++		.type = HDA_FIXUP_VERBS,
++		.v.verbs = (const struct hda_verb[]) {
++			{0x20, AC_VERB_SET_COEF_INDEX, 0x62},
++			{0x20, AC_VERB_SET_PROC_COEF, 0xa007},
++			{0x20, AC_VERB_SET_COEF_INDEX, 0x10},
++			{0x20, AC_VERB_SET_PROC_COEF, 0x8420},
++			{0x20, AC_VERB_SET_COEF_INDEX, 0x0f},
++			{0x20, AC_VERB_SET_PROC_COEF, 0x7774},
++			{ }
++		},
++		.chained = true,
++		.chain_id = ALC269_FIXUP_ASUS_N7601ZM_PINS,
++	},
+ 	[ALC269_FIXUP_LENOVO_EAPD] = {
+ 		.type = HDA_FIXUP_VERBS,
+ 		.v.verbs = (const struct hda_verb[]) {
+@@ -9466,6 +9491,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x1043, 0x1271, "ASUS X430UN", ALC256_FIXUP_ASUS_MIC_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x1043, 0x1290, "ASUS X441SA", ALC233_FIXUP_EAPD_COEF_AND_MIC_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x1043, 0x12a0, "ASUS X441UV", ALC233_FIXUP_EAPD_COEF_AND_MIC_NO_PRESENCE),
++	SND_PCI_QUIRK(0x1043, 0x12a3, "Asus N7691ZM", ALC269_FIXUP_ASUS_N7601ZM),
+ 	SND_PCI_QUIRK(0x1043, 0x12af, "ASUS UX582ZS", ALC245_FIXUP_CS35L41_SPI_2),
+ 	SND_PCI_QUIRK(0x1043, 0x12e0, "ASUS X541SA", ALC256_FIXUP_ASUS_MIC),
+ 	SND_PCI_QUIRK(0x1043, 0x12f0, "ASUS X541UV", ALC256_FIXUP_ASUS_MIC),
+@@ -9663,6 +9689,9 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x17aa, 0x22f1, "Thinkpad", ALC287_FIXUP_CS35L41_I2C_2),
+ 	SND_PCI_QUIRK(0x17aa, 0x22f2, "Thinkpad", ALC287_FIXUP_CS35L41_I2C_2),
+ 	SND_PCI_QUIRK(0x17aa, 0x22f3, "Thinkpad", ALC287_FIXUP_CS35L41_I2C_2),
++	SND_PCI_QUIRK(0x17aa, 0x2318, "Thinkpad Z13 Gen2", ALC287_FIXUP_CS35L41_I2C_2),
++	SND_PCI_QUIRK(0x17aa, 0x2319, "Thinkpad Z16 Gen2", ALC287_FIXUP_CS35L41_I2C_2),
++	SND_PCI_QUIRK(0x17aa, 0x231a, "Thinkpad Z16 Gen2", ALC287_FIXUP_CS35L41_I2C_2),
+ 	SND_PCI_QUIRK(0x17aa, 0x30bb, "ThinkCentre AIO", ALC233_FIXUP_LENOVO_LINE2_MIC_HOTKEY),
+ 	SND_PCI_QUIRK(0x17aa, 0x30e2, "ThinkCentre AIO", ALC233_FIXUP_LENOVO_LINE2_MIC_HOTKEY),
+ 	SND_PCI_QUIRK(0x17aa, 0x310c, "ThinkCentre Station", ALC294_FIXUP_LENOVO_MIC_LOCATION),
+diff --git a/sound/pci/hda/patch_sigmatel.c b/sound/pci/hda/patch_sigmatel.c
+index a794a01a68ca..61258b0aac8d 100644
+--- a/sound/pci/hda/patch_sigmatel.c
++++ b/sound/pci/hda/patch_sigmatel.c
+@@ -1707,6 +1707,7 @@ static const struct snd_pci_quirk stac925x_fixup_tbl[] = {
+ };
+ 
+ static const struct hda_pintbl ref92hd73xx_pin_configs[] = {
++	// Port A-H
+ 	{ 0x0a, 0x02214030 },
+ 	{ 0x0b, 0x02a19040 },
+ 	{ 0x0c, 0x01a19020 },
+@@ -1715,9 +1716,12 @@ static const struct hda_pintbl ref92hd73xx_pin_configs[] = {
+ 	{ 0x0f, 0x01014010 },
+ 	{ 0x10, 0x01014020 },
+ 	{ 0x11, 0x01014030 },
++	// CD in
+ 	{ 0x12, 0x02319040 },
++	// Digial Mic ins
+ 	{ 0x13, 0x90a000f0 },
+ 	{ 0x14, 0x90a000f0 },
++	// Digital outs
+ 	{ 0x22, 0x01452050 },
+ 	{ 0x23, 0x01452050 },
+ 	{}
+@@ -1758,6 +1762,7 @@ static const struct hda_pintbl alienware_m17x_pin_configs[] = {
+ };
+ 
+ static const struct hda_pintbl intel_dg45id_pin_configs[] = {
++	// Analog outputs
+ 	{ 0x0a, 0x02214230 },
+ 	{ 0x0b, 0x02A19240 },
+ 	{ 0x0c, 0x01013214 },
+@@ -1765,6 +1770,9 @@ static const struct hda_pintbl intel_dg45id_pin_configs[] = {
+ 	{ 0x0e, 0x01A19250 },
+ 	{ 0x0f, 0x01011212 },
+ 	{ 0x10, 0x01016211 },
++	// Digital output
++	{ 0x22, 0x01451380 },
++	{ 0x23, 0x40f000f0 },
+ 	{}
+ };
+ 
+@@ -1955,6 +1963,8 @@ static const struct snd_pci_quirk stac92hd73xx_fixup_tbl[] = {
+ 				"DFI LanParty", STAC_92HD73XX_REF),
+ 	SND_PCI_QUIRK(PCI_VENDOR_ID_DFI, 0x3101,
+ 				"DFI LanParty", STAC_92HD73XX_REF),
++	SND_PCI_QUIRK(PCI_VENDOR_ID_INTEL, 0x5001,
++				"Intel DP45SG", STAC_92HD73XX_INTEL),
+ 	SND_PCI_QUIRK(PCI_VENDOR_ID_INTEL, 0x5002,
+ 				"Intel DG45ID", STAC_92HD73XX_INTEL),
+ 	SND_PCI_QUIRK(PCI_VENDOR_ID_INTEL, 0x5003,
