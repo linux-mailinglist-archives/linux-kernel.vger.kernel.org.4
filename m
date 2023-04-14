@@ -2,226 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ED096E1B81
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 07:12:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D51F56E1B7A
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 07:11:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjDNFLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 01:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42982 "EHLO
+        id S229721AbjDNFLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 01:11:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbjDNFL0 (ORCPT
+        with ESMTP id S229484AbjDNFLM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 01:11:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AFDA40C0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 22:10:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681449018;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MnDvwf1R/OovgMAVg9WiYCMbtU1kpmzHDOYZjnYe0Qg=;
-        b=HMkAuRvnHciF4+FHTe7MQ4Mxh6/Bt/VBJLPDW52hH+vCzcvW9Vpvn8wyPWo9n3pHvH7Wfi
-        uZX4lfZuSaoEXLMCm4jUJ91at7z0rmwFLFxBlRH/Zw/XPCxL6VhKDxd3nvcQMGQg39PGMA
-        i/Rw6gQfEr024e1Ty+OtuHftXiyv4nI=
-Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
- [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-475-aCwe7LbqPraAtQECWJ0wAQ-1; Fri, 14 Apr 2023 01:10:12 -0400
-X-MC-Unique: aCwe7LbqPraAtQECWJ0wAQ-1
-Received: by mail-oi1-f197.google.com with SMTP id cd18-20020a056808319200b0038bef54e329so2309668oib.17
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 22:10:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681449011; x=1684041011;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MnDvwf1R/OovgMAVg9WiYCMbtU1kpmzHDOYZjnYe0Qg=;
-        b=OTOLk8exU+yeU5h2nLmyMlhBjrzrc9TW2duaNJXHRGyyMz9llKvuzQSQA3qYBYHcxo
-         Vvd8sC7KlxdNch1fl4H4xQgI34Y22ri6L5GzSOCG6h04pY+WppqULz6vpXRZhZRn/wvm
-         cllQ1DnqqSeR1r+egb9GPub+UsGRzC1RbEm49LebkNO/ij7REPQV2sl+T/ZdPNPh4Hdt
-         Lb9XRobxHDuQrQmh6+OzBXrAEfFkL9vjC7UxQorT51GPavi5CYYDngMjgX6IIHqJ67Sg
-         VaVFRufMUfzNc0cRDOOZo+IQPEs20vZ1W41hHFNVFwOw9hG3zkx0Ml0zCGKeUpyVPOvD
-         nfwA==
-X-Gm-Message-State: AAQBX9cBcK8moj9rVbXCvT5pFh8GYL/N8vlzqfpkANkpGIunlYxPZ5Iu
-        KZVdoh0A5jQ+OE6qDH8beELYXC6gjYclMWRflVkoFMdXV2ZvFXp6BT0hsUOC+Zo6CiwlfuzS1m5
-        kS5556CX8QIB/wcs5V3ed/LYEBDGbiFpmf93/VCv2
-X-Received: by 2002:a05:6870:2495:b0:177:b9c0:bcba with SMTP id s21-20020a056870249500b00177b9c0bcbamr3833499oaq.3.1681449011193;
-        Thu, 13 Apr 2023 22:10:11 -0700 (PDT)
-X-Google-Smtp-Source: AKy350aAWQ/zE3JzE+BJztmF9q8RTKt9Is6pPgO3saF+6nNCza+95hIGVBIaLglcjHvYzkHy1o1BpD43DUoFBOps7+M=
-X-Received: by 2002:a05:6870:2495:b0:177:b9c0:bcba with SMTP id
- s21-20020a056870249500b00177b9c0bcbamr3833491oaq.3.1681449010955; Thu, 13 Apr
- 2023 22:10:10 -0700 (PDT)
+        Fri, 14 Apr 2023 01:11:12 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2089.outbound.protection.outlook.com [40.107.220.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47DA34EF2
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 22:11:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jL88TowqblXFgwc4esZ2egIZr5737xXecf3Q5HZz4QN6DnuFPbBZio+kuXfEYTV0pZd1c4kTzG3KENR9xapz4KkTiDAaLJIXKgsxbSQoC6UoxTrQFuDKrPS1Ie1lBNbvqMw2YGUUqNwxafESkX13CjGxv0MBb0axl0GJFqW/2Y6aKQnD6pXlZvKCam/nno41a99zxhjSfCg5mhI31QwjfNnilS4+jcq22ssSEmM6Kv3MtoO2YiYjPbUyCheTe57M1z7+NSJ6/HoShStC5PHF7gaoA4AYmmznxOlRCRZ/R1+svSuWI8x5EZL5t6gt+cIBHrhmBWCo6iUP/XHghozUkg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=trmy4QeClJEfAtYNFTj9iNRGJGr0QkoFuiswcjO+LV0=;
+ b=eUrgkWfLxvWyzDQXb1S2ItM3M7khmdgoQ9krvu1Hw54pDewMkCyDc4zEqYLy59t880Yiasc6J1HGa7I3tvh8m1TSd76QnunziVnOzWK0KvSQPeHNpOI73gQ2srebxxlD+ElR9dSm4/ed0hZB1vzdo0e3ZAmhWujOIGwaSOZgzTANveni9e1XWGyqRF/uEqRGUqfQ4xQu2LTz3SeEqCVDY3PX69prXanMQUbURkVSYd4NWm+WVeApMMrqwWrUZPcAXHugtcPvl8eNatsJxCq+xkhwsccDvbCQ74lEbdrTlupUnClWPCxYsx5CrDWvL0X6h4BLPNFwU5IM3iBWftFXBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=trmy4QeClJEfAtYNFTj9iNRGJGr0QkoFuiswcjO+LV0=;
+ b=iP1F1SAlLTDAT5m5Sae7FMxkgfC7MGMBzHK8QrzwAs5I2zc42B7ty5CWW7zlpbUqwRYJfXy0+6gaKutbr3q247YJx8mCI7SFnJfVYvmP0j1yJ9/voiQtJs7R2/AyJAFe3EOwRnf0UsUlSW0wNACfdGKfSfRtYEO0MAh1TSVve5A=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS7PR12MB6309.namprd12.prod.outlook.com (2603:10b6:8:96::19) by
+ SA1PR12MB8844.namprd12.prod.outlook.com (2603:10b6:806:378::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6298.30; Fri, 14 Apr 2023 05:11:07 +0000
+Received: from DS7PR12MB6309.namprd12.prod.outlook.com
+ ([fe80::bf6e:1dc2:10ea:cc04]) by DS7PR12MB6309.namprd12.prod.outlook.com
+ ([fe80::bf6e:1dc2:10ea:cc04%7]) with mapi id 15.20.6298.030; Fri, 14 Apr 2023
+ 05:11:07 +0000
+Message-ID: <e99be091-8671-0ffd-ee87-1952d8302e43@amd.com>
+Date:   Fri, 14 Apr 2023 10:40:54 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Reply-To: nikunj@amd.com
+Subject: Re: [PATCH v2 08/11] x86/sev: Add Secure TSC support for SNP guests
+Content-Language: en-US
+To:     Peter Gonda <pgonda@google.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, bp@alien8.de,
+        thomas.lendacky@amd.com, dionnaglaze@google.com, seanjc@google.com,
+        pbonzini@redhat.com, michael.roth@amd.com, ketanch@iitk.ac.in
+References: <20230326144701.3039598-1-nikunj@amd.com>
+ <20230326144701.3039598-9-nikunj@amd.com>
+ <CAMkAt6rqsg6=Sx6Fqnf7KNOUB9YPMU6TUriZYZXbXQTvcoKzNw@mail.gmail.com>
+From:   "Nikunj A. Dadhania" <nikunj@amd.com>
+In-Reply-To: <CAMkAt6rqsg6=Sx6Fqnf7KNOUB9YPMU6TUriZYZXbXQTvcoKzNw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN2PR01CA0200.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:e9::11) To DS7PR12MB6309.namprd12.prod.outlook.com
+ (2603:10b6:8:96::19)
 MIME-Version: 1.0
-References: <20230413064027.13267-1-jasowang@redhat.com> <20230413064027.13267-3-jasowang@redhat.com>
- <1681370820.0675354-2-xuanzhuo@linux.alibaba.com> <CACGkMEuJuZKGMhVwFmD0ZMa7V7TdGu6qaXF24Gg67TzMbs8ANA@mail.gmail.com>
-In-Reply-To: <CACGkMEuJuZKGMhVwFmD0ZMa7V7TdGu6qaXF24Gg67TzMbs8ANA@mail.gmail.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Fri, 14 Apr 2023 13:10:00 +0800
-Message-ID: <CACGkMEvuFoc=8S666npEnTXuZZLMJVA8tzNAspfrTzR4L7NdgQ@mail.gmail.com>
-Subject: Re: [PATCH net-next V2 2/2] virtio-net: sleep instead of busy waiting
- for cvq command
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, maxime.coquelin@redhat.com,
-        alvaro.karsz@solid-run.com, eperezma@redhat.com,
-        david.marchand@redhat.com, mst@redhat.com,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB6309:EE_|SA1PR12MB8844:EE_
+X-MS-Office365-Filtering-Correlation-Id: 381e38e7-8cbb-4f7d-b62a-08db3ca6a716
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: YAT2StpA6T4x4+2SaR4uyCJFrok32dO8LYnn+TvedBdPiW6Qtfm1Bn5KbgL0EplJttYCq7KIuM54liH5IOkE307KH+9U5nSguGHcIh5hBXxNnowdaPSh8GhoE7BVo0eDOlB9mi912FEwK6nTgIrq3hhVQ0SSDFOMPseSG8vnZf7F/nmtcfnK/9t/dWiMNc2IEjZKMqhaUDvPQDVEB6+D17ovRwcMTfm1j5WYZ9QZ4nuCWVcm4fjT/etxPwCpOLX6P02OvcQ7QE2V2nrQAgB3DrOB75vBk0vvIfSuPOTTYacG6ZCL4KlpLUKDgiviCWxygvMHpFzio729nncsICWfsHegc5UWqOknnHaP/uo1NyVFX/OXgECJSvUHPh9ZUdlrIa5YHzWBVfLYmJPMI9NTsotlbwe1LqBb1GgzbXALwkm+MhoO9PwpISV/E+CVNjqHMlRafzsYk39W1fKNHAch3qNA1/Qyj1tea9fn2He95tV2gWiPwwSvgDQeNZXPYCZ31+nOWFppjcPudoYzCYfmrQsnAZvtHuzI8DpVfL3tHB1B3YocpQfsurB3xC478NrsFpQGEq6Lk8vH9jUswTyl33nDM0xV9YZbB/K3Q7lPKO3t4zz8enc+WyMusYsa8p448OYT6YGE6k92cT5z20Tn/Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6309.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(396003)(136003)(39860400002)(346002)(451199021)(53546011)(26005)(31686004)(6512007)(6506007)(186003)(2616005)(966005)(6486002)(6666004)(5660300002)(41300700001)(316002)(8676002)(8936002)(38100700002)(478600001)(31696002)(4326008)(66946007)(36756003)(66476007)(66556008)(6916009)(2906002)(3450700001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Nys3d2lxd2FGdTR5bk1sNnFvUzd6RE9WT3dzQ1Yrdy9EeXR0Q08wdFdsR1FF?=
+ =?utf-8?B?YXhXSjhyd3EwUWRYaC9NbURDcDlNNHBiUlJlOGhRdVNSZkRRSUZrY3JlbFhh?=
+ =?utf-8?B?NXdHbjFHelk2Q1pXOVhQMnF0TXMyS3UrcFRqNmN2a1ExcVhGWi9NNnFMMDVE?=
+ =?utf-8?B?d3BIVzN5WDlSWVNtYzdZNWxua2lCQnBkaTF2TW50aWFLMEtZanU2Z2tWQzVv?=
+ =?utf-8?B?ZUllakRyODZ6c09RYUVoVms0YUZnN3pUOXNWc09vMTlTUDFlRkNxQ3F5eWo4?=
+ =?utf-8?B?Y0pWTVcrSUdVUGpJdXc5WngxdklYMmVPbnFNUzBPUjVIamtWaUhyc2doK2o5?=
+ =?utf-8?B?U2dUajBhbDdIczRGL29qUUxrZ3MwYXlKS3o4Y29ra2pyV1NuMDNMNmZaeTEv?=
+ =?utf-8?B?VU1GTDI5RjNpQUp0RFB3aks3UnB0cGJsa2ZGYllzS1Z3ZHFjWWJjZ3NSQ0Mr?=
+ =?utf-8?B?Wkg5bEU0Q3RpUDEwUTdxeDZUWjZrd1dRa3YxNVo4OXNXcHVwTW1Ua01mMlFW?=
+ =?utf-8?B?dmhMREFQNTBJa0Uva1NqdXZwNXhHRmhvdG0xVFJGMnJhQWZYQ0VRT2lNTkpv?=
+ =?utf-8?B?SlBjalB2bzBSd25JU3BqTTJGaUxDYXZVeXFNc1NnSkRQT3RKdW94ZDJuODhj?=
+ =?utf-8?B?b0txdkVHK1JrbVV6QW1JMkVORmZsREs4TWlIQ3JWYUY4TzFCbWpmb2VmU2pO?=
+ =?utf-8?B?ME1QTnBIdnJ5VnpQQUxnZGlmUk0wUUticWZXaHBoeUxqbkJ1ZGJlYjZMQlpE?=
+ =?utf-8?B?aHlreHF0dDdibHJkU29zeHpjbmlLbkg4dGxIY2tqdVU4WVY0RjY1amRxSVlh?=
+ =?utf-8?B?SU03dFN1TXlGelJ0TXk0VDI0RHI5OWxnZzliSWNuRXNNVkVZcy9ycUZtelY5?=
+ =?utf-8?B?WXZnT252d0ZLRTltTjZsT1VMVWkzT0xwTDdHT3Z4MzYyYXJTMnNHdCtxaklQ?=
+ =?utf-8?B?Uk5uNS85aktQNDFmUUhoNngwTjJtNlFsais2dkczUXJHN0tUdTM2NXM2OWNH?=
+ =?utf-8?B?K3FqRWhMcVhFZU1lUGFlSytUZFhyRkRQQ0lXMUlJQnhQNWNLRXVKYWptU3c5?=
+ =?utf-8?B?Z1BoUzBXbksrVWhnU2ZzNkRybmhSejlLTjc4YVRFWEswZmNicG43Snk3MC94?=
+ =?utf-8?B?WEFVVHk1QjgvSnVnUEl6VC9oamZsc3dVa256VTB3VkdaTGJqVTdvekVrc0t2?=
+ =?utf-8?B?RkRvRWFzeGdnY3VoL3doMmxBTlBDN2JpUkx2WklKekJrbGhFSzN4Y2dmd1lX?=
+ =?utf-8?B?Q0RJbFhLMzZOS2dBamNhUy9sMGl6azRYMmZsajFGV1dMOHdDM2wzdnd2STR0?=
+ =?utf-8?B?cW4vaCtqa2Rqa1V0dHJyUy94YUdSSGk1N2F3bFdPZ2x1cHQyRzJldnlWS3V5?=
+ =?utf-8?B?UUFLd2VXbUdITnVNdGVVdUxzV3YvRVZlelJMcFc1bjc5bU5rVVQ5SXJTR3Ix?=
+ =?utf-8?B?UXZ0UjVRZDlidGRBcDNlM1NaQ3BiSHBvSlg2SWF2UEZNMTYxY3BvWWl6a2ZQ?=
+ =?utf-8?B?aUxwK3VYK3Nrd0lkSHlLUzZHWWs5UzdiVXI5UnUxc1BHb0Fxa3d4cGlUeHRr?=
+ =?utf-8?B?a3Z5MVJGOURmOXM5R3UwQUxoRkM5NThBeUVjSlg2U25VMG9aUVhvQ21nSXAr?=
+ =?utf-8?B?VEVla2hJT2lJZ0FyWjVPMENwaGtoWnpRTnNaSnBpVFFDbFJMdFVvMFFOUHBL?=
+ =?utf-8?B?SWJnYjZSRjlnQXhIbDlKMXdMOVJUdHlrT2dpRkdtc0w1REgrQkdYWGM5Rmsx?=
+ =?utf-8?B?ak9lOVFKZTRkcDl4SkVQRmRNUTE2TzE4d2tjSXdDc2tIcmw4ZGladFhyakdv?=
+ =?utf-8?B?UEFxTlMrSEFrSlNvVmdSbUtWalQxZGdhNWZURE5uLzNLbk1RWURVc2E0N0U0?=
+ =?utf-8?B?ak1HbEVkSEJvcDg0dmhLMVIzbTV3VDNjcVBLcXJxUzRUTmNxZFpBdG12OFBv?=
+ =?utf-8?B?QStkRUlKRjVkVFI3cXJyTGhQZzdKUFBlenhGbHk3RUFUM3dqZkxybVhuMTBG?=
+ =?utf-8?B?amJ3bDFiU1pJM2JCSGh4d0V6RDFMZVZHaGt4eHl4OFpkN0Z4UTB1ZFY3d0pM?=
+ =?utf-8?B?ekdkSTVyclhaM2Q2TGxpSEhDb3UzdUFWcjU0RERsOGp4ZStQTjJrTnQ3bFMr?=
+ =?utf-8?Q?zYoxBnGutyEzZheRolXkCfMSG?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 381e38e7-8cbb-4f7d-b62a-08db3ca6a716
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6309.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2023 05:11:07.2500
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: G9LlrIqrsLy3omZWZUQEd9ELXkyNPlwnRT776AUpsWDOKOMlWcE8bTJXEMTRiPslL6ErvefRwTLR4/SYJaWhFQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB8844
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding netdev.
+On 4/10/2023 10:44 PM, Peter Gonda wrote:
+>> +
+>>  /* #VC handler runtime per-CPU data */
+>>  struct sev_es_runtime_data {
+>>         struct ghcb ghcb_page;
+>> @@ -1107,7 +1111,7 @@ static void *alloc_shared_pages(size_t sz)
+>>         return page_address(page);
+>>  }
+>>
+>> -static int snp_setup_psp_messaging(struct sev_guest_platform_data *pdata)
+>> +static int __init snp_setup_psp_messaging(struct sev_guest_platform_data *pdata)
+>>  {
+>>         u64 gpa;
+>>         int ret;
+>> @@ -1406,6 +1410,80 @@ bool snp_assign_vmpck(struct snp_guest_dev *dev, int vmpck_id)
+>>  }
+>>  EXPORT_SYMBOL_GPL(snp_assign_vmpck);
+>>
+>> +static int __init snp_get_tsc_info(void)
+>> +{
+>> +       u8 buf[SNP_TSC_INFO_REQ_SZ + AUTHTAG_LEN];
+>> +       struct snp_tsc_info_resp tsc_resp = {0};
+>> +       struct snp_tsc_info_req tsc_req;
+>> +       struct snp_guest_req req;
+>> +       struct snp_guest_dev dev;
+>> +       int rc, resp_len;
+>> +
+>> +       /*
+>> +        * The intermediate response buffer is used while decrypting the
+>> +        * response payload. Make sure that it has enough space to cover the
+>> +        * authtag.
+>> +        */
+>> +       resp_len = sizeof(tsc_resp) + AUTHTAG_LEN;
+>> +       if (sizeof(buf) < resp_len)
+>> +               return -EINVAL;
+>> +
+>> +       /* Zero the tsc_info_req */
+>> +       memzero_explicit(&tsc_req, sizeof(tsc_req));
+>> +       memzero_explicit(&req, sizeof(req));
+> 
+> Whats the guidance on when we should use memzero_explicit() vs just
+> something like: `snp_tsc_info_resp tsc_resp = {0};`?
 
-On Fri, Apr 14, 2023 at 1:09=E2=80=AFPM Jason Wang <jasowang@redhat.com> wr=
-ote:
->
-> On Thu, Apr 13, 2023 at 3:31=E2=80=AFPM Xuan Zhuo <xuanzhuo@linux.alibaba=
-.com> wrote:
-> >
-> > On Thu, 13 Apr 2023 14:40:27 +0800, Jason Wang <jasowang@redhat.com> wr=
-ote:
-> > > We used to busy waiting on the cvq command this tends to be
-> > > problematic since there no way for to schedule another process which
-> > > may serve for the control virtqueue. This might be the case when the
-> > > control virtqueue is emulated by software. This patch switches to use
-> > > completion to allow the CPU to sleep instead of busy waiting for the
-> > > cvq command.
-> > >
-> > > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > > ---
-> > > Changes since V1:
-> > > - use completion for simplicity
-> > > - don't try to harden the CVQ command which requires more thought
-> > > Changes since RFC:
-> > > - break the device when timeout
-> > > - get buffer manually since the virtio core check more_used() instead
-> > > ---
-> > >  drivers/net/virtio_net.c | 21 ++++++++++++++-------
-> > >  1 file changed, 14 insertions(+), 7 deletions(-)
-> > >
-> > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > > index 2e56bbf86894..d3eb8fd6c9dc 100644
-> > > --- a/drivers/net/virtio_net.c
-> > > +++ b/drivers/net/virtio_net.c
-> > > @@ -19,6 +19,7 @@
-> > >  #include <linux/average.h>
-> > >  #include <linux/filter.h>
-> > >  #include <linux/kernel.h>
-> > > +#include <linux/completion.h>
-> > >  #include <net/route.h>
-> > >  #include <net/xdp.h>
-> > >  #include <net/net_failover.h>
-> > > @@ -295,6 +296,8 @@ struct virtnet_info {
-> > >
-> > >       /* failover when STANDBY feature enabled */
-> > >       struct failover *failover;
-> > > +
-> > > +     struct completion completion;
-> > >  };
-> > >
-> > >  struct padded_vnet_hdr {
-> > > @@ -1709,6 +1712,13 @@ static bool try_fill_recv(struct virtnet_info =
-*vi, struct receive_queue *rq,
-> > >       return !oom;
-> > >  }
-> > >
-> > > +static void virtnet_cvq_done(struct virtqueue *cvq)
-> > > +{
-> > > +     struct virtnet_info *vi =3D cvq->vdev->priv;
-> > > +
-> > > +     complete(&vi->completion);
-> > > +}
-> > > +
-> > >  static void skb_recv_done(struct virtqueue *rvq)
-> > >  {
-> > >       struct virtnet_info *vi =3D rvq->vdev->priv;
-> > > @@ -2169,12 +2179,8 @@ static bool virtnet_send_command(struct virtne=
-t_info *vi, u8 class, u8 cmd,
-> > >       if (unlikely(!virtqueue_kick(vi->cvq)))
-> > >               return vi->ctrl->status =3D=3D VIRTIO_NET_OK;
-> > >
-> > > -     /* Spin for a response, the kick causes an ioport write, trappi=
-ng
-> > > -      * into the hypervisor, so the request should be handled immedi=
-ately.
-> > > -      */
-> > > -     while (!virtqueue_get_buf(vi->cvq, &tmp) &&
-> > > -            !virtqueue_is_broken(vi->cvq))
-> > > -             cpu_relax();
-> > > +     wait_for_completion(&vi->completion);
-> > > +     virtqueue_get_buf(vi->cvq, &tmp);
-> > >
-> > >       return vi->ctrl->status =3D=3D VIRTIO_NET_OK;
-> > >  }
-> > > @@ -3672,7 +3678,7 @@ static int virtnet_find_vqs(struct virtnet_info=
- *vi)
-> > >
-> > >       /* Parameters for control virtqueue, if any */
-> > >       if (vi->has_cvq) {
-> > > -             callbacks[total_vqs - 1] =3D NULL;
-> > > +             callbacks[total_vqs - 1] =3D virtnet_cvq_done;
-> >
-> > This depends the interrupt, right?
->
-> Not necessarily, we have ISR for at last PCI:
->
-> static irqreturn_t vp_interrupt(int irq, void *opaque)
-> {
->         struct virtio_pci_device *vp_dev =3D opaque;
->         u8 isr;
->
->         /* reading the ISR has the effect of also clearing it so it's ver=
-y
->          * important to save off the value. */
->         isr =3D ioread8(vp_dev->isr);
-> ...
-> }
->
-> >
-> > I worry that there may be some devices that may not support interruptio=
-n on cvq.
->
-> Is the device using INTX or MSI-X?
->
-> > Although this may not be in line with SPEC, it may cause problem on the=
- devices
-> > that can work normally at present.
->
-> Then the implementation is buggy, it might not work for drivers other
-> than Linux. Working around such buggy implementation is suboptimal.
->
-> Thanks
->
-> >
-> > Thanks.
-> >
-> >
-> > >               names[total_vqs - 1] =3D "control";
-> > >       }
-> > >
-> > > @@ -4122,6 +4128,7 @@ static int virtnet_probe(struct virtio_device *=
-vdev)
-> > >       if (vi->has_rss || vi->has_rss_hash_report)
-> > >               virtnet_init_default_rss(vi);
-> > >
-> > > +     init_completion(&vi->completion);
-> > >       enable_rx_mode_work(vi);
-> > >
-> > >       /* serialize netdev register + virtio_device_ready() with ndo_o=
-pen() */
-> > > --
-> > > 2.25.1
-> > >
-> >
+Going over the history of memzero_explicit, it seems it was introduce to 
+explicitly zero sensitive information before the variable goes out of scope. 
+GCC was optimizing out the memset in these cases:
+
+d4c5efdb9777 ("random: add and use memzero_explicit() for clearing data")
+
+https://bugzilla.kernel.org/show_bug.cgi?id=82041
+
+With the above detail, IMHO, we do not need the memzero_explicit() for both case.
+
+> 
+>> +
+>> +       dev.pdata = platform_data;
+>> +       if (!snp_assign_vmpck(&dev, 0))
+>> +               return -EINVAL;
+>> +
+>> +       req.msg_version = MSG_HDR_VER;
+>> +       req.msg_type = SNP_MSG_TSC_INFO_REQ;
+>> +       req.req_buf = &tsc_req;
+>> +       req.req_sz = sizeof(tsc_req);
+>> +       req.resp_buf = buf;
+>> +       req.resp_sz = resp_len;
+>> +       req.fw_err = NULL;
+> 
+> Why do we not want the FW error code?
+
+I will add the FW error code.
+
+Regards
+Nikunj
 
