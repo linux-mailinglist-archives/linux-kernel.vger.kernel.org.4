@@ -2,164 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB61D6E1DF6
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:19:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DC586E1DF7
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:20:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbjDNITq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 04:19:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57546 "EHLO
+        id S230057AbjDNIUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 04:20:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230025AbjDNITn (ORCPT
+        with ESMTP id S230025AbjDNIUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 04:19:43 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E590330C4;
-        Fri, 14 Apr 2023 01:19:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681460382; x=1712996382;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Z135BJM0WTm/8JKwrFBhTuBcWJHalDnImuqqKXx6vwU=;
-  b=MjZXY82xsjru8rokraaQ3JdoSfQDTaQsIY5CsCpHyt90ewAc8hEyCc1J
-   ymBUYayfkX5ffBALzCdd1QIh/onvCYRIWnf/9AnJ5Msxi85eMvCUz6mSK
-   ekybyyXDL6+jUCcRmLrb5G1B1XLRhwfvorw5OtRaaswYwyuCyObOia3nO
-   r0dyIiSDX5Amw4nz1KX/+ALeNmG9wuy+CjJnhzeD3h3N45KZdd6rAdIfD
-   TdbD0Rr38OAfzMdGEfCw8hPULT76XJyP3z9uuxUIZriyo66lPHpAYvBAd
-   n/euGLaBTwvEAY41KWsxu/ZnSOmr+OJ4NS/prEdVWL4laxDCRfGyWbXKY
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="343171472"
-X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
-   d="scan'208";a="343171472"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 01:19:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="754376594"
-X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
-   d="scan'208";a="754376594"
-Received: from unknown (HELO rajath-NUC10i7FNH..) ([10.223.165.88])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 01:19:40 -0700
-From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-To:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-Subject: [PATCH v2] usb: typec: intel_pmc_mux: Expose IOM port status to debugfs
-Date:   Fri, 14 Apr 2023 13:49:10 +0530
-Message-Id: <20230414081910.1336405-1-rajat.khandelwal@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 14 Apr 2023 04:20:07 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 72AFF30EA
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 01:20:06 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AD03C2F4;
+        Fri, 14 Apr 2023 01:20:50 -0700 (PDT)
+Received: from [10.57.19.162] (unknown [10.57.19.162])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F19343F6C4;
+        Fri, 14 Apr 2023 01:20:01 -0700 (PDT)
+Message-ID: <2a05dac0-c57e-a3cd-ec4d-55cf32e6dce9@arm.com>
+Date:   Fri, 14 Apr 2023 10:19:56 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 2/4] cacheinfo: Check cache properties are present in
+ DT
+Content-Language: en-US
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Radu Rendec <rrendec@redhat.com>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Will Deacon <will@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Gavin Shan <gshan@redhat.com>
+References: <20230413091436.230134-1-pierre.gondois@arm.com>
+ <20230413091436.230134-3-pierre.gondois@arm.com>
+ <4da53918-839b-4d28-0634-66fd7f38c8bd@gmail.com>
+From:   Pierre Gondois <pierre.gondois@arm.com>
+In-Reply-To: <4da53918-839b-4d28-0634-66fd7f38c8bd@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IOM status has a crucial role during debugging to check the
-current state of the type-C port.
-There are ways to fetch the status, but all those require the
-IOM port status offset, which could change with platform.
+Hello Florian,
 
-Make a debugfs directory for intel_pmc_mux and expose the status
-under it per port basis.
+On 4/13/23 20:16, Florian Fainelli wrote:
+> On 4/13/23 02:14, Pierre Gondois wrote:
+>> If a Device Tree (DT) is used, the presence of cache properties is
+>> assumed. Not finding any is not considered. For arm64 platforms,
+>> cache information can be fetched from the clidr_el1 register.
+>> Checking whether cache information is available in the DT
+>> allows to switch to using clidr_el1.
+>>
+>> init_of_cache_level()
+>> \-of_count_cache_leaves()
+>> will assume there a 2 cache leaves (L1 data/instruction caches), which
+>> can be different from clidr_el1 information.
+>>
+>> cache_setup_of_node() tries to read cache properties in the DT.
+>> If there are none, this is considered a success. Knowing no
+>> information was available would allow to switch to using clidr_el1.
+>>
+>> Fixes: de0df442ee49 ("cacheinfo: Check 'cache-unified' property to count cache leaves")
+>> Reported-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+>> Link: https://lore.kernel.org/all/20230404-hatred-swimmer-6fecdf33b57a@spud/
+>> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+> 
+> Humm, it would appear that the cache levels and topology is still
+> provided, despite the lack of cache properties in the Device Tree which
+> is intended by this patch set however we lost the size/ways/sets
+> information, could we not complement the missing properties here?
+> 
+> If this is out of the scope of what you are doing:
+> 
+> Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 
-Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
----
+I submitted a v4 at:
+https://lore.kernel.org/all/20230414081453.244787-1-pierre.gondois@arm.com/
 
-v2:
-1. Remove static declaration of the debugfs root for 'intel_pmc_mux'
-2. Remove explicitly defined one-liner functions
+I haven't included your Tested-by as there were some small changes.
+If you consider these changes are small enough to include your tag,
+please let know,
 
- drivers/usb/typec/mux/intel_pmc_mux.c | 34 +++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
-
-diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
-index 34e4188a40ff..1d43b111781e 100644
---- a/drivers/usb/typec/mux/intel_pmc_mux.c
-+++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-@@ -15,6 +15,7 @@
- #include <linux/usb/typec_mux.h>
- #include <linux/usb/typec_dp.h>
- #include <linux/usb/typec_tbt.h>
-+#include <linux/debugfs.h>
- 
- #include <asm/intel_scu_ipc.h>
- 
-@@ -639,9 +640,34 @@ static int pmc_usb_probe_iom(struct pmc_usb *pmc)
- 	return 0;
- }
- 
-+static int port_iom_status_show(struct seq_file *s, void *unused)
-+{
-+	struct pmc_usb_port *port = s->private;
-+
-+	update_port_status(port);
-+	seq_printf(s, "0x%08x\n", port->iom_status);
-+
-+	return 0;
-+}
-+DEFINE_SHOW_ATTRIBUTE(port_iom_status);
-+
-+static void pmc_mux_port_debugfs_init(struct pmc_usb_port *port,
-+				      struct dentry *pmc_mux_debugfs_root)
-+{
-+	struct dentry *debugfs_dir;
-+	char name[6];
-+
-+	snprintf(name, sizeof(name), "port%d", port->usb3_port - 1);
-+
-+	debugfs_dir = debugfs_create_dir(name, pmc_mux_debugfs_root);
-+	debugfs_create_file("iom_status", 0400, debugfs_dir, port,
-+			    &port_iom_status_fops);
-+}
-+
- static int pmc_usb_probe(struct platform_device *pdev)
- {
- 	struct fwnode_handle *fwnode = NULL;
-+	struct dentry *pmc_mux_debugfs_root;
- 	struct pmc_usb *pmc;
- 	int i = 0;
- 	int ret;
-@@ -674,6 +700,8 @@ static int pmc_usb_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
-+	pmc_mux_debugfs_root = debugfs_create_dir("intel_pmc_mux", NULL);
-+
- 	/*
- 	 * For every physical USB connector (USB2 and USB3 combo) there is a
- 	 * child ACPI device node under the PMC mux ACPI device object.
-@@ -688,6 +716,8 @@ static int pmc_usb_probe(struct platform_device *pdev)
- 			fwnode_handle_put(fwnode);
- 			goto err_remove_ports;
- 		}
-+
-+		pmc_mux_port_debugfs_init(&pmc->port[i], pmc_mux_debugfs_root);
- 	}
- 
- 	platform_set_drvdata(pdev, pmc);
-@@ -703,6 +733,8 @@ static int pmc_usb_probe(struct platform_device *pdev)
- 
- 	acpi_dev_put(pmc->iom_adev);
- 
-+	debugfs_lookup_and_remove("intel_pmc_mux", NULL);
-+
- 	return ret;
- }
- 
-@@ -719,6 +751,8 @@ static int pmc_usb_remove(struct platform_device *pdev)
- 
- 	acpi_dev_put(pmc->iom_adev);
- 
-+	debugfs_lookup_and_remove("intel_pmc_mux", NULL);
-+
- 	return 0;
- }
- 
--- 
-2.34.1
-
+Regards,
+Pierre
