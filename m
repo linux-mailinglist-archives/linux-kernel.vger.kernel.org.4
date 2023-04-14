@@ -2,136 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D5596E194B
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 02:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 778266E1953
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 02:50:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbjDNApp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 20:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60894 "EHLO
+        id S229611AbjDNAuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 20:50:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbjDNApR (ORCPT
+        with ESMTP id S229481AbjDNAuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 20:45:17 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10hn2233.outbound.protection.outlook.com [52.100.157.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1DBE40FD;
-        Thu, 13 Apr 2023 17:45:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oXR7N2jUA9f70SB0WR0ZVhMVS9PHzxGG5IIT25ElPisMOJENSWQuNXl3ZBeGIHBDGHHcAO6ECTnynIW0+Mxqigp+m55YvYNwCMRsIMFwEXTxQNFUO2EwXOmyiGOmOJiXN0tId85uPeTBxlBKg2sSQd2u+yQV/4hRKqVUsxa8NSL/vOCKKqMTHNmgnU6hVu1HtGSeufRMHWQ+SPNXe/UWlo8TrR0Dqh9u5QCrGvw70h08WvMKPCctLn8Ywj2E6tGkMagYTAoFzXiy1dWI4MxszaQhPw6MMk8It+oRUkLryxNG6qgeE1nA3cHEAbjljM8z0EulPnOFJ/lIT1jQoc+zgA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=x0B4e4waDo/8ygYRfAUPi4j/yHBgi9ZU9AnjB6UuD5k=;
- b=KcGjZDGPYE7lSyijQexX9eRYRJsws2AbD4t8PePoBAKZQbO272pZfdGd4QuNCrJiN6iepqomQDZrtdIA4teiuUD880r2L0A41GT8ezOhZrbRj0Li+DVCx0UPr4xsdLWm5EjeB24gzriWA32ttbFrWkJVjNoP1GDfKw01qryamsdFQAh3mq7cWPyO/BMlMW7vryfEawjBQLAt6GreQ6Q7HdL+TV/kdyo0D7cMyKh8pqgBWkooMt2EzqUXvq4MxHy7GHDHJFLpDd/r1mqf1qFrmW+UeE1puOQhLGH46SMjfOz2yjob5Hs9bZinfQvwPvX1gV04QImkvk01kF+5QWYHpQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=x0B4e4waDo/8ygYRfAUPi4j/yHBgi9ZU9AnjB6UuD5k=;
- b=pqVji3cx3ZfPFTyzikkMZcb2HaPhDfuX4MY7shLJW2Vc3ObfbPR7psSOo+LIrQTQvfabe19P0EOqZnT7Yu8kU5IAmgtGGmNlOz11s5/MDKCoH7l/Pd3vdgJEAp0U9hZR6sveDgy5L/BNNrX4nMSUKF0A0hIBc75lCFj1cKpHXOfO24cF+LzLK+jWSOrEcku07P5Cx3NKu3Ln8D0nt1wRpPgrEpVa5K6W3pvdh+f5QjkuPOjikJiYBccw9ni7zvGpHZk0zvcoOhG2rfufddfyoNSJwYk13lPSpGQZm6nkkNwC9froN/X7GfPJDoHUQcbHBT/WxpRmbX9e+V6E5fRhSQ==
-Received: from MW4PR04CA0122.namprd04.prod.outlook.com (2603:10b6:303:84::7)
- by DM4PR12MB5819.namprd12.prod.outlook.com (2603:10b6:8:63::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Fri, 14 Apr
- 2023 00:45:14 +0000
-Received: from CO1NAM11FT028.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:84:cafe::6f) by MW4PR04CA0122.outlook.office365.com
- (2603:10b6:303:84::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.32 via Frontend
- Transport; Fri, 14 Apr 2023 00:45:13 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CO1NAM11FT028.mail.protection.outlook.com (10.13.175.214) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6298.30 via Frontend Transport; Fri, 14 Apr 2023 00:45:13 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 13 Apr 2023
- 17:45:03 -0700
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Thu, 13 Apr
- 2023 17:45:03 -0700
-Received: from dipenp.nvidia.com (10.127.8.10) by mail.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server id 15.2.986.37 via Frontend
- Transport; Thu, 13 Apr 2023 17:45:03 -0700
-From:   Dipen Patel <dipenp@nvidia.com>
-To:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <linus.walleij@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <robh+dt@kernel.org>, <timestamp@lists.linux.dev>,
-        <krzysztof.kozlowski+dt@linaro.org>, <brgl@bgdev.pl>,
-        <corbet@lwn.net>, <gregkh@linuxfoundation.org>
-CC:     Dipen Patel <dipenp@nvidia.com>
-Subject: [V6 9/9] gpio: tegra186: Add Tegra234 hte support
-Date:   Thu, 13 Apr 2023 17:44:55 -0700
-Message-ID: <20230414004455.19275-10-dipenp@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230414004455.19275-1-dipenp@nvidia.com>
-References: <20230414004455.19275-1-dipenp@nvidia.com>
-X-NVConfidentiality: public
+        Thu, 13 Apr 2023 20:50:18 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2061FAD
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 17:50:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681433417; x=1712969417;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=A2adXXG4XXG/hiODlKttDT+Oa7kc+GY7mzPTZAr7Reg=;
+  b=Tb3WABVuIw1gNd7zI8HCMnuJJcy0QceTJMqT8GLaGH6Cdmsw48IC1DH9
+   URwhqIJlTilBeitIyxslBynkPmnCJ6AZ6AZjCOQnU58RYFCa7oIJuQagi
+   ugHVu7uXOcSM9UARQbCbskBNOZTILiRQdITh47SBuhx8SA/TXcDHxRRO2
+   OnmMhC1coE0YWt7DutjEl2B4WRBMEkM7rrI+iPPbR8pMtEW35O0VhVX+R
+   ZfPCr816vMdDcb2c4JGNt+/b2/BYpuvzdDvTtdyRVgbafXuFSah0leP89
+   8V9ieMUpz9pN6Pysf2LzE3+onT47xqUVY9ChTkKId/yhJAiEDAKi2uyQw
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="324700042"
+X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
+   d="scan'208";a="324700042"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 17:50:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="722273230"
+X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
+   d="scan'208";a="722273230"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 13 Apr 2023 17:50:08 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pn7dg-000Z4n-00;
+        Fri, 14 Apr 2023 00:50:08 +0000
+Date:   Fri, 14 Apr 2023 08:49:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/urgent] BUILD SUCCESS
+ 775d3c514c5b2763a50ab7839026d7561795924d
+Message-ID: <6438a332.hGY3Ce8AJylJDLgA%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT028:EE_|DM4PR12MB5819:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2e68dc6d-848a-4177-f71c-08db3c818211
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qMPc5E7fOWXmu5zdiqWUx+aaXC6baQCFy0iwNl33dRFohQVOSD8cSrwdAWcxrSi5i+xsfP7kMIgxxek025dYUiaqptoQwY9bvcrOR+/EGWwVzWuaOLNJd0ccN5Ecibu396GC8r2A/32xjyDbvnDFjW0/Eyl8gESeVUzEoX5SgkNxU+a6rb7k2izTHXM7cYZbPJsG8qF0fnh4hfYMixtoKQPpQzO7bTnf9AKzJSRFiAhwoP1V6re1CC1ZN+RXmj6dykHFvYz8J11Vhdidrs7a7cfeSBUdif6N6F0tofbMTM669NBHtBOOQZKdD68H1Rt8iUnoTs/WoeXzJW816pXr9UH8DYZ88wzhN3T9bH6WMzMKl3NRkVFPXC+WXXxgh4jXxtF/g9/Gg3Jp/a0VZQ9iN45qPREEwr/cOVzKfa0b2E74PkKgyFrEdxETibUB21sNeMk+jObipVNtaWKSP+PP4tVP5Yl8X0q35ULJppgNgd53yuGpr4QjAAsVoPMErORAGNcpIFajJjKM3UUWGW+n/ktxVVU3DnZvAe9UQ5zJZEsH6cJKJ3PXYZCTEPbCNmzdqJ/vn8SyMjrElLmvZiFteBnQ9CVDEz3nUOLwpB+U2Rqa++RHiwr1WxESp96lef7ddv7W4vGs8h6BhF6H8PDie4cc+nd6cT6Hk7rnlGGsjv5hYt2WcQa7PPvYsFSeIpWaOYwzIb+aY4LyBkyxtkDdMebd9+/pAuojjUnHHM/8v1mXUEXFJkNNqZ5KpjgwrAz1IxjcM5VSlO+9vtN9GNg0w2XZE2o8DBjY40ziU4AXDBETsWR6UlHVqPbAsf2ZzIFwhw0Rjp6D0avKsYfk1wXlivEADdg58JcpQgAIGROeWMpda5xaM1X8o4xCM5MhCkm5
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(136003)(396003)(376002)(451199021)(5400799015)(36840700001)(40470700004)(46966006)(6666004)(7696005)(40460700003)(4744005)(4326008)(36756003)(70586007)(70206006)(110136005)(2906002)(7416002)(86362001)(356005)(7636003)(41300700001)(5660300002)(8676002)(8936002)(82740400003)(82310400005)(921005)(316002)(34020700004)(478600001)(40480700001)(1076003)(336012)(26005)(426003)(2616005)(36860700001)(107886003)(186003)(47076005)(83380400001)(83996005)(2101003)(12100799027);DIR:OUT;SFP:1501;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2023 00:45:13.2782
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2e68dc6d-848a-4177-f71c-08db3c818211
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT028.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5819
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To enable timestamp support for the Tegra234, has_gte variable needs
-to be set true.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
+branch HEAD: 775d3c514c5b2763a50ab7839026d7561795924d  x86/rtc: Remove __init for runtime functions
 
-Signed-off-by: Dipen Patel <dipenp@nvidia.com>
-Acked-by: Thierry Reding <treding@nvidia.com>
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
----
- drivers/gpio/gpio-tegra186.c | 1 +
- 1 file changed, 1 insertion(+)
+elapsed time: 721m
 
-diff --git a/drivers/gpio/gpio-tegra186.c b/drivers/gpio/gpio-tegra186.c
-index 14c872b6ad05..b904de0b1784 100644
---- a/drivers/gpio/gpio-tegra186.c
-+++ b/drivers/gpio/gpio-tegra186.c
-@@ -1134,6 +1134,7 @@ static const struct tegra_gpio_soc tegra234_aon_soc = {
- 	.name = "tegra234-gpio-aon",
- 	.instance = 1,
- 	.num_irqs_per_bank = 8,
-+	.has_gte = true,
- };
- 
- #define TEGRA241_MAIN_GPIO_PORT(_name, _bank, _port, _pins)	\
+configs tested: 128
+configs skipped: 227
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r024-20230413   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r043-20230409   gcc  
+arc                  randconfig-r043-20230410   gcc  
+arc                  randconfig-r043-20230412   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r026-20230413   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r001-20230410   clang
+arm64                randconfig-r023-20230410   gcc  
+arm64                randconfig-r025-20230412   gcc  
+arm64                randconfig-r026-20230409   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r021-20230409   gcc  
+csky                 randconfig-r024-20230410   gcc  
+hexagon              randconfig-r005-20230410   clang
+hexagon              randconfig-r015-20230409   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r006-20230410   clang
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230410   clang
+i386                 randconfig-a002-20230410   clang
+i386                 randconfig-a003-20230410   clang
+i386                 randconfig-a004-20230410   clang
+i386                 randconfig-a005-20230410   clang
+i386                 randconfig-a006-20230410   clang
+i386                 randconfig-a011-20230410   gcc  
+i386                 randconfig-a012-20230410   gcc  
+i386                          randconfig-a012   gcc  
+i386                 randconfig-a013-20230410   gcc  
+i386                 randconfig-a014-20230410   gcc  
+i386                          randconfig-a014   gcc  
+i386                 randconfig-a015-20230410   gcc  
+i386                 randconfig-a016-20230410   gcc  
+i386                          randconfig-a016   gcc  
+ia64                             allmodconfig   gcc  
+ia64         buildonly-randconfig-r005-20230409   gcc  
+ia64                                defconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch    buildonly-randconfig-r006-20230413   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                        bcm47xx_defconfig   gcc  
+mips                  maltasmvp_eva_defconfig   gcc  
+nios2                               defconfig   gcc  
+openrisc     buildonly-randconfig-r002-20230413   gcc  
+openrisc     buildonly-randconfig-r004-20230409   gcc  
+openrisc             randconfig-r022-20230413   gcc  
+openrisc             randconfig-r024-20230412   gcc  
+openrisc             randconfig-r025-20230413   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r021-20230413   gcc  
+parisc               randconfig-r024-20230409   gcc  
+parisc               randconfig-r026-20230412   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc      buildonly-randconfig-r002-20230410   gcc  
+powerpc      buildonly-randconfig-r006-20230409   gcc  
+powerpc              randconfig-r006-20230409   clang
+powerpc              randconfig-r021-20230410   gcc  
+powerpc              randconfig-r025-20230409   gcc  
+powerpc              randconfig-r036-20230412   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r001-20230409   clang
+riscv                randconfig-r003-20230410   clang
+riscv                randconfig-r004-20230409   clang
+riscv                randconfig-r021-20230412   gcc  
+riscv                randconfig-r022-20230409   gcc  
+riscv                randconfig-r026-20230410   gcc  
+riscv                randconfig-r031-20230412   clang
+riscv                randconfig-r035-20230412   clang
+riscv                randconfig-r042-20230409   gcc  
+riscv                randconfig-r042-20230410   gcc  
+riscv                randconfig-r042-20230412   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390         buildonly-randconfig-r002-20230409   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r025-20230410   gcc  
+s390                 randconfig-r044-20230409   gcc  
+s390                 randconfig-r044-20230410   gcc  
+s390                 randconfig-r044-20230412   gcc  
+sh                               allmodconfig   gcc  
+sh                     magicpanelr2_defconfig   gcc  
+sh                   randconfig-r023-20230409   gcc  
+sh                           sh2007_defconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r023-20230412   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230410   clang
+x86_64                        randconfig-a001   clang
+x86_64               randconfig-a002-20230410   clang
+x86_64               randconfig-a003-20230410   clang
+x86_64                        randconfig-a003   clang
+x86_64               randconfig-a004-20230410   clang
+x86_64               randconfig-a005-20230410   clang
+x86_64                        randconfig-a005   clang
+x86_64               randconfig-a006-20230410   clang
+x86_64               randconfig-a011-20230410   gcc  
+x86_64               randconfig-a012-20230410   gcc  
+x86_64               randconfig-a013-20230410   gcc  
+x86_64               randconfig-a014-20230410   gcc  
+x86_64               randconfig-a015-20230410   gcc  
+x86_64               randconfig-a016-20230410   gcc  
+x86_64               randconfig-r006-20230410   clang
+x86_64               randconfig-r022-20230410   gcc  
+x86_64                               rhel-8.3   gcc  
+xtensa       buildonly-randconfig-r001-20230413   gcc  
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
