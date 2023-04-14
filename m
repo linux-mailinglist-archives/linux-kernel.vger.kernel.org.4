@@ -2,98 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E61006E1FCA
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 11:51:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C3586E1FC2
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 11:50:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbjDNJvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 05:51:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34364 "EHLO
+        id S230135AbjDNJux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 05:50:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbjDNJvN (ORCPT
+        with ESMTP id S229854AbjDNJuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 05:51:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA1C61AE
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 02:50:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681465826;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kD03/VZMnuU+AkWoElhnvOWf3hPE4VUEKVtpsqSBK8c=;
-        b=bIaA7RND2jtHdBkeHaFH/rW6NsJhwPXhg6jXPDxcv2HzX4RrGZDC6897Q1MbTlPcsEG498
-        lVaLjFCK+lo3cg7J1vv2Vs5A2HvyjYWQg7gYTwl5yH/wEbPX3cBF4J+SekOMafORYicXT6
-        QLge7s+zxxUc4JxTYG9CzZppU17kwK4=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-135-oE6OI6IyMdWqsVSTY0PiUg-1; Fri, 14 Apr 2023 05:50:24 -0400
-X-MC-Unique: oE6OI6IyMdWqsVSTY0PiUg-1
-Received: by mail-ej1-f72.google.com with SMTP id vg10-20020a170907d30a00b0094807746cebso8372426ejc.6
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 02:50:24 -0700 (PDT)
+        Fri, 14 Apr 2023 05:50:50 -0400
+Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFDC72B3
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 02:50:48 -0700 (PDT)
+Received: by mail-io1-f78.google.com with SMTP id v4-20020a6bac04000000b007587234a54cso9780491ioe.6
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 02:50:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681465823; x=1684057823;
-        h=content-transfer-encoding:in-reply-to:references:to
-         :content-language:subject:cc:user-agent:mime-version:date:message-id
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kD03/VZMnuU+AkWoElhnvOWf3hPE4VUEKVtpsqSBK8c=;
-        b=B3Cl5S8m+S6LJSRyCdN1OqN30GgkGURbVVcUxNUO0wSY0pvDOAFOPp6jIv9/ZgwKcU
-         S32752YwkCeYecJRmacz132fv9VM6cS+7v+NmCSHqcbUtc23YgpWyGgQEsjg7NCv9Cjg
-         n2d8vqlhYME8zQGF9+gDEMAfL7GWZ58xipeMI71nDXoFArD95CzoyMq+tq684yUe4izR
-         4RQN7Fxy7K7JVF81RzztW9xGCc/K0Yqz5a2bWAxS1suK025xqgxVaFQlYU8m3cuoOotc
-         3z0xecM6rOM9FZI5naAzA2OqevXeRhYQsgnhsjEVd5gxOsl6yeJcvVQAnqPBtUEvaDnK
-         cn5A==
-X-Gm-Message-State: AAQBX9dbS892O8JjX8bkmOilLOh6aB4im85sjj/1TIicbGCA4lE+llew
-        I3i2IeDnCXJ1Tq8WiY19fQFLzjbdclngDHRdk+YeW7mtbTdAf+nK6lSSY3V5RVyk8ePDNDJMOUN
-        /MU2pvVx9jjahIIdzOwkphm+f
-X-Received: by 2002:a17:907:9808:b0:94e:7ddf:3ea4 with SMTP id ji8-20020a170907980800b0094e7ddf3ea4mr4486400ejc.24.1681465823374;
-        Fri, 14 Apr 2023 02:50:23 -0700 (PDT)
-X-Google-Smtp-Source: AKy350a6+Z5LefT4FRvBDLayHSHXZA3qQHN2R00EVjv3yDfVy5sfO/pP+qKrWWJLMzDXhuVJ7vw4Pw==
-X-Received: by 2002:a17:907:9808:b0:94e:7ddf:3ea4 with SMTP id ji8-20020a170907980800b0094e7ddf3ea4mr4486375ejc.24.1681465823000;
-        Fri, 14 Apr 2023 02:50:23 -0700 (PDT)
-Received: from [192.168.42.222] (194-45-78-10.static.kviknet.net. [194.45.78.10])
-        by smtp.gmail.com with ESMTPSA id y20-20020a170906559400b0094a7e4dfed8sm2189942ejp.47.2023.04.14.02.50.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 02:50:22 -0700 (PDT)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Message-ID: <8214fb10-8caa-4418-8435-85b6ac27b69e@redhat.com>
-Date:   Fri, 14 Apr 2023 11:50:21 +0200
+        d=1e100.net; s=20221208; t=1681465847; x=1684057847;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DY605WH554hKt7hprnlFZyoAVgwrKuT8eXNUVBGngv8=;
+        b=Gxv6UTWSykhoiUazmHPDDs7XU5vfftGNNVH6S4kPYM5uzCbEeulXK5tzGUrjG/QU8j
+         obEmDd+n6GI8Pu4G0VV457tT5wgx16aU+HG980D2afHi1ou1ZXjUCorvxEEUImTbAwiK
+         AY16GTP+C40VrdwyA90LIoa4PjA6aravCTEtCgErNZ6slRtTamN4PD+VThRmXWlkFdgX
+         TlLDNfoBnh3wqWn8aya/yjuIWyjd+mvbA/R+gOYC7dpDWrZxwnu8ZCKER4y1uAY+vT4n
+         k5boTAk67qw3ZoqpxmDTSeFioxIEWbv7N6siCdJ8HUSX23VJ8mY5bIvyfIp1a1ttODlv
+         289Q==
+X-Gm-Message-State: AAQBX9dYhadIJsaO7RRLahMpNn4G/OkYziXnICS/a7E3ewQIzzqiQDDc
+        gJEpwEMMSKjhO27sxJPwX/HiKxt7ocBWGEhesaGdtB+Ph193
+X-Google-Smtp-Source: AKy350YRh87egnBd4E6o4WRsks2zFji5B+tPPiokHRqawLgCL2QyDU+flfXTO09+mmOeA4xwBKeXbpUyCik4HGUZ3frRwtahUTKH
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Cc:     brouer@redhat.com, intel-wired-lan@lists.osuosl.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, xdp-hints@xdp-project.net,
-        stable@vger.kernel.org
-Subject: Re: [PATCH net v2 1/1] igc: read before write to SRRCTL register
-Content-Language: en-US
-To:     Song Yoong Siang <yoong.siang.song@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Vedang Patel <vedang.patel@intel.com>,
-        Jithu Joseph <jithu.joseph@intel.com>,
-        Andre Guedes <andre.guedes@intel.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Jacob Keller <jacob.e.keller@intel.com>
-References: <20230414020915.1869456-1-yoong.siang.song@intel.com>
-In-Reply-To: <20230414020915.1869456-1-yoong.siang.song@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+X-Received: by 2002:a02:b007:0:b0:40f:7c3d:2b12 with SMTP id
+ p7-20020a02b007000000b0040f7c3d2b12mr490413jah.0.1681465847370; Fri, 14 Apr
+ 2023 02:50:47 -0700 (PDT)
+Date:   Fri, 14 Apr 2023 02:50:47 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000088e26d05f948c634@google.com>
+Subject: [syzbot] [reiserfs?] KASAN: null-ptr-deref Read in __wait_on_buffer
+From:   syzbot <syzbot+f91110fac7f22eb6284f@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,109 +54,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-On 14/04/2023 04.09, Song Yoong Siang wrote:
-> igc_configure_rx_ring() function will be called as part of XDP program
-> setup. If Rx hardware timestamp is enabled prio to XDP program setup,
-> this timestamp enablement will be overwritten when buffer size is
-> written into SRRCTL register.
-> 
-> Thus, this commit read the register value before write to SRRCTL
-> register. This commit is tested by using xdp_hw_metadata bpf selftest
-> tool. The tool enables Rx hardware timestamp and then attach XDP program
-> to igc driver. It will display hardware timestamp of UDP packet with
-> port number 9092. Below are detail of test steps and results.
-> 
-> Command on DUT:
->    sudo ./xdp_hw_metadata <interface name>
-> 
-> Command on Link Partner:
->    echo -n skb | nc -u -q1 <destination IPv4 addr> 9092
-> 
-> Result before this patch:
->    skb hwtstamp is not found!
-> 
-> Result after this patch:
->    found skb hwtstamp = 1677800973.642836757
-> 
-> Optionally, read PHC to confirm the values obtained are almost the same:
-> Command:
->    sudo ./testptp -d /dev/ptp0 -g
-> Result:
->    clock time: 1677800973.913598978 or Fri Mar  3 07:49:33 2023
-> 
-> Fixes: fc9df2a0b520 ("igc: Enable RX via AF_XDP zero-copy")
-> Cc: <stable@vger.kernel.org> # 5.14+
-> Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
-> Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
-> ---
+syzbot found the following issue on:
 
-Reviewed-by: Jesper Dangaard Brouer <brouer@redhat.com>
+HEAD commit:    09a9639e56c0 Linux 6.3-rc6
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=12ad32adc80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c21559e740385326
+dashboard link: https://syzkaller.appspot.com/bug?extid=f91110fac7f22eb6284f
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-> v2 changelog:
->   - Fix indention
-> ---
->   drivers/net/ethernet/intel/igc/igc_base.h | 7 +++++--
->   drivers/net/ethernet/intel/igc/igc_main.c | 5 ++++-
->   2 files changed, 9 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/intel/igc/igc_base.h b/drivers/net/ethernet/intel/igc/igc_base.h
-> index 7a992befca24..b95007d51d13 100644
-> --- a/drivers/net/ethernet/intel/igc/igc_base.h
-> +++ b/drivers/net/ethernet/intel/igc/igc_base.h
-> @@ -87,8 +87,11 @@ union igc_adv_rx_desc {
->   #define IGC_RXDCTL_SWFLUSH		0x04000000 /* Receive Software Flush */
->   
->   /* SRRCTL bit definitions */
+Unfortunately, I don't have any reproducer for this issue yet.
 
-I have checked Foxville manual for SRRCTL (Split and Replication Receive
-Control) register and below GENMASKs looks correct.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/723a785e56e6/disk-09a9639e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/140da8057460/vmlinux-09a9639e.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/d73b2f2c297c/bzImage-09a9639e.xz
 
-> -#define IGC_SRRCTL_BSIZEPKT_SHIFT		10 /* Shift _right_ */
-> -#define IGC_SRRCTL_BSIZEHDRSIZE_SHIFT		2  /* Shift _left_ */
-> +#define IGC_SRRCTL_BSIZEPKT_MASK	GENMASK(6, 0)
-> +#define IGC_SRRCTL_BSIZEPKT_SHIFT	10 /* Shift _right_ */
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+f91110fac7f22eb6284f@syzkaller.appspotmail.com
 
-Shift due to 1 KB resolution of BSIZEPKT (manual field BSIZEPACKET)
+==================================================================
+BUG: KASAN: null-ptr-deref in instrument_atomic_read include/linux/instrumented.h:72 [inline]
+BUG: KASAN: null-ptr-deref in _test_bit_acquire include/asm-generic/bitops/instrumented-non-atomic.h:153 [inline]
+BUG: KASAN: null-ptr-deref in wait_on_bit_io include/linux/wait_bit.h:99 [inline]
+BUG: KASAN: null-ptr-deref in __wait_on_buffer+0x31/0x70 fs/buffer.c:123
+Read of size 8 at addr 0000000000000000 by task syz-executor.2/5538
 
-> +#define IGC_SRRCTL_BSIZEHDRSIZE_MASK	GENMASK(13, 8)
-> +#define IGC_SRRCTL_BSIZEHDRSIZE_SHIFT	2  /* Shift _left_ */
-
-This shift is suspicious, but as you inherited it I guess it works.
-I did the math, and it happens to work, knowing (from manual) value is
-in 64 bytes resolution.
-
-> +#define IGC_SRRCTL_DESCTYPE_MASK	GENMASK(27, 25)
->   #define IGC_SRRCTL_DESCTYPE_ADV_ONEBUF	0x02000000
-
-Given you have started using GENMASK(), then I would have updated 
-IGC_SRRCTL_DESCTYPE_ADV_ONEBUF to be expressed like:
-
-  #define IGC_SRRCTL_DESCTYPE_ADV_ONEBUF 
-FIELD_PREP(IGC_SRRCTL_DESCTYPE_MASK, 0x1)
-
-Making it easier to see code is selecting:
-  001b = Advanced descriptor one buffer.
-
-And not (as I first though):
-  010b = Advanced descriptor header splitting.
+CPU: 1 PID: 5538 Comm: syz-executor.2 Not tainted 6.3.0-rc6-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+ print_report mm/kasan/report.c:433 [inline]
+ kasan_report+0xec/0x130 mm/kasan/report.c:536
+ check_region_inline mm/kasan/generic.c:181 [inline]
+ kasan_check_range+0x141/0x190 mm/kasan/generic.c:187
+ instrument_atomic_read include/linux/instrumented.h:72 [inline]
+ _test_bit_acquire include/asm-generic/bitops/instrumented-non-atomic.h:153 [inline]
+ wait_on_bit_io include/linux/wait_bit.h:99 [inline]
+ __wait_on_buffer+0x31/0x70 fs/buffer.c:123
+ flush_commit_list.isra.0+0xdd6/0x1e70 fs/reiserfs/journal.c:1072
+ do_journal_end+0x3714/0x4af0 fs/reiserfs/journal.c:4302
+ do_journal_release fs/reiserfs/journal.c:1917 [inline]
+ journal_release+0x149/0x630 fs/reiserfs/journal.c:1971
+ reiserfs_put_super+0xe4/0x5c0 fs/reiserfs/super.c:616
+ generic_shutdown_super+0x158/0x480 fs/super.c:500
+ kill_block_super+0x9b/0xf0 fs/super.c:1407
+ deactivate_locked_super+0x98/0x160 fs/super.c:331
+ deactivate_super+0xb1/0xd0 fs/super.c:362
+ cleanup_mnt+0x2ae/0x3d0 fs/namespace.c:1177
+ task_work_run+0x16f/0x270 kernel/task_work.c:179
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0xad3/0x2960 kernel/exit.c:869
+ __do_sys_exit kernel/exit.c:986 [inline]
+ __se_sys_exit kernel/exit.c:984 [inline]
+ __x64_sys_exit+0x42/0x50 kernel/exit.c:984
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fee0e88c169
+Code: Unable to access opcode bytes at 0x7fee0e88c13f.
+RSP: 002b:00007fee0f592118 EFLAGS: 00000246 ORIG_RAX: 000000000000003c
+RAX: ffffffffffffffda RBX: 00007fee0e9abf80 RCX: 00007fee0e88c169
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: 00007fee0e8e7ca1 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffc0cf63b9f R14: 00007fee0f592300 R15: 0000000000022000
+ </TASK>
+==================================================================
 
 
->   #endif /* _IGC_BASE_H */
-> diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-> index 25fc6c65209b..88fac08d8a14 100644
-> --- a/drivers/net/ethernet/intel/igc/igc_main.c
-> +++ b/drivers/net/ethernet/intel/igc/igc_main.c
-> @@ -641,7 +641,10 @@ static void igc_configure_rx_ring(struct igc_adapter *adapter,
->   	else
->   		buf_size = IGC_RXBUFFER_2048;
->   
-> -	srrctl = IGC_RX_HDR_LEN << IGC_SRRCTL_BSIZEHDRSIZE_SHIFT;
-> +	srrctl = rd32(IGC_SRRCTL(reg_idx));
-> +	srrctl &= ~(IGC_SRRCTL_BSIZEPKT_MASK | IGC_SRRCTL_BSIZEHDRSIZE_MASK |
-> +		    IGC_SRRCTL_DESCTYPE_MASK);
-> +	srrctl |= IGC_RX_HDR_LEN << IGC_SRRCTL_BSIZEHDRSIZE_SHIFT;
->   	srrctl |= buf_size >> IGC_SRRCTL_BSIZEPKT_SHIFT;
->   	srrctl |= IGC_SRRCTL_DESCTYPE_ADV_ONEBUF;
->   
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
