@@ -2,158 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5BE86E2CB2
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 01:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3B426E2CB7
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 01:11:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbjDNXIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 19:08:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40108 "EHLO
+        id S229917AbjDNXLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 19:11:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjDNXIl (ORCPT
+        with ESMTP id S229497AbjDNXLr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 19:08:41 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738A84221;
-        Fri, 14 Apr 2023 16:08:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1681513715; x=1713049715;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=Ui3mori7XIEZ6LTcjA8o6NXG/WpxH9UAus+5RZPdGTE=;
-  b=QBpyDsSL0c/8vU444Mn1dnqDz0LSVEE18ia68m0g8fTuhzV96LwFkWwb
-   GjKzhCuyJYL96Tc1wpafw+VUfbd5/St5DB9O6pqUYd4uE6qtmGI839EXI
-   aq2g5/lS7Yb7Z0e6SKz2Aod+6X2K5vbcTb+BomFuM7h18ZGP1KlroRPjV
-   dUoYIIG+hU0Cl34/Gc8XWDkx/QSCVVv9AEtB9FK/34Si29I9o6If8riJD
-   gXfE1zPv7pyXyb0zD3JZ9lVGyPzIu6mZSMblBqDdjG7m8szZWct+ny6FN
-   4nSZiScaXOKFew4UYfBvKmt54wp17LU4AQiI15NT0qyTNC0uaH/J2utSO
-   w==;
-X-IronPort-AV: E=Sophos;i="5.99,198,1677567600"; 
-   d="scan'208";a="206607751"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Apr 2023 16:08:34 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 14 Apr 2023 16:08:19 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Fri, 14 Apr 2023 16:08:19 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bfF63wlQxFqFyVRWdN+ya8nffYD8l6qtZKhLsmhiG8wg34W48JUaJ33Cgl5ktPc8fWNTJcetuQUHsGPm8v7vr38Hsu5Ls6Mln1B1CGvCHK7dTTDEnHOkC07AhdMKUIJTKru3KEAmJnvwyxsm1XK1YsmaF9gQB3zYuR3SSlwDn3RasCY/t/63qmondp/1QcIpzMS2rV2l3PWAnuh3NY1SdvBllMj9XxftBVEUIwgR4wDHGVul8wgiJyxKbyb3q4G5/r5NQMBcKYmV9hyecVxTHOqiF3Bj/L5zoqFCV2p1tQR41U9pv6zbKefHmfw7TUeJecCaZq8XTGborn1HgdL5Wg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ui3mori7XIEZ6LTcjA8o6NXG/WpxH9UAus+5RZPdGTE=;
- b=fUBSsQhv+gg00ZRvsO8F4Ww5rgJTmhHUC4Kg+bgizz2NrkfeWPgeu1FmA6t/tEhOre3Nct39vpI+v4n2os0fA2VHWxwPI3+gyjQo02R7ymlXHjy0rso4eAlSuT7oW96MTWibj55Y15Gtw91R/6N+BRGPOiMYgo41Ai4ugGt5M9aeDB8HXczD6xLbve6kSMbgf2K30zMERffPzZGFgpTSDvwcHNpXSrYk7WYJIdF9Cnu7Sr2anSRpyvNtOk/vrPzLVJSm0awLL9r6GNCVae8/EOAOBxWun3kFL2jFnXzETPYudsVnKsMZxvsVWkcI+CFCfygQq3q9k/CTGYf48MbHrA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ui3mori7XIEZ6LTcjA8o6NXG/WpxH9UAus+5RZPdGTE=;
- b=SlEb3sau30+wZlrQCe4guTQr6weaFKF4v4Ih2plJzUU608AnibmzMOP2nctVkgX/IUfK70DzVIRpRSTAREYStAWzJ6KCvW9e0PjS+WQA+DaFhlLNQjOATmiwyd/ZANZe3HVIEzt0LXz7IeD3xG8Df5TDnrG3ULXqOQCHpBDMA2A=
-Received: from CO6PR11MB5618.namprd11.prod.outlook.com (2603:10b6:303:13f::24)
- by SA2PR11MB4987.namprd11.prod.outlook.com (2603:10b6:806:113::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.44; Fri, 14 Apr
- 2023 23:08:16 +0000
-Received: from CO6PR11MB5618.namprd11.prod.outlook.com
- ([fe80::4de2:6d2b:430c:ef6b]) by CO6PR11MB5618.namprd11.prod.outlook.com
- ([fe80::4de2:6d2b:430c:ef6b%6]) with mapi id 15.20.6298.028; Fri, 14 Apr 2023
- 23:08:16 +0000
-From:   <Kelvin.Cao@microchip.com>
-To:     <hch@infradead.org>
-CC:     <dmaengine@vger.kernel.org>, <vkoul@kernel.org>,
-        <George.Ge@microchip.com>, <linux-kernel@vger.kernel.org>,
-        <logang@deltatee.com>
-Subject: Re: [PATCH v2 1/1] dmaengine: switchtec-dma: Introduce Switchtec DMA
- engine PCI driver
-Thread-Topic: [PATCH v2 1/1] dmaengine: switchtec-dma: Introduce Switchtec DMA
- engine PCI driver
-Thread-Index: AQHZZmFWCpgZadogBUKZpBFKgoENK68kyiyAgAUbAwCAAHf9gIABIgwA
-Date:   Fri, 14 Apr 2023 23:08:16 +0000
-Message-ID: <10fb478ddcf4d2589b9440e2b936f59b2ff27d5a.camel@microchip.com>
-References: <20230403180630.4186061-1-kelvin.cao@microchip.com>
-         <20230403180630.4186061-2-kelvin.cao@microchip.com>
-         <ZDQ8geSEauTsd2ME@infradead.org>
-         <cee60331584b0408f61652376234078d4049359c.camel@microchip.com>
-         <ZDjpjzj3xPaeeE1c@infradead.org>
-In-Reply-To: <ZDjpjzj3xPaeeE1c@infradead.org>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.44.4-0ubuntu1 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CO6PR11MB5618:EE_|SA2PR11MB4987:EE_
-x-ms-office365-filtering-correlation-id: eb6e3f83-eb8f-4c36-60b6-08db3d3d212b
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 8KwW/SAijOSSZ5UUKclxQuV6NX0OEEeGAsp4d9Ht4Vd/KIUAMlPDvg+SCzVm0Z14KlHQZY0t2E1s02KlX1P22GCaty+s1DjzuhibkBZqi5jPkpFFyG7R4/COzDCLFnQx2N4MkLzvTq7Yt9L9htKI0VK15xDayaX/sxSnRYUi6yX8FCCG8YYmRiAzyRDFkiVn3YYF94RoOruoh6smo6fjkveUKvLS3l0U5SNV0VmG4kJkOEr3LfvuEkTt4ctYCOFQMaIi3aG0iqeF0m5uNolorkU22GrGnqp7IDgMty/ss2v6CG/HuWu+uuSxGEjzXlHJS9pc2k1REZwBLKgiz1gZlo602LQjQmMsYZtNgi9dQECIlwcJpzifMmfkAGRT7OXVRRX2zkdAX2eqodctgB+Rq6NyCreHVuFIg/KqHEC7p8OkQFEyrB/6xsptOvv2X2FCfyNJ4AvnoNjWGeiCCIWh6qYfUnhgR1728wsqGCtm85nLoKnGsAuKnrnCN16JfBeyyCCiPz2M4L7KmBgRX0VmZr4iZTizFg4+LfiM/iaUmsga1W/ixQRDe0ofUhe9gl4lcjiAkOwbwB+mTnsxj4PVowkOL2hnFbiM3BxSj6ib7ctwzHBAtpbkranFxUvC/Yq9
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR11MB5618.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(39860400002)(346002)(376002)(396003)(136003)(451199021)(6512007)(6506007)(186003)(26005)(91956017)(66556008)(66446008)(64756008)(38100700002)(122000001)(6486002)(71200400001)(83380400001)(2616005)(478600001)(66946007)(76116006)(66476007)(4326008)(6916009)(316002)(41300700001)(5660300002)(54906003)(2906002)(86362001)(38070700005)(36756003)(8936002)(8676002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aloxZ0IxQ1Q1RlIwbC9OREVKS3lsZnIvenh4WHF5c0EyRndhY2xTbkxQenJX?=
- =?utf-8?B?WVZtd3lLZnQ1Ni9QQXZ6YzlkM0tMTy9BZVI1MzZxb3plREtRWlF0QytRMmNC?=
- =?utf-8?B?Zks2dTFUU1hYaHp4bWFjOUFhYUhYNnRDK3RSTjBzRVdpSWZpK2VoVGs3aTht?=
- =?utf-8?B?Z29MYURjQXEzQWlndWNvMlI2WHlmUnlKT1JVNnpUbFdwRDlpY1FwbTlYOTk3?=
- =?utf-8?B?UVlqeUFWdUpySUxsQkt2YXJBUnMvcDVjenBMTnhrQ0VoeVhOdmpEcWZtemVE?=
- =?utf-8?B?ZmZVc0ZnVmx5NkZPa3BWdmsrMlVKU3ZFbGJXT095T29RdjdaZENhalc0RllJ?=
- =?utf-8?B?aEg4Vmd5QUlFZ21IaGhlczV0L0hkT21xYVZQQlQxekZRRUs1TFJwRkF6ckFk?=
- =?utf-8?B?TjVrMFdNS2lUcmRFL3oyb2ZRL0FTZStUSU1LQlBEMHRNdUFKS1BJZHYzODdp?=
- =?utf-8?B?Rk43MzhncFBvTk9zNDI0QXBMTWdCc3N0cndaNTZ5WW1HbmVGYk9zRkRRNUl6?=
- =?utf-8?B?YmFFV214YWdPcG5jcGIxc0Z3VXdsOFhsaTJhZ1BYekgwd1R4ZUVSQ1M5Q2Ey?=
- =?utf-8?B?aDRGNFFGZFJYWXkzMDhJSGNlaitjUGJFVS9HYUo2N1FubFFYZlVSUTVYRGxY?=
- =?utf-8?B?SHFwUU91V2VCN2NPOXEvQ1lGVHpDL08raTBzL0kvMkZPS0ZvaDBwd3phYUhr?=
- =?utf-8?B?dmt6THNnOXZRZUMyL21LR1VSb3FTV0xGem5LdjB4azVzVlFUUndqSzVmNDkz?=
- =?utf-8?B?azRtdDV4Sy9KR0pNeVl3RmpHSURMQ0JyM3lJWndBRk9xTTc5S2xxMWxjamx1?=
- =?utf-8?B?RDhCOTZTZ21WS00xTWxFc251eUFKLzRLMVhmU01lYnVVTCtXUm52Z05mdERk?=
- =?utf-8?B?LzJJSEs0MUhEakdLemM1cmVVdmZGazgyNjZGV0h6YW4wWE42ODluenFBRytC?=
- =?utf-8?B?bVcva3M5WVlSczBxNGo0ZnlrYWZFc0o3WGhRSVlnUVRiMmE1UmR6TWNlb3c5?=
- =?utf-8?B?dXlyWUdQdlJoNGExTHZQUlNna3EwRi83QytxelJyRklnVHJCbHNNOG9RVzBM?=
- =?utf-8?B?STNZNmZPRjhkOW5qdGVpUGNlYXQwbk1FVTRLQ3dnekE5a21RS0UrdGo0VjNL?=
- =?utf-8?B?WlNrazJOWStURG8zclBvMTRxdmtEeFVSNGU3bng0U0FEMGhBMUdtaUVaS1dY?=
- =?utf-8?B?K2FvdU9nVGdwRlhOZkhCNVBLSFNQa2V2a2h0ZHNZaUFLTGJyNkxJVGVmM3Uz?=
- =?utf-8?B?VGF6TEVraGlOQmw3T3JDMGF5L3dXbXhrVUFFRDM2ZzNqcE1MdGR1ZmF3bUtC?=
- =?utf-8?B?VTdWQlFBYk13UGFmV1JYUy9VZUpDSGpZTE5taFR5WnNZY3d5czJTZEdRQ2ln?=
- =?utf-8?B?ZndnaEFrSDV3VkJsU3Vwd0tid2pmcUVBcjl4ZFZuUlF6ZkRMYlpIRXhqLzQy?=
- =?utf-8?B?c2hmbjJtend6cVNWUnlNLzQ4TWlrVkNwMEhvNTZoTlRsZDRDeG5XL01EbWN3?=
- =?utf-8?B?VVBTRld0MDVnT1NMRjNhQW1Dc2hTcFp4ZHArcjZJaDZaSFJDNm5YQWRZbkFl?=
- =?utf-8?B?SFpPckd3R2RwNy9PSVJ1bEViMWZQVkdVMG1tYnlaWVBXZ0dCRUJmM213RE1S?=
- =?utf-8?B?NWd6RzdJQnpCbGVjSmFsZmRUM1pWS3g5b2FKRFhTbUsrdThYMFNSL2poSDR0?=
- =?utf-8?B?QWdRMWlvdG4yL2NyeGRhYlREZUsyc21pZVJHTmpCSGdXRnYyZmdiOS9CRFY3?=
- =?utf-8?B?SUxIUU9pU3FyYmk1a2tCRW9sTGcyWERzYmVtN0ZVa3VKTTdQV202enVjY20z?=
- =?utf-8?B?MHBsM0hWMUZ3M3dSUkdKYlZiVFlmTXoxaWJDTjhjRDRoci9OOWRGUWFvSnRp?=
- =?utf-8?B?VWtObUpFTUF0eUVDVFBybDE2ZHJ0WTRSMkh1MGpMcGEzNEhXcTVZaVo4TmhQ?=
- =?utf-8?B?UXF3WmxIL0IrTVU5MDNBMnBUZTBCb0x6YjEzNVh4aUVWR2R1TUplOHJhTnhu?=
- =?utf-8?B?anFrT0ZHN3pHbGFRVkJyT29mMmREWXB6d2xrK2lBR2lQbmRGeVRsQUROV0x2?=
- =?utf-8?B?YkNEd0MxMytCVFc3TXFOMzRtTlFCQjlLQjdGRGsxdmtINGhqMkNVeDV0T2l4?=
- =?utf-8?B?TWs1QjBVT016S0oyazBXcDNsaGlOUWlYVFZNZEh1MUVlenV1U3JGVFV3L1Nm?=
- =?utf-8?B?K3c9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D2F30399D94CB64AA0109D30FDDDC7D6@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Fri, 14 Apr 2023 19:11:47 -0400
+Received: from m-r1.th.seeweb.it (m-r1.th.seeweb.it [IPv6:2001:4b7a:2000:18::170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43E44221;
+        Fri, 14 Apr 2023 16:11:45 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id CEBBE20386;
+        Sat, 15 Apr 2023 01:11:43 +0200 (CEST)
+Date:   Sat, 15 Apr 2023 01:11:42 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     freedreno@lists.freedesktop.org, quic_sbillaka@quicinc.com,
+        dianders@chromium.org, airlied@gmail.com, andersson@kernel.org,
+        robdclark@gmail.com, dri-devel@lists.freedesktop.org,
+        swboyd@chromium.org, vkoul@kernel.org, agross@kernel.org,
+        daniel@ffwll.ch, linux-arm-msm@vger.kernel.org,
+        dmitry.baryshkov@linaro.org,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>, sean@poorly.run,
+        linux-kernel@vger.kernel.org
+Subject: Re: [Freedreno] [PATCH] drm/msm/dpu: always program dsc active bits
+Message-ID: <2e6dwt74oyy7rroxyus6ebfbylbbtinsi7bccpqazjm64owiv4@gfs52kkq47c3>
+References: <1681247095-1201-1-git-send-email-quic_khsieh@quicinc.com>
+ <z7wj2lcgcdxsqh7ylhec3ig6o4p6q37zqvpzoxp4bd4vid2z2n@ubsgt3ebqrwr>
+ <83f9a438-52c5-83f3-1767-92d16518d8f0@quicinc.com>
+ <feedv4isliterjtwyicqfarwuvzhtov3jkmvjcwqvt7itkyh7y@e2jq5t6r3lxc>
+ <e78e576a-2a04-e7ca-f6c4-701d508541ad@quicinc.com>
+ <mfzi535qsjtcznwdvgb7qyzk25rcsrkwozah6ji4thqsj73n3m@asybxllomisg>
+ <049697ba-d997-62c0-6e21-ffb287ac3100@quicinc.com>
+ <6s42sutrd2c6tme46t6tchd6y6wonmpwokseqqz2frkrfext7v@vnv44tzwyva4>
+ <82bf6167-d621-1a4e-86f0-7a8567347722@quicinc.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR11MB5618.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: eb6e3f83-eb8f-4c36-60b6-08db3d3d212b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Apr 2023 23:08:16.1302
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: IIC5vn1OxG2jO+lzrw/97QSvaG7vCG7zPrTgW9my63k/Jo2jxH6ZI2fuTDxVMEaH4TJ0T684KfqSgz0tpHUthPlOH1Hc3Z2YLzrDskZrK+w=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4987
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <82bf6167-d621-1a4e-86f0-7a8567347722@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -161,23 +56,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVGh1LCAyMDIzLTA0LTEzIGF0IDIyOjUwIC0wNzAwLCBDaHJpc3RvcGggSGVsbHdpZyB3cm90
-ZToNCj4gPiBFWFRFUk5BTCBFTUFJTDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNo
-bWVudHMgdW5sZXNzIHlvdSA+DQo+ID4ga25vdyB0aGUgY29udGVudCBpcyBzYWZlDQo+ID4gDQo+
-ID4gT24gVGh1LCBBcHIgMTMsIDIwMjMgYXQgMTA6NDA6NDFQTSArMDAwMCwgPg0KPiA+IEtlbHZp
-bi5DYW9AbWljcm9jaGlwLmNvbcKgd3JvdGU6DQo+ID4gPiA+ID4gPiA+ID4gV2h5IGlzIHRoZSBs
-b2NrIG5lZWRlZCB3aGlsZSByZWFkaW5nIHRoZSBzdGF0dXMgYW5kDQo+ID4gPiA+ID4gPiA+ID4g
-d2FpdGluZw0KPiA+ID4gPiA+ID4gPiA+IGZvciBpdCB3aXRoIGxvbmcgZGVsYXlzPw0KPiA+ID4g
-PiBUaGVyZSdzIChsb3cpIGNoYW5jZSBvZiBhY2Nlc3MgdG8gdGhlIHNhbWUgY3RybCByZWdpc3Rl
-ciBmcm9tDQo+ID4gPiA+IG90aGVyDQo+ID4gPiA+IHBhdGhzIHdoaWNoIG1pZ2h0IGNoYW5nZSB0
-aGUgdmFsdWUgb2Ygc3RhdHVzIGluIGFuIHVuZXhwZWN0ZWQNCj4gPiA+ID4gd2F5LiA+ID4gSXQN
-Cj4gPiA+ID4gYWxzbyBwcmV2ZW50cyB0aGUgaGFyZHdhcmUgb3BlcmF0aW9uIGZyb20gYmVpbmcg
-aW50ZXJydXB0ZWQNCj4gPiA+ID4gdW50aWwgPiA+IGl0DQo+ID4gPiA+IGluZGljYXRlcyBpdCBo
-YXMgZmluaXNoZWQgYnkgYSBiaXQgc2V0IGluIHRoZSBzdGF0dXMgcmVnaXN0ZXIuDQo+ID4gDQo+
-ID4gV2VsbCwgdGhlIGxvY2sgaXMgb2J2aW91c2x5IHJlcXVpcmVkIHRvIHByb3RlY3RlIHRoZSBy
-ZWFkcyB0byB0aGUNCj4gPiByZWdpc3Rlci7CoCBCdXQgd2h5IGRvIHlvdSBuZWVkIHRvIGhvbGQg
-dGhlIGxvY2sgb3ZlciB0aGUgcmVhZHMgYW5kDQo+ID4gdGhlIGRlbGF5Pw0KDQpJIHdhbnRlZCB0
-byBwcm90ZWN0IHRoZSBjb21wbGV0ZSBoYXJkd2FyZSBvcGVyYXRpb24sIGZyb20ga2ljay1vZmYg
-YnkNCmN0cmwgd3JpdGluZyB0byBzdGF0dXMgY2hhbmdlIGluZGljYXRpbmcgY29tcGxldGlvbiwg
-d2hpY2ggbWlnaHQNCmludm9sdmVzIGRlbGF5cyBpbiBiZXR3ZWVuIHdoZW4gbW9yZSB0aGFuIDEg
-c3RhdHVzIGNoZWNrcyByZXF1aXJlZC4NCg0KDQo=
+On 2023-04-14 10:57:45, Abhinav Kumar wrote:
+> On 4/14/2023 10:34 AM, Marijn Suijten wrote:
+> > On 2023-04-14 08:48:43, Abhinav Kumar wrote:
+> >> On 4/14/2023 12:35 AM, Marijn Suijten wrote:
+> >>> On 2023-04-12 10:33:15, Abhinav Kumar wrote:
+> >>> [..]
+> >>>>> What happens if a device boots without DSC panel connected?  Will
+> >>>>> CTL_DSC_FLUSH be zero and not (unnecessarily, I assume) flush any of the
+> >>>>> DSC blocks?  Or could this flush uninitialized state to the block?
+> >>>>
+> >>>> If we bootup without DSC panel connected, the kernel's cfg->dsc will be
+> >>>> 0 and default register value of CTL_DSC_FLUSH will be 0 so it wont flush
+> >>>> any DSC blocks.
+> >>>
+> >>> Ack, that makes sense.  However, if I connect a DSC panel, then
+> >>> disconnect it (now the register should be non-zero, but cfg->dsc will be
+> >>> zero), and then replug a non-DSC panel multiple times, it'll get flushed
+> >>> every time because we never clear CTL_DSC_FLUSH after that?
+> >>
+> >> If we remove it after kernel starts, that issue is there even today
+> >> without that change because DSI is not a hot-pluggable display so a
+> >> teardown wont happen when you plug out the panel. How will cfg->dsc be 0
+> >> then? In that case, its not a valid test as there was no indication to
+> >> DRM that display was disconnected so we cannot tear it down.
+> > 
+> > The patch description itself describes hot-pluggable displays, which I
+> > believe is the upcoming DSC support for DP?  You ask how cfg->dsc can
+> > become zero, but this is **exactly** what the patch description
+> > describes, and what this patch is removing the `if` for.  If we are not
+> > allowed to discuss that scenario because it is not currently supported,
+> > neither should we allow to apply this patch.
+> > 
+> > With that in mind, can you re-answer the question?
+> 
+> I didnt follow what needs to be re-answered.
+> 
+> This patch is being sent in preparation of the DSC over DP support. This 
+> does not handle non-hotpluggable displays.
+
+Good, because my question is specifically about *hotpluggable*
+displays/panels like the upcoming DSC support for DP.  After all there
+would be no point in me suggesting to connect and disconnect
+non-hotpluggable displays and expect something sensible to happen,
+wouldn't it?  Allow me to copy-paste the question again for convenience,
+with some minor wording changes:
+
+	However, if I connect a DSC DP display, then disconnect it (now the
+	register should be non-zero, but cfg->dsc will be zero), and then
+	connect and reconnect a non-DSC DP display multiple times, it'll get
+	flushed every time because we never clear CTL_DSC_FLUSH after that?
+
+And the missing part is: would multiple flushes be harmful in this case?
+
+> I do not think dynamic switch 
+> between DSC and non-DSC of non-hotpluggable displays needs to be 
+> discussed here as its not handled at all with or without this patch.
+> 
+> We wanted to get early reviews on the patch. If you want this patch to 
+> be absorbed when rest of DSC over DP lands, I have no concerns with 
+> that. I wont pick this up for fixes and we will land this together with 
+> the rest of DP over DSC.
+
+I don't mind when and where this lands, just want to have the semantics
+clear around persisting the value of CTL_DSC_FLUSh in the register.
+
+Regardless, this patch doesn't sound like a fix but a workaround until
+reset_intf_cfg() is fixed to be called at the right point, and extended
+to clear CTL_DSC_ACTIVE and flush the DSCs.  Perhaps it shouldn't have a
+Fixes: tag for that reason, as you intend to reinstate this
+if (cfg->dsc) condition when that is done?
+
+- Marijn
