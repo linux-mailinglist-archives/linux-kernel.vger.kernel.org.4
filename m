@@ -2,119 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 666F86E1C41
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 08:15:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FB016E1C44
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 08:16:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbjDNGPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 02:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47778 "EHLO
+        id S230007AbjDNGQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 02:16:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbjDNGPP (ORCPT
+        with ESMTP id S229534AbjDNGQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 02:15:15 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144C25271
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 23:15:14 -0700 (PDT)
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A33B23F447
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 06:15:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1681452909;
-        bh=4x1ielA7OU/wWOjnJ79+3XpTDh/ue6rRtFlaiIdzFqA=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=JDwuh2/Lfz1Jwh+sCxY4uiruBUrTtDijWoPVS4AW/NC5YCPwJiojL8eqriGtg4Mxm
-         Uq/BKTre6AbPF9dDCPktc0hevj7kQ6Mhw5OHi4MHAaqZPxJfzw+pWw7EVoOX7wS2vJ
-         kw8TMF85TTzG7fu7Ffx6T14HwmjUijh6ib9/DnBP2jdg1JTVHR558+etFN6u7YL88O
-         aUxTEVf09T10s3FnJ/7OQR8O38l5dOLCKYZ4wjeyRUALqQFZWWs3eFPXBTR9oDjyHz
-         rH2ongiXhLFmJz+cXESXkDz7LlJp/HlyeaunLiVL8WvQzsamoGyzhvzvQG2zXJdEF5
-         ClQV+vpBYhcVg==
-Received: by mail-wm1-f70.google.com with SMTP id w16-20020a05600c475000b003f082eecdcaso6676960wmo.6
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 23:15:09 -0700 (PDT)
+        Fri, 14 Apr 2023 02:16:11 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A395271;
+        Thu, 13 Apr 2023 23:16:07 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id z9so16001153ejx.11;
+        Thu, 13 Apr 2023 23:16:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681452966; x=1684044966;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SbTsshoRiULEkzwBbQ+pYzOmV8qW1WFmOzv8hcmERH4=;
+        b=R3bW5oFzORH25LIWr6Rg5plNyiNJTBt4KgKmYoJ2EKV6Z+dvmvaGm8n9S60SRjxiYe
+         b0piYWEFo8jkbjnCYJeyVAdQT21K26c65Db46czCaRbusEzE21ycT8kybD0/+A6ICrQc
+         QXzGi2XvyBRZMYbV0yMV+MSz8e+bUcRT6HgInsxtuCnkkiqzu5aLzoNsCYRs0SFQANgW
+         B68p7HMqK3NyvxFlclBgEgJpDgXjCuRbKVs57Mw036ArKdMKDA5DnpjJvO/HvN/nKhoi
+         rJpiBvezc2+XVSeQBcGKAi1Ycowo9f8W27quGoR6wgSWG95ufD4PPs00f4P0Dv5BYmye
+         dO7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681452905; x=1684044905;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4x1ielA7OU/wWOjnJ79+3XpTDh/ue6rRtFlaiIdzFqA=;
-        b=YwRT5xaIj/JqcLkHTbbCyt8ZU1Oc+kMTAjEGT0igtrMldPQOlNhWMst0MG2E4dSFev
-         0DcXuruD+T9zhBLup+hnY5pCUUAVGJyI4HSmIulIIhUG+zs7p4XZj3q+Iupvi5qyHG0k
-         nPeyvRL1gcwhmk07bdPygLGbnj7yMrAj+kMbqWV8OMiGjtYH1qZm6EsEEROXAnwmma4h
-         P5qqor4ggtDf0EluLYP3jN0VUPAYql7muVF/pQ4uHwgxY5f91JDsj3JKwboMS4U9yCiz
-         19RWCqLt5007umNZW68Kn7XYg5FJ1AtPjwtKKKtu8ktCpNv4ZmVX+AunUwRED6X1Thq/
-         kfWQ==
-X-Gm-Message-State: AAQBX9coUWsgAS7+moQwNMLcisPRoyc2zRW03m5yR8VumOhV0VMmXN/i
-        yg5ugEfGt2gDSOsGvQSQ6KaLo4Wy8lJRNqCRhGvqb31SMm9ZgoYWD6QDff9uodtEPWbIuYQxBFr
-        ZwpEeQhXdqPPniyEFXRa9iV2sjluAsRcwoX/qWpiVDA==
-X-Received: by 2002:a5d:4949:0:b0:2ef:b977:ee3a with SMTP id r9-20020a5d4949000000b002efb977ee3amr3214594wrs.34.1681452904876;
-        Thu, 13 Apr 2023 23:15:04 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZMWU0obXURDtM8C4VH2fQ+FRH6qv3QJQSMmxiEYCANgKRxwrF1qmRXzaL3awQ3sa15QW1Pzg==
-X-Received: by 2002:a5d:4949:0:b0:2ef:b977:ee3a with SMTP id r9-20020a5d4949000000b002efb977ee3amr3214570wrs.34.1681452904560;
-        Thu, 13 Apr 2023 23:15:04 -0700 (PDT)
-Received: from localhost (uk.sesame.canonical.com. [185.125.190.60])
-        by smtp.gmail.com with ESMTPSA id x17-20020a5d4911000000b002e55cc69169sm2794289wrq.38.2023.04.13.23.15.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 23:15:04 -0700 (PDT)
-Date:   Fri, 14 Apr 2023 08:15:03 +0200
-From:   Andrea Righi <andrea.righi@canonical.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Paolo Pisati <paolo.pisati@canonical.com>,
-        bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] selftests/bpf: ignore pointer types check with clang
-Message-ID: <ZDjvZ7mx7+IsSCCO@righiandr-XPS-13-7390>
-References: <20230412095912.188453-1-andrea.righi@canonical.com>
- <CAADnVQJ00Npkp=+XYaTybzaPnrcfK0nKrePAktVNBt2-YqWdEg@mail.gmail.com>
+        d=1e100.net; s=20221208; t=1681452966; x=1684044966;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SbTsshoRiULEkzwBbQ+pYzOmV8qW1WFmOzv8hcmERH4=;
+        b=ZWTz9B0CCtLca4zs4Ny5UtvcsHJxyxXjSSDn+UNDEhCApYucacE/0OpYkhWd39GOZw
+         gdkOGvUqDz76F+NVWxQFwKIsf2vD4nALhzHwqwmJooFWt3ZTpsiOt2VPkIkZkq8SAp9D
+         OaSfy9mbcwYgwAd1C+45Uu7rBlPO29bll1ce9J9GbG0gFzQ1Bk/Ho0RMAvULq8+1TIvB
+         zZq5/wKVHjK3nZYaJl9lmu5m9oWZrwvxXvYjRwOnHteCJcXmrGyY1D0mD6VlKOvS5KhL
+         iZDeFiJmUvSLRkkRJ160KDIi9H2w0zyifcDgY2ffDgNICHd4bHEHCGI6i6xXLv6LFUJO
+         czQA==
+X-Gm-Message-State: AAQBX9fULy0NAnLCzKCpp4AGn3fb1CHm2mT5norJi8sGerEgECPFIG+b
+        WWz1xiY5HN0RzOd9N/5OHLO2Vqg5awKEEumpyzY=
+X-Google-Smtp-Source: AKy350YMUhpwGWLwdV8/zzTVOiBxJk0QUuemBr0E9mcNMXCso4UmTVAQLZ360/+Pv4eJ0mbEkifzTL8++3Wb+45xeDI=
+X-Received: by 2002:a17:906:9b90:b0:947:9f2a:8ca0 with SMTP id
+ dd16-20020a1709069b9000b009479f2a8ca0mr2583942ejc.10.1681452965680; Thu, 13
+ Apr 2023 23:16:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQJ00Npkp=+XYaTybzaPnrcfK0nKrePAktVNBt2-YqWdEg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230327-tegra-pmic-reboot-v4-0-b24af219fb47@skidata.com>
+ <20230327-tegra-pmic-reboot-v4-3-b24af219fb47@skidata.com> <2df6f002-dcf8-1073-d0b5-a9843103096a@collabora.com>
+In-Reply-To: <2df6f002-dcf8-1073-d0b5-a9843103096a@collabora.com>
+From:   Benjamin Bara <bbara93@gmail.com>
+Date:   Fri, 14 Apr 2023 08:15:54 +0200
+Message-ID: <CAJpcXm4RRV15UUzsrw_9s4-ifE0W0uKSsZ2sAJxojsoctaT8Ow@mail.gmail.com>
+Subject: Re: [PATCH v4 3/4] mfd: tps6586x: use devm-based power off handler
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Wolfram Sang <wsa@kernel.org>, Lee Jones <lee@kernel.org>,
+        rafael.j.wysocki@intel.com, peterz@infradead.org,
+        jonathanh@nvidia.com, Richard Leitner <richard.leitner@linux.dev>,
+        treding@nvidia.com, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        Benjamin Bara <benjamin.bara@skidata.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 09:56:00PM -0700, Alexei Starovoitov wrote:
-> On Wed, Apr 12, 2023 at 2:59 AM Andrea Righi <andrea.righi@canonical.com> wrote:
-> >
-> > Building bpf selftests with clang can trigger errors like the following:
-> >
-> >   CLNG-BPF [test_maps] bpf_iter_netlink.bpf.o
-> > progs/bpf_iter_netlink.c:32:4: error: incompatible pointer types assigning to 'struct sock *' from 'struct sock___17 *' [-Werror,-Wincompatible-pointer-types]
-> >         s = &nlk->sk;
-> >           ^ ~~~~~~~~
-> > 1 error generated.
-> 
-> I cannot reproduce this and BPF CI doesn't complain about it either.
-> What kind of clang do you use?
-> Some special version and build flags?
+On Thu, 13 Apr 2023, 22:37 Dmitry Osipenko,
+<dmitry.osipenko@collabora.com> wrote:
+> Handlers must return NOTIFY_DONE or notifier_from_errno(). Sorry for
+> missing this previously.
 
-I'm using Ubuntu clang version 15.0.7 (Ubuntu 23.04), no special build
-flag (unless Ubuntu enables some different default flags, but it
-shouldn't be the case... I'll double check).
+Thanks!
 
--Andrea
+AFAIU, notifier_from_errno() sets NOTIFY_STOP_MASK, which stops
+atomic_notifier_call_chain() immediately. So I think NOTIFY_DONE is the
+only valid return value for sys_off handlers, to not skip others. So I
+think letting sys_off_notify() [1] always return NOTIFY_DONE might be a
+good idea.
+
+If so, we could return a "notify return errno" (or also a "normal
+errno") from the handler, which is checked, but then replaced to
+NOTIFY_DONE, in [1]. This would enable us to have a common place to
+check for failed handlers.
+
+Handlers then should only return NOTIFY_DONE when they are skipped (e.g.
+when the requested reboot mode is not supported by the handler).
+Otherwise, I think ETIME, ENOSYS or ENOTSUPP might fit when the
+communication was successful, a possible delay awaited, but the return
+was still reached. What do you think?
+
+Thanks and best regards,
+Benjamin
+
+[1] https://elixir.bootlin.com/linux/v6.3-rc6/source/kernel/reboot.c#L327
