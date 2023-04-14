@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04D056E1A7C
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 04:43:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA43A6E1A7E
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 04:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbjDNCnN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 13 Apr 2023 22:43:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57872 "EHLO
+        id S229708AbjDNCnV convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 13 Apr 2023 22:43:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbjDNCnE (ORCPT
+        with ESMTP id S229893AbjDNCnH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 22:43:04 -0400
+        Thu, 13 Apr 2023 22:43:07 -0400
 Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31AAC3A88;
-        Thu, 13 Apr 2023 19:43:02 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645635581;
+        Thu, 13 Apr 2023 19:43:03 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id C011024E0F6;
-        Fri, 14 Apr 2023 10:43:00 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 14 Apr
- 2023 10:43:00 +0800
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 9A0BF24E1D1;
+        Fri, 14 Apr 2023 10:43:01 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 14 Apr
+ 2023 10:43:01 +0800
 Received: from localhost.localdomain (183.27.97.249) by EXMBX061.cuchost.com
  (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 14 Apr
- 2023 10:42:59 +0800
+ 2023 10:43:00 +0800
 From:   Xingyu Wu <xingyu.wu@starfivetech.com>
 To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
         "Michael Turquette" <mturquette@baylibre.com>,
@@ -42,9 +42,9 @@ CC:     Rob Herring <robh+dt@kernel.org>,
         Xingyu Wu <xingyu.wu@starfivetech.com>,
         William Qiu <william.qiu@starfivetech.com>,
         <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-Subject: [PATCH v3 5/7] dt-bindings: soc: starfive: Add StarFive syscon module
-Date:   Fri, 14 Apr 2023 10:41:55 +0800
-Message-ID: <20230414024157.53203-6-xingyu.wu@starfivetech.com>
+Subject: [PATCH v3 6/7] riscv: dts: starfive: jh7110: Add syscon nodes
+Date:   Fri, 14 Apr 2023 10:41:56 +0800
+Message-ID: <20230414024157.53203-7-xingyu.wu@starfivetech.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230414024157.53203-1-xingyu.wu@starfivetech.com>
 References: <20230414024157.53203-1-xingyu.wu@starfivetech.com>
@@ -65,103 +65,55 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: William Qiu <william.qiu@starfivetech.com>
 
-Add documentation to describe StarFive System Controller Registers.
+Add stg_syscon/sys_syscon/aon_syscon nodes for JH7110 Soc.
 
 Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Reviewed-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
 ---
- .../soc/starfive/starfive,jh7110-syscon.yaml  | 58 +++++++++++++++++++
- MAINTAINERS                                   |  6 ++
- 2 files changed, 64 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
+ arch/riscv/boot/dts/starfive/jh7110.dtsi | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
-new file mode 100644
-index 000000000000..de086e74a229
---- /dev/null
-+++ b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
-@@ -0,0 +1,58 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/soc/starfive/starfive,jh7110-syscon.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: StarFive JH7110 SoC system controller
-+
-+maintainers:
-+  - William Qiu <william.qiu@starfivetech.com>
-+
-+description: |
-+  The StarFive JH7110 SoC system controller provides register information such
-+  as offset, mask and shift to configure related modules such as MMC and PCIe.
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - items:
-+          - enum:
-+              - starfive,jh7110-aon-syscon
-+              - starfive,jh7110-sys-syscon
-+          - const: syscon
-+          - const: simple-mfd
-+      - items:
-+          - const: starfive,jh7110-stg-syscon
-+          - const: syscon
-+
-+  reg:
-+    maxItems: 1
-+
-+  clock-controller:
-+    $ref: /schemas/clock/starfive,jh7110-pll.yaml#
-+    type: object
-+
-+  power-controller:
-+    $ref: /schemas/power/starfive,jh7110-pmu.yaml#
-+    type: object
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    syscon@10240000 {
-+        compatible = "starfive,jh7110-stg-syscon", "syscon";
-+        reg = <0x10240000 0x1000>;
-+    };
-+
-+    syscon@13030000 {
-+        compatible = "starfive,jh7110-sys-syscon", "syscon", "simple-mfd";
-+        reg = <0x13030000 0x1000>;
-+    };
-+
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 03051ae2e9e5..0fafeea8ebdb 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19917,6 +19917,11 @@ S:	Supported
- F:	Documentation/devicetree/bindings/clock/starfive,jh7110-pll.yaml
- F:	drivers/clk/starfive/clk-starfive-jh7110-pll.*
+diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+index 4c5fdb905da8..f271c3184d3a 100644
+--- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
++++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+@@ -353,6 +353,11 @@ i2c2: i2c@10050000 {
+ 			status = "disabled";
+ 		};
  
-+STARFIVE JH7110 SYSCON
-+M:	William Qiu <william.qiu@starfivetech.com>
-+S:	Supported
-+F:	Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
++		stg_syscon: syscon@10240000 {
++			compatible = "starfive,jh7110-stg-syscon", "syscon";
++			reg = <0x0 0x10240000 0x0 0x1000>;
++		};
 +
- STARFIVE JH71X0 CLOCK DRIVERS
- M:	Emil Renner Berthing <kernel@esmil.dk>
- M:	Hal Feng <hal.feng@starfivetech.com>
-@@ -19954,6 +19959,7 @@ STARFIVE SOC DRIVERS
- M:	Conor Dooley <conor@kernel.org>
- S:	Maintained
- T:	git https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/
-+F:	Documentation/devicetree/bindings/soc/starfive/
- F:	drivers/soc/starfive/
+ 		uart3: serial@12000000 {
+ 			compatible = "snps,dw-apb-uart";
+ 			reg = <0x0 0x12000000 0x0 0x10000>;
+@@ -457,6 +462,11 @@ syscrg: clock-controller@13020000 {
+ 			#reset-cells = <1>;
+ 		};
  
- STARFIVE TRNG DRIVER
++		sys_syscon: syscon@13030000 {
++			compatible = "starfive,jh7110-sys-syscon", "syscon", "simple-mfd";
++			reg = <0x0 0x13030000 0x0 0x1000>;
++		};
++
+ 		sysgpio: pinctrl@13040000 {
+ 			compatible = "starfive,jh7110-sys-pinctrl";
+ 			reg = <0x0 0x13040000 0x0 0x10000>;
+@@ -486,6 +496,11 @@ aoncrg: clock-controller@17000000 {
+ 			#reset-cells = <1>;
+ 		};
+ 
++		aon_syscon: syscon@17010000 {
++			compatible = "starfive,jh7110-aon-syscon", "syscon", "simple-mfd";
++			reg = <0x0 0x17010000 0x0 0x1000>;
++		};
++
+ 		aongpio: pinctrl@17020000 {
+ 			compatible = "starfive,jh7110-aon-pinctrl";
+ 			reg = <0x0 0x17020000 0x0 0x10000>;
 -- 
 2.25.1
 
