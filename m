@@ -2,95 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78DE26E1DDF
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D5B6E1DE4
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbjDNIPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 04:15:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53012 "EHLO
+        id S230020AbjDNIP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 04:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjDNIPK (ORCPT
+        with ESMTP id S229951AbjDNIPW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 04:15:10 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25532738;
-        Fri, 14 Apr 2023 01:15:08 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id he11-20020a05600c540b00b003ef6d684102so7771463wmb.3;
-        Fri, 14 Apr 2023 01:15:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681460107; x=1684052107;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=M+Mc35jdz5ILBLcNMehInkGDuRlm3RaMqvJWFISS8Gs=;
-        b=fJ6ou34jHaiMWNLtuawX7mHBaqkK6TXuLS+mClgQDS/pCt6KBhXf50G1/KigCySkKo
-         sf9RjSIdLKZDzrtaMUYG8QUUtsz7nSeHHvA0F+J2yiZWQ+E77OsbxUc/RR4ab+2Mb2A5
-         QZrf9MncKZDfePc6Pg5SU3zri17h8UxPzct9b4AJ/E4GOaisshApKiqVStv9y+Y5C69e
-         0bDHoyJMCFPBUis4g0zs7y8xN3g6CYIVkqJmXyohO8uoaa430a3NxlDiZ1W/cGCjlPeM
-         wodSxpSb3knU5WHQsbxVwDQweKfVFUe1SFMAkwlO6Jf3ESWfZHHg/H7ZE/qi8CdyFToA
-         Wyiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681460107; x=1684052107;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=M+Mc35jdz5ILBLcNMehInkGDuRlm3RaMqvJWFISS8Gs=;
-        b=S/caZTcN7DfV41BP34DKQkzl0xzU41RBD8yTPIHJirIw7tmbM2zu8hcCNQA8IiBVjH
-         HGzpeWvTgijwQTHOt0dB/VSH+4Nz0wfEoS1nYoh+jGgz02tKhh2RYD+T6BvNscskJ7At
-         eD57d03Dz9ehrG5ZI7O9gT+IKbje2d5sj1Zu+OcnTOrnwGIk5Uz2DImUwXywGj2jQpiv
-         RgwzCsFv2UWB4MqPTu2+W2BZG5CZsVuh81CdX6f/NNgT7kiQHgBrt4pE20kDBZPhlJ7p
-         93ShxRyjaEXBV6h2ULhVQlUwFPxsls3PLlsY8+6psZcb2qzxaN3Btz9F4DmMzmWzGjGR
-         jnvQ==
-X-Gm-Message-State: AAQBX9dzWKqq8pWvK3HEPWWXk3m1UD/Dtmnn9HvfNPA42HhFPKmTtXmN
-        4tedUB1jlyGE2KegsxQd0K0=
-X-Google-Smtp-Source: AKy350bOMdDp96BK15a3UYiXi665269oi3btXKvL7ZjK1c9ND3w1cT12/3oW2EflVwF3Ue0hqJ+6Jg==
-X-Received: by 2002:a1c:4b0b:0:b0:3ef:4138:9eef with SMTP id y11-20020a1c4b0b000000b003ef41389eefmr3813109wma.36.1681460107213;
-        Fri, 14 Apr 2023 01:15:07 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id y1-20020a1c4b01000000b003ef5f77901dsm3678924wma.45.2023.04.14.01.15.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Apr 2023 01:15:06 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] selftests/mm: Fix spelling mistake "priviledge" -> "privilege"
-Date:   Fri, 14 Apr 2023 09:15:06 +0100
-Message-Id: <20230414081506.1678998-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Fri, 14 Apr 2023 04:15:22 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4ED7D83;
+        Fri, 14 Apr 2023 01:15:21 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5B20A219B9;
+        Fri, 14 Apr 2023 08:15:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1681460119; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wnpYQ2ZfTwZ2ZAV4qraqjHueaXahHtXmI+0HNNBvkbA=;
+        b=i5+0f/xelZd/5CNWzW8EFPbGnINdzmH9KpJPCXRtV258U3pnnwxI0Ojd6XA35ry3MYF053
+        40aLkf5ThYFCgXSsjgdvWcMq6bzHVWqdzFEgNF9/CKsG8S1u89T/3aZ2akxuqK9jLQAvdz
+        wqHG3GLL/oIQlLDE4B1N6aYs02BynjQ=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 166E1139FC;
+        Fri, 14 Apr 2023 08:15:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id CvQjA5cLOWSZYgAAMHmgww
+        (envelope-from <mhocko@suse.com>); Fri, 14 Apr 2023 08:15:19 +0000
+Date:   Fri, 14 Apr 2023 10:15:13 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        David Hildenbrand <david@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yu Zhao <yuzhao@google.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v6 1/3] mm: vmscan: ignore non-LRU-based reclaim in memcg
+ reclaim
+Message-ID: <ZDkLkeTR0gYl5sv6@dhcp22.suse.cz>
+References: <20230413104034.1086717-1-yosryahmed@google.com>
+ <20230413104034.1086717-2-yosryahmed@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230413104034.1086717-2-yosryahmed@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in an error message string. Fix it.
+On Thu 13-04-23 10:40:32, Yosry Ahmed wrote:
+> We keep track of different types of reclaimed pages through
+> reclaim_state->reclaimed_slab, and we add them to the reported number
+> of reclaimed pages.  For non-memcg reclaim, this makes sense. For memcg
+> reclaim, we have no clue if those pages are charged to the memcg under
+> reclaim.
+> 
+> Slab pages are shared by different memcgs, so a freed slab page may have
+> only been partially charged to the memcg under reclaim.  The same goes for
+> clean file pages from pruned inodes (on highmem systems) or xfs buffer
+> pages, there is no simple way to currently link them to the memcg under
+> reclaim.
+> 
+> Stop reporting those freed pages as reclaimed pages during memcg reclaim.
+> This should make the return value of writing to memory.reclaim, and may
+> help reduce unnecessary reclaim retries during memcg charging.  Writing to
+> memory.reclaim on the root memcg is considered as cgroup_reclaim(), but
+> for this case we want to include any freed pages, so use the
+> global_reclaim() check instead of !cgroup_reclaim().
+> 
+> Generally, this should make the return value of
+> try_to_free_mem_cgroup_pages() more accurate. In some limited cases (e.g.
+> freed a slab page that was mostly charged to the memcg under reclaim),
+> the return value of try_to_free_mem_cgroup_pages() can be underestimated,
+> but this should be fine. The freed pages will be uncharged anyway, and we
+> can charge the memcg the next time around as we usually do memcg reclaim
+> in a retry loop.
+> 
+> Fixes: f2fe7b09a52b ("mm: memcg/slab: charge individual slab objects
+> instead of pages")
+> 
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- tools/testing/selftests/mm/uffd-common.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/selftests/mm/uffd-common.c
-index 61c6250adf93..54dfd92d86cf 100644
---- a/tools/testing/selftests/mm/uffd-common.c
-+++ b/tools/testing/selftests/mm/uffd-common.c
-@@ -311,7 +311,7 @@ int uffd_test_ctx_init(uint64_t features, const char **errmsg)
- 	ret = userfaultfd_open(&features);
- 	if (ret) {
- 		if (errmsg)
--			*errmsg = "possible lack of priviledge";
-+			*errmsg = "possible lack of privilege";
- 		return ret;
- 	}
- 
+Acked-by: Michal Hocko <mhocko@suse.com>
 -- 
-2.30.2
-
+Michal Hocko
+SUSE Labs
