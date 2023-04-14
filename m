@@ -2,154 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1F946E2756
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 17:49:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D10C46E276C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 17:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbjDNPta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 11:49:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36080 "EHLO
+        id S230305AbjDNPvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 11:51:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbjDNPt2 (ORCPT
+        with ESMTP id S229476AbjDNPvS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 11:49:28 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052B7B744
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 08:49:01 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-54bfa5e698eso505716207b3.13
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 08:49:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1681487339; x=1684079339;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fmFm31Zgsnr/JAh9QTSGsVfx+ibrGoUUFemyLUbPtb4=;
-        b=Rlt5TLsrmDQaF6QrL29STaJ8widYErvoHVHGL306lK6j+b2aQWb/UWMl/2yI0RqrwW
-         5KgUckmm4yPBuzWXEb7czSz+ISdpwkLm78usJs1W8tGJg0ggbhFepN/tR2qN06v8kgC6
-         /cHOuBdopwHD81KWmxN73TGt2jL9mHMADSvLg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681487339; x=1684079339;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fmFm31Zgsnr/JAh9QTSGsVfx+ibrGoUUFemyLUbPtb4=;
-        b=XNiHQdWiFHL/KwoHXuVnH0TYl64ZvZltysg4gHh+PNDkMmCzX7YZjbwAMw1moj5Xp3
-         K0cyPu79Qpp5aerO6oUICU5aVpeAAakYDU8t9WN70Daip4ZEm2ER/dLYDSHfb3FgR9OK
-         teVoYBNL/SiFxqipLYRgsrQQCnlTeGxZ2hCyPHAwy7MqVfjO/qRRjABJI7gjhg44Aam5
-         2rHj6/eF5f8LMxr4ITS6OjDvrTU6x8sK1ZArARhI7/SDaxbCeEkhg36h5MbgWwVV1LTf
-         sAe/Qm2L5v/JOC/wvkYQkAPIaAh82QTqIxFVye8V2znFdHYKerFb2I+50XyGIRa7KA3x
-         EJkg==
-X-Gm-Message-State: AAQBX9eyl9+77SGgslcOE916I4wDwGNdarCZfu4nK+ucEMUJtC4zVN5Q
-        /VnIHGOjgaDeZK/QWHE3G8YQgPRQjuAjkXOfh4A=
-X-Google-Smtp-Source: AKy350Z8OZCxrs8YvQLFgAvkrtT7M7I3THAb6QEtoQ2paEfeaGEZqwXXZTCsH/cxgLPvndiZHxEmYA==
-X-Received: by 2002:a0d:d695:0:b0:54f:7971:4f84 with SMTP id y143-20020a0dd695000000b0054f79714f84mr7686147ywd.23.1681487339030;
-        Fri, 14 Apr 2023 08:48:59 -0700 (PDT)
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
-        by smtp.gmail.com with ESMTPSA id p23-20020a254217000000b00b8efc2332f3sm1177040yba.64.2023.04.14.08.48.58
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 08:48:58 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-54fbb713301so110015827b3.11
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 08:48:58 -0700 (PDT)
-X-Received: by 2002:a81:4106:0:b0:54f:b4e6:ae4e with SMTP id
- o6-20020a814106000000b0054fb4e6ae4emr4048259ywa.7.1681487337813; Fri, 14 Apr
- 2023 08:48:57 -0700 (PDT)
+        Fri, 14 Apr 2023 11:51:18 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19AD4BBAE;
+        Fri, 14 Apr 2023 08:50:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681487460; x=1713023460;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+es8XQvduTZictHBoRTR0IW2Z+9WnoX89NAdi6iQf5A=;
+  b=HrBFY09MW+/yD0kBpnD8uMkI9LXksloOqf2KWV/+zb445ug5WPxYMaip
+   F79az3r8d3S+k7PW6MA0Emm8T0M/ZgQC/jGyDPJrm37ew/mvC01EotAI4
+   29GD1UBTCJ4N9Tv9zO8D/ZNzILmYViTgJYulir7GNCS17DXfQMGReODTR
+   thQJL1jrB1JJFEvYzWdKSewolw4vCTuKqdGc5EkG4PqHU0vfY4WORmAbK
+   4fsxZcqs9aE7JbrjevQzGvbduk62Ex6ngT2xeknNzp6Cqf19ZT8KKbOBr
+   ZPmOWW+z4hhTq12CQXEhnC342G9PmUKmaxfqHhpMp/EMy8zS63SczIeoe
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="407369166"
+X-IronPort-AV: E=Sophos;i="5.99,197,1677571200"; 
+   d="scan'208";a="407369166"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 08:49:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="833581607"
+X-IronPort-AV: E=Sophos;i="5.99,197,1677571200"; 
+   d="scan'208";a="833581607"
+Received: from p12ill20yoongsia.png.intel.com ([10.88.227.28])
+  by fmsmga001.fm.intel.com with ESMTP; 14 Apr 2023 08:49:35 -0700
+From:   Song Yoong Siang <yoong.siang.song@intel.com>
+To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Vedang Patel <vedang.patel@intel.com>,
+        Jithu Joseph <jithu.joseph@intel.com>,
+        Andre Guedes <andre.guedes@intel.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        David Laight <David.Laight@ACULAB.COM>
+Cc:     intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        xdp-hints@xdp-project.net, stable@vger.kernel.org,
+        Song Yoong Siang <yoong.siang.song@intel.com>
+Subject: [PATCH net v3 1/1] igc: read before write to SRRCTL register
+Date:   Fri, 14 Apr 2023 23:49:02 +0800
+Message-Id: <20230414154902.2950535-1-yoong.siang.song@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <1681481153-24036-1-git-send-email-quic_vnivarth@quicinc.com>
-In-Reply-To: <1681481153-24036-1-git-send-email-quic_vnivarth@quicinc.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 14 Apr 2023 08:48:46 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XU_SWzJTmtqoZZ1eTDu3WcWQOAFbkBS=Juaz9_DivZSg@mail.gmail.com>
-Message-ID: <CAD=FV=XU_SWzJTmtqoZZ1eTDu3WcWQOAFbkBS=Juaz9_DivZSg@mail.gmail.com>
-Subject: Re: [PATCH v3 0/3] spi: Add DMA mode support to spi-qcom-qspi
-To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        cros-qcom-dts-watchers@chromium.org, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_msavaliy@quicinc.com,
-        mka@chromium.org, swboyd@chromium.org, quic_vtanuku@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+igc_configure_rx_ring() function will be called as part of XDP program
+setup. If Rx hardware timestamp is enabled prio to XDP program setup,
+this timestamp enablement will be overwritten when buffer size is
+written into SRRCTL register.
 
-On Fri, Apr 14, 2023 at 7:06=E2=80=AFAM Vijaya Krishna Nivarthi
-<quic_vnivarth@quicinc.com> wrote:
->
-> There are large number of QSPI irqs that fire during boot/init and later
-> on every suspend/resume.
-> This could be made faster by doing DMA instead of PIO.
-> Below is comparison for number of interrupts raised in 2 acenarios...
+Thus, this commit read the register value before write to SRRCTL
+register. This commit is tested by using xdp_hw_metadata bpf selftest
+tool. The tool enables Rx hardware timestamp and then attach XDP program
+to igc driver. It will display hardware timestamp of UDP packet with
+port number 9092. Below are detail of test steps and results.
 
-s/acenarios/scenarios
+Command on DUT:
+  sudo ./xdp_hw_metadata <interface name>
 
-> Boot up and stabilise
-> Suspend/Resume
->
-> Sequence   PIO    DMA
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> Boot-up    69088  19284
-> S/R        5066   3430
->
-> Though we have not made measurements for speed, power we expect
-> the performance to be better with DMA mode and no regressions were
-> encountered in testing.
+Command on Link Partner:
+  echo -n skb | nc -u -q1 <destination IPv4 addr> 9092
 
-Measuring the speed isn't really very hard, so I gave it a shot.
+Result before this patch:
+  skb hwtstamp is not found!
 
-I used a truly terrible python script to do this on a Chromebook:
+Result after this patch:
+  found skb hwtstamp = 1677800973.642836757
 
---
+Optionally, read PHC to confirm the values obtained are almost the same:
+Command:
+  sudo ./testptp -d /dev/ptp0 -g
+Result:
+  clock time: 1677800973.913598978 or Fri Mar  3 07:49:33 2023
 
-import os
-import time
+Fixes: fc9df2a0b520 ("igc: Enable RX via AF_XDP zero-copy")
+Cc: <stable@vger.kernel.org> # 5.14+
+Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
+Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
+Reviewed-by: Jesper Dangaard Brouer <brouer@redhat.com>
+---
+v2 -> v3: Refactor SRRCTL definitions to more human readable definitions
+v1 -> v2: Fix indention
+---
+ drivers/net/ethernet/intel/igc/igc_base.h | 11 ++++++++---
+ drivers/net/ethernet/intel/igc/igc_main.c |  7 +++++--
+ 2 files changed, 13 insertions(+), 5 deletions(-)
 
-os.system("""
-stop ui
-stop powerd
+diff --git a/drivers/net/ethernet/intel/igc/igc_base.h b/drivers/net/ethernet/intel/igc/igc_base.h
+index 7a992befca24..9f3827eda157 100644
+--- a/drivers/net/ethernet/intel/igc/igc_base.h
++++ b/drivers/net/ethernet/intel/igc/igc_base.h
+@@ -87,8 +87,13 @@ union igc_adv_rx_desc {
+ #define IGC_RXDCTL_SWFLUSH		0x04000000 /* Receive Software Flush */
+ 
+ /* SRRCTL bit definitions */
+-#define IGC_SRRCTL_BSIZEPKT_SHIFT		10 /* Shift _right_ */
+-#define IGC_SRRCTL_BSIZEHDRSIZE_SHIFT		2  /* Shift _left_ */
+-#define IGC_SRRCTL_DESCTYPE_ADV_ONEBUF	0x02000000
++#define IGC_SRRCTL_BSIZEPKT_MASK	GENMASK(6, 0)
++#define IGC_SRRCTL_BSIZEPKT(x)		FIELD_PREP(IGC_SRRCTL_BSIZEPKT_MASK, \
++					(x) / 1024) /* in 1 KB resolution */
++#define IGC_SRRCTL_BSIZEHDR_MASK	GENMASK(13, 8)
++#define IGC_SRRCTL_BSIZEHDR(x)		FIELD_PREP(IGC_SRRCTL_BSIZEHDR_MASK, \
++					(x) / 64) /* in 64 bytes resolution */
++#define IGC_SRRCTL_DESCTYPE_MASK	GENMASK(27, 25)
++#define IGC_SRRCTL_DESCTYPE_ADV_ONEBUF	FIELD_PREP(IGC_SRRCTL_DESCTYPE_MASK, 1)
+ 
+ #endif /* _IGC_BASE_H */
+diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
+index 25fc6c65209b..a2d823e64609 100644
+--- a/drivers/net/ethernet/intel/igc/igc_main.c
++++ b/drivers/net/ethernet/intel/igc/igc_main.c
+@@ -641,8 +641,11 @@ static void igc_configure_rx_ring(struct igc_adapter *adapter,
+ 	else
+ 		buf_size = IGC_RXBUFFER_2048;
+ 
+-	srrctl = IGC_RX_HDR_LEN << IGC_SRRCTL_BSIZEHDRSIZE_SHIFT;
+-	srrctl |= buf_size >> IGC_SRRCTL_BSIZEPKT_SHIFT;
++	srrctl = rd32(IGC_SRRCTL(reg_idx));
++	srrctl &= ~(IGC_SRRCTL_BSIZEPKT_MASK | IGC_SRRCTL_BSIZEHDR_MASK |
++		    IGC_SRRCTL_DESCTYPE_MASK);
++	srrctl |= IGC_SRRCTL_BSIZEHDR(IGC_RX_HDR_LEN);
++	srrctl |= IGC_SRRCTL_BSIZEPKT(buf_size);
+ 	srrctl |= IGC_SRRCTL_DESCTYPE_ADV_ONEBUF;
+ 
+ 	wr32(IGC_SRRCTL(reg_idx), srrctl);
+-- 
+2.34.1
 
-cd /sys/devices/system/cpu/cpufreq
-for policy in policy*; do
-  cat ${policy}/cpuinfo_max_freq > ${policy}/scaling_min_freq
-done
-""")
-
-all_times =3D []
-for i in range(1000):
-  start =3D time.time()
-  os.system("flashrom -p host -r /tmp/foo.bin")
-  end =3D time.time()
-
-  all_times.append(end - start)
-  print("Iteration %d, min=3D%.2f, max=3D%.2f, avg=3D%.2f" % (
-      i, min(all_times), max(all_times), sum(all_times) / len(all_times)))
-
---
-
-The good news is that after applying your patches the loop runs _much_ fast=
-er.
-
-The bad news is that it runs much faster because it very quickly fails
-and errors out. flashrom just keeps reporting:
-
-Opened /dev/mtd0 successfully
-Found Programmer flash chip "Opaque flash chip" (8192 kB,
-Programmer-specific) on host.
-Reading flash... Cannot read 0x001000 bytes at 0x000000: Connection timed o=
-ut
-read_flash: failed to read (00000000..0x7fffff).
-Read operation failed!
-FAILED.
-FAILED
-
-I went back and tried v1, v2, and v3 and all three versions fail.
