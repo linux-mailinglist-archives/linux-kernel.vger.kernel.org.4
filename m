@@ -2,108 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FFF06EB4B9
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Apr 2023 00:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 082296E1F7A
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 11:40:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233584AbjDUW3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Apr 2023 18:29:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59500 "EHLO
+        id S229836AbjDNJkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 05:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjDUW32 (ORCPT
+        with ESMTP id S229476AbjDNJki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Apr 2023 18:29:28 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8604D1BF0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 15:29:27 -0700 (PDT)
-Received: from skinsburskii.localdomain (c-67-170-100-148.hsd1.wa.comcast.net [67.170.100.148])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 26EF021C2533;
-        Fri, 21 Apr 2023 15:29:25 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 26EF021C2533
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1682116165;
-        bh=XSS94wog701zQLpD7y0CmSI6sjOskvST2v9WTZpXSuw=;
-        h=Subject:From:Cc:Date:From;
-        b=arEPHrKsh8TFGu/P0XgGPHT9pjeBHzdkoVeqO526rGC7zm/U3vt4SRxnWYpvHdhQh
-         SSPIer8A5yVObP4y3b3+TKOhosxNDOSpBkhp2MxR/XdsDcmXFkNPOms7g3w/3rIMIn
-         1bWpAuyXCGq5DHAzh+bopglKFWnST9ompseG90EQ=
-Subject: [PATCH] x86: asm/io.h: Harden virt_to_phys/isa_virt_to_bus prototypes
-From:   Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
-Cc:     Stanislav Kinsburskii <stanislav.kinsburskii@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Chris Down <chris@chrisdown.name>,
-        Helge Deller <deller@gmx.de>, Omar Sandoval <osandov@fb.com>,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 14 Apr 2023 02:40:34 -0700
-Message-ID: <168146523405.6279.3632248068235163346.stgit@skinsburskii.localdomain>
-User-Agent: StGit/0.19
+        Fri, 14 Apr 2023 05:40:38 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A67721BD0;
+        Fri, 14 Apr 2023 02:40:37 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 8D20980A6;
+        Fri, 14 Apr 2023 09:40:36 +0000 (UTC)
+Date:   Fri, 14 Apr 2023 12:40:35 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-omap@vger.kernel.org,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] serial: 8250: Clear port->pm on port specific driver
+ unbind
+Message-ID: <20230414094035.GF36234@atomide.com>
+References: <20230413070342.36155-1-tony@atomide.com>
+ <ZDgoi2mFYYqswAhu@smile.fi.intel.com>
+ <20230414054726.GE36234@atomide.com>
+ <63b333cb-13c7-db58-9cf-697aa1c4c48a@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-15.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,
-        MISSING_HEADERS,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <63b333cb-13c7-db58-9cf-697aa1c4c48a@linux.intel.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stanislav Kinsburskii <stanislav.kinsburskii@gmail.com>
+* Ilpo Järvinen <ilpo.jarvinen@linux.intel.com> [230414 07:36]:
+> On Fri, 14 Apr 2023, Tony Lindgren wrote:
+> 
+> > * Andy Shevchenko <andriy.shevchenko@linux.intel.com> [230413 16:06]:
+> > > On Thu, Apr 13, 2023 at 10:03:41AM +0300, Tony Lindgren wrote:
+> > > > Let's fix the issue by clearing port->pm in serial8250_unregister_port().
+> > > 
+> > > Sounds to me like a fix that needs a Fixes tag.
+> > 
+> > Maybe commit c161afe9759d ("8250: allow platforms to override PM hook.").
+> > 
+> > That's a bit unclear though as the hardware specific functions were
+> > available at that point as they were passed in platform data. This can
+> > be seen with git blame c161afe9759d drivers/serial/8250.c. To me it seems
+> > the port->pm became potentially invalid if a serial port device driver
+> > started implementing PM runtime?
+> > 
+> > Maybe just tagging it with Cc: stable is better if no obvious Fixes tag
+> > can be figured out.
+> 
+> I'd just put that c161afe9759d there. It seems quite harmless even if it 
+> would be unnecessary before some driver commit which is much harder to 
+> pinpoint (and it would likely turn out old enough to not matter anyway 
+> for the kernels stable cares about).
 
-These two helper functions - virt_to_phys and isa_virt_to_bus - don't need the
-address pointer to be mutable.
+OK works for me.
 
-In the same time expecting it to be mutable leads to the following build
-warning for constant pointers:
+I'm now wondering still if we should clear all the conditional hardware
+specific functions too in addition to port->pm that get set in
+serial8250_register_8250_port(). Maybe best done in a separate patch
+as needed.. Any suggestions?
 
-  warning: passing argument 1 of ‘virt_to_phys’ discards ‘const’ qualifier from pointer target type
+> I forgot to give this earlier:
+> 
+> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-Signed-off-by: Stanislav Kinsburskii <stanislav.kinsburskii@gmail.com>
-CC: Thomas Gleixner <tglx@linutronix.de>
-CC: Ingo Molnar <mingo@redhat.com>
-CC: Borislav Petkov <bp@alien8.de>
-CC: Dave Hansen <dave.hansen@linux.intel.com>
-CC: x86@kernel.org
-CC: "H. Peter Anvin" <hpa@zytor.com>
-CC: Geert Uytterhoeven <geert@linux-m68k.org>
-CC: Arnd Bergmann <arnd@arndb.de>
-CC: Chris Down <chris@chrisdown.name>
-CC: Helge Deller <deller@gmx.de>
-CC: Omar Sandoval <osandov@fb.com>
-CC: linux-kernel@vger.kernel.org
----
- arch/x86/include/asm/io.h |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Thanks,
 
-diff --git a/arch/x86/include/asm/io.h b/arch/x86/include/asm/io.h
-index e9025640f634..0e6f5b48f517 100644
---- a/arch/x86/include/asm/io.h
-+++ b/arch/x86/include/asm/io.h
-@@ -128,7 +128,7 @@ extern int valid_mmap_phys_addr_range(unsigned long pfn, size_t size);
-  *	this function
-  */
- 
--static inline phys_addr_t virt_to_phys(volatile void *address)
-+static inline phys_addr_t virt_to_phys(const volatile void *address)
- {
- 	return __pa(address);
- }
-@@ -163,7 +163,7 @@ static inline void *phys_to_virt(phys_addr_t address)
-  * However, we truncate the address to unsigned int to avoid undesirable
-  * promotions in legacy drivers.
-  */
--static inline unsigned int isa_virt_to_bus(volatile void *address)
-+static inline unsigned int isa_virt_to_bus(const volatile void *address)
- {
- 	return (unsigned int)virt_to_phys(address);
- }
-
-
+Tony
