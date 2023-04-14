@@ -2,197 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29DE76E2CE9
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 01:31:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BDEA6E2CEB
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 01:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbjDNXb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 19:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50780 "EHLO
+        id S229734AbjDNXeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 19:34:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjDNXby (ORCPT
+        with ESMTP id S229457AbjDNXeM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 19:31:54 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C05BC9;
-        Fri, 14 Apr 2023 16:31:51 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 4341724DB83;
-        Sat, 15 Apr 2023 07:31:47 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 15 Apr
- 2023 07:31:47 +0800
-Received: from [192.168.0.6] (113.102.16.222) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 15 Apr
- 2023 07:31:46 +0800
-Message-ID: <2aa668e3-d065-7376-5d41-ef855afa8518@starfivetech.com>
-Date:   Sat, 15 Apr 2023 07:31:45 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] clk: starfive: Avoid casting iomem pointers
-To:     Xingyu Wu <xingyu.wu@starfivetech.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <patches@lists.linux.dev>,
-        Tommaso Merciai <tomm.merciai@gmail.com>,
-        "Emil Renner Berthing" <emil.renner.berthing@canonical.com>,
-        Conor Dooley <conor.dooley@microchip.com>
-References: <20230413205528.4044216-1-sboyd@kernel.org>
- <b41d8cf4-70aa-3b64-5254-46d92a188f63@starfivetech.com>
+        Fri, 14 Apr 2023 19:34:12 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380B9C0;
+        Fri, 14 Apr 2023 16:34:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1681515245; x=1713051245;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=iGEtWjwBtltHPW4MjUsYv5JPyccsKvvDCWP/Hm7rIhA=;
+  b=LCJ34B6zUOV83dJQermv1AdB4NoOCBCBMBmaG6Ad37Ui+PWGfaaVetqv
+   0TzQW+FRgStAqngpAybgILRghEVCSbEWHyiuMzsTY5ISrtbn3TD3x5L8n
+   K1LYkKL4AXVdHT4cA70FAWytNB2Hl9JWiUenxyJbHbeHtWSl45iFgiHkx
+   tp3UMbJUdnMs8dJYfhP1yrPuJlL1tFjBDEjFfSC8qTJRWOZa1vx2TDIv1
+   /ldQpJBPu3V/kwWNB97Dneg2Uhsxl8mS4NpYfMneJZJuRkipKeyW1OOhX
+   UnDHTj924vb2yo6pCOzBcP8pFpVQ7iEr0aV3fyxtLtn/N6n2m9ZNet1QX
+   g==;
+X-IronPort-AV: E=Sophos;i="5.99,198,1677567600"; 
+   d="scan'208";a="206609899"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Apr 2023 16:34:05 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 14 Apr 2023 16:34:01 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Fri, 14 Apr 2023 16:34:01 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HnYX+9BjZ08zaWRMfp97t9xatpFwrlYAc088+B0zOnfL97TLjBFt4pr1mbBacl5yEOfOmA4t5EvhHMBzgGQ+FSaGVvOmBC4x2vEypV3aVMTClCWIAdsDiL8HqI4TJzUPut7EcclZxKJBO1pCvB4sCYL1qMmhGXIW8vKNookJRiHHdJLibzSE87pY5lOn67d4WL3pmF2ZYnGXcG0JqCJyePBkmeRQR402pP73lWgezZkEAnEMk1G3RjY58fZeg6XJyb5RQEpr3hU3YLKxY6EXiTkJMmLf1gWOTPd5OGGvWNRaCCZBIuILYo/eLa+/srZqSVV/M/nb6XxUGIL6HRRFng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iGEtWjwBtltHPW4MjUsYv5JPyccsKvvDCWP/Hm7rIhA=;
+ b=D2hCbtM8j0n7Qa7PfbppRlLDW8hz7XBsVFhVSg59t2g5iR11H4+uuECHYwslOYjrXLAqbW8gVEkXJfxVI8fn/GviV4MsbaOD4GYQ/ksdHu5tJNU/TES2gBPC2s11iHeg1pmpnjeEn9gvxxPaEnzvrjBkUw+YUM12aqgBCiHKwVFkVme356C1pueamD0enwGA2KWdQI2hFifD3ko+cYOW//iOvwMV/PLtPRevAGJVh5JFtNWZ+KIcuI+QAubZ3WbtXauboSzl7sHuL/oHHQZuDBtYB7jr2zvke+iaG/DsDPKUjafGVWz8kqopazuiDclgt3zm+1YdDBC1nPypqIaYoA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iGEtWjwBtltHPW4MjUsYv5JPyccsKvvDCWP/Hm7rIhA=;
+ b=HCE28eglH1pR+riH+h2pUG6VUzKdgfaUJqz24HkMM2e40UFZoDifaIWQbllGiZHeyqts4rWGcvGfrvmYLPL3+NnAY1NQ+qQR+9l5yHSqjMKD4IWr3wmA85x2RNpFCds2nu1Ipw3JIYDBAmbZYvd97fOOlaPqHOx8ahPs6IXRQwA=
+Received: from CO6PR11MB5618.namprd11.prod.outlook.com (2603:10b6:303:13f::24)
+ by CY8PR11MB7338.namprd11.prod.outlook.com (2603:10b6:930:9e::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Fri, 14 Apr
+ 2023 23:33:59 +0000
+Received: from CO6PR11MB5618.namprd11.prod.outlook.com
+ ([fe80::4de2:6d2b:430c:ef6b]) by CO6PR11MB5618.namprd11.prod.outlook.com
+ ([fe80::4de2:6d2b:430c:ef6b%6]) with mapi id 15.20.6298.028; Fri, 14 Apr 2023
+ 23:33:59 +0000
+From:   <Kelvin.Cao@microchip.com>
+To:     <vkoul@kernel.org>
+CC:     <dmaengine@vger.kernel.org>, <George.Ge@microchip.com>,
+        <linux-kernel@vger.kernel.org>, <logang@deltatee.com>,
+        <christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH v3 1/1] dmaengine: switchtec-dma: Introduce Switchtec DMA
+ engine PCI driver
+Thread-Topic: [PATCH v3 1/1] dmaengine: switchtec-dma: Introduce Switchtec DMA
+ engine PCI driver
+Thread-Index: AQHZaNWGdssdDNSctEm686/OqYigAK8n78SAgAORvAA=
+Date:   Fri, 14 Apr 2023 23:33:59 +0000
+Message-ID: <fec615f661c6d244ee37ec082df25b1943add135.camel@microchip.com>
+References: <20230406210323.1018163-1-kelvin.cao@microchip.com>
+         <20230406210323.1018163-2-kelvin.cao@microchip.com>
+         <ZDbkZxppP/bmj7DD@matsya>
+In-Reply-To: <ZDbkZxppP/bmj7DD@matsya>
+Accept-Language: en-US, zh-CN
 Content-Language: en-US
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <b41d8cf4-70aa-3b64-5254-46d92a188f63@starfivetech.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.102.16.222]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.44.4-0ubuntu1 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CO6PR11MB5618:EE_|CY8PR11MB7338:EE_
+x-ms-office365-filtering-correlation-id: b8bd4a50-ab51-46f0-86c8-08db3d40b8f6
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: eEFUQGDp5vPWWICi5XYU2CfOpZKwnBnnDbidplMxTY6WPJlBSaRH8ace1Y24sitTesoEqE5mZ4utfAcaqJuEIwfwLEOARnbz9jVUtWhro++8ZLUc6/HuetdcxKOj1d4gSvOHSU983F1Las8Y6lxeMVtITy/gs/MV93Wt2C/OJfP4Wll7a+h6XrAu+Q+pSziWFfR2iyx52rYdYe0SyF8SxNtvtWRylg4BFHIzPzuqxVyvqOBOn4jxLiuADLnluoNwZlQjN+dH+cybpI629pbDA8RDmLhF3nFIU3gyWNIpxOPYRaqb7GPAdCYeXvxHSBCXzptnzEXCyL6iUaSDNwVhxCW4kH9XEx+vFHJxZg4IAFQSFtBo/onRTuYvjvRmFbeCT1agsgPaQIJ1laVYOypaVFdrwYgKjh40DwtLvAIYSte5KPNUvPj/yK4dUKDsHGXhrWO6mxc/YBFH1E+VafCPzdcGenMnP+CFAvvV75f1r+3kpO60QdYSqGkWDiOB5Shrocef8vg458TutkiYxpy2RRc1V2aN0RnM+/nLnnUHsT2jzEuDfizxObTcMR21Hy9tfkugaben4LGnnBV9mI+dxeIDrSHtISramV36lOf8W4g=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR11MB5618.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(346002)(366004)(136003)(396003)(39860400002)(451199021)(2616005)(66476007)(66946007)(91956017)(76116006)(6916009)(6486002)(66446008)(66556008)(478600001)(64756008)(54906003)(5660300002)(122000001)(4326008)(8676002)(38100700002)(316002)(8936002)(41300700001)(83380400001)(186003)(71200400001)(6512007)(26005)(6506007)(966005)(86362001)(2906002)(36756003)(38070700005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MU41dk1qT2o2QjQ3c0JjK05SakNnYVgrN3dqclhNVzhvbkpxRnZnNlJXOUxi?=
+ =?utf-8?B?bW1KQmE1VmxlRGJ2Q0ZBdVJXTURxTDRFOUhyRlJFU0JUbEx0bGN6eDhpcktX?=
+ =?utf-8?B?Q0t0aEdCaUk4VGk3SW5Oems0ZnNYZnJneHhEZXp0QjVXRGtzR0JsQ0dhUmlj?=
+ =?utf-8?B?bmtlS2thWTFVQkdid0dTUFIwRjliWmFPQUkvZzZOUWlpKzdrczVzVGs5bTN5?=
+ =?utf-8?B?d05Ndm41ZlJZRi9ld2paWHpUSjdid2QrYzlUU3MrNWVMNTdtekQrWStNRW13?=
+ =?utf-8?B?Qi9wZE42K2JrYjhoM1dtWVJtNXVBWVRtclJaS3FZbW02TFdSZkJUV3JPbFo2?=
+ =?utf-8?B?NEFnbGNTN0xpKzhwNExHckRuR2hRcGt0U1dLd0k1Q3ptMVg5Zkxjdk1nMkNs?=
+ =?utf-8?B?bHZVd25scUtydUgvVUtsQ1l0SmJsM3VLaGdVSGR6bjBEdGxtbUEzRjd3ZlFp?=
+ =?utf-8?B?SGp2cnM2TkRKb05ZOVdCK09DVDNPZU8rS2FDd2RCbjRFQTRpcFMzZllRUmg2?=
+ =?utf-8?B?YlFweWM0dDN3QytCTlZuNXBMeHFXc1B2Q1UycnpNYlF5c2lHalVwR0dVM3ZR?=
+ =?utf-8?B?Ry85QjFKRmh4eVN3NzRORk5wQWN1MFJSYjhYbnZNSUFGRnRGd1RCT2hrZnBq?=
+ =?utf-8?B?OE13NlFkRWVlYTdwUnYrRkZwMCtOaGg2YkV6RWgzc3FaTURMdmg1akdRTzMw?=
+ =?utf-8?B?OEEyNS9WamNCb0hVOVk2R3ByN3Vnd05aWTI0UjVNVkpkbjdJTnR3ejV2OERJ?=
+ =?utf-8?B?NUdOTVcxNlBLa1V5ZzlieEhUZWpLcTJveHJ4TVlaYi9Cb3docEdVeEEzVG5n?=
+ =?utf-8?B?RHBSbXFsZ001VDkzbVVMdndOZW9HalhpMkFPMUNlL1QxazJCNkY4NUd5VmJW?=
+ =?utf-8?B?ZkE4YUJxMzVteWFRRTBxRjI5b254UkFxVGdkLzhmSVZ5emdNS0F0WFQxbkh3?=
+ =?utf-8?B?WlNMRkRtdjRqblNxdnNDRnBXQVIybG83TGlNRkplZmdUSG8zS1dKYmVjbzhP?=
+ =?utf-8?B?QVNQT09PUWlCR01pN0dNMEVvWmUzVmVXOGFaRFN5R0dSTFkxakNkWmlEb2Y2?=
+ =?utf-8?B?VE9vV0t6UExHS3dySVdmTkxMRkptK0djQ21DcUlhMmlVNG5Bam5XNGkyTU1S?=
+ =?utf-8?B?dDZCOWFhc1FIMThPMWk1aWN1T1IwRzVIQnExRk9DMktCWDY5UFVUZmdobjhT?=
+ =?utf-8?B?VGtmQVpZUGdkbkZwb2hFekZhN25rd1kvUEVJdXpqSmRyTEg5TEdQWk5HdmNj?=
+ =?utf-8?B?UWwwZ1haaWlzbUNWRDBKOWpkWUhtMHhPdXZ3ZHhzcEVHVTFROVQ3bU9sNk5B?=
+ =?utf-8?B?eWsxWlZTN0xlL25EN3VKUFYvWmdVZ0tHN1FHa1FKcjgxN2JXRUVDZHVmbmZK?=
+ =?utf-8?B?L0djUC9BNHFoWVBJNEZHM1ljSThJRVI2alZlSWNwbEEzLzBVTEVBTDA3eXhU?=
+ =?utf-8?B?YnJPb3duZTBVN0tBNTdkZHZQUyt4Y05maXVPckgvZ0dpdUdpdXZyZjI0UjNJ?=
+ =?utf-8?B?d2p0Um1NWlArL0dxL0hkVGFpZFptRmtQOEdTQU90blRneFZCN3dpOUM5eUJD?=
+ =?utf-8?B?emt5aTViRmtrNFBoSm9ndDZ3c1FLa3NqN1JYSjltV2lNNlFyQ20zY1FOcHZG?=
+ =?utf-8?B?NGVPMDJwVnY1dElVaFRnaWdpaE5kb1I0cm14VzVxcHB6dTRjSzFMcUpjSnhP?=
+ =?utf-8?B?S3E4OGtENGx5UkxZYmhoSG1ZQmJqTEZacWQwaFQvR0JpSUhtWkVzdXA4Mzdk?=
+ =?utf-8?B?WENFeFRHV040RG1aQmJBNTNUV0x2ZUc5ZFpSeCtuTFB1T0VObnY0eE1POThQ?=
+ =?utf-8?B?cXZEVlB6bFpFd1BBOTlnVnlmQ29XbW1BaThTYU1RMC9kcDVJa0FJSzNDSmF0?=
+ =?utf-8?B?czNxOXJRc1FqaHhSZmM2anlnS1NoMTZKenI0Y1ZML3NySzVENkw0dC8vY2Ur?=
+ =?utf-8?B?SDNZUXNVSmlNMWt5eEdJMHFvZzVrV2hJdVAyQ1B3QnhwRmNYblhkR3NDQ0dV?=
+ =?utf-8?B?TWZSQXdiZDk3L05JdDVZYU96NitCWHFvbkpPaTFaNUI2Y2dtTTVFNVBGMk1F?=
+ =?utf-8?B?cHB0dDRLTGhlbUlxTitKV3FCamdkWDVFOGI1bDYya0FDelhtVWxJck1aWmZD?=
+ =?utf-8?B?bVNUMWR3YisxS1dYQ0N6b2VnYVJoUXc2TUVQU0Y0NTdpUmpRR01vOTIvT3RL?=
+ =?utf-8?B?b0E9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <5392FCE77D1FA648991C7341E92BAFFE@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR11MB5618.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b8bd4a50-ab51-46f0-86c8-08db3d40b8f6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Apr 2023 23:33:59.3405
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Z6/dqYQnyv9Lik8sbDAJLS6Hjo4SYGimVnpd6isDu1F9nzr6F+1J+FGZ/4UGweBG1lKMJXu08PdkdTRro9If0x12dBopNUUWtoUEFBgQ8fU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7338
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Apr 2023 09:58:47 +0800, Xingyu Wu wrote:
-> On 2023/4/14 4:55, Stephen Boyd wrote:
->> Let's use a wrapper struct for the auxiliary_device made in
->> jh7110_reset_controller_register() so that we can stop casting iomem
->> pointers. The casts trip up tools like sparse, and make for some awkward
->> casts that are largely unnecessary. While we're here, change the
->> allocation from devm and actually free the auxiliary_device memory in
->> the release function. This avoids any use after free problems where the
->> parent device driver is unbound from the device but the
->> auxiliuary_device is still in use accessing devm freed memory.
->> 
->> Cc: Tommaso Merciai <tomm.merciai@gmail.com>
->> Cc: Emil Renner Berthing <emil.renner.berthing@canonical.com>
->> Cc: Hal Feng <hal.feng@starfivetech.com>
->> Cc: Conor Dooley <conor.dooley@microchip.com>
->> Cc: Xingyu Wu <xingyu.wu@starfivetech.com>
->> Fixes: edab7204afe5 ("clk: starfive: Add StarFive JH7110 system clock driver")
->> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
->> ---
->> 
->> I can take this via clk tree.
->> 
->>  drivers/clk/starfive/clk-starfive-jh7110-sys.c | 15 ++++++++++++---
->>  drivers/reset/starfive/reset-starfive-jh7110.c |  9 ++++++---
->>  include/soc/starfive/reset-starfive-jh71x0.h   | 17 +++++++++++++++++
->>  3 files changed, 35 insertions(+), 6 deletions(-)
->>  create mode 100644 include/soc/starfive/reset-starfive-jh71x0.h
->> 
->> diff --git a/drivers/clk/starfive/clk-starfive-jh7110-sys.c b/drivers/clk/starfive/clk-starfive-jh7110-sys.c
->> index 5ec210644e1d..851b93d0f371 100644
->> --- a/drivers/clk/starfive/clk-starfive-jh7110-sys.c
->> +++ b/drivers/clk/starfive/clk-starfive-jh7110-sys.c
->> @@ -11,6 +11,9 @@
->>  #include <linux/init.h>
->>  #include <linux/io.h>
->>  #include <linux/platform_device.h>
->> +#include <linux/slab.h>
->> +
->> +#include <soc/starfive/reset-starfive-jh71x0.h>
->>  
->>  #include <dt-bindings/clock/starfive,jh7110-crg.h>
->>  
->> @@ -335,26 +338,32 @@ static void jh7110_reset_unregister_adev(void *_adev)
->>  	struct auxiliary_device *adev = _adev;
->>  
->>  	auxiliary_device_delete(adev);
->> +	auxiliary_device_uninit(adev);
->>  }
->>  
->>  static void jh7110_reset_adev_release(struct device *dev)
->>  {
->>  	struct auxiliary_device *adev = to_auxiliary_dev(dev);
->> +	struct jh71x0_reset_adev *rdev = to_jh71x0_reset_adev(adev);
->>  
->> -	auxiliary_device_uninit(adev);
->> +	kfree(rdev);
->>  }
->>  
->>  int jh7110_reset_controller_register(struct jh71x0_clk_priv *priv,
->>  				     const char *adev_name,
->>  				     u32 adev_id)
->>  {
->> +	struct jh71x0_reset_adev *rdev;
->>  	struct auxiliary_device *adev;
->>  	int ret;
->>  
->> -	adev = devm_kzalloc(priv->dev, sizeof(*adev), GFP_KERNEL);
->> -	if (!adev)
->> +	rdev = kzalloc(sizeof(*rdev), GFP_KERNEL);
->> +	if (!rdev)
->>  		return -ENOMEM;
->>  
->> +	rdev->base = priv->base;
->> +
->> +	adev = &rdev->adev;
->>  	adev->name = adev_name;
->>  	adev->dev.parent = priv->dev;
->>  	adev->dev.release = jh7110_reset_adev_release;
->> diff --git a/drivers/reset/starfive/reset-starfive-jh7110.c b/drivers/reset/starfive/reset-starfive-jh7110.c
->> index c1b3a490d951..2d26ae95c8cc 100644
->> --- a/drivers/reset/starfive/reset-starfive-jh7110.c
->> +++ b/drivers/reset/starfive/reset-starfive-jh7110.c
->> @@ -7,6 +7,8 @@
->>  
->>  #include <linux/auxiliary_bus.h>
->>  
->> +#include <soc/starfive/reset-starfive-jh71x0.h>
->> +
->>  #include "reset-starfive-jh71x0.h"
->>  
->>  #include <dt-bindings/reset/starfive,jh7110-crg.h>
->> @@ -33,14 +35,15 @@ static int jh7110_reset_probe(struct auxiliary_device *adev,
->>  			      const struct auxiliary_device_id *id)
->>  {
->>  	struct jh7110_reset_info *info = (struct jh7110_reset_info *)(id->driver_data);
->> -	void __iomem **base = (void __iomem **)dev_get_drvdata(adev->dev.parent);
-> 
-> Thank you for doing that. BTW, if drop the dev_get_drvdata(), the dev_set_drvdata() should also be dropped.
-> 
-> diff --git a/drivers/clk/starfive/clk-starfive-jh7110-aon.c b/drivers/clk/starfive/clk-starfive-jh7110-aon.c
-> index a2799fe8a234..62954eb7b50a 100644
-> --- a/drivers/clk/starfive/clk-starfive-jh7110-aon.c
-> +++ b/drivers/clk/starfive/clk-starfive-jh7110-aon.c
-> @@ -83,8 +83,6 @@ static int jh7110_aoncrg_probe(struct platform_device *pdev)
->         if (IS_ERR(priv->base))
->                 return PTR_ERR(priv->base);
-> 
-> -       dev_set_drvdata(priv->dev, (void *)(&priv->base));
-> -
->         for (idx = 0; idx < JH7110_AONCLK_END; idx++) {
->                 u32 max = jh7110_aonclk_data[idx].max;
->                 struct clk_parent_data parents[4] = {};
-> diff --git a/drivers/clk/starfive/clk-starfive-jh7110-sys.c b/drivers/clk/starfive/clk-starfive-jh7110-sys.c
-> index 5ec210644e1d..0cda33fd47f8 100644
-> --- a/drivers/clk/starfive/clk-starfive-jh7110-sys.c
-> +++ b/drivers/clk/starfive/clk-starfive-jh7110-sys.c
-> @@ -393,8 +393,6 @@ static int __init jh7110_syscrg_probe(struct platform_device *pdev)
->         if (IS_ERR(priv->base))
->                 return PTR_ERR(priv->base);
-> 
-> -       dev_set_drvdata(priv->dev, (void *)(&priv->base));
-> -
->         /*
->          * These PLL clocks are not actually fixed factor clocks and can be
->          * controlled by the syscon registers of JH7110. They will be dropped
->
-
-Hi, Stephen,
-
-Thanks for your fix to my previous patches, and I have tested this patch
-on VisionFive 2 board. As Xingyu said above, I think dev_set_drvdata()
-should also be dropped in clk-starfive-jh7110-sys.c and
-clk-starfive-jh7110-aon.c.
-
-Best regards,
-Hal
+T24gV2VkLCAyMDIzLTA0LTEyIGF0IDIyOjMzICswNTMwLCBWaW5vZCBLb3VsIHdyb3RlOg0KDQo+
+ID4gKyNpbmNsdWRlIDxsaW51eC9jaXJjX2J1Zi5oPg0KPiA+ICsjaW5jbHVkZSA8bGludXgvZG1h
+ZW5naW5lLmg+DQo+ID4gKyNpbmNsdWRlIDxsaW51eC9tb2R1bGUuaD4NCj4gPiArI2luY2x1ZGUg
+PGxpbnV4L3BjaS5oPg0KPiA+ICsjaW5jbHVkZSA8bGludXgvZGVsYXkuaD4NCj4gPiArDQo+ID4g
+KyNpbmNsdWRlICJkbWFlbmdpbmUuaCINCj4gPiArDQo+ID4gK01PRFVMRV9ERVNDUklQVElPTigi
+U3dpdGNodGVjIFBDSWUgU3dpdGNoIERNQSBFbmdpbmUiKTsNCj4gPiArTU9EVUxFX1ZFUlNJT04o
+IjAuMSIpOw0KPiANCj4gd2hhdCBpcyB0aGUgdXNlIG9mIHRoaXM/DQpOb3Qgc3VyZSBpZiBJIGdl
+dCBpdCBjb3JyZWN0bHkuIEFzIGEgbG9hZGFibGUgbW9kdWxlLCBpdCBzaG93cw0KJ3ZlcnNpb246
+IDAuMScgZm9yIG1vZGluZm8NCj4gPiANCj4gPiArI2RlZmluZSBIQUxUX1JFVFJZIDEwMA0KPiA+
+ICtzdGF0aWMgaW50IGhhbHRfY2hhbm5lbChzdHJ1Y3Qgc3dpdGNodGVjX2RtYV9jaGFuICpzd2Rt
+YV9jaGFuKQ0KPiA+ICt7DQo+ID4gK8KgwqDCoMKgIHUzMiBzdGF0dXM7DQo+ID4gK8KgwqDCoMKg
+IHN0cnVjdCBjaGFuX2h3X3JlZ3MgX19pb21lbSAqY2hhbl9odyA9IHN3ZG1hX2NoYW4tDQo+ID4g
+Pm1taW9fY2hhbl9odzsNCj4gPiArwqDCoMKgwqAgaW50IHJldHJ5ID0gSEFMVF9SRVRSWTsNCj4g
+PiArwqDCoMKgwqAgc3RydWN0IHBjaV9kZXYgKnBkZXY7DQo+ID4gK8KgwqDCoMKgIGludCByZXQ7
+DQo+ID4gKw0KPiA+ICvCoMKgwqDCoCByY3VfcmVhZF9sb2NrKCk7DQo+ID4gK8KgwqDCoMKgIHBk
+ZXYgPSByY3VfZGVyZWZlcmVuY2Uoc3dkbWFfY2hhbi0+c3dkbWFfZGV2LT5wZGV2KTsNCj4gDQo+
+IHRoYXQgc291bmRzIGZpc2h5LCB3aHkgZG9lcyBhIGRyaXZlciBuZWVkIHRvIHVzZSByY3UgZnVu
+Y3Rpb25zDQpSQ1UgaXMgdXNlZCB0byBzeW5jaHJvbml6ZSBkcml2ZXIgdW5iaW5kIGFuZCBsb3cg
+bGV2ZWwgUENJIG9wZXJhdGlvbnMuDQoNClRoZSB1bmJpbmQgaXNzdWUgd2FzIGZpcnN0IHNwb3R0
+ZWQgYW5kIGZpeGVkIGJ5IExvZ2FuOg0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYWxsLzIwMTkx
+MjE2MTkwMTIwLjIxMzc0LTEtbG9nYW5nQGRlbHRhdGVlLmNvbS8NCg0KPiANClRoYW5rcywNCktl
+bHZpbg0K
