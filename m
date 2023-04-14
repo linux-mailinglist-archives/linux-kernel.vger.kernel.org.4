@@ -2,77 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B006E28DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 19:00:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 917866E28E5
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 19:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbjDNRAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 13:00:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59088 "EHLO
+        id S230298AbjDNRBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 13:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjDNRAk (ORCPT
+        with ESMTP id S230185AbjDNRBc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 13:00:40 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA444230
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 10:00:39 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-504eb1155d3so12707654a12.1
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 10:00:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681491638; x=1684083638;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fcVz7CUgiYkhjPKrULZ6Y+Q6MNzNGZWZZ2qZp+hF1YE=;
-        b=CR9QspsCWtzKNvqnQ603pmM+6l4HqsfihOi5xyoIaanOI9D3sVSROgtrnxCxF6AvgW
-         jAbr1g3t77RA2eMuIzUbIQd6mPR8SZDNu8DoPo13zJ4k4qGZIa4M+SzZmIixtnc+7Xvm
-         bhXQMZibQ9v3ll1MzCkGynzn0HI+/8lLWEerhhF7jcV6w/B9nD5zFIvrKzt9NDlX5t9Z
-         koRDQPEHGqKbL0nu/hKLJ0J/sYf3LKaaL9wFszBsaUSbUJcXlSaQwWY1h0ixGP0PitcT
-         D2SUFetjeyaSW+cCVsX7lq2iMwREmwlTN+Jb9W29Qy09+ZWgNwLNLSvDuHMgZ3kI9DWU
-         NVFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681491638; x=1684083638;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fcVz7CUgiYkhjPKrULZ6Y+Q6MNzNGZWZZ2qZp+hF1YE=;
-        b=gcfUrfYpi1WgHymxcADQk5iY2Zov+gVKBqHdMtSESohWb9K8g2LHHyJ/JRIIW5KKzn
-         fvk9OZuBPbAYm6Ek1mJYXMUEcBPbaBd7IU8V7QEB9DHxEi189ilIak/k+Ci1pQowOQY/
-         xb5FujRu05uuDBwah1+0Wm/lyi3i589mbBtr221YQA0j1p6HdM3fV08MyucCIFaaUo4D
-         i9R38euUSZ+zVTpvONeQKL6sMzJrbXZyLYRgWC/2w6fT9iqCVkyfNwFB/8gDlc2jEmqq
-         xb2of0Z2t0CkgfchXBKT4Un4lovKxYpNuWiUIgeIUnyGX/di+F8hhG/RMD3WIbkrPwQM
-         ZDig==
-X-Gm-Message-State: AAQBX9dS6zNH2j5Oq4hdUN6UxE53HdrsBTmGshlgpqfQcJNX+jrbyRE+
-        zJ9eCUlc+2LP/XBDsWn3f0Dlow==
-X-Google-Smtp-Source: AKy350ZZUwNYw/gqt4ucoxJgVdnUzPsq4LA6OmDG8VF20owwn2Du/lQmxZOGY6pXpqgffpIDOkScGA==
-X-Received: by 2002:a05:6402:653:b0:501:fe46:480b with SMTP id u19-20020a056402065300b00501fe46480bmr6234787edx.15.1681491637856;
-        Fri, 14 Apr 2023 10:00:37 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:39b7:81a0:bd41:17b1? ([2a02:810d:15c0:828:39b7:81a0:bd41:17b1])
-        by smtp.gmail.com with ESMTPSA id i25-20020aa7c719000000b00504ae3a5adfsm2345714edq.2.2023.04.14.10.00.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 10:00:37 -0700 (PDT)
-Message-ID: <5544de12-396c-29d4-859c-a6e17b2e2de4@linaro.org>
-Date:   Fri, 14 Apr 2023 19:00:36 +0200
+        Fri, 14 Apr 2023 13:01:32 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D049359EE;
+        Fri, 14 Apr 2023 10:01:17 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33EGnjFl014262;
+        Fri, 14 Apr 2023 17:01:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=L3vpeRMuOc5IfcvR3N45isiunZ5Yl50NdibhXSiD3nw=;
+ b=cesS/IZWcbwkyJipXzw6LPInHXrFvUs5GMdpec+tOWT9CUECfXhLi7dij3HYooMtuxa+
+ jZUbpCSOPco+Rjjt5aUmG/LdjVV4fTA7Lxds3MsV6FDxXHJiW/LPD4xQ19YZxGZ/pRQ1
+ 3mBcMEOLITbhTavwKpRtW4R1ePMvC+qL1yEcCiWQ/a3+ZTCLeksLD7Ny0Nvtn+HMzHRi
+ 3YwXqLgecwmO1F/ndGElqv3rw3jYRl+3ZkY1fieJd1HDzlOHrqlAhDcbq8WkYfSkLWfW
+ TxA2a/lEg9jFPoeAANvlClevsLizQltJkJsG5MYSA524QtMUiwoHIA7A+sMg/a/q41Rc XA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pxe66kkx7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 17:01:10 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33EH19nN026081
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 17:01:09 GMT
+Received: from [10.216.0.144] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 14 Apr
+ 2023 10:01:04 -0700
+Message-ID: <ffd543a8-769d-a159-16c1-6309388d16e6@quicinc.com>
+Date:   Fri, 14 Apr 2023 22:31:00 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 2/9] dt-bindings: ASoC: Add chv3-i2s
-Content-Language: en-US
-To:     =?UTF-8?Q?Pawe=c5=82_Anikiel?= <pan@semihalf.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lgirdwood@gmail.com,
-        broonie@kernel.org
-Cc:     perex@perex.cz, tiwai@suse.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, dinguyen@kernel.org,
-        lars@metafoo.de, nuno.sa@analog.com, upstream@semihalf.com
-References: <20230414140203.707729-1-pan@semihalf.com>
- <20230414140203.707729-3-pan@semihalf.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230414140203.707729-3-pan@semihalf.com>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 0/3] spi: Add DMA mode support to spi-qcom-qspi
+Content-Language: en-CA
+To:     Doug Anderson <dianders@chromium.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <broonie@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <cros-qcom-dts-watchers@chromium.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_msavaliy@quicinc.com>, <mka@chromium.org>,
+        <swboyd@chromium.org>, <quic_vtanuku@quicinc.com>
+References: <1681481153-24036-1-git-send-email-quic_vnivarth@quicinc.com>
+ <CAD=FV=XU_SWzJTmtqoZZ1eTDu3WcWQOAFbkBS=Juaz9_DivZSg@mail.gmail.com>
+ <CAD=FV=W8ML4A9Yp3o1PzO1xRSJ3Z+9g-SdMDwLTMqhmMw0q99g@mail.gmail.com>
+From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+In-Reply-To: <CAD=FV=W8ML4A9Yp3o1PzO1xRSJ3Z+9g-SdMDwLTMqhmMw0q99g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: JiqJArLwzHREXkDPU5iaPVYy35xWbHe6
+X-Proofpoint-ORIG-GUID: JiqJArLwzHREXkDPU5iaPVYy35xWbHe6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-14_09,2023-04-14_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=726 phishscore=0
+ lowpriorityscore=0 spamscore=0 impostorscore=0 adultscore=0 clxscore=1015
+ mlxscore=0 suspectscore=0 bulkscore=0 malwarescore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304140150
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,83 +87,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/04/2023 16:01, Paweł Anikiel wrote:
-> Add binding for chv3-i2s device.
+On 4/14/2023 10:12 PM, Doug Anderson wrote:
+> Hi,
+>
+> On Fri, Apr 14, 2023 at 8:48 AM Doug Anderson <dianders@chromium.org> wrote:
+>> Hi,
+>>
+>> On Fri, Apr 14, 2023 at 7:06 AM Vijaya Krishna Nivarthi
+>> <quic_vnivarth@quicinc.com> wrote:
+>>> There are large number of QSPI irqs that fire during boot/init and later
+>>> on every suspend/resume.
+>>> This could be made faster by doing DMA instead of PIO.
+>>> Below is comparison for number of interrupts raised in 2 acenarios...
+>> s/acenarios/scenarios
+>>
+>>> Boot up and stabilise
+>>> Suspend/Resume
+>>>
+>>> Sequence   PIO    DMA
+>>> =======================
+>>> Boot-up    69088  19284
+>>> S/R        5066   3430
+>>>
+>>> Though we have not made measurements for speed, power we expect
+>>> the performance to be better with DMA mode and no regressions were
+>>> encountered in testing.
+>> Measuring the speed isn't really very hard, so I gave it a shot.
+>>
+>> I used a truly terrible python script to do this on a Chromebook:
+>>
+>> --
+>>
+>> import os
+>> import time
+>>
+>> os.system("""
+>> stop ui
+>> stop powerd
+>>
+>> cd /sys/devices/system/cpu/cpufreq
+>> for policy in policy*; do
+>>    cat ${policy}/cpuinfo_max_freq > ${policy}/scaling_min_freq
+>> done
+>> """)
+>>
+>> all_times = []
+>> for i in range(1000):
+>>    start = time.time()
+>>    os.system("flashrom -p host -r /tmp/foo.bin")
+>>    end = time.time()
+>>
+>>    all_times.append(end - start)
+>>    print("Iteration %d, min=%.2f, max=%.2f, avg=%.2f" % (
+>>        i, min(all_times), max(all_times), sum(all_times) / len(all_times)))
+>>
+>> --
+>>
+>> The good news is that after applying your patches the loop runs _much_ faster.
+>>
+>> The bad news is that it runs much faster because it very quickly fails
+>> and errors out. flashrom just keeps reporting:
+>>
+>> Opened /dev/mtd0 successfully
+>> Found Programmer flash chip "Opaque flash chip" (8192 kB,
+>> Programmer-specific) on host.
+>> Reading flash... Cannot read 0x001000 bytes at 0x000000: Connection timed out
+>> read_flash: failed to read (00000000..0x7fffff).
+>> Read operation failed!
+>> FAILED.
+>> FAILED
+>>
+>> I went back and tried v1, v2, and v3 and all three versions fail.
+> Ah, I see what's likely the problem. Your patch series only adds the
+> "iommus" for sc7280 but I'm testing on sc7180. That means:
+>
+> 1. You need to add the iommus to _all_ the boards that have qspi. That
+> means sc7280, sc7180, and sdm845.
+>
+> 2. Ideally the code should still be made to work (it should fall back
+> to PIO mode) if DMA isn't properly enabled. That would keep old device
+> trees working, which we're supposed to do.
 
-Your subject needs improvements:
-1. ASoC goes before bindings
-2. You miss some meaningful title of device. "chv3-i2s" can be anything,
-so add Google or Google Chameleon. Or use entire compatible.
+
+Thank you very much for the review, script, test and quick debug.
+Will check same and update a v4.
+
+-Vijay/
 
 
-> 
-> Signed-off-by: Paweł Anikiel <pan@semihalf.com>
-> ---
->  .../bindings/sound/google,chv3-i2s.yaml       | 42 +++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/sound/google,chv3-i2s.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/sound/google,chv3-i2s.yaml b/Documentation/devicetree/bindings/sound/google,chv3-i2s.yaml
-> new file mode 100644
-> index 000000000000..6f49cf059ac5
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/sound/google,chv3-i2s.yaml
-> @@ -0,0 +1,42 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/sound/google,chv3-i2s.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Google Chameleon v3 I2S device
-> +
-> +maintainers:
-> +  - Paweł Anikiel <pan@semihalf.com>
-> +
-> +description: |
-> +  I2S device for the Google Chameleon v3. The device handles both RX
-> +  and TX using a producer/consumer ring buffer design.
-> +
-> +properties:
-> +  compatible:
-> +    const: google,chv3-i2s
-
-Missing blank line.
-
-Is chv3 the name of your SoC? Where are the SoC bindings? What's exactly
-the versioning scheme for it (compatibles must be specific, not generic).
-
-> +  reg:
-> +    items:
-> +      - description: core registers
-> +      - description: irq registers
-
-As well...
-
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    i2s0: i2s@c0060300 {
-> +        compatible = "google,chv3-i2s";
-> +        reg = <0xc0060300 0x100>,
-> +              <0xc0060f00 0x10>;
-> +        interrupts = <0 20 IRQ_TYPE_LEVEL_HIGH>;
-
-Isn't 0 also a known define?
-
-
-
-Best regards,
-Krzysztof
-
+> -Doug
