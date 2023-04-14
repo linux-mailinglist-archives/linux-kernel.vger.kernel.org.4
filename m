@@ -2,145 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0841F6E283B
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 18:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2696C6E2843
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 18:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbjDNQW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 12:22:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
+        id S229930AbjDNQ0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 12:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjDNQWZ (ORCPT
+        with ESMTP id S229893AbjDNQ0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 12:22:25 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A5D26A6;
-        Fri, 14 Apr 2023 09:22:24 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id l21so841351pla.5;
-        Fri, 14 Apr 2023 09:22:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681489344; x=1684081344;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fTEhNVqZBw01s/PMM+cJ3g7Yn/OTOx3Os9TZhJT3Cc4=;
-        b=aExfXPPVLsn0eHbcr8h1bPznS8NVUHwuPKSzj0+5N4a2kMXbIh/OXWyITEDlmn0Nji
-         QNCvFNFoMgwekDUy3kxaF7hcgEG8WpDDLfpxzPztHFN21pOG5gLoyGQOyeA7TtDa5A6n
-         SycOB056nVLgChG/grzC1kxLHAuraxX86UG4GeIKPF9m+KlpRN1MeRL5sQcTnZ02C5mu
-         iU4RqNdcrDQCg4Ngjq7wldL/l/jMmHk6IGSJYxVTTp6MyGmSXL4Oul5wlQmDh4EqqepH
-         wc7E8UM44C+2QuuyR57JBDiC1Lzs8z2qXFyaTHvg+MciV2wUgICEiK9QfUC3NyZ+2t6W
-         YucA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681489344; x=1684081344;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=fTEhNVqZBw01s/PMM+cJ3g7Yn/OTOx3Os9TZhJT3Cc4=;
-        b=ZguXbEaQLtmqbyRmf7XJnAE2MPtdI/GZewAovK4NRt6l0q637JaWYo0z74It8vfgjd
-         nqHUEixejOzsXeIOP3al1peEPNyLiLZ9MHMZkHUFAVoDmkHmcM0hVGV9LoDm/kY6/WMa
-         FXHHbStoWUaJVn0hn8Pb2Kgds0vRtfiMYDT5GQfqORvu93OkJoQ5RNNMlbGqTR5gzUu/
-         tfd5/jb17xAG5dNrvcvrgyJlRbHJPjStNNaRw4BjzDf3KJONu/lRQf0U3x/6jfauZxdH
-         aBNNEPEi1+V+CdBvifxQLb/fYJwMuOobxJg0HWlsQZOb0kHUgHvkdTt3rk9B4tKdfRFc
-         14tg==
-X-Gm-Message-State: AAQBX9cKtjgoxLsZMmT1DpyC8wBjHDxjHUkxAkRdA+qtQadBpX3dvNrQ
-        GmueUphis10YgVHCWXKRmQ4=
-X-Google-Smtp-Source: AKy350Z4vu+cCQgSZbC4FG5FrywIq84iQCCq6NtgzACoGTjuRdeel5I8bVWxLOeexnvLfuSw/7uoYA==
-X-Received: by 2002:a17:90b:3a92:b0:240:90f0:fbe with SMTP id om18-20020a17090b3a9200b0024090f00fbemr6163103pjb.45.1681489344019;
-        Fri, 14 Apr 2023 09:22:24 -0700 (PDT)
-Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
-        by smtp.gmail.com with ESMTPSA id iq3-20020a17090afb4300b00233b196fe30sm4885542pjb.20.2023.04.14.09.22.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 09:22:23 -0700 (PDT)
-Message-ID: <527df1fc-5927-de9c-e18d-00fc1fab575e@gmail.com>
-Date:   Sat, 15 Apr 2023 00:22:11 +0800
+        Fri, 14 Apr 2023 12:26:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1738C26A6;
+        Fri, 14 Apr 2023 09:26:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 95674648F6;
+        Fri, 14 Apr 2023 16:26:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7B58C433D2;
+        Fri, 14 Apr 2023 16:26:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681489568;
+        bh=9dGs3TW9SOqFu3PmMFt8oVQybRajp0/o5j5Brj6gn0o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=j3qAa/tCEuOQUzRwfLB0aGf7iU1bf2YL4bclomJmgllHNHUVZqFxLgxPN0hwSBsr2
+         6cpRt5bVCm5ItQtZV92nvqQpmEqU2syQzwuxx+Cy+ss4E1JBzJncXuTRVgzChvksm7
+         yRqyNUv8VxLZn99sZaTBQ+STa2c+xj2e/1Fvd/d/9l7phb3zYlGxcv5fOtz1cD9al7
+         vESoRZA+A25yjhW9kPcijjWuR7QFfSBAyXa9U4Cl25dUG0mHUVVuQhjN0h8eKCuA9C
+         nOxX1dIzLW7gm9XRPNGRBzB3/M4lhNUGD3nsNDYq5/8zavX9b/DeqWIbZkAbVrn2ox
+         L9DBeg9yxx2Cw==
+Date:   Fri, 14 Apr 2023 09:26:05 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Marco Elver <elver@google.com>, Arnd Bergmann <arnd@arndb.de>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Tom Rix <trix@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        linux-kbuild@vger.kernel.org, kasan-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] kasan: remove hwasan-kernel-mem-intrinsic-prefix=1 for
+ clang-14
+Message-ID: <20230414162605.GA2161385@dev-arch.thelio-3990X>
+References: <20230414082943.1341757-1-arnd@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC PATCH V4 10/17] x86/hyperv: Add smp support for sev-snp
- guest
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "jiangshan.ljs@antgroup.com" <jiangshan.ljs@antgroup.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "ashish.kalra@amd.com" <ashish.kalra@amd.com>,
-        "srutherford@google.com" <srutherford@google.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>,
-        "pawan.kumar.gupta@linux.intel.com" 
-        <pawan.kumar.gupta@linux.intel.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "sandipan.das@amd.com" <sandipan.das@amd.com>,
-        "ray.huang@amd.com" <ray.huang@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "michael.roth@amd.com" <michael.roth@amd.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "sterritt@google.com" <sterritt@google.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "fenghua.yu@intel.com" <fenghua.yu@intel.com>
-Cc:     "pangupta@amd.com" <pangupta@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-References: <20230403174406.4180472-1-ltykernel@gmail.com>
- <20230403174406.4180472-11-ltykernel@gmail.com>
- <BYAPR21MB1688D729D203638C17FBC82AD79B9@BYAPR21MB1688.namprd21.prod.outlook.com>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <BYAPR21MB1688D729D203638C17FBC82AD79B9@BYAPR21MB1688.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230414082943.1341757-1-arnd@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/12/2023 10:59 PM, Michael Kelley (LINUX) wrote:
->>   #ifdef CONFIG_AMD_MEM_ENCRYPT
->>
->>   #define GHCB_USAGE_HYPERV_CALL	1
->>
->> +static u8 ap_start_input_arg[PAGE_SIZE] __bss_decrypted __aligned(PAGE_SIZE);
->> +static u8 ap_start_stack[PAGE_SIZE] __aligned(PAGE_SIZE);
-> Just a question:  ap_start_stack is a static variable that gets used as the
-> starting stack for every AP.  So obviously, once each AP is started, we must
-> be sure that the AP moves off the ap_start_stack before the next AP is
-> started.  How is that synchronization done?  I see that do_boot_cpu() is
-> where the wakeup_secondary_cpu() function is called.  Then there's
-> some waiting until the AP completes "initial initialization" per the
-> comment in the code.  Is there where we know that the AP is no
-> longer using ap_start_stack?
+On Fri, Apr 14, 2023 at 10:29:27AM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
+> Unknown -mllvm options don't cause an error to be returned by clang, so
+> the cc-option helper adds the unknown hwasan-kernel-mem-intrinsic-prefix=1
+> flag to CFLAGS with compilers that are new enough for hwasan but too
 
-Hi Micahel:
-	secondary_startup_64_no_verify() in the head_64.S initializes
-a boot time stack to replace the old stack. It's very begining stage of
-starting AP. The initial_stack was initialized with idle->thread.sp in
-the do_boot_cpu(). The AP is started one by one in current code and so
-It's safe to reuse the stack for all APs to boot up.
+Hmmm, how did a change like commit 0e1aa5b62160 ("kcsan: Restrict
+supported compilers") work if cc-option does not work with unknown
+'-mllvm' flags (or did it)? That definitely seems like a problem, as I
+see a few different places where '-mllvm' options are used with
+cc-option. I guess I will leave that up to the sanitizer folks to
+comment on that further, one small comment below.
 
-278        /*
-279         * Setup a boot time stack - Any secondary CPU will have lost 
-its stack
-280         * by now because the cr3-switch above unmaps the real-mode stack
-281         */
-282        movq initial_stack(%rip), %rsp
-283
+> old for this option. This causes a rather unreadable build failure:
+> 
+> fixdep: error opening file: scripts/mod/.empty.o.d: No such file or directory
+> make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:252: scripts/mod/empty.o] Error 2
+> fixdep: error opening file: scripts/mod/.devicetable-offsets.s.d: No such file or directory
+> make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:114: scripts/mod/devicetable-offsets.s] Error 2
+> 
+> Add a version check to only allow this option with clang-15, gcc-13
+> or later versions.
+> 
+> Fixes: 51287dcb00cc ("kasan: emit different calls for instrumentable memintrinsics")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> There is probably a better way to do this than to add version checks,
+> but I could not figure it out.
+> ---
+>  scripts/Makefile.kasan | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/scripts/Makefile.kasan b/scripts/Makefile.kasan
+> index c186110ffa20..2cea0592e343 100644
+> --- a/scripts/Makefile.kasan
+> +++ b/scripts/Makefile.kasan
+> @@ -69,7 +69,12 @@ CFLAGS_KASAN := -fsanitize=kernel-hwaddress \
+>  		$(instrumentation_flags)
+>  
+>  # Instrument memcpy/memset/memmove calls by using instrumented __hwasan_mem*().
+> +ifeq ($(call clang-min-version, 150000),y)
+>  CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
+> +endif
+> +ifeq ($(call gcc-min-version, 130000),y)
+> +CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
+> +endif
 
+I do not think you need to duplicate this block, I think
+
+  ifeq ($(call clang-min-version, 150000)$(call gcc-min-version, 130000),y)
+  CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
+  endif
+
+would work, as only one of those conditions can be true at a time.
+
+Cheers,
+Nathan
