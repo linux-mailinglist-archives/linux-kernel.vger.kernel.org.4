@@ -2,138 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA2216E2B37
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 22:42:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 550996E2B3A
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 22:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbjDNUl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 16:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45012 "EHLO
+        id S229992AbjDNUmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 16:42:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjDNUl5 (ORCPT
+        with ESMTP id S229802AbjDNUmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 16:41:57 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6BF344A8;
-        Fri, 14 Apr 2023 13:41:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kVy+3QN6dzyTMdqIcoPs1RajsSS6/KQgwBuU69JIg5tFgDQ558aPDfINZKFtuGFpXZF9EpxdfkJdRRuTSQh4tV+BwZYPWXLJSnUf6YhMbCAGOWoMlwm62MOxBw/Pgx4V2UvajwTtpfWDMlk0pk5l89J8zfCAwhIyh1SIdLPVYcB7rh94Zw6Wx6clqv9Us2E5vkPbrcK1Bry+dSfk+rE2YhKSgptMhc6JPMZnmT6yfoS/vZdb3RRd+bFxENj3Et71NQoT+lbYu9rovZjZH+kFRBEGtfUUhPl3TUqXEFbfyDTTd0MQiO2C9GQ320RQ2ZFj4bU103Mpty2nRe8wJjL8UA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VIXDGNruQWBQfHpl/ovgrhuDUFgKfVad/y94o7EFp00=;
- b=DMrAgnu5Yz9JtwlLWWVcdR/LoqQLhmTGn2XzzDFegqHAyQJFflUjBNUGRSeD1ZqhXOME+9LqMUktnl8tntEkz0QItaZ3SyGekaPt+aFw95ly14cEyoc4xle0bv3pgLKLtuNuT3eG4miDJO8JHTYkRjT+dSNzsh5kwzEdcu3djcdc2ehiECWtZuqXTfFppLrrV0wspSuNOtjX32rQYXHoHcGzCeyyGc4Ww1ub0NYRq678nPi+PnEpdfLU6VmUSbrJbIzhBoW1LMkn5Jpr988ZWKmbwXNQxtaj0GI5G+QpGMmvAN8hPaHKmJHow0F0iVwtz5ayJJww6pAFp5VV5A2dtg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VIXDGNruQWBQfHpl/ovgrhuDUFgKfVad/y94o7EFp00=;
- b=pYkv6Vmt2gIBR4EaW3Qf2B0CT4IpH5YUTwl4cGC759M4OLVzYicZGnnlFufDByLRS8Fgco4EIfw6gpPWB3ZoKsGJazs6FMJsx1NU7wwQn36utwuKIDsZ0hzYAe45rF38TKRO0Nkg8happA6Ts8b1TjfjxkeAXlxXwsN+mo0FYsY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS0PR12MB6390.namprd12.prod.outlook.com (2603:10b6:8:ce::7) by
- SA0PR12MB7073.namprd12.prod.outlook.com (2603:10b6:806:2d5::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6298.30; Fri, 14 Apr 2023 20:41:54 +0000
-Received: from DS0PR12MB6390.namprd12.prod.outlook.com
- ([fe80::48cb:9d06:e70b:4b42]) by DS0PR12MB6390.namprd12.prod.outlook.com
- ([fe80::48cb:9d06:e70b:4b42%3]) with mapi id 15.20.6298.030; Fri, 14 Apr 2023
- 20:41:54 +0000
-Message-ID: <1e93d649-c892-1992-2b38-93fa9ab3041d@amd.com>
-Date:   Fri, 14 Apr 2023 15:41:50 -0500
+        Fri, 14 Apr 2023 16:42:40 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75654E4A
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 13:42:38 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id c9so9787969ejz.1
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 13:42:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681504957; x=1684096957;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=C8pLu4jERpRba3FUTEoPszF0/AQbHGcUDrxLnefSzTE=;
+        b=w8Hp01Vm5edDVFPyq4CzVtZ3SVBji5A7jB93jOxlbSP1mAg0w8WmdrKlPapj/DtZu3
+         93qDObTt8sPCkx7T5KeXjR8HINtXd9BstDincbjezkcF5Y48yW0UY5MEwXm7El1w1pBj
+         Rp/Y3jp9aV7V4PwuCySYTiQLluVcxK++AGzBB0bBtmaT+OaXoZFoxc+HGJ7Hm6jAS2Dt
+         fvgGGlfhas+3eZCskUokP2Wa7HfHCUTfMEI980aJ4W7uhJwOo7XG0t8+WVyBYaxPGrLE
+         9z9nGqayH6O03k3zih6J77bcqtcjaeHk3CPiLvY6odp6e/TXP7CMiMlXwo3lylkfCnrT
+         NYaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681504957; x=1684096957;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C8pLu4jERpRba3FUTEoPszF0/AQbHGcUDrxLnefSzTE=;
+        b=emZyaRnas5E2JqFm8fpecM8fqrR4eqJoDB2aX+7BqYroky9aU66YADexmpToPhO+jN
+         Cgp7yF11Tu5bIUFjBzN0L3EMz2iGQWbj14OvIPZiQcj9PQfJvpeiItKVMkfEqSBnSfd/
+         zocF3i1GmkYkdd/AEOLxO+pi6TSctVrRUapVUH59pASyqsXfrhALgD+4SwxFSd9IqglK
+         Ba5fbsFK2oYxaMwkhK3FFnv1m5YkrHxe3/gl9VJWqtAqYKbw13sCVeRwfZBfIES46nRl
+         Lf1FAcn2Zp6VU6ZFmaJdY7Q3tdM80kOKTMsHpPD4GqIE+3Ci9HCWPhItLsPLd3TgeHdI
+         5OkQ==
+X-Gm-Message-State: AAQBX9dE5Q7TMpvSku6hUz4l7oUQ7dFJ/Un91uy7zmohWGUEw4Zzuu6o
+        JrJ2tUB3tEcm/OvmFC/04tMfIbU3Q0A0GJedH2E=
+X-Google-Smtp-Source: AKy350blLh5O9Aqx8n+mdVx/OhzQ8YJzp+126dy3SDo+2KiE4ZFWQvXzvrky4iJqJYy913BH1+wI3w==
+X-Received: by 2002:a17:906:5610:b0:94e:ff98:44a7 with SMTP id f16-20020a170906561000b0094eff9844a7mr332362ejq.72.1681504956944;
+        Fri, 14 Apr 2023 13:42:36 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:ffae:8aab:ae5a:4688? ([2a02:810d:15c0:828:ffae:8aab:ae5a:4688])
+        by smtp.gmail.com with ESMTPSA id d26-20020a170906c21a00b0094f0053d491sm569273ejz.162.2023.04.14.13.42.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Apr 2023 13:42:36 -0700 (PDT)
+Message-ID: <20b0af27-97c9-d764-43ef-d13a429ffe1d@linaro.org>
+Date:   Fri, 14 Apr 2023 22:42:35 +0200
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 3/5] pci/aer: Export cper_print_aer() for CXL driver
- logging
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        alison.schofield@intel.com, vishal.l.verma@intel.com,
-        ira.weiny@intel.com, bwidawsk@kernel.org, dan.j.williams@intel.com,
-        dave.jiang@intel.com, Jonathan.Cameron@huawei.com,
-        linux-cxl@vger.kernel.org, rrichter@amd.com, mahesh@linux.ibm.com,
-        oohall@gmail.com, linux-pci@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, bhelgaas@google.com
-References: <20230323213808.398039-1-terry.bowman@amd.com>
- <20230323213808.398039-4-terry.bowman@amd.com>
- <f31edb04-04c7-2d98-e3ef-a591993e7ceb@amd.com>
- <ef57e100-e656-d692-b776-3f6e3f242c15@linux.intel.com>
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 1/1] dt-bindings: iio: pressure: Support Honeywell
+ mprls0025pa sensor
 Content-Language: en-US
-From:   Terry Bowman <Terry.Bowman@amd.com>
-In-Reply-To: <ef57e100-e656-d692-b776-3f6e3f242c15@linux.intel.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andreas Klinger <ak@it-klinger.de>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        linux-kernel@vger.kernel.org
+References: <ZDlLmCIiKSMa7Hah@arbad>
+ <d577bc44-780f-f25d-29c6-ed1d353b540c@linaro.org>
+In-Reply-To: <d577bc44-780f-f25d-29c6-ed1d353b540c@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BLAPR03CA0123.namprd03.prod.outlook.com
- (2603:10b6:208:32e::8) To DS0PR12MB6390.namprd12.prod.outlook.com
- (2603:10b6:8:ce::7)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR12MB6390:EE_|SA0PR12MB7073:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1bf58b6d-1f0e-4b12-fcda-08db3d28ae94
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QrfmbhfbBI/ZfEPkkSgNAJLKXy5RoApQxAOtgd/0Qq9HUdjn5BGKZ+OjixIIKt9n1Ie+5ukVt6buW1KizkulzKozC1RAvsVyXcL6U6l1eEhfMLXu3a2mpzYWAriAFdZLhpScDEX0ntIRiCFQXGj+k+Z6Wmc4UKie0obNFmXq/IXyhA/HrZ6mv5NYggnGnhyRNct9fOGW+rWvuAxYZlGraOZbsBglsjXlWa97tXpymAk31Xw0MvlA5pdSIGBcOVkM26w90o+keISwC9ccORLkMNSfWcvvawg7cUdjzQIelYChGHM7xEqQ94IOo8GDG9ZEck86420mfXfT1XYo2NFdF+ol8zb+Rno8jgWw2XJGkJlYTPdd3eqjtNefs/9w+BU/5weU8eRLMaPfq1qQNHAwtiZ6LgCbJADiJaiT5S0Cd08c9e5xRu6hsfUKZaf7ll2kYRNfTjuH1yp/BzX9naBzIE+IGA4SMC6P4v7AP7p4H2CsiFm5Ff1tqnGuSZkC0ZOM6cID9lXVcTlaOIharYKGfJTg+Sn5isdSc1p852lajJt+IRmcxsCqRgpBoUVfDQUD1ptp2ADk91YJCGSjB8Pipmg4Yq/1tp2O0C4EIgN+CW2upma8DIfTA7xMT5XqiHtB0lXqXdi3EaR3FAgIkovQbNiG8b5m5egcuvPPqtT+JXY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB6390.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(366004)(376002)(346002)(396003)(451199021)(6506007)(2616005)(4326008)(6486002)(6666004)(478600001)(186003)(6512007)(53546011)(38100700002)(2906002)(5660300002)(316002)(36756003)(66946007)(66476007)(921005)(66556008)(41300700001)(31696002)(8936002)(86362001)(8676002)(558084003)(7416002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aHdiVGlaWkRpSGt4MDdORmlGRE1yUWozc2RLY2NqQWpwdlEyM3g5b1RINVRh?=
- =?utf-8?B?WG9aR1RHYVBSTUlOVjhzYXRDcWVZUVR5THBySWtTTURsNlQ3L1lEblRKT0o2?=
- =?utf-8?B?bXJwNno1WnNlb1B2VzIxa0xUcTdPMGExMmpQWHB1ZTJRbXdZU0tRQm85TzNU?=
- =?utf-8?B?OXVJVU5HWFpJaE1FRXdUNU55TWw5b0dqMFpUdDV5TE1TY0tjeS8rcGtuR2JX?=
- =?utf-8?B?RmJjbHVwQ0lYbXludjdGSEtzM2R6eEdlbTBQU0lWOUlOd0FCMXpaRmpINzZL?=
- =?utf-8?B?Ym1SZkNqTThmZCtKa0RJbVpodVQzb05MMmVLR0xDOE04eitSbnRYRVVlMmth?=
- =?utf-8?B?ZlFyYTV3ZmZwZTJBRjVNSXQvS3ZuZngrSnZLL1Y4MlpmSW5XWHFqREU5Vy9h?=
- =?utf-8?B?UktXRTNBYjJZZllXdTYrc09lWDlVYnhjeGFyMkNEYUluaGVIY0JFeWxwZkJk?=
- =?utf-8?B?L3FKK2paQXdIZmROdEZJVzZVRThMcGwyZFFLbUFqc1ZjOStFa1RoZWJWQ2xl?=
- =?utf-8?B?MlpaVzM1UU5PM1J5UnNqV3plSzJwcUx2MXlSNmg4Q0xxWFJGb2ZYMmxKcGlR?=
- =?utf-8?B?QXFjbXNicDlMUXI2STd2emp1bG0wOGhWL3B5UWs3VENId29sWHRJK3NlWUQ2?=
- =?utf-8?B?YTIwNXNrRHVGSmE5VytkU3JmTjBSNDh6N1JzK1ZaS29WK1JzWEtOaDZLaEtu?=
- =?utf-8?B?b0ZlU04rSnpkWkxMNkREczhrZkp5NFBVRkNwSWdlU21ORjNYOGNaRzUxeGhn?=
- =?utf-8?B?WnJnQUtoZGtoc1h6clhzZTNSVStiV2h4UlI3YlpDR2QxbEZoakNtdGdKU2Zk?=
- =?utf-8?B?TmRyRCszQlk2WGl4emFSbkNZUm92L3AyeHpoQUxZZ0ladlZQUGlEQ01WY2sz?=
- =?utf-8?B?S0lUZzk3RUNEYlIydUJReHp4WW5qNTBpaTJrczUvQWYxMTZOd2hQZlpVS0k3?=
- =?utf-8?B?dHdadkxvb2UxRldlY2hvbm5rcDFCWFgwdVRXTW9qdW1EbzlJTFJqVWcwWjRV?=
- =?utf-8?B?KzlKdVR4K0U2MGx4THc0eEVld0ZQNy9URWc4bWwzNi9pSVY4Q1VVSVc2QStH?=
- =?utf-8?B?dDYzVWZnYkxRcUpSR09JNVMva1R0L0F0RU9pWkR6blV0b0g5Si9mVEw0UkdP?=
- =?utf-8?B?dWlvRVhXMjhFdHNsblp0RStGVkJ5bkdZYVd4akJBRmtPeElDNlVsa0FINlNO?=
- =?utf-8?B?WmJ6ZzVrczFhajNEMENZTkMwejhGeVpIbzJYcXYvMnBHWWllWWhxTEY1VVln?=
- =?utf-8?B?NHVseW5FS25tVE1yNzNIU2xvTWZzalRsTGZlRit4MVpVaWlFdGtmUVBScStG?=
- =?utf-8?B?RXBRSUhmZWRDaUtuS1gxRFk0Q2duOUFlYVZ2SVRHRHdlcXl3NmlWV1lJdjVu?=
- =?utf-8?B?ek8wVUVyd2U2NDc2SHJ2UHMrWW9kc2Q5YW42Y3JpVkN4U2Nzb00xcFVWY0wv?=
- =?utf-8?B?dUYxRHdENTlpUkVmWENNQ2o1c1BaL01ReWR2b1M0ZVpVTjdncUV6bEl4bHNZ?=
- =?utf-8?B?Wmgya3lDTXViSnBDcS95NFprR3p2bW9aVUthV2hTbFVuS0Yxc3lvRDdUTml1?=
- =?utf-8?B?Vkdyd3FFRmRjbEJWazBaOGdnaXNPaXpZVktVR081NVl4TkRrRDJHOUZjcklz?=
- =?utf-8?B?RE42LzJvVFhSVjVOaTE4Q3ltWXptbmdvNWdMMkh4OGMrZStQK3VCK2Q3TnRR?=
- =?utf-8?B?TGl4MGFSVzN1L3pQU2hUckgwVUswTTdEWUZLZUxnelN0aS83T3czUkNFOTNK?=
- =?utf-8?B?dUlmN0pyRUkzTFlaUjRFRW5VSU82U0p4dERmZGxueEZNaUtDUjVFTVVEejkr?=
- =?utf-8?B?OWEwM2x2Z0JLOU9RNTJyaVMrRjg5Y05Md0h1RmRqeFVFclpVRXp1SUE2YXFJ?=
- =?utf-8?B?RWRmbEJpdnhmblFVcUlTNmRaUDh3OTJ3aC9NbGtrR1FPLzBDR3FtenEzWkJN?=
- =?utf-8?B?Tit0d2lVcHpQem9xdmZtczR6bDlIcmcvZFkzamhUQVR0S1J1dCtLUVl5cjYx?=
- =?utf-8?B?WHB4bzNSZnhzTk1tUlBaYm1vVEF3RFlCUUFzVnZCMG51dWVBalJZN3dtakIw?=
- =?utf-8?B?bEZSU1pnVFQzcGNpQ0hSS3U4bFIvT1BKeDhWeDFWbDJrYlBKYlY1cHJJMTg2?=
- =?utf-8?B?TWZpWHZDd3A3RFE2WkdqTnVQSmN4Ym5lRUNuNlpxczE0djdxVTRSQjlZOEtQ?=
- =?utf-8?Q?LG2uHG1UpIhjocSCW0fz5Pyk8VhPgM/zg1Yh+T4ST63p?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1bf58b6d-1f0e-4b12-fcda-08db3d28ae94
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB6390.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2023 20:41:54.3958
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Lc4t6sWQrQhZV0EZEqc5ogsLsFmD1jncqSiT8wwqHR9AQ9MlRtD8FZ/evCZXcJBV/NF8500KrrccATWG/4hp0Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB7073
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Sathya.
+On 14/04/2023 22:40, Krzysztof Kozlowski wrote:
+> On 14/04/2023 14:48, Andreas Klinger wrote:
+>> Honeywell mpr is a pressure sensor series. There are many different models with different pressure
+>> ranges, units and transfer functions.
+>>
+>> The range and transfer function need to be set up in the dt. Therefore new properties
+>> honeywell,pmin-pascal, honeywell,pmax-pascal, honeywell,transfer-function are introduced.
+> 
+> Please wrap commit message according to Linux coding style / submission
+> process (neither too early nor over the limit):
+> https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst#L586
+> 
+>>
+>> Add dt-bindings.
+>>
+>> Signed-off-by: Andreas Klinger <ak@it-klinger.de>
+> 
+> Patches 2 and 3 are missing. At least they were mentioned in the
+> changelog but this is 1/1.
+> 
+>> ---
+>>  .../iio/pressure/honeywell,mprls0025pa.yaml   | 93 +++++++++++++++++++
+>>  1 file changed, 93 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.yaml b/Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.yaml
+>> new file mode 100644
+>> index 000000000000..c0eb3c4be16f
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.yaml
+>> @@ -0,0 +1,93 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/iio/pressure/honeywell,mprls0025pa.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Honeywell mpr series pressure sensor
+>> +
+>> +maintainers:
+>> +  - Andreas Klinger <ak@it-klinger.de>
+>> +
+>> +description: |
+>> +  Honeywell pressure sensor of model mprls0025pa.
+>> +
+>> +  This sensor has an I2C and SPI interface. Only the I2C interface is implemented.
+>> +
+>> +  There are many models with different pressure ranges available. The vendor calls them "mpr
+>> +  series". All of them have the identical programming model and differ in the pressure range, unit
+> 
+> Wrap according to Linux coding style, so at 80.
+> 
+>> +  and transfer function.
+>> +
+>> +  To support different models one need to specify the pressure range as well as the transfer
+>> +  function. Pressure range needs to be converted from its unit to pascal.
+>> +
+>> +  The transfer function defines the ranges of numerical values delivered by the sensor. The minimal
+>> +  range value stands for the minimum pressure and the maximum value also for the maximum pressure
+>> +  with linear relation inside the range.
+>> +
+>> +  Specifications about the devices can be found at:
+>> +    https://prod-edam.honeywell.com/content/dam/honeywell-edam/sps/siot/en-us/products/sensors/
+>> +      pressure-sensors/board-mount-pressure-sensors/micropressure-mpr-series/documents/
+>> +      sps-siot-mpr-series-datasheet-32332628-ciid-172626.pdf
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: honeywell,mprls0025pa
+> 
+> So this is one compatible for entire family of 96 separate devices.
+> Looks like reasonable compromise, although I will wait for Rob's
+> approval on that.
+> 
+> Anyway you need to fix the coding style.
 
-On 3/23/23 17:26, Sathyanarayanan Kuppuswamy wrote:
-> Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+... and as Rob's bot pointed out, test it before sending.
+
+Best regards,
+Krzysztof
+
