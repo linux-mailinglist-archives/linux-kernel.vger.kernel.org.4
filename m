@@ -2,90 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 437C46E2333
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 14:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98D9C6E2335
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 14:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230462AbjDNM0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 08:26:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45576 "EHLO
+        id S230456AbjDNM1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 08:27:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230383AbjDNM0N (ORCPT
+        with ESMTP id S229911AbjDNM1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 08:26:13 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4882AD3C;
-        Fri, 14 Apr 2023 05:26:05 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 9CEA31C0AB3; Fri, 14 Apr 2023 14:26:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1681475164;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aF98xW+kJS6bveFCeBEFMleKEqa9knAc8f6AjcowGFA=;
-        b=FS/vK6kcxUHcMiLA/LsGDSDa1EHwKsCJjhnPqg3E2ByJJeuPtL7hdgNmJWU5w3w4ekxRCC
-        Ozwgmu7TebGjQVNsKq+CS5O1KgIJNVNKvhIDJODVfkrX5Q1i/4tPXdI4/FE1FtvJprVaci
-        7aCHj9ZgXO4mKKfwC62zWBd8qv/AKvs=
-Date:   Fri, 14 Apr 2023 14:26:04 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-iio@vger.kernel.org
-Subject: Re: [PATCH 6/8] dt-bindings: mfd: qcom-spmi-pmic: Add PMI632
- compatible
-Message-ID: <ZDlGXIhl7zSIO9Oe@duo.ucw.cz>
-References: <20230414-pmi632-v1-0-fe94dc414832@z3ntu.xyz>
- <20230414-pmi632-v1-6-fe94dc414832@z3ntu.xyz>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="Fd9zt1IvwpGLc8UW"
-Content-Disposition: inline
-In-Reply-To: <20230414-pmi632-v1-6-fe94dc414832@z3ntu.xyz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 14 Apr 2023 08:27:04 -0400
+X-Greylist: delayed 140 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 14 Apr 2023 05:27:01 PDT
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [20.228.234.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 89B9F1BEA;
+        Fri, 14 Apr 2023 05:27:01 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [218.12.19.98])
+        by mail-app3 (Coremail) with SMTP id cC_KCgCHwgFyRjlkR70BAA--.3418S2;
+        Fri, 14 Apr 2023 20:26:35 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Cc:     rajur@chelsio.com, Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH net] cxgb4: fix use after free bugs caused by circular dependency problem
+Date:   Fri, 14 Apr 2023 20:26:21 +0800
+Message-Id: <20230414122621.68269-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cC_KCgCHwgFyRjlkR70BAA--.3418S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ar48CF1fWr18Ar1fuF4kWFg_yoW8ZFW5pr
+        s3Zr9rJw48Xa1UtF4UXw4ktFyqk3Z5trZ8KF1fG3yfu3Z7AFnIkFyDKay8WFW5JFW8Ar9r
+        Aw48Zr98GFZYk3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvm14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7CjxVAaw2AFwI0_
+        JF0_Jw1lc2xSY4AK67AK6ryUMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
+        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
+        67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
+        x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
+        z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
+        UI43ZEXa7VUjpnQUUUUUU==
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAwMFAWQ4GlouNgAdsd
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The flower_stats_timer can schedule flower_stats_work and
+flower_stats_work can also arm the flower_stats_timer. The
+process is shown below:
 
---Fd9zt1IvwpGLc8UW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+----------- timer schedules work ------------
+ch_flower_stats_cb() //timer handler
+  schedule_work(&adap->flower_stats_work);
 
-On Fri 2023-04-14 01:17:50, Luca Weiss wrote:
-> Document support for the pmi632, often found with the sdm632 SoC.
->=20
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+----------- work arms timer ------------
+ch_flower_stats_handler() //workqueue callback function
+  mod_timer(&adap->flower_stats_timer, ...);
 
-5,6: Acked-by: Pavel Machek <pavel@ucw.cz>
+When the cxgb4 device is detaching, the timer and workqueue
+could still be rearmed. The process is shown below:
 
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
+  (cleanup routine)           | (timer and workqueue routine)
+remove_one()                  |
+  free_some_resources()       | ch_flower_stats_cb() //timer
+    cxgb4_cleanup_tc_flower() |   schedule_work()
+      del_timer_sync()        |
+                              | ch_flower_stats_handler() //workqueue
+                              |   mod_timer()
+      cancel_work_sync()      |
+  kfree(adapter) //FREE       | ch_flower_stats_cb() //timer
+                              |   adap->flower_stats_work //USE
 
---Fd9zt1IvwpGLc8UW
-Content-Type: application/pgp-signature; name="signature.asc"
+This patch changes del_timer_sync() to timer_shutdown_sync(),
+which could prevent rearming of the timer from the workqueue.
 
------BEGIN PGP SIGNATURE-----
+Fixes: e0f911c81e93 ("cxgb4: fetch stats for offloaded tc flower flows")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+ drivers/net/ethernet/chelsio/cxgb4/cxgb4_tc_flower.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZDlGXAAKCRAw5/Bqldv6
-8r2hAJ933+3CPUVwCNSR1xgSt6BXZOQpngCeOgWRJl0V6pKMyWpTofwbZhPKZSw=
-=Qb6k
------END PGP SIGNATURE-----
+diff --git a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_tc_flower.c b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_tc_flower.c
+index dd9be229819..d3541159487 100644
+--- a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_tc_flower.c
++++ b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_tc_flower.c
+@@ -1135,7 +1135,7 @@ void cxgb4_cleanup_tc_flower(struct adapter *adap)
+ 		return;
+ 
+ 	if (adap->flower_stats_timer.function)
+-		del_timer_sync(&adap->flower_stats_timer);
++		timer_shutdown_sync(&adap->flower_stats_timer);
+ 	cancel_work_sync(&adap->flower_stats_work);
+ 	rhashtable_destroy(&adap->flower_tbl);
+ 	adap->tc_flower_initialized = false;
+-- 
+2.17.1
 
---Fd9zt1IvwpGLc8UW--
