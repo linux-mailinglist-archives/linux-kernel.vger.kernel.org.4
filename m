@@ -2,187 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BEFA6E2549
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 16:09:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 367A76E254C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 16:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbjDNOI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 10:08:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60726 "EHLO
+        id S229967AbjDNOJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 10:09:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjDNOI6 (ORCPT
+        with ESMTP id S229693AbjDNOJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 10:08:58 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751A73A88
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 07:08:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681481306; x=1713017306;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=EFLijPFBtG3mUSmuaH9aDyMT6QOKXXk9Od/hHQ3hDIo=;
-  b=H9v3T/VF1U3qwHjb+EXNgQDc7J8jrmvhmDTNjF5/10moxSUT7VZl7J3X
-   eYmZV8fz6v3AXKhfOnhaJ6pm12btlToY4FParV94YXgswiI2ywmkZWZqc
-   L7BW6CnYj06MQZoCTJAns+i2gJ3/YkgffMzNLSDRq+cqJdBw8C5fVf7l6
-   2qujFiu6Mt18gu+iA4aKcUef1CMkxmE2EMrSHCfsmfg652W/8AiqNW/oh
-   FTSGPMsCapRUpJuTflUEqlTVehGfpMGVmjuR2yp1ANRMFKMmn6ezijmoR
-   8wvQT7F/Q8aoqLHGjZR4D9nDMWZQ7X7k59lG5yOhDcnx0aDTO/GZISOR1
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="409672153"
-X-IronPort-AV: E=Sophos;i="5.99,197,1677571200"; 
-   d="scan'208";a="409672153"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 07:08:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="1019596859"
-X-IronPort-AV: E=Sophos;i="5.99,197,1677571200"; 
-   d="scan'208";a="1019596859"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga005.fm.intel.com with ESMTP; 14 Apr 2023 07:08:08 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 14 Apr 2023 07:08:07 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 14 Apr 2023 07:08:07 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Fri, 14 Apr 2023 07:08:07 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.103)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Fri, 14 Apr 2023 07:08:07 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=K7g4ytUGTjvnP4mwZU3LHEei6u5JDMwIByG0VWR0PhwZMQU3j+5qpOysJBNzI4wlGQI5xPsdaHCrXoZSVMxDGpczOJkCf6u/QoHz71X5glj2ANVBJnX+JQizc611CysOqAz04P3WsmRhTwqYlNaPm4jD1BxAcx+vw4Hg9xDQhJRaPT2UZ6GW0vzHfxtti3S+uOyJsLSXImRcQf6N0p38I5J9tUH1DzxWFSYXP5x7igL4gW2lGyiKsmoTcBJnelarWBNrsIuShWOgLWaK9kf64a55Vv0e+ZiYr1xB5dLqtYcqn1sH/I+WfP8Kf+pGXpTrpZU0Gv622yuYVWsGltF3/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gk63PI3k2M5J3TCC/qwIXNsP16hh+xUYI0srmP9287w=;
- b=FJzr9Nnk2S6kADvYx38GZmMgbMYkQKVtIJvukKNPiW7aES33vfbNsdysj4HzxI61OM2KyEVtQZCVsRxLnL0Vl/F+7LFqEmzj86PhsThFo9N+vp7bItEawdI3wKk1nKBH5rPyk2Quhd6uVAzPbZNVu3UdxszkNBeKGulG+cKVImfSUJ2gJ4Yxk1alyx+JlVRdkkfv7T7cy9sfgSfdp2Vf8JURYHrzbP23iY0TAIsRRPTUTDDAPpAxCmDmyAh+ktsQ7H46ovyAn+AuDDUCy0ty1nmz8Wrf9JZ3qcxw85dbCNjUG/rcltvMBUBUUw9pppH/qmJc6GT2xssWLCjtVnbP2Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BYAPR11MB3062.namprd11.prod.outlook.com (2603:10b6:a03:92::18)
- by MW4PR11MB7101.namprd11.prod.outlook.com (2603:10b6:303:219::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Fri, 14 Apr
- 2023 14:08:03 +0000
-Received: from BYAPR11MB3062.namprd11.prod.outlook.com
- ([fe80::9cc2:9827:4f29:5885]) by BYAPR11MB3062.namprd11.prod.outlook.com
- ([fe80::9cc2:9827:4f29:5885%4]) with mapi id 15.20.6298.030; Fri, 14 Apr 2023
- 14:08:03 +0000
-Date:   Fri, 14 Apr 2023 22:07:53 +0800
-From:   Aaron Lu <aaron.lu@intel.com>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-CC:     Peter Zijlstra <peterz@infradead.org>,
-        <linux-kernel@vger.kernel.org>, Olivier Dion <odion@efficios.com>,
-        <michael.christie@oracle.com>
-Subject: Re: [RFC PATCH v6] sched: Fix performance regression introduced by
- mm_cid
-Message-ID: <20230414140753.GA279103@ziqianlu-desk2>
-References: <20230413223356.17195-1-mathieu.desnoyers@efficios.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230413223356.17195-1-mathieu.desnoyers@efficios.com>
-X-ClientProxiedBy: SG2PR06CA0211.apcprd06.prod.outlook.com
- (2603:1096:4:68::19) To BYAPR11MB3062.namprd11.prod.outlook.com
- (2603:10b6:a03:92::18)
+        Fri, 14 Apr 2023 10:09:03 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09BE62D59
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 07:08:33 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id e16so4366741wra.6
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 07:08:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google; t=1681481306; x=1684073306;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=s1PB0Wv+X709r9gK1DvzM1L0T2wxDcvnl72V9qpeZSo=;
+        b=WTswzxto2LWs5T1ZZv4PfRoEv2lZ+IBkWicbwaiXNBl9NFYat2/WH0uxvXwRofEqn3
+         CidhDsjz7VIW8P3YV3Y1X/ntkrrmGH9eW2HFU2SJWzi1xuCsI5tnptZVOC+aGGG9cZuf
+         ZOWw+t/zlqev4P+EexhxM+qZ4wBrQ+u841VHiIDaBWW+ijMw6s8yHjRGroxef49S9XCh
+         tJ0H8bxT+koL2Uou5KV9XKYNwwDtmzOPSsWo4KrZw/Yc40NmNWJA5Nm2uWr+i4jYfZPx
+         DTc2m1iE4NRDkl3zqWios+VBrS+PClqIrVWUcZ2OQ8IniqiSJniMX6Au/VtRhdFR68ny
+         rTBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681481306; x=1684073306;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=s1PB0Wv+X709r9gK1DvzM1L0T2wxDcvnl72V9qpeZSo=;
+        b=BVrOEO7v+Uu/7xC27ZCKprMPOiXvy4Cm2zvsViRADaKrYjj82yn42txBfmHVPNSvZU
+         N392Tn0BUXIViCCTEN8s20ZtANb+qVKJbQP7R1+uhK4rTaSgSmnR+TUrem8HcjZ8pY63
+         7OpSqKNjMnfHy/AWbzmaUrj2idV5KJcg7y3RsKINkj/Xsvsg/YaLdI0AFtGrsDLQcKPL
+         48XGsb4TNiSVIE5wdM+U+yXs5a4pM313mFceKRzJzorD3Bu7BVKGQETHm4cUCgfGEb5g
+         gkNy9PUxW7pqsPKhny3bALQ/OM/1mR9kzO8J9M33foPOyZvbDfumwV8YsBVkxrtwRjEK
+         BSWA==
+X-Gm-Message-State: AAQBX9fPOzvlUAa++lsA35TjDECPznbUsCpkno45Opy/98siYRSGzRmo
+        WZzu/f/1BxAP2x940kmoytuF7Q==
+X-Google-Smtp-Source: AKy350aGsOrJZHd0G9sjH0pEUFtRZ8X58J4OqAa/eg1kMTvhXqxCJotBcKwF6hELCEaKdNPm178A0g==
+X-Received: by 2002:adf:f492:0:b0:2f0:df59:1ea7 with SMTP id l18-20020adff492000000b002f0df591ea7mr4382632wro.31.1681481306425;
+        Fri, 14 Apr 2023 07:08:26 -0700 (PDT)
+Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
+        by smtp.gmail.com with ESMTPSA id o5-20020a5d58c5000000b002f47ae62fe0sm3648185wrf.115.2023.04.14.07.08.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Apr 2023 07:08:26 -0700 (PDT)
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+Subject: [PATCH net-next 0/5] mptcp: refactor first subflow init
+Date:   Fri, 14 Apr 2023 16:07:59 +0200
+Message-Id: <20230414-upstream-net-next-20230414-mptcp-refactor-first-subflow-init-v1-0-04d177057eb9@tessares.net>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR11MB3062:EE_|MW4PR11MB7101:EE_
-X-MS-Office365-Filtering-Correlation-Id: f4a5b93d-b4b4-442a-a1c2-08db3cf1a998
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TgSTQvZ3YlnXNXq9NDxHXB+MIHrJEW4cEr8RLB+D3xk2Z6mmxhAMF0uQtUbtodJzByC2ecKbPZAY4DMhBz4uzy78iS4onoBilOXgNC4w8RFayWu2+B1nawP/rSxAJoJFiqSDfZL6ymGXnJbGIXdavxMGvF4p2/uNqydlZJoWtxWrYcoytsjDf2H963+s+zsO3nHzkSUl+DqDRA/Ps4qVcxR0khS3hZJaM+DPVo8kutg0hDjcUJbTgOxNsTXgc9wXgXUDBgdYIvAjvkXfhxhGj4qvWc+LI9g+fN6VK23CzLDSHSSONxG/nnGW57kJi2P+knpLwYA/07ukKj0KaWRmGFqa7mP/Am5YIVJC0Dod6iwXW8VQAR8CxzrdN6F6Oc8jLC+iaBkvY8P8G7z5mmo0w8vjE9eTM5z4R+67KuAPyWuUYdbIH8OSID+m+DywgH9kB5o3peiQkhylKFSSpxl+wXexYDzMEWUmNqFgU2lLcCA5IxybNZSbFhx4d6vIX6ODyK24jvH7VcgjlcD6dG0QFDcDINcx0SDpDHLzyTkKT6RQ1XhMV7rPvtUlF+HAZyCc
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3062.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(136003)(39860400002)(366004)(396003)(346002)(376002)(451199021)(478600001)(33656002)(83380400001)(82960400001)(38100700002)(6916009)(86362001)(2906002)(66556008)(1076003)(5660300002)(6512007)(6666004)(44832011)(6486002)(316002)(6506007)(9686003)(26005)(186003)(66476007)(41300700001)(8676002)(8936002)(33716001)(4326008)(54906003)(66946007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?desvht5sX1k6QyfFayUwVzRaWFpoxG9aAHGBib/knCD3VdMhzVm6LZbAsO6U?=
- =?us-ascii?Q?MQoRsvg5p19xmpydhrIpvbm/0pCK1/o6mPRepQDUhAtZLr639NQMwzYMle9M?=
- =?us-ascii?Q?SysARqrWi5yYwOy/at1FyQnX+qwaumriN35WHIGYge+kOrFZgGReTCZNsqEQ?=
- =?us-ascii?Q?IDF9dJneKh+nnmSgqQxPlHE0vVOIZ9Aq2HjosP58QDkBxN4CeG+SDknKh1mF?=
- =?us-ascii?Q?0zFdAAHDeURgoVycye3LM3ByBE9YmTda2620XguOqpuyFzk7qeqr9UopMK7i?=
- =?us-ascii?Q?N2Ja6rqQRMnX9k0Z5hHLPknPlQmdPA2ZV/ieXqd8+CWp1voESam+0kMVhXIe?=
- =?us-ascii?Q?IOPJLL/Zjun/YPWkeOGW9C/ohy7e80AgeJ9ZgVgJcnZP/TN4FXFgTQPoG6Tc?=
- =?us-ascii?Q?g0NxXEEoFRSjFiZruguKsf5SyWlJ0Oz3r7gFb/u3E2Udr5JznZNWAVAT6GZb?=
- =?us-ascii?Q?oQC0LvKZXQ02cikstr2c1KzggO9UbiEMDaYlMa2WYoEmHtac3JfiBNTzgeuD?=
- =?us-ascii?Q?W/mtthOTh3k6HI7RtFcyCD/yVhVs1WTMLx3gAiw2cF2K4VJtogTKw2I47cMS?=
- =?us-ascii?Q?TDiNA5HVxyyLDgdmv96lBj8Foe1mCGOpK+/Ev+Pg44g/ZnHcF/3d5gqFJDfL?=
- =?us-ascii?Q?7GcElrG8m21eUK5OrtKSOvxkrHlJZmBE9VTp+L7SRINL9zgv4PPJjj/j4iT2?=
- =?us-ascii?Q?08HApOmD5+uafSwSJDe7pTHaztt0kQKs3Tccv4ccY1P/G5OAGxy3H+oL9t6K?=
- =?us-ascii?Q?G43yK++fZFR/a5PHIJFku8VfHvcVhvymZRbiZbvQ6HNDFaCExzwQqnj6WJdV?=
- =?us-ascii?Q?M+LrppBo+5zHZTQIot9xDEU/o78sZ6luUJNoCpiVfbMsc4ZoDTX1VrdI3W9x?=
- =?us-ascii?Q?ZUvl1I3yxcSZhUR6vW9x6R5AaSp8PsSKYhPsSDRs9tB7Yrh+P1AbyKJnsY/s?=
- =?us-ascii?Q?+0U1ZbHqGIHPDe28MAzW7e/siNCHNl8hWTZhdGAYS4hpj3ueXgHtlmTreG0i?=
- =?us-ascii?Q?4vV/mQbwKtVdtRLGbG2+jp1STIVNB2lWefO3d37KUoycsh4VQR/YZrXq/biz?=
- =?us-ascii?Q?BggbdoYEkckbVRUYVnBilpbTK5oexUEm1gFP9t3AcEKvCAlx9FPjmqqjZlGJ?=
- =?us-ascii?Q?SZCR8qQEQJFGT92yW+lESRxbTba5tOStXdrZFTIAlDWBquaOcdfFAGpIVXnc?=
- =?us-ascii?Q?58Dgbe06uzfNJpggWK1x7mfvCasjK0H+V+N20yB0xRVCakiibKddQQBJH2ke?=
- =?us-ascii?Q?MR00c35JSI4KhjpUetjHLYyvjrb350/+zNW3X/JzjxkuB17oAvh8rTyZPNwu?=
- =?us-ascii?Q?WdZ+NmAKuDlgA0RbxoxyQNYzInjD5Q+4nNoLqpIE4gy3U+HC+dh6b6UPORg6?=
- =?us-ascii?Q?7yGj8UUdivfN2Am7uwBhXEPbV2Kg+9uyjBkoacraVNnCBoGihrRczdCobm4K?=
- =?us-ascii?Q?RI2X6ebDOyOe5PcGAm+T1nbjhkA0MS+d/QhPWJ4cubEZ2ePw7+W0DJTUF6qd?=
- =?us-ascii?Q?5/DpGc6UD2RxFVzENpvxlmToku/GfFCSe+UPnNjhJqHgN2V9tzv2oFgRuPm5?=
- =?us-ascii?Q?QHa5c16lWLNBnYker0QTa679FehLDfzFfi/umOb9?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: f4a5b93d-b4b4-442a-a1c2-08db3cf1a998
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3062.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2023 14:08:03.5035
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 76vLScFqPFhWr0ENBJukiL+N7rf+Vi5+3dNe+RE/t7HxpH67osPB0Df+qMHz/CCtyM+l5ds8+SHaCBAX65ZP7A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB7101
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAD9eOWQC/z2O0QqDMAxFf0XyvDDnnOB+ZewhrekMzFra6ATx3
+ 1eF7SEPl3s5JyskjsIJ7sUKkWdJMvocLqcCbE/+xShdzlCV1bWsLzVOIWlkGtCz5lsU/9UQ1Aa
+ M7MjqGNFJTIppMu49flC8KBLXza3tXEOmhawwlBhNJG/7XZKRHc8H9TyQ+H0SMk+W48MH/Jzw3
+ LYvICelMbsAAAA=
+To:     mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Ondrej Mosnacek <omosnace@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Matthieu Baerts <matthieu.baerts@tessares.net>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2218;
+ i=matthieu.baerts@tessares.net; h=from:subject:message-id;
+ bh=HU9Ki4cI++7m6T8hYN0UqK/vmUY+R07+hTP2VGju6xA=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkOV5ZSkCmwdWKPC/lxOxiCWwqJbVICR+LGlNlL
+ N7BxQ8mHTGJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZDleWQAKCRD2t4JPQmmg
+ c5fmD/4gtUdRr0TmXmfPmZmkvMiJjlxQBr0/fCh0UzFh4XlZ58xuk18KsQBYfmmftx/j2+e5Y8R
+ 9CBeqUCGrmaPr4oKxG9O2/Y0hJu1CK0CL/L44hJJoCOhO+DVlro+3qG1zsCl12WJzzE0utO0FMM
+ S1rIinJ/71SgRhfnTwr7wH3MGj5MdF1NcNXMGqiHHYyuvUvGYTE6SWZYhgR1mdZwYzKXiL0at5g
+ XfAGKhc9AkCNSoZTag1zV2VMeqOqtlglyjCyl1gdX61BuJAbw2NrF+VWyU6hgqPSQunDrqwGdDy
+ i6GwlWv7qIcixFRQtl7ZEgA/AnNedZfT8oNbQDiNSKDSitbOebghdafrjMM7e6j0bRpzFnCJVNp
+ wA+jEL6q0UiLcZFIdoXGKdUKsJtwfayOG3mDivik1krleg1DSb4vbATjCp+BL5N7A/RMZ3tOPqj
+ y1gA98HnHzrTK+yl6BFgQzqTCXbCntak4NNGQYiBSSOuLJ7Snlm0N55b45RrPK6U+xUXUBaahWL
+ pg7Z93+A308UPD99z2bolS7fdsnkdglhlV+2sZF9ngKbrtkapm5KFvkDR64OKC8EJnfcp+KYYLv
+ /nWM/7GyG9B3cRO3U5rnKAkOEwW0Mj2G/iPNzZXXp3K5i12dh9VybB9j7KO6aVmT8G0Mxqa0k+q
+ i5OCsTP7LkgfxJQ==
+X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 06:33:56PM -0400, Mathieu Desnoyers wrote:
-> Introduce per-mm/cpu current concurrency id (mm_cid) to fix a PostgreSQL
-> sysbench regression reported by Aaron Lu.
-> 
-> Keep track of the currently allocated mm_cid for each mm/cpu rather than
-> freeing them immediately on context switch. This eliminates most atomic
-> operations when context switching back and forth between threads
-> belonging to different memory spaces in multi-threaded scenarios (many
-> processes, each with many threads). The per-mm/per-cpu mm_cid values are
-> serialized by their respective runqueue locks.
-> 
-> Thread migration is handled by introducing a task-work executed
-> periodically, similarly to NUMA work, which delays reclaim of cid
-> values when they are unused for a period of time.
-> 
-> Keep track of the allocation time for each per-cpu cid, and let the task
-> work clear them when they are observed to be older than
-> SCHED_MM_CID_PERIOD_NS and unused.
-> 
-> This fix is going for a task-work and delayed reclaim approach rather
-> than adding hooks to migrate-from and migrate-to because migration
-> happens to be a hot path for various real-world workloads.
-> 
-> Because we want to ensure the mm_cid converges towards the smaller
-> values as migrations happen, the prior optimization that was done when
-> context switching between threads belonging to the same mm is removed,
-> because it could delay the lazy release of the destination runqueue
-> mm_cid after it has been replaced by a migration. Removing this prior
-> optimization is not an issue performance-wise because the introduced
-> per-mm/per-cpu mm_cid tracking also covers this more specific case.
+This series refactors the initialisation of the first subflow of a
+listen socket. The first subflow allocation is no longer done at the
+initialisation of the socket but later, when the connection request is
+received or when requested by the userspace.
 
-I was wondering, if a thread was migrated to all possible cpus in the
-SCHED_MM_CID_PERIOD_NS window, its mm_cidmask will be full. For user
-space, if cid can be the full set of cpus, then it will have to prepare
-storage for the full set. Then what's the point of doing compaction? Or
-do I understand it wrong?
+This is needed not just because Paolo likes to refactor things but
+because this simplifies the code and makes the behaviour more consistent
+with the rest. Also, this is a prerequisite for future patches adding
+proper support of SELinux/LSM labels with MPTCP and accept(2).
+
+In [1], Ondrej Mosnacek explained they discovered the (userspace-facing)
+sockets returned by accept(2) when using MPTCP always end up with the
+label representing the kernel (typically system_u:system_r:kernel_t:s0),
+while it would make more sense to inherit the context from the parent
+socket (the one that is passed to accept(2)).
+
+Before being able to properly support that on SELinux/LSM side, patches
+2-3/5 prepare the code to simplify the patch 4/5 moving the allocation.
+
+Patch 1/5 is a small clean-up seen while working on the series and patch
+5/5 is a small improvement when closing unaccepted sockets.
+
+[1] https://lore.kernel.org/netdev/CAFqZXNs2LF-OoQBUiiSEyranJUXkPLcCfBkMkwFeM6qEwMKCTw@mail.gmail.com/
+
+Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+---
+Paolo Abeni (5):
+      mptcp: drop unneeded argument
+      mptcp: avoid unneeded __mptcp_nmpc_socket() usage
+      mptcp: move fastopen subflow check inside mptcp_sendmsg_fastopen()
+      mptcp: move first subflow allocation at mpc access time
+      mptcp: fastclose msk when cleaning unaccepted sockets
+
+ net/mptcp/options.c    |  2 +-
+ net/mptcp/pm.c         |  4 +--
+ net/mptcp/pm_netlink.c |  4 +--
+ net/mptcp/protocol.c   | 97 +++++++++++++++++++++++++++++++++-----------------
+ net/mptcp/protocol.h   |  4 +--
+ net/mptcp/sockopt.c    | 24 +++++++------
+ net/mptcp/subflow.c    |  2 +-
+ 7 files changed, 86 insertions(+), 51 deletions(-)
+---
+base-commit: e473ea818bfe42cbdf872c41593cbaf24dbf1297
+change-id: 20230414-upstream-net-next-20230414-mptcp-refactor-first-subflow-init-ae4659df6ab9
+
+Best regards,
+-- 
+Matthieu Baerts <matthieu.baerts@tessares.net>
+
