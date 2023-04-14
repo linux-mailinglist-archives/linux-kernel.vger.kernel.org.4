@@ -2,129 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3B426E2CB7
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 01:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 502D96E2CBD
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 01:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbjDNXLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 19:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40808 "EHLO
+        id S229931AbjDNXMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 19:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjDNXLr (ORCPT
+        with ESMTP id S229497AbjDNXMW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 19:11:47 -0400
-Received: from m-r1.th.seeweb.it (m-r1.th.seeweb.it [IPv6:2001:4b7a:2000:18::170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43E44221;
-        Fri, 14 Apr 2023 16:11:45 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id CEBBE20386;
-        Sat, 15 Apr 2023 01:11:43 +0200 (CEST)
-Date:   Sat, 15 Apr 2023 01:11:42 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     freedreno@lists.freedesktop.org, quic_sbillaka@quicinc.com,
-        dianders@chromium.org, airlied@gmail.com, andersson@kernel.org,
-        robdclark@gmail.com, dri-devel@lists.freedesktop.org,
-        swboyd@chromium.org, vkoul@kernel.org, agross@kernel.org,
-        daniel@ffwll.ch, linux-arm-msm@vger.kernel.org,
-        dmitry.baryshkov@linaro.org,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>, sean@poorly.run,
-        linux-kernel@vger.kernel.org
-Subject: Re: [Freedreno] [PATCH] drm/msm/dpu: always program dsc active bits
-Message-ID: <2e6dwt74oyy7rroxyus6ebfbylbbtinsi7bccpqazjm64owiv4@gfs52kkq47c3>
-References: <1681247095-1201-1-git-send-email-quic_khsieh@quicinc.com>
- <z7wj2lcgcdxsqh7ylhec3ig6o4p6q37zqvpzoxp4bd4vid2z2n@ubsgt3ebqrwr>
- <83f9a438-52c5-83f3-1767-92d16518d8f0@quicinc.com>
- <feedv4isliterjtwyicqfarwuvzhtov3jkmvjcwqvt7itkyh7y@e2jq5t6r3lxc>
- <e78e576a-2a04-e7ca-f6c4-701d508541ad@quicinc.com>
- <mfzi535qsjtcznwdvgb7qyzk25rcsrkwozah6ji4thqsj73n3m@asybxllomisg>
- <049697ba-d997-62c0-6e21-ffb287ac3100@quicinc.com>
- <6s42sutrd2c6tme46t6tchd6y6wonmpwokseqqz2frkrfext7v@vnv44tzwyva4>
- <82bf6167-d621-1a4e-86f0-7a8567347722@quicinc.com>
+        Fri, 14 Apr 2023 19:12:22 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D3496EB6
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 16:12:20 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id qb20so49041404ejc.6
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 16:12:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681513939; x=1684105939;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rQD1oso+8ADTrmZywcy5/ZWb5KiX0kq22/9gdYr2fT0=;
+        b=rqz6hoGlruHKPc5t2bxSsCjJ0q8fLUfCjDlhl4Z5UjfIBNLVoqdHRwpUspz3jYAZNl
+         f2vofoEu2tP1aZLwxjiF8wqjCmLPyk2fhSgT6bIqpEi5T7lKgWxLmMIvDyPKYYPdytt4
+         0nzGQ667jAg9GOBlcF6dDnqE+apDZpaXthStELBKtqOKxcyoTD2j9OXN3rWM9uHm2XUe
+         N1V7S4e4JntnuWAJxmosdJjiIoC0YQPvFtLV84JtHYBi/kBrs4jYzueDnngMYASwCDZy
+         WtYQLvayq7pTuprvd4phPV8N3kXKSN0VwNR/SuNsTRnEjL4i8iN6/xkGqGgGY6QAAvn2
+         cSJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681513939; x=1684105939;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rQD1oso+8ADTrmZywcy5/ZWb5KiX0kq22/9gdYr2fT0=;
+        b=dmRXRdXVdN359XKU4kZrfye1dyiJhAOysR1AdNchJ6QuXQ0QH+Gmd3we2/PM6KCeZa
+         WAqHPsV5NP4TLWGjsI5u4nx+1zca+ZH8ewrZT8N1MyiaiVEhd5ujF87/NdjFkwKIF/fF
+         PhIKcFBRgc24U30hiuaNRcb/Im5hU9djSm6crt64mcGm0Ng3cZ2spSHHX4KoCaDIyqGV
+         maJeP/cVpApO9yul3OcaIoH9kBrEuR/hqjef3obdQtHgeBFhNybIkvPqmmSNFEI2y5AL
+         rAoi8OdxFJUaasHLCyXlwqZRMBkVUfS3R9X0SICKm0f9ujgteq6lpBZ5COOsmdwSpBa1
+         3D8w==
+X-Gm-Message-State: AAQBX9cTTd14VdKAkVojov2tfOm+3g6CjC4Tj5heJ/p3oV12CiPthRMz
+        Roh4Ujp+rdJAtSbAfJECynMoVJp8/gVKEUVZ9K8k+w==
+X-Google-Smtp-Source: AKy350ZVW/SeKKN7bQaip/vQ/ZivEBvqqS/RV2NR13bc/DeeXMLJdi7ZYfPWAWzE33zqe1KsI8fspxB3C5u2WkZCZxI=
+X-Received: by 2002:a17:906:4c49:b0:94b:d619:e773 with SMTP id
+ d9-20020a1709064c4900b0094bd619e773mr320456ejw.15.1681513938572; Fri, 14 Apr
+ 2023 16:12:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <82bf6167-d621-1a4e-86f0-7a8567347722@quicinc.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230413104034.1086717-1-yosryahmed@google.com>
+ <20230413104034.1086717-4-yosryahmed@google.com> <b7fe839d-d914-80f7-6b96-f5f3a9d0c9b0@redhat.com>
+ <CAJD7tkae0uDuRG77nQEtzkV1abGstjF-1jfsCguR3jLNW=Cg5w@mail.gmail.com>
+ <20230413210051.GO3223426@dread.disaster.area> <CAJD7tkbzQb+gem-49xo8=1EfeOttiHZpD4X-iiWvHuO9rrHuog@mail.gmail.com>
+ <20230414144704.2e411d40887c8e9e25ab2864@linux-foundation.org>
+In-Reply-To: <20230414144704.2e411d40887c8e9e25ab2864@linux-foundation.org>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Fri, 14 Apr 2023 16:11:42 -0700
+Message-ID: <CAJD7tkZOkd17UubA5FwrphEFTx+ZhXikFVEEXpVt6159QSC4og@mail.gmail.com>
+Subject: Re: [PATCH v6 3/3] mm: vmscan: refactor updating current->reclaim_state
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Dave Chinner <david@fromorbit.com>,
+        David Hildenbrand <david@redhat.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-14 10:57:45, Abhinav Kumar wrote:
-> On 4/14/2023 10:34 AM, Marijn Suijten wrote:
-> > On 2023-04-14 08:48:43, Abhinav Kumar wrote:
-> >> On 4/14/2023 12:35 AM, Marijn Suijten wrote:
-> >>> On 2023-04-12 10:33:15, Abhinav Kumar wrote:
-> >>> [..]
-> >>>>> What happens if a device boots without DSC panel connected?  Will
-> >>>>> CTL_DSC_FLUSH be zero and not (unnecessarily, I assume) flush any of the
-> >>>>> DSC blocks?  Or could this flush uninitialized state to the block?
-> >>>>
-> >>>> If we bootup without DSC panel connected, the kernel's cfg->dsc will be
-> >>>> 0 and default register value of CTL_DSC_FLUSH will be 0 so it wont flush
-> >>>> any DSC blocks.
-> >>>
-> >>> Ack, that makes sense.  However, if I connect a DSC panel, then
-> >>> disconnect it (now the register should be non-zero, but cfg->dsc will be
-> >>> zero), and then replug a non-DSC panel multiple times, it'll get flushed
-> >>> every time because we never clear CTL_DSC_FLUSH after that?
-> >>
-> >> If we remove it after kernel starts, that issue is there even today
-> >> without that change because DSI is not a hot-pluggable display so a
-> >> teardown wont happen when you plug out the panel. How will cfg->dsc be 0
-> >> then? In that case, its not a valid test as there was no indication to
-> >> DRM that display was disconnected so we cannot tear it down.
-> > 
-> > The patch description itself describes hot-pluggable displays, which I
-> > believe is the upcoming DSC support for DP?  You ask how cfg->dsc can
-> > become zero, but this is **exactly** what the patch description
-> > describes, and what this patch is removing the `if` for.  If we are not
-> > allowed to discuss that scenario because it is not currently supported,
-> > neither should we allow to apply this patch.
-> > 
-> > With that in mind, can you re-answer the question?
-> 
-> I didnt follow what needs to be re-answered.
-> 
-> This patch is being sent in preparation of the DSC over DP support. This 
-> does not handle non-hotpluggable displays.
+On Fri, Apr 14, 2023 at 2:47=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
+n.org> wrote:
+>
+> On Thu, 13 Apr 2023 14:38:03 -0700 Yosry Ahmed <yosryahmed@google.com> wr=
+ote:
+>
+> > > > I suck at naming things. If you think "reclaimed_non_lru" is better=
+,
+> > > > then we can do that. FWIW mm_account_reclaimed_pages() was taken fr=
+om
+> > > > a suggestion from Dave Chinner. My initial version had a terrible
+> > > > name: report_freed_pages(), so I am happy with whatever you see fit=
+.
+> > > >
+> > > > Should I re-spin for this or can we change it in place?
+> > >
+> > > I don't care for the noise all the bikeshed painting has generated
+> > > for a simple change like this.  If it's a fix for a bug, and the
+> > > naming is good enough, just merge it already, ok?
+> >
+> > Sorry for all the noise. I think this version is in good enough shape.
+> >
+> > Andrew, could you please replace v4 with this v6 without patch 2 as
+> > multiple people pointed out that it is unneeded? Sorry for the hassle.
+>
+> I like patch 2!
+>
+> mm.git presently has the v6 series.  All of it ;)
 
-Good, because my question is specifically about *hotpluggable*
-displays/panels like the upcoming DSC support for DP.  After all there
-would be no point in me suggesting to connect and disconnect
-non-hotpluggable displays and expect something sensible to happen,
-wouldn't it?  Allow me to copy-paste the question again for convenience,
-with some minor wording changes:
-
-	However, if I connect a DSC DP display, then disconnect it (now the
-	register should be non-zero, but cfg->dsc will be zero), and then
-	connect and reconnect a non-DSC DP display multiple times, it'll get
-	flushed every time because we never clear CTL_DSC_FLUSH after that?
-
-And the missing part is: would multiple flushes be harmful in this case?
-
-> I do not think dynamic switch 
-> between DSC and non-DSC of non-hotpluggable displays needs to be 
-> discussed here as its not handled at all with or without this patch.
-> 
-> We wanted to get early reviews on the patch. If you want this patch to 
-> be absorbed when rest of DSC over DP lands, I have no concerns with 
-> that. I wont pick this up for fixes and we will land this together with 
-> the rest of DP over DSC.
-
-I don't mind when and where this lands, just want to have the semantics
-clear around persisting the value of CTL_DSC_FLUSh in the register.
-
-Regardless, this patch doesn't sound like a fix but a workaround until
-reset_intf_cfg() is fixed to be called at the right point, and extended
-to clear CTL_DSC_ACTIVE and flush the DSCs.  Perhaps it shouldn't have a
-Fixes: tag for that reason, as you intend to reinstate this
-if (cfg->dsc) condition when that is done?
-
-- Marijn
+Thanks Andrew :)
