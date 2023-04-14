@@ -2,246 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C45B16E23D7
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 14:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4855A6E235B
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 14:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbjDNM6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 08:58:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42380 "EHLO
+        id S230508AbjDNMd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 08:33:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjDNM56 (ORCPT
+        with ESMTP id S229685AbjDNMdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 08:57:58 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7032AAF35;
-        Fri, 14 Apr 2023 05:57:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1681477052; x=1713013052;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ATUW5+6lA7JEaiWiCALRhiDD0rwS4uvrPrY5ePlmioU=;
-  b=BPrcek03O8lal5dPZLJeCpyNRgAXyiriDa24xB0xOZpyRthLxoMJHfQm
-   VnxS3W83NTXq5ktbH89B3WZbueLusrQmjGH3scMYQ/JPdEZVuauJ8L6CU
-   mVUfiFslaqV3GWw9uutS0EZt9q/aSzaUvzNEx60+I1DYhRgL/3OIwBwtM
-   n1xIwbsCyIAlZtotK2tQJZwUNrjZ77kMr8wt5AnIXObeASAgukPJhXHYN
-   WoKj1mQEeQh4AO5xHL55Ed/6dJVQ4DsCyu6SE+v7l1jURTOQwxJ0TbjKj
-   +WRE9lkpCRSxw501uWRO580Ru4ftn/CpYf3qk/3UUkKBn9ePIbqNiA8op
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.99,195,1677567600"; 
-   d="scan'208";a="209087618"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Apr 2023 05:57:18 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 14 Apr 2023 05:33:26 -0700
-Received: from microchip1-OptiPlex-9020.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Fri, 14 Apr 2023 05:33:22 -0700
-From:   shravan kumar <shravan.chippa@microchip.com>
-To:     <paul.j.murphy@intel.com>, <daniele.alessandrelli@intel.com>,
-        <mchehab@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <shawnguo@kernel.org>,
-        <s.hauer@pengutronix.de>
-CC:     <kernel@pengutronix.de>, <festevam@gmail.com>, <linux-imx@nxp.com>,
-        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <shravan.chippa@microchip.com>, Sakari Ailus <sakari.ailus@iki.fi>
-Subject: [PATCH v13 1/1] media: i2c: imx334: update pixel, hblank and link frequency
-Date:   Fri, 14 Apr 2023 18:03:11 +0530
-Message-ID: <20230414123311.23923-2-shravan.chippa@microchip.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230414123311.23923-1-shravan.chippa@microchip.com>
-References: <20230414123311.23923-1-shravan.chippa@microchip.com>
+        Fri, 14 Apr 2023 08:33:55 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 137DDD7;
+        Fri, 14 Apr 2023 05:33:54 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id e7so7262171wrc.12;
+        Fri, 14 Apr 2023 05:33:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681475632; x=1684067632;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uvla7Msf6LOpeHcLRGRKcL7v0vF3JDugFuz78yM9KIU=;
+        b=NQhC3LioBxqP5wS6z1zTGCLGpP9u7qtQp6NE4y6GgZ5i1FTeSulJDZ1+U+ZTbF2lZo
+         98MNM9RHown12DA4B68j6B6c3aZTearTVTQ8xdfHRizaWsXG50fq8sV15U5f8yKXPt96
+         BGk+rqxtv2K+ng3K2uSwtYtLVsgTBE1N1YDBZ2HqloaulvO4yvZJuyTPK3yVUFgv9etm
+         NABoDDzlFK8IuHWk1PXw/Zk7g755c56dK7QHmWNqXrApTxMH4FtZfH5F5n2iHrmq1nsP
+         B8Pif8XYBlbigR/aMoukP1xhotqjWw2Q5qYVIX8KKgQKLJ2N7aGCVKYU0Wx6iPeUvkKZ
+         rykA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681475632; x=1684067632;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uvla7Msf6LOpeHcLRGRKcL7v0vF3JDugFuz78yM9KIU=;
+        b=ZBzGrJr+38zEA043bh7vjVmnHBgWt+Bk5TC7DC20anBrmCMRZluAIe63dI1XzMasIv
+         dCpiG7Yn9GcFipstgomq8e1MALN+1BPGmuFeihgWxZ3V++ogP8uZ2MxslO/bLWti/9QL
+         YzPSgWf+3R/ErIr8w9G1xJIyIhvUx0KRaU5zjzeXiLlqCXdLVN1C6THtO43o9D0QtL0M
+         E4PQiKwrXNfAkeZQfZqKMu0FaK53f69SlYW10GomSTTiY14EFyTFRpTmM4UPhIiFvJ/C
+         vJGYg2OOOoqVYySxpkDngL1nHXv8/J3S8wpsoil1/apNSCz/sFsaIKAhDUsmlnMT5neH
+         QTow==
+X-Gm-Message-State: AAQBX9ffBqPNo9XJ1rYmQ6TJzwbQouTua/LjRyFrvzokSyK5+SWo4yav
+        /U2sPLr07iTNjlOcrGHMe28PIjDogmc=
+X-Google-Smtp-Source: AKy350YSVk92XEpl/If1YXc0KdX/7n2Wb8XRQ9z2MdBpMmH2b6qLBPJHlfdYrXCW4umj+QJWV98Ppg==
+X-Received: by 2002:a5d:6d45:0:b0:2f2:1379:6b18 with SMTP id k5-20020a5d6d45000000b002f213796b18mr4681992wri.9.1681475632388;
+        Fri, 14 Apr 2023 05:33:52 -0700 (PDT)
+Received: from gmail.com ([81.168.73.77])
+        by smtp.gmail.com with ESMTPSA id t5-20020adfeb85000000b002e71156b0fcsm3481033wrn.6.2023.04.14.05.33.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Apr 2023 05:33:51 -0700 (PDT)
+Date:   Fri, 14 Apr 2023 13:33:49 +0100
+From:   Martin Habets <habetsm.xilinx@gmail.com>
+To:     Ding Hui <dinghui@sangfor.com.cn>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, ecree.xilinx@gmail.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pengdonglin@sangfor.com.cn,
+        huangcun@sangfor.com.cn
+Subject: Re: [RFC PATCH net] sfc: Fix use-after-free due to selftest_work
+Message-ID: <ZDlILcEDU16YgTT/@gmail.com>
+Mail-Followup-To: Ding Hui <dinghui@sangfor.com.cn>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        ecree.xilinx@gmail.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pengdonglin@sangfor.com.cn,
+        huangcun@sangfor.com.cn
+References: <20230412005013.30456-1-dinghui@sangfor.com.cn>
+ <ZDew+TqjrcK+zSgW@gmail.com>
+ <7a1de6be-8956-b1d5-6351-c7c2fb3bf9f4@sangfor.com.cn>
+ <ZDkgm/Ub/zXIU7+p@gmail.com>
+ <a7cb0d9e-7519-f90c-bd58-eab9ee82b3dc@sangfor.com.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a7cb0d9e-7519-f90c-bd58-eab9ee82b3dc@sangfor.com.cn>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shravan Chippa <shravan.chippa@microchip.com>
+On Fri, Apr 14, 2023 at 07:03:41PM +0800, Ding Hui wrote:
+> On 2023/4/14 17:44, Martin Habets wrote:
+> > On Thu, Apr 13, 2023 at 04:35:08PM +0800, Ding Hui wrote:
+> > > On 2023/4/13 15:37, Martin Habets wrote:
+> > > > On Wed, Apr 12, 2023 at 08:50:13AM +0800, Ding Hui wrote:
+> > > > > There is a use-after-free scenario that is:
+> > > > > 
+> > > > > When netif_running() is false, user set mac address or vlan tag to VF,
+> > > > > the xxx_set_vf_mac() or xxx_set_vf_vlan() will invoke efx_net_stop()
+> > > > > and efx_net_open(), since netif_running() is false, the port will not
+> > > > > start and keep port_enabled false, but selftest_worker is scheduled
+> > > > > in efx_net_open().
+> > > > > 
+> > > > > If we remove the device before selftest_worker run, the efx is freed,
+> > > > > then we will get a UAF in run_timer_softirq() like this:
+> > > > > 
+> > > > > [ 1178.907941] ==================================================================
+> > > > > [ 1178.907948] BUG: KASAN: use-after-free in run_timer_softirq+0xdea/0xe90
+> > > > > [ 1178.907950] Write of size 8 at addr ff11001f449cdc80 by task swapper/47/0
+> > > > > [ 1178.907950]
+> > > > > [ 1178.907953] CPU: 47 PID: 0 Comm: swapper/47 Kdump: loaded Tainted: G           O     --------- -t - 4.18.0 #1
+> > > > > [ 1178.907954] Hardware name: SANGFOR X620G40/WI2HG-208T1061A, BIOS SPYH051032-U01 04/01/2022
+> > > > > [ 1178.907955] Call Trace:
+> > > > > [ 1178.907956]  <IRQ>
+> > > > > [ 1178.907960]  dump_stack+0x71/0xab
+> > > > > [ 1178.907963]  print_address_description+0x6b/0x290
+> > > > > [ 1178.907965]  ? run_timer_softirq+0xdea/0xe90
+> > > > > [ 1178.907967]  kasan_report+0x14a/0x2b0
+> > > > > [ 1178.907968]  run_timer_softirq+0xdea/0xe90
+> > > > > [ 1178.907971]  ? init_timer_key+0x170/0x170
+> > > > > [ 1178.907973]  ? hrtimer_cancel+0x20/0x20
+> > > > > [ 1178.907976]  ? sched_clock+0x5/0x10
+> > > > > [ 1178.907978]  ? sched_clock_cpu+0x18/0x170
+> > > > > [ 1178.907981]  __do_softirq+0x1c8/0x5fa
+> > > > > [ 1178.907985]  irq_exit+0x213/0x240
+> > > > > [ 1178.907987]  smp_apic_timer_interrupt+0xd0/0x330
+> > > > > [ 1178.907989]  apic_timer_interrupt+0xf/0x20
+> > > > > [ 1178.907990]  </IRQ>
+> > > > > [ 1178.907991] RIP: 0010:mwait_idle+0xae/0x370
+> > > > > 
+> > > > > I am thinking about several ways to fix the issue:
+> > > > > 
+> > > > > [1] In this RFC, I cancel the selftest_worker unconditionally in
+> > > > > efx_pci_remove().
+> > > > > 
+> > > > > [2] Add a test condition, only invoke efx_selftest_async_start() when
+> > > > > efx->port_enabled is true in efx_net_open().
+> > > > > 
+> > > > > [3] Move invoking efx_selftest_async_start() from efx_net_open() to
+> > > > > efx_start_all() or efx_start_port(), that matching cancel action in
+> > > > > efx_stop_port().
+> > > > 
+> > > > I think moving this to efx_start_port() is best, as you say to match
+> > > > the cancel in efx_stop_port().
+> > > > 
+> > > 
+> > > If moving to efx_start_port(), should we worry about that IRQ_TIMEOUT
+> > > is still enough?
+> > 
+> > 1 second is a long time for a machine running code, so it does not worry me.
+> > 
+> > > I'm not sure if there is a long time waiting from starting of schedule
+> > > selftest_work to the ending of efx_net_open().
+> > 
+> > I see your point. Looking at efx_start_all() there is the call to
+> > efx_start_datapath() after the call to efx_net_open(), which takes a
+>                                          ^^^^^^^^^^^^
+> Do you mean efx_start_port()?
 
-Update pixel_rate and link frequency for 1920x1080@30
-while changing mode.
+Woops, yes that what I meant.
 
-Update vblank value while changing mode
+> > relatively long time (well under 200ms though).
+> > Logically it would be better to move efx_selftest_async_start() after this
+> > call. What do you think?
+> 
+> Agree with you.
+> 
+> > The point here is that efx_start_all() calls efx_start_port() early, and
+> > efx_stop_all() also calls efx_stop_port() early. The calling sequence is
+> > correct but they are not the strict inverse of each other.
+> > 
+> 
+> Yeah, that is what I noticed monitor_work does.
+> Then I'll move efx_selftest_async_start() into efx_start_all(), follows
+> the monitor_work.
 
-Add support to handle multiple link frequencies.
+Sounds good.
 
-Add dummy ctrl cases for pixel_rate and link frequency
-to avoid error while changing the modes dynamically.
+Thanks,
+Martin
 
-Update default link frequency from device tree max link
-frequency value.
-
-Update init_cfg() function to update the link frequency
-menu_skip_mask value.
-
-Suggested-by: Sakari Ailus <sakari.ailus@iki.fi>
-Signed-off-by: Shravan Chippa <shravan.chippa@microchip.com>
----
- drivers/media/i2c/imx334.c | 62 +++++++++++++++++++++++++++++---------
- 1 file changed, 48 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/media/i2c/imx334.c b/drivers/media/i2c/imx334.c
-index 309c706114d2..d4c9986aee59 100644
---- a/drivers/media/i2c/imx334.c
-+++ b/drivers/media/i2c/imx334.c
-@@ -49,7 +49,8 @@
- #define IMX334_INCLK_RATE	24000000
- 
- /* CSI2 HW configuration */
--#define IMX334_LINK_FREQ	891000000
-+#define IMX334_LINK_FREQ_891M	891000000
-+#define IMX334_LINK_FREQ_445M	445500000
- #define IMX334_NUM_DATA_LANES	4
- 
- #define IMX334_REG_MIN		0x00
-@@ -139,12 +140,14 @@ struct imx334 {
- 	u32 vblank;
- 	const struct imx334_mode *cur_mode;
- 	struct mutex mutex;
-+	unsigned long menu_skip_mask;
- 	u32 cur_code;
- 	bool streaming;
- };
- 
- static const s64 link_freq[] = {
--	IMX334_LINK_FREQ,
-+	IMX334_LINK_FREQ_891M,
-+	IMX334_LINK_FREQ_445M,
- };
- 
- /* Sensor mode registers for 1920x1080@30fps */
-@@ -468,7 +471,7 @@ static const struct imx334_mode supported_modes[] = {
- 		.vblank_min = 45,
- 		.vblank_max = 132840,
- 		.pclk = 297000000,
--		.link_freq_idx = 0,
-+		.link_freq_idx = 1,
- 		.reg_list = {
- 			.num_of_regs = ARRAY_SIZE(mode_1920x1080_regs),
- 			.regs = mode_1920x1080_regs,
-@@ -598,13 +601,23 @@ static int imx334_update_controls(struct imx334 *imx334,
- 	if (ret)
- 		return ret;
- 
-+	ret = __v4l2_ctrl_modify_range(imx334->pclk_ctrl, mode->pclk,
-+				       mode->pclk, 1, mode->pclk);
-+	if (ret)
-+		return ret;
-+
- 	ret = __v4l2_ctrl_modify_range(imx334->hblank_ctrl, mode->hblank,
- 				       mode->hblank, 1, mode->hblank);
- 	if (ret)
- 		return ret;
- 
--	return __v4l2_ctrl_modify_range(imx334->vblank_ctrl, mode->vblank_min,
-+
-+	ret =  __v4l2_ctrl_modify_range(imx334->vblank_ctrl, mode->vblank_min,
- 					mode->vblank_max, 1, mode->vblank);
-+	if (ret)
-+		return ret;
-+
-+	return __v4l2_ctrl_s_ctrl(imx334->vblank_ctrl, mode->vblank);
- }
- 
- /**
-@@ -698,6 +711,8 @@ static int imx334_set_ctrl(struct v4l2_ctrl *ctrl)
- 		pm_runtime_put(imx334->dev);
- 
- 		break;
-+	case V4L2_CID_PIXEL_RATE:
-+	case V4L2_CID_LINK_FREQ:
- 	case V4L2_CID_HBLANK:
- 		ret = 0;
- 		break;
-@@ -885,7 +900,17 @@ static int imx334_init_pad_cfg(struct v4l2_subdev *sd,
- 	struct v4l2_subdev_format fmt = { 0 };
- 
- 	fmt.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY : V4L2_SUBDEV_FORMAT_ACTIVE;
--	imx334_fill_pad_format(imx334, &supported_modes[0], &fmt);
-+
-+	mutex_lock(&imx334->mutex);
-+
-+	imx334_fill_pad_format(imx334, imx334->cur_mode, &fmt);
-+
-+	__v4l2_ctrl_modify_range(imx334->link_freq_ctrl, 0,
-+				 __fls(imx334->menu_skip_mask),
-+				 ~(imx334->menu_skip_mask),
-+				 __ffs(imx334->menu_skip_mask));
-+
-+	mutex_unlock(&imx334->mutex);
- 
- 	return imx334_set_pad_format(sd, sd_state, &fmt);
- }
-@@ -1046,8 +1071,8 @@ static int imx334_parse_hw_config(struct imx334 *imx334)
- 	};
- 	struct fwnode_handle *ep;
- 	unsigned long rate;
-+	unsigned int i, j;
- 	int ret;
--	int i;
- 
- 	if (!fwnode)
- 		return -ENXIO;
-@@ -1097,11 +1122,20 @@ static int imx334_parse_hw_config(struct imx334 *imx334)
- 		goto done_endpoint_free;
- 	}
- 
--	for (i = 0; i < bus_cfg.nr_of_link_frequencies; i++)
--		if (bus_cfg.link_frequencies[i] == IMX334_LINK_FREQ)
-+	for (i = 0; i < bus_cfg.nr_of_link_frequencies; i++) {
-+		for (j = 0; j < ARRAY_SIZE(link_freq); j++) {
-+			if (bus_cfg.link_frequencies[i] == link_freq[j]) {
-+				set_bit(j, &imx334->menu_skip_mask);
-+				break;
-+			}
-+		}
-+
-+		if (j == ARRAY_SIZE(link_freq)) {
-+			ret = dev_err_probe(imx334->dev, -EINVAL,
-+					    "no supported link freq found\n");
- 			goto done_endpoint_free;
--
--	ret = -EINVAL;
-+		}
-+	}
- 
- done_endpoint_free:
- 	v4l2_fwnode_endpoint_free(&bus_cfg);
-@@ -1232,10 +1266,10 @@ static int imx334_init_controls(struct imx334 *imx334)
- 	imx334->link_freq_ctrl = v4l2_ctrl_new_int_menu(ctrl_hdlr,
- 							&imx334_ctrl_ops,
- 							V4L2_CID_LINK_FREQ,
--							ARRAY_SIZE(link_freq) -
--							1,
--							mode->link_freq_idx,
-+							__fls(imx334->menu_skip_mask),
-+							__ffs(imx334->menu_skip_mask),
- 							link_freq);
-+
- 	if (imx334->link_freq_ctrl)
- 		imx334->link_freq_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
- 
-@@ -1302,7 +1336,7 @@ static int imx334_probe(struct i2c_client *client)
- 	}
- 
- 	/* Set default mode to max resolution */
--	imx334->cur_mode = &supported_modes[0];
-+	imx334->cur_mode = &supported_modes[__ffs(imx334->menu_skip_mask)];
- 	imx334->cur_code = imx334_mbus_codes[0];
- 	imx334->vblank = imx334->cur_mode->vblank;
- 
--- 
-2.34.1
-
+> -- 
+> Thanks,
+> - Ding Hui
