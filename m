@@ -2,167 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 380186E274A
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 17:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F56A6E2760
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 17:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230486AbjDNPrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 11:47:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33482 "EHLO
+        id S229874AbjDNPtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 11:49:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbjDNPr1 (ORCPT
+        with ESMTP id S230231AbjDNPtq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 11:47:27 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 208939757
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 08:47:26 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id w24so8371744wra.10
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 08:47:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1681487244; x=1684079244;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Qzxt4XcM4tuKu37taRV5Ugjl1Cb3GZa6ByEPKZjvm68=;
-        b=insrqgRzM5WggRlz8B5pv0UziSsf4Bk9QYU+AO+KzFAuqcBNEQfCS26+Tj+MjVpCPL
-         uP4cMmOfcMIkznI9FbQi2i0ZqSSx1UFKdWnalX1Ug6m5PBIPJDQIFphg7yUxhEV2ivcD
-         M9ofn6TCMlSEDu2NlD9l6W0zpNmlqjPG48oC5E9h6qNkuvq8EgkhkTf0ug4ZxZs7KyJ9
-         meB7e6gdS6S30/zAYV20930f0NRg/RqDN2wYo0qD2BrPx75U4pcQEcZUotJ2Zm55CSXX
-         IO6Jt3pvubJmtlv0lwzX8KuSBplshzeXLXRhQOuoEs50g6VBfAqoL9gGomBhW4PAPCn3
-         seLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681487244; x=1684079244;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Qzxt4XcM4tuKu37taRV5Ugjl1Cb3GZa6ByEPKZjvm68=;
-        b=SixiqtF6JfI7SIwOdd/ddnWSKX1GPZ15c2E6rgjAr23Jil30UiksIwU/wjCI/pFegY
-         +AROq55sr6U0Qrn+ZEOyT0sDfRyj+L69yajxYOfCfDUEauPsqxj9RZc7AbIcARF2+cun
-         Dmi16+bPQAl956Zw6wi5nEXeKnX3qOULHedLnQRyKcYJC0lt3TVcBgSTMGhIiLxQFptV
-         Sr3JPNEF+TXaIIpFD0vtqFyaf93rI6XwQAC6tDEivQ+Af3tCEAlXYsKrrcEaiZDZuy/H
-         u0NmdzVIBgRwGkpuOjYj0tismWQpCNhxOMVRu1RY8uskkmWTRDhMahjG0zzJXodsWU7+
-         iAkA==
-X-Gm-Message-State: AAQBX9djNcJzcaNW0EFxeV/lFBl4W2UjEL0YlYpj2ZVQv241Uw/HqKNl
-        Ow4wq+sRpvvYqR19ds7AL+WkQQ==
-X-Google-Smtp-Source: AKy350anVWsEzpcDQkwD4VfavS5OSXHWMTLonpGNhq7ef7wjmNN7vxgvbaWECHBpitBCNgJ0zo4sNQ==
-X-Received: by 2002:adf:f709:0:b0:2f4:e8e3:ef62 with SMTP id r9-20020adff709000000b002f4e8e3ef62mr4561531wrp.65.1681487244500;
-        Fri, 14 Apr 2023 08:47:24 -0700 (PDT)
-Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id x2-20020a05600c21c200b003f149715cb6sm1034298wmj.10.2023.04.14.08.47.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Apr 2023 08:47:24 -0700 (PDT)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Fri, 14 Apr 2023 17:47:10 +0200
-Subject: [PATCH net-next 5/5] selftests: mptcp: join: fix ShellCheck
- warnings
+        Fri, 14 Apr 2023 11:49:46 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16361C647;
+        Fri, 14 Apr 2023 08:49:26 -0700 (PDT)
+Received: from g550jk.localnet (unknown [62.108.10.64])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 79924D0C6C;
+        Fri, 14 Apr 2023 15:48:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1681487313; bh=gQLrJ2GzF9BgXS74O5aTTZWutfpFFW5QLaGMKa3LvgE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=codrCFgkS0x3sCmSAS9eviU+MbyGLf1fSUsWFRoHm+QBoySpnDl4IioL+hwZykxDA
+         n8/jkieiDtOPxk5cGJf4wDtMrc157ytPcWYAK2DKuMtkshMpgG8pDVz8YM3LDKfllv
+         tVqU+uSkhU1PIdX+00LCRQLiCJcXyYkwha0378eg=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-iio@vger.kernel.org
+Subject: Re: [PATCH 8/8] arm64: dts: qcom: sdm632-fairphone-fp3: Add notification LED
+Date:   Fri, 14 Apr 2023 17:48:32 +0200
+Message-ID: <6048598.DvuYhMxLoT@z3ntu.xyz>
+In-Reply-To: <ZDlF5ixavPw+J2fR@duo.ucw.cz>
+References: <20230414-pmi632-v1-0-fe94dc414832@z3ntu.xyz>
+ <20230414-pmi632-v1-8-fe94dc414832@z3ntu.xyz> <ZDlF5ixavPw+J2fR@duo.ucw.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230414-upstream-net-next-20230414-mptcp-small-cleanups-v1-5-5aa4a2e05cf2@tessares.net>
-References: <20230414-upstream-net-next-20230414-mptcp-small-cleanups-v1-0-5aa4a2e05cf2@tessares.net>
-In-Reply-To: <20230414-upstream-net-next-20230414-mptcp-small-cleanups-v1-0-5aa4a2e05cf2@tessares.net>
-To:     mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2487;
- i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=5FlU9MokKUitrXSC9YGwxuWrLrcBCHiaj46QcbM+33c=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkOXWGyZxITuXwckR3HbIuXnkVm7W+wSc67dzLx
- OqLJqwqrtuJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZDl1hgAKCRD2t4JPQmmg
- c/XiEAC9N9r9lk1IJXEOk06iElSNPd4XvWvMdxKFRC8a5fiRwKfffWvBq83xIqjvPN6lDECghch
- CfAefrERTjAFWIxCED0YwWTaJVZPL7CTRv3gVQsmtwCmaJtkS9GgsHxdL3r0RrUfjRqH8ut/Qny
- K/3m2zTdH1tg/2vBHB/Dr2ojGfwPAQnyLoxtLKk58CFZkTgSGshZx66pjSYvoCM8HsHwx7fRi7r
- DueOR1eS1vGOO4aupDJApFqpDG/ezuNyrOhWfwpoQZX4eTYzky/g2ZHB1m+tjgvgbZc5898o6D6
- j+Sw+5c/8/1EM5aZNcI3uQcIFgKFXQTFddSfuZn79KzBAdeo8qgOAUVzlLmz5fnJnqTaZiiJprD
- bjAQ01Yf0ADWyNM90DBOXG3GoVRYZdixwj5d6zGUmA81erWLFSChK34SDfulHISMbOvWjT5GXeX
- MRlzifdNAhXKtTbfm7r9zSg7lxBNdnqToMZnN07LX+DivSlR+tv2pjmK9k8P1fg+NSVRQrRo4IG
- YaMd4dgNsCCOdwzdic3nkmOvjfx5o6wyO3dLBBE8eFcwW3dLXQt0DRe3rRMN/ocQdWG3DUV4Pcs
- WRDOlOMJ4rBMfbcKDo4UkHyKa2pWSLiAdqztAQCLdUVev7wt3mfFKi8o6SGxzNvMjIDVEhwA/pa
- TCyicSCBV6Qm39Q==
-X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Most of the code had an issue according to ShellCheck.
+On Freitag, 14. April 2023 14:24:06 CEST Pavel Machek wrote:
+> On Fri 2023-04-14 01:17:52, Luca Weiss wrote:
+> > The phone features a notification LED connected to the pmi632. Configure
+> > the RGB led found on it.
+> 
+> Could you document the usage in Documentation/leds/well-known-leds.txt
+> so that all phones share the same name for the RGB notification LED?
 
-That's mainly due to the fact it incorrectly believes most of the code
-was unreachable because it's invoked by variable name, see how the
-"tests" array is used.
+This dts results in /sys/class/leds/rgb:status like (presumably) all of these 
+existing in-tree users:
+* qcom-msm8974-lge-nexus5-hammerhead.dts
+* qcom-msm8974-sony-xperia-rhine.dtsi
+* qcom-msm8974pro-fairphone-fp2.dts
+* qcom-msm8974pro-sony-xperia-shinano-castor.dts
+* freescale/imx8mq-librem5.dtsi
+* qcom/msm8996-xiaomi-common.dtsi
+* qcom/sdm630-sony-xperia-nile.dtsi
+* qcom/sdm845-shift-axolotl.dts
 
-Once SC2317 has been ignored, three small warnings were still visible:
+However I can send a patch adding it to this txt doc since it doesn't seem to 
+be there yet.
 
- - SC2155: Declare and assign separately to avoid masking return values.
+Regards
+Luca
 
- - SC2046: Quote this to prevent word splitting: can be ignored because
-   "ip netns pids" can display more than one pid.
+> 
+> Thanks,
+> 								
+Pavel
 
- - SC2166: Prefer [ p ] || [ q ] as [ p -o q ] is not well defined.
 
-This probably didn't fix any actual issues but it might help spotting
-new interesting warnings reported by ShellCheck as just before,
-ShellCheck was reporting issues for most lines making it a bit useless.
 
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
----
- tools/testing/selftests/net/mptcp/mptcp_join.sh | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-index fafd19ec7e1f..26310c17b4c6 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@ -6,6 +6,10 @@
- # address all other issues detected by shellcheck.
- #shellcheck disable=SC2086
- 
-+# ShellCheck incorrectly believes that most of the code here is unreachable
-+# because it's invoked by variable name, see how the "tests" array is used
-+#shellcheck disable=SC2317
-+
- ret=0
- sin=""
- sinfail=""
-@@ -371,8 +375,9 @@ check_transfer()
- 
- 	local line
- 	if [ -n "$bytes" ]; then
-+		local out_size
- 		# when truncating we must check the size explicitly
--		local out_size=$(wc -c $out | awk '{print $1}')
-+		out_size=$(wc -c $out | awk '{print $1}')
- 		if [ $out_size -ne $bytes ]; then
- 			echo "[ FAIL ] $what output file has wrong size ($out_size, $bytes)"
- 			fail_test
-@@ -500,6 +505,7 @@ kill_events_pids()
- 
- kill_tests_wait()
- {
-+	#shellcheck disable=SC2046
- 	kill -SIGUSR1 $(ip netns pids $ns2) $(ip netns pids $ns1)
- 	wait
- }
-@@ -1703,7 +1709,7 @@ chk_subflow_nr()
- 
- 	cnt1=$(ss -N $ns1 -tOni | grep -c token)
- 	cnt2=$(ss -N $ns2 -tOni | grep -c token)
--	if [ "$cnt1" != "$subflow_nr" -o "$cnt2" != "$subflow_nr" ]; then
-+	if [ "$cnt1" != "$subflow_nr" ] || [ "$cnt2" != "$subflow_nr" ]; then
- 		echo "[fail] got $cnt1:$cnt2 subflows expected $subflow_nr"
- 		fail_test
- 		dump_stats=1
-
--- 
-2.39.2
 
