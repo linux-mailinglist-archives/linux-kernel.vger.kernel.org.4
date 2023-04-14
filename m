@@ -2,88 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14AB16E228A
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 13:47:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C8BB6E228C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 13:48:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbjDNLr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 07:47:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46784 "EHLO
+        id S229874AbjDNLsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 07:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjDNLry (ORCPT
+        with ESMTP id S229945AbjDNLsM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 07:47:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF2810D8;
-        Fri, 14 Apr 2023 04:47:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4436764713;
-        Fri, 14 Apr 2023 11:47:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51D04C433EF;
-        Fri, 14 Apr 2023 11:47:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681472872;
-        bh=WewYkRh8ATgRc8boxhNdVYtv+nsqcF33L+MMWN/pbZ8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lRu4QNum9u78WCLAEbMheYyyBsAEesCGloSyIl/dacyViGAtHPYQG/Ov4u72oOCav
-         vpt8ZLmFA1IbnVikMbwQguFKD7mKn1nYRdFhw7LNTlC2OdNb1WazqZrAqbCm4/mx7+
-         erjqOTFdmd/Qicex24AaztgV5gKUbsMvWOWb5nbNpiPHNJz81Y4ZIJIqcbV6EjgWxG
-         gbk09V2SZnKBCkfUHWOQDGVmdlNvn69uTqvXEHag2WUpmYHQqGzAfOujxHow/Yemvx
-         7UZ7IH2eTZ9kLsC6YNr2Q1txn2vvPVfd2bHpj99Rb5k52CFP5iPpmAv2JFSmLvVysP
-         5b/JoYhogAY/A==
-Date:   Fri, 14 Apr 2023 12:47:47 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Patrick Rudolph <patrick.rudolph@9elements.com>
-Cc:     Peter Rosin <peda@axentia.se>, Liam Girdwood <lgirdwood@gmail.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 3/3] i2c: muxes: pca954x: Add regulator support
-Message-ID: <84a81f6a-4a35-4b30-8a5a-6cb0eba37594@sirena.org.uk>
-References: <20230414110137.401356-1-patrick.rudolph@9elements.com>
- <20230414110137.401356-4-patrick.rudolph@9elements.com>
+        Fri, 14 Apr 2023 07:48:12 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B0483ED;
+        Fri, 14 Apr 2023 04:48:09 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PyZQB6156z6JCL5;
+        Fri, 14 Apr 2023 19:45:38 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 14 Apr
+ 2023 12:48:07 +0100
+Date:   Fri, 14 Apr 2023 12:48:05 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Terry Bowman <Terry.Bowman@amd.com>
+CC:     <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
+        <ira.weiny@intel.com>, <bwidawsk@kernel.org>,
+        <dan.j.williams@intel.com>, <dave.jiang@intel.com>,
+        <linux-cxl@vger.kernel.org>, <rrichter@amd.com>,
+        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>, <linux-efi@vger.kernel.org>
+Subject: Re: [PATCH v3 2/6] efi/cper: Export cper_mem_err_unpack() for use
+ by modules
+Message-ID: <20230414124805.00000479@Huawei.com>
+In-Reply-To: <9d66afdb-40bd-4254-547e-05f6481dd550@amd.com>
+References: <20230411180302.2678736-1-terry.bowman@amd.com>
+        <20230411180302.2678736-3-terry.bowman@amd.com>
+        <20230413170816.0000333b@Huawei.com>
+        <9d66afdb-40bd-4254-547e-05f6481dd550@amd.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+vhEaLIsnQcCAIN/"
-Content-Disposition: inline
-In-Reply-To: <20230414110137.401356-4-patrick.rudolph@9elements.com>
-X-Cookie: One Bell System - it works.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 13 Apr 2023 14:40:10 -0500
+Terry Bowman <Terry.Bowman@amd.com> wrote:
 
---+vhEaLIsnQcCAIN/
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> Hi Jonathan,
+> 
+> On 4/13/23 11:08, Jonathan Cameron wrote:
+> > On Tue, 11 Apr 2023 13:02:58 -0500
+> > Terry Bowman <terry.bowman@amd.com> wrote:
+> >   
+> >> The CXL driver plans to use cper_print_aer() for restricted CXL host (RCH)
+> >> logging. This is not currently possible if CXL is built as a loadable
+> >> module because cper_print_aer() depends on cper_mem_err_unpack() which
+> >> is not exported.
+> >>
+> >> Export cper_mem_err_unpack() to enable cper_print_aer() usage in
+> >> CXL and other loadable modules.  
+> > 
+> > No problem with the export, but I'm struggling to see the path that needs it.
+> > Could you give a little more detail, perhaps a call path?
+> >   
+> 
+> The cper_print_aer() is used to log RCH dport AER errors. This is needed 
+> because the RCH dport AER errors are not handled directly by the AER port 
+> driver. I'll add these details to the patch.
 
-On Fri, Apr 14, 2023 at 01:01:36PM +0200, Patrick Rudolph wrote:
+Ah. I wasn't particularly clear.  cper_print_aer() is fine, but oddly
+I'm not seeing where that results in a call to cper_mem_err_unpack()
 
-> +	data->supply = devm_regulator_get_optional(dev, "vdd");
-> +	if (IS_ERR(data->supply)) {
-> +		ret = PTR_ERR(data->supply);
+More than possible my grep skills are failing me!
 
-Unless the device can work without power it should be using a normal
-regulator_get().
+Jonathan
 
---+vhEaLIsnQcCAIN/
-Content-Type: application/pgp-signature; name="signature.asc"
+> 
+> Regards,
+> Terry
+> 
+> > Thanks,
+> > 
+> > Jonathan
+> >   
+> >>
+> >> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+> >> Cc: Ard Biesheuvel <ardb@kernel.org>
+> >> Cc: linux-efi@vger.kernel.org
+> >> ---
+> >>  drivers/firmware/efi/cper.c | 1 +
+> >>  1 file changed, 1 insertion(+)
+> >>
+> >> diff --git a/drivers/firmware/efi/cper.c b/drivers/firmware/efi/cper.c
+> >> index 35c37f667781..ff15e12160ae 100644
+> >> --- a/drivers/firmware/efi/cper.c
+> >> +++ b/drivers/firmware/efi/cper.c
+> >> @@ -350,6 +350,7 @@ const char *cper_mem_err_unpack(struct trace_seq *p,
+> >>  
+> >>  	return ret;
+> >>  }
+> >> +EXPORT_SYMBOL_GPL(cper_mem_err_unpack);
+> >>  
+> >>  static void cper_print_mem(const char *pfx, const struct cper_sec_mem_err *mem,
+> >>  	int len)  
+> >   
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ5PWMACgkQJNaLcl1U
-h9AFRgf/bmWQW8fCL0FVMkcl3BLCa5mW9fAVRjqWcNzIZltT3JtbzaEBNfb+pdjv
-f5aTnuVnwiGeSeBMTMt/FD1vVzXjKHgQ9+VgaLt+0NIT5KTtT0EFoWqOtmhzaN/7
-/yao7Axxw8JDkLIDu4MfQz0KYHmaw7o1xRrxgZfNHrajBWIJtxrX39BK1mpAbW6o
-fe+NHN5gBg+DiDzX6o73GV/bKpaPeqD+JkGvjSgNyWTnUEPtpm/m6Ez3TUR05bUa
-BNnPW5+UyoqiuBopsuEwbob3PgJgS/cqjL6FbFHcujEWk1rewAqw6jR6ROBdE3Jx
-3Nb+B3KSZO0NI7C54sYE2oq5DA8R+w==
-=1xMK
------END PGP SIGNATURE-----
-
---+vhEaLIsnQcCAIN/--
