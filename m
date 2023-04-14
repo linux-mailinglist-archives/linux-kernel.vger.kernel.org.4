@@ -2,66 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2496A6E21EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 13:18:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B3666E21EB
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 13:19:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbjDNLSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 07:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52672 "EHLO
+        id S230142AbjDNLTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 07:19:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjDNLSc (ORCPT
+        with ESMTP id S229493AbjDNLTE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 07:18:32 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 099B13A88;
-        Fri, 14 Apr 2023 04:18:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681471111; x=1713007111;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=s2ahMarainzU0kJG0iKnmW59QKgo1hk/9wbUQKqrvKs=;
-  b=U2exyNn2jGQujboydX/El/nMt8LKjS2NuHxqLuM17w37P9SJAvKhoOFC
-   TtbgPtapjumBMZzBz3YQ2SlBReIRU4R+KAe/xeDiPLYJN0j7j5oK2duaZ
-   Cr8KZ+LMHfVDlqRAOgiZ8n2UJYZl8P95J5h8QGliMQ4UNg0vYnqAyOhdL
-   XZyqdKdKqLShfrciBPzrmhm2AAfBzLDnxANHp0lJdrZFw5Y5DNZAZFU5l
-   vA8AqfBUZa8WMt+gKTJIERKMKqMuxL8RucGLt72fBNu5JhD5t5iMj0+lO
-   aDbdrDKDIPGndilYaQX5MVas2fSnanop24BmOTJ3x//3FQ5CgN6ku+jMN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="409640701"
-X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
-   d="scan'208";a="409640701"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 04:18:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="754422074"
-X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
-   d="scan'208";a="754422074"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 14 Apr 2023 04:18:27 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pnHRi-000ZTZ-1X;
-        Fri, 14 Apr 2023 11:18:26 +0000
-Date:   Fri, 14 Apr 2023 19:17:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "songrui.771" <songrui.771@bytedance.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     oe-kbuild-all@lists.linux.dev, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "songrui.771" <songrui.771@bytedance.com>
-Subject: Re: [PATCH v2] libbpf: correct the macro KERNEL_VERSION for old
- kernel
-Message-ID: <202304141932.JnvYvgv5-lkp@intel.com>
-References: <20230414084353.36545-1-songrui.771@bytedance.com>
+        Fri, 14 Apr 2023 07:19:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF9DCF
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 04:18:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681471099;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5Q6BebmPe2/qdtHTdDBDGMsvLr38IhHc0NaBD2QrMNc=;
+        b=A3QDPi+kQEUNe+mmfYblsCaly0LkucTjXOmKTW6eTk7noKADb8RQgIBaSS1wHtZFFQXne1
+        AsIcA/eMC4n3def2xoG02rPXYg/GH7qwbNo5xb8mJGb6Is9zAK9MXZRaDkr1YCDS+Fsmpl
+        FuJCAq3wd7Ss0OLgerMA3/8hIqbFkro=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-386-KJDgE1gYMPKxtSJZ8rxr8g-1; Fri, 14 Apr 2023 07:18:14 -0400
+X-MC-Unique: KJDgE1gYMPKxtSJZ8rxr8g-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CC7783813F4B;
+        Fri, 14 Apr 2023 11:18:12 +0000 (UTC)
+Received: from lorien.usersys.redhat.com (unknown [10.22.8.167])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4500C1121320;
+        Fri, 14 Apr 2023 11:18:11 +0000 (UTC)
+Date:   Fri, 14 Apr 2023 07:18:08 -0400
+From:   Phil Auld <pauld@redhat.com>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>, mingo@kernel.org,
+        linux-kernel@vger.kernel.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, corbet@lwn.net,
+        qyousef@layalina.io, chris.hyser@oracle.com,
+        patrick.bellasi@matbug.net, pjt@google.com, pavel@ucw.cz,
+        qperret@google.com, tim.c.chen@linux.intel.com, joshdon@google.com,
+        timj@gnu.org, kprateek.nayak@amd.com, yu.c.chen@intel.com,
+        youssefesmat@chromium.org, efault@gmx.de
+Subject: Re: [PATCH 14/17] sched/eevdf: Better handle mixed slice length
+Message-ID: <20230414111808.GA144166@lorien.usersys.redhat.com>
+References: <20230328092622.062917921@infradead.org>
+ <20230328110354.562078801@infradead.org>
+ <CAKfTPtAkFBw5zt0+WK7dWBUE9OrbOOExG8ueUE6ogdCEQZhpXQ@mail.gmail.com>
+ <20230404092936.GD284733@hirez.programming.kicks-ass.net>
+ <20230404135050.GA471948@google.com>
+ <20230405083543.GZ4253@hirez.programming.kicks-ass.net>
+ <CAEXW_YQmG83_Yb9JgXapt9RgAs4m=fHnrOKRqfG9N_VMYcA88A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230414084353.36545-1-songrui.771@bytedance.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEXW_YQmG83_Yb9JgXapt9RgAs4m=fHnrOKRqfG9N_VMYcA88A@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,55 +76,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi songrui.771,
+On Wed, Apr 05, 2023 at 04:05:55PM -0400 Joel Fernandes wrote:
+> On Wed, Apr 5, 2023 at 4:36 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Tue, Apr 04, 2023 at 01:50:50PM +0000, Joel Fernandes wrote:
+> > > On Tue, Apr 04, 2023 at 11:29:36AM +0200, Peter Zijlstra wrote:
+> >
+> > > > Heh, this is actually the correct behaviour. If you have a u=1 and a
+> > > > u=.5 task, you should distribute time on a 2:1 basis, eg. 67% vs 33%.
+> > >
+> > > Splitting like that sounds like starvation of the sleeper to me. If something
+> > > sleeps a lot, it will get even less CPU time on an average than it would if
+> > > there was no contention from the u=1 task.
+> >
+> > No, sleeping, per definition, means you're not contending for CPU. What
+> > CFS does, giving them a little boost, is strictly yuck and messes with
+> > latency -- because suddenly you have a task that said it wasn't
+> > competing appear as if it were, but you didn't run it (how could you, it
+> > wasn't there to run) -- but it still needs to catch up.
+> >
+> > The reason it does that, is mostly because at the time we didn't want to
+> > do the whole lag thing -- it's somewhat heavy on the u64 mults and 32bit
+> > computing was still a thing :/ So hacks happened.
+> 
+> Also you have the whole "boost tasks" that sleep a lot with CFS right?
+>  Like a task handling user input sleeps a lot, but when it wakes up,
+> it gets higher dynamic priority as its vruntime did not advance. I
+> guess EEVDF also gets you the same thing but still messes with the CPU
+> usage?
+> 
+> > That said; I'm starting to regret not pushing the EEVDF thing harder
+> > back in 2010 when I first wrote it :/
+> >
+> > > And also CGroups will be even more weird than it already is in such a world,
+> > > 2 different containers will not get CPU time distributed properly- say if
+> > > tasks in one container sleep a lot and tasks in another container are CPU
+> > > bound.
+> >
+> > Cgroups are an abomination anyway :-) /me runs like hell. But no, I
+> > don't actually expect too much trouble there.
+> 
+> So, with 2 equally weighted containers, if one has a task that sleeps
+> 50% of the time, and another has a 100% task, then the sleeper will
+> only run 33% of the time? I can see people running containers having a
+> problem with that (a customer running one container gets less CPU than
+> the other.). Sorry if I missed something.
+>
 
-kernel test robot noticed the following build warnings:
+But the 50% sleeper is _asking_ for less CPU.  Doing 50% for each would
+mean that when the sleeper task was awake it always ran, always won, to
+the exclusion of any one else. (Assuming 1 CPU...)
 
-[auto build test WARNING on bpf-next/master]
-[also build test WARNING on bpf/master linus/master v6.3-rc6 next-20230413]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Cheers,
+Phil
 
-url:    https://github.com/intel-lab-lkp/linux/commits/songrui-771/libbpf-correct-the-macro-KERNEL_VERSION-for-old-kernel/20230414-164547
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20230414084353.36545-1-songrui.771%40bytedance.com
-patch subject: [PATCH v2] libbpf: correct the macro KERNEL_VERSION for old kernel
-reproduce:
-        make versioncheck
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304141932.JnvYvgv5-lkp@intel.com/
-
-versioncheck warnings: (new ones prefixed by >>)
-   INFO PATH=/opt/cross/clang/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-   /usr/bin/timeout -k 100 3h /usr/bin/make W=1 --keep-going HOSTCC=gcc-11 CC=gcc-11 -j32 ARCH=x86_64 versioncheck
-   find ./* \( -name SCCS -o -name BitKeeper -o -name .svn -o -name CVS -o -name .pc -o -name .hg -o -name .git \) -prune -o \
-   	-name '*.[hcS]' -type f -print | sort \
-   	| xargs perl -w ./scripts/checkversion.pl
-   ./drivers/accessibility/speakup/genmap.c: 13 linux/version.h not needed.
-   ./drivers/accessibility/speakup/makemapdata.c: 13 linux/version.h not needed.
-   ./drivers/soc/tegra/cbb/tegra-cbb.c: 19 linux/version.h not needed.
-   ./drivers/soc/tegra/cbb/tegra194-cbb.c: 26 linux/version.h not needed.
-   ./drivers/soc/tegra/cbb/tegra234-cbb.c: 27 linux/version.h not needed.
-   ./drivers/staging/media/atomisp/include/linux/atomisp.h: 23 linux/version.h not needed.
-   ./samples/trace_events/trace_custom_sched.c: 11 linux/version.h not needed.
-   ./sound/soc/codecs/cs42l42.c: 14 linux/version.h not needed.
-   ./tools/lib/bpf/bpf_helpers.h: 294: need linux/version.h
->> ./tools/lib/bpf/libbpf_probes.c: 15 linux/version.h not needed.
-   ./tools/perf/tests/bpf-script-example.c: 60: need linux/version.h
-   ./tools/perf/tests/bpf-script-test-kbuild.c: 21: need linux/version.h
-   ./tools/perf/tests/bpf-script-test-prologue.c: 49: need linux/version.h
-   ./tools/perf/tests/bpf-script-test-relocation.c: 51: need linux/version.h
-   ./tools/testing/selftests/bpf/progs/dev_cgroup.c: 9 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/netcnt_prog.c: 3 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_map_lock.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_send_signal_kern.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_spin_lock.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_tcp_estats.c: 37 linux/version.h not needed.
-   ./tools/testing/selftests/wireguard/qemu/init.c: 27 linux/version.h not needed.
+> But yeah I do find the whole EEVDF idea interesting but I admit I have
+> to research it more.
+> 
+>  - Joel
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+
