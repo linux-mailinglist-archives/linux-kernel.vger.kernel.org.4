@@ -2,98 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3DEE6E2B19
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 22:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30D356E2B1E
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 22:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbjDNU3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 16:29:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39838 "EHLO
+        id S229913AbjDNUcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 16:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbjDNU3a (ORCPT
+        with ESMTP id S229586AbjDNUcX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 16:29:30 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBEBC6E9B
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 13:29:29 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54f8d4f1ca1so102825517b3.20
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 13:29:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681504169; x=1684096169;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DLToSh8SFFWLZRyFSn4i7JQlNzNszta4xTWyY36zPEY=;
-        b=dpmv8GYPJG9Y6ih8+TvcQ+edTHglKG2Js/rYBcWjl6NW+0M+pqgW39ylCfa60dexZi
-         DcikGg0YcUK//c4DDFSsXjVyBtKVstj55BDa4latJZZfT6BZXQdFKZur+CF1NiYnfv1r
-         Ar3WhQ0JRYTCKTGlxXqJipp203cmSB1iWZAMC+pOHuds04YM74nbogb2hDxmdW8Ls8d2
-         m25JHxXb9tbOm6r+h9sfHSfr79rvJoEqQ1bxRGN3yrhvn6941TNduBebF8CUwf92Eot2
-         vkhRoqGuQW+iAMTUW+reMvp6CjV3n2Bx/CxA3aVlKcQjdI2FlYFi2kqbdG1tyYwGxr5v
-         LIIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681504169; x=1684096169;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DLToSh8SFFWLZRyFSn4i7JQlNzNszta4xTWyY36zPEY=;
-        b=DVmyeMEY//WwBzRLWICOC/bZH5Lovp+ePdsXgaUw219ilHmb2Fvm4tNnS0C5jmZPcW
-         1pUlYeIeBZhEfA6RY840eLyIVhU5iPIMARPjvv6Rjk0AM9FIOYswYa+S9L3GY0A4XVDi
-         mxvHpjQkn8+Fjl9tweZJKgyXAmqyUdDYWlMBlfV6nTnzdZk/sAnbaLnHv2btnMf0dSFm
-         JnNlUjCE//FjdRpxpOzYGGh4r9qUojYXwvGJaoocRFp6TItXDrpaaSMT5I4I/ZgLAqXT
-         Uvrh34Nay8NBYP7xK1bW3ackwsQkWYkNZnA02hGVazbzMn8ki+Jdf6HTuLgz2ixrwFMJ
-         ReUQ==
-X-Gm-Message-State: AAQBX9f57gQH23aEH+VqLH36vI2y6MxYjzLcqiR544pZ/obwCfFNBPSB
-        3AwAZSTIWBCemayO2Yf2SxM/54tYiwc=
-X-Google-Smtp-Source: AKy350YGjJSkhSWbMFiapNaVp2vMMOdjYO4P14f48+AuxLsAITPxtQITPLvVcWwdaknrUYlaSrf7ZfMHlGk=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:da0b:0:b0:b8f:6f3f:ed20 with SMTP id
- n11-20020a25da0b000000b00b8f6f3fed20mr2167663ybf.5.1681504169043; Fri, 14 Apr
- 2023 13:29:29 -0700 (PDT)
-Date:   Fri, 14 Apr 2023 13:29:21 -0700
-In-Reply-To: <20230407233254.957013-1-seanjc@google.com>
-Mime-Version: 1.0
-References: <20230407233254.957013-1-seanjc@google.com>
-X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-Message-ID: <168150370438.1550830.5816847574112858499.b4-ty@google.com>
-Subject: Re: [PATCH v4 0/6] KVM: selftests: Add "instructions required" testcase
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Aaron Lewis <aaronlewis@google.com>
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 14 Apr 2023 16:32:23 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320205B93;
+        Fri, 14 Apr 2023 13:32:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=zkJ52LKFN3KW2VRgFxWenolm+nSjIO2xurI61vRkfQg=; b=F61Xsi7hJg8p79oBCG/Ya4KZTs
+        NYyItO8lVqFUsyrFHUeHuSURJ8s59rMlIiWS7BsvUy4qB3i5uzGwW+rdiuBav36hIRnTg46zEearw
+        Xnseesrp3Lz6ju4rdZfBg9QAqsDrYMYtutNLh339JNW6vkxUIa4JL2Cbc/iTetC3zgnKGnAH1MCIg
+        AiM6IMqSgf0hcUWq/q1jH4TL5Q7NyoJixXwfUwfFjE1D9amcThVPP3aqN4qX/zKxhYnHJ93qN/xTW
+        cqlx53Uk6XjvJNHnU7VSi9nk/bQuOX061GIoEoD2sgE2fW8toStzRjxFgZ6LUsEpK1+Jjy9Nh4AP+
+        cmvyNvcw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pnQ5P-0093og-C7; Fri, 14 Apr 2023 20:31:59 +0000
+Date:   Fri, 14 Apr 2023 21:31:59 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, mhocko@suse.com,
+        josef@toxicpanda.com, jack@suse.cz, ldufour@linux.ibm.com,
+        laurent.dufour@fr.ibm.com, michel@lespinasse.org,
+        liam.howlett@oracle.com, jglisse@google.com, vbabka@suse.cz,
+        minchan@google.com, dave@stgolabs.net, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH 1/1] mm: handle swap page faults if the faulting page can
+ be locked
+Message-ID: <ZDm4P37XXyMBOMdZ@casper.infradead.org>
+References: <20230414180043.1839745-1-surenb@google.com>
+ <ZDmetaUdmlEz/W8Q@casper.infradead.org>
+ <CAJuCfpFPNiZmqQPP+K7CAuiFP5qLdd6W9T84VQNdRsN-9ggm1w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJuCfpFPNiZmqQPP+K7CAuiFP5qLdd6W9T84VQNdRsN-9ggm1w@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 07 Apr 2023 16:32:48 -0700, Sean Christopherson wrote:
-> This is the selftests portion of Aaron's series[*] to fix incorrect
-> "instructions required" counting.  The big change from v3 is to use a
-> common struct to copy counter values to/from the guest instead of smushing
-> the values into a single 64-bit value.
+On Fri, Apr 14, 2023 at 12:48:54PM -0700, Suren Baghdasaryan wrote:
+> >  - We can call migration_entry_wait().  This will wait for PG_locked to
+> >    become clear (in migration_entry_wait_on_locked()).  As previously
+> >    discussed offline, I think this is safe to do while holding the VMA
+> >    locked.
+
+Just to be clear, this particular use of PG_locked is not during I/O,
+it's during page migration.  This is a few orders of magnitude
+different.
+
+> >  - We can call swap_readpage() if we allocate a new folio.  I haven't
+> >    traced through all this code to tell if it's OK.
+
+... whereas this will wait for I/O.  If we decide that's not OK, we'll
+need to test for FAULT_FLAG_VMA_LOCK and bail out of this path.
+
+> > So ... I believe this is all OK, but we're definitely now willing to
+> > wait for I/O from the swap device while holding the VMA lock when we
+> > weren't before.  And maybe we should make a bigger deal of it in the
+> > changelog.
+> >
+> > And maybe we shouldn't just be failing the folio_lock_or_retry(),
+> > maybe we should be waiting for the folio lock with the VMA locked.
 > 
-> [*] https://lkml.kernel.org/r/20230307141400.1486314-1-aaronlewis%40google.com
-> 
-> [...]
+> Wouldn't that cause holding the VMA lock for the duration of swap I/O
+> (something you said we want to avoid in the previous paragraph) and
+> effectively undo d065bd810b6d ("mm: retry page fault when blocking on
+> disk transfer") for VMA locks?
 
-Applied to kvm-x86 pmu, thanks!
+I'm not certain we want to avoid holding the VMA lock for the duration
+of an I/O.  Here's how I understand the rationale for avoiding holding
+the mmap_lock while we perform I/O (before the existence of the VMA lock):
 
-[1/6] KVM: selftests: Add a common helper for the PMU event filter guest code
-      https://github.com/kvm-x86/linux/commit/33ef1411a36b
-[2/6] KVM: selftests: Add helpers for PMC asserts in PMU event filter test
-      https://github.com/kvm-x86/linux/commit/fa32233d51b9
-[3/6] KVM: selftests: Print detailed info in PMU event filter asserts
-      https://github.com/kvm-x86/linux/commit/c140e93a0c11
-[4/6] KVM: selftests: Use error codes to signal errors in PMU event filter test
-      https://github.com/kvm-x86/linux/commit/c02c74428288
-[5/6] KVM: selftests: Copy full counter values from guest in PMU event filter test
-      https://github.com/kvm-x86/linux/commit/e9f322bd2396
-[6/6] KVM: selftests: Test the PMU event "Instructions retired"
-      https://github.com/kvm-x86/linux/commit/457bd7af1a17
+ - If everybody is doing page faults, there is no specific problem;
+   we all hold the lock for read and multiple page faults can be handled
+   in parallel.
+ - As soon as one thread attempts to manipulate the tree (eg calls
+   mmap()), all new readers must wait (as the rwsem is fair), and the
+   writer must wait for all existing readers to finish.  That's
+   potentially milliseconds for an I/O during which time all page faults
+   stop.
 
---
-https://github.com/kvm-x86/linux/tree/next
-https://github.com/kvm-x86/linux/tree/fixes
+Now we have the per-VMA lock, faults which can be handled without taking
+the mmap_lock can still be satisfied, as long as that VMA is not being
+modified.  It is rare for a real application to take a page fault on a
+VMA which is being modified.
+
+So modifications to the tree will generally not take VMA locks on VMAs
+which are currently handling faults, and new faults will generally not
+find a VMA which is write-locked.
+
+When we find a locked folio (presumably for I/O, although folios are
+locked for other reasons), if we fall back to taking the mmap_lock
+for read, we increase contention on the mmap_lock and make the page
+fault wait on any mmap() operation.  If we simply sleep waiting for the
+I/O, we make any mmap() operation _which touches this VMA_ wait for
+the I/O to complete.  But I think that's OK, because new page faults
+can continue to be serviced ... as long as they don't need to take
+the mmap_lock.
+
+So ... I think what we _really_ want here is ...
+
++++ b/mm/filemap.c
+@@ -1690,7 +1690,8 @@ static int __folio_lock_async(struct folio *folio, struct wait_page_queue *wait)
+ bool __folio_lock_or_retry(struct folio *folio, struct mm_struct *mm,
+                         unsigned int flags)
+ {
+-       if (fault_flag_allow_retry_first(flags)) {
++       if (!(flags & FAULT_FLAG_VMA_LOCK) &&
++           fault_flag_allow_retry_first(flags)) {
+                /*
+                 * CAUTION! In this case, mmap_lock is not released
+                 * even though return 0.
+@@ -1710,7 +1711,8 @@ bool __folio_lock_or_retry(struct folio *folio, struct mm_struct *mm,
+
+                ret = __folio_lock_killable(folio);
+                if (ret) {
+-                       mmap_read_unlock(mm);
++                       if (!(flags & FAULT_FLAG_VMA_LOCK))
++                               mmap_read_unlock(mm);
+                        return false;
+                }
+        } else {
+
