@@ -2,153 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A8686E2B75
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 23:03:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C476E2B76
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 23:03:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjDNVDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 17:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53504 "EHLO
+        id S230071AbjDNVDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 17:03:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbjDNVDk (ORCPT
+        with ESMTP id S229804AbjDNVDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 17:03:40 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5EF14692;
-        Fri, 14 Apr 2023 14:03:31 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2a775754f45so484471fa.0;
-        Fri, 14 Apr 2023 14:03:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681506210; x=1684098210;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GT9tr8XGQgAm7n2qI4BxpVEnyKJx/Syv1KSUwwIoqzQ=;
-        b=CyfMsc3UbO8SchajKo/oKFDDeYJT3p7Lk8jRwDbov0P5mmS4I5K/uy/yElMseFUDTu
-         vzAb7wxk3pEqbq5KnVYpBpVUogaizqqMSJ/9j0NSNdfMn+zNON4bjqQDp/ekYdqwZCbK
-         tGBP2ZP6FLs1+PUW3t9b5hWQXtwkRp5j0N9BmiKgviPrXMeDUWN16qLJx2GzgNsIkgoa
-         FwVA+Ff2wP6YPDB5eRauR1btnm7h5Z158I4QKZetGQRfEKZu1M2OsxtcPLSZNa6Z3r8J
-         u2Fbz9dvXCXzS6fPgyXvSSQ1M0i5j8NFvu0zu3Z4jHzDLeKvWRrp5vYBE3sVdUzxWXXV
-         rhww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681506210; x=1684098210;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GT9tr8XGQgAm7n2qI4BxpVEnyKJx/Syv1KSUwwIoqzQ=;
-        b=gGKbaq4K7alASO5JoTp032UWezRw577joOVyHf3TL/spbE4cKJZeROSP+Io7wStiTk
-         lQhT0CQUz9hIW2KP4jHejhe3jGI3n9dH94HXFSYXf+ppCiRbm5Skm1oBIY+9fZjEqEVa
-         SNkcB+AyxQtFBSuPjzmf56/xi5IRvTCl7NJJyZWHVbV5LotuaNKEwPX5oxylWS/qv+Fz
-         1pb++e2owTrsG4S1a8bAqD6BkJSBPcZKdCCHLbAc0WGBNVzMfM5gZ3rmZLCaFczrx75k
-         GIT0ONNUAhmz+NVWhSGNhDyNYIBB3OS0gME6dk4o2LkDCKLdaqwPSJ+nnMwyd0dPUWEX
-         wt6A==
-X-Gm-Message-State: AAQBX9dyybnar/vOg+3Y22gRpqPuzPU/DAubxiLQeLaCUEZFM5cZ3Rmz
-        dxoDBuFS0knBUGfYgytrn3ewteoCcE6W+tzF0EY=
-X-Google-Smtp-Source: AKy350bCm4QxuUeiE6LWsB9GzlGclQjWtY7/Rj/iUb07fwNLnWyzmq8PihARcS7XugjsPCUN0NEXJCBFGnI3VmJDF3U=
-X-Received: by 2002:a05:6512:76:b0:4e0:39f3:5b9a with SMTP id
- i22-20020a056512007600b004e039f35b9amr57107lfo.13.1681506209925; Fri, 14 Apr
- 2023 14:03:29 -0700 (PDT)
+        Fri, 14 Apr 2023 17:03:41 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77949B;
+        Fri, 14 Apr 2023 14:03:38 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33EL01ma019798;
+        Fri, 14 Apr 2023 21:03:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=AwhCx3wuq7L0uIveBgsKwkcFhjqZsrOJUc2OeOS0mos=;
+ b=pUDlIIfoeCgUgIxVl1/5VAbI/upfdtew66GlRx1t7mXsQaH2GqK2N4Jv86hu3HZFCTY+
+ qgKmVIgTcS5nBy03HR5lQg74eCr9GrrT6VP4ZvrmVeMXrb5XyVMnHEobQB8bI5pCuEYH
+ N0gocLeUvwU8dcoa5WldImRW9LHHdosEA/oXXDBx80xMlbn5iz6ZhdM7ouT+IOdJq3Nl
+ PlGpExpgzn5Nlu40mDB0Spduv9JxFAoOF2NBbbx42zeLcCIuAZEYJXGg/M75Xr3RkMX4
+ f9mu0xQhgIeDsczNKhpCHfrTiNiE1eForndVlBdLEtVRM3kiVTw5FFyTCT+hq8/3DpOc yQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3py4ghsaay-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 21:03:26 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33EL3PlL003829
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 21:03:25 GMT
+Received: from [10.110.73.215] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 14 Apr
+ 2023 14:03:24 -0700
+Message-ID: <eb8ea024-1152-418c-a048-f86253867c9e@quicinc.com>
+Date:   Fri, 14 Apr 2023 14:03:23 -0700
 MIME-Version: 1.0
-References: <1681213778-31754-1-git-send-email-quic_zijuhu@quicinc.com>
-In-Reply-To: <1681213778-31754-1-git-send-email-quic_zijuhu@quicinc.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Fri, 14 Apr 2023 14:03:17 -0700
-Message-ID: <CABBYNZLJGmSaL1J0VSRU7vhTU-gyeqMndWxgwS2=d4-Bywfjxg@mail.gmail.com>
-Subject: Re: [PATCH v1] Bluetooth: Optimize devcoredump API hci_devcd_init()
-To:     Zijun Hu <quic_zijuhu@quicinc.com>
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        netdev@vger.kernel.org, abhishekpandit@chromium.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v2] drm/msm/dpu: always program dsc active bits
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1681401401-15099-1-git-send-email-quic_khsieh@quicinc.com>
+ <tgfbdk6q3uool365jqddibnbgq66clsmsm6tldxpm5toqghxpq@m2ic3oonv2s5>
+ <aac210da-dec1-aab8-3f48-c33d9e7687d6@quicinc.com>
+ <3oaangxh7gmie3cdd6rmujm7dd3hagsrnwiq3bascdtamvfn3a@bn6ou5hbsgxv>
+ <c09725ff-771c-35d1-adc9-4bb1b7c1c334@quicinc.com>
+ <CAA8EJppKXSGcOcYEc6UKz9Eh8JizSpdDNe+cdvfmFbuBJ9zPKw@mail.gmail.com>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <CAA8EJppKXSGcOcYEc6UKz9Eh8JizSpdDNe+cdvfmFbuBJ9zPKw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ijCGfHwj2m5L48MTwn8EOaYIoNz5OoPM
+X-Proofpoint-ORIG-GUID: ijCGfHwj2m5L48MTwn8EOaYIoNz5OoPM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-14_13,2023-04-14_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ mlxlogscore=861 malwarescore=0 bulkscore=0 phishscore=0 suspectscore=0
+ adultscore=0 mlxscore=0 clxscore=1015 lowpriorityscore=0
+ priorityscore=1501 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2304140185
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zijun,
-
-On Tue, Apr 11, 2023 at 4:49=E2=80=AFAM Zijun Hu <quic_zijuhu@quicinc.com> =
-wrote:
->
-> API hci_devcd_init() stores u32 type to memory without specific byte
-> order, let us store with little endian in order to be loaded and
-> parsed by devcoredump core rightly.
-
-This looks like a fix if devcoredump expects little endian, so I'd
-suggest rephrasing to state it in the subject line, also add the Fixes
-tag for the commit that introduces this problem.
-
-> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
-> ---
->  net/bluetooth/coredump.c | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
->
-> diff --git a/net/bluetooth/coredump.c b/net/bluetooth/coredump.c
-> index 08fa98505454..d2d2624ec708 100644
-> --- a/net/bluetooth/coredump.c
-> +++ b/net/bluetooth/coredump.c
-> @@ -5,6 +5,7 @@
->
->  #include <linux/devcoredump.h>
->
-> +#include <asm/unaligned.h>
->  #include <net/bluetooth/bluetooth.h>
->  #include <net/bluetooth/hci_core.h>
->
-> @@ -180,25 +181,25 @@ static int hci_devcd_prepare(struct hci_dev *hdev, =
-u32 dump_size)
->
->  static void hci_devcd_handle_pkt_init(struct hci_dev *hdev, struct sk_bu=
-ff *skb)
->  {
-> -       u32 *dump_size;
-> +       u32 dump_size;
->
->         if (hdev->dump.state !=3D HCI_DEVCOREDUMP_IDLE) {
->                 DBG_UNEXPECTED_STATE();
->                 return;
->         }
->
-> -       if (skb->len !=3D sizeof(*dump_size)) {
-> +       if (skb->len !=3D sizeof(dump_size)) {
->                 bt_dev_dbg(hdev, "Invalid dump init pkt");
->                 return;
->         }
->
-> -       dump_size =3D skb_pull_data(skb, sizeof(*dump_size));
-> -       if (!*dump_size) {
-> +       dump_size =3D get_unaligned_le32(skb_pull_data(skb, 4));
-> +       if (!dump_size) {
->                 bt_dev_err(hdev, "Zero size dump init pkt");
->                 return;
->         }
->
-> -       if (hci_devcd_prepare(hdev, *dump_size)) {
-> +       if (hci_devcd_prepare(hdev, dump_size)) {
->                 bt_dev_err(hdev, "Failed to prepare for dump");
->                 return;
->         }
-> @@ -441,7 +442,7 @@ int hci_devcd_init(struct hci_dev *hdev, u32 dump_siz=
-e)
->                 return -ENOMEM;
->
->         hci_dmp_cb(skb)->pkt_type =3D HCI_DEVCOREDUMP_PKT_INIT;
-> -       skb_put_data(skb, &dump_size, sizeof(dump_size));
-> +       put_unaligned_le32(dump_size, skb_put(skb, 4));
->
->         skb_queue_tail(&hdev->dump.dump_q, skb);
->         queue_work(hdev->workqueue, &hdev->dump.dump_rx);
-> --
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum=
-, a Linux Foundation Collaborative Project
->
 
 
---=20
-Luiz Augusto von Dentz
+On 4/14/2023 1:58 PM, Dmitry Baryshkov wrote:
+> On Fri, 14 Apr 2023 at 21:55, Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
+>>
+>>
+>>
+>> On 4/14/2023 10:28 AM, Marijn Suijten wrote:
+>>> On 2023-04-14 08:41:37, Abhinav Kumar wrote:
+>>>>
+>>>> On 4/14/2023 12:48 AM, Marijn Suijten wrote:
+>>>>> Capitalize DSC in the title, as discussed in v1.
+>>>>>
+>>>>> On 2023-04-13 08:56:41, Kuogee Hsieh wrote:
+>>>>>> In current code, the DSC active bits are written only if cfg->dsc is set.
+>>>>>> However, for displays which are hot-pluggable, there can be a use-case
+>>>>>> of disconnecting a DSC supported sink and connecting a non-DSC sink.
+>>>>>>
+>>>>>> For those cases we need to clear DSC active bits during tear down.
+>>>>>>
+>>>>>> Changes in V2:
+>>>>>> 1) correct commit text as suggested
+>>>>>> 2) correct Fixes commit id
+>>>>>> 3) add FIXME comment
+>>>>>>
+>>>>>> Fixes: 77f6da90487c ("drm/msm/disp/dpu1: Add DSC support in hw_ctl")
+>>>>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>>>>>> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+>>>>>
+>>>>> By default git send-email should pick this up in the CC line...  but I
+>>>>> had to download this patch from lore once again.
+>>>>>
+>>>>
+>>>> Yes, I think what happened here is, he didnt git am the prev rev and
+>>>> make changes on top of that so git send-email didnt pick up. We should
+>>>> fix that process.
+>>>
+>>> The mail was sent so it must have gone through git send-email, unless a
+>>> different mail client was used to send the .patch file.  I think you are
+>>> confusing this with git am (which doesn't need to be used if editing a
+>>> commit on a local branch) and subsequently git format-patch, which takes
+>>> a commit from a git repository and turns it into a .patch file: neither
+>>> of these "converts" r-b's (and other tags) to cc, that's happening in
+>>> git send-email (see `--suppress-cc` documentation in `man
+>>> git-send-email`).
+>>>
+>>
+>> Yes, ofcourse git send-email was used to send the patch, not any other
+>> mail client.
+>>
+>> Yes i am also aware that send-email converts rb to CC.
+>>
+>> But if you keep working on the local branch, then you would have to
+>> manually add the r-bs. If you use am of the prev version and develop on
+>> that, it will automatically add the r-bs.
+> 
+> It looks like there is some misunderstanding here. I think Marijn
+> doesn't question his R-B (which was present), but tries to point out
+> that Kuogee might want to adjust his git-send-email invocation. By
+> default (and that's a good practice, which we should follow),
+> git-send-email will CC people mentioned in such tags. Marijn didn't
+> get this email. So, it seems, for some reason this Cc: _mail_ header
+> was suppressed. Probably git-send-email invocation should be changed
+> to prevent suppression of adding mentioned people to CC lists.
+> 
+
+Yeah I understood that part. There were two issues here:
+
+1) My r-b got dropped and that was because am wasn't used to 
+automatically retain tags from prev version.
+
+If you dont add the r-bs either manually or by am, then folks wont be 
+part of CC either
+
+2) I synced with kuogee. his git version seems to be quite old which is 
+not adding the folks from r-b to cc. So there was nothing wrong with 
+invocation, just versioning.
+
+
+>>
+>>
+>>> I can recommend b4: it has lots of useful features including
+>>> automatically picking up reviews and processing revisions.  It even
+>>> requires a changelog to be edited ;).  However, finding the right flags
+>>> and trusting it'll "do as ordered" is a bit daunting at first.
+>>>
+>>>>>> ---
+>>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c | 8 ++++----
+>>>>>>     1 file changed, 4 insertions(+), 4 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+>>>>>> index bbdc95c..1651cd7 100644
+>>>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+>>>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+>>>>>> @@ -541,10 +541,10 @@ static void dpu_hw_ctl_intf_cfg_v1(struct dpu_hw_ctl *ctx,
+>>>>>>             if (cfg->merge_3d)
+>>>>>>                     DPU_REG_WRITE(c, CTL_MERGE_3D_ACTIVE,
+>>>>>>                                   BIT(cfg->merge_3d - MERGE_3D_0));
+>>>>>> -  if (cfg->dsc) {
+>>>>>> -          DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, DSC_IDX);
+>>>>>> -          DPU_REG_WRITE(c, CTL_DSC_ACTIVE, cfg->dsc);
+>>>>>> -  }
+>>>>>> +
+>>>>>> +  /* FIXME: fix reset_intf_cfg to handle teardown of dsc */
+>>>>>
+>>>>> There's more wrong than just moving (not "fix"ing) this bit of code into
+>>>>> reset_intf_cfg.  And this will have to be re-wrapped in `if (cfg->dsc)`
+>>>>> again by reverting this patch.  Perhaps that can be explained, or link
+>>>>> to Abhinav's explanation to make it clear to readers what this FIXME
+>>>>> actually means?  Let's wait for Abhinav and Dmitry to confirm the
+>>>>> desired communication here.
+>>>>>
+>>>>> https://lore.kernel.org/linux-arm-msm/ec045d6b-4ffd-0f8c-4011-8db45edc6978@quicinc.com/
+>>>>>
+>>>>
+>>>> Yes, I am fine with linking this explanation in the commit text and
+>>>> mentioning that till thats fixed, we need to go with this solution. The
+>>>> FIXME itself is fine, I will work on it and I remember this context well.
+>>>
+>>> Looks like it was removed entirely in v3, in favour of only describing
+>>> it in the patch body.  The wording seems a bit off but that's fine by me
+>>> if you're picking this up soon anyway.
+>>>
+>>> - Marijn
+> 
+> 
+> 
