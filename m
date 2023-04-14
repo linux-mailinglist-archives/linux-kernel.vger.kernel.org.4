@@ -2,112 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E0686E267C
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 17:09:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C4316E267A
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 17:09:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbjDNPJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 11:09:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58672 "EHLO
+        id S229894AbjDNPJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 11:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbjDNPJU (ORCPT
+        with ESMTP id S230137AbjDNPJL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 11:09:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081083AAB
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 08:08:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681484916;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=dntWt6MEzqE7MJUvMHAAGJ0dlLTaBYPZeQAgzMBHF18=;
-        b=BdtTN6CaVbp6dkzdttH4asfkUHoi+uduhNiWvCdlHFNjgmrD/UAB4wngdf9qhZkW2bz6U6
-        8fwQtD4w5OeCxcBhpId0aMafzvcYZqf39P4xpzacz0oY0bAH1L05kqi3kDxMVfz0F65sx/
-        myNHhDE707xdYmoPBtMi3lRhOyz6UFc=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-552-mBtKPdQlPnajhkyB55Zhsg-1; Fri, 14 Apr 2023 11:08:35 -0400
-X-MC-Unique: mBtKPdQlPnajhkyB55Zhsg-1
-Received: by mail-qt1-f200.google.com with SMTP id v3-20020a05622a130300b003eb13e57badso1264040qtk.18
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 08:08:34 -0700 (PDT)
+        Fri, 14 Apr 2023 11:09:11 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640A61FF3
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 08:09:10 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id qb20so45935489ejc.6
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 08:09:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681484949; x=1684076949;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=y2YIosRAqD0RcoeUtDhEKssUjybK8X1yJ4TLNycZYAk=;
+        b=Gry3UmYwLHT4qA7+1z/AMddLZsQimozLMMwWB4MRD3o5ySdLjkDZHDVcxUWOR1onoT
+         ZsInt2oSiRVt0OFZtWE8k4p4TGAXqfbcQVEkMB7FqvEJ7aajSOX9KWoqdlJ98dcjITpw
+         5BCEXKl4GWrnRsz/U1rIau+fJR/rxo8jzBkwPu5I5OtIIx9Dtoh7kAowBiWH1f2hU+Zh
+         6jLDXvqKtJjIQtO39UKdUlrB5Dn2DT8xT3Hk3iFxwxMUohnN7dvLzk6C8iWcYlzqRsJG
+         fGHP7rl241RIgOPjatWTEQFVOzptNlmmK5KhGvA/m9KUUMwwquuRmJC8FQuRMZYv/j5A
+         9xNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681484914; x=1684076914;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dntWt6MEzqE7MJUvMHAAGJ0dlLTaBYPZeQAgzMBHF18=;
-        b=fpGJvY5eQS4GStMnOAWh2tkzLr/BI4GeuScaPosozVrgO5nGs2zifOEffcv6XJOtAB
-         zyWgZh2cEZ2NYpegT2S3tlnFgYnPsdHWZOupdV1ayuu2gQOFayX3fTMKbNpxu1FzYHrV
-         WuXPwWvpCyCvx3/xO9stRaTtp9zDKGI+roxVeOd+f60xFibLxB3/AalaYyIsBLUjTIfG
-         NUec4KxfYp785fwJuOfrPKqd4/bbkpJVCu5sCWKZxvA1mMLyL+/0S4S+5iOtMyniVOEW
-         2AMfUyYBcj2ODCflJw5mFn2kx6q+wO7/zngdt0TLwjz0h/SmPHZqmqafRZL4kH0atYA4
-         6xrg==
-X-Gm-Message-State: AAQBX9eSX3gWECWjvF1Mo2Vdkdf+aQjRIALN29KK2DKLQamrvnd/UCIC
-        PKgDeRPiGp185MiOqaDt6Pv+NxAsB8Z1nbSb6u6qtkSbWpuYcYYp8y0Jf71o0G92Lerkeb0zVbr
-        K2CKxHz9PUrLJiAejATpdvFCq
-X-Received: by 2002:ac8:5ccb:0:b0:3e6:4e79:7401 with SMTP id s11-20020ac85ccb000000b003e64e797401mr9604121qta.29.1681484914448;
-        Fri, 14 Apr 2023 08:08:34 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YGN/ZPCYxibgTViJjjyz5pv87pPzhZ5EyrP/e3wwVcRZqPGm413XGTEu5OHq/fnESmP3RN0w==
-X-Received: by 2002:ac8:5ccb:0:b0:3e6:4e79:7401 with SMTP id s11-20020ac85ccb000000b003e64e797401mr9604084qta.29.1681484914150;
-        Fri, 14 Apr 2023 08:08:34 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id eb3-20020a05620a480300b0074b5219b63esm342074qkb.121.2023.04.14.08.08.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Apr 2023 08:08:33 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     harry.wentland@amd.com, sunpeng.li@amd.com,
-        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, HaoPing.Liu@amd.com, aric.cyr@amd.com,
-        qingqing.zhuo@amd.com, hanghong.ma@amd.com, felipe.clark@amd.com,
-        Dillon.Varone@amd.com, Mike.Hsieh@amd.com
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/amd/display: remove unused variable oldest_index
-Date:   Fri, 14 Apr 2023 11:08:30 -0400
-Message-Id: <20230414150830.3173504-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        d=1e100.net; s=20221208; t=1681484949; x=1684076949;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=y2YIosRAqD0RcoeUtDhEKssUjybK8X1yJ4TLNycZYAk=;
+        b=MUcp8kivbxd4iRpt5BhXAhDXjE02USYYbh712TelLJQIry3b2rAiEMu+jQP3ZJtZO+
+         DV8ZcBo+nqSGNFGuP5IT3Gvn++8cKhe/kvf7Vhrp6wPFElGSFdb9xSFpH3RSM5y2cBlC
+         flgo4Y3Kjwtn+5YOi7QOx8s3XqGOKVdlxrD/kEzyVZPQSysolvOAKighrNa/0pG/xLwP
+         FnMaH4meB/eGLNeGNAITMA0uo6ZmK0FsZ2LI2DJkN+rgptSwBD2CbfTq9OHU7x63nlnT
+         zFFhTbs498RH3utYHWgz5ngN4MdxU4jH2ZlVi5FQOfq2v6H9AzEQSNl7FjrIASAZFTTa
+         nDHQ==
+X-Gm-Message-State: AAQBX9egD3zrThUg3rpycHV3zCCUm+yX3HBBcNvPOC9/TsNYOgyWcV6u
+        kOrcw2hC4vbvx1dBnNk/ZJu1oA==
+X-Google-Smtp-Source: AKy350Y5vscslMdJAx35nCQvPSRnHUrNqLPW/+KyljmDqgU/KP6IWdG1spU0fR5e6iRHfMaUK4wMmA==
+X-Received: by 2002:a17:906:d053:b0:930:4eba:1640 with SMTP id bo19-20020a170906d05300b009304eba1640mr5090248ejb.38.1681484948890;
+        Fri, 14 Apr 2023 08:09:08 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:39b7:81a0:bd41:17b1? ([2a02:810d:15c0:828:39b7:81a0:bd41:17b1])
+        by smtp.gmail.com with ESMTPSA id sg32-20020a170907a42000b008c16025b318sm2525558ejc.155.2023.04.14.08.09.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Apr 2023 08:09:08 -0700 (PDT)
+Message-ID: <7b4fe58c-9cf8-57ab-8cbc-c5ccf0b2a46d@linaro.org>
+Date:   Fri, 14 Apr 2023 17:09:07 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH V1 1/4] dt-bindings: clock: qcom,ipq9574-gcc: Drop the
+ Bias PLL ubi clock source
+Content-Language: en-US
+To:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Cc:     quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
+        quic_kathirav@quicinc.com, quic_arajkuma@quicinc.com,
+        quic_anusha@quicinc.com, quic_poovendh@quicinc.com
+References: <20230414134812.16812-1-quic_devipriy@quicinc.com>
+ <20230414134812.16812-2-quic_devipriy@quicinc.com>
+ <dc48d390-9c8b-d3b7-9c5e-6cbddb0e1306@linaro.org>
+ <aca7b808-51ce-1921-2ee2-0e82cf19d960@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <aca7b808-51ce-1921-2ee2-0e82cf19d960@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cpp_check reports
-drivers/gpu/drm/amd/display/modules/freesync/freesync.c:1143:17: style: Variable
-  'oldest_index' is assigned a value that is never used. [unreadVariable]
-   oldest_index = 0;
-                ^
+On 14/04/2023 16:22, Devi Priya wrote:
+> 
+> 
+> On 4/14/2023 7:47 PM, Krzysztof Kozlowski wrote:
+>> On 14/04/2023 15:48, Devi Priya wrote:
+>>> Remove bias_pll_ubi_nc_clk from the binding as it has been removed from
+>>> the Device Tree. Also added Bjorn Andersson to the maintainers list.
+>>
+>> Was it really removed? Where?
+>>
+> It has been removed from the Device tree and binding in V11
+> https://lore.kernel.org/linux-arm-msm/20230404101622.5394-1-quic_devipriy@quicinc.com/
 
-This variable is not used so remove.
+I still see it in current next. Are you sure you refer to something
+already merged?
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/gpu/drm/amd/display/modules/freesync/freesync.c | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/drivers/gpu/drm/amd/display/modules/freesync/freesync.c b/drivers/gpu/drm/amd/display/modules/freesync/freesync.c
-index 5c41a4751db4..5798c0eafa1f 100644
---- a/drivers/gpu/drm/amd/display/modules/freesync/freesync.c
-+++ b/drivers/gpu/drm/amd/display/modules/freesync/freesync.c
-@@ -1137,10 +1137,6 @@ void mod_freesync_handle_preflip(struct mod_freesync *mod_freesync,
- 
- 	if (in_out_vrr->supported &&
- 			in_out_vrr->state == VRR_STATE_ACTIVE_VARIABLE) {
--		unsigned int oldest_index = plane->time.index + 1;
--
--		if (oldest_index >= DC_PLANE_UPDATE_TIMES_MAX)
--			oldest_index = 0;
- 
- 		last_render_time_in_us = curr_time_stamp_in_us -
- 				plane->time.prev_update_time_in_us;
--- 
-2.27.0
+Best regards,
+Krzysztof
 
