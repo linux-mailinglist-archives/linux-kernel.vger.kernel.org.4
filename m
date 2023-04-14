@@ -2,165 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA52F6E20B6
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 12:27:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A66586E297E
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 19:30:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbjDNK1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 06:27:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33144 "EHLO
+        id S229994AbjDNRan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 13:30:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjDNK1u (ORCPT
+        with ESMTP id S230265AbjDNRaa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 06:27:50 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7331F4C22
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 03:27:49 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id si1so14233491ejb.10
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 03:27:49 -0700 (PDT)
+        Fri, 14 Apr 2023 13:30:30 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D723B77D;
+        Fri, 14 Apr 2023 10:29:49 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id fw22-20020a17090b129600b00247255b2f40so5216433pjb.1;
+        Fri, 14 Apr 2023 10:29:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681468068; x=1684060068;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GfsBlxdTSJzQBTJl1OQ8F2O5M+aBu5tpSg3iXmktVXg=;
-        b=AF4HzdJP7Aw9KCPftS4DVfNYmqMCqiiYUSVCkM8WQyc2XPxROjGGKsGcT/xeeYTKpY
-         8/14/qT3Zc0de4dg5rWYtABdHgnbxE2/LCyCqwNr9KPO+UUzsJtFxaNgh4al8PhfUoAN
-         /xrWEJ2umqth+7YriTNHDTfpkTBXYZyYqjWF3E/XlziPjp7HLMDUl/ZOVfntgYVeRu8a
-         U2EBVCKahePEqWxpoJS4bDwHinOVgJ4j6ezqJ+JiwRebuiU6IEQlkpoHwpefs1Y77Ti4
-         hIcd33ZPFe2hsEPgJM8n7L4hCROi6KqyHdP5fFT0nu0MWEI2zlL0MBnfxGrXsKxG7VGr
-         FiGA==
+        d=gmail.com; s=20221208; t=1681493387; x=1684085387;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=oA7v86V6iYy/er+GdPOTuYZa860KsTLlZwCwQrf+4GM=;
+        b=kTsQI1JEp+BNjizJZdsaHTeLSPzTMh+8ZhdIBAOetu/YXFaPfSks9nrwtLzMucsXwY
+         OPVssxeXxKw9KUDK2tM54IF15q7H6BzvNX2QIhGeXqdaAO7Rbn8H9zNisL5IAk9WVakL
+         ornllfdf5snpZilws1YgiAdOIpIuxhUza3DYzxXcZwW1qFDQ9ACxuY0AnosV4H76mz8T
+         QO7NaENDQ68ytJfL0wmKxDb4mQJxcFbxuCHXydsAMubiCavrXBV9z00nzJhu4NCdN/SQ
+         vAulexmGQamd7ftwaO/9+GGJiNm6KAGiT/QGrmDiIOavzWBePL/FZaoX34xXL6PjP1wh
+         bNLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681468068; x=1684060068;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GfsBlxdTSJzQBTJl1OQ8F2O5M+aBu5tpSg3iXmktVXg=;
-        b=UWoD5pDB8XIk6/EqrDCApV4Jq7F8tKXTBpXgqPAmyMCosoXVruZYJdOTij2beh4+Jz
-         Flr8j9wZnVjPlm8/YqI5b6YLe5eQoXQxTs/QAk2l/ss6H/4DBfjtM/kKHGy6V33B2tL3
-         3piqmcTMoV0UrN4AXkOmDLZQ2pcWk5tvFf7yiDanYIV56MKyiqSkVlb8q1qog3S/MNPb
-         HYxBYx1gjvTYUUGxCZQC3utLKZgU0sfwZrBQIhKo9OosGWsQ2M/ryRXqOOPfI2EZgBnm
-         x7Uxd+/TQAvHa5kYnAgfJKuEElbRAhVf8jmKGAI9PwMP2q1TB0TwWS4a7ong+q1YlrqG
-         SoUg==
-X-Gm-Message-State: AAQBX9dC8111F2GFkN4BRvFFzvVha2cOkIRirrLoNQYOxKt/448uE001
-        wOnKXjxactyaoDCtOS5SDj55hw==
-X-Google-Smtp-Source: AKy350YwjBYY/9l54IU4pggStT9CGvMLLTI4ZvcV36eCKzr4rR2yhO8Ku0K0cb8HDXLUNgTntWGhvw==
-X-Received: by 2002:a17:906:7f98:b0:87b:6bbb:11ac with SMTP id f24-20020a1709067f9800b0087b6bbb11acmr5167654ejr.60.1681468067936;
-        Fri, 14 Apr 2023 03:27:47 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:40b9:8c57:b112:651d? ([2a02:810d:15c0:828:40b9:8c57:b112:651d])
-        by smtp.gmail.com with ESMTPSA id m7-20020a17090679c700b0094a8aa6338dsm2294826ejo.14.2023.04.14.03.27.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 03:27:47 -0700 (PDT)
-Message-ID: <0cbafc31-9b46-54df-f569-810a8781743c@linaro.org>
-Date:   Fri, 14 Apr 2023 12:27:45 +0200
+        d=1e100.net; s=20221208; t=1681493387; x=1684085387;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oA7v86V6iYy/er+GdPOTuYZa860KsTLlZwCwQrf+4GM=;
+        b=JcTWsZIhzQSU8qbsiDrw8mMEJFlH5BP1SONWZ6tUX04G9SnmZ3xlVpiySVt+0wDd8e
+         vD+I8NAttgs75D3iUKQbw+YTRvenjH7GVvbWUKJq/vCl1KjcDUSRM0NurDJEBNC/afDv
+         RocEASvajbCKuRyTP4m986a/9n6jsPE6OVsIYHYEHWQ6OqSQPDVKdr5bPNmMkFzX1NbY
+         1p2uYPSgx2OKdBoxBVkmc8s5/vfkn0zUXMCYkzI0U1FNpC448+kwxCU8eNTYHCikdJjj
+         ZPxxuN3pNp7IUmwmMy7M9rTIKUoN/P0XMWdcpoicnxaWdWAN07F+IlveIEF6IFZ9w/VJ
+         NrAQ==
+X-Gm-Message-State: AAQBX9c45ck+U2BQ9J+aBKPxsbScgym/An/0b4tcgK1wd588T5HtTA2T
+        JlHOrSeAfw0CZS3v8gv5NlolwuDXVzGeVoJP
+X-Google-Smtp-Source: AKy350ZM/lCKFNROMkR2BLN8j5h2sYyTe4cwE/DBiZZPljtct0wXCMbeFUr0FvTHbZ5DdocTi+b1dQ==
+X-Received: by 2002:a17:902:ecc5:b0:1a6:54cd:ccd9 with SMTP id a5-20020a170902ecc500b001a654cdccd9mr1583490plh.9.1681493386999;
+        Fri, 14 Apr 2023 10:29:46 -0700 (PDT)
+Received: from localhost (c-73-25-35-85.hsd1.wa.comcast.net. [73.25.35.85])
+        by smtp.gmail.com with ESMTPSA id iw5-20020a170903044500b001a64ce7b18dsm3326202plb.165.2023.04.14.10.29.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Apr 2023 10:29:46 -0700 (PDT)
+Date:   Fri, 14 Apr 2023 10:28:28 +0000
+From:   Bobby Eshleman <bobbyeshleman@gmail.com>
+To:     Alvaro Karsz <alvaro.karsz@solid-run.com>
+Cc:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Vishnu Dasa <vdasa@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        Jiang Wang <jiang.wang@bytedance.com>
+Subject: Re: [PATCH RFC net-next v2 2/4] virtio/vsock: add
+ VIRTIO_VSOCK_F_DGRAM feature bit
+Message-ID: <ZBajz9+ehv+Ixv+s@bullseye>
+References: <20230413-b4-vsock-dgram-v2-0-079cc7cee62e@bytedance.com>
+ <20230413-b4-vsock-dgram-v2-2-079cc7cee62e@bytedance.com>
+ <AM0PR04MB47238453B33915D18F247ABBD4999@AM0PR04MB4723.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 3/3] arm64: dts: rockchip: Add vdd_cpu_big regulators to
- rk3588-rock-5b
-Content-Language: en-US
-To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Christopher Obbard <chris.obbard@collabora.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20230414093411.113787-1-cristian.ciocaltea@collabora.com>
- <20230414093411.113787-4-cristian.ciocaltea@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230414093411.113787-4-cristian.ciocaltea@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <AM0PR04MB47238453B33915D18F247ABBD4999@AM0PR04MB4723.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/04/2023 11:34, Cristian Ciocaltea wrote:
-> The RK8602 and RK8603 voltage regulators on the Rock 5B board provide
-> the power lines vdd_cpu_big0 and vdd_cpu_big1, respectively.
+On Fri, Apr 14, 2023 at 08:47:52AM +0000, Alvaro Karsz wrote:
+> Hi Bobby,
 > 
-> Add the necessary device tree nodes and bind them to the corresponding
-> CPU big core nodes.
+> >  /* The feature bitmap for virtio vsock */
+> >  #define VIRTIO_VSOCK_F_SEQPACKET       1       /* SOCK_SEQPACKET supported */
+> > +#define VIRTIO_VSOCK_F_DGRAM           2       /* Host support dgram vsock */
 > 
-> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-> ---
->  .../boot/dts/rockchip/rk3588-rock-5b.dts      | 56 +++++++++++++++++++
->  1 file changed, 56 insertions(+)
+> Seems that bit 2 is already taken by VIRTIO_VSOCK_F_NO_IMPLIED_STREAM.
 > 
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-> index 8cc97d146a73..3e4aee8f70c1 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-> +++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-> @@ -53,6 +53,62 @@ vcc5v0_sys: vcc5v0-sys-regulator {
->  	};
->  };
->  
-> +&cpu_b0 {
-> +	cpu-supply = <&vdd_cpu_big0_s0>;
-> +};
-> +
-> +&cpu_b1 {
-> +	cpu-supply = <&vdd_cpu_big0_s0>;
-> +};
-> +
-> +&cpu_b2 {
-> +	cpu-supply = <&vdd_cpu_big1_s0>;
-> +};
-> +
-> +&cpu_b3 {
-> +	cpu-supply = <&vdd_cpu_big1_s0>;
-> +};
-> +
-> +&i2c0 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&i2c0m2_xfer>;
-> +	status = "okay";
-> +
-> +	vdd_cpu_big0_s0: regulator@42 {
-> +		compatible = "rockchip,rk8602";
+> https://github.com/oasis-tcs/virtio-spec/commit/26ed30ccb049fd51d6e20aad3de2807d678edb3a
 
-Looking at your next node, this is surprising... Double check if you
-have correct compatibles everywhere.
+Right! I'll bump that in the next rev.
 
-> +		reg = <0x42>;
-> +		fcs,suspend-voltage-selector = <1>;
-
-Does not look like you tested the DTS against bindings. Please run `make
-dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
-for instructions).
-
-> +		regulator-name = "vdd_cpu_big0_s0";
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +		regulator-min-microvolt = <550000>;
-> +		regulator-max-microvolt = <1050000>;
-> +		regulator-ramp-delay = <2300>;
-> +		vin-supply = <&vcc5v0_sys>;
-> +
-> +		regulator-state-mem {
-> +			regulator-off-in-suspend;
-> +		};
-> +	};
-> +
-> +	vdd_cpu_big1_s0: regulator@43 {
-> +		compatible = "rockchip,rk8603", "rockchip,rk8602";
-> +		reg = <0x43>;
-> +		fcs,suspend-voltage-selector = <1>;
-
-Does not look like you tested the DTS against bindings. Please run `make
-dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
-for instructions).
-
-Best regards,
-Krzysztof
-
+Thanks,
+Bobby
