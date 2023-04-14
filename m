@@ -2,224 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 215076E27C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 17:57:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADD376E2803
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 18:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbjDNP45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 11:56:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42428 "EHLO
+        id S231167AbjDNQGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 12:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbjDNP4z (ORCPT
+        with ESMTP id S229961AbjDNQGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 11:56:55 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6993626BE
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 08:56:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681487810; x=1713023810;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=sqI2bR2Hrn9cV4SNP1ykx8l2wFJBLbfB23ofqfAWA1o=;
-  b=kO/6QQ7eH2Cp25R8/XYBCY8eGrrnAMgcsJzP2q4XMgrpBiNpBdUFzVow
-   H4DQtek4f8mXdVnPDnmy+mP0Qxw6nPNlKF3tcFu+299jK5ikBfNk7k0aj
-   5jA1gREVOHzYTYMDl9u1lb/ZloeFPndexRYnTvNI8mFB7wJNXD1AT2BtZ
-   UxUiNsXE5HDSa2yslnWmaFXn3NiT8vwGeWI/idAeZYLNprwlPykyV3VIT
-   vdzlDqou2G7wUuw1TD5ozDNL5WpyfnMhznxzLfiZM7mPhhVhseHEQffO2
-   nmQYsHvRSNoA37N9YFu0ydq6bJrpDVREa1mZQIxvd9rRfc/PoGVKYCZ+H
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="324847243"
-X-IronPort-AV: E=Sophos;i="5.99,197,1677571200"; 
-   d="scan'208";a="324847243"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 08:56:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="720329427"
-X-IronPort-AV: E=Sophos;i="5.99,197,1677571200"; 
-   d="scan'208";a="720329427"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga008.jf.intel.com with ESMTP; 14 Apr 2023 08:56:44 -0700
-Received: from [10.212.165.245] (kliang2-mobl1.ccr.corp.intel.com [10.212.165.245])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 941215805CB;
-        Fri, 14 Apr 2023 08:56:42 -0700 (PDT)
-Message-ID: <803927bb-6f74-5c09-3c18-2fd5f423287b@linux.intel.com>
-Date:   Fri, 14 Apr 2023 11:56:41 -0400
+        Fri, 14 Apr 2023 12:06:13 -0400
+X-Greylist: delayed 442 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 14 Apr 2023 09:05:57 PDT
+Received: from out-57.mta1.migadu.com (out-57.mta1.migadu.com [IPv6:2001:41d0:203:375::39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE74B453
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 09:05:57 -0700 (PDT)
+Message-ID: <4d1cacbf-f9b2-07c7-75bf-61f34abc1841@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1681487913;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DpTXmit1ejSE9AiqoGnb66tLFIsHtNr5bViuZsAYkAc=;
+        b=nDszz0ZEH77cLMMPj6z6O2CrJFYAzr1sK7tHNTQ/oyEPIooAnIuuYUbuiZs1iCd53D/1xM
+        KXLWDMIwdnU7VbpmRlufelV+DTsO98xWmiyghnL+pUZwV8jnaaKHfkiwkQ9hbwj1Cyx8X2
+        1FGfqpjvZ9MB0FC0CO+LyypDjwih71M=
+Date:   Fri, 14 Apr 2023 23:58:26 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 2/6] perf: Support branch events logging
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@redhat.com, acme@kernel.org, linux-kernel@vger.kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
-        adrian.hunter@intel.com, ak@linux.intel.com, eranian@google.com
-References: <20230410204352.1098067-1-kan.liang@linux.intel.com>
- <20230410204352.1098067-2-kan.liang@linux.intel.com>
- <20230414103832.GD83892@hirez.programming.kicks-ass.net>
- <1d62b865-5d31-ec36-99e0-785844f79199@linux.intel.com>
- <20230414145324.GB761523@hirez.programming.kicks-ass.net>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20230414145324.GB761523@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH for-next 2/3] RDMA/rtrs: Fix rxe_dealloc_pd warning
+To:     Leon Romanovsky <leon@kernel.org>,
+        "Zhijian Li (Fujitsu)" <lizhijian@fujitsu.com>
+Cc:     Guoqing Jiang <guoqing.jiang@linux.dev>,
+        "haris.iqbal@ionos.com" <haris.iqbal@ionos.com>,
+        "jinpu.wang@ionos.com" <jinpu.wang@ionos.com>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <1681108984-2-1-git-send-email-lizhijian@fujitsu.com>
+ <1681108984-2-3-git-send-email-lizhijian@fujitsu.com>
+ <20230410120809.GN182481@unreal>
+ <0d9c57db-bca3-adb4-71fd-7362e4842917@linux.dev>
+ <85323eb2-cfc7-d1b8-3a75-3fa63dde29db@fujitsu.com>
+ <20230411122651.GV182481@unreal>
+ <aa43746f-77f9-8592-5370-2a5042506ee5@fujitsu.com>
+ <8fe62e38-e43d-3d6c-624f-1c8ce5859788@linux.dev>
+ <f85cdaaa-b1d6-bc89-e963-8b611ae3667d@fujitsu.com>
+ <20230413132418.GR17993@unreal>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Zhu Yanjun <yanjun.zhu@linux.dev>
+In-Reply-To: <20230413132418.GR17993@unreal>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023-04-14 10:53 a.m., Peter Zijlstra wrote:
-> On Fri, Apr 14, 2023 at 09:35:37AM -0400, Liang, Kan wrote:
+在 2023/4/13 21:24, Leon Romanovsky 写道:
+> On Thu, Apr 13, 2023 at 08:12:15AM +0000, Zhijian Li (Fujitsu) wrote:
 >>
 >>
->> On 2023-04-14 6:38 a.m., Peter Zijlstra wrote:
->>> On Mon, Apr 10, 2023 at 01:43:48PM -0700, kan.liang@linux.intel.com wrote:
->>>> From: Kan Liang <kan.liang@linux.intel.com>
->>>>
->>>> With the cycle time information between branches, stalls can be easily
->>>> observed. But it's difficult to explain what causes the long delay.
->>>>
->>>> Add a new field to collect the occurrences of events since the last
->>>> branch entry, which can be used to provide some causality information
->>>> for the cycle time values currently recorded in branches.
->>>>
->>>> Add a new branch sample type to indicate whether include occurrences of
->>>> events in branch info.
->>>>
->>>> Only support up to 4 events with saturating at value 3.
->>>> In the current kernel, the events are ordered by either the counter
->>>> index or the enabling sequence. But none of the order information is
->>>> available to the user space tool.
->>>> Add a new PERF_SAMPLE format, PERF_SAMPLE_BRANCH_EVENT_IDS, and generic
->>>> support to dump the event IDs of the branch events.
->>>> Add a helper function to detect the branch event flag.
->>>> These will be used in the following patch.
+>> On 13/04/2023 15:35, Guoqing Jiang wrote:
+>>> Hi,
 >>>
->>> I'm having trouble reverse engineering this. Can you more coherently
->>> explain this feature and how you've implemented it?
+>>> I take a closer look today.
+>>>
+>>> On 4/12/23 09:15, Zhijian Li (Fujitsu) wrote:
+>>>>
+>>>> On 11/04/2023 20:26, Leon Romanovsky wrote:
+>>>>> On Tue, Apr 11, 2023 at 02:43:46AM +0000, Zhijian Li (Fujitsu) wrote:
+>>>>>>
+>>>>>> On 10/04/2023 21:10, Guoqing Jiang wrote:
+>>>>>>>
+>>>>>>> On 4/10/23 20:08, Leon Romanovsky wrote:
+>>>>>>>> On Mon, Apr 10, 2023 at 06:43:03AM +0000, Li Zhijian wrote:
+>>>>>>>>> The warning occurs when destroying PD whose reference count is not zero.
+>>>>>>>>>
+>>>>>>>>> Precodition: clt_path->s.con_num is 2.
+>>>>>>>>> So 2 cm connection will be created as below:
+>>>>>>>>> CPU0                                              CPU1
+>>>>>>>>> init_conns {                              |
+>>>>>>>>>       create_cm() // a. con[0] created        |
+>>>>>>>>>                                               |  a'. rtrs_clt_rdma_cm_handler() {
+>>>>>>>>>                                               |    rtrs_rdma_addr_resolved()
+>>>>>>>>>                                               |      create_con_cq_qp(con); << con[0]
+>>>>>>>>>                                               |  }
+>>>>>>>>>                                               | in this moment, refcnt of PD was increased to 2+
+>>>
+>>> What do you mean "refcnt of PD"? usecnt in struct ib_pd or dev_ref.
 >>
->> Sorry for that.
+>> I mean usecnt in struct ib_pd
 >>
->> The feature is an enhancement of ARCH LBR. It adds new fields in the
->> LBR_INFO MSRs to log the occurrences of events on the first 4 GP
->> counters. Worked with the previous timed LBR feature together, the user
->> can understand not only the latency between two LBR blocks, but also
->> which events causes the stall.
 >>
->> The spec can be found at the latest Intel® Architecture Instruction Set
->> Extensions and Future Features, v048. Chapter 8.4.
->> https://cdrdv2.intel.com/v1/dl/getContent/671368
+>>
+>>>
+>>>>>>>>>                                               |
+>>>>>>>>>       create_cm() // b. cid = 1, failed       |
+>>>>>>>>>         destroy_con_cq_qp()                   |
+>>>>>>>>>           rtrs_ib_dev_put()                   |
+>>>>>>>>>             dev_free()                        |
+>>>>>>>>>               ib_dealloc_pd(dev->ib_pd) << PD |
+>>>>>>>>>                is destroyed, but refcnt is    |
+>>>>>>>>>                still greater than 0           |
+>>>
+>>> Assuming you mean "pd->usecnt". We only allocate pd in con[0] by rtrs_ib_dev_find_or_add,
+>>> if con[1] failed to create cm, then alloc_path_reqs -> ib_alloc_mr -> atomic_inc(&pd->usecnt)
+>>> can't be triggered. Is there other places could increase the refcnt?
+>>
+>>
+>> Yes, when create a qp, it will also associate to this PD, that also mean refcnt of PD will be increased.
+>>
+>> When con[0](create_con_cq_qp) succeeded, refcnt of PD will be 2. and then when con[1] failed, since
+>> QP didn't create, refcnt of PD is still 2. con[1]'s cleanup will destroy the PD(ib_dealloc_pd) since dev_ref = 1, after that its
+>> refcnt is still 1.
 > 
-> Oh gawd; that's terse. Why can't these people write comprehensible
-> things :/ It's almost as if they don't want this stuff to be used.
-> 
-> So IA32_LBR_x_INFO is extended:
-> 
->   [0:15]	CYC_CNT
->   [16:31]	undefined
-> + [32:33]	PMC0_CNT
-> + [34:35]	PMC1_CNT
-> + [36:37]	PMC2_CNT
-> + [38:39]	PMC3_CNT
-> + [40:41]	PMC4_CNT
-> + [42:43]	PMC5_CNT
-> + [44:45]	PMC6_CNT
-> + [46:47]	PMC7_CNT
->   [48:55]	undefined
->   [56:59]	BR_TYPE
->   [60]		CYC_CNT_VALID
->   [61]		TSX_ABORT
-> 
-> Where the PMCx_CNT fields are saturating counters for the respective
-> PMCs. And we'll run out of bits if we get more than 12 PMCs. Is SMT=n
-> PMC merging still a thing?
-> 
-> And for some reason this counting is enabled in PERFEVTSELx[35] instead
-> of in LBR_CTL somewhere :/
-> 
->> To support the feature, there are three main changes in ABIs.
->> - A new branch sample type, PERF_SAMPLE_BRANCH_EVENT, is used as a knob
->> to enable the feature.
-> 
->> - Extend the struct perf_branch_entry layout, because we have to save
->> and pass the occurrences of events to user space. Since it's only
->> available for 4 counters and saturating at value 3, it only occupies 8
->> bits. For the current Intel implementation, the order is the order of
->> counters.
-> 
-> Only for 4? Where does it say that? 
+> Why is refcnt 1 in con[1] destruction phase? It seems to me like a bug.
+Agree. We should find out why refcnt 1 and fix this problem.
 
-"Per-counter support for LBR Event Logging is indicated by the “Event
-Logging Supported” bitmap in
-CPUID.(EAX=01CH, ECX=0).ECX[19:16]"
-
-There are only 4 bits to indicate the supported counter.
-
-> If it were to only support 4, then
-> we're in counter scheduling contraint hell again 
-
-Unfortunately, yes.
-
-> and we need to somehow
-> group all these things together with the LBR event.
-
-Group will bring many limits for the usage. For example, I was told
-there could be someone wants to use it with multiplexing.
-
+Zhu Yanjun
 > 
->   @@ -1410,6 +1423,10 @@ union perf_mem_data_src {
->   *    cycles: cycles from last branch (or 0 if not supported)
->   *      type: branch type
->   *      spec: branch speculation info (or 0 if not supported)
->   + *      events: occurrences of events since the last branch entry.
->   + *              The fields can store up to 4 events with saturating
->   + *              at value 3.
->   + *              (or 0 if not supported)
->   */
->   struct perf_branch_entry {
-> 	  __u64   from;
->   @@ -1423,7 +1440,8 @@ struct perf_branch_entry {
-> 		  spec:2,     /* branch speculation info */
-> 		  new_type:4, /* additional branch type */
-> 		  priv:3,     /* privilege level */
->   -               reserved:31;
->   +               events:8,   /* occurrences of events since the last branch entry */
->   +               reserved:23;
->   };
-> 
->   union perf_sample_weight {
-> 
-> This seems properly terrible from an interface pov. What if the next
-> generation of silicon extends this to all 8 PMCs or another architecture
-> comes along that does this with 3 bits per counter etc...
-
-OK. The reserved space is not enough anymore. I think we have to add
-several new fields. I will redesign it.
-
-> 
->> - Add a new PERF_SAMPLE format, PERF_SAMPLE_BRANCH_EVENT_IDS, to dump
->> the order information. User space tool doesn't understand the order of
->> counters. So it cannot map the new fields in struct perf_branch_entry to
->> a specific event. We have to dump the order information.
-> 
-> Sorry; I can't parse this.
-
-The perf tool has no idea which physical counter is assigned to an event.
-The HW has no idea about an event. It only log the information from the
-counter 0 into IA32_LBR_x_INFO[32:33].
-If we pass the information from IA32_LBR_x_INFO[32:33] to the perf tool.
-The perf tool lacks of knowledge to connect the information to an event.
-So we have to dump the event ID at the same time.
-
-Thanks,
-Kan
+> Thanks
 
