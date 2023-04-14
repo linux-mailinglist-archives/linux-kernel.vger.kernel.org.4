@@ -2,131 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90EF16E2A72
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 21:09:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19B3D6E2A79
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 21:09:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbjDNTJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 15:09:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43406 "EHLO
+        id S229945AbjDNTJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 15:09:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbjDNTJF (ORCPT
+        with ESMTP id S229497AbjDNTJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 15:09:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23343F5;
-        Fri, 14 Apr 2023 12:09:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B26C864941;
-        Fri, 14 Apr 2023 19:09:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FDBBC433EF;
-        Fri, 14 Apr 2023 19:09:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681499343;
-        bh=8+ul74ZOMPCS9hfly4Btg1dktvKcVkcKPgQLuyGVrSc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d7NqpW/juNRjpXma8oVlbDfAIehEEZ1EhICsU4T4QzgIg9YAqWTqr3zCyrkth0awX
-         pah4hp2eVg06zve9pJ8HqJA8hJnXNdz9tlKqsZLDOLg4w7SMceK07jeTLGOfgg1Vdf
-         nglfKUf5VZDs8Zn/achnWXYxrhKlhqk9Wh7WcsExotAz2OeASTQwVe2mivL1P6KFiA
-         b+8OgM066vExi1h+E/9BjAY4Eo7gNMBsBolG1GBJ9ep3NG/PY2jW9cTF0ie1rVLfGi
-         Tol3SAq1do87ctDPOo8GMIN3gjeer6X2Q7YIeACAPmDWzDE5yBOyZ8on77qLn/NVua
-         UmuRaO4JIOPtA==
-Date:   Fri, 14 Apr 2023 12:09:00 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Marco Elver <elver@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Tom Rix <trix@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kbuild@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] kasan: remove hwasan-kernel-mem-intrinsic-prefix=1 for
- clang-14
-Message-ID: <20230414190900.GA1277152@dev-arch.thelio-3990X>
-References: <20230414082943.1341757-1-arnd@kernel.org>
- <20230414162605.GA2161385@dev-arch.thelio-3990X>
- <24ebf857-b70d-4d94-8870-e41b91649dd1@app.fastmail.com>
+        Fri, 14 Apr 2023 15:09:32 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C4D1991
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 12:09:28 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id u12so6950130lfu.5
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 12:09:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681499367; x=1684091367;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jVnUlhBA6jdlz83dcJuvBqHrUvd0hrnnS1oyxuPo19o=;
+        b=n+f05nLeF9RRty+4PwYX2MJg35RU6XoRr+aQ19NimDsWDexyxXCssREQrw7SW0a+os
+         Iiyatkx5HMRAITqlMSWlD250jp074ZpMQTZFA9Vky6cBe5M6L6C/uopa5mUK/zjuNVJb
+         mClWHu6XEOn0ft7bPzsulddypbIq4+JXVkzb3TDdSYLGoxD0G7qLgrfaKJwrR+rC3UXG
+         7n5F9ieBZ4jJ+6Hm4PAmAL+JEDjSlXNfjMTDTg+bc390JlShIvanch/UD0BJlrQFiWrM
+         ZzRil+jfJNwT5qx/fUzCxC2Ye7qfT8f+Z7Hq9HvjsbyRoiW4q+v5DRRf1TX7TOPQmfRL
+         69WQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681499367; x=1684091367;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jVnUlhBA6jdlz83dcJuvBqHrUvd0hrnnS1oyxuPo19o=;
+        b=Dwutmq2lg0W5EQe5BNnDFLEdoVpS5C8xUlWmVoeUat/2+WObSXmuGo767C2SvtBgeS
+         rmin0NmoGQ0J5z/cNs/ho9S6IkeHEAuiAuZuQytCEkGsBAnAciwNgKoY/t5b20dRzh4j
+         eR4XLzE0NvYNOrJjS/+I56daWr6k++2fPCkBrRpS1dbCrjjIkNNqgV3tbEO2biBKtMOO
+         sMMBpspDh9povwN1C17+2tEIeFipwUTTW2jwfBQa6MNQhpZOjCzmZouMPhi27fqPpEIj
+         0AtiXX6KDzjtw+eqPN82cUHkYxcq813HGPbpXHlRB9JXNEikn6pDE+hDTFhLFTUH3j4H
+         GwMg==
+X-Gm-Message-State: AAQBX9eNtI9WUhjn899MLUNmpP5Pqql5GzapGAisiif6dojf3IYxKpcy
+        lzuLU+SdoME0KJTJcHnlge/nApMJxpvUfwcYsGOadA==
+X-Google-Smtp-Source: AKy350b8TidBfwv6qQzVGUQWXE7sAbTgCZlg7xzVKfrDkf6OsFRioS7iHXlH0PzzFYOYdb1JlfpxYyihqWlf6Tu7heA=
+X-Received: by 2002:ac2:454e:0:b0:4db:1c2a:a96e with SMTP id
+ j14-20020ac2454e000000b004db1c2aa96emr39617lfm.9.1681499366734; Fri, 14 Apr
+ 2023 12:09:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <24ebf857-b70d-4d94-8870-e41b91649dd1@app.fastmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230407201921.2703758-1-sagis@google.com> <20230414100350.00000955.zhi.wang.linux@gmail.com>
+In-Reply-To: <20230414100350.00000955.zhi.wang.linux@gmail.com>
+From:   Sagi Shahar <sagis@google.com>
+Date:   Fri, 14 Apr 2023 12:09:15 -0700
+Message-ID: <CAAhR5DEdX0SOfRTwzCdBSNvfUwf_z6BT6TGaaCY-Uuis=URqiQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/5] Add TDX intra host migration support
+To:     Zhi Wang <zhi.wang.linux@gmail.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 14, 2023 at 08:53:49PM +0200, Arnd Bergmann wrote:
-> On Fri, Apr 14, 2023, at 18:26, Nathan Chancellor wrote:
-> > On Fri, Apr 14, 2023 at 10:29:27AM +0200, Arnd Bergmann wrote:
-> >> From: Arnd Bergmann <arnd@arndb.de>
-> >> 
-> >> Unknown -mllvm options don't cause an error to be returned by clang, so
-> >> the cc-option helper adds the unknown hwasan-kernel-mem-intrinsic-prefix=1
-> >> flag to CFLAGS with compilers that are new enough for hwasan but too
+On Fri, Apr 14, 2023 at 12:04=E2=80=AFAM Zhi Wang <zhi.wang.linux@gmail.com=
+> wrote:
+>
+> On Fri,  7 Apr 2023 20:19:16 +0000
+> Sagi Shahar <sagis@google.com> wrote:
+>
+> Hi:
+>
+> Is there any userspace using these APIs? I cant find them in AMD-QEMU rep=
+o
+> and upstream QEMU repo. It would nice to first take a look on how userspa=
+ce
+> is going to use it.
+>
+We are using a different userspace VMM internally so we didn't make
+changes to QEMU.
+I've uploaded our selftests which exercise these APIs to our public
+GitHub so you can take a look there:
+https://github.com/googleprodkernel/linux-cc/commit/62c8dba4c3cf06e37501807=
+7a6d9f491c933dc6d
+
+Note that these are a slightly older version based on TDX V10 API.
+They also use the
+KVM_CAP_VM_COPY_ENC_CONTEXT_FROM instead of KVM_CAP_VM_MOVE_ENC_CONTEXT_FRO=
+M
+
+> > This patchset adds support for TDX intra host migration using the same
+> > API which was added for SEV intra host migration here:
+> > https://lore.kernel.org/all/20211021174303.385706-1-pgonda@google.com/
 > >
-> > Hmmm, how did a change like commit 0e1aa5b62160 ("kcsan: Restrict
-> > supported compilers") work if cc-option does not work with unknown
-> > '-mllvm' flags (or did it)? That definitely seems like a problem, as I
-> > see a few different places where '-mllvm' options are used with
-> > cc-option. I guess I will leave that up to the sanitizer folks to
-> > comment on that further, one small comment below.
-> 
-> That one adds both "-fsanitize=thread" and "-mllvm
-> -tsan-distinguish-volatile=1". If the first one is missing in the
-> compiler, neither will be set. If only the second one fails, I assume
-> you'd get the same result I see with hwasan-kernel-mem-intrinsic-prefix=1.
-
-I did not look close enough but it turns out that this check is always
-true for the versions of clang that the kernel currently supports, so it
-could not fail even if '-mllvm' flag checking worked.
-
-$ git grep tsan-distinguish-volatile llvmorg-11.0.0
-llvmorg-11.0.0:llvm/lib/Transforms/Instrumentation/ThreadSanitizer.cpp:    "tsan-distinguish-volatile", cl::init(false),
-llvmorg-11.0.0:llvm/test/Instrumentation/ThreadSanitizer/volatile.ll:; RUN: opt < %s -tsan -tsan-distinguish-volatile -S | FileCheck %s
-
-At the time of the Linux change though, we did not have a minimum
-supported version, so that check was necessary. I wonder if LLVM
-regressed with regards to '-mllvm' flag checking at some point...
-
-> >>  # Instrument memcpy/memset/memmove calls by using instrumented __hwasan_mem*().
-> >> +ifeq ($(call clang-min-version, 150000),y)
-> >>  CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
-> >> +endif
-> >> +ifeq ($(call gcc-min-version, 130000),y)
-> >> +CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
-> >> +endif
+> > This patchset relies on the latest TDX patches from Intel:
+> > - fd-based approach for supporing KVM v10 and
+> >   https://lore.kernel.org/lkml/20221202061347.1070246-1-chao.p.peng@lin=
+ux.intel.com/
+> > - TDX host kernel support v10
+> >   https://lore.kernel.org/lkml/cover.1678111292.git.kai.huang@intel.com=
+/
+> > - KVM TDX basic feature support v13
+> >   https://lore.kernel.org/cover.1678643051.git.isaku.yamahata@intel.com
 > >
-> > I do not think you need to duplicate this block, I think
+> > The tree can be found at https://github.com/googleprodkernel/linux-cc/t=
+ree/copyless
+> > and is based on Intel's tdx tree at https://github.com/intel/tdx/tree/k=
+vm-upstream
 > >
-> >   ifeq ($(call clang-min-version, 150000)$(call gcc-min-version, 130000),y)
-> >   CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
-> >   endif
+> > In the TDX case, we need to transfer the VM state from multiple sources=
+:
 > >
-> > would work, as only one of those conditions can be true at a time.
-> 
-> Are you sure that clang-min-version evaluates to an empty string
-> rather than "n" or something else? I haven't found a documentation
-> that says anything about it other than it returning "y" if the condition
-> is true.
-
-Yes, see the test-ge and test-gt macros in scripts/Kbuild.include, they
-will only ever print the empty string or 'y'.
-
-Cheers,
-Nathan
+> >  * HKID and encrypted VM state is transfered between the kvm_tdx
+> >    objects.
+> >  * Encrypted and runtime state is transfered between the vcpu_tdx
+> >    objects.
+> >  * The EPT table backing TD's private memory is transfered at the
+> >    kvm-mmu level. This is needed since the secure EPT table managed by
+> >    the TD module remains the same after the migration so moving the
+> >    current private EPT table eliminates the need to rebuild the private
+> >    EPT table to match the secure EPT table on the destination.
+> >  * Information regarding the current shared/private memory is trasfered
+> >    using the mem_attr_array stored at the kvm object.
+> >  * Additional information derived from shared/private memory state is
+> >    trasfered at the memslot level.
+> >
+> > Tested with selftests locally. I will attach the self test in the next
+> > version after we send the new TDX selftest framework patches based on
+> > KVM TDX basic feature support v13.
+> >
+> > Sagi Shahar (5):
+> >   KVM: Split tdp_mmu_pages to private and shared lists
+> >   KVM: SEV: Refactor common code out of sev_vm_move_enc_context_from
+> >   KVM: TDX: Add base implementation for tdx_vm_move_enc_context_from
+> >   KVM: TDX: Implement moving private pages between 2 TDs
+> >   KVM: TDX: Add core logic for TDX intra-host migration
+> >
+> >  arch/x86/include/asm/kvm_host.h |   5 +-
+> >  arch/x86/kvm/mmu.h              |   2 +
+> >  arch/x86/kvm/mmu/mmu.c          |  60 ++++++++
+> >  arch/x86/kvm/mmu/tdp_mmu.c      |  88 +++++++++++-
+> >  arch/x86/kvm/mmu/tdp_mmu.h      |   3 +
+> >  arch/x86/kvm/svm/sev.c          | 175 +++--------------------
+> >  arch/x86/kvm/vmx/main.c         |  10 ++
+> >  arch/x86/kvm/vmx/tdx.c          | 245 ++++++++++++++++++++++++++++++++
+> >  arch/x86/kvm/vmx/tdx.h          |   2 +
+> >  arch/x86/kvm/vmx/x86_ops.h      |   5 +
+> >  arch/x86/kvm/x86.c              | 166 ++++++++++++++++++++++
+> >  arch/x86/kvm/x86.h              |  16 +++
+> >  12 files changed, 613 insertions(+), 164 deletions(-)
+> >
+>
