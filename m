@@ -2,128 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95BC76E229C
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 13:49:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DA586E22A4
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 13:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbjDNLt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 07:49:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47736 "EHLO
+        id S230135AbjDNLuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 07:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbjDNLt2 (ORCPT
+        with ESMTP id S229969AbjDNLuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 07:49:28 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05BA30FA
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 04:49:27 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id c10-20020a17090abf0a00b0023d1bbd9f9eso21386515pjs.0
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 04:49:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681472967; x=1684064967;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eBGcORFlx3mmfZ9Ef5BjM/SdwRHzq8zieg/Y4xH2/5Q=;
-        b=sjFfIzMrjWaABEOu7eTtLYLUtpjBVMEc2mJQ4WiVQ4aNf5MQAONZnjr+htlNcrEr43
-         bKlNiI2UwLuHsJ4NqWFR1Caaz2pl2kAe3t7awWHgqGwOoc331GGS8C4Qhjn+htFfKAFG
-         Pc4DP8htQnQBNKmufqACHStvdJMvcjhAyWKrAjXYJDKfPBYHnL0UKiwKRgvsp4OcoIcb
-         r7iQeOvrRoKj/O5qb8NbnLXt2o2upStIrBsEYtf28HJqdSKXiRLNER+CQAF5Ap7dmRoh
-         r6+kWWUy01FhFDHbdeVhl+rW7crnzFKGfzXFRTDDsoVpB3Mdu3HOMUMYqghJQeqpCvw2
-         FA+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681472967; x=1684064967;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eBGcORFlx3mmfZ9Ef5BjM/SdwRHzq8zieg/Y4xH2/5Q=;
-        b=aoq5Lml9yxbImXeWRqas+/2Oza3FFGGViG2xkAMQC5yWFI2gmmc2W3xWgSygWFGkh3
-         PGYSwDlJhhZP6emioiuoUuMahxdMKMdEoURm1pMX7ktmvgwZvEmqODCL7QjYuZnL8wuP
-         QVtvAsirdz0CbopqV8RzAjhHzL9ASpzmlt00ku0lv8+SveQXuP8DhxLafw7fcP4W/Kyf
-         I+taJQN3imHBnx9Qqe7aKDT7olBIhQjEhbn8pvQdm0InQ+j6qVj6+m9XWrPCF+Fu6TQb
-         Np4/lVrtlmIYHIuBEn8DG4nGteCkaSU3cKGPCkBKz4d4hx7BNwnDCIno0qeB83I7l3W3
-         eSbg==
-X-Gm-Message-State: AAQBX9ewNLf35R4r2eH5sz3e29TlCXMcjd3k5TBBq3IGCCL4FBi0YWGc
-        +iWqF3mCvmzUkEshKvYWZJ+QLpANEEKxdFZ287o=
-X-Google-Smtp-Source: AKy350bTIJT2TzoYlTj36mjcFSsjCoFF6Wk9Uj7w7aSn9syvHv7pk4HuzeHsCunCb/f9bGDj5t6EWIsTUg8xJZ6NcWE=
-X-Received: by 2002:a17:90a:6749:b0:246:696f:b1f1 with SMTP id
- c9-20020a17090a674900b00246696fb1f1mr5126942pjm.6.1681472966977; Fri, 14 Apr
- 2023 04:49:26 -0700 (PDT)
+        Fri, 14 Apr 2023 07:50:21 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603E230FA;
+        Fri, 14 Apr 2023 04:50:19 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33E8xq5L023005;
+        Fri, 14 Apr 2023 11:49:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=lGGtG0ZL06RAk+9DnB1J6y3+oHd/FzVf4TXsIJzgcM0=;
+ b=OBODqnqp7BrvjN73Cmv5z388VcXu9nuSSVSBhOgMVH9zlyBuV/souARnPUnNkceS2zmu
+ W3hlhE1+hNAQ//dGZdtz4Y8not+uMPbk/xzcTHN8AV1hIlAKvWAd4ddamXBlEADBSJCQ
+ vpHF1fVuDhYkm7CGOFjYOdHNT19AQKyX4o765dvaWaDiyOVzFuAxik3pu2/y+ZfFsita
+ 2IfY/8bfkz6u0/3iEItYeen4OuzK4K2PnbZfw1767JMD2Y687HxcDJBhmeXqubEcxRqb
+ tl+o3gHbeLcIDt0HOKchmztuaWAOU0y5OiCgT/4M5Usoz1tkWzcfRxwoZ02nLqXzX2zo vg== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pxqf99r9n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 11:49:56 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33EBntgf021932
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 11:49:55 GMT
+Received: from [10.216.56.7] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 14 Apr
+ 2023 04:49:40 -0700
+Message-ID: <93f5dc05-a91b-0fe6-c7e2-d3457cba8a1f@quicinc.com>
+Date:   Fri, 14 Apr 2023 17:19:26 +0530
 MIME-Version: 1.0
-Sender: morganford737@gmail.com
-Received: by 2002:a05:7301:3d0e:b0:99:ad87:a211 with HTTP; Fri, 14 Apr 2023
- 04:49:26 -0700 (PDT)
-From:   Moon Lee Park <leeparkmoon14@gmail.com>
-Date:   Fri, 14 Apr 2023 12:49:26 +0100
-X-Google-Sender-Auth: bsNKn7bj1LWusROTouxBtJ1GqHA
-Message-ID: <CAPVatJWKdOApumTYhc4VbpSPxyqOSwoAaGty39Xg+=UsZiZ0vg@mail.gmail.com>
-Subject: YOUR URGENT RESPONDS IS NEEDED.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.9 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FORM_FRAUD_5,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,
-        MILLION_HUNDRED,MONEY_FORM_SHORT,MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,T_FILL_THIS_FORM_SHORT,
-        T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:102b listed in]
-        [list.dnswl.org]
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [morganford737[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [morganford737[at]gmail.com]
-        *  1.1 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
-        *  0.0 T_FILL_THIS_FORM_SHORT Fill in a short form with personal
-        *      information
-        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
-        *  0.1 MONEY_FORM_SHORT Lots of money if you fill out a short form
-        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
-        *  3.1 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 FORM_FRAUD_5 Fill a form and many fraud phrases
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 6/6] remoterproc: qcom: refactor to leverage exported
+ minidump symbol
+Content-Language: en-US
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <corbet@lwn.net>,
+        <keescook@chromium.org>, <tony.luck@intel.com>,
+        <gpiccoli@igalia.com>, <catalin.marinas@arm.com>, <will@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-hardening@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-doc@vger.kernel.org>
+References: <1679491817-2498-1-git-send-email-quic_mojha@quicinc.com>
+ <1679491817-2498-7-git-send-email-quic_mojha@quicinc.com>
+ <6c01d2fc-3155-0dcd-f473-9cbd75dd69ec@linaro.org>
+ <af23d650-3dec-9a51-566c-1eec2fa4b84b@quicinc.com>
+ <5a872001-dfcb-5c00-3b13-3c29e6be213b@linaro.org>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <5a872001-dfcb-5c00-3b13-3c29e6be213b@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 3ntYelLKBQ7bxw53Kv7pIpZOL47Q7afW
+X-Proofpoint-ORIG-GUID: 3ntYelLKBQ7bxw53Kv7pIpZOL47Q7afW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-14_06,2023-04-14_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ suspectscore=0 malwarescore=0 spamscore=0 phishscore=0 clxscore=1015
+ mlxlogscore=999 priorityscore=1501 lowpriorityscore=0 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304140106
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'm writing with tears and sorrow in my heart,My name is Moon Lee
-Park. I am  24 year old girl and the only child of my deceased
-parents. My father was an oil drilling engineer and he deposited the
-sum of Two million five hundred thousand U.S Dollars in my name in
-United kingdom bank  before he died in January 2019.
 
-Please,I want you to help me and evacuate this money into the account
-for investment purposes. After fter transfer, you will also help me to
-get a student visa to come to your country to further my studies. I
-made this decision because my uncle wants to kill me and take away my
-inheritance!.I reported my uncle to the local Police here in my
-country South Korea but nothing has been done to help me. My life is
-in danger here in my country!
 
-I am writing this letter to you from a local hotel where I am
-currently hiding for my safety until i leave my country after my
-transfer,I am willing to give you thirty percent of the money as
-compensation.If you agree to help me. Please answer me quickly in my
-private email address so that I can send you more information.
+On 4/14/2023 5:10 PM, Srinivas Kandagatla wrote:
+> 
+> 
+> On 14/04/2023 12:14, Mukesh Ojha wrote:
+>>
+>>
+>> On 4/14/2023 4:14 PM, Srinivas Kandagatla wrote:
+>>>
+>>>
+>>> On 22/03/2023 13:30, Mukesh Ojha wrote:
+>>>> qcom_minidump driver provides qcom_minidump_subsystem_desc()
+>>>> exported API which other driver can use it query subsystem
+>>>> descriptor. Refactor qcom_minidump() to use this symbol.
+>>>>
+>>>> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+>>>> ---
+>>>>   drivers/remoteproc/qcom_common.c | 13 ++-----------
+>>>>   1 file changed, 2 insertions(+), 11 deletions(-)
+>>>>
+>>>> diff --git a/drivers/remoteproc/qcom_common.c 
+>>>> b/drivers/remoteproc/qcom_common.c
+>>>> index 88fc984..240e9f7 100644
+>>>> --- a/drivers/remoteproc/qcom_common.c
+>>>> +++ b/drivers/remoteproc/qcom_common.c
+>>>> @@ -94,19 +94,10 @@ void qcom_minidump(struct rproc *rproc, unsigned 
+>>>> int minidump_id,
+>>>>   {
+>>>>       int ret;
+>>>>       struct minidump_subsystem *subsystem;
+>>>> -    struct minidump_global_toc *toc;
+>>>> -    /* Get Global minidump ToC*/
+>>>> -    toc = qcom_smem_get(QCOM_SMEM_HOST_ANY, SBL_MINIDUMP_SMEM_ID, 
+>>>> NULL);
+>>>> -
+>>>> -    /* check if global table pointer exists and init is set */
+>>>> -    if (IS_ERR(toc) || !toc->status) {
+>>>> -        dev_err(&rproc->dev, "Minidump TOC not found in SMEM\n");
+>>>> +    subsystem = qcom_minidump_subsystem_desc(minidump_id);
+>>>> +    if (IS_ERR(subsystem))
+>>>>           return;
+>>>
+>>> Sorry If I am missing something but I got lost looking at the below 
+>>> code snippet in drivers/remoteproc/qcom_common.c
+>>>
+>>>
+>>> -------------------->cut<-----------------------------
+>>>      subsystem = qcom_minidump_subsystem_desc(minidump_id);
+>>>      if (IS_ERR(subsystem))
+>>>          return;
+>>>
+>>>      /**
+>>>       * Collect minidump if SS ToC is valid and segment table
+>>>       * is initialized in memory and encryption status is set.
+>>>       */
+>>>      if (subsystem->regions_baseptr == 0 ||
+>>>          le32_to_cpu(subsystem->status) != 1 ||
+>>>          le32_to_cpu(subsystem->enabled) != MINIDUMP_SS_ENABLED ||
+>>>          le32_to_cpu(subsystem->encryption_status) != 
+>>> MINIDUMP_SS_ENCR_DONE) {
+>>>          dev_err(&rproc->dev, "Minidump not ready, skipping\n");
+>>>          return;
+>>>      }
+>>> -------------------->cut<-----------------------------
+>>>
+>>> where does "subsystem->regions_baseptr" for this ADSP minidump 
+>>> descriptor get set?
+>>
+>> Other co-processor such as adsp/cdsp/Mpss has their own way of 
+>> registering their region/segment (mostly they are static known
+>> regions) with minidump global infra and which could be happening
+>> from firmware side .
+> If its happening from firmware side, then that ram phys address range 
+> should be reserved from kernel usage I guess.
+> 
+> Do you have more details on where exactly is this reserved from within 
+> linux kernel?
 
-leeparkmoon14@gmail.com
+These regions are inside remoteproc memory carve-out.
+like.
 
-Yours faithfully
-Moon Lee Park.
+adsp_mem: memory@85e00000 {
+	reg = <0x0 0x85e00000 0x0 0x2100000>;
+	no-map;
+};
+
+
+
+remoteproc_adsp: remoteproc@30000000 {
+	compatible = "qcom,sm8450-adsp-pas";
+	reg = <0 0x30000000 0 0x100>;
+            ...
+            ...
+	memory-region = <&adsp_mem>; <==
+
+-Mukesh
+	
+> 
+> 
+> --srini
+> 
+>>
+>>
+>> -Mukesh
+>>
+>>>
+>>>
+>>> --srini
+>>>
+>>>> -    }
+>>>> -
+>>>> -    /* Get subsystem table of contents using the minidump id */
+>>>> -    subsystem = &toc->subsystems[minidump_id];
+>>>>       /**
+>>>>        * Collect minidump if SS ToC is valid and segment table
