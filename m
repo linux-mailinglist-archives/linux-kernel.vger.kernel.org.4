@@ -2,143 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D356E2B1E
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 22:32:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84AB86E2B22
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 22:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbjDNUcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 16:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40720 "EHLO
+        id S229561AbjDNUcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 16:32:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjDNUcX (ORCPT
+        with ESMTP id S229922AbjDNUcd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 16:32:23 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320205B93;
-        Fri, 14 Apr 2023 13:32:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=zkJ52LKFN3KW2VRgFxWenolm+nSjIO2xurI61vRkfQg=; b=F61Xsi7hJg8p79oBCG/Ya4KZTs
-        NYyItO8lVqFUsyrFHUeHuSURJ8s59rMlIiWS7BsvUy4qB3i5uzGwW+rdiuBav36hIRnTg46zEearw
-        Xnseesrp3Lz6ju4rdZfBg9QAqsDrYMYtutNLh339JNW6vkxUIa4JL2Cbc/iTetC3zgnKGnAH1MCIg
-        AiM6IMqSgf0hcUWq/q1jH4TL5Q7NyoJixXwfUwfFjE1D9amcThVPP3aqN4qX/zKxhYnHJ93qN/xTW
-        cqlx53Uk6XjvJNHnU7VSi9nk/bQuOX061GIoEoD2sgE2fW8toStzRjxFgZ6LUsEpK1+Jjy9Nh4AP+
-        cmvyNvcw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pnQ5P-0093og-C7; Fri, 14 Apr 2023 20:31:59 +0000
-Date:   Fri, 14 Apr 2023 21:31:59 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, mhocko@suse.com,
-        josef@toxicpanda.com, jack@suse.cz, ldufour@linux.ibm.com,
-        laurent.dufour@fr.ibm.com, michel@lespinasse.org,
-        liam.howlett@oracle.com, jglisse@google.com, vbabka@suse.cz,
-        minchan@google.com, dave@stgolabs.net, punit.agrawal@bytedance.com,
-        lstoakes@gmail.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Subject: Re: [PATCH 1/1] mm: handle swap page faults if the faulting page can
- be locked
-Message-ID: <ZDm4P37XXyMBOMdZ@casper.infradead.org>
-References: <20230414180043.1839745-1-surenb@google.com>
- <ZDmetaUdmlEz/W8Q@casper.infradead.org>
- <CAJuCfpFPNiZmqQPP+K7CAuiFP5qLdd6W9T84VQNdRsN-9ggm1w@mail.gmail.com>
+        Fri, 14 Apr 2023 16:32:33 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F56583CF
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 13:32:27 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4ec8133c698so163329e87.0
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 13:32:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681504345; x=1684096345;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pF8wYlTRr7UhJmkBBdIJdcpPe42pYWprHEZ8trWKnL8=;
+        b=vUo2RawMzewrKvOpzDihQ3ZxDMiNBGASJoUa5Xt11CyZ2Dzeys+3KErZRBEu5273S1
+         TBYBKOxB3RmhwRc5OVgu0Z2+KJm5qOHP55KcUWwiMHbZ7T3xyNDdt1H6O+NEqsBAHFKV
+         JlJdJGcrbx/ApxD/nSD5nphcQeoW0LyIBhS/lJIVuLSe+FgpOoZcr0B9WSOaa4alE/Ad
+         v8hnqrFOCMn9CAiVCxICOShT1VVTs8DpknLYf5070+BBDolYf8649baTIjqYf0MdLGZw
+         3fmcRQBt8g5TsjfI1IyYjkuUD0zVpfArZX76Wra1aJ0/kMIygKJgOlZKH8X2IpF4wrWG
+         5r0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681504345; x=1684096345;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pF8wYlTRr7UhJmkBBdIJdcpPe42pYWprHEZ8trWKnL8=;
+        b=gg9Izf3fhH+0gxCTx2lh85aqIKm5c88eS+2fX+SsGvPcoGydqTUT2WJEwvO+JyPZNY
+         nbpcpmSKBmdFrI8NRSvmgcZpjXKANsKzyiLZY/Qmo5Gfbb+BhnArZY+pBuyoDN7N2cEk
+         /oT+BxsLhXv7OzYJ968im5/Xfc77NRpKWQxPolf5DgrlSlVhJ7deDK7+Q+zGQ8CcJv2w
+         ytDD5eAL1TGFm+oCSBeOiBqlbZhsAIaUAMnu4Gar0mBi5strT8P5hf6E5oHdTqm13RxA
+         kFP69siwhlAxlZ8BmQKh1xBnL1IdatBJvWEiS/Eb2Sao4TYTa4pqxhuc73svI0hF6oru
+         I4Kg==
+X-Gm-Message-State: AAQBX9cd9Ulg0KL6hKh+XfzoTF9RQpC8zcLzP94XRf0SXJUWJJrRZwSt
+        zcu4IRaZqHTUEcjNxdDKTpc+xg==
+X-Google-Smtp-Source: AKy350Z0WYbGj4bk7grD+6NmVk3+WiGz+Pgt8Nt3XfsGmQsf/NVlYrV9tSMJOjBSRzIPEPCFG+gf8g==
+X-Received: by 2002:a05:6512:230e:b0:4e2:7ab6:15cd with SMTP id o14-20020a056512230e00b004e27ab615cdmr26508lfu.30.1681504345630;
+        Fri, 14 Apr 2023 13:32:25 -0700 (PDT)
+Received: from [192.168.1.101] (abyk99.neoplus.adsl.tpnet.pl. [83.9.30.99])
+        by smtp.gmail.com with ESMTPSA id h4-20020a2eb0e4000000b002a0d3a51a55sm986956ljl.91.2023.04.14.13.32.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Apr 2023 13:32:25 -0700 (PDT)
+Message-ID: <ed35e238-77f4-862a-c536-97428ce03a2b@linaro.org>
+Date:   Fri, 14 Apr 2023 22:32:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJuCfpFPNiZmqQPP+K7CAuiFP5qLdd6W9T84VQNdRsN-9ggm1w@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 1/2] dt-bindings: clock: qcom,videocc: Add SM8350
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Taniya Das <tdas@codeaurora.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230413-topic-lahaina_vidcc-v2-0-f721d507e555@linaro.org>
+ <20230413-topic-lahaina_vidcc-v2-1-f721d507e555@linaro.org>
+ <20faef75-9182-6e67-8ac5-c8234318ab64@linaro.org>
+ <CAA8EJprnD0jSH7JvhoEnqhNxC55TeqCvvR64R7U8Ni7M93N2eQ@mail.gmail.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <CAA8EJprnD0jSH7JvhoEnqhNxC55TeqCvvR64R7U8Ni7M93N2eQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 14, 2023 at 12:48:54PM -0700, Suren Baghdasaryan wrote:
-> >  - We can call migration_entry_wait().  This will wait for PG_locked to
-> >    become clear (in migration_entry_wait_on_locked()).  As previously
-> >    discussed offline, I think this is safe to do while holding the VMA
-> >    locked.
 
-Just to be clear, this particular use of PG_locked is not during I/O,
-it's during page migration.  This is a few orders of magnitude
-different.
 
-> >  - We can call swap_readpage() if we allocate a new folio.  I haven't
-> >    traced through all this code to tell if it's OK.
-
-... whereas this will wait for I/O.  If we decide that's not OK, we'll
-need to test for FAULT_FLAG_VMA_LOCK and bail out of this path.
-
-> > So ... I believe this is all OK, but we're definitely now willing to
-> > wait for I/O from the swap device while holding the VMA lock when we
-> > weren't before.  And maybe we should make a bigger deal of it in the
-> > changelog.
-> >
-> > And maybe we shouldn't just be failing the folio_lock_or_retry(),
-> > maybe we should be waiting for the folio lock with the VMA locked.
+On 14.04.2023 18:45, Dmitry Baryshkov wrote:
+> On Fri, 14 Apr 2023 at 18:18, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 14/04/2023 13:26, Konrad Dybcio wrote:
+>>> SM8350, like most recent higher-end chips has a separate clock
+>>> controller block just for the Venus IP. Document it.
+>>>
+>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>> ---
+>>>  .../devicetree/bindings/clock/qcom,videocc.yaml    | 29 +++++++++++++
+>>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> Wouldn't that cause holding the VMA lock for the duration of swap I/O
-> (something you said we want to avoid in the previous paragraph) and
-> effectively undo d065bd810b6d ("mm: retry page fault when blocking on
-> disk transfer") for VMA locks?
+> Krzysztof, Konrad, would it make sense to split it into separate
+> bindings? After all, previous videocc bindings used clock-names, while
+> this one doesn't.
+I'm fine with either of these. Your call, Krzysztof.
 
-I'm not certain we want to avoid holding the VMA lock for the duration
-of an I/O.  Here's how I understand the rationale for avoiding holding
-the mmap_lock while we perform I/O (before the existence of the VMA lock):
-
- - If everybody is doing page faults, there is no specific problem;
-   we all hold the lock for read and multiple page faults can be handled
-   in parallel.
- - As soon as one thread attempts to manipulate the tree (eg calls
-   mmap()), all new readers must wait (as the rwsem is fair), and the
-   writer must wait for all existing readers to finish.  That's
-   potentially milliseconds for an I/O during which time all page faults
-   stop.
-
-Now we have the per-VMA lock, faults which can be handled without taking
-the mmap_lock can still be satisfied, as long as that VMA is not being
-modified.  It is rare for a real application to take a page fault on a
-VMA which is being modified.
-
-So modifications to the tree will generally not take VMA locks on VMAs
-which are currently handling faults, and new faults will generally not
-find a VMA which is write-locked.
-
-When we find a locked folio (presumably for I/O, although folios are
-locked for other reasons), if we fall back to taking the mmap_lock
-for read, we increase contention on the mmap_lock and make the page
-fault wait on any mmap() operation.  If we simply sleep waiting for the
-I/O, we make any mmap() operation _which touches this VMA_ wait for
-the I/O to complete.  But I think that's OK, because new page faults
-can continue to be serviced ... as long as they don't need to take
-the mmap_lock.
-
-So ... I think what we _really_ want here is ...
-
-+++ b/mm/filemap.c
-@@ -1690,7 +1690,8 @@ static int __folio_lock_async(struct folio *folio, struct wait_page_queue *wait)
- bool __folio_lock_or_retry(struct folio *folio, struct mm_struct *mm,
-                         unsigned int flags)
- {
--       if (fault_flag_allow_retry_first(flags)) {
-+       if (!(flags & FAULT_FLAG_VMA_LOCK) &&
-+           fault_flag_allow_retry_first(flags)) {
-                /*
-                 * CAUTION! In this case, mmap_lock is not released
-                 * even though return 0.
-@@ -1710,7 +1711,8 @@ bool __folio_lock_or_retry(struct folio *folio, struct mm_struct *mm,
-
-                ret = __folio_lock_killable(folio);
-                if (ret) {
--                       mmap_read_unlock(mm);
-+                       if (!(flags & FAULT_FLAG_VMA_LOCK))
-+                               mmap_read_unlock(mm);
-                        return false;
-                }
-        } else {
-
+Konrad
+> 
+>>
+>> Best regards,
+>> Krzysztof
+>>
+> 
+> 
