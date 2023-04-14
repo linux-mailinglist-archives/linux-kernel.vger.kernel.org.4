@@ -2,90 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D87C6E2055
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 12:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 511AB6E2069
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 12:12:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbjDNKKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 06:10:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47900 "EHLO
+        id S229736AbjDNKMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 06:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbjDNKKi (ORCPT
+        with ESMTP id S229636AbjDNKM0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 06:10:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B83D9028;
-        Fri, 14 Apr 2023 03:10:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 14 Apr 2023 06:12:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 002AC4C3C
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 03:11:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681467077;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=/1QlXpdfAcoxJFAV8x4J/Rw5Xo/ViKHKPnwtGvKhjoU=;
+        b=PkZxDjAPBw+NoQvgBPuwy95M6ZoNaIM6mxAfwvedLj3If9oLONW6+/I1PO0DJnAn/vyLZ5
+        QRQ1YeZjTlXTvY7dL4hjHE+UQzDXxKkWDOQlPWEbcqCet9Uas3/i+w1Xvn/wOynzqyusEV
+        uyfkwVN6SR8mvlMgVcbJf8uCf0yoTdg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-458-rIwxkIbLNU2MscZq_krH_A-1; Fri, 14 Apr 2023 06:11:12 -0400
+X-MC-Unique: rIwxkIbLNU2MscZq_krH_A-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BF1C64626;
-        Fri, 14 Apr 2023 10:10:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8B8E4C4339B;
-        Fri, 14 Apr 2023 10:10:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681467018;
-        bh=6vFCtZdLswTTngNOHSWwKa2cqJCsc1kWkahPU6fh2IA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=XTMCjyPzrz6aDFgnkhP9KSQ7vt+L9iUkAwmdUMISGkre3YgGlOrKzvpQ6nR8DUIvG
-         qK55a4fzU16WGRvze9wLIsPEMOM8EYD+JjmR9BHTTHiYL8mp2JUQ2H6dH5gGzr5a87
-         coRENjdodA7ZB06nK6FQ7gPD0N8CK2OFBUl9n75rbBzrZ/AWkocpzjREZOO4H7Wx4w
-         Kh8WBoYh1QV5csblMgGT1CqAKxX5+96g21LkZpNBJz/nbiWfaGM7/Ns3Io3XOjooDW
-         cM2xMRbs72LNGH1NxUkxaU6wf45p+R9g4uNuwPvkgCp6S8MGxYOFaxDSrfhSGR4vei
-         jZLeg7N1Y0N9A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 73429E29F3B;
-        Fri, 14 Apr 2023 10:10:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5542C185A791;
+        Fri, 14 Apr 2023 10:11:11 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.39.193.178])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 228551121320;
+        Fri, 14 Apr 2023 10:11:09 +0000 (UTC)
+From:   =?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@redhat.com>
+To:     ojeda@kernel.org, masahiroy@kernel.org, jgg@nvidia.com,
+        mic@digikod.net, danny@kdrag0n.dev
+Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net, joe@perches.com,
+        linux@rasmusvillemoes.dk, willy@infradead.org,
+        =?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@redhat.com>
+Subject: [PATCH v3] Add .editorconfig file for basic formatting
+Date:   Fri, 14 Apr 2023 12:10:52 +0200
+Message-Id: <20230414101052.11012-1-ihuguet@redhat.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v1] vsock/loopback: don't disable irqs for queue
- access
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168146701846.23331.1103536295768648716.git-patchwork-notify@kernel.org>
-Date:   Fri, 14 Apr 2023 10:10:18 +0000
-References: <a4f17ab9-4be9-1b0a-0fc0-9fa8ef98273d@sberdevices.ru>
-In-Reply-To: <a4f17ab9-4be9-1b0a-0fc0-9fa8ef98273d@sberdevices.ru>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     stefanha@redhat.com, sgarzare@redhat.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        bobby.eshleman@bytedance.com, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@sberdevices.ru,
-        oxffffaa@gmail.com, avkrasnov@sberdevices.ru
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+EditorConfig is a specification to define the most basic code formatting
+stuff, and it's supported by many editors and IDEs, either directly or
+via plugins, including VSCode/VSCodium, Vim, emacs and more.
 
-This patch was applied to netdev/net-next.git (main)
-by David S. Miller <davem@davemloft.net>:
+It allows to define formatting style related to indentation, charset,
+end of lines and trailing whitespaces. It also allows to apply different
+formats for different files based on wildcards, so for example it is
+possible to apply different configs to *.{c,h}, *.py and *.rs.
 
-On Thu, 13 Apr 2023 12:17:19 +0300 you wrote:
-> This replaces 'skb_queue_tail()' with 'virtio_vsock_skb_queue_tail()'.
-> The first one uses 'spin_lock_irqsave()', second uses 'spin_lock_bh()'.
-> There is no need to disable interrupts in the loopback transport as
-> there is no access to the queue with skbs from interrupt context. Both
-> virtio and vhost transports work in the same way.
-> 
-> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-> Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
-> 
-> [...]
+In linux project, defining a .editorconfig might help to those people
+that work on different projects with different indentation styles, so
+they cannot define a global style. Now they will directly see the
+correct indentation on every fresh clone of the project.
 
-Here is the summary with links:
-  - [net-next,v1] vsock/loopback: don't disable irqs for queue access
-    https://git.kernel.org/netdev/net-next/c/eaaa4e923979
+See https://editorconfig.org
 
-You are awesome, thank you!
+Link: https://lore.kernel.org/lkml/20200703073143.423557-1-danny@kdrag0n.dev/
+Link: https://lore.kernel.org/lkml/20230404075540.14422-1-ihuguet@redhat.com/
+Co-developed-by: Danny Lin <danny@kdrag0n.dev>
+Signed-off-by: Danny Lin <danny@kdrag0n.dev>
+Signed-off-by: Íñigo Huguet <ihuguet@redhat.com>
+---
+v2:
+ - added special rule for patch files so it doesn't remove
+   trailing whitespaces, making them unusable.
+v3:
+ - moved all rules from [*] section to all the individual
+   sections so they doesn't affect to unexpected files.
+ - added some extensions and files from a patch from Danny
+   Lin that didn't get to be merged:
+   https://lore.kernel.org/lkml/20200703073143.423557-1-danny@kdrag0n.dev/
+   However, the following file types hasn't been added
+   because they don't have a clear common style:
+   rst,pl,cocci,tc,bconf,svg,xsl,manual pages
+---
+ .editorconfig                          | 30 ++++++++++++++++++++++++++
+ .gitignore                             |  1 +
+ Documentation/process/4.Coding.rst     |  4 ++++
+ Documentation/process/coding-style.rst |  4 ++++
+ 4 files changed, 39 insertions(+)
+ create mode 100644 .editorconfig
+
+diff --git a/.editorconfig b/.editorconfig
+new file mode 100644
+index 000000000000..dce20d45c246
+--- /dev/null
++++ b/.editorconfig
+@@ -0,0 +1,30 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++root = true
++
++# 8 width tabs
++[{*.{c,h},Kconfig,Makefile,Makefile.*,*.mk}]
++charset = utf-8
++end_of_line = lf
++trim_trailing_whitespace = true
++insert_final_newline = true
++indent_style = tab
++indent_size = 8
++
++# 4 spaces
++[{*.{json,pm,py,rs},tools/perf/scripts/*/bin/*}]
++charset = utf-8
++end_of_line = lf
++trim_trailing_whitespace = true
++insert_final_newline = true
++indent_style = space
++indent_size = 4
++
++# 2 spaces
++[{*.{rb,yaml},.clang-format}]
++charset = utf-8
++end_of_line = lf
++trim_trailing_whitespace = true
++insert_final_newline = true
++indent_style = space
++indent_size = 2
+diff --git a/.gitignore b/.gitignore
+index 70ec6037fa7a..e4b3fe1d029b 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -100,6 +100,7 @@ modules.order
+ #
+ !.clang-format
+ !.cocciconfig
++!.editorconfig
+ !.get_maintainer.ignore
+ !.gitattributes
+ !.gitignore
+diff --git a/Documentation/process/4.Coding.rst b/Documentation/process/4.Coding.rst
+index 1f0d81f44e14..c2046dec0c2f 100644
+--- a/Documentation/process/4.Coding.rst
++++ b/Documentation/process/4.Coding.rst
+@@ -66,6 +66,10 @@ for aligning variables/macros, for reflowing text and other similar tasks.
+ See the file :ref:`Documentation/process/clang-format.rst <clangformat>`
+ for more details.
+ 
++Some basic editor settings, such as indentation and line endings, will be
++set automatically if you are using an editor that is compatible with
++EditorConfig. See the official EditorConfig website for more information:
++https://editorconfig.org/
+ 
+ Abstraction layers
+ ******************
+diff --git a/Documentation/process/coding-style.rst b/Documentation/process/coding-style.rst
+index 007e49ef6cec..ec96462fa8be 100644
+--- a/Documentation/process/coding-style.rst
++++ b/Documentation/process/coding-style.rst
+@@ -735,6 +735,10 @@ for aligning variables/macros, for reflowing text and other similar tasks.
+ See the file :ref:`Documentation/process/clang-format.rst <clangformat>`
+ for more details.
+ 
++Some basic editor settings, such as indentation and line endings, will be
++set automatically if you are using an editor that is compatible with
++EditorConfig. See the official EditorConfig website for more information:
++https://editorconfig.org/
+ 
+ 10) Kconfig configuration files
+ -------------------------------
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.39.2
 
