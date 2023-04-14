@@ -2,67 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F9C6E1CC0
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 08:36:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56BC36E1CC5
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 08:42:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjDNGga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 02:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36468 "EHLO
+        id S229739AbjDNGmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 02:42:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjDNGg2 (ORCPT
+        with ESMTP id S229479AbjDNGl7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 02:36:28 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64CFF198A;
-        Thu, 13 Apr 2023 23:36:27 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id w11so18031635pjh.5;
-        Thu, 13 Apr 2023 23:36:27 -0700 (PDT)
+        Fri, 14 Apr 2023 02:41:59 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D85189;
+        Thu, 13 Apr 2023 23:41:57 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id lh8so4482553plb.1;
+        Thu, 13 Apr 2023 23:41:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681454187; x=1684046187;
+        d=gmail.com; s=20221208; t=1681454517; x=1684046517;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JNTNY+fYIuYgMKhPkuwFtekY/OSbATyn0LHE7jhQLpY=;
-        b=pL8hDaTgqJpwUz4GQCEwn9ivr8hlVD67UB1PN9SQW/+QiEASVWD9HYw/QeDVpt0a5G
-         kliw2hAD2lkodhWtQOzb1p9Kbc9Z06UBD76F0AfKfAFQnWfktTGUl6Tg6B7vjWDpb7cF
-         tYVtUNxomfiiBBZt1Mezk6BrMMwO7814gDgHZbkh/j0IponczvrD2iR7ZA/Sb0juOwWa
-         cgMnGEu98E7Scoym+2e75kotm7C/XBRso1sim4c4yJEZAQw+tpzr9t+1B99d2WM3pdWF
-         sjiD6eyR3BjasyLb2pNVJf88VmAfhPzofDuw15n2yxd57Ti/lVRzO7uNfNxzgggkEXRK
-         UkNA==
+        bh=9woUy3PxgOHJgXfQPPz0DGWiVkVDHz3NkKhCrLWDH8k=;
+        b=Xxkzg9VaOCUKcsG/uiCwjCpRK1yGJTP/PhnyQgUNlHioxtysplrgHNf5YB/NyuPnFR
+         1ov1yCdOnGGRZ5M/wpJly6T5ctGhFmZcfDa6hH8SyFMBua9ZyFDaXnIwV+fufIHCjPap
+         mPohPm/AwokDzhFyRe+Mdnf6RMTtXNIv2DGBdzzHw8iWCo4nIEdvZh6fU+icpcpRaVQZ
+         f/ZG49gTz5ASYy6aevmPNm7g3WGGgOvu4Jl10nzbnWpBMBBrxrVwrtPTG9ME+nn2J3Vi
+         TYfIU7Rqe4BBXO1HDwF8MBA6lD2giFhaqvYXnShb6EelTgRcYF461myagsXVSsp5K1sa
+         lKWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681454187; x=1684046187;
+        d=1e100.net; s=20221208; t=1681454517; x=1684046517;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JNTNY+fYIuYgMKhPkuwFtekY/OSbATyn0LHE7jhQLpY=;
-        b=bWJKbCMu1E+lcz0UwrIrZ35NbcNcW7e8NCvr7x6SHJ1mOkvrXrxeDFwcykWw5b79Py
-         FBfuVwu/SVf97iNYjjCFA+TSm8ltCaMRdCMKtn+PFPj5NXso5Febgxj0k3rLHm85hQil
-         pym+Y+al/8FRUjFXV4mR1TFHZoNw8terhVy3OeiR8YQQ6vOaWXf+i5jRtoFOoZiV86Y/
-         eJv6JKTS8L9paHvzl9al454f4XYZTGcXJUKWPcp/b0uQv60/1nMRNokPqLNyKjoW3ZhL
-         gnhFFaMSrpH7iV5VPe9xUvrMNVINDGW7J0abmOAL4vC1tiYz40xXTpRed9zm/OG2eDMl
-         woSQ==
-X-Gm-Message-State: AAQBX9eoaUOuqVREjCwiY2g2KwSOB4PBlOT0GZXb00VfvfVmGd7xx5qk
-        T9N4yn2OZtB0T+pHoV2Fwwc=
-X-Google-Smtp-Source: AKy350ZZkLbS3/CrJ8WVyiQmUj1XJWPAbcMUQaN1pJnPrTtMxdbXILcyu2IMwSXRfIBvkr1pbMFNHg==
-X-Received: by 2002:a17:90a:db14:b0:247:1104:c280 with SMTP id g20-20020a17090adb1400b002471104c280mr4521333pjv.31.1681454186706;
-        Thu, 13 Apr 2023 23:36:26 -0700 (PDT)
+        bh=9woUy3PxgOHJgXfQPPz0DGWiVkVDHz3NkKhCrLWDH8k=;
+        b=DO4m8WjCzd5YdpWJE7FAqhl6VO8eq2D73GhQEN4Ez0Zh9KvmDhg8WpTtO4irYEtkUm
+         Gs/CnfhkCc26LulvOEROifQDpurAE+RaccEHlYTk9lScX+mQ8npj23A9HVJiQDHUK5Uy
+         OJeD2oMYU879RZpwf+/nuaNxpW8gDuHv7ptNsmD5U8djWDj9k/bcIyj7sHy3yhxCEHe3
+         aZTnbftMyET/gHXdoI3bxlCmvRxxtZ8XCwyFWc8moB2DGxi/B+TIRWCanXDpCcS17nzQ
+         bin1FTEB+lw+kpoj+RqLmQp5E5ZJukEETmqdCZGRsXoKEub3OgqB1D1KPIEi1iWM6FNq
+         cdgA==
+X-Gm-Message-State: AAQBX9cwuVW+3wOvXVhUpGY6cdOj5AS3cEAJDZYrNcatEvyweAnybMzD
+        jpxuJAz1RGoSB56hbjTT+2qDCUFqbjqU0w==
+X-Google-Smtp-Source: AKy350aWTJiXJ3XOXdk2PsVpOVhuR217IAPmV97Bw5Aury8vQ9rEDnd17Ifgon1BjwnbYyDXGOpPYw==
+X-Received: by 2002:a17:90b:314c:b0:234:e0c:caaa with SMTP id ip12-20020a17090b314c00b002340e0ccaaamr4489720pjb.6.1681454516977;
+        Thu, 13 Apr 2023 23:41:56 -0700 (PDT)
 Received: from google.com ([2620:15c:9d:2:5142:7eb2:ace5:60c1])
-        by smtp.gmail.com with ESMTPSA id o22-20020a17090ab89600b002467717fa60sm2263864pjr.16.2023.04.13.23.36.25
+        by smtp.gmail.com with ESMTPSA id m4-20020a17090ade0400b00231227781d5sm4247509pjv.2.2023.04.13.23.41.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 23:36:26 -0700 (PDT)
-Date:   Thu, 13 Apr 2023 23:36:23 -0700
+        Thu, 13 Apr 2023 23:41:56 -0700 (PDT)
+Date:   Thu, 13 Apr 2023 23:41:53 -0700
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        s.hauer@pengutronix.de, linux-input@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH V3] dt-bindings: input: pwm-beeper: convert to dt schema
-Message-ID: <ZDj0Zz49/sCXvP2k@google.com>
-References: <20230407075259.1593739-1-peng.fan@oss.nxp.com>
+To:     hrdl <git@hrdl.eu>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alistair Francis <alistair@alistair23.me>
+Subject: Re: [PATCH] Input: cyttsp5 - fix sensing configuration data structure
+Message-ID: <ZDj1sXlHNJDlC523@google.com>
+References: <20230411211651.3791304-1-git@hrdl.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230407075259.1593739-1-peng.fan@oss.nxp.com>
+In-Reply-To: <20230411211651.3791304-1-git@hrdl.eu>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -73,13 +72,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 03:52:59PM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+On Tue, Apr 11, 2023 at 11:16:51PM +0200, hrdl wrote:
+> Prior to this patch, the sensing configuration data was not parsed
+> correctly, breaking detection of max_tch. The vendor driver includes
+> this field. This change informs the driver about the correct maximum
+> number of simultaneous touch inputs.
 > 
-> Convert the binding doc to dt schema, and also fixed the
-> example from fixed-regulator to regulator-fixed.
+> Tested on a Pine64 PineNote with a modified touch screen controller
+> firmware.
 > 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> Signed-off-by: hrdl <git@hrdl.eu>
 
 Applied, thank you.
 
