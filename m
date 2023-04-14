@@ -2,138 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E9C6E2ACF
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 21:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88E286E2AD3
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 21:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229829AbjDNT4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 15:56:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55346 "EHLO
+        id S229907AbjDNT5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 15:57:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbjDNT4o (ORCPT
+        with ESMTP id S229784AbjDNT5x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 15:56:44 -0400
-Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E067D4C39
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 12:56:41 -0700 (PDT)
-Received: by mail-io1-f79.google.com with SMTP id t2-20020a6bc302000000b00760c588931aso932826iof.22
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 12:56:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681502201; x=1684094201;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mtNyJU7opl/X5r0f9B+P211YtBrbp1eSIxo/w5hCQrE=;
-        b=QxnezJldfnrJbS1pgSOQnqEKrpbS+goaXLThvx4+DAbfdnZWg7xcTIfoUQxec5vYX7
-         W9ok0PYr5NN4xmYWNpzCWbdDm69ksLSCuvrrjiAf0vYkJ8qSm5zUaafPX4R+BdlruT9P
-         doIVXL0tqxu9atCElclo+Jlhw4sFzkvHkXFEtSaMQKTj/vZMnikVst/HFLyr/X8uX51b
-         xIVW+CvSsJ3Z78aUykfP5Z4lHjF5rl8tFDCWTAn5ROx/ZJ9COUSZPSgGEKT3FhU/SXWz
-         CSpzk+7/BN6iFtCC+5OlacvtJPxdPazCizFyXoG3zVfQLOguzrB7njI/PUQdGYEqQq9W
-         L1sw==
-X-Gm-Message-State: AAQBX9efxeIMGCnOPCzuRfcznftZvfN3JWLGCzQyCNKPCKAmciM+cHSs
-        kPu6CFt8yRnw/JPMhKrx+qzdyzyxdYS6TPngEUMTZt01K9Yb
-X-Google-Smtp-Source: AKy350b5V1+SPa2Y/FrYgxpYzFWnAdt31CYFlL1xMYpkYmmrGo9g/qrmO8OmB3Vuby3nb6lvWBaatOLJEPeJehyuAJ5i3FPYPCwu
+        Fri, 14 Apr 2023 15:57:53 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D7F558B
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 12:57:52 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33EJYO9D016440;
+        Fri, 14 Apr 2023 19:57:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=BqAVwop/+0V+5zcZMkcp/dLT3E6ICdzfCqVvM3N29YA=;
+ b=isb0jPtmqRWA3PCtGsh4s7hr6KOir/1wJo2jXusoNhQx2acEUT8reexWqHrGYGnsD0ak
+ hwkGHDsZYl+cjJU0+vd+b1q1tuvfJO8HzcENcojIZS4Ub6XakHJ21LG1MtCEpsbi7nDe
+ 9ESepA2ovNYOQSc2mKk3T+PRHrGptocQtADAzWMSktfS9vJlBrDe5Y6dhYVGoqPpr7Q/
+ /lJYxFlElHGQHfJHQe+TNowZSUHTXy7ttpdERJ1Jr8gI3purm9fGbv1WfOQSvssf0UAU
+ UHea2c4U7cIufkweG3BtWdjo2SZp8GaFGTek9vwDX8ETV/KUOpgc1egj2ptEP8Vq8Yby pg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3py0cvhuuj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 19:57:41 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33EJveRt011577
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 19:57:40 GMT
+Received: from jhugo-lnx.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Fri, 14 Apr 2023 12:57:39 -0700
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+To:     <mani@kernel.org>
+CC:     <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <mhi@lists.linux.dev>, Jeffrey Hugo <quic_jhugo@quicinc.com>
+Subject: [PATCH 0/2] Add MHI quirk for QAIC
+Date:   Fri, 14 Apr 2023 13:57:17 -0600
+Message-ID: <1681502239-3781-1-git-send-email-quic_jhugo@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:380d:b0:40d:97fe:8399 with SMTP id
- i13-20020a056638380d00b0040d97fe8399mr5682505jav.0.1681502201177; Fri, 14 Apr
- 2023 12:56:41 -0700 (PDT)
-Date:   Fri, 14 Apr 2023 12:56:41 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000063ec4705f9513d4f@google.com>
-Subject: [syzbot] [mm?] WARNING in unmap_page_range
-From:   syzbot <syzbot+78c74557d14e8d51e013@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: KaFoUd-BjbmCJY43Eo0hRM7ZaiaKjTlf
+X-Proofpoint-GUID: KaFoUd-BjbmCJY43Eo0hRM7ZaiaKjTlf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-14_12,2023-04-14_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ mlxscore=0 mlxlogscore=553 impostorscore=0 clxscore=1015 bulkscore=0
+ priorityscore=1501 adultscore=0 phishscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304140177
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+With the QAIC driver in -next, I'd like to suggest some MHI changes that
+specific to AIC100 devices, but perhaps provide a framework for other
+device oddities.
 
-syzbot found the following issue on:
+AIC100 devices technically violate the MHI spec in two ways. Sadly, these
+issues comes from the device hardware, so host SW needs to work around
+them.
 
-HEAD commit:    e134c93f788f Add linux-next specific files for 20230406
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=13b57c17c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7a0548c6ce6e9842
-dashboard link: https://syzkaller.appspot.com/bug?extid=78c74557d14e8d51e013
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Thie first issue, presented in this series, has to do with the
+SOC_HW_VERSION register. This register is suposed to be initialized by the
+hardware prior to the MHI being accessable by the host to contain a
+version string for the SoC of the device. This could be used by the host
+MHI controller software to identify and handle version to version changes.
+The AIC100 hardware does not initialize this register, and thus it
+contains garbage.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+This would not be much of a problem normally - the QAIC driver would just
+never use it. However the MHI stack uses this register as part of the init
+sequence and if the controller reports that the register is inaccessable
+then the init sequence fails.  On some AIC100 cards, the garbage value
+ends up being 0xFFFFFFFF which is PCIe spec defined to be a special value
+indicating the access failed.  The MHI controller cannot tell if that
+value is a PCIe link issue, or just garbage.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/b617d686938d/disk-e134c93f.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/3ac3406cd427/vmlinux-e134c93f.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/6b08a19acadb/bzImage-e134c93f.xz
+QAIC needs a way to tell MHI not to use this register. Other buses have a
+quirk mechanism - a way to describe oddities in a particular
+implementation that have some kind of workaround. Since this seems to be
+the first need for such a thing in MHI, introduce a quirk framework.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+78c74557d14e8d51e013@syzkaller.appspotmail.com
+The second issue AIC100 has involves the PK Hash registers. A solution for
+this is expected to be proposed in the near future and is anticipated to
+make use of the quirk framework proposed here. With PK Hash, there are two
+oddities to handle. AIC100 does not initialize these registers until the
+SBL is running, which is later than the spec indicates, and in practice
+is after MHI reads/caches them. Also, AIC100 does not have enough
+registers defined to fully report the 5 PK Hash slots, so a custom
+reporting format is defined by the device.
 
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 24899 at mm/memory.c:1491 zap_pte_range mm/memory.c:1491 [inline]
-WARNING: CPU: 1 PID: 24899 at mm/memory.c:1491 zap_pmd_range mm/memory.c:1564 [inline]
-WARNING: CPU: 1 PID: 24899 at mm/memory.c:1491 zap_pud_range mm/memory.c:1593 [inline]
-WARNING: CPU: 1 PID: 24899 at mm/memory.c:1491 zap_p4d_range mm/memory.c:1614 [inline]
-WARNING: CPU: 1 PID: 24899 at mm/memory.c:1491 unmap_page_range+0x1c07/0x39b0 mm/memory.c:1635
-Modules linked in:
-CPU: 1 PID: 24899 Comm: syz-executor.0 Not tainted 6.3.0-rc5-next-20230406-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
-RIP: 0010:zap_pte_range mm/memory.c:1491 [inline]
-RIP: 0010:zap_pmd_range mm/memory.c:1564 [inline]
-RIP: 0010:zap_pud_range mm/memory.c:1593 [inline]
-RIP: 0010:zap_p4d_range mm/memory.c:1614 [inline]
-RIP: 0010:unmap_page_range+0x1c07/0x39b0 mm/memory.c:1635
-Code: 83 fb 02 0f 86 ff 0c 00 00 e8 85 4b c2 ff 44 89 e6 bf 1f 00 00 00 e8 98 47 c2 ff 41 83 fc 1f 0f 84 38 0e 00 00 e8 69 4b c2 ff <0f> 0b e9 da ef ff ff e8 5d 4b c2 ff 4c 89 e5 31 ff 4c 89 e3 81 e5
-RSP: 0018:ffffc90004ef76f8 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000007 RCX: 0000000000000000
-RDX: ffff8880829f0000 RSI: ffffffff81c10c67 RDI: 0000000000000007
-RBP: 0000000000000000 R08: 0000000000000007 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 000000000000001f
-R13: 0000000020679000 R14: dffffc0000000000 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b33523000 CR3: 000000007b6c6000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- unmap_single_vma+0x19a/0x2b0 mm/memory.c:1681
- unmap_vmas+0x234/0x380 mm/memory.c:1720
- exit_mmap+0x190/0x930 mm/mmap.c:3063
- __mmput+0x13a/0x540 kernel/fork.c:1344
- mmput+0x60/0x70 kernel/fork.c:1366
- exit_mm kernel/exit.c:564 [inline]
- do_exit+0x9d7/0x29f0 kernel/exit.c:858
- do_group_exit+0xd4/0x2a0 kernel/exit.c:1021
- get_signal+0x2315/0x25b0 kernel/signal.c:2859
- arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:307
- exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
- exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
- __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
- syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
- do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f80caa8c169
-Code: Unable to access opcode bytes at 0x7f80caa8c13f.
-RSP: 002b:00007f80c95fe218 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
-RAX: fffffffffffffe00 RBX: 00007f80cababf88 RCX: 00007f80caa8c169
-RDX: 0000000000000000 RSI: 0000000000000080 RDI: 00007f80cababf88
-RBP: 00007f80cababf80 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f80cababf8c
-R13: 00007ffc884fac6f R14: 00007f80c95fe300 R15: 0000000000022000
- </TASK>
+Jeffrey Hugo (2):
+  bus: mhi: host: Add quirk framework and initial quirk
+  accel/qaic: Add MHI_QUIRK_SOC_HW_VERSION_UNRELIABLE
 
+ drivers/accel/qaic/mhi_controller.c |  1 +
+ drivers/bus/mhi/host/init.c         | 13 +++++++++----
+ include/linux/mhi.h                 | 18 ++++++++++++++++++
+ 3 files changed, 28 insertions(+), 4 deletions(-)
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+-- 
+2.7.4
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
