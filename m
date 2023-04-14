@@ -2,82 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C99F6E272C
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 17:41:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F31546E272F
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 17:43:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbjDNPlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 11:41:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57594 "EHLO
+        id S229820AbjDNPnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 11:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjDNPlx (ORCPT
+        with ESMTP id S229469AbjDNPni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 11:41:53 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98902900C;
-        Fri, 14 Apr 2023 08:41:52 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33EFffeY006347;
-        Fri, 14 Apr 2023 15:41:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=NK/P0Cz1MxmLV1BoZL/v3IENNRORMkZFXgt0sEvVQyI=;
- b=F3pL9Ovv8k0AqFx4bpYsFYuwNHy5C+J+T4PRGq/a/pEnU4gCxbDSvL20LtGMd44zLdbg
- j43V2GgxMR6pwgJgxBR8EtQ78O7syYaKMoD3lrOXwlIVG4jaFTfIHtlZuyZZXgNfuUDy
- 5PYl4TaG1hpD4ypwRDWKeNOzydhT1fffNis4r0Lpm9Fl4g9wFogGYXPYZBSlGDuDc1+v
- Bi7D6d65lzX+YFuZKREgEtHmndhrcRvsjPc6uYwh04OsCkjedZzBo7wF2vBaF1KmC/GE
- L31JVvVz3ADRyIpamRB20HyviUMSGNvdOAqYbyjlkJXPcaWO0FGV47tzi8kTqxdn70BD lQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3py20e11ru-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Apr 2023 15:41:40 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33EFfdsZ006120
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Apr 2023 15:41:39 GMT
-Received: from [10.110.73.215] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 14 Apr
- 2023 08:41:38 -0700
-Message-ID: <aac210da-dec1-aab8-3f48-c33d9e7687d6@quicinc.com>
-Date:   Fri, 14 Apr 2023 08:41:37 -0700
+        Fri, 14 Apr 2023 11:43:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D38526BB;
+        Fri, 14 Apr 2023 08:43:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 94EAC60FB8;
+        Fri, 14 Apr 2023 15:43:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99AEDC433D2;
+        Fri, 14 Apr 2023 15:43:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681487016;
+        bh=h08I4UOy8O/vtjA3/HDm61kRiDez4uSAqmuZ1CwmyKk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=o+ECzy4SqCMH8bwiyhjQ9euvqHVKbvcLeCukW2ymofuf6GA7/E3fJT3/VqTlAPYlM
+         WKQqWVBSNOCUNyQn/F/idt/Ui8effGoQvzoajqDVxeO4vI+OCzz+lmQQ8nFGCkpVB5
+         m3LeiQl6OxvxAr53faXSmRecTvhvxUuX/yNNahppTdFpI7u4olbJJuwQbPjf7wZI0y
+         0tZdQiDyqPmn94uKRuK6v5lzpJ2sz+rvTNqlr4gZpPIn8FB7GBq3+SI6s+d9CIFLlQ
+         krrsfzY7rQ5jl6J9ZB2UutIVwp/ceKcakzBQTFEkjy8cIgxHq9R1QK8RvLdU3Cx9Ia
+         D4UoQ8fD9lmew==
+Date:   Fri, 14 Apr 2023 08:43:33 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     No Name <xbjfk.github@gmail.com>,
+        Quentin Monnet <quentin@isovalent.com>
+Cc:     linux-kernel@vger.kernel.org, ndesaulniers@google.com,
+        llvm@lists.linux.dev, bpf@vger.kernel.org
+Subject: Re: LLVM not detected in bpfutil due to LLVM 16 requiring c++17
+Message-ID: <20230414154333.GA1931632@dev-arch.thelio-3990X>
+References: <CALS7K9V1j6ufrQ=6nGjyHQCWb7-YiqNdctBWk8og1gW_q4C4dA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v2] drm/msm/dpu: always program dsc active bits
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>
-CC:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
-        <airlied@gmail.com>, <agross@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <andersson@kernel.org>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1681401401-15099-1-git-send-email-quic_khsieh@quicinc.com>
- <tgfbdk6q3uool365jqddibnbgq66clsmsm6tldxpm5toqghxpq@m2ic3oonv2s5>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <tgfbdk6q3uool365jqddibnbgq66clsmsm6tldxpm5toqghxpq@m2ic3oonv2s5>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: xnbsfrOMy6PlHWXsXlNi3qaZM2ZHUpO0
-X-Proofpoint-ORIG-GUID: xnbsfrOMy6PlHWXsXlNi3qaZM2ZHUpO0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-14_08,2023-04-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- phishscore=0 adultscore=0 impostorscore=0 spamscore=0 mlxlogscore=663
- priorityscore=1501 clxscore=1015 malwarescore=0 bulkscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304140138
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALS7K9V1j6ufrQ=6nGjyHQCWb7-YiqNdctBWk8og1gW_q4C4dA@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,76 +56,181 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Reagan,
 
+On Fri, Apr 14, 2023 at 10:36:35PM +1200, No Name wrote:
+> This is my first time reporting a bug, so apologies if I get something wrong.
 
-On 4/14/2023 12:48 AM, Marijn Suijten wrote:
-> Capitalize DSC in the title, as discussed in v1.
-> 
-> On 2023-04-13 08:56:41, Kuogee Hsieh wrote:
->> In current code, the DSC active bits are written only if cfg->dsc is set.
->> However, for displays which are hot-pluggable, there can be a use-case
->> of disconnecting a DSC supported sink and connecting a non-DSC sink.
->>
->> For those cases we need to clear DSC active bits during tear down.
->>
->> Changes in V2:
->> 1) correct commit text as suggested
->> 2) correct Fixes commit id
->> 3) add FIXME comment
->>
->> Fixes: 77f6da90487c ("drm/msm/disp/dpu1: Add DSC support in hw_ctl")
->> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
-> 
-> By default git send-email should pick this up in the CC line...  but I
-> had to download this patch from lore once again.
-> 
+Thanks for the report! "See something, say something", even if it is not
+quite right out of the gate, we can get down to the bottom of it.
 
-Yes, I think what happened here is, he didnt git am the prev rev and 
-make changes on top of that so git send-email didnt pick up. We should 
-fix that process.
+> In tools/build/feature/Makefile, line 342, the c++ std is set to
+> gnu++14, whereas LLVM 16 now requires c++17 to include the headers.
+> This results in the llvm feature being falsely disabled for bpfutil.
 
->> ---
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c | 8 ++++----
->>   1 file changed, 4 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
->> index bbdc95c..1651cd7 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
->> @@ -541,10 +541,10 @@ static void dpu_hw_ctl_intf_cfg_v1(struct dpu_hw_ctl *ctx,
->>   	if (cfg->merge_3d)
->>   		DPU_REG_WRITE(c, CTL_MERGE_3D_ACTIVE,
->>   			      BIT(cfg->merge_3d - MERGE_3D_0));
->> -	if (cfg->dsc) {
->> -		DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, DSC_IDX);
->> -		DPU_REG_WRITE(c, CTL_DSC_ACTIVE, cfg->dsc);
->> -	}
->> +
->> +	/* FIXME: fix reset_intf_cfg to handle teardown of dsc */
-> 
-> There's more wrong than just moving (not "fix"ing) this bit of code into
-> reset_intf_cfg.  And this will have to be re-wrapped in `if (cfg->dsc)`
-> again by reverting this patch.  Perhaps that can be explained, or link
-> to Abhinav's explanation to make it clear to readers what this FIXME
-> actually means?  Let's wait for Abhinav and Dmitry to confirm the
-> desired communication here.
-> 
-> https://lore.kernel.org/linux-arm-msm/ec045d6b-4ffd-0f8c-4011-8db45edc6978@quicinc.com/
-> 
+I cannot find any reference to bpfutil either in tree or when doing a
+web search, did you mean bpftool? I am going to assume yes, so I have
+gone ahead and added Quentin (the maintainer of bpftool in MAINTAINERS)
+and bpf@vger.kernel.org to the thread.
 
-Yes, I am fine with linking this explanation in the commit text and 
-mentioning that till thats fixed, we need to go with this solution. The 
-FIXME itself is fine, I will work on it and I remember this context well.
+> Perhaps the --cxxflags, --ldflags and --libs options of llvm-config
+> should instead?
 
-> - Marijn
-> 
->> +	DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, DSC_IDX);
->> +	DPU_REG_WRITE(c, CTL_DSC_ACTIVE, cfg->dsc);
->>   }
->>   
->>   static void dpu_hw_ctl_intf_cfg(struct dpu_hw_ctl *ctx,
->> -- 
->> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
->> a Linux Foundation Collaborative Project
->>
+The tools system is pretty much Greek to me, so I am hoping someone else
+will have a better idea of what is going on and how to fix it.
+
+For the record, I think I see the issue you are talking about on Fedora,
+which has clang-16, whereas I do not see the same issue on Arch Linux,
+which still has clang-15.
+
+  $ clang --version | head -1
+  clang version 15.0.7
+
+  $ make -C tools/bpf/bpftool -j(nproc) -s
+
+  Auto-detecting system features:
+  ...                         clang-bpf-co-re: [ on  ]
+  ...                                    llvm: [ on  ]
+  ...                                  libcap: [ on  ]
+  ...                                  libbfd: [ on  ]
+
+compared to
+
+  $ clang --version | head -1
+  clang version 16.0.0 (Fedora 16.0.0-1.fc39)
+
+  $ make -C tools/bpf/bpftool -j(nproc) -s
+
+  Auto-detecting system features:
+  ...                         clang-bpf-co-re: [ on  ]
+  ...                                    llvm: [ OFF ]
+  ...                                  libcap: [ on  ]
+  ...                                  libbfd: [ on  ]
+
+This is the output of tools/build/feature/test-llvm.make.output on my
+machine, which seems to confirm that the headers expect to be compiled
+with '-std=c++17', but that is just a superficial observation at this
+point.
+
+  In file included from /usr/include/llvm/Support/raw_ostream.h:16,
+                   from test-llvm.cpp:3:
+  /usr/include/llvm/ADT/SmallVector.h: In static member function ‘static void llvm::SmallVectorTemplateBase<T, <anonymous> >::uninitialized_move(It1, It1, It2)’:
+  /usr/include/llvm/ADT/SmallVector.h:352:10: error: ‘uninitialized_move’ is not a member of ‘std’; did you mean ‘uninitialized_copy’?
+    352 |     std::uninitialized_move(I, E, Dest);
+        |          ^~~~~~~~~~~~~~~~~~
+        |          uninitialized_copy
+  In file included from /usr/include/llvm/ADT/StringRef.h:12,
+                   from /usr/include/llvm/Support/raw_ostream.h:17:
+  /usr/include/llvm/ADT/DenseMapInfo.h: At global scope:
+  /usr/include/llvm/ADT/DenseMapInfo.h:294:52: error: ‘variant’ is not a member of ‘std’
+    294 | template <typename... Ts> struct DenseMapInfo<std::variant<Ts...>> {
+        |                                                    ^~~~~~~
+  /usr/include/llvm/ADT/DenseMapInfo.h:294:52: note: ‘std::variant’ is only available from C++17 onwards
+  /usr/include/llvm/ADT/DenseMapInfo.h:294:52: error: ‘variant’ is not a member of ‘std’
+  /usr/include/llvm/ADT/DenseMapInfo.h:294:52: note: ‘std::variant’ is only available from C++17 onwards
+  /usr/include/llvm/ADT/DenseMapInfo.h:294:62: error: expected parameter pack before ‘...’
+    294 | template <typename... Ts> struct DenseMapInfo<std::variant<Ts...>> {
+        |                                                              ^~~
+  /usr/include/llvm/ADT/DenseMapInfo.h:294:62: error: template argument 1 is invalid
+  /usr/include/llvm/ADT/DenseMapInfo.h:294:65: error: expected unqualified-id before ‘>’ token
+    294 | template <typename... Ts> struct DenseMapInfo<std::variant<Ts...>> {
+        |                                                                 ^~
+  In file included from /usr/include/llvm/ADT/STLFunctionalExtras.h:18,
+                   from /usr/include/llvm/ADT/StringRef.h:13:
+  /usr/include/llvm/ADT/STLForwardCompat.h:46:35: error: ‘optional’ in namespace ‘std’ does not name a template type
+     46 | auto transformOptional(const std::optional<T> &O, const Function &F)
+        |                                   ^~~~~~~~
+  /usr/include/llvm/ADT/STLForwardCompat.h:46:30: note: ‘std::optional’ is only available from C++17 onwards
+     46 | auto transformOptional(const std::optional<T> &O, const Function &F)
+        |                              ^~~
+  /usr/include/llvm/ADT/STLForwardCompat.h:46:43: error: expected ‘,’ or ‘...’ before ‘<’ token
+     46 | auto transformOptional(const std::optional<T> &O, const Function &F)
+        |                                           ^
+  /usr/include/llvm/ADT/STLForwardCompat.h:47:13: error: ‘optional’ in namespace ‘std’ does not name a template type
+     47 |     -> std::optional<decltype(F(*O))> {
+        |             ^~~~~~~~
+  /usr/include/llvm/ADT/STLForwardCompat.h:47:8: note: ‘std::optional’ is only available from C++17 onwards
+     47 |     -> std::optional<decltype(F(*O))> {
+        |        ^~~
+  /usr/include/llvm/ADT/STLForwardCompat.h:47:21: error: expected initializer before ‘<’ token
+     47 |     -> std::optional<decltype(F(*O))> {
+        |                     ^
+  /usr/include/llvm/ADT/STLForwardCompat.h:56:29: error: ‘optional’ is not a member of ‘std’
+     56 | auto transformOptional(std::optional<T> &&O, const Function &F)
+        |                             ^~~~~~~~
+  /usr/include/llvm/ADT/STLForwardCompat.h:56:29: note: ‘std::optional’ is only available from C++17 onwards
+  /usr/include/llvm/ADT/STLForwardCompat.h:56:39: error: expected primary-expression before ‘>’ token
+     56 | auto transformOptional(std::optional<T> &&O, const Function &F)
+        |                                       ^
+  /usr/include/llvm/ADT/STLForwardCompat.h:56:43: error: label ‘O’ referenced outside of any function
+     56 | auto transformOptional(std::optional<T> &&O, const Function &F)
+        |                                           ^
+  /usr/include/llvm/ADT/STLForwardCompat.h:56:46: error: expected primary-expression before ‘const’
+     56 | auto transformOptional(std::optional<T> &&O, const Function &F)
+        |                                              ^~~~~
+  /usr/include/llvm/ADT/STLForwardCompat.h:56:63: error: expression list treated as compound expression in initializer [-fpermissive]
+     56 | auto transformOptional(std::optional<T> &&O, const Function &F)
+        |                                                               ^
+  /usr/include/llvm/ADT/STLForwardCompat.h:56:64: error: expected ‘;’ before ‘->’ token
+     56 | auto transformOptional(std::optional<T> &&O, const Function &F)
+        |                                                                ^
+        |                                                                ;
+     57 |     -> std::optional<decltype(F(*std::move(O)))> {
+        |     ~~                                                          
+  /usr/include/llvm/ADT/StringRef.h:104:54: error: expected ‘)’ before ‘Str’
+    104 |     /*implicit*/ constexpr StringRef(std::string_view Str)
+        |                                     ~                ^~~~
+        |                                                      )
+  /usr/include/llvm/ADT/StringRef.h:248:14: error: expected type-specifier
+    248 |     operator std::string_view() const {
+        |              ^~~
+  /usr/include/llvm/ADT/StringRef.h: In member function ‘size_t llvm::StringRef::find(char, size_t) const’:
+  /usr/include/llvm/ADT/StringRef.h:296:19: error: ‘string_view’ is not a member of ‘std’
+    296 |       return std::string_view(*this).find(C, From);
+        |                   ^~~~~~~~~~~
+  /usr/include/llvm/ADT/StringRef.h:296:19: note: ‘std::string_view’ is only available from C++17 onwards
+  /usr/include/llvm/Support/raw_ostream.h: At global scope:
+  /usr/include/llvm/Support/raw_ostream.h:252:38: error: ‘string_view’ in namespace ‘std’ does not name a type
+    252 |   raw_ostream &operator<<(const std::string_view &Str) {
+        |                                      ^~~~~~~~~~~
+  /usr/include/llvm/Support/raw_ostream.h:252:33: note: ‘std::string_view’ is only available from C++17 onwards
+    252 |   raw_ostream &operator<<(const std::string_view &Str) {
+        |                                 ^~~
+  /usr/include/llvm/Support/raw_ostream.h: In member function ‘llvm::raw_ostream& llvm::raw_ostream::operator<<(const int&)’:
+  /usr/include/llvm/Support/raw_ostream.h:253:22: error: request for member ‘data’ in ‘Str’, which is of non-class type ‘const int’
+    253 |     return write(Str.data(), Str.length());
+        |                      ^~~~
+  /usr/include/llvm/Support/raw_ostream.h:253:34: error: request for member ‘length’ in ‘Str’, which is of non-class type ‘const int’
+    253 |     return write(Str.data(), Str.length());
+        |                                  ^~~~~~
+  /usr/include/llvm/Support/raw_ostream.h: At global scope:
+  /usr/include/llvm/Support/raw_ostream.h:459:16: error: ‘optional’ in namespace ‘std’ does not name a template type
+    459 |   mutable std::optional<bool> HasColors;
+        |                ^~~~~~~~
+  /usr/include/llvm/Support/raw_ostream.h:459:11: note: ‘std::optional’ is only available from C++17 onwards
+    459 |   mutable std::optional<bool> HasColors;
+        |           ^~~
+  /usr/include/llvm/Support/raw_ostream.h:757:47: error: ‘std::nullopt_t’ has not been declared
+    757 | raw_ostream &operator<<(raw_ostream &OS, std::nullopt_t);
+        |                                               ^~~~~~~~~
+  /usr/include/llvm/Support/raw_ostream.h:761:53: error: ‘optional’ in namespace ‘std’ does not name a template type
+    761 | raw_ostream &operator<<(raw_ostream &OS, const std::optional<T> &O) {
+        |                                                     ^~~~~~~~
+  /usr/include/llvm/Support/raw_ostream.h:761:48: note: ‘std::optional’ is only available from C++17 onwards
+    761 | raw_ostream &operator<<(raw_ostream &OS, const std::optional<T> &O) {
+        |                                                ^~~
+  /usr/include/llvm/Support/raw_ostream.h:761:61: error: expected ‘,’ or ‘...’ before ‘<’ token
+    761 | raw_ostream &operator<<(raw_ostream &OS, const std::optional<T> &O) {
+        |                                                             ^
+  /usr/include/llvm/Support/raw_ostream.h: In function ‘llvm::raw_ostream& llvm::operator<<(raw_ostream&, int)’:
+  /usr/include/llvm/Support/raw_ostream.h:762:7: error: ‘O’ was not declared in this scope; did you mean ‘OS’?
+    762 |   if (O)
+        |       ^
+        |       OS
+  /usr/include/llvm/Support/raw_ostream.h:765:16: error: ‘nullopt’ is not a member of ‘std’
+    765 |     OS << std::nullopt;
+        |                ^~~~~~~
+  /usr/include/llvm/Support/raw_ostream.h:765:16: note: ‘std::nullopt’ is only available from C++17 onwards
+
+Cheers,
+Nathan
