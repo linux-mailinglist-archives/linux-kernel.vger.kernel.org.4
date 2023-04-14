@@ -2,103 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3C596E2A22
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 20:35:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6290C6E2A26
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 20:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbjDNSe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 14:34:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60106 "EHLO
+        id S230126AbjDNSh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 14:37:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbjDNSe6 (ORCPT
+        with ESMTP id S229564AbjDNSh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 14:34:58 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42384EDD
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 11:34:56 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-94a342f202cso47882066b.0
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 11:34:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681497295; x=1684089295;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/J+vjdb6cOyet1NlcJdx7Gney2QIkG13+uv7x6+rlKE=;
-        b=G05SBNFy+5LmoPB7N11GwA1JML3OifQBNYPoauP/kLqe28fX59OGvQikVdsU4O2tDh
-         zOVj501kf2xTO+zvTMDq+Kp3aZf+eYqSK5ua93Kja/71tEvabIKH1sKsPC43lAsaDyxa
-         2tEn0/DMof+CP2PLedntGb1xlx8uKxCHbsofChiYZtDQXfp+80LxC7owTaumdLcudxSk
-         9DNIyE9PdqzsdES5sUSsGT2tGVek6S186vBvQTOs4T63Y2DZpHmZQzFOVppbxnt0IKZw
-         5pjqR1HRtfrwumCZwBC+wyXKi2zgAqi04XXYr4NdQDbBD0wZkL5pSDSiK72I/3J/RVIY
-         SqtA==
+        Fri, 14 Apr 2023 14:37:58 -0400
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A8755B4;
+        Fri, 14 Apr 2023 11:37:57 -0700 (PDT)
+Received: by mail-ot1-f50.google.com with SMTP id w19-20020a9d6393000000b006a43ff0f57cso1600284otk.5;
+        Fri, 14 Apr 2023 11:37:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681497295; x=1684089295;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/J+vjdb6cOyet1NlcJdx7Gney2QIkG13+uv7x6+rlKE=;
-        b=gA6ICQogITuzjsp+kO5MjZqXNU0ZPrGgJYMaOlfASceZIR2NYmAhavmLUms73uiSAX
-         0wbxSCxznQo/DQiOVD88SnuxJahN39j2dMjXbN9X9GsRL4O6lOCbJ8TUP16KQXskOlmL
-         5UE+T7OKc2ly885n7dEBoNmUhQ/gYGQXpubsRW1CE9AkkSTvIWmI7KM9PPpZ/qcTcsgt
-         9ksma7oXJRudhyRWCZyjE3CywEx5OEXX9DYmgUDJdm+mjlT/8sUXP6Joj7yvIVI8DTlO
-         oya1/Ve6AGnX4q7vFvdrlcp7oVpRF88P2YhJgtBdQpz/kEHgka0zz2asbrq43vvXuJNu
-         pKzw==
-X-Gm-Message-State: AAQBX9dwJZ/M8rxWVtSMBWaqqKsAGlXbX5Rk7/GxQ9WqWb23kzwL0cA9
-        WblDAaaCZF199sMOv78ubM0rYkFaEPI=
-X-Google-Smtp-Source: AKy350Yfsz8pokbm+WLlXGCqYoauSB33GAtn2ZEuFtPM657L3N+8DOR1vE+fbxwQQ7ZaL7nCXRMN1w==
-X-Received: by 2002:a17:906:d4:b0:947:bff2:1c2b with SMTP id 20-20020a17090600d400b00947bff21c2bmr2971926eji.1.1681497294723;
-        Fri, 14 Apr 2023 11:34:54 -0700 (PDT)
-Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
-        by smtp.gmail.com with ESMTPSA id m9-20020a1709062b8900b0094a9b9c4979sm2781449ejg.88.2023.04.14.11.34.53
+        d=1e100.net; s=20221208; t=1681497476; x=1684089476;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=esLUoAYEUiCqLSENFicfSVfYmj0WlNAWG2ZggPbHEGc=;
+        b=XGG4gvTRfNyKuUoCwUMAAuC4kBEqjqCLg8S5JGfputNxEt30neGlPOzExOzmUf1L9f
+         SMkpeb0C/7wT9biydCqIIsOcJZWdIZ1+7gOeR1ctfm5AGZLRCGqeeQ2YsYNbMP1BEiXK
+         Aaz+DYEIOkWk9CedWy2B8Nip2Sgqqh229V0N8znLY1aRiqk61BIf8JTFTTrsuwfMb5px
+         soUkx+Hu9DMCjL65djRTbxAYSyyWg2kCZsntxPjoyyhvby+p9CxiSOATJopmc2V9AB20
+         9CVb/ChwznE2x+MXzd9YWQpbqctk7RlmEFKO68J2p6R4fHhQgB2tbJGVbASiLSxr+7uF
+         f7OQ==
+X-Gm-Message-State: AAQBX9cSYJ8zMiHv7o7kLM/Zu3SNX63c7IQN36IpCyt/ZR0a47xyzDXt
+        +sOT+FpaeSSD4lwxD7yShw==
+X-Google-Smtp-Source: AKy350Yb7Wxpz60VAMD1VMkHDAMWwCgvcXgm479C4o7Hkyqu53KhC9PtSXkFDuHi7qQxnYtXpwT9Fw==
+X-Received: by 2002:a05:6830:2049:b0:68d:416e:3d9d with SMTP id f9-20020a056830204900b0068d416e3d9dmr3353438otp.7.1681497476228;
+        Fri, 14 Apr 2023 11:37:56 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id k7-20020a056830150700b0069fa6ca584bsm1998493otp.40.2023.04.14.11.37.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Apr 2023 11:34:54 -0700 (PDT)
-Date:   Fri, 14 Apr 2023 20:34:52 +0200
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: rtl8192e: Fix W_DISABLE# does not work after
- stop/start
-Message-ID: <20230414183452.GA12295@matrix-ESPRIMO-P710>
+        Fri, 14 Apr 2023 11:37:55 -0700 (PDT)
+Received: (nullmailer pid 105410 invoked by uid 1000);
+        Fri, 14 Apr 2023 18:37:55 -0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Andreas Klinger <ak@it-klinger.de>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <ZDlLmCIiKSMa7Hah@arbad>
+References: <ZDlLmCIiKSMa7Hah@arbad>
+Message-Id: <168149742968.103828.12005372013452240608.robh@kernel.org>
+Subject: Re: [PATCH v2 1/1] dt-bindings: iio: pressure: Support Honeywell
+ mprls0025pa sensor
+Date:   Fri, 14 Apr 2023 13:37:55 -0500
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When loading the driver for rtl8192e, the W_DISABLE# switch is working as
-intended. But when the WLAN is turned off in software and then turned on
-again the W_DISABLE# does not work anymore. Reason for this is that in
-the function _rtl92e_dm_check_rf_ctrl_gpio() the bfirst_after_down is
-checked and returned when true. bfirst_after_down is set true when
-switching the WLAN off in software. But it is not set to false again
-when WLAN is turned on again.
 
-Add bfirst_after_down = false in _rtl92e_sta_up to reset bit and fix
-above described bug.
+On Fri, 14 Apr 2023 14:48:24 +0200, Andreas Klinger wrote:
+> Honeywell mpr is a pressure sensor series. There are many different models with different pressure
+> ranges, units and transfer functions.
+> 
+> The range and transfer function need to be set up in the dt. Therefore new properties
+> honeywell,pmin-pascal, honeywell,pmax-pascal, honeywell,transfer-function are introduced.
+> 
+> Add dt-bindings.
+> 
+> Signed-off-by: Andreas Klinger <ak@it-klinger.de>
+> ---
+>  .../iio/pressure/honeywell,mprls0025pa.yaml   | 93 +++++++++++++++++++
+>  1 file changed, 93 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.yaml
+> 
 
-Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
----
-Tested with rtl8192e (WLL6130-D99)
-Transferred this patch over wlan connection of rtl8192e
----
- drivers/staging/rtl8192e/rtl8192e/rtl_core.c | 1 +
- 1 file changed, 1 insertion(+)
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-index 45989a77a27c..a644543015ee 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-@@ -648,6 +648,7 @@ static int _rtl92e_sta_up(struct net_device *dev, bool is_silent_reset)
- 	else
- 		netif_wake_queue(dev);
- 
-+	priv->bfirst_after_down = false;
- 	return 0;
- }
- 
--- 
-2.40.0
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.yaml: properties:honeywell,transfer-function: 'oneOf' conditional failed, one must be fixed:
+	'type' is a required property
+		hint: A vendor boolean property can use "type: boolean"
+	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.yaml: properties:honeywell,transfer-function: 'oneOf' conditional failed, one must be fixed:
+		'enum' is a required property
+		'const' is a required property
+		hint: A vendor string property with exact values has an implicit type
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.yaml: properties:honeywell,transfer-function: 'oneOf' conditional failed, one must be fixed:
+		'$ref' is a required property
+		'allOf' is a required property
+		hint: A vendor property needs a $ref to types.yaml
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
+	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.example.dtb: pressure@18: 'honeywell,pmax', 'honeywell,pmin' do not match any of the regexes: 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/ZDlLmCIiKSMa7Hah@arbad
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
