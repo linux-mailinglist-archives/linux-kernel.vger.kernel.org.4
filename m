@@ -2,87 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 378BC6E24B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 15:50:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD3536E24AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 15:49:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbjDNNuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 09:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
+        id S230046AbjDNNtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 09:49:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbjDNNuD (ORCPT
+        with ESMTP id S229735AbjDNNtj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 09:50:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B741E4
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 06:48:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681480134;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=n9KTxwucszaTPogQTyzYW05x/84ce5RmeI1lCrNY9JY=;
-        b=QtssD3cR/1Rrgizi0YHuavkP4o/nSrf3wtfvO6oiyjFye78srFyt91pICvRMTfdzRV/8+x
-        74R8P6WdAIdwfAh5u//wbluQcq5TkZlDgN4r12IgO4TM1bBAOkH0CmFB5XA/soX2XvzasH
-        jwoA10ghDKpVS3kTtBAl7dBnSolZ/QU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-536-RwSb7RRiNreUmN_e4zUG7w-1; Fri, 14 Apr 2023 09:48:51 -0400
-X-MC-Unique: RwSb7RRiNreUmN_e4zUG7w-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ACF8110334A6;
-        Fri, 14 Apr 2023 13:48:50 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.5])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8577E2166B26;
-        Fri, 14 Apr 2023 13:48:49 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20230329140155.53272-5-zhujia.zj@bytedance.com>
-References: <20230329140155.53272-5-zhujia.zj@bytedance.com> <20230329140155.53272-1-zhujia.zj@bytedance.com>
-To:     Jia Zhu <zhujia.zj@bytedance.com>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
-        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        jefflexu@linux.alibaba.com, hsiangkao@linux.alibaba.com,
-        yinxin.x@bytedance.com
-Subject: Re: [PATCH V5 4/5] cachefiles: narrow the scope of triggering EPOLLIN events in ondemand mode
+        Fri, 14 Apr 2023 09:49:39 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0A7B77E;
+        Fri, 14 Apr 2023 06:49:11 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 262D9219D7;
+        Fri, 14 Apr 2023 13:49:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1681480150; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=tVTQPul/JXATpe+rLUOKdbwaHI2COkJc82nsUk9iRu0=;
+        b=yrrU8Rd8A6t3YfPMmwobhbRVKgeH14EUpv9J7/J74OlCc/kJNuZgarcU3PNAUH61RBAUxM
+        3b5vspT9hfcvBkrii/eKZvjDWZLTwodFjnI6S9SYS4eCK40AZiYFy7zwbqAkJIJb0ZMVLy
+        Ru/9vvTOVF1QGjm5/TFinKWlsMglZI8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1681480150;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=tVTQPul/JXATpe+rLUOKdbwaHI2COkJc82nsUk9iRu0=;
+        b=3Cm3KiqT004Qj8aTzVi0lrNxTyArJdXb6TAd7XXHhwgQ6kHnpe7eQRbw8AREzmsFzx4G1F
+        qBLrXxO/oJelEBBg==
+Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
+        by relay2.suse.de (Postfix) with ESMTP id D12BB2C143;
+        Fri, 14 Apr 2023 13:49:09 +0000 (UTC)
+Received: by adalid.arch.suse.de (Postfix, from userid 16045)
+        id C146951C23D9; Fri, 14 Apr 2023 15:49:09 +0200 (CEST)
+From:   Hannes Reinecke <hare@suse.de>
+To:     Pankaj Raghav <p.raghav@samsung.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mcgrof@kernel.org, Hannes Reinecke <hare@suse.de>
+Subject: [PATCH] mm/filemap: allocate folios according to the blocksize
+Date:   Fri, 14 Apr 2023 15:49:08 +0200
+Message-Id: <20230414134908.103932-1-hare@suse.de>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1250224.1681480128.1@warthog.procyon.org.uk>
-Date:   Fri, 14 Apr 2023 14:48:48 +0100
-Message-ID: <1250225.1681480128@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jia Zhu <zhujia.zj@bytedance.com> wrote:
+If the blocksize is larger than the pagesize allocate folios
+with the correct order.
 
->  	if (cachefiles_in_ondemand_mode(cache)) {
-> -		if (!xa_empty(&cache->reqs))
-> -			mask |= EPOLLIN;
-> +		if (!xa_empty(xa)) {
-> +			rcu_read_lock();
-> +			xa_for_each_marked(xa, index, req, CACHEFILES_REQ_NEW) {
-> +				if (!cachefiles_ondemand_is_reopening_read(req)) {
-> +					mask |= EPOLLIN;
-> +					break;
-> +				}
-> +			}
-> +			rcu_read_unlock();
+Signed-off-by: Hannes Reinecke <hare@suse.de>
+---
+ mm/filemap.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-You should probably use xas_for_each_marked() instead of xa_for_each_marked()
-as the former should perform better.
-
-David
+diff --git a/mm/filemap.c b/mm/filemap.c
+index 05fd86752489..468f25714ced 100644
+--- a/mm/filemap.c
++++ b/mm/filemap.c
+@@ -1927,7 +1927,7 @@ struct folio *__filemap_get_folio(struct address_space *mapping, pgoff_t index,
+ 		folio_wait_stable(folio);
+ no_page:
+ 	if (!folio && (fgp_flags & FGP_CREAT)) {
+-		int err;
++		int err, order = 0;
+ 		if ((fgp_flags & FGP_WRITE) && mapping_can_writeback(mapping))
+ 			gfp |= __GFP_WRITE;
+ 		if (fgp_flags & FGP_NOFS)
+@@ -1937,7 +1937,9 @@ struct folio *__filemap_get_folio(struct address_space *mapping, pgoff_t index,
+ 			gfp |= GFP_NOWAIT | __GFP_NOWARN;
+ 		}
+ 
+-		folio = filemap_alloc_folio(gfp, 0);
++		if (mapping->host->i_blkbits > PAGE_SHIFT)
++			order = mapping->host->i_blkbits - PAGE_SHIFT;
++		folio = filemap_alloc_folio(gfp, order);
+ 		if (!folio)
+ 			return NULL;
+ 
+@@ -2492,9 +2494,11 @@ static int filemap_create_folio(struct file *file,
+ 		struct folio_batch *fbatch)
+ {
+ 	struct folio *folio;
+-	int error;
++	int error, order = 0;
+ 
+-	folio = filemap_alloc_folio(mapping_gfp_mask(mapping), 0);
++	if (mapping->host->i_blkbits > PAGE_SHIFT)
++		order = mapping->host->i_blkbits - PAGE_SHIFT;
++	folio = filemap_alloc_folio(mapping_gfp_mask(mapping), order);
+ 	if (!folio)
+ 		return -ENOMEM;
+ 
+@@ -3607,14 +3611,16 @@ static struct folio *do_read_cache_folio(struct address_space *mapping,
+ 		pgoff_t index, filler_t filler, struct file *file, gfp_t gfp)
+ {
+ 	struct folio *folio;
+-	int err;
++	int err, order = 0;
+ 
++	if (mapping->host->i_blkbits > PAGE_SHIFT)
++		order = mapping->host->i_blkbits - PAGE_SHIFT;
+ 	if (!filler)
+ 		filler = mapping->a_ops->read_folio;
+ repeat:
+ 	folio = filemap_get_folio(mapping, index);
+ 	if (!folio) {
+-		folio = filemap_alloc_folio(gfp, 0);
++		folio = filemap_alloc_folio(gfp, order);
+ 		if (!folio)
+ 			return ERR_PTR(-ENOMEM);
+ 		err = filemap_add_folio(mapping, folio, index, gfp);
+-- 
+2.35.3
 
