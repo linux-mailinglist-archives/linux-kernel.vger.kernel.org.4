@@ -2,94 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC69C6E2B11
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 22:24:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 509656E2B17
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 22:27:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbjDNUYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 16:24:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37988 "EHLO
+        id S229866AbjDNU1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 16:27:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjDNUYm (ORCPT
+        with ESMTP id S229615AbjDNU1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 16:24:42 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7EA19BE;
-        Fri, 14 Apr 2023 13:24:39 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id h198so26677417ybg.12;
-        Fri, 14 Apr 2023 13:24:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681503879; x=1684095879;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mcJm5hLKyUNL7+RYyxgpIIZn6r4c17VTxrbdJol2s3Y=;
-        b=nt2sDuFdcDgz86mh7WqO565n1USL59YnmMgoURsDdbPpto3rycnpwOOBUeqSnG5Jib
-         6tZ+mlupDHukSv8/1iic5MTyjpVZkDEXfq1Mbui4CHuTZ3H752NQu6NmASw6vLZ5Fnrb
-         S2IvZPdboW0ELvkFVGd8RTrPHYFbsHg8b9U9T0QoW94bSBu5+6d00O+AwihxSjI6Oene
-         JCTffG+aU+EwT3tIibXmkD7qJ6yluWlYPogY9dj6yMWBl/hkEV5ArWch/KcsMzzquIbZ
-         TFBVpULvQ/kMt59AqeWqGRNAfWyZ465JQUguuS59l8YewGzSJrj2UFjE6RiE0iY4zriF
-         9jJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681503879; x=1684095879;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mcJm5hLKyUNL7+RYyxgpIIZn6r4c17VTxrbdJol2s3Y=;
-        b=B28QUJeaKOaWtGkbZ9BBVpDGk092tLY5yifnXLrc/nRzj3Wgew9w8rsrhxPnEIrnhM
-         paRGtfII0pQy7XJsy9nFRmlMxx4J6Wc51WHsTyIJBi3aBnMWNjg9YesaUicXwez+gJ+H
-         pxpmbunhx01SivhY5LERqK9NP2/NZUktzRzVecQZ6w2YKFp5bOPWEtUIiKg8mGwqH1A2
-         01HdgZJ1zmTF7Z/HHCO4jQazl4jOUHaSg0rglsVZA5L9M13yYKCIZwwTjNvRWaXD29WF
-         5LcEwf/r1T5gnrrrbZBFsd8vPPMRnOZ5efUgbsLuc7iY/G2QiBQXmn/KtH14+mUHIN6F
-         tRlA==
-X-Gm-Message-State: AAQBX9dfNKcwTWZUxwDvfB8XKMHv+3/xa2Wp/tJ1nOCloo0Ou4mejGEO
-        gd5lKp8RUO6NZzcNUSYoPtnMYSDwyyq2LqpA1o3FhI25zY8=
-X-Google-Smtp-Source: AKy350aFSvFTy99MFR/kvT4awySB5exmsZcn2Ik/7dAPL6x18HXOcqvEg5C+sj0jhGrr7tQ+kWBg37HjPnxmyz6S3ww=
-X-Received: by 2002:a25:d6d4:0:b0:b8e:ec30:853e with SMTP id
- n203-20020a25d6d4000000b00b8eec30853emr3779823ybg.4.1681503878648; Fri, 14
- Apr 2023 13:24:38 -0700 (PDT)
+        Fri, 14 Apr 2023 16:27:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B12640DF;
+        Fri, 14 Apr 2023 13:27:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 25E8A60BBF;
+        Fri, 14 Apr 2023 20:27:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DAB6C433EF;
+        Fri, 14 Apr 2023 20:27:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681504042;
+        bh=mGto9gKSSTTM0gjfPcNOwu+t1VdaM4q/g495do+Uqt8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=NvptJXJfYZg8rRDRCNDqhhIXYMXWrNT6H/HO3Adt5dsfOmgNJDBm4RxAjf1RfS/c4
+         XzKK7VN/DJow762nJWUJh1ECAEVuljiC1xdR64Z5T4YNrT5R9cMjedIcWsJHO5eZBr
+         0x0rL2c8pf4fLTcAeHUkXmnrQ8HM/AjxDXo6HxQYg5jq49mSX3utwdWL0odxkt4n+2
+         gnPwFo65d1LHJsEjImH5PZcJt1KqE2B5+QUkofBHcOgZIPfrdPwkLpg2cz9ZCYqPDq
+         y5cegzB+mg5DN9vK6TF35erBUchLXLC2YltXCwOlkiC4kAwLpIwHZc3+ryoa3JHff6
+         v0hTSj+rCxYdg==
+Date:   Fri, 14 Apr 2023 15:27:20 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Jim Quinlan <jim2101024@gmail.com>
+Cc:     linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/3] PCI: brcmstb: CLKREQ# accomodations of downstream
+ device
+Message-ID: <20230414202720.GA215111@bhelgaas>
 MIME-Version: 1.0
-References: <20230414045747.5499-1-bruno.thomsen@gmail.com> <45602a7e-9385-296b-d704-64cdf727f5db@linaro.org>
-In-Reply-To: <45602a7e-9385-296b-d704-64cdf727f5db@linaro.org>
-From:   Bruno Thomsen <bruno.thomsen@gmail.com>
-Date:   Fri, 14 Apr 2023 22:24:22 +0200
-Message-ID: <CAH+2xPBe8Ef2YedghsxBwxUEiS_M-eVxyC4oScs2HeTM=4M_yg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: vendor-prefixes: Add KUNBUS GmbH
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Stefano Bossi <stefano.bossi@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230411165919.23955-3-jim2101024@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Den fre. 14. apr. 2023 kl. 09.58 skrev Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org>:
->
-> On 14/04/2023 06:57, Bruno Thomsen wrote:
-> > KUNBUS GmbH created the modular DIN-rail mounted open source hardware
-> > platform called Revolution Pi for automation and IIoT projects.
-> > https://www.kunbus.com/
-> >
-> > Signed-off-by: Bruno Thomsen <bruno.thomsen@gmail.com>
-> > Reviewed-by: Stefano Bossi <stefano.bossi@gmail.com>
->
-> I do not see it being used in current next. We do not document all
-> possible companies in the world. We document prefixes used in bindings.
+This subject line no verb.  Can you add a leading verb to suggest what
+this patch does?
 
-I am going to use it in the board compatibility string for the Revolution Pi
-DIN module device tree(s). So I send it separately to avoid spamming the
-mailing list on every iteration of the board DT. But I can resend it when there
-is a board patch that uses it.
+s/accomodations/accommodations/
 
-/Bruno
+On Tue, Apr 11, 2023 at 12:59:17PM -0400, Jim Quinlan wrote:
+> The Broadcom STB/CM PCIe HW core, which is also used in RPi SOCs, must be
+> deliberately set by the probe() into one of three mutually exclusive modes:
+> 
+>   (a) No CLKREQ# expected or required, refclk is always available.
+>   (b) CLKREQ# is expected to be driven by downstream device when needed.
+>   (c) Bidirectional CLKREQ# for L1SS capable devices.
+> 
+> Previously, only (b) was supported by the driver, as almost all STB/CM
+> boards operate in this mode.  But now there is interest in activating L1SS
+> power savings from STB/CM customers, and also interest in accomodating mode
+> (a) for designs such as the RPi CM4 with IO board.
 
-> Best regards,
-> Krzysztof
->
+accommodating
+
+> The HW+driver is able to tell us when mode (a) mode is needed.  But there
+> is no easy way to tell if L1SS mode should be configured.  In certain
+> situations, getting this wrong may cause a panic during boot time.  So we
+> rely on the DT prop "brcm,enable-l1ss" to tell us when mode (c) is desired.
+> Using this mode only makes sense when the downstream device is L1SS-capable
+> and the OS has been configured to activate L1SS
+> (e.g. policy==powersupersave).
+
+I'm really concerned about the user experience here.  I assume users
+do not want to edit the DT based on what device they plug in.  They
+shouldn't need to (and probably won't) know whether the device
+supports L1SS.
+
+I hate kernel/module parameters, but I think even that would be better
+then having to edit the DT.
+
+There's obviously a period of time when L1SS is supported but not yet
+enabled, so I'm *guessing* the "OS has been configured to activate
+L1SS" is not actually a requirement, and choosing (c) really just
+opens the possibility that L1SS can be used?
+
+Would be nice to have a hint (maybe a line or two of the panic
+message) to help users find the fix for a problem they're seeing.
+
+Obviously the ideal would be if we could use (c) in all cases, so I
+assume that's where a panic might happen.  What situation would that
+be?  An endpoint that doesn't support L1SS?  One that supports L1SS
+but it's not enabled?  Maybe if L1SS isn't configured correctly, e.g.,
+LTR values programmed wrong?
+
+Bjorn
