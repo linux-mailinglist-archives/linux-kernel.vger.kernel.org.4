@@ -2,189 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E8FF6E1DBA
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17D186E1DBC
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:03:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbjDNIBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 04:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46628 "EHLO
+        id S229744AbjDNIDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 04:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjDNIBk (ORCPT
+        with ESMTP id S229476AbjDNIDj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 04:01:40 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B716A42
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 01:01:39 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id rp27so6577364ejb.12
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 01:01:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681459297; x=1684051297;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xje8D9sa7nkYBBtoZ60rXI27tiHKZTyz3H3ko6glfWs=;
-        b=SNzhq9yJd9kEmkttqZyGlJGyME1zSO4jRes4LYWjxfYh998ByIMuuMTsRUC891pvxw
-         5AbB3DkE+/EOqA2BNkBBk8hUjWFZ/fsDHsISSnQjmlvPXuU+ZIjNOAu5lpXAwpfJfTEA
-         yO5q6VoErPQyjATCG48//JjePz1qHYt2qjl4TzMF9ZlJVwNabncUPeq+tecx6EDJUKf1
-         SmJBsa6PEJixtGxDfajFmw+YdCKCVQXPhhvgr9ARk8zGh5bbnAwaR8WlRfTPIIMRv581
-         skHZEIVneM3xKjRXv+yhfg+Kzzu/zgEY9CydYX7AmUffCqlQBHKN8c655e6lzeHPdX4E
-         d/Pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681459297; x=1684051297;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xje8D9sa7nkYBBtoZ60rXI27tiHKZTyz3H3ko6glfWs=;
-        b=XBzqSlCYhF++C+gZkoim5iOE3bpYHt8XOHsMto5hyDMZ+fMUSzjiS7LMWI33iMrlKF
-         TAti2q2cVFx9AS+K3ZdYTaHDRMhG96CyhXsDfq5DFxV2yyHmcBdaROVl8fcJoEbjvrOX
-         EJeGOJD75u/obTbXYajU5Q4LnXI0u0Oj6srXZ3iRnLe66NtZ/vJSwrA9/cnDLeao3qJR
-         MiOvVDJ/CUfrT166wStSoZ4QnHiRMZR8BuTktDY+/j45YF8zCrJGzceuANEQRXwdulB2
-         fHWKmjeTLjbbFd+gooRWY1u6G7sDQTIj1KufEscumSrXVGqDJbBz9Nu1RRnuhXw9d+Oh
-         0mzg==
-X-Gm-Message-State: AAQBX9ecqCrOd9wN8ic4GE09gOjlvE2ntq6EzGTBCxnbwVBgJ1VNMl56
-        yvWPk1Vfkb18RrfQIQJ7+nrbQw==
-X-Google-Smtp-Source: AKy350ZpPz0lsPYf/WDpVV1jLkM/RaqXPVT1AUiSTHl5MrL2rJ/rUIEn3+7mlYfUZuE5d3lI///K/w==
-X-Received: by 2002:a17:906:4d1:b0:94e:8aeb:f8f3 with SMTP id g17-20020a17090604d100b0094e8aebf8f3mr5886098eja.57.1681459297579;
-        Fri, 14 Apr 2023 01:01:37 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:8a60:6b0f:105a:eefb? ([2a02:810d:15c0:828:8a60:6b0f:105a:eefb])
-        by smtp.gmail.com with ESMTPSA id gj19-20020a170906e11300b0094a83007249sm2129846ejb.16.2023.04.14.01.01.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 01:01:37 -0700 (PDT)
-Message-ID: <9ab56180-328e-1416-56cb-bbf71af0c26d@linaro.org>
-Date:   Fri, 14 Apr 2023 10:01:36 +0200
+        Fri, 14 Apr 2023 04:03:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECAA410DB;
+        Fri, 14 Apr 2023 01:03:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8150061509;
+        Fri, 14 Apr 2023 08:03:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FEA1C433EF;
+        Fri, 14 Apr 2023 08:03:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681459415;
+        bh=A/hvv45Iuk0V5ALA824dIubPvLgUljKnosLa3dg0EbI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=V/uwUPy98/cFW554EfKlf6cexw08ln3C2B5ofLE9nOvQezv/KhEjJbYIQrjQMccQO
+         v3x7hoEOJPfEQipk5f+ghSpMXXToj/wKRGF3+m5rRVLcDbZMHGsqpOPo16l34CCPKZ
+         NkxueHB8RY0GL7qEcegiYKsDPK9q+jGy/gVezoh/AeQqgSJWJsI3JXn6WSl8Y4xqop
+         Qp5B8SSowKiZOHth0iAxZWcPHVCjv8gZ/IvKwSZnr1+E3dem3zY2ZnqWKGIaZ6VGId
+         XFYWMCscrvH9wGgiMTtdlte0jJBlajO/5v15A1EQnV5rDK1AOjk/9M9OgMlG0gSvMI
+         Je2lDSIUh6crQ==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Russ Weight <russell.h.weight@intel.com>
+Cc:     linux-crypto@vger.kernel.org,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>,
+        Takashi Iwai <tiwai@suse.de>, linux-kernel@vger.kernel.org
+Subject: [PATCH] firmware_loader: rework crypto dependencies
+Date:   Fri, 14 Apr 2023 10:03:07 +0200
+Message-Id: <20230414080329.76176-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [RFC PATCH 4/5] arm64: dts: ti: Enable multiple MCAN for AM62x in
- MCU MCAN overlay
-Content-Language: en-US
-To:     Judith Mendez <jm@ti.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>
-Cc:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Andrew Davis <afd@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        Schuyler Patton <spatton@ti.com>
-References: <20230413223051.24455-1-jm@ti.com>
- <20230413223051.24455-5-jm@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230413223051.24455-5-jm@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/04/2023 00:30, Judith Mendez wrote:
-> Enable two MCAN in MCU domain. AM62x does not have on-board CAN
-> transcievers, so instead of changing the DTB permanently, add
-> MCU MCAN nodes and transceiver nodes to a MCU MCAN overlay.
-> 
-> If there are no hardware interrupts rounted to the GIC interrupt
-> controller for MCAN IP, A53 Linux will not receive hardware
-> interrupts. If an hrtimer is used to generate software interrupts,
-> the two required interrupt attributes in the MCAN node do not have
-> to be included.
-> 
-> Signed-off-by: Judith Mendez <jm@ti.com>
-> ---
->  arch/arm64/boot/dts/ti/Makefile               |  2 +-
->  .../boot/dts/ti/k3-am625-sk-mcan-mcu.dtso     | 75 +++++++++++++++++++
->  2 files changed, 76 insertions(+), 1 deletion(-)
->  create mode 100644 arch/arm64/boot/dts/ti/k3-am625-sk-mcan-mcu.dtso
-> 
-> diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
-> index abe15e76b614..c76be3888e4d 100644
-> --- a/arch/arm64/boot/dts/ti/Makefile
-> +++ b/arch/arm64/boot/dts/ti/Makefile
-> @@ -9,7 +9,7 @@
->  # alphabetically.
->  
->  # Boards with AM62x SoC
-> -k3-am625-sk-mcan-dtbs := k3-am625-sk.dtb k3-am625-sk-mcan-main.dtbo
-> +k3-am625-sk-mcan-dtbs := k3-am625-sk.dtb k3-am625-sk-mcan-main.dtbo k3-am625-sk-mcan-mcu.dtbo
->  dtb-$(CONFIG_ARCH_K3) += k3-am625-beagleplay.dtb
->  dtb-$(CONFIG_ARCH_K3) += k3-am625-sk.dtb
->  dtb-$(CONFIG_ARCH_K3) += k3-am625-sk-mcan.dtb
-> diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk-mcan-mcu.dtso b/arch/arm64/boot/dts/ti/k3-am625-sk-mcan-mcu.dtso
-> new file mode 100644
-> index 000000000000..777705aea546
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/ti/k3-am625-sk-mcan-mcu.dtso
-> @@ -0,0 +1,75 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/**
-> + * DT overlay for MCAN in MCU domain on AM625 SK
-> + *
-> + * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
-> + */
-> +
-> +/dts-v1/;
-> +/plugin/;
-> +
-> +#include <dt-bindings/pinctrl/k3.h>
-> +#include <dt-bindings/soc/ti,sci_pm_domain.h>
-> +
-> +
-> +&{/} {
-> +	transceiver2: can-phy1 {
-> +		compatible = "ti,tcan1042";
-> +		#phy-cells = <0>;
-> +		max-bitrate = <5000000>;
-> +	};
-> +
-> +	transceiver3: can-phy2 {
-> +		compatible = "ti,tcan1042";
-> +		#phy-cells = <0>;
-> +		max-bitrate = <5000000>;
-> +	};
-> +};
-> +
-> +&mcu_pmx0 {
-> +	mcu_mcan1_pins_default: mcu-mcan1-pins-default {
-> +		pinctrl-single,pins = <
-> +			AM62X_IOPAD(0x038, PIN_INPUT, 0) /* (B3) MCU_MCAN0_RX */
-> +			AM62X_IOPAD(0x034, PIN_OUTPUT, 0) /* (D6) MCU_MCAN0_TX */
-> +		>;
-> +	};
-> +
-> +	mcu_mcan2_pins_default: mcu-mcan2-pins-default {
-> +		pinctrl-single,pins = <
-> +			AM62X_IOPAD(0x040, PIN_INPUT, 0) /* (D4) MCU_MCAN1_RX */
-> +			AM62X_IOPAD(0x03C, PIN_OUTPUT, 0) /* (E5) MCU_MCAN1_TX */
-> +		>;
-> +	};
-> +};
-> +
-> +&cbass_mcu {
-> +	mcu_mcan1: can@4e00000 {
-> +		compatible = "bosch,m_can";
-> +		reg = <0x00 0x4e00000 0x00 0x8000>,
-> +			  <0x00 0x4e08000 0x00 0x200>;
-> +		reg-names = "message_ram", "m_can";
-> +		power-domains = <&k3_pds 188 TI_SCI_PD_EXCLUSIVE>;
-> +		clocks = <&k3_clks 188 6>, <&k3_clks 188 1>;
-> +		clock-names = "hclk", "cclk";
-> +		bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&mcu_mcan1_pins_default>;
-> +		phys = <&transceiver2>;
-> +		status = "okay";
+From: Arnd Bergmann <arnd@arndb.de>
 
-okay is by default. Why do you need it?
+The crypto dependencies for the firmwware loader are incomplete,
+in particular a built-in FW_LOADER fails to link against a modular
+crypto hash driver:
 
+ld.lld: error: undefined symbol: crypto_alloc_shash
+ld.lld: error: undefined symbol: crypto_shash_digest
+ld.lld: error: undefined symbol: crypto_destroy_tfm
+>>> referenced by main.c
+>>>               drivers/base/firmware_loader/main.o:(fw_log_firmware_info) in archive vmlinux.a
 
+Rework this to use the usual 'select' from the driver module,
+to respect the built-in vs module dependencies, and add a
+more verbose crypto dependency to the debug option to prevent
+configurations that lead to a link failure.
 
-Best regards,
-Krzysztof
+Fixes: 02fe26f25325 ("firmware_loader: Add debug message with checksum for FW file")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+Tested on a few hundred randconfig builds
+---
+ drivers/base/firmware_loader/Kconfig | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/base/firmware_loader/Kconfig b/drivers/base/firmware_loader/Kconfig
+index 0cabc783d67a..5ca00e02fe82 100644
+--- a/drivers/base/firmware_loader/Kconfig
++++ b/drivers/base/firmware_loader/Kconfig
+@@ -3,6 +3,8 @@ menu "Firmware loader"
+ 
+ config FW_LOADER
+ 	tristate "Firmware loading facility" if EXPERT
++	select CRYPTO_HASH if FW_LOADER_DEBUG
++	select CRYPTO_SHA256 if FW_LOADER_DEBUG
+ 	default y
+ 	help
+ 	  This enables the firmware loading facility in the kernel. The kernel
+@@ -26,10 +28,9 @@ config FW_LOADER
+ 
+ config FW_LOADER_DEBUG
+ 	bool "Log filenames and checksums for loaded firmware"
++	depends on CRYPTO = FW_LOADER || CRYPTO=y
+ 	depends on DYNAMIC_DEBUG
+ 	depends on FW_LOADER
+-	depends on CRYPTO
+-	depends on CRYPTO_SHA256
+ 	default FW_LOADER
+ 	help
+ 	  Select this option to use dynamic debug to log firmware filenames and
+-- 
+2.39.2
 
