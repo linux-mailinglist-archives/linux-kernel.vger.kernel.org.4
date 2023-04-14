@@ -2,90 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 005B76E29D5
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 20:09:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 628776E2987
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 19:34:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbjDNSJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 14:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48322 "EHLO
+        id S229839AbjDNReh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 13:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjDNSJL (ORCPT
+        with ESMTP id S229528AbjDNRef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 14:09:11 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B18D9EFA;
-        Fri, 14 Apr 2023 11:09:09 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33EEpId7025674;
-        Fri, 14 Apr 2023 17:31:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=fP0y3ivoleJMzMVSQbyNpJyi0x/okXy9OO/bGDnBZuo=;
- b=pYNXcPekDQ16mTq+D/7EAGIE8BRt1hg7PnruFL1Pbu7KTKrhWFgi0LDJByqJOe2MypuP
- Y3TImWgL9QKuioOjAGyDSRISML8y6fH0GgLl5oQQr/ki2hd52vG7UxiM0V7A56bFkVGM
- ujUVA1ofe1VPxOt8jQ/9ZMo2fSl5iezCNSprhy/5hUEUDxgm/SY6d/X0SP3J/CpfuCH8
- NWHY0j7/odt6qCxx/wM5BSiZycqeubNH0RqYpUEoOYezOViglCEtwLlVC1HdOdSK0kTM
- JUg9nGyz+0zM8KXp3mnsKvphpg9fB2fXbn6eovlgIIGoqmVylQGhVibuQWsZ/mFFBZ7j MA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pxked32d8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Apr 2023 17:31:20 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33EHVJ2p028545
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Apr 2023 17:31:19 GMT
-Received: from [10.216.10.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 14 Apr
- 2023 10:31:13 -0700
-Message-ID: <7abff83f-09ea-5b1b-cbb8-786cc97627d0@quicinc.com>
-Date:   Fri, 14 Apr 2023 23:01:03 +0530
+        Fri, 14 Apr 2023 13:34:35 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD9F7ED2;
+        Fri, 14 Apr 2023 10:34:11 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-63b73203e0aso684086b3a.1;
+        Fri, 14 Apr 2023 10:34:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681493647; x=1684085647;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dG7apmRM3yhNuDvjT8hFfLfoQEI3ny9KJqTDvMmgXGo=;
+        b=AX5OheJ6KNfyM3K9opcvdfBav2CGjPcxmDkXPNcSoXNVzf/5Cr3QkXedJn1avHZ7J9
+         MXCeIyUxmvqQWhNz6e/1pYgD8M0MXfnab7qPP8FOGAwbnT9GyN3U+d6S+O4rIry0Ul9Z
+         AyW5Ps9Qwh0KwbKaxaJQ+E47gPxiMk7zKTddk8MSZTNefHNANE5m5/EQq5nUG5ICmfT/
+         3IEUZX59/5bnSrse5aFuxFKp5Z5RN3neHIQ45Vao2oT99n0swkJ5FPNvhPFEEAJvifiA
+         q2jRbLcYm9cNqCyD7X/wquvcfsSAuf8a77Ujpk47PWLTAVJeHgxE5koW1tqX6xp9uM7c
+         b1yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681493647; x=1684085647;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dG7apmRM3yhNuDvjT8hFfLfoQEI3ny9KJqTDvMmgXGo=;
+        b=UbGVbU1tdYNk7293TMBY2vD6AD0BJMzsCVjRAd04+st0L1hBwvzxI6dqGXProDWUjv
+         GMF3Rs5dUCa6nT5siYZFkMr+aZDDPx5Dky4VVxCtWOtjJilq6AtX6OIJSWI9W654Z6A7
+         P5Txykiv39dyViYVHsGVtKnJ0PbPwf4/rrH3+jpA8c6TXBXx2OdGFJCuIkAqGbjcW4Qm
+         6GhagIwijJmyIec37Sl+20c+qhHolV0RB52HGrKvAnV2dnR+6uHvmCrK2XAOy5gl2GRs
+         I72eyaxKvAccl0PnZC7sNKSo/tlG972RbaflizlZXV9ZGV9IRqNFWReQwk9Oe0jfNFHR
+         b7eQ==
+X-Gm-Message-State: AAQBX9eQGabn1XIm3Mff18yw/QRE+71er2dthNXl8dvycQDf/ZgrFRJa
+        cNUNzT3jA6iaZXySMDML7FCbnttmpHE=
+X-Google-Smtp-Source: AKy350Zw01YkPPvz6a+slxPluZg+5dR1OyjVY2sBGnURNDS7i5o7q/M2CGya86v1OM674JjP/EsK4g==
+X-Received: by 2002:a05:6a00:80f:b0:633:8cc7:bbd5 with SMTP id m15-20020a056a00080f00b006338cc7bbd5mr7400127pfk.11.1681493647169;
+        Fri, 14 Apr 2023 10:34:07 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id u23-20020a62ed17000000b0062d7c0dc4f4sm3272612pfh.80.2023.04.14.10.34.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Apr 2023 10:34:06 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Fri, 14 Apr 2023 07:34:05 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
+Message-ID: <ZDmOjeBVsIcgSLIV@slm.duckdns.org>
+References: <e38f72aa-9705-cf0c-a565-fb790f16c53e@redhat.com>
+ <ZDdG1K0kTETZMTCu@slm.duckdns.org>
+ <cd4c3f92-4a01-e636-7390-8c6a3d0cfe6c@redhat.com>
+ <ZDdNy2NAfj2_1CbW@slm.duckdns.org>
+ <1b8d9128-d076-7d37-767d-11d6af314662@redhat.com>
+ <ZDdYOI9LB87ra2t_@slm.duckdns.org>
+ <9862da55-5f41-24c3-f3bb-4045ccf24b2e@redhat.com>
+ <226cb2da-e800-6531-4e57-cbf991022477@redhat.com>
+ <ZDmFLfII8EUX_ocY@slm.duckdns.org>
+ <c61ca9d0-c514-fb07-c2f2-3629e8898984@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH V1 1/4] dt-bindings: clock: qcom,ipq9574-gcc: Drop the
- Bias PLL ubi clock source
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-CC:     <quic_srichara@quicinc.com>, <quic_sjaganat@quicinc.com>,
-        <quic_kathirav@quicinc.com>, <quic_arajkuma@quicinc.com>,
-        <quic_anusha@quicinc.com>, <quic_poovendh@quicinc.com>
-References: <20230414134812.16812-1-quic_devipriy@quicinc.com>
- <20230414134812.16812-2-quic_devipriy@quicinc.com>
- <dc48d390-9c8b-d3b7-9c5e-6cbddb0e1306@linaro.org>
- <aca7b808-51ce-1921-2ee2-0e82cf19d960@quicinc.com>
- <7b4fe58c-9cf8-57ab-8cbc-c5ccf0b2a46d@linaro.org>
- <2c5bbe48-3007-a1d5-73b9-9d2132bff9d4@quicinc.com>
- <76237034-7871-c77f-1e32-c0a585d8df86@linaro.org>
-Content-Language: en-US
-From:   Devi Priya <quic_devipriy@quicinc.com>
-In-Reply-To: <76237034-7871-c77f-1e32-c0a585d8df86@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: QQV_QQ5WEzXOyGI-CmQyQ1dyJA7XHiKR
-X-Proofpoint-ORIG-GUID: QQV_QQ5WEzXOyGI-CmQyQ1dyJA7XHiKR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-14_10,2023-04-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
- phishscore=0 bulkscore=0 spamscore=0 malwarescore=0 suspectscore=0
- adultscore=0 priorityscore=1501 clxscore=1015 mlxlogscore=669
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304140154
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c61ca9d0-c514-fb07-c2f2-3629e8898984@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,44 +90,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/14/2023 10:41 PM, Krzysztof Kozlowski wrote:
-> On 14/04/2023 18:04, Devi Priya wrote:
->>
->>
->> On 4/14/2023 8:39 PM, Krzysztof Kozlowski wrote:
->>> On 14/04/2023 16:22, Devi Priya wrote:
->>>>
->>>>
->>>> On 4/14/2023 7:47 PM, Krzysztof Kozlowski wrote:
->>>>> On 14/04/2023 15:48, Devi Priya wrote:
->>>>>> Remove bias_pll_ubi_nc_clk from the binding as it has been removed from
->>>>>> the Device Tree. Also added Bjorn Andersson to the maintainers list.
->>>>>
->>>>> Was it really removed? Where?
->>>>>
->>>> It has been removed from the Device tree and binding in V11
->>>> https://lore.kernel.org/linux-arm-msm/20230404101622.5394-1-quic_devipriy@quicinc.com/
->>>
->>> I still see it in current next. Are you sure you refer to something
->>> already merged?
->>
->> This change was made in V11 and Currently V9 is merged in linux-next.
->> So, the delta changes between V9 & V12 is posted in this series.
->> The device tree change where the clock is removed is added part of this
->> incremental patch series and the binding is updated to reflect the same.
->> Apologies, if the confusion is because of "has been removed from device
->> tree" in the commit message.
+On Fri, Apr 14, 2023 at 01:29:25PM -0400, Waiman Long wrote:
 > 
-> Your commit indicated that removal from DTS happened. If it did not
-> happen, you need to come with proper reason (and fix the tense not to
-> confuse).
-Got it, will update the commit message.
+> On 4/14/23 12:54, Tejun Heo wrote:
+> > On Thu, Apr 13, 2023 at 09:22:19PM -0400, Waiman Long wrote:
+> > > I now have a slightly different idea of how to do that. We already have an
+> > > internal cpumask for partitioning - subparts_cpus. I am thinking about
+> > > exposing it as cpuset.cpus.reserve. The current way of creating
+> > > subpartitions will be called automatic reservation and require a direct
+> > > parent/child partition relationship. But as soon as a user write anything to
+> > > it, it will break automatic reservation and require manual reservation going
+> > > forward.
+> > > 
+> > > In that way, we can keep the old behavior, but also support new use cases. I
+> > > am going to work on that.
+> > I'm not sure I fully understand the proposed behavior but it does sound more
+> > quirky.
+> 
+> The idea is to use the existing subparts_cpus for cpu reservation instead of
+> adding a new cpumask for that purpose. The current way of partition creation
+> does cpus reservation (setting subparts_cpus) automatically with the
+> constraint that the parent of a partition must be a partition root itself.
+> One way to relax this constraint is to allow a new manual reservation mode
+> where users can set reserve cpus manually and distribute them down the
+> hierarchy before activating a partition to use those cpus.
+> 
+> Now the question is how to enable this new manual reservation mode. One way
+> to do it is to enable it whenever the new cpuset.cpus.reserve file is
+> modified. Alternatively, we may enable it by a cgroupfs mount option or a
+> boot command line option.
 
-Thanks,
-Devi Priya
-> 
-> Best regards,
-> Krzysztof
-> 
+It'd probably be best if we can keep the behavior within cgroupfs if
+possible. Would you mind writing up the documentation section describing the
+behavior beforehand? I think things would be clearer if we look at it from
+the interface documentation side.
+
+Thanks.
+
+-- 
+tejun
