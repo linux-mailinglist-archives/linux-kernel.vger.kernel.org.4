@@ -2,134 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CE6D6E1CE9
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 09:04:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10F026E1CEF
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 09:06:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbjDNHEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 03:04:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42552 "EHLO
+        id S229651AbjDNHGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 03:06:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjDNHER (ORCPT
+        with ESMTP id S229553AbjDNHGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 03:04:17 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BF93A84;
-        Fri, 14 Apr 2023 00:04:15 -0700 (PDT)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PyS6R54MLzKxvD;
-        Fri, 14 Apr 2023 15:01:35 +0800 (CST)
-Received: from [10.67.111.205] (10.67.111.205) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 14 Apr 2023 15:04:11 +0800
-Subject: Re: [PATCH RESEND v3] perf/core: Fix hardlockup failure caused by
- perf throttle
-From:   Yang Jihong <yangjihong1@huawei.com>
-To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>, <irogers@google.com>,
-        <eranian@google.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230227023508.102230-1-yangjihong1@huawei.com>
- <12782722-103e-88a9-df3e-6815b4734bc3@huawei.com>
- <37d019af-191c-9955-2417-b7cfa5e5efa3@huawei.com>
-Message-ID: <56cc5b4f-3cbd-c265-36fc-fedab16b8cff@huawei.com>
-Date:   Fri, 14 Apr 2023 15:04:11 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Fri, 14 Apr 2023 03:06:01 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA0630F5;
+        Fri, 14 Apr 2023 00:05:59 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33E6UlGG031289;
+        Fri, 14 Apr 2023 07:05:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=1h16hUb3V1HHJiseU1aSCsalqmOi0P1+ZAFDaD80Qt8=;
+ b=dMSFJ7NbyEi/5vBUl7A2h6idvDX+qZ5LJJKCfiBRki8EZXV9r7Z3AXllfIlxD/mnYJKd
+ 6WRfT0bXKQywz5ICcITY1suF7A1kB0RvRgCKlC75jV1Izj5WkqxScqykgXkwlX7h4phV
+ ax3ci2KnyiQvqgG/UBKwppoxh89BMiySRe2tvSA2k6LOjvIocnBjIUry54OB/pOlBG4a
+ t5S1rEGqV47+E0vKb0PKjHsWeDFK4dVZ83EhUan4D7/n3gYzcGMW150OficPpjqce7EW
+ IgNnqDlWI7SQZsSS+4ZLOPGhhCQpzAz/twq8ljmN9Btci4ATJZsk167hMFNg9cbblAQc tg== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pxqf9964m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 07:05:11 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33E759T8032286
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 07:05:09 GMT
+Received: from [10.216.56.7] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 14 Apr
+ 2023 00:05:04 -0700
+Message-ID: <3df1ec27-7e4d-1f84-ff20-94e8ea91c86f@quicinc.com>
+Date:   Fri, 14 Apr 2023 12:35:00 +0530
 MIME-Version: 1.0
-In-Reply-To: <37d019af-191c-9955-2417-b7cfa5e5efa3@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 2/6] remoteproc: qcom: Move minidump specific data to
+ qcom_minidump.h
 Content-Language: en-US
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <corbet@lwn.net>,
+        <keescook@chromium.org>, <tony.luck@intel.com>,
+        <gpiccoli@igalia.com>, <catalin.marinas@arm.com>, <will@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-hardening@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-doc@vger.kernel.org>
+References: <1679491817-2498-1-git-send-email-quic_mojha@quicinc.com>
+ <1679491817-2498-3-git-send-email-quic_mojha@quicinc.com>
+ <e74fb30d-4268-86b1-cdf7-ad3d104c6c40@linaro.org>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <e74fb30d-4268-86b1-cdf7-ad3d104c6c40@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.205]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Kjd3iZFPQAyO7ZDiYAcbngj41D7Q5c2b
+X-Proofpoint-ORIG-GUID: Kjd3iZFPQAyO7ZDiYAcbngj41D7Q5c2b
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-14_02,2023-04-13_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ suspectscore=0 malwarescore=0 spamscore=0 phishscore=0 clxscore=1011
+ mlxlogscore=999 priorityscore=1501 lowpriorityscore=0 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304140063
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Thanks again for coming back on this.
 
-PING again.
-Look forward the review.
+On 4/14/2023 4:02 AM, Srinivas Kandagatla wrote:
+> 
+> 
+> On 22/03/2023 13:30, Mukesh Ojha wrote:
+>> Move minidump specific data types and macros to a separate internal
+>> header(qcom_minidump.h) so that it can be shared among different
+> 
+> minidump.h should be good as we are already in include/soc/qcom/
 
-Thanks,
-Yang.
 
-On 2023/3/22 15:36, Yang Jihong wrote:
-> Hello,
+Initially, i wanted to protect the content of qcom_minidump.h between 
+qcom_minidump.c and qcom_common.c
+
+Ideally, here qcom_minidump.h should be supplier/provider header and can 
+be shared among above qcom_minidump.c and qcom_common.c but since they 
+are not in same directory, moved it inside include/soc/qcom/ as separate 
+header than consumer header minidump.h .
+
+-Mukesh
 > 
-> PING.
+> --srini
 > 
-> This patch has not been responded.
-> Please take time to check whether the fix solution is OK.
-> Look forward to reviewing the patch. Thanks :)
-> 
-> Thanks,
-> Yang.
-> 
-> On 2023/3/6 9:14, Yang Jihong wrote:
->> Hello,
+>> Qualcomm drivers.
 >>
->> PING.
+>> There is no change in functional behavior after this.
 >>
->> Thanks,
->> Yang.
+>> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+>> ---
+>>   drivers/remoteproc/qcom_common.c | 56 
+>> +---------------------------------
+>>   include/soc/qcom/qcom_minidump.h | 66 
+>> ++++++++++++++++++++++++++++++++++++++++
+>>   2 files changed, 67 insertions(+), 55 deletions(-)
+>>   create mode 100644 include/soc/qcom/qcom_minidump.h
 >>
->> On 2023/2/27 10:35, Yang Jihong wrote:
->>> commit e050e3f0a71bf ("perf: Fix broken interrupt rate throttling")
->>> introduces a change in throttling threshold judgment. Before this,
->>> compare hwc->interrupts and max_samples_per_tick, then increase
->>> hwc->interrupts by 1, but this commit reverses order of these two
->>> behaviors, causing the semantics of max_samples_per_tick to change.
->>> In literal sense of "max_samples_per_tick", if hwc->interrupts ==
->>> max_samples_per_tick, it should not be throttled, therefore, the 
->>> judgment
->>> condition should be changed to "hwc->interrupts > max_samples_per_tick".
->>>
->>> In fact, this may cause the hardlockup to fail, The minimum value of
->>> max_samples_per_tick may be 1, in this case, the return value of
->>> __perf_event_account_interrupt function is 1.
->>> As a result, nmi_watchdog gets throttled, which would stop PMU (Use x86
->>> architecture as an example, see x86_pmu_handle_irq).
->>>
->>> Fixes: e050e3f0a71b ("perf: Fix broken interrupt rate throttling")
->>> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
->>> ---
->>>
->>> Changes since v2:
->>>    - Add fixed commit.
->>>
->>> Changes since v1:
->>>    - Modify commit title.
->>>
->>>   kernel/events/core.c | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/kernel/events/core.c b/kernel/events/core.c
->>> index f79fd8b87f75..0540a8653906 100644
->>> --- a/kernel/events/core.c
->>> +++ b/kernel/events/core.c
->>> @@ -9434,7 +9434,7 @@ __perf_event_account_interrupt(struct 
->>> perf_event *event, int throttle)
->>>       } else {
->>>           hwc->interrupts++;
->>>           if (unlikely(throttle
->>> -                 && hwc->interrupts >= max_samples_per_tick)) {
->>> +                 && hwc->interrupts > max_samples_per_tick)) {
->>>               __this_cpu_inc(perf_throttled_count);
->>>               tick_dep_set_cpu(smp_processor_id(), 
->>> TICK_DEP_BIT_PERF_EVENTS);
->>>               hwc->interrupts = MAX_INTERRUPTS;
->>>
->>
->> .
-> 
-> .
+>> diff --git a/drivers/remoteproc/qcom_common.c 
+>> b/drivers/remoteproc/qcom_common.c
+>> index 805e525..88fc984 100644
+>> --- a/drivers/remoteproc/qcom_common.c
+>> +++ b/drivers/remoteproc/qcom_common.c
+>> @@ -18,6 +18,7 @@
+>>   #include <linux/slab.h>
+>>   #include <linux/soc/qcom/mdt_loader.h>
+>>   #include <linux/soc/qcom/smem.h>
+>> +#include <soc/qcom/qcom_minidump.h>
+>>   #include "remoteproc_internal.h"
+>>   #include "qcom_common.h"
+>> @@ -26,61 +27,6 @@
+>>   #define to_smd_subdev(d) container_of(d, struct qcom_rproc_subdev, 
+>> subdev)
+>>   #define to_ssr_subdev(d) container_of(d, struct qcom_rproc_ssr, subdev)
+>> -#define MAX_NUM_OF_SS           10
+>> -#define MAX_REGION_NAME_LENGTH  16
+>> -#define SBL_MINIDUMP_SMEM_ID    602
+>> -#define MINIDUMP_REGION_VALID        ('V' << 24 | 'A' << 16 | 'L' << 
+>> 8 | 'I' << 0)
+>> -#define MINIDUMP_SS_ENCR_DONE        ('D' << 24 | 'O' << 16 | 'N' << 
+>> 8 | 'E' << 0)
+>> -#define MINIDUMP_SS_ENABLED        ('E' << 24 | 'N' << 16 | 'B' << 8 
+>> | 'L' << 0)
+>> -
+>> -/**
+>> - * struct minidump_region - Minidump region
+>> - * @name        : Name of the region to be dumped
+>> - * @seq_num:        : Use to differentiate regions with same name.
+>> - * @valid        : This entry to be dumped (if set to 1)
+>> - * @address        : Physical address of region to be dumped
+>> - * @size        : Size of the region
+>> - */
+>> -struct minidump_region {
+>> -    char    name[MAX_REGION_NAME_LENGTH];
+>> -    __le32    seq_num;
+>> -    __le32    valid;
+>> -    __le64    address;
+>> -    __le64    size;
+>> -};
+>> -
+>> -/**
+>> - * struct minidump_subsystem - Subsystem's SMEM Table of content
+>> - * @status : Subsystem toc init status
+>> - * @enabled : if set to 1, this region would be copied during coredump
+>> - * @encryption_status: Encryption status for this subsystem
+>> - * @encryption_required : Decides to encrypt the subsystem regions or 
+>> not
+>> - * @region_count : Number of regions added in this subsystem toc
+>> - * @regions_baseptr : regions base pointer of the subsystem
+>> - */
+>> -struct minidump_subsystem {
+>> -    __le32    status;
+>> -    __le32    enabled;
+>> -    __le32    encryption_status;
+>> -    __le32    encryption_required;
+>> -    __le32    region_count;
+>> -    __le64    regions_baseptr;
+>> -};
+>> -
+>> -/**
+>> - * struct minidump_global_toc - Global Table of Content
+>> - * @status : Global Minidump init status
+>> - * @md_revision : Minidump revision
+>> - * @enabled : Minidump enable status
+>> - * @subsystems : Array of subsystems toc
+>> - */
+>> -struct minidump_global_toc {
+>> -    __le32                status;
+>> -    __le32                md_revision;
+>> -    __le32                enabled;
+>> -    struct minidump_subsystem    subsystems[MAX_NUM_OF_SS];
+>> -};
+>> -
+>>   struct qcom_ssr_subsystem {
+>>       const char *name;
+>>       struct srcu_notifier_head notifier_list;
+>> diff --git a/include/soc/qcom/qcom_minidump.h 
+>> b/include/soc/qcom/qcom_minidump.h
+>> new file mode 100644
+>> index 0000000..84c8605
+>> --- /dev/null
+>> +++ b/include/soc/qcom/qcom_minidump.h
+>> @@ -0,0 +1,66 @@
+>> +/* SPDX-License-Identifier: GPL-2.0-only */
+>> +/*
+>> + * Qualcomm minidump shared data structures and macros
+>> + *
+>> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights 
+>> reserved.
+>> + */
+>> +
+>> +#ifndef _QCOM_MINIDUMP_H_
+>> +#define _QCOM_MINIDUMP_H_
+>> +
+>> +#define MAX_NUM_OF_SS           10
+>> +#define MAX_REGION_NAME_LENGTH  16
+>> +#define SBL_MINIDUMP_SMEM_ID    602
+>> +#define MINIDUMP_REGION_VALID        ('V' << 24 | 'A' << 16 | 'L' << 
+>> 8 | 'I' << 0)
+>> +#define MINIDUMP_SS_ENCR_DONE        ('D' << 24 | 'O' << 16 | 'N' << 
+>> 8 | 'E' << 0)
+>> +#define MINIDUMP_SS_ENABLED        ('E' << 24 | 'N' << 16 | 'B' << 8 
+>> | 'L' << 0)
+>> +
+>> +/**
+>> + * struct minidump_region - Minidump region
+>> + * @name        : Name of the region to be dumped
+>> + * @seq_num:        : Use to differentiate regions with same name.
+>> + * @valid        : This entry to be dumped (if set to 1)
+>> + * @address        : Physical address of region to be dumped
+>> + * @size        : Size of the region
+>> + */
+>> +struct minidump_region {
+>> +    char    name[MAX_REGION_NAME_LENGTH];
+>> +    __le32    seq_num;
+>> +    __le32    valid;
+>> +    __le64    address;
+>> +    __le64    size;
+>> +};
+>> +
+>> +/**
+>> + * struct minidump_subsystem - Subsystem's SMEM Table of content
+>> + * @status : Subsystem toc init status
+>> + * @enabled : if set to 1, this region would be copied during coredump
+>> + * @encryption_status: Encryption status for this subsystem
+>> + * @encryption_required : Decides to encrypt the subsystem regions or 
+>> not
+>> + * @region_count : Number of regions added in this subsystem toc
+>> + * @regions_baseptr : regions base pointer of the subsystem
+>> + */
+>> +struct minidump_subsystem {
+>> +    __le32    status;
+>> +    __le32    enabled;
+>> +    __le32    encryption_status;
+>> +    __le32    encryption_required;
+>> +    __le32    region_count;
+>> +    __le64    regions_baseptr;
+>> +};
+>> +
+>> +/**
+>> + * struct minidump_global_toc - Global Table of Content
+>> + * @status : Global Minidump init status
+>> + * @md_revision : Minidump revision
+>> + * @enabled : Minidump enable status
+>> + * @subsystems : Array of subsystems toc
+>> + */
+>> +struct minidump_global_toc {
+>> +    __le32                status;
+>> +    __le32                md_revision;
+>> +    __le32                enabled;
+>> +    struct minidump_subsystem    subsystems[MAX_NUM_OF_SS];
+>> +};
+>> +
+>> +#endif  /* _QCOM_MINIDUMP_H_ */
