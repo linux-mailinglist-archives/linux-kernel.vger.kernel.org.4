@@ -2,131 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E153C6E29BA
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 19:54:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 457AD6E29C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 19:58:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbjDNRyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 13:54:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42820 "EHLO
+        id S229870AbjDNR6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 13:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjDNRyu (ORCPT
+        with ESMTP id S229493AbjDNR6D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 13:54:50 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F29210C
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 10:54:49 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-54fbb2ee579so64040757b3.14
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 10:54:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681494888; x=1684086888;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=sxtuJlZyuhJWBSe3BUp1o+R468Jyg7wjt5EQDKL8liw=;
-        b=g9SpJgATsQDIYrkaPJd8d+PpBLT6jxYfne0OaHPIARm2IOQH+5ZUzrk668RVIdTFIK
-         sxOkrjHFb2IwJhV+Rhhqr+Ms2OhPNi3AodJ+9OY+2GG2/dSng1wTYMa57UFr7FfZAVxI
-         Mjh/iCg/xVEVvZMZlFypxHv6CoV31SltYbDHcAJCNrxBVXuHnfWdWgPZy7WTw1rRq2XX
-         TXhZzJwJ3E/Ie4KgOXvM9CGQPa5RcER+MZF/7gxO1S4H4wu9t0bNr4IGAKdJ6Cqg7aGH
-         BaxrJvra46EdXACNO7xHjaZO0BZXtOmHgL+PMxZE4/oVvLRUiP56FT8IvxbimldOWzpD
-         U8NA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681494888; x=1684086888;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sxtuJlZyuhJWBSe3BUp1o+R468Jyg7wjt5EQDKL8liw=;
-        b=a6PAdwh6iKzhaUGvdJsmCMnvJvv/F/B4ciY0hKXWen3QRQ0MOECxeQ172NLcNIDDAs
-         NuzYSEJxazm2q/YRkSDoiQ0ivwd57TgBcLVRO/BK/EKeTUfdY3aAjx1gH3IgLx4+/c1P
-         ZFhyLrdX/hC3bGmMdfil+0ObFBcNNKcZJ3bW0nRjVD5yZNgcIQAHs1aXEQuRY/1xh7O7
-         NOVQEc7CSsmBB03+xiCzGlI1TE1J2VxdnQ1lV+dOd9QGOsG1JZbMVHgyOLrz+u03ZN+y
-         C0wEEahKDxYpooSpnfBORTwuwS9JO55VcfQkrhRo3NOjoux1ztn9aBBdiX5fNINQkORb
-         EkcA==
-X-Gm-Message-State: AAQBX9dQlPl7cbO5uFUM1P5bfN7yydTx0UFza1M4Mpk6a91EIQSo+gQY
-        7J0Us05wy0npzhm59IQuXvi0UmzC8dk=
-X-Google-Smtp-Source: AKy350avB5MCJ6AGQUDi4bXHuLqjAuOo0YGWC/cK9hfJMcJckV+n+dWeR6kBIWjZnXn/yq9bCXOysK/QEQk=
-X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:46c0:7584:f020:e09f])
- (user=surenb job=sendgmr) by 2002:a25:730c:0:b0:b91:b64e:743d with SMTP id
- o12-20020a25730c000000b00b91b64e743dmr1199758ybc.9.1681494888506; Fri, 14 Apr
- 2023 10:54:48 -0700 (PDT)
-Date:   Fri, 14 Apr 2023 10:54:44 -0700
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-Message-ID: <20230414175444.1837474-1-surenb@google.com>
-Subject: [PATCH 1/1] mm: do not increment pgfault stats when page fault
- handler retries
-From:   Suren Baghdasaryan <surenb@google.com>
-To:     akpm@linux-foundation.org
-Cc:     willy@infradead.org, hannes@cmpxchg.org, mhocko@suse.com,
-        josef@toxicpanda.com, jack@suse.cz, ldufour@linux.ibm.com,
-        laurent.dufour@fr.ibm.com, michel@lespinasse.org,
-        liam.howlett@oracle.com, jglisse@google.com, vbabka@suse.cz,
-        minchan@google.com, dave@stgolabs.net, punit.agrawal@bytedance.com,
-        lstoakes@gmail.com, surenb@google.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 14 Apr 2023 13:58:03 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E437D91;
+        Fri, 14 Apr 2023 10:58:01 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33EEdnvq027916;
+        Fri, 14 Apr 2023 17:57:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Tios2Y7npBZ6qwjO6Disa8Qx5hEM+baQi0KFCeAxbcY=;
+ b=JRgsfLlBoW5DWcGP/9epXOMuzYVU6RqHUhaHLapjp3l4ZMy2T+P6OITWy+JXbaWvLbr4
+ CwpgveYAyxsbHGVnEJL5zIGIr4T2eRcro7KiyRJWWJnaK0uSiWxkBM5nEGD6c5HFA/c/
+ vgKNWyijPJJ9upPNXEJvPNMEnEqnTH/s/bLb3TvQVxiyt1vx8ANt+IKcuIPI57FSlh5n
+ mSS/hnSZco5dhV8ky9f1/ItBm3GoMSDl9pyW9ktwxBcFhn8kzg4izSXd0WCuxeRbt1Pr
+ mF1BDzWEaO/70YeX34MxweyD2gHWXxKsXqSTJ/A5S9Q1XucGDH3Upn/hhu6XvIjYlICW Uw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pxx8ussgp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 17:57:48 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33EHvlu7002529
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 17:57:47 GMT
+Received: from [10.110.73.215] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 14 Apr
+ 2023 10:57:45 -0700
+Message-ID: <82bf6167-d621-1a4e-86f0-7a8567347722@quicinc.com>
+Date:   Fri, 14 Apr 2023 10:57:45 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [Freedreno] [PATCH] drm/msm/dpu: always program dsc active bits
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+CC:     <freedreno@lists.freedesktop.org>, <quic_sbillaka@quicinc.com>,
+        <dianders@chromium.org>, <airlied@gmail.com>,
+        <andersson@kernel.org>, <robdclark@gmail.com>,
+        <dri-devel@lists.freedesktop.org>, <swboyd@chromium.org>,
+        <vkoul@kernel.org>, <agross@kernel.org>, <daniel@ffwll.ch>,
+        <linux-arm-msm@vger.kernel.org>, <dmitry.baryshkov@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>, <sean@poorly.run>,
+        <linux-kernel@vger.kernel.org>
+References: <1681247095-1201-1-git-send-email-quic_khsieh@quicinc.com>
+ <z7wj2lcgcdxsqh7ylhec3ig6o4p6q37zqvpzoxp4bd4vid2z2n@ubsgt3ebqrwr>
+ <83f9a438-52c5-83f3-1767-92d16518d8f0@quicinc.com>
+ <feedv4isliterjtwyicqfarwuvzhtov3jkmvjcwqvt7itkyh7y@e2jq5t6r3lxc>
+ <e78e576a-2a04-e7ca-f6c4-701d508541ad@quicinc.com>
+ <mfzi535qsjtcznwdvgb7qyzk25rcsrkwozah6ji4thqsj73n3m@asybxllomisg>
+ <049697ba-d997-62c0-6e21-ffb287ac3100@quicinc.com>
+ <6s42sutrd2c6tme46t6tchd6y6wonmpwokseqqz2frkrfext7v@vnv44tzwyva4>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <6s42sutrd2c6tme46t6tchd6y6wonmpwokseqqz2frkrfext7v@vnv44tzwyva4>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: B8MBCU2YWbpysRyWwHZbqieLfTBLlxUp
+X-Proofpoint-GUID: B8MBCU2YWbpysRyWwHZbqieLfTBLlxUp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-14_09,2023-04-14_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 suspectscore=0 spamscore=0 clxscore=1015 lowpriorityscore=0
+ mlxlogscore=946 impostorscore=0 mlxscore=0 bulkscore=0 malwarescore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304140158
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the page fault handler requests a retry, we will count the fault
-multiple times.  This is a relatively harmless problem as the retry paths
-are not often requested, and the only user-visible problem is that the
-fault counter will be slightly higher than it should be.  Nevertheless,
-userspace only took one fault, and should not see the fact that the
-kernel had to retry the fault multiple times.
 
-Fixes: 6b4c9f446981 ("filemap: drop the mmap_sem for all blocking operations")
-Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
----
-Patch applies cleanly over linux-next and mm-unstable
 
- mm/memory.c | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+On 4/14/2023 10:34 AM, Marijn Suijten wrote:
+> On 2023-04-14 08:48:43, Abhinav Kumar wrote:
+>>
+>> On 4/14/2023 12:35 AM, Marijn Suijten wrote:
+>>> On 2023-04-12 10:33:15, Abhinav Kumar wrote:
+>>> [..]
+>>>>> What happens if a device boots without DSC panel connected?  Will
+>>>>> CTL_DSC_FLUSH be zero and not (unnecessarily, I assume) flush any of the
+>>>>> DSC blocks?  Or could this flush uninitialized state to the block?
+>>>>>
+>>>>
+>>>> If we bootup without DSC panel connected, the kernel's cfg->dsc will be
+>>>> 0 and default register value of CTL_DSC_FLUSH will be 0 so it wont flush
+>>>> any DSC blocks.
+>>>
+>>> Ack, that makes sense.  However, if I connect a DSC panel, then
+>>> disconnect it (now the register should be non-zero, but cfg->dsc will be
+>>> zero), and then replug a non-DSC panel multiple times, it'll get flushed
+>>> every time because we never clear CTL_DSC_FLUSH after that?
+>>>
+>>
+>> If we remove it after kernel starts, that issue is there even today
+>> without that change because DSI is not a hot-pluggable display so a
+>> teardown wont happen when you plug out the panel. How will cfg->dsc be 0
+>> then? In that case, its not a valid test as there was no indication to
+>> DRM that display was disconnected so we cannot tear it down.
+> 
+> The patch description itself describes hot-pluggable displays, which I
+> believe is the upcoming DSC support for DP?  You ask how cfg->dsc can
+> become zero, but this is **exactly** what the patch description
+> describes, and what this patch is removing the `if` for.  If we are not
+> allowed to discuss that scenario because it is not currently supported,
+> neither should we allow to apply this patch.
+> 
+> With that in mind, can you re-answer the question?
+> 
 
-diff --git a/mm/memory.c b/mm/memory.c
-index 1c5b231fe6e3..d88f370eacd1 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -5212,17 +5212,16 @@ vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
- 
- 	__set_current_state(TASK_RUNNING);
- 
--	count_vm_event(PGFAULT);
--	count_memcg_event_mm(vma->vm_mm, PGFAULT);
--
- 	ret = sanitize_fault_flags(vma, &flags);
- 	if (ret)
--		return ret;
-+		goto out;
- 
- 	if (!arch_vma_access_permitted(vma, flags & FAULT_FLAG_WRITE,
- 					    flags & FAULT_FLAG_INSTRUCTION,
--					    flags & FAULT_FLAG_REMOTE))
--		return VM_FAULT_SIGSEGV;
-+					    flags & FAULT_FLAG_REMOTE)) {
-+		ret = VM_FAULT_SIGSEGV;
-+		goto out;
-+	}
- 
- 	/*
- 	 * Enable the memcg OOM handling for faults triggered in user
-@@ -5253,6 +5252,11 @@ vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
- 	}
- 
- 	mm_account_fault(regs, address, flags, ret);
-+out:
-+	if (!(ret & VM_FAULT_RETRY)) {
-+		count_vm_event(PGFAULT);
-+		count_memcg_event_mm(vma->vm_mm, PGFAULT);
-+	}
- 
- 	return ret;
- }
--- 
-2.40.0.634.g4ca3ef3211-goog
+I didnt follow what needs to be re-answered.
 
+This patch is being sent in preparation of the DSC over DP support. This 
+does not handle non-hotpluggable displays. I do not think dynamic switch 
+between DSC and non-DSC of non-hotpluggable displays needs to be 
+discussed here as its not handled at all with or without this patch.
+
+We wanted to get early reviews on the patch. If you want this patch to 
+be absorbed when rest of DSC over DP lands, I have no concerns with 
+that. I wont pick this up for fixes and we will land this together with 
+the rest of DP over DSC.
+
+
+> - Marijn
