@@ -2,101 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CFB66E1B5F
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 06:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55ED36E1B62
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 07:00:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbjDNE7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 00:59:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38426 "EHLO
+        id S229733AbjDNFAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 01:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjDNE7I (ORCPT
+        with ESMTP id S229597AbjDNFAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 00:59:08 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A3F44B2;
-        Thu, 13 Apr 2023 21:59:07 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id xi5so42696223ejb.13;
-        Thu, 13 Apr 2023 21:59:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681448345; x=1684040345;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JYs4X/cHVaQ4OsoLQeKiZlQ/sz76dJL60RQrChG+avM=;
-        b=MUE+EmqdKmfgI4I5aNbVYFhO87BatVBWQQRMy2LBUKj/auXVnR80y/rR3Ex84amKHA
-         DU7eIt0EKDhI49FGNaHklV/NpJTHI7V5wOoyqpFCSGNOUdlIyafj7Om0HNfNLDv8aLuC
-         EHk0Ar83DmZCn89YXoRjsAQzmssBDCSdqyfGF5+OvcZGQ5UutgPZCqNst/8oa78Dbgbe
-         rHPtljSq9NguVoLAS0z8YdAt6oTP7Tdf5RnP6cERJgxsV40m7Lv5GgYmurxGZUIYTuOD
-         sGFK4viYLOKWIgpr5uCseyZsGdZ7xn7Z2pKkKi52HL8s9kwfnAsS2SCeh0+vGoDe6vYT
-         kXug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681448345; x=1684040345;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JYs4X/cHVaQ4OsoLQeKiZlQ/sz76dJL60RQrChG+avM=;
-        b=SkEUzL5rT+N/JGJm3qAHXeLzQtZXA+PU/oqgx5KH57HytdEu+gp/ntlwTgMf41VmP9
-         mTGwqw1LeDbpS/jnbp0zhJE170MItqQquup2WlZi4RerJqQWZ/Nv5CciryBFEFyfof/+
-         CdYUsyJ05TMAgHbGgle4kzJMcW/G9r+vIbZB+Mg/xhNenCskiArZpsx3QVg9o95WQhDh
-         253AIW204C+FvOAHsznwnC3MXcExbeNfplMKjXSnRwDNmbZy1XsPvrrl29U/3IgxhKE6
-         OBw7vw6igmzrB+s+DvdYjTSRYI7yMv8JnsRz89j0UVa9GIx/gsWA1fOGy1CjOm8vrHGn
-         /e7A==
-X-Gm-Message-State: AAQBX9cD4c/HGDpOGdNYf30p1TjiqVZwzj9wdkuQodU4PudyV+Qe75Q7
-        EFoAOfCX3fuyuSlfklUOEUiHx2+uQQQjrg==
-X-Google-Smtp-Source: AKy350bvu0DNMbDQ4DT7gskdAsna8gD1Ujp/pq8fgr7712VXWm8+xybgxHbxElno2WmurNHS5kWeJg==
-X-Received: by 2002:a17:906:9f0d:b0:94e:baaf:3c39 with SMTP id fy13-20020a1709069f0d00b0094ebaaf3c39mr2568345ejc.46.1681448345417;
-        Thu, 13 Apr 2023 21:59:05 -0700 (PDT)
-Received: from xps13.. (77.241.128.176.mobile.3.dk. [77.241.128.176])
-        by smtp.gmail.com with ESMTPSA id h23-20020aa7c957000000b005066ca60b2csm1621979edt.63.2023.04.13.21.59.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 21:59:04 -0700 (PDT)
-From:   Bruno Thomsen <bruno.thomsen@gmail.com>
-To:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Bruno Thomsen <bruno.thomsen@gmail.com>,
-        Stefano Bossi <stefano.bossi@gmail.com>
-Subject: [PATCH] dt-bindings: vendor-prefixes: Add KUNBUS GmbH
-Date:   Fri, 14 Apr 2023 06:57:47 +0200
-Message-Id: <20230414045747.5499-1-bruno.thomsen@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        Fri, 14 Apr 2023 01:00:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7124A2;
+        Thu, 13 Apr 2023 22:00:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 55520643D0;
+        Fri, 14 Apr 2023 05:00:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6BD97C433EF;
+        Fri, 14 Apr 2023 05:00:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681448418;
+        bh=Nuj4Q/n+u+sbinQ2UL896QpTHkLhLwc1MiTdNnxNY78=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=d9M58d/HcVeQFN+gwfMVesploSFc5+l8pWtlltiXfi71J5FNhY5WmIaJvPGdyTgQ4
+         MAuwAymXreWoZI6Lqw6BR7BTpuxft810fi+K4hgm4eyo0GHxt8LlUoalvzRjnRPRI7
+         n/HbfJGoZAnu/Rg5QwU6Bdz3Y+WbQiW8+mBt2q/PMm359/dhkknx99dL/dmeLHYblC
+         NtI35Pbov4SiJMqvMc8AJ3eynaGaNx4h0CGfeZtDCz1WyP4l28gl6SujsFj0N4Dr1g
+         8rmd1xHlYsHhIhHnBgCi4Wanp3eUglBGxn5w0W0XF9LMMRe12NZUXmZSCuNVBKIHsv
+         c9XqtdaItajuQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 51F14E21EDE;
+        Fri, 14 Apr 2023 05:00:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Subject: Re: [PATCH bpf-next] samples/bpf: sampleip: Replace PAGE_OFFSET with
+ _text address
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168144841833.15631.13621906411844041748.git-patchwork-notify@kernel.org>
+Date:   Fri, 14 Apr 2023 05:00:18 +0000
+References: <tencent_A0E82E0BEE925285F8156D540731DF805F05@qq.com>
+In-Reply-To: <tencent_A0E82E0BEE925285F8156D540731DF805F05@qq.com>
+To:     Rong Tao <rtoax@foxmail.com>
+Cc:     ast@kernel.org, rongtao@cestc.cn, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KUNBUS GmbH created the modular DIN-rail mounted open source hardware
-platform called Revolution Pi for automation and IIoT projects.
-https://www.kunbus.com/
+Hello:
 
-Signed-off-by: Bruno Thomsen <bruno.thomsen@gmail.com>
-Reviewed-by: Stefano Bossi <stefano.bossi@gmail.com>
----
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+This patch was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index ed64e06ecca4..f5e48b49b208 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -707,6 +707,8 @@ patternProperties:
-     description: Kontron S&T AG
-   "^kosagi,.*":
-     description: Sutajio Ko-Usagi PTE Ltd.
-+  "^kunbus,.*":
-+    description: KUNBUS GmbH
-   "^kvg,.*":
-     description: Kverneland Group
-   "^kyo,.*":
+On Wed, 12 Apr 2023 16:16:24 +0800 you wrote:
+> From: Rong Tao <rongtao@cestc.cn>
+> 
+> Macro PAGE_OFFSET(0xffff880000000000) in sampleip_user.c is inaccurate,
+> for example, in aarch64 architecture, this value depends on the
+> CONFIG_ARM64_VA_BITS compilation configuration, this value defaults to 48,
+> the corresponding PAGE_OFFSET is 0xffff800000000000, if we use the value
+> defined in sampleip_user.c, then all KSYMs obtained by sampleip are (user)
+> 
+> [...]
 
-base-commit: de4664485abbc0529b1eec44d0061bbfe58a28fb
+Here is the summary with links:
+  - [bpf-next] samples/bpf: sampleip: Replace PAGE_OFFSET with _text address
+    https://git.kernel.org/bpf/bpf-next/c/4a1e885c6d14
+
+You are awesome, thank you!
 -- 
-2.39.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
