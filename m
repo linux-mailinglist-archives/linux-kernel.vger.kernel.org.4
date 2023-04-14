@@ -2,102 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A76616E20D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 12:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90ECC6E20D5
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 12:32:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbjDNKbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 06:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36768 "EHLO
+        id S229696AbjDNKce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 06:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjDNKbn (ORCPT
+        with ESMTP id S229753AbjDNKcc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 06:31:43 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E8F55AB
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 03:31:41 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-94a9606518cso293264866b.2
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 03:31:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681468300; x=1684060300;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1720p3siIfGtX4Ig+Z8rM9FJYarwB+pzhTTSt4MACL8=;
-        b=P4W8iZ2w1Gh7w85Jw+AojjPgK8APjJ7qSz1fTCyoPkCa8pfiyXaWxx90phdGQQOHuu
-         bPac1TD/9gNZKaxRbz72Wunu/xHXHKFL4Cjd+Kbo52qxYaxOIcxUROS9Zy3LzFzKcr5I
-         vrNiZB9B8jI3QK3Thuhu/5A0m1jUs5B6xfgGgfbTJB7LU72BfxDmi6sw0t1l9pGk3YQp
-         jJ05crgXl9OPB3wfvTnJ0+FiJaAaNf5r2bwoioghBIUqWem/txWIR74BMuNN6nnS29eV
-         FGQJ/+bVKmWcbBYbm982gzUtSJCvXphxxoWHiJskFaVd/XvHtsbTh68neo11aAgkcmFw
-         tzaw==
+        Fri, 14 Apr 2023 06:32:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482D28A53
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 03:31:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681468307;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z4OY31S9mUHw6BlIMwhzxwBlTgpR3iZTfz/4sQFURp8=;
+        b=AjGrTNqN/QXfiCAO8noubXFkuZIcsH2irAWgwPgWKVZvXjezcGxIkY4tzjd+PJW8xkVSEh
+        HST6QceSkypbiPH8y5yJoSQVAoYnCUWaqN9QX4WOlu366azjrs6nSFV35BWQSa2UWB5KDh
+        SbB601jgBuPE2K0jDExVhhZV9aLLxxg=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-655-vPCan0r_PLCaGIlZM7JjLQ-1; Fri, 14 Apr 2023 06:31:46 -0400
+X-MC-Unique: vPCan0r_PLCaGIlZM7JjLQ-1
+Received: by mail-wr1-f69.google.com with SMTP id g23-20020adfa497000000b002f420263923so2099063wrb.21
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 03:31:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681468300; x=1684060300;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1720p3siIfGtX4Ig+Z8rM9FJYarwB+pzhTTSt4MACL8=;
-        b=FClmi+d9DcX2nf6penDWuAGxtdijTJATU7MlY2+/moPQddtgnNwNAJq41m3EivgMhW
-         HqY+kfOEpJBx16QcsRmzfxwvMLi/AzCidAGtO2Ek+a2xM45Z6FAXc4X0UeraIKEd55o6
-         Ks2iVUuo1q8Q1Kqht7CC27Ku8izegrVkOPeVRLA0FhKUGXH6L2OcKGE3XcA3j5+iN/ps
-         Ar5FlcKk8ioGO21IiOGjQjudx1jPuJPWR7K8b7EQe9Teb2f1+lagyPappi9Nq3cwA3Kx
-         Q1k2v+dths599IIeQvsCCd2dom1MQXlUt0i21QEc7zZy/iXI840je0dpeq9fRAwDoBBL
-         6yaA==
-X-Gm-Message-State: AAQBX9dlhKSHAsy1Mr3nkTF8dw6LR69Ka7SMR9sqhNSlYc7O/KIjh0KC
-        UPwTvTtPeLwWM6mka20g+v+ehQ==
-X-Google-Smtp-Source: AKy350ZIjMP6TMSw+k6xUakCFEXrjNxzNtDnPVbQjujlC0FIdzUT/htNABiisXWE6rAig7qQ68+/Ig==
-X-Received: by 2002:aa7:d947:0:b0:501:cf67:97f3 with SMTP id l7-20020aa7d947000000b00501cf6797f3mr5612068eds.25.1681468299842;
-        Fri, 14 Apr 2023 03:31:39 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:40b9:8c57:b112:651d? ([2a02:810d:15c0:828:40b9:8c57:b112:651d])
-        by smtp.gmail.com with ESMTPSA id d25-20020a05640208d900b004fa99a22c3bsm1949428edz.61.2023.04.14.03.31.38
+        d=1e100.net; s=20221208; t=1681468305; x=1684060305;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Z4OY31S9mUHw6BlIMwhzxwBlTgpR3iZTfz/4sQFURp8=;
+        b=PhFrjvwDITRiLmmGN3VxgwWUQpbugzFPye+ze2JnHwZ8GS4CPPBLyRgU8hX5IDWg4u
+         JKFxgvWsk+2jYxr8NE55JSVuiQ4QMJ23QvlpXZt3JRrHUvwvFgx3wmDTPYtFSVPoP1xM
+         Ef6piAxiGtwD2AePW4AM5q46iyu6EFXnEZkdS/i+EWJEgo20MEnueUoZEgdF7x/QLtpW
+         CUpoV92rZWt9GtaPULfLd/Xdwu1ZkkweEekgPHF/T1rGUda3MVozQGj7a5jJcDEtgEXa
+         0rbnVToTQHvmgjHcEHcwDansAFll/K5TdAQJOQ1KbR3tjhugUpmdXlv5zPL2cCnmG4Vl
+         KZiw==
+X-Gm-Message-State: AAQBX9c1SJ0ZG6VNiSAroiaLApRBJdjcZiEWrBOe99wpCN/N6suhTd/K
+        vFFDPVUr7B1uiy08xMlyn3TUoq4TUSWmHVI9FWonTwE4JIj7H2y8qgP9gBReEPrmGTytYYTuXhY
+        yhzZNbheGK67mhLoPxNdwQ+rl
+X-Received: by 2002:a05:6000:107:b0:2f4:170:3807 with SMTP id o7-20020a056000010700b002f401703807mr3923334wrx.44.1681468305138;
+        Fri, 14 Apr 2023 03:31:45 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YJev2/y8Y93fyj23BgYm40VnAb0CKaZh0JPuItMitr0VyPEpZgKjy6MkOkxfO8rUIFpCcLkQ==
+X-Received: by 2002:a05:6000:107:b0:2f4:170:3807 with SMTP id o7-20020a056000010700b002f401703807mr3923315wrx.44.1681468304747;
+        Fri, 14 Apr 2023 03:31:44 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c702:5700:cb5b:f73a:c650:1d9? (p200300cbc7025700cb5bf73ac65001d9.dip0.t-ipconnect.de. [2003:cb:c702:5700:cb5b:f73a:c650:1d9])
+        by smtp.gmail.com with ESMTPSA id p11-20020a5d458b000000b002efb31d3c24sm3251251wrq.32.2023.04.14.03.31.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 03:31:39 -0700 (PDT)
-Message-ID: <eea67985-261f-6ce0-031e-2acf0e682375@linaro.org>
-Date:   Fri, 14 Apr 2023 12:31:37 +0200
+        Fri, 14 Apr 2023 03:31:44 -0700 (PDT)
+Message-ID: <832d4026-c88f-876b-5f95-4d573bb9d1dd@redhat.com>
+Date:   Fri, 14 Apr 2023 12:31:43 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
-Subject: Re: [PATCH 01/27] dt-bindings: pwm: Add compatible for MediaTek
- MT6795
+Subject: Re: [PATCH] mm: page_alloc: Assume huge tail pages are valid when
+ allocating contiguous pages
 Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, matthias.bgg@gmail.com
-Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        jassisinghbrar@gmail.com, chunfeng.yun@mediatek.com,
-        vkoul@kernel.org, kishon@kernel.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, chunkuang.hu@kernel.org,
-        ck.hu@mediatek.com, jitao.shi@mediatek.com,
-        xinlei.lee@mediatek.com, houlong.wei@mediatek.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-pwm@vger.kernel.org,
-        kernel@collabora.com, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20230412112739.160376-1-angelogioacchino.delregno@collabora.com>
- <20230412112739.160376-2-angelogioacchino.delregno@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230412112739.160376-2-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Michal Hocko <mhocko@suse.com>,
+        Mel Gorman <mgorman@techsingularity.net>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Oscar Salvador <OSalvador@suse.com>,
+        Yuanxi Liu <y.liu@naruida.com>, Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20230414082222.idgw745cgcduzy37@techsingularity.net>
+ <ZDkU6PuuDsUb82lr@dhcp22.suse.cz>
+ <20230414095204.7fz6trkj5i4mzthz@techsingularity.net>
+ <ZDkolzCWQNe0NmTD@dhcp22.suse.cz>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <ZDkolzCWQNe0NmTD@dhcp22.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/04/2023 13:27, AngeloGioacchino Del Regno wrote:
-> Add a compatible string for MediaTek Helio X10 MT6795's display PWM
-> block: this is the same as MT8173.
+On 14.04.23 12:19, Michal Hocko wrote:
+> On Fri 14-04-23 10:52:04, Mel Gorman wrote:
+>> On Fri, Apr 14, 2023 at 10:55:04AM +0200, Michal Hocko wrote:
+>>> On Fri 14-04-23 09:22:22, Mel Gorman wrote:
+>>> [...]
+>>>> +
+>>>> +		/*
+>>>> +		 * Do not migrate huge pages that span the size of the region
+>>>> +		 * being allocated contiguous. e.g. Do not migrate a 1G page
+>>>> +		 * for a 1G allocation request. CMA is an exception as the
+>>>> +		 * region may be reserved for hardware that requires physical
+>>>> +		 * memory without a MMU or scatter/gather capability.
+>>>> +		 *
+>>>> +		 * Note that the compound check is race-prone versus
+>>>> +		 * free/split/collapse but it should be safe and result in
+>>>> +		 * a premature skip or a useless migration attempt.
+>>>> +		 */
+>>>> +		if (PageHuge(page) && compound_nr(page) >= nr_pages &&
+>>>> +		    !is_migrate_cma_page(page)) {
+>>>> +			return false;
+>>>
+>>> Is the CMA check working as expected?
+>>
+>> I didn't test it as I don't have a good simulator for CMA contraints which
+>> is still a mobile phone concern for devices like cameras.
+>>
+>>> The function sounds quite generic
+>>> and I agree that it would make sense if it was generic but it is used
+>>> only for GB pages in fact and unless I am missing something it would
+>>> allow to migrate CMA pages and potentially allocate over that region
+>>> without any possibility to migrate GB page out so the CMA region would
+>>> be essentially unusable for CMA users.
+>>
+>> It's used primarily for 1G pages but does have other users (debugging
+>> mostly, low priority). As it's advertised as a general API, I decided to
+>> treat it as such and that meant being nice to CMA if possible. If CMA pages
+>> migrate but can still use the target location then it should be fine. If a
+>> CMA can migrate to an usable location that breaks a device then that's a bug.
+>>
+>>> GB pages already have their CMA
+>>> allocator path before we get to alloc_contig_pages. Or do I miss
+>>> something?
+>>
+>> I don't think you missed anything. The CMA check is, at best, an effort
+>> to have a potentially useful semantic but it's very doubtful anyone will
+>> notice or care. I'm perfectly happy just to drop the CMA check because it's a
+>> straight-forward fix and more suitable as a -stable backport.  I'm also happy
+>> to just go with a PageHuge check and ignore any possibility that a 2M page
+>> could be migrated to satisfy a 1G allocation.  1G allocation requests after
+>> significant uptime is a crapshoot at best and relying on them succeeding is
+>> unwise. There is a non-zero possibility that the latency incurred migrating
+>> 2M pages and still failing a 1G allocation could itself be classed as a
+>> bug with users preferring fast-failure of 1G allocation attempts.
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Yes, the simpler the better. If we encounter a real usecase where couple
+> of 2MB hugetlb pages stand in the way to GB pages then we can add the
+> check so I would just go with reintroducing the PageHuge check alone.
 
+alloc_contig_pages() -> __alloc_contig_pages() -> 
+alloc_contig_range(MIGRATE_MOVABLE)
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Should always fail when stumbling over MIGRATE_CMA pageblocks IIRC.
 
-Best regards,
-Krzysztof
+So we could bail out in that function early if we stumble over any CMA 
+region.
+
+-- 
+Thanks,
+
+David / dhildenb
 
