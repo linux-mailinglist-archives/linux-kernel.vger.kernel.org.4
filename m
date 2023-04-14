@@ -2,120 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C68476E28A4
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 18:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AB336E28A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 18:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbjDNQqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 12:46:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50792 "EHLO
+        id S230139AbjDNQrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 12:47:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbjDNQqk (ORCPT
+        with ESMTP id S229732AbjDNQrN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 12:46:40 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC6CBA;
-        Fri, 14 Apr 2023 09:46:40 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33EEd8QG028575;
-        Fri, 14 Apr 2023 16:46:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=7+TsOP++DooVFLAxfVY9IG1YmgdG7JzRlvZbp1DatVk=;
- b=Id6vPLOWdRnZuFZ9/A+Q/2znRUkp8Cluz0RMGSP3zA4PregV+wbCeljV15aXHYs/Iw57
- HwRW4fRQGJqEDVw4SPFw9p+nvPH9XpNUQNW8AZktO9GSn3p+a8pNdXIjtfDwOIdzo8Hv
- WKU5/5IqVm2LcaZbzS6xmIMsLxhjsUOFUKu36YCmCrARcfj0s8LlDPYDrr348uSXYBPy
- RdEUUiHJVX2InNx4LXHyI4OWYeJPQylY1HgY6Hg/R46waJ9UuNnPu+MdhyLOa05s1nKX
- LC8gQ2u6yCYRGfTa/zbqx5prgMIiJzSpbdYxWRWXEzUowAUjFKcWYM5quTx+7g+/KwrP Gg== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3py20e1743-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Apr 2023 16:46:29 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33EGkSAf023941
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Apr 2023 16:46:28 GMT
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 14 Apr 2023 09:46:27 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
-        <airlied@gmail.com>, <agross@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <andersson@kernel.org>,
-        <marijn.suijten@somainline.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_khsieh@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3] drm/msm/dpu: always program DSC active bits
-Date:   Fri, 14 Apr 2023 09:46:17 -0700
-Message-ID: <1681490777-15351-1-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Fri, 14 Apr 2023 12:47:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1900949E3;
+        Fri, 14 Apr 2023 09:47:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 622BE64904;
+        Fri, 14 Apr 2023 16:47:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C7B7C433EF;
+        Fri, 14 Apr 2023 16:47:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681490828;
+        bh=kLySdUEMQr1iUvlQq6Htdfgpuyp1tU6kNYr8ymjcJnQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XZEjQWuoiaLMzrotKOefVL+KiaM61y6oJKqWG8HFdNkhwH2QW1Efhz7uwpZtwl6K6
+         WilqvCdPSuY2QoommbloPIYgOiKpHYPdZaL4AmnjffO1mSDkbcrXBopNbiB6I3rk4W
+         9ECmmny4LI3rkqydUbpL7fy35cxKUj5LQpPvCqDHwnsPl/6cT/HNAwHQQG2kByojwy
+         szLQElxMKHDl6PPrQb7NlXFE9D3yyu1jle6XZg8zHfWNo4eDkTz6+PgGRe68r5bvaW
+         gKTj7wdyFyw7/86HcMpL3EZwShkxgfj/azOQTpdRlKoR/+EG1qydfVIuKH6rgBPIkI
+         BoVXZFUikBiJg==
+Date:   Fri, 14 Apr 2023 17:47:02 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     =?utf-8?B?UGF3ZcWC?= Anikiel <pan@semihalf.com>
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lgirdwood@gmail.com, perex@perex.cz,
+        tiwai@suse.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, dinguyen@kernel.org,
+        lars@metafoo.de, nuno.sa@analog.com, upstream@semihalf.com
+Subject: Re: [PATCH 0/9] Add Chameleon v3 ASoC audio
+Message-ID: <6d90ad41-bb2d-41a0-8a4a-922b78967a2e@sirena.org.uk>
+References: <20230414140203.707729-1-pan@semihalf.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: lJwAbsVO9EpPYOAslYzyC-i809aXykHk
-X-Proofpoint-ORIG-GUID: lJwAbsVO9EpPYOAslYzyC-i809aXykHk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-14_09,2023-04-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- phishscore=0 adultscore=0 impostorscore=0 spamscore=0 mlxlogscore=674
- priorityscore=1501 clxscore=1011 malwarescore=0 bulkscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304140148
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6K3bg/ncOMgdX1Ax"
+Content-Disposition: inline
+In-Reply-To: <20230414140203.707729-1-pan@semihalf.com>
+X-Cookie: One Bell System - it works.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In current code, the dsc active bits are set only if the cfg->dsc is set.
-However, for displays which are hot-pluggable, there can be a use-case
-of disconnecting a DSC supported sink and connecting a non-DSC sink.
 
-For those cases we need to clear DSC active bits during teardown.
+--6K3bg/ncOMgdX1Ax
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-As discuss at [1], clear DSC active bit will handled at reset_intf_cfg()
+On Fri, Apr 14, 2023 at 04:01:54PM +0200, Pawe=C5=82 Anikiel wrote:
 
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Fixes: 77f6da90487c ("drm/msm/disp/dpu1: Add DSC support in hw_ctl")
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+>  sound/soc/Makefile                            |   1 +
+>  sound/soc/chameleonv3/Kconfig                 |   7 +
+>  sound/soc/chameleonv3/Makefile                |   2 +
+>  sound/soc/chameleonv3/chv3-audio.c            | 111 ++++++
+>  sound/soc/chameleonv3/chv3-i2s.c              | 347 ++++++++++++++++++
+>  sound/soc/chameleonv3/chv3-it68051.c          |  41 +++
 
-[1] https://lore.kernel.org/linux-arm-msm/ec045d6b-4ffd-0f8c-4011-8db45edc6978@quicinc.com/
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+Please at least make a directory for Google as a vendor, we don't want
+people adding directories for each individual product.  That said
+generally we add machine drivers in the directory for the relevant SoC
+family, is there any reason that pattern isn't followed here?
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-index bbdc95c..88e4efe 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-@@ -541,10 +541,9 @@ static void dpu_hw_ctl_intf_cfg_v1(struct dpu_hw_ctl *ctx,
- 	if (cfg->merge_3d)
- 		DPU_REG_WRITE(c, CTL_MERGE_3D_ACTIVE,
- 			      BIT(cfg->merge_3d - MERGE_3D_0));
--	if (cfg->dsc) {
--		DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, DSC_IDX);
--		DPU_REG_WRITE(c, CTL_DSC_ACTIVE, cfg->dsc);
--	}
-+
-+	DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, DSC_IDX);
-+	DPU_REG_WRITE(c, CTL_DSC_ACTIVE, cfg->dsc);
- }
- 
- static void dpu_hw_ctl_intf_cfg(struct dpu_hw_ctl *ctx,
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+--6K3bg/ncOMgdX1Ax
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ5g4IACgkQJNaLcl1U
+h9Awagf/ddeh9NiL6xTm0jG7Plq85gP3Pyvhk2dVP91pSzF9F2Ji14MAlnMxtKdW
+I01PMKID+Zk7oMMvVWT6XwDfK6F6ScWBXR+uwqhtD2m+5Qz+srCzqKyZZpWevujg
+KSrw9av66SOmEHB8BYWK7PnhBGV27/0E8mxzHqaxWNyyVkJhgxhBakVda9ocacmY
+hBjUSiivVFpEV36uNZrn2N9ivcj8Ux5mVpNhFLF1BGnlMGLvYyZMcbfAUtkAm9AN
+rgduYeGNGttpn7p3/xjusIeboE0QZU/6JYfQ+tX6FTSm1QeklwL6e0G8hb8OzLQz
+OYG7LQgbQju5RMftb4EWn0bLI/4qsw==
+=rrTF
+-----END PGP SIGNATURE-----
+
+--6K3bg/ncOMgdX1Ax--
