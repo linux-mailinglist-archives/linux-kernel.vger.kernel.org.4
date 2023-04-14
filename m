@@ -2,67 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E726E2B04
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 22:14:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5D286E2B0B
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 22:20:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbjDNUOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 16:14:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35772 "EHLO
+        id S229935AbjDNUT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 16:19:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjDNUOR (ORCPT
+        with ESMTP id S229994AbjDNUTw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 16:14:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0823D5BA2;
-        Fri, 14 Apr 2023 13:14:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9875C64A19;
-        Fri, 14 Apr 2023 20:14:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9AF5C433EF;
-        Fri, 14 Apr 2023 20:14:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681503255;
-        bh=ihadHc7Q34AcePOx6aVt7nhJ+22BkwIb1WodWnGJFlQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=cDwWCSAbS5fybckM6+s1Wc9IbrWH2tkgGXp5avbemJ8B5kpNHOS9nUPlD3qzpYTAG
-         MNcQuldty84KmoPI0Zl7zWpG3uQn89UQbD8g4UfdSOaZ5JqYo9Tqw1g8GUu9QdqGba
-         PZ69ICfZjQY2Mxf9UDeH84rAkNEVWdrOUdT64POaihMaKOrI/0Wf5Y//G7ja0dkjy1
-         pnam14qQQMK8IApALv5C7089I2P5ZBLdTiJjvJiHMKcaFHYEJrLETX2HzAZqRz1KNc
-         HlAP8cZKYTdWnEU+hEvpjDh9gYJXdmZHXj0yaRrse2F8j1D+N/4wHW2IQKkjf3kA3c
-         +iF3TdxQa5pIQ==
-Date:   Fri, 14 Apr 2023 15:14:13 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jim Quinlan <jim2101024@gmail.com>
-Cc:     linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/3] dt-bindings: PCI: brcmstb: Add two optional props
-Message-ID: <20230414201413.GA215912@bhelgaas>
+        Fri, 14 Apr 2023 16:19:52 -0400
+Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D553B6A59
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 13:19:50 -0700 (PDT)
+Received: by mail-io1-f79.google.com with SMTP id p124-20020a6b8d82000000b00760a07db0e1so4640596iod.19
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 13:19:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681503590; x=1684095590;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PZJFh2lneSO2O2apuZY38a9QpaHYW44PXRNeRva/kLA=;
+        b=dsxMkdwyLLGQlj6XXkFQnt6x4DRdcP2FI0KO3s/ylxD1WICRCVUg4w3WCcMbAjaMgv
+         5u//4GqP9ovH+YXXCmCjryeFSyoMdtT7s6l+Ob8KIihEBH1U2gW687hCJWUgHb6BN83j
+         hsPUlhLqzEEQgXvturM5gExLunT7qqJir2FcCfuO4h2JLV1N1ZPgCovitsFam0GLocg6
+         VCTvx5G99IXuqOG96n+DOaPLr5XUBaPAl0IQ0I1CsvYBGN6NMoVtq9Q/hwWJMiYmG8xy
+         8vt3PM/76epsFRIanxoRzA1TnlrBuUigsBdjQCAod6Gv4SsZS+br8Tg7TTVeM3r3Wi7G
+         fn1w==
+X-Gm-Message-State: AAQBX9cDEBluHuHcy3r5qqr0Hh8eYKFBwRCyFM2FEmFB7ca9+DWvrYdx
+        eTYU8FCeFhz4YSC/IWrcnI6ITFXOpxitN5fYhlC9cPPqQwlt
+X-Google-Smtp-Source: AKy350buB1FR3HC2W63OvVvWcogrZGb23vOC1mxQwtrXgZDnuMfzHNlsggYdBDoairXrtR01lwqfLiJilwpTBHRA6lLEXVhJrrbA
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230411165919.23955-2-jim2101024@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a02:624d:0:b0:406:5e9b:87bd with SMTP id
+ d74-20020a02624d000000b004065e9b87bdmr2681488jac.2.1681503590185; Fri, 14 Apr
+ 2023 13:19:50 -0700 (PDT)
+Date:   Fri, 14 Apr 2023 13:19:50 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002e88ef05f9519048@google.com>
+Subject: [syzbot] [btrfs?] kernel BUG in btrfs_remove_ordered_extent
+From:   syzbot <syzbot+f7df8841df368e155864@syzkaller.appspotmail.com>
+To:     chris@chrisdown.name, clm@fb.com, dsterba@suse.com,
+        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,75 +56,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It'd be nice to mention the property names (maybe omit the "brcm,"
-prefix if that helps) in the commit log so "git log --oneline" is more
-useful:
+Hello,
 
-  959e000f0463 ("dt-bindings: PCI: brcmstb: Add two optional props")
-  ea372f45cfff ("dt-bindings: PCI: Add bindings for Brcmstb EP voltage regulators")
-  504253e44a9d ("dt-bindings: PCI: Correct brcmstb interrupts, interrupt-map.")
-  145790e55d82 ("dt-bindings: PCI: Add compatible string for Brcmstb 74[23]5 MIPs SOCs")
-  5e8a7d26d935 ("dt-bindings: PCI: brcmstb: compatible is required")
-  f435ce7ebf8c ("dt-bindings: PCI: brcmstb: add BCM4908 binding")
+syzbot found the following issue on:
 
-On Tue, Apr 11, 2023 at 12:59:16PM -0400, Jim Quinlan wrote:
-> Regarding "brcm,enable-l1ss":
-> 
->   The Broadcom STB/CM PCIe HW -- a core that is also used by RPi SOCs --
->   requires the driver probe() to deliberately place the HW one of three
->   CLKREQ# modes:
-> 
->   (a) CLKREQ# driven by the RC unconditionally
->   (b) CLKREQ# driven by the EP for ASPM L0s, L1
->   (c) Bidirectional CLKREQ#, as used for L1 Substates (L1SS).
-> 
->   The HW+driver can tell the difference between downstream devices that
->   need (a) and (b), but does not know when to configure (c).  Further, the
->   HW may cause a CPU abort on boot if guesses wrong regarding the need for
->   (c).  So we introduce the boolean "brcm,enable-l1ss" property to indicate
->   that (c) is desired.  Setting this property only makes sense when the
->   downstream device is L1SS-capable and the OS is configured to activate
->   this mode (e.g. policy==superpowersave).
-> 
->   This property is already present in the Raspian version of Linux, but the
->   upstream driver implementaion that will follow adds more details and
->   discerns between (a) and (b).
-> 
-> Regarding "brcm,completion-timeout-us"
-> 
->   Our HW will cause a CPU abort if the L1SS exit time is longer than the
->   PCIe transaction completion abort timeout.  We've been asked to make this
->   configurable, so we are introducing "brcm,completion-timeout-us".
+HEAD commit:    09a9639e56c0 Linux 6.3-rc6
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16491af9c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=759d5e665e47a55
+dashboard link: https://syzkaller.appspot.com/bug?extid=f7df8841df368e155864
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Completion Timeout is a generic PCIe concept.  Do we want a generic
-(non-brcm) name that would be documented elsewhere?  Rob?
+Unfortunately, I don't have any reproducer for this issue yet.
 
-> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
-> ---
->  .../devicetree/bindings/pci/brcm,stb-pcie.yaml   | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml b/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
-> index 7e15aae7d69e..f7fc2f6561bb 100644
-> --- a/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
-> +++ b/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
-> @@ -64,6 +64,22 @@ properties:
->  
->    aspm-no-l0s: true
->  
-> +  brcm,enable-l1ss:
-> +    description: Indicates that PCIe L1SS power savings
-> +      are desired, the downstream device is L1SS-capable, and the
-> +      OS has been configured to enable this mode.  Note that when
-> +      in this mode, this particular HW may not meet the requirement
-> +      that requires CLKREQ# assertion to clock active to be
-> +      within 400ns.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/322ee98e9b51/disk-09a9639e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/b7f428bb61b7/vmlinux-09a9639e.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/8c3310bcdc76/bzImage-09a9639e.xz
 
-Maybe a pointer to the source of the 400ns requirement?
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+f7df8841df368e155864@syzkaller.appspotmail.com
 
-"requirement that requires" is a little redundant, maybe "... may not
-meet the requirement that Refclk be valid within 400ns of CLKREQ#
-assertion"?
+assertion failed: trans, in fs/btrfs/ordered-data.c:586
+------------[ cut here ]------------
+kernel BUG at fs/btrfs/messages.c:259!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 17716 Comm: kworker/u4:17 Not tainted 6.3.0-rc6-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+Workqueue: btrfs-endio-write btrfs_work_helper
+RIP: 0010:btrfs_assertfail+0x18/0x20 fs/btrfs/messages.c:259
+Code: df e8 2c 6c 43 f7 e9 50 fb ff ff e8 42 80 01 00 66 90 66 0f 1f 00 89 d1 48 89 f2 48 89 fe 48 c7 c7 80 ee 2b 8b e8 e8 60 ff ff <0f> 0b 66 0f 1f 44 00 00 66 0f 1f 00 53 48 89 fb e8 a3 ab ed f6 48
+RSP: 0018:ffffc900163ef998 EFLAGS: 00010246
+RAX: 0000000000000037 RBX: ffff88802c25c538 RCX: 34a4a5ce511e7800
+RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffff816df7fc R09: fffff52002c7deed
+R10: 0000000000000000 R11: dffffc0000000001 R12: ffff88802c25cc10
+R13: ffff88802c25c000 R14: ffff88802bad71f0 R15: dffffc0000000000
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f900f261000 CR3: 000000000cd30000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ btrfs_remove_ordered_extent+0x7f0/0x9b0 fs/btrfs/ordered-data.c:586
+ btrfs_finish_ordered_io+0x153e/0x1cc0 fs/btrfs/inode.c:3328
+ btrfs_work_helper+0x380/0xbe0 fs/btrfs/async-thread.c:280
+ process_one_work+0x8a0/0x10e0 kernel/workqueue.c:2390
+ worker_thread+0xa63/0x1210 kernel/workqueue.c:2537
+ kthread+0x270/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:btrfs_assertfail+0x18/0x20 fs/btrfs/messages.c:259
+Code: df e8 2c 6c 43 f7 e9 50 fb ff ff e8 42 80 01 00 66 90 66 0f 1f 00 89 d1 48 89 f2 48 89 fe 48 c7 c7 80 ee 2b 8b e8 e8 60 ff ff <0f> 0b 66 0f 1f 44 00 00 66 0f 1f 00 53 48 89 fb e8 a3 ab ed f6 48
+RSP: 0018:ffffc900163ef998 EFLAGS: 00010246
+RAX: 0000000000000037 RBX: ffff88802c25c538 RCX: 34a4a5ce511e7800
+RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffff816df7fc R09: fffff52002c7deed
+R10: 0000000000000000 R11: dffffc0000000001 R12: ffff88802c25cc10
+R13: ffff88802c25c000 R14: ffff88802bad71f0 R15: dffffc0000000000
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fa101bad988 CR3: 00000000323b9000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
-(I don't actually know whether this refers to Refclk or if that would
-be a true statement; this is just a possible sentence structure.)
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
