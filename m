@@ -2,73 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE3B06E2C97
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 00:54:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F49B6E2CA4
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 00:59:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbjDNWyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 18:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
+        id S229853AbjDNW7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 18:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbjDNWyM (ORCPT
+        with ESMTP id S229653AbjDNW67 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 18:54:12 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85EFA72BE
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 15:54:10 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-54fbb713301so127009127b3.11
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 15:54:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681512849; x=1684104849;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RsEpHWGUAT6/yQHsUqy7RYLlhjJJBPs4/FPHEMvEdok=;
-        b=l7SvFeI8wAyE3IVHu4sdBXgh5y48P8qp65dCOH1gwQsVN1v8gjeerld6Deapj1+2we
-         Djuo8gK7k1yxyXQdjJVN4b67SZAqPhaNkf9mQGbbo/2ZEVRYcRsKlvS5jmhpwQtjD8tn
-         NU0gaJS0gbsPuGaQ0Ka8pIvVToBlt11htGL+biYLNouQYULXSvmkdFsqDKPdjJhRmftz
-         D4evnJTyuygL94k1iIcWhIwD33WNeTavTXl/VkgUEy+dP9g3uxq3E67Fn/wS9uM//jFt
-         nqkLp8JHHbGszXP2hdICNdgNND5H94ywb3O/04KgWN1oQZxxCcDrSygz1BAHvkoOpxaU
-         3cjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681512849; x=1684104849;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RsEpHWGUAT6/yQHsUqy7RYLlhjJJBPs4/FPHEMvEdok=;
-        b=EuxF6Afer4wGIvrs/0eZBYkQV0o0yke8lwaMMvGG740yX/Xk+LikKiD4JzdCbiTUs5
-         WQZvls7Byzxkuvd/gb/3BWmzOTz2n7qSnDwdxds+I7WqLHbkmgqWDOGhRx+tZJEZFgF5
-         nXhgqz3kj+K/iS8zfSHvVsz69CEC6uCodYisGcg/myLTQfnV1DcdbVX4VLE/x4VrWI5o
-         tVE9k1J5SLdWxp9WWLtPPMEnwfOnObFeUXjIjA3ZKA+eGJwT/AOY32pfmvq+FmKt+aIq
-         yE7MEuM3nbgOYUgJh0y9tRCJbJ5tqusf3jdO9gWBN1JemSAbXm64wfSufqzncVcLyg5A
-         gJRg==
-X-Gm-Message-State: AAQBX9fuyMtnidm+ZOkxEmStcAlPd/JRy+qqGTBVXhqiyEK48PcpJa5t
-        vHW+jU0u9/tPNY+JfuRboHLr3sEEaULf+ra8prxiag==
-X-Google-Smtp-Source: AKy350alnLGNiqXynMnQ2A1/nkIijoMJpeU74l1AYCOWrgnODdEBiuXNrkulMYhHR3pZUgKChfS9TBSwcF4FFQWXuSs=
-X-Received: by 2002:a81:ac22:0:b0:54f:85a6:c80c with SMTP id
- k34-20020a81ac22000000b0054f85a6c80cmr4728207ywh.5.1681512849564; Fri, 14 Apr
- 2023 15:54:09 -0700 (PDT)
+        Fri, 14 Apr 2023 18:58:59 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C40AF6EBB
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 15:58:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681513136; x=1713049136;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=DxCEocmRcvDpZhDusrNDy5e+Jo3Wo5s+PSqQO4ZNIog=;
+  b=D1XQ2dcjEmZ1mJ7vzybbpHN5B88xiZpPAjGEQy888T6eDUnf57rkQ14Q
+   Hq2KKnypB8rlf/ILpVEXt+nIVzUdu0COG1QrCzvKBJMn55kLlOBxZ9rWn
+   6OdMVoazhkNp39Lh53b3dOr9qkuWS4g9SuJirxe7Cs9yO7Eflkx+dAVKs
+   1cH1qGOaX77hjcPNmDzBQUzoAG5pcTDAtprQJ/VrnbtleV71/y6hDTh9z
+   pa62Ljffj6a07Bn27SJFzICEKByfe9lqrdwllpm07mZRJ3Dk1Uv4irrOy
+   xVL0RRFvJWd+Y6rX3e6NZ4XM457hTli4O6DlcJPdZPSLt/urGC3jaaJA2
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="430880712"
+X-IronPort-AV: E=Sophos;i="5.99,198,1677571200"; 
+   d="scan'208";a="430880712"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 15:58:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="667346923"
+X-IronPort-AV: E=Sophos;i="5.99,198,1677571200"; 
+   d="scan'208";a="667346923"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 14 Apr 2023 15:58:55 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pnSNb-000a56-05;
+        Fri, 14 Apr 2023 22:58:55 +0000
+Date:   Sat, 15 Apr 2023 06:58:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/microcode] BUILD SUCCESS
+ 7bc9c1df89a3e5496ace55c198ff09409da0feb0
+Message-ID: <6439da8e.s0omwYltOvhl2sua%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <1681401401-15099-1-git-send-email-quic_khsieh@quicinc.com>
- <tgfbdk6q3uool365jqddibnbgq66clsmsm6tldxpm5toqghxpq@m2ic3oonv2s5>
- <aac210da-dec1-aab8-3f48-c33d9e7687d6@quicinc.com> <3oaangxh7gmie3cdd6rmujm7dd3hagsrnwiq3bascdtamvfn3a@bn6ou5hbsgxv>
- <c09725ff-771c-35d1-adc9-4bb1b7c1c334@quicinc.com> <CAA8EJppKXSGcOcYEc6UKz9Eh8JizSpdDNe+cdvfmFbuBJ9zPKw@mail.gmail.com>
- <eb8ea024-1152-418c-a048-f86253867c9e@quicinc.com>
-In-Reply-To: <eb8ea024-1152-418c-a048-f86253867c9e@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sat, 15 Apr 2023 01:53:58 +0300
-Message-ID: <CAA8EJpoOZOwLfa4tx1zhp8w5cY+3OR4J4o0xjTaNO5SMM=F6Bg@mail.gmail.com>
-Subject: Re: [PATCH v2] drm/msm/dpu: always program dsc active bits
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
-        agross@kernel.org, andersson@kernel.org, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,145 +64,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 15 Apr 2023 at 00:03, Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
->
->
->
-> On 4/14/2023 1:58 PM, Dmitry Baryshkov wrote:
-> > On Fri, 14 Apr 2023 at 21:55, Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
-> >>
-> >>
-> >>
-> >> On 4/14/2023 10:28 AM, Marijn Suijten wrote:
-> >>> On 2023-04-14 08:41:37, Abhinav Kumar wrote:
-> >>>>
-> >>>> On 4/14/2023 12:48 AM, Marijn Suijten wrote:
-> >>>>> Capitalize DSC in the title, as discussed in v1.
-> >>>>>
-> >>>>> On 2023-04-13 08:56:41, Kuogee Hsieh wrote:
-> >>>>>> In current code, the DSC active bits are written only if cfg->dsc is set.
-> >>>>>> However, for displays which are hot-pluggable, there can be a use-case
-> >>>>>> of disconnecting a DSC supported sink and connecting a non-DSC sink.
-> >>>>>>
-> >>>>>> For those cases we need to clear DSC active bits during tear down.
-> >>>>>>
-> >>>>>> Changes in V2:
-> >>>>>> 1) correct commit text as suggested
-> >>>>>> 2) correct Fixes commit id
-> >>>>>> 3) add FIXME comment
-> >>>>>>
-> >>>>>> Fixes: 77f6da90487c ("drm/msm/disp/dpu1: Add DSC support in hw_ctl")
-> >>>>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> >>>>>> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
-> >>>>>
-> >>>>> By default git send-email should pick this up in the CC line...  but I
-> >>>>> had to download this patch from lore once again.
-> >>>>>
-> >>>>
-> >>>> Yes, I think what happened here is, he didnt git am the prev rev and
-> >>>> make changes on top of that so git send-email didnt pick up. We should
-> >>>> fix that process.
-> >>>
-> >>> The mail was sent so it must have gone through git send-email, unless a
-> >>> different mail client was used to send the .patch file.  I think you are
-> >>> confusing this with git am (which doesn't need to be used if editing a
-> >>> commit on a local branch) and subsequently git format-patch, which takes
-> >>> a commit from a git repository and turns it into a .patch file: neither
-> >>> of these "converts" r-b's (and other tags) to cc, that's happening in
-> >>> git send-email (see `--suppress-cc` documentation in `man
-> >>> git-send-email`).
-> >>>
-> >>
-> >> Yes, ofcourse git send-email was used to send the patch, not any other
-> >> mail client.
-> >>
-> >> Yes i am also aware that send-email converts rb to CC.
-> >>
-> >> But if you keep working on the local branch, then you would have to
-> >> manually add the r-bs. If you use am of the prev version and develop on
-> >> that, it will automatically add the r-bs.
-> >
-> > It looks like there is some misunderstanding here. I think Marijn
-> > doesn't question his R-B (which was present), but tries to point out
-> > that Kuogee might want to adjust his git-send-email invocation. By
-> > default (and that's a good practice, which we should follow),
-> > git-send-email will CC people mentioned in such tags. Marijn didn't
-> > get this email. So, it seems, for some reason this Cc: _mail_ header
-> > was suppressed. Probably git-send-email invocation should be changed
-> > to prevent suppression of adding mentioned people to CC lists.
-> >
->
-> Yeah I understood that part. There were two issues here:
->
-> 1) My r-b got dropped and that was because am wasn't used to
-> automatically retain tags from prev version.
->
-> If you dont add the r-bs either manually or by am, then folks wont be
-> part of CC either
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/microcode
+branch HEAD: 7bc9c1df89a3e5496ace55c198ff09409da0feb0  x86/microcode: Do not taint when late loading on AMD
 
-Just as a note: there is nothing wrong with adding tags manually. I do
-that for some of my patchsets (and sometimes I miss them too).
+elapsed time: 726m
 
->
-> 2) I synced with kuogee. his git version seems to be quite old which is
-> not adding the folks from r-b to cc. So there was nothing wrong with
-> invocation, just versioning.
+configs tested: 105
+configs skipped: 5
 
-Ack. Thanks for updating it.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
->
->
-> >>
-> >>
-> >>> I can recommend b4: it has lots of useful features including
-> >>> automatically picking up reviews and processing revisions.  It even
-> >>> requires a changelog to be edited ;).  However, finding the right flags
-> >>> and trusting it'll "do as ordered" is a bit daunting at first.
-> >>>
-> >>>>>> ---
-> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c | 8 ++++----
-> >>>>>>     1 file changed, 4 insertions(+), 4 deletions(-)
-> >>>>>>
-> >>>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-> >>>>>> index bbdc95c..1651cd7 100644
-> >>>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-> >>>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-> >>>>>> @@ -541,10 +541,10 @@ static void dpu_hw_ctl_intf_cfg_v1(struct dpu_hw_ctl *ctx,
-> >>>>>>             if (cfg->merge_3d)
-> >>>>>>                     DPU_REG_WRITE(c, CTL_MERGE_3D_ACTIVE,
-> >>>>>>                                   BIT(cfg->merge_3d - MERGE_3D_0));
-> >>>>>> -  if (cfg->dsc) {
-> >>>>>> -          DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, DSC_IDX);
-> >>>>>> -          DPU_REG_WRITE(c, CTL_DSC_ACTIVE, cfg->dsc);
-> >>>>>> -  }
-> >>>>>> +
-> >>>>>> +  /* FIXME: fix reset_intf_cfg to handle teardown of dsc */
-> >>>>>
-> >>>>> There's more wrong than just moving (not "fix"ing) this bit of code into
-> >>>>> reset_intf_cfg.  And this will have to be re-wrapped in `if (cfg->dsc)`
-> >>>>> again by reverting this patch.  Perhaps that can be explained, or link
-> >>>>> to Abhinav's explanation to make it clear to readers what this FIXME
-> >>>>> actually means?  Let's wait for Abhinav and Dmitry to confirm the
-> >>>>> desired communication here.
-> >>>>>
-> >>>>> https://lore.kernel.org/linux-arm-msm/ec045d6b-4ffd-0f8c-4011-8db45edc6978@quicinc.com/
-> >>>>>
-> >>>>
-> >>>> Yes, I am fine with linking this explanation in the commit text and
-> >>>> mentioning that till thats fixed, we need to go with this solution. The
-> >>>> FIXME itself is fine, I will work on it and I remember this context well.
-> >>>
-> >>> Looks like it was removed entirely in v3, in favour of only describing
-> >>> it in the patch body.  The wording seems a bit off but that's fine by me
-> >>> if you're picking this up soon anyway.
-> >>>
-> >>> - Marijn
-> >
-> >
-> >
-
-
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r032-20230413   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r043-20230409   gcc  
+arc                  randconfig-r043-20230410   gcc  
+arc                  randconfig-r043-20230412   gcc  
+arc                  randconfig-r043-20230413   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                     am200epdkit_defconfig   clang
+arm                                 defconfig   gcc  
+arm                            mps2_defconfig   gcc  
+arm                  randconfig-r036-20230413   clang
+arm                  randconfig-r046-20230413   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r031-20230413   gcc  
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230410   clang
+i386                 randconfig-a002-20230410   clang
+i386                 randconfig-a003-20230410   clang
+i386                 randconfig-a004-20230410   clang
+i386                 randconfig-a005-20230410   clang
+i386                 randconfig-a006-20230410   clang
+i386                 randconfig-a011-20230410   gcc  
+i386                 randconfig-a012-20230410   gcc  
+i386                 randconfig-a013-20230410   gcc  
+i386                 randconfig-a014-20230410   gcc  
+i386                 randconfig-a015-20230410   gcc  
+i386                 randconfig-a016-20230410   gcc  
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r031-20230411   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r033-20230411   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                            mac_defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                        maltaup_defconfig   clang
+mips                      pic32mzda_defconfig   clang
+nios2                               defconfig   gcc  
+nios2                randconfig-r034-20230413   gcc  
+openrisc             randconfig-r032-20230411   gcc  
+openrisc             randconfig-r034-20230411   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                  mpc866_ads_defconfig   clang
+powerpc              randconfig-r035-20230413   gcc  
+powerpc              randconfig-r036-20230411   gcc  
+powerpc                     taishan_defconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv             nommu_k210_sdcard_defconfig   gcc  
+riscv                randconfig-r042-20230409   gcc  
+riscv                randconfig-r042-20230410   gcc  
+riscv                randconfig-r042-20230412   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                          debug_defconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230409   gcc  
+s390                 randconfig-r044-20230410   gcc  
+s390                 randconfig-r044-20230412   gcc  
+sh                               allmodconfig   gcc  
+sh                         ecovec24_defconfig   gcc  
+sh                   randconfig-r033-20230413   gcc  
+sh                           se7712_defconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r035-20230411   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230410   clang
+x86_64                        randconfig-a001   clang
+x86_64               randconfig-a002-20230410   clang
+x86_64               randconfig-a003-20230410   clang
+x86_64                        randconfig-a003   clang
+x86_64               randconfig-a004-20230410   clang
+x86_64               randconfig-a005-20230410   clang
+x86_64                        randconfig-a005   clang
+x86_64               randconfig-a006-20230410   clang
+x86_64               randconfig-a011-20230410   gcc  
+x86_64               randconfig-a012-20230410   gcc  
+x86_64               randconfig-a013-20230410   gcc  
+x86_64               randconfig-a014-20230410   gcc  
+x86_64               randconfig-a015-20230410   gcc  
+x86_64               randconfig-a016-20230410   gcc  
+x86_64                               rhel-8.3   gcc  
+xtensa                              defconfig   gcc  
 
 -- 
-With best wishes
-Dmitry
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
