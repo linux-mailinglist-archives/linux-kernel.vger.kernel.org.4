@@ -2,141 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17FD06E1A85
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 04:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 095196E1A8A
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 04:51:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbjDNCpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 22:45:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60998 "EHLO
+        id S229656AbjDNCvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 22:51:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjDNCpM (ORCPT
+        with ESMTP id S229484AbjDNCvc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 22:45:12 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7774C01;
-        Thu, 13 Apr 2023 19:44:45 -0700 (PDT)
-Received: from dggpeml500010.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PyLJs14ZwzSrrx;
-        Fri, 14 Apr 2023 10:40:13 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpeml500010.china.huawei.com
- (7.185.36.155) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 14 Apr
- 2023 10:44:11 +0800
-From:   Xin Liu <liuxin350@huawei.com>
-To:     <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-        <davem@davemloft.net>, <edumazet@google.com>, <hsinweih@uci.edu>,
-        <jakub@cloudflare.com>, <john.fastabend@gmail.com>,
-        <kuba@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <liuxin350@huawei.com>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>,
-        <syzbot+49f6cef45247ff249498@syzkaller.appspotmail.com>,
-        <syzkaller-bugs@googlegroups.com>, <yanan@huawei.com>,
-        <wuchangye@huawei.com>, <xiesongyang@huawei.com>,
-        <kongweibin2@huawei.com>, <zhangmingyi5@huawei.com>
-Subject: Re: [syzbot] [bpf?] [net?] WARNING in sock_map_del_link
-Date:   Fri, 14 Apr 2023 10:44:01 +0800
-Message-ID: <20230414024401.121885-1-liuxin350@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <67f98e03-79ae-a290-b97a-2f6e11ab1251@iogearbox.net>
-References: <67f98e03-79ae-a290-b97a-2f6e11ab1251@iogearbox.net>
+        Thu, 13 Apr 2023 22:51:32 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C52C9
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 19:51:31 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id z11-20020a17090abd8b00b0024721c47ceaso3364156pjr.3
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 19:51:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=daynix-com.20221208.gappssmtp.com; s=20221208; t=1681440691; x=1684032691;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=52dTXDeasU3qeAPixz48OWdPDQAgiBEqkhzYoyavubA=;
+        b=ztmp0d0ENV/7cH9KnXyHx5Ng3dqjGSytavxqAGT5jFzqqKceLfNaAr60SAqxj3MQTV
+         zixFfp92J5qEQ66MBxP7rUvGquIZGyx9O9qYOZthZkAiqr1NqX8Uk0X/BMUTM+pXaH1z
+         DHOUJzUeWzCwmO80uuMDtRMdqXR1OgsMlElVjlt+Pw6S87uxL8+HUoNmaPx1NTvwxSmI
+         9qXvjDrYZpp3NZ+2XZq8bAsrsdAhpQuAHfYScWefEm7h4xcobedu9Ac1Cn/UUOfqCCpU
+         cOzrQ7PUh3Qn/IuDWu+ndlKTbtqL1ihta0PYQl0pl/yxdSWdOorgfzuaaK6WhWC1/zcO
+         eTcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681440691; x=1684032691;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=52dTXDeasU3qeAPixz48OWdPDQAgiBEqkhzYoyavubA=;
+        b=keCHwPYcCvqyoVS1l0kylNgWMOw17Iu0aqvKpDc+1arDQMJ6GKF6QfNubSrDoD7YBD
+         1pxkD5+sUKow/x2IyUyYimUAu3Fu4uGm3A1sMtXFIX/rRcyIApLKC2D9w2qqP88dE+Fb
+         Nz64jhvAgXdQeUsgoc7oYiTPUnPOo33SJnDgXkbzju6TBlHs6K/BJewpZE6fvZwvmnUr
+         mvmF8eHT2K/97pJDQaytgHJS90zRUBBlrVhyMzaTtQHTRTi8ua6J0mMpY8P6Z+0N+qK0
+         5F+CUur6MwuTd9tAX1Vqou0MZCsZREUh1h32fHUDVKy0y7+DVr8oePS8/DkfweEORYyh
+         SEGA==
+X-Gm-Message-State: AAQBX9evEVp1iZmf6DwoZQqHEjWhhoRYWIHHPPzNZg6N0ahSfYhdtqcp
+        DC9LGMuS+Gd/XvsZ5YzqO8tNJw==
+X-Google-Smtp-Source: AKy350ai1GwoaP7hcrIv3V8SdFcLeiYB/1L3j7Pjabe9qVevpRPDt5e20MLhKX8LOT1eoDXFt4XVGQ==
+X-Received: by 2002:a17:902:cad1:b0:1a6:6fe3:df8d with SMTP id y17-20020a170902cad100b001a66fe3df8dmr982543pld.8.1681440690708;
+        Thu, 13 Apr 2023 19:51:30 -0700 (PDT)
+Received: from ?IPV6:2400:4050:a840:1e00:4457:c267:5e09:481b? ([2400:4050:a840:1e00:4457:c267:5e09:481b])
+        by smtp.gmail.com with ESMTPSA id g7-20020a1709026b4700b001a1ed2fce9asm2102285plt.235.2023.04.13.19.51.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Apr 2023 19:51:30 -0700 (PDT)
+Message-ID: <0d3f78ba-edff-5e64-2a3a-b2d7ec9b609a@daynix.com>
+Date:   Fri, 14 Apr 2023 11:51:27 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500010.china.huawei.com (7.185.36.155)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: virtio-iommu hotplug issue
+To:     eric.auger@redhat.com,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     virtio-dev@lists.oasis-open.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, qemu-devel@nongnu.org
+References: <15bf1b00-3aa0-973a-3a86-3fa5c4d41d2c@daynix.com>
+ <20230413104041.GA3295191@myrica>
+ <c6fb5a06-aa7e-91f9-7001-f456b2769595@daynix.com>
+ <9a765411-00ad-307e-9ca2-f6a7defba9cc@redhat.com>
+Content-Language: en-US
+From:   Akihiko Odaki <akihiko.odaki@daynix.com>
+In-Reply-To: <9a765411-00ad-307e-9ca2-f6a7defba9cc@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/14/23 2:42 AM, Daniel Borkmann wrote:
-> On 4/13/23 5:33 PM, syzbot wrote:
-> > Hello,
-> > 
-> > syzbot found the following issue on:
-> > 
-> > HEAD commit:    d319f344561d mm: Fix copy_from_user_nofault().
-> > git tree:       bpf-next
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=15930c9dc80000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=78c9d875f0a80d33
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=49f6cef45247ff249498
-> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > 
-> > Unfortunately, I don't have any reproducer for this issue yet.
-> > 
-> > Downloadable assets:
-> > disk image: https://storage.googleapis.com/syzbot-assets/229f3623b7df/disk-d319f344.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/6da0db75c9aa/vmlinux-d319f344.xz
-> > kernel image: https://storage.googleapis.com/syzbot-assets/01f022fb9a13/bzImage-d319f344.xz
-> > 
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+49f6cef45247ff249498@syzkaller.appspotmail.com
+On 2023/04/13 22:39, Eric Auger wrote:
+> Hi,
 > 
-> Xin, fyi, given we're currently prepping bpf-next pr we unfortunately had to revert commit
-> ed17aa92dc56 ("bpf, sockmap: fix deadlocks in the sockhash and sockmap") which is causing
-> this new syzkaller splat. There's another one in the syzkaller queue we've been made
-> aware of which bisected to earlier mentioned commit.
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=8c5c2a4898e3d6bad86e29d471e023c8a19ba799
-> 
-> > ------------[ cut here ]------------
-> > WARNING: CPU: 1 PID: 7921 at kernel/softirq.c:376 __local_bh_enable_ip+0xbe/0x130 kernel/softirq.c:376
-> > Modules linked in:
-> > CPU: 1 PID: 7921 Comm: syz-executor.4 Not tainted 6.2.0-syzkaller-13249-gd319f344561d #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
-> > RIP: 0010:__local_bh_enable_ip+0xbe/0x130 kernel/softirq.c:376
-> > Code: 45 bf 01 00 00 00 e8 b1 44 0a 00 e8 9c 41 3d 00 fb 65 8b 05 2c 61 b5 7e 85 c0 74 58 5b 5d c3 65 8b 05 12 2f b4 7e 85 c0 75 a2 <0f> 0b eb 9e e8 e9 41 3d 00 eb 9f 48 89 ef e8 ff 30 18 00 eb a8 0f
-> > RSP: 0018:ffffc90007bffbe8 EFLAGS: 00010046
-> > RAX: 0000000000000000 RBX: 0000000000000201 RCX: 1ffffffff1cf0736
-> > RDX: 0000000000000000 RSI: 0000000000000201 RDI: ffffffff882bf40a
-> > RBP: ffffffff882bf40a R08: 0000000000000000 R09: ffff88801cc6327b
-> > R10: ffffed100398c64f R11: 1ffffffff21917f0 R12: ffff88801cc63268
-> > R13: ffff88801cc63268 R14: ffff8880188ef500 R15: 0000000000000000
-> > FS:  00007f378f724700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 00007fbbc57831b8 CR3: 00000000210ad000 CR4: 00000000003506e0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > Call Trace:
-> >   <TASK>
-> >   spin_unlock_bh include/linux/spinlock.h:395 [inline]
-> >   sock_map_del_link+0x2ea/0x510 net/core/sock_map.c:165
-> >   sock_map_unref+0xb0/0x1d0 net/core/sock_map.c:184
-> >   sock_hash_delete_elem+0x1ec/0x2a0 net/core/sock_map.c:945
-> >   map_delete_elem kernel/bpf/syscall.c:1536 [inline]
-> >   __sys_bpf+0x2edc/0x53e0 kernel/bpf/syscall.c:5053
-> >   __do_sys_bpf kernel/bpf/syscall.c:5166 [inline]
-> >   __se_sys_bpf kernel/bpf/syscall.c:5164 [inline]
-> >   __x64_sys_bpf+0x79/0xc0 kernel/bpf/syscall.c:5164
-> >   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >   do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-> >   entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > RIP: 0033:0x7f378ea8c169
-> > Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> > RSP: 002b:00007f378f724168 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-> > RAX: ffffffffffffffda RBX: 00007f378ebabf80 RCX: 00007f378ea8c169
-> > RDX: 0000000000000020 RSI: 0000000020000140 RDI: 0000000000000003
-> > RBP: 00007f378eae7ca1 R08: 0000000000000000 R09: 0000000000000000
-> > R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-> > R13: 00007ffe9737aebf R14: 00007f378f724300 R15: 0000000000022000
-> >   </TASK>
-> > 
-> > 
-> > ---
-> > This report is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> > 
-> > syzbot will keep track of this issue. See:
-> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> > 
+> On 4/13/23 13:01, Akihiko Odaki wrote:
+>> On 2023/04/13 19:40, Jean-Philippe Brucker wrote:
+>>> Hello,
+>>>
+>>> On Thu, Apr 13, 2023 at 01:49:43PM +0900, Akihiko Odaki wrote:
+>>>> Hi,
+>>>>
+>>>> Recently I encountered a problem with the combination of Linux's
+>>>> virtio-iommu driver and QEMU when a SR-IOV virtual function gets
+>>>> disabled.
+>>>> I'd like to ask you what kind of solution is appropriate here and
+>>>> implement
+>>>> the solution if possible.
+>>>>
+>>>> A PCIe device implementing the SR-IOV specification exports a virtual
+>>>> function, and the guest can enable or disable it at runtime by
+>>>> writing to a
+>>>> configuration register. This effectively looks like a PCI device is
+>>>> hotplugged for the guest.
+>>>
+>>> Just so I understand this better: the guest gets a whole PCIe device PF
+>>> that implements SR-IOV, and so the guest can dynamically create VFs?
+>>> Out
+>>> of curiosity, is that a hardware device assigned to the guest with VFIO,
+>>> or a device emulated by QEMU?
+>>
+>> Yes, that's right. The guest can dynamically create and delete VFs.
+>> The device is emulated by QEMU: igb, an Intel NIC recently added to
+>> QEMU and projected to be released as part of QEMU 8.0.
+>  From below description In understand you then bind this emulated device
+> to VFIO on guest, correct?
 
-I did miss some bh lock processing when deleting links, and I'll be
-combing the use of sockhash locks recently.
-Thanks.
+Yes, that's correct.
+
+>>
+>>>
+>>>> In such a case, the kernel assumes the endpoint is
+>>>> detached from the virtio-iommu domain, but QEMU actually does not
+>>>> detach it.
+> The QEMU virtio-iommu device executes commands from the virtio-iommu
+> driver and my understanding is the VFIO infra is not in trouble here. As
+> suggested by Jean, a detach command probably is missed.
+
+VFIO just illustrates the problem and the origin of the problem is 
+indeed virtio-iommu.
+
+Regards,
+Akihiko Odaki
+
+>>>>
+>>>> This inconsistent view of the removed device sometimes prevents the
+>>>> VM from
+>>>> correctly performing the following procedure, for example:
+>>>> 1. Enable a VF.
+>>>> 2. Disable the VF.
+>>>> 3. Open a vfio container.
+>>>> 4. Open the group which the PF belongs to.
+>>>> 5. Add the group to the vfio container.
+>>>> 6. Map some memory region.
+>>>> 7. Close the group.
+>>>> 8. Close the vfio container.
+>>>> 9. Repeat 3-8
+>>>>
+>>>> When the VF gets disabled, the kernel assumes the endpoint is
+>>>> detached from
+>>>> the IOMMU domain, but QEMU actually doesn't detach it. Later, the
+>>>> domain
+>>>> will be reused in step 3-8.
+>>>>
+>>>> In step 7, the PF will be detached, and the kernel thinks there is no
+>>>> endpoint attached and the mapping the domain holds is cleared, but
+>>>> the VF
+>>>> endpoint is still attached and the mapping is kept intact.
+>>>>
+>>>> In step 9, the same domain will be reused again, and the kernel
+>>>> requests to
+>>>> create a new mapping, but it will conflict with the existing mapping
+>>>> and
+>>>> result in -EINVAL.
+>>>>
+>>>> This problem can be fixed by either of:
+>>>> - requesting the detachment of the endpoint from the guest when the PCI
+>>>> device is unplugged (the VF is disabled)
+>>>
+>>> Yes, I think this is an issue in the virtio-iommu driver, which
+>>> should be
+>>> sending a DETACH request when the VF is disabled, likely from
+>>> viommu_release_device(). I'll work on a fix unless you would like to
+>>> do it
+>>
+>> It will be nice if you prepare a fix. I will test your patch with my
+>> workload if you share it with me.
+> 
+> I can help testing too
+> 
+> Thanks
+> 
+> Eric
+>>
+>> Regards,
+>> Akihiko Odaki
+>>
+>>>
+>>>> - detecting that the PCI device is gone and automatically detach it on
+>>>> QEMU-side.
+>>>>
+>>>> It is not completely clear for me which solution is more appropriate
+>>>> as the
+>>>> virtio-iommu specification is written in a way independent of the
+>>>> endpoint
+>>>> mechanism and does not say what should be done when a PCI device is
+>>>> unplugged.
+>>>
+>>> Yes, I'm not sure it's in scope for the specification, it's more about
+>>> software guidance
+>>>
+>>> Thanks,
+>>> Jean
+>>
+> 
