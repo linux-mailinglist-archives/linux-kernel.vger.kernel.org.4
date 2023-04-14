@@ -2,96 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8AE56E2402
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 15:08:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EF8C6E240C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 15:12:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjDNNIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 09:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48036 "EHLO
+        id S230097AbjDNNMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 09:12:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjDNNIo (ORCPT
+        with ESMTP id S229540AbjDNNMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 09:08:44 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900D53A9C;
-        Fri, 14 Apr 2023 06:08:43 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PycG21yKCz4xFd;
-        Fri, 14 Apr 2023 23:08:42 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1681477722;
-        bh=lQ2sy1Tfw62Ka0rYbe1ZrKAYF5rJAMMAsOCk22IsWto=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=XsmIQJ3soXQbetkQ1EFK7ilZ4d9taopH/uxnydUgDsGDZBtuA/lMQSf1WxR3aVr4j
-         aWFNbT69fPVcYIue3Edkw9ggv8vi1sGC5QC9d7j0KaktizWblQ92eM3+nYKNToY7jH
-         B0rs1QC6LEdGeGYTifm/xA5R667sTgUMrvHdI/mKk4ucn21tqcN5W1UnlziIY8CEiI
-         T9AXkVyyPVgXy9WSBFh6YTUQ2FGBy44kZu1/4g27vlNOQadC26OMH+5gastWCJUNNV
-         zrIXcuXKPdpbKNjG+EBRDVpf0i0P2/te3agT3P87UcRqbDONwbZnicnhRQINq0URPd
-         WvvjIyGUrLyUA==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Danny Tsen <dtsen@linux.ibm.com>, linux-crypto@vger.kernel.org
-Cc:     herbert@gondor.apana.org.au, leitao@debian.org,
-        nayna@linux.ibm.com, appro@cryptogams.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        ltcgcw@linux.vnet.ibm.com, dtsen@us.ibm.com,
-        Danny Tsen <dtsen@linux.ibm.com>
-Subject: Re: [PATCH v2 2/2] Move Power10 feature, PPC_MODULE_FEATURE_P10.
-In-Reply-To: <20230413194625.10631-3-dtsen@linux.ibm.com>
-References: <20230413194625.10631-1-dtsen@linux.ibm.com>
- <20230413194625.10631-3-dtsen@linux.ibm.com>
-Date:   Fri, 14 Apr 2023 23:08:41 +1000
-Message-ID: <87fs92a9wm.fsf@mpe.ellerman.id.au>
+        Fri, 14 Apr 2023 09:12:46 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A4253A8D;
+        Fri, 14 Apr 2023 06:12:43 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-5055141a8fdso1812377a12.3;
+        Fri, 14 Apr 2023 06:12:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681477962; x=1684069962;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2Uom6lc4AWGfEj6FlZegDGpqslLO6mugP8+4t00eUbk=;
+        b=BmZ8EPO4h0mM3Mt5eW1k3OTRWCZy0A/N0LVFa4nVRbMecDr8gUorPxktYnDsMBf9ap
+         M+z08/XOuzDoDWoGD+4ef2zG8CCmQ41G4Rtru6xuXFpIhqspl+LrXyhGTW7r/AFlqqr+
+         vXTzX4+ozGzo03KEqoH+vzjVzidVpjQd6yFbyEMmzNsPJPIKIFTItdPPhIoglZcY2kpP
+         GDDYZLg9L5+DnthyY9kw98npLGsg8BXbynM/F8g2No5pQCovaN7N7obu95NQhLmL2bUo
+         uelmdJevCMw0oVGEvY5BjDZRpdCPPwn7NCUMesY1+yPwg7YQCEpLrdCkhZx/6Rym1OBZ
+         +MPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681477962; x=1684069962;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2Uom6lc4AWGfEj6FlZegDGpqslLO6mugP8+4t00eUbk=;
+        b=MB3vVVVARGXP3kCQS+58vWX/P9qPfDqbp5IpMFPCpQtI2TCQFFsk6/81NKSnos5a92
+         tmeaY4JMW4JRvzcm7gtF6Xst0pX3EgM7Hx6fhvOnhgTKk5QLbU+NkEUzBVcpbDNtutJk
+         Ll7Ujs6IQCGy4qYaRpocBz8pEYl2hvf980OYyHKjRpe0/wOP4g7+AmhMghq7nLXcpl6L
+         2u4xP6sGMD5+pf87sIgAhleyMKiGJGoSszm1gK9C9USwHpJCSXxQXGiRDYx2+MEw04rs
+         hK8iVo4JPWLooIcZuFJc73K3+Bl9OYmDvcVZTgwvTh3lR/7x2PK3CQC3GDlWmbuebeoM
+         VNJg==
+X-Gm-Message-State: AAQBX9ecKHYWZEjgJHyO0RVnXbvtR+aYjUi5ixsJBn2yUjYviauOY5s8
+        5sjWkv5Zsn0Z62f9KnXSItaqStRqg/c=
+X-Google-Smtp-Source: AKy350bQ919IQYOcCLpYeV47FFJjr0wzWWGdFepcMolluF6PUo9O5lgrLH8PBiKun80jqf64z4Q3oQ==
+X-Received: by 2002:aa7:cd56:0:b0:4fb:59bb:ce71 with SMTP id v22-20020aa7cd56000000b004fb59bbce71mr5550074edw.36.1681477962047;
+        Fri, 14 Apr 2023 06:12:42 -0700 (PDT)
+Received: from ?IPV6:2620:10d:c096:310::26ef? ([2620:10d:c092:600::2:5dfa])
+        by smtp.gmail.com with ESMTPSA id u11-20020aa7d98b000000b004ad601533a3sm2097486eds.55.2023.04.14.06.12.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Apr 2023 06:12:41 -0700 (PDT)
+Message-ID: <44420e92-f629-f56e-f930-475be6f6a83a@gmail.com>
+Date:   Fri, 14 Apr 2023 14:12:10 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH RFC] io_uring: Pass whole sqe to commands
+Content-Language: en-US
+To:     Ming Lei <ming.lei@redhat.com>, Breno Leitao <leitao@debian.org>
+Cc:     axboe@kernel.dk, davem@davemloft.net, dccp@vger.kernel.org,
+        dsahern@kernel.org, edumazet@google.com, io-uring@vger.kernel.org,
+        kuba@kernel.org, leit@fb.com, linux-kernel@vger.kernel.org,
+        marcelo.leitner@gmail.com, matthieu.baerts@tessares.net,
+        mptcp@lists.linux.dev, netdev@vger.kernel.org, pabeni@redhat.com,
+        willemdebruijn.kernel@gmail.com
+References: <20230406144330.1932798-1-leitao@debian.org>
+ <20230406165705.3161734-1-leitao@debian.org>
+ <ZDdvcSKLa6ZEAhRW@ovpn-8-18.pek2.redhat.com> <ZDgyPL6UrX/MaBR4@gmail.com>
+ <ZDi2pP4jgHwCvJRm@ovpn-8-21.pek2.redhat.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <ZDi2pP4jgHwCvJRm@ovpn-8-21.pek2.redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Danny Tsen <dtsen@linux.ibm.com> writes:
-> Move Power10 feature, PPC_MODULE_FEATURE_P10, definition to be in
-> arch/powerpc/include/asm/cpufeature.h.
->
-> Signed-off-by: Danny Tsen <dtsen@linux.ibm.com>
-> ---
->  arch/powerpc/crypto/aes-gcm-p10-glue.c | 1 -
->  arch/powerpc/include/asm/cpufeature.h  | 1 +
->  2 files changed, 1 insertion(+), 1 deletion(-)
+On 4/14/23 03:12, Ming Lei wrote:
+> On Thu, Apr 13, 2023 at 09:47:56AM -0700, Breno Leitao wrote:
+>> Hello Ming,
+>>
+>> On Thu, Apr 13, 2023 at 10:56:49AM +0800, Ming Lei wrote:
+>>> On Thu, Apr 06, 2023 at 09:57:05AM -0700, Breno Leitao wrote:
+>>>> Currently uring CMD operation relies on having large SQEs, but future
+>>>> operations might want to use normal SQE.
+>>>>
+>>>> The io_uring_cmd currently only saves the payload (cmd) part of the SQE,
+>>>> but, for commands that use normal SQE size, it might be necessary to
+>>>> access the initial SQE fields outside of the payload/cmd block.  So,
+>>>> saves the whole SQE other than just the pdu.
+>>>>
+>>>> This changes slighlty how the io_uring_cmd works, since the cmd
+>>>> structures and callbacks are not opaque to io_uring anymore. I.e, the
+>>>> callbacks can look at the SQE entries, not only, in the cmd structure.
+>>>>
+>>>> The main advantage is that we don't need to create custom structures for
+>>>> simple commands.
+>>>>
+>>>> Suggested-by: Pavel Begunkov <asml.silence@gmail.com>
+>>>> Signed-off-by: Breno Leitao <leitao@debian.org>
+>>>> ---
+>>>
+>>> ...
+>>>
+>>>> diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+>>>> index 2e4c483075d3..9648134ccae1 100644
+>>>> --- a/io_uring/uring_cmd.c
+>>>> +++ b/io_uring/uring_cmd.c
+>>>> @@ -63,14 +63,15 @@ EXPORT_SYMBOL_GPL(io_uring_cmd_done);
+>>>>   int io_uring_cmd_prep_async(struct io_kiocb *req)
+>>>>   {
+>>>>   	struct io_uring_cmd *ioucmd = io_kiocb_to_cmd(req, struct io_uring_cmd);
+>>>> -	size_t cmd_size;
+>>>> +	size_t size = sizeof(struct io_uring_sqe);
+>>>>   
+>>>>   	BUILD_BUG_ON(uring_cmd_pdu_size(0) != 16);
+>>>>   	BUILD_BUG_ON(uring_cmd_pdu_size(1) != 80);
+>>>>   
+>>>> -	cmd_size = uring_cmd_pdu_size(req->ctx->flags & IORING_SETUP_SQE128);
+>>>> +	if (req->ctx->flags & IORING_SETUP_SQE128)
+>>>> +		size <<= 1;
+>>>>   
+>>>> -	memcpy(req->async_data, ioucmd->cmd, cmd_size);
+>>>> +	memcpy(req->async_data, ioucmd->sqe, size);
+>>>
+>>> The copy will make some fields of sqe become READ TWICE, and driver may see
+>>> different sqe field value compared with the one observed in io_init_req().
+>>
+>> This copy only happens if the operation goes to the async path
+>> (calling io_uring_cmd_prep_async()).  This only happens if
+>> f_op->uring_cmd() returns -EAGAIN.
+>>
+>>            ret = file->f_op->uring_cmd(ioucmd, issue_flags);
+>>            if (ret == -EAGAIN) {
+>>                    if (!req_has_async_data(req)) {
+>>                            if (io_alloc_async_data(req))
+>>                                    return -ENOMEM;
+>>                            io_uring_cmd_prep_async(req);
+>>                    }
+>>                    return -EAGAIN;
+>>            }
+>>
+>> Are you saying that after this copy, the operation is still reading from
+>> sqe instead of req->async_data?
+> 
+> I meant that the 2nd read is on the sqe copy(req->aync_data), but same
+> fields can become different between the two READs(first is done on original
+> SQE during io_init_req(), and second is done on sqe copy in driver).
+> 
+> Will this kind of inconsistency cause trouble for driver? Cause READ
+> TWICE becomes possible with this patch.
 
-Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+Right it might happen, and I was keeping that in mind, but it's not
+specific to this patch. It won't reload core io_uring bits, and all
+fields cmds use already have this problem.
 
-cheers
+Unless there is a better option, the direction we'll be moving in is
+adding a preparation step that should read and stash parts of SQE
+it cares about, which should also make full SQE copy not
+needed / optional.
 
-> diff --git a/arch/powerpc/crypto/aes-gcm-p10-glue.c b/arch/powerpc/crypto/aes-gcm-p10-glue.c
-> index 1533c8cdd26f..bd3475f5348d 100644
-> --- a/arch/powerpc/crypto/aes-gcm-p10-glue.c
-> +++ b/arch/powerpc/crypto/aes-gcm-p10-glue.c
-> @@ -22,7 +22,6 @@
->  #include <linux/module.h>
->  #include <linux/types.h>
->  
-> -#define PPC_MODULE_FEATURE_P10	(32 + ilog2(PPC_FEATURE2_ARCH_3_1))
->  #define	PPC_ALIGN		16
->  #define GCM_IV_SIZE		12
->  
-> diff --git a/arch/powerpc/include/asm/cpufeature.h b/arch/powerpc/include/asm/cpufeature.h
-> index f6f790a90367..2dcc66225e7f 100644
-> --- a/arch/powerpc/include/asm/cpufeature.h
-> +++ b/arch/powerpc/include/asm/cpufeature.h
-> @@ -22,6 +22,7 @@
->   */
->  
->  #define PPC_MODULE_FEATURE_VEC_CRYPTO			(32 + ilog2(PPC_FEATURE2_VEC_CRYPTO))
-> +#define PPC_MODULE_FEATURE_P10				(32 + ilog2(PPC_FEATURE2_ARCH_3_1))
->  
->  #define cpu_feature(x)		(x)
->  
-> -- 
-> 2.31.1
+>> If you have an example of the two copes flow, that would be great.
+> 
+> Not any example yet, but also not see any access on cmd->sqe(except for cmd_op)
+> in your patches too.
+
+-- 
+Pavel Begunkov
