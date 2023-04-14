@@ -2,84 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5E036E2C8D
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 00:50:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41D516E2C93
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 00:52:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjDNWus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 18:50:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34228 "EHLO
+        id S229894AbjDNWwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 18:52:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbjDNWuq (ORCPT
+        with ESMTP id S229848AbjDNWwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 18:50:46 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB1865AE
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 15:50:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1681512605; i=j.neuschaefer@gmx.net;
-        bh=k+3jRXgTPReCyEux1QLX+EwAdB1mjZaxnQ1uRzHgPFI=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=X01eZ2kN0JO0HRnXg4+I0Wr6UXiaIiJCpxPjEWK9/XUGw6uULvknLRLS7aTrtuxkt
-         KHLUkxLa+jCcQ6ZbHhjTANNQYxVpcVCtxv8/4itnEzY5GapSWRHwsP9j85HAb4vS68
-         lXSFtjTJ4rJQL/62pxs1GkCDrPgPj9F2OLzh9tnXPT5KeKQ54gj+7DibrJU4ZVqyIW
-         6xEzfAXqobSGkIOWg93S/waySFQ9L43kwa+rvJE0Qpgk/zSC/fPTXzWPal90bVDmIi
-         idm/xGf9+EZrG9iHHb52yw+M69qZ9ZMoZigIBFInuLiK2xfDUgvHyt4xfRpWw1BSGW
-         03aY1xeeO8p7g==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([81.173.153.53]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mqb1c-1q9KfN1rn6-00mb6t; Sat, 15
- Apr 2023 00:50:05 +0200
-Date:   Sat, 15 Apr 2023 00:50:01 +0200
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        linux-arm-kernel@lists.infradead.org,
-        Russell King <linux@armlinux.org.uk>,
-        Nick Terrell <terrelln@fb.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        "Hawkins, Nick" <nick.hawkins@hpe.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Xin Li <xin3.li@intel.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Paul Bolle <pebolle@tiscali.nl>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] ARM ZSTD boot compression
-Message-ID: <ZDnYme3w3T6310MJ@probook>
-References: <20230412212126.3966502-1-j.neuschaefer@gmx.net>
- <9ae523ae-aad4-40b1-8b6b-d5e18bf8b92a@app.fastmail.com>
+        Fri, 14 Apr 2023 18:52:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D5B65AE
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 15:51:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681512718;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Xzg1uEhhBGkSbd3wSQjxiynbNYfCWbcMjiTfelS4Yzw=;
+        b=Gy9Jm0jehybTKcb590aFwjOv8jSJzROc+BIYWSVINwe6TMiH6QEJ1E4LKXSRRLyBJ/ysKb
+        hTdxV8H4eewvS7Y75yFXQOxHBW3nAZVMdSezh3k4fz0z5N4UFD/8GkUMROXlR3I2oAHVmj
+        UH4INSM9GucUu5X3CGDeSdvyzqpctQM=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-619-ZNiFnrzHMyKDRAEdl4Jwmg-1; Fri, 14 Apr 2023 18:51:57 -0400
+X-MC-Unique: ZNiFnrzHMyKDRAEdl4Jwmg-1
+Received: by mail-qk1-f199.google.com with SMTP id b193-20020ae9ebca000000b0074adfd12828so1728169qkg.20
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 15:51:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681512716; x=1684104716;
+        h=mime-version:user-agent:content-transfer-encoding:organization
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xzg1uEhhBGkSbd3wSQjxiynbNYfCWbcMjiTfelS4Yzw=;
+        b=lYplkCPDV1YOQCJk3NR9zU5bEid7khMIepZ72Rdh2AT+ewCGORsAywUQw0wJNQ3KhG
+         Init/liGS1n0gRFbRS2N3pGwASk3DFFM4tInPvmV4H389HiWt2+Qo44m2xMy+R7hReMz
+         RxmWjkf/pLGA6vRvFeaqhoRMtk4wPje8LLRgvvJtm4zVaA0RpmiwlUi/O83AvX73sC/6
+         5GP0VlcseqVjLSERaEjI/FG8UqLDctW7kWxHbDOmnprDkZw0xsZcQbbY4w/yPkjsPQXg
+         Sx2QoKeLjQCc79R4zuRtwn4fTr/vm/IgG+OXauFTMRKF254qtTCyLLnmF96Liz6hrFs/
+         iPrw==
+X-Gm-Message-State: AAQBX9dLNFKjbpLCTXIGjtx7cVhCOmauLhQBKZ2cfKtKq0lO+uB7z7MR
+        ZTuYvpFOqVaeJAUzRQexcrCYCQZhZOIMSYzUTYoWhtTv+lxhD6m0hYoEt7pX5VoHjMZz81vjWKk
+        8s9VEFruslBNQCGvjxs9XNp7F
+X-Received: by 2002:ac8:5bc2:0:b0:3da:e3a8:b01a with SMTP id b2-20020ac85bc2000000b003dae3a8b01amr10483562qtb.0.1681512716678;
+        Fri, 14 Apr 2023 15:51:56 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bq+nyFZeqoJ0c2ttgmXGuKaQG8bk9r8rd3vo02jf/CzwDaHZcBXoi9bOyI3iTHqKqMN9Ym5w==
+X-Received: by 2002:ac8:5bc2:0:b0:3da:e3a8:b01a with SMTP id b2-20020ac85bc2000000b003dae3a8b01amr10483542qtb.0.1681512716374;
+        Fri, 14 Apr 2023 15:51:56 -0700 (PDT)
+Received: from ?IPv6:2600:4040:5c62:8200::feb? ([2600:4040:5c62:8200::feb])
+        by smtp.gmail.com with ESMTPSA id o10-20020a05620a2a0a00b0074acb58d489sm1545132qkp.32.2023.04.14.15.51.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Apr 2023 15:51:55 -0700 (PDT)
+Message-ID: <7a1b00f02b125bd65824b18ea09509efe3cf777d.camel@redhat.com>
+Subject: Re: [PATCH] drm: make drm_dp_add_payload_part2 gracefully handle
+ NULL state pointer
+From:   Lyude Paul <lyude@redhat.com>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "Lin, Wayne" <Wayne.Lin@amd.com>,
+        Alex Deucher <alexdeucher@gmail.com>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
+Date:   Fri, 14 Apr 2023 18:51:55 -0400
+In-Reply-To: <878reug394.fsf@intel.com>
+References: <20230413111254.22458-1-jlayton@kernel.org>
+         <87edooarpq.fsf@intel.com>
+         <CADnq5_PVnYMSiKO77+cfg_V-tDKYkVJYN3qGNb1vhQO3QtXskA@mail.gmail.com>
+         <CO6PR12MB5489044012B2A96639470F38FC999@CO6PR12MB5489.namprd12.prod.outlook.com>
+         <4d8479f20ef30866fcf73f3602f1237376110764.camel@kernel.org>
+         <878reug394.fsf@intel.com>
+Organization: Red Hat Inc.
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="MtWVWVRQEu4Rfh5n"
-Content-Disposition: inline
-In-Reply-To: <9ae523ae-aad4-40b1-8b6b-d5e18bf8b92a@app.fastmail.com>
-X-Provags-ID: V03:K1:xLfVlD/834yQTbAOhcp5UzTaDMq2eblUtqHE3GZhirAmi6rCdvU
- 5d8mh4wpvxTUOdrlxWfLc3YlUb1dJ/rdfpgH7Q6lsSQ2fN46VESmFefk3xH56dCL4h7/hyH
- k2knN8Xs3DeGssmQSTWjKtq4tyhgHsQKY3f/F6FtUt+/cJcsJ/XbDLggqvfR6tjGLei/+vc
- t3ZMtZvX49wKI6VDHU/Yw==
-UI-OutboundReport: notjunk:1;M01:P0:OZGBpJrhXkA=;f6OJMBJN7WZsK9Ml5X03Jg+VehM
- JLoboQBuiz55Wr58aKenioPaEs4WRm2SSlrljAxU4CZj6ckSraoE0rqQMZhEz/IeaPRijPaDo
- LTooHuqN2gBlNfE0uai5XVaA2U5DlmnwXYBqHqCngkFWB18U4/IrpUEqhQvDd11MmrYeazyzi
- TxeR/u/pcxpTYd7qNUeYp5xYbPxXSVcQIXV5gkgk3BRBdhu/RqjR4dzRKgUqp4jcdWXwCdBhr
- 52FCPgnOdZT9fo5qJwx0/MbSm9+P8jInuc9sU8xDd7YtU0cl4y7wkiQKHkrAc/c6We/Gqk0hk
- M96mmHY/5Qn+e6Qkm3PE+eGEKEcH4JAYGT0XdK74NgOLdv/uhq5j27Y6fJCzOKOm2ujHmy764
- lWKr0Xm/Q9H22JNf78mGQIF4VIWlBDnYmpw4fQCP1v8LMfWb1RqZxNzl+cenHdWSwex+UrLu3
- w3mMV/4r3wGM0Cf0mXlsnM8dv0zE4Im1+8FLdB5FTPjs5VFOf7dQHatGAVT5mWFRWnRUJTy8j
- piyZk13vjzO/+xNNEE0viWGmB0nVZuAQq0XsrXS04oFB+gA+f0YKXP7mmfipzouCnWHUgrzpn
- r9CPCJNS9JudxwgdUiLMp7NhhJB5na2gnpEg/SJFbpW++sX5lyO8NNKsZK9OPl4OEtYoL2xhz
- uUV9FYWe9j2tw4yXPYdYSGar0XJXEjCvdylY9K/RBty0WAv22IKPBxJNQ31LlW+wYkoTBtLkN
- OTbYJihxa7PCRDPNKLZkTEsHKumy/balRmks8TLMtvbz13YCQs4mzsJtKHoG1BA8LEwN5QfZJ
- cZulOAcsgVBxpIydfagxH0kS3CAxL/9shurubBfnTBnALqtls4Q5wErUIide96cCAeqgZz/nA
- 3xD6h3wmLZfiEt7a8FchT5Nie+634vmvlGaIF/sCV0Kkaw8RHdaCQutjnGV0bZMf8sQpYdvpx
- ckDj2ml07go2Jx9TUlylS1k9I+c=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,87 +91,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---MtWVWVRQEu4Rfh5n
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Apr 12, 2023 at 11:33:15PM +0200, Arnd Bergmann wrote:
-> On Wed, Apr 12, 2023, at 23:21, Jonathan Neusch=C3=A4fer wrote:
-> > This patchset enables ZSTD kernel (de)compression on 32-bit ARM.
-> > Unfortunately, it is much slower than I hoped (tested on ARM926EJ-S):
-> >
-> >  - LZO:  7.2 MiB,  6 seconds
-> >  - ZSTD: 5.6 MiB, 60 seconds
+On Fri, 2023-04-14 at 13:35 +0300, Jani Nikula wrote:
+> On Fri, 14 Apr 2023, Jeff Layton <jlayton@kernel.org> wrote:
+> > On Fri, 2023-04-14 at 04:40 +0000, Lin, Wayne wrote:
+> > > [Public]
+> > >=20
+> > > Hi Jeff,
+> > >=20
+> > > Thanks. I might need more information to understand why we can't retr=
+ieve
+> > > the drm atomic state. Also , "Failed to create MST payload for port" =
+indicates
+> > > error while configuring DPCD payload ID table. Could you help to prov=
+ide log
+> > > with KMS + ATOMIC + DP debug on please? Thanks in advance!
+> > >=20
+> > > Regards,
+> > > Wayne
+> > >=20
+> >=20
+> > Possibly. I'm not that familiar with display driver debugging. Can you
+> > send me some directions on how to crank up that sort of debug logging?
+> >=20
+> > Note that this problem is _very_ intermittent too: I went about 2 weeks
+> > between crashes, and then I got 3 in one day. I'd rather not run with a
+> > lot of debug logging for a long time if that's what this is going to
+> > require, as this is my main workstation.
+> >=20
+> > The last time I got this log message, my proposed patch did prevent the
+> > box from oopsing, so I'd really like to see it go in unless it's just
+> > categorically wrong for the caller to pass down a NULL state pointer to
+> > drm_dp_add_payload_part2.
 >=20
-> That seems unexpected, as the usual numbers say it's about 25%
-> slower than LZO. Do you have an idea why it is so much slower
-> here?
+> Cc: Lyude.
+>=20
+> Looks like the state parameter was added in commit 4d07b0bc4034
+> ("drm/display/dp_mst: Move all payload info into the atomic state") and
+> its only use is to get at state->dev for debug logging.
+>=20
+> What's the plan for the parameter? Surely something more than that! :)
 
-No clear idea.
+I don't think there was any plan for that, or at least I certainly don't ev=
+en
+remember adding that D:. It must totally have been by mistake and snuck by
+review, if that's the only thing that we're using it for I'd say it's
+definitely fine to just drop it entirely
 
-I guess it might be related to caching or unaligned memory accesses
-somehow.
+>=20
+> Instead of "state ? state->dev : NULL" I guess we could use mgr->dev
+> like the other logging calls do. It's papering over the NULL parameter
+> too, but perhaps in a slightly cleaner way...
+>=20
+>=20
+> BR,
+> Jani.
+>=20
+>=20
+> >=20
+> > > > -----Original Message-----
+> > > > From: Alex Deucher <alexdeucher@gmail.com>
+> > > > Sent: Thursday, April 13, 2023 8:59 PM
+> > > > To: Jani Nikula <jani.nikula@linux.intel.com>; Lin, Wayne
+> > > > <Wayne.Lin@amd.com>
+> > > > Cc: Jeff Layton <jlayton@kernel.org>; David Airlie <airlied@gmail.c=
+om>;
+> > > > Daniel Vetter <daniel@ffwll.ch>; Deucher, Alexander
+> > > > <Alexander.Deucher@amd.com>; linux-kernel@vger.kernel.org; dri-
+> > > > devel@lists.freedesktop.org
+> > > > Subject: Re: [PATCH] drm: make drm_dp_add_payload_part2 gracefully
+> > > > handle NULL state pointer
+> > > >=20
+> > > > + Wayne
+> > > >=20
+> > > > On Thu, Apr 13, 2023 at 8:31=E2=80=AFAM Jani Nikula <jani.nikula@li=
+nux.intel.com>
+> > > > wrote:
+> > > > >=20
+> > > > > On Thu, 13 Apr 2023, Jeff Layton <jlayton@kernel.org> wrote:
+> > > > > > I've been experiencing some intermittent crashes down in the di=
+splay
+> > > > > > driver code. The symptoms are ususally a line like this in dmes=
+g:
+> > > > > >=20
+> > > > > >     amdgpu 0000:30:00.0: [drm] Failed to create MST payload for=
+ port
+> > > > > > 000000006d3a3885: -5
+> > > > > >=20
+> > > > > > ...followed by an Oops due to a NULL pointer dereference.
+> > > > > >=20
+> > > > > > The real bug is probably in the caller of this function, which =
+is
+> > > > > > passing it a NULL state pointer, but this patch at least keeps =
+my
+> > > > > > machine from oopsing when this occurs.
+> > > > >=20
+> > > > > My fear is that papering over this makes the root cause harder to=
+ find.
+> > > > >=20
+> > > > > Cc: Harry, Alex
+> > > > >=20
+> > > > >=20
+> > > > > BR,
+> > > > > Jani.
+> > > > >=20
+> > > > >=20
+> > > > > >=20
+> > > > > > Link: https://bugzilla.redhat.com/show_bug.cgi?id=3D2184855
+> > > > > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > > > > > ---
+> > > > > >  drivers/gpu/drm/display/drm_dp_mst_topology.c | 3 ++-
+> > > > > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > > > > >=20
+> > > > > > diff --git a/drivers/gpu/drm/display/drm_dp_mst_topology.c
+> > > > > > b/drivers/gpu/drm/display/drm_dp_mst_topology.c
+> > > > > > index 38dab76ae69e..87ad406c50f9 100644
+> > > > > > --- a/drivers/gpu/drm/display/drm_dp_mst_topology.c
+> > > > > > +++ b/drivers/gpu/drm/display/drm_dp_mst_topology.c
+> > > > > > @@ -3404,7 +3404,8 @@ int drm_dp_add_payload_part2(struct
+> > > > > > drm_dp_mst_topology_mgr *mgr,
+> > > > > >=20
+> > > > > >       /* Skip failed payloads */
+> > > > > >       if (payload->vc_start_slot =3D=3D -1) {
+> > > > > > -             drm_dbg_kms(state->dev, "Part 1 of payload creati=
+on for %s
+> > > > failed, skipping part 2\n",
+> > > > > > +             drm_dbg_kms(state ? state->dev : NULL,
+> > > > > > +                         "Part 1 of payload creation for %s fa=
+iled,
+> > > > > > + skipping part 2\n",
+> > > > > >                           payload->port->connector->name);
+> > > > > >               return -EIO;
+> > > > > >       }
+> > > > >=20
+> > > > > --
+> > > > > Jani Nikula, Intel Open Source Graphics Center
+>=20
 
-I suspected CONFIG_CPU_DCACHE_WRITETHROUGH, which was enabled, but
-disabling it didn't improve performance.
+--=20
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
 
-> How long does it take to decompress the generated arch/arm/boot/Image
-> file in user space on the same hardware using lzop and zstd?
-
-
-Unfortunately, the unzstd userspace tool requires a buffer of of 128 MiB
-(the window size), which is too big for my usual devboard (which has about
-100 MiB available). I'd have to test on a different board.
-
-
-Jonathan
-
----
-# uname -a
-Linux buildroot 6.3.0-rc6-00020-g023058d50f2f #1212 PREEMPT Fri Apr 14 20:5=
-8:21 CEST 2023 armv5tejl GNU/Linux
-
-# ls -lh
-total 13M
--rw-r--r--    1 root     root        7.5M Jan  1 00:07 piggy.lzo
--rw-r--r--    1 root     root        5.8M Jan  1 00:07 piggy.zstd
-
-# time lzop -d piggy.lzo -c > /dev/null
-lzop: piggy.lzo: warning: ignoring trailing garbage in lzop file
-Command exited with non-zero status 2
-real    0m 3.38s
-user    0m 3.20s
-sys     0m 0.18s
-
-# time unzstd piggy.zstd -c > /dev/null
-[  858.270000] __vm_enough_memory: pid: 114, comm: unzstd, not enough memor=
-y for the allocation
-piggy.zstd : Decoding error (36) : Allocation error : not enough memory
-Command exited with non-zero status 1
-real    0m 0.03s
-user    0m 0.01s
-sys     0m 0.03s
-
---MtWVWVRQEu4Rfh5n
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmQ52HkACgkQCDBEmo7z
-X9uhehAA0tS+qeGWot/dj4Bon39HGWPXOsaSNuEazuHoluXDu5OmH3WAZoIYV7RM
-Y0CUKLfUYKOuXuleFL4uFI6FaCJsKhtnbsLxbpFXm231Nizt86OOXX2rfZ+R1gqy
-5GJit+f2spT8mD2gQ6Sj2bXIs/30CWRUq3aBnOEP/XsZvJvrQewP7ZcYBfJDev33
-Vez7qiTrtFhBwJx9fUWGs1ptpoAZXZxKp2u50fdtr0FXRCijEa1EN09Mx2Mmq641
-jmNTt1ZsamsbSb98MXfW3stmMoA/EUi5f7HHyZus17mk+SqXXYT8XDi8TNfX/DHP
-VogG4EaHF1/yEBkVaMVThZWEDN78DrzNZjEgTmj0BMcCvaXw1INiYX9edYXlMmN1
-Hmn7RuhdB7PqzmDrUFhRTkemfmZJF939WZI9NRSdNKpMcwcN0iD/3K4J15ciA2V/
-+39SRWSl0a80A8WJivKFcmdCcZiJmlPZiCsQ//20rUauSbfYNlDFMvf6TGfH1uUf
-zggrPD7XnjZY3MXX8u+XKPCMi3PoBrP/jfRpEfvHsC0vLhuT+hiHLAN8ADoVr6hA
-ISgtMZK2Uc4jYlZcqgm+mSP/UuquNhbciPxKXcLrjP8NSfjfD7eQbalt5hykBdya
-rWUdUT3hipPvbXj6EUf4vXpN1XLLg1UxF+S/Eh2lN8p9UcwKUsA=
-=sfDd
------END PGP SIGNATURE-----
-
---MtWVWVRQEu4Rfh5n--
