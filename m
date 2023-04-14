@@ -2,117 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E736E2A60
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 21:00:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D909D6E2A6F
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 21:07:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbjDNTAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 15:00:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41100 "EHLO
+        id S229829AbjDNTHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 15:07:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjDNTAR (ORCPT
+        with ESMTP id S229628AbjDNTHV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 15:00:17 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B42A24D;
-        Fri, 14 Apr 2023 12:00:04 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id k13so19048964iov.10;
-        Fri, 14 Apr 2023 12:00:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681498804; x=1684090804;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yWR09PnwXA83YCTdrYoULV0/Df8/NB3IaqlxX19sB5E=;
-        b=sS9TNcxHWLjDdEZTybGm8OXLbHVx4dLpkhAHGEU00ZQQv4wuc8sm7L9HUctfE3wcIw
-         LjkFzJmhjiqwr2tqQpSbDZpDkVK1kGk7LRKUhmU1deWP6w0z1UEN80Ssj0v9B4E2l7n1
-         MMz4S0zQoXw+Z4rQan8za66ztL7n/GI8bfDPFominYq9g70Nru3tO7F76iJKef3BYzAl
-         K7pVDgr0XyGKQ+dEhv9ZtXYOLOHdQvdW//SQmMOCH3J7Q+gLQM9JkWBzvn5aGsmrC8ze
-         jjDPNguPhnKDRDNmfzf2xQPjyp6b5bTg8XWl4ZRxD5QeCKfJ0+lEPfktogDg1Y6y1J3Q
-         3bVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681498804; x=1684090804;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yWR09PnwXA83YCTdrYoULV0/Df8/NB3IaqlxX19sB5E=;
-        b=TrC+/7nS4lYXluPxi4l/nqQr59MUOXAhuILMqvm/HGPrq+BuJzAeanpj8ETIvLd52x
-         +TGAfEJhayz0Jc/grtSXZFxfXeHCzY3php9K8F+IfRApRCWJgIWNjQUruT9zw1owtYr9
-         j2UlDPtdDJyY96der9tDkYQcrK3swCE2SbQ2MW+R5eFe6zFU9DXs9L5bgbyc4IahLB2t
-         v0L8GdEaEMJot5HxEFIUMUem2rfsFsI+q41NPcQ10rLFsXf7KPZIPcUb7F4i5bzMswLl
-         LirYfGgZ0QEaBF/oaRpAx88qNJqjlTAbKNDZjlz8XRw0uMPJm5CzvV1y6nnyp7OMetJX
-         vW7w==
-X-Gm-Message-State: AAQBX9f48aYMmqPgSjSmtjrtfl8V1XhDc7D5kfVP3/0onDeySA4PYx8s
-        AMFbCQK/lvm4EAkPeyb+2ntMlHVkifBuGubSD1k=
-X-Google-Smtp-Source: AKy350bBMFShfeoZZt2QjaqsfgTvtxSX9IZEiShxzW3qpTYXC1IhCI0f2JRNozkCVFDD/ZX6hBW/RRG4mX1gkr4y3LM=
-X-Received: by 2002:a02:628f:0:b0:3a7:e46e:ab64 with SMTP id
- d137-20020a02628f000000b003a7e46eab64mr2919644jac.1.1681498803871; Fri, 14
- Apr 2023 12:00:03 -0700 (PDT)
+        Fri, 14 Apr 2023 15:07:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45E61703
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 12:06:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681499193;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dkAMl7zGu0d47GwL2c/7Q7hgpJNswSuiV5ht7dE8kSA=;
+        b=ep+n/TAMUgxv/3a8iVKz8w8x/FAPORXwZss5uLQd5eMkkqCgHS2rXxKrBPoYI0kk5t2ePA
+        0iGtz+guXDLW7hSOcKB7WCxSNBcJwthOGAOtRrSV6Sp0RThQLMI01D5g78MmfeePBoohFV
+        tJAPDBROi95D9/C13v+PtjupKR9DIyo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-340-OTxuLRa6M7eOHyW_t1s0_Q-1; Fri, 14 Apr 2023 15:06:28 -0400
+X-MC-Unique: OTxuLRa6M7eOHyW_t1s0_Q-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 181AD384708A;
+        Fri, 14 Apr 2023 19:06:28 +0000 (UTC)
+Received: from [10.22.18.140] (unknown [10.22.18.140])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7110A2027043;
+        Fri, 14 Apr 2023 19:06:27 +0000 (UTC)
+Message-ID: <46d26abf-a725-b924-47fa-4419b20bbc02@redhat.com>
+Date:   Fri, 14 Apr 2023 15:06:27 -0400
 MIME-Version: 1.0
-References: <20230412110900.69738-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20230412110900.69738-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20230412-cheddar-prune-5ce03ccf5581@spud> <20230413-aorta-unheated-c9bb35411fb2@wendy>
- <CA+V-a8uksWMihUadYc_dCoef7vaC5ncOicX0oGpSP9HRnHgScw@mail.gmail.com>
- <20230413-staunch-superman-e71fd3303176@spud> <CA+V-a8sGsbz5snMzc7JqFVktafzvEJTq3RNH+ndNBV6Fxj5bbQ@mail.gmail.com>
-In-Reply-To: <CA+V-a8sGsbz5snMzc7JqFVktafzvEJTq3RNH+ndNBV6Fxj5bbQ@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Fri, 14 Apr 2023 19:59:37 +0100
-Message-ID: <CA+V-a8vV0rnOo6bLmegu5gAqA3-jfOn6hknG12jAtYXce0haLQ@mail.gmail.com>
-Subject: Re: [PATCH v8 5/7] cache: Add L2 cache management for Andes AX45MP
- RISC-V core
-To:     Conor Dooley <conor@kernel.org>, Heiko Stuebner <heiko@sntech.de>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Guo Ren <guoren@kernel.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
+Content-Language: en-US
+From:   Waiman Long <longman@redhat.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>
+References: <e38f72aa-9705-cf0c-a565-fb790f16c53e@redhat.com>
+ <ZDdG1K0kTETZMTCu@slm.duckdns.org>
+ <cd4c3f92-4a01-e636-7390-8c6a3d0cfe6c@redhat.com>
+ <ZDdNy2NAfj2_1CbW@slm.duckdns.org>
+ <1b8d9128-d076-7d37-767d-11d6af314662@redhat.com>
+ <ZDdYOI9LB87ra2t_@slm.duckdns.org>
+ <9862da55-5f41-24c3-f3bb-4045ccf24b2e@redhat.com>
+ <226cb2da-e800-6531-4e57-cbf991022477@redhat.com>
+ <ZDmFLfII8EUX_ocY@slm.duckdns.org>
+ <c61ca9d0-c514-fb07-c2f2-3629e8898984@redhat.com>
+ <ZDmOjeBVsIcgSLIV@slm.duckdns.org>
+ <60ec12dc-943c-b8f0-8b6f-97c5d332144c@redhat.com>
+In-Reply-To: <60ec12dc-943c-b8f0-8b6f-97c5d332144c@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 10:06=E2=80=AFPM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
+On 4/14/23 13:38, Waiman Long wrote:
+> On 4/14/23 13:34, Tejun Heo wrote:
+>> On Fri, Apr 14, 2023 at 01:29:25PM -0400, Waiman Long wrote:
+>>> On 4/14/23 12:54, Tejun Heo wrote:
+>>>> On Thu, Apr 13, 2023 at 09:22:19PM -0400, Waiman Long wrote:
+>>>>> I now have a slightly different idea of how to do that. We already 
+>>>>> have an
+>>>>> internal cpumask for partitioning - subparts_cpus. I am thinking 
+>>>>> about
+>>>>> exposing it as cpuset.cpus.reserve. The current way of creating
+>>>>> subpartitions will be called automatic reservation and require a 
+>>>>> direct
+>>>>> parent/child partition relationship. But as soon as a user write 
+>>>>> anything to
+>>>>> it, it will break automatic reservation and require manual 
+>>>>> reservation going
+>>>>> forward.
+>>>>>
+>>>>> In that way, we can keep the old behavior, but also support new 
+>>>>> use cases. I
+>>>>> am going to work on that.
+>>>> I'm not sure I fully understand the proposed behavior but it does 
+>>>> sound more
+>>>> quirky.
+>>> The idea is to use the existing subparts_cpus for cpu reservation 
+>>> instead of
+>>> adding a new cpumask for that purpose. The current way of partition 
+>>> creation
+>>> does cpus reservation (setting subparts_cpus) automatically with the
+>>> constraint that the parent of a partition must be a partition root 
+>>> itself.
+>>> One way to relax this constraint is to allow a new manual 
+>>> reservation mode
+>>> where users can set reserve cpus manually and distribute them down the
+>>> hierarchy before activating a partition to use those cpus.
+>>>
+>>> Now the question is how to enable this new manual reservation mode. 
+>>> One way
+>>> to do it is to enable it whenever the new cpuset.cpus.reserve file is
+>>> modified. Alternatively, we may enable it by a cgroupfs mount option 
+>>> or a
+>>> boot command line option.
+>> It'd probably be best if we can keep the behavior within cgroupfs if
+>> possible. Would you mind writing up the documentation section 
+>> describing the
+>> behavior beforehand? I think things would be clearer if we look at it 
+>> from
+>> the interface documentation side.
 >
-> On Thu, Apr 13, 2023 at 7:46=E2=80=AFPM Conor Dooley <conor@kernel.org> w=
-rote:
-> >
-> > > Is
-> > > dma-noncoherent.c also valid for RISCV-32? If not then we can make
-> > > pmem.c compile conditionally if DMA non-coherenet is enabled and we
-> > > make DMA non-coherent depend on 64bit.
-> >
-> > Could you drop the {s,l}d in exchange for {s,l}w instead, or am I
-> > progressing even further into braino territory?
-> Just the direct exchange wont work in addition shifting + oring to
-> take care of 64-bit will require. (Correct me if I'm wrong here)
->
-> I was wondering now if we need to store/restore the s0 and ra
-> registers. I stumbled on an X86 implementation which has call [0] in
-> the ALTERNATIVE_X() macro but here we dont store/restore the
-> registers. Is the RISC-V implementation of ALT macro different
-> compared to x86?
->
-I did try a call without stroe/restore of s0 and ra registers and that
-didn't work!. So I have re-written the assembly code which makes
-32-bit RISC-V compilers happy. Once done with the testing I'll send a
-new version of this series. Hopefully the last ;)
+> Sure, will do that. I need some time and so it will be early next week.
+
+Just kidding :-)
+
+Below is a draft of the new cpuset.cpus.reserve cgroupfs file:
+
+   cpuset.cpus.reserve
+         A read-write multiple values file which exists on all
+         cpuset-enabled cgroups.
+
+         It lists the reserved CPUs to be used for the creation of
+         child partitions.  See the section on "cpuset.cpus.partition"
+         below for more information on cpuset partition.  These reserved
+         CPUs should be a subset of "cpuset.cpus" and will be mutually
+         exclusive of "cpuset.cpus.effective" when used since these
+         reserved CPUs cannot be used by tasks in the current cgroup.
+
+         There are two modes for partition CPUs reservation -
+         auto or manual.  The system starts up in auto mode where
+         "cpuset.cpus.reserve" will be set automatically when valid
+         child partitions are created and users don't need to touch the
+         file at all.  This mode has the limitation that the parent of a
+         partition must be a partition root itself.  So child partition
+         has to be created one-by-one from the cgroup root down.
+
+         To enable the creation of a partition down in the hierarchy
+         without the intermediate cgroups to be partition roots, one
+         has to turn on the manual reservation mode by writing directly
+         to "cpuset.cpus.reserve" with a value different from its
+         current value.  By distributing the reserve CPUs down the cgroup
+         hierarchy to the parent of the target cgroup, this target cgroup
+         can be switched to become a partition root if its "cpuset.cpus"
+         is a subset of the set of valid reserve CPUs in its parent. The
+         set of valid reserve CPUs is the set that are present in all
+         its ancestors' "cpuset.cpus.reserve" up to cgroup root and
+         which have not been allocated to another valid partition yet.
+
+         Once manual reservation mode is enabled, a cgroup administrator
+         must always set up "cpuset.cpus.reserve" files properly before
+         a valid partition can be created. So this mode has more
+         administrative overhead but with greater flexibility.
 
 Cheers,
-Prabhakar
+Longman
+
