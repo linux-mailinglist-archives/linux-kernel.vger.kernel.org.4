@@ -2,95 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 911926E1DD4
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:08:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB286E1DD8
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjDNIIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 04:08:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50220 "EHLO
+        id S229836AbjDNIMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 04:12:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbjDNIIU (ORCPT
+        with ESMTP id S229543AbjDNIME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 04:08:20 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3411FF5;
-        Fri, 14 Apr 2023 01:08:14 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id e16so3343009wra.6;
-        Fri, 14 Apr 2023 01:08:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681459693; x=1684051693;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=QDBBNQ9/LR6u7uLMX4fVcZ0wYs0Li+YPOJWE6r0SuhM=;
-        b=UQkO8HakYq+zhijR1gMsYIE01N5NNjSTU801UOBrKrV2fAp6uWsDCUE+Lu4XMOgquF
-         pq7M76XfFoPBCfYpMOM5ktmkNQGFc2vz6l5NudFBysI6FK+5nZ1o35MY59vpW8Jk9NbT
-         m9oKWXBhSGHLlDDaOnoKFVJq1zG7aI8ZktTNXdajJ7zJvnqfPqO7CFrxyjK25Y+uCL4e
-         ofaBHa/icPZsDyrXrWDeU0t8mprQiSfQduwO7AWHtSdQ5qqpUscCH3OXGLdoYAnXaNLF
-         SKlfmAZc0ySWPzrRra6IJdRNCI3TigexPAkSXiDPzth+FRN/e5rPceBNcYlbOZ/9d9bl
-         P5HA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681459693; x=1684051693;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QDBBNQ9/LR6u7uLMX4fVcZ0wYs0Li+YPOJWE6r0SuhM=;
-        b=YEWUX/4ftWuUall6i/5hotz1cSW7nwqTR6bQUDiTjAAhcBjs7ccI8DKwT/A/ffeKvL
-         ZQMawNzoXlbO/3VWREpnnC2SMdnfEFHZXcfbGqTA9t0Rk4xIry8VYlep27tnwzWS9OOj
-         mREGEdCjpYk8TidWzWxc0OZRqbW7La2lIvF/01xWknu0URroNASnqFPoQYlTbuqY33a6
-         X+hWUi3wTXpCw1OSgJ40xCvC0yShef0XUBo6VdBvDyv1+tIPsgtmB8IowJgXTTbihons
-         97PtOlalOrpF3fRdjowfFA2SHmh1DlOaMjBFfA6IJyGaFaRpX5MvvaEgeEzLnYOkjf7G
-         nAyg==
-X-Gm-Message-State: AAQBX9ej2K0q2EnyBEkgxKGVQaVETux5U2hTsxghzbLwtM47TqX44uvr
-        HazMAkQXrePJtNP9QYGG2UXxR+z4iynEag==
-X-Google-Smtp-Source: AKy350aAiBwRVGpNbd3P1Nn464f/JuJojSUOsLGSQlPtJVW+n+Xc/uj9d7y2jARJ5icJwx2jCse7/w==
-X-Received: by 2002:a5d:69c2:0:b0:2f4:9004:e5d1 with SMTP id s2-20020a5d69c2000000b002f49004e5d1mr3332275wrw.67.1681459691088;
-        Fri, 14 Apr 2023 01:08:11 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id x13-20020a5d60cd000000b002c54c9bd71fsm2937002wrt.93.2023.04.14.01.08.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Apr 2023 01:08:10 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] KVM: selftests: Fix spelling mistake "perrmited" -> "permitted"
-Date:   Fri, 14 Apr 2023 09:08:09 +0100
-Message-Id: <20230414080809.1678603-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Fri, 14 Apr 2023 04:12:04 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A765B8
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 01:12:03 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id B53BB219BA;
+        Fri, 14 Apr 2023 08:12:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1681459921; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=b/O0ymfBIYoLmIJ1onnswDyLlhMcwo8UOm63k2V8FeE=;
+        b=iwTPtsV5tBGYYv75ZphmWd06rDJZANbTqJQwhPMm38xt1i3EFXvjs801qABTyIB44uCGzD
+        BbkpuwPgUyBF417Fl0M9+oSaZelYiYZ1/gtLotlQGy0VMkRVIFQXfVYBfHzrGeRxEWyA0y
+        XW/61YNDLG2voE5KHehvIh40ofLMkcU=
+Received: from suse.cz (pmladek.tcp.ovpn2.prg.suse.de [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id E43662C143;
+        Fri, 14 Apr 2023 08:12:00 +0000 (UTC)
+Date:   Fri, 14 Apr 2023 10:11:57 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+Cc:     Marco Elver <elver@google.com>, Dmitry Vyukov <dvyukov@google.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH] printk: Export console trace point for
+ kcsan/kasan/kfence/kmsan
+Message-ID: <ZDkKzQCM1gJnVBdO@alley>
+References: <20230413100859.1492323-1-quic_pkondeti@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230413100859.1492323-1-quic_pkondeti@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a test report message. Fix it.
+On Thu 2023-04-13 15:38:59, Pavankumar Kondeti wrote:
+> The console tracepoint is used by kcsan/kasan/kfence/kmsan test
+> modules. Since this tracepoint is not exported, these modules iterate
+> over all available tracepoints to find the console trace point.
+> Export the trace point so that it can be directly used.
+> 
+> Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- tools/testing/selftests/kvm/lib/x86_64/processor.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Makes sense. From the printk side:
 
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index 898b30096c80..d4a0b504b1e0 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -731,7 +731,7 @@ void __vm_xsave_require_permission(uint64_t xfeature, const char *name)
- 	rc = syscall(SYS_arch_prctl, ARCH_GET_XCOMP_GUEST_PERM, &bitmask);
- 	TEST_ASSERT(rc == 0, "prctl(ARCH_GET_XCOMP_GUEST_PERM) error: %ld", rc);
- 	TEST_ASSERT(bitmask & xfeature,
--		    "'%s' (0x%lx) not permitted after prctl(ARCH_REQ_XCOMP_GUEST_PERM) perrmited=0x%lx",
-+		    "'%s' (0x%lx) not permitted after prctl(ARCH_REQ_XCOMP_GUEST_PERM) permitted=0x%lx",
- 		    name, xfeature, bitmask);
- }
- 
--- 
-2.30.2
+Acked-by: Petr Mladek <pmladek@suse.com>
 
+Best Regards,
+Petr
