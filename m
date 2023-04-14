@@ -2,80 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 269536E2C78
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 00:36:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00ACE6E2C7D
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 00:38:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjDNWgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 18:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58408 "EHLO
+        id S229693AbjDNWiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 18:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjDNWgP (ORCPT
+        with ESMTP id S229450AbjDNWiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 18:36:15 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E046F59C5
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 15:36:11 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id dd8so7415556qvb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 15:36:11 -0700 (PDT)
+        Fri, 14 Apr 2023 18:38:18 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66CA49E1;
+        Fri, 14 Apr 2023 15:38:17 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-63b4dfead1bso528732b3a.3;
+        Fri, 14 Apr 2023 15:38:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681511771; x=1684103771;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hUnJTVe353X7D+kk1qyBsl2qfE9bNXB0zqwKLC3dEcQ=;
-        b=GY7MwPymVJ7DaG2xBowO1rpXTXaq+S7n4WuoAoaOVCTGNa/bi1nV2IFkY8mJuSAMbW
-         i+X0DXrmgpgUMSON8MpVguPXIrwQEJua6HhNxUs9H1WyFSLgya1JcHTiVbJqx0svoz6W
-         ZaG5yv5qgzA1MfNuOAn5m1o/X/27YLq9jTFeWI27tXvFZpS7nPesbNHyUNFMR0VGlTe5
-         hjTu/LOor8WP8XbH6gmxNC2EY83INlYMVGdH3qe02uGKJnMQ3mT2DxPFGKD0nR5ygio1
-         VQbNqqwWi9zB8DD1jDwl+j9P2QsmB+GPV0Bx/5jzwYR2YRRxDdFIyZE5kWYVxK5Pdetj
-         N7DQ==
+        d=gmail.com; s=20221208; t=1681511897; x=1684103897;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rd3c9+mE7jlWzBM428gtRxGvixpDmdNW0Kf4A0MjSMA=;
+        b=UD6PxTIDCsE4J+rPmy8GMiFLpPCTQ1CQrkYgVjV06BcaKT43qjbC5n5gJx61EtyNeA
+         upOp6yo07/MGB5NM/tPJzODZ4XhxxNQhuAzaUMsj8GzDOXjuGMzz+QXi8Z7EkPKNkyY9
+         d03rndiEB/L/iCvqVZtlpdHyYkZD/i4JVlAKyPFKlcY/7ADVyft2KEfFHl1Kc48xiwsZ
+         PAZfyY0PSBBqgyCXHYYdHrhgSz6V9aL+m+cMIcg/62kfZV8bOhqns3r8LoEvysWoYTmC
+         IdWZXgnHo41uFI+k+OqGLr9NODetSYnIvUthbLcISBcGd802rit7avfxrjomgqLsyae7
+         Jfhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681511771; x=1684103771;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hUnJTVe353X7D+kk1qyBsl2qfE9bNXB0zqwKLC3dEcQ=;
-        b=VKy9bAwz83p1mmoql/RwGW6R/tOHeGJwP+QgnSDTRRNf+DG7EoNvOqXrFzKvKLWQM0
-         JKV+JoaC6s3s4tE5CfM7do4nk/uqaJDqbcRgsAmnkoJYHNYLjRmOZW372S6Th52DhuzJ
-         fgsQitCt0MXoLb9qszjRY8eG56Ng/RbgdPNOwiCKkMC30vxlI1F03tTMf64JDYOrzzwB
-         +rXqGx53CrccZCh435HM3r2H8I4NRM2xX6h09NmzXmc7hRJQKki2L5Pucq067TftrbWV
-         uF/gvmDjIIkQpoOQO+3asj4wus0l5TY5hIM+syb6DwjMxDn682NVKIObo/GxOBSNpHZM
-         UVgw==
-X-Gm-Message-State: AAQBX9cHm+e9MitrlLvyUNtPM00iTXkk/l5fqJNIoqbLzGXiO49NaaKD
-        UilMWcs96/zci3aFc2pfCVM=
-X-Google-Smtp-Source: AKy350bOTQyHeEN6YKpacGZ+oIIlEXaVh8Wxtpu4Y1VIM5LfLwYEx5cJX5nBMxjBCDrTn8V7oKbZrQ==
-X-Received: by 2002:a05:6214:20a3:b0:5ef:565d:ae6a with SMTP id 3-20020a05621420a300b005ef565dae6amr5772073qvd.20.1681511770919;
-        Fri, 14 Apr 2023 15:36:10 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id r11-20020ac87eeb000000b003e38e2815a5sm1521104qtc.22.2023.04.14.15.36.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 15:36:10 -0700 (PDT)
-Message-ID: <15abdf3e-1a01-a568-9089-625e771c9d53@gmail.com>
-Date:   Fri, 14 Apr 2023 15:36:08 -0700
+        d=1e100.net; s=20221208; t=1681511897; x=1684103897;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rd3c9+mE7jlWzBM428gtRxGvixpDmdNW0Kf4A0MjSMA=;
+        b=bNnjK3tOCWsTDv6Y4R5h1kMkLtATcHaonNUJbHzaX4Ek+8mCbMhC5mtpfy1jRr2Uk3
+         IRYscJh54VaL3BoYpCxYDXCwA9dXrytl3Uqh05SvC0qbw1GzbToungkHSalOjlCs7efM
+         jE4opdytSx98vCbrfNQlrjp2zvQbv3GLlTRowijKY3DKCD6OcKrJXpNGsGU6HYPWX3C6
+         1IHz/SvF2d8tY6cbbA4dvj9PE94AFhDeabu6A9cPrv0rJNrdmY5jKvXsZiQ8IT8kZK50
+         255ah5IUtVF8L7HVP+Cex9n8t/eLUNI0Mt9wMcXB1E9OaN5+H9ThKqe8ATLVInhL5zdI
+         Becg==
+X-Gm-Message-State: AAQBX9dxpk6Ovhaitm5MG/OmfpxV5AGmAY2PuXrzD8nVC6JlRuuZJMUm
+        kJTjbRy+5GrmG7TlSKxyH3kaGI1NVP5L0A==
+X-Google-Smtp-Source: AKy350apIIoDRR+eXBw9W9c5rt3yXzw2WlFDTi4QTZvEVK8Chf3FqVrZrXgZCZFz+pq6B4PSfLQ46w==
+X-Received: by 2002:aa7:8891:0:b0:632:e512:1025 with SMTP id z17-20020aa78891000000b00632e5121025mr10789705pfe.33.1681511897077;
+        Fri, 14 Apr 2023 15:38:17 -0700 (PDT)
+Received: from localhost.localdomain ([2402:e280:218d:82:ae97:7cb6:b12a:54f5])
+        by smtp.gmail.com with ESMTPSA id v26-20020aa7851a000000b00637b0c719c5sm3478084pfn.201.2023.04.14.15.38.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Apr 2023 15:38:16 -0700 (PDT)
+From:   Saalim Quadri <danascape@gmail.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, daniel.baluta@nxp.com
+Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Saalim Quadri <danascape@gmail.com>
+Subject: [PATCH] ASoC: dt-bindings: wm8753: Convert to dtschema
+Date:   Fri, 14 Apr 2023 22:38:01 +0000
+Message-Id: <20230414223801.1106550-1-danascape@gmail.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 0/4] cacheinfo: Correctly fallback to using clidr_el1's
- information
-Content-Language: en-US
-To:     Pierre Gondois <pierre.gondois@arm.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Radu Rendec <rrendec@redhat.com>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Will Deacon <will@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Gavin Shan <gshan@redhat.com>
-References: <20230414081453.244787-1-pierre.gondois@arm.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230414081453.244787-1-pierre.gondois@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,52 +71,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/14/23 01:14, Pierre Gondois wrote:
-> v4:
-> arch_topology: Remove early cacheinfo error message:
-> - Only remove the error message if the error code is -ENOENT
-> cacheinfo: Add use_arch[|_cache]_info field/function:
-> - Use a static variable instead of a per-leaf 'use_arch_info'
-> - Reformat the use_arch_cache_info() define
-> 
-> v3:
-> cacheinfo: Check sib_leaf in cache_leaves_are_shared():
-> - Reformulate commit message
-> - Fix rebase issue and move '&&' condition which was in the last patch
->    to this patch.
-> cacheinfo: Add use_arch[|_cache]_info field/function:
-> - Put the function declaration in one line.
-> arch_topology: Remove early cacheinfo error message:
-> - New patch.
-> 
-> v2:
-> cacheinfo: Check sib_leaf in cache_leaves_are_shared()
-> - Reformulate commit message
-> - Add 'Fixes: f16d1becf96f ("cacheinfo: Use cache identifiers [...]'
-> cacheinfo: Check cache properties are present in DT
-> - Use of_property_present()
-> - Add 'Reported-by: Alexandre Ghiti <alexghiti@rivosinc.com>'
-> cacheinfo: Add use_arch[|_cache]_info field/function:
-> - Make use_arch_cache_info() a static inline function
-> 
-> The cache information can be extracted from either a Device
-> Tree (DT), the PPTT ACPI table, or arch registers (clidr_el1
-> for arm64).
-> 
-> When the DT is used but no cache properties are advertised,
-> the current code doesn't correctly fallback to using arch information.
-> 
-> Correct this. Also use the assumption that L1 data/instruction caches
-> are private and L2/higher caches are shared when the cache information
-> is coming form clidr_el1.
-> 
-> As suggested by Alexandre, this serie should ideally go to 6.3 fixes.
+Convert the WM8753 audio codec bindings to DT schema.
 
-FWIW:
+Signed-off-by: Saalim Quadri <danascape@gmail.com>
+---
+ .../devicetree/bindings/sound/wlf,wm8753.yaml | 62 +++++++++++++++++++
+ .../devicetree/bindings/sound/wm8753.txt      | 40 ------------
+ 2 files changed, 62 insertions(+), 40 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/sound/wlf,wm8753.yaml
+ delete mode 100644 Documentation/devicetree/bindings/sound/wm8753.txt
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
-
-Thanks!
+diff --git a/Documentation/devicetree/bindings/sound/wlf,wm8753.yaml b/Documentation/devicetree/bindings/sound/wlf,wm8753.yaml
+new file mode 100644
+index 000000000000..9eebe7d7f0b7
+--- /dev/null
++++ b/Documentation/devicetree/bindings/sound/wlf,wm8753.yaml
+@@ -0,0 +1,62 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/sound/wlf,wm8753.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: WM8753 audio CODEC
++
++description: |
++  Pins on the device (for linking into audio routes):
++      * LOUT1
++      * LOUT2
++      * ROUT1
++      * ROUT2
++      * MONO1
++      * MONO2
++      * OUT3
++      * OUT4
++      * LINE1
++      * LINE2
++      * RXP
++      * RXN
++      * ACIN
++      * ACOP
++      * MIC1N
++      * MIC1
++      * MIC2N
++      * MIC2
++      * Mic Bias
++
++maintainers:
++  - patches@opensource.cirrus.com
++
++allOf:
++  - $ref: dai-common.yaml#
++
++properties:
++  compatible:
++    const: wlf,wm8753
++
++  reg:
++    maxItems: 1
++
++  "#sound-dai-cells":
++    const: 0
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        codec@1a {
++            compatible = "wlf,wm8753";
++            reg = <0x1a>;
++        };
++    };
+diff --git a/Documentation/devicetree/bindings/sound/wm8753.txt b/Documentation/devicetree/bindings/sound/wm8753.txt
+deleted file mode 100644
+index eca9e5a825a9..000000000000
+--- a/Documentation/devicetree/bindings/sound/wm8753.txt
++++ /dev/null
+@@ -1,40 +0,0 @@
+-WM8753 audio CODEC
+-
+-This device supports both I2C and SPI (configured with pin strapping
+-on the board).
+-
+-Required properties:
+-
+-  - compatible : "wlf,wm8753"
+-
+-  - reg : the I2C address of the device for I2C, the chip select
+-          number for SPI.
+-
+-Pins on the device (for linking into audio routes):
+-
+-  * LOUT1
+-  * LOUT2
+-  * ROUT1
+-  * ROUT2
+-  * MONO1
+-  * MONO2
+-  * OUT3
+-  * OUT4
+-  * LINE1
+-  * LINE2
+-  * RXP
+-  * RXN
+-  * ACIN
+-  * ACOP
+-  * MIC1N
+-  * MIC1
+-  * MIC2N
+-  * MIC2
+-  * Mic Bias
+-
+-Example:
+-
+-wm8753: codec@1a {
+-	compatible = "wlf,wm8753";
+-	reg = <0x1a>;
+-};
 -- 
-Florian
+2.40.0
 
