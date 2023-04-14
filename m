@@ -2,127 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD3536E24AF
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 15:49:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A1F36E24C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 15:52:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbjDNNtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 09:49:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38918 "EHLO
+        id S229853AbjDNNwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 09:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbjDNNtj (ORCPT
+        with ESMTP id S229625AbjDNNwP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 09:49:39 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0A7B77E;
-        Fri, 14 Apr 2023 06:49:11 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 262D9219D7;
-        Fri, 14 Apr 2023 13:49:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1681480150; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=tVTQPul/JXATpe+rLUOKdbwaHI2COkJc82nsUk9iRu0=;
-        b=yrrU8Rd8A6t3YfPMmwobhbRVKgeH14EUpv9J7/J74OlCc/kJNuZgarcU3PNAUH61RBAUxM
-        3b5vspT9hfcvBkrii/eKZvjDWZLTwodFjnI6S9SYS4eCK40AZiYFy7zwbqAkJIJb0ZMVLy
-        Ru/9vvTOVF1QGjm5/TFinKWlsMglZI8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1681480150;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=tVTQPul/JXATpe+rLUOKdbwaHI2COkJc82nsUk9iRu0=;
-        b=3Cm3KiqT004Qj8aTzVi0lrNxTyArJdXb6TAd7XXHhwgQ6kHnpe7eQRbw8AREzmsFzx4G1F
-        qBLrXxO/oJelEBBg==
-Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id D12BB2C143;
-        Fri, 14 Apr 2023 13:49:09 +0000 (UTC)
-Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id C146951C23D9; Fri, 14 Apr 2023 15:49:09 +0200 (CEST)
-From:   Hannes Reinecke <hare@suse.de>
-To:     Pankaj Raghav <p.raghav@samsung.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mcgrof@kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH] mm/filemap: allocate folios according to the blocksize
-Date:   Fri, 14 Apr 2023 15:49:08 +0200
-Message-Id: <20230414134908.103932-1-hare@suse.de>
-X-Mailer: git-send-email 2.35.3
+        Fri, 14 Apr 2023 09:52:15 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156A4AF16;
+        Fri, 14 Apr 2023 06:51:50 -0700 (PDT)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1681480304;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WNDyBVduIseCowQeQV6xpjhSeQnDe1IBsVjmd+71qk0=;
+        b=WoDnxp7jIe/vNmnQSDSy8P82Wu1P+DSsfJ3VKsS9hjJNv8smgFybz1t7t3n34FCKuTED+h
+        /fPdpQg6dpNnqhfRQv1d5FzfLN7FC1LszR+TzKWEm4nlCjvgMj0wUbC4j5EzSKGNzGNuNM
+        1E3erEV49HNgETeKvNkLThI8iBw/3MlF3dkCfcLRBFEUKwJkYG3l/VdVaUEF/YQI+W3otB
+        v0BwePZENBYrs+QYpNisAhQTYAq2HdB2BLUVKg6+wq8z8t7/N0p1KsJno4zn7yhglTR9bJ
+        +5Z6B+1wJn74VEBVqvx3UhcnIdoqoXmKAKoI3/8ksQz7L/mO8zPlW21KfVAL4g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1681480304;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WNDyBVduIseCowQeQV6xpjhSeQnDe1IBsVjmd+71qk0=;
+        b=39awMyFNo8WELCM1kDeMjaQ5YAzi5amupO3rjP7cIQS2xqol5p101uKQoHM6kgPY/MxYPk
+        Dso1U9tJpMPSUNBQ==
+To:     Pierre Gondois <pierre.gondois@arm.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [ANNOUNCE] v6.3-rc2-rt3
+In-Reply-To: <9ee941ae-ae22-f14b-4e69-f81b29bbba4b@arm.com>
+References: <20230314170502.OHw1_FK3@linutronix.de>
+ <20230314171231.jwtham4a@linutronix.de>
+ <9ee941ae-ae22-f14b-4e69-f81b29bbba4b@arm.com>
+Date:   Fri, 14 Apr 2023 15:55:50 +0206
+Message-ID: <87ttxiefpd.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the blocksize is larger than the pagesize allocate folios
-with the correct order.
+Hi Pierre,
 
-Signed-off-by: Hannes Reinecke <hare@suse.de>
----
- mm/filemap.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+On 2023-04-14, Pierre Gondois <pierre.gondois@arm.com> wrote:
+> =============================
+> [ BUG: Invalid wait context ]
+> 6.3.0-rc5-rt8-gacb52bd349a2 #417 Not tainted
+> -----------------------------
+> swapper/0/1 is trying to lock:
+> ffff00097eea1180 (cpu){....}-{3:3}, at: __printk_safe_enter (kernel/printk/printk_safe.c:28 (discriminator 3))
+> other info that might help us debug this:
+> context-{5:5}
+> 1 lock held by swapper/0/1:
+> #0: ffff80000ba77028 (rcu_tasks_rude.cbs_gbl_lock){....}-{2:2}, at: cblist_init_generic (kernel/rcu/tasks.h:233)
 
-diff --git a/mm/filemap.c b/mm/filemap.c
-index 05fd86752489..468f25714ced 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -1927,7 +1927,7 @@ struct folio *__filemap_get_folio(struct address_space *mapping, pgoff_t index,
- 		folio_wait_stable(folio);
- no_page:
- 	if (!folio && (fgp_flags & FGP_CREAT)) {
--		int err;
-+		int err, order = 0;
- 		if ((fgp_flags & FGP_WRITE) && mapping_can_writeback(mapping))
- 			gfp |= __GFP_WRITE;
- 		if (fgp_flags & FGP_NOFS)
-@@ -1937,7 +1937,9 @@ struct folio *__filemap_get_folio(struct address_space *mapping, pgoff_t index,
- 			gfp |= GFP_NOWAIT | __GFP_NOWARN;
- 		}
- 
--		folio = filemap_alloc_folio(gfp, 0);
-+		if (mapping->host->i_blkbits > PAGE_SHIFT)
-+			order = mapping->host->i_blkbits - PAGE_SHIFT;
-+		folio = filemap_alloc_folio(gfp, order);
- 		if (!folio)
- 			return NULL;
- 
-@@ -2492,9 +2494,11 @@ static int filemap_create_folio(struct file *file,
- 		struct folio_batch *fbatch)
- {
- 	struct folio *folio;
--	int error;
-+	int error, order = 0;
- 
--	folio = filemap_alloc_folio(mapping_gfp_mask(mapping), 0);
-+	if (mapping->host->i_blkbits > PAGE_SHIFT)
-+		order = mapping->host->i_blkbits - PAGE_SHIFT;
-+	folio = filemap_alloc_folio(mapping_gfp_mask(mapping), order);
- 	if (!folio)
- 		return -ENOMEM;
- 
-@@ -3607,14 +3611,16 @@ static struct folio *do_read_cache_folio(struct address_space *mapping,
- 		pgoff_t index, filler_t filler, struct file *file, gfp_t gfp)
- {
- 	struct folio *folio;
--	int err;
-+	int err, order = 0;
- 
-+	if (mapping->host->i_blkbits > PAGE_SHIFT)
-+		order = mapping->host->i_blkbits - PAGE_SHIFT;
- 	if (!filler)
- 		filler = mapping->a_ops->read_folio;
- repeat:
- 	folio = filemap_get_folio(mapping, index);
- 	if (!folio) {
--		folio = filemap_alloc_folio(gfp, 0);
-+		folio = filemap_alloc_folio(gfp, order);
- 		if (!folio)
- 			return ERR_PTR(-ENOMEM);
- 		err = filemap_add_folio(mapping, folio, index, gfp);
--- 
-2.35.3
+This is actually a mainline issue relating to legacy consoles. In
+mainline you see it as a warning when CONFIG_PROVE_RAW_LOCK_NESTING is
+enabled.
 
+If you enable CONFIG_PREEMPT_RT you will not have the problem.
+
+I will look at how the issue can be gracefully ignored in
+!CONFIG_PREEMPT_RT.
+
+Thanks for reporting.
+
+John Ogness
