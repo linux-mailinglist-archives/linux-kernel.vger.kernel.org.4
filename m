@@ -2,80 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52E726E2B41
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 22:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E70696E2B4B
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 22:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjDNUoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 16:44:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46848 "EHLO
+        id S229734AbjDNUrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 16:47:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbjDNUoE (ORCPT
+        with ESMTP id S229733AbjDNUrq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 16:44:04 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC781BF
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 13:44:03 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id c9so9795378ejz.1
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 13:44:03 -0700 (PDT)
+        Fri, 14 Apr 2023 16:47:46 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258D43C23
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 13:47:44 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-94a34d3812dso448624366b.3
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 13:47:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681505042; x=1684097042;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=linaro.org; s=google; t=1681505262; x=1684097262;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=k/nx/yKVbSsYFF5X0g9blNxbC1WsVq39ejbZ4qWxfM4=;
-        b=Ka24PG3jdtgMZW+uR4p/SVUg5cMBUtdd3X/qmhLPC52CEUJbbs59MkyYCFent9DH2d
-         E0xG3C6UMAr5vpG+BrO4blJSsiRtGeghEB6SPsyLiSu1llEBoGJFaujchENgVyC5d3H+
-         IdVE9Opq0NfJAUYJJ3ZyuR+/evAehUq6h9uncJkKg0wq+IJMnYXCmzyDmfOqi74LI2oT
-         eSZps8MaYm54Y/Y5bdKhtMnYf+2U0J7FK0YYRWLqLT3w37gmyeATunCmWsc6m/9VPIwc
-         OUB3Dyskhgl532D0H1hWlJnUNIsDjx48wBav2YQUcJMBThdmL/ZVEh20Bm81b5f1numX
-         q96g==
+        bh=s5f3N0RAtgUVBIB/xIm7w7WNTQBqMz0AMr1YWNHsHjg=;
+        b=X7duMdF7yBT9zLGwesGIN4G3wnxp3Cjfh3udvsg4agx3zVaZ/60sVw/xE7aSLDTGhJ
+         zIjF3dd5jmSjhNdUX/OuNDeR2QQNKuNa7hYPHXF+TO4ZuLaKUXtGxHGa03DKlHrMgFeu
+         xfjSbV19IpjVaxXaFVOgcoi9ORTuRfC4KpnrmEDPFuoispB5my4N9JAPmdvul7vQ7HXf
+         Yum4/lMy5nouQOYVVzN07viXOybs3vZoC4POy8XN2UmICUQ3Y6zvtFLW30B1TIzjFLZl
+         RiDCukTz9T+ZsbMuVrfFxih+a2WKElYsyb0CNfJebpbF0EgGQQ1aL3Bh25KUHqarouEr
+         k3xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681505042; x=1684097042;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=1e100.net; s=20221208; t=1681505262; x=1684097262;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k/nx/yKVbSsYFF5X0g9blNxbC1WsVq39ejbZ4qWxfM4=;
-        b=DUqzsoHyQk6sFlO1ttqn5qvciHT66powooFhj4M5kl8j1ORyDHoLT8pnrDc+Q+Lvjc
-         LEZSv3Ap1/rq2TlnkIODX9YlmU0qW8QELFMPLkSEwe8EsCNd5fdPkvL+3BqxLSr39jON
-         aRnv0UXoGAwaaE8YcLwA2cHVD/drojQM+y7Xtt8EzoOifbK3M/lDZn/jKM22+bZj7CWI
-         Cip5YA3P4FtK+uTHqBqBHHeNDnn54rYMztvszt2YLMHtJ4oS/0X3PccE4GTa+35jpRKG
-         Cxa8wthwRIIsGC+GGTda9ERhauNOcxsgy5Sjm8pjK0I4jkuRq2fPV8lCMgVxClm59Dk/
-         4eRQ==
-X-Gm-Message-State: AAQBX9flldsSG+jA6dG1vapwyJz+g/2QaZb5Rxw7kp3eqrpb83WfK7cl
-        gCGBDlEqoaV5IGhpaXpdOYNvQA==
-X-Google-Smtp-Source: AKy350ZOjOg5ES3cZwD713h6zSPRrL5WIGdTryxXFTVy1eJJGbtMQ8icDtPg15fL8avEWmLCkrIbUA==
-X-Received: by 2002:a17:906:7295:b0:947:3d04:61dc with SMTP id b21-20020a170906729500b009473d0461dcmr324838ejl.77.1681505041758;
-        Fri, 14 Apr 2023 13:44:01 -0700 (PDT)
+        bh=s5f3N0RAtgUVBIB/xIm7w7WNTQBqMz0AMr1YWNHsHjg=;
+        b=P8q/RjMXeYEG3UMvMnP1OQYeh405DFkZPihGL6xhP305ozRjcAvJTfNx+QAsRkdQse
+         CYzNlaWlzjEVavx/ZzDuse3BzdgysAj/68zgyf/vp1+cCGl9LbQJNn5zuOgcSGy6koOV
+         NhVgil39RKzyES/Jh0NwQj4BUb+pEHSWxDRDR6KsRHHCeqsXY1AvW/ZQT1RgZhET9Qlh
+         YN98oTG8SslT3XGw558Pm0SRheh9f/P5+dq8BJkFaQNGMg09UInaIu5theX61eSjWYjC
+         FN5DTrjvLYsspEMTPP6QnOPBzUBRTv6MhFfp975oMFICUq7q85YlCf0mHjyZBQDIrrMm
+         8GZg==
+X-Gm-Message-State: AAQBX9fY3D7/17FBYMe/u9Rudi3VTEprDHNagO2JwORUG9yNcr/rk266
+        n9JIHzo0LZLoJJE2p/qLf0QWUw==
+X-Google-Smtp-Source: AKy350YgvMVGXc4UafDc/Bu9EhgyHaWr2UVtxorQb1uoFdRovgAwRThK3H4UFtY7yfcABeD8dWrWig==
+X-Received: by 2002:a05:6402:b2e:b0:4fb:f2db:a654 with SMTP id bo14-20020a0564020b2e00b004fbf2dba654mr7044407edb.12.1681505262487;
+        Fri, 14 Apr 2023 13:47:42 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:ffae:8aab:ae5a:4688? ([2a02:810d:15c0:828:ffae:8aab:ae5a:4688])
-        by smtp.gmail.com with ESMTPSA id qf29-20020a1709077f1d00b0094a2f92aaeesm2852341ejc.158.2023.04.14.13.44.00
+        by smtp.gmail.com with ESMTPSA id bf13-20020a0564021a4d00b005024459f431sm2491923edb.70.2023.04.14.13.47.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 13:44:01 -0700 (PDT)
-Message-ID: <342dd9b0-35cd-1715-ee67-6a6628a3a9a6@linaro.org>
-Date:   Fri, 14 Apr 2023 22:44:00 +0200
+        Fri, 14 Apr 2023 13:47:41 -0700 (PDT)
+Message-ID: <193eb300-3075-c07c-6946-9c56aca7a340@linaro.org>
+Date:   Fri, 14 Apr 2023 22:47:40 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
-Subject: Re: [RFC PATCH 4/5] arm64: dts: ti: Enable multiple MCAN for AM62x in
- MCU MCAN overlay
+Subject: Re: [V6 0/9] Add Tegra234 HTE support
 Content-Language: en-US
-To:     Nishanth Menon <nm@ti.com>
-Cc:     Judith Mendez <jm@ti.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Andrew Davis <afd@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        Schuyler Patton <spatton@ti.com>
-References: <20230413223051.24455-1-jm@ti.com>
- <20230413223051.24455-5-jm@ti.com>
- <9ab56180-328e-1416-56cb-bbf71af0c26d@linaro.org>
- <20230414182925.ya3fe2n6mtyuqotb@detached>
+To:     Dipen Patel <dipenp@nvidia.com>, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linus.walleij@linaro.org, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, robh+dt@kernel.org,
+        timestamp@lists.linux.dev, krzysztof.kozlowski+dt@linaro.org,
+        brgl@bgdev.pl, corbet@lwn.net, gregkh@linuxfoundation.org
+References: <20230414004455.19275-1-dipenp@nvidia.com>
+ <373eacb8-be3f-6b95-3e08-f0ff36f79891@linaro.org>
+ <a280fe0f-b8b1-4cb5-b4b6-aa9e9367241e@nvidia.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230414182925.ya3fe2n6mtyuqotb@detached>
+In-Reply-To: <a280fe0f-b8b1-4cb5-b4b6-aa9e9367241e@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -88,31 +81,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/04/2023 20:29, Nishanth Menon wrote:
->>> +
->>> +&cbass_mcu {
->>> +	mcu_mcan1: can@4e00000 {
->>> +		compatible = "bosch,m_can";
->>> +		reg = <0x00 0x4e00000 0x00 0x8000>,
->>> +			  <0x00 0x4e08000 0x00 0x200>;
->>> +		reg-names = "message_ram", "m_can";
->>> +		power-domains = <&k3_pds 188 TI_SCI_PD_EXCLUSIVE>;
->>> +		clocks = <&k3_clks 188 6>, <&k3_clks 188 1>;
->>> +		clock-names = "hclk", "cclk";
->>> +		bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
->>> +		pinctrl-names = "default";
->>> +		pinctrl-0 = <&mcu_mcan1_pins_default>;
->>> +		phys = <&transceiver2>;
->>> +		status = "okay";
+On 14/04/2023 19:14, Dipen Patel wrote:
+> On 4/14/23 12:36 AM, Krzysztof Kozlowski wrote:
+>> On 14/04/2023 02:44, Dipen Patel wrote:
+>>> This patch series mainly adds support for the Tegra234 HTE provider. In
+>>> addition, it addresses dt binding comments which prompted code
+>>> changes in the existing HTE provider driver without breaking the
+>>> Tegra194 provider. The comments raised concern how existing code
+>>> retrieves gpio controller node
+>>> (the node is used to help namespace conversion between HTE and GPIOLIB).
+>>> To help simplify that process, new DT property is suggested which adds
+>>> gpio controller node in the HTE provider binding as phandle property. To
+>>> conlude this patch series:
+>>> - adds Tegra234 HTE provider
+>>> - modifies existing provider code to address new dt binding for Tegra234
+>>> without breaking it for the Tegra194 chip.
+>>>
+>>> The V1 patch series:
+>>> - Adds tegra Tegra234 HTE(timestamp) provider supports.
+>>> - Updates MAINTAINERS file for git tree, mail list fields.
+>>> - Updates devicetree and API documentations.
+>>> - Enables HTE subsystem, Tegra194 and Tegra234 HTE providers
+>>> by default in arm64 defconfig and dts files.
 >>
->> okay is by default. Why do you need it?
+>> All your emails miss PATCH prefix. Use `git format-patch` to generate
+>> proper versioned patch. Stripping important part messes up with our
+>> filters. We have quite a lot of emails, so proper filtering is important.
 > 
-> mcan is not functional without pinmux, so it has been disabled by
-> default in SoC. this overlay is supposed to enable it. But this is done
-> entirely wrongly.
+> My bad...excitement of sending the patch series got hold of me :) Now I have realized
+> it is been happening since the beginning. Since all the previous patches have been
+> sent without PATCH prefix, is it ok for this version as it is or do you want me to resend
+> with proper prefix?
+> 
 
-Ah, so this is override of existing node? Why not overriding by
-label/phandle?
+It's okay for me, no need to resend. I just wanted to bring this to your
+attention, so future patchsets can be improved.
 
 Best regards,
 Krzysztof
