@@ -2,319 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 097256E2771
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 17:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 402F76E2773
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 17:52:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbjDNPvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 11:51:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39252 "EHLO
+        id S230192AbjDNPww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 11:52:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbjDNPvx (ORCPT
+        with ESMTP id S229476AbjDNPwv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 11:51:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE80A30FA;
-        Fri, 14 Apr 2023 08:51:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C7EF648BE;
-        Fri, 14 Apr 2023 15:51:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 371F6C433D2;
-        Fri, 14 Apr 2023 15:51:36 +0000 (UTC)
-Message-ID: <04e89fcc-87db-8677-daf9-48aa3cb61b8c@xs4all.nl>
-Date:   Fri, 14 Apr 2023 17:51:34 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v5 14/20] staging: media: tegra-video: move MIPI
- calibration calls from VI to CSI
-Content-Language: en-US
-To:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        linux-tegra@vger.kernel.org
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
+        Fri, 14 Apr 2023 11:52:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6953B474
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 08:52:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681487524;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ATzwgaslzQU3gPsTLdjNRzR08gZk0kKwHmUAOWcuyho=;
+        b=IoYZJBxK32pNT0xoodwh3nKL7crrsOfksSv913xz76pnmYpw/QXcQDaIrr/tb6mNIIv1kW
+        p0+CFqOLLqo+FdC5tiso1S+jP53QWQxqDS4/DjBdO+NsJjH0Lk9vAyW2CAFfdiuOPJsMTa
+        aYLJViNWnd4GMiXncd7pTVh9hHz5eaM=
+Received: from mail-oa1-f69.google.com (mail-oa1-f69.google.com
+ [209.85.160.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-369-0ZvkSJVeMqeDAOpaDHvBag-1; Fri, 14 Apr 2023 11:52:03 -0400
+X-MC-Unique: 0ZvkSJVeMqeDAOpaDHvBag-1
+Received: by mail-oa1-f69.google.com with SMTP id 586e51a60fabf-18438c83b9cso9145932fac.8
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 08:52:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681487523; x=1684079523;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ATzwgaslzQU3gPsTLdjNRzR08gZk0kKwHmUAOWcuyho=;
+        b=LkCvB519ShbhGgvDVqZFvnVnjcWUAao2g044n5HauqyIhNDWs05xtDF53fosCxj07d
+         kxarujT4Iy2TAvoTE4+auAqMTEyyWQc20ItcT/QvFPbKVzXW3+p9UVFj19XW1Lqn4ibC
+         2kIonKXczYLgCSaP3gtF4pSbscLACDFXrTPRUjZSzLPSLN0N3zMDDOBeRVynIfVh7s8D
+         BhmK75xyvtUzCF6kVUVYWbLFJMFYPJ3NaALeu1IG0zyXUnms3FFyBPRbuYSrFVw2b2O+
+         0fXGWA3ncG/nkC5Ijar/ET8ZwMuZpi8urdtSZf+PYEFT54npr5JUVPEK/eS7B5mhJH6n
+         hqlw==
+X-Gm-Message-State: AAQBX9cdmEq2Gji5okL6ytkZtRqLdW0ROlfl9z0MUN63IGfuQC+AvtiE
+        nu0SvbAaw21JlKhHpksIzLpczNwuCjYsslK21lQf1hG4QTmDw/SiszVE3yo65nmrSqYadClGwDv
+        yrKqy5Ye7IrJFdMtgc/8mUX0v
+X-Received: by 2002:a54:4601:0:b0:389:4f7b:949d with SMTP id p1-20020a544601000000b003894f7b949dmr2828325oip.22.1681487523001;
+        Fri, 14 Apr 2023 08:52:03 -0700 (PDT)
+X-Google-Smtp-Source: AKy350a0ymS28sAALQ4gSVn0pIU6HcawITLnwQRF/nhGAcGXRRC0HAnooY6KqMZffglNozLSmTy3tw==
+X-Received: by 2002:a54:4601:0:b0:389:4f7b:949d with SMTP id p1-20020a544601000000b003894f7b949dmr2828314oip.22.1681487522774;
+        Fri, 14 Apr 2023 08:52:02 -0700 (PDT)
+Received: from halaney-x13s (104-53-165-62.lightspeed.stlsmo.sbcglobal.net. [104.53.165.62])
+        by smtp.gmail.com with ESMTPSA id bm26-20020a0568081a9a00b0038b734b335csm1800645oib.43.2023.04.14.08.52.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Apr 2023 08:52:02 -0700 (PDT)
+Date:   Fri, 14 Apr 2023 10:51:59 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Richard Leitner <richard.leitner@skidata.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-References: <20230407133852.2850145-1-luca.ceresoli@bootlin.com>
- <20230407133852.2850145-15-luca.ceresoli@bootlin.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20230407133852.2850145-15-luca.ceresoli@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
+        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
+        quic_harshq@quicinc.com, quic_shazhuss@quicinc.com
+Subject: Re: [PATCH v6 8/8] arm64: dts: qcom: sa8540-ride: Enable first port
+ of tertiary usb controller
+Message-ID: <20230414155159.zmhkeoxwhxe5czm5@halaney-x13s>
+References: <20230405125759.4201-1-quic_kriskura@quicinc.com>
+ <20230405125759.4201-9-quic_kriskura@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230405125759.4201-9-quic_kriskura@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luca,
-
-I just encountered an error in this patch, so I have rejected the PR I made.
-
-See below for the details:
-
-On 07/04/2023 15:38, Luca Ceresoli wrote:
-> The CSI module does not handle all the MIPI lane calibration procedure,
-> leaving a small part of it to the VI module. In doing this,
-> tegra_channel_enable_stream() (vi.c) manipulates the private data of the
-> upstream subdev casting it to struct 'tegra_csi_channel', which will be
-> wrong after introducing a VIP (parallel video input) channel.
+On Wed, Apr 05, 2023 at 06:27:59PM +0530, Krishna Kurapati wrote:
+> Enable first port of Quad port Tertiary USB controller for SA8540 Ride.
 > 
-> This prevents adding support for the VIP module.  It also breaks the
-> logical isolation between modules.
-> 
-> Since the lane calibration requirement does not exist in the parallel input
-> module, moving the calibration function to a per-module op is not
-> optimal. Instead move the calibration procedure in the CSI module, together
-> with the rest of the calibration procedures. After this change,
-> tegra_channel_enable_stream() just calls v4l2_subdev_call() to ask for a
-> stream start/stop to the CSI module, which in turn knows all the
-> CSI-specific details to implement it.
-> 
-> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
-> 
-> ---
-> 
-> No changes in v5
-> 
-> Changed in v4:
->  - Added review tags
-> 
-> No changes in v3
-> No changes in v2
-> ---
->  drivers/staging/media/tegra-video/csi.c | 44 ++++++++++++++++++++
->  drivers/staging/media/tegra-video/vi.c  | 54 ++-----------------------
->  2 files changed, 48 insertions(+), 50 deletions(-)
-> 
-> diff --git a/drivers/staging/media/tegra-video/csi.c b/drivers/staging/media/tegra-video/csi.c
-> index 9a03d5ccdf3c..b93fc879ef3a 100644
-> --- a/drivers/staging/media/tegra-video/csi.c
-> +++ b/drivers/staging/media/tegra-video/csi.c
-> @@ -328,12 +328,42 @@ static int tegra_csi_enable_stream(struct v4l2_subdev *subdev)
->  	}
->  
->  	csi_chan->pg_mode = chan->pg_mode;
-> +
-> +	/*
-> +	 * Tegra CSI receiver can detect the first LP to HS transition.
-> +	 * So, start the CSI stream-on prior to sensor stream-on and
-> +	 * vice-versa for stream-off.
-> +	 */
->  	ret = csi->ops->csi_start_streaming(csi_chan);
->  	if (ret < 0)
->  		goto finish_calibration;
->  
-> +	if (csi_chan->mipi) {
-> +		struct v4l2_subdev *src_subdev;
-> +		/*
-> +		 * TRM has incorrectly documented to wait for done status from
-> +		 * calibration logic after CSI interface power on.
-> +		 * As per the design, calibration results are latched and applied
-> +		 * to the pads only when the link is in LP11 state which will happen
-> +		 * during the sensor stream-on.
-> +		 * CSI subdev stream-on triggers start of MIPI pads calibration.
-> +		 * Wait for calibration to finish here after sensor subdev stream-on.
-> +		 */
-> +		src_subdev = tegra_channel_get_remote_source_subdev(chan);
-> +		ret = v4l2_subdev_call(src_subdev, video, s_stream, true);
-> +		err = tegra_mipi_finish_calibration(csi_chan->mipi);
-> +
-> +		if (ret < 0 && ret != -ENOIOCTLCMD)
-> +			goto disable_csi_stream;
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
 
-If there was an error from s_stream, then tegra_mipi_finish_calibration is called
-and it goes to disable_csi_stream...
+This is nitpicky, but I liked some of the description in the first[0]
+version of this patch that I authored for you:
 
-> +
-> +		if (err < 0)
-> +			dev_warn(csi->dev, "MIPI calibration failed: %d\n", err);
-> +	}
-> +
->  	return 0;
->  
-> +disable_csi_stream:
-> +	csi->ops->csi_stop_streaming(csi_chan);
->  finish_calibration:
->  	if (csi_chan->mipi)
->  		tegra_mipi_finish_calibration(csi_chan->mipi);
+    From dcb27d07f079194ebd7efe1c9bec64da78beb290 Mon Sep 17 00:00:00 2001
+    From: Andrew Halaney <ahalaney@redhat.com>
+    Date: Thu, 19 Jan 2023 14:53:38 -0600
+    Subject: [PATCH] arm64: dts: qcom: sa8540p-ride: Enable usb_2
+    Content-type: text/plain
 
-...but here tegra_mipi_finish_calibration() is called again, leading to an unlock
-imbalance.
+    There is now support for the multiport USB controller this uses
+    so enable it.
 
-This is the callstack:
+    The board only has a single port hooked up (despite it being wired up to
+    the multiport IP on the SoC). There's also a USB 2.0 mux hooked up,
+    which by default on boot is selected to mux properly. Grab the gpio
+    controlling that and ensure it stays in the right position so USB 2.0
+    continues to be routed from the external port to the SoC.
 
-[  109.894502] IMX274 5-001a: s_stream failed
+    Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
 
-[  109.900203] =====================================
-[  109.904898] WARNING: bad unlock balance detected!
-[  109.909594] 6.3.0-rc2-tegra #16 Not tainted
-[  109.913774] -------------------------------------
-[  109.918470] v4l2-ctl/2000 is trying to release lock (&mipi->lock) at:
-[  109.924911] [<ffff80000866b828>] tegra_mipi_finish_calibration+0x84/0xb0
-[  109.931621] but there are no more locks to release!
-[  109.936489]
-               other info that might help us debug this:
-[  109.943004] 1 lock held by v4l2-ctl/2000:
-[  109.947009]  #0: ffff000083bcf6a8 (&chan->video_lock){....}-{3:3}, at: __video_do_ioctl+0xdc/0x3c8
-[  109.955987]
-               stack backtrace:
-[  109.960336] CPU: 2 PID: 2000 Comm: v4l2-ctl Not tainted 6.3.0-rc2-tegra #16
-[  109.967290] Hardware name: NVIDIA Jetson TX1 Developer Kit (DT)
-[  109.973200] Call trace:
-[  109.975642]  dump_backtrace+0xa0/0xfc
-[  109.979308]  show_stack+0x18/0x24
-[  109.982622]  dump_stack_lvl+0x48/0x60
-[  109.986285]  dump_stack+0x18/0x24
-[  109.989598]  print_unlock_imbalance_bug+0x130/0x148
-[  109.994472]  lock_release+0x1bc/0x248
-[  109.998131]  __mutex_unlock_slowpath+0x48/0x2cc
-[  110.002657]  mutex_unlock+0x20/0x2c
-[  110.006141]  tegra_mipi_finish_calibration+0x84/0xb0
-[  110.011102]  tegra_csi_s_stream+0x260/0x318
-[  110.015286]  call_s_stream+0x80/0xcc
-[  110.018857]  tegra_channel_set_stream+0x58/0xe4
-[  110.023386]  tegra210_vi_start_streaming+0xb0/0x1c8
-[  110.028262]  tegra_channel_start_streaming+0x54/0x134
-[  110.033311]  vb2_start_streaming+0xbc/0x1b8
-[  110.037491]  vb2_core_streamon+0x158/0x260
-[  110.041582]  vb2_ioctl_streamon+0x4c/0x90
-[  110.045589]  v4l_streamon+0x24/0x30
-[  110.049076]  __video_do_ioctl+0x160/0x3c8
-[  110.053082]  video_usercopy+0x1f0/0x658
-[  110.056916]  video_ioctl2+0x18/0x28
-[  110.060404]  v4l2_ioctl+0x40/0x60
-[  110.063715]  __arm64_sys_ioctl+0xac/0xf0
-[  110.067638]  invoke_syscall+0x48/0x114
-[  110.071385]  el0_svc_common.constprop.0+0x44/0xec
-[  110.076086]  do_el0_svc+0x38/0x98
-[  110.079398]  el0_svc+0x2c/0x84
-[  110.082454]  el0t_64_sync_handler+0xf4/0x120
-[  110.086722]  el0t_64_sync+0x190/0x194
+Specifically the bit helping explain what the mux, its default state,
+etc are things I find explain some of the hardware/patch better. Personal
+opinion of course but I'll highlight it since you dropped it out :)
 
-Regards,
+[0] https://lore.kernel.org/linux-arm-msm/20230119220942.ja5gbo3t3fl63gpy@halaney-x13s/
 
-	Hans
+Either way, thanks for taking the patch along and working on this.
 
-> @@ -352,10 +382,24 @@ static int tegra_csi_enable_stream(struct v4l2_subdev *subdev)
->  
->  static int tegra_csi_disable_stream(struct v4l2_subdev *subdev)
->  {
-> +	struct tegra_vi_channel *chan = v4l2_get_subdev_hostdata(subdev);
->  	struct tegra_csi_channel *csi_chan = to_csi_chan(subdev);
->  	struct tegra_csi *csi = csi_chan->csi;
->  	int err;
->  
-> +	/*
-> +	 * Stream-off subdevices in reverse order to stream-on.
-> +	 * Remote source subdev in TPG mode is same as CSI subdev.
-> +	 */
-> +	if (csi_chan->mipi) {
-> +		struct v4l2_subdev *src_subdev;
-> +
-> +		src_subdev = tegra_channel_get_remote_source_subdev(chan);
-> +		err = v4l2_subdev_call(src_subdev, video, s_stream, false);
-> +		if (err < 0 && err != -ENOIOCTLCMD)
-> +			dev_err_probe(csi->dev, err, "source subdev stream off failed\n");
-> +	}
-> +
->  	csi->ops->csi_stop_streaming(csi_chan);
->  
->  	if (csi_chan->mipi) {
-> diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
-> index b88532d8d2c9..c76c2a404889 100644
-> --- a/drivers/staging/media/tegra-video/vi.c
-> +++ b/drivers/staging/media/tegra-video/vi.c
-> @@ -197,49 +197,15 @@ tegra_channel_get_remote_source_subdev(struct tegra_vi_channel *chan)
->  
->  static int tegra_channel_enable_stream(struct tegra_vi_channel *chan)
->  {
-> -	struct v4l2_subdev *csi_subdev, *src_subdev;
-> -	struct tegra_csi_channel *csi_chan;
-> -	int ret, err;
-> +	struct v4l2_subdev *subdev;
-> +	int ret;
->  
-> -	/*
-> -	 * Tegra CSI receiver can detect the first LP to HS transition.
-> -	 * So, start the CSI stream-on prior to sensor stream-on and
-> -	 * vice-versa for stream-off.
-> -	 */
-> -	csi_subdev = tegra_channel_get_remote_csi_subdev(chan);
-> -	ret = v4l2_subdev_call(csi_subdev, video, s_stream, true);
-> +	subdev = tegra_channel_get_remote_csi_subdev(chan);
-> +	ret = v4l2_subdev_call(subdev, video, s_stream, true);
->  	if (ret < 0 && ret != -ENOIOCTLCMD)
->  		return ret;
->  
-> -	if (IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
-> -		return 0;
-> -
-> -	csi_chan = v4l2_get_subdevdata(csi_subdev);
-> -	/*
-> -	 * TRM has incorrectly documented to wait for done status from
-> -	 * calibration logic after CSI interface power on.
-> -	 * As per the design, calibration results are latched and applied
-> -	 * to the pads only when the link is in LP11 state which will happen
-> -	 * during the sensor stream-on.
-> -	 * CSI subdev stream-on triggers start of MIPI pads calibration.
-> -	 * Wait for calibration to finish here after sensor subdev stream-on.
-> -	 */
-> -	src_subdev = tegra_channel_get_remote_source_subdev(chan);
-> -	ret = v4l2_subdev_call(src_subdev, video, s_stream, true);
-> -	err = tegra_mipi_finish_calibration(csi_chan->mipi);
-> -
-> -	if (ret < 0 && ret != -ENOIOCTLCMD)
-> -		goto err_disable_csi_stream;
-> -
-> -	if (err < 0)
-> -		dev_warn(csi_chan->csi->dev,
-> -			 "MIPI calibration failed: %d\n", err);
-> -
->  	return 0;
-> -
-> -err_disable_csi_stream:
-> -	v4l2_subdev_call(csi_subdev, video, s_stream, false);
-> -	return ret;
->  }
->  
->  static int tegra_channel_disable_stream(struct tegra_vi_channel *chan)
-> @@ -247,18 +213,6 @@ static int tegra_channel_disable_stream(struct tegra_vi_channel *chan)
->  	struct v4l2_subdev *subdev;
->  	int ret;
->  
-> -	/*
-> -	 * Stream-off subdevices in reverse order to stream-on.
-> -	 * Remote source subdev in TPG mode is same as CSI subdev.
-> -	 */
-> -	subdev = tegra_channel_get_remote_source_subdev(chan);
-> -	ret = v4l2_subdev_call(subdev, video, s_stream, false);
-> -	if (ret < 0 && ret != -ENOIOCTLCMD)
-> -		return ret;
-> -
-> -	if (IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
-> -		return 0;
-> -
->  	subdev = tegra_channel_get_remote_csi_subdev(chan);
->  	ret = v4l2_subdev_call(subdev, video, s_stream, false);
->  	if (ret < 0 && ret != -ENOIOCTLCMD)
+Thanks,
+Andrew
 
