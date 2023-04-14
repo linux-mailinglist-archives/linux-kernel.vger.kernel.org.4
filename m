@@ -2,125 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0856B6E1886
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 01:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 407256E189C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 02:03:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbjDMX7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 19:59:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39610 "EHLO
+        id S230188AbjDNACo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 20:02:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjDMX66 (ORCPT
+        with ESMTP id S229530AbjDNACm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 19:58:58 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E6D3C05
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 16:58:57 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1a1b23f49e2so251705ad.0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 16:58:57 -0700 (PDT)
+        Thu, 13 Apr 2023 20:02:42 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB8F3C0B
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 17:02:40 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id pm7-20020a17090b3c4700b00246f00dace2so9121074pjb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 17:02:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681430337; x=1684022337;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EefSkyZ3Lf0FxAAlOktzH9a+rP5j/aHtRq9oKYJfYbo=;
-        b=a3byag42DLwFJ6SRJEJQ1CcOmIM/nt97jvXvLVycLr+Vz6t8EuDD3sfm40CDOIf2l+
-         CWnXHMfEZ9X0fhqgtzPG+zqEGL/DmRKb5uFzisQdqhsMYKi2FTj6pW25nSR9jIv/TrhH
-         d0sv/sposQqbLpPuM9L+y+vBg8xN8XjARVzLMSSMPrKJJVxX9Na1q0mDetHv8ISLhI1H
-         Fxc1ejXe8TUp1biTe/A2rKuRtETHTzgVp6Btl5QXZCzGmH6p0qWTIIYYZBj3a+tjVq5H
-         dSl9te0h/slqxMAmE/8u+tC+ViHh/1jJrqttvZd2/SAl8mgV5eT9eYY1Ywf8DluAngIb
-         JgQA==
+        d=chromium.org; s=google; t=1681430559; x=1684022559;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o7P9g3Nl+EfrrL2NO6MRAt6Dye4XvqSU4otNxeRaGZY=;
+        b=IRUYl+scWxtKHfQzW1OJHJIuR3Z3RkNtZXSk2D4iGYiWRM+zh5hAWdHpMYLUNWFNrn
+         mLzFrKWjDYCRBZ5ukbWyr/5DVDpw5GvHFJGO31u9DPxe2rdJMyTCo4TGQJruwa45+WfG
+         0zMUArth2/a1WFpBOeA4+r+QFJJ+At0aSepqs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681430337; x=1684022337;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EefSkyZ3Lf0FxAAlOktzH9a+rP5j/aHtRq9oKYJfYbo=;
-        b=PeokD/tF1ryErnKtulwGWPN946Quk2W1R7D8hmQ/VX8DRFUbmYA9TPHZd2lEHi1TJV
-         D2C7ajQIdyh7sGceAL9PNQJf2kBrqZg2EANqbejBpNwiiCjoJLeoy68o/MTzm0VVgoo9
-         v9/P0W02j/bejMILlzPLsjjIhIF7sEqyzGM2Y2H9dDGcli1lbZAuDR7WcEHc0MBFARtD
-         ctqErfpaTHWyDXIlef0KHuj77vsJ05Q6aeT/7tiz1oyNhUXz6KA5Fo46MaEbe9HQNOpe
-         3o8H4VIlaRQmDD9ihVeqs41jQjEvAHS0S6kxluJtRDQQqYzNlkFXaR/fGbHXfOuMcPU4
-         2FcQ==
-X-Gm-Message-State: AAQBX9ekhAZvqmc+NxfkklTvOVditKb5pkAGPbL9BtR1PVf99WqK7cEw
-        UcNKZr/97ZnQjfsGu93V/m74kQ==
-X-Google-Smtp-Source: AKy350YH5HIo+Pnar7dEHZwI83HNlquD0aFwYwkXZ4qi+fngzr+A7Sa4LTPVo1hWYWBDnD1pMLkLMQ==
-X-Received: by 2002:a17:902:d546:b0:19c:c5d4:afd2 with SMTP id z6-20020a170902d54600b0019cc5d4afd2mr28099plf.11.1681430336852;
-        Thu, 13 Apr 2023 16:58:56 -0700 (PDT)
-Received: from [2620:0:1008:11:dd63:9ab7:90b4:a420] ([2620:0:1008:11:dd63:9ab7:90b4:a420])
-        by smtp.gmail.com with ESMTPSA id k14-20020aa792ce000000b0062e15c22cd8sm1901961pfa.48.2023.04.13.16.58.56
+        d=1e100.net; s=20221208; t=1681430559; x=1684022559;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=o7P9g3Nl+EfrrL2NO6MRAt6Dye4XvqSU4otNxeRaGZY=;
+        b=KP4RRH6PaCm8oQAXgTfH0BUwSNRlWPLCJEWUbOkOfE4bWo/Wu8O7A2/RZzX0QBo4xu
+         mq92dL7lu/ihhkZQWIat5tbp2fZuoOhN256/7jdeO4Am9ZK0QIEmC28/a8GgVqXdAl9X
+         MQr2HYSqNf345wedWTQ1IlWllXgtL+dnDgj9RO4f96eKmgK17lcFFzaTmLfLkHaRcGYV
+         OjvFamSOKMnQB5Unp66KRKIgZZzVp0DbyHuMjKeTmZ8Z+xHsbjlS5SekvtUiNWQeq2aB
+         w7GaIAsmr5buK0I0Q3+9kt1FnU8KSdVR9a2A0MQmLgDThXSBwlGyaimZ2PkVv64KY4VQ
+         HBsg==
+X-Gm-Message-State: AAQBX9dZvYDsHU8ZtFw2Lpy4emB0VNgfk+Bw6SXALC9MFeMKnnKIV32f
+        lLxVtA7MCUAIT8OdDNGD0HNUOA==
+X-Google-Smtp-Source: AKy350a2nB2erFq7GiOYjZ2KhzsJGWrzG9WdIfbNnMAWthKviGqkJTS5lu3A5CkCn3PsSc1wuojVvw==
+X-Received: by 2002:a17:90b:2692:b0:246:f5a3:e942 with SMTP id pl18-20020a17090b269200b00246f5a3e942mr9234592pjb.18.1681430559599;
+        Thu, 13 Apr 2023 17:02:39 -0700 (PDT)
+Received: from sarthakkukreti-glaptop.corp.google.com ([2620:15c:9d:200:72cc:7fa5:adcb:7c02])
+        by smtp.gmail.com with ESMTPSA id u18-20020a17090a891200b002470f179b92sm2212939pjn.43.2023.04.13.17.02.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 16:58:56 -0700 (PDT)
-Date:   Thu, 13 Apr 2023 16:58:55 -0700 (PDT)
-From:   David Rientjes <rientjes@google.com>
-To:     Yang Shi <shy828301@gmail.com>, willemb@google.com
-cc:     David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kirill.shutemov@linux.intel.com, jannh@google.com,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [v4 PATCH] fs/proc: task_mmu.c: don't read mapcount for migration
- entry
-In-Reply-To: <CAHbLzkp16tAzFRnM3BUnspnR-qR2JG3c9TqaNq3YHxy9u5ZC6w@mail.gmail.com>
-Message-ID: <67d3e5e1-57be-590d-f925-47b49442a67e@google.com>
-References: <20220203182641.824731-1-shy828301@gmail.com> <132ba4a4-3b1d-329d-1db4-f102eea2fd08@suse.cz> <9ba70a5e-4e12-0e9f-a6a4-d955bf25d0fe@redhat.com> <64ec7939-0733-7925-0ec0-d333e62c5f21@suse.cz> <CAHbLzkoZctsJf92Lw3wKMuSqT7-aje0SiAjc6JVW5Z3bNS1JNg@mail.gmail.com>
- <efab25ef-c29c-3671-5f26-060bba76d481@suse.cz> <CAHbLzkomXCwabFrNaNyuGBozmindHqVD0ki4n75XJ2V8Uw=9rw@mail.gmail.com> <5618f454-7a88-0443-59e7-df9780e9fa50@redhat.com> <CAHbLzkp16tAzFRnM3BUnspnR-qR2JG3c9TqaNq3YHxy9u5ZC6w@mail.gmail.com>
+        Thu, 13 Apr 2023 17:02:39 -0700 (PDT)
+From:   Sarthak Kukreti <sarthakkukreti@chromium.org>
+To:     sarthakkukreti@google.com, dm-devel@redhat.com,
+        linux-block@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Brian Foster <bfoster@redhat.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Bart Van Assche <bvanassche@google.com>,
+        Daniil Lunev <dlunev@google.com>,
+        "Darrick J. Wong" <djwong@kernel.org>
+Subject: [PATCH v3 0/3] Introduce provisioning primitives for thinly provisioned storage
+Date:   Thu, 13 Apr 2023 17:02:16 -0700
+Message-ID: <20230414000219.92640-1-sarthakkukreti@chromium.org>
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
+In-Reply-To: <20221229071647.437095-1-sarthakkukreti@chromium.org>
+References: <20221229071647.437095-1-sarthakkukreti@chromium.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="2003089352-1481215759-1681430336=:63269"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Hi,
 
---2003089352-1481215759-1681430336=:63269
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+This patch series adds a mechanism to pass through provision requests on
+stacked thinly provisioned block devices.
 
-On Mon, 3 Apr 2023, Yang Shi wrote:
+The linux kernel provides several mechanisms to set up thinly provisioned
+block storage abstractions (eg. dm-thin, loop devices over sparse files),
+either directly as block devices or backing storage for filesystems. Currently,
+short of writing data to either the device or filesystme, there is no way for
+users to pre-allocate space for use in such storage setups. Consider the
+following use-cases:
 
-> On Mon, Apr 3, 2023 at 12:30 AM David Hildenbrand <david@redhat.com> wrote:
-> >
-> > On 24.03.23 21:12, Yang Shi wrote:
-> > > On Fri, Mar 24, 2023 at 4:25 AM Vlastimil Babka <vbabka@suse.cz> wrote:
-> > >>
-> > >> On 3/23/23 21:45, Yang Shi wrote:
-> > >>> On Thu, Mar 23, 2023 at 3:11 AM Vlastimil Babka <vbabka@suse.cz> wrote:
-> > >>>
-> > >>> Out of curiosity, is there any public link for this CVE? Google search
-> > >>> can't find it.
-> > >>
-> > >> Only this one is live so far, AFAIK
-> > >>
-> > >> https://bugzilla.redhat.com/show_bug.cgi?id=2180936
-> > >
-> > > Thank you.
-> >
-> > There is now
-> >
-> > https://access.redhat.com/security/cve/cve-2023-1582
-> 
-> Thank you.
-> 
+1) Suspend-to-disk and resume from a dm-thin device: In order to ensure that
+   the underlying thinpool metadata is not modified during the suspend
+   mechanism, the dm-thin device needs to be fully provisioned.
+2) If a filesystem uses a loop device over a sparse file, fallocate() on the
+   filesystem will allocate blocks for files but the underlying sparse file
+   will remain intact.
+3) Another example is virtual machine using a sparse file/dm-thin as a storage
+   device; by default, allocations within the VM boundaries will not affect
+   the host.
+4) Several storage standards support mechanisms for thin provisioning on
+   real hardware devices. For example:
+   a. The NVMe spec 1.0b section 2.1.1 loosely talks about thin provisioning:
+      "When the THINP bit in the NSFEAT field of the Identify Namespace data
+       structure is set to ‘1’, the controller ... shall track the number of
+       allocated blocks in the Namespace Utilization field"
+   b. The SCSi Block Commands reference - 4 section references "Thin
+      provisioned logical units",
+   c. UFS 3.0 spec section 13.3.3 references "Thin provisioning".
 
-Hi Yang,
+In all the above situations, currently, the only way for pre-allocating space
+is to issue writes (or use WRITE_ZEROES/WRITE_SAME). However, that does not
+scale well with larger pre-allocation sizes.
 
-commit 24d7275ce2791829953ed4e72f68277ceb2571c6
-Author: Yang Shi <shy828301@gmail.com>
-Date:   Fri Feb 11 16:32:26 2022 -0800
+This patchset introduces primitives to support block-level provisioning (note:
+the term 'provisioning' is used to prevent overloading the term
+'allocations/pre-allocations') requests across filesystems and block devices.
+This allows fallocate() and file creation requests to reserve space across
+stacked layers of block devices and filesystems. Currently, the patchset covers
+a prototype on the device-mapper targets, loop device and ext4, but the same
+mechanism can be extended to other filesystems/block devices as well as extended
+for use with devices in 4 a-c.
 
-    fs/proc: task_mmu.c: don't read mapcount for migration entry
+Patch 1 introduces REQ_OP_PROVISION as a new request type.
+The provision request acts like the inverse of a discard request; instead
+of notifying lower layers that the block range will no longer be used, provision
+acts as a request to lower layers to provision disk space for the given block
+range. Real hardware storage devices will currently disable the provisioing
+capability but for the standards listed in 4a.-c., REQ_OP_PROVISION can be
+overloaded for use as the provisioing primitive for future devices.
 
-is backported to 5.10 stable but not to 5.4 or earlier stable trees.  The 
-commit advertises to fix a commit from 4.5.
+Patch 2 implements REQ_OP_PROVISION handling for some of the device-mapper
+targets. Device-mapper targets will usually mirror the support of underlying
+devices. This patch also enables the use of fallocate in mode == 0 for block
+devices.
 
-Do we need stable backports for earlier trees or are they not affected?
+Patch 3 wires up the loop device handling of REQ_OP_PROVISION and calls
+fallocate() with mode 0 on the underlying file/block device.
 
-Thanks!
---2003089352-1481215759-1681430336=:63269--
+Testing:
+--------
+- Tested on a VM running a 6.2 kernel.
+
+- Preallocation of dm-thin devices:
+As expected, avoiding the need to zero out thinly-provisioned block devices to
+preallocate space speeds up the provisioning operation significantly:
+
+The following was tested on a dm-thin device set up on top of a dm-thinp with
+skip_block_zeroing=true.
+A) Zeroout was measured using `fallocate -z ...`
+B) Provision was measured using `fallocate -p ...`.
+
+Size	Time	A	B
+512M	real	1.093	0.034
+	user	0	0
+	sys	0.022	0.01
+1G	real	2.182	0.048
+	user	0	0.01
+	sys	0.022	0
+2G	real	4.344	0.082
+	user	0	0.01
+	sys	0.036	0
+4G	real	8.679	0.153
+	user	0	0.01
+	sys	0.073	0
+8G	real	17.777	0.318
+	user	0	0.01
+	sys	0.144	0
+
+Changelog:
+
+V3:
+- Drop FALLOC_FL_PROVISION and use mode == 0 for provision requests.
+- Drop fs-specific patches; will be sent out in a follow up series.
+- Fix missing shared block handling for thin snapshots.
+
+V2:
+- Fix stacked limit handling.
+- Enable provision request handling in dm-snapshot
+- Don't call truncate_bdev_range if blkdev_fallocate() is called with
+  FALLOC_FL_PROVISION.
+- Clarify semantics of FALLOC_FL_PROVISION and why it needs to be a separate flag
+  (as opposed to overloading mode == 0).
+
+Sarthak Kukreti (3):
+  block: Introduce provisioning primitives
+  dm: Add support for block provisioning
+  loop: Add support for provision requests
+
+ block/blk-core.c              |   5 ++
+ block/blk-lib.c               |  53 ++++++++++++++++
+ block/blk-merge.c             |  18 ++++++
+ block/blk-settings.c          |  19 ++++++
+ block/blk-sysfs.c             |   8 +++
+ block/bounce.c                |   1 +
+ block/fops.c                  |  14 +++--
+ drivers/block/loop.c          |  42 +++++++++++++
+ drivers/md/dm-crypt.c         |   4 +-
+ drivers/md/dm-linear.c        |   1 +
+ drivers/md/dm-snap.c          |   7 +++
+ drivers/md/dm-table.c         |  25 ++++++++
+ drivers/md/dm-thin.c          | 110 +++++++++++++++++++++++++++++++---
+ drivers/md/dm.c               |   4 ++
+ include/linux/bio.h           |   6 +-
+ include/linux/blk_types.h     |   5 +-
+ include/linux/blkdev.h        |  16 +++++
+ include/linux/device-mapper.h |  11 ++++
+ 18 files changed, 333 insertions(+), 16 deletions(-)
+
+-- 
+2.40.0.634.g4ca3ef3211-goog
+
