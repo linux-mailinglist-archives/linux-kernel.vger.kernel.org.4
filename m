@@ -2,184 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3D76E1EA0
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:44:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9EFA6E1E9D
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:44:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbjDNIoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 04:44:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54344 "EHLO
+        id S229873AbjDNIoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 04:44:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbjDNIoa (ORCPT
+        with ESMTP id S229632AbjDNIoV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 04:44:30 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6805293D1;
-        Fri, 14 Apr 2023 01:44:06 -0700 (PDT)
-X-UUID: 7395d066daa011eda9a90f0bb45854f4-20230414
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=RY/YziVKOrW364M200jK4FHwB6TcRDDpWCMRXEQDir8=;
-        b=lg7+dfGpAS1WMS1+dDTbK6FRR4dVHcclo8QwBWPI/saptUyur8RkOCZByuVoUVEFaw0FZncprjA5WCWpsEF4mb6z4BFVSEcLoVmdPclXSWEfSBPf+0+NfDpIfTzHlxxNZJkhIqO1o5bfspX8H0vCX1LE82ErO8OYk7CrXijsrhY=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:993cba5a-911e-469c-990d-ae577b0c0e86,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:120426c,CLOUDID:049af5ea-db6f-41fe-8b83-13fe7ed1ef52,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: 7395d066daa011eda9a90f0bb45854f4-20230414
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-        (envelope-from <yi-de.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 229041311; Fri, 14 Apr 2023 16:43:38 +0800
-Received: from mtkmbs10n2.mediatek.inc (172.21.101.183) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Fri, 14 Apr 2023 16:43:37 +0800
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (172.21.101.239)
- by mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Fri, 14 Apr 2023 16:43:37 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lrQ/cHHb67sPqPCa2v7sueFira1XgbLYO5jPMpHIbB8pcmH57ddbdC3d2BNVCUt45eciymNTEyXkBGJWlEAddcRfeRFuinUQG95vqzUSOohdi3fkE7KMu4z1YGBB2WayL5RmBLTPp72MpARVjDOF9DqQtZCDAmfMmWrc01v1f5EUMNSLyJRfblzqlpek3qjzFtxFQ51lNJTFeONY84M2gspBpxl7vxnkGs9+6Rb2Lqz+zTjliAo+93NMOeBH6tGRmGB3uqoC/TyY+SmXf9nRrVqtoGfuEPllbPw8mDRf0mFANm6OqAUi6UWEnJV42vto7sZ6CFT8cLE1FeFihlckHQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RY/YziVKOrW364M200jK4FHwB6TcRDDpWCMRXEQDir8=;
- b=mocSn4srDzBe3x8vlvqerY2DTUrfY3SYrvLU2LiNkFj6UlYCLojSykueGlq1N8ThPKrDAXzEHuDbKUEKJSwGOiq9T6uu4wzg9MfcsswGLuWn1utM7agAIYzExl2WpW1exV4gSKbJZleoWo1VQEi9xrwZCtd907oeK7qWSBfLxrgxOdX/68uBCmoID2uZtuRlSk4QmF+rTjvmC0mcMzwIp0JTmdwaGictX0q+cI6XUrXRjdVTL9A7dPodZDW6+xbasC9NQqXaIwDQDFlaqNFC6QE2YUdyf1hlGUJ/yBmBqXZct2ACAjg4Q8pvEdGuKFU5+54rkUgpcZbYK3De8Ox7+A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
- dkim=pass header.d=mediatek.com; arc=none
+        Fri, 14 Apr 2023 04:44:21 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7DF67ED2
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 01:44:01 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id my14-20020a17090b4c8e00b0024708e8e2ddso7080730pjb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 01:44:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RY/YziVKOrW364M200jK4FHwB6TcRDDpWCMRXEQDir8=;
- b=aEwlNpB5LTknfJERt9mCwHS5LskGjxuUDV3Z1KvdZYADDS3Ln1W5g3/U8PQAddbbIgJ19m8CRfkb2+cBeZeVgr8CFEsd5UIptRKVA0BBJluIi8fPzh4YnL7pIkzudZhoZjEvkF6IbceZ0hwgdP8WAwjbjRqWHqas/ENN9cJEzys=
-Received: from SI2PR03MB6167.apcprd03.prod.outlook.com (2603:1096:4:14f::8) by
- TYZPR03MB7004.apcprd03.prod.outlook.com (2603:1096:400:268::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Fri, 14 Apr
- 2023 08:43:35 +0000
-Received: from SI2PR03MB6167.apcprd03.prod.outlook.com
- ([fe80::47e2:93ab:c1d3:670b]) by SI2PR03MB6167.apcprd03.prod.outlook.com
- ([fe80::47e2:93ab:c1d3:670b%9]) with mapi id 15.20.6298.030; Fri, 14 Apr 2023
- 08:43:33 +0000
-From:   =?utf-8?B?WWktRGUgV3UgKOWQs+S4gOW+tyk=?= <Yi-De.Wu@mediatek.com>
-To:     "corbet@lwn.net" <corbet@lwn.net>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        =?utf-8?B?WWluZ3NoaXVhbiBQYW4gKOa9mOepjui7kik=?= 
-        <Yingshiuan.Pan@mediatek.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        "will@kernel.org" <will@kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        =?utf-8?B?TVkgQ2h1YW5nICjojormmI7ouo0p?= <MY.Chuang@mediatek.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        =?utf-8?B?UGVpTHVuIFN1ZWkgKOmai+WfueWAqyk=?= 
-        <PeiLun.Suei@mediatek.com>,
-        =?utf-8?B?TGlqdS1jbHIgQ2hlbiAo6Zmz6bqX5aaCKQ==?= 
-        <Liju-clr.Chen@mediatek.com>,
-        =?utf-8?B?SmFkZXMgU2hpaCAo5pa95ZCR546oKQ==?= 
-        <jades.shih@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        =?utf-8?B?U2hhd24gSHNpYW8gKOiVreW/l+elpSk=?= 
-        <shawn.hsiao@mediatek.com>,
-        =?utf-8?B?TWlsZXMgQ2hlbiAo6Zmz5rCR5qi6KQ==?= 
-        <Miles.Chen@mediatek.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        =?utf-8?B?SXZhbiBUc2VuZyAo5pu+5b+X6LuSKQ==?= 
-        <ivan.tseng@mediatek.com>,
-        =?utf-8?B?WmUteXUgV2FuZyAo546L5r6k5a6HKQ==?= 
-        <Ze-yu.Wang@mediatek.com>
-Subject: Re: [PATCH v1 3/6] soc: mediatek: virt: geniezone: Introduce
- GenieZone hypervisor support
-Thread-Topic: [PATCH v1 3/6] soc: mediatek: virt: geniezone: Introduce
- GenieZone hypervisor support
-Thread-Index: AQHZbeeL18MyQqxT3UGeJoMyfQvhiK8pMrMAgABGroCAAQUyAA==
-Date:   Fri, 14 Apr 2023 08:43:33 +0000
-Message-ID: <533a1a9b653cf63f1e5df7f95d1b23902809561d.camel@mediatek.com>
-References: <20230413090735.4182-1-yi-de.wu@mediatek.com>
-         <20230413090735.4182-4-yi-de.wu@mediatek.com>
-         <1aa701cc-92ca-71be-0663-df4bfae66c2f@linaro.org>
-         <5c1d69c8-d973-fa7b-1f14-c72729ff5594@gmail.com>
-In-Reply-To: <5c1d69c8-d973-fa7b-1f14-c72729ff5594@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=mediatek.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SI2PR03MB6167:EE_|TYZPR03MB7004:EE_
-x-ms-office365-filtering-correlation-id: 96af51f8-f967-490d-8caa-08db3cc454ba
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: LZFoFfjWNWTDyJBGRJOgJNF7EceJg+6GUuuOF9BO4Y7URIvkKA6AK+ipoP8n9eDbLDhDiC4gbCEDDnswyCV+X6hB1NeQDPXMPFx30vZv6CBkMEQJBcWWqf95ojTkw2vMjaNCd9aNtnSwrCRc6efMhL6HICaHdY7CN+4ew6JdvnKb9PxbnLpMECbyg83Rq4h8w5qawZqzxLl8hGMbyMRXCkNTR9LzD1/NuHEgfDXYq8qChc2hlJsJP1PRU7JJStS+gaP0Cd18bxzwD6Zh8T2+JPMNY2XZXuzi/9NK2AHx5YcmkcfnGT6D2vqTCMHEYKjlZCrUIkeDS0Z6vKLnE7a34VeDH9kA55h2cIM9HdmD1ck5HDtGgWNjHHknWTGjLi+2tYUEjM1il/jUiuhG7twb6rIHHbhWOidjGyLrEqgEIu7TH11cWj5w6s4YBoYK1iN5BvY+tBSPWVCnoLSWYu3XY5oaHk7+hebleJlP41k6qR43TQknE9OovVUD9z611Wd+VlinFFZ/uttG0ANpGXDFw90e+xJMNkg9SD2gbtQk6xRlneNBTvLvPqfxpBFb84i8fkcVuST79ToUd6U02M/4CVew8HX2M+XGF9U0RrA9Jleg7nTkg/S11EOZ2soWydTEFW9Qq2vpq3dMsTb5Neq13A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR03MB6167.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(396003)(39860400002)(346002)(136003)(451199021)(4326008)(64756008)(478600001)(110136005)(76116006)(66946007)(66446008)(66556008)(66476007)(91956017)(54906003)(38070700005)(316002)(2616005)(83380400001)(122000001)(85182001)(38100700002)(53546011)(107886003)(26005)(186003)(6512007)(6506007)(7416002)(8676002)(8936002)(6486002)(966005)(5660300002)(36756003)(71200400001)(86362001)(2906002)(41300700001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dnVSckh0SUdLNFhudDlmd0ErYXQ1RHdCVTV6bnV4WUdKN3pobzlqNHd5WHNu?=
- =?utf-8?B?c0p3QWVSUlR3K25NT09jbWg2SXZhUXlScFpDbmcwZzZpdCtva1Q0bjdjUEtZ?=
- =?utf-8?B?Ym5nZXNJTGd1b1A3ODRhYWgycFY1ajhVd0o3MnNaS0xXa1l3Qzc1ZXZDWHFC?=
- =?utf-8?B?ZDc1TVFKbGxacHVlNVpTNlA0R2dHTEl6RHdYeSsyTUxpMEdVSSsvSktlcmNS?=
- =?utf-8?B?U3lsVlBiWEVFWFEwcDFTR0R3bVd2Z2FrWmdUbE90MHk3RWtmN0VwMU0zcytE?=
- =?utf-8?B?dFhEYXpGUytoWmN1a0ErblY5cGkyc1BVVkhHOWlTTnVTLy85SENkbnIzNUc3?=
- =?utf-8?B?UmJBOElkSEFQbVMvU1pkNDNlUnp1LzZaNVJFV01sbU5hRWZoRGFwZ1JWdkEx?=
- =?utf-8?B?M0JRc0hBVVJ0cDUxTU9XZFV5MFEvbitjbWRvTlE2ZHJta0FpUW9VWjQ5MC95?=
- =?utf-8?B?bk45UGhYUndOUUZHcUcrU1RoUUVidGNzZ2ltQXNHaDNRenFubUVvZVJGOHhk?=
- =?utf-8?B?aXFvUFpNcVRSRVl6RzdVbTJoTk1jcEl0aGE4VHY3TUErQnVZNGlpZ3pLTE8r?=
- =?utf-8?B?OUM1akVxNXlkRDhXYTBlOTR2T0NSd3VIdThxdmFIcFNiVWlDQlVZSlV1Rzlo?=
- =?utf-8?B?UEprTHdSUTdoM2JzNDVUSXZnN215MkJwRVY5UGFkS2dvVDROTEF3RUE4TjFD?=
- =?utf-8?B?MWNYeWowTC9lQURwckN2TSs3SkZXMGwxTUp2bzVOTFcxdERBaTVXY0hsTytU?=
- =?utf-8?B?M0pxMmVpelA2SS84VFMxWnJpR0V0WHJ2Tk44d1FBT3JaU1lYUEVkd2dGMnZD?=
- =?utf-8?B?aVNWU0J2NXdCMEUrODlwOExzYWp2TW9xUmZhZkhyN3QwUW94bHVNenU0NWk0?=
- =?utf-8?B?MldCUUhLKzV6NEowSW1ORk85N0VWdTZaa2pTS3A1SFBvRC8wNXZKVnhNMEk3?=
- =?utf-8?B?KzdMVHJ1MkdLQ2o1TmZ3SWRHdG15TmlHQ2R0UXlKZC84Q1VKRkZaa1BHYWk0?=
- =?utf-8?B?ekFUc0FCOVV5d09ObUUyZlkzYnd2dDhGc2VjdWlVM1JSYlMxb1gvU1dsdnJh?=
- =?utf-8?B?amJCSE9nNURlQS9XamQ0bzFmNVNNQUo1RTNWcjlhR044OFc3NEc4REpWQWpD?=
- =?utf-8?B?SlFzeHFlWnVnaTdSODQ2T3FNRDVObW8vaGxWa3pzZWxPV0MxZ0xtVGhNeWVZ?=
- =?utf-8?B?WXU1a2hvZTdWWDJHU2Y4YTFLZ2FhMnJESmV1WlVIVjVjSzU3RUZPd09rSm5m?=
- =?utf-8?B?d0pzSGtoaW1IOWRnTG05eWxTaVQyT1hkaVZBK1lCNlhTRmx3MVVJY2t6cVlh?=
- =?utf-8?B?dnRaS2N4K0M0TkhxQVIwRXR4R21yOWxOeFpWYjkxWWdZL3NQd1ZjZk9zNFYw?=
- =?utf-8?B?Z3lSSUNJb0g3STVqa2ZWV3pQUWNJUHpySEdQWXc5bm9pcFZLeVJQa3dFdEpJ?=
- =?utf-8?B?aXBlckNzbWwvbnF3UWUvV1V2VXhsZ3M4Mk9hemM4Mno1NHNTcWIxZjhYSEMr?=
- =?utf-8?B?TWYwOTZFUWZrTWJpbVlxdW1tZzRVSE16OEdnNmNTOXhaNjVTSDJhdmY2cDlU?=
- =?utf-8?B?akhuaGpxNVBpL1hjcE5iZGNrdlBoK1Q1SXo2NGMvazBvaUQ2dXVadzhTTXUy?=
- =?utf-8?B?VVZSenM5RFhzSmhYZkVTcTRsK0VjMlpkTDZzMmxuNVdrbk5LUmdyRHlGYUNT?=
- =?utf-8?B?L0pWYmRQeEZQSjVJMmltNmY4TjNDOC9GZTBmSkFlK2MwRklYb2hHTlNvbWIx?=
- =?utf-8?B?dXduNmY2eEMrUjF5RUkzUXA0L1lnUEhES3lVcFhndmxMdWIwZkwyUGx4eWxq?=
- =?utf-8?B?bDRWV1NCVXlPVEJIUFZxNnJIcm51VFo3RFNjK3dpSGlnUVhpQlBPVm15Zm5Z?=
- =?utf-8?B?Sm80V2xnaVd3bFp1bTlNS2FNaDlpeVovSGxGbmk5VU8zM0FQZ3VZR2hmejR3?=
- =?utf-8?B?Ujg0YUt5SVIwc25nN2RSNVlQM1prT01wQXIvZjdNc1VUU1hhSzRzNWxIRzdT?=
- =?utf-8?B?T0NrQ1ZkZUtjOVQxWmU5R1Qrb2d0dnJsV3lMK1BIK0MvSUhZS0YzYnB5QW8v?=
- =?utf-8?B?MTJBY2YzUWpFb0xNaEJYdEN1UWp5SlR0dW5LTDNaOGphY3NqT01nMFFPS0pu?=
- =?utf-8?B?Z1RJc3lyNXV4MmgvdUl1ZXplTWhJU2VzbnV4alRaQmVqMGpNdW83dlhsZjNK?=
- =?utf-8?B?NGc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <39FA565B7A227C46B4D8E192EE021EF6@apcprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=bytedance.com; s=google; t=1681461841; x=1684053841;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qT9vFhlt3TMl+TX1oNW68//w+Ro4Y14kvCsjAYOLicY=;
+        b=B+7R6eL8tEV45YJ8qURuZTcAFO6pap6SIvfvp/eq19D2BSSl4UWWRWAGMzKreTMOKL
+         C5MAKEjqrJsDDYYXBrG/AslOPZxoYfdi+3Ke59+g1cG9clX0NBtPMl6IOndYjFnOauBm
+         wJ6gF88Izt/SehBLL6GSh16ToC5PSfM57jRMh5QDGbBj7EKH6AGdOtPLxNpIReyhDGza
+         tHAyQOjDmWRsKsttD2F91A9WYE5B1cupkZ78fQZSZZcI2kCV8pDAePEuEvuwQGZzfi2w
+         p4qR7lRS1cBcGcNHoQU7QSXW0Wn89ji6usyLXPF5+aQWQnqa4tpIh4qsipeph9mu8LRb
+         YJ9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681461841; x=1684053841;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qT9vFhlt3TMl+TX1oNW68//w+Ro4Y14kvCsjAYOLicY=;
+        b=ZCu2wSRxluv7wnZ12OR7YwOB5L0e8e/yli/izF8hf6B/SpFh4vS+6fR4iVlxpf8+bM
+         hSoI4a5lJ1jkLQ4pt7RbX+9NdrkEK2sABzhVVzxcPwKs3QzRlcVqqrhgkQPm61pnV4fB
+         hP3s0EpHoowiF9BWDliU9clvd6HHtzodADA7QwNiOJ0LUwVv0rC7RBQDLBu45QflCdEd
+         B/7ZDzrKHqygK/+z5l3eUUWdA0ITR1lfm1x61aTLYrkLz56HRUUDCzTGLQ8q6lZw5/kG
+         fE8F3QvaVYDJd4LUmuCqU1x+Wy49n/VipX+NNANm7G71QMfTXBHJ3S3cxTzrl0ORx2nb
+         QV6A==
+X-Gm-Message-State: AAQBX9cLTAqlqOVeAMMB0NsVFbBtLwEmuhWIlk8yZ7AfpauZv7yrfFjO
+        WtdS0cldZHeOC+0L/oUCV2OU
+X-Google-Smtp-Source: AKy350bNAERFGkwBQHVVfdBaSsU9015qtbuqO1lXiDwoaRbQgHDumFlCZ+QTDrguD/Bxj4bhO23dGw==
+X-Received: by 2002:a17:90a:cb98:b0:247:20e2:2060 with SMTP id a24-20020a17090acb9800b0024720e22060mr4843673pju.15.1681461840821;
+        Fri, 14 Apr 2023 01:44:00 -0700 (PDT)
+Received: from HX3YDL60GM.bytedance.net ([139.177.225.233])
+        by smtp.gmail.com with ESMTPSA id x6-20020a17090a530600b0024749e7321bsm120722pjh.6.2023.04.14.01.43.58
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Fri, 14 Apr 2023 01:44:00 -0700 (PDT)
+From:   "songrui.771" <songrui.771@bytedance.com>
+To:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "songrui.771" <songrui.771@bytedance.com>
+Subject: [PATCH v2] libbpf: correct the macro KERNEL_VERSION for old kernel
+Date:   Fri, 14 Apr 2023 16:43:53 +0800
+Message-Id: <20230414084353.36545-1-songrui.771@bytedance.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SI2PR03MB6167.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 96af51f8-f967-490d-8caa-08db3cc454ba
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Apr 2023 08:43:33.5230
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: HkAsUHiUapioQNo1DuG0QC5aHE/SeKrbIfuDO+x2vpQ/vDm6jtvW1Dvs0tQsreIj46ZeIuh3lU8tTNo2B91q4Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR03MB7004
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -187,42 +71,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVGh1LCAyMDIzLTA0LTEzIGF0IDE5OjA4ICswMjAwLCBNYXR0aGlhcyBCcnVnZ2VyIHdyb3Rl
-Og0KPiBFeHRlcm5hbCBlbWFpbCA6IFBsZWFzZSBkbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBh
-dHRhY2htZW50cyB1bnRpbA0KPiB5b3UgaGF2ZSB2ZXJpZmllZCB0aGUgc2VuZGVyIG9yIHRoZSBj
-b250ZW50Lg0KPiANCj4gDQo+IE9uIDEzLzA0LzIwMjMgMTQ6NTUsIEtyenlzenRvZiBLb3psb3dz
-a2kgd3JvdGU6DQo+ID4gT24gMTMvMDQvMjAyMyAxMTowNywgWWktRGUgV3Ugd3JvdGU6DQo+ID4g
-PiBGcm9tOiAiWWluZ3NoaXVhbiBQYW4iIDx5aW5nc2hpdWFuLnBhbkBtZWRpYXRlay5jb20+DQo+
-ID4gPiANCj4gPiA+IEdlbmllWm9uZSBpcyBNZWRpYVRlayBwcm9wcmlldGFyeSBoeXBlcnZpc29y
-IHNvbHV0aW9uLCBhbmQgaXQgaXMNCj4gPiA+IHJ1bm5pbmcNCj4gPiA+IGluIEVMMiBzdGFuZCBh
-bG9uZSBhcyBhIHR5cGUtSSBoeXBlcnZpc29yLiBUaGlzIHBhdGNoIGV4cG9ydHMgYQ0KPiA+ID4g
-c2V0IG9mDQo+ID4gPiBpb2N0bCBpbnRlcmZhY2VzIGZvciB1c2Vyc3BhY2UgVk1NIChlLmcuLCBj
-cm9zdm0pIHRvIG9wZXJhdGUNCj4gPiA+IGd1ZXN0IFZNcw0KPiA+ID4gbGlmZWN5Y2xlIChjcmVh
-dGlvbiwgcnVubmluZywgYW5kIGRlc3Ryb3kpIG9uIEdlbmllWm9uZS4NCj4gPiA+IA0KPiA+ID4g
-U2lnbmVkLW9mZi1ieTogWWluZ3NoaXVhbiBQYW4gPHlpbmdzaGl1YW4ucGFuQG1lZGlhdGVrLmNv
-bT4NCj4gPiA+IFNpZ25lZC1vZmYtYnk6IFlpLURlIFd1IDx5aS1kZS53dUBtZWRpYXRlay5jb20+
-DQo+ID4gPiAtLS0NCj4gPiA+ICAgYXJjaC9hcm02NC9pbmNsdWRlL3VhcGkvYXNtL2d6dm1fYXJj
-aC5oICAgICAgIHwgIDc5ICsrKysNCj4gPiA+ICAgZHJpdmVycy9zb2MvbWVkaWF0ZWsvS2NvbmZp
-ZyAgICAgICAgICAgICAgICAgIHwgICAyICsNCj4gPiA+ICAgZHJpdmVycy9zb2MvbWVkaWF0ZWsv
-TWFrZWZpbGUgICAgICAgICAgICAgICAgIHwgICAxICsNCj4gPiA+ICAgZHJpdmVycy9zb2MvbWVk
-aWF0ZWsvdmlydC9nZW5pZXpvbmUvS2NvbmZpZyAgIHwgIDE3ICsNCj4gPiANCj4gPiBIeXBlcnZp
-c29yIGRyaXZlcnMgZG8gbm90IGdvIHRvIHNvYy4gU3RvcCBzaG92aW5nIHRoZXJlIGV2ZXJ5dGhp
-bmcNCj4gPiBmcm9tDQo+ID4geW91ciBkb3duc3RyZWFtLiBGaW5kIGFwcHJvcHJpYXRlIGRpcmVj
-dG9yeSwgZS5nLiBtYXliZQ0KPiA+IGRyaXZlcnMvdmlydC4NCj4gDQo+IEFja2VkLCB3aGF0IGlz
-IHRoZSByZWFzb24geW91IHdhbnQgdG8gYWRkIHRoaXMgdG8gZHJpdmVycy9zb2MgaW5zdGVhZA0K
-PiBvZg0KPiBkcml2ZXJzL3ZpcnQ/DQo+IA0KPiBSZWdhcmRzLA0KPiBNYXR0aGlhcw0KPiANCk5v
-dGVkLiBXZSB3b3VsZCB0YWtlIHlvdXIgYWR2aWNlIGFuZCBtb3ZlIGl0IGZyb20NCmRyaXZlcnMv
-c29jL21lZGlhdGVrL3ZpcnQgdG8gL2RyaXZlcnMvdmlydCBvbiBuZXh0IHZlcnNpb24uDQoNClRo
-ZSByZWFzb24gd2UgcHV0IGl0IHVuZGVyIG91ciBzb2MvIGlzIHRoYXQgdGhlIGRydmVyIGlzIGhp
-Z2hseQ0KcHJvcGlldGFyeSBmb3IgbWVkaWF0ZWsncyBwcm9kdWN0IGFuZCBmb3IgYWFyY2g2NCBv
-bmx5LiBNYXliZSBpdCdzIG5vdA0KZ2VuZXJhbCBlbm91Z2ggdG8gcHV0IGluIHVuZGVyIC9kcml2
-ZXJzL3ZpcnQuDQoNClJlbGF0ZWQgZGlzY3Vzc2lvbnMgaGFwcGVuZWQgaGVyZSBmb3IgeW91ciBp
-bmZvcm1hdGlvbi4gDQoNCmh0dHBzOi8vYW5kcm9pZC1yZXZpZXcuZ29vZ2xlc291cmNlLmNvbS9j
-L2tlcm5lbC9jb21tb24vKy8yNDQ3NTQ3LzEuLjIvZHJpdmVycy92aXJ0L2dlbmllem9uZS9nenZt
-LmgjYjkxDQoNCj4gPiBTZWU6DQo+ID4gDQpodHRwczovL2xvcmUua2VybmVsLm9yZy9hbGwvMjAy
-MzAzMDQwMTA2MzIuMjEyNzQ3MC0xLXF1aWNfZWJlcm1hbkBxdWljaW5jLmNvbS8NCj4gPiANCj4g
-PiBZb3Ugc2hvdWxkIGZvbGxvdyB0aGF0IGRpc2N1c3Npb24gYXMgd2VsbCBhbmQgYmUgc3VyZSB0
-aGF0IGFsbA0KPiA+IGNvbmNlcm5zDQo+ID4gcmFpc2VkIGZvciBHdW55YWggYXJlIHNvbHZlZCBh
-bHNvIGhlcmUuDQo+ID4gDQpTdXJlLCB3ZSB3b3VsZCBsb29rIGl0IHVwIGZvciB0aGUgYWJvdmUt
-bWVudGlvbmVkIGluZm9ybWF0aW9uLg0KDQo+ID4gQmVzdCByZWdhcmRzLA0KPiA+IEtyenlzenRv
-Zg0KPiA+IA0K
+The introduced header file linux/version.h in libbpf_probes.c may have a wrong macro KERNEL_VERSION for calculating LINUX_VERSION_CODE in some old kernel (Debian9,10). Below is a version info example from Debian 10.
+
+release: 4.19.0-22-amd64
+version: #1 SMP Debian 4.19.260-1 (2022-09-29)
+
+The macro KERNEL_VERSION is defined to (((a) << 16) + ((b) << 8)) + (c)), which a, b, and c stand for major, minor and patch version. So in example here, the major is 4, minor is 19, patch is 260, the LINUX_VERSION(4, 19, 260) which is 267268 should be matched to LINUX_VERSION_CODE. However, the KERNEL_VERSION_CODE in linux/version.h is defined to 267263.
+
+I noticed that the macro KERNEL_VERSION in linux/version.h of some new kernel is defined to (((a) << 16) + ((b) << 8) + ((c) > 255 ? 255 : (c))). And KERNEL_VERSION(4, 19, 260) is equal to 267263 which is the right LINUX_VERSION_CODE.
+
+The mismatched LINUX_VERSION_CODE which will cause failing to load kprobe BPF programs in the version check of BPF syscall.
+
+The return value of get_kernel_version in libbpf_probes.c should be matched to LINUX_VERSION_CODE by correcting the macro KERNEL_VERSION.
+
+Signed-off-by: songrui.771 <songrui.771@bytedance.com>
+---
+Changes since v1:
+- reintroduce header file linux/version.h
+- define a new macro LIBBPF_KERNEL_VERSION to get kernel version rather than KERNEL_VERSION
+---
+ tools/lib/bpf/libbpf_probes.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.c
+index 4f3bc968ff8e..5b22a880c7e7 100644
+--- a/tools/lib/bpf/libbpf_probes.c
++++ b/tools/lib/bpf/libbpf_probes.c
+@@ -18,6 +18,10 @@
+ #include "libbpf.h"
+ #include "libbpf_internal.h"
+ 
++#ifndef LIBBPF_KERNEL_VERSION
++#define LIBBPF_KERNEL_VERSION(a, b, c) (((a) << 16) + ((b) << 8) + ((c) > 255 ? 255 : (c)))
++#endif
++
+ /* On Ubuntu LINUX_VERSION_CODE doesn't correspond to info.release,
+  * but Ubuntu provides /proc/version_signature file, as described at
+  * https://ubuntu.com/kernel, with an example contents below, which we
+@@ -47,7 +51,7 @@ static __u32 get_ubuntu_kernel_version(void)
+ 	if (ret != 3)
+ 		return 0;
+ 
+-	return KERNEL_VERSION(major, minor, patch);
++	return LIBBPF_KERNEL_VERSION(major, minor, patch);
+ }
+ 
+ /* On Debian LINUX_VERSION_CODE doesn't correspond to info.release.
+@@ -74,7 +78,7 @@ static __u32 get_debian_kernel_version(struct utsname *info)
+ 	if (sscanf(p, "Debian %u.%u.%u", &major, &minor, &patch) != 3)
+ 		return 0;
+ 
+-	return KERNEL_VERSION(major, minor, patch);
++	return LIBBPF_KERNEL_VERSION(major, minor, patch);
+ }
+ 
+ __u32 get_kernel_version(void)
+@@ -97,7 +101,7 @@ __u32 get_kernel_version(void)
+ 	if (sscanf(info.release, "%u.%u.%u", &major, &minor, &patch) != 3)
+ 		return 0;
+ 
+-	return KERNEL_VERSION(major, minor, patch);
++	return LIBBPF_KERNEL_VERSION(major, minor, patch);
+ }
+ 
+ static int probe_prog_load(enum bpf_prog_type prog_type,
+-- 
+2.39.2 (Apple Git-143)
+
