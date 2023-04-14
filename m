@@ -2,165 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98E5C6E2B25
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 22:33:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A67066E2B27
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 22:35:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbjDNUdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 16:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41740 "EHLO
+        id S229907AbjDNUfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 16:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjDNUdf (ORCPT
+        with ESMTP id S229841AbjDNUfI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 16:33:35 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BDA15B93;
-        Fri, 14 Apr 2023 13:33:33 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id qh25so9270027qvb.1;
-        Fri, 14 Apr 2023 13:33:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681504412; x=1684096412;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vdK48rxG4KzEvjeD5gYO8w9ZQkzGlmyxMjxEd3WM8Ds=;
-        b=RU4Wt/rZ/iVY6X8bgz7G6eH5EGXYINrl+Fe2IqRIBdpeGETIkmw0oWqFPq9tSvatW9
-         QLP0WcU6FVa6XrRsBWd3EF3KjVlc4ZwXFw/rDi/vQd3wmrkKNqcDC+lax8OnQuVQvg8n
-         ZLToWWojLfbH1KVrSQZUuFYT72RgmAUqajcirkYTdABfX85XJ/pwJFbVjY5guIe7VtPm
-         1rY3h84Ys17p/m9Qewtx6F64kK/qSPZ+2WhkVDL3UDWrDGF3PyJrB0hadf7S5ZUEgEnL
-         WsblOVRX1mgrW6OALrKMqe45Y8iHzvGq9gdhy6pUFmxJjqAbqJjaYnEXuIoVFjf4PfFJ
-         dYrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681504412; x=1684096412;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vdK48rxG4KzEvjeD5gYO8w9ZQkzGlmyxMjxEd3WM8Ds=;
-        b=aOtQuOEgLmbW2hlEMKUbm7p5IaRM0bNi6oG641wkDHtPQnowgb7bQ5iIH5/dVaDOTA
-         qNyTSvwnAOWuN8Z8pGk6+c7moy6cGTVjx7VCapFf9fdVPtzU3bqKzPLPoSC8mTD4NdtC
-         Sw7ywRvMHdoJKlBY+od2zhijej5i7YcrFr2csB7GYyL/zAewrtPJjjRblfBXkp91y78t
-         3L8SI0zsi2r3j55476ciD/Hy5yLJ1uhn46Nu9ZSQaLoE8opahU7gtvewaKrtmGAr9D3l
-         hJi8yTIjjVMmUlzAWxbMh8KRef1l4KkOYQ6C9pmbo+KB+l3KwYXcq7/455MdbMCcp7tp
-         IJdQ==
-X-Gm-Message-State: AAQBX9d92APcVfldYUzDl9z95vs7YKrFkX1zq4u2U0Z9+REZTMI8oa3v
-        6A07qlk8NSz6FAMbsHYdcUBgLT/LUx5jNA==
-X-Google-Smtp-Source: AKy350ZiIPEt9O0PhLwBNN2FE+DwAu7PHpzVSX93modZ5Ct8O98kggmWIhZi585f9U5I40R3pH1m+g==
-X-Received: by 2002:a05:6214:21e5:b0:5e9:752:766b with SMTP id p5-20020a05621421e500b005e90752766bmr6120380qvj.47.1681504412627;
-        Fri, 14 Apr 2023 13:33:32 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id ei18-20020ad45a12000000b005eac706d223sm1337386qvb.124.2023.04.14.13.33.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 13:33:32 -0700 (PDT)
-Message-ID: <c3a1271b-3faf-0900-d8e4-2ded0230f461@gmail.com>
-Date:   Fri, 14 Apr 2023 13:33:29 -0700
+        Fri, 14 Apr 2023 16:35:08 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41BFB5B9E
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 13:35:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681504507; x=1713040507;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7BSsLbY8tOejMePCFiWkY9De5oXFdkL9luABTcNIYtU=;
+  b=HYFeW0FcuhPYBW6b+G7gmjQT+cLz/QlnhHiB8x8NEjhHY7mYHE2MYAF2
+   8nuDk8+haOihORcLPm7o4TV37bfVysY6gTQVpztwteKE172TRtTcb2uH8
+   eY0io6Mr6OD6TzvxABsy+vQU2RfRaMreErDNBqhfoQQ4Kq2PzXadvjQ3o
+   lnyWzE3raJoQvni1we1VE6mL3LJuk+i2hdsqWJQAXO8AWdgIVwXJWJ2hA
+   CpyNp9FkB/jd5DBB0xdzFldqPD5IlWYddD99+KBq70jkIWK9A7JVJOUWo
+   ppsciskyVAyvc9KBKxo9LFtskpW7GmFU9JfdiuUQ7vdtlAhQPRXx3vfij
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="333346635"
+X-IronPort-AV: E=Sophos;i="5.99,197,1677571200"; 
+   d="scan'208";a="333346635"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 13:34:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="692548799"
+X-IronPort-AV: E=Sophos;i="5.99,197,1677571200"; 
+   d="scan'208";a="692548799"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga007.fm.intel.com with ESMTP; 14 Apr 2023 13:34:48 -0700
+Received: from [10.209.83.72] (kliang2-mobl1.ccr.corp.intel.com [10.209.83.72])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 0169F5805CB;
+        Fri, 14 Apr 2023 13:34:46 -0700 (PDT)
+Message-ID: <2428e6a2-9578-1e1d-bdef-ffcc87301503@linux.intel.com>
+Date:   Fri, 14 Apr 2023 16:34:45 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v2 2/3] PCI: brcmstb: CLKREQ# accomodations of downstream
- device
+Subject: Re: [PATCH 2/6] perf: Support branch events logging
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Andi Kleen <ak@linux.intel.com>
+Cc:     mingo@redhat.com, acme@kernel.org, linux-kernel@vger.kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
+        adrian.hunter@intel.com, eranian@google.com
+References: <20230410204352.1098067-1-kan.liang@linux.intel.com>
+ <20230410204352.1098067-2-kan.liang@linux.intel.com>
+ <20230414103832.GD83892@hirez.programming.kicks-ass.net>
+ <1d62b865-5d31-ec36-99e0-785844f79199@linux.intel.com>
+ <20230414145324.GB761523@hirez.programming.kicks-ass.net>
+ <803927bb-6f74-5c09-3c18-2fd5f423287b@linux.intel.com>
+ <20230414160945.GC761523@hirez.programming.kicks-ass.net>
+ <085fa11e-ea07-c148-1b32-8a09007ee12b@linux.intel.com>
+ <20230414192407.GA778423@hirez.programming.kicks-ass.net>
 Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Jim Quinlan <jim2101024@gmail.com>
-Cc:     linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230414202720.GA215111@bhelgaas>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230414202720.GA215111@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20230414192407.GA778423@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/14/23 13:27, Bjorn Helgaas wrote:
-> This subject line no verb.  Can you add a leading verb to suggest what
-> this patch does?
-> 
-> s/accomodations/accommodations/
-> 
-> On Tue, Apr 11, 2023 at 12:59:17PM -0400, Jim Quinlan wrote:
->> The Broadcom STB/CM PCIe HW core, which is also used in RPi SOCs, must be
->> deliberately set by the probe() into one of three mutually exclusive modes:
+
+
+On 2023-04-14 3:24 p.m., Peter Zijlstra wrote:
+> On Fri, Apr 14, 2023 at 01:53:24PM -0400, Liang, Kan wrote:
 >>
->>    (a) No CLKREQ# expected or required, refclk is always available.
->>    (b) CLKREQ# is expected to be driven by downstream device when needed.
->>    (c) Bidirectional CLKREQ# for L1SS capable devices.
 >>
->> Previously, only (b) was supported by the driver, as almost all STB/CM
->> boards operate in this mode.  But now there is interest in activating L1SS
->> power savings from STB/CM customers, and also interest in accomodating mode
->> (a) for designs such as the RPi CM4 with IO board.
+>> On 2023-04-14 12:09 p.m., Peter Zijlstra wrote:
+>>> On Fri, Apr 14, 2023 at 11:56:41AM -0400, Liang, Kan wrote:
+>>>>> If it were to only support 4, then
+>>>>> we're in counter scheduling contraint hell again 
+>>>>
+>>>> Unfortunately, yes.
+>>>>
+>>>>> and we need to somehow
+>>>>> group all these things together with the LBR event.
+>>>>
+>>>> Group will bring many limits for the usage. For example, I was told
+>>>> there could be someone wants to use it with multiplexing.
+>>>
+>>> You can create two groups, each with an LBR event, no?
+>>
+>> If we put everything in a group, that will make the enabling much
+>> simpler. I don't think the perf tool needs the order information
+>> anymore. Because the kernel enables the events one by one in a group.
+>> The kernel just need to convert the information from the counter order
+>> to the enabling order and dump to user space.
 > 
-> accommodating
-> 
->> The HW+driver is able to tell us when mode (a) mode is needed.  But there
->> is no easy way to tell if L1SS mode should be configured.  In certain
->> situations, getting this wrong may cause a panic during boot time.  So we
->> rely on the DT prop "brcm,enable-l1ss" to tell us when mode (c) is desired.
->> Using this mode only makes sense when the downstream device is L1SS-capable
->> and the OS has been configured to activate L1SS
->> (e.g. policy==powersupersave).
-> 
-> I'm really concerned about the user experience here.  I assume users
-> do not want to edit the DT based on what device they plug in.  They
-> shouldn't need to (and probably won't) know whether the device
-> supports L1SS.
-> 
-> I hate kernel/module parameters, but I think even that would be better
-> then having to edit the DT.
+> I never understood the whole order thing. What was it trying to do?
 
-The problem I see with kernel/module parameters is that it is really 
-hard to differentiate whether they should be applied across all 
-instances of the device/drivers or just for one in particular.
+Let's say we have three events with the LBR event logging feature as below.
+    perf record -e branches,branches,instructions:ppp -j any,event
 
-The Raspberry Pi 4 is a single pcie-brcmstb instance, but we have other 
-systems supported by that driver on Set-top-box and Cable Modem chips 
-for instance where we may have different types of end-points being 
-connected, some of which could be Multi-chip-module (MCM) where 
-everything is known ahead of time, and sometimes cards that are plugged 
-to full-sized PCIe or mini-PCIe connectors, where some amount of runtime 
-discoverability is involved.
+The counter 0 will be assigned to instructions:ppp, since the PDist is
+only supported on GP 0 & 1.
+The count 1 & 2 will be assigned to the other two branches.
 
-Without inventing some custom modular parameter syntax, it may not work 
-that well. The Device Tree properties at least easily allow for 
-per-instance configuration.
+If branches occurs 1 time and instructions occurs 3 times in a LBR
+block, the LBR_INFO will have 0b010111 (counter order).
+
+But as you can see from the perf command, the first event is actually
+branches. Without the event IDs information, perf tool will interpret
+that branches 3 branches 1 and instructions:ppp 1. That's wrong.
+
+If there are multiple users, the situation becomes even worse.
 
 > 
-> There's obviously a period of time when L1SS is supported but not yet
-> enabled, so I'm *guessing* the "OS has been configured to activate
-> L1SS" is not actually a requirement, and choosing (c) really just
-> opens the possibility that L1SS can be used?
+>> But if we have two groups with LBR event, the order information is still
+>> required. Why we still want to group things?
 > 
-> Would be nice to have a hint (maybe a line or two of the panic
-> message) to help users find the fix for a problem they're seeing.
+> Why would you need that; what is that whole order nonsense about?
 > 
-> Obviously the ideal would be if we could use (c) in all cases, so I
-> assume that's where a panic might happen.  What situation would that
-> be?  An endpoint that doesn't support L1SS?  One that supports L1SS
-> but it's not enabled?  Maybe if L1SS isn't configured correctly, e.g.,
-> LTR values programmed wrong?
+> {e1, e2, e3, e4}, {e5, e6, e7, e8} with e1 and e5 both having LBR on
+> just works no?
 > 
-> Bjorn
+> Since they have LBR and that extra sample flag they all get a 0-3
+> constraint.
+> 
+> Since both e1 and e5 use LBR, they're mutually exclusive, either e1 or
+> e5 group runs.
 
--- 
-Florian
+It's possible that someone pins an event using LBR, and set more than 4
+events for logging, e0:D,{e1, e2},{e3, e4},{e5, e6}. If so, those events
+could do multiplexing. Without the event IDs information, perf tool has
+no idea how to interpret the information.
 
+
+Andi, do you have any other cases which require the multiplexing support
+for LBR event logging.
+
+
+Thanks,
+Kan
