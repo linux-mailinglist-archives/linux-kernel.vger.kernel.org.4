@@ -2,154 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5580E6E2940
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 19:24:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA6EC6E2952
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 19:26:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230448AbjDNRY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 13:24:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45918 "EHLO
+        id S229839AbjDNR0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 13:26:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbjDNRYI (ORCPT
+        with ESMTP id S230286AbjDNRYk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 13:24:08 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF5183D2
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 10:23:37 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id o2so18964415plg.4
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 10:23:37 -0700 (PDT)
+        Fri, 14 Apr 2023 13:24:40 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B95C141
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 10:24:23 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id l124-20020a252582000000b00b8f5572bcdaso6568932ybl.13
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 10:24:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1681493017; x=1684085017;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qgUvM997QJXfBj7OoFl5jxJ2P02ysazlJ3MfSoqKoTg=;
-        b=T3zZn09jU30v3X8gm7zDVFka4YxfNrNYqbfTW7odCAvrYSgeHu3+TWK/Uex+lInrl0
-         ZR1SLxQQ2glTEULCFiZ8A/qnkb3MFe92XInJENc/PcgdijaRXP2jIN6X1kDLUnP++6IQ
-         QxplK7Pa9BQFppNM64xGUztMw2VnSlZCV2zATAGfF/9q2HqmOLCVZbagxFdEGTigAVE7
-         RRP7UH3QmA5SfzjT8wMk+gaqYPYHMimKUVP4jk4csTXP/FrA5rfpwAOvMO2aZza7K1yL
-         I+DdpAxZdgWcfk37FG8L7ECQ6ETodw8zhueKCA6Z7daSTQ1CBJEUdu45EQFDRCXK1SVa
-         kMig==
+        d=google.com; s=20221208; t=1681493062; x=1684085062;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1suTIWWaXvrjwoXvee3hiPz1nCSIoJ8zBj0cMHmSI7Y=;
+        b=ikLyr+8Xr+H5vM/bYsln0btIfSDwhlyv3SopCKg3euLB29KjQafs0AtMmmr4T9EIfJ
+         vIPC9xf1NxKqXFWckbIj0WVo4SgvKsPOQl1cOwpgB/XV40BLqns/ryvTGzxH0hPTIol7
+         xarcJ0GqxJFOJTIObBYAoUoAUl0iAOmFpm7/8rkUekiKozgid1NlTMyN45x5pS33IxKE
+         d8HkpLc19gk/5O6gbpIr0ZptEhH2xIi2xu1OHofuLnINm9CQonnrWxwWMzsJ6C8Y+skF
+         MUVvqijzMdtqQ30NGAKrF5+eZpQbbmVeMtcc7lOWf3BPP1QJqZGJHkM9DCvCxyboG1b4
+         logA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681493017; x=1684085017;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qgUvM997QJXfBj7OoFl5jxJ2P02ysazlJ3MfSoqKoTg=;
-        b=i+Tt5l1SFhYqzoe4mnSLr4llv5hYaWBAv3SxCjBpzWDP+EG73i44JLPCQWoL/KGfer
-         nWU8WDz3UfqnHbs0x+a4eyVlcRxmh42sBLY2bEuGmmsbjkj7hrhC+gz0gAjcrIroMCdD
-         OHZW7XuU/KoFm1tFBfHGPKjI2BlSCCknvt0kY7o0118320mexBrW3u3mFR9VOubYSiSw
-         KGpfg9xh3yXq2tE6Bpkl32CeZYc5XNrCKkOr7HqdAq3bMuOs6OiM9SqwvQedXY1Jm2Zc
-         voTQ4TElAXS3UjnsUOEcX4KtiPgISmZMz/vbNIMfW64nJ6YOdA3lTl5Z+5lJsDRF1ieo
-         EBcA==
-X-Gm-Message-State: AAQBX9ff7DO+ub3FGwfQG9/gKhUvOWg+ebqnXhLMVAqlSd0jkfCLbvdH
-        pPD8CVOlcvwSOY9qqtWHszKzIQ==
-X-Google-Smtp-Source: AKy350aBgZHg/laFWLHOBjKb0DZ6Hi2flL729hh8PovcVeBU4tyJFAUENy+tE8fTCKXuvB2+OR9kVQ==
-X-Received: by 2002:a05:6a20:8f2a:b0:ee:b24e:a40b with SMTP id b42-20020a056a208f2a00b000eeb24ea40bmr335653pzk.53.1681493017046;
-        Fri, 14 Apr 2023 10:23:37 -0700 (PDT)
-Received: from localhost.localdomain ([139.177.225.243])
-        by smtp.gmail.com with ESMTPSA id q12-20020a631f4c000000b0051b8172fa68sm370315pgm.38.2023.04.14.10.23.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Apr 2023 10:23:36 -0700 (PDT)
-From:   Jia Zhu <zhujia.zj@bytedance.com>
-To:     dhowells@redhat.com, linux-cachefs@redhat.com
-Cc:     linux-erofs@lists.ozlabs.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jefflexu@linux.alibaba.com,
-        hsiangkao@linux.alibaba.com, Jia Zhu <zhujia.zj@bytedance.com>,
-        Xin Yin <yinxin.x@bytedance.com>
-Subject: [PATCH V6 5/5] cachefiles: add restore command to recover inflight ondemand read requests
-Date:   Sat, 15 Apr 2023 01:22:39 +0800
-Message-Id: <20230414172239.33743-6-zhujia.zj@bytedance.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
-In-Reply-To: <20230414172239.33743-1-zhujia.zj@bytedance.com>
-References: <20230414172239.33743-1-zhujia.zj@bytedance.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1681493062; x=1684085062;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1suTIWWaXvrjwoXvee3hiPz1nCSIoJ8zBj0cMHmSI7Y=;
+        b=kvIG0ZTJvNK2uFPum9V8uLQNdpiVBRD8q+a+BTq9ggIssyw3N9YuI/+4qVowDFJC52
+         1VY5P6E4EfA6XHsyWkpqf5znR+ReRvbx8neIF1pxz6IeCuQSd6VOun98PKcWis0b4OxY
+         qhnc55DtgAtWvEanK+7CrJUX/L7Nnox/M9BTlZ8dkdoRuHg3hYnjfCzE4je7CmZagerx
+         jMd5V5INW+eMYwfv/CE2pVW+Kh+SEbKTXmmiEHmlzmj1fJU2xy/dMb2XzEZNsCwRlaW5
+         V5eVaQGOQWn/hhG00kjcETYZD7PJpCe97usLjosh7wmQBjc3ObxyWZMSR4ffngkART3C
+         Dv4A==
+X-Gm-Message-State: AAQBX9dVlGErTinzQet+3gvneady/owYy0bS/PzlzNtyjRg1Rw1W1lYP
+        mlysLVRvy/O6vg93+mMkjJk0eno2d/4=
+X-Google-Smtp-Source: AKy350bMntOiUpabNyzZrQez/ekmQ/pO8bA95EPMaEz7NgDSS6qOH/7lua5qHB9B+z+FW4OM+ZLtRc32bN4=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:b621:0:b0:54c:bf7:1853 with SMTP id
+ u33-20020a81b621000000b0054c0bf71853mr4241791ywh.6.1681493062225; Fri, 14 Apr
+ 2023 10:24:22 -0700 (PDT)
+Date:   Fri, 14 Apr 2023 17:24:20 +0000
+In-Reply-To: <ZDjzpKL9Omcox991@dhcp22.suse.cz>
+Mime-Version: 1.0
+References: <cover.1681430907.git.ackerleytng@google.com> <ZDjzpKL9Omcox991@dhcp22.suse.cz>
+Message-ID: <ZDmMRAZYgLJ+x4l9@google.com>
+Subject: Re: [RFC PATCH 0/6] Setting memory policy for restrictedmem file
+From:   Sean Christopherson <seanjc@google.com>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Ackerley Tng <ackerleytng@google.com>, kvm@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        qemu-devel@nongnu.org, aarcange@redhat.com, ak@linux.intel.com,
+        akpm@linux-foundation.org, arnd@arndb.de, bfields@fieldses.org,
+        bp@alien8.de, chao.p.peng@linux.intel.com, corbet@lwn.net,
+        dave.hansen@intel.com, david@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, hpa@zytor.com, hughd@google.com,
+        jlayton@kernel.org, jmattson@google.com, joro@8bytes.org,
+        jun.nakajima@intel.com, kirill.shutemov@linux.intel.com,
+        linmiaohe@huawei.com, luto@kernel.org, mail@maciej.szmigiero.name,
+        michael.roth@amd.com, mingo@redhat.com, naoya.horiguchi@nec.com,
+        pbonzini@redhat.com, qperret@google.com, rppt@kernel.org,
+        shuah@kernel.org, steven.price@arm.com, tabba@google.com,
+        tglx@linutronix.de, vannapurve@google.com, vbabka@suse.cz,
+        vkuznets@redhat.com, wanpengli@tencent.com, wei.w.wang@intel.com,
+        x86@kernel.org, yu.c.zhang@linux.intel.com, muchun.song@linux.dev,
+        feng.tang@intel.com, brgerst@gmail.com, rdunlap@infradead.org,
+        masahiroy@kernel.org, mailhol.vincent@wanadoo.fr
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously, in ondemand read scenario, if the anonymous fd was closed by
-user daemon, inflight and subsequent read requests would return EIO.
-As long as the device connection is not released, user daemon can hold
-and restore inflight requests by setting the request flag to
-CACHEFILES_REQ_NEW.
+On Fri, Apr 14, 2023, Michal Hocko wrote:
+> On Fri 14-04-23 00:11:49, Ackerley Tng wrote:
+> > 3. A more generic fbind(): it seems like this new functionality is
+> >    really only needed for restrictedmem files, hence a separate,
+> >    specific syscall was proposed to avoid complexities with handling
+> >    conflicting policies that may be specified via other syscalls like
+> >    mbind()
+> 
+> I do not think it is a good idea to make the syscall restrict mem
+> specific.
 
-Suggested-by: Gao Xiang <hsiangkao@linux.alibaba.com>
-Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
-Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
-Reviewed-by: Jingbo Xu <jefflexu@linux.alibaba.com>
----
- fs/cachefiles/daemon.c   |  1 +
- fs/cachefiles/internal.h |  3 +++
- fs/cachefiles/ondemand.c | 23 +++++++++++++++++++++++
- 3 files changed, 27 insertions(+)
++1.  IMO, any uAPI that isn't directly related to the fundamental properties of
+restricted memory, i.e. isn't truly unique to restrictedmem, should be added as
+generic fd-based uAPI.
 
-diff --git a/fs/cachefiles/daemon.c b/fs/cachefiles/daemon.c
-index 70caa1946207d..3f24905f40661 100644
---- a/fs/cachefiles/daemon.c
-+++ b/fs/cachefiles/daemon.c
-@@ -77,6 +77,7 @@ static const struct cachefiles_daemon_cmd cachefiles_daemon_cmds[] = {
- 	{ "tag",	cachefiles_daemon_tag		},
- #ifdef CONFIG_CACHEFILES_ONDEMAND
- 	{ "copen",	cachefiles_ondemand_copen	},
-+	{ "restore",	cachefiles_ondemand_restore	},
- #endif
- 	{ "",		NULL				}
- };
-diff --git a/fs/cachefiles/internal.h b/fs/cachefiles/internal.h
-index 26e5f8f123ef1..4a87c9d714a94 100644
---- a/fs/cachefiles/internal.h
-+++ b/fs/cachefiles/internal.h
-@@ -303,6 +303,9 @@ extern ssize_t cachefiles_ondemand_daemon_read(struct cachefiles_cache *cache,
- extern int cachefiles_ondemand_copen(struct cachefiles_cache *cache,
- 				     char *args);
- 
-+extern int cachefiles_ondemand_restore(struct cachefiles_cache *cache,
-+					char *args);
-+
- extern int cachefiles_ondemand_init_object(struct cachefiles_object *object);
- extern void cachefiles_ondemand_clean_object(struct cachefiles_object *object);
- 
-diff --git a/fs/cachefiles/ondemand.c b/fs/cachefiles/ondemand.c
-index 8e130de952f7d..b8fbbb1961bbc 100644
---- a/fs/cachefiles/ondemand.c
-+++ b/fs/cachefiles/ondemand.c
-@@ -182,6 +182,29 @@ int cachefiles_ondemand_copen(struct cachefiles_cache *cache, char *args)
- 	return ret;
- }
- 
-+int cachefiles_ondemand_restore(struct cachefiles_cache *cache, char *args)
-+{
-+	struct cachefiles_req *req;
-+
-+	XA_STATE(xas, &cache->reqs, 0);
-+
-+	if (!test_bit(CACHEFILES_ONDEMAND_MODE, &cache->flags))
-+		return -EOPNOTSUPP;
-+
-+	/*
-+	 * Reset the requests to CACHEFILES_REQ_NEW state, so that the
-+	 * requests have been processed halfway before the crash of the
-+	 * user daemon could be reprocessed after the recovery.
-+	 */
-+	xas_lock(&xas);
-+	xas_for_each(&xas, req, ULONG_MAX)
-+		xas_set_mark(&xas, CACHEFILES_REQ_NEW);
-+	xas_unlock(&xas);
-+
-+	wake_up_all(&cache->daemon_pollwq);
-+	return 0;
-+}
-+
- static int cachefiles_ondemand_get_fd(struct cachefiles_req *req)
- {
- 	struct cachefiles_object *object;
--- 
-2.20.1
+> History shows that users are much more creative when it comes
+> to usecases than us. I do understand that the nature of restricted
+> memory is that it is not mapable but memory policies without a mapping
+> are a reasonable concept in genereal. After all this just tells where
+> the memory should be allocated from. Do we need to implement that for
+> any other fs? No, you can safely return EINVAL for anything but
+> memfd_restricted fd for now but you shouldn't limit usecases upfront.
 
+I would even go a step further and say that we should seriously reconsider the
+design/implemenation of memfd_restricted() if a generic fbind() needs explicit
+handling from the restricted memory code.  One of the goals with memfd_restricted()
+is to rely on the underlying backing store to handle all of the "normal" behaviors.
