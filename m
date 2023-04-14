@@ -2,146 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 457AD6E29C0
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 19:58:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F61D6E29C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 20:00:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjDNR6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 13:58:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43646 "EHLO
+        id S229911AbjDNSAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 14:00:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjDNR6D (ORCPT
+        with ESMTP id S229507AbjDNSAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 13:58:03 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E437D91;
-        Fri, 14 Apr 2023 10:58:01 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33EEdnvq027916;
-        Fri, 14 Apr 2023 17:57:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Tios2Y7npBZ6qwjO6Disa8Qx5hEM+baQi0KFCeAxbcY=;
- b=JRgsfLlBoW5DWcGP/9epXOMuzYVU6RqHUhaHLapjp3l4ZMy2T+P6OITWy+JXbaWvLbr4
- CwpgveYAyxsbHGVnEJL5zIGIr4T2eRcro7KiyRJWWJnaK0uSiWxkBM5nEGD6c5HFA/c/
- vgKNWyijPJJ9upPNXEJvPNMEnEqnTH/s/bLb3TvQVxiyt1vx8ANt+IKcuIPI57FSlh5n
- mSS/hnSZco5dhV8ky9f1/ItBm3GoMSDl9pyW9ktwxBcFhn8kzg4izSXd0WCuxeRbt1Pr
- mF1BDzWEaO/70YeX34MxweyD2gHWXxKsXqSTJ/A5S9Q1XucGDH3Upn/hhu6XvIjYlICW Uw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pxx8ussgp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Apr 2023 17:57:48 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33EHvlu7002529
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Apr 2023 17:57:47 GMT
-Received: from [10.110.73.215] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 14 Apr
- 2023 10:57:45 -0700
-Message-ID: <82bf6167-d621-1a4e-86f0-7a8567347722@quicinc.com>
-Date:   Fri, 14 Apr 2023 10:57:45 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [Freedreno] [PATCH] drm/msm/dpu: always program dsc active bits
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-CC:     <freedreno@lists.freedesktop.org>, <quic_sbillaka@quicinc.com>,
-        <dianders@chromium.org>, <airlied@gmail.com>,
-        <andersson@kernel.org>, <robdclark@gmail.com>,
-        <dri-devel@lists.freedesktop.org>, <swboyd@chromium.org>,
-        <vkoul@kernel.org>, <agross@kernel.org>, <daniel@ffwll.ch>,
-        <linux-arm-msm@vger.kernel.org>, <dmitry.baryshkov@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>, <sean@poorly.run>,
-        <linux-kernel@vger.kernel.org>
-References: <1681247095-1201-1-git-send-email-quic_khsieh@quicinc.com>
- <z7wj2lcgcdxsqh7ylhec3ig6o4p6q37zqvpzoxp4bd4vid2z2n@ubsgt3ebqrwr>
- <83f9a438-52c5-83f3-1767-92d16518d8f0@quicinc.com>
- <feedv4isliterjtwyicqfarwuvzhtov3jkmvjcwqvt7itkyh7y@e2jq5t6r3lxc>
- <e78e576a-2a04-e7ca-f6c4-701d508541ad@quicinc.com>
- <mfzi535qsjtcznwdvgb7qyzk25rcsrkwozah6ji4thqsj73n3m@asybxllomisg>
- <049697ba-d997-62c0-6e21-ffb287ac3100@quicinc.com>
- <6s42sutrd2c6tme46t6tchd6y6wonmpwokseqqz2frkrfext7v@vnv44tzwyva4>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <6s42sutrd2c6tme46t6tchd6y6wonmpwokseqqz2frkrfext7v@vnv44tzwyva4>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: B8MBCU2YWbpysRyWwHZbqieLfTBLlxUp
-X-Proofpoint-GUID: B8MBCU2YWbpysRyWwHZbqieLfTBLlxUp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-14_09,2023-04-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 suspectscore=0 spamscore=0 clxscore=1015 lowpriorityscore=0
- mlxlogscore=946 impostorscore=0 mlxscore=0 bulkscore=0 malwarescore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304140158
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 14 Apr 2023 14:00:48 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E3783CB
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 11:00:47 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id mu10-20020a17090b388a00b00247112388ebso2701994pjb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 11:00:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681495247; x=1684087247;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=vrpytJrQkeMnSBoK05n6C3PVwm0AhQVwCbqW6lOv8WI=;
+        b=I0MSTyggzSSsOoQJjyGrso/7Ybeopii3TjXK3ukhg1ZB/4io6QzG1BwsA1C0yT/loh
+         n6ClZYWNFbLZiRPRvChwZHfYVGAwte3VJpkRziPllFiBNERgJ9QRme+PVgf8DNh9u/yd
+         DNXT8doZ70gPqMtfdeOXYsOFny71YkC8/JWP4JcJYyTxwEFsYDUnqLDTF26pORtCpguw
+         +unNZBR8+bYQqvQCmRg8kRM4L9qEB9Sv06+FZxWl2LXZUxEA6jzQDCuuwRdLTdG6IDWg
+         fIKwzH8ycwC2+9LPQmrvE1OIt53IiTrnddq6TvFhw0FCWMdQQ1D3ErYizr1wYFvTHCNp
+         OzVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681495247; x=1684087247;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vrpytJrQkeMnSBoK05n6C3PVwm0AhQVwCbqW6lOv8WI=;
+        b=BZ0kJ2nT+UHspaSgUmZpz9N+KXy8AU8j3n8E5iy21YD2OUDAPyDbUkcQ8gfOY29PW+
+         1GgcWAY17eHYEm9XrQInuKXL0u3FB2//ezCZ+qqBnnzBEHkNLAhkR2Rt9psbpncrkfou
+         bkYnb5JnVY+T7zkrjpnFZPNV5q7oUNutlgI4Tb9qaPmfkdxjfRYvgn+ZeJuPi7rg+azl
+         zosoYSoonLH39Kovb20tBCOgq/LhZtzyLJgRlmnwgTZbd2Ug5fgQXnWmKzURyhgM8cUA
+         YN16SvOBE7o4WWWVUzTir8L9nL1NwnpWKUQ8KiLGnPfAvGGaF2FgPenmZ+xYzyqnoEk1
+         8CzA==
+X-Gm-Message-State: AAQBX9fCnU8yQbMu4BFu9fMQiLcLqKIrnDIhCjwGelbbufXagkmKvKiE
+        tBjqdeGV0F/hW/glGEsqErQsftuUOOU=
+X-Google-Smtp-Source: AKy350b7HRLz3uh0vBz0/Uzl8Z+fa6BzF8jLXkvpc+cVek+DZVtKLCgPYkVzSF5sDmnJyeu0FdtqA4SmhFg=
+X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:46c0:7584:f020:e09f])
+ (user=surenb job=sendgmr) by 2002:a63:4818:0:b0:50b:188d:25bb with SMTP id
+ v24-20020a634818000000b0050b188d25bbmr986965pga.5.1681495246966; Fri, 14 Apr
+ 2023 11:00:46 -0700 (PDT)
+Date:   Fri, 14 Apr 2023 11:00:43 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
+Message-ID: <20230414180043.1839745-1-surenb@google.com>
+Subject: [PATCH 1/1] mm: handle swap page faults if the faulting page can be locked
+From:   Suren Baghdasaryan <surenb@google.com>
+To:     akpm@linux-foundation.org
+Cc:     willy@infradead.org, hannes@cmpxchg.org, mhocko@suse.com,
+        josef@toxicpanda.com, jack@suse.cz, ldufour@linux.ibm.com,
+        laurent.dufour@fr.ibm.com, michel@lespinasse.org,
+        liam.howlett@oracle.com, jglisse@google.com, vbabka@suse.cz,
+        minchan@google.com, dave@stgolabs.net, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, surenb@google.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When page fault is handled under VMA lock protection, all swap page
+faults are retried with mmap_lock because folio_lock_or_retry
+implementation has to drop and reacquire mmap_lock if folio could
+not be immediately locked.
+Instead of retrying all swapped page faults, retry only when folio
+locking fails.
 
+Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+---
+Patch applies cleanly over linux-next and mm-unstable
 
-On 4/14/2023 10:34 AM, Marijn Suijten wrote:
-> On 2023-04-14 08:48:43, Abhinav Kumar wrote:
->>
->> On 4/14/2023 12:35 AM, Marijn Suijten wrote:
->>> On 2023-04-12 10:33:15, Abhinav Kumar wrote:
->>> [..]
->>>>> What happens if a device boots without DSC panel connected?  Will
->>>>> CTL_DSC_FLUSH be zero and not (unnecessarily, I assume) flush any of the
->>>>> DSC blocks?  Or could this flush uninitialized state to the block?
->>>>>
->>>>
->>>> If we bootup without DSC panel connected, the kernel's cfg->dsc will be
->>>> 0 and default register value of CTL_DSC_FLUSH will be 0 so it wont flush
->>>> any DSC blocks.
->>>
->>> Ack, that makes sense.  However, if I connect a DSC panel, then
->>> disconnect it (now the register should be non-zero, but cfg->dsc will be
->>> zero), and then replug a non-DSC panel multiple times, it'll get flushed
->>> every time because we never clear CTL_DSC_FLUSH after that?
->>>
->>
->> If we remove it after kernel starts, that issue is there even today
->> without that change because DSI is not a hot-pluggable display so a
->> teardown wont happen when you plug out the panel. How will cfg->dsc be 0
->> then? In that case, its not a valid test as there was no indication to
->> DRM that display was disconnected so we cannot tear it down.
-> 
-> The patch description itself describes hot-pluggable displays, which I
-> believe is the upcoming DSC support for DP?  You ask how cfg->dsc can
-> become zero, but this is **exactly** what the patch description
-> describes, and what this patch is removing the `if` for.  If we are not
-> allowed to discuss that scenario because it is not currently supported,
-> neither should we allow to apply this patch.
-> 
-> With that in mind, can you re-answer the question?
-> 
+ mm/filemap.c | 6 ++++++
+ mm/memory.c  | 5 -----
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-I didnt follow what needs to be re-answered.
+diff --git a/mm/filemap.c b/mm/filemap.c
+index 6f3a7e53fccf..67b937b0f436 100644
+--- a/mm/filemap.c
++++ b/mm/filemap.c
+@@ -1706,6 +1706,8 @@ static int __folio_lock_async(struct folio *folio, struct wait_page_queue *wait)
+  *     mmap_lock has been released (mmap_read_unlock(), unless flags had both
+  *     FAULT_FLAG_ALLOW_RETRY and FAULT_FLAG_RETRY_NOWAIT set, in
+  *     which case mmap_lock is still held.
++ *     If flags had FAULT_FLAG_VMA_LOCK set, meaning the operation is performed
++ *     with VMA lock only, the VMA lock is still held.
+  *
+  * If neither ALLOW_RETRY nor KILLABLE are set, will always return true
+  * with the folio locked and the mmap_lock unperturbed.
+@@ -1713,6 +1715,10 @@ static int __folio_lock_async(struct folio *folio, struct wait_page_queue *wait)
+ bool __folio_lock_or_retry(struct folio *folio, struct mm_struct *mm,
+ 			 unsigned int flags)
+ {
++	/* Can't do this if not holding mmap_lock */
++	if (flags & FAULT_FLAG_VMA_LOCK)
++		return false;
++
+ 	if (fault_flag_allow_retry_first(flags)) {
+ 		/*
+ 		 * CAUTION! In this case, mmap_lock is not released
+diff --git a/mm/memory.c b/mm/memory.c
+index d88f370eacd1..3301a8d01820 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -3715,11 +3715,6 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+ 	if (!pte_unmap_same(vmf))
+ 		goto out;
+ 
+-	if (vmf->flags & FAULT_FLAG_VMA_LOCK) {
+-		ret = VM_FAULT_RETRY;
+-		goto out;
+-	}
+-
+ 	entry = pte_to_swp_entry(vmf->orig_pte);
+ 	if (unlikely(non_swap_entry(entry))) {
+ 		if (is_migration_entry(entry)) {
+-- 
+2.40.0.634.g4ca3ef3211-goog
 
-This patch is being sent in preparation of the DSC over DP support. This 
-does not handle non-hotpluggable displays. I do not think dynamic switch 
-between DSC and non-DSC of non-hotpluggable displays needs to be 
-discussed here as its not handled at all with or without this patch.
-
-We wanted to get early reviews on the patch. If you want this patch to 
-be absorbed when rest of DSC over DP lands, I have no concerns with 
-that. I wont pick this up for fixes and we will land this together with 
-the rest of DP over DSC.
-
-
-> - Marijn
