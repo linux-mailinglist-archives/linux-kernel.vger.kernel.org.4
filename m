@@ -2,172 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 446886E234C
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 14:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 469AF6E2352
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 14:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbjDNMcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 08:32:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50492 "EHLO
+        id S229947AbjDNMci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 08:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjDNMcC (ORCPT
+        with ESMTP id S230250AbjDNMcg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 08:32:02 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E3319A8;
-        Fri, 14 Apr 2023 05:32:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681475521; x=1713011521;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=DtfG+JYEslO+lbslUcYDrV41Boe8ZOwviHVMmeg2SyY=;
-  b=am4f4qulZiqAN9mzyoBo26KFCwZeSMtsikG6QDJPffxE5UG7utZPMgwH
-   sp8vOOEoECMwNFjh99IPz8dk75iGcyeOc2iSGdcHnQtMycpQastd6DE83
-   wKf48SBPARg7WuouZ3+1JM0EA6/K+DXo28lbikNKzHjlh2dkwanIdRJHg
-   WgQQ+e5Vd91brkeX/wadTllanJLaWdZ6tcU0gJHOlZw0/lqdDl+nKd/fW
-   dIVYqTTTIcFe/cauTxx9AZtCG+ty7ozjnP1kVAhaBttZp6ZfDM14Ma3bN
-   pKe960k3lbJV01X9x2I18Chjrul7Gl0KNLzvxSTcsM4xHPbXz5WJLa1+1
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="344451286"
-X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
-   d="scan'208";a="344451286"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 05:32:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="833535318"
-X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
-   d="scan'208";a="833535318"
-Received: from smiokx-mobl.amr.corp.intel.com ([10.252.57.49])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 05:31:58 -0700
-Date:   Fri, 14 Apr 2023 15:31:55 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v9 1/6] selftests/resctrl: Fix set up schemata with 100%
- allocation on first run in MBM test
-In-Reply-To: <20230413072259.2089348-2-tan.shaopeng@jp.fujitsu.com>
-Message-ID: <bb65cce8-54d7-68c5-ef19-3364ec95392a@linux.intel.com>
-References: <20230413072259.2089348-1-tan.shaopeng@jp.fujitsu.com> <20230413072259.2089348-2-tan.shaopeng@jp.fujitsu.com>
+        Fri, 14 Apr 2023 08:32:36 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859909EF7
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 05:32:33 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-185-VqRPGaRUPQWesYHLYOoMpg-1; Fri, 14 Apr 2023 13:32:30 +0100
+X-MC-Unique: VqRPGaRUPQWesYHLYOoMpg-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Fri, 14 Apr
+ 2023 13:32:27 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Fri, 14 Apr 2023 13:32:27 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Song, Yoong Siang'" <yoong.siang.song@intel.com>,
+        Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "Jesper Dangaard Brouer" <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>,
+        Vedang Patel <vedang.patel@intel.com>,
+        "Joseph, Jithu" <jithu.joseph@intel.com>,
+        "Andre Guedes" <andre.guedes@intel.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        "Keller, Jacob E" <jacob.e.keller@intel.com>
+CC:     "Brouer, Jesper" <brouer@redhat.com>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "xdp-hints@xdp-project.net" <xdp-hints@xdp-project.net>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH net v2 1/1] igc: read before write to SRRCTL register
+Thread-Topic: [PATCH net v2 1/1] igc: read before write to SRRCTL register
+Thread-Index: AQHZbnY42u7Gz9ET40eYzbfYWKvVVq8qkCGAgAAQJMCAABqMIA==
+Date:   Fri, 14 Apr 2023 12:32:27 +0000
+Message-ID: <4dc9ea6c77ff49138a49d7f73f7301fd@AcuMS.aculab.com>
+References: <20230414020915.1869456-1-yoong.siang.song@intel.com>
+ <8214fb10-8caa-4418-8435-85b6ac27b69e@redhat.com>
+ <PH0PR11MB5830D3F9144B61A6959A4A0FD8999@PH0PR11MB5830.namprd11.prod.outlook.com>
+In-Reply-To: <PH0PR11MB5830D3F9144B61A6959A4A0FD8999@PH0PR11MB5830.namprd11.prod.outlook.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1398643149-1681475520=:2245"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+RnJvbTogU29uZywgWW9vbmcgU2lhbmcNCj4gU2VudDogMTQgQXByaWwgMjAyMyAxMjoxNg0KLi4u
+DQo+ID5JIGhhdmUgY2hlY2tlZCBGb3h2aWxsZSBtYW51YWwgZm9yIFNSUkNUTCAoU3BsaXQgYW5k
+IFJlcGxpY2F0aW9uIFJlY2VpdmUNCj4gPkNvbnRyb2wpIHJlZ2lzdGVyIGFuZCBiZWxvdyBHRU5N
+QVNLcyBsb29rcyBjb3JyZWN0Lg0KPiA+DQo+ID4+IC0jZGVmaW5lIElHQ19TUlJDVExfQlNJWkVQ
+S1RfU0hJRlQJCTEwIC8qIFNoaWZ0IF9yaWdodF8gKi8NCj4gPj4gLSNkZWZpbmUgSUdDX1NSUkNU
+TF9CU0laRUhEUlNJWkVfU0hJRlQJCTIgIC8qIFNoaWZ0IF9sZWZ0XyAqLw0KPiA+PiArI2RlZmlu
+ZSBJR0NfU1JSQ1RMX0JTSVpFUEtUX01BU0sJR0VOTUFTSyg2LCAwKQ0KPiA+PiArI2RlZmluZSBJ
+R0NfU1JSQ1RMX0JTSVpFUEtUX1NISUZUCTEwIC8qIFNoaWZ0IF9yaWdodF8gKi8NCj4gPg0KPiA+
+U2hpZnQgZHVlIHRvIDEgS0IgcmVzb2x1dGlvbiBvZiBCU0laRVBLVCAobWFudWFsIGZpZWxkIEJT
+SVpFUEFDS0VUKQ0KPiANCj4gWWEsIDFLID0gQklUKDEwKSwgc28gbmVlZCB0byBzaGlmdCByaWdo
+dCAxMCBiaXRzLg0KDQpJIGJldCB0aGUgY29kZSB3b3VsZCBiZSBlYXNpZXIgdG8gcmVhZCBpZiBp
+dCBkaWQgJ3ZhbHVlIC8gMTAyNHUnLg0KVGhlIG9iamVjdCBjb2RlIHdpbGwgYmUgKG11Y2gpIHRo
+ZSBzYW1lLg0KDQo+ID4+ICsjZGVmaW5lIElHQ19TUlJDVExfQlNJWkVIRFJTSVpFX01BU0sJR0VO
+TUFTSygxMywgOCkNCj4gPj4gKyNkZWZpbmUgSUdDX1NSUkNUTF9CU0laRUhEUlNJWkVfU0hJRlQJ
+MiAgLyogU2hpZnQgX2xlZnRfICovDQo+ID4NCj4gPlRoaXMgc2hpZnQgaXMgc3VzcGljaW91cywg
+YnV0IGFzIHlvdSBpbmhlcml0ZWQgaXQgSSBndWVzcyBpdCB3b3Jrcy4NCj4gPkkgZGlkIHRoZSBt
+YXRoLCBhbmQgaXQgaGFwcGVucyB0byB3b3JrLCBrbm93aW5nIChmcm9tIG1hbnVhbCkgdmFsdWUg
+aXMgaW4gNjQgYnl0ZXMNCj4gPnJlc29sdXRpb24uDQo+IA0KPiBJdCBpcyBpbiA2NCA9IEJJVCg2
+KSByZXNvbHV0aW9uLCBzbyBuZWVkIHRvIHNoaWZ0IHJpZ2h0IDYgYml0cy4NCj4gQnV0IGl0IHN0
+YXJ0IG9uIDh0aCBiaXQsIHNvIG5lZWQgdG8gc2hpZnQgbGVmdCA4IGJpdHMuDQo+IFRodXMsIHRv
+dGFsID0gc2hpZnQgbGVmdCAyIGJpdHMuDQo+IA0KPiBJIGRpbnQgcHV0IHRoZSBleHBsYW5hdGlv
+biBpbnRvIHRoZSBoZWFkZXIgZmlsZSBiZWNhdXNlIGl0IGlzIHRvbyBsZW5ndGh5DQo+IGFuZCB1
+c2VyIGNhbiBrbm93IGZyb20gZGF0YWJvb2suDQo+IA0KPiBIb3cgZG8geW91IGZlZWwgb24gdGhl
+IG5lY2Vzc2FyeSBvZiBleHBsYWluaW5nIHRoZSBzaGlmdGluZyBsb2dpYz8NCg0KTm90IGV2ZXJ5
+b25lIHRyeWluZyB0byBncm9rIHRoZSBjb2RlIHdpbGwgaGF2ZSB0aGUgbWFudWFsLg0KRXZlbiB3
+cml0aW5nICg4IC0gNikgd2lsbCBoZWxwLg0KT3IgKEkgdGhpbmspIGlmIHRoZSB2YWx1ZSBpcyBp
+biBiaXRzIDEzLTggaW4gdW5pdHMgb2YgNjQgdGhlbiBqdXN0Og0KCSgodmFsdWUgPj4gOCkgJiAw
+eDFmKSAqIDY0DQpnY2Mgd2lsbCBkbyBhIHNpbmdsZSBzaGlmdCByaWdodCBhbmQgYSBtYXNrIDlh
+dCBzb21lIHBvaW50KS4NCllvdSBtaWdodCB3YW50IHNvbWUgZGVmaW5lcywgYnV0IGlmIHRoZXkg
+YXJlbid0IHVzZWQgbXVjaA0KanVzdCBjb21tZW50cyB0aGF0IHJlZmVyIHRvIHRoZSBuYW1lcyBp
+biB0aGUgbWFudWFsL2RhdGFzaGVldA0KY2FuIGJlIGVub3VnaC4NCg0KCURhdmlkDQoNCi0NClJl
+Z2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0
+b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykN
+Cg==
 
---8323329-1398643149-1681475520=:2245
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-
-On Thu, 13 Apr 2023, Shaopeng Tan wrote:
-
-> There is a comment "Set up shemata with 100% allocation on the first run"
-
-s/shemata/schemata/
-
-> in function mbm_setup(), but there is an increment bug and the condition
-> "num_of_runs == 0" will never be met and write_schemata() will never be
-> called to set schemata to 100%. Even if write_schemata() is called in MBM
-> test, since it is not supported for MBM test it does not set the schemata.
-> This is currently fine because resctrl_val_parm->mum_resctrlfs is always 1
-> and umount/mount will be run in each test to set the schemata to 100%.
-> 
-> To support the usage when MBM test does not unmount/remount resctrl
-> filesystem before the test starts, fix to call write_schemata() and
-> set schemata properly when the function is called for the first time.
-> 
-> Also, remove static local variable 'num_of_runs' because this is not
-> needed as there is resctrl_val_param->num_of_runs which should be used
-> instead like in cat_setup().
-> 
-> Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-> Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-> ---
->  tools/testing/selftests/resctrl/mbm_test.c  | 13 +++++++------
->  tools/testing/selftests/resctrl/resctrlfs.c |  4 +++-
->  2 files changed, 10 insertions(+), 7 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-> index c9dfa54af42f..9b591c35310f 100644
-> --- a/tools/testing/selftests/resctrl/mbm_test.c
-> +++ b/tools/testing/selftests/resctrl/mbm_test.c
-> @@ -89,23 +89,24 @@ static int check_results(int span)
->  static int mbm_setup(int num, ...)
->  {
->  	struct resctrl_val_param *p;
-> -	static int num_of_runs;
->  	va_list param;
->  	int ret = 0;
->  
-> -	/* Run NUM_OF_RUNS times */
-> -	if (num_of_runs++ >= NUM_OF_RUNS)
-> -		return END_OF_TESTS;
-> -
->  	va_start(param, num);
->  	p = va_arg(param, struct resctrl_val_param *);
->  	va_end(param);
->  
-> +	/* Run NUM_OF_RUNS times */
-> +	if (p->num_of_runs >= NUM_OF_RUNS)
-> +		return -1;
-
-This is not rebased correctly, negative return values mean now errors.
-To complete tests "normally", return END_OF_TESTS. Please see commit 
-fa10366cc6f4 ("selftests/resctrl: Allow ->setup() to return errors") for 
-future information.
-
-With the forementioned problems fixed:
-
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-
--- 
- i.
-
-> +
->  	/* Set up shemata with 100% allocation on the first run. */
-> -	if (num_of_runs == 0)
-> +	if (p->num_of_runs == 0)
->  		ret = write_schemata(p->ctrlgrp, "100", p->cpu_no,
->  				     p->resctrl_val);
->  
-> +	p->num_of_runs++;
-> +
->  	return ret;
->  }
->  
-> diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-> index cc6cf49e3129..b31b1d9e41d1 100644
-> --- a/tools/testing/selftests/resctrl/resctrlfs.c
-> +++ b/tools/testing/selftests/resctrl/resctrlfs.c
-> @@ -498,6 +498,7 @@ int write_schemata(char *ctrlgrp, char *schemata, int cpu_no, char *resctrl_val)
->  	FILE *fp;
->  
->  	if (strncmp(resctrl_val, MBA_STR, sizeof(MBA_STR)) &&
-> +	    strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR)) &&
->  	    strncmp(resctrl_val, CAT_STR, sizeof(CAT_STR)) &&
->  	    strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR)))
->  		return -ENOENT;
-> @@ -523,7 +524,8 @@ int write_schemata(char *ctrlgrp, char *schemata, int cpu_no, char *resctrl_val)
->  	if (!strncmp(resctrl_val, CAT_STR, sizeof(CAT_STR)) ||
->  	    !strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR)))
->  		sprintf(schema, "%s%d%c%s", "L3:", resource_id, '=', schemata);
-> -	if (!strncmp(resctrl_val, MBA_STR, sizeof(MBA_STR)))
-> +	if (!strncmp(resctrl_val, MBA_STR, sizeof(MBA_STR)) ||
-> +	    !strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR)))
->  		sprintf(schema, "%s%d%c%s", "MB:", resource_id, '=', schemata);
->  
->  	fp = fopen(controlgroup, "w");
-> 
-
---8323329-1398643149-1681475520=:2245--
