@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DF986E2D03
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 01:44:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E55806E2D0B
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 01:44:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbjDNXoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 19:44:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54146 "EHLO
+        id S230017AbjDNXok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 19:44:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbjDNXoV (ORCPT
+        with ESMTP id S229841AbjDNXoX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 19:44:21 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46655243;
-        Fri, 14 Apr 2023 16:44:19 -0700 (PDT)
-Message-ID: <20230414232309.385574446@linutronix.de>
+        Fri, 14 Apr 2023 19:44:23 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99AC559ED;
+        Fri, 14 Apr 2023 16:44:21 -0700 (PDT)
+Message-ID: <20230414232309.448345494@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1681515858;
+        s=2020; t=1681515860;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=IHNUiYT/aa+9U/QrFpO4u8KQro95rDNTw6iEEK5ze9o=;
-        b=1GGWgmKl+Z16YESLBwfkaJ8pYvl0ibRrRLZ//qbrV6Rn4ejq8Bvi6vo9cC/d06/jSPEXR4
-        hvZPrEqwgB1nXc44jqzGpA3g8UhwvIHA09SMd8L91BmwlYgaP2m77BjOpifPA2Jp8FR9F+
-        c0G0jy+fXRMuNBDQtZn5Uv5VCIUDjwdIxXIzMKcFSmEiflIS9qbg0CEGaA9Azgv3qTSjMh
-        2Q6Nmfsfu+SPkBhJwKselmJZVd9FCtpTg9fyXFZ6j2n8kUoisHbXRgCmcH48m/s4qcThpJ
-        o2FriQZJckk/vdgmu5g5vmRYvkI+K74QUFnLD6JN3zpP58uh1nfGpXn5o7XkuA==
+         references:references; bh=SRk3RrJ8+RSaiZTRwxMk0fG1NuTGaGpFKdBZXu8mJKE=;
+        b=TenZelvKdY6Tx+OsImAHk36b4tbQIR+z0M1WnFpjy8y+51j9W5eVFc7Of6Sf8s0X5uq+xc
+        6SLC+/lL+CpUg+kTVvDAN1gjqSax0V+tVQNmmxi4coTX5o01NqKtoGfLSsdE0lb320KW1r
+        QEHnIVRUnqLfhZgK+7fQTY+n7WOGwL6ll+eunwu5W5z5A2qnT1aRW5PuasQXgjsBUf/jBU
+        7xOQ39cpNhzE0/XOurXN0gDhM1Ox280g/R6YyoZtAiatQnNAao3G3M3vKjSts9mlj9G6qX
+        S7eGW9eMYE6lWwqIwp+CRBO4mI9eSSdxCdQI74WXa5fo3DgjCo/bZ5Uwga1FYg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1681515858;
+        s=2020e; t=1681515860;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=IHNUiYT/aa+9U/QrFpO4u8KQro95rDNTw6iEEK5ze9o=;
-        b=cHgI8T+6dl0c5QvmY+jPTGI3Fml5ooLABkADGz2XWt8RyEwXHfElCQYbWkrIndZHTvvRK5
-        Onzbq0bjdDoTP8Dg==
+         references:references; bh=SRk3RrJ8+RSaiZTRwxMk0fG1NuTGaGpFKdBZXu8mJKE=;
+        b=GpdL477IqUbVLYXts40m+nkntEs4l/SFSgjl8WTxVs9fG2Y4NeqfbJbNj3fY+ekDTnUTf2
+        CVV1j8YeN8LpbeAA==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, David Woodhouse <dwmw@infradead.org>,
@@ -67,12 +67,11 @@ Cc:     x86@kernel.org, David Woodhouse <dwmw@infradead.org>,
         linux-riscv@lists.infradead.org,
         Mark Rutland <mark.rutland@arm.com>,
         Sabin Rapan <sabrapan@amazon.com>
-Subject: [patch 03/37] x86/smpboot: Avoid pointless delay calibration is TSC
- is synchronized
+Subject: [patch 04/37] x86/smpboot: Rename start_cpu0() to soft_restart_cpu()
 References: <20230414225551.858160935@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Sat, 15 Apr 2023 01:44:18 +0200 (CEST)
+Date:   Sat, 15 Apr 2023 01:44:19 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -83,125 +82,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When TSC is synchronized across sockets then there is no reason in
-calibrating the delay for the first CPU which comes up on a socket.
-
-Just reuse the existing calibration value.
-
-This removes 100ms pointlessly wasted time from CPU hotplug.
+This is used in the SEV play_dead() implementation to re-online CPUs. But
+that has nothing to do with CPU0.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: Tom Lendacky <thomas.lendacky@amd.com>
 ---
- arch/x86/kernel/smpboot.c |   38 ++++++++++++++++++++++++--------------
- arch/x86/kernel/tsc.c     |   20 ++++++++++++++++----
- 2 files changed, 40 insertions(+), 18 deletions(-)
+ arch/x86/include/asm/cpu.h   |    2 +-
+ arch/x86/kernel/callthunks.c |    2 +-
+ arch/x86/kernel/head_32.S    |   10 +++++-----
+ arch/x86/kernel/head_64.S    |   10 +++++-----
+ arch/x86/kernel/sev.c        |    2 +-
+ 5 files changed, 13 insertions(+), 13 deletions(-)
 
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -178,10 +178,7 @@ static void smp_callin(void)
+--- a/arch/x86/include/asm/cpu.h
++++ b/arch/x86/include/asm/cpu.h
+@@ -30,7 +30,7 @@ struct x86_cpu {
+ #ifdef CONFIG_HOTPLUG_CPU
+ extern int arch_register_cpu(int num);
+ extern void arch_unregister_cpu(int);
+-extern void start_cpu0(void);
++extern void soft_restart_cpu(void);
+ #ifdef CONFIG_DEBUG_HOTPLUG_CPU0
+ extern int _debug_hotplug_cpu(int cpu, int action);
+ #endif
+--- a/arch/x86/kernel/callthunks.c
++++ b/arch/x86/kernel/callthunks.c
+@@ -134,7 +134,7 @@ static bool skip_addr(void *dest)
+ 	if (dest == ret_from_fork)
+ 		return true;
+ #ifdef CONFIG_HOTPLUG_CPU
+-	if (dest == start_cpu0)
++	if (dest == soft_restart_cpu)
+ 		return true;
+ #endif
+ #ifdef CONFIG_FUNCTION_TRACER
+--- a/arch/x86/kernel/head_32.S
++++ b/arch/x86/kernel/head_32.S
+@@ -140,16 +140,16 @@ SYM_CODE_END(startup_32)
+ 
+ #ifdef CONFIG_HOTPLUG_CPU
+ /*
+- * Boot CPU0 entry point. It's called from play_dead(). Everything has been set
+- * up already except stack. We just set up stack here. Then call
+- * start_secondary().
++ * Entry point for soft restart of a CPU. Invoked from xxx_play_dead() for
++ * restarting the boot CPU or for restarting SEV guest CPUs after CPU hot
++ * unplug. Everything is set up already except the stack.
+  */
+-SYM_FUNC_START(start_cpu0)
++SYM_FUNC_START(soft_restart_cpu)
+ 	movl initial_stack, %ecx
+ 	movl %ecx, %esp
+ 	call *(initial_code)
+ 1:	jmp 1b
+-SYM_FUNC_END(start_cpu0)
++SYM_FUNC_END(soft_restart_cpu)
+ #endif
+ 
+ /*
+--- a/arch/x86/kernel/head_64.S
++++ b/arch/x86/kernel/head_64.S
+@@ -377,11 +377,11 @@ SYM_CODE_END(secondary_startup_64)
+ 
+ #ifdef CONFIG_HOTPLUG_CPU
+ /*
+- * Boot CPU0 entry point. It's called from play_dead(). Everything has been set
+- * up already except stack. We just set up stack here. Then call
+- * start_secondary() via .Ljump_to_C_code.
++ * Entry point for soft restart of a CPU. Invoked from xxx_play_dead() for
++ * restarting the boot CPU or for restarting SEV guest CPUs after CPU hot
++ * unplug. Everything is set up already except the stack.
+  */
+-SYM_CODE_START(start_cpu0)
++SYM_CODE_START(soft_restart_cpu)
+ 	ANNOTATE_NOENDBR
+ 	UNWIND_HINT_EMPTY
+ 
+@@ -390,7 +390,7 @@ SYM_CODE_START(start_cpu0)
+ 	movq	TASK_threadsp(%rcx), %rsp
+ 
+ 	jmp	.Ljump_to_C_code
+-SYM_CODE_END(start_cpu0)
++SYM_CODE_END(soft_restart_cpu)
+ #endif
+ 
+ #ifdef CONFIG_AMD_MEM_ENCRYPT
+--- a/arch/x86/kernel/sev.c
++++ b/arch/x86/kernel/sev.c
+@@ -1326,7 +1326,7 @@ static void sev_es_play_dead(void)
+ 	 * If we get here, the VCPU was woken up again. Jump to CPU
+ 	 * startup code to get it back online.
  	 */
- 	apic_ap_setup();
- 
--	/*
--	 * Save our processor parameters. Note: this information
--	 * is needed for clock calibration.
--	 */
-+	/* Save our processor parameters. */
- 	smp_store_cpu_info(cpuid);
- 
- 	/*
-@@ -192,14 +189,6 @@ static void smp_callin(void)
- 
- 	ap_init_aperfmperf();
- 
--	/*
--	 * Get our bogomips.
--	 * Update loops_per_jiffy in cpu_data. Previous call to
--	 * smp_store_cpu_info() stored a value that is close but not as
--	 * accurate as the value just calculated.
--	 */
--	calibrate_delay();
--	cpu_data(cpuid).loops_per_jiffy = loops_per_jiffy;
- 	pr_debug("Stack at about %p\n", &cpuid);
- 
- 	wmb();
-@@ -212,8 +201,24 @@ static void smp_callin(void)
- 	cpumask_set_cpu(cpuid, cpu_callin_mask);
+-	start_cpu0();
++	soft_restart_cpu();
  }
- 
-+static void ap_calibrate_delay(void)
-+{
-+	/*
-+	 * Calibrate the delay loop and update loops_per_jiffy in cpu_data.
-+	 * smp_store_cpu_info() stored a value that is close but not as
-+	 * accurate as the value just calculated.
-+	 *
-+	 * As this is invoked after the TSC synchronization check,
-+	 * calibrate_delay_is_known() will skip the calibration routine
-+	 * when TSC is synchronized across sockets.
-+	 */
-+	calibrate_delay();
-+	cpu_data(smp_processor_id()).loops_per_jiffy = loops_per_jiffy;
-+}
-+
- static int cpu0_logical_apicid;
- static int enable_start_cpu0;
-+
- /*
-  * Activate a secondary processor.
-  */
-@@ -240,10 +245,15 @@ static void notrace start_secondary(void
- 
- 	/* otherwise gcc will move up smp_processor_id before the cpu_init */
- 	barrier();
-+	/* Check TSC synchronization with the control CPU: */
-+	check_tsc_sync_target();
-+
- 	/*
--	 * Check TSC synchronization with the boot CPU:
-+	 * Calibrate the delay loop after the TSC synchronization check.
-+	 * This allows to skip the calibration when TSC is synchronized
-+	 * across sockets.
- 	 */
--	check_tsc_sync_target();
-+	ap_calibrate_delay();
- 
- 	speculative_store_bypass_ht_init();
- 
---- a/arch/x86/kernel/tsc.c
-+++ b/arch/x86/kernel/tsc.c
-@@ -1598,10 +1598,7 @@ void __init tsc_init(void)
- 
- #ifdef CONFIG_SMP
- /*
-- * If we have a constant TSC and are using the TSC for the delay loop,
-- * we can skip clock calibration if another cpu in the same socket has already
-- * been calibrated. This assumes that CONSTANT_TSC applies to all
-- * cpus in the socket - this should be a safe assumption.
-+ * Check whether existing calibration data can be reused.
-  */
- unsigned long calibrate_delay_is_known(void)
- {
-@@ -1609,6 +1606,21 @@ unsigned long calibrate_delay_is_known(v
- 	int constant_tsc = cpu_has(&cpu_data(cpu), X86_FEATURE_CONSTANT_TSC);
- 	const struct cpumask *mask = topology_core_cpumask(cpu);
- 
-+	/*
-+	 * If TSC has constant frequency and TSC is synchronized across
-+	 * sockets then reuse CPU0 calibration.
-+	 */
-+	if (constant_tsc && !tsc_unstable)
-+		return cpu_data(0).loops_per_jiffy;
-+
-+	/*
-+	 * If TSC has constant frequency and TSC is not synchronized across
-+	 * sockets and this is not the first CPU in the socket, then reuse
-+	 * the calibration value of an already online CPU on that socket.
-+	 *
-+	 * This assumes that CONSTANT_TSC is consistent for all CPUs in a
-+	 * socket.
-+	 */
- 	if (!constant_tsc || !mask)
- 		return 0;
- 
+ #else  /* CONFIG_HOTPLUG_CPU */
+ #define sev_es_play_dead	native_play_dead
 
