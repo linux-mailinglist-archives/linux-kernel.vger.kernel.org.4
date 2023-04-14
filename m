@@ -2,145 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A6356E1E41
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:28:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF3676E1E42
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:29:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230204AbjDNI2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 04:28:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37764 "EHLO
+        id S229457AbjDNI3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 04:29:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230161AbjDNI1y (ORCPT
+        with ESMTP id S230339AbjDNI24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 04:27:54 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83DE265BA;
-        Fri, 14 Apr 2023 01:27:20 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id 98e67ed59e1d1-2470e93ea71so389614a91.0;
-        Fri, 14 Apr 2023 01:27:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681460838; x=1684052838;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zzKR2LyQ2p4nmkCMjGPaXnh+dnHbOHXDFbLSWiv9aKI=;
-        b=pM63Dvia+E1GA/XPoR8yqc3McXi+HI6vownSSu1Fi6nTFmNoACVjzvBTn9oCiSrMUV
-         hb2DVaTgQA/i7bGsF9dq8MVSYOoATnHkoIkzB1aJE6WxuVAiVpdecoftLep5KtY+ekzn
-         eFPyeQlxM2pzEe05qrBWCDhy0eFjlskEgA4Zl+cSJIiGAFyfy2tOens5i6mL3vu3DXCs
-         ZZh2uAuH9p2T7bv2IW0X1Yh9jeNlW/bfFSBnoqblxRwg/Ait2pkzw+hjyg2zQTuRsaH6
-         D/JebzTPtPTERsPhssTCBbDhOXhdzXqRmc2aG9y2S/TnTuV1907FQdJcLTr73xSNO6R1
-         KgcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681460838; x=1684052838;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zzKR2LyQ2p4nmkCMjGPaXnh+dnHbOHXDFbLSWiv9aKI=;
-        b=d3sjl2p18rNbTQNsRe5JhiRqR8Km8b8NFZArcMLImrSf8db6BcpjVKdSAuepJCF3Id
-         4vKU1zwc8Ce64qjfUqiDvRggykAMVtVEJfy3S9BHiStCkfZ12v9HLAyKnIsDRd1qoRmd
-         EmnDB3WmU7/GNR0TdTOzaIuUHTdxoG7AwqLlOzn/JGEPhv7Lz4Q/PkH37ClIQuuhEt4b
-         od1U+91Y22NBWugWI0ZtoZv7yVCrzvQWtSV+7qN/ZFKsawNe3ztiJKt1sd8ro1378MZf
-         grmbTp7OiqzcTEnbDmHJFAsrcrFDeCkWA8NMwkoB+inygDV4Z2bj4hIAkezC01fi2VXK
-         RdZw==
-X-Gm-Message-State: AAQBX9e8LXVGIQD1b7CeMEVi9J4KX08QkxH2WJUJXvttVwR5Fu4ZKeyE
-        HpsPGGHew7Raug3+ts47mQE=
-X-Google-Smtp-Source: AKy350YkpGycY5TWD4lm+/xAK9z9lP/zyakLMPoDbXGP17+eOwwTeByNHA52Oc58U1QToDT7OJpGjg==
-X-Received: by 2002:a05:6a00:1744:b0:63a:d2e4:cc35 with SMTP id j4-20020a056a00174400b0063ad2e4cc35mr8012882pfc.31.1681460838532;
-        Fri, 14 Apr 2023 01:27:18 -0700 (PDT)
-Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id 23-20020aa79257000000b0062df30c7e7esm2537400pfp.136.2023.04.14.01.27.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 01:27:18 -0700 (PDT)
-Message-ID: <7396daa9-e697-5fd6-2e7d-0164302070dc@gmail.com>
-Date:   Fri, 14 Apr 2023 16:27:14 +0800
+        Fri, 14 Apr 2023 04:28:56 -0400
+Received: from cstnet.cn (smtp80.cstnet.cn [159.226.251.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5A21C768D;
+        Fri, 14 Apr 2023 01:28:09 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.141.245])
+        by APP-01 (Coremail) with SMTP id qwCowAAnL5+ODjlkXzDPAw--.24916S2;
+        Fri, 14 Apr 2023 16:27:58 +0800 (CST)
+From:   sunying@nj.iscas.ac.cn
+To:     rostedt@goodmis.org, mhiramat@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linux-trace-kernel@vger.kernel.org,
+        Ying Sun <sunying@nj.iscas.ac.cn>
+Subject: [PATCH v1] trace: add the necessary dependencies of configuration options
+Date:   Fri, 14 Apr 2023 16:27:56 +0800
+Message-Id: <20230414082756.24119-1-sunying@nj.iscas.ac.cn>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v7 04/12] dt-bindings: reset: nuvoton: Document ma35d1
- reset control
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        arnd@arndb.de, schung@nuvoton.com, mjchen@nuvoton.com,
-        Jacky Huang <ychuang3@nuvoton.com>
-References: <20230412053824.106-1-ychuang570808@gmail.com>
- <20230412053824.106-5-ychuang570808@gmail.com>
- <874a1e5c-f82e-68d7-3617-042deb928071@linaro.org>
- <41807e8d-b081-6c91-3fc8-f273770ea493@gmail.com>
- <5a59485e-5421-0cd9-ce51-79cf0fd6da79@linaro.org>
-Content-Language: en-US
-From:   Jacky Huang <ychuang570808@gmail.com>
-In-Reply-To: <5a59485e-5421-0cd9-ce51-79cf0fd6da79@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: qwCowAAnL5+ODjlkXzDPAw--.24916S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Xw1kZryUWr13Ww45JF4ruFg_yoW3Zwb_Za
+        yUJa48Gw4DZryqgrW3WFs3Zr1Fv3y7WFZYv3WUtrZrJw4DKr45GasxJFn8JFsrG39rWF13
+        urWfXrZ3K3WfujkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbaAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr
+        1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r126r1DMcIj6I8E87Iv67AKxVW8Jr0_Cr1UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lw4CEc2x0rVAKj4xx
+        MxkF7I0En4kS14v26r126r1DMxkIecxEwVAFwVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxV
+        CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
+        6r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
+        WUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG
+        6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_Gr
+        UvcSsGvfC2KfnxnUUI43ZEXa7VUj1lk3UUUUU==
+X-Originating-IP: [124.16.141.245]
+X-CM-SenderInfo: 5vxq5xdqj60y4olvutnvoduhdfq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Ying Sun <sunying@nj.iscas.ac.cn>
 
+HAVE_NOP_MCOUNT is used only if the condition
+"ifdef CONFIG_FTRACE_MCOUNT_USE_CC" is met in the Makefile,
+adding a dependency constraint on this configuration option
+ to prevent it from being set ‘y' but not taking effect.
 
-On 2023/4/14 下午 03:46, Krzysztof Kozlowski wrote:
-> On 14/04/2023 02:55, Jacky Huang wrote:
->> Dear Krzysztof,
->>
->>
->> On 2023/4/14 上午 12:58, Krzysztof Kozlowski wrote:
->>> On 12/04/2023 07:38, Jacky Huang wrote:
->>>> From: Jacky Huang <ychuang3@nuvoton.com>
->>>>
->>>> Add the dt-bindings header for Nuvoton ma35d1, that gets shared
->>>> between the reset controller and reset references in the dts.
->>>> Add documentation to describe nuvoton ma35d1 reset driver.
->>>>
->>>> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
->>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>
->>>
->>> This is an automated instruction, just in case, because many review tags
->>> are being ignored. If you do not know the process, here is a short
->>> explanation:
->>>
->>> Please add Acked-by/Reviewed-by/Tested-by tags when posting new
->>> versions, under or above your Signed-off-by tag. Tools like b4 can help
->>> here. However, there's no need to repost patches *only* to add the tags.
->>> The upstream maintainer will do that for acks received on the version
->>> they apply.
->>>
->>> https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
->>>
->>> Best regards,
->>> Krzysztof
->>>
->> Thank you for your explanation. I was not aware of the rules for adding
->> tags, and it was my mistake.
->> I thought that it was necessary for the reviewer to proactively add the
->> "reviewed-by" tag to the patch
-> I proactively added the tag last time. You expect me to review it every
-> time and every time add my tag? You know, we all have better things to do...
->
-> Best regards,
-> Krzysztof
->
+Suggested-by: Yanjie Ren <renyanjie01@gmail.com>
+Signed-off-by: Ying Sun <sunying@nj.iscas.ac.cn>
+---
+ kernel/trace/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Dear Krzysztof,
-
-
-Got it, I will make sure to add review tags for this patch in all 
-subsequent versions.
-Of course, other patches that have received review tags should also be 
-included.
-
-
-Best regards,
-Jacky Huang
-
+diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+index 8cf97fa4a4b3..c640f405cc91 100644
+--- a/kernel/trace/Kconfig
++++ b/kernel/trace/Kconfig
+@@ -77,6 +77,7 @@ config HAVE_FENTRY
+ 
+ config HAVE_NOP_MCOUNT
+ 	bool
++	depends on FTRACE_MCOUNT_USE_CC
+ 	help
+ 	  Arch supports the gcc options -pg with -mrecord-mcount and -nop-mcount
+ 
+-- 
+2.17.1
 
