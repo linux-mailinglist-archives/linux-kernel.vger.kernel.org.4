@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E32046E1E0C
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8152E6E1E0E
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:23:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbjDNIXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 04:23:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33002 "EHLO
+        id S230192AbjDNIXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 04:23:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbjDNIXZ (ORCPT
+        with ESMTP id S230003AbjDNIX2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 04:23:25 -0400
+        Fri, 14 Apr 2023 04:23:28 -0400
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E408E30FD;
-        Fri, 14 Apr 2023 01:23:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF6B6E9D;
+        Fri, 14 Apr 2023 01:23:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681460603; x=1712996603;
+  t=1681460607; x=1712996607;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=lKhCyQDrP3SWVP+Mn5U2yqr9K7pd2gf6DvLZAJNWAYw=;
-  b=C3us+nhnfk6/hNhlG/JKbd6WhQY7SlftA2qG84jea3PzKO6PBZOro3t7
-   CTpxnRp0Myxx28XiTcFjz8AeHDjB1Iit49Ar4GNCBHzjxeADod5FNVWK/
-   JrSV3q754ooJ03E5CuqxCUnwZZwauXiw9uOXgZt4MQeW2a4v5WhlnpUP7
-   d759Twsp25xR73lwo8kBGU5DNXNbEdwwPSXULeA/sIE2C8Exxev+zPTxA
-   dUA4JAcDqBxOaM+U/4S/WErqZ+XZSmlUGgnLcTl811De0HR6e9sprLE97
-   6tR4YleFLbvHkZ1xw8914v9Mp8GLqXD0AafSD4Nec2qW7RUa0GlKCeDkN
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="430708091"
+  bh=Xhw2PFI44xhxatWgOY9IkkDtUpBt0VWfQQBb/Lx2E8k=;
+  b=ahgM5qkA4p9/HBmOgo2SAuiCLd3kduResrfoGooNywsBgx5l1JM8Q9i1
+   xjQyu2bcqAUEQO8YfujHtZ7omMlZNBB/l+43gAv7mww2ICgi8nA49vh4a
+   D3bQWHbdWm2SWI02cjBeVq2e3jnnPDFyFBOGk18P8jjrQ72/jr32sYIHi
+   HhRZP5SjH3DAg8l0UOuPc+loFyRXBfX3DzdVTHXyZOsz00VzywDwKCkWR
+   mrHGFH84mR167vx+mm5WhcqDOHZGDaqTaZwYLkigygkxH101+cZ6RINcr
+   uGPJ7jXBSkWjw8s8A/iID5IwkabT0UAwOjIqRbk+6pGBN2JiUCEorDUV6
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="430708106"
 X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
-   d="scan'208";a="430708091"
+   d="scan'208";a="430708106"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 01:23:23 -0700
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 01:23:27 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="683267456"
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="683267482"
 X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
-   d="scan'208";a="683267456"
+   d="scan'208";a="683267482"
 Received: from ahunter6-mobl1.ger.corp.intel.com (HELO ahunter-VirtualBox.home\044ger.corp.intel.com) ([10.249.34.252])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 01:23:20 -0700
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 01:23:23 -0700
 From:   Adrian Hunter <adrian.hunter@intel.com>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     Ingo Molnar <mingo@redhat.com>,
@@ -49,9 +49,9 @@ Cc:     Ingo Molnar <mingo@redhat.com>,
         Namhyung Kim <namhyung@kernel.org>,
         Ian Rogers <irogers@google.com>,
         linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH RFC 1/5] perf: Add ioctl to emit sideband events
-Date:   Fri, 14 Apr 2023 11:22:56 +0300
-Message-Id: <20230414082300.34798-2-adrian.hunter@intel.com>
+Subject: [PATCH RFC 2/5] perf: Add fork to the sideband ioctl
+Date:   Fri, 14 Apr 2023 11:22:57 +0300
+Message-Id: <20230414082300.34798-3-adrian.hunter@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230414082300.34798-1-adrian.hunter@intel.com>
 References: <20230414082300.34798-1-adrian.hunter@intel.com>
@@ -68,224 +68,193 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-perf tools currently read /proc to get this information, but that
-races with changes made by the kernel.
+Support the case of output to an active event, and return an error if
+output is not possible in that case. Set PERF_RECORD_MISC_STATUS_ONLY to
+differentiate the ioctl status-only sideband event from a "real" sideband
+event.
 
-Add an ioctl to output status-only sideband events for a currently
-active event on the current CPU. Using timestamps, these status-only
-sideband events will be correctly ordered with respect to "real"
-sideband events.
-
-The assumption is a user will:
-	- open and enable a dummy event to track sideband events
-	- call the new ioctl to get sideband information for currently
-	  running processes as needed
-	- enable the remaining selected events
-
-The initial sideband events to be supported will be: fork, namespaces, comm
-and mmap.
-
-Add a new misc flag PERF_RECORD_MISC_STATUS_ONLY to differentiate "real"
-sideband events from status-only sideband events.
-
-The limitation that the event must be active is significant. The ioctl
-caller must either:
-	i)  For a CPU context, set CPU affinity to the correct CPU.
-	    Note, obviously that would not need to be done for system-wide
-	    tracing on all CPUs. It would also only need to be done for the
-	    period of tracing when the ioctl is to be used.
-	ii) Use an event opened for the current process on all CPUs.
-	    Note, if such an additional event is needed, it would also use
-	    additional memory from the user's perf_event_mlock_kb /
-	    RLIMIT_MEMLOCK limit.
+Set the fork parent pid/tid to the real parent for a thread group leader,
+or to the thread group leader otherwise.
 
 Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 ---
- include/uapi/linux/perf_event.h | 19 ++++++-
- kernel/events/core.c            | 87 ++++++++++++++++++++++++++++++++-
- 2 files changed, 103 insertions(+), 3 deletions(-)
+ kernel/events/core.c | 88 ++++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 73 insertions(+), 15 deletions(-)
 
-diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
-index 37675437b768..d44fb0f65484 100644
---- a/include/uapi/linux/perf_event.h
-+++ b/include/uapi/linux/perf_event.h
-@@ -541,6 +541,18 @@ struct perf_event_query_bpf {
- 	__u32	ids[];
- };
- 
-+enum perf_event_emit_flag {
-+	PERF_EVENT_EMIT_FORK		= 1U << 0,
-+	PERF_EVENT_EMIT_NAMESPACES	= 1U << 1,
-+	PERF_EVENT_EMIT_COMM		= 1U << 2,
-+	PERF_EVENT_EMIT_MMAP		= 1U << 3,
-+};
-+
-+struct perf_event_pid_sb {
-+	__u32	pid;
-+	__u32	emit_flags; /* Refer perf_event_emit_flag */
-+};
-+
- /*
-  * Ioctls that can be done on a perf event fd:
-  */
-@@ -556,6 +568,7 @@ struct perf_event_query_bpf {
- #define PERF_EVENT_IOC_PAUSE_OUTPUT		_IOW('$', 9, __u32)
- #define PERF_EVENT_IOC_QUERY_BPF		_IOWR('$', 10, struct perf_event_query_bpf *)
- #define PERF_EVENT_IOC_MODIFY_ATTRIBUTES	_IOW('$', 11, struct perf_event_attr *)
-+#define PERF_EVENT_IOC_EMIT_SIDEBAND		_IOW('$', 12, struct perf_event_pid_sb *)
- 
- enum perf_event_ioc_flags {
- 	PERF_IOC_FLAG_GROUP		= 1U << 0,
-@@ -743,12 +756,13 @@ struct perf_event_mmap_page {
-  * The current state of perf_event_header::misc bits usage:
-  * ('|' used bit, '-' unused bit)
-  *
-- *  012         CDEF
-- *  |||---------||||
-+ *  012        BCDEF
-+ *  |||--------|||||
-  *
-  *  Where:
-  *    0-2     CPUMODE_MASK
-  *
-+ *    B       STATUS_ONLY
-  *    C       PROC_MAP_PARSE_TIMEOUT
-  *    D       MMAP_DATA / COMM_EXEC / FORK_EXEC / SWITCH_OUT
-  *    E       MMAP_BUILD_ID / EXACT_IP / SCHED_OUT_PREEMPT
-@@ -763,6 +777,7 @@ struct perf_event_mmap_page {
- #define PERF_RECORD_MISC_GUEST_KERNEL		(4 << 0)
- #define PERF_RECORD_MISC_GUEST_USER		(5 << 0)
- 
-+#define PERF_RECORD_MISC_STATUS_ONLY		(1 << 11)
- /*
-  * Indicates that /proc/PID/maps parsing are truncated by time out.
-  */
 diff --git a/kernel/events/core.c b/kernel/events/core.c
-index fb3e436bcd4a..5cbcc6851587 100644
+index 5cbcc6851587..4e76596d3bfb 100644
 --- a/kernel/events/core.c
 +++ b/kernel/events/core.c
-@@ -5797,6 +5797,7 @@ static int perf_event_set_output(struct perf_event *event,
- static int perf_event_set_filter(struct perf_event *event, void __user *arg);
- static int perf_copy_attr(struct perf_event_attr __user *uattr,
- 			  struct perf_event_attr *attr);
-+static int perf_event_emit_sideband(struct perf_event *event, void __user *arg);
- 
- static long _perf_ioctl(struct perf_event *event, unsigned int cmd, unsigned long arg)
- {
-@@ -5924,6 +5925,9 @@ static long perf_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
- 	if (ret)
- 		return ret;
- 
-+	if (cmd == PERF_EVENT_IOC_EMIT_SIDEBAND)
-+		return perf_event_emit_sideband(event, (void __user *)arg);
-+
- 	ctx = perf_event_ctx_lock(event);
- 	ret = _perf_ioctl(event, cmd, arg);
- 	perf_event_ctx_unlock(event, ctx);
-@@ -5940,6 +5944,7 @@ static long perf_compat_ioctl(struct file *file, unsigned int cmd,
- 	case _IOC_NR(PERF_EVENT_IOC_ID):
- 	case _IOC_NR(PERF_EVENT_IOC_QUERY_BPF):
- 	case _IOC_NR(PERF_EVENT_IOC_MODIFY_ATTRIBUTES):
-+	case _IOC_NR(PERF_EVENT_IOC_EMIT_SIDEBAND):
- 		/* Fix up pointer size (usually 4 -> 8 in 32-on-64-bit case */
- 		if (_IOC_SIZE(cmd) == sizeof(compat_uptr_t)) {
- 			cmd &= ~IOCSIZE_MASK;
-@@ -12277,7 +12282,7 @@ perf_check_permission(struct perf_event_attr *attr, struct task_struct *task)
- 	unsigned int ptrace_mode = PTRACE_MODE_READ_REALCREDS;
- 	bool is_capable = perfmon_capable();
- 
--	if (attr->sigtrap) {
-+	if (attr && attr->sigtrap) {
- 		/*
- 		 * perf_event_attr::sigtrap sends signals to the other task.
- 		 * Require the current task to also have CAP_KILL.
-@@ -12810,6 +12815,86 @@ perf_event_create_kernel_counter(struct perf_event_attr *attr, int cpu,
+@@ -7948,6 +7948,54 @@ perf_iterate_sb(perf_iterate_f output, void *data,
+ 	rcu_read_unlock();
  }
- EXPORT_SYMBOL_GPL(perf_event_create_kernel_counter);
  
-+static int perf_event_emit_fork(struct perf_event *event, struct task_struct *task)
++typedef int (perf_output_f)(struct perf_event *event, void *data);
++
++static int perf_event_output_sb(struct perf_event *event, perf_output_f output, void *data)
 +{
-+	return -EINVAL;
-+}
++	int err = -ENOENT;
 +
-+static int perf_event_emit_namespaces(struct perf_event *event, struct task_struct *task)
-+{
-+	return -EINVAL;
-+}
++	preempt_disable();
 +
-+static int perf_event_emit_comm(struct perf_event *event, struct task_struct *task)
-+{
-+	return -EINVAL;
-+}
++	if (event->state != PERF_EVENT_STATE_ACTIVE ||
++	    !event_filter_match(event) ||
++	    READ_ONCE(event->oncpu) != smp_processor_id())
++		goto out;
 +
-+static int perf_event_emit_mmap(struct perf_event *event, struct task_struct *task)
-+{
-+	return -EINVAL;
-+}
-+
-+static int perf_event_emit_sideband(struct perf_event *event, void __user *arg)
-+{
-+	struct perf_event_pid_sb pid_sb;
-+	struct perf_event_context *ctx;
-+	struct task_struct *task;
-+	int err;
-+
-+	if (copy_from_user(&pid_sb, arg, sizeof(pid_sb)))
-+		return -EFAULT;
-+
-+	if (pid_sb.emit_flags & ~(PERF_EVENT_EMIT_FORK |
-+				  PERF_EVENT_EMIT_NAMESPACES |
-+				  PERF_EVENT_EMIT_COMM |
-+				  PERF_EVENT_EMIT_MMAP))
-+		return -EINVAL;
-+
-+	task = find_lively_task_by_vpid(pid_sb.pid);
-+	if (IS_ERR(task))
-+		return PTR_ERR(task);
-+
-+	err = down_read_interruptible(&task->signal->exec_update_lock);
-+	if (err)
-+		goto out_put_task;
-+
-+	/* Validate access to pid (same as perf_event_open) */
-+	err = -EACCES;
-+	if (!perf_check_permission(NULL, task))
-+		goto out_cred;
-+
-+	ctx = perf_event_ctx_lock(event);
-+
-+	if (pid_sb.emit_flags & PERF_EVENT_EMIT_FORK) {
-+		err = perf_event_emit_fork(event, task);
-+		if (err)
-+			goto out_ctx;
-+	}
-+	if (pid_sb.emit_flags & PERF_EVENT_EMIT_NAMESPACES) {
-+		err = perf_event_emit_namespaces(event, task);
-+		if (err)
-+			goto out_ctx;
-+	}
-+	if (pid_sb.emit_flags & PERF_EVENT_EMIT_COMM) {
-+		err = perf_event_emit_comm(event, task);
-+		if (err)
-+			goto out_ctx;
-+	}
-+	if (pid_sb.emit_flags & PERF_EVENT_EMIT_MMAP) {
-+		err = perf_event_emit_mmap(event, task);
-+		if (err)
-+			goto out_ctx;
-+	}
-+out_ctx:
-+	perf_event_ctx_unlock(event, ctx);
-+out_cred:
-+	up_read(&task->signal->exec_update_lock);
-+out_put_task:
-+	put_task_struct(task);
++	err = output(event, data);
++out:
++	preempt_enable();
 +	return err;
 +}
 +
- static void __perf_pmu_remove(struct perf_event_context *ctx,
- 			      int cpu, struct pmu *pmu,
- 			      struct perf_event_groups *groups,
++struct perf_output_f_data {
++	perf_output_f *func;
++	void *data;
++};
++
++void perf_output_f_wrapper(struct perf_event *event, void *data)
++{
++	struct perf_output_f_data *f_data = data;
++
++	f_data->func(event, f_data->data);
++}
++
++static int perf_output_sb(perf_output_f output, void *data,
++			  struct perf_event_context *task_ctx,
++			  struct perf_event *event)
++{
++	struct perf_output_f_data f_data = {
++		.func = output,
++		.data = data,
++	};
++
++	if (event)
++		return perf_event_output_sb(event, output, data);
++
++	perf_iterate_sb(perf_output_f_wrapper, &f_data, task_ctx);
++
++	return 0;
++}
++
+ /*
+  * Clear all file-based filters at exec, they'll have to be
+  * re-instated when/if these objects are mmapped again.
+@@ -8107,8 +8155,7 @@ static int perf_event_task_match(struct perf_event *event)
+ 	       event->attr.task;
+ }
+ 
+-static void perf_event_task_output(struct perf_event *event,
+-				   void *data)
++static int perf_event_task_output(struct perf_event *event, void *data)
+ {
+ 	struct perf_task_event *task_event = data;
+ 	struct perf_output_handle handle;
+@@ -8117,7 +8164,7 @@ static void perf_event_task_output(struct perf_event *event,
+ 	int ret, size = task_event->event_id.header.size;
+ 
+ 	if (!perf_event_task_match(event))
+-		return;
++		return -ENOENT;
+ 
+ 	perf_event_header__init_id(&task_event->event_id.header, &sample, event);
+ 
+@@ -8134,6 +8181,14 @@ static void perf_event_task_output(struct perf_event *event,
+ 							task->real_parent);
+ 		task_event->event_id.ptid = perf_event_pid(event,
+ 							task->real_parent);
++	} else if (task_event->event_id.header.misc & PERF_RECORD_MISC_STATUS_ONLY) {
++		if (thread_group_leader(task)) {
++			task_event->event_id.ppid = perf_event_pid(event, task->real_parent);
++			task_event->event_id.ptid = perf_event_tid(event, task->real_parent);
++		} else {
++			task_event->event_id.ppid = perf_event_pid(event, task);
++			task_event->event_id.ptid = perf_event_pid(event, task);
++		}
+ 	} else {  /* PERF_RECORD_FORK */
+ 		task_event->event_id.ppid = perf_event_pid(event, current);
+ 		task_event->event_id.ptid = perf_event_tid(event, current);
+@@ -8148,18 +8203,19 @@ static void perf_event_task_output(struct perf_event *event,
+ 	perf_output_end(&handle);
+ out:
+ 	task_event->event_id.header.size = size;
++	return ret;
+ }
+ 
+-static void perf_event_task(struct task_struct *task,
+-			      struct perf_event_context *task_ctx,
+-			      int new)
++static int perf_event_task(struct task_struct *task,
++			   struct perf_event_context *task_ctx,
++			   int new, struct perf_event *event)
+ {
+ 	struct perf_task_event task_event;
+ 
+ 	if (!atomic_read(&nr_comm_events) &&
+ 	    !atomic_read(&nr_mmap_events) &&
+ 	    !atomic_read(&nr_task_events))
+-		return;
++		return -ENOENT;
+ 
+ 	task_event = (struct perf_task_event){
+ 		.task	  = task,
+@@ -8167,7 +8223,7 @@ static void perf_event_task(struct task_struct *task,
+ 		.event_id    = {
+ 			.header = {
+ 				.type = new ? PERF_RECORD_FORK : PERF_RECORD_EXIT,
+-				.misc = 0,
++				.misc = event ? PERF_RECORD_MISC_STATUS_ONLY : 0,
+ 				.size = sizeof(task_event.event_id),
+ 			},
+ 			/* .pid  */
+@@ -8178,14 +8234,12 @@ static void perf_event_task(struct task_struct *task,
+ 		},
+ 	};
+ 
+-	perf_iterate_sb(perf_event_task_output,
+-		       &task_event,
+-		       task_ctx);
++	return perf_output_sb(perf_event_task_output, &task_event, task_ctx, event);
+ }
+ 
+ void perf_event_fork(struct task_struct *task)
+ {
+-	perf_event_task(task, NULL, 1);
++	perf_event_task(task, NULL, 1, NULL);
+ 	perf_event_namespaces(task);
+ }
+ 
+@@ -12817,7 +12871,11 @@ EXPORT_SYMBOL_GPL(perf_event_create_kernel_counter);
+ 
+ static int perf_event_emit_fork(struct perf_event *event, struct task_struct *task)
+ {
+-	return -EINVAL;
++	if (!event->attr.comm && !event->attr.mmap && !event->attr.mmap2 &&
++	    !event->attr.mmap_data && !event->attr.task)
++		return -EINVAL;
++
++	return perf_event_task(task, NULL, 1, event);
+ }
+ 
+ static int perf_event_emit_namespaces(struct perf_event *event, struct task_struct *task)
+@@ -13115,7 +13173,7 @@ static void perf_event_exit_task_context(struct task_struct *child)
+ 	 * won't get any samples after PERF_RECORD_EXIT. We can however still
+ 	 * get a few PERF_RECORD_READ events.
+ 	 */
+-	perf_event_task(child, child_ctx, 0);
++	perf_event_task(child, child_ctx, 0, NULL);
+ 
+ 	list_for_each_entry_safe(child_event, next, &child_ctx->event_list, event_entry)
+ 		perf_event_exit_event(child_event, child_ctx);
+@@ -13157,7 +13215,7 @@ void perf_event_exit_task(struct task_struct *child)
+ 	 * child contexts and sets child->perf_event_ctxp[] to NULL.
+ 	 * At this point we need to send EXIT events to cpu contexts.
+ 	 */
+-	perf_event_task(child, NULL, 0);
++	perf_event_task(child, NULL, 0, NULL);
+ }
+ 
+ static void perf_free_event(struct perf_event *event,
 -- 
 2.34.1
 
