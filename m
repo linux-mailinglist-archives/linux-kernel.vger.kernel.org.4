@@ -2,77 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 469AF6E2352
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 14:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC1E46E2357
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 14:33:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbjDNMci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 08:32:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51226 "EHLO
+        id S230263AbjDNMdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 08:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbjDNMcg (ORCPT
+        with ESMTP id S229611AbjDNMdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 08:32:36 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859909EF7
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 05:32:33 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-185-VqRPGaRUPQWesYHLYOoMpg-1; Fri, 14 Apr 2023 13:32:30 +0100
-X-MC-Unique: VqRPGaRUPQWesYHLYOoMpg-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Fri, 14 Apr
- 2023 13:32:27 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Fri, 14 Apr 2023 13:32:27 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     "'Song, Yoong Siang'" <yoong.siang.song@intel.com>,
-        Jesper Dangaard Brouer <jbrouer@redhat.com>,
-        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "Jesper Dangaard Brouer" <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>,
-        Vedang Patel <vedang.patel@intel.com>,
-        "Joseph, Jithu" <jithu.joseph@intel.com>,
-        "Andre Guedes" <andre.guedes@intel.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        "Keller, Jacob E" <jacob.e.keller@intel.com>
-CC:     "Brouer, Jesper" <brouer@redhat.com>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "xdp-hints@xdp-project.net" <xdp-hints@xdp-project.net>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH net v2 1/1] igc: read before write to SRRCTL register
-Thread-Topic: [PATCH net v2 1/1] igc: read before write to SRRCTL register
-Thread-Index: AQHZbnY42u7Gz9ET40eYzbfYWKvVVq8qkCGAgAAQJMCAABqMIA==
-Date:   Fri, 14 Apr 2023 12:32:27 +0000
-Message-ID: <4dc9ea6c77ff49138a49d7f73f7301fd@AcuMS.aculab.com>
-References: <20230414020915.1869456-1-yoong.siang.song@intel.com>
- <8214fb10-8caa-4418-8435-85b6ac27b69e@redhat.com>
- <PH0PR11MB5830D3F9144B61A6959A4A0FD8999@PH0PR11MB5830.namprd11.prod.outlook.com>
-In-Reply-To: <PH0PR11MB5830D3F9144B61A6959A4A0FD8999@PH0PR11MB5830.namprd11.prod.outlook.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 14 Apr 2023 08:33:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29321AF19;
+        Fri, 14 Apr 2023 05:33:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF7C961FA3;
+        Fri, 14 Apr 2023 12:33:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3919FC433EF;
+        Fri, 14 Apr 2023 12:33:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681475586;
+        bh=Y69wMnPQS9vYEGsWc6rHU3GfHiIE/Dgo33xdBBfWBQ0=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=Vew1os5awK/kNZH7RGwefay6icS6yRfzxH4BJLlyuKm7xLVIPDzRDTO2Kx8S/4bzi
+         +Zm6v8hNYVnkBHY7KX1eLVg/lD9oZScQP2Kdo26bNysnCncVP+79XgJfVAKHlfwhG3
+         uNHK7A7PzL8S61TSgxd2RNaPGGhXksInvZIAAwmqffARGsHQFknSrNUrpVNy0gQN1i
+         dqNbjD8yThQSa+SNZ8vd5CGKXnhLwk+IPIZIWAdJYKLiPxP8hPR5QScaMfnNopUuwX
+         NLHY2Gl+v5IYIkd9gKbBRkg2SCryo/jLedFj6+zz1VdIYKw+ti1/nIlmJ4d8guD4y/
+         NlUu6NNeDomnA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] bcma: Add explicit of_device.h include
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20230410232701.1561613-1-robh@kernel.org>
+References: <20230410232701.1561613-1-robh@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     =?utf-8?b?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <168147558198.16522.6525405237382366801.kvalo@kernel.org>
+Date:   Fri, 14 Apr 2023 12:33:05 +0000 (UTC)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,38 +55,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogU29uZywgWW9vbmcgU2lhbmcNCj4gU2VudDogMTQgQXByaWwgMjAyMyAxMjoxNg0KLi4u
-DQo+ID5JIGhhdmUgY2hlY2tlZCBGb3h2aWxsZSBtYW51YWwgZm9yIFNSUkNUTCAoU3BsaXQgYW5k
-IFJlcGxpY2F0aW9uIFJlY2VpdmUNCj4gPkNvbnRyb2wpIHJlZ2lzdGVyIGFuZCBiZWxvdyBHRU5N
-QVNLcyBsb29rcyBjb3JyZWN0Lg0KPiA+DQo+ID4+IC0jZGVmaW5lIElHQ19TUlJDVExfQlNJWkVQ
-S1RfU0hJRlQJCTEwIC8qIFNoaWZ0IF9yaWdodF8gKi8NCj4gPj4gLSNkZWZpbmUgSUdDX1NSUkNU
-TF9CU0laRUhEUlNJWkVfU0hJRlQJCTIgIC8qIFNoaWZ0IF9sZWZ0XyAqLw0KPiA+PiArI2RlZmlu
-ZSBJR0NfU1JSQ1RMX0JTSVpFUEtUX01BU0sJR0VOTUFTSyg2LCAwKQ0KPiA+PiArI2RlZmluZSBJ
-R0NfU1JSQ1RMX0JTSVpFUEtUX1NISUZUCTEwIC8qIFNoaWZ0IF9yaWdodF8gKi8NCj4gPg0KPiA+
-U2hpZnQgZHVlIHRvIDEgS0IgcmVzb2x1dGlvbiBvZiBCU0laRVBLVCAobWFudWFsIGZpZWxkIEJT
-SVpFUEFDS0VUKQ0KPiANCj4gWWEsIDFLID0gQklUKDEwKSwgc28gbmVlZCB0byBzaGlmdCByaWdo
-dCAxMCBiaXRzLg0KDQpJIGJldCB0aGUgY29kZSB3b3VsZCBiZSBlYXNpZXIgdG8gcmVhZCBpZiBp
-dCBkaWQgJ3ZhbHVlIC8gMTAyNHUnLg0KVGhlIG9iamVjdCBjb2RlIHdpbGwgYmUgKG11Y2gpIHRo
-ZSBzYW1lLg0KDQo+ID4+ICsjZGVmaW5lIElHQ19TUlJDVExfQlNJWkVIRFJTSVpFX01BU0sJR0VO
-TUFTSygxMywgOCkNCj4gPj4gKyNkZWZpbmUgSUdDX1NSUkNUTF9CU0laRUhEUlNJWkVfU0hJRlQJ
-MiAgLyogU2hpZnQgX2xlZnRfICovDQo+ID4NCj4gPlRoaXMgc2hpZnQgaXMgc3VzcGljaW91cywg
-YnV0IGFzIHlvdSBpbmhlcml0ZWQgaXQgSSBndWVzcyBpdCB3b3Jrcy4NCj4gPkkgZGlkIHRoZSBt
-YXRoLCBhbmQgaXQgaGFwcGVucyB0byB3b3JrLCBrbm93aW5nIChmcm9tIG1hbnVhbCkgdmFsdWUg
-aXMgaW4gNjQgYnl0ZXMNCj4gPnJlc29sdXRpb24uDQo+IA0KPiBJdCBpcyBpbiA2NCA9IEJJVCg2
-KSByZXNvbHV0aW9uLCBzbyBuZWVkIHRvIHNoaWZ0IHJpZ2h0IDYgYml0cy4NCj4gQnV0IGl0IHN0
-YXJ0IG9uIDh0aCBiaXQsIHNvIG5lZWQgdG8gc2hpZnQgbGVmdCA4IGJpdHMuDQo+IFRodXMsIHRv
-dGFsID0gc2hpZnQgbGVmdCAyIGJpdHMuDQo+IA0KPiBJIGRpbnQgcHV0IHRoZSBleHBsYW5hdGlv
-biBpbnRvIHRoZSBoZWFkZXIgZmlsZSBiZWNhdXNlIGl0IGlzIHRvbyBsZW5ndGh5DQo+IGFuZCB1
-c2VyIGNhbiBrbm93IGZyb20gZGF0YWJvb2suDQo+IA0KPiBIb3cgZG8geW91IGZlZWwgb24gdGhl
-IG5lY2Vzc2FyeSBvZiBleHBsYWluaW5nIHRoZSBzaGlmdGluZyBsb2dpYz8NCg0KTm90IGV2ZXJ5
-b25lIHRyeWluZyB0byBncm9rIHRoZSBjb2RlIHdpbGwgaGF2ZSB0aGUgbWFudWFsLg0KRXZlbiB3
-cml0aW5nICg4IC0gNikgd2lsbCBoZWxwLg0KT3IgKEkgdGhpbmspIGlmIHRoZSB2YWx1ZSBpcyBp
-biBiaXRzIDEzLTggaW4gdW5pdHMgb2YgNjQgdGhlbiBqdXN0Og0KCSgodmFsdWUgPj4gOCkgJiAw
-eDFmKSAqIDY0DQpnY2Mgd2lsbCBkbyBhIHNpbmdsZSBzaGlmdCByaWdodCBhbmQgYSBtYXNrIDlh
-dCBzb21lIHBvaW50KS4NCllvdSBtaWdodCB3YW50IHNvbWUgZGVmaW5lcywgYnV0IGlmIHRoZXkg
-YXJlbid0IHVzZWQgbXVjaA0KanVzdCBjb21tZW50cyB0aGF0IHJlZmVyIHRvIHRoZSBuYW1lcyBp
-biB0aGUgbWFudWFsL2RhdGFzaGVldA0KY2FuIGJlIGVub3VnaC4NCg0KCURhdmlkDQoNCi0NClJl
-Z2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0
-b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykN
-Cg==
+Rob Herring <robh@kernel.org> wrote:
+
+> bcma/main.c uses of_dma_configure() which is declared in of_device.h.
+> of_device.h gets implicitly included by of_platform.h, but that is going
+> to be removed soon.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+
+Patch applied to wireless-next.git, thanks.
+
+666f4ab26c2c bcma: Add explicit of_device.h include
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20230410232701.1561613-1-robh@kernel.org/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
