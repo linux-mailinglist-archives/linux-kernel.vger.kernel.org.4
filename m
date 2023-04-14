@@ -2,130 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71EA86E2C60
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 00:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE43C6E2C5E
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 00:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbjDNWMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 18:12:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51470 "EHLO
+        id S229895AbjDNWMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 18:12:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbjDNWMD (ORCPT
+        with ESMTP id S229721AbjDNWMA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 18:12:03 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5F84227;
-        Fri, 14 Apr 2023 15:11:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681510317; x=1713046317;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WiWXTGVCF+qXlWmQRnmUTBXheyJciBXVKqlJT/z2Yn0=;
-  b=J7UCc0kyPb1fgtVfbS224vXnc9LjO70546hvZabMLsen1iUXOsLTtTDe
-   O37QLlk8XuoRX8wsPdwmEKuG41o5aKdMgznhfAL1zex7xrjer5h62dTIo
-   v1YwOGIOE6YZ4KkjJUHWfa9lNYx7QtfN9FvuDpz/TNWNTU+9RMFKlZ6Dx
-   bgwEVoK5dsAJthPAKapICFkDSkO+IuKGZXyDK2UIrPV5XzqFZ3Ti0ypUe
-   lCHA0uZeZRfrRShNLkQ+NCS1wIxsJ/G4Xku60UdF6zbiDUnf1/q787+TE
-   LSDsD/2XAnP6yHdyFyb8HRPgkmhza6WzJRubc+4GtTvsfvDYcOeRy0vip
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="372450078"
-X-IronPort-AV: E=Sophos;i="5.99,198,1677571200"; 
-   d="scan'208";a="372450078"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 15:10:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="833708633"
-X-IronPort-AV: E=Sophos;i="5.99,198,1677571200"; 
-   d="scan'208";a="833708633"
-Received: from ibaremetalpc.amr.corp.intel.com (HELO desk) ([10.209.10.51])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 15:10:23 -0700
-Date:   Fri, 14 Apr 2023 15:10:17 -0700
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     Binbin Wu <binbin.wu@linux.intel.com>
-Cc:     Chao Gao <chao.gao@intel.com>, kvm@vger.kernel.org,
-        Jiaan Lu <jiaan.lu@intel.com>,
-        Alexandre Chartre <alexandre.chartre@oracle.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Babu Moger <babu.moger@amd.com>,
-        Borislav Petkov <bp@alien8.de>, Borislav Petkov <bp@suse.de>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Matlack <dmatlack@google.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Len Brown <len.brown@intel.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Nikunj A Dadhania <nikunj@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>, x86@kernel.org,
-        Zhang Chen <chen.zhang@intel.com>
-Subject: Re: [RFC PATCH v2 00/11] Intel IA32_SPEC_CTRL Virtualization
-Message-ID: <20230414221017.i4nfrcxrbxlznrxk@desk>
-References: <20230414062545.270178-1-chao.gao@intel.com>
- <e956f4b9-34a1-de7b-2157-0101b586ab46@linux.intel.com>
+        Fri, 14 Apr 2023 18:12:00 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD91C44AE;
+        Fri, 14 Apr 2023 15:11:52 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33EMBanx037917;
+        Fri, 14 Apr 2023 17:11:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1681510296;
+        bh=a0uKTsMKaNvk5uDtPQLpPxerY/DYuoC0qGEIcf/1C7s=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=IJNabqVjScx0220sPMI7p2BoqZ48sUsP3VO/xJ82NdcXb1LijLkJG00auwjgpXv22
+         0yImhfOtcNFQAm77FHHd9eUOmCJnQLcQ1w6V5PX7swnDudtpBfgFIknAaKL5gKupba
+         iKqhYx0/B6iCm4Dj2+3+zIK/yeZL5pH3KFozmi94=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33EMBatK009894
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 14 Apr 2023 17:11:36 -0500
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 14
+ Apr 2023 17:11:36 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Fri, 14 Apr 2023 17:11:36 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33EMBZf4063553;
+        Fri, 14 Apr 2023 17:11:35 -0500
+Date:   Fri, 14 Apr 2023 17:11:35 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Judith Mendez <jm@ti.com>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Andrew Davis <afd@ti.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-can@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <netdev@vger.kernel.org>,
+        Schuyler Patton <spatton@ti.com>
+Subject: Re: [RFC PATCH 4/5] arm64: dts: ti: Enable multiple MCAN for AM62x
+ in MCU MCAN overlay
+Message-ID: <20230414221135.vifinqboqndxdxzw@embark>
+References: <20230413223051.24455-1-jm@ti.com>
+ <20230413223051.24455-5-jm@ti.com>
+ <9ab56180-328e-1416-56cb-bbf71af0c26d@linaro.org>
+ <20230414182925.ya3fe2n6mtyuqotb@detached>
+ <342dd9b0-35cd-1715-ee67-6a6628a3a9a6@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <e956f4b9-34a1-de7b-2157-0101b586ab46@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <342dd9b0-35cd-1715-ee67-6a6628a3a9a6@linaro.org>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 14, 2023 at 05:51:43PM +0800, Binbin Wu wrote:
+On 22:44-20230414, Krzysztof Kozlowski wrote:
+> On 14/04/2023 20:29, Nishanth Menon wrote:
+> >>> +
+> >>> +&cbass_mcu {
+> >>> +	mcu_mcan1: can@4e00000 {
+> >>> +		compatible = "bosch,m_can";
+> >>> +		reg = <0x00 0x4e00000 0x00 0x8000>,
+> >>> +			  <0x00 0x4e08000 0x00 0x200>;
+> >>> +		reg-names = "message_ram", "m_can";
+> >>> +		power-domains = <&k3_pds 188 TI_SCI_PD_EXCLUSIVE>;
+> >>> +		clocks = <&k3_clks 188 6>, <&k3_clks 188 1>;
+> >>> +		clock-names = "hclk", "cclk";
+> >>> +		bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
+> >>> +		pinctrl-names = "default";
+> >>> +		pinctrl-0 = <&mcu_mcan1_pins_default>;
+> >>> +		phys = <&transceiver2>;
+> >>> +		status = "okay";
+> >>
+> >> okay is by default. Why do you need it?
+> > 
+> > mcan is not functional without pinmux, so it has been disabled by
+> > default in SoC. this overlay is supposed to enable it. But this is done
+> > entirely wrongly.
 > 
-> On 4/14/2023 2:25 PM, Chao Gao wrote:
-> > Changes since RFC v1:
-> >   * add two kselftests (patch 10-11)
-> >   * set virtual MSRs also on APs [Pawan]
-> >   * enable "virtualize IA32_SPEC_CTRL" for L2 to prevent L2 from changing
-> >     some bits of IA32_SPEC_CTRL (patch 4)
-> >   * other misc cleanup and cosmetic changes
-> > 
-> > RFC v1: https://lore.kernel.org/lkml/20221210160046.2608762-1-chen.zhang@intel.com/
-> > 
-> > 
-> > This series introduces "virtualize IA32_SPEC_CTRL" support. Here are
-> > introduction and use cases of this new feature.
-> > 
-> > ### Virtualize IA32_SPEC_CTRL
-> > 
-> > "Virtualize IA32_SPEC_CTRL" [1] is a new VMX feature on Intel CPUs. This feature
-> > allows VMM to lock some bits of IA32_SPEC_CTRL MSR even when the MSR is
-> > pass-thru'd to a guest.
-> > 
-> > 
-> > ### Use cases of "virtualize IA32_SPEC_CTRL" [2]
-> > 
-> > Software mitigations like Retpoline and software BHB-clearing sequence depend on
-> > CPU microarchitectures. And guest cannot know exactly the underlying
-> > microarchitecture. When a guest is migrated between processors of different
-> > microarchitectures, software mitigations which work perfectly on previous
-> > microachitecture may be not effective on the new one. To fix the problem, some
-> > hardware mitigations should be used in conjunction with software mitigations.
-> 
-> So even the hardware mitigations are enabled, the software mitigations are
-> still needed, right?
+> Ah, so this is override of existing node? Why not overriding by
+> label/phandle?
 
-Retpoline mitigation is not fully effective when RET can take prediction
-from an alternate predictor. Newer hardware provides a way to disable
-this behavior (using RRSBA_DIS_S bit in MSR SPEC_CTRL).
+Yep, that is how it should be done (as every other node is done for
+mcan):
+a) SoC.dtsi -> introduce mcu_mcan1, disabled since no transciever or
+pinmux, set status = "disabled";
+b) overlay -> use the label and provide the missing properties, set
+status = "okay";
 
-eIBRS is the preferred way to mitigate BTI, but for some reason when a
-guest has deployed retpoline, VMM can make it more effective by
-deploying the relevant hardware control. That is why the above text
-says:
+The series definitely needs a respin.
 
-  "... hardware mitigations should be used in conjunction with software
-  mitigations."
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
