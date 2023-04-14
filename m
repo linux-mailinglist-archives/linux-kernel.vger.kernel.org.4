@@ -2,62 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54D836E2A06
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 20:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58B7F6E2A16
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 20:29:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbjDNS0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 14:26:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56278 "EHLO
+        id S230095AbjDNS3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 14:29:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjDNS0r (ORCPT
+        with ESMTP id S229650AbjDNS3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 14:26:47 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F9810F1;
-        Fri, 14 Apr 2023 11:26:45 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33EIQdKk016155;
-        Fri, 14 Apr 2023 13:26:39 -0500
+        Fri, 14 Apr 2023 14:29:41 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCED44A9;
+        Fri, 14 Apr 2023 11:29:39 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33EITPnC119329;
+        Fri, 14 Apr 2023 13:29:26 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1681496799;
-        bh=f1rWEXtycthMgiKddjaoGBKDDMdqyZ3FLZjxYrgaVsw=;
+        s=ti-com-17Q1; t=1681496966;
+        bh=duGXWm/j3nBzRl2n2W7pepgTfc6KT76GkKbo6Tam8xY=;
         h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=p/XuKZZ1/8xu/6kG1Qr1axqb5WCEaxO55Cn3hyZ6izlfzdV6oAzbfvN53IqupPLi7
-         2r0Vc1COKRhyrAQBdOHpCbA4TckKRyN4va0GUVgA14cfuBt12AhiZ5LJZ/KZgJragy
-         87d3OqseQHA+5UTd+uvBGmir8MBNWslpSpQdWXsY=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33EIQdaU005027
+        b=QoAvJ3muQZL9qdd4rCvaaAubB6BtMFkEeJx+PYr7uIp1IbEt7rDO1fn2gW2tCkkRg
+         s3IGCovqkgj+ywn5JVjsEXgBwHC/WgVDK8I8CldrdvTP9YZYsjZEEvSdnp+qEDNvlb
+         RLwBVC9axPLUc6qVFcZbqcNXCCjt74l2gRWR/B5I=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33EITPmn032250
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 14 Apr 2023 13:26:39 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+        Fri, 14 Apr 2023 13:29:25 -0500
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 14
- Apr 2023 13:26:38 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ Apr 2023 13:29:25 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 14 Apr 2023 13:26:38 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33EIQc3r038020;
-        Fri, 14 Apr 2023 13:26:38 -0500
-Date:   Fri, 14 Apr 2023 13:26:38 -0500
+ Frontend Transport; Fri, 14 Apr 2023 13:29:25 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33EITPdd040108;
+        Fri, 14 Apr 2023 13:29:25 -0500
+Date:   Fri, 14 Apr 2023 13:29:25 -0500
 From:   Nishanth Menon <nm@ti.com>
-To:     Udit Kumar <u-kumar1@ti.com>
-CC:     <linux-arm-kernel@lists.infradead.org>, <afd@ti.com>, <bb@ti.com>,
-        <vaishnav.a@ti.com>, <j-choudhary@ti.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <a-govindraju@ti.com>,
-        <kishon@ti.com>, J Keerthi <j-keerthy@ti.com>
-Subject: Re: [PATCH 1/2] arm64: dts: ti: k3-j7200: Fix  physical address of
- pin
-Message-ID: <20230414182638.watc555ihi2hgkuv@slinging>
-References: <20230414181434.2046049-1-u-kumar1@ti.com>
- <20230414181434.2046049-2-u-kumar1@ti.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Judith Mendez <jm@ti.com>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Andrew Davis <afd@ti.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-can@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <netdev@vger.kernel.org>,
+        Schuyler Patton <spatton@ti.com>
+Subject: Re: [RFC PATCH 4/5] arm64: dts: ti: Enable multiple MCAN for AM62x
+ in MCU MCAN overlay
+Message-ID: <20230414182925.ya3fe2n6mtyuqotb@detached>
+References: <20230413223051.24455-1-jm@ti.com>
+ <20230413223051.24455-5-jm@ti.com>
+ <9ab56180-328e-1416-56cb-bbf71af0c26d@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230414181434.2046049-2-u-kumar1@ti.com>
+In-Reply-To: <9ab56180-328e-1416-56cb-bbf71af0c26d@linaro.org>
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -69,93 +75,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23:44-20230414, Udit Kumar wrote:
-> Fixes: 9ae21ac445e9 ("arm64: dts: ti: k3-j7200: Fix wakeup pinmux range")
+On 10:01-20230414, Krzysztof Kozlowski wrote:
+> On 14/04/2023 00:30, Judith Mendez wrote:
+> > Enable two MCAN in MCU domain. AM62x does not have on-board CAN
+> > transcievers, so instead of changing the DTB permanently, add
+> > MCU MCAN nodes and transceiver nodes to a MCU MCAN overlay.
+> > 
+> > If there are no hardware interrupts rounted to the GIC interrupt
+> > controller for MCAN IP, A53 Linux will not receive hardware
+> > interrupts. If an hrtimer is used to generate software interrupts,
+> > the two required interrupt attributes in the MCAN node do not have
+> > to be included.
+> > 
+> > Signed-off-by: Judith Mendez <jm@ti.com>
+> > ---
+> >  arch/arm64/boot/dts/ti/Makefile               |  2 +-
+> >  .../boot/dts/ti/k3-am625-sk-mcan-mcu.dtso     | 75 +++++++++++++++++++
+> >  2 files changed, 76 insertions(+), 1 deletion(-)
+> >  create mode 100644 arch/arm64/boot/dts/ti/k3-am625-sk-mcan-mcu.dtso
+> > 
+> > diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
+> > index abe15e76b614..c76be3888e4d 100644
+> > --- a/arch/arm64/boot/dts/ti/Makefile
+> > +++ b/arch/arm64/boot/dts/ti/Makefile
+> > @@ -9,7 +9,7 @@
+> >  # alphabetically.
+> >  
+> >  # Boards with AM62x SoC
+> > -k3-am625-sk-mcan-dtbs := k3-am625-sk.dtb k3-am625-sk-mcan-main.dtbo
+> > +k3-am625-sk-mcan-dtbs := k3-am625-sk.dtb k3-am625-sk-mcan-main.dtbo k3-am625-sk-mcan-mcu.dtbo
+> >  dtb-$(CONFIG_ARCH_K3) += k3-am625-beagleplay.dtb
+> >  dtb-$(CONFIG_ARCH_K3) += k3-am625-sk.dtb
+> >  dtb-$(CONFIG_ARCH_K3) += k3-am625-sk-mcan.dtb
+> > diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk-mcan-mcu.dtso b/arch/arm64/boot/dts/ti/k3-am625-sk-mcan-mcu.dtso
+> > new file mode 100644
+> > index 000000000000..777705aea546
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/ti/k3-am625-sk-mcan-mcu.dtso
+> > @@ -0,0 +1,75 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/**
+> > + * DT overlay for MCAN in MCU domain on AM625 SK
+> > + *
+> > + * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
+> > + */
+> > +
+> > +/dts-v1/;
+> > +/plugin/;
+> > +
+> > +#include <dt-bindings/pinctrl/k3.h>
+> > +#include <dt-bindings/soc/ti,sci_pm_domain.h>
 
-In the wrong place.
+NAK.
+
+> > +
+> > +
+> > +&{/} {
+> > +	transceiver2: can-phy1 {
+> > +		compatible = "ti,tcan1042";
+> > +		#phy-cells = <0>;
+> > +		max-bitrate = <5000000>;
+> > +	};
+> > +
+> > +	transceiver3: can-phy2 {
+> > +		compatible = "ti,tcan1042";
+> > +		#phy-cells = <0>;
+> > +		max-bitrate = <5000000>;
+> > +	};
+> > +};
+> > +
+> > +&mcu_pmx0 {
+> > +	mcu_mcan1_pins_default: mcu-mcan1-pins-default {
+> > +		pinctrl-single,pins = <
+> > +			AM62X_IOPAD(0x038, PIN_INPUT, 0) /* (B3) MCU_MCAN0_RX */
+> > +			AM62X_IOPAD(0x034, PIN_OUTPUT, 0) /* (D6) MCU_MCAN0_TX */
+> > +		>;
+> > +	};
+> > +
+> > +	mcu_mcan2_pins_default: mcu-mcan2-pins-default {
+> > +		pinctrl-single,pins = <
+> > +			AM62X_IOPAD(0x040, PIN_INPUT, 0) /* (D4) MCU_MCAN1_RX */
+> > +			AM62X_IOPAD(0x03C, PIN_OUTPUT, 0) /* (E5) MCU_MCAN1_TX */
+> > +		>;
+> > +	};
+> > +};
+> > +
+> > +&cbass_mcu {
+> > +	mcu_mcan1: can@4e00000 {
+> > +		compatible = "bosch,m_can";
+> > +		reg = <0x00 0x4e00000 0x00 0x8000>,
+> > +			  <0x00 0x4e08000 0x00 0x200>;
+> > +		reg-names = "message_ram", "m_can";
+> > +		power-domains = <&k3_pds 188 TI_SCI_PD_EXCLUSIVE>;
+> > +		clocks = <&k3_clks 188 6>, <&k3_clks 188 1>;
+> > +		clock-names = "hclk", "cclk";
+> > +		bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
+> > +		pinctrl-names = "default";
+> > +		pinctrl-0 = <&mcu_mcan1_pins_default>;
+> > +		phys = <&transceiver2>;
+> > +		status = "okay";
 > 
-> wkup_pmx splits into multiple regions. Like
-> 
->     wkup_pmx0 -> 13 pins (WKUP_PADCONFIG 0 - 12)
->     wkup_pmx1 -> 2 pins (WKUP_PADCONFIG 14 - 15)
->     wkup_pmx2 -> 59 pins (WKUP_PADCONFIG 26 - 84)
->     wkup_pmx3 -> 8 pins (WKUP_PADCONFIG 93 - 100)
-> 
-> With this split, pin offset needs to be adjusted to
-> match with new pmx for all pins above wkup_pmx0.
-> 
-> Example a pin under wkup_pmx1 should start from 0 instead of
-> old offset(0x38 WKUP_PADCONFIG 14 offset)
-> 
-> J7200 Datasheet (Table 6-106, Section 6.4 Pin Multiplexing) :
->             https://www.ti.com/lit/ds/symlink/dra821u.pdf
+> okay is by default. Why do you need it?
 
-Drop the preceding whitespace.
+mcan is not functional without pinmux, so it has been disabled by
+default in SoC. this overlay is supposed to enable it. But this is done
+entirely wrongly.
 
-> 
-> Signed-off-by: J Keerthi <j-keerthy@ti.com>
 
-Spell check name please, I think he usually goes with:
-
-Signed-off-by: Keerthy <j-keerthy@ti.com>
-
-If this patch is from Keerthy, the patch should have a "From:"
-
-> Signed-off-by: Udit Kumar <u-kumar1@ti.com>
-> ---
->  .../dts/ti/k3-j7200-common-proc-board.dts     | 28 +++++++++----------
->  1 file changed, 14 insertions(+), 14 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts
-> index 0d39d6b8cc0c..63633e4f6c59 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts
-> +++ b/arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts
-> @@ -83,25 +83,25 @@ vdd_sd_dv: gpio-regulator-TLV71033 {
->  &wkup_pmx2 {
->  	mcu_cpsw_pins_default: mcu-cpsw-pins-default {
->  		pinctrl-single,pins = <
-> -			J721E_WKUP_IOPAD(0x0068, PIN_OUTPUT, 0) /* MCU_RGMII1_TX_CTL */
-> -			J721E_WKUP_IOPAD(0x006c, PIN_INPUT, 0) /* MCU_RGMII1_RX_CTL */
-> -			J721E_WKUP_IOPAD(0x0070, PIN_OUTPUT, 0) /* MCU_RGMII1_TD3 */
-> -			J721E_WKUP_IOPAD(0x0074, PIN_OUTPUT, 0) /* MCU_RGMII1_TD2 */
-> -			J721E_WKUP_IOPAD(0x0078, PIN_OUTPUT, 0) /* MCU_RGMII1_TD1 */
-> -			J721E_WKUP_IOPAD(0x007c, PIN_OUTPUT, 0) /* MCU_RGMII1_TD0 */
-> -			J721E_WKUP_IOPAD(0x0088, PIN_INPUT, 0) /* MCU_RGMII1_RD3 */
-> -			J721E_WKUP_IOPAD(0x008c, PIN_INPUT, 0) /* MCU_RGMII1_RD2 */
-> -			J721E_WKUP_IOPAD(0x0090, PIN_INPUT, 0) /* MCU_RGMII1_RD1 */
-> -			J721E_WKUP_IOPAD(0x0094, PIN_INPUT, 0) /* MCU_RGMII1_RD0 */
-> -			J721E_WKUP_IOPAD(0x0080, PIN_OUTPUT, 0) /* MCU_RGMII1_TXC */
-> -			J721E_WKUP_IOPAD(0x0084, PIN_INPUT, 0) /* MCU_RGMII1_RXC */
-> +			J721E_WKUP_IOPAD(0x0000, PIN_OUTPUT, 0) /* MCU_RGMII1_TX_CTL */
-> +			J721E_WKUP_IOPAD(0x0004, PIN_INPUT, 0) /* MCU_RGMII1_RX_CTL */
-> +			J721E_WKUP_IOPAD(0x0008, PIN_OUTPUT, 0) /* MCU_RGMII1_TD3 */
-> +			J721E_WKUP_IOPAD(0x000c, PIN_OUTPUT, 0) /* MCU_RGMII1_TD2 */
-> +			J721E_WKUP_IOPAD(0x0010, PIN_OUTPUT, 0) /* MCU_RGMII1_TD1 */
-> +			J721E_WKUP_IOPAD(0x0014, PIN_OUTPUT, 0) /* MCU_RGMII1_TD0 */
-> +			J721E_WKUP_IOPAD(0x0020, PIN_INPUT, 0) /* MCU_RGMII1_RD3 */
-> +			J721E_WKUP_IOPAD(0x0024, PIN_INPUT, 0) /* MCU_RGMII1_RD2 */
-> +			J721E_WKUP_IOPAD(0x0028, PIN_INPUT, 0) /* MCU_RGMII1_RD1 */
-> +			J721E_WKUP_IOPAD(0x002c, PIN_INPUT, 0) /* MCU_RGMII1_RD0 */
-> +			J721E_WKUP_IOPAD(0x0018, PIN_OUTPUT, 0) /* MCU_RGMII1_TXC */
-> +			J721E_WKUP_IOPAD(0x001c, PIN_INPUT, 0) /* MCU_RGMII1_RXC */
-
-nice catch.
-
->  		>;
->  	};
->  
->  	mcu_mdio_pins_default: mcu-mdio1-pins-default {
->  		pinctrl-single,pins = <
-> -			J721E_WKUP_IOPAD(0x009c, PIN_OUTPUT, 0) /* (L1) MCU_MDIO0_MDC */
-> -			J721E_WKUP_IOPAD(0x0098, PIN_INPUT, 0) /* (L4) MCU_MDIO0_MDIO */
-> +			J721E_WKUP_IOPAD(0x0034, PIN_OUTPUT, 0) /* (L1) MCU_MDIO0_MDC */
-> +			J721E_WKUP_IOPAD(0x0030, PIN_INPUT, 0) /* (L4) MCU_MDIO0_MDIO */
->  		>;
->  	};
->  };
-> -- 
-> 2.34.1
-> 
+The mcu_mcan1 should first be added to the SoC.dtsi as disabled, then
+set to okay with pinctrl and  transciever in the overlay.
 
 -- 
 Regards,
