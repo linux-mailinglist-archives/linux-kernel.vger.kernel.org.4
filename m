@@ -2,192 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFCF06E1D22
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 09:27:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80AF96E1D24
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 09:28:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbjDNH1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 03:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51302 "EHLO
+        id S229765AbjDNH26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 03:28:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjDNH1w (ORCPT
+        with ESMTP id S229450AbjDNH24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 03:27:52 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7BD85598;
-        Fri, 14 Apr 2023 00:27:46 -0700 (PDT)
-Received: from localhost ([31.220.118.10]) by mrelayeu.kundenserver.de
- (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MhlXE-1qIAwk0mzA-00dmP8; Fri, 14 Apr 2023 09:27:30 +0200
-Date:   Fri, 14 Apr 2023 09:27:29 +0200
-From:   Andreas Klinger <ak@it-klinger.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Fri, 14 Apr 2023 03:28:56 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866308E;
+        Fri, 14 Apr 2023 00:28:55 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1681457333;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=klyLf10+PhwThcHh9soCY6U6nng+9nhGiH3nrdUWw/A=;
+        b=n5HqlRQoJKez1bTC0V+hKAlgNUkdClqh62yfeIbIOIb3LuyNV9P5QSmSk295Rkpnmly3zZ
+        FsynLdTeGSoMYvO61BcUg2zPfC4Pk4a9YJnVKjfWczAd9q+ESnNtAD/OpLgxI3BzBzjMat
+        QWqUc9YI3xIVKy40rqcTxZxsk9Qmb4hVFkBys76EbrcW+xU4VJMKkwBb2oofQJwADRK5Fr
+        kuTcp+Vl0/xOqLyf5vS2SsxMRraQvw9pXM401BUVfioziJlktZ5ITV9Yd5v+fSY9oZKXgD
+        FRavhzjYIuhWbDJ4xwcQnmEwvWJt5RVcQi77fwOl9U+lPKiAsy5v2fLWDCKekA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1681457333;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=klyLf10+PhwThcHh9soCY6U6nng+9nhGiH3nrdUWw/A=;
+        b=skxnFpdMvzah/yejhlu25op+2G5P9jmRb4f8CnwJghZTL+hHVHVO+76Mr3FwEeqgDkjEsG
+        LXzy7pvKmILBBRCQ==
+To:     Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
+Cc:     Stanislav Kinsburskii <stanislav.kinsburskii@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-hyperv@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] dt-bindings: iio: pressure: Support Honeywell mpr
- sensors
-Message-ID: <ZDkAYZV9z6cKCZQo@arbad>
-References: <20230401185717.1b971617@jic23-huawei>
- <27a1d0f4-3a02-c7fd-36a0-07729a136e20@linaro.org>
+Subject: Re: [PATCH 1/2] x86/hyperv: Expose an helper to map PCI interrupts
+In-Reply-To: <20230412163616.GA1535@skinsburskii.localdomain>
+References: <168079806973.14175.17999267023207421381.stgit@skinsburskii.localdomain>
+ <168079870998.14175.16015623662679754647.stgit@skinsburskii.localdomain>
+ <87o7nrzy9e.ffs@tglx> <20230412161951.GA894@skinsburskii.localdomain>
+ <20230412163616.GA1535@skinsburskii.localdomain>
+Date:   Fri, 14 Apr 2023 09:28:52 +0200
+Message-ID: <878reuzzuz.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <27a1d0f4-3a02-c7fd-36a0-07729a136e20@linaro.org>
-X-Provags-ID: V03:K1:9bByc2/Vv78HO6SCY14ArSj2OgJdGpsVQD+YvlmuJV70NcKh5g1
- 5feRyxelQggg0IStorXBSyXJiqkPsMVjgY+M9wNiIfxv5Z7CLeTtrzAd/Zl4mutuzpMahAh
- ChF5O/lG/DpnFoXUIIbi18KcHV4G4LC7Lg/0htwHKO8/BVgmQxKeWdxQn6VeXE2qYmV68U5
- tiaPaPDiFkowEMica0NeQ==
-UI-OutboundReport: notjunk:1;M01:P0:EvaFxQY3prM=;A1KkZ9f6gBjD/LlKX7nFAzyO9kc
- yp3xmnl7HIwSYpaWeV/isHVZXMejfEZOjc3QUMsGXf1HWRKfMtqhPMP8YAe4ZwbRPXUgnylsw
- g32reJ7RC0q5r2IdYQTSKxQ79ncahzT2UY3WRfWXBVzQCNd4cqqN9wROqR8WWNS4LN2c9yQH+
- MM6t0DuyOkDfA67pnaSfTVnVLYUyyLbTSbVMxkxrnJ7INrH3tF5l8pEgcQKgK4ipsLeWrP291
- v4/9kggRtf4MPNRSh9+hEX1TSwoILqc0VAmDBRk1DJsR9LAu4fzjE59gCJvp63umMs88sVd5q
- LnzSuyJ754IpXJR8W/43Oo0lx3dWjxz8keyQthGyD4jKXa1dVpTazt6yIvmiTkIl/w8Z3/B1w
- noPpTXXaV9i69subRWSFNiYlqN10b5nSP1vnLwgGK9k77z5D2xPSDMSdGl8iqIW84D8FRBxe0
- 0eLeQf2Shnt0GzhZ55VsrUFC7b2pT0PkSBM2UQwSOjDni3Xv2iJu2SCpVuIMi9pNJD/p9gYCR
- I3ldxYMrjfHZ74JpLYsMNeBqkLptsugwsy4+rOL/Wsqo7EhjUsFswUd6ixBeut2AP+OpLL2ng
- 7brpjkelIQ8/SP+sXQllbP07s60vq8nvTcEzcAj8I4mGne0QvkymY+M38tcvi84entEVm01BX
- c1lgl2lCNnnr2NUvHnjhSLRT9976z47m1LVVuQiKjw==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+Stanislav!
 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> schrieb am Sa, 01. Apr 11:42:
-> On 01/04/2023 11:09, Andreas Klinger wrote:
-> > Honeywell mpr is a pressure sensor family. There are many different
-> > types with different pressure ranges. The range needs to be set up in
-> > the dt. Therefore new properties honeywell,pmin and honeywell,pmax are
-> > introduced.
-> > 
-> > Add dt-bindings.
-> > 
-> > Signed-off-by: Andreas Klinger <ak@it-klinger.de>
-> > ---
-> >  .../bindings/iio/pressure/honeywell,mpr.yaml  | 74 +++++++++++++++++++
-> >  1 file changed, 74 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/iio/pressure/honeywell,mpr.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/iio/pressure/honeywell,mpr.yaml b/Documentation/devicetree/bindings/iio/pressure/honeywell,mpr.yaml
-> > new file mode 100644
-> > index 000000000000..d6fad6f841cf
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/iio/pressure/honeywell,mpr.yaml
-> > @@ -0,0 +1,74 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/iio/pressure/honeywell,mpr.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Honeywell mpr pressure sensor
-> > +
-> > +maintainers:
-> > +  - Andreas Klinger <ak@it-klinger.de>
-> > +
-> > +description: |
-> > +  Honeywell pressure sensor of type mpr. This sensor has an I2C and SPI interface. Only the I2C
-> 
-> Doesn't look wrapped according to Linux coding style (see Coding style).
-> 
-> > +  interface is implemented.
-> > +
-> > +  There are many subtypes with different pressure ranges available. Therefore the minimum and
-> > +  maximum pressure values of the specific sensor needs to be specified in Pascal.
-> > +
-> > +  Specifications about the devices can be found at:
-> > +    https://prod-edam.honeywell.com/content/dam/honeywell-edam/sps/siot/en-us/products/sensors/  \
-> > +      pressure-sensors/board-mount-pressure-sensors/micropressure-mpr-series/documents/          \
-> > +      sps-siot-mpr-series-datasheet-32332628-ciid-172626.pdf
-> 
-> Lines are not continued, so drop \
-> 
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: honeywell,mpr
-> 
-> You need device specific compatible, not some generic one. Rename also
-> then the filename (should match the compatible).
-> 
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  reset-gpios:
-> > +    description:
-> > +      Optional GPIO for resetting the device. If not present the device is not resetted.
-> 
-> Are you sure it is wrapped properly?
-> 
-> > +    maxItems: 1
-> > +
-> > +  honeywell,pmin:
-> > +    description:
-> > +      Minimum pressure value the sensor can measure in pascal.
-> 
-> Use standard unit suffix:
-> https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/property-units.yaml
+On Wed, Apr 12 2023 at 09:36, Stanislav Kinsburskii wrote:
+> On Wed, Apr 12, 2023 at 09:19:51AM -0700, Stanislav Kinsburskii wrote:
+>> > > +	affinity = irq_data_get_effective_affinity_mask(data);
+>> > > +	cpu = cpumask_first_and(affinity, cpu_online_mask);
+>> > 
+>> > The effective affinity mask of MSI interrupts consists only of online
+>> > CPUs, to be accurate: it has exactly one online CPU set.
+>> > 
+>> > But even if it would have only offline CPUs then the result would be:
+>> > 
+>> >     cpu = nr_cpu_ids
+>> > 
+>> > which is definitely invalid. While a disabled vector targeted to an
+>> > offline CPU is not necessarily invalid.
+>
+> Although this patch only tosses the code and doens't make any functional
+> changes, I guess if the fix for the used cpu id is required, it has to
+> be in a separated patch.
 
-There are only kilopascal as standard unit suffix. But with kilopascal as
-integer the accuracy of the driver is very rough. Therefore I would like to use
-pascal. E. g.:
+Sure.
 
-honeywell,pmin-pascal
+> Would you mind to elaborate more of the problem(s)?
+> Do you mean that the result of cpumask_first_and has to be checked for not
+> being >= nr_cpus_ids?
+> Or do you mean that there is no need to check the irq affinity against
+> cpu_online_mask at all and we can simply take any first bit from the
+> effective affinity mask?
 
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +
-> > +  honeywell,pmax:
-> > +    description:
-> > +      Maximum pressure value the sensor can measure in pascal.
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> 
-> Same.
-> 
-> Why these values are suitable for DT?
+As of today the effective mask of MSI interrupts contains only online
+CPUs. I don't see a reason for that to change.
 
-Technically from the software perspective the sensors are identical with the
-only difference of having different pressure ranges, measurement units and
-transfer functions.
+> Also, could you elaborate more on the disabled vector targeting an
+> offline CPU? Is there any use case for such scenario (in this case we
+> might want to support it)?
 
-If we omit the pressure values and transfer function we'll need 96 compatibles
-and also 96 I2C ids.
+I'm not aware of one today. That was more a theoretical reasoning.
 
-But there are also custom sensor types. For covering them we'll need another
-compatible and just for this case the pressure values and transfer function.
+> I guess the goal of this code is to make sure that hypervisor won't be
+> configured to deliver an MSI to an offline CPU.
 
-> Does it depend on type of sensor (thus it is implied from compatible) or on
-> system setup?
+Correct, but if the interrupt _is_ masked at the MSI level then the
+hypervisor must not deliver an interrupt at all.
 
-For the standard types it can be derived from the type of sensor but for the
-custom types it's not possible.
+The point is that it is valid to target a masked MSI entry to an offline
+CPU under the assumption that the hardware/emulation respects the
+masking. Whether that's a good idea or not is a different question.
 
-So sum up it'll look like this:
+The kernel as of today does not do that. It targets unused but
+configured MSI[-x] entries towards MANAGED_IRQ_SHUTDOWN_VECTOR on CPU0
+for various reasons, one of them being paranoia.
 
-standard types:
-96 compatibles, e. g. "honeywell,mpr-0025pa-a"
+But in principle there is nothing wrong with that and it should either
+succeed or being rejected at the software level and not expose a
+completely invalid CPU number to the hypercall in the first place.
 
-custom types:
-1 compatible: "honeywell,mpr-custom"
-honeywell,pmin-pascal
-honeywell,pmax-pascal
-honeywell,transfer-function
+So if you want to be defensive, then keep the _and(), but then check the
+result for being valid and emit something useful like a pr_warn_once()
+instead of blindly handing the invalid result to the hypercall and then
+have that reject it with some undecipherable error code.
 
+Actually it would not necessarily reach the hypercall because before
+that it dereferences cpumask_of(nr_cpu_ids) here:
 
-Best regards,
+	nr_bank = cpumask_to_vpset(&(intr_desc->target.vp_set),	cpumask_of(cpu));
 
-Andreas
+and explode with a kernel pagefault. If not it will read some random
+adjacent data and try to create a vp_set from it. Neither of that is
+anywhere close to correct.
 
+Thanks,
+
+        tglx
