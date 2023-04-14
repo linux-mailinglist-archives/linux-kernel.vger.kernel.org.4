@@ -2,116 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83EFE6E1971
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 03:11:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4652C6E1975
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 03:12:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbjDNBLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 21:11:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42550 "EHLO
+        id S229786AbjDNBMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 21:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbjDNBLv (ORCPT
+        with ESMTP id S229685AbjDNBM2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 21:11:51 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B71130F3;
-        Thu, 13 Apr 2023 18:11:50 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id 21so8715246plg.12;
-        Thu, 13 Apr 2023 18:11:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681434710; x=1684026710;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+r3aux4yucH9SfhX2QxRIhHkcAuFbVjbJD90j5NQDME=;
-        b=LTiTK/swZV7NKEl/gDQ0Kwa8lG0QRiTNpM1bhk4UU41HQuNi9JvxoHuDzJapEkGiIc
-         blCXwG1azwi7xwTxv9JdkUjPiaEHYdfrDPfkGAll4qwo8RzViZDWtaJ++2ZlZ57+6QfN
-         l92H1aSvlNf55kdN/jJg3bSceXHk+7ExmBszbvjg9gV9W74dT6OjUgpGUlAY7eSnJR6N
-         wjkOarxQXE6IucpxP+Y0m8+M9p47ONQS++51wdNvgMPVVCY1Jb/5tkzEboDUcxINpDtS
-         W5vESFC/L20aEt0ijgh7o3pz8Qf26NJlWX9KSNOdal/6hNzQYpEfHmWRMfCty40vsYH5
-         ns7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681434710; x=1684026710;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+r3aux4yucH9SfhX2QxRIhHkcAuFbVjbJD90j5NQDME=;
-        b=bkvJLZBgEtobCIfQaE/BF2tEJzAoDs4UN+Ha5rm6VdwDvh5rEy4G0sxlIsvwPhlOEA
-         7Jr/p3ywuaaxNXhNQdJufG8U0XZbqmAB0QflHHyESVm2ewYJRe9RszAwDfUScvotocyL
-         Kj5UPDAsOGIajvzHXl0oUfPdSO/Cnu3M9DVj87jZKdsYIPNrRedV2L+QRQ36cHuTE243
-         c3Kx4tt1zuNIhcFG/RviJqGoxRVV2vlGPczu/v4yNDXrBkh7LrAoR7zuOUJTi0AE3r1u
-         vOgSSPhUVrruZ0wk8Ek9QcMofoFIn/SAMoYKir3afhiHoI/ovuFzDXv6akBGCc5M4+zP
-         p/Bg==
-X-Gm-Message-State: AAQBX9enm73TV2EliM6D040mAAVa23T8hgzlFqw3bqbZn1+i9TEXwzaN
-        EdYgcZ4eJdLtrjfDhdUMGko=
-X-Google-Smtp-Source: AKy350alZnXk2cEN2Fxwx4ap7KVspTrFpi0rTKMdrKoiKVa0Y51FgzPgsfTKRY54nCDiY47kD8MhqQ==
-X-Received: by 2002:a17:903:4281:b0:1a1:bf22:2b6e with SMTP id ju1-20020a170903428100b001a1bf222b6emr891939plb.43.1681434709602;
-        Thu, 13 Apr 2023 18:11:49 -0700 (PDT)
-Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id jw19-20020a170903279300b0019f3cc463absm2074638plb.0.2023.04.13.18.11.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Apr 2023 18:11:49 -0700 (PDT)
-Message-ID: <69b0aa3a-f5d2-8310-81ae-61d379db0d3b@gmail.com>
-Date:   Fri, 14 Apr 2023 09:11:46 +0800
+        Thu, 13 Apr 2023 21:12:28 -0400
+Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9248230EE
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 18:12:25 -0700 (PDT)
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 33E0tprI098251;
+        Fri, 14 Apr 2023 08:55:51 +0800 (GMT-8)
+        (envelope-from jammy_huang@aspeedtech.com)
+Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 14 Apr
+ 2023 09:11:51 +0800
+From:   Jammy Huang <jammy_huang@aspeedtech.com>
+To:     <airlied@redhat.com>, <tzimmermann@suse.de>
+CC:     <airlied@gmail.com>, <daniel@ffwll.ch>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] drm/ast: Fix long time waiting on s3/s4 resume
+Date:   Fri, 14 Apr 2023 09:11:47 +0800
+Message-ID: <20230414011147.3858-1-jammy_huang@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v7 05/12] dt-bindings: mfd: syscon: Add nuvoton,ma35d1-sys
- compatible
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        arnd@arndb.de, schung@nuvoton.com, mjchen@nuvoton.com,
-        Jacky Huang <ychuang3@nuvoton.com>
-References: <20230412053824.106-1-ychuang570808@gmail.com>
- <20230412053824.106-6-ychuang570808@gmail.com>
- <d11b6acb-b072-9496-5ad6-0635357394f1@linaro.org>
-From:   Jacky Huang <ychuang570808@gmail.com>
-In-Reply-To: <d11b6acb-b072-9496-5ad6-0635357394f1@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.2.115]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 33E0tprI098251
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Krzysztof,
+In resume, DP's launch function, ast_dp_launch, could wait at most 30
+seconds before timeout to check if DP is enabled.
 
+To avoid this problem, we only check if DP enable or not at driver probe.
 
-On 2023/4/14 上午 12:47, Krzysztof Kozlowski wrote:
-> On 12/04/2023 07:38, Jacky Huang wrote:
->> From: Jacky Huang <ychuang3@nuvoton.com>
->>
->> Add Nuvoton ma35d1 system registers compatible.
->>
->> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
-> What about the tag? Why did you ignore it?
->
-> Also, wasn't this applied? Why do you resend (incorrect version)?
->
-> Best regards,
-> Krzysztof
->
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=217278
+Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+---
+ drivers/gpu/drm/ast/ast_dp.c   | 53 ++++++++++------------------------
+ drivers/gpu/drm/ast/ast_drv.h  |  2 +-
+ drivers/gpu/drm/ast/ast_main.c | 11 +++++--
+ drivers/gpu/drm/ast/ast_post.c |  3 +-
+ 4 files changed, 28 insertions(+), 41 deletions(-)
 
-When I was making this patchset, this patch was still not merged.
-So I'm not sure if I should remove it.
-This is just a resend with no updates. And I will remove this patch
-in the next version as it was applied.
-If possible, please add the following tags for this patch.
+diff --git a/drivers/gpu/drm/ast/ast_dp.c b/drivers/gpu/drm/ast/ast_dp.c
+index 56483860306b..3a4218102631 100644
+--- a/drivers/gpu/drm/ast/ast_dp.c
++++ b/drivers/gpu/drm/ast/ast_dp.c
+@@ -121,51 +121,30 @@ int ast_astdp_read_edid(struct drm_device *dev, u8 *ediddata)
+  */
+ void ast_dp_launch(struct drm_device *dev, u8 bPower)
+ {
+-	u32 i = 0, j = 0, WaitCount = 1;
+-	u8 bDPTX = 0;
++	u32 i = 0;
+ 	u8 bDPExecute = 1;
+-
+ 	struct ast_private *ast = to_ast_private(dev);
+-	// S3 come back, need more time to wait BMC ready.
+-	if (bPower)
+-		WaitCount = 300;
+-
+-
+-	// Wait total count by different condition.
+-	for (j = 0; j < WaitCount; j++) {
+-		bDPTX = ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD1, TX_TYPE_MASK);
+-
+-		if (bDPTX)
+-			break;
+ 
++	// Wait one second then timeout.
++	while (ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD1, COPROCESSOR_LAUNCH) !=
++		COPROCESSOR_LAUNCH) {
++		i++;
++		// wait 100 ms
+ 		msleep(100);
+-	}
+ 
+-	// 0xE : ASTDP with DPMCU FW handling
+-	if (bDPTX == ASTDP_DPMCU_TX) {
+-		// Wait one second then timeout.
+-		i = 0;
+-
+-		while (ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD1, COPROCESSOR_LAUNCH) !=
+-			COPROCESSOR_LAUNCH) {
+-			i++;
+-			// wait 100 ms
+-			msleep(100);
+-
+-			if (i >= 10) {
+-				// DP would not be ready.
+-				bDPExecute = 0;
+-				break;
+-			}
++		if (i >= 10) {
++			// DP would not be ready.
++			bDPExecute = 0;
++			break;
+ 		}
++	}
+ 
+-		if (bDPExecute)
+-			ast->tx_chip_types |= BIT(AST_TX_ASTDP);
++	if (!bDPExecute)
++		drm_err(dev, "Wait DPMCU executing timeout\n");
+ 
+-		ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE5,
+-							(u8) ~ASTDP_HOST_EDID_READ_DONE_MASK,
+-							ASTDP_HOST_EDID_READ_DONE);
+-	}
++	ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE5,
++			       (u8) ~ASTDP_HOST_EDID_READ_DONE_MASK,
++			       ASTDP_HOST_EDID_READ_DONE);
+ }
+ 
+ 
+diff --git a/drivers/gpu/drm/ast/ast_drv.h b/drivers/gpu/drm/ast/ast_drv.h
+index d51b81fea9c8..15e86394be4f 100644
+--- a/drivers/gpu/drm/ast/ast_drv.h
++++ b/drivers/gpu/drm/ast/ast_drv.h
+@@ -498,7 +498,7 @@ struct ast_i2c_chan *ast_i2c_create(struct drm_device *dev);
+ 
+ /* aspeed DP */
+ int ast_astdp_read_edid(struct drm_device *dev, u8 *ediddata);
+-void ast_dp_launch(struct drm_device *dev, u8 bPower);
++void ast_dp_launch(struct drm_device *dev);
+ void ast_dp_power_on_off(struct drm_device *dev, bool no);
+ void ast_dp_set_on_off(struct drm_device *dev, bool no);
+ void ast_dp_set_mode(struct drm_crtc *crtc, struct ast_vbios_mode_info *vbios_mode);
+diff --git a/drivers/gpu/drm/ast/ast_main.c b/drivers/gpu/drm/ast/ast_main.c
+index f83ce77127cb..8ecddf20113f 100644
+--- a/drivers/gpu/drm/ast/ast_main.c
++++ b/drivers/gpu/drm/ast/ast_main.c
+@@ -254,8 +254,13 @@ static int ast_detect_chip(struct drm_device *dev, bool *need_post)
+ 		case 0x0c:
+ 			ast->tx_chip_types = AST_TX_DP501_BIT;
+ 		}
+-	} else if (ast->chip == AST2600)
+-		ast_dp_launch(&ast->base, 0);
++	} else if (ast->chip == AST2600) {
++		if (ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD1, TX_TYPE_MASK) ==
++		    ASTDP_DPMCU_TX) {
++			ast->tx_chip_types = AST_TX_ASTDP_BIT;
++			ast_dp_launch(&ast->base);
++		}
++	}
+ 
+ 	/* Print stuff for diagnostic purposes */
+ 	if (ast->tx_chip_types & AST_TX_NONE_BIT)
+@@ -264,6 +269,8 @@ static int ast_detect_chip(struct drm_device *dev, bool *need_post)
+ 		drm_info(dev, "Using Sil164 TMDS transmitter\n");
+ 	if (ast->tx_chip_types & AST_TX_DP501_BIT)
+ 		drm_info(dev, "Using DP501 DisplayPort transmitter\n");
++	if (ast->tx_chip_types & AST_TX_ASTDP_BIT)
++		drm_info(dev, "Using ASPEED DisplayPort transmitter\n");
+ 
+ 	return 0;
+ }
+diff --git a/drivers/gpu/drm/ast/ast_post.c b/drivers/gpu/drm/ast/ast_post.c
+index 82fd3c8adee1..90e40f59aff7 100644
+--- a/drivers/gpu/drm/ast/ast_post.c
++++ b/drivers/gpu/drm/ast/ast_post.c
+@@ -380,7 +380,8 @@ void ast_post_gpu(struct drm_device *dev)
+ 	ast_set_def_ext_reg(dev);
+ 
+ 	if (ast->chip == AST2600) {
+-		ast_dp_launch(dev, 1);
++		if (ast->tx_chip_types & AST_TX_ASTDP_BIT)
++			ast_dp_launch(dev);
+ 	} else if (ast->config_mode == ast_use_p2a) {
+ 		if (ast->chip == AST2500)
+ 			ast_post_chip_2500(dev);
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Lee Jones <lee@kernel.org>
-
-
-Thank you,
-Jacky Huang
+base-commit: e62252bc55b6d4eddc6c2bdbf95a448180d6a08d
+-- 
+2.25.1
 
