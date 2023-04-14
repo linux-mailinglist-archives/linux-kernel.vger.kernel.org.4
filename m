@@ -2,81 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DB026E27E4
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 18:03:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC2EB6E27EB
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 18:04:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbjDNQD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 12:03:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47838 "EHLO
+        id S229917AbjDNQEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 12:04:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjDNQDN (ORCPT
+        with ESMTP id S231126AbjDNQD4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 12:03:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4861BD0;
-        Fri, 14 Apr 2023 09:03:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4AB5164661;
-        Fri, 14 Apr 2023 16:03:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0F8FC433EF;
-        Fri, 14 Apr 2023 16:03:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681488191;
-        bh=mwpEVmthTFGXrAt5wlQ6rrrdR4nou9HpjsVImzjWbwc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=USod7eYDgwQFm8mGHq42JZkxRBBqcRBcS/dbXR1mcv0RHk+Wj3tekEGltOQYaPwCo
-         dZt0N2BAlkr6VaDxl1+zcnQ3GXIt+opo76fryYak+swZvJtsM2bqb1uTUtJja8cojQ
-         G0pDi3ElubIeYbRzlQk5uxmmMPtQbQcJ9H9VvmtYxvs7lHOBlcRRMq8FCVA1Mkd4Vd
-         9z3c+bLF4BF/auLop7aQd7etKjmN6HitGbyrI4otiF0VABaZqj6k6gVbEONUiN6m79
-         QhHmB2x3VnpL8BlzKgdmhDh7fnsFzM6sPqUr+o+gD//pwJlAt7lN8lq7QDwCwCRrCK
-         duZTIYnnhvPaQ==
-From:   broonie@kernel.org
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>
-Subject: linux-next: manual merge of the nvmem tree with the devicetree tree
-Date:   Fri, 14 Apr 2023 17:03:06 +0100
-Message-Id: <20230414160306.2254545-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Fri, 14 Apr 2023 12:03:56 -0400
+Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8EF7698;
+        Fri, 14 Apr 2023 09:03:51 -0700 (PDT)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1pnLtG-00FwRE-Kq; Sat, 15 Apr 2023 00:03:11 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Sat, 15 Apr 2023 00:03:10 +0800
+Date:   Sat, 15 Apr 2023 00:03:10 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Linus Walleij <linusw@kernel.org>, Imre Kaloz <kaloz@openwrt.org>,
+        Krzysztof Halasa <khalasa@piap.pl>,
+        Corentin Labbe <clabbe@baylibre.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-crypto@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ixp4xx_crypto: fix building wiht 64-bit dma_addr_t
+Message-ID: <ZDl5PkEvkyMM5qF0@gondor.apana.org.au>
+References: <20230414080709.284005-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230414080709.284005-1-arnd@kernel.org>
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On Fri, Apr 14, 2023 at 10:06:56AM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The crypt_ctl structure must be exactly 64 bytes long to work correctly,
+> and it has to be a power-of-two size to allow turning the
+> 64-bit division in crypt_phys2virt() into a shift operation, avoiding
+> the link failure:
+> 
+> ERROR: modpost: "__aeabi_uldivmod" [drivers/crypto/intel/ixp4xx/ixp4xx_crypto.ko] undefined!
+> 
+> The failure now shows up because the driver is available for compile
+> testing after the move, and a previous fix turned the more descriptive
+> BUILD_BUG_ON() into a link error.
+> 
+> Change the variably-sized dma_addr_t into the expected 'u32' type that is
+> needed for the hardware, and reinstate the size check for all 32-bit
+> architectures to simplify debugging if it hits again.
+> 
+> Fixes: 1bc7fdbf2677 ("crypto: ixp4xx - Move driver to drivers/crypto/intel/ixp4xx")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/crypto/intel/ixp4xx/ixp4xx_crypto.c | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
 
-Today's linux-next merge of the nvmem tree got a conflict in:
-
-  include/linux/of.h
-
-between commit:
-
-  82174a0a9c5cf ("of: Move of_device_get_match_data() declaration")
-
-from the devicetree tree and commit:
-
-  82174a0a9c5cf ("of: Move of_device_get_match_data() declaration")
-
-from the nvmem tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --cc include/linux/of.h
-index 6ecde0515677d,9b7a99499ef35..0000000000000
---- a/include/linux/of.h
-+++ b/include/linux/of.h
+Patch applied.  Thanks.
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
