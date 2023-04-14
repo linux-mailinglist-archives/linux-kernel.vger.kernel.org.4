@@ -2,70 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 131186E20BC
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 12:28:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BBBC6E20BE
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 12:29:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbjDNK2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 06:28:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34040 "EHLO
+        id S230011AbjDNK3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 06:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbjDNK2k (ORCPT
+        with ESMTP id S229479AbjDNK3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 06:28:40 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 785D559E6;
-        Fri, 14 Apr 2023 03:28:39 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 914816603222;
-        Fri, 14 Apr 2023 11:28:36 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681468118;
-        bh=O6UuvcllmyzTDSJc0UaOYAOQKjJ0Wjevnx+e8DkBSeM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=K7R8qjegIdkwqF/7w5tJJg9sYdFwlpygfiAAU98C2JMgVK6z54cj3NGBb+Dh+a7Dj
-         bhVZ5Ysb9z1WPSdWUKinHqi0zB15C4bAajyFYITfw2htlrg+PD5kZT8oTybHYXR3ZW
-         vLP+6gasJtW94RFPOjLSrRk2nbaHoQxj1BdXWRJ1MI3FI+Piy78/Vbx1UxxGHXqGWj
-         9oc021CUl1y9zyStzyjMhgp27PeAsj1CUsjOv2fDk8Uhchmw4gWvRCI8CBKqgzCxm6
-         I0585IrwHpupbTWjRSNelofMwMGEKVD1G1VDSQJhc5FC16uoar+hXprJwZdT5nHWtl
-         I6OnS2YrUviZA==
-Message-ID: <5e085030-39a6-5aec-3c66-bb647b9e8da3@collabora.com>
-Date:   Fri, 14 Apr 2023 12:28:33 +0200
+        Fri, 14 Apr 2023 06:29:21 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D314510FC
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 03:29:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=mabrkjJN0IeQKhxInoEIAYe6rjhJQoOGlkU97HBs3Fo=; b=olAEilK25HkCq4rMrRoXo/KjK4
+        +CHuqZTrBYRivlqpmQ/gbNuoBLwgETiuAsXdy1zfjgBeM17IDKN98jswwkJtB7qmNS6t3J+UIrGun
+        buYNcZinwg/StlfEpfSe1em+utA9cNRdrtYU+A01PoM82ph/c3UctYu3x7hM3MHILQ5IK5Ps08anS
+        mXVW6r/Wlfv173+gZztQujyFwSIxzMcwvwVtRSWPKvmh7ntYoFukcr9inEKKLjt0WPy9x0geGkDsr
+        YIDJNfpMCPnIkaw5PcrThh7K2r3R8nZcMqACUAISixTTXYt9zCRZC4ugdKoDNRun+n66VTA2f4TLL
+        uOYTcQnA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pnGg3-008fen-Bv; Fri, 14 Apr 2023 10:29:11 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4CDD83002A3;
+        Fri, 14 Apr 2023 12:29:09 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id E517E265F26D4; Fri, 14 Apr 2023 12:29:08 +0200 (CEST)
+Date:   Fri, 14 Apr 2023 12:29:08 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     kan.liang@linux.intel.com
+Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org, eranian@google.com,
+        ak@linux.intel.com
+Subject: Re: [PATCH V3] perf/x86/intel/ds: Flush the PEBS buffer in PEBS
+ enable
+Message-ID: <20230414102908.GC83892@hirez.programming.kicks-ass.net>
+References: <20230410181309.827175-1-kan.liang@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 22/27] arm64: dts: mediatek: mt6795: Copyright header
- additions
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        matthias.bgg@gmail.com
-Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        jassisinghbrar@gmail.com, chunfeng.yun@mediatek.com,
-        vkoul@kernel.org, kishon@kernel.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, chunkuang.hu@kernel.org,
-        ck.hu@mediatek.com, jitao.shi@mediatek.com,
-        xinlei.lee@mediatek.com, houlong.wei@mediatek.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-pwm@vger.kernel.org,
-        kernel@collabora.com, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20230412112739.160376-1-angelogioacchino.delregno@collabora.com>
- <20230412112739.160376-23-angelogioacchino.delregno@collabora.com>
- <6fc26e38-ac45-b4a3-32f0-2bae686371db@linaro.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <6fc26e38-ac45-b4a3-32f0-2bae686371db@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230410181309.827175-1-kan.liang@linux.intel.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,34 +59,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 14/04/23 10:46, Krzysztof Kozlowski ha scritto:
-> On 12/04/2023 13:27, AngeloGioacchino Del Regno wrote:
->> I have added more than 800 lines to this devicetree: adding myself to
->> the copyright header.
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> ---
->>   arch/arm64/boot/dts/mediatek/mt6795.dtsi | 3 +++
->>   1 file changed, 3 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/mediatek/mt6795.dtsi b/arch/arm64/boot/dts/mediatek/mt6795.dtsi
->> index 29ca9a7bf0b3..a4c950b65006 100644
->> --- a/arch/arm64/boot/dts/mediatek/mt6795.dtsi
->> +++ b/arch/arm64/boot/dts/mediatek/mt6795.dtsi
->> @@ -2,6 +2,9 @@
->>   /*
->>    * Copyright (c) 2015 MediaTek Inc.
->>    * Author: Mars.C <mars.cheng@mediatek.com>
->> + *
->> + * Copyright (C) 2023 Collabora Ltd.
->> + *                    AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> 
-> Copyright is a result of significant changes, thus it is a part of
-> commit(s) making these changes. Adding copyrights in separate commits
-> looks like you are spreading them unjustified. Squash it.
-> 
+On Mon, Apr 10, 2023 at 11:13:09AM -0700, kan.liang@linux.intel.com wrote:
 
-Ok, I'll squash it in one of the commits of this series.
+>  arch/x86/events/intel/ds.c | 39 ++++++++++++++++++++++++++------------
+>  1 file changed, 27 insertions(+), 12 deletions(-)
+> 
+> diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
+> index 3a77f4336df7..4639d4c1e98d 100644
+> --- a/arch/x86/events/intel/ds.c
+> +++ b/arch/x86/events/intel/ds.c
+> @@ -1257,20 +1257,18 @@ pebs_update_state(bool needed_cb, struct cpu_hw_events *cpuc,
+>  	if (x86_pmu.intel_cap.pebs_baseline && add) {
+>  		u64 pebs_data_cfg;
+>  
+> -		/* Clear pebs_data_cfg and pebs_record_size for first PEBS. */
+> -		if (cpuc->n_pebs == 1) {
+> +		/* Clear pebs_data_cfg for first PEBS. */
+> +		if (cpuc->n_pebs == 1)
+>  			cpuc->pebs_data_cfg = 0;
+> -			cpuc->pebs_record_size = sizeof(struct pebs_basic);
+> -		}
+>  
+>  		pebs_data_cfg = pebs_update_adaptive_cfg(event);
+>  
+> -		/* Update pebs_record_size if new event requires more data. */
+> -		if (pebs_data_cfg & ~cpuc->pebs_data_cfg) {
+> +		/*
+> +		 * Only update the pebs_data_cfg here. The pebs_record_size
+> +		 * will be updated later when the new pebs_data_cfg takes effect.
+> +		 */
+> +		if (pebs_data_cfg & ~cpuc->pebs_data_cfg)
+>  			cpuc->pebs_data_cfg |= pebs_data_cfg;
+> -			adaptive_pebs_record_size_update();
+> -			update = true;
+> -		}
+>  	}
+>  
+>  	if (update)
+		pebs_update_threshold(cpuc);
 
-Regards,
-Angelo
+Now, pebs_update_threshold() will actually use
+->pebs_record_size, but afaict the above now has a path through (for
+example for the first event) where update is true but ->pebs_record_size
+is unset/stale.
+
+I think it all works out, but it is quite a mess and hard to follow.
+
+> @@ -1331,6 +1329,13 @@ static void intel_pmu_pebs_via_pt_enable(struct perf_event *event)
+>  	wrmsrl(base + idx, value);
+>  }
+>  
+> +static inline void intel_pmu_drain_large_pebs(struct cpu_hw_events *cpuc)
+> +{
+> +	if (cpuc->n_pebs == cpuc->n_large_pebs &&
+> +	    cpuc->n_pebs != cpuc->n_pebs_via_pt)
+> +		intel_pmu_drain_pebs_buffer();
+> +}
+
+Its been a minute since I looked at this code; but why only for large
+pebs? Surely flushing is quick when the DS is actually empty and that
+stops us having to worry if there's races where there might be a single
+entry in.
+
+>  void intel_pmu_pebs_enable(struct perf_event *event)
+>  {
+>  	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+> @@ -1350,6 +1355,18 @@ void intel_pmu_pebs_enable(struct perf_event *event)
+>  	if (x86_pmu.intel_cap.pebs_baseline) {
+>  		hwc->config |= ICL_EVENTSEL_ADAPTIVE;
+>  		if (cpuc->pebs_data_cfg != cpuc->active_pebs_data_cfg) {
+> +			/*
+> +			 * A system-wide PEBS event with the large PEBS
+> +			 * config may still be enabled when switching the
+> +			 * context. Some PEBS records for the system-wide
+> +			 * PEBS may be generated while the old event has
+> +			 * been scheduled out but the new one hasn't been
+> +			 * scheduled in. It's not enough to only flush the
+> +			 * buffer when a PEBS event is disable.
+> +			 */
+
+Perhaps just:
+
+			/*
+			 * drain_pebs() assumes uniform record size;
+			 * hence we need to drain when changing said
+			 * size.
+			 */
+
+
+> +			intel_pmu_drain_large_pebs(cpuc);
+> +			adaptive_pebs_record_size_update();
+> +			pebs_update_threshold(cpuc);
+>  			wrmsrl(MSR_PEBS_DATA_CFG, cpuc->pebs_data_cfg);
+>  			cpuc->active_pebs_data_cfg = cpuc->pebs_data_cfg;
+>  		}
