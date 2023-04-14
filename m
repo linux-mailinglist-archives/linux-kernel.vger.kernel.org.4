@@ -2,134 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F00B46E28B7
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 18:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDAD66E28C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 18:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbjDNQuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 12:50:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53786 "EHLO
+        id S230240AbjDNQyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 12:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbjDNQuu (ORCPT
+        with ESMTP id S229468AbjDNQyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 12:50:50 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37FE410B;
-        Fri, 14 Apr 2023 09:50:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681491049; x=1713027049;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gOE3x1iEfLs78Hp6b6MSZH6/nR9g2zasnCgn/QaH5gs=;
-  b=nkelexk5vTEuxeW2cd4rNZyMy2MV+WmB8+/5m2OGX5JE5LVZ5TAIvytU
-   6vQQ8n3EAkWPDLOaeHKR4fIwrE5w/H7QA3kqMsw4SAnaRQ12L9r4FEpI2
-   LOY0SnESdB7HxX93t5GfeuyU1wjQbM72NoPJmyJjuXlHMyYxhGeEgt9oo
-   3L2q5POnyjgr5EqtbbPrq6pn21Lail3ztNzbTSaIZX1HIhnqjOacxQkHy
-   7l+e7RrUdRcLWwPGZgz10qr233bHLKHl/93TyFiolyOD8FE3T/Xjke1ll
-   PeF+zVZbH7xkOmIvne4a0YjvywzAj/lUzU5co4BguRiSsTCY2IHO2wCD4
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="333284200"
-X-IronPort-AV: E=Sophos;i="5.99,197,1677571200"; 
-   d="scan'208";a="333284200"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 09:50:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="1019636249"
-X-IronPort-AV: E=Sophos;i="5.99,197,1677571200"; 
-   d="scan'208";a="1019636249"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 14 Apr 2023 09:50:44 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pnMdC-000ZjH-1v;
-        Fri, 14 Apr 2023 16:50:38 +0000
-Date:   Sat, 15 Apr 2023 00:50:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-crypto@vger.kernel.org,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Mark Hasemeyer <markhas@chromium.org>,
-        Wolfram Sang <wsa-dev@sang-engineering.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 2/2] i2c: designware: Add doorbell support for
- Mendocino
-Message-ID: <202304150012.IieZ4vzl-lkp@intel.com>
-References: <20230414144008.836-3-mario.limonciello@amd.com>
+        Fri, 14 Apr 2023 12:54:11 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB4A3A8D;
+        Fri, 14 Apr 2023 09:54:08 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1a6670671e3so7021315ad.0;
+        Fri, 14 Apr 2023 09:54:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681491248; x=1684083248;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oZAvqYOYWKaKZx+hMdeSRvFQw5l3f6+NXzgHNVGxyZc=;
+        b=OfVaK49qpidMI4dngUHtYirJkn7oUxSdbRfakMpgbgn1EFE3V1SYLnsMiNawY5+rO8
+         RSz6N22SGnArcSiCFDiDDF8y0Mg0rksJp6GEeqz4JCmOGYqPgTBU4DjnYzHkVJtnjfbs
+         7M6o0fyvoZAa764vAUL+5wWCmydHepII7odqZRhxbPgswGcuJLGCb33m//yqFG51bGfd
+         EuZchA48GyJDKBZFZBQz8/ubKoIpi6QR7p2vFeaq8xIxPzym+vxjvt+3fBHgCGQoGciR
+         d+wDMNjSb7n0YwP2P3v8pIMdRq4upNL7fPmC5l6PUNGZPadQDMFZSkNyK/qtJpT0U7l1
+         8/5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681491248; x=1684083248;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oZAvqYOYWKaKZx+hMdeSRvFQw5l3f6+NXzgHNVGxyZc=;
+        b=cTtoNR50dwW+BzS8o1cGFoWR5DeCxOgydloh7nnRAEoX202vSHbVBjsXqisWY9QGwu
+         3oh0dGx02385hEUc+z0GlvYhzyX6goT5Pn0Qf77qlUj7FPqFHIMt8zMXeQDJo8ZBJriW
+         yZOlWJzQpXMx92TOYjhkJF1bSGOBxFh9Kgj55ruHZLHPZuWFq7E+O4mKse7joAiGCCMW
+         aOMIC9F79lW++OOh+nQnmG+0owkYggNRkYgDzA+jJXfCSZnfGlw+EsmYfT1JgzQFY+7E
+         BW9mzyZ9o9GfvHoIm4lhqrQVZdBCGp6+Ah9f15B4qz1aWJ/zmFnzWQ1VwHH2vAwc9ZP8
+         AyHg==
+X-Gm-Message-State: AAQBX9fA8kBIkG9KAoGEQLQ0XOOZums1Rwy85hhzqoY2iqbn8ocT0k7U
+        eQc8BydylW9IBAY9y6o3dPrG3Uii8mc=
+X-Google-Smtp-Source: AKy350YUW8tdWpk3MzDYQnAIYJwxPe47Jerfv2Tk35H6paSNTQHJ+AdGjSP+u4D2yUOoVrFHtpcLZA==
+X-Received: by 2002:a05:6a00:ccc:b0:634:c780:5bb8 with SMTP id b12-20020a056a000ccc00b00634c7805bb8mr11011340pfv.17.1681491247683;
+        Fri, 14 Apr 2023 09:54:07 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id g21-20020aa78195000000b00625d84a0194sm3252020pfi.107.2023.04.14.09.54.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Apr 2023 09:54:07 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Fri, 14 Apr 2023 06:54:05 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
+Message-ID: <ZDmFLfII8EUX_ocY@slm.duckdns.org>
+References: <1ce6a073-e573-0c32-c3d8-f67f3d389a28@redhat.com>
+ <ZDcS_yVCgh6g1LoM@slm.duckdns.org>
+ <e38f72aa-9705-cf0c-a565-fb790f16c53e@redhat.com>
+ <ZDdG1K0kTETZMTCu@slm.duckdns.org>
+ <cd4c3f92-4a01-e636-7390-8c6a3d0cfe6c@redhat.com>
+ <ZDdNy2NAfj2_1CbW@slm.duckdns.org>
+ <1b8d9128-d076-7d37-767d-11d6af314662@redhat.com>
+ <ZDdYOI9LB87ra2t_@slm.duckdns.org>
+ <9862da55-5f41-24c3-f3bb-4045ccf24b2e@redhat.com>
+ <226cb2da-e800-6531-4e57-cbf991022477@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230414144008.836-3-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <226cb2da-e800-6531-4e57-cbf991022477@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mario,
+On Thu, Apr 13, 2023 at 09:22:19PM -0400, Waiman Long wrote:
+> I now have a slightly different idea of how to do that. We already have an
+> internal cpumask for partitioning - subparts_cpus. I am thinking about
+> exposing it as cpuset.cpus.reserve. The current way of creating
+> subpartitions will be called automatic reservation and require a direct
+> parent/child partition relationship. But as soon as a user write anything to
+> it, it will break automatic reservation and require manual reservation going
+> forward.
+> 
+> In that way, we can keep the old behavior, but also support new use cases. I
+> am going to work on that.
 
-kernel test robot noticed the following build errors:
+I'm not sure I fully understand the proposed behavior but it does sound more
+quirky.
 
-[auto build test ERROR on next-20230413]
-[cannot apply to wsa/i2c/for-next linus/master v6.3-rc6 v6.3-rc5 v6.3-rc4 v6.3-rc6]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/i2c-designware-Use-PCI-PSP-driver-for-communication/20230414-224238
-patch link:    https://lore.kernel.org/r/20230414144008.836-3-mario.limonciello%40amd.com
-patch subject: [PATCH v9 2/2] i2c: designware: Add doorbell support for Mendocino
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230415/202304150012.IieZ4vzl-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/a8ae7845f0c3fcb46f4c37508838fed08dae7eec
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mario-Limonciello/i2c-designware-Use-PCI-PSP-driver-for-communication/20230414-224238
-        git checkout a8ae7845f0c3fcb46f4c37508838fed08dae7eec
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/i2c/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304150012.IieZ4vzl-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/i2c/busses/i2c-designware-amdpsp.c: In function 'psp_send_i2c_req_doorbell':
->> drivers/i2c/busses/i2c-designware-amdpsp.c:82:15: error: too many arguments to function 'psp_ring_platform_doorbell'
-      82 |         ret = psp_ring_platform_doorbell(req->type, &req->hdr.status);
-         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/i2c/busses/i2c-designware-amdpsp.c:5:
-   include/linux/psp-platform-access.h:51:5: note: declared here
-      51 | int psp_ring_platform_doorbell(int msg);
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/psp_ring_platform_doorbell +82 drivers/i2c/busses/i2c-designware-amdpsp.c
-
-    77	
-    78	static int psp_send_i2c_req_doorbell(struct psp_i2c_req *req)
-    79	{
-    80		int ret;
-    81	
-  > 82		ret = psp_ring_platform_doorbell(req->type, &req->hdr.status);
-    83		if (ret == -EIO)
-    84			return check_i2c_req_sts(req);
-    85	
-    86		return ret;
-    87	}
-    88	
+Thanks.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+tejun
