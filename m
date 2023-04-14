@@ -2,117 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A079E6E2B2D
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 22:36:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC9786E2B2E
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 22:36:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbjDNUgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 16:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42826 "EHLO
+        id S229992AbjDNUgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 16:36:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbjDNUgG (ORCPT
+        with ESMTP id S229704AbjDNUgH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 16:36:06 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0A66A6F;
-        Fri, 14 Apr 2023 13:36:05 -0700 (PDT)
-Date:   Fri, 14 Apr 2023 22:36:02 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1681504563; bh=ZwA/9DtV5sIdb/Fn2apGAZQqdnsdth6XO2NjZS/VdUw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fAfj7+pqLPl5wCg0IhA63T1O2rpeqdI9b7C0u7uh+R9orZekqA1etB4cHayTvGNzk
-         fub1lMpxqlSAN+VeJ1/Vi2qc30gG1tzARxhCqu/qKmFCBVbcw648sQm9YGxp47ZIf+
-         SIu/+qr79FGzlZ+cym+ftArann/rMz9WyXtZRpWM=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Jorge Lopez <jorgealtxwork@gmail.com>
-Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9] HP BIOSCFG driver - Documentation
-Message-ID: <0b92276d-09e5-4308-b4c1-4519ac2ac65d@t-8ch.de>
-References: <20230412144821.5716-1-jorge.lopez2@hp.com>
- <f91ee2ff-3a24-4e2b-bf68-f1c5400b7462@t-8ch.de>
- <CAOOmCE-pfQa8_yn7zOkt9dBR9VpnnJF=dsvByZqLM=qcvoEx+Q@mail.gmail.com>
+        Fri, 14 Apr 2023 16:36:07 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34EF47290
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 13:36:06 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id jg21so48273622ejc.2
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 13:36:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681504564; x=1684096564;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=y8CJir3j3h3iz3lOaao3uM4b4n2bBipQycmBP4wvaNk=;
+        b=kGWjr0/CHo8BFqm+05eB3GLYkTLecAOjzwYHXFb9ROxyHjoM+n5DU7jEpWNDb/rp5g
+         OkzEMwjv62wpX9GyJ+CyGr3dNhc8rjLUK1fw99wYj8ouDnzFWk5p2S3r3c7PtA1ozWB6
+         OzSZZ8Q8grvNoS9oNtFzjksLWBdMyWdDihVMPJLGL47lCgV08ry9nMdZD6/31cseIVOt
+         tna0SqWUlB1PL5hFyqx00lOSil0+Y9dA1UG/w29Ig9xR2tFOazqoG9dqroRmKaz8qty0
+         nbtlE/YMMGufW2Bc4d/n4B99YVV/zhl8WPwoRUcBDL3IX7CegYW1TjEEdke3Pgofnx4O
+         fWrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681504564; x=1684096564;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=y8CJir3j3h3iz3lOaao3uM4b4n2bBipQycmBP4wvaNk=;
+        b=ca6JElwjNZ1uzQwfpoQswLKgck7Ttd5I/17pNOkaw/HJaQV5lPJQLydD20jhcLGurP
+         Zt8Hjd4DjgPFPsE5dMPuqY/xAfVzdaf7F5ZdnZ9d2CaEBdPx9qeEy/3X1pm9uOEeOGJI
+         Hh7GIt8a7BfHE9Lc6j4awOT780EAi1NNx2q31rrKe4+rwVGt/iwjBpz3DdurR68TKYaO
+         tik6o/FuEmhOZSCuX7MSrEmbmDfJiGFLzT8ERDBW6jnLwGlUS78/aFWoQ6SD91vZKJtj
+         o24CYh8dfHlR0V/52XcOthUae9kxpyAP2NrgoEAhw3jAA3SvgcNuRz9/lP3ly7VQBFG4
+         c5Qw==
+X-Gm-Message-State: AAQBX9f+RYya30dVfFALonflJwxzgtX1rhWKYvKHzJaroz3C+LlxBvLS
+        XpRItlzOHXny6J3oPv4KBAUBYg==
+X-Google-Smtp-Source: AKy350bNnkeouvV6lS7CSRyzxJBpdhSqncKW6XFCRpOwKjqeVcRUhCjyEbvbpaYbs+WoPeAlLZtROQ==
+X-Received: by 2002:a17:906:2f91:b0:94a:87d6:d39e with SMTP id w17-20020a1709062f9100b0094a87d6d39emr277861eji.58.1681504564643;
+        Fri, 14 Apr 2023 13:36:04 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:ffae:8aab:ae5a:4688? ([2a02:810d:15c0:828:ffae:8aab:ae5a:4688])
+        by smtp.gmail.com with ESMTPSA id g25-20020a17090613d900b0094edfbd475csm1398229ejc.127.2023.04.14.13.36.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Apr 2023 13:36:04 -0700 (PDT)
+Message-ID: <686577b9-7ddf-c05d-19d4-926a8b0a963a@linaro.org>
+Date:   Fri, 14 Apr 2023 22:36:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOOmCE-pfQa8_yn7zOkt9dBR9VpnnJF=dsvByZqLM=qcvoEx+Q@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] dt-bindings: vendor-prefixes: Add KUNBUS GmbH
+To:     Bruno Thomsen <bruno.thomsen@gmail.com>
+Cc:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Stefano Bossi <stefano.bossi@gmail.com>
+References: <20230414045747.5499-1-bruno.thomsen@gmail.com>
+ <45602a7e-9385-296b-d704-64cdf727f5db@linaro.org>
+ <CAH+2xPBe8Ef2YedghsxBwxUEiS_M-eVxyC4oScs2HeTM=4M_yg@mail.gmail.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAH+2xPBe8Ef2YedghsxBwxUEiS_M-eVxyC4oScs2HeTM=4M_yg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-14 15:00:02-0500, Jorge Lopez wrote:
-> On Fri, Apr 14, 2023 at 10:27 AM <thomas@t-8ch.de> wrote:
-> > On 2023-04-12 09:48:21-0500, Jorge Lopez wrote:
-> > > [..]
-> > >
-> > > +What:                /sys/class/firmware-attributes/*/authentication/SPM/statusbin
-> > > +Date:                March 29
-> > > +KernelVersion:       5.18
-> > > +Contact:     "Jorge Lopez" <jorge.lopez2@hp.com>
-> > > +Description: 'statusbin' is a read-only file that returns 'status' information
-> > > +             in binary format. This file provides a mechanism for components
-> > > +             downstream (e.g. Recovery Agent) can read the status and public
-> > > +             key modulus.
-> >
-> > This is still missing docs about how to interpret the contents of the
-> > "statusbin" file.
-> >
-> > "components downstream" -> userspace.
-> >
+On 14/04/2023 22:24, Bruno Thomsen wrote:
+> Den fre. 14. apr. 2023 kl. 09.58 skrev Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org>:
+>>
+>> On 14/04/2023 06:57, Bruno Thomsen wrote:
+>>> KUNBUS GmbH created the modular DIN-rail mounted open source hardware
+>>> platform called Revolution Pi for automation and IIoT projects.
+>>> https://www.kunbus.com/
+>>>
+>>> Signed-off-by: Bruno Thomsen <bruno.thomsen@gmail.com>
+>>> Reviewed-by: Stefano Bossi <stefano.bossi@gmail.com>
+>>
+>> I do not see it being used in current next. We do not document all
+>> possible companies in the world. We document prefixes used in bindings.
 > 
-> I will provide the details in Version 10.   Additionally, I am working
-> with the architect to understand the need for 'statusbin' in their
-> upcoming features.
+> I am going to use it in the board compatibility string for the Revolution Pi
+> DIN module device tree(s). So I send it separately to avoid spamming the
+> mailing list on every iteration of the board DT. But I can resend it when there
+> is a board patch that uses it.
 
-If the userspace component is not ready maybe this can be delayed for a
-future patchset?
-The basic features should already be useful with a generic client like
-fwupd.
-Doing it in steps should be faster both in development and wall time.
+The best is to send it with the first patchset which introduces it.
 
-> > I think we can start with the code review.
-> >
-> 
-> I will send all files with Version 10.   To aid in the review process,
-> I will keep all ..c in separate reviews.  It is less confusing that
-> way since there is commonality between them
-> 
-> > Could you also provide a sample of the attribute files?
-> > I'm especially curious about the different instances of the sure-start
-> > attributes, including current_value, possible_values and the auditlog
-> > properties.
-> >
-> 
-> What type of sample are you looking for.?   I can provide you with a
-> tree display of all attributes and some output samples for different
-> attribute types.
+Best regards,
+Krzysztof
 
-That sounds great.
-
-> I will include sure-start  attributes, including current_value,
-> possible_values and the audit log properties.  Please let me know if
-> there is anything else you want to see.
-
-I want to get a feeling for the exposed bios settings and how the
-sure-start stuff works.
-
-> > Also is the userspace component for this published somewhere?
-> > If so it would be useful to refer to it from the commit message.
-> 
-> Linux components are under development and not published yet.  The
-> only linux component at this time is the driver (hp bioscfg).
-> The only published components are under Windows ONLY.
-
-Maybe mention this in the commit message.
-
-Also it would be useful to test the new driver with fwupd which is the
-existing userspace user of this ABI.
-Just to make sure that nothing is obviously broken there.
-(And mention this in the commit message)
-
-Thomas
