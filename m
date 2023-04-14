@@ -2,163 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ED606E2969
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 19:30:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AD806E297B
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 19:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbjDNRaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 13:30:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51296 "EHLO
+        id S229961AbjDNRak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 13:30:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbjDNR3r (ORCPT
+        with ESMTP id S230291AbjDNRaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 13:29:47 -0400
-Received: from mail-io1-xd4a.google.com (mail-io1-xd4a.google.com [IPv6:2607:f8b0:4864:20::d4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3661383CF
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 10:29:33 -0700 (PDT)
-Received: by mail-io1-xd4a.google.com with SMTP id r14-20020a5e950e000000b0074cc9aba965so9862252ioj.11
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 10:29:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681493372; x=1684085372;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=B/zMNPvsJ76QjkM1FVDxX2x1kCiWFrXUv8piHTPNmKE=;
-        b=Nx6yKI3EIRZ1j9gTwptzX9+uokMoja8+/mQJmU3Rbml7atU0NoaDLBGoC2ADYzVIzd
-         7aha5aGITbsGDsKM1l7NfS0DEzKHMH2NeeQayQA6VslRgzCarBgdYEG+PUEtCAER1UXf
-         fyrUxrpkNjxH5oSb49dS7Rfk+7CWIo2gqojXOL8s9xSwDoxq+npACrZokCS2ovl6fOzW
-         8l09mW/ccEk4oAdZg2MnlEm5WTsX7ut19ZEDWM18wpQZ6t2WzsLVdUB3PkYURffuJxRY
-         g+aUVAE5+Yw98jqRcnug+ZTFUE+1aDOhSwxOp+NtIoyMuMlVf2eoWotUhma2O9uNKFW9
-         +UAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681493372; x=1684085372;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=B/zMNPvsJ76QjkM1FVDxX2x1kCiWFrXUv8piHTPNmKE=;
-        b=jl1d9muijtDChmqSqCroRouls7VWAvl7zbwAtB3c9Kj5Jz56ZMoTY+RqH1Tamg+vOv
-         lyR67/hMVkAxCAEdZwXlhyF3KB6Zu0x5b9tITFWg58aZ6j+Fgu3cdPsSgGgKSBXe4dNY
-         UQBvSeP1X2+1bY7v28MYomtZc++R4xPEoV4BaOj+IUbYktrlcnsF2dWyDJeN/br9MuHH
-         liX5BzGMwtNEY1Ql2sn6VHz7IZTkRGSpenvv/s4sV3LrVQqzhlSmNLrjtoHhKhrr04lu
-         9hSsEEYv7Y+98LNA4Y7cDAD9jUs3e/2IwNEMT7v1Ci0dWdKequC21nhcsB+ERfP+Dzi4
-         dZDw==
-X-Gm-Message-State: AAQBX9dwwmYRefk4s180/+ZlXAnDDwUzcfhrIdEkBFHY3fqd76wWAVmd
-        BAmBAyCXmqLvbt1xeL5g3Q0GBHBMo5Dj
-X-Google-Smtp-Source: AKy350Z4dUZKdVtn0ngicjL45vSsU+MnN2dqL/cSY7ktGGKCk03DL47Ioacf0/CM1+w6Tkn33IoibTV1wujW
-X-Received: from rananta-linux.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:22b5])
- (user=rananta job=sendgmr) by 2002:a02:85ed:0:b0:40b:bd17:3c31 with SMTP id
- d100-20020a0285ed000000b0040bbd173c31mr2482742jai.0.1681493372447; Fri, 14
- Apr 2023 10:29:32 -0700 (PDT)
-Date:   Fri, 14 Apr 2023 17:29:22 +0000
-In-Reply-To: <20230414172922.812640-1-rananta@google.com>
-Mime-Version: 1.0
-References: <20230414172922.812640-1-rananta@google.com>
-X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-Message-ID: <20230414172922.812640-8-rananta@google.com>
-Subject: [PATCH v3 7/7] KVM: arm64: Use TLBI range-based intructions for unmap
-From:   Raghavendra Rao Ananta <rananta@google.com>
-To:     Oliver Upton <oliver.upton@linux.dev>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     Ricardo Koller <ricarkol@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        Raghavendra Rao Anata <rananta@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 14 Apr 2023 13:30:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318B88A5A
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 10:29:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681493371;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MTd7Dy+8soUmatOtiinPtWUDXXQuQ2CyGor29K2QHkA=;
+        b=Cnjt3xGimUsOlJFtWS1O0dmcYIwkm2plNwztvRERnvg9wTQCcjFYqv/RKBLrGnonbv5Xby
+        4Swlkb1oqIYo30hp2jKLGfZTSFnYBgGUkPV58EoCosjJUJion631yKDZjEeJKkPFD5+6oW
+        F06N2Nmx20YEMDl33b1D4mG44VOcTWg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-461-CSoVfliCPOm3dUjnmkUAqA-1; Fri, 14 Apr 2023 13:29:26 -0400
+X-MC-Unique: CSoVfliCPOm3dUjnmkUAqA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 54124280A341;
+        Fri, 14 Apr 2023 17:29:26 +0000 (UTC)
+Received: from [10.22.18.140] (unknown [10.22.18.140])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B9CD640C6E70;
+        Fri, 14 Apr 2023 17:29:25 +0000 (UTC)
+Message-ID: <c61ca9d0-c514-fb07-c2f2-3629e8898984@redhat.com>
+Date:   Fri, 14 Apr 2023 13:29:25 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>
+References: <1ce6a073-e573-0c32-c3d8-f67f3d389a28@redhat.com>
+ <ZDcS_yVCgh6g1LoM@slm.duckdns.org>
+ <e38f72aa-9705-cf0c-a565-fb790f16c53e@redhat.com>
+ <ZDdG1K0kTETZMTCu@slm.duckdns.org>
+ <cd4c3f92-4a01-e636-7390-8c6a3d0cfe6c@redhat.com>
+ <ZDdNy2NAfj2_1CbW@slm.duckdns.org>
+ <1b8d9128-d076-7d37-767d-11d6af314662@redhat.com>
+ <ZDdYOI9LB87ra2t_@slm.duckdns.org>
+ <9862da55-5f41-24c3-f3bb-4045ccf24b2e@redhat.com>
+ <226cb2da-e800-6531-4e57-cbf991022477@redhat.com>
+ <ZDmFLfII8EUX_ocY@slm.duckdns.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <ZDmFLfII8EUX_ocY@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current implementation of the stage-2 unmap walker traverses
-the given range and, as a part of break-before-make, performs
-TLB invalidations with a DSB for every PTE. A multitude of this
-combination could cause a performance bottleneck.
 
-Hence, if the system supports FEAT_TLBIRANGE, defer the TLB
-invalidations until the entire walk is finished, and then
-use range-based instructions to invalidate the TLBs in one go.
-Condition this upon S2FWB in order to avoid walking the page-table
-again to perform the CMOs after issuing the TLBI.
+On 4/14/23 12:54, Tejun Heo wrote:
+> On Thu, Apr 13, 2023 at 09:22:19PM -0400, Waiman Long wrote:
+>> I now have a slightly different idea of how to do that. We already have an
+>> internal cpumask for partitioning - subparts_cpus. I am thinking about
+>> exposing it as cpuset.cpus.reserve. The current way of creating
+>> subpartitions will be called automatic reservation and require a direct
+>> parent/child partition relationship. But as soon as a user write anything to
+>> it, it will break automatic reservation and require manual reservation going
+>> forward.
+>>
+>> In that way, we can keep the old behavior, but also support new use cases. I
+>> am going to work on that.
+> I'm not sure I fully understand the proposed behavior but it does sound more
+> quirky.
 
-Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-Suggested-by: Oliver Upton <oliver.upton@linux.dev>
----
- arch/arm64/kvm/hyp/pgtable.c | 33 +++++++++++++++++++++++++++++----
- 1 file changed, 29 insertions(+), 4 deletions(-)
+The idea is to use the existing subparts_cpus for cpu reservation 
+instead of adding a new cpumask for that purpose. The current way of 
+partition creation does cpus reservation (setting subparts_cpus) 
+automatically with the constraint that the parent of a partition must be 
+a partition root itself. One way to relax this constraint is to allow a 
+new manual reservation mode where users can set reserve cpus manually 
+and distribute them down the hierarchy before activating a partition to 
+use those cpus.
 
-diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
-index 3f136e35feb5e..bcb748e3566c7 100644
---- a/arch/arm64/kvm/hyp/pgtable.c
-+++ b/arch/arm64/kvm/hyp/pgtable.c
-@@ -987,10 +987,16 @@ int kvm_pgtable_stage2_set_owner(struct kvm_pgtable *pgt, u64 addr, u64 size,
- 	return ret;
- }
- 
-+struct stage2_unmap_data {
-+	struct kvm_pgtable *pgt;
-+	bool skip_pte_tlbis;
-+};
-+
- static int stage2_unmap_walker(const struct kvm_pgtable_visit_ctx *ctx,
- 			       enum kvm_pgtable_walk_flags visit)
- {
--	struct kvm_pgtable *pgt = ctx->arg;
-+	struct stage2_unmap_data *unmap_data = ctx->arg;
-+	struct kvm_pgtable *pgt = unmap_data->pgt;
- 	struct kvm_s2_mmu *mmu = pgt->mmu;
- 	struct kvm_pgtable_mm_ops *mm_ops = ctx->mm_ops;
- 	kvm_pte_t *childp = NULL;
-@@ -1018,7 +1024,7 @@ static int stage2_unmap_walker(const struct kvm_pgtable_visit_ctx *ctx,
- 	 * block entry and rely on the remaining portions being faulted
- 	 * back lazily.
- 	 */
--	stage2_put_pte(ctx, mmu, mm_ops, false);
-+	stage2_put_pte(ctx, mmu, mm_ops, unmap_data->skip_pte_tlbis);
- 
- 	if (need_flush && mm_ops->dcache_clean_inval_poc)
- 		mm_ops->dcache_clean_inval_poc(kvm_pte_follow(ctx->old, mm_ops),
-@@ -1032,13 +1038,32 @@ static int stage2_unmap_walker(const struct kvm_pgtable_visit_ctx *ctx,
- 
- int kvm_pgtable_stage2_unmap(struct kvm_pgtable *pgt, u64 addr, u64 size)
- {
-+	int ret;
-+	struct stage2_unmap_data unmap_data = {
-+		.pgt = pgt,
-+		/*
-+		 * If FEAT_TLBIRANGE is implemented, defer the individial PTE
-+		 * TLB invalidations until the entire walk is finished, and
-+		 * then use the range-based TLBI instructions to do the
-+		 * invalidations. Condition this upon S2FWB in order to avoid
-+		 * a page-table walk again to perform the CMOs after TLBI.
-+		 */
-+		.skip_pte_tlbis = system_supports_tlb_range() &&
-+					stage2_has_fwb(pgt),
-+	};
- 	struct kvm_pgtable_walker walker = {
- 		.cb	= stage2_unmap_walker,
--		.arg	= pgt,
-+		.arg	= &unmap_data,
- 		.flags	= KVM_PGTABLE_WALK_LEAF | KVM_PGTABLE_WALK_TABLE_POST,
- 	};
- 
--	return kvm_pgtable_walk(pgt, addr, size, &walker);
-+	ret = kvm_pgtable_walk(pgt, addr, size, &walker);
-+	if (unmap_data.skip_pte_tlbis)
-+		/* Perform the deferred TLB invalidations */
-+		kvm_call_hyp(__kvm_tlb_flush_vmid_range, pgt->mmu,
-+				addr, addr + size);
-+
-+	return ret;
- }
- 
- struct stage2_attr_data {
--- 
-2.40.0.634.g4ca3ef3211-goog
+Now the question is how to enable this new manual reservation mode. One 
+way to do it is to enable it whenever the new cpuset.cpus.reserve file 
+is modified. Alternatively, we may enable it by a cgroupfs mount option 
+or a boot command line option.
+
+Hope this can clarify your confusion.
+
+Cheers,
+Longman
 
