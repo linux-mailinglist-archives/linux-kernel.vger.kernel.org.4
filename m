@@ -2,94 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 339516E19F2
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 04:02:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A0F76E1A02
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 04:10:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbjDNCCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 22:02:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37510 "EHLO
+        id S229786AbjDNCKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 22:10:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjDNCCp (ORCPT
+        with ESMTP id S229577AbjDNCJ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 22:02:45 -0400
-Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 45A933C15;
-        Thu, 13 Apr 2023 19:02:44 -0700 (PDT)
-Received: from u201911681$hust.edu.cn ( [10.12.190.96] ) by
- ajax-webmail-app1 (Coremail) ; Fri, 14 Apr 2023 10:02:19 +0800 (GMT+08:00)
-X-Originating-IP: [10.12.190.96]
-Date:   Fri, 14 Apr 2023 10:02:19 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   =?UTF-8?B?5ZGo5biI5b63?= <u201911681@hust.edu.cn>
-To:     "stephen boyd" <sboyd@kernel.org>
-Cc:     "abel vesa" <abelvesa@kernel.org>, "bai ping" <ping.bai@nxp.com>,
-        "fabio estevam" <festevam@gmail.com>,
-        "michael turquette" <mturquette@baylibre.com>,
-        "nxp linux team" <linux-imx@nxp.com>,
-        "peng fan" <peng.fan@nxp.com>,
-        "pengutronix kernel team" <kernel@pengutronix.de>,
-        "sascha hauer" <s.hauer@pengutronix.de>,
-        "shawn guo" <shawnguo@kernel.org>,
-        hust-os-kernel-patches@googlegroups.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "hao luo" <m202171776@hust.edu.cn>
-Subject: Re: Re: [PATCH] clk: imx: clk-imx8mm: fix memory leak issue in
- 'imx8mm_clocks_probe'
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220802(cbd923c5)
- Copyright (c) 2002-2023 www.mailtech.cn hust
-In-Reply-To: <25b06794ffb595229019640e10f256fd.sboyd@kernel.org>
-References: <20230413032439.1706448-1-u201911681@hust.edu.cn>
- <25b06794ffb595229019640e10f256fd.sboyd@kernel.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Thu, 13 Apr 2023 22:09:58 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 965132D4A;
+        Thu, 13 Apr 2023 19:09:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681438197; x=1712974197;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=V6yxTKpwndzirxcebJgSFtOtxmxSXQn9YpBYMRBfZ4M=;
+  b=IwmEk92YKmlopoiubdxsDjVO5YVj8uqSre6G7rLEt9+f9p7e2Sf5w3FE
+   8JigK0pHLHdTMWgoTTrnFqoG1BrZrPhSEIeCL4meE+Y+m71/a0Bb8aiZj
+   oeEUQ5MbDTkQazeGt7kKnx4ZVGFWJwmcL39tOw87jkOqLfcSHboDhCVVg
+   WfS7L+OpJ0q/E0hgxTfLj3y6mY9fZAwPn5WTCBIIH3LKb7eIdaOb/0u5f
+   o0fcVRuD6KdC91ro0gULGfX1uOS/VRkpTNE8QWq2MGdXZT6XPpwFP9Jgo
+   94ssCv5U6njevTYfLDapt2tzEzO7xkNNbdAIQNQL55Swd8tk+OvvOge0+
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="333124446"
+X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
+   d="scan'208";a="333124446"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 19:09:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="779019528"
+X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
+   d="scan'208";a="779019528"
+Received: from p12ill20yoongsia.png.intel.com ([10.88.227.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 13 Apr 2023 19:09:51 -0700
+From:   Song Yoong Siang <yoong.siang.song@intel.com>
+To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Vedang Patel <vedang.patel@intel.com>,
+        Jithu Joseph <jithu.joseph@intel.com>,
+        Andre Guedes <andre.guedes@intel.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Jacob Keller <jacob.e.keller@intel.com>
+Cc:     intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        xdp-hints@xdp-project.net, stable@vger.kernel.org,
+        Song Yoong Siang <yoong.siang.song@intel.com>
+Subject: [PATCH net v2 1/1] igc: read before write to SRRCTL register
+Date:   Fri, 14 Apr 2023 10:09:15 +0800
+Message-Id: <20230414020915.1869456-1-yoong.siang.song@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Message-ID: <5e18370b.3c8a8.1877d7fc98a.Coremail.u201911681@hust.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: FgEQrAAHVwgrtDhk3X2oAg--.38998W
-X-CM-SenderInfo: zxsqimqrrwmio6kx23oohg3hdfq/1tbiAQkBAV7Em5BU+wABs3
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgoKPiAtLS0tLeWOn+Wni+mCruS7ti0tLS0tCj4g5Y+R5Lu25Lq6OiAiU3RlcGhlbiBCb3lkIiA8
-c2JveWRAa2VybmVsLm9yZz4KPiDlj5HpgIHml7bpl7Q6IDIwMjMtMDQtMTQgMDM6MDY6NTkgKOaY
-n+acn+S6lCkKPiDmlLbku7bkuro6ICJBYmVsIFZlc2EiIDxhYmVsdmVzYUBrZXJuZWwub3JnPiwg
-IkJhaSBQaW5nIiA8cGluZy5iYWlAbnhwLmNvbT4sICJGYWJpbyBFc3RldmFtIiA8ZmVzdGV2YW1A
-Z21haWwuY29tPiwgIk1pY2hhZWwgVHVycXVldHRlIiA8bXR1cnF1ZXR0ZUBiYXlsaWJyZS5jb20+
-LCAiTlhQIExpbnV4IFRlYW0iIDxsaW51eC1pbXhAbnhwLmNvbT4sICJQZW5nIEZhbiIgPHBlbmcu
-ZmFuQG54cC5jb20+LCAiUGVuZ3V0cm9uaXggS2VybmVsIFRlYW0iIDxrZXJuZWxAcGVuZ3V0cm9u
-aXguZGU+LCAiU2FzY2hhIEhhdWVyIiA8cy5oYXVlckBwZW5ndXRyb25peC5kZT4sICJTaGF3biBH
-dW8iIDxzaGF3bmd1b0BrZXJuZWwub3JnPiwgIlpob3UgU2hpZGUiIDx1MjAxOTExNjgxQGh1c3Qu
-ZWR1LmNuPgo+IOaKhOmAgTogaHVzdC1vcy1rZXJuZWwtcGF0Y2hlc0Bnb29nbGVncm91cHMuY29t
-LCAiWmhvdSBTaGlkZSIgPHUyMDE5MTE2ODFAaHVzdC5lZHUuY24+LCBsaW51eC1jbGtAdmdlci5r
-ZXJuZWwub3JnLCBsaW51eC1hcm0ta2VybmVsQGxpc3RzLmluZnJhZGVhZC5vcmcsIGxpbnV4LWtl
-cm5lbEB2Z2VyLmtlcm5lbC5vcmcsICJIYW8gTHVvIiA8bTIwMjE3MTc3NkBodXN0LmVkdS5jbj4K
-PiDkuLvpopg6IFJlOiBbUEFUQ0hdIGNsazogaW14OiBjbGstaW14OG1tOiBmaXggbWVtb3J5IGxl
-YWsgaXNzdWUgaW4gJ2lteDhtbV9jbG9ja3NfcHJvYmUnCj4gCj4gUXVvdGluZyBaaG91IFNoaWRl
-ICgyMDIzLTA0LTEyIDIwOjI0OjM5KQo+ID4gVGhlIGZ1bmN0aW9uIGlteDhtbV9jbG9ja3NfcHJv
-YmUoKSBoYXMgdHdvIG1haW4gaXNzdWVzOgo+ID4gLSBUaGUgb2ZfaW9tYXAoKSBmdW5jdGlvbiBt
-YXkgY2F1c2UgYSBtZW1vcnkgbGVhay4KPiA+IC0gTWVtb3J5IGFsbG9jYXRlZCBmb3IgJ2Nsa19o
-d19kYXRhJyBtYXkgbm90IGJlIGZyZWVkIHByb3Blcmx5Cj4gPiBpbiBzb21lIHBhdGhzLgo+ID4g
-Cj4gPiBUbyBmaXggdGhlc2UgaXNzdWVzLCB0aGlzIGNvbW1pdCByZXBsYWNlcyB0aGUgdXNlIG9m
-IG9mX2lvbWFwKCkKPiA+IHdpdGggZGV2bV9vZl9pb21hcCgpIGFuZCByZXBsYWNlcyBremFsbG9j
-KCkgd2l0aCBkZXZtX2t6YWxsb2MoKS4KPiA+IFRoaXMgZW5zdXJlcyB0aGF0IGFsbCBtZW1vcnkg
-aXMgcHJvcGVybHkgbWFuYWdlZCBhbmQgYXV0b21hdGljYWxseQo+ID4gZnJlZWQgd2hlbiB0aGUg
-ZGV2aWNlIGlzIHJlbW92ZWQuCj4gPiAKPiA+IEluIGFkZGl0aW9uLCB3aGVuIGRldm1fb2ZfaW9t
-YXAoKSBhbGxvY2F0ZXMgbWVtb3J5IHdpdGggYW4gZXJyb3IsCj4gPiBpdCB3aWxsIGZpcnN0IGp1
-bXAgdG8gbGFiZWwgInVucmVnaXN0ZXJfaHdzIiBhbmQKPiA+IHRoZW4gcmV0dXJuIFBUUl8gRVJS
-KGJhc2UpLgo+ID4gCj4gPiBGaXhlczogOWM3MWY5ZWEzNWQ3ICgiY2xrOiBpbXg6IGlteDhtbTog
-U3dpdGNoIHRvIGNsa19odyBiYXNlZCBBUEkiKQo+ID4gRml4ZXM6IGJhNTYyNWMzZTI3MiAoImNs
-azogaW14OiBBZGQgY2xvY2sgZHJpdmVyIHN1cHBvcnQgZm9yIGlteDhtbSIpCj4gPiBTaWduZWQt
-b2ZmLWJ5OiBaaG91IFNoaWRlIDx1MjAxOTExNjgxQGh1c3QuZWR1LmNuPgo+ID4gLS0tCj4gPiBU
-aGUgaXNzdWUgaXMgZGlzY292ZXJlZCBieSBzdGF0aWMgYW5hbHlzaXMsIGFuZCB0aGUgcGF0Y2gg
-aXMgbm90IHRlc3RlZCB5ZXQuCj4gCj4gQW5kIHlvdSdyZSBub3QgY29vcmRpbmF0aW5nIHdpdGgg
-ZWFjaCBvdGhlcj8KV2hhdCBkbyB5b3UgbWVhbiBieSAiY29vcmRpbmF0aW5nIHdpdGggZWFjaCBv
-dGhlciI/CgpyZWdhcmRzLApaaG91IFNoaWRl
+igc_configure_rx_ring() function will be called as part of XDP program
+setup. If Rx hardware timestamp is enabled prio to XDP program setup,
+this timestamp enablement will be overwritten when buffer size is
+written into SRRCTL register.
+
+Thus, this commit read the register value before write to SRRCTL
+register. This commit is tested by using xdp_hw_metadata bpf selftest
+tool. The tool enables Rx hardware timestamp and then attach XDP program
+to igc driver. It will display hardware timestamp of UDP packet with
+port number 9092. Below are detail of test steps and results.
+
+Command on DUT:
+  sudo ./xdp_hw_metadata <interface name>
+
+Command on Link Partner:
+  echo -n skb | nc -u -q1 <destination IPv4 addr> 9092
+
+Result before this patch:
+  skb hwtstamp is not found!
+
+Result after this patch:
+  found skb hwtstamp = 1677800973.642836757
+
+Optionally, read PHC to confirm the values obtained are almost the same:
+Command:
+  sudo ./testptp -d /dev/ptp0 -g
+Result:
+  clock time: 1677800973.913598978 or Fri Mar  3 07:49:33 2023
+
+Fixes: fc9df2a0b520 ("igc: Enable RX via AF_XDP zero-copy")
+Cc: <stable@vger.kernel.org> # 5.14+
+Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
+Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
+---
+v2 changelog:
+ - Fix indention
+---
+ drivers/net/ethernet/intel/igc/igc_base.h | 7 +++++--
+ drivers/net/ethernet/intel/igc/igc_main.c | 5 ++++-
+ 2 files changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/net/ethernet/intel/igc/igc_base.h b/drivers/net/ethernet/intel/igc/igc_base.h
+index 7a992befca24..b95007d51d13 100644
+--- a/drivers/net/ethernet/intel/igc/igc_base.h
++++ b/drivers/net/ethernet/intel/igc/igc_base.h
+@@ -87,8 +87,11 @@ union igc_adv_rx_desc {
+ #define IGC_RXDCTL_SWFLUSH		0x04000000 /* Receive Software Flush */
+ 
+ /* SRRCTL bit definitions */
+-#define IGC_SRRCTL_BSIZEPKT_SHIFT		10 /* Shift _right_ */
+-#define IGC_SRRCTL_BSIZEHDRSIZE_SHIFT		2  /* Shift _left_ */
++#define IGC_SRRCTL_BSIZEPKT_MASK	GENMASK(6, 0)
++#define IGC_SRRCTL_BSIZEPKT_SHIFT	10 /* Shift _right_ */
++#define IGC_SRRCTL_BSIZEHDRSIZE_MASK	GENMASK(13, 8)
++#define IGC_SRRCTL_BSIZEHDRSIZE_SHIFT	2  /* Shift _left_ */
++#define IGC_SRRCTL_DESCTYPE_MASK	GENMASK(27, 25)
+ #define IGC_SRRCTL_DESCTYPE_ADV_ONEBUF	0x02000000
+ 
+ #endif /* _IGC_BASE_H */
+diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
+index 25fc6c65209b..88fac08d8a14 100644
+--- a/drivers/net/ethernet/intel/igc/igc_main.c
++++ b/drivers/net/ethernet/intel/igc/igc_main.c
+@@ -641,7 +641,10 @@ static void igc_configure_rx_ring(struct igc_adapter *adapter,
+ 	else
+ 		buf_size = IGC_RXBUFFER_2048;
+ 
+-	srrctl = IGC_RX_HDR_LEN << IGC_SRRCTL_BSIZEHDRSIZE_SHIFT;
++	srrctl = rd32(IGC_SRRCTL(reg_idx));
++	srrctl &= ~(IGC_SRRCTL_BSIZEPKT_MASK | IGC_SRRCTL_BSIZEHDRSIZE_MASK |
++		    IGC_SRRCTL_DESCTYPE_MASK);
++	srrctl |= IGC_RX_HDR_LEN << IGC_SRRCTL_BSIZEHDRSIZE_SHIFT;
+ 	srrctl |= buf_size >> IGC_SRRCTL_BSIZEPKT_SHIFT;
+ 	srrctl |= IGC_SRRCTL_DESCTYPE_ADV_ONEBUF;
+ 
+-- 
+2.34.1
+
