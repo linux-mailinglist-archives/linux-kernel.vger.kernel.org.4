@@ -2,97 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EC5E6E2022
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 12:02:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 862B06E2033
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 12:03:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbjDNKCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 06:02:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40896 "EHLO
+        id S230156AbjDNKDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 06:03:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbjDNKCG (ORCPT
+        with ESMTP id S229941AbjDNKCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 06:02:06 -0400
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEECB76B4;
-        Fri, 14 Apr 2023 03:02:04 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id 717652B06EFE;
-        Fri, 14 Apr 2023 06:02:02 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Fri, 14 Apr 2023 06:02:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1681466522; x=1681473722; bh=AX
-        mBOrau9y62Ep9jBep7xcrWEaTvywvjZLIPJDZWzw8=; b=CE5N4hsCc7Ea/viRSL
-        F+lnjOkQlk0k83MsdAcZxkswiLmj+ON4CTfy8rNKto8zkw6FOyCVNt7YaP4qohYO
-        t1GD6QXChlJ5TlWE7S8kBm1x8TDX6DWmQnADAYhF9WXNzlt5N0WtjXXsbKE65maH
-        tiRY8Qvy5NbOgLUbPjA9lmRumA0VlEhlySMC7HD5N9Nx8ZcEnjCbVpbS+bwkr/e2
-        tbhcPcHcL3pF0/UDYA73HoQot8sd4w9tiRspivnSl961Ic8CU46fpYWuAwSanPKL
-        x2OR9Y/Ud+XHPZcsM2/y16iu6MC0RsGkUDlX9BS7X2eeUPfenpgD3ikx1t9O62JK
-        GNUg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1681466522; x=1681473722; bh=AXmBOrau9y62E
-        p9jBep7xcrWEaTvywvjZLIPJDZWzw8=; b=Ul5rPHERFuTt+CzCsMPKn39Z8amcc
-        1H5mS8DL09X92kH7U+j2yFTEl8gSzgi6dp528zsuZkyXY7OLYbnbfVyiTttg7Vym
-        t9oRDetMlPIdSPZD+dhJzJiHY6sN7T51UMZ+T39xkB5lZaIaUoQQraiyC9UdXLC8
-        BzNm7lmcklwI7nDa/ZsTjh3Lq6XYntum+UqXySB5V9612zV+jntCB/1lnRXSH73b
-        YIawuuUmh960/JXAsaqUDjwWmc4nxp6YjuLOG0kIfm0x64n68p2BoDte9egwN/Im
-        L5D2Diz5PkQ0F0avFjFfxc+iPuDY8U2DArYcMFR2c0KQ9VFV1Fw+J0kmw==
-X-ME-Sender: <xms:mSQ5ZJ9sGfbDvuVzBblC2zzsPHP5MjKOrhr6mqjdXZVurL7Qt_y6Dg>
-    <xme:mSQ5ZNs19OxX2hlzXhDsAUmUfakZawtbcCmWUsIHNifDKaeW2lmVlGYZwQab6A38Z
-    Q0TrR7AxDsejqwPm7k>
-X-ME-Received: <xmr:mSQ5ZHAIotOx71Aw9jYCyv1359f8opuD8Jn8ZL7PKITU3TOY_vChRRRxBaz8zgf_duwgXg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeltddgvddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephfffvfevuffkfhggtggujgesghdtsfertddtvdenucfhrhhomhepmhgrgihi
-    mhgvsegtvghrnhhordhtvggthhenucggtffrrghtthgvrhhnpeegfeeuffdtuefffeegvd
-    evhedvtdekkeeftdefjedufffguefgudffhfduffehteenucffohhmrghinhepkhgvrhhn
-    vghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:mSQ5ZNejtdtl0F7Sxmo-hFqWXhultPBqvVc9tc6IM5WyXIxEgfb6BQ>
-    <xmx:mSQ5ZOOwAXZ7YZKeEuj3IYaQBM-iqWl9Kv3PQEWtMQoZLbXjxd68fg>
-    <xmx:mSQ5ZPnezi-Ry3315dLzcCygIWUrpMbhbDB21E2PDJRwSHgtKBqc3Q>
-    <xmx:miQ5ZDZCwRFz0rRZCRNxGj318CIgoVJcUJ5QxtdisCSu9bGYhxHjm3IAeqw>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 14 Apr 2023 06:02:00 -0400 (EDT)
-From:   maxime@cerno.tech
-Date:   Fri, 14 Apr 2023 12:01:59 +0200
-To:     David Gow <davidgow@google.com>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        Rae Moar <rmoar@google.com>,
-        Benjamin Berg <benjamin@sipsolutions.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com
-Subject: Re: [RFC PATCH v2 1/3] kunit: Add kunit_add_action() to defer a call
- until test exit
-Message-ID: <56w47e5mff74b4jrpgl4odhjxzayoptb6u2e2u6haaf7tuvl4f@xwlmne7p6kli>
-11;rgb: fafa/f4f4/ededFrom: Maxime Ripard <maxime@cerno.tech>
-References: <20230331080411.981038-1-davidgow@google.com>
- <20230331080411.981038-2-davidgow@google.com>
+        Fri, 14 Apr 2023 06:02:49 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689467D91;
+        Fri, 14 Apr 2023 03:02:48 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33E9l4iH022901;
+        Fri, 14 Apr 2023 10:02:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Q/n+MZ4xOGHaYAcNvhWlx8MWXpSgSS7OVEh/YXvb4Vo=;
+ b=EYIPsluiq0WDO+a+R84fasyYeitE3ue0aIlMnDzoxQw+nQSizBazSF+pUAX0h+z0O2qa
+ jpLXk0wgoZHGdTIsQlAQFt/EgFnvbR8/aZrEWIL6jQjF+SdgFHO2zGIz0X+4jSbj6aL4
+ Xx6TrTSGXi7gmw44nITmCyWODLIM0AEL7AOJ0xghPGL9+r/c6nVrB9y2naztAVKzH0VQ
+ v1h/7EjCJieYQbiwEVoHEXGbunNZ2vNLJdNAzbVflV4nwP/7n6zFGpW1nd+nVTXDCrna
+ LRPtPUnK89mYgbkF2ezq1379IhwiBT1hjMgpU3dFrThVjLeZwBRXr4WhittMGwSgIeem rA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3py4ghr0y7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 10:02:13 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33EA2Cr1013401
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 10:02:12 GMT
+Received: from [10.216.10.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 14 Apr
+ 2023 03:02:02 -0700
+Message-ID: <da6051dd-1a29-a356-9d6a-a35f20b23fb9@quicinc.com>
+Date:   Fri, 14 Apr 2023 15:31:59 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fceqsyq7p6l42qjy"
-Content-Disposition: inline
-In-Reply-To: <20230331080411.981038-2-davidgow@google.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH V12 3/4] arm64: dts: qcom: Add support for ipq9574 SoC and
+ RDP433 variant
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <linus.walleij@linaro.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <p.zabel@pengutronix.de>, <shawnguo@kernel.org>, <arnd@arndb.de>,
+        <marcel.ziswiler@toradex.com>, <dmitry.baryshkov@linaro.org>,
+        <geert+renesas@glider.be>, <rafal@milecki.pl>,
+        <nfraprado@collabora.com>, <broonie@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_poovendh@quicinc.com>
+References: <20230410135948.11970-1-quic_devipriy@quicinc.com>
+ <20230410135948.11970-4-quic_devipriy@quicinc.com>
+ <a599d157-002f-26ef-5f31-a3fb0925dfba@linaro.org>
+From:   Devi Priya <quic_devipriy@quicinc.com>
+In-Reply-To: <a599d157-002f-26ef-5f31-a3fb0925dfba@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: rFPC14_6yVVzlHo2ldTvJLOibAZ3tZTz
+X-Proofpoint-ORIG-GUID: rFPC14_6yVVzlHo2ldTvJLOibAZ3tZTz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-14_04,2023-04-13_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ mlxlogscore=999 malwarescore=0 bulkscore=0 phishscore=0 suspectscore=0
+ adultscore=0 mlxscore=0 clxscore=1015 lowpriorityscore=0
+ priorityscore=1501 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2304140090
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -100,146 +97,213 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---fceqsyq7p6l42qjy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi David,
+On 4/13/2023 2:16 AM, Konrad Dybcio wrote:
+> 
+> 
+> On 10.04.2023 15:59, Devi Priya wrote:
+>> Add initial device tree support for Qualcomm IPQ9574 SoC and
+>> Reference Design Platform(RDP) 433 which is based on IPQ9574
+>> family of SoCs
+>>
+>> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
+>> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+>> Co-developed-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
+>> Signed-off-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
+>> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+>> ---
+> 
+>> +	soc: soc@0 {
+>> +		compatible = "simple-bus";
+>> +		#address-cells = <1>;
+>> +		#size-cells = <1>;
+>> +		ranges = <0 0 0 0xffffffff>;
+> this is equal to:
+> 
+> ranges;
 
-On Fri, Mar 31, 2023 at 04:04:09PM +0800, David Gow wrote:
-> Many uses of the KUnit resource system are intended to simply defer
-> calling a function until the test exits (be it due to success or
-> failure). The existing kunit_alloc_resource() function is often used for
-> this, but was awkward to use (requiring passing NULL init functions, etc),
-> and returned a resource without incrementing its reference count, which
-> -- while okay for this use-case -- could cause problems in others.
->=20
-> Instead, introduce a simple kunit_add_action() API: a simple function
-> (returning nothing, accepting a single void* argument) can be scheduled
-> to be called when the test exits. Deferred actions are called in the
-> opposite order to that which they were registered.
->=20
-> This mimics the devres API, devm_add_action(), and also provides
-> kunit_remove_action(), to cancel a deferred action, and
-> kunit_release_action() to trigger one early.
->=20
-> This is implemented as a resource under the hood, so the ordering
-> between resource cleanup and deferred functions is maintained.
->=20
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
->=20
-> Changes since RFC v1:
-> https://lore.kernel.org/linux-kselftest/20230325043104.3761770-2-davidgow=
-@google.com/
-> - Rename functions to better match the devm_* APIs. (Thanks Maxime)
-> - Embed the kunit_resource in struct kunit_action_ctx to avoid an extra
->   allocation (Thanks Benjamin)
-> - Use 'struct kunit_action_ctx' as the type for cancellation tokens
->   (Thanks Benjamin)
-> - Add tests.
->=20
-> ---
->  include/kunit/resource.h |  89 ++++++++++++++++++++++++++++
->  lib/kunit/kunit-test.c   | 123 ++++++++++++++++++++++++++++++++++++++-
->  lib/kunit/resource.c     |  99 +++++++++++++++++++++++++++++++
->  3 files changed, 310 insertions(+), 1 deletion(-)
->=20
-> diff --git a/include/kunit/resource.h b/include/kunit/resource.h
-> index c0d88b318e90..15efd8924666 100644
-> --- a/include/kunit/resource.h
-> +++ b/include/kunit/resource.h
-> @@ -387,4 +387,93 @@ static inline int kunit_destroy_named_resource(struc=
-t kunit *test,
->   */
->  void kunit_remove_resource(struct kunit *test, struct kunit_resource *re=
-s);
-> =20
-> +typedef void (*kunit_defer_function_t)(void *ctx);
-> +
-> +/* An opaque token to a deferred action. */
-> +struct kunit_action_ctx;
-> +
-> +/**
-> + * kunit_add_action() - Defer an 'action' (function call) until the test=
- ends.
-> + * @test: Test case to associate the action with.
-> + * @func: The function to run on test exit
-> + * @ctx: Data passed into @func
-> + * @internal_gfp: gfp to use for internal allocations, if unsure, use GF=
-P_KERNEL
-> + *
-> + * Defer the execution of a function until the test exits, either normal=
-ly or
-> + * due to a failure.  @ctx is passed as additional context. All functions
-> + * registered with kunit_add_action() will execute in the opposite order=
- to that
-> + * they were registered in.
-> + *
-> + * This is useful for cleaning up allocated memory and resources.
-> + *
-> + * Returns:
-> + *   An opaque "cancellation token", or NULL on error. Pass this token to
-> + *   kunit_remove_action_token() in order to cancel the deferred executi=
-on of
-> + *   func().
-> + */
-> +struct kunit_action_ctx *kunit_add_action(struct kunit *test, kunit_defe=
-r_function_t func,
-> +		      void *ctx, gfp_t internal_gfp);
+Konrad, on updating (ranges = <0 0 0 0xffffffff>; --> ranges;)
+we see the below warnings:
+arch/arm64/boot/dts/qcom/ipq9574.dtsi:103.3-10: Warning (ranges_format):
+/soc@0:ranges: empty "ranges" property but its #address-cells (1)
+differs from / (2)
+arch/arm64/boot/dts/qcom/ipq9574.dtsi:103.3-10: Warning (ranges_format): 
+/soc@0:ranges: empty "ranges" property but its #size-cells (1) differs
+from / (2)
 
-I've tried to leverage kunit_add_action() today, and I'm wondering if
-passing the struct kunit pointer to the deferred function would help.
+Looks like, empty ranges property isn't supported if the parent and
+child address spaces are non-identical.
+Would you suggest to retain the ranges as such?
+(ranges = <0 0 0 0xffffffff>;)
 
-The code I'm struggling with is something like:
-
-> static int test_init(struct kunit *test)
-> {
-> 	priv =3D kunit_kzalloc(sizeof(*priv), GFP_KERNEL);
->	KUNIT_ASSERT_NOT_NULL(test, priv);
->	test->priv =3D priv;
->
-> 	priv->dev =3D alloc_device();
->
->	return 0;
-> }
-
-and then in the test itself:
-
-> static void actual_test(struct kunit *test)
-> {
-> 	struct test_priv *priv =3D test->priv;
->
->	id =3D allocate_buffer(priv->dev);
->
-> 	KUNIT_EXPECT_EQ(test, id, 42);
->
-> 	free_buffer(priv->dev, id);
-> }
-
-I'd like to turn free_buffer an action registered right after allocate
-buffer. However, since it takes several arguments and kunit_add_action
-expects a single pointer, we would need to create a structure for it,
-allocate it, fill it, and then free it when the action has ran.
-
-It creates a lot of boilerplate, while if we were passing the pointer to
-struct kunit we could access the context of the test as well, and things
-would be much simpler.
-
-Does that make sense?
-
-Maxime
-
---fceqsyq7p6l42qjy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZDkklwAKCRDj7w1vZxhR
-xeNoAP9VMmSPcl8ZzIFWaozvx8UFXU/3lzCtRY36TKzGyxPxxAD+NLmzkbxArqsc
-XrsZQswdB53bCVwGmp6eiVyTgG8Dnw4=
-=ONZA
------END PGP SIGNATURE-----
-
---fceqsyq7p6l42qjy--
+Thanks,
+Devi Priya
+> 
+> Could you fix that up when applying, Bjorn, should there be
+> no other issues?
+> 
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> 
+Thank you!
+> Konrad
+> 
+>> +
+>> +		tlmm: pinctrl@1000000 {
+>> +			compatible = "qcom,ipq9574-tlmm";
+>> +			reg = <0x01000000 0x300000>;
+>> +			interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
+>> +			gpio-controller;
+>> +			#gpio-cells = <2>;
+>> +			gpio-ranges = <&tlmm 0 0 65>;
+>> +			interrupt-controller;
+>> +			#interrupt-cells = <2>;
+>> +
+>> +			uart2_pins: uart2-state {
+>> +				pins = "gpio34", "gpio35";
+>> +				function = "blsp2_uart";
+>> +				drive-strength = <8>;
+>> +				bias-disable;
+>> +			};
+>> +		};
+>> +
+>> +		gcc: clock-controller@1800000 {
+>> +			compatible = "qcom,ipq9574-gcc";
+>> +			reg = <0x01800000 0x80000>;
+>> +			clocks = <&xo_board_clk>,
+>> +				 <&sleep_clk>,
+>> +				 <0>,
+>> +				 <0>,
+>> +				 <0>,
+>> +				 <0>,
+>> +				 <0>;
+>> +			#clock-cells = <1>;
+>> +			#reset-cells = <1>;
+>> +			#power-domain-cells = <1>;
+>> +		};
+>> +
+>> +		sdhc_1: mmc@7804000 {
+>> +			compatible = "qcom,ipq9574-sdhci", "qcom,sdhci-msm-v5";
+>> +			reg = <0x07804000 0x1000>, <0x07805000 0x1000>;
+>> +			reg-names = "hc", "cqhci";
+>> +
+>> +			interrupts = <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH>;
+>> +			interrupt-names = "hc_irq", "pwr_irq";
+>> +
+>> +			clocks = <&gcc GCC_SDCC1_AHB_CLK>,
+>> +				 <&gcc GCC_SDCC1_APPS_CLK>,
+>> +				 <&xo_board_clk>;
+>> +			clock-names = "iface", "core", "xo";
+>> +			non-removable;
+>> +			status = "disabled";
+>> +		};
+>> +
+>> +		blsp1_uart2: serial@78b1000 {
+>> +			compatible = "qcom,msm-uartdm-v1.4", "qcom,msm-uartdm";
+>> +			reg = <0x078b1000 0x200>;
+>> +			interrupts = <GIC_SPI 306 IRQ_TYPE_LEVEL_HIGH>;
+>> +			clocks = <&gcc GCC_BLSP1_UART3_APPS_CLK>,
+>> +				 <&gcc GCC_BLSP1_AHB_CLK>;
+>> +			clock-names = "core", "iface";
+>> +			status = "disabled";
+>> +		};
+>> +
+>> +		intc: interrupt-controller@b000000 {
+>> +			compatible = "qcom,msm-qgic2";
+>> +			reg = <0x0b000000 0x1000>,  /* GICD */
+>> +			      <0x0b002000 0x2000>,  /* GICC */
+>> +			      <0x0b001000 0x1000>,  /* GICH */
+>> +			      <0x0b004000 0x2000>;  /* GICV */
+>> +			#address-cells = <1>;
+>> +			#size-cells = <1>;
+>> +			interrupt-controller;
+>> +			#interrupt-cells = <3>;
+>> +			interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
+>> +			ranges = <0 0x0b00c000 0x3000>;
+>> +
+>> +			v2m0: v2m@0 {
+>> +				compatible = "arm,gic-v2m-frame";
+>> +				reg = <0x00000000 0xffd>;
+>> +				msi-controller;
+>> +			};
+>> +
+>> +			v2m1: v2m@1000 {
+>> +				compatible = "arm,gic-v2m-frame";
+>> +				reg = <0x00001000 0xffd>;
+>> +				msi-controller;
+>> +			};
+>> +
+>> +			v2m2: v2m@2000 {
+>> +				compatible = "arm,gic-v2m-frame";
+>> +				reg = <0x00002000 0xffd>;
+>> +				msi-controller;
+>> +			};
+>> +		};
+>> +
+>> +		timer@b120000 {
+>> +			compatible = "arm,armv7-timer-mem";
+>> +			reg = <0x0b120000 0x1000>;
+>> +			#address-cells = <1>;
+>> +			#size-cells = <1>;
+>> +			ranges;
+>> +
+>> +			frame@b120000 {
+>> +				reg = <0x0b121000 0x1000>,
+>> +				      <0x0b122000 0x1000>;
+>> +				frame-number = <0>;
+>> +				interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
+>> +					     <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
+>> +			};
+>> +
+>> +			frame@b123000 {
+>> +				reg = <0x0b123000 0x1000>;
+>> +				frame-number = <1>;
+>> +				interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
+>> +				status = "disabled";
+>> +			};
+>> +
+>> +			frame@b124000 {
+>> +				reg = <0x0b124000 0x1000>;
+>> +				frame-number = <2>;
+>> +				interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
+>> +				status = "disabled";
+>> +			};
+>> +
+>> +			frame@b125000 {
+>> +				reg = <0x0b125000 0x1000>;
+>> +				frame-number = <3>;
+>> +				interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
+>> +				status = "disabled";
+>> +			};
+>> +
+>> +			frame@b126000 {
+>> +				reg = <0x0b126000 0x1000>;
+>> +				frame-number = <4>;
+>> +				interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
+>> +				status = "disabled";
+>> +			};
+>> +
+>> +			frame@b127000 {
+>> +				reg = <0x0b127000 0x1000>;
+>> +				frame-number = <5>;
+>> +				interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
+>> +				status = "disabled";
+>> +			};
+>> +
+>> +			frame@b128000 {
+>> +				reg = <0x0b128000 0x1000>;
+>> +				frame-number = <6>;
+>> +				interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
+>> +				status = "disabled";
+>> +			};
+>> +		};
+>> +	};
+>> +
+>> +	timer {
+>> +		compatible = "arm,armv8-timer";
+>> +		interrupts = <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+>> +			     <GIC_PPI 3 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+>> +			     <GIC_PPI 4 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+>> +			     <GIC_PPI 1 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
+>> +	};
+>> +};
