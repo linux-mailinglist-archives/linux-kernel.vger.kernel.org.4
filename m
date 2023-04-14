@@ -2,92 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD1706E2905
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 19:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 765CC6E28FB
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 19:10:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbjDNRMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 13:12:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38308 "EHLO
+        id S230218AbjDNRKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 13:10:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbjDNRMh (ORCPT
+        with ESMTP id S229744AbjDNRKp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 13:12:37 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9EA412F;
-        Fri, 14 Apr 2023 10:12:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681492356; x=1713028356;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BvUZ/WxkZ91U7aHTLOgkDO1QjRQQwhV++ic08HnfP2U=;
-  b=YV2lUzJPWeMtN4AN70nEVaSLBcog3BOgmq2Vs7uovxQNAJaqitvV2Her
-   FHp78uNsmKsX9nOMtx06W3tktSyipvkaVH4xvNdUipZh+1XgQ0IEVxnXN
-   JinMq3MWrlAKMhj3TKL+s3RnNpJ9o5g8Af42g047nPc96aPSpXB9J0euj
-   0tej53wkib//1OadH4TIdLMxliXaAcCUqACQRuSdy66nOTAQBPtqXrKsY
-   ugp3GHb9WQPFGmB36y9GVAjs0sxZzRIXg/n5NYwTYsqgYPK6l8Y5nlU9D
-   nQIibOADhyR8b4F9qEKw9kffRrD7tSoFWTnyaZPXGpnI48n4tGcv13+/l
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="407396285"
-X-IronPort-AV: E=Sophos;i="5.99,197,1677571200"; 
-   d="scan'208";a="407396285"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 10:10:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="689878765"
-X-IronPort-AV: E=Sophos;i="5.99,197,1677571200"; 
-   d="scan'208";a="689878765"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 14 Apr 2023 10:10:35 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pnMwT-00HDQf-2Z;
-        Fri, 14 Apr 2023 20:10:33 +0300
-Date:   Fri, 14 Apr 2023 20:10:33 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andrew Davis <afd@ti.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] serial: 8250_exar: Add support for USR298x PCI Modems
-Message-ID: <ZDmJCa4I5EA9GLMm@smile.fi.intel.com>
-References: <20230413214421.6251-1-afd@ti.com>
- <20230413214421.6251-2-afd@ti.com>
+        Fri, 14 Apr 2023 13:10:45 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C915B4;
+        Fri, 14 Apr 2023 10:10:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Ti6cYdcZoKEE42acSDYdLZZ8XvUjNJ9ejinmTKxANOc=; b=4InsRRvRPC1aGBxCPZpgSSoMPY
+        OAvGUEm0s8N1CDjsOEQHbh4bxagIo50k+E8anop6y8pKG+Bkpwx+4kHHZ2MW987Jop7xaBluBUFPz
+        4qb765rlUELgMKnjJZkWPbez/wg9DHFF7O5WlAEFX1BFr8V33oIr+Au9sW4Lp8krQRKZBLpL7gRvz
+        HDVgLqcQsjCHeUd2fFhNFmz8hYgFh2ABxoJr6rRkAjk2U5GRtv2kv31AENQtFecfQ9+iP/fyt3+Gy
+        qbSh9X+mRUSGC+Hl/7I4OtP9k5tjcnJCb3jctZH4E+76SyPlxnGbLNQECO9pL/BmCvZ9/1wlNOwdR
+        VVRHeevA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pnMwY-00ACgB-2N;
+        Fri, 14 Apr 2023 17:10:38 +0000
+Date:   Fri, 14 Apr 2023 10:10:38 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     david@redhat.com, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com,
+        petr.pavlu@suse.com, prarit@redhat.com,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        rafael@kernel.org
+Cc:     christophe.leroy@csgroup.eu, tglx@linutronix.de,
+        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com,
+        catalin.marinas@arm.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com
+Subject: Re: [PATCH v3 1/2] Change DEFINE_SEMAPHORE() to take a number
+ argument
+Message-ID: <ZDmJDq/9qU52TgMd@bombadil.infradead.org>
+References: <20230414051349.1986744-1-mcgrof@kernel.org>
+ <20230414051349.1986744-2-mcgrof@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230413214421.6251-2-afd@ti.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230414051349.1986744-2-mcgrof@kernel.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 04:44:21PM -0500, Andrew Davis wrote:
-> Possibly the last PCI controller-based (i.e. not a soft/winmodem)
-> dial-up modem one can still buy.
-> 
-> Looks to have a stock XR17C154 PCI UART chip for communication, but for
-> some reason when provisioning the PCI IDs they swapped the vendor and
-> subvendor IDs. Otherwise this card would have worked out of the box.
-> 
-> Searching online, some folks seem to not have this issue and others do,
-> so it is possible only some batches of cards have this error.
-> 
-> Create a new macro to handle the switched IDs and add support here.
+On Thu, Apr 13, 2023 at 10:13:48PM -0700, Luis Chamberlain wrote:
+> From: Peter Zijlstra <peterz@infradead.org>
+> [mcgrof: add some tribal knowledge about why some folks prefer
+>  binary sempahores over mutexes]
 
-Yeah, and here you just going to support the schema before your patch 1.
+Jeesh, sorry I thought I had replaced the tribal knowledge tibit with
+what Matthew had suggested before, will do that in v4.
 
-For this patch
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+  Luis
