@@ -2,100 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F65B6E2A1C
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 20:32:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3C596E2A22
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 20:35:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbjDNScj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 14:32:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59280 "EHLO
+        id S230106AbjDNSe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 14:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjDNSch (ORCPT
+        with ESMTP id S229786AbjDNSe6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 14:32:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C3286A2;
-        Fri, 14 Apr 2023 11:32:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8033E649C2;
-        Fri, 14 Apr 2023 18:32:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3E2CC433EF;
-        Fri, 14 Apr 2023 18:32:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681497153;
-        bh=vKUitZRz+obzaz3lR/ADlqWYQaTRObBYOfyX3so27Cs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hgMiVd29EUGpZ0DIrQG8hCUG6oRbUwMXG3RATbdWmuTePaJKjipP0URpQpFKfUIK6
-         Ibtsn7dD8gDx8lnOprtLzd0QMEvkUGudgpuXfwsHTi/NGDrvmby3RvLJpLJbQxT/TQ
-         Y11T7gwPxWUGGeqrpwvczEWVGKS2VGNXuCrrpnGG9sV2zlekd2Afu4xILoFeSIFlRd
-         0Ldm2nG9Ut8l//ahhzO22les8tmNKW6oRTRBRoj3psef920gK6OaVdZcSjClvk1qxt
-         JmFFHAkhIOryH3pvLdjo4YDKNF+ojqZEyo6UAlEZuXxjwEcchWVr7+xhQ43Yz8VeX7
-         Q128fCVFPjayA==
-Date:   Fri, 14 Apr 2023 19:32:28 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH v7 2/2] spi: loongson: add bus driver for the loongson
- spi controller
-Message-ID: <f0989d13-4520-461f-8715-3595e11f988e@sirena.org.uk>
-References: <20230412045152.4694-1-zhuyinbo@loongson.cn>
- <20230412045152.4694-3-zhuyinbo@loongson.cn>
+        Fri, 14 Apr 2023 14:34:58 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42384EDD
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 11:34:56 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-94a342f202cso47882066b.0
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 11:34:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681497295; x=1684089295;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/J+vjdb6cOyet1NlcJdx7Gney2QIkG13+uv7x6+rlKE=;
+        b=G05SBNFy+5LmoPB7N11GwA1JML3OifQBNYPoauP/kLqe28fX59OGvQikVdsU4O2tDh
+         zOVj501kf2xTO+zvTMDq+Kp3aZf+eYqSK5ua93Kja/71tEvabIKH1sKsPC43lAsaDyxa
+         2tEn0/DMof+CP2PLedntGb1xlx8uKxCHbsofChiYZtDQXfp+80LxC7owTaumdLcudxSk
+         9DNIyE9PdqzsdES5sUSsGT2tGVek6S186vBvQTOs4T63Y2DZpHmZQzFOVppbxnt0IKZw
+         5pjqR1HRtfrwumCZwBC+wyXKi2zgAqi04XXYr4NdQDbBD0wZkL5pSDSiK72I/3J/RVIY
+         SqtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681497295; x=1684089295;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/J+vjdb6cOyet1NlcJdx7Gney2QIkG13+uv7x6+rlKE=;
+        b=gA6ICQogITuzjsp+kO5MjZqXNU0ZPrGgJYMaOlfASceZIR2NYmAhavmLUms73uiSAX
+         0wbxSCxznQo/DQiOVD88SnuxJahN39j2dMjXbN9X9GsRL4O6lOCbJ8TUP16KQXskOlmL
+         5UE+T7OKc2ly885n7dEBoNmUhQ/gYGQXpubsRW1CE9AkkSTvIWmI7KM9PPpZ/qcTcsgt
+         9ksma7oXJRudhyRWCZyjE3CywEx5OEXX9DYmgUDJdm+mjlT/8sUXP6Joj7yvIVI8DTlO
+         oya1/Ve6AGnX4q7vFvdrlcp7oVpRF88P2YhJgtBdQpz/kEHgka0zz2asbrq43vvXuJNu
+         pKzw==
+X-Gm-Message-State: AAQBX9dwJZ/M8rxWVtSMBWaqqKsAGlXbX5Rk7/GxQ9WqWb23kzwL0cA9
+        WblDAaaCZF199sMOv78ubM0rYkFaEPI=
+X-Google-Smtp-Source: AKy350Yfsz8pokbm+WLlXGCqYoauSB33GAtn2ZEuFtPM657L3N+8DOR1vE+fbxwQQ7ZaL7nCXRMN1w==
+X-Received: by 2002:a17:906:d4:b0:947:bff2:1c2b with SMTP id 20-20020a17090600d400b00947bff21c2bmr2971926eji.1.1681497294723;
+        Fri, 14 Apr 2023 11:34:54 -0700 (PDT)
+Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
+        by smtp.gmail.com with ESMTPSA id m9-20020a1709062b8900b0094a9b9c4979sm2781449ejg.88.2023.04.14.11.34.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Apr 2023 11:34:54 -0700 (PDT)
+Date:   Fri, 14 Apr 2023 20:34:52 +0200
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: rtl8192e: Fix W_DISABLE# does not work after
+ stop/start
+Message-ID: <20230414183452.GA12295@matrix-ESPRIMO-P710>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="29/KVkP8J7BvNLls"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230412045152.4694-3-zhuyinbo@loongson.cn>
-X-Cookie: One Bell System - it works.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When loading the driver for rtl8192e, the W_DISABLE# switch is working as
+intended. But when the WLAN is turned off in software and then turned on
+again the W_DISABLE# does not work anymore. Reason for this is that in
+the function _rtl92e_dm_check_rf_ctrl_gpio() the bfirst_after_down is
+checked and returned when true. bfirst_after_down is set true when
+switching the WLAN off in software. But it is not set to false again
+when WLAN is turned on again.
 
---29/KVkP8J7BvNLls
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Add bfirst_after_down = false in _rtl92e_sta_up to reset bit and fix
+above described bug.
 
-On Wed, Apr 12, 2023 at 12:51:52PM +0800, Yinbo Zhu wrote:
+Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+---
+Tested with rtl8192e (WLL6130-D99)
+Transferred this patch over wlan connection of rtl8192e
+---
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> +static int __maybe_unused loongson_spi_suspend(struct device *dev)
-> +{
-> +	struct loongson_spi *loongson_spi;
-> +	struct spi_master *master;
-> +
-> +	master = dev_get_drvdata(dev);
-> +	loongson_spi = spi_master_get_devdata(master);
-> +
-> +	loongson_spi->spcr = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPCR_REG);
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+index 45989a77a27c..a644543015ee 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+@@ -648,6 +648,7 @@ static int _rtl92e_sta_up(struct net_device *dev, bool is_silent_reset)
+ 	else
+ 		netif_wake_queue(dev);
+ 
++	priv->bfirst_after_down = false;
+ 	return 0;
+ }
+ 
+-- 
+2.40.0
 
-This is missing a call to spi_controller_suspend(), and similarly resume
-is missing a call to spi_controller_resume().  Otherwise this looks
-good.
-
---29/KVkP8J7BvNLls
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ5nDsACgkQJNaLcl1U
-h9CAhwf/U5UIA8nm2mT4KVXaTYaJXvCv34GkE7RaSHf8It33c3T+SzafytzTzRHk
-4q8WWlxOQZu5tu+0aO3gaBj56nQeZjKNF4ZlL2xaoZqCH9KEgmaOfgo6PLNKO9o/
-bNa3M7s1p+FfNWmAdlBroU5mQdBFmZdFV0QvE/Ys/JeF3tHQSRYWm248IZezQTc4
-+8YKNJxyZZGXD9LG65ArFFHvaCGzYu6c236XAPXEh9zhFENmeEXITVdsn4no6jgq
-c7lb7gp9y9urAdft/vo+/Xmyltfx+5lDCz22gFdO6zWY9lWjDmvqACOfYExsX6SV
-1IyF3T3c6GnpADr3xzM5RPE/iU2rjg==
-=eM2N
------END PGP SIGNATURE-----
-
---29/KVkP8J7BvNLls--
