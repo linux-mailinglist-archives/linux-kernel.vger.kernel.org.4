@@ -2,257 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB64F6E2656
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 17:00:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B882F6E265B
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 17:00:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230219AbjDNPAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 11:00:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52842 "EHLO
+        id S230382AbjDNPAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 11:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjDNPAB (ORCPT
+        with ESMTP id S230185AbjDNPAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 11:00:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA93C666
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 07:58:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681484332;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=k9tZKbJ5qs0aTJOWbxa+ntg7JuywwVnLOpTSJzXLREE=;
-        b=B1P/+qDKa26azQYbyB2uno8YZJqZvA9vWr8PfE4OiLJeVM9l96EiO90awA26+81eqkvAdh
-        MQgksZ0CHDqOFRLQLiVdTgwc/8iTXilFXsEJ4zzHVgShazOHLiFQFC3O+OJp/T4CUw+mw6
-        tS3dY/YWa2NU0FBuxcP2Ci1tZlertSY=
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
- [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-468-Si2CmEupOWe6dN4S7jgAoA-1; Fri, 14 Apr 2023 10:58:50 -0400
-X-MC-Unique: Si2CmEupOWe6dN4S7jgAoA-1
-Received: by mail-ot1-f69.google.com with SMTP id w8-20020a9d5388000000b006a43c04758eso1039603otg.10
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 07:58:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681484328; x=1684076328;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k9tZKbJ5qs0aTJOWbxa+ntg7JuywwVnLOpTSJzXLREE=;
-        b=NjYK+ibm9fQrBk4OIB1yBhV6cTmJiwPKxFScMOPwWgE2Xq7d8Yxnk40GWmT4dzbMxq
-         GejB7nCUMlAplRXpmTVzCZIfMmRwCTWjemPWge+MgAfbw1FnkXBv3+agXAINNz4QifSY
-         urLsNc4WwG/ZEAjQWe5trbkMcMiBahIgIkwEC/MFycspzd4OPbukg64YusMGzrPcdG4u
-         wkC8YcxrG5rup6a33fDGsRs67TIaLxx2B5apiiKqVDPuFpmkWGsWiQ/Hjt0iS7Dcvd6Q
-         pTzHvuhD3GV9mzx6Yq1vrBhN5q40X7qrvCfGAYwmmw1yDnN8ocTEc1kHufKIqHbCXA5F
-         8s1A==
-X-Gm-Message-State: AAQBX9cDt04LkbIyk7VJfkQ/O5zH7w5JX9RcBmoIQzesUcHfF2Scx0Zo
-        IuJBrvJaTYOKGM2vONjMvZs5zTtDxxlBy7qKqK7LoKoMUmOUr7aEk1PS90HTROonxkaKwi4WwCV
-        VM9lVzNeQA8sd5nGZsFrhzoZg
-X-Received: by 2002:a54:4594:0:b0:389:7d66:131a with SMTP id z20-20020a544594000000b003897d66131amr2571659oib.0.1681484328419;
-        Fri, 14 Apr 2023 07:58:48 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bkRH9KaOHjyXtwFRXXzVwyZiRQ/axbyA+HWVFGo3S3BIN+ZZccIIJ8MK7vkdCqMcmg6iiLag==
-X-Received: by 2002:a54:4594:0:b0:389:7d66:131a with SMTP id z20-20020a544594000000b003897d66131amr2571637oib.0.1681484328154;
-        Fri, 14 Apr 2023 07:58:48 -0700 (PDT)
-Received: from halaney-x13s (104-53-165-62.lightspeed.stlsmo.sbcglobal.net. [104.53.165.62])
-        by smtp.gmail.com with ESMTPSA id n84-20020acaef57000000b0038bb2f60064sm1737277oih.30.2023.04.14.07.58.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Apr 2023 07:58:47 -0700 (PDT)
-Date:   Fri, 14 Apr 2023 09:58:44 -0500
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        richardcochran@gmail.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        netdev@vger.kernel.org, bmasney@redhat.com, echanude@redhat.com,
-        ncai@quicinc.com, jsuraj@qti.qualcomm.com, hisunil@quicinc.com
-Subject: Re: [PATCH v5 3/3] arm64: dts: qcom: sa8540p-ride: Add ethernet nodes
-Message-ID: <20230414145844.wyg6pt623pzqwh5l@halaney-x13s>
-References: <20230413191541.1073027-1-ahalaney@redhat.com>
- <20230413191541.1073027-4-ahalaney@redhat.com>
- <a295939f0058373d1caf956749820c0d.sboyd@kernel.org>
- <20230413210127.s5dkek6adp5ndern@halaney-x13s>
- <7b2b2eefb4b7b6ef8ac2a3176286a97b.sboyd@kernel.org>
+        Fri, 14 Apr 2023 11:00:44 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB6172AB
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 08:00:41 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230414150039euoutp01ed0f80c5ce6e3a913418f0382f58cf12~V1TBVf86-0862308623euoutp01P
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 15:00:39 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230414150039euoutp01ed0f80c5ce6e3a913418f0382f58cf12~V1TBVf86-0862308623euoutp01P
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1681484439;
+        bh=ibChgCKjv6ZNfmfGmvDkXir9juzYcVtKHbDliZZElaE=;
+        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
+        b=b690qyFDFwdcZ4VpnIRFLL/sUbT6SKTU5rccJefapP1Sc1SdUqZVPKF8BapH2rn1P
+         tMvqlriK162g7L5dsDz0/eHqz/THTrnO2cnb86Q3d9haatkjOYZdzlTHbdc6zsP2bv
+         HWyS0Cl3/3wCVJGW6hSRBj+qk5YRqZE8+wh93ctA=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20230414150039eucas1p2a78fe0f14bab4af8b151f58376e57051~V1TBGk7b_0877108771eucas1p2m;
+        Fri, 14 Apr 2023 15:00:39 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 35.24.10014.79A69346; Fri, 14
+        Apr 2023 16:00:39 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20230414150038eucas1p2149867beb4014958519034201f06b78e~V1TAwwbuA3074830748eucas1p2A;
+        Fri, 14 Apr 2023 15:00:38 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230414150038eusmtrp18f1f982ab0452497f21645f8377db0c8~V1TAwKdSE1449714497eusmtrp1b;
+        Fri, 14 Apr 2023 15:00:38 +0000 (GMT)
+X-AuditID: cbfec7f5-ba1ff7000000271e-0d-64396a97478d
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 49.D8.22108.69A69346; Fri, 14
+        Apr 2023 16:00:38 +0100 (BST)
+Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230414150038eusmtip13ca9996d02463ff786bf3a84ff4d3a95~V1TAlif7k0761007610eusmtip1h;
+        Fri, 14 Apr 2023 15:00:38 +0000 (GMT)
+Received: from [106.110.32.65] (106.110.32.65) by CAMSVWEXC02.scsc.local
+        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Fri, 14 Apr 2023 16:00:37 +0100
+Message-ID: <58ba1aec-f42b-f896-617f-a3720c09b30f@samsung.com>
+Date:   Fri, 14 Apr 2023 17:00:19 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7b2b2eefb4b7b6ef8ac2a3176286a97b.sboyd@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+        Thunderbird/102.10.0
+Subject: Re: [RFC 0/4] convert create_page_buffers to create_folio_buffers
+Content-Language: en-US
+To:     Hannes Reinecke <hare@suse.de>, <brauner@kernel.org>,
+        <willy@infradead.org>, <viro@zeniv.linux.org.uk>,
+        <akpm@linux-foundation.org>
+CC:     <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <mcgrof@kernel.org>, <gost.dev@samsung.com>
+From:   Pankaj Raghav <p.raghav@samsung.com>
+In-Reply-To: <1e68a118-d177-a218-5139-c8f13793dbbf@suse.de>
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [106.110.32.65]
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrCKsWRmVeSWpSXmKPExsWy7djP87rTsyxTDOYe4rSYs34Nm8Xrw58Y
+        LfYsmsRksWfvSRaLy7vmsFncmPCU0eL83+OsFr9/zGFz4PDYvELLY9OqTjaPEzN+s3hsPl3t
+        8XmTnMemJ2+ZAtiiuGxSUnMyy1KL9O0SuDK2PjzMVvCev2Jzz0nGBsYVvF2MnBwSAiYSq+4v
+        ZAGxhQRWMEqsna7YxcgFZH9hlLh3uJEJwvnMKPF99j02mI7+QxuYIRLLGSUezfnLCtEOVPXh
+        vxZEYifQqKdPGEESvAJ2Eht7njOB2CwCqhJXp35lgogLSpyc+QRst6hAtMTifVOAbA4OYQEv
+        iR+9SSBhZgFxiVtP5oNdISLQDXTS9c/MEIkiicXPljGB1LMJaEk0drKDhDkFrCUmPmxggyiR
+        l2jeOpsZ4mhFiUk337NC2LUSp7bcApspIdDPKfFx/R2oz1wkvq3/yQhhC0u8Or6FHcKWkTg9
+        uYcFwq6WeHrjNzNEcwujRP/O9WwgR0gAbe47kwNiMgtoSqzfpQ9R7ijRd3kfI0QFn8SNt4IQ
+        p/FJTNo2nXkCo+ospICYheTjWUg+mIUwdAEjyypG8dTS4tz01GLjvNRyveLE3OLSvHS95Pzc
+        TYzAhHT63/GvOxhXvPqod4iRiYPxEKMEB7OSCG+VpWWKEG9KYmVValF+fFFpTmrxIUZpDhYl
+        cV5t25PJQgLpiSWp2ampBalFMFkmDk6pBqZNdfNLPtQlC2bMastJmfq6IcR8g2DJupp53k7f
+        896lLHng/yZ115dGl+aHi2U4ee3PV04Sv1FR1nNRpzBpVrrZam2etk+bbuUu6t0s6zrRoEy8
+        bV2typEnersdLK0/33OyM5bZtejO4b+7NrS5Kn8MFvLy/zh/av21fWHCJ+ZGZfGIthW5Ptl7
+        aN7Weyp3ynhk2p+mhwU9L1LoVnU+IbFSxPPf7i3WpieWO/zd/7OXeUmw/NFd09OfrS59cmqX
+        vZ/Y+ll2E9wnbOfpvLXhil+tpc7RDczpFgsVQiZ+jC5P7NpjpxOuZmpb/23r59VZQT/T2sJW
+        WXybG5v2feGtwEe3/QV+mCdFSCkrWPzfkafEUpyRaKjFXFScCAAJJ+gXtwMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrLIsWRmVeSWpSXmKPExsVy+t/xu7rTsixTDF7d07OYs34Nm8Xrw58Y
+        LfYsmsRksWfvSRaLy7vmsFncmPCU0eL83+OsFr9/zGFz4PDYvELLY9OqTjaPEzN+s3hsPl3t
+        8XmTnMemJ2+ZAtii9GyK8ktLUhUy8otLbJWiDS2M9AwtLfSMTCz1DI3NY62MTJX07WxSUnMy
+        y1KL9O0S9DK2PjzMVvCev2Jzz0nGBsYVvF2MnBwSAiYS/Yc2MHcxcnEICSxllPjzeQILREJG
+        YuOXq6wQtrDEn2tdbBBFHxkl7r7+xgrh7GSUaDt5CqyKV8BOYmPPcyYQm0VAVeLq1K9MEHFB
+        iZMzn4BNFRWIlrix/BtQnINDWMBL4kdvEkiYWUBc4taT+UwgM0UEOhklti47xgiRKJJY/GwZ
+        E8SyfYwSfy8+YwVpZhPQkmjsZAep4RSwlpj4sIENol5TonX7b3YIW16ieetsZogPFCUm3XwP
+        9U2txOe/zxgnMIrOQnLeLCR3zEIyahaSUQsYWVYxiqSWFuem5xYb6hUn5haX5qXrJefnbmIE
+        xvO2Yz8372Cc9+qj3iFGJg7GQ4wSHMxKIrxVlpYpQrwpiZVVqUX58UWlOanFhxhNgWE0kVlK
+        NDkfmFDySuINzQxMDU3MLA1MLc2MlcR5PQs6EoUE0hNLUrNTUwtSi2D6mDg4pRqYXF6WdcUl
+        y1+cIOk8q+nP5NNsbk7n12+yluH6+3YrQ4SR51KBaSVhK6bclvm/V+TZZVu/GQVVf3Yx9AZO
+        W/3lROK3+3t9Uiw4VpZ9V+DtcOnmMpbi+tOU6yz9+p01e/zLS3+qU+rCTfTUK81KHv2de99W
+        LFJ88nymiiNnLp6TYNmn8PxVnvPsnS/LTLkfXml5pm52y0aFmXH/W+bySMnnTNLTz9+dsfhP
+        U+G9q9V7dpY03OPoOCPqpMcwpzmY4W/QNM+FC3eeurOJSeQK16PPW+SNm4UlbvxSMpqmVSvs
+        IP9+mvTK36UL5u956d8nJGi/0fDvujc9zI8/7Yu6NGe36yfL4n+11fqe/C3nfwb8U2Ipzkg0
+        1GIuKk4EAKw5vklwAwAA
+X-CMS-MailID: 20230414150038eucas1p2149867beb4014958519034201f06b78e
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20230414110825eucas1p1ed4d16627889ef8542dfa31b1183063d
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230414110825eucas1p1ed4d16627889ef8542dfa31b1183063d
+References: <CGME20230414110825eucas1p1ed4d16627889ef8542dfa31b1183063d@eucas1p1.samsung.com>
+        <20230414110821.21548-1-p.raghav@samsung.com>
+        <1e68a118-d177-a218-5139-c8f13793dbbf@suse.de>
+X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 03:05:26PM -0700, Stephen Boyd wrote:
-> Quoting Andrew Halaney (2023-04-13 14:01:27)
-> > On Thu, Apr 13, 2023 at 01:47:19PM -0700, Stephen Boyd wrote:
-> > > Quoting Andrew Halaney (2023-04-13 12:15:41)
-> > > >  arch/arm64/boot/dts/qcom/sa8540p-ride.dts | 179 ++++++++++++++++++++++
-> > > >  1 file changed, 179 insertions(+)
-> > > > 
-> > > > diff --git a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-> > > > index 40db5aa0803c..650cd54f418e 100644
-> > > > --- a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-> > > > +++ b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-> > > > @@ -28,6 +28,65 @@ aliases {
-> > > >         chosen {
-> > > >                 stdout-path = "serial0:115200n8";
-> > > >         };
-> > > > +
-> > > > +       mtl_rx_setup: rx-queues-config {
-> > > 
-> > > Is there a reason why this isn't a child of an ethernet node?
-> > > 
-> > > 
-> > 
-> > I debated if it was more appropriate to:
-> > 
-> >     1. make a duplicate in each ethernet node (ethernet0/1)
-> >     2. Put it in one and reference from both
-> >     3. have it floating around independent like this, similar to what is
-> >        done in sa8155p-adp.dts[0]
-> > 
-> > I chose 3 as it seemed cleanest, but if there's a good argument for a
-> > different approach I'm all ears!
+>> Pankaj Raghav (4):
+>>    fs/buffer: add set_bh_folio helper
+>>    buffer: add alloc_folio_buffers() helper
+>>    fs/buffer: add folio_create_empty_buffers helper
+>>    fs/buffer: convert create_page_buffers to create_folio_buffers
+>>
+>>   fs/buffer.c                 | 131 +++++++++++++++++++++++++++++++++---
+>>   include/linux/buffer_head.h |   4 ++
+>>   2 files changed, 125 insertions(+), 10 deletions(-)
+>>
+> Funnily enough, I've been tinkering along the same lines, and ended up with pretty similar patches.
+> I've had to use two additional patches to get my modified 'brd' driver off the ground with logical
+> blocksize of 16k:
+
+Good to know that we are working on a similar direction here.
+
+> - mm/filemap: allocate folios according to the blocksize
+>   (will be sending the patch separately)
+> - Modify read_folio() to use the correct order:
 > 
-> I wonder if it allows the binding checker to catch bad properties by
-> having it under the ethernet node? That's the only thing I can think of
-> that may be improved, but I'll let binding reviewers comment here.
+> @@ -2333,13 +2395,15 @@ int block_read_full_folio(struct folio *folio, get_block_t *get_block)
+>         if (IS_ENABLED(CONFIG_FS_VERITY) && IS_VERITY(inode))
+>                 limit = inode->i_sb->s_maxbytes;
 > 
+> -       VM_BUG_ON_FOLIO(folio_test_large(folio), folio);
+> -
+>         head = create_folio_buffers(folio, inode, 0);
+>         blocksize = head->b_size;
+>         bbits = block_size_bits(blocksize);
+> 
+> -       iblock = (sector_t)folio->index << (PAGE_SHIFT - bbits);
+> +       if (WARN_ON(PAGE_SHIFT < bbits)) {
+> +               iblock = (sector_t)folio->index >> (bbits - PAGE_SHIFT);
+> +       } else {
+> +               iblock = (sector_t)folio->index << (PAGE_SHIFT - bbits);
+> +       }
+>         lblock = (limit+blocksize-1) >> bbits;
+>         bh = head;
+>         nr = 0;
+> 
+> 
+> With that (and my modified brd driver) I've been able to set the logical blocksize to 16k for brd
+> and have it happily loaded.
 
-Thanks, I was curious so I played around to answer the question via
-testing, and you're right... rx-queues-config/tx-queues-config aren't
-evaluated unless they sit under the node with the compatible (i.e. it
-doesn't just follow the phandle and evaluate). That makes sense to me I
-suppose.
-
-So, I guess, would maintainers prefer to see option (1) or (2) above? I
-want that thing evaluated.
-
-Option 1., above, has duplicated configuration, but is probably a more accurate
-representation of the hardware description.
-
-Option 2., above, doesn't duplicate rx-queues-config/tx-queues-config,
-but is a weirder representation of hardware description, and only
-complains once (which is fine since it's shared) when the binding checker
-runs (i.e. only the etherent parent containing rx-queues-config yells).
-
-In the below example you can see what I mean by the "only complains
-once" comment as well as illustration that the patchset as is doesn't
-allow rx-queues-config/tx-queues-config to be validated by dt-binding
-checks:
-
-(dtschema) ahalaney@halaney-x13s ~/git/redhat/stmmac (git)-[stmmac] % # Purposely introduce a dt-binding error on top of the current patchset                                                                                          :(
-(dtschema) ahalaney@halaney-x13s ~/git/redhat/stmmac (git)-[stmmac] % git diff                                                                                                                                                         :(
-diff --git a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-index 650cd54f418e..ecb0000db4e2 100644
---- a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-@@ -54,7 +54,7 @@ queue2 {
- 
-                queue3 {
-                        snps,avb-algorithm;
--                       snps,map-to-dma-channel = <0x3>;
-+                       snps,map-to-dma-channel = "not-correct";
-                        snps,priority = <0xc>;
-                };
-        };
-(dtschema) ahalaney@halaney-x13s ~/git/redhat/stmmac (git)-[stmmac] % make CHECK_DTBS=y DT_SCHEMA_FILES=/net/qcom,ethqos.yaml qcom/sa8540p-ride.dtb
-  DTC_CHK arch/arm64/boot/dts/qcom/sa8540p-ride.dtb
-(dtschema) ahalaney@halaney-x13s ~/git/redhat/stmmac (git)-[stmmac] % # That should have failed
-(dtschema) ahalaney@halaney-x13s ~/git/redhat/stmmac (git)-[stmmac] % # Move the whole node under ethernet0, have ethernet1 reference via phandle only still
-(dtschema) ahalaney@halaney-x13s ~/git/redhat/stmmac (git)-[stmmac] % git diff | cat
-diff --git a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-index 650cd54f418e..451246936731 100644
---- a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-@@ -29,35 +29,6 @@ chosen {
- 		stdout-path = "serial0:115200n8";
- 	};
- 
--	mtl_rx_setup: rx-queues-config {
--		snps,rx-queues-to-use = <1>;
--		snps,rx-sched-sp;
--
--		queue0 {
--			snps,dcb-algorithm;
--			snps,map-to-dma-channel = <0x0>;
--			snps,route-up;
--			snps,priority = <0x1>;
--		};
--
--		queue1 {
--			snps,dcb-algorithm;
--			snps,map-to-dma-channel = <0x1>;
--			snps,route-ptp;
--		};
--
--		queue2 {
--			snps,avb-algorithm;
--			snps,map-to-dma-channel = <0x2>;
--			snps,route-avcp;
--		};
--
--		queue3 {
--			snps,avb-algorithm;
--			snps,map-to-dma-channel = <0x3>;
--			snps,priority = <0xc>;
--		};
--	};
- 
- 	mtl_tx_setup: tx-queues-config {
- 		snps,tx-queues-to-use = <1>;
-@@ -223,6 +194,36 @@ &ethernet0 {
- 
- 	status = "okay";
- 
-+	mtl_rx_setup: rx-queues-config {
-+		snps,rx-queues-to-use = <1>;
-+		snps,rx-sched-sp;
-+
-+		queue0 {
-+			snps,dcb-algorithm;
-+			snps,map-to-dma-channel = <0x0>;
-+			snps,route-up;
-+			snps,priority = <0x1>;
-+		};
-+
-+		queue1 {
-+			snps,dcb-algorithm;
-+			snps,map-to-dma-channel = <0x1>;
-+			snps,route-ptp;
-+		};
-+
-+		queue2 {
-+			snps,avb-algorithm;
-+			snps,map-to-dma-channel = <0x2>;
-+			snps,route-avcp;
-+		};
-+
-+		queue3 {
-+			snps,avb-algorithm;
-+			snps,map-to-dma-channel = "not-correct";
-+			snps,priority = <0xc>;
-+		};
-+	};
-+
- 	mdio {
- 		compatible = "snps,dwmac-mdio";
- 		#address-cells = <1>;
-(dtschema) ahalaney@halaney-x13s ~/git/redhat/stmmac (git)-[stmmac] % make CHECK_DTBS=y DT_SCHEMA_FILES=/net/qcom,ethqos.yaml qcom/sa8540p-ride.dtb
-  DTC_CHK arch/arm64/boot/dts/qcom/sa8540p-ride.dtb
-/home/ahalaney/git/redhat/stmmac/arch/arm64/boot/dts/qcom/sa8540p-ride.dtb: ethernet@20000: rx-queues-config:queue3:snps,map-to-dma-channel:0: [1852797997, 1668248178, 1701016576] is too long
-	From schema: /home/ahalaney/git/redhat/stmmac/Documentation/devicetree/bindings/net/qcom,ethqos.yaml
-/home/ahalaney/git/redhat/stmmac/arch/arm64/boot/dts/qcom/sa8540p-ride.dtb: ethernet@20000: Unevaluated properties are not allowed ('max-speed', 'mdio', 'phy-handle', 'phy-mode', 'power-domains', 'rx-fifo-depth', 'rx-queues-config', 'snps,mtl-rx-config', 'snps,mtl-tx-config', 'snps,pbl', 'snps,tso', 'tx-fifo-depth' were unexpected)
-	From schema: /home/ahalaney/git/redhat/stmmac/Documentation/devicetree/bindings/net/qcom,ethqos.yaml
-(dtschema) ahalaney@halaney-x13s ~/git/redhat/stmmac (git)-[stmmac] % # That warned as expected, since snps,dwmac.yaml failed on rx-queues-config it warns, \
-									and since part of the schema failed its not inherited (hence the Unevaluated properties warning following) \
-									also note how only ethernet0 (@20000) is evaluating rx-queues-config since that's where the rx-queues-config node lives
-(dtschema) ahalaney@halaney-x13s ~/git/redhat/stmmac (git)-[stmmac] %
-
-Thanks for the review!
- - Andrew
-
+I will give your patches a try as well.
