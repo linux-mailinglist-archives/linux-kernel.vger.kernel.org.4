@@ -2,127 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 986926E26F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 17:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7D6D6E26F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 17:27:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231400AbjDNP1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 11:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46954 "EHLO
+        id S231407AbjDNP12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 11:27:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231236AbjDNP1D (ORCPT
+        with ESMTP id S231280AbjDNP1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 11:27:03 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F0073CC39;
-        Fri, 14 Apr 2023 08:26:32 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B11A41758;
-        Fri, 14 Apr 2023 08:26:07 -0700 (PDT)
-Received: from localhost.localdomain (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2F1813F6C4;
-        Fri, 14 Apr 2023 08:25:21 -0700 (PDT)
-From:   Luca Vizzarro <Luca.Vizzarro@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Luca Vizzarro <Luca.Vizzarro@arm.com>, Jan Kara <jack@suse.cz>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Kevin Brodsky <Kevin.Brodsky@arm.com>,
-        Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        David Laight <David.Laight@ACULAB.com>,
-        Mark Rutland <Mark.Rutland@arm.com>,
-        linux-fsdevel@vger.kernel.org, linux-morello@op-lists.linaro.org
-Subject: [PATCH v2 5/5] dnotify: Pass argument of fcntl_dirnotify as int
-Date:   Fri, 14 Apr 2023 16:24:59 +0100
-Message-Id: <20230414152459.816046-6-Luca.Vizzarro@arm.com>
+        Fri, 14 Apr 2023 11:27:10 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F2CFF33
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 08:26:35 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33EDVEGn030487;
+        Fri, 14 Apr 2023 10:26:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=kQnGTPoOoJ60c3e4evHJ+bJMKizBYsYUfwtuqCqRn8o=;
+ b=BLl04glH8O2G2+Bay7G9VpW6ysoD8gmG9mKMqumqnjWXsvaUpO+Nb/1+CSfFclVOjWar
+ t5bAUAcHiA3fdNjNVmTmIbs4Gn4uiz0C8ASPByC3UjUSaJnqqWlHiSe9h1qrqw5FeA6v
+ MneueOl5XwOOLRWILOy5Neb4hTBExU0X8fIeF0Zwm0K/zRo7r/25cvKXZQx8+qh4o27L
+ LcrIe98FQIJulsr60aWqP3lF3uG+Xh4vOWoBQ7wxPrKLHilTd0YAorAw0zx0uHrlvwpu
+ hWfAaJ9Mhl8HGZLE2rhbj59mo4e20S0c1Q51peHd21z4eUWKmoQTlOwJ5/TpaeZ0JP61 ew== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3pu5p3skxn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 10:26:01 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Fri, 14 Apr
+ 2023 10:25:59 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
+ Transport; Fri, 14 Apr 2023 10:25:59 -0500
+Received: from sbinding-cirrus-dsktp2.ad.cirrus.com (unknown [198.90.238.135])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 15AFF45D;
+        Fri, 14 Apr 2023 15:25:59 +0000 (UTC)
+From:   Stefan Binding <sbinding@opensource.cirrus.com>
+To:     Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>
+CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        Stefan Binding <sbinding@opensource.cirrus.com>
+Subject: [PATCH v1 0/4] Fixes and cleanup for CS35L41 HDA
+Date:   Fri, 14 Apr 2023 16:25:48 +0100
+Message-ID: <20230414152552.574502-1-sbinding@opensource.cirrus.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230414152459.816046-1-Luca.Vizzarro@arm.com>
-References: <20230414152459.816046-1-Luca.Vizzarro@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: -yXugJRosrL2NPHbAT-fHWDQFid_X_ns
+X-Proofpoint-GUID: -yXugJRosrL2NPHbAT-fHWDQFid_X_ns
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The interface for fcntl expects the argument passed for the command
-F_DIRNOTIFY to be of type int. The current code wrongly treats it as
-a long. In order to avoid access to undefined bits, we should explicitly
-cast the argument to int.
+Several minor issues were found during additional testing and
+static analysis. These patches fix these minor issues.
 
-Cc: Jan Kara <jack@suse.cz>
-Cc: Amir Goldstein <amir73il@gmail.com>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: Jeff Layton <jlayton@kernel.org>
-Cc: Chuck Lever <chuck.lever@oracle.com>
-Cc: Kevin Brodsky <Kevin.Brodsky@arm.com>
-Cc: Vincenzo Frascino <Vincenzo.Frascino@arm.com>
-Cc: Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Cc: "Theodore Ts'o" <tytso@mit.edu>
-Cc: David Laight <David.Laight@ACULAB.com>
-Cc: Mark Rutland <Mark.Rutland@arm.com>
-Cc: linux-fsdevel@vger.kernel.org
-Cc: linux-morello@op-lists.linaro.org
-Acked-by: Jan Kara <jack@suse.cz>
-Signed-off-by: Luca Vizzarro <Luca.Vizzarro@arm.com>
----
- fs/notify/dnotify/dnotify.c | 4 ++--
- include/linux/dnotify.h     | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Stefan Binding (4):
+  ALSA: hda: cs35l41: Clean up Firmware Load Controls
+  ALSA: hda: cs35l41: Fix endian conversions
+  ALSA: cs35l41: Fix default regmap values for some registers
+  ALSA: hda/realtek: Delete cs35l41 component master during free
 
-diff --git a/fs/notify/dnotify/dnotify.c b/fs/notify/dnotify/dnotify.c
-index 190aa717fa32..ebdcc25df0f7 100644
---- a/fs/notify/dnotify/dnotify.c
-+++ b/fs/notify/dnotify/dnotify.c
-@@ -199,7 +199,7 @@ void dnotify_flush(struct file *filp, fl_owner_t id)
- }
- 
- /* this conversion is done only at watch creation */
--static __u32 convert_arg(unsigned long arg)
-+static __u32 convert_arg(unsigned int arg)
- {
- 	__u32 new_mask = FS_EVENT_ON_CHILD;
- 
-@@ -258,7 +258,7 @@ static int attach_dn(struct dnotify_struct *dn, struct dnotify_mark *dn_mark,
-  * up here.  Allocate both a mark for fsnotify to add and a dnotify_struct to be
-  * attached to the fsnotify_mark.
-  */
--int fcntl_dirnotify(int fd, struct file *filp, unsigned long arg)
-+int fcntl_dirnotify(int fd, struct file *filp, unsigned int arg)
- {
- 	struct dnotify_mark *new_dn_mark, *dn_mark;
- 	struct fsnotify_mark *new_fsn_mark, *fsn_mark;
-diff --git a/include/linux/dnotify.h b/include/linux/dnotify.h
-index b1d26f9f1c9f..9f183a679277 100644
---- a/include/linux/dnotify.h
-+++ b/include/linux/dnotify.h
-@@ -30,7 +30,7 @@ struct dnotify_struct {
- 			    FS_MOVED_FROM | FS_MOVED_TO)
- 
- extern void dnotify_flush(struct file *, fl_owner_t);
--extern int fcntl_dirnotify(int, struct file *, unsigned long);
-+extern int fcntl_dirnotify(int, struct file *, unsigned int);
- 
- #else
- 
-@@ -38,7 +38,7 @@ static inline void dnotify_flush(struct file *filp, fl_owner_t id)
- {
- }
- 
--static inline int fcntl_dirnotify(int fd, struct file *filp, unsigned long arg)
-+static inline int fcntl_dirnotify(int fd, struct file *filp, unsigned int arg)
- {
- 	return -EINVAL;
- }
+ sound/pci/hda/cs35l41_hda.c    | 40 +++++++++++++++-------------------
+ sound/pci/hda/patch_realtek.c  |  2 ++
+ sound/soc/codecs/cs35l41-lib.c |  6 ++---
+ 3 files changed, 23 insertions(+), 25 deletions(-)
+
 -- 
 2.34.1
 
