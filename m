@@ -2,194 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4652C6E1975
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 03:12:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2D7E6E1981
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 03:17:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbjDNBMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 21:12:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43080 "EHLO
+        id S229826AbjDNBRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 21:17:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbjDNBM2 (ORCPT
+        with ESMTP id S229582AbjDNBRB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 21:12:28 -0400
-Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9248230EE
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 18:12:25 -0700 (PDT)
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 33E0tprI098251;
-        Fri, 14 Apr 2023 08:55:51 +0800 (GMT-8)
-        (envelope-from jammy_huang@aspeedtech.com)
-Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 14 Apr
- 2023 09:11:51 +0800
-From:   Jammy Huang <jammy_huang@aspeedtech.com>
-To:     <airlied@redhat.com>, <tzimmermann@suse.de>
-CC:     <airlied@gmail.com>, <daniel@ffwll.ch>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] drm/ast: Fix long time waiting on s3/s4 resume
-Date:   Fri, 14 Apr 2023 09:11:47 +0800
-Message-ID: <20230414011147.3858-1-jammy_huang@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 13 Apr 2023 21:17:01 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2387D449C
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 18:17:00 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id o2so16901361plg.4
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 18:17:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1681435019; x=1684027019;
+        h=to:from:content-transfer-encoding:mime-version:date:message-id
+         :subject:references:in-reply-to:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q/xFbhdfGbvhRzWNEiCTRFnrjnSlOCJrbe6wqyR9o+g=;
+        b=QXtiP/ByEYzceemUsaq/VFt/95tjAPbukG/yJU1BYKDXLWY9JnBb1qFjjKQiMHuZc7
+         KDBm2KxxV+1sy0gvosuwTh3uNFazeNd0bGrOCthnPeEskRcS1VZYaisP0KOoX8SbMx6N
+         g/Ob5H2SICItoT0eTy+MWCi+v5vTDmfR+uNJqVxZcogn9Es4b2fkJQryFIE3G4FhKgYG
+         VLib+0aHObAPKWXU5XH3QIYW3cELcsfxTiMJciaQXS4Ir/1GAFVMKTkflXAOgd2DnlU/
+         HGzXygSGG9WL/hqHHeELmmFqHdihBZRYc+oqamxIGrOK5boj9Pz89krRZwLrfUXzeA6r
+         seSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681435019; x=1684027019;
+        h=to:from:content-transfer-encoding:mime-version:date:message-id
+         :subject:references:in-reply-to:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=q/xFbhdfGbvhRzWNEiCTRFnrjnSlOCJrbe6wqyR9o+g=;
+        b=Ou3tk5CrwWawnktJHlC3g+4kFcdnAthdljG1FL9u+yRlGhei7+Ce2rKsokTrm+TpVY
+         qqLoE72a4wVvLuTOWvKK74rHt3lTqm7SA3ZWZWJzdf0ahaFnyZ67O1mgEGCxJYwvgNDr
+         IMLWa6IZgu/D2sIIcy6GwKswbkFOIkDvQVLaIh2HlrZffYLJd7GADkKm3wdkm0fFgkyT
+         t6GfiMSYA4aAT0G8UefF5eFV6Pyh44LfiRAuew6GTqCSvMSjqmq/I8hIkTRF54SQEHAf
+         bS1Up+AFzUxsdXYTQ3n2EnwIAWr4pbZ3HHucHtdLNi2l/NuIY4nd8Q6AJbGqXs/+BwAL
+         qIhw==
+X-Gm-Message-State: AAQBX9cUc+AcK+ocKFz0RPY2EiMBeJP+qdKox8b1NbH5Gl0NgQ66oYeB
+        ha0zAkZGKcOoUysUPq0SoMZc4Q==
+X-Google-Smtp-Source: AKy350bQ3oqWllwLgBEegjI4WfroCRbVOlwhljc9x8NRdkj9O1kPoiELl13X1u2kGURDIau8Rwelew==
+X-Received: by 2002:a05:6a20:2795:b0:dd:e6f5:a798 with SMTP id s21-20020a056a20279500b000dde6f5a798mr3211242pzf.6.1681435019394;
+        Thu, 13 Apr 2023 18:16:59 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id l13-20020a63ea4d000000b004fb8732a2f9sm1932694pgk.88.2023.04.13.18.16.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 18:16:58 -0700 (PDT)
+In-Reply-To: <20230329081932.79831-1-alexghiti@rivosinc.com>
+References: <20230329081932.79831-1-alexghiti@rivosinc.com>
+Subject: Re: [PATCH -fixes v2 0/3] Fixes for dtb mapping
+Message-Id: <168143480593.31161.4075805306178598424.b4-ty@rivosinc.com>
+Date:   Thu, 13 Apr 2023 18:13:25 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.2.115]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 33E0tprI098251
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-901c5
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Alexandre Ghiti <alexghiti@rivosinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In resume, DP's launch function, ast_dp_launch, could wait at most 30
-seconds before timeout to check if DP is enabled.
 
-To avoid this problem, we only check if DP enable or not at driver probe.
+On Wed, 29 Mar 2023 10:19:29 +0200, Alexandre Ghiti wrote:
+> We used to map the dtb differently between early_pg_dir and
+> swapper_pg_dir which caused issues when we referenced addresses from
+> the early mapping with swapper_pg_dir (reserved_mem): move the dtb mapping
+> to the fixmap region in patch 1, which allows to simplify dtb handling in
+> patch 2.
+> 
+> base-commit-tag: v6.3-rc3
+> 
+> [...]
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=217278
-Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
----
- drivers/gpu/drm/ast/ast_dp.c   | 53 ++++++++++------------------------
- drivers/gpu/drm/ast/ast_drv.h  |  2 +-
- drivers/gpu/drm/ast/ast_main.c | 11 +++++--
- drivers/gpu/drm/ast/ast_post.c |  3 +-
- 4 files changed, 28 insertions(+), 41 deletions(-)
+Applied, thanks!
 
-diff --git a/drivers/gpu/drm/ast/ast_dp.c b/drivers/gpu/drm/ast/ast_dp.c
-index 56483860306b..3a4218102631 100644
---- a/drivers/gpu/drm/ast/ast_dp.c
-+++ b/drivers/gpu/drm/ast/ast_dp.c
-@@ -121,51 +121,30 @@ int ast_astdp_read_edid(struct drm_device *dev, u8 *ediddata)
-  */
- void ast_dp_launch(struct drm_device *dev, u8 bPower)
- {
--	u32 i = 0, j = 0, WaitCount = 1;
--	u8 bDPTX = 0;
-+	u32 i = 0;
- 	u8 bDPExecute = 1;
--
- 	struct ast_private *ast = to_ast_private(dev);
--	// S3 come back, need more time to wait BMC ready.
--	if (bPower)
--		WaitCount = 300;
--
--
--	// Wait total count by different condition.
--	for (j = 0; j < WaitCount; j++) {
--		bDPTX = ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD1, TX_TYPE_MASK);
--
--		if (bDPTX)
--			break;
- 
-+	// Wait one second then timeout.
-+	while (ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD1, COPROCESSOR_LAUNCH) !=
-+		COPROCESSOR_LAUNCH) {
-+		i++;
-+		// wait 100 ms
- 		msleep(100);
--	}
- 
--	// 0xE : ASTDP with DPMCU FW handling
--	if (bDPTX == ASTDP_DPMCU_TX) {
--		// Wait one second then timeout.
--		i = 0;
--
--		while (ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD1, COPROCESSOR_LAUNCH) !=
--			COPROCESSOR_LAUNCH) {
--			i++;
--			// wait 100 ms
--			msleep(100);
--
--			if (i >= 10) {
--				// DP would not be ready.
--				bDPExecute = 0;
--				break;
--			}
-+		if (i >= 10) {
-+			// DP would not be ready.
-+			bDPExecute = 0;
-+			break;
- 		}
-+	}
- 
--		if (bDPExecute)
--			ast->tx_chip_types |= BIT(AST_TX_ASTDP);
-+	if (!bDPExecute)
-+		drm_err(dev, "Wait DPMCU executing timeout\n");
- 
--		ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE5,
--							(u8) ~ASTDP_HOST_EDID_READ_DONE_MASK,
--							ASTDP_HOST_EDID_READ_DONE);
--	}
-+	ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE5,
-+			       (u8) ~ASTDP_HOST_EDID_READ_DONE_MASK,
-+			       ASTDP_HOST_EDID_READ_DONE);
- }
- 
- 
-diff --git a/drivers/gpu/drm/ast/ast_drv.h b/drivers/gpu/drm/ast/ast_drv.h
-index d51b81fea9c8..15e86394be4f 100644
---- a/drivers/gpu/drm/ast/ast_drv.h
-+++ b/drivers/gpu/drm/ast/ast_drv.h
-@@ -498,7 +498,7 @@ struct ast_i2c_chan *ast_i2c_create(struct drm_device *dev);
- 
- /* aspeed DP */
- int ast_astdp_read_edid(struct drm_device *dev, u8 *ediddata);
--void ast_dp_launch(struct drm_device *dev, u8 bPower);
-+void ast_dp_launch(struct drm_device *dev);
- void ast_dp_power_on_off(struct drm_device *dev, bool no);
- void ast_dp_set_on_off(struct drm_device *dev, bool no);
- void ast_dp_set_mode(struct drm_crtc *crtc, struct ast_vbios_mode_info *vbios_mode);
-diff --git a/drivers/gpu/drm/ast/ast_main.c b/drivers/gpu/drm/ast/ast_main.c
-index f83ce77127cb..8ecddf20113f 100644
---- a/drivers/gpu/drm/ast/ast_main.c
-+++ b/drivers/gpu/drm/ast/ast_main.c
-@@ -254,8 +254,13 @@ static int ast_detect_chip(struct drm_device *dev, bool *need_post)
- 		case 0x0c:
- 			ast->tx_chip_types = AST_TX_DP501_BIT;
- 		}
--	} else if (ast->chip == AST2600)
--		ast_dp_launch(&ast->base, 0);
-+	} else if (ast->chip == AST2600) {
-+		if (ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD1, TX_TYPE_MASK) ==
-+		    ASTDP_DPMCU_TX) {
-+			ast->tx_chip_types = AST_TX_ASTDP_BIT;
-+			ast_dp_launch(&ast->base);
-+		}
-+	}
- 
- 	/* Print stuff for diagnostic purposes */
- 	if (ast->tx_chip_types & AST_TX_NONE_BIT)
-@@ -264,6 +269,8 @@ static int ast_detect_chip(struct drm_device *dev, bool *need_post)
- 		drm_info(dev, "Using Sil164 TMDS transmitter\n");
- 	if (ast->tx_chip_types & AST_TX_DP501_BIT)
- 		drm_info(dev, "Using DP501 DisplayPort transmitter\n");
-+	if (ast->tx_chip_types & AST_TX_ASTDP_BIT)
-+		drm_info(dev, "Using ASPEED DisplayPort transmitter\n");
- 
- 	return 0;
- }
-diff --git a/drivers/gpu/drm/ast/ast_post.c b/drivers/gpu/drm/ast/ast_post.c
-index 82fd3c8adee1..90e40f59aff7 100644
---- a/drivers/gpu/drm/ast/ast_post.c
-+++ b/drivers/gpu/drm/ast/ast_post.c
-@@ -380,7 +380,8 @@ void ast_post_gpu(struct drm_device *dev)
- 	ast_set_def_ext_reg(dev);
- 
- 	if (ast->chip == AST2600) {
--		ast_dp_launch(dev, 1);
-+		if (ast->tx_chip_types & AST_TX_ASTDP_BIT)
-+			ast_dp_launch(dev);
- 	} else if (ast->config_mode == ast_use_p2a) {
- 		if (ast->chip == AST2500)
- 			ast_post_chip_2500(dev);
+[1/3] riscv: Move early dtb mapping into the fixmap region
+      https://git.kernel.org/palmer/c/99a289623453
+[2/3] riscv: Do not set initial_boot_params to the linear address of the dtb
+      https://git.kernel.org/palmer/c/becc32e1f2ef
+[3/3] riscv: No need to relocate the dtb as it lies in the fixmap region
+      https://git.kernel.org/palmer/c/585da9dacc9c
 
-base-commit: e62252bc55b6d4eddc6c2bdbf95a448180d6a08d
+Best regards,
 -- 
-2.25.1
+Palmer Dabbelt <palmer@rivosinc.com>
 
