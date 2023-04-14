@@ -2,69 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C8B6E258C
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 16:23:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 357FA6E2590
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 16:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbjDNOW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 10:22:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46642 "EHLO
+        id S230025AbjDNOYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 10:24:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjDNOWw (ORCPT
+        with ESMTP id S229656AbjDNOYW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 10:22:52 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87981709
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 07:22:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681482170; x=1713018170;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ti0rTmfDkYPhg39eIph+WMRiRDY2DhR53PBDAW/VO/M=;
-  b=ILTwYcf41clS9ek2wTVFh/b9NDF9Wi3C69LEjijzrg+B6VNnd/YIYHdH
-   G/FjTTyaOLgbu/kQtrQ6hf028FKXRcravNJz1ZRhbpfkyd9RUIQkzKUSs
-   OcnnOuVo7/OeIFmhkQMMJa4dVgvgVuqxXrYGUzPeXvSpd1aOQ2DDa1vEQ
-   /u3GKxUbifVq7Q0Jimb0Aazk6ztwJ1MxA4keSEa29SOkM6nDg8tq8BntU
-   2cKsw1bqMd1D0QAv9w+4RjcKqZMc0DaxOClo5CsgtxtloP2xQMmWIb0PJ
-   ceZn92NrvG/dRzftHZKwhNRMwONUJzIfnbSGVIMDmNf/iJ9vDBckY/d0Y
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="324102197"
-X-IronPort-AV: E=Sophos;i="5.99,197,1677571200"; 
-   d="scan'208";a="324102197"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 07:22:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="936027772"
-X-IronPort-AV: E=Sophos;i="5.99,197,1677571200"; 
-   d="scan'208";a="936027772"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga006.fm.intel.com with ESMTP; 14 Apr 2023 07:22:50 -0700
-Received: from [10.212.165.245] (kliang2-mobl1.ccr.corp.intel.com [10.212.165.245])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 96E3E5805EE;
-        Fri, 14 Apr 2023 07:22:49 -0700 (PDT)
-Message-ID: <49b6f5fb-665b-2857-788b-e5082bb7374b@linux.intel.com>
-Date:   Fri, 14 Apr 2023 10:22:48 -0400
+        Fri, 14 Apr 2023 10:24:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28173BB9B
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 07:23:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681482206;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hltDKbvNvHexES28VJ8PrHZ5axydk/DuBFAgC2CjweM=;
+        b=DHF9Z/9pjh3gJsDuHGqCUbOjHxcASzA31LPB8ED1qECe6MFkRgaU/gTeJUgsuWUJ/+6FvH
+        DK9Kzr62M2c1QWirXpLeCa66ZLFwD4jvSzRXhEqB7Cx8WhxZorD7Pl+N+TldLpqZMPRyEK
+        nSI70batQq0cfTYe1N4XvpmLWXqoDL4=
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
+ [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-369--KgsV_6UMFKA5RnbwHNsnQ-1; Fri, 14 Apr 2023 10:23:24 -0400
+X-MC-Unique: -KgsV_6UMFKA5RnbwHNsnQ-1
+Received: by mail-lf1-f71.google.com with SMTP id c11-20020a19654b000000b004ec7cf78494so7567727lfj.8
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 07:23:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681482203; x=1684074203;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hltDKbvNvHexES28VJ8PrHZ5axydk/DuBFAgC2CjweM=;
+        b=lsHnIyJwSdZiCRe28xQHGVRlMaAHU6V0d5qBJIQ2uknGbvyh9sXiZvIg7+pempi22S
+         OYUlN5Dd2CqOd5pPob4zIFnVn4vLXIrYbtCH3HEUOWD7WkWqQLF9PaxvHk6iiT7JRFpf
+         8pIVKRcNIsBaUQVJ/GPaVHMdQFAYgCogoTeXQTtTssH18zUFhB6E8CbKLXOQhs+Ncw2w
+         cyrP61eew1ZdhC7n+80g1O+EaPQGju9NNRRHGnzubSOkvISO/pWWMphwSYR11bY2/Tug
+         40HkGeZmtYmjf6UsaFuSefGeZzwS9L2+nSmudly1ZW/1hsXrL58omrA8/bzlSzYvlN8o
+         31WQ==
+X-Gm-Message-State: AAQBX9ejOdx9P42R2BIAVZckrJefwm9BaCX0XkpA3kOtXTTHFB5By2yh
+        7DSr93+m2TAXVRa4X/XDL94lWb7KwktXb9uS+Gclj73z6Fon5BX6Tp/DVcclP/MNnRlqr20pH69
+        zAjoQwuC3TRVqn1UfhQkqgvQ=
+X-Received: by 2002:a2e:a792:0:b0:2a8:ac66:eeab with SMTP id c18-20020a2ea792000000b002a8ac66eeabmr768211ljf.0.1681482203007;
+        Fri, 14 Apr 2023 07:23:23 -0700 (PDT)
+X-Google-Smtp-Source: AKy350b7VPoQO09O0c49XgZ4B2B4eCvIBorexhqlHcLjtGZkMsk2NCN98yoWaRivKxjs6AR2MoVjZw==
+X-Received: by 2002:a2e:a792:0:b0:2a8:ac66:eeab with SMTP id c18-20020a2ea792000000b002a8ac66eeabmr768199ljf.0.1681482202680;
+        Fri, 14 Apr 2023 07:23:22 -0700 (PDT)
+Received: from [192.168.1.121] (85-23-48-202.bb.dnainternet.fi. [85.23.48.202])
+        by smtp.gmail.com with ESMTPSA id v7-20020a2e87c7000000b002a2b9d9429esm832740ljj.117.2023.04.14.07.23.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Apr 2023 07:23:21 -0700 (PDT)
+Message-ID: <d14ddbc6-5315-78a2-cdfa-72a77d3603dd@redhat.com>
+Date:   Fri, 14 Apr 2023 17:23:12 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH V3] perf/x86/intel/ds: Flush the PEBS buffer in PEBS
- enable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 1/6] mm/hugetlb: Fix uffd-wp during fork()
 Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org, eranian@google.com,
-        ak@linux.intel.com
-References: <20230410181309.827175-1-kan.liang@linux.intel.com>
- <20230414102908.GC83892@hirez.programming.kicks-ass.net>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20230414102908.GC83892@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        linux-stable <stable@vger.kernel.org>
+References: <20230413231120.544685-1-peterx@redhat.com>
+ <20230413231120.544685-2-peterx@redhat.com>
+ <9cb84b60-6b51-3117-27cb-a29b3bd9e741@mbosol.com> <ZDlet0+oZ2nrnUdu@x1n>
+From:   =?UTF-8?Q?Mika_Penttil=c3=a4?= <mpenttil@redhat.com>
+In-Reply-To: <ZDlet0+oZ2nrnUdu@x1n>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -73,123 +92,74 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2023-04-14 6:29 a.m., Peter Zijlstra wrote:
-> On Mon, Apr 10, 2023 at 11:13:09AM -0700, kan.liang@linux.intel.com wrote:
+On 14.4.2023 17.09, Peter Xu wrote:
+> On Fri, Apr 14, 2023 at 12:45:29PM +0300, Mika Penttilä wrote:
+>>>    		} else if (unlikely(is_hugetlb_entry_migration(entry))) {
+>>>    			swp_entry_t swp_entry = pte_to_swp_entry(entry);
+>>> -			bool uffd_wp = huge_pte_uffd_wp(entry);
 > 
->>  arch/x86/events/intel/ds.c | 39 ++++++++++++++++++++++++++------------
->>  1 file changed, 27 insertions(+), 12 deletions(-)
+> [1]
+> 
+>>>    			if (!is_readable_migration_entry(swp_entry) && cow) {
+>>>    				/*
+>>> @@ -5049,11 +5050,12 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
+>>>    				swp_entry = make_readable_migration_entry(
+>>>    							swp_offset(swp_entry));
+>>>    				entry = swp_entry_to_pte(swp_entry);
+> 
+> [2]
+> 
+>>> -				if (userfaultfd_wp(src_vma) && uffd_wp)
+>>> -					entry = huge_pte_mkuffd_wp(entry);
+>>> +				if (userfaultfd_wp(src_vma) &&
+>>> +				    pte_swp_uffd_wp(entry))
+>>> +					entry = pte_swp_mkuffd_wp(entry);
 >>
->> diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
->> index 3a77f4336df7..4639d4c1e98d 100644
->> --- a/arch/x86/events/intel/ds.c
->> +++ b/arch/x86/events/intel/ds.c
->> @@ -1257,20 +1257,18 @@ pebs_update_state(bool needed_cb, struct cpu_hw_events *cpuc,
->>  	if (x86_pmu.intel_cap.pebs_baseline && add) {
->>  		u64 pebs_data_cfg;
->>  
->> -		/* Clear pebs_data_cfg and pebs_record_size for first PEBS. */
->> -		if (cpuc->n_pebs == 1) {
->> +		/* Clear pebs_data_cfg for first PEBS. */
->> +		if (cpuc->n_pebs == 1)
->>  			cpuc->pebs_data_cfg = 0;
->> -			cpuc->pebs_record_size = sizeof(struct pebs_basic);
->> -		}
->>  
->>  		pebs_data_cfg = pebs_update_adaptive_cfg(event);
->>  
->> -		/* Update pebs_record_size if new event requires more data. */
->> -		if (pebs_data_cfg & ~cpuc->pebs_data_cfg) {
->> +		/*
->> +		 * Only update the pebs_data_cfg here. The pebs_record_size
->> +		 * will be updated later when the new pebs_data_cfg takes effect.
->> +		 */
->> +		if (pebs_data_cfg & ~cpuc->pebs_data_cfg)
->>  			cpuc->pebs_data_cfg |= pebs_data_cfg;
->> -			adaptive_pebs_record_size_update();
->> -			update = true;
->> -		}
->>  	}
->>  
->>  	if (update)
-> 		pebs_update_threshold(cpuc);
+>>
+>> This looks interesting with pte_swp_uffd_wp and pte_swp_mkuffd_wp ?
 > 
-> Now, pebs_update_threshold() will actually use
-> ->pebs_record_size, but afaict the above now has a path through (for
-> example for the first event) where update is true but ->pebs_record_size
-> is unset/stale.
-> 
-> I think it all works out, but it is quite a mess and hard to follow.
-
-With this patch, the pebs_update_threshold() will be delayed to
-intel_pmu_pebs_enable() for the adaptive PEBS.
-
-I think we may reuse the pebs_data_cfg method for the previous fixed
-PEBS as well and delay the DS update to intel_pmu_pebs_enable() as well.
-So everything will be consistent.
-
-I will do more tests and probably send a clean up patch later separately.
-
-
-> 
->> @@ -1331,6 +1329,13 @@ static void intel_pmu_pebs_via_pt_enable(struct perf_event *event)
->>  	wrmsrl(base + idx, value);
->>  }
->>  
->> +static inline void intel_pmu_drain_large_pebs(struct cpu_hw_events *cpuc)
->> +{
->> +	if (cpuc->n_pebs == cpuc->n_large_pebs &&
->> +	    cpuc->n_pebs != cpuc->n_pebs_via_pt)
->> +		intel_pmu_drain_pebs_buffer();
->> +}
-> 
-> Its been a minute since I looked at this code; but why only for large
-> pebs? Surely flushing is quick when the DS is actually empty and that
-> stops us having to worry if there's races where there might be a single
-> entry in.
-
-The AUTO_RELOAD is a separate feature. It should be always enabled when
-a fixed period is set. That's not the case for the large PEBS, which
-only supports partial sample type.
-
-There should be some overhead for the AUTO_RELOAD + single PEBS case. We
-have to update the event count.
-
-> 
->>  void intel_pmu_pebs_enable(struct perf_event *event)
->>  {
->>  	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
->> @@ -1350,6 +1355,18 @@ void intel_pmu_pebs_enable(struct perf_event *event)
->>  	if (x86_pmu.intel_cap.pebs_baseline) {
->>  		hwc->config |= ICL_EVENTSEL_ADAPTIVE;
->>  		if (cpuc->pebs_data_cfg != cpuc->active_pebs_data_cfg) {
->> +			/*
->> +			 * A system-wide PEBS event with the large PEBS
->> +			 * config may still be enabled when switching the
->> +			 * context. Some PEBS records for the system-wide
->> +			 * PEBS may be generated while the old event has
->> +			 * been scheduled out but the new one hasn't been
->> +			 * scheduled in. It's not enough to only flush the
->> +			 * buffer when a PEBS event is disable.
->> +			 */
-> 
-> Perhaps just:
-> 
-> 			/*
-> 			 * drain_pebs() assumes uniform record size;
-> 			 * hence we need to drain when changing said
-> 			 * size.
-> 			 */
+> Could you explain what do you mean?
 > 
 
-Sure, I will update in V4.
+Yes like you noticed also you called pte_swp_mkuffd_wp(entry) iff 
+pte_swp_uffd_wp(entry) which is of course a nop.
 
-Thanks,
-Kan
+But the fixup not dropping the temp var should work.
 
+> I think these helpers are the right ones to use, as afaict hugetlb
+> migration should follow the same pte format with !hugetlb.  However, I
+> noticed I did it wrong when dropping the temp var - when at [1], "entry"
+> still points to the src entry, but at [2] it's already pointing to the
+> newly created one..  so I think I can't drop the var, a fixup should like:
 > 
->> +			intel_pmu_drain_large_pebs(cpuc);
->> +			adaptive_pebs_record_size_update();
->> +			pebs_update_threshold(cpuc);
->>  			wrmsrl(MSR_PEBS_DATA_CFG, cpuc->pebs_data_cfg);
->>  			cpuc->active_pebs_data_cfg = cpuc->pebs_data_cfg;
->>  		}
+> ===8<===
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 083aae35bff8..cd3a9d8f4b70 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -5041,6 +5041,7 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
+>                          set_huge_pte_at(dst, addr, dst_pte, entry);
+>                  } else if (unlikely(is_hugetlb_entry_migration(entry))) {
+>                          swp_entry_t swp_entry = pte_to_swp_entry(entry);
+> +                       bool uffd_wp = pte_swp_uffd_wp(entry);
+> 
+>                          if (!is_readable_migration_entry(swp_entry) && cow) {
+>                                  /*
+> @@ -5050,8 +5051,7 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
+>                                  swp_entry = make_readable_migration_entry(
+>                                                          swp_offset(swp_entry));
+>                                  entry = swp_entry_to_pte(swp_entry);
+> -                               if (userfaultfd_wp(src_vma) &&
+> -                                   pte_swp_uffd_wp(entry))
+> +                               if (userfaultfd_wp(src_vma) && uffd_wp)
+>                                          entry = pte_swp_mkuffd_wp(entry);
+>                                  set_huge_pte_at(src, addr, src_pte, entry);
+> ===8<===
+> 
+> Besides, did I miss something else?
+> 
+> Thanks,
+> 
+
+--Mika
+
