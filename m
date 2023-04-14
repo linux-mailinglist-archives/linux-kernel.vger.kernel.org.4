@@ -2,209 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 495A86E18EF
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 02:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AB176E18F2
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 02:25:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbjDNAZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 20:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51160 "EHLO
+        id S230205AbjDNAZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 20:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjDNAZM (ORCPT
+        with ESMTP id S229493AbjDNAZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 20:25:12 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A05132
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 17:25:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681431910; x=1712967910;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Fs2VFDRCoL8ueWMrrphYOep+Z6kjmQv1CyNXp4IhtnU=;
-  b=PDDhcCWTQgFgs/M1Yt2ce0UZnTRn2M1YXiuMZxA5OocupsqPKVMLaeS6
-   J4RFI0O417bTCcSlt7SvcmHfNnvwSjg7VBJPeNeE4BgJ8UnYsIUTKXblD
-   Gw9msbd+8cDKdyy661rHW5VnKOVbGqF1pLV9FvbpTrW1aI1QtCr8RIyW1
-   EXz5WO7y4lmqfPggNQ+TMSHQEavJAEiB1k7wpAmfP5DBarcLDmHkLsLn/
-   FqUHv4MXQBsM8Bwj2oTeIXjYpsXYcG7Uaexre9/l0IDSDYsvvFKhBgyBd
-   +kcCfiJz3y782qgRcBnEoVLTcosKfVeYLFxrcZyOFZjTotHXXMZQvhUCj
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="346168345"
-X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
-   d="scan'208";a="346168345"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 17:25:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="692172791"
-X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
-   d="scan'208";a="692172791"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 13 Apr 2023 17:25:08 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pn7FT-000Z3x-1k;
-        Fri, 14 Apr 2023 00:25:07 +0000
-Date:   Fri, 14 Apr 2023 08:24:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 8930264852dace3e2e3743b8b5058512014c955a
-Message-ID: <64389d2e.BbTRRJLiTms6Pw37%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 13 Apr 2023 20:25:43 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE98BB7;
+        Thu, 13 Apr 2023 17:25:41 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id o1so21418476lfc.2;
+        Thu, 13 Apr 2023 17:25:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681431940; x=1684023940;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=yImyeG5ZxqGz4x0G0VPUdchtzunzdj+0SM9hBCkgnyg=;
+        b=Mv4xq2QsrYjJgA811eWnvVImUuOV8yAqj66zXVSdL5nfEqlMrzRX3lxbNITcggvyB2
+         hHqs3sNKmFMp4elA+jeNj0VRoDfKrFWQWUwBjFsPyeAgB7QJiqzqZ7hn7IFUehlyJtOv
+         HvrxuC4dx8qClWvWPzlwqwCu5vZPuXO0TpDpv7F2Alc402slBpfLfjBP0PkQ3mML3ruO
+         M6EA2JV9IWwUeJU3N0/UQxrHAs2OvwfQQsnfNazcy5jK7DRsi/75gRkZHXOLYm5T7sKX
+         pACW7c2gcszTC4eQwGoJUzgRznikrznv7ilQxPRDDKT3Csx7kBxhCZC1Ly3p5RWM8rE3
+         gwnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681431940; x=1684023940;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yImyeG5ZxqGz4x0G0VPUdchtzunzdj+0SM9hBCkgnyg=;
+        b=GF0fHz8NkZdeBUfX+6YCoLvvKDcs7l9emuuS1VME0mVFcMe52a2opcv1I+RUBVPq4a
+         s35BpBfKV6NskZLuF86DhwnJropsf/lEa7wtk0M8AH9d3w7wUdkT+54bxuzneX7RY1xK
+         Gb0xGLa3bD3JQpPbsg6L86M551nwLhHQkUttgj7qKkAu2VK1Ro5HQMYDUQrHrB+KWCTi
+         KF7+D0RR9eifF7ogsc07PDmIjGZrTpaBYWp4qQDklV17mGyQSbqj1PAP0MJ4SxKE1vAI
+         3Cj6q9hA8uqJbdCnA034qhLLFs8jAE/H7iK4vb7a7RMdq4Cbp1juBKV1fj1vgkwTkXkL
+         Cukw==
+X-Gm-Message-State: AAQBX9c1Q9CMFqzzNG+NuyAzrTN9FcATsROJLsvk8wrD+8vTovLJ6pPU
+        uXngKcnakDP6+QW3Ya9c2jk=
+X-Google-Smtp-Source: AKy350YA6vyufvtq/6uKoGm4dYs9Gz/KECvQicem/fbRJeNTqzz6GKU+7JPL1tNbi4GS/57PRhud6g==
+X-Received: by 2002:a19:f00b:0:b0:4db:4fe8:fd0f with SMTP id p11-20020a19f00b000000b004db4fe8fd0fmr1210449lfc.25.1681431940097;
+        Thu, 13 Apr 2023 17:25:40 -0700 (PDT)
+Received: from mobilestation ([95.79.140.35])
+        by smtp.gmail.com with ESMTPSA id k4-20020ac24564000000b004ec9361e3c5sm523253lfm.142.2023.04.13.17.25.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 17:25:39 -0700 (PDT)
+Date:   Fri, 14 Apr 2023 03:25:37 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Vinod Koul <vkoul@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Rob Herring <robh@kernel.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v3 00/10] PCI: dwc: Relatively simple fixes and
+ cleanups
+Message-ID: <20230414002537.3y553iferlqkubfo@mobilestation>
+References: <20230411033928.30397-1-Sergey.Semin@baikalelectronics.ru>
+ <20230411110240.GB5333@thinkpad>
+ <20230411165924.4zfwhwxacxxeg7rk@mobilestation>
+ <ZDbjHTenZMxfziZD@matsya>
+ <20230413133454.ef7f5s34ysyequfz@mobilestation>
+ <20230413140024.GA13020@thinkpad>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230413140024.GA13020@thinkpad>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 8930264852dace3e2e3743b8b5058512014c955a  Merge branch into tip/master: 'sched/core'
+On Thu, Apr 13, 2023 at 07:30:24PM +0530, Manivannan Sadhasivam wrote:
+> On Thu, Apr 13, 2023 at 04:34:54PM +0300, Serge Semin wrote:
+> > On Wed, Apr 12, 2023 at 10:28:05PM +0530, Vinod Koul wrote:
+> > > On 11-04-23, 19:59, Serge Semin wrote:
+> > > > On Tue, Apr 11, 2023 at 04:32:40PM +0530, Manivannan Sadhasivam wrote:
+> > > > > On Tue, Apr 11, 2023 at 06:39:18AM +0300, Serge Semin wrote:
+> > > > > > It turns out the recent DW PCIe-related patchset was merged in with
+> > > > > > several relatively trivial issues left unsettled (noted by Bjorn and
+> > > > > > Manivannan). All of these lefovers have been fixed in this patchset.
+> > > > > > Namely the series starts with two bug-fixes. The first one concerns the
+> > > > > > improper link-mode initialization in case if the CDM-check is enabled. The
+> > > > > > second unfortunate mistake I made in the IP-core version type helper. In
+> > > > > > particular instead of testing the IP-core version type the macro function
+> > > > > > referred to the just IP-core version which obviously wasn't what I
+> > > > > > intended.
+> > > > > > 
+> > > > > > Afterwards two @Mani-noted fixes follow. Firstly the dma-ranges related warning
+> > > > > > message is fixed to start with "DMA-ranges" word instead of "Dma-ranges".
+> > > > > > Secondly the Baikal-T1 PCIe Host driver is converted to perform the
+> > > > > > asynchronous probe type which saved us of about 15% of bootup time if no any
+> > > > > > PCIe peripheral device attached to the port.
+> > > > > > 
+> > > > > > Then the patchset contains the Baikal-T1 PCIe driver fix. The
+> > > > > > corresponding patch removes the false error message printed during the
+> > > > > > controller probe procedure. I accidentally added the unconditional
+> > > > > > dev_err_probe() method invocation. It was obviously wrong.
+> > > > > > 
+> > > > > > Then two trivial cleanups are introduced. The first one concerns the
+> > > > > > duplicated fast-link-mode flag unsetting. The second one implies
+> > > > > > dropping a redundant empty line from the dw_pcie_link_set_max_speed()
+> > > > > > function.
+> > > > > > 
+> > > > > > The series continues with a patch inspired by the last @Bjorn note
+> > > > > > regarding the generic resources request interface. As @Bjorn correctly
+> > > > > > said it would be nice to have the new interface used wider in the DW PCIe
+> > > > > > subsystem. Aside with the Baikal-T1 PCIe Host driver the Toshiba Visconti
+> > > > > > PCIe driver can be easily converted to using the generic clock names.
+> > > > > > That's what is done in the noted patch.
+> > > > > > 
+> > > > > > The patchset is closed with a series of MAINTAINERS-list related patches.
+> > > > > > Firstly after getting the DW PCIe RP/EP DT-schemas refactored I forgot to
+> > > > > > update the MAINTAINER-list with the new files added in the framework of
+> > > > > > that procedure. All the snps,dw-pcie* schemas shall be maintained by the
+> > > > > > DW PCIe core driver maintainers. Secondly seeing how long it took for my
+> > > > > > patchsets to review and not having any comments from the original driver
+> > > > > > maintainers I'd suggest to add myself as the reviewer to the DW PCIe and
+> > > > > > eDMA drivers. Thus hopefully the new updates review process will be
+> > > > > > performed with much less latencies. For the same reason I would also like
+> > > > > > to suggest to add @Manivannan as the DW PCIe/eDMA drivers maintainer if
+> > > > > > he isn't against that idea. What do you think about the last suggestion?
+> > > > > > 
+> > > > > 
+> > > > > I'm willing to co-maintain the drivers.
+> > > > 
+> > > > Awesome! @Bjorn, @Lorenzo, @Vinod what do you think about this? If you
+> > > > are ok with that shall I resubmit the series with @Mani added to the
+> > > > DW PCIe/eDMA maintainers list or will you create the respective
+> > > > patches yourself?
+> > > 
+> > 
+> > > Pls send the patch, that is preferred.
+> > 
+> > Ok. I'll resubmit the series with the new patches replacing @Gustavo with
+> > @Mani as the DW PCIe/eDMA drivers maintainer.
+> > 
+> 
+> I talked to Vinod about the non-responsive maintainers and he suggested first
+> demoting them as Reviewers instead of dropping altogether. So you can move
+> Gustavo as a Reviewer.
 
-elapsed time: 726m
+Got it. Thanks for the note.
 
-configs tested: 128
-configs skipped: 8
+-Serge(y)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r005-20230409   gcc  
-alpha                randconfig-r005-20230410   gcc  
-alpha                randconfig-r011-20230410   gcc  
-alpha                randconfig-r011-20230413   gcc  
-alpha                randconfig-r013-20230409   gcc  
-alpha                randconfig-r022-20230412   gcc  
-alpha                randconfig-r022-20230413   gcc  
-alpha                randconfig-r024-20230413   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r036-20230413   gcc  
-arc                  randconfig-r043-20230412   gcc  
-arc                  randconfig-r043-20230413   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r013-20230413   gcc  
-arm                  randconfig-r021-20230413   gcc  
-arm                  randconfig-r023-20230413   gcc  
-arm                  randconfig-r032-20230413   clang
-arm                  randconfig-r046-20230412   clang
-arm                  randconfig-r046-20230413   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r012-20230410   gcc  
-arm64                randconfig-r035-20230412   clang
-csky                                defconfig   gcc  
-csky                 randconfig-r016-20230413   gcc  
-csky                 randconfig-r025-20230413   gcc  
-hexagon              randconfig-r013-20230410   clang
-hexagon              randconfig-r016-20230409   clang
-hexagon              randconfig-r024-20230412   clang
-hexagon              randconfig-r031-20230413   clang
-hexagon              randconfig-r034-20230413   clang
-hexagon              randconfig-r041-20230412   clang
-hexagon              randconfig-r041-20230413   clang
-hexagon              randconfig-r045-20230412   clang
-hexagon              randconfig-r045-20230413   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230410   clang
-i386                 randconfig-a002-20230410   clang
-i386                 randconfig-a003-20230410   clang
-i386                 randconfig-a004-20230410   clang
-i386                 randconfig-a005-20230410   clang
-i386                 randconfig-a006-20230410   clang
-i386                 randconfig-a011-20230410   gcc  
-i386                 randconfig-a012-20230410   gcc  
-i386                 randconfig-a013-20230410   gcc  
-i386                 randconfig-a014-20230410   gcc  
-i386                 randconfig-a015-20230410   gcc  
-i386                 randconfig-a016-20230410   gcc  
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r002-20230409   gcc  
-ia64                 randconfig-r032-20230412   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r031-20230412   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r012-20230413   gcc  
-m68k                 randconfig-r014-20230409   gcc  
-m68k                 randconfig-r015-20230409   gcc  
-m68k                 randconfig-r026-20230413   gcc  
-microblaze           randconfig-r003-20230409   gcc  
-microblaze           randconfig-r015-20230410   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                 randconfig-r014-20230413   gcc  
-mips                 randconfig-r016-20230410   clang
-mips                 randconfig-r036-20230412   gcc  
-nios2                               defconfig   gcc  
-openrisc             randconfig-r006-20230409   gcc  
-openrisc             randconfig-r015-20230413   gcc  
-openrisc             randconfig-r021-20230412   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r001-20230409   gcc  
-parisc               randconfig-r011-20230409   gcc  
-parisc               randconfig-r014-20230410   gcc  
-parisc               randconfig-r035-20230413   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc              randconfig-r003-20230410   clang
-powerpc              randconfig-r012-20230409   gcc  
-powerpc              randconfig-r033-20230412   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r042-20230412   gcc  
-riscv                randconfig-r042-20230413   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230412   gcc  
-s390                 randconfig-r044-20230413   clang
-sh                               allmodconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64              randconfig-r001-20230410   gcc  
-sparc64              randconfig-r004-20230410   gcc  
-sparc64              randconfig-r006-20230410   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                        randconfig-a001   clang
-x86_64                        randconfig-a002   gcc  
-x86_64                        randconfig-a003   clang
-x86_64                        randconfig-a004   gcc  
-x86_64                        randconfig-a005   clang
-x86_64                        randconfig-a006   gcc  
-x86_64               randconfig-a011-20230410   gcc  
-x86_64               randconfig-a012-20230410   gcc  
-x86_64               randconfig-a013-20230410   gcc  
-x86_64               randconfig-a014-20230410   gcc  
-x86_64               randconfig-a015-20230410   gcc  
-x86_64               randconfig-a016-20230410   gcc  
-x86_64               randconfig-r002-20230410   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r034-20230412   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> 
+> - Mani
+> 
+> > -Serge(y)
+> > 
+> > > 
+> > > -- 
+> > > ~Vinod
+> 
+> -- 
+> மணிவண்ணன் சதாசிவம்
