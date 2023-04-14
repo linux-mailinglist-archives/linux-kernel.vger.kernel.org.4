@@ -2,419 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A8E6E2476
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 15:40:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23AD56E247C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 15:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbjDNNkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 09:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33910 "EHLO
+        id S229967AbjDNNmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 09:42:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbjDNNkt (ORCPT
+        with ESMTP id S229446AbjDNNmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 09:40:49 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A24A39767;
-        Fri, 14 Apr 2023 06:40:40 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-1878504c22aso8382859fac.8;
-        Fri, 14 Apr 2023 06:40:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681479639; x=1684071639;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8k3j7iPMhP/FUSzfe643f8gemd9FDlPSy1ejUd/ofyU=;
-        b=EJ+z/pQVj6GYVRd8gupCF5cd8q30JpiNSlbsE91ra24QRTyl2fiOOlAou4n6pcRcrX
-         ctFBL6HNNypjFnRMEG5j7aOgcU9iU4/Xl3dESt0XSzbFX2HTLtNw/2lNT1vd/FgG+nog
-         mM+KySLR9NUBuIacy4KQq9Ohuel15zGSkMohVm7rju06seSULOMsDDToosdXkt0xPWNJ
-         2hBznLDJzmr94m0oec5CXHFmVjeh/nQgvJZB0bBygDcACpKCxlKQf4/TK3kG/35Mstk2
-         LrfgAdOwXOhRk2jjtVJ0H+hR5yJrBomJ1r8FjpcrY7Cj4v9ObHMZQsZMUBjBt499ZoHm
-         CpLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681479639; x=1684071639;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8k3j7iPMhP/FUSzfe643f8gemd9FDlPSy1ejUd/ofyU=;
-        b=VJPAZqLDijeKhB4unI9qe7800RGEQP+HJVoKXQXAsdlGgAblkH1CCNbDqVSV9MarhQ
-         d3LiAGguXkzZOBJAFZZp/ur8NTAxExsa0DueDgw52KA2mdeyTFHOE+lEZOO5LyRZNviv
-         EFabw3cGXnZTzbyHh3lgi8c2EgUvmutgzO//ZGfmzhBv2CD9xQKsL93UkOV2b4z8jaNA
-         yqAtxDdXsjrZrceA+6hbJKBH+rqe6QayGjeMvValXoxzasIJb/OTo+0GW3dLpJ5FoHta
-         ctmfhMciKMb74HiysAozlrQxy8j9gAwm8eg9afk60jT9lMzmYT9t1WoCnDktiuXSegyN
-         U+hg==
-X-Gm-Message-State: AAQBX9cPnQF7AnZjUvGuDXwuRCiRHffiAf4R6w36YyVY7/OJ38WVdeQw
-        b4kRuQd+5xVB9clvyR43Pl54ojnq20TE5d/gq2g=
-X-Google-Smtp-Source: AKy350b2Hioell15/MaNUt43wgHi26LYG+zT37bfyOTjbWRdSZHDC8KSuU4H38f10e2Pdl3Hqy1CzWUlr5hRnZaanT0=
-X-Received: by 2002:a05:6870:34b:b0:187:8ee8:5f5b with SMTP id
- n11-20020a056870034b00b001878ee85f5bmr2871061oaf.5.1681479638775; Fri, 14 Apr
- 2023 06:40:38 -0700 (PDT)
+        Fri, 14 Apr 2023 09:42:19 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC68E4;
+        Fri, 14 Apr 2023 06:42:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681479738; x=1713015738;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=2z1/Z0MRQ1KdWKnKHdp1AwhmaqWmPilSzXmnK2PTU+A=;
+  b=iLfpoX3a3SAeZFXv206n8aH5JFPspgNF7Cap2AG8CtBlFCpnCK6vNTAO
+   78NwJDcjPLM7qtYjtvyb/XtrjeerSX6ZIK2+vJ8ruH7KoTyyXGD248+Lh
+   ooe+9MPQPCVOmQWmeqLl9rR6iEFzoo2NcCveIzx8g7MyqKGLMgg6c//zG
+   JyMu6nTQoEnUV1o5F8FoibJ0/dOIM0O7gbZ5aq1XJCABCAvrsEC/ag8Y1
+   4SCGshUpQdEMUmpsyrkFV4rzsfhl3MP2Kck+moWJvJXfu5MpM4gnYR8t7
+   gJXocGb19c+rgvuc72Dlce+EcVImA4fLP6D06PxYtYVm0C3dSdbVJJ2Yn
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="341962916"
+X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
+   d="scan'208";a="341962916"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 06:42:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="936012903"
+X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
+   d="scan'208";a="936012903"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga006.fm.intel.com with ESMTP; 14 Apr 2023 06:42:15 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 14 Apr 2023 06:42:15 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Fri, 14 Apr 2023 06:42:15 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.174)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Fri, 14 Apr 2023 06:42:14 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SLMHLG8fKNnL0LZ4nU6RtvWvhHimTbcK+aSw00LBb47EO0Of0fkzmmRbfXp06PcNQV6/LzsOo15xn1CaV+6sIKmz1C+aYC3KK80QcnLJ3VxUn1yqAuRSMBppSuwBDE1yXUVBo0Vh88Q7ebuyZM+haehDTHEFk4+em/Vs/7jkRLz6yGB7kM8c2j7sAC0phB1aWJ9z4CBeA/oO00yWOnvwa09CibEs5lmBn2P113lpe3NjKBMKB1Lf0oMeLVAr3tYWl1ELMAwPOYNMZf4nw+LwGCGYln80H77RgN6Y3CAzUb1cMKNLANK8OvIXNmZFfi+VPhe7IPPinVm+YO2/wu8YWw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2z1/Z0MRQ1KdWKnKHdp1AwhmaqWmPilSzXmnK2PTU+A=;
+ b=WXF+6+clvD64vIj2E5t/ck9qeurue4/p2Fu+lo4ghya24bnQiUtgHkHk+TpOuluI37e33JYYqLulnEo35Gj4SLBjiig2cYNi6X5zOhljqRSROYWnedwQdl57jTTJ1hHwkdsOF9jNCo7X2uWaQI0tHS998dC+Ys0rpQThZ37WQyG1ZxPrihOyhNDMtvKRSx156hyGp/Neq2zsJlKCLJHbnr315f7EJHxD4WHRnMBhgtiMcJ0NDwjNPK0MkXPsTT2AaxVc7MipCmJRABw82w/5h27DjXFg8kKt/8T/UvlRJ2+Lr8t3xXM5rQo8RPrYYlApSfJceCy60jo1G47d9UT28Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
+ by CY8PR11MB6913.namprd11.prod.outlook.com (2603:10b6:930:5b::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Fri, 14 Apr
+ 2023 13:42:11 +0000
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::3c9e:36da:562b:f1f5]) by BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::3c9e:36da:562b:f1f5%3]) with mapi id 15.20.6298.030; Fri, 14 Apr 2023
+ 13:42:11 +0000
+From:   "Huang, Kai" <kai.huang@intel.com>
+To:     "Christopherson,, Sean" <seanjc@google.com>
+CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "zhi.wang.linux@gmail.com" <zhi.wang.linux@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 0/3] KVM: x86: SGX vs. XCR0 cleanups
+Thread-Topic: [PATCH 0/3] KVM: x86: SGX vs. XCR0 cleanups
+Thread-Index: AQHZZ1neAPY41R6lzkG8Mkf04T1Dpq8cd6WAgAETnwCAAIN/gIAJkScAgAA2l4CAAJZTgIABeHsAgAD5zQA=
+Date:   Fri, 14 Apr 2023 13:42:11 +0000
+Message-ID: <23aa3eb68362648f1fab41954728a47dfadd9c61.camel@intel.com>
+References: <20230405005911.423699-1-seanjc@google.com>
+         <d0af618169ebc17722e7019ca620ec22ee0b49c3.camel@intel.com>
+         <ZC4qF90l77m3X1Ir@google.com>
+         <20230406130119.000011fe.zhi.wang.linux@gmail.com>
+         <e1e7a37a29c2c7ad22cd14181f24b06088eca451.camel@intel.com>
+         <ZDbMuZKhAUbrkrc7@google.com>
+         <ae28ce9b0c78a926c38a8c8b9694aa34b140b467.camel@intel.com>
+         <ZDiGpCkXOcCm074O@google.com>
+In-Reply-To: <ZDiGpCkXOcCm074O@google.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|CY8PR11MB6913:EE_
+x-ms-office365-filtering-correlation-id: c1035f10-9f0f-4f2c-1bd3-08db3cee0c86
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ofowSbitDJNrigtoETczlHlWgIG4m4MetDbCl9GR/0AQE/xFUMzKX7TJZXs5IIiHZZJO0p7vefiZWhadefnJQAh+VulSA0zcf6A0Zt4L/3QBse/Co4lnJc/i2SBhxbt7huXyi8SEfuiBF4FVd+/giUJVMLUhzh/NMsd5OKrSWzWgPNxjdPsNH6XOGAq0xAd5k35aTlMaDn8qHE9/qmgoFvHYvc/V7a+1Oye2i7GjnU2Cwbw1p/TMcjayZ9KlR9w+EcpiKqcUi9n5fXoU8rcXZQ1y0CqQQOzJ1ecTq5z2wkbtI4XJDr5NcIDRNgEhxlMZVKOISL1eV5v8wf/8GcANuurw1rnTFAKu6pHJzuetn6SGUsP29TvjCwfwEmkIWo/xmsxGjLcrYrk1SeWEJk5u1uVZe99j6ebcv99TxotA65GW7vEa2QDqDBXsOfcoYw5iVkGvCBR5r+Fz2p50yogGnz9wBspL/0/kUtehgVnrBQd+s6pbJMCNM91YTZdK5UOmcFD+d9e1Mpim5ObqrGFt9oq7+QklZhreWLZACR0pNRjE1WnAK0+hHpmGIUgI/6K7iLlJ/D3/oSF1KL6sPMyKaVFzs6Pq7B9iqUe63DkHtzY=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(396003)(376002)(366004)(346002)(136003)(451199021)(6916009)(316002)(26005)(38070700005)(122000001)(38100700002)(6512007)(82960400001)(6506007)(71200400001)(966005)(83380400001)(6486002)(2616005)(186003)(8936002)(5660300002)(36756003)(2906002)(8676002)(41300700001)(86362001)(91956017)(478600001)(54906003)(66556008)(4326008)(66946007)(66476007)(64756008)(66446008)(76116006);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UEpqYUdRRHAzMEdMTVVyWUl1WWptOXBJMC9xcFk1MStzMkt1c25NY3lDTDd3?=
+ =?utf-8?B?QURFODBnbmh3UjVBREYzYWdnZ0p1M0N2ZXlNM3FQWDJwdC9sc3lvN3FPZUc3?=
+ =?utf-8?B?SjQzWGpXeExWN2o0TTNIamZBUDBWSGJpUEVqZVEvM1ZLYkg2ZkxuWk1wMWtW?=
+ =?utf-8?B?UVB1UUp2Zm1UQ3plMmNJcVlSMUJiV05Jb1BLaWp5cTNhTzB6NUp5QUgxVDFV?=
+ =?utf-8?B?dGZyQ29kUTBiTDlzdUxvZENXMEQ4Yml0MS9CcERpMVZFM1N4d3dHUXkxYkxx?=
+ =?utf-8?B?amFSK2ZpdnhETzVod1h0eVlkTXNCVTRjRWxlWjh4U1hORnNSeGQ0emM3Z3l0?=
+ =?utf-8?B?Yjl1N0svL2VWQTlmekZrWEhkS1NxaDlKZFhDMm9HQTRRc1d4VkpsYWU1clNt?=
+ =?utf-8?B?dFZaeHN4T21iL1BDWU1DT1lTeG9vRGY5eXRBYmwxanZYUXhoUHpDUkI5dGFa?=
+ =?utf-8?B?akp4d0EyRlJTb2xFZk5zZVB1ZW9hVDdDd1NzaXkvQzZoMFp3MWgrYUd0RWhR?=
+ =?utf-8?B?d2JhUzlNODVQbm5yS2EvRXB1QUZOeFduZmJUSUVyUzFkbWJGZUJnS0EwaHRZ?=
+ =?utf-8?B?Y0xKTFJBSzE2YWx4TnFMNmpTRjYrVGMrZERReDVjdjVISU5yUk1wVXJrNFV3?=
+ =?utf-8?B?NEVyR3VwOFhpYmY4SkZiSmNkdzQyREQvSlhDc3BaWjJyT25iMG9NajYzakdM?=
+ =?utf-8?B?b3hobmhnYTBCQThYZStsckNWNkY3eEcwTjgveDNEKzVJc0FNdW92WHo0L0NU?=
+ =?utf-8?B?MldoTm9nQkxzeGxQNFhwS3l2UVFSYWd6b01xQlJIckk0bVhUdlNQM2dZNkxl?=
+ =?utf-8?B?NDA3SlljWm5hNzhqM3MyYTFQbk1aUXN0YjRPMFdsNUZmT2d5YVZNcTI4SUQ5?=
+ =?utf-8?B?VG1nWjlxL2pjdGg0Y2pIK0VMU1Yvb1BneFlPSk1vTUtLa0tDbjI5SHJ4QVI2?=
+ =?utf-8?B?RDM3TnJrMDZxcEc1K1QvczNSZnZmb2lXY2RFZGl2b0QySHJRNDFWM2xiQmli?=
+ =?utf-8?B?cnc3UERFVkZzZ3FyeGlDei9RVXRYb0ExYm53TmFraU5zMTBBK28rTVZtaG8w?=
+ =?utf-8?B?OWpnamlZUmp3QkxEMXNkMm8yR0VTQmFqZjgxQmU0NW1WZGJVTlZkVDY5dDRj?=
+ =?utf-8?B?aVkxNWorYlVINitnZFk0VmVHd0VJTm8rcDRoaUxaYldQUGdNL3M2TXR3RG8x?=
+ =?utf-8?B?cTNOVm5ZUXJ4WVJDLzNKNitadDFHOWZZS2ZoTHIvOHdDN01oWmovQ2JFNDRs?=
+ =?utf-8?B?RWk3MWhrSGxVWFRtdUM0VDZPL2xURnIzcUlDRVZhRDJiYTN3NEZvcGp3aVp2?=
+ =?utf-8?B?RGh4UFgwU2Fra1VTYVBHQUNyUER5c3VNcmJVWVZZb2xiNkxBWlFmQmhQRUhX?=
+ =?utf-8?B?WjJ0Y2xudW9TaWs0WmRDU3FtSGtrdDRSMHNNYkVyak9HU0cvR2g5dVBuTmEy?=
+ =?utf-8?B?TjFBaWFKRDUwOEpGQ0ZQNmpoWEY3dzg2V20xK1BWUWVGcFJHR1BrRXBpcncw?=
+ =?utf-8?B?L1VSZjVnZm1TWGtiTm94c0FzWkdkWE92QlUvRnBBRytKYitKZytKeDZoVi9l?=
+ =?utf-8?B?NWV5NFZsTWdNTFZQMDNjTXNZR014VXR4WUJ4R0JtTFNnc29LNzBSMGt2K1ds?=
+ =?utf-8?B?SEpEdUg2dGFyOHM5MU4rQm1QQmJFTncyaExhaUFiZ0M1MENZcHZaOUxiQlE2?=
+ =?utf-8?B?MzdxdGNvVDh6NEF1cSsyYkkvVE9wRklYVWJaOHc3Ujd6TVdtdVRoU1RKNFpY?=
+ =?utf-8?B?RXZBcm1OK2pDd3lFM3pZako2Sjc2R1lPL1NpcDBhYXY3NlIzNXgzenFPN2JD?=
+ =?utf-8?B?dUZpNTUxNFVGL0FWZXJCaHJ1Wi9MM1RyeFNvRGRZTWVMMlF1NmV6eWQwTXJV?=
+ =?utf-8?B?dnUvUytTV05BcGQvR09nc1RCcTJmU2Z2bW1BdWg0QjlaMFdwVmhLTENPOHow?=
+ =?utf-8?B?ZHJSejlxenR0NmNNL0NFS3NnL0VHYkpUaDhkNkZ3RjFVeC9tU1h0c3hXOGFy?=
+ =?utf-8?B?WHZIcnl1aHRkUlNHekNadHBNWWtXVlNXMGRkN2g1YnlLZ0EzZ0Q5YVlTTFN1?=
+ =?utf-8?B?dWI0bXNXSnpndmt2VUdBZlBjemVhUEhhZzNvTkhZV0w3am84OGNxYVZnZUhE?=
+ =?utf-8?Q?K69Bb/1x8VaJsuT1b9yogEq5W?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <E728FE13E982334DA877B9F7294201F1@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20230411225725.2032862-1-robdclark@gmail.com> <20230411225725.2032862-7-robdclark@gmail.com>
- <29a8d9aa-c6ea-873f-ce0b-fb8199b13068@linux.intel.com> <CAF6AEGsZsMx+Vy+4UQSx3X7w_QNvvjLqWxx=PnCLAOC9f-X2CQ@mail.gmail.com>
- <ZDb1phnddSne79iN@phenom.ffwll.local> <CAF6AEGvBeDVM12ac0j_PKSdcY83hNDhyrQs9-=h=dx_7AoMXLw@mail.gmail.com>
- <ZDcEGoSPGr/oRLas@phenom.ffwll.local> <c82fd8fa-9f4b-f62f-83be-25853f9ecf5e@linux.intel.com>
- <ZDgDQ1PqtXwu8zqA@phenom.ffwll.local> <ad8f2793-c1b3-a505-e93f-6cc52fded86d@linux.intel.com>
- <ZDhgcqiOtJi6//TS@phenom.ffwll.local> <8893ad56-8807-eb69-2185-b338725f0b18@linux.intel.com>
-In-Reply-To: <8893ad56-8807-eb69-2185-b338725f0b18@linux.intel.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Fri, 14 Apr 2023 06:40:27 -0700
-Message-ID: <CAF6AEGtaiKMWsGxTSUHM7_s_Wqiw3=ta+g=arUxknJ0dxbYvFQ@mail.gmail.com>
-Subject: Re: [PATCH v3 6/7] drm: Add fdinfo memory stats
-To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Christopher Healy <healych@amazon.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Rob Clark <robdclark@chromium.org>,
-        David Airlie <airlied@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c1035f10-9f0f-4f2c-1bd3-08db3cee0c86
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Apr 2023 13:42:11.2504
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fGMibIHxRM3xfmcguPTchAWxVbA0YBFJToCjENoilZ0VCbJ3MCkrnC87WrLWMVnfXmq14UjV98L3hNPnWvNOKQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB6913
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 14, 2023 at 1:57=E2=80=AFAM Tvrtko Ursulin
-<tvrtko.ursulin@linux.intel.com> wrote:
->
->
-> On 13/04/2023 21:05, Daniel Vetter wrote:
-> > On Thu, Apr 13, 2023 at 05:40:21PM +0100, Tvrtko Ursulin wrote:
-> >>
-> >> On 13/04/2023 14:27, Daniel Vetter wrote:
-> >>> On Thu, Apr 13, 2023 at 01:58:34PM +0100, Tvrtko Ursulin wrote:
-> >>>>
-> >>>> On 12/04/2023 20:18, Daniel Vetter wrote:
-> >>>>> On Wed, Apr 12, 2023 at 11:42:07AM -0700, Rob Clark wrote:
-> >>>>>> On Wed, Apr 12, 2023 at 11:17=E2=80=AFAM Daniel Vetter <daniel@ffw=
-ll.ch> wrote:
-> >>>>>>>
-> >>>>>>> On Wed, Apr 12, 2023 at 10:59:54AM -0700, Rob Clark wrote:
-> >>>>>>>> On Wed, Apr 12, 2023 at 7:42=E2=80=AFAM Tvrtko Ursulin
-> >>>>>>>> <tvrtko.ursulin@linux.intel.com> wrote:
-> >>>>>>>>>
-> >>>>>>>>>
-> >>>>>>>>> On 11/04/2023 23:56, Rob Clark wrote:
-> >>>>>>>>>> From: Rob Clark <robdclark@chromium.org>
-> >>>>>>>>>>
-> >>>>>>>>>> Add support to dump GEM stats to fdinfo.
-> >>>>>>>>>>
-> >>>>>>>>>> v2: Fix typos, change size units to match docs, use div_u64
-> >>>>>>>>>> v3: Do it in core
-> >>>>>>>>>>
-> >>>>>>>>>> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> >>>>>>>>>> Reviewed-by: Emil Velikov <emil.l.velikov@gmail.com>
-> >>>>>>>>>> ---
-> >>>>>>>>>>      Documentation/gpu/drm-usage-stats.rst | 21 ++++++++
-> >>>>>>>>>>      drivers/gpu/drm/drm_file.c            | 76 ++++++++++++++=
-+++++++++++++
-> >>>>>>>>>>      include/drm/drm_file.h                |  1 +
-> >>>>>>>>>>      include/drm/drm_gem.h                 | 19 +++++++
-> >>>>>>>>>>      4 files changed, 117 insertions(+)
-> >>>>>>>>>>
-> >>>>>>>>>> diff --git a/Documentation/gpu/drm-usage-stats.rst b/Documenta=
-tion/gpu/drm-usage-stats.rst
-> >>>>>>>>>> index b46327356e80..b5e7802532ed 100644
-> >>>>>>>>>> --- a/Documentation/gpu/drm-usage-stats.rst
-> >>>>>>>>>> +++ b/Documentation/gpu/drm-usage-stats.rst
-> >>>>>>>>>> @@ -105,6 +105,27 @@ object belong to this client, in the resp=
-ective memory region.
-> >>>>>>>>>>      Default unit shall be bytes with optional unit specifiers=
- of 'KiB' or 'MiB'
-> >>>>>>>>>>      indicating kibi- or mebi-bytes.
-> >>>>>>>>>>
-> >>>>>>>>>> +- drm-shared-memory: <uint> [KiB|MiB]
-> >>>>>>>>>> +
-> >>>>>>>>>> +The total size of buffers that are shared with another file (=
-ie. have more
-> >>>>>>>>>> +than a single handle).
-> >>>>>>>>>> +
-> >>>>>>>>>> +- drm-private-memory: <uint> [KiB|MiB]
-> >>>>>>>>>> +
-> >>>>>>>>>> +The total size of buffers that are not shared with another fi=
-le.
-> >>>>>>>>>> +
-> >>>>>>>>>> +- drm-resident-memory: <uint> [KiB|MiB]
-> >>>>>>>>>> +
-> >>>>>>>>>> +The total size of buffers that are resident in system memory.
-> >>>>>>>>>
-> >>>>>>>>> I think this naming maybe does not work best with the existing
-> >>>>>>>>> drm-memory-<region> keys.
-> >>>>>>>>
-> >>>>>>>> Actually, it was very deliberate not to conflict with the existi=
-ng
-> >>>>>>>> drm-memory-<region> keys ;-)
-> >>>>>>>>
-> >>>>>>>> I wouldn't have preferred drm-memory-{active,resident,...} but i=
-t
-> >>>>>>>> could be mis-parsed by existing userspace so my hands were a bit=
- tied.
-> >>>>>>>>
-> >>>>>>>>> How about introduce the concept of a memory region from the sta=
-rt and
-> >>>>>>>>> use naming similar like we do for engines?
-> >>>>>>>>>
-> >>>>>>>>> drm-memory-$CATEGORY-$REGION: ...
-> >>>>>>>>>
-> >>>>>>>>> Then we document a bunch of categories and their semantics, for=
- instance:
-> >>>>>>>>>
-> >>>>>>>>> 'size' - All reachable objects
-> >>>>>>>>> 'shared' - Subset of 'size' with handle_count > 1
-> >>>>>>>>> 'resident' - Objects with backing store
-> >>>>>>>>> 'active' - Objects in use, subset of resident
-> >>>>>>>>> 'purgeable' - Or inactive? Subset of resident.
-> >>>>>>>>>
-> >>>>>>>>> We keep the same semantics as with process memory accounting (i=
-f I got
-> >>>>>>>>> it right) which could be desirable for a simplified mental mode=
-l.
-> >>>>>>>>>
-> >>>>>>>>> (AMD needs to remind me of their 'drm-memory-...' keys semantic=
-s. If we
-> >>>>>>>>> correctly captured this in the first round it should be equival=
-ent to
-> >>>>>>>>> 'resident' above. In any case we can document no category is eq=
-ual to
-> >>>>>>>>> which category, and at most one of the two must be output.)
-> >>>>>>>>>
-> >>>>>>>>> Region names we at most partially standardize. Like we could sa=
-y
-> >>>>>>>>> 'system' is to be used where backing store is system RAM and ot=
-hers are
-> >>>>>>>>> driver defined.
-> >>>>>>>>>
-> >>>>>>>>> Then discrete GPUs could emit N sets of key-values, one for eac=
-h memory
-> >>>>>>>>> region they support.
-> >>>>>>>>>
-> >>>>>>>>> I think this all also works for objects which can be migrated b=
-etween
-> >>>>>>>>> memory regions. 'Size' accounts them against all regions while =
-for
-> >>>>>>>>> 'resident' they only appear in the region of their current plac=
-ement, etc.
-> >>>>>>>>
-> >>>>>>>> I'm not too sure how to rectify different memory regions with th=
-is,
-> >>>>>>>> since drm core doesn't really know about the driver's memory reg=
-ions.
-> >>>>>>>> Perhaps we can go back to this being a helper and drivers with v=
-ram
-> >>>>>>>> just don't use the helper?  Or??
-> >>>>>>>
-> >>>>>>> I think if you flip it around to drm-$CATEGORY-memory{-$REGION}: =
-then it
-> >>>>>>> all works out reasonably consistently?
-> >>>>>>
-> >>>>>> That is basically what we have now.  I could append -system to eac=
-h to
-> >>>>>> make things easier to add vram/etc (from a uabi standpoint)..
-> >>>>>
-> >>>>> What you have isn't really -system, but everything. So doesn't real=
-ly make
-> >>>>> sense to me to mark this -system, it's only really true for integra=
-ted (if
-> >>>>> they don't have stolen or something like that).
-> >>>>>
-> >>>>> Also my comment was more in reply to Tvrtko's suggestion.
-> >>>>
-> >>>> Right so my proposal was drm-memory-$CATEGORY-$REGION which I think =
-aligns
-> >>>> with the current drm-memory-$REGION by extending, rather than creati=
-ng
-> >>>> confusion with different order of key name components.
-> >>>
-> >>> Oh my comment was pretty much just bikeshed, in case someone creates =
-a
-> >>> $REGION that other drivers use for $CATEGORY. Kinda Rob's parsing poi=
-nt.
-> >>> So $CATEGORY before the -memory.
-> >>>
-> >>> Otoh I don't think that'll happen, so I guess we can go with whatever=
- more
-> >>> folks like :-) I don't really care much personally.
-> >>
-> >> Okay I missed the parsing problem.
-> >>
-> >>>> AMD currently has (among others) drm-memory-vram, which we could def=
-ine in
-> >>>> the spec maps to category X, if category component is not present.
-> >>>>
-> >>>> Some examples:
-> >>>>
-> >>>> drm-memory-resident-system:
-> >>>> drm-memory-size-lmem0:
-> >>>> drm-memory-active-vram:
-> >>>>
-> >>>> Etc.. I think it creates a consistent story.
-> >>>>
-> >>>> Other than this, my two I think significant opens which haven't been
-> >>>> addressed yet are:
-> >>>>
-> >>>> 1)
-> >>>>
-> >>>> Why do we want totals (not per region) when userspace can trivially
-> >>>> aggregate if they want. What is the use case?
-> >>>>
-> >>>> 2)
-> >>>>
-> >>>> Current proposal limits the value to whole objects and fixates that =
-by
-> >>>> having it in the common code. If/when some driver is able to support=
- sub-BO
-> >>>> granularity they will need to opt out of the common printer at which=
- point
-> >>>> it may be less churn to start with a helper rather than mid-layer. O=
-r maybe
-> >>>> some drivers already support this, I don't know. Given how important=
- VM BIND
-> >>>> is I wouldn't be surprised.
-> >>>
-> >>> I feel like for drivers using ttm we want a ttm helper which takes ca=
-re of
-> >>> the region printing in hopefully a standard way. And that could then =
-also
-> >>> take care of all kinds of of partial binding and funny rules (like ma=
-ybe
-> >>> we want a standard vram region that addds up all the lmem regions on
-> >>> intel, so that all dgpu have a common vram bucket that generic tools
-> >>> understand?).
-> >>
-> >> First part yes, but for the second I would think we want to avoid any
-> >> aggregation in the kernel which can be done in userspace just as well.=
- Such
-> >> total vram bucket would be pretty useless on Intel even since userspac=
-e
-> >> needs to be region aware to make use of all resources. It could even b=
-e
-> >> counter productive I think - "why am I getting out of memory when half=
- of my
-> >> vram is unused!?".
-> >
-> > This is not for intel-aware userspace. This is for fairly generic "gput=
-op"
-> > style userspace, which might simply have no clue or interest in what lm=
-emX
-> > means, but would understand vram.
-> >
-> > Aggregating makes sense.
->
-> Lmem vs vram is now an argument not about aggregation but about
-> standardizing regions names.
->
-> One detail also is a change in philosophy compared to engine stats where
-> engine names are not centrally prescribed and it was expected userspace
-> will have to handle things generically and with some vendor specific
-> knowledge.
->
-> Like in my gputop patches. It doesn't need to understand what is what,
-> it just finds what's there and presents it to the user.
->
-> Come some accel driver with local memory it wouldn't be vram any more.
-> Or even a headless data center GPU. So I really don't think it is good
-> to hardcode 'vram' in the spec, or midlayer, or helpers.
->
-> And for aggregation.. again, userspace can do it just as well. If we do
-> it in kernel then immediately we have multiple sets of keys to output
-> for any driver which wants to show the region view. IMO it is just
-> pointless work in the kernel and more code in the kernel, when userspace
-> can do it.
->
-> Proposal A (one a discrete gpu, one category only):
->
-> drm-resident-memory: x KiB
-> drm-resident-memory-system: x KiB
-> drm-resident-memory-vram: x KiB
->
-> Two loops in the kernel, more parsing in userspace.
-
-why would it be more than one loop, ie.
-
-    mem.resident +=3D size;
-    mem.category[cat].resident +=3D size;
-
-At the end of the day, there is limited real-estate to show a million
-different columns of information.  Even the gputop patches I posted
-don't show everything of what is currently there.  And nvtop only
-shows toplevel resident stat.  So I think the "everything" stat is
-going to be what most tools use.
-
-BR,
--R
-
-> Proposal B:
->
-> drm-resident-memory-system: x KiB
-> drm-resident-memory-vram: x KiB
->
-> Can be one loop, one helper, less text for userspace to parse and it can
-> still trivially show the total if so desired.
->
-> For instance a helper (or two) with a common struct containing region
-> names and totals, where a callback into the driver tallies under each
-> region, as the drm helper is walking objects.
->
-> >>> It does mean we walk the bo list twice, but *shrug*. People have been
-> >>> complaining about procutils for decades, they're still horrible, I th=
-ink
-> >>> walking bo lists twice internally in the ttm case is going to be ok. =
-If
-> >>> not, it's internals, we can change them again.
-> >>>
-> >>> Also I'd lean a lot more towards making ttm a helper and not putting =
-that
-> >>> into core, exactly because it's pretty clear we'll need more flexibil=
-ity
-> >>> when it comes to accurate stats for multi-region drivers.
-> >>
-> >> Exactly.
-> >>
-> >>> But for a first "how much gpu space does this app use" across everyth=
-ing I
-> >>> think this is a good enough starting point.
-> >>
-> >> Okay so we agree this would be better as a helper and not in the core.
-> >
-> > Nope, if you mean with this =3D Rob's patch. I was talking about a
-> > hypothetical region-aware extension for ttm-using drivers.
-> >
-> >> On the point are keys/semantics good enough as a starting point I am s=
-till
-> >> not convinced kernel should aggregate and that instead we should start=
- from
-> >> day one by appending -system (or something) to Rob's proposed keys.
-> >
-> > It should imo. Inflicting driver knowledge on generic userspace makes n=
-ot
-> > much sense, we should start with the more generally useful stuff imo.
-> > That's why there's the drm fdinfo spec and all that so it's not a
-> > free-for-all.
-> >
-> > Also Rob's stuff is _not_ system. Check on a i915 dgpu if you want :-)
->
-> I am well aware it adds up everything, that is beside the point.
->
-> Drm-usage-stats.rst text needs to be more precise across all keys at leas=
-t:
->
-> +- drm-resident-memory: <uint> [KiB|MiB]
-> +
-> +The total size of buffers that are resident in system memory.
->
-> But as said, I don't see the point in providing aggregated values.
->
-> Regards,
->
-> Tvrtko
+T24gVGh1LCAyMDIzLTA0LTEzIGF0IDE1OjQ4IC0wNzAwLCBTZWFuIENocmlzdG9waGVyc29uIHdy
+b3RlOg0KPiBPbiBUaHUsIEFwciAxMywgMjAyMywgS2FpIEh1YW5nIHdyb3RlOg0KPiA+IE9uIFdl
+ZCwgMjAyMy0wNC0xMiBhdCAwODoyMiAtMDcwMCwgU2VhbiBDaHJpc3RvcGhlcnNvbiB3cm90ZToN
+Cj4gPiA+IEtWTSdzIHVBUEkgZm9yIGluaXRpYXRpbmcgVERILk1ORy5JTklUIGNvdWxkIG9idmlv
+dXNseSBmaWx0ZXIgb3V0DQo+ID4gPiB1bnN1cHBvcnRlZCBsZWFmcywgYnV0IGRvaW5nIHNvIHdv
+dWxkIGxlYWQgdG8gcG90ZW50aWFsIEFCSSBicmVha3MsIGUuZy4gaWYgYSBsZWFmDQo+ID4gPiB0
+aGF0IEtWTSBmaWx0ZXJzIG91dCBiZWNvbWVzIGtub3duIHRvIHRoZSBURFggTW9kdWxlLCB0aGVu
+IHVwZ3JhZGluZyB0aGUgVERYIE1vZHVsZQ0KPiA+ID4gY291bGQgcmVzdWx0IGluIHByZXZpb3Vz
+bHkgYWxsb3dlZCBpbnB1dCBiZWNvbWluZyBpbnZhbGlkLg0KPiA+IA0KPiA+IEhvdyBhYm91dCBv
+bmx5IGZpbHRlcmluZyBvdXQgUFYgcmVsYXRlZCBDUFVJRHMgd2hlbiBhcHBseWluZyBDUFVJRHMg
+dG8NCj4gPiBUREguTU5HLklOSVQ/ICBJIHRoaW5rIHdlIGNhbiBhc3N1bWUgdGhleSBhcmUgbm90
+IGdvbm5hIGJlIGtub3duIHRvIFREWCBtb2R1bGUNCj4gPiBhbnl3YXkuDQo+IA0KPiBOb3BlLCBu
+b3QgZ29pbmcgZG93biB0aGF0IHJvYWQuICBGb29sIG1lIG9uY2VbKl0sIHNoYW1lIG9uIHlvdS4g
+IEZvb2wgbWUgdHdpY2UsDQo+IHNoYW1lIG9uIG1lIDotKQ0KDQpBaCBPSyA6KQ0KDQo+IA0KPiBP
+YmplY3Rpb25zIHRvIGhhcmR3YXJlIHZlbmRvcnMgZGVmaW5pbmcgUFYgaW50ZXJmYWNlcyBhc2lk
+ZSwgdGhlcmUgZXhpc3QgbGVhZnMNCj4gdGhhdCBhcmUgbmVpdGhlciBQViByZWxhdGVkIG5vciBr
+bm93biB0byB0aGUgVERYIG1vZHVsZSwgZS5nLiBDZW50YXVyIGxlYWZzLiAgSQ0KPiB0aGluayBp
+dCdzIGV4dHJlbWVseSB1bmxpa2VseSAodW5kZXJzdGF0ZW1lbnQpIHRoYXQgYW55b25lIHdpbGwg
+d2FudCB0byBleHBvc2UNCj4gQ2VudGF1ciBsZWFmcyB0byBhIFREWCBndWVzdCwgYnV0IGFnYWlu
+IEkgd2FudCB0byBzYXkgb3V0IG9mIHRoZSBidXNpbmVzcyBvZg0KPiB0ZWxsaW5nIHVzZXJzcGFj
+ZSB3aGF0IGlzIGFuZCBpc24ndCBzYW5lIENQVUlEIG1vZGVscy4NCg0KUmlnaHQuICBUaGVyZSBt
+aWdodCBiZSB1c2UgY2FzZSB0aGF0IFREWCBndWVzdCB3YW50cyB0byB1c2Ugc29tZSBDUFVJRCB3
+aGljaA0KaXNuJ3QgaGFuZGxlZCBieSB0aGUgVERYIG1vZHVsZSBidXQgcHVyZWx5IGJ5IEtWTS4g
+IFdlIGRvbid0IHdhbnQgdG8gbGltaXQgdGhlDQpwb3NzaWJpbGl0eS4gIFRvdGFsbHkgYWdyZWUu
+DQoNCj4gDQo+IFsqXSBodHRwczovL2xvcmUua2VybmVsLm9yZy9hbGwvMjAyMjEyMTAxNjAwNDYu
+MjYwODc2Mi02LWNoZW4uemhhbmdAaW50ZWwuY29tDQo+IA0KPiA+ID4gRXZlbiBpZiB0aGF0IHdl
+cmVuJ3QgdGhlIGNhc2UsIGlnbm9yaW5nIEtWTV9TRVRfQ1BVSUR7Mn0gd291bGQgYmUgYSBiYWQg
+b3B0aW9uDQo+ID4gPiBiZWN1YXNlIGl0IGRvZXNuJ3QgYWxsb3cgS1ZNIHRvIG9wZW4gYmVoYXZp
+b3IgaW4gdGhlIGZ1dHVyZSwgaS5lLiBpZ25vcmluZyB0aGUNCj4gPiA+IGxlYWYgd291bGQgZWZm
+ZWN0aXZlbHkgbWFrZSBfZXZlcnl0aGluZ18gdmFsaWQgaW5wdXQuICBJZiBLVk0gd2VyZSB0byBy
+ZWx5IHNvbGVseQ0KPiA+ID4gb24gVERILk1ORy5JTklULCB0aGVuIEtWTSB3b3VsZCB3YW50IHRv
+IGNvbXBsZXRlbHkgZGlzYWxsb3cgS1ZNX1NFVF9DUFVJRHsyfS4NCj4gPiANCj4gPiBSaWdodC4g
+IERpc2FsbG93aW5nIFNFVF9DUFVJRHsyfSBwcm9iYWJseSBpcyBiZXR0ZXIsIGFzIGl0IGdpdmVz
+IHVzZXJzcGFjZSBhDQo+ID4gbW9yZSBjb25jcmV0ZSByZXN1bHQuICANCj4gPiANCj4gPiA+IA0K
+PiA+ID4gQmFjayB0byBaaGkncyBxdWVzdGlvbiwgdGhlIGJlc3QgdGhpbmcgdG8gZG8gZm9yIFRE
+WCBhbmQgU05QIGlzIGxpa2VseSB0byByZXF1aXJlDQo+ID4gPiB0aGF0IG92ZXJsYXAgYmV0d2Vl
+biBLVk1fU0VUX0NQVUlEezJ9IGFuZCB0aGUgInRydXN0ZWQiIENQVUlEIGJlIGNvbnNpc3RlbnQu
+ICBUaGUNCj4gPiA+IGtleSBkaWZmZXJlbmNlIGlzIHRoYXQgS1ZNIHdvdWxkIGJlIGVuZm9yY2lu
+ZyBjb25zaXN0ZW5jeSwgbm90IHNhbml0eS4gIEkuZS4gS1ZNDQo+ID4gPiBpc24ndCBtYWtpbmcg
+YXJiaXRyYXJ5IGRlY2lzaW9ucyBvbiB3aGF0IGlzL2lzbid0IHNhbmUsIEtWTSBpcyBzaW1wbHkg
+cmVxdWlyaW5nDQo+ID4gPiB0aGF0IHVzZXJzcGFjZSBwcm92aWRlIGEgQ1BVSUQgbW9kZWwgdGhh
+dCdzIGNvbnNpc3RlbnQgd2l0aCB3aGF0IHVzZXJzcGFjZSBwcm92aWRlZA0KPiA+ID4gZWFybGll
+ci4NCj4gPiANCj4gPiBTbyBJSVVDLCB5b3UgcHJlZmVyIHRvIHZlcmlmeWluZyB0aGUgQ1BVSURz
+IGluIFNFVF9DUFVJRHsyfSBhcmUgYSBzdXBlciBzZXQgb2YNCj4gPiB0aGUgQ1BVSURzIHByb3Zp
+ZGVkIGluIFRESC5NTkcuSU5JVD8gIEFuZCBLVk0gbWFudWFsbHkgdmVyaWZpZXMgYWxsIENQVUlE
+cyBmb3INCj4gPiBhbGwgdmNwdXMgYXJlIGNvbnNpc3RlbnQgKHRoZSBzYW1lKSBpbiBTRVRfQ1BV
+SUR7Mn0/DQo+IA0KPiBZZXMsIGV4Y2VwdCBLVk0gZG9lc24ndCBuZWVkIHRvIHZlcmlmeSB2Q1BV
+cyBhcmUgY29uc2lzdGVudCB3aXRoIHJlc3BlY3QgdG8gZWFjaA0KPiBvdGhlciwganVzdCB0aGF0
+IGVhY2ggdkNQVSBpcyBjb25zaXN0ZW50IHdpdGggcmVzcGVjdCB0byB3aGF0IHdhcyByZXBvcnRl
+ZCB0byB0aGUNCj4gVERYIE1vZHVsZS4NCg0KT0suICBGaW5lIHRvIG1lLg0KDQo+IA0KPiA+IExv
+b2tzIHRoaXMgaXMgb3Zlci1jb21wbGljYXRlZCwgX2lmXyB0aGUgIm9ubHkgZmlsdGVyaW5nIG91
+dCBQViByZWxhdGVkIENQVUlEcw0KPiA+IHdoZW4gYXBwbHlpbmcgQ1BVSURzIHRvIFRESC5NTkcu
+SU5JVCIgYXBwcm9hY2ggd29ya3MuIA0KPiANCj4gSXQncyBub3QgY29tcGxpY2F0ZWQgYXQgYWxs
+LiAgV2FsayB0aHJvdWdoIHRoZSBsZWFmcyBkZWZpbmVkIGR1cmluZyBUREguTU5HLklOSVQsDQo+
+IHJlamVjdCBLVk1fU0VUX0NQVUlEIGlmIGEgbGVhZiBpc24ndCBwcmVzZW50IG9yIGRvZXNuJ3Qg
+bWF0Y2ggZXhhY3RseS4gIE9yIGhhcw0KPiB0aGUgVERYIHNwZWMgY2hhbmdlZCBhbmQgaXQncyBu
+byBsb25nZXIgdGhhdCBzaW1wbGU/DQoNCk5vIHRoZSBtb2R1bGUgaGFzbid0IGJlZW4gY2hhbmdl
+ZCwgYW5kIHllcyBpdCBzaG91bGQgYmUgYXMgc2ltcGxlIGFzIHlvdSBzYWlkLiANCkkganVzdCBo
+YWQgc29tZSBmaXJzdCBpbXByZXNzaW9uIHRoYXQgaGFuZGxpbmcgQ1BVSUQgaW4gb25lIElPQ1RM
+IChUREguTU5HLklOSVQpDQpzaG91bGQgYmUgc2ltcGxlciB0aGFuIGhhbmRsaW5nIENQVUlEIGlu
+IHR3byBJT0NUTHMsIGJ1dCBJIGd1ZXNzIHRoaXMgbWlnaHQgbm90DQpiZSB0cnVlIDopDQoNCkFu
+eXdheSBJIGFncmVlIHdpdGggeW91ciBzdWdnZXN0aW9uLiAgVGhhbmtzLg0KDQo=
