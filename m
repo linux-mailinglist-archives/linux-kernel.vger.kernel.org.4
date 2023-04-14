@@ -2,136 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D35E6E1DF3
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:18:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB61D6E1DF6
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:19:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbjDNISg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 04:18:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56738 "EHLO
+        id S230060AbjDNITq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 04:19:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbjDNISd (ORCPT
+        with ESMTP id S230025AbjDNITn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 04:18:33 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467306E9D;
-        Fri, 14 Apr 2023 01:18:32 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id A90265C00E8;
-        Fri, 14 Apr 2023 04:18:31 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Fri, 14 Apr 2023 04:18:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1681460311; x=1681546711; bh=Bc0pT2daBTU9tVgFjZ8Ba3dqY4qyOA04fQh
-        gM2l2eck=; b=UxPbbZFZwOBd9G2Nxjg0ul2HGzohc3CtWd60kgtEw93f7Ooww5z
-        DU8hkhNApz6JC8OAohmolLCjzWWiLhdazwsHxov+0TRcJukOaiSKmxeAxanV3+nb
-        eA/A14OGsct1z7YQ7Ij0GmJ9a6MeSqtxvPsQIOgTzV2NTz5cnReyRHoe8/HUT5xy
-        Xj/Cgy+XMymv8PD0JI+WBVzkkZsjKd7Gds29XYR6XPhnceI4y1mWgS64i4gc3zGa
-        TFifDLX7OzXUjE8ynPXGFWGIFl45rVZLTn1rFzGe8GuRDsdNDhxWCL/k8T+wIr/e
-        xbVvo0JxXVDPRVOQ6Z4jr0maYILMMZsyO+Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1681460311; x=1681546711; bh=Bc0pT2daBTU9tVgFjZ8Ba3dqY4qyOA04fQh
-        gM2l2eck=; b=XBrs8KQXClKUt0VBUb54mfl0+mdP8/SqOwjqIgFuG9aLTZbVYv/
-        3J6dzYnk4Vt61Sz+4JYdi2kqeRCl5jnOywzmcRqwBUwBd9DzjODfFB1vdYZtWBpg
-        QAFhED1VLbCIeY0mx6BW2v2MnvCnl+g8Awk+DBtasLmMVKrKBiqGW9rt3vY9HYjs
-        Kz3aDoJelEjwq4GSH7M8jtuuaoTW6Et1iuUn3noMn6/cX/S0J6z1j6X7FqrAKh3r
-        VjKfE0wm8vAEGJ7Q0ef5ybuDbEwQQ/dzCSfKo2RvElEfRTy9zaLxhqFupfY0GamV
-        UgjKlOBZHVSdPLm+jlGXxGASqeB/77RMyVA==
-X-ME-Sender: <xms:Vww5ZLRyYSSkS3fJB89LAU4DAs27fMmAG1eSeLm6vX9c8v51zyGKbw>
-    <xme:Vww5ZMyqcSiHxb1NwrBzLVcYE4iCHzSuNZgdd6VVxoLRH9hjiO_GLnlz53o_49Rqu
-    hvmU-ZQ0yPrpAPl9Kk>
-X-ME-Received: <xmr:Vww5ZA1ZSaveJSoSygjHCXctrjnRETXnepPtLaFIDJKBSZIlhd8BvrtD8PYcMhqEbiEi>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeltddgtdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpegtggfuhfgjffevgffkfhfvofesth
-    hqmhdthhdtjeenucfhrhhomheplfhirgiguhhnucgjrghnghcuoehjihgrgihunhdrhigr
-    nhhgsehflhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpedutdejffetteefke
-    ejieehfeeuieeguedtveeijeeviefhffelvdfgudeihfdvtdenucevlhhushhtvghrufhi
-    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflh
-    ihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:Vww5ZLAEHHcYHlPzPNXJ8APeejk_q0FpzHphp9jyhZ-YN8fyoLjYZw>
-    <xmx:Vww5ZEjjpxFwUr_2_3a0aIpZ-c27M_mQpWWtu_0AqKcxjkmunlrPPA>
-    <xmx:Vww5ZPoR9dGfR8V-MEErPJGzPjem-cYayX-BQu3pzsJpxLe2pghJQw>
-    <xmx:Vww5ZAb2TNq6v7iqJit4xmuA-GRfUsgWA_L6haR-WVV7inRK_A6-DQ>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 14 Apr 2023 04:18:30 -0400 (EDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: Multiple undefined configuration options are dependent in Kconfig
- under the v6.3-rc4 drivers directory
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <20230410232725.zwbccyryboxj3bh5@mobilestation>
-Date:   Fri, 14 Apr 2023 09:18:20 +0100
-Cc:     linux-kernel@vger.kernel.org,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <011B19A8-1276-4603-B4D8-4CA7E9F07B3D@flygoat.com>
-References: <bc6c86d.11bb9.1872c5aa2cb.Coremail.sunying@nj.iscas.ac.cn>
- <18c3fbb4-59db-d508-ddd6-080cc8944b39@opensource.wdc.com>
- <20230410232725.zwbccyryboxj3bh5@mobilestation>
-To:     Serge Semin <fancer.lancer@gmail.com>
-X-Mailer: Apple Mail (2.3731.500.231)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 14 Apr 2023 04:19:43 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E590330C4;
+        Fri, 14 Apr 2023 01:19:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681460382; x=1712996382;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Z135BJM0WTm/8JKwrFBhTuBcWJHalDnImuqqKXx6vwU=;
+  b=MjZXY82xsjru8rokraaQ3JdoSfQDTaQsIY5CsCpHyt90ewAc8hEyCc1J
+   ymBUYayfkX5ffBALzCdd1QIh/onvCYRIWnf/9AnJ5Msxi85eMvCUz6mSK
+   ekybyyXDL6+jUCcRmLrb5G1B1XLRhwfvorw5OtRaaswYwyuCyObOia3nO
+   r0dyIiSDX5Amw4nz1KX/+ALeNmG9wuy+CjJnhzeD3h3N45KZdd6rAdIfD
+   TdbD0Rr38OAfzMdGEfCw8hPULT76XJyP3z9uuxUIZriyo66lPHpAYvBAd
+   n/euGLaBTwvEAY41KWsxu/ZnSOmr+OJ4NS/prEdVWL4laxDCRfGyWbXKY
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="343171472"
+X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
+   d="scan'208";a="343171472"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 01:19:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="754376594"
+X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
+   d="scan'208";a="754376594"
+Received: from unknown (HELO rajath-NUC10i7FNH..) ([10.223.165.88])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 01:19:40 -0700
+From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+To:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+Subject: [PATCH v2] usb: typec: intel_pmc_mux: Expose IOM port status to debugfs
+Date:   Fri, 14 Apr 2023 13:49:10 +0530
+Message-Id: <20230414081910.1336405-1-rajat.khandelwal@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+IOM status has a crucial role during debugging to check the
+current state of the type-C port.
+There are ways to fetch the status, but all those require the
+IOM port status offset, which could change with platform.
 
+Make a debugfs directory for intel_pmc_mux and expose the status
+under it per port basis.
 
-> 2023=E5=B9=B44=E6=9C=8811=E6=97=A5 00:40=EF=BC=8CSerge Semin =
-<fancer.lancer@gmail.com> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> On Thu, Mar 30, 2023 at 07:34:58AM +0900, Damien Le Moal wrote:
->> On 3/29/23 16:52, =E5=AD=99=E6=BB=A2 wrote:
->>> It has been discovered that the following configuration options are =
-undefined in the current latest version, v6.3-rc4, yet they are being =
-relied upon by other configuration options in multiple Kconfig files:
->>>=20
->>> MIPS_BAIKAL_T1 is undefined, used as a 'depends on' condition in =
-multiple files such as drivers/ata/Kconfig, drivers/hwmon/Kconfig, =
-drivers/bus/Kconfig, and drivers/memory/Kconfig.
->>> MFD_MAX597X is undefined, used as a 'depends on' condition in =
-Kconfig file drivers/regulator/Kconfig.
->>> MFD_SM5703 is undefined, used as a 'depends on' condition in Kconfig =
-file drivers/regulator/Kconfig.
->>> ARCH_THUNDERBAY is undefined, used as a 'depends on' condition in =
-Kconfig files drivers/pinctrl/Kconfig and drivers/phy/intel/Kconfig.
->>> ARCH_BCM4908 is undefined, used as a 'depends on' condition in =
-Kconfig file drivers/leds/blink/Kconfig.
->>> MFD_TN48M_CPLD is undefined, used as a 'depends on' condition in =
-Kconfig files drivers/gpio/Kconfig and drivers/reset/Kconfig.=20
->>> USB_HSIC_USB3613 is undefined, used as a 'depends on' condition in =
-drivers/staging/greybus/Kconfig and =
-drivers/staging/greybus/arche-platform.c.
->=20
-> Please, don't drop the MIPS_BAIKAL_T1 config. It will be defined and
-> thus utilized after I submit the SoC CSP support to the MIPS arch.
+Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+---
 
-Hi Serge,
+v2:
+1. Remove static declaration of the debugfs root for 'intel_pmc_mux'
+2. Remove explicitly defined one-liner functions
 
-Is there any special support at MIPS arch level required by Baikal T1?
+ drivers/usb/typec/mux/intel_pmc_mux.c | 34 +++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-I think MIPS32R5 generic kernel should fit your purpose? You can easily =
-add some =E2=80=9Cworkaround=E2=80=9D
-under generic kernel framework as well.
-
-Thanks
-Jiaxun
-
-
-
+diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
+index 34e4188a40ff..1d43b111781e 100644
+--- a/drivers/usb/typec/mux/intel_pmc_mux.c
++++ b/drivers/usb/typec/mux/intel_pmc_mux.c
+@@ -15,6 +15,7 @@
+ #include <linux/usb/typec_mux.h>
+ #include <linux/usb/typec_dp.h>
+ #include <linux/usb/typec_tbt.h>
++#include <linux/debugfs.h>
+ 
+ #include <asm/intel_scu_ipc.h>
+ 
+@@ -639,9 +640,34 @@ static int pmc_usb_probe_iom(struct pmc_usb *pmc)
+ 	return 0;
+ }
+ 
++static int port_iom_status_show(struct seq_file *s, void *unused)
++{
++	struct pmc_usb_port *port = s->private;
++
++	update_port_status(port);
++	seq_printf(s, "0x%08x\n", port->iom_status);
++
++	return 0;
++}
++DEFINE_SHOW_ATTRIBUTE(port_iom_status);
++
++static void pmc_mux_port_debugfs_init(struct pmc_usb_port *port,
++				      struct dentry *pmc_mux_debugfs_root)
++{
++	struct dentry *debugfs_dir;
++	char name[6];
++
++	snprintf(name, sizeof(name), "port%d", port->usb3_port - 1);
++
++	debugfs_dir = debugfs_create_dir(name, pmc_mux_debugfs_root);
++	debugfs_create_file("iom_status", 0400, debugfs_dir, port,
++			    &port_iom_status_fops);
++}
++
+ static int pmc_usb_probe(struct platform_device *pdev)
+ {
+ 	struct fwnode_handle *fwnode = NULL;
++	struct dentry *pmc_mux_debugfs_root;
+ 	struct pmc_usb *pmc;
+ 	int i = 0;
+ 	int ret;
+@@ -674,6 +700,8 @@ static int pmc_usb_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+ 
++	pmc_mux_debugfs_root = debugfs_create_dir("intel_pmc_mux", NULL);
++
+ 	/*
+ 	 * For every physical USB connector (USB2 and USB3 combo) there is a
+ 	 * child ACPI device node under the PMC mux ACPI device object.
+@@ -688,6 +716,8 @@ static int pmc_usb_probe(struct platform_device *pdev)
+ 			fwnode_handle_put(fwnode);
+ 			goto err_remove_ports;
+ 		}
++
++		pmc_mux_port_debugfs_init(&pmc->port[i], pmc_mux_debugfs_root);
+ 	}
+ 
+ 	platform_set_drvdata(pdev, pmc);
+@@ -703,6 +733,8 @@ static int pmc_usb_probe(struct platform_device *pdev)
+ 
+ 	acpi_dev_put(pmc->iom_adev);
+ 
++	debugfs_lookup_and_remove("intel_pmc_mux", NULL);
++
+ 	return ret;
+ }
+ 
+@@ -719,6 +751,8 @@ static int pmc_usb_remove(struct platform_device *pdev)
+ 
+ 	acpi_dev_put(pmc->iom_adev);
+ 
++	debugfs_lookup_and_remove("intel_pmc_mux", NULL);
++
+ 	return 0;
+ }
+ 
+-- 
+2.34.1
 
