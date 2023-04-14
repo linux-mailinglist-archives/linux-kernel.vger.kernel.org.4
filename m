@@ -2,167 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF0A96E2137
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 12:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D53A86E213C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 12:48:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230204AbjDNKqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 06:46:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52010 "EHLO
+        id S229797AbjDNKsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 06:48:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjDNKq3 (ORCPT
+        with ESMTP id S230184AbjDNKse (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 06:46:29 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC2895;
-        Fri, 14 Apr 2023 03:46:27 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Fri, 14 Apr 2023 06:48:34 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8145359EA
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 03:48:33 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id DD51E1FD95;
-        Fri, 14 Apr 2023 10:46:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1681469185; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NaDKrVzHktRGkhvNC8mOy7GLmS2NFDSAPBln7UTiz9Q=;
-        b=Mi9ou96w9xvxbp6Exkd6EGylmL5lp7Mu33FedVadh7SrkmmJPYwKGBSwr9zJxRKgFsdGb7
-        gHW0oGlD26djN5njEDeceOD4h9KXHxQfSrM6AgaOkZx0T9uJ+nQ3T2QvyTdd0PB26aCbvP
-        X2ib6TA2fZs8xpSyoIDbx+IyyN2tXFw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1681469185;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NaDKrVzHktRGkhvNC8mOy7GLmS2NFDSAPBln7UTiz9Q=;
-        b=9vWudS8M5XsxTuY0B046MKslysKF1mrmztRo4UGnWT4XH9akLQKLv9snoIat72AImT6d6c
-        CRVVTnSwo1nRYXAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CD957139FC;
-        Fri, 14 Apr 2023 10:46:25 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id zkolMgEvOWSNMgAAMHmgww
-        (envelope-from <jack@suse.cz>); Fri, 14 Apr 2023 10:46:25 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 4AD65A0732; Fri, 14 Apr 2023 12:46:25 +0200 (CEST)
-Date:   Fri, 14 Apr 2023 12:46:25 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Luca Vizzarro <Luca.Vizzarro@arm.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Kevin Brodsky <Kevin.Brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        David Laight <David.Laight@ACULAB.com>,
-        Mark Rutland <Mark.Rutland@arm.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        linux-fsdevel@vger.kernel.org, Jan Kara <jack@suse.cz>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: Re: [PATCH 5/5] dnotify: Pass argument of fcntl_dirnotify as int
-Message-ID: <20230414104625.gyzuswldwil4jlfw@quack3>
-References: <20230414100212.766118-1-Luca.Vizzarro@arm.com>
- <20230414100212.766118-6-Luca.Vizzarro@arm.com>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id ED0691EC0691;
+        Fri, 14 Apr 2023 12:48:12 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1681469293;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=3TWGLxyxOgYeVK6FexCzZr9UcM0G4Qqyy7muYzctMI4=;
+        b=izVvOO9KW1Sq3Fupbi7J9BC4amlGE3IkcVZ/oWDx/YQqyIa3IkX6ttctXqsh+vRAFIQWcD
+        lXDPoXdHoC2L0ru9GKSOrxlPTzCYIREzqAaDmEiPBtJ3c0GRQMFIN358G3Bfe9lpjLAM5d
+        2bGtFrPON/pf5DSIdr0m+uDaD7TnPUo=
+Date:   Fri, 14 Apr 2023 12:48:08 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        hpa@zytor.com, x86@kernel.org, linux-kernel@vger.kernel.org,
+        peterz@infradead.org, seanjc@google.com, pbonzini@redhat.com,
+        kim.phillips@amd.com, babu.moger@amd.com,
+        pawan.kumar.gupta@linux.intel.com, sandipan.das@amd.com,
+        CobeChen@zhaoxin.com, TimGuo@zhaoxin.com, LeoLiu-oc@zhaoxin.com
+Subject: Re: [PATCH] x86/cpufeatures: extend CPUID leaf 0xc0000001 support
+ for Zhaoxin
+Message-ID: <20230414104808.GBZDkvaJechZSM+SI9@fat_crate.local>
+References: <20230414095334.8743-1-TonyWWang-oc@zhaoxin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230414100212.766118-6-Luca.Vizzarro@arm.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230414095334.8743-1-TonyWWang-oc@zhaoxin.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 14-04-23 11:02:12, Luca Vizzarro wrote:
-> The interface for fcntl expects the argument passed for the command
-> F_DIRNOTIFY to be of type int. The current code wrongly treats it as
-> a long. In order to avoid access to undefined bits, we should explicitly
-> cast the argument to int.
+On Fri, Apr 14, 2023 at 05:53:34PM +0800, Tony W Wang-oc wrote:
+> Extend CPUID leaf 0xc0000001 to support SM2, SM3, SM4, PARALLAX, TM3,
+> RNG2, PHE2, RSA.
 > 
-> Cc: Kevin Brodsky <Kevin.Brodsky@arm.com>
-> Cc: Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-> Cc: "Theodore Ts'o" <tytso@mit.edu>
-> Cc: David Laight <David.Laight@ACULAB.com>
-> Cc: Mark Rutland <Mark.Rutland@arm.com>
-> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: Jeff Layton <jlayton@kernel.org>
-> Cc: Chuck Lever <chuck.lever@oracle.com>
-> Cc: linux-fsdevel@vger.kernel.org
-> Cc: Jan Kara <jack@suse.cz>
-> Cc: Amir Goldstein <amir73il@gmail.com>
-> Signed-off-by: Luca Vizzarro <Luca.Vizzarro@arm.com>
+> CPUID.(EAX=0xc0000001,ECX=0):EDX[bit 0]  SM2
+> CPUID.(EAX=0xc0000001,ECX=0):EDX[bit 1]  SM2_EN
+> CPUID.(EAX=0xc0000001,ECX=0):EDX[bit 4]  SM3 SM4
+> CPUID.(EAX=0xc0000001,ECX=0):EDX[bit 5]  SM3_EN SM4_EN
+> CPUID.(EAX=0xc0000001,ECX=0):EDX[bit 16] PARALLAX
+> CPUID.(EAX=0xc0000001,ECX=0):EDX[bit 17] PARALLAX_EN
+> CPUID.(EAX=0xc0000001,ECX=0):EDX[bit 20] TM3
+> CPUID.(EAX=0xc0000001,ECX=0):EDX[bit 21] TM3_EN
+> CPUID.(EAX=0xc0000001,ECX=0):EDX[bit 22] RNG2
+> CPUID.(EAX=0xc0000001,ECX=0):EDX[bit 23] RNG2_EN
+> CPUID.(EAX=0xc0000001,ECX=0):EDX[bit 25] PHE2
+> CPUID.(EAX=0xc0000001,ECX=0):EDX[bit 26] PHE2_EN
+> CPUID.(EAX=0xc0000001,ECX=0):EDX[bit 27] RSA
+> CPUID.(EAX=0xc0000001,ECX=0):EDX[bit 28] RSA_EN
 
-Looks good to me. Do you plan to merge this series together (perhaps
-Christian could?) or should I pick up the dnotify patch? In case someone
-else will merge the patch feel free to add:
+None of those flags are used in code, why do we need this patch?
 
-Acked-by: Jan Kara <jack@suse.cz>
+If you want to dump them on the hardware to know what's set or not,
+there's tools/arch/x86/kcpuid/ for that.
 
-								Honza
+> SM2/SM3/SM4 imply the instructions support for Chinese cipher security
+> algorithm generations 2/3/4.
+> PARALLAX is the feature of Zhaoxin CPU that automatically adjusts
+> processors's voltage as a function of temperature.
+> TM3 is the abbreviation of Thermal Monitor version 3.
+> RNG2 is the abbreviation of Random Number Generation version 2.
+> PHE2 is the abbreviation of Padlock Hash Engine version 2.
+> RSA implies Zhaoxin hardware support for RSA algorithm.
+> 
+> All these features have two relative CPUID bits, one bit implies the
+> existence of the feature and the other bit with postfix "EN" implies
+> the availability of this feature.
 
-> ---
->  fs/notify/dnotify/dnotify.c | 4 ++--
->  include/linux/dnotify.h     | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/fs/notify/dnotify/dnotify.c b/fs/notify/dnotify/dnotify.c
-> index 190aa717fa32..ebdcc25df0f7 100644
-> --- a/fs/notify/dnotify/dnotify.c
-> +++ b/fs/notify/dnotify/dnotify.c
-> @@ -199,7 +199,7 @@ void dnotify_flush(struct file *filp, fl_owner_t id)
->  }
-> 
->  /* this conversion is done only at watch creation */
-> -static __u32 convert_arg(unsigned long arg)
-> +static __u32 convert_arg(unsigned int arg)
->  {
->         __u32 new_mask = FS_EVENT_ON_CHILD;
-> 
-> @@ -258,7 +258,7 @@ static int attach_dn(struct dnotify_struct *dn, struct dnotify_mark *dn_mark,
->   * up here.  Allocate both a mark for fsnotify to add and a dnotify_struct to be
->   * attached to the fsnotify_mark.
->   */
-> -int fcntl_dirnotify(int fd, struct file *filp, unsigned long arg)
-> +int fcntl_dirnotify(int fd, struct file *filp, unsigned int arg)
->  {
->         struct dnotify_mark *new_dn_mark, *dn_mark;
->         struct fsnotify_mark *new_fsn_mark, *fsn_mark;
-> diff --git a/include/linux/dnotify.h b/include/linux/dnotify.h
-> index b1d26f9f1c9f..9f183a679277 100644
-> --- a/include/linux/dnotify.h
-> +++ b/include/linux/dnotify.h
-> @@ -30,7 +30,7 @@ struct dnotify_struct {
->                             FS_MOVED_FROM | FS_MOVED_TO)
-> 
->  extern void dnotify_flush(struct file *, fl_owner_t);
-> -extern int fcntl_dirnotify(int, struct file *, unsigned long);
-> +extern int fcntl_dirnotify(int, struct file *, unsigned int);
-> 
->  #else
-> 
-> @@ -38,7 +38,7 @@ static inline void dnotify_flush(struct file *filp, fl_owner_t id)
->  {
->  }
-> 
-> -static inline int fcntl_dirnotify(int fd, struct file *filp, unsigned long arg)
-> +static inline int fcntl_dirnotify(int fd, struct file *filp, unsigned int arg)
->  {
->         return -EINVAL;
->  }
-> --
-> 2.34.1
-> 
-> IMPORTANT NOTICE: The contents of this email and any attachments are confidential and may also be privileged. If you are not the intended recipient, please notify the sender immediately and do not disclose the contents to any other person, use it for any purpose, or store or copy the information in any medium. Thank you.
+That's a lot of waste of CPUID bits but that's your decision.
+
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
