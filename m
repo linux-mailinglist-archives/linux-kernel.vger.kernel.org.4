@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B1CA6E1A16
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 04:18:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 231416E1A17
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 04:18:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjDNCSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 22:18:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43220 "EHLO
+        id S229845AbjDNCSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 22:18:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbjDNCSc (ORCPT
+        with ESMTP id S229754AbjDNCSc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 13 Apr 2023 22:18:32 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC25430D5
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 19:18:30 -0700 (PDT)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PyKl901X5zSs8R;
-        Fri, 14 Apr 2023 10:14:28 +0800 (CST)
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A8A30DA
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 19:18:31 -0700 (PDT)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PyKlc2fcMz17SV0;
+        Fri, 14 Apr 2023 10:14:52 +0800 (CST)
 Received: from localhost.localdomain (10.175.112.125) by
  kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -27,10 +27,12 @@ To:     <akpm@linux-foundation.org>, <naoya.horiguchi@nec.com>
 CC:     <linmiaohe@huawei.com>, <wangkefeng.wang@huawei.com>,
         <sunnanyong@huawei.com>, <linux-kernel@vger.kernel.org>,
         <linux-mm@kvack.org>, Longlong Xia <xialonglong1@huawei.com>
-Subject: [PATCH v2 0/2] mm: ksm: support hwpoison for ksm page
-Date:   Fri, 14 Apr 2023 10:17:39 +0800
-Message-ID: <20230414021741.2597273-1-xialonglong1@huawei.com>
+Subject: [PATCH v2 1/2] mm: memory-failure: Refactor add_to_kill()
+Date:   Fri, 14 Apr 2023 10:17:40 +0800
+Message-ID: <20230414021741.2597273-2-xialonglong1@huawei.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230414021741.2597273-1-xialonglong1@huawei.com>
+References: <20230414021741.2597273-1-xialonglong1@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -39,53 +41,110 @@ X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
  kwepemm600003.china.huawei.com (7.193.23.202)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, ksm does not support hwpoison. As ksm is being used more widely
-for deduplication at the system level, container level, and process level, 
-supporting hwpoison for ksm has become increasingly important. However, ksm
-pages were not processed by hwpoison in 2009 [1].
+The page_address_in_vma() is used to find the user virtual address of page
+in add_to_kill(), but it doesn't support ksm due to the ksm page->index
+unusable, add an ksm_addr as parameter to add_to_kill(), let's the caller 
+to pass it, also rename the function to __add_to_kill(), and adding
+add_to_kill_anon_file() for handling anonymous pages and file pages,
+adding add_to_kill_fsdax() for handling fsdax pages.
 
-The main method of implementation:
-1. Refactor add_to_kill() and add new add_to_kill_*() to better accommodate
-the handling of different types of pages.
-2. Add collect_procs_ksm() to collect processes when the error hit an ksm 
-page.
-3. Add task_in_to_kill_list() to avoid duplicate addition of tsk to the 
-to_kill list. 
-4. Try_to_unmap ksm page (already supported).
-5. Handle related processes such as sending SIGBUS.
+Signed-off-by: Longlong Xia <xialonglong1@huawei.com>
+Tested-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+ mm/memory-failure.c | 29 +++++++++++++++++++++--------
+ 1 file changed, 21 insertions(+), 8 deletions(-)
 
-Tested with poisoning to ksm page from
-1) different process
-2) one process
-
-and with/without memory_failure_early_kill set, the processes
-are killed as expected with the patchset. 
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-commit/?h=01e00f880ca700376e1845cf7a2524ebe68e47d6
-
-v2:
-- Rename the "addr" argument to "ksm_addr" in both the 
-"__add__add_to_kill()" and "add_to_kill_ksm()"
-- Collect RB/TB
-
-Longlong Xia (2):
-  mm: memory-failure: Refactor add_to_kill()
-  mm: ksm: Support hwpoison for ksm page
-
- include/linux/ksm.h | 11 ++++++++
- include/linux/mm.h  |  7 +++++
- mm/ksm.c            | 45 ++++++++++++++++++++++++++++++++
- mm/memory-failure.c | 63 +++++++++++++++++++++++++++++++++------------
- 4 files changed, 109 insertions(+), 17 deletions(-)
-
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index fae9baf3be162..f5e1d80a82738 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -405,9 +405,9 @@ static unsigned long dev_pagemap_mapping_shift(struct vm_area_struct *vma,
+  * page->mapping are sufficient for mapping the page back to its
+  * corresponding user virtual address.
+  */
+-static void add_to_kill(struct task_struct *tsk, struct page *p,
+-			pgoff_t fsdax_pgoff, struct vm_area_struct *vma,
+-			struct list_head *to_kill)
++static void __add_to_kill(struct task_struct *tsk, struct page *p,
++			  struct vm_area_struct *vma, struct list_head *to_kill,
++			  unsigned long ksm_addr, pgoff_t fsdax_pgoff)
+ {
+ 	struct to_kill *tk;
+ 
+@@ -417,7 +417,7 @@ static void add_to_kill(struct task_struct *tsk, struct page *p,
+ 		return;
+ 	}
+ 
+-	tk->addr = page_address_in_vma(p, vma);
++	tk->addr = ksm_addr ? ksm_addr : page_address_in_vma(p, vma);
+ 	if (is_zone_device_page(p)) {
+ 		if (fsdax_pgoff != FSDAX_INVALID_PGOFF)
+ 			tk->addr = vma_pgoff_address(fsdax_pgoff, 1, vma);
+@@ -448,6 +448,13 @@ static void add_to_kill(struct task_struct *tsk, struct page *p,
+ 	list_add_tail(&tk->nd, to_kill);
+ }
+ 
++static void add_to_kill_anon_file(struct task_struct *tsk, struct page *p,
++				  struct vm_area_struct *vma,
++				  struct list_head *to_kill)
++{
++	__add_to_kill(tsk, p, vma, to_kill, 0, FSDAX_INVALID_PGOFF);
++}
++
+ /*
+  * Kill the processes that have been collected earlier.
+  *
+@@ -573,7 +580,7 @@ static void collect_procs_anon(struct page *page, struct list_head *to_kill,
+ 				continue;
+ 			if (!page_mapped_in_vma(page, vma))
+ 				continue;
+-			add_to_kill(t, page, FSDAX_INVALID_PGOFF, vma, to_kill);
++			add_to_kill_anon_file(t, page, vma, to_kill);
+ 		}
+ 	}
+ 	read_unlock(&tasklist_lock);
+@@ -609,8 +616,7 @@ static void collect_procs_file(struct page *page, struct list_head *to_kill,
+ 			 * to be informed of all such data corruptions.
+ 			 */
+ 			if (vma->vm_mm == t->mm)
+-				add_to_kill(t, page, FSDAX_INVALID_PGOFF, vma,
+-					    to_kill);
++				add_to_kill_anon_file(t, page, vma, to_kill);
+ 		}
+ 	}
+ 	read_unlock(&tasklist_lock);
+@@ -618,6 +624,13 @@ static void collect_procs_file(struct page *page, struct list_head *to_kill,
+ }
+ 
+ #ifdef CONFIG_FS_DAX
++static void add_to_kill_fsdax(struct task_struct *tsk, struct page *p,
++			      struct vm_area_struct *vma,
++			      struct list_head *to_kill, pgoff_t pgoff)
++{
++	__add_to_kill(tsk, p, vma, to_kill, 0, pgoff);
++}
++
+ /*
+  * Collect processes when the error hit a fsdax page.
+  */
+@@ -637,7 +650,7 @@ static void collect_procs_fsdax(struct page *page,
+ 			continue;
+ 		vma_interval_tree_foreach(vma, &mapping->i_mmap, pgoff, pgoff) {
+ 			if (vma->vm_mm == t->mm)
+-				add_to_kill(t, page, pgoff, vma, to_kill);
++				add_to_kill_fsdax(t, page, vma, to_kill, pgoff);
+ 		}
+ 	}
+ 	read_unlock(&tasklist_lock);
 -- 
 2.25.1
 
