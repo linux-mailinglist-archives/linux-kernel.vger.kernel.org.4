@@ -2,68 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DBA86E267F
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 17:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC256E2683
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 17:11:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbjDNPKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 11:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59996 "EHLO
+        id S230054AbjDNPLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 11:11:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbjDNPJ6 (ORCPT
+        with ESMTP id S229848AbjDNPK5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 11:09:58 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82229EF7
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 08:09:56 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f04275b2bdso135405e9.1
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 08:09:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681484995; x=1684076995;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zCGUqGKs3tAkN4PWIVOkGhEmJaHLWss+zp+zjXoaqdA=;
-        b=BiV1ZX1XVOjp3RYTp/kQgVb2NKLRT/hVMSM3sJFOjaKVbpQjPd+XrgO2+g/2vEuCPL
-         VcJWkLr32iIkTFOyTc8Vz2wIvkclgb/IRQH208Qdx6xnVPE3waKluFljcnKdCG+cPg75
-         OJQTdsL9vKavdzdAUcRRxBiMUAecMmKCzJC57GLhDRXQRuW+b2pXWE9H9LvbwqJA09FM
-         rJOYSBswFOdVXmeGy5nLNcWX/CjP/AOeQ06K+FNtIXQ6tYE18Y98ekB3NmeUkHscJMxK
-         TgNYY0BoIF+xAHuneV6baHatEyNFKISfm3dJNyTjwEsWW7NpgTmeSODYjTwWK9zUWtcJ
-         xynw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681484995; x=1684076995;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zCGUqGKs3tAkN4PWIVOkGhEmJaHLWss+zp+zjXoaqdA=;
-        b=jNNtX2I5XJH97uXB7R2eIXvccUsCnrPFJWbDeNejhU1LfMleqkMLQIZOQ3AUOEIs4X
-         XvweImBJgA6MIHK+rJCZkNXEt7JuKj/h+xv/7of+ccoM9SLGzP8eAconxoYIWjRHFeSV
-         IAde1mpr799QSYQyRzoJA/3LPCPJVNxxMkRQDXnKD7Xty+Wuilrd/O0X9kCsW9vpZIXL
-         d0UmUa0vTMlekLCxSVGOZTtdK4E1G3+R8jUG7YWRf42QqtwyI33gYhGYjJhllbeBDmf9
-         5SHYabiSY/Vz1A4L6Gy7WD6XS6fUVrLJuQeX/AKandC9vwdwn5qKDjS9W3Vsfp1YXqih
-         DMFw==
-X-Gm-Message-State: AAQBX9e3nT/OfUdgNh7+umox4+vnHKgnYM/hSlMLx0M1/2Ew+3HYrmJS
-        Gn7sKs/+w1hRb2ob4vpuBakkszjX2s4IdrX9hIZqoQ==
-X-Google-Smtp-Source: AKy350YNRE9KdzSv0BHHlgzjJenLNDx4WAMSbv1tLKKMPCwWVZ8F1ulyGQwBz/MxzGz5BO3rakg76/qLgAOnVLD86HM=
-X-Received: by 2002:a05:600c:12c5:b0:3df:f3cb:e8ce with SMTP id
- v5-20020a05600c12c500b003dff3cbe8cemr107763wmd.7.1681484995027; Fri, 14 Apr
- 2023 08:09:55 -0700 (PDT)
+        Fri, 14 Apr 2023 11:10:57 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 868F0C4;
+        Fri, 14 Apr 2023 08:10:54 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33EFAQWO107868;
+        Fri, 14 Apr 2023 10:10:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1681485026;
+        bh=j36I0SHEL60unIXivNF5NtJiYS+8nIovqEm5U5C62pc=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=OWqxc4LP0AM4767LfxOn4EznCyjT0ZR1jUvDKbXq66luisSpXDZ2wJmkTlLl7OSxB
+         sNlmiO5tl5UOTaBlvGDmeA2cOLQWdde/h35hN/Re0yb6DqoZpKhtjf5vtmWFjr0Fv7
+         D3pvyDD2QUAQo1UDqaV/JZrrNt5nX+yYL1lju5GU=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33EFAQHW031535
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 14 Apr 2023 10:10:26 -0500
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 14
+ Apr 2023 10:10:26 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Fri, 14 Apr 2023 10:10:26 -0500
+Received: from [172.24.145.152] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33EFAJ9f089671;
+        Fri, 14 Apr 2023 10:10:19 -0500
+Message-ID: <83e146a8-0ba6-d49f-cfa8-68ca7f45bcfe@ti.com>
+Date:   Fri, 14 Apr 2023 20:40:18 +0530
 MIME-Version: 1.0
-References: <000000000000d5a93805f8930638@google.com> <CAJfpegsGjFQX9t_NS8-oiE0K8Y0xEmr60VXMg6d4HQCCXOrOXg@mail.gmail.com>
-In-Reply-To: <CAJfpegsGjFQX9t_NS8-oiE0K8Y0xEmr60VXMg6d4HQCCXOrOXg@mail.gmail.com>
-From:   Aleksandr Nogikh <nogikh@google.com>
-Date:   Fri, 14 Apr 2023 17:09:42 +0200
-Message-ID: <CANp29Y6=HkcQYNEnpjozNhp7h5hmCnRUSXpjYKqyS6yaeTMQpQ@mail.gmail.com>
-Subject: Re: [syzbot] Monthly fuse report
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Dmitry Vyukov <dvyukov@google.com>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        syzbot <syzbot+list69b50efce6f847334104@syzkaller.appspotmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 2/2] drm: bridge: cdns-mhdp8546: Add support for no-hpd
+Content-Language: en-US
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+CC:     <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <krzysztof.kozlowski@linaro.org>,
+        <andrzej.hajda@intel.com>, <neil.armstrong@linaro.org>,
+        <rfoss@kernel.org>, <jonas@kwiboo.se>, <jernej.skrabec@gmail.com>,
+        <airlied@gmail.com>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <sam@ravnborg.org>,
+        <jani.nikula@intel.com>, <tzimmermann@suse.de>,
+        <javierm@redhat.com>, <ville.syrjala@linux.intel.com>,
+        <r-ravikumar@ti.com>, <lyude@redhat.com>,
+        <alexander.deucher@amd.com>, <sjakhade@cadence.com>,
+        <yamonkar@cadence.com>, <a-bhatia1@ti.com>,
+        <tomi.valkeinen@ideasonboard.com>
+References: <20230405142440.191939-1-j-choudhary@ti.com>
+ <20230405142440.191939-3-j-choudhary@ti.com>
+ <20230406015207.GO9915@pendragon.ideasonboard.com>
+From:   Jayesh Choudhary <j-choudhary@ti.com>
+In-Reply-To: <20230406015207.GO9915@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,65 +78,174 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 3:52=E2=80=AFPM 'Miklos Szeredi' via syzkaller-bugs
-<syzkaller-bugs@googlegroups.com> wrote:
->
-> On Wed, 5 Apr 2023 at 11:00, syzbot
-> <syzbot+list69b50efce6f847334104@syzkaller.appspotmail.com> wrote:
-> >
-> > Hello fuse maintainers/developers,
-> >
-> > This is a 30-day syzbot report for the fuse subsystem.
-> > All related reports/information can be found at:
-> > https://syzkaller.appspot.com/upstream/s/fuse
-> >
-> > During the period, 0 new issues were detected and 0 were fixed.
-> > In total, 8 issues are still open and 34 have been fixed so far.
-> >
-> > Some of the still happening issues:
-> >
-> > Crashes Repro Title
-> > 146     Yes   INFO: task hung in fuse_simple_request
-> >               https://syzkaller.appspot.com/bug?extid=3D46fe899420456e0=
-14d6b
-> > 26      Yes   INFO: task hung in lookup_slow (3)
-> >               https://syzkaller.appspot.com/bug?extid=3D7cfc6a4f6b025f7=
-10423
-> > 13      Yes   INFO: task hung in walk_component (5)
-> >               https://syzkaller.appspot.com/bug?extid=3D8fba0e0286621ce=
-71edd
->
-> Hi Dmitry,
->
-> These all look like non-kernel deadlocks.
->
-> AFAIR syzbot was taught about breaking these by "umount -f" or "echo 1
-> > /sys/fs/fuse/connections/$DEV/abort", right?
 
-Hi Miklos,
 
-syzbot indeed writes 0x1 to each /sys/fs/fuse/connections/%s/abort
-See https://github.com/google/syzkaller/blob/ec410564b9e4ff241d1242febb29ed=
-a2ee28b50d/executor/common_linux.h#L4614
+On 06/04/23 07:22, Laurent Pinchart wrote:
+> Hi Jayesh,
+> 
+> Thank you for the patch.
+> 
+> On Wed, Apr 05, 2023 at 07:54:40PM +0530, Jayesh Choudhary wrote:
+>> From: Rahul T R <r-ravikumar@ti.com>
+>>
+>> In J721S2 EVMs DP0 hpd is not connected to correct
+>> hpd pin on SOC, to handle such cases, Add support for
+>> "no-hpd" property in the device tree node to disable
+>> hpd
+> 
+> s/hpd/hpd./
+> 
+> You can also reflow the commit message to 72 columns.
 
-Some C reproducers (e.g.
-https://syzkaller.appspot.com/text?tag=3DReproC&x=3D128284a0b00000) also
-contain that piece of code.
+Okay. Thanks for the suggestion. Will do.
 
---
-Aleksandr
+> 
+>> Also change the log level for dpcd read failuers to
+>> debug, since framework retries 32 times for each read
+> 
+> s/read/read./
+> 
+> Doesn't this apply to writes as well ?
 
->
-> I wonder why they are still triggering a report then.
->
-> Thanks,
-> Miklos
->
-> --
-> You received this message because you are subscribed to the Google Groups=
- "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/syzkaller-bugs/CAJfpegsGjFQX9t_NS8-oiE0K8Y0xEmr60VXMg6d4HQCCXOrOXg%40mail=
-.gmail.com.
+Based on message request, we went into the conditional that uses
+read. So just changing the log-level for dpcd read was enough to
+get rid of the debug logs.
+
+> 
+>> Signed-off-by: Rahul T R <r-ravikumar@ti.com>
+>> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
+>> ---
+>>   .../drm/bridge/cadence/cdns-mhdp8546-core.c   | 37 ++++++++++++++++---
+>>   .../drm/bridge/cadence/cdns-mhdp8546-core.h   |  1 +
+>>   2 files changed, 33 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
+>> index f6822dfa3805..e177794b069d 100644
+>> --- a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
+>> +++ b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
+>> @@ -54,6 +54,8 @@
+>>   #include "cdns-mhdp8546-hdcp.h"
+>>   #include "cdns-mhdp8546-j721e.h"
+>>   
+>> +static int cdns_mhdp_update_link_status(struct cdns_mhdp_device *mhdp);
+>> +
+>>   static int cdns_mhdp_mailbox_read(struct cdns_mhdp_device *mhdp)
+>>   {
+>>   	int ret, empty;
+>> @@ -749,7 +751,7 @@ static int cdns_mhdp_fw_activate(const struct firmware *fw,
+>>   	 * MHDP_HW_STOPPED happens only due to driver removal when
+>>   	 * bridge should already be detached.
+>>   	 */
+>> -	if (mhdp->bridge_attached)
+>> +	if (mhdp->bridge_attached && !mhdp->no_hpd)
+>>   		writel(~(u32)CDNS_APB_INT_MASK_SW_EVENT_INT,
+>>   		       mhdp->regs + CDNS_APB_INT_MASK);
+>>   
+>> @@ -845,7 +847,7 @@ static ssize_t cdns_mhdp_transfer(struct drm_dp_aux *aux,
+>>   		ret = cdns_mhdp_dpcd_read(mhdp, msg->address,
+>>   					  msg->buffer, msg->size);
+>>   		if (ret) {
+>> -			dev_err(mhdp->dev,
+>> +			dev_dbg(mhdp->dev,
+>>   				"Failed to read DPCD addr %u\n",
+>>   				msg->address);
+>>   
+>> @@ -1738,6 +1740,19 @@ static int cdns_mhdp_attach(struct drm_bridge *bridge,
+>>   
+>>   	spin_unlock(&mhdp->start_lock);
+>>   
+>> +	if (mhdp->no_hpd) {
+>> +		ret = wait_event_timeout(mhdp->fw_load_wq,
+>> +					 mhdp->hw_state == MHDP_HW_READY,
+>> +					 msecs_to_jiffies(100));
+>> +		if (ret == 0) {
+>> +			dev_err(mhdp->dev, "%s: Timeout waiting for fw loading\n",
+>> +				__func__);
+>> +			return -ETIMEDOUT;
+>> +		}
+>> +
+>> +		cdns_mhdp_update_link_status(mhdp);
+>> +		return 0;
+>> +	}
+> 
+> Missing blank line.
+> 
+> It's not clear to me while you need to wait for the state to change to
+> MHDP_HW_READY in the no_hpd case. This should be explained in the commit
+> message.
+> 
+>>   	/* Enable SW event interrupts */
+>>   	if (hw_ready)
+>>   		writel(~(u32)CDNS_APB_INT_MASK_SW_EVENT_INT,
+>> @@ -2256,7 +2271,16 @@ static int cdns_mhdp_update_link_status(struct cdns_mhdp_device *mhdp)
+>>   
+>>   	mutex_lock(&mhdp->link_mutex);
+>>   
+>> -	mhdp->plugged = cdns_mhdp_detect_hpd(mhdp, &hpd_pulse);
+>> +	if (mhdp->no_hpd) {
+>> +		ret = drm_dp_dpcd_read_link_status(&mhdp->aux, status);
+>> +		hpd_pulse = false;
+>> +		if (ret < 0)
+>> +			mhdp->plugged = false;
+>> +		else
+>> +			mhdp->plugged = true;
+> 
+> I think there's an issue with how the driver uses mhdp->plugged. In the
+> no_hpd case, you try to detect if a display is connected by reading the
+> link status at attach time, and then never update mhdp->plugged. This
+> means that if no display is connected at that point, functions like
+> cdns_mhdp_get_edid() will always fail, even if a display gets plugged
+> later. As the goal of this series is (as far as I understand) support
+> systems where the HPD signal could be connected to a SoC GPIO instead of
+> the bridge, I don't think this is good enough.
+
+In the driver, I see that this is the only call which changes 
+mhdp->plugged. Do you have any suggestions on how to work on this?
+Polling the value of drm_dp_dpdc_read_link_status does not seem like a
+clean way.
+Here by doing this, we are settling for few functionalities of display.
+
+Thanks,
+-Jayesh
+
+> 
+>> +	} else {
+>> +		mhdp->plugged = cdns_mhdp_detect_hpd(mhdp, &hpd_pulse);
+>> +	}
+>>   
+>>   	if (!mhdp->plugged) {
+>>   		cdns_mhdp_link_down(mhdp);
+>> @@ -2451,6 +2475,8 @@ static int cdns_mhdp_probe(struct platform_device *pdev)
+>>   	mhdp->aux.dev = dev;
+>>   	mhdp->aux.transfer = cdns_mhdp_transfer;
+>>   
+>> +	mhdp->no_hpd = of_property_read_bool(dev->of_node, "cdns,no-hpd");
+>> +
+>>   	mhdp->regs = devm_platform_ioremap_resource(pdev, 0);
+>>   	if (IS_ERR(mhdp->regs)) {
+>>   		dev_err(dev, "Failed to get memory resource\n");
+>> @@ -2526,8 +2552,9 @@ static int cdns_mhdp_probe(struct platform_device *pdev)
+>>   
+>>   	mhdp->bridge.of_node = pdev->dev.of_node;
+>>   	mhdp->bridge.funcs = &cdns_mhdp_bridge_funcs;
+>> -	mhdp->bridge.ops = DRM_BRIDGE_OP_DETECT | DRM_BRIDGE_OP_EDID |
+>> -			   DRM_BRIDGE_OP_HPD;
+>> +	mhdp->bridge.ops = DRM_BRIDGE_OP_DETECT | DRM_BRIDGE_OP_EDID;
+>> +	if (!mhdp->no_hpd)
+>> +		mhdp->bridge.ops |= DRM_BRIDGE_OP_HPD;
+>>   	mhdp->bridge.type = DRM_MODE_CONNECTOR_DisplayPort;
+>>   	if (mhdp->info)
+>>   		mhdp->bridge.timings = mhdp->info->timings;
+>> diff --git a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.h b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.h
+>> index bedddd510d17..6786ccb51387 100644
+>> --- a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.h
+>> +++ b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.h
+>> @@ -388,6 +388,7 @@ struct cdns_mhdp_device {
+>>   
+>>   	bool link_up;
+>>   	bool plugged;
+>> +	bool no_hpd;
+>>   
+>>   	/*
+>>   	 * "start_lock" protects the access to bridge_attached and
+> 
