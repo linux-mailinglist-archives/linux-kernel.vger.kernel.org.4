@@ -2,109 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC266E245A
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 15:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D41A36E245E
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 15:38:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbjDNNgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 09:36:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58354 "EHLO
+        id S229820AbjDNNiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 09:38:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbjDNNgf (ORCPT
+        with ESMTP id S229778AbjDNNiK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 09:36:35 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11AD383E3
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 06:36:32 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id g10so1984317ybu.8
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 06:36:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681479391; x=1684071391;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bCMMqYXqdLzftYPyxap730NaR/BDwk+TJ6kmlEYvp48=;
-        b=YEt3CDL9MSdSVh6XkAStD2cO5TGpHGncPbKV8aVwUs5fCzuGR9+SwHo4vlTeGp8mmo
-         9URlBi9ZyRZkkn5ycruLpDiuV41Me2mn/fMsEUo6vcLvkTnkZdMZYSC1LMpyiZ0K+BF8
-         ua84+5iWLzEwozDVYbjn5tI3TdSu+lzQ9FYcSjZ0REO721IihVzjhXDJPVbYeDHVXkyC
-         Mf9bv41H96tEbGxXUIAqscfDZa0AoATkByTfn9ePFIKlItbhrCXzcZm7jsSVlByIXUo2
-         Wiv/6i/nwrtgxJlm1nu1637RHinpq2mNocQKhDUVmIb4Ht0fw0IITNmN1aKeanWvuVH2
-         HkgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681479391; x=1684071391;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bCMMqYXqdLzftYPyxap730NaR/BDwk+TJ6kmlEYvp48=;
-        b=NC/4QqQ4oMeSwBiXZEunqih9N074BntbSX+rviLMEYCOU9BbTBMcjxspa+glPFVVD+
-         mKM8sDjWiQQqZYQDuIjRPbszFysjtemcNiFGhc5QVzwWlY71i6/A+6m7fZFlACir3d9J
-         zBxJN3Oz7YnOSLDuphQ+7l4eDAFXtL0oe/TcYZTYzGyavs1D2dcSlgEUTkq6ThQT4rgS
-         cNJoC9jdiVmhDl1GSMw5t/Hrr+y11UlLo+E/PgvqCQKubPFtXE0D5h6bM9GN2I2t1JRY
-         1hzG6wqhCkNd17bZnCAbcz0m+ftj1AYuNCGxOyK4e+kGTzYlh4dMWtdrQaKvdkcNmVdj
-         eXvg==
-X-Gm-Message-State: AAQBX9eDkLgxoC2Bz1UsXwcdB1l+LuVwGyxM0GL16ugudWQxfRQgtO76
-        G04z0xokpM7UMNoQUJDNSTMbDOQRp/CaPRfec8I=
-X-Google-Smtp-Source: AKy350bqM4zM1q8oCeAZ1JNgqtK/Wwvrnwzuwj3VbLQqJMeHQJUS/aR6xQXxF2C5z3fw32E7/0cJz2/YhLeSu4xDGyE=
-X-Received: by 2002:a25:d6d8:0:b0:b8f:5680:7d99 with SMTP id
- n207-20020a25d6d8000000b00b8f56807d99mr3717296ybg.11.1681479391314; Fri, 14
- Apr 2023 06:36:31 -0700 (PDT)
+        Fri, 14 Apr 2023 09:38:10 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09CAB93D1
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 06:38:08 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33EDVEAM030487;
+        Fri, 14 Apr 2023 08:37:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=AAlFGQAOpcc0LwsD9Spsit9e4j2SMFa9NMT3Q4ZJ9oE=;
+ b=VfxbVc4DptepOS+DmwhmH6eLOgzxXWcSKSLwA4GIzXmh+J41Axwtj6u47AgyoXXD+KtN
+ vJqx8LPWlhMaQ3iSHemmFhfbNbiGVwCNlmjyXfCvlMGb1UtglHdkL82lVTSwHUQC+fel
+ gUADJmRq0tHVPME11DwsHdxBVJdU2+C/MOkrY275YIKCuS+avt/j0ZIsEU93yhaE1V6D
+ kuCX/atRGnyY56Zg7QGqkjZ9x+Vxqwjx9MuxvrZjIyv+LOOJHtFcVHoYlDHQNuDP6oSH
+ EYKO6ApVxVEPOdeG6q669yVo3qeRbv7clR/JLf0VbEaIsE6TGJRe+B0+6VZVIaP3wzvt YA== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3pu5p3sexy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 08:37:56 -0500
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Fri, 14 Apr
+ 2023 08:37:54 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Fri, 14 Apr 2023 08:37:54 -0500
+Received: from edi-sw-dsktp-006.ad.cirrus.com (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.127])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id E682311D3;
+        Fri, 14 Apr 2023 13:37:53 +0000 (UTC)
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+To:     <broonie@kernel.org>
+CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>
+Subject: [PATCH 0/5] ASoC: cs35l56: Code improvements
+Date:   Fri, 14 Apr 2023 14:37:48 +0100
+Message-ID: <20230414133753.653139-1-rf@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20230414101052.11012-1-ihuguet@redhat.com>
-In-Reply-To: <20230414101052.11012-1-ihuguet@redhat.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Fri, 14 Apr 2023 15:36:19 +0200
-Message-ID: <CANiq72=vTLT1PnbWu4pwNNyMO0S413G3O+_TLcCGLiDGr5fH7Q@mail.gmail.com>
-Subject: Re: [PATCH v3] Add .editorconfig file for basic formatting
-To:     =?UTF-8?B?w43DsWlnbyBIdWd1ZXQ=?= <ihuguet@redhat.com>
-Cc:     ojeda@kernel.org, masahiroy@kernel.org, jgg@nvidia.com,
-        mic@digikod.net, danny@kdrag0n.dev, linux-kernel@vger.kernel.org,
-        corbet@lwn.net, joe@perches.com, linux@rasmusvillemoes.dk,
-        willy@infradead.org, Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: 3PhiBjqEB1ZEDelYIFJzJYCmBME5LQUt
+X-Proofpoint-GUID: 3PhiBjqEB1ZEDelYIFJzJYCmBME5LQUt
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 14, 2023 at 12:11=E2=80=AFPM =C3=8D=C3=B1igo Huguet <ihuguet@re=
-dhat.com> wrote:
->
-> EditorConfig is a specification to define the most basic code formatting
-> stuff, and it's supported by many editors and IDEs, either directly or
-> via plugins, including VSCode/VSCodium, Vim, emacs and more.
+Various code improvements. These remove redundant code and
+clean up less-than-optimal original implementations.
 
-Thanks -- v3 looks much safer!
+Simon Trimmer (5):
+  ASoC: cs35l56: Rework IRQ allocation
+  ASoC: cs35l56: Allow a wider range for reset pulse width
+  ASoC: cs35l56: Wait for init_complete in cs35l56_component_probe()
+  ASoC: cs35l56: Remove redundant dsp_ready_completion
+  ASoC: cs35l56: Don't return a value from cs35l56_remove()
 
-To clarify the risks (it would be nice to detail these in the commit messag=
-e):
+ sound/soc/codecs/cs35l56-i2c.c |  3 +-
+ sound/soc/codecs/cs35l56-sdw.c |  4 +-
+ sound/soc/codecs/cs35l56-spi.c |  3 +-
+ sound/soc/codecs/cs35l56.c     | 83 +++++++++++++---------------------
+ sound/soc/codecs/cs35l56.h     |  5 +-
+ 5 files changed, 38 insertions(+), 60 deletions(-)
 
-  - Did you sample files manually or did you automate the search (e.g.
-grepping for spaces/tabs, for LF, etc.) to verify the current rules
-match the files in the kernel tree?
+-- 
+2.30.2
 
-  - Would it be possible to go further than grepping and apply the
-rules (e.g. trigger a "save") through the entire tree to see whether
-there would be spurious changes?
-
-    If that comes out clean (or mostly clean), then we would be fairly
-confident this will not surprise developers (and it would be nice to
-have the script around for future updates of the `.editorconfig`).
-
-    Perhaps EditorConfig provides a script to check this already?
-Otherwise perhaps it can be done with editorconfig-core-c or
-editorconfig-vim or directly scripting on a couple editors?
-
-  - Are we sure the rules match the output of automated formatters we
-are using? (e.g. for Rust we enforce `rustfmt`, and thus we need to
-ensure the editor does not "fight" the formatter; otherwise developers
-may need to run the formatter more).
-
-Cc'ing Andrew since he applied originally the `.clang-format`.
-
-Cheers,
-Miguel
