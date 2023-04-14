@@ -2,130 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E8D86E2829
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 18:15:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A9986E282C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 18:16:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbjDNQPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 12:15:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58262 "EHLO
+        id S229542AbjDNQQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 12:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjDNQPq (ORCPT
+        with ESMTP id S229446AbjDNQQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 12:15:46 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616C0188;
-        Fri, 14 Apr 2023 09:15:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=y77Vn1iQ2Yr8r94PJbu25E6c2t/sA9gRbZHB/9bHBWk=; b=sgynuWJ1+GOxbplFPJ2IKiq5oX
-        /0JSnWlKYR9E1aamdcGDR2pOlNQXbnqQdu1Z5TcAiXan78/lTWDYRcvX/2vTAk6OIrn9E5UjMFrD8
-        TaREFVUstQ4tCbiJYRTBJajZo4WrOzgEmroxCtNOFm1bon6dQdCmFT19UH/RGKTm5TwE=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pnM5C-00AIdW-9F; Fri, 14 Apr 2023 18:15:30 +0200
-Date:   Fri, 14 Apr 2023 18:15:30 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-phy@lists.infradead.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [RFC PATCH 0/4] Add support for QMC HDLC and PHY
-Message-ID: <c99a99c5-139d-41c5-89a4-0722e0627aea@lunn.ch>
-References: <20230323103154.264546-1-herve.codina@bootlin.com>
- <885e4f20-614a-4b8e-827e-eb978480af87@lunn.ch>
- <20230414165504.7da4116f@bootlin.com>
+        Fri, 14 Apr 2023 12:16:16 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104D3903A;
+        Fri, 14 Apr 2023 09:16:14 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33EFDGa9000385;
+        Fri, 14 Apr 2023 16:15:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=pp1;
+ bh=RpAjtv77c3dRhMWtwrys0GqqNyVgx8vpDE89fectelk=;
+ b=HJHZQclP6Z3x2k4AE6TMpOc3p3WyV+QmZvnv1rR68o4I5xxlT2cZ/+CdHTW5SCrxwzu5
+ o4f5Va/KhvAAsirsIKFqt41Av6XUl5gx4DEyIDL4Sbj62BEkfsPysdR3LbYYiS7tPN3g
+ Ez20moBGhPVQiKVWtLqkdmP4HKhuQnQ7PANuszxmKnF4HzNJT2H8Kt24PPc4p3Cw5DWY
+ t5qw4LsHgdOgxDRsxtkfOx6gqrSzDK4JQ0s7sctTfDNipxz7RNzDusr80xh4ZsNJJk1w
+ ys2R9uVz4uKzkzLHYhPjhzZSCQ1g+IJne6H4kFc6FkOVXRFdFKuopyd3Tmi/rhEKEZGw Cw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3py999tfkh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 16:15:47 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33EFEWAB009783;
+        Fri, 14 Apr 2023 16:15:46 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3py999tfj7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 16:15:46 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33E3dPhX018750;
+        Fri, 14 Apr 2023 16:15:43 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3pu0m1btbw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 16:15:43 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33EGFfnU30998922
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 14 Apr 2023 16:15:41 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1D94820043;
+        Fri, 14 Apr 2023 16:15:41 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3949E20040;
+        Fri, 14 Apr 2023 16:15:40 +0000 (GMT)
+Received: from heavy (unknown [9.171.89.218])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Fri, 14 Apr 2023 16:15:40 +0000 (GMT)
+Date:   Fri, 14 Apr 2023 18:15:38 +0200
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     Andrea Righi <andrea.righi@canonical.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Paolo Pisati <paolo.pisati@canonical.com>,
+        bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] selftests/bpf: ignore pointer types check with clang
+Message-ID: <q5rj72tmwlpzx6qgkromem5t7q6xmen52aavfr65olnuv52f3z@wzs4p3xz3635>
+References: <20230412095912.188453-1-andrea.righi@canonical.com>
+ <CAADnVQJ00Npkp=+XYaTybzaPnrcfK0nKrePAktVNBt2-YqWdEg@mail.gmail.com>
+ <ZDjvZ7mx7+IsSCCO@righiandr-XPS-13-7390>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230414165504.7da4116f@bootlin.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZDjvZ7mx7+IsSCCO@righiandr-XPS-13-7390>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: UqRBtxknN6WEuZnVDVXRbt06hx3mQ1k9
+X-Proofpoint-GUID: CeKvyijkGrCWLD_t0crn5f_K5gZ88OdP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-14_08,2023-04-14_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ lowpriorityscore=0 bulkscore=0 priorityscore=1501 impostorscore=0
+ mlxlogscore=999 malwarescore=0 adultscore=0 clxscore=1011 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304140141
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > When i look at the 'phy' driver, i don't see anything a typical PHY
-> > driver used for networking would have. A networking PHY driver often
-> > has the ability to change between modes, like SGMII, QSGMII, 10GBASER.
-> > The equivalent here would be changing between E1, T1 and J1. It has
-> > the ability to change the speed, 1G, 2.5G, 10G etc. This could be
-> > implied via the mode, E1 is 2.048Mbps, T1 1.544Mbps, and i forget what
-> > J1 is. The PEF2256 also seems to support E1/T1/J1. How is its modes
-> > configured?
-> 
-> All of these are set by the MFD driver during its probe().
-> The expected setting come from several properties present in the pef2256
-> DT node. The binding can be found here:
->   https://lore.kernel.org/all/20230328092645.634375-2-herve.codina@bootlin.com/
-
-I'm surprised to see so much in the binding. I assume you are familiar
-with DAHDI. It allows nearly everything to be configured at
-runtime. The systems i've used allow you to select the clock
-configuration, line build out, user side vs networks side signalling
-CRC4 enables or not, etc.
-
-> Further more, the QMC HDLC is not the only PEF2256 consumer.
-> The PEF2256 is also used for audio path (ie audio over E1) and so the
-> configuration is shared between network and audio. The setting cannot be
-> handle by the network part as the PEF2256 must be available and correctly
-> configured even if the network part is not present.
-
-But there is no reason why the MFD could not provide a generic PHY to
-actually configure the 'PHY'. The HDLC driver can then also use the
-generic PHY. It would make your generic PHY less 'pointless'. I'm not
-saying it has to be this way, but it is an option.
- 
-> > In fact, this PHY driver does not seem to do any configuration of any
-> > sort on the framer. All it seems to be doing is take notification from
-> > one chain and send them out another chain!
-> 
-> Configuration is done by the parent MFD driver.
-> The PHY driver has nothing more to do.
-> 
+On Fri, Apr 14, 2023 at 08:15:03AM +0200, Andrea Righi wrote:
+> On Thu, Apr 13, 2023 at 09:56:00PM -0700, Alexei Starovoitov wrote:
+> > On Wed, Apr 12, 2023 at 2:59 AM Andrea Righi <andrea.righi@canonical.com> wrote:
+> > >
+> > > Building bpf selftests with clang can trigger errors like the following:
+> > >
+> > >   CLNG-BPF [test_maps] bpf_iter_netlink.bpf.o
+> > > progs/bpf_iter_netlink.c:32:4: error: incompatible pointer types assigning to 'struct sock *' from 'struct sock___17 *' [-Werror,-Wincompatible-pointer-types]
+> > >         s = &nlk->sk;
+> > >           ^ ~~~~~~~~
+> > > 1 error generated.
 > > 
-> > I also wounder if this get_status() call is sufficient. Don't you also
-> > want Red, Yellow and Blue alarms? It is not just the carrier is down,
-> > but why it is down.
+> > I cannot reproduce this and BPF CI doesn't complain about it either.
+> > What kind of clang do you use?
+> > Some special version and build flags?
 > 
-> I don't need them in my use case but if needed can't they be added later?
-> Also, from the HDLC device point of view what can be done with these alarms?
-
-https://elixir.bootlin.com/linux/latest/source/Documentation/networking/ethtool-netlink.rst#L472
-
-> Requests link state information. Link up/down flag (as provided by
-> ``ETHTOOL_GLINK`` ioctl command) is provided. Optionally, extended
-> state might be provided as well. In general, extended state
-> describes reasons for why a port is down, or why it operates in some
-> non-obvious mode.
-
-The colour of the Alarm gives you an idea which end of the system has
-the problem.
-
-> > Overall, i don't see why you want a PHY. What value does it add?
+> I'm using Ubuntu clang version 15.0.7 (Ubuntu 23.04), no special build
+> flag (unless Ubuntu enables some different default flags, but it
+> shouldn't be the case... I'll double check).
 > 
-> I need to detect carrier on/off according to the E1 link state.
+> -Andrea
 
-Why not just use the MFD notifier? What is the value of a PHY driver
-translating one notifier into another?
+Hi,
 
-And why is the notifier specific to the PEF2256? What would happen if
-i used a analog devices DS2155, DS21Q55, and DS2156, or the IDT
-82P2281? Would each have its own notifier? And hence each would need
-its own PHY which translates one notifier into another?
+FWIW, I see similar errors when I don't use recent pahole.
 
-There are enough E1/T1/J1 framers we should have a generic API between
-the framer and the HDLC device.
-
-    Andrew
+Best regards,
+Ilya
