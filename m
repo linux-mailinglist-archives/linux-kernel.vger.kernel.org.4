@@ -2,142 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A01066E2899
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 18:44:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8136D6E28A0
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 18:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbjDNQoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 12:44:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
+        id S230193AbjDNQpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 12:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbjDNQog (ORCPT
+        with ESMTP id S229871AbjDNQpb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 12:44:36 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D26C99
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 09:44:35 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id w24so8552959wra.10
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 09:44:35 -0700 (PDT)
+        Fri, 14 Apr 2023 12:45:31 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018F69EDE
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 09:45:27 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id v7so18053801ybi.0
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 09:45:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681490673; x=1684082673;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/ExngqUZl/pg1Kd6E34uU7m6iwz6q/2qwB8gBrD6lrQ=;
-        b=GhkswUhAKDkCiKoc9t/eyiaF53+6JyxpB18rycr+qlp/lNeetlGLuu6GC3ZG8hfb3p
-         fqfpoGQ1pqAOcdlI8Y+sJ72mfNnaJ4FPwqnqMuQ+izLObeSwa41gXQt8sJodv5jGa/0T
-         DCHyxVmFTXoiZAJKFeYg2l3HyO7R7QqyznuMMRwhr31tpWeC+kKGYa4XZgae5wk9hU5v
-         VC7eE6Gxz4FTNBR5+PHuTW33T3KogEu+IssYXh1wsleN/owJgoVClrGYWJ1UOi2BxTfn
-         OAH2m6K62WkIgosirUt4RSz7l1iPN9jNIyueDp5i7cjxMfGJCzjb0B8HHgaz47wDrAyd
-         iNkA==
+        d=linaro.org; s=google; t=1681490727; x=1684082727;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=dGC6d8pHkx4LIPUvsw9NY8Blv0Cd/e0UOketkjdE2UI=;
+        b=BZcE8fedbi18rtgZPHpt1A5gtRhqA1KWFJW0hZztZLJnmp7/8+45rKQ8SqCQRnkSMX
+         OrhW5n8u/jdnVn6kHOg+p4p17zWCP4T1eWwqc/VLUhKHmpPHlbpui+FEKLvL3hr0NJDA
+         wJktVnSc0iQgEYc0uf5XaRHWJHYflUEfAAtnJDVHEjc4tbIPkewCWJOyNlFKJCMjN1xd
+         UskxIRr2rqYcXu0wE89gsLVcVbkAyPWlCnK+Cae2exfEwEJRrBmXm8hY5VEw8hjcDGp3
+         ltnc8RMjfFapmakZhiYxo/6vYPZoDxmTCTxGouXEvJxxGK5P2ggqZeH3usKly73d5kUf
+         WjzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681490673; x=1684082673;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/ExngqUZl/pg1Kd6E34uU7m6iwz6q/2qwB8gBrD6lrQ=;
-        b=GnS0pWqeRXWnmPW5JWDVB115scIpYqX2KcBFMbFHPrtc/FXQWDQbR1lkMuGBkmjClS
-         +c1ph1jMfMiBJsGLhcwBkMKM8rSFeZDYwSerNZpfNkN+Lbxmhs19ul/rlKTiTcVopS75
-         lgGQtRd+6M4XUtM2226nLHLwgysaNHbRXIUywAkrgV9GJz0TtzifWnx6isgRzlCKEMWN
-         e9bCO1fL7EXhz0V1vRoyDIsAr6c0tGjHS+eT29tK/jcVnIaNqjVVTcRrkabmUaOs3XQ1
-         MnLVOVzSAKDyZd1dIwHtE3auAmCBzPwjO8SAhK6homSEo1OkCUwHyT5qdhrXW0824hML
-         tt/Q==
-X-Gm-Message-State: AAQBX9eaqML9YQFWY88r/7UvtARkcW+7f9dpOKJi2Cv17Xuyorl2yCMx
-        NknKKt3aUS3fPOGm0qiyhEQ=
-X-Google-Smtp-Source: AKy350bpkl/XH9EejX97SLMedFqNtcocLz0dofiURStn1ZlIYfmxrsXsRPyGC/UDwV0n9ZyuKK9coQ==
-X-Received: by 2002:adf:ed45:0:b0:2f7:faa0:3f19 with SMTP id u5-20020adfed45000000b002f7faa03f19mr349951wro.28.1681490673410;
-        Fri, 14 Apr 2023 09:44:33 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id r16-20020a056000015000b002f21a96c161sm3936139wrx.70.2023.04.14.09.44.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 09:44:32 -0700 (PDT)
-Message-ID: <8e40e46a-edf4-96c5-7248-21f39a93a410@gmail.com>
-Date:   Fri, 14 Apr 2023 18:44:30 +0200
+        d=1e100.net; s=20221208; t=1681490727; x=1684082727;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dGC6d8pHkx4LIPUvsw9NY8Blv0Cd/e0UOketkjdE2UI=;
+        b=SrT+QXzSxpSIrmSlRUTYlYiSM9pw/M5MSntg+Kr7KnEoXm35RRHb8LV2bBB5GEjDo7
+         wmpLVcddp8vikHtJTbeJQB0odw0NwEp8o6XM4bXyG2gciso+TmRRawEyQEuYGA+SRheA
+         QJSh3qKJ68wyHwtKdSlik+kiM4odcmpF8co25NCurY0PWaCD6GXOgAh7sEm6TieyH/kz
+         HnG8XhP76xLVKwRQkUQXO8IPkGiwfrdASJMIPM1nGN0MOs1pARI1A4A4NvY4JJoNxDwB
+         8Klqit/BI3qbVEBv6HB21/FkELS4L9GBMsgYakAWt6NYrx9Mxw6BJ+p4xgx7aWBz80+N
+         lxuQ==
+X-Gm-Message-State: AAQBX9dKixc2hgN3QfEFBz6EZXU1mAP37BfzXzsV2Md1LgD/5yuh2Wrg
+        jsfI0+lB5K2u+tjDPzFEkaGiPMV4xdVU+y37jR9Kg7RuxDhn13vu
+X-Google-Smtp-Source: AKy350boKXfRN0EHF9rp1Ah6iMumgNGg0ee80ixDS188j6sNu0vGjqXXrOcozUq0QKMO2Qx0WTIft4lniHatCuhAROE=
+X-Received: by 2002:a5b:647:0:b0:b8f:5474:2f33 with SMTP id
+ o7-20020a5b0647000000b00b8f54742f33mr4712273ybq.5.1681490727101; Fri, 14 Apr
+ 2023 09:45:27 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 1/2] phy: mediatek: hdmi: mt8195: fix uninitialized
- variable usage in pll_calc
-Content-Language: en-US
-To:     Guillaume Ranquet <granquet@baylibre.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+References: <20230413-topic-lahaina_vidcc-v2-0-f721d507e555@linaro.org>
+ <20230413-topic-lahaina_vidcc-v2-1-f721d507e555@linaro.org> <20faef75-9182-6e67-8ac5-c8234318ab64@linaro.org>
+In-Reply-To: <20faef75-9182-6e67-8ac5-c8234318ab64@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Fri, 14 Apr 2023 19:45:15 +0300
+Message-ID: <CAA8EJprnD0jSH7JvhoEnqhNxC55TeqCvvR64R7U8Ni7M93N2eQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: clock: qcom,videocc: Add SM8350
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-References: <20230413-fixes-for-mt8195-hdmi-phy-v2-0-bbad62e64321@baylibre.com>
- <20230413-fixes-for-mt8195-hdmi-phy-v2-1-bbad62e64321@baylibre.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230413-fixes-for-mt8195-hdmi-phy-v2-1-bbad62e64321@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Taniya Das <tdas@codeaurora.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 14 Apr 2023 at 18:18, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 14/04/2023 13:26, Konrad Dybcio wrote:
+> > SM8350, like most recent higher-end chips has a separate clock
+> > controller block just for the Venus IP. Document it.
+> >
+> > Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> > ---
+> >  .../devicetree/bindings/clock/qcom,videocc.yaml    | 29 +++++++++++++
+>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Krzysztof, Konrad, would it make sense to split it into separate
+bindings? After all, previous videocc bindings used clock-names, while
+this one doesn't.
+
+>
+> Best regards,
+> Krzysztof
+>
 
 
-On 14/04/2023 18:07, Guillaume Ranquet wrote:
-> The ret variable in mtk_hdmi_pll_calc() was used unitialized as reported
-> by the kernel test robot.
-> 
-> Fix the issue by removing the variable altogether and testing out the
-> return value of mtk_hdmi_pll_set_hw()
-> 
-> Fixes: 45810d486bb44 ("phy: mediatek: add support for phy-mtk-hdmi-mt8195")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-
-Looks good, but got unfortunately already fixed 4 hours ago with
-20230414122253.3171524-1-trix@redhat.com
-
-:)
-
-Regards,
-Matthias
-
-> ---
->   drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c | 8 ++------
->   1 file changed, 2 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c b/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
-> index abfc077fb0a8..054b73cb31ee 100644
-> --- a/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
-> +++ b/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
-> @@ -213,7 +213,7 @@ static int mtk_hdmi_pll_calc(struct mtk_hdmi_phy *hdmi_phy, struct clk_hw *hw,
->   	u64 tmds_clk, pixel_clk, da_hdmitx21_ref_ck, ns_hdmipll_ck, pcw;
->   	u8 txpredivs[4] = { 2, 4, 6, 12 };
->   	u32 fbkdiv_low;
-> -	int i, ret;
-> +	int i;
->   
->   	pixel_clk = rate;
->   	tmds_clk = pixel_clk;
-> @@ -292,13 +292,9 @@ static int mtk_hdmi_pll_calc(struct mtk_hdmi_phy *hdmi_phy, struct clk_hw *hw,
->   	if (!(digital_div <= 32 && digital_div >= 1))
->   		return -EINVAL;
->   
-> -	mtk_hdmi_pll_set_hw(hw, PLL_PREDIV, fbkdiv_high, fbkdiv_low,
-> +	return mtk_hdmi_pll_set_hw(hw, PLL_PREDIV, fbkdiv_high, fbkdiv_low,
->   			    PLL_FBKDIV_HS3, posdiv1, posdiv2, txprediv,
->   			    txposdiv, digital_div);
-> -	if (ret)
-> -		return -EINVAL;
-> -
-> -	return 0;
->   }
->   
->   static int mtk_hdmi_pll_drv_setting(struct clk_hw *hw)
-> 
+-- 
+With best wishes
+Dmitry
