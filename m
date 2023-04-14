@@ -2,94 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27E436E24CA
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 15:53:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C08B6E24C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 15:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbjDNNw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 09:52:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41400 "EHLO
+        id S229802AbjDNNwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 09:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbjDNNwx (ORCPT
+        with ESMTP id S229911AbjDNNwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 09:52:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C2AB440
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 06:51:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681480297;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hwFOnM3nMI93el8j5Fm/36C16c2wvk4iAVnNGABHAIk=;
-        b=Ea6hOwhCcjOC6HIdiwMeVz0bhGhmvNp6Yr8maP7VHPI9cc+gVl52pDbC+5i96yl1Y80WmA
-        tWJ7FFrW3R0tJSxTpZfSdgMQCxiuSHjphpUgoRHshiyrw4ToM6uSSsuAbcBjLc7DyL8k3R
-        r1Wzm6itKPb8SBxXz1YbH9gQkp92IdY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-593-_ewnsBbJPLymurl5keXJNQ-1; Fri, 14 Apr 2023 09:51:34 -0400
-X-MC-Unique: _ewnsBbJPLymurl5keXJNQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 84BEF3C10C70;
-        Fri, 14 Apr 2023 13:51:33 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.5])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 96D5140C6E70;
-        Fri, 14 Apr 2023 13:51:32 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20230329140155.53272-3-zhujia.zj@bytedance.com>
-References: <20230329140155.53272-3-zhujia.zj@bytedance.com> <20230329140155.53272-1-zhujia.zj@bytedance.com>
-To:     Jia Zhu <zhujia.zj@bytedance.com>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
-        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        jefflexu@linux.alibaba.com, hsiangkao@linux.alibaba.com,
-        yinxin.x@bytedance.com
-Subject: Re: [PATCH V5 2/5] cachefiles: extract ondemand info field from cachefiles_object
+        Fri, 14 Apr 2023 09:52:13 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B225EA249;
+        Fri, 14 Apr 2023 06:51:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=H6yVqe3+TZhy1SSy1fKm7kd3A50sGl37oZqxB01zGlU=; b=QncjLKTKiy0uzEpGNicbWTEO2r
+        XWMiZJgDerXO7NYny0kfXUwV1YDKgjyK7BCCmiJitTWFelmEcfLN7dQqrHQ8QCvctnbfoUd9XuGVC
+        hY9AmZBK4rpVuv+4a+o3C0mwWu8Fwcggyl8Gvoz6snXv9SnUCt+kLMHXXln3NybhOgfQhxXJNWIlZ
+        XB9U9Kbib+hqF2UnDc03Y9NMR8GFsodUuAupozc0+EJod/g9S/0xh2/pHyp/KmYc4o053PKdZuopM
+        jz0AFQRcZ2Q3ortfwFg0SlL8MHMApzalM08RbAR9KkuoewS3uRCRVAE3+zaSxyg+Vu4hpMkw+BFry
+        thWVFksQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pnJpw-008nNL-E8; Fri, 14 Apr 2023 13:51:36 +0000
+Date:   Fri, 14 Apr 2023 14:51:36 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     Pankaj Raghav <p.raghav@samsung.com>, brauner@kernel.org,
+        viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mcgrof@kernel.org, gost.dev@samsung.com
+Subject: Re: [RFC 0/4] convert create_page_buffers to create_folio_buffers
+Message-ID: <ZDlaaJxjXFbh+xSI@casper.infradead.org>
+References: <CGME20230414110825eucas1p1ed4d16627889ef8542dfa31b1183063d@eucas1p1.samsung.com>
+ <20230414110821.21548-1-p.raghav@samsung.com>
+ <1e68a118-d177-a218-5139-c8f13793dbbf@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1250338.1681480291.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Fri, 14 Apr 2023 14:51:31 +0100
-Message-ID: <1250339.1681480291@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1e68a118-d177-a218-5139-c8f13793dbbf@suse.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jia Zhu <zhujia.zj@bytedance.com> wrote:
+On Fri, Apr 14, 2023 at 03:47:13PM +0200, Hannes Reinecke wrote:
+> BTW; I've got another patch replacing 'writepage' with 'write_folio'
+> (and the corresponding argument update). Is that a direction you want to go?
 
->  #define CACHEFILES_OBJECT_STATE_FUNCS(_state, _STATE)	\
->  static inline bool								\
->  cachefiles_ondemand_object_is_##_state(const struct cachefiles_object *=
-object) \
->  {												\
-> -	return object->state =3D=3D CACHEFILES_ONDEMAND_OBJSTATE_##_STATE; \
-> +	return object->ondemand->state =3D=3D CACHEFILES_ONDEMAND_OBJSTATE_##_=
-STATE; \
->  }												\
->  												\
->  static inline void								\
->  cachefiles_ondemand_set_object_##_state(struct cachefiles_object *objec=
-t) \
->  {												\
-> -	object->state =3D CACHEFILES_ONDEMAND_OBJSTATE_##_STATE; \
-> +	object->ondemand->state =3D CACHEFILES_ONDEMAND_OBJSTATE_##_STATE; \
->  }
-
-I wonder if those need barriers - smp_load_acquire() and smp_store_release=
-().
-
-David
-
+No; ->writepage is being deleted.  It's already gone from ext4 and xfs.
