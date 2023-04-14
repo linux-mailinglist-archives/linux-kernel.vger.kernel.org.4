@@ -2,126 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1A1D6E2301
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 14:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A0266E2302
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 14:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230469AbjDNMTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 08:19:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36354 "EHLO
+        id S230335AbjDNMTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 08:19:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230456AbjDNMTR (ORCPT
+        with ESMTP id S230390AbjDNMTH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 08:19:17 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852B6B742;
-        Fri, 14 Apr 2023 05:19:07 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33EBqBpu020374;
-        Fri, 14 Apr 2023 12:18:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=0Z5TFjJbwYe7B5sjyIj8FGt4HdXqg1HWXeLZ6d93/fM=;
- b=eAHnGwiMJXI3RXTjeRJVaiXGVXOvguxX1+IbxP8n8y+qwBUX4xY1+5crd5cZrdS2DTfD
- vtf2DP9BwF/0csqI6yl49qHt5xDNa+a4W3l4K9gKKYzrtD5+lzFdrnKapx+Gb3Xz60M5
- rB2nAgYduwIuBdxoAzFlBllAti5j8fOJuRWsXHaJVXYs51lpd/T1bw1tvCFtxmlT1im7
- 6+1w9ej3ytnA7QkBxmcAStrXy7bPSa+1G8CE/DRC0A14tu+1psEUIOqWy3DUBujBXGGh
- d9SAn2m8NkSrSV/NA4NqfOLe2gX/mhsoox9vinpmbSmKp7/6eVS8OXCM5NiArPIK65kw qA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pxqf99sye-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Apr 2023 12:18:55 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33ECIrB4006099
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Apr 2023 12:18:53 GMT
-Received: from [10.216.25.10] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 14 Apr
- 2023 05:18:46 -0700
-Message-ID: <1c9110d4-ce71-c163-0301-3e309a0bb36e@quicinc.com>
-Date:   Fri, 14 Apr 2023 17:48:42 +0530
+        Fri, 14 Apr 2023 08:19:07 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on20622.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eaa::622])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A3EAF1D;
+        Fri, 14 Apr 2023 05:18:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iePVVcb4FTStdUco0jOOPPEZ71vH7axkRutSe5gV/LzSFpwqT0363iek50UyAquEP7eqaFKGVivRa+ejsVg8wdZ7gsLyHupam55Sb768OTHicb0GQSDpV/sANDn9+sx7WP3+V7QiNACwVIIfo3UNF2duI44D3N6JuprDZ490vrE/RdSBvQxK4uYOsj706/+NRk0f02THphRUitHMYD4obygEE8IpqoCkhewNnAJTY1YXy+n5QCBh1UBoN/eayfj89/p5nYbKLK8NdIDYdhX92UMi7XigDguP/kCiY/ud2tUYgWAb4KxHekLGMXrpkVzZEeiB8wDAuRo0YJbWFj/x2A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Lr33P0F2ZykrXqVk4v77QuMLoc1wqFJ9dOkYDfcX4Hk=;
+ b=Ne1lvybxGxs7HvOaHMpsd1UtADXapTfb5XJ2J9H0uf36JmB9BnL+enQ/63onbT8KvL66V+47dAn1fSLar2iwXOrcitsdaaPNIc92vKMydCr1jik92KBtwKKhwIQlnuSimuCW3K9EkhSyGisDFC5F3MlUefvD/mN4s+ACH8OgBUe565OLgcY+ZfjI+jN0meEhuTy6Ctk8kyHQWCPeXISoxm8hdx/+55jQ+tZ2Lnulk15hCo/FbroYS0Re+Va5wIxFiOXEs6fnluWBXkhUXbvi/+fsluMC7jlKPr7YNmohCgk0us1XreKT9MHQE+8ItxFKQUbWUzjGjKKTunmtEZzdkQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Lr33P0F2ZykrXqVk4v77QuMLoc1wqFJ9dOkYDfcX4Hk=;
+ b=kY12enT11Cdpjk8hZ/a5ebyWZsnm0ck0KBUBuRkTrzCKBfTal+OfEEUYQkHVS8Jmr9NXE5EJwpnIc1wWH0Xn9MI5WwVGRP56noliUwEx2BbniJh9q53rpHcHsuoHaa6kxiM/G9OHBe5B5rL48ORLfH1BXt0w/p+yfiCOny5utUJIiMPLs3ifD5bFoCkPALS0fOuuz03YkhrFjDHgaQWzwkUgoBtY7lCQ9ktztlCylTVWyxGEq7++uVUovuuYE+lvdYHcPG2KtMIKr8WbAz7YB4dmG6c9SSmEMW+AX1cOYyB3g5p2HbWhq/jVzJgk+fD3ir3GVpIYPrZ0kBP4SgqBHw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by IA1PR12MB6140.namprd12.prod.outlook.com (2603:10b6:208:3e8::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Fri, 14 Apr
+ 2023 12:18:56 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::6045:ad97:10b7:62a2]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::6045:ad97:10b7:62a2%9]) with mapi id 15.20.6298.030; Fri, 14 Apr 2023
+ 12:18:56 +0000
+Date:   Fri, 14 Apr 2023 09:18:52 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Leon Romanovsky <leonro@nvidia.com>
+Subject: [GIT PULL] Please pull RDMA subsystem changes
+Message-ID: <ZDlErF54qwFrZ/X9@nvidia.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="L1YSN2iGruswI8m/"
+Content-Disposition: inline
+X-ClientProxiedBy: SJ0PR03CA0147.namprd03.prod.outlook.com
+ (2603:10b6:a03:33c::32) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH V3 2/9] clk: qcom: Add Global Clock controller (GCC)
- driver for IPQ5018
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <ulf.hansson@linaro.org>,
-        <linus.walleij@linaro.org>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <p.zabel@pengutronix.de>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     Varadarajan Narayanan <quic_varada@quicinc.com>,
-        Gokul Sriram Palanisamy <quic_gokulsri@quicinc.com>
-References: <1681468167-11689-1-git-send-email-quic_srichara@quicinc.com>
- <1681468167-11689-3-git-send-email-quic_srichara@quicinc.com>
- <af41069c-add8-f0bf-1180-3e5c4da9d9dd@linaro.org>
-From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
-In-Reply-To: <af41069c-add8-f0bf-1180-3e5c4da9d9dd@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 8GSGOLDRNwhPP_KJ98yfwIqdxAdYuuKy
-X-Proofpoint-ORIG-GUID: 8GSGOLDRNwhPP_KJ98yfwIqdxAdYuuKy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-14_06,2023-04-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
- suspectscore=0 malwarescore=0 spamscore=0 phishscore=0 clxscore=1015
- mlxlogscore=731 priorityscore=1501 lowpriorityscore=0 bulkscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304140111
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|IA1PR12MB6140:EE_
+X-MS-Office365-Filtering-Correlation-Id: b5f8d2de-22a8-4e7f-3ae4-08db3ce26b18
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: I9AoSinkBazUoZpY6pFqMNxfCsrbx2npiLkFksA3cl4bi7HuFYHREz+G62remvGDLp6c0nxK5Q5YJCaDB9QoqFeToIdtH9/26kxJTn9NmvvnmPQjle0mAWYMbIXk3xtzxdj+ehw6tPbZYml+XO8Z6+H34quq/YsT5sn6ZPW23d9ZBjdLJye4eOkOWI2Ht8cCGNjHpI5Tc82TOA/4bKmok2HUNQabsX/QqcSE9wNY4QEt4yzjbaFWD9LvQxAGE3D8Xxb1Z9N3cG05pDcZv9FAP8uKOGzHNjKj5DqLYS9M59Mk4gItZIO8w5unuAHIS2wfSkpMq4IsprsM42PgNvBO0HNkSFK1XCQ3+1z9g6LDWbkgE0IGuUbIMWR1CtWMrLyKJUrza9d/cHzHSmJPg0iWoS6391q4Yq7QqXX+KSw5IIM/TcLQipppe0FEXV9MP1AkLzMOpLOeFuIXrahhyLnLR+PRPpuw1FGmG6Buygu/Ry3y+RTInw1IJPOFRKQTywuA9CR9LZkUh0jxHsD12qIMGImre/817JLUwLF/mQHPUVf5xlouHsWufg8CAksJnC5ihXzPY5hICUUmdOck5nP0V/Ro661G18ZknFmWJCACIAA55W0aCbmuV9wL6SftT9UI
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(396003)(136003)(39860400002)(346002)(451199021)(5660300002)(41300700001)(8676002)(8936002)(2906002)(38100700002)(6666004)(6486002)(44144004)(83380400001)(478600001)(186003)(2616005)(21480400003)(107886003)(36756003)(6506007)(6512007)(26005)(86362001)(4326008)(6916009)(66946007)(66556008)(66476007)(316002)(2700100001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kWSMbeDydjUOm3qCrtU745Jcv1H/ef/7R8rFPABAuUmd9pmZ0KT6indZmsRz?=
+ =?us-ascii?Q?OS1WhFpk6egJm0Z1IaKo4Rx/+IY1EB6Ap5LkPmbiEo29bQ/jS060av3KsVm6?=
+ =?us-ascii?Q?L8+T/4dkpcxpyDCEsjO059dL/YuUZDbHbTU9gtQCTyplIha+IrSPtD0gBvKD?=
+ =?us-ascii?Q?zleceWIBy/Vl8/xwTX0RuR863le6ZowHcPhOLIPvAA8+wCZZQQi2i7T8xiqp?=
+ =?us-ascii?Q?O7399zZ+XWxdMoufQvbs04uNryqmTeZsa904wetw+L3FrWfUJCIyIsj6AZLQ?=
+ =?us-ascii?Q?hw8PdpxNqwvdxVFkZmE5fkzyhqeOaHI0zW8I+6LyyiTtdU1gBv7hLIFfAmpK?=
+ =?us-ascii?Q?1PG+9WZzyZBKGXEzJ8Nbyfs4rnzDASKFooma+BOVKnLowUGIsCCcsNnj0b1K?=
+ =?us-ascii?Q?pkwnt/WNosZrbZbjZAMAjaxkWas3Ah5GjV7+zq4CcfvrH10dOy1+8IeicFE3?=
+ =?us-ascii?Q?KNT73/jQoPtJ3C2Y95IV2c2qCHJ9E6Cyth1aCdV+7NcJgejzhQI4oBehZjKV?=
+ =?us-ascii?Q?i8ChSr/Gwx9vPxRpALRzSqEk6N9bOrY+a0sVtDvPGhLp7gr0OXoOetZfbbIa?=
+ =?us-ascii?Q?c6GNDAhYztpo+zMc7kshzxStvXZmOLLRCEpSHZo8mEHZEbDraLm93UZ1qhvH?=
+ =?us-ascii?Q?CMwRYNaKWFts3s3PLqTP/F+Wh3VU1b7uA11Jss2bRFoPYESlY03WY+Qn5dx4?=
+ =?us-ascii?Q?R76a5SySSm7Lc1t6IM2R9fKUC7HSniNgdE5h9Y/3I6iYHP3ukqNIUYbBxLiG?=
+ =?us-ascii?Q?qlFohMWKMTAPiHzfnjzwrjLDyTsC8k318PlbD4vY/9K7BUX0e5CXGzpBorUr?=
+ =?us-ascii?Q?seYqu8e/heVsZ42iWn5NgzbEk709DAAwtjfqzbuZ1UA9tFeWl4LlW0hoXFIl?=
+ =?us-ascii?Q?jQXs0s+UPMgS9VIaiagAmD0/UuBd0hwcQxPajkMcg8eE+BnfQk12ngZeELGE?=
+ =?us-ascii?Q?TM3f3LSKowpMd4ZFdfhm3UTo3iGtG+ii1rXegFRihJTSLHvoL3gi2ATEQyUF?=
+ =?us-ascii?Q?Axq+KdIBGCYJ1wIMfXHwKLyqWX9ng9hdpQvC+lhMN30Pt/Zt9okannEnJRjK?=
+ =?us-ascii?Q?Qw9F2hECEJpRzB0Cd68rJeKUiI863zMQKfFMwO+Y3AYBYzR/HNcfCPdy0aYz?=
+ =?us-ascii?Q?CpSfMlJi+1l/kUn1G5MTtyP34pt+gEZPE95/k6oMg3fWfJJf2e29A2vs4voI?=
+ =?us-ascii?Q?PHLmDmYkvxV/2CjD3DovZIshCurMJp+D74lViUyerVOIK2+ssYoOnY73IiP4?=
+ =?us-ascii?Q?1mUe2trzagko/SiuiUdkowkG9yazAU9H+fvp20Ms3i1j40//z6JKygX1SXPj?=
+ =?us-ascii?Q?YKA/eNP3JTZFW+FXiixX6WYA0PLGcPFIdAmM4tP4dMNiSxOHXw9fSUYhUjy4?=
+ =?us-ascii?Q?cYyTfn1u65pJS1sILC5l6m0Gka8MGiD82uxkGtBmo4o7x0mPlWfENUQoh5lw?=
+ =?us-ascii?Q?ChD2B1aZG5Q4zAB24GSTAuMgaQomWxYam79iZY6aACEIDTccurM1zkSkoPAn?=
+ =?us-ascii?Q?FEBheLamYwJB02Jv8l7c0bPAcFoXwdw1o3/bnTBCrktPFvTjO3k68SVAQtkV?=
+ =?us-ascii?Q?j2IxlQclk38gSuTvqK2KUMd/cytHd8BlJUF5e4Rr?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b5f8d2de-22a8-4e7f-3ae4-08db3ce26b18
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2023 12:18:56.1756
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8Scf8Ap474jZfoJsLAeSpRzXtdRNEcbZpU2+Z1nOMS4P7Ec5EQ8A3Qmzx1Iluudb
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6140
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--L1YSN2iGruswI8m/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+Hi Linus,
 
-On 4/14/2023 4:59 PM, Konrad Dybcio wrote:
-> 
-> 
-> On 14.04.2023 12:29, Sricharan Ramabadhran wrote:
->> Add support for the global clock controller found on IPQ5018
->> based devices.
->>
->> Co-developed-by: Varadarajan Narayanan <quic_varada@quicinc.com>
->> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
->> Co-developed-by: Gokul Sriram Palanisamy <quic_gokulsri@quicinc.com>
->> Signed-off-by: Gokul Sriram Palanisamy <quic_gokulsri@quicinc.com>
->> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
->> ---
-> [...]
-> 
->> +		.name = "adss_pwm_clk_src",
->> +		.parent_data = gcc_xo_gpll0,
->> +		.num_parents = 2,
-> ARRAY_SIZE(), everywhere where you reference parent_data
-> 
-   ok.
+We had a fairly slow cycle on the rc side this time, here are the
+accumulated fixes, mostly in drivers.
 
-> [...]
-> 
->> +MODULE_DESCRIPTION("Qualcomm Technologies, Inc. GCC IPQ5018 Driver");
->> +MODULE_LICENSE("GPL v2");
-> "GPL"
+Thanks,
+Jasn
 
-   ok, will fix.
+The following changes since commit eeac8ede17557680855031c6f305ece2378af326:
 
-Regards,
-  Sricharan
+  Linux 6.3-rc2 (2023-03-12 16:36:44 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
+
+for you to fetch changes up to aca3b0fa3d04b40c96934d86cc224cccfa7ea8e0:
+
+  RDMA/core: Fix GID entry ref leak when create_ah fails (2023-04-13 12:17:32 -0300)
+
+----------------------------------------------------------------
+v6.3 rc RDMA pull request
+
+Driver bug fixes:
+
+- irdma should not generate extra completions during flushing
+
+- Fix several memory leaks
+
+- Do not get confused in irdma's iwarp mode if IPv6 is present
+
+- Correct a link speed calculation in mlx5
+
+- Increase the EQ/WQ limits on erdma as they are too small for big
+  applications
+
+- Use the right math for erdma's inline mtt feature
+
+- Make erdma probing more robust to boot time ordering differences
+
+- Fix a KMSAN crash in CMA due to uninitialized qkey
+
+----------------------------------------------------------------
+Cheng Xu (4):
+      RDMA/erdma: Fix some typos
+      RDMA/erdma: Update default EQ depth to 4096 and max_send_wr to 8192
+      RDMA/erdma: Inline mtt entries into WQE if supported
+      RDMA/erdma: Defer probing if netdevice can not be found
+
+Maher Sanalla (1):
+      IB/mlx5: Add support for 400G_8X lane speed
+
+Mark Zhang (1):
+      RDMA/cma: Allow UD qp_type to join multicast only
+
+Mustafa Ismail (3):
+      RDMA/irdma: Do not generate SW completions for NOPs
+      RDMA/irdma: Fix memory leak of PBLE objects
+      RDMA/irdma: Increase iWARP CM default rexmit count
+
+Saravanan Vajravel (1):
+      RDMA/core: Fix GID entry ref leak when create_ah fails
+
+Tatyana Nikolova (1):
+      RDMA/irdma: Add ipv4 check to irdma_find_listener()
+
+ drivers/infiniband/core/cma.c             | 60 +++++++++++++++++--------------
+ drivers/infiniband/core/verbs.c           |  2 ++
+ drivers/infiniband/hw/erdma/erdma_cq.c    |  2 +-
+ drivers/infiniband/hw/erdma/erdma_hw.h    |  4 +--
+ drivers/infiniband/hw/erdma/erdma_main.c  |  2 +-
+ drivers/infiniband/hw/erdma/erdma_qp.c    |  4 +--
+ drivers/infiniband/hw/erdma/erdma_verbs.h |  2 +-
+ drivers/infiniband/hw/irdma/cm.c          | 16 +++++----
+ drivers/infiniband/hw/irdma/cm.h          |  2 +-
+ drivers/infiniband/hw/irdma/hw.c          |  3 ++
+ drivers/infiniband/hw/irdma/utils.c       |  5 ++-
+ drivers/infiniband/hw/mlx5/main.c         |  4 +++
+ 12 files changed, 65 insertions(+), 41 deletions(-)
+
+--L1YSN2iGruswI8m/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRRRCHOFoQz/8F5bUaFwuHvBreFYQUCZDlEqwAKCRCFwuHvBreF
+YfgkAP9cXsABeQCmA833vrZGtbRgXa9XSGEuGq1VXYlBgH7u5wEA+WbBSkdnpc55
+Dllvx6HSFMpX2O6ueVy/fRzY41zwrQk=
+=8Yxq
+-----END PGP SIGNATURE-----
+
+--L1YSN2iGruswI8m/--
