@@ -2,76 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 910006E1EC5
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 141386E1ED5
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:57:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjDNIuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 04:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60246 "EHLO
+        id S230265AbjDNI5b convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 14 Apr 2023 04:57:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjDNIuS (ORCPT
+        with ESMTP id S229753AbjDNI5a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 04:50:18 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32683ED
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 01:50:17 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id y35so3317557ljq.6
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 01:50:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681462215; x=1684054215;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EBgMMuS3S+nXOdAGD5zD1EDLkW0bCURYfUeSPB7KubA=;
-        b=NLYUJk99xU7r+pN765ipnQaG9lLkDyKe2RnXwtoLkmjGso7R3e/NxcaXy8LcK6kz27
-         +m/8FenyJM2vQpPB1abepGwVOI46En6kV28VWp8tQWGp+eA0kcrhhqMimA4/vE5PWwgW
-         sygDw/9TcMatp3hCa3afnKBKNgRWE3JZ1o7z6yN9LJFXneQppT1AkzZzOV3tj0qkND1m
-         unNh3Y3MwTis4R1Gg7wO4aYDpDQBkffCa/xThX98NuiGY9Q1Z75ys0eyIxGKDnuW64fD
-         W8FKpwnqkYTgLoCSoFeKNvGO4BpP2+mWBC4kWrzk7NSO+t16h4/BrjN5M/ukfu88iQs0
-         9m7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681462215; x=1684054215;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EBgMMuS3S+nXOdAGD5zD1EDLkW0bCURYfUeSPB7KubA=;
-        b=FQJCIjH2goAF31cWdTZWQW083HixNi0FvmItnkv0to77Ol+5xn3EdT28/BB23ldyA7
-         idbpZ68E9iuh4NFc1Rb8QY3FDDW8JKDyC3w66596tl14/a/72FnlJZLeBIQ8x4ZR3pOo
-         2iDkTW3z3CnJn/RMiFueYg45jB5CErp3kclGkMajXQGD4+0N7M+2Y7AE7CCP+2fR0Ki8
-         qPo6tVc91mR3xo2COKXKLOGm8L6kkz/cDCVVuTYkZlCG2oicyUzhAR0p7EcwoSuWT3tA
-         LsDlHa73dKuA/btC310pquXavVdbGt1WdEHW7wsoQMZWvHy7H7nR+NKwYtO7gMq7B6wd
-         AECQ==
-X-Gm-Message-State: AAQBX9fjyMED/kRHUO9xrGEEzQqbAW9htsLoUrZxR3Dvgc5bt7rd+KS9
-        NXkI9WkKx/hT7g0cLDJ0wpS4TONkm/kIgh4bV/4=
-X-Google-Smtp-Source: AKy350bxpJ+021dTXfi1qOpBlTlt6o6tJgcHIgRJydnBxiQ0AIbQGMiAnX2RI6WJT2jeCY6ia3SGXFJt/yKfnNgGm+8=
-X-Received: by 2002:a2e:864d:0:b0:299:9de5:2f0f with SMTP id
- i13-20020a2e864d000000b002999de52f0fmr1688145ljj.5.1681462215379; Fri, 14 Apr
- 2023 01:50:15 -0700 (PDT)
+        Fri, 14 Apr 2023 04:57:30 -0400
+X-Greylist: delayed 694 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 14 Apr 2023 01:57:27 PDT
+Received: from gfmail2.glenfly.com (unknown [113.31.180.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94D6D5B98
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 01:57:27 -0700 (PDT)
+X-ASG-Debug-ID: 1681461947-196b9619469beb0001-xx1T2L
+Received: from GFSHEXCH02.glenfly.com (GFSHEXCH02.glenfly.com [10.5.250.52]) by gfmail2.glenfly.com with ESMTP id 54d1DXRYsjdmbAuw; Fri, 14 Apr 2023 16:45:47 +0800 (CST)
+X-Barracuda-Envelope-From: ReaperLi@glenfly.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.5.250.52
+Received: from sqa-PC.glenfly.com (10.30.16.40) by GFSHEXCH02.glenfly.com
+ (10.5.250.52) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 14 Apr
+ 2023 16:45:48 +0800
+From:   ReaperLi <ReaperLi@glenfly.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.5.250.52
+To:     <perex@perex.cz>, <tiwai@suse.com>
+CC:     <linux-kernel@vger.kernel.org>, jasontao <jasontao@glenfly.com>
+Subject: [PATCH] ALSA: hda: Glenfly: add HD Audio PCI IDs and HDMI Codec Vendor IDs.
+Date:   Fri, 14 Apr 2023 16:50:55 +0800
+X-ASG-Orig-Subj: [PATCH] ALSA: hda: Glenfly: add HD Audio PCI IDs and HDMI Codec Vendor IDs.
+Message-ID: <20230414085055.27323-1-ReaperLi@glenfly.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Received: by 2002:a2e:6a03:0:b0:2a7:9cf6:c181 with HTTP; Fri, 14 Apr 2023
- 01:50:14 -0700 (PDT)
-Reply-To: mrskumarprince@gmail.com
-From:   Aisha Gaddafi <koolboy5528@gmail.com>
-Date:   Fri, 14 Apr 2023 08:50:14 +0000
-Message-ID: <CA+hg5UNj2tJBW=vQyb12Mu=5Dth2+7YgEjJtJ+0JTefdaG+hWg@mail.gmail.com>
-Subject: Greetings
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain
+X-Originating-IP: [10.30.16.40]
+X-ClientProxiedBy: GFSHEXCH02.glenfly.com (10.5.250.52) To
+ GFSHEXCH02.glenfly.com (10.5.250.52)
+X-Barracuda-Connect: GFSHEXCH02.glenfly.com[10.5.250.52]
+X-Barracuda-Start-Time: 1681461947
+X-Barracuda-URL: https://10.5.252.52:443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at glenfly.com
+X-Barracuda-Scan-Msg-Size: 4604
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.5000 1.0000 0.0100
+X-Barracuda-Spam-Score: 0.01
+X-Barracuda-Spam-Status: No, SCORE=0.01 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.107397
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: jasontao <jasontao@glenfly.com>
 
-I am Ms, Aiisha,,I am currently residing in
-one of the African Countries, unfortunately as a refugee..I need your
-assistance please.
+Add a set of HD Audio PCI IDS, and the HDMI codec vendor IDs for
+Glenfly Arise.
 
-Best Regard
-Mrs.Aisha
+Signed-off-by: jasontao <jasontao@glenfly.com>
+---
+ sound/pci/hda/hda_intel.c  | 14 ++++++++++++++
+ sound/pci/hda/patch_hdmi.c | 18 ++++++++++++++++++
+ 2 files changed, 32 insertions(+)
+
+diff --git a/sound/pci/hda/hda_intel.c b/sound/pci/hda/hda_intel.c
+index 77a592f21..6c4a559d9 100644
+--- a/sound/pci/hda/hda_intel.c
++++ b/sound/pci/hda/hda_intel.c
+@@ -227,6 +227,7 @@ enum {
+        AZX_DRIVER_ATI,
+        AZX_DRIVER_ATIHDMI,
+        AZX_DRIVER_ATIHDMI_NS,
++       AZX_DRIVER_GFHDMI,
+        AZX_DRIVER_VIA,
+        AZX_DRIVER_SIS,
+        AZX_DRIVER_ULI,
+@@ -349,6 +350,7 @@ static const char * const driver_short_names[] = {
+        [AZX_DRIVER_ATI] = "HDA ATI SB",
+        [AZX_DRIVER_ATIHDMI] = "HDA ATI HDMI",
+        [AZX_DRIVER_ATIHDMI_NS] = "HDA ATI HDMI",
++       [AZX_DRIVER_GFHDMI] = "HDA GF HDMI",
+        [AZX_DRIVER_VIA] = "HDA VIA VT82xx",
+        [AZX_DRIVER_SIS] = "HDA SIS966",
+        [AZX_DRIVER_ULI] = "HDA ULI M5461",
+@@ -1743,6 +1745,8 @@ static int default_bdl_pos_adj(struct azx *chip)
+        }
+
+        switch (chip->driver_type) {
++       case AZX_DRIVER_GFHDMI:
++               return 128;
+        case AZX_DRIVER_ICH:
+        case AZX_DRIVER_PCH:
+                return 1;
+@@ -1859,6 +1863,9 @@ static int azx_first_init(struct azx *chip)
+        }
+ #endif
+
++       if (chip->driver_type == AZX_DRIVER_GFHDMI)
++               bus->polling_mode = 1;
++
+        err = pcim_iomap_regions(pci, 1 << 0, "ICH HD audio");
+        if (err < 0)
+                return err;
+@@ -1959,6 +1966,7 @@ static int azx_first_init(struct azx *chip)
+                        chip->playback_streams = ATIHDMI_NUM_PLAYBACK;
+                        chip->capture_streams = ATIHDMI_NUM_CAPTURE;
+                        break;
++               case AZX_DRIVER_GFHDMI:
+                case AZX_DRIVER_GENERIC:
+                default:
+                        chip->playback_streams = ICH6_NUM_PLAYBACK;
+@@ -2724,6 +2732,12 @@ static const struct pci_device_id azx_ids[] = {
+        { PCI_DEVICE(0x1002, 0xab38),
+          .driver_data = AZX_DRIVER_ATIHDMI_NS | AZX_DCAPS_PRESET_ATI_HDMI_NS |
+          AZX_DCAPS_PM_RUNTIME },
++       /* GLENFLY */
++       { PCI_DEVICE(0x6766, PCI_ANY_ID),
++         .class = PCI_CLASS_MULTIMEDIA_HD_AUDIO << 8,
++         .class_mask = 0xffffff,
++         .driver_data = AZX_DRIVER_GFHDMI | AZX_DCAPS_POSFIX_LPIB |
++         AZX_DCAPS_NO_MSI | AZX_DCAPS_NO_64BIT },
+        /* VIA VT8251/VT8237A */
+        { PCI_DEVICE(0x1106, 0x3288), .driver_data = AZX_DRIVER_VIA },
+        /* VIA GFX VT7122/VX900 */
+diff --git a/sound/pci/hda/patch_hdmi.c b/sound/pci/hda/patch_hdmi.c
+index 4ffa3a59f..7ccdc375f 100644
+--- a/sound/pci/hda/patch_hdmi.c
++++ b/sound/pci/hda/patch_hdmi.c
+@@ -4489,6 +4489,18 @@ static int patch_via_hdmi(struct hda_codec *codec)
+        return patch_simple_hdmi(codec, VIAHDMI_CVT_NID, VIAHDMI_PIN_NID);
+ }
+
++static int patch_gf_hdmi(struct hda_codec *codec)
++{
++       int err;
++
++       err = patch_generic_hdmi(codec);
++       if (err)
++               return err;
++
++       codec->no_sticky_stream = 1;
++       return 0;
++}
++
+ /*
+  * patch entries
+  */
+@@ -4579,6 +4591,12 @@ HDA_CODEC_ENTRY(0x10de009f, "GPU 9f HDMI/DP",    patch_nvhdmi),
+ HDA_CODEC_ENTRY(0x10de00a0, "GPU a0 HDMI/DP",  patch_nvhdmi),
+ HDA_CODEC_ENTRY(0x10de8001, "MCP73 HDMI",      patch_nvhdmi_2ch),
+ HDA_CODEC_ENTRY(0x10de8067, "MCP67/68 HDMI",   patch_nvhdmi_2ch),
++HDA_CODEC_ENTRY(0x67663d82, "Arise HDMI/DP",   patch_gf_hdmi),
++HDA_CODEC_ENTRY(0x67663d83, "Arise HDMI/DP",   patch_gf_hdmi),
++HDA_CODEC_ENTRY(0x67663d84, "Arise HDMI/DP",   patch_gf_hdmi),
++HDA_CODEC_ENTRY(0x67663d85, "Arise HDMI/DP",   patch_gf_hdmi),
++HDA_CODEC_ENTRY(0x67663d86, "Arise HDMI/DP",   patch_gf_hdmi),
++HDA_CODEC_ENTRY(0x67663d87, "Arise HDMI/DP",   patch_gf_hdmi),
+ HDA_CODEC_ENTRY(0x11069f80, "VX900 HDMI/DP",   patch_via_hdmi),
+ HDA_CODEC_ENTRY(0x11069f81, "VX900 HDMI/DP",   patch_via_hdmi),
+ HDA_CODEC_ENTRY(0x11069f84, "VX11 HDMI/DP",    patch_generic_hdmi),
+--
+2.20.1
+
+
+
+保密声明：
+本邮件含有保密或专有信息，仅供指定收件人使用。严禁对本邮件或其内容做任何未经授权的查阅、使用、复制或转发。
+CONFIDENTIAL NOTE:
+This email contains confidential or legally privileged information and is for the sole use of its intended recipient. Any unauthorized review, use, copying or forwarding of this email or the content of this email is strictly prohibited.
