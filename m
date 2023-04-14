@@ -2,154 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7EE36E211F
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 12:41:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 476656E2127
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 12:42:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjDNKlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 06:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47700 "EHLO
+        id S229992AbjDNKmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 06:42:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjDNKlH (ORCPT
+        with ESMTP id S229659AbjDNKmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 06:41:07 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F20FF3;
-        Fri, 14 Apr 2023 03:41:01 -0700 (PDT)
-Received: from [192.168.1.90] (unknown [188.27.34.213])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0FEB26603222;
-        Fri, 14 Apr 2023 11:40:59 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681468859;
-        bh=vfh35bWjaeukPfJ1DTroLll07PP0VwQUozLzA1ckpqQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Li6V/wHS/HhegSta0kxWzRHlEOSFjcQkRDODVv9z0+kKynYwrL9opHtf4hreYsCyj
-         VHLjGoyaG1QlFRN+H3YSS/ZdnJCI6pI8+dqEe9qsWhlukkwrFQFPen5yQ7TdikUg1M
-         5Llpj7+1ot+gXzM3nE33sSnv5bJgjzAMnDYYFyEXf03I0BNChmtO/qJIVT/ctp8MGX
-         5OWce8AkA2UiWtskG2YFlK7OInKvUY14+cjPFdX3wmFBnsTPXoEIT10dxtoIC4eH3l
-         uSPSBVEmSLGPo/2Qv+XASr4KeakEU6UhJwUInK7oUTAhIXIMUJKKqjOdcNMUcHLoy8
-         3fsnq4Fafo7DQ==
-Message-ID: <36d8050b-0636-2b30-f3fc-7f7d96bec253@collabora.com>
-Date:   Fri, 14 Apr 2023 13:40:55 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 3/3] arm64: dts: rockchip: Add vdd_cpu_big regulators to
- rk3588-rock-5b
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Fri, 14 Apr 2023 06:42:37 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C82D95
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 03:42:35 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-50672fbf83eso5736843a12.0
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 03:42:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681468954; x=1684060954;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QlR+xSiTjnc2SLlMey8CvdA1HO2rDpDlXaNoW69NFc0=;
+        b=zmUd3JoFz7Tv3Vx3luqjYIZjlQtlyaeuFd+OzfpBA9c7rp/ziS2FdfeDuPsrYQtq1z
+         kq7caNrwLhd08UehIxFjfRrljBj/baEVLCQ+rGlTPY6NVq/av0qfmCMvwmfVjG/Y534t
+         yHl6IlLtsqJstYTzc+fFCm9T1g1/UUQF9HVIXIISfAmYYW1GZl8TcwC1YRMWetZypgkI
+         qlztK+3VOTDeTrrV2/XpUuHrxhkgt7nC95w6p1w/0dn2OOrPBo8UBkjeW0y5ZgH0b37L
+         P+8GAmEl/DSEHevlWAY3lMSLpPVIZEDp0MUMCpaS+XK6JdORsDpYQWrMLuUkTEFnCe/T
+         dr5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681468954; x=1684060954;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QlR+xSiTjnc2SLlMey8CvdA1HO2rDpDlXaNoW69NFc0=;
+        b=hdjkUiqshn13sq8+xh99j7FMNaUe5hDBtSaS0PMNWPCuPUCr/FczmbhBFJ+o7ShsUO
+         7zsRv8Vn9FzfvfRP2QhEl1sL7/IPGQGuU0mxU4itu3yXCszeLVyE1YcIKt+Q1cYUUGdp
+         Bjy5jKe/z3q8tUnyjLNKx9Fo5o5fcEGDTUwOv/kn/wX12/9u9HV/uQEj10NTvuIeJXRn
+         06AuQClW8oA4FtUhnwAoFoBLrahj5WNjxXkaGEqhPdu7fuzLpkdw8FHdxSaH+9+1wv9y
+         t/PY86Xu1ZnybGZT9TMhBRzgMGSpP/zt6KijHsj0svRS1Mbvm0qrSzVHyJev8aEd+FMc
+         lltw==
+X-Gm-Message-State: AAQBX9fEfIT30b8X5F3gJF+o/UhI0j+nJJL9aGe0szxlBbXdeeHBgx37
+        vjCuq4MlS8XQWCXE3BizNN/OEw==
+X-Google-Smtp-Source: AKy350a8p/Dm34e6FTIrwnmd/FYPe6DCZ5aMSRnZbXAhFybe2SHbqsToCcm2MWHCebPZJuVwNc96pw==
+X-Received: by 2002:a05:6402:114e:b0:504:9e79:e86f with SMTP id g14-20020a056402114e00b005049e79e86fmr5349108edw.18.1681468953929;
+        Fri, 14 Apr 2023 03:42:33 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:40b9:8c57:b112:651d])
+        by smtp.gmail.com with ESMTPSA id m24-20020aa7d358000000b00504706aa54esm1966447edr.57.2023.04.14.03.42.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Apr 2023 03:42:33 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Christopher Obbard <chris.obbard@collabora.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20230414093411.113787-1-cristian.ciocaltea@collabora.com>
- <20230414093411.113787-4-cristian.ciocaltea@collabora.com>
- <0cbafc31-9b46-54df-f569-810a8781743c@linaro.org>
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-In-Reply-To: <0cbafc31-9b46-54df-f569-810a8781743c@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sam Ravnborg <sam@ravnborg.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Xin Ji <xji@analogixsemi.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: display: simplify compatibles syntax
+Date:   Fri, 14 Apr 2023 12:42:30 +0200
+Message-Id: <20230414104230.23165-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/14/23 13:27, Krzysztof Kozlowski wrote:
-> On 14/04/2023 11:34, Cristian Ciocaltea wrote:
->> The RK8602 and RK8603 voltage regulators on the Rock 5B board provide
->> the power lines vdd_cpu_big0 and vdd_cpu_big1, respectively.
->>
->> Add the necessary device tree nodes and bind them to the corresponding
->> CPU big core nodes.
->>
->> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
->> ---
->>  .../boot/dts/rockchip/rk3588-rock-5b.dts      | 56 +++++++++++++++++++
->>  1 file changed, 56 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
->> index 8cc97d146a73..3e4aee8f70c1 100644
->> --- a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
->> +++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
->> @@ -53,6 +53,62 @@ vcc5v0_sys: vcc5v0-sys-regulator {
->>  	};
->>  };
->>  
->> +&cpu_b0 {
->> +	cpu-supply = <&vdd_cpu_big0_s0>;
->> +};
->> +
->> +&cpu_b1 {
->> +	cpu-supply = <&vdd_cpu_big0_s0>;
->> +};
->> +
->> +&cpu_b2 {
->> +	cpu-supply = <&vdd_cpu_big1_s0>;
->> +};
->> +
->> +&cpu_b3 {
->> +	cpu-supply = <&vdd_cpu_big1_s0>;
->> +};
->> +
->> +&i2c0 {
->> +	pinctrl-names = "default";
->> +	pinctrl-0 = <&i2c0m2_xfer>;
->> +	status = "okay";
->> +
->> +	vdd_cpu_big0_s0: regulator@42 {
->> +		compatible = "rockchip,rk8602";
-> 
-> Looking at your next node, this is surprising... Double check if you
-> have correct compatibles everywhere.
-> 
->> +		reg = <0x42>;
->> +		fcs,suspend-voltage-selector = <1>;
-> 
-> Does not look like you tested the DTS against bindings. Please run `make
-> dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
-> for instructions).
-> 
->> +		regulator-name = "vdd_cpu_big0_s0";
->> +		regulator-always-on;
->> +		regulator-boot-on;
->> +		regulator-min-microvolt = <550000>;
->> +		regulator-max-microvolt = <1050000>;
->> +		regulator-ramp-delay = <2300>;
->> +		vin-supply = <&vcc5v0_sys>;
->> +
->> +		regulator-state-mem {
->> +			regulator-off-in-suspend;
->> +		};
->> +	};
->> +
->> +	vdd_cpu_big1_s0: regulator@43 {
->> +		compatible = "rockchip,rk8603", "rockchip,rk8602";
->> +		reg = <0x43>;
->> +		fcs,suspend-voltage-selector = <1>;
-> 
-> Does not look like you tested the DTS against bindings. Please run `make
-> dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
-> for instructions).
+Lists (items) with one item should be just const or enum because it is
+shorter and simpler.
 
-I mentioned in the cover letter that the support for the RK860X 
-regulators has been recently merged via [1]. The patches in this 
-series have been verified on next-20230413.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-[1] https://lore.kernel.org/lkml/20230406194158.963352-1-cristian.ciocaltea@collabora.com/
+---
 
-Thanks,
-Cristian
+Rebased on next-20230406. I hope it applies cleanly...
+---
+ .../display/bridge/analogix,anx7625.yaml      |  3 +--
+ .../display/panel/sharp,lq101r1sx01.yaml      |  4 ++--
+ .../bindings/display/solomon,ssd1307fb.yaml   | 24 +++++++++----------
+ 3 files changed, 14 insertions(+), 17 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+index 7960745a8dbe..a1ed1004651b 100644
+--- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
++++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+@@ -16,8 +16,7 @@ description: |
+ 
+ properties:
+   compatible:
+-    items:
+-      - const: analogix,anx7625
++    const: analogix,anx7625
+ 
+   reg:
+     maxItems: 1
+diff --git a/Documentation/devicetree/bindings/display/panel/sharp,lq101r1sx01.yaml b/Documentation/devicetree/bindings/display/panel/sharp,lq101r1sx01.yaml
+index 9ec0e8aae4c6..57b44a0e763d 100644
+--- a/Documentation/devicetree/bindings/display/panel/sharp,lq101r1sx01.yaml
++++ b/Documentation/devicetree/bindings/display/panel/sharp,lq101r1sx01.yaml
+@@ -34,8 +34,8 @@ properties:
+       - items:
+           - const: sharp,lq101r1sx03
+           - const: sharp,lq101r1sx01
+-      - items:
+-          - const: sharp,lq101r1sx01
++      - enum:
++          - sharp,lq101r1sx01
+ 
+   reg: true
+   power-supply: true
+diff --git a/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml b/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
+index 8bd58913804a..94bb5ef567c6 100644
+--- a/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
++++ b/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
+@@ -14,20 +14,18 @@ properties:
+   compatible:
+     oneOf:
+       # Deprecated compatible strings
+-      - items:
+-          - enum:
+-              - solomon,ssd1305fb-i2c
+-              - solomon,ssd1306fb-i2c
+-              - solomon,ssd1307fb-i2c
+-              - solomon,ssd1309fb-i2c
++      - enum:
++          - solomon,ssd1305fb-i2c
++          - solomon,ssd1306fb-i2c
++          - solomon,ssd1307fb-i2c
++          - solomon,ssd1309fb-i2c
+         deprecated: true
+-      - items:
+-          - enum:
+-              - sinowealth,sh1106
+-              - solomon,ssd1305
+-              - solomon,ssd1306
+-              - solomon,ssd1307
+-              - solomon,ssd1309
++      - enum:
++          - sinowealth,sh1106
++          - solomon,ssd1305
++          - solomon,ssd1306
++          - solomon,ssd1307
++          - solomon,ssd1309
+ 
+   reg:
+     maxItems: 1
+-- 
+2.34.1
+
