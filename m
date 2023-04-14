@@ -2,79 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 426FC6E2112
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 12:38:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF0A96E2137
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 12:46:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbjDNKiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 06:38:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43922 "EHLO
+        id S230204AbjDNKqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 06:46:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbjDNKiA (ORCPT
+        with ESMTP id S229479AbjDNKq3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 06:38:00 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B254A9EDD
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 03:37:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681468647; x=1713004647;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CFmbTNZab9I7ir2+O5evjGn+3mmBidb0nlh8n5NmjpY=;
-  b=lZXwMaKFl3ROHVlfAfbpDdrbLtCg/JNpS4S4p1sYAT2N1zRoj7qjw4na
-   GjFuPltVvpZLmFqpoRK/a/chUo8sI3NCd8qnS+Q1tRpWzsWkJOUHp/wO5
-   HhjLKDxJ+/ety0mxu0ZUp8XyeTOVxYg5c1I0rvP/He7KVfNpBAfR9L8Oq
-   3m9wMU8sKx3OoKsTLUVB2Mw/w2Wf7erRsyw/iDJkGXmuW7JNmsfZuP33v
-   xPF1BQuDMOA8yejxDHPzwfHGw9T43iIP9D/Z+yy59+jxOJE1Zu0SD8jNf
-   fb29gb5VJo/ys2senc50420F7qVTIpJdSWO9FnJZ/8wnjwW4njWDvsSyM
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="344433719"
-X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
-   d="scan'208";a="344433719"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 03:37:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="864170782"
-X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
-   d="scan'208";a="864170782"
-Received: from liuzhao-optiplex-7080.sh.intel.com (HELO localhost) ([10.239.160.28])
-  by orsmga005.jf.intel.com with ESMTP; 14 Apr 2023 03:37:07 -0700
-Date:   Fri, 14 Apr 2023 18:45:57 +0800
-From:   Zhao Liu <zhao1.liu@linux.intel.com>
-To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Thomas =?iso-8859-1?Q?Hellstr=F6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Nirmoy Das <nirmoy.das@intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Zhenyu Wang <zhenyu.z.wang@intel.com>,
-        Zhao Liu <zhao1.liu@intel.com>
-Subject: Re: [PATCH v2 9/9] drm/i915: Use kmap_local_page() in
- gem/i915_gem_execbuffer.c
-Message-ID: <ZDku5SJhl2Ve51UC@liuzhao-OptiPlex-7080>
-References: <20230329073220.3982460-1-zhao1.liu@linux.intel.com>
- <64265ef8725fe_375f7e294a@iweiny-mobl.notmuch>
- <fdc8a470-1e6b-815d-e367-a9df1b0b14dd@linux.intel.com>
- <2177327.1BCLMh4Saa@suse>
- <1b341218-f0e2-a613-2ac6-107064a813ca@linux.intel.com>
+        Fri, 14 Apr 2023 06:46:29 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC2895;
+        Fri, 14 Apr 2023 03:46:27 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id DD51E1FD95;
+        Fri, 14 Apr 2023 10:46:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1681469185; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NaDKrVzHktRGkhvNC8mOy7GLmS2NFDSAPBln7UTiz9Q=;
+        b=Mi9ou96w9xvxbp6Exkd6EGylmL5lp7Mu33FedVadh7SrkmmJPYwKGBSwr9zJxRKgFsdGb7
+        gHW0oGlD26djN5njEDeceOD4h9KXHxQfSrM6AgaOkZx0T9uJ+nQ3T2QvyTdd0PB26aCbvP
+        X2ib6TA2fZs8xpSyoIDbx+IyyN2tXFw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1681469185;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NaDKrVzHktRGkhvNC8mOy7GLmS2NFDSAPBln7UTiz9Q=;
+        b=9vWudS8M5XsxTuY0B046MKslysKF1mrmztRo4UGnWT4XH9akLQKLv9snoIat72AImT6d6c
+        CRVVTnSwo1nRYXAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CD957139FC;
+        Fri, 14 Apr 2023 10:46:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id zkolMgEvOWSNMgAAMHmgww
+        (envelope-from <jack@suse.cz>); Fri, 14 Apr 2023 10:46:25 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 4AD65A0732; Fri, 14 Apr 2023 12:46:25 +0200 (CEST)
+Date:   Fri, 14 Apr 2023 12:46:25 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Luca Vizzarro <Luca.Vizzarro@arm.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Kevin Brodsky <Kevin.Brodsky@arm.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        David Laight <David.Laight@ACULAB.com>,
+        Mark Rutland <Mark.Rutland@arm.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        linux-fsdevel@vger.kernel.org, Jan Kara <jack@suse.cz>,
+        Amir Goldstein <amir73il@gmail.com>
+Subject: Re: [PATCH 5/5] dnotify: Pass argument of fcntl_dirnotify as int
+Message-ID: <20230414104625.gyzuswldwil4jlfw@quack3>
+References: <20230414100212.766118-1-Luca.Vizzarro@arm.com>
+ <20230414100212.766118-6-Luca.Vizzarro@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1b341218-f0e2-a613-2ac6-107064a813ca@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20230414100212.766118-6-Luca.Vizzarro@arm.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,70 +82,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tvrtko,
-
-On Wed, Apr 12, 2023 at 04:45:13PM +0100, Tvrtko Ursulin wrote:
-
-[snip]
-
-> > 
-> > [snip]
-> > > However I am unsure if disabling pagefaulting is needed or not. Thomas,
-> > > Matt, being the last to touch this area, perhaps you could have a look?
-> > > Because I notice we have a fallback iomap path which still uses
-> > > io_mapping_map_atomic_wc. So if kmap_atomic to kmap_local conversion is
-> > > safe, does the iomap side also needs converting to
-> > > io_mapping_map_local_wc? Or they have separate requirements?
-> > 
-> > AFAIK, the requirements for io_mapping_map_local_wc() are the same as for
-> > kmap_local_page(): the kernel virtual address is _only_ valid in the caller
-> > context, and map/unmap nesting must be done in stack-based ordering (LIFO).
-> > 
-> > I think a follow up patch could safely switch to io_mapping_map_local_wc() /
-> > io_mapping_unmap_local_wc since the address is local to context.
-> > 
-> > However, not being an expert, reading your note now I suspect that I'm missing
-> > something. Can I ask why you think that page-faults disabling might be
-> > necessary?
+On Fri 14-04-23 11:02:12, Luca Vizzarro wrote:
+> The interface for fcntl expects the argument passed for the command
+> F_DIRNOTIFY to be of type int. The current code wrongly treats it as
+> a long. In order to avoid access to undefined bits, we should explicitly
+> cast the argument to int.
 > 
-> I am not saying it is, was just unsure and wanted some people who worked on this code most recently to take a look and confirm.
-> 
-> I guess it will work since the copying is done like this anyway:
-> 
-> 		/*
-> 		 * This is the fast path and we cannot handle a pagefault
-> 		 * whilst holding the struct mutex lest the user pass in the
-> 		 * relocations contained within a mmaped bo. For in such a case
-> 		 * we, the page fault handler would call i915_gem_fault() and
-> 		 * we would try to acquire the struct mutex again. Obviously
-> 		 * this is bad and so lockdep complains vehemently.
-> 		 */
-> 		pagefault_disable();
-> 		copied = __copy_from_user_inatomic(r, urelocs, count * sizeof(r[0]));
-> 		pagefault_enable();
-> 		if (unlikely(copied)) {
-> 			remain = -EFAULT;
-> 			goto out;
-> 		}
-> 
-> Comment is a bit outdated since we don't use that global "struct mutex" any longer, but in any case, if there is a page fault on the mapping where we need to recurse into i915 again to satisfy if, we seem to have code already to handle it. So kmap_local conversion I *think* can't regress anything.
+> Cc: Kevin Brodsky <Kevin.Brodsky@arm.com>
+> Cc: Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+> Cc: "Theodore Ts'o" <tytso@mit.edu>
+> Cc: David Laight <David.Laight@ACULAB.com>
+> Cc: Mark Rutland <Mark.Rutland@arm.com>
+> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> Cc: Christian Brauner <brauner@kernel.org>
+> Cc: Jeff Layton <jlayton@kernel.org>
+> Cc: Chuck Lever <chuck.lever@oracle.com>
+> Cc: linux-fsdevel@vger.kernel.org
+> Cc: Jan Kara <jack@suse.cz>
+> Cc: Amir Goldstein <amir73il@gmail.com>
+> Signed-off-by: Luca Vizzarro <Luca.Vizzarro@arm.com>
 
-Thanks for your explanation!
+Looks good to me. Do you plan to merge this series together (perhaps
+Christian could?) or should I pick up the dnotify patch? In case someone
+else will merge the patch feel free to add:
 
+Acked-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
+> ---
+>  fs/notify/dnotify/dnotify.c | 4 ++--
+>  include/linux/dnotify.h     | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> Patch to convert the io_mapping_map_atomic_wc can indeed come later.
-
-Okay, I will also look at this.
-
+> diff --git a/fs/notify/dnotify/dnotify.c b/fs/notify/dnotify/dnotify.c
+> index 190aa717fa32..ebdcc25df0f7 100644
+> --- a/fs/notify/dnotify/dnotify.c
+> +++ b/fs/notify/dnotify/dnotify.c
+> @@ -199,7 +199,7 @@ void dnotify_flush(struct file *filp, fl_owner_t id)
+>  }
 > 
-> In terms of logistics - if we landed this series to out branch it would be queued only for 6.5. Would that work for you?
-
-Yeah, it's ok for me. But could I ask, did I miss the 6.4 merge time?
-
-Thanks,
-Zhao
-
+>  /* this conversion is done only at watch creation */
+> -static __u32 convert_arg(unsigned long arg)
+> +static __u32 convert_arg(unsigned int arg)
+>  {
+>         __u32 new_mask = FS_EVENT_ON_CHILD;
 > 
-> Regards,
+> @@ -258,7 +258,7 @@ static int attach_dn(struct dnotify_struct *dn, struct dnotify_mark *dn_mark,
+>   * up here.  Allocate both a mark for fsnotify to add and a dnotify_struct to be
+>   * attached to the fsnotify_mark.
+>   */
+> -int fcntl_dirnotify(int fd, struct file *filp, unsigned long arg)
+> +int fcntl_dirnotify(int fd, struct file *filp, unsigned int arg)
+>  {
+>         struct dnotify_mark *new_dn_mark, *dn_mark;
+>         struct fsnotify_mark *new_fsn_mark, *fsn_mark;
+> diff --git a/include/linux/dnotify.h b/include/linux/dnotify.h
+> index b1d26f9f1c9f..9f183a679277 100644
+> --- a/include/linux/dnotify.h
+> +++ b/include/linux/dnotify.h
+> @@ -30,7 +30,7 @@ struct dnotify_struct {
+>                             FS_MOVED_FROM | FS_MOVED_TO)
 > 
-> Tvrtko
+>  extern void dnotify_flush(struct file *, fl_owner_t);
+> -extern int fcntl_dirnotify(int, struct file *, unsigned long);
+> +extern int fcntl_dirnotify(int, struct file *, unsigned int);
+> 
+>  #else
+> 
+> @@ -38,7 +38,7 @@ static inline void dnotify_flush(struct file *filp, fl_owner_t id)
+>  {
+>  }
+> 
+> -static inline int fcntl_dirnotify(int fd, struct file *filp, unsigned long arg)
+> +static inline int fcntl_dirnotify(int fd, struct file *filp, unsigned int arg)
+>  {
+>         return -EINVAL;
+>  }
+> --
+> 2.34.1
+> 
+> IMPORTANT NOTICE: The contents of this email and any attachments are confidential and may also be privileged. If you are not the intended recipient, please notify the sender immediately and do not disclose the contents to any other person, use it for any purpose, or store or copy the information in any medium. Thank you.
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
