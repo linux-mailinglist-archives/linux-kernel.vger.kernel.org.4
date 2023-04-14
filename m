@@ -2,93 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70AB16E292C
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 19:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73C086E292D
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 19:23:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbjDNRUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 13:20:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44690 "EHLO
+        id S229773AbjDNRXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 13:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjDNRUv (ORCPT
+        with ESMTP id S229469AbjDNRXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 13:20:51 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E023AA0;
-        Fri, 14 Apr 2023 10:20:49 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33EHKggP108172;
-        Fri, 14 Apr 2023 12:20:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1681492842;
-        bh=JF/2JgozJ0OBWGZ5LniP6mjhSeBRS0/u484NSdXRmu8=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=FTajqF5DoEjE0NwKfj+MeJXONySICmmFOwYaCw+rEcZDt8l+lP/7sOZRSKdhl1Irf
-         hlbvPq8Lz2zaPpsWWWzLKBA9td33KebTV3F4SgFnXKvJToHRBmXOllxw3Zcl3uMY6K
-         XhxC7cInNoecEHi+413jPCWfFGuN0erx41vN81FM=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33EHKgNu009448
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 14 Apr 2023 12:20:42 -0500
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 14
- Apr 2023 12:20:42 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 14 Apr 2023 12:20:42 -0500
-Received: from [10.250.32.8] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33EHKfhh004216;
-        Fri, 14 Apr 2023 12:20:42 -0500
-Message-ID: <d9c98ab1-dc78-8f68-6a2d-28d9185d3294@ti.com>
-Date:   Fri, 14 Apr 2023 12:20:41 -0500
+        Fri, 14 Apr 2023 13:23:20 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC145B9F
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 10:23:19 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id hg12so4493868pjb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 10:23:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1681492999; x=1684084999;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VT+0HvHjEsU+vTXyoXG01Ki1olkigaqjaaxRq0h7zD0=;
+        b=WrL85XgE0J/LewoQgL2BMdswzVLg7QxUJTeJeS9VQZ5mwgMS0mXn5j79U8flu5TuJM
+         z4/yZGflE+2kIgss9MtM/oNaynA0Nj6+pnjAPxwGQYlkZStGQBpz6+69PMwvwf/tUmDo
+         hPL2KatXFoFd7z490zNL1E2J3rvfdUrnhDaYzqu7rk/CmRAhz57TpyIpmr+DrNiEkrkj
+         GMLR7H+tVsAiitRBa8rHFIKMzRFzPbkmWP7Lb45gwH0ALEwN8PFjwPnOg3yIDHH6ZKDD
+         6i2oxR5RGyobbFO316EpC1EpP2KfQMGsluPOpOdYDgbE4zJq2jhCILSbhujNOBF1Wn2D
+         woCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681492999; x=1684084999;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VT+0HvHjEsU+vTXyoXG01Ki1olkigaqjaaxRq0h7zD0=;
+        b=l76QWsgal+fK9Hu7/CuCACNHNCSgaFz9e+CAIrXWxP9m5E5rlrF4gknYRtVVTpweHV
+         /TRemZYDLTUjEKQ5G1fFkNGGpvn7/oFXpI96ZBpAaOzaOMZ/fobQJGqoYeI27qBzihlK
+         cfkUt6BH267Hyto3FBYVCC2bO/ydRaEZogT2G+lBiHrtgB+D5mpjrSQytWQKOuQ/muig
+         WZh0qsNl6AklzZ33d3Vrbfog61+AH8IDcCFwg8KLRCmZ8LWaradBRV6pQZPn3DeItirK
+         9mqIRGMPSX976Yye4R2ccivT9O4t6Z/hDMZm3ZhmWAexVQZdo9dGmfWSuVU5UHkFcwWb
+         Xj5w==
+X-Gm-Message-State: AAQBX9dh5AQfQV64EyChYL6t7ih0oS8yFUDMT2B5UVWPmrB4KLK3fRnN
+        fPeMyvo0mPQElhiKF2fmLPOpzjgXjzooA5Jevdb1vQ==
+X-Google-Smtp-Source: AKy350YoK4w2okqy34rm4+OZcZLR+GQ/jupsYmqKLeW08OcJZwUp+2x19/ioiaHyOTYBH/N7bCnvVw==
+X-Received: by 2002:a17:902:c951:b0:1a6:8ee3:4e2e with SMTP id i17-20020a170902c95100b001a68ee34e2emr4809363pla.33.1681492998912;
+        Fri, 14 Apr 2023 10:23:18 -0700 (PDT)
+Received: from localhost.localdomain ([139.177.225.243])
+        by smtp.gmail.com with ESMTPSA id q12-20020a631f4c000000b0051b8172fa68sm370315pgm.38.2023.04.14.10.23.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Apr 2023 10:23:18 -0700 (PDT)
+From:   Jia Zhu <zhujia.zj@bytedance.com>
+To:     dhowells@redhat.com, linux-cachefs@redhat.com
+Cc:     linux-erofs@lists.ozlabs.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jefflexu@linux.alibaba.com,
+        hsiangkao@linux.alibaba.com, Jia Zhu <zhujia.zj@bytedance.com>
+Subject: [PATCH V6 0/5]  Introduce daemon failover mechanism to recover from crashing
+Date:   Sat, 15 Apr 2023 01:22:34 +0800
+Message-Id: <20230414172239.33743-1-zhujia.zj@bytedance.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 1/2] serial: 8250_exar: Use PCI_DEVICE_DATA macro directly
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230413214421.6251-1-afd@ti.com>
- <ZDmIXoARLYXb8k9z@smile.fi.intel.com>
-From:   Andrew Davis <afd@ti.com>
-In-Reply-To: <ZDmIXoARLYXb8k9z@smile.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/14/23 12:07 PM, Andy Shevchenko wrote:
-> On Thu, Apr 13, 2023 at 04:44:20PM -0500, Andrew Davis wrote:
->> The EXAR_DEVICE macro was converted to use PCI_DEVICE_DATA, having
->> this macro at doesn't add much, remove it.
-> 
-> I'm not against this, but I have to point out that this patch brings
-> inconsistency into the table. Either convert all, or none, I think.
-> 
+Changes since v5:
+In cachefiles_daemon_poll(), replace xa_for_each_marked with xas_for_each_marked.
 
-I did notice that, and was not sure how I feel about it either. The
-issue is the others in the table have SUBDEVICE_IDs but we have
-no simple macro for that.
+[Background]
+============
+In ondemand read mode, if user daemon closes anonymous fd(e.g. daemon
+crashes), subsequent read and inflight requests based on these fd will
+return -EIO.
+Even if above mentioned case is tolerable for some individual users, but
+when it happenens in real cloud service production environment, such IO
+errors will be passed to cloud service users and impact its working jobs.
+It's terrible for cloud service stability.
 
-Maybe what we need is a PCI_DEVICE_SUB_DATA() macro in pci.h, basically
-it would be to PCI_DEVICE_SUB() what PCI_DEVICE_DATA() is to PCI_DEVICE().
+[Design]
+========
+The main idea of daemon failover is reopen the inflight req related object,
+thus the newly started daemon could process the req as usual. 
+To implement that, we need to support:
+	1. Store inflight requests during daemon crash.
+	2. Hold the handle of /dev/cachefiles(by container snapshotter/systemd).
+BTW, if user chooses not to keep /dev/cachefiles fd, failover is not enabled.
+Inflight requests return error and passed it to container.(same behavior as now).
 
-Then I could re-consistify the table later with that. Thoughts?
+[Flow Path]
+===========
+This patchset introduce three states for ondemand object:
+CLOSE: Object which just be allocated or closed by user daemon.
+OPEN: Object which related OPEN request has been processed correctly.
+REOPENING: Object which has been closed, and is drived to open by a read
+request.
 
-Andrew
+1. Daemon use UDS send/receive fd to keep and pass the fd reference of
+   "/dev/cachefiles".
+2. User daemon crashes -> restart and recover dev fd's reference.
+3. User daemon write "restore" to device.
+   2.1 Reset the object's state from CLOSE to REOPENING.
+   2.2 Init a work which reinit the object and add it to wq. (daemon can
+       get rid of kernel space and handle that open request).
+4. The user of upper filesystem won't notice that the daemon ever crashed
+   since the inflight IO is restored and handled correctly.
 
-> That's why the patch that converts EXAR_DEVICE() to use PCI_DEVICE_DATA()
-> had a little intrusion.
-> 
-> 
+[Test]
+======
+There is a testcase for above mentioned scenario.
+A user process read the file by fscache ondemand reading.
+At the same time, we kill the daemon constantly.
+The expected result is that the file read by user is consistent with
+original, and the user doesn't notice that daemon has ever been killed.
+
+https://github.com/userzj/demand-read-cachefilesd/commits/failover-test
+
+[GitWeb]
+========
+https://github.com/userzj/linux/tree/fscache-failover-v6
+
+RFC: https://lore.kernel.org/all/20220818135204.49878-1-zhujia.zj@bytedance.com/
+V1: https://lore.kernel.org/all/20221011131552.23833-1-zhujia.zj@bytedance.com/
+V2: https://lore.kernel.org/all/20221014030745.25748-1-zhujia.zj@bytedance.com/
+V3: https://lore.kernel.org/all/20221014080559.42108-1-zhujia.zj@bytedance.com/
+V4: https://lore.kernel.org/all/20230111052515.53941-1-zhujia.zj@bytedance.com/
+V5: https://lore.kernel.org/all/20230329140155.53272-1-zhujia.zj@bytedance.com/
+
+Jia Zhu (5):
+  cachefiles: introduce object ondemand state
+  cachefiles: extract ondemand info field from cachefiles_object
+  cachefiles: resend an open request if the read request's object is
+    closed
+  cachefiles: narrow the scope of triggering EPOLLIN events in ondemand
+    mode
+  cachefiles: add restore command to recover inflight ondemand read
+    requests
+
+ fs/cachefiles/daemon.c    |  15 +++-
+ fs/cachefiles/interface.c |   7 +-
+ fs/cachefiles/internal.h  |  59 +++++++++++++-
+ fs/cachefiles/ondemand.c  | 166 ++++++++++++++++++++++++++++----------
+ 4 files changed, 201 insertions(+), 46 deletions(-)
+
+-- 
+2.20.1
+
