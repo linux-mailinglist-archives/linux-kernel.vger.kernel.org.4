@@ -2,105 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E266E1E66
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1BB76E1E6D
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 10:34:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbjDNIeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 04:34:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46198 "EHLO
+        id S229907AbjDNIes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 04:34:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbjDNIeL (ORCPT
+        with ESMTP id S229836AbjDNIep (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 04:34:11 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22AEF6E9F
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 01:34:08 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id c9so4907787ejz.1
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 01:34:08 -0700 (PDT)
+        Fri, 14 Apr 2023 04:34:45 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2694ED5;
+        Fri, 14 Apr 2023 01:34:38 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id b2-20020a17090a6e0200b002470b249e59so6937372pjk.4;
+        Fri, 14 Apr 2023 01:34:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681461246; x=1684053246;
+        d=gmail.com; s=20221208; t=1681461278; x=1684053278;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=YETSwyP9KyJmIykjMyk1TM49CieBNMVHrTzyPxKcTSk=;
-        b=FkQzqgIFOAMsY5C49r1vVB/ZlzTMvC6eoeJBVcpcCRatuAaj6EIDAzi3hygq5+Ij1g
-         JBGhZBFMX7pINFHlQiMdv7hC22MjElW2vDWKKVX/MSzTmcHGS5Gow/BGmXAiYyXVt3Rc
-         TwHLdDfG5VUJBs7kKpL0yZtdBIOgMc27tvQabifkeXgBXMFPRAaCDM7iXEOBED/IWt/y
-         NmIFWcjRsMtBhqMZwvLbe3ORStBZA417ZS8RGIc3ZE0/2GEdnH753mli+ov6NbQ1UAV0
-         2miw7dNFMmbmugoxca3FDGb1jnUPzAQcjAd4BRyShkqiZf8yTad3RCKAOBWa8ejhn2ha
-         LbVA==
+        bh=SXMwXqcrpUiU9dk+EsfRSt5kNG0i+4dtdeK+iRChPWc=;
+        b=SvKsmpW4bm6DL+E4UfMWhLf77qqTurbgjNAeMlCkEKhmHwoX1lcM2KGJweIhJsSWUM
+         +aLFrme183Er6PtYgySl/1KNdYhdlQeAwi7pjO13QI/8MF2yEc1CkFX8S7gLCgggq6+u
+         zOCrcHv6X8Tv3R/XRdQwqjAt2RzPA7zrVXqIOu12XItrq01jPT6E1zicRXFaXTIVybK3
+         Sp0mGAtUGl1x413GRyolpv0kxnjcy+SkX2gtF0LaMpGCBvMQmBQYGPJNxtEDjzw4a1ye
+         SKC9db/3odJHenRwFK15SV1PO6NkwWPzFVg0+Y/bGd/Dfk9dDL+JSzWS7y8CGSDfsOWR
+         QqbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681461246; x=1684053246;
+        d=1e100.net; s=20221208; t=1681461278; x=1684053278;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YETSwyP9KyJmIykjMyk1TM49CieBNMVHrTzyPxKcTSk=;
-        b=QrajqKo7QDboE4nHDtGyJIwUYAKLhW6D2eLyPyirgeUOV0/BPh5T/HAA3Qb9c/kfmy
-         Q+XQimB2PM5H7b822teW9XNEeo85NyaiVi5K3xq8yJYVwFiUM5yEqjKnhAZWOZs+nWB1
-         1cx6Mhxe1xf0QtCZ4+3XySKUqZx5wKzB4a/Bdpd+KYD/nZs9exKghPH0gC9PPT+SJjEl
-         Ufkj4z9uIvb2uf1wXztYgWEsG3p6+U3XwbyPuKScfAR9XOD/kdfJ5vNNGOXlTDFVORb9
-         dT0i+7AvkcNRpV/IvNMIic0XcfgrE8mhxmLb/0vSGVBQqtALpmDCvlhMe/CqfVE4psN/
-         H3Cw==
-X-Gm-Message-State: AAQBX9fFF4zM/75jMyJviHky1C+PkbzLrk/rgtCACxlCv3XMn6pQpSly
-        UluCkfoO/x6BK2PVz0Pl08+qfQ==
-X-Google-Smtp-Source: AKy350Z7uaDB4GQxOP+F7tcD8R2KCxU2CUl3f5Uqi9jTZYCUHl43i3I1xzx6+MrjdoI2Do1jwFgUmg==
-X-Received: by 2002:a17:907:1b1b:b0:94a:68a9:b399 with SMTP id mp27-20020a1709071b1b00b0094a68a9b399mr6056042ejc.53.1681461246577;
-        Fri, 14 Apr 2023 01:34:06 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:8a60:6b0f:105a:eefb? ([2a02:810d:15c0:828:8a60:6b0f:105a:eefb])
-        by smtp.gmail.com with ESMTPSA id jt6-20020a170906dfc600b0094e6c45b117sm2106215ejc.168.2023.04.14.01.34.05
+        bh=SXMwXqcrpUiU9dk+EsfRSt5kNG0i+4dtdeK+iRChPWc=;
+        b=SiF6DvSwJvQQPRugZoMHxsa6oAZAyOOLel+ENZHkP+c7IupdfK3EQHsUYVQIm/Av2z
+         SPx/OyKO5aimHdOLBkfxZ1BWedwA6u2sKf0UaX36dOZ9twDS4epU7ZnlEcVHvHKWsR0R
+         okafsn8BMZjPgkMuqxQB68APDx1+7rHilAtb+wGeZdFodD7aK3qFg6TBlwmc07eqnQdK
+         b4pMw0qKGDSTc8G2yb/uhBt3F6nJczD2KSVRzY9oM2Jk0QJ/Ll9+fKMvx7bgBKohDYG7
+         ZH9JRCJnTmekGbqnLldi2z85gtii4Y6e2lXo96wQqcikNjNGHZY+K1FHotXY7hKhzUVW
+         xrJg==
+X-Gm-Message-State: AAQBX9e6XXjruiYIZYkr2sKhCKARsJSgM9rBR1YpQ+uHqP7po3B/5tBy
+        ZVytJTQ0RBTimAavGa2VK3I=
+X-Google-Smtp-Source: AKy350ZutiwM2zHwZT3hOp9PJUH4ekEPRJgSWPP3fk5qersMoeH3CbZx7I5ACHxSY3zuxWKS7sBsoQ==
+X-Received: by 2002:a17:90a:43c6:b0:246:b4b4:555f with SMTP id r64-20020a17090a43c600b00246b4b4555fmr4861345pjg.7.1681461278098;
+        Fri, 14 Apr 2023 01:34:38 -0700 (PDT)
+Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id c15-20020a63d50f000000b0051b603bf22csm1287769pgg.69.2023.04.14.01.34.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 01:34:06 -0700 (PDT)
-Message-ID: <8349f5c1-36fe-802b-2a36-acb9c6eb6d8e@linaro.org>
-Date:   Fri, 14 Apr 2023 10:34:04 +0200
+        Fri, 14 Apr 2023 01:34:37 -0700 (PDT)
+Message-ID: <a7217c06-1037-9245-1241-33a7b1398907@gmail.com>
+Date:   Fri, 14 Apr 2023 16:34:34 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 12/27] dt-bindings: display: mediatek: split: Add
- compatible for MediaTek MT6795
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v7 05/12] dt-bindings: mfd: syscon: Add nuvoton,ma35d1-sys
+ compatible
 Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, matthias.bgg@gmail.com
-Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
+To:     Lee Jones <lee@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        jassisinghbrar@gmail.com, chunfeng.yun@mediatek.com,
-        vkoul@kernel.org, kishon@kernel.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, chunkuang.hu@kernel.org,
-        ck.hu@mediatek.com, jitao.shi@mediatek.com,
-        xinlei.lee@mediatek.com, houlong.wei@mediatek.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-pwm@vger.kernel.org,
-        kernel@collabora.com, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20230412112739.160376-1-angelogioacchino.delregno@collabora.com>
- <20230412112739.160376-13-angelogioacchino.delregno@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230412112739.160376-13-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        arnd@arndb.de, schung@nuvoton.com, mjchen@nuvoton.com,
+        Jacky Huang <ychuang3@nuvoton.com>
+References: <20230412053824.106-1-ychuang570808@gmail.com>
+ <20230412053824.106-6-ychuang570808@gmail.com>
+ <d11b6acb-b072-9496-5ad6-0635357394f1@linaro.org>
+ <69b0aa3a-f5d2-8310-81ae-61d379db0d3b@gmail.com>
+ <20230414070326.GA1036697@google.com>
+From:   Jacky Huang <ychuang570808@gmail.com>
+In-Reply-To: <20230414070326.GA1036697@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/04/2023 13:27, AngeloGioacchino Del Regno wrote:
-> Add a compatible string for MediaTek Helio X10 MT6795's SPLIT block: this
-> is the same as MT8173.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  .../devicetree/bindings/display/mediatek/mediatek,split.yaml   | 3 +++
->  1 file changed, 3 insertions(+)
-> 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+On 2023/4/14 下午 03:03, Lee Jones wrote:
+> On Fri, 14 Apr 2023, Jacky Huang wrote:
+>
+>> Dear Krzysztof,
+>>
+>>
+>> On 2023/4/14 上午 12:47, Krzysztof Kozlowski wrote:
+>>> On 12/04/2023 07:38, Jacky Huang wrote:
+>>>> From: Jacky Huang <ychuang3@nuvoton.com>
+>>>>
+>>>> Add Nuvoton ma35d1 system registers compatible.
+>>>>
+>>>> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+>>> What about the tag? Why did you ignore it?
+>>>
+>>> Also, wasn't this applied? Why do you resend (incorrect version)?
+>>>
+>>> Best regards,
+>>> Krzysztof
+>>>
+>> When I was making this patchset, this patch was still not merged.
+>> So I'm not sure if I should remove it.
+>> This is just a resend with no updates. And I will remove this patch
+>> in the next version as it was applied.
+>> If possible, please add the following tags for this patch.
+>>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> I added this.
+>
+>> Reviewed-by: Lee Jones <lee@kernel.org>
+> When did I provide this?
+>
+> --
+> Lee Jones [李琼斯]
+
+Dear Lee,
+
+Thank you for your help. And, I'm sorry, I thought 'applied' meant 
+'reviewed', and this patch
+didn't actually get your review tag. If this offends you, please remove 
+it. Of course, if you are
+willing to provide a review tag, I would greatly appreciate it.
+
 
 Best regards,
-Krzysztof
+Jacky Huang
 
