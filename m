@@ -2,65 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2696C6E2843
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 18:26:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C8AF6E2846
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 18:26:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjDNQ0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 12:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33986 "EHLO
+        id S229954AbjDNQ0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 12:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbjDNQ0K (ORCPT
+        with ESMTP id S229913AbjDNQ0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 12:26:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1738C26A6;
-        Fri, 14 Apr 2023 09:26:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95674648F6;
-        Fri, 14 Apr 2023 16:26:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7B58C433D2;
-        Fri, 14 Apr 2023 16:26:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681489568;
-        bh=9dGs3TW9SOqFu3PmMFt8oVQybRajp0/o5j5Brj6gn0o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j3qAa/tCEuOQUzRwfLB0aGf7iU1bf2YL4bclomJmgllHNHUVZqFxLgxPN0hwSBsr2
-         6cpRt5bVCm5ItQtZV92nvqQpmEqU2syQzwuxx+Cy+ss4E1JBzJncXuTRVgzChvksm7
-         yRqyNUv8VxLZn99sZaTBQ+STa2c+xj2e/1Fvd/d/9l7phb3zYlGxcv5fOtz1cD9al7
-         vESoRZA+A25yjhW9kPcijjWuR7QFfSBAyXa9U4Cl25dUG0mHUVVuQhjN0h8eKCuA9C
-         nOxX1dIzLW7gm9XRPNGRBzB3/M4lhNUGD3nsNDYq5/8zavX9b/DeqWIbZkAbVrn2ox
-         L9DBeg9yxx2Cw==
-Date:   Fri, 14 Apr 2023 09:26:05 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Marco Elver <elver@google.com>, Arnd Bergmann <arnd@arndb.de>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Tom Rix <trix@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        linux-kbuild@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] kasan: remove hwasan-kernel-mem-intrinsic-prefix=1 for
- clang-14
-Message-ID: <20230414162605.GA2161385@dev-arch.thelio-3990X>
-References: <20230414082943.1341757-1-arnd@kernel.org>
+        Fri, 14 Apr 2023 12:26:11 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4100B449F
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 09:26:10 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id j16so3265435wms.0
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 09:26:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1681489569; x=1684081569;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/QVqsv1za6e/zUOVKQjprn3HsPAV78HFDgrrmzoZ9Dc=;
+        b=b27QUfzW9ra/5AcL1P5rBfo4qxN0/GWFGbqsnR360Ol3PO2RPDv9wVeF6JWQkOt4qu
+         hzKA4vsvNdmsbJRJd4NxBYn6mSPwCmoCEu/rUt8KKXvkW4DKqNy+MRbF02MlGFqG4L79
+         /oFQ6vAx+HBAqoVYruIEFJ2wPTvX6M826vqPEzRc0FHrQ7fYlXFkTXoBdRmlhnnsUIVY
+         V+3fHEL9nHdwYqygAVRv5nBOx5Bu4ggGrjJDf2CVP0KmLhhIJL5tlXyoCEaVKJwOBq05
+         wlDjf1ujelRZmmk7sdFkUNG6+Dqk0QPbe+KjSfKWIXDU/8eyn4w/ycpDKQCcjHLK5znT
+         Mawg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681489569; x=1684081569;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/QVqsv1za6e/zUOVKQjprn3HsPAV78HFDgrrmzoZ9Dc=;
+        b=dcXM77t6GaWDcM+1HxeiYc+9WWjCzZLl3LBf3yo5Tj4j5bFe0aAoFziIK6wDJ2qcIv
+         QLHTb8UdfonQl77D3aXCKUe6ZPbL2owaVVgfK3SGpuzh4ZqZSTp59/ymhgxa2Sgy3I5i
+         DM8FPMNRXV6xFRxrx8Nb1Hck6gHgjQat7PY+UqsVxMyItU0HdnVnEtGBe94X9gAKBfzh
+         CPRgWMAXPX69z6c0xjFCusJgafSHkwSQXnVc2GFKvdLKLiibQEDNh0E1wgNQFy4Xkevc
+         kukbmXO2q61zNe/ispSKXcvU+xhGjUS+4S5G3eG18L/e/2kOBfQ5zz1AiWPt5D38z++d
+         hpyw==
+X-Gm-Message-State: AAQBX9e3Bel5LxolSNvrFI5CKbbTBg5IfZXWvcqIU3m1O9E/Mo7cb8mE
+        kEW0xkqkDwEpYUs4i6Z+oqSJAY+Rcr03vNct8RspIA==
+X-Google-Smtp-Source: AKy350YxXdZgZk/cK4PxdX2uBWEPg6+suyNNMrpWNoX5GHykqZnQ/n20jTwpBzW/MGM1rePCQnTSng==
+X-Received: by 2002:a7b:c7c7:0:b0:3f0:7db5:607e with SMTP id z7-20020a7bc7c7000000b003f07db5607emr4714057wmk.37.1681489568683;
+        Fri, 14 Apr 2023 09:26:08 -0700 (PDT)
+Received: from ?IPV6:2a02:8011:e80c:0:d040:969c:6e8e:e95d? ([2a02:8011:e80c:0:d040:969c:6e8e:e95d])
+        by smtp.gmail.com with ESMTPSA id l10-20020a7bc34a000000b003eeb1d6a470sm4628669wmj.13.2023.04.14.09.26.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Apr 2023 09:26:08 -0700 (PDT)
+Message-ID: <c8168a87-7c98-caf9-5bf3-5779120b3121@isovalent.com>
+Date:   Fri, 14 Apr 2023 17:26:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230414082943.1341757-1-arnd@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: LLVM not detected in bpfutil due to LLVM 16 requiring c++17
+Content-Language: en-GB
+To:     Nathan Chancellor <nathan@kernel.org>,
+        No Name <xbjfk.github@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, ndesaulniers@google.com,
+        llvm@lists.linux.dev, bpf@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+References: <CALS7K9V1j6ufrQ=6nGjyHQCWb7-YiqNdctBWk8og1gW_q4C4dA@mail.gmail.com>
+ <20230414154333.GA1931632@dev-arch.thelio-3990X>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <20230414154333.GA1931632@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,61 +78,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 14, 2023 at 10:29:27AM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+Hi Nathan, Reagan, thanks for the report and CC,
+
+2023-04-14 08:43 UTC-0700 ~ Nathan Chancellor <nathan@kernel.org>
+> Hi Reagan,
 > 
-> Unknown -mllvm options don't cause an error to be returned by clang, so
-> the cc-option helper adds the unknown hwasan-kernel-mem-intrinsic-prefix=1
-> flag to CFLAGS with compilers that are new enough for hwasan but too
-
-Hmmm, how did a change like commit 0e1aa5b62160 ("kcsan: Restrict
-supported compilers") work if cc-option does not work with unknown
-'-mllvm' flags (or did it)? That definitely seems like a problem, as I
-see a few different places where '-mllvm' options are used with
-cc-option. I guess I will leave that up to the sanitizer folks to
-comment on that further, one small comment below.
-
-> old for this option. This causes a rather unreadable build failure:
+> On Fri, Apr 14, 2023 at 10:36:35PM +1200, No Name wrote:
+>> This is my first time reporting a bug, so apologies if I get something wrong.
 > 
-> fixdep: error opening file: scripts/mod/.empty.o.d: No such file or directory
-> make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:252: scripts/mod/empty.o] Error 2
-> fixdep: error opening file: scripts/mod/.devicetable-offsets.s.d: No such file or directory
-> make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:114: scripts/mod/devicetable-offsets.s] Error 2
+> Thanks for the report! "See something, say something", even if it is not
+> quite right out of the gate, we can get down to the bottom of it.
 > 
-> Add a version check to only allow this option with clang-15, gcc-13
-> or later versions.
+>> In tools/build/feature/Makefile, line 342, the c++ std is set to
+>> gnu++14, whereas LLVM 16 now requires c++17 to include the headers.
+>> This results in the llvm feature being falsely disabled for bpfutil.
 > 
-> Fixes: 51287dcb00cc ("kasan: emit different calls for instrumentable memintrinsics")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
-> There is probably a better way to do this than to add version checks,
-> but I could not figure it out.
-> ---
->  scripts/Makefile.kasan | 5 +++++
->  1 file changed, 5 insertions(+)
+> I cannot find any reference to bpfutil either in tree or when doing a
+> web search, did you mean bpftool? I am going to assume yes, so I have
+> gone ahead and added Quentin (the maintainer of bpftool in MAINTAINERS)
+> and bpf@vger.kernel.org to the thread.
 > 
-> diff --git a/scripts/Makefile.kasan b/scripts/Makefile.kasan
-> index c186110ffa20..2cea0592e343 100644
-> --- a/scripts/Makefile.kasan
-> +++ b/scripts/Makefile.kasan
-> @@ -69,7 +69,12 @@ CFLAGS_KASAN := -fsanitize=kernel-hwaddress \
->  		$(instrumentation_flags)
->  
->  # Instrument memcpy/memset/memmove calls by using instrumented __hwasan_mem*().
-> +ifeq ($(call clang-min-version, 150000),y)
->  CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
-> +endif
-> +ifeq ($(call gcc-min-version, 130000),y)
-> +CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
-> +endif
+>> Perhaps the --cxxflags, --ldflags and --libs options of llvm-config
+>> should instead?
+> 
+> The tools system is pretty much Greek to me, so I am hoping someone else
+> will have a better idea of what is going on and how to fix it.
+> 
+> For the record, I think I see the issue you are talking about on Fedora,
+> which has clang-16, whereas I do not see the same issue on Arch Linux,
+> which still has clang-15.
+> 
+>   $ clang --version | head -1
+>   clang version 15.0.7
+> 
+>   $ make -C tools/bpf/bpftool -j(nproc) -s
+> 
+>   Auto-detecting system features:
+>   ...                         clang-bpf-co-re: [ on  ]
+>   ...                                    llvm: [ on  ]
+>   ...                                  libcap: [ on  ]
+>   ...                                  libbfd: [ on  ]
+> 
+> compared to
+> 
+>   $ clang --version | head -1
+>   clang version 16.0.0 (Fedora 16.0.0-1.fc39)
+> 
+>   $ make -C tools/bpf/bpftool -j(nproc) -s
+> 
+>   Auto-detecting system features:
+>   ...                         clang-bpf-co-re: [ on  ]
+>   ...                                    llvm: [ OFF ]
+>   ...                                  libcap: [ on  ]
+>   ...                                  libbfd: [ on  ]
+> 
+> This is the output of tools/build/feature/test-llvm.make.output on my
+> machine, which seems to confirm that the headers expect to be compiled
+> with '-std=c++17', but that is just a superficial observation at this
+> point.
+> 
 
-I do not think you need to duplicate this block, I think
++Cc Arnaldo, as I believe perf uses the 'llvm' feature as well.
 
-  ifeq ($(call clang-min-version, 150000)$(call gcc-min-version, 130000),y)
-  CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
-  endif
+I noticed the same on my machine some time ago, but haven't investigated
+yet. The error I get in test-llvm.make.output seems to be exactly the same.
 
-would work, as only one of those conditions can be true at a time.
+I confirm I can fix detection by using '-std=c++17' instead. It looks
+like the version was bumped earlier in commit d0d0f0c12461 ("tools: Bump
+minimum LLVM C++ std to GNU++14").
 
-Cheers,
-Nathan
+Reagan's suggestion to use '$(shell $(LLVM_CONFIG) --cxxflags)' instead
+of specifying the standard manually works as well on my setup, and looks
+cleaner to me. But I'm not sure of the impact this change would have,
+and if it might break other setups.
+
+As far as I could find, perf and bpftool are the only users for this
+feature?
+
+Quentin
+
