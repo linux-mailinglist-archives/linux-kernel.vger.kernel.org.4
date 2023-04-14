@@ -2,218 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85C476E2B76
+	by mail.lfdr.de (Postfix) with ESMTP id D1FB76E2B77
 	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 23:03:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbjDNVDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 17:03:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53512 "EHLO
+        id S230102AbjDNVDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 17:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbjDNVDl (ORCPT
+        with ESMTP id S230036AbjDNVDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 14 Apr 2023 17:03:41 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77949B;
-        Fri, 14 Apr 2023 14:03:38 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33EL01ma019798;
-        Fri, 14 Apr 2023 21:03:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=AwhCx3wuq7L0uIveBgsKwkcFhjqZsrOJUc2OeOS0mos=;
- b=pUDlIIfoeCgUgIxVl1/5VAbI/upfdtew66GlRx1t7mXsQaH2GqK2N4Jv86hu3HZFCTY+
- qgKmVIgTcS5nBy03HR5lQg74eCr9GrrT6VP4ZvrmVeMXrb5XyVMnHEobQB8bI5pCuEYH
- N0gocLeUvwU8dcoa5WldImRW9LHHdosEA/oXXDBx80xMlbn5iz6ZhdM7ouT+IOdJq3Nl
- PlGpExpgzn5Nlu40mDB0Spduv9JxFAoOF2NBbbx42zeLcCIuAZEYJXGg/M75Xr3RkMX4
- f9mu0xQhgIeDsczNKhpCHfrTiNiE1eForndVlBdLEtVRM3kiVTw5FFyTCT+hq8/3DpOc yQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3py4ghsaay-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Apr 2023 21:03:26 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33EL3PlL003829
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Apr 2023 21:03:25 GMT
-Received: from [10.110.73.215] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 14 Apr
- 2023 14:03:24 -0700
-Message-ID: <eb8ea024-1152-418c-a048-f86253867c9e@quicinc.com>
-Date:   Fri, 14 Apr 2023 14:03:23 -0700
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26B53A84
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 14:03:37 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id lh8so6640758plb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 14:03:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681506217; x=1684098217;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WZCFnEyZCPOZULi6aWVfblgCZydsGMA1WowXRWrNQ+U=;
+        b=RRSiY34E+HrRgT5YmvRV5t1XHPy1bu4cS88Q9/FAVqlFCqIlY7aVpZEkZ0Ofpbfk7N
+         VqCsL7qVTkKPknwO3G888fMqjvVnjhxEhpi7N0DajL+9E95wyTEBJGA3bbk13d0WfKKj
+         d73qa4OM7db2ouhoEtuPQ8/cnUzzWqy9O/qKdYb1dL1c8kZxUmJ+E3Q1M1BIb0miUHuj
+         9Frv9hvrQ0elH0VucIBPaJHO4R6ijP0LE5Qzl1CuilfqxE+TASMxjzEuuvChmTlXr+t0
+         ErP1pFyDx3i3Tk3WvbB7n8xZngRq7bOz3Gn7xXPZhpjz4PBHPtSrw3xb10MBdMAiZHqb
+         0uIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681506217; x=1684098217;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WZCFnEyZCPOZULi6aWVfblgCZydsGMA1WowXRWrNQ+U=;
+        b=FCCXz1HRno1U8EyYbFA7s74YP8MAeNCanUNevafwT1PmcvBKC2VO2koUD00zhLXB19
+         Ke2z5HVBscn2G6Jn38RjJCWwmpcQJQWMlO+2NywPEn7HxRrCQqWlgkNlpiJiEvuCoxI7
+         p2qBbIDuxxaeDi3GIUljuSS1JNNM591LwgG1RPvk9VGSrBH4ljKmo3kD2+MM5z7VoUtU
+         mgTN4zfeu8fzmNoqRLhAgaEr0RKxTdsE+Rlmh7D1ajfvUF3aVI157GWIXWY7kjirZqIe
+         p5qnyA2dR4zBcNsNPWLX74zwrxhniq6J0YC2IjaAm51ChWrINiOUIu+vlnnROhOZuegT
+         S/gw==
+X-Gm-Message-State: AAQBX9f3e+1yjYmQsJgGWM8W7S2WF5SWJMHw5AJzEOFlI2EVEA8h1gsV
+        0e0XwiH03pot14/pvh+Ig2wDzA==
+X-Google-Smtp-Source: AKy350ayy60QRYNn9pd0jrgd6OhDHo69tFpjZCVIDDepN3FQgp1zwejBxjTdoggQhYwZYoCVPfKtxw==
+X-Received: by 2002:a17:90b:38ce:b0:247:2300:87d9 with SMTP id nn14-20020a17090b38ce00b00247230087d9mr6680586pjb.34.1681506216756;
+        Fri, 14 Apr 2023 14:03:36 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id w3-20020a1709029a8300b001a66c4afe0asm2098932plp.255.2023.04.14.14.03.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Apr 2023 14:03:36 -0700 (PDT)
+Date:   Fri, 14 Apr 2023 21:03:32 +0000
+From:   Carlos Llamas <cmllamas@google.com>
+To:     Chuang Zhang <zhangchuang3@xiaomi.corp-partner.google.com>
+Cc:     gregkh@linuxfoundation.org, arve@android.com, tkjos@android.com,
+        maco@android.com, joel@joelfernandes.org, brauner@kernel.org,
+        surenb@google.com, linux-kernel@vger.kernel.org,
+        Chuang Zhang <zhangchuang3@xiaomi.com>
+Subject: Re: [PATCH] Binder: Add timestamp and async from pid/tid to
+ transaction record
+Message-ID: <ZDm/pLQefIyTBAqb@google.com>
+References: <20230413104047.388861-1-zhangchuang3@xiaomi.corp-partner.google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v2] drm/msm/dpu: always program dsc active bits
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1681401401-15099-1-git-send-email-quic_khsieh@quicinc.com>
- <tgfbdk6q3uool365jqddibnbgq66clsmsm6tldxpm5toqghxpq@m2ic3oonv2s5>
- <aac210da-dec1-aab8-3f48-c33d9e7687d6@quicinc.com>
- <3oaangxh7gmie3cdd6rmujm7dd3hagsrnwiq3bascdtamvfn3a@bn6ou5hbsgxv>
- <c09725ff-771c-35d1-adc9-4bb1b7c1c334@quicinc.com>
- <CAA8EJppKXSGcOcYEc6UKz9Eh8JizSpdDNe+cdvfmFbuBJ9zPKw@mail.gmail.com>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <CAA8EJppKXSGcOcYEc6UKz9Eh8JizSpdDNe+cdvfmFbuBJ9zPKw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ijCGfHwj2m5L48MTwn8EOaYIoNz5OoPM
-X-Proofpoint-ORIG-GUID: ijCGfHwj2m5L48MTwn8EOaYIoNz5OoPM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-14_13,2023-04-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=861 malwarescore=0 bulkscore=0 phishscore=0 suspectscore=0
- adultscore=0 mlxscore=0 clxscore=1015 lowpriorityscore=0
- priorityscore=1501 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2303200000 definitions=main-2304140185
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230413104047.388861-1-zhangchuang3@xiaomi.corp-partner.google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/14/2023 1:58 PM, Dmitry Baryshkov wrote:
-> On Fri, 14 Apr 2023 at 21:55, Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
->>
->>
->>
->> On 4/14/2023 10:28 AM, Marijn Suijten wrote:
->>> On 2023-04-14 08:41:37, Abhinav Kumar wrote:
->>>>
->>>> On 4/14/2023 12:48 AM, Marijn Suijten wrote:
->>>>> Capitalize DSC in the title, as discussed in v1.
->>>>>
->>>>> On 2023-04-13 08:56:41, Kuogee Hsieh wrote:
->>>>>> In current code, the DSC active bits are written only if cfg->dsc is set.
->>>>>> However, for displays which are hot-pluggable, there can be a use-case
->>>>>> of disconnecting a DSC supported sink and connecting a non-DSC sink.
->>>>>>
->>>>>> For those cases we need to clear DSC active bits during tear down.
->>>>>>
->>>>>> Changes in V2:
->>>>>> 1) correct commit text as suggested
->>>>>> 2) correct Fixes commit id
->>>>>> 3) add FIXME comment
->>>>>>
->>>>>> Fixes: 77f6da90487c ("drm/msm/disp/dpu1: Add DSC support in hw_ctl")
->>>>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->>>>>> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
->>>>>
->>>>> By default git send-email should pick this up in the CC line...  but I
->>>>> had to download this patch from lore once again.
->>>>>
->>>>
->>>> Yes, I think what happened here is, he didnt git am the prev rev and
->>>> make changes on top of that so git send-email didnt pick up. We should
->>>> fix that process.
->>>
->>> The mail was sent so it must have gone through git send-email, unless a
->>> different mail client was used to send the .patch file.  I think you are
->>> confusing this with git am (which doesn't need to be used if editing a
->>> commit on a local branch) and subsequently git format-patch, which takes
->>> a commit from a git repository and turns it into a .patch file: neither
->>> of these "converts" r-b's (and other tags) to cc, that's happening in
->>> git send-email (see `--suppress-cc` documentation in `man
->>> git-send-email`).
->>>
->>
->> Yes, ofcourse git send-email was used to send the patch, not any other
->> mail client.
->>
->> Yes i am also aware that send-email converts rb to CC.
->>
->> But if you keep working on the local branch, then you would have to
->> manually add the r-bs. If you use am of the prev version and develop on
->> that, it will automatically add the r-bs.
+On Thu, Apr 13, 2023 at 06:40:47PM +0800, Chuang Zhang wrote:
+> From: Chuang Zhang <zhangchuang3@xiaomi.com>
 > 
-> It looks like there is some misunderstanding here. I think Marijn
-> doesn't question his R-B (which was present), but tries to point out
-> that Kuogee might want to adjust his git-send-email invocation. By
-> default (and that's a good practice, which we should follow),
-> git-send-email will CC people mentioned in such tags. Marijn didn't
-> get this email. So, it seems, for some reason this Cc: _mail_ header
-> was suppressed. Probably git-send-email invocation should be changed
-> to prevent suppression of adding mentioned people to CC lists.
+> This patch adds a timestamp field to the binder_transaction
+> structure to track the time consumed during transmission
+> when reading binder_transaction records.
+> Additionally, it records the from pid and tid of asynchronous
+> binder. This information is printed when reading binderfs
+> related nodes to assist with debugging.
+
+Can you clarify how are you using this information? It seems the
+timestamp here is only applicable for in-flight transactions correct?
+Also, why not use the current trace points to generate this information?
+The standard to measure transaction latency seems to be Perfetto.
+
+> 
+> Signed-off-by: Chuang Zhang <zhangchuang3@xiaomi.com>
+> ---
+>  drivers/android/binder.c          | 24 ++++++++++++++++++------
+>  drivers/android/binder_internal.h |  3 +++
+>  2 files changed, 21 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+> index fb56bfc45096..e79f548bcbac 100644
+> --- a/drivers/android/binder.c
+> +++ b/drivers/android/binder.c
+> @@ -66,6 +66,7 @@
+>  #include <linux/syscalls.h>
+>  #include <linux/task_work.h>
+>  #include <linux/sizes.h>
+> +#include <linux/ktime.h>
+>  
+>  #include <uapi/linux/android/binder.h>
+>  
+> @@ -3145,6 +3146,7 @@ static void binder_transaction(struct binder_proc *proc,
+>  	binder_stats_created(BINDER_STAT_TRANSACTION_COMPLETE);
+>  
+>  	t->debug_id = t_debug_id;
+> +	t->start_time = ktime_get();
+
+The start_time will be more accurate if taken earlier. Several spinlocks
+will delay the timestamp here. You can cache this value in a local
+variable upon entry, actually similar to the t_debug_id.
+
+>  
+>  	if (reply)
+>  		binder_debug(BINDER_DEBUG_TRANSACTION,
+> @@ -3165,10 +3167,15 @@ static void binder_transaction(struct binder_proc *proc,
+>  			     (u64)tr->data_size, (u64)tr->offsets_size,
+>  			     (u64)extra_buffers_size);
+>  
+> -	if (!reply && !(tr->flags & TF_ONE_WAY))
+> +	if (!reply && !(tr->flags & TF_ONE_WAY)) {
+>  		t->from = thread;
+> -	else
+> +		t->async_from_pid = 0;
+> +		t->async_from_tid = 0;
+
+The t->from is not populated for oneway transactions as it is not safe
+to access. However, I don't see a reason for not populating the from_pid
+and from_tid in synchronous here. Why make this async only?
+
+> +	} else  {
+>  		t->from = NULL;
+> +		t->async_from_pid = thread->proc->pid;
+
+nit: just proc->pid is shorter and equivalent.
+
+> +		t->async_from_tid = thread->pid;
+> +	}
+>  	t->sender_euid = task_euid(proc->tsk);
+>  	t->to_proc = target_proc;
+>  	t->to_thread = target_thread;
+> @@ -4963,6 +4970,8 @@ static int binder_thread_release(struct binder_proc *proc,
+>  		} else if (t->from == thread) {
+>  			t->from = NULL;
+>  			t = t->from_parent;
+> +			t->async_from_pid = 0;
+> +			t->async_from_tid = 0;
+>  		} else
+>  			BUG();
+>  		spin_unlock(&last_t->lock);
+> @@ -5930,17 +5939,20 @@ static void print_binder_transaction_ilocked(struct seq_file *m,
+>  {
+>  	struct binder_proc *to_proc;
+>  	struct binder_buffer *buffer = t->buffer;
+> +	ktime_t current_time = ktime_get();
+>  
+>  	spin_lock(&t->lock);
+>  	to_proc = t->to_proc;
+>  	seq_printf(m,
+> -		   "%s %d: %pK from %d:%d to %d:%d code %x flags %x pri %ld r%d",
+> +		   "%s %d: %pK from %d:%d to %d:%d code %x elapsed %lldms flags %x pri %ld r%d",
+>  		   prefix, t->debug_id, t,
+> -		   t->from ? t->from->proc->pid : 0,
+> -		   t->from ? t->from->pid : 0,
+> +		   t->from ? t->from->proc->pid : t->async_from_pid,
+> +		   t->from ? t->from->pid : t->async_from_tid,
+
+You could always use t->from_pid and t->from_tid here regardless if
+t->from is populated or not. But as mentioned above, you'd need to drop
+the async only portion.
+
+>  		   to_proc ? to_proc->pid : 0,
+>  		   t->to_thread ? t->to_thread->pid : 0,
+> -		   t->code, t->flags, t->priority, t->need_reply);
+> +		   t->code,
+> +		   ktime_ms_delta(current_time, t->start_time),
+> +		   t->flags, t->priority, t->need_reply);
+>  	spin_unlock(&t->lock);
+>  
+>  	if (proc != to_proc) {
+> diff --git a/drivers/android/binder_internal.h b/drivers/android/binder_internal.h
+> index 28ef5b3704b1..7e60f547abb6 100644
+> --- a/drivers/android/binder_internal.h
+> +++ b/drivers/android/binder_internal.h
+> @@ -528,6 +528,9 @@ struct binder_transaction {
+>  	long    priority;
+>  	long    saved_priority;
+>  	kuid_t  sender_euid;
+> +	int async_from_pid;
+> +	int async_from_tid;
+> +	ktime_t start_time;
+>  	struct list_head fd_fixups;
+>  	binder_uintptr_t security_ctx;
+>  	/**
+> -- 
+> 2.34.1
 > 
 
-Yeah I understood that part. There were two issues here:
-
-1) My r-b got dropped and that was because am wasn't used to 
-automatically retain tags from prev version.
-
-If you dont add the r-bs either manually or by am, then folks wont be 
-part of CC either
-
-2) I synced with kuogee. his git version seems to be quite old which is 
-not adding the folks from r-b to cc. So there was nothing wrong with 
-invocation, just versioning.
-
-
->>
->>
->>> I can recommend b4: it has lots of useful features including
->>> automatically picking up reviews and processing revisions.  It even
->>> requires a changelog to be edited ;).  However, finding the right flags
->>> and trusting it'll "do as ordered" is a bit daunting at first.
->>>
->>>>>> ---
->>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c | 8 ++++----
->>>>>>     1 file changed, 4 insertions(+), 4 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
->>>>>> index bbdc95c..1651cd7 100644
->>>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
->>>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
->>>>>> @@ -541,10 +541,10 @@ static void dpu_hw_ctl_intf_cfg_v1(struct dpu_hw_ctl *ctx,
->>>>>>             if (cfg->merge_3d)
->>>>>>                     DPU_REG_WRITE(c, CTL_MERGE_3D_ACTIVE,
->>>>>>                                   BIT(cfg->merge_3d - MERGE_3D_0));
->>>>>> -  if (cfg->dsc) {
->>>>>> -          DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, DSC_IDX);
->>>>>> -          DPU_REG_WRITE(c, CTL_DSC_ACTIVE, cfg->dsc);
->>>>>> -  }
->>>>>> +
->>>>>> +  /* FIXME: fix reset_intf_cfg to handle teardown of dsc */
->>>>>
->>>>> There's more wrong than just moving (not "fix"ing) this bit of code into
->>>>> reset_intf_cfg.  And this will have to be re-wrapped in `if (cfg->dsc)`
->>>>> again by reverting this patch.  Perhaps that can be explained, or link
->>>>> to Abhinav's explanation to make it clear to readers what this FIXME
->>>>> actually means?  Let's wait for Abhinav and Dmitry to confirm the
->>>>> desired communication here.
->>>>>
->>>>> https://lore.kernel.org/linux-arm-msm/ec045d6b-4ffd-0f8c-4011-8db45edc6978@quicinc.com/
->>>>>
->>>>
->>>> Yes, I am fine with linking this explanation in the commit text and
->>>> mentioning that till thats fixed, we need to go with this solution. The
->>>> FIXME itself is fine, I will work on it and I remember this context well.
->>>
->>> Looks like it was removed entirely in v3, in favour of only describing
->>> it in the patch body.  The wording seems a bit off but that's fine by me
->>> if you're picking this up soon anyway.
->>>
->>> - Marijn
-> 
-> 
-> 
+Thanks,
+Carlos Llamas
