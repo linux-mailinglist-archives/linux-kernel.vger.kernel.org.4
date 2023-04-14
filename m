@@ -2,171 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F046E1A4E
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 04:24:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B141C6E1A4C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 04:24:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjDNCY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 22:24:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51678 "EHLO
+        id S229736AbjDNCYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 22:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbjDNCYz (ORCPT
+        with ESMTP id S229492AbjDNCYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 22:24:55 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2060.outbound.protection.outlook.com [40.107.6.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490A01703;
-        Thu, 13 Apr 2023 19:24:54 -0700 (PDT)
+        Thu, 13 Apr 2023 22:24:10 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01olkn2060.outbound.protection.outlook.com [40.92.53.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86F7330D5;
+        Thu, 13 Apr 2023 19:24:07 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lKVzMgBfAPfpYJ9jUHquML74n23fUc53t5euAjqDOm2AH5dRSXf+AtJFFIGRHhpucrKGP8GDPG0vC5PGlQMPcWmTMxvMcqv68WRjDsaYGxUZzabicLrtSU4OFuSjteRwL7Ec27PKqfuigtzcEolAS6gZQlUFa035hC3GnBOegpRqfMeU7zqzXheMuTzXp1QaDwM8aa1SRI46zLVL65Twb8K7xMPye/HCOdaFVgJrAOu3TNaQCDIJ/43v7o7yEZ/98C49D9lj0Ynn7v4qT0ZE6cDuJRAylTVJRQ4GioxKHhp/eKeFMrnzJoNKX4tZv6m6JXQ89IxAVXziQTza1FfBMQ==
+ b=VotyPCJVFMIhfTrCoRucowbjF2VAOOSHEQKEUth0eG9kxv6oaqaaq0Qtn5ttWG5mjBEOiqAqAY0sf2qz0tktz09KuqcF9tn0aEQjBswKg1Voks/T1YKFaLOiEG9xXqSUg9B+rFout6Ls4y1oDThwR+TD9Pvl8w2R9eoW4Sa3kViMbAgWNtf5M87pu7G4qBkn1nt8uEmn/o2njjBmWIyGAuZJvv5B/r9uElzu7YddcRawSicqfJBaZep4uNdsUkxEOIOTjej1qVG2v0jgasqByJlKsgpHo8GbFovr7G590qeJrnZ77Jm9auu4n8XXByAC0zHnoULyuSKUuOvDwlVHOA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7a6LxWLOgRyUuYZm2uCE5m3z13QBnswXQhMwGpy7H4s=;
- b=fe9mlr1AfR/HhNeb30MklPylyhNm9Ts3Evzu8spnOwuNLaPnX1gBREAryH+mT6/85xQpnA85fmfstzJhwjrOuwz1Yx18N1QVDqozzB4XZ1rJlgw8RUNhWzaeNrQAvN9KPsJxXOTFsqmVusvyMXtNQEWPXQzwOsJ5Gy0S2iBsSxRgMV4dPCi12eMKhkQxUcp4ZdrFW/p44N0eueyb2WgpbaI/uiqzs+lW2jLdtrKbNNmUBQNDh/aArTanbf8JwNZsNhN+tsIyXf1lgSzcE2jjNAZbaZNJrbDW2tiS/vBAIp4SJXrnVeJwDeaPvgb/j2UGq8ObQ4/BJPdO5cXC8w33ww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ bh=qBDbvD3JZkVSBPlod6bdoB90wzu9+p4AQQEdai6b+04=;
+ b=Mf08bS4Uk5QmjdjjCIf8/DrkfWX1zgBAhoPpocel7yqw12HPw5M8BZcnQOCdOVhhXU4sqp3LSXMzQbiPh4xdeefSUDRdVZvdC2np9I9HLhhjk+omGM+nXkC1Ik3CT2K8N5lusPU6jb8DNEuyKvHeS1R0XYCPO1bqbeU0pAFn2tk4DXxyOltDK99PXxG+3MZQCf7ab9kfKZKu7i5K7nDPqmEMkSMr3qP+tYP00a6e8zgHo5GR8nqcNZdxjQm0S7UJflmtS7YtI6NmTSdvQioqi5qLYJYo5w7d7Q4W19f2DYGyh9fmVHVR01dh+blPQK8xJCzBkMEbQxwTsrENYhYO7g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7a6LxWLOgRyUuYZm2uCE5m3z13QBnswXQhMwGpy7H4s=;
- b=D42ejNebBmZFdtfjAX3DHg+suuXQ4LmFVQkGhnCP35x3vOg/bF0LuPQyWNDMhqLhb0OzAKt2IJPaN6cHSrx/48Uvu2zJy93rJPxCHbua8M0VPICl4YJbIMB4nk4HLM7H1qlJ9ihwo+t7jBj87GgFr8EMIpBYdFPEFY8LyGyZauA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AS8PR04MB8404.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::7)
- by DBAPR04MB7399.eurprd04.prod.outlook.com (2603:10a6:10:1a8::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Fri, 14 Apr
- 2023 02:24:51 +0000
-Received: from AS8PR04MB8404.eurprd04.prod.outlook.com
- ([fe80::e1cd:e733:d3aa:ea49]) by AS8PR04MB8404.eurprd04.prod.outlook.com
- ([fe80::e1cd:e733:d3aa:ea49%6]) with mapi id 15.20.6298.030; Fri, 14 Apr 2023
- 02:24:51 +0000
-From:   Sherry Sun <sherry.sun@nxp.com>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        philippe.schenker@toradex.com, ilpo.jarvinen@linux.intel.com
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com
-Subject: [PATCH V2] tty: serial: fsl_lpuart: use UARTMODIR register bits for lpuart32 platform
-Date:   Fri, 14 Apr 2023 10:21:11 +0800
-Message-Id: <20230414022111.20896-1-sherry.sun@nxp.com>
+ bh=qBDbvD3JZkVSBPlod6bdoB90wzu9+p4AQQEdai6b+04=;
+ b=TWDB+QJi7mg8PVi6bMD85NJ5++mZFQgO8q3Cl4Lj6PUZ0u6N/ZeJxJMpYzs87r7t3PrZsJtRLxjpu3Mf1rMLbz/l7WIBLYDB0PUnS+5fAFHARboASv7R3zcMDt7o9GecQGC67bmEYem5Re6HOszbdAZog/tqhQWFyMPX0EygoPBkTvGCVRKr/dalYAfNwQO+oM5pGa/1wYJ7+Lbg53YFn4v6ItdmMrKVgU9+eZQaXwJkIHCilsHQYKAkMm41DxKMbHii1U9G70PcEwLrr6YFU11+TYF/bWkdO/AlJt737l1GUIaDkU3Lz64eGKQ66syFDudXX4Zew2dHkT+Z8Bk06A==
+Received: from KL1PR01MB5448.apcprd01.prod.exchangelabs.com
+ (2603:1096:820:9a::12) by SEZPR01MB5342.apcprd01.prod.exchangelabs.com
+ (2603:1096:101:e5::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.4; Fri, 14 Apr
+ 2023 02:24:01 +0000
+Received: from KL1PR01MB5448.apcprd01.prod.exchangelabs.com
+ ([fe80::5bff:fd7e:ec7c:e9d3]) by KL1PR01MB5448.apcprd01.prod.exchangelabs.com
+ ([fe80::5bff:fd7e:ec7c:e9d3%7]) with mapi id 15.20.6319.007; Fri, 14 Apr 2023
+ 02:24:01 +0000
+From:   Yan Wang <rk.code@outlook.com>
+To:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        kuba@kernel.org, mcoquelin.stm32@gmail.com
+Cc:     Yan Wang <rk.code@outlook.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        netdev@vger.kernel.org (open list:STMMAC ETHERNET DRIVER),
+        linux-stm32@st-md-mailman.stormreply.com (moderated list:ARM/STM32
+        ARCHITECTURE),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/STM32
+        ARCHITECTURE), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH net-next v2] net: stmmac:fix system hang when setting up tag_8021q VLAN for DSA ports
+Date:   Fri, 14 Apr 2023 10:23:41 +0800
+Message-ID: <KL1PR01MB54482D50B5C8713A2CA697DFE6999@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
 X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SI2PR04CA0009.apcprd04.prod.outlook.com
- (2603:1096:4:197::8) To AS8PR04MB8404.eurprd04.prod.outlook.com
- (2603:10a6:20b:3f8::7)
+Content-Type: text/plain
+X-TMN:  [iutxibE7g/AJa0EZGWrBA8JcKp1NSYu2Ve8NNNXbiLE=]
+X-ClientProxiedBy: SG2PR01CA0111.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:40::15) To KL1PR01MB5448.apcprd01.prod.exchangelabs.com
+ (2603:1096:820:9a::12)
+X-Microsoft-Original-Message-ID: <20230414022341.18095-1-rk.code@outlook.com>
 MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8PR04MB8404:EE_|DBAPR04MB7399:EE_
-X-MS-Office365-Filtering-Correlation-Id: 961ff1bf-2a83-4699-d741-08db3c8f6d5d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
+X-MS-TrafficTypeDiagnostic: KL1PR01MB5448:EE_|SEZPR01MB5342:EE_
+X-MS-Office365-Filtering-Correlation-Id: 157a1ed4-ba50-4fc4-4700-08db3c8f4f71
+X-MS-Exchange-SLBlob-MailProps: ScCmN3RHayHCvCmR7Mrip+46pMXVmOzprsLuyh2I67nGh5nZ7zZbEY0KUuutlMqqtHCXkPobdCGgHNhfJS+upb0wirypm/N7aVOfjvdbQhVoUvlduaM9or71uiMQbb2TZclrArSjcKMcnTjAo0cciFggy1rLkM/HP0DPfuTy/BYmN1433IYYHRp22hMaXeH45Uox2UISjxKyBOhHepyg86tv36jYUtbbgupny3H2o977FmjyWxMmzO6LICfXqZjAAu280PKYn6ZTzm4ch2+3wXvJaBiLaIhF1cvznv5v0fVlkf0nm3PQ6pa96GP+rPgNVGv9nUF/XzAa4Zvwybw7lhWRpC2sn5tqCplDb7PguPolnGMu3AQiUHg5lHAHCLvc/vTo5mfAeOjAze0kTVTF4oVHQ5onSeq37lbvNaKi8Mta+Y8m9H+0wIvm9j2M/1rkxeea3bGYmw+snfOECsW+Ja1GJpSJUj6J+arEU2anLVNxCmSnR4vUZeagnZdehwGdxLgRzQUMUwzdELo6uJf/lQHeHeR+CmGaHqg14bzF2mj7ChxxauaH3F+1jfIZc5D8/p1E5vlU3TUgWWdm0BtGH2gogfQqrwvPzNAfskrVCkQEHl6pnomgJwzjvvd6q0u34CWyFDwqno5NDsovgzc0h64n3/xRpvNa97YvXN3SkS0j7rV/8X/OvyRvB2wwoAPIBQgO5nbb0P7nUW06lNcl2VaZTmVa5zyefRLPLb3JHus=
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XtHQErKL6pJQwVRE7zPNlxLZkRFrr6sqPJpCpQaouEl8pvpX0c1JUFrhVZ2/zZGeRFldB4plP7UFqczsgax3C2Yjk7rzbJTv5ld/+rnd1N4j6JDtanRq1wensp2IhQFTiZZf+Wo5zOuw+ZGJJ3h6cBTFSKTNFCsgaY7xN9W9lJlW09Ds1WsbYfzeeJDcEbACRXyzzfQJPHiS5A0h1ZWamNHov4XBYAJ/9QGH7VNBOhD+iGafu69RAheq3Ru0SgDuP3xjOdAXPUhqE+7Alv420zisGT7d5DCKTud/e5bRmvCKxbBM+F1gBiv2f8QR1uR705sZIF5CXCHsU6aT2EXtmh9J4Co4qYIukO3aoyb4SyJQokKcKT1gB9a1CRXHxSAMIKHp7MIfYUMaLUlxQoFR/iV7gXJKwkBhGu760ULyTW4Ty4yvA5xfG9xegYiajhIPyB9ACEGMLVGVXf9JaF9uJ9bDhcn3nYkv1skUdKhdtXLNIQkIFAZZVAVE8Gc6N3Co759TuHt4FKOFDyroZVUUdOiIq1uHIKQLr1ZYrLdzle+wY+mzBlVaHFw2PuxmmrdPmldz2V/wwY+He4yhtnlm43wZx5+5Lqf+q+XcOsYntpFVTi0/LuNA52KytDQHWG2e
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8404.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(376002)(366004)(396003)(136003)(451199021)(83380400001)(2616005)(1076003)(52116002)(6666004)(6486002)(6512007)(26005)(478600001)(6506007)(186003)(316002)(2906002)(5660300002)(38100700002)(38350700002)(41300700001)(36756003)(8936002)(44832011)(66556008)(4326008)(66946007)(66476007)(8676002)(86362001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: qzHaPCFYOQcEQL7nliogwm1wpVh2SlFe84bjb59amplC1Tt7nLAg2fFnhpx1gb7vJ3G0+dibHjjIw8U+AB1pP0DnTHYgaNjnJclwmlpK4MWsJPfb3CurIlJUhwNOKyYjErosYzxNitGG2jzRHSV8Gvh+BWbHSLYZ2i3yCm6LZTibVAPQ8ocALgHeatheRjVMvcP5Tw6c9Rbsiyt8UlAKMIliDgEanGztDphUFL3CwUTFbd0pTUoHi/4BLT2/lGat0ovKNAHIqpm8+Sk8CtvmBXOdJtntvJbOIkRlIG2+mWruOXzKTiWnHRwN5cXfu+NB3+E6ozbGF2ewyG0oIaLWAmRcwoHJMobGGGSUVpByGwaDe7gfy2HwJUrZU7nU8JTwEb54AOhuq4YV45U5k3UQI+mqBXlzBvdFTsmspSS6pkfHvqhdBLJ6pwbQR+H89Qt9OHogz2K0ve+u6iNk+awHGUTkNtmch9sz2S5h1HFEO15AYiPDt0rhznmwQlAD2qz+N101G6BFPxPIgup9eHL8wy0sXWrf7JMA0IAzhfoSjQZbl6xGRO1EZdUmrjSqPxbMe3Gixi6Xn2rXYFXnThPtw618frRDNaixDjnAhl+35YOK4eMaR9RC4e7sYI5yIkrf
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?T1FOcDE3MGtTNk1hbDRrQnFSeG1RRVgvN1UyRUZ1YXRrd2p5dW1aekpqQjRW?=
- =?utf-8?B?NEVzRFRvamlGTU1VSGdvQjRYZWY3bkN5b2FVZ2x5eE9hTDdwR0lsall4UUI3?=
- =?utf-8?B?Z3JOWFk5cFdNYzdHTm5ET0FKZzRrc21TR256eWxXSU9OR253SzlrYjk5M1dB?=
- =?utf-8?B?VGhDK2R5UGZPTGYyRjNQeVJ6b1M5c1BlVmlUMFRkbVhXVkg5QlJqRmx2U2o5?=
- =?utf-8?B?cTRlcWZpaTJWSVZWRkVvZElKZDVrK0xjQkFqbFNoL1RIdzJhYnZYSm5TcWls?=
- =?utf-8?B?TEdacHpiOEhadkdaQVpnNTBYRUkvaTFYRFAzelZBNTJqRTU3OHlqUGtwK1dU?=
- =?utf-8?B?SUhyZ1VJT3ZiVDRLT2l5dXh0OW1OT1daK1hkeEV4blpCZFg5aTBHeEV6VEQv?=
- =?utf-8?B?QjZ1SDBBY2RkcnVSWDN3VUlIUHdvU0FTKzhGS1FNalZ2U3ZxTXlwZk1LU2RT?=
- =?utf-8?B?R1doaHBBYXBhTVMzV0pSZEV1ZHRmbW5ORzJMMkx4ZGV1ZEw1enovcFU0MWEv?=
- =?utf-8?B?VTZIZXZHcFNWQnRxMC9TYkN4YjVDbjh3cCsvU1B4ZTdvVnNMNjlnSTF2dFQx?=
- =?utf-8?B?T1puZThtTjNRVGRObStEaEwwV2ZOZFpqMGdWdTFuS0s3eGtsRm5ZN1luaXJF?=
- =?utf-8?B?a1RVbGx1RXFSTWw0Qlk1TmxWM2JPRDZ4NXNRbFR5aTVjcmI2eWZwZE1KQnJl?=
- =?utf-8?B?UlVLMSt5TVF2YXk3Q2lKQVVXb0J1ai9INnZHd3I4VjZMOElNRXVoajJ6SU90?=
- =?utf-8?B?cS8xUmgzUk9FYmJ5bXJUU1BWdUFjYmNkYVEraHgycG9RWHZXck9FY3JYbHlG?=
- =?utf-8?B?M1JOUGkzK0xkSndsUHdyaERQT09NYVQ5REp4bTBxR2oydGRTdEptL0RFc2hq?=
- =?utf-8?B?bEIxQ05HMnl2ang3YTRCaXhlVElvOVo3MHNWT1p3QzFLK3E3a0svK1AxSFNv?=
- =?utf-8?B?NGp2RHdyc0tzTUtzazI2RWs0eDVkZnVkc2RNK3J0d3VKVlV0U2ZxQ1k3Z3Zz?=
- =?utf-8?B?bHNZRDFudENEOWd0OWgyWkNPSVBOS0dwdlFIZE9mNnpTSktUQVpaTGpUdHdI?=
- =?utf-8?B?dnhWUWNqWnFZclJWWUpaTVR0Q3ZqQUlEVUZWM21vS1pNR1d4ZTI0SE5oL0J4?=
- =?utf-8?B?TmdqTGtxckNOaDlhMkFCbVJGS29oSDZuVFcyUE9haFRwUHdkUk0yWmJRMk1o?=
- =?utf-8?B?LytjclRueGVoY25Xd05iVlB1NWtYS1BjKzgxSUZoNFlSbGF1bUw5RjVRU0Z3?=
- =?utf-8?B?cVhlVDlLbjVtbDhxNk9XSE5UTEZTcWlRWG5SRUdtZUs0Zkx0QWdEK3gwR3BB?=
- =?utf-8?B?ME9ZRk5lMGhBSEprMVF4d1FtaEFVOFVQQUFnMUJremNzaHVWTkVKa00rRmF1?=
- =?utf-8?B?bW1LdFdFTVYvZHRnQnl1dS8yR21ZcU1kWHpUWVJ1bkpsYUZBT1pXUTNrQVh4?=
- =?utf-8?B?RXJwTHh0WjI5YVkwNzVJSXFLczgyRjV2WkNKdEgzYTQwMU1abE9zaldUVmFL?=
- =?utf-8?B?cnU2UEdCNE4rQzZ4ekcvRmJCSGlPVlBmQjN2cHRBVTN3a2pNb0ZrbDVVRms3?=
- =?utf-8?B?T2ozN0ROYUxabVRJRmxicTZNZG9ickp2YjcxRmJSWGZBTG0zazBXTjF3ay9K?=
- =?utf-8?B?Z3JxbGtZZnJJTVY4MjAvSVBxR2o3Mm1NN1BDcXk1eUxmWm5Ka3dnYUdTS2Ew?=
- =?utf-8?B?ekdRQ1hlQmwrZ25kQlVYVEJpdk9kcmc2OFU3Z2ZQTVlLeHFOQmZxbm90eXpZ?=
- =?utf-8?B?T1hHMjRMcXlkRzBEUHRJblhES1ZtTi9MTUVnSkdnZU5UUmNrdGxxMmRBd1d0?=
- =?utf-8?B?bGIyWG96YUIzdkpObzRmTUl4c3ZoY2dUVy80cVgySVlBMmxmRHRhUG01QTdv?=
- =?utf-8?B?dk8waHJQM2RiTCsvZGdhR1RFeWVBSFJGODc3bUFmM214QU1FU3l1TXFXbHJk?=
- =?utf-8?B?bnhCZ2RhOUpBald4TDk5d1RZTDZiKzUxWUVNYTB4WmFseCszZ21WM0FrV2pr?=
- =?utf-8?B?UHF4eXNkMDU0Z0UzNDF2TUsyQUJiNzJpbUVWTytmODhjV3VKOTk5N1c5b0pz?=
- =?utf-8?B?U0VxaElPVExIVkxQTmY4cjVDejRod1lvU2N2aFhMamRYVFBoQVVCcXhOYXp0?=
- =?utf-8?Q?H5bmfOpKZEi/IsyQwXPSuzHdN?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 961ff1bf-2a83-4699-d741-08db3c8f6d5d
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8404.eurprd04.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?d8sHqUsVdDFEtfLgYcpvcd1FGuirujX/G/8IAErtjA+gg5a8DdrR0aolK4Fn?=
+ =?us-ascii?Q?nkG8xOdGev0kVF1rblcK0upEWevtcOv5Aa7dpoLc1U8Fu74j+4mJ1pb60bF4?=
+ =?us-ascii?Q?2h2wtLEIHk27PCqkYS0M7QingCO1NTlqbYg/kmkjBDM2rU642ZludhV4NaUz?=
+ =?us-ascii?Q?5G3yjqWv5tJjk4YmFxoKphzzJeVS6ACGc+aOS0uAEk+koPQE5avIAA/u2xTg?=
+ =?us-ascii?Q?PluoFxGGB3aML3E3qja1aJwqIX2Y3eKFTKiAeA7Oh9nG6TGshsJ4qkumfmrW?=
+ =?us-ascii?Q?l+kaym4kNusZFIkJ0KIJwoqt4KAywpCljw6teVUuNQryqVjIMh+uchfrjv44?=
+ =?us-ascii?Q?BeRUbEATLgn93K7N7xhw8wqkZWkeRR8B5WnVUcLdKxpw9yWH93Gzmy5AGYZz?=
+ =?us-ascii?Q?wNjixof6woRuJBBKJhXuSJIVt3K9oMFl5uo3hjS/WUreSjlvhNKD5RbaoovI?=
+ =?us-ascii?Q?7hZXXWpIN1O1ahGw7JF7nSLc+Gt08t7fcpIAGkyAQX22HsWzAlSGYy1NAGzH?=
+ =?us-ascii?Q?H2wRl76NiyUIfL3S3ZB3KZXsaIjriExno8ts6q9jFGic7L8M8YoDiJmX6nI4?=
+ =?us-ascii?Q?JZ6ZoTXXpYeE8RxKhZIqj2Wau5+1GvRvaOMTx3GtKrLRE+RyMlxeaKYiayty?=
+ =?us-ascii?Q?MwTu2L0HO1sFUC1xkkP7UfHL/XwefE0rIqUH4m3sgeSxC9zWFh4IzJHfNZYg?=
+ =?us-ascii?Q?0w3N3ndSVF5RoX25uaiV5LeLZn3CMUuQE+JnHsALAC9H5uggI3blCk/0pFSM?=
+ =?us-ascii?Q?bAZmFBbgpdHVIJ2g+WYYcu6MbrMuKZ1X8UR5wtdNaAlijvIkeRt7Y796T8i8?=
+ =?us-ascii?Q?im3pRSaL4P9jcgqPK881/GksD4ygVrkNWatJtNCXuf54R/DLJ//6Wmb7nv86?=
+ =?us-ascii?Q?1Y8IwTlUzRCDQ97wT8eWmT9x15pIlwC6QeZMN3myBiIlgc3IRArxvvKK1KyV?=
+ =?us-ascii?Q?Vlt2LLrzntJy7oh0CAYshX3PwgP9Zzxsnjk+tz0IhHb/ig7hF2OQKm6YXG9m?=
+ =?us-ascii?Q?pdlLMLI6duPAjHDlwB7rnUDY7bNKw9VcoHvKBhQUtpyt/DFM0/WLj8UcFMlO?=
+ =?us-ascii?Q?oKMIsM7CRBvwcqJ5IJG2W5na0hHlOlZYOg0hrJX8n8OjV9hnFlD3fbbgs0mN?=
+ =?us-ascii?Q?zc09JTMNfcO9Wf3y1Z1W6IUb2cwMOu/Vqdtq/f8XaSGFqN63+bhBSAL7zVS5?=
+ =?us-ascii?Q?wcdgfdnuPYDe16hcyMc8fh6n/5ociAhDZoUn/g=3D=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 157a1ed4-ba50-4fc4-4700-08db3c8f4f71
+X-MS-Exchange-CrossTenant-AuthSource: KL1PR01MB5448.apcprd01.prod.exchangelabs.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2023 02:24:51.7743
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2023 02:24:01.5841
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VWxapn1VdtvnFthwawTiPTkIfmDX5kQht2dj29cFXtNrezK5o02gA0NCfZEgGuFfC7gazBZ+qDlc3cG0UT2ROQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR04MB7399
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR01MB5342
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For lpuart32 platforms, UARTMODIR register is used instead of UARTMODEM.
-So here should configure the corresponding UARTMODIR register bits to
-avoid confusion.
+The system hang because of dsa_tag_8021q_port_setup()->
+				stmmac_vlan_rx_add_vid().
 
-Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
-Changes in V2
-1. Remove the fix tag.
-2. Add Reviewed-by tag.
-3. Improve the commit message.
----
- drivers/tty/serial/fsl_lpuart.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+I found in stmmac_drv_probe() that cailing pm_runtime_put()
+disabled the clock.
 
-diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-index 074bfed57fc9..9845d3f5b84b 100644
---- a/drivers/tty/serial/fsl_lpuart.c
-+++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -1406,12 +1406,12 @@ static int lpuart32_config_rs485(struct uart_port *port, struct ktermios *termio
- 			struct lpuart_port, port);
+First, when the kernel is compiled with CONFIG_PM=y,The stmmac's
+resume/suspend is active.
+
+Secondly,stmmac as DSA master,the dsa_tag_8021q_port_setup() function
+will callback stmmac_vlan_rx_add_vid when DSA dirver starts. However,
+The system is hanged for the stmmac_vlan_rx_add_vid() accesses its
+registers after stmmac's clock is closed.
+
+I would suggest adding the pm_runtime_resume_and_get() to the
+stmmac_vlan_rx_add_vid().This guarantees that resuming clock output
+while in use.
+
+Fixes: 804ff4120f67 ("net: stmmac:fix system hang when setting up tag_8021q VLAN for DSA ports")
+Signed-off-by: Yan Wang <rk.code@outlook.com>
+---
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index d7fcab057032..f9cd063f1fe3 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -6350,6 +6350,10 @@ static int stmmac_vlan_rx_add_vid(struct net_device *ndev, __be16 proto, u16 vid
+ 	bool is_double = false;
+ 	int ret;
  
- 	unsigned long modem = lpuart32_read(&sport->port, UARTMODIR)
--				& ~(UARTMODEM_TXRTSPOL | UARTMODEM_TXRTSE);
-+				& ~(UARTMODIR_TXRTSPOL | UARTMODIR_TXRTSE);
- 	lpuart32_write(&sport->port, modem, UARTMODIR);
++	ret = pm_runtime_resume_and_get(priv->device);
++	if (ret < 0)
++		return ret;
++
+ 	if (be16_to_cpu(proto) == ETH_P_8021AD)
+ 		is_double = true;
  
- 	if (rs485->flags & SER_RS485_ENABLED) {
- 		/* Enable auto RS-485 RTS mode */
--		modem |= UARTMODEM_TXRTSE;
-+		modem |= UARTMODIR_TXRTSE;
- 
- 		/*
- 		 * The hardware defaults to RTS logic HIGH while transfer.
-@@ -1420,9 +1420,9 @@ static int lpuart32_config_rs485(struct uart_port *port, struct ktermios *termio
- 		 * Note: UART is assumed to be active high.
- 		 */
- 		if (rs485->flags & SER_RS485_RTS_ON_SEND)
--			modem |= UARTMODEM_TXRTSPOL;
-+			modem |= UARTMODIR_TXRTSPOL;
- 		else if (rs485->flags & SER_RS485_RTS_AFTER_SEND)
--			modem &= ~UARTMODEM_TXRTSPOL;
-+			modem &= ~UARTMODIR_TXRTSPOL;
+@@ -6357,16 +6361,18 @@ static int stmmac_vlan_rx_add_vid(struct net_device *ndev, __be16 proto, u16 vid
+ 	ret = stmmac_vlan_update(priv, is_double);
+ 	if (ret) {
+ 		clear_bit(vid, priv->active_vlans);
+-		return ret;
++		goto err_pm_put;
  	}
  
- 	lpuart32_write(&sport->port, modem, UARTMODIR);
+ 	if (priv->hw->num_vlan) {
+ 		ret = stmmac_add_hw_vlan_rx_fltr(priv, ndev, priv->hw, proto, vid);
+ 		if (ret)
+-			return ret;
++			goto err_pm_put;
+ 	}
++err_pm_put:
++	pm_runtime_put(priv->device);
+ 
+-	return 0;
++	return ret;
+ }
+ 
+ static int stmmac_vlan_rx_kill_vid(struct net_device *ndev, __be16 proto, u16 vid)
 -- 
 2.17.1
 
