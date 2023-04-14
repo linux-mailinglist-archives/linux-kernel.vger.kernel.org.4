@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58B556E2169
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 12:59:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23B8E6E2170
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 13:00:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbjDNK7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 06:59:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60220 "EHLO
+        id S229871AbjDNLAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 07:00:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbjDNK7C (ORCPT
+        with ESMTP id S229450AbjDNLAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 06:59:02 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BDCDE59C5;
-        Fri, 14 Apr 2023 03:58:59 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.43:42156.1962834727
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id 8444610029C;
-        Fri, 14 Apr 2023 18:58:55 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-7b48884fd-tj646 with ESMTP id 20d9f539d4bf418d80c5123a73ddff62 for tzimmermann@suse.de;
-        Fri, 14 Apr 2023 18:58:57 CST
-X-Transaction-ID: 20d9f539d4bf418d80c5123a73ddff62
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <32a1510e-d38a-ffb6-8e8d-026f8b3aa17a@189.cn>
-Date:   Fri, 14 Apr 2023 18:58:53 +0800
+        Fri, 14 Apr 2023 07:00:43 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606BA35B1;
+        Fri, 14 Apr 2023 04:00:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=8uNPJbFR7IVtn1RsT91H7sboSJ2k268CmZMEJSUz9Qk=;
+        t=1681470042; x=1682679642; b=I/sCIezoh19zKXoptGuue/yYv4U+/gJ+k3DLtPO/nETxdfO
+        IepO9jQNMAgzkm4wzRTScuaR2ePi4MrshlVk0GfQvOY1O7dZA2jusYVPuiVlaThnjhDDlrXDE549F
+        4SH5YfQ7ZRZCondqHw0qZLTHuNrIy6QBsGMSQXoRT3jefbE7uundX8xZjFvDVXFSFaUbgoyQgo3/u
+        KCZeBlCMp3kgqoXBP9rQX/H/3zZkX8hAip3NfrfFjfUmNue21SNwL7uWIoS1TRcOaD70DYEMh09vU
+        /8WEV5rvEj/QIgyFOUehYr9H4yx20t9L3JJcEHm6S2wpjrhFo4tzUFz0q6lERBrw==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <benjamin@sipsolutions.net>)
+        id 1pnHAK-00FZ3m-3C;
+        Fri, 14 Apr 2023 13:00:29 +0200
+Message-ID: <f51a15fbc49b9119a9e5db8240facd6ab51a0d46.camel@sipsolutions.net>
+Subject: Re: [RFC PATCH v2 1/3] kunit: Add kunit_add_action() to defer a
+ call until test exit
+From:   Benjamin Berg <benjamin@sipsolutions.net>
+To:     maxime@cerno.tech, David Gow <davidgow@google.com>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        Rae Moar <rmoar@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com
+Date:   Fri, 14 Apr 2023 13:00:26 +0200
+In-Reply-To: <56w47e5mff74b4jrpgl4odhjxzayoptb6u2e2u6haaf7tuvl4f@xwlmne7p6kli>
+References: <20230331080411.981038-1-davidgow@google.com>
+         <20230331080411.981038-2-davidgow@google.com>
+         <56w47e5mff74b4jrpgl4odhjxzayoptb6u2e2u6haaf7tuvl4f@xwlmne7p6kli>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2] drm/fbdev-generic: prohibit potential out-of-bounds
- access
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sui Jingfeng <suijingfeng@loongson.cn>,
-        Li Yi <liyi@loongson.cn>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Helge Deller <deller@gmx.de>,
-        Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
-References: <20230413180622.1014016-1-15330273260@189.cn>
- <fccc494f-0e52-5fdf-0e40-acc29177c73c@suse.de>
-Content-Language: en-US
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <fccc494f-0e52-5fdf-0e40-acc29177c73c@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,218 +68,155 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On 2023/4/14 03:16, Thomas Zimmermann wrote:
-> Hi,
->
-> thanks for the patch. This is effectively a revert of commit 
-> 8fbc9af55de0 ("drm/fbdev-generic: Set screen size to size of GEM 
-> buffer"). Please add a Fixes tag.
->
-> Am 13.04.23 um 20:06 schrieb Sui Jingfeng:
->> From: Sui Jingfeng <suijingfeng@loongson.cn>
->>
->> The crazy fbdev test of IGT may write after EOF, which lead to 
->> out-of-bound
->
-> Please drop 'crazy'. :)
+On Fri, 2023-04-14 at 12:01 +0200, maxime@cerno.tech wrote:
+> Hi David,
+>=20
+> On Fri, Mar 31, 2023 at 04:04:09PM +0800, David Gow wrote:
+> > Many uses of the KUnit resource system are intended to simply defer
+> > calling a function until the test exits (be it due to success or
+> > failure). The existing kunit_alloc_resource() function is often used fo=
+r
+> > this, but was awkward to use (requiring passing NULL init functions, et=
+c),
+> > and returned a resource without incrementing its reference count, which
+> > -- while okay for this use-case -- could cause problems in others.
+> >=20
+> > Instead, introduce a simple kunit_add_action() API: a simple function
+> > (returning nothing, accepting a single void* argument) can be scheduled
+> > to be called when the test exits. Deferred actions are called in the
+> > opposite order to that which they were registered.
+> >=20
+> > This mimics the devres API, devm_add_action(), and also provides
+> > kunit_remove_action(), to cancel a deferred action, and
+> > kunit_release_action() to trigger one early.
+> >=20
+> > This is implemented as a resource under the hood, so the ordering
+> > between resource cleanup and deferred functions is maintained.
+> >=20
+> > Signed-off-by: David Gow <davidgow@google.com>
+> > ---
+> >=20
+> > Changes since RFC v1:
+> > https://lore.kernel.org/linux-kselftest/20230325043104.3761770-2-davidg=
+ow@google.com/
+> > - Rename functions to better match the devm_* APIs. (Thanks Maxime)
+> > - Embed the kunit_resource in struct kunit_action_ctx to avoid an extra
+> > =C2=A0 allocation (Thanks Benjamin)
+> > - Use 'struct kunit_action_ctx' as the type for cancellation tokens
+> > =C2=A0 (Thanks Benjamin)
+> > - Add tests.
+> >=20
+> > ---
+> > =C2=A0include/kunit/resource.h |=C2=A0 89 ++++++++++++++++++++++++++++
+> > =C2=A0lib/kunit/kunit-test.c=C2=A0=C2=A0 | 123 ++++++++++++++++++++++++=
+++++++++++++++-
+> > =C2=A0lib/kunit/resource.c=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 99 +++++++++=
+++++++++++++++++++++++
+> > =C2=A03 files changed, 310 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/include/kunit/resource.h b/include/kunit/resource.h
+> > index c0d88b318e90..15efd8924666 100644
+> > --- a/include/kunit/resource.h
+> > +++ b/include/kunit/resource.h
+> > @@ -387,4 +387,93 @@ static inline int kunit_destroy_named_resource(str=
+uct kunit *test,
+> > =C2=A0 */
+> > =C2=A0void kunit_remove_resource(struct kunit *test, struct kunit_resou=
+rce *res);
+> > =C2=A0
+> > +typedef void (*kunit_defer_function_t)(void *ctx);
+> > +
+> > +/* An opaque token to a deferred action. */
+> > +struct kunit_action_ctx;
+> > +
+> > +/**
+> > + * kunit_add_action() - Defer an 'action' (function call) until the te=
+st ends.
+> > + * @test: Test case to associate the action with.
+> > + * @func: The function to run on test exit
+> > + * @ctx: Data passed into @func
+> > + * @internal_gfp: gfp to use for internal allocations, if unsure, use =
+GFP_KERNEL
+> > + *
+> > + * Defer the execution of a function until the test exits, either norm=
+ally or
+> > + * due to a failure.=C2=A0 @ctx is passed as additional context. All f=
+unctions
+> > + * registered with kunit_add_action() will execute in the opposite ord=
+er to that
+> > + * they were registered in.
+> > + *
+> > + * This is useful for cleaning up allocated memory and resources.
+> > + *
+> > + * Returns:
+> > + *=C2=A0=C2=A0 An opaque "cancellation token", or NULL on error. Pass =
+this token to
+> > + *=C2=A0=C2=A0 kunit_remove_action_token() in order to cancel the defe=
+rred execution of
+> > + *=C2=A0=C2=A0 func().
+> > + */
+> > +struct kunit_action_ctx *kunit_add_action(struct kunit *test, kunit_de=
+fer_function_t func,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 void *ctx, gfp_t intern=
+al_gfp);
+>=20
+> I've tried to leverage kunit_add_action() today, and I'm wondering if
+> passing the struct kunit pointer to the deferred function would help.
+>=20
+> The code I'm struggling with is something like:
+>=20
+> > static int test_init(struct kunit *test)
+> > {
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0priv =3D kunit_kzalloc(=
+sizeof(*priv), GFP_KERNEL);
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0KUNIT_ASSERT_NOT_NULL(t=
+est, priv);
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0test->priv =3D priv;
+> >=20
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0priv->dev =3D alloc_dev=
+ice();
+> >=20
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
+> > }
+>=20
+> and then in the test itself:
+>=20
+> > static void actual_test(struct kunit *test)
+> > {
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct test_priv *priv =
+=3D test->priv;
+> >=20
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0id =3D allocate_buffer(=
+priv->dev);
+> >=20
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0KUNIT_EXPECT_EQ(test, i=
+d, 42);
+> >=20
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0free_buffer(priv->dev, =
+id);
+> > }
+>=20
+> I'd like to turn free_buffer an action registered right after allocate
+> buffer. However, since it takes several arguments and kunit_add_action
+> expects a single pointer, we would need to create a structure for it,
+> allocate it, fill it, and then free it when the action has ran.
+>=20
+> It creates a lot of boilerplate, while if we were passing the pointer to
+> struct kunit we could access the context of the test as well, and things
+> would be much simpler.
 
-This is OK.
+The question seems to be what about the typical use-case. I was always
+imagining calling functions like kfree/kfree_skb which often only
+require a single argument.
 
-By using the world 'crazy',
+For arbitrary arguments, a struct and custom free function will be
+needed. At that point, maybe it is fair to assume that API users will
+use the resource API directly, doing the same trick as kunit_add_action
+and storing the arguments together with struct kunit_resource.
 
-I meant that the test is very good and maybe it is written by 
-professional  peoples
+That said, maybe one could add it as a second argument? It is a little
+bit weird API wise, but it would allow simply casting single-argument
+functions in order to ignore "struct kunit *" argument.=20
 
-with the guidance by  experienced  engineer. So that even the corner get 
-tested.
-
-
->
->> access for the drm drivers using fbdev-generic. For example, run 
->> fbdev test
->> on a x86-64+ast2400 platform with 1680x1050 resolution will cause the 
->> linux
->> kernel hang with following call trace:
->>
->>    Oops: 0000 [#1] PREEMPT SMP PTI
->>    [IGT] fbdev: starting subtest eof
->>    Workqueue: events drm_fb_helper_damage_work [drm_kms_helper]
->>    [IGT] fbdev: starting subtest nullptr
->>
->>    RIP: 0010:memcpy_erms+0xa/0x20
->>    RSP: 0018:ffffa17d40167d98 EFLAGS: 00010246
->>    RAX: ffffa17d4eb7fa80 RBX: ffffa17d40e0aa80 RCX: 00000000000014c0
->>    RDX: 0000000000001a40 RSI: ffffa17d40e0b000 RDI: ffffa17d4eb80000
->>    RBP: ffffa17d40167e20 R08: 0000000000000000 R09: ffff89522ecff8c0
->>    R10: ffffa17d4e4c5000 R11: 0000000000000000 R12: ffffa17d4eb7fa80
->>    R13: 0000000000001a40 R14: 000000000000041a R15: ffffa17d40167e30
->>    FS:  0000000000000000(0000) GS:ffff895257380000(0000) 
->> knlGS:0000000000000000
->>    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>    CR2: ffffa17d40e0b000 CR3: 00000001eaeca006 CR4: 00000000001706e0
->>    Call Trace:
->>     <TASK>
->>     ? drm_fbdev_generic_helper_fb_dirty+0x207/0x330 [drm_kms_helper]
->>     drm_fb_helper_damage_work+0x8f/0x170 [drm_kms_helper]
->>     process_one_work+0x21f/0x430
->>     worker_thread+0x4e/0x3c0
->>     ? __pfx_worker_thread+0x10/0x10
->>     kthread+0xf4/0x120
->>     ? __pfx_kthread+0x10/0x10
->>     ret_from_fork+0x2c/0x50
->>     </TASK>
->>    CR2: ffffa17d40e0b000
->>    ---[ end trace 0000000000000000 ]---
->>
->> The indirect reason is drm_fb_helper_memory_range_to_clip() generate 
->> damage
->> rectangles which partially or completely go out of the active display 
->> area.
->> The second of argument 'off' is passing from the user-space, this 
->> will lead
->> to the out-of-bound if it is large than (fb_height + 1) * fb_pitches; 
->> while
->> DIV_ROUND_UP() may also controbute to error by 1.
->>
->> This patch will add code to restrict the damage rect computed go 
->> beyond of
->> the last line of the framebuffer.
->>
->> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->> ---
->>   drivers/gpu/drm/drm_fb_helper.c     | 16 ++++++++++++----
->>   drivers/gpu/drm/drm_fbdev_generic.c |  2 +-
->>   2 files changed, 13 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/drm_fb_helper.c 
->> b/drivers/gpu/drm/drm_fb_helper.c
->> index 64458982be40..6bb1b8b27d7a 100644
->> --- a/drivers/gpu/drm/drm_fb_helper.c
->> +++ b/drivers/gpu/drm/drm_fb_helper.c
->> @@ -641,19 +641,27 @@ static void drm_fb_helper_damage(struct 
->> drm_fb_helper *helper, u32 x, u32 y,
->>   static void drm_fb_helper_memory_range_to_clip(struct fb_info 
->> *info, off_t off, size_t len,
->>                              struct drm_rect *clip)
->>   {
->> +    u32 line_length = info->fix.line_length;
->> +    u32 fb_height = info->var.yres;
->>       off_t end = off + len;
->>       u32 x1 = 0;
->> -    u32 y1 = off / info->fix.line_length;
->> +    u32 y1 = off / line_length;
->>       u32 x2 = info->var.xres;
->> -    u32 y2 = DIV_ROUND_UP(end, info->fix.line_length);
->> +    u32 y2 = DIV_ROUND_UP(end, line_length);
->> +
->> +    /* Don't allow any of them beyond the bottom bound of display 
->> area */
->> +    if (y1 > fb_height)
->> +        y1 = fb_height;
->> +    if (y2 > fb_height)
->> +        y2 = fb_height;
->>         if ((y2 - y1) == 1) {
->>           /*
->>            * We've only written to a single scanline. Try to reduce
->>            * the number of horizontal pixels that need an update.
->>            */
->> -        off_t bit_off = (off % info->fix.line_length) * 8;
->> -        off_t bit_end = (end % info->fix.line_length) * 8;
->> +        off_t bit_off = (off % line_length) * 8;
->> +        off_t bit_end = (end % line_length) * 8;
->
-> Please scratch all these changes. The current code should work as 
-> intended. Only the generic fbdev emulation uses this code and it 
-> should really be moved there at some point.
-
-
-Are you meant  that we should remove all these changes in 
-drivers/gpu/drm/drm_fb_helper.c ?
-
-
-But this changes are helps to prevent the damage box computed go out of 
-bound,
-
-the bound of the displayable shadow buffer on multiple display case.
-
-It is the minimum width x height which could be fit in for all 
-display/minotor.
-
-
-For example, one is 1920x1080 monitor, another is 1280x800 monitor.
-
-connected to the motherboard simultaneously.
-
-
-Then, 1920x1080x4 (suppose we are using the XRGB) scanout buffer will be
-
-allocate by the  GEM backend. But the the actual display area is 1280x800.
-
-This is true at least for my driver on my platform, In this case,
-
-```
-
-    info->var.xres ==1280;
-
-    info->var.yres == 800;
-
-```
-
-If don't restrict this, the damage box computed out of the bound of  (0, 
-0) ~ (1280, 800) rectangle.
-
-a 1920x1080 damage box will came out.
-
-
-When running fbdev test of IGT, the smaller screen display will be OK.
-
-but the larger screen, the area outsize of 1280x800 will also be written.
-
-The background color became completely white from completely black 
-before carry out the test,
-
-luckily, linux kernel do not hung, this time.
-
-
-On multi-screen case, we still need to restrict the damage box computed,
-
-Do not go out of 1280x800,  right?
-
-
->
->>             x1 = bit_off / info->var.bits_per_pixel;
->>           x2 = DIV_ROUND_UP(bit_end, info->var.bits_per_pixel);
->> diff --git a/drivers/gpu/drm/drm_fbdev_generic.c 
->> b/drivers/gpu/drm/drm_fbdev_generic.c
->> index 8e5148bf40bb..b057cfbba938 100644
->> --- a/drivers/gpu/drm/drm_fbdev_generic.c
->> +++ b/drivers/gpu/drm/drm_fbdev_generic.c
->> @@ -94,7 +94,7 @@ static int drm_fbdev_generic_helper_fb_probe(struct 
->> drm_fb_helper *fb_helper,
->>       fb_helper->buffer = buffer;
->>       fb_helper->fb = buffer->fb;
->>   -    screen_size = buffer->gem->size;
->> +    screen_size = sizes->surface_height * buffer->fb->pitches[0];
->
-> I guess we simply go back to this line. I'd R-b a patch that does 
-> exactly this.
->
-> But some explanation is in order. Maybe you can add this as a comment 
-> to the computation, as it's not obvious:
->
-> The value of screen_size should actually be the size of the gem 
-> buffer. In a physical framebuffer (i.e., video memory), the size would 
-> be a multiple of the page size, but not necessarily a multiple of the 
-> screen resolution. There are also pan fbdev's operations, and we could 
-> possibly use DRM buffers that are not multiples of the screen width. 
-> But the update code requires the use of drm_framebuffer_funcs.dirty, 
-> which takes a clipping rectangle and therefore doesn't work well with 
-> these odd values for screen_size.
->
-> Best regards
-> Thomas
->
->>       screen_buffer = vzalloc(screen_size);
->>       if (!screen_buffer) {
->>           ret = -ENOMEM;
->
+Benjamin
