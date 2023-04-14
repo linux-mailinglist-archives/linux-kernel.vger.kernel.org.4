@@ -2,137 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 625E36E1910
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 02:35:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B726E1915
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 02:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjDNAeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 20:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57418 "EHLO
+        id S229628AbjDNAfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 20:35:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjDNAeq (ORCPT
+        with ESMTP id S229567AbjDNAfx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 20:34:46 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD11383
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 17:34:44 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id o2so16821305plg.4
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 17:34:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1681432484; x=1684024484;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dK9hVUz2orffoZSnLQ0uN85JKx6BIiwXe++QYrjelFs=;
-        b=gCnHcFqqp79fTpuPHK1wuBk7ErKVY2ZIcBq1b/iopBXE9PysQONktZDCg7Cu49sUaO
-         fqBoqlZLKd7e3NIlFtDvk5GBmAGZRJmhqGfl0PWjuTD4afgiD3HjfqdGZRfGhI2LcjBf
-         LOO6LIpZa2B76parOtem+TsLevXVi/SDvJCXw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681432484; x=1684024484;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dK9hVUz2orffoZSnLQ0uN85JKx6BIiwXe++QYrjelFs=;
-        b=fF8G13Rvt8LdKXtOj10IkdbkZyxz78gfnfi5w/Wc4KduWy8Q4SiJTyQ6OtbEr4/UVD
-         5P2a9s81ZW5piSzWn7J+zzqctLb3pOQTYAMAEnF6W4mORrEa98wTciQAdCwEs+OLo3mm
-         ZUO9ZIC0P4cr2ERLrbEfOn0NGhQwf/+AiO+SWGngDec8L64ou5s74U8iR+wzZ97tXJ7e
-         8AEq9NoIDLuGIDt4g3nyJLqErkiLbzOPIhthKmLP5s2RG2NqHKoUkagHnKVCoVKw0Wtd
-         oG/76qyc7Y3brvRlNETOoCXqDv3NOSA/hrPIdZFP0p4VPaxR8PU0RkebwfzTreQsTUWo
-         wDNQ==
-X-Gm-Message-State: AAQBX9e71rlL0btvLbG+xMTl+pCSbk27XZNCl8OikfzqGUaK9rGqSSoE
-        X1Kwkv25q3z7TO7BB+XZbWqLFw==
-X-Google-Smtp-Source: AKy350YdtrS06a4KBpbxbNlJiemjt1P2RNhUGLmkm5jwlZzjN7Ce5eBRPNqJONMadr/kNmxP8sITNw==
-X-Received: by 2002:a17:90b:788:b0:246:896a:408d with SMTP id l8-20020a17090b078800b00246896a408dmr3842408pjz.14.1681432484191;
-        Thu, 13 Apr 2023 17:34:44 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:d555:e8ef:b29c:bd37])
-        by smtp.gmail.com with ESMTPSA id u2-20020a17090adb4200b00246cfdb570asm3798151pjx.27.2023.04.13.17.34.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 17:34:43 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] regulator: core: Make regulator_lock_two() logic easier to follow
-Date:   Thu, 13 Apr 2023 17:34:17 -0700
-Message-ID: <20230413173359.1.I1ae92b25689bd6579952e6d458b79f5f8054a0c9@changeid>
-X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
+        Thu, 13 Apr 2023 20:35:53 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646ECBE;
+        Thu, 13 Apr 2023 17:35:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681432552; x=1712968552;
+  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=gJXUKvtAKIhFjJW0OMUbj/X+85vaYXQK0dClWr5sQks=;
+  b=RTNx1zAmY8Kway3NdxJl1YqtPfFk+ssgMyU3kjmvXT8yKXNTLXUND+JS
+   27ymq6x8t8p9GfWlgQL8PNxd+IRFmqy+hU593OTKWTfzOoWFuButSFiRe
+   5bMww/uNFh4N9lKRUikdPs40zlt4a/dx6eQ+pAsM19WsXA5zAElaCNlzD
+   AkoUmYhW4wscaPPb6OnNDol4JxsbJ4SlHtakp5XsZheHonnTVj+lmVeXG
+   oq3aifODxaDCAG0IdQxl1KO9oKyRFoXSvWYiEzg3KxY10/6mf4XgkyDvQ
+   Kq8M2VtZ//er98TcVGxDbHD8IQx8ub/h1xc9J2IAqpiNVRPfFSSEuriM3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="346170058"
+X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
+   d="scan'208";a="346170058"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 17:35:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="722269709"
+X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
+   d="scan'208";a="722269709"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga001.jf.intel.com with ESMTP; 13 Apr 2023 17:35:51 -0700
+Received: from [10.54.75.144] (debox1-desk1.jf.intel.com [10.54.75.144])
+        by linux.intel.com (Postfix) with ESMTP id 1E4DA580BEE;
+        Thu, 13 Apr 2023 17:35:51 -0700 (PDT)
+Message-ID: <fc37371bb116cabdd9d2ae114c0f34a818e9c4c2.camel@linux.intel.com>
+Subject: Re: [PATCH v8 4/4] platform/x86/intel/pmc: core: Report duration of
+ time in HW sleep state
+From:   "David E. Box" <david.e.box@linux.intel.com>
+Reply-To: david.e.box@linux.intel.com
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        Ilpo =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Box David E <david.e.box@intel.com>
+Cc:     "jstultz@google.com" <jstultz@google.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "svenva@chromium.org" <svenva@chromium.org>,
+        Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+        "S-k, Shyam-sundar" <Shyam-sundar.S-k@amd.com>,
+        "rrangel@chromium.org" <rrangel@chromium.org>,
+        Jain Rajat <rajatja@google.com>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Date:   Thu, 13 Apr 2023 17:35:51 -0700
+In-Reply-To: <MN0PR12MB6101F7E14E3AD1ECFD6C2F25E2989@MN0PR12MB6101.namprd12.prod.outlook.com>
+References: <20230412194917.7164-1-mario.limonciello@amd.com>
+         <20230412194917.7164-5-mario.limonciello@amd.com>
+         <5d904d5a-d25e-7d6d-57e4-ca451bcead57@linux.intel.com>
+         <MN0PR12MB6101F7E14E3AD1ECFD6C2F25E2989@MN0PR12MB6101.namprd12.prod.outlook.com>
+Organization: David E. Box
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The regulator_lock_two() function could be made clearer in the case of
-lock contention by having a local variable for each of the held and
-contended locks. Let's do that. At the same time, let's use the swap()
-function instead of open coding it.
+On Thu, 2023-04-13 at 22:40 +0000, Limonciello, Mario wrote:
+> [Public]
+>=20
+>=20
+>=20
+> > -----Original Message-----
+> > From: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
+> > Sent: Thursday, April 13, 2023 04:24
+> > To: Limonciello, Mario <Mario.Limonciello@amd.com>
+> > Cc: Box David E <david.e.box@intel.com>; jstultz@google.com;
+> > pavel@ucw.cz; svenva@chromium.org; Rajneesh Bhardwaj
+> > <irenic.rajneesh@gmail.com>; S-k, Shyam-sundar <Shyam-sundar.S-
+> > k@amd.com>; rrangel@chromium.org; Jain Rajat <rajatja@google.com>;
+> > hdegoede@redhat.com; Mark Gross <markgross@kernel.org>; platform-
+> > driver-x86@vger.kernel.org; LKML <linux-kernel@vger.kernel.org>
+> > Subject: Re: [PATCH v8 4/4] platform/x86/intel/pmc: core: Report durati=
+on of
+> > time in HW sleep state
+> >=20
+> > On Wed, 12 Apr 2023, Mario Limonciello wrote:
+> >=20
+> > > intel_pmc_core displays a warning when the module parameter
+> > > `warn_on_s0ix_failures` is set and a suspend didn't get to a HW sleep
+> > > state.
+> > >=20
+> > > Report this to the standard kernel reporting infrastructure so that
+> > > userspace software can query after the suspend cycle is done.
+> > >=20
+> > > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> > > ---
+> > > v7->v8:
+> > > =C2=A0* Report max sleep as well
+> > > ---
+> > > =C2=A0drivers/platform/x86/intel/pmc/core.c | 3 +++
+> > > =C2=A01 file changed, 3 insertions(+)
+> > >=20
+> > > diff --git a/drivers/platform/x86/intel/pmc/core.c
+> > b/drivers/platform/x86/intel/pmc/core.c
+> > > index 925c5d676a43..f9677104353d 100644
+> > > --- a/drivers/platform/x86/intel/pmc/core.c
+> > > +++ b/drivers/platform/x86/intel/pmc/core.c
+> > > @@ -1153,6 +1153,7 @@ static int pmc_core_probe(struct platform_devic=
+e
+> > *pdev)
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pmc_core_do_dmi_quirk=
+s(pmcdev);
+> > >=20
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pmc_core_dbgfs_regist=
+er(pmcdev);
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pm_report_max_hw_sleep(((1=
+UL << 32) - 1) *
+> > pmc_core_adjust_slp_s0_step(pmcdev, 1));
+> >=20
+> > Technically this is FIELD_MAX(SLP_S0_RES_COUNTER_MASK) *
+> > pmc_core_adjust...?
+> > Where the define is:
+> > #define SLP_S0_RES_COUNTER_MASK=C2=A0GENMASK(31, 0)
+>=20
+> That's fine by me to switch it over, it certainly makes it a lot more
+> readable.
+> I took the value from @Box David E to use suggested in v7, so what are yo=
+ur
+> thoughts?
 
-This change is expected to be a no-op and simply improves code
-clarity.
+Ilpo's suggestion is preferable. The warning comes from using 1UL, long bei=
+ng 4
+bytes on i386.
 
-Suggested-by: Stephen Boyd <swboyd@chromium.org>
-Link: https://lore.kernel.org/r/CAE-0n53Eb1BeDPmjBycXUaQAF4ppiAM6UDWje_jiB9GAmR8MMw@mail.gmail.com
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
+>=20
+> The current version has an overflow error reported by the robot for i386,=
+ so
+> it
+> definitely needs some sort of change.
 
- drivers/regulator/core.c | 31 ++++++++++++-------------------
- 1 file changed, 12 insertions(+), 19 deletions(-)
+Resolved by using the macro. With Ilpo's suggestion you can add my reviewed=
+ by.
+Thanks.
 
-diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
-index 08726bc0da9d..dc741ac156c3 100644
---- a/drivers/regulator/core.c
-+++ b/drivers/regulator/core.c
-@@ -219,7 +219,7 @@ static void regulator_lock_two(struct regulator_dev *rdev1,
- 			       struct regulator_dev *rdev2,
- 			       struct ww_acquire_ctx *ww_ctx)
- {
--	struct regulator_dev *tmp;
-+	struct regulator_dev *held, *contended;
- 	int ret;
- 
- 	ww_acquire_init(ww_ctx, &regulator_ww_class);
-@@ -233,25 +233,18 @@ static void regulator_lock_two(struct regulator_dev *rdev1,
- 		goto exit;
- 	}
- 
-+	held = rdev1;
-+	contended = rdev2;
- 	while (true) {
--		/*
--		 * Start of loop: rdev1 was locked and rdev2 was contended.
--		 * Need to unlock rdev1, slowly lock rdev2, then try rdev1
--		 * again.
--		 */
--		regulator_unlock(rdev1);
--
--		ww_mutex_lock_slow(&rdev2->mutex, ww_ctx);
--		rdev2->ref_cnt++;
--		rdev2->mutex_owner = current;
--		ret = regulator_lock_nested(rdev1, ww_ctx);
--
--		if (ret == -EDEADLOCK) {
--			/* More contention; swap which needs to be slow */
--			tmp = rdev1;
--			rdev1 = rdev2;
--			rdev2 = tmp;
--		} else {
-+		regulator_unlock(held);
-+
-+		ww_mutex_lock_slow(&contended->mutex, ww_ctx);
-+		contended->ref_cnt++;
-+		contended->mutex_owner = current;
-+		swap(held, contended);
-+		ret = regulator_lock_nested(contended, ww_ctx);
-+
-+		if (ret != -EDEADLOCK) {
- 			WARN_ON(ret);
- 			break;
- 		}
--- 
-2.40.0.634.g4ca3ef3211-goog
+David
+
+>=20
+> >=20
+> > >=20
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0device_initialized =
+=3D true;
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dev_info(&pdev->dev, =
+" initialized\n");
+> > > @@ -1214,6 +1215,8 @@ static inline bool pmc_core_is_s0ix_failed(stru=
+ct
+> > pmc_dev *pmcdev)
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (pmc_core_dev_stat=
+e_get(pmcdev, &s0ix_counter))
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0return false;
+> > >=20
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pm_report_hw_sleep_time((u=
+32)(s0ix_counter - pmcdev-
+> > > s0ix_counter));
+> > > +
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (s0ix_counter =3D=
+=3D pmcdev->s0ix_counter)
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0return true;
+> > >=20
+> > >=20
+> >=20
+> > --
+> > =C2=A0i.
 
