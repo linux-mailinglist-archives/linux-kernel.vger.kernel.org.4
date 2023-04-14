@@ -2,91 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 977FB6E2A32
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 20:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1D356E2A34
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 20:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbjDNSn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 14:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35286 "EHLO
+        id S229793AbjDNSn6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 14 Apr 2023 14:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjDNSnY (ORCPT
+        with ESMTP id S229468AbjDNSn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 14:43:24 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58547868B;
-        Fri, 14 Apr 2023 11:43:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=p26dZK3pH6VmE9TncnwVN82emLjrvNPhwxTiscJM8dU=; b=Sd/cxbIkTSLPdPrOyKbZZr25Yk
-        YwccLPev/kvz0gp5GFwNUnfgXp+fhJlhYTVZKK0P5sYL8xyjHsX/RAGiviCKwy3eFnojOgRE93pRj
-        wjBET4Nv4ldXh/xNykeV3Re6au6xejXVhuYQxtwkT5EXoTUjR0wY0b/dHfOLWyoDn9FbIaOgIvFka
-        66lHXnuIx3gtHO5BGyjEHbIlRTA3+snpRomlp1zSShbh308va4EmMNd/bkQZcl+apjOwmr42zNbTd
-        nds1ibzn7oxYqmdROUjK9Q04q2ogcBBtIii1R7kYe06diNa7TBjT4YjR0aM09KznpCUK5flSECDBv
-        NOzAcIbA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pnONy-008zEZ-0z; Fri, 14 Apr 2023 18:43:02 +0000
-Date:   Fri, 14 Apr 2023 19:43:01 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, mhocko@suse.com,
-        josef@toxicpanda.com, jack@suse.cz, ldufour@linux.ibm.com,
-        laurent.dufour@fr.ibm.com, michel@lespinasse.org,
-        liam.howlett@oracle.com, jglisse@google.com, vbabka@suse.cz,
-        minchan@google.com, dave@stgolabs.net, punit.agrawal@bytedance.com,
-        lstoakes@gmail.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Subject: Re: [PATCH 1/1] mm: handle swap page faults if the faulting page can
- be locked
-Message-ID: <ZDmetaUdmlEz/W8Q@casper.infradead.org>
-References: <20230414180043.1839745-1-surenb@google.com>
+        Fri, 14 Apr 2023 14:43:56 -0400
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801FB8A74;
+        Fri, 14 Apr 2023 11:43:55 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id c9so9059067ejz.1;
+        Fri, 14 Apr 2023 11:43:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681497834; x=1684089834;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=McbEA2OpJ6jOUiDyogw43V66/S8Du0pTDcqQpetxNCk=;
+        b=DijGJVUPdXnOAuxmFyIkmYlvbANbgCrsoMEmeD1hLCp/WwyZBHamiyKpZc7m3xXRei
+         P0/Lkgsb1UCRT7/WMWS+tM842Uj7ynrBe7MG4yB2eqoJVQUSk9lPewtFq12bVUn8dck+
+         vDHnUjuhl0TmfRSmAiGsDd8cAoIOEsIFcqzQ6Ph2cNIF7aLNDKzQBCgOOBGNX6kZRByH
+         Xs4gTjfdabxTGa+IacW8lmZVFwWzHv20/SoJ29l2SfeNfzbfRwMcJxhz9A2C77mQvaQV
+         2Exzvn7v0qn0whv2zKshBoNxpJdKnrj+bOMKNMyG3JC7QS7rPmUz1JkMWsnEvHIPmfvq
+         y5dQ==
+X-Gm-Message-State: AAQBX9eI/6YVpx3C67iB00086+zedBi2VuEqIzyZA5lF4xFstK83ZMTd
+        UEi8qmVeLmX5hLUHQ39QoRbRoUucDrWCfOeaD7+SUfGC
+X-Google-Smtp-Source: AKy350a9mCU+qLfRhNEohaOPdo9gUyZvFfhQXZlP30P74TgOlIYg3BBUjPKSoHR9YqC1AO4tQFFs20VUsT7rRdiUS7k=
+X-Received: by 2002:a17:906:f290:b0:94d:cf8c:1542 with SMTP id
+ gu16-20020a170906f29000b0094dcf8c1542mr71781ejb.2.1681497833847; Fri, 14 Apr
+ 2023 11:43:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230414180043.1839745-1-surenb@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230307133735.90772-1-daniel.lezcano@linaro.org>
+ <20230307133735.90772-10-daniel.lezcano@linaro.org> <CAJZ5v0hW1B7XmU16PHRE2B6z2e-qs=X8m4v8qb--MUttiPuGqw@mail.gmail.com>
+ <a7cf78b9-84f3-a10a-d192-8f45565d85c9@linaro.org>
+In-Reply-To: <a7cf78b9-84f3-a10a-d192-8f45565d85c9@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 14 Apr 2023 20:43:42 +0200
+Message-ID: <CAJZ5v0gT1FdH3wF1104wHLHzx7YnmhtqCnNtywO2L5y4jG00ZQ@mail.gmail.com>
+Subject: Re: [PATCH v1 09/11] thermal/core: Add a linked device parameter
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, amitk@kernel.org,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>, rui.zhang@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 14, 2023 at 11:00:43AM -0700, Suren Baghdasaryan wrote:
-> When page fault is handled under VMA lock protection, all swap page
-> faults are retried with mmap_lock because folio_lock_or_retry
-> implementation has to drop and reacquire mmap_lock if folio could
-> not be immediately locked.
-> Instead of retrying all swapped page faults, retry only when folio
-> locking fails.
+On Tue, Apr 4, 2023 at 9:01 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>
+> On 27/03/2023 18:16, Rafael J. Wysocki wrote:
+> > On Tue, Mar 7, 2023 at 2:38 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+> >>
+> >> Some drivers want to create a link from the thermal zone to the device
+> >> sysfs entry and vice versa.
+> >
+> > Which device is this, exactly?
+>
+> ls -alh /sys/bus/acpi/drivers/thermal/LNXTHERM:00/
+>
+> [ ... ]
+>
+> lrwxrwxrwx    1         0 thermal_zone ->
+> ../../../virtual/thermal/thermal_zone0
+>
+> [ ... ]
+>
+> The ACPI driver is the only one doing this AFAICT.
+>
+>
+> >> That is the case of the APCI driver.
+> >>
+> >> Having a backpointer from the device to the thermal zone sounds akward
+> >> as we can have the same device instantiating multiple thermal zones so
+> >> there will be a conflict while creating the second link with the same
+> >> name. Moreover, the userspace has enough information to build the
+> >> dependency from the thermal zone device link without having this cyclic
+> >> link from the device to thermal zone.
+> >>
+> >> Anyway, everything in its time.
+> >>
+> >> This change allows to create a these cyclic links tz <-> device as
+> >> ACPI does and will allow to remove the code in the ACPI driver.
+> >
+> > Well, I'd rather have it in the driver than in the core TBH.
+> >
+> > If ACPI is the only user of this, let it do the dirty thing by itself.
+> >
+> > There are two cases which would justify making this change:
+> > 1. There will be more users of it going forward (seems unlikely from
+> > the description).
+> > 2. It gets in the way of some other changes somehow.
+> >
+> > I kind of expect 2. to be the case, so how does it get in the way?
+>
+> Shall we do the same approach than 'Menlow' and add an option to remove
+> the thermal zone link in the acpi sysfs directory ?
 
-Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-
-Let's just review what can now be handled under the VMA lock instead of
-the mmap_lock, in case somebody knows better than me that it's not safe.
-
- - We can call migration_entry_wait().  This will wait for PG_locked to
-   become clear (in migration_entry_wait_on_locked()).  As previously
-   discussed offline, I think this is safe to do while holding the VMA
-   locked.
- - We can call remove_device_exclusive_entry().  That calls
-   folio_lock_or_retry(), which will fail if it can't get the VMA lock.
- - We can call pgmap->ops->migrate_to_ram().  Perhaps somebody familiar
-   with Nouveau and amdkfd could comment on how safe this is?
- - I believe we can't call handle_pte_marker() because we exclude UFFD
-   VMAs earlier.
- - We can call swap_readpage() if we allocate a new folio.  I haven't
-   traced through all this code to tell if it's OK.
-
-So ... I believe this is all OK, but we're definitely now willing to
-wait for I/O from the swap device while holding the VMA lock when we
-weren't before.  And maybe we should make a bigger deal of it in the
-changelog.
-
-And maybe we shouldn't just be failing the folio_lock_or_retry(),
-maybe we should be waiting for the folio lock with the VMA locked.
-
+That depends on the answer to the question above.
