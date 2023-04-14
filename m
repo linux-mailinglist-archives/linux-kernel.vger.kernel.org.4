@@ -2,72 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87D8F6E2570
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 16:18:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 120DB6E2573
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 16:18:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbjDNOSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 10:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43074 "EHLO
+        id S230167AbjDNOSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 10:18:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230368AbjDNOSG (ORCPT
+        with ESMTP id S229925AbjDNOSm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 10:18:06 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F431B769
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 07:18:01 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33EEHlxi092711;
-        Fri, 14 Apr 2023 09:17:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1681481867;
-        bh=0xJWWmhVT0Y8R8sE6W9HoThWfwH6miZcXks0nWWEUaU=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=XqDrpcKR6XXiYMge3vlQFJyuwjiPY9ghwi0NfLIE3IX6eMzbNENz3q8/b+Lqf5M2J
-         Tf/NDSHkKHWs3g12D1ggysaZBiE/CP9eXviT1Chm6hm0Ckms6O2N0ieXjiE/FUOdsk
-         Qw9oZyMsqrVmUMSJ/wmUI3w8lOY57eGBzP/HmDGc=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33EEHl7J100935
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 14 Apr 2023 09:17:47 -0500
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 14
- Apr 2023 09:17:46 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 14 Apr 2023 09:17:46 -0500
-Received: from [10.250.32.8] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33EEHk1T029808;
-        Fri, 14 Apr 2023 09:17:46 -0500
-Message-ID: <5be1c313-9e1e-3bac-46f3-ee172d1afb45@ti.com>
-Date:   Fri, 14 Apr 2023 09:17:46 -0500
+        Fri, 14 Apr 2023 10:18:42 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1153B7ED2;
+        Fri, 14 Apr 2023 07:18:38 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2E3612F4;
+        Fri, 14 Apr 2023 07:19:23 -0700 (PDT)
+Received: from [10.57.19.153] (unknown [10.57.19.153])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9FBB23F6C4;
+        Fri, 14 Apr 2023 07:18:36 -0700 (PDT)
+Message-ID: <e31da1fa-168d-9a85-cdb3-66192d887d83@arm.com>
+Date:   Fri, 14 Apr 2023 15:18:34 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH] misc: sram: Add dma-heap-export reserved SRAM area type
-To:     Christian Gmeiner <christian.gmeiner@gmail.com>
-CC:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        <linaro-mm-sig@lists.linaro.org>
-References: <20200424222740.16259-1-afd@ti.com>
- <CAL_Jsq+4mf6QHX27knoHTXA4vnsC3swuvAH7zK1DpyaV-p_qbw@mail.gmail.com>
- <f46c097a-b2a6-6368-a8a4-e30995a54d17@ti.com>
- <CAH9NwWeZnDEkundm98=KL6xB9bVO3nOkk48xMF-eQnztP4DD4g@mail.gmail.com>
- <99f1da4f-810e-986d-388a-af136ade745e@ti.com>
- <CAH9NwWcafkmcZd=5WN_hoJmfkwUJJrewaPnSmCK-izrC3hwKnA@mail.gmail.com>
- <CAH9NwWfkWTXMVOY-7USgYJnBtUOYd8=TFVcPxiTgVd9AJAQH=Q@mail.gmail.com>
+Subject: Re: [PATCH V3] thermal/core/power_allocator: avoid thermal cdev can
+ not be reset
 Content-Language: en-US
-From:   Andrew Davis <afd@ti.com>
-In-Reply-To: <CAH9NwWfkWTXMVOY-7USgYJnBtUOYd8=TFVcPxiTgVd9AJAQH=Q@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Di Shen <di.shen@unisoc.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xuewen.yan@unisoc.com,
+        jeson.gao@unisoc.com, zhanglyra@gmail.com, orsonzhai@gmail.com,
+        rui.zhang@intel.com, amitk@kernel.org, rafael@kernel.org,
+        Di Shen <cindygm567@gmail.com>
+References: <20230320095620.7480-1-di.shen@unisoc.com>
+ <6055bc39-5c00-d12f-b5c3-fa21a9649d63@arm.com>
+ <CAHYJL4qL+nJuiN8vXGaiPQuuaPx6BA+yjRq2TRaBgb+qXi8-yw@mail.gmail.com>
+ <637a3bb1-ba1c-e707-01b7-06c1358583ca@linaro.org>
+ <CAHYJL4rnfVp+X3imbxWzUd9ixTFAPe4ioLyi-t50PwhL0y5v8A@mail.gmail.com>
+ <da59b4ef-1532-1b3a-7a73-9a095d8c9390@linaro.org>
+ <CAHYJL4qJwKHFsCPUvLzmUEAJtEfHDAO23D5=0zAXOYSCABJ8_g@mail.gmail.com>
+ <6aad180f-410c-5b11-b30b-c7bc02cbe054@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <6aad180f-410c-5b11-b30b-c7bc02cbe054@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,46 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/14/23 12:44 AM, Christian Gmeiner wrote:
-> Hi Andrew
-> 
-> Am Di., 4. Apr. 2023 um 17:02 Uhr schrieb Christian Gmeiner
-> <christian.gmeiner@gmail.com>:
+
+
+On 4/14/23 12:12, Daniel Lezcano wrote:
+> On 13/04/2023 10:40, Di Shen wrote:
+>> We have discussed this question in patch-v1:
+>> https://lore.kernel.org/all/f6aaa5f1-495d-a158-14d8-ddb2bffbd9c2@arm.com/
 >>
->>>> Hi Andrew
->>>>
->>>>>
->>>>>
->>>>> Okay, will split for v2.
->>>>>
->>>>>
->>>>
->>>> Was there a follow-up v2 of this patchset? AFAICT this series did not
->>>> make it into the mainline kernel.
->>>> Do you have any plans to work on it? If not I would like to help out
->>>> as we have a use case where we want to
->>>> use a dma-buf sram exporter.
->>>>
->>>>
->>>
->>> Sure, I've been keeping it alive in our evil vendor tree, but if
->>> there is interest upstream now I'll post a v2 and CC you.
->>
->> That would be great!
->>
+>> Simply put, we use the trip_temp in the Android System; set different
+>> trip_temp for thermal control of different scenarios.
 > 
-> Did you find time to prepare a v2? If not, can you point me to the
-> evil vendor tree?
+> The changes are dealing with the trip points and trying to detect the 
+> threshold. That part should be handled in the thermal core or thermal 
+> trip side, not in the governor.
+> 
+> AFAICT, if a trip point is changed, then the power allocator should be 
+> reset, including the cdev state.
+> 
+> It would be more convenient to add an ops to the governor ops structure 
+> to reset the governor and then call it when a trip point is changed in 
+> thermal_zone_set_trip()
 > 
 > 
 
-I did find some time and CC'd you on v2, the patch's subject was slightly
-renamed, so maybe your emailer missed it?
+Sounds reasonable to have a proper API and fwk handling this corner
+case scenario.
+Although, if there is a need for a 'easy-to-backport' fix for IPA only,
+I agree with this patch, since it's straight forward to put in some
+Android kernel. We can later fix the framework to handle this properly.
+Anyway, both ways are OK to me.
 
-https://patchwork.kernel.org/project/linux-media/patch/20230403192433.26648-1-afd@ti.com/
-
-Our evil vendor trees are here either way:
-
-https://git.ti.com/cgit/ti-linux-kernel/ti-linux-kernel/
-
-Andrew
+Regards,
+Lukasz
