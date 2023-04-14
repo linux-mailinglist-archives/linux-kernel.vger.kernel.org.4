@@ -2,144 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF1D76E1AD2
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 05:34:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CF106E1ADD
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 05:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbjDNDdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 23:33:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46380 "EHLO
+        id S229479AbjDNDgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Apr 2023 23:36:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjDNDdb (ORCPT
+        with ESMTP id S229546AbjDNDgG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 23:33:31 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D7C30FA
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 20:33:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681443207; x=1712979207;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=d9bYFb9mGWq+UdOaWT8JgAgu+2LDydqXaDPlXU6+OWU=;
-  b=Rq5ZV8GH/M+KFoZJNaP7pjqlKBYXCnMQHkWDo7arE1EJhuOwIsakzeM9
-   OFkWtvZ7ixBPWKEBrBsERmakWgIuMLBxyrEItcDysM1Mypr768p7I4xlc
-   S/2qgMU3yToIEzPovIhD1z/kRyyXEjb6AxhVmOolVluu+J/ru7iQWX6hP
-   h+8Vy1u8T1pQN0BQ4MSuAPYtWk3V3VSTMLm9VCM0PppQOz1r0PP/7Kq/l
-   Q9r8+o5/3RzviKDPO59m2JdDXJGoRp7eOrHqzqJdGKkFaMo86Vj3j1Zpg
-   IYcoouGprLviBQ6ZVvN/6t6+bZGmlYMH2IMVOS8pfgHilb0qAUz5BC4dl
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="333137552"
-X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
-   d="scan'208";a="333137552"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 20:33:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="833380646"
-X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
-   d="scan'208";a="833380646"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 13 Apr 2023 20:33:13 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pnABU-000ZBh-2A;
-        Fri, 14 Apr 2023 03:33:12 +0000
-Date:   Fri, 14 Apr 2023 11:32:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jammy Huang <jammy_huang@aspeedtech.com>, airlied@redhat.com,
-        tzimmermann@suse.de
-Cc:     oe-kbuild-all@lists.linux.dev, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/ast: Fix long time waiting on s3/s4 resume
-Message-ID: <202304141155.Hsgy2cN0-lkp@intel.com>
-References: <20230414011147.3858-1-jammy_huang@aspeedtech.com>
+        Thu, 13 Apr 2023 23:36:06 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25AB30FA;
+        Thu, 13 Apr 2023 20:36:04 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id q5so20405984ybk.7;
+        Thu, 13 Apr 2023 20:36:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681443364; x=1684035364;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=paJ5hRO9EMV/Yv7G3XVsFSJRRP7FHyA9IIQOu6K6c3U=;
+        b=gypS9R9Xjh3IysKxBOiWkZXgor4O2y0l74oKJrOxWOZlqFtbGq1I0SvZM6worKJ1/8
+         RShsktY20SsfNpilwszhDQJ5tmcgYCoARcr7101Y1Udo/Qh2cv0V4Kr75OvFlfac8SBm
+         Luj9KNQs871SbNeOIdYrkT7CpaVBR7uhMpmNCxzb/xDokXG0S0LXPFlUHa4/6JnFYlWC
+         FiYP+BTFMDelAnrUHEzLxGw9MhETXUDhjIMSO0VHw99t3PCymhcaqqiUcCKpTy4Zmc38
+         oIqgMPxb41+XPd5HIq08Ril4dN4/M3eYGg0zPZhfgnJFjlLS+XMS7dJbw+jP149DuTRU
+         6NhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681443364; x=1684035364;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=paJ5hRO9EMV/Yv7G3XVsFSJRRP7FHyA9IIQOu6K6c3U=;
+        b=exbNnQyLBGbG2PgWZddKwBbc9RQf0ZkSNUKFMQwlmpzpVW/NKjgM9nvJAkq4B3CAt4
+         7b4Arcns9daebY+WdUGqzX1xeBv/ndQ50IqawsnSCYGvWv59NhLRcp3hrYic/vCPQ6yt
+         Sdc6pvPyLb17aP9BV28POKgTcSrvIZPVDjms+M9k/IJt1dsS+c7vDGo48K2oPElKg9yP
+         55MsxzXFnol9QOD9uhDnHbQ2sd+B/bM9y3OooD4WV1FD6HsH05eRd6krY4Fef3Fd5MFY
+         A/sXyeiyxG+/b2y6qwPKBWet9Zq3wceV5RSNfkz+PnMu83f1OGVuN5V8vZzwwtv++Z+N
+         nbTw==
+X-Gm-Message-State: AAQBX9fBp5f6eHQNVaUPZIb7FCcHfwEUv82Q5sN4qyFVjWizWSKn35Bw
+        7puz0v/iiH5yK90TCSUlP0PAkWyBLFOFnIVDZ5OU7iyVqN7mf6c3
+X-Google-Smtp-Source: AKy350ZUb9uD4VSSEoJLYAGtmi4TfBtVx2vd7ZIcrZM9ZYLkdhZ7os26wKYWujqZGdJQz1DyHZKk/tkvuyPVPqJgPak=
+X-Received: by 2002:a25:d2d2:0:b0:b8f:480c:ba49 with SMTP id
+ j201-20020a25d2d2000000b00b8f480cba49mr2528936ybg.4.1681443363892; Thu, 13
+ Apr 2023 20:36:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230414011147.3858-1-jammy_huang@aspeedtech.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Palash Oswal <oswalpalash@gmail.com>
+Date:   Thu, 13 Apr 2023 20:35:52 -0700
+Message-ID: <CAGyP=7fDcSPKu6nttbGwt7RXzE3uyYxLjCSE97J64pRxJP8jPA@mail.gmail.com>
+Subject: kernel BUG in fou_build_udp
+To:     "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jammy,
+Hello,
+I found the following issue using syzkaller with enriched corpus on:
+HEAD commit : 0bcc4025550403ae28d2984bddacafbca0a2f112
+git tree: linux
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on e62252bc55b6d4eddc6c2bdbf95a448180d6a08d]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jammy-Huang/drm-ast-Fix-long-time-waiting-on-s3-s4-resume/20230414-091312
-base:   e62252bc55b6d4eddc6c2bdbf95a448180d6a08d
-patch link:    https://lore.kernel.org/r/20230414011147.3858-1-jammy_huang%40aspeedtech.com
-patch subject: [PATCH] drm/ast: Fix long time waiting on s3/s4 resume
-config: ia64-allyesconfig (https://download.01.org/0day-ci/archive/20230414/202304141155.Hsgy2cN0-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/120de3fe25a450d9918de8bc73a4fe079bc71d9c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jammy-Huang/drm-ast-Fix-long-time-waiting-on-s3-s4-resume/20230414-091312
-        git checkout 120de3fe25a450d9918de8bc73a4fe079bc71d9c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/gpu/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304141155.Hsgy2cN0-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/ast/ast_dp.c:122:6: error: conflicting types for 'ast_dp_launch'; have 'void(struct drm_device *, u8)' {aka 'void(struct drm_device *, unsigned char)'}
-     122 | void ast_dp_launch(struct drm_device *dev, u8 bPower)
-         |      ^~~~~~~~~~~~~
-   In file included from drivers/gpu/drm/ast/ast_dp.c:8:
-   drivers/gpu/drm/ast/ast_drv.h:501:6: note: previous declaration of 'ast_dp_launch' with type 'void(struct drm_device *)'
-     501 | void ast_dp_launch(struct drm_device *dev);
-         |      ^~~~~~~~~~~~~
+C Reproducer : https://gist.github.com/oswalpalash/2a4bdb639c605ec80dbeec220e09603c
+Kernel .config :
+https://gist.github.com/oswalpalash/d9580b0bfce202b37445fa5fd426e41f
+syz-repro :
+r0 = socket$inet6(0xa, 0x2, 0x0)
+r1 = socket$nl_route(0x10, 0x3, 0x0)
+r2 = socket(0x10, 0x803, 0x0)
+sendmsg$nl_route(r2, &(0x7f0000000380)={0x0, 0x0,
+&(0x7f0000000340)={0x0, 0x14}}, 0x0)
+getsockname$packet(r2, &(0x7f0000000100)={0x11, 0x0, <r3=>0x0, 0x1,
+0x0, 0x6, @broadcast}, &(0x7f00000000c0)=0x14)
+sendmsg$nl_route(r1, &(0x7f0000000080)={0x0, 0x0,
+&(0x7f0000000500)={&(0x7f0000000180)=@newlink={0x60, 0x10, 0x439, 0x0,
+0x0, {0x0, 0x0, 0x0, 0x0, 0x9801}, [@IFLA_LINKINFO={0x40, 0x12, 0x0,
+0x1, @sit={{0x8}, {0x34, 0x2, 0x0, 0x1, [@IFLA_IPTUN_LINK={0x8, 0x1,
+r3}, @IFLA_IPTUN_ENCAP_TYPE={0x6, 0xf, 0x2},
+@IFLA_IPTUN_ENCAP_SPORT={0x6, 0x11, 0x4e21},
+@IFLA_IPTUN_ENCAP_SPORT={0x6, 0x11, 0x4e24}, @IFLA_IPTUN_LOCAL={0x8,
+0x2, @dev={0xac, 0x14, 0x14, 0x16}}, @IFLA_IPTUN_ENCAP_FLAGS={0x6,
+0x10, 0xfff}]}}}]}, 0x60}}, 0x20048894)
+sendmmsg$inet(r0, &(0x7f00000017c0)=[{{&(0x7f0000000040)={0x2, 0x4e20,
+@multicast1}, 0x10, 0x0, 0x0, &(0x7f0000000000)=[@ip_pktinfo={{0x1c,
+0x0, 0x8, {r3, @empty, @remote}}}], 0x20}}], 0x1, 0x0)
 
 
-vim +122 drivers/gpu/drm/ast/ast_dp.c
+Console log:
 
-594e9c04b5864b KuoHsiang Chou    2022-04-28  118  
-594e9c04b5864b KuoHsiang Chou    2022-04-28  119  /*
-594e9c04b5864b KuoHsiang Chou    2022-04-28  120   * Launch Aspeed DP
-594e9c04b5864b KuoHsiang Chou    2022-04-28  121   */
-594e9c04b5864b KuoHsiang Chou    2022-04-28 @122  void ast_dp_launch(struct drm_device *dev, u8 bPower)
-594e9c04b5864b KuoHsiang Chou    2022-04-28  123  {
-120de3fe25a450 Jammy Huang       2023-04-14  124  	u32 i = 0;
-594e9c04b5864b KuoHsiang Chou    2022-04-28  125  	u8 bDPExecute = 1;
-594e9c04b5864b KuoHsiang Chou    2022-04-28  126  	struct ast_private *ast = to_ast_private(dev);
-594e9c04b5864b KuoHsiang Chou    2022-04-28  127  
-594e9c04b5864b KuoHsiang Chou    2022-04-28  128  	// Wait one second then timeout.
-594e9c04b5864b KuoHsiang Chou    2022-04-28  129  	while (ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD1, COPROCESSOR_LAUNCH) !=
-594e9c04b5864b KuoHsiang Chou    2022-04-28  130  		COPROCESSOR_LAUNCH) {
-594e9c04b5864b KuoHsiang Chou    2022-04-28  131  		i++;
-594e9c04b5864b KuoHsiang Chou    2022-04-28  132  		// wait 100 ms
-594e9c04b5864b KuoHsiang Chou    2022-04-28  133  		msleep(100);
-594e9c04b5864b KuoHsiang Chou    2022-04-28  134  
-594e9c04b5864b KuoHsiang Chou    2022-04-28  135  		if (i >= 10) {
-594e9c04b5864b KuoHsiang Chou    2022-04-28  136  			// DP would not be ready.
-594e9c04b5864b KuoHsiang Chou    2022-04-28  137  			bDPExecute = 0;
-594e9c04b5864b KuoHsiang Chou    2022-04-28  138  			break;
-594e9c04b5864b KuoHsiang Chou    2022-04-28  139  		}
-594e9c04b5864b KuoHsiang Chou    2022-04-28  140  	}
-594e9c04b5864b KuoHsiang Chou    2022-04-28  141  
-120de3fe25a450 Jammy Huang       2023-04-14  142  	if (!bDPExecute)
-120de3fe25a450 Jammy Huang       2023-04-14  143  		drm_err(dev, "Wait DPMCU executing timeout\n");
-594e9c04b5864b KuoHsiang Chou    2022-04-28  144  
-594e9c04b5864b KuoHsiang Chou    2022-04-28  145  	ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE5,
-594e9c04b5864b KuoHsiang Chou    2022-04-28  146  			       (u8) ~ASTDP_HOST_EDID_READ_DONE_MASK,
-594e9c04b5864b KuoHsiang Chou    2022-04-28  147  			       ASTDP_HOST_EDID_READ_DONE);
-7f35680ada234c Thomas Zimmermann 2022-06-07  148  }
-594e9c04b5864b KuoHsiang Chou    2022-04-28  149  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+skbuff: skb_under_panic: text:ffffffff88a09da0 len:48 put:8
+head:ffff88801e4be680 data:ffff88801e4be67c tail:0x2c end:0x140
+dev:sit1
+------------[ cut here ]------------
+kernel BUG at net/core/skbuff.c:150!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 10068 Comm: syz-executor.3 Not tainted
+6.3.0-rc6-pasta-00035-g0bcc40255504 #1
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+1.13.0-1ubuntu1.1 04/01/2014
+RIP: 0010:skb_panic+0x152/0x1d0
+Code: 0f b6 04 01 84 c0 74 04 3c 03 7e 20 8b 4b 70 41 56 45 89 e8 48
+c7 c7 80 b3 5b 8b 41 57 56 48 89 ee 52 4c 89 e2 e8 ae 15 6c f9 <0f> 0b
+4c 89 4c 24 10 48 89 54 24 08 48 89 34 24 e8 69 1f d8 f9 4c
+RSP: 0018:ffffc900029bead0 EFLAGS: 00010282
+RAX: 0000000000000084 RBX: ffff88801d1c3d00 RCX: ffffc9000d863000
+RDX: 0000000000000000 RSI: ffffffff816695cc RDI: 0000000000000005
+RBP: ffffffff8b5bc1e0 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000400 R11: 0000000000000000 R12: ffffffff88a09da0
+R13: 0000000000000008 R14: ffff8880306b8000 R15: 0000000000000140
+FS:  00007f1dae5ed700(0000) GS:ffff888063a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000564f403b7d10 CR3: 0000000117f1c000 CR4: 00000000000006f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ skb_push+0xc8/0xe0
+ fou_build_udp+0x30/0x370
+ gue_build_header+0xfb/0x150
+ ip_tunnel_xmit+0x66e/0x3150
+ sit_tunnel_xmit__.isra.0+0xe7/0x150
+ sit_tunnel_xmit+0xf7e/0x28e0
+ dev_hard_start_xmit+0x187/0x700
+ __dev_queue_xmit+0x2ce4/0x3c40
+ neigh_connected_output+0x3c2/0x550
+ ip_finish_output2+0x78a/0x22e0
+ __ip_finish_output+0x396/0x650
+ ip_finish_output+0x31/0x280
+ ip_mc_output+0x21f/0x710
+ ip_send_skb+0xd8/0x260
+ udp_send_skb+0x73a/0x1480
+ udp_sendmsg+0x1bb2/0x2840
+ udpv6_sendmsg+0x1710/0x2c20
+ inet6_sendmsg+0x9d/0xe0
+ sock_sendmsg+0xde/0x190
+ ____sys_sendmsg+0x334/0x900
+ ___sys_sendmsg+0x110/0x1b0
+ __sys_sendmmsg+0x18f/0x460
+ __x64_sys_sendmmsg+0x9d/0x100
+ do_syscall_64+0x39/0xb0
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f1dad88eacd
+Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48
+89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
+01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f1dae5ecbf8 EFLAGS: 00000246 ORIG_RAX: 0000000000000133
+RAX: ffffffffffffffda RBX: 00007f1dad9bbf80 RCX: 00007f1dad88eacd
+RDX: 0000000000000001 RSI: 00000000200017c0 RDI: 0000000000000003
+RBP: 00007f1dad8fcb05 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fff4922802f R14: 00007fff492281d0 R15: 00007f1dae5ecd80
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:skb_panic+0x152/0x1d0
+Code: 0f b6 04 01 84 c0 74 04 3c 03 7e 20 8b 4b 70 41 56 45 89 e8 48
+c7 c7 80 b3 5b 8b 41 57 56 48 89 ee 52 4c 89 e2 e8 ae 15 6c f9 <0f> 0b
+4c 89 4c 24 10 48 89 54 24 08 48 89 34 24 e8 69 1f d8 f9 4c
+RSP: 0018:ffffc900029bead0 EFLAGS: 00010282
+RAX: 0000000000000084 RBX: ffff88801d1c3d00 RCX: ffffc9000d863000
+RDX: 0000000000000000 RSI: ffffffff816695cc RDI: 0000000000000005
+RBP: ffffffff8b5bc1e0 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000400 R11: 0000000000000000 R12: ffffffff88a09da0
+R13: 0000000000000008 R14: ffff8880306b8000 R15: 0000000000000140
+FS:  00007f1dae5ed700(0000) GS:ffff888063a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000564f403b7d10 CR3: 0000000117f1c000 CR4: 00000000000006f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
