@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0BBC6E2627
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 16:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E23376E2625
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 16:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231370AbjDNOsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 10:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42212 "EHLO
+        id S230437AbjDNOsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 10:48:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231235AbjDNOsC (ORCPT
+        with ESMTP id S231234AbjDNOsC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 14 Apr 2023 10:48:02 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 219639039;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F7007DB6;
         Fri, 14 Apr 2023 07:48:00 -0700 (PDT)
 Date:   Fri, 14 Apr 2023 14:47:56 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=I6eWeHhDXQ8Dk1a3rU13BnGG9fZTkXy6cJScMSWpIeA=;
-        b=JTSauNRt4iuEP1B4h5wgsv4FOh5m2/ry3WiAReJL/aL+IOmfaKz8XhC2PVt6/taO7t4ugW
-        iilMTMETwLm6rqYPVDDhMfF4JS4eHavZj7VUJ81/XwtQJG0UOo5WwUiRGBTTkk1fNoZ2JJ
-        zDubjf0SDAgbm0dBM84RMMQpN1BIjEF3Gwwu8HJOfozJ1116P4/SAqJZ05ANmqmX/iojCa
-        Oizb6IQ+ZeVk6rQpIBBrtcIMYL+I4sow2AY69tyMmERkF4QFz+fXBBxg+yMR/aaleXQK/U
-        gSHDydcl1/wscuML71nQFGs/vZnjufPa3Xb36/Ap2cH+CohjHqL3vLXsMaehbw==
+        bh=GyQpTxd1zzamu2vNd/KzheAQNFpYlN2xXq44JyXZpu8=;
+        b=J0aPfTtYtSxRqUgLOTrmaSZ+6R3YfCVHmnciKqLgd7LAHuxEiTf6WiQYJnqyO9SrktS9yA
+        VNpQsjwDw/rL+1iFecuNQHvMoVyCKUiJ6nRzbLAa1NKqfEqFalNPKZnw6XOORj7GIYR7VW
+        iofkqE7A+vhLK6cYmfachkFAg8AHg8pi5IrvpScGXTxb0lsh6jEZraD14hLJcP/LKTHqBO
+        qR5N3imPZ6GjmRJ4GJZsgrTrR9hsaA5M+Y1dwYV4Ej0hGyb5GjYTuQlA9vpqropz/8D7j+
+        tAo6RraNciDIS3lt3T5SObruA7htb7N6ek4E0cCtgcDTXVw3ZaMAdSzscDhWxQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1681483676;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,21 +36,22 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=I6eWeHhDXQ8Dk1a3rU13BnGG9fZTkXy6cJScMSWpIeA=;
-        b=SwChvhsG1TkF2yK9BUAY42IEpjDy10h1C+L+c3zgt4PX+M6MITJlpq7fruPsUOvrXc+gAm
-        xtuFBGNqROXeHICg==
+        bh=GyQpTxd1zzamu2vNd/KzheAQNFpYlN2xXq44JyXZpu8=;
+        b=z2+X11UFvqvoFJYiosJrk0Rf5e7YLskr11TtumuApR05wf+7hXJR4TerBQTJNf055nWXHT
+        T9GpqVkXRvp4weBA==
 From:   "tip-bot2 for Josh Poimboeuf" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: objtool/core] context_tracking: Fix KCSAN noinstr violation
+Subject: [tip: objtool/core] objtool: Add stackleak instrumentation to uaccess
+ safe list
 Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <dc93f45abdec90c171108b4b590b7fff5790963c.1681320026.git.jpoimboe@kernel.org>
-References: <dc93f45abdec90c171108b4b590b7fff5790963c.1681320026.git.jpoimboe@kernel.org>
+In-Reply-To: <42e9b487ef89e9b237fd5220ad1c7cf1a2ad7eb8.1681320562.git.jpoimboe@kernel.org>
+References: <42e9b487ef89e9b237fd5220ad1c7cf1a2ad7eb8.1681320562.git.jpoimboe@kernel.org>
 MIME-Version: 1.0
-Message-ID: <168148367618.404.8910517787032335784.tip-bot2@tip-bot2>
+Message-ID: <168148367644.404.15894767923207222447.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,41 +68,42 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the objtool/core branch of tip:
 
-Commit-ID:     e8deb00c0c4808654d1bf96a8f79cf1deb59b631
-Gitweb:        https://git.kernel.org/tip/e8deb00c0c4808654d1bf96a8f79cf1deb59b631
+Commit-ID:     7f530fba1123edcad00d59e1a73019814935f0c1
+Gitweb:        https://git.kernel.org/tip/7f530fba1123edcad00d59e1a73019814935f0c1
 Author:        Josh Poimboeuf <jpoimboe@kernel.org>
-AuthorDate:    Wed, 12 Apr 2023 10:24:06 -07:00
+AuthorDate:    Wed, 12 Apr 2023 10:29:35 -07:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Fri, 14 Apr 2023 16:08:27 +02:00
 
-context_tracking: Fix KCSAN noinstr violation
+objtool: Add stackleak instrumentation to uaccess safe list
 
-With KCSAN enabled, even empty inline stubs can be out-of-lined.
+If a function has a large stack frame, the stackleak plugin adds a call
+to stackleak_track_stack() after the prologue.
 
-Force the context_tracking_guest_exit() stub inline.
+This function may be called in uaccess-enabled code.  Add it to the
+uaccess safe list.
 
-Fixes the following warnings:
+Fixes the following warning:
 
-  vmlinux.o: warning: objtool: vmx_vcpu_enter_exit+0x1be: call to context_tracking_guest_exit() leaves .noinstr.text section
-  vmlinux.o: warning: objtool: svm_vcpu_enter_exit+0x85: call to context_tracking_guest_exit() leaves .noinstr.text section
+  vmlinux.o: warning: objtool: kasan_report+0x12: call to stackleak_track_stack() with UACCESS enabled
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/dc93f45abdec90c171108b4b590b7fff5790963c.1681320026.git.jpoimboe@kernel.org
+Link: https://lkml.kernel.org/r/42e9b487ef89e9b237fd5220ad1c7cf1a2ad7eb8.1681320562.git.jpoimboe@kernel.org
 ---
- include/linux/context_tracking.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/objtool/check.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/include/linux/context_tracking.h b/include/linux/context_tracking.h
-index d4afa85..5ae3abd 100644
---- a/include/linux/context_tracking.h
-+++ b/include/linux/context_tracking.h
-@@ -97,7 +97,7 @@ static inline int exception_enter(void) { return 0; }
- static inline void exception_exit(enum ctx_state prev_ctx) { }
- static inline int ct_state(void) { return -1; }
- static __always_inline bool context_tracking_guest_enter(void) { return false; }
--static inline void context_tracking_guest_exit(void) { }
-+static __always_inline void context_tracking_guest_exit(void) { }
- #define CT_WARN_ON(cond) do { } while (0)
- #endif /* !CONFIG_CONTEXT_TRACKING_USER */
- 
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 9440b07..4c8ef81 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -1279,6 +1279,8 @@ static const char *uaccess_safe_builtin[] = {
+ 	"__ubsan_handle_type_mismatch_v1",
+ 	"__ubsan_handle_shift_out_of_bounds",
+ 	"__ubsan_handle_load_invalid_value",
++	/* STACKLEAK */
++	"stackleak_track_stack",
+ 	/* misc */
+ 	"csum_partial_copy_generic",
+ 	"copy_mc_fragile",
