@@ -2,130 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBE706E2C3B
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 00:02:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 301376E2C3F
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 00:05:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbjDNWCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 18:02:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47284 "EHLO
+        id S229964AbjDNWFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 18:05:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjDNWCb (ORCPT
+        with ESMTP id S229704AbjDNWFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 18:02:31 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EDC02D6D
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 15:02:30 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id gc14so3963763ejc.5
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 15:02:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681509749; x=1684101749;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MQuB9JCPITcGs+8HPntMmVSm61Ab+fnUpiW2TFHYHeE=;
-        b=uQpTlspPi0frg0JzINki3uCSt7EQ5x2lIGx/Jr1wFzNrfNsbCmIQRvQ1hrsoNNfS/v
-         XrYRntGvOyQ0xNt9Np4/jI341PIvSXRPeG0vSEapvvFhriZgmhSwv88FI1+oembfKq1V
-         8qZMRetKAwhF+WHdW3t2T0O3P1dGMgypsnyxbx3nz3t8GnkY9Xt4AxTu3E1bYp8rwjZE
-         HDnoXxe0Jl6cYzHLfNqBL7DxH1kGYLuoB5lfvGdYbj2Ea2gqsV7bGivkTM9nA5MmvR8U
-         rV4iz/8fIzWcOJ1V5EkV/Phy+fwSK3o8vZ4Lb1yHWH1IUrHvpWHcHmNJ19h0jA7BokWT
-         eCTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681509749; x=1684101749;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MQuB9JCPITcGs+8HPntMmVSm61Ab+fnUpiW2TFHYHeE=;
-        b=Nbzo+eCRycOI66PjdWRwWBsZ/xtxOsELUb9a5r3HU0Nm1U+drYd/KwuXnggXVSlujl
-         qdJD9vE3MLb2w6k4JScD/FWFUBDoy+6rZj73OsufW7HC5P1eFC4wRXvnq+icsO/9HvUT
-         Eri4J85e7B7jb2+MkXYSdxzb5ksgUOwPjVwplkosVlJBErVerfH/TJTxD7r5Ha1Xi49a
-         kIUCYvXZPkg/r0yUPfJwl0C6GtS/ngbf1YUb/ZO/JrLfbV5oxiqdMvC7tN08Hf+g0O7P
-         +FHdyrXr0pTLUaCM/fj+NJGQqFG+w5PvBQipAEtlI+5X/ebDSvNJLWuflZNPcD2HcKmP
-         TADg==
-X-Gm-Message-State: AAQBX9eQTMhMytg/1f48GRVd8+7E0mJLN14gBvCiH+42QCavJwmy/xXf
-        HfOo+s4LMhLZBGFn9eRJ6RIOvA6H7zPNTZzJ94p5oA==
-X-Google-Smtp-Source: AKy350Z2qGZgN2hDoy1aETuvpCsfxE3LE+VGFXIFcMKe6mqaUWE+80tTq89vHOsbH/LgewxQIexF0XRH53ySfc/n9e8=
-X-Received: by 2002:a17:906:584e:b0:94e:e7cb:2cd5 with SMTP id
- h14-20020a170906584e00b0094ee7cb2cd5mr266468ejs.15.1681509748576; Fri, 14 Apr
- 2023 15:02:28 -0700 (PDT)
+        Fri, 14 Apr 2023 18:05:44 -0400
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F6E3ABB;
+        Fri, 14 Apr 2023 15:05:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=s+IM/+0ZljmoOwrC8aH0N6phZc5Qbyf0wMKHprnzsNQ=; b=c3UxjVFSuQJdID+wTU9Df0cxAG
+        9/kq8+F1ioKAvh7UHPGDdjIoJVtqOVEbu2jdTnoFr1EbEGNMjHaqr2x9c+VNA+m77Dstq0E5LHyXd
+        t4BRU0ZRdRZXGGSYiX2Gw/aptn6ZBsaCy0wRwHZ5BHNvyRUMpS3cOq3iiWF+385cTD3bGfm/BjqVK
+        pCb4Y/8MZMY80sSdFsJlmZUiXGtwvRHakgeU+adT8upqimxo/cD/5FZ4gMFQ2WUk3xvFiCh6mVxg1
+        whPTnZ5m8hK4q/sHi/LZUoVQyvJymO/uzYD0aBxu5lzihAWO2aH2XZbFy4N0IlisOeLUBtN1tv0EB
+        KSMRImVg==;
+Received: from p200300ccff0c0d001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff0c:d00:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1pnRXz-00075s-Bh; Sat, 15 Apr 2023 00:05:35 +0200
+Date:   Sat, 15 Apr 2023 00:05:33 +0200
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH v4 2/2] leds: bd2606mvv: Driver for the Rohm 6 Channel
+ i2c LED driver
+Message-ID: <20230415000533.534ea99b@aktux>
+In-Reply-To: <ZDlEsNZ3pTlfxkAz@duo.ucw.cz>
+References: <20230414055341.335456-1-andreas@kemnade.info>
+        <20230414055341.335456-3-andreas@kemnade.info>
+        <ZDlEsNZ3pTlfxkAz@duo.ucw.cz>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.24; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <cover.1676378702.git.quic_charante@quicinc.com>
- <CAPTztWYgRORXKp83Spm3DX8qJsi1rw5s=WbPcjUYfOxFXxRAwg@mail.gmail.com>
- <CAPTztWadceJtPUrSab1Tj2WV=uAhLo+CrxqyeSQ8rLn0FtM_zA@mail.gmail.com> <0853b4b0-770f-f742-95bc-eb74a1859138@quicinc.com>
-In-Reply-To: <0853b4b0-770f-f742-95bc-eb74a1859138@quicinc.com>
-From:   Frank van der Linden <fvdl@google.com>
-Date:   Fri, 14 Apr 2023 15:02:17 -0700
-Message-ID: <CAPTztWZ-PTmF=AazhCuC3u-Ca_mY+QsJGgMdu4W0DC05zk3-iA@mail.gmail.com>
-Subject: Re: [PATCH V7 0/2] mm: shmem: support POSIX_FADV_[WILL|DONT]NEED for
- shmem files
-To:     Charan Teja Kalla <quic_charante@quicinc.com>
-Cc:     akpm@linux-foundation.org, hughd@google.com, willy@infradead.org,
-        markhemm@googlemail.com, rientjes@google.com, surenb@google.com,
-        shakeelb@google.com, quic_pkondeti@quicinc.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -1.0 (-)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 14, 2023 at 12:10=E2=80=AFPM Charan Teja Kalla
-<quic_charante@quicinc.com> wrote:
->
-> Thanks Frank!!
->
-> On 4/14/2023 11:14 PM, Frank van der Linden wrote:
-> >> I didn't see this patch before, so I looked a bit at the history. At
-> >> some point, in v3, dealing with mapped pages for DONTNEED was left
-> >> out, they are now skipped. Unfortunately, that makes this patch no
-> >> longer usable for a case that we have: restoring the (approximate)
-> >> swap state of a tmpfs file. This involves walking a potentially large
-> >> number of regions, and explicitly pushing them out to swap. This can
-> >> be used to e.g. restore the state VM memory that is backed by a tmpfs
-> >> file, avoiding memory usage by cold VM pages after resume.
-> >>
->
-> This is an interesting use case and I feel this really supports this
-> patchset. IIUC, supporting the reclaim of mapped file pages through
-> fadvise() helps this usecase where you can avoid traversing the large
-> number of vma regions as you can directly issue the fadvise() on the
-> shmem file 'fd' and it takes care. Am I correct?
+Hi Pavel,
 
-Right, that's correct. The only snag here is that fadvise, with your
-patch set, will skip mapped pages, which might be an issue for this
-case.
+On Fri, 14 Apr 2023 14:18:56 +0200
+Pavel Machek <pavel@ucw.cz> wrote:
 
->
-> > Hmm, actually, looking at it a bit more, there are several issues
-> > here. One is that with fadvise, you can't be sure if you are the only
-> > one dealing with the page in a mapped way(with madvise, if mapcount =3D=
-=3D
-> > 1, that mean's it's just you, but you don't know that for fadvise, so
-> > that makes correctly dealing with mapped pages harder).
-> >
-> Sorry, Why not for fadvise()? I can still attempt only if the page is
-> mapped and its mapcount =3D=3D 1, but then we already have madvise() for
-> such pages and why not we simply use it.
+> Hi!
+> 
+> > The device provides 6 channels which can be individually
+> > turned off and on but groups of two channels share a common brightness
+> > register.  
+> 
+> Yeah, well.. Turn it into 3-channel controller with brightness or
+> 6-channel on/off one... You can't really share brightness.
+> 
+No, I cannot change the hardware, so it is a 6-channel with limitations.
+And the devicetree has to describe the hardware and not the driver.
 
-Yes, you could use madvise (as I was thinking). One issue with that
-is, though, that madvise(PAGEOUT) is based on a page table walk of
-present PTEs. So you actually need to map and touch the page before
-madvise will work, which is suboptimal. A direct fadvise solution
-would be nicer, since that does a file mapping walk. However, that can
-be addressed later, my comments weren't intended to raise an objection
-- merely that there is a chance here to address this usecase. But that
-shouldn't block anything. It's something to keep in mind, though.
+What is discussable is just how the driver should deal with that:
 
-I'll do some experiments to see what the best solution is here. But,
-any follow-ups would be on top of your patch, so I'm not raising
-objections, merely hoping that this, and possible extra work, could
-solve this case.
+I see 5 possibilities.
+a) ignore the shared brightness problem (status quo)
+b) never set a brightness other than full on/off
+c) ignore one led of each pair (not register it at all{
+d) couple also the on/off of the pairs, so present to
+   userspace only max. 3 leds.
+e) allow full brightness control where independently possible,
+   if LEDs are defined where that leads to conflicts,
+   register them with max_brightness=1 and use them
+   in on/off mode.
 
+My preference were a) or e), the most possible usages.
+e) has a cleaner interface to the userspace.
 
-- Frank
+I would not upstream b)
+
+Regards,
+Andreas
+
+> > +++ b/drivers/leds/Kconfig
+> > @@ -551,6 +551,17 @@ config LEDS_REGULATOR
+> >  	help
+> >  	  This option enables support for regulator driven LEDs.
+> >  
+> > +config LEDS_BD2606MVV
+> > +	tristate "LED driver for BD2606MVV"
+> > +	depends on LEDS_CLASS
+> > +	depends on I2C
+> > +	select REGMAP_I2C
+> > +	help
+> > +	  This option enables support for BD2606MVV LED driver chips
+> > +	  accessed via the I2C bus. It supports setting brightness, with
+> > +	  the limitiation that there are groups of two channels sharing
+> > +	  a brightness setting, but not the on/off setting.
+> > +  
+> 
+> This driver can be used as a module...
+> 
+> 
+> > +static int
+> > +bd2606mvv_brightness_set(struct led_classdev *led_cdev,
+> > +		      enum led_brightness brightness)
+> > +{
+> > +	struct bd2606mvv_led *led = ldev_to_led(led_cdev);
+> > +	struct bd2606mvv_priv *priv = led->priv;
+> > +	int err;
+> > +
+> > +	if (brightness == 0)
+> > +		return regmap_update_bits(priv->regmap,
+> > +					  BD2606_REG_PWRCNT,
+> > +					  1 << led->led_no,
+> > +					  0);
+> > +
+> > +	/* shared brightness register */
+> > +	err = regmap_write(priv->regmap, led->led_no / 2,
+> > +			   brightness);
+> > +	if (err)
+> > +		return err;  
+> 
+> Yeah. No.
+> 
+> Best regards,
+> 							Pavel
+
