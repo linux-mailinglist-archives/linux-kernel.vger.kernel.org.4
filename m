@@ -2,142 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D9686E2A4B
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 20:54:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0992A6E2A51
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 20:56:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbjDNSyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 14:54:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38244 "EHLO
+        id S229913AbjDNSz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 14:55:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbjDNSyW (ORCPT
+        with ESMTP id S229784AbjDNSz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 14:54:22 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9625FB464;
-        Fri, 14 Apr 2023 11:54:15 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id C84B8320024A;
-        Fri, 14 Apr 2023 14:54:11 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 14 Apr 2023 14:54:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1681498451; x=1681584851; bh=f+
-        eksfp3DfnIrZxYIuunG6lmnjTIyE/skvW2EyyiYuk=; b=GoP8TIfVSmXokDxMo4
-        cYY3zqDJJsl1XrTa/7T1atRYC435KTOUvfYdp602uYPD+OIL3WKq6rqVUgv1XPqZ
-        71p+bGaMVBQVSAQw73O9ogC+tQfektGhjjD82nr/xj5tK/NeXfe/Q8iyt6MA038U
-        5cK71d9n3Wa8POdIZ9faueMUo1r/oo+3YeUeEWeq0hmrhe+PHyx78Ul9McINAEkH
-        H6H6w18rIFxDKBkXnVYItcubtZLWl0tXYqL67Q5EmWYXD9Y7E1csJUU1X4eXKDqp
-        FoLo3TzeFEagrDqnleY2b4Mj1/bJBKzAr437C75Tdr6A5VQumYi0dZE4cWCuyKm/
-        eT5A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1681498451; x=1681584851; bh=f+eksfp3DfnIr
-        ZxYIuunG6lmnjTIyE/skvW2EyyiYuk=; b=D97nFEMzohb+6lQUUS+kLHb62Qyqr
-        FQw+7YLZ4BFYNVnZu+RRQMXAa3NU8JsQPf1FLTkg/MlOoh9Rn4bDe40fxD7LDw9R
-        2IMxsC8ps2HzSuTvxF/1o+XGGbuOD+G8A74UFxqbsPogPcmeZ/d3Yr/132wcN9hV
-        8458WH/xizR4ipnuFa5PeFPUZ28eKb6Qj/3eD7q6r+k9UjTqXPuzZ4pY1fGlC+GL
-        pEXc6MYT8Ft6Y5E4ceo1sU7RNvQ9makCxmTt11B7jksVnJTRI55UBYWWAT7Da7K5
-        MiqkJKokucsJsmk4jQD1fiyE79CfwaSoWK9BoFE1bbQ6qEmBBitHRGKRw==
-X-ME-Sender: <xms:UqE5ZM__ZM91pQUfchkfPFVBlwBP1q_lOJcVa0UcAhN9JZMyMMZpzw>
-    <xme:UqE5ZEsBn6hw5AePBTVzDhY3vZATfmz9OFUeI8AOlMUozilo0W95gaaBU1d2PCEFI
-    PO-lk1PH1kItduvGWA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeltddgudefudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:UqE5ZCBHYdlqxoP2L9VqXZxjYMr5fIiUa8GckvwDxOU6kGOodErs8g>
-    <xmx:UqE5ZMd0tYqgyVklMk7XfHZTyK0gdE4t2WvX8fgjgNbdCadAV2bR5Q>
-    <xmx:UqE5ZBNH5YvyjNTeh-BYsHW-iB9fEFjIpQnLuxZ4XesS4dcmZNqdXQ>
-    <xmx:U6E5ZOfu9quh-s0aPVkxQW75nFfADwQ7etQbil9I0sBAixItgrqMTQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 77353B60086; Fri, 14 Apr 2023 14:54:10 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-334-g8c072af647-fm-20230330.001-g8c072af6
-Mime-Version: 1.0
-Message-Id: <24ebf857-b70d-4d94-8870-e41b91649dd1@app.fastmail.com>
-In-Reply-To: <20230414162605.GA2161385@dev-arch.thelio-3990X>
-References: <20230414082943.1341757-1-arnd@kernel.org>
- <20230414162605.GA2161385@dev-arch.thelio-3990X>
-Date:   Fri, 14 Apr 2023 20:53:49 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Nathan Chancellor" <nathan@kernel.org>,
-        "Arnd Bergmann" <arnd@kernel.org>
-Cc:     "Andrey Ryabinin" <ryabinin.a.a@gmail.com>,
-        "Masahiro Yamada" <masahiroy@kernel.org>,
-        "Nick Desaulniers" <ndesaulniers@google.com>,
-        "Marco Elver" <elver@google.com>,
-        "Nicolas Schier" <nicolas@fjasle.eu>,
-        "Alexander Potapenko" <glider@google.com>,
-        "Andrey Konovalov" <andreyknvl@gmail.com>,
-        "Dmitry Vyukov" <dvyukov@google.com>,
-        "Vincenzo Frascino" <vincenzo.frascino@arm.com>,
-        "Tom Rix" <trix@redhat.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        linux-kbuild@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] kasan: remove hwasan-kernel-mem-intrinsic-prefix=1 for clang-14
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 14 Apr 2023 14:55:57 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2A4A5F6;
+        Fri, 14 Apr 2023 11:55:55 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33EEdRXn014288;
+        Fri, 14 Apr 2023 18:55:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=k1mDopPu96vuFakrxaHVOtUPpYYw/6m0RlgeL7uMJdw=;
+ b=NvdG/MNEZlFotwkfJjYFYSgozyyXWZBbE880jf0jy5IQ+CZMC9Rlm8k4E75hdWaO7+mT
+ truni2B7rSP+2ishWsSg8NodfagIxCwXyfSdmRcOUmrhRxHNTlDcECqpxVwNfXHW0Zj/
+ DaSBnUyXb9r6FEkkH10WSNlNKHgQxkargn3AgxV5eZQTJcQbJbw0l0DIF9xiSGyXrGa7
+ XqpRxLj22uHaET4iqMB8kbaadoJiYikk32F/0hYovm3c6w8XSiYic53jaIp9mBToVaCA
+ uuwiTVipbcQpRSTo/w1H+SAMXoXhLN0a8Z0OsmN7GavysoDj1xtzdP5HssQLcYYSnGY2 Dw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3py4ghs30v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 18:55:44 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33EIthED018582
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 18:55:43 GMT
+Received: from [10.110.73.215] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 14 Apr
+ 2023 11:55:41 -0700
+Message-ID: <c09725ff-771c-35d1-adc9-4bb1b7c1c334@quicinc.com>
+Date:   Fri, 14 Apr 2023 11:55:41 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v2] drm/msm/dpu: always program dsc active bits
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <andersson@kernel.org>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1681401401-15099-1-git-send-email-quic_khsieh@quicinc.com>
+ <tgfbdk6q3uool365jqddibnbgq66clsmsm6tldxpm5toqghxpq@m2ic3oonv2s5>
+ <aac210da-dec1-aab8-3f48-c33d9e7687d6@quicinc.com>
+ <3oaangxh7gmie3cdd6rmujm7dd3hagsrnwiq3bascdtamvfn3a@bn6ou5hbsgxv>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <3oaangxh7gmie3cdd6rmujm7dd3hagsrnwiq3bascdtamvfn3a@bn6ou5hbsgxv>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: MHSKCgAF3JSAtIDmmX169TJNCYDV4Kul
+X-Proofpoint-ORIG-GUID: MHSKCgAF3JSAtIDmmX169TJNCYDV4Kul
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-14_11,2023-04-14_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ mlxlogscore=863 malwarescore=0 bulkscore=0 phishscore=0 suspectscore=0
+ adultscore=0 mlxscore=0 clxscore=1015 lowpriorityscore=0
+ priorityscore=1501 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2304140168
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 14, 2023, at 18:26, Nathan Chancellor wrote:
-> On Fri, Apr 14, 2023 at 10:29:27AM +0200, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->> 
->> Unknown -mllvm options don't cause an error to be returned by clang, so
->> the cc-option helper adds the unknown hwasan-kernel-mem-intrinsic-prefix=1
->> flag to CFLAGS with compilers that are new enough for hwasan but too
->
-> Hmmm, how did a change like commit 0e1aa5b62160 ("kcsan: Restrict
-> supported compilers") work if cc-option does not work with unknown
-> '-mllvm' flags (or did it)? That definitely seems like a problem, as I
-> see a few different places where '-mllvm' options are used with
-> cc-option. I guess I will leave that up to the sanitizer folks to
-> comment on that further, one small comment below.
 
-That one adds both "-fsanitize=thread" and "-mllvm
--tsan-distinguish-volatile=1". If the first one is missing in the
-compiler, neither will be set. If only the second one fails, I assume
-you'd get the same result I see with hwasan-kernel-mem-intrinsic-prefix=1.
 
->>  # Instrument memcpy/memset/memmove calls by using instrumented __hwasan_mem*().
->> +ifeq ($(call clang-min-version, 150000),y)
->>  CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
->> +endif
->> +ifeq ($(call gcc-min-version, 130000),y)
->> +CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
->> +endif
->
-> I do not think you need to duplicate this block, I think
->
->   ifeq ($(call clang-min-version, 150000)$(call gcc-min-version, 130000),y)
->   CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
->   endif
->
-> would work, as only one of those conditions can be true at a time.
+On 4/14/2023 10:28 AM, Marijn Suijten wrote:
+> On 2023-04-14 08:41:37, Abhinav Kumar wrote:
+>>
+>> On 4/14/2023 12:48 AM, Marijn Suijten wrote:
+>>> Capitalize DSC in the title, as discussed in v1.
+>>>
+>>> On 2023-04-13 08:56:41, Kuogee Hsieh wrote:
+>>>> In current code, the DSC active bits are written only if cfg->dsc is set.
+>>>> However, for displays which are hot-pluggable, there can be a use-case
+>>>> of disconnecting a DSC supported sink and connecting a non-DSC sink.
+>>>>
+>>>> For those cases we need to clear DSC active bits during tear down.
+>>>>
+>>>> Changes in V2:
+>>>> 1) correct commit text as suggested
+>>>> 2) correct Fixes commit id
+>>>> 3) add FIXME comment
+>>>>
+>>>> Fixes: 77f6da90487c ("drm/msm/disp/dpu1: Add DSC support in hw_ctl")
+>>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>>>> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+>>>
+>>> By default git send-email should pick this up in the CC line...  but I
+>>> had to download this patch from lore once again.
+>>>
+>>
+>> Yes, I think what happened here is, he didnt git am the prev rev and
+>> make changes on top of that so git send-email didnt pick up. We should
+>> fix that process.
+> 
+> The mail was sent so it must have gone through git send-email, unless a
+> different mail client was used to send the .patch file.  I think you are
+> confusing this with git am (which doesn't need to be used if editing a
+> commit on a local branch) and subsequently git format-patch, which takes
+> a commit from a git repository and turns it into a .patch file: neither
+> of these "converts" r-b's (and other tags) to cc, that's happening in
+> git send-email (see `--suppress-cc` documentation in `man
+> git-send-email`).
+> 
 
-Are you sure that clang-min-version evaluates to an empty string
-rather than "n" or something else? I haven't found a documentation
-that says anything about it other than it returning "y" if the condition
-is true.
+Yes, ofcourse git send-email was used to send the patch, not any other 
+mail client.
 
-      Arnd
+Yes i am also aware that send-email converts rb to CC.
+
+But if you keep working on the local branch, then you would have to 
+manually add the r-bs. If you use am of the prev version and develop on 
+that, it will automatically add the r-bs.
+
+
+> I can recommend b4: it has lots of useful features including
+> automatically picking up reviews and processing revisions.  It even
+> requires a changelog to be edited ;).  However, finding the right flags
+> and trusting it'll "do as ordered" is a bit daunting at first.
+> 
+>>>> ---
+>>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c | 8 ++++----
+>>>>    1 file changed, 4 insertions(+), 4 deletions(-)
+>>>>
+>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+>>>> index bbdc95c..1651cd7 100644
+>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+>>>> @@ -541,10 +541,10 @@ static void dpu_hw_ctl_intf_cfg_v1(struct dpu_hw_ctl *ctx,
+>>>>    	if (cfg->merge_3d)
+>>>>    		DPU_REG_WRITE(c, CTL_MERGE_3D_ACTIVE,
+>>>>    			      BIT(cfg->merge_3d - MERGE_3D_0));
+>>>> -	if (cfg->dsc) {
+>>>> -		DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, DSC_IDX);
+>>>> -		DPU_REG_WRITE(c, CTL_DSC_ACTIVE, cfg->dsc);
+>>>> -	}
+>>>> +
+>>>> +	/* FIXME: fix reset_intf_cfg to handle teardown of dsc */
+>>>
+>>> There's more wrong than just moving (not "fix"ing) this bit of code into
+>>> reset_intf_cfg.  And this will have to be re-wrapped in `if (cfg->dsc)`
+>>> again by reverting this patch.  Perhaps that can be explained, or link
+>>> to Abhinav's explanation to make it clear to readers what this FIXME
+>>> actually means?  Let's wait for Abhinav and Dmitry to confirm the
+>>> desired communication here.
+>>>
+>>> https://lore.kernel.org/linux-arm-msm/ec045d6b-4ffd-0f8c-4011-8db45edc6978@quicinc.com/
+>>>
+>>
+>> Yes, I am fine with linking this explanation in the commit text and
+>> mentioning that till thats fixed, we need to go with this solution. The
+>> FIXME itself is fine, I will work on it and I remember this context well.
+> 
+> Looks like it was removed entirely in v3, in favour of only describing
+> it in the patch body.  The wording seems a bit off but that's fine by me
+> if you're picking this up soon anyway.
+> 
+> - Marijn
