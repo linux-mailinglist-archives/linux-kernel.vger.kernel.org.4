@@ -2,173 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45FAD6E2096
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 12:19:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CC416E2092
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 12:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbjDNKTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 06:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55090 "EHLO
+        id S230098AbjDNKTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 06:19:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbjDNKTL (ORCPT
+        with ESMTP id S230009AbjDNKTJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 06:19:11 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB1E4C06;
-        Fri, 14 Apr 2023 03:19:09 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 829305C019C;
-        Fri, 14 Apr 2023 06:19:08 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Fri, 14 Apr 2023 06:19:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1681467548; x=
-        1681553948; bh=3WBXbUqLLLeQq1ZCi/ry0FRNyZxe7SfbSw3k4IDdgYw=; b=Z
-        ClIRosJvFYimXH424uFn+IMWuq7wHzSt3CljrY6r3b2AWz20JTr3/voTEg5m5Jwj
-        UJozpW/Eb7z4fS8NJLngrRWiQwe9+eoOVt7aOHAQU8KHYLFuHpcZJ9KLPu/jJtH2
-        9khb9X0dhloRjI8UKC8rzGLqd4glPe/VOA+1sw47v8Kz2xTKBqAmvuIHRr2Hk9cb
-        qkCx1iB5t55scuSTy14A81GS7dz2XtgBVN4oPJ1F8+Jje3pSWcAngphiyuKemx3f
-        5gvG9A4VrQlZBSySiKi8BqvxPS1CgAlqqjhMEMgsJmNEdYd+KfOodnUs9Md3q4qX
-        aKeFlK5chukPhVnOAF12Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1681467548; x=1681553948; bh=3WBXbUqLLLeQq
-        1ZCi/ry0FRNyZxe7SfbSw3k4IDdgYw=; b=Upd2y1I6y+9hRCGMAhkcN7OzmAdK+
-        ZYWyZauB6wWOXiH4DJdR7jvPQF4zF5KAFENPCLq+iUnbuIbPxWvaRixT0yBUZDWB
-        sURE8/aBRxo4kDgGlXUphkxSqWCNFJLcBsoXhTKFDVSmNnp/D+3t493rFbUl2G5m
-        3z7OHA3oU3wt8CMch2Ipsx0uZsyKbSEL8xR3x6AsfXqGa2qwbvzTwOpnZ0h15QFu
-        yOoVpNQ7SoueL2JYoTHKrbUTt6bnABkk3OshYd7lnz0sYNwOyzoAwrcPb/l2hTse
-        V/H/Nb6xu7Mwzmd/y/uH1C6F2FvXMRV1h25KH7yXB1zx++Pm/aVEoJ/lw==
-X-ME-Sender: <xms:mSg5ZPS4HgjIrSFX5z_NpAVVSbED5mN9q3mUjZ_8nHbZ9eVTlmtdWA>
-    <xme:mSg5ZAwUJnBb46d1NnpKk21K5cIBNFghWn5EDA6GyBByGtkoqmxquuGnpLQs_zVA8
-    RQJwjSpKbr_bGa_XSg>
-X-ME-Received: <xmr:mSg5ZE2pqdD1eG7mmTjt8v2OqS7gQXjHe0eCEkBuTn1RUFeR5GiZYcC81LlUgFzc8J9r3A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeltddgvdeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpeekvddvjeffheetgedtvdfgieejiedvgeejieet
-    jeehieehveffueekfeehffdvveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:mSg5ZPCvN2Rg7TWqsjEeh_lGBR8eEY7DVzpug6C_77mc6cCu2EIXhA>
-    <xmx:mSg5ZIhNS0G2oXtzXubSOHOOhSyd2NDMcTQ5j4QU67biRvjCz3iZ3w>
-    <xmx:mSg5ZDrP_l6z9rFc5Czx3kgu5vM-oC36DTLB_RQcRK9qcA7pihEogQ>
-    <xmx:nCg5ZNtKLM41dZv5Xl9o1gVYOHKrPDeiKeYiGdqaoMzKsiOzE_xpbg>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 14 Apr 2023 06:19:05 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id EE51510D7B4; Fri, 14 Apr 2023 13:19:01 +0300 (+03)
-Date:   Fri, 14 Apr 2023 13:19:01 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
+        Fri, 14 Apr 2023 06:19:09 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23BE183CD
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 03:19:06 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B96791FD95;
+        Fri, 14 Apr 2023 10:19:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1681467544; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oxm+Jbd0/Tkjw/vGhSVmsyY0h1pCAWJpxgNwHUNcSZ8=;
+        b=HjXeb8lquZ6LFAsP8NfkDUKuHxmSIPuev7wDyM6h5va7AUsw22u/xHpgNzfjRQ0bZ6A2+B
+        Ngo7JZu8RPnLoDf9V8UzAMRuCY5FQJ/7npoTINDjEgp2KZh1+v1M0WYKcDCRKZ7TB62Ze9
+        LOb0HC5cb20hDf6ADo2IJ6gUbRYrS+Y=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9A1D4139FC;
+        Fri, 14 Apr 2023 10:19:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id pPttI5goOWRmJAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Fri, 14 Apr 2023 10:19:04 +0000
+Date:   Fri, 14 Apr 2023 12:19:03 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Oscar Salvador <OSalvador@suse.com>,
+        Yuanxi Liu <y.liu@naruida.com>,
         David Hildenbrand <david@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv9 03/14] mm/page_alloc: Fake unaccepted memory
-Message-ID: <20230414101901.j3zoji6vmjzpjiec@box>
-References: <20230330114956.20342-1-kirill.shutemov@linux.intel.com>
- <20230330114956.20342-4-kirill.shutemov@linux.intel.com>
- <835dfe65-d9dd-0b16-37d4-920e97f1bca0@suse.cz>
- <20230403143915.uc4tnpgmssvpdqxu@box.shutemov.name>
- <20230403155011.aodnd5ratcyeie52@box.shutemov.name>
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mm: page_alloc: Assume huge tail pages are valid when
+ allocating contiguous pages
+Message-ID: <ZDkolzCWQNe0NmTD@dhcp22.suse.cz>
+References: <20230414082222.idgw745cgcduzy37@techsingularity.net>
+ <ZDkU6PuuDsUb82lr@dhcp22.suse.cz>
+ <20230414095204.7fz6trkj5i4mzthz@techsingularity.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230403155011.aodnd5ratcyeie52@box.shutemov.name>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230414095204.7fz6trkj5i4mzthz@techsingularity.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 06:50:11PM +0300, Kirill A. Shutemov wrote:
-> On Mon, Apr 03, 2023 at 05:39:15PM +0300, Kirill A. Shutemov wrote:
-> > On Mon, Apr 03, 2023 at 03:39:53PM +0200, Vlastimil Babka wrote:
-> > > On 3/30/23 13:49, Kirill A. Shutemov wrote:
-> > > > For testing purposes, it is useful to fake unaccepted memory in the
-> > > > system. It helps to understand unaccepted memory overhead to the page
-> > > > allocator.
-> > > 
-> > > Ack on being useful for testing, but the question is if we want to also
-> > > merge this patch into mainline as it is?
+On Fri 14-04-23 10:52:04, Mel Gorman wrote:
+> On Fri, Apr 14, 2023 at 10:55:04AM +0200, Michal Hocko wrote:
+> > On Fri 14-04-23 09:22:22, Mel Gorman wrote:
+> > [...]
+> > > +
+> > > +		/*
+> > > +		 * Do not migrate huge pages that span the size of the region
+> > > +		 * being allocated contiguous. e.g. Do not migrate a 1G page
+> > > +		 * for a 1G allocation request. CMA is an exception as the
+> > > +		 * region may be reserved for hardware that requires physical
+> > > +		 * memory without a MMU or scatter/gather capability.
+> > > +		 *
+> > > +		 * Note that the compound check is race-prone versus
+> > > +		 * free/split/collapse but it should be safe and result in
+> > > +		 * a premature skip or a useless migration attempt.
+> > > +		 */
+> > > +		if (PageHuge(page) && compound_nr(page) >= nr_pages &&
+> > > +		    !is_migrate_cma_page(page)) {
+> > > +			return false;
 > > 
-> > I don't insist on getting it upstream, but it can be handy to debug
-> > related bugs in the future.
-> > 
-> > > > The patch allows to treat memory above the specified physical memory
-> > > > address as unaccepted.
-> > > > 
-> > > > The change only fakes unaccepted memory for page allocator. Memblock is
-> > > > not affected.
-> > > > 
-> > > > It also assumes that arch-provided accept_memory() on already accepted
-> > > > memory is a nop.
-> > > 
-> > > I guess to be in mainline it would have to at least gracefully handle the
-> > > case of accept_memory actually not being a nop, and running on a system with
-> > > actual unaccepted memory (probably by ignoring the parameter in such case).
-> > > Then also the parameter would have to be documented.
-> > 
-> > As it is written now, accept_memory() is nop on system with real
-> > unaccepted memory if the memory is already accepted. Arch-specific code
-> > will check against own records to see if the memory needs accepting. If
-> > not, just return.
-> > 
-> > And the option will not interfere with unaccepted memory declared by EFI
-> > memmap. It can extend it, but that's it.
-> > 
-> > Looks safe to me.
-> > 
-> > > Speaking of documented parameters, I found at least two that seem a more
-> > > generic variant of this (but I didn't look closely if that makes sense):
-> > > 
-> > > efi_fake_mem=   nn[KMG]@ss[KMG]:aa[,nn[KMG]@ss[KMG]:aa,..] [EFI; X86]
-> > >     Add arbitrary attribute to specific memory range by
-> > >     updating original EFI memory map.
+> > Is the CMA check working as expected?
 > 
-> As of now, efi_fake_mem= can adjust attributes of memory. Unaccepted is
-> type of memory, not an attribute. I guess we can allow it override type
-> too. But syntax is going to be fun.
+> I didn't test it as I don't have a good simulator for CMA contraints which
+> is still a mobile phone concern for devices like cameras.
+> 
+> > The function sounds quite generic
+> > and I agree that it would make sense if it was generic but it is used
+> > only for GB pages in fact and unless I am missing something it would
+> > allow to migrate CMA pages and potentially allocate over that region
+> > without any possibility to migrate GB page out so the CMA region would
+> > be essentially unusable for CMA users.
+> 
+> It's used primarily for 1G pages but does have other users (debugging
+> mostly, low priority). As it's advertised as a general API, I decided to
+> treat it as such and that meant being nice to CMA if possible. If CMA pages
+> migrate but can still use the target location then it should be fine. If a
+> CMA can migrate to an usable location that breaks a device then that's a bug.
+> 
+> > GB pages already have their CMA
+> > allocator path before we get to alloc_contig_pages. Or do I miss
+> > something?
+> 
+> I don't think you missed anything. The CMA check is, at best, an effort
+> to have a potentially useful semantic but it's very doubtful anyone will
+> notice or care. I'm perfectly happy just to drop the CMA check because it's a
+> straight-forward fix and more suitable as a -stable backport.  I'm also happy
+> to just go with a PageHuge check and ignore any possibility that a 2M page
+> could be migrated to satisfy a 1G allocation.  1G allocation requests after
+> significant uptime is a crapshoot at best and relying on them succeeding is
+> unwise. There is a non-zero possibility that the latency incurred migrating
+> 2M pages and still failing a 1G allocation could itself be classed as a
+> bug with users preferring fast-failure of 1G allocation attempts.
 
-efi_fake_mem applied too late. Bitmap that represents unaccepted memory
-for kernel created at kernel decompression stage, but efi_fake_mem=
-handled in main kernel.
+Yes, the simpler the better. If we encounter a real usecase where couple
+of 2MB hugetlb pages stand in the way to GB pages then we can add the
+check so I would just go with reintroducing the PageHuge check alone.
 
-I don't think pushing efi_fake_mem to decompressor makes sesne. I would
-rather drom the feature altogether.
-
+Thanks!
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Michal Hocko
+SUSE Labs
