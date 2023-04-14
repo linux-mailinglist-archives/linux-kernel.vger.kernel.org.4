@@ -2,116 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA4646E1EFA
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 11:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D60EA6E1EFC
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 11:05:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbjDNJF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 05:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40160 "EHLO
+        id S229804AbjDNJFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 05:05:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjDNJF1 (ORCPT
+        with ESMTP id S229457AbjDNJFv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 05:05:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996D04EF2;
-        Fri, 14 Apr 2023 02:05:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C4F5645AB;
-        Fri, 14 Apr 2023 09:05:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 293CFC433EF;
-        Fri, 14 Apr 2023 09:05:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681463125;
-        bh=RKUWjVPJrlvFOSvux9HcYl0d5UDv8c+EXyBgf50pelE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=mE442eTSMCUa1C9zYj7L4qpyrvhC5zrPs2rpEW2uH1GvQOSH3pMGef5IGz1qD/sf2
-         +xZb8ETgUWeUIcx9mWiF2EkWQ9AYyP5IXkClZh8BM94lNXXHpDNkRlMI+xlyeMOdcJ
-         zIJbOsNdU77wL2A4MQzKTboe7YeuPgJISKZ8AlR/PwSzuCjQkYkTGFFZt8ValSde5v
-         cBmHyFr1f1acGKWTKJTMWpVLZEigJKXA9nciQZsB/CpOYbY0O1uG1P8tgAVWdrtRFv
-         oy2xsLn/FVCd5bxgOrWCXPc3/4ZUVpUC02oHgFUmOfIQBDi9Mpqpr6SKz/rQs1/pMz
-         3EEkhpIGvjztw==
-Message-ID: <1db257c0-ef31-ca03-2101-948974d31c42@kernel.org>
-Date:   Fri, 14 Apr 2023 11:05:19 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2 2/2] dt-bindings: usb: snps,dwc3: Add
- 'snps,global-regs-starting-offset' quirk
-Content-Language: en-US
-To:     =?UTF-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Fri, 14 Apr 2023 05:05:51 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B1F34EF3
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 02:05:46 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B77D32F4;
+        Fri, 14 Apr 2023 02:06:30 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AEC2B3F587;
+        Fri, 14 Apr 2023 02:05:44 -0700 (PDT)
+Date:   Fri, 14 Apr 2023 10:05:42 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Pierre Gondois <pierre.gondois@arm.com>,
+        linux-kernel@vger.kernel.org, Radu Rendec <rrendec@redhat.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Will Deacon <will@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>
-References: <20230412033006.10859-2-stanley_chang@realtek.com>
- <20230413042503.4047-1-stanley_chang@realtek.com>
- <167e4a8c-3ebd-92b7-1481-947f08901f97@kernel.org>
- <9f6abbe7a6fd479c98e2fd6c1080ad8a@realtek.com>
- <19946f94-db48-fe0d-722c-cbb45b8bd0ba@kernel.org>
- <313863df3a3b492aa7590e1354d22d8b@realtek.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <313863df3a3b492aa7590e1354d22d8b@realtek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v3 2/4] cacheinfo: Check cache properties are present in
+ DT
+Message-ID: <20230414090542.rbidu45cx4halja4@bogus>
+References: <20230413091436.230134-1-pierre.gondois@arm.com>
+ <20230413091436.230134-3-pierre.gondois@arm.com>
+ <4da53918-839b-4d28-0634-66fd7f38c8bd@gmail.com>
+ <20230413195032.bw3yu7a6puqziinx@bogus>
+ <d44baa58-8c39-407c-db94-390bc0d12dbe@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d44baa58-8c39-407c-db94-390bc0d12dbe@gmail.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/04/2023 04:12, Stanley Chang[昌育德] wrote:
+On Thu, Apr 13, 2023 at 01:06:46PM -0700, Florian Fainelli wrote:
+> On 4/13/23 12:50, Sudeep Holla wrote:
+> > On Thu, Apr 13, 2023 at 11:16:37AM -0700, Florian Fainelli wrote:
+> > > On 4/13/23 02:14, Pierre Gondois wrote:
+> > > > If a Device Tree (DT) is used, the presence of cache properties is
+> > > > assumed. Not finding any is not considered. For arm64 platforms,
+> > > > cache information can be fetched from the clidr_el1 register.
+> > > > Checking whether cache information is available in the DT
+> > > > allows to switch to using clidr_el1.
+> > > > 
+> > > > init_of_cache_level()
+> > > > \-of_count_cache_leaves()
+> > > > will assume there a 2 cache leaves (L1 data/instruction caches), which
+> > > > can be different from clidr_el1 information.
+> > > > 
+> > > > cache_setup_of_node() tries to read cache properties in the DT.
+> > > > If there are none, this is considered a success. Knowing no
+> > > > information was available would allow to switch to using clidr_el1.
+> > > > 
+> > > > Fixes: de0df442ee49 ("cacheinfo: Check 'cache-unified' property to count cache leaves")
+> > > > Reported-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> > > > Link: https://lore.kernel.org/all/20230404-hatred-swimmer-6fecdf33b57a@spud/
+> > > > Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+> > > 
+> > > Humm, it would appear that the cache levels and topology is still provided,
+> > > despite the lack of cache properties in the Device Tree which is intended by
+> > > this patch set however we lost the size/ways/sets information, could we not
+> > > complement the missing properties here?
+> > > 
+> > 
+> > I am confused. How and from where the information was fetched before this
+> > change ?
 > 
->>>> Didn't you got already comment for this patch? How did you implement it?
->>>>
->>>> Also, I asked you multiple times:
->>>>
->>>> Please use scripts/get_maintainers.pl to get a list of necessary
->>>> people and lists to CC.  It might happen, that command when run on an
->>>> older kernel, gives you outdated entries.  Therefore please be sure
->>>> you base your patches on recent Linux kernel.
->>>>
->>>> I don't understand why you ignore this.
->>>>
->>>> NAK, patch is not correct.
->>>>
->>>> Best regards,
->>>> Krzysztof
->>>>
->>>
->>> Thank you for your patient guidance.
->>> Because I'm not familiar with the review process and didn't use
->> scripts/get_maintainers.pl properly in the initial email thread.
->>> Therefore, this series of errors was caused. Sorry for the confusion.
->>> Now I know how to use the script properly.
->>> After correcting the maintainer's suggestion, I'll restart a new email thread
->> and review again.
->>
->> Did you respond to feedback you got about the property? Did reviewer agreed
->> on your view after your feedback?
->>
->> If not, then why resending this patch?
->>
+> I applied Pierre's patches to my tree and then did the following:
 > 
-> 1. Because you said, "This patch is incorrect". And I won't be cc'ing the proper maintainer.
-> I think I need to restart a new review process.
-> 2. Modify the previous reviewer's comments and fix the dtschema validation error.
+> - before means booting with the patches applied and the Device Tree
+> providing cache information: {d,i}-cache-{size,line-size,sets} and
+> next-level-cache
 > 
-> Am I misunderstanding what you mean?
-> Can I keep reviewing this patch on this email thread until consensus is reached with the reviewers?
+> - after means removing all of those properties still with the patches
+> applied
+>
 
-I guess confusion is because you never received response from Rob. I'll
-reply there.
+Ah okay, I assumed something totally different and hence thought patches
+broke something.
 
-Best regards,
-Krzysztof
+> My expectation is that if we omit the properties in the Device Tree, we will
+> fallback to reading that information out of clidr_el1. However as can be
+> seen from the "before" and "after" outputs, there is loss of information, as
+> we no longer have the cacheline size, number of sets/ways, the rest is valid
+> though.
+>
 
+Correct and that is expected. We dropped ccsidr_el1 support to fetch cache
+geometry with the commit a8d4636f96ad ("arm64: cacheinfo: Remove CCSIDR-based
+cache information probing") after Arm ARM added wordings not to infer the
+information. However clidr_el1 info still holds except it may not include
+transparent system level caches. Hope that clarifies.
+
+> So my question is whether this is expected and in scope of what is being
+> done here, or not.
+> 
+> > 
+> > > If this is out of the scope of what you are doing:
+> > > 
+> > > Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+> > > 
+> > 
+> > Just looking at the lscpu output before and after, it looks something is
+> > broken. What am I missing here ?
+> > 
+> 
+> What is broken in the "before" output? It contains the entire set of
+> possible information we know about the caches. As for the "after", well yes
+> there is information missing, the whole point of my email actually...
+
+Sorry, I was not referring to "before" output. I assumed "before" means
+without patches and "after" means with patches, hence I thought patches
+broke something but got confused why are you giving tested-by :D.
+
+-- 
+Regards,
+Sudeep
