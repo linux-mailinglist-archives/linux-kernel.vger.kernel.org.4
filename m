@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 063406E2056
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 12:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B81B76E1FF5
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 11:55:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbjDNKLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 06:11:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48314 "EHLO
+        id S229922AbjDNJzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 05:55:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbjDNKKy (ORCPT
+        with ESMTP id S229663AbjDNJzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 06:10:54 -0400
-X-Greylist: delayed 988 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 14 Apr 2023 03:10:37 PDT
-Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF44198D
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 03:10:37 -0700 (PDT)
-X-ASG-Debug-ID: 1681466044-086e237e53010c0001-xx1T2L
-Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx1.zhaoxin.com with ESMTP id 2oyFb70X5fSWHZgr (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Fri, 14 Apr 2023 17:54:04 +0800 (CST)
-X-Barracuda-Envelope-From: TonyWWang-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX3.zhaoxin.com
- (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Fri, 14 Apr
- 2023 17:54:04 +0800
-Received: from tony-HX002EA.zhaoxin.com (10.32.65.162) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Fri, 14 Apr
- 2023 17:54:02 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-From:   Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
-To:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <hpa@zytor.com>, <x86@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <peterz@infradead.org>,
-        <seanjc@google.com>, <pbonzini@redhat.com>, <kim.phillips@amd.com>,
-        <babu.moger@amd.com>, <pawan.kumar.gupta@linux.intel.com>,
-        <TonyWWang-oc@zhaoxin.com>, <sandipan.das@amd.com>
-CC:     <CobeChen@zhaoxin.com>, <TimGuo@zhaoxin.com>,
-        <LeoLiu-oc@zhaoxin.com>
-Subject: [PATCH] x86/cpufeatures: extend CPUID leaf 0xc0000001 support for Zhaoxin
-Date:   Fri, 14 Apr 2023 17:53:34 +0800
-X-ASG-Orig-Subj: [PATCH] x86/cpufeatures: extend CPUID leaf 0xc0000001 support for Zhaoxin
-Message-ID: <20230414095334.8743-1-TonyWWang-oc@zhaoxin.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 14 Apr 2023 05:55:00 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D94A43C33;
+        Fri, 14 Apr 2023 02:54:59 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 984731FD95;
+        Fri, 14 Apr 2023 09:54:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1681466098; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JneUppOda+5TGdxaMKXFrkRT/M0RbNosDbdjrmg3y6k=;
+        b=eoAS1KDc4SAzQxjPHa49axCInW8IYd7O23TIPd4pc4RtFzpXMnPNvJuuh4r8HAN2in8lnb
+        sM/fnESaVmSw9iLUm3YlEHd37s6sPk1uDXk/YScAO02FhmppXPGQyPOLtKAT5DYjazK5y8
+        s0q1QxXYzigtfGSPzu1yV8/MxXm+c3Q=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1681466098;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JneUppOda+5TGdxaMKXFrkRT/M0RbNosDbdjrmg3y6k=;
+        b=T/MqJAD2yZlYNLf1ybBOCRHZrfmQwdHuODNnW6DOSFgHnLD9yHU8HdY3Fjes0PO1zVgAXB
+        A1BgrUiyUa2zRbAQ==
+Received: from kunlun.suse.cz (unknown [10.100.128.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 4EF8B2C143;
+        Fri, 14 Apr 2023 09:54:58 +0000 (UTC)
+Date:   Fri, 14 Apr 2023 11:54:57 +0200
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Alexander Lobakin <alobakin@pm.me>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Shung-Hsi Yu <shung-hsi.yu@suse.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Song Liu <songliubraving@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 bpf 02/11] bpftool: define a local bpf_perf_link to
+ fix accessing its fields
+Message-ID: <20230414095457.GG63923@kunlun.suse.cz>
+References: <20220421003152.339542-1-alobakin@pm.me>
+ <20220421003152.339542-3-alobakin@pm.me>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.32.65.162]
-X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
-X-Barracuda-Start-Time: 1681466044
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 4032
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
-X-Barracuda-Spam-Score: -2.02
-X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.107399
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220421003152.339542-3-alobakin@pm.me>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,80 +71,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Extend CPUID leaf 0xc0000001 to support SM2, SM3, SM4, PARALLAX, TM3,
-RNG2, PHE2, RSA.
+Hello,
 
-CPUID.(EAX=0xc0000001,ECX=0):EDX[bit 0]  SM2
-CPUID.(EAX=0xc0000001,ECX=0):EDX[bit 1]  SM2_EN
-CPUID.(EAX=0xc0000001,ECX=0):EDX[bit 4]  SM3 SM4
-CPUID.(EAX=0xc0000001,ECX=0):EDX[bit 5]  SM3_EN SM4_EN
-CPUID.(EAX=0xc0000001,ECX=0):EDX[bit 16] PARALLAX
-CPUID.(EAX=0xc0000001,ECX=0):EDX[bit 17] PARALLAX_EN
-CPUID.(EAX=0xc0000001,ECX=0):EDX[bit 20] TM3
-CPUID.(EAX=0xc0000001,ECX=0):EDX[bit 21] TM3_EN
-CPUID.(EAX=0xc0000001,ECX=0):EDX[bit 22] RNG2
-CPUID.(EAX=0xc0000001,ECX=0):EDX[bit 23] RNG2_EN
-CPUID.(EAX=0xc0000001,ECX=0):EDX[bit 25] PHE2
-CPUID.(EAX=0xc0000001,ECX=0):EDX[bit 26] PHE2_EN
-CPUID.(EAX=0xc0000001,ECX=0):EDX[bit 27] RSA
-CPUID.(EAX=0xc0000001,ECX=0):EDX[bit 28] RSA_EN
+On Thu, Apr 21, 2022 at 12:38:58AM +0000, Alexander Lobakin wrote:
+> When building bpftool with !CONFIG_PERF_EVENTS:
+> 
+> skeleton/pid_iter.bpf.c:47:14: error: incomplete definition of type 'struct bpf_perf_link'
+>         perf_link = container_of(link, struct bpf_perf_link, link);
+>                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> tools/bpf/bpftool/bootstrap/libbpf/include/bpf/bpf_helpers.h:74:22: note: expanded from macro 'container_of'
+>                 ((type *)(__mptr - offsetof(type, member)));    \
+>                                    ^~~~~~~~~~~~~~~~~~~~~~
+> tools/bpf/bpftool/bootstrap/libbpf/include/bpf/bpf_helpers.h:68:60: note: expanded from macro 'offsetof'
+>  #define offsetof(TYPE, MEMBER)  ((unsigned long)&((TYPE *)0)->MEMBER)
+>                                                   ~~~~~~~~~~~^
+> skeleton/pid_iter.bpf.c:44:9: note: forward declaration of 'struct bpf_perf_link'
+>         struct bpf_perf_link *perf_link;
+>                ^
+> 
+> &bpf_perf_link is being defined and used only under the ifdef.
+> Define struct bpf_perf_link___local with the `preserve_access_index`
+> attribute inside the pid_iter BPF prog to allow compiling on any
+> configs. CO-RE will substitute it with the real struct bpf_perf_link
+> accesses later on.
+> container_of() is not CO-REd, but it is a noop for
+> bpf_perf_link <-> bpf_link and the local copy is a full mirror of
+> the original structure.
+> 
+> Fixes: cbdaf71f7e65 ("bpftool: Add bpf_cookie to link output")
 
-SM2/SM3/SM4 imply the instructions support for Chinese cipher security
-algorithm generations 2/3/4.
-PARALLAX is the feature of Zhaoxin CPU that automatically adjusts
-processors's voltage as a function of temperature.
-TM3 is the abbreviation of Thermal Monitor version 3.
-RNG2 is the abbreviation of Random Number Generation version 2.
-PHE2 is the abbreviation of Padlock Hash Engine version 2.
-RSA implies Zhaoxin hardware support for RSA algorithm.
+This does not solve the problem completely. Kernels that don't have
+CONFIG_PERF_EVENTS in the first place are also missing the enum value
+BPF_LINK_TYPE_PERF_EVENT which is used as the condition for handling the
+cookie.
 
-All these features have two relative CPUID bits, one bit implies the
-existence of the feature and the other bit with postfix "EN" implies
-the availability of this feature. Eg, SM2 implies Zhaoxin CPU have SM2
-algorithm support, SM2_EN implies user can use relative instructions
-with SM2 algorithm.
+Thanks
 
-Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
----
- arch/x86/include/asm/cpufeatures.h | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index d7215c8b7923..98f3ac6ec66d 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -145,9 +145,13 @@
- #define X86_FEATURE_RDRAND		( 4*32+30) /* RDRAND instruction */
- #define X86_FEATURE_HYPERVISOR		( 4*32+31) /* Running on a hypervisor */
- 
--/* VIA/Cyrix/Centaur-defined CPU features, CPUID level 0xC0000001, word 5 */
-+/* VIA/Cyrix/Centaur/Zhaoxin-defined CPU features, CPUID level 0xC0000001, word 5 */
-+#define X86_FEATURE_SM2			( 5*32+ 0) /* Chinese cipher security hardware support of SM2 */
-+#define X86_FEATURE_SM2_EN		( 5*32+ 1) /* SM2 enabled */
- #define X86_FEATURE_XSTORE		( 5*32+ 2) /* "rng" RNG present (xstore) */
- #define X86_FEATURE_XSTORE_EN		( 5*32+ 3) /* "rng_en" RNG enabled */
-+#define X86_FEATURE_CCS			( 5*32+ 4) /* "sm3 sm4" Chinese cipher security hardware support*/
-+#define X86_FEATURE_CCS_EN		( 5*32+ 5) /* "sm3_en sm4_en" sm3 sm4 enabled */
- #define X86_FEATURE_XCRYPT		( 5*32+ 6) /* "ace" on-CPU crypto (xcrypt) */
- #define X86_FEATURE_XCRYPT_EN		( 5*32+ 7) /* "ace_en" on-CPU crypto enabled */
- #define X86_FEATURE_ACE2		( 5*32+ 8) /* Advanced Cryptography Engine v2 */
-@@ -156,6 +160,16 @@
- #define X86_FEATURE_PHE_EN		( 5*32+11) /* PHE enabled */
- #define X86_FEATURE_PMM			( 5*32+12) /* PadLock Montgomery Multiplier */
- #define X86_FEATURE_PMM_EN		( 5*32+13) /* PMM enabled */
-+#define X86_FEATURE_PARALLAX		( 5*32+16) /* Parallax auto adjust processor voltage */
-+#define X86_FEATURE_PARALLAX_EN		( 5*32+17) /* Parallax auto adjust processor voltage enabled */
-+#define X86_FEATURE_TM3			( 5*32+20) /* Thermal Monitor v3 support */
-+#define X86_FEATURE_TM3_EN		( 5*32+21) /* TM3 enabled */
-+#define X86_FEATURE_RNG2		( 5*32+22) /* RNG v2 present */
-+#define X86_FEATURE_RNG2_EN		( 5*32+23) /* RNG v2 enabled */
-+#define X86_FEATURE_PHE2		( 5*32+25) /* PHE v2 present */
-+#define X86_FEATURE_PHE2_EN		( 5*32+26) /* PHE v2 enabled */
-+#define X86_FEATURE_RSA			( 5*32+27) /* RSA hardware support */
-+#define X86_FEATURE_RSA_EN		( 5*32+28) /* RSA enabled */
- 
- /* More extended AMD flags: CPUID level 0x80000001, ECX, word 6 */
- #define X86_FEATURE_LAHF_LM		( 6*32+ 0) /* LAHF/SAHF in long mode */
--- 
-2.17.1
-
+Michal
