@@ -2,130 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADD376E2803
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 18:06:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DB026E27E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 18:03:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231167AbjDNQGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 12:06:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50664 "EHLO
+        id S229895AbjDNQD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 12:03:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbjDNQGN (ORCPT
+        with ESMTP id S229497AbjDNQDN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 12:06:13 -0400
-X-Greylist: delayed 442 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 14 Apr 2023 09:05:57 PDT
-Received: from out-57.mta1.migadu.com (out-57.mta1.migadu.com [IPv6:2001:41d0:203:375::39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE74B453
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 09:05:57 -0700 (PDT)
-Message-ID: <4d1cacbf-f9b2-07c7-75bf-61f34abc1841@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1681487913;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DpTXmit1ejSE9AiqoGnb66tLFIsHtNr5bViuZsAYkAc=;
-        b=nDszz0ZEH77cLMMPj6z6O2CrJFYAzr1sK7tHNTQ/oyEPIooAnIuuYUbuiZs1iCd53D/1xM
-        KXLWDMIwdnU7VbpmRlufelV+DTsO98xWmiyghnL+pUZwV8jnaaKHfkiwkQ9hbwj1Cyx8X2
-        1FGfqpjvZ9MB0FC0CO+LyypDjwih71M=
-Date:   Fri, 14 Apr 2023 23:58:26 +0800
+        Fri, 14 Apr 2023 12:03:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4861BD0;
+        Fri, 14 Apr 2023 09:03:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4AB5164661;
+        Fri, 14 Apr 2023 16:03:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0F8FC433EF;
+        Fri, 14 Apr 2023 16:03:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681488191;
+        bh=mwpEVmthTFGXrAt5wlQ6rrrdR4nou9HpjsVImzjWbwc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=USod7eYDgwQFm8mGHq42JZkxRBBqcRBcS/dbXR1mcv0RHk+Wj3tekEGltOQYaPwCo
+         dZt0N2BAlkr6VaDxl1+zcnQ3GXIt+opo76fryYak+swZvJtsM2bqb1uTUtJja8cojQ
+         G0pDi3ElubIeYbRzlQk5uxmmMPtQbQcJ9H9VvmtYxvs7lHOBlcRRMq8FCVA1Mkd4Vd
+         9z3c+bLF4BF/auLop7aQd7etKjmN6HitGbyrI4otiF0VABaZqj6k6gVbEONUiN6m79
+         QhHmB2x3VnpL8BlzKgdmhDh7fnsFzM6sPqUr+o+gD//pwJlAt7lN8lq7QDwCwCRrCK
+         duZTIYnnhvPaQ==
+From:   broonie@kernel.org
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>
+Subject: linux-next: manual merge of the nvmem tree with the devicetree tree
+Date:   Fri, 14 Apr 2023 17:03:06 +0100
+Message-Id: <20230414160306.2254545-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: Re: [PATCH for-next 2/3] RDMA/rtrs: Fix rxe_dealloc_pd warning
-To:     Leon Romanovsky <leon@kernel.org>,
-        "Zhijian Li (Fujitsu)" <lizhijian@fujitsu.com>
-Cc:     Guoqing Jiang <guoqing.jiang@linux.dev>,
-        "haris.iqbal@ionos.com" <haris.iqbal@ionos.com>,
-        "jinpu.wang@ionos.com" <jinpu.wang@ionos.com>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <1681108984-2-1-git-send-email-lizhijian@fujitsu.com>
- <1681108984-2-3-git-send-email-lizhijian@fujitsu.com>
- <20230410120809.GN182481@unreal>
- <0d9c57db-bca3-adb4-71fd-7362e4842917@linux.dev>
- <85323eb2-cfc7-d1b8-3a75-3fa63dde29db@fujitsu.com>
- <20230411122651.GV182481@unreal>
- <aa43746f-77f9-8592-5370-2a5042506ee5@fujitsu.com>
- <8fe62e38-e43d-3d6c-624f-1c8ce5859788@linux.dev>
- <f85cdaaa-b1d6-bc89-e963-8b611ae3667d@fujitsu.com>
- <20230413132418.GR17993@unreal>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Zhu Yanjun <yanjun.zhu@linux.dev>
-In-Reply-To: <20230413132418.GR17993@unreal>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2023/4/13 21:24, Leon Romanovsky 写道:
-> On Thu, Apr 13, 2023 at 08:12:15AM +0000, Zhijian Li (Fujitsu) wrote:
->>
->>
->> On 13/04/2023 15:35, Guoqing Jiang wrote:
->>> Hi,
->>>
->>> I take a closer look today.
->>>
->>> On 4/12/23 09:15, Zhijian Li (Fujitsu) wrote:
->>>>
->>>> On 11/04/2023 20:26, Leon Romanovsky wrote:
->>>>> On Tue, Apr 11, 2023 at 02:43:46AM +0000, Zhijian Li (Fujitsu) wrote:
->>>>>>
->>>>>> On 10/04/2023 21:10, Guoqing Jiang wrote:
->>>>>>>
->>>>>>> On 4/10/23 20:08, Leon Romanovsky wrote:
->>>>>>>> On Mon, Apr 10, 2023 at 06:43:03AM +0000, Li Zhijian wrote:
->>>>>>>>> The warning occurs when destroying PD whose reference count is not zero.
->>>>>>>>>
->>>>>>>>> Precodition: clt_path->s.con_num is 2.
->>>>>>>>> So 2 cm connection will be created as below:
->>>>>>>>> CPU0                                              CPU1
->>>>>>>>> init_conns {                              |
->>>>>>>>>       create_cm() // a. con[0] created        |
->>>>>>>>>                                               |  a'. rtrs_clt_rdma_cm_handler() {
->>>>>>>>>                                               |    rtrs_rdma_addr_resolved()
->>>>>>>>>                                               |      create_con_cq_qp(con); << con[0]
->>>>>>>>>                                               |  }
->>>>>>>>>                                               | in this moment, refcnt of PD was increased to 2+
->>>
->>> What do you mean "refcnt of PD"? usecnt in struct ib_pd or dev_ref.
->>
->> I mean usecnt in struct ib_pd
->>
->>
->>
->>>
->>>>>>>>>                                               |
->>>>>>>>>       create_cm() // b. cid = 1, failed       |
->>>>>>>>>         destroy_con_cq_qp()                   |
->>>>>>>>>           rtrs_ib_dev_put()                   |
->>>>>>>>>             dev_free()                        |
->>>>>>>>>               ib_dealloc_pd(dev->ib_pd) << PD |
->>>>>>>>>                is destroyed, but refcnt is    |
->>>>>>>>>                still greater than 0           |
->>>
->>> Assuming you mean "pd->usecnt". We only allocate pd in con[0] by rtrs_ib_dev_find_or_add,
->>> if con[1] failed to create cm, then alloc_path_reqs -> ib_alloc_mr -> atomic_inc(&pd->usecnt)
->>> can't be triggered. Is there other places could increase the refcnt?
->>
->>
->> Yes, when create a qp, it will also associate to this PD, that also mean refcnt of PD will be increased.
->>
->> When con[0](create_con_cq_qp) succeeded, refcnt of PD will be 2. and then when con[1] failed, since
->> QP didn't create, refcnt of PD is still 2. con[1]'s cleanup will destroy the PD(ib_dealloc_pd) since dev_ref = 1, after that its
->> refcnt is still 1.
-> 
-> Why is refcnt 1 in con[1] destruction phase? It seems to me like a bug.
-Agree. We should find out why refcnt 1 and fix this problem.
+Hi all,
 
-Zhu Yanjun
-> 
-> Thanks
+Today's linux-next merge of the nvmem tree got a conflict in:
 
+  include/linux/of.h
+
+between commit:
+
+  82174a0a9c5cf ("of: Move of_device_get_match_data() declaration")
+
+from the devicetree tree and commit:
+
+  82174a0a9c5cf ("of: Move of_device_get_match_data() declaration")
+
+from the nvmem tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc include/linux/of.h
+index 6ecde0515677d,9b7a99499ef35..0000000000000
+--- a/include/linux/of.h
++++ b/include/linux/of.h
