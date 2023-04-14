@@ -2,111 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 274EB6E21CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 13:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 625506E21BD
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 13:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbjDNLKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 07:10:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46802 "EHLO
+        id S229831AbjDNLIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 07:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbjDNLKJ (ORCPT
+        with ESMTP id S230335AbjDNLII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 07:10:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDC49EFA;
-        Fri, 14 Apr 2023 04:09:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E6BD3646CF;
-        Fri, 14 Apr 2023 11:09:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 469B9C433D2;
-        Fri, 14 Apr 2023 11:09:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681470587;
-        bh=dCWQvGEBkXfONfpK8qRsz+qQGvbMNYwp8pY9BT7oHlM=;
-        h=From:Date:Subject:To:Cc:Reply-To:From;
-        b=gojfUNusRFaxsw+K+iU6qmS0wnoIF3H+MO6I41GnkfBqHWvCdBR8gtOlREW9d08Bx
-         219Bjq8YmQzuP8eQvxqU6FOasO0WYXmWh8xK58ggcf366u+7RloteUDHW2jZ3isl7Z
-         cGMv1M+KR6319Lidsor26t5p/XHa8wp2Z49xM4KXrPt3rOpIMMcsK7ctfaHAKMNxWd
-         VDqfhpuQuGid39lmj/wiznEHqQ4GsBUdiyJzVduzhK8JaovNxazIkftMTKEroIUqFD
-         28LXg/OiDpO43srB7ejb0EItsRGniB5L5jqUQD1Ku8PkazXE7OEQiIQ8US2niVbqrD
-         2l+CdknqWPfMA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by smtp.lore.kernel.org (Postfix) with ESMTP id 28B3FC77B72;
-        Fri, 14 Apr 2023 11:09:47 +0000 (UTC)
-From:   Jaime Breva via B4 Relay 
-        <devnull+jbreva.nayarsystems.com@kernel.org>
-Date:   Fri, 14 Apr 2023 13:07:40 +0200
-Subject: [PATCH] net: wwan: Expose secondary AT port on DATA1
+        Fri, 14 Apr 2023 07:08:08 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90680468D
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 04:08:04 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id q191so16410151pgq.7
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 04:08:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681470484; x=1684062484;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=n2wfI2E+jV194FHBMWMS+0xMan6iTsY8bMkxOTpZtNA=;
+        b=g6S2XrRuOAQuvDLYj/jHkWIxHdfodiZTRVRBnc+5DuliHaNeMzA8P6BW1aQZd8d94q
+         WNwtSaXqp/l7TQakpRKL/bok+IaAwZtae9jW/6DXhhg6ZSA+RTk0LpDruS7X2J20w1sw
+         s3lzKZ7XikjRLQRW8p/3pHmAXgUsf0ExZrhy0v5ZASZXXAUxbG/1L0GlrD4oi8wCStCC
+         BBJrrhiywCgI0qCLtnHWNOzMFsgdQiCgFZhYeonJ0Y917zbMW7uvIPQ8m7xLHuPU8LyV
+         +C4PRVqvFTBenEtBCdN/ug1vyTyWTAuEecI7tjxH/XoTKJZWJjyBJPN6qhwYWcy+osWj
+         tDUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681470484; x=1684062484;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=n2wfI2E+jV194FHBMWMS+0xMan6iTsY8bMkxOTpZtNA=;
+        b=dAxiNyyTGsj7ileOc0EFRoDIL5l6nxe2R0l4NdHHh2t7GRr7XbNKoXyq5iUN5VYKhd
+         cderP4740w+DN+Ky/Oq4ZS0m61TEQmn/luwI7lAk5D6p8FyqQhrvmXfDQ07Mf2af7b3x
+         R5Ec0xoj/TufoaI3bz/BGk9e4yO/kfjLRgZbltlJaxU6coGb7zcEN8VaY711mlvC4FTD
+         8HNO0lxM2J+ynuSc/N+WVqMHtxusWdnEAT9RnFJNSl5yTfKAHv/zMEgpPLaLdyNNi6CP
+         C3hnFvm4VGBkk+PciB8FdjmLvXBWnDdt/jZnA9ALAhUiwN6YkKn22yeQL524WbEHuDC1
+         kOZA==
+X-Gm-Message-State: AAQBX9fVcWUR6XOFSGLyg9SVYXSNsSJLFHwb8oB4rDN/JzWe63PKxwKu
+        2VrGgucp8Vn06WVhveOtj15jL/D64DHJX0Nf+Mo=
+X-Google-Smtp-Source: AKy350YojJaKJVwtbpcRMAlKVum5WUazSwYMJa+RRMWNR8fG/nVYb5GI+29ERxijEGScAALkMwZ5JZdNHj+AxpeJXjc=
+X-Received: by 2002:a65:6a51:0:b0:503:4a2c:5f0 with SMTP id
+ o17-20020a656a51000000b005034a2c05f0mr632062pgu.9.1681470484033; Fri, 14 Apr
+ 2023 04:08:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230414-rpmsg-wwan-secondary-at-port-v1-1-6d7307527911@nayarsystems.com>
-X-B4-Tracking: v=1; b=H4sIAPwzOWQC/x2NQQqDMBAAvyJ77oKmQaFfKT1skq3mYBJ2Q7WIf
- 2/scRiYOUBZIis8ugOEP1FjTg2GWwd+oTQzxtAYTG/uvR0sSll1xm2jhMo+p0DyRapYslQMbjI
- 0jp4nS9ASjpTRCSW/XJGVtLJcogi/4/7/Pl/n+QMph2lPhwAAAA==
-To:     Stephan Gerhold <stephan@gerhold.net>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     netdev@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jaime Breva <jbreva@nayarsystems.com>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1681470586; l=1075;
- i=jbreva@nayarsystems.com; s=20230414; h=from:subject:message-id;
- bh=cSR4ZQap91Ye+xWxHZdF++TRRzXHB58d7aORnQDEYqM=;
- b=UtqPg4Ls/omSuTtTSlV0VkJABHHRNDsCfzzMZBGbx0UTm78zIV39iYILVj5p0bOVV8LWiNvRi
- 1InMJSqRsISARwe/xrdCFAgj+PEDNk4JRU+vdLJAYeKPJMiP3rqDHnJ
-X-Developer-Key: i=jbreva@nayarsystems.com; a=ed25519;
- pk=zDC7l1kB518eXlRUJzDUyrUOKe2m/yx+62R/yqmd/kM=
-X-Endpoint-Received: by B4 Relay for jbreva@nayarsystems.com/20230414 with auth_id=42
-X-Original-From: Jaime Breva <jbreva@nayarsystems.com>
-Reply-To: <jbreva@nayarsystems.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Received: by 2002:a05:6a10:e252:b0:48d:5e44:76f3 with HTTP; Fri, 14 Apr 2023
+ 04:08:03 -0700 (PDT)
+From:   Charlene Brown <41baillet@gmail.com>
+Date:   Fri, 14 Apr 2023 11:08:03 +0000
+Message-ID: <CAL9MPfE46y2jOemBt69LhZSTGLcCuBFFdLH=8fgcxi71eH6Q-w@mail.gmail.com>
+Subject: urgent
+To:     41baillet <41baillet@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.4 required=5.0 tests=ADVANCE_FEE_2_NEW_MONEY,
+        BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FROM,HK_SCAM,LOTS_OF_MONEY,MONEY_FRAUD_3,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jaime Breva <jbreva@nayarsystems.com>
+Hello,
 
-Our use-case needs two AT ports available:
-One for running a ppp daemon, and another one for management
+I know this message may come to you as a surprise. Nevertheless I
+humbly ask you to give me your attention and hear me as
+I have chosen to reach you through the internet because it still
+remains the fastest medium of communication  after going
+through your profile in search of an honest and responsible person.
+My name is Charlene Brown an aging widow suffering from a long time
+illness and I am currently bedbound  and admitted in a private
+hospital here.I have some funds I inherited from my late loving
+husband in  the sum of US$ 14,530,000 which i  deposited in the bank.
+I am looking for a honest and God fearing person that can use these
+funds for Charity work, and a percentage of this funds will be
+allocated  for your compensation for handling this  project
 
-This patch enables a second AT port on DATA1
+Please let me know if you are able to do this work so that I will give
+you more detail how the project could be done
 
-Signed-off-by: Jaime Breva <jbreva@nayarsystems.com>
----
- drivers/net/wwan/rpmsg_wwan_ctrl.c | 1 +
- 1 file changed, 1 insertion(+)
+Sincerely,
 
-diff --git a/drivers/net/wwan/rpmsg_wwan_ctrl.c b/drivers/net/wwan/rpmsg_wwan_ctrl.c
-index 31c24420ab2e..e964bdeea2b3 100644
---- a/drivers/net/wwan/rpmsg_wwan_ctrl.c
-+++ b/drivers/net/wwan/rpmsg_wwan_ctrl.c
-@@ -149,6 +149,7 @@ static const struct rpmsg_device_id rpmsg_wwan_ctrl_id_table[] = {
- 	/* RPMSG channels for Qualcomm SoCs with integrated modem */
- 	{ .name = "DATA5_CNTL", .driver_data = WWAN_PORT_QMI },
- 	{ .name = "DATA4", .driver_data = WWAN_PORT_AT },
-+	{ .name = "DATA1", .driver_data = WWAN_PORT_AT },
- 	{},
- };
- MODULE_DEVICE_TABLE(rpmsg, rpmsg_wwan_ctrl_id_table);
-
----
-base-commit: c9c3395d5e3dcc6daee66c6908354d47bf98cb0c
-change-id: 20230414-rpmsg-wwan-secondary-at-port-db72a66ce74a
-
-Best regards,
--- 
-Jaime Breva <jbreva@nayarsystems.com>
-
+Charlene
