@@ -2,40 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18C1C6E1CA1
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 08:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88AAE6E1CB3
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 08:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbjDNG3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 02:29:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58056 "EHLO
+        id S229939AbjDNGdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 02:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjDNG3A (ORCPT
+        with ESMTP id S229689AbjDNGdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 02:29:00 -0400
-Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291341FE7
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Apr 2023 23:28:32 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R461e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0Vg2TGjn_1681453692;
-Received: from 30.97.49.1(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0Vg2TGjn_1681453692)
-          by smtp.aliyun-inc.com;
-          Fri, 14 Apr 2023 14:28:13 +0800
-Message-ID: <f2cbd4dc-5e24-9d09-4c8c-96d2dc4b2958@linux.alibaba.com>
-Date:   Fri, 14 Apr 2023 14:28:11 +0800
+        Fri, 14 Apr 2023 02:33:00 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BAEA1FFD;
+        Thu, 13 Apr 2023 23:32:57 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id w24so6793525wra.10;
+        Thu, 13 Apr 2023 23:32:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681453976; x=1684045976;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wu9t9qkvRho3a2+VOvYAw+ny13P5sPBLocJ00Zos1+0=;
+        b=i63ZUmiwp2QsF62nyzrRiuqkcWRkBgu7ZE8QFGne5qA0EbAWUXmsXYiwkglPOu2+cy
+         qR/z8rlRj8h6RysuwTOHiT2yl/0MD6ZmPKvSZxLDTp6uavfTYO/rnH0IkqUr+b9Mn5sD
+         97XiWJJdD0nBIYcTpdy97CkOzOelbBMjj4Veedlc8kV9FIGcV6Z0MCapKrm5gCz4MQNH
+         FU7okbbo/sZC8PIoD2ELnt+/udpzRtwk8xFAyoO9dUzKV/3FUMeCL78EENTUNL/pX1HI
+         qutoq/8j7SEf66WZzYPbuYhVbYukC7amlqka7D5f2Hl0IV9pYkkntCr9L3LNc9CYDy6/
+         CvUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681453976; x=1684045976;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wu9t9qkvRho3a2+VOvYAw+ny13P5sPBLocJ00Zos1+0=;
+        b=MywIC9loIKJsAPDQ1eYnEkJX/BO6L52km7H0yiOmazNHFeAEimpUoW+r2gPhUgXXSn
+         kBSvKrVfDlF23/R7245/UclDvno93XRVSooU4FU1DL7qRTE+q9QON63OxWM3IVu75t/k
+         0klNPqmFbANxPinRwu5dshZvCuwQuBwaKk1AfAQyFSE/cGCPVcRwB2Z36YoW/Q+3VTwd
+         bYhGPIhJ4vEWloYCFckMdBg45VnwigKf0keTexomKy0kHCa0rcLd4wtZWy5+8hYd9T7k
+         Kvkx1zexR7KcMjCAn+B5l/nuyZmPCWvDWqM/w7XPV2wok2xD2UoGbLbdvdkqzaZO/CHz
+         WG+w==
+X-Gm-Message-State: AAQBX9cKxyfewZiOQqfxragkZwMmJG/6EIrqpJjb7UG8DObcwL3PPa54
+        4C71wpoe+65HQ/FB5NRPZ28=
+X-Google-Smtp-Source: AKy350ZAC/ZKvfRKMwL4WNCGIl+3kXoSut0GX7Q8mBQCMiu8Rxu9pJXuSdeX+M49NzprIM6KcWBQsA==
+X-Received: by 2002:a5d:43c4:0:b0:2c5:5687:5ed5 with SMTP id v4-20020a5d43c4000000b002c556875ed5mr3220704wrr.18.1681453975545;
+        Thu, 13 Apr 2023 23:32:55 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id j11-20020a05600c190b00b003f09c34fa4csm7283184wmq.40.2023.04.13.23.32.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 23:32:55 -0700 (PDT)
+Date:   Fri, 14 Apr 2023 09:32:51 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     David Ahern <dsahern@kernel.org>
+Cc:     Haoyi Liu <iccccc@hust.edu.cn>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        hust-os-kernel-patches@googlegroups.com, yalongz@hust.edu.cn,
+        Dongliang Mu <dzm91@hust.edu.cn>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v2] net/ipv6: silence 'passing zero to
+ ERR_PTR()' warning
+Message-ID: <11c76aa6-4c19-4f1d-86dd-e94e683dbd64@kili.mountain>
+References: <20230413101005.7504-1-iccccc@hust.edu.cn>
+ <a3e202ed-a50f-2a0f-082b-ec0313be096e@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.1
-Subject: Re: [PATCH] erofs: fix potential overflow calculating xattr_isize
-To:     Jingbo Xu <jefflexu@linux.alibaba.com>, xiang@kernel.org,
-        chao@kernel.org, huyue2@coolpad.com, linux-erofs@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20230414061810.6479-1-jefflexu@linux.alibaba.com>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <20230414061810.6479-1-jefflexu@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a3e202ed-a50f-2a0f-082b-ec0313be096e@kernel.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,38 +79,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/4/14 14:18, Jingbo Xu wrote:
-> Given on-disk i_xattr_icount is 16 bits and xattr_isize is calculated
-> from i_xattr_icount multiplying 4, xattr_isize has a theoretical maximum
-> of 256K (64K * 4).
+On Thu, Apr 13, 2023 at 06:32:24PM -0600, David Ahern wrote:
+> On 4/13/23 4:10 AM, Haoyi Liu wrote:
+> > Smatch complains that if xfrm_lookup() returns NULL then this does a
+> > weird thing with "err":
 > 
-> Thus declare xattr_isize as unsigned int to avoid the potential overflow.
-> 
-> Fixes: bfb8674dc044 ("staging: erofs: add erofs in-memory stuffs")
-> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+> xfrm_lookup is a wrapper around xfrm_lookup_with_ifid which returns
+> either either a valid dst or ERR_PTR(err).
 
-Thanks for catching this!
-Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+Also it can return NULL.
 
-Thanks,
-Gao Xiang
+net/xfrm/xfrm_policy.c
+  3229                  dst = dst_orig;
+  3230          }
+  3231  ok:
+  3232          xfrm_pols_put(pols, drop_pols);
+  3233          if (dst && dst->xfrm &&
+                    ^^^
+"dst" is NULL.
 
-> ---
->   fs/erofs/internal.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-> index 8a563374b518..c86241a32ab3 100644
-> --- a/fs/erofs/internal.h
-> +++ b/fs/erofs/internal.h
-> @@ -306,7 +306,7 @@ struct erofs_inode {
->   
->   	unsigned char datalayout;
->   	unsigned char inode_isize;
-> -	unsigned short xattr_isize;
-> +	unsigned int xattr_isize;
->   
->   	unsigned int xattr_shared_count;
->   	unsigned int *xattr_shared_xattrs;
+  3234              dst->xfrm->props.mode == XFRM_MODE_TUNNEL)
+  3235                  dst->flags |= DST_XFRM_TUNNEL;
+  3236          return dst;
+                ^^^^^^^^^^^
+  3237  
+
+So in the original code what happened here was:
+
+net/ipv6/icmp.c
+   395          dst2 = xfrm_lookup(net, dst2, flowi6_to_flowi(&fl2), sk, XFRM_LOOKUP_ICMP);
+   396          if (!IS_ERR(dst2)) {
+
+xfrm_lookup() returns NULL.  NULL is not an error pointer.
+
+   397                  dst_release(dst);
+   398                  dst = dst2;
+
+We set "dst" to NULL.
+
+   399          } else {
+   400                  err = PTR_ERR(dst2);
+   401                  if (err == -EPERM) {
+   402                          dst_release(dst);
+   403                          return dst2;
+   404                  } else
+   405                          goto relookup_failed;
+   406          }
+   407  
+   408  relookup_failed:
+   409          if (dst)
+   410                  return dst;
+
+dst is not NULL so we don't return it.
+
+   411          return ERR_PTR(err);
+
+However "err" is not set so we do return NULL and Smatch complains about
+that.
+
+Returning ERR_PTR(0); is not necessarily a bug, however 80% of the time
+in newly introduced code it is a bug.  Here, returning NULL is correct.
+So this is a false positive, but the code is just wibbly winding and so
+difficult to read.
+
+   412  }
+
+regards,
+dan carpenter
