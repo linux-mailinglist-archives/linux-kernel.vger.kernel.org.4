@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5810A6E2744
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 17:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0BB6E2740
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 17:48:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbjDNPr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 11:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33398 "EHLO
+        id S230299AbjDNPrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 11:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbjDNPrZ (ORCPT
+        with ESMTP id S230219AbjDNPrZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 14 Apr 2023 11:47:25 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C3EC9757
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 08:47:22 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id l10-20020a05600c1d0a00b003f04bd3691eso20998902wms.5
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 08:47:22 -0700 (PDT)
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A6535AA
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 08:47:23 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id o6-20020a05600c4fc600b003ef6e6754c5so8351186wmq.5
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 08:47:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1681487241; x=1684079241;
+        d=tessares.net; s=google; t=1681487242; x=1684079242;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=O+DYIjU6I16ahs9ojO7PJA1gBnyWy1b9YKTrLd6I+3A=;
-        b=4ID7M5d63Lb3U7c35N+eucaFO8dTtTHS8lYWblB4FRza6pUJTGJmd3nzaec0gS8Q+B
-         TLzhYkH9y1XqUMh/KWndBHFwTnTNYY0kHrTkLjISs1JYMDZusFgKYwryZWS3U/2wolr2
-         B8g0Q/AYAiXuJ2IzbE5B6VfGxs7JPEbatfHjsOhRC7GmFhmCeED6xiZqZWGkuOhHTW1o
-         WOaGTOfDfVCIli+JSAwKVCyrQFOTl4LJ9Sy5MmBygDk9p9gBXeeMPAFUk8JAeHap0i4y
-         pO2HkCwMWi90oaOEMt/R5NXWK+aJsBYB6bNhLpHszpX8yAm9jqYuUrEMuVDFqPvAQu+o
-         OuyQ==
+        bh=ROAGH3/MLol0O8DposnZ2qSsZAiwA2IYVTP8Kksz9vY=;
+        b=BcU0vgNmCs3O3nL1BJrMGOUPdysG0O8cCK20bn3jpxWDdSyEI6JuGHa6Y14UD9zkkL
+         ExwC5v63owpHeh8GsdQW50p+FQtXVl8T9Hi140rk+/kth8L1Q7i5YBYERj/v9gFDFOOY
+         /4kCV/MD7eW6DKH/cdxD1+xCM3krUxjztJk/WMaF38d7nuenxhcgRuDiIMCkP1kREvPy
+         kcmREXKGNc5ziHg6gUPokyvTOcnO/L5cq0itR1xFrzh0R+lhtt6bKbQrD0/6+XU2mHk1
+         idLY7ji05pW+y5rFpohLiYrcAVtR2Ac62kbpXqEHxa9gk/ZslxZfyoj5m1mG7tK354T6
+         kz6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681487241; x=1684079241;
+        d=1e100.net; s=20221208; t=1681487242; x=1684079242;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=O+DYIjU6I16ahs9ojO7PJA1gBnyWy1b9YKTrLd6I+3A=;
-        b=ZO+FTC3+Xg6IBFj76aiAkGMIdzbW7NBlQWYjA3v154euZTZJxHuj3DCyLG3uEp95gy
-         inqtg58r7S4YI4Rc2YExJVlA3MJxkV+sjv6U8VDa4B9uON7wTmo7OkMNFHpZzgrQhEbv
-         W3HtUDYCxPOgZ8eiTEf7aTcijzFOewtpmQzxWa901HZv3gugcVBonmQhk65SRPJuyOeO
-         y7udKuymw5kugRrugykcPe/8XoKGTEMVsAMFC6Qt2zNvoAGkuPnrFhP8rx1OFlksPF8I
-         /32nyWkyqmZr1hI+9ZfBlbsDzQ/80HIIQDKfMB93EAdy2R61uyDCPt9ZSTuAytSRgXz+
-         09BA==
-X-Gm-Message-State: AAQBX9egYlCQnKepDESqh/h6zD7bvKJ2yNdbvAUG5bWqvQMWoP2jXKM2
-        cT3DWdQOCY0cCSp7lQQphXHa5Q==
-X-Google-Smtp-Source: AKy350a2pFZHSYI2Cs61wOr3ZE02/f1Ft7kJ1/y0Uv4GxwlVz3xm14xyBcYCuyI/5r8nMpzingY2tg==
-X-Received: by 2002:a05:600c:204c:b0:3f0:aeac:2f9c with SMTP id p12-20020a05600c204c00b003f0aeac2f9cmr3054597wmg.7.1681487240924;
-        Fri, 14 Apr 2023 08:47:20 -0700 (PDT)
+        bh=ROAGH3/MLol0O8DposnZ2qSsZAiwA2IYVTP8Kksz9vY=;
+        b=bwFt+kcAaEkc8ivdiYEeb33z5FBPQLp7RcSN1K+/RIYPyMbw8bmMQ2hBoCdMTXYCYE
+         IBOn2G7hoMWfA6xPNx4AxysOhTWgyMTlGgcj82SJeA/Qu46me5y+bFgkzWpASvDR32/b
+         S0M9Qt79b8lw52P0wdjXSyV2CrsRxiV/uVcCwP8+l57MANhX5LrlW9slYQJEMe/ldeNe
+         YPBUtwzMjF37Rti/7LQ0RlxWwZl/p5t8+YLE4ybAl1F0UtZJ0207hCPyafHRn37fGF0L
+         PptsO6dTeG6L1Tzj14bJDiERkZ+rd15qsfgaC0vyZw4EqXdTky5wYfRRRE5mFc5ppUp9
+         2djg==
+X-Gm-Message-State: AAQBX9dbL+tycyzfTmhMUiYokAdaXIE0X2RktQfHMrqB1ecTpFaREnxj
+        iMpdudfTBYUdQ26151doliW2oA==
+X-Google-Smtp-Source: AKy350Z0mr0LXQVIqANCRWRGdF73h7kiyhCCcRaAzITaYTExNfjW/VmAKoBwmp/TH2DQHkwhPa2sTg==
+X-Received: by 2002:a1c:7312:0:b0:3f0:9f9b:1665 with SMTP id d18-20020a1c7312000000b003f09f9b1665mr5195510wmb.3.1681487241751;
+        Fri, 14 Apr 2023 08:47:21 -0700 (PDT)
 Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id x2-20020a05600c21c200b003f149715cb6sm1034298wmj.10.2023.04.14.08.47.20
+        by smtp.gmail.com with ESMTPSA id x2-20020a05600c21c200b003f149715cb6sm1034298wmj.10.2023.04.14.08.47.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Apr 2023 08:47:20 -0700 (PDT)
+        Fri, 14 Apr 2023 08:47:21 -0700 (PDT)
 From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Fri, 14 Apr 2023 17:47:06 +0200
-Subject: [PATCH net-next 1/5] mptcp: make
- userspace_pm_append_new_local_addr static
+Date:   Fri, 14 Apr 2023 17:47:07 +0200
+Subject: [PATCH net-next 2/5] MAINTAINERS: add git trees for MPTCP
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230414-upstream-net-next-20230414-mptcp-small-cleanups-v1-1-5aa4a2e05cf2@tessares.net>
+Message-Id: <20230414-upstream-net-next-20230414-mptcp-small-cleanups-v1-2-5aa4a2e05cf2@tessares.net>
 References: <20230414-upstream-net-next-20230414-mptcp-small-cleanups-v1-0-5aa4a2e05cf2@tessares.net>
 In-Reply-To: <20230414-upstream-net-next-20230414-mptcp-small-cleanups-v1-0-5aa4a2e05cf2@tessares.net>
 To:     mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
@@ -66,24 +65,23 @@ To:     mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
         Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
 Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Geliang Tang <geliang.tang@suse.com>
+        Matthieu Baerts <matthieu.baerts@tessares.net>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1836;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=830;
  i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=xn6nYYGzn0RBwhlUBtEUuUOZaLPe5YmFSoe6Y1JgLjw=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkOXWGV0Q+whOEFb9TdMJNNgfTb7WByJGEl3RHb
- c8yjkzLtw+JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZDl1hgAKCRD2t4JPQmmg
- c4uHD/96LwkaJxFO1uZFMjroUmhb7BYvg14lCgz5jkWQLzcMb773Z3WawsSeohAZwLXdV6wEAPf
- 2iSgOnnzRHYZ1qKWnyfjKDGsuGmBcnJ4AtNhpIabkeivgab65SjSfzKpOpJ9izwn/b9lGbYK/fN
- Z5a/81WpeBsfhH7ZPdheta7cOdi4OzZeXTanZfnynlSUz6LdW+AGp15Fkctz3m+rmjpvnUYFOAL
- DoJBkYe8NhAYl2TBZk0EW3LWiYuogrI04ZUe4Q0D/i20uvDWHBfVsHX9Un5JnGYSXviOxyf+pt2
- XmZ16tCpecFjRPTS0oAqJ7pAEuzWffB5j/7/zndy/+0A/8nBeGOcVjySoMzMdhNH09ODAXGh/Dv
- kpMWXrRb7DdeHlzC2sNPSg55L7xpMM8+2xFNfFtJiaptqrg4uOECoLBy1S3X4WClmkPtjeO6Um/
- 05psx+HYtz1/9ogjcyBC2bt7Usx8nJiMGFdu3mZ8jyWxBShVA6xA0Je8HQzABwk6r9u/7uIjpMc
- OPI59cMXC5+gOm1PsnkvFgj1c7OeI8VOToskDTMUogXTiiXMMUOWPd8+MR330bNbNF0E/qh/215
- 9vEX+k8CJyZqgwF0UlSrBroGnLTQZvduW2kgmogVBrtkWOP4m7ZMRhYAttho+k7EQzz9DkoaQ4M
- Wccq/XOL6KbbMaw==
+ bh=vS/IFlxUvtKD47GgBJOfT3kDGNlgv5CC+NDxkpe5d+k=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkOXWGt+uBrmDtZZccm3vssXJRxb3/wgMKtBSBW
+ qhi747VdSmJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZDl1hgAKCRD2t4JPQmmg
+ c3uqD/wMCewm+HBVHMHDEX/wjw7fB1HzXE0Z3cLx2pd8dV25HH1vkE6HTBjRQtPa1/C0CsBlvG6
+ WjhkhaiwWzkQV/Yq8jMIILjYeOdsIY03vYRNZqaC4oQ6MCZ/kqCpuwAm7E/bobwxK4FGa6kXkOi
+ LrdolWQ6B19d5Js+m+12T/wInvSNk0peB1dzMt/HqOqkMhJA5R4/OmXetgeLkoglQu4glLg2AKi
+ WIVfaqiZ2a6RLT948YfRQDTwCevtQGD3LUrICilewOxgOqNsoNj/xAtcFKuhqFOQOCES9zZ6n8O
+ Yf6CSQMeFPc2vhv1/BOHuINF7qUsgsCXxet6XQXGrRIXmuC/hwzO9Icv1uusIRm9wIoBYMqZX/A
+ oAlYci8XierSHT5aWGSFR8yH1vp2tD1NOAWjymaEjKmul9uWM+4HgHvVn/XWHvWEdNpqYTnaWWE
+ c/j3m28QlDSVr36S7/rUH21gxa5t8GXCehnKGduyxOY9h51WbHnCkReUOsd88LTICbXJJ03tDPH
+ dtCyE5fv2dukcogwD9Yb+ZbhnViqhQMRPJb4SbyZTPq5vUBCjuEPgO8Js7YQIBcXbEG8/cPDSec
+ ZpMTdn8QgGCA5FM1TsMjMu6YlQgBUMJC0IRFsFztSeadzSCTusTjgSquhX7tOUjDLJJegHRp6GC
+ JaCGmHDdXqRbD7g==
 X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -96,50 +94,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Geliang Tang <geliang.tang@suse.com>
+This will help occasional developers to find our git repo without having
+to look at our wiki.
 
-mptcp_userspace_pm_append_new_local_addr() has always exclusively been
-used in pm_userspace.c since its introduction in
-commit 4638de5aefe5 ("mptcp: handle local addrs announced by userspace PMs").
-
-So make it static.
-
-Signed-off-by: Geliang Tang <geliang.tang@suse.com>
-Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+Acked-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 ---
- net/mptcp/pm_userspace.c | 4 ++--
- net/mptcp/protocol.h     | 2 --
- 2 files changed, 2 insertions(+), 4 deletions(-)
+ MAINTAINERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/net/mptcp/pm_userspace.c b/net/mptcp/pm_userspace.c
-index a02d3cbf2a1b..27a275805c06 100644
---- a/net/mptcp/pm_userspace.c
-+++ b/net/mptcp/pm_userspace.c
-@@ -25,8 +25,8 @@ void mptcp_free_local_addr_list(struct mptcp_sock *msk)
- 	}
- }
- 
--int mptcp_userspace_pm_append_new_local_addr(struct mptcp_sock *msk,
--					     struct mptcp_pm_addr_entry *entry)
-+static int mptcp_userspace_pm_append_new_local_addr(struct mptcp_sock *msk,
-+						    struct mptcp_pm_addr_entry *entry)
- {
- 	DECLARE_BITMAP(id_bitmap, MPTCP_PM_MAX_ADDR_ID + 1);
- 	struct mptcp_pm_addr_entry *match = NULL;
-diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
-index e1310bc113be..c8dd24feabef 100644
---- a/net/mptcp/protocol.h
-+++ b/net/mptcp/protocol.h
-@@ -830,8 +830,6 @@ int mptcp_pm_remove_subflow(struct mptcp_sock *msk, const struct mptcp_rm_list *
- void mptcp_pm_remove_addrs_and_subflows(struct mptcp_sock *msk,
- 					struct list_head *rm_list);
- 
--int mptcp_userspace_pm_append_new_local_addr(struct mptcp_sock *msk,
--					     struct mptcp_pm_addr_entry *entry);
- void mptcp_free_local_addr_list(struct mptcp_sock *msk);
- int mptcp_nl_cmd_announce(struct sk_buff *skb, struct genl_info *info);
- int mptcp_nl_cmd_remove(struct sk_buff *skb, struct genl_info *info);
+diff --git a/MAINTAINERS b/MAINTAINERS
+index b8b275e27cdb..1c09473685b1 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14617,6 +14617,8 @@ L:	mptcp@lists.linux.dev
+ S:	Maintained
+ W:	https://github.com/multipath-tcp/mptcp_net-next/wiki
+ B:	https://github.com/multipath-tcp/mptcp_net-next/issues
++T:	git https://github.com/multipath-tcp/mptcp_net-next.git export-net
++T:	git https://github.com/multipath-tcp/mptcp_net-next.git export
+ F:	Documentation/networking/mptcp-sysctl.rst
+ F:	include/net/mptcp.h
+ F:	include/trace/events/mptcp.h
 
 -- 
 2.39.2
