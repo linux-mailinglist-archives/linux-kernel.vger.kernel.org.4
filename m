@@ -2,320 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE6566E23BE
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 14:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E35596E23F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 15:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjDNM5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 08:57:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40272 "EHLO
+        id S229989AbjDNNAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 09:00:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbjDNM5G (ORCPT
+        with ESMTP id S229820AbjDNNAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 08:57:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC9A5FDE
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 05:56:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681476980;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8MIchSc/IRBHqG8cQoqV4sLghuhrbfRz6nKRE2TruRs=;
-        b=iyoBXxA7PZa3KHRyuYXJJGY5wpig8ZB1maTdfTUnZUwrXDibH9m2p5NFDBv//RUu3Cn8JE
-        nUCXXdyw4urjCG+r31U5BO6tbcRDFOz+X5BZE3ua2sZGFP0u7ey7XuTetEBZnwI7I12itg
-        tmfGqw/oCEikm+1iXrZ5NKDxygJBuQ0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-108-HizxkZDTNICfXSF6gf899w-1; Fri, 14 Apr 2023 08:56:17 -0400
-X-MC-Unique: HizxkZDTNICfXSF6gf899w-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 81C1485530D;
-        Fri, 14 Apr 2023 12:56:16 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.22.9.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id ADB80406AA66;
-        Fri, 14 Apr 2023 12:56:09 +0000 (UTC)
-From:   Wander Lairson Costa <wander@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Brian Cain <bcain@quicinc.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Andrei Vagin <avagin@gmail.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org (open list),
-        linux-perf-users@vger.kernel.org (open list:PERFORMANCE EVENTS
-        SUBSYSTEM)
-Subject: [PATCH v6 3/3] treewide: replace put_task_struct() witht the atomic safe version
-Date:   Fri, 14 Apr 2023 09:55:29 -0300
-Message-Id: <20230414125532.14958-4-wander@redhat.com>
-In-Reply-To: <20230414125532.14958-1-wander@redhat.com>
-References: <20230414125532.14958-1-wander@redhat.com>
+        Fri, 14 Apr 2023 09:00:43 -0400
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0FC977C;
+        Fri, 14 Apr 2023 06:00:25 -0700 (PDT)
+Received: from localhost.localdomain ([172.16.0.254])
+        (user=dzm91@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 33ECwwkT018300-33ECwwkW018300
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 14 Apr 2023 20:59:03 +0800
+From:   Dongliang Mu <dzm91@hust.edu.cn>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Pavel Rojtberg <rojtberg@gmail.com>,
+        Vicki Pfau <vi@endrift.com>, Nate Yocom <nate@yocom.org>,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        John Butler <radon86dev@gmail.com>,
+        Matthias Benkmann <matthias.benkmann@gmail.com>,
+        Christopher Crockett <chaorace@gmail.com>,
+        Santosh De Massari <s.demassari@gmail.com>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        Dongliang Mu <dzm91@hust.edu.cn>,
+        syzbot+a3f758b8d8cb7e49afec@syzkaller.appspotmail.com,
+        "Pierre-Loup A. Griffais" <pgriffais@valvesoftware.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Input: xpad - fix GPF in xpad_probe
+Date:   Fri, 14 Apr 2023 20:55:47 +0800
+Message-Id: <20230414125603.686123-1-dzm91@hust.edu.cn>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-FEAS-AUTH-USER: dzm91@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In places where put_task_struct() is called in a non-sleepable context,
-we replace those calls by put_task_struct_atomic_safe().
+In xpad_probe(), it does not allocate xpad->dev with input_dev type.
+Then, when it invokes dev_warn with 1st argument - &xpad->dev->dev, it
+would trigger GPF.
 
-These call sites were found by running internal regression tests and
-looking for warnings generated by put_task_might_resched().
+Fix this by allocating xpad->dev, its error handling and cleanup
+operations in the remove function.
 
-Signed-off-by: Wander Lairson Costa <wander@redhat.com>
-Cc: Valentin Schneider <vschneid@redhat.com>
+Note that this crash does not have any reproducer, so the patch
+only passes compilation testing.
+
+Reported-by: syzbot+a3f758b8d8cb7e49afec@syzkaller.appspotmail.com
+Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
 ---
- kernel/events/core.c     |  6 +++---
- kernel/locking/rtmutex.c | 10 +++++-----
- kernel/sched/core.c      |  6 +++---
- kernel/sched/deadline.c  | 16 ++++++++--------
- kernel/sched/rt.c        |  4 ++--
- 5 files changed, 21 insertions(+), 21 deletions(-)
+ drivers/input/joystick/xpad.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 435815d3be3f..8f823da02324 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -1181,7 +1181,7 @@ static void put_ctx(struct perf_event_context *ctx)
- 		if (ctx->parent_ctx)
- 			put_ctx(ctx->parent_ctx);
- 		if (ctx->task && ctx->task != TASK_TOMBSTONE)
--			put_task_struct(ctx->task);
-+			put_task_struct_atomic_safe(ctx->task);
- 		call_rcu(&ctx->rcu_head, free_ctx);
- 	}
- }
-@@ -13019,7 +13019,7 @@ static void perf_event_exit_task_context(struct task_struct *child)
- 	RCU_INIT_POINTER(child->perf_event_ctxp, NULL);
- 	put_ctx(child_ctx); /* cannot be last */
- 	WRITE_ONCE(child_ctx->task, TASK_TOMBSTONE);
--	put_task_struct(current); /* cannot be last */
-+	put_task_struct_atomic_safe(current); /* cannot be last */
- 
- 	clone_ctx = unclone_ctx(child_ctx);
- 	raw_spin_unlock_irq(&child_ctx->lock);
-@@ -13124,7 +13124,7 @@ void perf_event_free_task(struct task_struct *task)
- 	 */
- 	RCU_INIT_POINTER(task->perf_event_ctxp, NULL);
- 	WRITE_ONCE(ctx->task, TASK_TOMBSTONE);
--	put_task_struct(task); /* cannot be last */
-+	put_task_struct_atomic_safe(task); /* cannot be last */
- 	raw_spin_unlock_irq(&ctx->lock);
- 
- 
-diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
-index 728f434de2bb..3ecb8d6ae039 100644
---- a/kernel/locking/rtmutex.c
-+++ b/kernel/locking/rtmutex.c
-@@ -509,7 +509,7 @@ static __always_inline void rt_mutex_wake_up_q(struct rt_wake_q_head *wqh)
+diff --git a/drivers/input/joystick/xpad.c b/drivers/input/joystick/xpad.c
+index 66a92691a047..2e077b52f46a 100644
+--- a/drivers/input/joystick/xpad.c
++++ b/drivers/input/joystick/xpad.c
+@@ -1944,6 +1944,7 @@ static int xpad_probe(struct usb_interface *intf, const struct usb_device_id *id
  {
- 	if (IS_ENABLED(CONFIG_PREEMPT_RT) && wqh->rtlock_task) {
- 		wake_up_state(wqh->rtlock_task, TASK_RTLOCK_WAIT);
--		put_task_struct(wqh->rtlock_task);
-+		put_task_struct_atomic_safe(wqh->rtlock_task);
- 		wqh->rtlock_task = NULL;
+ 	struct usb_device *udev = interface_to_usbdev(intf);
+ 	struct usb_xpad *xpad;
++	struct input_dev *input_dev;
+ 	struct usb_endpoint_descriptor *ep_irq_in, *ep_irq_out;
+ 	int i, error;
+ 
+@@ -1957,9 +1958,13 @@ static int xpad_probe(struct usb_interface *intf, const struct usb_device_id *id
  	}
  
-@@ -649,7 +649,7 @@ static int __sched rt_mutex_adjust_prio_chain(struct task_struct *task,
- 			       "task: %s (%d)\n", max_lock_depth,
- 			       top_task->comm, task_pid_nr(top_task));
- 		}
--		put_task_struct(task);
-+		put_task_struct_atomic_safe(task);
+ 	xpad = kzalloc(sizeof(struct usb_xpad), GFP_KERNEL);
+-	if (!xpad)
+-		return -ENOMEM;
++	input_dev = input_allocate_device();
++	if (!xpad || !input_dev) {
++		error = -ENOMEM;
++		goto err_free_mem;
++	}
  
- 		return -EDEADLK;
- 	}
-@@ -817,7 +817,7 @@ static int __sched rt_mutex_adjust_prio_chain(struct task_struct *task,
- 		 * No requeue[7] here. Just release @task [8]
- 		 */
- 		raw_spin_unlock(&task->pi_lock);
--		put_task_struct(task);
-+		put_task_struct_atomic_safe(task);
++	xpad->dev = input_dev;
+ 	usb_make_path(udev, xpad->phys, sizeof(xpad->phys));
+ 	strlcat(xpad->phys, "/input0", sizeof(xpad->phys));
  
- 		/*
- 		 * [9] check_exit_conditions_3 protected by lock->wait_lock.
-@@ -886,7 +886,7 @@ static int __sched rt_mutex_adjust_prio_chain(struct task_struct *task,
- 
- 	/* [8] Release the task */
- 	raw_spin_unlock(&task->pi_lock);
--	put_task_struct(task);
-+	put_task_struct_atomic_safe(task);
- 
- 	/*
- 	 * [9] check_exit_conditions_3 protected by lock->wait_lock.
-@@ -990,7 +990,7 @@ static int __sched rt_mutex_adjust_prio_chain(struct task_struct *task,
-  out_unlock_pi:
- 	raw_spin_unlock_irq(&task->pi_lock);
-  out_put_task:
--	put_task_struct(task);
-+	put_task_struct_atomic_safe(task);
- 
- 	return ret;
+@@ -2134,6 +2139,7 @@ static int xpad_probe(struct usb_interface *intf, const struct usb_device_id *id
+ err_free_idata:
+ 	usb_free_coherent(udev, XPAD_PKT_LEN, xpad->idata, xpad->idata_dma);
+ err_free_mem:
++	input_free_device(input_dev);
+ 	kfree(xpad);
+ 	return error;
  }
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 0d18c3969f90..a4783f0c9f01 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -1007,7 +1007,7 @@ void wake_up_q(struct wake_q_head *head)
- 		 * the queueing in wake_q_add() so as not to miss wakeups.
- 		 */
- 		wake_up_process(task);
--		put_task_struct(task);
-+		put_task_struct_atomic_safe(task);
- 	}
- }
+@@ -2159,6 +2165,7 @@ static void xpad_disconnect(struct usb_interface *intf)
+ 	usb_free_coherent(xpad->udev, XPAD_PKT_LEN,
+ 			xpad->idata, xpad->idata_dma);
  
-@@ -2528,7 +2528,7 @@ int push_cpu_stop(void *arg)
- 	raw_spin_rq_unlock(rq);
- 	raw_spin_unlock_irq(&p->pi_lock);
++	input_free_device(xpad->dev);
+ 	kfree(xpad);
  
--	put_task_struct(p);
-+	put_task_struct_atomic_safe(p);
- 	return 0;
- }
- 
-@@ -9316,7 +9316,7 @@ static int __balance_push_cpu_stop(void *arg)
- 	rq_unlock(rq, &rf);
- 	raw_spin_unlock_irq(&p->pi_lock);
- 
--	put_task_struct(p);
-+	put_task_struct_atomic_safe(p);
- 
- 	return 0;
- }
-diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index 71b24371a6f7..0f8b8a490dc0 100644
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -327,7 +327,7 @@ static void dl_change_utilization(struct task_struct *p, u64 new_bw)
- 		 * so we are still safe.
- 		 */
- 		if (hrtimer_try_to_cancel(&p->dl.inactive_timer) == 1)
--			put_task_struct(p);
-+			put_task_struct_atomic_safe(p);
- 	}
- 	__sub_rq_bw(p->dl.dl_bw, &rq->dl);
- 	__add_rq_bw(new_bw, &rq->dl);
-@@ -467,7 +467,7 @@ static void task_contending(struct sched_dl_entity *dl_se, int flags)
- 		 * so we are still safe.
- 		 */
- 		if (hrtimer_try_to_cancel(&dl_se->inactive_timer) == 1)
--			put_task_struct(dl_task_of(dl_se));
-+			put_task_struct_atomic_safe(dl_task_of(dl_se));
- 	} else {
- 		/*
- 		 * Since "dl_non_contending" is not set, the
-@@ -1207,7 +1207,7 @@ static enum hrtimer_restart dl_task_timer(struct hrtimer *timer)
- 	 * This can free the task_struct, including this hrtimer, do not touch
- 	 * anything related to that after this.
- 	 */
--	put_task_struct(p);
-+	put_task_struct_atomic_safe(p);
- 
- 	return HRTIMER_NORESTART;
- }
-@@ -1442,7 +1442,7 @@ static enum hrtimer_restart inactive_task_timer(struct hrtimer *timer)
- 	dl_se->dl_non_contending = 0;
- unlock:
- 	task_rq_unlock(rq, p, &rf);
--	put_task_struct(p);
-+	put_task_struct_atomic_safe(p);
- 
- 	return HRTIMER_NORESTART;
- }
-@@ -1899,7 +1899,7 @@ static void migrate_task_rq_dl(struct task_struct *p, int new_cpu __maybe_unused
- 		 * so we are still safe.
- 		 */
- 		if (hrtimer_try_to_cancel(&p->dl.inactive_timer) == 1)
--			put_task_struct(p);
-+			put_task_struct_atomic_safe(p);
- 	}
- 	sub_rq_bw(&p->dl, &rq->dl);
- 	rq_unlock(rq, &rf);
-@@ -2351,7 +2351,7 @@ static int push_dl_task(struct rq *rq)
- 			/* No more tasks */
- 			goto out;
- 
--		put_task_struct(next_task);
-+		put_task_struct_atomic_safe(next_task);
- 		next_task = task;
- 		goto retry;
- 	}
-@@ -2366,7 +2366,7 @@ static int push_dl_task(struct rq *rq)
- 	double_unlock_balance(rq, later_rq);
- 
- out:
--	put_task_struct(next_task);
-+	put_task_struct_atomic_safe(next_task);
- 
- 	return ret;
- }
-@@ -2633,7 +2633,7 @@ static void switched_from_dl(struct rq *rq, struct task_struct *p)
- static void switched_to_dl(struct rq *rq, struct task_struct *p)
- {
- 	if (hrtimer_try_to_cancel(&p->dl.inactive_timer) == 1)
--		put_task_struct(p);
-+		put_task_struct_atomic_safe(p);
- 
- 	/* If p is not queued we will update its parameters at next wakeup. */
- 	if (!task_on_rq_queued(p)) {
-diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-index 0a11f44adee5..e58a84535f61 100644
---- a/kernel/sched/rt.c
-+++ b/kernel/sched/rt.c
-@@ -2150,7 +2150,7 @@ static int push_rt_task(struct rq *rq, bool pull)
- 		/*
- 		 * Something has shifted, try again.
- 		 */
--		put_task_struct(next_task);
-+		put_task_struct_atomic_safe(next_task);
- 		next_task = task;
- 		goto retry;
- 	}
-@@ -2163,7 +2163,7 @@ static int push_rt_task(struct rq *rq, bool pull)
- 
- 	double_unlock_balance(rq, lowest_rq);
- out:
--	put_task_struct(next_task);
-+	put_task_struct_atomic_safe(next_task);
- 
- 	return ret;
- }
+ 	usb_set_intfdata(intf, NULL);
 -- 
 2.39.2
 
