@@ -2,145 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69F456E1BB4
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 07:28:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1ED46E1BB9
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 07:29:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229446AbjDNF2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 01:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51756 "EHLO
+        id S229754AbjDNF3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 01:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbjDNF2K (ORCPT
+        with ESMTP id S229450AbjDNF3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 01:28:10 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A1DE4F;
-        Thu, 13 Apr 2023 22:27:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681450078; x=1712986078;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=iHZ3pySy0Mry1kT1bLKTKmQEXlQGTOhTLuIriclyu7A=;
-  b=QQtxZ9nSlABzSOWVEG7fSMwQS7l7F58iiCykOFCxk2V3YPZE/DS54B8P
-   D9ZMlHf0dFIW7wTa9Krk+TJmSfyLIzmVA+vCyOmKXU9iKFXiDwiUxWO/E
-   qXx7MLxeZ6+Q2eFHRI+ii163ZzLKo9VZt6PiYV/D5bPhePofrHz7VAfST
-   m0AcbGkGE9aT00PyduKc/BmTe0V9TleB8B6sHNoE2Ncdn1Ggaf9+2w/yi
-   HjsFZWimwT0FC76M8VfGMWyzxOk4dLAXnbvliwHFIfCOkvxYF2fqHqPu1
-   fYqkvQNoJ4SUc4fHgU28xX9rjgnk0DzgFijHRYL7lMreJklW+moLwPKsL
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="333152747"
-X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
-   d="scan'208";a="333152747"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 22:27:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="692234171"
-X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
-   d="scan'208";a="692234171"
-Received: from p12ill20yoongsia.png.intel.com ([10.88.227.28])
-  by fmsmga007.fm.intel.com with ESMTP; 13 Apr 2023 22:27:52 -0700
-From:   Song Yoong Siang <yoong.siang.song@intel.com>
-To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Ong Boon Leong <boon.leong.ong@intel.com>,
-        Jacob Keller <jacob.e.keller@intel.com>
-Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, xdp-hints@xdp-project.net,
-        Song Yoong Siang <yoong.siang.song@intel.com>
-Subject: [PATCH net-next v5 3/3] net: stmmac: add Rx HWTS metadata to XDP ZC receive pkt
-Date:   Fri, 14 Apr 2023 13:26:51 +0800
-Message-Id: <20230414052651.1871424-4-yoong.siang.song@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230414052651.1871424-1-yoong.siang.song@intel.com>
-References: <20230414052651.1871424-1-yoong.siang.song@intel.com>
+        Fri, 14 Apr 2023 01:29:18 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ACB15FCD;
+        Thu, 13 Apr 2023 22:28:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=WTrjq/Hj7xVrgUTwXL4fhU02Kmf9Tqu/Teapat/Qe9U=; b=nrh5SDtLtFVCBqV9LcByXzOdcP
+        fXhCPG9ig8aJsOG7gPetVfxNTBbuzPyZkskWLeKVsmjPcuEk2cCOfpxGR02jXC/fUzmWFnPsOyscd
+        tc4Qi/T0dBYNpGiQzXWkCgMNGewsl84u+OBVY7+BPnz/UDbbg5Wo1OSWF5IVwBkE4C2kGI+NSmCn+
+        Zd4jl1uWkAD/IEm/bTzZtoWpqT1F6I+jvwdCYcLyoAk1+9kA55qTZXnYD7bAe2zgwOUVnZUoeg4Pl
+        9iQAxEaW6qucTufLGSa7Swyd2NQedIZfgXzGRsJOVGG30gme0xbCyDq4EiANSdnuqAM+e3dchOhRt
+        KlPkdRUg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pnBzK-008MsV-0U;
+        Fri, 14 Apr 2023 05:28:46 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     david@redhat.com, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com,
+        petr.pavlu@suse.com, prarit@redhat.com,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        rafael@kernel.org
+Cc:     christophe.leroy@csgroup.eu, tglx@linutronix.de,
+        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com,
+        catalin.marinas@arm.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com, mcgrof@kernel.org
+Subject: [RFC 0/2] module: fix virtual memory wasted on finit_module()
+Date:   Thu, 13 Apr 2023 22:28:38 -0700
+Message-Id: <20230414052840.1994456-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add receive hardware timestamp metadata support via kfunc to XDP Zero Copy
-receive packets.
+The graph from my v3 patch series [0] which tries to resolve the virtual
+memory lost bytes due to duplicates says it all:
 
-Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
----
- .../net/ethernet/stmicro/stmmac/stmmac_main.c | 22 +++++++++++++++++++
- 1 file changed, 22 insertions(+)
+         +----------------------------------------------------------------------------+
+    14GB |-+          +            +            +           +           *+          +-|
+         |                                                          ****              |
+         |                                                       ***                  |
+         |                                                     **                     |
+    12GB |-+                                                 **                     +-|
+         |                                                 **                         |
+         |                                               **                           |
+         |                                             **                             |
+         |                                           **                               |
+    10GB |-+                                       **                               +-|
+         |                                       **                                   |
+         |                                     **                                     |
+         |                                   **                                       |
+     8GB |-+                               **                                       +-|
+waste    |                               **                             ###           |
+         |                             **                           ####              |
+         |                           **                      #######                  |
+     6GB |-+                     ****                    ####                       +-|
+         |                      *                    ####                             |
+         |                     *                 ####                                 |
+         |                *****              ####                                     |
+     4GB |-+            **               ####                                       +-|
+         |            **             ####                                             |
+         |          **           ####                                                 |
+         |        **         ####                                                     |
+     2GB |-+    **      #####                                                       +-|
+         |     *    ####                                                              |
+         |    * ####                                                   Before ******* |
+         |  **##      +            +            +           +           After ####### |
+         +----------------------------------------------------------------------------+
+         0            50          100          150         200          250          300
+                                          CPUs count
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 74f78e5537a3..f3b8eae0846e 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -1614,6 +1614,12 @@ static int stmmac_alloc_rx_buffers_zc(struct stmmac_priv *priv,
- 	struct stmmac_rx_queue *rx_q = &dma_conf->rx_queue[queue];
- 	int i;
- 
-+	/* struct stmmac_xdp_buff is using cb field (maximum size of 24 bytes)
-+	 * in struct xdp_buff_xsk to stash driver specific information. Thus,
-+	 * use this macro to make sure no size violations.
-+	 */
-+	XSK_CHECK_PRIV_TYPE(struct stmmac_xdp_buff);
-+
- 	for (i = 0; i < dma_conf->dma_rx_size; i++) {
- 		struct stmmac_rx_buffer *buf;
- 		dma_addr_t dma_addr;
-@@ -4998,6 +5004,16 @@ static bool stmmac_rx_refill_zc(struct stmmac_priv *priv, u32 queue, u32 budget)
- 	return ret;
- }
- 
-+static struct stmmac_xdp_buff *xsk_buff_to_stmmac_ctx(struct xdp_buff *xdp)
-+{
-+	/* In XDP zero copy data path, xdp field in struct xdp_buff_xsk is used
-+	 * to represent incoming packet, whereas cb field in the same structure
-+	 * is used to store driver specific info. Thus, struct stmmac_xdp_buff
-+	 * is laid on top of xdp and cb fields of struct xdp_buff_xsk.
-+	 */
-+	return (struct stmmac_xdp_buff *)xdp;
-+}
-+
- static int stmmac_rx_zc(struct stmmac_priv *priv, int limit, u32 queue)
- {
- 	struct stmmac_rx_queue *rx_q = &priv->dma_conf.rx_queue[queue];
-@@ -5027,6 +5043,7 @@ static int stmmac_rx_zc(struct stmmac_priv *priv, int limit, u32 queue)
- 	}
- 	while (count < limit) {
- 		struct stmmac_rx_buffer *buf;
-+		struct stmmac_xdp_buff *ctx;
- 		unsigned int buf1_len = 0;
- 		struct dma_desc *np, *p;
- 		int entry;
-@@ -5112,6 +5129,11 @@ static int stmmac_rx_zc(struct stmmac_priv *priv, int limit, u32 queue)
- 			goto read_again;
- 		}
- 
-+		ctx = xsk_buff_to_stmmac_ctx(buf->xdp);
-+		ctx->priv = priv;
-+		ctx->p = p;
-+		ctx->np = np;
-+
- 		/* XDP ZC Frame only support primary buffers for now */
- 		buf1_len = stmmac_rx_buf1_len(priv, p, status, len);
- 		len += buf1_len;
+So we really need to debug to see WTF, because really, WTF. The first
+patch tries to answer the question if the issue is module auto-loading
+being abused and that causing the issues. The patch proves that the
+answer is no, but it does also help us find *a few* requests which can
+get a bit of love to avoid duplicates. My system at least found one. So
+it adds a debugging facility to let you do that.
+
+As I was writing the commit log for my first patch series [0] I was noting
+that this is it... and the obvious conclusion is that the culprit is udev
+issuing requests per CPU for tons of modules. I didn't feel comfortable in
+writing that this is it and we can't really do anything before really
+trying hard. So I gave it a good 'ol college try. At first I wondered if
+we could use file descriptor hints to just exlude users early on boot
+before SYSTEM_RUNNING. I couldn't find much, but if there are some ways
+to do that -- then the last patch can be simplified to do just that.
+The second patch proves essentially that we can just send -EBUSY to
+duplicate requests, at least for duplicate module loads and the world
+doesn't fall apart. It *would* solve the issue. The patch however
+borrows tons of the code from the first, and if we're realy going to
+rely on something like that we may as well share. But I'm hopeful that
+perhaps there are some jucier file descriptor tricks we can use to
+just make a file mutually exlusivive and introduce a new kread which
+lets finit_module() use that. The saving grace is that at least all
+finit_module() calls *wait*, contray to request_module() calls and so
+the solution can be much simpler.
+
+The end result is 0 wasted virtual memory bytes.
+
+Any ideas how not to make patch 2 suck as-is ?
+
+Yes -- we can also go fix udev, or libkmod, and that's what should be
+done. However, it seems silly to not fix if the fix is as trivial as
+patch 2 demonstrates.
+
+If you want to test / muck with all this you can use my branch
+20230413-module-alloc-opts [1]:
+
+[0] https://lkml.kernel.org/r/20230414050836.1984746-1-mcgrof@kernel.org
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230413-module-alloc-opts
+
+Luis Chamberlain (2):
+  module: add debugging auto-load duplicate module support
+  kread: avoid duplicates
+
+ fs/kernel_read_file.c    | 150 +++++++++++++++++++++++++
+ kernel/module/Kconfig    |  40 +++++++
+ kernel/module/Makefile   |   1 +
+ kernel/module/dups.c     | 234 +++++++++++++++++++++++++++++++++++++++
+ kernel/module/internal.h |  15 +++
+ kernel/module/kmod.c     |  23 +++-
+ kernel/module/main.c     |   6 +-
+ 7 files changed, 463 insertions(+), 6 deletions(-)
+ create mode 100644 kernel/module/dups.c
+
 -- 
-2.34.1
+2.39.2
 
