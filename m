@@ -2,53 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 507BE6E22DF
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 14:11:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F7186E22EF
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 14:15:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbjDNMLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 08:11:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60330 "EHLO
+        id S230032AbjDNMO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 08:14:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjDNMLf (ORCPT
+        with ESMTP id S229534AbjDNMO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 08:11:35 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2ECF3
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 05:11:31 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PyZzx4lSzz4xDr;
-        Fri, 14 Apr 2023 22:11:25 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1681474287;
-        bh=MYWkP1BdVX8PGN/iA6OZcWJO9svH3C1eZp+WN7k5FIo=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=mdwA45Eithl0Zfh3JUNb19wIcdyRVRZ5+KdBsT3YAyXLw3z1g+1I8L8QGKfAxZbw9
-         3QEqORW7+p1AbJO1VYtkE8JsROYW8V50LJ0YsqMjkiM0B3t1sClAKD6gggatv53ux5
-         nr9boy5RaVf64/96tp2nNHXgrevpYd5YXGb9WTJpzDuixJQX932mk1T7Zdc3oik3WZ
-         W/jKAEENYrrj6IEaRX6zGcZ6sH6fCYNJh1ZBgMMv2SSEHbHLqHoYh3ySHzNJOiZmNG
-         vcMArxorstICPmmWDIKnKj6VDX5Jw/fq0TZq+3b388J+GzfyksH+5ZRTdH3PkgAqjl
-         d1RvGdNCIvjtg==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Laurent Dufour <ldufour@linux.ibm.com>, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu
-Cc:     msuchanek@suse.de, nathanl@linux.ibm.com,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-Subject: Re: [PATCH 1/2] pseries/smp: export the smt level in the SYS FS.
-In-Reply-To: <0e668a82-3a3e-798a-8707-1a9b622b23b6@linux.ibm.com>
-References: <20230331153905.31698-1-ldufour@linux.ibm.com>
- <20230331153905.31698-2-ldufour@linux.ibm.com>
- <87ttxjaonc.fsf@mpe.ellerman.id.au>
- <0e668a82-3a3e-798a-8707-1a9b622b23b6@linux.ibm.com>
-Date:   Fri, 14 Apr 2023 22:11:24 +1000
-Message-ID: <87leiuack3.fsf@mpe.ellerman.id.au>
+        Fri, 14 Apr 2023 08:14:56 -0400
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564DF1722;
+        Fri, 14 Apr 2023 05:14:55 -0700 (PDT)
+Received: by mail-vs1-xe2a.google.com with SMTP id y17so16210462vsd.9;
+        Fri, 14 Apr 2023 05:14:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681474494; x=1684066494;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qjiVKo1Y1OcOlbDVIJvSvV2H1MeJz//axCy7/BdCahk=;
+        b=Fe8m4/mmLHl4ZcnIo9fRP/p9xuMfWjJd0XRYLnfACf08hAOaoZwHLltFHx4kbzMnkE
+         m17/byXfxvA/+aYt3yW1bZihcAGFhsH816eL+hTqqE7+2ZMg06Gnia5UyfVGicIfMNK3
+         d2WpCUBZcjPwHLk8ykizOLdXj6eeP4lDuB5bUYZP2nkW6GvzmIMwPhLij7rpCNNoUi6t
+         T4O/ww+iNf7FrsuavkakQzLoEfwBCXLiuKaEX4UoQ7Z+1ovI1UIlSJVye70rkA/aPM5Z
+         bEght6Q9hNTgs7ISxw+jVDYwfNTAR7i5aP3pdMaY8jM3yeY0Z9ZEyDrXdIToDaj5s3/8
+         A5Zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681474494; x=1684066494;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qjiVKo1Y1OcOlbDVIJvSvV2H1MeJz//axCy7/BdCahk=;
+        b=jlrtnzUKbIHJwMxo+8jGPghSu/XFmv9CprFj08/PPXMy9DxYWeVIYOSE8s6ol1B5TT
+         /FTx6O4CR1oeknu3My+dUzcQ7wCbsdl0nwiSjE0xY4rk+9as7zWyYAPXGoHMR15wYYKT
+         i9W1NpPoE/tNl6oAVhnFVUSP2G6UGIp7cLWviNmQ6rlNMLXy+AF+UgFF6KT50p30tfNJ
+         P3kLRx2ztJnPSxyOgRJxnd3zeNk1qxToTl/whsXavmU9wYPRtDoOxkqKAcdzpgWvXMKu
+         vtEndZynHSuYO3egtpVIIyqWxqSFJ/XqrCsPEGRTW5+ZTuHgjmsmZz4Y4V/aT54lCWJj
+         m06w==
+X-Gm-Message-State: AAQBX9c5BCVE/BSJOpBG0b8O7Hgw7gd4ieQ8ANJBcQCLhvVOGEVJurn8
+        BeleN1PWXAx6AHJPe38b4nwE4lrL8Ck470zw6T0=
+X-Google-Smtp-Source: AKy350ayHjK9a/ULv1Go4EqUSXtpslgMBDkHswCkCXSD3vSN1LlLTEVtwPpfrdd4gpdos1YOr7fJY3+3FggVQsUq1Gc=
+X-Received: by 2002:a67:ca8b:0:b0:42e:3afd:dc2d with SMTP id
+ a11-20020a67ca8b000000b0042e3afddc2dmr1610104vsl.6.1681474494437; Fri, 14 Apr
+ 2023 05:14:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+References: <20230411165919.23955-1-jim2101024@gmail.com> <20230411165919.23955-3-jim2101024@gmail.com>
+ <20230413143935.pmbyjk2boxl3rwne@mraw.org> <CANCKTBtXKAYf1LxR4qN+dVyxsWgyDztUVB4EdG=xhHbuhNCq5w@mail.gmail.com>
+ <20230413200646.ddgsoqgmaae343nl@mraw.org>
+In-Reply-To: <20230413200646.ddgsoqgmaae343nl@mraw.org>
+From:   Jim Quinlan <jim2101024@gmail.com>
+Date:   Fri, 14 Apr 2023 08:14:42 -0400
+Message-ID: <CANCKTBuZ=Hxy9WgnjbauhHqXGx4QU_t8pgX=3che2K89=2BT9A@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] PCI: brcmstb: CLKREQ# accomodations of downstream device
+To:     Cyril Brulebois <kibi@debian.org>
+Cc:     linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Phil Elwell <phil@raspberrypi.com>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,76 +84,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Laurent Dufour <ldufour@linux.ibm.com> writes:
-> On 13/04/2023 15:37:59, Michael Ellerman wrote:
->> Laurent Dufour <ldufour@linux.ibm.com> writes:
->>> There is no SMT level recorded in the kernel neither in user space.
->>> Indeed there is no real constraint about that and mixed SMT levels are
->>> allowed and system is working fine this way.
->>>
->>> However when new CPU are added, the kernel is onlining all the threads
->>> which is leading to mixed SMT levels and confuse end user a bit.
->>>
->>> To prevent this exports a SMT level from the kernel so user space
->>> application like the energy daemon, could read it to adjust their settings.
->>> There is no action unless recording the value when a SMT value is written
->>> into the new sysfs entry. User space applications like ppc64_cpu should
->>> update the sysfs when changing the SMT level to keep the system consistent.
->>>
->>> Suggested-by: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
->>> Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
->>> ---
->>>  arch/powerpc/platforms/pseries/pseries.h |  3 ++
->>>  arch/powerpc/platforms/pseries/smp.c     | 39 ++++++++++++++++++++++++
->>>  2 files changed, 42 insertions(+)
->>
->> There is a generic sysfs interface for smt in /sys/devices/system/cpu/smt
->>
->> I think we should be enabling that on powerpc and then adapting it to
->> our needs, rather than adding a pseries specific file.
+On Thu, Apr 13, 2023 at 4:06=E2=80=AFPM Cyril Brulebois <kibi@debian.org> w=
+rote:
 >
-> Thanks Michael, I was not aware of this sysfs interface.
+> Hi Jim,
 >
->> Currently the generic code is only aware of SMT on/off, so it would need
->> to be taught about SMT4 and 8 at least.
+> Jim Quinlan <jim2101024@gmail.com> (2023-04-13):
+> > Can you provide (a) the full boot log prior to applying the patch
+> > series and (b) full boot log after applying the series, using an
+> > IDENTICAL setup. If it fails on both then it has little to do with my
+> > patch series.
 >
-> Do you think we should limit our support to SMT4 and SMT8 only?
-
-Possibly? Currently the SMT state is represented by an enum:
-
-enum cpuhp_smt_control {
-	CPU_SMT_ENABLED,
-	CPU_SMT_DISABLED,
-	CPU_SMT_FORCE_DISABLED,
-	CPU_SMT_NOT_SUPPORTED,
-	CPU_SMT_NOT_IMPLEMENTED,
-};
-
-Adding two states for SMT4 and SMT8 seeems like it might be acceptable.
-
-On the other hand if we want to support artbitrary SMT values from 3 to
-8 then it might be better to store that value separately from the state
-enum.
-
-TBH I'm not sure whether we want to support values other than 1/2/4/8
-via this interface.
-
-A user who wants some odd numbered SMT value can always configure that
-manually using the existing tools.
-
-But maybe it's less confusing if this interface supports all values?
-Even if they're unlikely to get much usage.
-
->> There are already hooks in the generic code to check the SMT level when
->> bringing CPUs up, see cpu_smt_allowed(), they may work for the pseries
->> hotplug case too, though maybe we need some additional logic.
->>
->> Wiring up the basic support is pretty straight forward, something like
->> the diff below.
+> Just to be clear, the issue I reported was with:
+>  - Raspberry Pi Compute Module 4 (Rev 1.1, 4G RAM, 32G storage)
+>  - Raspberry Pi Compute Module 4 IO Board
+>  - SupaHub PCIe-to-multiple-USB adapter, reference PCE6U1C-R02, VER 006S
 >
-> I'll look into how to wire this up.
-> Thanks a lot!
+> This was my minimal reproducer for the kernel panic at boot-up, which
+> goes away with either v1 or v2. When I realized I didn't actually check
+> whether the SupaHub board was working correctly, I plugged 2 devices to
+> obtain this setup:
+>  - Raspberry Pi Compute Module 4 (Rev 1.1, 4G RAM, 32G storage)
+>  - Raspberry Pi Compute Module 4 IO Board
+>  - SupaHub PCIe-to-multiple-USB adapter, reference PCE6U1C-R02, VER 006S
+>  - Kingston DataTraveler G4 32GB on USB-A port #1 of the SupaHub board.
+>  - Logitech K120 keyboard on USB-A port #2 of the SupaHub board.
+>
+> It turns out that this particular revision of the SupaHub board isn't
+> supported by xhci_hcd directly (failing to probe with error -110) and
+> one needs to enable CONFIG_USB_XHCI_PCI_RENESAS=3Dm and also ship its
+> accompanying firmware (/lib/firmware/renesas_usb_fw.mem). With this
+> updated kernel config, I'm able to use the keyboard and to read data
+> from the memory stick without problems (70 MB/s).
+>
+> > In my last series your testing somehow conflated the effect of an
+> > unrelated MMC interrupt issue so please be precise.
+>
+> I wish things would be simpler and didn't involve combinatorics, let
+> alone other bugs/regressions at times, but I'm really trying my best to
+> navigate and report issues and test patches when I can spare some time=E2=
+=80=A6
 
-Thanks.
+Hi Cyril,
 
-cheers
+I want to encourage you and others doing testing and bug reporting:
+everyone wins when a bug or issue is reported, fixed, and tested.
+I'm just asking that when you have negative results, that you provide
+information on the "before" and "after" test results of
+the patch series, and run both on the same test environment.
+
+Regards,
+Jim Quinlan
+Broadcom STB
+
+>
+>
+> In my defence, the very similar board PCE6U1C-R02, VER 006 boots without
+> a kernel panic, and works fine with xhci_hcd without that extra module
+> and its firmware. It's based on the exact same chip (Renesas Technology
+> Corp. uPD720201) though, that's why I didn't realize the need for an
+> extra module until now for the PCE6U1C-R02, VER 006S one. (Florian,
+> thanks for mentioning .config earlier=E2=80=A6)
+>
+> To sum up, it seems both (sub)versions of that SupaHub PCE6U1C-R02 board
+> are usable with this patch series: the kernel panic at boot-up is gone,
+> and USB devices plugged into those boards are working as expected.
+>
+>
+> But, speaking of combinatorics, while the patch series helps fix
+> https://bugzilla.kernel.org/show_bug.cgi?id=3D217276 on that particular
+> initial combination of CM4 and SupaHub PCE6U1C-R02, VER 006S, it also
+> generates a regression if I use a different CM4=E2=80=A6
+>
+> Setup:
+>  - Raspberry Pi Compute Module 4 (Rev 1.0, 8G RAM, 32G storage)
+>  - Raspberry Pi Compute Module 4 IO Board
+>  - SupaHub PCIe-to-multiple-USB adapter, reference PCE6U1C-R02, VER 006S
+>
+> You'll find attached (a) and (b) as requested above, for this setup, as
+> well as the kernel configuration file:
+>  - (a) =3D dmesg-unpatched.txt =3D boots fine (and USB devices work fine =
+if
+>    memory sticks or keyboards are plugged in).
+>  - (b) =3D dmesg-patched.txt =3D kernel panic.
+>  - cm4+pcie.config
+>
+> I'm getting similar results with the other SupaHub board:
+>  - Raspberry Pi Compute Module 4 (Rev 1.0, 8G RAM, 32G storage)
+>  - Raspberry Pi Compute Module 4 IO Board
+>  - SupaHub PCIe-to-multiple-USB adapter, reference PCE6U1C-R02, VER 006
+>
+>
+> This is probably best summarized this way:
+>
+>                               | unpatched    | patched
+> ------------------------------+--------------+--------------
+> CM4 Rev 1.1 4G/32G + VER 006  | OK           | OK
+> CM4 Rev 1.1 4G/32G + VER 006S | Kernel panic | OK            =E2=86=90 Bu=
+gzilla entry
+> CM4 Rev 1.0 8G/32G + VER 006  | OK           | Kernel panic
+> CM4 Rev 1.0 8G/32G + VER 006S | OK           | Kernel panic
+>
+>
+> (And I'm of course using the same settings regarding the serial console,
+> to get traces when needed.)
+>
+>
+> Cheers,
+> --
+> Cyril Brulebois (kibi@debian.org)            <https://debamax.com/>
+> D-I release manager -- Release team member -- Freelance Consultant
