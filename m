@@ -2,147 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 297DD6E2FF2
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 11:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04A8B6E3016
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 11:31:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbjDOJJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 05:09:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38114 "EHLO
+        id S229830AbjDOJbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 05:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbjDOJJR (ORCPT
+        with ESMTP id S229623AbjDOJbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 05:09:17 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A747D84
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 02:08:58 -0700 (PDT)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Pz6t04rShzJrRL;
-        Sat, 15 Apr 2023 17:08:08 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Sat, 15 Apr 2023 17:08:55 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>
-CC:     SeongJae Park <sj@kernel.org>, Hugh Dickins <hughd@google.com>,
-        <linux-kernel@vger.kernel.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH] mm: rename reclaim_pages() to reclaim_folios()
-Date:   Sat, 15 Apr 2023 17:27:16 +0800
-Message-ID: <20230415092716.61970-1-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.35.3
+        Sat, 15 Apr 2023 05:31:45 -0400
+Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929013C15
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 02:31:43 -0700 (PDT)
+Received: by mail-il1-f207.google.com with SMTP id 7-20020a921907000000b003260dffae47so6437912ilz.17
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 02:31:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681551103; x=1684143103;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sQWY3p8eNhIUMjpqZ712oTMmutyZYotMgmBqh/S/Tic=;
+        b=BM9iymoWl6BptUYNZ3dLX/sCxMhyQ79TmZfO3IAUdSsvPS2Hwlh9/+m1R+8rt3fCmH
+         7xtcE9Vvz1sxtHr0H6/mgnydhoN52GixpHyQamwY7d/txY2fZpPkwpoyWEz8STP6wjwq
+         N5oaovuFuZzEWcBGBjxzGFAX5bxhwRzXScpN4+OTcmXbgQltHNGzm9/5Q1Nq4PjV023H
+         M2hvzpVJRWJtsxgQ7e8rqVrDTWwJ9Ogtn9hxPz9v+8vLZ9F1kb3SWtLIqhtM3h0eZJIz
+         mlnndCLQWd8ZRzs2/SFPnuGgf0RrTTmdsLOOu0qkPTYMUIqSN142jMBcOlb3mxtc4YF7
+         F7rw==
+X-Gm-Message-State: AAQBX9eKGepOuC6psnPNAQr6tpSLBOQT7GVuDaaslVquLrkblRlQLiyP
+        DPkapGQd4McN9FiZ74xqIvpQm+Efd5hi6SL2O4FVLsa+pwY5
+X-Google-Smtp-Source: AKy350bDKViPVFB5V4Rguz0ij4tDbQlW7qW7YQRJ6WRetGv4+9qvK2JGZ0REdn56TwnUfzHuIqwbWniGlNMn9ClJ6s1q3o1ZV8Wh
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:42cc:b0:3ec:46d4:e15 with SMTP id
+ bm12-20020a05663842cc00b003ec46d40e15mr6393826jab.3.1681551102867; Sat, 15
+ Apr 2023 02:31:42 -0700 (PDT)
+Date:   Sat, 15 Apr 2023 02:31:42 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002882fb05f95ca0c2@google.com>
+Subject: [syzbot] [hfs?] WARNING in check_flush_dependency (2)
+From:   syzbot <syzbot+f60c5689d74d066ddd1a@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As commit a83f0551f496 ("mm/vmscan: convert reclaim_pages() to use
-a folio") changes the arg from page_list to folio_list, but not
-the defination, let's correct it and rename it to reclaim_folios too.
+Hello,
 
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+syzbot found the following issue on:
+
+HEAD commit:    0d3eb744aed4 Merge tag 'urgent-rcu.2023.04.07a' of git://g..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=132ae59bc80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c21559e740385326
+dashboard link: https://syzkaller.appspot.com/bug?extid=f60c5689d74d066ddd1a
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/a02928003efa/disk-0d3eb744.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/7839447005a4/vmlinux-0d3eb744.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/d26ab3184148/bzImage-0d3eb744.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+f60c5689d74d066ddd1a@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+workqueue: WQ_MEM_RECLAIM dio/loop3:dio_aio_complete_work is flushing !WQ_MEM_RECLAIM events_long:flush_mdb
+WARNING: CPU: 1 PID: 5167 at kernel/workqueue.c:2729 check_flush_dependency+0x29b/0x3f0 kernel/workqueue.c:2729
+Modules linked in:
+CPU: 1 PID: 5167 Comm: kworker/1:4 Not tainted 6.3.0-rc6-syzkaller-00016-g0d3eb744aed4 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+Workqueue: dio/loop3 dio_aio_complete_work
+RIP: 0010:check_flush_dependency+0x29b/0x3f0 kernel/workqueue.c:2729
+Code: 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 3f 01 00 00 48 8b 53 18 49 8d b6 60 01 00 00 4d 89 e0 48 c7 c7 c0 67 4b 8a e8 75 e3 f8 ff <0f> 0b e9 e8 fd ff ff e8 19 5e 30 00 65 4c 8b 2c 25 80 b8 03 00 4c
+RSP: 0018:ffffc9000478fa60 EFLAGS: 00010086
+RAX: 0000000000000000 RBX: ffff88802a40f500 RCX: 0000000000000000
+RDX: ffff8880213357c0 RSI: ffffffff814b6237 RDI: 0000000000000001
+RBP: ffff888012471400 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: ffffffff82502670
+R13: 0000000000000000 R14: ffff88802b3cf400 R15: ffffc9000478fb00
+FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020710000 CR3: 000000003c040000 CR4: 0000000000350ee0
+Call Trace:
+ <TASK>
+ start_flush_work kernel/workqueue.c:3133 [inline]
+ __flush_work+0x281/0xb60 kernel/workqueue.c:3173
+ hfs_file_fsync+0x108/0x1a0 fs/hfs/inode.c:683
+ vfs_fsync_range+0x13e/0x230 fs/sync.c:188
+ generic_write_sync include/linux/fs.h:2452 [inline]
+ dio_complete+0x796/0xa80 fs/direct-io.c:309
+ process_one_work+0x991/0x15c0 kernel/workqueue.c:2390
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2537
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+
+
 ---
- include/linux/swap.h | 2 +-
- mm/damon/paddr.c     | 2 +-
- mm/madvise.c         | 4 ++--
- mm/shmem.c           | 4 ++--
- mm/vmscan.c          | 2 +-
- 5 files changed, 7 insertions(+), 7 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/include/linux/swap.h b/include/linux/swap.h
-index 7f7d5b9ddf7e..8c8c6ceaa462 100644
---- a/include/linux/swap.h
-+++ b/include/linux/swap.h
-@@ -442,7 +442,7 @@ extern unsigned long shrink_all_memory(unsigned long nr_pages);
- extern int vm_swappiness;
- long remove_mapping(struct address_space *mapping, struct folio *folio);
- 
--extern unsigned long reclaim_pages(struct list_head *page_list);
-+unsigned long reclaim_folios(struct list_head *folio_list);
- #ifdef CONFIG_NUMA
- extern int node_reclaim_mode;
- extern int sysctl_min_unmapped_ratio;
-diff --git a/mm/damon/paddr.c b/mm/damon/paddr.c
-index dd9c33fbe805..840d25ad9e59 100644
---- a/mm/damon/paddr.c
-+++ b/mm/damon/paddr.c
-@@ -255,7 +255,7 @@ static unsigned long damon_pa_pageout(struct damon_region *r, struct damos *s)
- 			list_add(&folio->lru, &folio_list);
- 		folio_put(folio);
- 	}
--	applied = reclaim_pages(&folio_list);
-+	applied = reclaim_folios(&folio_list);
- 	cond_resched();
- 	return applied * PAGE_SIZE;
- }
-diff --git a/mm/madvise.c b/mm/madvise.c
-index b5ffbaf616f5..bfc683de85ef 100644
---- a/mm/madvise.c
-+++ b/mm/madvise.c
-@@ -417,7 +417,7 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *pmd,
- huge_unlock:
- 		spin_unlock(ptl);
- 		if (pageout)
--			reclaim_pages(&folio_list);
-+			reclaim_folios(&folio_list);
- 		return 0;
- 	}
- 
-@@ -513,7 +513,7 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *pmd,
- 	arch_leave_lazy_mmu_mode();
- 	pte_unmap_unlock(orig_pte, ptl);
- 	if (pageout)
--		reclaim_pages(&folio_list);
-+		reclaim_folios(&folio_list);
- 	cond_resched();
- 
- 	return 0;
-diff --git a/mm/shmem.c b/mm/shmem.c
-index 16378b281a5d..bdb2948a149f 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -2381,7 +2381,7 @@ static void shmem_isolate_pages_range(struct address_space *mapping, loff_t star
- 		folio_put(folio);
- 
- 		/*
--		 * Prepare the folios to be passed to reclaim_pages().
-+		 * Prepare the folios to be passed to reclaim_folios().
- 		 * VM can't reclaim a folio unless young bit is
- 		 * cleared in its flags.
- 		 */
-@@ -2406,7 +2406,7 @@ static int shmem_fadvise_dontneed(struct address_space *mapping, loff_t start,
- 
- 	lru_add_drain();
- 	shmem_isolate_pages_range(mapping, start, end, &folio_list);
--	reclaim_pages(&folio_list);
-+	reclaim_folios(&folio_list);
- 
- 	return 0;
- }
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 2cd21e1d5849..b218c8a6244f 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -2786,7 +2786,7 @@ static unsigned int reclaim_folio_list(struct list_head *folio_list,
- 	return nr_reclaimed;
- }
- 
--unsigned long reclaim_pages(struct list_head *folio_list)
-+unsigned long reclaim_folios(struct list_head *folio_list)
- {
- 	int nid;
- 	unsigned int nr_reclaimed = 0;
--- 
-2.35.3
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
