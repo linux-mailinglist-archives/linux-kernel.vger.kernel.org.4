@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E2BC6E30B3
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 12:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB80B6E30B5
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 12:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230083AbjDOKlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 06:41:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39790 "EHLO
+        id S229845AbjDOKlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 06:41:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbjDOKl1 (ORCPT
+        with ESMTP id S229546AbjDOKl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 06:41:27 -0400
+        Sat, 15 Apr 2023 06:41:28 -0400
 Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C915B93;
-        Sat, 15 Apr 2023 03:41:24 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id ca18e2360f4ac-760c5522520so79413939f.2;
-        Sat, 15 Apr 2023 03:41:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0705BB0;
+        Sat, 15 Apr 2023 03:41:26 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id ca18e2360f4ac-760e8acca3eso690539f.1;
+        Sat, 15 Apr 2023 03:41:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681555284; x=1684147284;
+        d=gmail.com; s=20221208; t=1681555286; x=1684147286;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dtFFKmwY6AVZaivGUGeBXmlxV0WshHisjIf4olqGXlk=;
-        b=oL6X1i8/kjCWm/1yiymDM94a0njyMbG9HTxP6ejrDG7ZtExirgBlCbJ0hJrZEL0w20
-         nuhCPKvLwSDiQ14eICBJgwALXNAeZT404BHs1u9WKpHsUVZJyCeLHpCFthF0uiaFAnS2
-         Zu7wBi42hG7hRgKlP9BwSgxVY/kX4j31smJWTVlmcL9KfbTR8RQvNNbIWus0nM47u0iL
-         COZC6yOIDhepC15FBWAId35YzFu2uZt2gqEOLpfzvP0AwZ67Fk/XxaVh4m6j0SFP8F7m
-         1BdnNafSJs1yK1VQnsmvS3G178egs+eeAie4bDJyPGXCZHTYRc/UdZ25dwN2bQiMFcGW
-         IVDg==
+        bh=hcAU830LZXIq4Od+MpqJpps0tJki2Rs3z9GrCN5O5F8=;
+        b=YLeiKPXwGyo5iZJpXn3Tkc+hE+FtHtfsYG2mlXimXOohTZ555+VueT+KOzYLdwkjPb
+         hupPmnNpskhX3EbEKJdLw+EJQXvrdx2dN7LLpa9ivtY0TkryvmppUQZUec4PbnQJy28K
+         0O+yJ1tjUEJRbhSYrIUYsEEAh9t3XytXuTb/PwTZ0ciHMnW2gdplq44vdr9DQNJvRPOp
+         q1u9xylNN4wa4hLLY10jsUEH0dqFYMCqBV/7DQfRkYxuzbrbivtd4IZfOfzcckH0/yxT
+         YckoQhfJLpxkI12awnBW7LUXw/CSxBI6q9XfW4b9GH83iVqnDbSxo6zVLYSq/l3kjoa+
+         wEig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681555284; x=1684147284;
+        d=1e100.net; s=20221208; t=1681555286; x=1684147286;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dtFFKmwY6AVZaivGUGeBXmlxV0WshHisjIf4olqGXlk=;
-        b=eJaFCMniBmhCukurqqromx9ZEpZgZb+rPvSwr6yenKzbM/7Rb2wJFwYrfXdJXJYtl5
-         aayB1qfSZjuYPkkl0wqwiIdbPgGH3SKGl2bLntpNkFl3x6fh7PKdVKbO0V/8D3kwRCdh
-         Vfe674/yHZGUKHmM206YuMuoQ5i0ozVZtTU4+3CQvF/JX0rq7I69E204Cpu7CSVAIcpE
-         LxR+w+htVnfWHt5OeQ2ol7RqR7/rbPpMhZIzDshtqp0WsREZETmmZa/wP+dRtw/FW/wG
-         dp4qE8Igqyx10aEn6dLsRfmZbySxm5O3UpUTT6aymBSrVqmkKWp7kqf7VEdQrCzhLbkz
-         KNpw==
-X-Gm-Message-State: AAQBX9fxkFVQKKYreMOIgZDL5GISxaCNcpINqA/rVsqTpC438uI/RYoF
-        jnDAcUAl6vDLEzkDHi0QNfc=
-X-Google-Smtp-Source: AKy350Zh2mdRrtm0rvTQDn/bkgIVArEkgFv6/4BKmvhP9tvea7MQ7QnqypAhJ6V3RS+W4k7NVOx5wA==
-X-Received: by 2002:a92:d690:0:b0:326:2bb3:5f9a with SMTP id p16-20020a92d690000000b003262bb35f9amr6437030iln.6.1681555283888;
-        Sat, 15 Apr 2023 03:41:23 -0700 (PDT)
+        bh=hcAU830LZXIq4Od+MpqJpps0tJki2Rs3z9GrCN5O5F8=;
+        b=kMSAsbHEgglPXJMXf4f1z3W+KRrbnXuZsVx9yJawe4tLl052e0aHMk5sx5rN8WWIeb
+         rbKTCkw8mNCKgHbanFVU3RW5GuPYP1N7KMHX57MqU8ziurYh+muCtsRu8nQS+TWzuyVG
+         xjyDkA40ErrXnBwUbl2UtrUevBkWYPKuz5ZWQ+I5ZiwjfqEnZDaXkBmYqvmzM+sgMqWp
+         IF9/AkwrZpOAi9GM1PQW5Ui7Oldm5TjdWE/w59rRkW8/fwHmmj+LTOc3AtT7CcafeCi+
+         aZmNasR2LuakHNd36pNF/8XXfhasJSn0NeJWx7zA3xquo+wj3u3hQw9zIo8BzDga67Ah
+         A0uQ==
+X-Gm-Message-State: AAQBX9ex/kvpCdwBLrES2s3yeq46YAqLyGM122ZpMvLJsXONSg78EgvQ
+        VaB+drbEcxSvs3CGT8ml8QI=
+X-Google-Smtp-Source: AKy350bXSqH+Lm4v7QjEFHrCI2v6hwyhefeLvef54xJqodbtS/xvZNtS3Dm8GpKP3yhe126JMMVIYA==
+X-Received: by 2002:a92:c04c:0:b0:32a:abbe:e6b5 with SMTP id o12-20020a92c04c000000b0032aabbee6b5mr2790610ilf.11.1681555286038;
+        Sat, 15 Apr 2023 03:41:26 -0700 (PDT)
 Received: from aford-B741.lan ([2601:447:d001:897f:40bb:6fe6:ddbc:cc9a])
-        by smtp.gmail.com with ESMTPSA id bp11-20020a056638440b00b0040b38102b79sm246536jab.82.2023.04.15.03.41.22
+        by smtp.gmail.com with ESMTPSA id bp11-20020a056638440b00b0040b38102b79sm246536jab.82.2023.04.15.03.41.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Apr 2023 03:41:23 -0700 (PDT)
+        Sat, 15 Apr 2023 03:41:25 -0700 (PDT)
 From:   Adam Ford <aford173@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     m.szyprowski@samsung.com, marex@denx.de, aford@beaconembedded.com,
@@ -74,9 +74,9 @@ Cc:     m.szyprowski@samsung.com, marex@denx.de, aford@beaconembedded.com,
         Frieder Schrempf <frieder.schrempf@kontron.de>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 5/6] drm: bridge: samsung-dsim: Support non-burst mode
-Date:   Sat, 15 Apr 2023 05:41:02 -0500
-Message-Id: <20230415104104.5537-5-aford173@gmail.com>
+Subject: [PATCH 6/6] arm64: dts: imx8mn: Fix video clock parents
+Date:   Sat, 15 Apr 2023 05:41:03 -0500
+Message-Id: <20230415104104.5537-6-aford173@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230415104104.5537-1-aford173@gmail.com>
 References: <20230415104104.5537-1-aford173@gmail.com>
@@ -92,46 +92,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The high-speed clock is hard-coded to the burst-clock
-frequency specified in the device tree.  However, when
-using devices like certain bridge chips without burst mode
-and varying resolutions and refresh rates, it may be
-necessary to set the high-speed clock dynamically based
-on the desired pixel clock for the connected device.
+There are a few clocks whose parents are set in mipi_dsi
+and mxsfb nodes, but these clocks are used by the disp_blk_ctrl
+power domain which may cause an issue when re-parenting, resuling
+in a disp_pixel clock having the wrong parent and wrong rate.
 
+Fix this by moving the assigned-clock-parents as associate clock
+assignments to the power-domain node to setup these clocks before
+they are enabled.
+
+Fixes: d825fb6455d5 ("arm64: dts: imx8mn: Add display pipeline components")
 Signed-off-by: Adam Ford <aford173@gmail.com>
 ---
- drivers/gpu/drm/bridge/samsung-dsim.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/freescale/imx8mn.dtsi | 28 ++++++++++++-----------
+ 1 file changed, 15 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/bridge/samsung-dsim.c
-index c48db27adafe..5aa3a44f15ec 100644
---- a/drivers/gpu/drm/bridge/samsung-dsim.c
-+++ b/drivers/gpu/drm/bridge/samsung-dsim.c
-@@ -659,11 +659,21 @@ static unsigned long samsung_dsim_set_pll(struct samsung_dsim *dsi,
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn.dtsi b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
+index bd84db550053..8be8f090e8b8 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mn.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
+@@ -1069,13 +1069,6 @@ lcdif: lcdif@32e00000 {
+ 					 <&clk IMX8MN_CLK_DISP_APB_ROOT>,
+ 					 <&clk IMX8MN_CLK_DISP_AXI_ROOT>;
+ 				clock-names = "pix", "axi", "disp_axi";
+-				assigned-clocks = <&clk IMX8MN_CLK_DISP_PIXEL_ROOT>,
+-						  <&clk IMX8MN_CLK_DISP_AXI>,
+-						  <&clk IMX8MN_CLK_DISP_APB>;
+-				assigned-clock-parents = <&clk IMX8MN_CLK_DISP_PIXEL>,
+-							 <&clk IMX8MN_SYS_PLL2_1000M>,
+-							 <&clk IMX8MN_SYS_PLL1_800M>;
+-				assigned-clock-rates = <594000000>, <500000000>, <200000000>;
+ 				interrupts = <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>;
+ 				power-domains = <&disp_blk_ctrl IMX8MN_DISPBLK_PD_LCDIF>;
+ 				status = "disabled";
+@@ -1093,12 +1086,6 @@ mipi_dsi: dsi@32e10000 {
+ 				clocks = <&clk IMX8MN_CLK_DSI_CORE>,
+ 					 <&clk IMX8MN_CLK_DSI_PHY_REF>;
+ 				clock-names = "bus_clk", "sclk_mipi";
+-				assigned-clocks = <&clk IMX8MN_CLK_DSI_CORE>,
+-						  <&clk IMX8MN_CLK_DSI_PHY_REF>;
+-				assigned-clock-parents = <&clk IMX8MN_SYS_PLL1_266M>,
+-							 <&clk IMX8MN_CLK_24M>;
+-				assigned-clock-rates = <266000000>, <24000000>;
+-				samsung,pll-clock-frequency = <24000000>;
+ 				interrupts = <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH>;
+ 				power-domains = <&disp_blk_ctrl IMX8MN_DISPBLK_PD_MIPI_DSI>;
+ 				status = "disabled";
+@@ -1142,6 +1129,21 @@ disp_blk_ctrl: blk-ctrl@32e28000 {
+ 					      "lcdif-axi", "lcdif-apb", "lcdif-pix",
+ 					      "dsi-pclk", "dsi-ref",
+ 					      "csi-aclk", "csi-pclk";
++				assigned-clocks = <&clk IMX8MN_CLK_DSI_CORE>,
++						  <&clk IMX8MN_CLK_DSI_PHY_REF>,
++						  <&clk IMX8MN_CLK_DISP_PIXEL>,
++						  <&clk IMX8MN_CLK_DISP_AXI>,
++						  <&clk IMX8MN_CLK_DISP_APB>;
++				assigned-clock-parents = <&clk IMX8MN_SYS_PLL1_266M>,
++							 <&clk IMX8MN_CLK_24M>,
++							 <&clk IMX8MN_VIDEO_PLL1_OUT>,
++							 <&clk IMX8MN_SYS_PLL2_1000M>,
++							 <&clk IMX8MN_SYS_PLL1_800M>;
++				assigned-clock-rates = <266000000>,
++						       <24000000>,
++						       <594000000>,
++						       <500000000>,
++						       <200000000>;
+ 				#power-domain-cells = <1>;
+ 			};
  
- static int samsung_dsim_enable_clock(struct samsung_dsim *dsi)
- {
--	unsigned long hs_clk, byte_clk, esc_clk;
-+	unsigned long hs_clk, byte_clk, esc_clk, pix_clk;
- 	unsigned long esc_div;
- 	u32 reg;
-+	struct drm_display_mode *m = &dsi->mode;
-+	int bpp = mipi_dsi_pixel_format_to_bpp(dsi->format);
-+
-+	/* m->clock is in KHz */
-+	pix_clk = m->clock * 1000;
-+
-+	/* Use burst_clk_rate for burst mode, otherwise use the pix_clk */
-+	if ((dsi->mode_flags & MIPI_DSI_MODE_VIDEO_BURST) && dsi->burst_clk_rate)
-+		hs_clk = samsung_dsim_set_pll(dsi, dsi->burst_clk_rate);
-+	else
-+		hs_clk = samsung_dsim_set_pll(dsi, DIV_ROUND_UP(pix_clk * bpp, dsi->lanes));
- 
--	hs_clk = samsung_dsim_set_pll(dsi, dsi->burst_clk_rate);
- 	if (!hs_clk) {
- 		dev_err(dsi->dev, "failed to configure DSI PLL\n");
- 		return -EFAULT;
 -- 
 2.39.2
 
