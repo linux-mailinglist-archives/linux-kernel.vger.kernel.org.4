@@ -2,140 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB7796E30BD
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 12:42:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD7BC6E30BE
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 12:44:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbjDOKmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 06:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41490 "EHLO
+        id S230060AbjDOKoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 06:44:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbjDOKmd (ORCPT
+        with ESMTP id S229830AbjDOKoC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 06:42:33 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064688691
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 03:41:59 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id k15so3538288ljq.4
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 03:41:58 -0700 (PDT)
+        Sat, 15 Apr 2023 06:44:02 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397798A74
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 03:43:19 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-94f32588c13so3180766b.2
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 03:43:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681555314; x=1684147314;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mmIpyi6/VTzVwR3NUnypEdQ8q3iaaas7kIub4aO6IHw=;
-        b=OsFYyZ3jgJxQdw2pwn6WlUYEcNltC2vYfjFDR9nB7nX85UcJZB887HpisNMDFkha3m
-         ihWNz2OElgrMGAO7z1VtmGJVX/mGh1vAL9UrjimCa2SZcib6AdgAxCRVeO8tHL2uDLXi
-         B0ibtNDpp0oLIHRsvSpq0RoOHL+9pw8ILiyTpZlC4iwvRFHPmvNd/OgjZ9v6YzxUG2kR
-         ugBTOTI8kL92jPcqcugtIRE35CKLNj3qeYzZTFWno7hjwMvkehB0FVPDDc0mczQKmC/Z
-         LqR9jcj9NmpARzzME7ACZ/z3JC8Sr2WPFrPhNTlW7w9MznjxCCD6TXJHUDmP7LOmbW69
-         nDEA==
+        d=linaro.org; s=google; t=1681555396; x=1684147396;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6aFDy/SB7tnUF0+eQ7zFT5mQKFJQM8aVqeD2imV3VFQ=;
+        b=YQEkWEK4VR8sC/8J0bTo0pPtA5ui12m+R4UvuHGj1HnX7Rq88fDAaf9QOhDXbO2yAl
+         Y6icCppsb5LAK3+IWX2txT9xtOeV1PSM1x0ZjaEECRZGv7rhumJb1C0NS2R72MHLTkAR
+         jPTKO7QHkfWTjn+Hn4iNlw0USmKQN6Hm1ppS5Frr3Th+IXX7yVfVF+GWUS2duwsg6Kff
+         l8D54PAk2fKpq5bdHRy3Qb3qPcR2+/qzN+yNPOGqAPfIYen2Y6IwbRpwcuvMlgNQFaAI
+         B/cc7Cu6MpxZELECRwgBqGcWbqXdBQ+lYVt2Jjqoo/NdkXCZbTgkzLK+YWQAjdY3NqAR
+         W+9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681555314; x=1684147314;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mmIpyi6/VTzVwR3NUnypEdQ8q3iaaas7kIub4aO6IHw=;
-        b=Oxlwi7RZC0ZEzfPVg5iziWr1EAhugriS7wOXi97/581agh/qKIlQ7b3bPi/J7mdwRQ
-         0C4VoLktz1+7paxGrDhcrI7Az5GUA5zb4a9Jo7fCVQ0ZuXJ+54EWZWDulkCxSM85stqW
-         2qkcMyckC4tW88dM+VqiFj4hX7OdC7h/fRPUXENGOG4eWK4tM1O2T4I0K9xnuGiEjK2N
-         qlg22kOp1dMANqxuDKR9hUItWRexBOFXm7WfRZAk2/C3ncS6YdlmUHdfou1MUCz3CrGr
-         otbX1mQt8S40JLTBGlCrbSA4T1gT0h42bkx3zi0Md3stgeBRnDtr1mmCXgtIo2C9u3my
-         xrUw==
-X-Gm-Message-State: AAQBX9ev3fUmx7ks3cxzzvuXJaosI5ODvCzV9w0t6WMXSOfeKI3UUbG8
-        bxRipXJjZtxy6dNj+zhDa8FOVw==
-X-Google-Smtp-Source: AKy350ZMoScIlZDLdVRk0mI6XK2W/BpNCPrjar+eP/56X+p/oI81gvPUNLcgVsAoH1ejne6AYBKpFg==
-X-Received: by 2002:a05:651c:10cc:b0:2a7:a3b4:7747 with SMTP id l12-20020a05651c10cc00b002a7a3b47747mr2417038ljn.29.1681555314001;
-        Sat, 15 Apr 2023 03:41:54 -0700 (PDT)
-Received: from [192.168.1.101] (abyk99.neoplus.adsl.tpnet.pl. [83.9.30.99])
-        by smtp.gmail.com with ESMTPSA id u7-20020a2ea167000000b002a784085edbsm1272666ljl.99.2023.04.15.03.41.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 15 Apr 2023 03:41:53 -0700 (PDT)
-Message-ID: <d34f008b-080c-7639-6839-918aaa8da8a1@linaro.org>
-Date:   Sat, 15 Apr 2023 12:41:51 +0200
+        d=1e100.net; s=20221208; t=1681555396; x=1684147396;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6aFDy/SB7tnUF0+eQ7zFT5mQKFJQM8aVqeD2imV3VFQ=;
+        b=f4CPhgwUvJTfJDilecnE9x2NkA/oxuS2LM8APNmCQz/ZnTPeW/C82BYWL1a6xTMo4L
+         BpDsKvPq2/eRUTh0smvBtyMKr/D8K8J1uDMT6EQ9ruL9UE3i5ThM8UdFgijO2QfvkCfV
+         QMrf0d7ncM4oZUD5VqTdnYWrtAvVhJFYpocgv4EcTqVLzW8Bd4Hsl8xjq9qu1rrOiGL3
+         X7b2/eXkfMAl/QTWS1ZCIgINFZzq0P7tx2A5nIu1M0mO6iddvTp6ZqHqi03eHxxqdcAF
+         STdHnK7LNCbth4mwUENeE+WxcsO700oKAl5Z25WL3Mmj13TM/O99F2pgKecvt6ZRo6f3
+         AHVg==
+X-Gm-Message-State: AAQBX9fGnmkDpj8A1R+Pv1JC6PbGu92txAPhXQHUYPZpLHzblElHYIQV
+        o8l+j0pJkGj/5yzYt9L/1ouiaA==
+X-Google-Smtp-Source: AKy350Z43wpLjbwwzoveofc5k6ZjhabN/INplT3i3zKAYsqb/f/i29jvpuHEVTH+7+a/rogzU+ed3Q==
+X-Received: by 2002:a05:6402:517b:b0:4c6:10a7:c422 with SMTP id d27-20020a056402517b00b004c610a7c422mr9151637ede.18.1681555396527;
+        Sat, 15 Apr 2023 03:43:16 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:a3bf:4ed:6c53:2a36])
+        by smtp.gmail.com with ESMTPSA id b10-20020aa7d48a000000b004fd1ee3f723sm3157481edr.67.2023.04.15.03.43.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Apr 2023 03:43:16 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Evgeniy Polyakov <zbr@ioremap.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 01/15] w1: ds2408: drop kerneldoc annotation
+Date:   Sat, 15 Apr 2023 12:42:49 +0200
+Message-Id: <20230415104304.104134-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v3 4/5] arm64: dts: qcom: sdm845-xiaomi-beryllium-ebbg:
- introduce support for fts touchscreen
-Content-Language: en-US
-To:     Joel Selvaraj <joelselvaraj.oss@gmail.com>,
-        Caleb Connolly <caleb@connolly.tech>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Henrik Rydberg <rydberg@bitmath.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Jeff LaBundy <jeff@labundy.com>,
-        Markuss Broks <markuss.broks@gmail.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        Job Noorman <job@noorman.info>,
-        Alistair Francis <alistair@alistair23.me>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-References: <20230415020222.216232-1-joelselvaraj.oss@gmail.com>
- <20230415020222.216232-5-joelselvaraj.oss@gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230415020222.216232-5-joelselvaraj.oss@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Drop kerneldoc annotation from comment which is not a kerneldoc to fix:
 
+  w1_ds2408.c:210: warning: This comment starts with '/**', but isn't a kernel-doc comment
 
-On 15.04.2023 04:02, Joel Selvaraj wrote:
-> The Poco F1 EBBG variant uses Focaltech FTS touchscreen. Introduce
-> support for it.
-> 
-> Signed-off-by: Joel Selvaraj <joelselvaraj.oss@gmail.com>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ drivers/w1/slaves/w1_ds2408.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Konrad
->  .../dts/qcom/sdm845-xiaomi-beryllium-ebbg.dts | 21 +++++++++++++++++++
->  1 file changed, 21 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-ebbg.dts b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-ebbg.dts
-> index 76931ebad065..26e77979cdab 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-ebbg.dts
-> +++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-ebbg.dts
-> @@ -13,3 +13,24 @@ &display_panel {
->  	compatible = "ebbg,ft8719";
->  	status = "okay";
->  };
-> +
-> +&i2c14 {
-> +	status = "okay";
-> +
-> +	touchscreen@38 {
-> +		compatible = "focaltech,fts8719";
-> +		reg = <0x38>;
-> +
-> +		interrupts-extended = <&tlmm 31 IRQ_TYPE_EDGE_FALLING>;
-> +		reset-gpios = <&tlmm 32 GPIO_ACTIVE_LOW>;
-> +
-> +		vddio-supply = <&vreg_l14a_1p8>;
-> +
-> +		pinctrl-0 = <&ts_int_default &ts_reset_default>;
-> +		pinctrl-1 = <&ts_int_sleep &ts_reset_sleep>;
-> +		pinctrl-names = "default", "sleep";
-> +
-> +		touchscreen-size-x = <1080>;
-> +		touchscreen-size-y = <2246>;
-> +	};
-> +};
+diff --git a/drivers/w1/slaves/w1_ds2408.c b/drivers/w1/slaves/w1_ds2408.c
+index ad102c577122..7fa911989193 100644
+--- a/drivers/w1/slaves/w1_ds2408.c
++++ b/drivers/w1/slaves/w1_ds2408.c
+@@ -206,7 +206,7 @@ static ssize_t output_write(struct file *filp, struct kobject *kobj,
+ }
+ 
+ 
+-/**
++/*
+  * Writing to the activity file resets the activity latches.
+  */
+ static ssize_t activity_write(struct file *filp, struct kobject *kobj,
+-- 
+2.34.1
+
