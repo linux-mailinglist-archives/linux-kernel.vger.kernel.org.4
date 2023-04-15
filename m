@@ -2,81 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6D26E316A
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 14:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA5CA6E3170
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 14:49:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbjDOMsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 08:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53188 "EHLO
+        id S229735AbjDOMtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 08:49:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjDOMr6 (ORCPT
+        with ESMTP id S229468AbjDOMtS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 08:47:58 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1AF449F;
-        Sat, 15 Apr 2023 05:47:57 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33FClrKL058863;
-        Sat, 15 Apr 2023 07:47:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1681562873;
-        bh=175p3ZVJsTOUSx4Nbc4YPiwG5gYesJeD1d+lrMhHF1k=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=Lwg9qpelYHOB6DADh5D1v+jbDl+rlKYoB0DskWFlwJE7uSPh2LlTw0I0q0fwqlM+/
-         2v734EpyelXre3tL8m5HuGPawhrfxJzmvpYaJhxDbHTKayysO8Esg9M/C+Vr5Tvoo4
-         ryJwZNkh3b+Fbj/gtya7RBb1bAq4Dp8MoBpjV7PE=
-Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33FClrXE019110
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sat, 15 Apr 2023 07:47:53 -0500
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Sat, 15
- Apr 2023 07:47:53 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Sat, 15 Apr 2023 07:47:53 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33FClrES114324;
-        Sat, 15 Apr 2023 07:47:53 -0500
-Date:   Sat, 15 Apr 2023 07:47:53 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     "Kumar, Udit" <u-kumar1@ti.com>
-CC:     <linux-arm-kernel@lists.infradead.org>, <afd@ti.com>, <bb@ti.com>,
-        <vaishnav.a@ti.com>, <j-choudhary@ti.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, J Keerthi <j-keerthy@ti.com>
-Subject: Re: [PATCH 1/2] arm64: dts: ti: k3-j7200: Fix physical address of pin
-Message-ID: <20230415124753.ovy5za4up3kqx5y7@ritalin>
-References: <20230414181434.2046049-1-u-kumar1@ti.com>
- <20230414181434.2046049-2-u-kumar1@ti.com>
- <20230414182638.watc555ihi2hgkuv@slinging>
- <20bbb3f0-ac79-9d98-9c99-7062581b163f@ti.com>
+        Sat, 15 Apr 2023 08:49:18 -0400
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C5744BA;
+        Sat, 15 Apr 2023 05:49:17 -0700 (PDT)
+Received: by mail-oo1-xc2e.google.com with SMTP id u13-20020a4ac38d000000b005426b196223so410725oop.8;
+        Sat, 15 Apr 2023 05:49:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681562957; x=1684154957;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TqQ3SiHws9LUFOFeaTF92+MKSqS3DlyruqkxUBl1iVE=;
+        b=sAInW4jdFWd18P0SfBBU1170JUXE7LLFld6YAm6j4OxSekPTZLOY5WVbySpiaUlsDL
+         cpJMSyT+1ai6GPaZ+GaWtYkHgOJajm9XTRgsMpGNHdNJpFSdVJ8eIclf7bq9/lqZwTjy
+         bYCndd0i63bDCsn6dTfSGaZPEXeKUTgVW8kEdsGMEbT0z3VpD/9H/GWrqqlAGE4Lefvt
+         8vN3ZbLwGvCs+1TSnnJ1en9utPQWCqfFfzI10I/VkrMacWt/iSTGLzvHIyVo4jDYeh3D
+         +Ov80e54jVnDI/UWw16z7QxZWBr9RpuXpXEUdPm8cjZeoDBTgzQd8mvnIFazu15hpi/D
+         Heqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681562957; x=1684154957;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TqQ3SiHws9LUFOFeaTF92+MKSqS3DlyruqkxUBl1iVE=;
+        b=ccoeXEI4b7ewJeMjgqXsh8232CkvgJsicaaSrI//J547pAIvcTUajnFxrRUe7BKp9D
+         GZICmkB6RdvIfZ3HKXdoGNmjd0uSGETmx5Ob4uqei1cQOcrTv+xXxvza5fWEDiJNQ0iE
+         CClVZrrPCD5088cyF6mq/N3RQ6bjFHwROIV/nIyb2Q58Yac0lK/aRlDeKDh/COk57hN1
+         Y4Tn6n0AhDdLx2Pe+94kO/PU293+hLykropyOOCCxtJ1cjhha5V3NbhrcV8xreOuYmmy
+         2R+w5jLAEBNcBTj87IAjX7Nwdtu779IpKe0Xil8nAmF7KKBKs2LMyZNr8dkak6k9s1dn
+         /yKg==
+X-Gm-Message-State: AAQBX9dnPFd1ZtLG2U4+oB246OXO3P/8DFgPefGHUs2uEeiznHwhg4CF
+        Neqtyt5GAk+RpOCnKAeYH6K9jk/JOOA+ADBPLAA=
+X-Google-Smtp-Source: AKy350aw1sitUTkN1aRNjH+bN0r38acxG6oBYdh1kAmyzRFvhhgzUT2uye2u9KKaOPwVKPk8KV+BJZuBzcqgjqA4HF4=
+X-Received: by 2002:a4a:d50d:0:b0:53b:7a81:fe64 with SMTP id
+ m13-20020a4ad50d000000b0053b7a81fe64mr2496510oos.0.1681562956798; Sat, 15 Apr
+ 2023 05:49:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20bbb3f0-ac79-9d98-9c99-7062581b163f@ti.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230415095112.51257-1-krzysztof.kozlowski@linaro.org> <20230415095112.51257-2-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230415095112.51257-2-krzysztof.kozlowski@linaro.org>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Sat, 15 Apr 2023 14:49:04 +0200
+Message-ID: <CAMhs-H8e_e29=DVU0vc42gp0EiB_zkQLcNw_rH5Om21Xbm=Fpg@mail.gmail.com>
+Subject: Re: [PATCH 2/6] dt-bindings: watchdog: indentation, quotes and
+ white-space cleanup
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Julius Werner <jwerner@chromium.org>,
+        Evan Benn <evanbenn@chromium.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Sander Vanheule <sander@svanheule.net>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Fu Wei <fu.wei@linaro.org>, Viresh Kumar <vireshk@kernel.org>,
+        Eugen Hristev <eugen.hristev@collabora.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        =?UTF-8?B?4oCaZWNraQ==?= <rafal@milecki.pl>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Corentin Labbe <clabbe@baylibre.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jamie Iles <jamie@jamieiles.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Christophe Roullier <christophe.roullier@foss.st.com>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
+        Srinivas Neeli <srinivas.neeli@xilinx.com>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-renesas-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09:40-20230415, Kumar, Udit wrote:
-[...]
-> git apply on original patch didn't worked , so i applied and committed.
-> 
-> will fix in patch itself before posting, Keerthi as author
-Yes, with s/Keerthi/Keerthy please.
+On Sat, Apr 15, 2023 at 11:58=E2=80=AFAM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> Minor cleanup without functional impact:
+> 1. Indent DTS examples to preferred four-spaces (more readable for DTS),
+> 2. Drop unneeded quotes,
+> 3. Add/drop blank lines to make the code readable.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../watchdog/mediatek,mt7621-wdt.yaml         |  6 ++--
 
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+
+Thanks,
+    Sergio Paracuellos
