@@ -2,141 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD3A16E3096
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 12:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CC936E30A6
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 12:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbjDOKgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 06:36:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38620 "EHLO
+        id S229847AbjDOKlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 06:41:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjDOKgU (ORCPT
+        with ESMTP id S229540AbjDOKlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 06:36:20 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3474EDE
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 03:36:18 -0700 (PDT)
-Received: from fsav119.sakura.ne.jp (fsav119.sakura.ne.jp [27.133.134.246])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 33FAa749075332;
-        Sat, 15 Apr 2023 19:36:07 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav119.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav119.sakura.ne.jp);
- Sat, 15 Apr 2023 19:36:07 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav119.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 33FAa7LV075329
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sat, 15 Apr 2023 19:36:07 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <65e79cf8-8713-4d2d-7a50-76d7e2aa454a@I-love.SAKURA.ne.jp>
-Date:   Sat, 15 Apr 2023 19:36:06 +0900
+        Sat, 15 Apr 2023 06:41:17 -0400
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2D04C3F;
+        Sat, 15 Apr 2023 03:41:16 -0700 (PDT)
+Received: by mail-il1-x12b.google.com with SMTP id e9e14a558f8ab-32a7770f7d1so13783095ab.1;
+        Sat, 15 Apr 2023 03:41:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681555275; x=1684147275;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NxV/r2dg6tmyFGrf7XbFu39RjdGZZ9Qw/qpOckRtFcs=;
+        b=nkxVRMgX1GxubqUedgn9gXUJHy+brhU+3BcUFfjVgyCkoGudE9vSWr3Y8suNnwiEv+
+         W8yGBeGfODXBLYCs6nVn2KX4m+oD6yWq/F1eRJp3Z+aFjU608yiclFytafmdERH3CJJR
+         HtMwgvVu1OTXrkiIiNzRBci8NMvJdEMUm8Oj5Vm31359sF/pA4PDYmJMIsd9Q8h1Y8Xk
+         q+HUt00HV7vkK9y9UukZsBljW5DjBzm9uSDN7sChkNbjExgM9QLRAx2Hytcq1BZp8C/o
+         iw2zx3nm8q2SPJVubnoX8TCVQCtB4H2vnS4TKmGvyjsAoFY9mfB+fRsHBMnwUpLQeHr3
+         baZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681555275; x=1684147275;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NxV/r2dg6tmyFGrf7XbFu39RjdGZZ9Qw/qpOckRtFcs=;
+        b=AeTVLMF1o+SQClNYYmvBvgWjb9dXzltjoNQppHOE2h2RkS1JDB7e0uZ12eNE3cIRU6
+         5oXcbltkiWStuaTfHvI7sfmm9xeaBo2pQRnFszoVbn4Ife2hDz46q51nTaH6LIi4lZwR
+         W4xWB8ZTIT/8l01h5dgMO49uV8zMSrx8FE6NfIRXzv5SQqYcZ/xX7E3XkpBEA5N5Qv7l
+         HTqJNv4slHKToAmcnN8sbVFQbz35InNlTBB5dUTjBU/iBg64rVXsEgRU3wqRhnHPzbeg
+         AhXpVOjgO+QgdGh5ukmj9OkS16fpsG/dlFKtZIFIgFDzVdMbqnG4PesmpauoV4HTVGOM
+         viQQ==
+X-Gm-Message-State: AAQBX9eqgNSktpfTVyRM1ItAm+6IQwaEUgrEYV7m0x7csOugrliEH6+r
+        Ijlwo4tS+uBxNvCGak4tc5E=
+X-Google-Smtp-Source: AKy350be9XGQbEpTAMxfp/yDs4zbKCqaElyWQiPWqA6tPdcVQdgTQGeHdLNOwe+rg1tq3rDX2lHvrA==
+X-Received: by 2002:a05:6e02:526:b0:328:edf8:be71 with SMTP id h6-20020a056e02052600b00328edf8be71mr5849677ils.0.1681555275334;
+        Sat, 15 Apr 2023 03:41:15 -0700 (PDT)
+Received: from aford-B741.lan ([2601:447:d001:897f:40bb:6fe6:ddbc:cc9a])
+        by smtp.gmail.com with ESMTPSA id bp11-20020a056638440b00b0040b38102b79sm246536jab.82.2023.04.15.03.41.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Apr 2023 03:41:14 -0700 (PDT)
+From:   Adam Ford <aford173@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     m.szyprowski@samsung.com, marex@denx.de, aford@beaconembedded.com,
+        Adam Ford <aford173@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Inki Dae <inki.dae@samsung.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/6] drm: bridge: samsung-dsim: Support multi-lane calculations
+Date:   Sat, 15 Apr 2023 05:40:58 -0500
+Message-Id: <20230415104104.5537-1-aford173@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 3/7] mm/gup: remove vmas parameter from
- get_user_pages_remote()
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1681547405.git.lstoakes@gmail.com>
- <631001ecc556c5e348ff4f47719334c31f7bd592.1681547405.git.lstoakes@gmail.com>
- <b4706369-f97c-8b78-f194-b45a870114e1@I-love.SAKURA.ne.jp>
- <63d92734-2185-439c-bbc7-53a4720f5d4a@lucifer.local>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <63d92734-2185-439c-bbc7-53a4720f5d4a@lucifer.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/04/15 19:14, Lorenzo Stoakes wrote:
-> On Sat, Apr 15, 2023 at 06:52:41PM +0900, Tetsuo Handa wrote:
->> On 2023/04/15 18:08, Lorenzo Stoakes wrote:
->>> @@ -475,10 +474,14 @@ int uprobe_write_opcode(struct arch_uprobe *auprobe, struct mm_struct *mm,
->>>  		gup_flags |= FOLL_SPLIT_PMD;
->>>  	/* Read the page with vaddr into memory */
->>>  	ret = get_user_pages_remote(mm, vaddr, 1, gup_flags,
->>> -				    &old_page, &vma, NULL);
->>> +				    &old_page, NULL);
->>>  	if (ret <= 0)
->>>  		return ret;
->>>
->>> +	vma = vma_lookup(mm, vaddr);
->>> +	if (!vma)
->>> +		goto put_old;
->>> +
->>>  	ret = verify_opcode(old_page, vaddr, &opcode);
->>>  	if (ret <= 0)
->>>  		goto put_old;
->>
->> This conversion looks wrong.
->> This causes returning a positive number when vma_lookup() returned NULL.
->>
->>   * Return 0 (success) or a negative errno.
->>
-> 
-> In reality it shouldn't be possible for vma to return NULL, I'm adding the
-> checks to be extra careful.
-> 
-> In any case you're right, attaching a -fix patch to avoid spam:-
+If there is more than one lane, the HFP, HBP, and HSA is calculated in
+bytes/pixel, then they are divided amongst the different lanes with some
+additional overhead. This is necessary to achieve higher resolutions while
+keeping the pixel clocks lower as the number of lanes increase.
 
-If you want to return -EINVAL when vma_lookup() returned NULL for whatever
-unexpected reason, returning -EOPNOTSUPP in below path looks strange.
+Signed-off-by: Adam Ford <aford173@gmail.com>
+---
+ drivers/gpu/drm/bridge/samsung-dsim.c | 40 +++++++++++++++++++++++----
+ 1 file changed, 34 insertions(+), 6 deletions(-)
 
-> @@ -448,7 +448,8 @@ static int __access_remote_tags(struct mm_struct *mm, unsigned long addr,
->  		 * would cause the existing tags to be cleared if the page
->  		 * was never mapped with PROT_MTE.
->  		 */
-> -		if (!(vma->vm_flags & VM_MTE)) {
-> +		vma = vma_lookup(mm, addr);
-> +		if (!vma || !(vma->vm_flags & VM_MTE)) {
->  			ret = -EOPNOTSUPP;
->  			put_page(page);
->  			break;
-
-Also,
-
-> @@ -5591,7 +5591,9 @@ int __access_remote_vm(struct mm_struct *mm, unsigned long addr, void *buf,
->  		struct page *page = NULL;
->  
->  		ret = get_user_pages_remote(mm, addr, 1,
-> -				gup_flags, &page, &vma, NULL);
-> +				gup_flags, &page, NULL);
-> +		vma = vma_lookup(mm, addr);
-> +
->  		if (ret <= 0) {
->  #ifndef CONFIG_HAVE_IOREMAP_PROT
->  			break;
-> @@ -5600,7 +5602,6 @@ int __access_remote_vm(struct mm_struct *mm, unsigned long addr, void *buf,
->  			 * Check if this is a VM_IO | VM_PFNMAP VMA, which
->  			 * we can access using slightly different code.
->  			 */
-> -			vma = vma_lookup(mm, addr);
->  			if (!vma)
->  				break;
->  			if (vma->vm_ops && vma->vm_ops->access)
-> @@ -5617,11 +5618,11 @@ int __access_remote_vm(struct mm_struct *mm, unsigned long addr, void *buf,
->  				bytes = PAGE_SIZE-offset;
->  
->  			maddr = kmap(page);
-> -			if (write) {
-> +			if (write && vma) {
->  				copy_to_user_page(vma, page, addr,
->  						  maddr + offset, buf, bytes);
->  				set_page_dirty_lock(page);
-> -			} else {
-> +			} else if (vma) {
->  				copy_from_user_page(vma, page, addr,
->  						    buf, maddr + offset, bytes);
->  			}
-
-not calling copy_{from,to}_user_page() if vma == NULL is not sufficient for
-propagating an error to caller.
+diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/bridge/samsung-dsim.c
+index e0a402a85787..1ccbad4ea577 100644
+--- a/drivers/gpu/drm/bridge/samsung-dsim.c
++++ b/drivers/gpu/drm/bridge/samsung-dsim.c
+@@ -215,6 +215,7 @@
+ #define DSI_RX_FIFO_SIZE		256
+ #define DSI_XFER_TIMEOUT_MS		100
+ #define DSI_RX_FIFO_EMPTY		0x30800002
++#define DSI_HSYNC_PKT_OVERHEAD	6
+ 
+ #define OLD_SCLK_MIPI_CLK_NAME		"pll_clk"
+ 
+@@ -879,13 +880,40 @@ static void samsung_dsim_set_display_mode(struct samsung_dsim *dsi)
+ 			| DSIM_MAIN_VBP(m->vtotal - m->vsync_end);
+ 		samsung_dsim_write(dsi, DSIM_MVPORCH_REG, reg);
+ 
+-		reg = DSIM_MAIN_HFP(m->hsync_start - m->hdisplay)
+-			| DSIM_MAIN_HBP(m->htotal - m->hsync_end);
+-		samsung_dsim_write(dsi, DSIM_MHPORCH_REG, reg);
++		/*
++		 * If there is more than one lane, the HFP, HBP, and HSA
++		 * is calculated in bytes/pixel, then they are divided
++		 * amongst the different lanes with some additional
++		 * overhead correction
++		 */
++		if (dsi->lanes > 1) {
++			u32 hfp, hbp, hsa;
++			int bpp = mipi_dsi_pixel_format_to_bpp(dsi->format) / 8;
++
++			hfp = ((m->hsync_start - m->hdisplay) * bpp) / dsi->lanes;
++			hfp -= (hfp > DSI_HSYNC_PKT_OVERHEAD) ? DSI_HSYNC_PKT_OVERHEAD : 0;
++
++			hbp = ((m->htotal - m->hsync_end) * bpp) / dsi->lanes;
++			hbp -= (hbp > DSI_HSYNC_PKT_OVERHEAD) ? DSI_HSYNC_PKT_OVERHEAD : 0;
+ 
+-		reg = DSIM_MAIN_VSA(m->vsync_end - m->vsync_start)
+-			| DSIM_MAIN_HSA(m->hsync_end - m->hsync_start);
+-		samsung_dsim_write(dsi, DSIM_MSYNC_REG, reg);
++			hsa = ((m->hsync_end - m->hsync_start) * bpp) / dsi->lanes;
++			hsa -= (hsa > DSI_HSYNC_PKT_OVERHEAD) ? DSI_HSYNC_PKT_OVERHEAD : 0;
++
++			reg = DSIM_MAIN_HFP(hfp) | DSIM_MAIN_HBP(hbp);
++			samsung_dsim_write(dsi, DSIM_MHPORCH_REG, reg);
++
++			reg = DSIM_MAIN_VSA(m->vsync_end - m->vsync_start)
++				| DSIM_MAIN_HSA(hsa);
++			samsung_dsim_write(dsi, DSIM_MSYNC_REG, reg);
++		} else {
++			reg = DSIM_MAIN_HFP(m->hsync_start - m->hdisplay)
++				| DSIM_MAIN_HBP(m->htotal - m->hsync_end);
++			samsung_dsim_write(dsi, DSIM_MHPORCH_REG, reg);
++
++			reg = DSIM_MAIN_VSA(m->vsync_end - m->vsync_start)
++				| DSIM_MAIN_HSA(m->hsync_end - m->hsync_start);
++			samsung_dsim_write(dsi, DSIM_MSYNC_REG, reg);
++		}
+ 	}
+ 	reg =  DSIM_MAIN_HRESOL(m->hdisplay, num_bits_resol) |
+ 		DSIM_MAIN_VRESOL(m->vdisplay, num_bits_resol);
+-- 
+2.39.2
 
