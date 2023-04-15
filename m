@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF376E2FB2
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 10:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E5906E2FB1
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 10:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbjDOIUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 04:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52832 "EHLO
+        id S229829AbjDOIUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 04:20:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjDOIUh (ORCPT
+        with ESMTP id S229564AbjDOIUg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 04:20:37 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4785583;
+        Sat, 15 Apr 2023 04:20:36 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E424ED5;
         Sat, 15 Apr 2023 01:20:35 -0700 (PDT)
 Date:   Sat, 15 Apr 2023 08:20:32 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GnzE4raEONRJxVjFOSpczBdz0wF9vVGe9QBOs99a6Io=;
-        b=jGtfoOqTGT8E5Do9fHd1GvUZxwj1vrZSvpdg8xhhvfk1ZkNHuvdDBL7jSUFpmYASiIEXyf
-        IySLiUeTf2Rzfx+rXAss+HAwasbhs756hQk3V3qQ1JKN9BVQvFgBmpjEm/OAdypMWk4f/s
-        7bW8JnUBOF3OELRNJd9bdDT7uBTut4Dnfccmupdjbpk6V2N+luFxw9MsK8qC4d702M32Hu
-        qdPQFlGFxkpkixwN3zosinErKAL71TcI6Jd1OFI2m+uQ8qs4GG//PSuwDhNfILfHDl4VkQ
-        c7iK7mJE+dccbk+FAzcPwq6MbGZxDE5MWqssF32bqu3YoetRkBQ3G1EleXbUIA==
+        bh=eiIvPGenEBT6gAsxlbg/0DJsj/OvvM8nyaJ/KHx0twc=;
+        b=Asznsa5n+CvFKhi+0Tcw7GHHRXr9gQVaEI8vN34w14fn+D8vEF2QizLfk/I7rsne3S4vRX
+        UJ6ypDNI1IuveVijHQcWgoD9eOFLSLZEM3ZXrVwFQ9fzMxg2LCIjQfyz115pVszZNP/M83
+        9MDOMChdwP4nqqjI4qgtgw6ZhYIA8WW/tplPoDcI1yV6tAjTUqzeZaHUO6pvszClKtJye8
+        /uENgWuYOOs6M5jQPvekx8fCG42OGGqiJWl8plodV76d1R4l942GK2Ck6mv0VTdlWixUqr
+        NlJT3DjWpBqvocYlE2ms/5gSSOBqBwSjCJIzED2Gtf8e0NfHtqr3lr03XatiDQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1681546833;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,23 +36,21 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GnzE4raEONRJxVjFOSpczBdz0wF9vVGe9QBOs99a6Io=;
-        b=HNTu8wINmM5oDWBgRvFBNfmytR/i8xjyrsXdgYfQfZk/i/IN7rWORDJN+mAMlpD8ydk2Kw
-        j96aB9AjkV/NVRBA==
-From:   "tip-bot2 for Lingutla Chandrasekhar" <tip-bot2@linutronix.de>
+        bh=eiIvPGenEBT6gAsxlbg/0DJsj/OvvM8nyaJ/KHx0twc=;
+        b=FKY87IGkBIJ/jW8uOAk8n+X04CxG0X752hi90Anzyr/rWqJloGwGvqFGxsAP6TpR0x8lZw
+        3nBtQ3x1m2e270BA==
+From:   "tip-bot2 for John Keeping" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/core] softirq: Add trace points for tasklet entry/exit
-Cc:     Lingutla Chandrasekhar <clingutla@codeaurora.org>,
-        "J. Avila" <elavila@google.com>, John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>, x86@kernel.org,
+Subject: [tip: irq/core] genirq: Update affinity of secondary threads
+Cc:     John Keeping <john@metanate.com>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org, maz@kernel.org
-In-Reply-To: <20230407230526.1685443-1-jstultz@google.com>
-References: <20230407230526.1685443-1-jstultz@google.com>
+In-Reply-To: <20230406180857.588682-1-john@metanate.com>
+References: <20230406180857.588682-1-john@metanate.com>
 MIME-Version: 1.0
-Message-ID: <168154683281.404.4623946113472484183.tip-bot2@tip-bot2>
+Message-ID: <168154683244.404.11833513907758281471.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,139 +67,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/core branch of tip:
 
-Commit-ID:     f4bf3ca2e5cba655824b6e0893a98dfb33ed24e5
-Gitweb:        https://git.kernel.org/tip/f4bf3ca2e5cba655824b6e0893a98dfb33ed24e5
-Author:        Lingutla Chandrasekhar <clingutla@codeaurora.org>
-AuthorDate:    Fri, 07 Apr 2023 23:05:26 
+Commit-ID:     803235982b8c086184d04798d9079d236f352f88
+Gitweb:        https://git.kernel.org/tip/803235982b8c086184d04798d9079d236f352f88
+Author:        John Keeping <john@metanate.com>
+AuthorDate:    Thu, 06 Apr 2023 19:08:57 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Sat, 15 Apr 2023 10:17:16 +02:00
 
-softirq: Add trace points for tasklet entry/exit
+genirq: Update affinity of secondary threads
 
-Tasklets are supposed to finish their work quickly and should not block the
-current running process, but it is not guaranteed that they do so.
+For interrupts with secondary threads, the affinity is applied when the
+thread is created but if the interrupts affinity is changed later only
+the primary thread is updated.
 
-Currently softirq_entry/exit can be used to analyse the total tasklets
-execution time, but that's not helpful to track individual tasklets
-execution time. That makes it hard to identify tasklet functions, which
-take more time than expected.
+Update the secondary thread's affinity as well to keep all the interrupts
+activity on the assigned CPUs.
 
-Add tasklet_entry/exit trace point support to track individual tasklet
-execution.
-
-Trivial usage example:
-   # echo 1 > /sys/kernel/debug/tracing/events/irq/tasklet_entry/enable
-   # echo 1 > /sys/kernel/debug/tracing/events/irq/tasklet_exit/enable
-   # cat /sys/kernel/debug/tracing/trace
- # tracer: nop
- #
- # entries-in-buffer/entries-written: 4/4   #P:4
- #
- #                                _-----=> irqs-off/BH-disabled
- #                               / _----=> need-resched
- #                              | / _---=> hardirq/softirq
- #                              || / _--=> preempt-depth
- #                              ||| / _-=> migrate-disable
- #                              |||| /     delay
- #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
- #              | |         |   |||||     |         |
-           <idle>-0       [003] ..s1.   314.011428: tasklet_entry: tasklet=0xffffa01ef8db2740 function=tcp_tasklet_func
-           <idle>-0       [003] ..s1.   314.011432: tasklet_exit: tasklet=0xffffa01ef8db2740 function=tcp_tasklet_func
-           <idle>-0       [003] ..s1.   314.017369: tasklet_entry: tasklet=0xffffa01ef8db2740 function=tcp_tasklet_func
-           <idle>-0       [003] ..s1.   314.017371: tasklet_exit: tasklet=0xffffa01ef8db2740 function=tcp_tasklet_func
-
-Signed-off-by: Lingutla Chandrasekhar <clingutla@codeaurora.org>
-Signed-off-by: J. Avila <elavila@google.com>
-Signed-off-by: John Stultz <jstultz@google.com>
+Signed-off-by: John Keeping <john@metanate.com>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Link: https://lore.kernel.org/r/20230407230526.1685443-1-jstultz@google.com
+Link: https://lore.kernel.org/r/20230406180857.588682-1-john@metanate.com
 
-[elavila: Port to android-mainline]
-[jstultz: Rebased to upstream, cut unused trace points, added
- comments for the tracepoints, reworded commit]
 ---
- include/trace/events/irq.h | 47 +++++++++++++++++++++++++++++++++++++-
- kernel/softirq.c           |  9 +++++--
- 2 files changed, 54 insertions(+), 2 deletions(-)
+ kernel/irq/manage.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/include/trace/events/irq.h b/include/trace/events/irq.h
-index eeceafa..a07b460 100644
---- a/include/trace/events/irq.h
-+++ b/include/trace/events/irq.h
-@@ -160,6 +160,53 @@ DEFINE_EVENT(softirq, softirq_raise,
- 	TP_ARGS(vec_nr)
- );
+diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
+index 8ce7549..d2742af 100644
+--- a/kernel/irq/manage.c
++++ b/kernel/irq/manage.c
+@@ -189,9 +189,12 @@ void irq_set_thread_affinity(struct irq_desc *desc)
+ {
+ 	struct irqaction *action;
  
-+DECLARE_EVENT_CLASS(tasklet,
-+
-+	TP_PROTO(struct tasklet_struct *t, void *func),
-+
-+	TP_ARGS(t, func),
-+
-+	TP_STRUCT__entry(
-+		__field(	void *,	tasklet)
-+		__field(	void *,	func)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->tasklet = t;
-+		__entry->func = func;
-+	),
-+
-+	TP_printk("tasklet=%ps function=%ps", __entry->tasklet, __entry->func)
-+);
-+
-+/**
-+ * tasklet_entry - called immediately before the tasklet is run
-+ * @t: tasklet pointer
-+ * @func: tasklet callback or function being run
-+ *
-+ * Used to find individual tasklet execution time
-+ */
-+DEFINE_EVENT(tasklet, tasklet_entry,
-+
-+	TP_PROTO(struct tasklet_struct *t, void *func),
-+
-+	TP_ARGS(t, func)
-+);
-+
-+/**
-+ * tasklet_exit - called immediately after the tasklet is run
-+ * @t: tasklet pointer
-+ * @func: tasklet callback or function being run
-+ *
-+ * Used to find individual tasklet execution time
-+ */
-+DEFINE_EVENT(tasklet, tasklet_exit,
-+
-+	TP_PROTO(struct tasklet_struct *t, void *func),
-+
-+	TP_ARGS(t, func)
-+);
-+
- #endif /*  _TRACE_IRQ_H */
+-	for_each_action_of_desc(desc, action)
++	for_each_action_of_desc(desc, action) {
+ 		if (action->thread)
+ 			set_bit(IRQTF_AFFINITY, &action->thread_flags);
++		if (action->secondary && action->secondary->thread)
++			set_bit(IRQTF_AFFINITY, &action->secondary->thread_flags);
++	}
+ }
  
- /* This part must be outside protection */
-diff --git a/kernel/softirq.c b/kernel/softirq.c
-index c8a6913..1b72551 100644
---- a/kernel/softirq.c
-+++ b/kernel/softirq.c
-@@ -793,10 +793,15 @@ static void tasklet_action_common(struct softirq_action *a,
- 		if (tasklet_trylock(t)) {
- 			if (!atomic_read(&t->count)) {
- 				if (tasklet_clear_sched(t)) {
--					if (t->use_callback)
-+					if (t->use_callback) {
-+						trace_tasklet_entry(t, t->callback);
- 						t->callback(t);
--					else
-+						trace_tasklet_exit(t, t->callback);
-+					} else {
-+						trace_tasklet_entry(t, t->func);
- 						t->func(t->data);
-+						trace_tasklet_exit(t, t->func);
-+					}
- 				}
- 				tasklet_unlock(t);
- 				continue;
+ #ifdef CONFIG_GENERIC_IRQ_EFFECTIVE_AFF_MASK
