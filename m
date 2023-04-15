@@ -2,187 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B346E2E89
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 04:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E96D46E2E8D
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 04:17:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbjDOCQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 22:16:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50378 "EHLO
+        id S230112AbjDOCRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 22:17:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjDOCQR (ORCPT
+        with ESMTP id S229569AbjDOCRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 22:16:17 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255C055B3;
-        Fri, 14 Apr 2023 19:16:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=I+T4EDQebiiyahHWac5SLmoudsQlP+Xbpp0Ua4hQnmY=; b=k0M36e49KyrwSvcWcznvQjbAoh
-        TT4GvgvX/m/ZSoD4vmfsjLWLXE3V5uqOFSI0OPrCpLBMlpD406oVS+1Rrrswdi8vlTw3cR6If6faE
-        VsGwtaBllrkW1/GtNU/0/FPglY1QTTYqre0iaIu3I1apLYlyWZB1Nfumb7hKqrrno82bVsGCAw6gg
-        bRSki81u9jypJx5rg3rGTM6+/DN8IdJtTdPjdZ5EGymdxARh3oL+UjHzDzjNA3V4JXfj8OFKH88Oy
-        MWP84DlBJQV35D/rz8QktIlaLzz+5UHcwbS7W4sciNbDVYfu1J2a8xB7vIoIEnEWE5VtyflOjaCVO
-        xI/z99Sw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pnVS8-009HLo-CN; Sat, 15 Apr 2023 02:15:48 +0000
-Date:   Sat, 15 Apr 2023 03:15:48 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, mhocko@suse.com,
-        josef@toxicpanda.com, jack@suse.cz, ldufour@linux.ibm.com,
-        laurent.dufour@fr.ibm.com, michel@lespinasse.org,
-        liam.howlett@oracle.com, jglisse@google.com, vbabka@suse.cz,
-        minchan@google.com, dave@stgolabs.net, punit.agrawal@bytedance.com,
-        lstoakes@gmail.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Subject: Re: [PATCH 1/1] mm: handle swap page faults if the faulting page can
- be locked
-Message-ID: <ZDoI1PdzgV9YBCzd@casper.infradead.org>
-References: <20230414180043.1839745-1-surenb@google.com>
- <ZDmetaUdmlEz/W8Q@casper.infradead.org>
- <CAJuCfpFPNiZmqQPP+K7CAuiFP5qLdd6W9T84VQNdRsN-9ggm1w@mail.gmail.com>
- <ZDm4P37XXyMBOMdZ@casper.infradead.org>
- <CAJuCfpF2idZUjON6TZw4NV+himmACMGGE=2jgmt=fgAXv6L5Pg@mail.gmail.com>
+        Fri, 14 Apr 2023 22:17:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1124F55B3;
+        Fri, 14 Apr 2023 19:17:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A0F4D64934;
+        Sat, 15 Apr 2023 02:17:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FBD7C433EF;
+        Sat, 15 Apr 2023 02:17:05 +0000 (UTC)
+Date:   Fri, 14 Apr 2023 22:17:02 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linux trace kernel <linux-trace-kernel@vger.kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Yafang Shao <laoar.shao@gmail.com>
+Subject: [PATCH] tracing: Add generic test_recursion_try_acquire()
+Message-ID: <20230414221702.554c44fe@rorschach.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJuCfpF2idZUjON6TZw4NV+himmACMGGE=2jgmt=fgAXv6L5Pg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 14, 2023 at 02:51:59PM -0700, Suren Baghdasaryan wrote:
-> On Fri, Apr 14, 2023 at 1:32 PM Matthew Wilcox <willy@infradead.org> wrote:
-> >
-> > On Fri, Apr 14, 2023 at 12:48:54PM -0700, Suren Baghdasaryan wrote:
-> > > >  - We can call migration_entry_wait().  This will wait for PG_locked to
-> > > >    become clear (in migration_entry_wait_on_locked()).  As previously
-> > > >    discussed offline, I think this is safe to do while holding the VMA
-> > > >    locked.
-> >
-> > Just to be clear, this particular use of PG_locked is not during I/O,
-> > it's during page migration.  This is a few orders of magnitude
-> > different.
-> >
-> > > >  - We can call swap_readpage() if we allocate a new folio.  I haven't
-> > > >    traced through all this code to tell if it's OK.
-> >
-> > ... whereas this will wait for I/O.  If we decide that's not OK, we'll
-> > need to test for FAULT_FLAG_VMA_LOCK and bail out of this path.
-> >
-> > > > So ... I believe this is all OK, but we're definitely now willing to
-> > > > wait for I/O from the swap device while holding the VMA lock when we
-> > > > weren't before.  And maybe we should make a bigger deal of it in the
-> > > > changelog.
-> > > >
-> > > > And maybe we shouldn't just be failing the folio_lock_or_retry(),
-> > > > maybe we should be waiting for the folio lock with the VMA locked.
-> > >
-> > > Wouldn't that cause holding the VMA lock for the duration of swap I/O
-> > > (something you said we want to avoid in the previous paragraph) and
-> > > effectively undo d065bd810b6d ("mm: retry page fault when blocking on
-> > > disk transfer") for VMA locks?
-> >
-> > I'm not certain we want to avoid holding the VMA lock for the duration
-> > of an I/O.  Here's how I understand the rationale for avoiding holding
-> > the mmap_lock while we perform I/O (before the existence of the VMA lock):
-> >
-> >  - If everybody is doing page faults, there is no specific problem;
-> >    we all hold the lock for read and multiple page faults can be handled
-> >    in parallel.
-> >  - As soon as one thread attempts to manipulate the tree (eg calls
-> >    mmap()), all new readers must wait (as the rwsem is fair), and the
-> >    writer must wait for all existing readers to finish.  That's
-> >    potentially milliseconds for an I/O during which time all page faults
-> >    stop.
-> >
-> > Now we have the per-VMA lock, faults which can be handled without taking
-> > the mmap_lock can still be satisfied, as long as that VMA is not being
-> > modified.  It is rare for a real application to take a page fault on a
-> > VMA which is being modified.
-> >
-> > So modifications to the tree will generally not take VMA locks on VMAs
-> > which are currently handling faults, and new faults will generally not
-> > find a VMA which is write-locked.
-> >
-> > When we find a locked folio (presumably for I/O, although folios are
-> > locked for other reasons), if we fall back to taking the mmap_lock
-> > for read, we increase contention on the mmap_lock and make the page
-> > fault wait on any mmap() operation.
-> 
-> Do you mean we increase mmap_lock contention by holding the mmap_lock
-> between the start of pagefault retry and until we drop it in
-> __folio_lock_or_retry?
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-Yes, and if there is a writer (to any VMA, not just to the VMA we're
-working on), this page fault has to wait for that writer.  Rather than
-just waiting for this I/O to complete.
+The ftrace_test_recursion_trylock() also disables preemption. This is not
+required, but was a clean up as every place that called it also disabled
+preemption, and making the two tightly coupled appeared to make the code
+simpler.
 
-> > If we simply sleep waiting for the
-> > I/O, we make any mmap() operation _which touches this VMA_ wait for
-> > the I/O to complete.  But I think that's OK, because new page faults
-> > can continue to be serviced ... as long as they don't need to take
-> > the mmap_lock.
-> 
-> Ok, so we will potentially block VMA writers for the duration of the I/O...
-> Stupid question: why was this a bigger problem for mmap_lock?
-> Potentially our address space can consist of only one anon VMA, so
-> locking that VMA vs mmap_lock should be the same from swap pagefault
-> POV. Maybe mmap_lock is taken for write in some other important cases
-> when VMA lock is not needed?
+But the recursion protection can be used for other purposes that do not
+require disabling preemption. As the recursion bits are attached to the
+task_struct, it follows the task, so there's no need for preemption being
+disabled.
 
-I really doubt any process has only a single VMA.  Usually, there's at
-least stack, program text, program data, program rodata, heap, vdso,
-libc text, libc data, libc rodata, etc.
+Add test_recursion_try_acquire/release() functions to be used generically,
+and separate it from being associated with ftrace. It also removes the
+"lock" name, as there is no lock happening. Keeping the "lock" for the
+ftrace version is better, as it at least differentiates that preemption is
+being disabled (hence, "locking the CPU").
 
-$ cat /proc/self/maps |wc -l
-23
+Link: https://lore.kernel.org/linux-trace-kernel/20230321020103.13494-1-laoar.shao@gmail.com/
 
-That's 5 for the program, 5 for ld.so, 5 for libc, heap, stack, vvar,
-vdso, and a few I can't identify.
+Cc: Yafang Shao <laoar.shao@gmail.com>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ include/linux/trace_recursion.h | 47 ++++++++++++++++++++++++---------
+ kernel/trace/ftrace.c           |  2 ++
+ 2 files changed, 37 insertions(+), 12 deletions(-)
 
-Also, if our program only has one anon VMA, what is it doing that
-it needs to modify the tree?  Growing it, perhaps?  Almost anything
-else would cause it to have more than one VMA ;-)
+diff --git a/include/linux/trace_recursion.h b/include/linux/trace_recursion.h
+index d48cd92d2364..80de2ee7b4c3 100644
+--- a/include/linux/trace_recursion.h
++++ b/include/linux/trace_recursion.h
+@@ -150,9 +150,6 @@ extern void ftrace_record_recursion(unsigned long ip, unsigned long parent_ip);
+ # define trace_warn_on_no_rcu(ip)	false
+ #endif
+ 
+-/*
+- * Preemption is promised to be disabled when return bit >= 0.
+- */
+ static __always_inline int trace_test_and_set_recursion(unsigned long ip, unsigned long pip,
+ 							int start)
+ {
+@@ -182,18 +179,11 @@ static __always_inline int trace_test_and_set_recursion(unsigned long ip, unsign
+ 	val |= 1 << bit;
+ 	current->trace_recursion = val;
+ 	barrier();
+-
+-	preempt_disable_notrace();
+-
+ 	return bit;
+ }
+ 
+-/*
+- * Preemption will be enabled (if it was previously enabled).
+- */
+ static __always_inline void trace_clear_recursion(int bit)
+ {
+-	preempt_enable_notrace();
+ 	barrier();
+ 	trace_recursion_clear(bit);
+ }
+@@ -205,12 +195,18 @@ static __always_inline void trace_clear_recursion(int bit)
+  * tracing recursed in the same context (normal vs interrupt),
+  *
+  * Returns: -1 if a recursion happened.
+- *           >= 0 if no recursion.
++ *           >= 0 if no recursion and preemption will be disabled.
+  */
+ static __always_inline int ftrace_test_recursion_trylock(unsigned long ip,
+ 							 unsigned long parent_ip)
+ {
+-	return trace_test_and_set_recursion(ip, parent_ip, TRACE_FTRACE_START);
++	int bit;
++
++	bit = trace_test_and_set_recursion(ip, parent_ip, TRACE_FTRACE_START);
++	if (unlikely(bit < 0))
++		return bit;
++	preempt_disable_notrace();
++	return bit;
+ }
+ 
+ /**
+@@ -220,6 +216,33 @@ static __always_inline int ftrace_test_recursion_trylock(unsigned long ip,
+  * This is used at the end of a ftrace callback.
+  */
+ static __always_inline void ftrace_test_recursion_unlock(int bit)
++{
++	preempt_enable_notrace();
++	trace_clear_recursion(bit);
++}
++
++/**
++ * test_recursion_try_acquire - tests for recursion in same context
++ *
++ * This will detect recursion of a function.
++ *
++ * Returns: -1 if a recursion happened.
++ *           >= 0 if no recursion
++ */
++static __always_inline int test_recursion_try_acquire(unsigned long ip,
++						      unsigned long parent_ip)
++{
++	return trace_test_and_set_recursion(ip, parent_ip, TRACE_FTRACE_START);
++}
++
++/**
++ * test_recursion_release - called after a success of test_recursion_try_acquire()
++ * @bit: The return of a successful test_recursion_try_acquire()
++ *
++ * This releases the recursion lock taken by a non-negative return call
++ * by test_recursion_try_acquire().
++ */
++static __always_inline void test_recursion_release(int bit)
+ {
+ 	trace_clear_recursion(bit);
+ }
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index db8532a4d5c8..1b117ab057ed 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -7299,6 +7299,7 @@ __ftrace_ops_list_func(unsigned long ip, unsigned long parent_ip,
+ 	if (bit < 0)
+ 		return;
+ 
++	preempt_disable();
+ 	do_for_each_ftrace_op(op, ftrace_ops_list) {
+ 		/* Stub functions don't need to be called nor tested */
+ 		if (op->flags & FTRACE_OPS_FL_STUB)
+@@ -7320,6 +7321,7 @@ __ftrace_ops_list_func(unsigned long ip, unsigned long parent_ip,
+ 		}
+ 	} while_for_each_ftrace_op(op);
+ out:
++	preempt_enable();
+ 	trace_clear_recursion(bit);
+ }
+ 
+-- 
+2.39.2
 
-But let's consider the case where we have a 1TB VMA which is servicing the
-majority of faults and we try to mprotect one page in it.  The mprotect()
-thread will take the mmap_lock for write, then block on the VMA lock until
-all the other threads taking page faults have finished (ie waiting for all
-the swapin to happen).  While it waits, new faults on that VMA will also
-block (on the mmap_lock as the read_trylock on the VMA lock will fail).
-So yes, this case is just as bad as the original problem.
-
-We have two alternatives here.  We can do what we do today -- fall back
-to taking the mmap_lock for read before dropping it while we wait
-for the folio lock.  Or we can do something like this ...
-
-+++ b/mm/filemap.c
-@@ -1698,7 +1698,10 @@ bool __folio_lock_or_retry(struct folio *folio, struct mm_struct *mm,
-                if (flags & FAULT_FLAG_RETRY_NOWAIT)
-                        return false;
-
--               mmap_read_unlock(mm);
-+               if (flags & FAULT_FLAG_VMA_LOCK)
-+                       vma_end_read(vma);
-+               else
-+                       mmap_read_unlock(mm);
-                if (flags & FAULT_FLAG_KILLABLE)
-                        folio_wait_locked_killable(folio);
-                else
-
-... and then figure out a return value that lets the caller of
-handle_mm_fault() know not to call vma_end_read().
-
-Or we can decide that it's OK to reintroduce this worst-case scenario,
-because we've now reduced the likelihood of it happening so far.
