@@ -2,69 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B41D6E2DCB
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 02:08:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0E2B6E2DCF
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 02:10:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbjDOAIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 20:08:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45744 "EHLO
+        id S229933AbjDOAKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 20:10:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjDOAIY (ORCPT
+        with ESMTP id S229457AbjDOAKl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 20:08:24 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A9730F1
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 17:08:22 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54c17fb245dso257450757b3.21
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 17:08:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681517302; x=1684109302;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=HTZMn+gdePQ6w7ytfojAbFuEgA1Exnj51R99edjgsk4=;
-        b=HXjWck7PIwn2MOmDJ61gXB6mzp/zcBEjD3VXA3dtP3JJsKBX66dn/fLDKzYLSzjpIV
-         uB6IAS5hoNhvCHiUomWn2VQqw2IPnD5EyGKpS2wAoHPc6fmCfv5WdV4AdkiAndxqG0/f
-         A3iGSOwBT+Wc9uyp37v4l1yGWipIaT8+Fddu6G6fOKU+GvtsudqwOPNOy+I2UADevQPI
-         P6HALgBGheXxZj4ZF4896PfGAnRZtV9TnQ8x06UepUb5yCvAn51CJ7jiAOvqNUJUJpOy
-         P7bkZdc8Fc1YaoWGW3I/Npq2iAY8MJJCIYd4bz5+Vt3agxk4OVsmono5B9lYJtW3B4Ql
-         Kn0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681517302; x=1684109302;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HTZMn+gdePQ6w7ytfojAbFuEgA1Exnj51R99edjgsk4=;
-        b=Z/03rRaL2sq/TwUTWMYvaqqXRSLMY/dCZoYTz0i+YVlelsL7r1R7tnqfMRqHqVEh+V
-         bxL9Vi16bRbZG/NwPWZDdmjsN2XYoypfG9BGNH3N4cjTfEqLBX/HpW7dAeoQxthLufEo
-         1F6qUME8sXeOzTavtxC/cIe29o+nuk7Dp8BmiWj2ZQMtkACSK6fMtlCbsLjmNugvqxQF
-         dzlVKmdgk4Ez64BQOJoTYMXktu3KMF8glojMKtk5MjbZie0z4aNvB/1ty1PSEtP63JuT
-         B0cZ+tl+Y/4u+9Uyakzdfrthx3WqJ4Tn9coymN4YEuOvdAVKoVglrqwOo/OhfuZBxsnt
-         D58g==
-X-Gm-Message-State: AAQBX9dh51l4uzvz9IVD5bpvv/n8KF041JON7NS61VoJnwpV/+tB/Ru1
-        /VV8sEmSIa5IEa849U8z0VaznFd+dr0=
-X-Google-Smtp-Source: AKy350Zdqn2SuZ84MXlUvPdnfLvMmZOEwQDahaWw8QbW+PES4oLAtpiiNIVM9mruaQNMWSGM6qirf/zEdBQ=
-X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:46c0:7584:f020:e09f])
- (user=surenb job=sendgmr) by 2002:a81:b71c:0:b0:54f:b931:adf7 with SMTP id
- v28-20020a81b71c000000b0054fb931adf7mr5042050ywh.4.1681517302208; Fri, 14 Apr
- 2023 17:08:22 -0700 (PDT)
-Date:   Fri, 14 Apr 2023 17:08:18 -0700
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-Message-ID: <20230415000818.1955007-1-surenb@google.com>
-Subject: [PATCH v2 1/1] mm: do not increment pgfault stats when page fault
- handler retries
-From:   Suren Baghdasaryan <surenb@google.com>
-To:     akpm@linux-foundation.org
-Cc:     willy@infradead.org, hannes@cmpxchg.org, mhocko@suse.com,
-        josef@toxicpanda.com, jack@suse.cz, ldufour@linux.ibm.com,
-        laurent.dufour@fr.ibm.com, michel@lespinasse.org,
-        liam.howlett@oracle.com, jglisse@google.com, vbabka@suse.cz,
-        minchan@google.com, dave@stgolabs.net, punit.agrawal@bytedance.com,
-        lstoakes@gmail.com, surenb@google.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        Fri, 14 Apr 2023 20:10:41 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD4B30F1;
+        Fri, 14 Apr 2023 17:10:40 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33F01UY3016291;
+        Sat, 15 Apr 2023 00:10:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=LUJ2/lAfWFV0553iBaBy/s0Q3nMiR2TR4qQH20SjvaE=;
+ b=a9Royk2NmeiLjMtwLn36yyepLw1Zh60uDH1atMzTyAcpQ1dXmT+JKCg75+uay6JFxgZE
+ 6tc/R1vg0hEu3LQPU0hV+7MQHk6STanqzC9IvrcLYJH5hR1f7WyXvmf4ZAXL5UhMRlh1
+ 5RYL+yFa6jpe/ve4Xc8MulQ0dLBY5Nc7HpdoG4VZCydVz7NAoZlCrUXk8Cgvg/XdsVqY
+ P4ciKQw1R0p/p8J1gyntrIL5Tq0ho+w0bRF9Z0CCRUXI1PMwQYbpXz5pRQAv5a5ZYlIP
+ f2Up5tFH8SlHgfUQy4I7R9zxNNC5I840nc4WiYh+NBbRK/dYz7pu+OpVzrE8LtqgqDvQ CA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pyck1gexa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 15 Apr 2023 00:10:30 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33F0ATMq027243
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 15 Apr 2023 00:10:29 GMT
+Received: from [10.110.73.215] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 14 Apr
+ 2023 17:10:27 -0700
+Message-ID: <76d217d2-ee49-2074-d54a-7ba21ff4fb2d@quicinc.com>
+Date:   Fri, 14 Apr 2023 17:10:27 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v2] drm/msm/dpu: always program dsc active bits
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+CC:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1681401401-15099-1-git-send-email-quic_khsieh@quicinc.com>
+ <tgfbdk6q3uool365jqddibnbgq66clsmsm6tldxpm5toqghxpq@m2ic3oonv2s5>
+ <aac210da-dec1-aab8-3f48-c33d9e7687d6@quicinc.com>
+ <3oaangxh7gmie3cdd6rmujm7dd3hagsrnwiq3bascdtamvfn3a@bn6ou5hbsgxv>
+ <c09725ff-771c-35d1-adc9-4bb1b7c1c334@quicinc.com>
+ <CAA8EJppKXSGcOcYEc6UKz9Eh8JizSpdDNe+cdvfmFbuBJ9zPKw@mail.gmail.com>
+ <eb8ea024-1152-418c-a048-f86253867c9e@quicinc.com>
+ <m43254ainsnznnehtziigr3akpy7lnwkel424e2emr2tycpbek@yqam6dij63d5>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <m43254ainsnznnehtziigr3akpy7lnwkel424e2emr2tycpbek@yqam6dij63d5>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: ZrV_lk8tW8jJssG75kSzHIUE4WsBt4OC
+X-Proofpoint-GUID: ZrV_lk8tW8jJssG75kSzHIUE4WsBt4OC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-14_16,2023-04-14_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ adultscore=0 priorityscore=1501 mlxlogscore=999 lowpriorityscore=0
+ mlxscore=0 bulkscore=0 clxscore=1015 suspectscore=0 malwarescore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304150000
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,107 +92,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the page fault handler requests a retry, we will count the fault
-multiple times. This is a relatively harmless problem as the retry paths
-are not often requested, and the only user-visible problem is that the
-fault counter will be slightly higher than it should be.  Nevertheless,
-userspace only took one fault, and should not see the fact that the
-kernel had to retry the fault multiple times.
-Move page fault accounting into mm_account_fault() and skip incomplete
-faults which will be accounted upon completion.
 
-Fixes: d065bd810b6d ("mm: retry page fault when blocking on disk transfer")
-Signed-off-by: Suren Baghdasaryan <surenb@google.com>
----
- mm/memory.c | 45 ++++++++++++++++++++++++++-------------------
- 1 file changed, 26 insertions(+), 19 deletions(-)
 
-diff --git a/mm/memory.c b/mm/memory.c
-index 01a23ad48a04..c3b709ceeed7 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -5080,24 +5080,30 @@ static vm_fault_t __handle_mm_fault(struct vm_area_struct *vma,
-  * updates.  However, note that the handling of PERF_COUNT_SW_PAGE_FAULTS should
-  * still be in per-arch page fault handlers at the entry of page fault.
-  */
--static inline void mm_account_fault(struct pt_regs *regs,
-+static inline void mm_account_fault(struct mm_struct *mm, struct pt_regs *regs,
- 				    unsigned long address, unsigned int flags,
- 				    vm_fault_t ret)
- {
- 	bool major;
- 
- 	/*
--	 * We don't do accounting for some specific faults:
--	 *
--	 * - Unsuccessful faults (e.g. when the address wasn't valid).  That
--	 *   includes arch_vma_access_permitted() failing before reaching here.
--	 *   So this is not a "this many hardware page faults" counter.  We
--	 *   should use the hw profiling for that.
--	 *
--	 * - Incomplete faults (VM_FAULT_RETRY).  They will only be counted
--	 *   once they're completed.
-+	 * Do not account for incomplete faults (VM_FAULT_RETRY). They will be
-+	 * counted upon completion.
- 	 */
--	if (ret & (VM_FAULT_ERROR | VM_FAULT_RETRY))
-+	if (ret & VM_FAULT_RETRY)
-+		return;
-+
-+	/* Register both successful and failed faults in PGFAULT counters. */
-+	count_vm_event(PGFAULT);
-+	count_memcg_event_mm(mm, PGFAULT);
-+
-+	/*
-+	 * Do not account for unsuccessful faults (e.g. when the address wasn't
-+	 * valid).  That includes arch_vma_access_permitted() failing before
-+	 * reaching here. So this is not a "this many hardware page faults"
-+	 * counter.  We should use the hw profiling for that.
-+	 */
-+	if (ret & VM_FAULT_ERROR)
- 		return;
- 
- 	/*
-@@ -5180,21 +5186,22 @@ static vm_fault_t sanitize_fault_flags(struct vm_area_struct *vma,
- vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
- 			   unsigned int flags, struct pt_regs *regs)
- {
-+	/* Copy vma->vm_mm in case mmap_lock is dropped and vma becomes unstable. */
-+	struct mm_struct *mm = vma->vm_mm;
- 	vm_fault_t ret;
- 
- 	__set_current_state(TASK_RUNNING);
- 
--	count_vm_event(PGFAULT);
--	count_memcg_event_mm(vma->vm_mm, PGFAULT);
--
- 	ret = sanitize_fault_flags(vma, &flags);
- 	if (ret)
--		return ret;
-+		goto out;
- 
- 	if (!arch_vma_access_permitted(vma, flags & FAULT_FLAG_WRITE,
- 					    flags & FAULT_FLAG_INSTRUCTION,
--					    flags & FAULT_FLAG_REMOTE))
--		return VM_FAULT_SIGSEGV;
-+					    flags & FAULT_FLAG_REMOTE)) {
-+		ret = VM_FAULT_SIGSEGV;
-+		goto out;
-+	}
- 
- 	/*
- 	 * Enable the memcg OOM handling for faults triggered in user
-@@ -5223,8 +5230,8 @@ vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
- 		if (task_in_memcg_oom(current) && !(ret & VM_FAULT_OOM))
- 			mem_cgroup_oom_synchronize(false);
- 	}
--
--	mm_account_fault(regs, address, flags, ret);
-+out:
-+	mm_account_fault(mm, regs, address, flags, ret);
- 
- 	return ret;
- }
--- 
-2.40.0.634.g4ca3ef3211-goog
+On 4/14/2023 3:52 PM, Marijn Suijten wrote:
+> On 2023-04-14 14:03:23, Abhinav Kumar wrote:
+> [..]
+>>>> Yes, ofcourse git send-email was used to send the patch, not any other
+>>>> mail client.
+>>>>
+>>>> Yes i am also aware that send-email converts rb to CC.
+>>>>
+>>>> But if you keep working on the local branch, then you would have to
+>>>> manually add the r-bs. If you use am of the prev version and develop on
+>>>> that, it will automatically add the r-bs.
+> 
+> I don't think git-am is smart enough to fetch additional replies from
+> lore and apply the reviewed-by (and other trailers).  This workflow
+> relies on downloading the mbox from a service that extracts and
+> accumulates the trailers such as patchwork, see for example:
+> 
+> 	https://patchwork.freedesktop.org/api/1.0/series/116340/revisions/1/mbox/
+> 
+> Note that it also picked up one sentence starting with Fixes:
+> 
+> 	Fixes: tag below seems extraneous.
+> 
 
+Yes, I usually use git-pw ap.
+
+So perhaps, I should have been more specific to say that.
+
+Some form of am is what i wanted to emphasize but just wrote git am by 
+mistake.
+
+> On the other hand b4 (shaz)am is itself capable of downloading the whole
+> mail thread and appending all trailers, just like patchwork is doing
+> above, in one automated `b4 shazam <lore link>` command.
+> 
+> And to solve the problem of trailers arriving in your inbox after
+> working on the next revision in a local branch - or without ever even
+> redownloading the series from lore/patchwork¸ b4 has a command to
+> download and apply them to commits in your local branch:
+> 
+> 	b4 trailers -uF <lore link>
+> 
+> Try it out, b4 is amazing :)
+> 
+
+Yes, i recently started using it to send "applied" emails as suggested 
+by Dmitry , for patch related work was still using git-pw.
+
+Perhaps, I will switch completely to it.
+
+> [..]
+>> 2) I synced with kuogee. his git version seems to be quite old which is
+>> not adding the folks from r-b to cc. So there was nothing wrong with
+>> invocation, just versioning.
+> 
+> You are right.  The X-Mailer header of Kuogee's patch indicates git
+> 2.7.4, while cc'ing of additional -by trailers (such as r-b's) was only
+> introduced in 2.20.0:
+> 
+> https://github.com/git/git/commit/ef0cc1df90f6b6c2987ab2db8e0ccf2cfc421edf
+> 
+> Fwiw 2.7.4 is from March 2016.
+> 
+> - Marijn
