@@ -2,48 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03C5C6E323C
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 18:02:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC77A6E323F
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 18:03:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbjDOQCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 12:02:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40192 "EHLO
+        id S229995AbjDOQDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 12:03:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbjDOQCq (ORCPT
+        with ESMTP id S229752AbjDOQDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 12:02:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49EC4ECB
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 09:02:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A40E60AED
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 16:02:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6908C433D2;
-        Sat, 15 Apr 2023 16:02:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1681574563;
-        bh=Keho5jZUf9JoMSbHmX57TIOBY/LQblSMA+MdqWd6VXc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CmWfuR3uSekN6HhPeC3PBfkOM6/U+mAO6TNArkm/CpYFEZOpXE3G6j9SZM54hvhw9
-         I8aKbZdhpUOpdwQM03SAEvB3mNX9SNwsf/8iuo0YqdQJGHYNA4dsumZ1RdjjpFC+2C
-         VW7a3a866ltfvQpIK/zlw/YeYnXoIKRukvV3QmFc=
-Date:   Sat, 15 Apr 2023 18:02:40 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: rtl8192e: Fix W_DISABLE# does not work after
- stop/start
-Message-ID: <2023041515-overhung-grime-d9fc@gregkh>
-References: <20230414183452.GA12295@matrix-ESPRIMO-P710>
+        Sat, 15 Apr 2023 12:03:43 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DFB3A8E;
+        Sat, 15 Apr 2023 09:03:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=IvR+KTULywCa9KcsMX/Vvku+X+SUD7cXl4deynP11rw=; b=NXgdWGOJ25IYCZlHiYT0mbyGZx
+        naD9urTP2DUiBJUjKQlNEH2DS40R77jvtbEq4XAy/5vWSl02rzMkRT5TAq0rbz2Nh0NH632JDAr+I
+        SJgPoAJEhkTTr5JtR5IUWePoHpwTwg/zFOJ2QMkyVic84BqzLYKT9cYZjFVgv8/TvC3I8irmVZcS9
+        7oJkfHnzWx/Xq5P3mWtQaBn1W5zG8JXNJivfnrkYUURJT+lI9WO0HvPCrF9WJUFjRIkrK9636g+gJ
+        rMxcVteiYdZnU9nRzXRm1p4BVkyPgZ0dQHkUZ3bvrFhzarIgT8TMdSujWFBKbERhlzwtNTA0nkRqP
+        BqL7H2NA==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pniMy-00CPZ1-07;
+        Sat, 15 Apr 2023 16:03:20 +0000
+Message-ID: <dac32cfb-6cb6-613d-169e-f1445492418c@infradead.org>
+Date:   Sat, 15 Apr 2023 09:03:17 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230414183452.GA12295@matrix-ESPRIMO-P710>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] fs/proc: add Kthread flag to /proc/$pid/status
+Content-Language: en-US
+To:     Chunguang Wu <fullspring2018@gmail.com>, akpm@linux-foundation.org,
+        corbet@lwn.net
+Cc:     adobriyan@gmail.com, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20230415082155.5298-1-fullspring2018@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230415082155.5298-1-fullspring2018@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,30 +55,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 14, 2023 at 08:34:52PM +0200, Philipp Hortmann wrote:
-> When loading the driver for rtl8192e, the W_DISABLE# switch is working as
-> intended. But when the WLAN is turned off in software and then turned on
-> again the W_DISABLE# does not work anymore. Reason for this is that in
-> the function _rtl92e_dm_check_rf_ctrl_gpio() the bfirst_after_down is
-> checked and returned when true. bfirst_after_down is set true when
-> switching the WLAN off in software. But it is not set to false again
-> when WLAN is turned on again.
+Hi,
+
+On 4/15/23 01:21, Chunguang Wu wrote:
+> The command `ps -ef ` and `top -c` mark kernel thread by '['
+> and ']', but sometimes the result is not correct.
+> The task->flags in /proc/$pid/stat is good, but we need remember
+> the value of PF_KTHREAD is 0x00200000 and convert dec to hex.
+> If we have no binary program and shell script which read
+> /proc/$pid/stat, we can know it directly by
+> `cat /proc/$pid/status`.
 > 
-> Add bfirst_after_down = false in _rtl92e_sta_up to reset bit and fix
-> above described bug.
+> Signed-off-by: Chunguang Wu <fullspring2018@gmail.com>
+> ---
+>  Documentation/filesystems/proc.rst | 2 ++
+>  fs/proc/array.c                    | 7 +++++++
+>  2 files changed, 9 insertions(+)
 > 
-> Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
-> ---
-> Tested with rtl8192e (WLL6130-D99)
-> Transferred this patch over wlan connection of rtl8192e
-> ---
->  drivers/staging/rtl8192e/rtl8192e/rtl_core.c | 1 +
->  1 file changed, 1 insertion(+)
+> diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+> index 9d5fd9424e8b..8a563684586c 100644
+> --- a/Documentation/filesystems/proc.rst
+> +++ b/Documentation/filesystems/proc.rst
+> @@ -179,6 +179,7 @@ read the file /proc/PID/status::
+>    Gid:    100     100     100     100
+>    FDSize: 256
+>    Groups: 100 14 16
+> +  Kthread:    0
+>    VmPeak:     5004 kB
+>    VmSize:     5004 kB
+>    VmLck:         0 kB
+> @@ -256,6 +257,7 @@ It's slow but very precise.
+>   NSpid                       descendant namespace process ID hierarchy
+>   NSpgid                      descendant namespace process group ID hierarchy
+>   NSsid                       descendant namespace session ID hierarchy
+> + Kthread                     kernel thread flag, 1 is yes, 0 is no
+>   VmPeak                      peak virtual memory size
+>   VmSize                      total program size
+>   VmLck                       locked memory size
+
+The Documentation changes look good, except that they may need to be moved
+if you do the changes indicated below.
 
 
-What commit id does this fix?  Should it go to the stable kernels?  If
-so, how far back?
+Now that I have looked at the rest of the patch:
 
-thanks,
+> diff --git a/fs/proc/array.c b/fs/proc/array.c
+> index 9b0315d34c58..fde6a0b92728 100644
+> --- a/fs/proc/array.c
+> +++ b/fs/proc/array.c
+> @@ -434,6 +434,13 @@ int proc_pid_status(struct seq_file *m, struct pid_namespace *ns,
+>  
+>  	task_state(m, ns, pid, task);
+>  
+> +	seq_puts(m, "Kthread:\t");
+> +	if (task->flags & PF_KTHREAD) {
+> +		seq_puts(m, "1\n");
+> +	} else {
+> +		seq_puts(m, "0\n");
+> +	}
+> +
 
-greg k-h
+I would put that patch fragment inside task_state(), but I'll leave that
+to others to decide on.
+
+and condense it to one line, e.g.:
+
+	seq_puts(m, "Kthread: %c\n", task->flags & PF_KTHREAD ? '1' : '0');
+
+
+>  	if (mm) {
+>  		task_mem(m, mm);
+>  		task_core_dumping(m, task);
+
+
+Please add version info to your future patches.
+
+Thanks.
+-- 
+~Randy
