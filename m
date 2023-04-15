@@ -2,139 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 199BB6E2E23
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 03:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5176F6E2E2B
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 03:23:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbjDOBP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 21:15:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59710 "EHLO
+        id S229894AbjDOBXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 21:23:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjDOBPz (ORCPT
+        with ESMTP id S229462AbjDOBXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 21:15:55 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238486EAC;
-        Fri, 14 Apr 2023 18:15:54 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id dm2so50028473ejc.8;
-        Fri, 14 Apr 2023 18:15:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681521352; x=1684113352;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fC4kxkJoU5H0KyEnir1WfQCWSx6t7d24Ud56sJ7PoSE=;
-        b=hbwLdFnJtyk2KnbO/WdU6+2+hQM8kH0eWv+EzVzdZwyxorRpn6LVyC9YIPOwwR5VMh
-         Pqf22M0lBsfTecsgzlYN5jg3PKrBNzbOPOY4ZvTFgzgza7yWjjPbsCFb9DYfYRja0ymr
-         /vTxNaLOLFDC5n5Dmywh+q/j376tNhP3PHbztAMJcM7ySjefTeO9TBkhHh+ZOQYoXaZk
-         685kc0KTChqFLvFU5HpiihQgzRXftkDY2aDQUpWw+ZryVo/liieskjXk8ejImAQgSe+N
-         EMpkeMrs5wild3eQycaqaeZ65TkFXS/smf45Fd1npo/dyjv3HB6KUu4djG9n8D2QQxbB
-         MjOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681521352; x=1684113352;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fC4kxkJoU5H0KyEnir1WfQCWSx6t7d24Ud56sJ7PoSE=;
-        b=JmW6PSOlh0dcHt5JQwPkbYu/dIzh++DdeofrGKHOu+3tT+ZbHmXwgq1dM1himrMAS6
-         W+6siT1cH+s5JaRc596MW5DEJFNK7ZsnLmwg+8sxf36pvLekK97dNQjqBDmPQUtD8n/R
-         8gZlCPNqgcRilU2kDX5pN7jkmbx3BuFyHuV5ziY6zteTtX474gnMyiIQ/i25+HAkfxtG
-         S1mpad3NAc7qfAWNT12jCAWkThgFPgwjQD2jMgL0o+KO26PY7Hm+B3PukM6y2XsAKHWw
-         AYgKl/eyihxuDu5QIDCLFqoonMhjwQIH90cnbhidyehRYISb5UhWPAXdds0Yp2YppGYH
-         mShw==
-X-Gm-Message-State: AAQBX9e3cl6H8DwgggdZs446Nqo0ulfn4Qbo9BjR0XVi5zPOKXDajpKV
-        LPGzP34qg3mmDWE/ltkdFDIeh03f+bnZ1GMg/4S01PkwzZc=
-X-Google-Smtp-Source: AKy350aZc1kDQXDRrsAJdoYDo7bzIbPeRF8KE0ZiYxoWv56d2Y08t0DwLjaJjC11xY/qgxHf1ArGOp0K0JH+2GdqjsA=
-X-Received: by 2002:a17:906:4ace:b0:94e:d57a:49fe with SMTP id
- u14-20020a1709064ace00b0094ed57a49femr429549ejt.7.1681521352400; Fri, 14 Apr
- 2023 18:15:52 -0700 (PDT)
+        Fri, 14 Apr 2023 21:23:35 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5268C65B3
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 18:23:34 -0700 (PDT)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1681521812;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=wk6tBRL4rOUhZyc8yDlJOrUexb/aW0doiLcILhv9l7I=;
+        b=K3VpJIa7/dxb0WP7AvWLftrAQNOTsaZjvZmKQ6YN2nguYFLsK6AsUuyRV9uDrC6jiWGzPD
+        lganGKWEcmuOvIgBuHlfalKv3fuJVLucbbyw+e9JWAQyXZ84woRWVrjWslhuXs85CfHp9c
+        omAzaAOG5TzCfmfat02AeNfKJW9OCG2hOwekQ+PE6TYZMtIjsUYjIU2xXGrikg1ws+V8IS
+        bdJ/57TjCAwVw/BA+SNG8YFss8jEtMXwtWg+dZqBAbssKa0td9ruPW/8anxCcbkqwD67qg
+        8bfNP4vxgc3Ums3ojYGSf6fK8w0v6DukzGWb5n0z5MF+slXH5C6fP3az35hViA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1681521812;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=wk6tBRL4rOUhZyc8yDlJOrUexb/aW0doiLcILhv9l7I=;
+        b=sD8RwqQUN1CEo6InqlzRlqogbgz0MsLVKyf2S6UvbYcE7yi6nc7UxCvpXgQQkjg45mnbnl
+        XS7dLzTzE7fWAlDw==
+To:     =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     linux-kernel@vger.kernel.org, Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        Tanmay Bhushan <007047221b@gmail.com>
+Subject: [PATCH v2] drm/nouveau: fix incorrect conversion to dma_resv_wait_timeout()
+Date:   Sat, 15 Apr 2023 03:27:37 +0206
+Message-Id: <20230415012137.615305-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
-References: <20230412095912.188453-1-andrea.righi@canonical.com>
- <CAADnVQJ00Npkp=+XYaTybzaPnrcfK0nKrePAktVNBt2-YqWdEg@mail.gmail.com>
- <ZDjvZ7mx7+IsSCCO@righiandr-XPS-13-7390> <q5rj72tmwlpzx6qgkromem5t7q6xmen52aavfr65olnuv52f3z@wzs4p3xz3635>
- <ZDl/KFLy7wOBa2tj@righiandr-XPS-13-7390>
-In-Reply-To: <ZDl/KFLy7wOBa2tj@righiandr-XPS-13-7390>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 14 Apr 2023 18:15:41 -0700
-Message-ID: <CAADnVQJFxoYqBisj4w_Mm35mf3gR6YTK0QvNjQfVSjfcQK33yw@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: ignore pointer types check with clang
-To:     Andrea Righi <andrea.righi@canonical.com>
-Cc:     Ilya Leoshkevich <iii@linux.ibm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Paolo Pisati <paolo.pisati@canonical.com>,
-        bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 14, 2023 at 9:28=E2=80=AFAM Andrea Righi <andrea.righi@canonica=
-l.com> wrote:
->
-> On Fri, Apr 14, 2023 at 06:15:38PM +0200, Ilya Leoshkevich wrote:
-> > On Fri, Apr 14, 2023 at 08:15:03AM +0200, Andrea Righi wrote:
-> > > On Thu, Apr 13, 2023 at 09:56:00PM -0700, Alexei Starovoitov wrote:
-> > > > On Wed, Apr 12, 2023 at 2:59=E2=80=AFAM Andrea Righi <andrea.righi@=
-canonical.com> wrote:
-> > > > >
-> > > > > Building bpf selftests with clang can trigger errors like the fol=
-lowing:
-> > > > >
-> > > > >   CLNG-BPF [test_maps] bpf_iter_netlink.bpf.o
-> > > > > progs/bpf_iter_netlink.c:32:4: error: incompatible pointer types =
-assigning to 'struct sock *' from 'struct sock___17 *' [-Werror,-Wincompati=
-ble-pointer-types]
-> > > > >         s =3D &nlk->sk;
-> > > > >           ^ ~~~~~~~~
-> > > > > 1 error generated.
-> > > >
-> > > > I cannot reproduce this and BPF CI doesn't complain about it either=
-.
-> > > > What kind of clang do you use?
-> > > > Some special version and build flags?
-> > >
-> > > I'm using Ubuntu clang version 15.0.7 (Ubuntu 23.04), no special buil=
-d
-> > > flag (unless Ubuntu enables some different default flags, but it
-> > > shouldn't be the case... I'll double check).
-> > >
-> > > -Andrea
-> >
-> > Hi,
-> >
-> > FWIW, I see similar errors when I don't use recent pahole.
->
-> I'm using pahole v1.24.
+Commit 41d351f29528 ("drm/nouveau: stop using ttm_bo_wait")
+converted from ttm_bo_wait_ctx() to dma_resv_wait_timeout().
+However, dma_resv_wait_timeout() returns greater than zero on
+success as opposed to ttm_bo_wait_ctx(). As a result, relocs
+will fail and log errors even when it was a success.
 
-I believe Ilya is correct.
+Change the return code handling to match that of
+nouveau_gem_ioctl_cpu_prep(), which was already using
+dma_resv_wait_timeout() correctly.
 
-struct sock___17 is likely coming from vmlinux.h
-Which means that there were errors due vmlinux build which
-caused multiple structs to be present in BTF
-and therefore bpftool generated such broken vmlinux.h
+Fixes: 41d351f29528 ("drm/nouveau: stop using ttm_bo_wait")
+Reported-by: Tanmay Bhushan <007047221b@gmail.com>
+Link: https://lore.kernel.org/lkml/20230119225351.71657-1-007047221b@gmail.com
+Signed-off-by: John Ogness <john.ogness@linutronix.de>
+---
+ The original report was actually a patch that needed fixing.
+ Since nobody has stepped up to fix this regression correctly,
+ I'm posting the v2.
 
-The BTF section in such vmlinux is likely much larger than normal.
-Let's get to the bottom of it instead of masking build error.
+ This is a real regression introduced in 6.3-rc1.
 
-Please try pahole 1.25.
+ drivers/gpu/drm/nouveau/nouveau_gem.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/gpu/drm/nouveau/nouveau_gem.c b/drivers/gpu/drm/nouveau/nouveau_gem.c
+index f77e44958037..346839c24273 100644
+--- a/drivers/gpu/drm/nouveau/nouveau_gem.c
++++ b/drivers/gpu/drm/nouveau/nouveau_gem.c
+@@ -645,8 +645,9 @@ nouveau_gem_pushbuf_reloc_apply(struct nouveau_cli *cli,
+ 				struct drm_nouveau_gem_pushbuf_reloc *reloc,
+ 				struct drm_nouveau_gem_pushbuf_bo *bo)
+ {
+-	long ret = 0;
++	int ret = 0;
+ 	unsigned i;
++	long lret;
+ 
+ 	for (i = 0; i < req->nr_relocs; i++) {
+ 		struct drm_nouveau_gem_pushbuf_reloc *r = &reloc[i];
+@@ -703,13 +704,18 @@ nouveau_gem_pushbuf_reloc_apply(struct nouveau_cli *cli,
+ 				data |= r->vor;
+ 		}
+ 
+-		ret = dma_resv_wait_timeout(nvbo->bo.base.resv,
+-					    DMA_RESV_USAGE_BOOKKEEP,
+-					    false, 15 * HZ);
+-		if (ret == 0)
++		lret = dma_resv_wait_timeout(nvbo->bo.base.resv,
++					     DMA_RESV_USAGE_BOOKKEEP,
++					     false, 15 * HZ);
++		if (!lret)
+ 			ret = -EBUSY;
++		else if (lret > 0)
++			ret = 0;
++		else
++			ret = lret;
++
+ 		if (ret) {
+-			NV_PRINTK(err, cli, "reloc wait_idle failed: %ld\n",
++			NV_PRINTK(err, cli, "reloc wait_idle failed: %d\n",
+ 				  ret);
+ 			break;
+ 		}
+
+base-commit: 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d
+-- 
+2.30.2
+
