@@ -2,106 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3DF6E3205
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 17:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0643F6E3210
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 17:15:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbjDOPFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 11:05:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55732 "EHLO
+        id S229967AbjDOPPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 11:15:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjDOPFs (ORCPT
+        with ESMTP id S229535AbjDOPPd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 11:05:48 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A12B3C3B;
-        Sat, 15 Apr 2023 08:05:47 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id eo6-20020a05600c82c600b003ee5157346cso13294318wmb.1;
-        Sat, 15 Apr 2023 08:05:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681571146; x=1684163146;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zwxTHaEdDM59TU3KApuuMuKC7LO7W9mKFqhs96b3+4Y=;
-        b=pAdy9OpNyRv1mrYm5Uf6HqbxZo6eUc4IkyHQXp3rLLZ3mtYZ5JGjiuiqFbMHKKQsW8
-         f2jqPCpanpxfDRP5XdNa29FJKHCbor4KcQAYwoBbIMnih+wR7q2wou4w4yk+peU/1PHC
-         JsA0uSgFlVerM0k+ZsZKPPKU9iEA8+1YgEoWuueDc7H5pYr17mcMmZVYSeA/5/WITs0I
-         JDw5zqEG4TsECjYXYY3WvgBZmeWsrug2CelY+2KAJrem3AVMGTWzkt/kVG+kiJtyd49M
-         phxJnQwMVnilskM8QkwUq9FA8YbO/gSeh9HgB8La2vqmdPn6eCFNJYhRxhqtXZ2/oMmf
-         YEZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681571146; x=1684163146;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zwxTHaEdDM59TU3KApuuMuKC7LO7W9mKFqhs96b3+4Y=;
-        b=hbLdzNVhW4HcMY4syGshv5V/s/rXmzIJ+U2PwZ/B7S4CcPzniXt+1dHfzdt2DUkzR6
-         zvXrY+FpwBgrWgvIgQYurjUXFSRkHLqPXbtYx4lFZkVzVLnGIcI6MY6+lV+ji3qPbyit
-         BjW8mTtYOtllraVLksnk6AwhcwqXaHOo5LK/wIoUH+OPRvoJ3hKKIjh0qxj7CWc/hHke
-         A/rq8sCYYCFFpNYpFh6/lSCIWqKgbnsy+kyTIZ6CucAKZCMWsQgxW98mP3mcBLZOu3U3
-         GA4mFcl/6y3GZ2TW08OiYuHfgf/WLoAr7iCIie+gswtw9PEs0h2KiB4s27PGsoCHQkXJ
-         JA4A==
-X-Gm-Message-State: AAQBX9e6SwVunlgTKkcX4zvINcqy/xDvbJi+TZQYVXcW9X4hgCoKdpJH
-        U8l7arlU3ZctpzCnpYDzFXg=
-X-Google-Smtp-Source: AKy350b4HGFEsNoz0CzqZsYFmqDwpZlqQr3G3X5b8lUqEm4pjyGBYq759ma7727uzhP6VWiEf58OxA==
-X-Received: by 2002:a7b:c309:0:b0:3f0:967e:2cfb with SMTP id k9-20020a7bc309000000b003f0967e2cfbmr7122512wmj.36.1681571145574;
-        Sat, 15 Apr 2023 08:05:45 -0700 (PDT)
-Received: from skynet.lan (255.red-79-146-124.dynamicip.rima-tde.net. [79.146.124.255])
-        by smtp.gmail.com with ESMTPSA id i8-20020a5d5228000000b002efb4dc5a5fsm5990556wra.7.2023.04.15.08.05.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Apr 2023 08:05:45 -0700 (PDT)
-From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-To:     f.fainelli@gmail.com, jonas.gorski@gmail.com, nbd@nbd.name,
-        toke@toke.dk, kvalo@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        chunkeey@gmail.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-Subject: [PATCH] ath9k: fix calibration data endianness
-Date:   Sat, 15 Apr 2023 17:05:42 +0200
-Message-Id: <20230415150542.2368179-1-noltari@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        Sat, 15 Apr 2023 11:15:33 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA51540EC;
+        Sat, 15 Apr 2023 08:15:29 -0700 (PDT)
+Date:   Sat, 15 Apr 2023 17:15:27 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1681571728;
+        bh=PHGt+W7NxEPDtQSyORfCnDMsqkljH8VZv53sZGUyqI0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S9Igvkz9VpsW/V72zgvqKQcAeVJWNCDfO2XZVnNhkpQG9aEitCLDNS+7snMEYxABZ
+         JA6ouk4ZB+c6yOisadjNJcU8wZ56mp6OnIgEDNJTEsF3HVdokcOyj+Xn6l1CyujGTY
+         JtK3TsCz5ud9ksS+6BYjEj1RGwL9AMXChbaYFvUk=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 00/11] tools/nolibc: -std=c89 compatibility
+Message-ID: <e93c1260-ae29-4fa4-9097-a81784ac7ef8@t-8ch.de>
+References: <20230328-nolibc-c99-v2-0-c989f2289222@weissschuh.net>
+ <ZDKFTvhzgVGBjr0M@1wt.eu>
+ <ZDq455RD5yJ8Nwk0@1wt.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZDq455RD5yJ8Nwk0@1wt.eu>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-BCM63xx (Big Endian MIPS) devices store the calibration data in MTD
-partitions but it needs to be swapped in order to work, otherwise it fails:
-ath9k 0000:00:01.0: enabling device (0000 -> 0002)
-ath: phy0: Ignoring endianness difference in EEPROM magic bytes.
-ath: phy0: Bad EEPROM VER 0x0001 or REV 0x00e0
-ath: phy0: Unable to initialize hardware; initialization status: -22
-ath9k 0000:00:01.0: Failed to initialize device
-ath9k: probe of 0000:00:01.0 failed with error -22
+On 2023-04-15 16:47:03+0200, Willy Tarreau wrote:
+> On Sun, Apr 09, 2023 at 11:28:46AM +0200, Willy Tarreau wrote:
+> > On Thu, Apr 06, 2023 at 09:54:46PM +0000, Thomas Weißschuh wrote:
+> > > This series replaces the C99 compatibility patch. (See v1 link below).
+> > > After the discussion about support C99 and/or GNU89 I came to the
+> > > conclusion supporting straight C89 is not very hard.
+> > > 
+> > > Instead of validating both C99 and GNU89 in some awkward way only for
+> > > somebody requesting true C89 support let's just do it this way.
+> > > 
+> > > Feel free to squash all the comment syntax patches together if you
+> > > prefer.
+> > 
+> > I gave it some thought, at first considering that going lower than GNU89
+> > was possibly not very useful, but given that the changes are very small
+> > in the end (mostly comments formating), I think that you're right. The
+> > cost of reaching this level of portability is basically zero once the
+> > patch is applied so I think it's worth doing it now. However I think I
+> > will indeed squash all the comments patch together as you suggest.
+> 
+> I've now squashed the ones about comments together, fixed the declaration
+> inside the for statement in nolibc-test and tested with gcc 4.7 & 4.8 and
+> confirmed it works as expected. I've queued it there for now:
+> 
+>    https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git/log/?h=20230415-nolibc-updates-4a
 
-Fixes: eb3a97a69be8 ("ath9k: fetch calibration data via nvmem subsystem")
-Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
----
- drivers/net/wireless/ath/ath9k/init.c | 1 -
- 1 file changed, 1 deletion(-)
+Thanks!
 
-diff --git a/drivers/net/wireless/ath/ath9k/init.c b/drivers/net/wireless/ath/ath9k/init.c
-index 4f00400c7ffb..1314fbc55c0b 100644
---- a/drivers/net/wireless/ath/ath9k/init.c
-+++ b/drivers/net/wireless/ath/ath9k/init.c
-@@ -615,7 +615,6 @@ static int ath9k_nvmem_request_eeprom(struct ath_softc *sc)
- 
- 	ah->nvmem_blob_len = len;
- 	ah->ah_flags &= ~AH_USE_EEPROM;
--	ah->ah_flags |= AH_NO_EEP_SWAP;
- 
- 	return 0;
- }
--- 
-2.39.2
+I noticed today that I did not adapt the comments in arch-s390.h;
+because the start() comments were already correct.
 
+But the last line of arch-s390.h still contains a C99 comment.
+
+Do you want me to send a patch or could you just push one?
+(Or fold it into my patch)
+
+Thanks,
+Thomas
