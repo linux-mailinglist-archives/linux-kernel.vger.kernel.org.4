@@ -2,139 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDDAA6E3100
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 13:01:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 329086E310F
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 13:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbjDOLBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 07:01:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59282 "EHLO
+        id S230260AbjDOLO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 07:14:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbjDOLBF (ORCPT
+        with ESMTP id S229623AbjDOLO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 07:01:05 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4667693
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 04:01:04 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id bx15so19622848ljb.7
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 04:01:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681556462; x=1684148462;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gxs5lrZiuUMHb5dYpFm0IIyfMKZX7kJZib+sRP8GGTk=;
-        b=kdlO5bcc480qfQKisepn4Mr4sTybTQtn5tGn5m2rtYjUSm0Gjtx9zaWF0anm/S/Trp
-         ggFU/W7Y4BU3H2UGjcxzVYASVZj3yCE/d0IiJM6G+GAH7wYPETYyUaGpLivow4Re9qw5
-         XEuYgJA/fFsgxa9QG2MoHLf2wuRvk5ZjtOejmsbTr4iTd0L4JrbPdgwvABJnkvF6xI8Y
-         if4BRED7+IMf87V3Zwyml23sGO76XvZsNsDoO7Pgj8sUluxMvmWFaxA1QRpfoIVwIcqc
-         3C5GMtA5nvnbzgAS4vSEaAEIWKF/dL8xOk7m3+DQU3ZAtbYMkorGMT4z1tDUJz8vCGPt
-         Wh5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681556462; x=1684148462;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Gxs5lrZiuUMHb5dYpFm0IIyfMKZX7kJZib+sRP8GGTk=;
-        b=QNqldWcUE7guqnkh0Gy2TTDfNIVzaIl7j0VNn3J5dYkSOIT1ssnpLjIwgdRfDCGnn/
-         TSrn0/9AWS8TJ0BquKguxq62NG2NT6OL1ipqXxUPq2Ku5N5/T9PLyF7iV4hpl5Btjq5r
-         Wg6fTXGpo5tFxNpF+MQ7pAwyQcudHaZBUZFls/6gO1crTDH7pAyvPltQ0XPpaUwHoyFQ
-         STqpDb3evJbN+MYD0qWAfTTMhpDwII9EDjooYl1hOZbxkutlp14QHpUpSG5FV8Y1CNW9
-         UoRrmMqscJlWZRgxAfnMvFfn74qy4UsMmqZeVQs5koPH8ZNTeZN/76o7McWtodDQVOxi
-         4Whw==
-X-Gm-Message-State: AAQBX9fL7ZuVjPTPNNr7m0wErEwdac7/q7qquAMIeei7BLXAtU398fOc
-        0vU89utUprakpYpf/Tin5RU3GTRoS+DVBmX+EKk=
-X-Google-Smtp-Source: AKy350bVjU523dSJdWRv3YB7nrXwNMFf/bpzrH+1dTJMw8eM6dkJ/1UM5ONhbyeFmmLTHRGZyoRWkw==
-X-Received: by 2002:a2e:7c16:0:b0:2a7:6544:8e42 with SMTP id x22-20020a2e7c16000000b002a765448e42mr2680129ljc.19.1681556462447;
-        Sat, 15 Apr 2023 04:01:02 -0700 (PDT)
-Received: from [192.168.1.101] (abyk99.neoplus.adsl.tpnet.pl. [83.9.30.99])
-        by smtp.gmail.com with ESMTPSA id o6-20020a2e7306000000b002a77792f2c5sm1250470ljc.62.2023.04.15.04.01.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Apr 2023 04:01:02 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Sat, 15 Apr 2023 13:00:30 +0200
-Subject: [PATCH] drm/panel: novatek-nt35950: Improve error handling
+        Sat, 15 Apr 2023 07:14:56 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115483AAD;
+        Sat, 15 Apr 2023 04:14:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1681557263; i=j.neuschaefer@gmx.net;
+        bh=ouLPlj+JJ99qgDIlMPBR/EYcxhVRtACUcMPo8tbwbOQ=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=uZXx8dQMxVULrYtSTRXPEzJijQbvPJRt/WbbEFmHD1PV6fQ3UZmEpVnpwhkRe+rXu
+         LRauDwg2IcZ/xQgWnURE9d6OlpM7JTvwB+rwUlnpkWTqetFEEF2i8k8rqOTXTU0aua
+         Nvq2Dcb+cTbWBWozgiWZk99detq8pSJ7NNvIl8pdvbLMiH/8IUsGNlksAj3q61gRcX
+         CZrY5EOsw+lik9nqnCnI/ZumOTc1OvA5QoOxAI8H8DROaPeDftbWoGFm6M/dFf9J9q
+         M7vg1meF/S+gvEXTUIVWLDK45L6XO5vf9d3SS0c3yUkRFwBYzoWeAilnEbwr5YK1Nf
+         T7elsU8P8PqkA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([95.223.44.193]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MJmKh-1q3OOF3S81-00K6p4; Sat, 15
+ Apr 2023 13:14:22 +0200
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-clk@vger.kernel.org, openbmc@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v6 0/2] Nuvoton WPCM450 clock and reset driver
+Date:   Sat, 15 Apr 2023 13:13:53 +0200
+Message-Id: <20230415111355.696738-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230415-konrad-longbois-next-v1-1-ce695dc9df84@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAM2DOmQC/x2N0QrCMAwAf2Xk2cBWOyb+iviQrHELllRSlcHYv
- 1t8vIPjdqjiKhWu3Q4uX61arMFw6mBeyRZBTY0h9OHcx2HEZzGnhLnYwkUrmmxvvMQpjRMxxxS
- gpUxVkJ1sXltsn5ybfLk8dPu/bvfj+AHXrGiqewAAAA==
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1681556461; l=1735;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=GYsGlCcltfmdrDXO+aOe/68DSe4OLB+OCq4VQr9q5rk=;
- b=qX0g3RtIKAy8Nfq9bAUTgYgSz6DAnZPpT76Q7UeSQBoRm7gqApfY3f/4y8hglOm2kjT2dlObSL6K
- TK783grBCgyvBdW+Kh5+CCNxlGyjQtfUzV3PRVHcLhVHtNYdnfgA
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:gExXOv/2O3gKNHbYkqgUMQ+ff5aeYbPJIikimhemjhH8coxNWKa
+ EEXwdHe8j9t7sUlqDan9uKna2szlA7gkK0cpO1k9nKhaiuzKB/XAlOsQXGqUy7Kh5l42ODp
+ t3UZ6Ae8vPSc95VMUGDSELK/yKC2DPGS7kjwhQy5IM79H91jL3T2kuLA2/57V68tAJrZF74
+ bB/OzytdSMR2HWATIO+HA==
+UI-OutboundReport: notjunk:1;M01:P0:abN0CqTbuGw=;vNQ4JrSDd3wHvjX8plDu8+6GDPW
+ KKECW+/CCA3QPoMbP/JGQVSryqDm1EPgixyD9trdQ4csPDhEuDD0Mh5auy5GUhRI+mcZV5Ezf
+ vr7MvWrsmJywfyoxRvji48Hz6AM6XDaUSbuOKhuuWxtpBtvPPRGr/7My0s3hTARY4u42LMpV5
+ 1m9WAsyu2Er94lptU+X0tMvWy3o7v9sdrtZUHDiUAhTateq37AuWJlrEJAeQWzqRzIHzaSN5M
+ d6wnwCRw5n+6hZpyOrEUEPzK8ADgsgbQjGGs67GdZTxnA2cCZ9PPuMDNOXhsWoKRy4S1nYtgN
+ mOkbqm6DOztQr/QAZNnknEuKWghVpn1di/SMxKgnkZvscvdTxaZpzi6s2A9Bv+U79jLV1pf6O
+ E+stgaZ+rzcorjiFlYrf8bQtBTlTOwD3vFk3UbxbFlTX3DaRd6Jz249VvcZIsx+7s+dEQOYY0
+ Z1B6PbZHYC5auIEc3fqc+QOBuSStS9NEAXqvAIgULVBakabcd0G5TyO/L87dtMOxy8i4DgTQ6
+ JyJ/4SDHx4GhGzDg2/g3JmP7zcuv5a2Jp2TL3w9zr2yYRpYo/H0ZIfxafP0gsBolFrnCGN+fT
+ GqlTGLbTrpL3NcvLuNzbIK/dwbs9WAmf8sU7Q7AKs4Ly/sj2QGzuvTkeL+N/COZLglFG0UADS
+ TVIXW9JFTDedRCMpGRWGbQshdyPvD1iCcJSI+c+GEDcGQ93UzOYf/isdt4qKZknWiyc4Wh8lN
+ +GTi0JnFWbcNfdKTrvOg2qnVORZwjz5laaA9APTMO4ZJKlgSxYCmlw09yFEtGm4ykl2he3v2V
+ mwhnoMES9P85/8dMSJzG75w2XZmTNevAPdqLh3cqyhQxDqUbf9xi9ut4ZwBodJla/fkNH+fA6
+ LeE2U5ckpfF7DCts/jxVWsO0Q/ZXo/4yvPwL7cuT7prk7Mpy51vlHGsxRzGFTT0agTiFiv77C
+ DZHhOxAwrr++bG2F2Z6Emv4yHnk=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In a very peculiar case when probing and registering with the secondary
-DSI host succeeds, but the OF backlight or DSI attachment fails, the
-primary DSI device is automatically cleaned up, but the secondary one
-is not, leading to -EEXIST when the driver core tries to handle
--EPROBE_DEFER.
+This series adds support for the clock and reset controller in the Nuvoton
+WPCM450 SoC. This means that the clock rates for peripherals will be calcu=
+lated
+automatically based on the clock tree as it was preconfigured by the bootl=
+oader.
+The 24 MHz dummy clock, that is currently in the devicetree, is no longer =
+needed.
+Somewhat unfortunately, this also means that there is a breaking change on=
+ce
+the devicetree starts relying on the clock driver, but I find it acceptabl=
+e in
+this case, because WPCM450 is still at a somewhat early stage.
 
-Unregister the DSI1 device manually on failure to prevent that.
 
-Fixes: 623a3531e9cf ("drm/panel: Add driver for Novatek NT35950 DSI DriverIC panels")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/gpu/drm/panel/panel-novatek-nt35950.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+v6:
+- Dropped all patches except the clock binding and the clock driver, becau=
+se
+  they have mostly been merged
+- Minor correction to how RESET_SIMPLE is selected
 
-diff --git a/drivers/gpu/drm/panel/panel-novatek-nt35950.c b/drivers/gpu/drm/panel/panel-novatek-nt35950.c
-index abf752b36a52..7498fc6258bb 100644
---- a/drivers/gpu/drm/panel/panel-novatek-nt35950.c
-+++ b/drivers/gpu/drm/panel/panel-novatek-nt35950.c
-@@ -585,8 +585,11 @@ static int nt35950_probe(struct mipi_dsi_device *dsi)
- 		       DRM_MODE_CONNECTOR_DSI);
- 
- 	ret = drm_panel_of_backlight(&nt->panel);
--	if (ret)
-+	if (ret) {
-+		mipi_dsi_device_unregister(nt->dsi[1]);
-+
- 		return dev_err_probe(dev, ret, "Failed to get backlight\n");
-+	}
- 
- 	drm_panel_add(&nt->panel);
- 
-@@ -602,6 +605,9 @@ static int nt35950_probe(struct mipi_dsi_device *dsi)
- 
- 		ret = mipi_dsi_attach(nt->dsi[i]);
- 		if (ret < 0) {
-+			/* If we fail to attach to either host, we're done */
-+			mipi_dsi_device_unregister(nt->dsi[1]);
-+
- 			return dev_err_probe(dev, ret,
- 					     "Cannot attach to DSI%d host.\n", i);
- 		}
+v5:
+- Dropped patch 2 (watchdog: npcm: Enable clock if provided), which
+  was since merged upstream
+- Added patch 2 (clocksource: timer-npcm7xx: Enable timer 1 clock before u=
+se) again,
+  because I wasn't able to find it in linux-next
+- Switched the driver to using struct clk_parent_data
+- Rebased on 6.1-rc3
 
----
-base-commit: 035ba5f9cf511b9299fd9c9d0688ef930d33c886
-change-id: 20230415-konrad-longbois-next-847d57abb4d2
+v4:
+- Leave WDT clock running during after restart handler
+- Fix reset controller initialization
+- Dropped patch 2/7 (clocksource: timer-npcm7xx: Enable timer 1 clock befo=
+re use),
+  as it was applied by Daniel Lezcano
 
-Best regards,
--- 
-Konrad Dybcio <konrad.dybcio@linaro.org>
+v3:
+- https://lore.kernel.org/lkml/20220508194333.2170161-1-j.neuschaefer@gmx.=
+net/
+- Changed "refclk" string to "ref"
+- Fixed some dead code in the driver
+- Added clk_prepare_enable call to the watchdog restart handler
+- Added a few review tags
+
+v2:
+- https://lore.kernel.org/lkml/20220429172030.398011-1-j.neuschaefer@gmx.n=
+et/
+- various small improvements
+
+v1:
+- https://lore.kernel.org/lkml/20220422183012.444674-1-j.neuschaefer@gmx.n=
+et/
+
+Jonathan Neusch=C3=A4fer (2):
+  dt-bindings: clock: Add Nuvoton WPCM450 clock/reset controller
+  clk: wpcm450: Add Nuvoton WPCM450 clock/reset controller driver
+
+ .../bindings/clock/nuvoton,wpcm450-clk.yaml   |  66 +++
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/clk-wpcm450.c                     | 375 ++++++++++++++++++
+ drivers/reset/Kconfig                         |   2 +-
+ .../dt-bindings/clock/nuvoton,wpcm450-clk.h   |  67 ++++
+ 5 files changed, 510 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,wpcm45=
+0-clk.yaml
+ create mode 100644 drivers/clk/clk-wpcm450.c
+ create mode 100644 include/dt-bindings/clock/nuvoton,wpcm450-clk.h
+
+=2D-
+2.39.2
 
