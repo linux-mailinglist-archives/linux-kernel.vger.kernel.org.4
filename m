@@ -2,51 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 513D26E3385
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 22:25:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B8F6E3389
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 22:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbjDOUZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 16:25:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49594 "EHLO
+        id S229984AbjDOU36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 16:29:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbjDOUY7 (ORCPT
+        with ESMTP id S229545AbjDOU35 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 16:24:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3F1358C
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 13:24:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 78B2661189
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 20:24:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85F80C433D2;
-        Sat, 15 Apr 2023 20:24:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681590296;
-        bh=OcdAMD4h6vpRlUyg25ns5nyLBp7B81xMjeVUfm1e5Pc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hh7ylH3TAq8W+WTOkeAwm1IeWriB8dot0jW5WMO7AtG6BP4uRV0KABZBdRADOcIbO
-         3LhmL10ZA1Y7B8OBivvjbt3josXwGA5KV60XNwIjrgKOoW258ThaqYPaC6pddAYmf1
-         K7b8veYM3k/iC6b1kPJVmBPXCY0/5znYRxpK1is8iO1li7HWaJSV3IYRn0Pxy84lI/
-         clOdkgVvpgiXXwSxHeGIO1Z6gPNNaRy+T87AF6fT0JNg8fXOnDflMrfQSxr2gZ7VCY
-         kj0EHIBhfhbKgT3dj1w3hQ6KXQfQkVlBJGWRHh6CwhFYqT0cQg0GYPCzw4hRRx8lH7
-         be2qVaGntfg/A==
-From:   SeongJae Park <sj@kernel.org>
-To:     SeongJae Park <sj@kernel.org>
-Cc:     Ricardo Pardini <ricardo@pardini.net>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: linux: change tools/vm to tools/mm breaks "make clean" in tools dir
-Date:   Sat, 15 Apr 2023 20:24:54 +0000
-Message-Id: <20230415202454.13558-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230415173915.6915-1-sj@kernel.org>
-References: 
+        Sat, 15 Apr 2023 16:29:57 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D18E1BCA
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 13:29:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681590595; x=1713126595;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=cslb83PYO8RFoDZQjrD5KlS18ENccnRVEY5NjA94Gqw=;
+  b=WnPcN3lfHdxzUe4Uo5VgCgZNZ7F2vkz/CmsXYPk1nKlDbIQk+LTkt5HO
+   zp7OucUW6kn1Yp2wMabpZKcyW7fjxtkyjr4VRr+PmSvZSMjJGVqklHSow
+   1IhdSPGd8ni1n1ZBb5sw5wyQbTkgf7EM09fyfnP/93GwMqVdg1IQmvoPj
+   uYp15GrT5W5h6fGd1XPaXUaSczikEMY7yV+RcMaGHwhwVOlyqsCEpjIyY
+   ehY0GG77B+7xQh34Bxk1O7ouVNPXTSmCKD8UjcorR5stAObl9Lb3ovKUF
+   WD87Gk5Vw3J2E39yiLezcvYuI2n0ePWR+FGI1H/b98D4sa8Fey7EC8S/G
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="430970886"
+X-IronPort-AV: E=Sophos;i="5.99,200,1677571200"; 
+   d="scan'208";a="430970886"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2023 13:29:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="814316769"
+X-IronPort-AV: E=Sophos;i="5.99,200,1677571200"; 
+   d="scan'208";a="814316769"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 15 Apr 2023 13:29:53 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pnmWu-000bKr-2q;
+        Sat, 15 Apr 2023 20:29:52 +0000
+Date:   Sun, 16 Apr 2023 04:29:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:irq/core] BUILD SUCCESS
+ 803235982b8c086184d04798d9079d236f352f88
+Message-ID: <643b0937.OfjZ96FQtcKLbTVy%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,150 +64,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/core
+branch HEAD: 803235982b8c086184d04798d9079d236f352f88  genirq: Update affinity of secondary threads
 
+elapsed time: 726m
 
-I got below breat bug report from Ricardo via personal mail.  Forwarding to
-mailing lists under Ricardo's approval for sharing the context.
+configs tested: 166
+configs skipped: 9
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Thanks,
-SJ
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha        buildonly-randconfig-r001-20230409   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc          buildonly-randconfig-r004-20230409   gcc  
+arc                                 defconfig   gcc  
+arc                            hsdk_defconfig   gcc  
+arc                  randconfig-r001-20230413   gcc  
+arc                  randconfig-r013-20230410   gcc  
+arc                  randconfig-r016-20230415   gcc  
+arc                  randconfig-r034-20230413   gcc  
+arc                  randconfig-r043-20230409   gcc  
+arc                  randconfig-r043-20230410   gcc  
+arc                  randconfig-r043-20230412   gcc  
+arc                  randconfig-r043-20230413   gcc  
+arc                  randconfig-r043-20230415   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r046-20230409   clang
+arm                  randconfig-r046-20230410   clang
+arm                  randconfig-r046-20230412   clang
+arm                  randconfig-r046-20230413   gcc  
+arm                  randconfig-r046-20230415   gcc  
+arm64                            allyesconfig   gcc  
+arm64        buildonly-randconfig-r003-20230409   clang
+arm64                               defconfig   gcc  
+csky         buildonly-randconfig-r004-20230410   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r003-20230413   gcc  
+csky                 randconfig-r031-20230409   gcc  
+hexagon      buildonly-randconfig-r002-20230413   clang
+hexagon      buildonly-randconfig-r002-20230415   clang
+hexagon      buildonly-randconfig-r003-20230414   clang
+hexagon      buildonly-randconfig-r006-20230409   clang
+hexagon              randconfig-r011-20230410   clang
+hexagon              randconfig-r012-20230415   clang
+hexagon              randconfig-r041-20230409   clang
+hexagon              randconfig-r041-20230410   clang
+hexagon              randconfig-r041-20230412   clang
+hexagon              randconfig-r041-20230413   clang
+hexagon              randconfig-r041-20230415   clang
+hexagon              randconfig-r045-20230409   clang
+hexagon              randconfig-r045-20230410   clang
+hexagon              randconfig-r045-20230412   clang
+hexagon              randconfig-r045-20230413   clang
+hexagon              randconfig-r045-20230415   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230410   clang
+i386                 randconfig-a002-20230410   clang
+i386                 randconfig-a003-20230410   clang
+i386                 randconfig-a004-20230410   clang
+i386                 randconfig-a005-20230410   clang
+i386                 randconfig-a006-20230410   clang
+i386                          randconfig-a011   clang
+i386                          randconfig-a012   gcc  
+i386                          randconfig-a013   clang
+i386                          randconfig-a014   gcc  
+i386                          randconfig-a015   clang
+i386                          randconfig-a016   gcc  
+ia64                             allmodconfig   gcc  
+ia64         buildonly-randconfig-r001-20230413   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r015-20230410   gcc  
+ia64                 randconfig-r036-20230413   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch    buildonly-randconfig-r001-20230410   gcc  
+loongarch    buildonly-randconfig-r003-20230413   gcc  
+loongarch    buildonly-randconfig-r004-20230414   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r016-20230410   gcc  
+loongarch            randconfig-r032-20230409   gcc  
+m68k                             allmodconfig   gcc  
+m68k         buildonly-randconfig-r002-20230409   gcc  
+m68k                                defconfig   gcc  
+m68k                        m5272c3_defconfig   gcc  
+m68k                 randconfig-r004-20230413   gcc  
+m68k                 randconfig-r011-20230415   gcc  
+microblaze           randconfig-r014-20230415   gcc  
+microblaze           randconfig-r032-20230410   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r035-20230410   gcc  
+nios2        buildonly-randconfig-r005-20230415   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r011-20230409   gcc  
+nios2                randconfig-r033-20230413   gcc  
+openrisc     buildonly-randconfig-r005-20230409   gcc  
+openrisc     buildonly-randconfig-r006-20230410   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r012-20230409   gcc  
+parisc               randconfig-r013-20230415   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc      buildonly-randconfig-r002-20230414   gcc  
+powerpc      buildonly-randconfig-r005-20230413   clang
+powerpc      buildonly-randconfig-r006-20230415   clang
+powerpc                     mpc83xx_defconfig   gcc  
+powerpc              randconfig-r035-20230413   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r014-20230410   gcc  
+riscv                randconfig-r015-20230415   clang
+riscv                randconfig-r042-20230409   gcc  
+riscv                randconfig-r042-20230410   gcc  
+riscv                randconfig-r042-20230412   gcc  
+riscv                randconfig-r042-20230413   clang
+riscv                randconfig-r042-20230415   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390         buildonly-randconfig-r001-20230415   clang
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230409   gcc  
+s390                 randconfig-r044-20230410   gcc  
+s390                 randconfig-r044-20230412   gcc  
+s390                 randconfig-r044-20230413   clang
+s390                 randconfig-r044-20230415   clang
+sh                               allmodconfig   gcc  
+sh           buildonly-randconfig-r003-20230410   gcc  
+sh                     magicpanelr2_defconfig   gcc  
+sh                         microdev_defconfig   gcc  
+sh                   randconfig-r005-20230413   gcc  
+sh                   randconfig-r012-20230410   gcc  
+sh                   randconfig-r014-20230409   gcc  
+sh                   randconfig-r015-20230409   gcc  
+sh                   sh7724_generic_defconfig   gcc  
+sh                  sh7785lcr_32bit_defconfig   gcc  
+sh                          urquell_defconfig   gcc  
+sparc        buildonly-randconfig-r002-20230410   gcc  
+sparc        buildonly-randconfig-r003-20230415   gcc  
+sparc        buildonly-randconfig-r004-20230415   gcc  
+sparc        buildonly-randconfig-r005-20230410   gcc  
+sparc        buildonly-randconfig-r006-20230414   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r036-20230409   gcc  
+sparc64      buildonly-randconfig-r005-20230414   gcc  
+sparc64              randconfig-r006-20230413   gcc  
+sparc64              randconfig-r031-20230410   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                        randconfig-a001   clang
+x86_64                        randconfig-a002   gcc  
+x86_64                        randconfig-a003   clang
+x86_64                        randconfig-a004   gcc  
+x86_64                        randconfig-a005   clang
+x86_64                        randconfig-a006   gcc  
+x86_64               randconfig-a011-20230410   gcc  
+x86_64               randconfig-a012-20230410   gcc  
+x86_64               randconfig-a013-20230410   gcc  
+x86_64               randconfig-a014-20230410   gcc  
+x86_64               randconfig-a015-20230410   gcc  
+x86_64               randconfig-a016-20230410   gcc  
+x86_64                        randconfig-k001   clang
+x86_64                               rhel-8.3   gcc  
+xtensa       buildonly-randconfig-r004-20230413   gcc  
 
-On Sat, 15 Apr 2023 17:39:15 +0000 SeongJae Park <sj@kernel.org> wrote:
-
-> Hi Ricardo,
-> 
-> On Sat, 15 Apr 2023 18:55:41 +0200 Ricardo Pardini <ricardo@pardini.net> wrote:
-> 
-> > Hey SJ, here's a hack I had to do. I'm not on the mailing list, sorry.
-> 
-> No problem.  If you don't mind, please feel free to send any mail to the
-> mailing list even if you don't subscribe.  You can also read the mails from
-> archives like lore.kernel.org.
-> 
-> > I figure the tools/Makefile needs love after the vm->mm rename, wanted
-> > to give you a heads up.
-> > 
-> > + # Small detour: in v6.3-rc1, in commit
-> > https://github.com/torvalds/linux/commit/799fb82aa132fa3a3886b7872997a5a84e820062,
-> > + #               the tools/vm dir was renamed to tools/mm.
-> > Unfortunately tools/Makefile still expects it to exist,
-> > + #               and "make clean" in the "/tools" dir fails. Drop in
-> > a fake Makefile there to work around this.
-> > 
-> > From https://patch-diff.githubusercontent.com/raw/armbian/build/pull/5059.patch
-> 
-> Thank you very much for this report!  I confirmed the issue can be reproduced
-> on my machine and fixed with below patch.  If you see no problem with the
-> patch, I will post it to the mailing list.
-> 
-> 
-> Thanks,
-> SJ
-> 
-> > 
-> > Cordially,
-> > 
-> > -- 
-> > Ricardo Pardini
-> > Armbian
-> 
-> 
-> ================================== 8< ==========================================
-> 
-> From de3d8d9a84e1b37aeefb01935dc8d5a390829a6c Mon Sep 17 00:00:00 2001
-> From: SeongJae Park <sj@kernel.org>
-> Date: Sat, 15 Apr 2023 17:27:18 +0000
-> Subject: [PATCH] tools/Makefile: do missed s/vm/mm/
-> 
-> Commit 799fb82aa132 ("tools/vm: rename tools/vm to tools/mm") missed
-> renaming 'vm' in 'tools/Makefile' to 'mm'.  As a result, 'make clean'
-> under 'tools/' directory fails as below:
-> 
->     $ make -C tools clean
->       DESCEND vm
->     make[1]: Entering directory '/linux/tools/vm'
->     make[1]: *** No rule to make target 'clean'.  Stop.
->     make[1]: Leaving directory '/linux/tools/vm'
->     make: *** [Makefile:173: vm_clean] Error 2
->     make: Leaving directory '/linux/tools'
-> 
-> Do the missed rename.
-> 
-> Reported-by: Ricardo Pardini <ricardo@pardini.net>
-> Fixes: 799fb82aa132 ("tools/vm: rename tools/vm to tools/mm")
-> Signed-off-by: SeongJae Park <sj@kernel.org>
-> ---
->  tools/Makefile | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
-> 
-> diff --git a/tools/Makefile b/tools/Makefile
-> index e497875fc7e3..37e9f6804832 100644
-> --- a/tools/Makefile
-> +++ b/tools/Makefile
-> @@ -39,7 +39,7 @@ help:
->  	@echo '  turbostat              - Intel CPU idle stats and freq reporting tool'
->  	@echo '  usb                    - USB testing tools'
->  	@echo '  virtio                 - vhost test module'
-> -	@echo '  vm                     - misc vm tools'
-> +	@echo '  mm                     - misc mm tools'
->  	@echo '  wmi			- WMI interface examples'
->  	@echo '  x86_energy_perf_policy - Intel energy policy tool'
->  	@echo ''
-> @@ -69,7 +69,7 @@ acpi: FORCE
->  cpupower: FORCE
->  	$(call descend,power/$@)
->  
-> -cgroup counter firewire hv guest bootconfig spi usb virtio vm bpf iio gpio objtool leds wmi pci firmware debugging tracing: FORCE
-> +cgroup counter firewire hv guest bootconfig spi usb virtio mm bpf iio gpio objtool leds wmi pci firmware debugging tracing: FORCE
->  	$(call descend,$@)
->  
->  bpf/%: FORCE
-> @@ -118,7 +118,7 @@ kvm_stat: FORCE
->  
->  all: acpi cgroup counter cpupower gpio hv firewire \
->  		perf selftests bootconfig spi turbostat usb \
-> -		virtio vm bpf x86_energy_perf_policy \
-> +		virtio mm bpf x86_energy_perf_policy \
->  		tmon freefall iio objtool kvm_stat wmi \
->  		pci debugging tracing thermal thermometer thermal-engine
->  
-> @@ -128,7 +128,7 @@ acpi_install:
->  cpupower_install:
->  	$(call descend,power/$(@:_install=),install)
->  
-> -cgroup_install counter_install firewire_install gpio_install hv_install iio_install perf_install bootconfig_install spi_install usb_install virtio_install vm_install bpf_install objtool_install wmi_install pci_install debugging_install tracing_install:
-> +cgroup_install counter_install firewire_install gpio_install hv_install iio_install perf_install bootconfig_install spi_install usb_install virtio_install mm_install bpf_install objtool_install wmi_install pci_install debugging_install tracing_install:
->  	$(call descend,$(@:_install=),install)
->  
->  selftests_install:
-> @@ -158,7 +158,7 @@ kvm_stat_install:
->  install: acpi_install cgroup_install counter_install cpupower_install gpio_install \
->  		hv_install firewire_install iio_install \
->  		perf_install selftests_install turbostat_install usb_install \
-> -		virtio_install vm_install bpf_install x86_energy_perf_policy_install \
-> +		virtio_install mm_install bpf_install x86_energy_perf_policy_install \
->  		tmon_install freefall_install objtool_install kvm_stat_install \
->  		wmi_install pci_install debugging_install intel-speed-select_install \
->  		tracing_install thermometer_install thermal-engine_install
-> @@ -169,7 +169,7 @@ acpi_clean:
->  cpupower_clean:
->  	$(call descend,power/cpupower,clean)
->  
-> -cgroup_clean counter_clean hv_clean firewire_clean bootconfig_clean spi_clean usb_clean virtio_clean vm_clean wmi_clean bpf_clean iio_clean gpio_clean objtool_clean leds_clean pci_clean firmware_clean debugging_clean tracing_clean:
-> +cgroup_clean counter_clean hv_clean firewire_clean bootconfig_clean spi_clean usb_clean virtio_clean mm_clean wmi_clean bpf_clean iio_clean gpio_clean objtool_clean leds_clean pci_clean firmware_clean debugging_clean tracing_clean:
->  	$(call descend,$(@:_clean=),clean)
->  
->  libapi_clean:
-> @@ -211,7 +211,7 @@ build_clean:
->  
->  clean: acpi_clean cgroup_clean counter_clean cpupower_clean hv_clean firewire_clean \
->  		perf_clean selftests_clean turbostat_clean bootconfig_clean spi_clean usb_clean virtio_clean \
-> -		vm_clean bpf_clean iio_clean x86_energy_perf_policy_clean tmon_clean \
-> +		mm_clean bpf_clean iio_clean x86_energy_perf_policy_clean tmon_clean \
->  		freefall_clean build_clean libbpf_clean libsubcmd_clean \
->  		gpio_clean objtool_clean leds_clean wmi_clean pci_clean firmware_clean debugging_clean \
->  		intel-speed-select_clean tracing_clean thermal_clean thermometer_clean thermal-engine_clean
-> -- 
-> 2.25.1
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
