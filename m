@@ -2,127 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A09D6E30F7
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 12:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD3A16E3096
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 12:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbjDOKuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 06:50:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51038 "EHLO
+        id S229774AbjDOKgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 06:36:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231255AbjDOKuE (ORCPT
+        with ESMTP id S229540AbjDOKgU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 06:50:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36737689;
-        Sat, 15 Apr 2023 03:49:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 656D7617E9;
-        Sat, 15 Apr 2023 10:47:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D92CBC4339C;
-        Sat, 15 Apr 2023 10:47:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681555631;
-        bh=do8+kPrEABA/+sArd48GuvtE5icgNiKsJ/7FNgFAelM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dporkX0WW0fhZFEVO/F2CASskX2d40MRRLEmFBG1IID+1LRE6lLfRquePq7Uq/g+4
-         fBDM8CehfHL1DswkW/cB8Ua53h5Qwih+GIsbNxWImA/ocQhZyBG2F8JoAfM7MnCTtO
-         APoUUrCIMJ+M8XOYa3Ub122/btV/J/HRIVatMN/jQZVhKIQmzEfqk8xhxcHsiWPJA9
-         omQF8OYi6CrNh+NN7ocUCEP4Qf8qNFZe5bRNfaIjhFI1Cp9rPGkZWq1WR6VWnbArCl
-         N/JEnLKc+RPHbx6ArQToBUniAVg+FDdvFuPgKQ4fP9IoPe7Cg3xj/wsSY3+iTDykrU
-         ED0G3sj882wMQ==
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 11/11] dmaengine: dw-axi-dmac: support polled mode
-Date:   Sat, 15 Apr 2023 18:36:01 +0800
-Message-Id: <20230415103601.2979-12-jszhang@kernel.org>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230415103601.2979-1-jszhang@kernel.org>
-References: <20230415103601.2979-1-jszhang@kernel.org>
+        Sat, 15 Apr 2023 06:36:20 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3474EDE
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 03:36:18 -0700 (PDT)
+Received: from fsav119.sakura.ne.jp (fsav119.sakura.ne.jp [27.133.134.246])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 33FAa749075332;
+        Sat, 15 Apr 2023 19:36:07 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav119.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav119.sakura.ne.jp);
+ Sat, 15 Apr 2023 19:36:07 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav119.sakura.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 33FAa7LV075329
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Sat, 15 Apr 2023 19:36:07 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <65e79cf8-8713-4d2d-7a50-76d7e2aa454a@I-love.SAKURA.ne.jp>
+Date:   Sat, 15 Apr 2023 19:36:06 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 3/7] mm/gup: remove vmas parameter from
+ get_user_pages_remote()
+Content-Language: en-US
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1681547405.git.lstoakes@gmail.com>
+ <631001ecc556c5e348ff4f47719334c31f7bd592.1681547405.git.lstoakes@gmail.com>
+ <b4706369-f97c-8b78-f194-b45a870114e1@I-love.SAKURA.ne.jp>
+ <63d92734-2185-439c-bbc7-53a4720f5d4a@lucifer.local>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <63d92734-2185-439c-bbc7-53a4720f5d4a@lucifer.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Run in polled mode if the DMA_PREP_INTERRUPT flag is not provided.
+On 2023/04/15 19:14, Lorenzo Stoakes wrote:
+> On Sat, Apr 15, 2023 at 06:52:41PM +0900, Tetsuo Handa wrote:
+>> On 2023/04/15 18:08, Lorenzo Stoakes wrote:
+>>> @@ -475,10 +474,14 @@ int uprobe_write_opcode(struct arch_uprobe *auprobe, struct mm_struct *mm,
+>>>  		gup_flags |= FOLL_SPLIT_PMD;
+>>>  	/* Read the page with vaddr into memory */
+>>>  	ret = get_user_pages_remote(mm, vaddr, 1, gup_flags,
+>>> -				    &old_page, &vma, NULL);
+>>> +				    &old_page, NULL);
+>>>  	if (ret <= 0)
+>>>  		return ret;
+>>>
+>>> +	vma = vma_lookup(mm, vaddr);
+>>> +	if (!vma)
+>>> +		goto put_old;
+>>> +
+>>>  	ret = verify_opcode(old_page, vaddr, &opcode);
+>>>  	if (ret <= 0)
+>>>  		goto put_old;
+>>
+>> This conversion looks wrong.
+>> This causes returning a positive number when vma_lookup() returned NULL.
+>>
+>>   * Return 0 (success) or a negative errno.
+>>
+> 
+> In reality it shouldn't be possible for vma to return NULL, I'm adding the
+> checks to be extra careful.
+> 
+> In any case you're right, attaching a -fix patch to avoid spam:-
 
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
----
- drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c | 11 ++++++++++-
- drivers/dma/dw-axi-dmac/dw-axi-dmac.h          |  1 +
- 2 files changed, 11 insertions(+), 1 deletion(-)
+If you want to return -EINVAL when vma_lookup() returned NULL for whatever
+unexpected reason, returning -EOPNOTSUPP in below path looks strange.
 
-diff --git a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
-index 1d00793a83bf..8daeb22d4560 100644
---- a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
-+++ b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
-@@ -383,7 +383,10 @@ static void axi_chan_block_xfer_start(struct axi_dma_chan *chan,
- 	write_chan_llp(chan, first->hw_desc[0].llp | lms);
- 
- 	irq_mask = DWAXIDMAC_IRQ_DMA_TRF | DWAXIDMAC_IRQ_ALL_ERR;
--	axi_chan_irq_sig_set(chan, irq_mask);
-+	if (chan->polled)
-+		axi_chan_irq_sig_set(chan, DWAXIDMAC_IRQ_NONE);
-+	else
-+		axi_chan_irq_sig_set(chan, irq_mask);
- 
- 	/* Generate 'suspend' status but don't generate interrupt */
- 	irq_mask |= DWAXIDMAC_IRQ_SUSPENDED;
-@@ -714,6 +717,7 @@ dw_axi_dma_chan_prep_cyclic(struct dma_chan *dchan, dma_addr_t dma_addr,
- 	if (unlikely(!desc))
- 		goto err_desc_get;
- 
-+	chan->polled = !(flags & DMA_PREP_INTERRUPT);
- 	chan->direction = direction;
- 	desc->chan = chan;
- 	chan->cyclic = true;
-@@ -796,6 +800,7 @@ dw_axi_dma_chan_prep_slave_sg(struct dma_chan *dchan, struct scatterlist *sgl,
- 
- 	desc->chan = chan;
- 	desc->length = 0;
-+	chan->polled = !(flags & DMA_PREP_INTERRUPT);
- 	chan->direction = direction;
- 
- 	for_each_sg(sgl, sg, sg_len, i) {
-@@ -859,6 +864,7 @@ dma_chan_prep_dma_memcpy(struct dma_chan *dchan, dma_addr_t dst_adr,
- 	if (unlikely(!desc))
- 		goto err_desc_get;
- 
-+	chan->polled = !(flags & DMA_PREP_INTERRUPT);
- 	desc->chan = chan;
- 	num = 0;
- 	desc->length = 0;
-@@ -1139,6 +1145,9 @@ dma_chan_tx_status(struct dma_chan *dchan, dma_cookie_t cookie,
- 	u32 length;
- 	u32 len;
- 
-+	if (chan->polled)
-+		dw_axi_dma_handle_ch(chan);
-+
- 	status = dma_cookie_status(dchan, cookie, txstate);
- 	if (status == DMA_COMPLETE || !txstate)
- 		return status;
-diff --git a/drivers/dma/dw-axi-dmac/dw-axi-dmac.h b/drivers/dma/dw-axi-dmac/dw-axi-dmac.h
-index f57961620d2d..e4fbc38446ec 100644
---- a/drivers/dma/dw-axi-dmac/dw-axi-dmac.h
-+++ b/drivers/dma/dw-axi-dmac/dw-axi-dmac.h
-@@ -54,6 +54,7 @@ struct axi_dma_chan {
- 	bool				cyclic;
- 	/* these other elements are all protected by vc.lock */
- 	bool				is_paused;
-+	bool				polled;
- };
- 
- struct dw_axi_dma {
--- 
-2.39.2
+> @@ -448,7 +448,8 @@ static int __access_remote_tags(struct mm_struct *mm, unsigned long addr,
+>  		 * would cause the existing tags to be cleared if the page
+>  		 * was never mapped with PROT_MTE.
+>  		 */
+> -		if (!(vma->vm_flags & VM_MTE)) {
+> +		vma = vma_lookup(mm, addr);
+> +		if (!vma || !(vma->vm_flags & VM_MTE)) {
+>  			ret = -EOPNOTSUPP;
+>  			put_page(page);
+>  			break;
+
+Also,
+
+> @@ -5591,7 +5591,9 @@ int __access_remote_vm(struct mm_struct *mm, unsigned long addr, void *buf,
+>  		struct page *page = NULL;
+>  
+>  		ret = get_user_pages_remote(mm, addr, 1,
+> -				gup_flags, &page, &vma, NULL);
+> +				gup_flags, &page, NULL);
+> +		vma = vma_lookup(mm, addr);
+> +
+>  		if (ret <= 0) {
+>  #ifndef CONFIG_HAVE_IOREMAP_PROT
+>  			break;
+> @@ -5600,7 +5602,6 @@ int __access_remote_vm(struct mm_struct *mm, unsigned long addr, void *buf,
+>  			 * Check if this is a VM_IO | VM_PFNMAP VMA, which
+>  			 * we can access using slightly different code.
+>  			 */
+> -			vma = vma_lookup(mm, addr);
+>  			if (!vma)
+>  				break;
+>  			if (vma->vm_ops && vma->vm_ops->access)
+> @@ -5617,11 +5618,11 @@ int __access_remote_vm(struct mm_struct *mm, unsigned long addr, void *buf,
+>  				bytes = PAGE_SIZE-offset;
+>  
+>  			maddr = kmap(page);
+> -			if (write) {
+> +			if (write && vma) {
+>  				copy_to_user_page(vma, page, addr,
+>  						  maddr + offset, buf, bytes);
+>  				set_page_dirty_lock(page);
+> -			} else {
+> +			} else if (vma) {
+>  				copy_from_user_page(vma, page, addr,
+>  						    buf, maddr + offset, bytes);
+>  			}
+
+not calling copy_{from,to}_user_page() if vma == NULL is not sufficient for
+propagating an error to caller.
 
