@@ -2,60 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A75496E2FAE
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 10:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBF376E2FB2
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 10:20:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbjDOITX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 04:19:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52414 "EHLO
+        id S229847AbjDOIUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 04:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjDOITV (ORCPT
+        with ESMTP id S229647AbjDOIUh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 04:19:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCDC04ED5
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 01:19:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 67F2D60E98
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 08:19:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68DCEC433D2;
-        Sat, 15 Apr 2023 08:19:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681546757;
-        bh=ljAiPSwIhWGmapP/c1uNdTrp/qDU7fl0aVv/azO7YYc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Wl3gzEypngqcW08OZvjH6HF9OZf/zXny3K7LUCUsq++UnsVLaDKvBzCnhntZEYtQK
-         AdB9V6nMsz4R1ufYFZULYMFVAZSDK8ynDrMXz1jq1KTK4udt9Q5xLqSIN9p4eTcs87
-         b50ZibD2Eh59IxclwgnAp1/U+qO7oK4EjJ0rv/gbAKKYQ+uqaqERJSJn1kGtIIFnr5
-         AHjH5ltIKRs+cDY9eMjqab2PHhVcroegZgBk10mO6WzgSLNbOP6m9LsjdE2kwul5XY
-         kmklVMWmjC1IK0WvXsS3piYyalfFDaaEw79LF5x/x+nWKSBDnFHZuVKa4vLKWoXDlO
-         a3MDw3OJUipSg==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, llvm@lists.linux.dev,
-        Vineet Gupta <vgupta@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH] [v2] mm: make arch_has_descending_max_zone_pfns() static
-Date:   Sat, 15 Apr 2023 10:18:20 +0200
-Message-Id: <20230415081904.969049-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Sat, 15 Apr 2023 04:20:37 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4785583;
+        Sat, 15 Apr 2023 01:20:35 -0700 (PDT)
+Date:   Sat, 15 Apr 2023 08:20:32 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1681546833;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GnzE4raEONRJxVjFOSpczBdz0wF9vVGe9QBOs99a6Io=;
+        b=jGtfoOqTGT8E5Do9fHd1GvUZxwj1vrZSvpdg8xhhvfk1ZkNHuvdDBL7jSUFpmYASiIEXyf
+        IySLiUeTf2Rzfx+rXAss+HAwasbhs756hQk3V3qQ1JKN9BVQvFgBmpjEm/OAdypMWk4f/s
+        7bW8JnUBOF3OELRNJd9bdDT7uBTut4Dnfccmupdjbpk6V2N+luFxw9MsK8qC4d702M32Hu
+        qdPQFlGFxkpkixwN3zosinErKAL71TcI6Jd1OFI2m+uQ8qs4GG//PSuwDhNfILfHDl4VkQ
+        c7iK7mJE+dccbk+FAzcPwq6MbGZxDE5MWqssF32bqu3YoetRkBQ3G1EleXbUIA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1681546833;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GnzE4raEONRJxVjFOSpczBdz0wF9vVGe9QBOs99a6Io=;
+        b=HNTu8wINmM5oDWBgRvFBNfmytR/i8xjyrsXdgYfQfZk/i/IN7rWORDJN+mAMlpD8ydk2Kw
+        j96aB9AjkV/NVRBA==
+From:   "tip-bot2 for Lingutla Chandrasekhar" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: irq/core] softirq: Add trace points for tasklet entry/exit
+Cc:     Lingutla Chandrasekhar <clingutla@codeaurora.org>,
+        "J. Avila" <elavila@google.com>, John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, maz@kernel.org
+In-Reply-To: <20230407230526.1685443-1-jstultz@google.com>
+References: <20230407230526.1685443-1-jstultz@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Message-ID: <168154683281.404.4623946113472484183.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,77 +67,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+The following commit has been merged into the irq/core branch of tip:
 
-clang produces a build failure on x86 for some randconfig builds
-after a change that moves around code to mm/mm_init.c:
+Commit-ID:     f4bf3ca2e5cba655824b6e0893a98dfb33ed24e5
+Gitweb:        https://git.kernel.org/tip/f4bf3ca2e5cba655824b6e0893a98dfb33ed24e5
+Author:        Lingutla Chandrasekhar <clingutla@codeaurora.org>
+AuthorDate:    Fri, 07 Apr 2023 23:05:26 
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Sat, 15 Apr 2023 10:17:16 +02:00
 
-Cannot find symbol for section 2: .text.
-mm/mm_init.o: failed
+softirq: Add trace points for tasklet entry/exit
 
-I have not been able to figure out why this happens, but the __weak
-annotation on arch_has_descending_max_zone_pfns() is the trigger here.
+Tasklets are supposed to finish their work quickly and should not block the
+current running process, but it is not guaranteed that they do so.
 
-Removing the weak function in favor of an open-coded Kconfig option
-check avoids the problem and becomes clearer as well as better to
-optimize by the compiler.
+Currently softirq_entry/exit can be used to analyse the total tasklets
+execution time, but that's not helpful to track individual tasklets
+execution time. That makes it hard to identify tasklet functions, which
+take more time than expected.
 
-Fixes: 9420f89db2dd ("mm: move most of core MM initialization to mm/mm_init.c")
-Cc: llvm@lists.linux.dev
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Add tasklet_entry/exit trace point support to track individual tasklet
+execution.
+
+Trivial usage example:
+   # echo 1 > /sys/kernel/debug/tracing/events/irq/tasklet_entry/enable
+   # echo 1 > /sys/kernel/debug/tracing/events/irq/tasklet_exit/enable
+   # cat /sys/kernel/debug/tracing/trace
+ # tracer: nop
+ #
+ # entries-in-buffer/entries-written: 4/4   #P:4
+ #
+ #                                _-----=> irqs-off/BH-disabled
+ #                               / _----=> need-resched
+ #                              | / _---=> hardirq/softirq
+ #                              || / _--=> preempt-depth
+ #                              ||| / _-=> migrate-disable
+ #                              |||| /     delay
+ #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+ #              | |         |   |||||     |         |
+           <idle>-0       [003] ..s1.   314.011428: tasklet_entry: tasklet=0xffffa01ef8db2740 function=tcp_tasklet_func
+           <idle>-0       [003] ..s1.   314.011432: tasklet_exit: tasklet=0xffffa01ef8db2740 function=tcp_tasklet_func
+           <idle>-0       [003] ..s1.   314.017369: tasklet_entry: tasklet=0xffffa01ef8db2740 function=tcp_tasklet_func
+           <idle>-0       [003] ..s1.   314.017371: tasklet_exit: tasklet=0xffffa01ef8db2740 function=tcp_tasklet_func
+
+Signed-off-by: Lingutla Chandrasekhar <clingutla@codeaurora.org>
+Signed-off-by: J. Avila <elavila@google.com>
+Signed-off-by: John Stultz <jstultz@google.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Link: https://lore.kernel.org/r/20230407230526.1685443-1-jstultz@google.com
+
+[elavila: Port to android-mainline]
+[jstultz: Rebased to upstream, cut unused trace points, added
+ comments for the tracepoints, reworded commit]
 ---
-v2: fix logic bug reported-by: kernel test robot <oliver.sang@intel.com>,
-see https://lore.kernel.org/oe-lkp/202304151422.5e4d380b-oliver.sang@intel.com
----
- arch/arc/mm/init.c | 5 -----
- include/linux/mm.h | 1 -
- mm/mm_init.c       | 4 ++--
- 3 files changed, 2 insertions(+), 8 deletions(-)
+ include/trace/events/irq.h | 47 +++++++++++++++++++++++++++++++++++++-
+ kernel/softirq.c           |  9 +++++--
+ 2 files changed, 54 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arc/mm/init.c b/arch/arc/mm/init.c
-index ce4e939a7f07..2b89b6c53801 100644
---- a/arch/arc/mm/init.c
-+++ b/arch/arc/mm/init.c
-@@ -74,11 +74,6 @@ void __init early_init_dt_add_memory_arch(u64 base, u64 size)
- 		base, TO_MB(size), !in_use ? "Not used":"");
- }
+diff --git a/include/trace/events/irq.h b/include/trace/events/irq.h
+index eeceafa..a07b460 100644
+--- a/include/trace/events/irq.h
++++ b/include/trace/events/irq.h
+@@ -160,6 +160,53 @@ DEFINE_EVENT(softirq, softirq_raise,
+ 	TP_ARGS(vec_nr)
+ );
  
--bool arch_has_descending_max_zone_pfns(void)
--{
--	return !IS_ENABLED(CONFIG_ARC_HAS_PAE40);
--}
--
- /*
-  * First memory setup routine called from setup_arch()
-  * 1. setup swapper's mm @init_mm
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 63acf4a598fe..75d8adce0aee 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3061,7 +3061,6 @@ extern void setup_per_cpu_pageset(void);
- extern int min_free_kbytes;
- extern int watermark_boost_factor;
- extern int watermark_scale_factor;
--extern bool arch_has_descending_max_zone_pfns(void);
++DECLARE_EVENT_CLASS(tasklet,
++
++	TP_PROTO(struct tasklet_struct *t, void *func),
++
++	TP_ARGS(t, func),
++
++	TP_STRUCT__entry(
++		__field(	void *,	tasklet)
++		__field(	void *,	func)
++	),
++
++	TP_fast_assign(
++		__entry->tasklet = t;
++		__entry->func = func;
++	),
++
++	TP_printk("tasklet=%ps function=%ps", __entry->tasklet, __entry->func)
++);
++
++/**
++ * tasklet_entry - called immediately before the tasklet is run
++ * @t: tasklet pointer
++ * @func: tasklet callback or function being run
++ *
++ * Used to find individual tasklet execution time
++ */
++DEFINE_EVENT(tasklet, tasklet_entry,
++
++	TP_PROTO(struct tasklet_struct *t, void *func),
++
++	TP_ARGS(t, func)
++);
++
++/**
++ * tasklet_exit - called immediately after the tasklet is run
++ * @t: tasklet pointer
++ * @func: tasklet callback or function being run
++ *
++ * Used to find individual tasklet execution time
++ */
++DEFINE_EVENT(tasklet, tasklet_exit,
++
++	TP_PROTO(struct tasklet_struct *t, void *func),
++
++	TP_ARGS(t, func)
++);
++
+ #endif /*  _TRACE_IRQ_H */
  
- /* nommu.c */
- extern atomic_long_t mmap_pages_allocated;
-diff --git a/mm/mm_init.c b/mm/mm_init.c
-index 35302b7bca83..7f7f9c677854 100644
---- a/mm/mm_init.c
-+++ b/mm/mm_init.c
-@@ -1754,9 +1754,9 @@ static void __init free_area_init_memoryless_node(int nid)
-  * Some architectures, e.g. ARC may have ZONE_HIGHMEM below ZONE_NORMAL. For
-  * such cases we allow max_zone_pfn sorted in the descending order
-  */
--bool __weak arch_has_descending_max_zone_pfns(void)
-+static bool arch_has_descending_max_zone_pfns(void)
- {
--	return false;
-+	return IS_ENABLED(CONFIG_ARC) && !IS_ENABLED(CONFIG_ARC_HAS_PAE40);
- }
- 
- /**
--- 
-2.39.2
-
+ /* This part must be outside protection */
+diff --git a/kernel/softirq.c b/kernel/softirq.c
+index c8a6913..1b72551 100644
+--- a/kernel/softirq.c
++++ b/kernel/softirq.c
+@@ -793,10 +793,15 @@ static void tasklet_action_common(struct softirq_action *a,
+ 		if (tasklet_trylock(t)) {
+ 			if (!atomic_read(&t->count)) {
+ 				if (tasklet_clear_sched(t)) {
+-					if (t->use_callback)
++					if (t->use_callback) {
++						trace_tasklet_entry(t, t->callback);
+ 						t->callback(t);
+-					else
++						trace_tasklet_exit(t, t->callback);
++					} else {
++						trace_tasklet_entry(t, t->func);
+ 						t->func(t->data);
++						trace_tasklet_exit(t, t->func);
++					}
+ 				}
+ 				tasklet_unlock(t);
+ 				continue;
