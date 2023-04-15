@@ -2,151 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98EE36E3182
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 15:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3AE36E3185
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 15:14:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbjDONJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 09:09:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56986 "EHLO
+        id S229917AbjDONOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 09:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbjDONJL (ORCPT
+        with ESMTP id S229678AbjDONOh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 09:09:11 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672ED49F9;
-        Sat, 15 Apr 2023 06:09:09 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id si1so22292048ejb.10;
-        Sat, 15 Apr 2023 06:09:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681564148; x=1684156148;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MmkdB2m8LRfDVpq0AlbkUd9MRTLzgba0G5f/0MwvZKM=;
-        b=POTaPjGb3OHOUpgy5zifdsNyPIwXCKUxu7EPej3sqe/Z7BvGs/j5qFd8y4lQE1Jeui
-         IpgXJjIBYg6GkU2CfMmq6VH+QiSkhlLq6LSLMJsuc9ZylhrPbkYIpLk20a0NlNz/sQsH
-         r+/Y6G5nPslMwdbW7TSWyBFNtTnz7AjH5DTWBfapEjmADr5Z4PCjMwlAbiI8pJH5oLcG
-         94YiHkE4EUFJBh3lY4JgHTDHdB8tRxDb7J2OufrZS6sv7Ag+duA7rdZgp6kkVNlYguQq
-         cPcM6Ig3uV1+a8Xa99vwIz8SghLr8B/ueyi6bYxVnXIT5PQLcRuRdpMpo9edeReahm+a
-         /H9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681564148; x=1684156148;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MmkdB2m8LRfDVpq0AlbkUd9MRTLzgba0G5f/0MwvZKM=;
-        b=PP0NufdyECzYS7/qROGjEjIVPs7GyaXo51EzyRkUK8kvB+eC6NY5NOvEE17LmdUxHn
-         rANF/q47wvPkS3ggG3otJ9fmmjYbL1yezv6ujKI7i/ThNKTXukTGXaqRGUNjnBZhxyZa
-         NsVaXouma0HnBl4GLqehjLMTzuztXa5abLOxydN6ay/0/7YugUKaWWKKj6XdCAbHfA9l
-         GuD0MrtgOAOOjqepp+F9rDYV4GeJ6zGK2LrXbHaNDcxsiYppoNF98vbsuHMY7KUT34fH
-         ByFxpssOEPUt040F48tYZn22VSKfiVBwFRM/u39bhhje5XfkJO3tMvaAi6XJWL1nabG7
-         4fLQ==
-X-Gm-Message-State: AAQBX9cwahJ4CvxeAfSPVb31ikokZfzRzk8eR0RaPIdP3Nc27RQzeMQQ
-        8nVnlnPye3O3ztG0+gtODRmBGpntCBE=
-X-Google-Smtp-Source: AKy350ZhV6fvjwW6Xnvq0B7PDvaEeeE6aHsGUoHHDgmmqIjW4CB++PzEuCxne4xPtEYQWWzKgpqmoQ==
-X-Received: by 2002:a17:906:d20d:b0:949:797e:ea91 with SMTP id w13-20020a170906d20d00b00949797eea91mr1877911ejz.56.1681564147760;
-        Sat, 15 Apr 2023 06:09:07 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id fl3-20020a1709072a8300b0094f396c7a7asm74422ejc.214.2023.04.15.06.09.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Apr 2023 06:09:07 -0700 (PDT)
-Date:   Sat, 15 Apr 2023 16:09:03 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Helge Deller <deller@gmx.de>, Cai Huoqing <cai.huoqing@linux.dev>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] video: fbdev: mmp: Fix deferred clk handling in
- mmphw_probe()
-Message-ID: <67353089-4966-424c-99c2-8524818f0e37@kili.mountain>
-References: <685f452cacc74f4983aaff2bc28a02a95e8aa8b7.1681414375.git.christophe.jaillet@wanadoo.fr>
+        Sat, 15 Apr 2023 09:14:37 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0310A4C26;
+        Sat, 15 Apr 2023 06:14:35 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 4AC481FDC5;
+        Sat, 15 Apr 2023 13:14:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1681564474; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=h5k/RbS3a6kwtihmho3Q3mrYWrzOBkRjuXgoZbNNYHI=;
+        b=XYysb9Th9C57KmHRUhQg/Xw5Cm563xxANOV4YkugAv5E/0rianuE7RlkMAwnZ3FJNh3eXK
+        NU++4s6YOZQlHwlxkk5kDfpndBq7aR6cCqQL1Q3IipQZsSHsstNov6m9Zw9uPaXOmmGAhr
+        mj2WAUhPhJUEiTCl2TYnAK3XicOnm+c=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1681564474;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=h5k/RbS3a6kwtihmho3Q3mrYWrzOBkRjuXgoZbNNYHI=;
+        b=S9v6bvc+eOJnhTovvE0tORWGe0nwUU7lfI9G+gDVn7mpKhy/QksaiuRZlHsoVMZzgKOuO/
+        tXVhupyvXQKqxoBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1CD7B1390E;
+        Sat, 15 Apr 2023 13:14:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id IfMcBTqjOmRIDgAAMHmgww
+        (envelope-from <hare@suse.de>); Sat, 15 Apr 2023 13:14:34 +0000
+Message-ID: <31765c8c-e895-4207-2b8c-39f6c7c83ece@suse.de>
+Date:   Sat, 15 Apr 2023 15:14:33 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <685f452cacc74f4983aaff2bc28a02a95e8aa8b7.1681414375.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [RFC 0/4] convert create_page_buffers to create_folio_buffers
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Pankaj Raghav <p.raghav@samsung.com>, brauner@kernel.org,
+        viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gost.dev@samsung.com
+References: <CGME20230414110825eucas1p1ed4d16627889ef8542dfa31b1183063d@eucas1p1.samsung.com>
+ <20230414110821.21548-1-p.raghav@samsung.com>
+ <1e68a118-d177-a218-5139-c8f13793dbbf@suse.de>
+ <ZDn3XPMA024t+C1x@bombadil.infradead.org>
+ <ZDoMmtcwNTINAu3N@casper.infradead.org>
+ <ZDoZCJHQXhVE2KZu@bombadil.infradead.org>
+ <ZDodlnm2nvYxbvR4@casper.infradead.org>
+From:   Hannes Reinecke <hare@suse.de>
+In-Reply-To: <ZDodlnm2nvYxbvR4@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 09:33:17PM +0200, Christophe JAILLET wrote:
-> When dev_err_probe() is called, 'ret' holds the value of the previous
-> successful devm_request_irq() call.
-> 'ret' should be assigned with a meaningful value before being used in
-> dev_err_probe().
+On 4/15/23 05:44, Matthew Wilcox wrote:
+> On Fri, Apr 14, 2023 at 08:24:56PM -0700, Luis Chamberlain wrote:
+>> I thought of that but I saw that the loop that assigns the arr only
+>> pegs a bh if we don't "continue" for certain conditions, which made me
+>> believe that we only wanted to keep on the array as non-null items which
+>> meet the initial loop's criteria. If that is not accurate then yes,
+>> the simplication is nice!
 > 
-> While at it, use and return "PTR_ERR(ctrl->clk)" instead of a hard-coded
-> "-ENOENT" so that -EPROBE_DEFER is handled and propagated correctly.
+> Uh, right.  A little bit more carefully this time ... how does this
+> look?
 > 
-> Fixes: 81b63420564d ("video: fbdev: mmp: Make use of the helper function dev_err_probe()")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
+> diff --git a/fs/buffer.c b/fs/buffer.c
+> index 5e67e21b350a..dff671079b02 100644
+> --- a/fs/buffer.c
+> +++ b/fs/buffer.c
+> @@ -2282,7 +2282,7 @@ int block_read_full_folio(struct folio *folio, get_block_t *get_block)
+>   {
+>   	struct inode *inode = folio->mapping->host;
+>   	sector_t iblock, lblock;
+> -	struct buffer_head *bh, *head, *arr[MAX_BUF_PER_PAGE];
+> +	struct buffer_head *bh, *head;
+>   	unsigned int blocksize, bbits;
+>   	int nr, i;
+>   	int fully_mapped = 1;
+> @@ -2335,7 +2335,7 @@ int block_read_full_folio(struct folio *folio, get_block_t *get_block)
+>   			if (buffer_uptodate(bh))
+>   				continue;
+>   		}
+> -		arr[nr++] = bh;
+> +		nr++;
+>   	} while (i++, iblock++, (bh = bh->b_this_page) != head);
+>   
+>   	if (fully_mapped)
+> @@ -2352,25 +2352,29 @@ int block_read_full_folio(struct folio *folio, get_block_t *get_block)
+>   		return 0;
+>   	}
+>   
+> -	/* Stage two: lock the buffers */
+> -	for (i = 0; i < nr; i++) {
+> -		bh = arr[i];
+> +	/*
+> +	 * Stage two: lock the buffers.  Recheck the uptodate flag under
+> +	 * the lock in case somebody else brought it uptodate first.
+> +	 */
+> +	bh = head;
+> +	do {
+> +		if (buffer_uptodate(bh))
+> +			continue;
+>   		lock_buffer(bh);
+> +		if (buffer_uptodate(bh)) {
+> +			unlock_buffer(bh);
+> +			continue;
+> +		}
+>   		mark_buffer_async_read(bh);
+> -	}
+> +	} while ((bh = bh->b_this_page) != head);
+>   
+> -	/*
+> -	 * Stage 3: start the IO.  Check for uptodateness
+> -	 * inside the buffer lock in case another process reading
+> -	 * the underlying blockdev brought it uptodate (the sct fix).
+> -	 */
+> -	for (i = 0; i < nr; i++) {
+> -		bh = arr[i];
+> -		if (buffer_uptodate(bh))
+> -			end_buffer_async_read(bh, 1);
+> -		else
+> +	/* Stage 3: start the IO */
+> +	bh = head;
+> +	do {
+> +		if (buffer_async_read(bh))
+>   			submit_bh(REQ_OP_READ, bh);
+> -	}
+> +	} while ((bh = bh->b_this_page) != head);
+> +
+>   	return 0;
+>   }
+>   EXPORT_SYMBOL(block_read_full_folio);
+> 
+> 
+> I do wonder how much it's worth doing this vs switching to non-BH methods.
+> I appreciate that's a lot of work still.
 
-Presumably you already wrote a Coccinelle script for this but I've added
-it to Smatch as well.
+That's what I've been wondering, too.
 
-regards,
-dan carpenter
+I would _vastly_ prefer to switch over to iomap; however, the blasted
+sb_bread() is getting in the way. Currently iomap only runs on entire
+pages / folios, but a lot of (older) filesystems insist on doing 512
+byte I/O. While this seem logical (seeing that 512 bytes is the
+default, and, in most cases, the only supported sector size) question
+is whether _we_ from the linux side need to do that.
+We _could_ upgrade to always do full page I/O; there's a good
+chance we'll be using the entire page anyway eventually.
+And with storage bandwidth getting larger and larger we might even
+get a performance boost there.
 
-diff --git a/check_zero_to_err_ptr.c b/check_zero_to_err_ptr.c
-index 88ca0285948a..fa2a1f1603b2 100644
---- a/check_zero_to_err_ptr.c
-+++ b/check_zero_to_err_ptr.c
-@@ -157,11 +157,12 @@ static void match_err_ptr(const char *fn, struct expression *expr, void *data)
- {
- 	struct expression *arg_expr;
- 	struct sm_state *sm, *tmp;
-+	int arg = PTR_INT(data);
- 
- 	if (is_impossible_path())
- 		return;
- 
--	arg_expr = get_argument_from_call_expr(expr->args, 0);
-+	arg_expr = get_argument_from_call_expr(expr->args, arg);
- 	sm = get_sm_state_expr(SMATCH_EXTRA, arg_expr);
- 	if (!sm)
- 		return;
-@@ -194,13 +195,36 @@ static void match_err_ptr(const char *fn, struct expression *expr, void *data)
- 	} END_FOR_EACH_PTR(tmp);
- }
- 
-+static void match_err_ptr_or_zero(const char *fn, struct expression *expr, void *data)
-+{
-+	struct expression *arg;
-+	struct range_list *rl;
-+	char *name;
-+
-+	if (is_impossible_path())
-+		return;
-+
-+	arg = get_argument_from_call_expr(expr->args, 0);
-+	get_absolute_rl(arg, &rl);
-+
-+	if (rl_intersection(rl, valid_ptr_rl))
-+		return;
-+
-+	name = expr_to_str(arg);
-+	sm_warning("'%s' is never a valid pointer", name);
-+	free_string(name);
-+}
-+
- void check_zero_to_err_ptr(int id)
- {
- 	if (option_project != PROJ_KERNEL)
- 		return;
- 
- 	my_id = id;
--	add_function_hook("ERR_PTR", &match_err_ptr, NULL);
--	add_function_hook("ERR_CAST", &match_err_ptr, NULL);
--	add_function_hook("PTR_ERR", &match_err_ptr, NULL);
-+	add_function_hook("ERR_PTR", &match_err_ptr, INT_PTR(0));
-+	add_function_hook("ERR_CAST", &match_err_ptr, INT_PTR(0));
-+	add_function_hook("PTR_ERR", &match_err_ptr, INT_PTR(0));
-+	add_function_hook("dev_err_probe", &match_err_ptr, INT_PTR(1));
-+
-+	add_function_hook("ERR_PTR_OR_ZERO", &match_err_ptr_or_zero, NULL);
- }
+And it would save us having to implement sub-page I/O for iomap.
+
+Hmm?
+
+Cheers,
+
+Hannes
+-- 
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Ivo Totev, Andrew
+Myers, Andrew McDonald, Martje Boudien Moerman
+
