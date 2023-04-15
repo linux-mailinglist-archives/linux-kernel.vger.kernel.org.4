@@ -2,143 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E9336E2E51
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 03:54:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE77A6E2E55
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 03:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbjDOBxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 21:53:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40772 "EHLO
+        id S229623AbjDOBzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 21:55:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjDOBxQ (ORCPT
+        with ESMTP id S229457AbjDOBzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 21:53:16 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCA549FA
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 18:53:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1681523558; i=j.neuschaefer@gmx.net;
-        bh=VPWEigCp7vzQZd7CKWpOuVBagfWMUqURjCMHGWXXDCs=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=P4i025P9TU3c3UlxEZvweOE6U8C+4rXpBIJrwOjL8yPydAI7NNBGyHDppK+bOL1kb
-         tMgBDATAwZfU15u7Rsy6+w7OA84Bxd2GREjdSIRbBa6MpCCikl7lZKRBn8Q3NBlwws
-         OApLl7WrBRwHD30eSpc/paC4EurQLfjoDBGLjXb8idKVE4+Ef85HBtB5RAeyvOzcHE
-         uuS9tEe/II2/bcaauCNtETlNdZ/qnfAqCD2RY2kPbass6W7QmnHN6pb9HYKXkCfwZZ
-         C8HtMGkHNnnG18/OgcG0mC8KVfeNAnl2RabMG7wh+DBpLCfw5x4IXEi8qpE32QCNJT
-         Y/AkoHs6k+JrQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([81.173.153.53]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MbzyP-1qLTGT0pW3-00dZ5e; Sat, 15
- Apr 2023 03:52:38 +0200
-Date:   Sat, 15 Apr 2023 03:52:34 +0200
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        linux-arm-kernel@lists.infradead.org,
-        Russell King <linux@armlinux.org.uk>,
-        Nick Terrell <terrelln@fb.com>, Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Nick Hawkins <nick.hawkins@hpe.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Xin Li <xin3.li@intel.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Paul Bolle <pebolle@tiscali.nl>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-kernel@vger.kernel.org,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Subject: Re: [PATCH 1/3] ARM: compressed: Pass the actual output length to
- the decompressor
-Message-ID: <ZDoDYh01GYjdwp63@probook>
-References: <20230412212126.3966502-1-j.neuschaefer@gmx.net>
- <20230412212126.3966502-2-j.neuschaefer@gmx.net>
- <20230413052050.GB9837@atomide.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dLt/khkji09eQ9Ix"
-Content-Disposition: inline
-In-Reply-To: <20230413052050.GB9837@atomide.com>
-X-Provags-ID: V03:K1:dBIRB48REk7T6R85Mr+o/FFvtnm2aGOmdT6CjRgjOEsM5OJWhc9
- 2DeGjUPBqNTaCn9XAFHsNiXviclx3afb3XAIeknIht5vGY3jo5YczvdGujenGchSq6l3MAh
- YsuELVJQ0p8dTarVpTY5YET94dx7mAj4Fo0tD9M0wvqBp+14jOkNwqehs0VvORPbU9tRAoe
- 9dDITolaRx2MwdwGjniIQ==
-UI-OutboundReport: notjunk:1;M01:P0:yZpYo+eQceU=;M5XHc/LUGQ6c1ksvaPAuZn9dbaI
- HO1Gg1jlP3iPw2Wyuw6tq4mvScfDpeCoj1Gu4nDuzPxhSZCSDgSJXW+dHLy2BLlItfCJXWnxZ
- 97QD57HAKAgwQLt5J7YjHjowIW1ziUHfZ1PWit2PyUBVnqvzR4e9qn/NKNiBB11uQ6KtVRgC2
- wcebsHQQPmZxQRNhiy0DIB+6+OKF59Jw8szkjeoAJCr0/Cw7O6mbN0FWCDuz8cLXZpJPGgycC
- i7w+qlBYv6bjbCuwS5wosAG1URDK73kZm06lDrLLAKq29tU8o7+6KpUlivTbnhyC+wcsJScIt
- KQ7G3NBY459s9x6KBEj0XysdDNaTGZ2eQeHDSR3HIdY/1rilmpBbINoJh6przkYyHWe1wOYft
- 0eGMSqJI4iM1fgb1n19Gu+Fp+/l8wN7EqL/4x0P0TIs9eBS9kCiEJKP6ETs8nvVPxrqN99ox3
- vcW75fxEGOWpkbzXFF3l1dbtfdVJqAssyGsJO1Tloi7Kzu5CZ4GMnYW5Q4asWsKgiof9hvj4P
- ZQQd/7J82niQy+mm5DhVFsJ1v2fzhQJ8JAh7H11XyhVyThOq0GZ35c5IFhj9qKiTe4ZjhvRAS
- nsqQ+szJkxiK8c8c0CiYONy8E1sc6fRBcNFqDM8QnWABumOIXes5uAOvmgsrduGfl0zg9dJHO
- 6yBiny98//Xn8ICzQ4RNbnYUEnQD/G9lmdEbMP8b53tsIonuOdHKtdnAXYO/G+rwbOVFG8I5r
- rM2nSjaBGjDx/cMRPv6HkVD7ollof79+3a82huHavMNlQuW6C90hJHWmMyV4Z9xBl9keVlBmn
- Gz1k5l3d6eVuyw3DbYDl2S4ymCkA1CKvWDoSucXVQOkpsYsjNSj4yzk8MgOuPlWHMwcHitowT
- 07yUKq3phHGiT53D7JMKoKd1LLe3PepVHw2/jXjGHxic/4/NCQv2SsCp5dONVb9CIG0OLTUTY
- yXo56fSj16QEIvQu5bx930Ti6xY=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 14 Apr 2023 21:55:43 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E934C0C
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 18:55:42 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id p5-20020a17090a428500b002400d8a8d1dso8998598pjg.7
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 18:55:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681523741; x=1684115741;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wgg0kRJ3s4RNAMUV5romv+CLC/70n6mh2aOg/nYLnSo=;
+        b=LL3Uiq0aMFuWs5pOQABjTo2pDdSvJzIV26S0d1tlTc1KwOPzxxjJLPifBH+8GgN7Wq
+         RUbePsbhn5MxmjmzRspLksuwKIh40zw2Q2KqlzTvTI3Zp3vnLOTu27NaX2IL+RuKrtGb
+         ZlX8puvvxlmqZm76Lekxr8LNulJlU2AZ9f5cpQF3DWPUJB6T8U2iVOY7YkL1CuJXff3h
+         D0CJ6qON1pffWZlnygSlyw8bQLlOOrbnMz1tJiTJSkK4Y3EdF2aRQVOdGye4cYVmfyEK
+         EQ6+i1KIK9xvl/40puWq+/TnZ8AGwWtgaWRIJsrNfd5IuQJEu81YgeuBHIJqinei+sbL
+         TqkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681523741; x=1684115741;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=wgg0kRJ3s4RNAMUV5romv+CLC/70n6mh2aOg/nYLnSo=;
+        b=E4+TYSJyuzbIEFWPLTN35MKNJ2buabSdpJmOQe7l47GtB0NgAMn+yoeHW4Wmze1BKt
+         0qllwY2Id4TafuZyMWBzsG4xqGDCBRY3KHZis62ISFAwLezQvXA8fVYu2bpVuwSfKvAe
+         OQs73UG+qoUYeytOJCZgkiblEx7OcYyUL/0UXmliecBx84lty2ttPBpIOYy9LUR6pN9N
+         x2Vot2SnP31k+mzbaZmVUbFrecid9x4teQT3c61mmsZ5WEOm5rYr073bM7T+MeMd7ISN
+         mB2t/ZYFWMxOF7FyH+5301vXg1orcs1/3e8jd0xVyuU7w63HtxHxUdvgX24dk4N4dMi7
+         M8VQ==
+X-Gm-Message-State: AAQBX9eUTW7PTh7nH1paOlspSI43OxuyCZW2rOALTndiCUmxxhZSrrqL
+        WR/QWdSmTFHGP8hWJbPLLn+Tmqc=
+X-Google-Smtp-Source: AKy350bXvYkqDduF6+mlorKT8pd0PbKxNmHZmWysx0GeSVuezBGd7BYrdATRQxgzXEDPxjpf3GQZfAY=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a65:55cd:0:b0:514:3d3d:da5a with SMTP id
+ k13-20020a6555cd000000b005143d3dda5amr1341981pgs.3.1681523741052; Fri, 14 Apr
+ 2023 18:55:41 -0700 (PDT)
+Date:   Fri, 14 Apr 2023 18:55:39 -0700
+In-Reply-To: <CAKH8qBt+xPygUVPMUuzbi1HCJuxc4gYOdU6JkrFmSouRQgoG6g@mail.gmail.com>
+Mime-Version: 1.0
+References: <20230413133355.350571-1-aleksandr.mikhalitsyn@canonical.com>
+ <20230413133355.350571-3-aleksandr.mikhalitsyn@canonical.com>
+ <CANn89iLuLkUvX-dDC=rJhtFcxjnVmfn_-crOevbQe+EjaEDGbg@mail.gmail.com>
+ <CAEivzxcEhfLttf0VK=NmHdQxF7CRYXNm6NwUVx6jx=-u2k-T6w@mail.gmail.com> <CAKH8qBt+xPygUVPMUuzbi1HCJuxc4gYOdU6JkrFmSouRQgoG6g@mail.gmail.com>
+Message-ID: <ZDoEG0VF6fb9y0EC@google.com>
+Subject: Re: [PATCH net-next v4 2/4] net: socket: add sockopts blacklist for
+ BPF cgroup hook
+From:   Stanislav Fomichev <sdf@google.com>
+To:     Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Cc:     Eric Dumazet <edumazet@google.com>, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        daniel@iogearbox.net, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---dLt/khkji09eQ9Ix
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Apr 13, 2023 at 08:20:50AM +0300, Tony Lindgren wrote:
-> * Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net> [230412 21:22]:
-> > --- a/arch/arm/boot/compressed/misc.c
-> > +++ b/arch/arm/boot/compressed/misc.c
-> > +static u32 get_inflated_image_size(void)
-> > +{
-> > +	return get_unaligned_le32(input_data_end - 4);
-> > +}
+On 04/13, Stanislav Fomichev wrote:
+> On Thu, Apr 13, 2023 at 7:38=E2=80=AFAM Aleksandr Mikhalitsyn
+> <aleksandr.mikhalitsyn@canonical.com> wrote:
+> >
+> > On Thu, Apr 13, 2023 at 4:22=E2=80=AFPM Eric Dumazet <edumazet@google.c=
+om> wrote:
+> > >
+> > > On Thu, Apr 13, 2023 at 3:35=E2=80=AFPM Alexander Mikhalitsyn
+> > > <aleksandr.mikhalitsyn@canonical.com> wrote:
+> > > >
+> > > > During work on SO_PEERPIDFD, it was discovered (thanks to Christian=
+),
+> > > > that bpf cgroup hook can cause FD leaks when used with sockopts whi=
+ch
+> > > > install FDs into the process fdtable.
+> > > >
+> > > > After some offlist discussion it was proposed to add a blacklist of
+> > >
+> > > We try to replace this word by either denylist or blocklist, even in =
+changelogs.
+> >
+> > Hi Eric,
+> >
+> > Oh, I'm sorry about that. :( Sure.
+> >
+> > >
+> > > > socket options those can cause troubles when BPF cgroup hook is ena=
+bled.
+> > > >
+> > >
+> > > Can we find the appropriate Fixes: tag to help stable teams ?
+> >
+> > Sure, I will add next time.
+> >
+> > Fixes: 0d01da6afc54 ("bpf: implement getsockopt and setsockopt hooks")
+> >
+> > I think it's better to add Stanislav Fomichev to CC.
 >=20
-> Just something to check.. This patch should not picked for the old stable
-> kernels that did not have the uncompressed image size at the end. Maybe
-> the patch should have a Depends-on tag to prevent possible issues?
+> Can we use 'struct proto' bpf_bypass_getsockopt instead? We already
+> use it for tcp zerocopy, I'm assuming it should work in this case as
+> well?
 
-As far as I can see, the appended size has been around for a really long
-time (v2.6.28, commit bc22c17e12c130dc929218a95aa347e0f3fd05dc), far
-longer than the oldest LTS kernel that's still around.
+Jakub reminded me of the other things I wanted to ask here bug forgot:
 
->=20
-> Other than that looks good to me:
->=20
-> Reviewed-by: Tony Lindgren <tony@atomide.com>
+- setsockopt is probably not needed, right? setsockopt hook triggers
+  before the kernel and shouldn't leak anything
+- for getsockopt, instead of bypassing bpf completely, should we instead
+  ignore the error from the bpf program? that would still preserve
+  the observability aspect
+- or maybe we can even have a per-proto bpf_getsockopt_cleanup call that
+  gets called whenever bpf returns an error to make sure protocols have
+  a chance to handle that condition (and free the fd)
 
-Thanks
-
-Jonathan
-
---dLt/khkji09eQ9Ix
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmQ6A0AACgkQCDBEmo7z
-X9vtpxAAjWUuKQgQzvqF71IztmOzNwe0TWSbAQezw+JOGX3+NtpmJQSYa3SG6RFw
-tUaGPRtg4EXPN6+SCaBJzNvIDt8+7S5e+A1PP+wHo/eoWcp0U0r36ApNUgtBORLq
-CqtU36X+QdQSB3Op9WFzhWmKTu3IiIrAztaAyV2I0PmI6rfNGe65SiJsLSx+p1/v
-x/guzjSqWtkrErxU6otskmZ7IwQtnxkDD6qY54ESIXc2qgI3cc8/Wo5jt4c/iYZm
-Bq8jGCi5acFMeY+A0zHHwNPzOutuCakeaP/Jgfq8FV3XvRoa6Znpda2wtMkZRQsm
-5DuA0NFDxFoZXSa367/ET763u4w7pOQ10JhI/kBVtiu6YHQCRlSf1yNadR/iRGrW
-eaO91EzM5S8X3TiQ0h4UGZyfugzenAMDk+sZV4rlZwa0axzuRTY2IaDqI8Gn9vWF
-0XoPBcytx1bYPsoioBBQXmOCXfdkzNAZwEZ2QLtfPpzUZYOzNSrp39NqP+A6iaQE
-Ul0w8CgwJJzjG3YTPh5fZNWrUnAw/4k43/j+Y7ttWZQ4qS3Yn/g+g0MqA6ECNMdg
-sA5IMEy6KEyJ6ot3bB7SyWj+LlUfhVeP7YTSpN5vAh1YH5G0+4PW51WoNbOnU91o
-8T5dXnWzeHWRY53kPfxWrn9zGw7uKJb/tDjmWznLNFi148xwoLc=
-=VVLD
------END PGP SIGNATURE-----
-
---dLt/khkji09eQ9Ix--
+> > Kind regards,
+> > Alex
+> >
+> > >
+> > > > Cc: "David S. Miller" <davem@davemloft.net>
+> > > > Cc: Eric Dumazet <edumazet@google.com>
+> > > > Cc: Jakub Kicinski <kuba@kernel.org>
+> > > > Cc: Paolo Abeni <pabeni@redhat.com>
+> > > > Cc: Leon Romanovsky <leon@kernel.org>
+> > > > Cc: David Ahern <dsahern@kernel.org>
+> > > > Cc: Arnd Bergmann <arnd@arndb.de>
+> > > > Cc: Kees Cook <keescook@chromium.org>
+> > > > Cc: Christian Brauner <brauner@kernel.org>
+> > > > Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
+> > > > Cc: Lennart Poettering <mzxreary@0pointer.de>
+> > > > Cc: linux-kernel@vger.kernel.org
+> > > > Cc: netdev@vger.kernel.org
+> > > > Cc: linux-arch@vger.kernel.org
+> > > > Suggested-by: Daniel Borkmann <daniel@iogearbox.net>
+> > > > Suggested-by: Christian Brauner <brauner@kernel.org>
+> > > > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonic=
+al.com>
+> > >
+> > > Thanks.
