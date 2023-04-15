@@ -2,353 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 576F26E31CC
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 16:24:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C05AD6E31D2
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 16:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbjDOOYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 10:24:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45286 "EHLO
+        id S229948AbjDOOZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 10:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjDOOYA (ORCPT
+        with ESMTP id S229468AbjDOOZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 10:24:00 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD0A49EA
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 07:23:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681568638; x=1713104638;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OfnwQm6Bo6FWbilIKA1+eP5Y8qlhKGqRenzmVzOoc4E=;
-  b=Pdrs2mupzL5NYYOMemVunKuf6QoT7W8Siim9B7g/VQOUu25pwQR0e54i
-   BuV0cCUWs2noDfpv/wpieKTe9+haM3oZ+cgx1hfaIJN88DhWxcixSxAsZ
-   +HAMXfRMPJlzftI41ornCCPY6KZyZYgZEB5cOgPiA9ZQ4c2ubf+pGR1U+
-   2SB270ay9hwJYRC3jj3L35uFSM2Q/zpz1KTSCxDbKSDF2iF/wvDPuQjLI
-   yJNfxISFpBqv+L7c8pkgvsFO7Mv2XS3On+1BXwe5eKnooLoDV5thzT+iZ
-   v+65ojVJ/6QBre5Aaoauq9vy66Ym/LimObpM7HefE2S1bbKjpKOFIP84v
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="407538544"
-X-IronPort-AV: E=Sophos;i="5.99,199,1677571200"; 
-   d="scan'208";a="407538544"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2023 07:23:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="1019922219"
-X-IronPort-AV: E=Sophos;i="5.99,199,1677571200"; 
-   d="scan'208";a="1019922219"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 15 Apr 2023 07:23:43 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pngoY-000b6h-2g;
-        Sat, 15 Apr 2023 14:23:42 +0000
-Date:   Sat, 15 Apr 2023 22:22:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>, mani@kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        mhi@lists.linux.dev
-Subject: Re: [PATCH 1/2] bus: mhi: host: Add quirk framework and initial quirk
-Message-ID: <202304152256.QzCwI9iu-lkp@intel.com>
-References: <1681502239-3781-2-git-send-email-quic_jhugo@quicinc.com>
+        Sat, 15 Apr 2023 10:25:33 -0400
+Received: from BN6PR00CU002.outbound.protection.outlook.com (mail-eastus2azon11021018.outbound.protection.outlook.com [52.101.57.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4446249EA;
+        Sat, 15 Apr 2023 07:25:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ehxGJRya95KyoF9kxYMJjyGL3yOuPIb2Pl7zGHcnI59zhszI+WuAYkK5zz+CezE6wAkgWJE5m08UxWm2egylXKWovJXEMzrnR4uHpbqdUw1Ddm/rcV4LYTo3FqPNjpfJ+Uv7uqR8INMCT1LUaLj+HouDlL19fmNmitQDb21va99/tenO95OopDkAA0zty3NFflk4Xbwvn48qGqZfQwaVrJr10Reu1GYuH4t3zphR4ZEzYmzmC7devfVGLhItZSiTEsm1amSkIAeDOAOvRZDHFuSQmiUIbUFvxLpFXq0JOjpMHF0OcjqyVeL+kemgLG3EnfhmYZmwiSNkiJuhZvOzGA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=U+T6EjHz9bFJeys8VpYPn0Yc5OCPeWQTs/ZIjC5Y3CY=;
+ b=es2yQI5jYd2BaviuWtKC4EtG5Fk7z4wAppDnUpU4zFm3bHuEDL7AERy0wDNowmSpRBZsFKbkvXi0ymKGPU9F7V8bImuJ/O/zmd9OFGrO7wNAvsS/kngp/CW9P2De7bzs/w2x01mzQfFOyaTOJyhUG84erLGE28tGCt48upm4W04rlByecIDqj6VV3TFanZpZRxvCnw+ZVIMORcH/q9tAjq0A9YiVfzu0Q/kp7lev5Ch7M7o4luaE6pRRQ7NDVzfsN+tSi1ltQHjY2EEnQRbDC2Qxza9hZ1LDkWrlOTnNkxk4rYeCy0+4eVqmdd2NixeAH9dHr3Tjh2LEw6IZ3ClQUA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=U+T6EjHz9bFJeys8VpYPn0Yc5OCPeWQTs/ZIjC5Y3CY=;
+ b=RjgUWjjwqgkU3voWvsRmy5Lv85nhhRQajXAC03Rrq3ILILppFYLDkXCmM/UHTaeTUXlZ43J8ed6GjZvb9fTZa5hI0Aouq2wxLArO51fk34vcCOwUSzKEw5T2xaGyvl/ASUvQtsLftR/JBT02hliL32ClhuaMw8146C1h5Ibe120=
+Received: from PH7PR21MB3116.namprd21.prod.outlook.com (2603:10b6:510:1d0::10)
+ by BL0PR2101MB1348.namprd21.prod.outlook.com (2603:10b6:208:92::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.1; Sat, 15 Apr
+ 2023 14:25:29 +0000
+Received: from PH7PR21MB3116.namprd21.prod.outlook.com
+ ([fe80::5d8d:b97a:1064:cc65]) by PH7PR21MB3116.namprd21.prod.outlook.com
+ ([fe80::5d8d:b97a:1064:cc65%6]) with mapi id 15.20.6340.001; Sat, 15 Apr 2023
+ 14:25:29 +0000
+From:   Haiyang Zhang <haiyangz@microsoft.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Paul Rosswurm <paulros@microsoft.com>,
+        "olaf@aepfle.de" <olaf@aepfle.de>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "leon@kernel.org" <leon@kernel.org>,
+        Long Li <longli@microsoft.com>,
+        "ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        Ajay Sharma <sharmaajay@microsoft.com>,
+        "hawk@kernel.org" <hawk@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH V3,net-next, 3/4] net: mana: Enable RX path to handle
+ various MTU sizes
+Thread-Topic: [PATCH V3,net-next, 3/4] net: mana: Enable RX path to handle
+ various MTU sizes
+Thread-Index: AQHZbYQwnFQeBoPFWkmXBOV6OTjsn68roqYAgADK5IA=
+Date:   Sat, 15 Apr 2023 14:25:29 +0000
+Message-ID: <PH7PR21MB3116023068CFA8D600FA5B18CA9E9@PH7PR21MB3116.namprd21.prod.outlook.com>
+References: <1681334163-31084-1-git-send-email-haiyangz@microsoft.com>
+        <1681334163-31084-4-git-send-email-haiyangz@microsoft.com>
+ <20230414190608.3c21f44f@kernel.org>
+In-Reply-To: <20230414190608.3c21f44f@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=8e8173a7-fe88-4944-8b5b-dd08e47c614a;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-04-15T14:12:17Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH7PR21MB3116:EE_|BL0PR2101MB1348:EE_
+x-ms-office365-filtering-correlation-id: e748ac2a-f250-4049-a4c2-08db3dbd4359
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: TGG0m9oO0UtU1yoGxSKvHlVhS66Tfetz9j7UnskFIe3rRHMAW3eqBJWsnmcbLAaknr9ITwp7js0BpuU6dBVF1M0+6wIXngh+RiBVWb83+g4OBmbocmXawIiyJT37WeX1jpiRMPKOvU3GmXv8nO8WaL4edamW9QSCYqixvBI5rBIqnJQTH95ZLIAxPtGmW4cc/nW+5k1P2tKQZPR/wDCeF+JP+P3+9mR415610rAqWjLgJoR/s3xnS1+TPTWv+hD5JDDPDY+MbWB0X8i5rTdTLz/VTkSydvlXMiUYB9GDUWmdy5kvXIDX4XsTeLR3+GGX0PUZ+OujODRNgVaC0DRautKpVjBaZ4PfeWm773vwDUWGN0DQyT2PmDa3FlXtfWEC3oF9G113PqlRkT2b5x3EmRSpbDbWQEFeZ5iNoe9+jkOMO0Hoe8IzTulZH2DSg7GIYLr1lJgLKPnnPTjdyaeecanKZhORb38jkCm2WbBBlKFQiXCMYQF+yIebZgK75os9C/1RUN/CvcPZr+bLM9aA3tfpz7wWOv8UPJNvG9yAqsPU26GKDw9tC/NowvyIIDuyvEbsGpVHM898ZgUt5yIQOEyzpPqx2Wf9O+Q6oEhSL46Eb1LAEwB1fAJiidrKumtY9kCaaCg+MFIJfNl5pQRFzuloMrpmOWbHfEL7qA2IiuQ=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR21MB3116.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(376002)(136003)(346002)(366004)(451199021)(478600001)(10290500003)(71200400001)(38100700002)(8936002)(8676002)(316002)(786003)(41300700001)(82960400001)(82950400001)(6916009)(4326008)(64756008)(55016003)(66476007)(66446008)(76116006)(66946007)(66556008)(122000001)(54906003)(8990500004)(186003)(2906002)(38070700005)(53546011)(6506007)(26005)(9686003)(86362001)(83380400001)(33656002)(5660300002)(52536014)(7696005)(7416002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?K4PkFqscrBbRda2uB2ftd4NfLBkXBabFd3fc7LeiEKFSVY+PHX31d2ZTNCmj?=
+ =?us-ascii?Q?UGZZaYNuqQ96B25KhRQHGKM1bdn5Yo/I8j9fLHZ1O2FsmauPmMvYwEVQoXdi?=
+ =?us-ascii?Q?FC4UX4/oWPzxFNj5lvdpAJZpwrqykT6cp6rLtoI17aNsLywMp1RUDAiesiZf?=
+ =?us-ascii?Q?GjQ+VtoBTPqzdv9RsOb/+ZB23TFehvmNMc4kvzDRPx+BMJ74IZfAN5HTUb8a?=
+ =?us-ascii?Q?4bL0zb5yC0uHf+Oa8WQxCuZBtYPIMwt8DAvK4S+LmbGq0rzgDeJEom/wLx2P?=
+ =?us-ascii?Q?wQII/llSo30uGLtQGDa6rqjQ1FlSO4OsWPBGwhqapnM1GZG5l5NmM/xEpEa1?=
+ =?us-ascii?Q?I8ji2QiKMGA4/ldP3fXzJt90tGC17Art+5A+aHeE0mfzJvLnY/JMHs2EDa7P?=
+ =?us-ascii?Q?UKdORBAlr4Ob5oaT6qIgHaMwU1JsxRFlc5v0OGlS2T4+U5RJb1dGqbfCH4ye?=
+ =?us-ascii?Q?NuiQbR5LkcTzXf66d3JVFHjzDuea6AalhOkl4p7OIlJ+5TvZuFQmGTa7XUEu?=
+ =?us-ascii?Q?LAgwlct3jrNx6BhYmhhrUJ05lEKs6LiAySNNMVyHW6GdKQFAnVpmVcxIZpuM?=
+ =?us-ascii?Q?PXgcYXeY/tUsRKesoVe34idxuxd3ocvKumAEw1b0ewVuRq9dwXAoalNB2+1M?=
+ =?us-ascii?Q?wjFqQgUePl3fqKmo+xcjNtb6nlCNOm/PA1jEQ1vWbKwwI8jNMyj8MXBZUn0W?=
+ =?us-ascii?Q?EoKspB8SJYQldGuo8SQ5oneLohGdbZ0jG1kXDnUplKYsLrAgZGfdFD+ILgbU?=
+ =?us-ascii?Q?bySIhAcaiGONhzy0XSDi2IbVUsyFN7gdmyZdFqw9eShO46XXuvVMzOXhHC8G?=
+ =?us-ascii?Q?EOw7TVUyhAm0XJaYtq00XbPk+B0ykz4l7c1mbCFvllYDNwBw33AnUzlpZCs+?=
+ =?us-ascii?Q?PJ5zXHBpdGS88uMJBNjA+Jq+sQSZC2stQ/NMvUiE9RuuE5oT7ymbxSkblWda?=
+ =?us-ascii?Q?IHobLIum7wjLJOIf/3o/jkB81Occc6OAx9tvqJ77TTwwuJeoVoevDrogf9kx?=
+ =?us-ascii?Q?nxrZd7g/O8Bo43KjARlCQ5TA6YiBXRVr53QctdYVEaLAiwgkdGzsxAFaMbyZ?=
+ =?us-ascii?Q?cfZvOY3YRbBbda6jcfa7RreBBA23GQIA+qxPPMXt4Y61kbGBeT8lBgsci1AL?=
+ =?us-ascii?Q?GqVH/Z5zk8D6Ht3h1CAlx3bfQshVj4VlQ02v/MUY8Exo9ySr7K6+tFOXLxCn?=
+ =?us-ascii?Q?nQ318ZGjnkdJg0Iijgiahqyw0leYflbdRLE/svNt/UhHt8wjFNKHc3YjRw/3?=
+ =?us-ascii?Q?CHWVnsAOiCnL/fiVWUpc+R50SAWyvJXKwdGr5rmZWMt3mt+DIw0scgBRNRGf?=
+ =?us-ascii?Q?FF8Ee23aeCWTQKCK+/RyxCY21i7VcKAEprxGM0J6/W/VR7InCHzj56bUfRqg?=
+ =?us-ascii?Q?MJ/ZT5/oOfXxMHhmZKz/ib9X/Mh2zOrbdz9yD7s7/bDhAHg1GddlQEuub/5m?=
+ =?us-ascii?Q?KKL9VdsJ6uGXleIuE5w4qSzJTZFtCo9lFEa+IZEuhO9VU1PktwZU/SFjNlTL?=
+ =?us-ascii?Q?ZPLpk8kr9HxJ1VBrBtWRPFBQ1+t6qPipq+Cw0u1qTdncmtbufJ/FE+C/Anbm?=
+ =?us-ascii?Q?+fYo/F0NwTleAUNByUKd55TJIHMA9Sp5Ei9FDQBN?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1681502239-3781-2-git-send-email-quic_jhugo@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR21MB3116.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e748ac2a-f250-4049-a4c2-08db3dbd4359
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Apr 2023 14:25:29.0820
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: eZwYYATDuLav0VM25ujFsw1jbtDVOjumPPHj+lI16v6Y0zAyvB6ISAdtZEkXnC26Z3PkRgn1xSvPIPKsuVYlQA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR2101MB1348
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jeffrey,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on drm-tip/drm-tip linus/master v6.3-rc6]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jeffrey-Hugo/bus-mhi-host-Add-quirk-framework-and-initial-quirk/20230415-035846
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/1681502239-3781-2-git-send-email-quic_jhugo%40quicinc.com
-patch subject: [PATCH 1/2] bus: mhi: host: Add quirk framework and initial quirk
-config: i386-randconfig-r036-20230410 (https://download.01.org/0day-ci/archive/20230415/202304152256.QzCwI9iu-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/678cad31c3c8f1b6d772150b98d25e40240e4e14
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jeffrey-Hugo/bus-mhi-host-Add-quirk-framework-and-initial-quirk/20230415-035846
-        git checkout 678cad31c3c8f1b6d772150b98d25e40240e4e14
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304152256.QzCwI9iu-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/bus/mhi/host/init.c:977:2: error: expected expression
-           else {
-           ^
->> drivers/bus/mhi/host/init.c:1043:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/bus/mhi/host/init.c:1072:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/bus/mhi/host/init.c:1082:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/bus/mhi/host/init.c:1088:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/bus/mhi/host/init.c:1170:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/bus/mhi/host/init.c:1189:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/bus/mhi/host/init.c:1208:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/bus/mhi/host/init.c:1236:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/bus/mhi/host/init.c:1312:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/bus/mhi/host/init.c:1382:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/bus/mhi/host/init.c:1398:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/bus/mhi/host/init.c:1404:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/bus/mhi/host/init.c:1412:1: error: function definition is not allowed here
-   {
-   ^
->> drivers/bus/mhi/host/init.c:1436:11: error: use of undeclared identifier 'mhi_match'
-           .match = mhi_match,
-                    ^
->> drivers/bus/mhi/host/init.c:1437:12: error: use of undeclared identifier 'mhi_uevent'; did you mean 'mhi_event'?
-           .uevent = mhi_uevent,
-                     ^~~~~~~~~~
-                     mhi_event
-   drivers/bus/mhi/host/init.c:895:20: note: 'mhi_event' declared here
-           struct mhi_event *mhi_event;
-                             ^
-   drivers/bus/mhi/host/init.c:1442:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/bus/mhi/host/init.c:1448:1: error: function definition is not allowed here
-   {
-   ^
->> drivers/bus/mhi/host/init.c:1453:19: error: use of undeclared identifier 'mhi_init'
-   postcore_initcall(mhi_init);
-                     ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
 
 
-vim +977 drivers/bus/mhi/host/init.c
+> -----Original Message-----
+> From: Jakub Kicinski <kuba@kernel.org>
+> Sent: Friday, April 14, 2023 10:06 PM
+> To: Haiyang Zhang <haiyangz@microsoft.com>
+> Cc: linux-hyperv@vger.kernel.org; netdev@vger.kernel.org; Dexuan Cui
+> <decui@microsoft.com>; KY Srinivasan <kys@microsoft.com>; Paul Rosswurm
+> <paulros@microsoft.com>; olaf@aepfle.de; vkuznets@redhat.com;
+> davem@davemloft.net; wei.liu@kernel.org; edumazet@google.com;
+> pabeni@redhat.com; leon@kernel.org; Long Li <longli@microsoft.com>;
+> ssengar@linux.microsoft.com; linux-rdma@vger.kernel.org;
+> daniel@iogearbox.net; john.fastabend@gmail.com; bpf@vger.kernel.org;
+> ast@kernel.org; Ajay Sharma <sharmaajay@microsoft.com>;
+> hawk@kernel.org; linux-kernel@vger.kernel.org
+> Subject: Re: [PATCH V3,net-next, 3/4] net: mana: Enable RX path to handle
+> various MTU sizes
+>=20
+> On Wed, 12 Apr 2023 14:16:02 -0700 Haiyang Zhang wrote:
+> > +	} else if (rxq->alloc_size > PAGE_SIZE) {
+> > +		if (is_napi)
+> > +			va =3D napi_alloc_frag(rxq->alloc_size);
+>=20
+> Allocating frag larger than a page is not safe.
 
-   891	
-   892	int mhi_register_controller(struct mhi_controller *mhi_cntrl,
-   893				    const struct mhi_controller_config *config)
-   894	{
-   895		struct mhi_event *mhi_event;
-   896		struct mhi_chan *mhi_chan;
-   897		struct mhi_cmd *mhi_cmd;
-   898		struct mhi_device *mhi_dev;
-   899		u32 soc_info;
-   900		int ret, i;
-   901	
-   902		if (!mhi_cntrl || !mhi_cntrl->cntrl_dev || !mhi_cntrl->regs ||
-   903		    !mhi_cntrl->runtime_get || !mhi_cntrl->runtime_put ||
-   904		    !mhi_cntrl->status_cb || !mhi_cntrl->read_reg ||
-   905		    !mhi_cntrl->write_reg || !mhi_cntrl->nr_irqs ||
-   906		    !mhi_cntrl->irq || !mhi_cntrl->reg_len)
-   907			return -EINVAL;
-   908	
-   909		ret = parse_config(mhi_cntrl, config);
-   910		if (ret)
-   911			return -EINVAL;
-   912	
-   913		mhi_cntrl->mhi_cmd = kcalloc(NR_OF_CMD_RINGS,
-   914					     sizeof(*mhi_cntrl->mhi_cmd), GFP_KERNEL);
-   915		if (!mhi_cntrl->mhi_cmd) {
-   916			ret = -ENOMEM;
-   917			goto err_free_event;
-   918		}
-   919	
-   920		INIT_LIST_HEAD(&mhi_cntrl->transition_list);
-   921		mutex_init(&mhi_cntrl->pm_mutex);
-   922		rwlock_init(&mhi_cntrl->pm_lock);
-   923		spin_lock_init(&mhi_cntrl->transition_lock);
-   924		spin_lock_init(&mhi_cntrl->wlock);
-   925		INIT_WORK(&mhi_cntrl->st_worker, mhi_pm_st_worker);
-   926		init_waitqueue_head(&mhi_cntrl->state_event);
-   927	
-   928		mhi_cntrl->hiprio_wq = alloc_ordered_workqueue("mhi_hiprio_wq", WQ_HIGHPRI);
-   929		if (!mhi_cntrl->hiprio_wq) {
-   930			dev_err(mhi_cntrl->cntrl_dev, "Failed to allocate workqueue\n");
-   931			ret = -ENOMEM;
-   932			goto err_free_cmd;
-   933		}
-   934	
-   935		mhi_cmd = mhi_cntrl->mhi_cmd;
-   936		for (i = 0; i < NR_OF_CMD_RINGS; i++, mhi_cmd++)
-   937			spin_lock_init(&mhi_cmd->lock);
-   938	
-   939		mhi_event = mhi_cntrl->mhi_event;
-   940		for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
-   941			/* Skip for offload events */
-   942			if (mhi_event->offload_ev)
-   943				continue;
-   944	
-   945			mhi_event->mhi_cntrl = mhi_cntrl;
-   946			spin_lock_init(&mhi_event->lock);
-   947			if (mhi_event->data_type == MHI_ER_CTRL)
-   948				tasklet_init(&mhi_event->task, mhi_ctrl_ev_task,
-   949					     (ulong)mhi_event);
-   950			else
-   951				tasklet_init(&mhi_event->task, mhi_ev_task,
-   952					     (ulong)mhi_event);
-   953		}
-   954	
-   955		mhi_chan = mhi_cntrl->mhi_chan;
-   956		for (i = 0; i < mhi_cntrl->max_chan; i++, mhi_chan++) {
-   957			mutex_init(&mhi_chan->mutex);
-   958			init_completion(&mhi_chan->completion);
-   959			rwlock_init(&mhi_chan->lock);
-   960	
-   961			/* used in setting bei field of TRE */
-   962			mhi_event = &mhi_cntrl->mhi_event[mhi_chan->er_index];
-   963			mhi_chan->intmod = mhi_event->intmod;
-   964		}
-   965	
-   966		if (mhi_cntrl->bounce_buf) {
-   967			mhi_cntrl->map_single = mhi_map_single_use_bb;
-   968			mhi_cntrl->unmap_single = mhi_unmap_single_use_bb;
-   969		} else {
-   970			mhi_cntrl->map_single = mhi_map_single_no_bb;
-   971			mhi_cntrl->unmap_single = mhi_unmap_single_no_bb;
-   972		}
-   973	
-   974		/* Read the MHI device info */
-   975		if (mhi_cntrl->quirks & MHI_QUIRK_SOC_HW_VERSION_UNRELIABLE) {
-   976			soc_info = 0;
- > 977		else {
-   978			ret = mhi_read_reg(mhi_cntrl, mhi_cntrl->regs, SOC_HW_VERSION_OFFS, &soc_info);
-   979			if (ret)
-   980				goto err_destroy_wq;
-   981		}
-   982	
-   983		mhi_cntrl->family_number = FIELD_GET(SOC_HW_VERSION_FAM_NUM_BMSK, soc_info);
-   984		mhi_cntrl->device_number = FIELD_GET(SOC_HW_VERSION_DEV_NUM_BMSK, soc_info);
-   985		mhi_cntrl->major_version = FIELD_GET(SOC_HW_VERSION_MAJOR_VER_BMSK, soc_info);
-   986		mhi_cntrl->minor_version = FIELD_GET(SOC_HW_VERSION_MINOR_VER_BMSK, soc_info);
-   987	
-   988		mhi_cntrl->index = ida_alloc(&mhi_controller_ida, GFP_KERNEL);
-   989		if (mhi_cntrl->index < 0) {
-   990			ret = mhi_cntrl->index;
-   991			goto err_destroy_wq;
-   992		}
-   993	
-   994		ret = mhi_init_irq_setup(mhi_cntrl);
-   995		if (ret)
-   996			goto err_ida_free;
-   997	
-   998		/* Register controller with MHI bus */
-   999		mhi_dev = mhi_alloc_device(mhi_cntrl);
-  1000		if (IS_ERR(mhi_dev)) {
-  1001			dev_err(mhi_cntrl->cntrl_dev, "Failed to allocate MHI device\n");
-  1002			ret = PTR_ERR(mhi_dev);
-  1003			goto error_setup_irq;
-  1004		}
-  1005	
-  1006		mhi_dev->dev_type = MHI_DEVICE_CONTROLLER;
-  1007		mhi_dev->mhi_cntrl = mhi_cntrl;
-  1008		dev_set_name(&mhi_dev->dev, "mhi%d", mhi_cntrl->index);
-  1009		mhi_dev->name = dev_name(&mhi_dev->dev);
-  1010	
-  1011		/* Init wakeup source */
-  1012		device_init_wakeup(&mhi_dev->dev, true);
-  1013	
-  1014		ret = device_add(&mhi_dev->dev);
-  1015		if (ret)
-  1016			goto err_release_dev;
-  1017	
-  1018		mhi_cntrl->mhi_dev = mhi_dev;
-  1019	
-  1020		mhi_create_debugfs(mhi_cntrl);
-  1021	
-  1022		return 0;
-  1023	
-  1024	err_release_dev:
-  1025		put_device(&mhi_dev->dev);
-  1026	error_setup_irq:
-  1027		mhi_deinit_free_irq(mhi_cntrl);
-  1028	err_ida_free:
-  1029		ida_free(&mhi_controller_ida, mhi_cntrl->index);
-  1030	err_destroy_wq:
-  1031		destroy_workqueue(mhi_cntrl->hiprio_wq);
-  1032	err_free_cmd:
-  1033		kfree(mhi_cntrl->mhi_cmd);
-  1034	err_free_event:
-  1035		kfree(mhi_cntrl->mhi_event);
-  1036		vfree(mhi_cntrl->mhi_chan);
-  1037	
-  1038		return ret;
-  1039	}
-  1040	EXPORT_SYMBOL_GPL(mhi_register_controller);
-  1041	
-  1042	void mhi_unregister_controller(struct mhi_controller *mhi_cntrl)
-> 1043	{
-  1044		struct mhi_device *mhi_dev = mhi_cntrl->mhi_dev;
-  1045		struct mhi_chan *mhi_chan = mhi_cntrl->mhi_chan;
-  1046		unsigned int i;
-  1047	
-  1048		mhi_deinit_free_irq(mhi_cntrl);
-  1049		mhi_destroy_debugfs(mhi_cntrl);
-  1050	
-  1051		destroy_workqueue(mhi_cntrl->hiprio_wq);
-  1052		kfree(mhi_cntrl->mhi_cmd);
-  1053		kfree(mhi_cntrl->mhi_event);
-  1054	
-  1055		/* Drop the references to MHI devices created for channels */
-  1056		for (i = 0; i < mhi_cntrl->max_chan; i++, mhi_chan++) {
-  1057			if (!mhi_chan->mhi_dev)
-  1058				continue;
-  1059	
-  1060			put_device(&mhi_chan->mhi_dev->dev);
-  1061		}
-  1062		vfree(mhi_cntrl->mhi_chan);
-  1063	
-  1064		device_del(&mhi_dev->dev);
-  1065		put_device(&mhi_dev->dev);
-  1066	
-  1067		ida_free(&mhi_controller_ida, mhi_cntrl->index);
-  1068	}
-  1069	EXPORT_SYMBOL_GPL(mhi_unregister_controller);
-  1070	
+ I saw other drivers doing this - use napi_alloc_frag for size bigger than =
+a page.
+And it returns compound page. Why it's not safe? Should we use other alloca=
+tor
+when need compound pages?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> Frag allocator falls back to allocating single pages, doesn't it?
+
+Actually I checked it. Compound page is still returned for size smaller tha=
+n PAGE_SIZE,
+so I used single page allocation for that.
+
+Thanks,
+- Haiyang
+
