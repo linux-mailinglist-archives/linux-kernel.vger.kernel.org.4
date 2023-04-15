@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE18E6E2ED3
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 05:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D97FB6E2EDB
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 05:44:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjDODcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 23:32:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36542 "EHLO
+        id S229958AbjDODof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 23:44:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbjDODcO (ORCPT
+        with ESMTP id S229625AbjDODod (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 23:32:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4442119BF
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 20:32:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D271B63869
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 03:32:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B52C6C433D2;
-        Sat, 15 Apr 2023 03:32:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681529531;
-        bh=+XWziO2ua4unQE9zKFAr0FfsCxROiRZNlP1PEGcC0V4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kwTyhhqBaHhovdgbtGcm2bJ6ADe6+zG/8hZF+KwfzHV9UhcaXoTBUvq/WrD+Em6eQ
-         F2MyBPLt/BvcmaWeoFkU8CTWH19xDu35N03OrdsVKObBMcbc/WNfxuCrifnqtmp5Dz
-         AlaCvGVLRhXZTloldkBT5LFZ0WQVTIMltu4lhd4/mwjX5hPWV3Ra5A4gpY65ALjsHc
-         ByiB8zEIvlHLApbU9KjIioeuwc45HvDtZVO+iZQTjgyZw3wajBYcUh8dQ6pMIdB99E
-         n8FXPuAkutINB3TChQ7S9lp5W1LeV/VmevI2DwizELzZDEmimaoPbfvOruyR+q9emN
-         7UpN8v8nGInSQ==
-From:   SeongJae Park <sj@kernel.org>
-To:     akpm@linux-foundation.org
-Cc:     vbabka@suse.cz, willy@infradead.org, paulmck@kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        SeongJae Park <sj@kernel.org>
-Subject: [PATCH v2 2/2] mm/slab: break up RCU readers on SLAB_TYPESAFE_BY_RCU example code
-Date:   Sat, 15 Apr 2023 03:31:59 +0000
-Message-Id: <20230415033159.4249-3-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230415033159.4249-1-sj@kernel.org>
-References: <20230415033159.4249-1-sj@kernel.org>
+        Fri, 14 Apr 2023 23:44:33 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37695270;
+        Fri, 14 Apr 2023 20:44:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=IA9ip5bWB1ooOWtdktRveDQHQwdcZUthNMzBra0HynA=; b=rNQjyH4XIZodG7Hs4L6O1x68Rm
+        USXE+8fk55T0Ag6HiXuxyRajtUaXOtU0e6BuW+o44iwW6qbprtyX4VpOO6BfWqqJ1pmfGGDaTrI8Q
+        pfpZUD3QYkEGx+dqRsCcuVmzNeVCmvwBXoqLzuCgWlRLrsXMWH9XzCOYqEbD4ZobcNKe1THCQ1WBx
+        Hw4sEYyEEr4GbwrkfpFVPDXdcnDGGZBWtNpU52M2W8B807/Y15m3PWyx8KkajV9T9HbPW35qn6MTR
+        l7F1n18wb2km4XiEDvrsmvA+e6BXQ2hVgS9Y479iJ0YDwsVNBi6XHcxQ+eTIBE3i36fMgZbKAKuue
+        A6gPJwTQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pnWpq-009KMF-CR; Sat, 15 Apr 2023 03:44:22 +0000
+Date:   Sat, 15 Apr 2023 04:44:22 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Hannes Reinecke <hare@suse.de>,
+        Pankaj Raghav <p.raghav@samsung.com>, brauner@kernel.org,
+        viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gost.dev@samsung.com
+Subject: Re: [RFC 0/4] convert create_page_buffers to create_folio_buffers
+Message-ID: <ZDodlnm2nvYxbvR4@casper.infradead.org>
+References: <CGME20230414110825eucas1p1ed4d16627889ef8542dfa31b1183063d@eucas1p1.samsung.com>
+ <20230414110821.21548-1-p.raghav@samsung.com>
+ <1e68a118-d177-a218-5139-c8f13793dbbf@suse.de>
+ <ZDn3XPMA024t+C1x@bombadil.infradead.org>
+ <ZDoMmtcwNTINAu3N@casper.infradead.org>
+ <ZDoZCJHQXhVE2KZu@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZDoZCJHQXhVE2KZu@bombadil.infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,43 +57,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SLAB_TYPESAFE_BY_RCU example code snippet is having not tiny RCU
-read-side critical section.  'Documentation/RCU/rculist_nulls.rst' has
-similar example code snippet, and commit da82af04352b ("doc: Update and
-wordsmith rculist_nulls.rst") has broken it.  Apply the change to
-SLAB_TYPESAFE_BY_RCU example code snippet, too.
+On Fri, Apr 14, 2023 at 08:24:56PM -0700, Luis Chamberlain wrote:
+> I thought of that but I saw that the loop that assigns the arr only
+> pegs a bh if we don't "continue" for certain conditions, which made me
+> believe that we only wanted to keep on the array as non-null items which
+> meet the initial loop's criteria. If that is not accurate then yes,
+> the simplication is nice!
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
- include/linux/slab.h | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+Uh, right.  A little bit more carefully this time ... how does this
+look?
 
-diff --git a/include/linux/slab.h b/include/linux/slab.h
-index b18e56c6f06c..6acf1b7c6551 100644
---- a/include/linux/slab.h
-+++ b/include/linux/slab.h
-@@ -53,16 +53,18 @@
-  * stays valid, the trick to using this is relying on an independent
-  * object validation pass. Something like:
-  *
-+ * begin:
-  *  rcu_read_lock();
-- * again:
-  *  obj = lockless_lookup(key);
-  *  if (obj) {
-  *    if (!try_get_ref(obj)) // might fail for free objects
-- *      goto again;
-+ *      rcu_read_unlock();
-+ *      goto begin;
-  *
-  *    if (obj->key != key) { // not the object we expected
-  *      put_ref(obj);
-- *      goto again;
-+ *      rcu_read_unlock();
-+ *      goto begin;
-  *    }
-  *  }
-  *  rcu_read_unlock();
--- 
-2.25.1
+diff --git a/fs/buffer.c b/fs/buffer.c
+index 5e67e21b350a..dff671079b02 100644
+--- a/fs/buffer.c
++++ b/fs/buffer.c
+@@ -2282,7 +2282,7 @@ int block_read_full_folio(struct folio *folio, get_block_t *get_block)
+ {
+ 	struct inode *inode = folio->mapping->host;
+ 	sector_t iblock, lblock;
+-	struct buffer_head *bh, *head, *arr[MAX_BUF_PER_PAGE];
++	struct buffer_head *bh, *head;
+ 	unsigned int blocksize, bbits;
+ 	int nr, i;
+ 	int fully_mapped = 1;
+@@ -2335,7 +2335,7 @@ int block_read_full_folio(struct folio *folio, get_block_t *get_block)
+ 			if (buffer_uptodate(bh))
+ 				continue;
+ 		}
+-		arr[nr++] = bh;
++		nr++;
+ 	} while (i++, iblock++, (bh = bh->b_this_page) != head);
+ 
+ 	if (fully_mapped)
+@@ -2352,25 +2352,29 @@ int block_read_full_folio(struct folio *folio, get_block_t *get_block)
+ 		return 0;
+ 	}
+ 
+-	/* Stage two: lock the buffers */
+-	for (i = 0; i < nr; i++) {
+-		bh = arr[i];
++	/*
++	 * Stage two: lock the buffers.  Recheck the uptodate flag under
++	 * the lock in case somebody else brought it uptodate first.
++	 */
++	bh = head;
++	do {
++		if (buffer_uptodate(bh))
++			continue;
+ 		lock_buffer(bh);
++		if (buffer_uptodate(bh)) {
++			unlock_buffer(bh);
++			continue;
++		}
+ 		mark_buffer_async_read(bh);
+-	}
++	} while ((bh = bh->b_this_page) != head);
+ 
+-	/*
+-	 * Stage 3: start the IO.  Check for uptodateness
+-	 * inside the buffer lock in case another process reading
+-	 * the underlying blockdev brought it uptodate (the sct fix).
+-	 */
+-	for (i = 0; i < nr; i++) {
+-		bh = arr[i];
+-		if (buffer_uptodate(bh))
+-			end_buffer_async_read(bh, 1);
+-		else
++	/* Stage 3: start the IO */
++	bh = head;
++	do {
++		if (buffer_async_read(bh))
+ 			submit_bh(REQ_OP_READ, bh);
+-	}
++	} while ((bh = bh->b_this_page) != head);
++
+ 	return 0;
+ }
+ EXPORT_SYMBOL(block_read_full_folio);
 
+
+I do wonder how much it's worth doing this vs switching to non-BH methods.
+I appreciate that's a lot of work still.
