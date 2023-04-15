@@ -2,145 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE6C6E3059
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 12:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E44326E307F
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 12:13:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbjDOKBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 06:01:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55212 "EHLO
+        id S229894AbjDOKNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 06:13:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjDOKBS (ORCPT
+        with ESMTP id S229994AbjDOKNK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 06:01:18 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9F53C1E
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 03:01:17 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-63b60366047so498313b3a.1
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 03:01:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1681552877; x=1684144877;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xHqibnNY4gA+evDUThDgjACEqmKl0LOJc2RKlg79svA=;
-        b=TGH9B4DUswCHmUGOcZZ+1lYnWG0x7dyyYJgZI+4xpwtGrfcjZCWcBnB/YyOBciGAUC
-         Vo+Y0O+U3oueDwSAT1VvRQE8s15PKZaLMVaOdqhVXT8veO9CFDET0EDnJGf6FYDSRvQg
-         /4wo8Wjohfpi9BswLyfCbwZ/UR0UKyX5mV5Ps=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681552877; x=1684144877;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xHqibnNY4gA+evDUThDgjACEqmKl0LOJc2RKlg79svA=;
-        b=OaRNIc/V8SOyhyuIfiW6dlRfhDcm6u8dUo84U0898FmnN7cJsXJB3qHLSqWiEVgewY
-         bezdD3Kw+9SMlG9OgdSdPOfkomsUSIpSClqVxiMMso5FfDEcbTSdsVNgEmxYoAWCanIG
-         lv3+UAc0iQ/unzezLEhHAnznmPXyrIlmI3EtrpElvsFkL+svDfg6Ue9y/qvp9LXQY+9q
-         5MyDAoVMAPJD9fnk3N1QZ+OtFnit2ksznr+uWsABeL0VV9fuMM0bfkfBIvOqav+Ay4wt
-         GgFqTcq9Je8EoutmzZlG42yiu1xtKpCvEF3uvlk1QJqCWAaOYiDmtg9P/SscuCA24V0j
-         R/ZQ==
-X-Gm-Message-State: AAQBX9d5fYpoTWqWLU4xGAD6UCq6Rd97nFPQt9yC9C4JlzRbNbh8i25j
-        8CVqa2WwwLZKFgx67dw8Y2BxJg==
-X-Google-Smtp-Source: AKy350YTzs0cX55VRFIMdPwWSA1UoMgHTy/om9EKcy+s3h6ZZ13HNLKax9hO0G1J1ALiI8ftnBXJrQ==
-X-Received: by 2002:a05:6a00:1402:b0:62d:e966:ffcb with SMTP id l2-20020a056a00140200b0062de966ffcbmr12826079pfu.0.1681552877311;
-        Sat, 15 Apr 2023 03:01:17 -0700 (PDT)
-Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:499e:18eb:4cc3:7e30])
-        by smtp.gmail.com with ESMTPSA id z9-20020aa791c9000000b0062e63cdfcb2sm4492112pfa.93.2023.04.15.03.01.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Apr 2023 03:01:16 -0700 (PDT)
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Petr Mladek <pmladek@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        linux-kernel@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [PATCHv3] seq_buf: add seq_buf_do_printk() helper
-Date:   Sat, 15 Apr 2023 19:01:10 +0900
-Message-ID: <20230415100110.1419872-1-senozhatsky@chromium.org>
-X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
+        Sat, 15 Apr 2023 06:13:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08FC3C1E;
+        Sat, 15 Apr 2023 03:13:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5EDE460F15;
+        Sat, 15 Apr 2023 10:13:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5F1CC433EF;
+        Sat, 15 Apr 2023 10:13:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681553588;
+        bh=y8PFiTJmyHVcHoADVCxHznp9xq9eD+8CSpYGucAEaE0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QRkWhbnlSseV5l3hBHRP/eNaCxSXMpLHob+yibG4SaXV/siBfZUZzlyCZ/o5H4U9Z
+         YPkHs8kURnehXrBRyfQXgOWs6pcetoJ8cAxOvT1LU0inYvVYTY6tye57rQutNtTlZf
+         jMSixDxbp2YqX4CnxJ8wu2G+x5K/KdekvsHxArInDCFIGQyn5t+B70U+Rhrez3ghlp
+         v1Qslr3kDv3YXE+jzQlqbFJW/N5xEYbJj/csRRIuXHEYPAf/2eP43tEXDdjqYjC5pq
+         xF4zynIr1Wysm7XqAq5qAwlVmhLq/i2Ez0ZcOeWoqVyg36+SjJvLvK2IY6sLuyLuq8
+         oYaUxJWBLqjmg==
+Date:   Sat, 15 Apr 2023 18:02:14 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 01/11] dmaengine: dw-axi-dmac: fix reading register hen
+ runtime suspended
+Message-ID: <ZDp2JjQRkSzwx03g@xhacker>
+References: <20230313170450.897-1-jszhang@kernel.org>
+ <20230313170450.897-2-jszhang@kernel.org>
+ <ZDbrTvfPdnvW4Gue@matsya>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZDbrTvfPdnvW4Gue@matsya>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sometimes we use seq_buf to format a string buffer, which
-we then pass to printk(). However, in certain situations
-the seq_buf string buffer can get too big, exceeding the
-PRINTKRB_RECORD_MAX bytes limit, and causing printk() to
-truncate the string.
+On Wed, Apr 12, 2023 at 11:03:02PM +0530, Vinod Koul wrote:
+> s/hen/when..? or something else
+> 
+> On 14-03-23, 01:04, Jisheng Zhang wrote:
+> > We should runtime resume the device before calling
+> > axi_chan_is_hw_enable().
+> 
+> why is that can you please explain..
 
-Add a new seq_buf helper. This helper prints the seq_buf
-string buffer line by line, using \n as a delimiter,
-rather than passing the whole string buffer to printk()
-at once.
+If the device is suspended, I.E not resumed, accessing any
+registers in axi_chan_is_hw_enable() will cause cpu abort.
 
-Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
----
- include/linux/seq_buf.h |  2 ++
- lib/seq_buf.c           | 32 ++++++++++++++++++++++++++++++++
- 2 files changed, 34 insertions(+)
+I will add this info into commit log of v2.
 
-diff --git a/include/linux/seq_buf.h b/include/linux/seq_buf.h
-index 5b31c5147969..515d7fcb9634 100644
---- a/include/linux/seq_buf.h
-+++ b/include/linux/seq_buf.h
-@@ -159,4 +159,6 @@ extern int
- seq_buf_bprintf(struct seq_buf *s, const char *fmt, const u32 *binary);
- #endif
- 
-+void seq_buf_do_printk(struct seq_buf *s, const char *lvl);
-+
- #endif /* _LINUX_SEQ_BUF_H */
-diff --git a/lib/seq_buf.c b/lib/seq_buf.c
-index 0a68f7aa85d6..45c450f423fa 100644
---- a/lib/seq_buf.c
-+++ b/lib/seq_buf.c
-@@ -93,6 +93,38 @@ int seq_buf_printf(struct seq_buf *s, const char *fmt, ...)
- }
- EXPORT_SYMBOL_GPL(seq_buf_printf);
- 
-+/**
-+ * seq_buf_do_printk - printk seq_buf line by line
-+ * @s: seq_buf descriptor
-+ * @lvl: printk level
-+ *
-+ * printk()-s a multi-line sequential buffer line by line. The function
-+ * makes sure that the buffer in @s is nul terminated and safe to read
-+ * as a string.
-+ */
-+void seq_buf_do_printk(struct seq_buf *s, const char *lvl)
-+{
-+	const char *start, *lf;
-+
-+	if (s->size == 0 || s->len == 0)
-+		return;
-+
-+	seq_buf_terminate(s);
-+
-+	start = s->buffer;
-+	while ((lf = strchr(start, '\n'))) {
-+		int len = lf - start + 1;
-+
-+		printk("%s%.*s", lvl, len, start);
-+		start = ++lf;
-+	}
-+
-+	/* No trailing LF */
-+	if (start < s->buffer + s->len)
-+		printk("%s%s\n", lvl, start);
-+}
-+EXPORT_SYMBOL_GPL(seq_buf_do_printk);
-+
- #ifdef CONFIG_BINARY_PRINTF
- /**
-  * seq_buf_bprintf - Write the printf string from binary arguments
--- 
-2.40.0.634.g4ca3ef3211-goog
-
+> 
+> > 
+> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > ---
+> >  drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c | 15 +++++++++++----
+> >  1 file changed, 11 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
+> > index 7f3a60e28e38..23a10dbdecb7 100644
+> > --- a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
+> > +++ b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
+> > @@ -462,13 +462,17 @@ static void dw_axi_dma_synchronize(struct dma_chan *dchan)
+> >  
+> >  static int dma_chan_alloc_chan_resources(struct dma_chan *dchan)
+> >  {
+> > +	int ret;
+> >  	struct axi_dma_chan *chan = dchan_to_axi_dma_chan(dchan);
+> >  
+> > +	pm_runtime_get(chan->chip->dev);
+> > +
+> >  	/* ASSERT: channel is idle */
+> >  	if (axi_chan_is_hw_enable(chan)) {
+> >  		dev_err(chan2dev(chan), "%s is non-idle!\n",
+> >  			axi_chan_name(chan));
+> > -		return -EBUSY;
+> > +		ret = -EBUSY;
+> > +		goto err_busy;
+> >  	}
+> >  
+> >  	/* LLI address must be aligned to a 64-byte boundary */
+> > @@ -478,13 +482,16 @@ static int dma_chan_alloc_chan_resources(struct dma_chan *dchan)
+> >  					  64, 0);
+> >  	if (!chan->desc_pool) {
+> >  		dev_err(chan2dev(chan), "No memory for descriptors\n");
+> > -		return -ENOMEM;
+> > +		ret = -ENOMEM;
+> > +		goto err_busy;
+> >  	}
+> >  	dev_vdbg(dchan2dev(dchan), "%s: allocating\n", axi_chan_name(chan));
+> >  
+> > -	pm_runtime_get(chan->chip->dev);
+> > -
+> >  	return 0;
+> > +
+> > +err_busy:
+> > +	pm_runtime_put(chan->chip->dev);
+> > +	return ret;
+> >  }
+> >  
+> >  static void dma_chan_free_chan_resources(struct dma_chan *dchan)
+> > -- 
+> > 2.39.2
+> 
+> -- 
+> ~Vinod
