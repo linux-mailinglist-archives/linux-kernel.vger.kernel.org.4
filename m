@@ -2,61 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CECC6E2DFC
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 02:44:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F13C6E2DFE
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 02:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbjDOAoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 20:44:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53628 "EHLO
+        id S229780AbjDOArd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 20:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbjDOAoQ (ORCPT
+        with ESMTP id S229491AbjDOArc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 20:44:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D19C4EFB
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 17:43:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681519407;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jLzcmt6yXFfM7kna/P8KGa04zAmCOpl3/oE8xB2gQTc=;
-        b=CIu0Q9Rv/+dselgn5y7vHsNUQsoc6d5dUrq628AOyZCZxCPRq5h6Y0haIRT6UC+vMdACJm
-        VFa9RwF05IubpbLK53vh8d7m9dcsKLUN9MfiyxkxvFJJfx2paX5W1xnvv+tZ5ED4DYjX24
-        UTMicskF7HW2ncuM1saYFOvV0D0r3mY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-581-2cQ0V8l1PEOwMptCbG6fhg-1; Fri, 14 Apr 2023 20:43:24 -0400
-X-MC-Unique: 2cQ0V8l1PEOwMptCbG6fhg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B2B792823815;
-        Sat, 15 Apr 2023 00:43:23 +0000 (UTC)
-Received: from localhost (ovpn-12-58.pek2.redhat.com [10.72.12.58])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 91CDE1121320;
-        Sat, 15 Apr 2023 00:43:22 +0000 (UTC)
-Date:   Sat, 15 Apr 2023 08:43:17 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, catalin.marinas@arm.com,
-        horms@kernel.org, thunder.leizhen@huawei.com,
-        John.p.donnelly@oracle.com, kexec@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v5] arm64: kdump: simplify the reservation behaviour of
- crashkernel=,high
-Message-ID: <ZDnzJaqQLkllQox1@MiWiFi-R3L-srv>
-References: <20230407022419.19412-1-bhe@redhat.com>
- <20230414143413.GA27911@willie-the-truck>
+        Fri, 14 Apr 2023 20:47:32 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E111BE6
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 17:47:31 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1a273b3b466so346835ad.1
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 17:47:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681519651; x=1684111651;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IOjLK7bQw/L2nScgnPBp53VOvgLxyAOh6awtiT0/aow=;
+        b=RtOWkJYbe+9ZGSd5xT+gJJLYqAEs2lVrS2bkzsMdZM7klHA/vSY0tlzl9xqOiJdx8m
+         rqlTfL3MNAEjVlQMaCXNLrbo5gZYSR3bhVkruXKeaodAqxkbYpyechzuxax+w8YuuJUD
+         3OGs6/AEAYveEgXL/bO+6mCSy9S7+6J4/XJLqCXX0u9jEvIaoVBuWSt5OgAdjfBwsXre
+         rKkC0tHcAyrqchK8mRNiDF2e23Guzns+ByJka25IHcbAt4DomqxMo8dbEzlSCLdjltxr
+         QUB8GI9mo8ImKeov5KYlljJx8+b7wgs8PgbPW1MCx681BvtaYwevu0jbqxSasgXmR7Bg
+         QoaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681519651; x=1684111651;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IOjLK7bQw/L2nScgnPBp53VOvgLxyAOh6awtiT0/aow=;
+        b=RSIyj+2FVA9UlAb+YhxGztdVOa4sOFL6yZ7s+k5NKYlOiS3qpwQfBLf0oySyWyNvf5
+         DfLXclHaxMeI7FtdFg/C4+9MP4U4ga2dMVLMd8ONqcYyGW+9M9HjNgrtw1zP3isNdzMv
+         a3gTpHwbrVpNnsxGwS6zv2xgM4RYkRY1Ya2/DaNx0qzYu632gu4a0G7RxpLJPx4Ty8tn
+         rNgwGYXA/7imghBtqpzHfiGqUh29DmwxY+KSjljOPKVHoyfBYUhFEdviQ8dkgvNWwP6J
+         0uTNpFEvRCWB3rOf/oTMj4/X/XsmxKCGJoikxbrQ8b6E9mRc4fAWpsLTpgHkaOIS9FIL
+         lZbA==
+X-Gm-Message-State: AAQBX9cAi7UdLAIAxidw71nhFaeZtAgSXN4Ydlr+IJ9RsL6VE/ZnfXww
+        LCyerM1y+KDS0qA153sU98G3UA==
+X-Google-Smtp-Source: AKy350bHkVJvegqUh1KkAk2WDRkXKzUMzBurIQmEMbkglCRkotl3792v/bGfao0Tkm70skXEKMpw4g==
+X-Received: by 2002:a17:902:6505:b0:19a:c659:e1cc with SMTP id b5-20020a170902650500b0019ac659e1ccmr72607plk.2.1681519650587;
+        Fri, 14 Apr 2023 17:47:30 -0700 (PDT)
+Received: from [2620:0:1008:11:7645:4c1a:1f51:a9b8] ([2620:0:1008:11:7645:4c1a:1f51:a9b8])
+        by smtp.gmail.com with ESMTPSA id k20-20020aa790d4000000b0063585190b09sm3552921pfk.113.2023.04.14.17.47.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Apr 2023 17:47:29 -0700 (PDT)
+Date:   Fri, 14 Apr 2023 17:47:28 -0700 (PDT)
+From:   David Rientjes <rientjes@google.com>
+To:     Michal Hocko <mhocko@suse.com>
+cc:     Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        mike.kravetz@oracle.com, muchun.song@linux.dev,
+        souravpanda@google.com
+Subject: Re: [PATCH v2] mm: hugetlb_vmemmap: provide stronger vmemmap allocation
+ guarantees
+In-Reply-To: <ZDhGADdnbIAqdlrg@dhcp22.suse.cz>
+Message-ID: <e7171928-61aa-2897-b3d1-e5f826a4592c@google.com>
+References: <20230412195939.1242462-1-pasha.tatashin@soleen.com> <20230412131302.cf42a7f4b710db8c18b7b676@linux-foundation.org> <ZDcSG2t3/sVuZc67@dhcp22.suse.cz> <CA+CK2bCZEKsocuwN4Na1+YyviERztGdGDoQgWhxQF-9WxVVW5Q@mail.gmail.com> <ZDge+eM67WzVzB9V@dhcp22.suse.cz>
+ <CA+CK2bDCKUDJu+Vx1PF9hsBGzbrN05fkyw7AHAKd0YYfTkhp5g@mail.gmail.com> <ZDhGADdnbIAqdlrg@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230414143413.GA27911@willie-the-truck>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,69 +75,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/14/23 at 03:34pm, Will Deacon wrote:
-> Hi,
-> 
-> On Fri, Apr 07, 2023 at 10:24:19AM +0800, Baoquan He wrote:
-> > On arm64, reservation for 'crashkernel=xM,high' is taken by searching for
-> > suitable memory region top down. If the 'xM' of crashkernel high memory
-> > is reserved from high memory successfully, it will try to reserve
-> > crashkernel low memory later accoringly. Otherwise, it will try to search
-> > low memory area for the 'xM' suitable region. Please see the details in
-> > Documentation/admin-guide/kernel-parameters.txt.
-> 
+On Thu, 13 Apr 2023, Michal Hocko wrote:
+
 > [...]
+> > > > This is a theoretical concern. Freeing a 1G page requires 16M of free
+> > > > memory. A machine might need to be reconfigured from one task to
+> > > > another, and release a large number of 1G pages back to the system if
+> > > > allocating 16M fails, the release won't work.
+> > >
+> > > This is really an important "detail" changelog should mention. While I
+> > > am not really against that change I would much rather see that as a
+> > > result of a real world fix rather than a theoretical concern. Mostly
+> > > because a real life scenario would allow us to test the
+> > > __GFP_RETRY_MAYFAIL effectivness. As that request might fail as well we
+> > > just end up with a theoretical fix for a theoretical problem. Something
+> > > that is easy to introduce but much harder to get rid of should we ever
+> > > need to change __GFP_RETRY_MAYFAIL implementation for example.
+> > 
+> > I will add this to changelog in v3. If  __GFP_RETRY_MAYFAIL is
+> > ineffective we will receive feedback once someone hits this problem.
 > 
-> >  arch/arm64/mm/init.c | 44 ++++++++++++++++++++++++++++++++++----------
-> >  1 file changed, 34 insertions(+), 10 deletions(-)
+> I do not remember anybody hitting this with the current __GFP_NORETRY.
+> So arguably there is nothing to be fixed ATM.
 > 
-> I tried to apply this, but smatch is unhappy with the result:
-> 
->   | arch/arm64/mm/init.c:153 reserve_crashkernel() error: uninitialized symbol 'search_base'.
-> 
-> I _think_ this is a false positive, but I must say that the control flow
-> in reserve_crashkernel() is extremely hard to follow so I couldn't be
-> sure. If the static checker is struggling, then so will humans!
-> 
-> Ideally, this would all be restructured to make it easier to follow,
-> but in the short term we need something to squash the warning.
 
-Sorry for that, I didn't run static checker. We should do initialization
-as below to fix the warning. Below code can be added into this v5 patch,
-or I can post v6 with Catalin's Reviewed-by tag.
+I think we should still at least clear __GFP_NORETRY in this allocation: 
+to be able to free 1GB hugepages back to the system we'd like the page 
+allocator to at least exercise its normal order-0 allocation logic rather 
+than exempting it from retrying reclaim by opting into __GFP_NORETRY.
 
-Yes, about restructuring, I can think about it later. The added corner
-cases handling specific for arm64 makes the flow a little harder to
-flow. I will consider if adding document in arm64 is better.
+I'd agree with the analysis in 
+https://lore.kernel.org/linux-mm/YCafit5ruRJ+SL8I@dhcp22.suse.cz/ that 
+either a cleared __GFP_NORETRY or a __GFP_RETRY_MAYFAIL makes logical 
+sense.
 
-From 3575571ab9614c31f30933148a8693924a30321c Mon Sep 17 00:00:00 2001
-From: Baoquan He <bhe@redhat.com>
-Date: Sat, 15 Apr 2023 08:35:08 +0800
-Subject: [PATCH] arm64: kdump: fix warning reported by static checker
-Content-type: text/plain
+We really *do* want to free these hugepages back to the system and the 
+amount of memory freeing will always be more than the allocation for 
+struct page.  The net result is more free memory.
 
-Signed-off-by: Baoquan He <bhe@redhat.com>
----
- arch/arm64/mm/init.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
-index 13750b0548da..bfc117cefcd5 100644
---- a/arch/arm64/mm/init.c
-+++ b/arch/arm64/mm/init.c
-@@ -128,9 +128,9 @@ static int __init reserve_crashkernel_low(unsigned long long low_size)
-  */
- static void __init reserve_crashkernel(void)
- {
--	unsigned long long crash_base, crash_size, search_base;
-+	unsigned long long crash_low_size = 0, search_base = 0;
- 	unsigned long long crash_max = CRASH_ADDR_LOW_MAX;
--	unsigned long long crash_low_size = 0;
-+	unsigned long long crash_base, crash_size;
- 	char *cmdline = boot_command_line;
- 	bool fixed_base = false;
- 	bool high = false;
--- 
-2.34.1
-
-
+If the allocation fails, we can't free 1GB back to the system on a 
+saturated node if our first reclaim attempt didn't allow these struct 
+pages to be allocated.  Stranding 1GB in the hugetlb pool that no 
+userspace on the system can make use of at the time isn't very useful.
