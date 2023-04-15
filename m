@@ -2,64 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8AEE6E3131
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 14:01:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BF5A6E313A
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 14:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbjDOMBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 08:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41826 "EHLO
+        id S229848AbjDOMJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 08:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjDOMBr (ORCPT
+        with ESMTP id S229557AbjDOMJV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 08:01:47 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E2A4ED5
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 05:01:45 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id si1so22008655ejb.10
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 05:01:45 -0700 (PDT)
+        Sat, 15 Apr 2023 08:09:21 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B7424EDE
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 05:09:19 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-2efbab2d524so322275f8f.1
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 05:09:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681560104; x=1684152104;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=loYQo7M8BRPGuxyliqbEUne9rPks6JWwMjKdxM22SSs=;
-        b=jGVB7otariHvjr7dnZp+PuOdufOikW2BI2GlBSWMchRZ/oWSZKSFOjFNHoRnRBMg1t
-         nNAw7Wzxsi7+Lis/dyrW0cGw6pqTWLQ0u+Z3K3znc92K1AaKAolwEnuU3q1OKDkUhe5N
-         NDbJ7VLGeiCuHcjkNpSrY+nMJ/YHAaI3rtL2S+9LaMhwqCbDFpmXzAI4pdZ1u6sL11bp
-         IFPFDALNa4XEz0TQ8YVZEbW8cjsVaxW287NPOj7wdl/r3BEfulTpE2xkSaxhI1N+a6pN
-         dmYUD/MJPssGuHVLPvmoNmAjP+7dESXdwTQ9SRRrOClps9xT1rf4icBZVBxjSgD+9ZBz
-         TaPg==
+        d=gmail.com; s=20221208; t=1681560558; x=1684152558;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OFJP1DEOM2hcDBxvWV93h2rtiTrUT+yDD0c0jto4Tbk=;
+        b=M0DAP/83XHRXNFaFuUrIe0FPT2ywMdU7/EBmKQkTuzotA3+g/mX5EiP3BZ+gmRdcOl
+         UFrBOLbbcBc2zRVa5VcBRxWVoQLbT3u4UDKUxj1j8r+KUEAcNw+jp5GMYy5Qna5WIi4n
+         wCciW3dklDpS4KBECt4G0sWLch9GdrifFX0Y3oipbTaFgwH6rAobYlBjp6ZeYCChwHwu
+         a93hq7U9JKqyU8tbsVUNx5Ic/yKw4fXOYjce49G0+fOVQ4A9axdGZ6eoY0Py0irGUfkF
+         cTfQ/2fUz/BDqh2Z7ElN+Epnoix8a7JN3AI6y1EAcJNqOo2xQkm12U0oZBCONQAHFbKK
+         eU/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681560104; x=1684152104;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=loYQo7M8BRPGuxyliqbEUne9rPks6JWwMjKdxM22SSs=;
-        b=PBPee+YTqlQbntpvzT1A/y+1E4H/QBf5rDcee0Sk4MHxxjNlkD4Gdrm0dxD8zgwjr2
-         LAaCYuwn/pNJ+xJBJ9UIG4YQOr76hL+wCIgpjT0arAa9eqCBlAiWMdktiAS0lzexzz2f
-         B4kVfyeC3pW6he7dWL/a3lQiQAfAO9ujqVm2nKNUBHMmn/6hsSDsOBIWOR0ITt4WUzZP
-         vR62SvzdmDEy9DSqiNZujECz3t62Kj0Y1+HzdzE7kG/ps7cBnNk/d5vpNOrhwFBfek1V
-         vH4HaTUU/Jd0SId43b84yrVs/CP83tM4xTraiZCii1r3c8DAIQEHzmS9gUT/WsZb01vn
-         DdHQ==
-X-Gm-Message-State: AAQBX9dADB0dcIxrJRBPu1zFkIcaHf1E/22VkNmGDJyjJ62/3qNrpEPV
-        KeDFwGBYQ/IdzE/dPYcxUlU6qNRPGA==
-X-Google-Smtp-Source: AKy350YmaFJs1/xmFhjwsAqRQVbz9nW/no3u7zgOjqOjWNPqPuCBTPhi2s2MDnm4zhfZCCNPVriEgw==
-X-Received: by 2002:a17:906:b756:b0:94a:82ca:12e5 with SMTP id fx22-20020a170906b75600b0094a82ca12e5mr1872166ejb.45.1681560104212;
-        Sat, 15 Apr 2023 05:01:44 -0700 (PDT)
-Received: from koolguy (dslb-002-205-192-117.002.205.pools.vodafone-ip.de. [2.205.192.117])
-        by smtp.gmail.com with ESMTPSA id wz4-20020a170906fe4400b0094eeda0df09sm1930184ejb.179.2023.04.15.05.01.43
+        d=1e100.net; s=20221208; t=1681560558; x=1684152558;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OFJP1DEOM2hcDBxvWV93h2rtiTrUT+yDD0c0jto4Tbk=;
+        b=F/itvZ0CkJvA8gSGuaYWOqTzo6CrjDx/3m5kzvFVMeQ4XPiFEiXvcBqFssHxfeCTF8
+         5B5QSyvt/vezGVa6DnXUThGOx4WtYpF5s4ewpkHy9soLmaJ0dpqoy1ZQpk3eGWspq8YZ
+         xSYTb7ySIexlCqOzdiQYurTysnG299sGOTi8ROahvXlwTee/YksrDUSNTPImgoCj/LoZ
+         DZ5h8ivnDo3o7QpwGYlmz3C3oikD36Hf371j3ku+JXFnQ59vJWjyXTXspOc4jBhk5soA
+         OnX3ih84Kzaq60e8g3Q4iiB0g8SjY+24bvFcceEBmZQaEOuOFvD1yrKMO0cuycNtiaME
+         /35g==
+X-Gm-Message-State: AAQBX9fpZ0sfTpFi3JezpBon1s6r5ommU06wLdvZ0JoV4eWIUz934PfB
+        rXJ7qquGHWbzfISF7s/fOnA=
+X-Google-Smtp-Source: AKy350bdgIVIT8Ikiu4Ulq2mLTKwIF3hcqxe6rsYgcxgaWqBWXYlZO3ICi2NP+5izhbKbr9kn0X6yA==
+X-Received: by 2002:adf:e802:0:b0:2d1:7ade:aac with SMTP id o2-20020adfe802000000b002d17ade0aacmr1306465wrm.0.1681560557807;
+        Sat, 15 Apr 2023 05:09:17 -0700 (PDT)
+Received: from lucifer.home ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
+        by smtp.googlemail.com with ESMTPSA id h12-20020adffa8c000000b002d322b9a7f5sm5657253wrr.88.2023.04.15.05.09.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Apr 2023 05:01:43 -0700 (PDT)
-Date:   Sat, 15 Apr 2023 14:01:41 +0200
-From:   Dalvin-Ehinoma Noah Aiguobas <pharcodra@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] staging: octeon: remove typedef declaration
-Message-ID: <20230415120141.GA6585@koolguy>
+        Sat, 15 Apr 2023 05:09:17 -0700 (PDT)
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>
+Subject: [PATCH v3 0/7] remove the vmas parameter from GUP APIs
+Date:   Sat, 15 Apr 2023 13:09:14 +0100
+Message-Id: <cover.1681558407.git.lstoakes@gmail.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,148 +71,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix checkpatch.pl warning for enums.
+(pin_/get)_user_pages[_remote]() each provide an optional output parameter
+for an array of VMA objects associated with each page in the input range.
 
-Change typedef cvmx_helper_interface_mode_t to
-enum cvmx_helper_interface_mode in ethernet.c
+These provide the means for VMAs to be returned, as long as mm->mmap_lock
+is never released during the GUP operation (i.e. the internal flag
+FOLL_UNLOCKABLE is not specified).
 
-Signed-off-by: Dalvin-Ehinoma Noah Aiguobas <pharcodra@gmail.com>
----
-Changes in V2:
--Remove Alignment fixes from previous version.
+In addition, these VMAs have also to only be accessed under the mmap_lock,
+and become invalidated the moment it is released.
 
- drivers/staging/octeon/ethernet.c     |  2 +-
- drivers/staging/octeon/octeon-stubs.h | 39 +++++++++++++--------------
- 2 files changed, 20 insertions(+), 21 deletions(-)
+The vast majority of invocations do not use this functionality and of those
+that do, all but one retrieve a single VMA to perform checks upon.
 
-diff --git a/drivers/staging/octeon/ethernet.c b/drivers/staging/octeon/ethernet.c
-index 9eee28f2940c..023b107e077a 100644
---- a/drivers/staging/octeon/ethernet.c
-+++ b/drivers/staging/octeon/ethernet.c
-@@ -798,7 +798,7 @@ static int cvm_oct_probe(struct platform_device *pdev)
- 
- 	num_interfaces = cvmx_helper_get_number_of_interfaces();
- 	for (interface = 0; interface < num_interfaces; interface++) {
--		cvmx_helper_interface_mode_t imode =
-+		enum cvmx_helper_interface_mode imode =
- 		    cvmx_helper_interface_get_mode(interface);
- 		int num_ports = cvmx_helper_ports_on_interface(interface);
- 		int port;
-diff --git a/drivers/staging/octeon/octeon-stubs.h b/drivers/staging/octeon/octeon-stubs.h
-index 3e7b92cd2e35..58708a7f727a 100644
---- a/drivers/staging/octeon/octeon-stubs.h
-+++ b/drivers/staging/octeon/octeon-stubs.h
-@@ -213,14 +213,14 @@ enum cvmx_fau_op_size {
- 	CVMX_FAU_OP_SIZE_64 = 3
- };
- 
--typedef enum {
-+enum cvmx_spi_mode {
- 	CVMX_SPI_MODE_UNKNOWN = 0,
- 	CVMX_SPI_MODE_TX_HALFPLEX = 1,
- 	CVMX_SPI_MODE_RX_HALFPLEX = 2,
- 	CVMX_SPI_MODE_DUPLEX = 3
--} cvmx_spi_mode_t;
-+};
- 
--typedef enum {
-+enum cvmx_helper_interface_mode {
- 	CVMX_HELPER_INTERFACE_MODE_DISABLED,
- 	CVMX_HELPER_INTERFACE_MODE_RGMII,
- 	CVMX_HELPER_INTERFACE_MODE_GMII,
-@@ -231,20 +231,20 @@ typedef enum {
- 	CVMX_HELPER_INTERFACE_MODE_PICMG,
- 	CVMX_HELPER_INTERFACE_MODE_NPI,
- 	CVMX_HELPER_INTERFACE_MODE_LOOP,
--} cvmx_helper_interface_mode_t;
-+};
- 
--typedef enum {
-+enum cvmx_pow_wait {
- 	CVMX_POW_WAIT = 1,
- 	CVMX_POW_NO_WAIT = 0,
--} cvmx_pow_wait_t;
-+};
- 
--typedef enum {
-+enum cvmx_pko_lock {
- 	CVMX_PKO_LOCK_NONE = 0,
- 	CVMX_PKO_LOCK_ATOMIC_TAG = 1,
- 	CVMX_PKO_LOCK_CMD_QUEUE = 2,
--} cvmx_pko_lock_t;
-+};
- 
--typedef enum {
-+enum cvmx_pko_status {
- 	CVMX_PKO_SUCCESS,
- 	CVMX_PKO_INVALID_PORT,
- 	CVMX_PKO_INVALID_QUEUE,
-@@ -252,7 +252,7 @@ typedef enum {
- 	CVMX_PKO_NO_MEMORY,
- 	CVMX_PKO_PORT_ALREADY_SETUP,
- 	CVMX_PKO_CMD_QUEUE_INIT_ERROR
--} cvmx_pko_status_t;
-+};
- 
- enum cvmx_pow_tag_type {
- 	CVMX_POW_TAG_TYPE_ORDERED   = 0L,
-@@ -1265,8 +1265,7 @@ static inline void cvmx_pko_get_port_status(uint64_t port_num, uint64_t clear,
- 					    cvmx_pko_port_status_t *status)
- { }
- 
--static inline cvmx_helper_interface_mode_t cvmx_helper_interface_get_mode(int
--								   interface)
-+static inline enum cvmx_helper_interface_mode cvmx_helper_interface_get_mode(int interface)
- {
- 	return 0;
- }
-@@ -1342,11 +1341,11 @@ static inline unsigned int cvmx_get_core_num(void)
- }
- 
- static inline void cvmx_pow_work_request_async_nocheck(int scr_addr,
--						       cvmx_pow_wait_t wait)
-+						       enum cvmx_pow_wait wait)
- { }
- 
- static inline void cvmx_pow_work_request_async(int scr_addr,
--					       cvmx_pow_wait_t wait)
-+					       enum cvmx_pow_wait wait)
- { }
- 
- static inline struct cvmx_wqe *cvmx_pow_work_response_async(int scr_addr)
-@@ -1356,13 +1355,13 @@ static inline struct cvmx_wqe *cvmx_pow_work_response_async(int scr_addr)
- 	return wqe;
- }
- 
--static inline struct cvmx_wqe *cvmx_pow_work_request_sync(cvmx_pow_wait_t wait)
-+static inline struct cvmx_wqe *cvmx_pow_work_request_sync(enum cvmx_pow_wait wait)
- {
- 	return (void *)(unsigned long)wait;
- }
- 
- static inline int cvmx_spi_restart_interface(int interface,
--					cvmx_spi_mode_t mode, int timeout)
-+				       enum cvmx_spi_mode mode, int timeout)
- {
- 	return 0;
- }
-@@ -1381,12 +1380,12 @@ static inline union cvmx_gmxx_rxx_rx_inbnd cvmx_spi4000_check_speed(int interfac
- }
- 
- static inline void cvmx_pko_send_packet_prepare(uint64_t port, uint64_t queue,
--						cvmx_pko_lock_t use_locking)
-+						enum cvmx_pko_lock use_locking)
- { }
- 
--static inline cvmx_pko_status_t cvmx_pko_send_packet_finish(uint64_t port,
--		uint64_t queue, union cvmx_pko_command_word0 pko_command,
--		union cvmx_buf_ptr packet, cvmx_pko_lock_t use_locking)
-+static inline enum cvmx_pko_status cvmx_pko_send_packet_finish(uint64_t port,
-+		    uint64_t queue, union cvmx_pko_command_word0 pko_command,
-+		    union cvmx_buf_ptr packet, enum cvmx_pko_lock use_locking)
- {
- 	return 0;
- }
+It is not egregious in the single VMA cases to simply replace the operation
+with a vma_lookup(). In these cases we duplicate the (fast) lookup on a
+slow path already under the mmap_lock.
+
+The special case is io_uring, where io_pin_pages() specifically needs to
+assert that all the VMAs possess the same vm->vm_file (possibly NULL) and
+they are either anonymous or hugetlb pages.
+
+To continue to provide this functionality, we introduce the FOLL_SAME_PAGE
+flag which asserts that the vma->vm_file remains the same throughout,
+erroring out if this is not the case.
+
+We can then replace the io_uring case by passing FOLL_SAME_FILE and looking
+up the first VMA manually and performing the required checks on this
+alone. The combination of the two amount to the same checks being
+performed (and avoids an allocation).
+
+Eliminating this parameter eliminates an entire class of errors - the vmas
+array used to become a set of dangling pointers if access after release of
+mmap_lock was attempted, this is simply no longer possible.
+
+In addition the API is simplified and now clearly expresses what it is for
+- applying the specified GUP flags and (if pinning) returning pinned pages.
+
+This change additionally opens the door to further potential improvements
+in GUP and the possible marrying of disparate code paths.
+
+I have run the gup_test and a simple io_uring program which exercises the
+use of FOLL_SAME_PAGE with no issues.
+
+Thanks to Matthew Wilcox for suggesting this refactoring!
+
+v3:
+- Always explicitly handle !vma cases, feeding back an error to the user if
+  appropriate, indicating the operation did not completely succeed if not
+  and always with a warning since these conditions should be impossible.
+
+v2:
+- Only lookup the VMA if the pin succeeded (other than __access_remote_vm()
+  which has different semantics)
+- Be pedantically careful about ensuring that under no circumstances can we
+  fail to unpin a page
+https://lore.kernel.org/linux-mm/cover.1681547405.git.lstoakes@gmail.com/
+
+v1:
+https://lore.kernel.org/linux-mm/cover.1681508038.git.lstoakes@gmail.com/
+
+Lorenzo Stoakes (7):
+  mm/gup: remove unused vmas parameter from get_user_pages()
+  mm/gup: remove unused vmas parameter from pin_user_pages_remote()
+  mm/gup: remove vmas parameter from get_user_pages_remote()
+  mm/gup: introduce the FOLL_SAME_FILE GUP flag
+  io_uring: rsrc: use FOLL_SAME_FILE on pin_user_pages()
+  mm/gup: remove vmas parameter from pin_user_pages()
+  mm/gup: remove vmas array from internal GUP functions
+
+ arch/arm64/kernel/mte.c                    |   7 +-
+ arch/powerpc/mm/book3s64/iommu_api.c       |   2 +-
+ arch/s390/kvm/interrupt.c                  |   2 +-
+ arch/x86/kernel/cpu/sgx/ioctl.c            |   2 +-
+ drivers/gpu/drm/radeon/radeon_ttm.c        |   2 +-
+ drivers/infiniband/hw/qib/qib_user_pages.c |   2 +-
+ drivers/infiniband/hw/usnic/usnic_uiom.c   |   2 +-
+ drivers/infiniband/sw/siw/siw_mem.c        |   2 +-
+ drivers/iommu/iommufd/pages.c              |   4 +-
+ drivers/media/v4l2-core/videobuf-dma-sg.c  |   2 +-
+ drivers/misc/sgi-gru/grufault.c            |   2 +-
+ drivers/vdpa/vdpa_user/vduse_dev.c         |   2 +-
+ drivers/vfio/vfio_iommu_type1.c            |   2 +-
+ drivers/vhost/vdpa.c                       |   2 +-
+ fs/exec.c                                  |   2 +-
+ include/linux/hugetlb.h                    |  10 +-
+ include/linux/mm.h                         |  10 +-
+ include/linux/mm_types.h                   |   2 +
+ io_uring/rsrc.c                            |  40 +++----
+ kernel/events/uprobes.c                    |  14 ++-
+ mm/gup.c                                   | 121 ++++++++-------------
+ mm/gup_test.c                              |  14 +--
+ mm/hugetlb.c                               |  24 ++--
+ mm/memory.c                                |   8 +-
+ mm/process_vm_access.c                     |   2 +-
+ mm/rmap.c                                  |   2 +-
+ net/xdp/xdp_umem.c                         |   2 +-
+ security/tomoyo/domain.c                   |   2 +-
+ virt/kvm/async_pf.c                        |   3 +-
+ virt/kvm/kvm_main.c                        |   2 +-
+ 30 files changed, 132 insertions(+), 161 deletions(-)
+
 -- 
-2.25.1
+2.40.0
 
