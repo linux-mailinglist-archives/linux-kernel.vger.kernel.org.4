@@ -2,131 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6E8C6E2EC9
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 05:25:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAABD6E2ECF
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 05:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbjDODZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 23:25:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34940 "EHLO
+        id S229951AbjDODaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 23:30:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjDODZH (ORCPT
+        with ESMTP id S229450AbjDODaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 23:25:07 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6504ECB;
-        Fri, 14 Apr 2023 20:25:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ieHtrQuR9xDvhidDNkbr97KSetebKREK0D1RgGN+8Kw=; b=nWIxEB2WTi0n5vRquZCmT201yR
-        LteCJWdrJj+NyEvujqTn/vJP4mZ73RtA90E6jffxBqzZ4OTH+kCoxWavP4vBVj+UEa4wVBLieQEbO
-        /S3fzZ2mJudG8cfl08Qk/ztSjUUTXeG8Lw1SYzO9a1/9vlul0/tbP6GUBrgZv8akf52dM4KbKNXcA
-        G3Ku2uDRaSGy/vftY9g1dO1E24BQmBPHrCSHA3oidqqI7LR19esa01Ofb9xErkO2EMvE5XeJ1tccP
-        Rfs3hbXcBAM3vaMaGmSVY6NVn/EUszDj4tkPMBgb4W2n1nZPHr13HIMvichh1KNo2rTHTnCCv2djg
-        vMan+UeA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pnWX2-00BBD1-1b;
-        Sat, 15 Apr 2023 03:24:56 +0000
-Date:   Fri, 14 Apr 2023 20:24:56 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Hannes Reinecke <hare@suse.de>,
-        Pankaj Raghav <p.raghav@samsung.com>, brauner@kernel.org,
-        viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gost.dev@samsung.com
-Subject: Re: [RFC 0/4] convert create_page_buffers to create_folio_buffers
-Message-ID: <ZDoZCJHQXhVE2KZu@bombadil.infradead.org>
-References: <CGME20230414110825eucas1p1ed4d16627889ef8542dfa31b1183063d@eucas1p1.samsung.com>
- <20230414110821.21548-1-p.raghav@samsung.com>
- <1e68a118-d177-a218-5139-c8f13793dbbf@suse.de>
- <ZDn3XPMA024t+C1x@bombadil.infradead.org>
- <ZDoMmtcwNTINAu3N@casper.infradead.org>
+        Fri, 14 Apr 2023 23:30:17 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFC75262;
+        Fri, 14 Apr 2023 20:30:17 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id l9-20020a17090a3f0900b0023d32684e7fso9873104pjc.1;
+        Fri, 14 Apr 2023 20:30:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681529416; x=1684121416;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DYuiOUfZbNYoaOvaw4w44ADqt0elsTzyixCb90LMiNM=;
+        b=PwChkDyHFiqCQAuJgi3SG8Hl2XFO7ygPzQDN+7mCh6sVabKy1wvaWsf7RcJXpn89ta
+         BWztKvyNvUOQfSvVtnJdv6Z3+ve44wu2qSL9+PhkN7hZWElIDn8MkTIMzfdS0RLzOSTo
+         YZ4kS8Tgg/hoVhVGTn6CZxle6g3rnSz3DDcKrBQYnYwn6ImsGhtAX8x+3xBj1FFd//rc
+         PsqcswnLKcxMqtydMkaSm+X4EiCBt5AK4uM/P91cH0EShtrPwH70fbmpviVpPhy1ou3z
+         Hy5VqrhvSPpruRRlV3bWP+fNL1z1PyL6/b0ddmYaBbnw/TZl+F+zADpXAu1svEk2xIB0
+         qOWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681529416; x=1684121416;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DYuiOUfZbNYoaOvaw4w44ADqt0elsTzyixCb90LMiNM=;
+        b=VW0mWPZsvXWdOpijyc1kJMBQm+Cute/1B0E3dmPqYcCqyLgJ3QYDExiW4rH7oa+U39
+         M5w5TPBmsX2BjwvmJApQeZZnTYEPedGarUci9KB6DnWIPQbqGm3mX8drZoPCv2I6Mw71
+         Jc/TH/fRd7J74VZCkc36b3jsJSzSyHUcBBY/NVS2lC89hxhDMEQfxgOYWRGK/Hi5iR3H
+         b07CU6bVCF+ZqR6MEh1q3RSyW36HlA1hT1dIPqPLl4a3sCR40oitnIwI95GZWZr+3oJQ
+         cjZK0dJtcOC/Ckxr5qMBNsd/MoUWI8Yi0dBIV+9+QUfAIilrX090yMifV8M89UU/1LI2
+         hD7w==
+X-Gm-Message-State: AAQBX9e41ag5T3VcyBaLCA7iB56h5mlULHMKfpDvzQixrQ91qYQ5gSJX
+        8varHs9JzQejPd10q0qun5UymjxMV4oCug==
+X-Google-Smtp-Source: AKy350YvmMOmwU3L7qtH+jQE0Sjc9WIWUjAwSq1iWGArEkm9M4ZIYn/t2izTlByhdJRlYB157DKFmA==
+X-Received: by 2002:a17:902:ea03:b0:1a6:6c27:e8b8 with SMTP id s3-20020a170902ea0300b001a66c27e8b8mr5539088plg.59.1681529416497;
+        Fri, 14 Apr 2023 20:30:16 -0700 (PDT)
+Received: from localhost.localdomain ([43.132.141.3])
+        by smtp.gmail.com with ESMTPSA id d5-20020a170902c18500b001a5000ba26esm3689101pld.264.2023.04.14.20.30.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Apr 2023 20:30:16 -0700 (PDT)
+From:   alexjlzheng@gmail.com
+X-Google-Original-From: alexjlzheng@tencent.com
+To:     seanjc@google.com
+Cc:     alexjlzheng@gmail.com, alexjlzheng@tencent.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mingo@redhat.com,
+        pbonzini@redhat.com, tglx@linutronix.de, x86@kernel.org
+Subject: Re: [PATCH v2] KVM: x86: Fix poll command
+Date:   Sat, 15 Apr 2023 11:30:12 +0800
+Message-Id: <20230415033012.3826437-1-alexjlzheng@tencent.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <ZDmSWIEOTYo3qHf7@google.com>
+References: <ZDmSWIEOTYo3qHf7@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZDoMmtcwNTINAu3N@casper.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 15, 2023 at 03:31:54AM +0100, Matthew Wilcox wrote:
-> On Fri, Apr 14, 2023 at 06:01:16PM -0700, Luis Chamberlain wrote:
-> > a) dynamically allocate those now
-> > b) do a cursory review of the users of that and prepare them
-> >    to grok buffer heads which are blocksize based rather than
-> >    PAGE_SIZE based. So we just try to kill MAX_BUF_PER_PAGE.
+On Fri, 14 Apr 2023, Sean Christopherson <seanjc@google.com> wrote:
+> On Thu, Apr 13, 2023, alexjlzheng@gmail.com wrote:
+> > From: Jinliang Zheng <alexjlzheng@tencent.com>
 > > 
-> > Without a) I think buffers after PAGE_SIZE won't get submit_bh() or lock for
-> > bs > PAGE_SIZE right now.
+> > According to the hardware manual, when the Poll command is issued, the
 > 
-> Worse, we'll overflow the array and corrupt the stack.
-> 
-> This one is a simple fix ...
-> 
-> +++ b/fs/buffer.c
-> @@ -2282,7 +2282,7 @@ int block_read_full_folio(struct folio *folio, get_block_t *get_block)
->  {
->         struct inode *inode = folio->mapping->host;
->         sector_t iblock, lblock;
-> -       struct buffer_head *bh, *head, *arr[MAX_BUF_PER_PAGE];
-> +       struct buffer_head *bh, *head;
->         unsigned int blocksize, bbits;
->         int nr, i;
->         int fully_mapped = 1;
-> @@ -2335,7 +2335,6 @@ int block_read_full_folio(struct folio *folio, get_block_t *get_block)
->                         if (buffer_uptodate(bh))
->                                 continue;
->                 }
-> -               arr[nr++] = bh;
->         } while (i++, iblock++, (bh = bh->b_this_page) != head);
->  
->         if (fully_mapped)
-> @@ -2353,24 +2352,27 @@ int block_read_full_folio(struct folio *folio, get_block_t *get_block)
->         }
->  
->         /* Stage two: lock the buffers */
-> -       for (i = 0; i < nr; i++) {
-> -               bh = arr[i];
-> +       bh = head;
-> +       do {
->                 lock_buffer(bh);
->                 mark_buffer_async_read(bh);
-> -       }
-> +               bh = bh->b_this_page;
-> +       } while (bh != head);
->  
->         /*
->          * Stage 3: start the IO.  Check for uptodateness
->          * inside the buffer lock in case another process reading
->          * the underlying blockdev brought it uptodate (the sct fix).
->          */
-> -       for (i = 0; i < nr; i++) {
-> -               bh = arr[i];
-> +       bh = head;
-> +       do {
->                 if (buffer_uptodate(bh))
->                         end_buffer_async_read(bh, 1);
->                 else
->                         submit_bh(REQ_OP_READ, bh);
-> -       }
-> +               bh = bh->b_this_page;
-> +       } while (bh != head);
-> +
->         return 0;
+> Please add "8259", i.e. "According to the 8259 hardware manual".
 
-I thought of that but I saw that the loop that assigns the arr only
-pegs a bh if we don't "continue" for certain conditions, which made me
-believe that we only wanted to keep on the array as non-null items which
-meet the initial loop's criteria. If that is not accurate then yes,
-the simplication is nice!
+Ok, I will pay attention next time.
 
-  Luis
+> 
+> > byte returned by the I/O read is 1 in Bit 7 when there is an interrupt,
+> > and the highest priority binary code in Bits 2:0. The current pic
+> > simulation code is not implemented strictly according to the above
+> > expression.
+> > 
+> > Fix the implementation of pic_poll_read():
+> > 1. Set Bit 7 when there is an interrupt
+> > 2. Return 0 when there is no interrupt
+> 
+> I don't think #2 is justified.  The spec says:
+> 
+>   The interrupt requests are ordered in priority from 0 through 7 (0 highest).
+
+This is only true when don't use rotation for priority or just reset the 8259a.
+It's prossible to change priorities, i.e. Specific Rotation Mode or Automatic
+Rotation Mode.
+
+> 
+> I.e. the current code enumerates the _lowest_ priority when there is no interrupt,
+> which seems more correct than reporting the highest priority possible.
+
+The practice and interpretation of returning to the lowest priority interrupt
+when there are no active interrupts in the PIC doesn't seem reasonable, as far as I
+understand. For #2, in my opinion, the correct interpretation of the current code
+may be that a spurious interrupt is returned(IRQ 7 is used for that according to
+the 8259 hardware manual).
+
+For #2, the main purpose of returning 0 is to set Bit 7 of the return value to 0
+to indicate that there is no interrupt.
+
+Thank you very much.
+Jinliang Zheng
