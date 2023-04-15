@@ -2,134 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC77A6E323F
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 18:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4245D6E3240
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 18:04:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjDOQDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 12:03:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41038 "EHLO
+        id S229841AbjDOQEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 12:04:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbjDOQDn (ORCPT
+        with ESMTP id S229752AbjDOQE2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 12:03:43 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DFB3A8E;
-        Sat, 15 Apr 2023 09:03:22 -0700 (PDT)
+        Sat, 15 Apr 2023 12:04:28 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D77E1BE1
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 09:04:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=IvR+KTULywCa9KcsMX/Vvku+X+SUD7cXl4deynP11rw=; b=NXgdWGOJ25IYCZlHiYT0mbyGZx
-        naD9urTP2DUiBJUjKQlNEH2DS40R77jvtbEq4XAy/5vWSl02rzMkRT5TAq0rbz2Nh0NH632JDAr+I
-        SJgPoAJEhkTTr5JtR5IUWePoHpwTwg/zFOJ2QMkyVic84BqzLYKT9cYZjFVgv8/TvC3I8irmVZcS9
-        7oJkfHnzWx/Xq5P3mWtQaBn1W5zG8JXNJivfnrkYUURJT+lI9WO0HvPCrF9WJUFjRIkrK9636g+gJ
-        rMxcVteiYdZnU9nRzXRm1p4BVkyPgZ0dQHkUZ3bvrFhzarIgT8TMdSujWFBKbERhlzwtNTA0nkRqP
-        BqL7H2NA==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pniMy-00CPZ1-07;
-        Sat, 15 Apr 2023 16:03:20 +0000
-Message-ID: <dac32cfb-6cb6-613d-169e-f1445492418c@infradead.org>
-Date:   Sat, 15 Apr 2023 09:03:17 -0700
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=M3f0tIbZDw4BYYTvAn/I3PyGrQQdEwG1iuWGGViQqu0=; b=HzUYva4ocTcDkz1rYhCD0RCe/e
+        jeFJUe7IjVEjWa8unTzNeyQjBEDAD45Evl0WwB+CwrytNo4JEVvFyCqcrnIRpB59k5gOWZwXij7gM
+        +gzsOjIAOrz4O9f5SAJUER1ond+l+PklWO0rt8mNbdT0tbcj36qhHgAZccE5kXGTvm7d+mty3po4W
+        O5zGQxrZbOFJruV+XJOV++F+sleci0M/uWe5A+7W9Qf5BwDX0tpeQEJiN3OyET07YP5dLAS7XcKk8
+        LRxSLvN+ksJUWohg4cUIRyUJJL0OY4RWggIsuS/RmMcoxGnFkZ6ifW+GjMXdJy0lUAOJAA0ZuzQQa
+        Nejnn6rg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pniNh-009iCt-LF; Sat, 15 Apr 2023 16:04:05 +0000
+Date:   Sat, 15 Apr 2023 17:04:05 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        SeongJae Park <sj@kernel.org>, Hugh Dickins <hughd@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: rename reclaim_pages() to reclaim_folios()
+Message-ID: <ZDrK9R9wLlfrUWMZ@casper.infradead.org>
+References: <20230415092716.61970-1-wangkefeng.wang@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] fs/proc: add Kthread flag to /proc/$pid/status
-Content-Language: en-US
-To:     Chunguang Wu <fullspring2018@gmail.com>, akpm@linux-foundation.org,
-        corbet@lwn.net
-Cc:     adobriyan@gmail.com, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20230415082155.5298-1-fullspring2018@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230415082155.5298-1-fullspring2018@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230415092716.61970-1-wangkefeng.wang@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sat, Apr 15, 2023 at 05:27:16PM +0800, Kefeng Wang wrote:
+> As commit a83f0551f496 ("mm/vmscan: convert reclaim_pages() to use
+> a folio") changes the arg from page_list to folio_list, but not
+> the defination, let's correct it and rename it to reclaim_folios too.
 
-On 4/15/23 01:21, Chunguang Wu wrote:
-> The command `ps -ef ` and `top -c` mark kernel thread by '['
-> and ']', but sometimes the result is not correct.
-> The task->flags in /proc/$pid/stat is good, but we need remember
-> the value of PF_KTHREAD is 0x00200000 and convert dec to hex.
-> If we have no binary program and shell script which read
-> /proc/$pid/stat, we can know it directly by
-> `cat /proc/$pid/status`.
-> 
-> Signed-off-by: Chunguang Wu <fullspring2018@gmail.com>
-> ---
->  Documentation/filesystems/proc.rst | 2 ++
->  fs/proc/array.c                    | 7 +++++++
->  2 files changed, 9 insertions(+)
-> 
-> diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
-> index 9d5fd9424e8b..8a563684586c 100644
-> --- a/Documentation/filesystems/proc.rst
-> +++ b/Documentation/filesystems/proc.rst
-> @@ -179,6 +179,7 @@ read the file /proc/PID/status::
->    Gid:    100     100     100     100
->    FDSize: 256
->    Groups: 100 14 16
-> +  Kthread:    0
->    VmPeak:     5004 kB
->    VmSize:     5004 kB
->    VmLck:         0 kB
-> @@ -256,6 +257,7 @@ It's slow but very precise.
->   NSpid                       descendant namespace process ID hierarchy
->   NSpgid                      descendant namespace process group ID hierarchy
->   NSsid                       descendant namespace session ID hierarchy
-> + Kthread                     kernel thread flag, 1 is yes, 0 is no
->   VmPeak                      peak virtual memory size
->   VmSize                      total program size
->   VmLck                       locked memory size
-
-The Documentation changes look good, except that they may need to be moved
-if you do the changes indicated below.
-
-
-Now that I have looked at the rest of the patch:
-
-> diff --git a/fs/proc/array.c b/fs/proc/array.c
-> index 9b0315d34c58..fde6a0b92728 100644
-> --- a/fs/proc/array.c
-> +++ b/fs/proc/array.c
-> @@ -434,6 +434,13 @@ int proc_pid_status(struct seq_file *m, struct pid_namespace *ns,
->  
->  	task_state(m, ns, pid, task);
->  
-> +	seq_puts(m, "Kthread:\t");
-> +	if (task->flags & PF_KTHREAD) {
-> +		seq_puts(m, "1\n");
-> +	} else {
-> +		seq_puts(m, "0\n");
-> +	}
-> +
-
-I would put that patch fragment inside task_state(), but I'll leave that
-to others to decide on.
-
-and condense it to one line, e.g.:
-
-	seq_puts(m, "Kthread: %c\n", task->flags & PF_KTHREAD ? '1' : '0');
-
-
->  	if (mm) {
->  		task_mem(m, mm);
->  		task_core_dumping(m, task);
-
-
-Please add version info to your future patches.
-
-Thanks.
--- 
-~Randy
+I didn't bother.  It's not inaccurate; we're reclaiming the pages
+in the folios.
