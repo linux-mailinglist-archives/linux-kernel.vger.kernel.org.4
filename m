@@ -2,55 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04B566E301A
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 11:33:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA416E3022
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 11:35:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbjDOJds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 05:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45810 "EHLO
+        id S229561AbjDOJfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 05:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjDOJdp (ORCPT
+        with ESMTP id S229920AbjDOJfd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 05:33:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F5B1BE4;
-        Sat, 15 Apr 2023 02:33:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7255B60A51;
-        Sat, 15 Apr 2023 09:33:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C5B2C433D2;
-        Sat, 15 Apr 2023 09:33:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681551221;
-        bh=/UzeVtaHJfUN6UpTwCEr/HMGM0EcHNAX80284645RSY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=FplwyjYa0i4Oka6LJMEu9onR6CgkbfbRW779jA2nBjLTC/WBm/7pzF3FiU6lBl+H7
-         M7InySQCY2YnDgubZvazD9p0fBFV9G4nEbmqqW2EXA211+N3Bw0XHJD1MsBh9oTXJP
-         +dyqlzFLq2GtQ3SDJTbk95G09WxdC0KMRbnwPDJ0AQvqkV/82Wh/W9H3+jC2aee1vf
-         bSAdiRau/2vYHtqa+h9efMjupQ8e/264BFwGTy87guxuRjCU5+zDVnd3gOHJVWn9ys
-         HPX8IZVFWCoZj5QRQpz1yfzdYSPR+eVKCvU12i0p4sbSBu077RTaL1JBQReK34TU5l
-         JyciWooxqEBew==
-Date:   Sat, 15 Apr 2023 11:33:36 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PULL REQUEST] i2c-for-6.3-rc7
-Message-ID: <ZDpvcE2jMBPqlxgF@sai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
+        Sat, 15 Apr 2023 05:35:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3CC3C1E
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 02:34:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681551285;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZxPnWAcQVBNBNS9KRY2KFLNjYwkNYHKUC4oRsplfh2c=;
+        b=YsjDKVWbQwcuv/k+czHq+2ZS6INLwy7HJOyNNobed0GzB44JGT5L+kSd+nKBbQ0+gxBK6T
+        9OVbfuESsRiYuRbJtKfs/x9yU8fyPMFmmHt5HVABlK6Ov22D8IeXacXPyABVxFtvWtJqs8
+        qHEVk9P6o2Vq/N7ropge7vFEJnQ8H38=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-76-MLXhP-rjPDOb6inEB8t6dA-1; Sat, 15 Apr 2023 05:34:43 -0400
+X-MC-Unique: MLXhP-rjPDOb6inEB8t6dA-1
+Received: by mail-ej1-f72.google.com with SMTP id tx6-20020a1709078e8600b009343596918cso7304709ejc.16
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 02:34:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681551282; x=1684143282;
+        h=content-transfer-encoding:in-reply-to:references:to
+         :content-language:subject:cc:user-agent:mime-version:date:message-id
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZxPnWAcQVBNBNS9KRY2KFLNjYwkNYHKUC4oRsplfh2c=;
+        b=WvBzkYzJA4lqBiONiijOX/2952Ut1Hn0XQA1X4tqgk4EK5+WYnsO3NNz+A7HgDwCY8
+         8IYUsNJUMgV5G9e1wt8N6te7y7HGqcj4zgmdoQcbT0iA0aJifGGUjL4MnvJ29x6NXOGQ
+         1Tw6ZCJ7DH4KxghDG9tMVOY+cA12eHwH4rWA1huVpW/EkRTnt1iprQPsl8PiqO0N/MpN
+         ffLR/p49zQDWBnkP8EohqTdQVwXxR7q1ifSlfUTR1Hl0fmULAZtjO6bfhrm4JfgaNNjN
+         p5lVCqEr9ybzz9BQPWsx/ztQb82I4TTSQGTRWWP8HWzm+q9l+pCdwS3n72HaOHxz/+ag
+         AJnw==
+X-Gm-Message-State: AAQBX9fQXcUDggpRhUeC/jD/byYCNWPjGZSgEaPBz1BQ2VnZCYNXcHoo
+        knfNiV7FK0JJDgMo4kUspRC+FX8RmAbTerRoewFXqxDLd4N+ecBa1jEIeaMbDhbSwqnU6TpkPmD
+        h4ZDnBtniAAvhkUz2RAQLR1hX
+X-Received: by 2002:a17:906:6bd0:b0:94e:f969:fb3e with SMTP id t16-20020a1709066bd000b0094ef969fb3emr1661549ejs.43.1681551282637;
+        Sat, 15 Apr 2023 02:34:42 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ahABqOGqRCJSwv9+bd3MwJOCg8HOEo/vfDe75jx4W55RgExcuyfQKh2L9CES3tCsodbIai/w==
+X-Received: by 2002:a17:906:6bd0:b0:94e:f969:fb3e with SMTP id t16-20020a1709066bd000b0094ef969fb3emr1661531ejs.43.1681551282362;
+        Sat, 15 Apr 2023 02:34:42 -0700 (PDT)
+Received: from [192.168.42.222] (194-45-78-10.static.kviknet.net. [194.45.78.10])
+        by smtp.gmail.com with ESMTPSA id b22-20020a1709062b5600b009306ebc79d3sm3549540ejg.59.2023.04.15.02.34.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 15 Apr 2023 02:34:41 -0700 (PDT)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <eb277f26-932b-d1b5-ec67-5aee2bd0a287@redhat.com>
+Date:   Sat, 15 Apr 2023 11:34:40 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="XKVvgIsd51l6uQA2"
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Cc:     brouer@redhat.com, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, xdp-hints@xdp-project.net
+Subject: Re: [PATCH net-next v6 3/3] net: stmmac: add Rx HWTS metadata to XDP
+ ZC receive pkt
+Content-Language: en-US
+To:     Song Yoong Siang <yoong.siang.song@intel.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Alexander Duyck <alexanderduyck@fb.com>,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        Jacob Keller <jacob.e.keller@intel.com>
+References: <20230415064503.3225835-1-yoong.siang.song@intel.com>
+ <20230415064503.3225835-4-yoong.siang.song@intel.com>
+In-Reply-To: <20230415064503.3225835-4-yoong.siang.song@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -58,66 +103,16 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---XKVvgIsd51l6uQA2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 15/04/2023 08.45, Song Yoong Siang wrote:
+> Add receive hardware timestamp metadata support via kfunc to XDP Zero Copy
+> receive packets.
+> 
+> Signed-off-by: Song Yoong Siang<yoong.siang.song@intel.com>
+> ---
+>   .../net/ethernet/stmicro/stmmac/stmmac_main.c | 22 +++++++++++++++++++
+>   1 file changed, 22 insertions(+)
 
-The following changes since commit 197b6b60ae7bc51dd0814953c562833143b292aa:
+LGTM
 
-  Linux 6.3-rc4 (2023-03-26 14:40:20 -0700)
+Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.3-rc7
-
-for you to fetch changes up to f8160d3b35fc94491bb0cb974dbda310ef96c0e2:
-
-  i2c: ocores: generate stop condition after timeout in polling mode (2023-04-13 18:29:29 +0200)
-
-----------------------------------------------------------------
-just two driver fixes
-
-----------------------------------------------------------------
-Gregor Herburger (1):
-      i2c: ocores: generate stop condition after timeout in polling mode
-
-Tharun Kumar P (1):
-      i2c: mchp-pci1xxxx: Update Timing registers
-
-
-with much appreciated quality assurance from
-----------------------------------------------------------------
-Andrew Lunn (1):
-      (Rev.) i2c: ocores: generate stop condition after timeout in polling mode
-
-Andy Shevchenko (1):
-      (Rev.) i2c: mchp-pci1xxxx: Update Timing registers
-
-Federico Vaga (1):
-      (Rev.) i2c: ocores: generate stop condition after timeout in polling mode
-
- drivers/i2c/busses/i2c-mchp-pci1xxxx.c | 60 +++++++++++++++++-----------------
- drivers/i2c/busses/i2c-ocores.c        | 35 +++++++++++---------
- 2 files changed, 49 insertions(+), 46 deletions(-)
-
---XKVvgIsd51l6uQA2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQ6b28ACgkQFA3kzBSg
-KbaqQA//VtA3nuI7sITivfBCRDqj+WZizg1lJd7dgkxYj/nwj3WxGROG2aDX4em9
-KGniTgHNcWe4CAcAqudEqoFJU4gv3W/yL8I62nYp9EFjT88Opz4Xpjcy1OFkQkub
-tZGJKaoRU7jaIxKoYsvMyvA8CeCy+j1Xgr539aAd7vEa3DeYlRS5bgyvHGHW+Idq
-ImItOdyaPun0U0ONf05qiKlM1Tg18jsFxFe7LKe2Ett+p3cf3mVlcdS88oE/bD55
-56T8zZTuezavTOdFbPd21ZlwoATsXHjzeLPxZheyF9UZmCCmq5P0TVeUJtzpXluG
-ACkG/qI6DW3tONe98NvYRGBma/0nNQfQvX3O6z2mZYP47exRBxlIF/Rw8Qycdg+T
-uWFk3RJM2zNlX5vOIkoAeltuCkVFGyp2TXoMi+xE+MmPtEwSUYgoihAwYnpU9xzP
-7OllBjM6TGIoV0TnXA5aeSPnHM3hTY7O3ZBMXKvbodHz3IHuszdfTuCal9DzYEZO
-LsiMkWWM/2lDS5Rag8MOCQ9aGMbNUV9I9LXQzGPTtfaMd4+yk/UUCZJcC0sdLcF7
-VogAA87DaMEM+F+srnWOv2UBB6PC5Eos1pfA7l01/FXY5zQEien9dg3hoq7gP634
-0mmgt+lgLUxZcB4JKTuqck4AbmuJ775Cucys8wA3RH7klQymPzQ=
-=OttL
------END PGP SIGNATURE-----
-
---XKVvgIsd51l6uQA2--
