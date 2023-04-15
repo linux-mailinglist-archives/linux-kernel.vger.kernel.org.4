@@ -2,241 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C63966E3156
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 14:16:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B43D6E3163
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 14:44:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbjDOMQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 08:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48546 "EHLO
+        id S229574AbjDOMnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 08:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbjDOMQT (ORCPT
+        with ESMTP id S229481AbjDOMn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 08:16:19 -0400
-Received: from smtp.smtpout.orange.fr (smtp-18.smtpout.orange.fr [80.12.242.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B218C114
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 05:16:15 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id nep7pQmHwxZmMnep7pYjtW; Sat, 15 Apr 2023 14:16:13 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orange.fr;
-        s=t20230301; t=1681560973;
-        bh=oaPZSLKdrABf1h1Krxj/JAchE9UFaxR56+UJQa8Br+c=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=VxL/oOX0wNjy5nN1pSUJEJaCRISTlLLgnQt25YBRmaUAafnO+qqd4SDR6ttBOwgeK
-         4/ap2fK6aU4pyRiHsl7oEKcJRFc/EtjXX35bNzs9i7UKaYvVCNeEBIyF63+0l1aoBw
-         kMBQPkx9GrXubTccZWX3sgVxX7+iA/UFWvzAthok6JJK2f+al44GHWIlI16C5eyt/T
-         EugS05IB1hoIcNkBGVUhthXrM6YdfATY6sqqeV4m9cU1zOM/+sNYtivNv/O0MpHHRW
-         Xb4tkYeRiMUuHgELPgFZ1VOSO5AklvXSg8FbAvqBIbkBZsxBUHOB8Uc9/W7YktdUed
-         y2D7NffMlsGNg==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 15 Apr 2023 14:16:13 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <c04038f2-b7aa-7c37-df93-6950831579f6@wanadoo.fr>
-Date:   Sat, 15 Apr 2023 14:16:09 +0200
+        Sat, 15 Apr 2023 08:43:29 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EABD422F
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 05:43:27 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id c9so13469573ejz.1
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 05:43:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681562605; x=1684154605;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=u/U1EVhvmioxEWIZgOSAGDZ+lg8zKWYdBXw2nRcSafA=;
+        b=XdjZ0ecoe3m5GeprHd2E/skpAQs49TAHnmG5JRrbqT79yKHwlx0WppkOsNO0w3GrfQ
+         of0bdSWPjwrH7HgQXc4a9+alX6mpY8O444oxwYYRkYCiv7m5q2OtQWnxHKQApsdV5bDF
+         UA6sS5HVCw5Vffyib2DLyQjmWqXmp6Wm5PQVjZWASBdrxfXmDKqAdwB/jZ6ct8rTgWRq
+         xO6+OwSxwl4vRVIY+6cppz4+7eAvwEPABG/UCZrnAbCmHRkN05d+FC9FH7l445+4Rp2S
+         Yvk5FAMEOKjOyM8MA5N/Z+AIZsDLr0r7c8MpIMmPyD5iC7O+8NHMRv1Zh5A4erZ0kDCR
+         csHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681562605; x=1684154605;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u/U1EVhvmioxEWIZgOSAGDZ+lg8zKWYdBXw2nRcSafA=;
+        b=hAkmKkYGE7yW9KwVRCgUbcZTFpmu65qEPvg0QdJkJ1LcuQZyV5++D4sx7yyf4cc+AA
+         cxjuEzX8hbQkmxrbhkuaFiW4X7m9nM9VQYMPpG5sXAqAOBoWpHu6aJphEQm2tsm2I2xd
+         ANztsq06hJK+Iyk26pl5NDF9RkkiQAxy+fuFYIRy8xk9MtFJNEzOGkk1uFaRpQKHqy2D
+         L+BxdOQt7qP/32opAJj8eX86iL9E5hi3x0e1bJ4RRY2Q+h2Zd8lzlhlSyxgefnR/IiJ8
+         Y/HQIdhRwi9VtZEoWcIFmLoDUJrU4d7d/QPJKgXngqQ2m0FpQBsw2ZCQCHErfHWMxKcC
+         1lTw==
+X-Gm-Message-State: AAQBX9e4QIxlaxw9V7C25soLVEFrFQiZBdItmzAxcWROG3OPfYlrwRm5
+        D6H8sIFl8FiaB0rvTuUPCAc=
+X-Google-Smtp-Source: AKy350bpAeF1kQWWtp+NVI6jLeI+pEP8H1bmjGpmwhUF0/v/EjW29kjm9IGnzOKQGPIdU/IxKvu7Ew==
+X-Received: by 2002:a17:907:77ce:b0:94f:3d8:3d80 with SMTP id kz14-20020a17090777ce00b0094f03d83d80mr2054728ejc.11.1681562605528;
+        Sat, 15 Apr 2023 05:43:25 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id qc27-20020a170906d8bb00b0094f364b36acsm138665ejb.165.2023.04.15.05.43.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Apr 2023 05:43:25 -0700 (PDT)
+Date:   Sat, 15 Apr 2023 15:43:20 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Luke Koch <lu.ale.koch@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: wlan-ng: replace rate macros
+Message-ID: <714c5d3f-438a-4633-a46e-127f876ffec4@kili.mountain>
+References: <ZDqKb1iuoSQTYXJM@kernelhacking.kernelhacking.example.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v6 2/2] clk: wpcm450: Add Nuvoton WPCM450 clock/reset
- controller driver
-To:     j.neuschaefer@gmx.net
-Cc:     avifishman70@gmail.com, benjaminfair@google.com,
-        daniel.lezcano@linaro.org, devicetree@vger.kernel.org,
-        krzk+dt@kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux@roeck-us.net, mturquette@baylibre.com,
-        openbmc@lists.ozlabs.org, p.zabel@pengutronix.de,
-        robh+dt@kernel.org, sboyd@kernel.org, tali.perry1@gmail.com,
-        tglx@linutronix.de, tmaimon77@gmail.com, venture@google.com,
-        wim@linux-watchdog.org, yuenn@google.com
-References: <20230415111355.696738-1-j.neuschaefer@gmx.net>
- <20230415111355.696738-3-j.neuschaefer@gmx.net>
-Content-Language: fr
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20230415111355.696738-3-j.neuschaefer@gmx.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZDqKb1iuoSQTYXJM@kernelhacking.kernelhacking.example.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 15/04/2023 à 13:13, Jonathan Neuschäfer a écrit :
-> This driver implements the following features w.r.t. the clock and reset
-> controller in the WPCM450 SoC:
+On Sat, Apr 15, 2023 at 01:28:47PM +0200, Luke Koch wrote:
+> Change p80211msg_dot11req_scan_results rate members to struct arrays
+> instead of individually numbered member structs.
+> Replace macros to set rates with loops to avoid checkpatch warning
+> and adhere to linux coding style.
+
+Writing every sentence in imperative tense makes people sound like space
+aliens in human skin...  You can if you want to but it's not a
+requirement in staging.  There are two maintainers who have that
+requirement and the Outreachy people.
+
 > 
-> - It calculates the rates for all clocks managed by the clock controller
-> - It leaves the clock tree mostly unchanged, except that it enables/
->    disables clock gates based on usage.
-> - It exposes the reset lines managed by the controller using the
->    Generic Reset Controller subsystem
+> Reported by checkpatch:
 > 
-> NOTE: If the driver and the corresponding devicetree node are present,
->        the driver will disable "unused" clocks. This is problem until
->        the clock relations are properly declared in the devicetree (in a
->        later patch). Until then, the clk_ignore_unused kernel parameter
->        can be used as a workaround.
+> CHECK: Macro argument reuse 'N' - possible side-effects?
 > 
-> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer-hi6Y0CQ0nG0@public.gmane.org>
+> Signed off by: Luke Koch <lu.ale.koch@gmail.com>
 > ---
-
-[...]
-
-> +
-> +static void __init wpcm450_clk_init(struct device_node *clk_np)
-> +{
-> +	struct clk_hw_onecell_data *clk_data;
-> +	static struct clk_hw **hws;
-> +	static struct clk_hw *hw;
-> +	void __iomem *clk_base;
-> +	int i, ret;
-> +	struct reset_simple_data *reset;
-> +
-> +	clk_base = of_iomap(clk_np, 0);
-> +	if (!clk_base) {
-> +		pr_err("%pOFP: failed to map registers\n", clk_np);
-> +		of_node_put(clk_np);
-> +		return;
-> +	}
-> +	of_node_put(clk_np);
-> +
-> +	clk_data = kzalloc(struct_size(clk_data, hws, WPCM450_NUM_CLKS), GFP_KERNEL);
-> +	if (!clk_data)
-> +		goto err_unmap;
-> +
-> +	clk_data->num = WPCM450_NUM_CLKS;
-> +	hws = clk_data->hws;
-> +
-> +	for (i = 0; i < WPCM450_NUM_CLKS; i++)
-> +		hws[i] = ERR_PTR(-ENOENT);
-> +
-> +	// PLLs
-> +	for (i = 0; i < ARRAY_SIZE(pll_data); i++) {
-> +		const struct wpcm450_pll_data *data = &pll_data[i];
-> +
-> +		hw = wpcm450_clk_register_pll(clk_base + data->reg, data->name,
-> +					      &data->parent, data->flags);
-> +		if (IS_ERR(hw)) {
-> +			pr_info("Failed to register PLL: %pe", hw);
-> +			goto err_free;
-> +		}
-> +	}
-> +
-> +	// Early divisors (REF/2)
-> +	for (i = 0; i < ARRAY_SIZE(clkdiv_data_early); i++) {
-> +		const struct wpcm450_clkdiv_data *data = &clkdiv_data_early[i];
-> +
-> +		hw = clk_hw_register_divider_table_parent_data(NULL, data->name, &data->parent,
-> +							       data->flags, clk_base + REG_CLKDIV,
-> +							       data->shift, data->width,
-> +							       data->div_flags, data->table,
-> +							       &wpcm450_clk_lock);
-> +		if (IS_ERR(hw)) {
-> +			pr_err("Failed to register div table: %pe\n", hw);
-> +			goto err_free;
-> +		}
-> +	}
-> +
-> +	// Selects/muxes
-> +	for (i = 0; i < ARRAY_SIZE(clksel_data); i++) {
-> +		const struct wpcm450_clksel_data *data = &clksel_data[i];
-> +
-> +		hw = clk_hw_register_mux_parent_data(NULL, data->name, data->parents,
-> +						     data->num_parents, data->flags,
-> +						     clk_base + REG_CLKSEL, data->shift,
-> +						     data->width, 0,
-> +						     &wpcm450_clk_lock);
-> +		if (IS_ERR(hw)) {
-> +			pr_err("Failed to register mux: %pe\n", hw);
-> +			goto err_free;
-> +		}
-> +		if (data->index >= 0)
-> +			clk_data->hws[data->index] = hw;
-> +	}
-> +
-> +	// Divisors
-> +	for (i = 0; i < ARRAY_SIZE(clkdiv_data); i++) {
-> +		const struct wpcm450_clkdiv_data *data = &clkdiv_data[i];
-> +
-> +		hw = clk_hw_register_divider_table_parent_data(NULL, data->name, &data->parent,
-> +							       data->flags, clk_base + REG_CLKDIV,
-> +							       data->shift, data->width,
-> +							       data->div_flags, data->table,
-> +							       &wpcm450_clk_lock);
-> +		if (IS_ERR(hw)) {
-> +			pr_err("Failed to register divider: %pe\n", hw);
-> +			goto err_free;
-> +		}
-> +	}
-> +
-> +	// Enables/gates
-> +	for (i = 0; i < ARRAY_SIZE(clken_data); i++) {
-> +		const struct wpcm450_clken_data *data = &clken_data[i];
-> +
-> +		hw = clk_hw_register_gate_parent_data(NULL, data->name, &data->parent, data->flags,
-> +						      clk_base + REG_CLKEN, data->bitnum,
-> +						      data->flags, &wpcm450_clk_lock);
-
-If an error occures in the 'for' loop or after it, should this be 
-clk_hw_unregister_gate()'ed somewhere?
-
-CJ
-
-> +		if (IS_ERR(hw)) {
-> +			pr_err("Failed to register gate: %pe\n", hw);
-> +			goto err_free;
-> +		}
-> +		clk_data->hws[data->bitnum] = hw;
-> +	}
-> +
-> +	ret = of_clk_add_hw_provider(clk_np, of_clk_hw_onecell_get, clk_data);
-> +	if (ret)
-> +		pr_err("Failed to add DT provider: %d\n", ret);
-> +
-> +	// Reset controller
-> +	reset = kzalloc(sizeof(*reset), GFP_KERNEL);
-> +	if (!reset)
-> +		goto err_free;
-> +	reset->rcdev.owner = THIS_MODULE;
-> +	reset->rcdev.nr_resets = WPCM450_NUM_RESETS;
-> +	reset->rcdev.ops = &reset_simple_ops;
-> +	reset->rcdev.of_node = clk_np;
-> +	reset->membase = clk_base + REG_IPSRST;
-> +	ret = reset_controller_register(&reset->rcdev);
-> +	if (ret)
-> +		pr_err("Failed to register reset controller: %d\n", ret);
-> +
-> +	of_node_put(clk_np);
-> +	return;
-> +
-> +err_free:
-> +	kfree(clk_data->hws);
-> +err_unmap:
-> +	iounmap(clk_base);
-> +	of_node_put(clk_np);
-> +}
-> +
-> +CLK_OF_DECLARE(wpcm450_clk_init, "nuvoton,wpcm450-clk", wpcm450_clk_init);
-> diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
-> index 2a52c990d4fec..16e111d213560 100644
-> --- a/drivers/reset/Kconfig
-> +++ b/drivers/reset/Kconfig
-> @@ -208,7 +208,7 @@ config RESET_SCMI
+>  drivers/staging/wlan-ng/p80211metastruct.h | 18 +-------
+>  drivers/staging/wlan-ng/prism2mgmt.c       | 52 +++++++---------------
+>  2 files changed, 18 insertions(+), 52 deletions(-)
 > 
->   config RESET_SIMPLE
->   	bool "Simple Reset Controller Driver" if COMPILE_TEST || EXPERT
-> -	default ARCH_ASPEED || ARCH_BCMBCA || ARCH_BITMAIN || ARCH_REALTEK || ARCH_STM32 || (ARCH_INTEL_SOCFPGA && ARM64) || ARCH_SUNXI || ARC
-> +	default ARCH_ASPEED || ARCH_BCMBCA || ARCH_BITMAIN || ARCH_REALTEK || ARCH_STM32 || (ARCH_INTEL_SOCFPGA && ARM64) || ARCH_SUNXI || ARC || ARCH_WPCM450
->   	depends on HAS_IOMEM
->   	help
->   	  This enables a simple reset controller driver for reset lines that
-> --
-> 2.39.2
-> 
-> 
+> diff --git a/drivers/staging/wlan-ng/p80211metastruct.h b/drivers/staging/wlan-ng/p80211metastruct.h
+> index 4adc64580185..e963227f797c 100644
+> --- a/drivers/staging/wlan-ng/p80211metastruct.h
+> +++ b/drivers/staging/wlan-ng/p80211metastruct.h
+> @@ -114,22 +114,8 @@ struct p80211msg_dot11req_scan_results {
+>  	struct p80211item_uint32 cfpollreq;
+>  	struct p80211item_uint32 privacy;
+>  	struct p80211item_uint32 capinfo;
+> -	struct p80211item_uint32 basicrate1;
+                                 ^^^^^^^^^^
+This starts at 1 instead of 0.
 
+> -	struct p80211item_uint32 basicrate2;
+> -	struct p80211item_uint32 basicrate3;
+> -	struct p80211item_uint32 basicrate4;
+> -	struct p80211item_uint32 basicrate5;
+> -	struct p80211item_uint32 basicrate6;
+> -	struct p80211item_uint32 basicrate7;
+> -	struct p80211item_uint32 basicrate8;
+> -	struct p80211item_uint32 supprate1;
+> -	struct p80211item_uint32 supprate2;
+> -	struct p80211item_uint32 supprate3;
+> -	struct p80211item_uint32 supprate4;
+> -	struct p80211item_uint32 supprate5;
+> -	struct p80211item_uint32 supprate6;
+> -	struct p80211item_uint32 supprate7;
+> -	struct p80211item_uint32 supprate8;
+> +	struct p80211item_uint32 basicrate[8];
+> +	struct p80211item_uint32 supprate[8];
+>  } __packed;
+> 
+>  struct p80211msg_dot11req_start {
+> diff --git a/drivers/staging/wlan-ng/prism2mgmt.c b/drivers/staging/wlan-ng/prism2mgmt.c
+> index 9030a8939a9b..069c39c36753 100644
+> --- a/drivers/staging/wlan-ng/prism2mgmt.c
+> +++ b/drivers/staging/wlan-ng/prism2mgmt.c
+> @@ -437,42 +437,22 @@ int prism2mgmt_scan_results(struct wlandevice *wlandev, void *msgp)
+>  		if (item->supprates[count] == 0)
+>  			break;
+> 
+> -#define REQBASICRATE(N) \
+> -	do { \
+> -		if ((count >= (N)) && DOT11_RATE5_ISBASIC_GET(	\
+> -			item->supprates[(N) - 1])) { \
+> -			req->basicrate ## N .data = item->supprates[(N) - 1]; \
+> -			req->basicrate ## N .status = \
+> -				P80211ENUM_msgitem_status_data_ok; \
+> -		} \
+> -	} while (0)
+> -
+> -	REQBASICRATE(1);
+> -	REQBASICRATE(2);
+> -	REQBASICRATE(3);
+> -	REQBASICRATE(4);
+> -	REQBASICRATE(5);
+> -	REQBASICRATE(6);
+> -	REQBASICRATE(7);
+> -	REQBASICRATE(8);
+> -
+> -#define REQSUPPRATE(N) \
+> -	do { \
+> -		if (count >= (N)) {					\
+> -			req->supprate ## N .data = item->supprates[(N) - 1]; \
+> -			req->supprate ## N .status = \
+> -				P80211ENUM_msgitem_status_data_ok; \
+> -		} \
+> -	} while (0)
+> -
+> -	REQSUPPRATE(1);
+> -	REQSUPPRATE(2);
+> -	REQSUPPRATE(3);
+> -	REQSUPPRATE(4);
+> -	REQSUPPRATE(5);
+> -	REQSUPPRATE(6);
+> -	REQSUPPRATE(7);
+> -	REQSUPPRATE(8);
+> +	for (int i = 0; i < 8; i++) {
+                 ^^^^^
+Now it starts at zero.
+
+> +		if (count >= i &&
+> +		    DOT11_RATE5_ISBASIC_GET(item->supprates[i - 1])) {
+                                                            ^^^^^
+This is an array underflow.
+
+regards,
+dan carpenter
+
+> +			req->basicrate[i] .data = item->supprates[i - 1];
+> +			req->basicrate[i] .status =
+> +				P80211ENUM_msgitem_status_data_ok;
+> +		}
+> +	}
+> +
+> +	for (int i = 0; i < 8; i++) {
+> +		if (count >= i) {
+> +			req->supprate[i] .data = item->supprates[i - 1];
+> +			req->supprate[i] .status =
+> +				P80211ENUM_msgitem_status_data_ok;
+> +		}
+> +	}
+>  
+>  	/* beacon period */
+>  	req->beaconperiod.status = P80211ENUM_msgitem_status_data_ok;
+> -- 
+> 2.34.1
+> 
