@@ -2,120 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 744A96E2F1A
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 07:06:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F6C06E2F1D
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 07:06:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229497AbjDOFGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 01:06:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49494 "EHLO
+        id S229625AbjDOFG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 01:06:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjDOFGD (ORCPT
+        with ESMTP id S229459AbjDOFGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 01:06:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93FB94C2B;
-        Fri, 14 Apr 2023 22:06:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D3A2361BC5;
-        Sat, 15 Apr 2023 05:05:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D1B1C433D2;
-        Sat, 15 Apr 2023 05:05:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681535159;
-        bh=XOIJuxXHCj+rkGybuZPerdCBU1hgQaWT6pZnlBVE1nE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i3U9k+O3VHIIZEC2+EhtmpMMVSjZZzq3kTeqKL2XzTLENPtmfxZzhWjNbHiyghVKM
-         lCKJkJO/YGCgTbuUessQ/5nzd5zXACdYVEKGlHGrvkgBpiS0Gyn73esckKwSnY3kUQ
-         xcxVn1Dx6QxoUJHheqJemZibhbSh+S9XKe4U75b9jkFa51xuaZvzxPIIs2Xw5Di9mi
-         v0gl+uMQzh1IJynRN2MCMjhftuIBKrszkBD/gG+Bd3PxjlXAiHdEiO5bfu+fdV/f+6
-         NAGaBPOLGAp56Nn1udzmfs7qnYk8cAdz8W4HIJTYCRzLle4VY/E9HBt2vI6IGOkff2
-         bSZlbNywZ4uEw==
-Date:   Fri, 14 Apr 2023 22:05:56 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>, jpoimboe@redhat.com,
-        peterz@infradead.org, chenzhongjin@huawei.com, broonie@kernel.org,
-        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org,
-        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-toolchains@vger.kernel.org
-Subject: Re: [RFC PATCH v3 00/22] arm64: livepatch: Use ORC for dynamic frame
- pointer validation
-Message-ID: <20230415050556.isimfnqnsgwmerkf@treble>
-References: <054ce0d6-70f0-b834-d4e5-1049c8df7492@linux.microsoft.com>
- <ZDVft9kysWMfTiZW@FVFF77S0Q05N>
- <20230412041752.i4raswvrnacnjjgy@treble>
- <c7e1df79-1506-4502-035b-24ddf6848311@linux.microsoft.com>
- <20230412050106.7v4s3lalg43i6ciw@treble>
- <a7e45ab5-c583-9077-5747-9a3d3b7274e7@linux.microsoft.com>
- <20230412155221.2l2mqsyothseymeq@treble>
- <cf583799-1a8d-4dd2-8bc7-c8fbb07f29ab@linux.microsoft.com>
- <20230413163035.ttar5uexrpldz3yl@treble>
- <4e5029f4-be42-ef23-1eab-a6cfff49527c@linux.microsoft.com>
+        Sat, 15 Apr 2023 01:06:25 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA105FC6;
+        Fri, 14 Apr 2023 22:06:21 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-24704a7bf34so743887a91.1;
+        Fri, 14 Apr 2023 22:06:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681535180; x=1684127180;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4outNeWTpKnHS1tnIqaAxG4LTg3nQXw/XvITsujeCUo=;
+        b=G3X6TIMiuLMxETVVWqIC6vA5pu2tdtCdVQlQTiDn5HaEYxMnUU6R44aIC/fho04igi
+         6Q5qKTveX1vx7Y6IpqNk5oKv49WanoW87ZatCx7Ch+Awyt77bcI5+t83yutT1p7pIg6t
+         D4t/mxDzzCUx9SjVXEnmhHWdslPmDSBnB5V0XVedn2ObHsA+OjliUkz+8qOA+0Hk0CsA
+         YWRMyzT0QO55cUrRp3jWypSLc1+OGOLdSctEmzKC2fazZIQEhYubTXR1y4fb6pu0Z2jz
+         LCS1c1Jor2V0qOieqagC574Dhyi+7O+WiXMklc1FDo3DdqqCQytA/GhCmljCs2sLi+nM
+         Ll5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681535180; x=1684127180;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4outNeWTpKnHS1tnIqaAxG4LTg3nQXw/XvITsujeCUo=;
+        b=WeMvb2Kehkrog8q6Oq+YKw55nOt4jQdYdh942mWM3gJN6LdVaPzxPOjXuOQjFFo6+V
+         HJgk/Mq9AQdHoNm8ag2Iop009o+UJvb1N2Bg0dIqzor8a20dj5zklWC+bRlW2a7ojBdB
+         Bf3uEgdKAGbV+dwNHVeu7faNr4rgNtXgBS9dVpC5CB/6oz4Fo2i8NdMeR9dyVm5lmEkn
+         XAC0Blw+yT17u9C+CamjkyftR9qbU0vLNnBbz/W+2uqj7VL+NZNTb+0QZn64QgFWpS+/
+         kQhRMUEuLPGmAdX0YvrZUvFPlNa8qUXak1fC6uNrkEAR9gFD27nhwp27mCrPBalVjA+9
+         wx7w==
+X-Gm-Message-State: AAQBX9f4NeecoAuJP4ZxLTz8gV2Xd7W1Ano+fKKsmrSav2H4mnfrGDW2
+        mXJuMkwexF26D0IGGzlslsA=
+X-Google-Smtp-Source: AKy350ZuMT4Y/RmGzcyjt11dR3WV+dvye8DegNtm7l0swicWf4n6G0fp8+JcO/p6KMFHGhBW+QtHKA==
+X-Received: by 2002:a05:6a00:1892:b0:627:fb40:7cb4 with SMTP id x18-20020a056a00189200b00627fb407cb4mr10782790pfh.30.1681535180391;
+        Fri, 14 Apr 2023 22:06:20 -0700 (PDT)
+Received: from localhost ([2601:646:200:6ab0:b18c:e581:87ef:6790])
+        by smtp.gmail.com with ESMTPSA id x20-20020a62fb14000000b005abc0d426c4sm3824805pfm.54.2023.04.14.22.06.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Apr 2023 22:06:19 -0700 (PDT)
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Yury Norov <yury.norov@gmail.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Pawel Chmielewski <pawel.chmielewski@intel.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Barry Song <baohua@kernel.org>
+Subject: [PATCH v2 0/8] sched/topology: add for_each_numa_cpu() macro
+Date:   Fri, 14 Apr 2023 22:06:09 -0700
+Message-Id: <20230415050617.324288-1-yury.norov@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <4e5029f4-be42-ef23-1eab-a6cfff49527c@linux.microsoft.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 14, 2023 at 11:27:44PM -0500, Madhavan T. Venkataraman wrote:
-> >> What I meant is - if SFrame is implemented by simply extracting unwind info from
-> >> DWARF data and placing it in a separate section (as it is probably implemented now),
-> >> then what you say is totally true. But if the compiler folks agree to make SFrame reliable,
-> >> then either they have to make DWARF reliable. Or, they have to implement SFrame as a
-> >> separate feature and make it reliable. The former is tough to do as DWARF has a lot of complexity.
-> >> The latter is a lot easier to do.
-> > 
-> > [ adding linux-toolchains ]
-> > 
-> > I don't think ensuring reliability is an easy task, regardless of the
-> > complexity of the unwinding format.
-> > 
-> > Whether it's SFrame or DWARF/eh_frame, the question would be how to
-> > ensure it's always reliable for a compiler "power user" like the kernel
-> > which has many edge cases (including lots of inline asm which the
-> > compiler has no visibility to) and which uses unwinding for more than
-> > just debugging.
-> > 
-> > It would need some kind of black-box testing on a complex code base.
-> > (hint: kind of like what objtool already does today)
-> > 
-> 
-> I could use the ORC data I generate by using the decoder against the SFrame data.
-> A function is reliable only if both data sources agree for the whole function.
+for_each_cpu() is widely used in kernel, and it's beneficial to create
+a NUMA-aware version of the macro.
 
-This is somewhat similar to what I'm saying in another thread:
+Recently added for_each_numa_hop_mask() works, but switching existing
+codebase to it is not an easy process.
 
-  https://lore.kernel.org/live-patching/20230415043949.7y4tvshe26zday3e@treble/
+This series adds for_each_numa_cpu(), which is designed to be similar to
+the for_each_cpu(). It allows to convert existing code to NUMA-aware as
+simple as adding a hop iterator variable and passing it inside new macro.
+for_each_numa_cpu() takes care of the rest.
 
-If objtool and DWARF/SFrame agree, all is well.
+At the moment, we have 2 users of NUMA-aware enumerators. One is
+Melanox's in-tree driver, and another is Intel's in-review driver:
 
-> Also, in my approach, the actual frame pointer is dynamically checked against the
-> frame pointer computed from the unwind data. Any mismatch indicates an unreliable stack trace.
-> 
-> IMHO, this is sufficient to provide livepatch. Do you agree?
+https://lore.kernel.org/lkml/20230216145455.661709-1-pawel.chmielewski@intel.com/
 
-The dynamic reliable stacktrace checks for CONFIG_FRAME_POINTER on x86
-are much simpler, as they don't require ORC or any other metadata.  They
-just need to detect preemption and page faults on the stack, and to
-identify the end of the stack.  Those simple dynamic checks, combined
-with objtool's build-time frame pointer validation, worked very well
-until we switched to ORC.
+Both real-life examples follow the same pattern:
 
-So I'm not sure I see the benefit of the additional complexity involved
-in cross-checking frame pointers with ORC at runtime.  But I'm just a
-bystander.  What really matters is what the arm64 folks think ;-)
+        for_each_numa_hop_mask(cpus, prev, node) {
+                for_each_cpu_andnot(cpu, cpus, prev) {
+                        if (cnt++ == max_num)
+                                goto out;
+                        do_something(cpu);
+                }
+                prev = cpus;
+        }
+
+With the new macro, it has a more standard look, like this:
+
+        for_each_numa_cpu(cpu, hop, node, cpu_possible_mask) {
+                if (cnt++ == max_num)
+                        break;
+                do_something(cpu);
+        }
+
+Straight conversion of existing for_each_cpu() codebase to NUMA-aware
+version with for_each_numa_hop_mask() is difficult because it doesn't
+take a user-provided cpu mask, and eventually ends up with open-coded
+double loop. With for_each_numa_cpu() it shouldn't be a brainteaser.
+Consider the NUMA-ignorant example:
+
+        cpumask_t cpus = get_mask();
+        int cnt = 0, cpu;
+
+        for_each_cpu(cpu, cpus) {
+                if (cnt++ == max_num)
+                        break;
+                do_something(cpu);
+        }
+
+Converting it to NUMA-aware version would be as simple as:
+
+        cpumask_t cpus = get_mask();
+        int node = get_node();
+        int cnt = 0, hop, cpu;
+
+        for_each_numa_cpu(cpu, hop, node, cpus) {
+                if (cnt++ == max_num)
+                        break;
+                do_something(cpu);
+        }
+
+The latter looks more verbose and avoids from open-coding that annoying
+double loop. Another advantage is that it works with a 'hop' parameter with
+the clear meaning of NUMA distance, and doesn't make people not familiar
+to enumerator internals bothering with current and previous masks machinery.
+
+v2:
+ - repase on top of master;
+ - cleanup comments and tweak them to comply with kernel-doc;
+ - remove RFC from patch #8 as there's no objections.
+
+Yury Norov (8):
+  lib/find: add find_next_and_andnot_bit()
+  sched/topology: introduce sched_numa_find_next_cpu()
+  sched/topology: add for_each_numa_cpu() macro
+  net: mlx5: switch comp_irqs_request() to using for_each_numa_cpu
+  lib/cpumask: update comment to cpumask_local_spread()
+  sched/topology: export sched_domains_numa_levels
+  lib: add test for for_each_numa_{cpu,hop_mask}()
+  sched: drop for_each_numa_hop_mask()
+
+ drivers/net/ethernet/mellanox/mlx5/core/eq.c | 16 ++----
+ include/linux/find.h                         | 43 ++++++++++++++
+ include/linux/topology.h                     | 37 ++++++------
+ kernel/sched/topology.c                      | 59 +++++++++++---------
+ lib/cpumask.c                                |  7 +--
+ lib/find_bit.c                               | 12 ++++
+ lib/test_bitmap.c                            | 16 ++++++
+ 7 files changed, 133 insertions(+), 57 deletions(-)
 
 -- 
-Josh
+2.34.1
+
