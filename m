@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1A236E2FD3
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 10:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EEFA6E2FD7
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 10:59:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbjDOI4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 04:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60968 "EHLO
+        id S229678AbjDOI7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 04:59:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjDOI4x (ORCPT
+        with ESMTP id S229468AbjDOI7K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 04:56:53 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAFB340F1
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 01:56:51 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id c9so12628043ejz.1
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 01:56:51 -0700 (PDT)
+        Sat, 15 Apr 2023 04:59:10 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5F1131
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 01:59:08 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id dx24so7455251ejb.11
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 01:59:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681549010; x=1684141010;
+        d=linaro.org; s=google; t=1681549147; x=1684141147;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=KXiigblBzd+BU70FqSJL39EK8P2S//kVQiPcDPt1kOM=;
-        b=qUyroR2Rx6ySD4cu7xBoTwFmQ0VWRO91hHf2j72MweTnAhTQWNNHY7afg351BhTdhI
-         z8rmf2SR7zUyNGnOsI6rFaawC9DSUQnDl+973/VMxqh87Ie+vhiCDsg+d8Oqt8RMFBjo
-         tVM5BO0km1K98WvnDm9Tghc/wPfyegNDlYMP4cXPARTllXvFwqukkwG1spAxdpN5OGpp
-         PBLIFOqUiEzxu56ticch0MiNxb8CQRM10iZkVm4Y68pmzabbviUrzQwYLd4TAzJtlrlZ
-         xkUdlwAjXVYqWNaUcm1rmw8zHo+HyTQ57T9clKA2MMOPFP6YZ8jyH/VkfN3Y7DYc5+Qi
-         8Rnw==
+        bh=Med8MNi8DSncJEWPZ8pMWBDtWOVLQvgNcdZTfLmu3P8=;
+        b=w2dcG33ez1MdQud4+IHT0fWHUqpw/R409tq0LyQXnt0QjHDLNP49U3XFuTOtYTM2V7
+         rz85pI0Tk0CiSGvRTnrRgi/h8bNyywqkgMSJv/cN67QefTsyY7DqvkqVDh7PC0VMqNL1
+         vod/dlIkQ5vFwd29EyKd5qBdHdhXdq5638BYAgMoEQRoPxyy17YmPv2htqcwvRsaCOD4
+         tBcbwwH74Jb9JqWOBgob4Dri6Ck04o71SlVtX2y7coImyuf+MC1arqLHVEx/Hy6AMAut
+         f251Kpw4TgnTUN57GRIRQ9T+c1TRUu9ufSwDLgdjltEopyrMTbt0fEFi2QKA7bx+pQab
+         RZVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681549010; x=1684141010;
+        d=1e100.net; s=20221208; t=1681549147; x=1684141147;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KXiigblBzd+BU70FqSJL39EK8P2S//kVQiPcDPt1kOM=;
-        b=h5z1d6d+W0EXSbJkmvDXZXfhiXrQwr+9WF1vGr4AcicwpVHyDAe5ZCAQBL5XtNlzr0
-         WPh9y8ASqdc2wwG5LELLRF/bqy61zELfWfmbo85ub+If2vcyZCz7lrHnaZyYlzrm+ipa
-         fr1HTBWiWentqr80cfX3gkEEdlPAlRO1f6eBB2lyZQ1aDinAi/VhJbdgthGAsuF1gMu/
-         7qtTPQksBzDJUAuelI/pdVPVSC32ohfztC+ZBlfY/dkLuc3EIi0rlo7G1STaF871ntPK
-         40p+liim3v6uRlFgZLhQ2d4UDlmsad1qmENS6O/qICI1hHmPxswNR4FXET1NyhnRwYoN
-         WgDQ==
-X-Gm-Message-State: AAQBX9dBeWpzG2fCWGoFa4mh9tYQvvf4049jM5S5bHREU9UQJmxVhPga
-        pv/iI5JvmgkUMdw0cdilq0i0Lg==
-X-Google-Smtp-Source: AKy350aXdBFMDe3uSpxc+jG1qjnrrpj7m+IRvlYTua3HuZ18VVDteVNpOizL7XlRnP++hK0nXFzJmQ==
-X-Received: by 2002:a17:906:755:b0:94f:2eb1:ffd2 with SMTP id z21-20020a170906075500b0094f2eb1ffd2mr257610ejb.40.1681549010444;
-        Sat, 15 Apr 2023 01:56:50 -0700 (PDT)
+        bh=Med8MNi8DSncJEWPZ8pMWBDtWOVLQvgNcdZTfLmu3P8=;
+        b=DB+FEDVL3u5GCMidvfY0GSe6wAxg62MXYtaoqM1Hfp30JJlrgIHzxEaR6cZ1mjof2w
+         fQ9nDJJhRL/l7dSqiOqRre2HcvYn59x3ktqujrKW87xUR9Xb94QUq33pCp/shyTf/S5t
+         2+vboho5AiC70yNR6TzevjPUD7MdlfksU+xJfQYMg21E1xdn66e80GbRTGG63Q/Ygsi0
+         3HijfCV9nIBj7MaCRHjK6bc64HZ1Ax08wGicROajMf1YpqijhOHWGxIu10jIIJQ6gBh/
+         mNCKP66IIhJokdufGnul4Hwnzmg/5MC0mY/HGrTyDG9Y18KJ0O0eShdwGrQfahA9Zzoi
+         WEVA==
+X-Gm-Message-State: AAQBX9eKjZadns6EHimox/t/8ET1LdheHxGX24IacI+lKV6muGBCNVvS
+        LMktEC5L3LPmoZ6ZQT0dfask7g==
+X-Google-Smtp-Source: AKy350bi+DUYyH9UZ4AdhS/7htgoHTSJhb6dVUrQycsSJfFQZCP1PpSuhd0WIoLMh2dVyUKqY32vWg==
+X-Received: by 2002:a17:906:4ed5:b0:94f:f6e:fdb4 with SMTP id i21-20020a1709064ed500b0094f0f6efdb4mr1680089ejv.42.1681549147434;
+        Sat, 15 Apr 2023 01:59:07 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:a3bf:4ed:6c53:2a36? ([2a02:810d:15c0:828:a3bf:4ed:6c53:2a36])
-        by smtp.gmail.com with ESMTPSA id sg44-20020a170907a42c00b0094c784f64fbsm3507553ejc.66.2023.04.15.01.56.49
+        by smtp.gmail.com with ESMTPSA id ov5-20020a170906fc0500b00931baabe36csm3509441ejb.63.2023.04.15.01.59.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 15 Apr 2023 01:56:49 -0700 (PDT)
-Message-ID: <d08d052e-6be6-92fa-a326-5227aba1c344@linaro.org>
-Date:   Sat, 15 Apr 2023 10:56:48 +0200
+        Sat, 15 Apr 2023 01:59:06 -0700 (PDT)
+Message-ID: <f8681075-30c8-5cda-6e1c-ddb80c052e50@linaro.org>
+Date:   Sat, 15 Apr 2023 10:59:05 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v4 1/8] media: dt-bindings: cadence-csi2rx: Convert to DT
- schema
+Subject: Re: [PATCH v4 6/8] media: dt-bindings: Add bindings for JH7110 Camera
+ Subsystem
 Content-Language: en-US
 To:     Jack Zhu <jack.zhu@starfivetech.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -73,9 +73,9 @@ To:     Jack Zhu <jack.zhu@starfivetech.com>,
 Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, changhuang.liang@starfivetech.com
 References: <20230413035541.62129-1-jack.zhu@starfivetech.com>
- <20230413035541.62129-2-jack.zhu@starfivetech.com>
+ <20230413035541.62129-7-jack.zhu@starfivetech.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230413035541.62129-2-jack.zhu@starfivetech.com>
+In-Reply-To: <20230413035541.62129-7-jack.zhu@starfivetech.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -89,18 +89,32 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 13/04/2023 05:55, Jack Zhu wrote:
-> Convert DT bindings document for Cadence MIPI-CSI2 RX controller to
-> DT schema format.
-> 
-> For compatible, new compatibles should not be messed with conversion,
-> but the original binding did not specify any SoC-specific compatible
-> string, so add the StarFive compatible string.
+> Add the bindings documentation for Starfive JH7110 Camera Subsystem
+> which is used for handing image sensor data.
 > 
 > Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
+
+Subject: drop second/last, redundant "bindings for". The "dt-bindings"
+prefix is already stating that these are bindings.
+
 > ---
->  .../devicetree/bindings/media/cdns,csi2rx.txt | 100 ----------
->  .../bindings/media/cdns,csi2rx.yaml           | 177 ++++++++++++++++++
->  MAINTAINERS                                   |   1 +
+>  .../bindings/media/starfive,jh7110-camss.yaml | 164 ++++++++++++++++++
+>  MAINTAINERS                                   |   7 +
+>  2 files changed, 171 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml b/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+> new file mode 100644
+> index 000000000000..4cd144f1b845
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+> @@ -0,0 +1,164 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +
+
+No need for blank line.
+
+With two fixes above:
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
