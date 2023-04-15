@@ -2,96 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCB526E3263
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 18:20:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72A0C6E3266
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 18:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbjDOQUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 12:20:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48032 "EHLO
+        id S229839AbjDOQXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 12:23:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbjDOQUQ (ORCPT
+        with ESMTP id S229670AbjDOQXo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 12:20:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC3204230;
-        Sat, 15 Apr 2023 09:20:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 57CF3612ED;
-        Sat, 15 Apr 2023 16:20:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A8FCC433EF;
-        Sat, 15 Apr 2023 16:20:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681575610;
-        bh=DTWP6xThhLREOoWWAUdntoavtxBw4x/BgKGr7En2G+I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=GmUNzIsw/k9u6mHIPjmMJSdolY4BlTCHrz6o7gYdxbGZ4PeqtrXozfp7Q0xrDnbiC
-         N6ekHJxPfDEloG4V6MmfkCTixSIWH1HgBN+y1e31mC07b0+LhDW0C7uMoCN/A/BhTi
-         jUvvq4lR3/PsJM4LKq8P622ks4HUD+ow7FgYUcGyuPPF338khCSriVkmAo8+iMuIcL
-         HpcSRkBGLZcccS36Cc+ZDyy8vRsL7XDfWkoY+X6I3k3wFeExu1KK/hteM8F+nK+guS
-         ib5saxEInFemsZ9wUM71gB7w4pIgdeqdZvHr5xOpxOy1pq+gMq4Er0BxK1bjFZYFSl
-         njkcndZEX5djw==
-Date:   Sat, 15 Apr 2023 17:20:09 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-iio@vger.kernel.org
-Subject: Re: [PATCH 5/8] dt-bindings: iio: adc: qcom,spmi-vadc: Allow 1/16
- for pre-scaling
-Message-ID: <20230415172009.529d91c5@jic23-huawei>
-In-Reply-To: <577ecd98-94eb-3795-4859-ffad03192f89@linaro.org>
-References: <20230414-pmi632-v1-0-fe94dc414832@z3ntu.xyz>
-        <20230414-pmi632-v1-5-fe94dc414832@z3ntu.xyz>
-        <577ecd98-94eb-3795-4859-ffad03192f89@linaro.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Sat, 15 Apr 2023 12:23:44 -0400
+Received: from smtp.smtpout.orange.fr (smtp-18.smtpout.orange.fr [80.12.242.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA094205
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 09:23:42 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id nigdpWagKzvWynigdpJpvG; Sat, 15 Apr 2023 18:23:40 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orange.fr;
+        s=t20230301; t=1681575820;
+        bh=MAu6FtQocPfF7HLftUeIz5L/LjWmrKfwqCeX9Eip2zs=;
+        h=From:To:Cc:Subject:Date;
+        b=MQexySYLp4AK43xDaS2eH2jE+/tLInYnZZZtFldvpZqTrZ5vInwfiaB6Kw1DO/EpX
+         dcaFupj8Wl8wECUb5kxyydHW9OSUxvPzkWnxWFbKsXHi7Z78CPKmCztmeKjDkoLN9y
+         t+H9b19kkLUgVoaJV1qwuNL+ANuct4X8JwdHDZG8jF/bfRrQeZzePDpTQbkjGJNfxL
+         7O45Db1USkV7v5LBA0f8gmelrH1/1GwN6ughha1ZNTvemwKSIJAs+MLhECion1eyDI
+         c8JoUEelAIMTxU34c988bmnUM7qVMCJJb42zPpswesP23xOuXZnK9+6rrgp/LWp6NB
+         OdPo2ALpKyDQQ==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 15 Apr 2023 18:23:40 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Emil Renner Berthing <kernel@esmil.dk>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-hwmon@vger.kernel.org
+Subject: [PATCH] hwmon: (sfctemp) Simplify error message
+Date:   Sat, 15 Apr 2023 18:23:37 +0200
+Message-Id: <f32a6e877f399e11ca130476002f85c2b48ba7ec.1681575790.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Apr 2023 09:56:07 +0200
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+dev_err_probe() already display the error code. There is no need to
+duplicate it explicitly in the error message.
 
-> On 14/04/2023 01:17, Luca Weiss wrote:
-> > The channel ADC5_USB_IN_V_16 is using 1/16 pre-scaling on at least
-> > pm7250b and pmi632. Allow that in the schema.
-> > 
-> > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> > ---
-> >  Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >   
-> 
-> 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> Best regards,
-> Krzysztof
-> 
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/hwmon/sfctemp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied this patch to the IIO togreg branch initially pushed out as testing
-for 0-day to poke at it.
+diff --git a/drivers/hwmon/sfctemp.c b/drivers/hwmon/sfctemp.c
+index d7484e2b8100..fb1da93383d7 100644
+--- a/drivers/hwmon/sfctemp.c
++++ b/drivers/hwmon/sfctemp.c
+@@ -303,7 +303,7 @@ static int sfctemp_probe(struct platform_device *pdev)
+ 
+ 	ret = sfctemp_enable(sfctemp);
+ 	if (ret)
+-		return dev_err_probe(dev, ret, "error enabling temperature sensor: %d\n", ret);
++		return dev_err_probe(dev, ret, "error enabling temperature sensor\n");
+ 
+ 	hwmon_dev = devm_hwmon_device_register_with_info(dev, "sfctemp", sfctemp,
+ 							 &sfctemp_chip_info, NULL);
+-- 
+2.34.1
 
-I'm doubtful this one will make the upcoming merge window but seems unlikely
-the rest will all make it either so that shouldn't be a problem.
-
-Jonathan
