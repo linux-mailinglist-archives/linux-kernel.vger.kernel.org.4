@@ -2,76 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B05D6E33E6
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 23:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EFDE6E3454
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 00:57:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbjDOVuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 17:50:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36918 "EHLO
+        id S229989AbjDOW47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 18:56:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjDOVuL (ORCPT
+        with ESMTP id S229822AbjDOW45 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 17:50:11 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8AAD35B1
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 14:50:09 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1681595408;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6RF8rETFXCMTOEukxl28OtsTiYOmUtZ5LkzSVRomdEI=;
-        b=bCSe9oIbk38mz6gGtqb83ZHXb79KC5FX34U0HbGtZ0K+gUKZgAlcbCyPtTUyV52BQyjKuJ
-        E83vMU/abAzkt43icmo9xeRb70plOh1pHlSKpvGg6bk21bHoNtjdQKP9zZp82j6mUhMtOB
-        ojAJOA6Wkqt5MqFOlo5LrMJkSrL+ZyDr3dpvj24OJ3ElQcmI4iF7aEYgp0mPLFZfftA005
-        Xb2GFZF53+OLnyrJIbWumxEW/1NA0xIoZrH8FeOOm17fUlpqH+85GFubRgeJ2kNbZtVVKk
-        WDcNqXNo23+jG3bFYvMn04cg7NY1gnKdDk6IvW0WFOyQEaigTi3VqDhm1H8Vsw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1681595408;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6RF8rETFXCMTOEukxl28OtsTiYOmUtZ5LkzSVRomdEI=;
-        b=FGbGIwtE3KdJH2E1FnzqdjS/QofAGcl+GaCS22tt/YdqoNZPnbY2D4F4YdaR0VO/5HSu+T
-        Mg3wmKfzxyS+vyDQ==
-To:     Shanker Donthineni <sdonthineni@nvidia.com>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Michael Walle <michael@walle.cc>, linux-kernel@vger.kernel.org,
-        Vikram Sethi <vsethi@nvidia.com>,
-        Jason Sequeira <jsequeira@nvidia.com>
-Subject: Re: [PATCH v3 0/3] Increase the number of IRQ descriptors for
- SPARSEIRQ
-In-Reply-To: <3951b23f-bafa-2979-f349-232c509a33fb@nvidia.com>
-References: <20230410155721.3720991-1-sdonthineni@nvidia.com>
- <3951b23f-bafa-2979-f349-232c509a33fb@nvidia.com>
-Date:   Sat, 15 Apr 2023 23:50:07 +0200
-Message-ID: <87jzycyfw0.ffs@tglx>
+        Sat, 15 Apr 2023 18:56:57 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A2803580
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 15:56:55 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id f2so13481613pjs.3
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 15:56:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=networkplumber-org.20221208.gappssmtp.com; s=20221208; t=1681599414; x=1684191414;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ubRjxle8AfL59Prm/wkmTmVjb75/p8iBeRuuijtLjNg=;
+        b=TZKMN8poAHP4YwAqnU9eEVSOlb5ek8a5pOp6pAenCZDEHOJssxaf+A4++1IIYw7MpM
+         7aq9yaEQTpQNruGixDOeSiEIZuumGKqQqq61OfoKbml+6JwtYe2rw4/T/V8o5iEBSi51
+         OSOWCMJ+FlQaNG/1ktYx6rTm4HSd8b8EpSnbipfzd+GjNGowid2Q/djKv2jOWWHaHmEP
+         hSiqOIeyIH6QSf2ALrjHP/WGwHSsfWJFwgnpnRFGR3vBzTBTPXI+33kdhOkhQoB8hegE
+         UeeIqG5sqAzmDiUPg8p1YaOLplu+Tnxv7+bB8KIo23tQvL0qQzEtGCfEbteC9xiY3pS+
+         pioA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681599414; x=1684191414;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ubRjxle8AfL59Prm/wkmTmVjb75/p8iBeRuuijtLjNg=;
+        b=duwlvtsH5ll9r9oUvWnTnZ1yl76otw+tqmqTn1vd1M38ef2+2P1CrIvv8IuLHGHKlf
+         B/EtHdikW9GJzALKeyvBQ8i3AaU2wosrGgTWrBGtFqlJacuKXOpotf6BCcflO/jk5vnl
+         ymVlugs582C+Vp5r6om0GMJLlnUDHnxP5Hv77Vq4D2z/VfMlC+vsAEnz5lhfZzgoEvOp
+         o02FIvKczZeOkjBCmQ1XXfaylrSGBLht1vpzJsJpgYO5wzQzMOUw6TofNgDbcjv/34vX
+         5n9mqOCd7Le1EFURXRP5wFJBPcFvEp6k4x7eW0UKP4iLBOTidOXBsLLB1VggYCZT5z0P
+         ICeA==
+X-Gm-Message-State: AAQBX9egCcPdoGBL6JJmG8bWP7PGkGlAhqF8+VWjKPVZlhfv4R4YCwnX
+        lNPIwVoXRpaVKeBZZ47zzXLlgw==
+X-Google-Smtp-Source: AKy350bsEaGCTirqACeAVtm48St3ie5XE0fYZj2D3HWUz1dZxDWvNItGbUZOV8DjHKhZt7C3oJG6Eg==
+X-Received: by 2002:a05:6a20:78a8:b0:e9:5b0a:deff with SMTP id d40-20020a056a2078a800b000e95b0adeffmr9990865pzg.22.1681599414582;
+        Sat, 15 Apr 2023 15:56:54 -0700 (PDT)
+Received: from hermes.local (204-195-120-218.wavecable.com. [204.195.120.218])
+        by smtp.gmail.com with ESMTPSA id e25-20020a635019000000b00502e6bfedc0sm4647359pgb.0.2023.04.15.15.56.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Apr 2023 15:56:54 -0700 (PDT)
+Date:   Sat, 15 Apr 2023 15:56:51 -0700
+From:   Stephen Hemminger <stephen@networkplumber.org>
+To:     david.keisarschm@mail.huji.ac.il
+Cc:     linux-kernel@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>, Jason@zx2c4.com,
+        keescook@chromium.org, ilay.bahat1@gmail.com, aksecurity@gmail.com,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH v5 3/3] Replace invocation of weak PRNG
+Message-ID: <20230415155651.18ce590f@hermes.local>
+In-Reply-To: <20230415173756.5520-1-david.keisarschm@mail.huji.ac.il>
+References: <20230415173756.5520-1-david.keisarschm@mail.huji.ac.il>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 15 2023 at 10:49, Shanker Donthineni wrote:
-> Hello Thomas,
->
-> I wanted to update you that all the review comments have been resolved and
-> the necessary fixes for the maple tree have been integrated into the mainline.
-> If there are any outstanding tasks required to consider it for the upcoming
-> v6.4 release, please let me know.
+On Sat, 15 Apr 2023 20:37:53 +0300
+david.keisarschm@mail.huji.ac.il wrote:
 
-It's on my todo list and as I'm traveling next week I might not come
-around to review/merge this right now.
+> diff --git a/include/uapi/linux/netfilter/xt_dscp.h b/include/uapi/linux/netfilter/xt_dscp.h
+> index 7594e4df8..223d635e8 100644
+> --- a/include/uapi/linux/netfilter/xt_dscp.h
+> +++ b/include/uapi/linux/netfilter/xt_dscp.h
+> @@ -1,32 +1,27 @@
+>  /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> -/* x_tables module for matching the IPv4/IPv6 DSCP field
+> +/* x_tables module for setting the IPv4/IPv6 DSCP field
+>   *
+>   * (C) 2002 Harald Welte <laforge@gnumonks.org>
+> + * based on ipt_FTOS.c (C) 2000 by Matthew G. Marsh <mgm@paktronix.com>
+>   * This software is distributed under GNU GPL v2, 1991
+>   *
+>   * See RFC2474 for a description of the DSCP field within the IP Header.
+>   *
+> - * xt_dscp.h,v 1.3 2002/08/05 19:00:21 laforge Exp
+> + * xt_DSCP.h,v 1.7 2002/03/14 12:03:13 laforge Exp
+>  */
 
-I'll get to it.
+This part of the change is a mess.
+Why are you adding ipt_FTOS.c here?
+Why are you updating ancient header line from 2002?
 
-Thanks,
-
-        tglx
