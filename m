@@ -2,78 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B3656E302F
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 11:54:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D2A36E3061
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 12:06:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbjDOJyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 05:54:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50600 "EHLO
+        id S229678AbjDOKGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 06:06:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjDOJyH (ORCPT
+        with ESMTP id S229869AbjDOKGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 05:54:07 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF25530FF;
-        Sat, 15 Apr 2023 02:54:05 -0700 (PDT)
-Received: from fsav414.sakura.ne.jp (fsav414.sakura.ne.jp [133.242.250.113])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 33F9qg6n066740;
-        Sat, 15 Apr 2023 18:52:42 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav414.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav414.sakura.ne.jp);
- Sat, 15 Apr 2023 18:52:42 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav414.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 33F9qfPk066737
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sat, 15 Apr 2023 18:52:41 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <b4706369-f97c-8b78-f194-b45a870114e1@I-love.SAKURA.ne.jp>
-Date:   Sat, 15 Apr 2023 18:52:41 +0900
+        Sat, 15 Apr 2023 06:06:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639C36EB4;
+        Sat, 15 Apr 2023 03:06:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DFF2660B8D;
+        Sat, 15 Apr 2023 10:06:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 753E4C433EF;
+        Sat, 15 Apr 2023 10:06:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681553173;
+        bh=5ZDvmp4AmKVtWmkiXBMt//3ziXaWBzX6cVS1LHEShbU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=COd7ijUIiSXQJ28LUX+gvrw14X1y84xoZmDm/W1Gu5Ccm5OwP9xSQkU0071o8ojJy
+         G1og91LxVzENlwUP+ej5TUtouS97rCMMfv6lESKxmj6LKn/JbZgdPg+eBuBOEv+RCd
+         XlrqTOwATmlkdwqiIeAvf0UnhxvTbQBDRabqnzbZ5l20rFpltKykYS5wZs3Q2URIz9
+         af0XN8tjyHxSRSRRU7cJ5hbgYFW3EXjBH6NTqlmL21/7gdvTdIeh9NoxsNhL46eSd0
+         ew6ilq18KtDlMy5WSLLI7d9ONyL6ja3PH8Ll1EFC7j/g6P30xwJQWZJ4poLdaAItZb
+         c3hjwvjE3GG2A==
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Lars-Peter Clausen <lars@metafoo.de>,
+        Vinod Koul <vkoul@kernel.org>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Sinan Kaya <okaya@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
+Subject: [PATCH v2 0/5] dma: don't set chancnt
+Date:   Sat, 15 Apr 2023 17:55:12 +0800
+Message-Id: <20230415095517.2763-1-jszhang@kernel.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 3/7] mm/gup: remove vmas parameter from
- get_user_pages_remote()
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <cover.1681547405.git.lstoakes@gmail.com>
- <631001ecc556c5e348ff4f47719334c31f7bd592.1681547405.git.lstoakes@gmail.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <631001ecc556c5e348ff4f47719334c31f7bd592.1681547405.git.lstoakes@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/04/15 18:08, Lorenzo Stoakes wrote:
-> @@ -475,10 +474,14 @@ int uprobe_write_opcode(struct arch_uprobe *auprobe, struct mm_struct *mm,
->  		gup_flags |= FOLL_SPLIT_PMD;
->  	/* Read the page with vaddr into memory */
->  	ret = get_user_pages_remote(mm, vaddr, 1, gup_flags,
-> -				    &old_page, &vma, NULL);
-> +				    &old_page, NULL);
->  	if (ret <= 0)
->  		return ret;
->  
-> +	vma = vma_lookup(mm, vaddr);
-> +	if (!vma)
-> +		goto put_old;
-> +
->  	ret = verify_opcode(old_page, vaddr, &opcode);
->  	if (ret <= 0)
->  		goto put_old;
+I'm patching dw-axi-dmac to add more features, but I found a small
+clean up point and some drivers in drivers/dma/ have the same issue,
+so this series comes.
 
-This conversion looks wrong.
-This causes returning a positive number when vma_lookup() returned NULL.
+The dma framework will calculate the dma channels chancnt, setting it
+is wrong.
 
-  * Return 0 (success) or a negative errno.
+NOTE: I leave drivers/dma/ioat/ as is, because its logic have a
+heavy dependency on chancnt usage, however it's still doable.
+
+Since v1:
+  - collet Acked-by tag
+  - fix typo
+
+Jisheng Zhang (5):
+  dmaengine: dw-axi-dmac: Don't set chancnt
+  dmaengine: axi-dmac: Don't set chancnt
+  dmaengine: plx_dma: Don't set chancnt
+  dmaengine: hidma: Don't set chancnt
+  dmaengine: sprd: Don't set chancnt
+
+ drivers/dma/dma-axi-dmac.c                     | 1 -
+ drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c | 1 -
+ drivers/dma/plx_dma.c                          | 1 -
+ drivers/dma/qcom/hidma.c                       | 1 -
+ drivers/dma/sprd-dma.c                         | 1 -
+ 5 files changed, 5 deletions(-)
+
+-- 
+2.39.2
 
