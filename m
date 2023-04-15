@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EFDE6E3454
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 00:57:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5AC06E3456
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 00:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbjDOW47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 18:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42898 "EHLO
+        id S230036AbjDOW5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 18:57:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbjDOW45 (ORCPT
+        with ESMTP id S229999AbjDOW5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 18:56:57 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A2803580
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 15:56:55 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id f2so13481613pjs.3
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 15:56:55 -0700 (PDT)
+        Sat, 15 Apr 2023 18:57:52 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B431B1BCA
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 15:57:51 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id kc3so5001141plb.6
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 15:57:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20221208.gappssmtp.com; s=20221208; t=1681599414; x=1684191414;
+        d=networkplumber-org.20221208.gappssmtp.com; s=20221208; t=1681599471; x=1684191471;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ubRjxle8AfL59Prm/wkmTmVjb75/p8iBeRuuijtLjNg=;
-        b=TZKMN8poAHP4YwAqnU9eEVSOlb5ek8a5pOp6pAenCZDEHOJssxaf+A4++1IIYw7MpM
-         7aq9yaEQTpQNruGixDOeSiEIZuumGKqQqq61OfoKbml+6JwtYe2rw4/T/V8o5iEBSi51
-         OSOWCMJ+FlQaNG/1ktYx6rTm4HSd8b8EpSnbipfzd+GjNGowid2Q/djKv2jOWWHaHmEP
-         hSiqOIeyIH6QSf2ALrjHP/WGwHSsfWJFwgnpnRFGR3vBzTBTPXI+33kdhOkhQoB8hegE
-         UeeIqG5sqAzmDiUPg8p1YaOLplu+Tnxv7+bB8KIo23tQvL0qQzEtGCfEbteC9xiY3pS+
-         pioA==
+        bh=9jm23euiY98fsN22kiG5rHbRtDdr3VWwy800+EazcFQ=;
+        b=GBfLzDMaedtUl6MyPA5MjqwskjXDB8bXlQkls/cGP4aq1jUv7RrRFtXHLwgTEGVidb
+         x+yYSroQA1+8wmK2nLvfaVEN3cMOIs5qH3X54gCP+KRH3xJ+4SmDE1grbMoFifyFXlPc
+         RI0xSxywOQMml3hnpp2skrtAslxJZk2wR9p79TDktIn6BkkyDaCbEmvvHIRn0QjEWqht
+         8eQQirlYYZgBQ/JwhSrlewqOHstVPBpK4duQ8aUnfUE+nLGCySqyLX1g1NOzCO3wSxFa
+         jm9ygqNznrgQ9S2/G24r7ngYQJBkMGHFycKgNG88gySGQA40KnO1k13R5U3FnMpOhOD2
+         Pi9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681599414; x=1684191414;
+        d=1e100.net; s=20221208; t=1681599471; x=1684191471;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ubRjxle8AfL59Prm/wkmTmVjb75/p8iBeRuuijtLjNg=;
-        b=duwlvtsH5ll9r9oUvWnTnZ1yl76otw+tqmqTn1vd1M38ef2+2P1CrIvv8IuLHGHKlf
-         B/EtHdikW9GJzALKeyvBQ8i3AaU2wosrGgTWrBGtFqlJacuKXOpotf6BCcflO/jk5vnl
-         ymVlugs582C+Vp5r6om0GMJLlnUDHnxP5Hv77Vq4D2z/VfMlC+vsAEnz5lhfZzgoEvOp
-         o02FIvKczZeOkjBCmQ1XXfaylrSGBLht1vpzJsJpgYO5wzQzMOUw6TofNgDbcjv/34vX
-         5n9mqOCd7Le1EFURXRP5wFJBPcFvEp6k4x7eW0UKP4iLBOTidOXBsLLB1VggYCZT5z0P
-         ICeA==
-X-Gm-Message-State: AAQBX9egCcPdoGBL6JJmG8bWP7PGkGlAhqF8+VWjKPVZlhfv4R4YCwnX
-        lNPIwVoXRpaVKeBZZ47zzXLlgw==
-X-Google-Smtp-Source: AKy350bsEaGCTirqACeAVtm48St3ie5XE0fYZj2D3HWUz1dZxDWvNItGbUZOV8DjHKhZt7C3oJG6Eg==
-X-Received: by 2002:a05:6a20:78a8:b0:e9:5b0a:deff with SMTP id d40-20020a056a2078a800b000e95b0adeffmr9990865pzg.22.1681599414582;
-        Sat, 15 Apr 2023 15:56:54 -0700 (PDT)
+        bh=9jm23euiY98fsN22kiG5rHbRtDdr3VWwy800+EazcFQ=;
+        b=HGJxiv2+LPoxxrvZ2tf3Te39ORUp5tYRoYW1az0qooqgTZuDAfA8Pw0XJkjTjP8jmq
+         CDmgDBY6w0neOfY7AtVetLFDnpIVcvKjyQMN7r33gH34oV98UkJsbezNIsZ1+9MO95/l
+         A+NoN5bW91cPF2Bw7dN/DA5Y7AseB6oA+EdT/BxB7GM3V4TDc7alGIeOp72Yk7Jg23ji
+         ecxvdzvsPNCQcoxqUY1R45oQuJ+3W+4+xIcFJCu4Ah46qW9tjYL2VMAEzCG9gUoef0cc
+         EGYAI3Sopri5LdgRsIFN6yGtUljRlPqSUuj4r9mBTji0ies8Y5s3JvOXEalrp57OMNgX
+         KE7w==
+X-Gm-Message-State: AAQBX9cxXJPhCVDfcB7Zqrn4XP5IDT94vQQF5Ib6UsCGvXQWOEsWohFa
+        sE21XK9LavE+JL++PW8gPSc+8g==
+X-Google-Smtp-Source: AKy350atP7YyE1uh5Cv1o1OIAdHqZyYd5TMCJvKCXUcCmogo34GyZWci+oDz1ExgkYU+uGfEZj3q7Q==
+X-Received: by 2002:a17:902:d583:b0:1a0:6bd4:ea78 with SMTP id k3-20020a170902d58300b001a06bd4ea78mr7929045plh.31.1681599471180;
+        Sat, 15 Apr 2023 15:57:51 -0700 (PDT)
 Received: from hermes.local (204-195-120-218.wavecable.com. [204.195.120.218])
-        by smtp.gmail.com with ESMTPSA id e25-20020a635019000000b00502e6bfedc0sm4647359pgb.0.2023.04.15.15.56.53
+        by smtp.gmail.com with ESMTPSA id y13-20020a170902b48d00b001a68991e1b3sm4801780plr.263.2023.04.15.15.57.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Apr 2023 15:56:54 -0700 (PDT)
-Date:   Sat, 15 Apr 2023 15:56:51 -0700
+        Sat, 15 Apr 2023 15:57:51 -0700 (PDT)
+Date:   Sat, 15 Apr 2023 15:57:48 -0700
 From:   Stephen Hemminger <stephen@networkplumber.org>
 To:     david.keisarschm@mail.huji.ac.il
 Cc:     linux-kernel@vger.kernel.org,
@@ -83,15 +83,15 @@ Cc:     linux-kernel@vger.kernel.org,
         netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
         netdev@vger.kernel.org, linux-arch@vger.kernel.org
 Subject: Re: [PATCH v5 3/3] Replace invocation of weak PRNG
-Message-ID: <20230415155651.18ce590f@hermes.local>
+Message-ID: <20230415155748.2c9663a9@hermes.local>
 In-Reply-To: <20230415173756.5520-1-david.keisarschm@mail.huji.ac.il>
 References: <20230415173756.5520-1-david.keisarschm@mail.huji.ac.il>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -101,26 +101,19 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Sat, 15 Apr 2023 20:37:53 +0300
 david.keisarschm@mail.huji.ac.il wrote:
 
-> diff --git a/include/uapi/linux/netfilter/xt_dscp.h b/include/uapi/linux/netfilter/xt_dscp.h
-> index 7594e4df8..223d635e8 100644
-> --- a/include/uapi/linux/netfilter/xt_dscp.h
-> +++ b/include/uapi/linux/netfilter/xt_dscp.h
-> @@ -1,32 +1,27 @@
->  /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> -/* x_tables module for matching the IPv4/IPv6 DSCP field
-> +/* x_tables module for setting the IPv4/IPv6 DSCP field
->   *
->   * (C) 2002 Harald Welte <laforge@gnumonks.org>
-> + * based on ipt_FTOS.c (C) 2000 by Matthew G. Marsh <mgm@paktronix.com>
->   * This software is distributed under GNU GPL v2, 1991
->   *
->   * See RFC2474 for a description of the DSCP field within the IP Header.
->   *
-> - * xt_dscp.h,v 1.3 2002/08/05 19:00:21 laforge Exp
-> + * xt_DSCP.h,v 1.7 2002/03/14 12:03:13 laforge Exp
->  */
+>  include/uapi/linux/netfilter/xt_connmark.h    |  40 +-
+>  include/uapi/linux/netfilter/xt_dscp.h        |  27 +-
+>  include/uapi/linux/netfilter/xt_mark.h        |  17 +-
+>  include/uapi/linux/netfilter/xt_rateest.h     |  38 +-
+>  include/uapi/linux/netfilter/xt_tcpmss.h      |  13 +-
+>  include/uapi/linux/netfilter_ipv4/ipt_ecn.h   |  40 +-
+>  include/uapi/linux/netfilter_ipv4/ipt_ttl.h   |  14 +-
+>  include/uapi/linux/netfilter_ipv6/ip6t_hl.h   |  14 +-
+>  net/netfilter/xt_dscp.c                       | 149 ++++---
+>  net/netfilter/xt_hl.c                         | 164 +++++---
+>  net/netfilter/xt_rateest.c                    | 282 ++++++++-----
+>  net/netfilter/xt_tcpmss.c                     | 378 ++++++++++++++----
+>  ...Z6.0+pooncelock+pooncelock+pombonce.litmus |  12 +-
 
-This part of the change is a mess.
-Why are you adding ipt_FTOS.c here?
-Why are you updating ancient header line from 2002?
-
+NAK
+You sucked in some unrelated netfilter stuff.
