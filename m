@@ -2,180 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1AE86E3151
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 14:13:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C63966E3156
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 14:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbjDOMN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 08:13:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47808 "EHLO
+        id S229839AbjDOMQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 08:16:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjDOMNZ (ORCPT
+        with ESMTP id S229780AbjDOMQT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 08:13:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F570AD;
-        Sat, 15 Apr 2023 05:13:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D70C6615B9;
-        Sat, 15 Apr 2023 12:13:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D93C6C433EF;
-        Sat, 15 Apr 2023 12:13:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681560801;
-        bh=vISxtwgPDbbPk2EBE4+0qWc3uawfwrv6lg/w51U7c6M=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=TIZnNaCcjQcrtSjP8IynjFI1zOZE3ioOSGp+Xn3NEVkUwUEXcrwHvksQ98DP4NHpW
-         9Zx2SJ/mlVxxXSTmIGv/qSCXlFMtBnImrVbhnUv0Ur+hMnqUkmhE0Ks0XdjxDTc9uf
-         ceCXE1LxO4OkhkFijr5SUnlAgCAcvKjIsPnx0C4nU1OQDh+fnp1vd6vJ+0WCpvOXiC
-         3XGbuoH61TENPu8kv3jwKXweUll2mdc/qmkkIq1eUwOZr8dAAnvX7x6Xb2G+K9Qh5F
-         ZNn+GAhUJrngGxyhRHEc154VKiYwXivaxryFgHhYxlWV+B1QI2v2ivKCbTs6PASN7F
-         IhmSdcNSSglqQ==
-Message-ID: <e03485c02c6f9fefdaf76e93724978e4874d5442.camel@kernel.org>
-Subject: Re: [RFC PATCH 0/3][RESEND] fs: opportunistic high-res file
- timestamps
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Amir Goldstein <amir73il@gmail.com>,
-        Dave Chinner <david@fromorbit.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-mm@kvack.org,
-        linux-nfs@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>
-Date:   Sat, 15 Apr 2023 08:13:18 -0400
-In-Reply-To: <CAOQ4uxi9rz1GFP+jMJm482axyAPtAcB+jnZ5jCR++EYKA_iRpw@mail.gmail.com>
-References: <20230411143702.64495-1-jlayton@kernel.org>
-         <CAOQ4uxi9rz1GFP+jMJm482axyAPtAcB+jnZ5jCR++EYKA_iRpw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Sat, 15 Apr 2023 08:16:19 -0400
+Received: from smtp.smtpout.orange.fr (smtp-18.smtpout.orange.fr [80.12.242.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B218C114
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 05:16:15 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id nep7pQmHwxZmMnep7pYjtW; Sat, 15 Apr 2023 14:16:13 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orange.fr;
+        s=t20230301; t=1681560973;
+        bh=oaPZSLKdrABf1h1Krxj/JAchE9UFaxR56+UJQa8Br+c=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=VxL/oOX0wNjy5nN1pSUJEJaCRISTlLLgnQt25YBRmaUAafnO+qqd4SDR6ttBOwgeK
+         4/ap2fK6aU4pyRiHsl7oEKcJRFc/EtjXX35bNzs9i7UKaYvVCNeEBIyF63+0l1aoBw
+         kMBQPkx9GrXubTccZWX3sgVxX7+iA/UFWvzAthok6JJK2f+al44GHWIlI16C5eyt/T
+         EugS05IB1hoIcNkBGVUhthXrM6YdfATY6sqqeV4m9cU1zOM/+sNYtivNv/O0MpHHRW
+         Xb4tkYeRiMUuHgELPgFZ1VOSO5AklvXSg8FbAvqBIbkBZsxBUHOB8Uc9/W7YktdUed
+         y2D7NffMlsGNg==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 15 Apr 2023 14:16:13 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <c04038f2-b7aa-7c37-df93-6950831579f6@wanadoo.fr>
+Date:   Sat, 15 Apr 2023 14:16:09 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v6 2/2] clk: wpcm450: Add Nuvoton WPCM450 clock/reset
+ controller driver
+To:     j.neuschaefer@gmx.net
+Cc:     avifishman70@gmail.com, benjaminfair@google.com,
+        daniel.lezcano@linaro.org, devicetree@vger.kernel.org,
+        krzk+dt@kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux@roeck-us.net, mturquette@baylibre.com,
+        openbmc@lists.ozlabs.org, p.zabel@pengutronix.de,
+        robh+dt@kernel.org, sboyd@kernel.org, tali.perry1@gmail.com,
+        tglx@linutronix.de, tmaimon77@gmail.com, venture@google.com,
+        wim@linux-watchdog.org, yuenn@google.com
+References: <20230415111355.696738-1-j.neuschaefer@gmx.net>
+ <20230415111355.696738-3-j.neuschaefer@gmx.net>
+Content-Language: fr
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20230415111355.696738-3-j.neuschaefer@gmx.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2023-04-15 at 14:35 +0300, Amir Goldstein wrote:
-> On Tue, Apr 11, 2023 at 5:38=E2=80=AFPM Jeff Layton <jlayton@kernel.org> =
-wrote:
-> >=20
-> > (Apologies for the resend, but I didn't send this with a wide enough
-> > distribution list originally).
-> >=20
-> > A few weeks ago, during one of the discussions around i_version, Dave
-> > Chinner wrote this:
-> >=20
-> > "You've missed the part where I suggested lifting the "nfsd sampled
-> > i_version" state into an inode state flag rather than hiding it in
-> > the i_version field. At that point, we could optimise away the
-> > secondary ctime updates just like you are proposing we do with the
-> > i_version updates.  Further, we could also use that state it to
-> > decide whether we need to use high resolution timestamps when
-> > recording ctime updates - if the nfsd has not sampled the
-> > ctime/i_version, we don't need high res timestamps to be recorded
-> > for ctime...."
-> >=20
-> > While I don't think we can practically optimize away ctime updates
-> > like we do with i_version, I do like the idea of using this scheme to
-> > indicate when we need to use a high-res timestamp.
-> >=20
-> > This patchset is a first stab at a scheme to do this. It declares a new
-> > i_state flag for this purpose and adds two new vfs-layer functions to
-> > implement conditional high-res timestamp fetching. It then converts bot=
-h
-> > tmpfs and xfs to use it.
-> >=20
-> > This seems to behave fine under xfstests, but I haven't yet done
-> > any performance testing with it. I wouldn't expect it to create huge
-> > regressions though since we're only grabbing high res timestamps after
-> > each query.
-> >=20
-> > I like this scheme because we can potentially convert any filesystem to
-> > use it. No special storage requirements like with i_version field.  I
-> > think it'd potentially improve NFS cache coherency with a whole swath o=
-f
-> > exportable filesystems, and helps out NFSv3 too.
-> >=20
-> > This is really just a proof-of-concept. There are a number of things we
-> > could change:
-> >=20
-> > 1/ We could use the top bit in the tv_sec field as the flag. That'd giv=
-e
-> >    us different flags for ctime and mtime. We also wouldn't need to use
-> >    a spinlock.
-> >=20
-> > 2/ We could probably optimize away the high-res timestamp fetch in more
-> >    cases. Basically, always do a coarse-grained ts fetch and only fetch
-> >    the high-res ts when the QUERIED flag is set and the existing time
-> >    hasn't changed.
-> >=20
-> > If this approach looks reasonable, I'll plan to start working on
-> > converting more filesystems.
-> >=20
-> > One thing I'm not clear on is how widely available high res timestamps
-> > are. Is this something we need to gate on particular CONFIG_* options?
-> >=20
-> > Thoughts?
->=20
-> Jeff,
->=20
-> Considering that this proposal is pretty uncontroversial,
-> do you still want to discuss/lead a session on i_version changes in LSF/M=
-M?
->=20
-> I noticed that Chuck listed "timespamt resolution and i_version" as part
-> of his NFSD BoF topic proposal [1], but I do not think all of these topic=
-s
-> can fit in one 30 minute session.
->=20
+Le 15/04/2023 à 13:13, Jonathan Neuschäfer a écrit :
+> This driver implements the following features w.r.t. the clock and reset
+> controller in the WPCM450 SoC:
+> 
+> - It calculates the rates for all clocks managed by the clock controller
+> - It leaves the clock tree mostly unchanged, except that it enables/
+>    disables clock gates based on usage.
+> - It exposes the reset lines managed by the controller using the
+>    Generic Reset Controller subsystem
+> 
+> NOTE: If the driver and the corresponding devicetree node are present,
+>        the driver will disable "unused" clocks. This is problem until
+>        the clock relations are properly declared in the devicetree (in a
+>        later patch). Until then, the clk_ignore_unused kernel parameter
+>        can be used as a workaround.
+> 
+> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer-hi6Y0CQ0nG0@public.gmane.org>
+> ---
 
-Agreed. I think we'll need an hour for the nfsd BoF.
+[...]
 
-I probably don't need a full 30 min slot for this topic, between the
-nfsd BoF and hallway track.
+> +
+> +static void __init wpcm450_clk_init(struct device_node *clk_np)
+> +{
+> +	struct clk_hw_onecell_data *clk_data;
+> +	static struct clk_hw **hws;
+> +	static struct clk_hw *hw;
+> +	void __iomem *clk_base;
+> +	int i, ret;
+> +	struct reset_simple_data *reset;
+> +
+> +	clk_base = of_iomap(clk_np, 0);
+> +	if (!clk_base) {
+> +		pr_err("%pOFP: failed to map registers\n", clk_np);
+> +		of_node_put(clk_np);
+> +		return;
+> +	}
+> +	of_node_put(clk_np);
+> +
+> +	clk_data = kzalloc(struct_size(clk_data, hws, WPCM450_NUM_CLKS), GFP_KERNEL);
+> +	if (!clk_data)
+> +		goto err_unmap;
+> +
+> +	clk_data->num = WPCM450_NUM_CLKS;
+> +	hws = clk_data->hws;
+> +
+> +	for (i = 0; i < WPCM450_NUM_CLKS; i++)
+> +		hws[i] = ERR_PTR(-ENOENT);
+> +
+> +	// PLLs
+> +	for (i = 0; i < ARRAY_SIZE(pll_data); i++) {
+> +		const struct wpcm450_pll_data *data = &pll_data[i];
+> +
+> +		hw = wpcm450_clk_register_pll(clk_base + data->reg, data->name,
+> +					      &data->parent, data->flags);
+> +		if (IS_ERR(hw)) {
+> +			pr_info("Failed to register PLL: %pe", hw);
+> +			goto err_free;
+> +		}
+> +	}
+> +
+> +	// Early divisors (REF/2)
+> +	for (i = 0; i < ARRAY_SIZE(clkdiv_data_early); i++) {
+> +		const struct wpcm450_clkdiv_data *data = &clkdiv_data_early[i];
+> +
+> +		hw = clk_hw_register_divider_table_parent_data(NULL, data->name, &data->parent,
+> +							       data->flags, clk_base + REG_CLKDIV,
+> +							       data->shift, data->width,
+> +							       data->div_flags, data->table,
+> +							       &wpcm450_clk_lock);
+> +		if (IS_ERR(hw)) {
+> +			pr_err("Failed to register div table: %pe\n", hw);
+> +			goto err_free;
+> +		}
+> +	}
+> +
+> +	// Selects/muxes
+> +	for (i = 0; i < ARRAY_SIZE(clksel_data); i++) {
+> +		const struct wpcm450_clksel_data *data = &clksel_data[i];
+> +
+> +		hw = clk_hw_register_mux_parent_data(NULL, data->name, data->parents,
+> +						     data->num_parents, data->flags,
+> +						     clk_base + REG_CLKSEL, data->shift,
+> +						     data->width, 0,
+> +						     &wpcm450_clk_lock);
+> +		if (IS_ERR(hw)) {
+> +			pr_err("Failed to register mux: %pe\n", hw);
+> +			goto err_free;
+> +		}
+> +		if (data->index >= 0)
+> +			clk_data->hws[data->index] = hw;
+> +	}
+> +
+> +	// Divisors
+> +	for (i = 0; i < ARRAY_SIZE(clkdiv_data); i++) {
+> +		const struct wpcm450_clkdiv_data *data = &clkdiv_data[i];
+> +
+> +		hw = clk_hw_register_divider_table_parent_data(NULL, data->name, &data->parent,
+> +							       data->flags, clk_base + REG_CLKDIV,
+> +							       data->shift, data->width,
+> +							       data->div_flags, data->table,
+> +							       &wpcm450_clk_lock);
+> +		if (IS_ERR(hw)) {
+> +			pr_err("Failed to register divider: %pe\n", hw);
+> +			goto err_free;
+> +		}
+> +	}
+> +
+> +	// Enables/gates
+> +	for (i = 0; i < ARRAY_SIZE(clken_data); i++) {
+> +		const struct wpcm450_clken_data *data = &clken_data[i];
+> +
+> +		hw = clk_hw_register_gate_parent_data(NULL, data->name, &data->parent, data->flags,
+> +						      clk_base + REG_CLKEN, data->bitnum,
+> +						      data->flags, &wpcm450_clk_lock);
 
-I've started a TOPIC email for this about 5 times now, and keep deleting
-it. I think most of the more controversial bits are pretty much settled
-at this point, and the rest (crash resilience) is still too embryonic
-for discussion.
+If an error occures in the 'for' loop or after it, should this be 
+clk_hw_unregister_gate()'ed somewhere?
 
-I might want a lightning talk at some point about what I'd _really_ like
-to do long term with the i_version counter (basically: I want to be able
-to do a write that is gated on the i_version not having changed).
+CJ
 
+> +		if (IS_ERR(hw)) {
+> +			pr_err("Failed to register gate: %pe\n", hw);
+> +			goto err_free;
+> +		}
+> +		clk_data->hws[data->bitnum] = hw;
+> +	}
+> +
+> +	ret = of_clk_add_hw_provider(clk_np, of_clk_hw_onecell_get, clk_data);
+> +	if (ret)
+> +		pr_err("Failed to add DT provider: %d\n", ret);
+> +
+> +	// Reset controller
+> +	reset = kzalloc(sizeof(*reset), GFP_KERNEL);
+> +	if (!reset)
+> +		goto err_free;
+> +	reset->rcdev.owner = THIS_MODULE;
+> +	reset->rcdev.nr_resets = WPCM450_NUM_RESETS;
+> +	reset->rcdev.ops = &reset_simple_ops;
+> +	reset->rcdev.of_node = clk_np;
+> +	reset->membase = clk_base + REG_IPSRST;
+> +	ret = reset_controller_register(&reset->rcdev);
+> +	if (ret)
+> +		pr_err("Failed to register reset controller: %d\n", ret);
+> +
+> +	of_node_put(clk_np);
+> +	return;
+> +
+> +err_free:
+> +	kfree(clk_data->hws);
+> +err_unmap:
+> +	iounmap(clk_base);
+> +	of_node_put(clk_np);
+> +}
+> +
+> +CLK_OF_DECLARE(wpcm450_clk_init, "nuvoton,wpcm450-clk", wpcm450_clk_init);
+> diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
+> index 2a52c990d4fec..16e111d213560 100644
+> --- a/drivers/reset/Kconfig
+> +++ b/drivers/reset/Kconfig
+> @@ -208,7 +208,7 @@ config RESET_SCMI
+> 
+>   config RESET_SIMPLE
+>   	bool "Simple Reset Controller Driver" if COMPILE_TEST || EXPERT
+> -	default ARCH_ASPEED || ARCH_BCMBCA || ARCH_BITMAIN || ARCH_REALTEK || ARCH_STM32 || (ARCH_INTEL_SOCFPGA && ARM64) || ARCH_SUNXI || ARC
+> +	default ARCH_ASPEED || ARCH_BCMBCA || ARCH_BITMAIN || ARCH_REALTEK || ARCH_STM32 || (ARCH_INTEL_SOCFPGA && ARM64) || ARCH_SUNXI || ARC || ARCH_WPCM450
+>   	depends on HAS_IOMEM
+>   	help
+>   	  This enables a simple reset controller driver for reset lines that
+> --
+> 2.39.2
+> 
+> 
 
-> Dave,
->=20
-> I would like to use this opportunity to invite you and any developers tha=
-t
-> are involved in fs development and not going to attend LSF/MM in-person,
-> to join LSF/MM virtually for some sessions that you may be interested in.
-> See this lore query [2] for TOPICs proposed this year.
->=20
-> You can let me know privately which sessions you are interested in
-> attending and your time zone and I will do my best to schedule those
-> sessions in time slots that would be more convenient for your time zone.
->=20
-> Obviously, I am referring to FS track sessions.
-> Cross track sessions are going to be harder to accommodate,
-> but I can try.
->=20
-> Thanks,
-> Amir.
->=20
-> [1] https://lore.kernel.org/linux-fsdevel/FF0202C3-7500-4BB3-914B-DBAA3E0=
-EA3D7@oracle.com/
-> [2] https://lore.kernel.org/linux-fsdevel/?q=3DLSF+TOPIC+-re+d%3A4.months=
-.ago..
-
---=20
-Jeff Layton <jlayton@kernel.org>
