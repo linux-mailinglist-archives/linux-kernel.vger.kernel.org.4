@@ -2,194 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3AE36E3185
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 15:14:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B4C6E3186
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 15:15:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbjDONOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 09:14:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57870 "EHLO
+        id S229881AbjDONPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 09:15:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbjDONOh (ORCPT
+        with ESMTP id S229780AbjDONPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 09:14:37 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0310A4C26;
-        Sat, 15 Apr 2023 06:14:35 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 4AC481FDC5;
-        Sat, 15 Apr 2023 13:14:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1681564474; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=h5k/RbS3a6kwtihmho3Q3mrYWrzOBkRjuXgoZbNNYHI=;
-        b=XYysb9Th9C57KmHRUhQg/Xw5Cm563xxANOV4YkugAv5E/0rianuE7RlkMAwnZ3FJNh3eXK
-        NU++4s6YOZQlHwlxkk5kDfpndBq7aR6cCqQL1Q3IipQZsSHsstNov6m9Zw9uPaXOmmGAhr
-        mj2WAUhPhJUEiTCl2TYnAK3XicOnm+c=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1681564474;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=h5k/RbS3a6kwtihmho3Q3mrYWrzOBkRjuXgoZbNNYHI=;
-        b=S9v6bvc+eOJnhTovvE0tORWGe0nwUU7lfI9G+gDVn7mpKhy/QksaiuRZlHsoVMZzgKOuO/
-        tXVhupyvXQKqxoBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1CD7B1390E;
-        Sat, 15 Apr 2023 13:14:34 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id IfMcBTqjOmRIDgAAMHmgww
-        (envelope-from <hare@suse.de>); Sat, 15 Apr 2023 13:14:34 +0000
-Message-ID: <31765c8c-e895-4207-2b8c-39f6c7c83ece@suse.de>
-Date:   Sat, 15 Apr 2023 15:14:33 +0200
+        Sat, 15 Apr 2023 09:15:15 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD9A4C2D
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 06:15:13 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id gc14so7360751ejc.5
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 06:15:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681564512; x=1684156512;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6EpckPTlITJCcV86K42wxeJjyBtM78s04ZVrlAnB1Wo=;
+        b=BygQT2Cxosjd6UPDSFJUTlWXXtlv8r3BC7YTdH+F9N6oKIIwZvKxv/BqYwFdO+bWoB
+         JRNneGUusVSQOVhM55BuTaYF1SwP3nmuPEd2OQDPHWEi+F3ygUKO88A/1QKLC2Yynrda
+         vlLg/RBngIDcodg8eJrrgLwnv5FpGdN5pz/0tgVD2iNkBwHM9bSxeEk/MXjEZjqg7hsw
+         ejAnozHRSqVbbicDrI2uaQMviNJkMEsfxLvszjAm8pKtw4aR+gvfTTKhBfIyrF+Jvr2a
+         6qXg/7WjZxnJVgq67UJQdmimLp0izxD9mJboD2/qW4GlSK5cVBsaA2c6CIAQvQje4+hZ
+         BMEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681564512; x=1684156512;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6EpckPTlITJCcV86K42wxeJjyBtM78s04ZVrlAnB1Wo=;
+        b=FVZ8MEN+64ruaMwYB5rQntCX0WgeA6fD7J+LzEnP29Dl5gl9FvoXwpd9WQTFK1LZv8
+         5OhzY6ODt8TA7ZcKg0l6AgUpUzk0RgbocGmvXzNer+Lj4oA1wm+VqJ+iSYN+366qWigZ
+         IwCAbQv6XwEuych4q8dK9H1gbxMvSu5I+lLqMuKf5tUTbAyTYCz39glvZmWZgNOLSMHl
+         7TM09W1ElqFfiLkFJ24yrf+5MsJ0trhOzOrbaVRp9qqBHOL+EJqOFxVg7GQAVuzbEhXR
+         oIGESCKRQUf4156+ofJRuH+8oM8Wdi72TgMATFuWrRh99yo7TcuC3RtG6iGka9BeRtn7
+         1WHA==
+X-Gm-Message-State: AAQBX9el8Qzii1mked1WsNEGcBzW/DnCw9wWQ+98fY+hP9Sm+it+qoXW
+        HQNlqj0wslxM9g43ug9OBmtdq4gmjkw=
+X-Google-Smtp-Source: AKy350aUPNHE349aRb9CqXOWcVUsZbUebYwWtRJFyLTkbWDfMNqc8WyezjQHw28/aOeRHzzKP2vKGw==
+X-Received: by 2002:a17:906:7f9a:b0:92f:b290:78c with SMTP id f26-20020a1709067f9a00b0092fb290078cmr2527291ejr.21.1681564511746;
+        Sat, 15 Apr 2023 06:15:11 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id g25-20020a17090613d900b0094edfbd475csm2307410ejc.127.2023.04.15.06.15.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Apr 2023 06:15:11 -0700 (PDT)
+Date:   Sat, 15 Apr 2023 16:15:07 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     oe-kbuild@lists.linux.dev, Kalle Valo <quic_kvalo@quicinc.com>
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: drivers/net/wireless/ath/ath11k/debugfs.c:1009
+ ath11k_debugfs_soc_create() warn: passing zero to 'PTR_ERR'
+Message-ID: <278dae1d-0cc2-4963-b7f0-5d611a5b31a4@kili.mountain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [RFC 0/4] convert create_page_buffers to create_folio_buffers
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Pankaj Raghav <p.raghav@samsung.com>, brauner@kernel.org,
-        viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gost.dev@samsung.com
-References: <CGME20230414110825eucas1p1ed4d16627889ef8542dfa31b1183063d@eucas1p1.samsung.com>
- <20230414110821.21548-1-p.raghav@samsung.com>
- <1e68a118-d177-a218-5139-c8f13793dbbf@suse.de>
- <ZDn3XPMA024t+C1x@bombadil.infradead.org>
- <ZDoMmtcwNTINAu3N@casper.infradead.org>
- <ZDoZCJHQXhVE2KZu@bombadil.infradead.org>
- <ZDodlnm2nvYxbvR4@casper.infradead.org>
-From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <ZDodlnm2nvYxbvR4@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/15/23 05:44, Matthew Wilcox wrote:
-> On Fri, Apr 14, 2023 at 08:24:56PM -0700, Luis Chamberlain wrote:
->> I thought of that but I saw that the loop that assigns the arr only
->> pegs a bh if we don't "continue" for certain conditions, which made me
->> believe that we only wanted to keep on the array as non-null items which
->> meet the initial loop's criteria. If that is not accurate then yes,
->> the simplication is nice!
-> 
-> Uh, right.  A little bit more carefully this time ... how does this
-> look?
-> 
-> diff --git a/fs/buffer.c b/fs/buffer.c
-> index 5e67e21b350a..dff671079b02 100644
-> --- a/fs/buffer.c
-> +++ b/fs/buffer.c
-> @@ -2282,7 +2282,7 @@ int block_read_full_folio(struct folio *folio, get_block_t *get_block)
->   {
->   	struct inode *inode = folio->mapping->host;
->   	sector_t iblock, lblock;
-> -	struct buffer_head *bh, *head, *arr[MAX_BUF_PER_PAGE];
-> +	struct buffer_head *bh, *head;
->   	unsigned int blocksize, bbits;
->   	int nr, i;
->   	int fully_mapped = 1;
-> @@ -2335,7 +2335,7 @@ int block_read_full_folio(struct folio *folio, get_block_t *get_block)
->   			if (buffer_uptodate(bh))
->   				continue;
->   		}
-> -		arr[nr++] = bh;
-> +		nr++;
->   	} while (i++, iblock++, (bh = bh->b_this_page) != head);
->   
->   	if (fully_mapped)
-> @@ -2352,25 +2352,29 @@ int block_read_full_folio(struct folio *folio, get_block_t *get_block)
->   		return 0;
->   	}
->   
-> -	/* Stage two: lock the buffers */
-> -	for (i = 0; i < nr; i++) {
-> -		bh = arr[i];
-> +	/*
-> +	 * Stage two: lock the buffers.  Recheck the uptodate flag under
-> +	 * the lock in case somebody else brought it uptodate first.
-> +	 */
-> +	bh = head;
-> +	do {
-> +		if (buffer_uptodate(bh))
-> +			continue;
->   		lock_buffer(bh);
-> +		if (buffer_uptodate(bh)) {
-> +			unlock_buffer(bh);
-> +			continue;
-> +		}
->   		mark_buffer_async_read(bh);
-> -	}
-> +	} while ((bh = bh->b_this_page) != head);
->   
-> -	/*
-> -	 * Stage 3: start the IO.  Check for uptodateness
-> -	 * inside the buffer lock in case another process reading
-> -	 * the underlying blockdev brought it uptodate (the sct fix).
-> -	 */
-> -	for (i = 0; i < nr; i++) {
-> -		bh = arr[i];
-> -		if (buffer_uptodate(bh))
-> -			end_buffer_async_read(bh, 1);
-> -		else
-> +	/* Stage 3: start the IO */
-> +	bh = head;
-> +	do {
-> +		if (buffer_async_read(bh))
->   			submit_bh(REQ_OP_READ, bh);
-> -	}
-> +	} while ((bh = bh->b_this_page) != head);
-> +
->   	return 0;
->   }
->   EXPORT_SYMBOL(block_read_full_folio);
-> 
-> 
-> I do wonder how much it's worth doing this vs switching to non-BH methods.
-> I appreciate that's a lot of work still.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   7a934f4bd7d6f9da84c8812da3ba42ee10f5778e
+commit: 323d91d4684d238f6bc3693fed93caf795378fe0 wifi: ath11k: debugfs: fix to work with multiple PCI devices
+config: openrisc-randconfig-m041-20230414 (https://download.01.org/0day-ci/archive/20230415/202304152142.ssXYxFdQ-lkp@intel.com/config)
+compiler: or1k-linux-gcc (GCC) 12.1.0
 
-That's what I've been wondering, too.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
+| Link: https://lore.kernel.org/r/202304152142.ssXYxFdQ-lkp@intel.com/
 
-I would _vastly_ prefer to switch over to iomap; however, the blasted
-sb_bread() is getting in the way. Currently iomap only runs on entire
-pages / folios, but a lot of (older) filesystems insist on doing 512
-byte I/O. While this seem logical (seeing that 512 bytes is the
-default, and, in most cases, the only supported sector size) question
-is whether _we_ from the linux side need to do that.
-We _could_ upgrade to always do full page I/O; there's a good
-chance we'll be using the entire page anyway eventually.
-And with storage bandwidth getting larger and larger we might even
-get a performance boost there.
+New smatch warnings:
+drivers/net/wireless/ath/ath11k/debugfs.c:1009 ath11k_debugfs_soc_create() warn: passing zero to 'PTR_ERR'
 
-And it would save us having to implement sub-page I/O for iomap.
+Old smatch warnings:
+drivers/net/wireless/ath/ath11k/debugfs.c:1022 ath11k_debugfs_soc_create() warn: passing zero to 'PTR_ERR'
 
-Hmm?
+vim +/PTR_ERR +1009 drivers/net/wireless/ath/ath11k/debugfs.c
 
-Cheers,
+cb4e57db2ff0c8 Kalle Valo 2020-09-16   998  int ath11k_debugfs_soc_create(struct ath11k_base *ab)
+da3a9d3c15769b Kalle Valo 2020-09-16   999  {
+323d91d4684d23 Kalle Valo 2022-12-22  1000  	struct dentry *root;
+323d91d4684d23 Kalle Valo 2022-12-22  1001  	bool dput_needed;
+323d91d4684d23 Kalle Valo 2022-12-22  1002  	char name[64];
+323d91d4684d23 Kalle Valo 2022-12-22  1003  	int ret;
+323d91d4684d23 Kalle Valo 2022-12-22  1004  
+323d91d4684d23 Kalle Valo 2022-12-22  1005  	root = debugfs_lookup("ath11k", NULL);
+323d91d4684d23 Kalle Valo 2022-12-22  1006  	if (!root) {
+323d91d4684d23 Kalle Valo 2022-12-22  1007  		root = debugfs_create_dir("ath11k", NULL);
+323d91d4684d23 Kalle Valo 2022-12-22  1008  		if (IS_ERR_OR_NULL(root))
+323d91d4684d23 Kalle Valo 2022-12-22 @1009  			return PTR_ERR(root);
 
-Hannes
+Debugfs used to return a mix of error pointers and NULL but we changed
+the NULL return to an error pointer to encourage people to just delete
+all debugfs error handling code.
+
+323d91d4684d23 Kalle Valo 2022-12-22  1010  
+323d91d4684d23 Kalle Valo 2022-12-22  1011  		dput_needed = false;
+323d91d4684d23 Kalle Valo 2022-12-22  1012  	} else {
+323d91d4684d23 Kalle Valo 2022-12-22  1013  		/* a dentry from lookup() needs dput() after we don't use it */
+323d91d4684d23 Kalle Valo 2022-12-22  1014  		dput_needed = true;
+323d91d4684d23 Kalle Valo 2022-12-22  1015  	}
+323d91d4684d23 Kalle Valo 2022-12-22  1016  
+323d91d4684d23 Kalle Valo 2022-12-22  1017  	scnprintf(name, sizeof(name), "%s-%s", ath11k_bus_str(ab->hif.bus),
+323d91d4684d23 Kalle Valo 2022-12-22  1018  		  dev_name(ab->dev));
+da3a9d3c15769b Kalle Valo 2020-09-16  1019  
+323d91d4684d23 Kalle Valo 2022-12-22  1020  	ab->debugfs_soc = debugfs_create_dir(name, root);
+323d91d4684d23 Kalle Valo 2022-12-22  1021  	if (IS_ERR_OR_NULL(ab->debugfs_soc)) {
+323d91d4684d23 Kalle Valo 2022-12-22  1022  		ret = PTR_ERR(ab->debugfs_soc);
+323d91d4684d23 Kalle Valo 2022-12-22  1023  		goto out;
+323d91d4684d23 Kalle Valo 2022-12-22  1024  	}
+323d91d4684d23 Kalle Valo 2022-12-22  1025  
+323d91d4684d23 Kalle Valo 2022-12-22  1026  	ret = 0;
+323d91d4684d23 Kalle Valo 2022-12-22  1027  
+323d91d4684d23 Kalle Valo 2022-12-22  1028  out:
+323d91d4684d23 Kalle Valo 2022-12-22  1029  	if (dput_needed)
+323d91d4684d23 Kalle Valo 2022-12-22  1030  		dput(root);
+323d91d4684d23 Kalle Valo 2022-12-22  1031  
+323d91d4684d23 Kalle Valo 2022-12-22  1032  	return ret;
+da3a9d3c15769b Kalle Valo 2020-09-16  1033  }
+
 -- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Ivo Totev, Andrew
-Myers, Andrew McDonald, Martje Boudien Moerman
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
 
