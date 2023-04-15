@@ -2,119 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D7C6E2E95
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 04:24:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E2BF6E2E9A
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 04:32:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbjDOCYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 22:24:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53318 "EHLO
+        id S230206AbjDOCcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 22:32:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbjDOCYj (ORCPT
+        with ESMTP id S229463AbjDOCcE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 22:24:39 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C578A4EFF;
-        Fri, 14 Apr 2023 19:24:38 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id kx14so298112pjb.1;
-        Fri, 14 Apr 2023 19:24:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681525478; x=1684117478;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BqrBTsQCd1zYQLBBnbx9i78rnLPlSR69UKclBOmOyak=;
-        b=V/53j83sAyKzQf0cEnoYCDALwJZ8dofdGfd2D47FMx6uKG5QS3ca5lUnhTKIGERUO7
-         YPbFrcdPnTvGEEs/+6PG9aCKmsjRsmlxFuwTFmAP4sViWb2MkWBbXgxpXslmFKBsccHb
-         +ZmJOjcMz2mC6+E2ZpsWg16q67ZW3UrhXRdJ34BoqofUEmKvZnXNWXJZ1rzYb4hinnxN
-         NnH1jwEH2K0JR7Z7Ght4z0jnZ6y/a5TfzX9xc3g9Vi0S2bHF+y2DFufN2ynLsPITJ2R/
-         ZxBjH1Hl6HvWATLlpEzoDHpAZ0GtoRSm8HQsHKthrBl6/3Ho8FMMOu4VZYKa5pZrhRjf
-         Ejzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681525478; x=1684117478;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BqrBTsQCd1zYQLBBnbx9i78rnLPlSR69UKclBOmOyak=;
-        b=Kz9sxZEB6v/S+ZQmscwnAU7uMRvWFkPXrzUVTmulG5CJTKsOUuUDd6LRvRwJGVjcl3
-         aQoqHR3WGRgKoe6e/Rq6xJBEkYtCMfQofbnXFdkofCGzTFmRWBLuZbrffsY9uR+xgeI+
-         eht1Zb6clFyZzradbg53a2xCIzhNmuEOJl3VYcEoBxLKeKMe0QkZTW2DNULavPqI9EJi
-         P5ojQocY/txBLQ9eVdYDLRljXhlVWGfW8CI9y1sKcTJacVu+ZHMUOkjoOQz3UzHISN+S
-         4x9Wa2KmRuUP1ECpTnaOk+zt6PaghhEiWiLk8BPuY07xAi51zVcrHlEUTBXV/sd69bvh
-         lETQ==
-X-Gm-Message-State: AAQBX9fwWkEt/b1phWyArA97XQ9nmB/DK2qYsFWcabgB/OpVmtV3fVtE
-        tjMADGiFtlO6KQDtYUha27E=
-X-Google-Smtp-Source: AKy350YVtRVHeejbHr380dl3a7mFahL3inmrQvvMV8RLOjHzafex1lS6y4tHSjBMWNkjTVqtlATpxg==
-X-Received: by 2002:a17:90b:4a8f:b0:23d:29c7:916f with SMTP id lp15-20020a17090b4a8f00b0023d29c7916fmr7382073pjb.32.1681525478022;
-        Fri, 14 Apr 2023 19:24:38 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-91.three.co.id. [180.214.233.91])
-        by smtp.gmail.com with ESMTPSA id a11-20020a17090aa50b00b002470e095920sm3313017pjq.40.2023.04.14.19.24.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 19:24:37 -0700 (PDT)
-Message-ID: <cf4fdb30-6f2e-ca3e-fbc0-b48f6949508d@gmail.com>
-Date:   Sat, 15 Apr 2023 09:24:28 +0700
+        Fri, 14 Apr 2023 22:32:04 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B2D59D2;
+        Fri, 14 Apr 2023 19:32:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=LKu44/7divD7drUoUvhwbQweIThwjY6Ox0fiwkad+8M=; b=jkOcp4tWYw5Dep25AqfvxqhTc4
+        GTCA3dP1WQgfymf/IooR40z7GLI6DLMgaeBasOvQVaaWYSmM4lh4dDW2fLel82NDzIZ54rPbUdBzF
+        xGvbNAmM5pdLlIE7sS9cxobQ9+7HClxopbNumnWDoEVWsA1Vh7b4iYmCT4yTIIRJSWCY67XcTm4rR
+        OxkafstpetKZvyEgWnM6lI1eEnlJ9+3hnMMXhm9n33RXXVT/l6PuA/Feqhjg1Xp4msf5SKcdVyT4F
+        VFOYthuGpidWVrHCEv54eK76yMlcnMoa8POrsHHhRZlL6Ar004znok/fKBak7xVhndNnL5tNnqVsF
+        1/RCzSfg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pnVhi-009Hpb-FL; Sat, 15 Apr 2023 02:31:54 +0000
+Date:   Sat, 15 Apr 2023 03:31:54 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Hannes Reinecke <hare@suse.de>,
+        Pankaj Raghav <p.raghav@samsung.com>, brauner@kernel.org,
+        viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gost.dev@samsung.com
+Subject: Re: [RFC 0/4] convert create_page_buffers to create_folio_buffers
+Message-ID: <ZDoMmtcwNTINAu3N@casper.infradead.org>
+References: <CGME20230414110825eucas1p1ed4d16627889ef8542dfa31b1183063d@eucas1p1.samsung.com>
+ <20230414110821.21548-1-p.raghav@samsung.com>
+ <1e68a118-d177-a218-5139-c8f13793dbbf@suse.de>
+ <ZDn3XPMA024t+C1x@bombadil.infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2.1 2/2] x86/Documentation: Add documentation about
- cluster
-To:     K Prateek Nayak <kprateek.nayak@amd.com>,
-        linux-kernel@vger.kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, corbet@lwn.net,
-        jgross@suse.com, andrew.cooper3@citrix.com, peterz@infradead.org,
-        Jason@zx2c4.com, thomas.lendacky@amd.com, puwen@hygon.cn,
-        x86@kernel.org, linux-doc@vger.kernel.org, oleksandr@natalenko.name
-References: <20230413172918.1500-3-kprateek.nayak@amd.com>
- <20230414031743.875-1-kprateek.nayak@amd.com>
-Content-Language: en-US
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20230414031743.875-1-kprateek.nayak@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZDn3XPMA024t+C1x@bombadil.infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/14/23 10:17, K Prateek Nayak wrote:
-> +  - cluster_id:
-> +
-> +    A per-CPU variable containing:
-> +
-> +      - Upper bits extracted from the APIC ID.  CPUs which have the same value
-> +        in these bits share an L2 and have the same cluster_id.
-> +
-> +        CPUs for which cluster information is unavailable will show 65535
-> +        (BAD_APICID) as the cluster_id.
+On Fri, Apr 14, 2023 at 06:01:16PM -0700, Luis Chamberlain wrote:
+> a) dynamically allocate those now
+> b) do a cursory review of the users of that and prepare them
+>    to grok buffer heads which are blocksize based rather than
+>    PAGE_SIZE based. So we just try to kill MAX_BUF_PER_PAGE.
+> 
+> Without a) I think buffers after PAGE_SIZE won't get submit_bh() or lock for
+> bs > PAGE_SIZE right now.
 
-"... return cluster_id of 65535 (BAD_APICID)."
+Worse, we'll overflow the array and corrupt the stack.
 
->      The number of online threads is also printed in /proc/cpuinfo "siblings."
->  
-> +  - topology_cluster_cpumask():
-> +
-> +    The cpumask contains all online threads in the cluster to which a thread
-> +    belongs.
-> +
+This one is a simple fix ...
 
-Looks OK.
-
->      The physical package ID to which a thread belongs.
->  
-> +  - topology_cluster_id();
-> +
-> +    The ID of the cluster to which a thread belongs.
-> +
-
-Looks OK.
-
-Thanks.
-
--- 
-An old man doll... just what I always wanted! - Clara
++++ b/fs/buffer.c
+@@ -2282,7 +2282,7 @@ int block_read_full_folio(struct folio *folio, get_block_t *get_block)
+ {
+        struct inode *inode = folio->mapping->host;
+        sector_t iblock, lblock;
+-       struct buffer_head *bh, *head, *arr[MAX_BUF_PER_PAGE];
++       struct buffer_head *bh, *head;
+        unsigned int blocksize, bbits;
+        int nr, i;
+        int fully_mapped = 1;
+@@ -2335,7 +2335,6 @@ int block_read_full_folio(struct folio *folio, get_block_t *get_block)
+                        if (buffer_uptodate(bh))
+                                continue;
+                }
+-               arr[nr++] = bh;
+        } while (i++, iblock++, (bh = bh->b_this_page) != head);
+ 
+        if (fully_mapped)
+@@ -2353,24 +2352,27 @@ int block_read_full_folio(struct folio *folio, get_block_t *get_block)
+        }
+ 
+        /* Stage two: lock the buffers */
+-       for (i = 0; i < nr; i++) {
+-               bh = arr[i];
++       bh = head;
++       do {
+                lock_buffer(bh);
+                mark_buffer_async_read(bh);
+-       }
++               bh = bh->b_this_page;
++       } while (bh != head);
+ 
+        /*
+         * Stage 3: start the IO.  Check for uptodateness
+         * inside the buffer lock in case another process reading
+         * the underlying blockdev brought it uptodate (the sct fix).
+         */
+-       for (i = 0; i < nr; i++) {
+-               bh = arr[i];
++       bh = head;
++       do {
+                if (buffer_uptodate(bh))
+                        end_buffer_async_read(bh, 1);
+                else
+                        submit_bh(REQ_OP_READ, bh);
+-       }
++               bh = bh->b_this_page;
++       } while (bh != head);
++
+        return 0;
+ }
+ EXPORT_SYMBOL(block_read_full_folio);
 
