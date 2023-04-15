@@ -2,85 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 048326E2E5A
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 04:01:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F277F6E2E61
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 04:02:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbjDOCB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 22:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42894 "EHLO
+        id S229949AbjDOCCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 22:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjDOCB0 (ORCPT
+        with ESMTP id S229457AbjDOCCd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 22:01:26 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2530D4692
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 19:01:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1681524037; i=j.neuschaefer@gmx.net;
-        bh=bsr0bAHoqx4KWsAQJ5qoM8LRveyj5CWzKISZ7bzRopU=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=VOHITXrqPbCQLym8qEuM43l5zyjRUSSDXvswddBnFGS23rQLnhuPsYw3YQ+O0LRhy
-         Ux6P5ScPSAZc7jpmjw+mu1FC2aihgoyImrAGSj86HZhArUQHm1rpLbqiNdCIUbrnwR
-         nbLQ9tHKXO1XCU4isdDYphfHvJdclqbZhUYcb1PsgQsD18rsY9qn6Di8hE++a9eOjv
-         E+Vrc1oFoUq+c8CRMBxXiKjhDCz9q35Jx9UlmF0nkKE2zV4oiulOiz+bMAo0DWDdv6
-         bZKSHonVKdJzx1us1qJRhBbF6cF3Aa1DOD58k1qEFfYtY36On7i6myC6l3J4jiMMgf
-         90wiS0NAoocrg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([81.173.153.53]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N4z6q-1qWpua3ccm-010tPQ; Sat, 15
- Apr 2023 04:00:37 +0200
-Date:   Sat, 15 Apr 2023 04:00:33 +0200
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        linux-arm-kernel@lists.infradead.org,
-        Russell King <linux@armlinux.org.uk>,
-        Nick Terrell <terrelln@fb.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        "Hawkins, Nick" <nick.hawkins@hpe.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Xin Li <xin3.li@intel.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Paul Bolle <pebolle@tiscali.nl>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] ARM ZSTD boot compression
-Message-ID: <ZDoFQUYMZykLdTbX@probook>
-References: <20230412212126.3966502-1-j.neuschaefer@gmx.net>
- <9ae523ae-aad4-40b1-8b6b-d5e18bf8b92a@app.fastmail.com>
- <ecf9f34c-1f1f-47af-a470-0a6ae7773724@app.fastmail.com>
+        Fri, 14 Apr 2023 22:02:33 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71DD84C22;
+        Fri, 14 Apr 2023 19:02:32 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-54f80e173ecso1839317b3.0;
+        Fri, 14 Apr 2023 19:02:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681524151; x=1684116151;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Yc9UZCD0Thr43ELkRCLRaL1wv9oH/Wsg9/Asqvkeq74=;
+        b=hNGwWzo5Q3ABHTH1/bHqV8wpeBC3BY9+vFkyLdS4ysjfkGBg6ARqQpLmQg1XhKE1Ad
+         zUwgNg8vej6GzQrU6bA9rvRCr44iwfrn4XiTzg1kGWZs4qx5y84vbEtjfE92HzchF8w0
+         hA5O4Gq54yfu9WUKASvDGDkA462iFUKT0c7dKuHOB58FaJ5bJTgfk6AyuH4LJJs+SFgR
+         6luAkQA4k55mwFk20RsSXL1jTnUdgtchEXVqRBljUK/Yp5I6PY+CN6QHbjqhJlESiD2P
+         a+QmioUIc1vwj2HrWdwf+IbK/vFCXim9p3Fhiygk6KCM5ir7BO4HapVs/4Lt3XKWF2wy
+         3DDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681524151; x=1684116151;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Yc9UZCD0Thr43ELkRCLRaL1wv9oH/Wsg9/Asqvkeq74=;
+        b=Bm1JT0u51ZFfJ1y7fjikiRxSGxNvg6oiDw/rv/bc5OP+MUSjf/WiE5TrvwcEC/wmCe
+         qlDAjT4KO6nBAhdiB5kPQV3HRIYJsnCqaFUZ22a6uKBY1mY7zhwH9H4f+8wNgBhcGrKe
+         aGd8uGCXu+LZqLSu6sK7qPyt2ICrePFXNxbH/DfVwVfim8UuTI2ws5lYT8Ktfpmti+8d
+         Hye7YBCtIPGtK/s5Xe+IuCDsFRSVb5YUsJQoKjyXZTx/IHhzu2TWpHNNVoeohCvUbsJS
+         V2mpcAD1tcVczIOQpm92kb6g9WW43qRUZOEFWdXzLlSkehmQ3HBuZouIfnrDHYpVmGij
+         JtMQ==
+X-Gm-Message-State: AAQBX9dE7slCrAU+oxNGJXGHPDI5LQHe4Pas4/alkYJO1NkXBeQrbbP/
+        4g6AzOX36ugh5YJZt2DIGFs=
+X-Google-Smtp-Source: AKy350YkXBNOHfyjGAwIFs2cRWfuozknDP+ROfbjnUSQ1sGSCBEZQcfRRlX4kPEaEMsAtRkuwZ6/iA==
+X-Received: by 2002:a81:e10:0:b0:54f:a9e4:e79 with SMTP id 16-20020a810e10000000b0054fa9e40e79mr3803040ywo.2.1681524151546;
+        Fri, 14 Apr 2023 19:02:31 -0700 (PDT)
+Received: from JOEL-DESKTOP.. ([2604:2d80:4d87:cd00:9f51:32d7:1177:67d])
+        by smtp.gmail.com with ESMTPSA id 68-20020a810a47000000b00545a081847fsm1593607ywk.15.2023.04.14.19.02.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Apr 2023 19:02:31 -0700 (PDT)
+From:   Joel Selvaraj <joelselvaraj.oss@gmail.com>
+To:     Caleb Connolly <caleb@connolly.tech>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Henrik Rydberg <rydberg@bitmath.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Jeff LaBundy <jeff@labundy.com>,
+        Markuss Broks <markuss.broks@gmail.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Job Noorman <job@noorman.info>,
+        Alistair Francis <alistair@alistair23.me>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Joel Selvaraj <joelselvaraj.oss@gmail.com>
+Subject: [PATCH v3 0/5] Add support for Focaltech FTS Touchscreen
+Date:   Fri, 14 Apr 2023 21:02:17 -0500
+Message-Id: <20230415020222.216232-1-joelselvaraj.oss@gmail.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tUChAbDuev3sy1VC"
-Content-Disposition: inline
-In-Reply-To: <ecf9f34c-1f1f-47af-a470-0a6ae7773724@app.fastmail.com>
-X-Provags-ID: V03:K1:dM6Pk1H8/3BPe+XLgtnk5l30A5hDSGMhXcW4Baf8aIZBbz1Q5Lj
- gijykOFKwz9kAkn5OGnh8S0uPrpIv9hy0mlwr7GQ7bLVzP9SL0NE9knZyt/eXJDuu2sFjEB
- 5pCUv2Hq1J16EqqzrQ7aOoZIrvL8Bz0tS4EkYjBI40t5H088blsLIMIeh8W/BVxiNuB0+Ok
- P7RUU/wVxULGhH51boavQ==
-UI-OutboundReport: notjunk:1;M01:P0:5T46tHmqSH0=;8aLgwAkeX0DLCn04ncyL4b0nqUJ
- CmeouTgLEk8A964S8R6xrM9vKibBFJ52+olRxLPfvRRA2udb67oAbTnfjTjjEv3ZkhGpES7+O
- oSC4ybRqx7c+/4GorI8u45UKTXFeVzDM45EqR7lOqYcdSiGpLJkNd4eJOC6PNyM9B4e4LVUNS
- 2TPKL34ZFPg58EZT9R1/27fMvlV0iVoUG1BDLrGL12bpo7Xjs8p1wAaPCdJRdcej1hgnFdGjw
- 5v709vvZUu0VoZmP+3JeD0t1KMtf+T/CwdH9kPbQDI3HZnmPZfYb3VEmw1RmKPpXoWjM+H3Xv
- gg+/ubN5MCyzozpyBQbUYlfga5BVId6iUmS1G1xdx41LZ7sRPPWuR236dE5IcaijUxH67311r
- Fa+bhH5jHSdR68gYGy/2oi53iwFOqBAAI0iUvbwH0V3D99PjzC8OAqDk56iw1ExteJj/XbofQ
- IAwZMx/r97+lTLCmCNWh9KUZlTOiCXbklFTNpNwtG1H7L18nFI8SeJJe2JtWzr2DntBKNh70I
- ea1eLQND/d6lQ2sN2hohAunPwS19LnMM5jUHP1j6Ey3vWtnUaXRXnecK4FFGvkQr9u4GFRdCI
- 1HmkAywsDe9CB+ScpJSTiecsGnxaqz4ilaQKDdKOOa9Yi57JEQn+yBaVRY9wghxLwl5XyFfff
- QJZBImdWhNmcbK12Yd6FvXuqnq6kHUuVAcgjDA/cubGFsf6A4yvoqgeTUvCyM0v1MOd7P+sC8
- LnDgyWEI6zhgjIU59rl31TACk6We0R5DrSiLi22C+WYGTUICgZ0DUYDFaS+r7r5OgjOw2uytI
- yiFuG8tnhQ24BvCl5qHqr9phKf/RpjYTcjWQh+/gCAZbc/UpJn4RYaDZV0o5zP9ormxSt3PkI
- /NheVePPDWjwGEYTdkwPmAOKK2lzfjnBIoN6PeR1AGR0ZTbzK7GY3mn6h/0+DRptvc0GjBEB8
- r3Njej1skLqOwmyRARfuESmJXBg=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,71 +89,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Changes in v3:(Suggested by Krzysztof Kozlowski and Konrad Dybcio)
+--------------
+- dts: removed the invalid "input-enable" property
+- dts: replace interrupts with interrupts-extended
+- dts: removed redundant dma configuration
+- dts: reorder pinctrl and pinctrl-names
+- bindings: moved unevaluatedProperties after required
+- bindings: make interrupts a required property (new change from my end)
+- bindings: update example based on dts changes
 
---tUChAbDuev3sy1VC
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I have made the interrupts a required property in the bindings as the driver
+will not function without an interrupt. Because of this new change, I have not
+picked up the reviewed by tag of Krzysztof Kozlowski for the bindings.
 
-On Thu, Apr 13, 2023 at 01:13:21PM +0200, Arnd Bergmann wrote:
-> On Wed, Apr 12, 2023, at 23:33, Arnd Bergmann wrote:
-> > On Wed, Apr 12, 2023, at 23:21, Jonathan Neusch=C3=A4fer wrote:
-> >> This patchset enables ZSTD kernel (de)compression on 32-bit ARM.
-> >> Unfortunately, it is much slower than I hoped (tested on ARM926EJ-S):
-> >>
-> >>  - LZO:  7.2 MiB,  6 seconds
-> >>  - ZSTD: 5.6 MiB, 60 seconds
-> >
-> > That seems unexpected, as the usual numbers say it's about 25%
-> > slower than LZO. Do  you have an idea why it is so much slower
-> > here? How long does it take to decompress the
-> > generated arch/arm/boot/Image file in user space on the same
-> > hardware using lzop and zstd?
->=20
-> I looked through this a bit more and found two interesting points:
->=20
-> - zstd uses a lot more unaligned loads and stores while
->   decompressing. On armv5 those turn into individual byte
->   accesses, while the others can likely use word-aligned
->   accesses. This could make a huge difference if caches are
->   disabled during the decompression.
->=20
-> - The sliding window on zstd is much larger, with the kernel
->   using an 8MB window (zstd=3D23), compared to the normal 32kb
->   for deflate (couldn't find the default for lzo), so on
->   machines with no L2 cache, it is much likely to thrash a
->   small L1 dcache that are used on most arm9.
->=20
->       Arnd
+Changes in v2:
+--------------
+1. dt-bindings changes (Suggested by Krzysztof Kozlowski)
+	- changed file name from focaltech,fts.yaml to focaltech,fts5452.yaml
+	- removed focaltech,max-touch-number property, handled in driver now
+	- removed touchscreen-* properties and used unevaluatedProperties: false
+	instead of additionalProperties: false
+	- fixed the example dts node name to be generic
+	
+2. FTS Touchscreen driver changes (Suggested by Markuss Broks and Jeff LaBundy)
+	- removed repeated license terms since SPDX tag is used
+	- includes are now sorted
+	- added the missing input_mt_sync_frame when reporting touch
+	- focaltech,max-touch-number is no longer read from dts and instead
+	specified in the driver as compatible data.
+	- removed redundant __set_bits
+	- input_mt_init_slots is now called after the axes are defined
+	- irq handler now returns IRQ_NONE when there is an i2c error
+	- other minor fixes and refactoring as suggested
+	- renamed driver filename from focaltech_fts.c to focaltech_fts5452.c
+	(Suggested by Krzysztof Kozlowski)
+	
+3. dts changes (Suggested by Krzysztof Kozlowski)
+	- use generic touchscreen nodes
+	- removed focaltech,max-touch-number property
+	- irq type was specified wrongly for Poco F1 in v1. Changed the irq
+	type to IRQ_TYPE_EDGE_FALLING as that is correct.
 
-Make sense.
+Some Clarifications on v1 comments:
+-----------------------------------
+1. Jeff LaBundy suggested I could read chip id with the following:
+	__be16 val;
+	regmap_raw_read(data->regmap, FTS_REG_CHIP_ID_H, &val, sizeof(val));
+But this is not possible because FTS_REG_CHIP_ID_H and FTS_REG_CHIP_ID_L
+are not continuous register, therefore reading it together as 16-bit values
+will not work. So I went with what Markuss Broks suggested:
+	regmap_read(data->regmap, FTS_REG_CHIP_ID_L, &id);
+        regmap_read(data->regmap, FTS_REG_CHIP_ID_H, &val);
+        id |= val << 8;
 
-For ZSTD as used in kernel decompression (the zstd22 configuration), the
-window is even bigger, 128 MiB. (AFAIU)
+2. As Markuss Broks suggested, I tried to cast the buffer to struct, but 
+unfortunately was not able to successfully do it. The buffer layout is 
+weirdly split into 4 bits and 12 bits at someplaces which makes it hard 
+to cast into a struct. For example, we can note
+	type = buf[base + 3] >> 6
+	x = ((buf[base + 3] & 0x0F) << 8) + (buf[base + 4] & 0xFF);
+Here at buffer index 3, the first two bits (>>6) are used for denoting
+event type. The next two bits are not used. But the last 4 bits (&0x0F)
+of buffer[3] are added with buffer index 4 to get the x position. 
+I don't know how to handle these when casting to a struct. I tried
+experimenting with bitfields in struct, but to no avail. So I am sticking
+with my initial implementation for now.
 
+Kindly let me know if any further improvements are needed. Thanks.
 
-Thanks
+The Focaltech FTS driver supports several variants of focaltech
+touchscreens found in ~2018 era smartphones including variants found on
+the PocoPhone F1 and the SHIFT6mq which are already present in mainline.
+This driver is loosely based on the original driver from Focaltech and
+the patches submitted by Caleb Connolly previously[1] but has been
+simplified and largely reworked.
 
-Jonathan
+[1] https://patchwork.kernel.org/project/linux-input/patch/20220123173650.290349-3-caleb@connolly.tech/
 
---tUChAbDuev3sy1VC
-Content-Type: application/pgp-signature; name="signature.asc"
+Joel Selvaraj (5):
+  dt-bindings: input: touchscreen: add focaltech,fts5452 touchscreen
+  Input: add driver for Focaltech FTS touchscreen
+  arm64: dts: qcom: sdm845-xiaomi-beryllium-common: add touchscreen
+    related nodes
+  arm64: dts: qcom: sdm845-xiaomi-beryllium-ebbg: introduce support for
+    fts touchscreen
+  arm64: dts: qcom: sdm845-shift-axolotl: update focaltech touchscreen
+    properties
 
------BEGIN PGP SIGNATURE-----
+ .../input/touchscreen/focaltech,fts5452.yaml  |  71 +++
+ MAINTAINERS                                   |   8 +
+ .../boot/dts/qcom/sdm845-shift-axolotl.dts    |  18 +-
+ .../qcom/sdm845-xiaomi-beryllium-common.dtsi  |  37 ++
+ .../dts/qcom/sdm845-xiaomi-beryllium-ebbg.dts |  21 +
+ drivers/input/touchscreen/Kconfig             |  12 +
+ drivers/input/touchscreen/Makefile            |   1 +
+ drivers/input/touchscreen/focaltech_fts5452.c | 432 ++++++++++++++++++
+ 8 files changed, 590 insertions(+), 10 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/input/touchscreen/focaltech,fts5452.yaml
+ create mode 100644 drivers/input/touchscreen/focaltech_fts5452.c
 
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmQ6BUEACgkQCDBEmo7z
-X9tlOA//SDYTuVEU43pN9k/3lyWTymKfJ7d9WXttxT9YJ+pIeNougz1W0HipefGr
-sfmBu4Z47iRaJYPAUDXGo28UFXUgAHxPmJ0CbPOpOkdV11IdB545eT63t9xajH7Q
-yUF3CH3gPU2wKX9stnD+i5B5UuoY5cK+AproPBoMmADR3hTepama8DsFwXmGrsuT
-e39oUsp/7G0l8rWfRJ0y+CWQIXDJWXattL/kIofVZXTSxKbj+zntzqVDKjgZDVcZ
-3BNUWi3BSDFiHrULQAY2KKBCxK4RN/av0SwCKb6E2q5iqxenLw4y/aCQImjrx7Y3
-Tf8lLAnPwmRI8acWIVuCU86JXAO6XR8Z8/ciDJ6apWaHhYQDm6VGw4dp5/M9f2KL
-XOXne4jGfPHamLORYx4Gg+5z3mxqORTO2SsJdjN1fp7uDg/QcA7CEhucx0e0V/2e
-fE66F7BlqCBBv+rlStoaBaJE2VPLhslpZGJN/htI/8kkItQxvGJlYXdeJpreuMZA
-fB4XNk9pacFx/m6RfvDxLQRvuKQTP0uWgRsbVCix4C7BZKR2yPhB1jPedZ/kROGY
-ptDqwJmEQxhxnTvdvbsrXgebltx8a7zNmcVERYWCRaElgvDv1PmPX7DoAqTnWRC+
-de3ra8/aJJcWIjHrGKpBNaAsO86+TVr+p8vC/xGbEiC7/F36QEQ=
-=uukq
------END PGP SIGNATURE-----
+-- 
+2.40.0
 
---tUChAbDuev3sy1VC--
