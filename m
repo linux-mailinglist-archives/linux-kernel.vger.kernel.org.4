@@ -2,89 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB80B6E30B5
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 12:41:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 023716E30B8
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 12:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbjDOKlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 06:41:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39814 "EHLO
+        id S230050AbjDOKmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 06:42:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjDOKl2 (ORCPT
+        with ESMTP id S230070AbjDOKlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 06:41:28 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0705BB0;
-        Sat, 15 Apr 2023 03:41:26 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id ca18e2360f4ac-760e8acca3eso690539f.1;
-        Sat, 15 Apr 2023 03:41:26 -0700 (PDT)
+        Sat, 15 Apr 2023 06:41:50 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5857A93D1
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 03:41:36 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2a8ba5f1d6bso1546501fa.2
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 03:41:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681555286; x=1684147286;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hcAU830LZXIq4Od+MpqJpps0tJki2Rs3z9GrCN5O5F8=;
-        b=YLeiKPXwGyo5iZJpXn3Tkc+hE+FtHtfsYG2mlXimXOohTZ555+VueT+KOzYLdwkjPb
-         hupPmnNpskhX3EbEKJdLw+EJQXvrdx2dN7LLpa9ivtY0TkryvmppUQZUec4PbnQJy28K
-         0O+yJ1tjUEJRbhSYrIUYsEEAh9t3XytXuTb/PwTZ0ciHMnW2gdplq44vdr9DQNJvRPOp
-         q1u9xylNN4wa4hLLY10jsUEH0dqFYMCqBV/7DQfRkYxuzbrbivtd4IZfOfzcckH0/yxT
-         YckoQhfJLpxkI12awnBW7LUXw/CSxBI6q9XfW4b9GH83iVqnDbSxo6zVLYSq/l3kjoa+
-         wEig==
+        d=linaro.org; s=google; t=1681555294; x=1684147294;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0OE0tiBedvvvMl7tGzJDJSOxX+DvzTjuV5LZpnvcNSA=;
+        b=BTN6+yhtvhXDPIzJuF1zJSeIWVBMAs90iKQ6yQz0rBheHMw/XHG536+/6Fij0xIJHF
+         iwsJhezVlfZ+NUj4X0IrOtddXKlTIEGtKAdnGJvv4xNfXaKOYdrgbTwPy/WkRT/bExG7
+         gBHBcAPOL/BVFvq8Lvfe1xQ6kqAW8JiGxac3GddmiTBgdvfex85w3ewzLEC+qNl1HMOW
+         lTDjJs9SfKkCXpoeZx6cKHaFukaVfW17p4dH+MXW60sSLa1bXT1z8zrp8EFeXZkAcelt
+         jnYJbOOKXKrwJonOjgLOxF3ZS6Paxl/uC1UKpqC5Kr/O3hFuC8/j4Fey6Y0C0wjIVeqa
+         60sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681555286; x=1684147286;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hcAU830LZXIq4Od+MpqJpps0tJki2Rs3z9GrCN5O5F8=;
-        b=kMSAsbHEgglPXJMXf4f1z3W+KRrbnXuZsVx9yJawe4tLl052e0aHMk5sx5rN8WWIeb
-         rbKTCkw8mNCKgHbanFVU3RW5GuPYP1N7KMHX57MqU8ziurYh+muCtsRu8nQS+TWzuyVG
-         xjyDkA40ErrXnBwUbl2UtrUevBkWYPKuz5ZWQ+I5ZiwjfqEnZDaXkBmYqvmzM+sgMqWp
-         IF9/AkwrZpOAi9GM1PQW5Ui7Oldm5TjdWE/w59rRkW8/fwHmmj+LTOc3AtT7CcafeCi+
-         aZmNasR2LuakHNd36pNF/8XXfhasJSn0NeJWx7zA3xquo+wj3u3hQw9zIo8BzDga67Ah
-         A0uQ==
-X-Gm-Message-State: AAQBX9ex/kvpCdwBLrES2s3yeq46YAqLyGM122ZpMvLJsXONSg78EgvQ
-        VaB+drbEcxSvs3CGT8ml8QI=
-X-Google-Smtp-Source: AKy350bXSqH+Lm4v7QjEFHrCI2v6hwyhefeLvef54xJqodbtS/xvZNtS3Dm8GpKP3yhe126JMMVIYA==
-X-Received: by 2002:a92:c04c:0:b0:32a:abbe:e6b5 with SMTP id o12-20020a92c04c000000b0032aabbee6b5mr2790610ilf.11.1681555286038;
-        Sat, 15 Apr 2023 03:41:26 -0700 (PDT)
-Received: from aford-B741.lan ([2601:447:d001:897f:40bb:6fe6:ddbc:cc9a])
-        by smtp.gmail.com with ESMTPSA id bp11-20020a056638440b00b0040b38102b79sm246536jab.82.2023.04.15.03.41.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Apr 2023 03:41:25 -0700 (PDT)
-From:   Adam Ford <aford173@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     m.szyprowski@samsung.com, marex@denx.de, aford@beaconembedded.com,
-        Adam Ford <aford173@gmail.com>,
+        d=1e100.net; s=20221208; t=1681555294; x=1684147294;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0OE0tiBedvvvMl7tGzJDJSOxX+DvzTjuV5LZpnvcNSA=;
+        b=OTSl32rx1U0NXwMUk/4rli+UaWZTmf47qx3nz1hGCHc/Fq/+xsmAkgcdsqTrVpsS0f
+         sZVWMbrXd1pnxZVIW/MnbfFw4mNGXOavqdFTQJw+GeYi6L2xyPKFLdk7r0J8SAOWOD6p
+         wdQyXoPSfm6UBxLQv1r5yMkpfYnKkX6UCO3n+kIKh2hYcLO+FlCJXkZH7nCWTveMGy7f
+         RMBCO6jZA4DE5QmizcGvZPGekO+vY0YYSHe/fScc1wmwL+CozeQmjmGqzppu0+2FzjSC
+         ozIp3c2NsiYcId4Rwq9csUritGABYK29iEPGB4zeEAMBA4sPeaZl0uTCoccS+vXwpXI8
+         GhtQ==
+X-Gm-Message-State: AAQBX9eCVnsFLgJz6ugBDRt8yFbqtinD2qY8SeWm4dV4TZ0QpYDNHezm
+        QYPW402xns9LnLz9qnTrFxqZuQ==
+X-Google-Smtp-Source: AKy350ajyPgQvIV0O8hiDt6qZRVc1die/WObUcgV4uGq1lLwbb9wAc87RJ1NTklugxdFcuEUrDMQdA==
+X-Received: by 2002:ac2:5633:0:b0:4ec:8853:136 with SMTP id b19-20020ac25633000000b004ec88530136mr405409lff.12.1681555294309;
+        Sat, 15 Apr 2023 03:41:34 -0700 (PDT)
+Received: from [192.168.1.101] (abyk99.neoplus.adsl.tpnet.pl. [83.9.30.99])
+        by smtp.gmail.com with ESMTPSA id s21-20020a2e2c15000000b002a76e690aa9sm1266974ljs.73.2023.04.15.03.41.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 15 Apr 2023 03:41:33 -0700 (PDT)
+Message-ID: <1125104e-802a-b582-e279-fd4e9dd1bf97@linaro.org>
+Date:   Sat, 15 Apr 2023 12:41:31 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v3 3/5] arm64: dts: qcom: sdm845-xiaomi-beryllium-common:
+ add touchscreen related nodes
+To:     Joel Selvaraj <joelselvaraj.oss@gmail.com>,
+        Caleb Connolly <caleb@connolly.tech>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Inki Dae <inki.dae@samsung.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 6/6] arm64: dts: imx8mn: Fix video clock parents
-Date:   Sat, 15 Apr 2023 05:41:03 -0500
-Message-Id: <20230415104104.5537-6-aford173@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230415104104.5537-1-aford173@gmail.com>
-References: <20230415104104.5537-1-aford173@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Henrik Rydberg <rydberg@bitmath.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Jeff LaBundy <jeff@labundy.com>,
+        Markuss Broks <markuss.broks@gmail.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Job Noorman <job@noorman.info>,
+        Alistair Francis <alistair@alistair23.me>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+References: <20230415020222.216232-1-joelselvaraj.oss@gmail.com>
+ <20230415020222.216232-4-joelselvaraj.oss@gmail.com>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230415020222.216232-4-joelselvaraj.oss@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,74 +96,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are a few clocks whose parents are set in mipi_dsi
-and mxsfb nodes, but these clocks are used by the disp_blk_ctrl
-power domain which may cause an issue when re-parenting, resuling
-in a disp_pixel clock having the wrong parent and wrong rate.
 
-Fix this by moving the assigned-clock-parents as associate clock
-assignments to the power-domain node to setup these clocks before
-they are enabled.
 
-Fixes: d825fb6455d5 ("arm64: dts: imx8mn: Add display pipeline components")
-Signed-off-by: Adam Ford <aford173@gmail.com>
----
- arch/arm64/boot/dts/freescale/imx8mn.dtsi | 28 ++++++++++++-----------
- 1 file changed, 15 insertions(+), 13 deletions(-)
+On 15.04.2023 04:02, Joel Selvaraj wrote:
+> Enable qupv3_id_1 and gpi_dma1 as they are required for configuring
+> touchscreen. Also add pinctrl configurations needed for touchscreen.
+> These are common for both the tianma and ebbg touchscreen variant.
+> In the subsequent patch, we will initially enable support for the focaltech
+> touchscreen used in the EBBG variant. This is done in preparation for that.
+> 
+> Signed-off-by: Joel Selvaraj <joelselvaraj.oss@gmail.com>
+> ---
+Bit weird to add everything except the touchscreen, but okay..
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mn.dtsi b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-index bd84db550053..8be8f090e8b8 100644
---- a/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-@@ -1069,13 +1069,6 @@ lcdif: lcdif@32e00000 {
- 					 <&clk IMX8MN_CLK_DISP_APB_ROOT>,
- 					 <&clk IMX8MN_CLK_DISP_AXI_ROOT>;
- 				clock-names = "pix", "axi", "disp_axi";
--				assigned-clocks = <&clk IMX8MN_CLK_DISP_PIXEL_ROOT>,
--						  <&clk IMX8MN_CLK_DISP_AXI>,
--						  <&clk IMX8MN_CLK_DISP_APB>;
--				assigned-clock-parents = <&clk IMX8MN_CLK_DISP_PIXEL>,
--							 <&clk IMX8MN_SYS_PLL2_1000M>,
--							 <&clk IMX8MN_SYS_PLL1_800M>;
--				assigned-clock-rates = <594000000>, <500000000>, <200000000>;
- 				interrupts = <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>;
- 				power-domains = <&disp_blk_ctrl IMX8MN_DISPBLK_PD_LCDIF>;
- 				status = "disabled";
-@@ -1093,12 +1086,6 @@ mipi_dsi: dsi@32e10000 {
- 				clocks = <&clk IMX8MN_CLK_DSI_CORE>,
- 					 <&clk IMX8MN_CLK_DSI_PHY_REF>;
- 				clock-names = "bus_clk", "sclk_mipi";
--				assigned-clocks = <&clk IMX8MN_CLK_DSI_CORE>,
--						  <&clk IMX8MN_CLK_DSI_PHY_REF>;
--				assigned-clock-parents = <&clk IMX8MN_SYS_PLL1_266M>,
--							 <&clk IMX8MN_CLK_24M>;
--				assigned-clock-rates = <266000000>, <24000000>;
--				samsung,pll-clock-frequency = <24000000>;
- 				interrupts = <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH>;
- 				power-domains = <&disp_blk_ctrl IMX8MN_DISPBLK_PD_MIPI_DSI>;
- 				status = "disabled";
-@@ -1142,6 +1129,21 @@ disp_blk_ctrl: blk-ctrl@32e28000 {
- 					      "lcdif-axi", "lcdif-apb", "lcdif-pix",
- 					      "dsi-pclk", "dsi-ref",
- 					      "csi-aclk", "csi-pclk";
-+				assigned-clocks = <&clk IMX8MN_CLK_DSI_CORE>,
-+						  <&clk IMX8MN_CLK_DSI_PHY_REF>,
-+						  <&clk IMX8MN_CLK_DISP_PIXEL>,
-+						  <&clk IMX8MN_CLK_DISP_AXI>,
-+						  <&clk IMX8MN_CLK_DISP_APB>;
-+				assigned-clock-parents = <&clk IMX8MN_SYS_PLL1_266M>,
-+							 <&clk IMX8MN_CLK_24M>,
-+							 <&clk IMX8MN_VIDEO_PLL1_OUT>,
-+							 <&clk IMX8MN_SYS_PLL2_1000M>,
-+							 <&clk IMX8MN_SYS_PLL1_800M>;
-+				assigned-clock-rates = <266000000>,
-+						       <24000000>,
-+						       <594000000>,
-+						       <500000000>,
-+						       <200000000>;
- 				#power-domain-cells = <1>;
- 			};
- 
--- 
-2.39.2
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
+Konrad
+>  .../qcom/sdm845-xiaomi-beryllium-common.dtsi  | 37 +++++++++++++++++++
+>  1 file changed, 37 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
+> index 5ed975cc6ecb..b34ba46080ce 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
+> @@ -268,6 +268,10 @@ &gmu {
+>  	status = "okay";
+>  };
+>  
+> +&gpi_dma1 {
+> +	status = "okay";
+> +};
+> +
+>  &gpu {
+>  	status = "okay";
+>  
+> @@ -376,6 +380,10 @@ &qupv3_id_0 {
+>  	status = "okay";
+>  };
+>  
+> +&qupv3_id_1 {
+> +	status = "okay";
+> +};
+> +
+>  &sdhc_2 {
+>  	status = "okay";
+>  
+> @@ -481,6 +489,35 @@ sdc2_card_det_n: sd-card-det-n-state {
+>  		function = "gpio";
+>  		bias-pull-up;
+>  	};
+> +
+> +	ts_int_default: ts-int-default-state {
+> +		pins = "gpio31";
+> +		function = "gpio";
+> +		drive-strength = <16>;
+> +		bias-pull-down;
+> +	};
+> +
+> +	ts_reset_default: ts-reset-default-state {
+> +		pins = "gpio32";
+> +		function = "gpio";
+> +		drive-strength = <16>;
+> +		output-high;
+> +	};
+> +
+> +	ts_int_sleep: ts-int-sleep-state {
+> +		pins = "gpio31";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-pull-down;
+> +	};
+> +
+> +	ts_reset_sleep: ts-reset-sleep-state {
+> +		pins = "gpio32";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-disable;
+> +		output-low;
+> +	};
+>  };
+>  
+>  &uart6 {
