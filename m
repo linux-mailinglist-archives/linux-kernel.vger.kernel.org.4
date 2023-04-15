@@ -2,86 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0846E6E32C5
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 19:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D8A16E32CB
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 19:14:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjDORMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 13:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40482 "EHLO
+        id S229830AbjDOROK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 13:14:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjDORMP (ORCPT
+        with ESMTP id S229574AbjDOROI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 13:12:15 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 61F7C186;
-        Sat, 15 Apr 2023 10:12:14 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 33FHC7wj020436;
-        Sat, 15 Apr 2023 19:12:07 +0200
-Date:   Sat, 15 Apr 2023 19:12:07 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 00/11] tools/nolibc: -std=c89 compatibility
-Message-ID: <ZDra55UlsZdQYf70@1wt.eu>
-References: <20230328-nolibc-c99-v2-0-c989f2289222@weissschuh.net>
- <ZDKFTvhzgVGBjr0M@1wt.eu>
- <ZDq455RD5yJ8Nwk0@1wt.eu>
- <e93c1260-ae29-4fa4-9097-a81784ac7ef8@t-8ch.de>
+        Sat, 15 Apr 2023 13:14:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A2710E7;
+        Sat, 15 Apr 2023 10:14:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE2D960B00;
+        Sat, 15 Apr 2023 17:14:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 25E28C4339B;
+        Sat, 15 Apr 2023 17:14:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681578846;
+        bh=/jSsoNxOvU8LSy+l6NwzbNJ7bw9nm6AcIP7OOw8z6pQ=;
+        h=From:Subject:Date:To:Cc:Reply-To:From;
+        b=Lat7VnNXQ6AoNm2PHANEyrOZERv7dzW5MJn3a+tKFjsDFx9iQgxyy3ZTscQGK2xaQ
+         OyUrhpqLPWwaMg18/n8RsqiCnoqomSShiJ0dk4lvISqoj3vBCKToedpAs2JtYHL7Ii
+         7+INKhM6HhZx4ixo8majrNGBgiITShvept6RdDIfzEafvmnvQWtDmAYodi3tXDFa/Z
+         x4oxvCRLWyaUe9K9vJIFDunXTYvVQzKRHR7LapxTv7Q1HnbT12nl5nFz+BBF42P8My
+         TNjb3PO5uAIF8UIKfLW60Z2h1CIYzHiaSVwdnTvZwWtx8aMO88M1dIJpGkw0aE09xv
+         EA24JZOqEJUIA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by smtp.lore.kernel.org (Postfix) with ESMTP id 08CFAC77B77;
+        Sat, 15 Apr 2023 17:14:06 +0000 (UTC)
+From:   Yang Xiwen via B4 Relay 
+        <devnull+forbidden405.outlook.com@kernel.org>
+Subject: [PATCH RFC v2 0/3] mmc: add support for the dw-mmc controller on
+ Hi3798MV200
+Date:   Sun, 16 Apr 2023 01:13:15 +0800
+Message-Id: <20230415-mmc-hi3798mv200-v2-0-1d274f9b71da@outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e93c1260-ae29-4fa4-9097-a81784ac7ef8@t-8ch.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACvbOmQC/3WNyw7CIBQFf8XctRigD4srExM/wK3pgsdViFIMV
+ KJp+u/S7l3OOZnMBAmjwwSHzQQRs0suDAX4dgPayuGOxJnCwCmvaM0a4r0m1lV70fnMKSUaWYN
+ CibZrWyiWkgmJinLQdvG8TCPG5XhFvLnPmrrC5XyCvozWpTHE75rPbL3+ljIjlBjVKMGMqISpj
+ +E9PkN47HTw0M/z/AN2fUw/zgAAAA==
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Yang Xiwen <forbidden405@outlook.com>
+Cc:     tianshuliang <tianshuliang@hisilicon.com>,
+        Jiancheng Xue <xuejiancheng@hisilicon.com>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        David Yang <mmyangfl@gmail.com>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1681578841; l=1327;
+ i=forbidden405@outlook.com; s=20230415; h=from:subject:message-id;
+ bh=/jSsoNxOvU8LSy+l6NwzbNJ7bw9nm6AcIP7OOw8z6pQ=;
+ b=l4JXNZc79E2xwFXSVxovtxTQvUrpZAmERG0HzQvNBiv1O1kOh4Np5tlJxusfjwJbQDhwaU3lw
+ 48Dst+MG4HkC/nYlTtZygyY4WmHuE7CeSnQ4gSXvc4Yz3t6HzgOvWS9
+X-Developer-Key: i=forbidden405@outlook.com; a=ed25519;
+ pk=hfdpPU3AXR+t7fdv58tXCD4UzRNq+fop2TMJezFlAhM=
+X-Endpoint-Received: by B4 Relay for forbidden405@outlook.com/20230415 with auth_id=44
+X-Original-From: Yang Xiwen <forbidden405@outlook.com>
+Reply-To: <forbidden405@outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 15, 2023 at 05:15:27PM +0200, Thomas Weißschuh wrote:
-> On 2023-04-15 16:47:03+0200, Willy Tarreau wrote:
-> > On Sun, Apr 09, 2023 at 11:28:46AM +0200, Willy Tarreau wrote:
-> > > On Thu, Apr 06, 2023 at 09:54:46PM +0000, Thomas Weißschuh wrote:
-> > > > This series replaces the C99 compatibility patch. (See v1 link below).
-> > > > After the discussion about support C99 and/or GNU89 I came to the
-> > > > conclusion supporting straight C89 is not very hard.
-> > > > 
-> > > > Instead of validating both C99 and GNU89 in some awkward way only for
-> > > > somebody requesting true C89 support let's just do it this way.
-> > > > 
-> > > > Feel free to squash all the comment syntax patches together if you
-> > > > prefer.
-> > > 
-> > > I gave it some thought, at first considering that going lower than GNU89
-> > > was possibly not very useful, but given that the changes are very small
-> > > in the end (mostly comments formating), I think that you're right. The
-> > > cost of reaching this level of portability is basically zero once the
-> > > patch is applied so I think it's worth doing it now. However I think I
-> > > will indeed squash all the comments patch together as you suggest.
-> > 
-> > I've now squashed the ones about comments together, fixed the declaration
-> > inside the for statement in nolibc-test and tested with gcc 4.7 & 4.8 and
-> > confirmed it works as expected. I've queued it there for now:
-> > 
-> >    https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git/log/?h=20230415-nolibc-updates-4a
-> 
-> Thanks!
-> 
-> I noticed today that I did not adapt the comments in arch-s390.h;
-> because the start() comments were already correct.
-> 
-> But the last line of arch-s390.h still contains a C99 comment.
+The dw-mmc controller found on Hi3798MV200 is like the one found on
+Hi3798CV200, but has some tweaks.
+Also refreshed the dt binding and converted it to YAML.
 
-ah, I must have missed it because I checked using git grep //.
+Signed-off-by: Yang Xiwen <forbidden405@outlook.com>
+---
+Changes in v2:
+- add DDR52 support
+- edit dt-binding, substitude all hi3798cv200 with histb
+- send email to more people
+- Link to v1: https://lore.kernel.org/r/20230415-mmc-hi3798mv200-v1-0-db5b91d939d4@outlook.com
 
-> Do you want me to send a patch or could you just push one?
-> (Or fold it into my patch)
+---
+Yang Xiwen (3):
+      mmc: dw_mmc-hi3798cv200: rename to dw_mmc-histb
+      mmc: dw_mmc-histb: add support for hi3798mv200
+      binding: mmc: hi3798cv200-dw-mshc: convert to YAML and rename to histb-dw-mshc, add compatible of hi3798mv200
 
-I'll do it and force-push. Thanks for checking and notifying me!
+ .../bindings/mmc/hi3798cv200-dw-mshc.txt           |  40 ---
+ .../devicetree/bindings/mmc/histb-dw-mshc.yaml     |  90 ++++++
+ drivers/mmc/host/Kconfig                           |   8 +-
+ drivers/mmc/host/Makefile                          |   2 +-
+ drivers/mmc/host/dw_mmc-hi3798cv200.c              | 206 -------------
+ drivers/mmc/host/dw_mmc-histb.c                    | 339 +++++++++++++++++++++
+ 6 files changed, 434 insertions(+), 251 deletions(-)
+---
+base-commit: 76f598ba7d8e2bfb4855b5298caedd5af0c374a8
+change-id: 20230415-mmc-hi3798mv200-ce15e9b96866
 
-Cheers,
-Willy
+Best regards,
+-- 
+Yang Xiwen <forbidden405@outlook.com>
+
