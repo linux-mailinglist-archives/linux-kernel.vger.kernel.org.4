@@ -2,141 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 437A26E2E8F
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 04:18:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A4266E2E92
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 04:21:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbjDOCS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 22:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51638 "EHLO
+        id S230177AbjDOCVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 22:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbjDOCSz (ORCPT
+        with ESMTP id S229890AbjDOCU6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 22:18:55 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531AD2130;
-        Fri, 14 Apr 2023 19:18:53 -0700 (PDT)
-Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PyxjY1pWjz17SjF;
-        Sat, 15 Apr 2023 10:15:13 +0800 (CST)
-Received: from [10.174.178.171] (10.174.178.171) by
- kwepemi500015.china.huawei.com (7.221.188.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Sat, 15 Apr 2023 10:18:49 +0800
-Subject: =?UTF-8?B?UmU6IOetlOWkjTogW1BBVENIIG5ldF0gbmV0OiBBZGQgY2hlY2sgZm9y?=
- =?UTF-8?Q?_csum=5fstart_in_skb=5fpartial=5fcsum=5fset=28=29?=
-To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Eric Dumazet <edumazet@google.com>
-CC:     "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "asml.silence@gmail.com" <asml.silence@gmail.com>,
-        "imagedong@tencent.com" <imagedong@tencent.com>,
-        "brouer@redhat.com" <brouer@redhat.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "jbenc@redhat.com" <jbenc@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230410022152.4049060-1-luwei32@huawei.com>
- <CANn89iKFLREJV_cfHEk6wz6xXVv_jSrZ_UyXAB8VpH7gMXacxQ@mail.gmail.com>
- <643447ba5224a_83e69294b6@willemb.c.googlers.com.notmuch>
- <450994d7-4a77-99df-6317-b535ea73e01d@huawei.com>
- <CANn89iLOcvDRMi9kVr86xNp5=h4JWpx9yYWicVxCwSMgAJGf_g@mail.gmail.com>
- <c90abe8c-ffa0-f986-11eb-bde65c84d18b@huawei.com>
- <6436b5ba5c005_41e2294dd@willemb.c.googlers.com.notmuch>
- <a30a8ffaa8dd4cb6a84103eecf0c3338@huawei.com>
- <643983f69b440_17854f2948c@willemb.c.googlers.com.notmuch>
- <64398b4c4585f_17abe429442@willemb.c.googlers.com.notmuch>
-From:   "luwei (O)" <luwei32@huawei.com>
-Message-ID: <47fca2c7-db7c-0265-d724-38dffc62debe@huawei.com>
-Date:   Sat, 15 Apr 2023 10:18:49 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Fri, 14 Apr 2023 22:20:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B552130
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 19:20:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681525209;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=EbchukXhmamBCY4yfdTiw3lkj6XszMDdhtygCuSoX2M=;
+        b=dry5TG1B3rW3fk87kzmw4L3zIbHVT9JgXP0mfrMX+Q5/uXmBfJsS5C82SFcxEX0HbEd3Xp
+        6LT0f8TZ8JCkSEWAdExGAYbF2ElAxLLZZBsFoN7Me8nMjj67lVRyYQ+G+K50Mw5xj1FuQq
+        c2swSE0DV52Fhh0D2zqEeUfqSq12FbU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-664-B07pot0kPLylViyUjY6cqw-1; Fri, 14 Apr 2023 22:20:05 -0400
+X-MC-Unique: B07pot0kPLylViyUjY6cqw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 74A1080C8C7;
+        Sat, 15 Apr 2023 02:20:05 +0000 (UTC)
+Received: from server.redhat.com (ovpn-12-28.pek2.redhat.com [10.72.12.28])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C12B1140EBF4;
+        Sat, 15 Apr 2023 02:20:02 +0000 (UTC)
+From:   Cindy Lu <lulu@redhat.com>
+To:     lulu@redhat.com, mst@redhat.com, jasowang@redhat.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] vhost_vdpa: fix unmap process in no-batch mode
+Date:   Sat, 15 Apr 2023 10:19:59 +0800
+Message-Id: <20230415021959.197891-1-lulu@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <64398b4c4585f_17abe429442@willemb.c.googlers.com.notmuch>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.171]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500015.china.huawei.com (7.221.188.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+While using the no-batch mode with vIOMMU enabled
+Qemu will call a large memory to unmap. Much larger than the memory
+mapped to the kernel. The iotlb is NULL in the kernel and will return fail.
+Which causes failure.
+To fix this, we will not remove the AS while the iotlb->nmaps is 0.
+This will free in the vhost_vdpa_clean
 
-在 2023/4/15 1:20 AM, Willem de Bruijn 写道:
-> Willem de Bruijn wrote:
->> luwei (O) wrote:
->>> yes, here is the vnet_hdr:
->>>
->>>      flags: 3
->>>      gso_type: 3
->>>      hdr_len: 23
->>>      gso_size: 58452
->>>      csum_start: 5
->>>      csum_offset: 16
->>>
->>> and the packet:
->>>
->>> | vnet_hdr | mac header | network header | data ... |
->>>
->>>    memcpy((void*)0x20000200,
->>>           "\x03\x03\x02\x00\x54\xe4\x05\x00\x10\x00\x80\x00\x00\x53\xcc\x9c\x2b"
->>>           "\x19\x3b\x00\x00\x00\x89\x4f\x08\x03\x83\x81\x04",
->>>           29);
->>>    *(uint16_t*)0x200000c0 = 0x11;
->>>    *(uint16_t*)0x200000c2 = htobe16(0);
->>>    *(uint32_t*)0x200000c4 = r[3];
->>>    *(uint16_t*)0x200000c8 = 1;
->>>    *(uint8_t*)0x200000ca = 0;
->>>    *(uint8_t*)0x200000cb = 6;
->>>    memset((void*)0x200000cc, 170, 5);
->>>    *(uint8_t*)0x200000d1 = 0;
->>>    memset((void*)0x200000d2, 0, 2);
->>>    syscall(__NR_sendto, r[1], 0x20000200ul, 0xe45ful, 0ul, 0x200000c0ul, 0x14ul);
->> Thanks. So this can happen whenever a packet is injected into the tx
->> path with a virtio_net_hdr.
->>
->> Even if we add bounds checking for the link layer header in pf_packet,
->> it can still point to the network header.
->>
->> If packets are looped to the tx path, skb_pull is common if a packet
->> traverses tunnel devices. But csum_start does not directly matter in
->> the rx path (CHECKSUM_PARTIAL is just seen as CHECKSUM_UNNECESSARY).
->> Until it is forwarded again to the tx path.
->>
->> So the question is which code calls skb_checksum_start_offset on the
->> tx path. Clearly, skb_checksum_help. Also a lot of drivers. Which
->> may cast the signed int return value to an unsigned. Even an u8 in
->> the first driver I spotted (alx).
->>
->> skb_postpull_rcsum anticipates a negative return value, as do other
->> core functions. So it clearly allowed in certain cases. We cannot
->> just bound it.
->>
->> Summary after a long story: an initial investigation, but I don't have
->> a good solution so far. Maybe others have a good suggestiong based on
->> this added context.
-> Specific to skb_checksum_help, it appears that skb_checksum will
-> work with negative offset just fine.
+Signed-off-by: Cindy Lu <lulu@redhat.com>
+---
+ drivers/vhost/vdpa.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-       In this case maybe not, since it checksums from within the mac 
-header, and the mac header
-
-        will be stripped when the rx path checks the checksum.
-
->
-> Perhaps the only issue is that the WARN_ON_ONCE compares signed to
-> unsigned, and thus incorrectly interprets a negative offset as
->   >= skb_headlen(skb)
-> .
-
+diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+index 7be9d9d8f01c..74c7d1f978b7 100644
+--- a/drivers/vhost/vdpa.c
++++ b/drivers/vhost/vdpa.c
+@@ -851,11 +851,7 @@ static void vhost_vdpa_unmap(struct vhost_vdpa *v,
+ 		if (!v->in_batch)
+ 			ops->set_map(vdpa, asid, iotlb);
+ 	}
+-	/* If we are in the middle of batch processing, delay the free
+-	 * of AS until BATCH_END.
+-	 */
+-	if (!v->in_batch && !iotlb->nmaps)
+-		vhost_vdpa_remove_as(v, asid);
++
+ }
+ 
+ static int vhost_vdpa_va_map(struct vhost_vdpa *v,
+@@ -1112,8 +1108,6 @@ static int vhost_vdpa_process_iotlb_msg(struct vhost_dev *dev, u32 asid,
+ 		if (v->in_batch && ops->set_map)
+ 			ops->set_map(vdpa, asid, iotlb);
+ 		v->in_batch = false;
+-		if (!iotlb->nmaps)
+-			vhost_vdpa_remove_as(v, asid);
+ 		break;
+ 	default:
+ 		r = -EINVAL;
 -- 
-Best Regards,
-Lu Wei
+2.34.3
 
