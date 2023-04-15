@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A926E32FC
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 19:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 051FD6E32FE
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 19:47:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbjDORqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 13:46:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53034 "EHLO
+        id S230130AbjDORrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 13:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbjDORql (ORCPT
+        with ESMTP id S229746AbjDORrU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 13:46:41 -0400
+        Sat, 15 Apr 2023 13:47:20 -0400
 Received: from the.earth.li (the.earth.li [IPv6:2a00:1098:86:4d:c0ff:ee:15:900d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2EB435AB;
-        Sat, 15 Apr 2023 10:46:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF4EE41;
+        Sat, 15 Apr 2023 10:47:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
         s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
         Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
         Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
         :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
         List-Post:List-Owner:List-Archive;
-        bh=SuK0Nqd+nS8SKUO0Du0/KQ2vGgQINfivPg9iv+lc2e8=; b=QMszMv9lQlnmQjnVcFHF+mMKxz
-        UIfObinv+dr6ErxW/cA73BQtmAMgwfW96jimxUxUUZ+DUIUPuKPECjWK+hfxVPOHqvc4+GGrxMl8P
-        7BrkcpGDS8Wj+3C6jG25y6CA0E5q4IuGzy6mlOijtVNSW9d72Xmh2WFjsoVGdopp8pbwCTbZU0NVJ
-        YwTUXU46pmxJspVAKv19lOCAQawtvU9zZoNsM0XNGcrHYm5WgFgTr4QnsV18XLEVsKzTlmH/pwvef
-        g00uLngAY22PrVKADROodq2YW5ICLLcq7LL8dWFMXn90SDVFiLfeN0TTRgzEmK6eRUlc1cWqJrEFw
-        b3KL3awA==;
+        bh=V3hC1iXMftqNHVVjf9y/IQOJAn+pUeg8MBrKjF7zyEU=; b=tWlUdvEX04DAJTh9v4VGMcRyTc
+        fdQsu33b9RCx1TGq9nNTnuaxVm9lB5EnIT71Qaih2vSe73a+8R9xl5d8c1OXQiKgUSezj+3aCLpxa
+        TWbicTc6fjQwP/KxuHblsdSjBqOZ3CVy4kyQRVVcLrQSiUmC6Pdnme1vVptmUaHDK4dXYjcqPXPxi
+        GYXwb/9GBh6t0FNxAmPRaDTbPXZRWJw/+7RJ6tx8JLYrb4ySKrC35nY10Wworvekm1HzSt7ao0osK
+        3ffQuXXxBdlCxF/MJMYGZ+aYX3NZgqUkDA45pYedbs6oWNMjqdZ1cNR3wYj0aKjIAWYzsLLbqSJuq
+        cOy4/sSA==;
 Received: from [2001:4d48:ad59:1403::16a3] (helo=earth.li)
         by the.earth.li with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <noodles@earth.li>)
-        id 1pnjyn-00FJoJ-Ov; Sat, 15 Apr 2023 18:46:29 +0100
-Date:   Sat, 15 Apr 2023 18:46:24 +0100
+        id 1pnjzS-00FJpt-5k; Sat, 15 Apr 2023 18:47:10 +0100
+Date:   Sat, 15 Apr 2023 18:47:05 +0100
 From:   Jonathan McDowell <noodles@earth.li>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -41,8 +41,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
         Samuel Holland <samuel@sholland.org>
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/3] ARM: dts: sun5i: Add port E pinmux settings for mmc2
-Message-ID: <00d37ef9bf70785d05fb446ee6d0060c4a8d521a.1681580558.git.noodles@earth.li>
+Subject: [PATCH 3/3] ARM: dts: axp209: Add iio-hwmon node for internal
+ temperature
+Message-ID: <a40b6d46209f9b5626cd5a147c31daf5d19c9439.1681580558.git.noodles@earth.li>
 References: <cover.1681580558.git.noodles@earth.li>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -57,38 +58,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These alternate pins for mmc2 are brought out to the 40 pin U14 header
-on the C.H.I.P and can be used to add an external MMC device with a 4
-bit interface. See
-
-https://byteporter.com/ntc-chip-micro-sd-slot/
-
-for further details on how.
+This adds a DT node to hook up the internal temperature ADC to the
+iio-hwmon driver. The various voltage + current ADCs are consumed and
+exposed by their respective drivers, but this is not and is always
+available. Naming chosen to match the axp20x_ prefix the power sensors
+use.
 
 Signed-off-by: Jonathan McDowell <noodles@earth.li>
 ---
- arch/arm/boot/dts/sun5i.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ arch/arm/boot/dts/axp209.dtsi | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/arch/arm/boot/dts/sun5i.dtsi b/arch/arm/boot/dts/sun5i.dtsi
-index 250d6b87ab4d..e4922506ce22 100644
---- a/arch/arm/boot/dts/sun5i.dtsi
-+++ b/arch/arm/boot/dts/sun5i.dtsi
-@@ -517,6 +517,14 @@ mmc2_4bit_pc_pins: mmc2-4bit-pc-pins {
- 				bias-pull-up;
- 			};
+diff --git a/arch/arm/boot/dts/axp209.dtsi b/arch/arm/boot/dts/axp209.dtsi
+index ca240cd6f6c3..f00b5a7ec106 100644
+--- a/arch/arm/boot/dts/axp209.dtsi
++++ b/arch/arm/boot/dts/axp209.dtsi
+@@ -48,6 +48,13 @@
+  * http://dl.linux-sunxi.org/AXP/AXP209%20Datasheet%20v1.0_cn.pdf
+  */
  
-+			mmc2_4bit_pe_pins: mmc2-4bit-pe-pins {
-+				pins = "PE4", "PE5", "PE6", "PE7",
-+				       "PE8", "PE9";
-+				function = "mmc2";
-+				drive-strength = <30>;
-+				bias-pull-up;
-+			};
++/ {
++	axp20x_temp {
++		compatible = "iio-hwmon";
++		io-channels = <&axp_adc 4>; /* Internal temperature */
++	};
++};
 +
- 			mmc2_8bit_pins: mmc2-8bit-pins {
- 				pins = "PC6", "PC7", "PC8", "PC9",
- 				       "PC10", "PC11", "PC12", "PC13",
+ &axp209 {
+ 	compatible = "x-powers,axp209";
+ 	interrupt-controller;
 -- 
 2.39.2
 
