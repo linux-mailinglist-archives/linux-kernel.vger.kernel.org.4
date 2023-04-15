@@ -2,100 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 674556E301D
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 11:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04B566E301A
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 11:33:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbjDOJeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 05:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45782 "EHLO
+        id S229912AbjDOJds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 05:33:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229948AbjDOJeQ (ORCPT
+        with ESMTP id S229561AbjDOJdp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 05:34:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 823749F
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 02:33:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681551207;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yiqPklxUzRy8bqs+v/ZpMBXMKYs89gD+rYERGCmxvBI=;
-        b=NSzsuY3nh20hYKR5r63/OntVkBwtUdSwYVQi5ne3bwsnVCvkSyp3REmpdB+pmQh/CQxb3U
-        xdt51IRHR5Tp4EFPhnxO0Jc/Opk0PD1Z1dnhJVNyORgLgpmVw0E3RO0NLuy07NCU0cmrd3
-        y00iarI++EwbiAty4ByULvjdJMz+hU0=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-614-HqchGOurP8uFcjnUp0WcAw-1; Sat, 15 Apr 2023 05:33:26 -0400
-X-MC-Unique: HqchGOurP8uFcjnUp0WcAw-1
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-94a355c0f93so293205066b.2
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 02:33:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681551205; x=1684143205;
-        h=content-transfer-encoding:in-reply-to:references:to
-         :content-language:subject:cc:user-agent:mime-version:date:message-id
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yiqPklxUzRy8bqs+v/ZpMBXMKYs89gD+rYERGCmxvBI=;
-        b=NXIGXQrAhd+Z11astO2fToC5PYv47HuaL1WQuHa99n+dOz31MzjVWm6mUPfNPJgfVq
-         TO8FCxjic4F+05aFaD/0P2ZgfSVbeblaj6dxEOJkz062bE9oABTgfsnEQrmE9xIzZDL3
-         PJQ1Q1PWgA6WJLU4yzZbFMDU5v2GE7Ui/pZqfbof0ATBU/pyEWS1SZKrCNZ+3rBSbE3N
-         6I1EMHtS/fpq5HJqoc5Xd9mPhrrw2DSXZ435HUQhQKt/fSyvVc2rfP7Nb/wlAsGQxjRE
-         tqaz3DZ/NRui5n9FKPLtg11bhMi4tCpDWRD6Df6TcmMRYOaM+96QlT8GroXwIzkp8v9U
-         jMwQ==
-X-Gm-Message-State: AAQBX9d3L4Cy9GKqTFWM/VQLCPUyVOsMVXfBbxZgBfPX15W7rF9DhjXm
-        hob67qh+eL9k1FmpgS+Yov6nS1Tkrzn7QaObSYwr8V+WqCv2P/wBsH4WtL27mDfT3osZhe111dk
-        SPqP+tKHOl+XrnDVK8HD39YtM8NIE8NMK
-X-Received: by 2002:aa7:d04e:0:b0:505:7d54:db93 with SMTP id n14-20020aa7d04e000000b005057d54db93mr8621900edo.21.1681551204995;
-        Sat, 15 Apr 2023 02:33:24 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YF2Zbojdxq6qbQxtDvNXENyG1SKgwEvrcmid1+4koV/BuLd+OMKg6WCD3kviyV5EY7ijM6YA==
-X-Received: by 2002:aa7:d04e:0:b0:505:7d54:db93 with SMTP id n14-20020aa7d04e000000b005057d54db93mr8621886edo.21.1681551204598;
-        Sat, 15 Apr 2023 02:33:24 -0700 (PDT)
-Received: from [192.168.42.222] (194-45-78-10.static.kviknet.net. [194.45.78.10])
-        by smtp.gmail.com with ESMTPSA id o24-20020aa7c7d8000000b005067d089aafsm2138743eds.11.2023.04.15.02.33.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 15 Apr 2023 02:33:24 -0700 (PDT)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Message-ID: <164fc8a0-0248-76dc-be53-706eb36a9ec2@redhat.com>
-Date:   Sat, 15 Apr 2023 11:33:22 +0200
+        Sat, 15 Apr 2023 05:33:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F5B1BE4;
+        Sat, 15 Apr 2023 02:33:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7255B60A51;
+        Sat, 15 Apr 2023 09:33:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C5B2C433D2;
+        Sat, 15 Apr 2023 09:33:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681551221;
+        bh=/UzeVtaHJfUN6UpTwCEr/HMGM0EcHNAX80284645RSY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=FplwyjYa0i4Oka6LJMEu9onR6CgkbfbRW779jA2nBjLTC/WBm/7pzF3FiU6lBl+H7
+         M7InySQCY2YnDgubZvazD9p0fBFV9G4nEbmqqW2EXA211+N3Bw0XHJD1MsBh9oTXJP
+         +dyqlzFLq2GtQ3SDJTbk95G09WxdC0KMRbnwPDJ0AQvqkV/82Wh/W9H3+jC2aee1vf
+         bSAdiRau/2vYHtqa+h9efMjupQ8e/264BFwGTy87guxuRjCU5+zDVnd3gOHJVWn9ys
+         HPX8IZVFWCoZj5QRQpz1yfzdYSPR+eVKCvU12i0p4sbSBu077RTaL1JBQReK34TU5l
+         JyciWooxqEBew==
+Date:   Sat, 15 Apr 2023 11:33:36 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c-for-6.3-rc7
+Message-ID: <ZDpvcE2jMBPqlxgF@sai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Cc:     brouer@redhat.com, netdev@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, xdp-hints@xdp-project.net
-Subject: Re: [PATCH net-next v6 2/3] net: stmmac: add Rx HWTS metadata to XDP
- receive pkt
-Content-Language: en-US
-To:     Song Yoong Siang <yoong.siang.song@intel.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        Ong Boon Leong <boon.leong.ong@intel.com>,
-        Jacob Keller <jacob.e.keller@intel.com>
-References: <20230415064503.3225835-1-yoong.siang.song@intel.com>
- <20230415064503.3225835-3-yoong.siang.song@intel.com>
-In-Reply-To: <20230415064503.3225835-3-yoong.siang.song@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="XKVvgIsd51l6uQA2"
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -103,32 +58,66 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 15/04/2023 08.45, Song Yoong Siang wrote:
-> Add receive hardware timestamp metadata support via kfunc to XDP receive
-> packets.
-> 
-> Suggested-by: Stanislav Fomichev <sdf@google.com>
-> Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
-> Acked-by: Stanislav Fomichev <sdf@google.com>
-> ---
->   drivers/net/ethernet/stmicro/stmmac/stmmac.h  |  3 ++
->   .../net/ethernet/stmicro/stmmac/stmmac_main.c | 40 ++++++++++++++++++-
->   2 files changed, 42 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac.h b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
-> index ac8ccf851708..07ea5ab0a60b 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac.h
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
-> @@ -94,6 +94,9 @@ struct stmmac_rx_buffer {
->   
->   struct stmmac_xdp_buff {
->   	struct xdp_buff xdp;
-> +	struct stmmac_priv *priv;
-> +	struct dma_desc *desc;
-> +	struct dma_desc *ndesc;
->   };
+--XKVvgIsd51l6uQA2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thanks for the adjustments.
+The following changes since commit 197b6b60ae7bc51dd0814953c562833143b292aa:
 
-Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
+  Linux 6.3-rc4 (2023-03-26 14:40:20 -0700)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.3-rc7
+
+for you to fetch changes up to f8160d3b35fc94491bb0cb974dbda310ef96c0e2:
+
+  i2c: ocores: generate stop condition after timeout in polling mode (2023-04-13 18:29:29 +0200)
+
+----------------------------------------------------------------
+just two driver fixes
+
+----------------------------------------------------------------
+Gregor Herburger (1):
+      i2c: ocores: generate stop condition after timeout in polling mode
+
+Tharun Kumar P (1):
+      i2c: mchp-pci1xxxx: Update Timing registers
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Andrew Lunn (1):
+      (Rev.) i2c: ocores: generate stop condition after timeout in polling mode
+
+Andy Shevchenko (1):
+      (Rev.) i2c: mchp-pci1xxxx: Update Timing registers
+
+Federico Vaga (1):
+      (Rev.) i2c: ocores: generate stop condition after timeout in polling mode
+
+ drivers/i2c/busses/i2c-mchp-pci1xxxx.c | 60 +++++++++++++++++-----------------
+ drivers/i2c/busses/i2c-ocores.c        | 35 +++++++++++---------
+ 2 files changed, 49 insertions(+), 46 deletions(-)
+
+--XKVvgIsd51l6uQA2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQ6b28ACgkQFA3kzBSg
+KbaqQA//VtA3nuI7sITivfBCRDqj+WZizg1lJd7dgkxYj/nwj3WxGROG2aDX4em9
+KGniTgHNcWe4CAcAqudEqoFJU4gv3W/yL8I62nYp9EFjT88Opz4Xpjcy1OFkQkub
+tZGJKaoRU7jaIxKoYsvMyvA8CeCy+j1Xgr539aAd7vEa3DeYlRS5bgyvHGHW+Idq
+ImItOdyaPun0U0ONf05qiKlM1Tg18jsFxFe7LKe2Ett+p3cf3mVlcdS88oE/bD55
+56T8zZTuezavTOdFbPd21ZlwoATsXHjzeLPxZheyF9UZmCCmq5P0TVeUJtzpXluG
+ACkG/qI6DW3tONe98NvYRGBma/0nNQfQvX3O6z2mZYP47exRBxlIF/Rw8Qycdg+T
+uWFk3RJM2zNlX5vOIkoAeltuCkVFGyp2TXoMi+xE+MmPtEwSUYgoihAwYnpU9xzP
+7OllBjM6TGIoV0TnXA5aeSPnHM3hTY7O3ZBMXKvbodHz3IHuszdfTuCal9DzYEZO
+LsiMkWWM/2lDS5Rag8MOCQ9aGMbNUV9I9LXQzGPTtfaMd4+yk/UUCZJcC0sdLcF7
+VogAA87DaMEM+F+srnWOv2UBB6PC5Eos1pfA7l01/FXY5zQEien9dg3hoq7gP634
+0mmgt+lgLUxZcB4JKTuqck4AbmuJ775Cucys8wA3RH7klQymPzQ=
+=OttL
+-----END PGP SIGNATURE-----
+
+--XKVvgIsd51l6uQA2--
