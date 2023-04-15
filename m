@@ -2,74 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 266C86E2E36
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 03:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6764A6E2E4A
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 03:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjDOB2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 21:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35686 "EHLO
+        id S229689AbjDOBil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 21:38:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjDOB2y (ORCPT
+        with ESMTP id S229450AbjDOBik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 21:28:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C405040E1;
-        Fri, 14 Apr 2023 18:28:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5CE506450A;
-        Sat, 15 Apr 2023 01:28:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67D26C433D2;
-        Sat, 15 Apr 2023 01:28:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681522132;
-        bh=uUG02w5CTk2pu7MbMecz7O9Xu7eY0dFcJmlanh3cLkI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=RxVMv/1YlIFlLsLS1dxTIIsePbxn3H7U946n43Ybk9yTXqpHdkhsyRncgWRWocH9L
-         vgDqyeIYUzQVilW6N1sQ29GOmBHAX0r3RtF63NLDrK+AyotZO6u/B+VfuGrLJdmXxO
-         1ayPk8CPjLbAyiqEsT6yf0d/BkfbKIba6BNevRr52y0IFM4STlGUAAqMCy+dE/1Yd6
-         0u+pfXs+Hr4YQVm65Ov5JhQNCo06T0smwFNLC6YzZVt9O1a7IZGF30oroLfwm1Qtt3
-         713ikRYeXgKXGt20uX+XaolKCE0A0jsd7Vbfg78Hw84Pu9WL6nETlwoCbPTkPH3/ly
-         Nc/keyrMLaRCA==
-Date:   Fri, 14 Apr 2023 18:28:51 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc:     Horatiu Vultur <horatiu.vultur@microchip.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
-        <UNGLinuxDriver@microchip.com>
-Subject: Re: [PATCH net-next] net: lan966x: Fix lan966x_ifh_get
-Message-ID: <20230414182851.6f776cb7@kernel.org>
-In-Reply-To: <06722642-f934-db3a-f88e-94263592b216@intel.com>
-References: <20230414082047.1320947-1-horatiu.vultur@microchip.com>
-        <06722642-f934-db3a-f88e-94263592b216@intel.com>
+        Fri, 14 Apr 2023 21:38:40 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 884322720
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Apr 2023 18:38:33 -0700 (PDT)
+Received: from dggpemm500016.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Pywpy4xppznbWn;
+        Sat, 15 Apr 2023 09:34:50 +0800 (CST)
+Received: from [10.67.111.115] (10.67.111.115) by
+ dggpemm500016.china.huawei.com (7.185.36.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Sat, 15 Apr 2023 09:38:28 +0800
+Message-ID: <847e4b85-f081-e214-dc24-75a7b3c2c885@huawei.com>
+Date:   Sat, 15 Apr 2023 09:38:28 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [RFC PATCH] genirq: introduce handle_fasteoi_edge_irq flow
+ handler
+Content-Language: en-US
+To:     Marc Zyngier <maz@kernel.org>
+CC:     <tglx@linutronix.de>, <samuel@sholland.org>,
+        <oleksandr_tyshchenko@epam.com>, <andy.shevchenko@gmail.com>,
+        <apatel@ventanamicro.com>, <lvjianmin@loongson.cn>,
+        <linux-kernel@vger.kernel.org>, <chris.zjh@huawei.com>,
+        <liaochang1@huawei.com>, James Gowans <jgowans@amazon.com>
+References: <20230310101417.1081434-1-zouyipeng@huawei.com>
+ <86edomln7k.wl-maz@kernel.org>
+From:   Yipeng Zou <zouyipeng@huawei.com>
+In-Reply-To: <86edomln7k.wl-maz@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.111.115]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500016.china.huawei.com (7.185.36.25)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Apr 2023 19:00:20 +0200 Alexander Lobakin wrote:
-> > @@ -608,6 +608,7 @@ static u64 lan966x_ifh_get(u8 *ifh, size_t pos, size_t length)
-> >  			val |= (1 << i);  
-> 
-> Alternatively, you can change that to (pick one that you like the most):
-> 
-> 			val |= 1ULL << i;
-> 			// or
-> 			val |= BIT_ULL(i);
 
-	// or 
-	(u64)1 << i
-	// or, since you're only concerned about sign extension, even
-	1U << i
+在 2023/4/14 19:25, Marc Zyngier 写道:
+> On Fri, 10 Mar 2023 10:14:17 +0000,
+> Yipeng Zou <zouyipeng@huawei.com> wrote:
+>> Recently, We have a LPI migration issue on the ARM SMP platform.
+>>
+>> For example, NIC device generates MSI and sends LPI to CPU0 via ITS,
+>> meanwhile irqbalance running on CPU1 set irq affinity of NIC to CPU1,
+>> the next interrupt will be sent to CPU2, due to the state of irq is
+>> still in progress, kernel does not end up performing irq handler on
+>> CPU2, which results in some userland service timeouts, the sequence
+>> of events is shown as follows:
+>>
+>> NIC                     CPU0                    CPU1
+>>
+>> Generate IRQ#1          READ_IAR
+>>                          Lock irq_desc
+>>                          Set IRQD_IN_PROGRESS
+>>                          Unlock irq_desc
+>>                                                  Lock irq_desc
+>>                                                  Change LPI Affinity
+>>                                                  Unlock irq_desc
+>>                          Call irq_handler
+>> Generate IRQ#2
+>>                                                  READ_IAR
+>>                                                  Lock irq_desc
+>>                                                  Check IRQD_IN_PROGRESS
+>>                                                  Unlock irq_desc
+>>                                                  Return from interrupt#2
+>>                          Lock irq_desc
+>>                          Clear IRQD_IN_PROGRESS
+>>                          Unlock irq_desc
+>>                          return from interrupt#1
+>>
+>> For this scenario, The IRQ#2 will be lost. This does cause some exceptions.
+> Please see my reply to James at [1]. I'd appreciate if you could give
+> that patch a go, which I expect to be a better avenue to fix what is
+> effectively a GIC architecture defect.
+>
+> Thanks,
+>
+> 	M.
+>
+> [1] https://lore.kernel.org/all/86pm89kyyt.wl-maz@kernel.org/
 
-having the correct type of the lval seems cleaner than masking, indeed.
+Hi Marc:
+
+     Thanks for your time about this issue.
+
+     I have seen your latest patch, and I am preparing the environment 
+for testing, I will sent the testing status of this patch later.
+
+-- 
+Regards,
+Yipeng Zou
+
