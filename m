@@ -2,78 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 045FA6E2E01
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 02:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE9B66E2E06
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 02:54:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbjDOAvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 20:51:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55446 "EHLO
+        id S229749AbjDOAyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 20:54:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjDOAvm (ORCPT
+        with ESMTP id S229457AbjDOAyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 20:51:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9931BE6;
-        Fri, 14 Apr 2023 17:51:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B0731614E1;
-        Sat, 15 Apr 2023 00:51:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AC1FC433D2;
-        Sat, 15 Apr 2023 00:51:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681519901;
-        bh=bB2NT69LBZ9BjmwJ8HNoVcuUympJMh5JpNZZaQv1Rk8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=h7ovqmOjBpQgzV4olEuwILUyBuVA3unecvCVGbvIbNWpTqPUxNCMzTkunwwNa8pes
-         uLvAo96zOqp0x1AMVx7kFkdhs86Mh1eMyo8R+hdflknQPjLct7ofThSTFtMO7Oxfd7
-         B0t2mHZ0cZ0lGErO7kTX0VWaT9fQSxTzBPuOk43uLQom+IzEXKaVBoA8v9oqx49kM4
-         J7DIPx2wh5kwRn5mvCxm1xSnq4+O7w1ERoE9YcxX5ctUkbHTNMkeIGXEST/hDxdLGG
-         zfk5gJB5v4hBDOlIrIb9VFv2I7u9yMv2CcTcWgejfTfF9ZvhzwC5E9jNDqcZxY/UW3
-         S79Rg+0k5VxFQ==
-Date:   Fri, 14 Apr 2023 17:51:39 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Cc:     Eric Dumazet <edumazet@google.com>, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        daniel@iogearbox.net, Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        linux-arch@vger.kernel.org, sdf@google.com
-Subject: Re: [PATCH net-next v4 2/4] net: socket: add sockopts blacklist for
- BPF cgroup hook
-Message-ID: <20230414175139.21d284b6@kernel.org>
-In-Reply-To: <CAEivzxcEhfLttf0VK=NmHdQxF7CRYXNm6NwUVx6jx=-u2k-T6w@mail.gmail.com>
-References: <20230413133355.350571-1-aleksandr.mikhalitsyn@canonical.com>
-        <20230413133355.350571-3-aleksandr.mikhalitsyn@canonical.com>
-        <CANn89iLuLkUvX-dDC=rJhtFcxjnVmfn_-crOevbQe+EjaEDGbg@mail.gmail.com>
-        <CAEivzxcEhfLttf0VK=NmHdQxF7CRYXNm6NwUVx6jx=-u2k-T6w@mail.gmail.com>
+        Fri, 14 Apr 2023 20:54:07 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09514EFB;
+        Fri, 14 Apr 2023 17:54:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681520045; x=1713056045;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BaBaSZvIdqqeUdPYY6SOwnbn8OIbBnqhJrQSQnGFXNI=;
+  b=jcGYIL4p+9xqUvkfzBF52fKD5tm9hTCSdfO9fJnNMKgnRVO9uNgW92fm
+   vgbZf/WozTx1u0hMsHfkZKSDC0qaHlfGdnfGHaBtWWCK4nrtu9PI1c2/W
+   eZpO/rodK+nK196CJnIwgBWPGMwJNn/zySfWdeAIk9ETEntupmaLWAV64
+   2V9TZgxuhqjQ3+8Jqo47L/EH9gAUZH2ymnWLZI+Fg8tuSElYGAJ1vYNa1
+   Pq9DveN/RJf2XUXCkUrqpOKXd5cDSJCvcvxEH5pkQom9JEkKEJEuUK8ne
+   7cJDwk3Z2z64FNi/0P7AG/wGN+6CuCfiJNjRKy4owVGHWf8CivuL/cs05
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="342093259"
+X-IronPort-AV: E=Sophos;i="5.99,198,1677571200"; 
+   d="scan'208";a="342093259"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 17:54:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="833736948"
+X-IronPort-AV: E=Sophos;i="5.99,198,1677571200"; 
+   d="scan'208";a="833736948"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 14 Apr 2023 17:54:01 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pnUAy-000aC1-10;
+        Sat, 15 Apr 2023 00:54:00 +0000
+Date:   Sat, 15 Apr 2023 08:53:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jinrong Liang <ljr.kernel@gmail.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     oe-kbuild-all@lists.linux.dev, Like Xu <like.xu.linux@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Aaron Lewis <aaronlewis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jinrong Liang <cloudliang@tencent.com>,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/7] KVM: x86/pmu: Add documentation for fixed ctr on PMU
+ filter
+Message-ID: <202304150850.rx4UDDsB-lkp@intel.com>
+References: <20230414110056.19665-5-cloudliang@tencent.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230414110056.19665-5-cloudliang@tencent.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 13 Apr 2023 16:38:35 +0200 Aleksandr Mikhalitsyn wrote:
-> Sure, I will add next time.
-> 
-> Fixes: 0d01da6afc54 ("bpf: implement getsockopt and setsockopt hooks")
-> 
-> I think it's better to add Stanislav Fomichev to CC.
+Hi Jinrong,
 
-This should go in separately as a fix, right? Not in a -next series.
+kernel test robot noticed the following build warnings:
 
-Also the whole set as is does not build on top of net-next :(
+[auto build test WARNING on a25497a280bbd7bbcc08c87ddb2b3909affc8402]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jinrong-Liang/KVM-selftests-Replace-int-with-uint32_t-for-nevents/20230414-190401
+base:   a25497a280bbd7bbcc08c87ddb2b3909affc8402
+patch link:    https://lore.kernel.org/r/20230414110056.19665-5-cloudliang%40tencent.com
+patch subject: [PATCH 4/7] KVM: x86/pmu: Add documentation for fixed ctr on PMU filter
+reproduce:
+        # https://github.com/intel-lab-lkp/linux/commit/b0effe04478df3b33a26331f48540851c4d33173
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jinrong-Liang/KVM-selftests-Replace-int-with-uint32_t-for-nevents/20230414-190401
+        git checkout b0effe04478df3b33a26331f48540851c4d33173
+        make menuconfig
+        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
+        make htmldocs
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304150850.rx4UDDsB-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> Documentation/virt/kvm/api.rst:5133: WARNING: Definition list ends without a blank line; unexpected unindent.
+
+vim +5133 Documentation/virt/kvm/api.rst
+
+  5130	
+  5131	  FixCtr[i]_is_allowed = (action == ALLOW) && (bitmap & BIT(i)) ||
+  5132	    (action == DENY) && !(bitmap & BIT(i));
+> 5133	  FixCtr[i]_is_denied = !FixCtr[i]_is_allowed;
+  5134	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
