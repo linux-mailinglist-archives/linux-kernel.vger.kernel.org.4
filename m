@@ -2,231 +2,353 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AD1C6E31C7
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 16:19:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 576F26E31CC
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 16:24:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbjDOOTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 10:19:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42522 "EHLO
+        id S229796AbjDOOYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 10:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbjDOOS7 (ORCPT
+        with ESMTP id S229468AbjDOOYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 10:18:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DEB49E1;
-        Sat, 15 Apr 2023 07:18:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B78960B21;
-        Sat, 15 Apr 2023 14:18:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D7F73C433A4;
-        Sat, 15 Apr 2023 14:18:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681568336;
-        bh=jS0bpY0B94N3teaYRFeuB4DDITFUe3GUayl2qqATw4Y=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-        b=LNEqNroCC6vOajujZb9dIYQ0z7DDXijLtYKlOQPj+KDUEcUYap53J74dT7yIz60cp
-         Ytug0jO05So/92ZxfIULe35wdlW/v9bZu/OFg0us/r9S4PywKUc1XB7+05z3cfSy5t
-         eh7YbQD8VWwrBQ5q2N4223Sp84faioecgDyZ7C5iP9Woao+vuNpt3a1/hrAYDQD2ZG
-         8fxX59JOAqvj78iIPAGMU1XmuYp/brjRAqSAuS3SkwRm8D2zYNGd8QXagbL8Tybolg
-         VLTpTegO6kN0lbhJVd9ZGzFF+zRKwsCLYEQGTc5NVk+2D1SJZ+AKaPYh13TJ8V9VU2
-         hgkMN7FpPe8CA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by smtp.lore.kernel.org (Postfix) with ESMTP id B1032C77B70;
-        Sat, 15 Apr 2023 14:18:56 +0000 (UTC)
-From:   Yang Xiwen via B4 Relay 
-        <devnull+forbidden405.outlook.com@kernel.org>
-Date:   Sat, 15 Apr 2023 22:18:46 +0800
-Subject: [PATCH RFC 3/3] binding: mmc: hi3798cv200-dw-mshc: convert to YAML
- and rename to histb-dw-mshc, add compatible of hi3798mv200
+        Sat, 15 Apr 2023 10:24:00 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD0A49EA
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 07:23:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681568638; x=1713104638;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OfnwQm6Bo6FWbilIKA1+eP5Y8qlhKGqRenzmVzOoc4E=;
+  b=Pdrs2mupzL5NYYOMemVunKuf6QoT7W8Siim9B7g/VQOUu25pwQR0e54i
+   BuV0cCUWs2noDfpv/wpieKTe9+haM3oZ+cgx1hfaIJN88DhWxcixSxAsZ
+   +HAMXfRMPJlzftI41ornCCPY6KZyZYgZEB5cOgPiA9ZQ4c2ubf+pGR1U+
+   2SB270ay9hwJYRC3jj3L35uFSM2Q/zpz1KTSCxDbKSDF2iF/wvDPuQjLI
+   yJNfxISFpBqv+L7c8pkgvsFO7Mv2XS3On+1BXwe5eKnooLoDV5thzT+iZ
+   v+65ojVJ/6QBre5Aaoauq9vy66Ym/LimObpM7HefE2S1bbKjpKOFIP84v
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="407538544"
+X-IronPort-AV: E=Sophos;i="5.99,199,1677571200"; 
+   d="scan'208";a="407538544"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2023 07:23:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="1019922219"
+X-IronPort-AV: E=Sophos;i="5.99,199,1677571200"; 
+   d="scan'208";a="1019922219"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 15 Apr 2023 07:23:43 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pngoY-000b6h-2g;
+        Sat, 15 Apr 2023 14:23:42 +0000
+Date:   Sat, 15 Apr 2023 22:22:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jeffrey Hugo <quic_jhugo@quicinc.com>, mani@kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        mhi@lists.linux.dev
+Subject: Re: [PATCH 1/2] bus: mhi: host: Add quirk framework and initial quirk
+Message-ID: <202304152256.QzCwI9iu-lkp@intel.com>
+References: <1681502239-3781-2-git-send-email-quic_jhugo@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230415-mmc-hi3798mv200-v1-3-db5b91d939d4@outlook.com>
-References: <20230415-mmc-hi3798mv200-v1-0-db5b91d939d4@outlook.com>
-In-Reply-To: <20230415-mmc-hi3798mv200-v1-0-db5b91d939d4@outlook.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Yang Xiwen <forbidden405@outlook.com>
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1681568331; l=4836;
- i=forbidden405@outlook.com; s=20230415; h=from:subject:message-id;
- bh=2D/pBZCGAgmdlkmpqO4z/Qn0KjP4597p33+qioc0CGI=;
- b=KJ2kN9GGQjGE1Zfp9lP0qd6w9VrxShZz6xATYcFOjN9efHslM8Fg/Mvmb1tQm4GOpEK4gXWdF
- B7gusXCo1hKCdPU17hO8GB1o3Egx09cZ0kYKmLCJqEc8lB9VlzONOft
-X-Developer-Key: i=forbidden405@outlook.com; a=ed25519;
- pk=hfdpPU3AXR+t7fdv58tXCD4UzRNq+fop2TMJezFlAhM=
-X-Endpoint-Received: by B4 Relay for forbidden405@outlook.com/20230415 with auth_id=44
-X-Original-From: Yang Xiwen <forbidden405@outlook.com>
-Reply-To: <forbidden405@outlook.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1681502239-3781-2-git-send-email-quic_jhugo@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Xiwen <forbidden405@outlook.com>
+Hi Jeffrey,
 
-Hi3798MV200 has an extra clock, also document it here.
+kernel test robot noticed the following build errors:
 
-Signed-off-by: Yang Xiwen <forbidden405@outlook.com>
----
- .../bindings/mmc/hi3798cv200-dw-mshc.txt           | 40 ----------
- .../devicetree/bindings/mmc/histb-dw-mshc.yaml     | 90 ++++++++++++++++++++++
- 2 files changed, 90 insertions(+), 40 deletions(-)
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on drm-tip/drm-tip linus/master v6.3-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/Documentation/devicetree/bindings/mmc/hi3798cv200-dw-mshc.txt b/Documentation/devicetree/bindings/mmc/hi3798cv200-dw-mshc.txt
-deleted file mode 100644
-index a0693b7145f2a..0000000000000
---- a/Documentation/devicetree/bindings/mmc/hi3798cv200-dw-mshc.txt
-+++ /dev/null
-@@ -1,40 +0,0 @@
--* Hisilicon Hi3798CV200 specific extensions to the Synopsys Designware Mobile
--  Storage Host Controller
--
--Read synopsys-dw-mshc.txt for more details
--
--The Synopsys designware mobile storage host controller is used to interface
--a SoC with storage medium such as eMMC or SD/MMC cards. This file documents
--differences between the core Synopsys dw mshc controller properties described
--by synopsys-dw-mshc.txt and the properties used by the Hisilicon Hi3798CV200
--specific extensions to the Synopsys Designware Mobile Storage Host Controller.
--
--Required Properties:
--- compatible: Should contain "hisilicon,hi3798cv200-dw-mshc".
--- clocks: A list of phandle + clock-specifier pairs for the clocks listed
--  in clock-names.
--- clock-names: Should contain the following:
--	"ciu" - The ciu clock described in synopsys-dw-mshc.txt.
--	"biu" - The biu clock described in synopsys-dw-mshc.txt.
--	"ciu-sample" - Hi3798CV200 extended phase clock for ciu sampling.
--	"ciu-drive"  - Hi3798CV200 extended phase clock for ciu driving.
--
--Example:
--
--	emmc: mmc@9830000 {
--		compatible = "hisilicon,hi3798cv200-dw-mshc";
--		reg = <0x9830000 0x10000>;
--		interrupts = <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>;
--		clocks = <&crg HISTB_MMC_CIU_CLK>,
--			 <&crg HISTB_MMC_BIU_CLK>,
--			 <&crg HISTB_MMC_SAMPLE_CLK>,
--			 <&crg HISTB_MMC_DRV_CLK>;
--		clock-names = "ciu", "biu", "ciu-sample", "ciu-drive";
--		fifo-depth = <256>;
--		clock-frequency = <200000000>;
--		cap-mmc-highspeed;
--		mmc-ddr-1_8v;
--		mmc-hs200-1_8v;
--		non-removable;
--		bus-width = <8>;
--	};
-diff --git a/Documentation/devicetree/bindings/mmc/histb-dw-mshc.yaml b/Documentation/devicetree/bindings/mmc/histb-dw-mshc.yaml
-new file mode 100644
-index 0000000000000..05a435185e9da
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mmc/histb-dw-mshc.yaml
-@@ -0,0 +1,90 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mmc/histb-dw-mshc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title:
-+  Hisilicon Hi3798CV200 specific extensions to the Synopsys Designware Mobile
-+  Storage Host Controller
-+
-+maintainers:
-+  - Yang Xiwen <forbidden405@outlook.com>
-+
-+description:
-+  The Synopsys designware mobile storage host controller is used to interface
-+  a SoC with storage medium such as eMMC or SD/MMC cards. This file documents
-+  differences between the core Synopsys dw mshc controller properties described
-+  by synopsys-dw-mshc.txt and the properties used by the Hisilicon Hi3798CV200
-+  specific extensions to the Synopsys Designware Mobile Storage Host Controller.
-+
-+allOf:
-+  - $ref: "synopsys-dw-mshc-common.yaml#"
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: hisilicon,hi3798mv200-dw-mshc
-+    then:
-+      properties:
-+        clocks:
-+          minItems: 5
-+
-+        clock-names:
-+          minItems: 5
-+
-+properties:
-+  compatible:
-+    enum:
-+      - hisilicon,hi3798cv200-dw-mshc
-+      - hisilicon,hi3798mv200-dw-mshc
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    minItems: 4
-+    maxItems: 5
-+    description: A list of phandles for the clocks listed in clock-names
-+
-+  clock-names:
-+    minItems: 4
-+    items:
-+      - const: ciu
-+      - const: biu
-+      - const: ciu-sample
-+      - const: ciu-drive
-+      - const: sap-dll-mode
-+
-+unevaluatedProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+
-+examples:
-+  - |
-+    emmc: mmc@9830000 {
-+            compatible = "hisilicon,hi3798cv200-dw-mshc";
-+            reg = <0x9830000 0x10000>;
-+            interrupts = <35>;
-+            clocks = <&crg 1>,
-+                     <&crg 2>,
-+                     <&crg 3>,
-+                     <&crg 4>;
-+            clock-names = "ciu", "biu", "ciu-sample", "ciu-drive";
-+            fifo-depth = <256>;
-+            clock-frequency = <200000000>;
-+            cap-mmc-highspeed;
-+            mmc-ddr-1_8v;
-+            mmc-hs200-1_8v;
-+            non-removable;
-+            bus-width = <8>;
-+    };
-+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jeffrey-Hugo/bus-mhi-host-Add-quirk-framework-and-initial-quirk/20230415-035846
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/1681502239-3781-2-git-send-email-quic_jhugo%40quicinc.com
+patch subject: [PATCH 1/2] bus: mhi: host: Add quirk framework and initial quirk
+config: i386-randconfig-r036-20230410 (https://download.01.org/0day-ci/archive/20230415/202304152256.QzCwI9iu-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/678cad31c3c8f1b6d772150b98d25e40240e4e14
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jeffrey-Hugo/bus-mhi-host-Add-quirk-framework-and-initial-quirk/20230415-035846
+        git checkout 678cad31c3c8f1b6d772150b98d25e40240e4e14
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304152256.QzCwI9iu-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/bus/mhi/host/init.c:977:2: error: expected expression
+           else {
+           ^
+>> drivers/bus/mhi/host/init.c:1043:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/bus/mhi/host/init.c:1072:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/bus/mhi/host/init.c:1082:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/bus/mhi/host/init.c:1088:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/bus/mhi/host/init.c:1170:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/bus/mhi/host/init.c:1189:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/bus/mhi/host/init.c:1208:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/bus/mhi/host/init.c:1236:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/bus/mhi/host/init.c:1312:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/bus/mhi/host/init.c:1382:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/bus/mhi/host/init.c:1398:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/bus/mhi/host/init.c:1404:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/bus/mhi/host/init.c:1412:1: error: function definition is not allowed here
+   {
+   ^
+>> drivers/bus/mhi/host/init.c:1436:11: error: use of undeclared identifier 'mhi_match'
+           .match = mhi_match,
+                    ^
+>> drivers/bus/mhi/host/init.c:1437:12: error: use of undeclared identifier 'mhi_uevent'; did you mean 'mhi_event'?
+           .uevent = mhi_uevent,
+                     ^~~~~~~~~~
+                     mhi_event
+   drivers/bus/mhi/host/init.c:895:20: note: 'mhi_event' declared here
+           struct mhi_event *mhi_event;
+                             ^
+   drivers/bus/mhi/host/init.c:1442:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/bus/mhi/host/init.c:1448:1: error: function definition is not allowed here
+   {
+   ^
+>> drivers/bus/mhi/host/init.c:1453:19: error: use of undeclared identifier 'mhi_init'
+   postcore_initcall(mhi_init);
+                     ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
+
+
+vim +977 drivers/bus/mhi/host/init.c
+
+   891	
+   892	int mhi_register_controller(struct mhi_controller *mhi_cntrl,
+   893				    const struct mhi_controller_config *config)
+   894	{
+   895		struct mhi_event *mhi_event;
+   896		struct mhi_chan *mhi_chan;
+   897		struct mhi_cmd *mhi_cmd;
+   898		struct mhi_device *mhi_dev;
+   899		u32 soc_info;
+   900		int ret, i;
+   901	
+   902		if (!mhi_cntrl || !mhi_cntrl->cntrl_dev || !mhi_cntrl->regs ||
+   903		    !mhi_cntrl->runtime_get || !mhi_cntrl->runtime_put ||
+   904		    !mhi_cntrl->status_cb || !mhi_cntrl->read_reg ||
+   905		    !mhi_cntrl->write_reg || !mhi_cntrl->nr_irqs ||
+   906		    !mhi_cntrl->irq || !mhi_cntrl->reg_len)
+   907			return -EINVAL;
+   908	
+   909		ret = parse_config(mhi_cntrl, config);
+   910		if (ret)
+   911			return -EINVAL;
+   912	
+   913		mhi_cntrl->mhi_cmd = kcalloc(NR_OF_CMD_RINGS,
+   914					     sizeof(*mhi_cntrl->mhi_cmd), GFP_KERNEL);
+   915		if (!mhi_cntrl->mhi_cmd) {
+   916			ret = -ENOMEM;
+   917			goto err_free_event;
+   918		}
+   919	
+   920		INIT_LIST_HEAD(&mhi_cntrl->transition_list);
+   921		mutex_init(&mhi_cntrl->pm_mutex);
+   922		rwlock_init(&mhi_cntrl->pm_lock);
+   923		spin_lock_init(&mhi_cntrl->transition_lock);
+   924		spin_lock_init(&mhi_cntrl->wlock);
+   925		INIT_WORK(&mhi_cntrl->st_worker, mhi_pm_st_worker);
+   926		init_waitqueue_head(&mhi_cntrl->state_event);
+   927	
+   928		mhi_cntrl->hiprio_wq = alloc_ordered_workqueue("mhi_hiprio_wq", WQ_HIGHPRI);
+   929		if (!mhi_cntrl->hiprio_wq) {
+   930			dev_err(mhi_cntrl->cntrl_dev, "Failed to allocate workqueue\n");
+   931			ret = -ENOMEM;
+   932			goto err_free_cmd;
+   933		}
+   934	
+   935		mhi_cmd = mhi_cntrl->mhi_cmd;
+   936		for (i = 0; i < NR_OF_CMD_RINGS; i++, mhi_cmd++)
+   937			spin_lock_init(&mhi_cmd->lock);
+   938	
+   939		mhi_event = mhi_cntrl->mhi_event;
+   940		for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
+   941			/* Skip for offload events */
+   942			if (mhi_event->offload_ev)
+   943				continue;
+   944	
+   945			mhi_event->mhi_cntrl = mhi_cntrl;
+   946			spin_lock_init(&mhi_event->lock);
+   947			if (mhi_event->data_type == MHI_ER_CTRL)
+   948				tasklet_init(&mhi_event->task, mhi_ctrl_ev_task,
+   949					     (ulong)mhi_event);
+   950			else
+   951				tasklet_init(&mhi_event->task, mhi_ev_task,
+   952					     (ulong)mhi_event);
+   953		}
+   954	
+   955		mhi_chan = mhi_cntrl->mhi_chan;
+   956		for (i = 0; i < mhi_cntrl->max_chan; i++, mhi_chan++) {
+   957			mutex_init(&mhi_chan->mutex);
+   958			init_completion(&mhi_chan->completion);
+   959			rwlock_init(&mhi_chan->lock);
+   960	
+   961			/* used in setting bei field of TRE */
+   962			mhi_event = &mhi_cntrl->mhi_event[mhi_chan->er_index];
+   963			mhi_chan->intmod = mhi_event->intmod;
+   964		}
+   965	
+   966		if (mhi_cntrl->bounce_buf) {
+   967			mhi_cntrl->map_single = mhi_map_single_use_bb;
+   968			mhi_cntrl->unmap_single = mhi_unmap_single_use_bb;
+   969		} else {
+   970			mhi_cntrl->map_single = mhi_map_single_no_bb;
+   971			mhi_cntrl->unmap_single = mhi_unmap_single_no_bb;
+   972		}
+   973	
+   974		/* Read the MHI device info */
+   975		if (mhi_cntrl->quirks & MHI_QUIRK_SOC_HW_VERSION_UNRELIABLE) {
+   976			soc_info = 0;
+ > 977		else {
+   978			ret = mhi_read_reg(mhi_cntrl, mhi_cntrl->regs, SOC_HW_VERSION_OFFS, &soc_info);
+   979			if (ret)
+   980				goto err_destroy_wq;
+   981		}
+   982	
+   983		mhi_cntrl->family_number = FIELD_GET(SOC_HW_VERSION_FAM_NUM_BMSK, soc_info);
+   984		mhi_cntrl->device_number = FIELD_GET(SOC_HW_VERSION_DEV_NUM_BMSK, soc_info);
+   985		mhi_cntrl->major_version = FIELD_GET(SOC_HW_VERSION_MAJOR_VER_BMSK, soc_info);
+   986		mhi_cntrl->minor_version = FIELD_GET(SOC_HW_VERSION_MINOR_VER_BMSK, soc_info);
+   987	
+   988		mhi_cntrl->index = ida_alloc(&mhi_controller_ida, GFP_KERNEL);
+   989		if (mhi_cntrl->index < 0) {
+   990			ret = mhi_cntrl->index;
+   991			goto err_destroy_wq;
+   992		}
+   993	
+   994		ret = mhi_init_irq_setup(mhi_cntrl);
+   995		if (ret)
+   996			goto err_ida_free;
+   997	
+   998		/* Register controller with MHI bus */
+   999		mhi_dev = mhi_alloc_device(mhi_cntrl);
+  1000		if (IS_ERR(mhi_dev)) {
+  1001			dev_err(mhi_cntrl->cntrl_dev, "Failed to allocate MHI device\n");
+  1002			ret = PTR_ERR(mhi_dev);
+  1003			goto error_setup_irq;
+  1004		}
+  1005	
+  1006		mhi_dev->dev_type = MHI_DEVICE_CONTROLLER;
+  1007		mhi_dev->mhi_cntrl = mhi_cntrl;
+  1008		dev_set_name(&mhi_dev->dev, "mhi%d", mhi_cntrl->index);
+  1009		mhi_dev->name = dev_name(&mhi_dev->dev);
+  1010	
+  1011		/* Init wakeup source */
+  1012		device_init_wakeup(&mhi_dev->dev, true);
+  1013	
+  1014		ret = device_add(&mhi_dev->dev);
+  1015		if (ret)
+  1016			goto err_release_dev;
+  1017	
+  1018		mhi_cntrl->mhi_dev = mhi_dev;
+  1019	
+  1020		mhi_create_debugfs(mhi_cntrl);
+  1021	
+  1022		return 0;
+  1023	
+  1024	err_release_dev:
+  1025		put_device(&mhi_dev->dev);
+  1026	error_setup_irq:
+  1027		mhi_deinit_free_irq(mhi_cntrl);
+  1028	err_ida_free:
+  1029		ida_free(&mhi_controller_ida, mhi_cntrl->index);
+  1030	err_destroy_wq:
+  1031		destroy_workqueue(mhi_cntrl->hiprio_wq);
+  1032	err_free_cmd:
+  1033		kfree(mhi_cntrl->mhi_cmd);
+  1034	err_free_event:
+  1035		kfree(mhi_cntrl->mhi_event);
+  1036		vfree(mhi_cntrl->mhi_chan);
+  1037	
+  1038		return ret;
+  1039	}
+  1040	EXPORT_SYMBOL_GPL(mhi_register_controller);
+  1041	
+  1042	void mhi_unregister_controller(struct mhi_controller *mhi_cntrl)
+> 1043	{
+  1044		struct mhi_device *mhi_dev = mhi_cntrl->mhi_dev;
+  1045		struct mhi_chan *mhi_chan = mhi_cntrl->mhi_chan;
+  1046		unsigned int i;
+  1047	
+  1048		mhi_deinit_free_irq(mhi_cntrl);
+  1049		mhi_destroy_debugfs(mhi_cntrl);
+  1050	
+  1051		destroy_workqueue(mhi_cntrl->hiprio_wq);
+  1052		kfree(mhi_cntrl->mhi_cmd);
+  1053		kfree(mhi_cntrl->mhi_event);
+  1054	
+  1055		/* Drop the references to MHI devices created for channels */
+  1056		for (i = 0; i < mhi_cntrl->max_chan; i++, mhi_chan++) {
+  1057			if (!mhi_chan->mhi_dev)
+  1058				continue;
+  1059	
+  1060			put_device(&mhi_chan->mhi_dev->dev);
+  1061		}
+  1062		vfree(mhi_cntrl->mhi_chan);
+  1063	
+  1064		device_del(&mhi_dev->dev);
+  1065		put_device(&mhi_dev->dev);
+  1066	
+  1067		ida_free(&mhi_controller_ida, mhi_cntrl->index);
+  1068	}
+  1069	EXPORT_SYMBOL_GPL(mhi_unregister_controller);
+  1070	
 
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
