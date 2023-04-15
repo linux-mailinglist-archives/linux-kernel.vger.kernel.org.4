@@ -2,103 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C5ED6E33DB
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 23:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B05D6E33E6
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 23:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbjDOV24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 17:28:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33904 "EHLO
+        id S229908AbjDOVuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 17:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjDOV2w (ORCPT
+        with ESMTP id S229600AbjDOVuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 17:28:52 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615AA30C3;
-        Sat, 15 Apr 2023 14:28:50 -0700 (PDT)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1681594128;
-        bh=Serav5NsrGD7AG0O6Mn+YtgEHgPcj/qioSXyB4VmbSc=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=Snq8rnmGEhznB84w1h1GMX2CCLnPQiQYZsr7CzHsiLIF0csWLWmOE5ELA15vljlvC
-         s46bmjPStN3vU9wE2zoXbsvn8jXtSdqRvPv8bz/7Wzn1It6pIsB8hDZSumyA7CR067
-         HSfD1ctfwSw8qR5Krd7KchDszRkk2CAawuIgB+7g=
-Date:   Sat, 15 Apr 2023 23:28:48 +0200
-Subject: [PATCH 2/2] tools/nolibc: add testcase for fork()/waitpid()
+        Sat, 15 Apr 2023 17:50:11 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8AAD35B1
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 14:50:09 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1681595408;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6RF8rETFXCMTOEukxl28OtsTiYOmUtZ5LkzSVRomdEI=;
+        b=bCSe9oIbk38mz6gGtqb83ZHXb79KC5FX34U0HbGtZ0K+gUKZgAlcbCyPtTUyV52BQyjKuJ
+        E83vMU/abAzkt43icmo9xeRb70plOh1pHlSKpvGg6bk21bHoNtjdQKP9zZp82j6mUhMtOB
+        ojAJOA6Wkqt5MqFOlo5LrMJkSrL+ZyDr3dpvj24OJ3ElQcmI4iF7aEYgp0mPLFZfftA005
+        Xb2GFZF53+OLnyrJIbWumxEW/1NA0xIoZrH8FeOOm17fUlpqH+85GFubRgeJ2kNbZtVVKk
+        WDcNqXNo23+jG3bFYvMn04cg7NY1gnKdDk6IvW0WFOyQEaigTi3VqDhm1H8Vsw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1681595408;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6RF8rETFXCMTOEukxl28OtsTiYOmUtZ5LkzSVRomdEI=;
+        b=FGbGIwtE3KdJH2E1FnzqdjS/QofAGcl+GaCS22tt/YdqoNZPnbY2D4F4YdaR0VO/5HSu+T
+        Mg3wmKfzxyS+vyDQ==
+To:     Shanker Donthineni <sdonthineni@nvidia.com>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Michael Walle <michael@walle.cc>, linux-kernel@vger.kernel.org,
+        Vikram Sethi <vsethi@nvidia.com>,
+        Jason Sequeira <jsequeira@nvidia.com>
+Subject: Re: [PATCH v3 0/3] Increase the number of IRQ descriptors for
+ SPARSEIRQ
+In-Reply-To: <3951b23f-bafa-2979-f349-232c509a33fb@nvidia.com>
+References: <20230410155721.3720991-1-sdonthineni@nvidia.com>
+ <3951b23f-bafa-2979-f349-232c509a33fb@nvidia.com>
+Date:   Sat, 15 Apr 2023 23:50:07 +0200
+Message-ID: <87jzycyfw0.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230415-nolibc-fork-v1-2-9747c73651c5@weissschuh.net>
-References: <20230415-nolibc-fork-v1-0-9747c73651c5@weissschuh.net>
-In-Reply-To: <20230415-nolibc-fork-v1-0-9747c73651c5@weissschuh.net>
-To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1681594127; l=1787;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=Serav5NsrGD7AG0O6Mn+YtgEHgPcj/qioSXyB4VmbSc=;
- b=CpgzObVEN4lDAf4txDLUIMfLrZ7bQE/nT95ucHYkuVj5n26guKfZ+O3iP0qg8Ub9+Ilj6WS7g
- cpuzD12N0V7C5TkrMonxcca/bN3j+hm4BHn81dgd4x4FEoZOr1noMTW
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On s390 the arguments to clone() which is used by fork() are different
-than other archs.
-Make sure everything works correctly.
+On Sat, Apr 15 2023 at 10:49, Shanker Donthineni wrote:
+> Hello Thomas,
+>
+> I wanted to update you that all the review comments have been resolved and
+> the necessary fixes for the maple tree have been integrated into the mainline.
+> If there are any outstanding tasks required to consider it for the upcoming
+> v6.4 release, please let me know.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+It's on my todo list and as I'm traveling next week I might not come
+around to review/merge this right now.
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 888da60eb5ba..d294338cf141 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -474,6 +474,25 @@ static int test_getpagesize(void)
- 	return !c;
- }
- 
-+static int test_fork(void)
-+{
-+	int status;
-+	pid_t pid = fork();
-+
-+	switch (pid) {
-+	case -1:
-+		return 1;
-+
-+	case 0:
-+		exit(123);
-+
-+	default:
-+		pid = waitpid(pid, &status, 0);
-+
-+		return pid == -1 || !WIFEXITED(status) || WEXITSTATUS(status) != 123;
-+	}
-+}
-+
- /* Run syscall tests between IDs <min> and <max>.
-  * Return 0 on success, non-zero on failure.
-  */
-@@ -530,6 +549,7 @@ int run_syscall(int min, int max)
- 		CASE_TEST(dup3_0);            tmp = dup3(0, 100, 0);  EXPECT_SYSNE(1, tmp, -1); close(tmp); break;
- 		CASE_TEST(dup3_m1);           tmp = dup3(-1, 100, 0); EXPECT_SYSER(1, tmp, -1, EBADF); if (tmp != -1) close(tmp); break;
- 		CASE_TEST(execve_root);       EXPECT_SYSER(1, execve("/", (char*[]){ [0] = "/", [1] = NULL }, NULL), -1, EACCES); break;
-+		CASE_TEST(fork);              EXPECT_SYSZR(1, test_fork()); break;
- 		CASE_TEST(getdents64_root);   EXPECT_SYSNE(1, test_getdents64("/"), -1); break;
- 		CASE_TEST(getdents64_null);   EXPECT_SYSER(1, test_getdents64("/dev/null"), -1, ENOTDIR); break;
- 		CASE_TEST(gettimeofday_null); EXPECT_SYSZR(1, gettimeofday(NULL, NULL)); break;
+I'll get to it.
 
--- 
-2.40.0
+Thanks,
 
+        tglx
