@@ -2,92 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2AE46E3149
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 14:10:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC1C86E314C
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 14:10:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbjDOMKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 08:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44230 "EHLO
+        id S230211AbjDOMKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 08:10:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbjDOMJ4 (ORCPT
+        with ESMTP id S230164AbjDOMJ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 08:09:56 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251C25243;
-        Sat, 15 Apr 2023 05:09:37 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f09a3c8bbbso1985085e9.0;
-        Sat, 15 Apr 2023 05:09:36 -0700 (PDT)
+        Sat, 15 Apr 2023 08:09:58 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA61961B9
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 05:09:39 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f09ec7a5c6so3721125e9.2
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 05:09:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681560575; x=1684152575;
+        d=gmail.com; s=20221208; t=1681560578; x=1684152578;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=K8x3ikmaTJACOYzpIpbcvsaXlC6/cI+6Eg2IWvlQkq0=;
-        b=s6CnqnzBZ6THc6cnIXQ9tFiKd6HkuMO7PzqDl5qYoVBPz6TLY1hkf210w8sOnAzrei
-         v9NRZuqzkZm3ujvdTD4Q/xqsKFPfppKZJkMHKOw1AXAo0XZJ/iNVur/2UqE3Jlv29kyX
-         WOn43QOaq8pv1V3qHMqN6IwqHfyZW68QFzHs6Q02KpmsgBu7UGSYRrSzvpVoPUtTl+Mh
-         FXMcaHBNr48f9KhhS0WYsUzECx59vCwrezWsHbg5B0XWjTD0sne3p5XHAreuf1/PzvZU
-         3+QyOXL//9FA9+lL8VD4Lx7D8n+ic1FTN1z4dE6iaHk0DOWVvQ9otbUTysRkeHkeJynd
-         4YHg==
+        bh=uCs/sZPWJX1gtmxe2QOizxEtYJfYeMRPWTDbu9h9OZw=;
+        b=YiAIwHkEdr1/ZOqe4wrEnjAkwubUYyEEsIgZJmhmGfHlK0LKA53CcITGmXAghMQBuz
+         6MRaBAU4wGJycNw7yeijfstj6n9tZPM2lh9Cywavhxrkhfw7TcyV4hZ22Y7J+qTNZ056
+         LTQzBaMljW/5rTInhGkr/FyQne/l2VdWGonxsOZEpVVOo8HWpqx+T82g+AJotzXhUID2
+         6KX1iDN6jZqcoVqLiJceQkLrDr8d009jVLk4taTeTmD7nll7Oaz2v1IrIw28a4UR6rZs
+         1Fw2fsLN4dHsXX19tJ1xX4DQJRFRvi54ASHGEqFMM2Lo2jtrFl5LOSrd5TEoi32AUHDN
+         POEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681560575; x=1684152575;
+        d=1e100.net; s=20221208; t=1681560578; x=1684152578;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=K8x3ikmaTJACOYzpIpbcvsaXlC6/cI+6Eg2IWvlQkq0=;
-        b=HTDfjj++AwsLL5WAtuB31ot1KMCIeo4fq3CsmppmIUxX5aq5sxVQwSKswrg7IWFSAo
-         mLAs+juZi2GV7BzbE8DF++daRC3EaSvNAFWAC8ifWeQl0Em7xlxac+TR2vWXdJqA8g4b
-         LlHKi+qkz8bWhTe6vPiesENMSS4XPrmPvh7xzGB6j0io/9FCzSvcGqgEcNMAEzK90aEW
-         jgp2D79936OkzGs8X7XVZwVlKskkIIDkCbvBQlSQuz3mJDX/7HqXrZAAHlAmgLtbP/ED
-         7ZIZIG8cSxiToW5/Uj76imEcBBCsEDOYs06pado0u4RNc+fjNZnZgAx3EThEA0Dg6FfC
-         DlVw==
-X-Gm-Message-State: AAQBX9feUpSUZXvsGfhYPOCtwn7JNebkpx3wOJ3675H5UbiJnMs4qbiY
-        OccfnP+Oby646pqGJlv4ftg6hpzTiwvqrA==
-X-Google-Smtp-Source: AKy350YomYNfdZqxeUoplG58e3G8aFqN6nmBy7aau2fgnqPuY2DvZIwHvG83m+klTmm1CrIhE9BoRQ==
-X-Received: by 2002:a5d:6a42:0:b0:2f2:3a72:1cfa with SMTP id t2-20020a5d6a42000000b002f23a721cfamr1388788wrw.15.1681560575329;
-        Sat, 15 Apr 2023 05:09:35 -0700 (PDT)
+        bh=uCs/sZPWJX1gtmxe2QOizxEtYJfYeMRPWTDbu9h9OZw=;
+        b=cJFV2oiocb7pdUQ0vHN5wNS53Pl1+cZkwH7Zwah50HnLL5iy7iVu+LwRah8i1wrjvU
+         oVRuYN1AcRTVH14kxAEDAPpON2trC3wIUc39A2mYixNkmGwrQnSYoEoFBzT15RIYu0uT
+         gf4lF6h2SfmbyM/l4JBy1102y4BjE/lbjIUYG8A/usr0t0g/4oE4eSYLDn0CpHTq74tS
+         b2Gtj4QrKlT3QQ5pMSp/oswQgFI3pAwzEdfbum5UDsSPi99j8/8PjOsNFIzaA05dIJjD
+         B+QWImmYJeUJg8+GtYfLxk8D3JO8SGXs/z5RFqHLhiTY17Om2ZcLxLBMPytxpMiPRqVN
+         EDFA==
+X-Gm-Message-State: AAQBX9ejRx58qBPnfmZ8LrGjptlOZxKYRymyG2pxzKh3O+ofXbJOsdQt
+        i32guXkPDlBE3GD/YNvy2mc=
+X-Google-Smtp-Source: AKy350ZY0kxE6Dj9vHHELAdPslsinf/e7e/CwaX0yrhE9WGneZun20b+Rt4XRweObiUEpVFsW7zlKw==
+X-Received: by 2002:adf:efd0:0:b0:2db:bdc2:f8da with SMTP id i16-20020adfefd0000000b002dbbdc2f8damr1451812wrp.71.1681560577772;
+        Sat, 15 Apr 2023 05:09:37 -0700 (PDT)
 Received: from lucifer.home ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
-        by smtp.googlemail.com with ESMTPSA id t5-20020adfeb85000000b002e71156b0fcsm5651091wrn.6.2023.04.15.05.09.33
+        by smtp.googlemail.com with ESMTPSA id z12-20020a5d440c000000b002f5fa5fb793sm5487919wrq.60.2023.04.15.05.09.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Apr 2023 05:09:34 -0700 (PDT)
+        Sat, 15 Apr 2023 05:09:36 -0700 (PDT)
 From:   Lorenzo Stoakes <lstoakes@gmail.com>
 To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>
 Cc:     Matthew Wilcox <willy@infradead.org>,
         David Hildenbrand <david@redhat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
-        netdev@vger.kernel.org, io-uring@vger.kernel.org,
-        bpf@vger.kernel.org, Lorenzo Stoakes <lstoakes@gmail.com>
-Subject: [PATCH v3 6/7] mm/gup: remove vmas parameter from pin_user_pages()
-Date:   Sat, 15 Apr 2023 13:09:32 +0100
-Message-Id: <fa5487e54dfae725c84dfd7297b06567340165bd.1681558407.git.lstoakes@gmail.com>
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Lorenzo Stoakes <lstoakes@gmail.com>
+Subject: [PATCH v3 7/7] mm/gup: remove vmas array from internal GUP functions
+Date:   Sat, 15 Apr 2023 13:09:35 +0100
+Message-Id: <217d9369b15d657128746beeaf6d65c03214df42.1681558407.git.lstoakes@gmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <cover.1681558407.git.lstoakes@gmail.com>
 References: <cover.1681558407.git.lstoakes@gmail.com>
@@ -103,226 +76,412 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After the introduction of FOLL_SAME_FILE we no longer require vmas for any
-invocation of pin_user_pages(), so eliminate this parameter from the
-function and all callers.
+Now we have eliminated all callers to GUP APIs which use the vmas
+parameter, eliminate it altogether.
 
-This clears the way to removing the vmas parameter from GUP altogether.
+This eliminates a class of bugs where vmas might have been kept around
+longer than the mmap_lock and thus we need not be concerned about locks
+being dropped during this operation leaving behind dangling pointers.
+
+This simplifies the GUP API and makes it considerably clearer as to its
+purpose - follow flags are applied and if pinning, an array of pages is
+returned.
 
 Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
 ---
- arch/powerpc/mm/book3s64/iommu_api.c       | 2 +-
- drivers/infiniband/hw/qib/qib_user_pages.c | 2 +-
- drivers/infiniband/hw/usnic/usnic_uiom.c   | 2 +-
- drivers/infiniband/sw/siw/siw_mem.c        | 2 +-
- drivers/media/v4l2-core/videobuf-dma-sg.c  | 2 +-
- drivers/vdpa/vdpa_user/vduse_dev.c         | 2 +-
- drivers/vhost/vdpa.c                       | 2 +-
- include/linux/mm.h                         | 3 +--
- io_uring/rsrc.c                            | 2 +-
- mm/gup.c                                   | 9 +++------
- mm/gup_test.c                              | 9 ++++-----
- net/xdp/xdp_umem.c                         | 2 +-
- 12 files changed, 17 insertions(+), 22 deletions(-)
+ include/linux/hugetlb.h | 10 ++---
+ mm/gup.c                | 83 +++++++++++++++--------------------------
+ mm/hugetlb.c            | 24 +++++-------
+ 3 files changed, 45 insertions(+), 72 deletions(-)
 
-diff --git a/arch/powerpc/mm/book3s64/iommu_api.c b/arch/powerpc/mm/book3s64/iommu_api.c
-index 81d7185e2ae8..d19fb1f3007d 100644
---- a/arch/powerpc/mm/book3s64/iommu_api.c
-+++ b/arch/powerpc/mm/book3s64/iommu_api.c
-@@ -105,7 +105,7 @@ static long mm_iommu_do_alloc(struct mm_struct *mm, unsigned long ua,
+diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+index 28703fe22386..2735e7a2b998 100644
+--- a/include/linux/hugetlb.h
++++ b/include/linux/hugetlb.h
+@@ -141,9 +141,8 @@ int copy_hugetlb_page_range(struct mm_struct *, struct mm_struct *,
+ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
+ 				unsigned long address, unsigned int flags);
+ long follow_hugetlb_page(struct mm_struct *, struct vm_area_struct *,
+-			 struct page **, struct vm_area_struct **,
+-			 unsigned long *, unsigned long *, long, unsigned int,
+-			 int *);
++			 struct page **, unsigned long *, unsigned long *,
++			 long, unsigned int, int *);
+ void unmap_hugepage_range(struct vm_area_struct *,
+ 			  unsigned long, unsigned long, struct page *,
+ 			  zap_flags_t);
+@@ -297,9 +296,8 @@ static inline struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
  
- 		ret = pin_user_pages(ua + (entry << PAGE_SHIFT), n,
- 				FOLL_WRITE | FOLL_LONGTERM,
--				mem->hpages + entry, NULL);
-+				mem->hpages + entry);
- 		if (ret == n) {
- 			pinned += n;
- 			continue;
-diff --git a/drivers/infiniband/hw/qib/qib_user_pages.c b/drivers/infiniband/hw/qib/qib_user_pages.c
-index f693bc753b6b..1bb7507325bc 100644
---- a/drivers/infiniband/hw/qib/qib_user_pages.c
-+++ b/drivers/infiniband/hw/qib/qib_user_pages.c
-@@ -111,7 +111,7 @@ int qib_get_user_pages(unsigned long start_page, size_t num_pages,
- 		ret = pin_user_pages(start_page + got * PAGE_SIZE,
- 				     num_pages - got,
- 				     FOLL_LONGTERM | FOLL_WRITE,
--				     p + got, NULL);
-+				     p + got);
- 		if (ret < 0) {
- 			mmap_read_unlock(current->mm);
- 			goto bail_release;
-diff --git a/drivers/infiniband/hw/usnic/usnic_uiom.c b/drivers/infiniband/hw/usnic/usnic_uiom.c
-index 2a5cac2658ec..84e0f41e7dfa 100644
---- a/drivers/infiniband/hw/usnic/usnic_uiom.c
-+++ b/drivers/infiniband/hw/usnic/usnic_uiom.c
-@@ -140,7 +140,7 @@ static int usnic_uiom_get_pages(unsigned long addr, size_t size, int writable,
- 		ret = pin_user_pages(cur_base,
- 				     min_t(unsigned long, npages,
- 				     PAGE_SIZE / sizeof(struct page *)),
--				     gup_flags, page_list, NULL);
-+				     gup_flags, page_list);
- 
- 		if (ret < 0)
- 			goto out;
-diff --git a/drivers/infiniband/sw/siw/siw_mem.c b/drivers/infiniband/sw/siw/siw_mem.c
-index f51ab2ccf151..e6e25f15567d 100644
---- a/drivers/infiniband/sw/siw/siw_mem.c
-+++ b/drivers/infiniband/sw/siw/siw_mem.c
-@@ -422,7 +422,7 @@ struct siw_umem *siw_umem_get(u64 start, u64 len, bool writable)
- 		umem->page_chunk[i].plist = plist;
- 		while (nents) {
- 			rv = pin_user_pages(first_page_va, nents, foll_flags,
--					    plist, NULL);
-+					    plist);
- 			if (rv < 0)
- 				goto out_sem_up;
- 
-diff --git a/drivers/media/v4l2-core/videobuf-dma-sg.c b/drivers/media/v4l2-core/videobuf-dma-sg.c
-index 53001532e8e3..405b89ea1054 100644
---- a/drivers/media/v4l2-core/videobuf-dma-sg.c
-+++ b/drivers/media/v4l2-core/videobuf-dma-sg.c
-@@ -180,7 +180,7 @@ static int videobuf_dma_init_user_locked(struct videobuf_dmabuf *dma,
- 		data, size, dma->nr_pages);
- 
- 	err = pin_user_pages(data & PAGE_MASK, dma->nr_pages, gup_flags,
--			     dma->pages, NULL);
-+			     dma->pages);
- 
- 	if (err != dma->nr_pages) {
- 		dma->nr_pages = (err >= 0) ? err : 0;
-diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
-index 0c3b48616a9f..1f80254604f0 100644
---- a/drivers/vdpa/vdpa_user/vduse_dev.c
-+++ b/drivers/vdpa/vdpa_user/vduse_dev.c
-@@ -995,7 +995,7 @@ static int vduse_dev_reg_umem(struct vduse_dev *dev,
- 		goto out;
- 
- 	pinned = pin_user_pages(uaddr, npages, FOLL_LONGTERM | FOLL_WRITE,
--				page_list, NULL);
-+				page_list);
- 	if (pinned != npages) {
- 		ret = pinned < 0 ? pinned : -ENOMEM;
- 		goto out;
-diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-index 7be9d9d8f01c..4317128c1c62 100644
---- a/drivers/vhost/vdpa.c
-+++ b/drivers/vhost/vdpa.c
-@@ -952,7 +952,7 @@ static int vhost_vdpa_pa_map(struct vhost_vdpa *v,
- 	while (npages) {
- 		sz2pin = min_t(unsigned long, npages, list_size);
- 		pinned = pin_user_pages(cur_base, sz2pin,
--					gup_flags, page_list, NULL);
-+					gup_flags, page_list);
- 		if (sz2pin != pinned) {
- 			if (pinned < 0) {
- 				ret = pinned;
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 1bfe73a2b6d3..363e3d0d46f4 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2382,8 +2382,7 @@ long pin_user_pages_remote(struct mm_struct *mm,
- long get_user_pages(unsigned long start, unsigned long nr_pages,
- 		    unsigned int gup_flags, struct page **pages);
- long pin_user_pages(unsigned long start, unsigned long nr_pages,
--		    unsigned int gup_flags, struct page **pages,
--		    struct vm_area_struct **vmas);
-+		    unsigned int gup_flags, struct page **pages);
- long get_user_pages_unlocked(unsigned long start, unsigned long nr_pages,
- 		    struct page **pages, unsigned int gup_flags);
- long pin_user_pages_unlocked(unsigned long start, unsigned long nr_pages,
-diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
-index 56de4d7bfc2b..bd45681de660 100644
---- a/io_uring/rsrc.c
-+++ b/io_uring/rsrc.c
-@@ -1156,7 +1156,7 @@ struct page **io_pin_pages(unsigned long ubuf, unsigned long len, int *npages)
- 	mmap_read_lock(current->mm);
- 	pret = pin_user_pages(ubuf, nr_pages,
- 			      FOLL_WRITE | FOLL_LONGTERM | FOLL_SAME_FILE,
--			      pages, NULL);
-+			      pages);
- 	if (pret == nr_pages) {
- 		/*
- 		 * lookup the first VMA, we require that all VMAs in range
+ static inline long follow_hugetlb_page(struct mm_struct *mm,
+ 			struct vm_area_struct *vma, struct page **pages,
+-			struct vm_area_struct **vmas, unsigned long *position,
+-			unsigned long *nr_pages, long i, unsigned int flags,
+-			int *nonblocking)
++			unsigned long *position, unsigned long *nr_pages,
++			long i, unsigned int flags, int *nonblocking)
+ {
+ 	BUG();
+ 	return 0;
 diff --git a/mm/gup.c b/mm/gup.c
-index 3954ce499a4a..714970ef3b30 100644
+index 714970ef3b30..385e428a4acb 100644
 --- a/mm/gup.c
 +++ b/mm/gup.c
-@@ -3132,8 +3132,6 @@ EXPORT_SYMBOL(pin_user_pages_remote);
-  * @gup_flags:	flags modifying lookup behaviour
+@@ -1028,8 +1028,6 @@ static int check_vma_flags(struct vm_area_struct *vma, struct file *file,
   * @pages:	array that receives pointers to the pages pinned.
-  *		Should be at least nr_pages long.
+  *		Should be at least nr_pages long. Or NULL, if caller
+  *		only intends to ensure the pages are faulted in.
 - * @vmas:	array of pointers to vmas corresponding to each page.
 - *		Or NULL if the caller does not require them.
+  * @locked:     whether we're still with the mmap_lock held
   *
-  * Nearly the same as get_user_pages(), except that FOLL_TOUCH is not set, and
-  * FOLL_PIN is set.
-@@ -3142,15 +3140,14 @@ EXPORT_SYMBOL(pin_user_pages_remote);
-  * see Documentation/core-api/pin_user_pages.rst for details.
+  * Returns either number of pages pinned (which may be less than the
+@@ -1043,8 +1041,6 @@ static int check_vma_flags(struct vm_area_struct *vma, struct file *file,
+  *
+  * The caller is responsible for releasing returned @pages, via put_page().
+  *
+- * @vmas are valid only as long as mmap_lock is held.
+- *
+  * Must be called with mmap_lock held.  It may be released.  See below.
+  *
+  * __get_user_pages walks a process's page tables and takes a reference to
+@@ -1080,7 +1076,7 @@ static int check_vma_flags(struct vm_area_struct *vma, struct file *file,
+ static long __get_user_pages(struct mm_struct *mm,
+ 		unsigned long start, unsigned long nr_pages,
+ 		unsigned int gup_flags, struct page **pages,
+-		struct vm_area_struct **vmas, int *locked)
++		int *locked)
+ {
+ 	long ret = 0, i = 0;
+ 	struct vm_area_struct *vma = NULL;
+@@ -1124,9 +1120,9 @@ static long __get_user_pages(struct mm_struct *mm,
+ 			file = vma->vm_file;
+ 
+ 			if (is_vm_hugetlb_page(vma)) {
+-				i = follow_hugetlb_page(mm, vma, pages, vmas,
+-						&start, &nr_pages, i,
+-						gup_flags, locked);
++				i = follow_hugetlb_page(mm, vma, pages,
++							&start, &nr_pages, i,
++							gup_flags, locked);
+ 				if (!*locked) {
+ 					/*
+ 					 * We've got a VM_FAULT_RETRY
+@@ -1191,10 +1187,6 @@ static long __get_user_pages(struct mm_struct *mm,
+ 			ctx.page_mask = 0;
+ 		}
+ next_page:
+-		if (vmas) {
+-			vmas[i] = vma;
+-			ctx.page_mask = 0;
+-		}
+ 		page_increm = 1 + (~(start >> PAGE_SHIFT) & ctx.page_mask);
+ 		if (page_increm > nr_pages)
+ 			page_increm = nr_pages;
+@@ -1349,7 +1341,6 @@ static __always_inline long __get_user_pages_locked(struct mm_struct *mm,
+ 						unsigned long start,
+ 						unsigned long nr_pages,
+ 						struct page **pages,
+-						struct vm_area_struct **vmas,
+ 						int *locked,
+ 						unsigned int flags)
+ {
+@@ -1387,7 +1378,7 @@ static __always_inline long __get_user_pages_locked(struct mm_struct *mm,
+ 	pages_done = 0;
+ 	for (;;) {
+ 		ret = __get_user_pages(mm, start, nr_pages, flags, pages,
+-				       vmas, locked);
++				       locked);
+ 		if (!(flags & FOLL_UNLOCKABLE)) {
+ 			/* VM_FAULT_RETRY couldn't trigger, bypass */
+ 			pages_done = ret;
+@@ -1451,7 +1442,7 @@ static __always_inline long __get_user_pages_locked(struct mm_struct *mm,
+ 
+ 		*locked = 1;
+ 		ret = __get_user_pages(mm, start, 1, flags | FOLL_TRIED,
+-				       pages, NULL, locked);
++				       pages, locked);
+ 		if (!*locked) {
+ 			/* Continue to retry until we succeeded */
+ 			BUG_ON(ret != 0);
+@@ -1549,7 +1540,7 @@ long populate_vma_page_range(struct vm_area_struct *vma,
+ 	 * not result in a stack expansion that recurses back here.
+ 	 */
+ 	ret = __get_user_pages(mm, start, nr_pages, gup_flags,
+-				NULL, NULL, locked ? locked : &local_locked);
++			       NULL, locked ? locked : &local_locked);
+ 	lru_add_drain();
+ 	return ret;
+ }
+@@ -1607,7 +1598,7 @@ long faultin_vma_page_range(struct vm_area_struct *vma, unsigned long start,
+ 		return -EINVAL;
+ 
+ 	ret = __get_user_pages(mm, start, nr_pages, gup_flags,
+-				NULL, NULL, locked);
++			       NULL, locked);
+ 	lru_add_drain();
+ 	return ret;
+ }
+@@ -1675,8 +1666,7 @@ int __mm_populate(unsigned long start, unsigned long len, int ignore_errors)
+ #else /* CONFIG_MMU */
+ static long __get_user_pages_locked(struct mm_struct *mm, unsigned long start,
+ 		unsigned long nr_pages, struct page **pages,
+-		struct vm_area_struct **vmas, int *locked,
+-		unsigned int foll_flags)
++		int *locked, unsigned int foll_flags)
+ {
+ 	struct vm_area_struct *vma;
+ 	bool must_unlock = false;
+@@ -1720,8 +1710,7 @@ static long __get_user_pages_locked(struct mm_struct *mm, unsigned long start,
+ 			if (pages[i])
+ 				get_page(pages[i]);
+ 		}
+-		if (vmas)
+-			vmas[i] = vma;
++
+ 		start = (start + PAGE_SIZE) & PAGE_MASK;
+ 	}
+ 
+@@ -1902,8 +1891,7 @@ struct page *get_dump_page(unsigned long addr)
+ 	int locked = 0;
+ 	int ret;
+ 
+-	ret = __get_user_pages_locked(current->mm, addr, 1, &page, NULL,
+-				      &locked,
++	ret = __get_user_pages_locked(current->mm, addr, 1, &page, &locked,
+ 				      FOLL_FORCE | FOLL_DUMP | FOLL_GET);
+ 	return (ret == 1) ? page : NULL;
+ }
+@@ -2076,7 +2064,6 @@ static long __gup_longterm_locked(struct mm_struct *mm,
+ 				  unsigned long start,
+ 				  unsigned long nr_pages,
+ 				  struct page **pages,
+-				  struct vm_area_struct **vmas,
+ 				  int *locked,
+ 				  unsigned int gup_flags)
+ {
+@@ -2084,13 +2071,13 @@ static long __gup_longterm_locked(struct mm_struct *mm,
+ 	long rc, nr_pinned_pages;
+ 
+ 	if (!(gup_flags & FOLL_LONGTERM))
+-		return __get_user_pages_locked(mm, start, nr_pages, pages, vmas,
++		return __get_user_pages_locked(mm, start, nr_pages, pages,
+ 					       locked, gup_flags);
+ 
+ 	flags = memalloc_pin_save();
+ 	do {
+ 		nr_pinned_pages = __get_user_pages_locked(mm, start, nr_pages,
+-							  pages, vmas, locked,
++							  pages, locked,
+ 							  gup_flags);
+ 		if (nr_pinned_pages <= 0) {
+ 			rc = nr_pinned_pages;
+@@ -2108,9 +2095,8 @@ static long __gup_longterm_locked(struct mm_struct *mm,
+  * Check that the given flags are valid for the exported gup/pup interface, and
+  * update them with the required flags that the caller must have set.
   */
- long pin_user_pages(unsigned long start, unsigned long nr_pages,
--		    unsigned int gup_flags, struct page **pages,
--		    struct vm_area_struct **vmas)
-+		    unsigned int gup_flags, struct page **pages)
+-static bool is_valid_gup_args(struct page **pages, struct vm_area_struct **vmas,
+-			      int *locked, unsigned int *gup_flags_p,
+-			      unsigned int to_set)
++static bool is_valid_gup_args(struct page **pages, int *locked,
++			      unsigned int *gup_flags_p, unsigned int to_set)
+ {
+ 	unsigned int gup_flags = *gup_flags_p;
+ 
+@@ -2152,13 +2138,6 @@ static bool is_valid_gup_args(struct page **pages, struct vm_area_struct **vmas,
+ 			 (gup_flags & FOLL_PCI_P2PDMA)))
+ 		return false;
+ 
+-	/*
+-	 * Can't use VMAs with locked, as locked allows GUP to unlock
+-	 * which invalidates the vmas array
+-	 */
+-	if (WARN_ON_ONCE(vmas && (gup_flags & FOLL_UNLOCKABLE)))
+-		return false;
+-
+ 	*gup_flags_p = gup_flags;
+ 	return true;
+ }
+@@ -2227,11 +2206,11 @@ long get_user_pages_remote(struct mm_struct *mm,
+ {
+ 	int local_locked = 1;
+ 
+-	if (!is_valid_gup_args(pages, NULL, locked, &gup_flags,
++	if (!is_valid_gup_args(pages, locked, &gup_flags,
+ 			       FOLL_TOUCH | FOLL_REMOTE))
+ 		return -EINVAL;
+ 
+-	return __get_user_pages_locked(mm, start, nr_pages, pages, NULL,
++	return __get_user_pages_locked(mm, start, nr_pages, pages,
+ 				       locked ? locked : &local_locked,
+ 				       gup_flags);
+ }
+@@ -2266,11 +2245,11 @@ long get_user_pages(unsigned long start, unsigned long nr_pages,
  {
  	int locked = 1;
  
--	if (!is_valid_gup_args(pages, vmas, NULL, &gup_flags, FOLL_PIN))
-+	if (!is_valid_gup_args(pages, NULL, NULL, &gup_flags, FOLL_PIN))
+-	if (!is_valid_gup_args(pages, NULL, NULL, &gup_flags, FOLL_TOUCH))
++	if (!is_valid_gup_args(pages, NULL, &gup_flags, FOLL_TOUCH))
+ 		return -EINVAL;
+ 
+ 	return __get_user_pages_locked(current->mm, start, nr_pages, pages,
+-				       NULL, &locked, gup_flags);
++				       &locked, gup_flags);
+ }
+ EXPORT_SYMBOL(get_user_pages);
+ 
+@@ -2294,12 +2273,12 @@ long get_user_pages_unlocked(unsigned long start, unsigned long nr_pages,
+ {
+ 	int locked = 0;
+ 
+-	if (!is_valid_gup_args(pages, NULL, NULL, &gup_flags,
++	if (!is_valid_gup_args(pages, NULL, &gup_flags,
+ 			       FOLL_TOUCH | FOLL_UNLOCKABLE))
+ 		return -EINVAL;
+ 
+ 	return __get_user_pages_locked(current->mm, start, nr_pages, pages,
+-				       NULL, &locked, gup_flags);
++				       &locked, gup_flags);
+ }
+ EXPORT_SYMBOL(get_user_pages_unlocked);
+ 
+@@ -2982,7 +2961,7 @@ static int internal_get_user_pages_fast(unsigned long start,
+ 	start += nr_pinned << PAGE_SHIFT;
+ 	pages += nr_pinned;
+ 	ret = __gup_longterm_locked(current->mm, start, nr_pages - nr_pinned,
+-				    pages, NULL, &locked,
++				    pages, &locked,
+ 				    gup_flags | FOLL_TOUCH | FOLL_UNLOCKABLE);
+ 	if (ret < 0) {
+ 		/*
+@@ -3024,7 +3003,7 @@ int get_user_pages_fast_only(unsigned long start, int nr_pages,
+ 	 * FOLL_FAST_ONLY is required in order to match the API description of
+ 	 * this routine: no fall back to regular ("slow") GUP.
+ 	 */
+-	if (!is_valid_gup_args(pages, NULL, NULL, &gup_flags,
++	if (!is_valid_gup_args(pages, NULL, &gup_flags,
+ 			       FOLL_GET | FOLL_FAST_ONLY))
+ 		return -EINVAL;
+ 
+@@ -3057,7 +3036,7 @@ int get_user_pages_fast(unsigned long start, int nr_pages,
+ 	 * FOLL_GET, because gup fast is always a "pin with a +1 page refcount"
+ 	 * request.
+ 	 */
+-	if (!is_valid_gup_args(pages, NULL, NULL, &gup_flags, FOLL_GET))
++	if (!is_valid_gup_args(pages, NULL, &gup_flags, FOLL_GET))
+ 		return -EINVAL;
+ 	return internal_get_user_pages_fast(start, nr_pages, gup_flags, pages);
+ }
+@@ -3082,7 +3061,7 @@ EXPORT_SYMBOL_GPL(get_user_pages_fast);
+ int pin_user_pages_fast(unsigned long start, int nr_pages,
+ 			unsigned int gup_flags, struct page **pages)
+ {
+-	if (!is_valid_gup_args(pages, NULL, NULL, &gup_flags, FOLL_PIN))
++	if (!is_valid_gup_args(pages, NULL, &gup_flags, FOLL_PIN))
+ 		return -EINVAL;
+ 	return internal_get_user_pages_fast(start, nr_pages, gup_flags, pages);
+ }
+@@ -3115,10 +3094,10 @@ long pin_user_pages_remote(struct mm_struct *mm,
+ {
+ 	int local_locked = 1;
+ 
+-	if (!is_valid_gup_args(pages, NULL, locked, &gup_flags,
++	if (!is_valid_gup_args(pages, locked, &gup_flags,
+ 			       FOLL_PIN | FOLL_TOUCH | FOLL_REMOTE))
+ 		return 0;
+-	return __gup_longterm_locked(mm, start, nr_pages, pages, NULL,
++	return __gup_longterm_locked(mm, start, nr_pages, pages,
+ 				     locked ? locked : &local_locked,
+ 				     gup_flags);
+ }
+@@ -3144,10 +3123,10 @@ long pin_user_pages(unsigned long start, unsigned long nr_pages,
+ {
+ 	int locked = 1;
+ 
+-	if (!is_valid_gup_args(pages, NULL, NULL, &gup_flags, FOLL_PIN))
++	if (!is_valid_gup_args(pages, NULL, &gup_flags, FOLL_PIN))
  		return 0;
  	return __gup_longterm_locked(current->mm, start, nr_pages,
--				     pages, vmas, &locked, gup_flags);
-+				     pages, NULL, &locked, gup_flags);
+-				     pages, NULL, &locked, gup_flags);
++				     pages, &locked, gup_flags);
  }
  EXPORT_SYMBOL(pin_user_pages);
  
-diff --git a/mm/gup_test.c b/mm/gup_test.c
-index 9ba8ea23f84e..1668ce0e0783 100644
---- a/mm/gup_test.c
-+++ b/mm/gup_test.c
-@@ -146,18 +146,17 @@ static int __gup_test_ioctl(unsigned int cmd,
- 						 pages + i);
- 			break;
- 		case PIN_BASIC_TEST:
--			nr = pin_user_pages(addr, nr, gup->gup_flags, pages + i,
--					    NULL);
-+			nr = pin_user_pages(addr, nr, gup->gup_flags, pages + i);
- 			break;
- 		case PIN_LONGTERM_BENCHMARK:
- 			nr = pin_user_pages(addr, nr,
- 					    gup->gup_flags | FOLL_LONGTERM,
--					    pages + i, NULL);
-+					    pages + i);
- 			break;
- 		case DUMP_USER_PAGES_TEST:
- 			if (gup->test_flags & GUP_TEST_FLAG_DUMP_PAGES_USE_PIN)
- 				nr = pin_user_pages(addr, nr, gup->gup_flags,
--						    pages + i, NULL);
-+						    pages + i);
- 			else
- 				nr = get_user_pages(addr, nr, gup->gup_flags,
- 						    pages + i);
-@@ -270,7 +269,7 @@ static inline int pin_longterm_test_start(unsigned long arg)
- 							gup_flags, pages);
- 		else
- 			cur_pages = pin_user_pages(addr, remaining_pages,
--						   gup_flags, pages, NULL);
-+						   gup_flags, pages);
- 		if (cur_pages < 0) {
- 			pin_longterm_test_stop();
- 			ret = cur_pages;
-diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
-index 02207e852d79..06cead2b8e34 100644
---- a/net/xdp/xdp_umem.c
-+++ b/net/xdp/xdp_umem.c
-@@ -103,7 +103,7 @@ static int xdp_umem_pin_pages(struct xdp_umem *umem, unsigned long address)
+@@ -3161,11 +3140,11 @@ long pin_user_pages_unlocked(unsigned long start, unsigned long nr_pages,
+ {
+ 	int locked = 0;
  
- 	mmap_read_lock(current->mm);
- 	npgs = pin_user_pages(address, umem->npgs,
--			      gup_flags | FOLL_LONGTERM, &umem->pgs[0], NULL);
-+			      gup_flags | FOLL_LONGTERM, &umem->pgs[0]);
- 	mmap_read_unlock(current->mm);
+-	if (!is_valid_gup_args(pages, NULL, NULL, &gup_flags,
++	if (!is_valid_gup_args(pages, NULL, &gup_flags,
+ 			       FOLL_PIN | FOLL_TOUCH | FOLL_UNLOCKABLE))
+ 		return 0;
  
- 	if (npgs != umem->npgs) {
+-	return __gup_longterm_locked(current->mm, start, nr_pages, pages, NULL,
++	return __gup_longterm_locked(current->mm, start, nr_pages, pages,
+ 				     &locked, gup_flags);
+ }
+ EXPORT_SYMBOL(pin_user_pages_unlocked);
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index a08fb47fb200..85138a0394b9 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -6371,17 +6371,14 @@ int hugetlb_mfill_atomic_pte(pte_t *dst_pte,
+ }
+ #endif /* CONFIG_USERFAULTFD */
+ 
+-static void record_subpages_vmas(struct page *page, struct vm_area_struct *vma,
+-				 int refs, struct page **pages,
+-				 struct vm_area_struct **vmas)
++static void record_subpages(struct page *page, struct vm_area_struct *vma,
++			    int refs, struct page **pages)
+ {
+ 	int nr;
+ 
+ 	for (nr = 0; nr < refs; nr++) {
+ 		if (likely(pages))
+ 			pages[nr] = nth_page(page, nr);
+-		if (vmas)
+-			vmas[nr] = vma;
+ 	}
+ }
+ 
+@@ -6454,9 +6451,9 @@ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
+ }
+ 
+ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+-			 struct page **pages, struct vm_area_struct **vmas,
+-			 unsigned long *position, unsigned long *nr_pages,
+-			 long i, unsigned int flags, int *locked)
++			 struct page **pages, unsigned long *position,
++			 unsigned long *nr_pages, long i, unsigned int flags,
++			 int *locked)
+ {
+ 	unsigned long pfn_offset;
+ 	unsigned long vaddr = *position;
+@@ -6584,7 +6581,7 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+ 		 * If subpage information not requested, update counters
+ 		 * and skip the same_page loop below.
+ 		 */
+-		if (!pages && !vmas && !pfn_offset &&
++		if (!pages && !pfn_offset &&
+ 		    (vaddr + huge_page_size(h) < vma->vm_end) &&
+ 		    (remainder >= pages_per_huge_page(h))) {
+ 			vaddr += huge_page_size(h);
+@@ -6599,11 +6596,10 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+ 		refs = min3(pages_per_huge_page(h) - pfn_offset, remainder,
+ 		    (vma->vm_end - ALIGN_DOWN(vaddr, PAGE_SIZE)) >> PAGE_SHIFT);
+ 
+-		if (pages || vmas)
+-			record_subpages_vmas(nth_page(page, pfn_offset),
+-					     vma, refs,
+-					     likely(pages) ? pages + i : NULL,
+-					     vmas ? vmas + i : NULL);
++		if (pages)
++			record_subpages(nth_page(page, pfn_offset),
++					vma, refs,
++					likely(pages) ? pages + i : NULL);
+ 
+ 		if (pages) {
+ 			/*
 -- 
 2.40.0
 
