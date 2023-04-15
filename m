@@ -2,116 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A8B6E3016
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 11:31:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 674556E301D
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 11:34:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjDOJbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 05:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44954 "EHLO
+        id S229961AbjDOJeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 05:34:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjDOJbp (ORCPT
+        with ESMTP id S229948AbjDOJeQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 05:31:45 -0400
-Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929013C15
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 02:31:43 -0700 (PDT)
-Received: by mail-il1-f207.google.com with SMTP id 7-20020a921907000000b003260dffae47so6437912ilz.17
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 02:31:43 -0700 (PDT)
+        Sat, 15 Apr 2023 05:34:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 823749F
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 02:33:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681551207;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yiqPklxUzRy8bqs+v/ZpMBXMKYs89gD+rYERGCmxvBI=;
+        b=NSzsuY3nh20hYKR5r63/OntVkBwtUdSwYVQi5ne3bwsnVCvkSyp3REmpdB+pmQh/CQxb3U
+        xdt51IRHR5Tp4EFPhnxO0Jc/Opk0PD1Z1dnhJVNyORgLgpmVw0E3RO0NLuy07NCU0cmrd3
+        y00iarI++EwbiAty4ByULvjdJMz+hU0=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-614-HqchGOurP8uFcjnUp0WcAw-1; Sat, 15 Apr 2023 05:33:26 -0400
+X-MC-Unique: HqchGOurP8uFcjnUp0WcAw-1
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-94a355c0f93so293205066b.2
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 02:33:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681551103; x=1684143103;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sQWY3p8eNhIUMjpqZ712oTMmutyZYotMgmBqh/S/Tic=;
-        b=BM9iymoWl6BptUYNZ3dLX/sCxMhyQ79TmZfO3IAUdSsvPS2Hwlh9/+m1R+8rt3fCmH
-         7xtcE9Vvz1sxtHr0H6/mgnydhoN52GixpHyQamwY7d/txY2fZpPkwpoyWEz8STP6wjwq
-         N5oaovuFuZzEWcBGBjxzGFAX5bxhwRzXScpN4+OTcmXbgQltHNGzm9/5Q1Nq4PjV023H
-         M2hvzpVJRWJtsxgQ7e8rqVrDTWwJ9Ogtn9hxPz9v+8vLZ9F1kb3SWtLIqhtM3h0eZJIz
-         mlnndCLQWd8ZRzs2/SFPnuGgf0RrTTmdsLOOu0qkPTYMUIqSN142jMBcOlb3mxtc4YF7
-         F7rw==
-X-Gm-Message-State: AAQBX9eKGepOuC6psnPNAQr6tpSLBOQT7GVuDaaslVquLrkblRlQLiyP
-        DPkapGQd4McN9FiZ74xqIvpQm+Efd5hi6SL2O4FVLsa+pwY5
-X-Google-Smtp-Source: AKy350bDKViPVFB5V4Rguz0ij4tDbQlW7qW7YQRJ6WRetGv4+9qvK2JGZ0REdn56TwnUfzHuIqwbWniGlNMn9ClJ6s1q3o1ZV8Wh
+        d=1e100.net; s=20221208; t=1681551205; x=1684143205;
+        h=content-transfer-encoding:in-reply-to:references:to
+         :content-language:subject:cc:user-agent:mime-version:date:message-id
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yiqPklxUzRy8bqs+v/ZpMBXMKYs89gD+rYERGCmxvBI=;
+        b=NXIGXQrAhd+Z11astO2fToC5PYv47HuaL1WQuHa99n+dOz31MzjVWm6mUPfNPJgfVq
+         TO8FCxjic4F+05aFaD/0P2ZgfSVbeblaj6dxEOJkz062bE9oABTgfsnEQrmE9xIzZDL3
+         PJQ1Q1PWgA6WJLU4yzZbFMDU5v2GE7Ui/pZqfbof0ATBU/pyEWS1SZKrCNZ+3rBSbE3N
+         6I1EMHtS/fpq5HJqoc5Xd9mPhrrw2DSXZ435HUQhQKt/fSyvVc2rfP7Nb/wlAsGQxjRE
+         tqaz3DZ/NRui5n9FKPLtg11bhMi4tCpDWRD6Df6TcmMRYOaM+96QlT8GroXwIzkp8v9U
+         jMwQ==
+X-Gm-Message-State: AAQBX9d3L4Cy9GKqTFWM/VQLCPUyVOsMVXfBbxZgBfPX15W7rF9DhjXm
+        hob67qh+eL9k1FmpgS+Yov6nS1Tkrzn7QaObSYwr8V+WqCv2P/wBsH4WtL27mDfT3osZhe111dk
+        SPqP+tKHOl+XrnDVK8HD39YtM8NIE8NMK
+X-Received: by 2002:aa7:d04e:0:b0:505:7d54:db93 with SMTP id n14-20020aa7d04e000000b005057d54db93mr8621900edo.21.1681551204995;
+        Sat, 15 Apr 2023 02:33:24 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YF2Zbojdxq6qbQxtDvNXENyG1SKgwEvrcmid1+4koV/BuLd+OMKg6WCD3kviyV5EY7ijM6YA==
+X-Received: by 2002:aa7:d04e:0:b0:505:7d54:db93 with SMTP id n14-20020aa7d04e000000b005057d54db93mr8621886edo.21.1681551204598;
+        Sat, 15 Apr 2023 02:33:24 -0700 (PDT)
+Received: from [192.168.42.222] (194-45-78-10.static.kviknet.net. [194.45.78.10])
+        by smtp.gmail.com with ESMTPSA id o24-20020aa7c7d8000000b005067d089aafsm2138743eds.11.2023.04.15.02.33.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 15 Apr 2023 02:33:24 -0700 (PDT)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <164fc8a0-0248-76dc-be53-706eb36a9ec2@redhat.com>
+Date:   Sat, 15 Apr 2023 11:33:22 +0200
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:42cc:b0:3ec:46d4:e15 with SMTP id
- bm12-20020a05663842cc00b003ec46d40e15mr6393826jab.3.1681551102867; Sat, 15
- Apr 2023 02:31:42 -0700 (PDT)
-Date:   Sat, 15 Apr 2023 02:31:42 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002882fb05f95ca0c2@google.com>
-Subject: [syzbot] [hfs?] WARNING in check_flush_dependency (2)
-From:   syzbot <syzbot+f60c5689d74d066ddd1a@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Cc:     brouer@redhat.com, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, xdp-hints@xdp-project.net
+Subject: Re: [PATCH net-next v6 2/3] net: stmmac: add Rx HWTS metadata to XDP
+ receive pkt
+Content-Language: en-US
+To:     Song Yoong Siang <yoong.siang.song@intel.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Alexander Duyck <alexanderduyck@fb.com>,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        Jacob Keller <jacob.e.keller@intel.com>
+References: <20230415064503.3225835-1-yoong.siang.song@intel.com>
+ <20230415064503.3225835-3-yoong.siang.song@intel.com>
+In-Reply-To: <20230415064503.3225835-3-yoong.siang.song@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot found the following issue on:
+On 15/04/2023 08.45, Song Yoong Siang wrote:
+> Add receive hardware timestamp metadata support via kfunc to XDP receive
+> packets.
+> 
+> Suggested-by: Stanislav Fomichev <sdf@google.com>
+> Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
+> Acked-by: Stanislav Fomichev <sdf@google.com>
+> ---
+>   drivers/net/ethernet/stmicro/stmmac/stmmac.h  |  3 ++
+>   .../net/ethernet/stmicro/stmmac/stmmac_main.c | 40 ++++++++++++++++++-
+>   2 files changed, 42 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac.h b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+> index ac8ccf851708..07ea5ab0a60b 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+> @@ -94,6 +94,9 @@ struct stmmac_rx_buffer {
+>   
+>   struct stmmac_xdp_buff {
+>   	struct xdp_buff xdp;
+> +	struct stmmac_priv *priv;
+> +	struct dma_desc *desc;
+> +	struct dma_desc *ndesc;
+>   };
 
-HEAD commit:    0d3eb744aed4 Merge tag 'urgent-rcu.2023.04.07a' of git://g..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=132ae59bc80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c21559e740385326
-dashboard link: https://syzkaller.appspot.com/bug?extid=f60c5689d74d066ddd1a
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Thanks for the adjustments.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/a02928003efa/disk-0d3eb744.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/7839447005a4/vmlinux-0d3eb744.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/d26ab3184148/bzImage-0d3eb744.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f60c5689d74d066ddd1a@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-workqueue: WQ_MEM_RECLAIM dio/loop3:dio_aio_complete_work is flushing !WQ_MEM_RECLAIM events_long:flush_mdb
-WARNING: CPU: 1 PID: 5167 at kernel/workqueue.c:2729 check_flush_dependency+0x29b/0x3f0 kernel/workqueue.c:2729
-Modules linked in:
-CPU: 1 PID: 5167 Comm: kworker/1:4 Not tainted 6.3.0-rc6-syzkaller-00016-g0d3eb744aed4 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
-Workqueue: dio/loop3 dio_aio_complete_work
-RIP: 0010:check_flush_dependency+0x29b/0x3f0 kernel/workqueue.c:2729
-Code: 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 3f 01 00 00 48 8b 53 18 49 8d b6 60 01 00 00 4d 89 e0 48 c7 c7 c0 67 4b 8a e8 75 e3 f8 ff <0f> 0b e9 e8 fd ff ff e8 19 5e 30 00 65 4c 8b 2c 25 80 b8 03 00 4c
-RSP: 0018:ffffc9000478fa60 EFLAGS: 00010086
-RAX: 0000000000000000 RBX: ffff88802a40f500 RCX: 0000000000000000
-RDX: ffff8880213357c0 RSI: ffffffff814b6237 RDI: 0000000000000001
-RBP: ffff888012471400 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: ffffffff82502670
-R13: 0000000000000000 R14: ffff88802b3cf400 R15: ffffc9000478fb00
-FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020710000 CR3: 000000003c040000 CR4: 0000000000350ee0
-Call Trace:
- <TASK>
- start_flush_work kernel/workqueue.c:3133 [inline]
- __flush_work+0x281/0xb60 kernel/workqueue.c:3173
- hfs_file_fsync+0x108/0x1a0 fs/hfs/inode.c:683
- vfs_fsync_range+0x13e/0x230 fs/sync.c:188
- generic_write_sync include/linux/fs.h:2452 [inline]
- dio_complete+0x796/0xa80 fs/direct-io.c:309
- process_one_work+0x991/0x15c0 kernel/workqueue.c:2390
- worker_thread+0x669/0x1090 kernel/workqueue.c:2537
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
