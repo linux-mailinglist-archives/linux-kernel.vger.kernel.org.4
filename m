@@ -2,115 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE9B66E2E06
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 02:54:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9FA46E2E16
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 03:01:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbjDOAyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 20:54:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56344 "EHLO
+        id S229729AbjDOBB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 21:01:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjDOAyH (ORCPT
+        with ESMTP id S229568AbjDOBB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 20:54:07 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09514EFB;
-        Fri, 14 Apr 2023 17:54:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681520045; x=1713056045;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BaBaSZvIdqqeUdPYY6SOwnbn8OIbBnqhJrQSQnGFXNI=;
-  b=jcGYIL4p+9xqUvkfzBF52fKD5tm9hTCSdfO9fJnNMKgnRVO9uNgW92fm
-   vgbZf/WozTx1u0hMsHfkZKSDC0qaHlfGdnfGHaBtWWCK4nrtu9PI1c2/W
-   eZpO/rodK+nK196CJnIwgBWPGMwJNn/zySfWdeAIk9ETEntupmaLWAV64
-   2V9TZgxuhqjQ3+8Jqo47L/EH9gAUZH2ymnWLZI+Fg8tuSElYGAJ1vYNa1
-   Pq9DveN/RJf2XUXCkUrqpOKXd5cDSJCvcvxEH5pkQom9JEkKEJEuUK8ne
-   7cJDwk3Z2z64FNi/0P7AG/wGN+6CuCfiJNjRKy4owVGHWf8CivuL/cs05
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="342093259"
-X-IronPort-AV: E=Sophos;i="5.99,198,1677571200"; 
-   d="scan'208";a="342093259"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 17:54:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="833736948"
-X-IronPort-AV: E=Sophos;i="5.99,198,1677571200"; 
-   d="scan'208";a="833736948"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 14 Apr 2023 17:54:01 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pnUAy-000aC1-10;
-        Sat, 15 Apr 2023 00:54:00 +0000
-Date:   Sat, 15 Apr 2023 08:53:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jinrong Liang <ljr.kernel@gmail.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     oe-kbuild-all@lists.linux.dev, Like Xu <like.xu.linux@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Aaron Lewis <aaronlewis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jinrong Liang <cloudliang@tencent.com>,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/7] KVM: x86/pmu: Add documentation for fixed ctr on PMU
- filter
-Message-ID: <202304150850.rx4UDDsB-lkp@intel.com>
-References: <20230414110056.19665-5-cloudliang@tencent.com>
+        Fri, 14 Apr 2023 21:01:27 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FD94C30;
+        Fri, 14 Apr 2023 18:01:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=HuvJIncN8aFUliTWQ7g2baezC5OHGU7tzKlMYWi/RtU=; b=B0fuWDeiDcj+zjit6RptExvuKE
+        hLJW57hDfopXZs8gWmeEolk8lC34Ps3FnSGah6Wij69ZpPdG7uV/3JOMyJS4FIBo87kWwF0duX4Xw
+        EQTSbYOPWbqMYHQeQK8HYIXp4nlpvLlo18l19yOWpfQi4GhnlUXgt0GPya0wxom7dNEqPAxwjTJvC
+        oMzo/bOor6+KGDyRJsQKgwuTqbDGtShW9ZG06tJSMEt7d6TI62MAXe2ymhGxvpcqFV7Mv00aI7RDC
+        CcpzdcT1uTxpuff/4rZhWXIWGSbGjD//yzJ05FWqQwr+57mN6e2m4PSuEgFKEcjGM8RqxhRJV1y4z
+        X0tUyxaA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pnUI0-00Ax0X-2t;
+        Sat, 15 Apr 2023 01:01:16 +0000
+Date:   Fri, 14 Apr 2023 18:01:16 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     Pankaj Raghav <p.raghav@samsung.com>, brauner@kernel.org,
+        willy@infradead.org, viro@zeniv.linux.org.uk,
+        akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gost.dev@samsung.com
+Subject: Re: [RFC 0/4] convert create_page_buffers to create_folio_buffers
+Message-ID: <ZDn3XPMA024t+C1x@bombadil.infradead.org>
+References: <CGME20230414110825eucas1p1ed4d16627889ef8542dfa31b1183063d@eucas1p1.samsung.com>
+ <20230414110821.21548-1-p.raghav@samsung.com>
+ <1e68a118-d177-a218-5139-c8f13793dbbf@suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230414110056.19665-5-cloudliang@tencent.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1e68a118-d177-a218-5139-c8f13793dbbf@suse.de>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jinrong,
+On Fri, Apr 14, 2023 at 03:47:13PM +0200, Hannes Reinecke wrote:
+> On 4/14/23 13:08, Pankaj Raghav wrote:
+> > One of the first kernel panic we hit when we try to increase the
+> > block size > 4k is inside create_page_buffers()[1]. Even though buffer.c
+> > function do not support large folios (folios > PAGE_SIZE) at the moment,
+> > these changes are required when we want to remove that constraint.
 
-kernel test robot noticed the following build warnings:
+> Funnily enough, I've been tinkering along the same lines, and ended up with
+> pretty similar patches.
+> I've had to use two additional patches to get my modified 'brd' driver off
+> the ground with logical blocksize of 16k:
+> - mm/filemap: allocate folios according to the blocksize
+>   (will be sending the patch separately)
+> - Modify read_folio() to use the correct order:
+> 
+> @@ -2333,13 +2395,15 @@ int block_read_full_folio(struct folio *folio,
+> get_block_t *get_block)
+>         if (IS_ENABLED(CONFIG_FS_VERITY) && IS_VERITY(inode))
+>                 limit = inode->i_sb->s_maxbytes;
+> 
+> -       VM_BUG_ON_FOLIO(folio_test_large(folio), folio);
+> -
+>         head = create_folio_buffers(folio, inode, 0);
+>         blocksize = head->b_size;
+>         bbits = block_size_bits(blocksize);
+> 
+> -       iblock = (sector_t)folio->index << (PAGE_SHIFT - bbits);
+> +       if (WARN_ON(PAGE_SHIFT < bbits)) {
+> +               iblock = (sector_t)folio->index >> (bbits - PAGE_SHIFT);
+> +       } else {
+> +               iblock = (sector_t)folio->index << (PAGE_SHIFT - bbits);
+> +       }
+>         lblock = (limit+blocksize-1) >> bbits;
+>         bh = head;
+>         nr = 0;
 
-[auto build test WARNING on a25497a280bbd7bbcc08c87ddb2b3909affc8402]
+At a quick glance I think both approaches (unless Hannes already did it)
+seem to just miss that pesky static *arr[MAX_BUF_PER_PAGE], and so I
+think we need to:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jinrong-Liang/KVM-selftests-Replace-int-with-uint32_t-for-nevents/20230414-190401
-base:   a25497a280bbd7bbcc08c87ddb2b3909affc8402
-patch link:    https://lore.kernel.org/r/20230414110056.19665-5-cloudliang%40tencent.com
-patch subject: [PATCH 4/7] KVM: x86/pmu: Add documentation for fixed ctr on PMU filter
-reproduce:
-        # https://github.com/intel-lab-lkp/linux/commit/b0effe04478df3b33a26331f48540851c4d33173
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jinrong-Liang/KVM-selftests-Replace-int-with-uint32_t-for-nevents/20230414-190401
-        git checkout b0effe04478df3b33a26331f48540851c4d33173
-        make menuconfig
-        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
-        make htmldocs
+a) dynamically allocate those now
+b) do a cursory review of the users of that and prepare them
+   to grok buffer heads which are blocksize based rather than
+   PAGE_SIZE based. So we just try to kill MAX_BUF_PER_PAGE.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304150850.rx4UDDsB-lkp@intel.com/
+Without a) I think buffers after PAGE_SIZE won't get submit_bh() or lock for
+bs > PAGE_SIZE right now.
 
-All warnings (new ones prefixed by >>):
-
->> Documentation/virt/kvm/api.rst:5133: WARNING: Definition list ends without a blank line; unexpected unindent.
-
-vim +5133 Documentation/virt/kvm/api.rst
-
-  5130	
-  5131	  FixCtr[i]_is_allowed = (action == ALLOW) && (bitmap & BIT(i)) ||
-  5132	    (action == DENY) && !(bitmap & BIT(i));
-> 5133	  FixCtr[i]_is_denied = !FixCtr[i]_is_allowed;
-  5134	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Luis
