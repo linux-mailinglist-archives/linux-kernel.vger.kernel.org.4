@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A8E6E30DB
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 12:48:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9FD16E30DD
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 12:48:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbjDOKsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 06:48:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48458 "EHLO
+        id S229899AbjDOKsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 06:48:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbjDOKsE (ORCPT
+        with ESMTP id S230143AbjDOKsE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 15 Apr 2023 06:48:04 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7AC7D8A;
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50FC8AF19;
         Sat, 15 Apr 2023 03:47:35 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id qb20so51462141ejc.6;
+Received: by mail-ej1-x62e.google.com with SMTP id gc14so6756387ejc.5;
         Sat, 15 Apr 2023 03:47:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681555623; x=1684147623;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ICwYyWWnryvHm9RgRWeq29kRBlsUBNW7tslN8BXiwmU=;
-        b=BQaKk6QpiVmZPeB/smhkVOuNZTbb+v8ly+PlkeCAAUt25cyNgPCVm9EHDY1zU5H9ZJ
-         GVarHQ5Bc6ZcGPe6Bwfk8vERzbJADby9E/E4YAXf9GrGff/klt/bFP/Lm3NC4VKujCGF
-         vHOa1yCSPHf70VHMBwULihW2kIzTwHzKKADr3KbFPA53nKl5Xb6wT9FbFoZv8LTZ/mH5
-         hTjRz4qA8W12+1+3cOV2vzKvjJMUW0G5cSRcoXl0bdyEgPAPNH3nS2aL9/6bZcLTxOI3
-         hPzl/BZxx9dUBa0lM+AOa+Ts1Dh7s6E2VR25Q7p8TuWCo5L7ZgLE4cxSLqulgNyQgrIz
-         MzVQ==
+        d=gmail.com; s=20221208; t=1681555624; x=1684147624;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9pUd8DFQ/mMGaJuS7CXpgBKGgZF1BMCPB7h8W33HCwg=;
+        b=n5tydzgrJ8BvqSB5++nyIu0SF8/YOb1MSjRmH8/IFtW5mQWsPuRdyIOra6V10T6FZV
+         hGgTYwMF+lx8KLw1plktt251TOYSkKZ9vv5zpyJ8NQF1MJjbBbQA4mpO6bcHTyRnBRMm
+         nS9OooZA+VKqtHhBWUP8wUwCmNH8wJhM/7icFMUGeecgrDfxtMBRJ58l5wAPAU3I3F4v
+         T1xy306yEAhHINS82+ZJAiM9qUo2CN03M4jNl7fH2SsfQN8YfnvNJR4nx2PLNSpX4TUK
+         g1Aeo04jMyInkcrxEsesYnIRVLdVKQOoC8/C5jvr1FocICGeaq03k4eS7wodptjJP17R
+         NSEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681555623; x=1684147623;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ICwYyWWnryvHm9RgRWeq29kRBlsUBNW7tslN8BXiwmU=;
-        b=Toj0hslV3eSu4GkIKYe0GOYsuMlI8f0w5GpYbaHjxeXkFlxjZN587UEfnEt3eD/ZLk
-         h/eaq7bvcSDdflXXoIxyJ8lC9VNqHCZbgBNoJ7W7QaMVFnNqV7n5614yfYc0pikDhdJb
-         Ng9vQ3l7DIviECTVBheIonMR62b07JmF2iT6oL8pPyFfYCf2AuBtxwjJeKR3oXqt9dzX
-         omrdjbvTQcohSIMCNp06hXDIVcFUHGQxvz0zy8tV09WOv8gHHB+1UU45sMPqfod5vXay
-         5T/1ZeaSbvcTDb6A2uv3VGcdzW4NS4ijXIom7AIjXmGJNStdZIXH1Ze/GTVWJmLGEVGI
-         8WWw==
-X-Gm-Message-State: AAQBX9dxQJs5OrbhhSBo+QxdolF61wWj18xGWpaVZF3iWUyJdYegc03y
-        ISSWcQWZk/kKM0AtSC/Putw=
-X-Google-Smtp-Source: AKy350ZlZmmQo025rfm2e2tAa9xyZl6HKwCyENZ72HZZ0DvAjQTuASLgS7n6KD8a24YZf10jRtRI2A==
-X-Received: by 2002:a17:907:2087:b0:94e:fe0f:b2be with SMTP id pv7-20020a170907208700b0094efe0fb2bemr1577373ejb.14.1681555622742;
-        Sat, 15 Apr 2023 03:47:02 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681555624; x=1684147624;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9pUd8DFQ/mMGaJuS7CXpgBKGgZF1BMCPB7h8W33HCwg=;
+        b=Iix+PbmE3aXg8q9FzFjpGmg2yPMGXGV51xPA7YUDL5R0mXrzDX10BCASB43YV0yQIc
+         WzVI4t7Xc5UvTZMnq9Ak/bzJms+EZWTPxZZMV4c2/urt1BgQ+kLD+dvCWda/KIzKH1FF
+         63AcFBepFKkWIzUhXbnBrfmAHeyctsc0PDJ2t5vX4lnfjxlQEqa5tphjgHA2tlcVLJ3l
+         zlI4nvyy4l9pKv1NlXyrGJEcEZy+AmCh8/sRhdF8Irz/PMYT8erWeUcypQsjLWJrpEzL
+         743rV/Vf4A5hmwximYdflc3riwsU0jCC+9GeCfhALNLOxfXBXHDSmIuTRn9IJWHG6HhU
+         bDdw==
+X-Gm-Message-State: AAQBX9cKHdgZhnYNbc4HudmmFzxD+CTFvzbE3xQHgv1qnshR7hubRG0k
+        ySyyvPQbi9HTDtYwTejXweTAHsKsWNniz0W2
+X-Google-Smtp-Source: AKy350aJNghSC5CfNyPgKkWXs0FMN8fkENsNCl8unVGCaGJStsvyvk7XtDGK5pCnk/0RAbSApiKWog==
+X-Received: by 2002:a17:906:2a45:b0:94f:1a23:2f1b with SMTP id k5-20020a1709062a4500b0094f1a232f1bmr1247720eje.24.1681555624222;
+        Sat, 15 Apr 2023 03:47:04 -0700 (PDT)
 Received: from localhost.localdomain (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
-        by smtp.gmail.com with ESMTPSA id m15-20020a170906720f00b00947ab65d932sm3607034ejk.83.2023.04.15.03.47.01
+        by smtp.gmail.com with ESMTPSA id m15-20020a170906720f00b00947ab65d932sm3607034ejk.83.2023.04.15.03.47.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Apr 2023 03:47:02 -0700 (PDT)
+        Sat, 15 Apr 2023 03:47:03 -0700 (PDT)
 From:   Jernej Skrabec <jernej.skrabec@gmail.com>
 To:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
         rfoss@kernel.org, robh+dt@kernel.org,
@@ -60,10 +61,12 @@ Cc:     Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-media@vger.kernel.org,
         hverkuil-cisco@xs4all.nl, Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: [PATCH 0/3] drm/bridge: dw_hdmi: allow to disable CEC from DT
-Date:   Sat, 15 Apr 2023 12:46:10 +0200
-Message-Id: <20230415104613.61224-1-jernej.skrabec@gmail.com>
+Subject: [PATCH 1/3] dt-bindings: display: synopsys,dw-hdmi: Add property for disabling CEC
+Date:   Sat, 15 Apr 2023 12:46:11 +0200
+Message-Id: <20230415104613.61224-2-jernej.skrabec@gmail.com>
 X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230415104613.61224-1-jernej.skrabec@gmail.com>
+References: <20230415104613.61224-1-jernej.skrabec@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,26 +79,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Boards can have perfectly working DW HDMI CEC implementation but they
-may prefer to use bit banged implementation instead. This is the
-situation on Beelink X2.
+Even though some DW-HDMI controllers have perfectly usable HDMI-CEC
+implementation, some boards might prefer not to use it or even use
+software implementation instead.
 
-Add DW HDMI DT property for disabling CEC. This prevents confusion on
-userspace side by not exposing unused CEC interface.
+Add property for disabling CEC so driver doesn't expose unused CEC
+interface, if CEC pin isn't connected anywhere.
 
-Best regards,
-Jernej
-
-Jernej Skrabec (3):
-  dt-bindings: display: synopsys,dw-hdmi: Add property for disabling CEC
-  drm/bridge: dw_hdmi: Handle snps,disable-cec property
-  ARM: dts: sun8i: h3: beelink-x2: Disable DW-HDMI CEC
-
+Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+---
  .../devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml | 5 +++++
- arch/arm/boot/dts/sun8i-h3-beelink-x2.dts                    | 1 +
- drivers/gpu/drm/bridge/synopsys/dw-hdmi.c                    | 4 +++-
- 3 files changed, 9 insertions(+), 1 deletion(-)
+ 1 file changed, 5 insertions(+)
 
+diff --git a/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml b/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
+index 4b7e54a8f037..624d32c024f6 100644
+--- a/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
++++ b/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
+@@ -48,6 +48,11 @@ properties:
+   interrupts:
+     maxItems: 1
+ 
++  snps,disable-cec:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description:
++      Disable HDMI-CEC.
++
+ additionalProperties: true
+ 
+ ...
 -- 
 2.40.0
 
