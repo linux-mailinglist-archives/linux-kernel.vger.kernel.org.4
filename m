@@ -2,192 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 625686E89AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 07:45:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA166E3029
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 11:51:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233747AbjDTFpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 01:45:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45514 "EHLO
+        id S229962AbjDOJvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 05:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233224AbjDTFpR (ORCPT
+        with ESMTP id S229561AbjDOJvs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 01:45:17 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1A53A97;
-        Wed, 19 Apr 2023 22:45:15 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1a6715ee82fso8176925ad.1;
-        Wed, 19 Apr 2023 22:45:15 -0700 (PDT)
+        Sat, 15 Apr 2023 05:51:48 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0106F30FA;
+        Sat, 15 Apr 2023 02:51:46 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id ud9so51469691ejc.7;
+        Sat, 15 Apr 2023 02:51:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681969515; x=1684561515;
+        d=gmail.com; s=20221208; t=1681552305; x=1684144305;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8Tf2VpWhxjAYxcYUQ0lyc/cD0H8jUE/mITS0goQbaSM=;
-        b=kmHGRQyXSOAb2hb/c/TdQ7b70sLmKBkMMlesr8i5GI5t8tp0Wfu9UYbw+5lDh4zc6w
-         pfV3aLuPQSzcKGJphND4fCxArwCqz2jgYaoSzANMQnQ5YPkIUiuR8+jSEqLDZXHvv/Bf
-         KREiyP+WlVuCf69MkVWr5EOyvQpaOxBq+19N0Jp8e3Y4AyKWu/g+vyGQysy9mn3L17ia
-         nDq5wf7b0i0031yybcp1BQUItDAS/eO5R1ivAo4RG4Us9gax6DpnqI0vyJFV03GoSqq7
-         xvStIdET0pZ24j7Qj9BntbwOVw9oRnCSzRUaL9XRH7umcsfDGAjr4H02k291U/lMcw7/
-         61sg==
+        bh=HWQ55XCgxMzVrYbC4f0gRBhCKgR8TSk192DndIkYVbU=;
+        b=D10Ide1QWyGQiItP6shdmRzVzxuiDNMeNaZhIi8tgc+Xf0lJm5xo71AgHGFGMhqnHF
+         MdesI/Oh24NeXwgb0HNK7zq7dwz6sKXXIUWXyTLj5r1+G0lxGHQ9B03SvECb4vcEyTPw
+         dPXzcXYY/Fn7wJiKFlljVscbPuGPevY/qV09k7cXEBqvnDoo8RAw+CEwHkilfQPn6AT7
+         iHCNs76q3cY4mIyMJHeRZVyl+wX7NzcTwo1CDGufBL3Og1B4P5LrdNgfRIe+2QOJYgG5
+         RCYBY9tSpd3FKtK1/olJikqbVt4CDUaJnvRQjS+E6QqTOLaPUZ1Q3CKt6KcRWcjjoEsm
+         JJwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681969515; x=1684561515;
+        d=1e100.net; s=20221208; t=1681552305; x=1684144305;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8Tf2VpWhxjAYxcYUQ0lyc/cD0H8jUE/mITS0goQbaSM=;
-        b=Fo/DvwRdxPD7aOaKca9xVAgU9+6mJg87bRNYjPMEaDARme+w8dimEb/avct+hHlsT7
-         y7J0qBfZ3Cdeis4hmiz2dqktzWPQ3BtLF/TAkIbU2AM7tNf7chE67hD9a8nDVgySTokF
-         ksTyXiVm5+4g+g3Tk3TTp0AzTBFwa2nFcnRPpUq6MLRsGlJK8e4OZvgYBy2oSgXzKxdW
-         tlNoMl1MpVfpU2GLcErLYjZ2HQC7YAu9W0bcIeF7Ee1Z7C52DiyDeTQIiL68ZwVHe5AZ
-         RLAHNd7F0Xg5ZopcpFYAW4mBY7FG5e4xff8CkBV4/MFkVnhcKmhNoVZc2QY/+eloSxuC
-         8tvw==
-X-Gm-Message-State: AAQBX9dUt9eI9lfTt4uLEx2h88HR+hX6mxFNjoF/AoQp6qzkyJV1AJRg
-        P9ZuSj1yUtqx4LsMtJ7e118=
-X-Google-Smtp-Source: AKy350Y0Rncfr/8NyRfa6Y+/CLdM0DMxQ/jGouIv344inzmImgPcIc3YFQVpA9L2MYOQdMEKKcdOBg==
-X-Received: by 2002:a17:902:c3c3:b0:1a2:1922:985b with SMTP id j3-20020a170902c3c300b001a21922985bmr340590plj.59.1681969515199;
-        Wed, 19 Apr 2023 22:45:15 -0700 (PDT)
-Received: from localhost (ec2-54-67-115-33.us-west-1.compute.amazonaws.com. [54.67.115.33])
-        by smtp.gmail.com with ESMTPSA id jb4-20020a170903258400b001a682a195basm391242plb.28.2023.04.19.22.45.14
+        bh=HWQ55XCgxMzVrYbC4f0gRBhCKgR8TSk192DndIkYVbU=;
+        b=Q1dneSN+C8UIkbbf/pmwYvcOlLTR+8EUM9jXkafd8xhuSWgUXlYFkcYYXBjuSCy6dd
+         957+AeJ0PdxUT0ubqpI0CzyGBltHjf8hz21Yz3Z7S9JphZI1+sUnyRiUhDyGEt/VF2yf
+         4/ryl2MDVKBIPekcyZw9IBgol4Ap9+UGgh3p1Gd8hkxzAAg//vHEgKt5T6Hf7fDGR7+R
+         H1pJ4rSIRSjTzHaT2PW/r7Yf9lU0u34dGgW5vrHa1fOwXshhbLuOt3vw6YmsCzIV4JHe
+         j7EUEOSQht47v4slIteq1HPLxn5+o1FAsIRspUuIzu49vdzTY94RS4JxzVpd5Vxn72w0
+         ZKcg==
+X-Gm-Message-State: AAQBX9d6wIAjTyjDl+s9VDfFWLilQeEgUacvXPENaIFXCTMQ0mm4ity/
+        47+OVrKOSpAU9JcJRwqo7xDv22f03Ig=
+X-Google-Smtp-Source: AKy350b1QR7MHj04ykvekWmpeGKoJxXk7uY+wdSd5IPW8aUUCxYmmf/ktNoJ8B2uWa0q+vqJAO8nZA==
+X-Received: by 2002:a17:906:264a:b0:94f:2d5f:6949 with SMTP id i10-20020a170906264a00b0094f2d5f6949mr363481ejc.42.1681552305288;
+        Sat, 15 Apr 2023 02:51:45 -0700 (PDT)
+Received: from kernelhacking.kernelhacking.example.com (dslb-088-067-245-126.088.067.pools.vodafone-ip.de. [88.67.245.126])
+        by smtp.gmail.com with ESMTPSA id bl8-20020a170906c24800b00949691d3183sm3554040ejb.36.2023.04.15.02.51.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 22:45:14 -0700 (PDT)
-Date:   Sat, 15 Apr 2023 09:51:37 +0000
-From:   Bobby Eshleman <bobbyeshleman@gmail.com>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Vishnu Dasa <vdasa@vmware.com>, Wei Liu <wei.liu@kernel.org>,
-        Jiang Wang <jiang.wang@bytedance.com>, kvm@vger.kernel.org,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Bryan Tan <bryantan@vmware.com>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-hyperv@vger.kernel.org,
-        Stefan Hajnoczi <stefanha@redhat.com>, netdev@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH RFC net-next v2 2/4] virtio/vsock: add
- VIRTIO_VSOCK_F_DGRAM feature bit
-Message-ID: <ZDpzqTewbtuxV/Sk@bullseye>
-References: <20230413-b4-vsock-dgram-v2-0-079cc7cee62e@bytedance.com>
- <20230413-b4-vsock-dgram-v2-2-079cc7cee62e@bytedance.com>
- <nbuuohh72i4n27rzlg7sj7bwsrsrnnxxcxj6w5yotw5bhpcznt@ormwl5d6jiuw>
+        Sat, 15 Apr 2023 02:51:44 -0700 (PDT)
+Date:   Sat, 15 Apr 2023 11:51:43 +0200
+From:   Luke Koch <lu.ale.koch@gmail.com>
+To:     Muni Sekhar <munisekharrms@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        alsa-devel <alsa-devel@alsa-project.org>,
+        linux-sound@vger.kernel.org
+Subject: Re: ALSA: arecord : silennce recorded as 0x80
+Message-ID: <ZDpzr8VOD5w5UhsR@kernelhacking.kernelhacking.example.com>
+References: <CAHhAz+haVH-4Hgsz0PpTgUSW1pX4XxwxXwEd7nLVb0sFFwQwCg@mail.gmail.com>
+ <CAPDUAqPVDi4TgAja92tMqMp6rGAyC-eabS_6+W0zThKfsZAxGA@mail.gmail.com>
+ <CAHhAz+g-Mtz3xhnU9hDHG9DzBuBM_e9_4n0BSRpALRJcyLF0LQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <nbuuohh72i4n27rzlg7sj7bwsrsrnnxxcxj6w5yotw5bhpcznt@ormwl5d6jiuw>
-X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+In-Reply-To: <CAHhAz+g-Mtz3xhnU9hDHG9DzBuBM_e9_4n0BSRpALRJcyLF0LQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 11:30:21AM +0200, Stefano Garzarella wrote:
-> On Fri, Apr 14, 2023 at 12:25:58AM +0000, Bobby Eshleman wrote:
-> > This commit adds a feature bit for virtio vsock to support datagrams.
-> > This commit should not be applied without first applying the commit
-> > that implements datagrams for virtio.
-> > 
-> > Signed-off-by: Jiang Wang <jiang.wang@bytedance.com>
-> > Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
-> > ---
-> > drivers/vhost/vsock.c             | 3 ++-
-> > include/uapi/linux/virtio_vsock.h | 1 +
-> > net/vmw_vsock/virtio_transport.c  | 8 ++++++--
-> > 3 files changed, 9 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
-> > index dff6ee1c479b..028cf079225e 100644
-> > --- a/drivers/vhost/vsock.c
-> > +++ b/drivers/vhost/vsock.c
-> > @@ -32,7 +32,8 @@
-> > enum {
-> > 	VHOST_VSOCK_FEATURES = VHOST_FEATURES |
-> > 			       (1ULL << VIRTIO_F_ACCESS_PLATFORM) |
-> > -			       (1ULL << VIRTIO_VSOCK_F_SEQPACKET)
-> > +			       (1ULL << VIRTIO_VSOCK_F_SEQPACKET) |
-> > +			       (1ULL << VIRTIO_VSOCK_F_DGRAM)
-> > };
-> > 
-> > enum {
-> > diff --git a/include/uapi/linux/virtio_vsock.h b/include/uapi/linux/virtio_vsock.h
-> > index 331be28b1d30..0975b9c88292 100644
-> > --- a/include/uapi/linux/virtio_vsock.h
-> > +++ b/include/uapi/linux/virtio_vsock.h
-> > @@ -40,6 +40,7 @@
-> > 
-> > /* The feature bitmap for virtio vsock */
-> > #define VIRTIO_VSOCK_F_SEQPACKET	1	/* SOCK_SEQPACKET supported */
-> > +#define VIRTIO_VSOCK_F_DGRAM		2	/* Host support dgram vsock */
-> > 
-> > struct virtio_vsock_config {
-> > 	__le64 guest_cid;
-> > diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
-> > index 582c6c0f788f..bb43eea9a6f9 100644
-> > --- a/net/vmw_vsock/virtio_transport.c
-> > +++ b/net/vmw_vsock/virtio_transport.c
-> > @@ -29,6 +29,7 @@ static struct virtio_transport virtio_transport; /* forward declaration */
-> > struct virtio_vsock {
-> > 	struct virtio_device *vdev;
-> > 	struct virtqueue *vqs[VSOCK_VQ_MAX];
-> > +	bool has_dgram;
-> > 
-> > 	/* Virtqueue processing is deferred to a workqueue */
-> > 	struct work_struct tx_work;
-> > @@ -640,7 +641,6 @@ static int virtio_vsock_probe(struct virtio_device *vdev)
-> > 	}
-> > 
-> > 	vsock->vdev = vdev;
-> > -
-> > 	vsock->rx_buf_nr = 0;
-> > 	vsock->rx_buf_max_nr = 0;
-> > 	atomic_set(&vsock->queued_replies, 0);
-> > @@ -657,6 +657,9 @@ static int virtio_vsock_probe(struct virtio_device *vdev)
-> > 	if (virtio_has_feature(vdev, VIRTIO_VSOCK_F_SEQPACKET))
-> > 		vsock->seqpacket_allow = true;
-> > 
-> > +	if (virtio_has_feature(vdev, VIRTIO_VSOCK_F_DGRAM))
-> > +		vsock->has_dgram = true;
+> > This is what I found after Googling a bit:
+> > Since you didn't specify a format, arecord defaults to 8 bit format (U8).
+> > Being unsigned, a negative value for maximum negative amplitude is impossible. Therefore the value is given a bias of 128,
+> > making 0 the maximum negative amplitude, 255 the maximum positive, and 128 the center point (or silence).
+> Thanks for the clarification.
+> So I tried passing signed 8-bit format (S8), and then the arecord died
+> immediately, as mentioned below.
 > 
-> This is unused for now, but I think the idea is to use in
-> virtio_transport_dgram_allow(), right?
+> $ arecord -f S8 test.wav
+> Recording WAVE 'test.wav' : Signed 8 bit, Rate 8000 Hz, Mono
+> arecord: begin_wave:2481: Wave doesn't support S8 format...
 > 
-> I would follow `seqpacket_allow` in this case.
+> For other format S16_LE, the arecord hangs for a few seconds and
+> throws an I/O error.
 > 
+> $ arecord -f S16_LE test.wav
+> Recording WAVE 'test.wav' : Signed 16 bit Little Endian, Rate 8000 Hz, Mono
+> arecord: pcm_read:2032: read error: Input/output error
+> 
+> I am not sure why recording works only on the default format of U8.
+> For other formats, the record either dies immediately or hangs for a
+> timeout and then throws an I/O error. Any ideas about this behaviour?
 
-Got it, thanks.
+The flag --dump-hw-params should show the formats arecord supports On
+your installation. On top of that .wav does not support any big endian formats
+as well as no signed formats below 9 bit. You could try testing with raw
+file type instead.
 
+The i/o error *might* relate to incorrect device selection.
 
-> Thanks,
-> Stefano
-> 
-> > +
-> > 	vdev->priv = vsock;
-> > 
-> > 	ret = virtio_vsock_vqs_init(vsock);
-> > @@ -749,7 +752,8 @@ static struct virtio_device_id id_table[] = {
-> > };
-> > 
-> > static unsigned int features[] = {
-> > -	VIRTIO_VSOCK_F_SEQPACKET
-> > +	VIRTIO_VSOCK_F_SEQPACKET,
-> > +	VIRTIO_VSOCK_F_DGRAM
-> > };
-> > 
-> > static struct virtio_driver virtio_vsock_driver = {
-> > 
-> > -- 
-> > 2.30.2
-> > 
-> 
-> _______________________________________________
-> Virtualization mailing list
-> Virtualization@lists.linux-foundation.org
-> https://lists.linuxfoundation.org/mailman/listinfo/virtualization
+I hope you can pinpoint your issue to something more specific - and
+provide more information - so people with actual expertise in this driver can
+help you, I just googled a bit to not leave your questions hovering around unanswered.
+Maybe take a peek into the guide on how to ask good questions, linked on
+the kernelnewbies site, to make your questions more concise and worth busy people's time.
+
+Best regards,
+Luke
