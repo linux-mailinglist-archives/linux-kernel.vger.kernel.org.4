@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 115716E2E6E
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 04:02:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B87B6E2E72
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 04:03:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbjDOCCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 22:02:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43734 "EHLO
+        id S230091AbjDOCDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Apr 2023 22:03:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbjDOCCm (ORCPT
+        with ESMTP id S230107AbjDOCCn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 22:02:42 -0400
+        Fri, 14 Apr 2023 22:02:43 -0400
 Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5719F6EBB;
-        Fri, 14 Apr 2023 19:02:40 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-54fdf7cd390so861467b3.1;
-        Fri, 14 Apr 2023 19:02:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210DC83D3;
+        Fri, 14 Apr 2023 19:02:42 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-54f8b687a06so1581127b3.0;
+        Fri, 14 Apr 2023 19:02:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681524159; x=1684116159;
+        d=gmail.com; s=20221208; t=1681524161; x=1684116161;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XRYjuOFtFMXh2I5E0ogIAK80X8pJ9UuA0I2DICP2Jj0=;
-        b=q01K+eavqhDqxmY6O3BnpLDHn84NHxAp+tp0X8w9NK7oh+Lj2KjIt73m0fPerVAENl
-         /Uztms3HzIthZVeDhJRMKKXsspVsuOMtsP8T3s3VDx8/elFoL+vag34muSYMdC/6EcQ9
-         1OCNMROTMc6xjBYNsPCauStERIwOslyNStFOsd2vnnU6wQoHw/60+a7+/5c3GPHsjGur
-         vX2MENVj4M0xOixn59z3bAbm+0NGCuXLqHmUV17uZ4tV9fup0eSN70xXWl7XQ/nNMarQ
-         TKZMOm8Da/lvKz1p13+py1FzBnrZUu64086DtWrvAYfw9B/ysCstwpVjDw0TaAvGgw6x
-         nm2A==
+        bh=QfFLYwoRbIcS+5n1zFSGq1E+iP2KHQOy5/Vbet45Gu4=;
+        b=g/VYV2yqnH2eA0lEeYtVv85WVktmO9HxBMfNW7J4AQ16iR7EJE4Hi3vJTo7C/x7zMo
+         usfA55rBiBVMwtJcRm8avc1L+Q6WT9Nc8Oe8AJN9zOmfH0hiIA8U+cCdS3ku4gHvVTTo
+         WfpXhMQxgWrUwWEFVGhpEcirALG7LCfwniOKRzVc1TYlQOBPsoWaZnb66b1ZwvHSM5c6
+         MtvkqICCDlYW4EXUSPZ58vwbUHP0O5kKYIX7GzAVdNG4hHxZRxss/9c3csUFgc/EshwH
+         D5BljrSYJBTCk7SqDUyV1rzZ8THD+PVsn6SIDciGuKHwcYmQgnXjJuToVof8PUaEwD+z
+         0kIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681524159; x=1684116159;
+        d=1e100.net; s=20221208; t=1681524161; x=1684116161;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XRYjuOFtFMXh2I5E0ogIAK80X8pJ9UuA0I2DICP2Jj0=;
-        b=PZLn4XqXSBs1gLKwy8c44eevi5lu750WjzDvGpq/eB8f5R0Q0nseSu3a6/vg0Lacfd
-         jMpXpR3/Rum6JZd5YhQ1xAAp1sek35+s/Pb45pGLVOnI0//w9NwTfrO8LiWkZZQM/Pfj
-         7ym/qp6opHJu0Zk4hEioWNtMcZ3BlOcXkPy5dipzgGZLETSfM++EbUvDNgN0L9tEJWQQ
-         IGjYQhwX66idyFPLZD2q5V47DO1MmsVyE65ZgUSekQQ1HOnJTzjBh+XU3lc+teoOzfgz
-         iCUGxa+QraA/Pg+/PsCiHoQaOZB9WR/k88GDNm18StR909KH1RsjughEuGQqoTLAo8y3
-         nXBg==
-X-Gm-Message-State: AAQBX9fIvXsL1bp6G3jeEoNEj2mwQ2HU9KMD1D+vPPsmpruSb9L7KKdV
-        ZL7sLEL9W7ZsDnreIA45Hr4=
-X-Google-Smtp-Source: AKy350awlC76WlaWGXoFsIWVKz+9gED652/3+5wnud2dqYq54YV7SBAVZb8Nes9TMvuZTsIIJQkmdg==
-X-Received: by 2002:a81:130e:0:b0:54c:c7a:5c8a with SMTP id 14-20020a81130e000000b0054c0c7a5c8amr3738074ywt.1.1681524159319;
-        Fri, 14 Apr 2023 19:02:39 -0700 (PDT)
+        bh=QfFLYwoRbIcS+5n1zFSGq1E+iP2KHQOy5/Vbet45Gu4=;
+        b=beuyYd9Jifd8LXgEAUqMTJDChNHnVBXcr820W3SvstwgtjU0jTDdPfOqYQwHlTct1M
+         kurnswYEvE/9HORrsVNxIhV8zAZhGSVttutsjdd6Rm/VfNnhwWm/UwV3gySGf19mlAQt
+         fTldk853qSEvO0ltK6WuHKzkdNT8D71QU3JxgZTt9gc2TmQ+tLWvcO2dL63Pcd5us9DK
+         z55lgvGBluoM25VmaYmmgO4oE81FNTHcm/1J1n0/8EZhg17lN8IDUlgak/DpcmAFaXK+
+         8LqCQHSJE+Nl+pmOCZAgRym5JaDOhvMNmD4i+L7EAOhhzD8EpGZjAV0LW7b2MbrLFjjX
+         6KmQ==
+X-Gm-Message-State: AAQBX9e8CjOubDBj6bR/4hP02sMqBT3i3qEXdIGE4KchNdr+u/nsCTwf
+        IHQ0F1xSePRK67yTxoDio/A=
+X-Google-Smtp-Source: AKy350Z34NCtOeyDltAA+YqPY7xdtbn3jTq23ob5FORw1LL+hPAy4r721FNIfl2gkhYLEAIW28ad6Q==
+X-Received: by 2002:a81:1252:0:b0:54f:dc9b:c994 with SMTP id 79-20020a811252000000b0054fdc9bc994mr3789942yws.1.1681524161272;
+        Fri, 14 Apr 2023 19:02:41 -0700 (PDT)
 Received: from JOEL-DESKTOP.. ([2604:2d80:4d87:cd00:9f51:32d7:1177:67d])
-        by smtp.gmail.com with ESMTPSA id 68-20020a810a47000000b00545a081847fsm1593607ywk.15.2023.04.14.19.02.37
+        by smtp.gmail.com with ESMTPSA id 68-20020a810a47000000b00545a081847fsm1593607ywk.15.2023.04.14.19.02.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Apr 2023 19:02:39 -0700 (PDT)
+        Fri, 14 Apr 2023 19:02:41 -0700 (PDT)
 From:   Joel Selvaraj <joelselvaraj.oss@gmail.com>
 To:     Caleb Connolly <caleb@connolly.tech>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
@@ -74,9 +74,9 @@ Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         Joel Selvaraj <joelselvaraj.oss@gmail.com>
-Subject: [PATCH v3 4/5] arm64: dts: qcom: sdm845-xiaomi-beryllium-ebbg: introduce support for fts touchscreen
-Date:   Fri, 14 Apr 2023 21:02:21 -0500
-Message-Id: <20230415020222.216232-5-joelselvaraj.oss@gmail.com>
+Subject: [PATCH v3 5/5] arm64: dts: qcom: sdm845-shift-axolotl: update focaltech touchscreen properties
+Date:   Fri, 14 Apr 2023 21:02:22 -0500
+Message-Id: <20230415020222.216232-6-joelselvaraj.oss@gmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230415020222.216232-1-joelselvaraj.oss@gmail.com>
 References: <20230415020222.216232-1-joelselvaraj.oss@gmail.com>
@@ -92,43 +92,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Poco F1 EBBG variant uses Focaltech FTS touchscreen. Introduce
-support for it.
+The touchscreen nodes were added before the driver patches were merged.
+Update the focaltech touchscreen properties to match with the upstreamed
+focaltech driver. Also, the touchscreen used is in axolotl is fts5452
+and not fts8719.
 
 Signed-off-by: Joel Selvaraj <joelselvaraj.oss@gmail.com>
 ---
- .../dts/qcom/sdm845-xiaomi-beryllium-ebbg.dts | 21 +++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ .../boot/dts/qcom/sdm845-shift-axolotl.dts     | 18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-ebbg.dts b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-ebbg.dts
-index 76931ebad065..26e77979cdab 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-ebbg.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-ebbg.dts
-@@ -13,3 +13,24 @@ &display_panel {
- 	compatible = "ebbg,ft8719";
+diff --git a/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts b/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
+index b54e304abf71..70286e53e000 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
++++ b/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
+@@ -474,23 +474,21 @@ &i2c5 {
  	status = "okay";
+ 
+ 	touchscreen@38 {
+-		compatible = "focaltech,fts8719";
++		compatible = "focaltech,fts5452";
+ 		reg = <0x38>;
+-		wakeup-source;
+-		interrupt-parent = <&tlmm>;
+-		interrupts = <125 0x2>;
+-		vdd-supply = <&vreg_l28a_3p0>;
+-		vcc-i2c-supply = <&vreg_l14a_1p88>;
+ 
+-		pinctrl-names = "default", "suspend";
++		interrupts-extended = <&tlmm 125 IRQ_TYPE_EDGE_FALLING>;
++		reset-gpios = <&tlmm 99 GPIO_ACTIVE_LOW>;
++
++		avdd-supply = <&vreg_l28a_3p0>;
++		vddio-supply = <&vreg_l14a_1p88>;
++
+ 		pinctrl-0 = <&ts_int_active &ts_reset_active>;
+ 		pinctrl-1 = <&ts_int_suspend &ts_reset_suspend>;
++		pinctrl-names = "default", "suspend";
+ 
+-		reset-gpio = <&tlmm 99 GPIO_ACTIVE_HIGH>;
+-		irq-gpio = <&tlmm 125 GPIO_TRANSITORY>;
+ 		touchscreen-size-x = <1080>;
+ 		touchscreen-size-y = <2160>;
+-		focaltech,max-touch-number = <5>;
+ 	};
  };
-+
-+&i2c14 {
-+	status = "okay";
-+
-+	touchscreen@38 {
-+		compatible = "focaltech,fts8719";
-+		reg = <0x38>;
-+
-+		interrupts-extended = <&tlmm 31 IRQ_TYPE_EDGE_FALLING>;
-+		reset-gpios = <&tlmm 32 GPIO_ACTIVE_LOW>;
-+
-+		vddio-supply = <&vreg_l14a_1p8>;
-+
-+		pinctrl-0 = <&ts_int_default &ts_reset_default>;
-+		pinctrl-1 = <&ts_int_sleep &ts_reset_sleep>;
-+		pinctrl-names = "default", "sleep";
-+
-+		touchscreen-size-x = <1080>;
-+		touchscreen-size-y = <2246>;
-+	};
-+};
+ 
 -- 
 2.40.0
 
