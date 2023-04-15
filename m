@@ -2,156 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5826E3056
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Apr 2023 11:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 625686E89AE
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 07:45:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230257AbjDOJ7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 05:59:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53282 "EHLO
+        id S233747AbjDTFpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 01:45:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbjDOJ6u (ORCPT
+        with ESMTP id S233224AbjDTFpR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 05:58:50 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A277DAF
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 02:58:27 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id kt6so13528328ejb.0
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 02:58:27 -0700 (PDT)
+        Thu, 20 Apr 2023 01:45:17 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1A53A97;
+        Wed, 19 Apr 2023 22:45:15 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1a6715ee82fso8176925ad.1;
+        Wed, 19 Apr 2023 22:45:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681552706; x=1684144706;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Fr2pBCD6umNhczQxq97ewzN+14iVAoxszUR3df4m1JI=;
-        b=KBrssLMtLKmsLeebg43o7A5lMW1PVjr0FL9EGnzfptlfeJU2+O2WNhBQ0HFo977Iua
-         rcld+cXUs9Y3HxWGpMiWcxuAfuHnC6x2cl+2qmiauB6x3msu3sypy5NK/yx27mTj9y9H
-         Ewx0zS9sHKphX1IM5mkG+xkB6sHk7sfp4o4noyPWiYZEJSHxddoi/P8z/eEN6vWGUkfS
-         YvSlcUyBbUSaYJGQsDy8QWLzuLGdkAmSAIUuNvqPRl4XN5crob1qw9uZzXUe5YMUnJhX
-         g80zIJJQURIGeGysIlmkHk5jlgHtryhPW/OjPjPmOckvxXqsnLQS//OqqROjirbCPdRq
-         tmLw==
+        d=gmail.com; s=20221208; t=1681969515; x=1684561515;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8Tf2VpWhxjAYxcYUQ0lyc/cD0H8jUE/mITS0goQbaSM=;
+        b=kmHGRQyXSOAb2hb/c/TdQ7b70sLmKBkMMlesr8i5GI5t8tp0Wfu9UYbw+5lDh4zc6w
+         pfV3aLuPQSzcKGJphND4fCxArwCqz2jgYaoSzANMQnQ5YPkIUiuR8+jSEqLDZXHvv/Bf
+         KREiyP+WlVuCf69MkVWr5EOyvQpaOxBq+19N0Jp8e3Y4AyKWu/g+vyGQysy9mn3L17ia
+         nDq5wf7b0i0031yybcp1BQUItDAS/eO5R1ivAo4RG4Us9gax6DpnqI0vyJFV03GoSqq7
+         xvStIdET0pZ24j7Qj9BntbwOVw9oRnCSzRUaL9XRH7umcsfDGAjr4H02k291U/lMcw7/
+         61sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681552706; x=1684144706;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Fr2pBCD6umNhczQxq97ewzN+14iVAoxszUR3df4m1JI=;
-        b=aTEbB3tFyl4FdrmZy61njv7OA/iWq2Q8sGcxAa+31dA8tArE285wPSmD7gwibFNvIk
-         0yh2bgMla/Jhhbxzpc8sgZqe9/PiB+Y/BG4ZVND/qYtSxsBsQpRaKBXsQkhfzEGKFgql
-         lDFxLxM6LZwVFFg1YcL3SFtRQxS3eAva0SbPm7L9fT4cdHthGbit+b1RwgCTfOFF9FQB
-         Vzbl5QA/EmktJHRNoRCjhS4FUIxAg4D+lSNF7MW95INID8QZqqetl6ukAsHBpCa6+lxo
-         U5CmwmRVbAmjR8jd+qjXxuBS3mGqnQizlG9VCkExVKXXse8hlqRenfytp77DCrmh3cY2
-         AO8w==
-X-Gm-Message-State: AAQBX9etUlPHXZ9NQsZJvYfx3eXQuSvIvsCIro8YbQn0ApZFG1KWq075
-        hT3P+NO66YAV8r9qBLe1lymDbw==
-X-Google-Smtp-Source: AKy350bZWvNaGJptFPLSmIHH7cRbLl7V6f22Bt1WbL4mPTQOR4EbC2AYcFac6G7sc67vcTz0OtrFlQ==
-X-Received: by 2002:a17:906:b788:b0:94c:548f:f81d with SMTP id dt8-20020a170906b78800b0094c548ff81dmr1404066ejb.71.1681552705946;
-        Sat, 15 Apr 2023 02:58:25 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:a3bf:4ed:6c53:2a36])
-        by smtp.gmail.com with ESMTPSA id gn23-20020a1709070d1700b009373f1b5c4esm3594248ejc.161.2023.04.15.02.58.23
+        d=1e100.net; s=20221208; t=1681969515; x=1684561515;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8Tf2VpWhxjAYxcYUQ0lyc/cD0H8jUE/mITS0goQbaSM=;
+        b=Fo/DvwRdxPD7aOaKca9xVAgU9+6mJg87bRNYjPMEaDARme+w8dimEb/avct+hHlsT7
+         y7J0qBfZ3Cdeis4hmiz2dqktzWPQ3BtLF/TAkIbU2AM7tNf7chE67hD9a8nDVgySTokF
+         ksTyXiVm5+4g+g3Tk3TTp0AzTBFwa2nFcnRPpUq6MLRsGlJK8e4OZvgYBy2oSgXzKxdW
+         tlNoMl1MpVfpU2GLcErLYjZ2HQC7YAu9W0bcIeF7Ee1Z7C52DiyDeTQIiL68ZwVHe5AZ
+         RLAHNd7F0Xg5ZopcpFYAW4mBY7FG5e4xff8CkBV4/MFkVnhcKmhNoVZc2QY/+eloSxuC
+         8tvw==
+X-Gm-Message-State: AAQBX9dUt9eI9lfTt4uLEx2h88HR+hX6mxFNjoF/AoQp6qzkyJV1AJRg
+        P9ZuSj1yUtqx4LsMtJ7e118=
+X-Google-Smtp-Source: AKy350Y0Rncfr/8NyRfa6Y+/CLdM0DMxQ/jGouIv344inzmImgPcIc3YFQVpA9L2MYOQdMEKKcdOBg==
+X-Received: by 2002:a17:902:c3c3:b0:1a2:1922:985b with SMTP id j3-20020a170902c3c300b001a21922985bmr340590plj.59.1681969515199;
+        Wed, 19 Apr 2023 22:45:15 -0700 (PDT)
+Received: from localhost (ec2-54-67-115-33.us-west-1.compute.amazonaws.com. [54.67.115.33])
+        by smtp.gmail.com with ESMTPSA id jb4-20020a170903258400b001a682a195basm391242plb.28.2023.04.19.22.45.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Apr 2023 02:58:25 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Julius Werner <jwerner@chromium.org>,
-        Evan Benn <evanbenn@chromium.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Sander Vanheule <sander@svanheule.net>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Fu Wei <fu.wei@linaro.org>, Viresh Kumar <vireshk@kernel.org>,
-        Eugen Hristev <eugen.hristev@collabora.com>,
-        Justin Chen <justinpopo6@gmail.com>,
-        =?UTF-8?q?=82ecki?= <rafal@milecki.pl>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Jamie Iles <jamie@jamieiles.com>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        Christophe Roullier <christophe.roullier@foss.st.com>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        Srinivas Neeli <srinivas.neeli@xilinx.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-renesas-soc@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 6/6] dt-bindings: watchdog: realtek,otto-wdt: simplify requiring interrupt-names
-Date:   Sat, 15 Apr 2023 11:51:12 +0200
-Message-Id: <20230415095112.51257-6-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230415095112.51257-1-krzysztof.kozlowski@linaro.org>
-References: <20230415095112.51257-1-krzysztof.kozlowski@linaro.org>
+        Wed, 19 Apr 2023 22:45:14 -0700 (PDT)
+Date:   Sat, 15 Apr 2023 09:51:37 +0000
+From:   Bobby Eshleman <bobbyeshleman@gmail.com>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Vishnu Dasa <vdasa@vmware.com>, Wei Liu <wei.liu@kernel.org>,
+        Jiang Wang <jiang.wang@bytedance.com>, kvm@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Bryan Tan <bryantan@vmware.com>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-hyperv@vger.kernel.org,
+        Stefan Hajnoczi <stefanha@redhat.com>, netdev@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH RFC net-next v2 2/4] virtio/vsock: add
+ VIRTIO_VSOCK_F_DGRAM feature bit
+Message-ID: <ZDpzqTewbtuxV/Sk@bullseye>
+References: <20230413-b4-vsock-dgram-v2-0-079cc7cee62e@bytedance.com>
+ <20230413-b4-vsock-dgram-v2-2-079cc7cee62e@bytedance.com>
+ <nbuuohh72i4n27rzlg7sj7bwsrsrnnxxcxj6w5yotw5bhpcznt@ormwl5d6jiuw>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <nbuuohh72i4n27rzlg7sj7bwsrsrnnxxcxj6w5yotw5bhpcznt@ormwl5d6jiuw>
+X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Required properties should be listed in "required:" block.  Since
-interrupts are already there, the dependency of interrupt-names on the
-interrupts can be simplified.
+On Wed, Apr 19, 2023 at 11:30:21AM +0200, Stefano Garzarella wrote:
+> On Fri, Apr 14, 2023 at 12:25:58AM +0000, Bobby Eshleman wrote:
+> > This commit adds a feature bit for virtio vsock to support datagrams.
+> > This commit should not be applied without first applying the commit
+> > that implements datagrams for virtio.
+> > 
+> > Signed-off-by: Jiang Wang <jiang.wang@bytedance.com>
+> > Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+> > ---
+> > drivers/vhost/vsock.c             | 3 ++-
+> > include/uapi/linux/virtio_vsock.h | 1 +
+> > net/vmw_vsock/virtio_transport.c  | 8 ++++++--
+> > 3 files changed, 9 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
+> > index dff6ee1c479b..028cf079225e 100644
+> > --- a/drivers/vhost/vsock.c
+> > +++ b/drivers/vhost/vsock.c
+> > @@ -32,7 +32,8 @@
+> > enum {
+> > 	VHOST_VSOCK_FEATURES = VHOST_FEATURES |
+> > 			       (1ULL << VIRTIO_F_ACCESS_PLATFORM) |
+> > -			       (1ULL << VIRTIO_VSOCK_F_SEQPACKET)
+> > +			       (1ULL << VIRTIO_VSOCK_F_SEQPACKET) |
+> > +			       (1ULL << VIRTIO_VSOCK_F_DGRAM)
+> > };
+> > 
+> > enum {
+> > diff --git a/include/uapi/linux/virtio_vsock.h b/include/uapi/linux/virtio_vsock.h
+> > index 331be28b1d30..0975b9c88292 100644
+> > --- a/include/uapi/linux/virtio_vsock.h
+> > +++ b/include/uapi/linux/virtio_vsock.h
+> > @@ -40,6 +40,7 @@
+> > 
+> > /* The feature bitmap for virtio vsock */
+> > #define VIRTIO_VSOCK_F_SEQPACKET	1	/* SOCK_SEQPACKET supported */
+> > +#define VIRTIO_VSOCK_F_DGRAM		2	/* Host support dgram vsock */
+> > 
+> > struct virtio_vsock_config {
+> > 	__le64 guest_cid;
+> > diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
+> > index 582c6c0f788f..bb43eea9a6f9 100644
+> > --- a/net/vmw_vsock/virtio_transport.c
+> > +++ b/net/vmw_vsock/virtio_transport.c
+> > @@ -29,6 +29,7 @@ static struct virtio_transport virtio_transport; /* forward declaration */
+> > struct virtio_vsock {
+> > 	struct virtio_device *vdev;
+> > 	struct virtqueue *vqs[VSOCK_VQ_MAX];
+> > +	bool has_dgram;
+> > 
+> > 	/* Virtqueue processing is deferred to a workqueue */
+> > 	struct work_struct tx_work;
+> > @@ -640,7 +641,6 @@ static int virtio_vsock_probe(struct virtio_device *vdev)
+> > 	}
+> > 
+> > 	vsock->vdev = vdev;
+> > -
+> > 	vsock->rx_buf_nr = 0;
+> > 	vsock->rx_buf_max_nr = 0;
+> > 	atomic_set(&vsock->queued_replies, 0);
+> > @@ -657,6 +657,9 @@ static int virtio_vsock_probe(struct virtio_device *vdev)
+> > 	if (virtio_has_feature(vdev, VIRTIO_VSOCK_F_SEQPACKET))
+> > 		vsock->seqpacket_allow = true;
+> > 
+> > +	if (virtio_has_feature(vdev, VIRTIO_VSOCK_F_DGRAM))
+> > +		vsock->has_dgram = true;
+> 
+> This is unused for now, but I think the idea is to use in
+> virtio_transport_dgram_allow(), right?
+> 
+> I would follow `seqpacket_allow` in this case.
+> 
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../devicetree/bindings/watchdog/realtek,otto-wdt.yaml        | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Got it, thanks.
 
-diff --git a/Documentation/devicetree/bindings/watchdog/realtek,otto-wdt.yaml b/Documentation/devicetree/bindings/watchdog/realtek,otto-wdt.yaml
-index 099245fe7b10..1f5390a67cdb 100644
---- a/Documentation/devicetree/bindings/watchdog/realtek,otto-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/realtek,otto-wdt.yaml
-@@ -67,12 +67,10 @@ required:
-   - reg
-   - clocks
-   - interrupts
-+  - interrupt-names
- 
- unevaluatedProperties: false
- 
--dependencies:
--  interrupts: [ interrupt-names ]
--
- examples:
-   - |
-     watchdog: watchdog@3150 {
--- 
-2.34.1
 
+> Thanks,
+> Stefano
+> 
+> > +
+> > 	vdev->priv = vsock;
+> > 
+> > 	ret = virtio_vsock_vqs_init(vsock);
+> > @@ -749,7 +752,8 @@ static struct virtio_device_id id_table[] = {
+> > };
+> > 
+> > static unsigned int features[] = {
+> > -	VIRTIO_VSOCK_F_SEQPACKET
+> > +	VIRTIO_VSOCK_F_SEQPACKET,
+> > +	VIRTIO_VSOCK_F_DGRAM
+> > };
+> > 
+> > static struct virtio_driver virtio_vsock_driver = {
+> > 
+> > -- 
+> > 2.30.2
+> > 
+> 
+> _______________________________________________
+> Virtualization mailing list
+> Virtualization@lists.linux-foundation.org
+> https://lists.linuxfoundation.org/mailman/listinfo/virtualization
