@@ -2,68 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5659E6E3808
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 14:35:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09BC46E3810
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 14:37:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbjDPMf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 08:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48640 "EHLO
+        id S230251AbjDPMhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 08:37:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbjDPMf0 (ORCPT
+        with ESMTP id S230259AbjDPMhF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 08:35:26 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3D44F2127;
-        Sun, 16 Apr 2023 05:35:23 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.153])
-        by gateway (Coremail) with SMTP id _____8BxYU+K6ztkIHkdAA--.45982S3;
-        Sun, 16 Apr 2023 20:35:22 +0800 (CST)
-Received: from [10.20.42.153] (unknown [10.20.42.153])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx+72H6ztk1VApAA--.48745S3;
-        Sun, 16 Apr 2023 20:35:20 +0800 (CST)
-Subject: Re: [regression] Bug 217069 - Wake on Lan is broken on r8169 since
- 6.2
-To:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Bob Moore <robert.moore@intel.com>,
-        acpica-devel@lists.linuxfoundation.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>
-References: <e6aaddb9-afec-e77d-be33-570f9f10a9c2@leemhuis.info>
- <53e8b4db-e8dd-4dfa-f873-7dcbeac09149@leemhuis.info>
- <13aea525-108a-e018-987d-2447ff1d42df@leemhuis.info>
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-Message-ID: <754225a2-95a9-2c36-1886-7da1a78308c2@loongson.cn>
-Date:   Sun, 16 Apr 2023 20:35:19 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Sun, 16 Apr 2023 08:37:05 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8382D40;
+        Sun, 16 Apr 2023 05:37:04 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id xd13so23346093ejb.4;
+        Sun, 16 Apr 2023 05:37:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681648624; x=1684240624;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VDa2GFtYkfWVlc8ZTMskD2bfRssb3+wPHR9VnWdgQkk=;
+        b=Ye4lxVUXva7hfPvirb5EICjV7mvCIR+LZoN3QkH/Aa9mcMNRKXRHXY7XX9YxfQiM4d
+         UHF+N75fqf6yWUywGE72iYA9LGogaxALspplCNngKKlCEiNB/KHmYLhX5s9kFNdrJlgm
+         Ps5No9KHIl4sEN/LvkdFDyEuljHQ2Yb4FiMA1QptZREt1Bp0QkaLum68LKPqGSisGWmj
+         02RcdFqsq/361uqczbuNL3um2U2cyI0NQiD7Oc40B1PwxsMYtEbKZYmC5yPD3d1E2/Ce
+         TzkSQIRiqBSrM/faDZ7/OC9IJha+EfIshOaH1OD3tv+CNbl5x1Wr5b1zwVnYnEvDen3x
+         FaoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681648624; x=1684240624;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VDa2GFtYkfWVlc8ZTMskD2bfRssb3+wPHR9VnWdgQkk=;
+        b=Z1hVKdWL6mcmQiAcTWG7ZSqXu4ypa/OHCRM3SiGO1/SE0HUojNJdQTmW9OzR5nZAzU
+         yPy25ESlFFyu474/PVpYUe65AhBojgSp5I8ERpR2aQnlrTAzD+9CNUBmSYwuW9Mmgyak
+         RUm0zAvitYy4vumWkoUtPdd53TPHRqZeolzwiZDdQxqWJU/WzZuC7FqvfvDZnq49O2mF
+         Bz5ZpFYwDS0Q76y4PT0sFEPW5M9acX135DGNG99MQGk+AdSiyLDNdBus4lSHo2FwEaqX
+         HBCD5UM5OJIKoa9k16S8InRTM8XlQjjQ+iL1IYvU+wiobVfPf2LryMz/9k3W8+AVcGgq
+         6Ajw==
+X-Gm-Message-State: AAQBX9eJHJLJCH9GjNjX9G2Jrn27Nc5b0UMl2wwIo1HqvqMkxGGvGgup
+        yqnTGXBLnsaXXS0tDpo1z5s=
+X-Google-Smtp-Source: AKy350Z9RmwvdFDkqAGZQeSDhkrMeMTMfOfNN8b8VmhaRJ5qZRpnoXUSxR2zWJy9cKGKUWb33636uQ==
+X-Received: by 2002:a17:906:82c5:b0:93f:2256:fc05 with SMTP id a5-20020a17090682c500b0093f2256fc05mr4820249ejy.55.1681648624015;
+        Sun, 16 Apr 2023 05:37:04 -0700 (PDT)
+Received: from [192.168.50.244] (83.8.121.70.ipv4.supernova.orange.pl. [83.8.121.70])
+        by smtp.gmail.com with ESMTPSA id i3-20020a1709061e4300b0092b8c1f41ebsm4999772ejj.24.2023.04.16.05.37.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Apr 2023 05:37:03 -0700 (PDT)
+Message-ID: <8bb6e9a6-0143-3627-14c4-285ce2632070@gmail.com>
+Date:   Sun, 16 Apr 2023 14:37:01 +0200
 MIME-Version: 1.0
-In-Reply-To: <13aea525-108a-e018-987d-2447ff1d42df@leemhuis.info>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 00/12] Re-introduce Exynos4212 support and add Samsung
+ Galaxy Tab 3 8.0 boards
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cx+72H6ztk1VApAA--.48745S3
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxJr4fZr4rAryUWw4rtFWkJFb_yoW8tFWfpF
-        W5Kws8Xw4DGr18tan7Gw4v9ayj9wn8JF90kr9rXr4rXa45XasYvFyIgr43WFyUCr92ka13
-        ta13ZryFgr9rAaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bxxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1le2I2
-        62IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4
-        CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvj
-        eVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw2
-        8IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
-        x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrw
-        CI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI
-        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z2
-        80aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU7XTmDUUUU
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-phy@lists.infradead.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <20230416101624.15866-1-aweber.kernel@gmail.com>
+ <3e513119-4d6a-18ec-aaec-1c6b2b7e35b4@gmail.com>
+ <ba148e6c-1685-f6d4-458f-bbdf1dd674cf@linaro.org>
+ <36287654-c6e6-f4bd-320c-866bef692d2f@gmail.com>
+ <d0b2868f-cade-feb1-52cd-2aacd537c9c6@linaro.org>
+From:   Artur Weber <aweber.kernel@gmail.com>
+In-Reply-To: <d0b2868f-cade-feb1-52cd-2aacd537c9c6@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,57 +98,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- From the feedbacks, the WOL issue has been fixed, and I have submitted 
-a fixed patch to ACPICA, which has been reviewing in last week (Rafael 
-also looked into the fixed patch).
-
-There are two kinds of issues in the bug, one is WOL failed in kexec 
-reboot, another is WOL failed in cold reboot. The former one still exist 
-after reverted patch(5c62d5aab8752e5ee7bfbe75ed6060db1c787f98),
-so this issue is not caused by the reverted patch. The second is caused 
-by the reverted patch, and has been fixed with my provided patch.
-
-Please see:
-https://bugzilla.kernel.org/show_bug.cgi?id=217069#c54
-https://bugzilla.kernel.org/show_bug.cgi?id=217069#c59
-
-Thanks.
-
-
-On 2023/4/14 下午8:48, Thorsten Leemhuis wrote:
-> On 19.03.23 08:20, Linux regression tracking (Thorsten Leemhuis) wrote:
->> On 22.02.23 08:57, Thorsten Leemhuis wrote:
+On 16/04/2023 12:53, Krzysztof Kozlowski wrote:
+> On 16/04/2023 12:49, Artur Weber wrote:
+>> On 16/04/2023 12:34, Krzysztof Kozlowski wrote:
+>>> On 16/04/2023 12:26, Artur Weber wrote:
+>>>> On 16/04/2023 12:16, Artur Weber wrote:
+>>>>> This patches re-introduces the Exynos4212 platform and adds support
+>>>>> for the Samsung Galaxy Tab 3 8.0 series of tablets that uses it:
+>>>>>
+>>>>>     - Samsung Galaxy Tab 3 8.0 WiFi (SM-T310/lt01wifi)
+>>>>>     - Samsung Galaxy Tab 3 8.0 3G (SM-T311/lt013g)
+>>>>>     - Samsung Galaxy Tab 3 8.0 LTE (SM-T315/lt01lte)
+>>>>>
+>>>>> What works:
+>>>>>
+>>>>>     - Display and backlight
+>>>>>     - Touchscreen (without touchkeys)
+>>>>>     - GPIO buttons, hall sensor
+>>>>>     - WiFi and Bluetooth
+>>>>>     - USB, fuel gauge, charging (partial)
+>>>>>     - Accelerometer and magnetometer
+>>>>>     - WiFi model only: light sensor
+>>>>
+>>>> This patchset depends on "[PATCH 0/3] Add Samsung S6D7AA0 panel
+>>>> controller driver" for the display panel support for the Samsung Galaxy
+>>>> 3 8.0 boards.
 >>>
->>> I noticed a regression report in bugzilla.kernel.org. As many (most?)
->>> kernel developer don't keep an eye on it, I decided to forward it by
->>> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217069 :
+>>> Why? DTS and ARM code cannot depend on driver changes. Please rework
+>>> your patchsets to remove any of such dependencies.
 >>
->> An issue that looked like a network bug was now bisected and it turns
->> out it's cause by 5c62d5aab875 ("ACPICA: Events: Support fixed PCIe wake
->> event") which Huacai Chen provided. Could you take a look at the ticket
->> linked above?
+>> Ah, that makes sense. I'll re-send the patchset in a second with the
+>> panel node removed.
 > 
-> Jianmin did get close to a proper fix a while ago
-> (https://bugzilla.kernel.org/show_bug.cgi?id=217069#c46 ), but it
-> appears there wasn't any progress to fix this during the last week. Or
-> did I miss it?
-> 
-> This is kinda unsatisfying, as the culprit is now known for nearly four
-> weeks; especially as this is a issue that is present in 6.2 since it was
-> released and would have been possible to fix there and in mainline with
-> a simple revert. We even got close to one two weeks ago already
-> (https://bugzilla.kernel.org/show_bug.cgi?id=217069#c49 ).
-> 
-> #sigh
-> 
-> I'd say we should revert this. Rafael, what's your opinion here?
-> 
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-> --
-> Everything you wanna know about Linux kernel regression tracking:
-> https://linux-regtracking.leemhuis.info/about/#tldr
-> If I did something stupid, please tell me, as explained on that page.
-> 
-> #regzbot poke
-> 
+> I am sorry, I don't understand. Why would you remove anything from DTS?
+> Are bindings NAKed?
+
+The dependency display panel patchset introduces the panel and its 
+bindings, which in turn are included in the Tab3 DTSI. It was submitted 
+at roughly the same time as this series, and hasn't been fully reviewed 
+or merged as of writing. (I have seen your comments on that patchset, 
+and I will be addressing them shortly.) So the bindings haven't been 
+explicitly ACKed yet (assuming you mean the Acked-by reply).
+
+In response to:
+
+ > Please rework your patchsets to remove any of such dependencies.
+
+I suggested that I could remove the panel node from the DTSI for the 
+time being. The intent was to submit it in a separate patch later, once 
+the display is reviewed/merged, and thus actually available in the 
+kernel; this way, the two patches could be reviewed and merged separately.
+
+I could instead wait for the display patchset to get reviewed/merged 
+first, then resubmit this series, if that's preferable.
+
+I apologize for the confusion.
+
+Best regards,
+Artur Weber
 
