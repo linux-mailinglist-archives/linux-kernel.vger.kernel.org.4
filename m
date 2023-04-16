@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 011DC6E3A70
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 19:21:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32F7C6E3A71
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 19:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229500AbjDPRVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 13:21:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38756 "EHLO
+        id S229549AbjDPRWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 13:22:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDPRVE (ORCPT
+        with ESMTP id S229458AbjDPRWE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 13:21:04 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A991FEC
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 10:21:01 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-2f8405b3dc1so524204f8f.3
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 10:21:01 -0700 (PDT)
+        Sun, 16 Apr 2023 13:22:04 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E300F1FEC
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 10:22:02 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-2f46348728eso520417f8f.3
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 10:22:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mail.huji.ac.il; s=mailhuji; t=1681665660; x=1684257660;
+        d=mail.huji.ac.il; s=mailhuji; t=1681665721; x=1684257721;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8YLwTQZZnbXOgemqdrps8fA9Gldg2HuKE0/7cxnQpFQ=;
-        b=iWlAYsnwgQX8Cv+0u7jNsJWFqYxZ/C8lGVSRKgRj3qP9oakqkaEJs2uFMcFTHctaw7
-         eti0dU8HdJ+9qMsAbXIjxj582Q6F3mBHIm6bv9udoEKE0ghGEoQIbvTBDlfzT8G+iPXs
-         VSmBSe2HoXbw5z84nYJNq0q5chYouFQSyPLZM=
+        bh=DDlQI/J+UFcjKa6nIRBcZjhQV/MQ60rlZb/LHoB6Dp8=;
+        b=fOnB9/GClUPxMSB+z+8X5YoIs+bYGohLSbNJO4lElgVpmh9dkh20EsjQBQP5iJ4SpB
+         48APshaUgpALCK1NugS+2pgwezYRielOJ9tjRFNuMQyWC2i01+VDWCUJtvApczZTtbee
+         TVgMYt59oSZ/U1irMHRgmtymG+t6YemBdhPq0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681665660; x=1684257660;
+        d=1e100.net; s=20221208; t=1681665721; x=1684257721;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=8YLwTQZZnbXOgemqdrps8fA9Gldg2HuKE0/7cxnQpFQ=;
-        b=cRVVYlJ5fBF48FsOR9SFTmu908ZQXyRVBHRR2KvES6hDl/cwKeqqtBLKkE7EM+bsBj
-         puVbGyTJD6wzebbGfZtrTMjZudLmLYH2YSeAOjEY25zvVCWIDPsX3H1gHa49+0xITsg2
-         pWzh+mv7O3xZckZ/J6ga46KRKcfq/wFhp0j2h7wXT73TR94jinduffaRlNYaGUfn8H2Y
-         wbcK1oj/Si4nAH0+Kv105eYrF3jNlZwHlseUqv3wxNFpmQB5PhK8u9HaHwd2gp8NDvCL
-         2V91kgerkFQ008XUapgBrSKIYFKPqfFeGMPhijM4LdhiXuPdiTJAS+cJYiVf0QuZtBgt
-         LB8Q==
-X-Gm-Message-State: AAQBX9dEDHD+xRNvySQKdFuc5M24gKO72737Ef2OzBGnRdk4qdpqWlzl
-        iQNXogt7e4swX4cipuXL4grmtGpTTHJX0vbnhVbLJ5ig84wVBGCt0ovCJQespZLy32+dyhVA9RC
-        14mniK/mHLYmGg3f13clnWqQzii6iWhJp3mfWk7WcCp1l/20ceqcpXTjEbpLe2vzkST2wPLehRo
-        1aVzKJ/FYWU8izg8fITKjnjmBUQAK7
-X-Google-Smtp-Source: AKy350YuviM0vIUObaHotGRnvr9Vjw1j/ME0ncg+8Bba8DVf81OeLpLoAEtituVxJhkT4xf7F/zZUQ==
-X-Received: by 2002:a05:6000:151:b0:2fa:9036:9cf with SMTP id r17-20020a056000015100b002fa903609cfmr302208wrx.37.1681665659757;
-        Sun, 16 Apr 2023 10:20:59 -0700 (PDT)
+        bh=DDlQI/J+UFcjKa6nIRBcZjhQV/MQ60rlZb/LHoB6Dp8=;
+        b=N3DJX/uA5y1WF/tlw++eM+kAPT9OKkh+/+bbHT/vOsetsEqsz9GSwsrgRsORU10zyw
+         RfdmU8Q6F7eVdB0PveNT49CqR8QAjM/hHC3DbquDF2Vce4HPB4drjKaAYZfr9INGoPeo
+         d2lqbHHpRKjt/IUrfN7/SqQggdF0zMcZsxx6R2vmfBIrlEE1Q/FJD7JRcef9MWN1rNyL
+         2T9ddrxMIFVq5WJlBmElPyrJvARvJtR7qWNd1dRsAZkTVGz2Qwk2T/B7jfm8KIN8SCNZ
+         mc2rfIuOpJjFAv1Y+AFODD6RVZdRca40mXfztUIhD5uWHJaV5arLxr7fVKU3nyaQVo7V
+         Bsyg==
+X-Gm-Message-State: AAQBX9eUEUUQfVovAVsCAVLjwZPhmE21xAdJzXYJfv1a1wCg0rRdjDBj
+        2hCRJhavEJJKQRRlpa1zzvdmEHZhXV0HDhUGRZkDljbm97rdVHXmPv59XjMABfuGuRZ+num9oXT
+        vW/HgwF3+mdmLncyxF3/2RcS/h0CoTSaCQxnLFJ5tX4XVzP81vO0skHN2d0qLFh+esfMWyiZMZd
+        vDwAi6v4NeRF3Z0TbHf87rpbL0B7dC
+X-Google-Smtp-Source: AKy350bIAcypE5oApgVn5rul6KQifXK4N2ExuxKCNn8gC3dsfIPPIRPvhkqxmOEJW/RiIYN4r2Wfkg==
+X-Received: by 2002:a5d:4610:0:b0:2f6:c5bd:ba13 with SMTP id t16-20020a5d4610000000b002f6c5bdba13mr3921614wrq.42.1681665720867;
+        Sun, 16 Apr 2023 10:22:00 -0700 (PDT)
 Received: from localhost.localdomain ([94.159.161.55])
-        by smtp.gmail.com with ESMTPSA id s15-20020adfeb0f000000b002c55306f6edsm8496525wrn.54.2023.04.16.10.20.58
+        by smtp.gmail.com with ESMTPSA id g8-20020a05600c310800b003eddc6aa5fasm13355192wmo.39.2023.04.16.10.21.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 10:20:59 -0700 (PDT)
+        Sun, 16 Apr 2023 10:22:00 -0700 (PDT)
 From:   david.keisarschm@mail.huji.ac.il
 To:     linux-kernel@vger.kernel.org
 Cc:     Jason@zx2c4.com, linux-mm@kvack.org, akpm@linux-foundation.org,
@@ -55,9 +55,9 @@ Cc:     Jason@zx2c4.com, linux-mm@kvack.org, akpm@linux-foundation.org,
         hpa@zytor.com, keescook@chromium.org,
         David Keisar Schmidt <david.keisarschm@mail.huji.ac.il>,
         ilay.bahat1@gmail.com, aksecurity@gmail.com
-Subject: [PATCH v5 0/3] Replace invocations of prandom_u32() with get_random_u32()
-Date:   Sun, 16 Apr 2023 20:20:56 +0300
-Message-Id: <20230416172056.13086-1-david.keisarschm@mail.huji.ac.il>
+Subject: [PATCH v6 0/3] Replace invocations of prandom_u32() with get_random_u32() and siphash
+Date:   Sun, 16 Apr 2023 20:21:58 +0300
+Message-Id: <20230416172158.13133-1-david.keisarschm@mail.huji.ac.il>
 X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -94,9 +94,13 @@ randomizes the virtual address space of kernel memory regions.
 Hence, we have added the necessary changes to make those randomizations stronger,
 switching  prandom_u32 instance to siphash.
 
+Changes since v5:
+* Fixed coding style issues in mm/slab and mm/slab_common.
+* Deleted irrelevant changes which were appended accidentally in
+  arch/x86/mm/kaslr.
 
 Changes since v4:
-* This fifth series changes only the arch/x86/mm/kaslr patch.
+* Changed only the arch/x86/mm/kaslr patch.
   In particular, we replaced the use of prandom_bytes_state and
   prandom_seed_state with siphash inside arch/x86/mm/kaslr.c.
 
@@ -112,28 +116,14 @@ Regards,
 
 
 David Keisar Schmidt (3):
-  Replace invocation of weak PRNG in mm/slab.c
-  Replace invocation of weak PRNG inside mm/slab_common.c
-  Replace invocation of weak PRNG in arch/x86/mm/kaslr.c
+  mm/slab: Replace invocation of weak PRNG
+  mm/slab_common: Replace invocation of weak PRNG
+  arch/x86/mm/kaslr: use siphash instead of prandom_bytes_state
 
-
- arch/x86/mm/kaslr.c                           |  18 +-
- include/uapi/linux/netfilter/xt_connmark.h    |  40 +-
- include/uapi/linux/netfilter/xt_dscp.h        |  27 +-
- include/uapi/linux/netfilter/xt_mark.h        |  17 +-
- include/uapi/linux/netfilter/xt_rateest.h     |  38 +-
- include/uapi/linux/netfilter/xt_tcpmss.h      |  13 +-
- include/uapi/linux/netfilter_ipv4/ipt_ecn.h   |  40 +-
- include/uapi/linux/netfilter_ipv4/ipt_ttl.h   |  14 +-
- include/uapi/linux/netfilter_ipv6/ip6t_hl.h   |  14 +-
- mm/slab.c                                     |  25 +-
- mm/slab_common.c                              |  11 +-
- net/netfilter/xt_dscp.c                       | 149 ++++---
- net/netfilter/xt_hl.c                         | 164 +++++---
- net/netfilter/xt_rateest.c                    | 282 ++++++++-----
- net/netfilter/xt_tcpmss.c                     | 378 ++++++++++++++----
- ...Z6.0+pooncelock+pooncelock+pombonce.litmus |  12 +-
- 16 files changed, 815 insertions(+), 427 deletions(-)
+ arch/x86/mm/kaslr.c | 21 +++++++++++++++------
+ mm/slab.c           | 29 +++++++++--------------------
+ mm/slab_common.c    | 11 +++--------
+ 3 files changed, 27 insertions(+), 34 deletions(-)
 
 -- 
 2.37.3
