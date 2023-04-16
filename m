@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77DD76E38E6
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 15:36:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D436E38E7
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 15:36:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231174AbjDPNgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 09:36:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52446 "EHLO
+        id S231159AbjDPNgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 09:36:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230339AbjDPNgR (ORCPT
+        with ESMTP id S231191AbjDPNgY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 09:36:17 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000C54C3E;
-        Sun, 16 Apr 2023 06:35:57 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id fy21so14508405ejb.9;
-        Sun, 16 Apr 2023 06:35:57 -0700 (PDT)
+        Sun, 16 Apr 2023 09:36:24 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C416D4239;
+        Sun, 16 Apr 2023 06:36:00 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id fw30so4675975ejc.5;
+        Sun, 16 Apr 2023 06:36:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681652156; x=1684244156;
+        d=gmail.com; s=20221208; t=1681652159; x=1684244159;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Daq90p6qrczMZk89cBam/kQAHCGL98Y3xxZQBJA/2hY=;
-        b=JdyJtzg1mPJKZLWloB4AdzyfRPZqN+bEpQ12NixoS+Me97tKAttDlyqq7HUCxRQ+1v
-         v9Z5HBoG7mOB9bVkThpXHzl+2yV5KsrEAiy0qpoX0bqPYieRYuiJEkvnDgbcQjNed8X6
-         ucBkXUDv75ePKNA8z27uxkJLe1bxLilzQ5SPMNdXYTVweWk5b7bCqEWtyd+XPQJToa39
-         m/pG8wvjAD1ritFEKoFkWrjYcj1zbZlg3jOts3BYthPdQghXtVbV/d1HiWd/07yqilm2
-         dkPOAL+TFuG+WZGJJtifZiEeD5eyKQAwrFoSp6y+gp8acVeKeT75CHskrmmPpb9bl52s
-         xBhg==
+        bh=Deq7iuiEl1RFyBysVZfY7LGeNc11tLOLC+fdaC0CAMg=;
+        b=qEtVp1Z9nM6S8XbiJoCplRphuYpTjtmHGzrpd3ybx9pO5OzPHfLtuiS13LO3vQ9s/Q
+         qoGy9AGmRbHe2T+uJpbJ/XB0fxB1oGjkmtRpD4i96E5Rbo336OvHKjIXQzJEQrOFz7je
+         CzTcaRxn5wNjZq1KcN3EJh7GyzU/hPTpuhu0T0zgHUQALHuTKhyq3BKeAHRhL4qrfd6J
+         P0LYKAp3jaS7077nis0aCe2ogPsmY5wIW8o7nQ/a/1RoNjjwH5zBKw6wmXDxlGBBJghY
+         pKHDr2rKHpXlHKuaBu7qSr0eECmm8EXndI3L+x9b/M+GTy1Dwmo83Q4jHFsQ8k7SbdfD
+         Dodw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681652156; x=1684244156;
+        d=1e100.net; s=20221208; t=1681652159; x=1684244159;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Daq90p6qrczMZk89cBam/kQAHCGL98Y3xxZQBJA/2hY=;
-        b=O4gvkBG3qphhl3fkfH7pE5SpaCzGotTonqp9cVIALWaWTrwKkNySWaApU73XryV/W/
-         eD3nKWFSgaX7YXjdoPN7+0K3LmLeKXlnCHUM0HMj4L7WQTKVUFbpZHzS7SZ/hjriScRA
-         YId7OQd5k49i5bKLdFmowH5iYEyi+6HoN/CuzzqLb1bjprnYTYDoRRpXMLY1YnaS0xEM
-         VN+JBROBjnIhbCJBKc7Fr95Sx4NG61ozuWQelxRZx+6skiRVBESxLyyQoOaTtnOPJ2HL
-         Q6HKdtIcKTF5Lnn7ixdCq04J0NEIPNmdHjoD/Jst3JaLDtDqXjSICScnbaoAcloWaO6L
-         RtGg==
-X-Gm-Message-State: AAQBX9d3JaoJ5JOadAmm/KsSoAUVEqe3qKtD+7irxohzGQc9xJ1Lxiej
-        UXVvqckF7VOc/RPfPrybIpc=
-X-Google-Smtp-Source: AKy350YvqfmFSWkKt+Nc/8zQRr1Skw46RS13uJ3HUwVg0TMXAaJsvx1W6TU9yGC+D1uSawH51zHTDA==
-X-Received: by 2002:a17:906:d047:b0:94e:116:8581 with SMTP id bo7-20020a170906d04700b0094e01168581mr4758908ejb.5.1681652156503;
-        Sun, 16 Apr 2023 06:35:56 -0700 (PDT)
+        bh=Deq7iuiEl1RFyBysVZfY7LGeNc11tLOLC+fdaC0CAMg=;
+        b=VAVYf+ejl1/yaYilU40pickSGh5Sn7kHdy8VkYzdJE5K2oc/VhU1I8yW5POxlsluUl
+         tnuC26yfhEx2KP8JS5qvf0TiGUbeXozPa0whMQjAHLsoWqUumUF8ybatHclU0Jo3rBbZ
+         DRWPHrvDm5elKhIF1SCyH7AoxgEL0EyjevBhEc3ZjilS33WpKpURGuHrhPY+cKc++JTD
+         MD6dvZZDb+hM4qxmlMiHWxdexztxGxdsbIqS7FljgnWg8WriOan+I0EPbMQZtMobDLgO
+         0sRSczD1E2cCIygFODoeKSri2v9srJTq/jKEBWuv1eIe7W4kx7T8ynhmfXlvI1tsTF2b
+         VGDA==
+X-Gm-Message-State: AAQBX9f//aQZ3GM81XHgGO4sfRSSZLTTxn6Pm6CM+HstdfRMZJtcIVdR
+        oCQ2kKKmHA+yP2oOVcsppg0FAn/42hlfIA==
+X-Google-Smtp-Source: AKy350YadAm7tYLBr5BAsWXMhacr0mRYLnOX0Qe6f1ZBtmunodwY56V4KNqFq5dzyif3Jjvu2yo61Q==
+X-Received: by 2002:a17:906:d1c3:b0:94f:26bd:e005 with SMTP id bs3-20020a170906d1c300b0094f26bde005mr3562160ejb.9.1681652158836;
+        Sun, 16 Apr 2023 06:35:58 -0700 (PDT)
 Received: from localhost.my.domain (83.8.121.70.ipv4.supernova.orange.pl. [83.8.121.70])
-        by smtp.gmail.com with ESMTPSA id gn23-20020a1709070d1700b009373f1b5c4esm5122958ejc.161.2023.04.16.06.35.54
+        by smtp.gmail.com with ESMTPSA id gn23-20020a1709070d1700b009373f1b5c4esm5122958ejc.161.2023.04.16.06.35.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 06:35:56 -0700 (PDT)
+        Sun, 16 Apr 2023 06:35:58 -0700 (PDT)
 From:   Artur Weber <aweber.kernel@gmail.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
@@ -73,9 +73,9 @@ Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
         linux-phy@lists.infradead.org,
         ~postmarketos/upstreaming@lists.sr.ht,
         Artur Weber <aweber.kernel@gmail.com>
-Subject: [PATCH v2 10/12] ARM: dts: Re-introduce Exynos4212 DTSI
-Date:   Sun, 16 Apr 2023 15:34:20 +0200
-Message-Id: <20230416133422.1949-11-aweber.kernel@gmail.com>
+Subject: [PATCH v2 11/12] dt-bindings: arm: samsung: Add Samsung Galaxy Tab3 family boards
+Date:   Sun, 16 Apr 2023 15:34:21 +0200
+Message-Id: <20230416133422.1949-12-aweber.kernel@gmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230416133422.1949-1-aweber.kernel@gmail.com>
 References: <20230416133422.1949-1-aweber.kernel@gmail.com>
@@ -83,189 +83,43 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DTSI file was originally dropped in commit bca9085e0ae9 ("ARM:
-dts: exynos: remove Exynos4212 support (dead code)"), as there were
-no boards using it.
-
-We will be adding a device that uses it, so add it back.
+Add the compatible strings for the Samsung Galaxy Tab 3 8.0 series
+of tablets.
 
 Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
 ---
- arch/arm/boot/dts/exynos4212.dtsi | 157 ++++++++++++++++++++++++++++++
- 1 file changed, 157 insertions(+)
- create mode 100644 arch/arm/boot/dts/exynos4212.dtsi
+ .../bindings/arm/samsung/samsung-boards.yaml           | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/arch/arm/boot/dts/exynos4212.dtsi b/arch/arm/boot/dts/exynos4212.dtsi
-new file mode 100644
-index 000000000000..9261c14a4489
---- /dev/null
-+++ b/arch/arm/boot/dts/exynos4212.dtsi
-@@ -0,0 +1,157 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Samsung's Exynos4212 SoC device tree source
-+ *
-+ * Copyright (c) 2012 Samsung Electronics Co., Ltd.
-+ *		http://www.samsung.com
-+ *
-+ * Samsung's Exynos4212 SoC device nodes are listed in this file. Exynos4212
-+ * based board files can include this file and provide values for board specfic
-+ * bindings.
-+ *
-+ * Note: This file does not include device nodes for all the controllers in
-+ * Exynos4212 SoC. As device tree coverage for Exynos4212 increases, additional
-+ * nodes can be added to this file.
-+ */
+diff --git a/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml b/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
+index deb2cf971871..4ee026e7f7ad 100644
+--- a/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
++++ b/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
+@@ -104,6 +104,16 @@ properties:
+           - const: samsung,exynos4412
+           - const: samsung,exynos4
+ 
++      - description: Samsung Tab3 family boards
++        items:
++          - enum:
++              - samsung,t310                    # Samsung Galaxy Tab 3 8.0 WiFi (SM-T310)
++              - samsung,t311                    # Samsung Galaxy Tab 3 8.0 3G (SM-T311)
++              - samsung,t315                    # Samsung Galaxy Tab 3 8.0 LTE (SM-T315)
++          - const: samsung,tab3
++          - const: samsung,exynos4212
++          - const: samsung,exynos4
 +
-+#include "exynos4x12.dtsi"
-+
-+/ {
-+	compatible = "samsung,exynos4212", "samsung,exynos4";
-+
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		cpu-map {
-+			cluster0 {
-+				core0 {
-+					cpu = <&cpu0>;
-+				};
-+				core1 {
-+					cpu = <&cpu1>;
-+				};
-+			};
-+		};
-+
-+		cpu0: cpu@a00 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a9";
-+			reg = <0xa00>;
-+			clocks = <&clock CLK_ARM_CLK>;
-+			clock-names = "cpu";
-+			operating-points-v2 = <&cpu0_opp_table>;
-+			#cooling-cells = <2>; /* min followed by max */
-+		};
-+
-+		cpu1: cpu@a01 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a9";
-+			reg = <0xa01>;
-+			clocks = <&clock CLK_ARM_CLK>;
-+			clock-names = "cpu";
-+			operating-points-v2 = <&cpu0_opp_table>;
-+			#cooling-cells = <2>; /* min followed by max */
-+		};
-+	};
-+
-+	cpu0_opp_table: opp-table-0 {
-+		compatible = "operating-points-v2";
-+		opp-shared;
-+
-+		opp-200000000 {
-+			opp-hz = /bits/ 64 <200000000>;
-+			opp-microvolt = <900000>;
-+			clock-latency-ns = <200000>;
-+		};
-+		opp-300000000 {
-+			opp-hz = /bits/ 64 <300000000>;
-+			opp-microvolt = <900000>;
-+			clock-latency-ns = <200000>;
-+		};
-+		opp-400000000 {
-+			opp-hz = /bits/ 64 <400000000>;
-+			opp-microvolt = <925000>;
-+			clock-latency-ns = <200000>;
-+		};
-+		opp-500000000 {
-+			opp-hz = /bits/ 64 <500000000>;
-+			opp-microvolt = <950000>;
-+			clock-latency-ns = <200000>;
-+		};
-+		opp-600000000 {
-+			opp-hz = /bits/ 64 <600000000>;
-+			opp-microvolt = <975000>;
-+			clock-latency-ns = <200000>;
-+		};
-+		opp-700000000 {
-+			opp-hz = /bits/ 64 <700000000>;
-+			opp-microvolt = <987500>;
-+			clock-latency-ns = <200000>;
-+		};
-+		opp-800000000 {
-+			opp-hz = /bits/ 64 <800000000>;
-+			opp-microvolt = <1000000>;
-+			clock-latency-ns = <200000>;
-+			opp-suspend;
-+		};
-+		opp-900000000 {
-+			opp-hz = /bits/ 64 <900000000>;
-+			opp-microvolt = <1037500>;
-+			clock-latency-ns = <200000>;
-+		};
-+		opp-1000000000 {
-+			opp-hz = /bits/ 64 <1000000000>;
-+			opp-microvolt = <1087500>;
-+			clock-latency-ns = <200000>;
-+		};
-+		opp-1100000000 {
-+			opp-hz = /bits/ 64 <1100000000>;
-+			opp-microvolt = <1137500>;
-+			clock-latency-ns = <200000>;
-+		};
-+		opp-1200000000 {
-+			opp-hz = /bits/ 64 <1200000000>;
-+			opp-microvolt = <1187500>;
-+			clock-latency-ns = <200000>;
-+		};
-+		opp-1300000000 {
-+			opp-hz = /bits/ 64 <1300000000>;
-+			opp-microvolt = <1250000>;
-+			clock-latency-ns = <200000>;
-+		};
-+		opp-1400000000 {
-+			opp-hz = /bits/ 64 <1400000000>;
-+			opp-microvolt = <1287500>;
-+			clock-latency-ns = <200000>;
-+		};
-+		cpu0_opp_1500: opp-1500000000 {
-+			opp-hz = /bits/ 64 <1500000000>;
-+			opp-microvolt = <1350000>;
-+			clock-latency-ns = <200000>;
-+			turbo-mode;
-+		};
-+	};
-+};
-+
-+&clock {
-+	compatible = "samsung,exynos4212-clock";
-+};
-+
-+&combiner {
-+	samsung,combiner-nr = <18>;
-+};
-+
-+&gic {
-+	cpu-offset = <0x8000>;
-+};
-+
-+&pmu {
-+	interrupts = <2 2>, <3 2>;
-+	interrupt-affinity = <&cpu0>, <&cpu1>;
-+	status = "okay";
-+};
-+
-+&pmu_system_controller {
-+	compatible = "samsung,exynos4212-pmu", "syscon";
-+};
+       - description: Exynos5250 based boards
+         items:
+           - enum:
 -- 
 2.40.0
 
