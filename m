@@ -2,170 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13FC76E3BCA
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 22:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 796DC6E3BD9
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 22:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjDPUFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 16:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40106 "EHLO
+        id S229810AbjDPUMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 16:12:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjDPUFm (ORCPT
+        with ESMTP id S229685AbjDPUMn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 16:05:42 -0400
-Received: from qs51p00im-qukt01080501.me.com (qs51p00im-qukt01080501.me.com [17.57.155.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EBE526B5
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 13:05:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1681675538; bh=wnvonY8cnXrliGmn7aIfZnPhUdpyDka/v9LrWi+FIl0=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=NIvZaZuHfcdLdq89uX12X6DgOcconIr1IUBvDADK3fevsp3zKSfPyX4k+/3/TJiZy
-         0pbCsYlm0dgIC/18QI4XYgkgH3VfYIYojnBPZeu5Cf1mW+Z9M3CEShltUQz9wzs2b9
-         tI6aElHqBY6IjSziQ0U+WyU43SXgHeHn5mkwkA8YqMO3Ay0ZkP+B1ne04d9McfnnaV
-         7vf1kLy4lJjwoXXJczx3Uh7i02if5Qx3JMBbG8E829BC5WiF19DQaofeKTq6/LO8EQ
-         ZkiRUtoeZT3fbnWBvqp2drg1KBuIa+QznYPtGA1yHP7drXkKzjSdhzSKUUQs5fK0DF
-         +zg+vVIU+APMQ==
-Received: from localhost (qs51p00im-dlb-asmtp-mailmevip.me.com [17.57.155.28])
-        by qs51p00im-qukt01080501.me.com (Postfix) with ESMTPSA id 7146119811D7;
-        Sun, 16 Apr 2023 20:05:37 +0000 (UTC)
-From:   Alain Volmat <avolmat@me.com>
-To:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     patrice.chotard@foss.st.com, Alain Volmat <avolmat@me.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH] dt-bindings: reset: remove stih415/stih416 reset
-Date:   Sun, 16 Apr 2023 22:04:41 +0200
-Message-Id: <20230416200442.61554-1-avolmat@me.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 16 Apr 2023 16:12:43 -0400
+Received: from mo-csw.securemx.jp (mo-csw1514.securemx.jp [210.130.202.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D0526A6;
+        Sun, 16 Apr 2023 13:12:39 -0700 (PDT)
+Received: by mo-csw.securemx.jp (mx-mo-csw1514) id 33GKCbGl024668; Mon, 17 Apr 2023 05:12:37 +0900
+X-Iguazu-Qid: 34trY2IxUpWW3euG1Y
+X-Iguazu-QSIG: v=2; s=0; t=1681675957; q=34trY2IxUpWW3euG1Y; m=BS0vo4pEqbaNES6v9HRrz7x9hBtkBsB3he2K29dcAw0=
+Received: from imx2-a.toshiba.co.jp (imx2-a.toshiba.co.jp [106.186.93.35])
+        by relay.securemx.jp (mx-mr1511) id 33GKCaDP039796
+        (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
+        Mon, 17 Apr 2023 05:12:36 +0900
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fblBl7QaFKPEYJsRa+w1Tb83Lltyhu/mLLiwdAeKXJzNIWZhw8Z2njn0kqWtN8gQqmzcWBAE4MemsPZTALmkDXggUqqdhEvRuYJulHK16rItvu6O+VU2nGqsYb5IerdN87L2b5waxmpMQLskYpGE9qRx3gQkgw8DJGWSYugWjx/8EY20gZEeLjKCmNekHBCNjuobA4ZV/bnmCAN2kHpEV5MDjC2z/WBdShZ98iA82QnI1yAtZ7USiHIk8j3ImGMve1Miu1egapWK/sxHYDrQ3pbPNWn/ABg1Sz4FZk4a8Ox41LAa7ffVliZq4Ne9pw3WtDVIHBjDNNVlidTKFN8kpA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FAoR7cBrKKiyN7RN+qFS16+6bqWB6IXIXSGC3Ti/0cQ=;
+ b=hqVywAheNvB/Nui985Iv8d3wwm4ns/IVdJShgvEQ3c8EEpRDtiaRv6XMIyN/Acp3hi+dGrHFbJK+Usn3xcG7MY3rnnY4knQ2KGQ2KsQGvJuh6tujO07FzHVDmKkIV/DVqBe9MhZG468PzdyLqtT07PHEF2LT1migBziJ+P7lMmbSAtLruci9Pvra6onYRyZ+MHTKUMzQrcbUTo4A9iPFUEc+l/fB+pcm9TohJUbqawpCo1eGohIoB2rolCJjtzUWPkIyXyYRmhkB0EvPVr/31XuNf5J3Vb14BGLhksJ4OPSxE7WeOjUloW7ws0PrJxoabQj7k6N1GGI2CievUhUbSA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=toshiba.co.jp; dmarc=pass action=none
+ header.from=toshiba.co.jp; dkim=pass header.d=toshiba.co.jp; arc=none
+From:   <nobuhiro1.iwamatsu@toshiba.co.jp>
+To:     <krzysztof.kozlowski@linaro.org>, <wim@linux-watchdog.org>,
+        <linux@roeck-us.net>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <neil.armstrong@linaro.org>,
+        <khilman@baylibre.com>, <jbrunet@baylibre.com>,
+        <martin.blumenstingl@googlemail.com>, <jwerner@chromium.org>,
+        <evanbenn@chromium.org>, <nicolas.ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>,
+        <f.fainelli@gmail.com>, <bcm-kernel-feedback-list@broadcom.com>,
+        <shawnguo@kernel.org>, <s.hauer@pengutronix.de>,
+        <kernel@pengutronix.de>, <festevam@gmail.com>, <linux-imx@nxp.com>,
+        <matthias.bgg@gmail.com>,
+        <angelogioacchino.delregno@collabora.com>, <agross@kernel.org>,
+        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <sander@svanheule.net>, <mcoquelin.stm32@gmail.com>,
+        <alexandre.torgue@foss.st.com>, <geert+renesas@glider.be>,
+        <magnus.damm@gmail.com>, <fu.wei@linaro.org>, <vireshk@kernel.org>,
+        <eugen.hristev@collabora.com>, <justinpopo6@gmail.com>,
+        <rafal@milecki.pl>, <linus.walleij@linaro.org>,
+        <clabbe@baylibre.com>, <Anson.Huang@nxp.com>,
+        <robert.marko@sartura.hr>, <sergio.paracuellos@gmail.com>,
+        <quic_saipraka@quicinc.com>, <wsa+renesas@sang-engineering.com>,
+        <jamie@jamieiles.com>, <yannick.fertre@foss.st.com>,
+        <christophe.roullier@foss.st.com>, <shubhrajyoti.datta@xilinx.com>,
+        <srinivas.neeli@xilinx.com>, <linux-watchdog@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-renesas-soc@vger.kernel.org>
+Subject: RE: [PATCH 5/6] dt-bindings: watchdog: toshiba,visconti-wdt: simplify
+ with unevaluatedProperties
+Thread-Topic: [PATCH 5/6] dt-bindings: watchdog: toshiba,visconti-wdt:
+ simplify with unevaluatedProperties
+Thread-Index: AQHZb4DW/nyKteRfzE6TT61PALyrca8uYDxw
+Date:   Sun, 16 Apr 2023 20:12:32 +0000
+X-TSB-HOP2: ON
+Message-ID: <TYWPR01MB9420BB1F19C8EE8B87F92542929F9@TYWPR01MB9420.jpnprd01.prod.outlook.com>
+References: <20230415095112.51257-1-krzysztof.kozlowski@linaro.org>
+ <20230415095112.51257-5-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230415095112.51257-5-krzysztof.kozlowski@linaro.org>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=toshiba.co.jp;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYWPR01MB9420:EE_|TY3PR01MB11007:EE_
+x-ms-office365-filtering-correlation-id: af03b371-85d2-459d-0d57-08db3eb6e995
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Wj0duY5uKC7QEELuIhqkWrJDP3vfEEkePcP89hYSDST1L5F8vyh2oC32D69iu9xtu0zZyKPHJ25P8Vlw8snivMC6HgBqmgI/HT/JTfFOYeRX8uMYvObsaW4wewddEmsmL1soJEfovlQ9mZI2Ls0kv93UKacgD7jkVhctZraXrSRLqqyvZyPk3EpNuY6/8OE6ABvcQvaLC7IQfupkA06jvlJ6X/FUX5itX11Oaa4fuNDanQzAFoTx+/Nvzwr7hp8ZUj5a3ZeMu9U7GGP8WN/ZecSerEY6PcFFUmwtsewrk+a+4tNBVeZSSggR3vZGfRilPU88AF1Tt9JrMHS4jkLsBzDyvPWPt1cXuRolQffMMzRBQIBL6QQ1gmqNc3DyK+4GzmwTAT6kWHsZOAnEjnwYn5RLRzDaNF4Y6HnugXJw+uLE+ClFMFQXq4akT832w/iRwuLdzL2DzUJ3J8wgKnA5spYqVpu1FtNBu+2z9yi42KgIR+RFRUG+AC/oOh3UskRaXexamMZUSBNQSQeqNn86a8tz+pjNoHuzciNjCQMNZBeaub7demZv5tFgVFkd2qNb5BjhQnHuuBYCldkrVXt2DKvkFU2tztJl1iUCeNMPJpB4SYozgvdjqukB4gV7p4Q+eWEpqIBQrR+a1O/dXKqqQA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB9420.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(136003)(346002)(376002)(396003)(451199021)(7366002)(7406005)(7416002)(5660300002)(52536014)(86362001)(83380400001)(186003)(26005)(6506007)(9686003)(1191002)(921005)(122000001)(38100700002)(38070700005)(8936002)(8676002)(33656002)(478600001)(110136005)(71200400001)(7696005)(55016003)(41300700001)(316002)(76116006)(64756008)(66446008)(66476007)(66556008)(66946007)(2906002)(4744005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UlY2T25ucU5Kd0lKQVp0M2U5MlpGeXhWMG1Jamd1Q3Y0bTFaNGRJeHd2MXdn?=
+ =?utf-8?B?SDdPdGE0QWhLYnp6bEw4REFXK2lNUmU5MzVCaHJrWm92NUlPaWF5ZWZReTV6?=
+ =?utf-8?B?TXlhSFh5UGV1bFQwRlV4TDRpSCtqSWJvTXpnUlk2YmlKcHkyYnNTcUl6TmtI?=
+ =?utf-8?B?ZVVIK0xSYXRtbXBuNE5ubWs1eUQ4cVE0dC8vU2dYSU10TGEvdmZIR3U1U0pY?=
+ =?utf-8?B?VG5RZlEyZkpJaUJBc0ZNK0UxSlAxZ0ZjcDdua09iaFBzeHlkbTBaczAvV09M?=
+ =?utf-8?B?Vy9GQjRQOWhiYTVMbW1lSVN0SkVzNkdYeDJPQ1diRHR1cDhublJiZmhCbjd2?=
+ =?utf-8?B?aHQvRUw4ZmNyYXlvQXJhaGsxendoNjNqVmdjdVQvbHdTTmwrRGhzU3dTbnp6?=
+ =?utf-8?B?dEZMQjlOOHVZcG9ibG52c1VRaEUraW1zd0x2Vnp6Y1RvSnFKZHAya3k0NWNz?=
+ =?utf-8?B?Tytyd21BL1h0N3ZhVnNESnhGdkJPSjRLcyszYnloYTRjaTZuLzczaE9qaDAy?=
+ =?utf-8?B?WkhSVWlDbm5sUEp0LzRJeTJxeGUzVmdkNTZVbjFYVUo5VFhTTjQ5SG9XeWEy?=
+ =?utf-8?B?TkE3U0R2UjhMUHJKTitSdDNmc1FQY2lvN3psQVphTGZ3bnFHT3Bkdk5FcmZh?=
+ =?utf-8?B?NmFSS2dYaEt4bEE0bGphK2hKVEdPMXFGVEJYcDBoSUZWd2R6cm1zaDA4Z3lC?=
+ =?utf-8?B?OTF0MVdIR0lYOGRST0hCRW54RjFZZ3FUWUF6NCttckFINS9Fa01SREdBVys0?=
+ =?utf-8?B?bDFhODhrWjdpUjZvT1lBem5LWFhKTkptdGpZc1FXTlhJc2MwdUExLzJzVENO?=
+ =?utf-8?B?bitaNzl3Ylp3TndJVlMzSTZTeUVCWXZrOWlCVlk5cmdpWDk0VTZXVkF4ajJk?=
+ =?utf-8?B?UTdVR3ZGaFoxNGFNdVhGSUhLM29IWVRZUE9kZ2lwdlMyZVBzTmU4R3JXYVZh?=
+ =?utf-8?B?dzB3QktnTmZVTFhGbWFGanFUaDdieUl5b25WcUpqYjhSMWQvRWx1blFyd25R?=
+ =?utf-8?B?OWZrRGw0U0VCKzdUOHNZdXloYnI4VVZDRHZjMHpaVFdIUnIweEJkUkhuV2tM?=
+ =?utf-8?B?NGJNcStSbVFFQ0lQcVRHb05VL3Y2UFROMysxNXNKeEptUFpmQzc5TVFtb3pJ?=
+ =?utf-8?B?VmVRVkF0anQ4MVYwRFpjdVdCZXNFVVprVXk4dFFWUkJYYXAxOU1YZmZORllL?=
+ =?utf-8?B?R1ZkODhvNEdFaHlIc2cyQU95K0RnS1k5a1h4aGlWUHJJVHR2OXVXMjAvWitP?=
+ =?utf-8?B?NlJ1OENqb2V5YThXb0Q1M0NnZkExamdaWGhTdVQyQ2JVMHBGdjdvY1MxZXpC?=
+ =?utf-8?B?ZGkwbUI0NElMRzF4amlRNFpNWm9lMkFFYVIwSTVqMERSL216VkpERjhuNlpp?=
+ =?utf-8?B?VVlUUjVOQ1RtbTl5SHpuVnV0ZGY5TldWWTEwdmlKRk1PVlFKSXNZTzVjeEQv?=
+ =?utf-8?B?MWRTaFcrM3pqR05sYlVKUXVQeDkwbnVkd2VVUEw1L05oSDJxV1R4ZjhHRmtO?=
+ =?utf-8?B?eko4RWgzR1BSSDZEK0VFeG52eFhCdDI4WmlZMTFnV21Qb3JjR01LL0FFckgr?=
+ =?utf-8?B?a3FkY21aWHJjc1dFQVpNNmhHU1BWUHg0Zmo5ME5iRW1yeGRZRmpJOU4wdzl6?=
+ =?utf-8?B?bnZ6Nzh5NjJ1S0JGbzdNMXZxNjBqL1VyamRGcnRFdXR5TGNLSmpGaG5JWnBG?=
+ =?utf-8?B?WW9nWjRjbjg1dmdUc2ExdXJIcFRrVTI0UTlBd09Cdk9sSU41WTU1Yllxd05Y?=
+ =?utf-8?B?aGUwTGkvRjA0MGcxV0laY1h2V0RZVEEyRzZ0YzgvV1hRcGQvSEVCT2hReTF4?=
+ =?utf-8?B?b2UzN1NpSElKZkdhYjcrSFJoUlYyVkZtSlMvS1QwVy9acVdmbnBRWklWMkN1?=
+ =?utf-8?B?ZHQ5QnoxbFRQVnVIaWZBbTJIT3htcVdGOWZiNk51YmVOT2NhQzhJRytuNHRQ?=
+ =?utf-8?B?MW1GdE5PWGdSdFMwc082ZUM2bDFOendwSVlyNVZNcTZaZTZiWDRWTW9RY0s3?=
+ =?utf-8?B?M3N3ZDZyZitwUW80dFZERDZTa3M5dTVhdDZ1NkpVYmMxV3M0bTlYT3J6a2Vm?=
+ =?utf-8?B?RGJ0QnZKb1JlbnlsNnFLc3htQ3FhWVNLeVAvZ0pMU1JrcWJxT3pNa1A5N3ZW?=
+ =?utf-8?B?dGxwOXRuMTVRZXVQQmlpbzdOVjZZR0FSMEFxSDljUmRkd3Y5VWJSaU5Qd3pM?=
+ =?utf-8?B?aHc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: 8l1_BUPAhyJrbMOakdFZKh31Yw0gBKN2
-X-Proofpoint-GUID: 8l1_BUPAhyJrbMOakdFZKh31Yw0gBKN2
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.790,17.0.605.474.0000000_definitions?=
- =?UTF-8?Q?=3D2022-01-12=5F02:2020-02-14=5F02,2022-01-12=5F02,2020-01-23?=
- =?UTF-8?Q?=5F02_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=511 phishscore=0 mlxscore=0
- adultscore=0 malwarescore=0 bulkscore=0 suspectscore=0 clxscore=1015
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2304160190
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB9420.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: af03b371-85d2-459d-0d57-08db3eb6e995
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Apr 2023 20:12:32.6613
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: f109924e-fb71-4ba0-b2cc-65dcdf6fbe4f
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 1sriqPVzycidn3s/dBSgKiYHj2knZC4QPk9TCbds6ihWkxeKG9JyULsJVH6PWl2ZENs1o8ZQY6+Ha04XKHJnfDD1d/+qYc5jvb2tO2cSalNQF2IjNDXoBrbXk/vOgo7E
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY3PR01MB11007
+X-OriginatorOrg: toshiba.co.jp
+MSSCP.TransferMailToMossAgent: 103
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the stih415 and stih416 reset dt-bindings since those
-two platforms are no more supported.
-
-Signed-off-by: Alain Volmat <avolmat@me.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
-Patch previously sent via a serie: https://lore.kernel.org/all/20230209091659.1409-10-avolmat@me.com/
-
- include/dt-bindings/reset/stih415-resets.h | 28 ------------
- include/dt-bindings/reset/stih416-resets.h | 52 ----------------------
- 2 files changed, 80 deletions(-)
- delete mode 100644 include/dt-bindings/reset/stih415-resets.h
- delete mode 100644 include/dt-bindings/reset/stih416-resets.h
-
-diff --git a/include/dt-bindings/reset/stih415-resets.h b/include/dt-bindings/reset/stih415-resets.h
-deleted file mode 100644
-index 96f7831a1db0..000000000000
---- a/include/dt-bindings/reset/stih415-resets.h
-+++ /dev/null
-@@ -1,28 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--/*
-- * This header provides constants for the reset controller
-- * based peripheral powerdown requests on the STMicroelectronics
-- * STiH415 SoC.
-- */
--#ifndef _DT_BINDINGS_RESET_CONTROLLER_STIH415
--#define _DT_BINDINGS_RESET_CONTROLLER_STIH415
--
--#define STIH415_EMISS_POWERDOWN		0
--#define STIH415_NAND_POWERDOWN		1
--#define STIH415_KEYSCAN_POWERDOWN	2
--#define STIH415_USB0_POWERDOWN		3
--#define STIH415_USB1_POWERDOWN		4
--#define STIH415_USB2_POWERDOWN		5
--#define STIH415_SATA0_POWERDOWN		6
--#define STIH415_SATA1_POWERDOWN		7
--#define STIH415_PCIE_POWERDOWN		8
--
--#define STIH415_ETH0_SOFTRESET		0
--#define STIH415_ETH1_SOFTRESET		1
--#define STIH415_IRB_SOFTRESET		2
--#define STIH415_USB0_SOFTRESET		3
--#define STIH415_USB1_SOFTRESET		4
--#define STIH415_USB2_SOFTRESET		5
--#define STIH415_KEYSCAN_SOFTRESET	6
--
--#endif /* _DT_BINDINGS_RESET_CONTROLLER_STIH415 */
-diff --git a/include/dt-bindings/reset/stih416-resets.h b/include/dt-bindings/reset/stih416-resets.h
-deleted file mode 100644
-index f682c906ed5a..000000000000
---- a/include/dt-bindings/reset/stih416-resets.h
-+++ /dev/null
-@@ -1,52 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--/*
-- * This header provides constants for the reset controller
-- * based peripheral powerdown requests on the STMicroelectronics
-- * STiH416 SoC.
-- */
--#ifndef _DT_BINDINGS_RESET_CONTROLLER_STIH416
--#define _DT_BINDINGS_RESET_CONTROLLER_STIH416
--
--#define STIH416_EMISS_POWERDOWN		0
--#define STIH416_NAND_POWERDOWN		1
--#define STIH416_KEYSCAN_POWERDOWN	2
--#define STIH416_USB0_POWERDOWN		3
--#define STIH416_USB1_POWERDOWN		4
--#define STIH416_USB2_POWERDOWN		5
--#define STIH416_USB3_POWERDOWN		6
--#define STIH416_SATA0_POWERDOWN		7
--#define STIH416_SATA1_POWERDOWN		8
--#define STIH416_PCIE0_POWERDOWN		9
--#define STIH416_PCIE1_POWERDOWN		10
--
--#define STIH416_ETH0_SOFTRESET		0
--#define STIH416_ETH1_SOFTRESET		1
--#define STIH416_IRB_SOFTRESET		2
--#define STIH416_USB0_SOFTRESET		3
--#define STIH416_USB1_SOFTRESET		4
--#define STIH416_USB2_SOFTRESET		5
--#define STIH416_USB3_SOFTRESET		6
--#define STIH416_SATA0_SOFTRESET		7
--#define STIH416_SATA1_SOFTRESET		8
--#define STIH416_PCIE0_SOFTRESET		9
--#define STIH416_PCIE1_SOFTRESET		10
--#define STIH416_AUD_DAC_SOFTRESET	11
--#define STIH416_HDTVOUT_SOFTRESET	12
--#define STIH416_VTAC_M_RX_SOFTRESET	13
--#define STIH416_VTAC_A_RX_SOFTRESET	14
--#define STIH416_SYNC_HD_SOFTRESET	15
--#define STIH416_SYNC_SD_SOFTRESET	16
--#define STIH416_BLITTER_SOFTRESET	17
--#define STIH416_GPU_SOFTRESET		18
--#define STIH416_VTAC_M_TX_SOFTRESET	19
--#define STIH416_VTAC_A_TX_SOFTRESET	20
--#define STIH416_VTG_AUX_SOFTRESET	21
--#define STIH416_JPEG_DEC_SOFTRESET	22
--#define STIH416_HVA_SOFTRESET		23
--#define STIH416_COMPO_M_SOFTRESET	24
--#define STIH416_COMPO_A_SOFTRESET	25
--#define STIH416_VP8_DEC_SOFTRESET	26
--#define STIH416_VTG_MAIN_SOFTRESET	27
--#define STIH416_KEYSCAN_SOFTRESET	28
--
--#endif /* _DT_BINDINGS_RESET_CONTROLLER_STIH416 */
--- 
-2.34.1
+PiBTdWJqZWN0OiBbUEFUQ0ggNS82XSBkdC1iaW5kaW5nczogd2F0Y2hkb2c6IHRvc2hpYmEsdmlz
+Y29udGktd2R0OiBzaW1wbGlmeQ0KPiB3aXRoIHVuZXZhbHVhdGVkUHJvcGVydGllcw0KPiANCj4g
+QWxsb3cgZ2VuZXJpYyB3YXRjaGRvZyBwcm9wZXJ0aWVzIGJ5IHVzaW5nIHVuZXZhbHVhdGVkUHJv
+cGVydGllczogZmFsc2UuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBLcnp5c3p0b2YgS296bG93c2tp
+IDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+DQo+IC0tLQ0KPiAgLi4uL2RldmljZXRy
+ZWUvYmluZGluZ3Mvd2F0Y2hkb2cvdG9zaGliYSx2aXNjb250aS13ZHQueWFtbCAgICB8IDQgKy0t
+LQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAzIGRlbGV0aW9ucygtKQ0KDQpB
+Y2tlZC1ieTogTm9idWhpcm8gSXdhbWF0c3UgPG5vYnVoaXJvMS5pd2FtYXRzdUB0b3NoaWJhLmNv
+LmpwPg0KDQpCZXN0IHJlZ2FyZHMsDQogIE5vYnVoaXJvDQoNCj4gDQo+IGRpZmYgLS1naXQNCj4g
+YS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvd2F0Y2hkb2cvdG9zaGliYSx2aXNj
+b250aS13ZHQueWFtbA0KPiBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy93YXRj
+aGRvZy90b3NoaWJhLHZpc2NvbnRpLXdkdC55YW1sDQo+IGluZGV4IGViYTA4MzgyMmQxZi4uNTFk
+MDNkNWIwOGFkIDEwMDY0NA0KPiAtLS0NCj4gYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmlu
+ZGluZ3Mvd2F0Y2hkb2cvdG9zaGliYSx2aXNjb250aS13ZHQueWFtbA0KPiArKysNCj4gYi9Eb2N1
+bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvd2F0Y2hkb2cvdG9zaGliYSx2aXNjb250aS13
+ZHQueWFtbA0KPiBAQCAtMjQsMTQgKzI0LDEyIEBAIHByb3BlcnRpZXM6DQo+ICAgIGNsb2NrczoN
+Cj4gICAgICBtYXhJdGVtczogMQ0KPiANCj4gLSAgdGltZW91dC1zZWM6IHRydWUNCj4gLQ0KPiAg
+cmVxdWlyZWQ6DQo+ICAgIC0gY29tcGF0aWJsZQ0KPiAgICAtIHJlZw0KPiAgICAtIGNsb2Nrcw0K
+PiANCj4gLWFkZGl0aW9uYWxQcm9wZXJ0aWVzOiBmYWxzZQ0KPiArdW5ldmFsdWF0ZWRQcm9wZXJ0
+aWVzOiBmYWxzZQ0KPiANCj4gIGV4YW1wbGVzOg0KPiAgICAtIHwNCj4gLS0NCj4gMi4zNC4xDQo=
 
