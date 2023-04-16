@@ -2,108 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 833A46E36CE
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 11:53:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A5836E36CF
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 11:53:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbjDPJxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 05:53:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51506 "EHLO
+        id S230421AbjDPJxi convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 16 Apr 2023 05:53:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbjDPJxb (ORCPT
+        with ESMTP id S230363AbjDPJxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 05:53:31 -0400
-Received: from sender3-op-o18.zoho.com (sender3-op-o18.zoho.com [136.143.184.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D894AE62;
+        Sun, 16 Apr 2023 05:53:32 -0400
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401241BDA;
+        Sun, 16 Apr 2023 02:53:31 -0700 (PDT)
+Received: by mail-yb1-f180.google.com with SMTP id y16so7901146ybb.2;
+        Sun, 16 Apr 2023 02:53:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681638810; x=1684230810;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Vy0goH1eR4IHNE8qypyyzP1OUcgfs+Sxeg1e6E0IW/k=;
+        b=MNTIB/514fLN8+REJ+SUiqDm3FemzuDzeeOJM2+yltuLiDNRPQ8gHdpjHYYA/K34xr
+         w317Cxd/lj/qoJlq4d7evz37RYQCqb8qgzOHAosmnDBlEYHqdTiG7PFIKYx/hDELbQvD
+         JBdGWbLlxnDTadColGMxS5/9HONdGtgpaLm98KPOc1jcbhUNZLP4OrK4bAv8c86ZoTlN
+         /RU57jg3JypA/7HVXjJ/ve1rncJpVx2X/kW3AYCj/9iwS1dzCjSUwOrrA8BK8eYLWqTi
+         ulLOfMMJv+fe5YSkMDrQHHYFLNkxwSc5QceuKzCohL34dNeJizYk6kLLKyTRVYE7xeM6
+         Matw==
+X-Gm-Message-State: AAQBX9c31tXBZvW5CfPUZETIa18RWrmJY6auvelawfGLf9dA4+QDaP87
+        af6+R0Ep0GPmgbQ8s0X1mr5plT414XUaLA==
+X-Google-Smtp-Source: AKy350YJ5sgTQqbpk2nz2JhuJ0ZdAV99KHIhZ2YoNJjxxBLOwmpeNPDngqZFhmhxuX4a8fFMdywozw==
+X-Received: by 2002:a25:7388:0:b0:b92:5277:ebc2 with SMTP id o130-20020a257388000000b00b925277ebc2mr28742ybc.29.1681638810279;
+        Sun, 16 Apr 2023 02:53:30 -0700 (PDT)
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
+        by smtp.gmail.com with ESMTPSA id 126-20020a250a84000000b00b8f54571fc0sm785758ybk.5.2023.04.16.02.53.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Sun, 16 Apr 2023 02:53:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1681638761; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=E0swol1jw29yr7sbkD56kf0SXwk+LNzYdYTwvIMMhagyxm0z6vxHQZoLvxwjAjISMrIEc7XWnhviPfJy7EZOZ3lVAowfmmjdTC27FwHtQFGqQGLUkCQXXFQK84B5Nl8iAQOvy0gU1MgfZa+pogwdHLx6GaZXpUjoxH18kREFcQk=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1681638761; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=GCZjhm4Hbh1Xe4YSlI4A2hA8xi0IlyPYCkMgUVWDgKg=; 
-        b=abx6MaJDAXNiOU77CW+9MuEOVWOjcOjjS5/G6GwxWQN161hmmK0YoEgZpSc8mASh5p3ken7rBFBGz9OYGYGnl+yUldoERi+r+S+/oW/eFtkSu7rvFbcMCcpTw7hBdZ7wicNTcIU0TvEYTDFtZh8vR1dzxHA2s03v+cTnkH9l3rA=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1681638761;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=GCZjhm4Hbh1Xe4YSlI4A2hA8xi0IlyPYCkMgUVWDgKg=;
-        b=GMZ9Mi9oXvS+IUd1T5GR+csOJt5VeL93w9TXXeG4IGa1BF0s/Jb9eHL/irN5fYOY
-        a3+qZQeGd89KFxbYrY74lLcGEAzxrwGy8A5tauSRwex33XtR2UunlWHUupWsz1zTMEu
-        pEFdBN9lTQ5L9q2MJoxBbmKFMGgd45zDVXG4t+1E=
-Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
-        with SMTPS id 1681638759506996.2741470788767; Sun, 16 Apr 2023 02:52:39 -0700 (PDT)
-Message-ID: <c657f6a2-74fa-2cc1-92cf-18f25464b1e1@arinc9.com>
-Date:   Sun, 16 Apr 2023 12:52:31 +0300
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-54fe3cd445aso86100027b3.5;
+        Sun, 16 Apr 2023 02:53:29 -0700 (PDT)
+X-Received: by 2002:a81:e54b:0:b0:552:d6aa:80d9 with SMTP id
+ c11-20020a81e54b000000b00552d6aa80d9mr275295ywm.4.1681638809536; Sun, 16 Apr
+ 2023 02:53:29 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC/RFT v1] net: ethernet: mtk_eth_soc: drop generic vlan rx
- offload, only use DSA untagging
-Content-Language: en-US
-To:     Frank Wunderlich <linux@fw-web.de>, Felix Fietkau <nbd@nbd.name>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Daniel Golle <daniel@makrotopia.org>
-Cc:     John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Frank Wunderlich <frank-w@public-files.de>
-References: <20230416091038.54479-1-linux@fw-web.de>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <20230416091038.54479-1-linux@fw-web.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <202304150025.K0hczLR4-lkp@intel.com> <20230415125705.180426-1-akinobu.mita@gmail.com>
+In-Reply-To: <20230415125705.180426-1-akinobu.mita@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Sun, 16 Apr 2023 11:53:18 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWNQRgXzaEsb1M=SGm683dTOU2gLyjD2UuoD8qy+Ex74Q@mail.gmail.com>
+Message-ID: <CAMuHMdWNQRgXzaEsb1M=SGm683dTOU2gLyjD2UuoD8qy+Ex74Q@mail.gmail.com>
+Subject: Re: [PATCH -block] fault-inject: fix build error when
+ FAULT_INJECTION_CONFIGFS=y and CONFIGFS_FS=m
+To:     Akinobu Mita <akinobu.mita@gmail.com>
+Cc:     lkp@intel.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, axboe@kernel.dk,
+        oe-kbuild-all@lists.linux.dev, shinichiro.kawasaki@wdc.com,
+        chaitanyak@nvidia.com, akpm@linux-foundation.org,
+        hch@infradead.org, Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.04.2023 12:10, Frank Wunderlich wrote:
-> From: Felix Fietkau <nbd@nbd.name>
-> 
-> Through testing I found out that hardware vlan rx offload support seems to
-> have some hardware issues. At least when using multiple MACs and when receiving
-> tagged packets on the secondary MAC, the hardware can sometimes start to emit
-> wrong tags on the first MAC as well.
-> 
-> In order to avoid such issues, drop the feature configuration and use the
-> offload feature only for DSA hardware untagging on MT7621/MT7622 devices which
-> only use one MAC.
+Hi Mita-san,
 
-MT7621 devices most certainly use both MACs.
+On Sat, Apr 15, 2023 at 3:09 PM Akinobu Mita <akinobu.mita@gmail.com> wrote:
+> This fixes a build error when CONFIG_FAULT_INJECTION_CONFIGFS=y and
+> CONFIG_CONFIGFS_FS=m.
+>
+> Since the fault-injection library cannot built as a module, avoid building
+> configfs as a module.
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/oe-kbuild-all/202304150025.K0hczLR4-lkp@intel.com/
+> Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
 
-> 
-> Tested-by: Frank Wunderlich <frank-w@public-files.de>
-> Signed-off-by: Felix Fietkau <nbd@nbd.name>
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> ---
-> used felix Patch as base and ported up to 6.3-rc6 which seems to get lost
-> and the original bug is not handled again.
-> 
-> it reverts changes from vladimirs patch
-> 
-> 1a3245fe0cf8 net: ethernet: mtk_eth_soc: fix DSA TX tag hwaccel for switch port 0
+Thanks for your patch!
 
-Do I understand correctly that this is considered being reverted because 
-the feature it fixes is being removed?
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -1979,7 +1979,8 @@ config FAIL_SUNRPC
+>
+>  config FAULT_INJECTION_CONFIGFS
+>         bool "Configfs interface for fault-injection capabilities"
+> -       depends on FAULT_INJECTION && CONFIGFS_FS
+> +       depends on FAULT_INJECTION
+> +       select CONFIGFS_FS
 
-Arınç
+My first thought was "please do not select CONFIGFS_FS", but
+apparently this is what most users do, so I guess it's OK.
+
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+
+The alternative would be to do:
+
+-       depends on FAULT_INJECTION && CONFIGFS_FS
++       depends on FAULT_INJECTION && (CONFIGFS_FS=y ||
+CONFIGFS_FS=FAULT_INJECTION)
+
+>         help
+>           This option allows configfs-based drivers to dynamically configure
+>           fault-injection via configfs.  Each parameter for driver-specific
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
