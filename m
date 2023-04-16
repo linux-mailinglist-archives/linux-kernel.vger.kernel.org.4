@@ -2,150 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F346E3B9F
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 21:46:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3ED16E3BBA
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 21:52:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbjDPTq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 15:46:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33300 "EHLO
+        id S229866AbjDPTwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 15:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjDPTqz (ORCPT
+        with ESMTP id S229593AbjDPTv7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 15:46:55 -0400
-X-Greylist: delayed 25830 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 16 Apr 2023 12:46:51 PDT
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78C92694;
-        Sun, 16 Apr 2023 12:46:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1681674407; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=AgIVPUB345RxFKnkh07CQKy1ZbKF8aVI3EpXGvrSJ0eX8lErWtDbsDqF2QB77OqzuF
-    4GbFhWmGDA3ZGNPmSQytT39+7U/wL7b00FQtjaaRjwbbKZjUz3W4SjUtzrgPmF5CqmSR
-    a0CJXYdrGs7/wtFWYehvlHef/DyE0lkUskAJBFMMADVp5DvHxcIZRi/m2tcQQhcmGxeR
-    D6qzIGWnFMxkwYgJIxGZC46sVPGBevjrKS/hhj149ySat/7sj+St0/PRR/fUW2UJ9m5L
-    VX3YZ4i3cxaUlQnHFb4eVYjun2G0fpBZk46RjFols0hETr2/jzitD4JO38vGZMtmhVdr
-    xGjw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1681674407;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=s7e5pLZEiw+VWzLdZyOifqhlqNcQHDzzu/jx3K9/G7A=;
-    b=YsiMkGUwdyrKRaOuTCJ2T5uX3H5oGVFfgu9Bn78bKdHwbvFeyCXbphv4bVF3kWX+60
-    UdXUnXzRx1s6NCWRODFMl7jr+9O5CTm6beCfnxPdthcZLT66aenUeXDbKhoI8WXP7RTN
-    gHs/BYJNIq11hlLLzsERwCrmkA42+hlJ7Ql8ZqOFjwyffKrJ9Q4WQ4GMeufaapsA9+tE
-    8j/r/TzqFYSGAp+jUFoX/rnaO44zeG5tWLp1xsMG5LKVqtmsKtQ9dvMFohYrH95kfwD/
-    ck2gWcCzC5Tat1aG5+K24h89fZIEMeHLf9KBd6JgJZgI0NxON2ZNTlWQ8m4s8uVpKI/N
-    gTjA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1681674407;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=s7e5pLZEiw+VWzLdZyOifqhlqNcQHDzzu/jx3K9/G7A=;
-    b=IUznJkOsCZmR88DurFI/rNus5QPxdhpa6dnmuJzTnJIoMadzddwU+GNwBxPFuJZkcX
-    dAnsO7ZhR2ZNpdLSH1biuPLDNDZd87mpzpqtMll9J2Q16DBX5QDJwXwz9iaOFR8Blbsy
-    GosRbcSsyBaRKKLatZZdbprjlu/MaimwbBHvC5HtM2fY3jmPbwur5ZnRMlULzVcQwzdv
-    OetnfeUs9kGrkTcjTA4WdsNCREa/mW0SJz5G1MkBLLXdkfpMfXccm06X14WBiKegeco5
-    +pwlBtKjg7H8knYgbIM1J+4vEkOTugT3Lg45+OqoOW/rDMC+Q2RXdk3r7nyVQRJEjp4B
-    U57A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1681674407;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=s7e5pLZEiw+VWzLdZyOifqhlqNcQHDzzu/jx3K9/G7A=;
-    b=nSyMQzld3GoRWMQX62ZAhD0y3GwJr8+weQWFeukLweFeggQgoRN01MRqiSZ3HXtJOA
-    8Yhl4EeiV6aIp3yoIeBQ==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFq0USEbDUQnQ=="
-Received: from [IPV6:2a00:6020:4a8e:5000::923]
-    by smtp.strato.de (RZmta 49.4.0 AUTH)
-    with ESMTPSA id x06214z3GJkkSYH
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Sun, 16 Apr 2023 21:46:46 +0200 (CEST)
-Message-ID: <f58e8dce-898c-8797-5293-1001c9a75381@hartkopp.net>
-Date:   Sun, 16 Apr 2023 21:46:40 +0200
+        Sun, 16 Apr 2023 15:51:59 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D42D7
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 12:51:57 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-552ae3e2cbeso26923117b3.13
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 12:51:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681674716; x=1684266716;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+XV1SaR4oDj2LmHIYbtEP9BS2GzUn6i8QGpmiK2pWes=;
+        b=35GxN9QmW2hjy0Dfkmb2w05f+ZtVlxILgN7uYJpNWJLcIPK3szAO7GVlFCTIxLRIFw
+         ovaBhQJgVADB9Q6ICg7hyMv/NAh8j0wq800X9YdYJ/dDjbdghw8JokHMRoEQNsIdRkdC
+         WLiQXpG4Q+TttdZCcEbXfxWBxXC2GFAHRO1LtQZQgEpcMxrKREN4Avy2QCWCb6+mN3qa
+         FRLCFpSJV0ak+dFRGggbPcpzGTkIvZjikma5vN7FHtcFbl8p3SNMYoZ+VAOk0dtr67BG
+         CWcPeQAuI2DkTnaae9/D0Af3q8cBuCh0xrhWT3C7wipnfK4eVsi6qPFipvyeb/FiaUE3
+         Z2Xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681674716; x=1684266716;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+XV1SaR4oDj2LmHIYbtEP9BS2GzUn6i8QGpmiK2pWes=;
+        b=cEuxeJfWFii/wBNxB1P/QNgcD61+B2LZAS+xUY1spDA67YgufdjbLH1AD2QhI+Ii8z
+         tZpHIYnuJyTWuTGvLaAxbWQ9SCxRIHzOytdisNAVPOe12FbukjzNoQolFR/7/IP3nau2
+         FiAlqV+YCyyrwHjsZlv3YLa49cDopAuy2wUfyaZnyLqy1TkRLVBeTYdXkR+fE2pzEiV1
+         gmN2NCo3Oc60pRP61vfeAPyCwOQ9Ddc6kkD1zjftA3WkI639QaCOEtPP0YAhOZYg9z09
+         jJikz9lSzGKQyVTuJc2X/mm1B5XukMP/52hF+rHM59k0kA/C2WhMRXKI1QwxRUw4761s
+         t0aQ==
+X-Gm-Message-State: AAQBX9clkphv9ITcKxuqkk6FNm4uMVOgtbEnoDmYPSTLbGVSEwY+Cr7D
+        a1o1Q5bepclRfiYPR+b2G2fr+Q==
+X-Google-Smtp-Source: AKy350aso6IEsDAN1exazMbmo6Wh+kHtNe004GaFkMaSD4/1/07yu0c9ScNQNbT2abH6NzKDCzhu7g==
+X-Received: by 2002:a81:a210:0:b0:54e:ffbd:7a7e with SMTP id w16-20020a81a210000000b0054effbd7a7emr13157859ywg.45.1681674716340;
+        Sun, 16 Apr 2023 12:51:56 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id 22-20020a810b16000000b0054fae5ed408sm2677063ywl.45.2023.04.16.12.51.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Apr 2023 12:51:55 -0700 (PDT)
+Date:   Sun, 16 Apr 2023 12:51:46 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Zi Yan <ziy@nvidia.com>
+cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
+        linux-mm@kvack.org,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        =?ISO-8859-15?Q?Michal_Koutn=FD?= <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Zach O'Keefe <zokeefe@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 6/7] mm: truncate: split huge page cache page to a
+ non-zero order if possible.
+In-Reply-To: <9dd96da-efa2-5123-20d4-4992136ef3ad@google.com>
+Message-ID: <86864d6c-39d3-d26f-278f-b96e14884541@google.com>
+References: <20230403201839.4097845-1-zi.yan@sent.com> <20230403201839.4097845-7-zi.yan@sent.com> <9dd96da-efa2-5123-20d4-4992136ef3ad@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC PATCH 5/5] can: m_can: Add hrtimer to generate software
- interrupt
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Judith Mendez <jm@ti.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Andrew Davis <afd@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        Schuyler Patton <spatton@ti.com>
-References: <20230413223051.24455-1-jm@ti.com>
- <20230413223051.24455-6-jm@ti.com>
- <20230414-bounding-guidance-262dffacd05c-mkl@pengutronix.de>
- <4a6c66eb-2ccf-fc42-a6fc-9f411861fcef@hartkopp.net>
- <20230416-failing-washbasin-e4fa5caea267-mkl@pengutronix.de>
-Content-Language: en-US
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20230416-failing-washbasin-e4fa5caea267-mkl@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> As this code stands, truncate a 2M huge page at 1M and you get two 1M
+> pieces (one then discarded) - nice; but truncate it at 1M+1 and you get
+> lots of order 2 (forced up from 1) pieces.  Seems weird, and not worth
+> the effort.
 
+I've probably said that wrong: truncate at 1M+1 and you'd get lots of
+order 0 pieces.
 
-On 16.04.23 17:35, Marc Kleine-Budde wrote:
-> On 16.04.2023 14:33:11, Oliver Hartkopp wrote:
->>
->>
->> On 4/14/23 20:20, Marc Kleine-Budde wrote:
->>> On 13.04.2023 17:30:51, Judith Mendez wrote:
->>>> Add a hrtimer to MCAN struct. Each MCAN will have its own
->>>> hrtimer instantiated if there is no hardware interrupt found.
->>>>
->>>> The hrtimer will generate a software interrupt every 1 ms. In
->>>
->>> Are you sure about the 1ms?
-> 
-> I had the 5ms that are actually used in the code in mind. But this is a
-> good calculation.
-
-@Judith: Can you acknowledge the value calculation?
-
->> The "shortest" 11 bit CAN ID CAN frame is a Classical CAN frame with DLC = 0
->> and 1 Mbit/s (arbitration) bitrate. This should be 48 bits @1Mbit => ~50
->> usecs
->>
->> So it should be something about
->>
->>      50 usecs * (FIFO queue len - 2)
-> 
-> Where does the "2" come from?
-
-I thought about handling the FIFO earlier than it gets completely "full".
-
-The fetching routine would need some time too and the hrtimer could also 
-jitter to some extend.
-
->> if there is some FIFO involved, right?
-> 
-> Yes, the mcan core has a FIFO. In the current driver the FIFO
-> configuration is done via device tree and fixed after that. And I don't
-> know the size of the available RAM in the mcan IP core on that TI SoC.
-> 
-> Marc
-> 
-
-Best regards,
-Oliver
+Hugh
