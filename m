@@ -2,73 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB2236E3A3A
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 18:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BB496E3A3D
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 18:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbjDPQPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 12:15:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55650 "EHLO
+        id S230333AbjDPQQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 12:16:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbjDPQP2 (ORCPT
+        with ESMTP id S229513AbjDPQQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 12:15:28 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B25A6;
-        Sun, 16 Apr 2023 09:15:27 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id ca18e2360f4ac-7606d6bb669so36797939f.2;
-        Sun, 16 Apr 2023 09:15:27 -0700 (PDT)
+        Sun, 16 Apr 2023 12:16:43 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61FD51BF;
+        Sun, 16 Apr 2023 09:16:42 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id e9e14a558f8ab-32942f4b670so16904325ab.0;
+        Sun, 16 Apr 2023 09:16:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681661726; x=1684253726;
+        d=gmail.com; s=20221208; t=1681661802; x=1684253802;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=F23Msg9ijNGcjTb8eXel32GczcrBjfIv4/2kfrp1/10=;
-        b=sbb/0wwQNzXJY+DfJJa2MVtp6TdnUTBfq31ROyRdXpYiFDYGA1yqQcXNcW0/3Jc1R5
-         Rb41GyI8lG3CccJTo6s/iOL7cOrjhCfKVOuTjJviAlI2o5iY5oiPxdYnI5Hi+e9E6EgG
-         wraTkMOLAAEzG2kb+Mtj/rClJxawZMQvFJCpiI0m8PvrikO9OXvljQ9uWCp/G6zedBJq
-         23DFsYItj/kSbPDgkUAtfwirFem+KxfIxxok3/HnC34GXehmZK59yFBApPYwyB5qEDLm
-         MfkqWr3ujQcBbGkeyCgsvC3AnYXwXpk2YKqJ5o2LtVg6NOHJlI/EOKx5Nqc/ASrl+fKo
-         tvNg==
+        bh=+l1dPVCsBREBPaNplQqRXfU3+a1O21BXYl2UEtPALx8=;
+        b=TLi6HiNlOC2Ox8RT5MP3+mY2gdtLljfEssddiSDHZrvJqnuURtAmG5mElsm/5Xou6I
+         H4WIEbuHnB1mxituWDdQyEXkMmXSMA50eg/ckqUkTYYdsL8pOPcShLAIRdj8I8ZCJziF
+         SrKqXKQ5krvj0HRUGwP5EMkBAQ2SJgWeEJXgIcS5ddYQ14K4GayLJ9LVs1uqRiiBZY24
+         l7HyuxvZk6Q+Uv9X5qSG5K1mqdWOGxfra3ZzoZMu7H7RU06x/W3QDNc5nobphgZ4lDDl
+         WVx+3GD5UIquu40DvYgtybWoyID3FmB8NWHSu7hTmIomPrhz53J94PYcpp4P8qLz1Jlz
+         TTyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681661726; x=1684253726;
+        d=1e100.net; s=20221208; t=1681661802; x=1684253802;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=F23Msg9ijNGcjTb8eXel32GczcrBjfIv4/2kfrp1/10=;
-        b=cwSBJt97Z26jqdS/irFE3F98HC3EVpc1Fk540vV7KtV8ZV6e4OJZWIwlMBG7Gqw+Ls
-         oSIp9OncnQoyoqmus95o9H793yMOUcOHDE39Wy0qcMzNeLpKkJlXSOrk1mWTzj41bf9k
-         B0kwbx8ps18EtG50GVZPrKfXIaeZcf/XAWswjlrW7lcK9Sx6VyUeHMUmHTwvrGB4PRzB
-         DypetP1s1HU7ju3cE5Ry8qpB9VVHtdINqmF5rzwxK0WH4yUbHDAl9fgGCA1RXWP/FFrn
-         cHLCw+QIigt5nb69JnA/GzCn7Kc7fOqUr17TX6Cx05cHO4xBvee4B8WGHW0+YDNTy4cE
-         Z4vw==
-X-Gm-Message-State: AAQBX9dM7dy1tfBenUiIiF3her9wx/4ZXnvnBm4hKZIesEy3LSZAqIjT
-        0SmLXAGlH7YghmUp2H/f26nIpTrrphM=
-X-Google-Smtp-Source: AKy350ZK+vO65OU4McXqAR2Ng1tEXby6L8U8yz+HIrtKOxs2rqKxzzBeLyagSZ1a5uMqri9Kaakn5A==
-X-Received: by 2002:a92:da4f:0:b0:329:719d:10d0 with SMTP id p15-20020a92da4f000000b00329719d10d0mr8705540ilq.19.1681661726711;
-        Sun, 16 Apr 2023 09:15:26 -0700 (PDT)
+        bh=+l1dPVCsBREBPaNplQqRXfU3+a1O21BXYl2UEtPALx8=;
+        b=WaBpK9mKEj0t0Z6XvfDoG4UIltCw33r6T6US9XwGT6gwGtcASc+W6o2xA71coR3K0G
+         LkZjT1J0Y5L+8mCH1DPyLtdSPCSwgAIrjImQ+4kpe7wup0ZjNQ60VkSIc3bEWTdjIV2+
+         aQE2mjE2gjVzGjDXwuwKRnj5ox94T+sCogl4P9ZRpIw6CJjOznr61mC6XYY3RcIEsq5m
+         v+dpbF1BHuvRzamH48IcrlSZJ1GMW1Bo8u20lL4FW5F+jAgh25QsDr7woKZli0tim352
+         LX25muZp3/S5NHHjFRXYyBtQl8YTOeioKPezniT6s/D0zOMxf3xqvfI2cS5X2spdsTh1
+         IzQw==
+X-Gm-Message-State: AAQBX9cfDkFi/FGRYutU3xb0/X54EjvPtcyYOouoBlBrvuOLGOdvc5H+
+        q7DL/lSMtZA5u3FwUHU2JEY=
+X-Google-Smtp-Source: AKy350Zeoi8KGnj0y0vS8PjkkZ4WmsQB9qoWE7x07Mm55E7MAvTeyEB8EysU84E4C12fsFuzTfS9Vw==
+X-Received: by 2002:a92:cec9:0:b0:317:9818:ea49 with SMTP id z9-20020a92cec9000000b003179818ea49mr8282243ilq.2.1681661801789;
+        Sun, 16 Apr 2023 09:16:41 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f2-20020a056e0212a200b00325df6679a7sm1755438ilr.26.2023.04.16.09.15.26
+        by smtp.gmail.com with ESMTPSA id cn11-20020a0566383a0b00b0040f72526b1fsm1516212jab.16.2023.04.16.09.16.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 09:15:26 -0700 (PDT)
+        Sun, 16 Apr 2023 09:16:41 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 16 Apr 2023 09:15:25 -0700
+Date:   Sun, 16 Apr 2023 09:16:40 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Srinivas Neeli <srinivas.neeli@amd.com>
-Cc:     shubhrajyoti.datta@amd.com, michal.simek@amd.com,
-        srinivas.goud@amd.com, wim@linux-watchdog.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, git@amd.com, git@xilinx.com,
-        neelisrinivas18@gmail.com
-Subject: Re: [PATCH V3 1/4] MAINTAINERS: Add fragment for Xilinx watchdog
- driver
-Message-ID: <23d65122-8609-4337-8699-7380a3378eee@roeck-us.net>
-References: <20230331074117.356339-1-srinivas.neeli@amd.com>
- <20230331074117.356339-2-srinivas.neeli@amd.com>
+To:     Keguang Zhang <keguang.zhang@gmail.com>
+Cc:     linux-watchdog@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Yang Ling <gnaygnil@gmail.com>
+Subject: Re: [PATCH v2 2/2] watchdog: loongson1_wdt: Implement restart handler
+Message-ID: <89b3c1c9-025f-4157-ba99-af3a7097ae85@roeck-us.net>
+References: <20230330112051.551648-1-keguang.zhang@gmail.com>
+ <20230330112051.551648-3-keguang.zhang@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230331074117.356339-2-srinivas.neeli@amd.com>
+In-Reply-To: <20230330112051.551648-3-keguang.zhang@gmail.com>
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -80,36 +78,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 01:11:14PM +0530, Srinivas Neeli wrote:
-> Added entry for Xilinx xps-timebase watchdog driver.
+On Thu, Mar 30, 2023 at 07:20:51PM +0800, Keguang Zhang wrote:
+> Implement restart handler for the Loongson-1 watchdog driver and
+> define the watchdog registers instead of including the legacy header.
 > 
-> Signed-off-by: Srinivas Neeli <srinivas.neeli@amd.com>
+> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
-> Changes in V3:
-> -None
+> V1 -> V2: None
 > ---
->  MAINTAINERS | 8 ++++++++
->  1 file changed, 8 insertions(+)
+>  drivers/watchdog/loongson1_wdt.c | 19 ++++++++++++++++++-
+>  1 file changed, 18 insertions(+), 1 deletion(-)
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index d8287eb2ab4a..4ed139d56913 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -23071,6 +23071,14 @@ F:	Documentation/devicetree/bindings/media/xilinx/
->  F:	drivers/media/platform/xilinx/
->  F:	include/uapi/linux/xilinx-v4l2-controls.h
->  
-> +XILINX WATCHDOG DRIVER
-> +M:	Srinivas Neeli <srinivas.neeli@amd.com>
-> +R:	Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
-> +R:	Michal Simek <michal.simek@amd.com>
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml
-> +F:	drivers/watchdog/of_xilinx_wdt.c
+> diff --git a/drivers/watchdog/loongson1_wdt.c b/drivers/watchdog/loongson1_wdt.c
+> index bb3d075c0633..a0b6fe62e516 100644
+> --- a/drivers/watchdog/loongson1_wdt.c
+> +++ b/drivers/watchdog/loongson1_wdt.c
+> @@ -7,7 +7,11 @@
+>  #include <linux/module.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/watchdog.h>
+> -#include <loongson1.h>
 > +
->  XILINX XDMA DRIVER
->  M:	Lizhi Hou <lizhi.hou@amd.com>
->  M:	Brian Xu <brian.xu@amd.com>
+> +/* Loongson 1 Watchdog Register Definitions */
+> +#define WDT_EN			0x0
+> +#define WDT_TIMER		0x4
+> +#define WDT_SET			0x8
+>  
+>  #define DEFAULT_HEARTBEAT	30
+>  
+> @@ -66,6 +70,18 @@ static int ls1x_wdt_stop(struct watchdog_device *wdt_dev)
+>  	return 0;
+>  }
+>  
+> +static int ls1x_wdt_restart(struct watchdog_device *wdt_dev,
+> +			    unsigned long action, void *data)
+> +{
+> +	struct ls1x_wdt_drvdata *drvdata = watchdog_get_drvdata(wdt_dev);
+> +
+> +	writel(0x1, drvdata->base + WDT_EN);
+> +	writel(0x1, drvdata->base + WDT_TIMER);
+> +	writel(0x1, drvdata->base + WDT_SET);
+> +
+> +	return 0;
+> +}
+> +
+>  static const struct watchdog_info ls1x_wdt_info = {
+>  	.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
+>  	.identity = "Loongson1 Watchdog",
+> @@ -77,6 +93,7 @@ static const struct watchdog_ops ls1x_wdt_ops = {
+>  	.stop = ls1x_wdt_stop,
+>  	.ping = ls1x_wdt_ping,
+>  	.set_timeout = ls1x_wdt_set_timeout,
+> +	.restart = ls1x_wdt_restart,
+>  };
+>  
+>  static void ls1x_clk_disable_unprepare(void *data)
