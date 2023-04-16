@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C4B6E3716
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 12:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE74C6E371A
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 12:18:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbjDPKSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 06:18:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32768 "EHLO
+        id S229822AbjDPKSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 06:18:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbjDPKSL (ORCPT
+        with ESMTP id S229976AbjDPKSL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 16 Apr 2023 06:18:11 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31B01991;
-        Sun, 16 Apr 2023 03:18:07 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id xi5so56795845ejb.13;
-        Sun, 16 Apr 2023 03:18:07 -0700 (PDT)
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17EAB1722;
+        Sun, 16 Apr 2023 03:18:10 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-50670cc3abfso2300233a12.1;
+        Sun, 16 Apr 2023 03:18:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681640286; x=1684232286;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lMKv1eC7oXKgQg7kmPBpEEYkcLgFu/zreUxyQ3hjVRU=;
-        b=XY2jm6IUO7nOh7iJmLWXmOyrQaQ2zXMn6pKvFRann89LpKvUgmwOJ4vPQxCYYtgl/r
-         VHL5qEdKbz4cEa32T3mijCoxrubeICJTC1oz9/SCZMyviJQLMi2owVoreb9Buhr4/On6
-         +o2yhR4LpvZkgSUrbVIEN6JQCj+xh2qQYpvQOaE/rBhfkuXWUlon8FcmuFiI9DUUPlfq
-         GSxXv2IZ3AKkBNmIGQ1qMt92cC07eFOt0Ask8D23d61JCAwY7jtB1ylHQUY+4l+MsSZ6
-         xPDpywU+Y4gJRduqySkVW4gkcY+GLnvnZArfwxLArMPu+F8KS2LsXiVjNmbrJDBY73Id
-         5njQ==
+        d=gmail.com; s=20221208; t=1681640288; x=1684232288;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ictKT9aVXsy71NADauVKmbOAOmI+urQXpaOOBezHLGg=;
+        b=NmVfd+lGkyzIR89aTXtzukxRcrjPYn7C0h2vuCLNzXGN+ESHg7XCpJ05A0r2JFDj8A
+         ThSYnlSVdf/13t1J3961GHMbdlNv2jDuNPkJlyZjkQpoQAuDMQ019JKdzlhnNjhHsa2D
+         fF8kmlHnLHneEsPKwni4PtIvZmmYjfJRYmQwNrKSQIjA2/H6QePZhY8yOK+Kuv/zbwhl
+         PDA5PAAp+DXDXzgSneFDhQ5M5W+a1mPgofcdxOg5GbpESo+IvLoGqF1/f52FVuO5i8Jw
+         4en1XGcuCPvnrP/0arn8WBfOQUQUGvUuA0ulv3xi+hslfOFu4dl0OrFKqk22Cn1W9ftc
+         3QIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681640286; x=1684232286;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lMKv1eC7oXKgQg7kmPBpEEYkcLgFu/zreUxyQ3hjVRU=;
-        b=DvNs5F6KnRBflBSlj7p/58V+YA30RZ5muGwdj1rgHBUPjyhNLhGC7XqArpG8hxdydU
-         8BMElQ5bBr2RCu66Bawy/Smd2Pignf9fYXBzAgyhcil4AjFcb6CmJ42zeq71kKA0Bzp0
-         oBPtsp5dNaAq+3OWk0kuSAIZYgUozNaA7Uu0en8jxMiCyIRabikIT/YDeapVdaVPiEWk
-         Hj5+G2ANr531ixN0+UKl4s5g93OBO/F0TuLLVlZnjq24Njavc05Epi/0IS3oTG2h5Bm7
-         9w57w0H+WAUr4hARobmduIbOJk+D0SOScK2bplPjMSJ4/xsrd5qC9usEdmDjQ6mJgArU
-         Hf/g==
-X-Gm-Message-State: AAQBX9fBX2YyNbk263WN+xArFaJoMhP3GBCfWH+9RJKKO8RrFy9+A6+E
-        2RWce2J3dKpxO9o9I+qLpss=
-X-Google-Smtp-Source: AKy350aFxJm7/QXCtBcZGPfDmRrIsMdjN4hcBIIu5aXI7tPRyjlAly8QSDd0d6aOaUWrFr4Ex5a1Pg==
-X-Received: by 2002:a17:906:3454:b0:94e:8431:4767 with SMTP id d20-20020a170906345400b0094e84314767mr4666485ejb.38.1681640286211;
-        Sun, 16 Apr 2023 03:18:06 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681640288; x=1684232288;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ictKT9aVXsy71NADauVKmbOAOmI+urQXpaOOBezHLGg=;
+        b=czd+sZ+224DlOSNjac7H2Yz8jXPgW73UgW5Y0MPnjloRJclVUNiHDJ8CLoIU3AdMpF
+         w7RneadtHxtiwkgI20fmqKxyw1s6G34RmEC2S96RGO68MQ0KSoLXD5ezDOKxgtvwRUGO
+         n4Guto8b5iFHXSh6wtQkKI5Sb/SS1IuoIv94rN/dWWKvkWYDHE6JAn3lgA6zmodwy+Wp
+         8wiVoV2/KUuRuYFK1MnL6ZRTIr9rMqYQfcZYchXhwd4uCQb0Mt4J3IRer8fnsEMDh4xp
+         hfnZa2WOi4Pu/YWMmM2AR73ELF7DjrhUFkuvSaRw98crgJR9pJg4AyzsqtvM+oSWHc/g
+         WQog==
+X-Gm-Message-State: AAQBX9en0EB0Yp2D5eYS01u8znrwhk4FsL7Dwa39XeuhpB3GLF0o8JFT
+        +df2ktcjNKBO/AU/GP40/oM=
+X-Google-Smtp-Source: AKy350b4tPKvu3DKWB3ezxr4rb5TH+DVkFeKgGXShis+Z10SPj3vkg0ePywiJThMbrjGTZeKUqdoTw==
+X-Received: by 2002:aa7:cb19:0:b0:502:6e48:65ea with SMTP id s25-20020aa7cb19000000b005026e4865eamr8951620edt.12.1681640288447;
+        Sun, 16 Apr 2023 03:18:08 -0700 (PDT)
 Received: from localhost.my.domain (83.8.121.70.ipv4.supernova.orange.pl. [83.8.121.70])
-        by smtp.gmail.com with ESMTPSA id r20-20020a056402019400b0050476da5160sm4427443edv.45.2023.04.16.03.18.04
+        by smtp.gmail.com with ESMTPSA id r20-20020a056402019400b0050476da5160sm4427443edv.45.2023.04.16.03.18.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 03:18:05 -0700 (PDT)
+        Sun, 16 Apr 2023 03:18:07 -0700 (PDT)
 From:   Artur Weber <aweber.kernel@gmail.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
@@ -72,10 +73,12 @@ Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
         linux-phy@lists.infradead.org,
         ~postmarketos/upstreaming@lists.sr.ht,
         Artur Weber <aweber.kernel@gmail.com>
-Subject: [PATCH 00/12] Re-introduce Exynos4212 support and add Samsung Galaxy Tab 3 8.0 boards
-Date:   Sun, 16 Apr 2023 12:16:12 +0200
-Message-Id: <20230416101624.15866-1-aweber.kernel@gmail.com>
+Subject: [PATCH 01/12] dt-bindings: soc: samsung: add Exynos4212 PMU compatible
+Date:   Sun, 16 Apr 2023 12:16:13 +0200
+Message-Id: <20230416101624.15866-2-aweber.kernel@gmail.com>
 X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230416101624.15866-1-aweber.kernel@gmail.com>
+References: <20230416101624.15866-1-aweber.kernel@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -88,75 +91,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patches re-introduces the Exynos4212 platform and adds support
-for the Samsung Galaxy Tab 3 8.0 series of tablets that uses it:
-
- - Samsung Galaxy Tab 3 8.0 WiFi (SM-T310/lt01wifi)
- - Samsung Galaxy Tab 3 8.0 3G (SM-T311/lt013g)
- - Samsung Galaxy Tab 3 8.0 LTE (SM-T315/lt01lte)
-
-What works:
-
- - Display and backlight
- - Touchscreen (without touchkeys)
- - GPIO buttons, hall sensor
- - WiFi and Bluetooth
- - USB, fuel gauge, charging (partial)
- - Accelerometer and magnetometer
- - WiFi model only: light sensor
+Re-introduced as part of the Exynos4212 re-introduction effort.
 
 Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
+---
+ Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Artur Weber (12):
-  dt-bindings: soc: samsung: add Exynos4212 PMU compatible
-  dt-bindings: clock: add Exynos4212 clock compatible
-  ARM: exynos: Re-introduce Exynos4212 support
-  soc: samsung: Re-introduce Exynos4212 support
-  clk: samsung: Add Exynos4212 compatible to CLKOUT driver
-  clk: samsung: Re-add support for Exynos4212 CPU clock
-  Revert "media: exynos4-is: Remove dependency on obsolete SoC support"
-  Revert "phy: Remove SOC_EXYNOS4212 dep. from PHY_EXYNOS4X12_USB"
-  ARM: dts: Move common Exynos4x12 definitions to exynos4x12.dtsi
-  ARM: dts: Re-introduce Exynos4212 DTSI
-  dt-bindings: arm: samsung: Add Samsung Galaxy Tab3 family boards
-  ARM: dts: exynos: Add Samsung Galaxy Tab 3 8.0 boards
-
- .../bindings/arm/samsung/samsung-boards.yaml  |   10 +
- .../bindings/clock/samsung,exynos-clock.yaml  |    1 +
- .../bindings/soc/samsung/exynos-pmu.yaml      |    3 +
- arch/arm/boot/dts/Makefile                    |    3 +
- arch/arm/boot/dts/exynos4212-tab3-3g8.dts     |   30 +
- arch/arm/boot/dts/exynos4212-tab3-lte8.dts    |   43 +
- arch/arm/boot/dts/exynos4212-tab3-wifi8.dts   |   25 +
- arch/arm/boot/dts/exynos4212-tab3.dtsi        | 1175 +++++++++++++++++
- arch/arm/boot/dts/exynos4212.dtsi             |  157 +++
- arch/arm/boot/dts/exynos4412.dtsi             |  645 +--------
- ...2-pinctrl.dtsi => exynos4x12-pinctrl.dtsi} |    4 +-
- arch/arm/boot/dts/exynos4x12.dtsi             |  665 ++++++++++
- arch/arm/mach-exynos/Kconfig                  |    5 +
- arch/arm/mach-exynos/common.h                 |    8 +
- arch/arm/mach-exynos/exynos.c                 |    2 +
- arch/arm/mach-exynos/firmware.c               |    8 +-
- arch/arm/mach-exynos/pm.c                     |    2 +-
- arch/arm/mach-exynos/suspend.c                |    4 +
- drivers/clk/samsung/clk-exynos-clkout.c       |    3 +
- drivers/clk/samsung/clk-exynos4.c             |   44 +-
- .../media/platform/samsung/exynos4-is/Kconfig |    2 +-
- .../platform/samsung/exynos4-is/fimc-core.c   |    2 +-
- .../platform/samsung/exynos4-is/fimc-lite.c   |    2 +-
- drivers/phy/samsung/Kconfig                   |    2 +-
- drivers/soc/samsung/exynos-pmu.c              |    9 +
- drivers/soc/samsung/exynos-pmu.h              |    2 +
- drivers/soc/samsung/exynos4-pmu.c             |   13 +-
- 27 files changed, 2213 insertions(+), 656 deletions(-)
- create mode 100644 arch/arm/boot/dts/exynos4212-tab3-3g8.dts
- create mode 100644 arch/arm/boot/dts/exynos4212-tab3-lte8.dts
- create mode 100644 arch/arm/boot/dts/exynos4212-tab3-wifi8.dts
- create mode 100644 arch/arm/boot/dts/exynos4212-tab3.dtsi
- create mode 100644 arch/arm/boot/dts/exynos4212.dtsi
- rename arch/arm/boot/dts/{exynos4412-pinctrl.dtsi => exynos4x12-pinctrl.dtsi} (99%)
- create mode 100644 arch/arm/boot/dts/exynos4x12.dtsi
-
+diff --git a/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml b/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
+index f7c141dd11ec..be3128f2c0df 100644
+--- a/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
++++ b/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
+@@ -17,6 +17,7 @@ select:
+         enum:
+           - samsung,exynos3250-pmu
+           - samsung,exynos4210-pmu
++          - samsung,exynos4212-pmu
+           - samsung,exynos4412-pmu
+           - samsung,exynos5250-pmu
+           - samsung,exynos5260-pmu
+@@ -36,6 +37,7 @@ properties:
+           - enum:
+               - samsung,exynos3250-pmu
+               - samsung,exynos4210-pmu
++              - samsung,exynos4212-pmu
+               - samsung,exynos4412-pmu
+               - samsung,exynos5250-pmu
+               - samsung,exynos5260-pmu
+@@ -122,6 +124,7 @@ allOf:
+             enum:
+               - samsung,exynos3250-pmu
+               - samsung,exynos4210-pmu
++              - samsung,exynos4212-pmu
+               - samsung,exynos4412-pmu
+               - samsung,exynos5250-pmu
+               - samsung,exynos5410-pmu
 -- 
 2.40.0
 
