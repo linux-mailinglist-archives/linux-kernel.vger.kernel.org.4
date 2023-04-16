@@ -2,103 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F085E6E39B0
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 17:13:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D48586E39B5
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 17:15:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230411AbjDPPN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 11:13:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33892 "EHLO
+        id S229902AbjDPPPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 11:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbjDPPNT (ORCPT
+        with ESMTP id S229491AbjDPPP2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 11:13:19 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D5F273A
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 08:13:18 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id dx24so13806351ejb.11
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 08:13:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681657997; x=1684249997;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l1fA94NAcl87+C/afR7aU2FClgyJ4wBG784WxvcOq8o=;
-        b=mKGjfJXnxdsyCrYyFNzn0vT0G4Zi+94W3E7p/gcYBoeWn7MTlwc92KsbnxL1BT4wxq
-         2VE8Qh1fgAhk7gnCgoWkmrqTNST7VnsxTwFS7siQJOTUzofyOy1+9n9/8RW3DA7DOD3b
-         rGtlJyYHHZHWSbkNX7V61zUrirkhxnIFPn0EBwlM9dhzD8rJQlVTaeJCo1TyBtyKvBQL
-         975jn08KEIlwsZw/CewkyqmpssdqfMw8CElQtaRJX96WL4/cG7VeZtcarh384QI6o1GJ
-         AYxTD6q61Rx6GVQxOJ5Np3bXqe0NqKM1jWeuFUONHg8cmCyTYp1SaEBqLRWdgvMdwtTP
-         8dBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681657997; x=1684249997;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=l1fA94NAcl87+C/afR7aU2FClgyJ4wBG784WxvcOq8o=;
-        b=J/sY1usw7LCs9/e8QztFaqvY/Vyr1muYSXpNy4c8PxCbRwUpjOBEI6nBAkO+Bzcepa
-         gNxzfeWd5NVSUR1h301hYy7mrr3IFwuWRdcYdeujsILjTe28uuAK0u7nHXBxzey1gp6y
-         v3DKw0u7e/WYhueNkdaVbZLXXefsnIPDMNlVIGdtK0ycHxuW2XdVNqy0LF/Xh0gcBFF+
-         O3bbKcpivGXhlLOmWWCiumNOrBeR6Q0+AzQ9+2iIyXAtlJByG+ukzdF4ff18pn8u3Nqk
-         NGkhLZHodG8vXT8yKHNMfJyeqBfhgT6E+7TZrE1m6hZzOYA0OEFBTvL+t+hE/8Rt96de
-         086g==
-X-Gm-Message-State: AAQBX9fE+N5Zihof6BTK5X3GxZ/r5Gv7TNrNJtHg3gTbLA3Z+Y4Cr/Oy
-        NUo67dpyOa2c6ErpGve2+upXOQ==
-X-Google-Smtp-Source: AKy350Y05MF3d2vyxqLW7Lc7rHVFJsG/aqfTtQVTToYdEpNdzaUly++NgBkdcQSYghDNABRI5awcCg==
-X-Received: by 2002:a17:907:4ce:b0:94e:be0:97 with SMTP id vz14-20020a17090704ce00b0094e0be00097mr4577184ejb.26.1681657996890;
-        Sun, 16 Apr 2023 08:13:16 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:ba4d:301c:484d:5c9])
-        by smtp.gmail.com with ESMTPSA id v2-20020a1709064e8200b0094efcc4a076sm3009201eju.164.2023.04.16.08.13.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 08:13:16 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 4/4] arm64: dts: qcom: sc8280xp: correct GIC child node name
-Date:   Sun, 16 Apr 2023 17:13:11 +0200
-Message-Id: <20230416151311.346596-4-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230416151311.346596-1-krzysztof.kozlowski@linaro.org>
-References: <20230416151311.346596-1-krzysztof.kozlowski@linaro.org>
+        Sun, 16 Apr 2023 11:15:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA57B4;
+        Sun, 16 Apr 2023 08:15:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43ED761A8D;
+        Sun, 16 Apr 2023 15:15:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29733C433EF;
+        Sun, 16 Apr 2023 15:15:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681658126;
+        bh=vg7a+9DCnudCadywsW+LfZkYC34HIPkJONEpTnE3IgA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YdbRFGq8XX9t0ik/azOkzc9EKI0CmzqXbczuMupYZnuOWGoKjaTyzlIhAw/DyfaiQ
+         P//0oUjd/Me3pFl5u/6zxLgHHr+SFlpVunFRA9K86f7bHCLf5NLdu/QyxFp7SpHlhn
+         PgVXQm/s2Uuc39C8V9GcaWQxWjw2Gpl3RmlasxbB9RQ3KQRAGPKUSLFOt6HMyxVi3L
+         ltiIKU3FP0Hz3geJtpvvKV3Lh+b0ljO8P/dURRzfzP+Zq7z3aVaIOAqoO6ZG1B/+7B
+         prJppVDKgixqKXJGBV33f7rZsWOYcM1N7LJpGtEbzygqC3WfXs7zXixTo/GFKdu4U7
+         bm485htkgzjiQ==
+Date:   Sun, 16 Apr 2023 16:15:27 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Vinod Koul <vkoul@kernel.org>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Nuno =?UTF-8?B?U8Oh?= <noname.nuno@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
+Subject: Re: [PATCH v3 10/11] iio: buffer-dmaengine: Support new DMABUF
+ based userspace API
+Message-ID: <20230416161527.6e7021f1@jic23-huawei>
+In-Reply-To: <20230403154955.216148-1-paul@crapouillou.net>
+References: <20230403154800.215924-1-paul@crapouillou.net>
+        <20230403154955.216148-1-paul@crapouillou.net>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GIC child node is supposed to be named msi-controller:
+On Mon,  3 Apr 2023 17:49:54 +0200
+Paul Cercueil <paul@crapouillou.net> wrote:
 
-  sa8295p-adp.dtb: interrupt-controller@17a00000: gic-its@17a40000: False schema does not allow
+> Use the functions provided by the buffer-dma core to implement the
+> DMABUF userspace API in the buffer-dmaengine IIO buffer implementation.
+> 
+> Since we want to be able to transfer an arbitrary number of bytes and
+> not necesarily the full DMABUF, the associated scatterlist is converted
+> to an array of DMA addresses + lengths, which is then passed to
+> dmaengine_prep_slave_dma_array().
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+A few things inline.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks,
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-index 6d3780a75024..5532bf8af211 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-@@ -3907,7 +3907,7 @@ intc: interrupt-controller@17a00000 {
- 			#size-cells = <2>;
- 			ranges;
- 
--			gic-its@17a40000 {
-+			msi-controller@17a40000 {
- 				compatible = "arm,gic-v3-its";
- 				reg = <0 0x17a40000 0 0x20000>;
- 				msi-controller;
--- 
-2.34.1
+Jonathan
+
+> 
+> ---
+> v3: Use the new dmaengine_prep_slave_dma_array(), and adapt the code to
+>     work with the new functions introduced in industrialio-buffer-dma.c.
+> ---
+>  .../buffer/industrialio-buffer-dmaengine.c    | 69 ++++++++++++++++---
+>  include/linux/iio/buffer-dma.h                |  2 +
+>  2 files changed, 60 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/iio/buffer/industrialio-buffer-dmaengine.c b/drivers/iio/buffer/industrialio-buffer-dmaengine.c
+> index 866c8b84bb24..faed9c2b089c 100644
+> --- a/drivers/iio/buffer/industrialio-buffer-dmaengine.c
+> +++ b/drivers/iio/buffer/industrialio-buffer-dmaengine.c
+> @@ -65,25 +65,68 @@ static int iio_dmaengine_buffer_submit_block(struct iio_dma_buffer_queue *queue,
+>  		iio_buffer_to_dmaengine_buffer(&queue->buffer);
+>  	struct dma_async_tx_descriptor *desc;
+>  	enum dma_transfer_direction dma_dir;
+> +	unsigned int i, nents, *lenghts;
+> +	struct scatterlist *sgl;
+> +	unsigned long flags;
+> +	dma_addr_t *addrs;
+>  	size_t max_size;
+>  	dma_cookie_t cookie;
+> +	size_t len_total;
+>  
+> -	max_size = min(block->size, dmaengine_buffer->max_size);
+> -	max_size = round_down(max_size, dmaengine_buffer->align);
+> +	if (!block->bytes_used)
+> +		return -EINVAL;
+>  
+> -	if (queue->buffer.direction == IIO_BUFFER_DIRECTION_IN) {
+> -		block->bytes_used = max_size;
+> +	if (queue->buffer.direction == IIO_BUFFER_DIRECTION_IN)
+>  		dma_dir = DMA_DEV_TO_MEM;
+> -	} else {
+> +	else
+>  		dma_dir = DMA_MEM_TO_DEV;
+> -	}
+>  
+> -	if (!block->bytes_used || block->bytes_used > max_size)
+> -		return -EINVAL;
+
+Ah this is dropping the code I moaned about earlier.  I'll probably
+forget though so maybe add a note to that patch saying it goes
+away later anyway so I don't keep moaning about it in future versions.
+
+> +	if (block->sg_table) {
+> +		sgl = block->sg_table->sgl;
+> +		nents = sg_nents_for_len(sgl, block->bytes_used);
+> +
+> +		addrs = kmalloc_array(nents, sizeof(*addrs), GFP_KERNEL);
+> +		if (!addrs)
+> +			return -ENOMEM;
+> +
+> +		lenghts = kmalloc_array(nents, sizeof(*lenghts), GFP_KERNEL);
+
+lengths?
+
+> +		if (!lenghts) {
+> +			kfree(addrs);
+> +			return -ENOMEM;
+> +		}
+> +
+> +		len_total = block->bytes_used;
+>  
+> -	desc = dmaengine_prep_slave_single(dmaengine_buffer->chan,
+> -		block->phys_addr, block->bytes_used, dma_dir,
+> -		DMA_PREP_INTERRUPT);
+> +		for (i = 0; i < nents; i++) {
+> +			addrs[i] = sg_dma_address(sgl);
+> +			lenghts[i] = min(sg_dma_len(sgl), len_total);
+> +			len_total -= lenghts[i];
+> +
+> +			sgl = sg_next(sgl);
+> +		}
+> +
+> +		flags = block->cyclic ? DMA_PREP_REPEAT : DMA_PREP_INTERRUPT;
+> +
+> +		desc = dmaengine_prep_slave_dma_array(dmaengine_buffer->chan,
+> +						      addrs, lenghts, nents,
+> +						      dma_dir, flags);
+> +		kfree(addrs);
+> +		kfree(lenghts);
+> +	} else {
+> +		max_size = min(block->size, dmaengine_buffer->max_size);
+> +		max_size = round_down(max_size, dmaengine_buffer->align);
+> +
+> +		if (queue->buffer.direction == IIO_BUFFER_DIRECTION_IN)
+> +			block->bytes_used = max_size;
+> +
+> +		if (block->bytes_used > max_size)
+> +			return -EINVAL;
+> +
+> +		desc = dmaengine_prep_slave_single(dmaengine_buffer->chan,
+> +						   block->phys_addr,
+> +						   block->bytes_used, dma_dir,
+> +						   DMA_PREP_INTERRUPT);
+> +	}
+
+
+> diff --git a/include/linux/iio/buffer-dma.h b/include/linux/iio/buffer-dma.h
+> index e5e5817e99db..48f7ffaf0867 100644
+> --- a/include/linux/iio/buffer-dma.h
+> +++ b/include/linux/iio/buffer-dma.h
+> @@ -43,6 +43,7 @@ enum iio_block_state {
+>   * @queue: Parent DMA buffer queue
+>   * @kref: kref used to manage the lifetime of block
+>   * @state: Current state of the block
+> + * @cyclic: True if this is a cyclic buffer
+>   * @fileio: True if this buffer is used for fileio mode
+
+I might have commented on it earlier (I've lost track) but
+attach should be documented as well.   Worth sanity checking
+by either building with W=1 or running kernel-doc over
+the files and fixing the warnings.
+
+>   */
+>  struct iio_dma_buffer_block {
+> @@ -67,6 +68,7 @@ struct iio_dma_buffer_block {
+>  	 */
+>  	enum iio_block_state state;
+>  
+> +	bool cyclic;
+>  	bool fileio;
+>  
+>  	struct dma_buf_attachment *attach;
 
