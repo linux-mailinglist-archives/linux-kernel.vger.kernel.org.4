@@ -2,112 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 892AB6E3B66
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 21:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A11AF6E3B6F
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 21:11:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbjDPTFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 15:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52836 "EHLO
+        id S229721AbjDPTLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 15:11:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjDPTFn (ORCPT
+        with ESMTP id S229615AbjDPTLP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 15:05:43 -0400
-Received: from smtp.smtpout.orange.fr (smtp-22.smtpout.orange.fr [80.12.242.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066DC1FC3
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 12:05:40 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id o7gupnSP89ijuo7gupFud6; Sun, 16 Apr 2023 21:05:39 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orange.fr;
-        s=t20230301; t=1681671939;
-        bh=IVg6fEiAUlOm4eZf7hYcoOgAhxCwgPubM+tzVphnhWA=;
-        h=From:To:Cc:Subject:Date;
-        b=stcSMDrgerXIwGDnWbFTpJLich5sCmokXWajyYm+hTqyDWD1ySwkL80AfExFKq7Ei
-         bK7BYo5b4Ff1B5tdqZJ7aT4fjEPnexivEfJdFVzbqv4PvnmheT9h9rNayHAowfz+eL
-         I7KhMpmN21W8PHSti6gf5HunswVUeua7UZMD622kE+ajo0Gx/GResTiROqKUMaLiGj
-         ZwAFborjvoKnKsSUh7W5DzJOMwo7G3zmDosgiDOU9DO76gwcWXiXMHHNc9i1KErbXZ
-         LM/Ozs44yreCoWTzUahIRG2KBDIzvxCOaxg6ReIfKxz3nYp08I7njdCD+HvUpjLfhM
-         v+cg+PSIV0JPA==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 16 Apr 2023 21:05:39 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-sh@vger.kernel.org
-Subject: [PATCH RESEND] sh: sq: Use the bitmap API when applicable
-Date:   Sun, 16 Apr 2023 21:05:14 +0200
-Message-Id: <071e9f32c19a007f4922903282c9121898641400.1681671848.git.christophe.jaillet@wanadoo.fr>
+        Sun, 16 Apr 2023 15:11:15 -0400
+X-Greylist: delayed 335 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 16 Apr 2023 12:11:14 PDT
+Received: from st43p00im-ztfb10073301.me.com (st43p00im-ztfb10073301.me.com [17.58.63.186])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B3362D5B
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 12:11:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
+        t=1681672273; bh=SHEIfHZdwV1MgUhja3Pb7A0Q8HBViX4AhyXV3iC/XmE=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=IEp/xzCQksUYhUhiofR4fY9KsVezXAMrdQDRS9Qmb/R1e18RX4DVVZYt66l977Wpt
+         fCBIJ/bayDQXSSDKFgf4Ts2G3LlEYlA7fkgSxWMCBfkClp8xfzNOiLWfhILR/DGVYq
+         HXzq9wEk5PaN57/qD8gq1qfLAtEVr2lJ92tSAfIz425GNLsEgFommRIzAJ2R7l1hj5
+         QOEkj+btC1jKgU2fOtnguUgVo04sdtmoPsbjmfQ3Er0xLw/UX1pe6p+9UBvsncCUeO
+         ZYEWrSL6ngMnRmei0Qv59njFtqkC/PsdzAflZmswDtrs1McE63xDOtma9D65xKZ4C8
+         zbCxZWA1F6dWA==
+Received: from localhost (st43p00im-dlb-asmtp-mailmevip.me.com [17.42.251.41])
+        by st43p00im-ztfb10073301.me.com (Postfix) with ESMTPSA id 71783800D29;
+        Sun, 16 Apr 2023 19:11:12 +0000 (UTC)
+From:   Alain Volmat <avolmat@me.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     patrice.chotard@foss.st.com, Alain Volmat <avolmat@me.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH] dt-bindings: irqchip: sti: remove stih415/stih416 and stid127
+Date:   Sun, 16 Apr 2023 21:09:50 +0200
+Message-Id: <20230416190950.18929-1-avolmat@me.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Proofpoint-ORIG-GUID: Jkl-dPGDjNp7nHuhdjtxZtB-NUEdponJ
+X-Proofpoint-GUID: Jkl-dPGDjNp7nHuhdjtxZtB-NUEdponJ
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.816,17.11.62.513.0000000_definitions?=
+ =?UTF-8?Q?=3D2022-01-17=5F04:2020-02-14=5F02,2022-01-17=5F04,2021-12-02?=
+ =?UTF-8?Q?=5F01_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=611 mlxscore=0
+ phishscore=0 suspectscore=0 malwarescore=0 spamscore=0 bulkscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2304160181
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using the bitmap API is less verbose than hand writing them.
-It also improves the semantic.
+Remove bindings for the stih415/stih416/stid127 since they are
+not supported within the kernel anymore.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Signed-off-by: Alain Volmat <avolmat@me.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
-This is a resend of [1].
+Patch sent previously via serie: https://lore.kernel.org/all/20230209091659.1409-5-avolmat@me.com/
+ .../bindings/interrupt-controller/st,sti-irq-syscfg.txt  | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-Now cross-compile tested with CONFIG_CPU_SUBTYPE_SH7770=y
-
-[1]: https://lore.kernel.org/all/521788e22ad8f7a5058c154f068b061525321841.1656142814.git.christophe.jaillet@wanadoo.fr/
----
- arch/sh/kernel/cpu/sh4/sq.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/arch/sh/kernel/cpu/sh4/sq.c b/arch/sh/kernel/cpu/sh4/sq.c
-index 27f2e3da5aa2..d289e99dc118 100644
---- a/arch/sh/kernel/cpu/sh4/sq.c
-+++ b/arch/sh/kernel/cpu/sh4/sq.c
-@@ -372,7 +372,6 @@ static struct subsys_interface sq_interface = {
- static int __init sq_api_init(void)
- {
- 	unsigned int nr_pages = 0x04000000 >> PAGE_SHIFT;
--	unsigned int size = (nr_pages + (BITS_PER_LONG - 1)) / BITS_PER_LONG;
- 	int ret = -ENOMEM;
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/st,sti-irq-syscfg.txt b/Documentation/devicetree/bindings/interrupt-controller/st,sti-irq-syscfg.txt
+index ced6014061a3..977d7ed3670e 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/st,sti-irq-syscfg.txt
++++ b/Documentation/devicetree/bindings/interrupt-controller/st,sti-irq-syscfg.txt
+@@ -6,11 +6,7 @@ and PL310 L2 Cache IRQs are controlled using System Configuration registers.
+ This driver is used to unmask them prior to use.
  
- 	printk(KERN_NOTICE "sq: Registering store queue API.\n");
-@@ -382,7 +381,7 @@ static int __init sq_api_init(void)
- 	if (unlikely(!sq_cache))
- 		return ret;
+ Required properties:
+-- compatible	: Should be set to one of:
+-			"st,stih415-irq-syscfg"
+-			"st,stih416-irq-syscfg"
+-			"st,stih407-irq-syscfg"
+-			"st,stid127-irq-syscfg"
++- compatible	: Should be "st,stih407-irq-syscfg"
+ - st,syscfg	: Phandle to Cortex-A9 IRQ system config registers
+ - st,irq-device	: Array of IRQs to enable - should be 2 in length
+ - st,fiq-device	: Array of FIQs to enable - should be 2 in length
+@@ -25,11 +21,10 @@ Optional properties:
+ Example:
  
--	sq_bitmap = kzalloc(size, GFP_KERNEL);
-+	sq_bitmap = bitmap_zalloc(nr_pages, GFP_KERNEL);
- 	if (unlikely(!sq_bitmap))
- 		goto out;
- 
-@@ -393,7 +392,7 @@ static int __init sq_api_init(void)
- 	return 0;
- 
- out:
--	kfree(sq_bitmap);
-+	bitmap_free(sq_bitmap);
- 	kmem_cache_destroy(sq_cache);
- 
- 	return ret;
-@@ -402,7 +401,7 @@ static int __init sq_api_init(void)
- static void __exit sq_api_exit(void)
- {
- 	subsys_interface_unregister(&sq_interface);
--	kfree(sq_bitmap);
-+	bitmap_free(sq_bitmap);
- 	kmem_cache_destroy(sq_cache);
- }
- 
+ irq-syscfg {
+-	compatible    = "st,stih416-irq-syscfg";
++	compatible    = "st,stih407-irq-syscfg";
+ 	st,syscfg     = <&syscfg_cpu>;
+ 	st,irq-device = <ST_IRQ_SYSCFG_PMU_0>,
+ 			<ST_IRQ_SYSCFG_PMU_1>;
+ 	st,fiq-device = <ST_IRQ_SYSCFG_DISABLED>,
+ 			<ST_IRQ_SYSCFG_DISABLED>;
+-	st,invert-ext = <(ST_IRQ_SYSCFG_EXT_1_INV | ST_IRQ_SYSCFG_EXT_3_INV)>;
+ };
 -- 
 2.34.1
 
