@@ -2,116 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B138F6E3B53
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 20:51:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E84286E3B56
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 20:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229789AbjDPSvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 14:51:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48188 "EHLO
+        id S229936AbjDPSwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 14:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjDPSvS (ORCPT
+        with ESMTP id S229484AbjDPSwR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 14:51:18 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B5EE7E
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 11:51:16 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id fy21so15729183ejb.9
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 11:51:16 -0700 (PDT)
+        Sun, 16 Apr 2023 14:52:17 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8771810CB;
+        Sun, 16 Apr 2023 11:52:15 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f167d0c91bso9848175e9.2;
+        Sun, 16 Apr 2023 11:52:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681671075; x=1684263075;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GKImHCjHVF5MZ/4M5IREBVMKJU5wQfIJuuJriWo9vEM=;
-        b=s7Cy79OQkVoSUqwpUIa4AWNao0LwkjducBmRn/xrDI3YTfRKfxsy1NdT1DhklolWHz
-         agVFkH2SM+Sev/Pxi0yBokTO67lNPQ9po7rxIguvFpXX2W7KmgH+oeAL+/LwwUaC8onn
-         VGSaYCt3Fse06Zn83FmefE6gCa7XKwlMEDqUUnSe52G30qUOGjrTIokO+NItSxS4m9/j
-         QuA66PMKS7ihuYAPnxjgGViptkmwGlEnnmkZtbho2JULPMs8zDUH171k61GpvaaXyGE+
-         vsV3D7krkyEgfKiA3L+stcOe1IjYFjZml6jhGqjWyGQh6wJv88PTBbXDsO781DjJjz19
-         kjFg==
+        d=gmail.com; s=20221208; t=1681671134; x=1684263134;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w6Ku0+NTC8bNTjbCgiexuYfINosTStnT3+TeJKf99Zo=;
+        b=Cp048Icg72JbeFDMoVykKwpDz/bTi153C+AfD7d5gNJ8CW9QC24hK6bGnS7eS8ZmxK
+         /t8C12OZT7bBHsSYOlvspz2gubETrpyl+GaCUD6bl4ZEXI3eh5ZOSJ/rj8g9ZxXlNTCK
+         02G8PlQL9d1p7h01NbayN7jPurDbecZLbu/vakzt9p5uF91KDRtL8L7Hmx6vl+GYXLuG
+         fBZN5Xib8V6N2nYZ5+Z5roXsCU5hNQAJ827SykuWIYMw7cNE7FhL3NrihRtHYyYBXE1J
+         qoP85ZdnZGtQ3IwJKH+nj+0G0xGF2y/TeHd6oWOjOyUkIkgnKTUqaS9QXnB3m5b1Y6Yg
+         e9Dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681671075; x=1684263075;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GKImHCjHVF5MZ/4M5IREBVMKJU5wQfIJuuJriWo9vEM=;
-        b=MVjsm4xvwBoGhwxoSs+XjoDOU3zb6gJQ82PIum/hvhq1fzHpB0I52S+v2C0WjaThLB
-         zVcHqO4pdmgRiuY7jWoxHv/jAsNMLs6/5nnWUia1s+wlF1UPmATo/uzZLvK8paaFLm7r
-         UuEEtfK/n03XFvPgd1oP/l42j+jjKPJMXusau4rp7/m1PlxUEryy05lwViCPnxX49oG0
-         lmonsO9IeHFSZzLztpEUq+eB5N49qZ48Hj1ec5EnrA9dfhj/RrSgzzAoUt4gqNsnMONV
-         +Lwspw+Hvr1xuYyOrMPMLy11s/x96/6/EFR63CEv2/oGJgWHlrkDzf+u1lYSAgi7Aj7l
-         L+gw==
-X-Gm-Message-State: AAQBX9enHPmimoLegvSEV1GZG/AqV7cqgehYeuyDuBEQOiNGKYwHw1Uz
-        wqGos94LMqcYTKr4GEueFoKYzg==
-X-Google-Smtp-Source: AKy350ZUnlsLiqcJGll/ROJIUcU/VJ4V8dQbWggjC/n4kdtez0qynFD8+ZslbYFgDYYJPL4FJM4PFw==
-X-Received: by 2002:a17:906:fc0e:b0:94f:317f:6a58 with SMTP id ov14-20020a170906fc0e00b0094f317f6a58mr3656389ejb.35.1681671075214;
-        Sun, 16 Apr 2023 11:51:15 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:f9e3:1d38:66a7:ae92? ([2a02:810d:15c0:828:f9e3:1d38:66a7:ae92])
-        by smtp.gmail.com with ESMTPSA id v2-20020a1709064e8200b0094efcc4a076sm3253368eju.164.2023.04.16.11.51.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Apr 2023 11:51:14 -0700 (PDT)
-Message-ID: <98da9a32-9771-1002-f323-909e8b49a536@linaro.org>
-Date:   Sun, 16 Apr 2023 20:51:13 +0200
+        d=1e100.net; s=20221208; t=1681671134; x=1684263134;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=w6Ku0+NTC8bNTjbCgiexuYfINosTStnT3+TeJKf99Zo=;
+        b=llggdFbf2YpUonfYv2SLSfe8JR+x3TjTdj1fF9QdGBJwgt629bPCV/sj1V5DMpaF5r
+         Yet21LtjHOzqMRKwUjVVHIjUaLsZZo/hKMcnjr1ZJeK67ualQz4FbENR2ztj5DgU7GRn
+         qe/V59jIXVk8IeBYq9OLFikBoHz4bCK51gM5gtFoQMxn/bpXSsJFH2yHm9w1uEHdwHta
+         HwlvKMOJaDyLQRFlrhB9zlueX7JRWi0fc/vjfcBNuwS2dM+lhiNVf7MKTs73AB7iGXBx
+         1TDi7ItpW79lZY19HykXk06TWNUX/3sfGpTaY1FfgILqmvff0Yst9V6FzXa664uFZbTQ
+         07FA==
+X-Gm-Message-State: AAQBX9eV6OmBv59fpUf4mRjy6rBuQwTyTAjqKd8ufsWOa4jfD8vM8Vyv
+        Xt+PmQhuBBVRUyZ9zQkIxbI=
+X-Google-Smtp-Source: AKy350YkCc4ZGEuIKujbX6AaGd6LZRdZ6QK0UwncHLVlScZ655mI6QUblZznWeZ0EJCtBaOACnLtIg==
+X-Received: by 2002:adf:ee8a:0:b0:2f9:cee4:b7d with SMTP id b10-20020adfee8a000000b002f9cee40b7dmr1672567wro.70.1681671133706;
+        Sun, 16 Apr 2023 11:52:13 -0700 (PDT)
+Received: from solpc.. (67.pool90-171-92.dynamic.orange.es. [90.171.92.67])
+        by smtp.gmail.com with ESMTPSA id m13-20020adffe4d000000b002efb139ce72sm8641882wrs.36.2023.04.16.11.52.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Apr 2023 11:52:13 -0700 (PDT)
+From:   =?UTF-8?q?Joan=20Bruguera=20Mic=C3=B3?= <joanbrugueram@gmail.com>
+To:     jpoimboe@kernel.org, i.pear@outlook.com
+Cc:     acme@kernel.org, alan.maguire@oracle.com, alexandref75@gmail.com,
+        bpf@vger.kernel.org, dxu@dxuuu.xyz, jforbes@redhat.com,
+        linux-kernel@vger.kernel.org, olsajiri@gmail.com,
+        peterz@infradead.org, ptalbert@redhat.com, yhs@fb.com
+Subject: Re: [PATCH] vmlinux.lds.h: Force-align ELF notes section to four bytes
+Date:   Sun, 16 Apr 2023 18:52:04 +0000
+Message-Id: <20230416185204.2592590-1-joanbrugueram@gmail.com>
+X-Mailer: git-send-email 2.40.0
+In-Reply-To: <SY4P282MB108438B241E26EB9DC76A4469D989@SY4P282MB1084.AUSP282.PROD.OUTLOOK.COM>
+References: <SY4P282MB108438B241E26EB9DC76A4469D989@SY4P282MB1084.AUSP282.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] ASoC: dt-bindings: wm8753: Convert to dtschema
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Saalim Quadri <danascape@gmail.com>
-Cc:     alsa-devel@alsa-project.org, broonie@kernel.org,
-        daniel.baluta@nxp.com, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lgirdwood@gmail.com,
-        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com,
-        robh+dt@kernel.org
-References: <5d629ff3-c5ae-bd00-e70d-8c0d58365ce3@linaro.org>
- <20230415201246.1200683-1-danascape@gmail.com>
- <92d0f4c7-ed53-5d84-3955-08d1ab8bbd98@linaro.org>
-In-Reply-To: <92d0f4c7-ed53-5d84-3955-08d1ab8bbd98@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/04/2023 09:35, Krzysztof Kozlowski wrote:
-> On 15/04/2023 22:12, Saalim Quadri wrote:
->>> You choose unusual bindings to convert to DT schema. It is fine but
->>> honestly, less useful, with limited impact. This is an old, 12 year old
->>> binding without users. Maybe it would be even removed by now...
->>> I suggest converting ones which have a real impact - have users in DTS.
->>> Otherwise you will be putting quite a lot of effort for no real gains...
->>> because what is the difference between this binding being TXT and DT schema?
->>
->> I am converting these bindings as part of my GSoC project where I need to convert
->> as many files as possible during the given tenure, I am slowly trying to read files
->> in other subsystems too and will push patches for other subsystems too.
->> Is it fine?
+On Thu, Apr 13, 2023 at 12:54:19PM +0800, Tianyi Liu wrote:
+> On Wed, Apr 12, 2023 at 16:30PM UTC, Josh Poimboeuf wrote:
+> > On Wed, Apr 12, 2023 at 03:10:14PM +0800, Tianyi Liu wrote:
+> > > On Tue, Apr 11, 2023 at 17:00 , Josh Poimboeuf wrote:
+> > > > On Tue, Feb 14, 2023 at 02:33:02PM +0800, Tianyi Liu wrote:
+> > > > > > LLVM_OBJCOPY=objcopy pahole -J --btf_gen_floats -j
+> > > > > > --skip_encoding_btf_inconsistent_proto --btf_gen_optimized
+> > > > > > .tmp_vmlinux.btf
+> > > > > > btf_encoder__encode: btf__dedup failed!
+> > > > > > Failed to encode BTF
+> > > > > >
+> > > > > > Thanks,
+> > > > > >
+> > > > >
+> > > > > I encountered the same problem when building a new kernel and I found some
+> > > > > reasons for the error.
+> > > > >
+> > > > > In short, enabling CONFIG_X86_KERNEL_IBT will change the order of records in
+> > > > > .notes section. In addition, due to historical problems, the alignment of
+> > > > > records in the .notes section is not unified, which leads to the inability of
+> > > > > gelf_getnote() to read the records after the wrong one.
+> > > >
+> > > > Alexandre, Tianyi, are you still seeing this issue with the latest
+> > > > dwarves?  If so can you confirm the below patch fixes it?
+> > > >
+> > >
+> > > Josh, first of all, thank you very much for your help. However, this patch
+> > > doesn't work in my environment. I am using gcc 12.2.1 20230201.
+> > > After compiling, when I use readelf -S to view ELF sections,
+> > > the align of .notes section is still 8:
+> > >
+> > > $ readelf -S .tmp_vmlinux.btf
+> > > [20] .notes            NOTE             ffffffff8250b570  0170b570
+> > >      0000000000000084  0000000000000000   A       0     0     8
+> > 
+> > Hm, weird.
 > 
-> In general it is fine. I wonder if we can change the goal of GSoC? I am
-> surprised that such goal was chosen in the first place. Converting old,
-> unused bindings to DT schema is okay, but it would be much better to do
-> this for the bindings which are actually used.
+> I have consulted some materials and found that using ALIGN() in linker
+> scripts can only "increase" alignment, not decrease it.
 > 
-> Because I still wonder - what is the difference between this binding
-> being TXT and DT schema?
+> Perhaps could you try modifying your patch to use ALIGN(2) and SUBALIGN(2)
+> and see if the .notes section in the output file is aligned to 2?
+> In my tests, this had no effect.
+> 
+> [1] https://sourceware.org/binutils/docs/ld/Forced-Output-Alignment.html
 
-BTW,
+Not sure about the ld documentation (it may just be ambiguous wording)
+but while doing some tests, I have found that Josh's ALIGN/SUBALIGN(4)
+patch only works for certain kernel configs and fails for others.
+This likely explains why Josh's patch worked for me but not for Tianyi.
 
-If you want to find used bindings and tasks to do, check Rob's bot output:
+I haven't investigated why or when it works though, but here's a config
+where Josh's ALIGN(4) patch works and or where it doesn't (for me):
+https://zealcharm.com/20230416-btf-dedup-bug-sample-configs/align-4-working
+https://zealcharm.com/20230416-btf-dedup-bug-sample-configs/align-4-not-working
 
-https://gitlab.com/robherring/linux-dt/-/jobs/4118960859
-https://gitlab.com/robherring/linux-dt/-/jobs/4118960858
-
-I pointed to these jobs two months ago when Daniel was looking for some
-feedback.
-
-Best regards,
-Krzysztof
-
+OTOH the new patch to discard .note.gnu.property works in both cases.
