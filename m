@@ -2,93 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 426106E3A92
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 19:33:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B86446E3A95
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 19:34:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbjDPRdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 13:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44830 "EHLO
+        id S229762AbjDPReP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 13:34:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjDPRds (ORCPT
+        with ESMTP id S229494AbjDPReO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 13:33:48 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2AA3A80
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 10:33:39 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id fy21so15436552ejb.9
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 10:33:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1681666417; x=1684258417;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T0zjlBWrp8mSKGtJRwYtBg2SQIzPO5B3r0sq3wAU/qE=;
-        b=g1MD+qYi16eZw6jxHApEFjkbNo956Jcxfz2P9c/kau3fAu/rTglWtMgVp49hBcRqIu
-         3EGl/jOu+kTKjKayiKek25wcP7heFIuG7O1ErXo67cSsGTVmfEJINK6BKoof0ViTQueW
-         SE7hZm/xsV7LzO80FhgL+NBteCKDPDBlDWqnI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681666417; x=1684258417;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T0zjlBWrp8mSKGtJRwYtBg2SQIzPO5B3r0sq3wAU/qE=;
-        b=C8bMLRjUKHgN7ubv3FSEGS8gYaY4MyFrES/n5gQM1C8IseeOI7WsOSSBqDmhm+fO3+
-         wBy9irT0DZorI72FgXP6A1sESCadZrH+S8sQF8x5iiwFPI4OsIf2jg/y2snl5J3Uhg2n
-         EAwko5h1K24AFEXdya9oiYVnPrs3bl1/ejklRibWjHSlLnBt8V5gzIVg5umggPCJ1vH/
-         LZB4uLQ3TosG0Ih9H1LmgX8Vt7GpwyR1dPGmJ5ueIgVmBZ7dcE2iRNcTs8oaigToF999
-         rRGz1uFWuqtzDGLWkWOHLX8DArEmrO4ULenIFIdUrOAeGe+8yfPVdLuxN6/eVfPncrP6
-         PFeQ==
-X-Gm-Message-State: AAQBX9c3HNoyxDV0R1f1kXIwF57fcIGoNycaXVo7GrRzelcnAJJBnphc
-        bvzGDW7I6/mOqY3eHGOU/Y8hlRIpz4gYIFRaQSAHcQ==
-X-Google-Smtp-Source: AKy350Y9Rlmzb9wqgKFUGbIW+s2zccWTyhL9mMF5ugjVijkS8JEzAmffIFDitSQ704Z2pTuPx/ugOQ==
-X-Received: by 2002:a17:906:4714:b0:94e:fdec:67e2 with SMTP id y20-20020a170906471400b0094efdec67e2mr4782354ejq.77.1681666417329;
-        Sun, 16 Apr 2023 10:33:37 -0700 (PDT)
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com. [209.85.218.49])
-        by smtp.gmail.com with ESMTPSA id l10-20020aa7d94a000000b0050687f06aacsm2839387eds.12.2023.04.16.10.33.36
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Apr 2023 10:33:36 -0700 (PDT)
-Received: by mail-ej1-f49.google.com with SMTP id ud9so58204848ejc.7
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 10:33:36 -0700 (PDT)
-X-Received: by 2002:a17:907:2718:b0:94b:28ff:9e89 with SMTP id
- w24-20020a170907271800b0094b28ff9e89mr1914743ejk.15.1681666416204; Sun, 16
- Apr 2023 10:33:36 -0700 (PDT)
+        Sun, 16 Apr 2023 13:34:14 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C80199E;
+        Sun, 16 Apr 2023 10:34:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1681666435; bh=C3MiRL1+jYzT7/gFD6IpyMpli5bJnPrV9TtMIyTDig0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QeUEGgypVv4OEKyF6o72zsRqKKb2xLx+r3jI4AiNLXafL4929vXhDtQGx6No9mlFc
+         cGcFRC9F7/EcnqQhbvuLgsmyr2sh8vKhwga8Bsnj4YiRnv6VcnXECOtfo9j9PTfGmD
+         pVfqmjMVGuqDpVi0kKDsGTKFgBs+ZoSNd1q3mPd8=
+Received: from ld50.lan (unknown [101.228.138.124])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 9B0436011C;
+        Mon, 17 Apr 2023 01:33:52 +0800 (CST)
+From:   WANG Xuerui <kernel@xen0n.name>
+To:     loongarch@lists.linux.dev
+Cc:     WANG Xuerui <git@xen0n.name>, Huacai Chen <chenhuacai@kernel.org>,
+        Xi Ruoyao <xry111@xry111.site>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] LoongArch: Make bounds-checking instructions useful
+Date:   Mon, 17 Apr 2023 01:33:24 +0800
+Message-Id: <20230416173326.3995295-1-kernel@xen0n.name>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-References: <20230416122913.GCZDvqGVe9TPa5LPRm@fat_crate.local>
-In-Reply-To: <20230416122913.GCZDvqGVe9TPa5LPRm@fat_crate.local>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 16 Apr 2023 10:33:19 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjOZgMu2VYBHMt-yFvurAqWsxLG8wh59km=B245CXRKxA@mail.gmail.com>
-Message-ID: <CAHk-=wjOZgMu2VYBHMt-yFvurAqWsxLG8wh59km=B245CXRKxA@mail.gmail.com>
-Subject: Re: [GIT PULL] x86/urgent for v6.3-rc7
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 16, 2023 at 5:29=E2=80=AFAM Borislav Petkov <bp@alien8.de> wrot=
-e:
->
-> - Drop __init annotation from two rtc functions which get called after
->   boot is done, in order to prevent a crash
+From: WANG Xuerui <git@xen0n.name>
 
-.. ahh, and our automation to catch these things didn't find it,
-because they are only accessed from x86_wallclock_init(), which is
-also __init.
+Hi,
 
-So it all looked superficially good, except for the "oh, we saved them
-into a data structure that _isn't_ init".
+The LoongArch-64 base architecture is capable of performing
+bounds-checking either before memory accesses or alone, with specialized
+instructions generating BCEs (bounds-checking error) in case of failed
+assertions (ISA manual Volume 1, Sections 2.2.6.1 [1] and 2.2.10.3 [2]).
+This could be useful for managed runtimes, but the exception is not
+being handled so far, resulting in SIGSYSes in these cases, which is
+incorrect and warrants a fix in itself.
 
-It would require automation much smarter than the one we have to catch
-that kind of thing.
+During experimentation, it was discovered that there is already UAPI for
+expressing such semantics: SIGSEGV with si_code=SEGV_BNDERR. This was
+originally added for Intel MPX, and there is currently no user (!) after
+the removal of MPX support a few years ago. Although the semantics is
+not a 1:1 match to that of LoongArch, still it is better than
+alternatives such as SIGTRAP or SIGBUS of BUS_OBJERR kind, due to being
+able to convey both the value that failed assertion and the bound value.
 
-             Linus
+This patch series implements just this approach: translating BCEs into
+SIGSEGVs with si_code=SEGV_BNDERR, si_value set to the offending value,
+and si_lower and si_upper set to resemble a range with both lower and
+upper bound while in fact there is only one.
+
+The instructions are not currently used anywhere yet in the fledgling
+LoongArch ecosystem, so it's not very urgent and we could take the time
+to figure out the best way forward (should SEGV_BNDERR turn out not
+suitable).
+
+[1]: https://loongson.github.io/LoongArch-Documentation/LoongArch-Vol1-EN.html#bound-check-memory-access-instructions
+[2]: https://loongson.github.io/LoongArch-Documentation/LoongArch-Vol1-EN.html#_asrtlegt_d
+
+WANG Xuerui (2):
+  LoongArch: Add opcodes of bounds-checking instructions
+  LoongArch: Relay BCE exceptions to userland as SIGSEGVs with
+    si_code=SEGV_BNDERR
+
+ arch/loongarch/include/asm/inst.h   |  26 +++++++
+ arch/loongarch/include/asm/kdebug.h |   1 +
+ arch/loongarch/kernel/genex.S       |   1 +
+ arch/loongarch/kernel/traps.c       | 107 ++++++++++++++++++++++++++++
+ 4 files changed, 135 insertions(+)
+
+-- 
+2.40.0
+
