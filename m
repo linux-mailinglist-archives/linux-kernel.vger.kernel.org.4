@@ -2,56 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BCF26E358A
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 09:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7812C6E358B
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 09:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbjDPHEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 03:04:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53132 "EHLO
+        id S230131AbjDPHET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 03:04:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjDPHEN (ORCPT
+        with ESMTP id S229662AbjDPHEN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 16 Apr 2023 03:04:13 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B851FDA;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C9A1FE5;
         Sun, 16 Apr 2023 00:04:10 -0700 (PDT)
-Date:   Sun, 16 Apr 2023 07:04:07 -0000
+Date:   Sun, 16 Apr 2023 07:04:08 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1681628648;
+        s=2020; t=1681628649;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=S+f7GdkF3JQ90ONxa0bAHxG1+bv8XBIUSxJ2AMx2Jcs=;
-        b=RjO8dFSOFAYWrePhcpxPCF/kqL4KX/eq3g2PbL0f9i2S+PK2tJ8DZnN6etwcDBO/f4HUyh
-        TwfAaryS0nS0xuBO/F7jQYCo2Z6NL3sbubFJWKCz/jt6BjJdaX0lJYNlF5x8UG8DX1Qr6Y
-        brvP/VfSninVYjCJLotLWjRcahfQIU1JnTc2TYNHjtQq1+Y1arbFbZf+0df6mX3VrFnlrC
-        AU4xKmsl82STSqGK/YaunsO6B+Y16Dc5Wkk6DMEYSGFCdOcJjjrhcCzGefuhAf/l3ZrRAK
-        j/hdZ6DszFl5f1VI2qE9DMZWViqWMs1GSuXzmPjTiERu8FfhwYD+QeALODfynw==
+        bh=FDrX5X3OePpfMmerIBXTGeWzkwQBD/rUKSU6hHFCNFo=;
+        b=ypjsD0hw8XpL4+aOyJqUvWQwtrBnfjZkbJB3F2Z3ADsi0TM4pQVyakuPJ8aPZR6olgzzFt
+        s86faWQHGnoSOb5EGMJB2DRiHS8By0jCdcgHc/t9E+fQG53W49xivXENG9xdsL66QGcaka
+        7nlKGBu7m2R2YQKilqDsIEb1gL0W/LeLEb1Dq9rsRfYcd9TAoKsYg2HAamBo39NBNwMY/x
+        dJbb60ya9iLmgsnEPJwlIV4n+E1v6Y9BW8jdeEafSNZHlMvYR24BvpttfyMcHVtthYouKq
+        bQrPiyJSQ0QvQ3uBDVzoXS4Wu/O40mujA7944qOmchSfzqLyO2EdRBHPVXjA7A==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1681628648;
+        s=2020e; t=1681628649;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=S+f7GdkF3JQ90ONxa0bAHxG1+bv8XBIUSxJ2AMx2Jcs=;
-        b=W90zU+QVXka4kilzFI+qrSHVmps1ETX55nVUKbkCmRYFZzfb6nDQ9UytiAlTaJoAtthBBG
-        W+52q3eXSEAsdjAA==
+        bh=FDrX5X3OePpfMmerIBXTGeWzkwQBD/rUKSU6hHFCNFo=;
+        b=IdlXpufRto69GAZhEJU7j+cPyG1lx4SdatKwEUQVn0FUkAAAuod78pDXKmS1LrJ5z8yCUj
+        JeljgdIted5pBgBA==
 From:   "tip-bot2 for Dmitry Vyukov" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] selftests/timers/posix_timers: Test delivery of
- signals across threads
-Cc:     Dmitry Vyukov <dvyukov@google.com>, Marco Elver <elver@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+Subject: [tip: timers/core] posix-timers: Prefer delivery of signals to the
+ current thread
+Cc:     Oleg Nesterov <oleg@redhat.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Marco Elver <elver@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230316123028.2890338-2-elver@google.com>
-References: <20230316123028.2890338-2-elver@google.com>
+In-Reply-To: <20230316123028.2890338-1-elver@google.com>
+References: <20230316123028.2890338-1-elver@google.com>
 MIME-Version: 1.0
-Message-ID: <168162864799.404.9782456748146333366.tip-bot2@tip-bot2>
+Message-ID: <168162864858.404.11836404676377275448.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,119 +70,79 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     e797203fb3ba8c0ed2f4a8800d626c9d54fedfbf
-Gitweb:        https://git.kernel.org/tip/e797203fb3ba8c0ed2f4a8800d626c9d54fedfbf
+Commit-ID:     bcb7ee79029dcaeb09668a4d1489de256829a7cc
+Gitweb:        https://git.kernel.org/tip/bcb7ee79029dcaeb09668a4d1489de256829a7cc
 Author:        Dmitry Vyukov <dvyukov@google.com>
-AuthorDate:    Thu, 16 Mar 2023 13:30:28 +01:00
+AuthorDate:    Thu, 16 Mar 2023 13:30:27 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Sun, 16 Apr 2023 09:00:18 +02:00
 
-selftests/timers/posix_timers: Test delivery of signals across threads
+posix-timers: Prefer delivery of signals to the current thread
 
-Test that POSIX timers using CLOCK_PROCESS_CPUTIME_ID eventually deliver
-a signal to all running threads.  This effectively tests that the kernel
-doesn't prefer any one thread (or subset of threads) for signal delivery.
+POSIX timers using the CLOCK_PROCESS_CPUTIME_ID clock prefer the main
+thread of a thread group for signal delivery. However, this has a
+significant downside: it requires waking up a potentially idle thread.
 
+Instead, prefer to deliver signals to the current thread (in the same
+thread group) if SIGEV_THREAD_ID is not set by the user. This does not
+change guaranteed semantics, since POSIX process CPU time timers have
+never guaranteed that signal delivery is to a specific thread (without
+SIGEV_THREAD_ID set).
+
+The effect is that queueing the signal no longer wakes up potentially idle
+threads, and the kernel is no longer biased towards delivering the timer
+signal to any particular thread (which better distributes the timer signals
+esp. when multiple timers fire concurrently).
+
+Suggested-by: Oleg Nesterov <oleg@redhat.com>
 Signed-off-by: Dmitry Vyukov <dvyukov@google.com>
 Signed-off-by: Marco Elver <elver@google.com>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/20230316123028.2890338-2-elver@google.com
+Reviewed-by: Oleg Nesterov <oleg@redhat.com>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lore.kernel.org/r/20230316123028.2890338-1-elver@google.com
 
 ---
- tools/testing/selftests/timers/posix_timers.c | 77 ++++++++++++++++++-
- 1 file changed, 77 insertions(+)
+ kernel/signal.c | 21 ++++++++++++++++++---
+ 1 file changed, 18 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/timers/posix_timers.c b/tools/testing/selftests/timers/posix_timers.c
-index 0ba5000..8a17c0e 100644
---- a/tools/testing/selftests/timers/posix_timers.c
-+++ b/tools/testing/selftests/timers/posix_timers.c
-@@ -188,6 +188,80 @@ static int check_timer_create(int which)
- 	return 0;
- }
+diff --git a/kernel/signal.c b/kernel/signal.c
+index 8cb28f1..8f6330f 100644
+--- a/kernel/signal.c
++++ b/kernel/signal.c
+@@ -1003,8 +1003,7 @@ static void complete_signal(int sig, struct task_struct *p, enum pid_type type)
+ 	/*
+ 	 * Now find a thread we can wake up to take the signal off the queue.
+ 	 *
+-	 * If the main thread wants the signal, it gets first crack.
+-	 * Probably the least surprising to the average bear.
++	 * Try the suggested task first (may or may not be the main thread).
+ 	 */
+ 	if (wants_signal(sig, p))
+ 		t = p;
+@@ -1970,8 +1969,24 @@ int send_sigqueue(struct sigqueue *q, struct pid *pid, enum pid_type type)
  
-+int remain;
-+__thread int got_signal;
+ 	ret = -1;
+ 	rcu_read_lock();
 +
-+static void *distribution_thread(void *arg)
-+{
-+	while (__atomic_load_n(&remain, __ATOMIC_RELAXED));
-+	return NULL;
-+}
-+
-+static void distribution_handler(int nr)
-+{
-+	if (!__atomic_exchange_n(&got_signal, 1, __ATOMIC_RELAXED))
-+		__atomic_fetch_sub(&remain, 1, __ATOMIC_RELAXED);
-+}
-+
-+/*
-+ * Test that all running threads _eventually_ receive CLOCK_PROCESS_CPUTIME_ID
-+ * timer signals. This primarily tests that the kernel does not favour any one.
-+ */
-+static int check_timer_distribution(void)
-+{
-+	int err, i;
-+	timer_t id;
-+	const int nthreads = 10;
-+	pthread_t threads[nthreads];
-+	struct itimerspec val = {
-+		.it_value.tv_sec = 0,
-+		.it_value.tv_nsec = 1000 * 1000,
-+		.it_interval.tv_sec = 0,
-+		.it_interval.tv_nsec = 1000 * 1000,
-+	};
-+
-+	printf("Check timer_create() per process signal distribution... ");
-+	fflush(stdout);
-+
-+	remain = nthreads + 1;  /* worker threads + this thread */
-+	signal(SIGALRM, distribution_handler);
-+	err = timer_create(CLOCK_PROCESS_CPUTIME_ID, NULL, &id);
-+	if (err < 0) {
-+		perror("Can't create timer\n");
-+		return -1;
-+	}
-+	err = timer_settime(id, 0, &val, NULL);
-+	if (err < 0) {
-+		perror("Can't set timer\n");
-+		return -1;
-+	}
-+
-+	for (i = 0; i < nthreads; i++) {
-+		if (pthread_create(&threads[i], NULL, distribution_thread, NULL)) {
-+			perror("Can't create thread\n");
-+			return -1;
-+		}
-+	}
-+
-+	/* Wait for all threads to receive the signal. */
-+	while (__atomic_load_n(&remain, __ATOMIC_RELAXED));
-+
-+	for (i = 0; i < nthreads; i++) {
-+		if (pthread_join(threads[i], NULL)) {
-+			perror("Can't join thread\n");
-+			return -1;
-+		}
-+	}
-+
-+	if (timer_delete(id)) {
-+		perror("Can't delete timer\n");
-+		return -1;
-+	}
-+
-+	printf("[OK]\n");
-+	return 0;
-+}
-+
- int main(int argc, char **argv)
- {
- 	printf("Testing posix timers. False negative may happen on CPU execution \n");
-@@ -217,5 +291,8 @@ int main(int argc, char **argv)
- 	if (check_timer_create(CLOCK_PROCESS_CPUTIME_ID) < 0)
- 		return ksft_exit_fail();
++	/*
++	 * This function is used by POSIX timers to deliver a timer signal.
++	 * Where type is PIDTYPE_PID (such as for timers with SIGEV_THREAD_ID
++	 * set), the signal must be delivered to the specific thread (queues
++	 * into t->pending).
++	 *
++	 * Where type is not PIDTYPE_PID, signals must be delivered to the
++	 * process. In this case, prefer to deliver to current if it is in
++	 * the same thread group as the target process, which avoids
++	 * unnecessarily waking up a potentially idle task.
++	 */
+ 	t = pid_task(pid, type);
+-	if (!t || !likely(lock_task_sighand(t, &flags)))
++	if (!t)
++		goto ret;
++	if (type != PIDTYPE_PID && same_thread_group(t, current))
++		t = current;
++	if (!likely(lock_task_sighand(t, &flags)))
+ 		goto ret;
  
-+	if (check_timer_distribution() < 0)
-+		return ksft_exit_fail();
-+
- 	return ksft_exit_pass();
- }
+ 	ret = 1; /* the signal is ignored */
