@@ -2,88 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 093DA6E3498
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 02:24:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F54D6E349C
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 02:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbjDPAYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 20:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59640 "EHLO
+        id S230155AbjDPAZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 20:25:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDPAYq (ORCPT
+        with ESMTP id S230099AbjDPAZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 20:24:46 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 67CFC35A8;
-        Sat, 15 Apr 2023 17:24:44 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 550BE1063;
-        Sat, 15 Apr 2023 17:25:28 -0700 (PDT)
-Received: from slackpad.lan (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3DC203F587;
-        Sat, 15 Apr 2023 17:24:42 -0700 (PDT)
-Date:   Sun, 16 Apr 2023 01:24:21 +0100
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Jonathan McDowell <noodles@earth.li>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] ARM: dts: sun5i: chip: Enable bluetooth
-Message-ID: <20230416012421.255bfd19@slackpad.lan>
-In-Reply-To: <f26d11e613df7bd55822ff3fb7689e36bf9e4f7a.1681580558.git.noodles@earth.li>
-References: <cover.1681580558.git.noodles@earth.li>
-        <f26d11e613df7bd55822ff3fb7689e36bf9e4f7a.1681580558.git.noodles@earth.li>
-Organization: Arm Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
+        Sat, 15 Apr 2023 20:25:53 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8EF35A9;
+        Sat, 15 Apr 2023 17:25:52 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id dx24so11056814ejb.11;
+        Sat, 15 Apr 2023 17:25:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681604751; x=1684196751;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AikccuILl/rWwVlUOcy4wtolB2YL8IX34+EVMpD42sg=;
+        b=dPCVE1VQ9k0Cuu8quWGycURV9SGO5kqGK2tGTmoickhgMNDpDqcBvl5IcL+XDpuhl3
+         cOWkJWembdBu9WvJy52kUQA2ZSXBiRBiKCBqFVzjviJFVC9Brxy3iw/ErGO6jsBpHYk3
+         S8G4PAKdZopqWjA7S4NdtvXkORXKKQqN1OI20eQ3ILhOJAwlk2Bal7PjzFxSuXSc1CQ8
+         Ttlog++cOP2dT+V1t2hhXvarZyGaZvsQqW6cK2Gjry3vMUL53+d15wQ4UOagzze5+Fat
+         x9ohAczNH1lDYPkB1IjdaaQ88fmk6W9MLBV72LT8BTvwgcYPdUH861TPzTUgvKIek4QS
+         cYHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681604751; x=1684196751;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AikccuILl/rWwVlUOcy4wtolB2YL8IX34+EVMpD42sg=;
+        b=TDRuc3NbJGuq0JPeJ1jmJ65fkcyIA3PxSKVXzdQML8MZ9aTf8CpGkPGe1na93cWLHk
+         /ZOMUIwDNDAbbF1h8e6/cS2Je8vQsDEeNqd9NobF0PlmrkxzRMoiNlkakQY571UCUHHR
+         UQgtHRXlGEkAlqD0q2zZihADBbEVlGX6PsrCkTjUXLiAEXSykuA/MlvIPOkHx6Hzn6mD
+         re/fUTr2evy/qRqoV3gHKB0AwOD+ZdcBAKrBsubYsfqUT4gb8HJAE38dFwFkvuLkeBtf
+         iYA4mkb576PbGQBT3j6N1GvUTBEFPyAsEVjeiAEflWf5CRTX4hB5wIqOhlXhEwkWu1xz
+         8S1g==
+X-Gm-Message-State: AAQBX9dG8ZnyrBDQ+inO9hYaHLtfFoxKPZrpLeyHdvaeUVHpRQNkbpzN
+        BgHYFnVQV7LzboFZ5fbXpH+pnwX9NSl75ObNV7E=
+X-Google-Smtp-Source: AKy350bwAxk4mfYw5rLmjnhLo0oyAebJps3Rkaf2Za1xbwAMpcl5KBQjhfMpWZzvodcmJLLEgxG23DeILztqemeHW6Q=
+X-Received: by 2002:a17:906:fcd8:b0:94e:2d:e94f with SMTP id
+ qx24-20020a170906fcd800b0094e002de94fmr1597507ejb.8.1681604751315; Sat, 15
+ Apr 2023 17:25:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230414110056.19665-1-cloudliang@tencent.com>
+ <20230414110056.19665-5-cloudliang@tencent.com> <ZDoY1hOJfMwJk1SQ@debian.me>
+In-Reply-To: <ZDoY1hOJfMwJk1SQ@debian.me>
+From:   Jinrong Liang <ljr.kernel@gmail.com>
+Date:   Sun, 16 Apr 2023 08:25:40 +0800
+Message-ID: <CAFg_LQVLzXUhgOkzO780D1HmtLJ6topwPNQJTYXFbR9L7+X17Q@mail.gmail.com>
+Subject: Re: [PATCH 4/7] KVM: x86/pmu: Add documentation for fixed ctr on PMU filter
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Like Xu <like.xu.linux@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Aaron Lewis <aaronlewis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jinrong Liang <cloudliang@tencent.com>,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 15 Apr 2023 18:46:03 +0100
-Jonathan McDowell <noodles@earth.li> wrote:
+Bagas Sanjaya <bagasdotme@gmail.com> =E4=BA=8E2023=E5=B9=B44=E6=9C=8815=E6=
+=97=A5=E5=91=A8=E5=85=AD 11:24=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Fri, Apr 14, 2023 at 07:00:53PM +0800, Jinrong Liang wrote:
+> > +Specifically, KVM follows the following pseudo-code when determining w=
+hether to
+> > +allow the guest FixCtr[i] to count its pre-defined fixed event:
+> > +
+> > +  FixCtr[i]_is_allowed =3D (action =3D=3D ALLOW) && (bitmap & BIT(i)) =
+||
+> > +    (action =3D=3D DENY) && !(bitmap & BIT(i));
+> > +  FixCtr[i]_is_denied =3D !FixCtr[i]_is_allowed;
+> > +
+>
+> As kernel test robot has reported [1], you need to wrap the code above
+> in a code block:
 
-> The C.H.I.P has an rtl8723bs device with the bluetooth interface hooked
-> up on UART3. Support for this didn't exist in mainline when the DTS was
-> initially added, but it does now, so enable it.
-> 
-> Signed-off-by: Jonathan McDowell <noodles@earth.li>
-> ---
->  arch/arm/boot/dts/sun5i-r8-chip.dts | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/sun5i-r8-chip.dts b/arch/arm/boot/dts/sun5i-r8-chip.dts
-> index fd37bd1f3920..4d72a181d8aa 100644
-> --- a/arch/arm/boot/dts/sun5i-r8-chip.dts
-> +++ b/arch/arm/boot/dts/sun5i-r8-chip.dts
-> @@ -255,6 +255,10 @@ &uart3 {
->  	pinctrl-0 = <&uart3_pg_pins>,
->  		    <&uart3_cts_rts_pg_pins>;
->  	status = "okay";
-> +
-> +	bluetooth {
-> +		compatible = "realtek,rtl8723bs-bt";
-> +	}
+I will make the changes as you suggested, i.e. wrap the code above in
+a code block.
 
-As the kernel test robot already pointed out, there is a semicolon
-missing here.
-Otherwise looks good (dt-validate passes), but don't know if there are
-any wakeup GPIOs connected (can't seem to find a schematic?).
+Thanks.
 
-Cheers,
-Andre
-
-
->  };
->  
->  &usb_otg {
-
+>
+> ---- >8 ----
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.=
+rst
+> index 036f5b1a39aff8..b5836767e0e76d 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -5126,7 +5126,7 @@ Via this API, KVM userspace can also control the be=
+havior of the VM's fixed
+>  counters (if any) by configuring the "action" and "fixed_counter_bitmap"=
+ fields.
+>
+>  Specifically, KVM follows the following pseudo-code when determining whe=
+ther to
+> -allow the guest FixCtr[i] to count its pre-defined fixed event:
+> +allow the guest FixCtr[i] to count its pre-defined fixed event::
+>
+>    FixCtr[i]_is_allowed =3D (action =3D=3D ALLOW) && (bitmap & BIT(i)) ||
+>      (action =3D=3D DENY) && !(bitmap & BIT(i));
+>
+> Thanks.
+>
+> [1]: https://lore.kernel.org/linux-doc/202304150850.rx4UDDsB-lkp@intel.co=
+m/
+>
+> --
+> An old man doll... just what I always wanted! - Clara
