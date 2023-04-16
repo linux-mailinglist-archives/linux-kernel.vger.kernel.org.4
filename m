@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D81A86E35A1
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 09:20:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96BA06E35A2
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 09:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbjDPHUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 03:20:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58274 "EHLO
+        id S230285AbjDPHUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 03:20:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbjDPHUi (ORCPT
+        with ESMTP id S230233AbjDPHUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 03:20:38 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED91A30C7
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 00:20:21 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f167d0cbb7so1330645e9.0
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 00:20:21 -0700 (PDT)
+        Sun, 16 Apr 2023 03:20:41 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC8B30D8
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 00:20:28 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-2f44739a2afso407251f8f.1
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 00:20:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681629621; x=1684221621;
+        d=gmail.com; s=20221208; t=1681629628; x=1684221628;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AUb4sZWN17aC9uOKE2iR6leNu0T6NHURX++nzdcY5IQ=;
-        b=MylfWUa6l5E2JtYJ7hpuPbEowIeba5IImp/dH6hgWNM0p9QGdUDaDmtisIubZwQikE
-         mxbLM6ZUClNtfMR3LTvZcpcsGxu1aOWLXm2yEgq1hwd7Cw5rsfinlP41oSTV2yuf5i5b
-         VJsHlBQBQpco06d6T6/kDyihQwNxfJWEKIpdYAP16tzjwrs4ugGWk1l1+il/z6qYeNPX
-         /XENEnca5zJTrglitawS/ZrwzBcZLlUTuY33QE7DbTvi0lRwUVuLl1oGdyu+w8pZDJvU
-         Dn083f7fDbTaIIsK2PKzZKG9anqP3xoYXaII+lj/QRY7onhngkOWpy84Lj8kq3YpJSxp
-         lUKQ==
+        bh=8k9nO2fKVUUnwg/PlGeQfjbj4jMnL8QuYn9ONfwhXe4=;
+        b=sNI+KFfcbiffyf/EojEIoeeerwb5EobglE7DpjCOkmAa3g0CQ+eysVPTAHBhgG8ztK
+         AxIpWSVoKAkW5WMzFvz2ERsWrlDub+4d8ut8NKFTwa4eqc3juDJuHWrxeZ4CjOl3NIUj
+         NxTS8tFIPAbkL9gpf3/mKn5hqzLkZCiBl9TqJpUMXXO3Fty5Q+20iTS19A2EVWfx62hg
+         MKIMOqqcYocgRxy0oNJqw3HheaHOJNiou7SNplPGqTGdjui/kHmxhnWlsXYhqNb0t0AZ
+         TFG17W6y/pOz6lJPHzGGyaAUDDga50KIDSb0VI/3w12h74WCoj8b0Ur1tju4aK+GW04i
+         gduw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681629621; x=1684221621;
+        d=1e100.net; s=20221208; t=1681629628; x=1684221628;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AUb4sZWN17aC9uOKE2iR6leNu0T6NHURX++nzdcY5IQ=;
-        b=ZT2UfO9lXMJzGa6byw+78s0jktqnZ54sHTJTXWMexknywV2fsDTZRf50bSA77HDSwB
-         mILcLGFvWbCOAdZIZiKFAh5mLPRXCYzB1DPp1rL3LfY4NSHxZK66Y45O5rYN6LXIJ0S9
-         RXVcO0UrF8uhhgft0mHBQ3CN1tDeCBGlGU6XI0wLqX2U65Hc58lEe7jqNAaFMlu090KN
-         2chqcbnCo3EW/4dULzXV09YcdNXRi61liIedh1bzJPqJfUxvZKb1duZqlTduFf27643w
-         cakRvJX0BhlM/HEf8wfbp+Znu7aSwlCL4IR8BEzn4kTrPH/lylHbLBGNGBaskgyYk/92
-         lFgA==
-X-Gm-Message-State: AAQBX9eqQucwmNpEwgHBywqXVmY/j6b1xIoCeEQBPpd5DAF1NWVfsixb
-        xIYCEdTGMdF/NwCKtdslgns=
-X-Google-Smtp-Source: AKy350YitU+UU2jw5wDn+l9M1NI73lhAQ0cERXBFyYf6PJFI8vTl1eBeYIT5zZaG79bcRBNm5JGTEw==
-X-Received: by 2002:a5d:58d8:0:b0:2f7:ee2:c2a3 with SMTP id o24-20020a5d58d8000000b002f70ee2c2a3mr4343301wrf.3.1681629621442;
-        Sun, 16 Apr 2023 00:20:21 -0700 (PDT)
+        bh=8k9nO2fKVUUnwg/PlGeQfjbj4jMnL8QuYn9ONfwhXe4=;
+        b=jf3fs8rSETlXljO/0n1b6LlDb4GzqQP9NVPvnqgjQCMa/IBCahM4spMGzS7g9Jpoq1
+         yTP/TRVEhye9032sX0Axgfm7mvBCHQqd2P/WtMafQeo510wkv+o2pLZUthIaVk/hrFZS
+         OzjzyJGJE1NmncB00gaOmeJIzdEu5Sn4te8dx4xwxuQYVMm0bgr+8kyi9jVYcvv+RVH5
+         dKfHn8qvUyCqdbQ/oSt6Isw9Ud6ujJNQpfeGPA48j7Y0WeGlK+DYSAi5hWNCgPbhaO0D
+         JwYoAsnes8nEhxxwgF8JoerKwMaLRa08+g+gt/GnRQ6HQl8hUUCavBD6N3nLUcRd+Cxx
+         ZWlg==
+X-Gm-Message-State: AAQBX9eZj5eK5xRtXc4QJnNjoOWFqlzju4uErBV8zQXWOAtFNgT49ppl
+        HCiYxH/fP6GhUGIxP8quPfW44gJeO6M=
+X-Google-Smtp-Source: AKy350btAN4DW4CTH6qT6sz3xd8RKmz9VH32cpkb6NnPX0LeUxjcUaGl8ZGZzJGvd9Sq5U24p8uI9g==
+X-Received: by 2002:a05:600c:1d11:b0:3f1:7138:91ee with SMTP id l17-20020a05600c1d1100b003f1713891eemr899513wms.2.1681629628131;
+        Sun, 16 Apr 2023 00:20:28 -0700 (PDT)
 Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
-        by smtp.gmail.com with ESMTPSA id d4-20020a056000114400b002cea8f07813sm7351663wrx.81.2023.04.16.00.20.20
+        by smtp.gmail.com with ESMTPSA id f20-20020a1c6a14000000b003f17329f7f2sm291552wmc.38.2023.04.16.00.20.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 00:20:20 -0700 (PDT)
-Date:   Sun, 16 Apr 2023 09:20:19 +0200
+        Sun, 16 Apr 2023 00:20:27 -0700 (PDT)
+Date:   Sun, 16 Apr 2023 09:20:25 +0200
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 7/8] staging: rtl8192e: Remove unchanged variable
- frame_sync_monitor
-Message-ID: <0c4bdca5f5dbb93bb05c6b7f32136d4dfb3b0e4b.1681627603.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 8/8] staging: rtl8192e: Remove unchanged variables
+ bfsync_processing and more
+Message-ID: <cb609f904d988febaa579526514586877b1dabf7.1681627603.git.philipp.g.hortmann@gmail.com>
 References: <cover.1681627603.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -71,134 +71,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove unchanged variable frame_sync_monitor and equations that have
-always the same result to shorten code.
+Remove unchanged variable bfsync_processing and
+rfc_txpowertrackingindex_real to shorten code.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- drivers/staging/rtl8192e/rtl8192e/rtl_core.h |  2 -
- drivers/staging/rtl8192e/rtl8192e/rtl_dm.c   | 73 ++++++++------------
- 2 files changed, 30 insertions(+), 45 deletions(-)
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c | 1 -
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.h | 2 --
+ drivers/staging/rtl8192e/rtl8192e/rtl_dm.c   | 1 -
+ 3 files changed, 4 deletions(-)
 
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+index 88ff54173a1f..27040d1e3230 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+@@ -786,7 +786,6 @@ static void _rtl92e_init_priv_variable(struct net_device *dev)
+ 	priv->rtllib->short_slot = 1;
+ 	priv->promisc = (dev->flags & IFF_PROMISC) ? 1 : 0;
+ 	priv->bcck_in_ch14 = false;
+-	priv->bfsync_processing  = false;
+ 	priv->cck_present_attn = 0;
+ 	priv->rfa_txpowertrackingindex = 0;
+ 	priv->rfc_txpowertrackingindex = 0;
 diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-index 0eca73e4540f..c97e315a9091 100644
+index c97e315a9091..285dac32c074 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
 +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-@@ -382,8 +382,6 @@ struct r8192_priv {
- 	u32		continue_diff_count;
- 	bool		bswitch_fsync;
- 	u8		framesync;
--	u8		frame_sync_monitor;
--
- 	u32		reset_count;
+@@ -357,7 +357,6 @@ struct r8192_priv {
+ 	u8		rfa_txpowertrackingindex_real;
+ 	u8		rfa_txpowertracking_default;
+ 	u8		rfc_txpowertrackingindex;
+-	u8		rfc_txpowertrackingindex_real;
+ 	bool		btxpower_tracking;
+ 	bool		bcck_in_ch14;
  
- 	enum reset_type rst_progress;
+@@ -376,7 +375,6 @@ struct r8192_priv {
+ 	bool		bcurrent_turbo_EDCA;
+ 	bool		bis_cur_rdlstate;
+ 
+-	bool		bfsync_processing;
+ 	u32		rate_record;
+ 	u32		rate_count_diff_rec;
+ 	u32		continue_diff_count;
 diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-index ed8b39d3c856..43e335ab0733 100644
+index 43e335ab0733..56a8ec517c06 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
 +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-@@ -1826,7 +1826,6 @@ static void _rtl92e_dm_init_fsync(struct net_device *dev)
- 	priv->rtllib->fsync_firstdiff_ratethreshold = 100;
- 	priv->rtllib->fsync_seconddiff_ratethreshold = 200;
- 	priv->rtllib->fsync_state = Default_Fsync;
--	priv->frame_sync_monitor = 1;
+@@ -998,7 +998,6 @@ void rtl92e_dm_backup_state(struct net_device *dev)
+ 	u32 bit_mask = bMaskByte0;
  
- 	timer_setup(&priv->fsync_timer, _rtl92e_dm_fsync_timer_callback, 0);
- }
-@@ -2053,12 +2052,10 @@ static void _rtl92e_dm_check_fsync(struct net_device *dev)
+ 	priv->bswitch_fsync  = false;
+-	priv->bfsync_processing = false;
  
- 			}
- 		}
--		if (priv->frame_sync_monitor) {
--			if (reg_c38_State != RegC38_Fsync_AP_BCM) {
--				rtl92e_writeb(dev, rOFDM0_RxDetector3, 0x95);
-+		if (reg_c38_State != RegC38_Fsync_AP_BCM) {
-+			rtl92e_writeb(dev, rOFDM0_RxDetector3, 0x95);
- 
--				reg_c38_State = RegC38_Fsync_AP_BCM;
--			}
-+			reg_c38_State = RegC38_Fsync_AP_BCM;
- 		}
- 	} else {
- 		switch (priv->rtllib->fsync_state) {
-@@ -2075,50 +2072,40 @@ static void _rtl92e_dm_check_fsync(struct net_device *dev)
- 			break;
- 		}
- 
--		if (priv->frame_sync_monitor) {
--			if (priv->rtllib->state == RTLLIB_LINKED) {
--				if (priv->undecorated_smoothed_pwdb <=
--				    RegC38_TH) {
--					if (reg_c38_State !=
--					    RegC38_NonFsync_Other_AP) {
--						rtl92e_writeb(dev,
--							      rOFDM0_RxDetector3,
--							      0x90);
--
--						reg_c38_State =
--						     RegC38_NonFsync_Other_AP;
--					}
--				} else if (priv->undecorated_smoothed_pwdb >=
--					   (RegC38_TH+5)) {
--					if (reg_c38_State) {
--						rtl92e_writeb(dev,
--							rOFDM0_RxDetector3,
--							priv->framesync);
--						reg_c38_State = RegC38_Default;
--					}
-+		if (priv->rtllib->state == RTLLIB_LINKED) {
-+			if (priv->undecorated_smoothed_pwdb <=
-+			    RegC38_TH) {
-+				if (reg_c38_State !=
-+				    RegC38_NonFsync_Other_AP) {
-+					rtl92e_writeb(dev,
-+						      rOFDM0_RxDetector3,
-+						      0x90);
-+
-+					reg_c38_State =
-+					     RegC38_NonFsync_Other_AP;
- 				}
--			} else {
-+			} else if (priv->undecorated_smoothed_pwdb >=
-+				   (RegC38_TH+5)) {
- 				if (reg_c38_State) {
--					rtl92e_writeb(dev, rOFDM0_RxDetector3,
--						      priv->framesync);
-+					rtl92e_writeb(dev,
-+						rOFDM0_RxDetector3,
-+						priv->framesync);
- 					reg_c38_State = RegC38_Default;
- 				}
- 			}
-+		} else {
-+			if (reg_c38_State) {
-+				rtl92e_writeb(dev, rOFDM0_RxDetector3,
-+					      priv->framesync);
-+				reg_c38_State = RegC38_Default;
-+			}
- 		}
- 	}
--	if (priv->frame_sync_monitor) {
--		if (priv->reset_count != reset_cnt) {
--			rtl92e_writeb(dev, rOFDM0_RxDetector3,
--				       priv->framesync);
--			reg_c38_State = RegC38_Default;
--			reset_cnt = priv->reset_count;
--		}
--	} else {
--		if (reg_c38_State) {
--			rtl92e_writeb(dev, rOFDM0_RxDetector3,
--				       priv->framesync);
--			reg_c38_State = RegC38_Default;
--		}
-+	if (priv->reset_count != reset_cnt) {
-+		rtl92e_writeb(dev, rOFDM0_RxDetector3,
-+			       priv->framesync);
-+		reg_c38_State = RegC38_Default;
-+		reset_cnt = priv->reset_count;
- 	}
- }
- 
+ 	if (dm_digtable.dig_algorithm == DIG_ALGO_BY_RSSI)
+ 		return;
 -- 
 2.40.0
 
