@@ -2,89 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F3F36E3B88
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 21:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C06996E3B8E
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 21:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbjDPT2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 15:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58540 "EHLO
+        id S229725AbjDPTdz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 16 Apr 2023 15:33:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjDPT2C (ORCPT
+        with ESMTP id S229501AbjDPTdx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 15:28:02 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE432123
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 12:28:01 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3ee6c339cceso184865e9.0
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 12:28:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681673280; x=1684265280;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gycHA7yj6cEyO67Eau7CxKEijbEYGga0ND6jZYOwtZg=;
-        b=6S6DR2vTH+dFOkR6a8d71fDagEaq6IJk7sjV2HGM8i6O7MTtPWzOG9iQgN3hEjvnm8
-         l+93MjO9qOgUeim+m3yfWNM+1RDM9BplZE693Ak9q1MI+qM+MprjhxNKCdYbadEwcqdU
-         ZsqoEOjwVw42OAvPb+HMzjFFokh24oO32En017kDlEs0WZx/NcbaS9RRtexv9pDvA/+c
-         pv/umlvE8r42uhLcnigByBKiJHzE1R68xDURC+2axOKRcMtzkXP3sbkD1SNjpOqHC6CD
-         omeiKzS+wIz3Lb2bmPk9FYpLNmKk5KrnzfqtnftKTVneyLuh801XA8hsXGlh0mTQ7uch
-         GOqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681673280; x=1684265280;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gycHA7yj6cEyO67Eau7CxKEijbEYGga0ND6jZYOwtZg=;
-        b=jWXiNZ1mAPhLD8v85OfwkNOZzAnrAAW7Oqdeo63shmh77V7+BfPVN5oC5hbIQ147TM
-         EJ74/Ra+1GMyJhlFqEeRomb/C7H9dCmYudLesgfP23SHFGcce/F620OMPA8zAz5DnSie
-         tnKmoqOfgm4ES87C5LKHInxlIZRY+p5yC3+fyyj0se2EbMSJQgjPo20kdRaEoLrfcy/4
-         N7sbgbWXxQSQCgf/mbIQeWe+wzv5oeI/PzHpFYWeJUedEzT4Ullh7OK1CIJC7RSnwxMc
-         nW8FTyA1g4Z7Y+wNZ5+JPLxUsPhxkLGP4fPuJ9j9VkcUJO62604Pi93FuL/9OqMENXy6
-         Ct0g==
-X-Gm-Message-State: AAQBX9d7kiDcj3rXbuDNeRwCWgFkRRhdkjXHjGMuzpGUmqv7HutS8o1j
-        U+mfDQhlXU/cGZUQBCaNK+q4FCdGYsbFleAOjUBJuG0i/0FU+sLRqbs=
-X-Google-Smtp-Source: AKy350b/VL/+Q2o9jnSxvX2anT9FlHG65dUlkiaAS9inf614ndGS1epsRFhqLkGDkLIfII/9cJJ34uMBzUo7abuIxPI=
-X-Received: by 2002:a05:600c:3d13:b0:3f1:7490:e5a4 with SMTP id
- bh19-20020a05600c3d1300b003f17490e5a4mr4545wmb.6.1681673280121; Sun, 16 Apr
- 2023 12:28:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230304034835.2082479-1-senozhatsky@chromium.org>
- <CAOUHufZ6jPLJYeshO8=2TaqXRmpOFuMQ92E9sg-oCh54fkqW7g@mail.gmail.com> <20230416151853.GK25053@google.com>
-In-Reply-To: <20230416151853.GK25053@google.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Sun, 16 Apr 2023 13:27:22 -0600
-Message-ID: <CAOUHufZk+dxE8UXWwGzGbX1BYxomD_25u2xoWt3vnoQp4xSZqw@mail.gmail.com>
-Subject: Re: [PATCHv4 0/4] zsmalloc: fine-grained fullness and new compaction algorithm
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+        Sun, 16 Apr 2023 15:33:53 -0400
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763982126;
+        Sun, 16 Apr 2023 12:33:51 -0700 (PDT)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1po888-000Jmb-9R; Sun, 16 Apr 2023 21:33:44 +0200
+Received: from p5b13a017.dip0.t-ipconnect.de ([91.19.160.23] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1po888-0003Iq-2E; Sun, 16 Apr 2023 21:33:44 +0200
+Message-ID: <22ef4cb30c0315e73284cd965f9d090dd7a8990d.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH RESEND] sh: sq: Use the bitmap API when applicable
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-sh@vger.kernel.org
+Date:   Sun, 16 Apr 2023 21:33:43 +0200
+In-Reply-To: <071e9f32c19a007f4922903282c9121898641400.1681671848.git.christophe.jaillet@wanadoo.fr>
+References: <071e9f32c19a007f4922903282c9121898641400.1681671848.git.christophe.jaillet@wanadoo.fr>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.48.0 
+MIME-Version: 1.0
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 91.19.160.23
+X-ZEDAT-Hint: PO
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 16, 2023 at 9:19=E2=80=AFAM Sergey Senozhatsky
-<senozhatsky@chromium.org> wrote:
->
-> On (23/04/16 01:20), Yu Zhao wrote:
-> >
-> > Seeing the following crashes from mm-unstable. Please take a look. Than=
-ks.
-> >
->
-> Hi,
->
-> Did you bisect it down to this series?
+Hi Christophe!
 
-Not exactly -- since this series was the only suspect I had, I cherry
-picked it to v6.3-rc6 and verified it is the culprit.
+On Sun, 2023-04-16 at 21:05 +0200, Christophe JAILLET wrote:
+> Using the bitmap API is less verbose than hand writing them.
+> It also improves the semantic.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> This is a resend of [1].
+> 
+> Now cross-compile tested with CONFIG_CPU_SUBTYPE_SH7770=y
+> 
+> [1]: https://lore.kernel.org/all/521788e22ad8f7a5058c154f068b061525321841.1656142814.git.christophe.jaillet@wanadoo.fr/
+> ---
+>  arch/sh/kernel/cpu/sh4/sq.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/sh/kernel/cpu/sh4/sq.c b/arch/sh/kernel/cpu/sh4/sq.c
+> index 27f2e3da5aa2..d289e99dc118 100644
+> --- a/arch/sh/kernel/cpu/sh4/sq.c
+> +++ b/arch/sh/kernel/cpu/sh4/sq.c
+> @@ -372,7 +372,6 @@ static struct subsys_interface sq_interface = {
+>  static int __init sq_api_init(void)
+>  {
+>  	unsigned int nr_pages = 0x04000000 >> PAGE_SHIFT;
+> -	unsigned int size = (nr_pages + (BITS_PER_LONG - 1)) / BITS_PER_LONG;
+>  	int ret = -ENOMEM;
+>  
+>  	printk(KERN_NOTICE "sq: Registering store queue API.\n");
+> @@ -382,7 +381,7 @@ static int __init sq_api_init(void)
+>  	if (unlikely(!sq_cache))
+>  		return ret;
+>  
+> -	sq_bitmap = kzalloc(size, GFP_KERNEL);
+> +	sq_bitmap = bitmap_zalloc(nr_pages, GFP_KERNEL);
+>  	if (unlikely(!sq_bitmap))
+>  		goto out;
+>  
+> @@ -393,7 +392,7 @@ static int __init sq_api_init(void)
+>  	return 0;
+>  
+>  out:
+> -	kfree(sq_bitmap);
+> +	bitmap_free(sq_bitmap);
+>  	kmem_cache_destroy(sq_cache);
+>  
+>  	return ret;
+> @@ -402,7 +401,7 @@ static int __init sq_api_init(void)
+>  static void __exit sq_api_exit(void)
+>  {
+>  	subsys_interface_unregister(&sq_interface);
+> -	kfree(sq_bitmap);
+> +	bitmap_free(sq_bitmap);
+>  	kmem_cache_destroy(sq_cache);
+>  }
+>  
+
+Thanks for resending this patch. I will try to review it next week
+and also boot-test it on my SH7785LCR evaluation board.
+
+I am not familiar with the bitmap API at the moment, so I might take
+a little longer to review this patch.
+
+Adrian
+
+-- 
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
