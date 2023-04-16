@@ -2,217 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9E4F6E36A0
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 11:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 476066E36A9
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 11:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbjDPJdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 05:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
+        id S230220AbjDPJiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 05:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjDPJdI (ORCPT
+        with ESMTP id S229677AbjDPJiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 05:33:08 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5232F2132
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 02:33:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681637587; x=1713173587;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=5zreMxGjZKIJANb1TexdmE2H++2UviPWu1yEdXkZRsA=;
-  b=WlY4zhEbyrm/eZZqUSy8nQM8xLKNX46NLeobXyf1B3znHYjmZD7N+J0n
-   DNhknk2CXAZeB3osfQG8fZ/YR5OG2CMtU5UP/iJz9nf8zpGe8Os4Q72fz
-   DrqJmz++QhcOt5m8pWn6J9HvufAyaLRZ4YZXGEVHTF/16Vtjw0/svMhXA
-   oV22IQ1N1lqwRhmkQAhTIlJPziOQLWfvagToZtMkIQ9eMDRNkd1/4VGCi
-   JZGakEwWhykE0RYigYR775p3GoBHajj0J93odW0omte1uODMt8+hQKg+9
-   dHtAqEAvSYV/Qc/xf47pken25yL99cND/xQJQShctHM+isGZ/VzQn5WCs
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="344714604"
-X-IronPort-AV: E=Sophos;i="5.99,201,1677571200"; 
-   d="scan'208";a="344714604"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2023 02:33:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="667808632"
-X-IronPort-AV: E=Sophos;i="5.99,201,1677571200"; 
-   d="scan'208";a="667808632"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 16 Apr 2023 02:33:05 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pnykq-000bbK-14;
-        Sun, 16 Apr 2023 09:33:04 +0000
-Date:   Sun, 16 Apr 2023 17:32:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:irq/urgent] BUILD REGRESSION
- 84d9651e13fb9820041d19262a55906851524c0f
-Message-ID: <643bc0a0.V0FO3QYbUJgRGcVd%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sun, 16 Apr 2023 05:38:12 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 14F3A198C;
+        Sun, 16 Apr 2023 02:38:09 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.41:47894.353085718
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
+        by 189.cn (HERMES) with SMTP id F3817100248;
+        Sun, 16 Apr 2023 17:38:04 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-7b48884fd-ljp89 with ESMTP id c890ea7692304bfab0ddaf902e6dec90 for tzimmermann@suse.de;
+        Sun, 16 Apr 2023 17:38:06 CST
+X-Transaction-ID: c890ea7692304bfab0ddaf902e6dec90
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <3bbaf3a3-d7dc-d6ad-f2bb-f58899793f98@189.cn>
+Date:   Sun, 16 Apr 2023 17:38:01 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2] drm/fbdev-generic: prohibit potential out-of-bounds
+ access
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Sui Jingfeng <suijingfeng@loongson.cn>,
+        Li Yi <liyi@loongson.cn>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Helge Deller <deller@gmx.de>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
+References: <20230413180622.1014016-1-15330273260@189.cn>
+ <fccc494f-0e52-5fdf-0e40-acc29177c73c@suse.de>
+ <32a1510e-d38a-ffb6-8e8d-026f8b3aa17a@189.cn>
+ <ZDuqYp0RW9SngQ2H@phenom.ffwll.local>
+Content-Language: en-US
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <ZDuqYp0RW9SngQ2H@phenom.ffwll.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/urgent
-branch HEAD: 84d9651e13fb9820041d19262a55906851524c0f  PCI/MSI: Remove over-zealous hardware size check in pci_msix_validate_entries()
+Hi,
 
-Error/Warning reports:
+On 2023/4/16 15:57, Daniel Vetter wrote:
+> On Fri, Apr 14, 2023 at 06:58:53PM +0800, Sui Jingfeng wrote:
+>> Hi,
+>>
+>> On 2023/4/14 03:16, Thomas Zimmermann wrote:
+>>> Hi,
+>>>
+>>> thanks for the patch. This is effectively a revert of commit
+>>> 8fbc9af55de0 ("drm/fbdev-generic: Set screen size to size of GEM
+>>> buffer"). Please add a Fixes tag.
+>>>
+>>> Am 13.04.23 um 20:06 schrieb Sui Jingfeng:
+>>>> From: Sui Jingfeng <suijingfeng@loongson.cn>
+>>>>
+>>>> The crazy fbdev test of IGT may write after EOF, which lead to
+>>>> out-of-bound
+>>> Please drop 'crazy'. :)
+>> This is OK.
+>>
+>> By using the world 'crazy',
+>>
+>> I meant that the test is very good and maybe it is written by professional
+>> peoples
+>>
+>> with the guidance by  experienced  engineer. So that even the corner get
+>> tested.
+> 'thoroughly' would be better word to describe that I think.
+>
+> I think for the other discussions I've covered it all already in the other
+> thread.
+> -Daniel
+>
+Yes, 'thoroughly' is a definitely better word than 'crazy'.
 
-https://lore.kernel.org/oe-kbuild-all/202304160752.QJiM8zR3-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202304160832.bMSgCZQD-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202304160844.cCgXqLn2-lkp@intel.com
 
-Error/Warning: (recently discovered and may have been fixed)
+I see your reviews in v1 the thread of this patch,  I will resend this 
+patch with updates.
 
-drivers/pci/msi/msi.c:763:18: error: use of undeclared identifier 'nvec'; did you mean 'nvev'?
-drivers/pci/msi/msi.c:763:25: error: 'nvec' undeclared (first use in this function); did you mean 'nvev'?
+But I thinks we should wait Thomas Z. for a while.
 
-Error/Warning ids grouped by kconfigs:
+I'm wondering whether he still have some strong feelings toward this, I 
+guess not.
 
-gcc_recent_errors
-|-- ia64-randconfig-r002-20230416
-|   `-- drivers-pci-msi-msi.c:error:nvec-undeclared-(first-use-in-this-function)
-|-- mips-allyesconfig
-|   `-- drivers-pci-msi-msi.c:error:nvec-undeclared-(first-use-in-this-function)
-|-- powerpc-allmodconfig
-|   `-- drivers-pci-msi-msi.c:error:nvec-undeclared-(first-use-in-this-function)
-|-- s390-allyesconfig
-|   `-- drivers-pci-msi-msi.c:error:nvec-undeclared-(first-use-in-this-function)
-|-- x86_64-allyesconfig
-|   `-- drivers-pci-msi-msi.c:error:nvec-undeclared-(first-use-in-this-function)
-|-- x86_64-defconfig
-|   `-- drivers-pci-msi-msi.c:error:nvec-undeclared-(first-use-in-this-function)
-`-- x86_64-rhel-8.3
-    `-- drivers-pci-msi-msi.c:error:nvec-undeclared-(first-use-in-this-function)
-clang_recent_errors
-|-- mips-loongson2k_defconfig
-|   `-- drivers-pci-msi-msi.c:error:use-of-undeclared-identifier-nvec
-|-- powerpc-ppc44x_defconfig
-|   `-- drivers-pci-msi-msi.c:error:use-of-undeclared-identifier-nvec
-|-- s390-randconfig-r035-20230416
-|   `-- drivers-pci-msi-msi.c:error:use-of-undeclared-identifier-nvec
-`-- x86_64-randconfig-a012
-    `-- drivers-pci-msi-msi.c:error:use-of-undeclared-identifier-nvec
+thanks, :-)
 
-elapsed time: 725m
-
-configs tested: 101
-configs skipped: 11
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r021-20230416   gcc  
-arc                  randconfig-r043-20230416   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                       multi_v4t_defconfig   gcc  
-arm                  randconfig-r046-20230416   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-hexagon              randconfig-r041-20230416   clang
-hexagon              randconfig-r045-20230416   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                          randconfig-a001   gcc  
-i386                          randconfig-a002   clang
-i386                          randconfig-a003   gcc  
-i386                          randconfig-a004   clang
-i386                          randconfig-a005   gcc  
-i386                          randconfig-a006   clang
-i386                          randconfig-a011   clang
-i386                          randconfig-a012   gcc  
-i386                          randconfig-a013   clang
-i386                          randconfig-a014   gcc  
-i386                          randconfig-a015   clang
-i386                          randconfig-a016   gcc  
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r002-20230416   gcc  
-ia64                 randconfig-r026-20230416   gcc  
-ia64                 randconfig-r036-20230416   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze   buildonly-randconfig-r002-20230416   gcc  
-microblaze           randconfig-r001-20230416   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                          ath25_defconfig   clang
-mips                     loongson2k_defconfig   clang
-nios2                               defconfig   gcc  
-openrisc             randconfig-r006-20230416   gcc  
-openrisc             randconfig-r011-20230416   gcc  
-openrisc             randconfig-r016-20230416   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                      ppc44x_defconfig   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv        buildonly-randconfig-r006-20230416   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r025-20230416   gcc  
-riscv                randconfig-r042-20230416   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r015-20230416   gcc  
-s390                 randconfig-r022-20230416   gcc  
-s390                 randconfig-r035-20230416   clang
-s390                 randconfig-r044-20230416   gcc  
-sh                               allmodconfig   gcc  
-sh                   randconfig-r013-20230416   gcc  
-sh                   randconfig-r024-20230416   gcc  
-sh                      rts7751r2d1_defconfig   gcc  
-sparc        buildonly-randconfig-r001-20230416   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r012-20230416   gcc  
-sparc                randconfig-r031-20230416   gcc  
-sparc                       sparc32_defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                        randconfig-a001   clang
-x86_64                        randconfig-a002   gcc  
-x86_64                        randconfig-a003   clang
-x86_64                        randconfig-a004   gcc  
-x86_64                        randconfig-a005   clang
-x86_64                        randconfig-a006   gcc  
-x86_64                        randconfig-a011   gcc  
-x86_64                        randconfig-a012   clang
-x86_64                        randconfig-a013   gcc  
-x86_64                        randconfig-a014   clang
-x86_64                        randconfig-a015   gcc  
-x86_64                        randconfig-a016   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r023-20230416   gcc  
-xtensa               randconfig-r032-20230416   gcc  
-xtensa               randconfig-r034-20230416   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+>>
+>>>> access for the drm drivers using fbdev-generic. For example, run
+>>>> fbdev test
+>>>> on a x86-64+ast2400 platform with 1680x1050 resolution will cause
+>>>> the linux
+>>>> kernel hang with following call trace:
+>>>>
+>>>>     Oops: 0000 [#1] PREEMPT SMP PTI
+>>>>     [IGT] fbdev: starting subtest eof
+>>>>     Workqueue: events drm_fb_helper_damage_work [drm_kms_helper]
+>>>>     [IGT] fbdev: starting subtest nullptr
+>>>>
+>>>>     RIP: 0010:memcpy_erms+0xa/0x20
+>>>>     RSP: 0018:ffffa17d40167d98 EFLAGS: 00010246
+>>>>     RAX: ffffa17d4eb7fa80 RBX: ffffa17d40e0aa80 RCX: 00000000000014c0
+>>>>     RDX: 0000000000001a40 RSI: ffffa17d40e0b000 RDI: ffffa17d4eb80000
+>>>>     RBP: ffffa17d40167e20 R08: 0000000000000000 R09: ffff89522ecff8c0
+>>>>     R10: ffffa17d4e4c5000 R11: 0000000000000000 R12: ffffa17d4eb7fa80
+>>>>     R13: 0000000000001a40 R14: 000000000000041a R15: ffffa17d40167e30
+>>>>     FS:  0000000000000000(0000) GS:ffff895257380000(0000)
+>>>> knlGS:0000000000000000
+>>>>     CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>>>     CR2: ffffa17d40e0b000 CR3: 00000001eaeca006 CR4: 00000000001706e0
+>>>>     Call Trace:
+>>>>      <TASK>
+>>>>      ? drm_fbdev_generic_helper_fb_dirty+0x207/0x330 [drm_kms_helper]
+>>>>      drm_fb_helper_damage_work+0x8f/0x170 [drm_kms_helper]
+>>>>      process_one_work+0x21f/0x430
+>>>>      worker_thread+0x4e/0x3c0
+>>>>      ? __pfx_worker_thread+0x10/0x10
+>>>>      kthread+0xf4/0x120
+>>>>      ? __pfx_kthread+0x10/0x10
+>>>>      ret_from_fork+0x2c/0x50
+>>>>      </TASK>
+>>>>     CR2: ffffa17d40e0b000
+>>>>     ---[ end trace 0000000000000000 ]---
+>>>>
+>>>> The indirect reason is drm_fb_helper_memory_range_to_clip() generate
+>>>> damage
+>>>> rectangles which partially or completely go out of the active
+>>>> display area.
+>>>> The second of argument 'off' is passing from the user-space, this
+>>>> will lead
+>>>> to the out-of-bound if it is large than (fb_height + 1) *
+>>>> fb_pitches; while
+>>>> DIV_ROUND_UP() may also controbute to error by 1.
+>>>>
+>>>> This patch will add code to restrict the damage rect computed go
+>>>> beyond of
+>>>> the last line of the framebuffer.
+>>>>
+>>>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+>>>> ---
+>>>>    drivers/gpu/drm/drm_fb_helper.c     | 16 ++++++++++++----
+>>>>    drivers/gpu/drm/drm_fbdev_generic.c |  2 +-
+>>>>    2 files changed, 13 insertions(+), 5 deletions(-)
+>>>>
+>>>> diff --git a/drivers/gpu/drm/drm_fb_helper.c
+>>>> b/drivers/gpu/drm/drm_fb_helper.c
+>>>> index 64458982be40..6bb1b8b27d7a 100644
+>>>> --- a/drivers/gpu/drm/drm_fb_helper.c
+>>>> +++ b/drivers/gpu/drm/drm_fb_helper.c
+>>>> @@ -641,19 +641,27 @@ static void drm_fb_helper_damage(struct
+>>>> drm_fb_helper *helper, u32 x, u32 y,
+>>>>    static void drm_fb_helper_memory_range_to_clip(struct fb_info
+>>>> *info, off_t off, size_t len,
+>>>>                               struct drm_rect *clip)
+>>>>    {
+>>>> +    u32 line_length = info->fix.line_length;
+>>>> +    u32 fb_height = info->var.yres;
+>>>>        off_t end = off + len;
+>>>>        u32 x1 = 0;
+>>>> -    u32 y1 = off / info->fix.line_length;
+>>>> +    u32 y1 = off / line_length;
+>>>>        u32 x2 = info->var.xres;
+>>>> -    u32 y2 = DIV_ROUND_UP(end, info->fix.line_length);
+>>>> +    u32 y2 = DIV_ROUND_UP(end, line_length);
+>>>> +
+>>>> +    /* Don't allow any of them beyond the bottom bound of display
+>>>> area */
+>>>> +    if (y1 > fb_height)
+>>>> +        y1 = fb_height;
+>>>> +    if (y2 > fb_height)
+>>>> +        y2 = fb_height;
+>>>>          if ((y2 - y1) == 1) {
+>>>>            /*
+>>>>             * We've only written to a single scanline. Try to reduce
+>>>>             * the number of horizontal pixels that need an update.
+>>>>             */
+>>>> -        off_t bit_off = (off % info->fix.line_length) * 8;
+>>>> -        off_t bit_end = (end % info->fix.line_length) * 8;
+>>>> +        off_t bit_off = (off % line_length) * 8;
+>>>> +        off_t bit_end = (end % line_length) * 8;
+>>> Please scratch all these changes. The current code should work as
+>>> intended. Only the generic fbdev emulation uses this code and it should
+>>> really be moved there at some point.
+>>
+>> Are you meant  that we should remove all these changes in
+>> drivers/gpu/drm/drm_fb_helper.c ?
+>>
+>>
+>> But this changes are helps to prevent the damage box computed go out of
+>> bound,
+>>
+>> the bound of the displayable shadow buffer on multiple display case.
+>>
+>> It is the minimum width x height which could be fit in for all
+>> display/minotor.
+>>
+>>
+>> For example, one is 1920x1080 monitor, another is 1280x800 monitor.
+>>
+>> connected to the motherboard simultaneously.
+>>
+>>
+>> Then, 1920x1080x4 (suppose we are using the XRGB) scanout buffer will be
+>>
+>> allocate by the  GEM backend. But the the actual display area is 1280x800.
+>>
+>> This is true at least for my driver on my platform, In this case,
+>>
+>> ```
+>>
+>>     info->var.xres ==1280;
+>>
+>>     info->var.yres == 800;
+>>
+>> ```
+>>
+>> If don't restrict this, the damage box computed out of the bound of  (0, 0)
+>> ~ (1280, 800) rectangle.
+>>
+>> a 1920x1080 damage box will came out.
+>>
+>>
+>> When running fbdev test of IGT, the smaller screen display will be OK.
+>>
+>> but the larger screen, the area outsize of 1280x800 will also be written.
+>>
+>> The background color became completely white from completely black before
+>> carry out the test,
+>>
+>> luckily, linux kernel do not hung, this time.
+>>
+>>
+>> On multi-screen case, we still need to restrict the damage box computed,
+>>
+>> Do not go out of 1280x800,  right?
+>>
+>>
+>>>>              x1 = bit_off / info->var.bits_per_pixel;
+>>>>            x2 = DIV_ROUND_UP(bit_end, info->var.bits_per_pixel);
+>>>> diff --git a/drivers/gpu/drm/drm_fbdev_generic.c
+>>>> b/drivers/gpu/drm/drm_fbdev_generic.c
+>>>> index 8e5148bf40bb..b057cfbba938 100644
+>>>> --- a/drivers/gpu/drm/drm_fbdev_generic.c
+>>>> +++ b/drivers/gpu/drm/drm_fbdev_generic.c
+>>>> @@ -94,7 +94,7 @@ static int
+>>>> drm_fbdev_generic_helper_fb_probe(struct drm_fb_helper *fb_helper,
+>>>>        fb_helper->buffer = buffer;
+>>>>        fb_helper->fb = buffer->fb;
+>>>>    -    screen_size = buffer->gem->size;
+>>>> +    screen_size = sizes->surface_height * buffer->fb->pitches[0];
+>>> I guess we simply go back to this line. I'd R-b a patch that does
+>>> exactly this.
+>>>
+>>> But some explanation is in order. Maybe you can add this as a comment to
+>>> the computation, as it's not obvious:
+>>>
+>>> The value of screen_size should actually be the size of the gem buffer.
+>>> In a physical framebuffer (i.e., video memory), the size would be a
+>>> multiple of the page size, but not necessarily a multiple of the screen
+>>> resolution. There are also pan fbdev's operations, and we could possibly
+>>> use DRM buffers that are not multiples of the screen width. But the
+>>> update code requires the use of drm_framebuffer_funcs.dirty, which takes
+>>> a clipping rectangle and therefore doesn't work well with these odd
+>>> values for screen_size.
+>>>
+>>> Best regards
+>>> Thomas
+>>>
+>>>>        screen_buffer = vzalloc(screen_size);
+>>>>        if (!screen_buffer) {
+>>>>            ret = -ENOMEM;
