@@ -2,125 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB7306E3B59
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 21:00:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E06E6E3B6B
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 21:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbjDPTAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 15:00:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50062 "EHLO
+        id S229588AbjDPTKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 15:10:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjDPTAd (ORCPT
+        with ESMTP id S229513AbjDPTKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 15:00:33 -0400
-X-Greylist: delayed 333 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 16 Apr 2023 12:00:32 PDT
-Received: from qs51p00im-qukt01072702.me.com (qs51p00im-qukt01072702.me.com [17.57.155.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3916A19B9
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 12:00:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1681671631; bh=QAN81MKwVcJUypjnCIzr2RsjX6wyliLgubt6kklNa4U=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=twFT6yHJHu/leHiYQe0it2jz8GgcJsKflFLbDZKKoewTHxETzPUKHWVtYNUlaLznC
-         TdvzDcG3L3M8QT551ip+4t8Ieur3sMGmmLYxwW6ZaM7nOiVB1T9rz+M5Q5DbXR894i
-         v6fxJA1nBsmrfL5+FJalYWJcqcVJQzjLuglarY5XJQf1JkP3vslTDUTpG4v/C4CVRi
-         dwoST2SGTeixqK0fymZD68ObOw8q7gIoz3ZGDT4irzk9U216rceNeqRDLLNsDYGtPZ
-         sXdJIvjrxlIaMveLj1GjJV12pV+M7OFHc9bP8ok82kt1XIRNj2Rc/qbRs6HX5kgiWT
-         QEge5H+Ssk3Vw==
-Received: from localhost (qs51p00im-dlb-asmtp-mailmevip.me.com [17.57.155.28])
-        by qs51p00im-qukt01072702.me.com (Postfix) with ESMTPSA id BA96A168066F;
-        Sun, 16 Apr 2023 19:00:30 +0000 (UTC)
-From:   Alain Volmat <avolmat@me.com>
-To:     Patrice Chotard <patrice.chotard@foss.st.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     Alain Volmat <avolmat@me.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: sti: removal of stih415/stih416 related entries
-Date:   Sun, 16 Apr 2023 20:59:38 +0200
-Message-Id: <20230416185939.18497-1-avolmat@me.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 16 Apr 2023 15:10:07 -0400
+X-Greylist: delayed 582 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 16 Apr 2023 12:10:05 PDT
+Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22E6272E
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 12:10:05 -0700 (PDT)
+Received: from [192.168.100.237] (cust-58-62-110-94.dyn.as47377.net [94.110.62.58])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id 31B6A3A3B6B;
+        Sun, 16 Apr 2023 21:00:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1681671620;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KbiAlrrOOyRd9nSswntO2EM/kuhEbC2Dui2D0jg8mhE=;
+        b=yJTuA2IM1/ouSfmFU4g81QYz/Qs036N+Xgao0Ath/i9vW1OlzLPaQPSs5Z/cwJgY+mB5Yt
+        9frXAammof4cYeKT3YVKBBWuJmf5TlBYeZdPZpxvHm/UkuLToAfxBulAuQ/nfQnJU4gl/N
+        knaWX+2Bmwu0hShO8EBylOfwdt4HsidJ6JVG8BFAGRPK8fnJHUS7eltyRhN2MTg3ab2WE1
+        UgpwApF4MwfWTnKCtGazcW0/+MWrMm5ofGGKOhMMnVk7OADQ+R6e9jhHvt6dGh4OC2H0oK
+        b9tPCUEGwBSgAzSOzEjLJfpJWZ4oWq8P1U6FwFMzQAju74a9ESqS7tOiZHvUhQ==
+Message-ID: <75148300a158ceb0f86043535b089838e1d1bb61.camel@svanheule.net>
+Subject: Re: [PATCH 6/6] dt-bindings: watchdog: realtek,otto-wdt: simplify
+ requiring interrupt-names
+From:   Sander Vanheule <sander@svanheule.net>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Julius Werner <jwerner@chromium.org>,
+        Evan Benn <evanbenn@chromium.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Fu Wei <fu.wei@linaro.org>, Viresh Kumar <vireshk@kernel.org>,
+        Eugen Hristev <eugen.hristev@collabora.com>,
+        Justin Chen <justinpopo6@gmail.com>, ?ecki <rafal@milecki.pl>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Corentin Labbe <clabbe@baylibre.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jamie Iles <jamie@jamieiles.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Christophe Roullier <christophe.roullier@foss.st.com>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
+        Srinivas Neeli <srinivas.neeli@xilinx.com>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-renesas-soc@vger.kernel.org
+Date:   Sun, 16 Apr 2023 21:00:17 +0200
+In-Reply-To: <20230415095112.51257-6-krzysztof.kozlowski@linaro.org>
+References: <20230415095112.51257-1-krzysztof.kozlowski@linaro.org>
+         <20230415095112.51257-6-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: Zt2cW-BS7xoCe38YDWBx66SWWo3zWBU3
-X-Proofpoint-ORIG-GUID: Zt2cW-BS7xoCe38YDWBx66SWWo3zWBU3
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.790,17.0.605.474.0000000_definitions?=
- =?UTF-8?Q?=3D2022-01-12=5F02:2020-02-14=5F02,2022-01-12=5F02,2020-01-23?=
- =?UTF-8?Q?=5F02_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1015 spamscore=0 bulkscore=0
- mlxlogscore=950 mlxscore=0 suspectscore=0 malwarescore=0 adultscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2304160180
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ST's STiH415 and STiH416 platforms have already been removed since
-a while.  Remove some remaining bits within the mach-sti.
+Hi Krzysztof,
 
-Signed-off-by: Alain Volmat <avolmat@me.com>
-Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
----
-Patch sent previously as part of serie: https://lore.kernel.org/all/20230209091659.1409-3-avolmat@me.com/
+On Sat, 2023-04-15 at 11:51 +0200, Krzysztof Kozlowski wrote:
+> Required properties should be listed in "required:" block.=C2=A0 Since
+> interrupts are already there, the dependency of interrupt-names on the
+> interrupts can be simplified.
 
- arch/arm/mach-sti/Kconfig    | 20 +-------------------
- arch/arm/mach-sti/board-dt.c |  2 --
- 2 files changed, 1 insertion(+), 21 deletions(-)
+Maybe I'm not reading this right, but isn't the dependency stated in the bi=
+nding
+"interrupts requires interrupt-names to be present"? resource-names.txt
+describes the reverse dependency ("interrupt-names is only meaningful with =
+an
+associated interrupts").
 
-diff --git a/arch/arm/mach-sti/Kconfig b/arch/arm/mach-sti/Kconfig
-index b2d45cf10a3c..609957dead98 100644
---- a/arch/arm/mach-sti/Kconfig
-+++ b/arch/arm/mach-sti/Kconfig
-@@ -19,31 +19,13 @@ menuconfig ARCH_STI
- 	select PL310_ERRATA_769419 if CACHE_L2X0
- 	select RESET_CONTROLLER
- 	help
--	  Include support for STMicroelectronics' STiH415/416, STiH407/10 and
-+	  Include support for STMicroelectronics' STiH407/10 and
- 	  STiH418 family SoCs using the Device Tree for discovery.  More
- 	  information can be found in Documentation/arm/sti/ and
- 	  Documentation/devicetree.
- 
- if ARCH_STI
- 
--config SOC_STIH415
--	bool "STiH415 STMicroelectronics Consumer Electronics family"
--	default y
--	help
--	  This enables support for STMicroelectronics Digital Consumer
--	  Electronics family StiH415 parts, primarily targeted at set-top-box
--	  and other digital audio/video applications using Flattned Device
--	  Trees.
--
--config SOC_STIH416
--	bool "STiH416 STMicroelectronics Consumer Electronics family"
--	default y
--	help
--	  This enables support for STMicroelectronics Digital Consumer
--	  Electronics family StiH416 parts, primarily targeted at set-top-box
--	  and other digital audio/video applications using Flattened Device
--	  Trees.
--
- config SOC_STIH407
- 	bool "STiH407 STMicroelectronics Consumer Electronics family"
- 	default y
-diff --git a/arch/arm/mach-sti/board-dt.c b/arch/arm/mach-sti/board-dt.c
-index ffecbf29646f..8c313f07bd02 100644
---- a/arch/arm/mach-sti/board-dt.c
-+++ b/arch/arm/mach-sti/board-dt.c
-@@ -12,8 +12,6 @@
- #include "smp.h"
- 
- static const char *const stih41x_dt_match[] __initconst = {
--	"st,stih415",
--	"st,stih416",
- 	"st,stih407",
- 	"st,stih410",
- 	"st,stih418",
--- 
-2.34.1
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+
+In any case, I'm OK with a flattened requirements list:
+
+Acked-by: Sander Vanheule <sander@svanheule.net>
+
+
+Best,
+Sander
+
 
