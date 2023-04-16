@@ -2,180 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D10E16E399C
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 17:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4D586E39A1
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 17:12:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbjDPPK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 11:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60750 "EHLO
+        id S229557AbjDPPMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 11:12:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjDPPK0 (ORCPT
+        with ESMTP id S229530AbjDPPMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 11:10:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C65B199E;
-        Sun, 16 Apr 2023 08:10:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3963D60ECF;
-        Sun, 16 Apr 2023 15:10:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23133C433D2;
-        Sun, 16 Apr 2023 15:10:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681657824;
-        bh=I0sotEmV3kawNyJtlPP3kmpIyzaPhPsF87PCQWk+tlY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=sPXbC0sAJIEoZdtARQ8ujGEOupvOV46NmhADpKDepBQtzwPcO0oko3cFP0kUwSjFW
-         9bWkPtWo1p0jYWXPNV+7F4Vz/nzPvZpvkJgSeS6+AkbGqaz2DVx3OwXsD9mxZdMCGJ
-         F+ntAIeeoUDxtOWV6Kr5I1kYHIlTAmK1TkQxvkUlULhs/wwZCU9kvksDQn6+qhrn9G
-         Z6bvxASy0KCgriRs42PpEUlOtY9zzHJDDM0Pk1c36EDo7f+BlnU6lXdQProQSL+nQz
-         Mw8SMUN/9Xaz0avDg+4zabNkNYgg93URXiM5j7tMUwDaTR02tsQ+inoiBL1DnD2zIw
-         qWeKX7qeNQblQ==
-Date:   Sun, 16 Apr 2023 16:10:24 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Sun, 16 Apr 2023 11:12:38 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C8E1FD8
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 08:12:37 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a5so1290877ejb.6
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 08:12:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681657956; x=1684249956;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xlWlvCWzrovrnqFvYZa6sVT2dx6B7igBCNASIvtKe9k=;
+        b=ofuNa16m1w1KPW5fhX8kOZV6iA3lUxhQjy4U44tnXZ0qMuT+JO+fsjXJwxiyc0niJf
+         /QUO4b8lsrltY7rwihIhq5ewsI/26fOmG5uCtnB8az4Jt9Anw9vyqUdzCaMw5uh3KgOv
+         VAOkGVTZRKq1VXDhzOU5bjND7F57mPLNWUw1mibGlMTsE3LTgROWQlYxM1aJo4QSIU4/
+         79A3yLVaOBsBiGzRZuteNFkIcdbGfU+rbwNFZwtQwIXCPFVGdHFbiXqovZmOfKiGS1Kd
+         zdA+b9ejFY1YfrI2VZZZpbCQX00CAzB3nK3FyHcvP4+vIu8eepwVva3QRBQz6DDNzbvB
+         F4kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681657956; x=1684249956;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xlWlvCWzrovrnqFvYZa6sVT2dx6B7igBCNASIvtKe9k=;
+        b=NJmM+HRT/KD2zA1rnxQF1eI2XLT3GHypfawW0k+klDKcOQgJa9Kgx1Io+VhltVncvb
+         0QU+fy4vhyXJntP5/aLbR2XpihHqgN/jRPvQTB4bQnTZl/Ka5BmrsfPLbYJMeZCGLKEH
+         S4cxmwY6kXapogccy2LmqbWbPmcmvDGsvWkC85voi7iwFY4sqa+5n/41/TR9ZBw7r3Be
+         hWUgYNmlwTED2qnxt7A8R0KeaOJxxHJ4LUSHtOCtzjEK/3+b/yS2rBwRozIekzY+h9Ne
+         SqCfvcy+1/LjtoXJgXdC3alsmA1agHJlbuez390U/DZeM1k6PJ+W96KLyrTuw0fzsB92
+         RDCA==
+X-Gm-Message-State: AAQBX9c1TaH0WFWm6I2TzVE5V4B5pHcKpL4SCgGfib4/jxMySd5o1EjR
+        AAVW0i9BpiazPZ/tW7lCyIBYcQ==
+X-Google-Smtp-Source: AKy350ZI6BgnI3mupLhl88+iHzgLlBV1xT4C3FRFxxGbWQfUvHA+oyjPfjPjRJIwh1KODZ7vbnE2QA==
+X-Received: by 2002:a17:906:6992:b0:930:6c71:64eb with SMTP id i18-20020a170906699200b009306c7164ebmr4772616ejr.29.1681657955997;
+        Sun, 16 Apr 2023 08:12:35 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:ba4d:301c:484d:5c9])
+        by smtp.gmail.com with ESMTPSA id s13-20020a1709060c0d00b0094e729d333fsm5169635ejf.222.2023.04.16.08.12.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Apr 2023 08:12:35 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Vinod Koul <vkoul@kernel.org>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Nuno =?UTF-8?B?U8Oh?= <noname.nuno@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v3 09/11] iio: buffer-dma: Enable support for DMABUFs
-Message-ID: <20230416161024.68c761b2@jic23-huawei>
-In-Reply-To: <20230403154800.215924-10-paul@crapouillou.net>
-References: <20230403154800.215924-1-paul@crapouillou.net>
-        <20230403154800.215924-10-paul@crapouillou.net>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: phy: qcom,edp-phy: allow power-domains
+Date:   Sun, 16 Apr 2023 17:12:33 +0200
+Message-Id: <20230416151233.346336-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  3 Apr 2023 17:47:58 +0200
-Paul Cercueil <paul@crapouillou.net> wrote:
+At least on SC8280XP the eDP PHY is part of power domain:
 
-> Implement iio_dma_buffer_attach_dmabuf(), iio_dma_buffer_detach_dmabuf()
-> and iio_dma_buffer_transfer_dmabuf(), which can then be used by the IIO
-> DMA buffer implementations.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-Hi Paul,
+  sc8280xp-crd.dtb: phy@220c2a00: 'power-domains' does not match any of the regexes: 'pinctrl-[0-9]+'
 
-A few superficially comments.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/phy/qcom,edp-phy.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Jonathan
-
-> 
-> ---
-> v3: Update code to provide the functions that will be used as callbacks
-> for the new IOCTLs.
-> ---
->  drivers/iio/buffer/industrialio-buffer-dma.c | 157 +++++++++++++++++--
->  include/linux/iio/buffer-dma.h               |  24 +++
->  2 files changed, 168 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/iio/buffer/industrialio-buffer-dma.c b/drivers/iio/buffer/industrialio-buffer-dma.c
-> index e14814e0d4c8..422bd784fd1e 100644
-> --- a/drivers/iio/buffer/industrialio-buffer-dma.c
-> +++ b/drivers/iio/buffer/industrialio-buffer-dma.c
-...
-
-> @@ -412,8 +448,12 @@ static void iio_dma_buffer_submit_block(struct iio_dma_buffer_queue *queue,
->  
->  	block->state = IIO_BLOCK_STATE_ACTIVE;
->  	iio_buffer_block_get(block);
-> +
-
-Trivial, but I'd rather not see unrelated white space changes in a patch
-doing anything else.
-
->  	ret = queue->ops->submit(queue, block);
->  	if (ret) {
-> +		if (!block->fileio)
-> +			iio_buffer_signal_dmabuf_done(block->attach, ret);
-> +
->  		/*
->  		 * This is a bit of a problem and there is not much we can do
->  		 * other then wait for the buffer to be disabled and re-enabled
-> @@ -645,6 +685,97 @@ size_t iio_dma_buffer_data_available(struct iio_buffer *buf)
->  }
->  EXPORT_SYMBOL_GPL(iio_dma_buffer_data_available);
-
-...
-
-> +int iio_dma_buffer_enqueue_dmabuf(struct iio_buffer *buffer,
-> +				  struct iio_dma_buffer_block *block,
-> +				  struct sg_table *sgt,
-> +				  size_t size, bool cyclic)
-> +{
-> +	struct iio_dma_buffer_queue *queue = iio_buffer_to_queue(buffer);
-> +	int ret = 0;
-
-No need to init.
-
-> +
-> +	mutex_lock(&queue->lock);
-> +	ret = iio_dma_can_enqueue_block(block);
-> +	if (ret < 0)
-> +		goto out_mutex_unlock;
-> +
-> +	block->bytes_used = size;
-> +	block->cyclic = cyclic;
-> +	block->sg_table = sgt;
-> +
-> +	iio_dma_buffer_enqueue(queue, block);
-> +
-> +out_mutex_unlock:
-> +	mutex_unlock(&queue->lock);
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(iio_dma_buffer_enqueue_dmabuf);
-
-Obviously an unrelated activity but good to namespace these
-in a future patch set.
-
-> +
->  /**
->   * iio_dma_buffer_set_bytes_per_datum() - DMA buffer set_bytes_per_datum callback
->   * @buffer: Buffer to set the bytes-per-datum for
-> diff --git a/include/linux/iio/buffer-dma.h b/include/linux/iio/buffer-dma.h
-> index 490b93f76fa8..e5e5817e99db 100644
-> --- a/include/linux/iio/buffer-dma.h
-> +++ b/include/linux/iio/buffer-dma.h
-
->  /**
->   * enum iio_block_state - State of a struct iio_dma_buffer_block
-> @@ -41,6 +43,7 @@ enum iio_block_state {
->   * @queue: Parent DMA buffer queue
->   * @kref: kref used to manage the lifetime of block
->   * @state: Current state of the block
-> + * @fileio: True if this buffer is used for fileio mode
-
-Docs need update for the other two new elements.
-
->   */
->  struct iio_dma_buffer_block {
->  	/* May only be accessed by the owner of the block */
-> @@ -63,6 +66,11 @@ struct iio_dma_buffer_block {
->  	 * queue->list_lock if the block is not owned by the core.
->  	 */
->  	enum iio_block_state state;
-> +
-> +	bool fileio;
-> +
-> +	struct dma_buf_attachment *attach;
-> +	struct sg_table *sg_table;
->  };
+diff --git a/Documentation/devicetree/bindings/phy/qcom,edp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,edp-phy.yaml
+index c4f8e6ffa5c3..6566353f1a02 100644
+--- a/Documentation/devicetree/bindings/phy/qcom,edp-phy.yaml
++++ b/Documentation/devicetree/bindings/phy/qcom,edp-phy.yaml
+@@ -43,6 +43,9 @@ properties:
+   "#phy-cells":
+     const: 0
+ 
++  power-domains:
++    maxItems: 1
++
+   vdda-phy-supply: true
+   vdda-pll-supply: true
+ 
+-- 
+2.34.1
 
