@@ -2,297 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 476066E36A9
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 11:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A42666E36BA
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 11:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbjDPJiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 05:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47576 "EHLO
+        id S230292AbjDPJn4 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 16 Apr 2023 05:43:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjDPJiM (ORCPT
+        with ESMTP id S230221AbjDPJnx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 05:38:12 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 14F3A198C;
-        Sun, 16 Apr 2023 02:38:09 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.41:47894.353085718
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id F3817100248;
-        Sun, 16 Apr 2023 17:38:04 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-7b48884fd-ljp89 with ESMTP id c890ea7692304bfab0ddaf902e6dec90 for tzimmermann@suse.de;
-        Sun, 16 Apr 2023 17:38:06 CST
-X-Transaction-ID: c890ea7692304bfab0ddaf902e6dec90
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <3bbaf3a3-d7dc-d6ad-f2bb-f58899793f98@189.cn>
-Date:   Sun, 16 Apr 2023 17:38:01 +0800
+        Sun, 16 Apr 2023 05:43:53 -0400
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C95482709;
+        Sun, 16 Apr 2023 02:43:51 -0700 (PDT)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-54f6a796bd0so276730477b3.12;
+        Sun, 16 Apr 2023 02:43:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681638231; x=1684230231;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eGZ8vTVUDzMj6tlghPjPrAsFRulY7ZaPrM9DcatIBAM=;
+        b=g4liQ7U2AS0j0zlN9uek2QeiaJnNujlSfyDCbAaWE6Oy2UImehFg8sMgq3+am1rtxV
+         8ibSaQ6wZxRWM+oph97Dlt7bO1Mxj49TnHKHDOebAMTGeDB5N1XFFfjuSHpf2TXbifE5
+         FXCy/Cz7KET4VUjQ68WU8T7fJDqUGCTgw2EYd8wcK9BU7wjXp0mJ/Sb6rkwYUm+xdwuh
+         H9w2RujNvIV+MHgmHwDsLme1Y1OCwsMa+uBo7eOX9BAKBwNA8in6K1XPNMW5V85OPi8b
+         YhKLbC5pIFJOwD4zLKYKBJzyoWJ7B7xxm9c9UosChM5fK467c5dkN0H3Mj1ZcU4yKcSM
+         3XWA==
+X-Gm-Message-State: AAQBX9cpKltK6WzipALtK3mAaoNrqhQNCSoej95XSEvj6o/IIQmwQZlf
+        B/EQvXxRT5f0p1YfJ5IuxWZSB7nkie6FwA==
+X-Google-Smtp-Source: AKy350aohQNyiNHBnwR/yyAnqjMGsCSEh5XnEj0ec37xOCvPwMmeI4CaoEzz8PGsqL/xiE1A8DgY3g==
+X-Received: by 2002:a81:60d5:0:b0:54f:e4d8:f4a6 with SMTP id u204-20020a8160d5000000b0054fe4d8f4a6mr6959730ywb.42.1681638230771;
+        Sun, 16 Apr 2023 02:43:50 -0700 (PDT)
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
+        by smtp.gmail.com with ESMTPSA id e199-20020a811ed0000000b005463c7417c6sm2402300ywe.8.2023.04.16.02.43.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Apr 2023 02:43:50 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-54fe82d8bf5so77585127b3.3;
+        Sun, 16 Apr 2023 02:43:49 -0700 (PDT)
+X-Received: by 2002:a81:b65b:0:b0:54f:dc41:8edf with SMTP id
+ h27-20020a81b65b000000b0054fdc418edfmr6862753ywk.2.1681638229566; Sun, 16 Apr
+ 2023 02:43:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2] drm/fbdev-generic: prohibit potential out-of-bounds
- access
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Sui Jingfeng <suijingfeng@loongson.cn>,
-        Li Yi <liyi@loongson.cn>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Helge Deller <deller@gmx.de>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
-References: <20230413180622.1014016-1-15330273260@189.cn>
- <fccc494f-0e52-5fdf-0e40-acc29177c73c@suse.de>
- <32a1510e-d38a-ffb6-8e8d-026f8b3aa17a@189.cn>
- <ZDuqYp0RW9SngQ2H@phenom.ffwll.local>
-Content-Language: en-US
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <ZDuqYp0RW9SngQ2H@phenom.ffwll.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230410011325.26850-1-rdunlap@infradead.org> <099028386d683dcc585693d85b6b2739952fcdeb.camel@sipsolutions.net>
+ <ZDuTotxqsrysNaYu@infradead.org>
+In-Reply-To: <ZDuTotxqsrysNaYu@infradead.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Sun, 16 Apr 2023 11:43:38 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXRezGfUE4OOc3OjSmP6sS7oQXEd5QnC-G+d+Hv9uVz9Q@mail.gmail.com>
+Message-ID: <CAMuHMdXRezGfUE4OOc3OjSmP6sS7oQXEd5QnC-G+d+Hv9uVz9Q@mail.gmail.com>
+Subject: Re: [PATCH v3] UML: pata_cs5536: fix build for X86_32 UML with TRACEPOINTS
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Johannes Berg <johannes@sipsolutions.net>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        linux-ide@vger.kernel.org, linux-um@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Christoph,
 
-On 2023/4/16 15:57, Daniel Vetter wrote:
-> On Fri, Apr 14, 2023 at 06:58:53PM +0800, Sui Jingfeng wrote:
->> Hi,
->>
->> On 2023/4/14 03:16, Thomas Zimmermann wrote:
->>> Hi,
->>>
->>> thanks for the patch. This is effectively a revert of commit
->>> 8fbc9af55de0 ("drm/fbdev-generic: Set screen size to size of GEM
->>> buffer"). Please add a Fixes tag.
->>>
->>> Am 13.04.23 um 20:06 schrieb Sui Jingfeng:
->>>> From: Sui Jingfeng <suijingfeng@loongson.cn>
->>>>
->>>> The crazy fbdev test of IGT may write after EOF, which lead to
->>>> out-of-bound
->>> Please drop 'crazy'. :)
->> This is OK.
->>
->> By using the world 'crazy',
->>
->> I meant that the test is very good and maybe it is written by professional
->> peoples
->>
->> with the guidance by  experienced  engineer. So that even the corner get
->> tested.
-> 'thoroughly' would be better word to describe that I think.
+On Sun, Apr 16, 2023 at 8:20 AM Christoph Hellwig <hch@infradead.org> wrote:
+> On Fri, Apr 14, 2023 at 03:55:07PM +0200, Johannes Berg wrote:
+> > On Sun, 2023-04-09 at 18:13 -0700, Randy Dunlap wrote:
+> > > Current build of pata_cs5536 for i386 UML fails with:
+> > >
+> > > ERROR: modpost: "__tracepoint_write_msr" [drivers/ata/pata_cs5536.ko] undefined!
+> > > ERROR: modpost: "do_trace_write_msr" [drivers/ata/pata_cs5536.ko] undefined!
+> > > ERROR: modpost: "__tracepoint_read_msr" [drivers/ata/pata_cs5536.ko] undefined!
+> > > ERROR: modpost: "do_trace_read_msr" [drivers/ata/pata_cs5536.ko] undefined!
+> > >
+> > > Add the arch/x86/lib/msr.o binary to resolve these undefined symbols.
+> > >
+> >
+> > Hm. Does this make sense? I can't see it'd work on UML to configure an
+> > IDE device through MSRs? Surely that can't work? IOW, that entire driver
+> > can't really work anyway can it?
+> >
+> > OTOH, maybe theoretically it could work in PCI, just not with MSRs, and
+> > then this patch makes some sense?
 >
-> I think for the other discussions I've covered it all already in the other
-> thread.
-> -Daniel
->
-Yes, 'thoroughly' is a definitely better word than 'crazy'.
+> I think it is is integrated into actual Geode SOCs.  That being
+> said something like the patch below seems as simple as it gets and
+> at least gives build coverage on uml
 
+CS5536 is the Geode Companion Device, i.e. the South Bridge, which
+can be used with other devices, AFAIK.
 
-I see your reviews in v1 the thread of this patch,  I will resend this 
-patch with updates.
+Gr{oetje,eeting}s,
 
-But I thinks we should wait Thomas Z. for a while.
+                        Geert
 
-I'm wondering whether he still have some strong feelings toward this, I 
-guess not.
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-thanks, :-)
-
->>
->>>> access for the drm drivers using fbdev-generic. For example, run
->>>> fbdev test
->>>> on a x86-64+ast2400 platform with 1680x1050 resolution will cause
->>>> the linux
->>>> kernel hang with following call trace:
->>>>
->>>>     Oops: 0000 [#1] PREEMPT SMP PTI
->>>>     [IGT] fbdev: starting subtest eof
->>>>     Workqueue: events drm_fb_helper_damage_work [drm_kms_helper]
->>>>     [IGT] fbdev: starting subtest nullptr
->>>>
->>>>     RIP: 0010:memcpy_erms+0xa/0x20
->>>>     RSP: 0018:ffffa17d40167d98 EFLAGS: 00010246
->>>>     RAX: ffffa17d4eb7fa80 RBX: ffffa17d40e0aa80 RCX: 00000000000014c0
->>>>     RDX: 0000000000001a40 RSI: ffffa17d40e0b000 RDI: ffffa17d4eb80000
->>>>     RBP: ffffa17d40167e20 R08: 0000000000000000 R09: ffff89522ecff8c0
->>>>     R10: ffffa17d4e4c5000 R11: 0000000000000000 R12: ffffa17d4eb7fa80
->>>>     R13: 0000000000001a40 R14: 000000000000041a R15: ffffa17d40167e30
->>>>     FS:  0000000000000000(0000) GS:ffff895257380000(0000)
->>>> knlGS:0000000000000000
->>>>     CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>>     CR2: ffffa17d40e0b000 CR3: 00000001eaeca006 CR4: 00000000001706e0
->>>>     Call Trace:
->>>>      <TASK>
->>>>      ? drm_fbdev_generic_helper_fb_dirty+0x207/0x330 [drm_kms_helper]
->>>>      drm_fb_helper_damage_work+0x8f/0x170 [drm_kms_helper]
->>>>      process_one_work+0x21f/0x430
->>>>      worker_thread+0x4e/0x3c0
->>>>      ? __pfx_worker_thread+0x10/0x10
->>>>      kthread+0xf4/0x120
->>>>      ? __pfx_kthread+0x10/0x10
->>>>      ret_from_fork+0x2c/0x50
->>>>      </TASK>
->>>>     CR2: ffffa17d40e0b000
->>>>     ---[ end trace 0000000000000000 ]---
->>>>
->>>> The indirect reason is drm_fb_helper_memory_range_to_clip() generate
->>>> damage
->>>> rectangles which partially or completely go out of the active
->>>> display area.
->>>> The second of argument 'off' is passing from the user-space, this
->>>> will lead
->>>> to the out-of-bound if it is large than (fb_height + 1) *
->>>> fb_pitches; while
->>>> DIV_ROUND_UP() may also controbute to error by 1.
->>>>
->>>> This patch will add code to restrict the damage rect computed go
->>>> beyond of
->>>> the last line of the framebuffer.
->>>>
->>>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->>>> ---
->>>>    drivers/gpu/drm/drm_fb_helper.c     | 16 ++++++++++++----
->>>>    drivers/gpu/drm/drm_fbdev_generic.c |  2 +-
->>>>    2 files changed, 13 insertions(+), 5 deletions(-)
->>>>
->>>> diff --git a/drivers/gpu/drm/drm_fb_helper.c
->>>> b/drivers/gpu/drm/drm_fb_helper.c
->>>> index 64458982be40..6bb1b8b27d7a 100644
->>>> --- a/drivers/gpu/drm/drm_fb_helper.c
->>>> +++ b/drivers/gpu/drm/drm_fb_helper.c
->>>> @@ -641,19 +641,27 @@ static void drm_fb_helper_damage(struct
->>>> drm_fb_helper *helper, u32 x, u32 y,
->>>>    static void drm_fb_helper_memory_range_to_clip(struct fb_info
->>>> *info, off_t off, size_t len,
->>>>                               struct drm_rect *clip)
->>>>    {
->>>> +    u32 line_length = info->fix.line_length;
->>>> +    u32 fb_height = info->var.yres;
->>>>        off_t end = off + len;
->>>>        u32 x1 = 0;
->>>> -    u32 y1 = off / info->fix.line_length;
->>>> +    u32 y1 = off / line_length;
->>>>        u32 x2 = info->var.xres;
->>>> -    u32 y2 = DIV_ROUND_UP(end, info->fix.line_length);
->>>> +    u32 y2 = DIV_ROUND_UP(end, line_length);
->>>> +
->>>> +    /* Don't allow any of them beyond the bottom bound of display
->>>> area */
->>>> +    if (y1 > fb_height)
->>>> +        y1 = fb_height;
->>>> +    if (y2 > fb_height)
->>>> +        y2 = fb_height;
->>>>          if ((y2 - y1) == 1) {
->>>>            /*
->>>>             * We've only written to a single scanline. Try to reduce
->>>>             * the number of horizontal pixels that need an update.
->>>>             */
->>>> -        off_t bit_off = (off % info->fix.line_length) * 8;
->>>> -        off_t bit_end = (end % info->fix.line_length) * 8;
->>>> +        off_t bit_off = (off % line_length) * 8;
->>>> +        off_t bit_end = (end % line_length) * 8;
->>> Please scratch all these changes. The current code should work as
->>> intended. Only the generic fbdev emulation uses this code and it should
->>> really be moved there at some point.
->>
->> Are you meant  that we should remove all these changes in
->> drivers/gpu/drm/drm_fb_helper.c ?
->>
->>
->> But this changes are helps to prevent the damage box computed go out of
->> bound,
->>
->> the bound of the displayable shadow buffer on multiple display case.
->>
->> It is the minimum width x height which could be fit in for all
->> display/minotor.
->>
->>
->> For example, one is 1920x1080 monitor, another is 1280x800 monitor.
->>
->> connected to the motherboard simultaneously.
->>
->>
->> Then, 1920x1080x4 (suppose we are using the XRGB) scanout buffer will be
->>
->> allocate by the  GEM backend. But the the actual display area is 1280x800.
->>
->> This is true at least for my driver on my platform, In this case,
->>
->> ```
->>
->>     info->var.xres ==1280;
->>
->>     info->var.yres == 800;
->>
->> ```
->>
->> If don't restrict this, the damage box computed out of the bound of  (0, 0)
->> ~ (1280, 800) rectangle.
->>
->> a 1920x1080 damage box will came out.
->>
->>
->> When running fbdev test of IGT, the smaller screen display will be OK.
->>
->> but the larger screen, the area outsize of 1280x800 will also be written.
->>
->> The background color became completely white from completely black before
->> carry out the test,
->>
->> luckily, linux kernel do not hung, this time.
->>
->>
->> On multi-screen case, we still need to restrict the damage box computed,
->>
->> Do not go out of 1280x800,  right?
->>
->>
->>>>              x1 = bit_off / info->var.bits_per_pixel;
->>>>            x2 = DIV_ROUND_UP(bit_end, info->var.bits_per_pixel);
->>>> diff --git a/drivers/gpu/drm/drm_fbdev_generic.c
->>>> b/drivers/gpu/drm/drm_fbdev_generic.c
->>>> index 8e5148bf40bb..b057cfbba938 100644
->>>> --- a/drivers/gpu/drm/drm_fbdev_generic.c
->>>> +++ b/drivers/gpu/drm/drm_fbdev_generic.c
->>>> @@ -94,7 +94,7 @@ static int
->>>> drm_fbdev_generic_helper_fb_probe(struct drm_fb_helper *fb_helper,
->>>>        fb_helper->buffer = buffer;
->>>>        fb_helper->fb = buffer->fb;
->>>>    -    screen_size = buffer->gem->size;
->>>> +    screen_size = sizes->surface_height * buffer->fb->pitches[0];
->>> I guess we simply go back to this line. I'd R-b a patch that does
->>> exactly this.
->>>
->>> But some explanation is in order. Maybe you can add this as a comment to
->>> the computation, as it's not obvious:
->>>
->>> The value of screen_size should actually be the size of the gem buffer.
->>> In a physical framebuffer (i.e., video memory), the size would be a
->>> multiple of the page size, but not necessarily a multiple of the screen
->>> resolution. There are also pan fbdev's operations, and we could possibly
->>> use DRM buffers that are not multiples of the screen width. But the
->>> update code requires the use of drm_framebuffer_funcs.dirty, which takes
->>> a clipping rectangle and therefore doesn't work well with these odd
->>> values for screen_size.
->>>
->>> Best regards
->>> Thomas
->>>
->>>>        screen_buffer = vzalloc(screen_size);
->>>>        if (!screen_buffer) {
->>>>            ret = -ENOMEM;
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
