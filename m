@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B39C6E393B
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 16:29:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0472E6E393C
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 16:30:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230468AbjDPO3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 10:29:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44378 "EHLO
+        id S230358AbjDPOaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 10:30:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjDPO3T (ORCPT
+        with ESMTP id S230130AbjDPOaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 10:29:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F36F62D78
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 07:29:18 -0700 (PDT)
+        Sun, 16 Apr 2023 10:30:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBAD30CA
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 07:30:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 89A4760C8F
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 14:29:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6B3CC433D2;
-        Sun, 16 Apr 2023 14:29:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB454611E3
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 14:30:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B670C433EF;
+        Sun, 16 Apr 2023 14:30:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681655358;
-        bh=7FStxHBdst1il4TwvF6jUyQJzCfiTLjd/zo+/SZnMGc=;
+        s=k20201202; t=1681655404;
+        bh=89mDZMg+xFD90cl8I+iHM3Ipz3bqJ7SUgk7XUSskT+w=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=AtWc1soElWRYxqrPL3w7G5ukmunGLzsMGO7GgYIE+VusxKsZ2nZNV+IIyMYprPhMB
-         gPq+5PM/eZ45zDuYF7HcmQd6sIItNHbbzqoyNbmvgNyIDPpkJ5wDIP8JXToUPOUVWA
-         RnaIXsinVRjZw3fFTQrEH90s05tlpoHrsmG+xTrg8Z8mKmas5YG8oEedSl3m+uS0pB
-         vcB4mR1Y0W6z9WGGarE4Z8GjIAKbfQzjbLP6YBhm5WwevB3ixz8pSZIeLj/HkPV63O
-         Ux0Ob+ZsdnB/MLlufnE/i1XEYaYnuvDkaQDT5QfistxrY1rw3Issz+z0favyNUicCr
-         wqyFQcAIhCenw==
-Message-ID: <1cc4f1e8-d15d-37d0-b59b-b073fe0cf976@kernel.org>
-Date:   Sun, 16 Apr 2023 22:29:14 +0800
+        b=MKfxBOgpd2hhrO2Y75pAox3UaFwmdLc6eF+v750eqizYlHV2Q4s8VqzljIVfY+HZn
+         q95idOePRhMn97tre5JmMIEj88MBicX6YTQTMPc1xtmuS1tNRkDCW6y6rr+Xb0LLzs
+         +6CrdzXnrfTDegmjsF/qyng2SjGSqFCYFzUaLArnBuqUjwtvvFuvNSoCxSooXXRtPf
+         4UTGXOTc4Blfnuees7S3sec0Xt6Ds1a6dRyOwhIiLPrZxzs42BjsjjA32KT2QIuccu
+         4P7UBja4fOZnp6PE9MufnnmljsQduab3ycCc1P2zuGqGsDIktvvb4qslZr8KOaNtCT
+         u61EZ4o1TGBGg==
+Message-ID: <90dcc3c0-2100-5c30-d4ad-1058b386fe8f@kernel.org>
+Date:   Sun, 16 Apr 2023 22:30:01 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v2 3/8] erofs: simplify erofs_xattr_generic_get()
+Subject: Re: [PATCH] erofs: don't warn ztailpacking feature anymore
 Content-Language: en-US
-To:     Jingbo Xu <jefflexu@linux.alibaba.com>, xiang@kernel.org,
-        huyue2@coolpad.com, linux-erofs@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20230330082910.125374-1-jefflexu@linux.alibaba.com>
- <20230330082910.125374-4-jefflexu@linux.alibaba.com>
+To:     Yue Hu <zbestahu@gmail.com>, xiang@kernel.org,
+        linux-erofs@lists.ozlabs.org
+Cc:     jefflexu@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        zhangwen@coolpad.com, Yue Hu <huyue2@coolpad.com>
+References: <20230227084457.3510-1-zbestahu@gmail.com>
 From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20230330082910.125374-4-jefflexu@linux.alibaba.com>
+In-Reply-To: <20230227084457.3510-1-zbestahu@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,13 +58,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/30 16:29, Jingbo Xu wrote:
-> erofs_xattr_generic_get() won't be called from xattr handlers other than
-> user/trusted/security xattr handler, and thus there's no need of extra
-> checking.
+On 2023/2/27 16:44, Yue Hu wrote:
+> From: Yue Hu <huyue2@coolpad.com>
 > 
-> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
-> Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+> The ztailpacking feature has been merged for a year, it has been mostly
+> stable now.
+> 
+> Signed-off-by: Yue Hu <huyue2@coolpad.com>
 
 Reviewed-by: Chao Yu <chao@kernel.org>
 
