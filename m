@@ -2,74 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0176F6E38A7
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 15:32:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7CB76E38B0
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 15:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbjDPNcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 09:32:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49982 "EHLO
+        id S230291AbjDPNfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 09:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDPNcA (ORCPT
+        with ESMTP id S229458AbjDPNfe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 09:32:00 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88B11BD4;
-        Sun, 16 Apr 2023 06:31:59 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id dx24so13427171ejb.11;
-        Sun, 16 Apr 2023 06:31:59 -0700 (PDT)
+        Sun, 16 Apr 2023 09:35:34 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559C71BD4;
+        Sun, 16 Apr 2023 06:35:33 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id 4fb4d7f45d1cf-504eb1155d3so17407047a12.1;
+        Sun, 16 Apr 2023 06:35:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681651918; x=1684243918;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6JdNGYn7ATErhvA1sUBmn8DjGAPLnDdtrFLVnGWMoc4=;
-        b=CKDBa6gKS+JJAQOxB3ElN/nd9k2MKyzH1GLlWozxzcaJR2dJ3bKuGYKnmi1mMLGXCS
-         FrZXfuBtPgf5E7G65C1gDgKxLCcfBeOBvPzgG9lH3V6BkNTT/PaUdJpY3v2kneykuk9s
-         KaP56hDIiccMScOjuAlY3WlIQsCoYZmEx0gkgbl+PoQY5rNZIKMYHVvZUiaDGJzPsIU+
-         fat7UlrKFKPmunxWauMHMHXNliZziRKEVDlPwRMKxaEuk+Zc+5HGhqslxzYm3cjTTCQe
-         WwWQSWd5ngHpamlDBhVvdeksdtOuoaeluI+8CPsJ2xI1Kt4qLC/5fHUI9zJDhrdYb7dZ
-         2KwQ==
+        d=gmail.com; s=20221208; t=1681652132; x=1684244132;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UynXzPPu/DGOhUY3vG4qGCml8HX6Ft9KW/3oejkLCWs=;
+        b=FQNN0sb6s9yNnP/CGoXFh3igu4xyIcgaeJPp6zA3NG4A1PMVyPf1FiU2k8/tbyBysw
+         FUA+sT19X6zNEqN5kLjgQN3rhf0r04wuIcsXCnlYPJ8p2jbLld2ihtpHCHBMr/sP5Ibe
+         49FN7FuuJdWJWH1ofPTtGKAsLruUWcXhAgzump0LmZcFONBwW/sTiu6XJySSG2LM23+O
+         ZykDfby1f6p+vgr++p6XK4BoVl6iT6q3cVnKZasmQcbnCuyYHEmh+nku5f2TeFJQ4AaU
+         FTQZ0TL74Bp5teic6O3yj/gN5ZDhi3WW8RzJxiwiYN8S+nrgNDkuAtsjOqsqMvqtBRPC
+         UNBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681651918; x=1684243918;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6JdNGYn7ATErhvA1sUBmn8DjGAPLnDdtrFLVnGWMoc4=;
-        b=SsWS+JR8tmqa+ZZtfdKIQR7ozMH/r7aRbxgAmiXq2yNvaHHY2wp3QyCgxPCwceundr
-         8USFcKFdtMciJVwcigMcXcS2eRoB1kCqdUIyJY9wa/BbVtdvGh9qi74oev680KT9DMyW
-         xQqeCh/8sf+WqPFSQhTlatQ8RfCT6Yca77b2wi79//Zuy0o4SSORnxMW/qfuKFbpZ3Qd
-         994OCn93iapz+zX+E4IaTYkLeq3SSV2GPRfAvTPayeAh03s3WhekpL7+VT/4IY/v6pZZ
-         MfzvBvCmLMv8V3+EI89I5q07jROEfFtPknHmvbBZuBuyGK2rDMrLz2jSuGjuYUlNSTjV
-         W2cA==
-X-Gm-Message-State: AAQBX9e85t2Q1H585yxFvfQ3WptDhNsMIql17SmpTOswqiw0QKNnFNuN
-        LWDvTB76BXRHQZQQBNz679U=
-X-Google-Smtp-Source: AKy350agXy7aE/aJS4jJ15TKpLErwEJZj78+qOwH9nVYLbGTOcJD/smUnMqrvq5muFXhioghT0nC7w==
-X-Received: by 2002:a17:906:30c3:b0:94e:e1c7:31b4 with SMTP id b3-20020a17090630c300b0094ee1c731b4mr4474093ejb.48.1681651918086;
-        Sun, 16 Apr 2023 06:31:58 -0700 (PDT)
-Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
-        by smtp.gmail.com with ESMTPSA id ww4-20020a170907084400b0094f62a3197asm560513ejb.202.2023.04.16.06.31.56
+        d=1e100.net; s=20221208; t=1681652132; x=1684244132;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UynXzPPu/DGOhUY3vG4qGCml8HX6Ft9KW/3oejkLCWs=;
+        b=B5qgSQsRJ7WMZ3bYn+Cmiu6XvQn3IUD64QJh+Nhsem2kpM3RkNVAecRBFgzaY4ch1Z
+         Xn6xCoDKlT7nvuu+/KZ0ljfWp1ehoDlOWUMMIhngI5VNti6J2ERb+w/JXPP8i50BMPSf
+         g/lV8ANRcH+yrAkJCriT9AzQqQ7cp6LJWkN4pa/kHZtz+v2Wipis1IQJBfy83oabh7xL
+         QL9LTwuabmFCInRMPeNwEpQnArFcD8/VJd/U+r6oXbNYCA2TiEpiD82fyyIyE2B7DVj/
+         i94MtlZkav2be+shFW7nPxVCZ8j2K/S8jT7d8sxuEnvFG2+mv5G7Kw2O7JM9s3NMEjGN
+         PZoQ==
+X-Gm-Message-State: AAQBX9dupZ/7spCYS3VtMlZU1s44BX3FxGX5BRVrn42Fb64nVG0owRmm
+        0R+Qqq+H5004rcZJVLOhv0M=
+X-Google-Smtp-Source: AKy350asygcBIZsKMBeNku99Cbv7Vlr8EwyySMjH2lM0enYA55icjSyR1KmoiXcM+WoAFrj6uaFcyQ==
+X-Received: by 2002:a05:6402:254a:b0:506:771a:60d6 with SMTP id l10-20020a056402254a00b00506771a60d6mr9675333edb.1.1681652131760;
+        Sun, 16 Apr 2023 06:35:31 -0700 (PDT)
+Received: from localhost.my.domain (83.8.121.70.ipv4.supernova.orange.pl. [83.8.121.70])
+        by smtp.gmail.com with ESMTPSA id gn23-20020a1709070d1700b009373f1b5c4esm5122958ejc.161.2023.04.16.06.35.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 06:31:57 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
-        rfoss@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, wens@csie.org,
-        samuel@sholland.org, jonas@kwiboo.se, airlied@gmail.com,
-        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-media@vger.kernel.org, hverkuil-cisco@xs4all.nl
-Subject: Re: [PATCH 3/3] ARM: dts: sun8i: h3: beelink-x2: Disable DW-HDMI CEC
-Date:   Sun, 16 Apr 2023 15:31:56 +0200
-Message-ID: <2675247.mvXUDI8C0e@jernej-laptop>
-In-Reply-To: <20230416132531.GA28551@pendragon.ideasonboard.com>
-References: <20230415104613.61224-1-jernej.skrabec@gmail.com>
- <20230415104613.61224-4-jernej.skrabec@gmail.com>
- <20230416132531.GA28551@pendragon.ideasonboard.com>
+        Sun, 16 Apr 2023 06:35:31 -0700 (PDT)
+From:   Artur Weber <aweber.kernel@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-phy@lists.infradead.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Artur Weber <aweber.kernel@gmail.com>
+Subject: [PATCH v2 00/12] Re-introduce Exynos4212 support and add Samsung Galaxy Tab 3 8.0 boards
+Date:   Sun, 16 Apr 2023 15:34:10 +0200
+Message-Id: <20230416133422.1949-1-aweber.kernel@gmail.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -80,49 +88,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne nedelja, 16. april 2023 ob 15:25:31 CEST je Laurent Pinchart napisal(a):
-> Hi Jernej,
-> 
-> Thank you for the patch.
-> 
-> On Sat, Apr 15, 2023 at 12:46:13PM +0200, Jernej Skrabec wrote:
-> > Beelink X2 uses software implementation of CEC even though DW-HDMI has
-> > working hardware implementation.
-> 
-> Why ? The reason should be explained in the commit message.
+This patches re-introduces the Exynos4212 platform and adds support
+for the Samsung Galaxy Tab 3 8.0 series of tablets that uses it:
 
-Maybe I should reword this differently. It uses software implementation through 
-GPIO pin. Dedicated DW-HDMI CEC pin is left unconnected.
+ - Samsung Galaxy Tab 3 8.0 WiFi (SM-T310/lt01wifi)
+ - Samsung Galaxy Tab 3 8.0 3G (SM-T311/lt013g)
+ - Samsung Galaxy Tab 3 8.0 LTE (SM-T315/lt01lte)
 
-Best regards,
-Jernej 
+What works:
 
-> 
-> > Disable unused DW-HDMI CEC.
-> > 
-> > Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> > ---
-> > 
-> >  arch/arm/boot/dts/sun8i-h3-beelink-x2.dts | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/arch/arm/boot/dts/sun8i-h3-beelink-x2.dts
-> > b/arch/arm/boot/dts/sun8i-h3-beelink-x2.dts index
-> > a6d38ecee141..38f40d69e5c5 100644
-> > --- a/arch/arm/boot/dts/sun8i-h3-beelink-x2.dts
-> > +++ b/arch/arm/boot/dts/sun8i-h3-beelink-x2.dts
-> > @@ -150,6 +150,7 @@ &emac {
-> > 
-> >  };
-> >  
-> >  &hdmi {
-> > 
-> > +	snps,disable-cec;
-> > 
-> >  	status = "okay";
-> >  
-> >  };
+ - Display and backlight
+ - Touchscreen (without touchkeys)
+ - GPIO buttons, hall sensor
+ - WiFi and Bluetooth
+ - USB, fuel gauge, charging (partial)
+ - Accelerometer and magnetometer
+ - WiFi model only: light sensor
 
+Display panel bindings used by the Tab3 DTSI are added in a separate
+patchset - "[PATCH 0/3] Add Samsung S6D7AA0 panel controller driver":
+https://lore.kernel.org/all/20230416131632.31673-1-aweber.kernel@gmail.com/
 
+Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
 
+Changed in v2:
+ - Added note about display panel bindings to cover letter and
+   Tab3 DTSI commit
+
+Artur Weber (12):
+  dt-bindings: soc: samsung: add Exynos4212 PMU compatible
+  dt-bindings: clock: add Exynos4212 clock compatible
+  ARM: exynos: Re-introduce Exynos4212 support
+  soc: samsung: Re-introduce Exynos4212 support
+  clk: samsung: Add Exynos4212 compatible to CLKOUT driver
+  clk: samsung: Re-add support for Exynos4212 CPU clock
+  Revert "media: exynos4-is: Remove dependency on obsolete SoC support"
+  Revert "phy: Remove SOC_EXYNOS4212 dep. from PHY_EXYNOS4X12_USB"
+  ARM: dts: Move common Exynos4x12 definitions to exynos4x12.dtsi
+  ARM: dts: Re-introduce Exynos4212 DTSI
+  dt-bindings: arm: samsung: Add Samsung Galaxy Tab3 family boards
+  ARM: dts: exynos: Add Samsung Galaxy Tab 3 8.0 boards
+
+ .../bindings/arm/samsung/samsung-boards.yaml  |   10 +
+ .../bindings/clock/samsung,exynos-clock.yaml  |    1 +
+ .../bindings/soc/samsung/exynos-pmu.yaml      |    3 +
+ arch/arm/boot/dts/Makefile                    |    3 +
+ arch/arm/boot/dts/exynos4212-tab3-3g8.dts     |   30 +
+ arch/arm/boot/dts/exynos4212-tab3-lte8.dts    |   43 +
+ arch/arm/boot/dts/exynos4212-tab3-wifi8.dts   |   25 +
+ arch/arm/boot/dts/exynos4212-tab3.dtsi        | 1175 +++++++++++++++++
+ arch/arm/boot/dts/exynos4212.dtsi             |  157 +++
+ arch/arm/boot/dts/exynos4412.dtsi             |  645 +--------
+ ...2-pinctrl.dtsi => exynos4x12-pinctrl.dtsi} |    4 +-
+ arch/arm/boot/dts/exynos4x12.dtsi             |  665 ++++++++++
+ arch/arm/mach-exynos/Kconfig                  |    5 +
+ arch/arm/mach-exynos/common.h                 |    8 +
+ arch/arm/mach-exynos/exynos.c                 |    2 +
+ arch/arm/mach-exynos/firmware.c               |    8 +-
+ arch/arm/mach-exynos/pm.c                     |    2 +-
+ arch/arm/mach-exynos/suspend.c                |    4 +
+ drivers/clk/samsung/clk-exynos-clkout.c       |    3 +
+ drivers/clk/samsung/clk-exynos4.c             |   44 +-
+ .../media/platform/samsung/exynos4-is/Kconfig |    2 +-
+ .../platform/samsung/exynos4-is/fimc-core.c   |    2 +-
+ .../platform/samsung/exynos4-is/fimc-lite.c   |    2 +-
+ drivers/phy/samsung/Kconfig                   |    2 +-
+ drivers/soc/samsung/exynos-pmu.c              |    9 +
+ drivers/soc/samsung/exynos-pmu.h              |    2 +
+ drivers/soc/samsung/exynos4-pmu.c             |   13 +-
+ 27 files changed, 2213 insertions(+), 656 deletions(-)
+ create mode 100644 arch/arm/boot/dts/exynos4212-tab3-3g8.dts
+ create mode 100644 arch/arm/boot/dts/exynos4212-tab3-lte8.dts
+ create mode 100644 arch/arm/boot/dts/exynos4212-tab3-wifi8.dts
+ create mode 100644 arch/arm/boot/dts/exynos4212-tab3.dtsi
+ create mode 100644 arch/arm/boot/dts/exynos4212.dtsi
+ rename arch/arm/boot/dts/{exynos4412-pinctrl.dtsi => exynos4x12-pinctrl.dtsi} (99%)
+ create mode 100644 arch/arm/boot/dts/exynos4x12.dtsi
+
+-- 
+2.40.0
 
