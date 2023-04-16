@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E0D86E3C8B
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 00:07:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FDFC6E3C91
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 00:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjDPWHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 18:07:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34696 "EHLO
+        id S229932AbjDPWIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 18:08:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbjDPWHW (ORCPT
+        with ESMTP id S229446AbjDPWIM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 18:07:22 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77BC26A8;
-        Sun, 16 Apr 2023 15:07:20 -0700 (PDT)
+        Sun, 16 Apr 2023 18:08:12 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2216211F;
+        Sun, 16 Apr 2023 15:08:11 -0700 (PDT)
 Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 452BF85C9B;
-        Mon, 17 Apr 2023 00:07:17 +0200 (CEST)
+        by phobos.denx.de (Postfix) with ESMTPSA id 4337685C9B;
+        Mon, 17 Apr 2023 00:08:08 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1681682838;
-        bh=QKvk9+XBBRlUqKsk7bMr4Ef6sOzUUDhjPGcAEetatRM=;
+        s=phobos-20191101; t=1681682890;
+        bh=P7xgL3CLNT5Y3Sll/H8HmI7CJlMVMPUZvFIyj+/G2Es=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=UP2ewFEoUfz1Yxj8B3hg6QGvA+Tbdz7mVY7qFBYqT2SCIrLfSbPbSRGQCHOqWJWrc
-         ORWUzUa6iPefZDb6K9QPJ47F0588aUJAQqJfqIJDLrCjbFg8mZQyKOdfVVSdugvhlf
-         gj3D72BnNkyEWxlYU7o2ADx3rs+ftCsWsZYjpWZX2rxj4/vjSMHDAVxnhl3NgzCnaK
-         fym/KOdj8BoGIcRYR24bj7QS3pc6jGir33VGXmdOpeLdRRhO1Szaq+qe5Nex0gzHIl
-         IXbDVIOcy07IXnLtFjpNSuOZ3NWTPrR5Goli1tE2C5BFwzljvUCHiki9C6EcLQvg1X
-         VPxHxEsrbigSA==
-Message-ID: <414febc4-aab1-95ec-ac2e-e82a3f881d01@denx.de>
-Date:   Mon, 17 Apr 2023 00:07:16 +0200
+        b=IFxe2W0JkWDjpMS0PlKCOZBrlL1kiU60vH9dAdyi76jMrkP1rDZo2hDMtoRmYU/bE
+         qxo5KYa25KfGg+ictSmyAqM0a+7q8NyGxqAD8BG5sIMWofER5JAOy4KE97nX7ZJi2e
+         uORzWh7kIXBq7TQ0XEd4naZE7zocSVmLIABYfPP8g6HW0jan20a4eeKofjV4R/W9UN
+         5lRgWq8Og+PoMmPlci4SToa3PObg6iCZzfbuAlFVBRyRoTZVEEgvmNPTCr9+RzuCIJ
+         CWW3PPU2LBpMCGZcm4zgH3RJ9LdRBqzSMWVqJVKCg79G8MYQNHJhnRcgZXBy7j+4+m
+         sMtN4/g4HyRmQ==
+Message-ID: <7eed74e8-9f67-a410-3cec-f61a6db85238@denx.de>
+Date:   Mon, 17 Apr 2023 00:08:07 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 2/6] drm: bridge: samsung-dsim: Fix PMS Calculator on
- imx8m[mnp]
+Subject: Re: [PATCH 3/6] drm: bridge: samsung-dsim: Fetch pll-clock-frequency
+ automatically
 Content-Language: en-US
 To:     Adam Ford <aford173@gmail.com>, dri-devel@lists.freedesktop.org
 Cc:     m.szyprowski@samsung.com, aford@beaconembedded.com,
@@ -57,16 +57,14 @@ Cc:     m.szyprowski@samsung.com, aford@beaconembedded.com,
         Jonas Karlman <jonas@kwiboo.se>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
+        Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 References: <20230415104104.5537-1-aford173@gmail.com>
- <20230415104104.5537-2-aford173@gmail.com>
+ <20230415104104.5537-3-aford173@gmail.com>
 From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <20230415104104.5537-2-aford173@gmail.com>
+In-Reply-To: <20230415104104.5537-3-aford173@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
 X-Virus-Status: Clean
 X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,41 +77,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/15/23 12:40, Adam Ford wrote:
-> According to Table 13-45 of the i.MX8M Mini Reference Manual, the min
-> and max values for M and  the frequency range for the VCO_out
-> calculator were incorrect.  This also appears to be the case for the
-> imx8mn and imx8mp.
+On 4/15/23 12:41, Adam Ford wrote:
+> Fetch the clock rate of "sclk_mipi" (or "pll_clk") instead of
+> having an entry in the device tree for samsung,pll-clock-frequency.
 > 
-> To fix this, make new variables to hold the min and max values of m
-> and the minimum value of VCO_out, and update the PMS calculator to
-> use these new variables instead of using hard-coded values to keep
-> the backwards compatibility with other parts using this driver.
+> Signed-off-by: Adam Ford <aford173@gmail.com>
+> ---
+>   drivers/gpu/drm/bridge/samsung-dsim.c | 12 ++++++------
+>   1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/bridge/samsung-dsim.c
+> index 9fec32b44e05..73f0c3fbbdf5 100644
+> --- a/drivers/gpu/drm/bridge/samsung-dsim.c
+> +++ b/drivers/gpu/drm/bridge/samsung-dsim.c
+> @@ -1744,11 +1744,6 @@ static int samsung_dsim_parse_dt(struct samsung_dsim *dsi)
+>   	struct device_node *node = dev->of_node;
+>   	int ret;
+>   
+> -	ret = samsung_dsim_of_read_u32(node, "samsung,pll-clock-frequency",
+> -				       &dsi->pll_clk_rate);
+> -	if (ret < 0)
+> -		return ret;
+> -
+>   	ret = samsung_dsim_of_read_u32(node, "samsung,burst-clock-frequency",
+>   				       &dsi->burst_clk_rate);
+>   	if (ret < 0)
 
-[...]
-
->   static const struct samsung_dsim_driver_data imx8mm_dsi_driver_data = {
-> @@ -470,6 +485,9 @@ static const struct samsung_dsim_driver_data imx8mm_dsi_driver_data = {
->   	 */
->   	.pll_p_offset = 14,
->   	.reg_values = imx8mm_dsim_reg_values,
-> +	.m_min = 64,
-> +	.m_max = 1023,
-> +	.vco_min = 1050,
-
-You might want to call this 'min_freq' since there is a 'max_freq' which 
-seems to indicate what VCO max frequency is.
-
-Note that the same datasheet contains the following information:
-"
-MIPI_DPHY_M_PLLPMS field descriptions
-
-12–4 PMS_M
-Specifies the PLL PMS value for the M divider
-NOTE: The programmable divider range should be within 25 to 125 to 
-ensure PLL stability.
-NOTE: The M and P divider values should be considered together to ensure 
-VCO ouput frequency
-(VCO_out) range is between 350 MHz to 750 MHz.
-Please refer to the topic DPHY PLL for more information.
-"
+Does this break compatibility with old samsung DTs ?
