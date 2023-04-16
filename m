@@ -2,60 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D4016E3B93
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 21:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D592D6E3B97
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 21:45:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbjDPTkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 15:40:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60348 "EHLO
+        id S229769AbjDPTo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 15:44:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjDPTkS (ORCPT
+        with ESMTP id S229446AbjDPTo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 15:40:18 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B9612136
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 12:40:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681674016; x=1713210016;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jkUUUgay4Yb7asHb7gkLwqQttFebPKKAgMuZdHdb/EM=;
-  b=iYdT6VUpV7S0lD1QHx8pStOrmsLch6KzR/CGUItSSffd7l7MCtJs1gDi
-   On95Us23QpchTRLYbQ8kUtGfC7yOlYquMd2GEg3NpKJaDRssH0Ze8VfU5
-   aa1xzhG21r124yktJ4pmFI7o9MqPp7JMas85Y3el/37UAR0yEP8zr2oOt
-   VTPHuXqIXzjPmx21n2YGlpJPf6KgCAl3hTZrqDCpia9UDAeIXKivOcHsU
-   se+4ZRCpFT7qKzhbXTzu7oUSJ/YmLgOFhrS7PF4XXp4wWVeyYyJ15hPiT
-   foyOaqp7NQCMEIBa9djjJiM5mUW73UA1hAgi9JO6MvLNwDvkYtRJsAEL9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="342250580"
-X-IronPort-AV: E=Sophos;i="5.99,202,1677571200"; 
-   d="scan'208";a="342250580"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2023 12:40:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="936610441"
-X-IronPort-AV: E=Sophos;i="5.99,202,1677571200"; 
-   d="scan'208";a="936610441"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 16 Apr 2023 12:40:14 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1po8EP-000bot-38;
-        Sun, 16 Apr 2023 19:40:13 +0000
-Date:   Mon, 17 Apr 2023 03:39:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: arch/arm/mm/copypage-v4wb.c:47:6: warning: no previous prototype for
- function 'v4wb_copy_user_highpage'
-Message-ID: <202304170326.6P0CVjp4-lkp@intel.com>
+        Sun, 16 Apr 2023 15:44:57 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF282694
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 12:44:56 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-54fe82d8bf5so84861987b3.3
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 12:44:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681674296; x=1684266296;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fE9QU8ssRHfrkp+Qs6Jt2adPN0B10qQBjFxitvUur5w=;
+        b=pTFh9YoYONT2cKveKNA6jETiwf92HtqU0CX8Fb+eU6YKNATL4+NSIe9LuB571YVQQ2
+         FvSwcvWgTww19tc9Rn0y+4sCK5LZLj6N0yzT1FA5tlasgFfufKUaYPfhYO9DEP9ZDcYL
+         HchzUVzvPelw0Q4huckH+4NhHZRPQrzs+FZc7TS9g0u1uCXZ7Gh7Rx0t1vw6xeO3fjB1
+         ias0ybZKgaEzEMgV3MEOgwIBoeyu5n0/3eqYzjsLLft3tmdEYqDpNZ5I986azDXD11KD
+         q/h6ljYEwHQnadmPQUM7nqloQwRDf9UjRpTnWnfKFqeIYHT89pXApVgoyTjabBqFP5wG
+         a3Bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681674296; x=1684266296;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fE9QU8ssRHfrkp+Qs6Jt2adPN0B10qQBjFxitvUur5w=;
+        b=AFS7XeCCX1iFfKfh9HN61vFMNTXTpU0j4ccJKcBuM4bORTRq/nkskaPg7vcFJHUXhB
+         7i5I1+mLd5T/zr51gMdql9IV4E3zZKzuUrXB0iFC2ONYvw+nfDggZ+gSNxmfnTHryqG/
+         K6slU460IzTQXkvJdPSzNMI0FlezrkHZDz81L8+xU34pdoxx6ac7rWJNQlp2ZT5EObD7
+         ejZzp+SupMakMkyNlzSzbiXgZhDr7+iozu5qjku7HayFujWJimFedhBicvbLRGevGjVz
+         CLpmdUe/ZH9V/RE+34DToDNd4JtG7ePYFUgRI8HlDDj0oDmmRTk2Bt2itbZDeT3VWyNe
+         tCbA==
+X-Gm-Message-State: AAQBX9eskOdwrMW9WVf9xH1oIN5qMpQUSum7sGspv2u4RoPhwrvJ7iFI
+        seEG2kIl3o2CCRxHmj9I58ibwQ==
+X-Google-Smtp-Source: AKy350YDG3M9wmj9++Fuic4VEWPyfPHGcxyaI9iRZK4qaFSHnn38pvTPQQqEXoMJ3JmakygaSbceaA==
+X-Received: by 2002:a81:7782:0:b0:543:b06a:19de with SMTP id s124-20020a817782000000b00543b06a19demr12158258ywc.3.1681674295681;
+        Sun, 16 Apr 2023 12:44:55 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id b186-20020a811bc3000000b0054eff15530asm2650453ywb.90.2023.04.16.12.44.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Apr 2023 12:44:55 -0700 (PDT)
+Date:   Sun, 16 Apr 2023 12:44:53 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Zi Yan <ziy@nvidia.com>
+cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
+        linux-mm@kvack.org,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        =?ISO-8859-15?Q?Michal_Koutn=FD?= <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Zach O'Keefe <zokeefe@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 6/7] mm: truncate: split huge page cache page to a
+ non-zero order if possible.
+In-Reply-To: <20230403201839.4097845-7-zi.yan@sent.com>
+Message-ID: <9dd96da-efa2-5123-20d4-4992136ef3ad@google.com>
+References: <20230403201839.4097845-1-zi.yan@sent.com> <20230403201839.4097845-7-zi.yan@sent.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,137 +81,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On Mon, 3 Apr 2023, Zi Yan wrote:
 
-First bad commit (maybe != root cause):
+> From: Zi Yan <ziy@nvidia.com>
+> 
+> To minimize the number of pages after a huge page truncation, we do not
+> need to split it all the way down to order-0. The huge page has at most
+> three parts, the part before offset, the part to be truncated, the part
+> remaining at the end. Find the greatest common divisor of them to
+> calculate the new page order from it, so we can split the huge
+> page to this order and keep the remaining pages as large and as few as
+> possible.
+> 
+> Signed-off-by: Zi Yan <ziy@nvidia.com>
+> ---
+>  mm/truncate.c | 21 +++++++++++++++++++--
+>  1 file changed, 19 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/truncate.c b/mm/truncate.c
+> index 86de31ed4d32..817efd5e94b4 100644
+> --- a/mm/truncate.c
+> +++ b/mm/truncate.c
+> @@ -22,6 +22,7 @@
+>  #include <linux/buffer_head.h>	/* grr. try_to_release_page */
+>  #include <linux/shmem_fs.h>
+>  #include <linux/rmap.h>
+> +#include <linux/gcd.h>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3e7bb4f2461710b70887704af7f175383251088e
-commit: 250c1a694ff304e5d69e74ab32755eddcc2b8f65 ARM: pxa: convert to multiplatform
-date:   11 months ago
-config: arm-randconfig-r025-20230416 (https://download.01.org/0day-ci/archive/20230417/202304170326.6P0CVjp4-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=250c1a694ff304e5d69e74ab32755eddcc2b8f65
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 250c1a694ff304e5d69e74ab32755eddcc2b8f65
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mach-versatile/ arch/arm/mm/ drivers/clk/
+Really?
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304170326.6P0CVjp4-lkp@intel.com/
+>  #include "internal.h"
+>  
+>  /*
+> @@ -211,7 +212,8 @@ int truncate_inode_folio(struct address_space *mapping, struct folio *folio)
+>  bool truncate_inode_partial_folio(struct folio *folio, loff_t start, loff_t end)
+>  {
+>  	loff_t pos = folio_pos(folio);
+> -	unsigned int offset, length;
+> +	unsigned int offset, length, remaining;
+> +	unsigned int new_order = folio_order(folio);
+>  
+>  	if (pos < start)
+>  		offset = start - pos;
+> @@ -222,6 +224,7 @@ bool truncate_inode_partial_folio(struct folio *folio, loff_t start, loff_t end)
+>  		length = length - offset;
+>  	else
+>  		length = end + 1 - pos - offset;
+> +	remaining = folio_size(folio) - offset - length;
+>  
+>  	folio_wait_writeback(folio);
+>  	if (length == folio_size(folio)) {
+> @@ -236,11 +239,25 @@ bool truncate_inode_partial_folio(struct folio *folio, loff_t start, loff_t end)
+>  	 */
+>  	folio_zero_range(folio, offset, length);
+>  
+> +	/*
+> +	 * Use the greatest common divisor of offset, length, and remaining
+> +	 * as the smallest page size and compute the new order from it. So we
+> +	 * can truncate a subpage as large as possible. Round up gcd to
+> +	 * PAGE_SIZE, otherwise ilog2 can give -1 when gcd/PAGE_SIZE is 0.
+> +	 */
+> +	new_order = ilog2(round_up(gcd(gcd(offset, length), remaining),
+> +				   PAGE_SIZE) / PAGE_SIZE);
 
-All warnings (new ones prefixed by >>):
+Gosh.  In mm/readahead.c I can see "order = __ffs(index)",
+and I think something along those lines would be more appropriate here.
 
->> arch/arm/mm/copypage-v4wb.c:47:6: warning: no previous prototype for function 'v4wb_copy_user_highpage' [-Wmissing-prototypes]
-   void v4wb_copy_user_highpage(struct page *to, struct page *from,
-        ^
-   arch/arm/mm/copypage-v4wb.c:47:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void v4wb_copy_user_highpage(struct page *to, struct page *from,
-   ^
-   static 
->> arch/arm/mm/copypage-v4wb.c:65:6: warning: no previous prototype for function 'v4wb_clear_user_highpage' [-Wmissing-prototypes]
-   void v4wb_clear_user_highpage(struct page *page, unsigned long vaddr)
-        ^
-   arch/arm/mm/copypage-v4wb.c:65:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void v4wb_clear_user_highpage(struct page *page, unsigned long vaddr)
-   ^
-   static 
-   2 warnings generated.
---
->> arch/arm/mm/copypage-feroceon.c:65:6: warning: no previous prototype for function 'feroceon_copy_user_highpage' [-Wmissing-prototypes]
-   void feroceon_copy_user_highpage(struct page *to, struct page *from,
-        ^
-   arch/arm/mm/copypage-feroceon.c:65:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void feroceon_copy_user_highpage(struct page *to, struct page *from,
-   ^
-   static 
->> arch/arm/mm/copypage-feroceon.c:78:6: warning: no previous prototype for function 'feroceon_clear_user_highpage' [-Wmissing-prototypes]
-   void feroceon_clear_user_highpage(struct page *page, unsigned long vaddr)
-        ^
-   arch/arm/mm/copypage-feroceon.c:78:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void feroceon_clear_user_highpage(struct page *page, unsigned long vaddr)
-   ^
-   static 
-   2 warnings generated.
---
->> arch/arm/mm/copypage-xscale.c:84:6: warning: no previous prototype for function 'xscale_mc_copy_user_highpage' [-Wmissing-prototypes]
-   void xscale_mc_copy_user_highpage(struct page *to, struct page *from,
-        ^
-   arch/arm/mm/copypage-xscale.c:84:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void xscale_mc_copy_user_highpage(struct page *to, struct page *from,
-   ^
-   static 
->> arch/arm/mm/copypage-xscale.c:107:1: warning: no previous prototype for function 'xscale_mc_clear_user_highpage' [-Wmissing-prototypes]
-   xscale_mc_clear_user_highpage(struct page *page, unsigned long vaddr)
-   ^
-   arch/arm/mm/copypage-xscale.c:106:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void
-   ^
-   static 
-   2 warnings generated.
+But, if there's any value at all to choosing intermediate orders here in
+truncation, I don't think choosing a single order is the right approach -
+more easily implemented, yes, but is it worth doing?
 
+What you'd actually want (if anything) is to choose the largest orders
+possible, with smaller and smaller orders filling in the rest (I expect
+there's a technical name for this, but I don't remember - bin packing
+is something else, I think).
 
-vim +/v4wb_copy_user_highpage +47 arch/arm/mm/copypage-v4wb.c
+As this code stands, truncate a 2M huge page at 1M and you get two 1M
+pieces (one then discarded) - nice; but truncate it at 1M+1 and you get
+lots of order 2 (forced up from 1) pieces.  Seems weird, and not worth
+the effort.
 
-d73e60b7144a86b Russell King  2008-10-31  46  
-063b0a4207e43ac Russell King  2008-10-31 @47  void v4wb_copy_user_highpage(struct page *to, struct page *from,
-f00a75c094c340c Russell King  2009-10-05  48  	unsigned long vaddr, struct vm_area_struct *vma)
-063b0a4207e43ac Russell King  2008-10-31  49  {
-063b0a4207e43ac Russell King  2008-10-31  50  	void *kto, *kfrom;
-063b0a4207e43ac Russell King  2008-10-31  51  
-5472e862de2bc4a Cong Wang     2011-11-25  52  	kto = kmap_atomic(to);
-5472e862de2bc4a Cong Wang     2011-11-25  53  	kfrom = kmap_atomic(from);
-2725898fc9bb212 Russell King  2009-10-05  54  	flush_cache_page(vma, vaddr, page_to_pfn(from));
-063b0a4207e43ac Russell King  2008-10-31  55  	v4wb_copy_user_page(kto, kfrom);
-5472e862de2bc4a Cong Wang     2011-11-25  56  	kunmap_atomic(kfrom);
-5472e862de2bc4a Cong Wang     2011-11-25  57  	kunmap_atomic(kto);
-063b0a4207e43ac Russell King  2008-10-31  58  }
-063b0a4207e43ac Russell King  2008-10-31  59  
-d73e60b7144a86b Russell King  2008-10-31  60  /*
-d73e60b7144a86b Russell King  2008-10-31  61   * ARMv4 optimised clear_user_page
-d73e60b7144a86b Russell King  2008-10-31  62   *
-d73e60b7144a86b Russell King  2008-10-31  63   * Same story as above.
-d73e60b7144a86b Russell King  2008-10-31  64   */
-303c6443659bc1d Russell King  2008-10-31 @65  void v4wb_clear_user_highpage(struct page *page, unsigned long vaddr)
-d73e60b7144a86b Russell King  2008-10-31  66  {
-5472e862de2bc4a Cong Wang     2011-11-25  67  	void *ptr, *kaddr = kmap_atomic(page);
-43ae286b7d4d8c4 Nicolas Pitre 2008-11-04  68  	asm volatile("\
-43ae286b7d4d8c4 Nicolas Pitre 2008-11-04  69  	mov	r1, %2				@ 1\n\
-d73e60b7144a86b Russell King  2008-10-31  70  	mov	r2, #0				@ 1\n\
-d73e60b7144a86b Russell King  2008-10-31  71  	mov	r3, #0				@ 1\n\
-d73e60b7144a86b Russell King  2008-10-31  72  	mov	ip, #0				@ 1\n\
-d73e60b7144a86b Russell King  2008-10-31  73  	mov	lr, #0				@ 1\n\
-303c6443659bc1d Russell King  2008-10-31  74  1:	mcr	p15, 0, %0, c7, c6, 1		@ 1   invalidate D line\n\
-303c6443659bc1d Russell King  2008-10-31  75  	stmia	%0!, {r2, r3, ip, lr}		@ 4\n\
-303c6443659bc1d Russell King  2008-10-31  76  	stmia	%0!, {r2, r3, ip, lr}		@ 4\n\
-303c6443659bc1d Russell King  2008-10-31  77  	mcr	p15, 0, %0, c7, c6, 1		@ 1   invalidate D line\n\
-303c6443659bc1d Russell King  2008-10-31  78  	stmia	%0!, {r2, r3, ip, lr}		@ 4\n\
-303c6443659bc1d Russell King  2008-10-31  79  	stmia	%0!, {r2, r3, ip, lr}		@ 4\n\
-d73e60b7144a86b Russell King  2008-10-31  80  	subs	r1, r1, #1			@ 1\n\
-d73e60b7144a86b Russell King  2008-10-31  81  	bne	1b				@ 1\n\
-303c6443659bc1d Russell King  2008-10-31  82  	mcr	p15, 0, r1, c7, c10, 4		@ 1   drain WB"
-43ae286b7d4d8c4 Nicolas Pitre 2008-11-04  83  	: "=r" (ptr)
-43ae286b7d4d8c4 Nicolas Pitre 2008-11-04  84  	: "0" (kaddr), "I" (PAGE_SIZE / 64)
-303c6443659bc1d Russell King  2008-10-31  85  	: "r1", "r2", "r3", "ip", "lr");
-5472e862de2bc4a Cong Wang     2011-11-25  86  	kunmap_atomic(kaddr);
-d73e60b7144a86b Russell King  2008-10-31  87  }
-d73e60b7144a86b Russell King  2008-10-31  88  
+Hugh
 
-:::::: The code at line 47 was first introduced by commit
-:::::: 063b0a4207e43acbeff3d4b09f43e750e0212b48 [ARM] copypage: provide our own copy_user_highpage()
-
-:::::: TO: Russell King <rmk@dyn-67.arm.linux.org.uk>
-:::::: CC: Russell King <rmk+kernel@arm.linux.org.uk>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> +
+> +	/* order-1 THP not supported, downgrade to order-0 */
+> +	if (new_order == 1)
+> +		new_order = 0;
+> +
+> +
+>  	if (folio_has_private(folio))
+>  		folio_invalidate(folio, offset, length);
+>  	if (!folio_test_large(folio))
+>  		return true;
+> -	if (split_folio(folio) == 0)
+> +	if (split_huge_page_to_list_to_order(&folio->page, NULL, new_order) == 0)
+>  		return true;
+>  	if (folio_test_dirty(folio))
+>  		return false;
+> -- 
+> 2.39.2
