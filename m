@@ -2,114 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EC706E39EC
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 17:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E47796E39F6
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 17:47:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbjDPPpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 11:45:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46600 "EHLO
+        id S229976AbjDPPr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 11:47:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjDPPpQ (ORCPT
+        with ESMTP id S229446AbjDPPr0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 11:45:16 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD4826AE
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 08:45:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681659915; x=1713195915;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6dy8I9a6ntUdwJMxrUGfQ51fPaweaMDYo1hIWubTuck=;
-  b=kQfrDmaDVvGeY3xJtKfsf8EKVtGzgjoFf4ztlpsfAdffz/3lSTRcSxDW
-   0bCyJO8F+Y7zWgKE3KkFSeLq7D9AUNbclGaacxofFpXRp/ilt+3N0qrWf
-   o5FYR8PeokufOfVPctGk+6dGErdX1Dt93GY/Jv5oAQPiYXbUL+uoJEZWP
-   tcqAZivT/rJzLHEO1i9Gpi/gqOfSZ86z4gCM43xsGNvTubqc1KRYvjSIA
-   Ntg7YZfMx+ZAJnCaRDjt0VoCo8JbhWJ43+nBx1tjDnLyoxmtguQ05ynT7
-   p/jzTrPR/zkgOv7kpK5Zku2nJhoLYvMRVT17QL+JXHTywaAsV/ZGJHXcT
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="372619014"
-X-IronPort-AV: E=Sophos;i="5.99,202,1677571200"; 
-   d="scan'208";a="372619014"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2023 08:45:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="801812804"
-X-IronPort-AV: E=Sophos;i="5.99,202,1677571200"; 
-   d="scan'208";a="801812804"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 16 Apr 2023 08:45:11 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1po4Yw-000bjv-1J;
-        Sun, 16 Apr 2023 15:45:10 +0000
-Date:   Sun, 16 Apr 2023 23:44:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mark Yacoub <markyacoub@chromium.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     oe-kbuild-all@lists.linux.dev, seanpaul@chromium.org,
-        suraj.kandpal@intel.com, dianders@chromium.org,
-        dmitry.baryshkov@linaro.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        Jani Nikula <jani.nikula@intel.com>,
-        Mark Yacoub <markyacoub@chromium.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 04/10] drm/hdcp: Expand HDCP helper library for
- enable/disable/check
-Message-ID: <202304162307.7PcvuWlB-lkp@intel.com>
-References: <20230411192134.508113-5-markyacoub@google.com>
+        Sun, 16 Apr 2023 11:47:26 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D942D73;
+        Sun, 16 Apr 2023 08:47:25 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id e9e14a558f8ab-329560b1994so4741565ab.3;
+        Sun, 16 Apr 2023 08:47:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681660044; x=1684252044;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=475k3G03c46QPyiaxfGPBy/K6bUcqTXt0A1kqbPfJrQ=;
+        b=QRcu8+d2+ACNA4wQ+1n+kyTE6ET4Dmpf3RebBLyuTpj9Vwy5kuABYUWs4kExn48Ns1
+         aqkleZBSYA6B+QySAnae45XqmA+iylIHoMWArKNgQys9jjzpX/wcUc/9DuSGnWGQqV00
+         PKaBxQx4oPWGlcILHCfEM9Krm5IOJsjz/0qRgED8NLccCrjjzfxsfHriJp2AvH7qqmXm
+         C/1DPNM+OLDZctbLAqx809+9FgHu6/clZlt6wA9uxgUqawx6J05vicQ/7Pbt7EPElbCO
+         wA7+H5YRpDrA3udh9qtw7dY7gyKsVs4IUROTnv1gVbMEZqeG0/4KPLCED7XiqNXwhvbH
+         BJSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681660044; x=1684252044;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=475k3G03c46QPyiaxfGPBy/K6bUcqTXt0A1kqbPfJrQ=;
+        b=WV2sJ91tBxoRnVEusfUg6vf4CKTkpcJBz9lGIdoXns2M75aaFvAzNWtBNQqd6ymqs8
+         B95An3i1y/7nRmhRm3mrAxy9bGWKUajvhKU5x0PsZBJhUplXVhy7fPJJn+XpRuKGZdOg
+         nphYBll2KmAD/rG8zn2tMzg8uDbSvX2TV8iFqE8OMzrGIqYwlrlwNcuqu9UomLXeKJY3
+         fUDq81XSbDp6POpyLNIVEsbi0BUgxc1Rcy4GDITyuH9Kjp8ge7wt1iHkdXimXas4CgAh
+         90ADMO06TOSES81DpXOjd8n6G3EgjvE6rbHWq+zwBaQZg/jztWCelDPLoWkhIDQ8BeEy
+         l4fA==
+X-Gm-Message-State: AAQBX9e/co7QZWrnZ33r66XDeBe4Gm6DaZjpwrSjto9/XrI7FhaFwA2F
+        23OueBZZnhbvEKFURpe1Bk0=
+X-Google-Smtp-Source: AKy350aiKvWziwxjnRlCjjjVuxGGl1XwZhqvK/dJAcHfLH23CksyCOFNBusPgWMemoZmy81VyyssvQ==
+X-Received: by 2002:a92:dc50:0:b0:32a:93f5:fbd with SMTP id x16-20020a92dc50000000b0032a93f50fbdmr6050404ilq.27.1681660044687;
+        Sun, 16 Apr 2023 08:47:24 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 7-20020a921307000000b0032732e7c25esm2571870ilt.36.2023.04.16.08.47.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Apr 2023 08:47:24 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 16 Apr 2023 08:47:23 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Alexandre Mergnat <amergnat@baylibre.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        Bernhard =?iso-8859-1?Q?Rosenkr=E4nzer?= <bero@baylibre.com>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v5 03/12] dt-bindings: watchdog: mediatek,mtk-wdt: add
+ mt8365
+Message-ID: <05d07422-d53d-408b-972b-5937861afa63@roeck-us.net>
+References: <20230203-evk-board-support-v5-0-1883c1b405ad@baylibre.com>
+ <20230203-evk-board-support-v5-3-1883c1b405ad@baylibre.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230411192134.508113-5-markyacoub@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230203-evk-board-support-v5-3-1883c1b405ad@baylibre.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+On Fri, Apr 07, 2023 at 02:59:22PM +0200, Alexandre Mergnat wrote:
+> Add binding description for mediatek,mt8365-wdt
+> 
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
 
-kernel test robot noticed the following build warnings:
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-[auto build test WARNING on drm-intel/for-linux-next-fixes]
-[also build test WARNING on drm/drm-next linus/master v6.3-rc6]
-[cannot apply to drm-tip/drm-tip drm-misc/drm-misc-next drm-intel/for-linux-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Mark-Yacoub/drm-hdcp-Add-drm_hdcp_atomic_check/20230412-032412
-base:   git://anongit.freedesktop.org/drm-intel for-linux-next-fixes
-patch link:    https://lore.kernel.org/r/20230411192134.508113-5-markyacoub%40google.com
-patch subject: [PATCH v9 04/10] drm/hdcp: Expand HDCP helper library for enable/disable/check
-config: i386-randconfig-s001 (https://download.01.org/0day-ci/archive/20230416/202304162307.7PcvuWlB-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/972a98f65fb56b3be4370593c2b81f1283750db7
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mark-Yacoub/drm-hdcp-Add-drm_hdcp_atomic_check/20230412-032412
-        git checkout 972a98f65fb56b3be4370593c2b81f1283750db7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 olddefconfig
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/display/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304162307.7PcvuWlB-lkp@intel.com/
-
-sparse warnings: (new ones prefixed by >>)
->> drivers/gpu/drm/display/drm_hdcp_helper.c:675:5: sparse: sparse: symbol 'drm_hdcp_helper_hdcp1_capable_dp' was not declared. Should it be static?
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> ---
+>  Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml b/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
+> index 55b34461df1b..66cacea8e47f 100644
+> --- a/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
+> @@ -38,6 +38,7 @@ properties:
+>                - mediatek,mt7623-wdt
+>                - mediatek,mt7629-wdt
+>                - mediatek,mt8173-wdt
+> +              - mediatek,mt8365-wdt
+>                - mediatek,mt8516-wdt
+>            - const: mediatek,mt6589-wdt
+>  
