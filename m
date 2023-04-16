@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A369B6E37F8
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 14:28:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0106E37FA
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 14:29:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbjDPM2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 08:28:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44812 "EHLO
+        id S230166AbjDPM3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 08:29:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDPM2S (ORCPT
+        with ESMTP id S229458AbjDPM3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 08:28:18 -0400
+        Sun, 16 Apr 2023 08:29:07 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBE6271B;
-        Sun, 16 Apr 2023 05:28:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9050271B;
+        Sun, 16 Apr 2023 05:29:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EDF8D60BA0;
-        Sun, 16 Apr 2023 12:28:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5FA3C433EF;
-        Sun, 16 Apr 2023 12:28:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7528960BA0;
+        Sun, 16 Apr 2023 12:29:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9049DC433EF;
+        Sun, 16 Apr 2023 12:29:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681648096;
-        bh=LBtp8u40d7gaHGLY8w2ydHcEPeO7+ToYI4YBDXA5b8I=;
+        s=k20201202; t=1681648145;
+        bh=5PL0hkKXz5ojQm8kj6YRRLyZRbwnEHLHp0vxMogvW30=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UFqYPpaG6h7nQ3kOO/JHgzS6QChXYLuOAzpeXPCB4TVFBHAqkvh0bSZMgSQ3uUPDf
-         yA6Esk0IKIAppGJ9ijREuT1M77OkO9LlsohEt5jHRN10gWHj9FuAa/670DeWnznJYQ
-         ubGfhgKkT2sEcSqpixPZeiPdrxb+D2Atzc9lr0a1wReuHcDOWZNooiHEuKPVteabP9
-         T9+zzlqlSGspes0idWKeHzH3SBaF0Bs0xmcvdsBUnlntFNnGIr4kyf3y2hWvp9dVGl
-         A9yu5a1yRYyNKQzK8APXYg8OtElohSydQ7CIm6HOMpEL0FGDUaLYw0T+rQ9o0Jbu99
-         XayvnHKYhwOvw==
-Date:   Sun, 16 Apr 2023 13:28:16 +0100
+        b=DiF+ue7KxEntambN+egSr8hBnXyi2SApEZa7wjWOUtCyfAy7+91zOLnnNdmMNo/Rt
+         qN5aVsrGXDceTxS7F256H2nFCum+rocx4KMfAalo46QKMomhMKO/Ah726FE6oeDgNL
+         PefGfZDeJV++dA4nmUt0p48JkXvbPOZkC5rV3JYO5H4lscUOQVOgeOkFBN8Z0c4umT
+         On8O6pydCQ0y9fmzlWtnGMCiIdRLGXBU7+paPv9mG3o9tPIcFsV3cY7Q8fgXZilZ99
+         Uvblx9/Hj3dIsrueAIFpqt5LNGSReone9cD1sKTN1w/0eyD64DVW3qAJAYeSfTlQOI
+         IGH+F7J/UiDrQ==
+Date:   Sun, 16 Apr 2023 13:29:06 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
 To:     Jiakai Luo <jkluo@hust.edu.cn>
 Cc:     Lars-Peter Clausen <lars@metafoo.de>,
@@ -47,7 +47,7 @@ Cc:     Lars-Peter Clausen <lars@metafoo.de>,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2] iio: adc: mxs-lradc: fix the order of two cleanup
  operations
-Message-ID: <20230416132816.70f4814e@jic23-huawei>
+Message-ID: <20230416132906.4ec56e47@jic23-huawei>
 In-Reply-To: <20230416072157.57388-1-jkluo@hust.edu.cn>
 References: <20230416072157.57388-1-jkluo@hust.edu.cn>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
@@ -89,23 +89,19 @@ Jiakai Luo <jkluo@hust.edu.cn> wrote:
 > 
 > v1->v2: exchange the order of mxs_lradc_adc_trigger_remove()
 > and iio_triggered_buffer_cleanup() in error handling labels
+Move your change log to after the --- marking below.
+
+We don't want to retain that level of detail in the commit logs in the
+git tree.
+
+Thanks,
+
+Jonathan
+
 > 
 > Fixes: 6dd112b9f85e ("iio: adc: mxs-lradc: Add support for ADC driver")
 > Signed-off-by: Jiakai Luo <jkluo@hust.edu.cn>
 > Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
-
-Thanks for the patch.
-
-I agree with your analysis. 
-
-Please also reorder the unwind that goes on in the remove() callback
-to match the new ordering.  That way things remain consistent between
-the remove() calls and the error handling.  I doubt there is a bug 
-due to the ordering in remove() but there might be.
-
-Jonathan
-
-
 > ---
 >  drivers/iio/adc/mxs-lradc-adc.c | 8 ++++----
 >  1 file changed, 4 insertions(+), 4 deletions(-)
