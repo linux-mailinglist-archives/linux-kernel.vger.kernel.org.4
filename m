@@ -2,136 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1830E6E360D
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 10:32:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FC3C6E3615
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 10:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230298AbjDPIce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 04:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51016 "EHLO
+        id S230382AbjDPIgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 04:36:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbjDPIcc (ORCPT
+        with ESMTP id S230370AbjDPIgQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 04:32:32 -0400
-Received: from smtp.smtpout.orange.fr (smtp-26.smtpout.orange.fr [80.12.242.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1AE2D5D
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 01:32:30 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id nxoBpUp5GSbkVnxoBp6SVd; Sun, 16 Apr 2023 10:32:28 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orange.fr;
-        s=t20230301; t=1681633948;
-        bh=6Nh9SbNnwZaFDBB1P2bWoSGbGhDLyt3bjRnq7fv3tcQ=;
-        h=From:To:Cc:Subject:Date;
-        b=qFdGVJRwqDfnU9DfilquMgxQjV9J9mgxoH27+b8QY0gKrhl2ccxCYzou2MtAnD5ae
-         z0HourN8rMXV8JErxeZhIFcWiCliAqAmsA6WxwF5GMxRgHHQnoi+PrIBJKv7B0La23
-         8yjXbmlDHjyhgakbQSwaXyHW2dSD3Yv2u7Qvclm2aqU5in7R8jYE/daNW9A9u7NLsk
-         Nu6PfQA3Sl/DB+nFTc5vNzueEoyGmKmGzIt3nOnsBP63iFET/tYIyR/hPrHAt2esu/
-         bjNUGmEfRGEB3ilzvEdg0Uw1AEbRH2mbgjremW9TGWqPLQgQsjPIsJ6EaI2kboiSmc
-         qKbmfNnECzyHw==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 16 Apr 2023 10:32:28 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-pwm@vger.kernel.org
-Subject: [PATCH] pwm: sti: Fix the error handling path of sti_pwm_probe()
-Date:   Sun, 16 Apr 2023 10:32:24 +0200
-Message-Id: <ef5d6301cb120db5d52175a7bf94b5095beaaeef.1681633924.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sun, 16 Apr 2023 04:36:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC3735B7
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 01:36:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9027260FB0
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 08:36:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDB6BC433D2
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 08:36:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681634171;
+        bh=6P/SFh54TSeDeV9HcBVW8qufcWuXnCsWRpIr/HB1O+Q=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=k/6rxOgyxoPktbggmoBuXjalEfgvIY1gKCwI7QONAIrZjIhBQvxiGtDT4iCLvBX+9
+         x7KiuBvBQuWhfpheHLCtsgnFk61YToCss6+ymy2+WhTu2q1aj+Y84jmcuNog44OWS3
+         bYoIL9DglqhCVALxS9MOpGWR31hm82u0TfJIwglZ01LuC5PzVwV6DVM17Pjq14M755
+         f8WgBnd1gR13bH7HL0DqbffccRsoneiEv0nqgQXfDqJZH2P8UO6sQZEbghWXYJFfF9
+         xew4UtCADIKbtCddmhnlZjVimRRzz+RIgOFqI4Rk61erRGZ3Deee0j2HrK89zrcdSs
+         YIgCjvKudajYQ==
+Received: by mail-yb1-f171.google.com with SMTP id u13so23058738ybu.5
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 01:36:10 -0700 (PDT)
+X-Gm-Message-State: AAQBX9dB9SnD7cMMvTF8FVP0O4Uiuw7IX4DiuoKvteO0h33ZCVR0Rmob
+        q5+u4BaQv6kk0qYdx5k/Yp6wt0oHOWqPiI8rRrM=
+X-Google-Smtp-Source: AKy350b1gliAyW9R5Sw+cmthq1OYFRk9fZ7DNVu2cuc1HpHk1Ua5R/5kXBGv6+nsEyhLQWsyy8c1S9oiWOn/LBhe5C8=
+X-Received: by 2002:a25:d816:0:b0:b8d:a959:305c with SMTP id
+ p22-20020a25d816000000b00b8da959305cmr7215791ybg.7.1681634170003; Sun, 16 Apr
+ 2023 01:36:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230411140850.3129374-1-trix@redhat.com>
+In-Reply-To: <20230411140850.3129374-1-trix@redhat.com>
+From:   Oded Gabbay <ogabbay@kernel.org>
+Date:   Sun, 16 Apr 2023 11:35:43 +0300
+X-Gmail-Original-Message-ID: <CAFCwf12tq7-r7Ej2mwWruQHOvk2d1Z2S_BEVoKF45HsJjfZBDw@mail.gmail.com>
+Message-ID: <CAFCwf12tq7-r7Ej2mwWruQHOvk2d1Z2S_BEVoKF45HsJjfZBDw@mail.gmail.com>
+Subject: Re: [PATCH] accel/habanalabs: remove variable gaudi_irq_name
+To:     Tom Rix <trix@redhat.com>
+Cc:     gregkh@linuxfoundation.org, osharabi@habana.ai, talcohen@habana.ai,
+        dhirschfeld@habana.ai, obitton@habana.ai,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rewrite the error handing path of sti_pwm_probe() to avoid some leaks.
+On Tue, Apr 11, 2023 at 5:09=E2=80=AFPM Tom Rix <trix@redhat.com> wrote:
+>
+> gcc with W=3D1 reports
+> drivers/accel/habanalabs/gaudi/gaudi.c:117:19: error:
+>   =E2=80=98gaudi_irq_name=E2=80=99 defined but not used [-Werror=3Dunused=
+-const-variable=3D]
+>   117 | static const char gaudi_irq_name[GAUDI_MSI_ENTRIES][GAUDI_MAX_STR=
+ING_LEN] =3D {
+>       |                   ^~~~~~~~~~~~~~
+>
+> This variable is not used so remove it.
+>
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  drivers/accel/habanalabs/gaudi/gaudi.c | 7 -------
+>  1 file changed, 7 deletions(-)
+>
+> diff --git a/drivers/accel/habanalabs/gaudi/gaudi.c b/drivers/accel/haban=
+alabs/gaudi/gaudi.c
+> index a29aa8f7b6f3..a1697581c218 100644
+> --- a/drivers/accel/habanalabs/gaudi/gaudi.c
+> +++ b/drivers/accel/habanalabs/gaudi/gaudi.c
+> @@ -114,13 +114,6 @@ static u32 gaudi_stream_master[GAUDI_STREAM_MASTER_A=
+RR_SIZE] =3D {
+>         GAUDI_QUEUE_ID_DMA_1_3
+>  };
+>
+> -static const char gaudi_irq_name[GAUDI_MSI_ENTRIES][GAUDI_MAX_STRING_LEN=
+] =3D {
+> -               "gaudi cq 0_0", "gaudi cq 0_1", "gaudi cq 0_2", "gaudi cq=
+ 0_3",
+> -               "gaudi cq 1_0", "gaudi cq 1_1", "gaudi cq 1_2", "gaudi cq=
+ 1_3",
+> -               "gaudi cq 5_0", "gaudi cq 5_1", "gaudi cq 5_2", "gaudi cq=
+ 5_3",
+> -               "gaudi cpu eq"
+> -};
+> -
+>  static const u8 gaudi_dma_assignment[GAUDI_DMA_MAX] =3D {
+>         [GAUDI_PCI_DMA_1] =3D GAUDI_ENGINE_ID_DMA_0,
+>         [GAUDI_PCI_DMA_2] =3D GAUDI_ENGINE_ID_DMA_1,
+> --
+> 2.27.0
+>
 
-Fixes: 3f0925b5a864 ("pwm: sti: Initialise PWM capture device data")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-I also wonder if some clk_put() are also missing in the error handling path
-and in the remove function.
-
-This could be split in several patches because some issues were
-introduced before 3f0925b5a864.
-But it is already nearly 7 years old, so it should be enough, should it be
-back-ported.
----
- drivers/pwm/pwm-sti.c | 26 +++++++++++++++++---------
- 1 file changed, 17 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/pwm/pwm-sti.c b/drivers/pwm/pwm-sti.c
-index b1d1373648a3..7e678cab2991 100644
---- a/drivers/pwm/pwm-sti.c
-+++ b/drivers/pwm/pwm-sti.c
-@@ -630,13 +630,14 @@ static int sti_pwm_probe(struct platform_device *pdev)
- 		pc->cpt_clk = of_clk_get_by_name(dev->of_node, "capture");
- 		if (IS_ERR(pc->cpt_clk)) {
- 			dev_err(dev, "failed to get PWM capture clock\n");
--			return PTR_ERR(pc->cpt_clk);
-+			ret = PTR_ERR(pc->cpt_clk);
-+			goto err_unprepare_pwm;
- 		}
- 
- 		ret = clk_prepare(pc->cpt_clk);
- 		if (ret) {
- 			dev_err(dev, "failed to prepare clock\n");
--			return ret;
-+			goto err_unprepare_pwm;
- 		}
- 	}
- 
-@@ -645,18 +646,17 @@ static int sti_pwm_probe(struct platform_device *pdev)
- 	pc->chip.npwm = pc->cdata->pwm_num_devs;
- 
- 	ret = pwmchip_add(&pc->chip);
--	if (ret < 0) {
--		clk_unprepare(pc->pwm_clk);
--		clk_unprepare(pc->cpt_clk);
--		return ret;
--	}
-+	if (ret < 0)
-+		goto err_unprepare_cpt;
- 
- 	for (i = 0; i < cdata->cpt_num_devs; i++) {
- 		struct sti_cpt_ddata *ddata;
- 
- 		ddata = devm_kzalloc(dev, sizeof(*ddata), GFP_KERNEL);
--		if (!ddata)
--			return -ENOMEM;
-+		if (!ddata) {
-+			ret = -ENOMEM;
-+			goto err_remove_pwmchip;
-+		}
- 
- 		init_waitqueue_head(&ddata->wait);
- 		mutex_init(&ddata->lock);
-@@ -667,6 +667,14 @@ static int sti_pwm_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, pc);
- 
- 	return 0;
-+
-+err_remove_pwmchip:
-+	pwmchip_remove(&pc->chip);
-+err_unprepare_cpt:
-+	clk_unprepare(pc->cpt_clk);
-+err_unprepare_pwm:
-+	clk_unprepare(pc->pwm_clk);
-+	return ret;
- }
- 
- static void sti_pwm_remove(struct platform_device *pdev)
--- 
-2.34.1
-
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+Applied to -next
+Thanks,
+Oded
