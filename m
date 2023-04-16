@@ -2,180 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 629CB6E3706
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 12:11:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E8A6E3709
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 12:16:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbjDPKLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 06:11:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57944 "EHLO
+        id S229763AbjDPKQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 06:16:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbjDPKLn (ORCPT
+        with ESMTP id S229458AbjDPKQA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 06:11:43 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05DEFDE
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 03:11:42 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id xd13so22867143ejb.4
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 03:11:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681639900; x=1684231900;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=paR9xnnqoHafGWhtevGVPO7lCDkAStM4xbbA9pEeU/E=;
-        b=ObhszkQ5pMvOfAtBxaUpv8DZA89joVFNMDBz6+4btDrP4AlzBs224JzKs8aLppD+ys
-         OTL8pkC5hoEeveNPEvQfqxsRi5K0BD6mKhBtO9ikbsmOsX6XozlPeZnl+VCOEzc/y4DO
-         wGu+bIsj3CHM5tlQcD83xWi36jfnVuwG6IEinOT77qGM+IupV6dcxMjscdhIb3GREj45
-         99kkpm1e3j4+/mbxQEWmw5Rwk8+wB2BIFsY6mQViQBGpYNi4I4k+vbQFRP4H+ewoymLZ
-         9+qhoUEvNZGaGlogDcbzlJRROVsbLlnr0NgUp7H7nQPvXLIPVe7+E4enhkeAqFqlQ7Z6
-         UWqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681639900; x=1684231900;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=paR9xnnqoHafGWhtevGVPO7lCDkAStM4xbbA9pEeU/E=;
-        b=IG399nx8zCVD0GOD4v659XwebylB+J4PjUGiiAAX5Og353YvStXsD6BIgRtMp9lUTP
-         0iV9ekzXbG33wec5AgTs5ortejNdH5NWG6Hztm2VrI4C5aSJlam05Gu2O2YTCVu4ayrX
-         f4Pd4o84dGt/878YFM+g8A3uD2Z049CJfjJfd3/o7Se9s9akz5UdhNSuQPPuFUsqrUud
-         aeys0ZwcPZc6mrLzP5w7y9LeVHAqPdyVTPSv7L7SmLLqzT+OK1to/O+sXI6KymzKOi9U
-         H4W2KsZgunR9zeM4T5iytg3A8BJMemu092tMgLpiQXGFTCpNWkCXicrLnQHAabrYFVsw
-         6sOw==
-X-Gm-Message-State: AAQBX9e/ZeAdlWotUXNs2jf6z9tQAzvECn1yTtUau9AKZBTe0DT+Z161
-        YS5wM3u6gvhrqhLXITasNbiB+g==
-X-Google-Smtp-Source: AKy350aaS1mm/iGLzgMsJE+nL20g1KKZd0nySFL3Ajcx6uEjxEFEWi/0n0V34xf7g27EONkW4UXpyA==
-X-Received: by 2002:a17:907:1245:b0:94e:6294:9d23 with SMTP id wc5-20020a170907124500b0094e62949d23mr3401890ejb.26.1681639900439;
-        Sun, 16 Apr 2023 03:11:40 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:29dd:ded4:3ccc:83db])
-        by smtp.gmail.com with ESMTPSA id wg9-20020a17090705c900b0094ea48e9052sm4742755ejb.32.2023.04.16.03.11.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 03:11:40 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        cros-qcom-dts-watchers@chromium.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 4/4] ARM: dts: qcom: add missing cache properties
-Date:   Sun, 16 Apr 2023 12:11:34 +0200
-Message-Id: <20230416101134.95686-4-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230416101134.95686-1-krzysztof.kozlowski@linaro.org>
-References: <20230416101134.95686-1-krzysztof.kozlowski@linaro.org>
+        Sun, 16 Apr 2023 06:16:00 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6969F;
+        Sun, 16 Apr 2023 03:15:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1681640123; i=frank-w@public-files.de;
+        bh=esbXS3erM+9bN7FXQfqK4Y+DzXw+7shdEXSjgm5kthU=;
+        h=X-UI-Sender-Class:Date:From:To:CC:Subject:Reply-to:In-Reply-To:
+         References;
+        b=NsN2QSE0pIFy4P8nIh6vsVWtIWTV5qVXWhRn1GPb/SET9aCwAQoPAHKzJfNV50p2l
+         VxA3MUqo/FcyiVhHe87oTxR2i9HdepmrNltsesJEHx0avtM+kxIx1jYdZc2ylHm2Ob
+         56odbYXBzhn7lsPXvGasftTKwwR9OLZzwzo0oYkhbxyN3lM+L3qrrlpmg+ed3UPpW1
+         ULbIqVr9+WTxXs5FtvMy2+q/dRMw3OjtLntMpI1kgPFSBZBcoaTvQn+zrDm+/tM6Zw
+         aiW1JDTAlv37VKJFbGUKZubkzkyIb//FzOal1ypbti8KpHHrRrQmN7E55IhRKbutVs
+         r+Qtk36hO6sYQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [127.0.0.1] ([217.61.152.230]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N8GQy-1qRQq32tsG-014G8M; Sun, 16
+ Apr 2023 12:15:23 +0200
+Date:   Sun, 16 Apr 2023 12:15:20 +0200
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Frank Wunderlich <linux@fw-web.de>,
+        Felix Fietkau <nbd@nbd.name>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Daniel Golle <daniel@makrotopia.org>
+CC:     John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: =?US-ASCII?Q?Re=3A_=5BRFC/RFT_v1=5D_net=3A_et?= =?US-ASCII?Q?hernet=3A_mtk=5Feth=5Fsoc=3A_dro?= =?US-ASCII?Q?p_generic_vlan_rx_offload=2C_only_use_DSA_untagging?=
+User-Agent: K-9 Mail for Android
+Reply-to: frank-w@public-files.de
+In-Reply-To: <c657f6a2-74fa-2cc1-92cf-18f25464b1e1@arinc9.com>
+References: <20230416091038.54479-1-linux@fw-web.de> <c657f6a2-74fa-2cc1-92cf-18f25464b1e1@arinc9.com>
+Message-ID: <161044DF-0663-42D4-94B8-03741C91B1A4@public-files.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:HAemf09H/mcZT5enwWu1poSJfbWxNQaAH2fZSTGAKXFufW508mO
+ zFq7NFgz1YrrMnS4Gk47U7NYO+3EzF4/Le4t0Rs7/4mJRDFXIamqvYoeIAmfsPcQkdbO0Oy
+ r6+IGqNB8++NGK7c/5fL8JpOTFlkCtSsS3LPwDnAdfuJvYOEeVRqo5UBnMCNgSayJU3uX5S
+ /OnOsSvexov/YZ2P1woXQ==
+UI-OutboundReport: notjunk:1;M01:P0:Lrheoc8owC8=;S6MoK7apUwBCxS/IzsJSLjidBVb
+ QffW8VJxCxEawwnznEY3BFMr0KkCSg1YO607+l/H19IDnPCbdCL4HujvH6qwW/ZB9v5dkNGKy
+ EwP0oy5U0dciEkZM+4gMmbm8ideA28IDlIMFYMokr7/iiKhpFzQpvrFwcK69DTZtFuIkWPiuC
+ jlhQuA/+ANKLcCI6WoJ28h+2x7EBdu2Pv8Hu6JvAWzfOhqHrjnLN8KMPHzOS0TCshY8AtLk/p
+ pkb+rF8Kywojnj7XOey/tsDLTpgdyMHsLQGnvSXoQZaZCvRXa+GUhEUCpVyLB7UW0oiwv+Z5D
+ vp1ARyeC1qwyLwGyuWXzq6tJj2maU/KxIneA6HUj75Hc5aYG6X66iNsE7HmQt575bgCKFlZMn
+ /sLQeNUn9yfes/olhDJTMxT22V5+guVTV1MKOKpacyBRJIJHY26BGJznoN/spkpriBylIYrmf
+ o7K9L9J+SuIKTGN1fdiSj6hr3ZwIPexaKAEeXSJeg6v2dFBMx/Ei0fL2g5DRnExCKGq4Secly
+ CpNyeZGTGLC0zLoFmiFaGny1AOOQCWjl3Q3JkUdKDefr2j9ruW6F7E8g5Faihf9co2hVRt0QL
+ SgkXH7cWOBVPqs0Xqzw2rz45x4tHjIjG7cYQyB5rI8brVzqjlSXxPDSZOs2rLlRBk2tSJkGgf
+ BX80uIJH+Ed2meH80wJZgYr10XRuh6mpvjxG362wDsUBWIVQ4pc2E9n6dknD6Qfl6yaZW4Qr0
+ vLg6ZMCb2ZTHMgUP4iKZxB7nMN6jkPEFbK5Hls/nx32AbL44EZ7PV/fQXgE7loy2rXB48W2yk
+ 3YL1N2jckwDqaeT6DwIw2XlnjJSTqlZfcjb4V3zxTpdp3wg3sYDTIphQPosX40bclNnyvtygw
+ G4xpc1onzeqB49KHkJa6tzWinWzYWH4WNFISeM0v9KhjI5zcHE6hgJuc1hUBT34gCgH8+6H38
+ fG+Bmw==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add required cache-unified properties to fix warnings like:
+Am 16=2E April 2023 11:52:31 MESZ schrieb "Ar=C4=B1n=C3=A7 =C3=9CNAL" <arin=
+c=2Eunal@arinc9=2Ecom>:
+>On 16=2E04=2E2023 12:10, Frank Wunderlich wrote:
+>> From: Felix Fietkau <nbd@nbd=2Ename>
+>>=20
+>> Through testing I found out that hardware vlan rx offload support seems=
+ to
+>> have some hardware issues=2E At least when using multiple MACs and when=
+ receiving
+>> tagged packets on the secondary MAC, the hardware can sometimes start t=
+o emit
+>> wrong tags on the first MAC as well=2E
+>>=20
+>> In order to avoid such issues, drop the feature configuration and use t=
+he
+>> offload feature only for DSA hardware untagging on MT7621/MT7622 device=
+s which
+>> only use one MAC=2E
+>
+>MT7621 devices most certainly use both MACs=2E
+>
+>>=20
+>> Tested-by: Frank Wunderlich <frank-w@public-files=2Ede>
+>> Signed-off-by: Felix Fietkau <nbd@nbd=2Ename>
+>> Signed-off-by: Frank Wunderlich <frank-w@public-files=2Ede>
+>> ---
+>> used felix Patch as base and ported up to 6=2E3-rc6 which seems to get =
+lost
+>> and the original bug is not handled again=2E
+>>=20
+>> it reverts changes from vladimirs patch
+>>=20
+>> 1a3245fe0cf8 net: ethernet: mtk_eth_soc: fix DSA TX tag hwaccel for swi=
+tch port 0
+>
+>Do I understand correctly that this is considered being reverted because =
+the feature it fixes is being removed?
 
-  qcom-ipq4019-ap.dk01.1-c1.dtb: l2-cache: 'cache-unified' is a required property
+As far as i understood, vladimirs patch fixes one
+cornercase of hw rx offload where felix original
+patch was fixing more=2E=2Esent it as rft to you to test
+if your bug (which vladimir fixed) is not coming in
+again=2E If it does we can try to merge both
+attempts=2E But current state has broken vlan on
+bpi-r3 non-dsa gmac1 (sfp-wan)=2E
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm/boot/dts/qcom-apq8064.dtsi | 1 +
- arch/arm/boot/dts/qcom-apq8084.dtsi | 1 +
- arch/arm/boot/dts/qcom-ipq4019.dtsi | 1 +
- arch/arm/boot/dts/qcom-ipq8064.dtsi | 1 +
- arch/arm/boot/dts/qcom-msm8660.dtsi | 1 +
- arch/arm/boot/dts/qcom-msm8960.dtsi | 1 +
- arch/arm/boot/dts/qcom-msm8974.dtsi | 1 +
- 7 files changed, 7 insertions(+)
+>Ar=C4=B1n=C3=A7
 
-diff --git a/arch/arm/boot/dts/qcom-apq8064.dtsi b/arch/arm/boot/dts/qcom-apq8064.dtsi
-index 672b246afbba..d2289205ff81 100644
---- a/arch/arm/boot/dts/qcom-apq8064.dtsi
-+++ b/arch/arm/boot/dts/qcom-apq8064.dtsi
-@@ -83,6 +83,7 @@ CPU3: cpu@3 {
- 		L2: l2-cache {
- 			compatible = "cache";
- 			cache-level = <2>;
-+			cache-unified;
- 		};
- 
- 		idle-states {
-diff --git a/arch/arm/boot/dts/qcom-apq8084.dtsi b/arch/arm/boot/dts/qcom-apq8084.dtsi
-index b653ea40c441..83839e1ec4d1 100644
---- a/arch/arm/boot/dts/qcom-apq8084.dtsi
-+++ b/arch/arm/boot/dts/qcom-apq8084.dtsi
-@@ -74,6 +74,7 @@ cpu@3 {
- 		L2: l2-cache {
- 			compatible = "cache";
- 			cache-level = <2>;
-+			cache-unified;
- 			qcom,saw = <&saw_l2>;
- 		};
- 
-diff --git a/arch/arm/boot/dts/qcom-ipq4019.dtsi b/arch/arm/boot/dts/qcom-ipq4019.dtsi
-index dfcfb3339c23..f0ef86fadc9d 100644
---- a/arch/arm/boot/dts/qcom-ipq4019.dtsi
-+++ b/arch/arm/boot/dts/qcom-ipq4019.dtsi
-@@ -102,6 +102,7 @@ cpu@3 {
- 		L2: l2-cache {
- 			compatible = "cache";
- 			cache-level = <2>;
-+			cache-unified;
- 			qcom,saw = <&saw_l2>;
- 		};
- 	};
-diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-index bcdc37bfef54..621edf508a88 100644
---- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
-+++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-@@ -45,6 +45,7 @@ cpu1: cpu@1 {
- 		L2: l2-cache {
- 			compatible = "cache";
- 			cache-level = <2>;
-+			cache-unified;
- 		};
- 	};
- 
-diff --git a/arch/arm/boot/dts/qcom-msm8660.dtsi b/arch/arm/boot/dts/qcom-msm8660.dtsi
-index f601b40ebcf4..78023ed2fdf7 100644
---- a/arch/arm/boot/dts/qcom-msm8660.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8660.dtsi
-@@ -36,6 +36,7 @@ cpu@1 {
- 		L2: l2-cache {
- 			compatible = "cache";
- 			cache-level = <2>;
-+			cache-unified;
- 		};
- 	};
- 
-diff --git a/arch/arm/boot/dts/qcom-msm8960.dtsi b/arch/arm/boot/dts/qcom-msm8960.dtsi
-index 2a668cd535cc..616fef2ea682 100644
---- a/arch/arm/boot/dts/qcom-msm8960.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8960.dtsi
-@@ -42,6 +42,7 @@ cpu@1 {
- 		L2: l2-cache {
- 			compatible = "cache";
- 			cache-level = <2>;
-+			cache-unified;
- 		};
- 	};
- 
-diff --git a/arch/arm/boot/dts/qcom-msm8974.dtsi b/arch/arm/boot/dts/qcom-msm8974.dtsi
-index 38d3ee152dcb..a22616491dc0 100644
---- a/arch/arm/boot/dts/qcom-msm8974.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8974.dtsi
-@@ -80,6 +80,7 @@ CPU3: cpu@3 {
- 		L2: l2-cache {
- 			compatible = "cache";
- 			cache-level = <2>;
-+			cache-unified;
- 			qcom,saw = <&saw_l2>;
- 		};
- 
--- 
-2.34.1
 
+regards Frank
