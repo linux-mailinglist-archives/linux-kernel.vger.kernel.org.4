@@ -2,91 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3ED16E3BBA
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 21:52:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 859016E3BBE
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 21:56:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbjDPTwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 15:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37214 "EHLO
+        id S229912AbjDPT4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 15:56:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjDPTv7 (ORCPT
+        with ESMTP id S229500AbjDPT4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 15:51:59 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D42D7
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 12:51:57 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-552ae3e2cbeso26923117b3.13
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 12:51:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681674716; x=1684266716;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+XV1SaR4oDj2LmHIYbtEP9BS2GzUn6i8QGpmiK2pWes=;
-        b=35GxN9QmW2hjy0Dfkmb2w05f+ZtVlxILgN7uYJpNWJLcIPK3szAO7GVlFCTIxLRIFw
-         ovaBhQJgVADB9Q6ICg7hyMv/NAh8j0wq800X9YdYJ/dDjbdghw8JokHMRoEQNsIdRkdC
-         WLiQXpG4Q+TttdZCcEbXfxWBxXC2GFAHRO1LtQZQgEpcMxrKREN4Avy2QCWCb6+mN3qa
-         FRLCFpSJV0ak+dFRGggbPcpzGTkIvZjikma5vN7FHtcFbl8p3SNMYoZ+VAOk0dtr67BG
-         CWcPeQAuI2DkTnaae9/D0Af3q8cBuCh0xrhWT3C7wipnfK4eVsi6qPFipvyeb/FiaUE3
-         Z2Xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681674716; x=1684266716;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+XV1SaR4oDj2LmHIYbtEP9BS2GzUn6i8QGpmiK2pWes=;
-        b=cEuxeJfWFii/wBNxB1P/QNgcD61+B2LZAS+xUY1spDA67YgufdjbLH1AD2QhI+Ii8z
-         tZpHIYnuJyTWuTGvLaAxbWQ9SCxRIHzOytdisNAVPOe12FbukjzNoQolFR/7/IP3nau2
-         FiAlqV+YCyyrwHjsZlv3YLa49cDopAuy2wUfyaZnyLqy1TkRLVBeTYdXkR+fE2pzEiV1
-         gmN2NCo3Oc60pRP61vfeAPyCwOQ9Ddc6kkD1zjftA3WkI639QaCOEtPP0YAhOZYg9z09
-         jJikz9lSzGKQyVTuJc2X/mm1B5XukMP/52hF+rHM59k0kA/C2WhMRXKI1QwxRUw4761s
-         t0aQ==
-X-Gm-Message-State: AAQBX9clkphv9ITcKxuqkk6FNm4uMVOgtbEnoDmYPSTLbGVSEwY+Cr7D
-        a1o1Q5bepclRfiYPR+b2G2fr+Q==
-X-Google-Smtp-Source: AKy350aso6IEsDAN1exazMbmo6Wh+kHtNe004GaFkMaSD4/1/07yu0c9ScNQNbT2abH6NzKDCzhu7g==
-X-Received: by 2002:a81:a210:0:b0:54e:ffbd:7a7e with SMTP id w16-20020a81a210000000b0054effbd7a7emr13157859ywg.45.1681674716340;
-        Sun, 16 Apr 2023 12:51:56 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id 22-20020a810b16000000b0054fae5ed408sm2677063ywl.45.2023.04.16.12.51.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 12:51:55 -0700 (PDT)
-Date:   Sun, 16 Apr 2023 12:51:46 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Zi Yan <ziy@nvidia.com>
-cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
-        linux-mm@kvack.org,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        =?ISO-8859-15?Q?Michal_Koutn=FD?= <mkoutny@suse.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Zach O'Keefe <zokeefe@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 6/7] mm: truncate: split huge page cache page to a
- non-zero order if possible.
-In-Reply-To: <9dd96da-efa2-5123-20d4-4992136ef3ad@google.com>
-Message-ID: <86864d6c-39d3-d26f-278f-b96e14884541@google.com>
-References: <20230403201839.4097845-1-zi.yan@sent.com> <20230403201839.4097845-7-zi.yan@sent.com> <9dd96da-efa2-5123-20d4-4992136ef3ad@google.com>
+        Sun, 16 Apr 2023 15:56:21 -0400
+Received: from st43p00im-zteg10073501.me.com (st43p00im-zteg10073501.me.com [17.58.63.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B621C5
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 12:56:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
+        t=1681674979; bh=O2TgTgX7Cq2LJV67gutPlIPCO8dEwx+fpuc5YkEkMmg=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=XiM+52YdQzHlNrICnD+SpK/PumIEIs8y6iUR1ed6CEDCdOcJkhnx55KiZBI3ClnlR
+         yt4rOX2A8yuFRrT7QadN9Wjsm/dycbOo7vNnI/0sfuycIH+MwwIzDO8mhLZ5n3set4
+         l+JPOXApJelaJsInpXAQXEiH6gZpCZW+DgFT6aUvkxFGZ/zJjN+Z/igEp5wJpeoeX7
+         WWJt46cw+Zg1gnIuVewk8LrJRxgdW6+MjO+JbxTHeKPEfI2SQ+uJ8vrQ+5Hx/BMhHU
+         hV+jMVdnnuqa0lZPKLvUpyEfh6qohD7Xvv84a4V6myVVRuDshccQet2i5krPaAeLBm
+         pbXbt3Gmo48JA==
+Received: from localhost (st43p00im-dlb-asmtp-mailmevip.me.com [17.42.251.41])
+        by st43p00im-zteg10073501.me.com (Postfix) with ESMTPSA id B440936071D;
+        Sun, 16 Apr 2023 19:56:18 +0000 (UTC)
+From:   Alain Volmat <avolmat@me.com>
+To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc:     patrice.chotard@foss.st.com, Alain Volmat <avolmat@me.com>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] net: ethernet: stmmac: dwmac-sti: remove stih415/stih416/stid127
+Date:   Sun, 16 Apr 2023 21:55:23 +0200
+Message-Id: <20230416195523.61075-1-avolmat@me.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: -BnxXXwNbnJuEUZ46-1HnoonediJYxBc
+X-Proofpoint-ORIG-GUID: -BnxXXwNbnJuEUZ46-1HnoonediJYxBc
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.816,17.0.605.474.0000000_definitions?=
+ =?UTF-8?Q?=3D2022-01-17=5F04:2020-02-14=5F02,2022-01-17=5F04,2020-01-23?=
+ =?UTF-8?Q?=5F02_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=0
+ clxscore=1015 phishscore=0 malwarescore=0 mlxscore=0 adultscore=0
+ bulkscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2304160188
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> As this code stands, truncate a 2M huge page at 1M and you get two 1M
-> pieces (one then discarded) - nice; but truncate it at 1M+1 and you get
-> lots of order 2 (forced up from 1) pieces.  Seems weird, and not worth
-> the effort.
+Remove no more supported platforms (stih415/stih416 and stid127)
 
-I've probably said that wrong: truncate at 1M+1 and you'd get lots of
-order 0 pieces.
+Signed-off-by: Alain Volmat <avolmat@me.com>
+Acked-by: Jakub Kicinski <kuba@kernel.org>
+---
+Patch sent previously as part of serie: https://lore.kernel.org/all/20230209091659.1409-8-avolmat@me.com/
 
-Hugh
+ .../net/ethernet/stmicro/stmmac/dwmac-sti.c   | 60 +------------------
+ 1 file changed, 1 insertion(+), 59 deletions(-)
+
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-sti.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-sti.c
+index be3b1ebc06ab..465ce66ef9c1 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-sti.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-sti.c
+@@ -35,7 +35,7 @@
+ #define IS_PHY_IF_MODE_GBIT(iface)	(IS_PHY_IF_MODE_RGMII(iface) || \
+ 					 iface == PHY_INTERFACE_MODE_GMII)
+ 
+-/* STiH4xx register definitions (STiH415/STiH416/STiH407/STiH410 families)
++/* STiH4xx register definitions (STiH407/STiH410 families)
+  *
+  * Below table summarizes the clock requirement and clock sources for
+  * supported phy interface modes with link speeds.
+@@ -75,27 +75,6 @@
+ #define STIH4XX_ETH_SEL_INTERNAL_NOTEXT_PHYCLK	BIT(7)
+ #define STIH4XX_ETH_SEL_TXCLK_NOT_CLK125	BIT(6)
+ 
+-/* STiD127 register definitions
+- *-----------------------
+- * src	 |BIT(6)| BIT(7)|
+- *-----------------------
+- * MII   |  1	|   n/a	|
+- *-----------------------
+- * RMII  |  n/a	|   1	|
+- * clkgen|	|	|
+- *-----------------------
+- * RMII  |  n/a	|   0	|
+- * phyclk|	|	|
+- *-----------------------
+- * RGMII |  1	|  n/a	|
+- * clkgen|	|	|
+- *-----------------------
+- */
+-
+-#define STID127_RETIME_SRC_MASK			GENMASK(7, 6)
+-#define STID127_ETH_SEL_INTERNAL_NOTEXT_PHYCLK	BIT(7)
+-#define STID127_ETH_SEL_INTERNAL_NOTEXT_TXCLK	BIT(6)
+-
+ #define ENMII_MASK	GENMASK(5, 5)
+ #define ENMII		BIT(5)
+ #define EN_MASK		GENMASK(1, 1)
+@@ -194,36 +173,6 @@ static void stih4xx_fix_retime_src(void *priv, u32 spd)
+ 			   stih4xx_tx_retime_val[src]);
+ }
+ 
+-static void stid127_fix_retime_src(void *priv, u32 spd)
+-{
+-	struct sti_dwmac *dwmac = priv;
+-	u32 reg = dwmac->ctrl_reg;
+-	u32 freq = 0;
+-	u32 val = 0;
+-
+-	if (dwmac->interface == PHY_INTERFACE_MODE_MII) {
+-		val = STID127_ETH_SEL_INTERNAL_NOTEXT_TXCLK;
+-	} else if (dwmac->interface == PHY_INTERFACE_MODE_RMII) {
+-		if (!dwmac->ext_phyclk) {
+-			val = STID127_ETH_SEL_INTERNAL_NOTEXT_PHYCLK;
+-			freq = DWMAC_50MHZ;
+-		}
+-	} else if (IS_PHY_IF_MODE_RGMII(dwmac->interface)) {
+-		val = STID127_ETH_SEL_INTERNAL_NOTEXT_TXCLK;
+-		if (spd == SPEED_1000)
+-			freq = DWMAC_125MHZ;
+-		else if (spd == SPEED_100)
+-			freq = DWMAC_25MHZ;
+-		else if (spd == SPEED_10)
+-			freq = DWMAC_2_5MHZ;
+-	}
+-
+-	if (freq)
+-		clk_set_rate(dwmac->clk, freq);
+-
+-	regmap_update_bits(dwmac->regmap, reg, STID127_RETIME_SRC_MASK, val);
+-}
+-
+ static int sti_dwmac_set_mode(struct sti_dwmac *dwmac)
+ {
+ 	struct regmap *regmap = dwmac->regmap;
+@@ -408,14 +357,7 @@ static const struct sti_dwmac_of_data stih4xx_dwmac_data = {
+ 	.fix_retime_src = stih4xx_fix_retime_src,
+ };
+ 
+-static const struct sti_dwmac_of_data stid127_dwmac_data = {
+-	.fix_retime_src = stid127_fix_retime_src,
+-};
+-
+ static const struct of_device_id sti_dwmac_match[] = {
+-	{ .compatible = "st,stih415-dwmac", .data = &stih4xx_dwmac_data},
+-	{ .compatible = "st,stih416-dwmac", .data = &stih4xx_dwmac_data},
+-	{ .compatible = "st,stid127-dwmac", .data = &stid127_dwmac_data},
+ 	{ .compatible = "st,stih407-dwmac", .data = &stih4xx_dwmac_data},
+ 	{ }
+ };
+-- 
+2.34.1
+
