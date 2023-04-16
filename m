@@ -2,214 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C550C6E34DC
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 06:07:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D5206E34F7
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 06:32:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbjDPEHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 00:07:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56446 "EHLO
+        id S229894AbjDPEcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 00:32:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjDPEHQ (ORCPT
+        with ESMTP id S229647AbjDPEcI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 00:07:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6BE62103;
-        Sat, 15 Apr 2023 21:07:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 39DDF60BAF;
-        Sun, 16 Apr 2023 04:07:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9486CC4339B;
-        Sun, 16 Apr 2023 04:07:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681618033;
-        bh=PnZee4ox3MN3wDRCOgcUawCEXDLiUISLzgnloY07THY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RdSJrKtJVHsXZ7GotEqMxSNZj+oohUOyTIhUs1FshyuiAwM2VsHoExNbaf/o0M96+
-         PMBy7tZooX6jekPLD+Y9a68fR0pVQXiHfi118vHPEzTfCmSyMNo4xtG7HWh6+6zIPv
-         LmEjD28/iru2wBEEX7qlHun0J4sM9NDP7L946MZX2tgGbtiqckm/uB8jzrW7uGIdix
-         b7mNqbefdpv03RvrKaUuAbXnb/pubeDXU/OKxaf2s14QkglGX0i12W2fNl8SmEB+qz
-         yv4Fruq+/XLaTykNm72dwMSL0ulMaBBnxjC0JI1gEfi2KdDnYX0VgMlC314nBddkmT
-         PsMvcG91UO3/A==
-Received: by mail-oi1-f173.google.com with SMTP id be20so685687oib.4;
-        Sat, 15 Apr 2023 21:07:13 -0700 (PDT)
-X-Gm-Message-State: AAQBX9dX3bicB9cPdt6RorxjTXB//Ii3U5BFc6fcJ1cEe0SjyfBpTXMh
-        h0Le6L+tI2Csp3O1ZGhlOAauY70AKjUQe61okR0=
-X-Google-Smtp-Source: AKy350YBI8d2ttMFXHqS85NoLj8ZZ1npjgQElgKAnQ9Sei6c44WhVKj5yko+6aKtmr2PoeRtxtZ0iXWJ3etOJ+wzePE=
-X-Received: by 2002:aca:a84b:0:b0:38c:b261:33e2 with SMTP id
- r72-20020acaa84b000000b0038cb26133e2mr591742oie.11.1681618032878; Sat, 15 Apr
- 2023 21:07:12 -0700 (PDT)
+        Sun, 16 Apr 2023 00:32:08 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF471985
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 21:32:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681619524; x=1713155524;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Z8x+/0VHhdhz3hlyITWYBi0KQKi25SsWnrQQAjnJJwg=;
+  b=RFyToCzBzTXyrIS5b+rNa2F8MaYvFcJ9Ocq58BdopLv9ls16OgwQ2ahO
+   etkwknmCtebeeH4DF/SwnJFbdn/azyRHC5NQsKY4Pit4+UFVHW0fAgVC7
+   L8GWtV02rp4wJmhPCfVYSfIhI8kQMh6yl7kIgwGbtLg9sT2cFB4GOuVCy
+   1qO2TheRxP9tJQIkz4PTrZskUCp+XMFW576onUVLXqQl9JAClPKjIjRJo
+   /TJlqsIRbhW177RKvvSEC0FramoQBkUqTAjh6IvmM01pJpKK11jK6qTgg
+   5KFO3zj8MxtDyYryxFrAxCk+YZ0ALL0ghpxF+8l7zbnJkfcdXPafVacdL
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="346546716"
+X-IronPort-AV: E=Sophos;i="5.99,201,1677571200"; 
+   d="scan'208";a="346546716"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2023 21:32:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="667743560"
+X-IronPort-AV: E=Sophos;i="5.99,201,1677571200"; 
+   d="scan'208";a="667743560"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 15 Apr 2023 21:32:01 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pnu3U-000bW7-2Q;
+        Sun, 16 Apr 2023 04:32:00 +0000
+Date:   Sun, 16 Apr 2023 12:31:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Xingui Yang <yangxingui@huawei.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Qi Liu <liuqi115@huawei.com>,
+        John Garry <john.garry@huawei.com>
+Subject: drivers/scsi/hisi_sas/hisi_sas_v3_hw.c:2168:43: sparse: sparse:
+ restricted __le32 degrades to integer
+Message-ID: <202304161254.NztCVZIO-lkp@intel.com>
 MIME-Version: 1.0
-References: <20230320040839.660475-1-bgray@linux.ibm.com> <20230320040839.660475-2-bgray@linux.ibm.com>
-In-Reply-To: <20230320040839.660475-2-bgray@linux.ibm.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 16 Apr 2023 13:06:36 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASxnyFmM1JhuDatQfb4WMy616LzAqS3JzmNxb3wJGA52g@mail.gmail.com>
-Message-ID: <CAK7LNASxnyFmM1JhuDatQfb4WMy616LzAqS3JzmNxb3wJGA52g@mail.gmail.com>
-Subject: Re: [PATCH 2/2] initramfs: Encode dependency on KBUILD_BUILD_TIMESTAMP
-To:     Benjamin Gray <bgray@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 1:09=E2=80=AFPM Benjamin Gray <bgray@linux.ibm.com>=
- wrote:
->
-> gen_initramfs.sh has an internal dependency on KBUILD_BUILD_TIMESTAMP
-> for generating file mtimes that is not exposed to make, so changing
-> KBUILD_BUILD_TIMESTAMP will not trigger a rebuild of the archive.
->
-> Declare the mtime date as a new parameter to gen_initramfs.sh to encode
-> KBUILD_BUILD_TIMESTAMP in the shell command, thereby making make aware
-> of the dependency.
->
-> It will rebuild if KBUILD_BUILD_TIMESTAMP changes or is newly set/unset.
-> It will _not_ rebuild if KBUILD_BUILD_TIMESTAMP is unset before and
-> after. This should be fine for anyone who doesn't care about setting
-> specific build times in the first place.
->
-> Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
->
-> ---
->
-> Ran into this while debugging the issue in the first patch. Made for a
-> very perplexing debug session before we worked out the state wasn't
-> being rebuilt.
-> ---
->  usr/Makefile         |  2 ++
->  usr/gen_initramfs.sh | 16 +++++++++-------
->  2 files changed, 11 insertions(+), 7 deletions(-)
->
-> diff --git a/usr/Makefile b/usr/Makefile
-> index 59d9e8b07a01..2aa386cf48d6 100644
-> --- a/usr/Makefile
-> +++ b/usr/Makefile
-> @@ -64,6 +64,7 @@ quiet_cmd_initfs =3D GEN     $@
->         $(CONFIG_SHELL) $< -o $@ -l $(obj)/.initramfs_data.cpio.d \
->         $(if $(CONFIG_INITRAMFS_ROOT_UID), -u $(CONFIG_INITRAMFS_ROOT_UID=
-)) \
->         $(if $(CONFIG_INITRAMFS_ROOT_GID), -g $(CONFIG_INITRAMFS_ROOT_GID=
-)) \
-> +       $(if $(KBUILD_BUILD_TIMESTAMP), -d $(KBUILD_BUILD_TIMESTAMP)) \
->         $(ramfs-input)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   3e7bb4f2461710b70887704af7f175383251088e
+commit: 62413199cd6d2906c121c2dfa3d7b82fd05f08db scsi: hisi_sas: Modify v3 HW SSP underflow error processing
+date:   1 year, 2 months ago
+config: ia64-randconfig-s043-20230416 (https://download.01.org/0day-ci/archive/20230416/202304161254.NztCVZIO-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=62413199cd6d2906c121c2dfa3d7b82fd05f08db
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 62413199cd6d2906c121c2dfa3d7b82fd05f08db
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=ia64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/scsi/hisi_sas/
 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304161254.NztCVZIO-lkp@intel.com/
 
+sparse warnings: (new ones prefixed by >>)
+>> drivers/scsi/hisi_sas/hisi_sas_v3_hw.c:2168:43: sparse: sparse: restricted __le32 degrades to integer
+   drivers/scsi/hisi_sas/hisi_sas_v3_hw.c:2169:46: sparse: sparse: restricted __le32 degrades to integer
+   drivers/scsi/hisi_sas/hisi_sas_v3_hw.c:4427:35: sparse: sparse: incorrect type in argument 4 (different base types) @@     expected restricted __le32 [usertype] *[assigned] ptr @@     got unsigned int * @@
+   drivers/scsi/hisi_sas/hisi_sas_v3_hw.c:4427:35: sparse:     expected restricted __le32 [usertype] *[assigned] ptr
+   drivers/scsi/hisi_sas/hisi_sas_v3_hw.c:4427:35: sparse:     got unsigned int *
 
-If I apply this patch, I see a build error.
+vim +2168 drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
 
+  2144	
+  2145	static bool
+  2146	slot_err_v3_hw(struct hisi_hba *hisi_hba, struct sas_task *task,
+  2147		       struct hisi_sas_slot *slot)
+  2148	{
+  2149		struct task_status_struct *ts = &task->task_status;
+  2150		struct hisi_sas_complete_v3_hdr *complete_queue =
+  2151				hisi_hba->complete_hdr[slot->cmplt_queue];
+  2152		struct hisi_sas_complete_v3_hdr *complete_hdr =
+  2153				&complete_queue[slot->cmplt_queue_slot];
+  2154		struct hisi_sas_err_record_v3 *record =
+  2155				hisi_sas_status_buf_addr_mem(slot);
+  2156		u32 dma_rx_err_type = le32_to_cpu(record->dma_rx_err_type);
+  2157		u32 trans_tx_fail_type = le32_to_cpu(record->trans_tx_fail_type);
+  2158		u32 dw3 = le32_to_cpu(complete_hdr->dw3);
+  2159	
+  2160		switch (task->task_proto) {
+  2161		case SAS_PROTOCOL_SSP:
+  2162			if (dma_rx_err_type & RX_DATA_LEN_UNDERFLOW_MSK) {
+  2163				/*
+  2164				 * If returned response frame is incorrect because of data underflow,
+  2165				 * but I/O information has been written to the host memory, we examine
+  2166				 * response IU.
+  2167				 */
+> 2168				if (!(complete_hdr->dw0 & CMPLT_HDR_RSPNS_GOOD_MSK) &&
+  2169					(complete_hdr->dw0 & CMPLT_HDR_RSPNS_XFRD_MSK))
+  2170					return false;
+  2171	
+  2172				ts->residual = trans_tx_fail_type;
+  2173				ts->stat = SAS_DATA_UNDERRUN;
+  2174			} else if (dw3 & CMPLT_HDR_IO_IN_TARGET_MSK) {
+  2175				ts->stat = SAS_QUEUE_FULL;
+  2176				slot->abort = 1;
+  2177			} else {
+  2178				ts->stat = SAS_OPEN_REJECT;
+  2179				ts->open_rej_reason = SAS_OREJ_RSVD_RETRY;
+  2180			}
+  2181			break;
+  2182		case SAS_PROTOCOL_SATA:
+  2183		case SAS_PROTOCOL_STP:
+  2184		case SAS_PROTOCOL_SATA | SAS_PROTOCOL_STP:
+  2185			if (dma_rx_err_type & RX_DATA_LEN_UNDERFLOW_MSK) {
+  2186				ts->residual = trans_tx_fail_type;
+  2187				ts->stat = SAS_DATA_UNDERRUN;
+  2188			} else if (dw3 & CMPLT_HDR_IO_IN_TARGET_MSK) {
+  2189				ts->stat = SAS_PHY_DOWN;
+  2190				slot->abort = 1;
+  2191			} else {
+  2192				ts->stat = SAS_OPEN_REJECT;
+  2193				ts->open_rej_reason = SAS_OREJ_RSVD_RETRY;
+  2194			}
+  2195			hisi_sas_sata_done(task, slot);
+  2196			break;
+  2197		case SAS_PROTOCOL_SMP:
+  2198			ts->stat = SAS_SAM_STAT_CHECK_CONDITION;
+  2199			break;
+  2200		default:
+  2201			break;
+  2202		}
+  2203		return true;
+  2204	}
+  2205	
 
-$ make -j16 KBUILD_BUILD_TIMESTAMP=3D"$(date)"
-[snip]
-  GEN     usr/initramfs_data.cpio
-  usr/gen_initramfs.sh: Cannot open 'Apr'
-make[2]: *** [usr/Makefile:76: usr/initramfs_data.cpio] Error 1
-make[1]: *** [scripts/Makefile.build:494: usr] Error 2
-make[1]: *** Waiting for unfinished jobs....
-
-
-
-
-Because KBUILD_BUILD_TIMESTAMP may contain spaces
-depending on the format, init/Makefile and
-kernel/gen_kheaders.sh surround the date with
-double-quotes.
-
-
-Double-quoting it in the same way fixes the issue.
-
-$(if $(KBUILD_BUILD_TIMESTAMP), -d "$(KBUILD_BUILD_TIMESTAMP)") \
-
-
-
-
-
-
-
->  # We rebuild initramfs_data.cpio if:
-> @@ -71,6 +72,7 @@ quiet_cmd_initfs =3D GEN     $@
->  # 2) There are changes in which files are included (added or deleted)
->  # 3) If gen_init_cpio are newer than initramfs_data.cpio
->  # 4) Arguments to gen_initramfs.sh changes
-> +# 5) KBUILD_BUILD_TIMESTAMP is changed
-
-
-This is unneeded because the change of KBUILD_BUILD_TIMESTAMP
-is contained in
-
-  4) Arguments to gen_initramfs.sh changes
-
-
-
-
-
-
-
->  $(obj)/initramfs_data.cpio: $(src)/gen_initramfs.sh $(obj)/gen_init_cpio=
- $(deps_initramfs) FORCE
->         $(call if_changed,initfs)
->
-> diff --git a/usr/gen_initramfs.sh b/usr/gen_initramfs.sh
-> index 63476bb70b41..14b5782f961a 100755
-> --- a/usr/gen_initramfs.sh
-> +++ b/usr/gen_initramfs.sh
-> @@ -23,6 +23,7 @@ $0 [-o <file>] [-l <dep_list>] [-u <uid>] [-g <gid>] {-=
-d | <cpio_source>} ...
->         -g <gid>       Group ID to map to group ID 0 (root).
->                        <gid> is only meaningful if <cpio_source> is a
->                        directory.  "squash" forces all files to gid 0.
-> +       -d <date>      Use date for all file mtime values
->         <cpio_source>  File list or directory for cpio archive.
->                        If <cpio_source> is a .cpio file it will be used
->                        as direct input to initramfs.
-> @@ -190,6 +191,7 @@ prog=3D$0
->  root_uid=3D0
->  root_gid=3D0
->  dep_list=3D
-> +timestamp=3D
->  cpio_list=3D$(mktemp ${TMPDIR:-/tmp}/cpiolist.XXXXXX)
->  output=3D"/dev/stdout"
->
-> @@ -218,6 +220,13 @@ while [ $# -gt 0 ]; do
->                         [ "$root_gid" =3D "-1" ] && root_gid=3D$(id -g ||=
- echo 0)
->                         shift
->                         ;;
-> +               "-d")   # date for file mtimes
-> +                       timestamp=3D"$(date -d"$1" +%s || :)"
-> +                       if test -n "$timestamp"; then
-> +                               timestamp=3D"-t $timestamp"
-> +                       fi
-> +                       shift
-> +                       ;;
->                 "-h")
->                         usage
->                         exit 0
-> @@ -237,11 +246,4 @@ done
->
->  # If output_file is set we will generate cpio archive
->  # we are careful to delete tmp files
-> -timestamp=3D
-> -if test -n "$KBUILD_BUILD_TIMESTAMP"; then
-> -       timestamp=3D"$(date -d"$KBUILD_BUILD_TIMESTAMP" +%s || :)"
-> -       if test -n "$timestamp"; then
-> -               timestamp=3D"-t $timestamp"
-> -       fi
-> -fi
->  usr/gen_init_cpio $timestamp $cpio_list > $output
-> --
-> 2.39.2
->
-
-
---=20
-Best Regards
-Masahiro Yamada
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
