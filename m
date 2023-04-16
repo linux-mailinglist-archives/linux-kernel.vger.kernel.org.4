@@ -2,275 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 372296E3A9D
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 19:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E82A36E3AA9
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 19:37:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbjDPRe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 13:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45502 "EHLO
+        id S229648AbjDPRhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 13:37:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbjDPReS (ORCPT
+        with ESMTP id S229578AbjDPRhO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 13:34:18 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210EA35B7;
-        Sun, 16 Apr 2023 10:34:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1681666442; bh=AOkjniAjsX5UuN+KSlNpkEVvIA/wgxBbj3kApEEslcE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GJOmOysblNX5Q8ZwQpm/v1z1J5TX3AVKGLML2yhfWGaoHPY7cLCHLwpUqjJ6PVG+T
-         9KW0tllnpic4aN2LGKXFhPNmNHb3gOyqZdjbOFmkVkGSzTzkkbfFnejxTq8WvgMcCb
-         uNphAXpAWfLdoLgV6zYtKzMVt9TTq8Lvwo6+3pgc=
-Received: from ld50.lan (unknown [101.228.138.124])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 8E23A6018C;
-        Mon, 17 Apr 2023 01:34:01 +0800 (CST)
-From:   WANG Xuerui <kernel@xen0n.name>
-To:     loongarch@lists.linux.dev
-Cc:     WANG Xuerui <git@xen0n.name>, Huacai Chen <chenhuacai@kernel.org>,
-        Xi Ruoyao <xry111@xry111.site>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] LoongArch: Relay BCE exceptions to userland as SIGSEGVs with si_code=SEGV_BNDERR
-Date:   Mon, 17 Apr 2023 01:33:26 +0800
-Message-Id: <20230416173326.3995295-3-kernel@xen0n.name>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230416173326.3995295-1-kernel@xen0n.name>
-References: <20230416173326.3995295-1-kernel@xen0n.name>
+        Sun, 16 Apr 2023 13:37:14 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1236310CB
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 10:37:13 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id k101-20020a9d19ee000000b006a14270bc7eso8720822otk.6
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 10:37:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681666632; x=1684258632;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=p3MXe62Qv7CtzPpmu8rvoy3GoIPPlkCTC8+8F1j3AqY=;
+        b=R3Du7y6BhPUpvvixwE3OW/ohBtepqNDlfE90M9shQrOx76Z/fhM7fXKhouOtlYIE+p
+         id5Tfj4F61nLw8I3nS+kX3+YJJhXbqmYdBf9V391Rcb4Rtz4UFx8IHcJ9J6aJHMi1v9e
+         w58oe5JFw0hM2C9pzJ1Q40RXdP4sNyB4tHYjlAC9lORFWOSQnV8B3SRjp1+v9JYqiSbI
+         KbzanzvSmArETFunvri6vSJtEzACxV8Qsok5T8PYxPh8bHzbw1KPQG4o8nCaAE4vTe43
+         btGEJYfGhQeAIzjgyhuPa0phpUCdHgrf4k/jZUIGWNc02s/vf/i7fio1kejjjRG7StE0
+         mpew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681666632; x=1684258632;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=p3MXe62Qv7CtzPpmu8rvoy3GoIPPlkCTC8+8F1j3AqY=;
+        b=cvcm1Ajl0KiDH2Tg91m/oamDl+8T7QpZw8pl6jdz0QtNXfdbprgdJ7isJmGOjx8gVa
+         wsW5Np/YQANP5XpPuZO4Te8vR3RrlCt9mP9n6IPJOY+EqdTOuvea1+/mHa+z+iUC3mfU
+         BkVj6dKuxMo8TeDkTZJTCCPUqCu4ly6vrPnoN1pS766Z5+vWUFfWkoDFAIsocqncFyzi
+         vvm97e5WvOMNuh6W3zy5EP/zMW93LnsYl0eXgdCSU6ndu5XTObLdyBrdSvesT8JyrhPQ
+         yEXktrBIZULeGua2vRG7P8asol7Yx29077kRs/ZY3JjfsAzxXrd/E02ti/BHDZScimSa
+         DsTQ==
+X-Gm-Message-State: AAQBX9f7/C6/ZfIIlKBgBEcGmo+fiWUZn4tsSqZ0Od3Er41ZqLxxBxz5
+        80cBsAwipI4YuUpOokV6Jl8njQ==
+X-Google-Smtp-Source: AKy350bXVC/EzCQENYaq2Vy3eSjms9K00QDVO1VZxCNm3FLEvQ9qdIhKHUxU7ogt5zyfoN193fznHw==
+X-Received: by 2002:a05:6830:10c9:b0:6a5:e8da:a216 with SMTP id z9-20020a05683010c900b006a5e8daa216mr513558oto.27.1681666632369;
+        Sun, 16 Apr 2023 10:37:12 -0700 (PDT)
+Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id v16-20020a05683011d000b0069457b86060sm3771038otq.47.2023.04.16.10.37.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Apr 2023 10:37:11 -0700 (PDT)
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Cameron <jic23@kernel.org>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        William Breathitt Gray <william.gray@linaro.org>
+Subject: [PATCH 0/3] Add Intel 8254 Counter support
+Date:   Sun, 16 Apr 2023 13:36:52 -0400
+Message-Id: <cover.1681665189.git.william.gray@linaro.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: WANG Xuerui <git@xen0n.name>
+The Intel 8254 PIT first appeared in the early 1980s and was used
+initially in IBM PC compatibles. The popularity of the original Intel
+825x family of chips led to many subsequent variants and clones of the
+interface in various chips and integrated circuits. Although still
+popular, interfaces compatible with the Intel 8254 PIT are nowdays
+typically found embedded in larger VLSI processing chips and FPGA
+components rather than as discrete ICs.
 
-SEGV_BNDERR was introduced initially for supporting the Intel MPX, but
-fell into disuse after the MPX support was removed. The LoongArch
-bounds-checking instructions behave very differently than MPX, but
-overall the interface is still kind of suitable for conveying the
-information to userland when bounds-checking assertions trigger, so we
-wouldn't have to invent more UAPI. Specifically, when the BCE triggers,
-a SEGV_BNDERR is sent to userland, with si_addr set to the out-of-bounds
-address or value (in asrt{gt,le}'s case), and one of si_lower or
-si_upper set to the configured bound depending on the faulting
-instruction. The other bound is set to either 0 or ULONG_MAX to resemble
-a range with both lower and upper bounds.
+This patch series introduces a library to provide support for interfaces
+compatible with the venerable Intel 8254 Programmable Interval Timer
+(PIT). Modules wanting access to the i8254 library should select the
+newly introduced CONFIG_I8254 Kconfig option, and import the I8254
+symbol namespace.
 
-Note that it is possible to have si_addr == si_lower in case of failing
-asrtgt or {ld,st}gt, because those instructions test for strict
-greater-than relationship. This should not pose a problem for userland,
-though, because the faulting PC is available for the application to
-associate back to the exact instruction for figuring out the
-expectation.
+Support for the i8254 is added in respective follow-up patches for the
+104-dio-48e driver and stx104 driver whose devices feature i8254
+compatible interfaces. Several additional dependencies are necessary for
+the 104-dio-48e [0][1][2] and stx104 [3][4].
 
-Somewhat contrary to the ISA manual's wording, CSR.BADV does not seem to
-contain the out-of-bounds value when BCE occurs, so we have to resort to
-pattern-matching the instruction word to pull out the appropriate
-operand ourselves from the context.
+Due to the dependency requirements, I can take the i8254 introduction
+patch through the Counter tree and provide an immutable branch that can
+be merged to the GPIO and IIO trees; the 104-dio-48e patch and stx104
+patch could then be picked up separately by the respective subsystem
+maintainers.
 
-Example exception context generated by a faulting `asrtgt.d t0, t1`
-(assert t0 > t1 or BCE) with t0=100 and t1=200:
+[0] https://lore.kernel.org/all/05a878d340251b781387db4b6490f288e41a651c.1680543810.git.william.gray@linaro.org/
+[1] https://lore.kernel.org/all/20230208105542.9459-1-william.gray@linaro.org/
+[2] https://lore.kernel.org/all/cover.1679323449.git.william.gray@linaro.org/
+[3] https://lore.kernel.org/all/20230318185503.341914-1-william.gray@linaro.org/
+[4] https://lore.kernel.org/all/cover.1680790580.git.william.gray@linaro.org/
 
-> tp 00007ffff2f2f180 sp 00007ffffbf9fb80 a0 0000000000000002
-> a1 00007ffffbf9fce8 a2 00007ffffbf9fd00 a3 00007ffff2ed4558
-> a4 0000000000000000 a5 00007ffff2f044c8 a6 00007ffffbf9fce0
-> a7 fffffffffffff000 t0 0000000000000064 t1 00000000000000c8
-> t2 00007ffffbfa2d5e t3 00007ffff2f12aa0 t4 00007ffff2ed6158
-> t5 00007ffff2ed6158 t6 000000000000002e t7 0000000003d8f538
-> t8 0000000000000005 u0 0000000000000000 s9 0000000000000000
-> s0 00007ffffbf9fce8 s1 0000000000000002 s2 0000000000000000
-> s3 00007ffff2f2c038 s4 0000555555820610 s5 00007ffff2ed5000
-> s6 0000555555827e38 s7 00007ffffbf9fd00 s8 0000555555827e38
->   era: 00005555558206a4
->    ra: 00007ffff2d854fc
->  crmd: 000000b0 (-WE DACM=CC DACF=CC +PG -DA -IE PLV0)
->  prmd: 00000007 (-PWE +PIE PPLV3)
->  euen: 00000000 (-BTE -ASXE -SXE -FPE)
->  ecfg: 0007181c (VS=7 LIE=2-4,11-12)
-> estat: 000a0000 [BCE] (EsubCode=0 ECode=10 IS=)
->  prid: 0014c010 (Loongson-64bit)
+William Breathitt Gray (3):
+  counter: i8254: Introduce the Intel 8254 interface library module
+  gpio: 104-dio-48e: Add Counter/Timer support
+  iio: addac: stx104: Add 8254 Counter/Timer support
 
-Signed-off-by: WANG Xuerui <git@xen0n.name>
----
- arch/loongarch/include/asm/kdebug.h |   1 +
- arch/loongarch/kernel/genex.S       |   1 +
- arch/loongarch/kernel/traps.c       | 107 ++++++++++++++++++++++++++++
- 3 files changed, 109 insertions(+)
+ Documentation/ABI/testing/sysfs-bus-counter |  54 +++
+ MAINTAINERS                                 |   7 +
+ drivers/counter/Kconfig                     |  15 +
+ drivers/counter/Makefile                    |   1 +
+ drivers/counter/counter-sysfs.c             |   8 +-
+ drivers/counter/i8254.c                     | 447 ++++++++++++++++++++
+ drivers/gpio/Kconfig                        |   1 +
+ drivers/gpio/gpio-104-dio-48e.c             | 127 +++++-
+ drivers/iio/addac/Kconfig                   |   1 +
+ drivers/iio/addac/stx104.c                  |  61 ++-
+ include/linux/i8254.h                       |  21 +
+ include/uapi/linux/counter.h                |   6 +
+ 12 files changed, 730 insertions(+), 19 deletions(-)
+ create mode 100644 drivers/counter/i8254.c
+ create mode 100644 include/linux/i8254.h
 
-diff --git a/arch/loongarch/include/asm/kdebug.h b/arch/loongarch/include/asm/kdebug.h
-index d721b4b82fae..793a8fdfeb90 100644
---- a/arch/loongarch/include/asm/kdebug.h
-+++ b/arch/loongarch/include/asm/kdebug.h
-@@ -18,6 +18,7 @@ enum die_val {
- 	DIE_SSTEPBP,
- 	DIE_UPROBE,
- 	DIE_UPROBE_XOL,
-+	DIE_BOUNDS_CHECK,
- };
- 
- #endif /* _ASM_LOONGARCH_KDEBUG_H */
-diff --git a/arch/loongarch/kernel/genex.S b/arch/loongarch/kernel/genex.S
-index 44ff1ff64260..78f066384657 100644
---- a/arch/loongarch/kernel/genex.S
-+++ b/arch/loongarch/kernel/genex.S
-@@ -82,6 +82,7 @@ SYM_FUNC_END(except_vec_cex)
- 
- 	BUILD_HANDLER ade ade badv
- 	BUILD_HANDLER ale ale badv
-+	BUILD_HANDLER bce bce none
- 	BUILD_HANDLER bp bp none
- 	BUILD_HANDLER fpe fpe fcsr
- 	BUILD_HANDLER fpu fpu none
-diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
-index a060481198af..c6fc421a5983 100644
---- a/arch/loongarch/kernel/traps.c
-+++ b/arch/loongarch/kernel/traps.c
-@@ -36,6 +36,7 @@
- #include <asm/break.h>
- #include <asm/cpu.h>
- #include <asm/fpu.h>
-+#include <asm/inst.h>
- #include <asm/loongarch.h>
- #include <asm/mmu_context.h>
- #include <asm/pgtable.h>
-@@ -51,6 +52,7 @@
- 
- extern asmlinkage void handle_ade(void);
- extern asmlinkage void handle_ale(void);
-+extern asmlinkage void handle_bce(void);
- extern asmlinkage void handle_sys(void);
- extern asmlinkage void handle_bp(void);
- extern asmlinkage void handle_ri(void);
-@@ -589,6 +591,110 @@ static void bug_handler(struct pt_regs *regs)
- 	}
- }
- 
-+asmlinkage void noinstr do_bce(struct pt_regs *regs)
-+{
-+	irqentry_state_t state = irqentry_enter(regs);
-+	bool user = user_mode(regs);
-+	unsigned long era = exception_era(regs);
-+	union loongarch_instruction insn;
-+	u64 badv = 0, lower = 0, upper = ULONG_MAX;
-+
-+	if (regs->csr_prmd & CSR_PRMD_PIE)
-+		local_irq_enable();
-+
-+	current->thread.trap_nr = read_csr_excode();
-+
-+	/*
-+	 * notify the kprobe handlers, if instruction is likely to
-+	 * pertain to them.
-+	 */
-+	if (notify_die(DIE_BOUNDS_CHECK, "Bounds check error", regs, 0,
-+		       current->thread.trap_nr, SIGSEGV) == NOTIFY_STOP)
-+		goto out;
-+
-+	__show_regs(regs);
-+	die_if_kernel("Bounds check error in kernel code", regs);
-+
-+	/*
-+	 * Pull out the address that failed bounds checking, and the lower /
-+	 * upper bound, by minimally looking at the faulting instruction word
-+	 * and reading from the correct register.
-+	 *
-+	 * Somewhat counter-intuitively (but kinds of makes sense), BCEs
-+	 * during checked memory accesses *do not* update CSR.BADV. So badv
-+	 * still comes from regs[rj] in these cases.
-+	 */
-+	if (__get_inst(&insn.word, (u32 *)era, user))
-+		goto bad_era;
-+	switch (insn.reg3_format.opcode) {
-+	case asrtle_op:
-+		if (insn.reg3_format.rd != 0)
-+			/* not asrtle */
-+			break;
-+		badv = regs->regs[insn.reg3_format.rj];
-+		upper = regs->regs[insn.reg3_format.rk];
-+		break;
-+
-+	case asrtgt_op:
-+		if (insn.reg3_format.rd != 0)
-+			/* not asrtgt */
-+			break;
-+		badv = regs->regs[insn.reg3_format.rj];
-+		lower = regs->regs[insn.reg3_format.rk];
-+		break;
-+
-+	case fldles_op:
-+	case fldled_op:
-+	case fstles_op:
-+	case fstled_op:
-+	case ldleb_op:
-+	case ldleh_op:
-+	case ldlew_op:
-+	case ldled_op:
-+	case stleb_op:
-+	case stleh_op:
-+	case stlew_op:
-+	case stled_op:
-+		badv = regs->regs[insn.reg3_format.rj];
-+		upper = regs->regs[insn.reg3_format.rk];
-+		break;
-+
-+	case fldgts_op:
-+	case fldgtd_op:
-+	case fstgts_op:
-+	case fstgtd_op:
-+	case ldgtb_op:
-+	case ldgth_op:
-+	case ldgtw_op:
-+	case ldgtd_op:
-+	case stgtb_op:
-+	case stgth_op:
-+	case stgtw_op:
-+	case stgtd_op:
-+		badv = regs->regs[insn.reg3_format.rj];
-+		lower = regs->regs[insn.reg3_format.rk];
-+		break;
-+	}
-+
-+	force_sig_bnderr((void __user *)badv, (void __user *)lower,
-+			 (void __user *)upper);
-+
-+out:
-+	if (regs->csr_prmd & CSR_PRMD_PIE)
-+		local_irq_disable();
-+
-+	irqentry_exit(regs, state);
-+	return;
-+
-+bad_era:
-+	/*
-+	 * Cannot pull out the instruction word, hence cannot provide more
-+	 * info than a regular SIGSEGV in this case.
-+	 */
-+	force_sig(SIGSEGV);
-+	goto out;
-+}
-+
- asmlinkage void noinstr do_bp(struct pt_regs *regs)
- {
- 	bool user = user_mode(regs);
-@@ -1032,6 +1138,7 @@ void __init trap_init(void)
- 
- 	set_handler(EXCCODE_ADE * VECSIZE, handle_ade, VECSIZE);
- 	set_handler(EXCCODE_ALE * VECSIZE, handle_ale, VECSIZE);
-+	set_handler(EXCCODE_OOB * VECSIZE, handle_bce, VECSIZE);
- 	set_handler(EXCCODE_SYS * VECSIZE, handle_sys, VECSIZE);
- 	set_handler(EXCCODE_BP * VECSIZE, handle_bp, VECSIZE);
- 	set_handler(EXCCODE_INE * VECSIZE, handle_ri, VECSIZE);
+
+base-commit: 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d
+prerequisite-patch-id: 934c63dd47cb47e19739af076b95d3d55f5604f1
+prerequisite-patch-id: 02aafdd535091da6a4ed6abbb20fb661f74af9fb
+prerequisite-patch-id: cd19046150b7cff1be4ac7152198777aa960a3df
+prerequisite-patch-id: bd3e3830d9ce4f3876a77483364d7190b7fdffa7
+prerequisite-patch-id: 1e091c1f8f945a56cac59070221c4284306ba087
+prerequisite-patch-id: c6f681fcbf7495c5ed6a596872dc4f762f22d977
+prerequisite-patch-id: 239b016817624d56a4a2bddea1fda95282cb3d81
+prerequisite-patch-id: 5fbfe7df44dcf5a629cd82ba8383480cb05b52d1
+prerequisite-patch-id: 25a89f7312f225aaca11ef192e8d1f903a8b20e8
+prerequisite-patch-id: 899b556161f417e20db8e957c5099b92c3dcb673
+prerequisite-patch-id: eb09641cfb9e7caf7641ae6cb8e84e33cbb665a6
 -- 
-2.40.0
+2.39.2
 
