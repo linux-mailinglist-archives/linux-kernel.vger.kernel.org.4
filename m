@@ -2,109 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBDFD6E367C
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 11:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A55DB6E3682
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 11:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230413AbjDPJIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 05:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39292 "EHLO
+        id S230146AbjDPJNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 05:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjDPJIf (ORCPT
+        with ESMTP id S229777AbjDPJN3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 05:08:35 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29F2A95
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 02:08:34 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id c9so17742239ejz.1
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 02:08:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681636112; x=1684228112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+iVzZMtuVtPL5EfnPX4GJynjPPBEy50a8B0MBjMmaGY=;
-        b=QqMwyGaNfQavwwN9sOJ4yJkl3LWmjkcPBeRCIw3j6zZSnf7UlhCgiaowuYReyqXGNi
-         WBHxRdyQCiu157oZR6lm1MtxFp4MwMoxYeImTyWp532rECQIFvfAQuWVv7Z3o63cm/ao
-         y59rm+9dpMmCvb4cz4f0hdV3cRPu0hVuMCYxPXXT7IQ4HwOvBLE0flk+4IMGonWFRMHY
-         2cMQfMhSOOqO9ntIgSeAtrj4JC5Jr/qAba8BgUYXgrHHgCnvMQhMiEH6qVEX0r9Xz/oh
-         zQwhzGTAX4im05yvj4SnGDKwRV2quJqox7i7RDDZqVjgEXkiO2R8Lj+v/ebnnbWPCvAS
-         fp9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681636112; x=1684228112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+iVzZMtuVtPL5EfnPX4GJynjPPBEy50a8B0MBjMmaGY=;
-        b=T3kE/zLLrWE0uB0RHQugcLXbqHH3XEvHFrOcIJyUUbuyaOotIVWwpJvQieyVIdmrn+
-         ErqrUxhtX1p1yE+OQ+lgwgwdimJnh0UAuqnXYVjIVrsPEnd8rvKF1UzxOpFVKNwTNV/S
-         eaBTH1vEP29IM4UGzYTfaUIgbs36dnQm1iHQb+VO4vJfEou3AdVMpUvjLnkE2Xoa2HgK
-         lj7p2yo+HYtoYtaubFCn9UJFx2Dg8xCsLn4ULkpkshfRH4D+6zvFhWg+D25083HE6k8+
-         QHlrEz+kTpXcLkXYIVR9u+lA8IGjqtq5YG7oN/5MpXZgTWukEuWOI0Q4yjFnMPopISE5
-         RQoQ==
-X-Gm-Message-State: AAQBX9d4SbfcDEqEzW2fppRAf7b3win7fwbpMpS/xgI8UmhJQ2utTCXr
-        FOxClZe1yye4dNIjpjB8wbHirg==
-X-Google-Smtp-Source: AKy350ZzuDK19/V14tNBGjj9hK+8MosfCZizTsSGF0i+56aCRZpjthV486zpLVSS59djue/xAJ1ENQ==
-X-Received: by 2002:a17:906:ecba:b0:94e:f3d5:e4f8 with SMTP id qh26-20020a170906ecba00b0094ef3d5e4f8mr3892764ejb.37.1681636112693;
-        Sun, 16 Apr 2023 02:08:32 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:29dd:ded4:3ccc:83db? ([2a02:810d:15c0:828:29dd:ded4:3ccc:83db])
-        by smtp.gmail.com with ESMTPSA id re15-20020a170906d8cf00b0094ef923a6ccsm2736055ejb.219.2023.04.16.02.08.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Apr 2023 02:08:32 -0700 (PDT)
-Message-ID: <1d7b92ec-2aa7-d69b-0959-b62751ac29c5@linaro.org>
-Date:   Sun, 16 Apr 2023 11:08:31 +0200
+        Sun, 16 Apr 2023 05:13:29 -0400
+Received: from mxout4.routing.net (mxout4.routing.net [134.0.28.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765AD1BD9
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 02:13:27 -0700 (PDT)
+Received: from mxbox2.masterlogin.de (unknown [192.168.10.89])
+        by mxout4.routing.net (Postfix) with ESMTP id 09A601012C4;
+        Sun, 16 Apr 2023 09:13:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+        s=20200217; t=1681636403;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=KSatJAZyCfwpD4TZPKhwQdPlv6+YyvJv4XQLuenDj2A=;
+        b=A9mOekSEXDx7Zp1E9gy+f6GvqZskvOPcfTOwPI/YSnYoclR6u1WyETS6vXTKSRG3NGgVZJ
+        G1mxhuD/5tZ1l2w8a85Lqgj+OeucODT3B1r50jasNfVJAOVSt/QXQUQw46I9KYp46Bymex
+        tsjZOt7NFjxOR9VmelXciagSNvikFbQ=
+Received: from frank-G5.. (fttx-pool-217.61.152.230.bambit.de [217.61.152.230])
+        by mxbox2.masterlogin.de (Postfix) with ESMTPSA id 9AD651013A7;
+        Sun, 16 Apr 2023 09:11:35 +0000 (UTC)
+From:   Frank Wunderlich <linux@fw-web.de>
+To:     Felix Fietkau <nbd@nbd.name>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
+Cc:     John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Frank Wunderlich <frank-w@public-files.de>
+Subject: [RFC/RFT v1] net: ethernet: mtk_eth_soc: drop generic vlan rx offload, only use DSA untagging
+Date:   Sun, 16 Apr 2023 11:10:38 +0200
+Message-Id: <20230416091038.54479-1-linux@fw-web.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH V3 7/9] dt-bindings: mmc: sdhci-msm: Document the IPQ5018
- compatible
-Content-Language: en-US
-To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, ulf.hansson@linaro.org,
-        linus.walleij@linaro.org, catalin.marinas@arm.com, will@kernel.org,
-        p.zabel@pengutronix.de, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <1681468167-11689-1-git-send-email-quic_srichara@quicinc.com>
- <1681468167-11689-8-git-send-email-quic_srichara@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1681468167-11689-8-git-send-email-quic_srichara@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Mail-ID: 33c41008-f1e3-46f3-802e-ecce294b5d3c
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/04/2023 12:29, Sricharan Ramabadhran wrote:
-> Document the compatible for SDHCI on IPQ5018.
-> 
-> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> ---
+From: Felix Fietkau <nbd@nbd.name>
 
+Through testing I found out that hardware vlan rx offload support seems to
+have some hardware issues. At least when using multiple MACs and when receiving
+tagged packets on the secondary MAC, the hardware can sometimes start to emit
+wrong tags on the first MAC as well.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In order to avoid such issues, drop the feature configuration and use the
+offload feature only for DSA hardware untagging on MT7621/MT7622 devices which
+only use one MAC.
 
-This is an automated instruction, just in case, because many review tags
-are being ignored. If you do not know the process, here is a short
-explanation:
+Tested-by: Frank Wunderlich <frank-w@public-files.de>
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
+Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+---
+used felix Patch as base and ported up to 6.3-rc6 which seems to get lost
+and the original bug is not handled again.
 
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions, under or above your Signed-off-by tag. Tools like b4 can help
-here. However, there's no need to repost patches *only* to add the tags.
-The upstream maintainer will do that for acks received on the version
-they apply.
+it reverts changes from vladimirs patch
 
-https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+1a3245fe0cf8 net: ethernet: mtk_eth_soc: fix DSA TX tag hwaccel for switch port 0
 
+tested this on bananapi-r3 on non-dsa gmac1 and dsa aware eth0 (wan).
+on both vlan is working, but maybe it breaks HW-vlan-untagging
+---
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c | 105 ++++++++------------
+ drivers/net/ethernet/mediatek/mtk_eth_soc.h |   1 -
+ 2 files changed, 39 insertions(+), 67 deletions(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+index e14050e17862..20c60cee6aa7 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+@@ -1921,9 +1921,7 @@ static int mtk_poll_rx(struct napi_struct *napi, int budget,
+ 
+ 	while (done < budget) {
+ 		unsigned int pktlen, *rxdcsum;
+-		bool has_hwaccel_tag = false;
+ 		struct net_device *netdev;
+-		u16 vlan_proto, vlan_tci;
+ 		dma_addr_t dma_addr;
+ 		u32 hash, reason;
+ 		int mac = 0;
+@@ -2058,31 +2056,16 @@ static int mtk_poll_rx(struct napi_struct *napi, int budget,
+ 			skb_checksum_none_assert(skb);
+ 		skb->protocol = eth_type_trans(skb, netdev);
+ 
+-		if (netdev->features & NETIF_F_HW_VLAN_CTAG_RX) {
+-			if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2)) {
+-				if (trxd.rxd3 & RX_DMA_VTAG_V2) {
+-					vlan_proto = RX_DMA_VPID(trxd.rxd4);
+-					vlan_tci = RX_DMA_VID(trxd.rxd4);
+-					has_hwaccel_tag = true;
+-				}
+-			} else if (trxd.rxd2 & RX_DMA_VTAG) {
+-				vlan_proto = RX_DMA_VPID(trxd.rxd3);
+-				vlan_tci = RX_DMA_VID(trxd.rxd3);
+-				has_hwaccel_tag = true;
+-			}
+-		}
+-
+ 		/* When using VLAN untagging in combination with DSA, the
+ 		 * hardware treats the MTK special tag as a VLAN and untags it.
+ 		 */
+-		if (has_hwaccel_tag && netdev_uses_dsa(netdev)) {
+-			unsigned int port = vlan_proto & GENMASK(2, 0);
++		if (!MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2) &&
++		    (trxd.rxd2 & RX_DMA_VTAG) && netdev_uses_dsa(netdev)) {
++			unsigned int port = RX_DMA_VPID(trxd.rxd3) & GENMASK(2, 0);
+ 
+ 			if (port < ARRAY_SIZE(eth->dsa_meta) &&
+ 			    eth->dsa_meta[port])
+ 				skb_dst_set_noref(skb, &eth->dsa_meta[port]->dst);
+-		} else if (has_hwaccel_tag) {
+-			__vlan_hwaccel_put_tag(skb, htons(vlan_proto), vlan_tci);
+ 		}
+ 
+ 		if (reason == MTK_PPE_CPU_REASON_HIT_UNBIND_RATE_REACHED)
+@@ -2910,29 +2893,11 @@ static netdev_features_t mtk_fix_features(struct net_device *dev,
+ 
+ static int mtk_set_features(struct net_device *dev, netdev_features_t features)
+ {
+-	struct mtk_mac *mac = netdev_priv(dev);
+-	struct mtk_eth *eth = mac->hw;
+ 	netdev_features_t diff = dev->features ^ features;
+-	int i;
+ 
+ 	if ((diff & NETIF_F_LRO) && !(features & NETIF_F_LRO))
+ 		mtk_hwlro_netdev_disable(dev);
+ 
+-	/* Set RX VLAN offloading */
+-	if (!(diff & NETIF_F_HW_VLAN_CTAG_RX))
+-		return 0;
+-
+-	mtk_w32(eth, !!(features & NETIF_F_HW_VLAN_CTAG_RX),
+-		MTK_CDMP_EG_CTRL);
+-
+-	/* sync features with other MAC */
+-	for (i = 0; i < MTK_MAC_COUNT; i++) {
+-		if (!eth->netdev[i] || eth->netdev[i] == dev)
+-			continue;
+-		eth->netdev[i]->features &= ~NETIF_F_HW_VLAN_CTAG_RX;
+-		eth->netdev[i]->features |= features & NETIF_F_HW_VLAN_CTAG_RX;
+-	}
+-
+ 	return 0;
+ }
+ 
+@@ -3250,30 +3215,6 @@ static int mtk_open(struct net_device *dev)
+ 	struct mtk_eth *eth = mac->hw;
+ 	int i, err;
+ 
+-	if (mtk_uses_dsa(dev) && !eth->prog) {
+-		for (i = 0; i < ARRAY_SIZE(eth->dsa_meta); i++) {
+-			struct metadata_dst *md_dst = eth->dsa_meta[i];
+-
+-			if (md_dst)
+-				continue;
+-
+-			md_dst = metadata_dst_alloc(0, METADATA_HW_PORT_MUX,
+-						    GFP_KERNEL);
+-			if (!md_dst)
+-				return -ENOMEM;
+-
+-			md_dst->u.port_info.port_id = i;
+-			eth->dsa_meta[i] = md_dst;
+-		}
+-	} else {
+-		/* Hardware special tag parsing needs to be disabled if at least
+-		 * one MAC does not use DSA.
+-		 */
+-		u32 val = mtk_r32(eth, MTK_CDMP_IG_CTRL);
+-		val &= ~MTK_CDMP_STAG_EN;
+-		mtk_w32(eth, val, MTK_CDMP_IG_CTRL);
+-	}
+-
+ 	err = phylink_of_phy_connect(mac->phylink, mac->of_node, 0);
+ 	if (err) {
+ 		netdev_err(dev, "%s: could not attach PHY: %d\n", __func__,
+@@ -3312,6 +3253,39 @@ static int mtk_open(struct net_device *dev)
+ 	phylink_start(mac->phylink);
+ 	netif_tx_start_all_queues(dev);
+ 
++	if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2))
++		return 0;
++
++	if (mtk_uses_dsa(dev) && !eth->prog) {
++		for (i = 0; i < ARRAY_SIZE(eth->dsa_meta); i++) {
++			struct metadata_dst *md_dst = eth->dsa_meta[i];
++
++			if (md_dst)
++				continue;
++
++			md_dst = metadata_dst_alloc(0, METADATA_HW_PORT_MUX,
++						    GFP_KERNEL);
++			if (!md_dst)
++				return -ENOMEM;
++
++			md_dst->u.port_info.port_id = i;
++			eth->dsa_meta[i] = md_dst;
++		}
++	} else {
++		/* Hardware special tag parsing needs to be disabled if at least
++		 * one MAC does not use DSA.
++		 */
++		u32 val = mtk_r32(eth, MTK_CDMP_IG_CTRL);
++		val &= ~MTK_CDMP_STAG_EN;
++		mtk_w32(eth, val, MTK_CDMP_IG_CTRL);
++
++		val = mtk_r32(eth, MTK_CDMQ_IG_CTRL);
++		val &= ~MTK_CDMQ_STAG_EN;
++		mtk_w32(eth, val, MTK_CDMQ_IG_CTRL);
++
++		mtk_w32(eth, 0, MTK_CDMP_EG_CTRL);
++	}
++
+ 	return 0;
+ }
+ 
+@@ -3796,10 +3770,9 @@ static int mtk_hw_init(struct mtk_eth *eth, bool reset)
+ 	if (!MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2)) {
+ 		val = mtk_r32(eth, MTK_CDMP_IG_CTRL);
+ 		mtk_w32(eth, val | MTK_CDMP_STAG_EN, MTK_CDMP_IG_CTRL);
+-	}
+ 
+-	/* Enable RX VLan Offloading */
+-	mtk_w32(eth, 1, MTK_CDMP_EG_CTRL);
++		mtk_w32(eth, 1, MTK_CDMP_EG_CTRL);
++	}
+ 
+ 	/* set interrupt delays based on current Net DIM sample */
+ 	mtk_dim_rx(&eth->rx_dim.work);
+@@ -4437,7 +4410,7 @@ static int mtk_add_mac(struct mtk_eth *eth, struct device_node *np)
+ 		eth->netdev[id]->hw_features |= NETIF_F_LRO;
+ 
+ 	eth->netdev[id]->vlan_features = eth->soc->hw_features &
+-		~(NETIF_F_HW_VLAN_CTAG_TX | NETIF_F_HW_VLAN_CTAG_RX);
++		~NETIF_F_HW_VLAN_CTAG_TX;
+ 	eth->netdev[id]->features |= eth->soc->hw_features;
+ 	eth->netdev[id]->ethtool_ops = &mtk_ethtool_ops;
+ 
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+index 084a6badef6d..ac57dc87c59a 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+@@ -48,7 +48,6 @@
+ #define MTK_HW_FEATURES		(NETIF_F_IP_CSUM | \
+ 				 NETIF_F_RXCSUM | \
+ 				 NETIF_F_HW_VLAN_CTAG_TX | \
+-				 NETIF_F_HW_VLAN_CTAG_RX | \
+ 				 NETIF_F_SG | NETIF_F_TSO | \
+ 				 NETIF_F_TSO6 | \
+ 				 NETIF_F_IPV6_CSUM |\
+-- 
+2.34.1
 
