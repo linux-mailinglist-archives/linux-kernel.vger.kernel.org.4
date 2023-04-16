@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E126E38C9
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 15:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 610B86E38CE
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 15:36:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbjDPNgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 09:36:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51688 "EHLO
+        id S231184AbjDPNgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 09:36:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbjDPNfx (ORCPT
+        with ESMTP id S231140AbjDPNfz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 09:35:53 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5FBC49EA;
-        Sun, 16 Apr 2023 06:35:45 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id u3so5468525ejj.12;
-        Sun, 16 Apr 2023 06:35:45 -0700 (PDT)
+        Sun, 16 Apr 2023 09:35:55 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 889DC2D60;
+        Sun, 16 Apr 2023 06:35:48 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a5so927053ejb.6;
+        Sun, 16 Apr 2023 06:35:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681652144; x=1684244144;
+        d=gmail.com; s=20221208; t=1681652146; x=1684244146;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AjXGUzPKMMr8ygNmvKTs+ca+O+QBcfL+qA6w2J0vS7w=;
-        b=UgUKRtwE4oogpbBNh8fzZ3FqYbVAAOAtKTi1c6uAgDKatTn7KPuM6DbVmUVkVTtmuR
-         FSp52Dzw63N5O+/AzrgnCXSoYK2oSQ6Pk1xUfJ6Wa5OU0++bSc+N3LQgK0GOHmzJX46e
-         hadyNfBXqpFptAYcDI0LULtH95r/hbrEvaAYEQZLVdnIUXIkK+ilqyKez5dYbcmosIGt
-         gGm7HCaPN82U9qgXychN+Bc+WPuHmKEeO6r2sWVdFeSPesYbW6EUQH9UPMjaKL2MVwhG
-         rCQY7wNkclVIuhCpcbx1T8+HQsk4OCgOYiYT6yMiQJnQIN4Di8RJkRrOYlyZ2ZTldpSH
-         kitw==
+        bh=rsVMP+nc4oNcZ87McW4OVdy6DpQdiSat54tBtHLhBBY=;
+        b=BK9ciytjH5O2apYl911PFKkIxjD0zuyUTnHnkFvow0HPrFXNgXRS+bCDhdVp/D36t6
+         2P+yZB0Cqdr/gCuTRs5bqhMWolKAffqrQgg9iAQve6wBRsD6NVOxaeGXviUDLeV3rJuR
+         xLdhNHynxxhPQGqFxrD6NL5AK92/CrwjBjCH+NRPxkfCyXCUTnTwKgi5E73R0eV7jBwZ
+         HznmnxwUraE0gCIW5shq36yHLszhwO9+ho7QeR+RTJKYESs+Q3YqnnBWCavzVTrwfVvh
+         9ov5d3uIsJZKmu/pF0PG+eTcUExVaN7r7ETQ1ENn984AqaKihGNVEDbOeyz6yR/EZfad
+         w00Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681652144; x=1684244144;
+        d=1e100.net; s=20221208; t=1681652146; x=1684244146;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AjXGUzPKMMr8ygNmvKTs+ca+O+QBcfL+qA6w2J0vS7w=;
-        b=gFXGipWqgfAVaSc/XXKvm/DkdEgPluve8vdeT3RbK9okkKeNLb3yYVswDzZ43TWpjD
-         5WRtYwB/4degUXNuaGoK9BQ25MKEEPezE5zzmEz+ZLwDxLRsm31vPccVsCtkZDfloG02
-         Wa3Sn5VaqHkGwgv8MznKQaPXDTDYdofswfAIvl16Ml7hMBve4sLp6AjoD4lzHhjNhfwz
-         5YgZ5dSatBF35y9J90Ax83vU3duThbHvD+v/Slkh6nn9sd4aqOF1oBtPsBSMzmO28sFV
-         NHHzuECm7Qa5tNXfuxDTYomZR6edvdbD1FZ1JwcswAfrfdJOaAnb0oePOGWJIJqabEIB
-         60jA==
-X-Gm-Message-State: AAQBX9fWLQ5ExiyYu9G8vrj4o2WZddPaIMmnaU7vdvXxnASOXIEuT1VD
-        rm2KGfpJZBndIfNPtWzkeBo=
-X-Google-Smtp-Source: AKy350aB997CQTiblOPPq0SvVcmrg3sVPcAu4d+kAnkGtuMsIWRj3quw4TlqSzUjasl+SrIb1dRo3Q==
-X-Received: by 2002:a17:906:8805:b0:933:130e:e81a with SMTP id zh5-20020a170906880500b00933130ee81amr4134021ejb.32.1681652144115;
-        Sun, 16 Apr 2023 06:35:44 -0700 (PDT)
+        bh=rsVMP+nc4oNcZ87McW4OVdy6DpQdiSat54tBtHLhBBY=;
+        b=f6YLtA2u3mGdNoYwvvlwmQtUezm+InRNoKf73X1QtNM6Im6Zzfi0JIDBtIe/nglUB/
+         vw8pJSknZVlJ4tcRNK5VmMsDQB9tZBl92sO29YrUMqzWkRWjP2rY2MvA7XMkTIqkCmT8
+         JL7TmjJEuDYUU2etP6oDvSgeIhdp/NSABAMYIkJd/7dPDN5JQbhNiwhVeXbFKIAoky0b
+         VcPDAu935wt57sRGQgfnuU/+cu395v96h4tMnoVskjnx0y55cb4aVKahTxOBe8Vn+3P1
+         o7r2zPdWzaOb8koqjRSJKBhp5SuETFsow36OOTPWicXx1mpVWEVIM1qCgZA7eenxsGa8
+         Au5Q==
+X-Gm-Message-State: AAQBX9dPdlfK2o/kfNrME9U2g/NdPkhiHhrd5y2v7tBI1vgrxdK538hA
+        mykV53oCqcbDGziVWZN872g=
+X-Google-Smtp-Source: AKy350aOQZtUDJ6HCtW/XeHcJyZm9y8dSlT6kREJgZmf3EgNgVfgfeFUalYfzshLE7tAJJsTQfMIqQ==
+X-Received: by 2002:a17:906:4a0f:b0:94e:d664:c2d5 with SMTP id w15-20020a1709064a0f00b0094ed664c2d5mr4822386eju.21.1681652146503;
+        Sun, 16 Apr 2023 06:35:46 -0700 (PDT)
 Received: from localhost.my.domain (83.8.121.70.ipv4.supernova.orange.pl. [83.8.121.70])
-        by smtp.gmail.com with ESMTPSA id gn23-20020a1709070d1700b009373f1b5c4esm5122958ejc.161.2023.04.16.06.35.41
+        by smtp.gmail.com with ESMTPSA id gn23-20020a1709070d1700b009373f1b5c4esm5122958ejc.161.2023.04.16.06.35.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 06:35:43 -0700 (PDT)
+        Sun, 16 Apr 2023 06:35:46 -0700 (PDT)
 From:   Artur Weber <aweber.kernel@gmail.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
@@ -73,9 +73,9 @@ Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
         linux-phy@lists.infradead.org,
         ~postmarketos/upstreaming@lists.sr.ht,
         Artur Weber <aweber.kernel@gmail.com>
-Subject: [PATCH v2 05/12] clk: samsung: Add Exynos4212 compatible to CLKOUT driver
-Date:   Sun, 16 Apr 2023 15:34:15 +0200
-Message-Id: <20230416133422.1949-6-aweber.kernel@gmail.com>
+Subject: [PATCH v2 06/12] clk: samsung: Re-add support for Exynos4212 CPU clock
+Date:   Sun, 16 Apr 2023 15:34:16 +0200
+Message-Id: <20230416133422.1949-7-aweber.kernel@gmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230416133422.1949-1-aweber.kernel@gmail.com>
 References: <20230416133422.1949-1-aweber.kernel@gmail.com>
@@ -97,29 +97,101 @@ no boards using it.
 
 We will be adding a device that uses it, so add it back.
 
-This is effectively a revert of commit d5cd103b06f9 ("clk: samsung:
-Remove support for Exynos4212 SoCs in Exynos CLKOUT driver"); the
-driver has changed significantly since then, prompting this re-make.
+This is effectively a revert of commit c9194fb623b0 ("clk: samsung:
+Remove support for obsolete Exynos4212 CPU clock"); the driver
+has changed significantly since then, prompting this re-make.
 
 Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
 ---
- drivers/clk/samsung/clk-exynos-clkout.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/clk/samsung/clk-exynos4.c | 44 +++++++++++++++++++++++++++----
+ 1 file changed, 39 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/clk/samsung/clk-exynos-clkout.c b/drivers/clk/samsung/clk-exynos-clkout.c
-index e6d6cbf8c4e6..326d5fc58727 100644
---- a/drivers/clk/samsung/clk-exynos-clkout.c
-+++ b/drivers/clk/samsung/clk-exynos-clkout.c
-@@ -55,6 +55,9 @@ static const struct of_device_id exynos_clkout_ids[] = {
- 	}, {
- 		.compatible = "samsung,exynos4210-pmu",
- 		.data = &exynos_clkout_exynos4,
-+	}, {
-+		.compatible = "samsung,exynos4212-pmu",
-+		.data = &exynos_clkout_exynos4,
- 	}, {
- 		.compatible = "samsung,exynos4412-pmu",
- 		.data = &exynos_clkout_exynos4,
+diff --git a/drivers/clk/samsung/clk-exynos4.c b/drivers/clk/samsung/clk-exynos4.c
+index 22009cb53428..9655f46db95c 100644
+--- a/drivers/clk/samsung/clk-exynos4.c
++++ b/drivers/clk/samsung/clk-exynos4.c
+@@ -138,7 +138,8 @@
+ /* the exynos4 soc type */
+ enum exynos4_soc {
+ 	EXYNOS4210,
+-	EXYNOS4X12,
++	EXYNOS4412,
++	EXYNOS4212,
+ };
+ 
+ /* list of PLLs to be registered */
+@@ -1205,6 +1206,24 @@ static const struct exynos_cpuclk_cfg_data e4210_armclk_d[] __initconst = {
+ 	{  0 },
+ };
+ 
++static const struct exynos_cpuclk_cfg_data e4212_armclk_d[] __initconst = {
++	{ 1500000, E4210_CPU_DIV0(2, 1, 6, 0, 7, 3), E4210_CPU_DIV1(2, 6), },
++	{ 1400000, E4210_CPU_DIV0(2, 1, 6, 0, 7, 3), E4210_CPU_DIV1(2, 6), },
++	{ 1300000, E4210_CPU_DIV0(2, 1, 5, 0, 7, 3), E4210_CPU_DIV1(2, 5), },
++	{ 1200000, E4210_CPU_DIV0(2, 1, 5, 0, 7, 3), E4210_CPU_DIV1(2, 5), },
++	{ 1100000, E4210_CPU_DIV0(2, 1, 4, 0, 6, 3), E4210_CPU_DIV1(2, 4), },
++	{ 1000000, E4210_CPU_DIV0(1, 1, 4, 0, 5, 2), E4210_CPU_DIV1(2, 4), },
++	{  900000, E4210_CPU_DIV0(1, 1, 3, 0, 5, 2), E4210_CPU_DIV1(2, 3), },
++	{  800000, E4210_CPU_DIV0(1, 1, 3, 0, 5, 2), E4210_CPU_DIV1(2, 3), },
++	{  700000, E4210_CPU_DIV0(1, 1, 3, 0, 4, 2), E4210_CPU_DIV1(2, 3), },
++	{  600000, E4210_CPU_DIV0(1, 1, 3, 0, 4, 2), E4210_CPU_DIV1(2, 3), },
++	{  500000, E4210_CPU_DIV0(1, 1, 3, 0, 4, 2), E4210_CPU_DIV1(2, 3), },
++	{  400000, E4210_CPU_DIV0(1, 1, 3, 0, 4, 2), E4210_CPU_DIV1(2, 3), },
++	{  300000, E4210_CPU_DIV0(1, 1, 2, 0, 4, 2), E4210_CPU_DIV1(2, 3), },
++	{  200000, E4210_CPU_DIV0(1, 1, 1, 0, 3, 1), E4210_CPU_DIV1(2, 3), },
++	{  0 },
++};
++
+ #define E4412_CPU_DIV1(cores, hpm, copy)				\
+ 		(((cores) << 8) | ((hpm) << 4) | ((copy) << 0))
+ 
+@@ -1233,6 +1252,11 @@ static const struct samsung_cpu_clock exynos4210_cpu_clks[] __initconst = {
+ 			CLK_CPU_NEEDS_DEBUG_ALT_DIV | CLK_CPU_HAS_DIV1, 0x14200, e4210_armclk_d),
+ };
+ 
++static const struct samsung_cpu_clock exynos4212_cpu_clks[] __initconst = {
++	CPU_CLK(CLK_ARM_CLK, "armclk", CLK_MOUT_APLL, CLK_MOUT_MPLL_USER_C,
++			CLK_CPU_NEEDS_DEBUG_ALT_DIV | CLK_CPU_HAS_DIV1, 0x14200, e4212_armclk_d),
++};
++
+ static const struct samsung_cpu_clock exynos4412_cpu_clks[] __initconst = {
+ 	CPU_CLK(CLK_ARM_CLK, "armclk", CLK_MOUT_APLL, CLK_MOUT_MPLL_USER_C,
+ 			CLK_CPU_NEEDS_DEBUG_ALT_DIV | CLK_CPU_HAS_DIV1, 0x14200, e4412_armclk_d),
+@@ -1326,11 +1350,15 @@ static void __init exynos4_clk_init(struct device_node *np,
+ 		samsung_clk_register_fixed_factor(ctx,
+ 			exynos4x12_fixed_factor_clks,
+ 			ARRAY_SIZE(exynos4x12_fixed_factor_clks));
+-		samsung_clk_register_cpu(ctx, exynos4412_cpu_clks,
+-				ARRAY_SIZE(exynos4412_cpu_clks));
++		if (soc == EXYNOS4412)
++			samsung_clk_register_cpu(ctx, exynos4412_cpu_clks,
++					ARRAY_SIZE(exynos4412_cpu_clks));
++		else
++			samsung_clk_register_cpu(ctx, exynos4212_cpu_clks,
++					ARRAY_SIZE(exynos4212_cpu_clks));
+ 	}
+ 
+-	if (soc == EXYNOS4X12)
++	if (soc == EXYNOS4412 || soc == EXYNOS4212)
+ 		exynos4x12_core_down_clock();
+ 
+ 	samsung_clk_extended_sleep_init(reg_base,
+@@ -1363,8 +1391,14 @@ static void __init exynos4210_clk_init(struct device_node *np)
+ }
+ CLK_OF_DECLARE(exynos4210_clk, "samsung,exynos4210-clock", exynos4210_clk_init);
+ 
++static void __init exynos4212_clk_init(struct device_node *np)
++{
++	exynos4_clk_init(np, EXYNOS4212);
++}
++CLK_OF_DECLARE(exynos4212_clk, "samsung,exynos4212-clock", exynos4212_clk_init);
++
+ static void __init exynos4412_clk_init(struct device_node *np)
+ {
+-	exynos4_clk_init(np, EXYNOS4X12);
++	exynos4_clk_init(np, EXYNOS4412);
+ }
+ CLK_OF_DECLARE(exynos4412_clk, "samsung,exynos4412-clock", exynos4412_clk_init);
 -- 
 2.40.0
 
