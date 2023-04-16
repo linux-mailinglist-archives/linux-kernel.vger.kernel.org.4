@@ -2,88 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0EC6E379F
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 13:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 490246E37A3
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 13:10:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbjDPLCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 07:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49728 "EHLO
+        id S229959AbjDPLKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 07:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbjDPLCn (ORCPT
+        with ESMTP id S229579AbjDPLKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 07:02:43 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C656C26A4
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 04:02:41 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id kt6so18773849ejb.0
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 04:02:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681642960; x=1684234960;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F+s/B4eOWujes2P8w0FQ9OyTkSIgsXvTMJtbi4pA4Ms=;
-        b=LoJwkKaHZuLQSpe5mfubX2q90+8KP8SJSIbv7eWqc8stVGUcbxKNHGsdxIwqVVTBOr
-         wK32WqOXG12XXQ3ASKOSRixBJemSYGKBwZiaFabVcI3T/RVZapqspnvqp8+fVVxh4sf1
-         mFqvhaY6XXj3q8+ku3B0es/COgLcTxplSqHsvN0JXOuHsRYhMsz11yU99fejURyty62H
-         8E+2X/exTrtzWBnnF+9eKHEK+ENL+Rt8gH5r8d0OzNq3RSgJY1DXayP7e/Ha+3Zs1+5S
-         VfJM/jiMhOrnV4W1wdXDRLzLkjj38ElYY6xzpcE/Qa9pNmhCkiftvA2O0Zp1TZt6yl3K
-         d1yA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681642960; x=1684234960;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F+s/B4eOWujes2P8w0FQ9OyTkSIgsXvTMJtbi4pA4Ms=;
-        b=XVz9id+ILlrv0eGqBgeWQ0VtQBa3GWm3ftri6i0WLBeE8EWjKs3Dozl2ljI2jYr6IN
-         jfdcrXxni1dtch+YThT3n0+6BF56Ote+o416uVcO5FgL+6i6BbOKQSVcBvZY3PQB/EwD
-         vScYeNv15ppEY/yJeosFEAu/VA1c7BWVYwTOguG4f9GXpfHt86ckhVlxXO8Rh4uwaqkX
-         sQ36Jb3p9ZzB7BQEHWhK4+I+lZhehxP3lkUCif0kqLafcKZKoJ2UGsCUzxBrdWcpxWx4
-         Nf1ECcrDj3ASQVXPlcXPelEm/hvdhQlmRDhWLwmDOXo8NC+jzWCF1Nwlss3VLankhBBJ
-         kYbw==
-X-Gm-Message-State: AAQBX9fDWVkLsMkmxWP6HeSlEyxMeNOK2dviUCPydjQvpbuN3B5yWP3f
-        GiIYQ753DFlhhvjYeQW/f794QQ==
-X-Google-Smtp-Source: AKy350YdAKWNPsFVv4cdGqySJKoT8asIrHUdwyGPD1r62LVITFLHykWctNjuzDA9OAUXGziE0T3tng==
-X-Received: by 2002:a17:907:6d24:b0:94f:3980:bf87 with SMTP id sa36-20020a1709076d2400b0094f3980bf87mr2622794ejc.43.1681642960178;
-        Sun, 16 Apr 2023 04:02:40 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:29dd:ded4:3ccc:83db? ([2a02:810d:15c0:828:29dd:ded4:3ccc:83db])
-        by smtp.gmail.com with ESMTPSA id ry13-20020a1709068d8d00b0094ee3e4c934sm3395556ejc.221.2023.04.16.04.02.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Apr 2023 04:02:39 -0700 (PDT)
-Message-ID: <34c6632f-8fe0-f8d7-8900-3a9089faa14d@linaro.org>
-Date:   Sun, 16 Apr 2023 13:02:38 +0200
+        Sun, 16 Apr 2023 07:10:17 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF2126A3;
+        Sun, 16 Apr 2023 04:10:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1681643386; i=frank-w@public-files.de;
+        bh=ymxhQ9TX2WQdTJ+ydPfC8GgwxHoF1StrwXLPfQQbXrc=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=IFWzxJ56LXpFRMyFSPNTvIA5v9oJ0terq/FW1KKzCKls9n9hD44LkqrzQc7kfEtHT
+         Js1Yld/8V7iktVyv0o8nWLnRDJZpzetxONeMV3S10DU6a34x8YLEcpkeMzHD9yuxW3
+         IEOPbWlw42EkiYDmCWx7kK4a8ORW/w7UaVBS7AhZkkPXDGwam9k00+wZhids2lxFNY
+         wlSFbQ3ZtwVyIUz7TwX4mJFW1/eoO/BZt5cUUdclu9uCCEvpVYIBo6Ap/LxzlNCXuE
+         eOJtQgzRSKKvRbmNHbqJXBhMjffqC/HYunRhYvtREk9UbyslTwUrT+EYjBZf2kOpcO
+         KSSKBRYBQCGJg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [217.61.152.230] ([217.61.152.230]) by web-mail.gmx.net
+ (3c-app-gmx-bap64.server.lan [172.19.172.134]) (via HTTP); Sun, 16 Apr 2023
+ 13:09:46 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 3/3] MAINTAINERS: Add myself as Samsung S6D7AA0 panel
- driver maintainer
-Content-Language: en-US
-To:     Artur Weber <aweber.kernel@gmail.com>, thierry.reding@gmail.com
-Cc:     sam@ravnborg.org, airlied@gmail.com, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-References: <20230416100139.13741-1-aweber.kernel@gmail.com>
- <20230416100139.13741-4-aweber.kernel@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230416100139.13741-4-aweber.kernel@gmail.com>
+Message-ID: <trinity-753f5441-ab68-43df-9640-b9b0db7f8491-1681643386248@3c-app-gmx-bap64>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     =?UTF-8?Q?Ar=C4=B1n=C3=A7_=C3=9CNAL?= <arinc.unal@arinc9.com>
+Cc:     Frank Wunderlich <linux@fw-web.de>, Felix Fietkau <nbd@nbd.name>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Aw: Re: [RFC/RFT v1] net: ethernet: mtk_eth_soc: drop generic vlan
+ rx offload, only use DSA untagging
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Sun, 16 Apr 2023 13:09:46 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <2ad08330-59a0-d3b2-214e-13d93dbe35a1@arinc9.com>
+References: <20230416091038.54479-1-linux@fw-web.de>
+ <c657f6a2-74fa-2cc1-92cf-18f25464b1e1@arinc9.com>
+ <161044DF-0663-42D4-94B8-03741C91B1A4@public-files.de>
+ <2ad08330-59a0-d3b2-214e-13d93dbe35a1@arinc9.com>
+Content-Transfer-Encoding: quoted-printable
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:SUiR8hF+FewDGgljpxCW1y4S4fpM7gECbaE3CkqBMqIdBAyTY7LETYV1hoM742uPFLHIr
+ YVkhQKp/qAoom3V3ymdrd0oZ0evtIxGs5zB4lMfeXU05+OVgeHWh58OTb6NUxBve93bA7DU4+Fjs
+ sTUdhsSTWAC+FU6CukKrqjTmKyQ3bvThF5vuyjRI8TjEgMV4F99+sxyABA4PxjthyKO9Oow++Alg
+ LUZIG2pB79ewfbE1KUAtlHqJSVa4lbce5EQO7sYvUma8YScoPXi2ew1ntiKiMQM44+lU7Fohy5IM
+ 1Y=
+UI-OutboundReport: notjunk:1;M01:P0:C+O3HvvEQuY=;EO/g9Mg78RLMbfAH98AuOMYVGWF
+ BwyDHPC1IuOZneV8Xvdsq97XR6Esw6D5GCGIOeB3oWnXcxMjUJnC9ELwNoN5tPgoB4kKtm298
+ sCkMSA3TnIipuJFN1QT69ADzc54ii1oNpoAy+TXk3HCbAS6z1QQ9pBq2C+NJPBC0d7apjGvfx
+ KkGh39fEjAI8gw+0fWdGyp9G7RZ9p7OinQzB5aAKqwJEXyTy5lfGyDc1qqWD6/S4YOKvrkSty
+ QhHQij9Y2G26+RubsTXICBBVcP7IPUnj2FeFOjhJeeAXrSsesAszCADcq5R+4KUPwsRjKiZzf
+ amcM1ag0vWEi/uG6289PhhfQQHocHSLzVIJND9VS9qUn+3E7KP3JbrbIOf5+vXytJnOTKtxUi
+ jj9PayiBEThiDVPjII29eSrId3dRgXcQ6ebEmJcB/YO4XyD0i3dntbcRUasswX8NaWgIvTCl8
+ qY4C/IKwuFHnAQvLHIwPgoqMwJpck3oIuXW0l+bE3TaTqbTrW0A6Z7QaMS2ZV7p2T1c0PTnV/
+ k38IyMRbugvgSaZT1BQ3le0OU3mEceInu01Cm+nw97LmYpTt8QYh7GVHHpEBcW8tXjk0hzx2P
+ kwutZgr/iby2n4hywzbeU7pNjpqKQkZfiNz8rfoATjpKujoNZn7yFxqQzmzyigAerEgs+Pc2O
+ TipzsYSibSgYyFg462ej3vTU3tpiDR+EIie9pAeb32ZZcU7zAeN2UwobnYaUyLoGU4/540pAP
+ USFvAtnhQ/MiVYVzZ6r91A/LZ2gPnmg13Ta49XEWk0OMybh72qjy83/SBxCsun5zIYBaT/vuw
+ Ov3cUKT9k8V/jpP17TLOwNJw==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/04/2023 12:01, Artur Weber wrote:
-> Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
+> Gesendet: Sonntag, 16=2E April 2023 um 12:55 Uhr
+> Von: "Ar=C4=B1n=C3=A7 =C3=9CNAL" <arinc=2Eunal@arinc9=2Ecom>
+> On 16=2E04=2E2023 13:15, Frank Wunderlich wrote:
+> > Am 16=2E April 2023 11:52:31 MESZ schrieb "Ar=C4=B1n=C3=A7 =C3=9CNAL" =
+<arinc=2Eunal@arinc9=2Ecom>:
+> >> On 16=2E04=2E2023 12:10, Frank Wunderlich wrote:
+> >>> From: Felix Fietkau <nbd@nbd=2Ename>
+> >>>
+> >>> Through testing I found out that hardware vlan rx offload support se=
+ems to
+> >>> have some hardware issues=2E At least when using multiple MACs and w=
+hen receiving
+> >>> tagged packets on the secondary MAC, the hardware can sometimes star=
+t to emit
+> >>> wrong tags on the first MAC as well=2E
+> >>>
+> >>> In order to avoid such issues, drop the feature configuration and us=
+e the
+> >>> offload feature only for DSA hardware untagging on MT7621/MT7622 dev=
+ices which
+> >>> only use one MAC=2E
+> >>
+> >> MT7621 devices most certainly use both MACs=2E
+> >>
+> >>>
+> >>> Tested-by: Frank Wunderlich <frank-w@public-files=2Ede>
+> >>> Signed-off-by: Felix Fietkau <nbd@nbd=2Ename>
+> >>> Signed-off-by: Frank Wunderlich <frank-w@public-files=2Ede>
+> >>> ---
+> >>> used felix Patch as base and ported up to 6=2E3-rc6 which seems to g=
+et lost
+> >>> and the original bug is not handled again=2E
+> >>>
+> >>> it reverts changes from vladimirs patch
+> >>>
+> >>> 1a3245fe0cf8 net: ethernet: mtk_eth_soc: fix DSA TX tag hwaccel for =
+switch port 0
+> >>
+> >> Do I understand correctly that this is considered being reverted beca=
+use the feature it fixes is being removed?
+> >=20
+> > As far as i understood, vladimirs patch fixes one
+> > cornercase of hw rx offload where felix original
+> > patch was fixing more=2E=2Esent it as rft to you to test
+> > if your bug (which vladimir fixed) is not coming in
+> > again=2E If it does we can try to merge both
+> > attempts=2E But current state has broken vlan on
+> > bpi-r3 non-dsa gmac1 (sfp-wan)=2E
+>=20
+> I tested this patch on MT7621AT and MT7623NI SoCs on the current=20
+> linux-next=2E Port 0 keeps working fine=2E
 
-Missing commit msg.
+looks good so far ;)
 
-Best regards,
-Krzysztof
+> So when you use VLANs on non-DSA gmac1, network connectivity is broken?
+
+the vlan does not work=2E=2E=2Eit looks it is untagged on rx path=2E i see=
+ tagged frames on the other
+end, send tagged back and these are not received tagged on the mac=2E=2E=
+=2Ethis behaviour has brought
+me to felix patch i had rebased here=2E the non-vlan traffic is not affect=
+ed=2E
+
+> I've got an MT7621AT device which gmac1 is connected to an external phy=
+=20
+> (sfp-wan, the same case as yours)=2E I'll test VLANs there=2E See if MT7=
+621=20
+> is affected by this as well since the patch log here states this feature=
+=20
+> is kept enabled for MT7621 because only gmac0 is used which is false=2E
+
+good idea :)
+
+> Ar=C4=B1n=C3=A7
 
