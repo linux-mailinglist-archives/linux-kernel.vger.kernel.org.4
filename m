@@ -2,85 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 090CB6E397B
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 16:44:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 887C36E397E
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 16:47:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbjDPOol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 10:44:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54036 "EHLO
+        id S229592AbjDPOrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 10:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjDPOoi (ORCPT
+        with ESMTP id S229446AbjDPOrF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 10:44:38 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD0BE0;
-        Sun, 16 Apr 2023 07:44:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=R0OmTuYnRnfC/MO3/XO+qggHJ2auqA4fbzeAg1TSbpA=; b=M4Hh/wBCHKTBbxCoOhitU9u3i+
-        /5Z8EricwMTELUIHmfEV7n6ifgDieZs1oAdNJ0hazKigCs4hC4wSSMev3Ln8pw/ErCbNw1VjJvkZy
-        0wMu8LhApBjGtx+4HPa+Hztme49nKOs6PVHBIuwhWphMELxJ4ZQXoe5ErNFtsNwrNgXo=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1po3c8-00AQp9-TF; Sun, 16 Apr 2023 16:44:24 +0200
-Date:   Sun, 16 Apr 2023 16:44:24 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Christian Lamparter <chunkeey@gmail.com>
-Cc:     Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@toke.dk>,
-        =?iso-8859-1?Q?=C1lvaro_Fern=E1ndez?= Rojas <noltari@gmail.com>,
-        f.fainelli@gmail.com, jonas.gorski@gmail.com, nbd@nbd.name,
-        kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ath9k: fix calibration data endianness
-Message-ID: <6c0c6f91-9b5a-4d0a-b92d-4daf5775f27d@lunn.ch>
-References: <20230415150542.2368179-1-noltari@gmail.com>
- <87leitxj4k.fsf@toke.dk>
- <a7895e73-70a3-450d-64f9-8256c9470d25@gmail.com>
- <03a74fbb-dd77-6283-0b08-6a9145a2f4f6@gmail.com>
- <874jpgxfs7.fsf@toke.dk>
- <8caecebf-bd88-dffe-7749-b79b7ea61cc7@gmail.com>
+        Sun, 16 Apr 2023 10:47:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B72B31AD
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 07:47:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50B44613EA
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 14:47:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3863AC433D2;
+        Sun, 16 Apr 2023 14:47:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681656423;
+        bh=x/zF9nQGcQmo9J0zDMKFR6/60lK6sJYHHMJyzn5OqyA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=iIQnBNiOrw67ku333VmuCHTxqwb3OmXUK8Tk+5/KZ2gLTOY0bfRi3eDvWFA/pIGeA
+         NmFzgRsURvpnN4rqgwJVnNKUXjB8FlULg+y+5nr1n5H0dI6ilHOu+AztB4wtCkiofi
+         4n55gx+KIoztTEnVrxCkB9wCENvp83H8+EJVuPu0TzipeY6H79cVcg2EeEDc9omcjm
+         ZG2nBD1kxyqYii1JrvTwIsAah1hhvhakzn/9PrLAyE1i3QbCwaSSzn1bEYGYy/Bzs/
+         qwNOgHCzJMQlssacdK2HPRhDHMMloZsLhRknSUtJxvGNzVTUARTfyyvvGoQ4y9YEi4
+         vV5Z1QGdyWbvg==
+Message-ID: <363cf8e8-326b-6547-b780-268ce2e3c1a5@kernel.org>
+Date:   Sun, 16 Apr 2023 22:47:00 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8caecebf-bd88-dffe-7749-b79b7ea61cc7@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] erofs: fix potential overflow calculating xattr_isize
+Content-Language: en-US
+To:     Jingbo Xu <jefflexu@linux.alibaba.com>, xiang@kernel.org,
+        huyue2@coolpad.com, linux-erofs@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20230414061810.6479-1-jefflexu@linux.alibaba.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20230414061810.6479-1-jefflexu@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> |       if (ah->eep_ops->get_eepmisc(ah) & AR5416_EEPMISC_BIG_ENDIAN) {
-> |               *swap_needed = true;
-> |               ath_dbg(common, EEPROM,
-> |                       "Big Endian EEPROM detected according to EEPMISC register.\n");
-> |       } else {
-> |               *swap_needed = false;
-> |       }
+On 2023/4/14 14:18, Jingbo Xu wrote:
+> Given on-disk i_xattr_icount is 16 bits and xattr_isize is calculated
+> from i_xattr_icount multiplying 4, xattr_isize has a theoretical maximum
+> of 256K (64K * 4).
 > 
-> This doesn't take into consideration that swapping is not needed if
-> the data is in big endian format on a big endian device. So, this
-> could be changed so that the *swap_needed is only true if the flag and
-> device endiannes disagrees?
+> Thus declare xattr_isize as unsigned int to avoid the potential overflow.
+> 
+> Fixes: bfb8674dc044 ("staging: erofs: add erofs in-memory stuffs")
+> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
 
-There are versions of the macro which performs the swap which
-understands the CPU endianness and become a NOP when it is not
-required. htons()/ntohs() are the classic examples. So you need to
-consider:
+Good catch!
 
-Despite swap_needed being true, it is possible no swap it actually
-happening, because such a macro is being used.
+Reviewed-by: Chao Yu <chao@kernel.org>
 
-and
-
-Maybe using these variant can make the code simpler, by just doing the
-NOP swap when the CPU endianess does not require it.
-
-    Andrew
+Thanks,
