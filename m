@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 334EF6E359C
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 09:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B7E86E359E
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 09:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbjDPHUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 03:20:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57408 "EHLO
+        id S230209AbjDPHUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 03:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbjDPHUF (ORCPT
+        with ESMTP id S230216AbjDPHUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 03:20:05 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30EBF30D8
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 00:19:56 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f167d0cbb7so1330225e9.0
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 00:19:56 -0700 (PDT)
+        Sun, 16 Apr 2023 03:20:11 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92093C01
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 00:20:02 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-2f44739a2afso407187f8f.1
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 00:20:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681629594; x=1684221594;
+        d=gmail.com; s=20221208; t=1681629601; x=1684221601;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xwqobIGOuNNlDjWDqP0aoWUSzuDynHZFKSCMK2X1W5s=;
-        b=MS/9uKs70i2Y0OM91fP96hPnooh51wKOYR5q7O5FvAeHvt655iTNAegCBM1Ui5KHEV
-         +z94oAHtcUPe8k0yJ/pTt5aaHdfPIc4bjaVuVLUhAB/WiOK/VsLBZHdrH99eqL4XRDE5
-         GVCrcc7QXkWpXNB3Io3SBgSxWQK907xsxRYcxt0XdfQSQZv5ZdBKoRd15y3/wuMnc4/G
-         znizZcWO8/kEzdAt4qgSy/YB43NEqoJOZc5cYS3XhO8/Iz/dpD3/M15iyKBpB7YyalFD
-         O+caYr2XaXzdpHMOHWfVvw/Z58cqsAqcYtzMEJIt8XAp9F+LY5trPSVCpLA6OYLmLRxi
-         inVA==
+        bh=90mE4vdn9DzTlSbEbDUJ0ZvC16lpbnbcfCKswzbdsYs=;
+        b=VSdKfd6tV+8i05h89Gqj1/SH4zXlr3DvwA7iTIRF3rbn0aSxn7thUq4cJNwm4a/nDP
+         viD1eCUNbN/SwsZwS6SbnljvK0WLZVu0x9kpv/6LkJNzRgqvi6IIpHftz8efjIubOJvR
+         +JcupzZiYw8X0HNjGoTh/nxDMq/JP6Tgyi38p8RnaicRp0YrqMra6uP/OkevglzP9QF2
+         3OqTWTmhi/xu/s9iHs7c+HfbOrPJG57tbTo3gPZMhuHrodS/WbAsr2zZulFTnGHpILNH
+         otGQh1JxICB4TiNMaVGgP/6Yna9VBdCYmHYbapv7x2UiS6Hryn4gN0v7eHxa/xMpI1hT
+         KCOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681629594; x=1684221594;
+        d=1e100.net; s=20221208; t=1681629601; x=1684221601;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xwqobIGOuNNlDjWDqP0aoWUSzuDynHZFKSCMK2X1W5s=;
-        b=Ead2baW1cKOpSLbJBuabwibMDm5cqx59v56yI6CCHXuY4kHASFH9llh16miezaAEB6
-         BGUdEnFlUeVDaA0i0WSGBR2u2gPKK8mxaHdCmprT3mKqIvtAQd30Z+3aLazRebe7B/ko
-         /gtJ4FETFoyUSulaJCP+bcPKSwLj5PG4+ZD+AXxT+tdEItTNiDHlejowY8PgV1iaujg1
-         4NAtD5okN7dXMF8JxqhZa01U8lvZc60evg8JDQ5868XYD9E1wYUDRUUgSjUW8iZS3W7i
-         oFiG34OZKsJr/1TncxIDQBMoa5OT1GwttGAGg31Kv8zrNSFqvMW1zlqUyKeopMr1yItg
-         8+Yw==
-X-Gm-Message-State: AAQBX9fyjrcOGstq26/MJ5Jnl318o1JRwzk37J+RSbzebTREjeZgkFmz
-        e512lN83+2vYpZ57ueucrBXXihha9lw=
-X-Google-Smtp-Source: AKy350Z/+ex1LitSfEe3lLjtUEoaf67Zo88uq8SYG3OMeuLLafoRZBqhesiGEu3AZyjPPElo2Y3O6A==
-X-Received: by 2002:adf:fc8b:0:b0:2e4:ccb1:dba5 with SMTP id g11-20020adffc8b000000b002e4ccb1dba5mr4415020wrr.4.1681629594654;
-        Sun, 16 Apr 2023 00:19:54 -0700 (PDT)
+        bh=90mE4vdn9DzTlSbEbDUJ0ZvC16lpbnbcfCKswzbdsYs=;
+        b=ByMpDvJf+I+A+Sp46KYgTsOAi/3AYMSUBgmahec99zAFInnLDpruo+FpD229X63d/P
+         YdGOxqhC+8Z0RQa/+3lNnWnthjNJx+TxBn0Cf1tOEVMIMrU3ceqeNn4Y+1eVJwjSE2gJ
+         V/ZptaiUChrdVgBWUSMkPQpuLe6t1zBuwG2DVMeKZOGR2ApB05adi2z0r0P2bgfiWWCM
+         Y2vTStmRt/JOs5tXuHA0Yij/pXWLgFGw1yPXYdXO/bNL7VXIq2WYxu8AJuyQJYR1QojU
+         /Vd1rv4UrbmFkK65Wy118+P5DjuqOBkA8sNMqDPP7vkg4EF4Vfjo92hQroLTqD9985dK
+         Apig==
+X-Gm-Message-State: AAQBX9c8R0Rh1VXLowbn6mx5w5QSqljsqYThyy2t0E6zoGQBw2uPK9Zq
+        AfWPdJIoatqhvFthZsg0pWI=
+X-Google-Smtp-Source: AKy350a4IN4nnH5XTOwrfTuJMdHp0biWw11GVr9plvTPUzlCsevkSGG8ElTmF0/m7+UA5g4YDCZa7w==
+X-Received: by 2002:a5d:6d4c:0:b0:2f7:dc6a:9468 with SMTP id k12-20020a5d6d4c000000b002f7dc6a9468mr3384392wri.3.1681629600725;
+        Sun, 16 Apr 2023 00:20:00 -0700 (PDT)
 Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
-        by smtp.gmail.com with ESMTPSA id y18-20020adff6d2000000b002daf0b52598sm7427281wrp.18.2023.04.16.00.19.53
+        by smtp.gmail.com with ESMTPSA id s15-20020adfea8f000000b002d1801018e2sm7388202wrm.63.2023.04.16.00.19.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 00:19:54 -0700 (PDT)
-Date:   Sun, 16 Apr 2023 09:19:52 +0200
+        Sun, 16 Apr 2023 00:20:00 -0700 (PDT)
+Date:   Sun, 16 Apr 2023 09:19:58 +0200
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/8] staging: rtl8192e: Remove unused macro RT_SET_PS_LEVEL
-Message-ID: <0d397210830f77ad3231c3b4a0465ae89aacb962.1681627603.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 4/8] staging: rtl8192e: Remove second initialization of
+ bActuallySet
+Message-ID: <ebf51fbd56bad4f8fd7fb51fe031f376c3ab6d2c.1681627603.git.philipp.g.hortmann@gmail.com>
 References: <cover.1681627603.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -70,25 +71,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove unused macro RT_SET_PS_LEVEL to shorten code.
+Remove second initialization of bActuallySet to shorten code.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- drivers/staging/rtl8192e/rtllib.h | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/staging/rtl8192e/rtl8192e/rtl_dm.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/staging/rtl8192e/rtllib.h b/drivers/staging/rtl8192e/rtllib.h
-index 1a0e7ae70ca6..6e665e866f1f 100644
---- a/drivers/staging/rtl8192e/rtllib.h
-+++ b/drivers/staging/rtl8192e/rtllib.h
-@@ -100,7 +100,6 @@ static inline void *netdev_priv_rsl(struct net_device *dev)
- 	((psc->CurPsLevel & _PS_FLAG) ? true : false)
- #define	RT_CLEAR_PS_LEVEL(psc, _PS_FLAG)	\
- 	(psc->CurPsLevel &= (~(_PS_FLAG)))
--#define	RT_SET_PS_LEVEL(psc, _PS_FLAG)	(psc->CurPsLevel |= _PS_FLAG)
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
+index 93504d5a8578..7342ef591169 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
+@@ -1539,8 +1539,6 @@ static void _rtl92e_dm_check_rf_ctrl_gpio(void *data)
+ 	enum rt_rf_power_state rf_power_state_to_set;
+ 	bool bActuallySet = false;
  
- /* defined for skb cb field */
- /* At most 28 byte */
+-	bActuallySet = false;
+-
+ 	if ((priv->up_first_time == 1) || (priv->being_init_adapter))
+ 		return;
+ 
 -- 
 2.40.0
 
