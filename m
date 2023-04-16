@@ -2,116 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0233C6E391F
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 16:17:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4109F6E3922
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 16:18:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbjDPORS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 10:17:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38870 "EHLO
+        id S230368AbjDPOSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 10:18:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbjDPORQ (ORCPT
+        with ESMTP id S229826AbjDPOSr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 10:17:16 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDE71FD7
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 07:17:14 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id kt6so19456975ejb.0
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 07:17:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681654633; x=1684246633;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=V/3dcuion13sJsfdfeJ1nJXQOfv7UJn9geOzy4vdmqI=;
-        b=RkvtvgW+braPr1bHHGazAD5qn9gK5OvQe94UzPT1UkvqARIdsvB/x+GXiqSygrWCus
-         wMFbF+CPKZWY6gBpg/Pxg9svSQ0kJ3SGOh01bZpPwT+sGNMBnc6ZS5ujPwAsx+mlk96F
-         RkB5w3VklOTTOEVxzL/13WbNBw44/z9PMSsZqS6+fmI1C6B1nJ/Ezj4+mDqy+uxRVbYU
-         oBV5+DFcM8XnM1lO5MyZg1KTZ1kDPrnO8ehkpVQDuTBvM0pRBAGc1lomOLGmqt4thAML
-         y6wiOAJ0dBwPW0FjnL37cr/zsmqizT0QxLiORtvZbeKwr4E0q07sobjYpwZzcfVXadAE
-         r2Qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681654633; x=1684246633;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V/3dcuion13sJsfdfeJ1nJXQOfv7UJn9geOzy4vdmqI=;
-        b=UomIzVHAX708QE7GSpKJWU8pl3B5qw4wvLjtikHqXDnH8bk+n1dmby22PeZ+Q9JRsH
-         ooB+Oc66EfY9bySmU9OX4FXQAu0Df5cdVf/SY/JWM+vlalzn9tQuNEuaK2dDu2AYQMlF
-         wnHUYAtHbueE1CzuCSX6vNzYDiR10s57cBmFKqcLO5QhRbCwr22EC272/b1zttB+wtQ1
-         UuzPfwThOepDcf+PMamolEFwQ50ukze9g09gMcnQb/8CICu0Mhhv7i7kEfn965lpl/qH
-         pPLnZnycluJZn2pDiZYK8w2ZYBS3mYZyBYEnAOmg/NcTNssZSIFnbI3cjD+j46t2CN9F
-         RuAg==
-X-Gm-Message-State: AAQBX9e85Bk+//Y6rIQtwlth3tDF2hWOpR4E6gi3gv0DWJbFqdxv7q8a
-        89WgJMfv8cXM4fqHThw6o6d81g==
-X-Google-Smtp-Source: AKy350aQ90ciic978SSzqPVIlkBGrpmoWtF1iQGD8kNvA+qgmdNuq6DhXCVGMSoBsWaaUSC8SnFE0A==
-X-Received: by 2002:a17:906:b7c6:b0:94f:1:8469 with SMTP id fy6-20020a170906b7c600b0094f00018469mr4392986ejb.35.1681654633353;
-        Sun, 16 Apr 2023 07:17:13 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:ba4d:301c:484d:5c9? ([2a02:810d:15c0:828:ba4d:301c:484d:5c9])
-        by smtp.gmail.com with ESMTPSA id tg4-20020a1709078dc400b0094ea3a32694sm5013900ejc.190.2023.04.16.07.17.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Apr 2023 07:17:13 -0700 (PDT)
-Message-ID: <8eb3e8e5-95a8-ffcd-aa09-8d6d63b7f526@linaro.org>
-Date:   Sun, 16 Apr 2023 16:17:10 +0200
+        Sun, 16 Apr 2023 10:18:47 -0400
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D33AF1FD7;
+        Sun, 16 Apr 2023 07:18:45 -0700 (PDT)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1po3D4-0001gF-2d;
+        Sun, 16 Apr 2023 16:18:30 +0200
+Date:   Sun, 16 Apr 2023 15:18:27 +0100
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>
+Subject: Re: [PATCH net-next v2] net: dsa: mt7530: fix support for MT7531BE
+Message-ID: <ZDwDs6BHRo0ukfGF@makrotopia.org>
+References: <ZDvlLhhqheobUvOK@makrotopia.org>
+ <8d36ff3b-e084-9f79-4c00-ec832f2cdbb3@arinc9.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] dt-bindings: iio: adc: qcom,spmi-vadc: add 16 ratio of
- pre-scaling
-Content-Language: en-US
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Siddartha Mohanadoss <smohanad@codeaurora.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230416123142.299533-1-krzysztof.kozlowski@linaro.org>
- <20230416141024.2c09d7c8@jic23-huawei>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230416141024.2c09d7c8@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8d36ff3b-e084-9f79-4c00-ec832f2cdbb3@arinc9.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/04/2023 15:10, Jonathan Cameron wrote:
-> On Sun, 16 Apr 2023 14:31:42 +0200
-> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+On Sun, Apr 16, 2023 at 04:48:23PM +0300, Arınç ÜNAL wrote:
+> On 16.04.2023 15:08, Daniel Golle wrote:
+> > There are two variants of the MT7531 switch IC which got different
+> > features (and pins) regarding port 5:
+> >   * MT7531AE: SGMII/1000Base-X/2500Base-X SerDes PCS
+> >   * MT7531BE: RGMII
+> > 
+> > Moving the creation of the SerDes PCS from mt753x_setup to mt7530_probe
+> > with commit 6de285229773 ("net: dsa: mt7530: move SGMII PCS creation
+> > to mt7530_probe function") works fine for MT7531AE which got two
+> > instances of mtk-pcs-lynxi, however, MT7531BE requires mt7531_pll_setup
+> > to setup clocks before the single PCS on port 6 (usually used as CPU
+> > port) starts to work and hence the PCS creation failed on MT7531BE.
+> > 
+> > Fix this by introducing a pointer to mt7531_create_sgmii function in
+> > struct mt7530_priv and call it again at the end of mt753x_setup like it
+> > was before commit 6de285229773 ("net: dsa: mt7530: move SGMII PCS
+> > creation to mt7530_probe function").
+> > 
+> > Fixes: 6de285229773 ("net: dsa: mt7530: move SGMII PCS creation to mt7530_probe function")
+> > Signed-off-by: Daniel Golle <daniel@makrotopia.org>
 > 
->> Document value of 16 for pre-scaling, already used in DTS and supported
->> by the Linux driver since long time:
->>
->>   sm7225-fairphone-fp4.dtb: adc@3100: channel@8:qcom,pre-scaling: 'oneOf' conditional failed, one must be fixed:
->>     10 was expected
->>     16 is not one of [1, 3, 4, 6, 20, 8, 10]
->>     81 was expected
->>
->> Fixes: e13d757279bb ("iio: adc: Add QCOM SPMI PMIC5 ADC driver")
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> I'll put my 2 cents about the patch along with responding to your points on
+> the other thread here.
 > 
-> I'm carrying an identical patch (though without the reordering) from Luca Weiss.
-> I thought as the whole series was very late in the cycle that it was unlikely
-> to be necessary to rush this in.
+> > Why don't we use my original solution [1] which has some advantages:
+> > 
+> >  * It doesn't requrire additional export of mt7530_regmap_bus
+> > 
+> >  * It doesn't move PCS creation to mt7530.c, hence PCS_MTK_LYNXI is
+> >    only required for MDIO-connected switches
+> >    (with your patch we would have to move the dependency on PCS_MTK_LYNXI
+> >    from NET_DSA_MT7530_MDIO to NET_DSA_MT7530)
 > 
-> https://lore.kernel.org/all/20230414-pmi632-v1-5-fe94dc414832@z3ntu.xyz/
+> Maybe this is what should happen. Maybe the PCS creation (and therefore
+> mt7530_regmap_bus) should be on the core driver. Both are on the MDIO driver
+> for the sole reason of only the devices on the MDIO driver currently using
+> it. It's not an MDIO-specific operation as far as I can tell. Having it on
+> the core driver would make more sense in the long run.
+
+Which "long run" are you talking about?
+regmap creation is bus-specific, and so is the existence of LynxI PCS.
+There simply aren't any MMIO-connected switches which come with that IP.
+And I strongly doubt there ever will be. And even if, why should we now
+prepare for an entirely speculative future? If it actually happens, ie.
+in case there is going to be a new SoC with MMIO-connected switch which
+does comes with LynxI PCS (e.g. for port 5 only) we can still move the
+code.
+
 > 
-> I see that patch is for the fairphone-fp3 adn this report is the fairphone-fp4.
-> Is that the reason this is a fix?
+> > 
+> >  * It doesn't expose the dysfunctional SerDes PCS for port 5 on MT7531BE
+> >    This will still fail and hence result in probing on MT7531 to exit
+> >    prematurely, preventing the switch driver from being loaded.
+> >    Before 9ecc00164dc23 ("net: dsa: mt7530: refactor SGMII PCS creation")
+> >    the return value of mtk_pcs_lynxi_create was ignored, now it isn't...
+> 
+> Ok, so checking whether port 5 is SGMII or not on the PCS creation code
+> should be done on the same patch that fixes this issue.
+> 
+> > 
+> >  * It changes much less in terms of LoC
+> 
+> I'd rather prefer a better logic than the "least amount of changes possible"
+> approach.
+> 
+> Let's analyse what this patch does:
+> 
+> With this patch, mt7531_create_sgmii() is run after mt7530_setup_mdio is
+> run, under mt753x_setup(). mt7531_pll_setup() and, as the last requirement,
+> mt7530_setup_mdio() must be run to be able to create the PCS instances. That
+> also means running mt7530_free_irq_common must be avoided since the device
+> uses MDIO so mt7530_free_mdio_irq needs to be run too.
+> 
+> While probing the driver, the priv->create_sgmii pointer will be made to
+> point to mt7531_create_sgmii, if MT7531 is detected. Why? This pointer won't
+> be used for any other devices and sgmii will always be created for any
+> MT7531 variants, so it's always going to point to mt7531_create_sgmii when
+> priv->id is ID_MT7531. So you're introducing a new pointer just to be able
+> to call mt7531_create_sgmii() on mt7530-mdio.c from mt7530.c.
+> 
+> On mt753x_setup(), if priv->create_sgmii is pointing to something it will
+> now run whatever it points to with two arguments. One being the priv table
+> and the other being mt7531_dual_sgmii_supported() which returns 1 or 0 by
+> looking at the very same priv table. That looks bad. What could be done
+> instead is introduce a new field on the priv table that keeps the
+> information of whether port 5 on the MT7531 switch is SGMII or not.
 
-Oh, I missed it. It's just something new and not yet in next maybe, so
-thus I missed the fix.
+Yes, and on a 64-bit system that means 8 bytes of memory for each instance.
+Exporting a function or const implies significantly more overhead, and
+it would not be as nicely limited in scope as a function pointer would be.
 
-Ignore this patch then, please.
+There are no other users in the kernel of the const you would export in
+your variant of the fix, so why have it exported?
 
-Best regards,
-Krzysztof
+> 
+> A similar logic is already there on the U-Boot MediaTek ethernet driver.
+> 
+> https://github.com/u-boot/u-boot/blob/a94ab561e2f49a80d8579930e840b810ab1a1330/drivers/net/mtk_eth.c#L903
+> 
+> So this patch fixes the issue with the only consideration being changing as
+> less lines of code as possible.
 
+You are ignore two more important arguments:
+ * It doesn't requrire additional export of mt7530_regmap_bus
+   (which would imply significantly more storage overhead compared to
+   an additional function pointer in a priv struct)
+
+ * It doesn't move PCS creation to mt7530.c, hence PCS_MTK_LYNXI is
+   only required for MDIO-connected switches
+   (with your patch we would have to move the dependency on PCS_MTK_LYNXI
+   from NET_DSA_MT7530_MDIO to NET_DSA_MT7530)
+
+> And that's okay. We can make the least
+> amount of changes to fix the issue first, then improve the driver. But
+> there's nothing new made on the driver after the commit that caused this
+> issue, backportability to the stable trees is a non-issue. So why not do it
+> properly the first time?
+
+Most of all I'd rather have it fixed before net-next is merged to Linus'
+tree and also before net-next will close again.
+
+However, I also simply don't see what would be more "proper" about your
+solution.
+
+> 
+> Whatever the outcome with this patch is, on my upcoming patch series, I
+> intend to move mt7531_create_sgmii to mt7530.c. Then introduce
+> priv->p5_sgmii to get rid of mt7531_dual_sgmii_supported().
+
+What is the argument for that?
+
+There is not a single MMIO-connected switch which comes with LynxI PCS.
+(see above)
+
+Imho we should rather try to work into the opposite direction and move
+more code only used on either MDIO or MMIO from core to the
+bus-specific drivers. If needed we can even split them more, eg. have
+different modules for MT7530 and MT7531, so that even the driver for
+MDIO-connected MT7530 would not require MTK_PCS_LYNXI.
+
+In that sense I'm a big fan of the structure of the mt76 wireless
+driver: Have a core module for shared helper functions and then
+device-specific driver modules. Unfortunately many if not most drivers
+are doing the exact opposite approach, ie. having some abstration layer
+which will always need to be extended and changed with every
+unforeseeable new hardware to be supported which just results in lots
+of overhead and is a burden to maintain. You can see that in the rt2x00
+wireless driver which I also worked on a lot: Most of the abstractions
+aren't even useful with any of the latest hardware generations.
+
+tl;dr: What's wrong with moving functions specific to either variant
+(MMIO vs. MDIO) into the corresponding modules and keeping the core
+slim and really only cover shared functionality? This is also why I
+originally wanted the names of files and Kconfig symbols to reflect the
+supported hardware rather than the supported bus-type -- I've changed
+that upon your request and now believe I should have argued more
+clearly why I made my choice like I did...
