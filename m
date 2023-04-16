@@ -2,131 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 847506E3997
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 17:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C28BC6E3998
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 17:05:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbjDPPEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 11:04:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59328 "EHLO
+        id S229879AbjDPPF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 11:05:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjDPPEw (ORCPT
+        with ESMTP id S229547AbjDPPF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 11:04:52 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E10E6C
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 08:04:50 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a5so1259076ejb.6
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 08:04:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681657489; x=1684249489;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=W7knCr9Rw+t/6alapTgwg/iEzfEkJZjn1612eROrLe0=;
-        b=XaR//UYbfZ9tT/9t67VsysxxBdnm84ST9QijxZCd8TEMnylMyj9VhQcx71ux05BA7X
-         gvF55lWW47c0Bw/mwLgQzQD8fVM2+Uz7LYnQ9giWTZJ+fD1QPAas00GxJGeT5f5x82bY
-         /ozxls8s/s2xn/tZ0lmEn2Abr28OKO+3cBhmPntSX4koURbI4C53Gd4Wd/b/s2n1icDL
-         wBgDEteu6u8HjX9KYayX8Beyo7FtMdY+LlLOyOBHRHn0xIkgKxHq5QBqnm7m5ePcq8s2
-         jlBO4tKK4AL1u3BdACgHyA0YLBD1lGjbNiLufR33TGn7ve4qzKpfRHNqkVJC35YsOquF
-         5u5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681657489; x=1684249489;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W7knCr9Rw+t/6alapTgwg/iEzfEkJZjn1612eROrLe0=;
-        b=BLbMN4JU3+Nj1wQTr1ek0WRCr/3yBrzVrbBDeNHdXFoUquIBsfP71zctI/jJV3RGpl
-         qqThxu7w0CYiYbOoPLcguuVD5Wbf3dar6JUEfh8xBIguI9XLMipJQJLUsjDJovVUmkfl
-         I5KRzpPd3fpEMNSUjPR/zcbvoS6EYRvOeV1S4TJGoU3xsdQVYgAcjWySwUvGqwB3nw64
-         taAqNpwyt5cPrJqS7681E2ld0uSRoFna973869c6YMVg6uuzlIJJRPuc2rzbICMpqNsr
-         waDlzBEaTd9g8RluTsdVZwpGH8KWL7VOi34uVGPnZiqhNeUQipuMuLi3LYcEWLZ24ZSX
-         XFOA==
-X-Gm-Message-State: AAQBX9elglaouGwIWhfFe3o4seeN8emGTdUyZ0hi6ygqX19WnVlXRI20
-        U2gd7MdErzQuUsmTym5QsrhNDw==
-X-Google-Smtp-Source: AKy350ZmvaPyK/34orGOz6gZvivnaCzSPH+AWBjfFvkNmokL7H4Sbk94KYMRpcm+UnV25l3Pqe1/jA==
-X-Received: by 2002:a17:906:ad87:b0:94a:4b7a:9886 with SMTP id la7-20020a170906ad8700b0094a4b7a9886mr4729072ejb.12.1681657488988;
-        Sun, 16 Apr 2023 08:04:48 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:ba4d:301c:484d:5c9? ([2a02:810d:15c0:828:ba4d:301c:484d:5c9])
-        by smtp.gmail.com with ESMTPSA id tk9-20020a170907c28900b0094f5179540fsm955274ejc.83.2023.04.16.08.04.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Apr 2023 08:04:48 -0700 (PDT)
-Message-ID: <3877cb9e-9647-0acf-f705-d34fe2c731ff@linaro.org>
-Date:   Sun, 16 Apr 2023 17:04:47 +0200
+        Sun, 16 Apr 2023 11:05:27 -0400
+Received: from out203-205-221-173.mail.qq.com (out203-205-221-173.mail.qq.com [203.205.221.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4106C5
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 08:05:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1681657522;
+        bh=AhOIysLciGfF0MAR/cFkglmUP9qKvl8+zowFKTu98wA=;
+        h=From:To:Cc:Subject:Date;
+        b=GUTb7GyxRM+ISPrkAnHkynBFRCbAPecCjQIZ76jDEjJTMNwtEs1O9W1QgwxVNHNoY
+         moRw/akn1f/NpSXBLSMWAbBhdLIdvavRfoKdVFCeHvqlY/zGi3jZ18THpfQ3873i7r
+         Yk/p/tSeRkUPG4PnGtn4WQ/3YiVFrHes5L7Hwthg=
+Received: from rtoax.. ([111.199.190.121])
+        by newxmesmtplogicsvrszb6-0.qq.com (NewEsmtp) with SMTP
+        id 15381C4E; Sun, 16 Apr 2023 23:05:19 +0800
+X-QQ-mid: xmsmtpt1681657519t1yn8m3ow
+Message-ID: <tencent_D547A5F2B576141E11CCA04308252BE61205@qq.com>
+X-QQ-XMAILINFO: OGZxhFXqN7PJZuDu2qLVR7tT0Pg4S8kZaW5M4pPypjhb0eoKJBqdbOwaw1tZtF
+         EWSqFEOOWf61NJVhXKj8tKvLUF8LBVvf5gvwPjEOGxi/JOlJ001Zsa7N0j4lI+cA2dizYhQGP1GR
+         sI5YJA7MZan/LaqC+SpbZzL7bAtq+BkABthI4b5fIKQRdEzywmJzc+XkbqS61xoXWC5JuDGo2+yw
+         wxGTI3mh9JA5lhg/VRI7jSZErw0Xp0syplsNNd7SUutAD+OBV+5ByweiagIKkks1s2AfIvHhoAh8
+         gU5ZPODtl5ZsKafGG7XquXauukx9aOOfHbCPZ6RLhOowyNjNNCWvMNm+9eIDFaK/jWlHUHlELoCI
+         T6G0DqjFQx3crS9ADbqUqroKJ2iu9X4c5G+aI2T3JPwZZ+Di269UJ2NUdqRxXdF01qy/A8BTZnQk
+         MwCu/Snl+4hF1epRK6s1eo7q7wg/9PiOCjGwCpKLJR3YJ5E4zOxdUdnzsfwnI9Tvom3DNRrXWpKU
+         +g4qrox7fO5aTLILpF+rg7JgcYsBh5UF7r2rNXFdGSyO56oZddddJP+sVavT8+JLsL2ciiLtQG/P
+         Vuf4Mhm1IKKJmNY7HOT12BSNplSGvGmq0Lsf3N7EXsLd6w7Dkyfsa7V5vrTB/ycVS9Y2b1ayUsMd
+         Vtncir6amFJdG4nEHenrLkyw0bVK6q5IIh/jTwIMgkiY7oYAkgmTAJrEY2iEftxic94kK7N3nwhX
+         TsqA+vjtULDcxK3s1RSOe1RjaL9p0RH7EoSwk0G5PyifulfTGfSsFUO7UcKOGa/st6hlrEtJ6Yyy
+         tN98UARMREuKLrHPTcv1Mqefqh2cC7NwNJduN0cu9BNt+qy2suauExgpsDQyGQFbcxjzRHB/AAe4
+         QOIf0cywZ4UeS6aSJvIsyFN4kRjDE05jdbO6Lk6TLx2fukWCv/E035ib2nNYTjsqUMunK3eGdpU9
+         yuApCg5dUz7aE/FZd4ZqofFVlHqeOP6ABRNcxnEeA=
+From:   Rong Tao <rtoax@foxmail.com>
+To:     will@kernel.org
+Cc:     prasad@linux.vnet.ibm.com, tglx@linutronix.de,
+        gregkh@linuxfoundation.org, frederic@kernel.org,
+        qperret@google.com, ast@kernel.org, mbenes@suse.cz,
+        pmladek@suse.com, rongtao@cestc.cn,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] samples/hw_breakpoint: Fix kernel BUG 'invalid opcode: 0000'
+Date:   Sun, 16 Apr 2023 23:05:17 +0800
+X-OQ-MSGID: <20230416150518.90156-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 03/18] dt-bindings: interrupt-controller: qcom-pdc: add
- compatible for sa8775p
-Content-Language: en-US
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>
-References: <20230327125316.210812-1-brgl@bgdev.pl>
- <20230327125316.210812-4-brgl@bgdev.pl>
- <CAMRc=Mfe6gCM=Mz6Can6xsSsrjX-9T_aR2Yev+b57koky_az-A@mail.gmail.com>
- <CAMRc=Mfw+4Co8JPz51_E+DSawijO8EB6rMmFXEmM0e5F3Fg_8A@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAMRc=Mfw+4Co8JPz51_E+DSawijO8EB6rMmFXEmM0e5F3Fg_8A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/04/2023 11:33, Bartosz Golaszewski wrote:
-> On Thu, Apr 6, 2023 at 4:10 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
->>
->> On Mon, Mar 27, 2023 at 2:53 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
->>>
->>> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->>>
->>> Add a compatible for the Power Domain Controller on SA8775p platforms.
->>> Increase the number of PDC pin mappings.
->>>
->>> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->>> Cc: Thomas Gleixner <tglx@linutronix.de>
->>> Cc: Marc Zyngier <maz@kernel.org>
->>> ---
->>>  .../devicetree/bindings/interrupt-controller/qcom,pdc.yaml     | 3 ++-
->>>  1 file changed, 2 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
->>> index 94791e261c42..641ff32e4a6c 100644
->>> --- a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
->>> +++ b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
->>> @@ -26,6 +26,7 @@ properties:
->>>    compatible:
->>>      items:
->>>        - enum:
->>> +          - qcom,sa8775p-pdc
->>>            - qcom,sc7180-pdc
->>>            - qcom,sc7280-pdc
->>>            - qcom,sc8280xp-pdc
->>> @@ -53,7 +54,7 @@ properties:
->>>    qcom,pdc-ranges:
->>>      $ref: /schemas/types.yaml#/definitions/uint32-matrix
->>>      minItems: 1
->>> -    maxItems: 32 # no hard limit
->>> +    maxItems: 38 # no hard limit
+From: Rong Tao <rongtao@cestc.cn>
 
-I don't think the limit is correct. I still see warnings with this
-patch. We already have 57 elements, so limit should be I guess 128 or
-something.
+Macro symbol_put() is defined as __symbol_put(__stringify(x))
 
-Best regards,
-Krzysztof
+    ksym_name = "jiffies"
+    symbol_put(ksym_name)
+
+will be resolved as
+
+    __symbol_put("ksym_name")
+
+which is clearly wrong. So symbol_put must be replaced with __symbol_put.
+
+When we uninstall hw_breakpoint.ko (rmmod), a kernel bug occurs with the
+following error:
+
+[11381.854152] kernel BUG at kernel/module/main.c:779!
+[11381.854159] invalid opcode: 0000 [#2] PREEMPT SMP PTI
+[11381.854163] CPU: 8 PID: 59623 Comm: rmmod Tainted: G      D    OE      6.2.9-200.fc37.x86_64 #1
+[11381.854167] Hardware name: To Be Filled By O.E.M. To Be Filled By O.E.M./B360M-HDV, BIOS P3.20 10/23/2018
+[11381.854169] RIP: 0010:__symbol_put+0xa2/0xb0
+[11381.854175] Code: 00 e8 92 d2 f7 ff 65 8b 05 c3 2f e6 78 85 c0 74 1b 48 8b 44 24 30 65 48 2b 04 25 28 00 00 00 75 12 48 83 c4 38 c3 cc cc cc cc <0f> 0b 0f 1f 44 00 00 eb de e8 c0 df d8 00 90 90 90 90 90 90 90 90
+[11381.854178] RSP: 0018:ffffad8ec6ae7dd0 EFLAGS: 00010246
+[11381.854181] RAX: 0000000000000000 RBX: ffffffffc1fd1240 RCX: 000000000000000c
+[11381.854184] RDX: 000000000000006b RSI: ffffffffc02bf7c7 RDI: ffffffffc1fd001c
+[11381.854186] RBP: 000055a38b76e7c8 R08: ffffffff871ccfe0 R09: 0000000000000000
+[11381.854188] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+[11381.854190] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+[11381.854192] FS:  00007fbf7c62c740(0000) GS:ffff8c5badc00000(0000) knlGS:0000000000000000
+[11381.854195] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[11381.854197] CR2: 000055a38b7793f8 CR3: 0000000363e1e001 CR4: 00000000003726e0
+[11381.854200] DR0: ffffffffb3407980 DR1: 0000000000000000 DR2: 0000000000000000
+[11381.854202] DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000400
+[11381.854204] Call Trace:
+[11381.854207]  <TASK>
+[11381.854212]  s_module_exit+0xc/0xff0 [symbol_getput]
+[11381.854219]  __do_sys_delete_module.constprop.0+0x198/0x2f0
+[11381.854225]  do_syscall_64+0x58/0x80
+[11381.854231]  ? exit_to_user_mode_prepare+0x180/0x1f0
+[11381.854237]  ? syscall_exit_to_user_mode+0x17/0x40
+[11381.854241]  ? do_syscall_64+0x67/0x80
+[11381.854245]  ? syscall_exit_to_user_mode+0x17/0x40
+[11381.854248]  ? do_syscall_64+0x67/0x80
+[11381.854252]  ? exc_page_fault+0x70/0x170
+[11381.854256]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
+---
+ samples/hw_breakpoint/data_breakpoint.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/samples/hw_breakpoint/data_breakpoint.c b/samples/hw_breakpoint/data_breakpoint.c
+index 418c46fe5ffc..9debd128b2ab 100644
+--- a/samples/hw_breakpoint/data_breakpoint.c
++++ b/samples/hw_breakpoint/data_breakpoint.c
+@@ -70,7 +70,7 @@ static int __init hw_break_module_init(void)
+ static void __exit hw_break_module_exit(void)
+ {
+ 	unregister_wide_hw_breakpoint(sample_hbp);
+-	symbol_put(ksym_name);
++	__symbol_put(ksym_name);
+ 	printk(KERN_INFO "HW Breakpoint for %s write uninstalled\n", ksym_name);
+ }
+ 
+-- 
+2.39.2
 
