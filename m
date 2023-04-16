@@ -2,90 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2C2A6E3A83
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 19:29:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F7646E3A8B
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 19:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjDPR3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 13:29:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43186 "EHLO
+        id S229695AbjDPRd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 13:33:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjDPR3h (ORCPT
+        with ESMTP id S229446AbjDPRdY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 13:29:37 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828BE128
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 10:29:35 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id dx24so14349610ejb.11
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 10:29:35 -0700 (PDT)
+        Sun, 16 Apr 2023 13:33:24 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B1A792;
+        Sun, 16 Apr 2023 10:33:23 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-63b8b19901fso206360b3a.3;
+        Sun, 16 Apr 2023 10:33:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681666174; x=1684258174;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ALGubGI9vcPFVNhBw3xYsBRMIAknnF9aicGsi1XUPLk=;
-        b=sMuKVfCxr89Rs5nPX29H3CNTFQvBvR/XM4KqkDBiCu3zHbHhec+m6gNXeH8Zro6/hP
-         AihhHjRPgDkJMjkI9u+4MLflks+a3mpVBvuGtxpTgNNGVTSObVXzkGGaz7a2JUv7qXlL
-         ck4H9Pehfnd6zoAs7HLhocAskPw2zuiFDODfK63C8a+ttTQd2kG9jUvcK8TuiQfejL12
-         Iyi6hcI7sHL7i7GHwwqVBigCeaPwPbl2UAZscjInSEvlGpRjCKkNjXCYYVhBTHAUrtwY
-         up30+jmftwHc5xx/Vx/sX4QcSUcACPcmCemhZyfGVGReFJiD62AG5oi5XkFEDBOmFG0F
-         Mr7w==
+        d=gmail.com; s=20221208; t=1681666402; x=1684258402;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=G5OXsid8SYL4GdSMfFGQSs/wdoDzyJyZpFKL7M/EWZU=;
+        b=r26bZ91MxZ8MIhL3bXOVZym4OV4qGD+oXb+sZ6/Bbj88MEymCf06SEFfbJ1rJvc2q1
+         deH0nKmnSkPXiGMsDh1RxIQjjNioNDR3L70xYvCpb2Inm0MnMR7n/+DGpkEtjgFcYajq
+         X8MtthEibrfeXhnNPGsq6dO6V9SEASZIjbnyhFcD3zNaW8wdagJYamUA/l75EXgpkl6J
+         GCMS75hM8XEm87oly5ydBtTc1eByYn2eL2Rpg97qU6+uhXownM7uxSbs29Q7IOyJCSmn
+         GYFFRp+rmojhelvZprQysyptI+Od47EBs7GEdLJBUD3nrUzgqB/ySo7thbgcye8g33D2
+         T1ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681666174; x=1684258174;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ALGubGI9vcPFVNhBw3xYsBRMIAknnF9aicGsi1XUPLk=;
-        b=lWxGO7c1pV05g1cT9LW2fyPagKtRxZIds9t9WysK2OyiJ3vQv8YWFB46OBFebGPNFP
-         rCpzr269z9+Na/gVWO42YHI/E9ROv3ZTZgdHns0S8VFNnpaKkXpYi0pihJC15+qTIDgZ
-         xp/VDnxI4aRoiQ6+BQi270ZvaYldvK4yk1Th7rk0jlJeKuztv7WnWnSCOU7OH4JAQ5PP
-         vcGLK4PuVqTvoguljGKpLrr16+NPybS9nBTtQe3iKCOdN615TUwRnXjhVjATUkaaNuUm
-         ra8cIrkx1/2uKG+SAVyvSgJgC1a3TAtAa2RNDtIsG4NBMXjiKuovsKuRTBUCu2zdlP5d
-         L6rg==
-X-Gm-Message-State: AAQBX9cxoDJDRc6Ydvbc/xl0MXPQe96sH2Cgd25XZqA4Z7oLIP+3yYHl
-        /4XUFFjjltdMqJpEJSw1r6F5DQ==
-X-Google-Smtp-Source: AKy350YFnbIUE8o83ZkVTdY4/9rW/e7dq7GqM6STdl/F8jdbMAVS3RxyoIDP9UaCahROrbK+1R6w/Q==
-X-Received: by 2002:a17:907:2089:b0:947:a6d7:e2b4 with SMTP id pv9-20020a170907208900b00947a6d7e2b4mr4755130ejb.8.1681666173907;
-        Sun, 16 Apr 2023 10:29:33 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:f9e3:1d38:66a7:ae92? ([2a02:810d:15c0:828:f9e3:1d38:66a7:ae92])
-        by smtp.gmail.com with ESMTPSA id h20-20020a1709067cd400b0094a86ccb634sm5278610ejp.210.2023.04.16.10.29.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Apr 2023 10:29:33 -0700 (PDT)
-Message-ID: <31c582a7-682a-330e-51d4-53b4a0c5f3a2@linaro.org>
-Date:   Sun, 16 Apr 2023 19:29:32 +0200
+        d=1e100.net; s=20221208; t=1681666402; x=1684258402;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=G5OXsid8SYL4GdSMfFGQSs/wdoDzyJyZpFKL7M/EWZU=;
+        b=a1tkmuWnIlv9JU1jN/JbjrxKtwOmqQVwoFWFXMNQY2WKkjiLDfJc2347/H/ULmJy4w
+         DBlSPeMu9Y3loW1TPeB+Q4WPnQpo/qkCQeDv4A1jUsI8sI6WdTV+g3QQ0LlRf6LTmeKv
+         NgYUGx2fNh9zd74WK9hPZS5dymP3CEVkRFXXmXaLZ3Ibe6PzChFg1L2NdTW83T895d5f
+         8/hso3i4UVrnuZAGC8fjSxMSo2oSJrrhhFEXDow3tQ6RtAKBxBN5I3ttvQqiPzeH/Qzn
+         PP3xZ4SfeksSc/5CSPpuZ04nqG90R4nQL2DWAzGIdyvguy/OUV9nSkBY9Swr3s2E2aDR
+         yzmw==
+X-Gm-Message-State: AAQBX9c//BNcAGUG09yc+NrC814eI4anOOoi3WGGnZVjwN2FS5cMpLM6
+        g5dMy2ct2/QAvdlFIPjNWssT21sAkPjbk7FrCyg=
+X-Google-Smtp-Source: AKy350YOHxcAsnUbt/l01GPFPoS+uNRrCZ4sZGsqnnlfixZL9Q6Mh+rLYgt5VRK0pg//bgX/I5e3zQ==
+X-Received: by 2002:a05:6a00:240b:b0:637:c959:8ea1 with SMTP id z11-20020a056a00240b00b00637c9598ea1mr16584791pfh.22.1681666401849;
+        Sun, 16 Apr 2023 10:33:21 -0700 (PDT)
+Received: from d.home.yangfl.dn42 ([104.28.245.200])
+        by smtp.gmail.com with ESMTPSA id j22-20020a62b616000000b0062d90f36d16sm6110973pff.88.2023.04.16.10.33.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Apr 2023 10:33:21 -0700 (PDT)
+From:   David Yang <mmyangfl@gmail.com>
+To:     linux-clk@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, David Yang <mmyangfl@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/4] clk: Add basic register clock controller
+Date:   Mon, 17 Apr 2023 01:32:56 +0800
+Message-Id: <20230416173302.1185683-1-mmyangfl@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 1/3] dt-bindings: phy: Add starfive,jh7110-dphy-rx
-Content-Language: en-US
-To:     Changhuang Liang <changhuang.liang@starfivetech.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Jack Zhu <jack.zhu@starfivetech.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-References: <20230412084540.295411-1-changhuang.liang@starfivetech.com>
- <20230412084540.295411-2-changhuang.liang@starfivetech.com>
- <8dd0dc63-e0df-8764-f756-da032d9d671c@linaro.org>
- <eb47b7c7-bdbb-92d9-ba39-604ce487f297@starfivetech.com>
- <f6a4fb28-d635-4d99-44bb-d929cb41eef2@linaro.org>
- <b34a8d59-34e4-8358-9d2b-367f4707ca7c@starfivetech.com>
- <f0d82428-aaa5-3dd4-bc29-f1057fe749bc@linaro.org>
- <0c94aadf-fac3-d05c-1c54-ae8337526849@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <0c94aadf-fac3-d05c-1c54-ae8337526849@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,52 +72,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/04/2023 11:02, Changhuang Liang wrote:
-> 
-> 
-> On 2023/4/13 16:41, Krzysztof Kozlowski wrote:
->> On 13/04/2023 04:34, Changhuang Liang wrote:
->>>>>>> +  lane_maps:
->>>>>>
->>>>>> Why did this appear? Underscores are not allowed. It looks like you
->>>>>> re-implement some standard property.
->>>>>>
->>>>>
->>>>> Will change to lane-maps.
->>>>> Yes, according to Vinod advice, lane mapping table use device tree
->>>>> to parse makes sense.
->>>>
->>>> Hm, I have a feeling that I saw such property, so you should dig into
->>>> existing and in-flight bindings.
->>>>
->>>> Best regards,
->>>> Krzysztof
->>>>
->>>
->>> A standard property? Like "clocks" or "resets"?
->>
->> Like lane-polarities now submitted to one MIPI.
->>
->> Anyway it does not look like a property of a board. You said it is fixed
->> per SoC, so it should be implied from the compatible. Otherwise please
->> explain in description and provide some rationale.
->>
->> Best regards,
->> Krzysztof
->>
-> 
-> This property is the only one used for this IP, I have compared this IP with
-> other DPHY rx module, DPHY modules form the other manufacturers not have this
-> configure.
-> And we also have a SoC called JH7100. It DPHY rx module is the same as JH7110.
-> But we don't do the upstream work on it. If it use this lane-maps will be 
-> configure as "lane_maps = /bits/ 8 <0 1 2 3 4 5>;".
+These clocks were provided in `include/linux/clk-provider.h`, but lacks DT
+bindings. Add a clock controller to avoid operation conflict on same
+register.
 
-And JH7100 is different SoC, so you have different compatible. Again -
-is this board specific? If not, looks like SoC specific, thus imply it
-from compatible.
+v2: split clock controller and its clocks
+
+Links:
+v1: https://lore.kernel.org/r/20230414181302.986271-1-mmyangfl@gmail.com
+
+David Yang (4):
+  dt-bindings: clock: Add simple-clock-controller
+  clk: Add simple clock controller
+  dt-bindings: clock: Add gate-clock
+  clk: gate: Add DT binding
+
+ .../devicetree/bindings/clock/gate-clock.yaml |  58 ++++
+ .../clock/simple-clock-controller.yaml        |  50 +++
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/clk-gate.c                        |  81 +++++
+ drivers/clk/clk-of.c                          | 292 ++++++++++++++++++
+ drivers/clk/clk-of.h                          |  26 ++
+ 6 files changed, 508 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/gate-clock.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/simple-clock-controller.yaml
+ create mode 100644 drivers/clk/clk-of.c
+ create mode 100644 drivers/clk/clk-of.h
 
 
-Best regards,
-Krzysztof
+base-commit: 7a934f4bd7d6f9da84c8812da3ba42ee10f5778e
+-- 
+2.39.2
 
