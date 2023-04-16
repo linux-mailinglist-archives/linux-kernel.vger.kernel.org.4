@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1EDE6E3BAB
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 21:48:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1748F6E3BAE
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 21:48:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbjDPTsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 15:48:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35116 "EHLO
+        id S230002AbjDPTsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 15:48:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbjDPTr7 (ORCPT
+        with ESMTP id S229593AbjDPTsX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 15:47:59 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7204D3C39;
-        Sun, 16 Apr 2023 12:47:46 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id la15so224142plb.11;
-        Sun, 16 Apr 2023 12:47:46 -0700 (PDT)
+        Sun, 16 Apr 2023 15:48:23 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3128E3AA7;
+        Sun, 16 Apr 2023 12:47:58 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id p8so23526234plk.9;
+        Sun, 16 Apr 2023 12:47:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681674465; x=1684266465;
+        d=gmail.com; s=20221208; t=1681674474; x=1684266474;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UEI0eSnVROGbttT9l8rewKYrct6gZV9DrPEigxvXAbE=;
-        b=ifKVIowjbe1YizUEM+3ST0gRExiI9O1DyUUeZRr6cCIJTD8X7F3XPXMR9B5TX25zC3
-         8lgoJhipUwQSlAcNGXf0UDxuYQXUNjT1Avz7WST6RvDZm1L9XCSnXV3oGq8Xy7Pym28c
-         kpFuaq8nAIRzEhNjSKl/fglm0W7iZh/9LKL8J12Nb8f20Y0KgIu61FRUjvmSipXOOd3q
-         Iuitg/MTszSXpLUI3InHo0cTIONDg4GusUqg362stUuW8ih3Ub33mOla55pwLE0BPGI6
-         lawHzvtD1T4+doDwmmKML2FFGcH13ysKjhIhVdXSDDAf8Momc8JaxsugQz+iDNtQNsWX
-         9Mhg==
+        bh=bxfOnlh1gWPz4ECc5+gyXwuy61sNCNvLdcJJf29rWhA=;
+        b=A5N7ttd+GYkilmlvtj+KtFUZGLlXeWa2/lQC4BLJPMTdvqPpppJSz2wwXpvbGUnqkH
+         BcLUfkVue72PzL+gWUSgIPi+aZzmXVe3HLVRlZJWpJm1+du8k/4SQ1uMg/F0V1VXp2eI
+         wbP/ovn3eQssgVTaM4CvwGBMme04YX/bLsvbYH7txalwmDCIPAY8LUvKDRMTnMaMQj00
+         jBax7l6/0Vij4TqDSwRJnoYKsETwT00mr27xtm3M5PBXJdhaDli+Sd5o35866ICOWba5
+         Jz2mTWatkoNYK2rOvXqY5QIMfcWnzePy0J82H1+MshVziEnNW1RKeJGZnOSgm9mUdCMS
+         seGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681674465; x=1684266465;
+        d=1e100.net; s=20221208; t=1681674474; x=1684266474;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UEI0eSnVROGbttT9l8rewKYrct6gZV9DrPEigxvXAbE=;
-        b=dtG4YdBBN/vD/hpFq5V5vNuQ92BDXCyHPRxaBZ4aeRwH0fkq5CccjsuxyPgi/+Vs+q
-         4cAxho/Tr/efxuenx0qr3PBHZfnAPeZMbGHdNbcG5Ew+bWwL/c6ZS7KmXAoSihJRuu1T
-         5+nzegcdvODHuaWwct7+K2j1FdvebGbNQQZ45hcDY8wztWzqGZMmbDfm3hxuXJA1df2v
-         ubOgY9Br+LtUDdaNrFTzrrT76gIwedXWnAv/nevDu+anyYbI1Zkg14qFPUHmvkJrS3qZ
-         ezz1FpGYw4aH1Mz3YoN9MFYEVU7oELlaB+bJdGStn4+/fcjjfYuowXsG9tdgpkumgURP
-         VTkg==
-X-Gm-Message-State: AAQBX9dUuDXub8nJWZXBDc7XC3WOODB4NYyzHNPIXCAbIH/jqCIPAcLJ
-        d2Zgipbis5l1e30pvTr0bxoe5uHKBhMIdXAUV5I=
-X-Google-Smtp-Source: AKy350ZKEfzMft2d47xJWzGkkBgfFmWE+rP1k3yCCATbX7mx8o+16vpezzFP4/TdvvMOC1/mG7MNgA==
-X-Received: by 2002:a17:903:22c3:b0:1a6:4032:ef2 with SMTP id y3-20020a17090322c300b001a640320ef2mr11717060plg.28.1681674465407;
-        Sun, 16 Apr 2023 12:47:45 -0700 (PDT)
+        bh=bxfOnlh1gWPz4ECc5+gyXwuy61sNCNvLdcJJf29rWhA=;
+        b=DOqngfy0JVSTSUuR0WtYh6qsP1vfh0j32Z9ApoPOUdXra092AIuv6u6B/85QlUnyjk
+         idYWE49gnSUw4UjBgoMDg5nPIao50P4NsCkFbyL2GS3jJ0H6KHRqveSZvZ5g1nCLWrPU
+         GgiqheFQzU2U6jOF8D/HTR7VOjaOlx6NaBtvf19GU0/eh8LfNy27Zw/D6RYbXl47e2uQ
+         0dIfoiF+pK/8dyoqy7TiFnQkS4Uy2L9EZWAp1pug9Z2KrY3l2DGCCIzvsrEIG141kuMj
+         aW9QGKq/dQPbfks9Ov730L6PB4QHcQNS7oWQ+zDyLATPnt3kB9h0xHKMY5QyHzcqHCnZ
+         DTMw==
+X-Gm-Message-State: AAQBX9fgJdYBmY0uLzgfkSRHAwvCj9XPH5Gxbqpv8qKsUBlj6OguLTZY
+        POrNrEGG0vxhQ9nYo/hzbDBXaYSoNEgOzS4/Qus=
+X-Google-Smtp-Source: AKy350YNW0o4BxR7h0HrV31DgHcaDX8VRrafFkGAVtSacy2Ns4UtFBDAxhmCLeiKBHTvKRzzP8g83A==
+X-Received: by 2002:a17:902:da8d:b0:1a6:5274:c1b0 with SMTP id j13-20020a170902da8d00b001a65274c1b0mr12262127plx.60.1681674473708;
+        Sun, 16 Apr 2023 12:47:53 -0700 (PDT)
 Received: from d.home.yangfl.dn42 ([104.28.245.201])
-        by smtp.gmail.com with ESMTPSA id jd9-20020a170903260900b001a69b28f5c5sm4490375plb.222.2023.04.16.12.47.40
+        by smtp.gmail.com with ESMTPSA id jd9-20020a170903260900b001a69b28f5c5sm4490375plb.222.2023.04.16.12.47.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 12:47:45 -0700 (PDT)
+        Sun, 16 Apr 2023 12:47:53 -0700 (PDT)
 From:   David Yang <mmyangfl@gmail.com>
 To:     linux-clk@vger.kernel.org
 Cc:     David Yang <mmyangfl@gmail.com>,
@@ -59,9 +59,9 @@ Cc:     David Yang <mmyangfl@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/4] dt-bindings: clock: Add gate-clock
-Date:   Mon, 17 Apr 2023 03:46:21 +0800
-Message-Id: <20230416194624.1258860-4-mmyangfl@gmail.com>
+Subject: [PATCH v3 4/4] clk: gate: Add DT binding
+Date:   Mon, 17 Apr 2023 03:46:22 +0800
+Message-Id: <20230416194624.1258860-5-mmyangfl@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230416194624.1258860-1-mmyangfl@gmail.com>
 References: <20230416194624.1258860-1-mmyangfl@gmail.com>
@@ -69,87 +69,119 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add DT bindings documentation for gate clock, which can gate its output.
+Add DT binding for gate clock as "gate-clock".
 
 Signed-off-by: David Yang <mmyangfl@gmail.com>
 ---
- .../devicetree/bindings/clock/gate-clock.yaml | 59 +++++++++++++++++++
- 1 file changed, 59 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/gate-clock.yaml
+ drivers/clk/clk-gate.c | 81 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 81 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/clock/gate-clock.yaml b/Documentation/devicetree/bindings/clock/gate-clock.yaml
-new file mode 100644
-index 000000000000..bcd549dd9db1
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/gate-clock.yaml
-@@ -0,0 +1,59 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/gate-clock.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/clk/clk-gate.c b/drivers/clk/clk-gate.c
+index 64283807600b..a70df4a2a9a7 100644
+--- a/drivers/clk/clk-gate.c
++++ b/drivers/clk/clk-gate.c
+@@ -12,8 +12,11 @@
+ #include <linux/slab.h>
+ #include <linux/io.h>
+ #include <linux/err.h>
++#include <linux/platform_device.h>
+ #include <linux/string.h>
+ 
++#include "clk-of.h"
 +
-+title: Clock which can gate its output
+ /**
+  * DOC: basic gatable clock which can gate and ungate it's ouput
+  *
+@@ -257,3 +260,81 @@ struct clk_hw *__devm_clk_hw_register_gate(struct device *dev,
+ 	return hw;
+ }
+ EXPORT_SYMBOL_GPL(__devm_clk_hw_register_gate);
 +
-+maintainers:
-+  - David Yang <mmyangfl@gmail.com>
++#if IS_ENABLED(CONFIG_OF)
++static const struct of_clk_flag of_clk_gate_flags[] = {
++	{ "set-to-disable", CLK_GATE_SET_TO_DISABLE },
++	{ "hiword-mask", CLK_GATE_HIWORD_MASK },
++	{ "big-endian", CLK_GATE_BIG_ENDIAN },
++	{ }
++};
 +
-+description: |
-+  Clock which can gate its output, by toggling one bit in a register. Such
-+  register may also control other clocks or reset requests.
++static int of_clk_gate_setup(struct device_node *np)
++{
++	struct of_clk_ctrl *ctrl = np->parent->data;
++	const char *name;
++	void __iomem *reg;
++	u32 bit_idx;
 +
-+  The registers map is retrieved from the parental dt-node. So the clock node
-+  should be represented as a sub-node of a "clock-controller" node.
++	const char *property;
++	struct clk_hw *hw;
++	int ret;
 +
-+  See also: Documentation/devicetree/bindings/clock/simple-clock-controller.yaml
++	reg = of_clk_get_reg(np);
++	if (!reg)
++		return -ENOMEM;
++	name = of_clk_get_name(np);
++	if (!name)
++		return -EINVAL;
 +
-+properties:
-+  compatible:
-+    const: gate-clock
++	property = "bits";
++	if (of_property_read_u32(np, property, &bit_idx))
++		goto err_property;
 +
-+  '#clock-cells':
-+    const: 0
++	hw = __clk_hw_register_gate(NULL, np, name,
++				    of_clk_get_parent_name(np, 0),
++				    NULL, NULL, of_clk_get_flags(np, NULL),
++				    reg, bit_idx,
++				    of_clk_get_flags(np, of_clk_gate_flags),
++				    &ctrl->lock);
++	if (IS_ERR(hw))
++		return PTR_ERR(hw);
 +
-+  clocks:
-+    maxItems: 1
-+    description: Parent clock.
++	ret = of_clk_add_hw_provider(np, of_clk_hw_simple_get, hw);
++	if (ret)
++		goto err_register;
 +
-+  offset:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: Offset in the register map for the control register (in bytes).
++	np->data = hw;
++	return 0;
 +
-+  bits:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: Bit index which controls the output.
++err_register:
++	clk_hw_unregister(hw);
++	return ret;
 +
-+  clock-output-names:
-+    maxItems: 1
++err_property:
++	pr_err("%s: clock %s missing required property \"%s\"\n",
++	       __func__, name, property);
++	return -EINVAL;
++}
 +
-+required:
-+  - compatible
-+  - '#clock-cells'
-+  - offset
-+  - bits
++static void __init of_clk_gate_init(struct device_node *np)
++{
++	of_clk_gate_setup(np);
++}
++CLK_OF_DECLARE(of_clk_gate, "gate-clock", of_clk_gate_init);
 +
-+additionalProperties: false
++static const struct of_device_id of_clk_gate_ids[] = {
++	{ .compatible = "gate-clock", .data = of_clk_gate_setup },
++	{ }
++};
 +
-+examples:
-+  - |
-+    clock {
-+      compatible = "gate-clock";
-+      #clock-cells = <0>;
-+      offset = <0xcc>;
-+      bits = <3>;
-+      clock-output-names = "my-clk";
-+    };
++static struct platform_driver of_clk_gate_driver = {
++	.driver = {
++		.name = "clk_gate",
++		.of_match_table = of_clk_gate_ids,
++	},
++	.probe = of_clk_probe,
++	.remove = of_clk_remove,
++};
++builtin_platform_driver(of_clk_gate_driver);
++#endif
 -- 
 2.39.2
 
