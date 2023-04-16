@@ -2,147 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF1496E3BF2
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 22:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 718AA6E3BF3
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 22:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229458AbjDPUjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 16:39:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45860 "EHLO
+        id S229756AbjDPUkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 16:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjDPUjG (ORCPT
+        with ESMTP id S229488AbjDPUkF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 16:39:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1242117
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 13:38:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681677498;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1gmjEPQ1Z2707YDu2q8TGB4gvRcqR+kjHgJ0ZU8q2GE=;
-        b=UABSA020eadNdRYgNssvgDc9HlSzrAN2ANud2WR7U5X3ZPIzghaOt7q32NRKV+FRdEtkE2
-        I8vuMMnXYhcYu0zZ12/sSyl4eKVcFljgMDckuskuhG2lepF695Pqy2m//FDNoX+wq4lDAL
-        155AuKsrXsv4J49Ra5h1w45bX8Apmzs=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-637-wBcq_esJOc-D5xoNm3eyWA-1; Sun, 16 Apr 2023 16:38:17 -0400
-X-MC-Unique: wBcq_esJOc-D5xoNm3eyWA-1
-Received: by mail-ed1-f69.google.com with SMTP id n6-20020a5099c6000000b00502c2f26133so22456765edb.12
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 13:38:16 -0700 (PDT)
+        Sun, 16 Apr 2023 16:40:05 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23765211B
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 13:40:04 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-5067716f9e7so301636a12.0
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 13:40:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681677602; x=1684269602;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5Gmi/do156Oqurn6On7R7qt3l2vNSWVaalWH+Gn/vpM=;
+        b=MoZJUZMV6rloOpwXdLAzDuGOg+XGzhwrmBxevKigjbxIyy6Vsf3l8DgMthmIMu93a3
+         koN9dUheLelFz/KezCQN4OvkEgpwc5o/ds6mwGAlCLnnz8TfgWjO27231txGjGbR1jaO
+         Ri9VwLug1wkXyrloJIYAtLn22yQhe2C8gWYSyrCL56tB6WqPb4Rq91T4QmjgcMfEqCJ5
+         Xmc6Q/iD5VnQXzDrOEy2Kv1z/w2wxMcrZrITGGIUa226V8CoJ+gvRmVNzFvVaLyMk7rX
+         +YtPh1OkEVw3zaBdaWvO06CdtYRulj/ulvxpYX3ReF4WA1eqi7RURxDI7jGoCdZdxZ/4
+         iEIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681677496; x=1684269496;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1gmjEPQ1Z2707YDu2q8TGB4gvRcqR+kjHgJ0ZU8q2GE=;
-        b=JWPSNXpd2YLrLdFGqQu7mbl+Nsoeh5Sp+WhgG7tojcNbvboQhi//hmr4eDAH++J8Ju
-         AMQM92bYnkuA2EmklP3p2/WQu54ZDXEvfh3UToJv5EPbj8fbzel2HAageqHr+fKqNpgj
-         gwPMOF17UkFBSebjecASmXDCJd0azCBBYFK2IC/GgpKaFOUb/Zcm6vt1N9YOYEEX/OIw
-         SvQUCnekf1KqOQ10Ro3q9l/oT+tzQbpYSbaMXIgpT2WQsKL1DCEQCcncCPXZTn5ZSEjK
-         ayOvpcrObWD+mYjV3NY0PLLTfAHbkgNmAY72DV0wv7XBmvpulJ+h/iu48cN9ZvM7HRqQ
-         777w==
-X-Gm-Message-State: AAQBX9dIzGjCWrjTP0bGLpBWfA+8prTMWd1+tNB2yDUpw1gTrJDaVBuI
-        22omrUU2xu0hf5ziUq6m5CiTGiEIvcFVd71NiWs21DQ3mJC5s5fihkuIxtP/fgCLuChy/qGmI9n
-        /KOABbPg5n8XbukcNilVjZ0uK
-X-Received: by 2002:a17:906:bc42:b0:94f:5e17:e80d with SMTP id s2-20020a170906bc4200b0094f5e17e80dmr2534421ejv.45.1681677495993;
-        Sun, 16 Apr 2023 13:38:15 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZXEZ6g56atv06YaLfflLN9idtJzsyZtc6S7GD+9Ye4l6xSIop1CrwmmH2GLzP5maJM6si0Jg==
-X-Received: by 2002:a17:906:bc42:b0:94f:5e17:e80d with SMTP id s2-20020a170906bc4200b0094f5e17e80dmr2534403ejv.45.1681677495687;
-        Sun, 16 Apr 2023 13:38:15 -0700 (PDT)
-Received: from redhat.com ([2.52.136.129])
-        by smtp.gmail.com with ESMTPSA id xg12-20020a170907320c00b0094ee99eeb01sm3877035ejb.150.2023.04.16.13.38.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 13:38:15 -0700 (PDT)
-Date:   Sun, 16 Apr 2023 16:38:11 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Alvaro Karsz <alvaro.karsz@solid-run.com>
-Cc:     jasowang@redhat.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] virtio-net: reject small vring sizes
-Message-ID: <20230416163751-mutt-send-email-mst@kernel.org>
-References: <20230416074607.292616-1-alvaro.karsz@solid-run.com>
+        d=1e100.net; s=20221208; t=1681677602; x=1684269602;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5Gmi/do156Oqurn6On7R7qt3l2vNSWVaalWH+Gn/vpM=;
+        b=KSJYukM0zkleqN6mhQhYn4wMv+0FLKcvFTkMUGX9njvWso/1g7zrJDrPNtCRv0Vg1F
+         q+3dsibRv0N7p3hllNTEiNAA1EBRcbuemMugpMnjGMli6SZ7vdt00mm1vsxpBVr1MYQi
+         hWsfxJFgA7dxi2ueey5wRxXpYZu7UtGyOTw6TKFsFDSC/wNFXFR+ApOlRZAp7LdMdvUd
+         BPsKWVjR/EIeBffLsLU+i0S8ebbYOIYpraSPSlHZB3sIMLkqc09KnlK7rjol4KxNpj1O
+         17a0RqVJTDXVa//y44Ypgu8lSJt8WZZmiNaaclkG0kJhTqy8IzC8ojg+RDzN98jxKs9h
+         jTfw==
+X-Gm-Message-State: AAQBX9c3oEKiXnZuLVduXOtSxkvQXtS0f8RtaTr+N3Gyp5vJ7qgVscwx
+        kD5+8Hh2ezRoblqkU7Im8+an/W5ITWp0nQ==
+X-Google-Smtp-Source: AKy350Zl9UbVjnQxDl3btqlMf8RV3X44RulxYOQ2N9ntqnKgRdCPVIMtABj54YobhwzwJahy36T6Cw==
+X-Received: by 2002:a17:906:19c:b0:94f:66af:b1f7 with SMTP id 28-20020a170906019c00b0094f66afb1f7mr1551753ejb.1.1681677602426;
+        Sun, 16 Apr 2023 13:40:02 -0700 (PDT)
+Received: from [192.168.10.10] ([37.252.92.4])
+        by smtp.gmail.com with ESMTPSA id qb3-20020a1709077e8300b008c327bef167sm5562437ejc.7.2023.04.16.13.40.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Apr 2023 13:40:02 -0700 (PDT)
+Message-ID: <195d006f-b595-c0d4-24a5-49d8d350745b@gmail.com>
+Date:   Mon, 17 Apr 2023 00:39:59 +0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230416074607.292616-1-alvaro.karsz@solid-run.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2] mm: khugepaged: Fix kernel BUG in
+ hpage_collapse_scan_file
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Zach O'Keefe <zokeefe@google.com>
+Cc:     Yang Shi <shy828301@gmail.com>, himadrispandya@gmail.com,
+        linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org, linux-mm@kvack.org,
+        skhan@linuxfoundation.org,
+        syzbot+9578faa5475acb35fa50@syzkaller.appspotmail.com,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>
+References: <20230330155305.423051-1-ivan.orlov0322@gmail.com>
+ <20230331013301.ecgkjymaf3ws6rfb@google.com>
+ <CAHbLzkoJ2zvKZpqd6NqikpCc8rGR02C87f0fPq8qwb1BF3K+9Q@mail.gmail.com>
+ <CAAa6QmTLXSvygQQNk=8C4pB3D2Twy1guzo=+-aXhCqNAE3Q3MA@mail.gmail.com>
+ <20230416113335.caeafda1328fdd4bfe2406e8@linux-foundation.org>
+From:   Ivan Orlov <ivan.orlov0322@gmail.com>
+In-Reply-To: <20230416113335.caeafda1328fdd4bfe2406e8@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 16, 2023 at 10:46:07AM +0300, Alvaro Karsz wrote:
-> Check vring size and fail probe if a transmit/receive vring size is
-> smaller than MAX_SKB_FRAGS + 2.
+On 4/16/23 22:33, Andrew Morton wrote:
 > 
-> At the moment, any vring size is accepted. This is problematic because
-> it may result in attempting to transmit a packet with more fragments
-> than there are descriptors in the ring.
+> Circling back to this fix...
 > 
-> Furthermore, it leads to an immediate bug:
+> The BUG() is obviously real.  We're unsure that Ivan's fix is the best
+> one.  We haven't identified a Fixes:, and as this report is against the 6.2
+> kernel, a cc:stable will be needed.
 > 
-> The condition: (sq->vq->num_free >= 2 + MAX_SKB_FRAGS) in
-> virtnet_poll_cleantx and virtnet_poll_tx always evaluates to false,
-> so netif_tx_wake_queue is not called, leading to TX timeouts.
+> According to the sysbot bisection
+> (https://syzkaller.appspot.com/bug?id=7d6bb3760e026ece7524500fe44fb024a0e959fc),
+> this is present in linux-5.19, so it might predate Zach's
+> 58ac9a8993a13ebc changes.  But that bisection claim might be
+> misleading.
 > 
-> Signed-off-by: Alvaro Karsz <alvaro.karsz@solid-run.com>
-> ---
->  drivers/net/virtio_net.c | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
+> And Zach is offline for a few months.  So can people please take a look
+> and see if we can get this wrapped up?
 > 
-> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> index 2396c28c012..59676252c5c 100644
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@ -3745,6 +3745,26 @@ static int init_vqs(struct virtnet_info *vi)
->  	return ret;
->  }
->  
-> +static int virtnet_validate_vqs(struct virtnet_info *vi)
-> +{
-> +	u32 i, min_size = roundup_pow_of_two(MAX_SKB_FRAGS + 2);
+> Matthew, the assertion failure is in the
+> 
+> 	VM_BUG_ON(index != xas.xa_index);
+> 
+> which was added in 77da9389b9d5f, so perhaps you could take a look?
+> 
+> Thanks.
 
-why power of two?
+Hello, Andrew!
 
-> +
-> +	/* Transmit/Receive vring size must be at least MAX_SKB_FRAGS + 2
-> +	 * (fragments + linear part + virtio header)
-> +	 */
-> +	for (i = 0; i < vi->max_queue_pairs; i++) {
-> +		if (virtqueue_get_vring_size(vi->sq[i].vq) < min_size ||
-> +		    virtqueue_get_vring_size(vi->rq[i].vq) < min_size) {
-> +			dev_warn(&vi->vdev->dev,
-> +				 "Transmit/Receive virtqueue vring size must be at least %u\n",
-> +				 min_size);
-> +			return -EINVAL;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  #ifdef CONFIG_SYSFS
->  static ssize_t mergeable_rx_buffer_size_show(struct netdev_rx_queue *queue,
->  		char *buf)
-> @@ -4056,6 +4076,10 @@ static int virtnet_probe(struct virtio_device *vdev)
->  	if (err)
->  		goto free;
->  
-> +	err = virtnet_validate_vqs(vi);
-> +	if (err)
-> +		goto free_vqs;
-> +
->  #ifdef CONFIG_SYSFS
->  	if (vi->mergeable_rx_bufs)
->  		dev->sysfs_rx_queue_group = &virtio_net_mrg_rx_group;
-> -- 
-> 2.34.1
+I have been unable to reproduce the problem with any of the existing 
+reproducers on the 3d7cb6b04c3f3115719235cc6866b10326de34cd commit, 
+which was detected by the syzkaller bisection. I also tried to test if 
+the problem is reproducible on this commit via syzbot, but it did not 
+detect the problem. It's possible that the bisection claim is 
+misleading, as the issue may not be consistently reproducible.
 
+Why did you mention the 58ac9a8993a13ebc commit? I thought 99cb0dbd47a15 
+was considered as a "Fixes". 99cb0dbd47a15 is older than 3d7cb6b04c3f3, 
+and the problematic code appeared there, so probably the problem could 
+appear in 99cb0dbd47a15 as well.
+
+Please, correct me if I'm missing something.
+
+Kind regards,
+Ivan Orlov.
