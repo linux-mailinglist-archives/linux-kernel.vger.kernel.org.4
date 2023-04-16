@@ -2,72 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96AD06E39D3
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 17:33:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E12BE6E39D7
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 17:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230312AbjDPPdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 11:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42728 "EHLO
+        id S230333AbjDPPgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 11:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbjDPPd2 (ORCPT
+        with ESMTP id S229836AbjDPPf7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 11:33:28 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B764C2130;
-        Sun, 16 Apr 2023 08:33:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=CwVfLHJ6BrHQq1wrP7gbBlF9u1FTFNbWwQPTdQvEmpM=; b=opagxVVFDY3vzkOFWWUQFuxXt8
-        OOqIF8zpJR8iBrhvxTQ3WNrD2WxTlfny62yVmD+2HpuoZoqXbsKV+DhHMhCoGFFVP8582yNnBFOXs
-        jnnIEx9vTkOhFEvZjc/kr/uDytIgEsiJEjnbJkJW7G2u0AHg8K3pKxd46xwUgCFXY/tY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1po4NT-00AQxK-MU; Sun, 16 Apr 2023 17:33:19 +0200
-Date:   Sun, 16 Apr 2023 17:33:19 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Wang Zhang <silver_code@hust.edu.cn>
-Cc:     Peter Korsgaard <peter@korsgaard.com>,
-        Dongliang Mu <dzm91@hust.edu.cn>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: ocores: add missing unwind goto in
- `ocores_i2c_probe`
-Message-ID: <843fab4d-0fdd-4610-91ed-1d8e9accbd25@lunn.ch>
-References: <20230416072040.58373-1-silver_code@hust.edu.cn>
+        Sun, 16 Apr 2023 11:35:59 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46552712
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 08:35:58 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1po4Pk-00089D-DO; Sun, 16 Apr 2023 17:35:40 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 67CEB1AFF88;
+        Sun, 16 Apr 2023 15:35:36 +0000 (UTC)
+Date:   Sun, 16 Apr 2023 17:35:33 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     Judith Mendez <jm@ti.com>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Andrew Davis <afd@ti.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        Schuyler Patton <spatton@ti.com>
+Subject: Re: [RFC PATCH 5/5] can: m_can: Add hrtimer to generate software
+ interrupt
+Message-ID: <20230416-failing-washbasin-e4fa5caea267-mkl@pengutronix.de>
+References: <20230413223051.24455-1-jm@ti.com>
+ <20230413223051.24455-6-jm@ti.com>
+ <20230414-bounding-guidance-262dffacd05c-mkl@pengutronix.de>
+ <4a6c66eb-2ccf-fc42-a6fc-9f411861fcef@hartkopp.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="howza2ulvftzwff5"
 Content-Disposition: inline
-In-Reply-To: <20230416072040.58373-1-silver_code@hust.edu.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <4a6c66eb-2ccf-fc42-a6fc-9f411861fcef@hartkopp.net>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 16, 2023 at 03:20:40PM +0800, Wang Zhang wrote:
-> platform_get_irq_optional is a function used to obtain an IRQ
-> number for a device on a platform. The function returns the IRQ number
-> associated with the specified device, or a negative error code if it fails.
-> 
-> The error handling code after the err_clk label should be executed to
-> release any resources that were allocated for the clock if a negative
-> error code returned.
-> 
-> Fix this by assigning irq to ret and changing the direct return to err_clk.
 
-The clock is got in ocores_i2c_of_probe(). That function is not always
-called. So you need to be careful in the error handling that you are
-not disabling a clock which does not exist....
+--howza2ulvftzwff5
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-But i think a better fix is to change ocores_i2c_of_probe() to use
-devm_clk_get_enabled(), rather than devm_clk_get() so that the driver
-core will disable to clock if the probe fails, or when the driver is
-unloaded.
+On 16.04.2023 14:33:11, Oliver Hartkopp wrote:
+>=20
+>=20
+> On 4/14/23 20:20, Marc Kleine-Budde wrote:
+> > On 13.04.2023 17:30:51, Judith Mendez wrote:
+> > > Add a hrtimer to MCAN struct. Each MCAN will have its own
+> > > hrtimer instantiated if there is no hardware interrupt found.
+> > >=20
+> > > The hrtimer will generate a software interrupt every 1 ms. In
+> >=20
+> > Are you sure about the 1ms?
 
-     Andrew
+I had the 5ms that are actually used in the code in mind. But this is a
+good calculation.
+
+> The "shortest" 11 bit CAN ID CAN frame is a Classical CAN frame with DLC =
+=3D 0
+> and 1 Mbit/s (arbitration) bitrate. This should be 48 bits @1Mbit =3D> ~50
+> usecs
+>=20
+> So it should be something about
+>=20
+>     50 usecs * (FIFO queue len - 2)
+
+Where does the "2" come from?
+
+> if there is some FIFO involved, right?
+
+Yes, the mcan core has a FIFO. In the current driver the FIFO
+configuration is done via device tree and fixed after that. And I don't
+know the size of the available RAM in the mcan IP core on that TI SoC.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--howza2ulvftzwff5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQ8FcAACgkQvlAcSiqK
+BOiz7Qf9GVU38YyuModIpIhfmJ2wG+iWBhXzfO/pbD4ifYxknz+DcL1zgpTBGCrX
+wWjHojZuQQPU9AE9UT7vjKfQOcJs90kMFOmI87bEHQLUl8fO40PekZradALAVEII
+GEIFnU8ArKzXjaaUJxCmahRP/7cHPjctxRdn10RWkeFW5lITOiiO3rwOrLVogeVe
+9KX17fQQ2GbRiIT2e6GNWjngkAgsWo77hqtrSdJr8wvJQZ82Xkct9BCr14dJeoz1
+bgMiqIiELi+8hG0Sx2G+hdY+/30pXllBV4LFYluPY4JUjS9GeEWC6r7wGF0HqGe9
+FW2ZiemY+PGYXCB67pbf+f8SPAiQvg==
+=QN1Y
+-----END PGP SIGNATURE-----
+
+--howza2ulvftzwff5--
