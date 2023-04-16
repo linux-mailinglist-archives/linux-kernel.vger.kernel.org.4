@@ -2,100 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 453E36E35C9
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 09:36:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4DC86E35CF
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 09:38:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbjDPHgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 03:36:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39480 "EHLO
+        id S230352AbjDPHiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 03:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230337AbjDPHgS (ORCPT
+        with ESMTP id S229919AbjDPHiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 03:36:18 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 971B719AE
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 00:36:16 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-504fce3d7fbso2933678a12.2
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 00:36:16 -0700 (PDT)
+        Sun, 16 Apr 2023 03:38:02 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 228921FFC;
+        Sun, 16 Apr 2023 00:38:01 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-63b4960b015so844888b3a.3;
+        Sun, 16 Apr 2023 00:38:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681630575; x=1684222575;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KT6ds4r+t0E7ayy20d8041ijDjDVcqQYBYne/WH971Q=;
-        b=ZUefnxGf3uwiTnwbQHt23i0ynkK3Ie/1dRfIVfuL/Haj85OqjPvhUh4/yySsNsjyYk
-         NrGnkGvDUJlehsGN3KdDp8ohqT3pcNw84cH0pnBgjBL9xCqUz4pYqJQP7+YJw/mZ88dU
-         i3QL+NfsOE9AqtjAFkBmK6GzQVWgLjpm+2O/PH8X9jgoG/qErLBaowOCv0iH8ZxkJIzD
-         Te4gb7n+602eGxt+mZppFpXXKpGEQPZgQvBBxQqIiov2iVs/5gxOqemfjZoK8q+E/BRt
-         rTe6nGDQRg8+KpYE37v91yOotTit4tmGIw290XOdbRNaaco7MczRMMLZiJEzWXfIkTht
-         TFvQ==
+        d=gmail.com; s=20221208; t=1681630680; x=1684222680;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I5NhvhFxKX4Eel+mjyeudZ+71BGwovQHUqehBfxjjbo=;
+        b=Wq2JSSOcotk2koSIqamk3acYvBpROM5iA8zomrDZXIIFuFSEYQI9UoHiiiQ+C3LiT4
+         lspt7yhui0LBRekgQ4qZrSAFYDSRhNzbX0tuhGA+lb145WQP0zQVVYhDH+b12U+Wy0iF
+         gYImZ9ka1A5WsYRLNNHptVnDmubY/hILmhD0Z3X1PmF6SBflIlBDNO244wPcQjklnOvC
+         TarKt3tv1iFENcM3Bm1S/CW+y9TfLvi+9L1rnSlm/hiOfGPWZxU6TG+EOILYl6j/uBMN
+         Wlvlc10VArc5FrgasZSYfiFpFeJi8dSDNRfBXIM5nNfuugLjg2EPy0WPq4dv+AYnEArB
+         Z9jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681630575; x=1684222575;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KT6ds4r+t0E7ayy20d8041ijDjDVcqQYBYne/WH971Q=;
-        b=NUtnHVFSFv8hTad0b7Tsn05ots7w+oH2V1klZGbMXVy+q3AgNoxKRIiz1AWK5d3eo8
-         jy9Sig33AuJplSwo0XSqBAvKnR3B1BLYkNslB9d18tV7SDvSv53DWi1IoLb1HL1ifISi
-         AjGT3HtV1FyNkmowSeLb8B7WuUxPFRXCVtgraClNBIxcLjITnHfVAJl7UNyPUoMzv4r8
-         9yBUipr88KTCYD7xq6r8HA862MivH2v4M1SzbEtPh456uFHpKqJvDLmHcGAqyCFEEw3J
-         Rt6KV/cGZcLFNFDbia4CyjTMum0fxlCaC4Xnx1fMK6HzooEwVBqm3eAYAAQdoOL8k2yG
-         e6og==
-X-Gm-Message-State: AAQBX9eb/ExnlVgQYvhXFK7pqrJlynsY677hRkOUZ9EeN1C4IYxrj9rj
-        NSK+plooWnY4KIDJZRnJzwP7UQ==
-X-Google-Smtp-Source: AKy350Z2aww6ueQ2QXHv9VW/GbvbBi6FPFiYc7YAz5ZKFZ8NlNMWifqWm2wp7e/PC8O1NSVBC0fDYQ==
-X-Received: by 2002:aa7:da8f:0:b0:504:9ae7:f73b with SMTP id q15-20020aa7da8f000000b005049ae7f73bmr12695250eds.2.1681630575085;
-        Sun, 16 Apr 2023 00:36:15 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:29dd:ded4:3ccc:83db? ([2a02:810d:15c0:828:29dd:ded4:3ccc:83db])
-        by smtp.gmail.com with ESMTPSA id p25-20020a17090635d900b0094e75d3ba1bsm4756890ejb.131.2023.04.16.00.36.13
+        d=1e100.net; s=20221208; t=1681630680; x=1684222680;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=I5NhvhFxKX4Eel+mjyeudZ+71BGwovQHUqehBfxjjbo=;
+        b=ZKejT8CCHYg/QNFRVLuTHtpvUFx5yryhmjcYuj3h4ylYjJVy+i+qw9C2yEdRtvGB4t
+         UQ/Av/AiBcd9cBMDr/nbgclstr1m0Rt0OmDsEO3BkqfI/O+rXMVFISIpemmKa1UwdiPN
+         3uuK70SOuQClTF/diLspgc06D/B45+c1DP2Gk8eVoI+dFDunCil7L82aQLURx0ehK4ys
+         JLMfwPcZSQjPRuuR2gbtiTkIMl6Z4WOdBD/pQhr1NaqG4W/Kyk84riJ9SS2PkkzHtOoO
+         kq/6t8VlYFJA5Opl3XZip+WdHSVpbKm3s1xhMgb8Em4Qu+enUcLA0W0aNuBb23FnF9mq
+         1MMg==
+X-Gm-Message-State: AAQBX9fD7K6rLJnJoW9b+AyvK64XSBMSUVVksRxB9G7IJPeRuICnRswl
+        J/CRlHkcv5ZAn3suvYo8VS4=
+X-Google-Smtp-Source: AKy350ZdVtbyE9peGmRyH7eUsqqLQvUeElVcM5ven2Cb85XZ2BPQRqQm9YUSOfSUVQWBejQBwCsoLA==
+X-Received: by 2002:a05:6a00:1acb:b0:63b:23b0:a72e with SMTP id f11-20020a056a001acb00b0063b23b0a72emr16202900pfv.15.1681630680586;
+        Sun, 16 Apr 2023 00:38:00 -0700 (PDT)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:18:efec::75b])
+        by smtp.gmail.com with ESMTPSA id 12-20020aa7914c000000b00637ca3eada8sm5555427pfi.6.2023.04.16.00.37.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Apr 2023 00:36:14 -0700 (PDT)
-Message-ID: <05fbaaf6-3e0d-5d42-0645-587d8555065a@linaro.org>
-Date:   Sun, 16 Apr 2023 09:36:13 +0200
+        Sun, 16 Apr 2023 00:38:00 -0700 (PDT)
+Message-ID: <1ec6d77e-c5a1-52ac-de12-a878b753abcc@gmail.com>
+Date:   Sun, 16 Apr 2023 15:37:49 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH RFC v2 3/3] binding: mmc: hi3798cv200-dw-mshc: convert to
- YAML and rename to histb-dw-mshc, add compatible of hi3798mv200
-Content-Language: en-US
-To:     forbidden405@outlook.com, Ulf Hansson <ulf.hansson@linaro.org>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     tianshuliang <tianshuliang@hisilicon.com>,
-        Jiancheng Xue <xuejiancheng@hisilicon.com>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        David Yang <mmyangfl@gmail.com>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20230415-mmc-hi3798mv200-v2-0-1d274f9b71da@outlook.com>
- <20230415-mmc-hi3798mv200-v2-3-1d274f9b71da@outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230415-mmc-hi3798mv200-v2-3-1d274f9b71da@outlook.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [RFC PATCH V4 14/17] x86/hyperv/sev: Add AMD sev-snp enlightened
+ guest support on hyperv
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "jgross@suse.com" <jgross@suse.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "jiangshan.ljs@antgroup.com" <jiangshan.ljs@antgroup.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "ashish.kalra@amd.com" <ashish.kalra@amd.com>,
+        "srutherford@google.com" <srutherford@google.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>,
+        "pawan.kumar.gupta@linux.intel.com" 
+        <pawan.kumar.gupta@linux.intel.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
+        "alexander.shishkin@linux.intel.com" 
+        <alexander.shishkin@linux.intel.com>,
+        "sandipan.das@amd.com" <sandipan.das@amd.com>,
+        "ray.huang@amd.com" <ray.huang@amd.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "michael.roth@amd.com" <michael.roth@amd.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "venu.busireddy@oracle.com" <venu.busireddy@oracle.com>,
+        "sterritt@google.com" <sterritt@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "samitolvanen@google.com" <samitolvanen@google.com>,
+        "fenghua.yu@intel.com" <fenghua.yu@intel.com>
+Cc:     "pangupta@amd.com" <pangupta@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+References: <20230403174406.4180472-1-ltykernel@gmail.com>
+ <20230403174406.4180472-15-ltykernel@gmail.com>
+ <BYAPR21MB16884681B85CE6C83CBC2B1FD79B9@BYAPR21MB1688.namprd21.prod.outlook.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <BYAPR21MB16884681B85CE6C83CBC2B1FD79B9@BYAPR21MB1688.namprd21.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/04/2023 19:13, Yang Xiwen via B4 Relay wrote:
-> From: Yang Xiwen <forbidden405@outlook.com>
-> 
-> Hi3798MV200 has an extra clock, also document it here.
-> 
-> Signed-off-by: Yang Xiwen <forbidden405@outlook.com>
-> ---
->  .../bindings/mmc/hi3798cv200-dw-mshc.txt           | 40 ----------
+On 4/12/2023 11:02 PM, Michael Kelley (LINUX) wrote:
+> From: Tianyu Lan<ltykernel@gmail.com>  Sent: Monday, April 3, 2023 10:44 AM
+> The patch subject prefix of "x86/hyperv/sev:" doesn't make sense.
+> There's no pathname like that in the kernel code.  I think it should just be
+> "x86/sev:".
+>
 
-I got multiple, unthreaded patches from you, so I don't know which one
-is correct. Anyway, I responded to one of them. Entire feedback applies
-here as well.
-
-Best regards,
-Krzysztof
+Agree. Will update in the next version.
 
