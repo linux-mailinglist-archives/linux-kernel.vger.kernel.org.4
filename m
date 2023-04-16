@@ -2,209 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E2CC6E3BDE
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 22:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B80E6E3BE2
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 22:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbjDPUST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 16:18:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42980 "EHLO
+        id S229718AbjDPUUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 16:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjDPUSS (ORCPT
+        with ESMTP id S229484AbjDPUUn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 16:18:18 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54EA2213C
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 13:18:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681676297; x=1713212297;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=TexwlvQkVvhN5NaYVLiPcsHn+TpdtQQpv2NxGa8x6IU=;
-  b=Dtsk/H6T7PcuK3OB74otUf1Y7MAI0iIk1f3pgktxx9wJTuOskVnooYfH
-   dCLskAyvY6EJkj4gKiKeOZccTGtOlAy8+IDvapWxjSAPd33654Dem5TrT
-   zF5MTCU11zPLXv1c06IUyVGhYx7Cqz82mpLK8SlDLh3ZYPoPOwTLHwU9Y
-   /NRWs01embiO+3tPSw7BPha4Iv+LpxOxKeD7ZOixejTebdTKOFLz38R/U
-   VnxA0JqwHXEcmVCHwNp8DneKmq1o4Ep1lrc6aA/lBkRH+IYtCn1FwunU0
-   yd5SbjC8E55Is3BzGUawLU9XRCnQFXEGmr3uUFN/Oerav3tgqphf7bTMs
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="431052682"
-X-IronPort-AV: E=Sophos;i="5.99,202,1677571200"; 
-   d="scan'208";a="431052682"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2023 13:18:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="801856835"
-X-IronPort-AV: E=Sophos;i="5.99,202,1677571200"; 
-   d="scan'208";a="801856835"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 16 Apr 2023 13:18:15 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1po8pC-000bpV-1k;
-        Sun, 16 Apr 2023 20:18:14 +0000
-Date:   Mon, 17 Apr 2023 04:17:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:timers/core] BUILD SUCCESS
- e797203fb3ba8c0ed2f4a8800d626c9d54fedfbf
-Message-ID: <643c57eb.0aW8PJIqQM8lI0Xs%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sun, 16 Apr 2023 16:20:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E14C726B2
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 13:19:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681676395;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=E4VfgdWy79fScFpHd8ztN3EfNO1Bs6qzR+h66uHi/sM=;
+        b=i5AxEbG0cSngHWhXf5C2ZjZqVTKNboqSncT57H8g5NdtgMKUVT3/6bhd/YaABYS5rVM4F3
+        CTAm+Lew6LLkA/7keh6bqNnATBV9ENVw+aEdwesRfQKdBMq23qGg08fVVi1MKEmmLbfP4K
+        JFNDWX9xrAdn1gjm7J0p34RioamNom0=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-205-7yf3GhVmOd6IM13ocEV_iQ-1; Sun, 16 Apr 2023 16:19:54 -0400
+X-MC-Unique: 7yf3GhVmOd6IM13ocEV_iQ-1
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-94a355c9028so337675566b.3
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 13:19:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681676392; x=1684268392;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=E4VfgdWy79fScFpHd8ztN3EfNO1Bs6qzR+h66uHi/sM=;
+        b=IIviXxtLWYrd73LxtyJ2qe4g3mIgg3G6GaaFZ2v9pSNeg5BFORDQP5MBK5ujwxpa6y
+         zdNn7C8B3DpOMltWxPyYHmWVSFwLCvOGMPcpan37MDbi7wbSIXOEK9JYV7gSS6q6UuMQ
+         b5orjSAgZZca/J9Kz/5vUNWGzXhf9XbLyxfU3ea3hLfS9sC0kM8UjM7lVnfLB8UED/5A
+         cTO55RsunnE9HH6nwCAuBajFeEAQ8d3/AiVJCJZNLJJBwscvqovldUeZrgnc2bfPRmRM
+         fdW3rKV7NyhW10CqEeoi1Qq3AFRINegi6Bj4f58P2tyBcG+Go77JV6WfnO25OsXgcz8Z
+         2i1Q==
+X-Gm-Message-State: AAQBX9eeittP2ERf50BNp7x6f0EaJ6rBT70avZazq76mxWIKlBApmv3N
+        3wNwvR+uw8h/ErCoutYnxISp9X8B6/xbojZyJLDNlkQH9d7LrLba5P31Yw1YBMxMvlE4RcGSsXT
+        OEkhXe6CsrO8USnYe8kmi1JtaImSw27aM
+X-Received: by 2002:aa7:d814:0:b0:506:9701:8436 with SMTP id v20-20020aa7d814000000b0050697018436mr3928492edq.16.1681676392498;
+        Sun, 16 Apr 2023 13:19:52 -0700 (PDT)
+X-Google-Smtp-Source: AKy350b+Rx8aYCm1+2MZmFymKF7qHzMlh5iqmEBr7hABMtGp1cN0/0bG3sAD9IZSP+SnHgtLZmAN+Q==
+X-Received: by 2002:aa7:d814:0:b0:506:9701:8436 with SMTP id v20-20020aa7d814000000b0050697018436mr3928477edq.16.1681676392105;
+        Sun, 16 Apr 2023 13:19:52 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id y2-20020aa7ccc2000000b004c2158e87e6sm4878686edt.97.2023.04.16.13.19.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Apr 2023 13:19:51 -0700 (PDT)
+Message-ID: <3eb3de24-41b4-9566-9b11-a12d21904793@redhat.com>
+Date:   Sun, 16 Apr 2023 22:19:50 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 0/6] iio: st_sensors: Add lsm303d support
+To:     Marius Hoch <mail@mariushoch.de>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Denis Ciocca <denis.ciocca@st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230415231130.115094-1-mail@mariushoch.de>
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230415231130.115094-1-mail@mariushoch.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/core
-branch HEAD: e797203fb3ba8c0ed2f4a8800d626c9d54fedfbf  selftests/timers/posix_timers: Test delivery of signals across threads
+Hi Marius,
 
-elapsed time: 771m
+On 4/16/23 01:11, Marius Hoch wrote:
+> Hi!
+> 
+> This patch series adds support for the LSM303D accelerometer and
+> magnetometer. As the LSM303D is basically, as far as I can tell,
+> the LSM9DS0 without gyroscope, we can easily re-use its definitions.
+> 
+> This was tested on a Lenovo Yoga Tablet 2 1051-F.
 
-configs tested: 127
-configs skipped: 5
+Thank you for your work on this. I have had this on my own todo list
+since 2020 at least and I did not realize that Andy already added ST IMU
+support in 2021 so this just needed some extra device-ids :)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+I have tested this successfully on the following models:
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r004-20230416   gcc  
-alpha                randconfig-r023-20230416   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                     nsimosci_hs_defconfig   gcc  
-arc                  randconfig-r011-20230416   gcc  
-arc                  randconfig-r043-20230416   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                     am200epdkit_defconfig   clang
-arm          buildonly-randconfig-r005-20230416   clang
-arm                     davinci_all_defconfig   clang
-arm                                 defconfig   gcc  
-arm                          gemini_defconfig   gcc  
-arm                             mxs_defconfig   clang
-arm                        neponset_defconfig   clang
-arm                       netwinder_defconfig   clang
-arm                       omap2plus_defconfig   gcc  
-arm                  randconfig-r012-20230416   clang
-arm                  randconfig-r022-20230416   clang
-arm                  randconfig-r046-20230416   clang
-arm                    vt8500_v6_v7_defconfig   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r016-20230416   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r026-20230416   gcc  
-hexagon              randconfig-r015-20230416   clang
-hexagon              randconfig-r041-20230416   clang
-hexagon              randconfig-r045-20230416   clang
-i386                             allyesconfig   gcc  
-i386                         debian-10.3-func   gcc  
-i386                   debian-10.3-kselftests   gcc  
-i386                        debian-10.3-kunit   gcc  
-i386                          debian-10.3-kvm   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                          randconfig-a001   gcc  
-i386                          randconfig-a002   clang
-i386                          randconfig-a003   gcc  
-i386                          randconfig-a004   clang
-i386                          randconfig-a005   gcc  
-i386                          randconfig-a006   clang
-i386                          randconfig-a011   clang
-i386                          randconfig-a012   gcc  
-i386                          randconfig-a013   clang
-i386                          randconfig-a014   gcc  
-i386                          randconfig-a015   clang
-i386                          randconfig-a016   gcc  
-ia64                             alldefconfig   gcc  
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r036-20230416   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k         buildonly-randconfig-r006-20230416   gcc  
-m68k                                defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                            alldefconfig   gcc  
-nios2        buildonly-randconfig-r001-20230416   gcc  
-nios2                               defconfig   gcc  
-openrisc                    or1ksim_defconfig   gcc  
-parisc       buildonly-randconfig-r003-20230416   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r001-20230416   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                      arches_defconfig   gcc  
-powerpc                      bamboo_defconfig   gcc  
-powerpc                        fsp2_defconfig   clang
-powerpc                   motionpro_defconfig   gcc  
-powerpc                  mpc885_ads_defconfig   clang
-powerpc              randconfig-r025-20230416   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r014-20230416   gcc  
-riscv                randconfig-r042-20230416   gcc  
-riscv                          rv32_defconfig   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390         buildonly-randconfig-r004-20230416   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r006-20230416   clang
-s390                 randconfig-r024-20230416   gcc  
-s390                 randconfig-r035-20230416   clang
-s390                 randconfig-r044-20230416   gcc  
-sh                               allmodconfig   gcc  
-sh           buildonly-randconfig-r002-20230416   gcc  
-sh                   randconfig-r002-20230416   gcc  
-sh                   randconfig-r013-20230416   gcc  
-sh                           se7206_defconfig   gcc  
-sh                           se7619_defconfig   gcc  
-sh                   sh7770_generic_defconfig   gcc  
-sh                          urquell_defconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r003-20230416   gcc  
-sparc                randconfig-r031-20230416   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                        randconfig-a001   clang
-x86_64                        randconfig-a002   gcc  
-x86_64                        randconfig-a003   clang
-x86_64                        randconfig-a004   gcc  
-x86_64                        randconfig-a005   clang
-x86_64                        randconfig-a006   gcc  
-x86_64                        randconfig-a011   gcc  
-x86_64                        randconfig-a012   clang
-x86_64                        randconfig-a013   gcc  
-x86_64                        randconfig-a014   clang
-x86_64                        randconfig-a015   gcc  
-x86_64                        randconfig-a016   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                  audio_kc705_defconfig   gcc  
-xtensa               randconfig-r021-20230416   gcc  
-xtensa               randconfig-r032-20230416   gcc  
-xtensa               randconfig-r034-20230416   gcc  
+Lenovo Yoga Tablet 2 851F (Windows version 8")
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+This version needs an accel-mount-matrix quick in hwdb since it has
+a portrait screen rather then a landscape screen (so 90° rotated):
+https://github.com/systemd/systemd/pull/27295
+Note I've made sure that this quirk only applies to the 851 and not to the 1051.
+
+Lenovo Yoga Tablet 2  830F (Android version 8")
+
+Since the ACPI tables are broken in the Android BIOS these need
+a patch to x86-android-tablets to instantiate the i2c_client
+for the sensor, I'm still finalizing this patch and I'll submit
+it upstream when its finished.
+
+Tested-by: Hans de Goede <hansg@kernel.org>
+
+Regards,
+
+Hans
+
+
+p.s.
+
+1: I noticed that auto-screen rotation using iio-sensor-proxy is quite slow
+so I wrote a patch to fix this :)   :
+https://gitlab.freedesktop.org/hadess/iio-sensor-proxy/-/merge_requests/366
+
+2: There are some other unsupported sensors on these models too,
+perhaps you are interested in adding support for these too?
+
+Here are my personal notes on this:
+ -Light sensor should work with drivers/iio/light/al3320a.c
+  https://github.com/JideTechnology/remixos-kernel/commit/c52d55b4bd907e87b7b115b3943219f3e089a77a
+
+ -MXM1120 HALL sensor, have datasheet, measures angle of kickstand thingie, use
+  for SW_TABLET_MODE. Do a pdx86 driver just for the Tab 2 which checks that the
+  kick stand is out *and* the BT keyboard is paired, in that case report
+  SW_TABLET_MODE=0, in all other cases report SW_TABLET_MODE=1 ??
+  For the commit msg:
+  Datasheet available here: http://haechitech.com/tech-support/
+  Requires creating an account, once you have an account you can immediately download
+  the provided datasheets (or let me know if you want me to email you a copy)
+
+Especially the light sensor should be an easy win and light sensors
+are already supported in e.g. iio-sensor-proxy
+
+
+
+
+
+
+
+
+
+
+> Changes in v3:
+> Simplified the ACPI tables in the LSM9DS0 IMU driver, per Jonathan Cameron.
+> 
+> Marius Hoch (6):
+>   iio: accel: st_accel: Add LSM303D
+>   iio: magnetometer: st_accel: Add LSM303D
+>   iio: st_sensors: Add lsm303d support to the LSM9DS0 IMU driver
+>   iio: st_sensors: Add ACPI support for lsm303d to the LSM9DS0 IMU
+>     driver
+>   iio: Comment that the LSM303D also has the Magnetometer DRDY
+>   dt-bindings: iio: st-sensors: Add LSM303D accelerometer+magnetometer
+> 
+>  .../devicetree/bindings/iio/st,st-sensors.yaml       |  1 +
+>  drivers/iio/accel/st_accel_core.c                    |  1 +
+>  drivers/iio/imu/st_lsm9ds0/Kconfig                   |  3 ++-
+>  drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_i2c.c          | 12 ++++++++++++
+>  drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_spi.c          | 12 ++++++++++++
+>  drivers/iio/magnetometer/st_magn_core.c              |  1 +
+>  include/linux/iio/common/st_sensors.h                |  1 +
+>  include/linux/platform_data/st_sensors_pdata.h       |  2 +-
+>  8 files changed, 31 insertions(+), 2 deletions(-)
+> 
+> 
+> base-commit: e62252bc55b6d4eddc6c2bdbf95a448180d6a08d
+
