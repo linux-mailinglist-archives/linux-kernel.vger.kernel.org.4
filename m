@@ -2,67 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2BBC6E3946
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 16:32:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F336E394E
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 16:33:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbjDPOc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 10:32:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46766 "EHLO
+        id S230226AbjDPOdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 10:33:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjDPOcy (ORCPT
+        with ESMTP id S229791AbjDPOdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 10:32:54 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DEC310FB
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 07:32:53 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id fw30so4888531ejc.5
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 07:32:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681655572; x=1684247572;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vxPwmhTn7R8qcbvvXrEOzUT6iY4Cfl6bwCwS+WC5Va8=;
-        b=jRcjXg6jNI5pjujR/dVJj+LQpcy/81Qohbx/vk0NeKE/+JJSu4YD+o826383+s0OTJ
-         G+srA2g+4s8lELCqwy4n466Ip06tbeoBQDAgd1Fg2chSEnwPThZz0KDuGcyLQEj/xzsM
-         VxvIQfA/RZpK90xvfRkeJid59BhrRkzSCfJCG9cOAazSrwDz2osvpMJdQt8li1pb2jSB
-         y9/8RZp/30ZZGsEpp9u/Qn1ZkpvFKxpKm6Dvg+PQ/A6sl4EcUi+0+fruNo2eQR4gc1l9
-         VGH5fq3Baf8Cwep1ZSX3tILq2EbswDTIqt6xGjT5SL8n7Mk4VOpLVrQtCmzqbLOBboiU
-         mWpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681655572; x=1684247572;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vxPwmhTn7R8qcbvvXrEOzUT6iY4Cfl6bwCwS+WC5Va8=;
-        b=U/MfPiu/btbROzoLqEJVIURVjYkqvdZMHBo+r1PyvZrpOn6l4YaVyQYUGYQYaepH8l
-         QcrQe2gIFDxruzWVMbENw7ntdAtHJisQSkGrOwthNadovhlx5W9QohxxtMqUyynIFql5
-         YvPqoOAuBUDJMh6wxUN7MA7Pwg0dhxP+QTo3gxyuxyMxuhWanAMw899q8BcW9mEW8Wld
-         JRlqdQMDrFxBSqwqjkvKoxVA1aWtSh4D9vZ/iXgLWTVyAuD8fTiVKnWT419IJX4NeYhx
-         IpfEGEMb/ukXNaawDI773FwYXTZQvuSpJLKTffTpRp/yMvf2XSfqRzqWVNbaMYe3CLLT
-         E4wQ==
-X-Gm-Message-State: AAQBX9cCkxX0ttxzNg+gubB26AiwXSH3BLu9ff9zJf7AGm1rvOXJe1oR
-        +8u4adlpEozhy1+R3NoTSo4OFORgirc3SncixoA=
-X-Google-Smtp-Source: AKy350bxYnhx5lTuz3nhlAXOfqrgCFlsA9aSriC++51hMHa6zCQKlPTLANk80um0Va61/aHij0j7qw==
-X-Received: by 2002:a17:906:17c1:b0:932:ac6c:7ef9 with SMTP id u1-20020a17090617c100b00932ac6c7ef9mr4599921eje.22.1681655571849;
-        Sun, 16 Apr 2023 07:32:51 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:ba4d:301c:484d:5c9])
-        by smtp.gmail.com with ESMTPSA id g25-20020a17090613d900b0094edfbd475csm3663271ejc.127.2023.04.16.07.32.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 07:32:51 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        arm@kernel.org, soc@kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL] memory: drivers: late pull for v6.4, part two
-Date:   Sun, 16 Apr 2023 16:32:48 +0200
-Message-Id: <20230416143248.308942-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Sun, 16 Apr 2023 10:33:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446AB1FD7
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 07:33:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D56366115C
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 14:33:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81BB3C433EF;
+        Sun, 16 Apr 2023 14:33:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681655618;
+        bh=7pAQdp9zOWqx4avhF2Eg2nBD/7QWu9T59ZFFoTswNMI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=QHh9ZH95o94PQUzy68vuDqHSGC22vg3Bwk+P2SC6x0wkqD/rwcwlr/l/bbv4SQVzd
+         fR2tDRhzTIAw3QHBOoRajU1jbxs6ZYXkTIUU7xMUZUz3R48vY1sCrDP1GkMZTickrk
+         hDTm5BOdocydSm8ZgRdz/unhNV/ncpWolWTFhbNMvMMOrn8mgWaOE6m5/G2bwWm6Gv
+         McDlV28jnKiMBDRxlTqJ+1Bui6ekq0VSBTMJCuL5eb16BmPYnS6Ay1ql/gUpyYNdyR
+         UtbUFw37rAz0YV/55Fdqwj8b2b/I3MPQq7XEud19i5qsY0Gl2KkRm1QPLnG1cNeBvR
+         pfJ1yoJIXEWBw==
+Message-ID: <b7604342-1d56-1c15-1526-380a4fdbbb41@kernel.org>
+Date:   Sun, 16 Apr 2023 22:33:36 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] erofs: stop parsing non-compact HEAD index if clusterofs
+ is invalid
+Content-Language: en-US
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>,
+        linux-erofs@lists.ozlabs.org
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        syzbot+aafb3f37cfeb6534c4ac@syzkaller.appspotmail.com
+References: <20230410173714.104604-1-hsiangkao@linux.alibaba.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20230410173714.104604-1-hsiangkao@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,35 +59,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 69d170c4c28ba0490bd42630cc09d7e1834bbb3d:
+On 2023/4/11 1:37, Gao Xiang wrote:
+> Syzbot generated a crafted image [1] with a non-compact HEAD index of
+> clusterofs 33024 while valid numbers should be 0 ~ lclustersize-1,
+> which causes the following unexpected behavior as below:
+> 
+>   BUG: unable to handle page fault for address: fffff52101a3fff9
+>   #PF: supervisor read access in kernel mode
+>   #PF: error_code(0x0000) - not-present page
+>   PGD 23ffed067 P4D 23ffed067 PUD 0
+>   Oops: 0000 [#1] PREEMPT SMP KASAN
+>   CPU: 1 PID: 4398 Comm: kworker/u5:1 Not tainted 6.3.0-rc6-syzkaller-g09a9639e56c0 #0
+>   Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+>   Workqueue: erofs_worker z_erofs_decompressqueue_work
+>   RIP: 0010:z_erofs_decompress_queue+0xb7e/0x2b40
+>   ...
+>   Call Trace:
+>    <TASK>
+>    z_erofs_decompressqueue_work+0x99/0xe0
+>    process_one_work+0x8f6/0x1170
+>    worker_thread+0xa63/0x1210
+>    kthread+0x270/0x300
+>    ret_from_fork+0x1f/0x30
+> 
+> Note that normal images or images using compact indexes are not
+> impacted.  Let's fix this now.
+> 
+> [1] https://lore.kernel.org/r/000000000000ec75b005ee97fbaa@google.com
+> 
+> Reported-by: syzbot+aafb3f37cfeb6534c4ac@syzkaller.appspotmail.com
+> Fixes: 02827e1796b3 ("staging: erofs: add erofs_map_blocks_iter")
+> Fixes: 152a333a5895 ("staging: erofs: add compacted compression indexes support")
+> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 
-  dt-bindings: memory-controller: Drop unneeded quotes (2023-03-31 21:53:15 +0200)
+Reviewed-by: Chao Yu <chao@kernel.org>
 
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-6.4-2
-
-for you to fetch changes up to 3ec0e1ea4770e40575bfb2bb4e9ebbbaa3c80d3f:
-
-  memory: mtk-smi: mt8365: Add SMI Support (2023-04-10 18:57:15 +0200)
-
-----------------------------------------------------------------
-Memory controller drivers for v6.4, part two
-
-1. Tegra210 EMC: correct reading of MR18 register.
-2. MediaTek SMI: add support for MT8365.
-
-----------------------------------------------------------------
-Alexandre Mergnat (3):
-      dt-bindings: memory-controllers: mediatek,smi-common: add mt8365
-      dt-bindings: memory-controllers: mediatek,smi-larb: add mt8365
-      memory: mtk-smi: mt8365: Add SMI Support
-
-Diogo Ivo (1):
-      memory: tegra: read values from correct device
-
- .../devicetree/bindings/memory-controllers/mediatek,smi-common.yaml | 2 ++
- .../devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml   | 4 ++++
- drivers/memory/mtk-smi.c                                            | 6 ++++++
- drivers/memory/tegra/tegra210-emc-cc-r21021.c                       | 2 +-
- 4 files changed, 13 insertions(+), 1 deletion(-)
+Thanks,
