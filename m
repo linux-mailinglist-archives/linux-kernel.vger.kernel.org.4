@@ -2,181 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A7816E3C9F
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 00:27:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A696E3CA2
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 00:29:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbjDPW1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 18:27:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38818 "EHLO
+        id S230032AbjDPW3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 18:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjDPW1F (ORCPT
+        with ESMTP id S230016AbjDPW3m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 18:27:05 -0400
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3778A269E;
-        Sun, 16 Apr 2023 15:27:04 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 0ADE2C009; Mon, 17 Apr 2023 00:27:03 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1681684023; bh=M+qG9tBDP0q6BoIuH0STukSZh3pZTkWN9eRiZkUJxbk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0ZwelhQgh3FyP+PUx1/r9n7J0Q5eIpp0n40fsVrEKxJEqPavrmNZLeXoTlrRKyo4D
-         kRx4pjz4oEnUmc7aGAGHYUAnv1S6SvRrRzPO0f7MG4/bIyrZ8uB+mwdV4CRp/ali6R
-         3a0cQGpnGovoTAxrdnESDIVZ9IDHABsf5JJE2sIUnYgt4IYzPrSekNz6SARfSwXQdH
-         RGih2FU3ylcU/hnh9tIIRCNRwhw7dW5YmPKFTNFyCrg1NtTpZdvtqvfF0Zms1bTKzu
-         xVCwkjz2kYtNdh6UT/cZ6NLGBZWJMz0pniSPR+tcU4HXKCXAoRI70rGGOo3nUXxQ9N
-         NX5QHgOFdrwvQ==
+        Sun, 16 Apr 2023 18:29:42 -0400
+Received: from smtp.smtpout.orange.fr (smtp-14.smtpout.orange.fr [80.12.242.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8EBC26AD
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 15:29:40 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id oAsKpjB2PjYHDoAsLpkxww; Mon, 17 Apr 2023 00:29:39 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orange.fr;
+        s=t20230301; t=1681684179;
+        bh=8Wl/JXKwfD+OAzKNoPx7F3mXgRxtmTroNRADhZKqXe4=;
+        h=From:To:Cc:Subject:Date;
+        b=GibIBA27D/+YTPuxLJnn/hNkdxnNIF3BJmRdISCt+noAh0UTCAzfO3t8WfvwIb3yp
+         ntquYxOsazbUzvEfjpey6c4LAou25FFuyH9s0+QKj0DMnxgy7kQJcK26g4G7+bpViR
+         +YAYSVjAxfkQybX5AjeHsdW8nRJnoT/++aaOfVrClAZZpyTm5Cb/f04zm//+UPcGsI
+         9tkKE4INTIHJWPGnFXf50Td+PVkYy+LKUNYp2nMnEZMf6VHfy0BgV0WgzTvrnyepMI
+         /4E81MajRpVZp2CL4u3ktfjX6YnZDNlxbvxeR1iSzz03yq/laK4N6/d3a8rjy66Qtp
+         gHgOv7rq3RHzA==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 17 Apr 2023 00:29:39 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH] soc: qcom: ramp_controller: Fix an error handling path in qcom_ramp_controller_probe()
+Date:   Mon, 17 Apr 2023 00:29:35 +0200
+Message-Id: <84727a79d0261b4112411aec23b553504015c02c.1681684138.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id C741BC009;
-        Mon, 17 Apr 2023 00:26:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1681684022; bh=M+qG9tBDP0q6BoIuH0STukSZh3pZTkWN9eRiZkUJxbk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HJnlOxUTpvfnHYXh/DTjd9wz9+6Uw5UjUKrgVBsHbaMWW6cVVakw4+7GCG4fcrFrv
-         BWsDgOUuchOpOPbjQfr5IWqEi8iizwixZL4RilLr9WCoF4WOjgK1SlDADGoHOwf9n3
-         s439atTCQmxgnp7dFKQnFFzfmTdmcnpz9iJPvHAIDDiRnZ3tv7L3B2mcmiu1pw4zrm
-         wSIxaio4681GJRpK8VTOS0MNwkJAPPHRTdYo69YYlWx7i7eFuxUkmzICWRKatS0NKG
-         D02MfZYzJFY30Vwo56sawgyEIH4+Bi6bDmo6jyRmoF+rFkpovqasFHynCJY2ogFF9I
-         bP68wC10+k2og==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id e80dcd00;
-        Sun, 16 Apr 2023 22:26:56 +0000 (UTC)
-Date:   Mon, 17 Apr 2023 07:26:41 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Samuel Thibault <samuel.thibault@ens-lyon.org>
-Cc:     James Chapman <jchapman@katalix.com>, tparkin@katalix.com,
-        edumazet@google.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, corbet@lwn.net, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PPPoL2TP: Add more code snippets
-Message-ID: <ZDx2IUYTmLSdzU6D@codewreck.org>
-References: <20230416220704.xqk4q6uwjbujnqpv@begin>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230416220704.xqk4q6uwjbujnqpv@begin>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Samuel Thibault wrote on Mon, Apr 17, 2023 at 12:07:04AM +0200:
-> The existing documentation was not telling that one has to create a PPP
-> channel and a PPP interface to get PPPoL2TP data offloading working.
-> 
-> Also, tunnel switching was not described, so that people were thinking
-> it was not supported, while it actually is.
-> 
-> Signed-off-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
+'qrc' is known to be non-NULL at this point.
+Checking for 'qrc->desc' was expected instead, so use it.
 
-Just passing by, thanks!
-The update made me ask a couple more questions so I've commented below,
-but I think this is already useful in itself so don't hold back for me.
+Fixes: a723c95fa137 ("soc: qcom: Add Qualcomm Ramp Controller driver")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/soc/qcom/ramp_controller.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ---
->  Documentation/networking/l2tp.rst |   59 ++++++++++++++++++++++++++++++++++++--
->  1 file changed, 56 insertions(+), 3 deletions(-)
-> 
-> --- a/Documentation/networking/l2tp.rst
-> +++ b/Documentation/networking/l2tp.rst
-> @@ -387,11 +387,12 @@ Sample userspace code:
->    - Create session PPPoX data socket::
->  
->          struct sockaddr_pppol2tp sax;
-> -        int fd;
-> +        int ret;
->  
->          /* Note, the tunnel socket must be bound already, else it
->           * will not be ready
->           */
-> +        int session_fd = socket(AF_PPPOX, SOCK_DGRAM, PX_PROTO_OL2TP);
->          sax.sa_family = AF_PPPOX;
->          sax.sa_protocol = PX_PROTO_OL2TP;
->          sax.pppol2tp.fd = tunnel_fd;
-> @@ -406,12 +407,64 @@ Sample userspace code:
->          /* session_fd is the fd of the session's PPPoL2TP socket.
->           * tunnel_fd is the fd of the tunnel UDP / L2TPIP socket.
->           */
-> -        fd = connect(session_fd, (struct sockaddr *)&sax, sizeof(sax));
-> -        if (fd < 0 ) {
-> +        ret = connect(session_fd, (struct sockaddr *)&sax, sizeof(sax));
-> +        if (ret < 0 ) {
->                  return -errno;
->          }
->          return 0;
->  
-> +  - Create PPP channel::
-> +
-> +        int chindx;
-> +        ret = ioctl(session_fd, PPPIOCGCHAN, &chindx);
-> +        if (ret < 0)
-> +                return -errno;
-> +
-> +        int ppp_chan_fd = open("/dev/ppp", O_RDWR);
-> +
-> +        ret = ioctl(ppp_chan_fd, PPPIOCATTCHAN, &chindx);
-> +        if (ret < 0)
-> +                return -errno;
-> +
-> +Non-data PPP frames will be available for read on `ppp_chan_fd`.
-> +
-> +  - Create PPP interface::
-> +
-> +        int ppp_if_fd = open("/dev/ppp", O_RDWR);
-> +
-> +        int ifunit;
-> +        ret = ioctl(ppp_if_fd, PPPIOCNEWUNIT, &ifunit);
-> +        if (ret < 0)
-> +                return -errno;
-> +
-> +        ret = ioctl(ppp_chan_fd, PPPIOCCONNECT, ifunit);
-> +        if (ret < 0)
-> +                return -errno;
-> +
-> +The ppp<ifunit> interface can then be configured as usual with SIOCSIFMTU,
-> +SIOCSIFADDR, SIOCSIFDSTADDR, SIOCSIFNETMASK, and activated by setting IFF_UP
-> +with SIOCSIFFLAGS
-
-(That somewhat makes it sounds like the "new" netlink interface cannot
-be used (e.g. ip command); although I guess sommeone implementing this
-would be more likely to use the ioctls than not so having the names can
-be a timesaver?)
-
-Also, this got me wondering if the 'if' fd can be closed immediately or
-if the interface will be removed when the fd is closed (probably not?)
-If the fd can immediately be closed, could the chan fd or another fd be
-used instead, saving an open?
-
-> +
-> +  - Tunnel switching is supported by bridging channels::
-> +
-> +        int chindx;
-> +        ret = ioctl(session_fd, PPPIOCGCHAN, &chindx);
-> +        if (ret < 0)
-> +                return -errno;
-> +
-> +        int chindx2;
-> +        ret = ioctl(session_fd2, PPPIOCGCHAN, &chind2x);
-> +        if (ret < 0)
-> +                return -errno;
-> +
-> +        int ppp_chan_fd = open("/dev/ppp", O_RDWR);
-> +
-> +        ret = ioctl(ppp_chan_fd, PPPIOCBRIDGECHAN, &chindx2);
-> +        if (ret < 0)
-> +                return -errno;
-> +
-> +        close(ppp_chan_fd);
-> +
->  Old L2TPv2-only API
->  -------------------
->  
-
+diff --git a/drivers/soc/qcom/ramp_controller.c b/drivers/soc/qcom/ramp_controller.c
+index dc74d2a19de2..5e3ba0be0903 100644
+--- a/drivers/soc/qcom/ramp_controller.c
++++ b/drivers/soc/qcom/ramp_controller.c
+@@ -296,7 +296,7 @@ static int qcom_ramp_controller_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 
+ 	qrc->desc = device_get_match_data(&pdev->dev);
+-	if (!qrc)
++	if (!qrc->desc)
+ 		return -EINVAL;
+ 
+ 	qrc->regmap = devm_regmap_init_mmio(&pdev->dev, base, &qrc_regmap_config);
 -- 
-Dominique Martinet | Asmadeus
+2.34.1
+
