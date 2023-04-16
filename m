@@ -2,103 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4C96E36E2
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 12:02:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59E476E36E7
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 12:07:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230518AbjDPKCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 06:02:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53618 "EHLO
+        id S229648AbjDPKHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 06:07:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbjDPKBu (ORCPT
+        with ESMTP id S229582AbjDPKHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 06:01:50 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DA32D42;
-        Sun, 16 Apr 2023 03:01:49 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id c9so17895613ejz.1;
-        Sun, 16 Apr 2023 03:01:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681639307; x=1684231307;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bS+Nk5tohYdjt0M+Lv5Edd8xQcZQmX7f5b7WTtVtHzg=;
-        b=RuEfaLXciTcAZlv5u4MJtuL2VgOZ49Wdk/1vl86tSwFdXqfjiltwWMwo8uvtnc0ho1
-         bufJbRYn9hMHXwbO7uJ/BoOuEy5dP2PhGYyYrybgWwHH3JBP5IYvvWxDNdPbVaCoxYEe
-         ZszvpLPCZ6gSt9tceHdv8CxNhW61IxKZg/DisecM+uy4hHVjijoClEnPXJpEIAwZSwR0
-         kGTPhgI31i3yARXH3AhqoDuPlVG2DbIYmjn53BIBDsoiWe3gEL3J5v1rWOwT7W49HmxI
-         MoNbkh6iDVlDOegG9xTAiilRW/vNWXvwStWC3VfI1Ul223w0g54tFzdpInX8qSQd04Rh
-         dTMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681639307; x=1684231307;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bS+Nk5tohYdjt0M+Lv5Edd8xQcZQmX7f5b7WTtVtHzg=;
-        b=TheTzdoNFeplXH2znBw0GG90A2UZ4CnknSQO/1RQVhzmhrbFG2br/aNfyQhOI5fFVd
-         RLrRIu/GRyNl3Gso6lW/atwnAE9h8tfDnLlDaZTNhbv/KC3iYLOQedxeM7J8QVg6Eoff
-         V1N4TNJZ5+KXA2yN63TUhz8uj80/BSc6iqALJbhYxuztxA1BZnmTGDU5UIorlZISmQk7
-         GJyc+hz71FXL85PTt7jGfjZRWDAOtN746gN8EVOsBeKOg2KeFyDm4CKXvPxWKnc3CcLN
-         rpbElm4RCTpEawvs0gtD1BZh71Zx8KQWgn9DfmwUQkwX37S5w/9IHE7H09gjxVMgjMKN
-         7DUQ==
-X-Gm-Message-State: AAQBX9fyg5FlWoFEsyNWd9jDmmsJ+7kItNsTS/6M64RkD3Hlbv4ekN10
-        vsDMWtb+O6+djQq9ukC5kWQ=
-X-Google-Smtp-Source: AKy350Zsxh+KLSNWSgLa2gYb4NYNfxQubU3xCOln1931vfBIF0m0uS+s3t5u+AG6G6D2YvI1PIuNkw==
-X-Received: by 2002:a17:907:a074:b0:94e:bede:6d2a with SMTP id ia20-20020a170907a07400b0094ebede6d2amr4503207ejc.24.1681639307530;
-        Sun, 16 Apr 2023 03:01:47 -0700 (PDT)
-Received: from localhost.my.domain (83.8.121.70.ipv4.supernova.orange.pl. [83.8.121.70])
-        by smtp.gmail.com with ESMTPSA id lh22-20020a170906f8d600b0094f6bf5ac9asm145232ejb.22.2023.04.16.03.01.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 03:01:47 -0700 (PDT)
-From:   Artur Weber <aweber.kernel@gmail.com>
-To:     thierry.reding@gmail.com
-Cc:     sam@ravnborg.org, airlied@gmail.com, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Artur Weber <aweber.kernel@gmail.com>
-Subject: [PATCH 3/3] MAINTAINERS: Add myself as Samsung S6D7AA0 panel driver maintainer
-Date:   Sun, 16 Apr 2023 12:01:39 +0200
-Message-Id: <20230416100139.13741-4-aweber.kernel@gmail.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230416100139.13741-1-aweber.kernel@gmail.com>
-References: <20230416100139.13741-1-aweber.kernel@gmail.com>
+        Sun, 16 Apr 2023 06:07:08 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2EFAA4
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 03:07:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681639627; x=1713175627;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=gTwzZckg8JTLcu/fOxU1nW3A2oeP8J2MbPlbGfJbRTA=;
+  b=IAVE5T5ULamjnjWiELvaKPXB43UcVtQA8m4GRVQ3R1lrBQ/4s2rlRBMg
+   v/37nESdjorruHOOCu5Wu5hZRvzGFchvimwOlUXCrd/jm2r/c1QqG2U09
+   +9k+V6e/Ud4Dqp30Vq8budjOeuwNPzitumonSZ/v1qytc1loRjPguD9HK
+   LfgjjsND6Ca/0uh2T2wv3QYlyBlYMG+MS74LIBOWekmdn8L6HmO30Wr5K
+   0/q082VD0uM5Sn49Uh4PgHiwEAHd9D8ZKalIbUJWHDM9QGXvaaz8K63ip
+   GH3n0hIHjKJQ3JP7+j//mpx/JsbDSpfRAVIiF/21x/ucbVt4SiPe8Pgmc
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="372596820"
+X-IronPort-AV: E=Sophos;i="5.99,201,1677571200"; 
+   d="scan'208";a="372596820"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2023 03:07:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="814462807"
+X-IronPort-AV: E=Sophos;i="5.99,201,1677571200"; 
+   d="scan'208";a="814462807"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 16 Apr 2023 03:07:05 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pnzHk-000bcN-32;
+        Sun, 16 Apr 2023 10:07:04 +0000
+Date:   Sun, 16 Apr 2023 18:06:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:core/debugobjects] BUILD SUCCESS
+ 63a759694eed61025713b3e14dd827c8548daadc
+Message-ID: <643bc8bc.XXUZAlsJsLbdgVtF%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
----
- MAINTAINERS | 6 ++++++
- 1 file changed, 6 insertions(+)
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git core/debugobjects
+branch HEAD: 63a759694eed61025713b3e14dd827c8548daadc  debugobject: Prevent init race with static objects
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 90abe83c02f3..6a55e6e3ac59 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6623,6 +6623,12 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/display/panel/samsung,s6d27a1.yaml
- F:	drivers/gpu/drm/panel/panel-samsung-s6d27a1.c
- 
-+DRM DRIVER FOR SAMSUNG S6D7AA0 PANELS
-+M:	Artur Weber <aweber.kernel@gmail.com>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/display/panel/samsung,s6d7aa0.yaml
-+F:	drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
-+
- DRM DRIVER FOR SITRONIX ST7703 PANELS
- M:	Guido Günther <agx@sigxcpu.org>
- R:	Purism Kernel Team <kernel@puri.sm>
+elapsed time: 761m
+
+configs tested: 103
+configs skipped: 9
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r004-20230416   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                     haps_hs_smp_defconfig   gcc  
+arc                            hsdk_defconfig   gcc  
+arc                  randconfig-r013-20230416   gcc  
+arc                  randconfig-r043-20230416   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r011-20230416   clang
+arm                  randconfig-r046-20230416   clang
+arm64                            allyesconfig   gcc  
+arm64        buildonly-randconfig-r004-20230416   clang
+arm64                               defconfig   gcc  
+arm64                randconfig-r012-20230416   gcc  
+arm64                randconfig-r023-20230416   gcc  
+arm64                randconfig-r025-20230416   gcc  
+arm64                randconfig-r036-20230416   clang
+csky                                defconfig   gcc  
+hexagon              randconfig-r035-20230416   clang
+hexagon              randconfig-r041-20230416   clang
+hexagon              randconfig-r045-20230416   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                          randconfig-a001   gcc  
+i386                          randconfig-a002   clang
+i386                          randconfig-a003   gcc  
+i386                          randconfig-a004   clang
+i386                          randconfig-a005   gcc  
+i386                          randconfig-a006   clang
+i386                          randconfig-a011   clang
+i386                          randconfig-a012   gcc  
+i386                          randconfig-a013   clang
+i386                          randconfig-a014   gcc  
+i386                          randconfig-a015   clang
+i386                          randconfig-a016   gcc  
+ia64                             allmodconfig   gcc  
+ia64         buildonly-randconfig-r003-20230416   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r034-20230416   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                       bvme6000_defconfig   gcc  
+m68k                                defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r021-20230416   clang
+nios2                               defconfig   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r001-20230416   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                      obs600_defconfig   clang
+powerpc              randconfig-r016-20230416   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r015-20230416   gcc  
+riscv                randconfig-r032-20230416   clang
+riscv                randconfig-r042-20230416   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r006-20230416   clang
+s390                 randconfig-r024-20230416   gcc  
+s390                 randconfig-r044-20230416   gcc  
+sh                               allmodconfig   gcc  
+sh                        apsh4ad0a_defconfig   gcc  
+sh           buildonly-randconfig-r002-20230416   gcc  
+sh           buildonly-randconfig-r006-20230416   gcc  
+sh                   randconfig-r002-20230416   gcc  
+sh                   randconfig-r026-20230416   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r003-20230416   gcc  
+sparc64              randconfig-r022-20230416   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                        randconfig-a001   clang
+x86_64                        randconfig-a002   gcc  
+x86_64                        randconfig-a003   clang
+x86_64                        randconfig-a004   gcc  
+x86_64                        randconfig-a005   clang
+x86_64                        randconfig-a006   gcc  
+x86_64                        randconfig-a011   gcc  
+x86_64                        randconfig-a012   clang
+x86_64                        randconfig-a013   gcc  
+x86_64                        randconfig-a014   clang
+x86_64                        randconfig-a015   gcc  
+x86_64                        randconfig-a016   clang
+x86_64                               rhel-8.3   gcc  
+xtensa       buildonly-randconfig-r005-20230416   gcc  
+
 -- 
-2.40.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
