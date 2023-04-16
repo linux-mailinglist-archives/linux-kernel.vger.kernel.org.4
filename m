@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35D346E3BFD
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 22:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 892886E3C00
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 22:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjDPUye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 16:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48784 "EHLO
+        id S229892AbjDPU4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 16:56:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjDPUyc (ORCPT
+        with ESMTP id S229446AbjDPU4u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 16:54:32 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD12B2133;
-        Sun, 16 Apr 2023 13:54:30 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-50677365fd1so2198611a12.0;
-        Sun, 16 Apr 2023 13:54:30 -0700 (PDT)
+        Sun, 16 Apr 2023 16:56:50 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C022133;
+        Sun, 16 Apr 2023 13:56:49 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id ud9so58968891ejc.7;
+        Sun, 16 Apr 2023 13:56:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20221208; t=1681678469; x=1684270469;
+        d=googlemail.com; s=20221208; t=1681678608; x=1684270608;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xbqqVNzGOI+hATtCpzlQ1GOtPA5LF8eMW+rUvuU9Sis=;
-        b=TY2up1IYzC8pjZvMdhx8eGtZx/BaBmT6yhycBCle914vb88iVlSIX31toGZszNqfBv
-         DMzb8mC/rJX2a13NTyle/+iZulh5ackAEtZ9yLFKnkxgOxIZ74okVbBqVMKqttLOvDur
-         XlkAwWbN2It3I8a5YrWmi3wjCGgz5QOvV6KbhHH9lhyykINsDiMI62OlCT3lhkQlyTWE
-         wZYF6WBs9Yr/rb/b3oalu9sGQ3zjKSBYhi4hUQLwco10DvQTSznmTjVI/bURYb6+dxJy
-         dqGjy93kRj9LaWw4ZHMiaSQciPOsm8z8yP1v3BSM8Rr3RdOiq3okVzoygrqRogv+XFy1
-         mhhw==
+        bh=0WS1S2J47m9oZfeWP6yf02N4PR4c/sbbG9OpnnKVNb0=;
+        b=Y1MtgDTM9NDmIpajiqJlE+6DdkvMLOoVa3VmvdAft4qxVRnLve++ZydABxkHv8okQs
+         lNdimhxM1p+SzvXifOHGHG0RxMapoI1z00KvMeXjDXsFhN+mJmMSRPIwcTNq+188RkNL
+         w8y42mUxpWfiaOKBd6/x+4Vvm6ONnANnO80FXhOpioMXcOvkqMj2gPhEg6VPOxJxpleF
+         h9/JIntF3/Ml8569J/WDwrEtlxvV7WAypD48jWo+HNbZXSjTAw/9Ue2uG/zSnQvbrP7i
+         jy1EX3IzlOb4ECnd5O0c6MdrUbRX2ZO13DQMTQl2y6yqL23SqjPnN/piGBwGtr3Ft67e
+         8sSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681678469; x=1684270469;
+        d=1e100.net; s=20221208; t=1681678608; x=1684270608;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xbqqVNzGOI+hATtCpzlQ1GOtPA5LF8eMW+rUvuU9Sis=;
-        b=FqKAmQn4j9WKfRFkQxqgOunroddaXD1RvY/Tzs3IbxtQTqtiHpnV1hUCbtoFcA4+F3
-         60DXGBfaoHQ8ptwerWlV1/3rbfG83DHz7ZZdiSkZJ7EHjvMu2EuHJI8/1ffhyv4wusWT
-         zqxnTo4j6MoQj2OcCTok6k5G8o19WG2/tmfVXLqHDxIzW0xpqjLx01c1lQcoqIZM85kr
-         9jmg19rOfKEac/qsvfukc/f0TvhtvU8DXZ8QTvVib4QRs6KJEKvf0v8KIkAkTMc69NLD
-         IWOqNt0Ju/jpdeyuGvrBCjcmPPXGOplaok4zja1BCnAQ8HaXq13MGLAO9YbjJsIgoYlT
-         ZfNQ==
-X-Gm-Message-State: AAQBX9fZ7/QINSSYjg6oOmw/E2Zy3yKDU7TRVrjH+RutJmbeDwFEPUy+
-        rKgzkQYb6sYBUo/ScZvLBkfNIr195uR7wPPBLWrYXjZ1ZVo=
-X-Google-Smtp-Source: AKy350a9ZFr+WU3lXgqd6D7Ofo/EcQzK8HMKPpoXrZ6yJzickE0bYDDssYGK2YB94LQPzTqzkAKIWukx+kidRq69yb0=
-X-Received: by 2002:aa7:c414:0:b0:506:7d3e:ade1 with SMTP id
- j20-20020aa7c414000000b005067d3eade1mr9269439edq.27.1681678469135; Sun, 16
- Apr 2023 13:54:29 -0700 (PDT)
+        bh=0WS1S2J47m9oZfeWP6yf02N4PR4c/sbbG9OpnnKVNb0=;
+        b=l01DzcdUHFoUpyvW/Cmsw5+JmtNvyITT51BWUeeqris84ihVIruesBii9aR8+Zc3e2
+         sUzYavYMzHLZZNyC3/gwMRZ23+0R7ucBcGaBRxm/eAgNRXZpRXGgMbN1hxfuXGJd/XgB
+         N4Wa8CpGLUtqd1ecnWsCLZ4DHLiLa5r3wZUFY1+pjxNKO6xxCd4JCrjpJXiVMlal2hXM
+         QkWaTDWsTh4qSEhP4u7ykd53S9Cm58jMqZJ5g43oe/sJJhd23n8MrSOtCZtdwoL+II05
+         0Dre1bCkekHUQvl7s0i3V6+wVRhmyDgwqvgLUum4OTZxrLo5YPDZ8qjUUdfb1XcWVol/
+         g/Jw==
+X-Gm-Message-State: AAQBX9foKiqJN7wZuj8K8Q7pGv7Y5bEIsfs6lArBAp0gLxWctpzmZfMr
+        lFUtIo2Bfluy72/bJAnCsd14p/hENIFeYJhbBhs=
+X-Google-Smtp-Source: AKy350aAl7oqe1ri0rb5+ehDUovVW9O7EQwAqt1kFQNqQPClScpqKDS+kcHcWi9AGVPNc7cnTNruAr0Rv5/TYwEPLuE=
+X-Received: by 2002:a17:907:590:b0:94f:3338:2431 with SMTP id
+ vw16-20020a170907059000b0094f33382431mr3499453ejb.32.1681678608156; Sun, 16
+ Apr 2023 13:56:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230414152423.19842-1-ddrokosov@sberdevices.ru> <20230414152423.19842-2-ddrokosov@sberdevices.ru>
-In-Reply-To: <20230414152423.19842-2-ddrokosov@sberdevices.ru>
+References: <20230414152423.19842-1-ddrokosov@sberdevices.ru> <20230414152423.19842-5-ddrokosov@sberdevices.ru>
+In-Reply-To: <20230414152423.19842-5-ddrokosov@sberdevices.ru>
 From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Sun, 16 Apr 2023 22:54:17 +0200
-Message-ID: <CAFBinCCEhobbyKHuKDWzTYCQWgNT1-e8=7hMhq1mvT6CuEOjGw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/5] phy: amlogic: during USB PHY clkin obtaining,
- enable it
+Date:   Sun, 16 Apr 2023 22:56:36 +0200
+Message-ID: <CAFBinCDyUBWd-V0mDy_edzH=3JM5SAuX=vtT4MG9Fb62Rcv=mA@mail.gmail.com>
+Subject: Re: [PATCH v1 4/5] usb: dwc3-meson-g12a: support OTG switch
 To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
 Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, neil.armstrong@linaro.org,
@@ -78,22 +77,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
-
 On Fri, Apr 14, 2023 at 5:24=E2=80=AFPM Dmitry Rokosov <ddrokosov@sberdevic=
 es.ru> wrote:
 [...]
-> -       priv->clk =3D devm_clk_get(dev, "xtal");
-> +       priv->clk =3D devm_clk_get_enabled(dev, "xtal");
-Generally this works fine but I wouldn't recommend this approach if:
-- there's some required wait time after the clock has been enabled
-(see phy_meson_g12a_usb2_init - there's already some required wait
-time after triggering the reset)
-- clock gating (for power saving) is needed when the dwc3 driver is
-unloaded by the PHY driver is not
-
-In this case: just manually manage the clock in phy_meson_g12a_usb2_{init,e=
-xit}
+>  static const struct dwc3_meson_g12a_drvdata a1_drvdata =3D {
+> -       .otg_switch_supported =3D false,
+> +       .otg_switch_supported =3D true,
+it would be great if you could also follow up with a patch that
+removes otg_switch_supported.
+A1 was the only variant that needed it and after this patch it's just dead =
+code.
 
 
 Best regards,
