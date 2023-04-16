@@ -2,82 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C02B6E39BE
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 17:19:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 173596E39C3
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 17:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbjDPPTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 11:19:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37434 "EHLO
+        id S230333AbjDPPUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 11:20:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjDPPTA (ORCPT
+        with ESMTP id S229983AbjDPPUK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 11:19:00 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658F11BE7
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 08:18:59 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id kx14so3099447pjb.1
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 08:18:59 -0700 (PDT)
+        Sun, 16 Apr 2023 11:20:10 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA951FEF
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 08:20:08 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id dm2so57970535ejc.8
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 08:20:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1681658339; x=1684250339;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=H+mFyYIESIr8FNAXPWiIF3dqEDGQyLtd8kXWu8xTRR8=;
-        b=ghVi2V/DBXAUTjrwsnwtPUxkdkxMwoEpGhdwnl9bhgO6bLEJl4gFaM9BoA50ihUU2B
-         EZKeLGqtlz6boUyMI5CvikvHAEFeEN3nfCcdJyiBm3L1Sp6T3GwNR/JSfEEScQ/9V6FP
-         X2dDqycoMdShaMPnfzNH0sPm+dOvbX5FzifCc=
+        d=linaro.org; s=google; t=1681658406; x=1684250406;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rbAN5WU56B4VEiB1VFsqC9Gu1Swjc+C/BnQGH/MXxU8=;
+        b=vFZZkIacIl8160Edsrq6FQgdswWD0NbURlNL8AaHAfXEcNIcP6KSIWDgMY4FSOloem
+         XT/l6aZi+ZuEmbaliOaA/5H0K+gifvsizmgsSc0BW60VXrVuvNCvf6ojgqPq7NJx9muA
+         Dsr9+aIDlAqdhe9X7ca1vD4gfVi2qIFSR4x1HreKcoyuZETpLrczwLOD1DpP/ecie4mS
+         7strxWiKY+PzJbXnsZ+xGK3pckrJZNbSvKSyG+R6U+cQhM8WOdBDLK418/n0Adr90jIq
+         Q7rxJGhyHH1R+uwWq60OzhS4BYwlgEkWDPNTdZ4AL/sGQUYIu3N0caiv3B3Ft1FSkoCa
+         DBZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681658339; x=1684250339;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H+mFyYIESIr8FNAXPWiIF3dqEDGQyLtd8kXWu8xTRR8=;
-        b=AfOnDNUaI/BwsdDCJqAC5IgT08tTrqBDxNCSaBy2zmr7qBh4eWhfdfvIqocBARA+U3
-         czA0YUi3j6v2hVqBpOyEamACeZQCn21nBCjqiwz9/Qf51Npf39t/ocmjB9xp6zUuGDet
-         YqNh7dxpki5FDElgsH4muR7Kzi4ekJOmuW5KuNtPcpGpn8LReivoMA0eHpsAUrwQYFAW
-         1oDyOk6z6np3YOTKAHq3YuNAu0p83AZco4Wy2h/bY3j8g5uMtGfSbxQTSymskugW6vNa
-         sDl64wwdpSa7MXn9TRJyFkWeEMm1nNTor6TOXU3MQyU2HS8v9JA2fZgAXabhQABNRji+
-         uiJw==
-X-Gm-Message-State: AAQBX9cA5EIM19W886uT7qjjOgQVlDYiHzzACNmoYHSo6z9EIk2YsFbN
-        iVuUX4qdj8HQ+ZY0+nrpOAaX1g==
-X-Google-Smtp-Source: AKy350a4p2zxyerAHHe2Wj0BSwj/128IXx9kIfm/iH5k2mFijXGNwR40/crapYHpNJQIBMxDFTI/nQ==
-X-Received: by 2002:a17:90a:4ec2:b0:23f:7c82:2468 with SMTP id v2-20020a17090a4ec200b0023f7c822468mr12034883pjl.31.1681658338896;
-        Sun, 16 Apr 2023 08:18:58 -0700 (PDT)
-Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
-        by smtp.gmail.com with ESMTPSA id s1-20020a17090a440100b00246f73c3acesm7317040pjg.33.2023.04.16.08.18.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 08:18:58 -0700 (PDT)
-Date:   Mon, 17 Apr 2023 00:18:53 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCHv4 0/4] zsmalloc: fine-grained fullness and new compaction
- algorithm
-Message-ID: <20230416151853.GK25053@google.com>
-References: <20230304034835.2082479-1-senozhatsky@chromium.org>
- <CAOUHufZ6jPLJYeshO8=2TaqXRmpOFuMQ92E9sg-oCh54fkqW7g@mail.gmail.com>
+        d=1e100.net; s=20221208; t=1681658406; x=1684250406;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rbAN5WU56B4VEiB1VFsqC9Gu1Swjc+C/BnQGH/MXxU8=;
+        b=EYyYSuPBrTUTcRlzKasJbZtyeUYxDVeMNJ05I46FmHXoi3tyMKpGQNmvBpKvhCF2YS
+         Jr3dT9eWcsxtZdSekozOl2Pbcip/gWb5yNoTUj0D8lxHAf2/O/UacQwypV/JD5uPADv4
+         BUJXCJPGBwa2QptmMBPyVQnzxhowAlKZ6xjgUvg8B6NYcrtIQuhQDWDnphsl7obqDwRH
+         crpuZ2ojwNAF7a5yPItOrqpEc1OK2hwIoJ5oDT4h9ZanUr5RIrW7Zv2dqjHZdojcKRwC
+         YEIV6PhH5VKr48JW7n+t6MzUhqPxBBCxRr5Ml/+SbecI6JqfoZaloR4DyMskJNgouOh9
+         tl0A==
+X-Gm-Message-State: AAQBX9e9jCdwop8kZV8Ny27hxEEk/0qSwFDYKSt4zKjOASKLEi1LBFgt
+        zcJNhs61m17DcE+SddUsScSvhg==
+X-Google-Smtp-Source: AKy350ajHtRg1Jzq0HB8HI0deyaXSVS4/EcdAvXZXdc0qq6IDelZKY32JGmq5Y7NUAuRGGimi3ZFBQ==
+X-Received: by 2002:a17:906:bc42:b0:94f:5e17:e80d with SMTP id s2-20020a170906bc4200b0094f5e17e80dmr1786236ejv.45.1681658406502;
+        Sun, 16 Apr 2023 08:20:06 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:ba4d:301c:484d:5c9? ([2a02:810d:15c0:828:ba4d:301c:484d:5c9])
+        by smtp.gmail.com with ESMTPSA id d9-20020a17090648c900b0094f4f2db7e0sm1049358ejt.143.2023.04.16.08.20.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Apr 2023 08:20:06 -0700 (PDT)
+Message-ID: <df5377a3-4bdb-0f74-b536-528b9d225580@linaro.org>
+Date:   Sun, 16 Apr 2023 17:20:05 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOUHufZ6jPLJYeshO8=2TaqXRmpOFuMQ92E9sg-oCh54fkqW7g@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 3/4] dt-bindings: power: reset: convert nvmem-reboot-mode
+ bindings to YAML
+Content-Language: en-US
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20230413131705.3073911-1-brgl@bgdev.pl>
+ <20230413131705.3073911-4-brgl@bgdev.pl>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230413131705.3073911-4-brgl@bgdev.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (23/04/16 01:20), Yu Zhao wrote:
+On 13/04/2023 15:17, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
-> Seeing the following crashes from mm-unstable. Please take a look. Thanks.
-> 
+> Convert the DT binding document for nvmem-reboot-mode from .txt to YAML.
 
-Hi,
+Thank you for your patch. There is something to discuss/improve.
 
-Did you bisect it down to this series?
+> diff --git a/Documentation/devicetree/bindings/power/reset/nvmem-reboot-mode.yaml b/Documentation/devicetree/bindings/power/reset/nvmem-reboot-mode.yaml
+> new file mode 100644
+> index 000000000000..64a7d224c7dd
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/reset/nvmem-reboot-mode.yaml
+> @@ -0,0 +1,52 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/reset/nvmem-reboot-mode.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Generic NVMEM reboot mode driver
+
+Drop "driver".
+> +
+> +maintainers:
+> +  - Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> +
+> +description: |
+
+Do not need '|' unless you need to preserve formatting.
+
+> +  This driver gets the reboot mode magic value from the reboot-mode driver
+> +  and stores it in the NVMEM cell named "reboot-mode". The bootloader can
+> +  then read it and take different action according to the value.
+> +
+> +properties:
+> +  compatible:
+> +    const: nvmem-reboot-mode
+> +
+> +  nvmem-cells:
+> +    description: |
+
+Do not need '|' unless you need to preserve formatting.
+
+> +      A phandle pointing to the nvmem-cells node where the vendor-specific
+> +      magic value representing the reboot mode is stored.
+> +    maxItems: 1
+> +
+> +  nvmem-cell-names:
+> +    items:
+> +      - const: reboot-mode
+> +
+> +patternProperties:
+> +  "^mode-.+":
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: Vendor-specific mode value written to the mode register
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - nvmem-cells
+> +  - nvmem-cell-names
+
+put required: before additionalProperties
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
