@@ -2,141 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CDBB6E3641
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 10:49:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E6A06E364B
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 10:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbjDPItt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 04:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58638 "EHLO
+        id S230408AbjDPIwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 04:52:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbjDPItm (ORCPT
+        with ESMTP id S229472AbjDPIwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 04:49:42 -0400
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60524A4;
-        Sun, 16 Apr 2023 01:49:41 -0700 (PDT)
-Received: by mail-qt1-f172.google.com with SMTP id e3so10572920qtm.12;
-        Sun, 16 Apr 2023 01:49:41 -0700 (PDT)
+        Sun, 16 Apr 2023 04:52:03 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB19E106
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 01:52:01 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id q23so47077478ejz.3
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 01:52:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681635120; x=1684227120;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xz32sDKpQee3zlr0zbbcU6t7W7vxz6tKNYrQgxPMKhM=;
+        b=iByFr0zHFbbmpDcuRT4PT75udL0WsPCSqRaVHq4COTZiUZWBbd9DS6L1BeEDu7TGMe
+         numPO2jCgvITYIRIp0T7U4cz68Rlqwtprp8LZM3g+gg44ye6QTAx44AZox8WMTcXzQTl
+         /T7Wpk3Zi5IM1HGA+j9pfe8I4Vf7CzOMtkHc+cFltux3qesSZuIHafGZbTX8WwoQ81RT
+         hBJweTn+UqJShEsFPq2m/7GPDF5KW9E336x20WdGrRqG7vty5yem+Ykg5J8X9argTnhI
+         WXHdUoPI8HTmFLdKISV6h4fwk6WUAGpioWMImU1hrMZ5BhkC3FnuLZLZxK4VWbpgf6h4
+         SdnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681634980; x=1684226980;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bsE9U0MMwp7wZrIbIbCM0Lvuc4kI+kVHJ8gjGciCgfw=;
-        b=l+9EFTz6hfRyKCsz0WE0Z2OgDEbn75dOQJKBJZG4KBDuC5Dhg7z7c3ZbNDvilLqQ2x
-         WzeMXcXdJucfT9s5n4o1Hp5NgmLiF+XYXWHOjQxCxlV8rDVSC2qgX0mF0qY8J+UUKigE
-         pM9LNZQ+gOHfPHF/fAbxdcR+fhFThyOQTY/+wnHRGQhvAmNkhS8Q1Ysvck51GIBByUMI
-         Lu9n4BE4sGQyOjYc2jkhrbtJB05u6SmlY9gPMcz2NxmuZgjBlg+jo0TxtHuEy4G+hY6f
-         R6+UC+FJIa3RPGuZmJjP3Co/6dHwwImdmH5XaoboGFRYFqTv0M3DVa8sJHdLNOYNVPD0
-         MaxA==
-X-Gm-Message-State: AAQBX9fy2lqNwYrZi/O66vpLKokgAIw4ywRWe4tH6U79Hy1vfdkH+WQ9
-        5UIiruCCif7sxQB+59ApovU3Irmdaf3gjcEjE7C08g==
-X-Google-Smtp-Source: AKy350YDg4GE2SDrWaZTVd0wP5z9LzyzFhFukoi1IIYrsdmO+3TvEtXD0gQnEB+0bypZRLbEbsXABg==
-X-Received: by 2002:a05:622a:1056:b0:3e6:332a:70db with SMTP id f22-20020a05622a105600b003e6332a70dbmr18558382qte.37.1681634980093;
-        Sun, 16 Apr 2023 01:49:40 -0700 (PDT)
-Received: from localhost ([24.1.27.177])
-        by smtp.gmail.com with ESMTPSA id d17-20020a05620a205100b0074d673f1b47sm645582qka.31.2023.04.16.01.49.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 01:49:39 -0700 (PDT)
-From:   David Vernet <void@manifault.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, memxor@gmail.com
-Subject: [PATCH bpf-next v2 3/3] bpf,docs: Remove KF_KPTR_GET from documentation
-Date:   Sun, 16 Apr 2023 03:49:28 -0500
-Message-Id: <20230416084928.326135-4-void@manifault.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230416084928.326135-1-void@manifault.com>
-References: <20230416084928.326135-1-void@manifault.com>
+        d=1e100.net; s=20221208; t=1681635120; x=1684227120;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xz32sDKpQee3zlr0zbbcU6t7W7vxz6tKNYrQgxPMKhM=;
+        b=QvMBC4fLJqCU9xQGn43dfpnRbhRoU4iFxawbTBFf6NZtNgwY91ST0tb4bkG7Nv1Nwm
+         66JBfmimnM4tl1av8TCVdDS8aJQfYUUERnofFOwiOGPxLn/kpDpoq7AvWgDWkVVFLNqw
+         UdMhY+HQqxhJVioaTD2kd4hReP5VrYi+X3+BS2exmmdCAjA+qSC65fpMY5DuGLHe527u
+         KxN8u4Lc4q6qIOqjWBcL/CM6XlPT4ODLhB543C9zLxAvG7vlS5TWHKg6tiDigBmHCifZ
+         D5RDc1Jid2PrOcsLZR82V3wvHanIrbokF+f3bV+EuUcePTrMNakT0Ku0aUtyEjV/q9H3
+         kZJQ==
+X-Gm-Message-State: AAQBX9dTgYnV6lF7GHi5XfsxG/CnniHBHkBMxMPrh5Gu5Hq5ZLDayYj/
+        A0iBAoE3s+ivE7XgsqvSZ6vFPw==
+X-Google-Smtp-Source: AKy350ZgAT7FtBUWuvq/C/6PhXhW6abzvf7raeIGB2P72QHa4KKmckqO/uvo4v2wOGWhDawntqppKQ==
+X-Received: by 2002:a17:907:954f:b0:94e:11ce:4fcc with SMTP id ex15-20020a170907954f00b0094e11ce4fccmr3232718ejc.37.1681635120160;
+        Sun, 16 Apr 2023 01:52:00 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:29dd:ded4:3ccc:83db? ([2a02:810d:15c0:828:29dd:ded4:3ccc:83db])
+        by smtp.gmail.com with ESMTPSA id m24-20020a1709060d9800b0094eeab34ad5sm3038472eji.124.2023.04.16.01.51.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Apr 2023 01:51:59 -0700 (PDT)
+Message-ID: <d175db74-6208-02e5-6427-52377e33fa9e@linaro.org>
+Date:   Sun, 16 Apr 2023 10:51:58 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 1/2] dt-bindings: soc: qcom: Add RPM Master stats
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230405-topic-master_stats-v3-0-2cb2ba4f2092@linaro.org>
+ <20230405-topic-master_stats-v3-1-2cb2ba4f2092@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230405-topic-master_stats-v3-1-2cb2ba4f2092@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A prior patch removed KF_KPTR_GET from the kernel. Now that it's no
-longer accessible to kfunc authors, this patch removes it from the BPF
-kfunc documentation.
+On 14/04/2023 13:37, Konrad Dybcio wrote:
+> The RPM MSG RAM contains per-RPM-master (e.g. APPS, ADSP etc.) sleep
+> statistics. They let one assess which core is actively preventing the
+> system from entering a true low-power mode.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  .../bindings/soc/qcom/qcom,rpm-master-stats.yaml   | 53 ++++++++++++++++++++++
+>  1 file changed, 53 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,rpm-master-stats.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,rpm-master-stats.yaml
+> new file mode 100644
+> index 000000000000..d7e58cbd3344
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,rpm-master-stats.yaml
+> @@ -0,0 +1,53 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/soc/qcom/qcom,rpm-master-stats.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm Technologies, Inc. (QTI) RPM Master Stats
+> +
+> +maintainers:
+> +  - Konrad Dybcio <konrad.dybcio@linaro.org>
+> +
+> +description:
+> +  Per-RPM-Master (e.g. APSS, ADSP, etc.) sleep statistics.
 
-Signed-off-by: David Vernet <void@manifault.com>
----
- Documentation/bpf/kfuncs.rst | 21 ++++++---------------
- 1 file changed, 6 insertions(+), 15 deletions(-)
+Explain what is RPM-Master and what do you mean by "sleep".
 
-diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-index 3b42cfe12437..ea2516374d92 100644
---- a/Documentation/bpf/kfuncs.rst
-+++ b/Documentation/bpf/kfuncs.rst
-@@ -184,16 +184,7 @@ in. All copies of the pointer being released are invalidated as a result of
- invoking kfunc with this flag. KF_RELEASE kfuncs automatically receive the
- protection afforded by the KF_TRUSTED_ARGS flag described below.
- 
--2.4.4 KF_KPTR_GET flag
------------------------
--
--The KF_KPTR_GET flag is used to indicate that the kfunc takes the first argument
--as a pointer to kptr, safely increments the refcount of the object it points to,
--and returns a reference to the user. The rest of the arguments may be normal
--arguments of a kfunc. The KF_KPTR_GET flag should be used in conjunction with
--KF_ACQUIRE and KF_RET_NULL flags.
--
--2.4.5 KF_TRUSTED_ARGS flag
-+2.4.4 KF_TRUSTED_ARGS flag
- --------------------------
- 
- The KF_TRUSTED_ARGS flag is used for kfuncs taking pointer arguments. It
-@@ -205,7 +196,7 @@ exception described below).
- There are two types of pointers to kernel objects which are considered "valid":
- 
- 1. Pointers which are passed as tracepoint or struct_ops callback arguments.
--2. Pointers which were returned from a KF_ACQUIRE or KF_KPTR_GET kfunc.
-+2. Pointers which were returned from a KF_ACQUIRE kfunc.
- 
- Pointers to non-BTF objects (e.g. scalar pointers) may also be passed to
- KF_TRUSTED_ARGS kfuncs, and may have a non-zero offset.
-@@ -232,13 +223,13 @@ In other words, you must:
- 2. Specify the type and name of the trusted nested field. This field must match
-    the field in the original type definition exactly.
- 
--2.4.6 KF_SLEEPABLE flag
-+2.4.5 KF_SLEEPABLE flag
- -----------------------
- 
- The KF_SLEEPABLE flag is used for kfuncs that may sleep. Such kfuncs can only
- be called by sleepable BPF programs (BPF_F_SLEEPABLE).
- 
--2.4.7 KF_DESTRUCTIVE flag
-+2.4.6 KF_DESTRUCTIVE flag
- --------------------------
- 
- The KF_DESTRUCTIVE flag is used to indicate functions calling which is
-@@ -247,7 +238,7 @@ rebooting or panicking. Due to this additional restrictions apply to these
- calls. At the moment they only require CAP_SYS_BOOT capability, but more can be
- added later.
- 
--2.4.8 KF_RCU flag
-+2.4.7 KF_RCU flag
- -----------------
- 
- The KF_RCU flag is a weaker version of KF_TRUSTED_ARGS. The kfuncs marked with
-@@ -260,7 +251,7 @@ also be KF_RET_NULL.
- 
- .. _KF_deprecated_flag:
- 
--2.4.9 KF_DEPRECATED flag
-+2.4.8 KF_DEPRECATED flag
- ------------------------
- 
- The KF_DEPRECATED flag is used for kfuncs which are scheduled to be
--- 
-2.40.0
+> +
+> +properties:
+> +  compatible:
+> +    const: qcom,rpm-master-stats
+> +
+> +  qcom,rpm-msg-ram:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    description: Phandle to an RPM MSG RAM slice containing the master stats
+> +    minItems: 1
+> +    maxItems: 5
+> +
+> +  qcom,master-names:
+> +    $ref: /schemas/types.yaml#/definitions/string-array
+> +    description: RPM Master name
+
+There is a relation between this and qcom,rpm-msg-ram which you do not
+describe. It's not just RPM master name...
+
+Best regards,
+Krzysztof
 
