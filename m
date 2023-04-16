@@ -2,165 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D5206E34F7
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 06:32:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85FD26E3522
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 07:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbjDPEcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 00:32:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58896 "EHLO
+        id S229894AbjDPFKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 01:10:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjDPEcI (ORCPT
+        with ESMTP id S229462AbjDPFKf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 00:32:08 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF471985
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 21:32:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681619524; x=1713155524;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Z8x+/0VHhdhz3hlyITWYBi0KQKi25SsWnrQQAjnJJwg=;
-  b=RFyToCzBzTXyrIS5b+rNa2F8MaYvFcJ9Ocq58BdopLv9ls16OgwQ2ahO
-   etkwknmCtebeeH4DF/SwnJFbdn/azyRHC5NQsKY4Pit4+UFVHW0fAgVC7
-   L8GWtV02rp4wJmhPCfVYSfIhI8kQMh6yl7kIgwGbtLg9sT2cFB4GOuVCy
-   1qO2TheRxP9tJQIkz4PTrZskUCp+XMFW576onUVLXqQl9JAClPKjIjRJo
-   /TJlqsIRbhW177RKvvSEC0FramoQBkUqTAjh6IvmM01pJpKK11jK6qTgg
-   5KFO3zj8MxtDyYryxFrAxCk+YZ0ALL0ghpxF+8l7zbnJkfcdXPafVacdL
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="346546716"
-X-IronPort-AV: E=Sophos;i="5.99,201,1677571200"; 
-   d="scan'208";a="346546716"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2023 21:32:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="667743560"
-X-IronPort-AV: E=Sophos;i="5.99,201,1677571200"; 
-   d="scan'208";a="667743560"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 15 Apr 2023 21:32:01 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pnu3U-000bW7-2Q;
-        Sun, 16 Apr 2023 04:32:00 +0000
-Date:   Sun, 16 Apr 2023 12:31:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Xingui Yang <yangxingui@huawei.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Qi Liu <liuqi115@huawei.com>,
-        John Garry <john.garry@huawei.com>
-Subject: drivers/scsi/hisi_sas/hisi_sas_v3_hw.c:2168:43: sparse: sparse:
- restricted __le32 degrades to integer
-Message-ID: <202304161254.NztCVZIO-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 16 Apr 2023 01:10:35 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD632D76
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 22:10:34 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id z11-20020a17090abd8b00b0024721c47ceaso9034796pjr.3
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 22:10:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1681621834; x=1684213834;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=804GA9o6cT4dOHo4vnm+vLvNkHGZZYcxMInxuRb8f7c=;
+        b=ScdNoKlH4JTMGEiqvR89Q59KZCv7m93l/m1krV52JoGBqCnVV45hI4jCvBZydcvNgF
+         Fs1wE6udGBtuFEDTJ9tc9+pnv6YlTMjMaC0bgdEr2DwdJS4ptvcCQMHkk3g34LiOWSHk
+         fQhJ0QDP5svSmNiB0lcj08M0n1M6qfeMz1Mv8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681621834; x=1684213834;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=804GA9o6cT4dOHo4vnm+vLvNkHGZZYcxMInxuRb8f7c=;
+        b=G0K9xupiVRO1xh7ZZpejT3M5Q39jeKErgGh9tCfxIGZ2tDWEGWlIzXItOqBY1F6Kqs
+         C+ttfce0Y39iMry/cnT3lnsiSbpj3fdd7XHTl+Kk5p9A1pgR2K4dUPWyLQufhe7y/MYt
+         L/EdlMOjpfQCYiD17TaEx778ajoLyJzCrMGbKWT2SKebjAGdB+u0kLJMrbK32Kp/3P8v
+         HAbjw8NMsjnLhIvj5IUQJP9+u0hfB8OXdtVVzT9xCWouokYc89lkVzhsnbB+NM+H72xI
+         bXbJ9AScy1HOn2qZEAl0hy+VByXaw9zEVdpdvBOn/rVtqjnV8PynKgNNGJ28yXajGE2i
+         KBHQ==
+X-Gm-Message-State: AAQBX9de5yaOBcoJSMKWXyp7y/sV7KuKU6ZdNhbkQKyWYKts8YXYKWdC
+        9G8/1+rqGKKcJYY/6KuPFKm82g==
+X-Google-Smtp-Source: AKy350YACWmbtnA+6mOXh8/PYkPFBlj520MMLnYcxsPHmXPRKXEmJzLrF5AkWzOP4dd2gfyJ/6Ghog==
+X-Received: by 2002:a17:902:e812:b0:19f:8ad5:4331 with SMTP id u18-20020a170902e81200b0019f8ad54331mr9770247plg.38.1681621833944;
+        Sat, 15 Apr 2023 22:10:33 -0700 (PDT)
+Received: from smtpclient.apple ([205.220.129.18])
+        by smtp.gmail.com with ESMTPSA id az2-20020a170902a58200b001a27ea5cb94sm5333790plb.87.2023.04.15.22.10.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 15 Apr 2023 22:10:33 -0700 (PDT)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Joel Fernandes <joel@joelfernandes.org>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH 14/17] sched/eevdf: Better handle mixed slice length
+Date:   Sun, 16 Apr 2023 07:10:12 +0200
+Message-Id: <A0A2A612-B872-477E-A3B6-A1792EDF691E@joelfernandes.org>
+References: <20230414111808.GA144166@lorien.usersys.redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>, mingo@kernel.org,
+        linux-kernel@vger.kernel.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, corbet@lwn.net,
+        qyousef@layalina.io, chris.hyser@oracle.com,
+        patrick.bellasi@matbug.net, pjt@google.com, pavel@ucw.cz,
+        qperret@google.com, tim.c.chen@linux.intel.com, joshdon@google.com,
+        timj@gnu.org, kprateek.nayak@amd.com, yu.c.chen@intel.com,
+        youssefesmat@chromium.org, efault@gmx.de
+In-Reply-To: <20230414111808.GA144166@lorien.usersys.redhat.com>
+To:     Phil Auld <pauld@redhat.com>
+X-Mailer: iPhone Mail (20B101)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3e7bb4f2461710b70887704af7f175383251088e
-commit: 62413199cd6d2906c121c2dfa3d7b82fd05f08db scsi: hisi_sas: Modify v3 HW SSP underflow error processing
-date:   1 year, 2 months ago
-config: ia64-randconfig-s043-20230416 (https://download.01.org/0day-ci/archive/20230416/202304161254.NztCVZIO-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=62413199cd6d2906c121c2dfa3d7b82fd05f08db
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 62413199cd6d2906c121c2dfa3d7b82fd05f08db
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=ia64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/scsi/hisi_sas/
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304161254.NztCVZIO-lkp@intel.com/
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/scsi/hisi_sas/hisi_sas_v3_hw.c:2168:43: sparse: sparse: restricted __le32 degrades to integer
-   drivers/scsi/hisi_sas/hisi_sas_v3_hw.c:2169:46: sparse: sparse: restricted __le32 degrades to integer
-   drivers/scsi/hisi_sas/hisi_sas_v3_hw.c:4427:35: sparse: sparse: incorrect type in argument 4 (different base types) @@     expected restricted __le32 [usertype] *[assigned] ptr @@     got unsigned int * @@
-   drivers/scsi/hisi_sas/hisi_sas_v3_hw.c:4427:35: sparse:     expected restricted __le32 [usertype] *[assigned] ptr
-   drivers/scsi/hisi_sas/hisi_sas_v3_hw.c:4427:35: sparse:     got unsigned int *
+> On Apr 14, 2023, at 1:18 PM, Phil Auld <pauld@redhat.com> wrote:
+>=20
+> =EF=BB=BFOn Wed, Apr 05, 2023 at 04:05:55PM -0400 Joel Fernandes wrote:
+>>> On Wed, Apr 5, 2023 at 4:36=E2=80=AFAM Peter Zijlstra <peterz@infradead.=
+org> wrote:
+>>>=20
+>>> On Tue, Apr 04, 2023 at 01:50:50PM +0000, Joel Fernandes wrote:
+>>>>> On Tue, Apr 04, 2023 at 11:29:36AM +0200, Peter Zijlstra wrote:
+>>>=20
+>>>>> Heh, this is actually the correct behaviour. If you have a u=3D1 and a=
 
-vim +2168 drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+>>>>> u=3D.5 task, you should distribute time on a 2:1 basis, eg. 67% vs 33%=
+.
+>>>>=20
+>>>> Splitting like that sounds like starvation of the sleeper to me. If som=
+ething
+>>>> sleeps a lot, it will get even less CPU time on an average than it woul=
+d if
+>>>> there was no contention from the u=3D1 task.
+>>>=20
+>>> No, sleeping, per definition, means you're not contending for CPU. What
+>>> CFS does, giving them a little boost, is strictly yuck and messes with
+>>> latency -- because suddenly you have a task that said it wasn't
+>>> competing appear as if it were, but you didn't run it (how could you, it=
 
-  2144	
-  2145	static bool
-  2146	slot_err_v3_hw(struct hisi_hba *hisi_hba, struct sas_task *task,
-  2147		       struct hisi_sas_slot *slot)
-  2148	{
-  2149		struct task_status_struct *ts = &task->task_status;
-  2150		struct hisi_sas_complete_v3_hdr *complete_queue =
-  2151				hisi_hba->complete_hdr[slot->cmplt_queue];
-  2152		struct hisi_sas_complete_v3_hdr *complete_hdr =
-  2153				&complete_queue[slot->cmplt_queue_slot];
-  2154		struct hisi_sas_err_record_v3 *record =
-  2155				hisi_sas_status_buf_addr_mem(slot);
-  2156		u32 dma_rx_err_type = le32_to_cpu(record->dma_rx_err_type);
-  2157		u32 trans_tx_fail_type = le32_to_cpu(record->trans_tx_fail_type);
-  2158		u32 dw3 = le32_to_cpu(complete_hdr->dw3);
-  2159	
-  2160		switch (task->task_proto) {
-  2161		case SAS_PROTOCOL_SSP:
-  2162			if (dma_rx_err_type & RX_DATA_LEN_UNDERFLOW_MSK) {
-  2163				/*
-  2164				 * If returned response frame is incorrect because of data underflow,
-  2165				 * but I/O information has been written to the host memory, we examine
-  2166				 * response IU.
-  2167				 */
-> 2168				if (!(complete_hdr->dw0 & CMPLT_HDR_RSPNS_GOOD_MSK) &&
-  2169					(complete_hdr->dw0 & CMPLT_HDR_RSPNS_XFRD_MSK))
-  2170					return false;
-  2171	
-  2172				ts->residual = trans_tx_fail_type;
-  2173				ts->stat = SAS_DATA_UNDERRUN;
-  2174			} else if (dw3 & CMPLT_HDR_IO_IN_TARGET_MSK) {
-  2175				ts->stat = SAS_QUEUE_FULL;
-  2176				slot->abort = 1;
-  2177			} else {
-  2178				ts->stat = SAS_OPEN_REJECT;
-  2179				ts->open_rej_reason = SAS_OREJ_RSVD_RETRY;
-  2180			}
-  2181			break;
-  2182		case SAS_PROTOCOL_SATA:
-  2183		case SAS_PROTOCOL_STP:
-  2184		case SAS_PROTOCOL_SATA | SAS_PROTOCOL_STP:
-  2185			if (dma_rx_err_type & RX_DATA_LEN_UNDERFLOW_MSK) {
-  2186				ts->residual = trans_tx_fail_type;
-  2187				ts->stat = SAS_DATA_UNDERRUN;
-  2188			} else if (dw3 & CMPLT_HDR_IO_IN_TARGET_MSK) {
-  2189				ts->stat = SAS_PHY_DOWN;
-  2190				slot->abort = 1;
-  2191			} else {
-  2192				ts->stat = SAS_OPEN_REJECT;
-  2193				ts->open_rej_reason = SAS_OREJ_RSVD_RETRY;
-  2194			}
-  2195			hisi_sas_sata_done(task, slot);
-  2196			break;
-  2197		case SAS_PROTOCOL_SMP:
-  2198			ts->stat = SAS_SAM_STAT_CHECK_CONDITION;
-  2199			break;
-  2200		default:
-  2201			break;
-  2202		}
-  2203		return true;
-  2204	}
-  2205	
+>>> wasn't there to run) -- but it still needs to catch up.
+>>>=20
+>>> The reason it does that, is mostly because at the time we didn't want to=
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+>>> do the whole lag thing -- it's somewhat heavy on the u64 mults and 32bit=
+
+>>> computing was still a thing :/ So hacks happened.
+>>=20
+>> Also you have the whole "boost tasks" that sleep a lot with CFS right?
+>> Like a task handling user input sleeps a lot, but when it wakes up,
+>> it gets higher dynamic priority as its vruntime did not advance. I
+>> guess EEVDF also gets you the same thing but still messes with the CPU
+>> usage?
+>>=20
+>>> That said; I'm starting to regret not pushing the EEVDF thing harder
+>>> back in 2010 when I first wrote it :/
+>>>=20
+>>>> And also CGroups will be even more weird than it already is in such a w=
+orld,
+>>>> 2 different containers will not get CPU time distributed properly- say i=
+f
+>>>> tasks in one container sleep a lot and tasks in another container are C=
+PU
+>>>> bound.
+>>>=20
+>>> Cgroups are an abomination anyway :-) /me runs like hell. But no, I
+>>> don't actually expect too much trouble there.
+>>=20
+>> So, with 2 equally weighted containers, if one has a task that sleeps
+>> 50% of the time, and another has a 100% task, then the sleeper will
+>> only run 33% of the time? I can see people running containers having a
+>> problem with that (a customer running one container gets less CPU than
+>> the other.). Sorry if I missed something.
+>>=20
+>=20
+> But the 50% sleeper is _asking_ for less CPU.  Doing 50% for each would
+> mean that when the sleeper task was awake it always ran, always won, to
+> the exclusion of any one else. (Assuming 1 CPU...)
+>=20
+
+It sounds like you are saying that if the task busy looped instead of sleepi=
+ng, it would get more CPU during the time it is not busy looping but doing s=
+ome real work. That sounds like encouraging abuse to get more perf.
+
+But again, I have not looked too closely at EEVDF or Peters patches. I was j=
+ust going by Vincents test and was cautioning to not break users who depend o=
+n CFS shares..
+
+Cheers,
+
+- Joel
+
+
+> Cheers,
+> Phil
+>=20
+>> But yeah I do find the whole EEVDF idea interesting but I admit I have
+>> to research it more.
+>>=20
+>> - Joel
+>>=20
+>=20
+> --=20
+>=20
