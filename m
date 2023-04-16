@@ -2,175 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A276E37E6
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 14:08:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C53DB6E37E7
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 14:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbjDPMIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 08:08:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
+        id S230128AbjDPMJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 08:09:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230142AbjDPMIM (ORCPT
+        with ESMTP id S230064AbjDPMJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 08:08:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD8E4C0F;
-        Sun, 16 Apr 2023 05:08:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DE2861365;
-        Sun, 16 Apr 2023 12:08:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19063C433D2;
-        Sun, 16 Apr 2023 12:08:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681646888;
-        bh=06PSEkpwNBLhUVGwmELjtXXINIi/t/xKb7+PwqjgazA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FttnNmY69tXh3Mi4g57fhgHdU+fN5uUQVWdl/Pe32ipnW+/C9noAtrFCDANd66VEb
-         oxLF2yszcYf9PWxReh6uHGEJzEdUkX9unVCMPgebyXCWmccOASrDNq0euyGd932xhe
-         jd1annFh6yunxE5bkvplAdS1jmE7SLfq1Q17dgkyvEW7x6LleTgpuxn/DwPVLbb/JB
-         JOpMuGXg6qtTSmBTUM+bOTB9Y5WCPbWRykQuDM3ExPj1pXyPI+nezoPoQlxnDt0QuR
-         QUj6cBes4+AzQ1YwskIDiv35xZA/H5Em3hd4F5nKbEbIjx55LxzgN9bcWOJayII96q
-         iPcIGKQna1gFQ==
-From:   Ard Biesheuvel <ardb@kernel.org>
-To:     linux-efi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        Evgeniy Baskov <baskov@ispras.ru>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Dave Young <dyoung@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Kees Cook <keescook@chromium.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [RFC PATCH 3/3] efi/zboot: x86: Clear NX restrictions on populated code regions
-Date:   Sun, 16 Apr 2023 14:07:29 +0200
-Message-Id: <20230416120729.2470762-4-ardb@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230416120729.2470762-1-ardb@kernel.org>
-References: <20230416120729.2470762-1-ardb@kernel.org>
+        Sun, 16 Apr 2023 08:09:07 -0400
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8079261B2;
+        Sun, 16 Apr 2023 05:08:30 -0700 (PDT)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1po1B7-00081r-0z;
+        Sun, 16 Apr 2023 14:08:21 +0200
+Date:   Sun, 16 Apr 2023 13:08:14 +0100
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>
+Subject: [PATCH net-next v2] net: dsa: mt7530: fix support for MT7531BE
+Message-ID: <ZDvlLhhqheobUvOK@makrotopia.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3939; i=ardb@kernel.org; h=from:subject; bh=06PSEkpwNBLhUVGwmELjtXXINIi/t/xKb7+PwqjgazA=; b=owGbwMvMwCFmkMcZplerG8N4Wi2JIcX6KeOEJ0cntPbpySZ3Pn890bH39HkbA92ULQcZqla53 utdZdzTUcrCIMbBICumyCIw+++7nacnStU6z5KFmcPKBDKEgYtTACbSf5mRYW97cb7o5dszzZgV 7Q48Lo50u3X6vv/jS4GcvBc2/lvIeZDhf9XOy7HZTB4ulQqLQ25d+vA72ftJ34lI/aag3Ysv11s 4sAIA
-X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Future EFI firmware will require the PE/COFF NX_COMPAT header flag to be
-set in order to retain access to all system facilities while features
-such as UEFI secure boot or TCG measured boot are enabled.
+There are two variants of the MT7531 switch IC which got different
+features (and pins) regarding port 5:
+ * MT7531AE: SGMII/1000Base-X/2500Base-X SerDes PCS
+ * MT7531BE: RGMII
 
-The consequence of setting this flag is that the EFI firmware image
-loader may configure the page allocator to set the NX attribute on all
-allocations requested by the image. This means we should clear this
-attribute on all regions we allocate and expect to be able to execute
-from.
+Moving the creation of the SerDes PCS from mt753x_setup to mt7530_probe
+with commit 6de285229773 ("net: dsa: mt7530: move SGMII PCS creation
+to mt7530_probe function") works fine for MT7531AE which got two
+instances of mtk-pcs-lynxi, however, MT7531BE requires mt7531_pll_setup
+to setup clocks before the single PCS on port 6 (usually used as CPU
+port) starts to work and hence the PCS creation failed on MT7531BE.
 
-In the x86 EFI zboot case, the only code we execute under EFI's 1:1
-mapping that was not loaded by the image loader itself is the trampoline
-that effectuates the switch between 4 and 5 level paging, and the part
-of the loaded kernel image that runs before switching to its own page
-tables.  So let's use the EFI memory attributes protocol to clear the NX
-attribute on these regions.
+Fix this by introducing a pointer to mt7531_create_sgmii function in
+struct mt7530_priv and call it again at the end of mt753x_setup like it
+was before commit 6de285229773 ("net: dsa: mt7530: move SGMII PCS
+creation to mt7530_probe function").
 
-Whether or not setting the read-only attribute first is required is
-unclear at this point. Given that the kernel startup code uses two
-different executable sections before switching to its own page tables
-(normal text and inittext, with a writable data section in between),
-this would require some minor reorganization of the kernel memory map.
-
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+Fixes: 6de285229773 ("net: dsa: mt7530: move SGMII PCS creation to mt7530_probe function")
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
 ---
- arch/x86/kernel/head_64.S                |  4 +++
- drivers/firmware/efi/libstub/x86-zboot.c | 27 ++++++++++++++++++++
- 2 files changed, 31 insertions(+)
+ drivers/net/dsa/mt7530-mdio.c | 16 ++++++++--------
+ drivers/net/dsa/mt7530.c      |  6 ++++++
+ drivers/net/dsa/mt7530.h      |  4 ++--
+ 3 files changed, 16 insertions(+), 10 deletions(-)
 
-diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-index 4ae067852fb28663..38897ac51f13bb55 100644
---- a/arch/x86/kernel/head_64.S
-+++ b/arch/x86/kernel/head_64.S
-@@ -74,6 +74,10 @@ SYM_CODE_START_NOALIGN(startup_64)
- 	 */
- 	.org	startup_64 + 0x10 - 3, BYTES_NOP1
- 	nopl	(_end - startup_64)(%rax)
-+
-+	/* put the size of the initial executable mapping at offset 0x20 */
-+	.org	startup_64 + 0x20 - 3, BYTES_NOP1
-+	nopl	(_einittext - startup_64)(%rax)
- #endif
- 	leaq	_text(%rip), %rdi
+diff --git a/drivers/net/dsa/mt7530-mdio.c b/drivers/net/dsa/mt7530-mdio.c
+index 34a547b88e497..088533663b83b 100644
+--- a/drivers/net/dsa/mt7530-mdio.c
++++ b/drivers/net/dsa/mt7530-mdio.c
+@@ -81,14 +81,17 @@ static const struct regmap_bus mt7530_regmap_bus = {
+ };
  
-diff --git a/drivers/firmware/efi/libstub/x86-zboot.c b/drivers/firmware/efi/libstub/x86-zboot.c
-index 16e8b315892dedda..70668104804fb050 100644
---- a/drivers/firmware/efi/libstub/x86-zboot.c
-+++ b/drivers/firmware/efi/libstub/x86-zboot.c
-@@ -60,10 +60,33 @@ efi_status_t efi_handle_cmdline(efi_loaded_image_t *image, char **cmdline_ptr)
- 	return status;
+ static int
+-mt7531_create_sgmii(struct mt7530_priv *priv)
++mt7531_create_sgmii(struct mt7530_priv *priv, bool dual_sgmii)
+ {
+-	struct regmap_config *mt7531_pcs_config[2];
++	struct regmap_config *mt7531_pcs_config[2] = {};
+ 	struct phylink_pcs *pcs;
+ 	struct regmap *regmap;
+ 	int i, ret = 0;
+ 
+-	for (i = 0; i < 2; i++) {
++	/* MT7531AE has two SGMII units for port 5 and port 6
++	 * MT7531BE has only one SGMII unit for port 6
++	 */
++	for (i = dual_sgmii ? 0 : 1; i < 2; i++) {
+ 		mt7531_pcs_config[i] = devm_kzalloc(priv->dev,
+ 						    sizeof(struct regmap_config),
+ 						    GFP_KERNEL);
+@@ -208,11 +211,8 @@ mt7530_probe(struct mdio_device *mdiodev)
+ 	if (IS_ERR(priv->regmap))
+ 		return PTR_ERR(priv->regmap);
+ 
+-	if (priv->id == ID_MT7531) {
+-		ret = mt7531_create_sgmii(priv);
+-		if (ret)
+-			return ret;
+-	}
++	if (priv->id == ID_MT7531)
++		priv->create_sgmii = mt7531_create_sgmii;
+ 
+ 	return dsa_register_switch(priv->ds);
  }
+diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+index e4bb5037d3525..c680873819b01 100644
+--- a/drivers/net/dsa/mt7530.c
++++ b/drivers/net/dsa/mt7530.c
+@@ -3018,6 +3018,12 @@ mt753x_setup(struct dsa_switch *ds)
+ 	if (ret && priv->irq)
+ 		mt7530_free_irq_common(priv);
  
-+static void efi_remap_exec(unsigned long base, unsigned long size)
-+{
-+	static efi_memory_attribute_protocol_t *memattr = (void *)ULONG_MAX;
-+	efi_guid_t guid = EFI_MEMORY_ATTRIBUTE_PROTOCOL_GUID;
-+	efi_status_t status;
-+
-+	if (memattr == (void *)ULONG_MAX) {
-+		memattr = NULL;
-+		status = efi_bs_call(locate_protocol, &guid, NULL,
-+				     (void **)&memattr);
-+		if (status != EFI_SUCCESS)
-+			return;
-+	} else if (!memattr) {
-+		return;
++	if (priv->create_sgmii) {
++		ret = priv->create_sgmii(priv, mt7531_dual_sgmii_supported(priv));
++		if (ret && priv->irq)
++			mt7530_free_irq(priv);
 +	}
 +
-+	status = memattr->clear_memory_attributes(memattr, base, size,
-+						  EFI_MEMORY_XP);
-+	if (status != EFI_SUCCESS)
-+		efi_warn("Failed to clear NX attribute on code region\n");
-+}
-+
- void efi_cache_sync_image(unsigned long image_base, unsigned long alloc_size)
- {
- 	const u32 payload_size = *(u32 *)(_gzdata_end - 4);
- 	const u32 image_size = *(u32 *)(image_base + 0x10);
-+	const u32 code_size = *(u32 *)(image_base + 0x20);
- 	const s32 *reloc = (s32 *)(image_base + payload_size);
- 	u64 va_offset = __START_KERNEL - image_base;
- 	u64 range, delta;
-@@ -107,6 +130,8 @@ void efi_cache_sync_image(unsigned long image_base, unsigned long alloc_size)
- 		*(u64 *)((s64)*reloc - va_offset) += delta;
- 
- 	efi_free(alloc_size - image_size, image_base + image_size);
-+
-+	efi_remap_exec(image_base, PAGE_ALIGN(code_size));
+ 	return ret;
  }
  
- static void __naked tmpl_toggle(void *cr3, void *gdt)
-@@ -197,6 +222,8 @@ static efi_status_t efi_setup_5level_paging(void)
- 	 */
- 	*(u32 *)&la57_code[tmpl_size - 6] += (u64)la57_code;
+diff --git a/drivers/net/dsa/mt7530.h b/drivers/net/dsa/mt7530.h
+index 01db5c9724fa8..5084f48a88691 100644
+--- a/drivers/net/dsa/mt7530.h
++++ b/drivers/net/dsa/mt7530.h
+@@ -748,10 +748,10 @@ struct mt753x_info {
+  *			registers
+  * @p6_interface	Holding the current port 6 interface
+  * @p5_intf_sel:	Holding the current port 5 interface select
+- *
+  * @irq:		IRQ number of the switch
+  * @irq_domain:		IRQ domain of the switch irq_chip
+  * @irq_enable:		IRQ enable bits, synced to SYS_INT_EN
++ * @create_sgmii:	Pointer to function creating SGMII PCS instance(s)
+  */
+ struct mt7530_priv {
+ 	struct device		*dev;
+@@ -770,7 +770,6 @@ struct mt7530_priv {
+ 	unsigned int		p5_intf_sel;
+ 	u8			mirror_rx;
+ 	u8			mirror_tx;
+-
+ 	struct mt7530_port	ports[MT7530_NUM_PORTS];
+ 	struct mt753x_pcs	pcs[MT7530_NUM_PORTS];
+ 	/* protect among processes for registers access*/
+@@ -778,6 +777,7 @@ struct mt7530_priv {
+ 	int irq;
+ 	struct irq_domain *irq_domain;
+ 	u32 irq_enable;
++	int (*create_sgmii)(struct mt7530_priv *priv, bool dual_sgmii);
+ };
  
-+	efi_remap_exec((unsigned long)la57_code, PAGE_SIZE);
-+
- 	return EFI_SUCCESS;
- }
- 
+ struct mt7530_hw_vlan_entry {
+
+base-commit: e61caf04b9f8a2626714ffd12e734c555c758af4
 -- 
-2.39.2
+2.40.0
 
