@@ -2,138 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BBF76E3B7D
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 21:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EED436E3B85
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 21:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbjDPTTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 15:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57110 "EHLO
+        id S229808AbjDPTZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 15:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbjDPTTu (ORCPT
+        with ESMTP id S229815AbjDPTZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 15:19:50 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEDD12123;
-        Sun, 16 Apr 2023 12:19:48 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 8C5C05C0039;
-        Sun, 16 Apr 2023 15:19:45 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Sun, 16 Apr 2023 15:19:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1681672785; x=
-        1681759185; bh=YGRdIcPItYFcSw7fEDFLZquPj7AtRRDkYXtyuZxJq/U=; b=d
-        cKPlQi01xUEdqakuUy3IFFpBHkHDOpDeTPLZ78GWzQqE/gvsG2Sj9e0OyOzJI1x3
-        HUkEG3YdI4KsSgb6cgETLCUhDlkuOVgmIN23kS5njWdsAiRKWWMLNz54bMhlOHKP
-        1Nb+XSqoZrEMF0I7wdgORuqj1sfKMYPYHKPvT+Xe5uvQe62eIJp+72TBWCkYNqau
-        k5IUHGy16wXxNo6nQ3fxwiRNU9iggNarO6PezzahvI2J5yinnLv5FSkeEDchWpF/
-        pb4xTPq5RSBx8VkM/oFP5oDI3fYkR3ckSEp4Gk2OS1u7wus3bosyIR/DW8mdCTp+
-        pZ3VDIOmcTaF8/voIA7Lw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1681672785; x=1681759185; bh=YGRdIcPItYFcS
-        w7fEDFLZquPj7AtRRDkYXtyuZxJq/U=; b=ZhHDbhA+5anegK7zp66gP1bNpMsiO
-        DwJNW4ZlvCEuB+i/dDTyFod2fR8GNQxRbEa1JHytZ25x5/8iNzEisk9GPXP+2CM1
-        fu8mN7L5mAbgFsuqHGLfaXfhzDmP3NmvCZJ+c1H6WONj/9c40Zny9u2nyjq/o4dA
-        otPOkENiTyDS6386owjy06YAkP+h7RV5WZ8ltg/uDiPi1Cib79GoeeOACXAZflLv
-        9d3pYZltCvv/9E1lrz+MDmM8rj9N+bBwHaNbzxtgTvhtziopYYKgD9Vx6MGrDO9E
-        N1EKft90agA0X58pbTk4Te5DLOJiZvqJBsJOnm1I5SHYNvTZXDqL/2fzg==
-X-ME-Sender: <xms:UEo8ZCgJ2f_PcM4jhh96JFFn6pr379B1cIC0bxXCCOIX2i0gcuTSQA>
-    <xme:UEo8ZDDyeFbm2WjeVbIO0R9GC9GW4sV7A-gQFb0sikYf9f8ltyJvt0XmIs3XZriJc
-    lZ-SzhzKA4PzsqE3b0>
-X-ME-Received: <xmr:UEo8ZKGWtlZFRRuRPrgbp2u9xidH7_1f7bq6nG_aYvSSVq0pQdAIkgyHZ3zz0TE5dHC-oA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdelgedgleegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:UEo8ZLQ0YrZ0SYnvhgfFQXBo4MVahr8E1VYDJWwPPcfyHlaaqbkxIQ>
-    <xmx:UEo8ZPzsXc0J4X_Y1Wg66pwUUZB1zvyMnNicsACP2F_fQakLg8C3wg>
-    <xmx:UEo8ZJ7rHlVXMUN0oaS92Rr8hB2ve3zfdGwBJUyfqqdlAv8SYA_QJA>
-    <xmx:UUo8ZI9XMBpuDpdqcaMQcLMszovDTAUpQTN7s3cct9z3Po2ZFZ1dIA>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 16 Apr 2023 15:19:44 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id D06C610B9A3; Sun, 16 Apr 2023 22:19:40 +0300 (+03)
-Date:   Sun, 16 Apr 2023 22:19:40 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
+        Sun, 16 Apr 2023 15:25:44 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF476212F
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 12:25:40 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-54fbee98814so150287117b3.8
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 12:25:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681673140; x=1684265140;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MaaXUmWYMUrm34mHy8xc1MH5y2IuXmSQmwypNMLJjoU=;
+        b=1vkT+hAAWPKcBqQRjg5UlEuk7b/6YGv9MDW7ocM6tyOydCQ8m188DAXZgYCjKYgskz
+         l2WmKzdeIvIpplhACjFYmHbx53zO0q+HQwzxe5p5dKYP/zmwWfGPKSW0Q6ocK17IlorQ
+         1REaf9+uusXPEJOfHMzNR92oZiPCgN9+CpKgjJiggkmT1hrE0wOb4HuizMvt/FoHbDu4
+         Fh2t5T36T1jcZkgepypMcH846gV0XmKgrwg7pWOvbDi70FzRnFDqg+rD/t6DVFm4hbEO
+         s4xbCAgP8S4lH5NxtnThScJmZrax+zspeTnS9Sdsb2y0uWGlWTFSmrYV93/N2wFbgS+V
+         0+NQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681673140; x=1684265140;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MaaXUmWYMUrm34mHy8xc1MH5y2IuXmSQmwypNMLJjoU=;
+        b=QeI4DUfr4+miy3eaJea/hgQIaFKmCWDBKrOy2dAVCfjERQdeamNw5tB8mFh392quI5
+         y9COVQ876k0aQJ9YNN8+O/Mbyo3MSaU07FhaPS3+10RUknP3HQr2/yEtW1bdkb7DVzBI
+         ti5d1VyZc2cKjZsxtMLEVYkbWP3p330XfOGSlCENPB7Rxo8cYHGkYDZqi8WEapEo5ygE
+         LkXzDNDIvJI5fIqptZCsyJ/JVCjIS4cgcVx5l7vJ79Rt4TOd9upbGV5olA3k6a0XSWOf
+         850O7NGNkpTbSzqg9JoJ5nqebytRj3Tu2przjCmns1GMr4rG9YKOLtMp06CMo3lednZe
+         wxQw==
+X-Gm-Message-State: AAQBX9fwzgBy768WvtFw8igqRF+a+gXuLetZNBeEuUSGyrDs+E+2aXtj
+        JmZ6XxwA86XeRRVak1A4y48s+Q==
+X-Google-Smtp-Source: AKy350ZQaC5PHvOTs/Ci+GGGlU987ym/CM5N0qzNMVlGoxzf3xpQizKJqUG6Xt6FbOcsrYeS4JwNDA==
+X-Received: by 2002:a81:4644:0:b0:54e:dcf2:705b with SMTP id t65-20020a814644000000b0054edcf2705bmr12031663ywa.47.1681673139695;
+        Sun, 16 Apr 2023 12:25:39 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id b186-20020a811bc3000000b0054eff15530asm2641407ywb.90.2023.04.16.12.25.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Apr 2023 12:25:39 -0700 (PDT)
+Date:   Sun, 16 Apr 2023 12:25:37 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Zi Yan <ziy@nvidia.com>
+cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
+        linux-mm@kvack.org,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        =?ISO-8859-15?Q?Michal_Koutn=FD?= <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Zach O'Keefe <zokeefe@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv9 00/14] mm, x86/cc: Implement support for unaccepted
- memory
-Message-ID: <20230416191940.ex7ao43pmrjhru2p@box.shutemov.name>
-References: <20230330114956.20342-1-kirill.shutemov@linux.intel.com>
- <2e0da486-71e4-cfeb-1578-68f1c8c43d33@suse.cz>
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 5/7] mm: thp: split huge page to any lower order
+ pages.
+In-Reply-To: <20230403201839.4097845-6-zi.yan@sent.com>
+Message-ID: <26723f25-609a-fe9c-a41a-e692634d892@google.com>
+References: <20230403201839.4097845-1-zi.yan@sent.com> <20230403201839.4097845-6-zi.yan@sent.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2e0da486-71e4-cfeb-1578-68f1c8c43d33@suse.cz>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 04:42:54PM +0200, Vlastimil Babka wrote:
-> Hmm yeah it can be noisy. Did you try to only count events that have
-> fragmenting=1 and/or MIGRATE_MOVABLE as fallback_migratetype? As those are
-> the really bad events.
+On Mon, 3 Apr 2023, Zi Yan wrote:
 
-I finally got around to retest it.
+> From: Zi Yan <ziy@nvidia.com>
+> 
+> To split a THP to any lower order pages, we need to reform THPs on
+> subpages at given order and add page refcount based on the new page
+> order. Also we need to reinitialize page_deferred_list after removing
+> the page from the split_queue, otherwise a subsequent split will see
+> list corruption when checking the page_deferred_list again.
+> 
+> It has many uses, like minimizing the number of pages after
+> truncating a huge pagecache page. For anonymous THPs, we can only split
+> them to order-0 like before until we add support for any size anonymous
+> THPs.
+> 
+> Signed-off-by: Zi Yan <ziy@nvidia.com>
+> ---
+...
+> @@ -2754,14 +2798,18 @@ int split_huge_page_to_list(struct page *page, struct list_head *list)
+>  			if (folio_test_swapbacked(folio)) {
+>  				__lruvec_stat_mod_folio(folio, NR_SHMEM_THPS,
+>  							-nr);
+> -			} else {
+> +			} else if (!new_order) {
+> +				/*
+> +				 * Decrease THP stats only if split to normal
+> +				 * pages
+> +				 */
+>  				__lruvec_stat_mod_folio(folio, NR_FILE_THPS,
+>  							-nr);
+>  				filemap_nr_thps_dec(mapping);
+>  			}
+>  		}
 
-		total	fragmenting	movable	fragmenting&&movable
-base-1:		957	583		353	0
-base-2:		2715	2343		359	0
-base-3:		2033	1669		353	0
-patched-1:	1325	929		371	0
-patched-2:	2844	2451		371	0
-patched-3:	1304	917		361	0
+This part is wrong.  The problem I've had is /proc/sys/vm/stat_refresh 
+warning of negative nr_shmem_hugepages (which then gets shown as 0 in
+vmstat or meminfo, even though there actually are shmem hugepages).
 
-fragmenting=1 is defined as fallback_order<pageblock_order which is most
-of them.
+At first I thought that the fix needed (which I'm running with) is:
 
-Patched kernel showed slightly elevated movable(fallback_migratetype=1)
-cases. Is it critical?
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -2797,17 +2797,16 @@ int split_huge_page_to_list_to_order(str
+ 			int nr = folio_nr_pages(folio);
+ 
+ 			xas_split(&xas, folio, folio_order(folio));
+-			if (folio_test_swapbacked(folio)) {
+-				__lruvec_stat_mod_folio(folio, NR_SHMEM_THPS,
+-							-nr);
+-			} else if (!new_order) {
+-				/*
+-				 * Decrease THP stats only if split to normal
+-				 * pages
+-				 */
+-				__lruvec_stat_mod_folio(folio, NR_FILE_THPS,
+-							-nr);
+-				filemap_nr_thps_dec(mapping);
++			if (folio_test_pmd_mappable(folio) &&
++			    new_order < HPAGE_PMD_ORDER) {
++				if (folio_test_swapbacked(folio)) {
++					__lruvec_stat_mod_folio(folio,
++							NR_SHMEM_THPS, -nr);
++				} else {
++					__lruvec_stat_mod_folio(folio,
++							NR_FILE_THPS, -nr);
++					filemap_nr_thps_dec(mapping);
++				}
+ 			}
+ 		}
+ 
+because elsewhere the maintenance of NR_SHMEM_THPS or NR_FILE_THPS
+is rightly careful to be dependent on folio_test_pmd_mappable() (and,
+so far as I know, we shall not be seeing folios of order higher than
+HPAGE_PMD_ORDER yet in mm/huge_memory.c - those would need more thought).
 
-There's no allocations that is fragmenting and movable. Hm.
+But it may be more complicated than that, given that patch 7/7 appears
+(I haven't tried) to allow splitting to other orders on a file opened
+for reading - that might be a bug.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+The complication here is that we now have four kinds of large folio
+in mm/huge_memory.c, and the rules are a bit different for each.
+
+Anonymous THPs: okay, I think I've seen you exclude those with -EINVAL
+at a higher level (and they wouldn't be getting into this "if (mapping) {"
+block anyway).
+
+Shmem (swapbacked) THPs: we are only allocating shmem in 0-order or
+HPAGE_PMD_ORDER at present.  I can imagine that in a few months or a
+year-or-so's time, we shall want to follow Matthew's folio readahead,
+and generalize to other orders in shmem; but right now I'd really
+prefer not to have truncation or debugfs introducing the surprise
+of other orders there.  Maybe there's little that needs to be fixed,
+only the THP_SWPOUT and THP_SWPOUT_FALLBACK statistics have come to
+mind so far (would need to be limited to folio_test_pmd_mappable());
+though I've no idea how well intermediate orders will work with or
+against THP swapout.
+
+CONFIG_READ_ONLY_THP_FOR_FS=y file THPs: those need special care,
+and their filemap_nr_thps_dec(mapping) above may not be good enough.
+So long as it's working as intended, it does exclude the possibility
+of truncation splitting here; but if you allow splitting via debugfs
+to reach them, then the accounting needs to be changed - for them,
+any order higher than 0 has to be counted in nr_thps - so splitting
+one HPAGE_PMD_ORDER THP into multiple large folios will need to add
+to that count, not decrement it.  Otherwise, a filesystem unprepared
+for large folios or compound pages is in danger of meeting them by
+surprise.  Better just disable that possibility, along with shmem.
+
+mapping_large_folio_support() file THPs: this category is the one
+you're really trying to address with this series, they can already
+come in various orders, and it's fair for truncation to make a
+different choice of orders - but is what it's doing worth doing?
+I'll say more on 6/7.
+
+Hugh
