@@ -2,93 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6ABB6E3C21
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 23:29:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16FA66E3C2E
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 23:34:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjDPV3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 17:29:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55612 "EHLO
+        id S229695AbjDPVd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 17:33:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjDPV3E (ORCPT
+        with ESMTP id S229458AbjDPVd4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 17:29:04 -0400
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5384D2102;
-        Sun, 16 Apr 2023 14:29:03 -0700 (PDT)
-Received: by mail-pj1-f41.google.com with SMTP id v21-20020a17090a459500b0024776162815so2593829pjg.2;
-        Sun, 16 Apr 2023 14:29:03 -0700 (PDT)
+        Sun, 16 Apr 2023 17:33:56 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631AD1FEF;
+        Sun, 16 Apr 2023 14:33:55 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id r9so5040698iot.6;
+        Sun, 16 Apr 2023 14:33:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681680835; x=1684272835;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2gy3kFSOdkDvzSy0w35GiiIQBcHUHIwrasUl9Oa3Jx8=;
+        b=errXwELZEzPDIHRC2szYREDSwC1VyoYlgifGrauB7RuTnJPXpvbGOzJYqBOaJL+Gf4
+         uZvB4KJVyOUi3CUXKJujK7QBLFVXMsb42kOdXDESoIwscK9MJWDWb5fypfSi9qoni5Kp
+         w1ibolryRpAW1U7LOSuNE32a1yx8fVQbR+5Kw0AVD9UfvYBLS6NAUMps/E1JBuvucRnR
+         XCs4RUdap7VlBcqtTpXUol4+dqog/ZQEpfnxEDUwZFCNe85thK8K2+k7GL7fYTnRi+hz
+         NSfbaH+WamWmPQKR3Lx0IoGpzeSK7fKmEetvFNuxLIbP6y+5GgXkDWTu+Zhlh0l15YLb
+         17BQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681680543; x=1684272543;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=chhq8HLCYDXYSGAyei6zPDQ2eD5pJGIc6Oj3Q1YOILY=;
-        b=bTP1wt/vFdEora33yVVi0D5QfOKi26wbmyFRB7c6793pXsG357I/cIz/GLlgsjIMdW
-         maMdzpAHCsLM2z351eygG5YVCWEICbBkFwA6hL5608N3Vcs5mZGGwWOzwKw2NWWsp08B
-         sktLASrw3Qe4BESLkn642dAfvPlA4Y7YBf3+enKryotGuFamHEJQTpryRg4PC5hajTYG
-         T5w0ZX5gEXVatAbYdBXZ5kBsfqc7YxBt3bn1o2pAGbPsXaOfxmgBrtYM6v8Fg6o5Ycoj
-         NpsWD9CQc8cr1gRGaSI/v6NZZr3dtdd/GyVjic5xkElyqLjMXxIVnKfTrmVgG6DIDvk+
-         s2jQ==
-X-Gm-Message-State: AAQBX9cD6CZxkUpATfqPcbuXfzD3/m4cjBo12e9UxUi17p1cUa3zeExW
-        7PxIdyn2eLV0w1rVqf292+vsYVBiUkA=
-X-Google-Smtp-Source: AKy350bfDWbqMJEqizLVc1dWFEUewShV1vsSnA6UEhKkSSOeEoBEGX3uOVJMyOHVaMNmBp/6vz/smQ==
-X-Received: by 2002:a05:6a20:a015:b0:ee:b828:e971 with SMTP id p21-20020a056a20a01500b000eeb828e971mr7981226pzj.15.1681680542688;
-        Sun, 16 Apr 2023 14:29:02 -0700 (PDT)
-Received: from [192.168.3.219] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id t16-20020a656090000000b005143d3fa0e0sm5893181pgu.2.2023.04.16.14.29.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Apr 2023 14:29:02 -0700 (PDT)
-Message-ID: <e081cc6b-65a5-6d95-9a4c-da1ca454d754@acm.org>
-Date:   Sun, 16 Apr 2023 14:29:01 -0700
+        d=1e100.net; s=20221208; t=1681680835; x=1684272835;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2gy3kFSOdkDvzSy0w35GiiIQBcHUHIwrasUl9Oa3Jx8=;
+        b=ERMrlIuW4KkBhcdjW3Q2xqs5+UDEIA5XyPP6/lCGxRRbP9Fn0nv+30aB6p/bgOzoVx
+         jnMOZwcLzkR0GINz05MuUcGzhm7kXsF7umjowjqb/WttcaVnvZ94mVok86un5mAo9eWN
+         bELJbQXLk5daaPAMW0gtp7Hsk6SHnfc2VTxUxzOesk5tFXhb8FGKONWdXsMQ/0pOCBtb
+         CENOPRikdRq8OWC9AHm1UNocF2QdZm6F1rm3eMF/cOhTjrpopO8R2FaoyO3+uS2+SauI
+         CAjiZ+j1cYbuTbzgeThMgblo6t1WF3jD54g6V/U4AZxcA8G1Woan8Ni2+xsfYjOyZ62q
+         2msw==
+X-Gm-Message-State: AAQBX9fAOSsMgY/0zeh+BKFR3yJ1Rn8xrUGFlu3RAjSQ/46aMN2iRzfS
+        xT50tRru6fFrOwmrcqMugRDRhGgNUVE=
+X-Google-Smtp-Source: AKy350ZNWi0kZ8/te/K1qqoQvEOEoH2Mq1PWoxohXBZvSFupT5upL+8B/xmOtXXPNlWrJ4iwWAzzsw==
+X-Received: by 2002:a6b:e506:0:b0:760:ea10:757 with SMTP id y6-20020a6be506000000b00760ea100757mr2756166ioc.20.1681680834744;
+        Sun, 16 Apr 2023 14:33:54 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s2-20020a6bdc02000000b007587774bec7sm2674930ioc.54.2023.04.16.14.33.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Apr 2023 14:33:54 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 16 Apr 2023 14:33:52 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Aleksa Savic <savicaleksa83@gmail.com>
+Cc:     linux-hwmon@vger.kernel.org, Jack Doan <me@jackdoan.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Add support for
+ Aquacomputer Aquastream XT
+Message-ID: <4edb2285-904f-4dee-8bf8-7fdf42b2b7ce@roeck-us.net>
+References: <20230416181702.9892-1-savicaleksa83@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] scsi: scsi_debug: Abort commands from
- scsi_debug_device_reset()
-Content-Language: en-US
-To:     John Garry <john.g.garry@oracle.com>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, dgilbert@interlog.com
-Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        kernel test robot <yujie.liu@intel.com>
-References: <20230416175654.159163-1-john.g.garry@oracle.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20230416175654.159163-1-john.g.garry@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230416181702.9892-1-savicaleksa83@gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/16/23 10:56, John Garry wrote:
-> Currently scsi_debug_device_reset() does not do much apart from setting
-> the SDEBUG_UA_POR ("Power on, reset, or bus device reset") flag, which is
-> eventually passed back to the SCSI midlayer later for a "unit attention"
-> command.
+On Sun, Apr 16, 2023 at 08:17:01PM +0200, Aleksa Savic wrote:
+> Extend aquacomputer_d5next driver to expose various hardware sensors of the
+> Aquacomputer Aquastream XT watercooling pump, which communicates
+> through a proprietary USB HID protocol. Implemented by Leonard Anderweit
+> [1] [2].
 > 
-> There is a report that blktest scsi/007 test fails due to commit
-> 1107c7b24ee3 ("scsi: scsi_debug: Dynamically allocate sdebug_queued_cmd").
-> The problem there is that there are dangling scsi_debug queued commands
-> when we attempt to remove the driver.
+> Coolant temp, fan IC and external temp sensor readings are available, along
+> with speed and voltage of both the pump and optionally connected fan.
+> It also exposes pump current.
 > 
-> scsi/007 test triggers SCSI EH and attempts to abort a timed-out command.
-> Function scsi_debug_device_reset() is called as part of the EH, but does
-> not deal with outstanding erroneous command. Prior to the named commit,
-> removing the driver caused all dangling queued commands to be stopped -
-> this should have not been necessary.
+> Additionally, serial number and firmware version are exposed through
+> debugfs.
 > 
-> Fix by aborting outstanding commands on a scsi_device basis from
-> scsi_debug_device_reset().
+> [1] https://github.com/aleksamagicka/aquacomputer_d5next-hwmon/pull/46
+> [2] https://github.com/aleksamagicka/aquacomputer_d5next-hwmon/pull/49
 > 
-> Fixes: 1107c7b24ee3 ("scsi: scsi_debug: Dynamically allocate sdebug_queued_cmd")
-> Reported-by: kernel test robot <yujie.liu@intel.com>
-> Link: https://lore.kernel.org/oe-lkp/202304071111.e762fcbd-yujie.liu@intel.com
-> Signed-off-by: John Garry <john.g.garry@oracle.com>
+> Originally-from: Leonard Anderweit <leonard.anderweit@gmail.com>
+> Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Applied.
+
+Thanks,
+Guenter
