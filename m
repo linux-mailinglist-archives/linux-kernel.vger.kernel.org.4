@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CF4B6E3A65
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 19:02:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 438956E3A6A
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 19:05:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjDPRCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 13:02:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36174 "EHLO
+        id S229604AbjDPRFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 13:05:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDPRCh (ORCPT
+        with ESMTP id S229519AbjDPRFi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 13:02:37 -0400
+        Sun, 16 Apr 2023 13:05:38 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C0541FED
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 10:02:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEA91FFE
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 10:05:37 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1po5lq-0008Rd-5w; Sun, 16 Apr 2023 19:02:34 +0200
+        id 1po5ol-0000EQ-90; Sun, 16 Apr 2023 19:05:35 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1po5lo-00BgZu-Qe; Sun, 16 Apr 2023 19:02:32 +0200
+        id 1po5ok-00BgcE-Jg; Sun, 16 Apr 2023 19:05:34 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1po5lo-00Dgys-0x; Sun, 16 Apr 2023 19:02:32 +0200
-Date:   Sun, 16 Apr 2023 19:02:32 +0200
+        id 1po5oj-00DgzC-BQ; Sun, 16 Apr 2023 19:05:33 +0200
+Date:   Sun, 16 Apr 2023 19:05:33 +0200
 From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-pwm@vger.kernel.org
-Subject: Re: [PATCH] pwm: sti: Fix the error handling path of sti_pwm_probe()
-Message-ID: <20230416170232.igjwawhnkgya2qee@pengutronix.de>
-References: <ef5d6301cb120db5d52175a7bf94b5095beaaeef.1681633924.git.christophe.jaillet@wanadoo.fr>
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-pwm@vger.kernel.org
+Subject: Re: [PATCH] pwm: clk: Use the devm_clk_get_prepared() helper function
+Message-ID: <20230416170533.raji7rbawg6b4jpv@pengutronix.de>
+References: <9281571825c365c1591fcf31527d45ec576c19b4.1681635694.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qichhjai5fq4p6s3"
+        protocol="application/pgp-signature"; boundary="v6eywzs64ccbnngs"
 Content-Disposition: inline
-In-Reply-To: <ef5d6301cb120db5d52175a7bf94b5095beaaeef.1681633924.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <9281571825c365c1591fcf31527d45ec576c19b4.1681635694.git.christophe.jaillet@wanadoo.fr>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: ukl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -55,41 +55,42 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---qichhjai5fq4p6s3
+--v6eywzs64ccbnngs
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hello,
 
-On Sun, Apr 16, 2023 at 10:32:24AM +0200, Christophe JAILLET wrote:
-> Rewrite the error handing path of sti_pwm_probe() to avoid some leaks.
+On Sun, Apr 16, 2023 at 11:02:13AM +0200, Christophe JAILLET wrote:
+> Use the devm_clk_get_prepared() helper function instead of hand-writing i=
+t.
+> It saves some line of codes.
+>=20
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-There are also some clk_put()'s missing. See
-https://lore.kernel.org/linux-pwm/20201013081531.661528-1-uwe@kleine-koenig=
-=2Eorg
-for an older fix of the things you noticed.
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
-Best regards
+Thanks
 Uwe
 
 --=20
 Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
 Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
---qichhjai5fq4p6s3
+--v6eywzs64ccbnngs
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmQ8KicACgkQj4D7WH0S
-/k4rCgf+IgFiqYV/KJORdTuLVDP0Re0M+LXFE9SQ3feYlcXI4yGTxI+UQS3Is5mj
-QSjVvfU01PG4PHg1AeT88fR3XHDKHfecKoobE5vLJPkdawirsVBGDRIDSPGlRniG
-6ew05MYz2eQgNxN03KIFcIK2KQle8vgJBWVV2bgtFwkmc0gSbZtHfbr0KmtWUmpP
-7BUvcK7or4s/Kx7jpLIY0KRYvCpQXgOEyQcemzm7GVH8NL6vnNym0pveGlSEBqSa
-0ylrtOQ0mENxMAfRYxb4HMxdbZAb4uZkh/MAvDgcepsJF5/oFucCqiooz82vwkUZ
-VMzQlpU/5sisJaUqBt6F5ZZhn9zCIw==
-=amNk
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmQ8KtwACgkQj4D7WH0S
+/k4B5gf6A9VivW1m+6DUJHhfWnBMes4HsyzomWZ4Jw+pzaVfZ4ADBtXUH+L84Op+
+WomdnsDMifEhRRDk6DyG/Q9qFB+fawNmqmadg8XwvvwjLYXfID1TIBOgVaaSgFnz
+OtyOql/PzfeeJGl50pTPrb3TgYFphEpT1NB2K3jkLfO/sxOZAquMq0GlY8tOmwTT
+XeQNHpQi7693H7RMrpr+4vi8iLqqHrxX07oTahk1ZES8G4HHLgsxwpXdGoODOhxZ
+5B/LtsX/gjxFbX72mFHD5KKRDeU9hBZXO8XIDNlyN3y0zYdEE+XHpeVIqHmFqRdp
+ufZ07fkpFUF6njMVf7Yzg/uSXtg8kg==
+=jt+G
 -----END PGP SIGNATURE-----
 
---qichhjai5fq4p6s3--
+--v6eywzs64ccbnngs--
