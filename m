@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A54336E348D
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 02:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F87E6E348F
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 02:15:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjDPAFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 20:05:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56824 "EHLO
+        id S230085AbjDPAPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 20:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDPAFC (ORCPT
+        with ESMTP id S229451AbjDPAPC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 20:05:02 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3C302689
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 17:05:00 -0700 (PDT)
+        Sat, 15 Apr 2023 20:15:02 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906341FE1
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 17:15:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681603500; x=1713139500;
+  t=1681604100; x=1713140100;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JgFs7KIQMJ8PjqwX16Fc7qpGewozz09tLqQlWq91/uY=;
-  b=guvDzjE9v3GhIwklL65sVg7VC/9TQC2nhlG+MH9PFBxrmUylzG/YuJHM
-   lXnFkqlkQKaKmmwG23gTkNIBFxQNoCZvZM4LS1O5q7ser+9KtuVkIV4cl
-   WWwU3FgLWBD6fRG52M+2dv/T2SMJA6KNcjQVA85iV/RaGawpimBj0wf+w
-   tkOydXxIdR835BspDfFMyth+jFK4RJhhS6A0tq7fs6Q7pxVqQPmLUgus9
-   XTZvV2MPlRCLNSXC24wiRuz9+WdmNd4sGck0mhPA6rJg1f44lLKQsCVYU
-   OqPutiPA0kb0L9BV+2sBl/yzDqsyY8kwrlqmlrVRdNtH5QD9/vf8siVHp
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="407578015"
+  bh=aLG3LVTA7bxucq+WjXH8rOi7AHL4o8HgjGHC/Ra5xpk=;
+  b=EqmHRLCtUXmFxIqIgIUauxRPbPFNTPL2mAHU7aqSo9oMo/JOHPzsSwlq
+   vw9AD8545fxPlx6aojGTpgR3VBuhbrCFHaXmoWg/JLJjDg4/3BNrVGjPO
+   C7ngLuwlEye1BOF4VteZf8BO0fUnFcE78XL45mak3vHL+S5iC0LZGZwLx
+   8wJUFxXpLCq44sDb/ri6I5e8FfM7GMbkpQqzTo6U5DQzinMT7DgDq+jO6
+   O+l72seoZ8bswKgG6SLkkPdTYxxV/985PoAidJVtWya2JDX8HlWEvsyMw
+   0w7RkHY2Rn+avdU5/3rxKATwCSF/iG26T3Vw9i1h6Gp4rUA/vazxrWRMj
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="347418968"
 X-IronPort-AV: E=Sophos;i="5.99,201,1677571200"; 
-   d="scan'208";a="407578015"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2023 17:04:59 -0700
+   d="scan'208";a="347418968"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2023 17:14:59 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="692850873"
+X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="754888043"
 X-IronPort-AV: E=Sophos;i="5.99,201,1677571200"; 
-   d="scan'208";a="692850873"
+   d="scan'208";a="754888043"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 15 Apr 2023 17:04:56 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 15 Apr 2023 17:14:57 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pnpt2-000bQb-2r;
-        Sun, 16 Apr 2023 00:04:56 +0000
-Date:   Sun, 16 Apr 2023 08:04:17 +0800
+        id 1pnq2i-000bQl-37;
+        Sun, 16 Apr 2023 00:14:56 +0000
+Date:   Sun, 16 Apr 2023 08:14:30 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
         linux-kernel@vger.kernel.org, x86@kernel.org
 Subject: [tip:irq/urgent 1/1] drivers/pci/msi/msi.c:763:18: error: use of
  undeclared identifier 'nvec'; did you mean 'nvev'?
-Message-ID: <202304160832.bMSgCZQD-lkp@intel.com>
+Message-ID: <202304160844.cCgXqLn2-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -66,26 +66,88 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/urgent
 head:   84d9651e13fb9820041d19262a55906851524c0f
 commit: 84d9651e13fb9820041d19262a55906851524c0f [1/1] PCI/MSI: Remove over-zealous hardware size check in pci_msix_validate_entries()
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20230416/202304160832.bMSgCZQD-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+config: s390-randconfig-r035-20230416 (https://download.01.org/0day-ci/archive/20230416/202304160844.cCgXqLn2-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
         # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=84d9651e13fb9820041d19262a55906851524c0f
         git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
         git fetch --no-tags tip irq/urgent
         git checkout 84d9651e13fb9820041d19262a55906851524c0f
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/pci/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/pci/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304160832.bMSgCZQD-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304160844.cCgXqLn2-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
+   In file included from drivers/pci/msi/msi.c:11:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/pci/msi/msi.c:11:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/pci/msi/msi.c:11:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
 >> drivers/pci/msi/msi.c:763:18: error: use of undeclared identifier 'nvec'; did you mean 'nvev'?
            for (i = 0; i < nvec; i++) {
                            ^~~~
@@ -100,7 +162,7 @@ All errors (new ones prefixed by >>):
    drivers/pci/msi/msi.c:753:92: note: 'nvev' declared here
    static bool pci_msix_validate_entries(struct pci_dev *dev, struct msix_entry *entries, int nvev)
                                                                                               ^
-   2 errors generated.
+   12 warnings and 2 errors generated.
 
 
 vim +763 drivers/pci/msi/msi.c
