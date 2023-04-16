@@ -2,71 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 944326E39CD
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 17:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D9616E39CE
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 17:29:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbjDPP2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 11:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40556 "EHLO
+        id S230291AbjDPP3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 11:29:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjDPP2b (ORCPT
+        with ESMTP id S229656AbjDPP3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 11:28:31 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9C0D1FCE
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 08:28:29 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id v9so28427146pjk.0
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 08:28:29 -0700 (PDT)
+        Sun, 16 Apr 2023 11:29:00 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0846C1FD5
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 08:29:00 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1a524c999d9so12040545ad.3
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 08:29:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681658909; x=1684250909;
-        h=content-transfer-encoding:subject:cc:to:content-language:from
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G7+ik9HPRH9KCB/P60xIoYIrxr9FlO91ORF2/NM2wLU=;
-        b=XA0SNk3RGgtkVJMZ31Th930L/FV634DbxkxXdCuA/TxBnGdzSHQ3/KMF7+j5ZXwahJ
-         1mzUua/KNylrHliFlry4ftNFUjLgqo4ftoxepxdX4fArB5nTDUg4ww4B98lEmqND9QHw
-         5sa0OCWAMDu9TQxRjVDUtncwkDal8rzgQRrlOcB/8F0C3ocQ27w6SVuMSGb7+h4sAPlR
-         lLzNDBnS6Vmk43jIVY7wfob2B/23KbrxNfKZrr9R49yClLce6Y1keIvlOCwgN8neR+sq
-         LCsJ7LXEUYMrebJ0Kj1wflZIWFUUwo42dUHOh/7qS8M9mlbka822MEPfYPLTRskmHLDu
-         U1lA==
+        d=gmail.com; s=20221208; t=1681658939; x=1684250939;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YUpkKa9lSybfFOxcoDD5YeVul+uOBvZq53WUTUhoysM=;
+        b=OGBgitdOjVVBrw/PI50cjAT7bb47JG1/GHVc8+NRhctY+dd5lemjYnyEs5GCJ2Z/2I
+         xCSnY03km+OPcsndESmMhvaStIaUOidyNKgzRUgAl8tW2PIyJs0JfXS57O77nB6BYcr2
+         06D9p6+SKQbqTV3ORT9adeuK2j6HbTO5V910gTpLSvYXG0y5YNp95ol4QxTkysGnF44y
+         GucmPqptFNIBok8T8WSZQ9h5VTu0zXnuvl0oJvjrXS3QMGg+Dj/pwbNoFtiep5hHzwce
+         qN1s1OPGr28sv++G0BJs1pFkSBqee38JYfHGcRUiNMfgFoCI+1FqBlBPJZ/AaQeQJoUj
+         zheA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681658909; x=1684250909;
-        h=content-transfer-encoding:subject:cc:to:content-language:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=G7+ik9HPRH9KCB/P60xIoYIrxr9FlO91ORF2/NM2wLU=;
-        b=HKDUaHdOwnWDnSgGPAk2IcqvjtPHD2jaQ7Uj92d+ZGN66FLFbbza/xn7bAdARflKgg
-         n09P0UV8c+9IZ7bJa887zE15ZGTXVM5PvOsLdC8iFBoIl7pYKzYxOf8mwNTGhFtplL7m
-         aKPtN2nlfcx/6QWSzXtzMWnSbSBryEsaIh+wAmbnHyslhXIjnFNiSIdvyK9lOSODzvNp
-         mfbbI6+PmSC7ybxtbuNWx+cfo5NzAYUcq5xO8hbfsWsPZgxv+RIIMqZYAREdDGW2vCsb
-         7Woj8F2y7rMmnjZ+U+XuJaIoPf6Yaqx6qF4qZhmYf8RLp5g2B+P6F/cACxJ9X5djvyno
-         q8dQ==
-X-Gm-Message-State: AAQBX9cV8gjwgXmb7kwopzWuWxGDGsGLJhhb0Fyiu6SJfTYVOYfPrSgI
-        f8hKodWRJIMKl3kKimk5YBKKoV/glCi4VQ==
-X-Google-Smtp-Source: AKy350YUDNVy34cDJs3zFTTtfAnAbUeT+QkOw+pRbcI2x+ycTM9F5MleJIE+TRSEMvL/pR5rzmyZmw==
-X-Received: by 2002:a17:902:e184:b0:1a2:9183:a499 with SMTP id y4-20020a170902e18400b001a29183a499mr8057525pla.34.1681658909165;
-        Sun, 16 Apr 2023 08:28:29 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681658939; x=1684250939;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YUpkKa9lSybfFOxcoDD5YeVul+uOBvZq53WUTUhoysM=;
+        b=BK94Nr4vD/eIRBsNphrZBbfWrw51lxO4/27HRqEjrePu8qFPbfTLpITYqAGoSc32dC
+         i6Wgqw9PZB9CCAp9Kiz+RzltFBqDdDU6WKfqZsGXfon/ncqcg/O/qe2pzMd+DBNYsuhV
+         7r2r0hLSllupoWiqxUPkKR1aqcI5xOqMgDTWPqiFMkAfFs0imoF/EYygtJlswPXzLoxs
+         oGs7iavyLNlq70ByAQ+fpN+DugeLcJJFkQpbOm7z9Sl2jzFnK/A809fhOKD/rpRk2Jgy
+         AkYHB59xrht3FuWLA3tj9wN098NlyMt/Sm5OFMoKTmqOpbd4NrZpNRn1Xdi4iTxrtDHR
+         maWw==
+X-Gm-Message-State: AAQBX9d6HBVEL9aeVt0/FHGM5ehov6Xa/C2c0htLZK4VC3nik3IsuoHd
+        uZ9n1dwT+OsbtKs/lAyoR70=
+X-Google-Smtp-Source: AKy350YEmDIy25Bd8zKiuQ+6OSozvZjGFHDXPHWFGtuns4RRszXGEgg02bOTHpE891nfmsQq6QJI1g==
+X-Received: by 2002:a05:6a00:10cb:b0:638:7e00:3737 with SMTP id d11-20020a056a0010cb00b006387e003737mr15487247pfu.23.1681658939348;
+        Sun, 16 Apr 2023 08:28:59 -0700 (PDT)
 Received: from [172.30.1.1] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id i6-20020a1709026ac600b001a6930a9ac5sm4868488plt.185.2023.04.16.08.28.27
+        by smtp.gmail.com with ESMTPSA id y64-20020a636443000000b0051b4a163ccdsm5376005pgb.11.2023.04.16.08.28.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Apr 2023 08:28:28 -0700 (PDT)
-Message-ID: <1d2b9fd2-4a59-cb3b-2fd3-9f6635f3bbf8@gmail.com>
-Date:   Mon, 17 Apr 2023 00:28:25 +0900
+        Sun, 16 Apr 2023 08:28:58 -0700 (PDT)
+Message-ID: <f2bbe197-803d-14c4-4bdf-37d89c285933@gmail.com>
+Date:   Mon, 17 Apr 2023 00:28:55 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-From:   Chanwoo Choi <cwchoi00@gmail.com>
+Subject: Re: [PATCH v3 0/3] extcon: Core cleanups and documentation fixes
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Chanwoo Choi <cw00.choi@samsung.com>,
-        Chanwoo Choi <chanwoo@kernel.org>
-Subject: [GIT PULL] extcon next for 6.4
+        Bumwoo Lee <bw365.lee@samsung.com>,
+        linux-kernel@vger.kernel.org
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>
+References: <20230411114824.82960-1-andriy.shevchenko@linux.intel.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+In-Reply-To: <20230411114824.82960-1-andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,110 +77,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Greg,
+On 23. 4. 11. 20:48, Andy Shevchenko wrote:
+> A few fixes and some cleanups against extcon core module.
+> 
+> Changelog v3:
+> - dropped NAKed patches
+> - added missing tag (Chanwoo)
+> - dropped unrelated change in patch 2 (Chanwoo)
+> - dropped misplaced tags (Chanwoo)
+> 
+> Changelog v2:
+> - dropped applied patches
+> - completely rewrote the patch to handle name field
+> - dropped kasprintf_strarray() patch for now (Chanwoo)
+> - used new IDA APIs (Chanwoo)
+> - added tag (Bumwoo) to the patches that haven't changed
+> 
+> Cc: Chanwoo Choi <cwchoi00@gmail.com>
+> 
+> Note, MAINTAINERS shows what it has and hence the above Cc is manually
+> added. If the database has issues it should be updated, but it's out of
+> scope of this series.
+> 
+> Andy Shevchenko (3):
+>   extcon: Use unique number for the extcon device ID
+>   extcon: Use sizeof(*pointer) instead of sizeof(type)
+>   extcon: Drop unneeded assignments
+> 
+>  drivers/extcon/extcon.c | 35 +++++++++++++++++++++--------------
+>  drivers/extcon/extcon.h |  2 ++
+>  2 files changed, 23 insertions(+), 14 deletions(-)
+> 
 
-This is extcon-next pull request for v6.4. I add detailed description of
-this pull request on below. Please pull extcon with following updates.
+Applied them. Thanks for your clean-up.
 
+-- 
 Best Regards,
+Samsung Electronics
 Chanwoo Choi
 
-
-The following changes since commit 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d:
-
-  Linux 6.3-rc6 (2023-04-09 11:15:57 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/extcon.git tags/extcon-next-for-6.4
-
-for you to fetch changes up to 4e30418def07f8359c7927d5815788043afbb482:
-
-  extcon: Drop unneeded assignments (2023-04-17 00:14:12 +0900)
-
-----------------------------------------------------------------
-Update extcon next for v6.4
-
-Detailed description for this pull request:
-1. Clean-up extcon core without any behavior changes
-- Add extcon_alloc_cables/muex/groups to improve the readability
-  of extcon_dev_register.
-
-- Fix kernel doc of property and property capability fields to aovid warnings
-  and add missing description of struct extcon_dev.
-
-- Use DECLARE_BITMAP macro and sysfs_emit instead of sprintf
-
-- Use device_match_of_node helper instead of accessing the .of_node
-
-- Use ida_alloc/free to get the unique id for extcon device
-
-2. Update extcon-usbc-tusb320.c to support usb_role_switch and accessory detection
-- Add usb_role_switch support on extcon-usbsc-tusb320.
-
-- Add additional accessory detection for audio/debug accessory
-  and then pass the deteced accessory information to typec subsystem
-  on extcon-usbsc-tusb320.c.
-
-- Add the support of unregistration of typec port on both error handling
-  and driver removal step on
-
-3. Update extcon provider drivers (apx288/qcom-spmi-misc/palmas)
-- Replace put_device with acpi_dev_put on extcon-axp288.c
-
-- Use platform_get_irq_byname_optional for getting irq of
-  usb_id and usb_vbus on extcon-qcom-spmi-misc.c.
-
-- Remove unused of_gpio.h on extcon-palmas.c.
-
-4. Fix the devicetree binding document
-- Rename misc node name to 'usb-dect@900' on pm8941-misc.yam
-
-- Fix usb-id and usb_vbus defintion on pm8941-misc.yaml
-----------------------------------------------------------------
-
-Alvin Šipraga (3):
-      extcon: usbc-tusb320: Unregister typec port on driver removal
-      extcon: usbc-tusb320: add accessory detection support
-      extcon: usbc-tusb320: add usb_role_switch support
-
-Andy Shevchenko (13):
-      extcon: axp288: Replace open coded acpi_dev_put()
-      extcon: palmas: Remove unused of_gpio.h
-      extcon: Fix kernel doc of property fields to avoid warnings
-      extcon: Fix kernel doc of property capability fields to avoid warnings
-      extcon: Use DECLARE_BITMAP() to declare bit arrays
-      extcon: Use sysfs_emit() to instead of sprintf()
-      extcon: Amend kernel documentation of struct extcon_dev
-      extcon: Use device_match_of_node() helper
-      extcon: Use dev_of_node(dev) instead of dev->of_node
-      extcon: Remove dup device name in the message and unneeded error check
-      extcon: Use unique number for the extcon device ID
-      extcon: Use sizeof(*pointer) instead of sizeof(type)
-      extcon: Drop unneeded assignments
-
-Arnd Bergmann (1):
-      extcon: usbc-tusb320: add USB_ROLE_SWITCH dependency
-
-Bryan O'Donoghue (2):
-      dt-bindings: pm8941-misc: Fix usb_id and usb_vbus definitions
-      extcon: qcom-spmi: Switch to platform_get_irq_byname_optional
-
-Bumwoo Lee (4):
-      extcon: Remove redundant null checking for class
-      extcon: Add extcon_alloc_cables to simplify extcon register function
-      extcon: Add extcon_alloc_muex to simplify extcon register function
-      extcon: Add extcon_alloc_groups to simplify extcon register function
-
-Luca Weiss (1):
-      dt-bindings: pm8941-misc: rename misc node name
-
- .../bindings/extcon/qcom,pm8941-misc.yaml          |  14 +-
- drivers/extcon/Kconfig                             |   1 +
- drivers/extcon/extcon-axp288.c                     |   2 +-
- drivers/extcon/extcon-palmas.c                     |   1 -
- drivers/extcon/extcon-qcom-spmi-misc.c             |   4 +-
- drivers/extcon/extcon-usbc-tusb320.c               | 153 +++++++--
- drivers/extcon/extcon.c                            | 368 ++++++++++++---------
- drivers/extcon/extcon.h                            |   8 +-
- 8 files changed, 354 insertions(+), 197 deletions(-)
