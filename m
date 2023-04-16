@@ -2,81 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C8F96E3A5E
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 18:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CF4B6E3A65
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 19:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbjDPQ7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 12:59:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35290 "EHLO
+        id S229602AbjDPRCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 13:02:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDPQ7K (ORCPT
+        with ESMTP id S229458AbjDPRCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 12:59:10 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374D89C;
-        Sun, 16 Apr 2023 09:59:09 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-5058181d58dso3468361a12.1;
-        Sun, 16 Apr 2023 09:59:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681664347; x=1684256347;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=TIb2D7rkDuhVLUrXFOEDDaK8FmVcbl4NoqztV2OGIZc=;
-        b=gWokLH6gyE17z0PxP29Pf8sUePU/6QPbYQLUFuz2fWGjdQWParpPoT0LHjfWp7sU3+
-         5yCXMWI4PXjosQohNeTY3lHXFEBNAESIfN9PmnJHXlnnvHhv5DuD1zHWz6V8HqdtC63U
-         AWSssn1IL5EH0hH2l7F1dNc5lN0yb7b0NtoYcs8rdDp9nSy9OTH/fWLqGTEF7ChjEUIa
-         xEwT57dhEJron80zoyDiSyDNRllTwmTrmkEJKF3psf/xedoCkjfe0fcU06S6kif6Ec9K
-         +FsOS6PphAXnf0AsED6upty6rrMMV1vBjbwNkvqP32ZJgmXv/4c2BJibPaVJVKVdPRdK
-         3wEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681664348; x=1684256348;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TIb2D7rkDuhVLUrXFOEDDaK8FmVcbl4NoqztV2OGIZc=;
-        b=bwmDtdZNnbpMPi+kmpipNeDpCjaQl1DshSvyF+OjY9Ac93tGpDYWQO9HxtgoqQrUGv
-         Zccs3qyzODyP+CghJsbjxuEhcETl5Ybr/GhisRYrXKt4DcyyGU/KA0O/Y8z/+QT1FjRe
-         EMRhnS3El0S++NcXYRV+I8yYvCQVNylQFTVnY/b3vcVTfCFITFmsxpFVj88cs0qzU2Un
-         62hqqID58NRvOslDMKASGcuGpJmAdyfFFgzERGgIEWrWQ6JZcrlY/A4DeEebe78EstWI
-         qDe0UoJkbj/hWyk4Q2hZxEZqosZLY3HzPoq+00czbAgTtEd4nFFtZGj5TmAXIIDsBzLO
-         ngzQ==
-X-Gm-Message-State: AAQBX9fXBPtKSn2323TbMUdY3v5MykU2sLAC9vyAAYFeLXl/1RHvtXxJ
-        4is/dHlFu7tPEKjMieiAt/U=
-X-Google-Smtp-Source: AKy350b2/xS/9E1LcasLyAMeaL9y0hl61phjzAGwURZgjG4mZS1i7UZieXTZUICOsQTAHMHvgqZgmg==
-X-Received: by 2002:aa7:d74f:0:b0:504:adc2:80da with SMTP id a15-20020aa7d74f000000b00504adc280damr11421732eds.18.1681664347426;
-        Sun, 16 Apr 2023 09:59:07 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id g3-20020aa7c843000000b005029c47f814sm4663732edt.49.2023.04.16.09.59.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 09:59:06 -0700 (PDT)
-Date:   Sun, 16 Apr 2023 19:59:04 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Arun Ramadoss <arun.ramadoss@microchip.com>,
-        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net-next v1 2/2] net: dsa: microchip: Add partial ACL
- support for ksz9477 switches
-Message-ID: <20230416165904.2y7zwgyxwltjzj7m@skbuf>
-References: <20230411172456.3003003-1-o.rempel@pengutronix.de>
- <20230411172456.3003003-3-o.rempel@pengutronix.de>
- <20230413042936.GA12562@pengutronix.de>
+        Sun, 16 Apr 2023 13:02:37 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C0541FED
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 10:02:36 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1po5lq-0008Rd-5w; Sun, 16 Apr 2023 19:02:34 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1po5lo-00BgZu-Qe; Sun, 16 Apr 2023 19:02:32 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1po5lo-00Dgys-0x; Sun, 16 Apr 2023 19:02:32 +0200
+Date:   Sun, 16 Apr 2023 19:02:32 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-pwm@vger.kernel.org
+Subject: Re: [PATCH] pwm: sti: Fix the error handling path of sti_pwm_probe()
+Message-ID: <20230416170232.igjwawhnkgya2qee@pengutronix.de>
+References: <ef5d6301cb120db5d52175a7bf94b5095beaaeef.1681633924.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qichhjai5fq4p6s3"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230413042936.GA12562@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <ef5d6301cb120db5d52175a7bf94b5095beaaeef.1681633924.git.christophe.jaillet@wanadoo.fr>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,21 +54,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 06:29:36AM +0200, Oleksij Rempel wrote:
-> According to KSZ9477S 5.2.8.2 Port Priority Control Register
-> "To achieve the desired functionality, do not set more than one bit at a
-> time in this register.
-> ...
-> Bit 6 - OR’ed Priority
-> ...
-> Bit 2 - 802.1p Priority Classification
-> Bit 1 - Diffserv Priority Classification
-> Bit 0 - ACL Priority Classification
-> "
-> @Arun  what will happen if multiple engines are used for packet
-> prioritization? For example ACL || Diffserv || 802.1p... ?
-> If I see it correctly, it is possible but not recommended. Should I
-> prevent usage of multiple prio sources? 
 
-You could try and find out which one takes priority... we support VLAN
-PCP and DSCP prioritization through the dcbnl application priority table.
+--qichhjai5fq4p6s3
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hello,
+
+On Sun, Apr 16, 2023 at 10:32:24AM +0200, Christophe JAILLET wrote:
+> Rewrite the error handing path of sti_pwm_probe() to avoid some leaks.
+
+There are also some clk_put()'s missing. See
+https://lore.kernel.org/linux-pwm/20201013081531.661528-1-uwe@kleine-koenig=
+=2Eorg
+for an older fix of the things you noticed.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--qichhjai5fq4p6s3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmQ8KicACgkQj4D7WH0S
+/k4rCgf+IgFiqYV/KJORdTuLVDP0Re0M+LXFE9SQ3feYlcXI4yGTxI+UQS3Is5mj
+QSjVvfU01PG4PHg1AeT88fR3XHDKHfecKoobE5vLJPkdawirsVBGDRIDSPGlRniG
+6ew05MYz2eQgNxN03KIFcIK2KQle8vgJBWVV2bgtFwkmc0gSbZtHfbr0KmtWUmpP
+7BUvcK7or4s/Kx7jpLIY0KRYvCpQXgOEyQcemzm7GVH8NL6vnNym0pveGlSEBqSa
+0ylrtOQ0mENxMAfRYxb4HMxdbZAb4uZkh/MAvDgcepsJF5/oFucCqiooz82vwkUZ
+VMzQlpU/5sisJaUqBt6F5ZZhn9zCIw==
+=amNk
+-----END PGP SIGNATURE-----
+
+--qichhjai5fq4p6s3--
