@@ -2,109 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B406E3B79
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 21:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 892AB6E3B66
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 21:05:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbjDPTOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 15:14:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56116 "EHLO
+        id S229546AbjDPTFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 15:05:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDPTO3 (ORCPT
+        with ESMTP id S229484AbjDPTFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 15:14:29 -0400
-Received: from st43p00im-zteg10072001.me.com (st43p00im-zteg10072001.me.com [17.58.63.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C82E52
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 12:14:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1681671939; bh=gXqSiYO6SOxAXqgCT4Fu+9jvh6ULl25oou/uXwN3afI=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=Uc1ayGrNeFVVX/BRxu1sk9JeALQCbYs0PvNRu+rbzr7t8hSqBtfEuG5WbI7+aSWSh
-         KoFUa8AZPlsJg+2xV6FiZZohnq32MS9uCZpoZLszGJMl3KacF5/2KOsmFTXS//OAEj
-         AiA9zuYlPD99rliNOOQKnT3+sN3MbAYuTtvM/AEEvbhk+XUfjQ7qJCSjeOYKrcteGr
-         lVgvNviYZTMxRR1A6BtI2FnsqONi2GasFV1F+XlUcE357ZodOlDpp7Jrzai+F/B7ye
-         ZLEwA/S9Zp9r1Q6Qzbl3sndFeMS3YGHfsyBNcJhDPdiIaMMYzAn3MttsU+XLvLpyVE
-         RTh2u7HZVcCeg==
-Received: from localhost (st43p00im-dlb-asmtp-mailmevip.me.com [17.42.251.41])
-        by st43p00im-zteg10072001.me.com (Postfix) with ESMTPSA id DE573B410A5;
-        Sun, 16 Apr 2023 19:05:37 +0000 (UTC)
-From:   Alain Volmat <avolmat@me.com>
-To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
-Cc:     patrice.chotard@foss.st.com, Alain Volmat <avolmat@me.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] irqchip/st: remove stih415/stih416 and stid127 platforms support
-Date:   Sun, 16 Apr 2023 21:05:01 +0200
-Message-Id: <20230416190501.18737-1-avolmat@me.com>
+        Sun, 16 Apr 2023 15:05:43 -0400
+Received: from smtp.smtpout.orange.fr (smtp-22.smtpout.orange.fr [80.12.242.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066DC1FC3
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 12:05:40 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id o7gupnSP89ijuo7gupFud6; Sun, 16 Apr 2023 21:05:39 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orange.fr;
+        s=t20230301; t=1681671939;
+        bh=IVg6fEiAUlOm4eZf7hYcoOgAhxCwgPubM+tzVphnhWA=;
+        h=From:To:Cc:Subject:Date;
+        b=stcSMDrgerXIwGDnWbFTpJLich5sCmokXWajyYm+hTqyDWD1ySwkL80AfExFKq7Ei
+         bK7BYo5b4Ff1B5tdqZJ7aT4fjEPnexivEfJdFVzbqv4PvnmheT9h9rNayHAowfz+eL
+         I7KhMpmN21W8PHSti6gf5HunswVUeua7UZMD622kE+ajo0Gx/GResTiROqKUMaLiGj
+         ZwAFborjvoKnKsSUh7W5DzJOMwo7G3zmDosgiDOU9DO76gwcWXiXMHHNc9i1KErbXZ
+         LM/Ozs44yreCoWTzUahIRG2KBDIzvxCOaxg6ReIfKxz3nYp08I7njdCD+HvUpjLfhM
+         v+cg+PSIV0JPA==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 16 Apr 2023 21:05:39 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-sh@vger.kernel.org
+Subject: [PATCH RESEND] sh: sq: Use the bitmap API when applicable
+Date:   Sun, 16 Apr 2023 21:05:14 +0200
+Message-Id: <071e9f32c19a007f4922903282c9121898641400.1681671848.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: WFf52kYDmZ8xvINeI_WXuvXB7zFqapoI
-X-Proofpoint-ORIG-GUID: WFf52kYDmZ8xvINeI_WXuvXB7zFqapoI
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.517,18.0.883,17.11.64.514.0000000_definitions?=
- =?UTF-8?Q?=3D2022-06-21=5F08:2022-06-21=5F01,2022-06-21=5F08,2022-02-23?=
- =?UTF-8?Q?=5F01_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 clxscore=1015
- spamscore=0 adultscore=0 mlxscore=0 phishscore=0 suspectscore=0
- malwarescore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2304160181
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove support for the already no more supported stih415 and stih416
-platforms.  Remove as well the stid127 platform which never made it
-up to the kernel.
+Using the bitmap API is less verbose than hand writing them.
+It also improves the semantic.
 
-Signed-off-by: Alain Volmat <avolmat@me.com>
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
-Patch previously sent via serie: https://lore.kernel.org/all/20230209091659.1409-4-avolmat@me.com/
+This is a resend of [1].
 
- drivers/irqchip/irq-st.c | 15 ---------------
- 1 file changed, 15 deletions(-)
+Now cross-compile tested with CONFIG_CPU_SUBTYPE_SH7770=y
 
-diff --git a/drivers/irqchip/irq-st.c b/drivers/irqchip/irq-st.c
-index 1b83512b29c6..819a12297b58 100644
---- a/drivers/irqchip/irq-st.c
-+++ b/drivers/irqchip/irq-st.c
-@@ -15,10 +15,7 @@
- #include <linux/regmap.h>
- #include <linux/slab.h>
+[1]: https://lore.kernel.org/all/521788e22ad8f7a5058c154f068b061525321841.1656142814.git.christophe.jaillet@wanadoo.fr/
+---
+ arch/sh/kernel/cpu/sh4/sq.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/arch/sh/kernel/cpu/sh4/sq.c b/arch/sh/kernel/cpu/sh4/sq.c
+index 27f2e3da5aa2..d289e99dc118 100644
+--- a/arch/sh/kernel/cpu/sh4/sq.c
++++ b/arch/sh/kernel/cpu/sh4/sq.c
+@@ -372,7 +372,6 @@ static struct subsys_interface sq_interface = {
+ static int __init sq_api_init(void)
+ {
+ 	unsigned int nr_pages = 0x04000000 >> PAGE_SHIFT;
+-	unsigned int size = (nr_pages + (BITS_PER_LONG - 1)) / BITS_PER_LONG;
+ 	int ret = -ENOMEM;
  
--#define STIH415_SYSCFG_642		0x0a8
--#define STIH416_SYSCFG_7543		0x87c
- #define STIH407_SYSCFG_5102		0x198
--#define STID127_SYSCFG_734		0x088
+ 	printk(KERN_NOTICE "sq: Registering store queue API.\n");
+@@ -382,7 +381,7 @@ static int __init sq_api_init(void)
+ 	if (unlikely(!sq_cache))
+ 		return ret;
  
- #define ST_A9_IRQ_MASK			0x001FFFFF
- #define ST_A9_IRQ_MAX_CHANS		2
-@@ -44,22 +41,10 @@ struct st_irq_syscfg {
- };
+-	sq_bitmap = kzalloc(size, GFP_KERNEL);
++	sq_bitmap = bitmap_zalloc(nr_pages, GFP_KERNEL);
+ 	if (unlikely(!sq_bitmap))
+ 		goto out;
  
- static const struct of_device_id st_irq_syscfg_match[] = {
--	{
--		.compatible = "st,stih415-irq-syscfg",
--		.data = (void *)STIH415_SYSCFG_642,
--	},
--	{
--		.compatible = "st,stih416-irq-syscfg",
--		.data = (void *)STIH416_SYSCFG_7543,
--	},
- 	{
- 		.compatible = "st,stih407-irq-syscfg",
- 		.data = (void *)STIH407_SYSCFG_5102,
- 	},
--	{
--		.compatible = "st,stid127-irq-syscfg",
--		.data = (void *)STID127_SYSCFG_734,
--	},
- 	{}
- };
+@@ -393,7 +392,7 @@ static int __init sq_api_init(void)
+ 	return 0;
+ 
+ out:
+-	kfree(sq_bitmap);
++	bitmap_free(sq_bitmap);
+ 	kmem_cache_destroy(sq_cache);
+ 
+ 	return ret;
+@@ -402,7 +401,7 @@ static int __init sq_api_init(void)
+ static void __exit sq_api_exit(void)
+ {
+ 	subsys_interface_unregister(&sq_interface);
+-	kfree(sq_bitmap);
++	bitmap_free(sq_bitmap);
+ 	kmem_cache_destroy(sq_cache);
+ }
  
 -- 
 2.34.1
