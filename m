@@ -2,388 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 150DB6E37D4
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 13:53:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36F6A6E37D5
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 13:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230159AbjDPLxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 07:53:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59388 "EHLO
+        id S229991AbjDPLz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 07:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbjDPLx0 (ORCPT
+        with ESMTP id S230036AbjDPLzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 07:53:26 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0B2211B
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 04:53:24 -0700 (PDT)
-Received: from workpc.. (unknown [IPv6:2a00:1370:817e:4eb4:c5e6:4b85:1e3f:55e4])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5668B6603242;
-        Sun, 16 Apr 2023 12:53:22 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681646003;
-        bh=sqddcWUiE06YeLZPkiTfcRceF34Y3LsZ4KnYjbnMu0s=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UP5xeBqJS4VQFtlc3ur/90p2DlVGY8uUUhnfanMKiH/ddpQ2Wnkap9Da+mu4s+ANz
-         9o2IOsTkg5zPnh4zen7K2adK3W/Wte4Or3lousanFKSTaesD60PezgWqu8yD4/WuKL
-         eKeYwjzW7JRVRivG4EhJ08BFyxLvcwfWDxNmHNNTnDtj7hV4JrheI6HyEkCgh/BBaX
-         C3iJ6fu3/NeIHP2tyUIICtDmCU+48R/TVJP7OCYgJ7V8FGmV3375W0SVUZGtrNr5h+
-         5CAf+WC77jKUoyDz62cb0ESVDtkUCwB9ztxUHzS2al3TXZHNuOPyLZ0zI5pyax8ufj
-         G6gORnanW/SDA==
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     David Airlie <airlied@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Rob Clark <robdclark@gmail.com>,
-        =?UTF-8?q?Marek=20Ol=C5=A1=C3=A1k?= <maraeo@gmail.com>,
-        Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
-        Emil Velikov <emil.velikov@collabora.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org
-Subject: [PATCH v6 3/3] drm/virtio: Support sync objects
-Date:   Sun, 16 Apr 2023 14:52:37 +0300
-Message-Id: <20230416115237.798604-4-dmitry.osipenko@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230416115237.798604-1-dmitry.osipenko@collabora.com>
-References: <20230416115237.798604-1-dmitry.osipenko@collabora.com>
+        Sun, 16 Apr 2023 07:55:55 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9330F3A99
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 04:55:51 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-63b5ce4f069so927362b3a.1
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 04:55:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681646150; x=1684238150;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y8KZ3r9X7m+frzkUk71abgu3pE7RU14Dc/ipsaHwcko=;
+        b=XoMq0EVWI3nRgXwtqQFUyUpQLhUcLHer4Yo9nSw6D+lKunzd9B3jNIK72QJ5//v3MC
+         AHLPlQr7B2ZErB4zHnCN8YstKDjk17SWcGzlw85VLT2hzPKugGKLPvwcZDj/4zN2lKdx
+         RVIj5GTGwR1YeLaXGSi++0qJEwa0FGPg3JqdT7SXfnKqe6b6/iYHz549hUmsB6NGpGA7
+         K+0l2TtsYgNhBIuloGc5UyXr6vhrBSw/fpsF5BHjsK0CnpnAP5++BYMfp9SW+B3HcVTz
+         X3N46a5zN4P1zIHLZfD6W13NuoCSAS6kC26fi0/KwwAKMMF3srCAr8Ld3MEv2h0XgJzT
+         HRrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681646150; x=1684238150;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Y8KZ3r9X7m+frzkUk71abgu3pE7RU14Dc/ipsaHwcko=;
+        b=Zn7GnEUrxEZGEGpGtrgPI5mI/xWeVMsLikxKW1JANaC+drrhWigMpeM6ISarCIJ1m2
+         W4t+lBVL7pwHPGtM2om5wt4rYFbLRxdB2SblUaX8SBJK4+R1qGsGga3AyYvr3RsP/oVy
+         F9DsObxvxWuyG+MJR1zuL6WAaTC2/urxBep3MCS4B8YYQtSF6ZVJBEgmgK135mizIgWw
+         zyX/u80q/cdraR2YIsLbi3JFnGTgNNjUHdSdUZdD6ASAhDrilyz1SGrmboNEX4xVXxoL
+         faC48XbQEkpX+FiBN9BgyfGJpWcI1GnEvr5GM8ha1x15qarLBu70fxFRLSt4PyGOktoT
+         WDCA==
+X-Gm-Message-State: AAQBX9fxHzaLotiH9vnTIp7gPjNrmV7OtHFqvQt7470w4dAGrzZL0aXP
+        bTsCN/MwQ6sYBItmpQqJ5D00+QYIfct2mYr4
+X-Google-Smtp-Source: AKy350ZwTAHDISNb23JdS5FOQLwjDaG3jTcMflOFrRkYG0ua5qimsZYO+gjQ3z/Y30C7TbgNhsjLcw==
+X-Received: by 2002:a05:6a00:1ac7:b0:63b:5f78:d6e1 with SMTP id f7-20020a056a001ac700b0063b5f78d6e1mr13277000pfv.16.1681646150178;
+        Sun, 16 Apr 2023 04:55:50 -0700 (PDT)
+Received: from hyeyoo ([211.108.101.96])
+        by smtp.gmail.com with ESMTPSA id c2-20020aa78802000000b0063b7a0b9cc5sm2555924pfo.186.2023.04.16.04.55.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Apr 2023 04:55:49 -0700 (PDT)
+Date:   Sun, 16 Apr 2023 20:55:39 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     david.keisarschm@mail.huji.ac.il
+Cc:     linux-kernel@vger.kernel.org, Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>, Jason@zx2c4.com,
+        linux-mm@kvack.org, ilay.bahat1@gmail.com, aksecurity@gmail.com
+Subject: Re: [PATCH v5 2/3]  Replace invocation of weak PRNG
+Message-ID: <ZDviOwOyYJ9Ese87@hyeyoo>
+References: <20230415173650.5458-1-david.keisarschm@mail.huji.ac.il>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230415173650.5458-1-david.keisarschm@mail.huji.ac.il>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add sync object DRM UAPI support to VirtIO-GPU driver. Sync objects
-support is needed by native context VirtIO-GPU Mesa drivers, it also will
-be used by Venus and Virgl contexts.
+On Sat, Apr 15, 2023 at 08:36:49PM +0300, david.keisarschm@mail.huji.ac.il wrote:
+> From: David Keisar Schmidt <david.keisarschm@mail.huji.ac.il>
+> 
+> The Slab allocator randomization inside slab_common.c
+> uses the prandom_u32 PRNG. That was added to prevent attackers to obtain
+> information on the heap state.
+> 
+> However, this PRNG turned out to be weak, as noted in commit c51f8f88d705
+> To fix it, we have changed the invocation of prandom_u32_state to get_random_u32
+> to ensure the PRNG is strong.
+> 
+> Since a modulo operation is applied right after that,
+> in the Fisher-Yates shuffle, we used get_random_u32_below, to achieve uniformity.
+> 
+> Signed-off-by: David Keisar Schmidt <david.keisarschm@mail.huji.ac.il>
+> ---
 
-Reviewed-by; Emil Velikov <emil.velikov@collabora.com>
-Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
----
- drivers/gpu/drm/virtio/virtgpu_drv.c    |   3 +-
- drivers/gpu/drm/virtio/virtgpu_submit.c | 219 ++++++++++++++++++++++++
- include/uapi/drm/virtgpu_drm.h          |  16 +-
- 3 files changed, 236 insertions(+), 2 deletions(-)
+same comment for the subject line.
 
-diff --git a/drivers/gpu/drm/virtio/virtgpu_drv.c b/drivers/gpu/drm/virtio/virtgpu_drv.c
-index add075681e18..a22155577152 100644
---- a/drivers/gpu/drm/virtio/virtgpu_drv.c
-+++ b/drivers/gpu/drm/virtio/virtgpu_drv.c
-@@ -176,7 +176,8 @@ static const struct drm_driver driver = {
- 	 * If KMS is disabled DRIVER_MODESET and DRIVER_ATOMIC are masked
- 	 * out via drm_device::driver_features:
- 	 */
--	.driver_features = DRIVER_MODESET | DRIVER_GEM | DRIVER_RENDER | DRIVER_ATOMIC,
-+	.driver_features = DRIVER_MODESET | DRIVER_GEM | DRIVER_RENDER | DRIVER_ATOMIC |
-+			   DRIVER_SYNCOBJ | DRIVER_SYNCOBJ_TIMELINE,
- 	.open = virtio_gpu_driver_open,
- 	.postclose = virtio_gpu_driver_postclose,
- 
-diff --git a/drivers/gpu/drm/virtio/virtgpu_submit.c b/drivers/gpu/drm/virtio/virtgpu_submit.c
-index cf3c04b16a7a..5a0f2526c1a0 100644
---- a/drivers/gpu/drm/virtio/virtgpu_submit.c
-+++ b/drivers/gpu/drm/virtio/virtgpu_submit.c
-@@ -14,11 +14,24 @@
- #include <linux/uaccess.h>
- 
- #include <drm/drm_file.h>
-+#include <drm/drm_syncobj.h>
- #include <drm/virtgpu_drm.h>
- 
- #include "virtgpu_drv.h"
- 
-+struct virtio_gpu_submit_post_dep {
-+	struct drm_syncobj *syncobj;
-+	struct dma_fence_chain *chain;
-+	u64 point;
-+};
-+
- struct virtio_gpu_submit {
-+	struct virtio_gpu_submit_post_dep *post_deps;
-+	unsigned int num_out_syncobjs;
-+
-+	struct drm_syncobj **in_syncobjs;
-+	unsigned int num_in_syncobjs;
-+
- 	struct virtio_gpu_object_array *buflist;
- 	struct drm_virtgpu_execbuffer *exbuf;
- 	struct virtio_gpu_fence *out_fence;
-@@ -59,6 +72,199 @@ static int virtio_gpu_dma_fence_wait(struct virtio_gpu_submit *submit,
- 	return 0;
- }
- 
-+static void virtio_gpu_free_syncobjs(struct drm_syncobj **syncobjs,
-+				     u32 nr_syncobjs)
-+{
-+	u32 i = nr_syncobjs;
-+
-+	while (i--) {
-+		if (syncobjs[i])
-+			drm_syncobj_put(syncobjs[i]);
-+	}
-+
-+	kvfree(syncobjs);
-+}
-+
-+static int
-+virtio_gpu_parse_deps(struct virtio_gpu_submit *submit)
-+{
-+	struct drm_virtgpu_execbuffer *exbuf = submit->exbuf;
-+	struct drm_virtgpu_execbuffer_syncobj syncobj_desc;
-+	size_t syncobj_stride = exbuf->syncobj_stride;
-+	u32 num_in_syncobjs = exbuf->num_in_syncobjs;
-+	struct drm_syncobj **syncobjs;
-+	int ret = 0, i;
-+
-+	if (!num_in_syncobjs)
-+		return 0;
-+
-+	/*
-+	 * kvalloc at first tries to allocate memory using kmalloc and
-+	 * falls back to vmalloc only on failure. It also uses GFP_NOWARN
-+	 * internally for allocations larger than a page size, preventing
-+	 * storm of KMSG warnings.
-+	 */
-+	syncobjs = kvcalloc(num_in_syncobjs, sizeof(*syncobjs), GFP_KERNEL);
-+	if (!syncobjs)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < num_in_syncobjs; i++) {
-+		u64 address = exbuf->in_syncobjs + i * syncobj_stride;
-+		struct dma_fence *fence;
-+
-+		memset(&syncobj_desc, 0, sizeof(syncobj_desc));
-+
-+		if (copy_from_user(&syncobj_desc,
-+				   u64_to_user_ptr(address),
-+				   min(syncobj_stride, sizeof(syncobj_desc)))) {
-+			ret = -EFAULT;
-+			break;
-+		}
-+
-+		if (syncobj_desc.flags & ~VIRTGPU_EXECBUF_SYNCOBJ_FLAGS) {
-+			ret = -EINVAL;
-+			break;
-+		}
-+
-+		ret = drm_syncobj_find_fence(submit->file, syncobj_desc.handle,
-+					     syncobj_desc.point, 0, &fence);
-+		if (ret)
-+			break;
-+
-+		ret = virtio_gpu_dma_fence_wait(submit, fence);
-+
-+		dma_fence_put(fence);
-+		if (ret)
-+			break;
-+
-+		if (syncobj_desc.flags & VIRTGPU_EXECBUF_SYNCOBJ_RESET) {
-+			syncobjs[i] = drm_syncobj_find(submit->file,
-+						       syncobj_desc.handle);
-+			if (!syncobjs[i]) {
-+				ret = -EINVAL;
-+				break;
-+			}
-+		}
-+	}
-+
-+	if (ret) {
-+		virtio_gpu_free_syncobjs(syncobjs, i);
-+		return ret;
-+	}
-+
-+	submit->num_in_syncobjs = num_in_syncobjs;
-+	submit->in_syncobjs = syncobjs;
-+
-+	return ret;
-+}
-+
-+static void virtio_gpu_reset_syncobjs(struct drm_syncobj **syncobjs,
-+				      u32 nr_syncobjs)
-+{
-+	u32 i;
-+
-+	for (i = 0; i < nr_syncobjs; i++) {
-+		if (syncobjs[i])
-+			drm_syncobj_replace_fence(syncobjs[i], NULL);
-+	}
-+}
-+
-+static void
-+virtio_gpu_free_post_deps(struct virtio_gpu_submit_post_dep *post_deps,
-+			  u32 nr_syncobjs)
-+{
-+	u32 i = nr_syncobjs;
-+
-+	while (i--) {
-+		kfree(post_deps[i].chain);
-+		drm_syncobj_put(post_deps[i].syncobj);
-+	}
-+
-+	kvfree(post_deps);
-+}
-+
-+static int virtio_gpu_parse_post_deps(struct virtio_gpu_submit *submit)
-+{
-+	struct drm_virtgpu_execbuffer *exbuf = submit->exbuf;
-+	struct drm_virtgpu_execbuffer_syncobj syncobj_desc;
-+	struct virtio_gpu_submit_post_dep *post_deps;
-+	u32 num_out_syncobjs = exbuf->num_out_syncobjs;
-+	size_t syncobj_stride = exbuf->syncobj_stride;
-+	int ret = 0, i;
-+
-+	if (!num_out_syncobjs)
-+		return 0;
-+
-+	post_deps = kvcalloc(num_out_syncobjs, sizeof(*post_deps), GFP_KERNEL);
-+	if (!post_deps)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < num_out_syncobjs; i++) {
-+		u64 address = exbuf->out_syncobjs + i * syncobj_stride;
-+
-+		memset(&syncobj_desc, 0, sizeof(syncobj_desc));
-+
-+		if (copy_from_user(&syncobj_desc,
-+				   u64_to_user_ptr(address),
-+				   min(syncobj_stride, sizeof(syncobj_desc)))) {
-+			ret = -EFAULT;
-+			break;
-+		}
-+
-+		post_deps[i].point = syncobj_desc.point;
-+
-+		if (syncobj_desc.flags) {
-+			ret = -EINVAL;
-+			break;
-+		}
-+
-+		if (syncobj_desc.point) {
-+			post_deps[i].chain = dma_fence_chain_alloc();
-+			if (!post_deps[i].chain) {
-+				ret = -ENOMEM;
-+				break;
-+			}
-+		}
-+
-+		post_deps[i].syncobj = drm_syncobj_find(submit->file,
-+							syncobj_desc.handle);
-+		if (!post_deps[i].syncobj) {
-+			kfree(post_deps[i].chain);
-+			ret = -EINVAL;
-+			break;
-+		}
-+	}
-+
-+	if (ret) {
-+		virtio_gpu_free_post_deps(post_deps, i);
-+		return ret;
-+	}
-+
-+	submit->num_out_syncobjs = num_out_syncobjs;
-+	submit->post_deps = post_deps;
-+
-+	return 0;
-+}
-+
-+static void
-+virtio_gpu_process_post_deps(struct virtio_gpu_submit *submit)
-+{
-+	struct virtio_gpu_submit_post_dep *post_deps = submit->post_deps;
-+	struct dma_fence *fence = &submit->out_fence->f;
-+	u32 i;
-+
-+	for (i = 0; i < submit->num_out_syncobjs; i++) {
-+		if (post_deps[i].chain) {
-+			drm_syncobj_add_point(post_deps[i].syncobj,
-+					      post_deps[i].chain,
-+					      fence, post_deps[i].point);
-+			post_deps[i].chain = NULL;
-+		} else {
-+			drm_syncobj_replace_fence(post_deps[i].syncobj, fence);
-+		}
-+	}
-+}
-+
- static int virtio_gpu_fence_event_create(struct drm_device *dev,
- 					 struct drm_file *file,
- 					 struct virtio_gpu_fence *fence,
-@@ -122,6 +328,10 @@ static int virtio_gpu_init_submit_buflist(struct virtio_gpu_submit *submit)
- 
- static void virtio_gpu_cleanup_submit(struct virtio_gpu_submit *submit)
- {
-+	virtio_gpu_reset_syncobjs(submit->in_syncobjs, submit->num_in_syncobjs);
-+	virtio_gpu_free_syncobjs(submit->in_syncobjs, submit->num_in_syncobjs);
-+	virtio_gpu_free_post_deps(submit->post_deps, submit->num_out_syncobjs);
-+
- 	if (!IS_ERR(submit->buf))
- 		kvfree(submit->buf);
- 
-@@ -288,6 +498,14 @@ int virtio_gpu_execbuffer_ioctl(struct drm_device *dev, void *data,
- 	 * optimize the path by proceeding directly to the submission
- 	 * to virtio after the waits.
- 	 */
-+	ret = virtio_gpu_parse_post_deps(&submit);
-+	if (ret)
-+		goto cleanup;
-+
-+	ret = virtio_gpu_parse_deps(&submit);
-+	if (ret)
-+		goto cleanup;
-+
- 	ret = virtio_gpu_wait_in_fence(&submit);
- 	if (ret)
- 		goto cleanup;
-@@ -303,6 +521,7 @@ int virtio_gpu_execbuffer_ioctl(struct drm_device *dev, void *data,
- 	 * the job submission path.
- 	 */
- 	virtio_gpu_install_out_fence_fd(&submit);
-+	virtio_gpu_process_post_deps(&submit);
- 	virtio_gpu_complete_submit(&submit);
- cleanup:
- 	virtio_gpu_cleanup_submit(&submit);
-diff --git a/include/uapi/drm/virtgpu_drm.h b/include/uapi/drm/virtgpu_drm.h
-index 7b158fcb02b4..b1d0e56565bc 100644
---- a/include/uapi/drm/virtgpu_drm.h
-+++ b/include/uapi/drm/virtgpu_drm.h
-@@ -64,6 +64,16 @@ struct drm_virtgpu_map {
- 	__u32 pad;
- };
- 
-+#define VIRTGPU_EXECBUF_SYNCOBJ_RESET		0x01
-+#define VIRTGPU_EXECBUF_SYNCOBJ_FLAGS ( \
-+		VIRTGPU_EXECBUF_SYNCOBJ_RESET | \
-+		0)
-+struct drm_virtgpu_execbuffer_syncobj {
-+	__u32 handle;
-+	__u32 flags;
-+	__u64 point;
-+};
-+
- /* fence_fd is modified on success if VIRTGPU_EXECBUF_FENCE_FD_OUT flag is set. */
- struct drm_virtgpu_execbuffer {
- 	__u32 flags;
-@@ -73,7 +83,11 @@ struct drm_virtgpu_execbuffer {
- 	__u32 num_bo_handles;
- 	__s32 fence_fd; /* in/out fence fd (see VIRTGPU_EXECBUF_FENCE_FD_IN/OUT) */
- 	__u32 ring_idx; /* command ring index (see VIRTGPU_EXECBUF_RING_IDX) */
--	__u32 pad;
-+	__u32 syncobj_stride; /* size of @drm_virtgpu_execbuffer_syncobj */
-+	__u32 num_in_syncobjs;
-+	__u32 num_out_syncobjs;
-+	__u64 in_syncobjs;
-+	__u64 out_syncobjs;
- };
- 
- #define VIRTGPU_PARAM_3D_FEATURES 1 /* do we have 3D features in the hw */
--- 
-2.39.2
+> 
+> This fifth series changes only the arch/x86/mm/kaslr patch.
+> 
+> Changes since v3:
+> * edited commit message.
+> 
+> Changes since v2:
+> 
+> * replaced instances of get_random_u32 with get_random_u32_below
+>     in mm/slab_common.c.
+> 
+>  mm/slab_common.c | 11 +++--------
+>  1 file changed, 3 insertions(+), 8 deletions(-)
+> 
+> diff --git a/mm/slab_common.c b/mm/slab_common.c
+> index bf4e777cf..361da2191 100644
+> --- a/mm/slab_common.c
+> +++ b/mm/slab_common.c
+> @@ -1146,7 +1146,7 @@ EXPORT_SYMBOL(kmalloc_large_node);
+>  
+>  #ifdef CONFIG_SLAB_FREELIST_RANDOM
+>  /* Randomize a generic freelist */
+> -static void freelist_randomize(struct rnd_state *state, unsigned int *list,
+> +static void freelist_randomize(unsigned int *list,
+>  			       unsigned int count)
+>  {
+>  	unsigned int rand;
+> @@ -1157,8 +1157,7 @@ static void freelist_randomize(struct rnd_state *state, unsigned int *list,
+>  
+>  	/* Fisher-Yates shuffle */
+>  	for (i = count - 1; i > 0; i--) {
+> -		rand = prandom_u32_state(state);
+> -		rand %= (i + 1);
+> +		rand = get_random_u32_below(i+1);
 
+same here.
+
+otherwise looks good to me.
+
+
+>  		swap(list[i], list[rand]);
+>  	}
+>  }
+> @@ -1167,7 +1166,6 @@ static void freelist_randomize(struct rnd_state *state, unsigned int *list,
+>  int cache_random_seq_create(struct kmem_cache *cachep, unsigned int count,
+>  				    gfp_t gfp)
+>  {
+> -	struct rnd_state state;
+>  
+>  	if (count < 2 || cachep->random_seq)
+>  		return 0;
+> @@ -1176,10 +1174,7 @@ int cache_random_seq_create(struct kmem_cache *cachep, unsigned int count,
+>  	if (!cachep->random_seq)
+>  		return -ENOMEM;
+>  
+> -	/* Get best entropy at this stage of boot */
+> -	prandom_seed_state(&state, get_random_long());
+> -
+> -	freelist_randomize(&state, cachep->random_seq, count);
+> +	freelist_randomize(cachep->random_seq, count);
+>  	return 0;
+>  }
+>  
+> -- 
+> 2.37.3
+> 
