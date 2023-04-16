@@ -2,81 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D0506E3BE9
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 22:31:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF1496E3BF2
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 22:39:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbjDPU3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 16:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44768 "EHLO
+        id S229458AbjDPUjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 16:39:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDPU3c (ORCPT
+        with ESMTP id S229519AbjDPUjG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 16:29:32 -0400
-Received: from st43p00im-ztfb10061701.me.com (st43p00im-ztfb10061701.me.com [17.58.63.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 571A21FD4
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 13:29:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1681676969; bh=QOcoWbCcjc4S5ZBNccicx/PEXIx3g1kNuRyf36MJ7dQ=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=jmZwo9Qkr9SI/MA8gviFhsfb8kCAYV2NQx2LsTm3FzvbenVDtYoKOlWaHwfiamcwz
-         9DgJGVqPg3w6Sc3gmRcRxDtKTNrQPYrqrxXxZmm9xPmZPP8OssmOsMam/Mu4rhcvvh
-         tpRdMctppZ9zmqO83vJFDjySg00nQyX1BBiCp5rVOX15ixrywTEJUdSz3swCJMzboe
-         clUuldfLwvptns5vEZQ1WOpgFYY6WnhTLEmUXm4Z2mHXTKJLaQBW7p1NPzWXLQUtNi
-         Cb1Hh1ckTosMiemwj7j4W8aRMB49wa7w4B2HmChjjAB6TyRP2sYsRwAaLpFnwjwvkC
-         wQ1tHu9A0qnsQ==
-Received: from localhost (st43p00im-dlb-asmtp-mailmevip.me.com [17.42.251.41])
-        by st43p00im-ztfb10061701.me.com (Postfix) with ESMTPSA id 067712E0FD1;
-        Sun, 16 Apr 2023 20:29:28 +0000 (UTC)
-From:   Alain Volmat <avolmat@me.com>
-To:     philippe.cornu@foss.st.com, arnd@arnd.de
-Cc:     dri-devel@lists.freedesktop.org, patrice.chotard@foss.st.com,
-        Alain Volmat <avolmat@me.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH] MAINTAINERS: Update Alain Volmat's email address for drm/sti
-Date:   Sun, 16 Apr 2023 22:27:47 +0200
-Message-Id: <20230416202747.62479-1-avolmat@me.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 16 Apr 2023 16:39:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1242117
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 13:38:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681677498;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1gmjEPQ1Z2707YDu2q8TGB4gvRcqR+kjHgJ0ZU8q2GE=;
+        b=UABSA020eadNdRYgNssvgDc9HlSzrAN2ANud2WR7U5X3ZPIzghaOt7q32NRKV+FRdEtkE2
+        I8vuMMnXYhcYu0zZ12/sSyl4eKVcFljgMDckuskuhG2lepF695Pqy2m//FDNoX+wq4lDAL
+        155AuKsrXsv4J49Ra5h1w45bX8Apmzs=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-637-wBcq_esJOc-D5xoNm3eyWA-1; Sun, 16 Apr 2023 16:38:17 -0400
+X-MC-Unique: wBcq_esJOc-D5xoNm3eyWA-1
+Received: by mail-ed1-f69.google.com with SMTP id n6-20020a5099c6000000b00502c2f26133so22456765edb.12
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 13:38:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681677496; x=1684269496;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1gmjEPQ1Z2707YDu2q8TGB4gvRcqR+kjHgJ0ZU8q2GE=;
+        b=JWPSNXpd2YLrLdFGqQu7mbl+Nsoeh5Sp+WhgG7tojcNbvboQhi//hmr4eDAH++J8Ju
+         AMQM92bYnkuA2EmklP3p2/WQu54ZDXEvfh3UToJv5EPbj8fbzel2HAageqHr+fKqNpgj
+         gwPMOF17UkFBSebjecASmXDCJd0azCBBYFK2IC/GgpKaFOUb/Zcm6vt1N9YOYEEX/OIw
+         SvQUCnekf1KqOQ10Ro3q9l/oT+tzQbpYSbaMXIgpT2WQsKL1DCEQCcncCPXZTn5ZSEjK
+         ayOvpcrObWD+mYjV3NY0PLLTfAHbkgNmAY72DV0wv7XBmvpulJ+h/iu48cN9ZvM7HRqQ
+         777w==
+X-Gm-Message-State: AAQBX9dIzGjCWrjTP0bGLpBWfA+8prTMWd1+tNB2yDUpw1gTrJDaVBuI
+        22omrUU2xu0hf5ziUq6m5CiTGiEIvcFVd71NiWs21DQ3mJC5s5fihkuIxtP/fgCLuChy/qGmI9n
+        /KOABbPg5n8XbukcNilVjZ0uK
+X-Received: by 2002:a17:906:bc42:b0:94f:5e17:e80d with SMTP id s2-20020a170906bc4200b0094f5e17e80dmr2534421ejv.45.1681677495993;
+        Sun, 16 Apr 2023 13:38:15 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZXEZ6g56atv06YaLfflLN9idtJzsyZtc6S7GD+9Ye4l6xSIop1CrwmmH2GLzP5maJM6si0Jg==
+X-Received: by 2002:a17:906:bc42:b0:94f:5e17:e80d with SMTP id s2-20020a170906bc4200b0094f5e17e80dmr2534403ejv.45.1681677495687;
+        Sun, 16 Apr 2023 13:38:15 -0700 (PDT)
+Received: from redhat.com ([2.52.136.129])
+        by smtp.gmail.com with ESMTPSA id xg12-20020a170907320c00b0094ee99eeb01sm3877035ejb.150.2023.04.16.13.38.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Apr 2023 13:38:15 -0700 (PDT)
+Date:   Sun, 16 Apr 2023 16:38:11 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Alvaro Karsz <alvaro.karsz@solid-run.com>
+Cc:     jasowang@redhat.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] virtio-net: reject small vring sizes
+Message-ID: <20230416163751-mutt-send-email-mst@kernel.org>
+References: <20230416074607.292616-1-alvaro.karsz@solid-run.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: 1xLIxmdQxK7MZgk1QyxRp-bDz1-kadNu
-X-Proofpoint-ORIG-GUID: 1xLIxmdQxK7MZgk1QyxRp-bDz1-kadNu
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.883,17.0.605.474.0000000_definitions?=
- =?UTF-8?Q?=3D2022-06-21=5F08:2020-02-14=5F02,2022-06-21=5F08,2020-01-23?=
- =?UTF-8?Q?=5F02_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxlogscore=687
- suspectscore=0 clxscore=1011 mlxscore=0 spamscore=0 adultscore=0
- malwarescore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2304160194
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230416074607.292616-1-alvaro.karsz@solid-run.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update my email address for maintainer of the STi DRM driver.
+On Sun, Apr 16, 2023 at 10:46:07AM +0300, Alvaro Karsz wrote:
+> Check vring size and fail probe if a transmit/receive vring size is
+> smaller than MAX_SKB_FRAGS + 2.
+> 
+> At the moment, any vring size is accepted. This is problematic because
+> it may result in attempting to transmit a packet with more fragments
+> than there are descriptors in the ring.
+> 
+> Furthermore, it leads to an immediate bug:
+> 
+> The condition: (sq->vq->num_free >= 2 + MAX_SKB_FRAGS) in
+> virtnet_poll_cleantx and virtnet_poll_tx always evaluates to false,
+> so netif_tx_wake_queue is not called, leading to TX timeouts.
+> 
+> Signed-off-by: Alvaro Karsz <alvaro.karsz@solid-run.com>
+> ---
+>  drivers/net/virtio_net.c | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+> 
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 2396c28c012..59676252c5c 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -3745,6 +3745,26 @@ static int init_vqs(struct virtnet_info *vi)
+>  	return ret;
+>  }
+>  
+> +static int virtnet_validate_vqs(struct virtnet_info *vi)
+> +{
+> +	u32 i, min_size = roundup_pow_of_two(MAX_SKB_FRAGS + 2);
 
-Signed-off-by: Alain Volmat <avolmat@me.com>
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+why power of two?
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 0e64787aace8..3cec7ad72389 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6952,7 +6952,7 @@ F:	Documentation/devicetree/bindings/display/rockchip/
- F:	drivers/gpu/drm/rockchip/
- 
- DRM DRIVERS FOR STI
--M:	Alain Volmat <alain.volmat@foss.st.com>
-+M:	Alain Volmat <avolmat@me.com>
- L:	dri-devel@lists.freedesktop.org
- S:	Maintained
- T:	git git://anongit.freedesktop.org/drm/drm-misc
--- 
-2.34.1
+> +
+> +	/* Transmit/Receive vring size must be at least MAX_SKB_FRAGS + 2
+> +	 * (fragments + linear part + virtio header)
+> +	 */
+> +	for (i = 0; i < vi->max_queue_pairs; i++) {
+> +		if (virtqueue_get_vring_size(vi->sq[i].vq) < min_size ||
+> +		    virtqueue_get_vring_size(vi->rq[i].vq) < min_size) {
+> +			dev_warn(&vi->vdev->dev,
+> +				 "Transmit/Receive virtqueue vring size must be at least %u\n",
+> +				 min_size);
+> +			return -EINVAL;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  #ifdef CONFIG_SYSFS
+>  static ssize_t mergeable_rx_buffer_size_show(struct netdev_rx_queue *queue,
+>  		char *buf)
+> @@ -4056,6 +4076,10 @@ static int virtnet_probe(struct virtio_device *vdev)
+>  	if (err)
+>  		goto free;
+>  
+> +	err = virtnet_validate_vqs(vi);
+> +	if (err)
+> +		goto free_vqs;
+> +
+>  #ifdef CONFIG_SYSFS
+>  	if (vi->mergeable_rx_bufs)
+>  		dev->sysfs_rx_queue_group = &virtio_net_mrg_rx_group;
+> -- 
+> 2.34.1
 
