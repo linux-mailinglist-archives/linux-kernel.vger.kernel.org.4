@@ -2,89 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49AD76E390D
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 16:05:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE3846E390F
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 16:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbjDPOFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 10:05:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
+        id S230306AbjDPOHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 10:07:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbjDPOFG (ORCPT
+        with ESMTP id S229929AbjDPOHq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 10:05:06 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C56B268F;
-        Sun, 16 Apr 2023 07:05:05 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id s6so322432iow.11;
-        Sun, 16 Apr 2023 07:05:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681653904; x=1684245904;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=30p0VyHgAhZaeHPDj7owhm6SETRtyngxJZwQkQYURP8=;
-        b=KZC7hpxBc0dctYC9pNHS5dJWm21iCSyq68i06EcavxRstL4vrDTU0aGzHr8EPtenOp
-         8lQAMxYWHDLqZ9bMiC8MKRjyHku8FFHoL4XmxWsIuPG4vAiC5yca6/Ls99nZ8HbLKdZU
-         Rq1F0sHfKwnFofV3qpHlFuqRkvVsYVorsxAkgY1RDlt7SNUQL7/BK/B6qd02eESIP+nC
-         58MkLGKoocPKb/u2TTcVgtPUwzBpyKmEtcNGgivoun5AdtHUQxj3wdAXeJHvIS4di4Aa
-         T2PuFIyYgBId0iQ7Kk7zDz2OMeJfTRD/hrpWDXAzFGqXSrbCybgpH1xx/QhEWycAL1J3
-         Q30g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681653904; x=1684245904;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=30p0VyHgAhZaeHPDj7owhm6SETRtyngxJZwQkQYURP8=;
-        b=MyDE/ZMtfRjFl9RUwqxL4oOT7DqAruslZDPKzH0+edA4EOu7FEm9hn2k/FGPQY7qty
-         CZqqb9zzy/PMLwxmJVbi327EVI/6tk/EEnw2Qn4tlQEnp7DrgQ6ZlxxVK/AcWkhqMjWv
-         WhP2+jDZS28z3r20Ml5ydbzmX4bJq3mPrfVRflZ8QsdZlaDKC/zPKkrXdyqpJwjoq/Hq
-         /BbzUuVpOU4RoiQZ/5ZpYO6oONT3MQGskVrzE6jOS++F4a6hrK/EIhUmZ6D+2ivj7kQr
-         i7aYGQ1hsXtgdaDjzBrgnalXubqzCgLnOiDc3qu4ZFUOhCL78XFIzVd3UlLrEcPfP/9I
-         V4Tw==
-X-Gm-Message-State: AAQBX9eoESI1GUdV5fh5RtxNXr2BdGe+nCU6k2cqg4B1KUfDzXOSQRMm
-        P9g58LG88/ZWiigWm5CWFg9tlQjzq8U=
-X-Google-Smtp-Source: AKy350bSBDEjbhark7AVl01VOcBjUDz+jChmoI0BbrGeKYScCTm8kzQ99RobafqXnJqhN6gPGjF19A==
-X-Received: by 2002:a5d:8d91:0:b0:760:b5ad:ae18 with SMTP id b17-20020a5d8d91000000b00760b5adae18mr7221826ioj.0.1681653904615;
-        Sun, 16 Apr 2023 07:05:04 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m44-20020a026a6c000000b0040b1ecc3ec4sm2548340jaf.11.2023.04.16.07.05.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 07:05:04 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 16 Apr 2023 07:05:02 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jdelvare@suse.com
-Subject: Re: [PATCH v2 2/2] hwmon: (pmbus/ibm-cffps) Use default debugfs
- attributes and lock function
-Message-ID: <7110436b-432f-4fcc-bd90-da5645a60676@roeck-us.net>
-References: <20230412161526.252294-1-eajames@linux.ibm.com>
- <20230412161526.252294-3-eajames@linux.ibm.com>
+        Sun, 16 Apr 2023 10:07:46 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41701BEE;
+        Sun, 16 Apr 2023 07:07:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=2lY/TOEU604shlpMp7GNPTJiVI9cBfonl1OqK24KXgQ=; b=cf8NXC6uIy4cX5ndKCLS66cBL8
+        EaY8AcPjKM3d2zszKLlIFCW7iB8O7jyMYrVZSkVMWLDdlG0ZglUpYWwzqHWHeIWY6QAWEUHBOA/e/
+        xDiySoypXs7+aiOdz5u9bubV3usewS9TWfeg/JgHj1qwjDTQlSBNQnNqKW/xpxcDBEdLp+JiWV4oq
+        nfw5Tv2B9oGHYis+Aes4PNrQ6k43qtVv7BIsjvo+w8fExz35U0x06WpdT4wWtYKNIrM9k8zdYwTk8
+        TV95eAcLZLCqDGq/Jze6CJex5C0225bj+6bnkwf7rbTUc+bdv8vR5l1tqHGTJmXAECE4NUlR/4PNA
+        gwS8qH+Q==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1po32T-00AQai-Jl; Sun, 16 Apr 2023 14:07:33 +0000
+Date:   Sun, 16 Apr 2023 15:07:33 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Hannes Reinecke <hare@suse.de>,
+        Pankaj Raghav <p.raghav@samsung.com>,
+        "kbus >> Keith Busch" <kbusch@kernel.org>, brauner@kernel.org,
+        viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gost.dev@samsung.com
+Subject: Re: [RFC 0/4] convert create_page_buffers to create_folio_buffers
+Message-ID: <ZDwBJVmIN3tLFhXI@casper.infradead.org>
+References: <1e68a118-d177-a218-5139-c8f13793dbbf@suse.de>
+ <ZDn3XPMA024t+C1x@bombadil.infradead.org>
+ <ZDoMmtcwNTINAu3N@casper.infradead.org>
+ <ZDoZCJHQXhVE2KZu@bombadil.infradead.org>
+ <ZDodlnm2nvYxbvR4@casper.infradead.org>
+ <31765c8c-e895-4207-2b8c-39f6c7c83ece@suse.de>
+ <ZDraOHQHqeabyCvN@casper.infradead.org>
+ <ZDtPK5Qdts19bKY2@bombadil.infradead.org>
+ <ZDtuFux7FGlCMkC3@casper.infradead.org>
+ <ZDuHEolre/saj8iZ@bombadil.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230412161526.252294-3-eajames@linux.ibm.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <ZDuHEolre/saj8iZ@bombadil.infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 11:15:26AM -0500, Eddie James wrote:
-> Switch the driver to use the default debugfs attributes instead of
-> ones that provide the same data under different names. Use the lock
-> functions for the debugfs and led attributes, and simplify the input
-> history operation by dropping the timer and lock.
+On Sat, Apr 15, 2023 at 10:26:42PM -0700, Luis Chamberlain wrote:
+> On Sun, Apr 16, 2023 at 04:40:06AM +0100, Matthew Wilcox wrote:
+> > I don't think we
+> > should be overriding the aops, and if we narrow the scope of large folio
+> > support in blockdev t only supporting folio_size == LBA size, it becomes
+> > much more feasible.
 > 
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> I'm trying to think of the possible use cases where folio_size != LBA size
+> and I cannot immediately think of some. Yes there are cases where a
+> filesystem may use a different block for say meta data than data, but that
+> I believe is side issue, ie, read/writes for small metadata would have
+> to be accepted. At least for NVMe we have metadata size as part of the
+> LBA format, but from what I understand no Linux filesystem yet uses that.
 
-Applied.
+NVMe metadata is per-block metadata -- a CRC or similar.  Filesystem
+metadata is things like directories, inode tables, free space bitmaps,
+etc.
 
-Thanks,
-Guenter
+> struct buffer_head *alloc_page_buffers(struct page *page, unsigned long size,   
+>                 bool retry)                                                     
+> { 
+[...]
+>         head = NULL;  
+>         offset = PAGE_SIZE;                                                     
+>         while ((offset -= size) >= 0) {                                         
+> 
+> I see now what you say about the buffer head being of the block size
+> bh->b_size = size above.
+
+Yes, just changing that to 'offset = page_size(page);' will do the trick.
+
+> > sb_bread() is used by most filesystems, and the buffer cache aliases
+> > into the page cache.
+> 
+> I see thanks. I checked what xfs does and its xfs_readsb() uses its own
+> xfs_buf_read_uncached(). It ends up calling xfs_buf_submit() and
+> xfs_buf_ioapply_map() does it's own submit_bio(). So I'm curious why
+> they did that.
+
+IRIX didn't have an sb_bread() ;-)
+
+> > In userspace, if I run 'dd if=blah of=/dev/sda1 bs=512 count=1 seek=N',
+> > I can overwrite the superblock.  Do we want filesystems to see that
+> > kind of vandalism, or do we want the mounted filesystem to have its
+> > own copy of the data and overwrite what userspace wrote the next time it
+> > updates the superblock?
+> 
+> Oh, what happens today?
+
+Depends on the filesystem, I think?  Not really sure, to be honest.
+
