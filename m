@@ -2,96 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F336E394E
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 16:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA38D6E3952
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 16:35:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230226AbjDPOdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 10:33:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47252 "EHLO
+        id S230288AbjDPOfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 10:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjDPOdk (ORCPT
+        with ESMTP id S229791AbjDPOfR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 10:33:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446AB1FD7
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 07:33:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D56366115C
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 14:33:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81BB3C433EF;
-        Sun, 16 Apr 2023 14:33:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681655618;
-        bh=7pAQdp9zOWqx4avhF2Eg2nBD/7QWu9T59ZFFoTswNMI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QHh9ZH95o94PQUzy68vuDqHSGC22vg3Bwk+P2SC6x0wkqD/rwcwlr/l/bbv4SQVzd
-         fR2tDRhzTIAw3QHBOoRajU1jbxs6ZYXkTIUU7xMUZUz3R48vY1sCrDP1GkMZTickrk
-         hDTm5BOdocydSm8ZgRdz/unhNV/ncpWolWTFhbNMvMMOrn8mgWaOE6m5/G2bwWm6Gv
-         McDlV28jnKiMBDRxlTqJ+1Bui6ekq0VSBTMJCuL5eb16BmPYnS6Ay1ql/gUpyYNdyR
-         UtbUFw37rAz0YV/55Fdqwj8b2b/I3MPQq7XEud19i5qsY0Gl2KkRm1QPLnG1cNeBvR
-         pfJ1yoJIXEWBw==
-Message-ID: <b7604342-1d56-1c15-1526-380a4fdbbb41@kernel.org>
-Date:   Sun, 16 Apr 2023 22:33:36 +0800
+        Sun, 16 Apr 2023 10:35:17 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F887210B;
+        Sun, 16 Apr 2023 07:35:17 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id ca18e2360f4ac-760f5070ccfso8251639f.2;
+        Sun, 16 Apr 2023 07:35:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681655716; x=1684247716;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=W9KpJPbflQXiEf80alEmLHqabDQeRGmdrd1yTysWYt0=;
+        b=qAZFn2gH3LvXz4mZOwXu789cAJoBQsrJOy4++peDdsvhJphXOmrT1jU1POKwf0LS8s
+         YFmiJV4LWgPcc1vUWzy1i4oqpifC2FV8ZgmSPfoGN5trktOsWYjmMUeDaBSSGObuIP1I
+         +SiLYcS2wsRwidD4TZ9Om5dW0foOiW552wKrdevdUumP/LFJIGdg7k/xbiY2Lplv0qK7
+         0KJnF/rEpzkPam7tKscmaVNoEpuYNiPKjyrme1SN1Ha1lpfPPY2NRk3udTPKY8k12IvS
+         1cj8CJTd8HHknE+VLqIuRkgub8oExfLhKnZVGNBYAXar9wotnW1dltLbcWrfFYjks/Bz
+         Q54w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681655716; x=1684247716;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=W9KpJPbflQXiEf80alEmLHqabDQeRGmdrd1yTysWYt0=;
+        b=C4mIbIZFFgP9zDtE3CbpB7LxJT0X4rBlJWLNEPQcT08eft0z5VK5u2WEp060h/9ln4
+         ytgUXLfBJP86tko1mrA2Y7O8haGzTZGOD5wUYoMB5QY2/Mv6DKFtJLYc1hdsRyR3LY9b
+         dNu+0m3Q+mwcyvQ8RW/RQLHdGW9FjOunjWJ58N694fBOhnQHkkcWsdvxq8dPbrteDUYA
+         9rl4ZjcLQAdkuSE0UOU4yM0EEeVM1HQOAPUnF//NdMZSOwOuX/DBzhenTfQSy3DQ6JCW
+         1f7av2WgnPVYmVTut8wWUEw/rqxEfoLikPqBhmjb7dhoZ7n0x91FC28C3kqXHxE/NQHj
+         FTIg==
+X-Gm-Message-State: AAQBX9eoT+eT2/KH/KftKJZjaMnS1qLVnzmBrOBTV/J0JC6p3Z5MHEpP
+        ov3CBQMdV7ObD2Pb6p0UrhIKK4WIuVQ=
+X-Google-Smtp-Source: AKy350YAVnDhsREuWeyJPfIshNjOz1BwxduyrE7Og3xQsyke8n4KwvohLauIkunC/pamjPDJBbmDwA==
+X-Received: by 2002:a92:c8cf:0:b0:32a:b78f:e7d5 with SMTP id c15-20020a92c8cf000000b0032ab78fe7d5mr4595380ilq.27.1681655716411;
+        Sun, 16 Apr 2023 07:35:16 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l15-20020a02cd8f000000b0040bd610a08asm2626623jap.18.2023.04.16.07.35.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Apr 2023 07:35:16 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 16 Apr 2023 07:35:14 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Babu Moger <babu.moger@amd.com>
+Cc:     clemens@ladisch.de, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Baski.Kannan@amd.com,
+        yannick.hemery@corp.ovh.com
+Subject: Re: [PATCH] hwmon: (k10temp): Check range scale when CUR_TEMP
+ register is read-write
+Message-ID: <1afe95f1-cea1-418f-b9a1-23be6817157f@roeck-us.net>
+References: <20230413213958.847634-1-babu.moger@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] erofs: stop parsing non-compact HEAD index if clusterofs
- is invalid
-Content-Language: en-US
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>,
-        linux-erofs@lists.ozlabs.org
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        syzbot+aafb3f37cfeb6534c4ac@syzkaller.appspotmail.com
-References: <20230410173714.104604-1-hsiangkao@linux.alibaba.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20230410173714.104604-1-hsiangkao@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230413213958.847634-1-babu.moger@amd.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/11 1:37, Gao Xiang wrote:
-> Syzbot generated a crafted image [1] with a non-compact HEAD index of
-> clusterofs 33024 while valid numbers should be 0 ~ lclustersize-1,
-> which causes the following unexpected behavior as below:
+On Thu, Apr 13, 2023 at 04:39:58PM -0500, Babu Moger wrote:
+> From: Babu Moger <Babu.Moger@amd.com>
 > 
->   BUG: unable to handle page fault for address: fffff52101a3fff9
->   #PF: supervisor read access in kernel mode
->   #PF: error_code(0x0000) - not-present page
->   PGD 23ffed067 P4D 23ffed067 PUD 0
->   Oops: 0000 [#1] PREEMPT SMP KASAN
->   CPU: 1 PID: 4398 Comm: kworker/u5:1 Not tainted 6.3.0-rc6-syzkaller-g09a9639e56c0 #0
->   Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
->   Workqueue: erofs_worker z_erofs_decompressqueue_work
->   RIP: 0010:z_erofs_decompress_queue+0xb7e/0x2b40
->   ...
->   Call Trace:
->    <TASK>
->    z_erofs_decompressqueue_work+0x99/0xe0
->    process_one_work+0x8f6/0x1170
->    worker_thread+0xa63/0x1210
->    kthread+0x270/0x300
->    ret_from_fork+0x1f/0x30
+> Spec says, when CUR_TEMP_TJ_SEL == 3 and CUR_TEMP_RANGE_SEL == 0,
+> it should use RangeUnadjusted is 0, which is (CurTmp*0.125 -49) C. The
+> CUR_TEMP register is read-write when CUR_TEMP_TJ_SEL == 3 (bit 17-16).
 > 
-> Note that normal images or images using compact indexes are not
-> impacted.  Let's fix this now.
+> Add the check to detect it.
 > 
-> [1] https://lore.kernel.org/r/000000000000ec75b005ee97fbaa@google.com
+> Sensors command's output before the patch.
+> $sensors
+>  k10temp-pci-00c3
+>  Adapter: PCI adapter
+>  Tctl:         +76.6°C <- Wrong value
+>  Tccd1:        +26.5°C
+>  Tccd2:        +27.5°C
+>  Tccd3:        +27.2°C
+>  Tccd4:        +27.5°C
+>  Tccd5:        +26.0°C
+>  Tccd6:        +26.2°C
+>  Tccd7:        +25.0°C
+>  Tccd8:        +26.5°C
 > 
-> Reported-by: syzbot+aafb3f37cfeb6534c4ac@syzkaller.appspotmail.com
-> Fixes: 02827e1796b3 ("staging: erofs: add erofs_map_blocks_iter")
-> Fixes: 152a333a5895 ("staging: erofs: add compacted compression indexes support")
-> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+> Sensors command's output after the patch.
+> $sensors
+>  k10temp-pci-00c3
+>  Adapter: PCI adapter
+>  Tctl:         +28.8°C <- corrected value
+>  Tccd1:        +27.5°C
+>  Tccd2:        +28.5°C
+>  Tccd3:        +28.5°C
+>  Tccd4:        +28.5°C
+>  Tccd5:        +27.0°C
+>  Tccd6:        +27.5°C
+>  Tccd7:        +27.0°C
+>  Tccd8:        +27.5°C
+> 
+> Signed-off-by: Babu Moger <babu.moger@amd.com>
 
-Reviewed-by: Chao Yu <chao@kernel.org>
+Applied. Please update your e-mail address configuration to avoid the
+following checkpatch message.
+
+CHECK: From:/Signed-off-by: email comments mismatch: 'From: Babu Moger <Babu.Moger@amd.com>' != 'Signed-off-by: Babu Moger <babu.moger@amd.com>'
 
 Thanks,
+Guenter
