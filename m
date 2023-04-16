@@ -2,181 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5AA36E34B7
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 04:19:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2CB6E34BC
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 04:32:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbjDPCTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 22:19:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41664 "EHLO
+        id S229924AbjDPCb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 22:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjDPCTf (ORCPT
+        with ESMTP id S229462AbjDPCb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 22:19:35 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44072212E;
-        Sat, 15 Apr 2023 19:19:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681611574; x=1713147574;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=QKD1UOJuatQpubXWeizwbaVs8yUswmSPdYNKZ65U8Yw=;
-  b=nZs+0fYHJPnr5vZGDHxcgj01rJ1AhFw4KrB01CPHmhEgZL5qOfUwzOq4
-   Q8c659HeCVMRda5ktjjpqu5sjT1uXXYaRexa7O5orIpDmM8/cZb/+4NAK
-   IwHsfGMZbv1fpqmbkBj+pDfZzWq1H8BUxjvTGj75zkajkSxxJUJWLwuDm
-   K1plNb4sgSIYiaJtLD+3L0988e2EoHXyr/YrONFEMpANiasSgUTsHCi3J
-   kW6Rqun+raCVs16tWg0jjNJK9hkJwWvmvCbQAyNXZViqAjaaKIj1ajvcc
-   0FUM3QenbAsP9R5AcIrbt24UpioySKJZj65RS/N1qEsy43CiozSZXU+pT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="372571732"
-X-IronPort-AV: E=Sophos;i="5.99,201,1677571200"; 
-   d="scan'208";a="372571732"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2023 19:19:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="690258380"
-X-IronPort-AV: E=Sophos;i="5.99,201,1677571200"; 
-   d="scan'208";a="690258380"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga002.jf.intel.com with ESMTP; 15 Apr 2023 19:19:33 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Sat, 15 Apr 2023 19:19:32 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Sat, 15 Apr 2023 19:19:32 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Sat, 15 Apr 2023 19:19:32 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.105)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Sat, 15 Apr 2023 19:19:31 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QZRzwYq/g8H1Gk08Or1vTmb6n8D74b0OeGDXnzmQgQ9MGhXrGhqCqlWWYRqG1i+UutHa2PYXykdP5GPWLp8sauRo+4MXUBFQNwITNwdA7CLlltVp5qOcqy1x7ve2cyAMwEyUiJIvhwFEmxw7+lUGXWDy3Aabva/e0Z3F58pJi1fjbMUZBFnUVn4UG0HYHqTBc2k4PSyOq0oKBWusuX3E1FY98pLaMKhMgP82qzVX042p5wq9Pvo1U0lail6Um73UPGviZh88pUC8G2oy/acLdoKdlPipcycH5J6YqfDy2Fii5lDeUU8+xmrEnHmPyWqFJyZmeLYelD0jY7I9EFiEog==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QKD1UOJuatQpubXWeizwbaVs8yUswmSPdYNKZ65U8Yw=;
- b=LWUKNDupUGteoDnzRrBGFJcQsYQfb1Jj6X8Poga3+X796SGVGUl7HW0elomvUQ6FUKoLOkr6uzuCA1yDdk2ydZsj2DYxih8veFmtGQxFTJSIS2nk4dQLkAItO6Xz6OHPWB2nPETpOKNCfwPDXXs5utEVnwpgZMtsqSggs49VX43kmXFxIlfBJMvPViqIfkKK9fZuVHIxrK/OcfraSM01zjuZBPKKlurJ0c4UYDkXU6Z9ZMkFi5b/Qlx+vn4BGVOzIcASpdm0jgzKh8Ff8RfhUgoFSh6xQt6crhgPvhRBG5Hz3F7I/w3hg3jJKIvFKxKwmwHhxn6eaeQt9Xn9m3dbWg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from PH0PR11MB5830.namprd11.prod.outlook.com (2603:10b6:510:129::20)
- by CH3PR11MB8383.namprd11.prod.outlook.com (2603:10b6:610:171::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.49; Sun, 16 Apr
- 2023 02:19:26 +0000
-Received: from PH0PR11MB5830.namprd11.prod.outlook.com
- ([fe80::1c4e:86ae:810d:1fee]) by PH0PR11MB5830.namprd11.prod.outlook.com
- ([fe80::1c4e:86ae:810d:1fee%2]) with mapi id 15.20.6277.036; Sun, 16 Apr 2023
- 02:19:26 +0000
-From:   "Song, Yoong Siang" <yoong.siang.song@intel.com>
-To:     "Bezdeka, Florian" <florian.bezdeka@siemens.com>,
-        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        "John Fastabend" <john.fastabend@gmail.com>,
-        "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>,
-        Vedang Patel <vedang.patel@intel.com>,
-        "Joseph, Jithu" <jithu.joseph@intel.com>,
-        Andre Guedes <andre.guedes@intel.com>,
-        "Brouer, Jesper" <brouer@redhat.com>,
-        "Stanislav Fomichev" <sdf@google.com>,
-        "Keller, Jacob E" <jacob.e.keller@intel.com>,
-        David Laight <David.Laight@ACULAB.COM>
-CC:     "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "xdp-hints@xdp-project.net" <xdp-hints@xdp-project.net>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH net v3 1/1] igc: read before write to SRRCTL register
-Thread-Topic: [PATCH net v3 1/1] igc: read before write to SRRCTL register
-Thread-Index: AQHZbujC4ewv1e0L1E6tM68Rf5TZ1K8sGQAAgAEWu5A=
-Date:   Sun, 16 Apr 2023 02:19:26 +0000
-Message-ID: <PH0PR11MB58306BDB63286338EABAF61AD89F9@PH0PR11MB5830.namprd11.prod.outlook.com>
-References: <20230414154902.2950535-1-yoong.siang.song@intel.com>
- <ffa2551d-ca04-3fe9-944a-0383e1d079e3@siemens.com>
-In-Reply-To: <ffa2551d-ca04-3fe9-944a-0383e1d079e3@siemens.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH0PR11MB5830:EE_|CH3PR11MB8383:EE_
-x-ms-office365-filtering-correlation-id: eecfda88-841d-45b0-ad29-08db3e21006f
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: smhoyYQeB7K/FMb3zy5W0ZhAlgXpRP+JJ7mocmzvzYBpjlYQkELEgsxkqJEPEpL2FyLVSdrXMl1w+MAd120+JaiAiUMbnRrMqKDWAdTEijMkuYaRzFU4FQjBBNKyJbD5eXyHMSGIxmbsyQ2/29HR9SZx7xJ/uRYtnEkUxpFOAz0cs2tGGt5GoZMDZE9tbaNPSE5KJRvd1hNnnuX57wujbJXVRtTTfXkRfvIjlCD+sfg5vDr6AF4R1nhgbHWdHbti7CDSELorf7z/provEnpvt05jbF3G1bKeKsaHtJJlcGAioAXJy3iOjSIl2s6x8uqAEBEeDCpmHsYWZwqXnNQ+AVkTt03g0Vhon1Q0tERH2ITs88eAbGD0nLXCCgVnACZPRUoejRIgPTlA6ebDn57yYHtqVrTQYZ6EMNwiaV9Kjz/PGXqUAVH7J/57crkLnbU6+U0Zfr+MYsHTTBDH2/XOtOuxzucaU/jKUNkvIjDid8IsiNH2eoYAo8jIZgMAaVwwLg+Nt6UhKRdsz/PgfH46vsq6FZW1dThlfYgt4f1q3FXd8CjeaAiFTYEhuMOMjCG/K0gVL7/TXyIJvYfrlkc6/L36LXxo3WWvP9vDiiV+IQri4tvFDb7zlRRkexxhdNZ0
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5830.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(396003)(376002)(39860400002)(366004)(136003)(451199021)(41300700001)(316002)(38100700002)(64756008)(186003)(66946007)(110136005)(9686003)(86362001)(66446008)(76116006)(66476007)(66556008)(7416002)(6506007)(8676002)(4326008)(26005)(55236004)(53546011)(38070700005)(83380400001)(921005)(122000001)(82960400001)(33656002)(8936002)(54906003)(2906002)(5660300002)(55016003)(52536014)(71200400001)(478600001)(7696005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?LzFsbm93ZlNkTzUrQWozNktiWVNaUXV0cWFOTGJCTkM4bnUydVI1dkZZZzVP?=
- =?utf-8?B?WnU4OU5hWS94bExJUmM0S2JjMDVOUVgrSTljTHRWL1Rtems5RHlGR0lnbjN4?=
- =?utf-8?B?Mjd3dzlSbXNhTC9UdktxQ0sxa0ttYUVyblFMcmlVQzlPWWxNai8wWm9STU84?=
- =?utf-8?B?T1JFLys1VWJ3YmU0RVBRQXdRSk1ZQVFGUGRaQlQzeEJDWnNFVzFzRWRXSVcx?=
- =?utf-8?B?cjVYeXBkMVl3SFVyWTZkOTlkajVhVHNLTmFJVXFkNXVJYVFoWEdyUTFqMXVW?=
- =?utf-8?B?YUl1WUV0dVhFUjYySGhSaGM2Vm1xa0M2eXM3NHd1NXViWEVxMFMvbHFHZVRx?=
- =?utf-8?B?MStjaysxWURUYWt1UjdzRkFqM2FKK0ZEWnV1Vjl0dWxxT0R2MW85OW9yY2g3?=
- =?utf-8?B?QjhaWmlyYlNhcHdzUjg3NFpQU2pNczJ0V0lXVjUvMWpqVWRkaGpYQzg1MTF3?=
- =?utf-8?B?UnAzaGVjam5vUWRSeXhyYkd0WStSNVhoV1lCcjE4RUZINmY3MU5aZUJQd3pZ?=
- =?utf-8?B?V3NYUThlNDIvNEtBYTJGWU15WHVuUnNvTzJSdk0yaENnb2FGbElzZHlIZmo0?=
- =?utf-8?B?OXdVY2h1Zzg4K3ZYazloLzIrYll4WGdSWUNaVmdFa3ZkZXY0ZDhCZWRoRVBm?=
- =?utf-8?B?MmNueWkxaGhpNkMwK0JReEgyZ0JPSXlaS2Q1V0R1bWU1MmVjVzFqdks4eHRn?=
- =?utf-8?B?dW9vSnM3WUd4dlZVY0JtaUlMMkgrd1MzRHFkMGU4WXFIbmFhS29vOWxjMEpC?=
- =?utf-8?B?K1RMVGRPeGZXUXEydTdheERkVUF6bUNmdHB6cm9UVTdVZmRmQ2phQWpYaVVT?=
- =?utf-8?B?T0JFd3hQMUpCU05vcmZBQVRGV2x6cWdaV0JsRFdmWGxJU3dGL3dEY1IyMVFp?=
- =?utf-8?B?WUt5dmR2ZXk0QWFGZjZaSjNIOUpUWHRwdkJuTzJkL2FIdWJYN1ZzUm4vZkJS?=
- =?utf-8?B?SzJ3VDFteloxMTgybCtPZlZGUlBmRnplMEpZQ3BIOSs5akdCQVE0em1ZVEhY?=
- =?utf-8?B?aHlqWEVrM2lhV25ZcEZqWEpsbzRTd1RCU2NMeWRxYm1IVWIyT3M5dnQzOVVv?=
- =?utf-8?B?cDZnYzRKU1J2YVdCWGRyeFVkMmtyci9wbTdUUmZEcE5NQ0tSL2VOTnFmSm5J?=
- =?utf-8?B?ckx3Qm5UT2loQnk1MjF3b1R2MjUrUUhOMWlsNEFtMVZsWlhFa1FrQXdweFJk?=
- =?utf-8?B?MitlNDRnMmF3Y0FvU05BT1IrNlowWjZRdW1Qd0ZSMmVScFZ6dHE0QkVYU3Z1?=
- =?utf-8?B?OEJLdmptaGlvajQ5dXFXUU9aQTNWOUR0WmtDOWdWYnJua0NRTE9tWGxCNm9B?=
- =?utf-8?B?NzhGbHVYc0Y5VW8wSkFjOXhaMWZ1QzdPR2psK083bUYyMWN3aElyTStDQ1lN?=
- =?utf-8?B?ZXgvcXl5SE5nNlB2SXhTa3duWTNmZXJQamZKNUMveDZMbEVENGNjdG85T01r?=
- =?utf-8?B?cHp1VkVva0ZzVWVGWndHRjk3OFA1S29XSExpdkVYZEgzTmlETm1NZXpsRXdv?=
- =?utf-8?B?NHNDcnB0NDNqOVdFWExmRlpJY2ZJTXlRUnJCK1FEMlFTSmcvSUJqaHpsWVp1?=
- =?utf-8?B?U29peXZHS2xHTTB5K1Y0ZnMxRUg2NkxaV2x1L0tKNjdUcGRWL3dtYzExamda?=
- =?utf-8?B?eXExamk3Vms2T0pQa3pHdUNSZ25HUWRsMC9mMnFBZnZobGJhWWV5SmZ6ZjRo?=
- =?utf-8?B?OEVPYjNyZk84Vy9RQ2MzeWw3S2ZnbmFkbFMyaUthWXRjdjAxV2E0bUVJemxx?=
- =?utf-8?B?MHlsT2pQajh5dEhkSVlTZTN6QmxPWWNRaGtBWUk3MUlrTlZvQ29QRkh6M21t?=
- =?utf-8?B?OU1zbTc4YmNoejJaNVl2TDlRSWVqeHUvVUdiMGlaMWRnZm1KbTdYZEpyM255?=
- =?utf-8?B?TlFweVViVFNXejRvNUV2MUxmbmtBeWJ1b3NWeDlZUHZrb09PVzlzNE9ocFoy?=
- =?utf-8?B?NUNyalZkWHRwd1Y2RGlqSzhMRjVDM0hzVTM5K0hXUGZsY21HUVJmdkZ5dllY?=
- =?utf-8?B?ZnZrTG12M2Jsd3pZTmNEeSsyQm8xb0dKMVVaNnlIVE1vNlNzMWpnb2hwR1Rx?=
- =?utf-8?B?UlpGWDNoOEJ1dkVWbjRtWlhyeDl1Y3ByR0YvNjFHQ1VuWk56cXVxZzJMTExu?=
- =?utf-8?Q?hYTg/RLW/mqaOz57JLlzQnyKK?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Sat, 15 Apr 2023 22:31:56 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50432D5F;
+        Sat, 15 Apr 2023 19:31:52 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id fw22-20020a17090b129600b00247255b2f40so8702247pjb.1;
+        Sat, 15 Apr 2023 19:31:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681612312; x=1684204312;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Mbh8KBxteAdMHdfu1a3aRujCPPZXG30RxkMg5arQofY=;
+        b=TuGBhR0oV1QNnf+DO8mRmOvRRAovA31JL6MCftHNQAGsj6GE/hSvzuK2w0mFg62TGS
+         NdxzpcFT4yYoaeqmcFwkp4Nk/VxlBokT/j/ZhmFzKi5+ccHWn6iLXwYZgT9rVc09DcMR
+         4d8c4eQrpHjYmiQQm86wJmX8QxtYZZvKG0RpvCoset+PQ+JsDWAZkSdc0vTBnp5ugCRg
+         I8Qw/I9cK1yvvQFw9wa4d2izGk4i9ouZgulCddxycmFLEh7shq/LsTzJiFfjuqTxox1l
+         brN4z7O+oxi3gLMoKFE4PVT8SyunXZvhdaoERlgsD22PR8zwlIBSPnf5YYPk29LldwdL
+         zRLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681612312; x=1684204312;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mbh8KBxteAdMHdfu1a3aRujCPPZXG30RxkMg5arQofY=;
+        b=bgeSeWeI8JjbAnQoBGCdCvIvl9qOoaO+eGA95EwrWUdFE2JRNJ6MSmtqYBn/vJzbO3
+         EMMg/CEJ9bUW44aP4z/Vdoylj6MdfEfxSW5h+X3+sRn+ZzQtBQoUBmCEfnIUqzSiTajv
+         2Ya4BS7j+i3kXufhyTa6iXY90u2h88rdho/WxaMXsLa1/vuyN7y3FrGoxOx6AKFqL7I1
+         ir61IIP3l1N2EqTy5Hi2S3jMz6o+2iRGGzhwrTPiico2CeQxM8Rc313K6VE7IqsRhdI7
+         RxeYw8yNYrkOojUPY1CDnRJfCdgTiGdlLWETdi91nV2upZEgAG82HVydntOJINo0YYPF
+         K9wA==
+X-Gm-Message-State: AAQBX9dtcMok0CXO0H6pppiZOJSrQbwsYo77VS+pBRhYnmDLBe4hUuO8
+        M/TFHNo4ojbOW2dvAanAArE=
+X-Google-Smtp-Source: AKy350aCEe8StHXF+JpU9stlV4jilDL5hUak/GTLTuS4QN1nrMp0VEsTW3USsgODPq0DZ2N+orUdxQ==
+X-Received: by 2002:a17:902:e5c8:b0:1a6:be37:22e1 with SMTP id u8-20020a170902e5c800b001a6be3722e1mr2901809plf.15.1681612311968;
+        Sat, 15 Apr 2023 19:31:51 -0700 (PDT)
+Received: from [192.168.1.101] (1-160-170-76.dynamic-ip.hinet.net. [1.160.170.76])
+        by smtp.gmail.com with ESMTPSA id jl4-20020a170903134400b001a52abb3be3sm5208710plb.201.2023.04.15.19.31.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 15 Apr 2023 19:31:51 -0700 (PDT)
+Message-ID: <ae2883a6-2fbe-666f-c17d-169faa9a619e@gmail.com>
+Date:   Sun, 16 Apr 2023 10:31:47 +0800
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5830.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: eecfda88-841d-45b0-ad29-08db3e21006f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Apr 2023 02:19:26.4781
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: AUMlsaQlr87C8HSJX/0mnzYuwhK1gHjtmTSlTMqavE+cjfHhPNpjyh5vtt/jcWE00Wjjwz4GiOKP9HsEjVKbom7hy5Vjczu4N0N1i9cG3j0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR11MB8383
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v7 11/12] tty: serial: Add Nuvoton ma35d1 serial driver
+ support
+To:     Jiri Slaby <jirislaby@kernel.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        arnd@arndb.de, schung@nuvoton.com, mjchen@nuvoton.com,
+        Jacky Huang <ychuang3@nuvoton.com>
+References: <20230412053824.106-1-ychuang570808@gmail.com>
+ <20230412053824.106-12-ychuang570808@gmail.com>
+ <9bd73f85-9d9a-8c44-e4e6-3c10b76fe135@kernel.org>
+Content-Language: en-US
+From:   Jacky Huang <ychuang570808@gmail.com>
+In-Reply-To: <9bd73f85-9d9a-8c44-e4e6-3c10b76fe135@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -184,29 +83,389 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gU2F0dXJkYXksIEFwcmlsIDE1LCAyMDIzIDU6MjAgUE0sIEZsb3JpYW4gQmV6ZGVrYSA8Zmxv
-cmlhbi5iZXpkZWthQHNpZW1lbnMuY29tPiB3cm90ZToNCj5PbiAxNC4wNC4yMyAxNzo0OSwgU29u
-ZyBZb29uZyBTaWFuZyB3cm90ZToNCj4+IGlnY19jb25maWd1cmVfcnhfcmluZygpIGZ1bmN0aW9u
-IHdpbGwgYmUgY2FsbGVkIGFzIHBhcnQgb2YgWERQIHByb2dyYW0NCj4+IHNldHVwLiBJZiBSeCBo
-YXJkd2FyZSB0aW1lc3RhbXAgaXMgZW5hYmxlZCBwcmlvIHRvIFhEUCBwcm9ncmFtIHNldHVwLA0K
-Pj4gdGhpcyB0aW1lc3RhbXAgZW5hYmxlbWVudCB3aWxsIGJlIG92ZXJ3cml0dGVuIHdoZW4gYnVm
-ZmVyIHNpemUgaXMNCj4+IHdyaXR0ZW4gaW50byBTUlJDVEwgcmVnaXN0ZXIuDQo+Pg0KPg0KPkhp
-IGFsbCwNCj4NCj5JJ20gYWN0dWFsbHkgc2VhcmNoaW5nIGZvciB0aGUgcm9vdCBjYXVzZSBvZiBh
-IHNpbWlsYXIgcHJvYmxlbSAoUlggdGltZXN0YW1wIGxvc3QpDQo+dGhhdCBJIGNhbiByZXByb2R1
-Y2UgaGVyZSwgYnV0IHRoZSBzZXR1cCBpcyBzbGlnaHRseSBkaWZmZXJlbnQuIFRoZSBzZXR1cDoN
-Cj4NCj4tIGlnYyBkcml2ZXINCj4tIGkyMjUvMjI2IG5ldHdvcmsgY2FyZA0KPi0gV2hlbiBzdGFy
-dGluZyB0byB0cmFuc21pdCBmcmFtZXMgdXNpbmcgWERQIHdpdGggemVybyBjb3B5IGVuYWJsZWQN
-Cj4gIGFub3RoZXIgYXBwbGljYXRpb24gKHB0cDRsKSBjb21wbGFpbnMgYWJvdXQgbWlzc2luZyBS
-WCB0aW1lc3RhbXBzDQo+LSBMb2FkaW5nIHRoZSBYRFAgcHJvZ3JhbSBoYXMgYWxyZWFkeSBiZWVu
-IHJlbW92ZWQgKG5vdCBuZWVkZWQgZm9yDQo+ICBUWCBvbmx5KQ0KPi0gcHRwNGwgaXMgdXNpbmcg
-dGhlIHRyYWRpdGlvbmFsIHNvY2tldCBBUEkNCj4tIFRoZSBSWCB0aW1lc3RhbXBzIHNlZW0gdG8g
-Y29tZSBiYWNrIG9uY2Ugd2Ugc3RvcCBzZW5kaW5nIGZyYW1lcw0KPiAgdXNpbmcgWERQDQo+DQo+
-VGhlICJ6ZXJvIGNvcHkgc3VwcG9ydCIgZW5hYmxlZCBwYXJ0IGlzIGltcG9ydGFudC4gSWYgWkMg
-c3VwcG9ydCBpcyBub3QgcmVxdWVzdGVkDQo+ZXZlcnl0aGluZyB3b3JrcyBmaW5lLg0KPg0KPkFu
-eSBpZGVhcz8NCj4NCj5CZXN0IHJlZ2FyZHMsDQo+Rmxvcmlhbg0KPg0KDQpIaSBGbG9yaWFuLA0K
-DQpZb3UgbWVhbnMgdGhpcyBwYXRjaCBkb2VzIG5vdCBoZWxwIG9uIHlvdXIgaXNzdWU/DQpOZWVk
-IHRvIHVuZGVyc3RhbmQgbW9yZSBvbiB0aGUgc2V0dXAgYW5kIGJlaGF2aW9yIHRvIHRlbGwuDQpB
-cmUgcHRwNGwgYW5kIFhEUCBaQyBUeCBhcHBzIHJ1bm5pbmcgb24gc2FtZSBxdWV1ZSBvciBzZXBh
-cmF0ZSBxdWV1ZT8NCkkgc3VnZ2VzdCB5b3UgdG8gcnVuICIgc3VkbyBod3N0YW1wX2N0bCAtaSBl
-dGgwIC1yIDEgIiBtdWx0aXBsZSB0aW1lcyBpbiB0aGUgbWlkZGxlDQp0byBjaGVjayB0aGUgYmVo
-YXZpb3IuDQoNClRoYW5rcyAmIFJlZ2FyZHMNClNpYW5nDQo=
+Dear Jiri,
+
+
+Thanks for you advice.
+
+
+On 2023/4/14 下午 02:47, Jiri Slaby wrote:
+> On 12. 04. 23, 7:38, Jacky Huang wrote:
+>> From: Jacky Huang <ychuang3@nuvoton.com>
+>>
+>> This adds UART and console driver for Nuvoton ma35d1 Soc.
+>> It supports full-duplex communication, FIFO control, and
+>> hardware flow control.
+>>
+>> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+> ...
+>> --- /dev/null
+>> +++ b/drivers/tty/serial/ma35d1_serial.c
+>> @@ -0,0 +1,773 @@
+> ...
+>> +static void transmit_chars(struct uart_ma35d1_port *up)
+>> +{
+>> +    int count;
+>
+> count is unsigned.
+
+
+I will use 'u32' instead.
+
+
+>
+>> +    u8 ch;
+>> +
+>> +    if (uart_tx_stopped(&up->port)) {
+>> +        ma35d1serial_stop_tx(&up->port);
+>> +        return;
+>> +    }
+>> +    count = UART_FIFO_DEPTH - ((serial_in(up, UART_REG_FSR) & 
+>> FSR_TXPTR_MSK) >> 16);
+>
+> So this could be FIELD_GET() while you are defining FSR_TXPTR_MSK 
+> using GENMASK(), right?
+
+
+Yes, I will modify it as
+
+     count = UART_FIFO_DEPTH - FIELD_GET(FSR_TXPTR_MSK, serial_in(up, 
+UART_REG_FSR));
+
+
+>
+>> + uart_port_tx_limited(&up->port, ch, count,
+>> +                 !(serial_in(up, UART_REG_FSR) & FSR_TX_FULL),
+>> +                 serial_out(up, UART_REG_THR, ch),
+>> +                 ({}));
+>> +}
+> ...
+>> +static void ma35d1serial_set_termios(struct uart_port *port,
+>> +                     struct ktermios *termios,
+>> +                     const struct ktermios *old)
+>> +{
+>> +    struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
+>> +    u32 lcr = 0;
+>> +    unsigned long flags;
+>> +    u32 baud, quot;
+>> +
+>> +    lcr = UART_LCR_WLEN(tty_get_char_size(termios->c_cflag));
+>> +
+>> +    if (termios->c_cflag & CSTOPB)
+>> +        lcr |= LCR_NSB;
+>> +    if (termios->c_cflag & PARENB)
+>> +        lcr |= LCR_PBE;
+>> +    if (!(termios->c_cflag & PARODD))
+>> +        lcr |= LCR_EPE;
+>> +    if (termios->c_cflag & CMSPAR)
+>> +        lcr |= LCR_SPE;
+>> +
+>> +    baud = uart_get_baud_rate(port, termios, old, port->uartclk / 
+>> 0xffff,
+>> +                  port->uartclk / 11);
+>> +
+>> +    quot = ma35d1serial_get_divisor(port, baud);
+>> +
+>> +    /*
+>> +     * Ok, we're now changing the port state.  Do it with
+>> +     * interrupts disabled.
+>> +     */
+>> +    spin_lock_irqsave(&up->port.lock, flags);
+>> +
+>> +    up->port.read_status_mask = FSR_RX_OVER_IF;
+>> +    if (termios->c_iflag & INPCK)
+>> +        up->port.read_status_mask |= FSR_FEF | FSR_PEF;
+>> +    if (termios->c_iflag & (BRKINT | PARMRK))
+>> +        up->port.read_status_mask |= FSR_BIF;
+>> +
+>> +    /*
+>> +     * Characteres to ignore
+>
+> "Characters"
+>
+> The comment could be oneline.
+
+Okay, I will modify it as as oneline.
+
+
+>
+>> +     */
+>> +    up->port.ignore_status_mask = 0;
+>> +    if (termios->c_iflag & IGNPAR)
+>> +        up->port.ignore_status_mask |= FSR_FEF | FSR_PEF;
+>> +    if (termios->c_iflag & IGNBRK) {
+>> +        up->port.ignore_status_mask |= FSR_BIF;
+>> +        /*
+>> +         * If we're ignoring parity and break indicators,
+>> +         * ignore overruns too (for real raw support).
+>> +         */
+>> +        if (termios->c_iflag & IGNPAR)
+>> +            up->port.ignore_status_mask |= FSR_RX_OVER_IF;
+>> +    }
+>
+> Actually I don't understand the "Characteres" comment above at all. 
+> What characters?
+
+
+We just follow what other serial drivers have done.
+
+You can find the same code segment in tty/serial dz.c, fsl_lpuart.c, 
+atmel_serial.c, 8250_port.c ....
+
+
+>
+>> +    if (termios->c_cflag & CRTSCTS)
+>> +        up->mcr |= UART_MCR_AFE;
+>> +    else
+>> +        up->mcr &= ~UART_MCR_AFE;
+>> +
+>> +    uart_update_timeout(port, termios->c_cflag, baud);
+>> +    ma35d1serial_set_mctrl(&up->port, up->port.mctrl);
+>> +    serial_out(up, UART_REG_BAUD, quot | BAUD_MODE2);
+>> +    serial_out(up, UART_REG_LCR, lcr);
+>> +    spin_unlock_irqrestore(&up->port.lock, flags);
+>> +}
+> ...
+>
+>> +/*
+>> + *  Print a string to the serial port trying not to disturb
+>> + *  any possible real use of the port...
+>> + *
+>> + *  The console_lock must be held when we get here.
+>> + */
+>> +static void ma35d1serial_console_write(struct console *co,
+>> +                       const char *s, u32 count)
+>> +{
+>> +    struct uart_ma35d1_port *up = &ma35d1serial_ports[co->index];
+>> +    unsigned long flags;
+>> +    u32 ier;
+>> +
+>> +    local_irq_save(flags);
+>
+> This doesn't protect access to the registers on other CPUs.
+>
+
+We will add spin_lock protect to it.
+
+
+>> +
+>> +    /*
+>> +     *  First save the IER then disable the interrupts
+>> +     */
+>> +    ier = serial_in(up, UART_REG_IER);
+>> +    serial_out(up, UART_REG_IER, 0);
+>> +
+>> +    uart_console_write(&up->port, s, count, 
+>> ma35d1serial_console_putchar);
+>> +
+>> +    wait_for_xmitr(up);
+>> +
+>> +    serial_out(up, UART_REG_IER, ier);
+>> +    local_irq_restore(flags);
+>> +}
+>> +
+>> +static int __init ma35d1serial_console_setup(struct console *co,
+>> +                         char *options)
+>> +{
+>> +    struct device_node *np = ma35d1serial_uart_nodes[co->index];
+>> +    struct uart_ma35d1_port *p = &ma35d1serial_ports[co->index];
+>> +    u32 val32[4];
+>> +    struct uart_port *port;
+>> +    int baud = 115200;
+>> +    int bits = 8;
+>> +    int parity = 'n';
+>> +    int flow = 'n';
+>
+> If you don't do uart_parse_options() (why you don't?), you don't need 
+> the variables.
+
+
+On this platform, the serial console is fixed to be 11520, n, 8, since 
+booting from
+
+the non-volatile firmware in MaskROM, arm-trust-firmware, uboot. So we 
+do not
+
+use usrt_parse_options().
+
+I will remove these variables and modify 'uart_set_options(port, co, 
+baud, parity, bits, flow)'
+
+as 'uart_set_options(port, co, 115200, n, 8, n)'
+
+
+>
+>> +    /*
+>> +     * Check whether an invalid uart number has been specified, and
+>> +     * if so, search for the first available port that does have
+>> +     * console support.
+>> +     */
+>> +    if ((co->index < 0) || (co->index >= UART_NR)) {
+>> +        pr_debug("Console Port%x out of range\n", co->index);
+>> +        return -EINVAL;
+>> +    }
+>> +
+>> +    if (of_property_read_u32_array(np, "reg", val32, 4) != 0)
+>> +        return -EINVAL;
+>> +    p->port.iobase = val32[1];
+>> +    p->port.membase = ioremap(p->port.iobase, UART_REG_SIZE);
+>> +    p->port.ops = &ma35d1serial_ops;
+>> +    p->port.line = 0;
+>> +    p->port.uartclk = UART_CONSOLE_CLK;
+>> +
+>> +    port = &ma35d1serial_ports[co->index].port;
+>> +    return uart_set_options(port, co, baud, parity, bits, flow);
+>> +}
+> ...> +static void ma35d1serial_console_init_port(void)
+>> +{
+>> +    int i = 0;
+>
+> unsigned
+
+I will fix it.
+
+
+>
+>> +    struct device_node *np;
+>> +
+>> +    for_each_matching_node(np, ma35d1_serial_of_match) {
+>> +        if (ma35d1serial_uart_nodes[i] == NULL) {
+>> +            of_node_get(np);
+>> +            ma35d1serial_uart_nodes[i] = np;
+>> +            i++;
+>> +            if (i == UART_NR)
+>> +                break;
+>> +        }
+>> +    }
+>> +}
+>
+>> +/*
+>> + * Register a set of serial devices attached to a platform device.
+>> + * The list is terminated with a zero flags entry, which means we 
+>> expect
+>> + * all entries to have at least UPF_BOOT_AUTOCONF set.
+>> + */
+>> +static int ma35d1serial_probe(struct platform_device *pdev)
+>> +{
+>> +    struct resource *res_mem;
+>> +    struct uart_ma35d1_port *up;
+>> +    int ret = 0;
+>> +    struct clk *clk;
+>> +    int err;
+>> +
+>> +    if (pdev->dev.of_node) {
+>> +        ret = of_alias_get_id(pdev->dev.of_node, "serial");
+>> +        if (ret < 0) {
+>> +            dev_err(&pdev->dev, "failed to get alias/pdev id, errno 
+>> %d\n", ret);
+>> +            return ret;
+>> +        }
+>> +    }
+>> +    up = &ma35d1serial_ports[ret];
+>> +    up->port.line = ret;
+>> +    res_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>> +    if (!res_mem)
+>> +        return -ENODEV;
+>> +
+>> +    up->port.iobase = res_mem->start;
+>> +    up->port.membase = ioremap(up->port.iobase, UART_REG_SIZE);
+>> +    up->port.ops = &ma35d1serial_ops;
+>> +
+>> +    spin_lock_init(&up->port.lock);
+>> +
+>> +    clk = of_clk_get(pdev->dev.of_node, 0);
+>> +    if (IS_ERR(clk)) {
+>> +        err = PTR_ERR(clk);
+>> +        dev_err(&pdev->dev, "failed to get core clk: %d\n", err);
+>> +        return -ENOENT;
+>
+> iounmap(membase) missing.
+
+
+I will use devm_ioremap instead, and add return value check to it.
+
+
+>
+>> +    }
+>> +    err = clk_prepare_enable(clk);
+>> +    if (err)
+>> +        return -ENOENT;
+>
+> Dtto.
+>
+>> +
+>> +    if (up->port.line != 0)
+>> +        up->port.uartclk = clk_get_rate(clk);
+>> +    up->port.irq = platform_get_irq(pdev, 0);
+>
+> What if this fails?
+
+
+I will add return value check to it.
+
+
+>
+>> +    up->port.dev = &pdev->dev;
+>> +    up->port.flags = UPF_BOOT_AUTOCONF;
+>> +    ret = uart_add_one_port(&ma35d1serial_reg, &up->port);
+>
+> And this?
+>
+
+I will add return value check to it.
+
+
+>> +    platform_set_drvdata(pdev, up);
+>> +    return 0;
+>> +}
+>> +
+>> +/*
+>> + * Remove serial ports registered against a platform device.
+>> + */
+>> +static int ma35d1serial_remove(struct platform_device *dev)
+>> +{
+>> +    struct uart_port *port = platform_get_drvdata(dev);
+>> +
+>> +    uart_remove_one_port(&ma35d1serial_reg, port);
+>> +    free_irq(port->irq, port);
+>
+> You do this in ma35d1serial_shutdown() already, correct? So this will 
+> error out, right?
+
+
+Yes, the free_irq() should be removed. I  will fix it.
+
+
+>
+>> +    return 0;
+>> +}
+>
+> Just a couple of questions about testing. Have you tried to:
+> * remove the module?
+> * suspend/resume the machine while having a line active (device node 
+> opened)?
+> * running at least a lockdep-enabled kernel while using the device 
+> extensively?
+>
+> thanks,
+
+Thank you for the suggestions. Actually, we never remove the serial 
+driver module.
+
+We will have a test on serial module remove, and test suspend/resume 
+with at least one uart port enabled.
+
+For the last question, as this SoC have dual-core Cortex-A35 CPU. We 
+will a test
+
+to run independent uart transfer application on different core.
+
+
+Best regards,
+
+Jacky Huang
+
+
+
+
+
