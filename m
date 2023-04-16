@@ -2,78 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D592D6E3B97
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 21:45:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A656E3BA2
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 21:47:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbjDPTo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 15:44:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60978 "EHLO
+        id S229892AbjDPTrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 15:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjDPTo5 (ORCPT
+        with ESMTP id S229810AbjDPTra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 15:44:57 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF282694
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 12:44:56 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-54fe82d8bf5so84861987b3.3
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 12:44:56 -0700 (PDT)
+        Sun, 16 Apr 2023 15:47:30 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC7A10F1;
+        Sun, 16 Apr 2023 12:47:21 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id v9so28746560pjk.0;
+        Sun, 16 Apr 2023 12:47:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681674296; x=1684266296;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fE9QU8ssRHfrkp+Qs6Jt2adPN0B10qQBjFxitvUur5w=;
-        b=pTFh9YoYONT2cKveKNA6jETiwf92HtqU0CX8Fb+eU6YKNATL4+NSIe9LuB571YVQQ2
-         FvSwcvWgTww19tc9Rn0y+4sCK5LZLj6N0yzT1FA5tlasgFfufKUaYPfhYO9DEP9ZDcYL
-         HchzUVzvPelw0Q4huckH+4NhHZRPQrzs+FZc7TS9g0u1uCXZ7Gh7Rx0t1vw6xeO3fjB1
-         ias0ybZKgaEzEMgV3MEOgwIBoeyu5n0/3eqYzjsLLft3tmdEYqDpNZ5I986azDXD11KD
-         q/h6ljYEwHQnadmPQUM7nqloQwRDf9UjRpTnWnfKFqeIYHT89pXApVgoyTjabBqFP5wG
-         a3Bw==
+        d=gmail.com; s=20221208; t=1681674440; x=1684266440;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Meto6gsXNk91gHx8C0HmnEYuyxHZvVGTyKoqO9PiMNc=;
+        b=eJYqFrJGLk24WuxpY5JuFFW1v/FDUKlryz7xwHJakzKAdUk+S8VU0iiF5MekiOHc5o
+         ur0UALCSXSovdVFI191ofEm/D3GC32OPO80FM+Wl2ols3dif7zxY3rHS4NPa4ErHJ1+e
+         Im5jtiI1cWSha24rQLgrnFOHskXJ7t+6nZsR9DLrzGAEgZlcJqB4d+LaUObadc57YyKk
+         Lk2zAkOK3KOtE/R+8xcoExUwApUmw8NiA+VOC0Ssmdklx0XPTFVNTfPCSE46CxX0BtJg
+         j+lKuwjuySDz3Gq562LEvS4LvcuJiAcH+ymN0qB2auqXrbluYoNCoI83WhOYyhE/Rgoz
+         0L1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681674296; x=1684266296;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fE9QU8ssRHfrkp+Qs6Jt2adPN0B10qQBjFxitvUur5w=;
-        b=AFS7XeCCX1iFfKfh9HN61vFMNTXTpU0j4ccJKcBuM4bORTRq/nkskaPg7vcFJHUXhB
-         7i5I1+mLd5T/zr51gMdql9IV4E3zZKzuUrXB0iFC2ONYvw+nfDggZ+gSNxmfnTHryqG/
-         K6slU460IzTQXkvJdPSzNMI0FlezrkHZDz81L8+xU34pdoxx6ac7rWJNQlp2ZT5EObD7
-         ejZzp+SupMakMkyNlzSzbiXgZhDr7+iozu5qjku7HayFujWJimFedhBicvbLRGevGjVz
-         CLpmdUe/ZH9V/RE+34DToDNd4JtG7ePYFUgRI8HlDDj0oDmmRTk2Bt2itbZDeT3VWyNe
-         tCbA==
-X-Gm-Message-State: AAQBX9eskOdwrMW9WVf9xH1oIN5qMpQUSum7sGspv2u4RoPhwrvJ7iFI
-        seEG2kIl3o2CCRxHmj9I58ibwQ==
-X-Google-Smtp-Source: AKy350YDG3M9wmj9++Fuic4VEWPyfPHGcxyaI9iRZK4qaFSHnn38pvTPQQqEXoMJ3JmakygaSbceaA==
-X-Received: by 2002:a81:7782:0:b0:543:b06a:19de with SMTP id s124-20020a817782000000b00543b06a19demr12158258ywc.3.1681674295681;
-        Sun, 16 Apr 2023 12:44:55 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id b186-20020a811bc3000000b0054eff15530asm2650453ywb.90.2023.04.16.12.44.53
+        d=1e100.net; s=20221208; t=1681674440; x=1684266440;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Meto6gsXNk91gHx8C0HmnEYuyxHZvVGTyKoqO9PiMNc=;
+        b=G0kbFytODT+cCwT9UC6ruXTSK0CMPYUfsaLgR307lHjhHnw+FC4Nt8pw5xuCaXphEf
+         bG3iX0ux78emTYYpW/au0grqE0PDNeKC6U+cKdtGyGhzPfOrJskGsYqNdE3IlVubkJWV
+         HalWfWwKaaufOHpsXpywf4oNIxeHuKuXxQh67RHwC360FVYcvJOgRVQ2f+x0TMZ98w9+
+         nfOiysf5y/AVcAPSoDhJlOE638kNUsrxSXOf7IKa+oWidOkxAgk8lXS3YJp5RVsY96Or
+         0jRm/MBGzXk1gMYq0hhbWSxQwFCI0p08uKtnK2POmF7dAGY3ixeStMQm//PkUu3xhj+8
+         qEgA==
+X-Gm-Message-State: AAQBX9eNat8otMiSjWxlXfeJNbL/g68cqUdF+iW5CsPdil0lFC3fdYoj
+        Izm1zrQrTwkaP9UsIljZMwAVlZr5NAtkvol1CRU=
+X-Google-Smtp-Source: AKy350aKLugLJKCU9PBp1YlqTK5QgQQ9+hASlfM5JGJM0fpp7dQty4ffKT0yxtosQ52mF34G7YXYGA==
+X-Received: by 2002:a17:903:454:b0:1a0:50bd:31c0 with SMTP id iw20-20020a170903045400b001a050bd31c0mr8920831plb.24.1681674440450;
+        Sun, 16 Apr 2023 12:47:20 -0700 (PDT)
+Received: from d.home.yangfl.dn42 ([104.28.245.201])
+        by smtp.gmail.com with ESMTPSA id jd9-20020a170903260900b001a69b28f5c5sm4490375plb.222.2023.04.16.12.47.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 12:44:55 -0700 (PDT)
-Date:   Sun, 16 Apr 2023 12:44:53 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Zi Yan <ziy@nvidia.com>
-cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
-        linux-mm@kvack.org,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        =?ISO-8859-15?Q?Michal_Koutn=FD?= <mkoutny@suse.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Zach O'Keefe <zokeefe@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 6/7] mm: truncate: split huge page cache page to a
- non-zero order if possible.
-In-Reply-To: <20230403201839.4097845-7-zi.yan@sent.com>
-Message-ID: <9dd96da-efa2-5123-20d4-4992136ef3ad@google.com>
-References: <20230403201839.4097845-1-zi.yan@sent.com> <20230403201839.4097845-7-zi.yan@sent.com>
+        Sun, 16 Apr 2023 12:47:20 -0700 (PDT)
+From:   David Yang <mmyangfl@gmail.com>
+To:     linux-clk@vger.kernel.org
+Cc:     David Yang <mmyangfl@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/4] clk: Add basic register clock controller
+Date:   Mon, 17 Apr 2023 03:46:18 +0800
+Message-Id: <20230416194624.1258860-1-mmyangfl@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,102 +74,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Apr 2023, Zi Yan wrote:
+These clocks were provided in `include/linux/clk-provider.h`, but lacks DT
+bindings. Add DT bindings for them.
 
-> From: Zi Yan <ziy@nvidia.com>
-> 
-> To minimize the number of pages after a huge page truncation, we do not
-> need to split it all the way down to order-0. The huge page has at most
-> three parts, the part before offset, the part to be truncated, the part
-> remaining at the end. Find the greatest common divisor of them to
-> calculate the new page order from it, so we can split the huge
-> page to this order and keep the remaining pages as large and as few as
-> possible.
-> 
-> Signed-off-by: Zi Yan <ziy@nvidia.com>
-> ---
->  mm/truncate.c | 21 +++++++++++++++++++--
->  1 file changed, 19 insertions(+), 2 deletions(-)
-> 
-> diff --git a/mm/truncate.c b/mm/truncate.c
-> index 86de31ed4d32..817efd5e94b4 100644
-> --- a/mm/truncate.c
-> +++ b/mm/truncate.c
-> @@ -22,6 +22,7 @@
->  #include <linux/buffer_head.h>	/* grr. try_to_release_page */
->  #include <linux/shmem_fs.h>
->  #include <linux/rmap.h>
-> +#include <linux/gcd.h>
+v2: split clock controller and its clocks
+v3:
+  * rewrite commit message
+  * rewrite descriptions in dt-bindings to describe the devices
+  * fix format error of dt-bindings
 
-Really?
+Links:
+v1: https://lore.kernel.org/r/20230414181302.986271-1-mmyangfl@gmail.com
+v2: https://lore.kernel.org/r/20230416173302.1185683-1-mmyangfl@gmail.com
 
->  #include "internal.h"
->  
->  /*
-> @@ -211,7 +212,8 @@ int truncate_inode_folio(struct address_space *mapping, struct folio *folio)
->  bool truncate_inode_partial_folio(struct folio *folio, loff_t start, loff_t end)
->  {
->  	loff_t pos = folio_pos(folio);
-> -	unsigned int offset, length;
-> +	unsigned int offset, length, remaining;
-> +	unsigned int new_order = folio_order(folio);
->  
->  	if (pos < start)
->  		offset = start - pos;
-> @@ -222,6 +224,7 @@ bool truncate_inode_partial_folio(struct folio *folio, loff_t start, loff_t end)
->  		length = length - offset;
->  	else
->  		length = end + 1 - pos - offset;
-> +	remaining = folio_size(folio) - offset - length;
->  
->  	folio_wait_writeback(folio);
->  	if (length == folio_size(folio)) {
-> @@ -236,11 +239,25 @@ bool truncate_inode_partial_folio(struct folio *folio, loff_t start, loff_t end)
->  	 */
->  	folio_zero_range(folio, offset, length);
->  
-> +	/*
-> +	 * Use the greatest common divisor of offset, length, and remaining
-> +	 * as the smallest page size and compute the new order from it. So we
-> +	 * can truncate a subpage as large as possible. Round up gcd to
-> +	 * PAGE_SIZE, otherwise ilog2 can give -1 when gcd/PAGE_SIZE is 0.
-> +	 */
-> +	new_order = ilog2(round_up(gcd(gcd(offset, length), remaining),
-> +				   PAGE_SIZE) / PAGE_SIZE);
+David Yang (4):
+  dt-bindings: clock: Add simple-clock-controller
+  clk: Add simple clock controller
+  dt-bindings: clock: Add gate-clock
+  clk: gate: Add DT binding
 
-Gosh.  In mm/readahead.c I can see "order = __ffs(index)",
-and I think something along those lines would be more appropriate here.
+ .../devicetree/bindings/clock/gate-clock.yaml |  59 ++++
+ .../clock/simple-clock-controller.yaml        |  39 +++
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/clk-gate.c                        |  81 +++++
+ drivers/clk/clk-of.c                          | 292 ++++++++++++++++++
+ drivers/clk/clk-of.h                          |  26 ++
+ 6 files changed, 498 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/gate-clock.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/simple-clock-controller.yaml
+ create mode 100644 drivers/clk/clk-of.c
+ create mode 100644 drivers/clk/clk-of.h
 
-But, if there's any value at all to choosing intermediate orders here in
-truncation, I don't think choosing a single order is the right approach -
-more easily implemented, yes, but is it worth doing?
 
-What you'd actually want (if anything) is to choose the largest orders
-possible, with smaller and smaller orders filling in the rest (I expect
-there's a technical name for this, but I don't remember - bin packing
-is something else, I think).
+base-commit: 7a934f4bd7d6f9da84c8812da3ba42ee10f5778e
+-- 
+2.39.2
 
-As this code stands, truncate a 2M huge page at 1M and you get two 1M
-pieces (one then discarded) - nice; but truncate it at 1M+1 and you get
-lots of order 2 (forced up from 1) pieces.  Seems weird, and not worth
-the effort.
-
-Hugh
-
-> +
-> +	/* order-1 THP not supported, downgrade to order-0 */
-> +	if (new_order == 1)
-> +		new_order = 0;
-> +
-> +
->  	if (folio_has_private(folio))
->  		folio_invalidate(folio, offset, length);
->  	if (!folio_test_large(folio))
->  		return true;
-> -	if (split_folio(folio) == 0)
-> +	if (split_huge_page_to_list_to_order(&folio->page, NULL, new_order) == 0)
->  		return true;
->  	if (folio_test_dirty(folio))
->  		return false;
-> -- 
-> 2.39.2
