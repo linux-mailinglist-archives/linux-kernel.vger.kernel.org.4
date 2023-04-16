@@ -2,131 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20D7C6E3805
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 14:34:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5659E6E3808
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 14:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbjDPMex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 08:34:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48170 "EHLO
+        id S230231AbjDPMf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 08:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbjDPMev (ORCPT
+        with ESMTP id S229743AbjDPMf0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 08:34:51 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE21C26AF;
-        Sun, 16 Apr 2023 05:34:46 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id m39-20020a05600c3b2700b003f170e75bd3so369241wms.1;
-        Sun, 16 Apr 2023 05:34:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681648485; x=1684240485;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gepVDcgZ63u10tf5D/Mxq+XYlNxqDNlnnomNWJ0Zkyk=;
-        b=Yh/6oMntD58gdk+Jxg9Zuuj79vjdYVNa4EJwaI9fSzqkqe7hrYsV5LXnU+8FNfAruw
-         llfiBArledcqkjHaWPAhXuF+yyNzGWuWgRLgl0d+/WyK/gg687U1RQfAea/6/jatXcc9
-         dYM+6yKEWFg5Lz4329zvf9bDEA4Nu4dSlcKY7DtTIcjo8sTHRSShjeHvFni3LhQA7HJY
-         7q+zcIp9ep0svn9hNhnK40TubxcLQYBqcMDFkNtLnmnXLCDnNTlGG6CI20KtP5s6GqgH
-         YUrBGiJsyuBlO+24QGiWUVrpJefRB4c843oR3xkdpeyWK1ygyLg38QT6IaPLD2+3rDEb
-         8rWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681648485; x=1684240485;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gepVDcgZ63u10tf5D/Mxq+XYlNxqDNlnnomNWJ0Zkyk=;
-        b=CjoHuPQhDYYfqLqZxt/YOjKYYo6SkPmbdbHndCX3Liv372tZoB/x2CypLzTVqPtc33
-         rjAlfvRJl/7x1IV9E2Y45KnRVhAQX6F229FcGfgM8VoYkc718g3FNpc7oAL46U4sW7Cl
-         36EwWSuaOcTQWKVzpVqB0gFmtSV2IMZZYB4CvY8i1/nA5zOqPNVVVcwvYS/VqyizHZQn
-         hUGznwspHDL2nPhEdj5GqYS6P4qqRmkYWpwZdsQJo8cLZQPTLauk1Dru1jzho7rn4K6x
-         Lerk8FvS4A1L/vFHzpmiLuilN9a9rNkm67rC/TP9PSt5gvkJzUVrhcpvDQhtZz/N8fDd
-         A18Q==
-X-Gm-Message-State: AAQBX9cPvQsQejVerUui5lS+q8XBK/PWWQkzbdBr4C/GOWqwpH7k/yX1
-        sFeIUbjPHS+9kj4XXp3aqNKdU3tWFW5ZrQ==
-X-Google-Smtp-Source: AKy350aWNq62xOQqANII30KV/v65neAOYfc1waQwr0SahK/pCHkD0SbV9i12Lz4Ns/NQAHLIgawAPg==
-X-Received: by 2002:a1c:f402:0:b0:3ed:da74:ab0c with SMTP id z2-20020a1cf402000000b003edda74ab0cmr8547679wma.19.1681648485237;
-        Sun, 16 Apr 2023 05:34:45 -0700 (PDT)
-Received: from eldamar.lan (c-82-192-242-114.customer.ggaweb.ch. [82.192.242.114])
-        by smtp.gmail.com with ESMTPSA id g15-20020a05600c4ecf00b003edc4788fa0sm13028683wmq.2.2023.04.16.05.34.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 05:34:44 -0700 (PDT)
-Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
-Received: by eldamar.lan (Postfix, from userid 1000)
-        id DF91ABE2DE0; Sun, 16 Apr 2023 14:34:43 +0200 (CEST)
-Date:   Sun, 16 Apr 2023 14:34:43 +0200
-From:   Salvatore Bonaccorso <carnil@debian.org>
-To:     Cyril Brulebois <cyril@debamax.com>, regressions@lists.linux.dev
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Herring <robh@kernel.org>,
-        Michal Suchanek <msuchanek@suse.de>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] fbdev/offb: Update expected device name
-Message-ID: <ZDvrY7X9mpJ7WZ3z@eldamar.lan>
-References: <20230412095509.2196162-1-cyril@debamax.com>
- <20230412095509.2196162-2-cyril@debamax.com>
+        Sun, 16 Apr 2023 08:35:26 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3D44F2127;
+        Sun, 16 Apr 2023 05:35:23 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.153])
+        by gateway (Coremail) with SMTP id _____8BxYU+K6ztkIHkdAA--.45982S3;
+        Sun, 16 Apr 2023 20:35:22 +0800 (CST)
+Received: from [10.20.42.153] (unknown [10.20.42.153])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx+72H6ztk1VApAA--.48745S3;
+        Sun, 16 Apr 2023 20:35:20 +0800 (CST)
+Subject: Re: [regression] Bug 217069 - Wake on Lan is broken on r8169 since
+ 6.2
+To:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Bob Moore <robert.moore@intel.com>,
+        acpica-devel@lists.linuxfoundation.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>
+References: <e6aaddb9-afec-e77d-be33-570f9f10a9c2@leemhuis.info>
+ <53e8b4db-e8dd-4dfa-f873-7dcbeac09149@leemhuis.info>
+ <13aea525-108a-e018-987d-2447ff1d42df@leemhuis.info>
+From:   Jianmin Lv <lvjianmin@loongson.cn>
+Message-ID: <754225a2-95a9-2c36-1886-7da1a78308c2@loongson.cn>
+Date:   Sun, 16 Apr 2023 20:35:19 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <13aea525-108a-e018-987d-2447ff1d42df@leemhuis.info>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230412095509.2196162-2-cyril@debamax.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: AQAAf8Cx+72H6ztk1VApAA--.48745S3
+X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxJr4fZr4rAryUWw4rtFWkJFb_yoW8tFWfpF
+        W5Kws8Xw4DGr18tan7Gw4v9ayj9wn8JF90kr9rXr4rXa45XasYvFyIgr43WFyUCr92ka13
+        ta13ZryFgr9rAaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bxxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1le2I2
+        62IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4
+        CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvj
+        eVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw2
+        8IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
+        x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrw
+        CI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI
+        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z2
+        80aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU7XTmDUUUU
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+ From the feedbacks, the WOL issue has been fixed, and I have submitted 
+a fixed patch to ACPICA, which has been reviewing in last week (Rafael 
+also looked into the fixed patch).
 
-looping in as well the regressions list (hoping not doing any mistake
-with the regzbot commands):
+There are two kinds of issues in the bug, one is WOL failed in kexec 
+reboot, another is WOL failed in cold reboot. The former one still exist 
+after reverted patch(5c62d5aab8752e5ee7bfbe75ed6060db1c787f98),
+so this issue is not caused by the reverted patch. The second is caused 
+by the reverted patch, and has been fixed with my provided patch.
 
-On Wed, Apr 12, 2023 at 11:55:08AM +0200, Cyril Brulebois wrote:
-> Since commit 241d2fb56a18 ("of: Make OF framebuffer device names unique"),
-> as spotted by Frédéric Bonnard, the historical "of-display" device is
-> gone: the updated logic creates "of-display.0" instead, then as many
-> "of-display.N" as required.
-> 
-> This means that offb no longer finds the expected device, which prevents
-> the Debian Installer from setting up its interface, at least on ppc64el.
-> 
-> It might be better to iterate on all possible nodes, but updating the
-> hardcoded device from "of-display" to "of-display.0" is confirmed to fix
-> the Debian Installer at the very least.
-> 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217328
-> Link: https://bugs.debian.org/1033058
-> Fixes: 241d2fb56a18 ("of: Make OF framebuffer device names unique")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Cyril Brulebois <cyril@debamax.com>
-> ---
->  drivers/video/fbdev/offb.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/video/fbdev/offb.c b/drivers/video/fbdev/offb.c
-> index b97d251d894b..6264c7184457 100644
-> --- a/drivers/video/fbdev/offb.c
-> +++ b/drivers/video/fbdev/offb.c
-> @@ -698,7 +698,7 @@ MODULE_DEVICE_TABLE(of, offb_of_match_display);
->  
->  static struct platform_driver offb_driver_display = {
->  	.driver = {
-> -		.name = "of-display",
-> +		.name = "of-display.0",
->  		.of_match_table = offb_of_match_display,
->  	},
->  	.probe = offb_probe_display,
+Please see:
+https://bugzilla.kernel.org/show_bug.cgi?id=217069#c54
+https://bugzilla.kernel.org/show_bug.cgi?id=217069#c59
 
-#regzbot ^introduced 241d2fb56a18
-#regzbot title: Open Firmware framebuffer cannot find of-display
-#regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=217328
-#regzbot link: https://lore.kernel.org/all/20230412095509.2196162-1-cyril@debamax.com/T/#m34493480243a2cad2ae359abfd9db5e755f41add
-#regzbot link: https://bugs.debian.org/1033058
+Thanks.
 
-Regards,
-Salvatore
+
+On 2023/4/14 ä¸‹åˆ8:48, Thorsten Leemhuis wrote:
+> On 19.03.23 08:20, Linux regression tracking (Thorsten Leemhuis) wrote:
+>> On 22.02.23 08:57, Thorsten Leemhuis wrote:
+>>>
+>>> I noticed a regression report in bugzilla.kernel.org. As many (most?)
+>>> kernel developer don't keep an eye on it, I decided to forward it by
+>>> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217069 :
+>>
+>> An issue that looked like a network bug was now bisected and it turns
+>> out it's cause by 5c62d5aab875 ("ACPICA: Events: Support fixed PCIe wake
+>> event") which Huacai Chen provided. Could you take a look at the ticket
+>> linked above?
+> 
+> Jianmin did get close to a proper fix a while ago
+> (https://bugzilla.kernel.org/show_bug.cgi?id=217069#c46 ), but it
+> appears there wasn't any progress to fix this during the last week. Or
+> did I miss it?
+> 
+> This is kinda unsatisfying, as the culprit is now known for nearly four
+> weeks; especially as this is a issue that is present in 6.2 since it was
+> released and would have been possible to fix there and in mainline with
+> a simple revert. We even got close to one two weeks ago already
+> (https://bugzilla.kernel.org/show_bug.cgi?id=217069#c49 ).
+> 
+> #sigh
+> 
+> I'd say we should revert this. Rafael, what's your opinion here?
+> 
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> --
+> Everything you wanna know about Linux kernel regression tracking:
+> https://linux-regtracking.leemhuis.info/about/#tldr
+> If I did something stupid, please tell me, as explained on that page.
+> 
+> #regzbot poke
+> 
+
