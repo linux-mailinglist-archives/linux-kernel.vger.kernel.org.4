@@ -2,54 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C00096E36C1
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 11:45:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FD846E36C7
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 11:49:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbjDPJpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 05:45:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49176 "EHLO
+        id S230339AbjDPJts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 05:49:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbjDPJpw (ORCPT
+        with ESMTP id S230036AbjDPJto (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 05:45:52 -0400
-Received: from smtp.smtpout.orange.fr (smtp-29.smtpout.orange.fr [80.12.242.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E278270E
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 02:45:50 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id nyx8pERD6B8bjnyx8pG0XW; Sun, 16 Apr 2023 11:45:48 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orange.fr;
-        s=t20230301; t=1681638348;
-        bh=dXigaYMwb+m2xTiuf4ebRXnogGfAxTaA5Lp2S1H6688=;
-        h=From:To:Cc:Subject:Date;
-        b=Zmmc/sbB94VZ+7wayt/SSi8OckpymgDv2PTvp3KxkKDJjTkBYiYE9Be5z0V3LwaSF
-         Q0V2u3ThYQBWM2VG2SfZMp4O6MzooqbHyLTB/i1upDYalEeeUU0u2IOx6RuNkuQ6bB
-         n1zBQJp5H9gdlYR8GtbdYo3rGGWe2Qcs0rEFPmODGwFldLhc8g20uIGo8KOAhFwEJg
-         IC+qBILIY3OLbkDBdo/+Exk5zZOWS88VaUjy8Au9pqUvxakcqugC2doQoQSv5STOhH
-         KpvuJCHevmsXSLnTXKsC1vCxdoFSqYYbx7hQ9nIzQgnZDsCP1UZG7g7ZAGgHv+hLdr
-         2jMMOi66asH0w==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 16 Apr 2023 11:45:48 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-arm-msm@vger.kernel.org, iommu@lists.linux.dev
-Subject: [PATCH] iommu/msm: Use the devm_clk_get_prepared() helper function
-Date:   Sun, 16 Apr 2023 11:45:45 +0200
-Message-Id: <14a5928a91fc8addf7f87a76428188ddc4271727.1681638224.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sun, 16 Apr 2023 05:49:44 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE1E1BDC
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 02:49:42 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id he13so17327242wmb.2
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 02:49:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681638581; x=1684230581;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yYyN/AslObwW9PeqYPq039dTL5hYssNl8+iqncjQ4as=;
+        b=VZ2wGcQeAVAEP4RFmct0L/6OBDL00plV03Do3FEg+eFPg0jTLiT3ZOpe4DgA86gVzw
+         LZXf38Nzv9EaFxGARYcJ6qMAEZEvUGpOY8L92n0vUNr+msh1B5C35KN6H0jtGuVPfEwb
+         4ebPbI/bw56PVshiRe/R9WI4RPpOXJR6kNi0h+R+WichgaVRMOcoXj8cj5O85+reR6RX
+         i73QSFAAGEjiKBnz4IrBsa3aloE3Zy/WEugnTd5+Cp3OWngFqM0d5Vo5kNKgOXeJyUb/
+         AMh6nriNV5sYSeQ+gWerDYb7GBcunrx2uokohbrD+B8I79ZBRa1Vz0gjJp4uAikACZ88
+         GJog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681638581; x=1684230581;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=yYyN/AslObwW9PeqYPq039dTL5hYssNl8+iqncjQ4as=;
+        b=edc1JV5ONXkJzPYM7mx46TtOX9gMgzRZpvYrVLK7JckmvEXOcIo69CPRuPU1OISLQQ
+         DBfS3KtkfKv3BV/UAyPbYtgqyzk+t24ZDS7+jI5ILrzxobIZI5ci8U2MfKOlBVXjmhC0
+         DWSWy/ZLTXUr+Q6eSCbktpgWuNlbykX5lH8nS4rranlIiLrYXljwAiL+IH9R99cwfNEj
+         NFs9ExZrEQ/FkLYG1DWe3eqlPDQ/5RwnPbTjLCmk4mWcOxBmpSQk7Ot9WKobeLYuYIgl
+         Dk7imzJgY7cT7EhgQPRgmoOJscbokksylCWyZpugzQ/lXWk6GazKBzWhQTzVbEEHuOlk
+         DFkA==
+X-Gm-Message-State: AAQBX9ceKc4X9lcfcKIlrjQLlFITmADkhiYwqCcE6QY9wNZacCBJN3n9
+        32DOFud+65iDD3KlstyNR6oaRw==
+X-Google-Smtp-Source: AKy350bUiZqjoxYERnSAJKpvAt8CrihtPhmKAzb1lGX0uuzwv9YM5+W2t3cbapkeUaIw+yUjLPB/Sw==
+X-Received: by 2002:a7b:ce91:0:b0:3ed:e4ac:d532 with SMTP id q17-20020a7bce91000000b003ede4acd532mr9007838wmj.36.1681638581118;
+        Sun, 16 Apr 2023 02:49:41 -0700 (PDT)
+Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id iz11-20020a05600c554b00b003f09aaf547asm14362239wmb.1.2023.04.16.02.49.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Apr 2023 02:49:40 -0700 (PDT)
+Message-ID: <a83c3a2d-8c67-9053-455d-c1cee3545f16@linaro.org>
+Date:   Sun, 16 Apr 2023 11:49:34 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [GIT PULL] thermal for v6.4-rc1 #2
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,149 +82,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the devm_clk_get_prepared() helper function instead of hand-writing it.
-It saves some lines of code.
 
-It also makes the error handling path of the probe and the remove function
-useless.
+Hi Rafael,
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-This patch has been cross-compiled only.
----
- drivers/iommu/msm_iommu.c | 62 ++++++++++-----------------------------
- 1 file changed, 15 insertions(+), 47 deletions(-)
+please consider pulling the following changes, they are all from the 
+thermal/bleeding-edge which was then merged to thermal/linux-next
 
-diff --git a/drivers/iommu/msm_iommu.c b/drivers/iommu/msm_iommu.c
-index 79d89bad5132..5a9bbbd185cf 100644
---- a/drivers/iommu/msm_iommu.c
-+++ b/drivers/iommu/msm_iommu.c
-@@ -712,48 +712,30 @@ static int msm_iommu_probe(struct platform_device *pdev)
- 	iommu->dev = &pdev->dev;
- 	INIT_LIST_HEAD(&iommu->ctx_list);
+Thanks
+
+   -- Daniel
+
+The following changes since commit 75f74a907164eaeb1bd5334b01504a84b2b63bf5:
+
+   Merge tag 'thermal-v6.4-rc1-1' of 
+ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux 
+(2023-04-03 20:43:32 +0200)
+
+are available in the Git repository at:
+
  
--	iommu->pclk = devm_clk_get(iommu->dev, "smmu_pclk");
-+	iommu->pclk = devm_clk_get_prepared(iommu->dev, "smmu_pclk");
- 	if (IS_ERR(iommu->pclk))
- 		return dev_err_probe(iommu->dev, PTR_ERR(iommu->pclk),
- 				     "could not get smmu_pclk\n");
- 
--	ret = clk_prepare(iommu->pclk);
--	if (ret)
--		return dev_err_probe(iommu->dev, ret,
--				     "could not prepare smmu_pclk\n");
--
--	iommu->clk = devm_clk_get(iommu->dev, "iommu_clk");
--	if (IS_ERR(iommu->clk)) {
--		clk_unprepare(iommu->pclk);
-+	iommu->clk = devm_clk_get_prepared(iommu->dev, "iommu_clk");
-+	if (IS_ERR(iommu->clk))
- 		return dev_err_probe(iommu->dev, PTR_ERR(iommu->clk),
- 				     "could not get iommu_clk\n");
--	}
--
--	ret = clk_prepare(iommu->clk);
--	if (ret) {
--		clk_unprepare(iommu->pclk);
--		return dev_err_probe(iommu->dev, ret, "could not prepare iommu_clk\n");
--	}
- 
- 	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	iommu->base = devm_ioremap_resource(iommu->dev, r);
--	if (IS_ERR(iommu->base)) {
--		ret = dev_err_probe(iommu->dev, PTR_ERR(iommu->base), "could not get iommu base\n");
--		goto fail;
--	}
-+	if (IS_ERR(iommu->base))
-+		return dev_err_probe(iommu->dev, PTR_ERR(iommu->base),
-+				     "could not get iommu base\n");
- 	ioaddr = r->start;
- 
- 	iommu->irq = platform_get_irq(pdev, 0);
--	if (iommu->irq < 0) {
--		ret = -ENODEV;
--		goto fail;
--	}
-+	if (iommu->irq < 0)
-+		return -ENODEV;
- 
- 	ret = of_property_read_u32(iommu->dev->of_node, "qcom,ncb", &val);
--	if (ret) {
--		dev_err(iommu->dev, "could not get ncb\n");
--		goto fail;
--	}
-+	if (ret)
-+		return dev_err_probe(iommu->dev, ret, "could not get ncb\n");
- 	iommu->ncb = val;
- 
- 	msm_iommu_reset(iommu->base, iommu->ncb);
-@@ -767,8 +749,7 @@ static int msm_iommu_probe(struct platform_device *pdev)
- 
- 	if (!par) {
- 		pr_err("Invalid PAR value detected\n");
--		ret = -ENODEV;
--		goto fail;
-+		return -ENODEV;
- 	}
- 
- 	ret = devm_request_threaded_irq(iommu->dev, iommu->irq, NULL,
-@@ -778,7 +759,7 @@ static int msm_iommu_probe(struct platform_device *pdev)
- 					iommu);
- 	if (ret) {
- 		pr_err("Request IRQ %d failed with ret=%d\n", iommu->irq, ret);
--		goto fail;
-+		return ret;
- 	}
- 
- 	list_add(&iommu->dev_node, &qcom_iommu_devices);
-@@ -787,23 +768,19 @@ static int msm_iommu_probe(struct platform_device *pdev)
- 				     "msm-smmu.%pa", &ioaddr);
- 	if (ret) {
- 		pr_err("Could not add msm-smmu at %pa to sysfs\n", &ioaddr);
--		goto fail;
-+		return ret;
- 	}
- 
- 	ret = iommu_device_register(&iommu->iommu, &msm_iommu_ops, &pdev->dev);
- 	if (ret) {
- 		pr_err("Could not register msm-smmu at %pa\n", &ioaddr);
--		goto fail;
-+		return ret;
- 	}
- 
- 	pr_info("device mapped at %p, irq %d with %d ctx banks\n",
- 		iommu->base, iommu->irq, iommu->ncb);
- 
--	return ret;
--fail:
--	clk_unprepare(iommu->clk);
--	clk_unprepare(iommu->pclk);
--	return ret;
-+	return 0;
- }
- 
- static const struct of_device_id msm_iommu_dt_match[] = {
-@@ -811,20 +788,11 @@ static const struct of_device_id msm_iommu_dt_match[] = {
- 	{}
- };
- 
--static void msm_iommu_remove(struct platform_device *pdev)
--{
--	struct msm_iommu_dev *iommu = platform_get_drvdata(pdev);
--
--	clk_unprepare(iommu->clk);
--	clk_unprepare(iommu->pclk);
--}
--
- static struct platform_driver msm_iommu_driver = {
- 	.driver = {
- 		.name	= "msm_iommu",
- 		.of_match_table = msm_iommu_dt_match,
- 	},
- 	.probe		= msm_iommu_probe,
--	.remove_new	= msm_iommu_remove,
- };
- builtin_platform_driver(msm_iommu_driver);
+ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git 
+tags/thermal-v6.4-rc1-2
+
+for you to fetch changes up to 3d439b1a2ad36c8b4ea151c8de25309d60d17407:
+
+   thermal/core: Alloc-copy-free the thermal zone parameters structure 
+(2023-04-07 18:36:28 +0200)
+
+----------------------------------------------------------------
+- Do preparating cleaning and DT bindings for RK3588 support
+   (Sebastian Reichel)
+
+- Add driver support for RK3588 (Finley Xiao)
+
+- Use devm_reset_control_array_get_exclusive() for the Rockchip driver
+   (Ye Xingchen)
+
+- Detect power gated thermal zones and return -EAGAIN when reading the
+   temperature (Mikko Perttunen)
+
+- Remove thermal_bind_params structure as it is unused (Zhang Rui)
+
+- Drop unneeded quotes in DT bindings allowing to run yamllint (Rob
+   Herring)
+
+- Update the power allocator documentation according to the thermal
+   trace relocation (Lukas Bulwahn)
+
+- Fix sensor 1 interrupt status bitmask for the Mediatek LVTS sensor
+   (Chen-Yu Tsai)
+
+- Use the dev_err_probe() helper in the Amlogic driver (Ye Xingchen)
+
+- Add AP domain support to LVTS thermal controllers for mt8195
+   (Balsam CHIHI)
+
+- Remove buggy call to thermal_of_zone_unregister() (Daniel Lezcano)
+
+- Make thermal_of_zone_[un]register() private to the thermal OF code
+   (Daniel Lezcano)
+
+- Create a private copy of the thermal zone device parameters
+   structure when registering a thermal zone (Daniel Lezcano)
+
+----------------------------------------------------------------
+Balsam CHIHI (2):
+       dt-bindings: thermal: mediatek: Add AP domain to LVTS thermal 
+controllers for mt8195
+       thermal/drivers/mediatek/lvts_thermal: Add AP domain for mt8195
+
+Chen-Yu Tsai (1):
+       thermal/drivers/mediatek/lvts_thermal: Fix sensor 1 interrupt 
+status bitmask
+
+Daniel Lezcano (3):
+       thermal/drivers/bcm2835: Remove buggy call to 
+thermal_of_zone_unregister
+       thermal/of: Unexport unused OF functions
+       thermal/core: Alloc-copy-free the thermal zone parameters structure
+
+Finley Xiao (1):
+       thermal/drivers/rockchip: Support RK3588 SoC in the thermal driver
+
+Lukas Bulwahn (1):
+       MAINTAINERS: adjust entry in THERMAL/POWER_ALLOCATOR after header 
+movement
+
+Mikko Perttunen (1):
+       thermal/drivers/tegra-bpmp: Handle offline zones
+
+Rob Herring (1):
+       dt-bindings: thermal: Drop unneeded quotes
+
+Sebastian Reichel (6):
+       thermal/drivers/rockchip: Simplify getting match data
+       thermal/drivers/rockchip: Simplify clock logic
+       thermal/drivers/rockchip: Use dev_err_probe
+       thermal/drivers/rockchip: Simplify channel id logic
+       thermal/drivers/rockchip: Support dynamic sized sensor array
+       dt-bindings: rockchip-thermal: Support the RK3588 SoC compatible
+
+Ye Xingchen (2):
+       thermal/drivers/rockchip: use 
+devm_reset_control_array_get_exclusive()
+       thermal: amlogic: Use dev_err_probe()
+
+Zhang Rui (1):
+       thermal/core: Remove thermal_bind_params structure
+
+  Documentation/devicetree/bindings/thermal/amlogic,thermal.yaml  |   2 +-
+  Documentation/devicetree/bindings/thermal/imx-thermal.yaml      |   4 +--
+  Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml    |   4 +--
+  Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml |   1 +
+  Documentation/driver-api/thermal/sysfs-api.rst                  |  40 
+-------------------------
+  MAINTAINERS                                                     |   2 +-
+  drivers/thermal/amlogic_thermal.c                               |   7 
+++---
+  drivers/thermal/broadcom/bcm2835_thermal.c                      |   4 +--
+  drivers/thermal/mediatek/lvts_thermal.c                         | 100 
++++++++++++++++++++++++++++++++++++++++++++++++---------------
+  drivers/thermal/rockchip_thermal.c                              | 324 
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-------------------------------------------------------------
+  drivers/thermal/tegra/tegra-bpmp-thermal.c                      |   9 
++++++-
+  drivers/thermal/thermal_core.c                                  | 144 
++++++++++++++++--------------------------------------------------------------------------
+  drivers/thermal/thermal_of.c                                    |   8 
+++---
+  include/dt-bindings/thermal/mediatek,lvts-thermal.h             |  10 
++++++++
+  include/linux/thermal.h                                         |  55 
+----------------------------------
+  15 files changed, 358 insertions(+), 356 deletions(-)
+
 -- 
-2.34.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
