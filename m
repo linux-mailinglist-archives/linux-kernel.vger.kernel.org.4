@@ -2,202 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F87E6E348F
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 02:15:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 093DA6E3498
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 02:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbjDPAPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Apr 2023 20:15:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58158 "EHLO
+        id S230135AbjDPAYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Apr 2023 20:24:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDPAPC (ORCPT
+        with ESMTP id S229451AbjDPAYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Apr 2023 20:15:02 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906341FE1
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Apr 2023 17:15:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681604100; x=1713140100;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aLG3LVTA7bxucq+WjXH8rOi7AHL4o8HgjGHC/Ra5xpk=;
-  b=EqmHRLCtUXmFxIqIgIUauxRPbPFNTPL2mAHU7aqSo9oMo/JOHPzsSwlq
-   vw9AD8545fxPlx6aojGTpgR3VBuhbrCFHaXmoWg/JLJjDg4/3BNrVGjPO
-   C7ngLuwlEye1BOF4VteZf8BO0fUnFcE78XL45mak3vHL+S5iC0LZGZwLx
-   8wJUFxXpLCq44sDb/ri6I5e8FfM7GMbkpQqzTo6U5DQzinMT7DgDq+jO6
-   O+l72seoZ8bswKgG6SLkkPdTYxxV/985PoAidJVtWya2JDX8HlWEvsyMw
-   0w7RkHY2Rn+avdU5/3rxKATwCSF/iG26T3Vw9i1h6Gp4rUA/vazxrWRMj
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="347418968"
-X-IronPort-AV: E=Sophos;i="5.99,201,1677571200"; 
-   d="scan'208";a="347418968"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2023 17:14:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="754888043"
-X-IronPort-AV: E=Sophos;i="5.99,201,1677571200"; 
-   d="scan'208";a="754888043"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 15 Apr 2023 17:14:57 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pnq2i-000bQl-37;
-        Sun, 16 Apr 2023 00:14:56 +0000
-Date:   Sun, 16 Apr 2023 08:14:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: [tip:irq/urgent 1/1] drivers/pci/msi/msi.c:763:18: error: use of
- undeclared identifier 'nvec'; did you mean 'nvev'?
-Message-ID: <202304160844.cCgXqLn2-lkp@intel.com>
+        Sat, 15 Apr 2023 20:24:46 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 67CFC35A8;
+        Sat, 15 Apr 2023 17:24:44 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 550BE1063;
+        Sat, 15 Apr 2023 17:25:28 -0700 (PDT)
+Received: from slackpad.lan (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3DC203F587;
+        Sat, 15 Apr 2023 17:24:42 -0700 (PDT)
+Date:   Sun, 16 Apr 2023 01:24:21 +0100
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Jonathan McDowell <noodles@earth.li>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] ARM: dts: sun5i: chip: Enable bluetooth
+Message-ID: <20230416012421.255bfd19@slackpad.lan>
+In-Reply-To: <f26d11e613df7bd55822ff3fb7689e36bf9e4f7a.1681580558.git.noodles@earth.li>
+References: <cover.1681580558.git.noodles@earth.li>
+        <f26d11e613df7bd55822ff3fb7689e36bf9e4f7a.1681580558.git.noodles@earth.li>
+Organization: Arm Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/urgent
-head:   84d9651e13fb9820041d19262a55906851524c0f
-commit: 84d9651e13fb9820041d19262a55906851524c0f [1/1] PCI/MSI: Remove over-zealous hardware size check in pci_msix_validate_entries()
-config: s390-randconfig-r035-20230416 (https://download.01.org/0day-ci/archive/20230416/202304160844.cCgXqLn2-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=84d9651e13fb9820041d19262a55906851524c0f
-        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
-        git fetch --no-tags tip irq/urgent
-        git checkout 84d9651e13fb9820041d19262a55906851524c0f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/pci/
+On Sat, 15 Apr 2023 18:46:03 +0100
+Jonathan McDowell <noodles@earth.li> wrote:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304160844.cCgXqLn2-lkp@intel.com/
+> The C.H.I.P has an rtl8723bs device with the bluetooth interface hooked
+> up on UART3. Support for this didn't exist in mainline when the DTS was
+> initially added, but it does now, so enable it.
+> 
+> Signed-off-by: Jonathan McDowell <noodles@earth.li>
+> ---
+>  arch/arm/boot/dts/sun5i-r8-chip.dts | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/sun5i-r8-chip.dts b/arch/arm/boot/dts/sun5i-r8-chip.dts
+> index fd37bd1f3920..4d72a181d8aa 100644
+> --- a/arch/arm/boot/dts/sun5i-r8-chip.dts
+> +++ b/arch/arm/boot/dts/sun5i-r8-chip.dts
+> @@ -255,6 +255,10 @@ &uart3 {
+>  	pinctrl-0 = <&uart3_pg_pins>,
+>  		    <&uart3_cts_rts_pg_pins>;
+>  	status = "okay";
+> +
+> +	bluetooth {
+> +		compatible = "realtek,rtl8723bs-bt";
+> +	}
 
-All errors (new ones prefixed by >>):
+As the kernel test robot already pointed out, there is a semicolon
+missing here.
+Otherwise looks good (dt-validate passes), but don't know if there are
+any wakeup GPIOs connected (can't seem to find a schematic?).
 
-   In file included from drivers/pci/msi/msi.c:11:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/pci/msi/msi.c:11:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/pci/msi/msi.c:11:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/pci/msi/msi.c:763:18: error: use of undeclared identifier 'nvec'; did you mean 'nvev'?
-           for (i = 0; i < nvec; i++) {
-                           ^~~~
-                           nvev
-   drivers/pci/msi/msi.c:753:92: note: 'nvev' declared here
-   static bool pci_msix_validate_entries(struct pci_dev *dev, struct msix_entry *entries, int nvev)
-                                                                                              ^
-   drivers/pci/msi/msi.c:765:23: error: use of undeclared identifier 'nvec'; did you mean 'nvev'?
-                   for (j = i + 1; j < nvec; j++) {
-                                       ^~~~
-                                       nvev
-   drivers/pci/msi/msi.c:753:92: note: 'nvev' declared here
-   static bool pci_msix_validate_entries(struct pci_dev *dev, struct msix_entry *entries, int nvev)
-                                                                                              ^
-   12 warnings and 2 errors generated.
+Cheers,
+Andre
 
 
-vim +763 drivers/pci/msi/msi.c
+>  };
+>  
+>  &usb_otg {
 
-^1da177e4c3f41 drivers/pci/msi.c     Linus Torvalds    2005-04-16  752  
-84d9651e13fb98 drivers/pci/msi/msi.c Thomas Gleixner   2023-04-10  753  static bool pci_msix_validate_entries(struct pci_dev *dev, struct msix_entry *entries, int nvev)
-^1da177e4c3f41 drivers/pci/msi.c     Linus Torvalds    2005-04-16  754  {
-4644d22eb673f1 drivers/pci/msi/msi.c Thomas Gleixner   2022-11-11  755  	bool nogap;
-ded86d8d37736d drivers/pci/msi.c     Eric W. Biederman 2007-01-28  756  	int i, j;
-^1da177e4c3f41 drivers/pci/msi.c     Linus Torvalds    2005-04-16  757  
-bab65e48cb064d drivers/pci/msi/msi.c Thomas Gleixner   2022-11-11  758  	if (!entries)
-bab65e48cb064d drivers/pci/msi/msi.c Thomas Gleixner   2022-11-11  759  		return true;
-^1da177e4c3f41 drivers/pci/msi.c     Linus Torvalds    2005-04-16  760  
-4644d22eb673f1 drivers/pci/msi/msi.c Thomas Gleixner   2022-11-11  761  	nogap = pci_msi_domain_supports(dev, MSI_FLAG_MSIX_CONTIGUOUS, DENY_LEGACY);
-4644d22eb673f1 drivers/pci/msi/msi.c Thomas Gleixner   2022-11-11  762  
-^1da177e4c3f41 drivers/pci/msi.c     Linus Torvalds    2005-04-16 @763  	for (i = 0; i < nvec; i++) {
-bab65e48cb064d drivers/pci/msi/msi.c Thomas Gleixner   2022-11-11  764  		/* Check for duplicate entries */
-^1da177e4c3f41 drivers/pci/msi.c     Linus Torvalds    2005-04-16  765  		for (j = i + 1; j < nvec; j++) {
-^1da177e4c3f41 drivers/pci/msi.c     Linus Torvalds    2005-04-16  766  			if (entries[i].entry == entries[j].entry)
-bab65e48cb064d drivers/pci/msi/msi.c Thomas Gleixner   2022-11-11  767  				return false;
-^1da177e4c3f41 drivers/pci/msi.c     Linus Torvalds    2005-04-16  768  		}
-4644d22eb673f1 drivers/pci/msi/msi.c Thomas Gleixner   2022-11-11  769  		/* Check for unsupported gaps */
-4644d22eb673f1 drivers/pci/msi/msi.c Thomas Gleixner   2022-11-11  770  		if (nogap && entries[i].entry != i)
-4644d22eb673f1 drivers/pci/msi/msi.c Thomas Gleixner   2022-11-11  771  			return false;
-^1da177e4c3f41 drivers/pci/msi.c     Linus Torvalds    2005-04-16  772  	}
-bab65e48cb064d drivers/pci/msi/msi.c Thomas Gleixner   2022-11-11  773  	return true;
-3ac020e0ca8bef drivers/pci/msi.c     Christoph Hellwig 2016-07-12  774  }
-7bd007e480672c drivers/pci/msi.c     Eric W. Biederman 2006-10-04  775  
-
-:::::: The code at line 763 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
-
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
