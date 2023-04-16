@@ -2,239 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88DFB6E3AEC
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 19:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F99C6E3AF3
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 20:00:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbjDPR7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 13:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59598 "EHLO
+        id S229929AbjDPSAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 14:00:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjDPR7L (ORCPT
+        with ESMTP id S229851AbjDPSAv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 13:59:11 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B58121
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 10:59:08 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:5054:ff:feb3:8f48] (helo=regzbot.fritz.box); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        id 1po6eY-0008JP-N0; Sun, 16 Apr 2023 19:59:06 +0200
-From:   "Regzbot (on behalf of Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: Linux regressions report  for mainline [2023-04-16]
-Date:   Sun, 16 Apr 2023 17:59:06 +0000
-Message-Id: <168166781352.1843526.278570500979918184@leemhuis.info>
-X-Mailer: git-send-email 2.39.2
-Content-Type: text/plain; charset="utf-8"
+        Sun, 16 Apr 2023 14:00:51 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17041121
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 11:00:48 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id dx24so14464354ejb.11
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 11:00:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681668046; x=1684260046;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8r3Ph3wlo9aaB7DgnoPHy3tyWqlgW0rD+5zyojxS3hs=;
+        b=mmJl88pBJmqq7M40k9C+dTZWeToJCvvEHd5ziWNNYwChaS3z0gHAnhGbrzM0HNJUQC
+         8T39fdc1hMuEpXek569W6uW8kX8i8obKHwTib6wyUhWtPldbz76omqa4+TQyhikRfrvh
+         AxDluD6PekcBtZjkytKHnD9pK4FkGxucaj42VQ+7rEtk2Tdj5PpLJgHDyW7LR9Wm0/DR
+         KnxnINvuh0Clp9VDXXm7gnt4U16gJCVxrRFX66npHV/AtwG1pGCrPx6K/UODFATp6H4b
+         9a8Rl6am6CO86e6teZ9CqliGKVMXttYXxVIHKbFCX/byeAs4H5A0bITRdzGSEuWk9OP+
+         yL3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681668046; x=1684260046;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8r3Ph3wlo9aaB7DgnoPHy3tyWqlgW0rD+5zyojxS3hs=;
+        b=Sb//2bmfqkZrj9RfRUYPuKP+FcdUVSkmiSMAbx/rZu11gOlTWMhkeAB3xwrsoLK7fV
+         KCb4tEZ916CJpcOizFSz4eduo8ZkWHzcr1ujp6ZJebR52uaHs7/cNA+wn5IXQafN0K1E
+         sfdzirg3Ff6OBmzHSe1lrgCU7MWxZgYlF+5709sTpBpMt2I+mty1Wwwed+RnChExWW8L
+         SpJDDUATM0SknQMx416/+xqO50yI0CN0mdM+wygWR1g4Kf9y8ZEfs9q1aF7Kd4bxOY6V
+         oIBPbU6MB2f1q45nE+v1BTDogprOpbZWWdnrzK1/wOnl0hi9jen/mJsVJy/ViqXGxcds
+         ls3A==
+X-Gm-Message-State: AAQBX9ccAaISuodzlDyZizAeHOWdg3D+xttTUxOqAeaFKRe/Mh5dnREk
+        gMnblqV25E/sgWwL4CZ/zprcQA==
+X-Google-Smtp-Source: AKy350bEeekS6PjjoYeaY9ZD65LfZf1mhdBAyCQ7201c+Gz5Stjr8OqVkeI9F4SK1ojfGrPXfXNLmg==
+X-Received: by 2002:a17:906:a945:b0:870:d9a:9ebb with SMTP id hh5-20020a170906a94500b008700d9a9ebbmr5530065ejb.38.1681668046515;
+        Sun, 16 Apr 2023 11:00:46 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:f9e3:1d38:66a7:ae92? ([2a02:810d:15c0:828:f9e3:1d38:66a7:ae92])
+        by smtp.gmail.com with ESMTPSA id q17-20020a1709066ad100b0094f6f45b2c1sm576598ejs.156.2023.04.16.11.00.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Apr 2023 11:00:46 -0700 (PDT)
+Message-ID: <21eff2e7-1ebc-1d98-6e5e-025f5cf7b822@linaro.org>
+Date:   Sun, 16 Apr 2023 20:00:44 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1681667948;f6c84dbf;
-X-HE-SMSGID: 1po6eY-0008JP-N0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 03/12] ARM: exynos: Re-introduce Exynos4212 support
+Content-Language: en-US
+To:     Artur Weber <aweber.kernel@gmail.com>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-phy@lists.infradead.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <20230416133422.1949-1-aweber.kernel@gmail.com>
+ <20230416133422.1949-4-aweber.kernel@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230416133422.1949-4-aweber.kernel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus. I'm down to four regressions that I and regzbot are aware of
-and worth mentioning. All of them are worked on by developers. See below
-for details.
+On 16/04/2023 15:34, Artur Weber wrote:
+> The platform was originally dropped in commit bca9085e0ae9 ("ARM:
+> dts: exynos: remove Exynos4212 support (dead code)"), as there were
+> no boards using it.
 
-What currently worries me more are two regressions from the 6.2 cycle
-still not fixed.
+This is not accurate. Platform was not dropped with that commit. This
+was only DTS. I propose to drop it and focus on commit which you are
+reverting.
 
-Wake-on-lan (WOL) apparently is broken for a huge number of users since
-6.2 was released[1]. This is known for 8 weeks now and about 4 weeks ago
-it was bisected to commit 5c62d5aab87 ("ACPICA: Events: Support fixed
-PCIe wake event") we immediately could have reverted. The developer that
-looked into this was even willing to do the revert late March, but then
-got discouraged by a maintainer [2]. But well, a fix was apparently[3]
-finally posted for review last week (to the acpica-devel list); with a
-bit of luck your might get it next week. Still a bit sad that 6.2 is
-broken for so long now, as Greg wants to see it fixed in mainline first.
+> 
+> We will be adding a device that uses it, so add it back.
+> 
+> This effectively reverts commit 9e43eca3c874 ("ARM: EXYNOS: Remove
+> Exynos4212 related dead code").
+> 
+> Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
+> ---
+>  arch/arm/mach-exynos/Kconfig    | 5 +++++
+>  arch/arm/mach-exynos/common.h   | 8 ++++++++
+>  arch/arm/mach-exynos/exynos.c   | 2 ++
+>  arch/arm/mach-exynos/firmware.c | 8 +++++++-
+>  arch/arm/mach-exynos/pm.c       | 2 +-
+>  arch/arm/mach-exynos/suspend.c  | 4 ++++
+>  6 files changed, 27 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm/mach-exynos/Kconfig b/arch/arm/mach-exynos/Kconfig
+> index 4d3b40e4049a..b3d5df5225fe 100644
+> --- a/arch/arm/mach-exynos/Kconfig
+> +++ b/arch/arm/mach-exynos/Kconfig
+> @@ -78,6 +78,11 @@ config CPU_EXYNOS4210
+>  	default y
+>  	depends on ARCH_EXYNOS4
+>  
+> +config SOC_EXYNOS4212
+> +	bool "Samsung Exynos4212"
+> +	default y
+> +	depends on ARCH_EXYNOS4
+> +
+>  config SOC_EXYNOS4412
+>  	bool "Samsung Exynos4412"
+>  	default y
+> diff --git a/arch/arm/mach-exynos/common.h b/arch/arm/mach-exynos/common.h
+> index 29eb075b24a4..c9e85d33c309 100644
+> --- a/arch/arm/mach-exynos/common.h
+> +++ b/arch/arm/mach-exynos/common.h
+> @@ -15,6 +15,7 @@
+>  #define EXYNOS3_SOC_MASK	0xFFFFF000
+>  
+>  #define EXYNOS4210_CPU_ID	0x43210000
+> +#define EXYNOS4212_CPU_ID	0x43220000
+>  #define EXYNOS4412_CPU_ID	0xE4412200
+>  #define EXYNOS4_CPU_MASK	0xFFFE0000
+>  
+> @@ -34,6 +35,7 @@ static inline int is_samsung_##name(void)	\
+>  
+>  IS_SAMSUNG_CPU(exynos3250, EXYNOS3250_SOC_ID, EXYNOS3_SOC_MASK)
+>  IS_SAMSUNG_CPU(exynos4210, EXYNOS4210_CPU_ID, EXYNOS4_CPU_MASK)
+> +IS_SAMSUNG_CPU(exynos4212, EXYNOS4212_CPU_ID, EXYNOS4_CPU_MASK)
+>  IS_SAMSUNG_CPU(exynos4412, EXYNOS4412_CPU_ID, EXYNOS4_CPU_MASK)
+>  IS_SAMSUNG_CPU(exynos5250, EXYNOS5250_SOC_ID, EXYNOS5_SOC_MASK)
+>  IS_SAMSUNG_CPU(exynos5410, EXYNOS5410_SOC_ID, EXYNOS5_SOC_MASK)
+> @@ -52,6 +54,12 @@ IS_SAMSUNG_CPU(exynos5800, EXYNOS5800_SOC_ID, EXYNOS5_SOC_MASK)
+>  # define soc_is_exynos4210()	0
+>  #endif
+>  
+> +#if defined(CONFIG_SOC_EXYNOS4212)
+> +# define soc_is_exynos4212()	is_samsung_exynos4212()
+> +#else
+> +# define soc_is_exynos4212()	0
+> +#endif
+> +
+>  #if defined(CONFIG_SOC_EXYNOS4412)
+>  # define soc_is_exynos4412()	is_samsung_exynos4412()
+>  #else
+> diff --git a/arch/arm/mach-exynos/exynos.c b/arch/arm/mach-exynos/exynos.c
+> index 51a247ca4da8..5671621f1661 100644
+> --- a/arch/arm/mach-exynos/exynos.c
+> +++ b/arch/arm/mach-exynos/exynos.c
+> @@ -178,6 +178,7 @@ static void __init exynos_dt_machine_init(void)
+>  		exynos_cpuidle.dev.platform_data = &cpuidle_coupled_exynos_data;
+>  #endif
+>  	if (of_machine_is_compatible("samsung,exynos4210") ||
+> +	    of_machine_is_compatible("samsung,exynos4212") ||
+>  	    (of_machine_is_compatible("samsung,exynos4412") &&
+>  	     (of_machine_is_compatible("samsung,trats2") ||
+>  		  of_machine_is_compatible("samsung,midas") ||
+> @@ -192,6 +193,7 @@ static char const *const exynos_dt_compat[] __initconst = {
+>  	"samsung,exynos3250",
+>  	"samsung,exynos4",
+>  	"samsung,exynos4210",
+> +	"samsung,exynos4212",
+>  	"samsung,exynos4412",
+>  	"samsung,exynos5",
+>  	"samsung,exynos5250",
+> diff --git a/arch/arm/mach-exynos/firmware.c b/arch/arm/mach-exynos/firmware.c
+> index 2da5b60b59e2..110c8064ee64 100644
+> --- a/arch/arm/mach-exynos/firmware.c
+> +++ b/arch/arm/mach-exynos/firmware.c
+> @@ -63,12 +63,18 @@ static int exynos_cpu_boot(int cpu)
+>  	 *
+>  	 * On Exynos5 devices the call is ignored by trustzone firmware.
+>  	 */
+> -	if (!soc_is_exynos4210() && !soc_is_exynos4412())
+> +	if (!soc_is_exynos4210() && !soc_is_exynos4412() &&
+> +	    !soc_is_exynos4212())
 
-[1] https://bugzilla.kernel.org/show_bug.cgi?id=217069
-[2] https://bugzilla.kernel.org/show_bug.cgi?id=217069#c50
-[3]
-https://lore.kernel.org/all/754225a2-95a9-2c36-1886-7da1a78308c2@loongson.cn/
+Keep them ordered, so 4210, 4212 and 4412.
 
-I have see similar situations a few times already. I sometimes wonder if
-I should post reverts for review in cases like this (say a few days or a
-week after bisection, is no fix is in sight) to enforce the issue and at
-least trigger a discussion about the revert -- and depending on its
-outcome ask you a few days later to consider picking it up. But I'm not
-sure if that's really a wise move.
+>  		return 0;
+>  
+>  	/*
+>  	 * The second parameter of SMC_CMD_CPU1BOOT command means CPU id.
+> +	 * But, Exynos4212 has only one secondary CPU so second parameter
+> +	 * isn't used for informing secure firmware about CPU id.
+>  	 */
+> +	if (soc_is_exynos4212())
+> +		cpu = 0;
+> +
+>  	exynos_smc(SMC_CMD_CPU1BOOT, cpu, 0, 0);
+>  	return 0;
+>  }
+> diff --git a/arch/arm/mach-exynos/pm.c b/arch/arm/mach-exynos/pm.c
+> index 30f4e55bf39e..9b6db04e4e34 100644
+> --- a/arch/arm/mach-exynos/pm.c
+> +++ b/arch/arm/mach-exynos/pm.c
+> @@ -161,7 +161,7 @@ void exynos_enter_aftr(void)
+>  
+>  	exynos_pm_central_suspend();
+>  
+> -	if (soc_is_exynos4412()) {
+> +	if (soc_is_exynos4412() || soc_is_exynos4212()) {
 
+Ditto
 
-Another issue from the 6.2 days still not fixed are a huge number of
-DISCARD request on NVME devices with Btrfs caused by 63a7cb13071
-("btrfs: auto enable discard=async when possible") [1, 2]. This is known
-for 7 weeks and likely results in a performance regression for some
-users and might also reduce the life time of some devices. One user even
-reported his laptop now uses ~10W more due to the constant drive
-activity [3]. After some back and forth the Btrfs developers agreed on
-working towards a fix recently [4]; but I doubt we'll see it this week.
-I have no idea if a revert would be possible here. But I thought you
-might want to be aware of this.
+Best regards,
+Krzysztof
 
-[1] https://lore.kernel.org/linux-btrfs/Y%2F%2Bn1wS%2F4XAH7X1p@nz/
-[2]
-https://lore.kernel.org/linux-btrfs/CAHmG9huwQcQXvy3HS0OP9bKFxwUa3aQj9MXZCr74emn0U+efqQ@mail.gmail.com/
-[3]
-https://lore.kernel.org/linux-btrfs/6a54fa77-9a0c-8844-2eb0-b65591e97a16@gmail.com/
-[4] https://lore.kernel.org/linux-btrfs/20230404193909.GC344341@zen/
-
-HTH, Ciao, Thorsten
-
-P.S.: Sorry for bringing up a regression last week that was just a
-kernel warning; for some reason I was under the wrong impression that
-video apps were crashing; I guess my mind confused this with another
-regression.
-
----
-
-Hi, this is regzbot, the Linux kernel regression tracking bot.
-
-Currently I'm aware of 4 regressions in linux-mainline. Find the
-current status below and the latest on the web:
-
-https://linux-regtracking.leemhuis.info/regzbot/mainline/
-
-Bye bye, hope to see you soon for the next report.
-   Regzbot (on behalf of Thorsten Leemhuis)
-
-
-======================================================
-current cycle (v6.2.. aka v6.3-rc), culprit identified
-======================================================
-
-
-net: mlx5: InfiniBand devices were no longer present
-----------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/CAHC9VhQ7A4+msL38WpbOMYjAqLp0EtOjeLh4Dc6SQtD6OUvCQg@mail.gmail.com/
-https://lore.kernel.org/netdev/CAHC9VhQ7A4%2BmsL38WpbOMYjAqLp0EtOjeLh4Dc6SQtD6OUvCQg@mail.gmail.com/
-
-By Paul Moore; 18 days ago; 18 activities, latest 1 days ago.
-Introduced in fe998a3c77b9 (v6.3-rc1)
-
-Recent activities from: Jakub Kicinski (6), Saeed Mahameed (5), Paul
-  Moore (3), Leon Romanovsky (1)
-
-Noteworthy links:
-* [PATCH net] Revert "net/mlx5: Enable management PF initialization"
-  https://lore.kernel.org/netdev/20230413222547.56901-1-kuba@kernel.org/
-  2 days ago, by Jakub Kicinski; thread monitored.
-
-
-sched: PostgreSQL performance regression introduced by mm_cid
--------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/20230327080502.GA570847@ziqianlu-desk2/
-https://lore.kernel.org/lkml/20230327080502.GA570847@ziqianlu-desk2/
-
-By Aaron Lu; 20 days ago; 75 activities, latest 2 days ago.
-Introduced in af7f588d8f73 (v6.3-rc1)
-
-Recent activities from: Mathieu Desnoyers (15), Aaron Lu (13), Peter
-  Zijlstra (11), michael.christie@oracle.com (1)
-
-5 patch postings are associated with this regression, the latest is this:
-* Re: [RFC PATCH v4] sched: Fix performance regression introduced by mm_cid
-  https://lore.kernel.org/lkml/20230413131353.GA214119@ziqianlu-desk2/
-  3 days ago, by Aaron Lu
-
-Noteworthy links:
-* [RFC PATCH] sched: Introduce per-mm/cpu concurrency id state
-  https://lore.kernel.org/lkml/20230330230911.228720-1-mathieu.desnoyers@efficios.com/
-  16 days ago, by Mathieu Desnoyers; thread monitored.
-* [RFC PATCH] sched: Fix performance regression introduced by mm_cid
-  https://lore.kernel.org/lkml/20230403181342.210896-1-mathieu.desnoyers@efficios.com/
-  12 days ago, by Mathieu Desnoyers; thread monitored.
-* [RFC PATCH] sched: Fix performance regression introduced by mm_cid (v2)
-  https://lore.kernel.org/lkml/20230405121535.3891327-1-mathieu.desnoyers@efficios.com/
-  11 days ago, by Mathieu Desnoyers; thread monitored.
-* [RFC PATCH v3] sched: Fix performance regression introduced by mm_cid
-  https://lore.kernel.org/lkml/20230405162635.225245-1-mathieu.desnoyers@efficios.com/
-  11 days ago, by Mathieu Desnoyers; thread monitored.
-* [RFC PATCH v4] sched: Fix performance regression introduced by mm_cid
-  https://lore.kernel.org/lkml/20230410150150.2179062-1-mathieu.desnoyers@efficios.com/
-  6 days ago, by Mathieu Desnoyers; thread monitored.
-* [RFC PATCH] sched: Rate limit migrations
-  https://lore.kernel.org/lkml/20230411214116.361016-1-mathieu.desnoyers@efficios.com/
-  4 days ago, by Mathieu Desnoyers; thread monitored.
-* [RFC PATCH v5] sched: Fix performance regression introduced by mm_cid
-  https://lore.kernel.org/lkml/20230413140248.230479-1-mathieu.desnoyers@efficios.com/
-  3 days ago, by Mathieu Desnoyers; thread monitored.
-* [RFC PATCH v6] sched: Fix performance regression introduced by mm_cid
-  https://lore.kernel.org/lkml/20230413223356.17195-1-mathieu.desnoyers@efficios.com/
-  2 days ago, by Mathieu Desnoyers; thread monitored.
-
-
-firmware/sysfb: wrong mode and display garbled on 16-year old i686 laptop
--------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/4Psm6B6Lqkz1QXM@panix3.panix.com/
-https://lore.kernel.org/dri-devel/4Psm6B6Lqkz1QXM@panix3.panix.com/
-
-By pa@panix.com; 10 days ago; 24 activities, latest 2 days ago.
-Introduced in f35cd3fa7729 (v6.3-rc1)
-
-Recent activities from: Javier Martinez Canillas (12), Pierre
-  Asselin (9), pa@panix.com (1)
-
-4 patch postings are associated with this regression, the latest is this:
-* Re: [PATCH] firmware/sysfb: Fix wrong stride when bits-per-pixel is calculated
-  https://lore.kernel.org/lkml/87o7nsuumt.fsf@minerva.mail-host-address-is-not-set/
-  3 days ago, by Javier Martinez Canillas
-
-Noteworthy links:
-* [PATCH] firmware/sysfb: Fix wrong stride when bits-per-pixel is calculated
-  https://lore.kernel.org/lkml/20230412150225.3757223-1-javierm@redhat.com/
-  4 days ago, by Javier Martinez Canillas; thread monitored.
-
-
-pci: / net: igb: hangs during boot on PowerEdge R620
-----------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/m2fs9lgndw.fsf@gmail.com/
-https://lore.kernel.org/lkml/m2fs9lgndw.fsf@gmail.com/
-
-By Donald Hunter; 16 days ago; 9 activities, latest 4 days ago.
-Introduced in 6fffbc7ae137 (v6.3-rc1)
-
-Recent activities from: Donald Hunter (2), Andy Shevchenko (1), Rob
-  Herring (1), Bjorn Helgaas (1)
-
-
-=============
-End of report
-=============
-
-All regressions marked '[ *NEW* ]' were added since the previous report,
-which can be found here:
-https://lore.kernel.org/r/168106197596.1411382.4633915108737130144@leemhuis.info
-
-Thanks for your attention, have a nice day!
-
-  Regzbot, your hard working Linux kernel regression tracking robot
-
-
-P.S.: Wanna know more about regzbot or how to use it to track regressions
-for your subsystem? Then check out the getting started guide or the
-reference documentation:
-
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
-
-The short version: if you see a regression report you want to see
-tracked, just send a reply to the report where you Cc
-regressions@lists.linux.dev with a line like this:
-
-#regzbot introduced: v5.13..v5.14-rc1
-
-If you want to fix a tracked regression, just do what is expected
-anyway: add a 'Link:' tag with the url to the report, e.g.:
-
-Link: https://lore.kernel.org/all/30th.anniversary.repost@klaava.Helsinki.FI/
