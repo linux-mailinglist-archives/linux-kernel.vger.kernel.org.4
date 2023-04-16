@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6D9F6E3AE0
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 19:54:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98DFE6E3AE6
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 19:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbjDPRyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 13:54:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
+        id S229774AbjDPRza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 13:55:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjDPRyk (ORCPT
+        with ESMTP id S229762AbjDPRz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 13:54:40 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B876F1FDB
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 10:54:38 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-50489d1af35so6414015a12.3
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 10:54:38 -0700 (PDT)
+        Sun, 16 Apr 2023 13:55:28 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172161FE7
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 10:55:26 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-50489c109f4so6448624a12.2
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 10:55:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681667677; x=1684259677;
+        d=linaro.org; s=google; t=1681667724; x=1684259724;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=JS6gaHiphUmSOWpn+pmyiSugcXzg+J545dx/xJnnaxk=;
-        b=WuWEb3nQKRcBC4aQq5LCsl/QIdpbFKoJvTV/SSvo7+KcXslPZLEolPou2WpIPh9FCF
-         srBTN+NGP3wj8rwbrUDV8VW47d+Ia+cdOt36cVwkpPie84WhNTiO/G08tM6139DnVgOd
-         Dy8L6Fa6tgCAG04ZtOxo+uyGTfV4VjAkykB/5otTlNrA2UVIuusuAX/F56nUUuVtwxWD
-         96eYsH0axlMBFn6uCuZh8OTkFdS2nLbwtuzoUk7tVDlq+GxwnO2hQIDEnvwl1J3GmSt1
-         ugYCUXZV3Sj18cLHhJWSKF3gciUab1+yK2RmZV3x+B4zT8k8zJmTdCetNRpPXt6ybdBk
-         ZCWA==
+        bh=x7wT7n+DJMWXCwF/JmEqtyfQLfvwMTp3PMeKPlacVvI=;
+        b=N50SBxfRyEvNTrmfJYbWrp3K5WfAffRN7269lKy7ZahDLbF6YzyDwCeQmn5st8ZNVU
+         TiWP59+AIx+c+ZAGcexmwq8zozFdGU5WSKa0UB25+PDCSc4DR2aFOxSshDG+yG6lZTtE
+         VMUmyj7xEqwhgDxlwjVLbKZKrUgLZnSKjeZhv+bN3aVy2SnxHo3wD+ssFpSxvT0fw9Ji
+         nJvfEOqJZiPies9FMmCiYIx+QgQtaXzqnJjIOFIiaOXhUbVZsKOGnjX81ore0i2FBzsQ
+         emUEEbZhA3wQAmVg2rwJObOsNrFJMsE1DgyeFgvnwHPLIUuX6x4NX+GzS89nY5R8k+q6
+         g9Hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681667677; x=1684259677;
+        d=1e100.net; s=20221208; t=1681667724; x=1684259724;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JS6gaHiphUmSOWpn+pmyiSugcXzg+J545dx/xJnnaxk=;
-        b=M7Smd6x7k+o/g+THos+ASvO5IR25sV72XFlf8TN6TKAUzX+vTTGexgGgqb2tF8uv8e
-         widQ0P66V473kAQb4vjw7wlzs34Bx9uOTFwP+36KvnwUnMp+imY+vCaT/khN3I6Mk7Oy
-         rG8RVnLu6+T0JgvgXEE3xlJBc6qQxf3jzX9gJkjthLaiqhorq6UxOzHMp9hsj3cwi7PT
-         Nz4kz52bfgDdCdv7pUf42g3SSFfetRhxkqvIYRQJbFZRZdTfHPmvPV/GGPtyVn8Msm+v
-         sk1Vimrj9CS0ZzJ4RR++8frYVSM+kV0pLZSrNcO6edJbDhlrNVeXNPOKSSiqs6e5l/qx
-         +CVA==
-X-Gm-Message-State: AAQBX9fRXW3RuJYKHBRAuA/Pnfk29nG5MdDeBOvO+AIpuIji2v7KsHHQ
-        tPT/tpxNOb1PV/cYKkaE0L7eJA==
-X-Google-Smtp-Source: AKy350Y5iFghGHPVY/+36B4z9G0r8ayC/uD7aU0dvjOxkfyBYGegI5B/Jo7ShhZXPQ/Ssg96Hx350Q==
-X-Received: by 2002:a05:6402:1486:b0:4fd:29a1:6a58 with SMTP id e6-20020a056402148600b004fd29a16a58mr13688436edv.19.1681667677169;
-        Sun, 16 Apr 2023 10:54:37 -0700 (PDT)
+        bh=x7wT7n+DJMWXCwF/JmEqtyfQLfvwMTp3PMeKPlacVvI=;
+        b=ekD0cNdF168Mx7sn3GUKtICG/YTHOkAybsu9ij2Z/EQ+lIvYCuQbnuxzUbNns3zmpb
+         IcM21MEtSm5hw3ryPqpSRQ4HEjDhAkUCvD/Sg/OK0OYZw0MhScQJ2X33ttZjy4gywU/7
+         ReZVBCEn6ex0PqsQ5zEgIdt9nFGQgPtwfU7ziFYBsyI5KNeRm+L2tPwb6iO1rn13u7h1
+         X185eD8DE9D9G9HZxCKa16CymKuIsGGAsaSxjab7H8O3EWT8dAldR8/iYQL7CF9HHdgP
+         CNO7yCmCVblaHjzlS7TenmmZspiH2++HDP5k7DWYKMRZurwBk2EV6l9IoHgDRKgHfF1K
+         qj8Q==
+X-Gm-Message-State: AAQBX9c3DO9tOsk8l1gqJBqcacUN5ydA5Lqz0BQPkhLK1vmAOLmVuXIF
+        FvN1b7BerJVsGQK4uULkPp18MA==
+X-Google-Smtp-Source: AKy350avKh9PmUHvsOygNn3GPct8a9xHAE66Mg83Bz+YU/JqH0f5dabMl/mfcrMIbTTp5Lai6EdXjw==
+X-Received: by 2002:aa7:d352:0:b0:505:394:157b with SMTP id m18-20020aa7d352000000b005050394157bmr12230901edr.17.1681667724514;
+        Sun, 16 Apr 2023 10:55:24 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:f9e3:1d38:66a7:ae92? ([2a02:810d:15c0:828:f9e3:1d38:66a7:ae92])
-        by smtp.gmail.com with ESMTPSA id h23-20020aa7c957000000b005066ca60b2csm4695188edt.63.2023.04.16.10.54.35
+        by smtp.gmail.com with ESMTPSA id b11-20020a056402138b00b0050690bc07a3sm2240983edv.18.2023.04.16.10.55.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Apr 2023 10:54:36 -0700 (PDT)
-Message-ID: <00bd1ec1-0745-c521-4df9-e31e1057a6ff@linaro.org>
-Date:   Sun, 16 Apr 2023 19:54:35 +0200
+        Sun, 16 Apr 2023 10:55:24 -0700 (PDT)
+Message-ID: <99b7f216-114b-c01a-cb27-7dbcfc0c3b5c@linaro.org>
+Date:   Sun, 16 Apr 2023 19:55:22 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v2 01/12] dt-bindings: soc: samsung: add Exynos4212 PMU
+Subject: Re: [PATCH v2 02/12] dt-bindings: clock: add Exynos4212 clock
  compatible
 Content-Language: en-US
 To:     Artur Weber <aweber.kernel@gmail.com>
@@ -80,9 +80,9 @@ Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
         linux-phy@lists.infradead.org,
         ~postmarketos/upstreaming@lists.sr.ht
 References: <20230416133422.1949-1-aweber.kernel@gmail.com>
- <20230416133422.1949-2-aweber.kernel@gmail.com>
+ <20230416133422.1949-3-aweber.kernel@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230416133422.1949-2-aweber.kernel@gmail.com>
+In-Reply-To: <20230416133422.1949-3-aweber.kernel@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -100,16 +100,13 @@ On 16/04/2023 15:34, Artur Weber wrote:
 > dts: exynos: remove Exynos4212 support (dead code)"), as there were
 > no boards using it.
 
-You meant commit c40610198f35e? This is the one which you partially revert.
+Also wrong commit. Reference the one which dropped compatible from bindings.
 
 > 
 > We will be adding a device that uses it, so add it back.
 > 
 > Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
-> ---
->  Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml | 3 +++
->  1 file changed, 3 insertions(+)
-> 
+
 
 Best regards,
 Krzysztof
