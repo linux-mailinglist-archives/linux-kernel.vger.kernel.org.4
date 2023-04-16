@@ -2,99 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A34A6E3B40
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 20:32:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D6066E3B43
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 20:33:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbjDPScR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 14:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43022 "EHLO
+        id S229892AbjDPSdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 14:33:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbjDPScM (ORCPT
+        with ESMTP id S229500AbjDPSdi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 14:32:12 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EADCA210D
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 11:32:10 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id c9so19766204ejz.1
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 11:32:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681669929; x=1684261929;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nkHuhYDvbdCOvZz3EZOv9s7JCqMnwT2ehYe9tW+hB2c=;
-        b=lJHIQjGLglg10CR7YrWQEksL5owJYHniRJJxCge7kAz4nsrCAovsE455JaqvN8brv5
-         SZjfPkIpu2FLm9ufz9PAe5aaN0T8BEmHE6VzCZYiEVFr5nFC8tnpYaVFwkZa2FN0HIRr
-         499CC+lGs4QztOn8GZFP/wS0vbz/3xDpQWBEieKm1KFe+qkC35STEdsUSvAlfJZlOKZT
-         +AP5aRV0iLAbGi/nLZAPBpy+BGOTX8z7B4+mKzXOGPUN7nGk7gfNz+ZOujo3T2pUudqs
-         eZhKhcU3cOeAzWu3MDnOlxJFBHU80SWbXXEB+4SocrXUoU0zJd9Wn/QMQ95Hl/B+a96y
-         Pltw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681669929; x=1684261929;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nkHuhYDvbdCOvZz3EZOv9s7JCqMnwT2ehYe9tW+hB2c=;
-        b=b3nUOrIJ2+YLoWr4JXkPwLZwWZvyff96A5nD5eLCVpob8NLSScqRjTeEvlT/bc7x1v
-         Tj+ppb88tyZV/7pM5UJSAV1aexmAHeSlGOMRUXdOukuTaE07JaCtQsBgRBcCGeK6fSQg
-         ixV87Y0mZ132QhEajAsyAx0OvUkIXk//H5+pMr9S8/xm+FBqhpuzzRp4CRv/PfZ5q83A
-         JojFBLJfcQGVkoWnkVVxIVdndB68NCVePag+6mDL8yuTFP4zJk6K4O3JTBYn/ynaF04g
-         zLsmSfR4PNsZH5eJkGkiU7in0NrZZ5foeMadXuj2m8o/aecM+eScfGlf6RM0jfJiIOM+
-         Mt0A==
-X-Gm-Message-State: AAQBX9cPdnModXiha0modqGudfWgRcirDrveH99oLwH4AMyzal/MoeC6
-        +i6sQY6vAUHT00OHi7++xjogGw==
-X-Google-Smtp-Source: AKy350YzkY5FWr47E5pxqRH1fLpiNrNt1LhnrHitY5+bw4q9TPxq77fbrgfzf/3CIx30ao/jPTOgdg==
-X-Received: by 2002:a17:906:354c:b0:94a:6343:7596 with SMTP id s12-20020a170906354c00b0094a63437596mr5459372eja.41.1681669929374;
-        Sun, 16 Apr 2023 11:32:09 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:f9e3:1d38:66a7:ae92? ([2a02:810d:15c0:828:f9e3:1d38:66a7:ae92])
-        by smtp.gmail.com with ESMTPSA id k18-20020a17090632d200b0094f05fee9d3sm2956173ejk.211.2023.04.16.11.32.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Apr 2023 11:32:08 -0700 (PDT)
-Message-ID: <19ceb0f6-1225-c8cb-1469-3d657e66d171@linaro.org>
-Date:   Sun, 16 Apr 2023 20:32:07 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 5/9] regulator: rt5033: Change regulator names to
- lowercase
-Content-Language: en-US
-To:     Jakob Hauser <jahau@rocketmail.com>,
-        Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Beomho Seo <beomho.seo@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
-        ChiYuan Huang <cy_huang@richtek.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-References: <cover.1681646904.git.jahau@rocketmail.com>
- <d4218947e354aee45589acb1060ce41727a26750.1681646904.git.jahau@rocketmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <d4218947e354aee45589acb1060ce41727a26750.1681646904.git.jahau@rocketmail.com>
-Content-Type: text/plain; charset=UTF-8
+        Sun, 16 Apr 2023 14:33:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97083106
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 11:33:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3207F60F5D
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 18:33:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AE45C433D2;
+        Sun, 16 Apr 2023 18:33:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1681670016;
+        bh=YlCs2n5EALDS5s68UQrGs8UJMvIrgeYJRA21TLlnrN0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ZnRJwT8sgCw/ejrXUHDjYB/eP7lijyMB+3ylaEZ6+MWZuEiQu/DaC8FWk/mCvyeJL
+         yO/JKjgmW0yLzhWN7of/mNXBxC5GE0wmsbOC8SYGrSf0tGHR6GE/KaAr3OfknHmazI
+         6odrOytFLnI5HVyI/cEFOPCy5bnBp+xm/9yY+hRk=
+Date:   Sun, 16 Apr 2023 11:33:35 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     "Zach O'Keefe" <zokeefe@google.com>
+Cc:     Yang Shi <shy828301@gmail.com>,
+        Ivan Orlov <ivan.orlov0322@gmail.com>,
+        himadrispandya@gmail.com, linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org, linux-mm@kvack.org,
+        skhan@linuxfoundation.org,
+        syzbot+9578faa5475acb35fa50@syzkaller.appspotmail.com,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: [PATCH v2] mm: khugepaged: Fix kernel BUG in
+ hpage_collapse_scan_file
+Message-Id: <20230416113335.caeafda1328fdd4bfe2406e8@linux-foundation.org>
+In-Reply-To: <CAAa6QmTLXSvygQQNk=8C4pB3D2Twy1guzo=+-aXhCqNAE3Q3MA@mail.gmail.com>
+References: <20230330155305.423051-1-ivan.orlov0322@gmail.com>
+        <20230331013301.ecgkjymaf3ws6rfb@google.com>
+        <CAHbLzkoJ2zvKZpqd6NqikpCc8rGR02C87f0fPq8qwb1BF3K+9Q@mail.gmail.com>
+        <CAAa6QmTLXSvygQQNk=8C4pB3D2Twy1guzo=+-aXhCqNAE3Q3MA@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/04/2023 14:44, Jakob Hauser wrote:
-> Lowercase is preferred for node names.
-> 
 
-This will break all existing users. In-tree and out-of-tree. Where is
-the binding update?
+Circling back to this fix...
 
-Best regards,
-Krzysztof
+The BUG() is obviously real.  We're unsure that Ivan's fix is the best
+one.  We haven't identified a Fixes:, and as this report is against the 6.2
+kernel, a cc:stable will be needed.
 
+According to the sysbot bisection
+(https://syzkaller.appspot.com/bug?id=7d6bb3760e026ece7524500fe44fb024a0e959fc),
+this is present in linux-5.19, so it might predate Zach's
+58ac9a8993a13ebc changes.  But that bisection claim might be
+misleading.
+
+And Zach is offline for a few months.  So can people please take a look
+and see if we can get this wrapped up?
+
+Matthew, the assertion failure is in the
+
+	VM_BUG_ON(index != xas.xa_index);
+
+which was added in 77da9389b9d5f, so perhaps you could take a look?
+
+Thanks.
