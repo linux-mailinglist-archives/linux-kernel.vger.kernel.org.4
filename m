@@ -2,139 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E06E6E3B6B
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 21:10:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 427666E3B5E
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 21:02:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbjDPTKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 15:10:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53722 "EHLO
+        id S230048AbjDPTCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 15:02:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjDPTKH (ORCPT
+        with ESMTP id S229484AbjDPTCe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 15:10:07 -0400
-X-Greylist: delayed 582 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 16 Apr 2023 12:10:05 PDT
-Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22E6272E
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 12:10:05 -0700 (PDT)
-Received: from [192.168.100.237] (cust-58-62-110-94.dyn.as47377.net [94.110.62.58])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id 31B6A3A3B6B;
-        Sun, 16 Apr 2023 21:00:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1681671620;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KbiAlrrOOyRd9nSswntO2EM/kuhEbC2Dui2D0jg8mhE=;
-        b=yJTuA2IM1/ouSfmFU4g81QYz/Qs036N+Xgao0Ath/i9vW1OlzLPaQPSs5Z/cwJgY+mB5Yt
-        9frXAammof4cYeKT3YVKBBWuJmf5TlBYeZdPZpxvHm/UkuLToAfxBulAuQ/nfQnJU4gl/N
-        knaWX+2Bmwu0hShO8EBylOfwdt4HsidJ6JVG8BFAGRPK8fnJHUS7eltyRhN2MTg3ab2WE1
-        UgpwApF4MwfWTnKCtGazcW0/+MWrMm5ofGGKOhMMnVk7OADQ+R6e9jhHvt6dGh4OC2H0oK
-        b9tPCUEGwBSgAzSOzEjLJfpJWZ4oWq8P1U6FwFMzQAju74a9ESqS7tOiZHvUhQ==
-Message-ID: <75148300a158ceb0f86043535b089838e1d1bb61.camel@svanheule.net>
-Subject: Re: [PATCH 6/6] dt-bindings: watchdog: realtek,otto-wdt: simplify
- requiring interrupt-names
-From:   Sander Vanheule <sander@svanheule.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Julius Werner <jwerner@chromium.org>,
-        Evan Benn <evanbenn@chromium.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Fu Wei <fu.wei@linaro.org>, Viresh Kumar <vireshk@kernel.org>,
-        Eugen Hristev <eugen.hristev@collabora.com>,
-        Justin Chen <justinpopo6@gmail.com>, ?ecki <rafal@milecki.pl>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Jamie Iles <jamie@jamieiles.com>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        Christophe Roullier <christophe.roullier@foss.st.com>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        Srinivas Neeli <srinivas.neeli@xilinx.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-renesas-soc@vger.kernel.org
-Date:   Sun, 16 Apr 2023 21:00:17 +0200
-In-Reply-To: <20230415095112.51257-6-krzysztof.kozlowski@linaro.org>
-References: <20230415095112.51257-1-krzysztof.kozlowski@linaro.org>
-         <20230415095112.51257-6-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Sun, 16 Apr 2023 15:02:34 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EEDD1BD8;
+        Sun, 16 Apr 2023 12:02:33 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-2f86ee42669so907346f8f.2;
+        Sun, 16 Apr 2023 12:02:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681671751; x=1684263751;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Vw8K9fe+BlHCUVCEUNteZqDUg2w+tCDi6+6HkvyhbCY=;
+        b=qrWTzF5KSXiFBNT9RZSsE4u8rkHU1SLZoG9HmEBWLts7+VDVVjuHPlXTjsrUko1edj
+         0p+/DTS3DUXa8ea71PjBKND7xExmptK/sGPhhOZsuAJoh5Q1xBpgKmXoLYJ8OdD/Iqsj
+         5iknGE0ZRsIsqWZktZNSBqaSWLWnWdS31BfEKTmwW/7RZ08PIZKbz/Xa5VQrFoXNWdjW
+         hbVsRzzXeoD+x5Adn48gI4CQKnrO0LFjUZxrLz00DvhMn0ETFWLIG+DhsABJhLYMYR48
+         LVSpJRp+KUXHl5CwMIQWVFdZr5FwJxv8eNaQgqo6+hoE6P3JBmw7SJ0Yt+PgJsJ3gQ1+
+         tadw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681671751; x=1684263751;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Vw8K9fe+BlHCUVCEUNteZqDUg2w+tCDi6+6HkvyhbCY=;
+        b=bmcFXDPeMHGVgnh/TdNYLAxuJIixALNmJmovYpAuF2g5WihzUemiJt+l/T5+KMw4h0
+         /8NNcisx+5lprEoK1a+d5UzL/J1OJLx+OwdWnG60oV3GC2JZnJh+lcUQkOysTAbmtBAv
+         os8BB9QFl2XI9oapzUY4HX3Dqz3OCoOlbOuiZSUYfuGjz/MxRn7aWmAoJHjVZPm9Z856
+         hQOnqCUIbI2xkgJzbHSk7fVfoaEfDZMoEgdw4JlhwqRW7/VPysR8kBS6jUogJ3U+DJE7
+         k+Gmtwf3xuLwpCeoLPjSt+3LAix6xRA9iteR/EckQloQe8CYlOno/hU0Je/zxGmPjo47
+         yxkQ==
+X-Gm-Message-State: AAQBX9chOkr0MXhX2+6yg/LXMfAs20L106iA2fwtYcQE8xRIFxYZQzNv
+        uYt5F6nduUmRErfQmTIVU6A=
+X-Google-Smtp-Source: AKy350Yhb2/Ost8B4BG2zSTY73BCtmMjq4hc5FDXGK8LYQdOinL90QqSnSxJifZrD2T+f8FHgnN1Wg==
+X-Received: by 2002:a5d:5141:0:b0:2f8:a8de:1a with SMTP id u1-20020a5d5141000000b002f8a8de001amr3870906wrt.42.1681671751572;
+        Sun, 16 Apr 2023 12:02:31 -0700 (PDT)
+Received: from solpc.. (67.pool90-171-92.dynamic.orange.es. [90.171.92.67])
+        by smtp.gmail.com with ESMTPSA id y18-20020adff6d2000000b002daf0b52598sm8685421wrp.18.2023.04.16.12.02.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Apr 2023 12:02:31 -0700 (PDT)
+From:   =?UTF-8?q?Joan=20Bruguera=20Mic=C3=B3?= <joanbrugueram@gmail.com>
+To:     jpoimboe@kernel.org
+Cc:     i.pear@outlook.com, acme@kernel.org, alan.maguire@oracle.com,
+        alexandref75@gmail.com, bpf@vger.kernel.org, dxu@dxuuu.xyz,
+        jforbes@redhat.com, linux-kernel@vger.kernel.org,
+        olsajiri@gmail.com, peterz@infradead.org, ptalbert@redhat.com,
+        yhs@fb.com
+Subject: [PATCH] vmlinux.lds.h: Discard .note.gnu.property section
+Date:   Sun, 16 Apr 2023 19:02:19 +0000
+Message-Id: <20230416190219.2600911-1-joanbrugueram@gmail.com>
+X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230413185922.ufmollqlnlghwyvy@treble>
+References: <20230413185922.ufmollqlnlghwyvy@treble>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+Two small nitpicks:
 
-On Sat, 2023-04-15 at 11:51 +0200, Krzysztof Kozlowski wrote:
-> Required properties should be listed in "required:" block.=C2=A0 Since
-> interrupts are already there, the dependency of interrupt-names on the
-> interrupts can be simplified.
+> Link: https://lkml.kernel.org/lkml/57830c30-cd77-40cf-9cd1-3bb608aa602e@app.fastmail.com
 
-Maybe I'm not reading this right, but isn't the dependency stated in the bi=
-nding
-"interrupts requires interrupt-names to be present"? resource-names.txt
-describes the reverse dependency ("interrupt-names is only meaningful with =
-an
-associated interrupts").
+This link is "semi-broken", it should go to /bpf/ instead of /lkml/.
 
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
+>  	/DISCARD/ : { *(.note.GNU-stack) }				\
+> +	/DISCARD/ : { *(.note.gnu.property) }				\
 
-In any case, I'm OK with a flattened requirements list:
-
-Acked-by: Sander Vanheule <sander@svanheule.net>
-
-
-Best,
-Sander
-
-
+Both discards can go in the same DISCARD block.
+(just style; it's how it's most often done in other linker scripts)
