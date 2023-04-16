@@ -2,129 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 282AB6E386F
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 14:53:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1F676E3874
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 15:02:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230443AbjDPMxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 08:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36996 "EHLO
+        id S230424AbjDPNCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 09:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230365AbjDPMxG (ORCPT
+        with ESMTP id S230152AbjDPNCv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 08:53:06 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40DA98;
-        Sun, 16 Apr 2023 05:53:04 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1po1sJ-0000Ha-VW; Sun, 16 Apr 2023 14:53:00 +0200
-Message-ID: <2d9b786b-ed1f-0687-ea6f-575faa6036a3@leemhuis.info>
-Date:   Sun, 16 Apr 2023 14:52:59 +0200
+        Sun, 16 Apr 2023 09:02:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC07819B9;
+        Sun, 16 Apr 2023 06:02:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4AD0460C95;
+        Sun, 16 Apr 2023 13:02:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F34CC433D2;
+        Sun, 16 Apr 2023 13:02:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681650169;
+        bh=D3wy4kwpYEcnvQj/DKBp/Hq76nY/CXZPNCXOrIibLCg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Un3l3D3xgYAMWSddL2GeWG8Y3LD4HC3NFNMrx1dRHGwOdznt7jdMJhKELlvIdxPyW
+         KBdJ1QPSPeB+4rxMyty4HsmSO9oYSoE9rXgB95yaghcgI4ZGMttCQyHPJF2NwZ/ymH
+         l4yhK7PE6SPHHoolR3MFWhWQtuXzm60ABVe6MPMsim9zPGgPmcBmA6h1XpTqipfmzm
+         ODwTfGXrMy/dzPmmnux4tBBpAh9CBHzX5muBLBY67UHn9A+ff75HpHvMMq4ae8NTfP
+         t3JZvIkUeLk0UdvWC7HrHbZ3i/XrOlJ/Qk0tEVCrg1Wd2gxyTfqA7l1QyXiTPs+3Cc
+         7921zRW5bxGPQ==
+Received: by mail-ot1-f51.google.com with SMTP id 39-20020a9d04aa000000b006a1370e214aso9245624otm.11;
+        Sun, 16 Apr 2023 06:02:49 -0700 (PDT)
+X-Gm-Message-State: AAQBX9egqWrnJdC0yEn4b4IEF+fWmoOoaBh/I7yp/z9Vb3Lai0vm3QSy
+        iI0Z8ok0Tqd77hvoKSIti2T5/a8A6L2kaBDRZaw=
+X-Google-Smtp-Source: AKy350asvMZybXnMTiMzrhCi04P+dV9lupbZkct2X70VIIPJHBHL6CfYbZrmmKagvzwZVMmz4lAwLL/CIw60sfCgFkE=
+X-Received: by 2002:a9d:77d1:0:b0:6a4:279d:aab5 with SMTP id
+ w17-20020a9d77d1000000b006a4279daab5mr2778407otl.1.1681650168906; Sun, 16 Apr
+ 2023 06:02:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [regression] Bug 217069 - Wake on Lan is broken on r8169 since
- 6.2
-Content-Language: en-US, de-DE
-To:     Jianmin Lv <lvjianmin@loongson.cn>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Bob Moore <robert.moore@intel.com>,
-        acpica-devel@lists.linuxfoundation.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>
-References: <e6aaddb9-afec-e77d-be33-570f9f10a9c2@leemhuis.info>
- <53e8b4db-e8dd-4dfa-f873-7dcbeac09149@leemhuis.info>
- <13aea525-108a-e018-987d-2447ff1d42df@leemhuis.info>
- <754225a2-95a9-2c36-1886-7da1a78308c2@loongson.cn>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <754225a2-95a9-2c36-1886-7da1a78308c2@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1681649584;5b8dbad5;
-X-HE-SMSGID: 1po1sJ-0000Ha-VW
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230401170117.1580840-1-masahiroy@kernel.org> <20230403144758.GA3460665@dev-arch.thelio-3990X>
+In-Reply-To: <20230403144758.GA3460665@dev-arch.thelio-3990X>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 16 Apr 2023 22:02:12 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQsgB-SC2t+9ZpDwJbME+BVt+Gur1ydTnHfBfMAfn_y0w@mail.gmail.com>
+Message-ID: <CAK7LNAQsgB-SC2t+9ZpDwJbME+BVt+Gur1ydTnHfBfMAfn_y0w@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: clang: do not use CROSS_COMPILE for target triple
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Fangrui Song <maskray@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.04.23 14:35, Jianmin Lv wrote:
-> From the feedbacks, the WOL issue has been fixed, and I have submitted a
-> fixed patch to ACPICA, which has been reviewing in last week (Rafael
-> also looked into the fixed patch).
+On Mon, Apr 3, 2023 at 11:48=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> On Sun, Apr 02, 2023 at 02:01:17AM +0900, Masahiro Yamada wrote:
+> > The target triple is overridden by the user-supplied CROSS_COMPILE,
+> > but I do not see a good reason to support it. Users can use a new
+> > architecture without adding CLANG_TARGET_FLAGS_*, but that would be
+> > a rare case.
+> >
+> > Use the hard-coded and deterministic target triple all the time.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+>
+> I know of one bug where the value of '--target' matters:
+>
+> https://github.com/ClangBuiltLinux/linux/issues/1244
 
-Great, many thx. I looked for something like that, but failed to find it.
 
-FWIW, a link to the patch submission would have been nice. I tried to
-find it just now, but maybe it's not on lore.kernel.org or I did
-something stupid. And
-https://lists.linuxfoundation.org/pipermail/acpica-devel/ seems to lack
-behind or might not be the list you submitted the patch to. Whatever.
+I did not look into it closely, but if we say
+"
+Using either CROSS_COMPILE=3Dpowerpc64-linux-gnu- or
+CROSS_COMPILE=3Dpowerpc-linux-gnu- fixes it.
+Using KCFLAGS=3D-v reveals that powerpc64le-linux-gnu-as is not getting
+the endianness information.
+", why didn't we fix it like the following?
 
-> There are two kinds of issues in the bug, one is WOL failed in kexec
-> reboot, another is WOL failed in cold reboot. The former one still exist
-> after reverted patch(5c62d5aab8752e5ee7bfbe75ed6060db1c787f98),
-> so this issue is not caused by the reverted patch. The second is caused
-> by the reverted patch, and has been fixed with my provided patch.
-> 
-> Please see:
-> https://bugzilla.kernel.org/show_bug.cgi?id=217069#c54
-> https://bugzilla.kernel.org/show_bug.cgi?id=217069#c59
 
-I'll post a quick update there.
+ diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+ index 70b354fa1cb4..8dda7dc69c93 100644
+ --- a/scripts/Makefile.clang
+ +++ b/scripts/Makefile.clang
+ @@ -6,7 +6,7 @@ CLANG_TARGET_FLAGS_arm64        :=3D aarch64-linux-gnu
+  CLANG_TARGET_FLAGS_hexagon     :=3D hexagon-linux-musl
+  CLANG_TARGET_FLAGS_m68k                :=3D m68k-linux-gnu
+  CLANG_TARGET_FLAGS_mips                :=3D mipsel-linux-gnu
+ -CLANG_TARGET_FLAGS_powerpc     :=3D powerpc64le-linux-gnu
+ +CLANG_TARGET_FLAGS_powerpc     :=3D powerpc64-linux-gnu
+  CLANG_TARGET_FLAGS_riscv       :=3D riscv64-linux-gnu
+  CLANG_TARGET_FLAGS_s390                :=3D s390x-linux-gnu
+  CLANG_TARGET_FLAGS_x86         :=3D x86_64-linux-gnu
 
-Thx again.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
 
-> On 2023/4/14 下午8:48, Thorsten Leemhuis wrote:
->> On 19.03.23 08:20, Linux regression tracking (Thorsten Leemhuis) wrote:
->>> On 22.02.23 08:57, Thorsten Leemhuis wrote:
->>>>
->>>> I noticed a regression report in bugzilla.kernel.org. As many (most?)
->>>> kernel developer don't keep an eye on it, I decided to forward it by
->>>> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217069 :
->>>
->>> An issue that looked like a network bug was now bisected and it turns
->>> out it's cause by 5c62d5aab875 ("ACPICA: Events: Support fixed PCIe wake
->>> event") which Huacai Chen provided. Could you take a look at the ticket
->>> linked above?
->>
->> Jianmin did get close to a proper fix a while ago
->> (https://bugzilla.kernel.org/show_bug.cgi?id=217069#c46 ), but it
->> appears there wasn't any progress to fix this during the last week. Or
->> did I miss it?
->>
->> This is kinda unsatisfying, as the culprit is now known for nearly four
->> weeks; especially as this is a issue that is present in 6.2 since it was
->> released and would have been possible to fix there and in mainline with
->> a simple revert. We even got close to one two weeks ago already
->> (https://bugzilla.kernel.org/show_bug.cgi?id=217069#c49 ).
->>
->> #sigh
->>
->> I'd say we should revert this. Rafael, what's your opinion here?
->>
->> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
->> -- 
->> Everything you wanna know about Linux kernel regression tracking:
->> https://linux-regtracking.leemhuis.info/about/#tldr
->> If I did something stupid, please tell me, as explained on that page.
->>
->> #regzbot poke
->>
-> 
-> 
-> 
+We do not need to test all possible target triples.
+We can just use the one that is known to work.
+
+
+Anyway, I will apply this patch. Thanks.
+
+
+>
+> This was fixed in LLVM 12.0.0. We are not testing this in our CI though,
+> so we would not get bit by this (we could bump the minimum supported
+> version of LLVM to 12.0.0 for this, we have talked recently about doing
+> it for other reasons).
+>
+> I guess I cannot really think of a good reason not to do this aside from
+> that; the target triple should only affect code generation, rather than
+> tool selection (i.e., this does not take away the ability to use a
+> custom set of binutils with clang).
+>
+> However, Nick is currently OOO and I would like his opinion voiced
+> before we commit to this. Consider this a tentative:
+>
+> Acked-by: Nathan Chancellor <nathan@kernel.org>
+>
+> > ---
+> >
+> >  scripts/Makefile.clang | 8 ++------
+> >  1 file changed, 2 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> > index 70b354fa1cb4..9076cc939e87 100644
+> > --- a/scripts/Makefile.clang
+> > +++ b/scripts/Makefile.clang
+> > @@ -13,15 +13,11 @@ CLANG_TARGET_FLAGS_x86            :=3D x86_64-linux=
+-gnu
+> >  CLANG_TARGET_FLAGS_um                :=3D $(CLANG_TARGET_FLAGS_$(SUBAR=
+CH))
+> >  CLANG_TARGET_FLAGS           :=3D $(CLANG_TARGET_FLAGS_$(SRCARCH))
+> >
+> > -ifeq ($(CROSS_COMPILE),)
+> >  ifeq ($(CLANG_TARGET_FLAGS),)
+> > -$(error Specify CROSS_COMPILE or add '--target=3D' option to scripts/M=
+akefile.clang)
+> > +$(error add '--target=3D' option to scripts/Makefile.clang)
+> >  else
+> >  CLANG_FLAGS  +=3D --target=3D$(CLANG_TARGET_FLAGS)
+> > -endif # CLANG_TARGET_FLAGS
+> > -else
+> > -CLANG_FLAGS  +=3D --target=3D$(notdir $(CROSS_COMPILE:%-=3D%))
+> > -endif # CROSS_COMPILE
+> > +endif
+> >
+> >  ifeq ($(LLVM_IAS),0)
+> >  CLANG_FLAGS  +=3D -fno-integrated-as
+> > --
+> > 2.37.2
+> >
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
