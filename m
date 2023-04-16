@@ -2,93 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A89C36E3B4C
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 20:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D55316E3B4F
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 20:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjDPSpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 14:45:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46316 "EHLO
+        id S230032AbjDPSrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 14:47:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjDPSpo (ORCPT
+        with ESMTP id S229932AbjDPSqz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 14:45:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F49106;
-        Sun, 16 Apr 2023 11:45:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 460C060F5A;
-        Sun, 16 Apr 2023 18:45:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21DDCC433D2;
-        Sun, 16 Apr 2023 18:45:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1681670742;
-        bh=bkKWtC6NefsrTWOS00rB7CNAs9nNkai4VlH/PsdMTIY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=TGHaQhklY+LkjT0j6HAzM2+mxOTBdYmAsbuAZ3ObzoyKMTFo1uXLTY1kit7VoLk2N
-         NL7kpz6IkkV8pqUULIH2WIgB6m8ya6F1u3UehUsoNtS4io2CyDcILuXl1qntLEBKM2
-         0tfJg4UOA/SwBfK2S/Xnss9lUm7hnoSLsgcAc16Y=
-Date:   Sun, 16 Apr 2023 11:45:41 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Zi Yan <ziy@nvidia.com>, Zi Yan <zi.yan@sent.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
-        linux-mm@kvack.org,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        Michal =?ISO-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Zach O'Keefe <zokeefe@google.com>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 0/7] Split a folio to any lower order folios
-Message-Id: <20230416114541.5d5a71c91bb1d04597038e00@linux-foundation.org>
-In-Reply-To: <49ee481e-452f-61c7-2da5-28de2cf3de2@google.com>
-References: <20230403201839.4097845-1-zi.yan@sent.com>
-        <20230404144727.e613116684dbd65a4b4745c1@linux-foundation.org>
-        <49ee481e-452f-61c7-2da5-28de2cf3de2@google.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 16 Apr 2023 14:46:55 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA92173D;
+        Sun, 16 Apr 2023 11:46:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=5REhkcP6HO8C51Guu6FpUscAf0yYmr1Viqt44xiaTPQ=; b=v0Sz8mfUV5DZiovHbKECArxoSL
+        hCRi8R3KUGBCMMfVG5VUWKv2G3p+aZAkvE2AFG0kPWV21AupTIPvHTLVk/VH+D9KAkA8jpOl4gVO7
+        5kLkG9TcZooSDfKenBQvf8Dk0G+sGoqPeCCHVnAZPwGPngSRADpfZCumzMeMeoExV6DKwFS0kYQki
+        2vR6YUaDN+TsczV6Kl7r3XZPJFFEZ6k9zbjySfyBRdA0BfGCMGfd0GCplqrmuyJYxjgQyqeWdMVKN
+        dm6h446dFaJrE7kMZDtkadFuFdp6E1B45jjKPoKvqc/jJMEZm9Insb1iQLStK8XNQunPMkKtJ+TXi
+        8iUtWvWA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1po7Oe-00EIfM-1F;
+        Sun, 16 Apr 2023 18:46:44 +0000
+Date:   Sun, 16 Apr 2023 11:46:44 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Kees Cook <keescook@chromium.org>, david@redhat.com,
+        patches@lists.linux.dev, linux-modules@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org, pmladek@suse.com,
+        petr.pavlu@suse.com, prarit@redhat.com,
+        torvalds@linux-foundation.org, rafael@kernel.org,
+        christophe.leroy@csgroup.eu, tglx@linutronix.de,
+        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com,
+        catalin.marinas@arm.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com
+Subject: Re: [RFC 2/2] kread: avoid duplicates
+Message-ID: <ZDxClHwnTNqtuSbD@bombadil.infradead.org>
+References: <20230414052840.1994456-1-mcgrof@kernel.org>
+ <20230414052840.1994456-3-mcgrof@kernel.org>
+ <ZDuP3OCzN3x4NxRZ@infradead.org>
+ <ZDuYmPB5oqKQLcQd@bombadil.infradead.org>
+ <2023041637-glamorous-appetite-dc12@gregkh>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2023041637-glamorous-appetite-dc12@gregkh>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 16 Apr 2023 11:11:49 -0700 (PDT) Hugh Dickins <hughd@google.com> wrote:
-
-> On Tue, 4 Apr 2023, Andrew Morton wrote:
-> > On Mon,  3 Apr 2023 16:18:32 -0400 Zi Yan <zi.yan@sent.com> wrote:
+On Sun, Apr 16, 2023 at 02:50:01PM +0200, Greg KH wrote:
+> On Sat, Apr 15, 2023 at 11:41:28PM -0700, Luis Chamberlain wrote:
+> > On Sat, Apr 15, 2023 at 11:04:12PM -0700, Christoph Hellwig wrote:
+> > > On Thu, Apr 13, 2023 at 10:28:40PM -0700, Luis Chamberlain wrote:
+> > > > With this we run into 0 wasted virtual memory bytes.
+> > > 
+> > > Avoid what duplicates?
 > > 
-> > > File folio supports any order and people would like to support flexible orders
-> > > for anonymous folio[1] too. Currently, split_huge_page() only splits a huge
-> > > page to order-0 pages, but splitting to orders higher than 0 is also useful.
-> > > This patchset adds support for splitting a huge page to any lower order pages
-> > > and uses it during file folio truncate operations.
+> > David Hildenbrand had reported that with over 400 CPUs vmap space
+> > runs out and it seems it was related to module loading. I took a
+> > look and confirmed it. Module loading ends up requiring in the
+> > worst case 3 vmalloc allocations, so typically at least twice
+> > the size of the module size and in the worst case just add
+> > the decompressed module size:
 > > 
-> > This series (and its v1 & v2) don't appear to have much in the way of
-> > detailed review.  As it's at v3 and has been fairly stable I'll queue
-> > it up for some testing now, but I do ask that some reviewers go through
-> > it please.
+> > a) initial kernel_read*() call
+> > b) optional module decompression
+> > c) the actual module data copy we will keep
+> > 
+> > Duplicate module requests that come from userspace end up being thrown
+> > in the trash bin, as only one module will be allocated.  Although there
+> > are checks for a module prior to requesting a module udev still doesn't
+> > do the best of a job to avoid that and so we end up with tons of
+> > duplicate module requests. We're talking about gigabytes of vmalloc
+> > bytes just lost because of this for large systems and megabytes for
+> > average systems. So for example with just 255 CPUs we can loose about
+> > 13.58 GiB, and for 8 CPUs about 226.53 MiB.
 > 
-> Andrew, please don't let this series drift into 6.4-rc1.
+> How does the memory get "lost"?  Shouldn't it be properly freed when the
+> duplicate module load fails?
 
-I have it still parked awaiting some reviewer input.
+Yes memory gets freed, but since virtual memory space can be limitted it
+also means you can end up eventually getting to the point -ENOMEMs will
+happen as you have more CPUS and you cannot use virtual memory for other
+things during kernel bootup and bootup fails. This is apparently
+exacerbated with KASAN enabled.
 
-> I've seen a bug or two (I'll point out in response to those patches),
-> but overall I don't see what the justification for the series is: done
-> because it could be done, it seems to me, but liable to add surprises.
-> 
-> The cover letter says "splitting to orders higher than 0 is also useful",
-> but it's not clear why; and the infrastructure provided seems unsuited
-> to the one use provided - I'll say more on that truncation patch.
-
-OK, I'll drop the series for this cycle.
+  Luis
