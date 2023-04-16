@@ -2,184 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A75836E3AA4
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 19:35:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 426106E3A92
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 19:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjDPRfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 13:35:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46602 "EHLO
+        id S229461AbjDPRdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 13:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjDPRe7 (ORCPT
+        with ESMTP id S229567AbjDPRds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 13:34:59 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED24826B2;
-        Sun, 16 Apr 2023 10:34:38 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-63b70ca0a84so747718b3a.2;
-        Sun, 16 Apr 2023 10:34:38 -0700 (PDT)
+        Sun, 16 Apr 2023 13:33:48 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2AA3A80
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 10:33:39 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id fy21so15436552ejb.9
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 10:33:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681666478; x=1684258478;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=linux-foundation.org; s=google; t=1681666417; x=1684258417;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bxfOnlh1gWPz4ECc5+gyXwuy61sNCNvLdcJJf29rWhA=;
-        b=hPd8h+vf5YhJGTgRERaLgALldhgleev+V0wqIC4AzrE8ng92mX9Nhi98I3AzaYNiz6
-         jR8I62aILyO6oIAaxofOc0JbJC2WqXRXuQPD3Q1cgGY1I9JCxBz+RYK7bn3862a1nINC
-         kTkqgnIyN9jv1xzBR+mKuzmB3YT70V7nytrgRUd8CpI8wHusTu31FZbUDiT1y+dZNVPO
-         y8UgYR2t8D5vXE+5FlzZmBe8N4bxLmVdSTk3uO3cK8V++7Wi6zVdvgeBVV/LONAAUTPK
-         FQhrl7OXgNSq9au67KH6e4xeyV7S6GJLp2NswMtfSd8wlYPT31S9UsjU+95OpixHFK88
-         vOEg==
+        bh=T0zjlBWrp8mSKGtJRwYtBg2SQIzPO5B3r0sq3wAU/qE=;
+        b=g1MD+qYi16eZw6jxHApEFjkbNo956Jcxfz2P9c/kau3fAu/rTglWtMgVp49hBcRqIu
+         3EGl/jOu+kTKjKayiKek25wcP7heFIuG7O1ErXo67cSsGTVmfEJINK6BKoof0ViTQueW
+         SE7hZm/xsV7LzO80FhgL+NBteCKDPDBlDWqnI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681666478; x=1684258478;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1681666417; x=1684258417;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bxfOnlh1gWPz4ECc5+gyXwuy61sNCNvLdcJJf29rWhA=;
-        b=f1dAfj8392xlmavW3p0FM6iGJw/a5HMnVhucWPHKjaE7q89TfgUsMqKnVZ+WL2eu9t
-         Q6ftQjuZXguVrfP+9Fj/v8DY/SurKTfW8mNGhl5NyCpxTDsd4vzV4BXd+xz6t3DBbyTz
-         7bEt7uNPTs69WZQqq4ShUcSab4a71aa2BfZNKLXVkCjctc3BS3zUJynM3CKEI6jjLsDt
-         wiUPHnn/W5yC6EIytVdGluSxY4B+nBDs/X5xkUX7Zvygta8bWLYrTAClgTzsYX6J33a/
-         e8TkwyEZxnV5a/5r8nw7+VYZFXmXvXzv1APzoj6dXZOlDjanZgN/f2LCEq/7FypD9pBZ
-         9Rnw==
-X-Gm-Message-State: AAQBX9d/H2YcmQybfG2Y+ep1lAZpqDionyx/rgoe14Hb8Hz3yycoy9xx
-        dU7HfVh6rt7YKkvMyIOzZxScsVJn/1aO9j+pH/M=
-X-Google-Smtp-Source: AKy350YMmfJDtdMdCjBQlAMr3FKj0gbXI5/S7pqfHG2aKD6WhYFY+hKx1QoKx7o6B6c9hSxvbJuUzQ==
-X-Received: by 2002:a05:6a00:890:b0:63a:fae3:9890 with SMTP id q16-20020a056a00089000b0063afae39890mr17928494pfj.24.1681666477842;
-        Sun, 16 Apr 2023 10:34:37 -0700 (PDT)
-Received: from d.home.yangfl.dn42 ([104.28.245.200])
-        by smtp.gmail.com with ESMTPSA id j22-20020a62b616000000b0062d90f36d16sm6110973pff.88.2023.04.16.10.34.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 10:34:37 -0700 (PDT)
-From:   David Yang <mmyangfl@gmail.com>
-To:     linux-clk@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, David Yang <mmyangfl@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/4] clk: gate: Add DT binding
-Date:   Mon, 17 Apr 2023 01:33:02 +0800
-Message-Id: <20230416173302.1185683-5-mmyangfl@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230416173302.1185683-1-mmyangfl@gmail.com>
-References: <20230416173302.1185683-1-mmyangfl@gmail.com>
+        bh=T0zjlBWrp8mSKGtJRwYtBg2SQIzPO5B3r0sq3wAU/qE=;
+        b=C8bMLRjUKHgN7ubv3FSEGS8gYaY4MyFrES/n5gQM1C8IseeOI7WsOSSBqDmhm+fO3+
+         wBy9irT0DZorI72FgXP6A1sESCadZrH+S8sQF8x5iiwFPI4OsIf2jg/y2snl5J3Uhg2n
+         EAwko5h1K24AFEXdya9oiYVnPrs3bl1/ejklRibWjHSlLnBt8V5gzIVg5umggPCJ1vH/
+         LZB4uLQ3TosG0Ih9H1LmgX8Vt7GpwyR1dPGmJ5ueIgVmBZ7dcE2iRNcTs8oaigToF999
+         rRGz1uFWuqtzDGLWkWOHLX8DArEmrO4ULenIFIdUrOAeGe+8yfPVdLuxN6/eVfPncrP6
+         PFeQ==
+X-Gm-Message-State: AAQBX9c3HNoyxDV0R1f1kXIwF57fcIGoNycaXVo7GrRzelcnAJJBnphc
+        bvzGDW7I6/mOqY3eHGOU/Y8hlRIpz4gYIFRaQSAHcQ==
+X-Google-Smtp-Source: AKy350Y9Rlmzb9wqgKFUGbIW+s2zccWTyhL9mMF5ugjVijkS8JEzAmffIFDitSQ704Z2pTuPx/ugOQ==
+X-Received: by 2002:a17:906:4714:b0:94e:fdec:67e2 with SMTP id y20-20020a170906471400b0094efdec67e2mr4782354ejq.77.1681666417329;
+        Sun, 16 Apr 2023 10:33:37 -0700 (PDT)
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com. [209.85.218.49])
+        by smtp.gmail.com with ESMTPSA id l10-20020aa7d94a000000b0050687f06aacsm2839387eds.12.2023.04.16.10.33.36
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Apr 2023 10:33:36 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id ud9so58204848ejc.7
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 10:33:36 -0700 (PDT)
+X-Received: by 2002:a17:907:2718:b0:94b:28ff:9e89 with SMTP id
+ w24-20020a170907271800b0094b28ff9e89mr1914743ejk.15.1681666416204; Sun, 16
+ Apr 2023 10:33:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230416122913.GCZDvqGVe9TPa5LPRm@fat_crate.local>
+In-Reply-To: <20230416122913.GCZDvqGVe9TPa5LPRm@fat_crate.local>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 16 Apr 2023 10:33:19 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjOZgMu2VYBHMt-yFvurAqWsxLG8wh59km=B245CXRKxA@mail.gmail.com>
+Message-ID: <CAHk-=wjOZgMu2VYBHMt-yFvurAqWsxLG8wh59km=B245CXRKxA@mail.gmail.com>
+Subject: Re: [GIT PULL] x86/urgent for v6.3-rc7
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add DT binding for gate clock as "gate-clock".
+On Sun, Apr 16, 2023 at 5:29=E2=80=AFAM Borislav Petkov <bp@alien8.de> wrot=
+e:
+>
+> - Drop __init annotation from two rtc functions which get called after
+>   boot is done, in order to prevent a crash
 
-Signed-off-by: David Yang <mmyangfl@gmail.com>
----
- drivers/clk/clk-gate.c | 81 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 81 insertions(+)
+.. ahh, and our automation to catch these things didn't find it,
+because they are only accessed from x86_wallclock_init(), which is
+also __init.
 
-diff --git a/drivers/clk/clk-gate.c b/drivers/clk/clk-gate.c
-index 64283807600b..a70df4a2a9a7 100644
---- a/drivers/clk/clk-gate.c
-+++ b/drivers/clk/clk-gate.c
-@@ -12,8 +12,11 @@
- #include <linux/slab.h>
- #include <linux/io.h>
- #include <linux/err.h>
-+#include <linux/platform_device.h>
- #include <linux/string.h>
- 
-+#include "clk-of.h"
-+
- /**
-  * DOC: basic gatable clock which can gate and ungate it's ouput
-  *
-@@ -257,3 +260,81 @@ struct clk_hw *__devm_clk_hw_register_gate(struct device *dev,
- 	return hw;
- }
- EXPORT_SYMBOL_GPL(__devm_clk_hw_register_gate);
-+
-+#if IS_ENABLED(CONFIG_OF)
-+static const struct of_clk_flag of_clk_gate_flags[] = {
-+	{ "set-to-disable", CLK_GATE_SET_TO_DISABLE },
-+	{ "hiword-mask", CLK_GATE_HIWORD_MASK },
-+	{ "big-endian", CLK_GATE_BIG_ENDIAN },
-+	{ }
-+};
-+
-+static int of_clk_gate_setup(struct device_node *np)
-+{
-+	struct of_clk_ctrl *ctrl = np->parent->data;
-+	const char *name;
-+	void __iomem *reg;
-+	u32 bit_idx;
-+
-+	const char *property;
-+	struct clk_hw *hw;
-+	int ret;
-+
-+	reg = of_clk_get_reg(np);
-+	if (!reg)
-+		return -ENOMEM;
-+	name = of_clk_get_name(np);
-+	if (!name)
-+		return -EINVAL;
-+
-+	property = "bits";
-+	if (of_property_read_u32(np, property, &bit_idx))
-+		goto err_property;
-+
-+	hw = __clk_hw_register_gate(NULL, np, name,
-+				    of_clk_get_parent_name(np, 0),
-+				    NULL, NULL, of_clk_get_flags(np, NULL),
-+				    reg, bit_idx,
-+				    of_clk_get_flags(np, of_clk_gate_flags),
-+				    &ctrl->lock);
-+	if (IS_ERR(hw))
-+		return PTR_ERR(hw);
-+
-+	ret = of_clk_add_hw_provider(np, of_clk_hw_simple_get, hw);
-+	if (ret)
-+		goto err_register;
-+
-+	np->data = hw;
-+	return 0;
-+
-+err_register:
-+	clk_hw_unregister(hw);
-+	return ret;
-+
-+err_property:
-+	pr_err("%s: clock %s missing required property \"%s\"\n",
-+	       __func__, name, property);
-+	return -EINVAL;
-+}
-+
-+static void __init of_clk_gate_init(struct device_node *np)
-+{
-+	of_clk_gate_setup(np);
-+}
-+CLK_OF_DECLARE(of_clk_gate, "gate-clock", of_clk_gate_init);
-+
-+static const struct of_device_id of_clk_gate_ids[] = {
-+	{ .compatible = "gate-clock", .data = of_clk_gate_setup },
-+	{ }
-+};
-+
-+static struct platform_driver of_clk_gate_driver = {
-+	.driver = {
-+		.name = "clk_gate",
-+		.of_match_table = of_clk_gate_ids,
-+	},
-+	.probe = of_clk_probe,
-+	.remove = of_clk_remove,
-+};
-+builtin_platform_driver(of_clk_gate_driver);
-+#endif
--- 
-2.39.2
+So it all looked superficially good, except for the "oh, we saved them
+into a data structure that _isn't_ init".
 
+It would require automation much smarter than the one we have to catch
+that kind of thing.
+
+             Linus
