@@ -2,138 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64CA86E388A
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 15:13:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92D436E388F
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Apr 2023 15:16:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbjDPNNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 09:13:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43558 "EHLO
+        id S229887AbjDPNQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 09:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbjDPNNT (ORCPT
+        with ESMTP id S229476AbjDPNQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 09:13:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78193212E
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 06:12:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681650752;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ecW/u7CjtCVSaHYPl096FXbBaM+YOFYAJMZvfjOeWGs=;
-        b=cx0XHXlC+H5IFtWDZ+xVe4Gl/iBJ27p6xZWyqrTJXMTM/WUPzBud21p3bNLd5GaNuipVn9
-        zU+z7Vb/HcqyzvI2/YUCRoPCtHpbjscE6bLeQjR/tgJPlISiCwieWahlEfqCQ2/Xq2Axy5
-        se3sqeC59vGqf0XoXXy8FuO5KtpZpys=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-634-cv4rUWLVMUC-FK14ssodaQ-1; Sun, 16 Apr 2023 09:12:31 -0400
-X-MC-Unique: cv4rUWLVMUC-FK14ssodaQ-1
-Received: by mail-ed1-f72.google.com with SMTP id e30-20020a50a69e000000b0050690ba4f68so1942322edc.15
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 06:12:31 -0700 (PDT)
+        Sun, 16 Apr 2023 09:16:40 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69BDF211B;
+        Sun, 16 Apr 2023 06:16:39 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-504e232fe47so4178049a12.2;
+        Sun, 16 Apr 2023 06:16:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681650998; x=1684242998;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CG6bCloxRF63LINwsV/S6++Cq8kHn62f+t1mJDbwRK0=;
+        b=WXFFpsaEeQMYaSn0v/zrfFpyjWKoQioMpl8FyBtcvwM/W+CH3eQ+FO8fDo4YaSPbqC
+         IBR4fvHDQFglnsUsuGDL9btHT7rzgxknyMVD8vTPCfdzkSoD9OpN8e/0qHNlEtLtPnna
+         n8Wj0hynb/1Snkic/6YiPhC3tUkSx+ly+h1qYOrElXpFKddIjGlVH5U/mmCRnbijh9vJ
+         ZEqJnPJ/11Q/ZClWyCxatUVsjtlwtMkJGtOFVBqYpefMS0frrrjxK2+2ltAvy180okSB
+         fRcerp0pe6CHkmBii7OxVvmPyc0Q5kaLQgMUNyWXjmKjOzqcvNgTxzpnPnxefUNIzq17
+         /27Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681650750; x=1684242750;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ecW/u7CjtCVSaHYPl096FXbBaM+YOFYAJMZvfjOeWGs=;
-        b=FPkzVMpow5/s8KNlAI9xH5oqIPj53YnWsWwzALzLevLyTz3CUFfqSN+LBIDfzXmfcq
-         tcWSRxoBG9VjUdJG5YU4nd8EvGMLkWW3queyZ7kEa/nfIn9MIOKuriMxIVCHTz6y4Cqz
-         TCRWa5FiJl35a49v5/rii/KFABvy0nMZ1P9N45NmrmgZfvTVSc10hKUxdcUSian41YGf
-         olKQ9dfLSZZrBa7gJ2xd7n4oQudybgGzMH2bF2A3RGxCN2AtrT2U7Z8hzbCAI7rCkeiO
-         VPShePtNGUzZ6fzfj+Lm1WEwCo7U30xHuHxQHt4B/Y3ditEgEEdcEjvKY+wDmZVeFlBc
-         KErg==
-X-Gm-Message-State: AAQBX9d1uSujWYkEWjNOuZKWXld5dD21pCobg27nZV1nv0fXSVXedcdK
-        Pyb3f58MUay+Cwk+9KndGe8rQ27f+2Y5SpLBMXFxI49He5/mgFvqaC+i9DxW0v7iFpstc6Unrrz
-        +oPmbrrYTPlpLmFQOplaizcuB
-X-Received: by 2002:a17:907:7809:b0:949:c05d:73b6 with SMTP id la9-20020a170907780900b00949c05d73b6mr4080296ejc.17.1681650750402;
-        Sun, 16 Apr 2023 06:12:30 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Zvy4OWUGG7/uKcn/guQnbp5MOYixLaUbua5xOk1r9lVf96E10h0El+lKgLR9svlpzbszXUTg==
-X-Received: by 2002:a17:907:7809:b0:949:c05d:73b6 with SMTP id la9-20020a170907780900b00949c05d73b6mr4080287ejc.17.1681650750153;
-        Sun, 16 Apr 2023 06:12:30 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id xh5-20020a170906da8500b0094edd8e38fasm3665933ejb.76.2023.04.16.06.12.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Apr 2023 06:12:29 -0700 (PDT)
-Message-ID: <9b243f3e-92ad-197f-f0a6-b22eaf71238a@redhat.com>
-Date:   Sun, 16 Apr 2023 15:12:28 +0200
+        d=1e100.net; s=20221208; t=1681650998; x=1684242998;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CG6bCloxRF63LINwsV/S6++Cq8kHn62f+t1mJDbwRK0=;
+        b=gJQGUDB3mrRksT6nGbBIAmiOJuDX9TORQNvOUAXorsUFsGtfAuchSeO3oNq1F5e9bn
+         vXgkyt2bMr3GKPSom7ukQWn2DsgLZ9vjqJ8CuuP0iaU9sMdxtqpKq7J1fCO3MzzzQqvJ
+         WtprdQR8FF5PtQ44jswM3R1AUYK/mTP+Y5D4GisVFEzWXhSaEBqJjz7wKudVh+mClkfY
+         LJ51cxTXiimv8ICOIYF+BHU7a6Lxu05z14rO1w7rDFDycLS5++ER8bljFU5WszxKboLH
+         lWG4y92xCZkooFn6k6wp81LjPvEqpThSI4YDKJpxX+EVLnSGj56uycnWN48+eZ6G8+/g
+         UNJA==
+X-Gm-Message-State: AAQBX9eObdqy09c0RmMbk9I1BbkYU74m0D/Svx55f+eV/Hxbcoug6P1j
+        f5CvJc5yVHe2nUb+kN2sFYo=
+X-Google-Smtp-Source: AKy350ZcY3oLmiF4wDab6nhMKU9+AzhQFiWjQFrMeN775fJZ9qEf5nnH8cHD0k8y0tiEK1CJCRb2Ag==
+X-Received: by 2002:aa7:d04e:0:b0:505:7d54:db93 with SMTP id n14-20020aa7d04e000000b005057d54db93mr11408339edo.21.1681650997751;
+        Sun, 16 Apr 2023 06:16:37 -0700 (PDT)
+Received: from localhost.my.domain (83.8.121.70.ipv4.supernova.orange.pl. [83.8.121.70])
+        by smtp.gmail.com with ESMTPSA id n9-20020a05640204c900b005068d7ccfb0sm2396594edw.83.2023.04.16.06.16.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Apr 2023 06:16:37 -0700 (PDT)
+From:   Artur Weber <aweber.kernel@gmail.com>
+To:     thierry.reding@gmail.com
+Cc:     sam@ravnborg.org, airlied@gmail.com, daniel@ffwll.ch,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Artur Weber <aweber.kernel@gmail.com>
+Subject: [PATCH v3 0/3] Add Samsung S6D7AA0 panel controller driver
+Date:   Sun, 16 Apr 2023 15:16:29 +0200
+Message-Id: <20230416131632.31673-1-aweber.kernel@gmail.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] media: atomisp: Move a variable assignment behind a null
- pointer check in atomisp_cp_general_isp_parameters()
-Content-Language: en-US, nl
-To:     Andy Shevchenko <andy@kernel.org>,
-        Markus Elfring <Markus.Elfring@web.de>
-Cc:     kernel-janitors@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>, cocci@inria.fr,
-        LKML <linux-kernel@vger.kernel.org>
-References: <40c60719-4bfe-b1a4-ead7-724b84637f55@web.de>
- <1a11455f-ab57-dce0-1677-6beb8492a257@web.de>
- <d8ed4e5d-49d4-ca7e-1283-1ec166bf643d@web.de>
- <ZDmJsemYldOsMMrH@smile.fi.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <ZDmJsemYldOsMMrH@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This patchset adds initial support for Samsung S6D7AA0-based panels.
+Currently, only the S6D7AA0-LSL080AL02 panel used in the Samsung
+Galaxy Tab 3 8.0 family of tablets is supported; other panels can be
+added in the future.
 
-On 4/14/23 19:13, Andy Shevchenko wrote:
-> On Thu, Apr 13, 2023 at 10:20:15PM +0200, Markus Elfring wrote:
->> Date: Thu, 13 Apr 2023 22:08:42 +0200
->>
->> The address of a data structure member was determined before
->> a corresponding null pointer check in the implementation of
->> the function “atomisp_cp_general_isp_parameters”.
->>
->> Thus avoid the risk for undefined behaviour by moving the assignment
->> for the variable “cur_config” behind the null pointer check.
-> 
-> I don't think this is what is happening here. The check might be removed by
-> optimizer in the compiler.
+Changed in v2:
+ - Added commit messages for dt-bindings and MAINTAINERS entry commits
+ - dt-bindings: Applied suggestions from Krzysztof Kozlowski
+ - driver: Removed unused panel_name property from desc struct
 
-Right, Markus thank you for the patch.
+Changed in v3:
+ - Correctly applied patch for dt-bindings
 
-Instead of this patch, can you please audit the callers of this
-function? I expect that you will likely find that the callers
-already unconditionally deref css_param themselves, or they
-guarantee a non NULL value in other ways (e.g. address of local
-variable).
+Artur Weber (3):
+  dt-bindings: display: panel: Add Samsung S6D7AA0 LCD panel controller
+  drm/panel: Add Samsung S6D7AA0 panel controller driver
+  MAINTAINERS: Add entry for Samsung S6D7AA0 LCD panel controller driver
 
-So I expect that the check can simply be dropped completely,
-which would be a much better fix.
+ .../display/panel/samsung,s6d7aa0.yaml        |  52 +++
+ MAINTAINERS                                   |   6 +
+ drivers/gpu/drm/panel/Kconfig                 |   7 +
+ drivers/gpu/drm/panel/Makefile                |   1 +
+ drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c | 395 ++++++++++++++++++
+ 5 files changed, 461 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/panel/samsung,s6d7aa0.yaml
+ create mode 100644 drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
 
-Regards,
-
-Hans
-
-
-
-
-
-> 
->> This issue was detected by using the Coccinelle software.
->>
->> Fixes: ad85094b293e40e7a2f831b0311a389d952ebd5e ("Revert 'media: staging: atomisp: Remove driver'")
-> 
-> Wrong tag format.
-> 
-> Code-wise I'm not against this, but it's up to Hans.
-> 
+-- 
+2.40.0
 
