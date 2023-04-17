@@ -2,87 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8043A6E4B87
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:34:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DECE56E4B8F
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbjDQOeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 10:34:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57848 "EHLO
+        id S230491AbjDQOey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 10:34:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjDQOd6 (ORCPT
+        with ESMTP id S230458AbjDQOen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 10:33:58 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 66E1A92
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:33:57 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DA0611063;
-        Mon, 17 Apr 2023 07:34:40 -0700 (PDT)
-Received: from [10.57.68.227] (unknown [10.57.68.227])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8ACD33F5A1;
-        Mon, 17 Apr 2023 07:33:55 -0700 (PDT)
-Message-ID: <ac5405a7-85bb-1496-dcce-a8459b009eec@arm.com>
-Date:   Mon, 17 Apr 2023 15:33:53 +0100
+        Mon, 17 Apr 2023 10:34:43 -0400
+Received: from exchange.fintech.ru (exchange.fintech.ru [195.54.195.159])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B859EE2
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:34:37 -0700 (PDT)
+Received: from Ex16-01.fintech.ru (10.0.10.18) by exchange.fintech.ru
+ (195.54.195.159) with Microsoft SMTP Server (TLS) id 14.3.498.0; Mon, 17 Apr
+ 2023 17:34:35 +0300
+Received: from localhost (10.0.253.138) by Ex16-01.fintech.ru (10.0.10.18)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Mon, 17 Apr
+ 2023 17:34:35 +0300
+From:   Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+To:     Alex Deucher <alexander.deucher@amd.com>
+CC:     Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jerome Glisse <jglisse@redhat.com>,
+        <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>, <lvc-project@linuxtesting.org>
+Subject: [PATCH] drm/ttm: fix null-ptr-deref in radeon_ttm_tt_populate()
+Date:   Mon, 17 Apr 2023 07:34:31 -0700
+Message-ID: <20230417143431.58858-1-n.zhandarovich@fintech.ru>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.1
-Subject: Re: [PATCH v3 30/60] arm64: idreg-override: Create a pseudo feature
- for rodata=off
-Content-Language: en-US
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Kees Cook <keescook@chromium.org>
-References: <20230307140522.2311461-1-ardb@kernel.org>
- <20230307140522.2311461-31-ardb@kernel.org>
- <c4d4f543-9dae-9514-3411-7061192af530@arm.com>
- <CAMj1kXFK3uAMXgrtFofb0e2Z=eW+bMQBkbU-3MAazV3PgX_SpA@mail.gmail.com>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <CAMj1kXFK3uAMXgrtFofb0e2Z=eW+bMQBkbU-3MAazV3PgX_SpA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.0.253.138]
+X-ClientProxiedBy: Ex16-02.fintech.ru (10.0.10.19) To Ex16-01.fintech.ru
+ (10.0.10.18)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/04/2023 15:30, Ard Biesheuvel wrote:
-> On Mon, 17 Apr 2023 at 16:28, Ryan Roberts <ryan.roberts@arm.com> wrote:
->>
->> On 07/03/2023 14:04, Ard Biesheuvel wrote:
->>> Add rodata=off to the set of kernel command line options that is parsed
->>> early using the CPU feature override detection code, so we can easily
->>> refer to it when creating the kernel mapping.
->>>
->>> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
->>> ---
->>>  arch/arm64/include/asm/cpufeature.h   | 1 +
->>>  arch/arm64/kernel/pi/idreg-override.c | 2 ++
->>>  2 files changed, 3 insertions(+)
->>>
->>> diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
->>> index bc10098901808c00..edc7733aa49846b2 100644
->>> --- a/arch/arm64/include/asm/cpufeature.h
->>> +++ b/arch/arm64/include/asm/cpufeature.h
->>> @@ -16,6 +16,7 @@
->>>  #define cpu_feature(x)               KERNEL_HWCAP_ ## x
->>>
->>>  #define ARM64_SW_FEATURE_OVERRIDE_NOKASLR    0
->>> +#define ARM64_SW_FEATURE_OVERRIDE_RODATA_OFF 4
->>
->> I assume these are bit numbers? Why not just use the next available bit (bit 1)
->> for this new flag?
->>
-> 
-> This (ab)uses the CPU feature framework, which is based on 4-bit
-> quantities. I don't remember if it matters or not, but IIRC the
-> default macros use 4-bit wide values.
+Currently, drm_prime_sg_to_page_addr_arrays() dereferences 'gtt->ttm'
+without ensuring that 'gtt' (and therefore 'gtt->tmm') is not NULL.
 
-OK, thanks.
+Fix this by testing 'gtt' for NULL value before dereferencing.
+
+Found by Linux Verification Center (linuxtesting.org) with static
+analysis tool SVACE.
+
+Fixes: 40f5cf996991 ("drm/radeon: add PRIME support (v2)")
+Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+---
+ drivers/gpu/drm/radeon/radeon_ttm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/radeon/radeon_ttm.c b/drivers/gpu/drm/radeon/radeon_ttm.c
+index 1e8e287e113c..33d01c3bdee4 100644
+--- a/drivers/gpu/drm/radeon/radeon_ttm.c
++++ b/drivers/gpu/drm/radeon/radeon_ttm.c
+@@ -553,7 +553,7 @@ static int radeon_ttm_tt_populate(struct ttm_device *bdev,
+ 		return 0;
+ 	}
+ 
+-	if (slave && ttm->sg) {
++	if (gtt && slave && ttm->sg) {
+ 		drm_prime_sg_to_dma_addr_array(ttm->sg, gtt->ttm.dma_address,
+ 					       ttm->num_pages);
+ 		return 0;
+-- 
+2.25.1
+
