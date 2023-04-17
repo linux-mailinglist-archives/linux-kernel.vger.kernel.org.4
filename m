@@ -2,76 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 473086E4780
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 14:21:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04A3C6E46C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 13:48:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbjDQMVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 08:21:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40858 "EHLO
+        id S230181AbjDQLsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 07:48:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230525AbjDQMVJ (ORCPT
+        with ESMTP id S230048AbjDQLsM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 08:21:09 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6876E9D;
-        Mon, 17 Apr 2023 05:20:27 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1poNJU-0004S0-5s; Mon, 17 Apr 2023 13:46:28 +0200
-Message-ID: <c1bfe1e7-d256-a444-4cfc-e0a4f9fba036@leemhuis.info>
-Date:   Mon, 17 Apr 2023 13:46:27 +0200
+        Mon, 17 Apr 2023 07:48:12 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 161961AB
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 04:47:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=2sbQzu7RniseVk+khnE2kGEB/bPWNfsL2nxC/lM0Zu0=; b=NXC0G2nchijGyOCEIYYKVhI4/k
+        gECLFsUAU3H7pol0l1kU46JbLboQPhaXylBAd7rInZD95hRQix4LDeSRfaprvhhdQfmHtmLEben3z
+        aC+KN1pwgbBbl4RYF8B94jdJ1SiOnOY7ATr6z48fjTZk1HRAx1hnKifSIAirgXsRuRISJ/zrdANoi
+        atCNiiUdfWpqDVBgtGT0a14OG5MRSeYgF+UGout5J5yFAqQeBbSeiXnN3gU168PIeWGEyWM29eMYs
+        /IA0nIt2mALw6mu2NccAXLF3seKWEzEUlQup7jUcC9WdKDmQ7w3EUyMFChuNMlaRvKBHSWq8CAFr9
+        5agmYj7w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1poNJv-00HJ1f-2o;
+        Mon, 17 Apr 2023 11:46:56 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 682BF300338;
+        Mon, 17 Apr 2023 13:46:54 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 4EC8024248739; Mon, 17 Apr 2023 13:46:54 +0200 (CEST)
+Date:   Mon, 17 Apr 2023 13:46:54 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Andi Kleen <ak@linux.intel.com>
+Cc:     "Liang, Kan" <kan.liang@linux.intel.com>, mingo@redhat.com,
+        acme@kernel.org, linux-kernel@vger.kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
+        adrian.hunter@intel.com, eranian@google.com
+Subject: Re: [PATCH 2/6] perf: Support branch events logging
+Message-ID: <20230417114654.GL83892@hirez.programming.kicks-ass.net>
+References: <20230414103832.GD83892@hirez.programming.kicks-ass.net>
+ <1d62b865-5d31-ec36-99e0-785844f79199@linux.intel.com>
+ <20230414145324.GB761523@hirez.programming.kicks-ass.net>
+ <803927bb-6f74-5c09-3c18-2fd5f423287b@linux.intel.com>
+ <20230414160945.GC761523@hirez.programming.kicks-ass.net>
+ <085fa11e-ea07-c148-1b32-8a09007ee12b@linux.intel.com>
+ <20230414192407.GA778423@hirez.programming.kicks-ass.net>
+ <2428e6a2-9578-1e1d-bdef-ffcc87301503@linux.intel.com>
+ <20230414220106.GC778423@hirez.programming.kicks-ass.net>
+ <d53d4df7-d0b8-2fbc-4912-f89686b5d931@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [regression] Bug 217182 - Dell Latitude E7450 Trackpoint not
- working as expected
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     Linux kernel regressions list <regressions@lists.linux.dev>
-Cc:     "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
-          Linux regressions mailing list 
-          <regressions@lists.linux.dev>
-References: <6625ee0a-31a7-9fef-d299-457c0f98f5a0@leemhuis.info>
-In-Reply-To: <6625ee0a-31a7-9fef-d299-457c0f98f5a0@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1681734027;dfaa7a46;
-X-HE-SMSGID: 1poNJU-0004S0-5s
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d53d4df7-d0b8-2fbc-4912-f89686b5d931@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[TLDR: This mail in primarily relevant for Linux regression tracking. A
-change or fix related to the regression discussed in this thread was
-posted or applied, but it did not use a Link: tag to point to the
-report, as Linus and the documentation call for. Things happen, no
-worries -- but now the regression tracking bot needs to be told manually
-about the fix. See link in footer if these mails annoy you.]
-
-On 13.03.23 11:20, Linux regression tracking (Thorsten Leemhuis) wrote:
+On Fri, Apr 14, 2023 at 03:47:29PM -0700, Andi Kleen wrote:
 > 
-> Hi, Thorsten here, the Linux kernel's regression tracker.
+> > Yeah, don't do this. There is no guarantee what so ever you'll get any
+> > of those events in the 0-3 range.
 > 
-> I noticed a regression report in bugzilla.kernel.org. As many (most?)
-> kernel developer don't keep an eye on it, I decided to forward it by
-> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217182 :
+> 
+> The kernel can simply force to 0-3 if LBR is enabled and the feature too.
+> It's in Kan's patch
+> 
+> and it isn't particularly complicated.
 
-Tell regzbot about the fix for this:
-
-#regzbot fix: 754ff5060daf5a1cf4474eff9b4edeb6c17ef7ab
-#regzbot ignore-activity
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
-
+And what, totally leave 4-7 unused even if those counters were not
+related to LBR at all? That seems exceedingly daft.
