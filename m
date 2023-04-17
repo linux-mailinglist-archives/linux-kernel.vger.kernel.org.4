@@ -2,101 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC4116E47F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 14:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F4886E4808
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 14:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbjDQMkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 08:40:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60822 "EHLO
+        id S231272AbjDQMlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 08:41:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbjDQMkH (ORCPT
+        with ESMTP id S231216AbjDQMk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 08:40:07 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C78121
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 05:40:05 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id la15so2227777plb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 05:40:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1681735205; x=1684327205;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9wZohT/rXRJ7RxEfPJSlKRsC6xJ8iy8PXX3oqB2TB2A=;
-        b=L5kG2yNcDDrg4gc3IALK+Yb2SB9Q4uN8X3KQqJhb41hm0SKz2nxeH/xReR+dIyPsWd
-         mHdkLsagwuVp+SqIAqUQfvU4w5Rwnc5l5r1JBnfrI0OGf01GCi3zz7YUwah4nUtfDYeZ
-         rHBDB3tgAKpSyZc87VWKGyTaUoF+O3orNj0pI=
+        Mon, 17 Apr 2023 08:40:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792A35B90
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 05:40:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681735210;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=d8R/DyfPuxRJq8lFo64wBLNVpfrgX/DMbIH8EiFz9DI=;
+        b=UMHcNDB1jMrgHEhRmsyfqDz+JSI4qLExyMI2Erngpqs5g86AtjqsYaqPEsJKvS60AsXojC
+        fwisWZqyAROu2xncRdjujw3Y2VxKH6OE6+3/8JdGZYs6AM2Qu5cDqnHAIwUP+zl3kZxqjt
+        SROV+D202jNpRJHRMfKzAoARtEfASpo=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-316-Z6kkADfHPEOoA1k2mn35Cg-1; Mon, 17 Apr 2023 08:40:07 -0400
+X-MC-Unique: Z6kkADfHPEOoA1k2mn35Cg-1
+Received: by mail-ed1-f71.google.com with SMTP id b60-20020a509f42000000b00504eca73d05so8733391edf.18
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 05:40:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681735205; x=1684327205;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9wZohT/rXRJ7RxEfPJSlKRsC6xJ8iy8PXX3oqB2TB2A=;
-        b=FF0Oa54p9WDYLL6U916W3MSuKKHWYr6cA8PPGNsYl4Iw9ZDX8u+h37e1bP93BK7iZa
-         +0a9cEqlUEvFoVaVQhzWFjoEJgBnTr/j9Ucc9IeuMV8iPk4d9Vv8AEXhFK/ClIBo+Wom
-         V0OwEzeJOl/kYfeK2CmIlv0yhkGqtpF8AgrYplbaBfVkuSI6t1oiYjc1OdyepOsBkrqo
-         2LObDt46t08bpQTySLaYAaAbvtKx5ghwKf2ZRE24vidxCHtLjokR6vnN3OLaKonm1UCI
-         TH0x7wLS+ve9g0tWR4tuzVU6nnuQDwBFU4vXOT61/qgnIJcWzVzImPyv1CkzuaQTOJF1
-         /o0Q==
-X-Gm-Message-State: AAQBX9fuWvKWdZm4and0pj9TyRbetwghADsAUFd+mCB7LLoCFEXn6UgQ
-        pi1SSNw+LPsrlx72+HPO9JCwNg==
-X-Google-Smtp-Source: AKy350amnx4vQZWZh+xVgxnz5F9g1Ghxm0KeskyBP72RnpTiQW5hibRE3/bNwwAs389ftS5nG+HdUw==
-X-Received: by 2002:a17:902:e811:b0:1a5:898:37aa with SMTP id u17-20020a170902e81100b001a5089837aamr15105552plg.15.1681735205392;
-        Mon, 17 Apr 2023 05:40:05 -0700 (PDT)
-Received: from treapking.tpe.corp.google.com ([2401:fa00:1:10:c8e2:dd4:3c45:24e2])
-        by smtp.gmail.com with ESMTPSA id p11-20020a1709026b8b00b001a6467cfbeasm7595361plk.53.2023.04.17.05.40.02
+        d=1e100.net; s=20221208; t=1681735206; x=1684327206;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=d8R/DyfPuxRJq8lFo64wBLNVpfrgX/DMbIH8EiFz9DI=;
+        b=GJWAHCintr/I/IHz1XeiIxJtodp5QdqhNKkgR6N+KJdBoToCq5Tn0MPGiSv9yz+Y47
+         xDnGZKp5Jpv/E4KFy+iDAy8cbpFKN1cgYcYGe6IA3/AOfN8buIz7I+4GnL8KS488yoMu
+         NweS2yzf/60Nq7eOMI7aN+IlKhto0UedmEIRTRjFgvJXWyd+yKV4gDsZQHf6l8AU/ALh
+         5Oeo8Rblmvh8nLFg6wEfJwy2jinNTrc1oGLFV2sfrLjSFp+GVj/OlqhxPH7/BAvvvo4z
+         NOe/juPbCfkrrk/+A7C/dQ7Vct4B4OXaQI6lCfzX/s7IKGVvjemhNj6m8g8Kwwo2YvRx
+         saog==
+X-Gm-Message-State: AAQBX9cztLVUH4vB4A49VYWHjl5bmJEpISUiahUTL8KvAQX23oa07Xie
+        R/VFW1nD5L9qCSYZC6tBMH5xreJd2Uy/WyQvtOj7jc0hAyVwQQ/k53+xCSwWFamdBKObj003SgP
+        voOfm6+9DNTISo1FbzcP6l8A5
+X-Received: by 2002:a17:906:ae56:b0:932:1af9:7386 with SMTP id lf22-20020a170906ae5600b009321af97386mr7169630ejb.27.1681735206438;
+        Mon, 17 Apr 2023 05:40:06 -0700 (PDT)
+X-Google-Smtp-Source: AKy350aW/kxO/780wfJlvoA8/SxGVLczSeSpBXtQ9jUSEU7Eij2vduEeVE6+vnyBY1Qt/CkYdfKc2w==
+X-Received: by 2002:a17:906:ae56:b0:932:1af9:7386 with SMTP id lf22-20020a170906ae5600b009321af97386mr7169594ejb.27.1681735206008;
+        Mon, 17 Apr 2023 05:40:06 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id 14-20020a17090601ce00b0094a671c2298sm1119966ejj.62.2023.04.17.05.40.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 05:40:04 -0700 (PDT)
-From:   Pin-yen Lin <treapking@chromium.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Doug Anderson <dianders@chromium.org>,
-        Pin-yen Lin <treapking@chromium.org>
-Subject: [PATCH] arm64: dts: mt8173: Power on panel regulator on boot
-Date:   Mon, 17 Apr 2023 20:39:56 +0800
-Message-ID: <20230417123956.926266-1-treapking@chromium.org>
-X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
+        Mon, 17 Apr 2023 05:40:05 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id B7E40AA8452; Mon, 17 Apr 2023 14:40:04 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Magnus Karlsson <magnus.karlsson@gmail.com>
+Cc:     Kal Cutter Conley <kal.conley@dectris.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v3 1/3] xsk: Support UMEM chunk_size > PAGE_SIZE
+In-Reply-To: <CAJ8uoz3Rts2Xfhqq+0cm3GES=dMb2hTqPzGm515oG_nmt=-Nbg@mail.gmail.com>
+References: <20230406130205.49996-1-kal.conley@dectris.com>
+ <20230406130205.49996-2-kal.conley@dectris.com> <87sfdckgaa.fsf@toke.dk>
+ <ZDBEng1KEEG5lOA6@boxer>
+ <CAHApi-nuD7iSY7fGPeMYiNf8YX3dG27tJx1=n8b_i=ZQdZGZbw@mail.gmail.com>
+ <875ya12phx.fsf@toke.dk>
+ <CAHApi-=rMHt7uR8Sw1Vw+MHDrtkyt=jSvTvwz8XKV7SEb01CmQ@mail.gmail.com>
+ <87ile011kz.fsf@toke.dk>
+ <CAHApi-m4gu8SX_1rBtUwrw+1-Q3ERFEX-HPMcwcCK1OceirwuA@mail.gmail.com>
+ <87o7nrzeww.fsf@toke.dk>
+ <CAJ8uoz3Rts2Xfhqq+0cm3GES=dMb2hTqPzGm515oG_nmt=-Nbg@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Mon, 17 Apr 2023 14:40:04 +0200
+Message-ID: <87o7nmwul7.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add "regulator-boot-on" to "panel_fixed_3v3" to save time on powering
-the regulator during boot.  Also add "off-on-delay-us" to the node to
-make sure the regulator never violates the panel timing requirements.
+Magnus Karlsson <magnus.karlsson@gmail.com> writes:
 
-Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+> On Thu, 13 Apr 2023 at 22:52, Toke H=C3=B8iland-J=C3=B8rgensen <toke@redh=
+at.com> wrote:
+>>
+>> Kal Cutter Conley <kal.conley@dectris.com> writes:
+>>
+>> >> Well, you mentioned yourself that:
+>> >>
+>> >> > The disadvantage of this patchset is requiring the user to allocate
+>> >> > HugeTLB pages which is an extra complication.
+>> >
+>> > It's a small extra complication *for the user*. However, users that
+>> > need this feature are willing to allocate hugepages. We are one such
+>> > user. For us, having to deal with packets split into disjoint buffers
+>> > (from the XDP multi-buffer paradigm) is a significantly more annoying
+>> > complication than allocating hugepages (particularly on the RX side).
+>>
+>> "More annoying" is not a great argument, though. You're basically saying
+>> "please complicate your code so I don't have to complicate mine". And
+>> since kernel API is essentially frozen forever, adding more of them
+>> carries a pretty high cost, which is why kernel developers tend not to
+>> be easily swayed by convenience arguments (if all you want is a more
+>> convenient API, just build one on top of the kernel primitives and wrap
+>> it into a library).
+>>
+>> So you'll need to come up with either (1) a use case that you *can't*
+>> solve without this new API (with specifics as to why that is the case),
+>> or (2) a compelling performance benchmark showing the complexity is
+>> worth it. Magnus indicated he would be able to produce the latter, in
+>> which case I'm happy to be persuaded by the numbers.
+>
+> We will measure it and get back to you. Would be good with some
+> numbers.
 
----
+Sounds good, thanks! :)
 
- arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-index d77f6af19065..03d1ab2ca820 100644
---- a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-@@ -96,6 +96,8 @@ panel_fixed_3v3: regulator1 {
- 		regulator-min-microvolt = <3300000>;
- 		regulator-max-microvolt = <3300000>;
- 		enable-active-high;
-+		regulator-boot-on;
-+		off-on-delay-us = <500000>;
- 		gpio = <&pio 41 GPIO_ACTIVE_HIGH>;
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&panel_fixed_pins>;
--- 
-2.40.0.634.g4ca3ef3211-goog
+-Toke
 
