@@ -2,162 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A90526E45B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 12:51:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8097B6E45A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 12:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbjDQKvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 06:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50602 "EHLO
+        id S230030AbjDQKuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 06:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbjDQKus (ORCPT
+        with ESMTP id S229456AbjDQKuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 06:50:48 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11EE3868B;
-        Mon, 17 Apr 2023 03:50:03 -0700 (PDT)
-Date:   Mon, 17 Apr 2023 10:46:48 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1681728408;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aolYCW6BgKOyEtD8DrOwUI4vowED8g/kmdmypggM9C8=;
-        b=H6ouT7OvKN8c2M+K4Yxtcyt/W6y0H2vOT+E9Ee8nG8LX1nCElXJTK60h0sTTkJIaUx6cV/
-        //2bGvjT5PT+1oLI0TJfdmTWNl+RPjVZNffKpNJuYxAw8tg2+TceTfFvgbl6HQpPwM1m0N
-        1PGU3s5vrivVFvIqY9Eoz0Q6Jzoagi+kvRhsAfebpZlobA8qdMP/hL9staj5PRbQIkRy+A
-        W3pgnUTKzD8XdGSpva7ozMz8t9y2C0f3wVIjSjsnqRr6TNwmBwv1pU2AGKh5cg0jRBbGta
-        iwujHZrZYx2lPKWj8uJok8Tr1s1s2fbx7NDtZWy7iqn5D0Wq4eO4PVdCCkn5cA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1681728408;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aolYCW6BgKOyEtD8DrOwUI4vowED8g/kmdmypggM9C8=;
-        b=z/lrDazUoFU10SPyVdzEi6CEORp8wWY6wd6aYGotfmvb7frPnkZdh+JSA41/6sqdrXYvjy
-        t6WCNpkCo7SgQNAw==
-From:   "tip-bot2 for Josh Poimboeuf" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: objtool/core] init: Mark [arch_call_]rest_init() __noreturn
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <7194ed8a989a85b98d92e62df660f4a90435a723.1681342859.git.jpoimboe@kernel.org>
-References: <7194ed8a989a85b98d92e62df660f4a90435a723.1681342859.git.jpoimboe@kernel.org>
+        Mon, 17 Apr 2023 06:50:23 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A8E33A82;
+        Mon, 17 Apr 2023 03:49:39 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-2f8405b3dc1so834728f8f.3;
+        Mon, 17 Apr 2023 03:49:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681728465; x=1684320465;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aObB3gJrc6daE2Ub3D70WFvZc+MAMO7dkXaerkKuI3s=;
+        b=RXtnXeZZXh+VYZJiHO88aK0CSgdCnLOoMdEuRCkY9HvdqoQOpy2yOdn2VbYysVhQEo
+         Qp3qQWty1Awi//NPEO2vjwxvnTunFZEh9JGMiPRZUbbo91duK52ft167gIsvd4SoSAZP
+         g2+UMw+9aEMMIuHjthxFdI4y/ffXjJtbbCHQaycZsrxO9XubnFo5FXbb92ZqW85yXFzT
+         XYIZd0AAJkP+bCshzIFAZ5k0U5ek3spTLDa26+TcErtP1d2/KveQe5VcKXD4YClmjZpe
+         CBhTG0XqkXen+uqzAifVeYjxEFJxVEVJ5f6nVylsLEJXv6u2KQehZmTwTVN7yC0Ayy3s
+         cAJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681728465; x=1684320465;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aObB3gJrc6daE2Ub3D70WFvZc+MAMO7dkXaerkKuI3s=;
+        b=elJqsQ0SpPyuu0zpbttoYly9NrPpRK8SzOJh9SU/pWth8FJELhnLGIn4qGmfK39+zm
+         oy1CE1qIbb4vnH6ZrzWhFPdhZGwsacgBm/MNUDhRsOmm81yZPK+t6T9hHWfjp0JfXm7p
+         wf6N4NuyfdkjufUkByFQIDsDb7YygVHUE7KwhO12QAM2E/EYvEQ9cw109I+KqUb62Lkm
+         VUHqA8odmP+FnhBw0lXdBfXeb80l8owNPqIiOuU/YhhLh98ColNOvKDXUnhhN0wXluY7
+         3iM/kJofcflwsZn0EXs4mDwUtNN7PQfuyosD7uzDd2jEsnH7m0tUsKOKVrUktm1MqHPO
+         lCSQ==
+X-Gm-Message-State: AAQBX9eA6lbuctPyrlcjybttNpmg/l9cbQyjSU2BBsfr3q4vwDSUib6R
+        fehvYlDdXMJUPZ8lSbIQeug=
+X-Google-Smtp-Source: AKy350Z7+uQlEP1XtKOD7AoJ+k93bSPkZQhD/9C7egiwqE5TiutJFDy9XPkoBQK2c265G8aUDx1Rbw==
+X-Received: by 2002:adf:ce12:0:b0:2ef:b137:37fe with SMTP id p18-20020adfce12000000b002efb13737femr4862686wrn.0.1681728464622;
+        Mon, 17 Apr 2023 03:47:44 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id v11-20020a5d43cb000000b002f490a0cd1asm10138510wrr.92.2023.04.17.03.47.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 03:47:44 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-kselftest@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] kselftest: vDSO: Fix accumulation of uninitialized ret when CLOCK_REALTIME is undefined
+Date:   Mon, 17 Apr 2023 11:47:43 +0100
+Message-Id: <20230417104743.30018-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Message-ID: <168172840811.404.2288887185629391218.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the objtool/core branch of tip:
+In the unlikely case that CLOCK_REALTIME is not defined, variable ret is
+not initialized and further accumulation of return values to ret can leave
+ret in an undefined state. Fix this by initialized ret to zero and changing
+the assignment of ret to an accumulation for the CLOCK_REALTIME case.
 
-Commit-ID:     9ea7e6b62c2bd2f7bbfc3f10099df803002dd33b
-Gitweb:        https://git.kernel.org/tip/9ea7e6b62c2bd2f7bbfc3f10099df803002dd33b
-Author:        Josh Poimboeuf <jpoimboe@kernel.org>
-AuthorDate:    Wed, 12 Apr 2023 16:49:31 -07:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Fri, 14 Apr 2023 17:31:23 +02:00
-
-init: Mark [arch_call_]rest_init() __noreturn
-
-In preparation for improving objtool's handling of weak noreturn
-functions, mark start_kernel(), arch_call_rest_init(), and rest_init()
-__noreturn.
-
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Link: https://lore.kernel.org/r/7194ed8a989a85b98d92e62df660f4a90435a723.1681342859.git.jpoimboe@kernel.org
+Fixes: 03f55c7952c9 ("kselftest: Extend vDSO selftest to clock_getres")
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- arch/s390/kernel/setup.c     | 2 +-
- include/linux/start_kernel.h | 4 ++--
- init/main.c                  | 4 ++--
- tools/objtool/check.c        | 2 ++
- 4 files changed, 7 insertions(+), 5 deletions(-)
+ tools/testing/selftests/vDSO/vdso_test_clock_getres.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/s390/kernel/setup.c b/arch/s390/kernel/setup.c
-index 8ec5cdf..4259b6c 100644
---- a/arch/s390/kernel/setup.c
-+++ b/arch/s390/kernel/setup.c
-@@ -396,7 +396,7 @@ int __init arch_early_irq_init(void)
- 	return 0;
- }
+diff --git a/tools/testing/selftests/vDSO/vdso_test_clock_getres.c b/tools/testing/selftests/vDSO/vdso_test_clock_getres.c
+index 15dcee16ff72..38d46a8bf7cb 100644
+--- a/tools/testing/selftests/vDSO/vdso_test_clock_getres.c
++++ b/tools/testing/selftests/vDSO/vdso_test_clock_getres.c
+@@ -84,12 +84,12 @@ static inline int vdso_test_clock(unsigned int clock_id)
  
--void __init arch_call_rest_init(void)
-+void __init __noreturn arch_call_rest_init(void)
+ int main(int argc, char **argv)
  {
- 	unsigned long stack;
+-	int ret;
++	int ret = 0;
  
-diff --git a/include/linux/start_kernel.h b/include/linux/start_kernel.h
-index 8b369a4..864921e 100644
---- a/include/linux/start_kernel.h
-+++ b/include/linux/start_kernel.h
-@@ -9,7 +9,7 @@
-    up something else. */
+ #if _POSIX_TIMERS > 0
  
- extern asmlinkage void __init start_kernel(void);
--extern void __init arch_call_rest_init(void);
--extern void __ref rest_init(void);
-+extern void __init __noreturn arch_call_rest_init(void);
-+extern void __ref __noreturn rest_init(void);
- 
- #endif /* _LINUX_START_KERNEL_H */
-diff --git a/init/main.c b/init/main.c
-index 4425d17..161ed95 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -683,7 +683,7 @@ static void __init setup_command_line(char *command_line)
- 
- static __initdata DECLARE_COMPLETION(kthreadd_done);
- 
--noinline void __ref rest_init(void)
-+noinline void __ref __noreturn rest_init(void)
- {
- 	struct task_struct *tsk;
- 	int pid;
-@@ -889,7 +889,7 @@ static int __init early_randomize_kstack_offset(char *buf)
- early_param("randomize_kstack_offset", early_randomize_kstack_offset);
+ #ifdef CLOCK_REALTIME
+-	ret = vdso_test_clock(CLOCK_REALTIME);
++	ret += vdso_test_clock(CLOCK_REALTIME);
  #endif
  
--void __init __weak arch_call_rest_init(void)
-+void __init __weak __noreturn arch_call_rest_init(void)
- {
- 	rest_init();
- }
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index df634da..3d7227f 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -202,6 +202,7 @@ static bool __dead_end_function(struct objtool_file *file, struct symbol *func,
- 		"__reiserfs_panic",
- 		"__stack_chk_fail",
- 		"__ubsan_handle_builtin_unreachable",
-+		"arch_call_rest_init",
- 		"arch_cpu_idle_dead",
- 		"cpu_bringup_and_idle",
- 		"cpu_startup_entry",
-@@ -217,6 +218,7 @@ static bool __dead_end_function(struct objtool_file *file, struct symbol *func,
- 		"machine_real_restart",
- 		"make_task_dead",
- 		"panic",
-+		"rest_init",
- 		"rewind_stack_and_make_dead",
- 		"sev_es_terminate",
- 		"snp_abort",
+ #ifdef CLOCK_BOOTTIME
+-- 
+2.30.2
+
