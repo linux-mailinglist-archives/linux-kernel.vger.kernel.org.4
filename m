@@ -2,142 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEDEF6E549A
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 00:16:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D0BF6E54AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 00:24:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbjDQWQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 18:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57982 "EHLO
+        id S229967AbjDQWYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 18:24:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjDQWQR (ORCPT
+        with ESMTP id S230045AbjDQWYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 18:16:17 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6AD15279
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 15:16:16 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-63b73203e0aso4190745b3a.1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 15:16:16 -0700 (PDT)
+        Mon, 17 Apr 2023 18:24:46 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FCCE422F;
+        Mon, 17 Apr 2023 15:24:45 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-517bd9b1589so1695801a12.1;
+        Mon, 17 Apr 2023 15:24:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1681769776; x=1684361776;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=HX6x50X1I0Zl7KqrE4lTGH4kDeVIRVgagffI4hk1W4w=;
-        b=BAQM/Qj6aW6qQVkNxEdFfvp4L2v43/c1sWfOR0aw0h4Q4QXr91VuuUfUq4AAd0INWD
-         YwUAjIo/zgar/4MiknTnJOhzPmBP5cT+Eq6J5LrcP/OVrQBjHwp8yuW4S91pa7GLFw/S
-         ao8TZKF4rpXW4x3pxnaWwY/z/1I9ZK3fC7dSY=
+        d=gmail.com; s=20221208; t=1681770284; x=1684362284;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3rwGvdlgofaq/OnMesfSQWB2dx8nX+b4YsY9vlTE0GY=;
+        b=aYLxs4270fY8KaUuTyY4q+hyjrtluEj+7zROEfIPr7TlKhMnU8Xt06VC3Nz24Z93rT
+         YlOQ0PDYKpIBPZd8+LnKB7N5e9XcZrHsBE9m2QEYFKEfJjuuhm0r39ZGPdox/Lf88bms
+         CmrWVWKon7oX8VrThBQFczUmrqwqIiPDfjj6mtHHUocp5jEvRPJvsrraygatrfQmkPVK
+         Rd4PqZZCKgVdto5bDDqe97JgbEmiJT0uOtkBSccACJvmspEHLKcfgWpOsyQe/JWwg0GZ
+         kzTGUUI6cJnzYLvXQkusEyB6XOl62Kb5bmDFeHYMCNfzXSRpCNpa1FxEYYyV4Zi8dj5B
+         z0ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681769776; x=1684361776;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HX6x50X1I0Zl7KqrE4lTGH4kDeVIRVgagffI4hk1W4w=;
-        b=TOG1ZPiPSJU7HmAEv7wYecfj3iVmzAjwEkj/6NqMWluQ8v/WMTJpcAqtfUrZ+KSFFn
-         pncmhFu74PAqM+oJtH6kTBf7YSa1WusYJDx+xteKODpnAQX1GuokMMCNGxV9dy4Z1rLw
-         AEKi+czvmlxEuKSVqWtqJfKgCrs8xQbAaw+5TdpEvIpntRioHEDvBCV5gDUMz0ljD+dz
-         gcEJC5+OZu2ulaWeVJOZ+6jJrX5NwRS8suy307FtC5NDO15qfZ/H99ydVitusy9Lwmwj
-         2xOO4rqb77ceZzLo6FLQWr9cqLnx7MBSmharWXH+55XBvmrTQVf952f+0XNkFFHR+evx
-         fQVw==
-X-Gm-Message-State: AAQBX9dDFi7E4Tx4nHFgGO/gQdRFZ/gxPV2wneIOHN98jcSgxyvpuX99
-        HOnPhf7bB7sKnFk6SL1Lvuqi15BoVNZ1oVjE6p8=
-X-Google-Smtp-Source: AKy350bt8N4R7lILLMHSaYdSwchsR8TA9GZ20EO9f7pWWrbydsPpvy5sU2/JHpVNhYZRSgP0t7F50Q==
-X-Received: by 2002:a17:902:c405:b0:1a6:3630:16e1 with SMTP id k5-20020a170902c40500b001a6363016e1mr50164plk.13.1681769776269;
-        Mon, 17 Apr 2023 15:16:16 -0700 (PDT)
-Received: from pc98uv11.mtv.corp.google.com ([2620:15c:9d:2:8021:f588:5cf5:d9b4])
-        by smtp.gmail.com with ESMTPSA id b15-20020a170902b60f00b001a27f810a2esm8139061pls.256.2023.04.17.15.16.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 15:16:15 -0700 (PDT)
-From:   Daisuke Nojiri <dnojiri@chromium.org>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Daisuke Nojiri <dnojiri@chromium.org>
-Subject: [PATCH] cros_pchg: Sync port status on resume
-Date:   Mon, 17 Apr 2023 15:16:10 -0700
-Message-ID: <20230417221610.1507341-1-dnojiri@chromium.org>
-X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
+        d=1e100.net; s=20221208; t=1681770284; x=1684362284;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3rwGvdlgofaq/OnMesfSQWB2dx8nX+b4YsY9vlTE0GY=;
+        b=k/FSSgcbXAmTpAfNwNvgurRwj6m9wyPSp5DouAwvBnJ+DqeK4ZW4Ey30WNjfCxKxj8
+         zjJ7AX+zfqDyAjQK6FC3KCFMkU12gEJmfu7pxubHrbXr8LipmUj6ShU5KN/7xpXQuPCL
+         FQJev+ALJ+qRKxNHNhdbDLB+OSXbhSY6tYzvpiwGRtipHuJDmzuQx4MVOOP6QJkfZjd1
+         8W28DSSxw1KxLwqBrO9IK4SJ9bA9i+01Gan15WIBN/VaPGwe1SKHPgoJb+5QRf6QtYss
+         uSSaJbMSr8yfn8nRe6/DhLf5GDK4d81QTBJQt7MgpAK7tC4+H+0CqSC/QxkTe5wiml2P
+         LjUg==
+X-Gm-Message-State: AAQBX9dW2uKLtVohxsXB1t2Sr/H4Ima0m4RanOKmV/j56FGkKp74JLp+
+        PqTpkJmRHO6QleVtKDU/oP3YKcClRoMgPPdn3Wk=
+X-Google-Smtp-Source: AKy350ZAhVd3Lfj2zKF3GaKXZM7iufK+bBwmHjWGjJPf35olU0n+dshsZL36NZteW0f9jL1yboC6CI+f8btMah2HDF4=
+X-Received: by 2002:a63:df09:0:b0:51b:415a:6db5 with SMTP id
+ u9-20020a63df09000000b0051b415a6db5mr19362pgg.7.1681770284420; Mon, 17 Apr
+ 2023 15:24:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230415104104.5537-1-aford173@gmail.com> <20230415104104.5537-5-aford173@gmail.com>
+ <807aa6c6-bbea-abcc-172d-17e22d1a3988@denx.de> <CAHCN7x+NUnMtLbj_7A_uqxPsi5NXRXsPFwDnn=sf1bgm-Q-BsQ@mail.gmail.com>
+ <88e53197-2819-c068-eba6-a218a19d8d15@denx.de>
+In-Reply-To: <88e53197-2819-c068-eba6-a218a19d8d15@denx.de>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Mon, 17 Apr 2023 17:24:31 -0500
+Message-ID: <CAHCN7xLbbyTaN43pJe3NMdupoGb5vC3yXc_vBn6+CRChWCt92A@mail.gmail.com>
+Subject: Re: [PATCH 5/6] drm: bridge: samsung-dsim: Support non-burst mode
+To:     Marek Vasut <marex@denx.de>
+Cc:     dri-devel@lists.freedesktop.org, m.szyprowski@samsung.com,
+        aford@beaconembedded.com, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Inki Dae <inki.dae@samsung.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Lucas Stach <l.stach@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a stylus is removed (or attached) during suspend, the device detach
-(or attach) events can be lost. This patch makes the peripheral device
-charge driver retrieve the latest status from the EC on resume.
+On Mon, Apr 17, 2023 at 3:08=E2=80=AFPM Marek Vasut <marex@denx.de> wrote:
+>
+> On 4/17/23 13:57, Adam Ford wrote:
+> > On Sun, Apr 16, 2023 at 5:13=E2=80=AFPM Marek Vasut <marex@denx.de> wro=
+te:
+> >>
+> >> On 4/15/23 12:41, Adam Ford wrote:
+> >>> The high-speed clock is hard-coded to the burst-clock
+> >>> frequency specified in the device tree.  However, when
+> >>> using devices like certain bridge chips without burst mode
+> >>> and varying resolutions and refresh rates, it may be
+> >>> necessary to set the high-speed clock dynamically based
+> >>> on the desired pixel clock for the connected device.
+> >>
+> >> The link rate negotiation should happen internally between the nearest
+> >> bridge and DSIM, so please add that to DRM core instead of hacking
+> >> around it by tweaking the HS clock again.
+> >
+> > I thought you tried to add something like this before and had some resi=
+stance.
+>
+> Yes, all my attempts were rejected by a single reviewer. I suspended my
+> efforts in that area for now.
+>
+> > The Pixel clock is set by the bridge already without any new code
+> > added to the DRM core..  I am just reading that value that's there,
+> > and setting the clock accordingly.  I don't see how this is a hack.
+>
+> Assume you have a DSI-to-HDMI bridge attached to your DSIM bridge, it
+> operates in non-burst mode, like ADV7533 . How would you configure the
 
-BUG=b:276414488
-TEST=Redrix
+I have an ADV7535
 
-Signed-off-by: Daisuke Nojiri <dnojiri@chromium.org>
----
- .../power/supply/cros_peripheral_charger.c    | 25 ++++++++++++++++---
- 1 file changed, 22 insertions(+), 3 deletions(-)
+> HS clock rate for such a bridge in DT ? (hint: you cannot, because the
+> required clock comes from the EDID, which may not be available just yet)
 
-diff --git a/drivers/power/supply/cros_peripheral_charger.c b/drivers/power/supply/cros_peripheral_charger.c
-index 1379afd9698d..a204f2355be4 100644
---- a/drivers/power/supply/cros_peripheral_charger.c
-+++ b/drivers/power/supply/cros_peripheral_charger.c
-@@ -227,8 +227,7 @@ static int cros_pchg_get_prop(struct power_supply *psy,
- 	return 0;
- }
- 
--static int cros_pchg_event(const struct charger_data *charger,
--			   unsigned long host_event)
-+static int cros_pchg_event(const struct charger_data *charger)
- {
- 	int i;
- 
-@@ -256,7 +255,7 @@ static int cros_ec_notify(struct notifier_block *nb,
- 	if (!(host_event & EC_MKBP_PCHG_DEVICE_EVENT))
- 		return NOTIFY_DONE;
- 
--	return cros_pchg_event(charger, host_event);
-+	return cros_pchg_event(charger);
- }
- 
- static int cros_pchg_probe(struct platform_device *pdev)
-@@ -281,6 +280,8 @@ static int cros_pchg_probe(struct platform_device *pdev)
- 	charger->ec_dev = ec_dev;
- 	charger->ec_device = ec_device;
- 
-+	platform_set_drvdata(pdev, charger);
-+
- 	ret = cros_pchg_port_count(charger);
- 	if (ret <= 0) {
- 		/*
-@@ -349,9 +350,27 @@ static int cros_pchg_probe(struct platform_device *pdev)
- 	return 0;
- }
- 
-+#ifdef CONFIG_PM_SLEEP
-+static int __maybe_unused cros_pchg_resume(struct device *dev)
-+{
-+	struct charger_data *charger = dev_get_drvdata(dev);
-+
-+	/*
-+	 * Sync all ports on resume in case reports from EC are lost during
-+	 * the last suspend.
-+	 */
-+	cros_pchg_event(charger);
-+
-+	return 0;
-+}
-+#endif
-+
-+static SIMPLE_DEV_PM_OPS(cros_pchg_pm_ops, NULL, cros_pchg_resume);
-+
- static struct platform_driver cros_pchg_driver = {
- 	.driver = {
- 		.name = DRV_NAME,
-+		.pm = &cros_pchg_pm_ops,
- 	},
- 	.probe = cros_pchg_probe
- };
--- 
-2.39.2
+The whole idea is that you wouldn't want to or need to configure the
+clock speed in the device tree because it comes from the
+EDID->bridge->DSI.
 
+I've tested this configuration on imx8mm, imx8mn, and imx8mp and I can
+change the resolution and refresh rate on the fly and the DSI will
+automatically readjust accordingly.   If you fixed the clock in the
+device tree, you wouldn't be able to do that, and that was the point
+of this patch.
+
+
+adam
