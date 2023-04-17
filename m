@@ -2,106 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E1746E53D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 23:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81E756E53D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 23:29:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230358AbjDQV06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 17:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33866 "EHLO
+        id S230368AbjDQV3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 17:29:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjDQV05 (ORCPT
+        with ESMTP id S229643AbjDQV3L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 17:26:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE5E3A82
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 14:26:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681766768;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+iUdFnPPW5Cjo+Wv9uVErEgS8kkVkrl+5T7LT3zMOPQ=;
-        b=BPKEmPTA6imjDbkb/AoPdNUrU+XLbfq7Lt/WM4E5HBo+3RR1GX5iCWN6ADAGKk2MCf368D
-        HodOdxH1pTQgsXqYGYZ6wJkMdHXBW0WyiTh3G/UIxKPJBL2b1Y6OZrFL6tMrZNJ9dCAak0
-        fMYyOlW/Gf7pMaRPC3AmZO6hdgpptkk=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-86-qY6-dE2KOb6SvQDBRKbJsA-1; Mon, 17 Apr 2023 17:26:07 -0400
-X-MC-Unique: qY6-dE2KOb6SvQDBRKbJsA-1
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-5ef5fbe2cfaso6172336d6.0
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 14:26:07 -0700 (PDT)
+        Mon, 17 Apr 2023 17:29:11 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9006FF;
+        Mon, 17 Apr 2023 14:29:09 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-552ae3e2cbeso61562807b3.13;
+        Mon, 17 Apr 2023 14:29:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681766948; x=1684358948;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=55hC0C6PEmc4uh5DYwJYIxp6KDXjWnD+6ic8XLUbNJk=;
+        b=YKbaQH880ffbrD1wSOeYaho611fZvl8uvV2IkFui1/mpcsuGl8HTmTKzTVyNAeeWRv
+         K2HCmGqXq9q9RWCBtcngTm57FIzo6bzfEBLWPGXhcknNkGBtu/JWCSUGP994oL9GdPs1
+         BXU6gnQ18K9Yy8NqmxORm35quAoZireqRWLj4qXR7WhrabKwun03lI1kOWmO6B8EyO95
+         zagmJFtTWpSdzvCaZOb7G5RHn8+Ohcw55170PB6SgxcEysKW6yrM5vqkLbQ2DNaYhKGL
+         so8Hv47MKZSHkTptbG3Tp0ZjZM6r8NOfl1kiqxIEU+uxEy7RT8ZMjzyS7CUnFb7LhFf+
+         1byw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681766767; x=1684358767;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20221208; t=1681766948; x=1684358948;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+iUdFnPPW5Cjo+Wv9uVErEgS8kkVkrl+5T7LT3zMOPQ=;
-        b=G6+cf8yDJkCxHzCmu4vharKGABs1Ebkstb+RRVugzEg9VyyhO3d5HEv2ckOrgNavEX
-         Qu+qqztHrXoSJIUXesSKcH12l67+8VAMRQ4zcArZBGhONjwwuiyn6m3xvOfDtTOkmjUz
-         iZhPCQWGXHCyCZVeKJv0Omgmi8d0WAb0uRxsbWkXS7n8AXGopHj8OjsCAJQEG+nEJ4ty
-         ILfYK3YifEE5jNz6kS+KJLm8ig1dhoP5dMWpBJl8wXi4HeX1My9q2Mw/c82bkbHcsRuF
-         b9fJ6pTY1YC0WBcFIncF9hrr24rafc8o/cTllfODNQce9MVW0slqYRoW2bc+m5QvGmrh
-         JNUg==
-X-Gm-Message-State: AAQBX9dURrUjD+Gf//b/eKxCmOhWWAvYBEFNZr/FS78eDgVxmQeODvxG
-        ZUH0xmCwyFEv9ysX+sHGIjH1lT7pcvm5+qtTBK26ja6POjrGfysPokLv5JIUyUYNiAUMEMCOE6U
-        1smtI0fxPV07E/7yQdqYZtHV3
-X-Received: by 2002:a05:6214:4114:b0:5a9:ab44:5fdf with SMTP id kc20-20020a056214411400b005a9ab445fdfmr17548928qvb.0.1681766767257;
-        Mon, 17 Apr 2023 14:26:07 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bvmfyActz0XucL8uBTGsMXoULXM+Q4SGkObq+luJMUHRHs+pm3taS35Ybk4Jlndg31eEXu4A==
-X-Received: by 2002:a05:6214:4114:b0:5a9:ab44:5fdf with SMTP id kc20-20020a056214411400b005a9ab445fdfmr17548909qvb.0.1681766767032;
-        Mon, 17 Apr 2023 14:26:07 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
-        by smtp.gmail.com with ESMTPSA id dw17-20020a0562140a1100b005dd8b9345cesm3274332qvb.102.2023.04.17.14.26.05
+        bh=55hC0C6PEmc4uh5DYwJYIxp6KDXjWnD+6ic8XLUbNJk=;
+        b=Ycge3riNQ6QRU/LPs3RLP4IW+BZD/tC62Nqu5zOOcGD/TEqnJhr99BUvNIODKcXU/v
+         xHC3UF+AWQ4hxJ7HEIbQfEC1WOv3k4j2hulcyQAwlpYItcLLPft4uBO6wvnYOBif/Obd
+         nfakUcbWWjju7wc9tt/1EzpfobDsaCJLdx+bntDbsyZntxkEKWm4mp1ptYVRsBDycaJA
+         7gXZvBQCxpIlM1/nDroGal9QMoxmZkQuSIv4N3wRpUGDbINe+EEEEOA//muDUNobFcxh
+         p8WBNCTz4La08SH7H/iVZHPDiRUtVwSgtbshIm1vbWVMC4R5auy9qdbNh0HR9mowpxT/
+         ZrSw==
+X-Gm-Message-State: AAQBX9el1gMj2A8qjVDReFD2r8NP+y6zjv3CkxLexFsVBYVe0StCvkVa
+        gvDEkCzg64bN6g9eZSdc8cLfI581dUM=
+X-Google-Smtp-Source: AKy350Z4Nlte19iUKzHlWFsNgXXDy8Cm/QC1uz8bpSc6mOHOgOUn+xPO/slxQ2mViPvD61RnB4T2MQ==
+X-Received: by 2002:a81:4f09:0:b0:541:66e8:d4da with SMTP id d9-20020a814f09000000b0054166e8d4damr14851383ywb.29.1681766947164;
+        Mon, 17 Apr 2023 14:29:07 -0700 (PDT)
+Received: from tachyon.tail92c87.ts.net ([192.159.180.233])
+        by smtp.gmail.com with ESMTPSA id cl22-20020a05690c0c1600b0054fbadd96c4sm3332372ywb.126.2023.04.17.14.29.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 14:26:06 -0700 (PDT)
-Date:   Mon, 17 Apr 2023 17:26:04 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
-        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
-        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Subject: Re: [PATCH v2 1/1] mm: do not increment pgfault stats when page
- fault handler retries
-Message-ID: <ZD25bBPbZYSb7grA@x1n>
-References: <20230415000818.1955007-1-surenb@google.com>
+        Mon, 17 Apr 2023 14:29:06 -0700 (PDT)
+Sender: Tavian Barnes <tavianator@gmail.com>
+From:   tavianator@tavianator.com
+To:     linux-kernel@vger.kernel.org
+Cc:     Tavian Barnes <tavianator@tavianator.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests/futex: Fix pthread_create() error handling
+Date:   Mon, 17 Apr 2023 17:28:57 -0400
+Message-Id: <42a8405a78936a3ec96bbd0c6b5d983291faf646.1681766292.git.tavianator@tavianator.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230415000818.1955007-1-surenb@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 14, 2023 at 05:08:18PM -0700, Suren Baghdasaryan wrote:
-> @@ -5223,8 +5230,8 @@ vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
->  		if (task_in_memcg_oom(current) && !(ret & VM_FAULT_OOM))
->  			mem_cgroup_oom_synchronize(false);
->  	}
-> -
-> -	mm_account_fault(regs, address, flags, ret);
-> +out:
-> +	mm_account_fault(mm, regs, address, flags, ret);
+From: Tavian Barnes <tavianator@tavianator.com>
 
-Ah, one more question.. can this cached mm race with a destroying mm (just
-like the vma race we wanted to avoid)?  Still a question only applies to
-COMPLETE case when mmap read lock can be released.  Thanks,
+The pthread APIs return error codes, rather than setting errno.
 
->  
->  	return ret;
->  }
+Signed-off-by: Tavian Barnes <tavianator@tavianator.com>
+---
+ .../selftests/futex/functional/futex_requeue.c    | 10 ++++++----
+ .../functional/futex_requeue_pi_mismatched_ops.c  |  5 +++--
+ .../selftests/futex/functional/futex_wait.c       | 15 +++++++++------
+ .../functional/futex_wait_private_mapped_file.c   |  2 +-
+ .../functional/futex_wait_uninitialized_heap.c    |  2 +-
+ .../selftests/futex/functional/futex_waitv.c      | 10 ++++++----
+ 6 files changed, 26 insertions(+), 18 deletions(-)
 
+diff --git a/tools/testing/selftests/futex/functional/futex_requeue.c b/tools/testing/selftests/futex/functional/futex_requeue.c
+index 51485be6eb2f..76f672ad5263 100644
+--- a/tools/testing/selftests/futex/functional/futex_requeue.c
++++ b/tools/testing/selftests/futex/functional/futex_requeue.c
+@@ -73,8 +73,9 @@ int main(int argc, char *argv[])
+ 	/*
+ 	 * Requeue a waiter from f1 to f2, and wake f2.
+ 	 */
+-	if (pthread_create(&waiter[0], NULL, waiterfn, NULL))
+-		error("pthread_create failed\n", errno);
++	res = pthread_create(&waiter[0], NULL, waiterfn, NULL);
++	if (res)
++		error("pthread_create failed\n", res);
+ 
+ 	usleep(WAKE_WAIT_US);
+ 
+@@ -105,8 +106,9 @@ int main(int argc, char *argv[])
+ 	 * At futex_wake, wake INT_MAX (should be exactly 7).
+ 	 */
+ 	for (i = 0; i < 10; i++) {
+-		if (pthread_create(&waiter[i], NULL, waiterfn, NULL))
+-			error("pthread_create failed\n", errno);
++		res = pthread_create(&waiter[i], NULL, waiterfn, NULL);
++		if (res)
++			error("pthread_create failed\n", res);
+ 	}
+ 
+ 	usleep(WAKE_WAIT_US);
+diff --git a/tools/testing/selftests/futex/functional/futex_requeue_pi_mismatched_ops.c b/tools/testing/selftests/futex/functional/futex_requeue_pi_mismatched_ops.c
+index d0a4d332ea44..e28de62bc03a 100644
+--- a/tools/testing/selftests/futex/functional/futex_requeue_pi_mismatched_ops.c
++++ b/tools/testing/selftests/futex/functional/futex_requeue_pi_mismatched_ops.c
+@@ -79,8 +79,9 @@ int main(int argc, char *argv[])
+ 	ksft_print_msg("%s: Detect mismatched requeue_pi operations\n",
+ 	       basename(argv[0]));
+ 
+-	if (pthread_create(&child, NULL, blocking_child, NULL)) {
+-		error("pthread_create\n", errno);
++	ret = pthread_create(&child, NULL, blocking_child, NULL);
++	if (ret) {
++		error("pthread_create\n", ret);
+ 		ret = RET_ERROR;
+ 		goto out;
+ 	}
+diff --git a/tools/testing/selftests/futex/functional/futex_wait.c b/tools/testing/selftests/futex/functional/futex_wait.c
+index 685140d9b93d..2e06539e5bb7 100644
+--- a/tools/testing/selftests/futex/functional/futex_wait.c
++++ b/tools/testing/selftests/futex/functional/futex_wait.c
+@@ -78,8 +78,9 @@ int main(int argc, char *argv[])
+ 
+ 	/* Testing a private futex */
+ 	info("Calling private futex_wait on futex: %p\n", futex);
+-	if (pthread_create(&waiter, NULL, waiterfn, (void *) &flags))
+-		error("pthread_create failed\n", errno);
++	res = pthread_create(&waiter, NULL, waiterfn, (void *) &flags);
++	if (res)
++		error("pthread_create failed\n", res);
+ 
+ 	usleep(WAKE_WAIT_US);
+ 
+@@ -106,8 +107,9 @@ int main(int argc, char *argv[])
+ 	futex = shared_data;
+ 
+ 	info("Calling shared (page anon) futex_wait on futex: %p\n", futex);
+-	if (pthread_create(&waiter, NULL, waiterfn, NULL))
+-		error("pthread_create failed\n", errno);
++	res = pthread_create(&waiter, NULL, waiterfn, NULL);
++	if (res)
++		error("pthread_create failed\n", res);
+ 
+ 	usleep(WAKE_WAIT_US);
+ 
+@@ -145,8 +147,9 @@ int main(int argc, char *argv[])
+ 	futex = shm;
+ 
+ 	info("Calling shared (file backed) futex_wait on futex: %p\n", futex);
+-	if (pthread_create(&waiter, NULL, waiterfn, NULL))
+-		error("pthread_create failed\n", errno);
++	res = pthread_create(&waiter, NULL, waiterfn, NULL);
++	if (res)
++		error("pthread_create failed\n", res);
+ 
+ 	usleep(WAKE_WAIT_US);
+ 
+diff --git a/tools/testing/selftests/futex/functional/futex_wait_private_mapped_file.c b/tools/testing/selftests/futex/functional/futex_wait_private_mapped_file.c
+index fb4148f23fa3..7b4a28e8dc1a 100644
+--- a/tools/testing/selftests/futex/functional/futex_wait_private_mapped_file.c
++++ b/tools/testing/selftests/futex/functional/futex_wait_private_mapped_file.c
+@@ -100,7 +100,7 @@ int main(int argc, char **argv)
+ 		basename(argv[0]));
+ 
+ 	ret = pthread_create(&thr, NULL, thr_futex_wait, NULL);
+-	if (ret < 0) {
++	if (ret) {
+ 		fprintf(stderr, "pthread_create error\n");
+ 		ret = RET_ERROR;
+ 		goto out;
+diff --git a/tools/testing/selftests/futex/functional/futex_wait_uninitialized_heap.c b/tools/testing/selftests/futex/functional/futex_wait_uninitialized_heap.c
+index ed9cd07e31c1..bf7529bd7f0d 100644
+--- a/tools/testing/selftests/futex/functional/futex_wait_uninitialized_heap.c
++++ b/tools/testing/selftests/futex/functional/futex_wait_uninitialized_heap.c
+@@ -103,7 +103,7 @@ int main(int argc, char **argv)
+ 
+ 	ret = pthread_create(&thr, NULL, wait_thread, NULL);
+ 	if (ret) {
+-		error("pthread_create\n", errno);
++		error("pthread_create\n", ret);
+ 		ret = RET_ERROR;
+ 		goto out;
+ 	}
+diff --git a/tools/testing/selftests/futex/functional/futex_waitv.c b/tools/testing/selftests/futex/functional/futex_waitv.c
+index a94337f677e1..d2400b3c7d0a 100644
+--- a/tools/testing/selftests/futex/functional/futex_waitv.c
++++ b/tools/testing/selftests/futex/functional/futex_waitv.c
+@@ -94,8 +94,9 @@ int main(int argc, char *argv[])
+ 	}
+ 
+ 	/* Private waitv */
+-	if (pthread_create(&waiter, NULL, waiterfn, NULL))
+-		error("pthread_create failed\n", errno);
++	res = pthread_create(&waiter, NULL, waiterfn, NULL);
++	if (res)
++		error("pthread_create failed\n", res);
+ 
+ 	usleep(WAKE_WAIT_US);
+ 
+@@ -127,8 +128,9 @@ int main(int argc, char *argv[])
+ 		waitv[i].__reserved = 0;
+ 	}
+ 
+-	if (pthread_create(&waiter, NULL, waiterfn, NULL))
+-		error("pthread_create failed\n", errno);
++	res = pthread_create(&waiter, NULL, waiterfn, NULL);
++	if (res)
++		error("pthread_create failed\n", res);
+ 
+ 	usleep(WAKE_WAIT_US);
+ 
 -- 
-Peter Xu
+2.40.0
 
