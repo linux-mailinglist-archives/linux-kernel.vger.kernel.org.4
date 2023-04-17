@@ -2,79 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB8526E3EFC
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 07:35:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54D666E3EFA
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 07:35:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbjDQFfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 01:35:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55536 "EHLO
+        id S230089AbjDQFe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 01:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbjDQFez (ORCPT
+        with ESMTP id S230032AbjDQFew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 01:34:55 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9321E3AAA;
-        Sun, 16 Apr 2023 22:34:46 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33H5RMbp010253;
-        Mon, 17 Apr 2023 05:34:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=bGJSg4QHg3Mdt9XB0epGlO/VU8HOYvpFzIafzWr02Yg=;
- b=kDPwANq98Y+Ql6vcoHefcWGw21ylDYEuOQs9MqqiPaCoKf9KXoPwbDMB/zOhr0uCzAEp
- sHTFqXBI0rFhPyMrKNBPP3x8Jwn5QmViMe08a6ouXPKR7J33/7wHHVvzVrnK/CoCsQtO
- OpTaChxqurg2g6eGXSmsCZKLBT6JLvxElbABbm6LsWUr/FGd0Aj5qqVaQbHtWBCpTigJ
- 2H2nvxrs1WLmnkemmkdGXlCH+KFUJm7EpSyXE01yNM2a5nqH95AIsGTPEzAEz1CSQBON
- Vj1wTrb78CZllXrcEbQcUo/hl/CMQDpAlix46UCu/3M9BzInFxHIyGoeUiEsGLrblU5H qA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pymnf2n76-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Apr 2023 05:34:43 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33H5Ygdo000941
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Apr 2023 05:34:42 GMT
-Received: from devipriy-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Sun, 16 Apr 2023 22:34:37 -0700
-From:   Devi Priya <quic_devipriy@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-CC:     <quic_srichara@quicinc.com>, <quic_sjaganat@quicinc.com>,
-        <quic_kathirav@quicinc.com>, <quic_arajkuma@quicinc.com>,
-        <quic_anusha@quicinc.com>, <quic_poovendh@quicinc.com>
-Subject: [PATCH V2 4/4] arm64: dts: qcom: ipq9574: rename al02-c7 dts to rdp433
-Date:   Mon, 17 Apr 2023 11:03:55 +0530
-Message-ID: <20230417053355.25691-5-quic_devipriy@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230417053355.25691-1-quic_devipriy@quicinc.com>
-References: <20230417053355.25691-1-quic_devipriy@quicinc.com>
+        Mon, 17 Apr 2023 01:34:52 -0400
+Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65FE33A80
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 22:34:45 -0700 (PDT)
+Received: by mail-io1-f77.google.com with SMTP id d10-20020a056602280a00b00760e7aa8780so1230856ioe.0
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 22:34:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681709684; x=1684301684;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4mgl0iZLcTdWd+tfMeHZVb9M8iD5ML58BVHDGKAeGLo=;
+        b=Qt07jhUlWu7RPBLbMmNrExh1hhSqzrh/BI2F4zaGRCP+q6p/EzyBbjFg0Cchqa+ydv
+         e/mc7rWVgH394eGEoRbcRM6xY034u95wyKhleM4nQ8XlKqAw1UJWPuwWz6WU7AxdRbh3
+         kueN8SrhYG0PqXqE8rpGT+JF3O4TbA6LpSsb1spjTe9dvG3BBCnqINMhnoFtDEmUAgNN
+         bx9cNoL623BN61jiZcq2K+l/g1MVPx2iqIUvk+gKJ58Dg/OHMJglRz/SyH78rOkYT1T2
+         suz1+8hf+Ncel5NYE89cKJocbcA2awQVlIIr45/H5IaGwoFIybsY3LoNGizvPMmJ6V+H
+         7/LQ==
+X-Gm-Message-State: AAQBX9cuzIHXhcPXi2VVVuMkS/c9aB4DptPFZdHqh9lgdaqgl+cgejwo
+        8IT52Lvva+d1qdj6Vbw9Q/JrbmKpEr8uA+iFF0Fffd9RotyO
+X-Google-Smtp-Source: AKy350Zb/xJjWaIBLmQjjBiYWDrZXrBGGgoCEjchA9t5OwcUkc99mCJUgSDW83l267KyejjaJ8qqWYwMz9PW6C4QGZSQZHNZ7dnp
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 4COp8hi26rxbNCnDgEdkR0zphcExIBmD
-X-Proofpoint-ORIG-GUID: 4COp8hi26rxbNCnDgEdkR0zphcExIBmD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-17_02,2023-04-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=929 adultscore=0
- mlxscore=0 malwarescore=0 bulkscore=0 clxscore=1015 impostorscore=0
- priorityscore=1501 spamscore=0 lowpriorityscore=0 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304170050
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Received: by 2002:a02:8481:0:b0:40f:a8e9:96ab with SMTP id
+ f1-20020a028481000000b0040fa8e996abmr521317jai.5.1681709684551; Sun, 16 Apr
+ 2023 22:34:44 -0700 (PDT)
+Date:   Sun, 16 Apr 2023 22:34:44 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005cf71b05f9818cc2@google.com>
+Subject: [syzbot] [hfs?] KASAN: wild-memory-access Read in hfsplus_bnode_dump
+From:   syzbot <syzbot+f687659f3c2acfa34201@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,47 +54,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename the dts after Reference Design Platform(RDP) to adopt
-standard naming convention.
+Hello,
 
-Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+syzbot found the following issue on:
+
+HEAD commit:    0d3eb744aed4 Merge tag 'urgent-rcu.2023.04.07a' of git://g..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1662e1c3c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=759d5e665e47a55
+dashboard link: https://syzkaller.appspot.com/bug?extid=f687659f3c2acfa34201
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/0b9db4c3a583/disk-0d3eb744.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/462736705e85/vmlinux-0d3eb744.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/8932ee360b94/bzImage-0d3eb744.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+f687659f3c2acfa34201@syzkaller.appspotmail.com
+
+loop2: detected capacity change from 0 to 1024
+hfsplus: request for non-existent node 64 in B*Tree
+hfsplus: request for non-existent node 64 in B*Tree
+==================================================================
+BUG: KASAN: wild-memory-access in memcpy_from_page include/linux/highmem.h:391 [inline]
+BUG: KASAN: wild-memory-access in hfsplus_bnode_read fs/hfsplus/bnode.c:32 [inline]
+BUG: KASAN: wild-memory-access in hfsplus_bnode_read_u16 fs/hfsplus/bnode.c:45 [inline]
+BUG: KASAN: wild-memory-access in hfsplus_bnode_dump+0x403/0xba0 fs/hfsplus/bnode.c:305
+Read of size 2 at addr 000508800000103e by task syz-executor.2/9009
+
+CPU: 0 PID: 9009 Comm: syz-executor.2 Not tainted 6.3.0-rc6-syzkaller-00016-g0d3eb744aed4 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+ print_report+0xe6/0x540 mm/kasan/report.c:433
+ kasan_report+0x176/0x1b0 mm/kasan/report.c:536
+ kasan_check_range+0x283/0x290 mm/kasan/generic.c:187
+ __asan_memcpy+0x29/0x70 mm/kasan/shadow.c:105
+ memcpy_from_page include/linux/highmem.h:391 [inline]
+ hfsplus_bnode_read fs/hfsplus/bnode.c:32 [inline]
+ hfsplus_bnode_read_u16 fs/hfsplus/bnode.c:45 [inline]
+ hfsplus_bnode_dump+0x403/0xba0 fs/hfsplus/bnode.c:305
+ hfsplus_brec_remove+0x42c/0x4f0 fs/hfsplus/brec.c:229
+ __hfsplus_delete_attr+0x275/0x450 fs/hfsplus/attributes.c:299
+ hfsplus_delete_all_attrs+0x26b/0x3c0 fs/hfsplus/attributes.c:378
+ hfsplus_delete_cat+0xb87/0xfc0 fs/hfsplus/catalog.c:425
+ hfsplus_unlink+0x363/0x7f0 fs/hfsplus/dir.c:385
+ vfs_unlink+0x35d/0x5f0 fs/namei.c:4250
+ do_unlinkat+0x4a1/0x940 fs/namei.c:4316
+ __do_sys_unlink fs/namei.c:4364 [inline]
+ __se_sys_unlink fs/namei.c:4362 [inline]
+ __x64_sys_unlink+0x49/0x50 fs/namei.c:4362
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f603de8c169
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f603eb66168 EFLAGS: 00000246 ORIG_RAX: 0000000000000057
+RAX: ffffffffffffffda RBX: 00007f603dfabf80 RCX: 00007f603de8c169
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000000
+RBP: 00007f603dee7ca1 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fff75f7975f R14: 00007f603eb66300 R15: 0000000000022000
+ </TASK>
+==================================================================
+
+
 ---
- Changes since V9:
-	- Renamed the Board Device Tree Source to use the RDP numbers
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
- arch/arm64/boot/dts/qcom/Makefile                               | 2 +-
- .../boot/dts/qcom/{ipq9574-al02-c7.dts => ipq9574-rdp433.dts}   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
- rename arch/arm64/boot/dts/qcom/{ipq9574-al02-c7.dts => ipq9574-rdp433.dts} (97%)
-
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index e0e2def48470..f926e7e1aa7d 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -9,7 +9,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= ipq6018-cp01-c1.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk01.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk10-c1.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk10-c2.dtb
--dtb-$(CONFIG_ARCH_QCOM)	+= ipq9574-al02-c7.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= ipq9574-rdp433.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-acer-a1-724.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-alcatel-idol347.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-asus-z00l.dtb
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-similarity index 97%
-rename from arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
-rename to arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-index 2c8430197ec0..2ce8e09e7565 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
-+++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
- /*
-- * IPQ9574 AL02-C7 board device tree source
-+ * IPQ9574 RDP433 board device tree source
-  *
-  * Copyright (c) 2020-2021 The Linux Foundation. All rights reserved.
-  * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
--- 
-2.17.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
