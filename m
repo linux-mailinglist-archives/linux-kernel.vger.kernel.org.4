@@ -2,313 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C60A6E4EA1
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 18:54:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60AEB6E4EA6
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 18:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjDQQyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 12:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33364 "EHLO
+        id S229992AbjDQQ4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 12:56:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbjDQQyh (ORCPT
+        with ESMTP id S229485AbjDQQz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 12:54:37 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5F5A9;
-        Mon, 17 Apr 2023 09:54:35 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Q0Y4938pbz6J8Ds;
-        Tue, 18 Apr 2023 00:51:53 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Mon, 17 Apr
- 2023 17:54:32 +0100
-Date:   Mon, 17 Apr 2023 17:54:31 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Robert Richter <rrichter@amd.com>
-CC:     Terry Bowman <terry.bowman@amd.com>, <alison.schofield@intel.com>,
-        <vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
-        <bwidawsk@kernel.org>, <dan.j.williams@intel.com>,
-        <dave.jiang@intel.com>, <linux-cxl@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        "Mahesh J Salgaonkar" <mahesh@linux.ibm.com>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH v3 5/6] PCI/AER: Forward RCH downstream port-detected
- errors to the CXL.mem dev handler
-Message-ID: <20230417175431.00004ab5@Huawei.com>
-In-Reply-To: <ZDlkmcsbwsNv/t8+@rric.localdomain>
-References: <20230411180302.2678736-1-terry.bowman@amd.com>
-        <20230411180302.2678736-6-terry.bowman@amd.com>
-        <20230414131950.00006e76@Huawei.com>
-        <ZDlkmcsbwsNv/t8+@rric.localdomain>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Mon, 17 Apr 2023 12:55:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B90E9;
+        Mon, 17 Apr 2023 09:55:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7982B62851;
+        Mon, 17 Apr 2023 16:55:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66E5FC433D2;
+        Mon, 17 Apr 2023 16:55:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681750554;
+        bh=+d/lVi1J7BqYOvVt6PAqOL5mAcrAhRVB95e6IpiVqjo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=sE+FKdeXE4ervgvpNrQ1+ziY+As3s8uAvlcMWrQjT9aYUT5D3UzeRmpsUzoo1sBL5
+         pu2JeoGNMvuqrxSbinwViDMtMkQpSh97DCxkHQHm6p4ppmDJ7vFD/zrSim3ChUSu9W
+         nJS5dvKL2yCtAm3Z/kK1OoQKYlChb4ejr9SIs44rdl4id2Wv5TOhANM3zmUVy1VKAv
+         vnLavpfrej46/KoEwl8rCSwkQxrNo8RV1JLqVRpzWv/P22vtrRKCWNHr94G1EzUkxf
+         NiNf9FMhGk13yi8qH3a/giUsruCbJ3jdslOHhfPRGFjNSo9wedR3FNQxW6lVyor2xr
+         g1/lDTvtyu29w==
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     Christian Brauner <brauner@kernel.org>, amir73il@gmail.com,
+        linux-fsdevel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] IMA: use vfs_getattr_nosec to get the i_version
+Date:   Mon, 17 Apr 2023 12:55:51 -0400
+Message-Id: <20230417165551.31130-1-jlayton@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Apr 2023 16:35:05 +0200
-Robert Richter <rrichter@amd.com> wrote:
+IMA currently accesses the i_version out of the inode directly when it
+does a measurement. This is fine for most simple filesystems, but can be
+problematic with more complex setups (e.g. overlayfs).
 
-> On 14.04.23 13:19:50, Jonathan Cameron wrote:
-> > On Tue, 11 Apr 2023 13:03:01 -0500
-> > Terry Bowman <terry.bowman@amd.com> wrote:
-> >   
-> > > From: Robert Richter <rrichter@amd.com>
-> > > 
-> > > In Restricted CXL Device (RCD) mode a CXL device is exposed as an
-> > > RCiEP, but CXL downstream and upstream ports are not enumerated and
-> > > not visible in the PCIe hierarchy. Protocol and link errors are sent
-> > > to an RCEC.
-> > > 
-> > > Restricted CXL host (RCH) downstream port-detected errors are signaled
-> > > as internal AER errors, either Uncorrectable Internal Error (UIE) or
-> > > Corrected Internal Errors (CIE). The error source is the id of the
-> > > RCEC. A CXL handler must then inspect the error status in various CXL
-> > > registers residing in the dport's component register space (CXL RAS
-> > > cap) or the dport's RCRB (AER ext cap). [1]
-> > > 
-> > > Errors showing up in the RCEC's error handler must be handled and
-> > > connected to the CXL subsystem. Implement this by forwarding the error
-> > > to all CXL devices below the RCEC. Since the entire CXL device is
-> > > controlled only using PCIe Configuration Space of device 0, Function
-> > > 0, only pass it there [2]. These devices have the Memory Device class
-> > > code set (PCI_CLASS_MEMORY_CXL, 502h) and the existing cxl_pci driver
-> > > can implement the handler.  
-> > 
-> > This comment implies only class code compliant drivers.  Sure we don't
-> > have drivers for anything else yet, but we should try to avoid saying
-> > there won't be any (which I think above implies).
-> > 
-> > You have a comment in the code, but maybe relaxing the description above
-> > to "currently support devices have..."  
-> 
-> It is used here to identify CXL memory devices and limit the
-> enablement to those. The spec requires this to be set for CXL mem devs
-> (see cxl 3.0, 8.1.12.2).
-> 
-> There could be other CXL devices (e.g. cache), but other drivers are
-> not yet implemented. That is what I am referring to. The check makes
-> sure there is actually a driver with a handler for it (cxl_pci).
+Make IMA instead call vfs_getattr_nosec to get this info. This allows
+the filesystem to determine whether and how to report the i_version, and
+should allow IMA to work properly with a broader class of filesystems in
+the future.
 
-Understood on intent. My worry is that the above can be read as a
-statement on hardware restrictions, rathe than on what software currently
-implements.  Meh. Minor point so I don't care that much!
-Unlikely anyone will read the patch description after it merges anyway ;)
+Reported-and-Tested-by: Stefan Berger <stefanb@linux.ibm.com>
+Signed-off-by: Jeff Layton <jlayton@kernel.org>
+---
+ security/integrity/ima/ima_api.c  |  9 ++++++---
+ security/integrity/ima/ima_main.c | 12 ++++++++----
+ 2 files changed, 14 insertions(+), 7 deletions(-)
 
-> 
-> >   
-> > > In addition to errors directed to the CXL
-> > > endpoint device, the handler must also inspect the CXL downstream
-> > > port's CXL RAS and PCIe AER external capabilities that is connected to
-> > > the device.
-> > > 
-> > > Since CXL downstream port errors are signaled using internal errors,
-> > > the handler requires those errors to be unmasked. This is subject of a
-> > > follow-on patch.
-> > > 
-> > > The reason for choosing this implementation is that a CXL RCEC device
-> > > is bound to the AER port driver, but the driver does not allow it to
-> > > register a custom specific handler to support CXL. Connecting the RCEC
-> > > hard-wired with a CXL handler does not work, as the CXL subsystem
-> > > might not be present all the time. The alternative to add an
-> > > implementation to the portdrv to allow the registration of a custom
-> > > RCEC error handler isn't worth doing it as CXL would be its only user.
-> > > Instead, just check for an CXL RCEC and pass it down to the connected
-> > > CXL device's error handler. With this approach the code can entirely
-> > > be implemented in the PCIe AER driver and is independent of the CXL
-> > > subsystem. The CXL driver only provides the handler.
-> > > 
-> > > [1] CXL 3.0 spec, 12.2.1.1 RCH Downstream Port-detected Errors
-> > > [2] CXL 3.0 spec, 8.1.3 PCIe DVSEC for CXL Devices
-> > > 
-> > > Co-developed-by: Terry Bowman <terry.bowman@amd.com>
-> > > Signed-off-by: Robert Richter <rrichter@amd.com>
-> > > Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-> > > Cc: "Oliver O'Halloran" <oohall@gmail.com>
-> > > Cc: Bjorn Helgaas <bhelgaas@google.com>
-> > > Cc: Mahesh J Salgaonkar <mahesh@linux.ibm.com>
-> > > Cc: linuxppc-dev@lists.ozlabs.org
-> > > Cc: linux-pci@vger.kernel.org  
-> > 
-> > Generally looks good to me.  A few trivial comments inline.
-> >   
-> > > ---
-> > >  drivers/pci/pcie/Kconfig |  8 ++++++
-> > >  drivers/pci/pcie/aer.c   | 61 ++++++++++++++++++++++++++++++++++++++++
-> > >  2 files changed, 69 insertions(+)
-> > > 
-> > > diff --git a/drivers/pci/pcie/Kconfig b/drivers/pci/pcie/Kconfig
-> > > index 228652a59f27..b0dbd864d3a3 100644
-> > > --- a/drivers/pci/pcie/Kconfig
-> > > +++ b/drivers/pci/pcie/Kconfig
-> > > @@ -49,6 +49,14 @@ config PCIEAER_INJECT
-> > >  	  gotten from:
-> > >  	     https://git.kernel.org/cgit/linux/kernel/git/gong.chen/aer-inject.git/
-> > >  
-> > > +config PCIEAER_CXL
-> > > +	bool "PCI Express CXL RAS support"  
-> > 
-> > Description makes this sound too general. I'd mentioned restricted
-> > hosts even in the menu option title.
-> > 
-> >   
-> > > +	default y
-> > > +	depends on PCIEAER && CXL_PCI
-> > > +	help
-> > > +	  This enables CXL error handling for Restricted CXL Hosts
-> > > +	  (RCHs).  
-> > 
-> > Spec term is probably fine in the title, but in the help I'd 
-> > expand it as per the CXL 3.0 glossary to include
-> > "CXL Host that is operating in RCD mode."
-> > It might otherwise surprise people that this matters on their shiny
-> > new CXL X.0 host (because they found an old CXL 1.1 card in a box
-> > and decided to plug it in)
-> > 
-> > Do we actually need this protection at all?  It's a tiny amount of code
-> > and I can't see anything immediately that requires the CXL_PCI dependency
-> > other than it's a bit pointless if that isn't here.
-> >   
-> > > +
-> > >  #
-> > >  # PCI Express ECRC
-> > >  #
-> > > diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-> > > index 7a25b62d9e01..171a08fd8ebd 100644
-> > > --- a/drivers/pci/pcie/aer.c
-> > > +++ b/drivers/pci/pcie/aer.c
-> > > @@ -946,6 +946,65 @@ static bool find_source_device(struct pci_dev *parent,
-> > >  	return true;
-> > >  }
-> > >  
-> > > +#ifdef CONFIG_PCIEAER_CXL
-> > > +
-> > > +static bool is_cxl_mem_dev(struct pci_dev *dev)
-> > > +{
-> > > +	/*
-> > > +	 * A CXL device is controlled only using PCIe Configuration
-> > > +	 * Space of device 0, Function 0.  
-> > 
-> > That's not true in general.   Definitely true that CXL protocol
-> > error reporting is controlled only using this Devfn, but
-> > more generally there could be other stuff in later functions.
-> > So perhaps make the comment more specific.  
-> 
-> I actually mean CXL device in RCD mode here (seen as RCiEP in the PCI
-> hierarchy).
-> 
-> The spec says (cxl 3.0, 8.1.3):
-> 
-> """
-> In either case [(RCD and non-RCD)], the capability, status, and
-> control fields in Device 0, Function 0 DVSEC control the CXL
-> functionality of the entire device.
-
-> """
-> 
-> So dev 0, func 0 must contain a CXL PCIe DVSEC. Thus it is a CXL
-> device and able to handle CXL AER errors. The limitation to the first
-> device prevents the handler from being run multiple times for the same
-> event.
-
-Fine with limitation.  Text says "device is controlled only using".
-That is true for what you are controlling here, but other aspects of the
-device are controlled via whatever interface they like.
-
-Perhaps just quote the specification as you have done in your reply. Then it
-is clear that we mean just these registers.
-
-
-> 
-> 
-> >   
-> > > +	 */
-> > > +	if (dev->devfn != PCI_DEVFN(0, 0))
-> > > +		return false;
-> > > +
-> > > +	/* Right now there is only a CXL.mem driver */
-> > > +	if ((dev->class >> 8) != PCI_CLASS_MEMORY_CXL)
-> > > +		return false;
-> > > +
-> > > +	return true;
-> > > +}
-> > > +
-> > > +static bool is_internal_error(struct aer_err_info *info)
-> > > +{
-> > > +	if (info->severity == AER_CORRECTABLE)
-> > > +		return info->status & PCI_ERR_COR_INTERNAL;
-> > > +
-> > > +	return info->status & PCI_ERR_UNC_INTN;
-> > > +}
-> > > +
-> > > +static void handle_error_source(struct pci_dev *dev, struct aer_err_info *info);
-> > > +
-> > > +static int cxl_handle_error_iter(struct pci_dev *dev, void *data)
-> > > +{
-> > > +	struct aer_err_info *e_info = (struct aer_err_info *)data;
-> > > +
-> > > +	if (!is_cxl_mem_dev(dev))
-> > > +		return 0;
-> > > +
-> > > +	/* pci_dev_put() in handle_error_source() */
-> > > +	dev = pci_dev_get(dev);
-> > > +	if (dev)
-> > > +		handle_error_source(dev, e_info);
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static void cxl_handle_error(struct pci_dev *dev, struct aer_err_info *info)
-> > > +{
-> > > +	/*
-> > > +	 * CXL downstream port errors are signaled as RCEC internal  
-> > 
-> > Make this comment more specific (to RCH I think).  
-> 
-> Right, same here, this is restricted mode only.
-> 
-> Thanks for review.
-> 
-> -Robert
-> 
-> 
-> >   
-> > > +	 * errors. Forward them to all CXL devices below the RCEC.
-> > > +	 */
-> > > +	if (pci_pcie_type(dev) == PCI_EXP_TYPE_RC_EC &&
-> > > +	    is_internal_error(info))
-> > > +		pcie_walk_rcec(dev, cxl_handle_error_iter, info);
-> > > +}
-> > > +
-> > > +#else
-> > > +static inline void cxl_handle_error(struct pci_dev *dev,
-> > > +				    struct aer_err_info *info) { }
-> > > +#endif
-> > > +
-> > >  /**
-> > >   * handle_error_source - handle logging error into an event log
-> > >   * @dev: pointer to pci_dev data structure of error source device
-> > > @@ -957,6 +1016,8 @@ static void handle_error_source(struct pci_dev *dev, struct aer_err_info *info)
-> > >  {
-> > >  	int aer = dev->aer_cap;
-> > >  
-> > > +	cxl_handle_error(dev, info);
-> > > +
-> > >  	if (info->severity == AER_CORRECTABLE) {
-> > >  		/*
-> > >  		 * Correctable error does not need software intervention.  
-> >   
+diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
+index d3662f4acadc..c45902e72044 100644
+--- a/security/integrity/ima/ima_api.c
++++ b/security/integrity/ima/ima_api.c
+@@ -13,7 +13,6 @@
+ #include <linux/fs.h>
+ #include <linux/xattr.h>
+ #include <linux/evm.h>
+-#include <linux/iversion.h>
+ #include <linux/fsverity.h>
+ 
+ #include "ima.h"
+@@ -246,10 +245,11 @@ int ima_collect_measurement(struct integrity_iint_cache *iint,
+ 	struct inode *inode = file_inode(file);
+ 	const char *filename = file->f_path.dentry->d_name.name;
+ 	struct ima_max_digest_data hash;
++	struct kstat stat;
+ 	int result = 0;
+ 	int length;
+ 	void *tmpbuf;
+-	u64 i_version;
++	u64 i_version = 0;
+ 
+ 	/*
+ 	 * Always collect the modsig, because IMA might have already collected
+@@ -268,7 +268,10 @@ int ima_collect_measurement(struct integrity_iint_cache *iint,
+ 	 * to an initial measurement/appraisal/audit, but was modified to
+ 	 * assume the file changed.
+ 	 */
+-	i_version = inode_query_iversion(inode);
++	result = vfs_getattr_nosec(&file->f_path, &stat, STATX_CHANGE_COOKIE,
++				   AT_STATX_SYNC_AS_STAT);
++	if (!result && (stat.result_mask & STATX_CHANGE_COOKIE))
++		i_version = stat.change_cookie;
+ 	hash.hdr.algo = algo;
+ 	hash.hdr.length = hash_digest_size[algo];
+ 
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index d66a0a36415e..365db0e43d7c 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -24,7 +24,6 @@
+ #include <linux/slab.h>
+ #include <linux/xattr.h>
+ #include <linux/ima.h>
+-#include <linux/iversion.h>
+ #include <linux/fs.h>
+ 
+ #include "ima.h"
+@@ -164,11 +163,16 @@ static void ima_check_last_writer(struct integrity_iint_cache *iint,
+ 
+ 	mutex_lock(&iint->mutex);
+ 	if (atomic_read(&inode->i_writecount) == 1) {
++		struct kstat stat;
++
+ 		update = test_and_clear_bit(IMA_UPDATE_XATTR,
+ 					    &iint->atomic_flags);
+-		if (!IS_I_VERSION(inode) ||
+-		    !inode_eq_iversion(inode, iint->version) ||
+-		    (iint->flags & IMA_NEW_FILE)) {
++		if ((iint->flags & IMA_NEW_FILE) ||
++		    vfs_getattr_nosec(&file->f_path, &stat,
++				      STATX_CHANGE_COOKIE,
++				      AT_STATX_SYNC_AS_STAT) ||
++		    !(stat.result_mask & STATX_CHANGE_COOKIE) ||
++		    stat.change_cookie != iint->version) {
+ 			iint->flags &= ~(IMA_DONE_MASK | IMA_NEW_FILE);
+ 			iint->measured_pcrs = 0;
+ 			if (update)
+-- 
+2.39.2
 
