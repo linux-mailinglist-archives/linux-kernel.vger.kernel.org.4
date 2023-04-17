@@ -2,109 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 402826E4D87
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 17:47:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC4A6E4D8D
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 17:47:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231322AbjDQPrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 11:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41392 "EHLO
+        id S231382AbjDQPr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 11:47:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjDQPrD (ORCPT
+        with ESMTP id S229485AbjDQPr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 11:47:03 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BE9184
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 08:46:54 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id sz19so8283623ejc.2
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 08:46:54 -0700 (PDT)
+        Mon, 17 Apr 2023 11:47:56 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF76FB0;
+        Mon, 17 Apr 2023 08:47:54 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d8so912519plg.2;
+        Mon, 17 Apr 2023 08:47:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681746413; x=1684338413;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=B+2F8EcU3cNQlU6Th/BtOE+WmBpizsH32/28ir+VRk0=;
-        b=ngWGuIItu2FMBq91yohFZq2Y+mZDFO8bsXBpZu81UGmX/wPV25vJ7Xg1ZztfPRMIlY
-         Yl+do9Zk1Ld2BMLLbSlxk0+AnRQc7qnJJs37zJPG3GsIrPIsaDFGs5ZjY00/LXvTMuUm
-         KGeFdCk0nbX8c75gVYAkM5OPdnDtNQNinUmYE68Ym1TO2xurd/HEfaac5tZFUjZ1/7mP
-         sGa8Bu10kyJHb/wE/1OK0XYhCOBKP/vzuCyWbyCaaPGi4Tu6mO4OrNBAoRc6XgZiE+4a
-         8klGp4w67SsxY4PT/gqH2YVFN0vLfwlOe5g/SyZNssNJSzC2hW6B3mBo+6awlWVx0rZZ
-         Ve4Q==
+        d=gmail.com; s=20221208; t=1681746474; x=1684338474;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OULnICdYHOAOBZgGzZH4pNXiLKXoIP2AAPrDpC3Es1Q=;
+        b=MbsretE2GcIGceLNQIgzbDZAtx/EMTEEcrC47j5Zpe1K6RWuaROAD+mun174uT12Ow
+         dgWqdJbCNho1H/WNFwkmE8aPCtA5S2dre0w4+EwqSiZ4cN47v8GF4AodXyA3cvEf2r2+
+         SPM7z8uwQIkgwKYChhXS29JJkS2vhM2ImOUaTi/R95MPc8RY8S/uOxtKZS6CY4eNTXe2
+         Cb28LgfA758G0nzkWMlf5OvRavEtZ3tn4/5umeJ1RsndKAZVnYbuSY2ikXvkCLkZTRZX
+         QMx713+nhSFxVCHLt/m2Gieef/nKeph2w6t23hdopxh28dy+90sXdnnnZDkqJaDvY0fi
+         +ulg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681746413; x=1684338413;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=B+2F8EcU3cNQlU6Th/BtOE+WmBpizsH32/28ir+VRk0=;
-        b=clqjx5ohWCXrhHHxTs0KHVI4zZvaajIqzpdSqNcfNqSie60xF2W7ol9RDMQIRFYfgI
-         zctNjPyUgH+0a5KD1odCW3ZR9sunNsXeQNOYtmleRFgiwZ6TAfNSvG1cUcuFJhfSelMA
-         t5O8FYZ57L36aCQeRbNMkSymkKu5KaXVpiVI/Xcg1gbOp555Ffbk6UHelHLy0Dowk1cp
-         dr8RK/Hx24KEGlEDchoHq269JZt9uoUjhHtmj4Oipvz5vgUYRtwU+7TFw4R5KBz2NSXI
-         i2oFY+iCNoNX0Pr5hZWLjWRoYKiMa3rXUkcUynIBezp7CNPes81gEFnarXiXhRppcHox
-         YWlA==
-X-Gm-Message-State: AAQBX9fYF9aa4IFfm1/DW/QzNE6xfeYTmB+7dfr4UK0RIQc9fmm6GNAD
-        23W5bueW0Bs3YNJcv+hLoVqW7Q==
-X-Google-Smtp-Source: AKy350bJHYPXBCE4loHLxVpwMibECxn5IjMoG9VlSvjeLVDYrduMZvouljdvNrC1Fx8qyZcbc0/iEQ==
-X-Received: by 2002:a17:906:3a41:b0:94e:afa6:299f with SMTP id a1-20020a1709063a4100b0094eafa6299fmr8796087ejf.22.1681746413353;
-        Mon, 17 Apr 2023 08:46:53 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:96aa:60eb:e021:6511? ([2a02:810d:15c0:828:96aa:60eb:e021:6511])
-        by smtp.gmail.com with ESMTPSA id mp30-20020a1709071b1e00b00947ed087a2csm6774572ejc.154.2023.04.17.08.46.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Apr 2023 08:46:52 -0700 (PDT)
-Message-ID: <3c72e720-d636-d929-658b-75c98b575292@linaro.org>
-Date:   Mon, 17 Apr 2023 17:46:51 +0200
+        d=1e100.net; s=20221208; t=1681746474; x=1684338474;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OULnICdYHOAOBZgGzZH4pNXiLKXoIP2AAPrDpC3Es1Q=;
+        b=PUz7zhezHYOHTQDyYZwcW+/nV4WRgIymQXtNoSf6PGIcib3F+pFmo9I7T0RF3zqOQa
+         Habks/q86JeD/qMUBjEoEChIygA/qVB9hcJiAGSLG7LqIGUc3k9lxc1G1jjgqfMlQ++k
+         j6mzoGtarqWpB3wwfrfG6lNptDQNocxpson71NKvem9qkYWLotpeaqenGDRCbFaIGScu
+         EOa4YLjFZNUaSW4nWTxHP0lk3H+Q2eoeGW6UMTCJNwXiVrH0zWng89co+oWXdQTGyJ51
+         Hrwnb5/Kd6rles2l3GDK/4H+qQ3Rxaygy5/Uxd0017uYUbVbE93aUGB6prZYCH+c9NgD
+         EwRQ==
+X-Gm-Message-State: AAQBX9fjh9/rtAXOJ09cslM7omIsOPsWwY+kzQ9Zdjjj50FPvHqwXxSD
+        ecZ/+IVKiQbV5nrZ8XtQdBU=
+X-Google-Smtp-Source: AKy350bokXXTKLgGTQTsy58AVJVbkvNw4Hl9PBMwfbi34k5ByMLkxkAgE8hrNv9/27xSdpWpqLIbuw==
+X-Received: by 2002:a17:902:fa0d:b0:1a5:2b7b:57e8 with SMTP id la13-20020a170902fa0d00b001a52b7b57e8mr11845625plb.26.1681746474104;
+        Mon, 17 Apr 2023 08:47:54 -0700 (PDT)
+Received: from vultr.guest ([2401:c080:3800:263c:5400:4ff:fe66:d27f])
+        by smtp.gmail.com with ESMTPSA id jj17-20020a170903049100b001a6b308fcaesm4437513plb.153.2023.04.17.08.47.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 08:47:53 -0700 (PDT)
+From:   Yafang Shao <laoar.shao@gmail.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, rostedt@goodmis.org,
+        mhiramat@kernel.org
+Cc:     bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>
+Subject: [PATCH bpf-next 0/6] bpf: Tracing recursion prevention mechanism improvement 
+Date:   Mon, 17 Apr 2023 15:47:31 +0000
+Message-Id: <20230417154737.12740-1-laoar.shao@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] arm64: dts: qcom: msm8998: add blsp spi nodes
-Content-Language: en-US
-To:     Arnaud Vrac <avrac@freebox.fr>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230417-msm8998-spi-v1-1-6ea13d8a5384@freebox.fr>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230417-msm8998-spi-v1-1-6ea13d8a5384@freebox.fr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/04/2023 17:41, Arnaud Vrac wrote:
-> Signed-off-by: Arnaud Vrac <avrac@freebox.fr>
+Currently we use prog->active to prevent tracing recursion, but it has
+some downsides,
 
-Missing commit msg.
+- It can't identify different contexts
+  That said, if a process context is interrupted by a irq context and
+  the irq context runs the same code path, it will be considered as
+  recursion. For example,
+    normal:
+      this_cpu_inc_return(*(prog->active)) == 1 <- OK
 
-> ---
->  arch/arm64/boot/dts/qcom/msm8998.dtsi | 309 ++++++++++++++++++++++++++++++++++
->  1 file changed, 309 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-> index b150437a83558..41c8bb44d1fb1 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-> @@ -1228,6 +1228,57 @@ blsp1_i2c6_sleep: blsp1-i2c6-sleep-state {
->  				drive-strength = <2>;
->  				bias-pull-up;
->  			};
-> +
-> +			blsp1_spi_b_default: blsp1-spi_b-default {
+      irq:
+        this_cpu_inc_return(*(prog->active)) == 1 <- FAIL!
+        [ Considered as recusion ]
 
-No underscores in node names, missing suffix.
+- It has to maintain a percpu area
+  A percpu area will be allocated for each prog when the prog is loaded
+  and be freed when the prog is destroyed.
 
-Does not look like you tested the DTS against bindings. Please run `make
-dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
-for instructions).
+Let's replace it with the generic tracing recursion prevention mechanism,
+which can work fine with anything. In the above example, the irq context
+won't be considered as recursion again,
+  normal:
+    test_recursion_try_acquire() <- OK
 
-Best regards,
-Krzysztof
+    softirq:
+      test_recursion_try_acquire() <- OK
+
+      irq:
+        test_recursion_try_acquire() <- OK
+
+Note that, currently one single recursion in process context is allowed
+due to the TRACE_CTX_TRANSITION workaround, which can be fixed in the
+future. That said, below behavior is expected currently,
+  normal:
+    test_recursion_try_acquire() <- OK
+    [ recursion happens ]        <- one single recursion is allowed
+    test_recursion_try_acquire() <- OK
+    [ recursion happens ]
+    test_recursion_try_acquire() <- RECURSION!
+
+To adapt to this behavior, the bpf recursion selftest is changed.
+
+Steven Rostedt (Google) (1):
+  tracing: Add generic test_recursion_try_acquire()
+
+Yafang Shao (5):
+  bpf: Add __rcu_read_{lock,unlock} into btf id deny list
+  tracing: Add the comment for allowing one single recursion in process
+    context
+  selftests/bpf: Allow one single recursion in fentry recursion test
+  bpf: Improve tracing recursion prevention mechanism
+  bpf: Remove some denied functions from the btf id deny list
+
+ include/linux/bpf.h                                |  2 +-
+ include/linux/trace_recursion.h                    | 49 ++++++++++++++++------
+ kernel/bpf/core.c                                  | 10 -----
+ kernel/bpf/trampoline.c                            | 44 ++++++++++++++-----
+ kernel/bpf/verifier.c                              | 10 ++---
+ kernel/trace/bpf_trace.c                           | 12 +++---
+ kernel/trace/ftrace.c                              |  2 +
+ tools/testing/selftests/bpf/prog_tests/recursion.c |  7 +++-
+ tools/testing/selftests/bpf/test_progs.h           | 19 +++++++++
+ 9 files changed, 107 insertions(+), 48 deletions(-)
+
+-- 
+1.8.3.1
 
