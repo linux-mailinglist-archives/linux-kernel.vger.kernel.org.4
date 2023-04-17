@@ -2,110 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B6F66E437F
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 11:19:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 650696E4383
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 11:19:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjDQJTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 05:19:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47970 "EHLO
+        id S230515AbjDQJTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 05:19:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229833AbjDQJTl (ORCPT
+        with ESMTP id S229717AbjDQJTs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 05:19:41 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E883A94;
-        Mon, 17 Apr 2023 02:19:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681723179; x=1713259179;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=/rpXO8UEDEXcx2JhVMtmPjL+LYqlQvN0uFZLRWaYDYI=;
-  b=lprArSlp/6jGCVG+lKR+qh3zWjfMIC7vyP5emefG3BQOlxO9eg3/KlD/
-   XTn6OGfT2hcqcLfmJ0cDQVHTPN41cWfBYNcIdVXXUq/S4tBqdw/3xXYaj
-   tkyGq/6zz2JEJCHh/ka09oT0KY/ytT57rm4lw5838H5FMKbTp+0fqtZLf
-   r+4jjHXBeTbJt+cbPi2S2sORNZdjBiTY9ens+V9kGkndeVCImamU6RDTM
-   ah1mHkKmzfX8+xKy+ioVnYzXBN5GICRUjpIc2Q/SdO5LL1dyp2yezsLZF
-   xvDYytPRnaIP6SU5Wdw89xN2tHtL4K7+mwRzDCc0YGU8gZIViJfgpx5m+
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="410058060"
-X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
-   d="scan'208";a="410058060"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 02:19:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="864940320"
-X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
-   d="scan'208";a="864940320"
-Received: from anicosix-mobl2.ger.corp.intel.com ([10.249.35.34])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 02:19:35 -0700
-Date:   Mon, 17 Apr 2023 12:19:29 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-cc:     Xu Yilun <yilun.xu@intel.com>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-        linux-fpga@vger.kernel.org, Lee Jones <lee@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Russ Weight <russell.h.weight@intel.com>,
-        linux-hwmon@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 0/4] intel-m10-bmc: Manage register access to control
- delay during sec update
-In-Reply-To: <20230417091619.14134-1-ilpo.jarvinen@linux.intel.com>
-Message-ID: <53d2d5eb-26e-d017-41cc-60292a6f33a6@linux.intel.com>
-References: <20230417091619.14134-1-ilpo.jarvinen@linux.intel.com>
+        Mon, 17 Apr 2023 05:19:48 -0400
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4DE9F;
+        Mon, 17 Apr 2023 02:19:43 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id AF5D342404;
+        Mon, 17 Apr 2023 09:19:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1681723181; bh=frGGl/SueB8zDDanXT+8MSbrFf+w013HktHuXgfQFII=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=d3r/XQjjpRmnKOn6gqDZX6a0czfKALdekPl084QtoSGIIBxHkv7Apz6IBEByzgMBL
+         /i7fGBFIYxIKVwDJsJ4em8yOSTK7OggUc3x8iLYkUsK7fo+MGfhP1acpAt/3WB2p8K
+         PWgDUutpc1eLl+E77tUcDHMTsSsTnMk+Mvy0NhVICk7K0SJCskaKKctGWXyPB15PZN
+         sLifQPTLjQt+Wo0398gtpHBu+1L8kYhvAJ7X8dzwdpafJeuPle7Qix0Wb8g9vqvncA
+         qS9bQoLQnYaPddEGPLOkRRsFEYh0IMGcGRfi6ohaBpitJVrsoMDxNehECqAVBxOQvY
+         cmVxGbAF2lkng==
+Message-ID: <3d1acabd-ac0a-d0f2-3dd7-62165549e9dc@marcan.st>
+Date:   Mon, 17 Apr 2023 18:19:34 +0900
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1535459921-1681723178=:2047"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH RESEND v9 0/5] PWM and keyboard backlight driver for ARM
+ Macs
+Content-Language: en-US
+To:     fnkl.kernel@gmail.com, Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        - <asahi@lists.linux.dev>, Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>
+Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sasha Finkelstein <7d578vix8hzw@opayq.net>
+References: <20230214-fpwm-v9-0-f3094107b16b@gmail.com>
+From:   Hector Martin <marcan@marcan.st>
+In-Reply-To: <20230214-fpwm-v9-0-f3094107b16b@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1535459921-1681723178=:2047
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-
-On Mon, 17 Apr 2023, Ilpo Järvinen wrote:
-
-> Manage handshake register access on Max 10 FPGA cards that have a major
-> slowdown on reading handshake registers during secure update prepare and
-> write phases. The problem does not occur with PMCI-based cards.
+On 03/04/2023 23.19, Sasha Finkelstein via B4 Relay wrote:
+> Hi,
 > 
-> The first patch which moves Max M10 symbols into own namespace is
-> otherwise independent of the other changes but it would conflict with
-> this series if sent as separate change. Thus, it's part of this series
-> to give the patches a well-defined order.
+> This is the v9 of the patch series to add PWM and keyboard
+> backlight driver for ARM macs.
 > 
-> Ilpo Järvinen (4):
->   mfd: intel-m10-bmc: Move core symbols to own namespace
->   mfd: intel-m10-bmc: Create m10bmc_sys_update_bits()
->   mfd: intel-m10-bmc: Move m10bmc_sys_read() away from header
->   mfd: intel-m10-bmc: Manage access to MAX 10 fw handshake registers
+> Changes in v1:
+> Addressing the review comments.
 > 
->  drivers/fpga/intel-m10-bmc-sec-update.c | 47 +++++++------
->  drivers/hwmon/intel-m10-bmc-hwmon.c     |  1 +
->  drivers/mfd/intel-m10-bmc-core.c        | 90 ++++++++++++++++++++++++-
->  drivers/mfd/intel-m10-bmc-pmci.c        |  1 +
->  drivers/mfd/intel-m10-bmc-spi.c         | 15 +++++
->  include/linux/mfd/intel-m10-bmc.h       | 43 ++++++++----
->  6 files changed, 163 insertions(+), 34 deletions(-)
+> Changes in v2:
+> Added the reviewed-by and acked-by tags.
+> Addressing a review comment.
 > 
+> Changes in v3 and v4:
+> Addressing the review comments.
 > 
+> Changes in v5:
+> Added t600x device tree changes
+> 
+> Changes in v8:
+> Changed the overflow handling to clamp instead of erroring.
+> 
+> Changes in v9:
+> Missed a spot where clamping should be applied. Fixed that.
+> 
+> v1: https://www.spinics.net/lists/linux-pwm/msg19500.html
+> v2: https://www.spinics.net/lists/linux-pwm/msg19562.html
+> v3: https://www.spinics.net/lists/linux-pwm/msg19901.html
+> v4: https://www.spinics.net/lists/linux-pwm/msg20093.html
+> v5: https://www.spinics.net/lists/linux-pwm/msg20150.html
+> v6: https://www.spinics.net/lists/linux-pwm/msg20190.html
+> v7: https://lore.kernel.org/r/20230214-fpwm-v7-0-fb0a6bfbd037@gmail.com
+> v8: https://lore.kernel.org/r/20230214-fpwm-v8-0-65518a0d4944@gmail.com
+> 
+> ---
+> Sasha Finkelstein (5):
+>       dt-bindings: pwm: Add Apple PWM controller
+>       pwm: Add Apple PWM controller
+>       arm64: dts: apple: t8103: Add PWM controller
+>       arm64: dts: apple: t600x: Add PWM controller
+>       MAINTAINERS: Add entries for Apple PWM driver
+> 
+>  .../devicetree/bindings/pwm/apple,s5l-fpwm.yaml    |  51 +++++++
+>  MAINTAINERS                                        |   2 +
+>  arch/arm64/boot/dts/apple/t600x-die0.dtsi          |   9 ++
+>  arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi     |  18 +++
+>  arch/arm64/boot/dts/apple/t8103-j293.dts           |  17 +++
+>  arch/arm64/boot/dts/apple/t8103-j313.dts           |  17 +++
+>  arch/arm64/boot/dts/apple/t8103.dtsi               |   9 ++
+>  drivers/pwm/Kconfig                                |  12 ++
+>  drivers/pwm/Makefile                               |   1 +
+>  drivers/pwm/pwm-apple.c                            | 159 +++++++++++++++++++++
+>  10 files changed, 295 insertions(+)
+> ---
+> base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+> change-id: 20230214-fpwm-d8f76bc8ddc1
+> 
+> Best regards,
 
-Please disregard v2. I'll send v3 shortly. 
+Applied #3-#4 to asahi-soc/dt, thanks!
 
-(I managed to add the tags into wrong files so they're not correctly 
-here in v2).
+- Hector
 
--- 
- i.
-
---8323329-1535459921-1681723178=:2047--
