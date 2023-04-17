@@ -2,116 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEB3C6E46B6
+	by mail.lfdr.de (Postfix) with ESMTP id 4E8F76E46B5
 	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 13:44:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbjDQLox convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 17 Apr 2023 07:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35480 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbjDQLou (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230085AbjDQLou (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 17 Apr 2023 07:44:50 -0400
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0670C468D;
-        Mon, 17 Apr 2023 04:43:53 -0700 (PDT)
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-94971337b10so94178066b.1;
-        Mon, 17 Apr 2023 04:43:52 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35444 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229974AbjDQLor (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Apr 2023 07:44:47 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64232E58
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 04:43:50 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id fy21so20327840ejb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 04:43:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681731821; x=1684323821;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xvYzdosW+pl7hdpIOnke9mGqwsf21NWemxvx9QGqO7g=;
+        b=AJInmT4OcLIEQY+GD2XQHALBCXIcHvQJqMLztaaCbt2SO/Qjzie0qsYDg/cMZin9NY
+         i+Lk4tKMoh7EEmPZ234yP49QmA4o+SIAuUTzxNxk5qMrVekL0efcMGk4hzDS/ylir1tC
+         jAYp9AOP1pS6eCFAkOLE91xVCTLgPtTpqUdZJuorzWUJj63up2vjB5qWYzloip/RjAA7
+         wAjI+BPQhckBSo+VJ3Iy+p1sTnszyTThRpn4Aguj4p7vYms28M3KeCefhPgVeqOxmX7C
+         ERoJOyueRav2HAcqejybOPM2AUW4cyRpunPgnW/CEnsO8B5BmTAYT90WYhAhfzExYoxj
+         x1Ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681731763; x=1684323763;
+        d=1e100.net; s=20221208; t=1681731821; x=1684323821;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=h0xbRy2dWY+Ae8oaE0laExl3v3+/apitb+s9bwbmh0o=;
-        b=lzipMSXAzZkynpErCFHdhM0x99DhtPxgFJbagdfPXHy0sAfKWqnHHrHEAPMbP6WwWP
-         D2ijEzom+/NtlYulBRsQ7srw2xZ48iJFjC6aAKn5Dspw1M4CYc8ndAgaeWWiP3qgxRQ0
-         hwwUIrvWmk1Rs9YpeF4RAP7hML8dn8QEGCzGnl9uCrnl53HpvqHUuecBIe7p+e21kuqU
-         Qz/o4N0TnCOx2YFlLd36R58UyrdRB7Gc0wTNsclDqc3HYG9wQPlTMTIcpZweSVCEEqCV
-         AbRQObPxgsX9w+53nZdXmgOZcnEK6Rhwe4rldNJtjWAXU0ZN+UYwjgQ2PA9zwzaZ+Rtz
-         HA1w==
-X-Gm-Message-State: AAQBX9cYJBNsmwvPRZAemTSEI8MZkIuxCmTTUxVoE2zVjH55yXe8E4+Y
-        u5PIaXhpZ9tIfcpW8KIYcLbyfa0erFp4HCvyvlQ=
-X-Google-Smtp-Source: AKy350bt3Bh1m6ing+3dnlcH8T1XzXu8NJhp6jMQip6y5cDD5gRGzvLKvuEJd3Dl7f3lJEEMR8ZNBSvfvZ8vITslh5A=
-X-Received: by 2002:a17:906:7a4e:b0:94e:d5d7:67eb with SMTP id
- i14-20020a1709067a4e00b0094ed5d767ebmr8548849ejo.5.1681731762609; Mon, 17 Apr
- 2023 04:42:42 -0700 (PDT)
+        bh=xvYzdosW+pl7hdpIOnke9mGqwsf21NWemxvx9QGqO7g=;
+        b=A+jvmdJwOmuGNMIPuDBI4nB39YlqYEmcsW/GMhfzGcmFuMvm26xv2snk40L3RYgN66
+         9bwHi8JqTVlqP89K4uv4aJkv10kdseJw7Nset9ZEKKc2CAtZGbg1Pa6qukqbXiTI0jlL
+         5TRUtIRsDjQKs2MxYlVfHrzwkq1QkzOUtclJE9aBhgcHYWYUr74bVrdqhLw1KQgsqfCJ
+         6WEf64yFhGPrlnGGl3AHWaxieIJE1SwQb0deqUhGg3jbvQaoPCvrdxZuNAvT41ZuqjFU
+         JzTa0mDDJLKcFtPPacjvR8EPe2kdrV4/XmxukSJJ26Xrkel5r8ir5FU1OE+hqLzuTKd0
+         r3mg==
+X-Gm-Message-State: AAQBX9eWKyJr4hkLO3lUEx9EuSvK9F3h8yjIRE+QjYHnmEvABeBfKzAO
+        41JfgF6P1bNar0gy4Uy6RmgPYbP11uOCVp71z+olfQ==
+X-Google-Smtp-Source: AKy350btwfqyhvz2GjP4rsO5HviV0z00JGlfvMRNBkF1/rvxruwwQkHN7fuoOYEQbY2b/B3+Pbac+RzAvLFXaJ7JwAs=
+X-Received: by 2002:a17:906:48d4:b0:94f:1c69:f309 with SMTP id
+ d20-20020a17090648d400b0094f1c69f309mr3146862ejt.15.1681731821217; Mon, 17
+ Apr 2023 04:43:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230414012346.1946-1-mario.limonciello@amd.com> <8a4f2454-809c-d773-42b2-e62fb057feb2@redhat.com>
-In-Reply-To: <8a4f2454-809c-d773-42b2-e62fb057feb2@redhat.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 17 Apr 2023 13:42:31 +0200
-Message-ID: <CAJZ5v0h9YnitXBZK0SweMtAeaeDcb=mg_PinJfsG5Oc4dCxyMw@mail.gmail.com>
-Subject: Re: [PATCH v9 0/4] Add vendor agnostic mechanism to report hardware sleep
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Box David E <david.e.box@intel.com>, jstultz@google.com,
-        pavel@ucw.cz, svenva@chromium.org,
-        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>, Shyam-sundar.S-k@amd.com,
-        rrangel@chromium.org, Jain Rajat <rajatja@google.com>,
-        linux-kernel@vger.kernel.org
+References: <20230304034835.2082479-4-senozhatsky@chromium.org> <20230417050140.1653593-1-senozhatsky@chromium.org>
+In-Reply-To: <20230417050140.1653593-1-senozhatsky@chromium.org>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Mon, 17 Apr 2023 04:43:04 -0700
+Message-ID: <CAJD7tkYX4JEFwk3yjmMLMCLVPF=8UfFbv1qaPAufcQ++z8XqDQ@mail.gmail.com>
+Subject: Re: [PATCH] zsmalloc: reset compaction source zspage pointer after putback_zspage()
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhao <yuzhao@google.com>, Minchan Kim <minchan@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 10:25 AM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Hi Mario, et al.,
->
-> On 4/14/23 03:23, Mario Limonciello wrote:
-> > An important part of validating that s0ix worked properly is to check how
-> > much of a cycle was spent in a hardware sleep state.
-> >
-> > The reporting of hardware sleep is a mix of kernel messages and sysfs
-> > files that vary from vendor to vendor. Collecting this information
-> > requires extra information on the kernel command line or fetching from
-> > debugfs.
-> >
-> > To make this information more readily accessible introduce a new file in
-> > suspend_stats that drivers can report into during their resume routine.
-> >
-> > Userspace can fetch this information and compare it against the duration
-> > of the cycle to allow determining residency percentages and flagging
-> > problems.
-> >
-> > Mario Limonciello (4):
-> >   PM: Add sysfs files to represent time spent in hardware sleep state
-> >   platform/x86/amd: pmc: Report duration of time in hw sleep state
-> >   platform/x86/intel/pmc: core: Always capture counters on suspend
-> >   platform/x86/intel/pmc: core: Report duration of time in HW sleep
-> >     state
-> >
-> >  Documentation/ABI/testing/sysfs-power | 29 +++++++++++++
-> >  drivers/platform/x86/amd/pmc.c        |  6 +--
-> >  drivers/platform/x86/intel/pmc/core.c | 17 ++++----
-> >  drivers/platform/x86/intel/pmc/core.h |  4 +-
-> >  include/linux/suspend.h               |  8 ++++
-> >  kernel/power/main.c                   | 59 +++++++++++++++++++++------
-> >  6 files changed, 98 insertions(+), 25 deletions(-)
-> >
-> >
-> > base-commit: 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d
->
-> Thank you for working on this, this looks good to me:
->
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
->
-> For the series. Since this also touches kernel/power/main.c
-> I think it would be best if the entire series is merged
-> through the linux-pm tree and I'm fine with the pdx86 bits
-> also getting merged through linux-pm.
->
-> Rafael ?
+Hi Sergey,
 
-That would be fine with me, but I've only got the [1/4].
+On Sun, Apr 16, 2023 at 10:01=E2=80=AFPM Sergey Senozhatsky
+<senozhatsky@chromium.org> wrote:
+>
+> Fixup.
 
-Mario, can you please resend the series with CCs to linux-pm and with
-R-by from Hans?
+I think the original patch landed in mm-stable already, so we might
+want a proper commit log and fixes tag.
+
+I suspect we want:
+Fixes: 5a845e9f2d66 ("zsmalloc: rework compaction algorithm")
+
+>
+> Reported-by: Yu Zhao <yuzhao@google.com>
+> Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+
+Otherwise, LGTM.
+
+Reviewed-by: Yosry Ahmed <yosryahmed@google.com>
+
+> ---
+>  mm/zsmalloc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
+> index aea50e2aa350..cc81dfba05a0 100644
+> --- a/mm/zsmalloc.c
+> +++ b/mm/zsmalloc.c
+> @@ -2239,8 +2239,8 @@ static unsigned long __zs_compact(struct zs_pool *p=
+ool,
+>                 if (fg =3D=3D ZS_INUSE_RATIO_0) {
+>                         free_zspage(pool, class, src_zspage);
+>                         pages_freed +=3D class->pages_per_zspage;
+> -                       src_zspage =3D NULL;
+>                 }
+> +               src_zspage =3D NULL;
+>
+>                 if (get_fullness_group(class, dst_zspage) =3D=3D ZS_INUSE=
+_RATIO_100
+>                     || spin_is_contended(&pool->lock)) {
+> --
+> 2.40.0.634.g4ca3ef3211-goog
+>
