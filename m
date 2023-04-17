@@ -2,164 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7C426E49C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 15:19:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD8DF6E49C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 15:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbjDQNT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 09:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47186 "EHLO
+        id S230332AbjDQNTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 09:19:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbjDQNTT (ORCPT
+        with ESMTP id S230296AbjDQNTj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 09:19:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A44B461;
-        Mon, 17 Apr 2023 06:18:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 82F9561AB0;
-        Mon, 17 Apr 2023 13:18:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE74BC433D2;
-        Mon, 17 Apr 2023 13:18:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681737534;
-        bh=PyeeTfI8QXYJ6B2oTWU56K56KQLpF2XskjQp6upqB/o=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=HbyeZIClPQqGSJyeLLvmyIDGi1jlGksR+Zs8xddBe2bnS2xJedIuqmwDaJu8+tIcs
-         LCVvOd9fr+4GMdKrer0sQ+walMErAYp1K63yWEcnsG1bAsasvJtZWCqOkLZ6zQnPwh
-         11DALm6faqP+9X9KuN4aDgRtE9mA/MTaEGoTl1HpPhfXXk8pnigTGYll+rZnzUFdCQ
-         G9qMlO/tlHbU+rXwxZxdHxXNljZy8iVWe/NidepLYDLOGDmt43ucO+35NUk4zwJDh/
-         dHijeMCE5irAUPq7JPXT2bfEzYMrknWvXHAk0uLUPPwIGq9abYnoX7tWRunK5mQ0MV
-         PFL5w/h2PsbUg==
-Message-ID: <7596d06350a556741e1d1e54d0927d1a65b26939.camel@kernel.org>
-Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM
- after writes
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Amir Goldstein <amir73il@gmail.com>
-Cc:     Paul Moore <paul@paul-moore.com>, zohar@linux.ibm.com,
-        linux-integrity@vger.kernel.org, miklos@szeredi.hu,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org
-Date:   Mon, 17 Apr 2023 09:18:52 -0400
-In-Reply-To: <176640ae-3ff7-c3e9-218a-2952425336e7@linux.ibm.com>
-References: <20230407-trasse-umgearbeitet-d580452b7a9b@brauner>
-         <90a25725b4b3c96e84faefdb827b261901022606.camel@kernel.org>
-         <e2455c0e-5a17-7fc1-95e3-5f2aca2eb409@linux.ibm.com>
-         <94c2aadfb2fe7830d0289ffe6084581b99505a58.camel@kernel.org>
-         <176640ae-3ff7-c3e9-218a-2952425336e7@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Mon, 17 Apr 2023 09:19:39 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 666A086A1;
+        Mon, 17 Apr 2023 06:19:20 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-2f87c5b4635so1326379f8f.1;
+        Mon, 17 Apr 2023 06:19:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681737559; x=1684329559;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0QEqpLwnwFp5A1m8MrYucaOFzzcBM5ajIcjIAg9pASw=;
+        b=GgzfatfZDsG6l1hdBeNLHTz6BCXR5NlEbHsgO0Pdeh5LJ9zwjx2YgPElU6cZSTOAYE
+         R/dFJWNOgOc+Uyn4IHLHBATe0U90XZiBoxaQnLl8FKdfwpv+DtmotoQ9ZbpCPks24cPb
+         oybhbD+uyhlAte9GX94erRNqO7mJ7/vVVqA9lXphz1Q1zgrA5liTj83juYguLWarwfmT
+         Ns5Eu31CjKmX1aTnglR9IfZHZ3EzMS54FdTIzRSMi5AMWhDFqJWmS5j9Yp/xj/rkn0v3
+         jjg4p60PThtAYL2s6953ryUNK3WqfCyEZkRPU2ZzDwJks2xWvh8xE4jcZmkjZXUtrBgf
+         lDfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681737559; x=1684329559;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0QEqpLwnwFp5A1m8MrYucaOFzzcBM5ajIcjIAg9pASw=;
+        b=C0tGmjKouC3eZjc4cBA9nRm9RxrLSi7raWp/RwAtnJ5DASI2s93zdxNPEpG4K25IFC
+         VRw/u2S7xlnbCsEnaMa9BuY9miRZb+IFPy5DaMxd7HaBocOGuOwFyp3aweu0dxJRU9Up
+         Jv/zYn+w0b7aWNoSap6dF6oTrk3VtDiQiHNAKkaVaQ+2j8j5tFBtPrd3fxH6ffg3J1hh
+         nyDq1pmLAbsX7YmGenM2HQiBOysY96212fjYd2Vdbk8rz5fM4oEUozzFGmrTytysO24u
+         yyeFAXzJ1u9UwzkXiIztt8CXvZlWFr/kGeWKjBC8Rci0sDPDoJTuyyOmVmyIWyIRCov3
+         ydpA==
+X-Gm-Message-State: AAQBX9fqwlSwjTwLiEUkLitw3VxDr3rnWEQkptE97qRlSFbeV7STpJh+
+        2WUlq34Y8cARPVzSHEuJricU4ZsD1zXzag==
+X-Google-Smtp-Source: AKy350ZDipeS7QkU/VGnF7/BCdcymXldDYSzQ/bsTJ8FlmgcHx38mRLO7y2HMs/RxoBdi+rLV1MYrA==
+X-Received: by 2002:adf:f40e:0:b0:2f4:cf53:c961 with SMTP id g14-20020adff40e000000b002f4cf53c961mr5062546wro.54.1681737558569;
+        Mon, 17 Apr 2023 06:19:18 -0700 (PDT)
+Received: from localhost (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
+        by smtp.gmail.com with ESMTPSA id o5-20020a5d58c5000000b002f47ae62fe0sm10547708wrf.115.2023.04.17.06.19.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 06:19:17 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 14:19:16 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring@vger.kernel.org
+Subject: Re: [PATCH 5/7] io_uring: rsrc: use FOLL_SAME_FILE on
+ pin_user_pages()
+Message-ID: <b1f125c8-05ec-4b41-9b3d-165bf7694e5a@lucifer.local>
+References: <cover.1681508038.git.lstoakes@gmail.com>
+ <17357dec04b32593b71e4fdf3c30a346020acf98.1681508038.git.lstoakes@gmail.com>
+ <ZD1CAvXee5E5456e@nvidia.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZD1CAvXee5E5456e@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-04-17 at 08:45 -0400, Stefan Berger wrote:
->=20
-> On 4/17/23 06:05, Jeff Layton wrote:
-> > On Sun, 2023-04-16 at 21:57 -0400, Stefan Berger wrote:
-> > >=20
-> > > On 4/7/23 09:29, Jeff Layton wrote:
->=20
-> > > >=20
-> > > > Note that there Stephen is correct that calling getattr is probably
-> > > > going to be less efficient here since we're going to end up calling
-> > > > generic_fillattr unnecessarily, but I still think it's the right th=
-ing
-> > > > to do.
-> > >=20
-> > > I was wondering whether to use the existing inode_eq_iversion() for a=
-ll
-> > > other filesystems than overlayfs, nfs, and possibly other ones (which=
- ones?)
-> > > where we would use the vfs_getattr_nosec() via a case on inode->i_sb-=
->s_magic?
-> > > If so, would this function be generic enough to be a public function =
-for libfs.c?
-> > >=20
-> > > I'll hopefully be able to test the proposed patch tomorrow.
-> > >=20
-> > >=20
-> >=20
-> > No, you don't want to use inode_eq_iversion here because (as the commen=
-t
-> > over it says):
->=20
-> In the ima_check_last_writer() case the usage of inode_eq_iversion() was =
-correct since
-> at this point no record of  its value was made and therefore no writer ne=
-eded to change
-> the i_value again due to IMA:
->=20
-> 		update =3D test_and_clear_bit(IMA_UPDATE_XATTR,
-> 					    &iint->atomic_flags);
-> 		if (!IS_I_VERSION(inode) ||
-> 		    !inode_eq_iversion(inode, iint->version) ||
-> 		    (iint->flags & IMA_NEW_FILE)) {
-> 			iint->flags &=3D ~(IMA_DONE_MASK | IMA_NEW_FILE);
-> 			iint->measured_pcrs =3D 0;
-> 			if (update)
-> 				ima_update_xattr(iint, file);
-> 		}
->=20
-> The record of the value is only made when the actual measurement is done =
-in
-> ima_collect_measurement()
->=20
+On Mon, Apr 17, 2023 at 09:56:34AM -0300, Jason Gunthorpe wrote:
+> On Sat, Apr 15, 2023 at 12:27:45AM +0100, Lorenzo Stoakes wrote:
+> > Commit edd478269640 ("io_uring/rsrc: disallow multi-source reg buffers")
+> > prevents io_pin_pages() from pinning pages spanning multiple VMAs with
+> > permitted characteristics (anon/huge), requiring that all VMAs share the
+> > same vm_file.
+>
+> That commmit doesn't really explain why io_uring is doing such a weird
+> thing.
+>
+> What exactly is the problem with mixing struct pages from different
+> files and why of all the GUP users does only io_uring need to care
+> about this?
+>
+> If there is no justification then lets revert that commit instead.
+>
+> >  		/* don't support file backed memory */
+> > -		for (i = 0; i < nr_pages; i++) {
+> > -			if (vmas[i]->vm_file != file) {
+> > -				ret = -EINVAL;
+> > -				break;
+> > -			}
+> > -			if (!file)
+> > -				continue;
+> > -			if (!vma_is_shmem(vmas[i]) && !is_file_hugepages(file)) {
+> > -				ret = -EOPNOTSUPP;
+> > -				break;
+> > -			}
+> > -		}
+> > +		file = vma->vm_file;
+> > +		if (file && !vma_is_shmem(vma) && !is_file_hugepages(file))
+> > +			ret = -EOPNOTSUPP;
+> > +
+>
+> Also, why is it doing this?
+>
+> All GUP users don't work entirely right for any fops implementation
+> that assumes write protect is unconditionally possible. eg most
+> filesystems.
+>
+> We've been ignoring blocking it because it is an ABI break and it does
+> sort of work in some cases.
+>
 
-True, but we don't have a generic mechanism to do a this. What you're
-doing only works for IS_I_VERSION inodes.
+I will leave this to Jens and Pavel to revert on!
 
-> Compared to this the usage of vfs_getattr_nosec() is expensive since it r=
-esets the flag.
->=20
->          if ((request_mask & STATX_CHANGE_COOKIE) && IS_I_VERSION(inode))=
- {
->                  stat->result_mask |=3D STATX_CHANGE_COOKIE;
->                  stat->change_cookie =3D inode_query_iversion(inode);
->          }
->=20
-> 	idmap =3D mnt_idmap(path->mnt);
-> 	if (inode->i_op->getattr)
-> 		return inode->i_op->getattr(idmap, path, stat,
-> 					    request_mask, query_flags);
->=20
-> Also, many filesystems will have their getattr now called as well.
->=20
+> I'd rather see something like FOLL_ALLOW_BROKEN_FILE_MAPPINGS than
+> io_uring open coding this kind of stuff.
+>
 
-...as they should!
+How would the semantics of this work? What is broken? It is a little
+frustrating that we have FOLL_ANON but hugetlb as an outlying case, adding
+FOLL_ANON_OR_HUGETLB was another consideration...
 
-> I understand Christian's argument about the maintenance headache to a cer=
-tain degree...
->=20
-
-IMA is not equipped to understand the subtleties of how the i_version
-counter is implemented on different filesystems. In the past it dealt
-with this by limiting its usage to IS_I_VERSION inodes, but that is
-already problematic today. For instance: xfs currently sets the
-SB_I_VERSION flag, but its i_version counter also bumps the value on
-atime updates. That means that IMA is doing more remeasurements on xfs
-than are needed.
-
-I'm trying to clean a lot of this up, but IMA's current usage isn't
-really helping since it's poking around in areas it shouldn't be. Doing
-a getattr is the canonical way to query this value since it leaves it up
-to the filesystem how to report this value.
-
-If this turns out to cause a performance regression we can look at
-adding a getattr-like routine that _only_ reports the change attribute.
-I wouldn't want to do that though unless the need were clear (and backed
-up by performance numbers).
---=20
-Jeff Layton <jlayton@kernel.org>
+> Jason
