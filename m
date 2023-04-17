@@ -2,225 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE4E6E42DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B09736E42E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:45:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbjDQIo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 04:44:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53926 "EHLO
+        id S229488AbjDQIpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 04:45:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjDQIoy (ORCPT
+        with ESMTP id S230497AbjDQIpX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 04:44:54 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA21E49
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 01:44:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681721093; x=1713257093;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version:content-transfer-encoding;
-  bh=KV/N/E6kXh6FygL9ZMy5fr2iCnJHqBytPmQ8FHRLomc=;
-  b=c7qXXfZZwiPUe27P7DIHmoXDkzqKCJw7g2MTHq6sYpbx9DqJPPoOu/CT
-   8n373oOnj9Cz6BL8TUU1/fJqXrqIvaDuHEbQbx1nY1WwSMEGYJhCxRY+P
-   eqDX8ZTgwe1Tlay3Xr2LC4JnFPrSsLjx+kTRhIIgLPc4gD1kxAF9VpKfk
-   lnsSvPoUU29dd8uvYWivtBKhLMuunn3pY5ZaXgviy5wwvWj0xG00pe1IS
-   7LWfmt+w9aK8toGuP434rxr4JeecdSxanRpRh1IB1EKCV213PvWPsPcQf
-   DnFQj8iPnl/72m2RrSa67a4ZTeyHKxdvsvA979ABFN3hyYfe2Zhzcts4+
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="343595720"
-X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
-   d="scan'208";a="343595720"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 01:44:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="640887252"
-X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
-   d="scan'208";a="640887252"
-Received: from habramov-mobl4.ger.corp.intel.com (HELO localhost) ([10.252.47.83])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 01:44:49 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Lyude Paul <lyude@redhat.com>, Jeff Layton <jlayton@kernel.org>,
-        "Lin, Wayne" <Wayne.Lin@amd.com>,
-        Alex Deucher <alexdeucher@gmail.com>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
-Subject: Re: [PATCH] drm: make drm_dp_add_payload_part2 gracefully handle
- NULL state pointer
-In-Reply-To: <7a1b00f02b125bd65824b18ea09509efe3cf777d.camel@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230413111254.22458-1-jlayton@kernel.org>
- <87edooarpq.fsf@intel.com>
- <CADnq5_PVnYMSiKO77+cfg_V-tDKYkVJYN3qGNb1vhQO3QtXskA@mail.gmail.com>
- <CO6PR12MB5489044012B2A96639470F38FC999@CO6PR12MB5489.namprd12.prod.outlook.com>
- <4d8479f20ef30866fcf73f3602f1237376110764.camel@kernel.org>
- <878reug394.fsf@intel.com>
- <7a1b00f02b125bd65824b18ea09509efe3cf777d.camel@redhat.com>
-Date:   Mon, 17 Apr 2023 11:44:47 +0300
-Message-ID: <874jpegao0.fsf@intel.com>
+        Mon, 17 Apr 2023 04:45:23 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE3330E8
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 01:44:57 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id kh6so23275099plb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 01:44:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1681721097; x=1684313097;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NmX+x9DqsXNcwyQ2AzQA++eNv/lGS7QxnupRL+FL2+k=;
+        b=Wv8kL57awpXRXk0EW9fQQUFcNJ2J/nff5Thkeftm3tWKRmEgFD+RBldf1zyEBEDkmA
+         46rwpDSM9A7x7dtso8ZBruxf9fz4B3RvcOL0Yokk/WSyECsf5Gns1EX/jQqJZDnZMtxB
+         OkVXxFKhz9GwTWW6H13EtmWHN+qWm/YucyMBCv+PVzsDWicc22sOuZrmL18ZADCRZ58z
+         dqnYkrjeddOp7rPSVJgixl0pVjPJ8Z4rfB4KpXJrJyTwJiTnxpyKuxZ7rZhghUT9k3N1
+         JMSqElLyhb/Sa6Mvwt/GQQ2hbwqSd9+eLfkJw6rNUBrc+HwlmnhtMASXw4U/CM6Y7xxQ
+         t/Ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681721097; x=1684313097;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NmX+x9DqsXNcwyQ2AzQA++eNv/lGS7QxnupRL+FL2+k=;
+        b=a89yHyX/V6nWFLnaT4o+aObTifM5wggoEGNkgxtVkNFXszS22IBWITGtXUD70/R9pD
+         +ABTY/I/hsjAcQ3GrgUrGZ53DMovMtnQu7JhuFVGLzJu4vv87qeNFfl9UjC4SoiJ72aS
+         YuZvPRyWNTkIhMEE/vA42eEY/rK1n1yPIl9M9j7E8fAhKwk1VQzs5OaeiXAiYRTv79yy
+         LV+16GHjwszuwCEacCZ4AigRAdKDL0Apnm3BVpEnaBiqAlE429ZZCaB1EC6nD6pAG5gU
+         /AwwxHGd2Drhr4lr6KDvIovF0xK9qp+tGgbrYWKV9pUAvTF7VFCbU6XTFRQL/f21Q2K1
+         qdCQ==
+X-Gm-Message-State: AAQBX9ehdY9oNvLUAvtP4OxS2N1gRQIHePSq1bWMDv4tjCWv2jt2qY0p
+        6DQdpfuRYVXaSEz7M6lnhjXE
+X-Google-Smtp-Source: AKy350a5zEFkTizr11zAP8X9j+v5+H2omsRZxk1T4qjyH/MeZJDIN2agaSCVBBv1gbyuRPQ/1AF77A==
+X-Received: by 2002:a05:6a20:12c6:b0:ef:f558:b80 with SMTP id v6-20020a056a2012c600b000eff5580b80mr2234565pzg.58.1681721097130;
+        Mon, 17 Apr 2023 01:44:57 -0700 (PDT)
+Received: from HX3YDL60GM.bytedance.net ([139.177.225.243])
+        by smtp.gmail.com with ESMTPSA id u17-20020aa78491000000b0063ba9108c5csm1571536pfn.149.2023.04.17.01.44.54
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 17 Apr 2023 01:44:56 -0700 (PDT)
+From:   "songrui.771" <songrui.771@bytedance.com>
+To:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "songrui.771" <songrui.771@bytedance.com>
+Subject: [PATCH] libbpf: correct the macro KERNEL_VERSION for old kernel
+Date:   Mon, 17 Apr 2023 16:44:49 +0800
+Message-Id: <20230417084449.99848-1-songrui.771@bytedance.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Apr 2023, Lyude Paul <lyude@redhat.com> wrote:
-> On Fri, 2023-04-14 at 13:35 +0300, Jani Nikula wrote:
->> On Fri, 14 Apr 2023, Jeff Layton <jlayton@kernel.org> wrote:
->> > On Fri, 2023-04-14 at 04:40 +0000, Lin, Wayne wrote:
->> > > [Public]
->> > >=20
->> > > Hi Jeff,
->> > >=20
->> > > Thanks. I might need more information to understand why we can't ret=
-rieve
->> > > the drm atomic state. Also , "Failed to create MST payload for port"=
- indicates
->> > > error while configuring DPCD payload ID table. Could you help to pro=
-vide log
->> > > with KMS + ATOMIC + DP debug on please? Thanks in advance!
->> > >=20
->> > > Regards,
->> > > Wayne
->> > >=20
->> >=20
->> > Possibly. I'm not that familiar with display driver debugging. Can you
->> > send me some directions on how to crank up that sort of debug logging?
->> >=20
->> > Note that this problem is _very_ intermittent too: I went about 2 weeks
->> > between crashes, and then I got 3 in one day. I'd rather not run with a
->> > lot of debug logging for a long time if that's what this is going to
->> > require, as this is my main workstation.
->> >=20
->> > The last time I got this log message, my proposed patch did prevent the
->> > box from oopsing, so I'd really like to see it go in unless it's just
->> > categorically wrong for the caller to pass down a NULL state pointer to
->> > drm_dp_add_payload_part2.
->>=20
->> Cc: Lyude.
->>=20
->> Looks like the state parameter was added in commit 4d07b0bc4034
->> ("drm/display/dp_mst: Move all payload info into the atomic state") and
->> its only use is to get at state->dev for debug logging.
->>=20
->> What's the plan for the parameter? Surely something more than that! :)
->
-> I don't think there was any plan for that, or at least I certainly don't =
-even
-> remember adding that D:. It must totally have been by mistake and snuck by
-> review, if that's the only thing that we're using it for I'd say it's
-> definitely fine to just drop it entirely
+The introduced header file linux/version.h in libbpf_probes.c may have a
+wrong macro KERNEL_VERSION for calculating LINUX_VERSION_CODE in some old
+kernel (Debian9, 10). Below is a version info example from Debian 10.
 
-I guess we could use two patches then, first replace state->dev with
-mgr->dev as something that can be backported as needed, and second drop
-the state parameter altogether.
+release: 4.19.0-22-amd64
+version: #1 SMP Debian 4.19.260-1 (2022-09-29)
 
-Jeff, up for it? At least the first one?
+The macro KERNEL_VERSION is defined to (((a) << 16) + ((b) << 8)) + (c)),
+which a, b, and c stand for major, minor and patch version. So in example here,
+the major is 4, minor is 19, patch is 260, the LINUX_VERSION(4, 19, 260) which
+is 267268 should be matched to LINUX_VERSION_CODE. However, the KERNEL_VERSION_CODE
+in linux/version.h is defined to 267263.
 
+I noticed that the macro KERNEL_VERSION in linux/version.h of some new kernel is
+defined to (((a) << 16) + ((b) << 8) + ((c) > 255 ? 255 : (c))). And
+KERNEL_VERSION(4, 19, 260) is equal to 267263 which is the right LINUX_VERSION_CODE.
 
-BR,
-Jani.
+The mismatched LINUX_VERSION_CODE which will cause failing to load kprobe BPF
+programs in the version check of BPF syscall.
 
+The return value of get_kernel_version in libbpf_probes.c should be matched to
+LINUX_VERSION_CODE by correcting the macro KERNEL_VERSION.
 
->
->>=20
->> Instead of "state ? state->dev : NULL" I guess we could use mgr->dev
->> like the other logging calls do. It's papering over the NULL parameter
->> too, but perhaps in a slightly cleaner way...
->>=20
->>=20
->> BR,
->> Jani.
->>=20
->>=20
->> >=20
->> > > > -----Original Message-----
->> > > > From: Alex Deucher <alexdeucher@gmail.com>
->> > > > Sent: Thursday, April 13, 2023 8:59 PM
->> > > > To: Jani Nikula <jani.nikula@linux.intel.com>; Lin, Wayne
->> > > > <Wayne.Lin@amd.com>
->> > > > Cc: Jeff Layton <jlayton@kernel.org>; David Airlie <airlied@gmail.=
-com>;
->> > > > Daniel Vetter <daniel@ffwll.ch>; Deucher, Alexander
->> > > > <Alexander.Deucher@amd.com>; linux-kernel@vger.kernel.org; dri-
->> > > > devel@lists.freedesktop.org
->> > > > Subject: Re: [PATCH] drm: make drm_dp_add_payload_part2 gracefully
->> > > > handle NULL state pointer
->> > > >=20
->> > > > + Wayne
->> > > >=20
->> > > > On Thu, Apr 13, 2023 at 8:31=E2=80=AFAM Jani Nikula <jani.nikula@l=
-inux.intel.com>
->> > > > wrote:
->> > > > >=20
->> > > > > On Thu, 13 Apr 2023, Jeff Layton <jlayton@kernel.org> wrote:
->> > > > > > I've been experiencing some intermittent crashes down in the d=
-isplay
->> > > > > > driver code. The symptoms are ususally a line like this in dme=
-sg:
->> > > > > >=20
->> > > > > >     amdgpu 0000:30:00.0: [drm] Failed to create MST payload fo=
-r port
->> > > > > > 000000006d3a3885: -5
->> > > > > >=20
->> > > > > > ...followed by an Oops due to a NULL pointer dereference.
->> > > > > >=20
->> > > > > > The real bug is probably in the caller of this function, which=
- is
->> > > > > > passing it a NULL state pointer, but this patch at least keeps=
- my
->> > > > > > machine from oopsing when this occurs.
->> > > > >=20
->> > > > > My fear is that papering over this makes the root cause harder t=
-o find.
->> > > > >=20
->> > > > > Cc: Harry, Alex
->> > > > >=20
->> > > > >=20
->> > > > > BR,
->> > > > > Jani.
->> > > > >=20
->> > > > >=20
->> > > > > >=20
->> > > > > > Link: https://bugzilla.redhat.com/show_bug.cgi?id=3D2184855
->> > > > > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
->> > > > > > ---
->> > > > > >  drivers/gpu/drm/display/drm_dp_mst_topology.c | 3 ++-
->> > > > > >  1 file changed, 2 insertions(+), 1 deletion(-)
->> > > > > >=20
->> > > > > > diff --git a/drivers/gpu/drm/display/drm_dp_mst_topology.c
->> > > > > > b/drivers/gpu/drm/display/drm_dp_mst_topology.c
->> > > > > > index 38dab76ae69e..87ad406c50f9 100644
->> > > > > > --- a/drivers/gpu/drm/display/drm_dp_mst_topology.c
->> > > > > > +++ b/drivers/gpu/drm/display/drm_dp_mst_topology.c
->> > > > > > @@ -3404,7 +3404,8 @@ int drm_dp_add_payload_part2(struct
->> > > > > > drm_dp_mst_topology_mgr *mgr,
->> > > > > >=20
->> > > > > >       /* Skip failed payloads */
->> > > > > >       if (payload->vc_start_slot =3D=3D -1) {
->> > > > > > -             drm_dbg_kms(state->dev, "Part 1 of payload creat=
-ion for %s
->> > > > failed, skipping part 2\n",
->> > > > > > +             drm_dbg_kms(state ? state->dev : NULL,
->> > > > > > +                         "Part 1 of payload creation for %s f=
-ailed,
->> > > > > > + skipping part 2\n",
->> > > > > >                           payload->port->connector->name);
->> > > > > >               return -EIO;
->> > > > > >       }
->> > > > >=20
->> > > > > --
->> > > > > Jani Nikula, Intel Open Source Graphics Center
->>=20
+Signed-off-by: songrui.771 <songrui.771@bytedance.com>
+---
+ tools/lib/bpf/libbpf_probes.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
---=20
-Jani Nikula, Intel Open Source Graphics Center
+diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.c
+index 4f3bc968ff8e..5b22a880c7e7 100644
+--- a/tools/lib/bpf/libbpf_probes.c
++++ b/tools/lib/bpf/libbpf_probes.c
+@@ -18,6 +18,10 @@
+ #include "libbpf.h"
+ #include "libbpf_internal.h"
+ 
++#ifndef LIBBPF_KERNEL_VERSION
++#define LIBBPF_KERNEL_VERSION(a, b, c) (((a) << 16) + ((b) << 8) + ((c) > 255 ? 255 : (c)))
++#endif
++
+ /* On Ubuntu LINUX_VERSION_CODE doesn't correspond to info.release,
+  * but Ubuntu provides /proc/version_signature file, as described at
+  * https://ubuntu.com/kernel, with an example contents below, which we
+@@ -47,7 +51,7 @@ static __u32 get_ubuntu_kernel_version(void)
+ 	if (ret != 3)
+ 		return 0;
+ 
+-	return KERNEL_VERSION(major, minor, patch);
++	return LIBBPF_KERNEL_VERSION(major, minor, patch);
+ }
+ 
+ /* On Debian LINUX_VERSION_CODE doesn't correspond to info.release.
+@@ -74,7 +78,7 @@ static __u32 get_debian_kernel_version(struct utsname *info)
+ 	if (sscanf(p, "Debian %u.%u.%u", &major, &minor, &patch) != 3)
+ 		return 0;
+ 
+-	return KERNEL_VERSION(major, minor, patch);
++	return LIBBPF_KERNEL_VERSION(major, minor, patch);
+ }
+ 
+ __u32 get_kernel_version(void)
+@@ -97,7 +101,7 @@ __u32 get_kernel_version(void)
+ 	if (sscanf(info.release, "%u.%u.%u", &major, &minor, &patch) != 3)
+ 		return 0;
+ 
+-	return KERNEL_VERSION(major, minor, patch);
++	return LIBBPF_KERNEL_VERSION(major, minor, patch);
+ }
+ 
+ static int probe_prog_load(enum bpf_prog_type prog_type,
+-- 
+2.39.2 (Apple Git-143)
+
