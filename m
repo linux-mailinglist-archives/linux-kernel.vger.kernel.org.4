@@ -2,143 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2445E6E53AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 23:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9DAE6E53AE
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 23:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjDQVJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 17:09:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55438 "EHLO
+        id S230064AbjDQVK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 17:10:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjDQVJk (ORCPT
+        with ESMTP id S229980AbjDQVK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 17:09:40 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A6F4EC7
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 14:09:15 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id e9e14a558f8ab-32879965ac8so972875ab.1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 14:09:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1681765754; x=1684357754;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wVXmhj3TGHHFs7svj8Ip00zxJ88Teb4vtWufX4YraHw=;
-        b=PpgbovI364VkFQG3FXe8NZ2ByLY1ELlrpBA+aSUsnzH+QkDZN22exc1BM7ZtfTQi7j
-         5LY9jvHNhfac3GKLgBNVI/qZvAH3IPrjwqRJeR/M0vwKgDYQvXHwqB3NA6BqaqQmVvfd
-         s5fYrq5IROsG7zpA8jFPebxRrKTNDneSWPRUg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681765754; x=1684357754;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wVXmhj3TGHHFs7svj8Ip00zxJ88Teb4vtWufX4YraHw=;
-        b=O/OZCgDgKEkwdol2Zf1TT8w5HQ2/yQNwC8ih4NPzQTQP8uJZ42cdB3iPKdcKw3Qk3S
-         M5YY3LEVqZSY01Plh9dLod9vOxTD6iHOSA2Y86V67Y7Ovy7lrW4uJim+RmaT+frbDweb
-         vHhpXYjCKBVPuOYwwqtXJVWhH74rVpEvyuGGWNL1lwgwNQam5xkYe4GtywnPGuF9/Rmh
-         3teshyIL1Q0C5cf4NxqvgqNAgA7BFcfY3UH3sf+X2w2bsQm7iv8MNMhdZcTKgL7h6uSf
-         03Uc17+QWRN/SBiXMgXAPt8t3f6C2MH6xM1VCFo34IlmHsrYTEKMINr++NiGWnLQH7cH
-         KkZQ==
-X-Gm-Message-State: AAQBX9ee9fI1YFljhuneWc33FSvDN2Do/ckr2tUDM3J/BjDibP86svRW
-        e4yW3xGnqCqDBwF9bCCk6tSUpw==
-X-Google-Smtp-Source: AKy350biNY2JexbixxhrTYvQmzQqcnccL8xidRuISwhdvxL633H52V3hS4b3cG9nOnALT0AS1oYMQA==
-X-Received: by 2002:a6b:b2d1:0:b0:763:55ab:de with SMTP id b200-20020a6bb2d1000000b0076355ab00demr1784819iof.1.1681765754481;
-        Mon, 17 Apr 2023 14:09:14 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id p71-20020a02294a000000b0040f6f565d5dsm3309058jap.97.2023.04.17.14.09.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Apr 2023 14:09:13 -0700 (PDT)
-Message-ID: <4eaae372-c312-6a77-f57f-dffc5f9aff02@linuxfoundation.org>
-Date:   Mon, 17 Apr 2023 15:09:12 -0600
-MIME-Version: 1.0
+        Mon, 17 Apr 2023 17:10:56 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2083.outbound.protection.outlook.com [40.107.244.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF26C92
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 14:10:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OohtHc3e9Ve63cOc8C1fIlcF0YRtiiNnxI7AyiNwSqxZQL0AldPD+zpFHiPzOwDXMGgmT6HpwsnRMp3vXxFyrSOb6YvBSEOvG7rt3Fr5gEw9aAQYb8j1DHKW7E1uLwlosBWAfjUBjfuEW5WBrVYreuAUjGRwsOaePCUgSN2gJzc/kthPdB84ex5UCjX6+uMMKU9iDR//bfM0/3dCZVevXI+mpFld49FZwNNKVboAhWX8S/5sigRxP9PO821FGFDtMzUU7Y/jhzQUUTTJVak3E0oER4LHDY0+3ASU3KyH/Me4QvHUiSspS2EhW+xiriDL6NltoL6laJHJjoRNNei9vQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FdlTsVHTtSOsoTNDE7bTAINLudRbzyGng7xzbUerSp4=;
+ b=kYTGByjUunOkkUoscj+x1mCEQ5OP4YmnF2Tq6jfcwIs9wd8atXW79EWnRy8OGsd4FA1Y0lk/A35eZ6bmFtUK90xZF90+17WGItOICOxoGbafsqptmN9r9y1hJtA0m1OhyYsYzBuGJNCQnvohVH5irOa269kb7nYTe7q9qoGLHvc8nQmuYWol0qCL36EL1+kdzBP1DfWTvyessQZe5G5GWWcR7eIVrJZS7dXpXwqWSFqCSxuPOEe3/UdLVT29jdVZDNeFm6GgXjK8XyYfsZwszbP9Srn3vajvSfbobLxfSmhG8PDs5ZkfqF4jEtoDMJqqE+zciG3RHnh+LPsvX5lO2A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FdlTsVHTtSOsoTNDE7bTAINLudRbzyGng7xzbUerSp4=;
+ b=YGZ//B+ZRZhd7P2E9XpBBqz9AqzvAR2zPlYclaicYamucYsr2ZWp1DnQzuhHO5fR2wpom7imAhfCo/NGpNvPbBH2qWMqgk4uCN8UQTZ0DclYi00PxCKoYhF6HjpUDrENo/STvnGqefaZ2RfF4zq8BLDtUCyOQyXKYN5JgqN1Y0U=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
+ DS7PR12MB6214.namprd12.prod.outlook.com (2603:10b6:8:96::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6298.45; Mon, 17 Apr 2023 21:10:52 +0000
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::fe53:2742:10f9:b8f1]) by DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::fe53:2742:10f9:b8f1%9]) with mapi id 15.20.6298.045; Mon, 17 Apr 2023
+ 21:10:52 +0000
+Message-ID: <de29b7ac-910c-8d4b-50ff-47ba4134d16a@amd.com>
+Date:   Mon, 17 Apr 2023 17:12:15 -0400
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3] cpupower:Fix resource leaks in sysfs_get_enabled()
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 1/2] drm/amd/display: mark dccg314_init() static
 Content-Language: en-US
-To:     Hao Zeng <zenghao@kylinos.cn>
-Cc:     trenn@suse.com, shuah@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230417075617.10487-1-zenghao@kylinos.cn>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230417075617.10487-1-zenghao@kylinos.cn>
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Taimur Hassan <Syed.Hassan@amd.com>,
+        Jasdeep Dhillon <jdhillon@amd.com>,
+        Alex Hung <alex.hung@amd.com>,
+        Michael Strauss <michael.strauss@amd.com>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230417210602.2614198-1-arnd@kernel.org>
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+In-Reply-To: <20230417210602.2614198-1-arnd@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: YQBPR0101CA0120.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:5::23) To DM4PR12MB6280.namprd12.prod.outlook.com
+ (2603:10b6:8:a2::11)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|DS7PR12MB6214:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8540b53a-eaf8-492c-642f-08db3f8839b1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: MQZ+8CmFy1cZBFBUhmq4uqQlMGn1+Dzrrb7ra3msCfu60LJ2pnTFSXke2pTNsFw8UeTY0s/H0dTSjqcfclDM6o49AXKvhw9NHng8xX1eGgFjruej6cwvweRddMvy4QJvcNy4VyK3O/7jUVZKfci9n2vZCoIu++OXUn1zuMuL6FuO4OnZAKVAYbNJR9D0wpjHNMlKrR2XINcAPH2ANxFPlgecmJ28gHpEWVtGcbXzheO2+MHi7VQ6OJmWt5jm0a9BQQMDr6EizgbKEfXLSv/fMkh3xba0a/xZBtu5nPfkigAQfmBej8HvlxezpjbRxicuNORQG81Xik2GceWO4b1uDjhaYOIXfXS2Q7Q7W5H7CPGb//+g0eUBNF/PDfUXAC9sjTcUT5ETV/colaoTlIrVa5OPODqiOlLj8HKT+4A0dRNQ4NVaIqZbmfHHwCBHRc4SarPE3KrtOMgKSA22/xtYME4Mxko32Wp/E80beGXW3F/ZbmGWF0UfGkms2uya555jvZVwi32bU0IwdVn5TUKqo2q5G/vHGpFwCpKGKhlKhEOhjpLh6BD0O3rSvmQCbnXKFfPV55P1aks0Dg6uVMR1/Y/KhkBeCGVN3EnQB3dQgxCBtraBAM3ODPSwAsunlwOKvN3NbmgoMbmabR4yacBsFnazQB7kYSULv4OnubCfDyQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(39860400002)(136003)(346002)(366004)(451199021)(26005)(186003)(6506007)(6512007)(41300700001)(110136005)(54906003)(66946007)(86362001)(53546011)(2616005)(83380400001)(4326008)(316002)(31696002)(66476007)(66556008)(2906002)(8676002)(8936002)(6486002)(6666004)(921005)(44832011)(31686004)(38100700002)(36756003)(5660300002)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Rk5FU3p5UU8rSHlOemxNcVc2Mk9mRGFtdk5NVmpMTUwvWTM2d2NlZzR0Z01n?=
+ =?utf-8?B?UEIwVmNidFlkVGtUdFBKRlZDTGo3bUVIUGw3TUh0aU8weXlyRkN1SHpuRkw4?=
+ =?utf-8?B?MHY4a0hrbUJDRkdFRTcraVl3OHQ4MmtlczdKWEVXMWdEOEtmWmZTSGtJSE03?=
+ =?utf-8?B?eGdiMW4yYkdIQi80aG1QTVAvUXVDMVVTVWNsNUUrVUk3dno3ZnlEMy94NGdv?=
+ =?utf-8?B?NWU4QTRqcGw1L2JqZFFoN2JVWG40ekFOWHMycktZeGE0WUoxc1d5SXJOckV4?=
+ =?utf-8?B?UWJUOGJXWmtXQ1krSC95UWw3Ui9DMHpGd1VYOGM3NjR5KzNqNk5sc1JoSm00?=
+ =?utf-8?B?Z1pndVNrVmNZaktDOEJGSVpXUTBsNlNXd0tISG5xSmp6eGlPcWtPN2srcGpX?=
+ =?utf-8?B?a1ZraVVTMGxib2Z0OHUvSTNvaVEwUTBtK2VuWFJsVFB4YTlLa2hudERuaDZl?=
+ =?utf-8?B?K09MMVVaT2N2MUJVdXZtYzN0K0pjaEhVTmRBMnc3eE9nU2NreUxIZmp1amlS?=
+ =?utf-8?B?MHRib29MeTRlazcrZVFLdjhSKzRhVTZsRmtlUHRxeURqRmtaeWpxR2MwODg2?=
+ =?utf-8?B?MmkrejNncmhhVDRUZkVWYmQ2MG9tZWVmeU9jcG9vbWIxdy9Nc2xRNkk3bHNV?=
+ =?utf-8?B?SHNmYjlZZitkRSsxRWtSR2ZZb1NGTVpVMTdiQWQrekVDb0pZZVdaRStGVjFj?=
+ =?utf-8?B?Nk1zalkxeXhCdzB0NUlvbXRuSFd3WGExb1E4ZEc0Mk10OHpIWnMzam9yQlJU?=
+ =?utf-8?B?emhtZFg0T2x0QUdnYnE1NzZjeTNVRTJIeVVQRlJrUnNNVlNVL21aOXhjSFdR?=
+ =?utf-8?B?UFB2cnZMd2NYcUxIcWwwZUZpcVlEWTZYNE12OWh4ODNqczNGbTFOdGdRREMv?=
+ =?utf-8?B?dlNjWlBEQWRIU0xMTlA3L2ZydVAzdjZTK2VUUVRmSTZjNjBYM1gzZ2dad3d6?=
+ =?utf-8?B?QVd5VVphZVhvTFRDQVZFbm1BL21SRG1ZRDc2RGZJK2UrUkdIWWJYZmcvOE5K?=
+ =?utf-8?B?Tm5pWHhPV2RmbVRWRW5uNFpacTVVNlJpY3ovREVkNlFxb2o0eExpQ25TZG43?=
+ =?utf-8?B?SEVuNTB6bkFHYU5tbXZmMmdGRjBUKzk3OHdnemh6SVBTcnRJcnlOSERWcUxI?=
+ =?utf-8?B?bmVLYndsWXRGMDR3dndGbTFIRmY0bW94OGFVQWdha0hNVGdIU1RmWC9RaTk4?=
+ =?utf-8?B?VFlSQ2hiWnRSMldxM3RZMkZ1NWJ2Zkg3NWxGZEs4U004M2xXUjJPOGNRaEl6?=
+ =?utf-8?B?azU5ejhrQUY4TDZJMGxBOVoxOU8xd2VGMExKR1RKWS9ZdjFVN3RHbDkwZXFJ?=
+ =?utf-8?B?ejBhR0owaXA3VkdoZGdoQlI1SEE5Rzg2VmM3WDVIcXowazR0SlJHOFI1RTFr?=
+ =?utf-8?B?WW1TWDMxdzZzd2FWaE5HTmR3QUd6cDRCVUxVbzBlbHRRNVVJamZ4L3dwMmdn?=
+ =?utf-8?B?aVZ6RVpiallUNlVkUTBXV2x3LzVqVDZoeGpDSVo2MTVZaUZKckhMVGduSTh6?=
+ =?utf-8?B?VFJaMVNZem9qcFp4V2VhSEZFSGtibzdpMTc2Z2NCMVN5ZnMwSEhRQVVSWStr?=
+ =?utf-8?B?dHd0aTZJT21uQWF5am9uWEpySENhNmFGUGZaNlpOR3ZZVC9YZnlvVW9hWCsw?=
+ =?utf-8?B?RzB3Smc4TnZJNHIvUU51N3VJNEUzTjJkcDRLcjdDVHZMTWM1SnI3MjdlbGY5?=
+ =?utf-8?B?K25MY2cyU2I2Nk4yWFhSaXpoVDJsV01uaUNUWGdxcXVxd0QyWnNmNGhTME9l?=
+ =?utf-8?B?SFBkZ1Z6SmdtS29MNWhiYm1DaE9pR2RoQ3JBWnJtRGxBQlJsaWlRVnVqcWFh?=
+ =?utf-8?B?eHE4aUo3eE1hQzdXQ3NqU0lnbHVTS2FZZHh3cjhUK3NvOGk3cXQyUGZMZXdE?=
+ =?utf-8?B?NG5iTW1laTFMZkNaZFJVa0ZYVmFyRmFxZ3lZK1pieEpsV0FacENxSitNaGM2?=
+ =?utf-8?B?ZDhhNElIdVNsSWNZR3J3TmdKaXdncGMxUzNSOFNyUE5RQmlBeWVBMXpMV21O?=
+ =?utf-8?B?OE5CcGExS3RHekI1RkU4VUswTEx3M2E0WUtFQ3JKaUxmSnQ2ZDFkZk1SSDZD?=
+ =?utf-8?B?eWkvTE1VMUorZ2dJTkovOVFUK0VXdWQ3d2J6OHFUNEdOa3dhVXdUeExqSFpm?=
+ =?utf-8?Q?8W6vAgQ46Vl9WwLMUWjrpy+sh?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8540b53a-eaf8-492c-642f-08db3f8839b1
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2023 21:10:52.1565
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5UcoB7S+HOmQQQwHMyUuV6mFcVYBMO9rRhjvFmAHXujjcIyvfGY2ryqT4YW19nMU698BspJ43jYbxog+Y2atew==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6214
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/17/23 01:56, Hao Zeng wrote:
-> The sysfs_get_enabled() opened file processor not closed,
-> may cause a file handle leak.
-> Putting error handling and resource cleanup code together
-> makes the code easy to maintain and read.
-> Removed the unnecessary else if branch from the original
-> function, as it should return an error in cases other than '0'.
+
+On 4/17/23 17:05, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Signed-off-by: Hao Zeng <zenghao@kylinos.cn>
-> Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
+> The newly introduced global function is not declared in a header or
+> called from another file, causing a harmless warning with sparse
+> or W=1 builds:
+> 
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn314/dcn314_dccg.c:277:6: error: no previous prototype for 'dccg314_init' [-Werror=missing-prototypes]
+> 
+> Mark it static instead.
+> 
+> Fixes: 6f6869dcf415 ("drm/amd/display: prep work for root clock optimization enablement for DCN314")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+This has already been fixed as of commit 669f4ac40947 ("drm/amd/display:
+set variable dccg314_init storage-class-specifier to static") in
+amd-staging-drm-next.
+
 > ---
->   tools/power/cpupower/lib/powercap.c | 22 ++++++++++++++--------
->   1 file changed, 14 insertions(+), 8 deletions(-)
+>   drivers/gpu/drm/amd/display/dc/dcn314/dcn314_dccg.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/tools/power/cpupower/lib/powercap.c b/tools/power/cpupower/lib/powercap.c
-> index 0ce29ee4c2e4..f0334a5f1acf 100644
-> --- a/tools/power/cpupower/lib/powercap.c
-> +++ b/tools/power/cpupower/lib/powercap.c
-> @@ -40,25 +40,31 @@ static int sysfs_get_enabled(char *path, int *mode)
->   {
->   	int fd;
->   	char yes_no;
-> +	int ret = 0;
->   
->   	*mode = 0;
->   
->   	fd = open(path, O_RDONLY);
-> -	if (fd == -1)
-> -		return -1;
-> +	if (fd == -1) {
-> +		ret = -1;
-> +		goto out;
-> +	}
->   
->   	if (read(fd, &yes_no, 1) != 1) {
-> -		close(fd);
-> -		return -1;
-> +		ret = -1;
-> +		goto out_close;
+> diff --git a/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_dccg.c b/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_dccg.c
+> index 6f879265ad9c..de7bfba2c179 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_dccg.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_dccg.c
+> @@ -274,7 +274,7 @@ static void dccg314_set_dpstreamclk(
 >   	}
->   
->   	if (yes_no == '1') {
->   		*mode = 1;
-> -		return 0;
-
-You can just add goto out_close here
-
-> -	} else if (yes_no == '0') {
-> -		return 0;
-
-Keep == '0' check and add goto out_close here
-> +	} else if (yes_no != '0') {
-
-This can be just else with the above change.
-
-> +		ret = -1;
-> +		goto out_close;
->   	}
-> -	return -1;
-> +out_close:
-> +	close(fd);
-> +out:
-> +	return ret;
 >   }
 >   
->   int powercap_get_enabled(int *mode)
+> -void dccg314_init(struct dccg *dccg)
+> +static void dccg314_init(struct dccg *dccg)
+>   {
+>   	int otg_inst;
+>   
+-- 
+Hamza
 
-thanks,
--- Shuah
