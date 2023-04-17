@@ -2,74 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD8BC6E4B46
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:19:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30A986E4B3E
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbjDQOTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 10:19:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46126 "EHLO
+        id S229977AbjDQORj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 10:17:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjDQOTU (ORCPT
+        with ESMTP id S230419AbjDQORd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 10:19:20 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66EE9AD;
-        Mon, 17 Apr 2023 07:19:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681741153; x=1713277153;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6+IWgC8Bon0J7vBYLs+uH4i2nmSl2ZjVNXYdDXAbBmE=;
-  b=byoamTDbMe4+qcO5xToT+V/iMaYyDig5xFOEiqttnjz/sJxdGtssrUuc
-   iJX7bnBc1yGbkKSO7My4HhqvuWKidnDKczzmqHgnU6zswfgSdWxWgRC1S
-   Hybp2l+72tYmbfYbONzew/hGHBxhvmMVyNvFrQDvIshuT9QKn5IK391/P
-   Aw/SqnEhemAsoA7XxVkK3+TTE2SbJTsvCn7pM0ieRTfrN0a4WFIjpOR1u
-   Zb8VNBE0QiUkF3AjILtJKR+E89EupwCG7QWUjiVbJqumg9/Q5iQdhT/q/
-   Q5dhEueQMzYkhK/+uQJJQoANZYnKa5dmyYNKPfsvI/3TQ1P6m2/bMsaw+
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="372779493"
-X-IronPort-AV: E=Sophos;i="5.99,204,1677571200"; 
-   d="scan'208";a="372779493"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 07:17:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="723260296"
-X-IronPort-AV: E=Sophos;i="5.99,204,1677571200"; 
-   d="scan'208";a="723260296"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 17 Apr 2023 07:17:48 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1poPfv-000cRJ-1C;
-        Mon, 17 Apr 2023 14:17:47 +0000
-Date:   Mon, 17 Apr 2023 22:16:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
-        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net-next v1 2/2] net: dsa: microchip: Add partial ACL
- support for ksz9477 switches
-Message-ID: <202304172250.WOCLE8lZ-lkp@intel.com>
-References: <20230411172456.3003003-3-o.rempel@pengutronix.de>
+        Mon, 17 Apr 2023 10:17:33 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4BBBBB0
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:17:14 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 556965C00F4;
+        Mon, 17 Apr 2023 10:17:13 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Mon, 17 Apr 2023 10:17:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1681741033; x=
+        1681827433; bh=l15cdflCQ3SxSuEdRTgAeWktejfsY5ZPKXq6m2nekW4=; b=G
+        KDDM4yg0ja82PR7UFA2IM88NqCebJi+TFhPe8bF23WcNjhVDQEWCH1TYfg/60PWJ
+        2eq1+fp8TXDMhTdAo/E2HehgsceviXYt1VyjnZmNLEuWKMgElHZIGn5R/Z6tAA0p
+        Kb3cUaoVqZa3bGq2fJmq8Oj0hhCotfNQiB2IIiaiBIHTmYzZwLT4chniAXhpmBFp
+        UWxYRkEzUNums0CC5f+HhbgYFxsLO+HNXaaL2GbwLbEJJfXPYxN+HlfEJtetklRT
+        SUMhclwXbBISsRIdWft2w+V41XlAI77zXdVkkI3ER0pDvi9eVz0bzuteQWf4+goy
+        BZ8lKRk4DAlOxJdEkJBmQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1681741033; x=1681827433; bh=l15cdflCQ3SxS
+        uEdRTgAeWktejfsY5ZPKXq6m2nekW4=; b=HF7lLdY3CG29HOuOyGNcjYY41pnEv
+        MWBIHfX4aUc8tAYUFszbitfZZgH2Pfx6i6p48SFWRI+8fqFgrEdyooi7UblPTekR
+        cdHHJP3Iyyf4WrF/QdmlOnQJ51hUmV4FB7Me++xJEC0Xo+etuYcMvn1J9iAK399O
+        V83pXy9XNLaq/hGIJ4qyYd/WVSc0ifeAObIa7Y1gdzbiDkPiAYAp3Vsf2RbFhIeK
+        S1xL91ij3fgpNdT2yUbJwq/RrTdXEBYxzR3H8Obp8+TPmD1U5zaorqbCYhjGlSwO
+        DgoigqphQ21byer1j6UMHCssE1N4zMjFmoeKNXS4vFd9D4SjILRU0orLA==
+X-ME-Sender: <xms:6FQ9ZJ2aK6vxxCPEwnujDN1tMnT7qy31LDz9CRpsNeC_82efDKOFfA>
+    <xme:6FQ9ZAH_KwWWFROQNPE3U6K-723W797rjDrdAbHaVcQwbrlsyIj2Vx5UL53MN2Toq
+    zx_EIw1EnXaXaVflpg>
+X-ME-Received: <xmr:6FQ9ZJ7RIqUMmegwY4RZWC-C74hZarJKOjNk9kPUX5QLRt2sNLUp1-mFKXe_FkxATNT3sxg2MlKll4nDa9H6acQMhQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeliedgjeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepvfgrkhgr
+    shhhihcuufgrkhgrmhhothhouceoohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhird
+    hjpheqnecuggftrfgrthhtvghrnhephfduvedvgfduueekleeuleeihedvffdugffhteei
+    ffevhfeutddtffeijeegueevnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpmhgrrh
+    gtrdhinhhfohenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhr
+    ohhmpehoqdhtrghkrghshhhisehsrghkrghmohgttghhihdrjhhp
+X-ME-Proxy: <xmx:6FQ9ZG2gsh7a7AfZLmtW0Mo3JYojU-LUQPQvPWGRvm3Xo2FzHL7dVw>
+    <xmx:6FQ9ZMEA8DSYUxX73vgYYLZllY3pCt1BTZl4VCoU8C-J-rLIenRnGA>
+    <xmx:6FQ9ZH9UsLvTi3W8sTDp2Et2voeIOM3YKtRS1VazXkEWWw0R2l8ulg>
+    <xmx:6VQ9ZIjujCh3Rqaai1CTmVOzf24c8eby41BAQB1LRmNrSouq0u8iAA>
+Feedback-ID: ie8e14432:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 17 Apr 2023 10:17:10 -0400 (EDT)
+Date:   Mon, 17 Apr 2023 23:17:06 +0900
+From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
+To:     rdunlap@infradead.org
+Cc:     Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        linux-kernel@vger.kernel.org,
+        linux1394-devel@lists.sourceforge.net, tiwai@suse.de,
+        broonie@kernel.org
+Subject: Re: [PATCH] MAINTAINERS: replace maintainer of FireWire subsystem
+Message-ID: <20230417141706.GA493669@workstation>
+Mail-Followup-To: rdunlap@infradead.org,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        linux-kernel@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        tiwai@suse.de, broonie@kernel.org
+References: <20230306035814.78455-1-o-takashi@sakamocchi.jp>
+ <20230310210356.561dbe63@kant>
+ <20230311080343.GA378828@workstation>
+ <20230311101554.14c211d4@kant>
+ <20230312070728.GA421475@workstation>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230411172456.3003003-3-o.rempel@pengutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+In-Reply-To: <20230312070728.GA421475@workstation>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,81 +95,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Oleksij,
+Hi Randy,
 
-kernel test robot noticed the following build warnings:
+I'm sorry that I didn't notice your reply, but I'm off from the receivers
+list of the message.
 
-[auto build test WARNING on net-next/main]
+> Hi--
+> 
+>On 3/11/23 23:07, Takashi Sakamoto wrote:
+>> Hi,
+>> 
+>>>
+>>> It's good to see you being active in the kernel and related userland
+>>> development/ maintainership, and that you have a plan for the next years.
+>> 
+>> At the moment, I have a problem about the list archive.
+> 
+> If there is still a problem about the mailing list archives,
+> Hank Leininger at marc.info has been pretty good in the past about providing
+> archives fore lore.kernel.org.
+> See the bottom of https://marc.info/?q=about for his email address.
+ 
+Thanks for the information. As a quick glimpse, linux1394-devel has been
+archived since 2003. It looks to be a good source to push into
+lore.kernel.org, while I know that the list archive should include many
+spams since any one is allowed to post to the list without subscribing and
+being moderated at one time. It is one of my reason not to use the list
+so actively. I need to make filter to remove them before pushing.
+Furthermore, the ownership of list is still unclear to me. I have a small
+hesitation to use it further...
+ 
+> Are you waiting for the kernel.org account before merging the update to the
+> MAINTAINER's file?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Oleksij-Rempel/net-dsa-microchip-rework-ksz_prmw8/20230412-012709
-patch link:    https://lore.kernel.org/r/20230411172456.3003003-3-o.rempel%40pengutronix.de
-patch subject: [PATCH net-next v1 2/2] net: dsa: microchip: Add partial ACL support for ksz9477 switches
-config: x86_64-randconfig-a011-20230417 (https://download.01.org/0day-ci/archive/20230417/202304172250.WOCLE8lZ-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a25d395c637a31cbf5c2188bf8f8475d4bdeeee8
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Oleksij-Rempel/net-dsa-microchip-rework-ksz_prmw8/20230412-012709
-        git checkout a25d395c637a31cbf5c2188bf8f8475d4bdeeee8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/dsa/microchip/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304172250.WOCLE8lZ-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/net/dsa/microchip/ksz9477_acl.c:622:27: warning: no previous prototype for function 'ksz9477_acl_get_init_entry' [-Wmissing-prototypes]
-   struct ksz9477_acl_entry *ksz9477_acl_get_init_entry(struct ksz_device *dev,
-                             ^
-   drivers/net/dsa/microchip/ksz9477_acl.c:622:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct ksz9477_acl_entry *ksz9477_acl_get_init_entry(struct ksz_device *dev,
-   ^
-   static 
->> drivers/net/dsa/microchip/ksz9477_acl.c:887:28: warning: variable 'entry' set but not used [-Wunused-but-set-variable]
-           struct ksz9477_acl_entry *entry;
-                                     ^
-   2 warnings generated.
+I've already got the account and enough permission to linux1394
+repository, but The repository is inactive so long, and abandoned. Looking
+ahead to my future work, I'm preparing them at present.
 
 
-vim +/ksz9477_acl_get_init_entry +622 drivers/net/dsa/microchip/ksz9477_acl.c
+Thanks
 
-   609	
-   610	/**
-   611	 * ksz9477_acl_get_init_entry - Get a new uninitialized entry for a specified
-   612	 *				port on a ksz_device.
-   613	 * @dev: The ksz_device instance.
-   614	 * @port: The port number to get the uninitialized entry for.
-   615	 *
-   616	 * This function retrieves the next available ACL entry for the specified port,
-   617	 * clears all access flags, and associates it with the current cookie.
-   618	 *
-   619	 * Returns: A pointer to the new uninitialized ACL entry.
-   620	 */
-   621	
- > 622	struct ksz9477_acl_entry *ksz9477_acl_get_init_entry(struct ksz_device *dev,
-   623							     int port)
-   624	{
-   625		struct ksz9477_acl_priv *acl = dev->ports[port].acl_priv;
-   626		struct ksz9477_acl_entries *acles = &acl->acles;
-   627		struct ksz9477_acl_entry *entry;
-   628	
-   629		entry = &acles->entries[acles->entries_count];
-   630		entry->cookie = acl->current_cookie;
-   631	
-   632		/* clear all access flags */
-   633		entry->entry[KSZ9477_ACL_PORT_ACCESS_10] = 0;
-   634		entry->entry[KSZ9477_ACL_PORT_ACCESS_11] = 0;
-   635	
-   636		return entry;
-   637	}
-   638	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Takashi Sakamoto
