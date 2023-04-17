@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7087C6E3FCE
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 08:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 755656E3FD2
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 08:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbjDQG24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 02:28:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60166 "EHLO
+        id S230225AbjDQGaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 02:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbjDQG2y (ORCPT
+        with ESMTP id S229604AbjDQGaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 02:28:54 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E685AAB
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 23:28:52 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id c9so22408907ejz.1
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 23:28:52 -0700 (PDT)
+        Mon, 17 Apr 2023 02:30:06 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBBD10E3
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 23:30:03 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-504eb1155d3so19030365a12.1
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 23:30:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681712931; x=1684304931;
+        d=linaro.org; s=google; t=1681713002; x=1684305002;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=FWt4j1Xyr69lbkAY813rpWiC/cGT82L+jMmEMr4HTcs=;
-        b=loFYBhfJt3dyjdU6SBduolRdS1nAAbq6hyS4FSac/F2myypjS70HKvGuQwokG9V/zn
-         lXP0WUl2QXmJ78Kxu6XsdtICqQp4evc0ovNa42HG/FK9qpAGMuxZeg7dqFMZNkfO7WsN
-         bqFRdzxoeIkLSay0RyFZ3R4AsYQXRbwTrRVD3LC8vITg7SrTvi7Wg4xt1v58+/hVkiLD
-         n+f/GWS21UZ6s0dCcqeeKxb46yY1uTzr8hA5X8L4yinlEhiAQa3ylZ/auPwYvoYhXlsH
-         AlUwd4BeXZEFqbid2ttprh/XTf7wrOkG2vOTBftRHrwNJ/n+aJLIKs/NIGHmsK3O8zMS
-         NVLw==
+        bh=Rbr7dITfZlBNrOU3sgoC9hFuL+fFrZv65zzAZtIBsq0=;
+        b=SrWjsobloflYb7f6BmyVdO/YYtFDDB9pO7XiY0wOojUUVk8iSBQ63xasHG0VfazS6+
+         1xnySMqqRmRzDRynGmGqOheZrm70j93MkBSVBhDBIU70vBOdm2jSs6tDsafxiWvbg8ph
+         ToJ1RPr77U0ZIQS3S+ARaodQ/JRxbhbCjcMsUJWHiSLwE6h3O2tyCafvd6Mzk7btMX3D
+         NwiUWYlDKS5b2bsKCwgA72P6PLWi8AvQOlGLa/9QsaoDiPLeyUQEd1AvDPrQwnza0rkX
+         Jh0kGbjfW3G1aY5q1x3/ZztszBj19MNZKNdr+joWV/zfDJ3XqGQeKs1w7DEJUCvI6WsR
+         epMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681712931; x=1684304931;
+        d=1e100.net; s=20221208; t=1681713002; x=1684305002;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FWt4j1Xyr69lbkAY813rpWiC/cGT82L+jMmEMr4HTcs=;
-        b=EQtxZ8kJnYu9Kj/KzCOA9oNNDTl2as2aG0nbkekXmwoNvZ5FCgTvo1hQWVjZBimPbj
-         uOmyxD3/EB4OacCfj9d7A9euiqq5v+6MjcVIadtTJpX3WZEN1OCHRYJ1DVFGFGFyNMTk
-         TmTGV/KUM7jMCCgv++/QSj0Vr4vCihhmugOtBMZ5IzX3+Z3zlTKxwwPOWgQ2kHBSfEuV
-         9xyoZp7sfq0ypYkgOMBbNw2k6Uwj+Whwz5a99fgh8vvRvJNotIW8RmDTviqlchQQhNWo
-         FYH7Nx3VJAMP1KfMwoAM0MfTHsVWGsand69uy8DvZ7pfI3GVPLsFX4ZtdLMhR807xSt1
-         JErQ==
-X-Gm-Message-State: AAQBX9drFaOYKjN+srNlALqwwNwjopXXdHKYDZ8egNWoX9BZTfDagWYV
-        gQS9PcprJy0pr67uV5mAnuvzew==
-X-Google-Smtp-Source: AKy350aPIsKVFkNiUYJXoHhG85Ys1PSKY6PHLsNIO+VEZ20BRm9+qEcx56PYrkYAQUr7BtBudyZwJA==
-X-Received: by 2002:a17:907:1c26:b0:94a:921b:c805 with SMTP id nc38-20020a1709071c2600b0094a921bc805mr8296953ejc.45.1681712931432;
-        Sun, 16 Apr 2023 23:28:51 -0700 (PDT)
+        bh=Rbr7dITfZlBNrOU3sgoC9hFuL+fFrZv65zzAZtIBsq0=;
+        b=S71WdDZX/CJRO/t6qdDFTMAb42LL2xyyR+RyEEiYuh+mxz7VWQE7YAEhT7TDNX6Uns
+         aQa2EADzwCb2dT8vrrYlpyIg4+GozqDfVeQAvL4Xt9SENESL1iQkCocx8teZqpCXkI6K
+         H+hz6eF7rc29USo849sEVQ6B4W8LQ3rUU7/PTZ4KwrkJ82e+oF8/SilrzUgnHxgz24A5
+         7ktNTUclbnCCR+yBNZk2HBgSKtkBFVVgJAMYapv6KNv0LMtH9Tq0LhWS0bjF+Q7zZFPY
+         usL0jsdpscybIlG7oQqFdpXcB8PtoH7uf0V/340BthI0VjbuNriAjZJ4H/VjAzTOtYxA
+         XaSw==
+X-Gm-Message-State: AAQBX9do5d8XASdg6dhkEBO71zvnG63uU/M2oq/LPg5Xwi99UQ+GIgoD
+        GHFHq2t1Zqf80RmKLbF8QnjtOw==
+X-Google-Smtp-Source: AKy350ZhGCI4nKB2rNBLO5dGxX+qcrNO6ZBdzl6bN0SQV/cayNGubQvkofnZFqJlnl4AGISWYdpnig==
+X-Received: by 2002:a05:6402:4413:b0:4af:7bdc:188e with SMTP id y19-20020a056402441300b004af7bdc188emr16627552eda.16.1681713002258;
+        Sun, 16 Apr 2023 23:30:02 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:b0ac:4d3b:966c:b33d? ([2a02:810d:15c0:828:b0ac:4d3b:966c:b33d])
-        by smtp.gmail.com with ESMTPSA id la19-20020a170906ad9300b0094f8ff0d899sm525244ejb.45.2023.04.16.23.28.50
+        by smtp.gmail.com with ESMTPSA id ta15-20020a1709078c0f00b0094fa472a7c4sm140808ejc.161.2023.04.16.23.30.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Apr 2023 23:28:51 -0700 (PDT)
-Message-ID: <dd3efedd-54b8-5d10-397f-4c7c2a62d3a2@linaro.org>
-Date:   Mon, 17 Apr 2023 08:28:50 +0200
+        Sun, 16 Apr 2023 23:30:01 -0700 (PDT)
+Message-ID: <94e776a1-a927-ac3e-6f16-e9e71d71f3f0@linaro.org>
+Date:   Mon, 17 Apr 2023 08:30:00 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
@@ -81,52 +81,25 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 16/04/2023 21:46, David Yang wrote:
-> Add DT bindings documentation for simple clock controller, just a
-> contiguous region of multiple clock registers.
-> 
-> Signed-off-by: David Yang <mmyangfl@gmail.com>
-> ---
->  .../clock/simple-clock-controller.yaml        | 39 +++++++++++++++++++
->  1 file changed, 39 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/simple-clock-controller.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/simple-clock-controller.yaml b/Documentation/devicetree/bindings/clock/simple-clock-controller.yaml
-> new file mode 100644
-> index 000000000000..3d9b436b0ef9
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/simple-clock-controller.yaml
-> @@ -0,0 +1,39 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/simple-clock-controller.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Simple clock controller
-> +
-> +maintainers:
-> +  - David Yang <mmyangfl@gmail.com>
-> +
-> +description: |
-> +  A contiguous register region of multiple different clocks. No operations are
-> +  required to enable or disable the clock controller.
-> +
-> +properties:
-> +  compatible:
-> +    const: simple-clock-controller
-> +
-> +  reg:
-> +    maxItems: 1
-> +
+
 > +patternProperties:
 > +  '.*clock.*':
 > +    type: object
 > +    description: Clock devices.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    clock-controller@ffff000 {
+> +      compatible = "simple-clock-controller";
+> +      reg = <0xffff000 0x1000>;
 
-I don't know what improved here... this is still without any refs.
-
-It looks like you ignored my feedback from v1 and maybe v2, so respond
-to each of it.
+BTW, this is just incomplete example. Fill it with proper children.
 
 Best regards,
 Krzysztof
