@@ -2,135 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 374F66E4905
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 15:00:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 312AC6E4882
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 14:57:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231444AbjDQM75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 08:59:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49042 "EHLO
+        id S231410AbjDQM5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 08:57:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231354AbjDQM5r (ORCPT
+        with ESMTP id S231307AbjDQM5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 08:57:47 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1343B7690;
-        Mon, 17 Apr 2023 05:57:17 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id A995021A91;
-        Mon, 17 Apr 2023 12:57:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1681736226; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DBWm/Eu0c07u8Xvk5dygRLn1Yr7Deg++IVzIGW64CBY=;
-        b=QIDnQQM6FqpjVgjC60BIzr4jVLzaGkJrPhU59Raug1vVtqluGTEOViO9AGJkOal2qP0Dhw
-        aZzVrXsrEkBYww32/dW3b+o+nzsoWpJ3KlWyp/2eDW7Po7BW/deXGqlaSDhQpfJvzU431t
-        7vS4Z5CGgWaKjF2W4IdAHL05KRzLHEY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1681736226;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DBWm/Eu0c07u8Xvk5dygRLn1Yr7Deg++IVzIGW64CBY=;
-        b=ZsavFsQ/L/cdP5k8oM+73/uhqDnYVY4bVtRCFGtxGI8UdCvsLyzOZjdO14bzgBtVSfTG1F
-        /seSez5j0RSvfPDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 356921390E;
-        Mon, 17 Apr 2023 12:57:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id CEEjDCJCPWToWwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 17 Apr 2023 12:57:06 +0000
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     arnd@arndb.de, daniel.vetter@ffwll.ch, deller@gmx.de,
-        javierm@redhat.com, gregkh@linuxfoundation.org
-Cc:     linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, x86@kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH v3 19/19] arch/x86: Implement <asm/fb.h> with generic helpers
-Date:   Mon, 17 Apr 2023 14:56:51 +0200
-Message-Id: <20230417125651.25126-20-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230417125651.25126-1-tzimmermann@suse.de>
-References: <20230417125651.25126-1-tzimmermann@suse.de>
+        Mon, 17 Apr 2023 08:57:19 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE21493F2;
+        Mon, 17 Apr 2023 05:57:02 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id ej15so13072277qtb.7;
+        Mon, 17 Apr 2023 05:57:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681736221; x=1684328221;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=c04Z4NXpAIeTEwDDTm4BcfYvupzlt3zgjEjnDctDkEI=;
+        b=U/kjTj9RQcayRHKQxDi3hI56i5xGma0SrEZQuYKgmPEfDko7jLKYHxPhqvWjTwbGqp
+         kAE6I7v/rjIsLgkKb8zC8YijTfD3js2dP1uJe20P3U8bM6BdkjxMpf0UGHcfk/635MPw
+         noHFOIy4OjKRxQEYIaExjZK1WcGK1b+H8nDuA/9/7I5eCHzgtw23D9hYUW7baKyKucrn
+         X+xhuXXHi83rz3UfgcGiO3cvokAlZ3uWwUizKHgGC0gOlO2W8WniWZwrEktrPzpJLJD4
+         OJX51vZYizilG5qPupZrIOVOxnQed2rdTCMUG6VqsS4BiaKh2yR9PqRtaf0uoXWtGUE6
+         hrbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681736221; x=1684328221;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=c04Z4NXpAIeTEwDDTm4BcfYvupzlt3zgjEjnDctDkEI=;
+        b=e/TH/aOuU+Ve+ZWQfGphiEm+nWBGmFBMpvI8w41cClQXggRnhZQU4PFd2SRozT5cXb
+         caqbTG9UTnUoYx+K6m9rUmDtaU4c5SBpNL5j/rvNogNi6v+67aCefs88Tx/wRS+N/3Z+
+         kYWPYliWCrcdbWkR+qz/EqRCGE51b8S4JSCD+HG6PO4gHp2f179BAAcOldWvreWnIsGp
+         0Y+PSvz+dBsD6k1AGYB/ricLBi5Auu01jDdKpKIirjv2CkjwavADQO4UQMKylWqcfPDe
+         Cl51JWG0zvEtElLUccMY74kCSToyAxBjPIeAHHwl3UMXt3m5V2hdciGKG4cNI8ct1FM1
+         xBXg==
+X-Gm-Message-State: AAQBX9cMqgfI1qMVwmqwXy1+e+aIxJ/1zUvZeJGaBIvJAdpRiIu0aJhG
+        m49cdMnmMszTMDTwyIXMpSQ=
+X-Google-Smtp-Source: AKy350a+AcHnoKevzLaRdLy6pCM+8pPbQzqUa/rgOk4mWtZNecjWY/INbPYHtDmzxQlkB1fko8bIGA==
+X-Received: by 2002:a05:622a:1b9f:b0:3e4:e4c7:586a with SMTP id bp31-20020a05622a1b9f00b003e4e4c7586amr23504210qtb.4.1681736221478;
+        Mon, 17 Apr 2023 05:57:01 -0700 (PDT)
+Received: from [192.168.1.105] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id d6-20020ac80606000000b003b635a5d56csm3286265qth.30.2023.04.17.05.56.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Apr 2023 05:57:01 -0700 (PDT)
+Message-ID: <dceab485-1d51-0340-e5cc-8929901c64ad@gmail.com>
+Date:   Mon, 17 Apr 2023 05:56:58 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH net-next 2/7] net: mscc: ocelot: remove struct
+ ocelot_mm_state :: lock
+Content-Language: en-US
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        linux-kernel@vger.kernel.org
+References: <20230415170551.3939607-1-vladimir.oltean@nxp.com>
+ <20230415170551.3939607-3-vladimir.oltean@nxp.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230415170551.3939607-3-vladimir.oltean@nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Include <asm-generic/fb.h> and set the required preprocessor tokens
-correctly. x86 now implements its own set of fb helpers, but still
-follows the overall pattern of the other <asm/fb.h> files.
 
-v3:
-	* clarified commit message
 
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
----
- arch/x86/include/asm/fb.h | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+On 4/15/2023 10:05 AM, Vladimir Oltean wrote:
+> Unfortunately, the workarounds for the hardware bugs make it pointless
+> to keep fine-grained locking for the MAC Merge state of each port.
+> 
+> Our vsc9959_cut_through_fwd() implementation requires
+> ocelot->fwd_domain_lock to be held, in order to serialize with changes
+> to the bridging domains and to port speed changes (which affect which
+> ports can be cut-through). Simultaneously, the traffic classes which can
+> be cut-through cannot be preemptible at the same time, and this will
+> depend on the MAC Merge layer state (which changes from threaded
+> interrupt context).
+> 
+> Since vsc9959_cut_through_fwd() would have to hold the mm->lock of all
+> ports for a correct and race-free implementation with respect to
+> ocelot_mm_irq(), in practice it means that any time a port's mm->lock is
+> held, it would potentially block holders of ocelot->fwd_domain_lock.
+> 
+> In the interest of simple locking rules, make all MAC Merge layer state
+> changes (and preemptible traffic class changes) be serialized by the
+> ocelot->fwd_domain_lock.
+> 
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-diff --git a/arch/x86/include/asm/fb.h b/arch/x86/include/asm/fb.h
-index ab4c960146e3..a3fb801f12f1 100644
---- a/arch/x86/include/asm/fb.h
-+++ b/arch/x86/include/asm/fb.h
-@@ -2,10 +2,11 @@
- #ifndef _ASM_X86_FB_H
- #define _ASM_X86_FB_H
- 
--#include <linux/fb.h>
--#include <linux/fs.h>
- #include <asm/page.h>
- 
-+struct fb_info;
-+struct file;
-+
- static inline void fb_pgprotect(struct file *file, struct vm_area_struct *vma,
- 				unsigned long off)
- {
-@@ -16,7 +17,11 @@ static inline void fb_pgprotect(struct file *file, struct vm_area_struct *vma,
- 		pgprot_val(vma->vm_page_prot) =
- 			prot | cachemode2protval(_PAGE_CACHE_MODE_UC_MINUS);
- }
-+#define fb_pgprotect fb_pgprotect
-+
-+int fb_is_primary_device(struct fb_info *info);
-+#define fb_is_primary_device fb_is_primary_device
- 
--extern int fb_is_primary_device(struct fb_info *info);
-+#include <asm-generic/fb.h>
- 
- #endif /* _ASM_X86_FB_H */
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.40.0
-
+Florian
