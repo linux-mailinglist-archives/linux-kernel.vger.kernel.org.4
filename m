@@ -2,95 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F9756E466D
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 13:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1CCE6E4712
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 14:02:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbjDQL2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 07:28:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49116 "EHLO
+        id S230352AbjDQMCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 08:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231254AbjDQL1R (ORCPT
+        with ESMTP id S230092AbjDQMCK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 07:27:17 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA4D4232
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 04:26:16 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id n17so9300519pln.8
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 04:26:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1681730666; x=1684322666;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7LkCrILb9IuvbZSWvzfLhM66GWJHFdrMr5qCX1S/DkU=;
-        b=KbNyF8OBDiZXi97ZYaJA3QSSRzMsa69uKIMSClYQLH6b2Rr0cJ8pwnj2pxQjcxY4x9
-         M+UmQ4Fe0QgmEixYvr4iJk85QxnXlY98AysCnXpD9iJGhMBJMaijD+5kQtlsMUJkuSMt
-         RoybIcdHz2bg0TbSJH5AGv6Rj7DTOs+TGzjN4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681730666; x=1684322666;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7LkCrILb9IuvbZSWvzfLhM66GWJHFdrMr5qCX1S/DkU=;
-        b=Cf/8wsUriYvctCdYWJ0oE5R6OJbOWcgBZEEpPCcQhigOSsmMglcwjvybeZqPtcxZTg
-         C9bhjcLGhSkACZahSZpkGqOsewxPxyh5YMZIWHmmPzKafz5yQbs3/yvBvjuKA4XXhrAM
-         Kk99JFR72WbEY1FSZdV/qIU3GMJ1QHk6Y1TBnIXAqQyIfS8KtvTGfmg+uLn3T/3R3Hxv
-         RBWULhd0q6JhcZjoDAdKrLlFD9oFYCCcrIILBkIeehvCskURo8XuJjnE4ATq9skAM6kS
-         HkJjeX7lhGBxbrOREVGV+gYAoZYfkIEYtgurONBakCIcHUhXVdEdkuTJ+YTkmSubNxWn
-         RmSg==
-X-Gm-Message-State: AAQBX9df4BU+r1Dot4gZWKg1GRPVm287KN+p69l+QVbr5aEFQHChHMmQ
-        nLN9YlKQBhzNgfEiKoLVYH2HHQ==
-X-Google-Smtp-Source: AKy350YAx4Y+1l34FPHHHgsaRaE74K1JFkgBVWI188vcNGdM6psUQGX2v6zAr/nFWr/Z2VElHDtixg==
-X-Received: by 2002:a05:6a20:7aaf:b0:c6:bd82:ea2d with SMTP id u47-20020a056a207aaf00b000c6bd82ea2dmr14773435pzh.2.1681730666125;
-        Mon, 17 Apr 2023 04:24:26 -0700 (PDT)
-Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
-        by smtp.gmail.com with ESMTPSA id 142-20020a630494000000b00513955cc174sm6960590pge.47.2023.04.17.04.24.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 04:24:25 -0700 (PDT)
-Date:   Mon, 17 Apr 2023 20:24:21 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Yu Zhao <yuzhao@google.com>, Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCHv4 0/4] zsmalloc: fine-grained fullness and new compaction
- algorithm
-Message-ID: <20230417112421.GO25053@google.com>
-References: <20230304034835.2082479-1-senozhatsky@chromium.org>
- <CAOUHufZ6jPLJYeshO8=2TaqXRmpOFuMQ92E9sg-oCh54fkqW7g@mail.gmail.com>
- <20230416151853.GK25053@google.com>
- <CAOUHufZk+dxE8UXWwGzGbX1BYxomD_25u2xoWt3vnoQp4xSZqw@mail.gmail.com>
- <20230417024446.GL25053@google.com>
- <CAOUHufYJtB0n314GnMH1ByXL5PTtzzsrMvi2YbHz2YVqTTcYfA@mail.gmail.com>
- <20230417035232.GM25053@google.com>
- <CAJD7tkZFufCacfu-EeqwhQBYXt8dpea1DYhyDgponjFjdLt5Sw@mail.gmail.com>
- <20230417111243.GN25053@google.com>
- <CAJD7tkah9kx2kAcTY47J2R5p7NYS+b+3A9S_R-hSv9z8OSzzqA@mail.gmail.com>
+        Mon, 17 Apr 2023 08:02:10 -0400
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA099BB;
+        Mon, 17 Apr 2023 05:01:25 -0700 (PDT)
+Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id C7E5061CC40F9;
+        Mon, 17 Apr 2023 13:24:36 +0200 (CEST)
+Message-ID: <a736cae5-8c05-ddda-a1b0-37c8afdbd6ea@molgen.mpg.de>
+Date:   Mon, 17 Apr 2023 13:24:36 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJD7tkah9kx2kAcTY47J2R5p7NYS+b+3A9S_R-hSv9z8OSzzqA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [patch 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
+Content-Language: en-US
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Usama Arif <usama.arif@bytedance.com>,
+        =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E. J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>
+References: <20230414225551.858160935@linutronix.de>
+ <8247ce4d-15b7-03b2-0c9b-74f8cd6cad50@molgen.mpg.de>
+In-Reply-To: <8247ce4d-15b7-03b2-0c9b-74f8cd6cad50@molgen.mpg.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (23/04/17 04:16), Yosry Ahmed wrote:
-> > That's a good question to which I don't have an answer. We can list_add()
-> > the same zspage twice, unlocking the pool after first list_add() so that
-> > another process (including another zs_compact()) can do something to that
-> > zspage. The answer is somewhere between these lines, I guess.
-> 
-> But the first list_add() is (in this case) the correct add, so we
-> expect other processes to be able to access the zspage after the first
-> list_add() anyway, right?
+[Correct David’s address]
 
-Correct. Compaction also can unlock pool->lock and schedule() so that
-another process can access the source zspage, when compaction gets
-scheduled it can attempt putback/unlock the same zspage one more time
-(the zspage may not even exist at this point, I assume).
+Am 17.04.23 um 13:19 schrieb Paul Menzel:
+> Dear Thomas,
+> 
+> 
+> Am 15.04.23 um 01:44 schrieb Thomas Gleixner:
+> 
+>> This is a complete rework of the parallel bringup patch series (V17)
+>>
+>>      
+>> https://lore.kernel.org/lkml/20230328195758.1049469-1-usama.arif@bytedance.com
+>>
+>> to address the issues which were discovered in review:
+> 
+> […]
+> 
+> Thank you very much for your rework.
+> 
+> I tested this on the ASUS F2A85-M PRO, and get a delay of ten seconds.
+> 
+> ```
+> […]
+> [    0.258193] smpboot: CPU0: AMD A6-6400K APU with Radeon(tm) HD 
+> Graphics (family: 0x15, model: 0x13, stepping: 0x1)
+> […]
+> [    0.259329] smp: Bringing up secondary CPUs ...
+> [    0.259527] x86: Booting SMP configuration:
+> [    0.259528] .... node  #0, CPUs:      #1
+> [    0.261007] After schedule_preempt_disabled
+> [   10.260990] CPU1 failed to report alive state
+> [   10.261070] smp: Brought up 1 node, 1 CPU
+> [   10.261073] smpboot: Max logical packages: 2
+> [   10.261074] smpboot: Total of 1 processors activated (7800.54 BogoMIPS)
+> [   10.261601] devtmpfs: initialized
+> [   10.261697] x86/mm: Memory block size: 128MB
+> ```
+> 
+> This delay has been there with v6.3-rc6-46-gde4664485abbc and some 
+> custom (printk) patches on top and merging dwmw2/parallel-6.2-rc3-v16 
+> into it. I only tested this. I think dwmw2/parallel-6.2-v17 failed to 
+> build for me, when trying to merge it into Linus’ master version at that 
+> time. I didn’t come around to report it, and you posted your rework, so 
+> I am replying here.
+> 
+> I am going to try your branch directly in the next days, but just wanted 
+> to report back already.
+> 
+> 
+> Kind regards,
+> 
+> Paul
