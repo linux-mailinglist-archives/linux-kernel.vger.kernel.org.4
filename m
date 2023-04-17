@@ -2,214 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 897F06E51EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 22:36:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CE736E51ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 22:37:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbjDQUgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 16:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58034 "EHLO
+        id S230257AbjDQUhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 16:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbjDQUga (ORCPT
+        with ESMTP id S230150AbjDQUhE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 16:36:30 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2045.outbound.protection.outlook.com [40.107.93.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2484C10;
-        Mon, 17 Apr 2023 13:36:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JS28PVnp961N/HpmBp0Q194FLof3VlXlgKBRb/h5Qzv5LIW7ONT0n6eQBBV8HMTdSddv+z/Y5FUQyPP+QeGO1mdUvyeJt6kp7FcK8Dr56ej2HeLP4LVtYa2qfh2fnRfmzbkjkOnRk280PszWtaadW8QHcaczYJTCZucmErvubpLuzAgEbkHFz8MvI1GzZ7h7CELWHXt3L9GIJZo+w54pedFDontPrK60xwKMcLmE2KdDTE7lLrwI273UkOjdeE5vwdWjWkSOM8KvxO4cbOk/vv3J0ld/T+6biBKYfoiZJQUj89wkRU3OXiiPr31z17xv5F65opcato41w32Ny3rTsg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xwbzdqeGM8mPlbye6W3zxBHnZMfZTFXqSe3qlQnQ1mk=;
- b=Tzv6RpkN4HhO5pqUq+UNFY30Cxy2Maam/rrOstOVyC/KPaYn6oIMTuGXdkk7xTl1szvs4fBw5KTp3t6sFuWLw6lkClLuqJQBcpXZU68q/kp5Bdi9ifFqWHiBCUjAVag0U+vSm+r0Orbjy6KWmR50yoFW4eWRlTN1rbfvug/vgJmAl22ro5OiEYkH9YY/dfT5LRcyE4G2qJQbg7ZQAnf12BvDVZFufGfeHtJTyxizwJCLILccQyqnk4DPFF97yVMiTcy4BI/9GQ9kcpI1915PQtbOnf38+2Ym2/sSTVfFv/FWJWD6bMwUcqJg0HWUafIWiXTsWgjMN2gdMLknAgNsQQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=huawei.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xwbzdqeGM8mPlbye6W3zxBHnZMfZTFXqSe3qlQnQ1mk=;
- b=yVrgBT3xrK38C6KS4HZnwttPZg91HyxLC+QHpUjIh3PIU6qOMChlru+CmZWsSpEMxWKUmVye+3Uvkh/nBhUUIdD7o14bqgJbzxRZAKdAtkBJcnSZsWzNW1UeTBBDxyzbU9TeafqjCKZX0uEj1wIo9s2AH5OXjaaes7uHoAtqeAc=
-Received: from DS7PR03CA0029.namprd03.prod.outlook.com (2603:10b6:5:3b8::34)
- by BL1PR12MB5272.namprd12.prod.outlook.com (2603:10b6:208:319::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Mon, 17 Apr
- 2023 20:36:25 +0000
-Received: from DM6NAM11FT064.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b8:cafe::40) by DS7PR03CA0029.outlook.office365.com
- (2603:10b6:5:3b8::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.46 via Frontend
- Transport; Mon, 17 Apr 2023 20:36:25 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT064.mail.protection.outlook.com (10.13.172.234) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6319.20 via Frontend Transport; Mon, 17 Apr 2023 20:36:24 +0000
-Received: from rric.localdomain (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 17 Apr
- 2023 15:36:21 -0500
-Date:   Mon, 17 Apr 2023 22:36:18 +0200
-From:   Robert Richter <rrichter@amd.com>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-CC:     Terry Bowman <terry.bowman@amd.com>, <alison.schofield@intel.com>,
-        <vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
-        <bwidawsk@kernel.org>, <dan.j.williams@intel.com>,
-        <dave.jiang@intel.com>, <linux-cxl@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        "Mahesh J Salgaonkar" <mahesh@linux.ibm.com>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH v3 5/6] PCI/AER: Forward RCH downstream port-detected
- errors to the CXL.mem dev handler
-Message-ID: <ZD2tY8VqjY9kB+y6@rric.localdomain>
-References: <20230411180302.2678736-1-terry.bowman@amd.com>
- <20230411180302.2678736-6-terry.bowman@amd.com>
- <20230414131950.00006e76@Huawei.com>
- <ZDlkmcsbwsNv/t8+@rric.localdomain>
- <20230417175431.00004ab5@Huawei.com>
+        Mon, 17 Apr 2023 16:37:04 -0400
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C3F4236;
+        Mon, 17 Apr 2023 13:36:53 -0700 (PDT)
+Received: by mail-ot1-f43.google.com with SMTP id w15-20020a056830410f00b006a386a0568dso20202414ott.4;
+        Mon, 17 Apr 2023 13:36:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681763813; x=1684355813;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e+QAWI6HAoCLsTSrdd3iRiJoq4aMeJmCh6mY2TAkIBc=;
+        b=Dc12sEBCehwPTv2eVHr4DX7CX4vZkhkCg97430i+0oX2YBu45B67flbrTm8oarTh8r
+         omncR29qlDa5pNPTD+3GGCnSf8GWXmYHvniFuFJ4HYi3ya4CmqbrFr5/U/bnDmE/0iFw
+         UwoH8aClvKTSmY1NdGuZZNQ5NRLVT1V+VdGQUs03jcAyaz3WLJ9RKmIJFhmXwzM72pkC
+         /acMG9EDcetJDStRKYcOervo0jCLV1pkS5TQmYSJHS1zO9oPNw0UBXIlTPLkh2zhjjGp
+         kD0agEbEQqEg0sgyMqtCf9e/PGqGWleVqtKiYfXy0wo+Jf0hMiEWzMbnVdDrGJrrCKVC
+         cvhg==
+X-Gm-Message-State: AAQBX9co+hAEBS/Ubav6WYMYkg6j9MpJo4Di/U+3bQj42bsU58avZ8x5
+        sw41AZeP23RifIC3+AAK/w==
+X-Google-Smtp-Source: AKy350ZzPROXT2PlKvU2SU951qQVWLCRSEIxLBJC/mGvKH/rXm//HY70PVAU5Zz6bI6JxxuBMbXmxw==
+X-Received: by 2002:a9d:6217:0:b0:6a2:49e6:9afc with SMTP id g23-20020a9d6217000000b006a249e69afcmr7537309otj.12.1681763813076;
+        Mon, 17 Apr 2023 13:36:53 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id f24-20020a9d7b58000000b006a5e0165d3esm1789231oto.19.2023.04.17.13.36.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 13:36:52 -0700 (PDT)
+Received: (nullmailer pid 3327898 invoked by uid 1000);
+        Mon, 17 Apr 2023 20:36:51 -0000
+Date:   Mon, 17 Apr 2023 15:36:51 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Xingyu Wu <xingyu.wu@starfivetech.com>
+Cc:     William Qiu <william.qiu@starfivetech.com>,
+        linux-riscv@lists.infradead.org, Conor Dooley <conor@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, linux-clk@vger.kernel.org,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>
+Subject: Re: [PATCH v3 5/7] dt-bindings: soc: starfive: Add StarFive syscon
+ module
+Message-ID: <20230417203651.GA3319886-robh@kernel.org>
+References: <20230414024157.53203-1-xingyu.wu@starfivetech.com>
+ <20230414024157.53203-6-xingyu.wu@starfivetech.com>
+ <168147484896.3576391.17289619505417988717.robh@kernel.org>
+ <8c396a98-a76e-cd68-4d26-15ae3a15a623@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230417175431.00004ab5@Huawei.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT064:EE_|BL1PR12MB5272:EE_
-X-MS-Office365-Filtering-Correlation-Id: 99f77158-f62b-4565-5d1f-08db3f8369ba
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oHn1ftwkuRyeA9H+LnUrz5rirzW73iLZXj1/n3OHmZ73IRK3z0Ju5g8s34CNPita5SCEDgyl6GYF7ztZPtaM98xjwh4WUeC9F2PH50krN3HYiHplgeHwJOLM0XpYQNPrH2tN2gahUE9Q+WT8WOTNm/N2AwZzQ3/HwkiqFD1CdWdsOFIzcWP67JWANDAa7FL6U54dh5Cr6smXEWWhgymCKUomlNIAYVekeIjdWm4s4kfvb3WPoPwVo84w70aLVt3a5w3zE0iLkxmprHmCnP/DkEzpx9J0iiAPKUb5mYJqzouylN43LPncZq/gtskaRlvCj7tiC3ZiW4lhvTVaZzLrMi5Wvr+0esGczmLVuM7jmwJVAvhhHB2qepMEbBk5ALEgPzYiGf/WomB9Wr0YZN5uLV27cZTr9Jlbmfg4lwASbMazp+a5x7IU/sMDf33O9dzuWT/JU8ubedIYkbvl2I6yrU50SMTsGgQzTN8DuZtmfLDO3zBFVnVfYa71noLbM6X5Er36VmDmpP9FPBY7x2nLLu5y/YyQ11lViyllYBzMtIl2A5zQizm/TO/9m2xE5BbN69/udLDA3zGyIy6EoKXDP8jm/A7p1U569FJLDRlKftwip7y5ELdK7X2CTlfNVh/z9weTpUPE9wYX73T70nQA6Gjh/iPLgmAxTahDM3O8duFEBAnyOdd+6Dnm5h23V8m8BSyhsjfn94ERyu/9EHlST/IXgTWpw31wViyME/PMpMIzNoqLlqi3+13x4vOohta9SijVJX6P9c7d1t8aiir/1Q==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(396003)(39860400002)(136003)(451199021)(46966006)(40470700004)(36840700001)(54906003)(55016003)(40480700001)(6666004)(478600001)(7696005)(70586007)(81166007)(316002)(83380400001)(356005)(41300700001)(82740400003)(6916009)(426003)(336012)(4326008)(47076005)(36860700001)(186003)(16526019)(26005)(53546011)(9686003)(70206006)(5660300002)(7416002)(2906002)(8936002)(8676002)(40460700003)(82310400005)(67856001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2023 20:36:24.9362
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 99f77158-f62b-4565-5d1f-08db3f8369ba
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT064.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5272
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <8c396a98-a76e-cd68-4d26-15ae3a15a623@starfivetech.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jonathan,
-
-On 17.04.23 17:54:31, Jonathan Cameron wrote:
-> On Fri, 14 Apr 2023 16:35:05 +0200
-> Robert Richter <rrichter@amd.com> wrote:
+On Mon, Apr 17, 2023 at 03:43:48PM +0800, Xingyu Wu wrote:
+> On 2023/4/14 20:37, Rob Herring wrote:
+> > 
+> > On Fri, 14 Apr 2023 10:41:55 +0800, Xingyu Wu wrote:
+> >> From: William Qiu <william.qiu@starfivetech.com>
+> >> 
+> >> Add documentation to describe StarFive System Controller Registers.
+> >> 
+> >> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+> >> ---
+> >>  .../soc/starfive/starfive,jh7110-syscon.yaml  | 58 +++++++++++++++++++
+> >>  MAINTAINERS                                   |  6 ++
+> >>  2 files changed, 64 insertions(+)
+> >>  create mode 100644 Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
+> >> 
+> > 
+> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> > 
+> > yamllint warnings/errors:
+> > 
+> > dtschema/dtc warnings/errors:
+> > ./Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/clock/starfive,jh7110-pll.yaml
+> > 
+> > doc reference errors (make refcheckdocs):
+> > 
+> > See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230414024157.53203-6-xingyu.wu@starfivetech.com
+> > 
+> > The base for the series is generally the latest rc1. A different dependency
+> > should be noted in *this* patch.
+> > 
+> > If you already ran 'make dt_binding_check' and didn't see the above
+> > error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> > date:
+> > 
+> > pip3 install dtschema --upgrade
+> > 
+> > Please check and re-submit after running the above command yourself. Note
+> > that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+> > your schema. However, it must be unset to test all examples with your schema.
+> > 
 > 
-> > On 14.04.23 13:19:50, Jonathan Cameron wrote:
-> > > On Tue, 11 Apr 2023 13:03:01 -0500
-> > > Terry Bowman <terry.bowman@amd.com> wrote:
-> > >   
-> > > > From: Robert Richter <rrichter@amd.com>
-> > > > 
-> > > > In Restricted CXL Device (RCD) mode a CXL device is exposed as an
-> > > > RCiEP, but CXL downstream and upstream ports are not enumerated and
-> > > > not visible in the PCIe hierarchy. Protocol and link errors are sent
-> > > > to an RCEC.
-> > > > 
-> > > > Restricted CXL host (RCH) downstream port-detected errors are signaled
-> > > > as internal AER errors, either Uncorrectable Internal Error (UIE) or
-> > > > Corrected Internal Errors (CIE). The error source is the id of the
-> > > > RCEC. A CXL handler must then inspect the error status in various CXL
-> > > > registers residing in the dport's component register space (CXL RAS
-> > > > cap) or the dport's RCRB (AER ext cap). [1]
-> > > > 
-> > > > Errors showing up in the RCEC's error handler must be handled and
-> > > > connected to the CXL subsystem. Implement this by forwarding the error
-> > > > to all CXL devices below the RCEC. Since the entire CXL device is
-> > > > controlled only using PCIe Configuration Space of device 0, Function
-> > > > 0, only pass it there [2]. These devices have the Memory Device class
-> > > > code set (PCI_CLASS_MEMORY_CXL, 502h) and the existing cxl_pci driver
-> > > > can implement the handler.  
-> > > 
-> > > This comment implies only class code compliant drivers.  Sure we don't
-> > > have drivers for anything else yet, but we should try to avoid saying
-> > > there won't be any (which I think above implies).
-> > > 
-> > > You have a comment in the code, but maybe relaxing the description above
-> > > to "currently support devices have..."  
-> > 
-> > It is used here to identify CXL memory devices and limit the
-> > enablement to those. The spec requires this to be set for CXL mem devs
-> > (see cxl 3.0, 8.1.12.2).
-> > 
-> > There could be other CXL devices (e.g. cache), but other drivers are
-> > not yet implemented. That is what I am referring to. The check makes
-> > sure there is actually a driver with a handler for it (cxl_pci).
-> 
-> Understood on intent. My worry is that the above can be read as a
-> statement on hardware restrictions, rathe than on what software currently
-> implements.  Meh. Minor point so I don't care that much!
-> Unlikely anyone will read the patch description after it merges anyway ;)
+> I have updated yamllint and dtschema, and tested it and didn't see this error.
+> I asked william and also didn't see this. This error says the file:
+> http://devicetree.org/schemas/clock/starfive,jh7110-pll.yaml was not found.
+> This file is added in patch 1 but patch 1 should be applied after these patchset
+> about JH7110 basic clock drivers. I don't know if that's the reason.
 
-I have updated the description ...
+Yes, patch 1 could not be applied[1].
 
-> > > > diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-> > > > index 7a25b62d9e01..171a08fd8ebd 100644
-> > > > --- a/drivers/pci/pcie/aer.c
-> > > > +++ b/drivers/pci/pcie/aer.c
-> > > > @@ -946,6 +946,65 @@ static bool find_source_device(struct pci_dev *parent,
-> > > >  	return true;
-> > > >  }
-> > > >  
-> > > > +#ifdef CONFIG_PCIEAER_CXL
-> > > > +
-> > > > +static bool is_cxl_mem_dev(struct pci_dev *dev)
-> > > > +{
-> > > > +	/*
-> > > > +	 * A CXL device is controlled only using PCIe Configuration
-> > > > +	 * Space of device 0, Function 0.  
-> > > 
-> > > That's not true in general.   Definitely true that CXL protocol
-> > > error reporting is controlled only using this Devfn, but
-> > > more generally there could be other stuff in later functions.
-> > > So perhaps make the comment more specific.  
-> > 
-> > I actually mean CXL device in RCD mode here (seen as RCiEP in the PCI
-> > hierarchy).
-> > 
-> > The spec says (cxl 3.0, 8.1.3):
-> > 
-> > """
-> > In either case [(RCD and non-RCD)], the capability, status, and
-> > control fields in Device 0, Function 0 DVSEC control the CXL
-> > functionality of the entire device.
-> 
-> > """
-> > 
-> > So dev 0, func 0 must contain a CXL PCIe DVSEC. Thus it is a CXL
-> > device and able to handle CXL AER errors. The limitation to the first
-> > device prevents the handler from being run multiple times for the same
-> > event.
-> 
-> Fine with limitation.  Text says "device is controlled only using".
-> That is true for what you are controlling here, but other aspects of the
-> device are controlled via whatever interface they like.
-> 
-> Perhaps just quote the specification as you have done in your reply. Then it
-> is clear that we mean just these registers.
+Rob
 
-... and comments.
-
-Thanks,
-
--Robert
+[1] https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230414024157.53203-2-xingyu.wu@starfivetech.com/
