@@ -2,113 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D81886E45C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 12:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B32C26E447F
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 11:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231174AbjDQKwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 06:52:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51250 "EHLO
+        id S229682AbjDQJ5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 05:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbjDQKwG (ORCPT
+        with ESMTP id S229458AbjDQJ5p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 06:52:06 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9318699;
-        Mon, 17 Apr 2023 03:51:06 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1poLUs-0000V0-CC; Mon, 17 Apr 2023 11:50:06 +0200
-Message-ID: <afa92c35-b17a-49de-ac4c-6d60237a2dca@leemhuis.info>
-Date:   Mon, 17 Apr 2023 11:50:05 +0200
+        Mon, 17 Apr 2023 05:57:45 -0400
+Received: from xry111.site (xry111.site [89.208.246.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70525659D;
+        Mon, 17 Apr 2023 02:57:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1681725043;
+        bh=O/cKAdPP1ntH7IK9e/3cclJfPJoYfiCKYcnR1FDS28c=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=E5ZnmxxoCi42LLMmO5z0FR3DlqAoAY5yiajei+fCHQX57j4JBVZRuMDZiTncJykyh
+         MqkIeXj9QPaMbH2TEpJA+cyEtEDz72q/MhY7nble68s8WYuOCo6UfpWh6gtX/oQqyZ
+         EjNGC9LdHmSREBfn9zK60G0/Qx4weomdm7z9QWL4=
+Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id 2A3F865C4E;
+        Mon, 17 Apr 2023 05:50:42 -0400 (EDT)
+Message-ID: <f54abfae989023fcfdabb4e9800a66847c357b85.camel@xry111.site>
+Subject: Re: [PATCH 0/2] LoongArch: Make bounds-checking instructions useful
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev
+Cc:     WANG Xuerui <git@xen0n.name>, Huacai Chen <chenhuacai@kernel.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 17 Apr 2023 17:50:40 +0800
+In-Reply-To: <6ca642a9-62a6-00e5-39ac-f14ef36f6bdb@xen0n.name>
+References: <20230416173326.3995295-1-kernel@xen0n.name>
+         <e593541e7995cc46359da3dd4eb3a69094e969e2.camel@xry111.site>
+         <6ca642a9-62a6-00e5-39ac-f14ef36f6bdb@xen0n.name>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.0 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [regression] Bug 217286 - ath11k:deny assoc request, Invalid
- supported ch width and ext nss combination
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     P Praneesh <quic_ppranees@quicinc.com>
-Cc:     ath11k <ath11k@lists.infradead.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux kernel regressions list <regressions@lists.linux.dev>,
-        Kalle Valo <kvalo@kernel.org>,
-        Jouni Malinen <jouni@codeaurora.org>, Jouni Malinen <j@w1.fi>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
-          Linux regressions mailing list 
-          <regressions@lists.linux.dev>
-References: <ed31b6fe-e73d-34af-445b-81c5c644d615@leemhuis.info>
- <f84c39ed-b8d8-7d0c-0eff-c90feaf5ab4f@leemhuis.info>
-In-Reply-To: <f84c39ed-b8d8-7d0c-0eff-c90feaf5ab4f@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1681728666;9bab99fe;
-X-HE-SMSGID: 1poLUs-0000V0-CC
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[resending with the current email addresses for P Praneesh and Jouni
-Malinen; didn't find one on lore for Ganesh Sesetti, and Sathishkumar
-Muruganandam]
+On Mon, 2023-04-17 at 15:54 +0800, WANG Xuerui wrote:
+> On 2023/4/17 14:47, Xi Ruoyao wrote:
+> > On Mon, 2023-04-17 at 01:33 +0800, WANG Xuerui wrote:
+> > > From: WANG Xuerui <git@xen0n.name>
+> > >=20
+> > > Hi,
+> > >=20
+> > > The LoongArch-64 base architecture is capable of performing
+> > > bounds-checking either before memory accesses or alone, with speciali=
+zed
+> > > instructions generating BCEs (bounds-checking error) in case of faile=
+d
+> > > assertions (ISA manual Volume 1, Sections 2.2.6.1 [1] and 2.2.10.3 [2=
+]).
+> > > This could be useful for managed runtimes, but the exception is not
+> > > being handled so far, resulting in SIGSYSes in these cases, which is
+> > > incorrect and warrants a fix in itself.
+> > >=20
+> > > During experimentation, it was discovered that there is already UAPI =
+for
+> > > expressing such semantics: SIGSEGV with si_code=3DSEGV_BNDERR. This w=
+as
+> > > originally added for Intel MPX, and there is currently no user (!) af=
+ter
+> > > the removal of MPX support a few years ago. Although the semantics is
+> > > not a 1:1 match to that of LoongArch, still it is better than
+> > > alternatives such as SIGTRAP or SIGBUS of BUS_OBJERR kind, due to bei=
+ng
+> > > able to convey both the value that failed assertion and the bound val=
+ue.
+> > >=20
+> > > This patch series implements just this approach: translating BCEs int=
+o
+> > > SIGSEGVs with si_code=3DSEGV_BNDERR, si_value set to the offending va=
+lue,
+> > > and si_lower and si_upper set to resemble a range with both lower and
+> > > upper bound while in fact there is only one.
+> > >=20
+> > > The instructions are not currently used anywhere yet in the fledgling
+> > > LoongArch ecosystem, so it's not very urgent and we could take the ti=
+me
+> > > to figure out the best way forward (should SEGV_BNDERR turn out not
+> > > suitable).
+> >=20
+> > I don't think these instructions can be used in any systematic way
+> > within a Linux userspace in 2023.=C2=A0 IMO they should not exist in
+> > LoongArch at all because they have all the same disadvantages of Intel
+> > MPX; MPX has been removed by Intel in 2019, and LoongArch is designed
+> > after 2019.
+>=20
+> Well, the difference is IMO significant enough to make LoongArch=20
+> bounds-checking more useful, at least for certain use cases. For=20
+> example, the bounds were a separate register bank in Intel MPX, but in
+> LoongArch they are just values in GPRs. This fits naturally into=20
+> JIT-ting or other managed runtimes (e.g. Go) whose slice indexing ops=20
+> already bounds-check with a temporary register per bound anyway, so it's=
+=20
+> just a matter of this snippet (or something like it)
+>=20
+> - calculate element address
+> - if address < base: goto fail
+> - load/calculate upper bound
+> - if address >=3D upper bound: goto fail
+> - access memory
+>=20
+> becoming
+>=20
+> - calculate element address
+> - asrtgt address, base - 1
+> - load/calculate upper bound
+> - {ld,st}le address, upper bound
+>=20
+> then in SIGSEGV handler, check PC to associate the signal back with the=
+=20
+> exact access op;
 
-Please see quoted text below, as there is a kernel regression that is
-caused by a patch you authored or passed on.
+I remember using the signal handler for "usual" error handling can be a
+very bad idea but I can't remember where I've read about it.  Is there
+any managed environments doing so in practice?
 
-On 17.04.23 11:33, Thorsten Leemhuis wrote:
-> On 08.04.23 13:52, Linux regression tracking (Thorsten Leemhuis) wrote:
->> Hi, Thorsten here, the Linux kernel's regression tracker.
->>
->> I noticed a regression report in bugzilla.kernel.org. As many (most?)
->> kernel developers don't keep an eye on it, I decided to forward it by mail.
->>
->> Note, you have to use bugzilla to reach the reporter, as I sadly[1] can
->> not CCed them in mails like this.
->>
->> Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217286 :
->>
->>> Built and installed v6.2 kernel (with ath11k_pci) on arm64 hardware
->>> running Ubuntu22.04. Hardware has both Atheros QCN9074 module and Intel
->>> AX210 module. Running each (separately) in station mode and try to
->>> connect to Synology router with WiFi Access Point based on QCN9074.
->>> AX210 has no problem connecting to AP but Atheros is successfully
->>> authenticating but association is rejected by AP with this error message:
->>>
->>>
->>> wlan: [0:I:ANY] [UNSPECIFIED] vap-0(wlan100): [04:f0:21:a1:7c:3e]deny assoc request, Invalid supported ch width and ext nss combination
->>>
->>> Please note that when running v5.15.5 kernel (with ath11k_pci), I am
->>> able to connect to the same AP without problems.
->>>
->>> Detailed logs follow:
->>> [...]
->>
->> See the ticket for more details.
-> 
-> FWIW, the reporter bisected the regression down to
-> 
-> 552d6fd2f2 ("ath11k: add support for 80P80 and 160 MHz bandwidth")
-> 
-> Authored by P Praneesh, Ganesh Sesetti, and Sathishkumar Muruganandam,.
-> all of which I added to the list of recipients (just like Jouni Malinen,
-> who handled the patch). Could one of you please look into this?
-> 
-> While at it, let me update the tracking status:
-> 
-> #regzbot introduced: 552d6fd2f2
-> #regzbot ignore-activity
-> 
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-> --
-> Everything you wanna know about Linux kernel regression tracking:
-> https://linux-regtracking.leemhuis.info/about/#tldr
-> If I did something stupid, please tell me, as explained on that page.
-> 
-> 
+If we redefine new_ldle/new_stle as "if [[likely]] the address is in-
+bound, do the load/store and skip the next instruction; otherwise do
+nothing", we can say:
+
+blt        address, base, 1f
+new_ldle.d rd, address, upperbound
+1:b        panic_oob_access
+xor        rd, rd, 42 // use rd to do something
+
+This is more versatile, and useful for building a loop as well:
+
+or            a0, r0, r0
+0:new_ldle.d  t1, t0, t2
+b             1f
+add.d         a0, t1, a0
+add.d         t0, t0, 8
+b             0b
+1:bl          do_something_with_the_sum
+
+Yes it's "non-RISC", but at least more RISC than the current ldle: if
+you want a trap anyway you can say
+
+blt        address, base, 1f
+new_ldle.d rd, address, upperbound
+1:break    {a code defined for OOB}
+xor        rd, rd, 42 // use rd
+
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
