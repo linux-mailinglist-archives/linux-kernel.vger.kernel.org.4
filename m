@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C96546E4FCF
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 20:04:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD2C06E4FD1
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 20:04:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbjDQSEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 14:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
+        id S230418AbjDQSEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 14:04:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231182AbjDQSEG (ORCPT
+        with ESMTP id S231207AbjDQSEH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 14:04:06 -0400
+        Mon, 17 Apr 2023 14:04:07 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143065269
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16AA376A8
         for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 11:04:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1681754639; x=1713290639;
+  t=1681754640; x=1713290640;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=KoHza1vejrzAkyGsjA2yudMh/oMxUYOS4fEMrrvFgz8=;
-  b=lWnfQRkjgkn/cxKHQStTXy5UiohWfe5I/gzcwWh9eWqiMdw3MsckHVV1
-   sxXg84y29Ym4be4Zj5DF8neTpGsYsDuzxii6WTjaCN5S6fdvZQXZAV1+o
-   OEju2eLJ7GJU0vrBiflMWfIKkd4OaOCDBee2GInnec4Oq5/cgWXdElZF8
-   O9FGqiPGAGaS4JVljVwU/dXpm8sEeRR/uJlV1aHBJLJky8qChetJmAg15
-   tGheW+1KfFuU5WI348wn2B4QOHHc74g69lXVUb9Qg6Su+VbE1Wvb5U6SP
-   C8UVuj/VR0CLXiX78AbCtdReF/L97hIHpjRM6KIrRE0Jw/k/bAVxSKRph
+  bh=qWBx4BKoFDrQnCpgyAMwdPuAQ4nlRpG6oep6/zjdvDg=;
+  b=SPMiTOv8lG6jPe0YVtkkhAuZBOSOjP+Ge2hwlgXaR5njPCBKVxk0S7WB
+   Agdr8CXBBV47m+nneW0SGZ5LCIxkb1ZEZFZzAeCwGmyP8yatfwbKtOijp
+   WJpXBwKxy6tb/z91HJk2MQBMIb9+msCUmB61CKwF8pA6EAr80PRqhHLH/
+   Q9BNhmzPvvFCRk48okqSDdV0eYfwjxbZ0VCQLyr2rdh91yb4S4oE1LPyy
+   HqT8vz8NRC/0FU0hEHXFrPxNQVUPd4LXpE2iqS6BgB7ZR7gJM7Pe6Q7YX
+   dPAqjl25+nFsFtvCZLZUVeop6iwLlQ0hMU/52G8d13ZPK/JZnXgiPzQ05
    A==;
 X-IronPort-AV: E=Sophos;i="5.99,204,1677567600"; 
-   d="scan'208";a="147469774"
+   d="scan'208";a="147469779"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Apr 2023 11:03:57 -0700
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Apr 2023 11:03:58 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 17 Apr 2023 11:03:50 -0700
+ 15.1.2507.21; Mon, 17 Apr 2023 11:03:52 -0700
 Received: from DEN-LT-70577.microchip.com (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Mon, 17 Apr 2023 11:03:48 -0700
+ 15.1.2507.21 via Frontend Transport; Mon, 17 Apr 2023 11:03:50 -0700
 From:   Daniel Machon <daniel.machon@microchip.com>
 To:     <vkoul@kernel.org>
 CC:     <kishon@kernel.org>, <Steen.Hegelund@microchip.com>,
@@ -46,9 +46,9 @@ CC:     <kishon@kernel.org>, <Steen.Hegelund@microchip.com>,
         <joe@perches.com>, <linux-phy@lists.infradead.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH 4/7] phy: sparx5-serdes: power down all CMUs by default
-Date:   Mon, 17 Apr 2023 20:03:32 +0200
-Message-ID: <20230417180335.2787494-5-daniel.machon@microchip.com>
+Subject: [PATCH 5/7] phy: sparx5-serdes: power on CMUs individually
+Date:   Mon, 17 Apr 2023 20:03:33 +0200
+Message-ID: <20230417180335.2787494-6-daniel.machon@microchip.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230417180335.2787494-1-daniel.machon@microchip.com>
 References: <20230417180335.2787494-1-daniel.machon@microchip.com>
@@ -65,88 +65,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All CMUs are powered up initially. This uses needless power. This patch
-makes sure all CMUs are powered down by default. This involves
-configuring a number reference clock and power-down registers of the
-CMU.
-
-Individual CMUs are later powered up, when the serdes lanes are
-configured.
+Power on the CMU instance, that provides the clock for the serdes, given the
+specified serdes mode and index. The CMU instance is looked up, using a
+preset map of serdes mode and index to CMU index.
 
 Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
 ---
- drivers/phy/microchip/sparx5_serdes.c | 51 +++++++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
+ drivers/phy/microchip/sparx5_serdes.c | 43 ++++++++++++++++++++++++++-
+ 1 file changed, 42 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/phy/microchip/sparx5_serdes.c b/drivers/phy/microchip/sparx5_serdes.c
-index d8620e0fae7b..0e9db7b36b60 100644
+index 0e9db7b36b60..a6638d783a01 100644
 --- a/drivers/phy/microchip/sparx5_serdes.c
 +++ b/drivers/phy/microchip/sparx5_serdes.c
-@@ -1078,6 +1078,54 @@ static int sparx5_serdes_cmu_enable(struct sparx5_serdes_private *priv)
+@@ -25,6 +25,7 @@
+ 
+ #define SPX5_SERDES_10G_START 13
+ #define SPX5_SERDES_25G_START 25
++#define SPX5_SERDES_6G10G_CNT SPX5_SERDES_25G_START
+ 
+ /* Optimal power settings from GUC */
+ #define SPX5_SERDES_QUIET_MODE_VAL 0x01ef4e0c
+@@ -34,6 +35,7 @@ enum sparx5_10g28cmu_mode {
+ 	SPX5_SD10G28_CMU_AUX1 = 1,
+ 	SPX5_SD10G28_CMU_AUX2 = 3,
+ 	SPX5_SD10G28_CMU_NONE = 4,
++	SPX5_SD10G28_CMU_MAX,
+ };
+ 
+ enum sparx5_sd25g28_mode_preset_type {
+@@ -1078,6 +1080,39 @@ static int sparx5_serdes_cmu_enable(struct sparx5_serdes_private *priv)
  	return err;
  }
  
-+static void sparx5_serdes_cmu_power_off(struct sparx5_serdes_private *priv)
++/* Map of 6G/10G serdes mode and index to CMU index. */
++static const int
++sparx5_serdes_cmu_map[SPX5_SD10G28_CMU_MAX][SPX5_SERDES_6G10G_CNT] = {
++	[SPX5_SD10G28_CMU_MAIN] = {  2,  2,  2,  2,  2,
++				     2,  2,  2,  5,  5,
++				     5,  5,  5,  5,  5,
++				     5,  8, 11, 11, 11,
++				    11, 11, 11, 11, 11 },
++	[SPX5_SD10G28_CMU_AUX1] = {  0,  0,  3,  3,  3,
++				     3,  3,  3,  3,  3,
++				     6,  6,  6,  6,  6,
++				     6,  6,  9,  9, 12,
++				    12, 12, 12, 12, 12 },
++	[SPX5_SD10G28_CMU_AUX2] = {  1,  1,  1,  1,  4,
++				     4,  4,  4,  4,  4,
++				     4,  4,  7,  7,  7,
++				     7,  7, 10, 10, 10,
++				    10, 13, 13, 13, 13 },
++	[SPX5_SD10G28_CMU_NONE] = {  1,  1,  1,  1,  4,
++				     4,  4,  4,  4,  4,
++				     4,  4,  7,  7,  7,
++				     7,  7, 10, 10, 10,
++				    10, 13, 13, 13, 13 },
++};
++
++/* Get the index of the CMU which provides the clock for the specified serdes
++ * mode and index.
++ */
++static int sparx5_serdes_cmu_get(enum sparx5_10g28cmu_mode mode, int sd_index)
 +{
-+	void __iomem *cmu_inst, *cmu_cfg_inst;
-+	int i;
-+
-+	/* Power down each CMU */
-+	for (i = 0; i < SPX5_CMU_MAX; i++) {
-+		cmu_inst = sdx5_inst_get(priv, TARGET_SD_CMU, i);
-+		cmu_cfg_inst = sdx5_inst_get(priv, TARGET_SD_CMU_CFG, i);
-+
-+		sdx5_inst_rmw(SD_CMU_CFG_SD_CMU_CFG_EXT_CFG_RST_SET(0),
-+			      SD_CMU_CFG_SD_CMU_CFG_EXT_CFG_RST, cmu_cfg_inst,
-+			      SD_CMU_CFG_SD_CMU_CFG(0));
-+
-+		sdx5_inst_rmw(SD_CMU_CMU_05_CFG_REFCK_TERM_EN_SET(0),
-+			      SD_CMU_CMU_05_CFG_REFCK_TERM_EN, cmu_inst,
-+			      SD_CMU_CMU_05(0));
-+
-+		sdx5_inst_rmw(SD_CMU_CMU_09_CFG_EN_TX_CK_DN_SET(0),
-+			      SD_CMU_CMU_09_CFG_EN_TX_CK_DN, cmu_inst,
-+			      SD_CMU_CMU_09(0));
-+
-+		sdx5_inst_rmw(SD_CMU_CMU_06_CFG_VCO_PD_SET(1),
-+			      SD_CMU_CMU_06_CFG_VCO_PD, cmu_inst,
-+			      SD_CMU_CMU_06(0));
-+
-+		sdx5_inst_rmw(SD_CMU_CMU_09_CFG_EN_TX_CK_UP_SET(0),
-+			      SD_CMU_CMU_09_CFG_EN_TX_CK_UP, cmu_inst,
-+			      SD_CMU_CMU_09(0));
-+
-+		sdx5_inst_rmw(SD_CMU_CMU_08_CFG_CK_TREE_PD_SET(1),
-+			      SD_CMU_CMU_08_CFG_CK_TREE_PD, cmu_inst,
-+			      SD_CMU_CMU_08(0));
-+
-+		sdx5_inst_rmw(SD_CMU_CMU_0D_CFG_REFCK_PD_SET(1) |
-+			      SD_CMU_CMU_0D_CFG_PD_DIV64_SET(1) |
-+			      SD_CMU_CMU_0D_CFG_PD_DIV66_SET(1),
-+			      SD_CMU_CMU_0D_CFG_REFCK_PD |
-+			      SD_CMU_CMU_0D_CFG_PD_DIV64 |
-+			      SD_CMU_CMU_0D_CFG_PD_DIV66, cmu_inst,
-+			      SD_CMU_CMU_0D(0));
-+
-+		sdx5_inst_rmw(SD_CMU_CMU_06_CFG_CTRL_LOGIC_PD_SET(1),
-+			      SD_CMU_CMU_06_CFG_CTRL_LOGIC_PD, cmu_inst,
-+			      SD_CMU_CMU_06(0));
-+	}
++	return sparx5_serdes_cmu_map[mode][sd_index];
 +}
 +
- static void sparx5_sd25g28_reset(void __iomem *regs[],
- 				 struct sparx5_sd25g28_params *params,
- 				 u32 sd_index)
-@@ -2521,6 +2569,9 @@ static int sparx5_serdes_probe(struct platform_device *pdev)
- 			return err;
- 	}
- 
-+	/* Power down all CMUs by default */
-+	sparx5_serdes_cmu_power_off(priv);
+ static void sparx5_serdes_cmu_power_off(struct sparx5_serdes_private *priv)
+ {
+ 	void __iomem *cmu_inst, *cmu_cfg_inst;
+@@ -1626,7 +1661,13 @@ static int sparx5_sd10g28_apply_params(struct sparx5_serdes_macro *macro,
+ 	u32 lane_index = macro->sidx;
+ 	u32 sd_index = macro->stpidx;
+ 	void __iomem *sd_inst;
+-	u32 value;
++	u32 value, cmu_idx;
++	int err;
 +
- 	provider = devm_of_phy_provider_register(priv->dev, sparx5_serdes_xlate);
++	cmu_idx = sparx5_serdes_cmu_get(params->cmu_sel, lane_index);
++	err = sparx5_cmu_cfg(priv, cmu_idx);
++	if (err)
++		return err;
  
- 	return PTR_ERR_OR_ZERO(provider);
+ 	if (params->is_6g)
+ 		sd_inst = sdx5_inst_get(priv, TARGET_SD6G_LANE, sd_index);
 -- 
 2.34.1
 
