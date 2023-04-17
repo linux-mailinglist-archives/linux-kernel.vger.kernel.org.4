@@ -2,63 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00BF46E514D
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A4B46E5153
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbjDQT53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 15:57:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37270 "EHLO
+        id S230254AbjDQT7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 15:59:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjDQT51 (ORCPT
+        with ESMTP id S229584AbjDQT7s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 15:57:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E96C9;
-        Mon, 17 Apr 2023 12:57:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B172C629D8;
-        Mon, 17 Apr 2023 19:57:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8488AC433EF;
-        Mon, 17 Apr 2023 19:57:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681761445;
-        bh=HWzhW9GFVj6fWYcp46oHtAj7lXsg45I4Azq04EeNl0I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LmNR5s5mjY9NpnKdIIC/WCVFDZ5tbLXD8/eJDCbk+mxK1hkG22/IFU9eU6PdREZn0
-         WLpR3QaPM5CgJzgidX9S48mVuRMeqtkrKUkPCMw+ZUXKe5lJJEgS85bmcByDXxPNAU
-         tqCjxrJ59H4zfBhqPe2pwkgXDepguV3in2S+IJ26XxPce+ev0yYmgWS1l0U+1Qu0/f
-         TnyjUhC206sreCN8XslM+GTxFzMbO2ClSR4dok0vq6PdqY+tpA9UhK6p5eg6YynyOB
-         gYInd7ylhjU+nOY9l+1C2pH0CXTP2f4jiHQK3/d31pkpCW4fn2iN3zdlaQ73Nwm7VT
-         C0hvfirFuZWYg==
-Date:   Mon, 17 Apr 2023 20:57:17 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Danila Tikhonov <danila@jiaxyga.com>
-Subject: Re: [RESEND PATCH 2/2] regulator: dt-bindings: qcom,rpmh: Combine
- PM6150L and PM8150L if-then
-Message-ID: <1d3c99f5-12d5-4a7e-9098-32fc601b0837@sirena.org.uk>
-References: <20230327080626.24200-1-krzysztof.kozlowski@linaro.org>
- <20230327080626.24200-2-krzysztof.kozlowski@linaro.org>
+        Mon, 17 Apr 2023 15:59:48 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F5B421A;
+        Mon, 17 Apr 2023 12:59:47 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33HJfloL017631;
+        Mon, 17 Apr 2023 19:59:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=f0yR2o/2rv6QyvNtJVUHg97aiYmgNcqRPOSUH7dGGmU=;
+ b=EqFsb75zaz8dBAigRqnhvz5wkDQjRGTiX5Omc7OaTRioVDp9pukFWYPFp9sRniVr/N2u
+ Ndq1jyd26TA6LoiOAQ1z8EmcvtCnFEj28oNv6tg3PXXeSLJ0VY1jpklPAuV6zprqXmgv
+ eg1d607y5QetKwTaUTNXYNaNWbenMpTVtBwJ/ZTk5efHmGDcZYbfrK5ILUYsCKRyhWpj
+ 3hZ9rat1bBKdN5a7/tdDrXOAepIe7QjECsCiIEkZXnsKlImzyCqsbb0DdUGSIu6WI6u0
+ NLUiRiAMYuMrkRLpc5uuKbmyDcP147epNkud95wrVu43NAEjYPU1mSOvIRcmpCMlrM1o Vg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q17yhrtcb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Apr 2023 19:59:34 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33HJxXG3018573
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Apr 2023 19:59:33 GMT
+Received: from [10.110.98.241] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 17 Apr
+ 2023 12:59:31 -0700
+Message-ID: <9da3676e-d2fb-d25a-f9b9-4c1e6ac8d03c@quicinc.com>
+Date:   Mon, 17 Apr 2023 12:59:31 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="E44s44jAOtoWp166"
-Content-Disposition: inline
-In-Reply-To: <20230327080626.24200-2-krzysztof.kozlowski@linaro.org>
-X-Cookie: Fats Loves Madelyn.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [RFC PATCH 5/7] drm/msm/dpu: Document and enable TEAR interrupts
+ on DSI interfaces
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        <phone-devel@vger.kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        "Jami Kettunen" <jami.kettunen@somainline.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        "Loic Poulain" <loic.poulain@linaro.org>,
+        Vinod Polimera <quic_vpolimer@quicinc.com>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+References: <20221231215006.211860-1-marijn.suijten@somainline.org>
+ <20221231215006.211860-6-marijn.suijten@somainline.org>
+ <773cd72b-a766-1764-e25f-0af1174f0e51@quicinc.com>
+ <1051d6bd-eb3c-6293-0bd2-3f4ea28fa3f8@linaro.org>
+ <df059f88-6ff6-5906-58f1-4f6c752c4214@quicinc.com>
+ <20230214130636.ldckqgcq6ajph372@SoMainline.org>
+ <d514591a-2891-8c2d-2cd4-5af8283748f5@quicinc.com>
+ <5tjwn4p3nkpjuczudipkrvhy63kfzos6x7o7aufwdei7auujcz@oba37opujh5r>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <5tjwn4p3nkpjuczudipkrvhy63kfzos6x7o7aufwdei7auujcz@oba37opujh5r>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 7DfvtvYyoPWqKuXJqap4fVNdK2TMiDyu
+X-Proofpoint-GUID: 7DfvtvYyoPWqKuXJqap4fVNdK2TMiDyu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-17_13,2023-04-17_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 impostorscore=0 adultscore=0 suspectscore=0 mlxlogscore=999
+ clxscore=1011 malwarescore=0 phishscore=0 bulkscore=0 lowpriorityscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304170175
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -66,29 +109,86 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---E44s44jAOtoWp166
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Mon, Mar 27, 2023 at 10:06:26AM +0200, Krzysztof Kozlowski wrote:
-> The supplies for PM6150L and PM8150L are the same, so they can be part
-> of one if-then block, for smaller code.
+On 4/17/2023 12:41 PM, Marijn Suijten wrote:
+> On 2023-02-14 09:54:57, Abhinav Kumar wrote:
+> [..]
+>>>>>> Just wondering, how were the lengths calculated for the INTF blocks?
+>>>>>> The values in general seem a little off to me.
+>>>
+>>> These (for MSM8998) have been taken from downstream specifically; my
+>>> series starts using INTF_STATUS at 0x26C which conveniently is the
+>>> register right after 0x268, matching the fact that INTF TE and these
+>>> registers weren't supported/available yet on MSM8998.
+>>>
+>>>>>> For example, I'm looking downstream and it seems to me that the length
+>>>>>> for the INTF_0 on MSM8998 should be 0x280. Similarly for SC7280, I'm
+>>>>>> seeing that length for INTF + tearcheck should be 0x2c4.
+>>>
+>>> There are many different downstream sources and tags with seemingly
+>>> conflicting/confusing information.  For v2 [2] I've picked the highest
+>>> register used by the driver which is INTF_TEAR_AUTOREFRESH_CONFIG at
+>>> 0x2B4 (but there might always be more registers that don't need to be
+>>> poked at by the driver, but contain magic debug information and the
+>>> like... those would be useful to capture in the dump going forward).
+>>>
+>>> [2]: https://github.com/SoMainline/linux/commit/2bbc609dd28aa0bd0a2dede20163e521912d0072
+>>>
+>>
+>> Not entirely correct.TEAR_AUTOREFRESH_STATUS is at 0x2c0 for sm8350 and
+>> sm8450 as well so 0x2b4 is a bit short. DPU code uses autorefresh status
+>> today.Esp after your changes it will use the autorefresh status from
+>> intf te which is at offset 0x2c0
+> 
+> Revisiting this, I don't see current DPU code nor downstream 5.4 / 5.10
+> SDE techpack on some of my checkouts use this register, only
+> INTF_TEAR_AUTOREFRESH_CONFIG at 0x2b4..0x2b7.  Am I missing something
+> critical here?
+> 
 
-This doesn't apply against current code, please check and resend.
+Wow, I lost context since its been months since your last response.
 
---E44s44jAOtoWp166
-Content-Type: application/pgp-signature; name="signature.asc"
+But, I refreshed some of it. You are right, we use the status bits 
+present in the INTF_TEAR_AUTOREFRESH_CONFIG and INTF_TEAR_ 
+AUTOREFRESH_STATUS is unused.
 
------BEGIN PGP SIGNATURE-----
+I got confused between the status bit present in the two registers as 
+both relate to autorefresh.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ9pJ0ACgkQJNaLcl1U
-h9DsnggAgHjmkii2xZvIYCdy5E9xEyAeS4Ip4+UCvrAsVqlZn2zLZ2fXzGK0/2xS
-m6PwyyaH7UE8/Hliv7ema3EoheRvOkEzeENTy1goa42WNTM0YvSi31Y9Q56CtS2c
-u5B1IRJo3ePmXeIRdEUFj/sovwM1KNx+7w+y7K8G2oQJd/kdbvwT1YNcDLnIpE63
-uXkLLJkfjO38uDnnG3VGjApz/QqcL9XYHa+e7ZSSQPlU71hvDsqiYSryZChgj8TB
-cGAJHgZTo4AwxRORX6kzm1WtP/RvhUHaBE4J+abxNVMJvbrh0vnsIF8UP6JJG1HM
-6JyuNrkV8mzP4MNhj6DDw+MTRl0biA==
-=k1UD
------END PGP SIGNATURE-----
+But, the offset of of INTF_TEAR_ AUTOREFRESH_STATUS is still at 0x2c0 as 
+i wrote before so 0x2c4 is the accurate length of this block.
 
---E44s44jAOtoWp166--
+And yes, all the blk lengths should be accurate now in the hw catalog 
+after the rework and reviews of that rework.
+
+>>>>> We have discussed INTF lengths in [1]. The current understanding of the
+>>>>> block lengths can be found at [2]. Please comment there if any of the
+>>>>> fixed lengths sounds incorrect to you.
+>>>>>
+>>>>> [1] https://patchwork.freedesktop.org/patch/522187/
+>>>>> [2] https://patchwork.freedesktop.org/patch/522227/
+>>>>>
+>>>>> [skipped the rest]
+>>>>>
+>>>>
+>>>> Please correct my understanding here, it was agreed to fix intf blocks
+>>>> to 0x2c4 here https://patchwork.freedesktop.org/patch/522227/ but I dont
+>>>> see this was merged?
+>>>>
+>>>> It was agreed to first land INTF_TE and then add the higher addresses
+>>>
+>>> Seems like it, at least if I interpret [3] correctly.  My series adds a
+>>> new define that will hardcode _len to 0x2B8 for now, and Dmitry/Konrad
+>>> can later extend it to whatever is stated by the correct downstream
+>>> source.
+>>>
+>>
+>> Like mentioned above it should be 0x2c0 for intf block.
+>>
+>> If you face any conflicting information in downstream code, you can
+>> always check with me on IRC.
+> 
+> Ack, it looks like others landed these changes for me now via the
+> catalog rework, so I have just rebased and kept the lengths in.
+> 
+> - Marijn
