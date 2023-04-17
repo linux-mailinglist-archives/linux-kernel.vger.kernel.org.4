@@ -2,89 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A8B76E3D89
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 04:44:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D99426E3DA5
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 04:52:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbjDQCo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 22:44:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52252 "EHLO
+        id S230056AbjDQCwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 22:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDQCow (ORCPT
+        with ESMTP id S230036AbjDQCw0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 22:44:52 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8FD2D74
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 19:44:51 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id y6so23068280plp.2
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 19:44:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1681699491; x=1684291491;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5BW9mUGbE4CjcE5YLGMl/RAMUggg+307btqnvGXyK7k=;
-        b=kuRByPl6WakkokDKUuQi2G8ok9eGSNerVlAC2Ntd8FA4oCxGqYUnpDuDiDmXkLSWjm
-         53J0l43hDgyhKiFMO47jPKr3IgVqiytUuGvkUnI8T6PoGwhIJ5fZ9f9Ht13ox6GT2dcb
-         pxFNC8JxerHwXuG4U0BpfIaRZKPHgK7kSWeJ0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681699491; x=1684291491;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5BW9mUGbE4CjcE5YLGMl/RAMUggg+307btqnvGXyK7k=;
-        b=NFbN7QmrQeZfqSVqKGGWvcEmCgwWu8rTSjX8NPNSuhSO+pQbSO7JRX487oXKk3lUKA
-         63i9oZS+FJVSxDmlnxGwFGrByecT+EmzMCGPTh9B0CYZSPtQ8sXkhENOysmq7D3JXlra
-         p1cyYhvQgL8mMs3uWcKn9uKrusM3JP6oSsVBoV/Rf7XV/AXm+0iiNZZQg8oEcE8xBpQY
-         FhQl7zKB1u6xIoPxpScBjHESUodXS4InXuVWpUvsDCjITE/1znMHjEmHzqqQo5rZJuUm
-         rrV1H86DzcPEpFoZ41nFKuZ3gX7oR99jE+DO8R1Ca3e36J/SDby/f77D2+XBI6qe4rSC
-         HVMA==
-X-Gm-Message-State: AAQBX9eIEi5v7qOmMCj5cwFqg2ekGuKstLMMbkmkuJ74b5fJhYk6cEt0
-        Q1BB7lPYXJ4i4F8UG2UVDMnuIdGQ2KhVUPaHQzw=
-X-Google-Smtp-Source: AKy350Y2YySI9UdnGoVY7WmBo02qeEtux7soZEnOezCIW99T/kUw/VVxPotquhtNxyUVOxE0ixEELg==
-X-Received: by 2002:a17:902:e88c:b0:19e:f315:98d with SMTP id w12-20020a170902e88c00b0019ef315098dmr13179576plg.43.1681699491429;
-        Sun, 16 Apr 2023 19:44:51 -0700 (PDT)
-Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
-        by smtp.gmail.com with ESMTPSA id ja3-20020a170902efc300b001a65258011bsm6458214plb.26.2023.04.16.19.44.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 19:44:50 -0700 (PDT)
-Date:   Mon, 17 Apr 2023 11:44:46 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCHv4 0/4] zsmalloc: fine-grained fullness and new compaction
- algorithm
-Message-ID: <20230417024446.GL25053@google.com>
-References: <20230304034835.2082479-1-senozhatsky@chromium.org>
- <CAOUHufZ6jPLJYeshO8=2TaqXRmpOFuMQ92E9sg-oCh54fkqW7g@mail.gmail.com>
- <20230416151853.GK25053@google.com>
- <CAOUHufZk+dxE8UXWwGzGbX1BYxomD_25u2xoWt3vnoQp4xSZqw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOUHufZk+dxE8UXWwGzGbX1BYxomD_25u2xoWt3vnoQp4xSZqw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 16 Apr 2023 22:52:26 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 525963580;
+        Sun, 16 Apr 2023 19:52:22 -0700 (PDT)
+Received: from ubuntu.localdomain ([10.12.172.250])
+        (user=jkluo@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 33H2ncBq006394-33H2ncBr006394
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
+        Mon, 17 Apr 2023 10:49:43 +0800
+From:   Jiakai Luo <jkluo@hust.edu.cn>
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Ksenija Stanojevic <ksenija.stanojevic@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>, Marek Vasut <marex@denx.de>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        Jiakai Luo <jkluo@hust.edu.cn>, linux-iio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] iio: adc: mxs-lradc: fix the order of two cleanup operations
+Date:   Sun, 16 Apr 2023 19:47:45 -0700
+Message-Id: <20230417024745.59614-1-jkluo@hust.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-FEAS-AUTH-USER: jkluo@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (23/04/16 13:27), Yu Zhao wrote:
-> > Hi,
-> >
-> > Did you bisect it down to this series?
-> 
-> Not exactly -- since this series was the only suspect I had, I cherry
-> picked it to v6.3-rc6 and verified it is the culprit.
+Smatch reports:
+drivers/iio/adc/mxs-lradc-adc.c:766 mxs_lradc_adc_probe() warn:
+missing unwind goto?
 
-Can't reproduce it yet. One of the theories is that get_fullness_group()
-maybe returns an invalid index, but I don't immediately see how would it
-do so.
+the order of three init operation:
+1.mxs_lradc_adc_trigger_init
+2.iio_triggered_buffer_setup
+3.mxs_lradc_adc_hw_init
 
-Is the problem reproducible? Do you run some specific test?
+thus, the order of three cleanup operation should be:
+1.mxs_lradc_adc_hw_stop
+2.iio_triggered_buffer_cleanup
+3.mxs_lradc_adc_trigger_remove
+
+we exchange the order of two cleanup operations,
+introducing the following differences:
+1.if mxs_lradc_adc_trigger_init fails, returns directly;
+2.if trigger_init succeeds but iio_triggered_buffer_setup fails,
+goto err_trig and remove the trigger.
+
+In addition, we also reorder the unwind that goes on in the
+remove() callback to match the new ordering.
+
+Fixes: 6dd112b9f85e ("iio: adc: mxs-lradc: Add support for ADC driver")
+Signed-off-by: Jiakai Luo <jkluo@hust.edu.cn>
+Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+---
+The issue is found by static analysis and remains untested.
+---
+ drivers/iio/adc/mxs-lradc-adc.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/iio/adc/mxs-lradc-adc.c b/drivers/iio/adc/mxs-lradc-adc.c
+index bca79a93cbe4..85882509b7d9 100644
+--- a/drivers/iio/adc/mxs-lradc-adc.c
++++ b/drivers/iio/adc/mxs-lradc-adc.c
+@@ -757,13 +757,13 @@ static int mxs_lradc_adc_probe(struct platform_device *pdev)
+ 
+ 	ret = mxs_lradc_adc_trigger_init(iio);
+ 	if (ret)
+-		goto err_trig;
++		return ret;
+ 
+ 	ret = iio_triggered_buffer_setup(iio, &iio_pollfunc_store_time,
+ 					 &mxs_lradc_adc_trigger_handler,
+ 					 &mxs_lradc_adc_buffer_ops);
+ 	if (ret)
+-		return ret;
++		goto err_trig;
+ 
+ 	adc->vref_mv = mxs_lradc_adc_vref_mv[lradc->soc];
+ 
+@@ -801,9 +801,9 @@ static int mxs_lradc_adc_probe(struct platform_device *pdev)
+ 
+ err_dev:
+ 	mxs_lradc_adc_hw_stop(adc);
+-	mxs_lradc_adc_trigger_remove(iio);
+-err_trig:
+ 	iio_triggered_buffer_cleanup(iio);
++err_trig:
++	mxs_lradc_adc_trigger_remove(iio);
+ 	return ret;
+ }
+ 
+@@ -814,8 +814,8 @@ static int mxs_lradc_adc_remove(struct platform_device *pdev)
+ 
+ 	iio_device_unregister(iio);
+ 	mxs_lradc_adc_hw_stop(adc);
+-	mxs_lradc_adc_trigger_remove(iio);
+ 	iio_triggered_buffer_cleanup(iio);
++	mxs_lradc_adc_trigger_remove(iio);
+
+ 	return 0;
+ }
+-- 
+2.17.1
+
