@@ -2,265 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7613B6E4D68
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 17:39:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 584CB6E4D6B
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 17:40:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231290AbjDQPj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 11:39:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35844 "EHLO
+        id S230488AbjDQPkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 11:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231302AbjDQPjw (ORCPT
+        with ESMTP id S229940AbjDQPkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 11:39:52 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC9110A;
-        Mon, 17 Apr 2023 08:39:49 -0700 (PDT)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id C7858100004;
-        Mon, 17 Apr 2023 15:39:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1681745988;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1QbBR2bB5LMaN7h7i/xMkA3oEaeoCIU14nuN9j563/8=;
-        b=pPIzZVuga4kjB4/iB25V+Bk/IIoSnmzhdgtOYrWqun9VhrA0CjDBbJxIYPQRH49qrB+xtu
-        kez/uQDOIz1E3W9OQYlz+tYjlqMLOvz3i1bgiO83IcpkXFAT9RDFrQ4UlKThLWzwLYChku
-        zXYnJiPhToWVd2fAAHUglQsXQIBzREt1PXAENKp6eJlNddThO1DZrJXcqUY/HwZCT3a3TE
-        RmrQ7fWoekLXQJEmp3KUUP9VwEDx0FN+dtNs7l6c0AZflXlJwIJjXtgZ2L+c+1bjUGPVsZ
-        FE3YoIz7S6NONlfFJPBgcESokBYC5f5Ck0jSMOA27dcabLgO95G/67qDHV+Vwg==
-Date:   Mon, 17 Apr 2023 17:39:41 +0200
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-phy@lists.infradead.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [RFC PATCH 0/4] Add support for QMC HDLC and PHY
-Message-ID: <20230417173941.0206f696@bootlin.com>
-In-Reply-To: <a2615755-f009-4a21-b464-88ec5e58f32a@lunn.ch>
-References: <20230323103154.264546-1-herve.codina@bootlin.com>
-        <885e4f20-614a-4b8e-827e-eb978480af87@lunn.ch>
-        <20230414165504.7da4116f@bootlin.com>
-        <c99a99c5-139d-41c5-89a4-0722e0627aea@lunn.ch>
-        <20230417121629.63e97b80@bootlin.com>
-        <a2615755-f009-4a21-b464-88ec5e58f32a@lunn.ch>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        Mon, 17 Apr 2023 11:40:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A95C145;
+        Mon, 17 Apr 2023 08:40:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C5DF62049;
+        Mon, 17 Apr 2023 15:40:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A62CC433EF;
+        Mon, 17 Apr 2023 15:40:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681746009;
+        bh=Ct1SScPIzDNRIt4RDA3X/shUOw1Xw3+mqc/PCLpW23o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=t07U6pldJ/amL9H0/1sY2jhYYH9ZkRIwH4n3OoG1oC65WpCQ7nwP3mwnumrAWd+jf
+         8B/j4ORuXVj6/7D2n+/jC7NBrSM183DaBikNJT33HJCsCrSIGD1Q5d3dsAeaT576O7
+         07fzfU1ZxOZXAxb+tA7YvT6/eUXisf/E76IjO1es+JnWao8Binyf/zl1Dx+GM6jURW
+         n6XZDJq1DHVve+QzHv+gpoIgkdhS9Ab35XhHkOlpxbuLGqxo02VP5u61IgU4xO+vBn
+         0N3/e+c935BTOr4APFDPEZtVsU3uvcSjCctgbCGtg+jrvE6DsEGNVuh5mohqSozsZq
+         yapuFJT97D/Ew==
+Date:   Mon, 17 Apr 2023 08:40:09 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Hannes Reinecke <hare@suse.de>,
+        Pankaj Raghav <p.raghav@samsung.com>,
+        "kbus >> Keith Busch" <kbusch@kernel.org>, brauner@kernel.org,
+        viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gost.dev@samsung.com
+Subject: Re: [RFC 0/4] convert create_page_buffers to create_folio_buffers
+Message-ID: <20230417154009.GC360881@frogsfrogsfrogs>
+References: <ZDn3XPMA024t+C1x@bombadil.infradead.org>
+ <ZDoMmtcwNTINAu3N@casper.infradead.org>
+ <ZDoZCJHQXhVE2KZu@bombadil.infradead.org>
+ <ZDodlnm2nvYxbvR4@casper.infradead.org>
+ <31765c8c-e895-4207-2b8c-39f6c7c83ece@suse.de>
+ <ZDraOHQHqeabyCvN@casper.infradead.org>
+ <ZDtPK5Qdts19bKY2@bombadil.infradead.org>
+ <ZDtuFux7FGlCMkC3@casper.infradead.org>
+ <ZDuHEolre/saj8iZ@bombadil.infradead.org>
+ <ZDwBJVmIN3tLFhXI@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZDwBJVmIN3tLFhXI@casper.infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Apr 2023 15:12:14 +0200
-Andrew Lunn <andrew@lunn.ch> wrote:
+On Sun, Apr 16, 2023 at 03:07:33PM +0100, Matthew Wilcox wrote:
+> On Sat, Apr 15, 2023 at 10:26:42PM -0700, Luis Chamberlain wrote:
+> > On Sun, Apr 16, 2023 at 04:40:06AM +0100, Matthew Wilcox wrote:
+> > > I don't think we
+> > > should be overriding the aops, and if we narrow the scope of large folio
+> > > support in blockdev t only supporting folio_size == LBA size, it becomes
+> > > much more feasible.
+> > 
+> > I'm trying to think of the possible use cases where folio_size != LBA size
+> > and I cannot immediately think of some. Yes there are cases where a
+> > filesystem may use a different block for say meta data than data, but that
+> > I believe is side issue, ie, read/writes for small metadata would have
+> > to be accepted. At least for NVMe we have metadata size as part of the
+> > LBA format, but from what I understand no Linux filesystem yet uses that.
+> 
+> NVMe metadata is per-block metadata -- a CRC or similar.  Filesystem
+> metadata is things like directories, inode tables, free space bitmaps,
+> etc.
+> 
+> > struct buffer_head *alloc_page_buffers(struct page *page, unsigned long size,   
+> >                 bool retry)                                                     
+> > { 
+> [...]
+> >         head = NULL;  
+> >         offset = PAGE_SIZE;                                                     
+> >         while ((offset -= size) >= 0) {                                         
+> > 
+> > I see now what you say about the buffer head being of the block size
+> > bh->b_size = size above.
+> 
+> Yes, just changing that to 'offset = page_size(page);' will do the trick.
+> 
+> > > sb_bread() is used by most filesystems, and the buffer cache aliases
+> > > into the page cache.
+> > 
+> > I see thanks. I checked what xfs does and its xfs_readsb() uses its own
+> > xfs_buf_read_uncached(). It ends up calling xfs_buf_submit() and
+> > xfs_buf_ioapply_map() does it's own submit_bio(). So I'm curious why
+> > they did that.
+> 
+> IRIX didn't have an sb_bread() ;-)
+> 
+> > > In userspace, if I run 'dd if=blah of=/dev/sda1 bs=512 count=1 seek=N',
+> > > I can overwrite the superblock.  Do we want filesystems to see that
+> > > kind of vandalism, or do we want the mounted filesystem to have its
+> > > own copy of the data and overwrite what userspace wrote the next time it
+> > > updates the superblock?
+> > 
+> > Oh, what happens today?
+> 
+> Depends on the filesystem, I think?  Not really sure, to be honest.
 
-> > > I'm surprised to see so much in the binding. I assume you are familiar
-> > > with DAHDI. It allows nearly everything to be configured at
-> > > runtime. The systems i've used allow you to select the clock
-> > > configuration, line build out, user side vs networks side signalling
-> > > CRC4 enables or not, etc. =20
-> >=20
-> > Well, I am not familiar with DAHDI at all.
-> > I didn't even know about the DAHDI project.
-> > The project seems to use specific kernel driver and I would like to avo=
-id
-> > these external drivers. =20
->=20
-> DAHDI is kind of the reference. Pretty much any Linux system being
-> used as a open source PBX runs Asterisk, and has the out of tree DAHDI
-> code to provide access to E1/T1 hardware and analogue POTS. I doubt it
-> will ever be merged into mainline, but i think it gives a good idea
-> what is needed to fully make use of such hardware.
->=20
-> I don't know what you application is. Are you using libpri for
-> signalling? How are you exposing the B channel to user space so that
-> libpri can use it?
+The filesystem driver sees the vandalism, and can very well crash as a
+result[1].  In that case it was corrupted journal contents being
+replayed, but the same thing would happen if you wrote a malicious
+userspace program to set the metadata_csum feature flag in the ondisk
+superblock after mounting the fs.
 
-My application (probably a subset of what we can do with E1 lines) does
-not use signaling.
+https://bugzilla.kernel.org/show_bug.cgi?id=82201#c4
 
-I don't expose any channel to the user space but just:
-- One hdlc interface using one timeslot.
-- One or more dai links (audio channels) that can be used using ALSA librar=
-y.
+I've tried to prevent people from writing to mounted block devices in
+the past, but did not succeed.  If you try to prevent programs from
+opening such devices with O_RDWR/O_WRONLY you then break lvm tools which
+require that ability even though they don't actually write anything to
+the block device.  If you make the block device write_iter function
+fail, then old e2fsprogs breaks and you get shouted at for breaking
+userspace.
 
->=20
-> > > > Further more, the QMC HDLC is not the only PEF2256 consumer.
-> > > > The PEF2256 is also used for audio path (ie audio over E1) and so t=
-he
-> > > > configuration is shared between network and audio. The setting cann=
-ot be
-> > > > handle by the network part as the PEF2256 must be available and cor=
-rectly
-> > > > configured even if the network part is not present.   =20
-> > >=20
-> > > But there is no reason why the MFD could not provide a generic PHY to
-> > > actually configure the 'PHY'. The HDLC driver can then also use the
-> > > generic PHY. It would make your generic PHY less 'pointless'. I'm not
-> > > saying it has to be this way, but it is an option. =20
-> >=20
-> > If the pef2256 PHY provides a configure function, who is going to call =
-this
-> > configure(). I mean the one calling the configure will be the configura=
-tion
-> > owner. None of the MFD child can own the configuration as this configur=
-ation
-> > will impact other children. So the MFD (top level node) owns the config=
-uration. =20
->=20
-> Fine. Nothing unusual there. The netdev owns the configuration for an
-> Ethernet device. The MAC driver passes a subset down to any generic
-> PHY being used to implement a SERDES.
->=20
-> You could have the same architecture here. The MFD implements a
-> standardised netlink API for configuring E1/T1/J1 devices. Part of it
-> gets passed to the framer, which could be part of a generic PHY. I
-> assume you also need to configure the HDLC hardware. It needs to know
-> if it is using the whole E1 channel in unframed mode, or it should do
-> a fractional link, using a subset of slots, or is just using one slot
-> for 64Kbps, which would be an ISDN B channel.
+Hence I decided to let security researchers find these bugs and control
+the design discussion via CVE.  That's not correct and it's not smart,
+but it preserves some of my sanity.
 
-The HDLC driver uses a QMC channel and the DT binding related to this
-QMC channel defines the timeslots used by this channel.
-
-=46rom the QMC HDLC nothing is configured. This is done at the QMC level.
-  https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/=
-Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,cpm1-scc-qmc.yaml#n91
-
->=20
-> > > > > In fact, this PHY driver does not seem to do any configuration of=
- any
-> > > > > sort on the framer. All it seems to be doing is take notification=
- from
-> > > > > one chain and send them out another chain!   =20
-> > > >=20
-> > > > Configuration is done by the parent MFD driver.
-> > > > The PHY driver has nothing more to do.
-> > > >    =20
-> > > > >=20
-> > > > > I also wounder if this get_status() call is sufficient. Don't you=
- also
-> > > > > want Red, Yellow and Blue alarms? It is not just the carrier is d=
-own,
-> > > > > but why it is down.   =20
-> > > >=20
-> > > > I don't need them in my use case but if needed can't they be added =
-later?
-> > > > Also, from the HDLC device point of view what can be done with thes=
-e alarms?   =20
-> > >=20
-> > > https://elixir.bootlin.com/linux/latest/source/Documentation/networki=
-ng/ethtool-netlink.rst#L472 =20
-> >=20
-> > Thanks for pointing this interface.
-> > It is specific to ethtool but I can see the idea. =20
->=20
-> Don't equate ethtool with Ethernet. Any netdev can implement it, and a
-> HDLC device is a netdev. So it could well return link down reason.
-
-Ok.
-So the link down reason should be returned by the newly introduced QMC HDLC.
-
-Adding this in the generic PHY infrastructure I used (drivers/phy) is adding
-some specific netdev stuff in this subsystem.
-Don't forget that the pef2256 can be used without any network part by the
-audio subsystem in order to have the user audio data sent to E1 using pure
-ALSA path.
-
-
->=20
-> > But indeed this could be changed.
-> > If changed, the MFD pef2256 will have to handle the full struct
-> > phy_status_basic as the translation will not be there anymore.
-> > Right now, this structure is pretty simple and contains only the link s=
-tate
-> > flag. But in the future, this PHY structure can move to something more
-> > complex and I am not sure that filling this struct is the MFD pef2256
-> > responsibility. The PHY pef2256 is responsible for the correct structure
-> > contents not sure that this should be moved to the MFD part. =20
->=20
-> Framers, like Ethernet PHYs, are reasonably well defined, because
-> there are clear standards to follow. You could put the datasheets for
-> the various frames side by side and quickly get an idea of the common
-> properties. So you could define a structure now. In order to make it
-> extendable, just avoid 0 having any meaning other than UNKNOWN. If you
-> look at ethernet, SPEED_UNKNOWN is 0, DUPLEX_UNKNOWN is 0. So if a new
-> field is added, we know if a driver has not filled it in.
->=20
-> > > And why is the notifier specific to the PEF2256? What would happen if
-> > > i used a analog devices DS2155, DS21Q55, and DS2156, or the IDT
-> > > 82P2281? Would each have its own notifier? And hence each would need
-> > > its own PHY which translates one notifier into another? =20
-> >=20
-> > Each of them should have their own notifier if they can notify. =20
->=20
-> I doubt you will find a framer which cannot report lost of framing. It
-> is too much a part of the standards. There are signalling actions you
-> need to do when a link goes does. So all framer drivers will have a
-> notifier.
->=20
-> > At least they will need their own notifier at they PHY driver level.
-> > Having or not a translation from something else would depend on each de=
-vice
-> > PHY driver implementation. =20
->=20
-> Have you ever look at Ethernet PHYs? They all export the same API. You
-> can plug any Linux MAC driver into any Linux Ethernet PHY driver. It
-> should be the same here. You should be able to plug any HDLC driver
-> into any Framer. I should be able to take the same SoC you have
-> implementing the TDM interface, and plug it into the IDT framer i know
-> of. We want a standardised API between the HDLC device and the framer.
-
-Can you tell me more.
-I thought I was providing a "standardised" API between the HDLC device
-and the framer. Maybe it was not as complete as you could expect but I had
-the feeling that it was standardised.
-Right now it is just a link state notification provided by a simple 'basic
-PHY'. Any HDLC device that uses a 'basic PHY' can be notified of any changes
-of this link state provided by the PHY without knowing what is the exact
-PHY behind this 'basic phy'.
-
->=20
-> > I would like this first implementation without too much API restriction
-> > in order to see how it goes.
-> > The actual proposal imposes nothing on the PHY internal implementation.
-> > the pef2256 implementation chooses to have two notifiers (one at MFD
-> > level and one at PHY level) but it was not imposed by the API. =20
->=20
-> What i would like to see is some indication the API you are proposing
-> is generic, and could be implemented by multiple frames and HDLC
-> devices. The interface between the HDLC driver and the framer should
-> be generic. The HDLC driver has an abstract reference to a framer. The
-> framer has a reference to a netdev for the HDLC device.
-
-Here, I do not fully understand.
-Why does the framer need a reference to the netdev ?
-
->=20
-> You can keep this API very simple, just have link up/down
-> notification, since that is all you want at the moment. But the
-> implementation should give hints how it can be extended.
->=20
-
-Best regards,
-Herv=C3=A9
-
---=20
-Herv=C3=A9 Codina, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--D
