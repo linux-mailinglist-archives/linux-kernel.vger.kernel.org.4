@@ -2,401 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3005D6E452F
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 12:29:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C518A6E451C
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 12:23:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbjDQK3R convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 17 Apr 2023 06:29:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60862 "EHLO
+        id S230465AbjDQKXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 06:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjDQK3O (ORCPT
+        with ESMTP id S229575AbjDQKXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 06:29:14 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B899759C9;
-        Mon, 17 Apr 2023 03:28:21 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-506b29eaa74so8658a12.1;
-        Mon, 17 Apr 2023 03:28:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681727118; x=1684319118;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YVhj7BQVreOioVwdzfJVQPo3+YDsltlbdlC938y6eWQ=;
-        b=KHFvBTcCJLyeohrebInwZVXKYB3r5CtF4BqXORzj/I0hlqlQc28n7Tngq+vxsQEdH0
-         PlLhkL2r43E6dgR7CbaIQOgxEeCjSMKCwNU1V5Y/kLQD2nGItLssM7k7nK9LDr8h5aGs
-         FY4iLfFa/eI/kN/73MwG9o4XaqAG6v3V2oHHcR2HFL04GveKHFPgfIpFY7JimSgp4yXb
-         qZ15wYLi22BkqGNvbDDr3Pu0EMzZod0s+4uUyBTgUp5F1WttMDqOTT5llJ4v2aJ2y8H5
-         Cs71dE9kERTFpZQxtL5L9BPz9qKsmSAFVYWwzkYeFm7Q2ATeM36DbDNffzLYdsTYp2tq
-         5BAA==
-X-Gm-Message-State: AAQBX9ccO4CfBXgrGCDq43mQXGu2z6x52O6tm2OdakQd1d2v67X6Dzkx
-        heI+CxfB5G6Bo02egaIpgrrCYC9C33kQTUOBeps0s4+f
-X-Google-Smtp-Source: AKy350bdY6HZSs/RsNqGW3NB1kmuuo1L0NJdYE1O+wH4c+KfEM0P/M52AHVIMQNmco8t3CahWmIyW0lsatfcLMw7r5s=
-X-Received: by 2002:a17:906:2092:b0:94e:8b6c:462c with SMTP id
- 18-20020a170906209200b0094e8b6c462cmr9348344ejq.2.1681726594283; Mon, 17 Apr
- 2023 03:16:34 -0700 (PDT)
+        Mon, 17 Apr 2023 06:23:17 -0400
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [IPv6:2001:4b98:dc4:8::240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F288D3A91;
+        Mon, 17 Apr 2023 03:22:18 -0700 (PDT)
+Received: from relay9-d.mail.gandi.net (unknown [217.70.183.199])
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id 7FB4ACE256;
+        Mon, 17 Apr 2023 10:17:54 +0000 (UTC)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 6FD9AFF80F;
+        Mon, 17 Apr 2023 10:16:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1681726594;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2kMksyFjGeVV2iklCwJ5cx3YfiDVM7A12HWZsN5LSlA=;
+        b=eXWJEI1DzdLDX23p4dXUCZ4RaIC/UFBt5MrcdTcvrhcsRAOyTExzHAtfW8urPZaJFEB7hJ
+        RsyCLtNmlGE3jnuQMOSa55Lk0j12FqIHJmSVpDgghi21phcwXhlvetfPjdo8mJEsuAq5LM
+        zoVOAX9aMD+jaKguY4byqxzhJ6dqH8njWVl64fKA1565TdtZmO+Zyvhv6eYhVZ2sTcOfBu
+        qEjIjzv6oC8SfSClmfYo4E4A+ik/tjHM7w50hrYn4cJ5qfl/Xlcu+EXXI0TvJvA1jhapoE
+        vZuMbUR902z8esz0dmjsQE7hrktvJ6Ez9X1w/SrMqdz6yw51IYkW9GPrie8APw==
+Date:   Mon, 17 Apr 2023 12:16:29 +0200
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-phy@lists.infradead.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [RFC PATCH 0/4] Add support for QMC HDLC and PHY
+Message-ID: <20230417121629.63e97b80@bootlin.com>
+In-Reply-To: <c99a99c5-139d-41c5-89a4-0722e0627aea@lunn.ch>
+References: <20230323103154.264546-1-herve.codina@bootlin.com>
+        <885e4f20-614a-4b8e-827e-eb978480af87@lunn.ch>
+        <20230414165504.7da4116f@bootlin.com>
+        <c99a99c5-139d-41c5-89a4-0722e0627aea@lunn.ch>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20230413213753.129962-1-srinivas.pandruvada@linux.intel.com> <5c21f6b7-8c7e-6e42-fe02-c8fd3ae64016@linaro.org>
-In-Reply-To: <5c21f6b7-8c7e-6e42-fe02-c8fd3ae64016@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 17 Apr 2023 12:16:21 +0200
-Message-ID: <CAJZ5v0ir+-MEYkPSZKFSyZ=iAnUbVXtk9jMZHdgpWM6LMQ10jA@mail.gmail.com>
-Subject: Re: [PATCH v2] thermal/drivers/intel/int340x: Add DLVR support
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        rafael@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+Hi Andrew
 
-On Mon, Apr 17, 2023 at 12:00 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
->
-> Hi Rafael,
->
-> do you want me to pick this patch ?
+On Fri, 14 Apr 2023 18:15:30 +0200
+Andrew Lunn <andrew@lunn.ch> wrote:
 
-No, thank you.
+> > > When i look at the 'phy' driver, i don't see anything a typical PHY
+> > > driver used for networking would have. A networking PHY driver often
+> > > has the ability to change between modes, like SGMII, QSGMII, 10GBASER.
+> > > The equivalent here would be changing between E1, T1 and J1. It has
+> > > the ability to change the speed, 1G, 2.5G, 10G etc. This could be
+> > > implied via the mode, E1 is 2.048Mbps, T1 1.544Mbps, and i forget what
+> > > J1 is. The PEF2256 also seems to support E1/T1/J1. How is its modes
+> > > configured?  
+> > 
+> > All of these are set by the MFD driver during its probe().
+> > The expected setting come from several properties present in the pef2256
+> > DT node. The binding can be found here:
+> >   https://lore.kernel.org/all/20230328092645.634375-2-herve.codina@bootlin.com/  
+> 
+> I'm surprised to see so much in the binding. I assume you are familiar
+> with DAHDI. It allows nearly everything to be configured at
+> runtime. The systems i've used allow you to select the clock
+> configuration, line build out, user side vs networks side signalling
+> CRC4 enables or not, etc.
 
-You can generally assume that I will be applying patches for
-thermal/intel/ and ACPI-related ones directly.
+Well, I am not familiar with DAHDI at all.
+I didn't even know about the DAHDI project.
+The project seems to use specific kernel driver and I would like to avoid
+these external drivers.
 
-I may pick up thermal core patches too.
+> 
+> > Further more, the QMC HDLC is not the only PEF2256 consumer.
+> > The PEF2256 is also used for audio path (ie audio over E1) and so the
+> > configuration is shared between network and audio. The setting cannot be
+> > handle by the network part as the PEF2256 must be available and correctly
+> > configured even if the network part is not present.  
+> 
+> But there is no reason why the MFD could not provide a generic PHY to
+> actually configure the 'PHY'. The HDLC driver can then also use the
+> generic PHY. It would make your generic PHY less 'pointless'. I'm not
+> saying it has to be this way, but it is an option.
 
-Thanks!
+If the pef2256 PHY provides a configure function, who is going to call this
+configure(). I mean the one calling the configure will be the configuration
+owner. None of the MFD child can own the configuration as this configuration
+will impact other children. So the MFD (top level node) owns the configuration.
 
-> On 13/04/2023 23:37, Srinivas Pandruvada wrote:
-> > Add support for DLVR (Digital Linear Voltage Regulator) attributes,
-> > which can be used to control RFIM.
-> > Here instead of "fivr" another directory "dlvr" is created with DLVR
-> > attributes:
-> >
-> > /sys/bus/pci/devices/0000:00:04.0/dlvr
-> > ├── dlvr_freq_mhz
-> > ├── dlvr_freq_select
-> > ├── dlvr_hardware_rev
-> > ├── dlvr_pll_busy
-> > ├── dlvr_rfim_enable
-> > └── dlvr_spread_spectrum_pct
-> > └── dlvr_control_mode
-> > └── dlvr_control_lock
-> >
-> > Attributes
-> > dlvr_freq_mhz (RO):
-> > Current DLVR PLL frequency in MHz.
-> >
-> > dlvr_freq_select (RW):
-> > Sets DLVR PLL clock frequency.
-> >
-> > dlvr_hardware_rev (RO):
-> > DLVR hardware revision.
-> >
-> > dlvr_pll_busy (RO):
-> > PLL can't accept frequency change when set.
-> >
-> > dlvr_rfim_enable (RW):
-> > 0: Disable RF frequency hopping, 1: Enable RF frequency hopping.
-> >
-> > dlvr_control_mode (RW):
-> > Specifies how frequencies are spread. 0: Down spread, 1: Spread in Center.
-> >
-> > dlvr_control_lock (RW):
-> > 1: future writes are ignored.
-> >
-> > dlvr_spread_spectrum_pct (RW)
-> > A write to this register updates the DLVR spread spectrum percent value.
-> >
-> > Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> > ---
-> > v2
-> > - Updated documentation
-> > - Added dlvr_control_lock attribute
-> >
-> >   .../driver-api/thermal/intel_dptf.rst         | 46 +++++++++-
-> >   .../processor_thermal_device.c                |  3 +-
-> >   .../processor_thermal_device.h                |  1 +
-> >   .../processor_thermal_device_pci.c            |  2 +-
-> >   .../int340x_thermal/processor_thermal_rfim.c  | 92 ++++++++++++++++++-
-> >   5 files changed, 135 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/Documentation/driver-api/thermal/intel_dptf.rst b/Documentation/driver-api/thermal/intel_dptf.rst
-> > index f5c193cccbda..9ab4316322a1 100644
-> > --- a/Documentation/driver-api/thermal/intel_dptf.rst
-> > +++ b/Documentation/driver-api/thermal/intel_dptf.rst
-> > @@ -184,8 +184,9 @@ ABI.
-> >   DPTF Processor thermal RFIM interface
-> >   --------------------------------------------
-> >
-> > -RFIM interface allows adjustment of FIVR (Fully Integrated Voltage Regulator)
-> > -and DDR (Double Data Rate)frequencies to avoid RF interference with WiFi and 5G.
-> > +RFIM interface allows adjustment of FIVR (Fully Integrated Voltage Regulator),
-> > +DDR (Double Data Rate) and DLVR (Digital Linear Voltage Regulator)
-> > +frequencies to avoid RF interference with WiFi and 5G.
-> >
-> >   Switching voltage regulators (VR) generate radiated EMI or RFI at the
-> >   fundamental frequency and its harmonics. Some harmonics may interfere
-> > @@ -196,6 +197,15 @@ small % and shift away the switching noise harmonic interference from
-> >   radio channels.  OEM or ODMs can use the driver to control SOC IVR
-> >   operation within the range where it does not impact IVR performance.
-> >
-> > +Some products use DLVR instead of FIVR as switching voltage regulator.
-> > +In this case attributes of DLVR must be adjusted instead of FIVR.
-> > +
-> > +While shifting the frequencies additional clock noise can be introduced,
-> > +which is compensated by adjusting Spread spectrum percent. This helps
-> > +to reduce the clock noise to meet regulatory compliance. This spreading
-> > +% increases bandwidth of signal transmission and hence reduces the
-> > +effects of interference, noise and signal fading.
-> > +
-> >   DRAM devices of DDR IO interface and their power plane can generate EMI
-> >   at the data rates. Similar to IVR control mechanism, Intel offers a
-> >   mechanism by which DDR data rates can be changed if several conditions
-> > @@ -264,6 +274,38 @@ DVFS attributes
-> >   ``rfi_disable (RW)``
-> >       Disable DDR rate change feature
-> >
-> > +DLVR attributes
-> > +
-> > +:file:`/sys/bus/pci/devices/0000\:00\:04.0/dlvr/`
-> > +
-> > +``dlvr_hardware_rev`` (RO)
-> > +     DLVR hardware revision.
-> > +
-> > +``dlvr_freq_mhz`` (RO)
-> > +     Current DLVR PLL frequency in MHz.
-> > +
-> > +``dlvr_freq_select`` (RW)
-> > +     Sets DLVR PLL clock frequency. Once set, and enabled via
-> > +     dlvr_rfim_enable, the dlvr_freq_mhz will show the current
-> > +     DLVR PLL frequency.
-> > +
-> > +``dlvr_pll_busy`` (RO)
-> > +     PLL can't accept frequency change when set.
-> > +
-> > +``dlvr_rfim_enable`` (RW)
-> > +     0: Disable RF frequency hopping, 1: Enable RF frequency hopping.
-> > +
-> > +``dlvr_spread_spectrum_pct`` (RW)
-> > +     Sets DLVR spread spectrum percent value.
-> > +
-> > +``dlvr_control_mode`` (RW)
-> > +        Specifies how frequencies are spread using spread spectrum.
-> > +        0: Down spread,
-> > +        1: Spread in the Center.
-> > +
-> > +``dlvr_control_lock`` (RW)
-> > +    1: future writes are ignored.
-> > +
-> >   DPTF Power supply and Battery Interface
-> >   ----------------------------------------
-> >
-> > diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-> > index a1dc18be7609..3ca0a2f5937f 100644
-> > --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-> > +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-> > @@ -337,7 +337,8 @@ int proc_thermal_mmio_add(struct pci_dev *pdev,
-> >       }
-> >
-> >       if (feature_mask & PROC_THERMAL_FEATURE_FIVR ||
-> > -         feature_mask & PROC_THERMAL_FEATURE_DVFS) {
-> > +         feature_mask & PROC_THERMAL_FEATURE_DVFS ||
-> > +         feature_mask & PROC_THERMAL_FEATURE_DLVR) {
-> >               ret = proc_thermal_rfim_add(pdev, proc_priv);
-> >               if (ret) {
-> >                       dev_err(&pdev->dev, "failed to add RFIM interface\n");
-> > diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
-> > index 7d52fcff4937..7acaa8f1b896 100644
-> > --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
-> > +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
-> > @@ -60,6 +60,7 @@ struct rapl_mmio_regs {
-> >   #define PROC_THERMAL_FEATURE_FIVR   0x02
-> >   #define PROC_THERMAL_FEATURE_DVFS   0x04
-> >   #define PROC_THERMAL_FEATURE_MBOX   0x08
-> > +#define PROC_THERMAL_FEATURE_DLVR    0x10
-> >
-> >   #if IS_ENABLED(CONFIG_PROC_THERMAL_MMIO_RAPL)
-> >   int proc_thermal_rapl_add(struct pci_dev *pdev, struct proc_thermal_device *proc_priv);
-> > diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-> > index d71ee50e7878..8b260dd9221b 100644
-> > --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-> > +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-> > @@ -351,7 +351,7 @@ static SIMPLE_DEV_PM_OPS(proc_thermal_pci_pm, proc_thermal_pci_suspend,
-> >
-> >   static const struct pci_device_id proc_thermal_pci_ids[] = {
-> >       { PCI_DEVICE_DATA(INTEL, ADL_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
-> > -     { PCI_DEVICE_DATA(INTEL, MTLP_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
-> > +     { PCI_DEVICE_DATA(INTEL, MTLP_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX | PROC_THERMAL_FEATURE_DLVR) },
-> >       { PCI_DEVICE_DATA(INTEL, RPL_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
-> >       { },
-> >   };
-> > diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-> > index 92ed1213fe37..546b70434004 100644
-> > --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-> > +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-> > @@ -39,6 +39,29 @@ static const struct mmio_reg tgl_fivr_mmio_regs[] = {
-> >       { 1, 0x5A14, 2, 0x3, 1}, /* fivr_fffc_rev */
-> >   };
-> >
-> > +static const char * const dlvr_strings[] = {
-> > +     "dlvr_spread_spectrum_pct",
-> > +     "dlvr_control_mode",
-> > +     "dlvr_control_lock",
-> > +     "dlvr_rfim_enable",
-> > +     "dlvr_freq_select",
-> > +     "dlvr_hardware_rev",
-> > +     "dlvr_freq_mhz",
-> > +     "dlvr_pll_busy",
-> > +     NULL
-> > +};
-> > +
-> > +static const struct mmio_reg dlvr_mmio_regs[] = {
-> > +     { 0, 0x15A08, 5, 0x1F, 0}, /* dlvr_spread_spectrum_pct */
-> > +     { 0, 0x15A08, 1, 0x1, 5}, /* dlvr_control_mode */
-> > +     { 0, 0x15A08, 1, 0x1, 6}, /* dlvr_control_lock */
-> > +     { 0, 0x15A08, 1, 0x1, 7}, /* dlvr_rfim_enable */
-> > +     { 0, 0x15A08, 12, 0xFFF, 8}, /* dlvr_freq_select */
-> > +     { 1, 0x15A10, 2, 0x3, 30}, /* dlvr_hardware_rev */
-> > +     { 1, 0x15A10, 16, 0xFFFF, 0}, /* dlvr_freq_mhz */
-> > +     { 1, 0x15A10, 1, 0x1, 16}, /* dlvr_pll_busy */
-> > +};
-> > +
-> >   /* These will represent sysfs attribute names */
-> >   static const char * const dvfs_strings[] = {
-> >       "rfi_restriction_run_busy",
-> > @@ -78,14 +101,16 @@ static ssize_t suffix##_show(struct device *dev,\
-> >       int ret;\
-> >   \
-> >       proc_priv = pci_get_drvdata(pdev);\
-> > -     if (table) {\
-> > +     if (table == 1) {\
-> >               match_strs = (const char **)dvfs_strings;\
-> >               mmio_regs = adl_dvfs_mmio_regs;\
-> > -     } else { \
-> > +     } else if (table == 2) { \
-> > +             match_strs = (const char **)dlvr_strings;\
-> > +             mmio_regs = dlvr_mmio_regs;\
-> > +     } else {\
-> >               match_strs = (const char **)fivr_strings;\
-> >               mmio_regs = tgl_fivr_mmio_regs;\
-> >       } \
-> > -     \
-> >       ret = match_string(match_strs, -1, attr->attr.name);\
-> >       if (ret < 0)\
-> >               return ret;\
-> > @@ -109,10 +134,13 @@ static ssize_t suffix##_store(struct device *dev,\
-> >       u32 mask;\
-> >   \
-> >       proc_priv = pci_get_drvdata(pdev);\
-> > -     if (table) {\
-> > +     if (table == 1) {\
-> >               match_strs = (const char **)dvfs_strings;\
-> >               mmio_regs = adl_dvfs_mmio_regs;\
-> > -     } else { \
-> > +     } else if (table == 2) { \
-> > +             match_strs = (const char **)dlvr_strings;\
-> > +             mmio_regs = dlvr_mmio_regs;\
-> > +     } else {\
-> >               match_strs = (const char **)fivr_strings;\
-> >               mmio_regs = tgl_fivr_mmio_regs;\
-> >       } \
-> > @@ -147,6 +175,47 @@ RFIM_STORE(spread_spectrum_clk_enable, 0)
-> >   RFIM_STORE(rfi_vco_ref_code, 0)
-> >   RFIM_STORE(fivr_fffc_rev, 0)
-> >
-> > +RFIM_SHOW(dlvr_spread_spectrum_pct, 2)
-> > +RFIM_SHOW(dlvr_control_mode, 2)
-> > +RFIM_SHOW(dlvr_control_lock, 2)
-> > +RFIM_SHOW(dlvr_hardware_rev, 2)
-> > +RFIM_SHOW(dlvr_freq_mhz, 2)
-> > +RFIM_SHOW(dlvr_pll_busy, 2)
-> > +RFIM_SHOW(dlvr_freq_select, 2)
-> > +RFIM_SHOW(dlvr_rfim_enable, 2)
-> > +
-> > +RFIM_STORE(dlvr_spread_spectrum_pct, 2)
-> > +RFIM_STORE(dlvr_rfim_enable, 2)
-> > +RFIM_STORE(dlvr_freq_select, 2)
-> > +RFIM_STORE(dlvr_control_mode, 2)
-> > +RFIM_STORE(dlvr_control_lock, 2)
-> > +
-> > +static DEVICE_ATTR_RW(dlvr_spread_spectrum_pct);
-> > +static DEVICE_ATTR_RW(dlvr_control_mode);
-> > +static DEVICE_ATTR_RW(dlvr_control_lock);
-> > +static DEVICE_ATTR_RW(dlvr_freq_select);
-> > +static DEVICE_ATTR_RO(dlvr_hardware_rev);
-> > +static DEVICE_ATTR_RO(dlvr_freq_mhz);
-> > +static DEVICE_ATTR_RO(dlvr_pll_busy);
-> > +static DEVICE_ATTR_RW(dlvr_rfim_enable);
-> > +
-> > +static struct attribute *dlvr_attrs[] = {
-> > +     &dev_attr_dlvr_spread_spectrum_pct.attr,
-> > +     &dev_attr_dlvr_control_mode.attr,
-> > +     &dev_attr_dlvr_control_lock.attr,
-> > +     &dev_attr_dlvr_freq_select.attr,
-> > +     &dev_attr_dlvr_hardware_rev.attr,
-> > +     &dev_attr_dlvr_freq_mhz.attr,
-> > +     &dev_attr_dlvr_pll_busy.attr,
-> > +     &dev_attr_dlvr_rfim_enable.attr,
-> > +     NULL
-> > +};
-> > +
-> > +static const struct attribute_group dlvr_attribute_group = {
-> > +     .attrs = dlvr_attrs,
-> > +     .name = "dlvr"
-> > +};
-> > +
-> >   static DEVICE_ATTR_RW(vco_ref_code_lo);
-> >   static DEVICE_ATTR_RW(vco_ref_code_hi);
-> >   static DEVICE_ATTR_RW(spread_spectrum_pct);
-> > @@ -277,12 +346,22 @@ int proc_thermal_rfim_add(struct pci_dev *pdev, struct proc_thermal_device *proc
-> >                       return ret;
-> >       }
-> >
-> > +     if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DLVR) {
-> > +             ret = sysfs_create_group(&pdev->dev.kobj, &dlvr_attribute_group);
-> > +             if (ret)
-> > +                     return ret;
-> > +     }
-> > +
-> >       if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DVFS) {
-> >               ret = sysfs_create_group(&pdev->dev.kobj, &dvfs_attribute_group);
-> >               if (ret && proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_FIVR) {
-> >                       sysfs_remove_group(&pdev->dev.kobj, &fivr_attribute_group);
-> >                       return ret;
-> >               }
-> > +             if (ret && proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DLVR) {
-> > +                     sysfs_remove_group(&pdev->dev.kobj, &dlvr_attribute_group);
-> > +                     return ret;
-> > +             }
-> >       }
-> >
-> >       return 0;
-> > @@ -296,6 +375,9 @@ void proc_thermal_rfim_remove(struct pci_dev *pdev)
-> >       if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_FIVR)
-> >               sysfs_remove_group(&pdev->dev.kobj, &fivr_attribute_group);
-> >
-> > +     if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DLVR)
-> > +             sysfs_remove_group(&pdev->dev.kobj, &dlvr_attribute_group);
-> > +
-> >       if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DVFS)
-> >               sysfs_remove_group(&pdev->dev.kobj, &dvfs_attribute_group);
-> >   }
->
-> --
-> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
->
+>  
+> > > In fact, this PHY driver does not seem to do any configuration of any
+> > > sort on the framer. All it seems to be doing is take notification from
+> > > one chain and send them out another chain!  
+> > 
+> > Configuration is done by the parent MFD driver.
+> > The PHY driver has nothing more to do.
+> >   
+> > > 
+> > > I also wounder if this get_status() call is sufficient. Don't you also
+> > > want Red, Yellow and Blue alarms? It is not just the carrier is down,
+> > > but why it is down.  
+> > 
+> > I don't need them in my use case but if needed can't they be added later?
+> > Also, from the HDLC device point of view what can be done with these alarms?  
+> 
+> https://elixir.bootlin.com/linux/latest/source/Documentation/networking/ethtool-netlink.rst#L472
+
+Thanks for pointing this interface.
+It is specific to ethtool but I can see the idea.
+The 'get_status' I proposed could be extended later to provide more
+information related to the colour of the alarm if needed.
+ethtool and related interfaces are very well fitted with Ethernet and
+related PHYs. I am not sure that ethtool will be usable for the pef2256.
+
+> 
+> > Requests link state information. Link up/down flag (as provided by
+> > ``ETHTOOL_GLINK`` ioctl command) is provided. Optionally, extended
+> > state might be provided as well. In general, extended state
+> > describes reasons for why a port is down, or why it operates in some
+> > non-obvious mode.  
+> 
+> The colour of the Alarm gives you an idea which end of the system has
+> the problem.
+> 
+> > > Overall, i don't see why you want a PHY. What value does it add?  
+> > 
+> > I need to detect carrier on/off according to the E1 link state.  
+> 
+> Why not just use the MFD notifier? What is the value of a PHY driver
+> translating one notifier into another?
+
+I translated to another notifier to keep the core (MFD) pef2256 API
+independent.
+
+But indeed this could be changed.
+If changed, the MFD pef2256 will have to handle the full struct
+phy_status_basic as the translation will not be there anymore.
+Right now, this structure is pretty simple and contains only the link state
+flag. But in the future, this PHY structure can move to something more
+complex and I am not sure that filling this struct is the MFD pef2256
+responsibility. The PHY pef2256 is responsible for the correct structure
+contents not sure that this should be moved to the MFD part.
+
+> 
+> And why is the notifier specific to the PEF2256? What would happen if
+> i used a analog devices DS2155, DS21Q55, and DS2156, or the IDT
+> 82P2281? Would each have its own notifier? And hence each would need
+> its own PHY which translates one notifier into another?
+
+Each of them should have their own notifier if they can notify.
+At least they will need their own notifier at they PHY driver level.
+Having or not a translation from something else would depend on each device
+PHY driver implementation.
+Also, maybe some PHY will not be able to provide notifications but only
+the get_status(). In this case, the notifier is not needed.
+The proposed QMC HDLC driver handles this case switching to polling mode
+if the PHY is not able to provide notification.
+
+> 
+> There are enough E1/T1/J1 framers we should have a generic API between
+> the framer and the HDLC device.
+> 
+
+I agree.
+I would like this first implementation without too much API restriction
+in order to see how it goes.
+The actual proposal imposes nothing on the PHY internal implementation.
+the pef2256 implementation chooses to have two notifiers (one at MFD
+level and one at PHY level) but it was not imposed by the API.
+
+Best regards,
+Hervé
+
