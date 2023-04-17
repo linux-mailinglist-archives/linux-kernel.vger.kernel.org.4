@@ -2,108 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EEC56E4F26
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 19:22:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C7A46E4F29
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 19:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbjDQRWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 13:22:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50732 "EHLO
+        id S230137AbjDQRX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 13:23:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230130AbjDQRWi (ORCPT
+        with ESMTP id S229581AbjDQRXX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 13:22:38 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 863534EE9;
-        Mon, 17 Apr 2023 10:22:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=e4u/r1Ao73tMp+87CjTm7CAwGZ4eC7s0hnGVdo/J5F4=; b=CCPuC+u1Cjfrv/G1W1KQmUNBW2
-        LztD4+HDJQuyEtDusWM65DkXMopB95lw1eaY3Ym4c05/NfWhaI4/t2LO563wRXd+1+wr8amunE6GP
-        K1PlQvzMHY1w4hun/2QyG9ibgf8dwpk+GGq+KDt4ckXHvitlo4iM2zz+G8jTi9OBLaKI=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1poSYc-00AWh4-FU; Mon, 17 Apr 2023 19:22:26 +0200
-Date:   Mon, 17 Apr 2023 19:22:26 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-phy@lists.infradead.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [RFC PATCH 0/4] Add support for QMC HDLC and PHY
-Message-ID: <9e7fe32a-8125-41d5-9f8e-d3e5c6c64584@lunn.ch>
-References: <20230323103154.264546-1-herve.codina@bootlin.com>
- <885e4f20-614a-4b8e-827e-eb978480af87@lunn.ch>
- <20230414165504.7da4116f@bootlin.com>
- <c99a99c5-139d-41c5-89a4-0722e0627aea@lunn.ch>
- <20230417121629.63e97b80@bootlin.com>
- <a2615755-f009-4a21-b464-88ec5e58f32a@lunn.ch>
- <20230417173941.0206f696@bootlin.com>
+        Mon, 17 Apr 2023 13:23:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000CB44B0
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 10:23:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CB24620B8
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 17:23:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 055F5C433D2;
+        Mon, 17 Apr 2023 17:23:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681752201;
+        bh=wkeg5+i1e32gX2mRBlDeKCM1OhqUGj6JLGniF9eUzR8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jZTQ17mfcj1W4J9vzCSL5U3pyj7Ae1ts53GIi8pgOXnoTeZ+fP3hfuX8A6RytZnsJ
+         YN18jVESO6j1t/we3x7fIeWiCV7O4t00eqS5gg6bKz7+qhCj0clOKCoeBWU2/PcDiq
+         l/zO7dhHNLhnHF24JavnYDbfh/X/gZ5Ed4klTKT0rGbUYawl9EV1oHAysE39pUA8b9
+         jPW4q62LQvrTmXagfKp0FT7RFRUnIv8aKJPyUYNYQZmotdKlQXdiwhc2BGA2kG1HKa
+         nH35PO8neXKIXm9RdTbR6fJHIr7t/J6l+zvaaO0fzU1n4n3EsWfaBV5Rd5gpSivnOe
+         OK02oE/573M4g==
+Date:   Mon, 17 Apr 2023 18:23:16 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] ASoC: codecs: wcd934x: Simplify with dev_err_probe
+Message-ID: <7da0f237-b4ba-4c66-8061-a14c09a1e7a5@sirena.org.uk>
+References: <20230417141453.919158-1-krzysztof.kozlowski@linaro.org>
+ <20230417141453.919158-2-krzysztof.kozlowski@linaro.org>
+ <20aa9662-9cbb-4fbe-b6ed-3a6ba33e820a@sirena.org.uk>
+ <c294d672-c2fa-7468-f02d-18d5230a1d95@linaro.org>
+ <5d753a8a-b979-43f6-a403-8a51f69bac29@sirena.org.uk>
+ <752c2dc1-65a9-a74a-d9ce-7db5ddbea5f8@linaro.org>
+ <80be967f-b831-4a73-8474-09bb96bd2c32@sirena.org.uk>
+ <1cc83bad-55c2-46b5-ad70-cac160b842c1@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2eytpMUzOpYcD15r"
 Content-Disposition: inline
-In-Reply-To: <20230417173941.0206f696@bootlin.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1cc83bad-55c2-46b5-ad70-cac160b842c1@linaro.org>
+X-Cookie: Two heads are more numerous than one.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> My application (probably a subset of what we can do with E1 lines) does
-> not use signaling.
-> 
-> I don't expose any channel to the user space but just:
-> - One hdlc interface using one timeslot.
-> - One or more dai links (audio channels) that can be used using ALSA library.
 
-Well, that obviously does what you need for you application, but it
-does not sound very generic. I don't think you could build a PBX on
-top of that. I'd think you can build an E1 trunk to VoIP gateway.  So
-i also have to wounder how generic vs one specific use case your
-building blocks are.
+--2eytpMUzOpYcD15r
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Looking at the binding, i assume you could in fact instantiate 32 hdlc
-instances? And that 'transparent' actually means DAI? So you can
-instantiate as many DAI as you want. If you wanted to implement
-signalling, a third type could be added?
+On Mon, Apr 17, 2023 at 06:32:07PM +0200, Krzysztof Kozlowski wrote:
 
-> I thought I was providing a "standardised" API between the HDLC device
-> and the framer. Maybe it was not as complete as you could expect but I had
-> the feeling that it was standardised.
+> If you prefer, I can mention the message/EPROBE_DEFER difference in
+> commit msgs.
 
-You are abusing the Generic PHY interface, for something which is not
-a PHY. Your PHY driver does nothing a PHY driver normally does,
-because you keep arguing the MFD does it all. So to me this is the
-wrong abstraction.
+I know you prefer to maintain exacting standards in these areas.
 
-You need an abstraction of a framer. You do however want a similar API
-to generic PHY. devm_of_framer_optional_get() for the consumer of a
-framer, which looks in DT for a phandle to a device.
-devm_framer_create() which registers a framer provider, your MFD, with
-the framer core. The hdlc driver can then get an instance of the
-framer, and either put a notifier call block on its chain, or register
-a function to be called when there is change in status.
+--2eytpMUzOpYcD15r
+Content-Type: application/pgp-signature; name="signature.asc"
 
-What i also don't like is you have a very static configuration. You
-are putting configuration into DT, which i'm surprised Rob Herring and
-Krzysztof Kozlowski accepted. How you use E1 slots is not a hardware
-property, it is purely software configuration, so should not be in DT.
-So there should be a mechanism to configure how slots are used. You
-can then dynamically instantiate HDLC interfaces and DAI links. This
-is something which should be in the framer core. But since you have
-managed to get this binding accepted, you can skip this. But
-implementing the basic framer abstraction will give a place holder for
-somebody to implement a much more generic solution in the future.
+-----BEGIN PGP SIGNATURE-----
 
-	 Andrew
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ9gIMACgkQJNaLcl1U
+h9CZbAf9FNdeT6PP5Su4F8e7QLUDQqxLl/p8ptGVQfMYq+bdL8cy60Px4p3/b8OM
+b5y2tSixtmE6OERzR3qZ8IaX/0nizP2PumOJtUaipyBFdQE131qLvwx/6RbcL61g
+IjiG1Yu+Tn7FZdMCCTqIMq1yDnZbHx4wZ0tuYYgEl1gjH5wrIMxvZu0f6zw/O8Jy
+MBq31U+MvNPyr4hAG2/DrDUQ4H2hCnxiGzWId0eN6l+/m5Le+FlWi87FT5ZkbxWJ
+bp7QoVnTMRCBKR5WMUV4bUTZbNMC8bVCELv8xZIlzvL16WxbnN0vERxyjRSJKJlX
+VnBiR4rAEVpyJjHvcMoMCuJVzl0I9g==
+=j0TA
+-----END PGP SIGNATURE-----
+
+--2eytpMUzOpYcD15r--
