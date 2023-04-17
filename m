@@ -2,79 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34E826E50C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:25:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F5A6E50CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:26:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230446AbjDQTZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 15:25:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41584 "EHLO
+        id S230432AbjDQT0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 15:26:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbjDQTZO (ORCPT
+        with ESMTP id S230137AbjDQTZ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 15:25:14 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A6F4ECA
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:25:11 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f0aabd1040so49682425e9.1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:25:11 -0700 (PDT)
+        Mon, 17 Apr 2023 15:25:59 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF1E4ECA
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:25:57 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54be7584b28so361083037b3.16
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:25:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681759510; x=1684351510;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DypQbI9Beea3vxOJ/g/r8fFpYlaEHvGGbDv4nzRNF4M=;
-        b=ktVxsgrTxwOwwhRuVlM2cJco0jyMIpc7nNwxbcXOCBBT3QJrkNwjgAPQ8bbNGPfjNQ
-         TUCvnN0f6+3bZM5XlSCs76P3ebkh5Q6OW/BtWMs7lafviq/qk3oKyMiTlCjcIhbfIwX6
-         DxfXQQNoWx2KK560GPGkFSeVrm8uT5OjBeknL2XfuFuq0A4sgzJ5ZX9Oq6yG+UjUie0P
-         EywFU/jctoKVOBUZQauGNc568zaJu7IyxyRaFvkE4nNwX0j7nDO3j6V+NquZegGIfRdA
-         lYlRIR4wyDqRe0Vf7j69ggFG+GxB5ZboOfmTKGKdxgr+jAAWNU8S1sGMWukq3a4JY3Lr
-         xLMQ==
+        d=google.com; s=20221208; t=1681759557; x=1684351557;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=SXudyeJ/Cf8/L3rur43uuTWwi+2mrCWXl6MOmXE+mSM=;
+        b=rQDKQl9K0v4uhRr1ziEwpXOTAKKrLhUvSE6jNAZAHgj/2Zyh5/9gE5FzIWiR8ii5wK
+         dSmZoVARdmz+EAfLi+thJjqnn//w48INpmm2zFqS6zs8i8InU8XIOgDHY8c5XPHv2aZr
+         /7ZXNDX74WAi6heqXRHqZ36vmKROgF8EZrtzOE/BTFEJTX6/sKTzcsRoUtenMR4Pdeje
+         v3C3qramZ8e8neBgcbkvUVIA5ghWVnnXd41tUJyLZPqxJSnnQTiu5SwWpQAH/eY+ss4a
+         lTHdexOT/WbK1HYMPAQmbsB0d3GLQoDhgWKMpfnG5xTqqXa/NHGlYMOSkSx6X56azY2b
+         f8PQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681759510; x=1684351510;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DypQbI9Beea3vxOJ/g/r8fFpYlaEHvGGbDv4nzRNF4M=;
-        b=UyxaK37/pWSVFSRdIMGia4Fd8s4nFTRf0TAJ8naK2JLwTifAnTzDVfi91P7WCdu4t9
-         vkA/sZnKnhay7NHTTIm3bOZ+8Z6Qu4/3+iYbNuR1y7qVnzvt6Qd5LaPD3m6iu2u3uC4g
-         stas0TnC0zfqyaADKpHNqS2zT1vif/3lzyRBML0cPV2dikpC3IW9fI3ulzZQVwIu/WuY
-         8317jfgkL9BbxqjbU+fW/zUDglFvhnxSWiuJNWears7KsHSgPOulbs1LE7gcznXM42kd
-         85/bwi4wSLUcDR45OHpCDhfxmZo1jUgfIL3rN+v6zACfytZoSU0xe3SB0FRpVrJNDbiW
-         Z5VQ==
-X-Gm-Message-State: AAQBX9fTwaseGM+nDp1vrqYN1YLQ+sNo49j5RcbzZIAhonBdZgb/fKgN
-        7jeceybhOuq/keuCWMJSrarM4DkqUD+w96Zrcm1+ug==
-X-Google-Smtp-Source: AKy350bZetBnZjRbeR+rtUXIhg2WAzc4pxAs/e4rOaUGGFu6OByLaV+45K2E5u6YU6NQ6FYz4FGylytxxpd6NBAmjRk=
-X-Received: by 2002:a5d:6a11:0:b0:2fa:7308:47a1 with SMTP id
- m17-20020a5d6a11000000b002fa730847a1mr25892wru.20.1681759510025; Mon, 17 Apr
- 2023 12:25:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230308073201.3102738-1-avagin@google.com> <20230308073201.3102738-3-avagin@google.com>
- <ZDDddj50KZInqa84@chenyu5-mobl1> <CANaxB-y0eDExPB0v=LRPyoz1e-3tJ2VuuCmYJ3qkAERpnbz+aQ@mail.gmail.com>
- <ZDRSmC5tJiKZfMnE@chenyu5-mobl1>
-In-Reply-To: <ZDRSmC5tJiKZfMnE@chenyu5-mobl1>
-From:   Andrei Vagin <avagin@google.com>
-Date:   Mon, 17 Apr 2023 12:24:59 -0700
-Message-ID: <CAEWA0a5jP+pigtqa9uS4mA0TpiDb5+pubhcPU+D1CyDuW4vhSw@mail.gmail.com>
-Subject: Re: [PATCH 2/6] sched: add WF_CURRENT_CPU and externise ttwu
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     Andrei Vagin <avagin@gmail.com>, Kees Cook <keescook@chromium.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org,
-        Christian Brauner <brauner@kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        d=1e100.net; s=20221208; t=1681759557; x=1684351557;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SXudyeJ/Cf8/L3rur43uuTWwi+2mrCWXl6MOmXE+mSM=;
+        b=fY3UFdHFP6iyxq0CW0AMPyDSkpgXHBFn+FkXC7zzUMalhak8vDlHXCjaztfR3ThePr
+         kpSd5nZTAH/PIQ+QfDCw57EIacu/kJx7ptPix4d3r+k8ldVl5t7PLYkLJk/Gwjb3hrO3
+         B3MJAf5BuDlv2bRdHFtSopckIBD8dbuNG05j3nLCwlJ7JcbYHmIAPuFG68aRsAE/kvmG
+         jEvnmSliqCJvaO0+WxsCos6pM9R/S0tnRN7K0MQvG9loPlKBGM7trgkNLbXyMUoBk3/d
+         ZeSvPLFN/THo2LZ89i+lBJAZfG+H/f9dz+umYwu/L0z2rQOAwRMshKuD2izNBLlzT1vv
+         QhwA==
+X-Gm-Message-State: AAQBX9e9/jD9dcJlfuvP49+AW1WcCASYmYHTpKU8HEHagW3osweYmObJ
+        aw1AzYuaTmD0bK8q/4gsQQGF3ezaSRNk
+X-Google-Smtp-Source: AKy350axqLr5/aptfTTOZfKVP35oXDiOhVWyisXf+vfqQI8tQhZy3EwoF57xWjk89OFBHizuQdy/v9EcQRrK
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:d607:b4c5:5ac0:b831])
+ (user=irogers job=sendgmr) by 2002:a25:d44a:0:b0:b77:676c:773c with SMTP id
+ m71-20020a25d44a000000b00b77676c773cmr10297154ybf.2.1681759557123; Mon, 17
+ Apr 2023 12:25:57 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 12:25:46 -0700
+Message-Id: <20230417192546.99923-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
+Subject: [PATCH v1] perf build: Don't compile demangle-cxx.cpp if not necessary
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Oskolkov <posk@google.com>,
-        Tycho Andersen <tycho@tycho.pizza>,
-        Will Drewry <wad@chromium.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Qi Liu <liuqi115@huawei.com>, Leo Yan <leo.yan@linaro.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,127 +75,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 11:17=E2=80=AFAM Chen Yu <yu.c.chen@intel.com> wrot=
-e:
->
-> On 2023-04-09 at 21:56:26 -0700, Andrei Vagin wrote:
-> > On Fri, Apr 7, 2023 at 8:20=E2=80=AFPM Chen Yu <yu.c.chen@intel.com> wr=
-ote:
-> > >
-> > > On 2023-03-07 at 23:31:57 -0800, Andrei Vagin wrote:
-> > > > From: Peter Oskolkov <posk@google.com>
-> > > >
-> > > > Add WF_CURRENT_CPU wake flag that advices the scheduler to
-> > > > move the wakee to the current CPU. This is useful for fast on-CPU
-> > > > context switching use cases.
-> > > >
-> > > > In addition, make ttwu external rather than static so that
-> > > > the flag could be passed to it from outside of sched/core.c.
-> > > >
-> > > > Signed-off-by: Peter Oskolkov <posk@google.com>
-> > > > Signed-off-by: Andrei Vagin <avagin@google.com>
-> > > > --- a/kernel/sched/fair.c
-> > > > +++ b/kernel/sched/fair.c
-> > > > @@ -7569,6 +7569,10 @@ select_task_rq_fair(struct task_struct *p, i=
-nt prev_cpu, int wake_flags)
-> > > >       if (wake_flags & WF_TTWU) {
-> > > >               record_wakee(p);
-> > > >
-> > > > +             if ((wake_flags & WF_CURRENT_CPU) &&
-> > > > +                 cpumask_test_cpu(cpu, p->cpus_ptr))
-> > > > +                     return cpu;
-> > > > +
-> > > I tried to reuse WF_CURRENT_CPU to mitigate the cross-cpu wakeup, how=
-ever there
-> > > are regressions when running some workloads, and these workloads want=
- to be
-> > > spreaded on idle CPUs whenever possible.
-> > > The reason for the regression is that, above change chooses current C=
-PU no matter
-> > > what the load/utilization of this CPU is. So task are stacked on 1 CP=
-U and hurts
-> > > throughput/latency. And I believe this issue would be more severe on =
-system with
-> > > smaller number of CPU within 1 LLC(when compared to Intel platforms),=
- such as AMD,
-> > > Arm64.
-> >
-> > WF_CURRENT_CPU works only in certain conditions. Maybe you saw my
-> > attempt to change how WF_SYNC works:
-> >
-> > https://www.spinics.net/lists/kernel/msg4567650.html
-> >
-> > Then we've found that this idea doesn't work well, and it is a reason
-> > why we have the separate WF_CURRENT_CPU flag.
-> >
-> I see, in seccomp case, even the idle CPU is not a better choice.
-> > >
-> > > I know WF_CURRENT_CPU benefits seccomp, and can we make this change m=
-ore genefic
-> > > to benefit other workloads, by making the condition to trigger WF_CUR=
-RENT_CPU stricter?
-> > > Say, only current CPU has 1 runnable task, and treat current CPU as t=
-he last resort by
-> > > checking if the wakee's previous CPU is not idle. In this way, we can=
- enable WF_CURRENT_CPU flag
-> > > dynamically when some condition is met(a short task for example).
-> >
-> > We discussed all of these here and here:
-> >
-> > https://www.spinics.net/lists/kernel/msg4657545.html
-> >
-> > https://lore.kernel.org/lkml/CANaxB-yWkKzhhPMGXCQbtjntJbqZ40FL2qtM2hk7L=
-LWE-ZpbAg@mail.gmail.com/
-> >
-> > I like your idea about short-duration tasks, but I think it is a
-> > separate task and it has to be done in a separate patch set. Here, I
-> > solve the problem of optimizing synchronous switches when one task wake=
-s
-> > up another one and falls asleep immediately after that. Waking up the
-> > target task on the current CPU looks reasonable for a few reasons in
-> > this case. First, waking up a task on the current CPU is cheaper than o=
-n
-> > another one and it is much cheaper than waking on an idle cpu.
-> It depends. For waker and wakee that compete for cache resource and do
-> not have share data, sometimes an idle target would be better.
-> > Second,
-> > when tasks want to do synchronous switches, they often exchange some
-> > data, so memory caches can play on us.
-> I like the name of 'WF_CURRENT_CPU' too : ) and I was thinking that if th=
-is could
-> become a auto-detect behavior so others can benefit from this.
->
-> If I understand correctly, the scenario this patch deals with is:
-> task A wakeups task B, task A and taks B have close relationship with eac=
-h
-> other(cache sharing eg), when task A fall asleep, choose A's CPU, rather =
-than an
-> idle CPU.
->
-> I'm thinking if the following logic would cover your case:
-> 1. the waker A is a short duration one (waker will fall asleep soon)
-> 2. the waker B is a short duration one (impact of B is minor)
+demangle-cxx.cpp requires a C++ compiler, but feature checks may fail
+because of the absence of this. Add a CONFIG_CXX_DEMANGLE so that the
+source isn't built if not supported. Copy libbfd and cplus demangle
+variants to a weak symbol-elf.c version so they aren't dependent on
+C++. These variants are only built with the build option
+BUILD_NONDISTRO=1.
 
-In the seccomp case, A or B can be a non-short-duration but if they do
-synchronous
-switches they get all the benefits of WF_CURRENT_CPU.
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/Makefile.config   |  1 +
+ tools/perf/util/Build        |  2 +-
+ tools/perf/util/symbol-elf.c | 27 +++++++++++++++++++++++++++
+ 3 files changed, 29 insertions(+), 1 deletion(-)
 
-> 3. the A->wakee_flips is 0 and A->last_wakee =3D B
+diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+index 71442c54c25f..5f0f24b56f50 100644
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -923,6 +923,7 @@ ifndef NO_DEMANGLE
+     EXTLIBS += -lstdc++
+     CFLAGS += -DHAVE_CXA_DEMANGLE_SUPPORT
+     CXXFLAGS += -DHAVE_CXA_DEMANGLE_SUPPORT
++    $(call detected,CONFIG_CXX_DEMANGLE)
+   endif
+   ifdef BUILD_NONDISTRO
+     ifeq ($(filter -liberty,$(EXTLIBS)),)
+diff --git a/tools/perf/util/Build b/tools/perf/util/Build
+index bd18fe5f2719..f9df1df1eec0 100644
+--- a/tools/perf/util/Build
++++ b/tools/perf/util/Build
+@@ -214,7 +214,7 @@ perf-$(CONFIG_ZSTD) += zstd.o
+ 
+ perf-$(CONFIG_LIBCAP) += cap.o
+ 
+-perf-y += demangle-cxx.o
++perf-$(CONFIG_CXX_DEMANGLE) += demangle-cxx.o
+ perf-y += demangle-ocaml.o
+ perf-y += demangle-java.o
+ perf-y += demangle-rust.o
+diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
+index 35724f6a84fa..cd08bdb9824f 100644
+--- a/tools/perf/util/symbol-elf.c
++++ b/tools/perf/util/symbol-elf.c
+@@ -31,6 +31,13 @@
+ #include <bfd.h>
+ #endif
+ 
++#if defined(HAVE_LIBBFD_SUPPORT) || defined(HAVE_CPLUS_DEMANGLE_SUPPORT)
++#ifndef DMGL_PARAMS
++#define DMGL_PARAMS     (1 << 0)  /* Include function args */
++#define DMGL_ANSI       (1 << 1)  /* Include const, volatile, etc */
++#endif
++#endif
++
+ #ifndef EM_AARCH64
+ #define EM_AARCH64	183  /* ARM 64 bit */
+ #endif
+@@ -271,6 +278,26 @@ static bool want_demangle(bool is_kernel_sym)
+ 	return is_kernel_sym ? symbol_conf.demangle_kernel : symbol_conf.demangle;
+ }
+ 
++/*
++ * Demangle C++ function signature, typically replaced by demangle-cxx.cpp
++ * version.
++ */
++__weak char *cxx_demangle_sym(const char *str __maybe_unused, bool params __maybe_unused,
++			      bool modifiers __maybe_unused)
++{
++#ifdef HAVE_LIBBFD_SUPPORT
++	int flags = (params ? DMGL_PARAMS : 0) | (modifiers ? DMGL_ANSI : 0);
++
++	return bfd_demangle(NULL, str, flags);
++#elif defined(HAVE_CPLUS_DEMANGLE_SUPPORT)
++	int flags = (params ? DMGL_PARAMS : 0) | (modifiers ? DMGL_ANSI : 0);
++
++	return cplus_demangle(str, flags);
++#else
++	return NULL;
++#endif
++}
++
+ static char *demangle_sym(struct dso *dso, int kmodule, const char *elf_name)
+ {
+ 	char *demangled = NULL;
+-- 
+2.40.0.634.g4ca3ef3211-goog
 
-In our case, a "supervisor" is written in golang and there are
-goroutines that can be
-executed from different system threads, so this condition will fail often t=
-oo.
-
-> 4. the A->wakee_flips is 0 and B->last_wakee =3D A
-> 5, cpu(A)->nr_running =3D 1
->
-> (3 and 4 mean that, A and B wake up each other, so it is likely that
-> they share cache data, and they are good firends to be put together)
->
-> If above conditions are met, choose current CPU. In this way, WF_CURRENT_=
-CPU
-> can be set dynamically.
->
-> thanks,
-> Chenyu
