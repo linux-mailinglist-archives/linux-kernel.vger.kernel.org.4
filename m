@@ -2,64 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28D086E4B7A
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:30:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4764A6E4B7F
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:32:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230355AbjDQOat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 10:30:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55368 "EHLO
+        id S230424AbjDQOcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 10:32:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjDQOar (ORCPT
+        with ESMTP id S229498AbjDQOcE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 10:30:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA6310C0
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:30:46 -0700 (PDT)
+        Mon, 17 Apr 2023 10:32:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99CEE5FD8;
+        Mon, 17 Apr 2023 07:32:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 09BA0625FD
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 14:30:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65424C433EF
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 14:30:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 34E9961C01;
+        Mon, 17 Apr 2023 14:32:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56642C433D2;
+        Mon, 17 Apr 2023 14:31:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681741845;
-        bh=/dSHVIj2jm0FvpvKTK7PhYg5O2oiOqCxENl9j3Mpo5A=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HOJ6+K45kic3e83OKsUdwPNQR9ZGfxkPFUkrn/yY3Yt/WpxrdwZqePGTAHQf3MRYF
-         Copd8gWdrqLsNElWrwHKNOumvgiz42kWiwBtFBiRjPH0r9ekqN48XW2sTbVOfEyS+m
-         cbVP8XGa+SpCcoYgXiM3HBQCwte/E0u9wZpfhCR4U+Zv42p6VTkeaCdrdzEHRt7GLv
-         ThV0cRpJBAhkX951WQSbVsxYdavvsgeB90/wpZOo3fyjtejxqWpzLiJsHQbOvmMoC6
-         KluDTnqFZqjcRJNKRm8Np9xpKLM3K1C/Hp7sQstagl1bOBpfxkkwI2OzR4llpOxt0a
-         6XeNDdjsEFSow==
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-4ec817060cdso1487438e87.3
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:30:45 -0700 (PDT)
-X-Gm-Message-State: AAQBX9edE2kacxDJzWM55xOumOzHc+Xm9BFjMtO3wi5Z/rDV/G45frqe
-        A+cGV87b3dtq6bTvbBBrlEErqvwMllzeQvuDZ/M=
-X-Google-Smtp-Source: AKy350Y4B5WDHKcSD5KyHhdI2n0auFgqE4pOL4VPfVKggVfYkSt5Agu71dR6E/NZgItM+QWZ0RcVaHPSlgMhrZzFfdc=
-X-Received: by 2002:ac2:4a9c:0:b0:4ec:a218:4f92 with SMTP id
- l28-20020ac24a9c000000b004eca2184f92mr2249292lfp.9.1681741843461; Mon, 17 Apr
- 2023 07:30:43 -0700 (PDT)
+        s=k20201202; t=1681741921;
+        bh=qZwGgXwj74zjmmmG+1bRkrLbz6C/n830VkCa80+0q3k=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=JQmlZNPpvZPotgMsSrI/tmK/cig3Ot4xYX5389aGKCX/PiT5jEjrKfCv8Jm+uDMWI
+         c422Xpq/411fGx3ag+rZGXz4KCg9ggPtmB1Xh+WdYAcgCZ8t+EzRBFDPUuMXi8uHj2
+         KdQuFpfBcnP558W9jb0B5KV4DctWHI2P9Gd0qJxS9y24usT+Ep/sas5ERx0nSwctks
+         udSDeGzoN/IBqVsTpyRUGnTo18pMz4V7E0Q+dlXBABP6OA4e/U/guFB8Q+vCr7iocD
+         pGdeL594bigrJ629aefx4p2wViv2KD7udJQKqpsJ41slSlIhFseUxdFTvz2LPorUlZ
+         0XUk0YPJYVRCQ==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v4] dt-bindings: net: Convert ATH10K to YAML
+References: <20230406-topic-ath10k_bindings-v4-1-9f67a6bb0d56@linaro.org>
+        <87pm82x1ew.fsf@kernel.org>
+        <8a6834d6-8e5a-3c48-8a04-8d9c4d160408@linaro.org>
+Date:   Mon, 17 Apr 2023 17:31:56 +0300
+In-Reply-To: <8a6834d6-8e5a-3c48-8a04-8d9c4d160408@linaro.org> (Konrad
+        Dybcio's message of "Mon, 17 Apr 2023 15:36:59 +0200")
+Message-ID: <878reqwper.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20230307140522.2311461-1-ardb@kernel.org> <20230307140522.2311461-31-ardb@kernel.org>
- <c4d4f543-9dae-9514-3411-7061192af530@arm.com>
-In-Reply-To: <c4d4f543-9dae-9514-3411-7061192af530@arm.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 17 Apr 2023 16:30:32 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFK3uAMXgrtFofb0e2Z=eW+bMQBkbU-3MAazV3PgX_SpA@mail.gmail.com>
-Message-ID: <CAMj1kXFK3uAMXgrtFofb0e2Z=eW+bMQBkbU-3MAazV3PgX_SpA@mail.gmail.com>
-Subject: Re: [PATCH v3 30/60] arm64: idreg-override: Create a pseudo feature
- for rodata=off
-To:     Ryan Roberts <ryan.roberts@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,33 +67,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Apr 2023 at 16:28, Ryan Roberts <ryan.roberts@arm.com> wrote:
->
-> On 07/03/2023 14:04, Ard Biesheuvel wrote:
-> > Add rodata=off to the set of kernel command line options that is parsed
-> > early using the CPU feature override detection code, so we can easily
-> > refer to it when creating the kernel mapping.
-> >
-> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> > ---
-> >  arch/arm64/include/asm/cpufeature.h   | 1 +
-> >  arch/arm64/kernel/pi/idreg-override.c | 2 ++
-> >  2 files changed, 3 insertions(+)
-> >
-> > diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
-> > index bc10098901808c00..edc7733aa49846b2 100644
-> > --- a/arch/arm64/include/asm/cpufeature.h
-> > +++ b/arch/arm64/include/asm/cpufeature.h
-> > @@ -16,6 +16,7 @@
-> >  #define cpu_feature(x)               KERNEL_HWCAP_ ## x
-> >
-> >  #define ARM64_SW_FEATURE_OVERRIDE_NOKASLR    0
-> > +#define ARM64_SW_FEATURE_OVERRIDE_RODATA_OFF 4
->
-> I assume these are bit numbers? Why not just use the next available bit (bit 1)
-> for this new flag?
->
+Konrad Dybcio <konrad.dybcio@linaro.org> writes:
 
-This (ab)uses the CPU feature framework, which is based on 4-bit
-quantities. I don't remember if it matters or not, but IIRC the
-default macros use 4-bit wide values.
+> On 17.04.2023 12:12, Kalle Valo wrote:
+>> Konrad Dybcio <konrad.dybcio@linaro.org> writes:
+>> 
+>>> qcom,coexist-support and qcom,coexist-gpio-pin do very little and should
+>>> be reconsidered on the driver side, especially the latter one.
+>> 
+>> I'm curious, what do you mean very little? We set ath10k firmware
+>> parameters based on these coex properties. How would you propose to
+>> handle these?
+>
+> Right, I first thought they did nothing and then realized they're
+> sent to the fw.. I never amended the commit message though..
+
+Ok, I can remove that sentence before I commit the patch.
+
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/net/wireless/qcom,ath10k.yaml
+>>> @@ -0,0 +1,358 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/net/wireless/qcom,ath10k.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Qualcomm Technologies ATH10K wireless devices
+>> 
+>> [...]
+>> 
+>>> +  wifi-firmware:
+>>> +    type: object
+>>> +    additionalProperties: false
+>>> +    description: |
+>>> +      The ATH10K Wi-Fi node can contain one optional firmware subnode.
+>>> +      Firmware subnode is needed when the platform does not have Trustzone.
+>> 
+>> Is there a reason why you write ath10k in upper case? There are two case
+>> of that in the yaml file. We usually write it in lower case, can I
+>> change to that?
+>
+> No particular reason, my brain just implicitly decided that it
+> should be this way.. Please unify it (or LMK if you want me to
+> perform another resend)!
+
+No need to resend. I already changed these to lower case in my pending
+branch:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git/commit/?h=pending&id=ca448a93d8669a3af5aa644725444aa61b4ca255
+
+I'll remove the coex sentence later.
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
