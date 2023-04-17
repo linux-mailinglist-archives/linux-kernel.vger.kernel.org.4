@@ -2,134 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0133E6E4CAE
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 17:20:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 061876E4CBD
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 17:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbjDQPUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 11:20:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42470 "EHLO
+        id S230070AbjDQPUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 11:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbjDQPTs (ORCPT
+        with ESMTP id S229977AbjDQPUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 11:19:48 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2067.outbound.protection.outlook.com [40.107.20.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769CC4C3E;
-        Mon, 17 Apr 2023 08:19:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C0tPbYQXAHUVZO4erT/x3YgGKxiE6WH2+0l8CFqnuUs0KukUzHL8k+O+m8hyhVmnD7PWV5AM2F1kcg4k3CR1jHZOzAW1cgwnccJP3P9sBlK1qv5D0VCiQPnC/782BI0bGtlX7eFVzEFP08Ozt8XZEI3D/oQqSHuQ9Dzs5q5EZtojEPkZ2fSxzewuvSMVOzI2vwS/sOuPHb46AyfVEGDiBPsCAjy6/+1egsGyhDej8bj7+qAIFBmrpcc2AXrsJq5WboP7u/yw5Vf/ljLWB6iyC9Z13gTUqroITammXQv362dS1VLb9XYkmWp2dDiJMpxINgD71aQH9vxKT37313De9g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jgFFOZmuJSN8/g/UZWEZ+T5xsPejrkOSFTYeBP47f2s=;
- b=TcIxlHpLU34ilkarJLGc1BXODiLjWfEfvW8Kr6oofJQglULo3/XHjmNVODd8+Zmx80R1jA0ZwQtnC6H6mrpfNmdlNjxJd3wwgjork5haeyJKTcvIU9nZNJ5hFJm1FoWczUv1xlAm5myhO+NVytCahFMNtBlGmwRwVqFzMaC+XhmXCq6RS/lNcItP92qMD4wPTM/xOh2CfwcuyUeG1s75WXrpf7WToFVw3KsNTS2uURtADkCXgkeVr0kNhbi2Y+aFM8GHBaF8JbmkcrrnEECnuPSEQPqzVu2yJ3gouI0XJFEE4x0Y0O6JqWrWVK2c7/Pl/m4sMd53ahwerZlAUVf+dg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jgFFOZmuJSN8/g/UZWEZ+T5xsPejrkOSFTYeBP47f2s=;
- b=k19OLP25yWOD9n5wR/nHMPcN0R0fnc3UaekU9ZBpECVPQLh99XS/gqciG/QYEJhG0OYY5OqOEVWLpMkOYZwy47IZesh7HXwsPNwB8hb59fpC29A+si1UOB6sz4uaBD7U7BSabPXfjHYR5wO/pMPW71HEbQIqi+YDZ7LocTtpG4g=
-Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
- by AM8PR04MB7268.eurprd04.prod.outlook.com (2603:10a6:20b:1de::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Mon, 17 Apr
- 2023 15:19:30 +0000
-Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
- ([fe80::3b2b:11e9:91b7:465]) by AM6PR04MB4838.eurprd04.prod.outlook.com
- ([fe80::3b2b:11e9:91b7:465%2]) with mapi id 15.20.6298.045; Mon, 17 Apr 2023
- 15:19:30 +0000
-From:   Frank Li <frank.li@nxp.com>
-To:     Shunsuke Mie <mie@igel.co.jp>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>
-CC:     =?utf-8?B?S3J6eXN6dG9mIFdpbGN6ecWEc2tp?= <kw@linux.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, Jon Mason <jdmason@kudzu.us>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Ren Zhijie <renzhijie2@huawei.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>
-Subject: RE: [EXT] [RFC PATCH 0/3] Introduce a PCIe endpoint virtio console
-Thread-Topic: [EXT] [RFC PATCH 0/3] Introduce a PCIe endpoint virtio console
-Thread-Index: AQHZbs4fVljyzbxg6UmbNdb4S+yKZq8q3sJQgAPnjQCAANjcwA==
-Date:   Mon, 17 Apr 2023 15:19:30 +0000
-Message-ID: <AM6PR04MB483893F2A017B54AE29474A9889C9@AM6PR04MB4838.eurprd04.prod.outlook.com>
-References: <20230414123903.896914-1-mie@igel.co.jp>
- <AM6PR04MB483871ADC2BA657BBF3A5A4588999@AM6PR04MB4838.eurprd04.prod.outlook.com>
- <9e9acbf6-3486-56d3-c15a-c3d67557c2a9@igel.co.jp>
-In-Reply-To: <9e9acbf6-3486-56d3-c15a-c3d67557c2a9@igel.co.jp>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM6PR04MB4838:EE_|AM8PR04MB7268:EE_
-x-ms-office365-filtering-correlation-id: 89070b74-f680-43c8-37de-08db3f57240b
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: f2qo1vc/IEaGqQp2EV65DSlsF/2/fUgLsLiAgOOcjLqJgc9kEq49fRat9J37gVuy39SmB8YX2uLPnRJj5YnQrrKe91DUZTku31URYZZjsLuDKIPZp2u8jsGO2sFfNHQH+ap0vvsbtxSHpwo3fVUtLlqrEs05+BmV+ZbSRM6s6nYJiZ+k40NemvFM/bVDfkLeSuoH7yTXxPs3blHApXHQS/Squ4BE/A99afcuRJG8fKs3gGS/z2qHjyhgfzmQgrp2WqhjO8L+XLoSPgZkY1flbMM3RdHE1aYJOKEZ5HVB+CtXv8BjVlkKgbDKJrPvb69zHpi4jxc0veGaMPeNysHZSMp3BNJSYYPhU4PmdUmqjPBBw3TIAZpzb2VUV91EiEYnmUyZVDk7tY05e1xo6zh4KYKkzWscXAvPbQS6sBNrBHuEaC9ZxbLxDdIsZrccTDi2V2yvYIaoiI+YhP6k/1KjnW6ZdiV3q15jWRS6ms/7aJx3/Q6g+N9ElSpXrOUB9jxJqPntF1IaH52pi/3sXe7yHTpRdnnkpSNUkHMCHnqFnQw/LCBGZR4K4HNJXC4vaVNZDjqHgbajX8FwM0wvahrxa7xfEweN+7Y8+baFJ9veEmSZFCpkd3y9A4icLpzfJ6uS
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(136003)(39860400002)(366004)(346002)(451199021)(7696005)(966005)(45080400002)(86362001)(478600001)(110136005)(55016003)(71200400001)(66574015)(83380400001)(26005)(33656002)(6506007)(186003)(53546011)(9686003)(55236004)(38100700002)(38070700005)(122000001)(64756008)(76116006)(66446008)(66946007)(66476007)(66556008)(316002)(2906002)(4326008)(8936002)(8676002)(5660300002)(7416002)(44832011)(52536014)(41300700001)(66899021)(54906003)(21314003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VEJMOHFFS2g4TWVZdzBMdVEzcEVybDIzdXpPKzZaRWxVdUVkWmkxVFRuUVpj?=
- =?utf-8?B?Q1ZITEV5aTZMSHk0bktETFcwUkhuMlJiWURqa0VZNyt0MC94QXduM2x4aUlw?=
- =?utf-8?B?K1F4NDZ0aHhaYVBYR1oyWDZEZ05PdTVQVVY4ZFVyd3NCamNqYmhMWHVRdGQy?=
- =?utf-8?B?ZW9Lc21Ed0lNRlI2a2NLZ3VYaWtmc1IzaU1CN0ZjTEZxTzFzZHN0REVXM0Rr?=
- =?utf-8?B?NzFzU25nWm1tUlNQR3RpVG9IRnh2aUQ1YkorNHJTTE1uSFp0eFVBU3p5dG02?=
- =?utf-8?B?aEZHc3FLeFlrVGUycWhKdkl1Q1JJRWJzS0x4ZUJucVFnTXMzTDZhKzR4bDZx?=
- =?utf-8?B?ZC9OYzZoTDU5SnlmNzdZQm1RSE1zbTdsaGRGbnpBSGpvVGhUUXVRbVNqUzFV?=
- =?utf-8?B?UmZRMW9URG5OSTh1V3VNR0ZFd0hQbUlZcFlXNDZMaWJzZkYwUXBsdmJOMThB?=
- =?utf-8?B?VXJSZEd3MEU0NDgxSU1zWGVtN0IwM2YraU1jVGRBS2hhZ2UvVFZ5Y1FLN0RR?=
- =?utf-8?B?a3l4UThEcWFIUS8wTHJMRGlvaUFPUVRNeEhFS2EzZlYzMUNqSTNkVmtNZmJ1?=
- =?utf-8?B?OWRxb1dLUUZVQzVZWU5TWCsxeXh6aVhVNmJsMzdTeW13SzQzVlhEMEYvZjlk?=
- =?utf-8?B?S2tNMmdrWDcxdGdZQUVOTkd4Vi8wQ1Q0WnZlRFh5M0VNcHNEcG14TXVhN0ZK?=
- =?utf-8?B?STdMdEs2aTlCc2ZKckNEV3ZKdDZaWnRsSGdSR3lvcVEzMWVvNUc1aEpVUzB6?=
- =?utf-8?B?OURPaU8vTFpISkxqWU9QMW5wa2ZzTTF5S2krN3p0cHJnakJMK0sxditVa2dv?=
- =?utf-8?B?YUlFRGM3RXU4QkI2cG15R3NITmcrbzFaekdkM25ybkNqWHVFVzFhWnRna0NI?=
- =?utf-8?B?UlhESlZCUlVpNmZ5ZDNIdHZIczVsQllHK2JxS043K0IwMXJJVXpRRXBhNG1O?=
- =?utf-8?B?aUdDeUJieUV3Qk40cUg1R096b3lJWWZvcjZPamQxemxYRWVFYncrdXVEdFc0?=
- =?utf-8?B?TXNTVVhZRFZwRlV3Z1R2UmtybEp4bmJYNWpYMEMwbkl2VEJzUFNLQzlSNEVa?=
- =?utf-8?B?cCtoeERaK1VaU09RWmk2U0drTTB1MHdNV3ZOK2ZLMEp4MVJRY1lhd3RCRWVx?=
- =?utf-8?B?eUlidlo5Rk92R2pkb2E0WDNETDJBNjVSOWljMVYrQkMxNWdLL2Q3cVFrTHJ3?=
- =?utf-8?B?SVRISmhJVS9pTjB0dmxIVHkzditnK2tNY1R4VUlScm1yVnJwRld4UkRPREsr?=
- =?utf-8?B?QjM0dVIvWW9aTzF5MWlGTFhOTE5kZnlpbzlmQ3IxNTNwU2RKWWdCdDRDMWJM?=
- =?utf-8?B?MFVNZWZFakQ5NDNPU2JRbWVkK3A0VFRjZ3RtSzNiaEpaNlkxSVgwbjY2T2Zw?=
- =?utf-8?B?OEFFdGNHTzA5ZmRFWVpvd20xdTdDSzcvWlorQ2RjY241cVdhMnhoK0R1Y2J1?=
- =?utf-8?B?MDBIOCs2WUMzUEpIWHBKdE03bnVqWkJDSmR4eitWczFEWktjTWRRYnRTY2k1?=
- =?utf-8?B?TDNUSktyckxZdFJ2dWZyUkV5Nk8rb0RvK1pNQzJiaEdYU0FUcUpVOXprQ0JZ?=
- =?utf-8?B?WDFVY2h5azUxSXhpdkV2b1cyZStOaTdyWHRpb3JlOEdIYnJxVThKM1FMZHNw?=
- =?utf-8?B?eHRQMDJ4N2RVdUJ5WWNlN2JRWHg5aWZyaVZGMDltNG5mTU0yalJuQnVqcEdX?=
- =?utf-8?B?UDdLWEh1MVNtaTFMbTZ2TDVTT2hlOHBSVXBrQlFIRHEvbURheDFuYWlZSkhr?=
- =?utf-8?B?b1Y2bnpJbGZoOFhwWWVMWUFaMXZlczVUWS91aVhhRTgzb2t2WnFuUjhZZEs0?=
- =?utf-8?B?OHdmS0pMV0VwT0Q3LzY1L2lpL1NKRFp6QS9yS0dyd2RsalMvSVlqZ0hLWjRX?=
- =?utf-8?B?RUx5ZGJLemw5Q2M4RUYvUVJLcnIxZ0V1KzRxVktwT1gzREx2ai9uWnJJWGwv?=
- =?utf-8?B?Z3BJTW1oR3hwZmFvdXBLZUp2TFFZOFhSTG1OSVovTUNBOFdXSmZUd0xzMzgv?=
- =?utf-8?B?bzFZdG8yUE9VT2dCcHJoaHl1bjNPYVo4anhuelkxdy9FYXRWcU5lYkYyekpo?=
- =?utf-8?B?M1p4Z0l1MlpRN3g0K0dMd3R6c2t2SXMrelFrMDhyOGhwZG1pSEJISTQxNjdn?=
- =?utf-8?Q?NjkM=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 17 Apr 2023 11:20:48 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D222D49E9;
+        Mon, 17 Apr 2023 08:20:18 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id h14so14239366qvr.7;
+        Mon, 17 Apr 2023 08:20:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681744818; x=1684336818;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JcG5Rg00cRtoXxCeIGH/STBUivAgW9lxA+nnyVnDEz8=;
+        b=GewbOQP7WdiXclFyxS7JXpccMxxvZ1cU7fpMyh5LzKDUygJmgMGpRPuxPcxk9shm+M
+         gEhFUzry0XnOQeg3uaU3bZhYlBXpj/lfNanoJwQ4ljWtCBrbxmB9TD/R9OztnivHiYVH
+         MkU5v+waiZQQvFJ6YBlXCjpHW7jOD4q8yDie2ziQG89+dEfOrxMYteiQehL4IT/lNLmQ
+         WObxZmmPLQM8t7iKTfsbXkd6rKiOkvCpftLFLffnBENPmQdPvznP0R+RzDP3UQPMnAHg
+         XvM2MOEuAcvOjFOqRvdG2BcsirtYb4tHsKmRW4TYrvnRzNZq2yO1FD3dUL8YC7qphrq6
+         H6qQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681744818; x=1684336818;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JcG5Rg00cRtoXxCeIGH/STBUivAgW9lxA+nnyVnDEz8=;
+        b=eS7OJ/FI+KG3zrXgPzKYawQljddxbLrtay/UIzUPn7PsWXNeMJYzt7O9Khuz5rNOm2
+         bs4xh91baDAzIfXTuwsJHhF658AGWVyDQeXOaPcjWMfExm1rdL++eA6wMQ0orlHvL5P7
+         h9nl98ObQNlb/w6o1l+DJKmSyO7KpWFfGwStjX/ri/bngcPCv8dwKAauUv6npVkT0CW8
+         rfUw6ZLPBFU5Fs1E5kGwbAWHkHx2oBwUZD54H1JYRU66kVx+10jY0RlMNr+r7XGkYQuD
+         OuIBiVMP6/YK1uk/8pOgVRls/pq4YXlCOGTyfGPWdurKY2g3KgGVofalANRkm+Sj9LbF
+         givA==
+X-Gm-Message-State: AAQBX9eHkPG5suAaK949DKrnNc5KX2jvjxth14tHnqWz/aFveAowIqC2
+        llU8ufwIJmMSk4lW2Y3Dy10=
+X-Google-Smtp-Source: AKy350bWmoLUWGPFZqWjzbb+kRuHnyeZ6Ns1x07pfbQ2AfRhyxFg9PfNyGsNLjVBOeSnMRExEd3Gig==
+X-Received: by 2002:a05:6214:d0b:b0:5ef:8b6e:5832 with SMTP id 11-20020a0562140d0b00b005ef8b6e5832mr798201qvh.27.1681744817579;
+        Mon, 17 Apr 2023 08:20:17 -0700 (PDT)
+Received: from arinc9-PC.lan ([149.91.1.15])
+        by smtp.gmail.com with ESMTPSA id dm28-20020a05620a1d5c00b007468ec2e5dcsm3239337qkb.87.2023.04.17.08.20.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 08:20:17 -0700 (PDT)
+From:   arinc9.unal@gmail.com
+X-Google-Original-From: arinc.unal@arinc9.com
+To:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        me@1conan.com, erkin.bozoglu@xeront.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] USB: serial: option: add UNISOC vendor and TOZED LT70C product
+Date:   Mon, 17 Apr 2023 18:20:03 +0300
+Message-Id: <20230417152003.243248-1-arinc.unal@arinc9.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 89070b74-f680-43c8-37de-08db3f57240b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Apr 2023 15:19:30.1900
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vtdH8azaJGvzdVFM8ZUDyXolX9EjRToDMLb3R6FBoxLvKpOrR9qE6wUsT1e1UWda9+doAzOTnuMU3AmhbmUveA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7268
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -137,160 +73,649 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogU2h1bnN1a2UgTWllIDxt
-aWVAaWdlbC5jby5qcD4NCj4gU2VudDogU3VuZGF5LCBBcHJpbCAxNiwgMjAyMyA5OjEyIFBNDQo+
-IFRvOiBGcmFuayBMaSA8ZnJhbmsubGlAbnhwLmNvbT47IExvcmVuem8gUGllcmFsaXNpIDxscGll
-cmFsaXNpQGtlcm5lbC5vcmc+DQo+IENjOiBLcnp5c3p0b2YgV2lsY3p5xYRza2kgPGt3QGxpbnV4
-LmNvbT47IE1hbml2YW5uYW4gU2FkaGFzaXZhbQ0KPiA8bWFuaUBrZXJuZWwub3JnPjsgS2lzaG9u
-IFZpamF5IEFicmFoYW0gSSA8a2lzaG9uQGtlcm5lbC5vcmc+OyBCam9ybg0KPiBIZWxnYWFzIDxi
-aGVsZ2Fhc0Bnb29nbGUuY29tPjsgTWljaGFlbCBTLiBUc2lya2luIDxtc3RAcmVkaGF0LmNvbT47
-DQo+IEphc29uIFdhbmcgPGphc293YW5nQHJlZGhhdC5jb20+OyBKb24gTWFzb24gPGpkbWFzb25A
-a3VkenUudXM+Ow0KPiBSYW5keSBEdW5sYXAgPHJkdW5sYXBAaW5mcmFkZWFkLm9yZz47IFJlbiBa
-aGlqaWUNCj4gPHJlbnpoaWppZTJAaHVhd2VpLmNvbT47IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5l
-bC5vcmc7IGxpbnV4LQ0KPiBwY2lAdmdlci5rZXJuZWwub3JnOyB2aXJ0dWFsaXphdGlvbkBsaXN0
-cy5saW51eC1mb3VuZGF0aW9uLm9yZw0KPiBTdWJqZWN0OiBSZTogW0VYVF0gW1JGQyBQQVRDSCAw
-LzNdIEludHJvZHVjZSBhIFBDSWUgZW5kcG9pbnQgdmlydGlvIGNvbnNvbGUNCj4NCj4gQ2F1dGlv
-bjogRVhUIEVtYWlsDQo+DQo+IE9uIDIwMjMvMDQvMTQgMjM6MzksIEZyYW5rIExpIHdyb3RlOg0K
-PiA+DQo+ID4+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+ID4+IEZyb206IFNodW5zdWtl
-IE1pZSA8bWllQGlnZWwuY28uanA+DQo+ID4+IFNlbnQ6IEZyaWRheSwgQXByaWwgMTQsIDIwMjMg
-NzozOSBBTQ0KPiA+PiBUbzogTG9yZW56byBQaWVyYWxpc2kgPGxwaWVyYWxpc2lAa2VybmVsLm9y
-Zz4NCj4gPj4gQ2M6IEtyenlzenRvZiBXaWxjennFhHNraSA8a3dAbGludXguY29tPjsgTWFuaXZh
-bm5hbiBTYWRoYXNpdmFtDQo+ID4+IDxtYW5pQGtlcm5lbC5vcmc+OyBLaXNob24gVmlqYXkgQWJy
-YWhhbSBJIDxraXNob25Aa2VybmVsLm9yZz47IEJqb3JuDQo+ID4+IEhlbGdhYXMgPGJoZWxnYWFz
-QGdvb2dsZS5jb20+OyBNaWNoYWVsIFMuIFRzaXJraW4gPG1zdEByZWRoYXQuY29tPjsNCj4gPj4g
-SmFzb24gV2FuZyA8amFzb3dhbmdAcmVkaGF0LmNvbT47IFNodW5zdWtlIE1pZSA8bWllQGlnZWwu
-Y28uanA+Ow0KPiA+PiBGcmFuayBMaSA8ZnJhbmsubGlAbnhwLmNvbT47IEpvbiBNYXNvbiA8amRt
-YXNvbkBrdWR6dS51cz47IFJhbmR5DQo+ID4+IER1bmxhcCA8cmR1bmxhcEBpbmZyYWRlYWQub3Jn
-PjsgUmVuIFpoaWppZSA8cmVuemhpamllMkBodWF3ZWkuY29tPjsNCj4gPj4gbGludXgta2VybmVs
-QHZnZXIua2VybmVsLm9yZzsgbGludXgtcGNpQHZnZXIua2VybmVsLm9yZzsNCj4gPj4gdmlydHVh
-bGl6YXRpb25AbGlzdHMubGludXgtZm91bmRhdGlvbi5vcmcNCj4gPj4gU3ViamVjdDogW0VYVF0g
-W1JGQyBQQVRDSCAwLzNdIEludHJvZHVjZSBhIFBDSWUgZW5kcG9pbnQgdmlydGlvIGNvbnNvbGUN
-Cj4gPj4NCj4gPj4gQ2F1dGlvbjogRVhUIEVtYWlsDQo+ID4+DQo+ID4+IFBDSWUgZW5kcG9pbnQg
-ZnJhbWV3b3JrIHByb3ZpZGVzIEFQSXMgdG8gaW1wbGVtZW50IFBDSWUgZW5kcG9pbnQNCj4gPj4g
-ZnVuY3Rpb24uDQo+ID4+IFRoaXMgZnJhbWV3b3JrIGFsbG93cyBkZWZpbmluZyB2YXJpb3VzIFBD
-SWUgZW5kcG9pbnQgZnVuY3Rpb24gYmVoYXZpb3JzDQo+IGluDQo+ID4+IHNvZnR3YXJlLiBUaGlz
-IHBhdGNoIGV4dGVuZCB0aGUgZnJhbWV3b3JrIGZvciB2aXJ0aW8gcGNpIGRldmljZS4gVGhlDQo+
-ID4+IHZpcnRpbyBpcyBkZWZpbmVkIHRvIGNvbW11bmljYXRlIGd1ZXN0IG9uIHZpcnR1YWwgbWFj
-aGluZSBhbmQgaG9zdCBzaWRlLg0KPiA+PiBBZHZhbnRhZ2Ugb2YgdGhlIHZpcnRpbyBpcyB0aGUg
-ZWZmaWNpZW5jeSBvZiBkYXRhIHRyYW5zZmVyIGFuZCB0aGUNCj4gY29uY2lzZW5lc3MNCj4gPj4g
-b2YgaW1wbGVtZW50YXRpb24gZGV2aWNlIHVzaW5nIHNvZnR3YXJlLiBJdCBhbHNvIGJlIGFwcGxp
-ZWQgdG8gUENJZQ0KPiA+PiBlbmRwb2ludCBmdW5jdGlvbi4NCj4gPj4NCj4gPj4gV2UgZGVzaWdu
-ZWQgYW5kIGltcGxlbWVudGVkIGEgUENJZSBFUCB2aXJ0aW8gY29uc29sZSBmdW5jdGlvbiBkcml2
-ZXINCj4gdXNpbmcNCj4gPj4gdGhlIGV4dGVuZGVkIFBDSWUgZW5kcG9pbnQgZnJhbWV3b3JrIGZv
-ciB2aXJ0aW8uIEl0IGNhbiBiZSBjb21tdW5pY2F0ZQ0KPiA+PiBob3N0IGFuZCBlbmRwb2ludCBv
-dmVyIHZpcnRpbyBhcyBjb25zb2xlLg0KPiA+Pg0KPiA+PiBBbiBhcmNoaXRlY3R1cmUgb2YgdGhl
-IGZ1bmN0aW9uIGRyaXZlciBpcyBmb2xsb3dpbmc6DQo+ID4+DQo+ID4+ICAg4pSM4pSA4pSA4pSA
-4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSQICAgICAgICAg4pSM4pSA4pSA4pSA4pSA4pSA
-4pSA4pSA4pSA4pSA4pSA4pSA4pSADQo+IOKUgOKUgA0KPiA+PiDilIDilIDilIDilIDilIDilIDi
-lIDilIDilKzilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilJANCj4gPj4gICDi
-lIJ2aXJ0aW8gICAgICDilIIgICAgICAgICDilIIgICAgICAgICAgICAgICAgICAgICAg4pSCdmly
-dGlvICAgICAg4pSCDQo+ID4+ICAg4pSCY29uc29sZSBkcnYg4pSCICAgICAgICAg4pSc4pSA4pSA
-4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSQICAgICAg4pSCDQo+IGNv
-bnNvbGUNCj4gPj4gZHJ2IOKUgg0KPiA+PiAgIOKUnOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
-gOKUgOKUgOKUgOKUpCAgICAgICAgIOKUgih2aXJ0aW8gY29uc29sZeKUgiAgICAgIOKUnOKUgOKU
-gOKUgA0KPiDilIDilIANCj4gPj4g4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSkDQo+ID4+ICAg4pSC
-IHZpcnRpbyBidXMg4pSCICAgICAgICAg4pSCIGRldmljZSkgICAgICAg4pSC4peE4pSA4pSA4pSA
-4pSA4pa64pSCIHZpcnRpbyBidXMg4pSCDQo+ID4+ICAg4pSc4pSA4pSA4pSA4pSA4pSA4pSA4pSA
-4pSA4pSA4pSA4pSA4pSA4pSkICAgICAgICAg4pScLS0tLS0tLS0tLS0tLS0t4pSkICAgICAg4pSU
-4pSA4pSA4pSA4pSADQo+IOKUgOKUgA0KPiA+PiDilIDilIDilIDilIDilIDilIDilKQNCj4gPj4g
-ICDilIIgICAgICAgICAgICDilIIgICAgICAgICDilIIgcGNpIGVwIHZpcnRpbyDilIIgICAgICAg
-ICAgICAgICAgICAg4pSCDQo+ID4+ICAg4pSCICBwY2kgYnVzICAg4pSCICAgICAgICAg4pSCICBj
-b25zb2xlIGRydiAg4pSCICAgICAgICAgICAgICAgICAgIOKUgg0KPiA+PiAgIOKUgiAgICAgICAg
-ICAgIOKUgiAgcGNpZSAgIOKUnOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
-gOKUgOKUgOKUpCAgICAgICAgICAgICAgICAgICDilIINCj4gPj4gICDilIIgICAgICAgICAgICDi
-lIIg4peE4pSA4pSA4pSA4pSA4pSA4pa6IOKUgiAgcGNpIGVwIEJ1cyAgIOKUgiAgICAgICAgICAg
-ICAgICAgICDilIINCj4gPj4gICDilJTilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
-lIDilJggICAgICAgICDilJTilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIANCj4g
-4pSA4pSADQo+ID4+IOKUgOKUtOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
-gOKUgOKUgOKUgOKUgOKUgOKUgOKUmA0KPiA+PiAgICAgUENJZSBSb290ICAgICAgICAgICAgICBQ
-Q0llIEVuZHBvaW50DQo+ID4+DQo+ID4gW0ZyYW5rIExpXSBTb21lIGJhc2ljIHF1ZXN0aW9uLA0K
-PiA+IEkgc2VlIHlvdSBjYWxsIHJlZ2lzdGVyX3ZpcnRpb19kZXZpY2UgYXQgZXBmX3Zjb25fc2V0
-dXBfdmRldiwNCj4gPiBXaHkgY2FsbCBpdCBhcyB2aXJ0aW8gY29uc29sZT8gIEkgc3VwcG9zZSBp
-dCBzaG91bGQgYmUgdmlydGlvYnVzIGRpcmVjdGx5Pw0KPg0KPiBJJ20gc29ycnkgSSBkaWRuJ3Qg
-dW5kZXJzdGFuZCB5b3VyIHF1ZXN0aW9uLiBXaGF0IGRvIHlvdSBtZWFuIHRoZQ0KPiB2aXJ0aW9i
-dXMgZGlyZWN0bHk/DQoNCkkgZ28gdGhyb3VnaCB5b3VyIGNvZGUgYWdhaW4uICBJIHRoaW5rIEkg
-dW5kZXJzdGFuZCB3aHkgeW91IG5lZWQgcGNpLWVwZi12Y29uLmMuDQpBY3R1YWxseSwgIG15IG1l
-YW5zIGlzIGxpa2UgdmlydGlvX21taW9fcHJvYmUuDQoNCnZtX2Rldi0+dmRldi5pZC5kZXZpY2Ug
-PSByZWFkbCh2bV9kZXYtPmJhc2UgKyBWSVJUSU9fTU1JT19ERVZJQ0VfSUQpOw0Kdm1fZGV2LT52
-ZGV2LmlkLnZlbmRvciA9IHJlYWRsKHZtX2Rldi0+YmFzZSArIFZJUlRJT19NTUlPX1ZFTkRPUl9J
-RCk7DQoNCkkgYW0gbm90IHN1cmUgdGhhdCBpZiBWSVJUSU9fTU1JT19WRU5ET1JfSUQgYW5kIFZJ
-UlRJT19NTUlPX0RFVklDRV9JRA0KcmV1c2UgUENJJ3MgdmVuZG9yIElEIGFuZCBEZXZpY2UgSUQu
-ICBJZiB5ZXMsIHlvdSBjYW4gZGlyZWN0bHkgZ2V0IHN1Y2ggaW5mb3JtYXRpb24NCmZyb20gZXBm
-LiAgSWYgbm8sICBhIGN1c3RvbWVyIGZpZWxkIGNhbiBiZWVuIGFkZGVkIGF0IGVwZiBkcml2ZXIu
-DQoNClNvIHlvdSBuZWVkbid0IHdyaXRlIHBjaS1lcGYtdmNvbiAgYW5kIHBjaS1lcGYtdm5ldCAu
-Li4uLg0KDQpPZiBjYXVzZSBpdCB3aWxsIGJlIHdvbmRlcmZ1bCBpZiBkaXJlY3RseSB1c2Ugdmly
-dGlvX21taW9fcHJvYmUgYnkgZHlubWF0aWMgY3JlYXRlIHBsYXRmb3JtDQpEZXZpY2VzLiAgSXQg
-bWF5IGhhdmUgc29tZSBkaWZmaWN1bHQgYmVjYXVzZSBwY2kgbWVtb3J5IG1hcCByZXF1aXJlbWVu
-dC4NCg0KPg0KPiA+DQo+ID4gUHJldmlvdXMgeW91IHVzZSB2aXJ0aW8tbmV0LCB3aHkgY2hhbmdl
-IHRvIHZpcnRpby1jb25zb2xlIGhlcmU/ICBEb2VzIGl0DQo+IG1hdHRlcj8NCj4NCj4gTm8sIGl0
-IGRvZXNuJ3QuIEp1c3QgSSdkIGxpa2UgdG8gYnJlYWsgZG93biB0aGUgY2hhbmdlcyBpbnRvIHNt
-YWxsZXINCj4gc3RlcHMgdG8gbWFrZSBpdCBlYXNpZXIgdG8gcmV2aWV3IGFuZCBtZXJnZSB0aGUg
-Y2hhbmdlcy4NCj4NCj4gQXMgYSBmaXJzdCBzdGVwLCBJIHByb3Bvc2UgYWRkaW5nIGEgc2ltcGxl
-c3QgdmlydGlvIGZ1bmN0aW9uIGRyaXZlciB3aXRoDQo+IHRoZSBleHRlbnNpb24gZGVmaW5lZCBp
-biBwY2ktZXBmLXZpcnRpby57aCxjfS4NCj4NCj4gPiBBbGwgdmlydGlvLVhYWCBzaG91bGQgd29y
-az8NCj4gWWVzLCB0aGUgZXh0ZW5zaW9uIGlzIGRlc2lnbmVkIHRvIHVzZSBhbnkgdHlwZSBvZiB2
-aXJ0aW8gZGV2aWNlLg0KPiA+DQo+ID4gWW91IHJlbW92ZWQgRURNQSBzdXBwb3J0IHRoaXMgdmVy
-c2lvbj8NCj4gSSBwbGFuZWQgdGhlIHN1cHBvcnQgd2lsbCBiZSBhZGRlZCB3aXRoIGVwZiB2aXJ0
-aW8tbmV0IHBhdGNoZXMuDQo+ID4NCj4gPj4gSW50cm9kdWNlZCBkcml2ZXIgaXMgYHBjaSBlcCB2
-aXJ0aW8gY29uc29sZSBkcnZgIGluIHRoZSBmaWd1cmUuIEl0IHdvcmtzDQo+ID4+IGFzIGVwIGZ1
-bmN0aW9uIGZvciBQQ0llIHJvb3QgYW5kIHZpcnR1YWwgdmlydGlvIGNvbnNvbGUgZGV2aWNlIGZv
-ciBQQ0llDQo+ID4+IGVuZHBvaW50LiBFYWNoIHNpZGUgb2YgdmlydGlvIGNvbnNvbGUgZHJpdmVy
-IGhhcyB2aXJ0cXVldWUsIGFuZA0KPiA+PiBpbnRyb2R1Y2VkIGRyaXZlciB0cmFuc2ZlcnMgZGF0
-YSBvbiB0aGUgdmlydHF1ZXVlIHRvIGVhY2ggb3RoZXIuIEEgZGF0YQ0KPiA+PiBvbiByb290IHR4
-IHF1ZXVlIGlzIHRyYW5zZmVyZWQgdG8gZW5kcG9pbnQgcnggcXVldWUgYW5kIHZpY2UgdmVyc2Eu
-DQo+ID4+DQo+ID4+IFRoaXMgcGF0Y2hzZXQgaXMgZGVwZW5kIGZvbGx3aW5nIHBhdGNoZXMgd2hp
-Y2ggYXJlIHVuZGVyIGRpc2N1c3Npb24uDQo+ID4+DQo+ID4+IC0gW1JGQyBQQVRDSCAwLzNdIERl
-YWwgd2l0aCBhbGlnbm1lbnQgcmVzdHJpY3Rpb24gb24gRVAgc2lkZQ0KPiA+PiBsaW5rOg0KPiA+
-Pg0KPiBodHRwczovL2xvcmUuay8NCj4gJTJGJmRhdGE9MDUlN0MwMSU3Q2ZyYW5rLmxpJTQwbnhw
-LmNvbSU3Q2ZmNTlhMTZmODhjNjQzOTEzZTM5MDhkYjMNCj4gZWU5MWNhOCU3QzY4NmVhMWQzYmMy
-YjRjNmZhOTJjZDk5YzVjMzAxNjM1JTdDMCU3QzAlN0M2MzgxNzI5NDMxNQ0KPiAzODIxODMxJTdD
-VW5rbm93biU3Q1RXRnBiR1pzYjNkOGV5SldJam9pTUM0d0xqQXdNREFpTENKUUlqb2lWDQo+IDJs
-dU16SWlMQ0pCVGlJNklrMWhhV3dpTENKWFZDSTZNbjAlM0QlN0MzMDAwJTdDJTdDJTdDJnNkYXRh
-PWhUQg0KPiA1VURhSm9KZnRhOW9oTUclMkJyeENWSlkzNEFObjEwaVNMUDlpQ0hYM00lM0QmcmVz
-ZXJ2ZWQ9MA0KPiA+PiBlcm5lbC5vcmclMkZsaW51eC1wY2klMkYyMDIzMDExMzA5MDM1MC4xMTAz
-NDk0LTEtDQo+ID4+DQo+IG1pZSU0MGlnZWwuY28uanAlMkYmZGF0YT0wNSU3QzAxJTdDRnJhbmsu
-TGklNDBueHAuY29tJTdDZWE2NTEzZGJmDQo+ID4+DQo+IDQwODRiODBjZWQyMDhkYjNjZTU0MTMz
-JTdDNjg2ZWExZDNiYzJiNGM2ZmE5MmNkOTljNWMzMDE2MzUlN0MwJTcNCj4gPj4NCj4gQzAlN0M2
-MzgxNzA3Mjc1NTg4MDA3MjAlN0NVbmtub3duJTdDVFdGcGJHWnNiM2Q4ZXlKV0lqb2lNQzR3DQo+
-ID4+DQo+IExqQXdNREFpTENKUUlqb2lWMmx1TXpJaUxDSkJUaUk2SWsxaGFXd2lMQ0pYVkNJNk1u
-MCUzRCU3QzMwMDAlN0MNCj4gPj4gJTdDJTdDJnNkYXRhPWpZZ3klMkJ4azg0WlhaUlZmcW0wR0NY
-b1JuQ1RMTXJYNHpUZlYlMkJzNU1tDQo+IHN2bw0KPiA+PiAlM0QmcmVzZXJ2ZWQ9MA0KPiA+PiAt
-IFtSRkMgUEFUQ0ggdjIgMC83XSBJbnRyb2R1Y2UgYSB2cmluZ2ggYWNjZXNzb3IgZm9yIElPIG1l
-bW9yeQ0KPiA+PiBsaW5rOg0KPiA+Pg0KPiBodHRwczovL2xvcmUuay8NCj4gJTJGJmRhdGE9MDUl
-N0MwMSU3Q2ZyYW5rLmxpJTQwbnhwLmNvbSU3Q2ZmNTlhMTZmODhjNjQzOTEzZTM5MDhkYjMNCj4g
-ZWU5MWNhOCU3QzY4NmVhMWQzYmMyYjRjNmZhOTJjZDk5YzVjMzAxNjM1JTdDMCU3QzAlN0M2Mzgx
-NzI5NDMxNQ0KPiAzODIxODMxJTdDVW5rbm93biU3Q1RXRnBiR1pzYjNkOGV5SldJam9pTUM0d0xq
-QXdNREFpTENKUUlqb2lWDQo+IDJsdU16SWlMQ0pCVGlJNklrMWhhV3dpTENKWFZDSTZNbjAlM0Ql
-N0MzMDAwJTdDJTdDJTdDJnNkYXRhPWhUQg0KPiA1VURhSm9KZnRhOW9oTUclMkJyeENWSlkzNEFO
-bjEwaVNMUDlpQ0hYM00lM0QmcmVzZXJ2ZWQ9MA0KPiA+PiBlcm5lbC5vcmclMkZ2aXJ0dWFsaXph
-dGlvbiUyRjIwMjMwMjAyMDkwOTM0LjU0OTU1Ni0xLQ0KPiA+Pg0KPiBtaWUlNDBpZ2VsLmNvLmpw
-JTJGJmRhdGE9MDUlN0MwMSU3Q0ZyYW5rLkxpJTQwbnhwLmNvbSU3Q2VhNjUxM2RiZg0KPiA+Pg0K
-PiA0MDg0YjgwY2VkMjA4ZGIzY2U1NDEzMyU3QzY4NmVhMWQzYmMyYjRjNmZhOTJjZDk5YzVjMzAx
-NjM1JTdDMCU3DQo+ID4+DQo+IEMwJTdDNjM4MTcwNzI3NTU4ODAwNzIwJTdDVW5rbm93biU3Q1RX
-RnBiR1pzYjNkOGV5SldJam9pTUM0dw0KPiA+Pg0KPiBMakF3TURBaUxDSlFJam9pVjJsdU16SWlM
-Q0pCVGlJNklrMWhhV3dpTENKWFZDSTZNbjAlM0QlN0MzMDAwJTdDDQo+ID4+ICU3QyU3QyZzZGF0
-YT1LNEVsNzZHU0FHdHNXa05CWEpLNSUyRm43ZmxDTjIwZUVNWnBaWVRYMldJWjANCj4gJTMNCj4g
-Pj4gRCZyZXNlcnZlZD0wDQo+ID4+DQo+ID4+IEZpcnN0IG9mIHRoaXMgcGF0Y2hzZXQgaXMgaW50
-cm9kdWNlIGEgaGVscGVyIGZ1bmN0aW9uIHRvIHJlYWxpemUgcGNpDQo+ID4+IHZpcnRpbyBmdW5j
-dGlvbiB1c2luZyBQQ0llIGVuZHBvaW50IGZyYW1ld29yay4gVGhlIHNlY29uZCBvbmUgaXMgYWRk
-aW5nDQo+ID4+IGEgbWlzc2luZyBkZWZpbml0aW9uIGZvciB2aXJ0aW8gcGNpIGhlYWRlci4gVGhl
-IGxhc3Qgb25lIGlzIGZvciBQQ0llDQo+ID4+IGVuZHBvaW50IHZpcnRpbyBjb25zb2xlIGRyaXZl
-ci4NCj4gPj4NCj4gPj4gVGhpcyBpcyB0ZXN0ZWQgb24gbGludXgtMjAyMzA0MDYgYW5kIFJDYXIg
-UzQgYm9hcmQgYXMgUENJZSBlbmRwb2ludC4NCj4gPj4NCj4gPj4gU2h1bnN1a2UgTWllICgzKToN
-Cj4gPj4gICAgUENJOiBlbmRwb2ludDogaW50cm9kdWNlIGEgaGVscGVyIHRvIGltcGxlbWVudCBw
-Y2kgZXAgdmlydGlvIGZ1bmN0aW9uDQo+ID4+ICAgIHZpcnRpb19wY2k6IGFkZCBhIGRlZmluaXRp
-b24gb2YgcXVldWUgZmxhZyBpbiBJU1INCj4gPj4gICAgUENJOiBlbmRwb2ludDogQWRkIEVQIGZ1
-bmN0aW9uIGRyaXZlciB0byBwcm92aWRlIHZpcnRpby1jb25zb2xlDQo+ID4+ICAgICAgZnVuY3Rp
-b25hbGl0eQ0KPiA+Pg0KPiA+PiAgIGRyaXZlcnMvcGNpL2VuZHBvaW50L2Z1bmN0aW9ucy9LY29u
-ZmlnICAgICAgICB8ICAxOSArDQo+ID4+ICAgZHJpdmVycy9wY2kvZW5kcG9pbnQvZnVuY3Rpb25z
-L01ha2VmaWxlICAgICAgIHwgICAyICsNCj4gPj4gICBkcml2ZXJzL3BjaS9lbmRwb2ludC9mdW5j
-dGlvbnMvcGNpLWVwZi12Y29uLmMgfCA1NTQNCj4gKysrKysrKysrKysrKysrKysrDQo+ID4+ICAg
-Li4uL3BjaS9lbmRwb2ludC9mdW5jdGlvbnMvcGNpLWVwZi12aXJ0aW8uYyAgIHwgNDY5ICsrKysr
-KysrKysrKysrKw0KPiA+PiAgIC4uLi9wY2kvZW5kcG9pbnQvZnVuY3Rpb25zL3BjaS1lcGYtdmly
-dGlvLmggICB8IDEyMyArKysrDQo+ID4+ICAgaW5jbHVkZS91YXBpL2xpbnV4L3ZpcnRpb19wY2ku
-aCAgICAgICAgICAgICAgIHwgICAzICsNCj4gPj4gICA2IGZpbGVzIGNoYW5nZWQsIDExNzAgaW5z
-ZXJ0aW9ucygrKQ0KPiA+PiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL3BjaS9lbmRwb2lu
-dC9mdW5jdGlvbnMvcGNpLWVwZi12Y29uLmMNCj4gPj4gICBjcmVhdGUgbW9kZSAxMDA2NDQgZHJp
-dmVycy9wY2kvZW5kcG9pbnQvZnVuY3Rpb25zL3BjaS1lcGYtdmlydGlvLmMNCj4gPj4gICBjcmVh
-dGUgbW9kZSAxMDA2NDQgZHJpdmVycy9wY2kvZW5kcG9pbnQvZnVuY3Rpb25zL3BjaS1lcGYtdmly
-dGlvLmgNCj4gPj4NCj4gPj4gLS0NCj4gPj4gMi4yNS4xDQo=
+From: Arınç ÜNAL <arinc.unal@arinc9.com>
+
+Add UNISOC vendor ID and TOZED LT70-C modem which is based from UNISOC
+SL8563. The modem supports the NCM mode. Interface 0 is used for running
+the AT commands. Interface 12 is the ADB interface.
+
+T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  6 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1782 ProdID=4055 Rev=04.04
+S:  Manufacturer=Unisoc Phone
+S:  Product=Unisoc Phone
+S:  SerialNumber=<redacted>
+C:  #Ifs=14 Cfg#= 1 Atr=c0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0d Prot=00 Driver=cdc_ncm
+E:  Ad=82(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
+I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=01 Driver=cdc_ncm
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#=10 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=8b(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#=11 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=08(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=8c(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#=12 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=option
+E:  Ad=09(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=8d(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#=13 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=0a(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 2 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0d Prot=00 Driver=cdc_ncm
+E:  Ad=84(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
+I:  If#= 3 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=01 Driver=cdc_ncm
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 4 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0d Prot=00 Driver=cdc_ncm
+E:  Ad=86(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
+I:  If#= 5 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=01 Driver=cdc_ncm
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 6 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0d Prot=00 Driver=cdc_ncm
+E:  Ad=88(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
+I:  If#= 7 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=01 Driver=cdc_ncm
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 8 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 9 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=8a(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+
+Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+---
+
+lsusb -v output:
+
+Bus 001 Device 002: ID 1782:4055 Unisoc Phone Unisoc Phone
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            0
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0        64
+  idVendor           0x1782
+  idProduct          0x4055
+  bcdDevice            4.04
+  iManufacturer           1 Unisoc Phone
+  iProduct                2 Unisoc Phone
+  iSerial                 3 <redacted>
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x01e7
+    bNumInterfaces         14
+    bConfigurationValue     1
+    iConfiguration          4 4ncm
+    bmAttributes         0xc0
+      Self Powered
+    MaxPower              500mA
+    Interface Association:
+      bLength                 8
+      bDescriptorType        11
+      bFirstInterface         0
+      bInterfaceCount         2
+      bFunctionClass          2
+      bFunctionSubClass      13
+      bFunctionProtocol       0
+      iFunction               8 CDC NCM
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         2
+      bInterfaceSubClass     13
+      bInterfaceProtocol      0
+      iInterface              5 CDC Network Control Model (NCM)
+      CDC Header:
+        bcdCDC               1.10
+      CDC Union:
+        bMasterInterface        0
+        bSlaveInterface         1
+      CDC Ethernet:
+        iMacAddress                      6 <redacted>
+        bmEthernetStatistics    0x00000000
+        wMaxSegmentSize               1514
+        wNumberMCFilters            0x0000
+        bNumberPowerFilters              0
+      CDC NCM:
+        bcdNcmVersion        1.00
+        bmNetworkCapabilities 0x11
+          crc mode
+          packet filter
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x82  EP 2 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0010  1x 16 bytes
+        bInterval               9
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        1
+      bAlternateSetting       0
+      bNumEndpoints           0
+      bInterfaceClass        10
+      bInterfaceSubClass      0
+      bInterfaceProtocol      1
+      iInterface              7 CDC Network Data
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        1
+      bAlternateSetting       1
+      bNumEndpoints           2
+      bInterfaceClass        10
+      bInterfaceSubClass      0
+      bInterfaceProtocol      1
+      iInterface              7 CDC Network Data
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x01  EP 1 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+    Interface Association:
+      bLength                 8
+      bDescriptorType        11
+      bFirstInterface         2
+      bInterfaceCount         2
+      bFunctionClass          2
+      bFunctionSubClass      13
+      bFunctionProtocol       0
+      iFunction              13 CDC NCM
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        2
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         2
+      bInterfaceSubClass     13
+      bInterfaceProtocol      0
+      iInterface             10 CDC Network Control Model (NCM)
+      CDC Header:
+        bcdCDC               1.10
+      CDC Union:
+        bMasterInterface        2
+        bSlaveInterface         3
+      CDC Ethernet:
+        iMacAddress                     11 <redacted>
+        bmEthernetStatistics    0x00000000
+        wMaxSegmentSize               1514
+        wNumberMCFilters            0x0000
+        bNumberPowerFilters              0
+      CDC NCM:
+        bcdNcmVersion        1.00
+        bmNetworkCapabilities 0x11
+          crc mode
+          packet filter
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x84  EP 4 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0010  1x 16 bytes
+        bInterval               9
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        3
+      bAlternateSetting       0
+      bNumEndpoints           0
+      bInterfaceClass        10
+      bInterfaceSubClass      0
+      bInterfaceProtocol      1
+      iInterface             12 CDC Network Data
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        3
+      bAlternateSetting       1
+      bNumEndpoints           2
+      bInterfaceClass        10
+      bInterfaceSubClass      0
+      bInterfaceProtocol      1
+      iInterface             12 CDC Network Data
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x83  EP 3 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+    Interface Association:
+      bLength                 8
+      bDescriptorType        11
+      bFirstInterface         4
+      bInterfaceCount         2
+      bFunctionClass          2
+      bFunctionSubClass      13
+      bFunctionProtocol       0
+      iFunction              18 CDC NCM
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        4
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         2
+      bInterfaceSubClass     13
+      bInterfaceProtocol      0
+      iInterface             15 CDC Network Control Model (NCM)
+      CDC Header:
+        bcdCDC               1.10
+      CDC Union:
+        bMasterInterface        4
+        bSlaveInterface         5
+      CDC Ethernet:
+        iMacAddress                     16 <redacted>
+        bmEthernetStatistics    0x00000000
+        wMaxSegmentSize               1514
+        wNumberMCFilters            0x0000
+        bNumberPowerFilters              0
+      CDC NCM:
+        bcdNcmVersion        1.00
+        bmNetworkCapabilities 0x11
+          crc mode
+          packet filter
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x86  EP 6 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0010  1x 16 bytes
+        bInterval               9
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        5
+      bAlternateSetting       0
+      bNumEndpoints           0
+      bInterfaceClass        10
+      bInterfaceSubClass      0
+      bInterfaceProtocol      1
+      iInterface             17 CDC Network Data
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        5
+      bAlternateSetting       1
+      bNumEndpoints           2
+      bInterfaceClass        10
+      bInterfaceSubClass      0
+      bInterfaceProtocol      1
+      iInterface             17 CDC Network Data
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x85  EP 5 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x03  EP 3 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+    Interface Association:
+      bLength                 8
+      bDescriptorType        11
+      bFirstInterface         6
+      bInterfaceCount         2
+      bFunctionClass          2
+      bFunctionSubClass      13
+      bFunctionProtocol       0
+      iFunction              23 CDC NCM
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        6
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         2
+      bInterfaceSubClass     13
+      bInterfaceProtocol      0
+      iInterface             20 CDC Network Control Model (NCM)
+      CDC Header:
+        bcdCDC               1.10
+      CDC Union:
+        bMasterInterface        6
+        bSlaveInterface         7
+      CDC Ethernet:
+        iMacAddress                     21 <redacted>
+        bmEthernetStatistics    0x00000000
+        wMaxSegmentSize               1514
+        wNumberMCFilters            0x0000
+        bNumberPowerFilters              0
+      CDC NCM:
+        bcdNcmVersion        1.00
+        bmNetworkCapabilities 0x11
+          crc mode
+          packet filter
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x88  EP 8 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0010  1x 16 bytes
+        bInterval               9
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        7
+      bAlternateSetting       0
+      bNumEndpoints           0
+      bInterfaceClass        10
+      bInterfaceSubClass      0
+      bInterfaceProtocol      1
+      iInterface             22 CDC Network Data
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        7
+      bAlternateSetting       1
+      bNumEndpoints           2
+      bInterfaceClass        10
+      bInterfaceSubClass      0
+      bInterfaceProtocol      1
+      iInterface             22 CDC Network Data
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x87  EP 7 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x04  EP 4 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        8
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass       255
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x89  EP 9 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x05  EP 5 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        9
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass       255
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x8a  EP 10 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x06  EP 6 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber       10
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass       255
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x8b  EP 11 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x07  EP 7 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber       11
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass       255
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x8c  EP 12 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x08  EP 8 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber       12
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass       255
+      bInterfaceSubClass     66
+      bInterfaceProtocol      1
+      iInterface             26 ADB Interface
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x09  EP 9 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x8d  EP 13 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber       13
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass       255
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x8e  EP 14 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x0a  EP 10 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+Device Qualifier (for other device speed):
+  bLength                10
+  bDescriptorType         6
+  bcdUSB               2.00
+  bDeviceClass            0
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0        64
+  bNumConfigurations      1
+Device Status:     0x0000
+  (Bus Powered)
+
+---
+ drivers/usb/serial/option.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index f31cc3c76329..9880910a49a0 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -595,6 +595,11 @@ static void option_instat_callback(struct urb *urb);
+ #define SIERRA_VENDOR_ID			0x1199
+ #define SIERRA_PRODUCT_EM9191			0x90d3
+ 
++/* UNISOC (Spreadtrum) products */
++#define UNISOC_VENDOR_ID			0x1782
++/* TOZED TL70-C based on UNISOC SL8563 uses UNISOC's vendor ID */
++#define TOZED_PRODUCT_LT70C			0x4055
++
+ /* Device flags */
+ 
+ /* Highest interface number which can be used with NCTRL() and RSVD() */
+@@ -2225,6 +2230,7 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(OPPO_VENDOR_ID, OPPO_PRODUCT_R11, 0xff, 0xff, 0x30) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(SIERRA_VENDOR_ID, SIERRA_PRODUCT_EM9191, 0xff, 0xff, 0x30) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(SIERRA_VENDOR_ID, SIERRA_PRODUCT_EM9191, 0xff, 0, 0) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(UNISOC_VENDOR_ID, TOZED_PRODUCT_LT70C, 0xff, 0, 0) },
+ 	{ } /* Terminating entry */
+ };
+ MODULE_DEVICE_TABLE(usb, option_ids);
+-- 
+2.37.2
+
