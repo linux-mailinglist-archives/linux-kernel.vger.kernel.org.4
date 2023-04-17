@@ -2,55 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CFF76E457F
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 12:45:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 697296E4580
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 12:45:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjDQKpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 06:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45494 "EHLO
+        id S229958AbjDQKpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 06:45:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjDQKpU (ORCPT
+        with ESMTP id S229967AbjDQKpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 06:45:20 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E77165AF;
-        Mon, 17 Apr 2023 03:44:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=CW9lw2Cj2XyT8UmS0Kl5czpsMOIb9NpzZKIOou+Y6j4=;
-        t=1681728258; x=1682937858; b=RRBcRusnzaTG3BgEcC0O0NhOaZiod09xPNO77lteSGjFvJw
-        Jors0yiTgUCtCxb1Yla3gxOx0LTt+r0+ITy+qfKaRODie0E0FieRvQ9Bphc2xmZPbBduNOkZju0C3
-        22yBn0vvqcKO/QwpSe30jkOaC9iF2P3HamC4G22nIIc8iLwCh6Dh1++tsMjwjDbe4fHYoTrJPDTYz
-        q/6UTECEWZTOjNzrlUaYJqidjvanp9emxHj7pHxY0nmrvBVMIVklkEQuCxuLnKFaEGwQ6DWb3f5Uw
-        3FYL06JeALGRqgAgaJtxPhLJca55QMYCckmPre3TjX3wz4yA1qK5pY2XUhYp4H0Q==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.96)
-        (envelope-from <benjamin@sipsolutions.net>)
-        id 1poMK9-000fGG-2W;
-        Mon, 17 Apr 2023 12:43:06 +0200
-Message-ID: <4560d22e3d0a9beb71ef10202d8bcb77b5148eae.camel@sipsolutions.net>
-Subject: Re: [PATCH] kunit: Set the current KUnit context when cleaning up
-From:   Benjamin Berg <benjamin@sipsolutions.net>
-To:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Rae Moar <rmoar@google.com>,
-        Daniel Latypov <dlatypov@google.com>, maxime@cerno.tech
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 17 Apr 2023 12:43:03 +0200
-In-Reply-To: <20230415091401.681395-1-davidgow@google.com>
-References: <20230415091401.681395-1-davidgow@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Mon, 17 Apr 2023 06:45:22 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34626A78;
+        Mon, 17 Apr 2023 03:44:21 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f1738d0d4cso3962175e9.1;
+        Mon, 17 Apr 2023 03:44:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681728206; x=1684320206;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Z+oplVmOeEOPgIqDyW1qIYFp0lFRq10T5/lljQHKoh4=;
+        b=fHyGwkwDAtNj0DlHlyzUivs6EQ96RzQOhVuP6N5dkutmEDOwUGklY/lxNlehpflUy7
+         RCd62MWviAhxTYZS52hjrQ71xno4y9jqfbhxt3Hs4Mdcu9pON3/1mtG8vpmZqmE93rSc
+         Tb9ck/xOVFxFKiM0Wz1Z70UmNgrft9ErZieucpP2Mcdgn78ksMQlzO/LezrV2Woffiz0
+         kJl7S2KtfS+COsO3Kvw8GdleE1ATC3ii2tbsoi7Ycu7uWpB0wjKLZ2xVilaYMJZ3bvWt
+         zV+Wa2SY60vwSeapI6zXZ1/XB62iNG9tEkmvGcjh59AGw4AgSKF4VPgTwio0IlpzZPAh
+         K3Ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681728206; x=1684320206;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z+oplVmOeEOPgIqDyW1qIYFp0lFRq10T5/lljQHKoh4=;
+        b=gkLn/SB3PCUQV3V+/QTtclXCvfhtGS+zIZs8Sxa2iDt3qQq7ct1KSu5lb1dXgBsNMb
+         O7OoWZAadX105pu8JNnPedP/2/gC7r/OKWeNsy5zh0wtLli3oGGAhKi6DiMAWRWoKtgb
+         oOEP473M+2kzDREqVq4PuFqMWWMkKuhEB6wJS3WHNJmgDp+ffaarxDu/oKYSQyDTXnxi
+         pBtk6tGoWrwqfb7LrQmiMljYfVkB/iWXepiTg+MI7WA0rxlv5NZrVfDmX8DFouBt12Qb
+         UMookRNxAVlskO8CrslhJgDhsGJkgkRyFY81ZI+ybjO+gdXat2QZ/Lmox3O4ZV+fDXPA
+         Ox7g==
+X-Gm-Message-State: AAQBX9fLUhCRnFzchtpTqKGCZVthiqUL7vDYKahl5iWo/edbAuOp8R7z
+        7JRxGeDF9F83jS3o0hIlw2U=
+X-Google-Smtp-Source: AKy350bd9dvxSELvJHpzUxOJ/agocGbgxies6qUeTX6tG3PuWYiJlTByTcqlSV22b766L4A0As52Hw==
+X-Received: by 2002:adf:de89:0:b0:2f5:8116:6458 with SMTP id w9-20020adfde89000000b002f581166458mr4935358wrl.66.1681728206141;
+        Mon, 17 Apr 2023 03:43:26 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id o5-20020a5d58c5000000b002f47ae62fe0sm10246043wrf.115.2023.04.17.03.43.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 03:43:25 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 13:43:15 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Kang Chen <void0red@hust.edu.cn>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>, amitk@kernel.org,
+        angelogioacchino.delregno@collabora.com, bchihi@baylibre.com,
+        daniel@makrotopia.org, dzm91@hust.edu.cn, henry.yen@mediatek.com,
+        hust-os-kernel-patches@googlegroups.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+        matthias.bgg@gmail.com, rafael@kernel.org, rdunlap@infradead.org,
+        rui.zhang@intel.com, void0red@gmail.com
+Subject: Re: [PATCH v3 2/2] thermal: mediatek: change clk_prepare_enable to
+ devm_clk_get_enabled in mtk_thermal_probe
+Message-ID: <48ae0e2e-257d-4ad2-afbc-2eb4b48e516b@kili.mountain>
+References: <b2e5ef14-9a12-15d5-8016-d0994c1177c3@linaro.org>
+ <20230411063531.3976354-1-void0red@hust.edu.cn>
+ <20230411063531.3976354-2-void0red@hust.edu.cn>
+ <4fed91ef.3c256.18783c407e3.Coremail.void0red@hust.edu.cn>
+ <cfb7743b-03b0-96c4-fcc3-7095694f6fbb@linaro.org>
+ <6108982E-A3DC-4B7E-829E-20BBAC9C503F@hust.edu.cn>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6108982E-A3DC-4B7E-829E-20BBAC9C503F@hust.edu.cn>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,101 +85,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Apr 17, 2023 at 06:15:02PM +0800, Kang Chen wrote:
+> 
+> 
+> > 2023年4月17日 17:52，Daniel Lezcano <daniel.lezcano@linaro.org> 写道：
+> > 
+> > 
+> > Hi,
+> > 
+> > this patch does not apply:
+> > 
+> > Analyzing 9 messages in the thread
+> > Will use the latest revision: v3
+> > You can pick other revisions using the -vN flag
+> > Checking attestation on all messages, may take a moment...
+> > ---
+> >  [PATCH v3 2/2] thermal: mediatek: change clk_prepare_enable to devm_clk_get_enabled in mtk_thermal_probe
+> >    + Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> >    + Link: https://lore.kernel.org/r/20230411063531.3976354-2-void0red@hust.edu.cn
+> > ---
+> > Total patches: 1 (cherrypicked: 2)
+> > ---
+> > Link: https://lore.kernel.org/r/20230411063531.3976354-1-void0red@hust.edu.cn
+> > Base: not specified
+> > Applying: thermal: mediatek: change clk_prepare_enable to devm_clk_get_enabled in mtk_thermal_probe
+> > error: patch failed: drivers/thermal/mediatek/auxadc_thermal.c:1182
+> > error: drivers/thermal/mediatek/auxadc_thermal.c: patch does not apply
+> > Patch failed at 0001 thermal: mediatek: change clk_prepare_enable to devm_clk_get_enabled in mtk_thermal_probe
+> Could you show me your work tree? I can apply it on mainline-6.3-rc7...
 
-On Sat, 2023-04-15 at 17:14 +0800, David Gow wrote:
-> KUnit tests run in a kthread, with the current->kunit_test pointer set
-> to the test's context. This allows the kunit_get_current_test() and
-> kunit_fail_current_test() macros to work. Normally, this pointer is
-> still valid during test shutdown (i.e., the suite->exit function, and
-> any resource cleanup). However, if the test has exited early (e.g., due
-> to a failed assertion), the cleanup is done in the parent KUnit thread,
-> which does not have an active context.
+Please write it against linux-next instead.
 
-My only question here is whether assertions (not expectations) are OK
-within the exit/cleanup handler. That said, it wouldn't be clear
-whether we should try to continue cleaning up after every failure, so
-probably it is reasonable to not do that.
-
-But, I did see that at least the clock tests currently use assertions
-inside the init function. And, in those tests, if the context
-allocation fails the exit handler will dereference the NULL pointer.
-
-So, nothing for this patch, but maybe it would make sense to mark tests
-as failed (or print a warning) if they use assertions inside init, exit
-or cleanup handlers?
-
-Benjamin
-
-> Fix this by setting the active KUnit context for the duration of the
-> test shutdown procedure. When the test exits normally, this does
-> nothing. When run from the KUits previous value (probably NULL)
-> afterwards.
->=20
-> This should make it easier to get access to the KUnit context,
-> particularly from within resource cleanup functions, which may, for
-> example, need access to data in test->priv.
->=20
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
->=20
-> This becomes useful with the current kunit_add_action() implementation,
-> as actions do not get the KUnit context passed in by default:
-> https://lore.kernel.org/linux-kselftest/CABVgOSmjs0wLUa4=3DErkB9tH8p6A1P6=
-N33befv63whF+hECRExQ@mail.gmail.com/
->=20
-> I think it's probably correct anyway, though, so we should either do
-> this, or totally rule out using kunit_get_current_test() here at all, by
-> resetting current->kunit_test to NULL before running cleanup even in
-> the normal case.
->=20
-> I've only given this the most cursory testing so far (I'm not sure how
-> much of the executor innards I want to expose to be able to actually
-> write a proper test for it), so more eyes and/or suggestions are
-> welcome.
->=20
-> Cheers,
-> -- David
->=20
-> ---
-> =C2=A0lib/kunit/test.c | 11 +++++++++++
-> =C2=A01 file changed, 11 insertions(+)
->=20
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index e2910b261112..2d7cad249863 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -392,10 +392,21 @@ static void kunit_case_internal_cleanup(struct kuni=
-t *test)
-> =C2=A0static void kunit_run_case_cleanup(struct kunit *test,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct kunit_suit=
-e *suite)
-> =C2=A0{
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * If we're no-longer running =
-from within the test kthread() because it failed
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * or timed out, we still need=
- the context to be okay when running exit and
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * cleanup functions.
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct kunit *old_current =3D =
-current->kunit_test;
-> +
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0current->kunit_test =3D test;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (suite->exit)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0suite->exit(test);
-> =C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0kunit_case_internal_clean=
-up(test);
-> +
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Restore the thread's previo=
-us test context (probably NULL or test). */
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0current->kunit_test =3D old_cu=
-rrent;
-> =C2=A0}
-> =C2=A0
-> =C2=A0struct kunit_try_catch_context {
+regards,
+dan carpenter
 
