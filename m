@@ -2,66 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FDCE6E4994
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 15:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B95F76E4993
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 15:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbjDQNM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 09:12:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33110 "EHLO
+        id S230209AbjDQNMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 09:12:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbjDQNLm (ORCPT
+        with ESMTP id S229688AbjDQNLe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 09:11:42 -0400
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3BA7EE6;
-        Mon, 17 Apr 2023 06:11:06 -0700 (PDT)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1880110ebe5so500232fac.3;
-        Mon, 17 Apr 2023 06:11:06 -0700 (PDT)
+        Mon, 17 Apr 2023 09:11:34 -0400
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AAD7BB8C;
+        Mon, 17 Apr 2023 06:10:59 -0700 (PDT)
+Received: by mail-oi1-f179.google.com with SMTP id d1so6542819oiw.13;
+        Mon, 17 Apr 2023 06:10:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681737032; x=1684329032;
+        d=1e100.net; s=20221208; t=1681737035; x=1684329035;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=IXZt0KqImFgsyhhPxPLi1OSBe3TPO8lPA8li15emVQ8=;
-        b=eNmVN/i1QwqyB475WNYuIM60wcQSoX++knu5ea25r1tSb0PbiZhk95iEtxyqpfKLRO
-         uaG9JMtl70Y6JFjnYs95KSO2MUWDG7d0+x+8RQxUpQTych0Ei95nP7Eg7uJVDD5aJrgT
-         tjR8elV4dfqtHbtrGws3SkK5KJGDuccDvo94P90BghSFlA3K8vMcculAcC+I4k14+kma
-         PxMBEOA+pyIy+5pGDtxvvwAmsjqa4Ngrc64Hrm+nPTITFBHZnbtrNSbAxLB1q4yS/Xfu
-         awBNxpOFJ+yzGN62U5CkFGE/rUfBKAf7QSXi12LxEcuEDkX0iNunNCMJMlfmkPrM4Baa
-         EPlw==
-X-Gm-Message-State: AAQBX9eaT/zl1BPwadiyvcQgRqNaAWsZS3PxhA9+GOku4JwRNJLCOc22
-        Amw8+Mgg31EcY3/1IqWaAQ==
-X-Google-Smtp-Source: AKy350ayJO+eG9U/cqv47KAeV20FExrvvzSFt2UABLULJZ9LP4qdLHS8V2D+sSymTWdAERUmkEL1bg==
-X-Received: by 2002:a05:6870:519:b0:177:8200:d7b with SMTP id j25-20020a056870051900b0017782000d7bmr8842016oao.29.1681737032605;
-        Mon, 17 Apr 2023 06:10:32 -0700 (PDT)
+        bh=VxzMSlWJqp0jC6TDxAVrz9kAacy8nE6CyreWMpO82qY=;
+        b=TbEeth/d+Lh7X3cP079eim5YXZH1gp/ubS+M/EdEEmEr3ismKJZrQsYApY76Yeus+f
+         7StSEJj7qqXVXAIRiy9mHUpd3+6TT7VKt/oLuAoOUZpMvSzBsrVR4K9cwWjBsZNRtVJf
+         vgJ/AloTEGeaTVUNFc18nVMbG5lRQ6GY9FhXDaKaDQMBQ+yG0DgRQabKAh+CK5pQ87KE
+         mk0MzNpOIzftWWojKTVbyIZyw4O8CpN3q56Hs1dXhcflfRl4ndhDkx6LICDJ+3Z58vmm
+         idZim2BiOGErFZUOEo6Aym0tfv7tRo1Td/tQrOoleoQLcmR6F3jYIX9MUQbhMVdamNuK
+         pPNQ==
+X-Gm-Message-State: AAQBX9ce+Jc253AwUtTvXM9EJ1zngxWmgPvNT8u6Hc9EqPB3GBrYOdg1
+        hqL72O3Ibfuee4J/0OlBSA==
+X-Google-Smtp-Source: AKy350ZlGphdnLNiDveQNO6I/GKvTFb/FnKDX5Ft9E5IDzE2uMM2gZ+a2HIyvJqu2MA7klFBfhkVoQ==
+X-Received: by 2002:a05:6808:bd5:b0:38d:e9e4:1ebd with SMTP id o21-20020a0568080bd500b0038de9e41ebdmr3351197oik.8.1681737035239;
+        Mon, 17 Apr 2023 06:10:35 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id du3-20020a0568703a0300b001723a2e84b6sm4540975oab.6.2023.04.17.06.10.31
+        by smtp.gmail.com with ESMTPSA id r7-20020acada07000000b003895430852dsm4607496oig.54.2023.04.17.06.10.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 06:10:31 -0700 (PDT)
-Received: (nullmailer pid 2588783 invoked by uid 1000);
+        Mon, 17 Apr 2023 06:10:34 -0700 (PDT)
+Received: (nullmailer pid 2588774 invoked by uid 1000);
         Mon, 17 Apr 2023 13:10:27 -0000
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
-To:     Thippeswamy Havalige <thippeswamy.havalige@amd.com>
-Cc:     bhelgaas@google.com, lorenzo.pieralisi@arm.com,
-        krzysztof.kozlowski@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, bharat.kumar.gogada@amd.com,
-        robh+dt@kernel.org, michals@xilinx.com, devicetree@vger.kernel.org,
-        nagaradhesh.yeleswarapu@amd.com
-In-Reply-To: <20230417103226.334588-2-thippeswamy.havalige@amd.com>
-References: <20230417103226.334588-1-thippeswamy.havalige@amd.com>
- <20230417103226.334588-2-thippeswamy.havalige@amd.com>
-Message-Id: <168173527725.2535601.7665980002341378947.robh@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: PCI: xilinx-xdma: Add YAML schemas
- for Xilinx XDMA PCIe Root Port Bridge
+To:     =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <zajec5@gmail.com>
+Cc:     Paolo Abeni <pabeni@redhat.com>, ath11k@lists.infradead.org,
+        devicetree@vger.kernel.org,
+        =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Robert Marko <robimarko@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Eric Dumazet <edumazet@google.com>
+In-Reply-To: <20230414212356.9326-1-zajec5@gmail.com>
+References: <20230414212356.9326-1-zajec5@gmail.com>
+Message-Id: <168173527510.2535500.15269428530497246338.robh@kernel.org>
+Subject: Re: [PATCH 1/3] dt-bindings: net: wireless: qcom,ath11k: allow
+ describing radios
 Date:   Mon, 17 Apr 2023 08:10:27 -0500
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -69,16 +74,17 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Mon, 17 Apr 2023 16:02:25 +0530, Thippeswamy Havalige wrote:
-> Add YAML dtschemas of Xilinx XDMA Soft IP PCIe Root Port Bridge
-> dt binding.
+On Fri, 14 Apr 2023 23:23:54 +0200, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
 > 
-> Signed-off-by: Thippeswamy Havalige <thippeswamy.havalige@amd.com>
-> Signed-off-by: Bharat Kumar Gogada <bharat.kumar.gogada@amd.com>
+> Qualcomm ath11k chipsets can have up to 3 radios. Each radio may need to
+> be additionally described by including its MAC or available frequency
+> ranges.
+> 
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 > ---
->  .../bindings/pci/xlnx,xdma-host.yaml          | 117 ++++++++++++++++++
->  1 file changed, 117 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pci/xlnx,xdma-host.yaml
+>  .../bindings/net/wireless/qcom,ath11k.yaml    | 26 +++++++++++++++++++
+>  1 file changed, 26 insertions(+)
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -87,11 +93,14 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/pci/xlnx,xdma-host.example.dtb: /example-0/soc/pcie@a0000000: failed to match any schema with compatible: ['xlnx,xdma-host-3.00']
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.example.dtb: wifi@c000000: radio@0: Unevaluated properties are not allowed ('reg' was unexpected)
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.example.dtb: wifi@c000000: '#address-cells', '#size-cells' do not match any of the regexes: '^radio@[0-2]$', 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230417103226.334588-2-thippeswamy.havalige@amd.com
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230414212356.9326-1-zajec5@gmail.com
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
