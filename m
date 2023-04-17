@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CA1D6E4F63
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 19:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A256E4F66
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 19:39:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230419AbjDQRjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 13:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33802 "EHLO
+        id S230357AbjDQRj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 13:39:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbjDQRjV (ORCPT
+        with ESMTP id S230385AbjDQRjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 13:39:21 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376A45BBA;
-        Mon, 17 Apr 2023 10:39:12 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id o29-20020a05600c511d00b003f1739de43cso1754509wms.4;
-        Mon, 17 Apr 2023 10:39:12 -0700 (PDT)
+        Mon, 17 Apr 2023 13:39:23 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A653AD38;
+        Mon, 17 Apr 2023 10:39:13 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id r15so4669317wmo.1;
+        Mon, 17 Apr 2023 10:39:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681753150; x=1684345150;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/djxTOJ3x/NPtL+O6ti8i4+uQIKOqNWvQ/15BQ6ZKIE=;
-        b=ZzANMxbByQJeUrp6Tnh7+0PiRepMh66KBM+l9O1zc3bEcmT/eYd5kDTEacsbRhsyEk
-         5qGG+Bw03n4EGKAY/KJiV6n15tky2Iv7S7aIUIHOnhMDnrKD0f2Na783Go/8BztUbuUQ
-         qKPBpEuEWl/WACjzmlor0ke07zSvp3TcqGgdDoEzHCpoOBhMwcX8GTGvAgHeC9BXqDRC
-         moI4KtYcOjZfVwgUPzoxPmNL36Mj/5mIJmyjVQEzXmoq4EjF0feQvP4IDysl8seHP6B2
-         QYt0he/bYZLBXXMwJe9VR/31+Iy2K9BX9xq3lnk4xJsPqKFbh7Ef3c6/VViu2J2a3ILT
-         rXBw==
+        d=gmail.com; s=20221208; t=1681753151; x=1684345151;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9ieDwkRbhuGtBTgJ4hOuFJkUlUo/FNB20cmPOQ1PxlQ=;
+        b=dzUrRtQkog8JNXGtZoiC7CP+HTXCAQ9v4suq8iLyRHwcHjnosnjoOp1/z00XXRaR/z
+         3IXC/WUMCCftHOJuVXpTHXptlFVHH0vXL8bWaUUCkyJ2lipZ5x320iNXy1osMJ31chsx
+         3UeC2Do+coPSWPt4eIpOSKxm8wQg4Xmi7cwTKsCwvelKlqf8ubQk6BlOf6AJa7jiLvdV
+         Iub8emhrPLAPUyeaE+5+kI9xRSAcOQFv0VTfmLUUIaxwT/SZkhaTz2/KsMzZXtxHcJhS
+         DO8RbBZVcqnDg2FWAHZUA+bbY91JKjKyjfjkyo2A9eYMsi7MMgyuoZoeFHJ0SAC0fkRt
+         PGUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681753150; x=1684345150;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/djxTOJ3x/NPtL+O6ti8i4+uQIKOqNWvQ/15BQ6ZKIE=;
-        b=hE5+o9OoBDzmohs04PK8OUJ9qoqCa0Pl308nE3LAKMLC/d2KJIEcLNAdLA6W2gzwGl
-         tWxZzlXj2AiLgHM5V7ZBsNy1Y4L3nf5mi0Q7J7FweCnY9/dkV7Yu/XmS6r0DlhYgAdki
-         k2yi3u9mgfxKHST/b3bKzLtyPUqF4iq4VYw5761x5Y2u88nCTM4X8psy911yfkHxVE1k
-         8+PIBYc1VDJAkLn4iT7kYGVkJNIT84u3ZGcsEEEMk/z8QT5CvwB0PNl870B3XI1w15ia
-         9+1xz138PfMCCC36fz9WYmWrvlgx2Nvju2YDJbjy66uXCIHn2i7aax1+f4JsybmgP321
-         oZtg==
-X-Gm-Message-State: AAQBX9dDlob5wiwaqDLjRgCKP09VkuNVh5mkXEkXxSWt0LisUstyiAil
-        qfKQUVP2D4eMYUa304+d35W8ur8kNUXBjw==
-X-Google-Smtp-Source: AKy350ZQqUksrzWBOisqa1NVB4oOCWRb15F9kiwMNg0+qKvzsdDnaRS4HKyc1Olf0iPIcy2LhnS90Q==
-X-Received: by 2002:a1c:6a10:0:b0:3f1:7316:6f4 with SMTP id f16-20020a1c6a10000000b003f1731606f4mr3475167wmc.20.1681753150220;
-        Mon, 17 Apr 2023 10:39:10 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681753151; x=1684345151;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9ieDwkRbhuGtBTgJ4hOuFJkUlUo/FNB20cmPOQ1PxlQ=;
+        b=jXRS9PCA4aaet2CUJGYmElFmcimraBoYf1G79Mo636L6dAFvZdwGp4yR7V95wCAj9T
+         +XAvBQ+9X2RMe5hBr1Ple/mWsM/NdDMLnVFdF+MAWY52SehtbdU0xLeNnBrH6qTAMugZ
+         smxKT15tSoVW9cTA08BQaqrQa6RmO4dUD2CDnIHappeLbMwfc8qFOhXf1CqwObmgDyKK
+         NIScrAl0A38NBaw9Z3a8MbXjt0YF0iQYqD2jNlex6URzbj++watKxtEsmZfyOJz+FRn+
+         ZCQBu2xmaV6e3dgoqJjQYsfRT5NmF9JOeRV7KrAiJTN2uK65PIrk2lAUAuGNhGcE5fyW
+         VTTg==
+X-Gm-Message-State: AAQBX9eYOBsKrBVB0HFKp8ORf1Dc2mni0u+qmwGz58CZotg1Fgjx8x6V
+        KlJptbuaBHo9hOUjeItHTY06g+l0IYggWQ==
+X-Google-Smtp-Source: AKy350acDiZjZ/q8MEpKibMOeWoQQvMBufVGART6kFvMm7dpJYWzgvi7Mk44pQ8mdwP7UAQSTuaddg==
+X-Received: by 2002:a7b:c40b:0:b0:3ed:d3a7:7077 with SMTP id k11-20020a7bc40b000000b003edd3a77077mr10800678wmi.40.1681753151293;
+        Mon, 17 Apr 2023 10:39:11 -0700 (PDT)
 Received: from andrejs-nb.int.toradex.com (35.145.195.178.dynamic.wline.res.cust.swisscom.ch. [178.195.145.35])
-        by smtp.gmail.com with ESMTPSA id iw1-20020a05600c54c100b003f174cafcdasm2478211wmb.7.2023.04.17.10.39.08
+        by smtp.gmail.com with ESMTPSA id iw1-20020a05600c54c100b003f174cafcdasm2478211wmb.7.2023.04.17.10.39.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 10:39:09 -0700 (PDT)
+        Mon, 17 Apr 2023 10:39:10 -0700 (PDT)
 From:   Andrejs Cainikovs <andrejs.cainikovs@gmail.com>
 X-Google-Original-From: Andrejs Cainikovs <andrejs.cainikovs@toradex.com>
 To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
@@ -64,10 +65,12 @@ Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
         Emanuele Ghidoli <emanuele.ghidoli@toradex.com>,
         Francesco Dolcini <francesco.dolcini@toradex.com>,
         Andrejs Cainikovs <andrejs.cainikovs@toradex.com>
-Subject: [PATCH v1 0/4] arm64: dts: colibri-imx8x: misc fixes
-Date:   Mon, 17 Apr 2023 19:38:26 +0200
-Message-Id: <20230417173830.19401-1-andrejs.cainikovs@toradex.com>
+Subject: [PATCH v1 1/4] arm64: dts: colibri-imx8x: fix eval board pin configuration
+Date:   Mon, 17 Apr 2023 19:38:27 +0200
+Message-Id: <20230417173830.19401-2-andrejs.cainikovs@toradex.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230417173830.19401-1-andrejs.cainikovs@toradex.com>
+References: <20230417173830.19401-1-andrejs.cainikovs@toradex.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,29 +83,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series fixes a few small issues on the just introduced Colibri iMX8X:
+From: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
 
-* Remove duplicate GPIO3_IO01 pin configuration
-* Remove GPIO3_IO01 pin configuration from SoM level
-* Delete non-existing i.MX8X peripherals adc1 and dsp
+Fix pinctrl groups to have SODIMM 75 only in one group.
+Remove configuration of the pin at SoM level because it is normally
+used as CSI_MCLK at camera interface connector.
+Without this fix it is not possible, without redefining iomuxc pinctrl,
+to use CSI_MCLK signal and leads to the following error messages:
 
-In addition to that a small cleanup patch is added
-* Move iomuxc pinctrl from SoM to carrier board level
+imx8qxp-pinctrl scu:pinctrl: pin IMX8QXP_CSI_MCLK already requested
+imx8qxp-pinctrl scu:pinctrl: pin-147 (16-003c) status -22
 
-Andrejs Cainikovs (1):
-  arm64: dts: colibri-imx8x: delete adc1 and dsp
+Fixes: 4d2adf738169 ("arm64: dts: colibri-imx8x: Split pinctrl_hog1")
 
-Emanuele Ghidoli (3):
-  arm64: dts: colibri-imx8x: fix eval board pin configuration
-  arm64: dts: colibri-imx8x: move pinctrl property from SoM to eval
-    board
-  arm64: dts: colibri-imx8x: fix iris pinctrl configuration
+Signed-off-by: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
+Signed-off-by: Andrejs Cainikovs <andrejs.cainikovs@toradex.com>
+---
+ arch/arm64/boot/dts/freescale/imx8x-colibri.dtsi | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
- .../boot/dts/freescale/imx8x-colibri-eval-v3.dtsi  |  6 ++++++
- .../boot/dts/freescale/imx8x-colibri-iris.dtsi     |  3 +--
- arch/arm64/boot/dts/freescale/imx8x-colibri.dtsi   | 14 ++++++++------
- 3 files changed, 15 insertions(+), 8 deletions(-)
-
+diff --git a/arch/arm64/boot/dts/freescale/imx8x-colibri.dtsi b/arch/arm64/boot/dts/freescale/imx8x-colibri.dtsi
+index 7cad79102e1a..6f88c11f16e1 100644
+--- a/arch/arm64/boot/dts/freescale/imx8x-colibri.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8x-colibri.dtsi
+@@ -365,7 +365,7 @@ &usdhc2 {
+ &iomuxc {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_ext_io0>, <&pinctrl_hog0>, <&pinctrl_hog1>,
+-		    <&pinctrl_hog2>, <&pinctrl_lpspi2_cs2>;
++		    <&pinctrl_lpspi2_cs2>;
+ 
+ 	/* On-module touch pen-down interrupt */
+ 	pinctrl_ad7879_int: ad7879intgrp {
+@@ -499,8 +499,7 @@ pinctrl_hog0: hog0grp {
+ 	};
+ 
+ 	pinctrl_hog1: hog1grp {
+-		fsl,pins = <IMX8QXP_CSI_MCLK_LSIO_GPIO3_IO01			0x20>,		/* SODIMM  75 */
+-			   <IMX8QXP_QSPI0A_SCLK_LSIO_GPIO3_IO16			0x20>;		/* SODIMM  93 */
++		fsl,pins = <IMX8QXP_QSPI0A_SCLK_LSIO_GPIO3_IO16			0x20>;		/* SODIMM  93 */
+ 	};
+ 
+ 	pinctrl_hog2: hog2grp {
 -- 
 2.34.1
 
