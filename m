@@ -2,140 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E9BB6E4603
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 13:06:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BB4E6E4608
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 13:07:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbjDQLGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 07:06:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33388 "EHLO
+        id S230527AbjDQLHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 07:07:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbjDQLGL (ORCPT
+        with ESMTP id S229959AbjDQLHv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 07:06:11 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2945279
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 04:05:13 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1poMdd-0000eR-4a; Mon, 17 Apr 2023 13:03:13 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1poMdb-0005No-Nb; Mon, 17 Apr 2023 13:03:11 +0200
-Date:   Mon, 17 Apr 2023 13:03:11 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Arun Ramadoss <arun.ramadoss@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, Eric Dumazet <edumazet@google.com>,
-        kernel@pengutronix.de, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net-next v1 2/2] net: dsa: microchip: Add partial ACL
- support for ksz9477 switches
-Message-ID: <20230417110311.GA11474@pengutronix.de>
-References: <20230411172456.3003003-1-o.rempel@pengutronix.de>
- <20230411172456.3003003-1-o.rempel@pengutronix.de>
- <20230411172456.3003003-3-o.rempel@pengutronix.de>
- <20230411172456.3003003-3-o.rempel@pengutronix.de>
- <20230416165658.fuo7vwer7m7ulkg2@skbuf>
- <20230417045710.GB20350@pengutronix.de>
- <20230417101209.m5fhc7njeeomljkf@skbuf>
+        Mon, 17 Apr 2023 07:07:51 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B8AA5FC0;
+        Mon, 17 Apr 2023 04:06:58 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id e9e14a558f8ab-3294eacb2f6so3900725ab.3;
+        Mon, 17 Apr 2023 04:06:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681729512; x=1684321512;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ELltBzgQq2kMsFk/gBLyDUWGvL72bzaDJeO1HjsJ+nU=;
+        b=i0uxx4P8b7+jO8mRYbbxdG6Tfr1WANwEY6VPHvQYQbrvN/wUdd/DblekpGVF6pDzlY
+         voV/o3DikT2W9GSUxV8PGX7PgfRr+oJ2/26tGn5E6SCJHSidR3lWL+XGuQ8Y/E0uX/6o
+         yUYpESxqjjR+uiztIKF4TGwbKx82yutq9a+6+7lkrY3hhmlRRnSbAs4+nlLWIYosPCdr
+         VYPzJjqLIKc+QNtj2YBSCuC9SQtJSjUeIWNYZQzpZ97q2RCobF7EpuOXqia9CzHkptXH
+         uzHiB8VIFKT+R6a/v5sqMghm04M3C/3Y00UFKX3Y1H35WpHUnBybtY0az8JRLi/Xr97S
+         2Lpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681729512; x=1684321512;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ELltBzgQq2kMsFk/gBLyDUWGvL72bzaDJeO1HjsJ+nU=;
+        b=aaolkxrWArmJOxV3i487gmPkF0RamzX7OjscjsMe+vbJRVeAbZ76AS9VbdKVyKzuA6
+         8K8G28i9xGCr8z+d8tdWCJbnaoYdAKRDjHtxsq8i08TKWyD4JPONQYv3TahQiIZ5l+//
+         iNhC4Yv1u78eYL8wOB0VtVNh9H6DxYQasr9i80NGaLnM8tBb09D3vvjT0k4QslFFGkNe
+         dry/8cn7+vo9HShdqajlp2IfmBAkvyS0/RJNqnlrsg7Xq0N5+B1gwWL3R8DwvHbS0NC0
+         a8XGzSYdpg4Bkoe5laplj/tV36nNasXTiwQLLTjC5lzaNl9TPeKkwlWhFTmInMhYUGt5
+         L3qA==
+X-Gm-Message-State: AAQBX9dmbf1eploYHvOGhivNvIzqAmoskTLe3DBommOgGkxRELl6CMqX
+        RWRfOqyoA2aWrULfGWcLn2cJbYKNiIbbyUqw5gY=
+X-Google-Smtp-Source: AKy350ZM1nWgkQHtj558qYXfvl4irLs4ErPelGgapvsZkr0Tr0xC6WGBmnrJkha7B4Xh3iK8iVpXCIb6HF/fktL4JCE=
+X-Received: by 2002:a92:cf43:0:b0:32b:1c9f:3c48 with SMTP id
+ c3-20020a92cf43000000b0032b1c9f3c48mr1115197ilr.1.1681729512244; Mon, 17 Apr
+ 2023 04:05:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230417101209.m5fhc7njeeomljkf@skbuf>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230412185608.64628-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20230412185608.64628-3-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdU9qrSaJqNL_PsrvbyrBAEB17yVMmLPon8AbvE3kjbTUQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdU9qrSaJqNL_PsrvbyrBAEB17yVMmLPon8AbvE3kjbTUQ@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Mon, 17 Apr 2023 12:04:46 +0100
+Message-ID: <CA+V-a8sVjK7jm6m=7XC9B8JBeUqL+aL_wvFjM-e=-p+4xWuszQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] arm64: dts: renesas: rzv2l-smarc: Enable CRU, CSI support
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 01:12:09PM +0300, Vladimir Oltean wrote:
-> On Mon, Apr 17, 2023 at 06:57:10AM +0200, Oleksij Rempel wrote:
-> > > On Tue, Apr 11, 2023 at 07:24:55PM +0200, Oleksij Rempel wrote:
-> > > > The ACL also implements a count function, generating an interrupt
-> > > > instead of a forwarding action. It can be used as a watchdog timer or an
-> > > > event counter.
-> > > 
-> > > Is the interrupt handled here? I didn't see cls_flower_stats().
-> > 
-> > No, it is not implemented in this patch. It is generic description of things
-> > ACL should be able to do. Is it confusing? Should I remove it?
-> 
-> No, it's confusing that the ACL statistics are not reported even though
-> it's mentioned that it's possible...
+Hi Geert,
 
-Certain aspects of the chip specification appeared ambiguous, leading me
-to decide to allocate a separate time slot for investigating the counter
-topic if necessary.
+Thank you for the review.
 
-For example, according to the
-KSZ9477 4.4.18 ACCESS CONTROL LIST (ACL) FILTERING:
+On Mon, Apr 17, 2023 at 9:57=E2=80=AFAM Geert Uytterhoeven <geert@linux-m68=
+k.org> wrote:
+>
+> Hi Prabhakar,
+>
+> Thanks for your patch!
+>
+> On Wed, Apr 12, 2023 at 8:56=E2=80=AFPM Prabhakar <prabhakar.csengg@gmail=
+.com> wrote:
+> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >
+> > Enable CRU, CSI on RZ/V2L SMARC EVK and tie the CSI to the OV5645 senso=
+r
+> > using Device Tree overlay. RZ/G2L SMARC EVK and RZ/V2L SMARC EVK have t=
+he
+> > same connections for connecting the CSI to OV5645 sensor so just reuse
+> > the existing r9a07g044l2-smarc-cru-csi-ov5645.dtso and create a symboli=
+c
+> > link to this file for RZ/V2L SMARC EVK.
+>
+> Perhaps it makes more sense to rename r9a07g044l2-smarc-cru-csi-ov5645.dt=
+so
+> to rzg2l-smarc-cru-csi-ov5645.dtso instead?
+>
+ok, and then for g2lc [0] I add rzg2lc-smarc-cru-csi-ov5645.dtso ?
 
-"It is also possible to configure the ACL table so that multiple processing
-entries specify the same action rule. In this way, the final matching result is
-the OR of the matching results from each of the multiple RuleSets.
-The 16 ACL rules represent an ordered list, with entry #0 having the highest
-priority and entry #15 having the lowest priority. All matching rules are
-evaluated. If there are multiple true match results and multiple corresponding
-actions, the highest priority (lowest numbered) of those actions will be the
-one taken."
+[0] https://patchwork.kernel.org/project/linux-renesas-soc/patch/2023041311=
+4016.16068-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
 
-A summary of this part of documentation is:
-1. ACL table can have multiple entries specifying the same action rule.
-2. Final matching result is the OR of multiple RuleSets' results.
-3. 16 ACL rules form an ordered list, with priority descending from #0 to #15.
-4. All matching rules are evaluated.
-5. When multiple true matches and actions occur, the highest priority action is
-   executed.
-
-Considering this, there is a possibility that separate action rules would not
-be executed, as they might not be the highest priority match.  Since counters
-would have separation action rules, they would not be executed or prevent other
-action rules from execution.
-
-To confirm my hypothesis, additional time and testing will be required.
-Nonetheless, I hope this issue does not impede the progress of this patch.
-
-> > > Have you considered the "skbedit priority" action as opposed to hw_tc?
-> > 
-> > I had already thought of that, but since bridging is offloaded in the HW
-> > no skbs are involved, i thought it will be confusing. Since tc-flower seems to
-> > already support hw_tc remapping, I decided to use it. I hope it will not harm,
-> > to use it for now as mandatory option and make it optional later if other
-> > actions are added, including skbedit.
-> 
-> Well, skbedit is offloadable, so in that sense, its behavior is defined
-> even when no skbs are involved. OTOH, skbedit also has a software data
-> path (sets skb->priority), as opposed to hw_tc, which last time I checked,
-> did not.
-
-Alright, having tc rules be portable is certainly a benefit. I presume
-that in this situation, it's not an exclusive "either...or" choice. Both
-variants can coexist, and the skbedit action can be incorporated at a
-later time. Is that accurate?
-
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Cheers,
+Prabhakar
