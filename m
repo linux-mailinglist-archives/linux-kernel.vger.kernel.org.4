@@ -2,174 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 506186E4BBE
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:42:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9C6F6E4BB9
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbjDQOmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 10:42:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38258 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbjDQOml (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230197AbjDQOml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 17 Apr 2023 10:42:41 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2046.outbound.protection.outlook.com [40.107.95.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5825584
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:42:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ktyzn7hePPy21pga68eTL/BqtCJBsFGYQQ57aJru5J7RCDMrHMj/hppz6XDcm6Nr2XMlXBgx5j3p8MR27UsVvPv4fPA2IXNbYmTy8QrqkIkwGMDiZpCsyMHJnAN98cHEKn2BZjyLjE252TpFz/PSTUWi5vANKChUY5eN3i+OnfmCPtzH65ID8rtatn4sYDPkH0X2v8Q7KYMQNIC5E4f3Fr1AFKObCPhL1G757xNqDdpN0/c9tHw11AXzJF30SAUgW52TcTw4Fn/6D6ullc0wW9QHduVhAjfFH2e2z7LJaq6qgY+SEDm7Cp7bxTl4km1ysWFMYInivMakKU0BGP5uOg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ub5xf+DUboa33pYwIzibqqjYxx4JemUZdjFnXPeUQDs=;
- b=eIsmLkhxcKJY/Et9RgHLbgpNpGmsrIB7jlqeFoYCAl3B+tD+18q0+J+9k5Z57ghG5/t5ZtYfLJIg8jysTqKdlUHyez3QW9Oxocsun2lO9G/Dj10hPtre1rM0oKMjOTe8NGkvwCWspPud/lctmm4iR3r3Ec4jXDe/0VyAGPLXHUIJcqR5wj6M5WnnApZr6daac/8vpHlvKS3DdnxrzBGZvW6tJhZBxBCDvQ1REh8taCMpgeKdOztn2UtEBJFMjk+GrBfIDmxM83KtRXhsR22bdOch2CxttqV/seWh1QXOyeZn2L9mnoc4EIAutST1E1lK8CGhTOzD0o2Y03fu2B611A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ub5xf+DUboa33pYwIzibqqjYxx4JemUZdjFnXPeUQDs=;
- b=JxQXPCAJk66YApSbLdOR96uQEoKom4hAl+aFjy3hm+h5aTokRPZUoCQG9a8H0drXxb6g3g4ddDCt0HPnpdRA6b1/+a6ChO4Dnubnojoz+TP9aosV/cRFQhXDCAvZx+Px8G3zczgsKEZ4kD4uQWTGvHVa/5PrL96cNsKm+IjVGps=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by MW6PR12MB8759.namprd12.prod.outlook.com (2603:10b6:303:243::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Mon, 17 Apr
- 2023 14:42:35 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d2f8:7388:39c1:bbed]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d2f8:7388:39c1:bbed%3]) with mapi id 15.20.6298.045; Mon, 17 Apr 2023
- 14:42:35 +0000
-Message-ID: <fc9d282d-e1ac-b99f-7ba0-77bb9c52cca4@amd.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38234 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229551AbjDQOmj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Apr 2023 10:42:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A5B10CF;
+        Mon, 17 Apr 2023 07:42:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C8C661D57;
+        Mon, 17 Apr 2023 14:42:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0820C433EF;
+        Mon, 17 Apr 2023 14:42:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681742557;
+        bh=vK2Mdh81hU0JcVT4r2p86moQFzFGUnlZDHXh1AzFMFU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZladgrftPwmlvOxj9rleuJBtqTLN4AMElXXoPxwqYfn7tuJEKuRJH7dRYCkW+w0oA
+         QVDdG7eL5O383ATdRuJn2WGuU4052SCGbkZTctH88NRChqbDXWKHUHyl3LI9UGvg4+
+         U5wlN5L8QgSa9qRz6IMq/i7R5M3RPOe9JlhFjLngFNqkOSG6ZRm6y0lOhR5vPd2V4n
+         sQbgGwaSSCfBS5YIsQivPArb+m9r4kLN2RbEjCVL1rAAzV8dW0Wzwn8+Vl/zq0nnr5
+         Bh2sbwhk1bBx2Hmh3qN1U4TgHyV65DamYSQ9/ms0bHZ+D4C8stNY4RhW0ni4Oo9JsE
+         Fs2k+f5y3kaOw==
 Date:   Mon, 17 Apr 2023 16:42:30 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] drm/ttm: fix null-ptr-deref in radeon_ttm_tt_populate()
-Content-Language: en-US
-To:     Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
-        Alex Deucher <alexander.deucher@amd.com>
-Cc:     "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jerome Glisse <jglisse@redhat.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-References: <20230417143431.58858-1-n.zhandarovich@fintech.ru>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20230417143431.58858-1-n.zhandarovich@fintech.ru>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0111.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9c::15) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+From:   Christian Brauner <brauner@kernel.org>
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        Eric Dumazet <edumazet@google.com>, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        daniel@iogearbox.net, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH net-next v4 2/4] net: socket: add sockopts blacklist for
+ BPF cgroup hook
+Message-ID: <20230417-wellblech-zoodirektor-76a80f7763ab@brauner>
+References: <20230413133355.350571-1-aleksandr.mikhalitsyn@canonical.com>
+ <20230413133355.350571-3-aleksandr.mikhalitsyn@canonical.com>
+ <CANn89iLuLkUvX-dDC=rJhtFcxjnVmfn_-crOevbQe+EjaEDGbg@mail.gmail.com>
+ <CAEivzxcEhfLttf0VK=NmHdQxF7CRYXNm6NwUVx6jx=-u2k-T6w@mail.gmail.com>
+ <CAKH8qBt+xPygUVPMUuzbi1HCJuxc4gYOdU6JkrFmSouRQgoG6g@mail.gmail.com>
+ <ZDoEG0VF6fb9y0EC@google.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|MW6PR12MB8759:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7b302cf7-91ee-4fa0-610c-08db3f51fbeb
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZPsJzoYCMGtpc4NWIq0Cg9B2XB3jQBXVf/ooKJjJfkiIXHYs0L88T7FHz262t8HxslPdMz1VS+YOHrd7/PjLuYa/ENammbd/1ji6hm8xFqRfAuqg1UIwfgdX65FR6xlCKDHiV9b4pgVWUZ6Mkl9X34rpGqqIrNPDkJy+5Iqb4VcsG4nOcs4xOTcTewh+tUYRRgOpRhwhY6FxFl8fcgxwaO8ARmPXHl/v3hRhCGu9p3VKzbRtoydIEfBDAwTa/p92az6kEu4N9Fm76GrMAZ2YsQJlUKcFn8Rag/jHo53rjw45Y8BAvoSaAZ7yB7ElYbouY9vu2NohSlfhuaHXq8YJkRocsO/XtMF75AOjUnXAqNOcOVtIRB9WUK8DfPYRDUWWKt8fwOAeFYu4ccVqVSv6qDonodGIIAfeg5C2FZXWxA4ruELp/WU6FmnpwrWTpf/4UXDh+TX8CXgPa1ZsFFYtc4uCeJOZ/LxtVGa7if+Drd4RKv/2rswcrH719pBN4NfX7/1s1lyzzyj4Z84WENCiDSihodH/2jCUpXZyRGc9BrNHil/xGne+KvIsLY6p1Ih2eIrgITMrsfX3tXXLIzSJB42mJ348k5QYoEtUfW/l46/DlOqT35TLfVBEDqMV4SEuHfc5/yi1bH7Hn92TwLZHhQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(346002)(376002)(39860400002)(366004)(451199021)(5660300002)(2616005)(86362001)(31696002)(83380400001)(186003)(6506007)(6512007)(38100700002)(8676002)(6636002)(8936002)(54906003)(110136005)(478600001)(6666004)(6486002)(316002)(41300700001)(36756003)(66476007)(66556008)(4326008)(66946007)(31686004)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Mzl4c1NYYm16cVJXMHdiWmdXUisrMllURHc2MlNGcTA3UWpXb1Zkd2VuVVVY?=
- =?utf-8?B?bmdCb0JDQmF0YmlTd3NWdUNWNjlrTWNUTlhVTzFteGplc0VwVmtqNUs4QlVk?=
- =?utf-8?B?bGJseWVQTlNUZGF3c3VvWlYrWW9HV3hZcW1QY001NUUwUDNWY1VUajBUUXhO?=
- =?utf-8?B?UWYwR0ZiYXM1TVl4N256YXJSZTNLMzV2a1NlSTRtUHA0WHFzMHRicjlTTTNx?=
- =?utf-8?B?TDEraTUxanRMYUpOT3dJVnpBUVd1NUw0SWtsYzI4ZEwwcjNSQnp5aXVBTG5M?=
- =?utf-8?B?VEVDc0FFZnNnamlFY1dIcWU2Rm9ERk90TTRTM0NtM05zNW1CNGVvZkl3UnFE?=
- =?utf-8?B?OFd4eStpellnRjVsQmQ1bnpKaDdFU0U2RXZlMzkvRXRCamlFdEw5eUg3NUFw?=
- =?utf-8?B?NjF6a2djT2oxVjkxWXAzdnVyd0NKVEFxY3YveTJwVEkvalMvUjVCRnJNeGEr?=
- =?utf-8?B?aXBLcFZIemRBWXNpcVJHTUFMa3RBNHZzSU9aMy9PZXM1dFJjNEttQVg0bTV1?=
- =?utf-8?B?VnE0VzhnQnFJdVF2ZzdpV1ZQMHZwa1BTNVNxNzJXVkNJUHpQWjZPTy8vMGgz?=
- =?utf-8?B?NW9sU2twUGUvZVVsZHRuOCtkZm9UMFR2MGYzYk0rK01JYm1LaTc0SUJXbTlF?=
- =?utf-8?B?WUN4czYrbEM4ZUxqdVFETU14K2Fna2czQUFIOEI2V2JNTDVZYW9ya2ovVDhQ?=
- =?utf-8?B?TTdJUUZ3aEU2SEFRa0hnU2kzMTF0anpzL2ppYktpdnRFZUdIK0dXOWlDanBP?=
- =?utf-8?B?eXcvSXhIYWNEMGxIRTlOYi9vTkltVXB4bGExcHFFMlZaT3lEN2F4TlhhdGZ3?=
- =?utf-8?B?ekRWTEx0cXJFQ082UWVDbG42djR6V0lKZUJOcHNrSEN5Q0dpZDBLWFBBM0tD?=
- =?utf-8?B?OGU2eHVPTGxKL0dJT3liMWdqM0FUOTZjZ291Vjd5UWtUQmtScW5NSHRoSVFI?=
- =?utf-8?B?cnJRWXNITlJyckp0UmhhTWp6T1NVYW4rSmdub211YjZLN01MNW80b1JBdWlZ?=
- =?utf-8?B?Vzh4b1RxMjhXY09peW11N0NYcDB1cHFuUHM5YkZNYXFaajFMNWVCSWlsM01G?=
- =?utf-8?B?V1MzMDYyRUdoUm9YZlNiT1g2M1BKVmdUM0RxVkZ4QjJnTXNVU3IzVWVkZVZ4?=
- =?utf-8?B?bWM0RFhsMm52elkrTm41aHZkTHpnbHBxWmlkS1FRQytFdi9sSjZZVlNIbUpY?=
- =?utf-8?B?VEQyK3JkMWlKQVdBSGhzVVZibTlrcUZFcG85YVpvTjE0Qmp1NHc2akl4U29l?=
- =?utf-8?B?YlQxVFJPcmg1NlA0VFJwbHhDSVY3TWpRVE1FN1U4dFJ5LzcvTW5aaHNUeXBt?=
- =?utf-8?B?eTVEd09ETzdPK0JMUTJadDIzL1VncjRzNW1IYWVIWmE0WkVaSzBPUFZDRkN5?=
- =?utf-8?B?UVpISDRSWHZPYVJqRS9UazlYRW51Tml0d0xpbXVqRWdzN3RtZk11YzlZYmo2?=
- =?utf-8?B?RUtrdlRObEZDZmQ3YU1TVHowT3gwWG9jdFAwa3VWR0FnL3FPVVFVL3kycHdX?=
- =?utf-8?B?K0QyMExhdXBnUk9rQ1dhR1lRQnZnVjMyaGR1dGhMcy9kUVBaWkpDMmJiOEt1?=
- =?utf-8?B?Unk3VHRDNC9pUzk5T3FOVWpqdlV5YzRmY1FEZndQTU9mU29NLzNVMXRLUG9k?=
- =?utf-8?B?V3VKYXBBZTRsbzhxYzdFK2pKS29OUzVVTDJCMTFvSitsWkNuamRVLzNRT0NJ?=
- =?utf-8?B?R1Noa3BmandTMUNQWERYK0JwVy9ENjY5d2NabTI0VG0zeXhNdVJMaW1zaTd3?=
- =?utf-8?B?UFlGeFZLN3hxLzAzMWRjdmIzMVJzcmpIc2lYbERMME1ydmdsMDAzYlJSWTZW?=
- =?utf-8?B?eEo0RXU4UVBzcWIxMGw1QXlOaDEyNUt6NnluVXNMTFRCd1RKYjAzUDJoeUJn?=
- =?utf-8?B?dnBxRWdMMDRQWGtJYkp0VUUzdnJMcEkwbG5ZU09wTHZQdHZ0NVk2ZFE5T1FU?=
- =?utf-8?B?M1NxK2laRmRDcTRBUzVDbVF2SFZJeldsVlFNNk9WMkZISTN2K1lkRi95SEFj?=
- =?utf-8?B?SVVTUTBMdWRoSndSN0QwKzRNbE5SYVAwY2xEQzdBL3NDeVk3UmtGZkQxdE11?=
- =?utf-8?B?YUVyZkFJZUwyK1FESyszU21hZHhBQU1aaGZxa3huVEtJVUV0cGpBT2h0cklB?=
- =?utf-8?B?dFBrWisxWGUwLzNwZm1xUXJVZ1ZGekM5ZEo1Z3hEVTRxWDdmY2hUQzlXVjRa?=
- =?utf-8?Q?V7/f2Ac+mGBtsFzqJXyQnp95vue0W18Z8xenXX515M27?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7b302cf7-91ee-4fa0-610c-08db3f51fbeb
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2023 14:42:35.7317
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: h8fFrRSxmH2JMhVyaaMGZrkWG4q4BX+xNlncbkfybA1FHlmFmW5GUE+7K45jCx4/
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB8759
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZDoEG0VF6fb9y0EC@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Apr 14, 2023 at 06:55:39PM -0700, Stanislav Fomichev wrote:
+> On 04/13, Stanislav Fomichev wrote:
+> > On Thu, Apr 13, 2023 at 7:38 AM Aleksandr Mikhalitsyn
+> > <aleksandr.mikhalitsyn@canonical.com> wrote:
+> > >
+> > > On Thu, Apr 13, 2023 at 4:22 PM Eric Dumazet <edumazet@google.com> wrote:
+> > > >
+> > > > On Thu, Apr 13, 2023 at 3:35 PM Alexander Mikhalitsyn
+> > > > <aleksandr.mikhalitsyn@canonical.com> wrote:
+> > > > >
+> > > > > During work on SO_PEERPIDFD, it was discovered (thanks to Christian),
+> > > > > that bpf cgroup hook can cause FD leaks when used with sockopts which
+> > > > > install FDs into the process fdtable.
+> > > > >
+> > > > > After some offlist discussion it was proposed to add a blacklist of
+> > > >
+> > > > We try to replace this word by either denylist or blocklist, even in changelogs.
+> > >
+> > > Hi Eric,
+> > >
+> > > Oh, I'm sorry about that. :( Sure.
+> > >
+> > > >
+> > > > > socket options those can cause troubles when BPF cgroup hook is enabled.
+> > > > >
+> > > >
+> > > > Can we find the appropriate Fixes: tag to help stable teams ?
+> > >
+> > > Sure, I will add next time.
+> > >
+> > > Fixes: 0d01da6afc54 ("bpf: implement getsockopt and setsockopt hooks")
+> > >
+> > > I think it's better to add Stanislav Fomichev to CC.
+> > 
+> > Can we use 'struct proto' bpf_bypass_getsockopt instead? We already
+> > use it for tcp zerocopy, I'm assuming it should work in this case as
+> > well?
+> 
+> Jakub reminded me of the other things I wanted to ask here bug forgot:
+> 
+> - setsockopt is probably not needed, right? setsockopt hook triggers
+>   before the kernel and shouldn't leak anything
+> - for getsockopt, instead of bypassing bpf completely, should we instead
+>   ignore the error from the bpf program? that would still preserve
+
+That's fine by me as well.
+
+It'd be great if the net folks could tell Alex how they would want this
+handled.
+
+>   the observability aspect
+
+Please see for more details
+https://lore.kernel.org/lkml/20230411-nudelsalat-spreu-3038458f25c4@brauner
 
 
-Am 17.04.23 um 16:34 schrieb Nikita Zhandarovich:
-> Currently, drm_prime_sg_to_page_addr_arrays() dereferences 'gtt->ttm'
-> without ensuring that 'gtt' (and therefore 'gtt->tmm') is not NULL.
->
-> Fix this by testing 'gtt' for NULL value before dereferencing.
->
-> Found by Linux Verification Center (linuxtesting.org) with static
-> analysis tool SVACE.
->
-> Fixes: 40f5cf996991 ("drm/radeon: add PRIME support (v2)")
-> Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
-> ---
->   drivers/gpu/drm/radeon/radeon_ttm.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/radeon/radeon_ttm.c b/drivers/gpu/drm/radeon/radeon_ttm.c
-> index 1e8e287e113c..33d01c3bdee4 100644
-> --- a/drivers/gpu/drm/radeon/radeon_ttm.c
-> +++ b/drivers/gpu/drm/radeon/radeon_ttm.c
-> @@ -553,7 +553,7 @@ static int radeon_ttm_tt_populate(struct ttm_device *bdev,
->   		return 0;
->   	}
->   
-> -	if (slave && ttm->sg) {
-> +	if (gtt && slave && ttm->sg) {
+> - or maybe we can even have a per-proto bpf_getsockopt_cleanup call that
+>   gets called whenever bpf returns an error to make sure protocols have
+>   a chance to handle that condition (and free the fd)
 
-The gtt variable is derived from the ttm variable and so never NULL 
-here. The only case when this can be NULL is for AGP and IIRC we don't 
-support DMA-buf in this case.
-
->   		drm_prime_sg_to_dma_addr_array(ttm->sg, gtt->ttm.dma_address,
-
-Just use ttm->dma_addresses instead of gtt->ttm.dma_address here to make 
-your automated checker happy.
-
-Regards,
-Christian.
-
->   					       ttm->num_pages);
->   		return 0;
-
+Installing an fd into an fdtable makes it visible to userspace at which
+point calling close_fd() is doable but an absolute last resort and
+generally a good indicator of misdesign. If the bpf hook wants to make
+decisions based on the file then it should receive a struct
+file, not an fd.
