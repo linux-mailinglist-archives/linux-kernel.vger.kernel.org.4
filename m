@@ -2,131 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BBB86E40D1
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 09:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 060D46E40D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 09:27:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbjDQH0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 03:26:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41336 "EHLO
+        id S230282AbjDQH1L convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 17 Apr 2023 03:27:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230348AbjDQH0n (ORCPT
+        with ESMTP id S230356AbjDQH05 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 03:26:43 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA49423F
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 00:26:34 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1poJFh-0006hA-8x; Mon, 17 Apr 2023 09:26:17 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 0A8271B04D6;
-        Mon, 17 Apr 2023 07:26:14 +0000 (UTC)
-Date:   Mon, 17 Apr 2023 09:26:13 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Judith Mendez <jm@ti.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Andrew Davis <afd@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        Schuyler Patton <spatton@ti.com>
-Subject: Re: [RFC PATCH 5/5] can: m_can: Add hrtimer to generate software
- interrupt
-Message-ID: <20230417-taking-relieving-f2c8532864c0-mkl@pengutronix.de>
-References: <20230413223051.24455-1-jm@ti.com>
- <20230413223051.24455-6-jm@ti.com>
- <20230414-bounding-guidance-262dffacd05c-mkl@pengutronix.de>
- <4a6c66eb-2ccf-fc42-a6fc-9f411861fcef@hartkopp.net>
- <20230416-failing-washbasin-e4fa5caea267-mkl@pengutronix.de>
- <f58e8dce-898c-8797-5293-1001c9a75381@hartkopp.net>
+        Mon, 17 Apr 2023 03:26:57 -0400
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C9A3C3B
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 00:26:41 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id m14so7311713ybk.4
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 00:26:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681716400; x=1684308400;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UnHCIIu6B3qiVRFBtGIosQ/MV7BEV+uDGlhW9VKcxis=;
+        b=Jpi0WzGmqxfc3iSJi5X4KDt+ODwOs6IvGJJyD97Iw4tkCnsrVAoN79ekOh9C11utH1
+         dJlIv7dHAmxwQdrS6cYu4D7EaGYEHy5lMlsK3RZNcqLi68d65Nl9U7gn81ApmlrkDDr6
+         70YOLt5W0lxyOEidBJwi04ZyoNuGPvlR1e0cKYC1N9mw0Ru1y/DeAoabqTbnakAA0MAW
+         IYcn22ND1uNz3q82frJip/AfWp/p5S2f0QyGh0IP9xEEcUJDQpydk07nfhyu014tCY1w
+         FsDu0unpE6S2yf4aRw7192wt2MSFORvUeFNncJ7dyN07KdNFsiIa+CJR7b03HFkUdw3D
+         4kNA==
+X-Gm-Message-State: AAQBX9c00asbBRn1Z4bVNgPxevzUi9m5gCCLXyfdwPIr+uixHIn/7Xsv
+        wB/cVUqOLXf8xAfYpqwG89YYujzj7nTmtw==
+X-Google-Smtp-Source: AKy350ZqYHUj87GJFaRrCM2sqWRmV5fMDdRopqt1VPwRvx4zZQUEU/zqWdC2WuhzGeFQyOoMnjfcbA==
+X-Received: by 2002:a05:6902:707:b0:b8f:3685:c12a with SMTP id k7-20020a056902070700b00b8f3685c12amr15972870ybt.39.1681716400580;
+        Mon, 17 Apr 2023 00:26:40 -0700 (PDT)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id 126-20020a250a84000000b00b8f54571fc0sm1300552ybk.5.2023.04.17.00.26.40
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Apr 2023 00:26:40 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id n193so2252221ybf.12
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 00:26:40 -0700 (PDT)
+X-Received: by 2002:a25:d707:0:b0:b8f:578c:4e3a with SMTP id
+ o7-20020a25d707000000b00b8f578c4e3amr6749432ybg.12.1681716399950; Mon, 17 Apr
+ 2023 00:26:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="f6bxkwneko5oxwq5"
-Content-Disposition: inline
-In-Reply-To: <f58e8dce-898c-8797-5293-1001c9a75381@hartkopp.net>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230412183834.3769519-1-j.neuschaefer@gmx.net> <20230412183834.3769519-2-j.neuschaefer@gmx.net>
+In-Reply-To: <20230412183834.3769519-2-j.neuschaefer@gmx.net>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 17 Apr 2023 09:26:28 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVUC9n8vQYq+5tXX1jVPSnhyKoMAcB0dd6GFMXA=Apobw@mail.gmail.com>
+Message-ID: <CAMuHMdVUC9n8vQYq+5tXX1jVPSnhyKoMAcB0dd6GFMXA=Apobw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] soc: nuvoton: Add "select REGMAP" to WPCM450 SoC driver
+To:     =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Cc:     openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Joel Stanley <joel@jms.id.au>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 12, 2023 at 8:38 PM Jonathan Neuschäfer
+<j.neuschaefer@gmx.net> wrote:
+> Select CONFIG_REGMAP from CONFIG_WPCM450_SOC, because the driver relies
+> on regmap to work.
+>
+> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Link: https://lore.kernel.org/lkml/CAMuHMdWo5vHCeE6BeSHrUy12uT7_wFhW-VbQmQ5u+4Q8c7-wYQ@mail.gmail.com/
+> Fixes: 77b8c67b5637 ("soc: nuvoton: Add SoC info driver for WPCM450")
+> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+> ---
+> v3:
+> - Split the commit into two
+> - Reword the commit messages a bit
 
---f6bxkwneko5oxwq5
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-On 16.04.2023 21:46:40, Oliver Hartkopp wrote:
-> > I had the 5ms that are actually used in the code in mind. But this is a
-> > good calculation.
->=20
-> @Judith: Can you acknowledge the value calculation?
->=20
-> > > The "shortest" 11 bit CAN ID CAN frame is a Classical CAN frame with =
-DLC =3D 0
-> > > and 1 Mbit/s (arbitration) bitrate. This should be 48 bits @1Mbit =3D=
-> ~50
-> > > usecs
-> > >=20
-> > > So it should be something about
-> > >=20
-> > >      50 usecs * (FIFO queue len - 2)
-> >=20
-> > Where does the "2" come from?
->=20
-> I thought about handling the FIFO earlier than it gets completely "full".
->=20
-> The fetching routine would need some time too and the hrtimer could also
-> jitter to some extend.
+Gr{oetje,eeting}s,
 
-I was assuming something like this.
+                        Geert
 
-I would argue that the polling time should be:
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-    50 =C2=B5s * FIFO length - IRQ overhead.
-
-The max IRQ overhead depends on your SoC and kernel configuration.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---f6bxkwneko5oxwq5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQ89JIACgkQvlAcSiqK
-BOj1QAf8C3XM8k07BC2j8JyiAa7udtivyxZJ8HO2LKeVF312gm8khfUIMOo06Sqp
-jW+3LndAnjaby9ahmfPCWHwPPdF6X1xWJhH+JUCFTeM6C7JBdtKjSkFcVx2o69ot
-ZgMQnqOaxunKcnm2EOTOSsP9P2PLNzjm0MD0Nf+soV9PYgMdLfl/oKjZRMqQFbG/
-yMMZ40JaMt9kzwZSE9d6YE/EfygUmHmYQERz3OXGMhKVLMEe0CrOOKV+goEXvJfP
-SOg+kCqU14RzDC8fzJMk8Ju1bgICmQksIvHAH05hbuCctWjhePYHINx3kF8JZut+
-yJP8lWEBWlsf+uGi7oINsvn6ZTY4WA==
-=3slR
------END PGP SIGNATURE-----
-
---f6bxkwneko5oxwq5--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
