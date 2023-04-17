@@ -2,120 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DF9D6E51FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 22:41:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFC406E5200
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 22:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjDQUl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 16:41:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60894 "EHLO
+        id S230026AbjDQUnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 16:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjDQUlx (ORCPT
+        with ESMTP id S229521AbjDQUnl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 16:41:53 -0400
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE7683C2B;
-        Mon, 17 Apr 2023 13:41:52 -0700 (PDT)
-Received: by mail-ot1-f42.google.com with SMTP id 22-20020a9d0116000000b006a5dcfee7d7so2679589otu.2;
-        Mon, 17 Apr 2023 13:41:52 -0700 (PDT)
+        Mon, 17 Apr 2023 16:43:41 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44EC4422E;
+        Mon, 17 Apr 2023 13:43:40 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-5144a9c11c7so2018571a12.2;
+        Mon, 17 Apr 2023 13:43:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681764220; x=1684356220;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0D8fVQxMh2FytECOWBOGS25wxqSLBJ+NNK2BQrzIi0o=;
+        b=Ovsw61+/H1VzeZJwEvaeiN2rtY9+4CGQ97C3CXw57wyz4X3sGBZSw4h/rpIFulq7nn
+         HE9XwCw79oVevtF5Ckuw+PvXxdZ6QI1fus7xzyW/+6kfXOqNl8ltuKpZr3h2eHM8ESyF
+         NpcC52hW0bk5GrYGbuIX07KdMIsJ/N84j+SzdOyqS6EHjX1OF3QffdlBovpLUI9hpqbT
+         OZJppBBbR40xKayueq3IPwdEg3DgDyzCSQXCoJrvR39xueqfrsynhIFlZxrDam4Cv3iz
+         +ZsC8D0yhSHT7ETYy9GhWzOPulqpr1T985vZfikHihLdR4XQl2KeDUWF21mhG3c43g2+
+         BwUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681764112; x=1684356112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AgCCOyPJlZ+8fKfWAcjeoDQzm+xsVsIU0id6khxYMRs=;
-        b=Tszf1T/2Mwg59NYn4XPk7ztLYeWTa4PyjEORx9EPdlhjAWj2/artAIWaqrwe3VCJF+
-         zgXqX3PJ4vnd04FXiybcV9E0QsQb2QGAWnhnGJZ6sGz5RW2beHMzliwxcC1fIn0cuRcF
-         Sr/LMhDX1T4Fkb6uACmD9bBjk85nOBCc73h+tWNe2TQntW9MzWU5GhyhO+Z+3d5KxVnM
-         VY+ueczg1w488VHy1OQlTbg8RiKOEXGYqoDIf34AIuPhWOLrNGtLCYwl7ZTADRagCI5O
-         x6pmFhvck8ltMxl8MtMDHiCRVtzB7U5EtFCMwpVCO4rrQmXZpEb24bwSW9kYeLgdIkrz
-         UffA==
-X-Gm-Message-State: AAQBX9c2GencTqxl+bPkWH+lOc1Wr0R9zVqLgtSLC63jbxzEXxPx9HPI
-        aW1UHlbx+oETjzlSFKsY0w==
-X-Google-Smtp-Source: AKy350ZAcIbUvUMqEkEj6s0RcHV75OABdvSUl6WmtBW303CKhwJhEkgKKZsF4j7q0QT8uLyV5Otqhw==
-X-Received: by 2002:a05:6830:1d7a:b0:6a4:469a:1a59 with SMTP id l26-20020a0568301d7a00b006a4469a1a59mr5195094oti.23.1681764111870;
-        Mon, 17 Apr 2023 13:41:51 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i18-20020a056830011200b006a44d90de05sm3262030otp.69.2023.04.17.13.41.51
+        d=1e100.net; s=20221208; t=1681764220; x=1684356220;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0D8fVQxMh2FytECOWBOGS25wxqSLBJ+NNK2BQrzIi0o=;
+        b=QjrUewghmZ9ATFHjpyDtJKsZokwW8uVNEH1yKnGl38NGVG0qtrxykZ1p/Ok+O7B92K
+         tnxemKHCaSK2qm7rpZNAFXEcmTBBDwRkcKLdy3drMbEEdAz5XubSj2L5Md60n/62MNiJ
+         u2RyWCs/p9I35E1fL3WZzcXECUY4+jTU9J/bfpKcN6iSqgeCVkRtZuo5csN82epZ6Cay
+         r8bahsgF+3K8OVl/uiDDGoXTTrVBkBt7S1v+u0f0C0Fn41wLx5XLayXimyj71ts+NxGd
+         kZOSH1HVneqQvzk+OkBPUWy2nKB+T1N5IYm0aBEq18ELQY/wH39lrG+gbyqlOOcOp5V9
+         3Xdg==
+X-Gm-Message-State: AAQBX9e3Mjv1i3a6fNAmWzWJykT2UAG2ey34kWNOJf369MylZv/cb1al
+        MFeDIXZ/lscFy/KLwCDQ0kmCxl3172WvtA==
+X-Google-Smtp-Source: AKy350ZEPlPFvNP14bOLRitENDFtYaBMlc5g7zDZRvZSbWac/MAqQ3aSClp6qBRk07miCaf4k7I38A==
+X-Received: by 2002:a05:6a00:890:b0:63a:fae3:9890 with SMTP id q16-20020a056a00089000b0063afae39890mr22888001pfj.24.1681764219582;
+        Mon, 17 Apr 2023 13:43:39 -0700 (PDT)
+Received: from localhost.localdomain ([2402:e280:218d:82:ae97:7cb6:b12a:54f5])
+        by smtp.gmail.com with ESMTPSA id a2-20020aa78642000000b00632bb373949sm7956126pfo.158.2023.04.17.13.43.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 13:41:51 -0700 (PDT)
-Received: (nullmailer pid 3334304 invoked by uid 1000);
-        Mon, 17 Apr 2023 20:41:50 -0000
-Date:   Mon, 17 Apr 2023 15:41:50 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?B?UGF3ZcWC?= Anikiel <pan@semihalf.com>
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lgirdwood@gmail.com,
-        broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
-        krzysztof.kozlowski+dt@linaro.org, dinguyen@kernel.org,
-        lars@metafoo.de, nuno.sa@analog.com, upstream@semihalf.com
-Subject: Re: [PATCH 3/9] dt-bindings: ASoC: Add chv3-audio
-Message-ID: <20230417204150.GA3328603-robh@kernel.org>
-References: <20230414140203.707729-1-pan@semihalf.com>
- <20230414140203.707729-4-pan@semihalf.com>
+        Mon, 17 Apr 2023 13:43:39 -0700 (PDT)
+From:   Saalim Quadri <danascape@gmail.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, daniel.baluta@gmail.com
+Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Saalim Quadri <danascape@gmail.com>
+Subject: [PATCH] ASoC: dt-bindings: wm8728: Convert to dtschema
+Date:   Mon, 17 Apr 2023 20:43:23 +0000
+Message-Id: <20230417204323.137681-1-danascape@gmail.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230414140203.707729-4-pan@semihalf.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 14, 2023 at 04:01:57PM +0200, Paweł Anikiel wrote:
-> Add binding for chv3-audio device.
-> 
-> Signed-off-by: Paweł Anikiel <pan@semihalf.com>
-> ---
->  .../bindings/sound/google,chv3-audio.yaml     | 49 +++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/sound/google,chv3-audio.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/sound/google,chv3-audio.yaml b/Documentation/devicetree/bindings/sound/google,chv3-audio.yaml
-> new file mode 100644
-> index 000000000000..8b602b60eaee
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/sound/google,chv3-audio.yaml
-> @@ -0,0 +1,49 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/sound/google,chv3-audio.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Google Chameleon v3 audio
-> +
-> +maintainers:
-> +  - Paweł Anikiel <pan@semihalf.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: google,chv3-audio
-> +
-> +  google,audio-cpu0:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: The phandle of controller #0
-> +
-> +  google,audio-codec0:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: The phandle of codec #0
-> +
-> +  google,audio-cpu1:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: The phandle of controller #1
-> +
-> +  google,audio-codec1:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: The phandle of codec #1
+Convert the WM8728 audio CODEC bindings to DT schema
 
-Why do you need custom properties when we have standard property to 
-point to these things (sound-dai). We also have bindings to handle 
-multiple devices.
+Signed-off-by: Saalim Quadri <danascape@gmail.com>
+---
+ .../devicetree/bindings/sound/wlf,wm8728.yaml | 40 +++++++++++++++++++
+ .../devicetree/bindings/sound/wm8728.txt      | 18 ---------
+ 2 files changed, 40 insertions(+), 18 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/sound/wlf,wm8728.yaml
+ delete mode 100644 Documentation/devicetree/bindings/sound/wm8728.txt
 
-Rob
+diff --git a/Documentation/devicetree/bindings/sound/wlf,wm8728.yaml b/Documentation/devicetree/bindings/sound/wlf,wm8728.yaml
+new file mode 100644
+index 000000000000..fc89475a051e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/sound/wlf,wm8728.yaml
+@@ -0,0 +1,40 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/sound/wlf,wm8728.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: WM8728 audio CODEC
++
++maintainers:
++  - patches@opensource.cirrus.com
++
++allOf:
++  - $ref: dai-common.yaml#
++
++properties:
++  compatible:
++    const: wlf,wm8728
++
++  reg:
++    maxItems: 1
++
++  "#sound-dai-cells":
++    const: 0
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        codec@1a {
++            compatible = "wlf,wm8728";
++            reg = <0x1a>;
++        };
++    };
+diff --git a/Documentation/devicetree/bindings/sound/wm8728.txt b/Documentation/devicetree/bindings/sound/wm8728.txt
+deleted file mode 100644
+index a3608b4c78b9..000000000000
+--- a/Documentation/devicetree/bindings/sound/wm8728.txt
++++ /dev/null
+@@ -1,18 +0,0 @@
+-WM8728 audio CODEC
+-
+-This device supports both I2C and SPI (configured with pin strapping
+-on the board).
+-
+-Required properties:
+-
+-  - compatible : "wlf,wm8728"
+-
+-  - reg : the I2C address of the device for I2C, the chip select
+-          number for SPI.
+-
+-Example:
+-
+-wm8728: codec@1a {
+-	compatible = "wlf,wm8728";
+-	reg = <0x1a>;
+-};
+-- 
+2.40.0
+
