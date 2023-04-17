@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EAE36E5143
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:54:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C61786E5142
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:54:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230202AbjDQTyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 15:54:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33302 "EHLO
+        id S229738AbjDQTyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 15:54:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbjDQTyo (ORCPT
+        with ESMTP id S230454AbjDQTyo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 17 Apr 2023 15:54:44 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C40B49DE
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:53:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8256EB1
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:53:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681761209;
+        s=mimecast20190719; t=1681761211;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=VlJAJroC0qfUjlayNMIBwxZydfuRD55bTGjabDZPAD4=;
-        b=ZP/rrgSoE8H9BWi3SPbjCRHnruOYAOKmECWWGBS7em4hapH1bU7Oqr/XeGCDTbsTf+iJ8d
-        v3YYFvtsDL2Z5avJZYs/N1aJuNkWGuEMNlPsZmPnkZRywhVuDHjU//+aAZY9RHocslZfQL
-        Hb4nFryoUJ2xGvroq0l5JKHQ1fsSRi0=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=PiB4O8c7FzfgLpxlGuxco4WipLi6p7uHP+fG5udokS8=;
+        b=DlGuFqq5mO+6tNfbVSNcs4mL4/S420Z3QlL7DGSbj+JCAnmzmEY9NcQZfrvU14oF9BBLP2
+        cudzb+lH1PpxKa7Un1T0KAJ/KCqI+wUfmDEFxgyuNc3dZRuQYT/snCCqPBobaHDGQTQ2N7
+        jboM8HcVxVgs71k/fG1AI2GcM58Fs+M=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-282-kbxCxsszMya_WNCi-f4CHQ-1; Mon, 17 Apr 2023 15:53:28 -0400
-X-MC-Unique: kbxCxsszMya_WNCi-f4CHQ-1
-Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-3ed767b30easo1905071cf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:53:28 -0700 (PDT)
+ us-mta-400-yqvIume8OiyQWcc_AAwebw-1; Mon, 17 Apr 2023 15:53:30 -0400
+X-MC-Unique: yqvIume8OiyQWcc_AAwebw-1
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-74acb477be6so72178385a.1
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:53:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681761207; x=1684353207;
+        d=1e100.net; s=20221208; t=1681761209; x=1684353209;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VlJAJroC0qfUjlayNMIBwxZydfuRD55bTGjabDZPAD4=;
-        b=PEpzUxSrViaNRRpWeADN++C5Yj7jF5lN2MbPOyE/58Yy74CJWc6I3QqFDsrtK8H40l
-         16FNG62byDuMgl6bMa7vs30ICmcriVrGaeYe7mc8gWCf56L7TbbDNDBbI2/Soorb0Rgb
-         kZjTKjGxtDrZhozfoK7jvw9BAPNvpAtML9kPESwETQx/8XsZHizLbqjSH7bfIP6sn6K4
-         QAfzB7/5rJZJQL021aWy/NUb1S1LTDyxfMVTXTC4LQW/hTbh+CSJkb5fEvp6HeC/pqDi
-         pfF7OHd0jmjKLXCsyWmnxOwMY6CnRaASwdz2c6tiYgKbjbkiIlzWv0guCXMV6TVzZyRd
-         W5NQ==
-X-Gm-Message-State: AAQBX9cecB4SpY42T/z5V2sN5dSRKCs7donLG+cQqvJXHyVwKiadjVdi
-        mYMPE8+azsOgR7XPJdEsQK5PkP36dy64Pe5EYdzXLmqcfgLc+xzZLbLggfUQgYsEZfSuwSsmlEF
-        YyGswNywh00Mb2Xcy8/zflQYQMfVzX65O82yPDkJSOCUAgXlXVLSVHDJvz9reXOTQhCaSWvaQAz
-        ey6aeANA==
-X-Received: by 2002:ac8:4e43:0:b0:3bf:cf77:a861 with SMTP id e3-20020ac84e43000000b003bfcf77a861mr19130150qtw.4.1681761206873;
-        Mon, 17 Apr 2023 12:53:26 -0700 (PDT)
-X-Google-Smtp-Source: AKy350atiTLtabqgcPaZB1CQI3pkzcoQyHjGkW0AJzAmgZF9tCzczfoqxlZpXO4VXi+keofELA+BDw==
-X-Received: by 2002:ac8:4e43:0:b0:3bf:cf77:a861 with SMTP id e3-20020ac84e43000000b003bfcf77a861mr19130115qtw.4.1681761206528;
-        Mon, 17 Apr 2023 12:53:26 -0700 (PDT)
+        bh=PiB4O8c7FzfgLpxlGuxco4WipLi6p7uHP+fG5udokS8=;
+        b=aDso02lrE/qXfmVC3GBa5CYS+LBzDDJmq7LjiSk6kyv66WVMRDGp/izxZRpeDSUGPO
+         KYFfcoSFOAWgL0631VGA6jcR15LYJULTjVpJF+0efoEbwSO34D6nC8FznYzXEN4ILDvE
+         aaL59sD3lqGrUbZHszwIVeDJK5QDYAL4Pi/irSHl/javwwa4OAqu0GqALzpF04hAZCWs
+         Xk2VkVSdwwFjR6QLsccXI7eouuh90vSlduruGs4vYdXG6GUik8zVXwgQauk5Pi3CeFUE
+         C2m/NLnKkaaD7o6MGPl6hbBuddEYkveHceI4ZhLRnlYBinkT/JNK69gVi2iwVpIzfS9L
+         fQCw==
+X-Gm-Message-State: AAQBX9cltNvn3urTiEOhlh/kmK+yqWmvkGC/6hBgNa9n9ig/9zGmPWEa
+        Xof6+aqOm2CiuY3X+3hkHrcLXrglWgDqRPIC94sOhMyH70+dfaoPfoiL2QQTsVHfG2wG6vkn6oq
+        Nxyrnaw6tE5jrS5sD4+4lSo2pQ6iTChlIOACaNfTIvkPOOW/LFeeHjSH3oW76V9xa28ibz5d5nA
+        Ae+OfsJw==
+X-Received: by 2002:a05:622a:1352:b0:3ef:37fa:e1d6 with SMTP id w18-20020a05622a135200b003ef37fae1d6mr1229514qtk.2.1681761209399;
+        Mon, 17 Apr 2023 12:53:29 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Y/Xr56P7wXtTgHgR9HpSg1x1E8ea69mUaTjl3roEaHjKyTAe98r0gM0V7aTgCT/jxwZH4gBA==
+X-Received: by 2002:a05:622a:1352:b0:3ef:37fa:e1d6 with SMTP id w18-20020a05622a135200b003ef37fae1d6mr1229477qtk.2.1681761209061;
+        Mon, 17 Apr 2023 12:53:29 -0700 (PDT)
 Received: from x1n.redhat.com (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
-        by smtp.gmail.com with ESMTPSA id r17-20020ac87ef1000000b003edfb5d7637sm1731278qtc.73.2023.04.17.12.53.24
+        by smtp.gmail.com with ESMTPSA id r17-20020ac87ef1000000b003edfb5d7637sm1731278qtc.73.2023.04.17.12.53.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 12:53:25 -0700 (PDT)
+        Mon, 17 Apr 2023 12:53:28 -0700 (PDT)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
@@ -66,9 +66,9 @@ Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
         Axel Rasmussen <axelrasmussen@google.com>,
         Nadav Amit <nadav.amit@gmail.com>,
         David Hildenbrand <david@redhat.com>
-Subject: [PATCH v2 3/6] selftests/mm: Add a few options for uffd-unit-test
-Date:   Mon, 17 Apr 2023 15:53:14 -0400
-Message-Id: <20230417195317.898696-4-peterx@redhat.com>
+Subject: [PATCH v2 4/6] selftests/mm: Extend and rename uffd pagemap test
+Date:   Mon, 17 Apr 2023 15:53:15 -0400
+Message-Id: <20230417195317.898696-5-peterx@redhat.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230417195317.898696-1-peterx@redhat.com>
 References: <20230417195317.898696-1-peterx@redhat.com>
@@ -84,103 +84,224 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Namely:
+Extend it to all types of mem, meanwhile add one parallel test when
+EVENT_FORK is enabled, where uffd-wp bits should be persisted rather than
+dropped.
 
-  "-f": add a wildcard filter for tests to run
-  "-l": list tests rather than running any
-  "-h": help msg
+Since at it, rename the test to "wp-fork" to better show what it means.
+Making the new test called "wp-fork-with-event".
+
+Before:
+
+        Testing pagemap on anon... done
+
+After:
+
+        Testing wp-fork on anon... done
+        Testing wp-fork on shmem... done
+        Testing wp-fork on shmem-private... done
+        Testing wp-fork on hugetlb... done
+        Testing wp-fork on hugetlb-private... done
+        Testing wp-fork-with-event on anon... done
+        Testing wp-fork-with-event on shmem... done
+        Testing wp-fork-with-event on shmem-private... done
+        Testing wp-fork-with-event on hugetlb... done
+        Testing wp-fork-with-event on hugetlb-private... done
 
 Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- tools/testing/selftests/mm/uffd-unit-tests.c | 52 +++++++++++++++++---
- 1 file changed, 45 insertions(+), 7 deletions(-)
+ tools/testing/selftests/mm/uffd-unit-tests.c | 130 +++++++++++++++----
+ 1 file changed, 106 insertions(+), 24 deletions(-)
 
 diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
-index d871bf732e62..452ca05a829d 100644
+index 452ca05a829d..739fc4d30342 100644
 --- a/tools/testing/selftests/mm/uffd-unit-tests.c
 +++ b/tools/testing/selftests/mm/uffd-unit-tests.c
-@@ -909,28 +909,65 @@ uffd_test_case_t uffd_tests[] = {
- 	},
- };
+@@ -227,25 +227,65 @@ static int pagemap_open(void)
+ 			err("pagemap uffd-wp bit error: 0x%"PRIx64, value); \
+ 	} while (0)
  
-+static void usage(const char *prog)
-+{
-+	printf("usage: %s [-f TESTNAME]\n", prog);
-+	puts("");
-+	puts(" -f: test name to filter (e.g., event)");
-+	puts(" -h: show the help msg");
-+	puts(" -l: list tests only");
-+	puts("");
-+	exit(KSFT_FAIL);
+-static int pagemap_test_fork(bool present)
++typedef struct {
++	int parent_uffd, child_uffd;
++} fork_event_args;
++
++static void *fork_event_consumer(void *data)
+ {
+-	pid_t child = fork();
++	fork_event_args *args = data;
++	struct uffd_msg msg = { 0 };
++
++	/* Read until a full msg received */
++	while (uffd_read_msg(args->parent_uffd, &msg));
++
++	if (msg.event != UFFD_EVENT_FORK)
++		err("wrong message: %u\n", msg.event);
++
++	/* Just to be properly freed later */
++	args->child_uffd = msg.arg.fork.ufd;
++	return NULL;
 +}
 +
- int main(int argc, char *argv[])
- {
- 	int n_tests = sizeof(uffd_tests) / sizeof(uffd_test_case_t);
- 	int n_mems = sizeof(mem_types) / sizeof(mem_type_t);
-+	const char *test_filter = NULL;
-+	bool list_only = false;
- 	uffd_test_case_t *test;
- 	mem_type_t *mem_type;
- 	uffd_test_args_t args;
- 	char test_name[128];
- 	const char *errmsg;
--	int has_uffd;
-+	int has_uffd, opt;
- 	int i, j;
++static int pagemap_test_fork(int uffd, bool with_event)
++{
++	fork_event_args args = { .parent_uffd = uffd, .child_uffd = -1 };
++	pthread_t thread;
++	pid_t child;
+ 	uint64_t value;
+ 	int fd, result;
  
--	has_uffd = test_uffd_api(false);
--	has_uffd |= test_uffd_api(true);
-+	while ((opt = getopt(argc, argv, "f:hl")) != -1) {
-+		switch (opt) {
-+		case 'f':
-+			test_filter = optarg;
-+			break;
-+		case 'l':
-+			list_only = true;
-+			break;
-+		case 'h':
-+		default:
-+			/* Unknown */
-+			usage(argv[0]);
-+			break;
-+		}
++	/* Prepare a thread to resolve EVENT_FORK */
++	if (with_event) {
++		if (pthread_create(&thread, NULL, fork_event_consumer, &args))
++			err("pthread_create()");
 +	}
 +
-+	if (!test_filter && !list_only) {
-+		has_uffd = test_uffd_api(false);
-+		has_uffd |= test_uffd_api(true);
- 
--	if (!has_uffd) {
--		printf("Userfaultfd not supported or unprivileged, skip all tests\n");
--		exit(KSFT_SKIP);
-+		if (!has_uffd) {
-+			printf("Userfaultfd not supported or unprivileged, skip all tests\n");
-+			exit(KSFT_SKIP);
-+		}
++	child = fork();
+ 	if (!child) {
+ 		/* Open the pagemap fd of the child itself */
+ 		fd = pagemap_open();
+ 		value = pagemap_get_entry(fd, area_dst);
+ 		/*
+-		 * After fork() uffd-wp bit should be gone as long as we're
+-		 * without UFFD_FEATURE_EVENT_FORK
++		 * After fork(), we should handle uffd-wp bit differently:
++		 *
++		 * (1) when with EVENT_FORK, it should persist
++		 * (2) when without EVENT_FORK, it should be dropped
+ 		 */
+-		pagemap_check_wp(value, false);
++		pagemap_check_wp(value, with_event);
+ 		/* Succeed */
+ 		exit(0);
  	}
- 
- 	for (i = 0; i < n_tests; i++) {
- 		test = &uffd_tests[i];
-+		if (test_filter && !strstr(test->name, test_filter))
-+			continue;
-+		if (list_only) {
-+			printf("%s\n", test->name);
-+			continue;
-+		}
- 		for (j = 0; j < n_mems; j++) {
- 			mem_type = &mem_types[j];
- 			if (!(test->mem_targets & mem_type->mem_flag))
-@@ -952,7 +989,8 @@ int main(int argc, char *argv[])
- 		}
- 	}
- 
--	uffd_test_report();
-+	if (!list_only)
-+		uffd_test_report();
- 
- 	return ksft_get_fail_cnt() ? KSFT_FAIL : KSFT_PASS;
+ 	waitpid(child, &result, 0);
++
++	if (with_event) {
++		if (pthread_join(thread, NULL))
++			err("pthread_join()");
++		if (args.child_uffd < 0)
++			err("Didn't receive child uffd");
++		close(args.child_uffd);
++	}
++
+ 	return result;
  }
+ 
+@@ -295,7 +335,8 @@ static void uffd_wp_unpopulated_test(uffd_test_args_t *args)
+ 	uffd_test_pass();
+ }
+ 
+-static void uffd_pagemap_test(uffd_test_args_t *args)
++static void uffd_wp_fork_test_common(uffd_test_args_t *args,
++				     bool with_event)
+ {
+ 	int pagemap_fd;
+ 	uint64_t value;
+@@ -311,23 +352,42 @@ static void uffd_pagemap_test(uffd_test_args_t *args)
+ 	wp_range(uffd, (uint64_t)area_dst, page_size, true);
+ 	value = pagemap_get_entry(pagemap_fd, area_dst);
+ 	pagemap_check_wp(value, true);
+-	/* Make sure uffd-wp bit dropped when fork */
+-	if (pagemap_test_fork(true))
+-		err("Detected stall uffd-wp bit in child");
+-
+-	/* Exclusive required or PAGEOUT won't work */
+-	if (!(value & PM_MMAP_EXCLUSIVE))
+-		err("multiple mapping detected: 0x%"PRIx64, value);
++	if (pagemap_test_fork(uffd, with_event)) {
++		uffd_test_fail("Detected %s uffd-wp bit in child in present pte",
++			       with_event ? "missing" : "stall");
++		goto out;
++	}
+ 
+-	if (madvise(area_dst, page_size, MADV_PAGEOUT))
+-		err("madvise(MADV_PAGEOUT) failed");
++	/*
++	 * This is an attempt for zapping the pgtable so as to test the
++	 * markers.
++	 *
++	 * For private mappings, PAGEOUT will only work on exclusive ptes
++	 * (PM_MMAP_EXCLUSIVE) which we should satisfy.
++	 *
++	 * For shared, PAGEOUT may not work.  Use DONTNEED instead which
++	 * plays a similar role of zapping (rather than freeing the page)
++	 * to expose pte markers.
++	 */
++	if (args->mem_type->shared) {
++		if (madvise(area_dst, page_size, MADV_DONTNEED))
++			err("MADV_DONTNEED");
++	} else {
++		/*
++		 * NOTE: ignore retval because private-hugetlb doesn't yet
++		 * support swapping, so it could fail.
++		 */
++		madvise(area_dst, page_size, MADV_PAGEOUT);
++	}
+ 
+ 	/* Uffd-wp should persist even swapped out */
+ 	value = pagemap_get_entry(pagemap_fd, area_dst);
+ 	pagemap_check_wp(value, true);
+-	/* Make sure uffd-wp bit dropped when fork */
+-	if (pagemap_test_fork(false))
+-		err("Detected stall uffd-wp bit in child");
++	if (pagemap_test_fork(uffd, with_event)) {
++		uffd_test_fail("Detected %s uffd-wp bit in child in zapped pte",
++			       with_event ? "missing" : "stall");
++		goto out;
++	}
+ 
+ 	/* Unprotect; this tests swap pte modifications */
+ 	wp_range(uffd, (uint64_t)area_dst, page_size, false);
+@@ -338,9 +398,21 @@ static void uffd_pagemap_test(uffd_test_args_t *args)
+ 	*area_dst = 2;
+ 	value = pagemap_get_entry(pagemap_fd, area_dst);
+ 	pagemap_check_wp(value, false);
+-
+-	close(pagemap_fd);
+ 	uffd_test_pass();
++out:
++	if (uffd_unregister(uffd, area_dst, nr_pages * page_size))
++		err("unregister failed");
++	close(pagemap_fd);
++}
++
++static void uffd_wp_fork_test(uffd_test_args_t *args)
++{
++	uffd_wp_fork_test_common(args, false);
++}
++
++static void uffd_wp_fork_with_event_test(uffd_test_args_t *args)
++{
++	uffd_wp_fork_test_common(args, true);
+ }
+ 
+ static void check_memory_contents(char *p)
+@@ -836,10 +908,20 @@ uffd_test_case_t uffd_tests[] = {
+ 		.uffd_feature_required = 0,
+ 	},
+ 	{
+-		.name = "pagemap",
+-		.uffd_fn = uffd_pagemap_test,
+-		.mem_targets = MEM_ANON,
+-		.uffd_feature_required = UFFD_FEATURE_PAGEFAULT_FLAG_WP,
++		.name = "wp-fork",
++		.uffd_fn = uffd_wp_fork_test,
++		.mem_targets = MEM_ALL,
++		.uffd_feature_required = UFFD_FEATURE_PAGEFAULT_FLAG_WP |
++		UFFD_FEATURE_WP_HUGETLBFS_SHMEM,
++	},
++	{
++		.name = "wp-fork-with-event",
++		.uffd_fn = uffd_wp_fork_with_event_test,
++		.mem_targets = MEM_ALL,
++		.uffd_feature_required = UFFD_FEATURE_PAGEFAULT_FLAG_WP |
++		UFFD_FEATURE_WP_HUGETLBFS_SHMEM |
++		/* when set, child process should inherit uffd-wp bits */
++		UFFD_FEATURE_EVENT_FORK,
+ 	},
+ 	{
+ 		.name = "wp-unpopulated",
 -- 
 2.39.1
 
