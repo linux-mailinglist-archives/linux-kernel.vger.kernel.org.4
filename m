@@ -2,112 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F876E46FC
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 14:00:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F4E26E4746
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 14:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230283AbjDQMAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 08:00:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47398 "EHLO
+        id S230447AbjDQMM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 08:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbjDQL76 (ORCPT
+        with ESMTP id S229789AbjDQMMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 07:59:58 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF885275;
-        Mon, 17 Apr 2023 04:59:06 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-63b620188aeso1247752b3a.0;
-        Mon, 17 Apr 2023 04:59:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681732662; x=1684324662;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ByuvqnZ0whBYE58ALvTkPoZXFMoOo3weY1eli1YLs8M=;
-        b=ezXmzlMEqu08ohTUCxyWeT1ghxYBInGOWizV/QuxcC3LNYxDh4JflmMdjRbuaKuFEF
-         M3/peUNeBWEFoNGrCMbsDOZBj245P7/NUTnHjRz8dXI8bIdQiWYnK5KwVA7Eqfw2RG/y
-         IMj15+g/R9545qoQEQLdBloLu5S8PqcAuaJA3lC97I6/m2AOugMZBuh0HbYjumTHQNpL
-         ZALVclRThPcEz1Icfh4eP08TGGnFWk+EW52vi9FJR+hNPeiM4l4D/xaMz4GsJGAmmSKj
-         OZ3qvulCfiClhw3EKAQiTh34xSpk3PvDKxCXWzG/BuQPk5qXzXboCa1KB7OeZP+/otqg
-         nDpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681732662; x=1684324662;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ByuvqnZ0whBYE58ALvTkPoZXFMoOo3weY1eli1YLs8M=;
-        b=TD1r/7eQ1j8ai4uIs7pg5XnBQe9Jw6SYAnV6meRbzVE47qi1zkd9C5KwT2gRbrf5uU
-         s228ThKZO7kkWW7O2D/QKG5ILsfKt2VM62tgvRP5Za0skgxeF7zV3zZ6Mk/vXen05zqJ
-         rSNwaTFvH36caPsmdXXtgmj9rI70UudedNCWDBoe7mt2Cdw5jqRCcQk39XOI0NOwbf17
-         wp6zdwHEP7s6SCu1m7I/RPwnIJkZZEesRrEFigpH7cYPfGzFDzD+sJkNofiI/SEphgCR
-         DWkJBbMOps035k4xJQWRTKBbIylztFfTY9ZVYcDloNWESwJj7JeoYUXFwdAPIUIYMM4n
-         rx8Q==
-X-Gm-Message-State: AAQBX9eUnvuiw/bXNSc9Qo45mmK7CvS8x/cjWr59edi1kIpms8xNsXWS
-        XJgAUorcPwKW/nwH4Igj2GbDKPdHoVrtc6WY7sE=
-X-Google-Smtp-Source: AKy350ZuQYL1FYypLxgVwEvW7yKVWERIY1UOZe2w4ZV8QVjHAvbbucDalib2gb7BSAcoKBVQ6I/LS6oIqFiXdpeTNM4=
-X-Received: by 2002:a05:6a00:24c4:b0:63b:5496:7af9 with SMTP id
- d4-20020a056a0024c400b0063b54967af9mr6836463pfv.2.1681732661836; Mon, 17 Apr
- 2023 04:57:41 -0700 (PDT)
+        Mon, 17 Apr 2023 08:12:53 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693A47296;
+        Mon, 17 Apr 2023 05:12:20 -0700 (PDT)
+Received: from lnk.. ([10.12.190.56])
+        (user=lnk_01@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 33HC06ws003063-33HC06wt003063
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 17 Apr 2023 20:00:10 +0800
+From:   Li Ningke <lnk_01@hust.edu.cn>
+To:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vasanthakumar Thiagarajan <quic_vthiagar@quicinc.com>,
+        Jeff Johnson <quic_jjohnson@quicinc.com>,
+        Karthikeyan Periyasamy <quic_periyasa@quicinc.com>,
+        Carl Huang <quic_cjhuang@quicinc.com>,
+        P Praneesh <quic_ppranees@quicinc.com>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        Li Ningke <lnk_01@hust.edu.cn>,
+        Dongliang Mu <dzm91@hust.edu.cn>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
+        Bhagavathi Perumal S <quic_bperumal@quicinc.com>,
+        Baochen Qiang <quic_bqiang@quicinc.com>,
+        Balamurugan Selvarajan <quic_bselvara@quicinc.com>,
+        ath12k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] wifi: ath12k: fix missing unwind goto in `ath12k_pci_probe`
+Date:   Mon, 17 Apr 2023 11:59:21 +0000
+Message-Id: <20230417115921.176229-1-lnk_01@hust.edu.cn>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230415104104.5537-1-aford173@gmail.com> <20230415104104.5537-5-aford173@gmail.com>
- <807aa6c6-bbea-abcc-172d-17e22d1a3988@denx.de>
-In-Reply-To: <807aa6c6-bbea-abcc-172d-17e22d1a3988@denx.de>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Mon, 17 Apr 2023 06:57:30 -0500
-Message-ID: <CAHCN7x+NUnMtLbj_7A_uqxPsi5NXRXsPFwDnn=sf1bgm-Q-BsQ@mail.gmail.com>
-Subject: Re: [PATCH 5/6] drm: bridge: samsung-dsim: Support non-burst mode
-To:     Marek Vasut <marex@denx.de>
-Cc:     dri-devel@lists.freedesktop.org, m.szyprowski@samsung.com,
-        aford@beaconembedded.com, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Inki Dae <inki.dae@samsung.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Lucas Stach <l.stach@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: lnk_01@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 16, 2023 at 5:13=E2=80=AFPM Marek Vasut <marex@denx.de> wrote:
->
-> On 4/15/23 12:41, Adam Ford wrote:
-> > The high-speed clock is hard-coded to the burst-clock
-> > frequency specified in the device tree.  However, when
-> > using devices like certain bridge chips without burst mode
-> > and varying resolutions and refresh rates, it may be
-> > necessary to set the high-speed clock dynamically based
-> > on the desired pixel clock for the connected device.
->
-> The link rate negotiation should happen internally between the nearest
-> bridge and DSIM, so please add that to DRM core instead of hacking
-> around it by tweaking the HS clock again.
+Smatch complains that
+drivers/net/wireless/ath/ath12k/pci.c:1198 ath12k_pci_probe() warn: 
+missing unwind goto?
 
-I thought you tried to add something like this before and had some resistan=
-ce.
+In order to release the allocated resources before returning an
+error, the statement that directly returns the error is changed
+to a goto statement that first releases the resources in the error
+handling section.
 
-The Pixel clock is set by the bridge already without any new code
-added to the DRM core..  I am just reading that value that's there,
-and setting the clock accordingly.  I don't see how this is a hack.
+Fixes: d889913205cf ("wifi: ath12k: driver for Qualcomm Wi-Fi 7 devices")
+Signed-off-by: Li Ningke <lnk_01@hust.edu.cn>
+Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+---
+The issue is found by static analysis and the patch remains untested.
+---
+ drivers/net/wireless/ath/ath12k/pci.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-adam
+diff --git a/drivers/net/wireless/ath/ath12k/pci.c b/drivers/net/wireless/ath/ath12k/pci.c
+index ae7f6083c9fc..f523aa15885f 100644
+--- a/drivers/net/wireless/ath/ath12k/pci.c
++++ b/drivers/net/wireless/ath/ath12k/pci.c
+@@ -1195,7 +1195,8 @@ static int ath12k_pci_probe(struct pci_dev *pdev,
+ 			dev_err(&pdev->dev,
+ 				"Unknown hardware version found for QCN9274: 0x%x\n",
+ 				soc_hw_version_major);
+-			return -EOPNOTSUPP;
++			ret = -EOPNOTSUPP;
++			goto err_pci_free_region;
+ 		}
+ 		break;
+ 	case WCN7850_DEVICE_ID:
+-- 
+2.34.1
+
