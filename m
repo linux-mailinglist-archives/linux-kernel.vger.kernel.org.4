@@ -2,94 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7C756E51F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 22:37:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA226E51F6
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 22:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbjDQUhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 16:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58870 "EHLO
+        id S229523AbjDQUlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 16:41:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbjDQUhT (ORCPT
+        with ESMTP id S229461AbjDQUlT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 16:37:19 -0400
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7DD49EE;
-        Mon, 17 Apr 2023 13:37:18 -0700 (PDT)
-Received: by mail-ot1-f41.google.com with SMTP id q33-20020a056830442100b006a419d3fd20so8420241otv.7;
-        Mon, 17 Apr 2023 13:37:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681763838; x=1684355838;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Y7K6w8N+4yFsxz5r0OgTNWCI92V9EYta831Qdn5G1Wk=;
-        b=Wtr/YitaibMVMpY1XJaeCQj0P71G9Yi7Q0XZUJXE/OVAkZuHH6lBErDQ+OWbZSrrz6
-         4KMSC30eIwP9RDREJUZ+LH4DsByCUvqYOldgvoCwe0HY7lSYb60cFzSOc2Av8q73ovTn
-         8l5y1STm4or9K4nUz1d/oGQ4KXwZZWjarLzZyFl/ronMNFIGFTrbRqj7cPASpAeZ+wSi
-         Lt+obEgMpOkVCuFkG4327r/zhwok/JDS/6sX15xZCRT2qLrrdAKmKRg6jDN0LOVosxa6
-         F8ByhxkLeW+o/DfSgNe7BfjPfXFSEPUctU9O9+YX0l+2G7cmTFhx/fSJOQjTn01VAYlY
-         7zVA==
-X-Gm-Message-State: AAQBX9cDAU+Mp5dmcWOvzH45v9K3Ogbl2iFWAx92rqyLzcyHPW/vsmcp
-        wIXA/a0+jftstxU2ixE4zw==
-X-Google-Smtp-Source: AKy350ZSHvCTM5I55QfWpHLncSSzBNmF/jwP8c/i+62gJguXKk4sRPO02ecUbtNpycoowLqEuS/oiw==
-X-Received: by 2002:a9d:5614:0:b0:6a5:ee4e:e3fa with SMTP id e20-20020a9d5614000000b006a5ee4ee3famr1619791oti.15.1681763837629;
-        Mon, 17 Apr 2023 13:37:17 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id h24-20020a9d6418000000b006a44338c8efsm1985727otl.44.2023.04.17.13.37.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 13:37:17 -0700 (PDT)
-Received: (nullmailer pid 3328454 invoked by uid 1000);
-        Mon, 17 Apr 2023 20:37:16 -0000
-Date:   Mon, 17 Apr 2023 15:37:16 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Xingyu Wu <xingyu.wu@starfivetech.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Conor Dooley <conor@kernel.org>, linux-kernel@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        William Qiu <william.qiu@starfivetech.com>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>
-Subject: Re: [PATCH v3 5/7] dt-bindings: soc: starfive: Add StarFive syscon
- module
-Message-ID: <168176383573.3328400.3537476032397551479.robh@kernel.org>
-References: <20230414024157.53203-1-xingyu.wu@starfivetech.com>
- <20230414024157.53203-6-xingyu.wu@starfivetech.com>
+        Mon, 17 Apr 2023 16:41:19 -0400
+Received: from smtp.smtpout.orange.fr (smtp-17.smtpout.orange.fr [80.12.242.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34733C3F
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 13:41:17 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id oVf0plYozzvWyoVf0pNzt5; Mon, 17 Apr 2023 22:41:16 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orange.fr;
+        s=t20230301; t=1681764076;
+        bh=uY8LBeth5vJNi2Lzp3GMfyHfSkopsbeWtmhmmgyT3GM=;
+        h=From:To:Cc:Subject:Date;
+        b=bgyBqcn/j2enXfq0We5FO0LJwl3YbpRpB8UKfmiOxo89kCIl5sFQm+wFEZWYILNL/
+         WgtA20N8NCK7UXc6DFOug/ah6STLYj/UyNbSBtmF4Yokc+9LFBvGnpJRmdtIsQR2iT
+         I79Sf7tyOJFUFFeru2VRetn1o1dBzwBSYfjU1Q6Lbnnb9MWZhKTgPhVuWnEAEPs/tM
+         4QkVX7bJdKpow3y9Rz5iv8P1mJoR8bYNl5jjsB73GxO1ojLCm+TuEjRTw8YrkBTlPk
+         QKvES/I5i+kRUTYbIMCFFKX+x+zUlfFyS1YOhxHAzuq6pq1btq094g5YnaEPrqyNZo
+         O3LljMigC2TjQ==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 17 Apr 2023 22:41:16 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Hannes Reinecke <hare@suse.de>, Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <kch@nvidia.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-nvme@lists.infradead.org
+Subject: [PATCH] nvmet-auth: remove some dead code
+Date:   Mon, 17 Apr 2023 22:41:13 +0200
+Message-Id: <e6f0e506459eaec9dad74946c1e01aac74874054.1681764032.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230414024157.53203-6-xingyu.wu@starfivetech.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+'status' is known to be 0 at the point.
+And nvmet_auth_challenge() return a -E<ERROR_CODE> or 0.
+So these lines of code should just be removed.
 
-On Fri, 14 Apr 2023 10:41:55 +0800, Xingyu Wu wrote:
-> From: William Qiu <william.qiu@starfivetech.com>
-> 
-> Add documentation to describe StarFive System Controller Registers.
-> 
-> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
-> ---
->  .../soc/starfive/starfive,jh7110-syscon.yaml  | 58 +++++++++++++++++++
->  MAINTAINERS                                   |  6 ++
->  2 files changed, 64 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
-> 
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+The dead code became obvious after commit be2ada6d0ed0 ("nvmet-auth: fix
+return value check in auth receive")
+---
+ drivers/nvme/target/fabrics-cmd-auth.c | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+diff --git a/drivers/nvme/target/fabrics-cmd-auth.c b/drivers/nvme/target/fabrics-cmd-auth.c
+index 7970a7640e58..038032e46145 100644
+--- a/drivers/nvme/target/fabrics-cmd-auth.c
++++ b/drivers/nvme/target/fabrics-cmd-auth.c
+@@ -483,15 +483,6 @@ void nvmet_execute_auth_receive(struct nvmet_req *req)
+ 			status = NVME_SC_INTERNAL;
+ 			break;
+ 		}
+-		if (status) {
+-			req->sq->dhchap_status = status;
+-			nvmet_auth_failure1(req, d, al);
+-			pr_warn("ctrl %d qid %d: challenge status (%x)\n",
+-				ctrl->cntlid, req->sq->qid,
+-				req->sq->dhchap_status);
+-			status = 0;
+-			break;
+-		}
+ 		req->sq->dhchap_step = NVME_AUTH_DHCHAP_MESSAGE_REPLY;
+ 		break;
+ 	case NVME_AUTH_DHCHAP_MESSAGE_SUCCESS1:
+-- 
+2.34.1
 
