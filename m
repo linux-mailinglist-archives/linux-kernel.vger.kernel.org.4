@@ -2,99 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B5A6E5120
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23BD76E5123
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:46:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230302AbjDQTm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 15:42:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55202 "EHLO
+        id S230157AbjDQTqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 15:46:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230026AbjDQTm5 (ORCPT
+        with ESMTP id S229531AbjDQTqB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 15:42:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F71D2
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:42:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681760527;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ys6bHj0kEYQG5dBpJYBFUjQoxCIC6tHrlD1Aj5lZyJw=;
-        b=SyaoJrtamkTfPjcHI91k0Qrx4v0hANxrRY5SOu71ruIQJMLcBC1xzhg8elFDeBKKsnu7mm
-        pkKaXACjqMeMtaj4wIZTTIKyFkmO/ZWsDHzlOCCbbyBC1zAPjmPndpUYfbD2cwbPnJ3Rgm
-        DtosZ7RExVFNzOZnyM4eHFziYwF9gwU=
-Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com
- [209.85.128.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-601-MA0VtU-JPuicbji-kBiLVw-1; Mon, 17 Apr 2023 15:42:06 -0400
-X-MC-Unique: MA0VtU-JPuicbji-kBiLVw-1
-Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-54fbf53aa09so4830307b3.1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:42:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681760526; x=1684352526;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Mon, 17 Apr 2023 15:46:01 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F88128;
+        Mon, 17 Apr 2023 12:45:59 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2a8a4cbe473so224001fa.1;
+        Mon, 17 Apr 2023 12:45:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681760757; x=1684352757;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ys6bHj0kEYQG5dBpJYBFUjQoxCIC6tHrlD1Aj5lZyJw=;
-        b=NP0GY+0FyirYwVVE3oGsCI8F4MLzCtouCD/Y7XEiu6JTSHZ2BuAt65V/MOjI8tyWvO
-         aEG03qfy0o3XCP6kwQvPzt2NI6FNbwQ5cCR5MlJ26F4kSimaUQwbf3Q5ZRWX8W7jaJtw
-         CkuAfQ7TsuOnwiKqBTo5W+iIzJGIxn++nAvbOQJi1FkMbX5t9yvpyIqd5LvHZn1gNrds
-         9Mlrcfe/eKShYeU+x0y1VYSYCHmm9baBJxmtd5JlO1C6ES8HN/I4o41Zb0m/Zv77Ws9D
-         vPKy1M2kI24xyfgRSyDhhaUGwzhPn4vwQe2Vdnwxy0juqYtMW0pWlQ4EJ6gKLJM1E1s5
-         n8Lg==
-X-Gm-Message-State: AAQBX9fmx31uG2lse4FEQgmOcE8OSK1Gvg+fwR2tz1yWRW++IXsM25y/
-        HnUcE4zm4D3AWC6N2ROzq8GIZ8YHXeP7ene635aKIkFe9KXSko96LTM2OQhijPskZW1g60ZDL1Y
-        sfIgQCHzpWlR4et3oz7p8M8xF
-X-Received: by 2002:a25:f812:0:b0:b92:2ec4:468 with SMTP id u18-20020a25f812000000b00b922ec40468mr8387647ybd.2.1681760525799;
-        Mon, 17 Apr 2023 12:42:05 -0700 (PDT)
-X-Google-Smtp-Source: AKy350aD9Z53Fp0pWibrCkct8vOfri8wqcOppIT0+JRo2FSozSVhj1pOMlZkHbkZQMla/ukf75rU0w==
-X-Received: by 2002:a25:f812:0:b0:b92:2ec4:468 with SMTP id u18-20020a25f812000000b00b922ec40468mr8387624ybd.2.1681760525481;
-        Mon, 17 Apr 2023 12:42:05 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
-        by smtp.gmail.com with ESMTPSA id a67-20020a254d46000000b00b8bfb4c4f1esm3139594ybb.62.2023.04.17.12.42.03
+        bh=D/oSd11M1/DeKW+VmnRVEUHBAvD0YQ+O/weH1jrtyyQ=;
+        b=FPmDRqu+gB2j/IjjexFZo0zt3n/Qy3Klbee55/oOUnkPpIXhsQsCnM71Pf0+WApNXw
+         iw1iHscLc/g6gIYX8GWv57EBCelxK411XZ/S8kjBVMAmJ1puW1aGcV92cflnr6q4Qpwc
+         L87II9qPIBb9trCxx9p4fNF2w8TgRRRvxj7/6P4T463+NSs0kwu9R5zvSSBx7UZKAZZl
+         F9seck2SvB7tOh5BxuG1HgP0M4EOwQMLcVfklzBZ95Cq1GLTOPXB4y3z5wkDO6708Ep3
+         UXeNhxMEfw+iDlG8M2DzRJh08JOP3mmVPXqNnHoreVHqTYxbLNu3vJYc3h7xqM+j0N8K
+         ezeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681760757; x=1684352757;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=D/oSd11M1/DeKW+VmnRVEUHBAvD0YQ+O/weH1jrtyyQ=;
+        b=KzFxQEkl3w29zND5oR2akPErhO/1tbguGsp8OwFfTyA1DLTtL9rFd/VNSxfhbxyRcY
+         5FjaksxV5g8pdN3L7SoVOV0rHNAhfveoZJEed37d2EMDWJKNxg0GEZXJ495FH7e1PsXl
+         pl7duHh7KLdoIadqEhW9yP94SgY+JG0mjiYu+jWEfugLHEWakffN9FIiCWbw0FrKLtM/
+         do6P9S7XzxcOuXkv67KQIwwqvpa4X+0y1m6lAd3TJhZTWVdj+AsPSoV5bL3KyCaJHjO8
+         TNfsdmuIbrLp5P2rAzQdSZbMrK26MQhdT4LlJ70f9T1ryII3NQ8N3Qw9E13YAyooBp0P
+         2jHQ==
+X-Gm-Message-State: AAQBX9enUhjRsR+VXHWr/HCaBv3W7hxGcGSTLRhX7RmK5ZpjBJRYq2Ae
+        vJiYuUfxyQ5W08GBIfaCnIM=
+X-Google-Smtp-Source: AKy350aOqIwcSPJgjx53pipipsDFJOS4KedcyPscHdqyxTFKeldsx8LZt5/HYKaOiDgvaBpMWdtSVQ==
+X-Received: by 2002:a05:651c:2126:b0:2a7:81c5:2d19 with SMTP id a38-20020a05651c212600b002a781c52d19mr3565573ljq.2.1681760757227;
+        Mon, 17 Apr 2023 12:45:57 -0700 (PDT)
+Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
+        by smtp.gmail.com with ESMTPSA id m26-20020ac2425a000000b004cc9042c9cfsm2118142lfl.158.2023.04.17.12.45.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 12:42:04 -0700 (PDT)
-Date:   Mon, 17 Apr 2023 15:42:02 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v13 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-Message-ID: <ZD2hCoTqSMtpjmaX@x1n>
-References: <20230417125630.1146906-1-usama.anjum@collabora.com>
- <20230417125630.1146906-3-usama.anjum@collabora.com>
+        Mon, 17 Apr 2023 12:45:57 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 22:45:46 +0300
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     Sagi Shahar <sagis@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [RFC PATCH 2/5] KVM: SEV: Refactor common code out of
+ sev_vm_move_enc_context_from
+Message-ID: <20230417224546.00001f73.zhi.wang.linux@gmail.com>
+In-Reply-To: <20230407201921.2703758-3-sagis@google.com>
+References: <20230407201921.2703758-1-sagis@google.com>
+        <20230407201921.2703758-3-sagis@google.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230417125630.1146906-3-usama.anjum@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,78 +84,470 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Muhammad,
+On Fri,  7 Apr 2023 20:19:18 +0000
+Sagi Shahar <sagis@google.com> wrote:
 
-On Mon, Apr 17, 2023 at 05:56:27PM +0500, Muhammad Usama Anjum wrote:
-> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
-> +				  unsigned long end, struct mm_walk *walk)
+> Both SEV and TDX are going to use similar flows for intra-host
+> migration. This change moves some of the code which will be used by both
+> architecture into shared code in x86.h
+> 
+> Signed-off-by: Sagi Shahar <sagis@google.com>
+> ---
+>  arch/x86/kvm/svm/sev.c | 175 +++++------------------------------------
+>  arch/x86/kvm/x86.c     | 166 ++++++++++++++++++++++++++++++++++++++
+>  arch/x86/kvm/x86.h     |  16 ++++
+>  3 files changed, 201 insertions(+), 156 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index c25aeb550cd97..18831a0b7734e 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -1553,116 +1553,6 @@ static bool is_cmd_allowed_from_mirror(u32 cmd_id)
+>  	return false;
+>  }
+>  
+> -static int sev_lock_two_vms(struct kvm *dst_kvm, struct kvm *src_kvm)
+> -{
+> -	struct kvm_sev_info *dst_sev = &to_kvm_svm(dst_kvm)->sev_info;
+> -	struct kvm_sev_info *src_sev = &to_kvm_svm(src_kvm)->sev_info;
+> -	int r = -EBUSY;
+> -
+> -	if (dst_kvm == src_kvm)
+> -		return -EINVAL;
+> -
+> -	/*
+> -	 * Bail if these VMs are already involved in a migration to avoid
+> -	 * deadlock between two VMs trying to migrate to/from each other.
+> -	 */
+> -	if (atomic_cmpxchg_acquire(&dst_sev->migration_in_progress, 0, 1))
+> -		return -EBUSY;
+> -
+> -	if (atomic_cmpxchg_acquire(&src_sev->migration_in_progress, 0, 1))
+> -		goto release_dst;
+> -
+> -	r = -EINTR;
+> -	if (mutex_lock_killable(&dst_kvm->lock))
+> -		goto release_src;
+> -	if (mutex_lock_killable_nested(&src_kvm->lock, SINGLE_DEPTH_NESTING))
+> -		goto unlock_dst;
+> -	return 0;
+> -
+> -unlock_dst:
+> -	mutex_unlock(&dst_kvm->lock);
+> -release_src:
+> -	atomic_set_release(&src_sev->migration_in_progress, 0);
+> -release_dst:
+> -	atomic_set_release(&dst_sev->migration_in_progress, 0);
+> -	return r;
+> -}
+> -
+> -static void sev_unlock_two_vms(struct kvm *dst_kvm, struct kvm *src_kvm)
+> -{
+> -	struct kvm_sev_info *dst_sev = &to_kvm_svm(dst_kvm)->sev_info;
+> -	struct kvm_sev_info *src_sev = &to_kvm_svm(src_kvm)->sev_info;
+> -
+> -	mutex_unlock(&dst_kvm->lock);
+> -	mutex_unlock(&src_kvm->lock);
+> -	atomic_set_release(&dst_sev->migration_in_progress, 0);
+> -	atomic_set_release(&src_sev->migration_in_progress, 0);
+> -}
+> -
+> -/* vCPU mutex subclasses.  */
+> -enum sev_migration_role {
+> -	SEV_MIGRATION_SOURCE = 0,
+> -	SEV_MIGRATION_TARGET,
+> -	SEV_NR_MIGRATION_ROLES,
+> -};
+> -
+> -static int sev_lock_vcpus_for_migration(struct kvm *kvm,
+> -					enum sev_migration_role role)
+> -{
+> -	struct kvm_vcpu *vcpu;
+> -	unsigned long i, j;
+> -
+> -	kvm_for_each_vcpu(i, vcpu, kvm) {
+> -		if (mutex_lock_killable_nested(&vcpu->mutex, role))
+> -			goto out_unlock;
+> -
+> -#ifdef CONFIG_PROVE_LOCKING
+> -		if (!i)
+> -			/*
+> -			 * Reset the role to one that avoids colliding with
+> -			 * the role used for the first vcpu mutex.
+> -			 */
+> -			role = SEV_NR_MIGRATION_ROLES;
+> -		else
+> -			mutex_release(&vcpu->mutex.dep_map, _THIS_IP_);
+> -#endif
+> -	}
+> -
+> -	return 0;
+> -
+> -out_unlock:
+> -
+> -	kvm_for_each_vcpu(j, vcpu, kvm) {
+> -		if (i == j)
+> -			break;
+> -
+> -#ifdef CONFIG_PROVE_LOCKING
+> -		if (j)
+> -			mutex_acquire(&vcpu->mutex.dep_map, role, 0, _THIS_IP_);
+> -#endif
+> -
+> -		mutex_unlock(&vcpu->mutex);
+> -	}
+> -	return -EINTR;
+> -}
+> -
+> -static void sev_unlock_vcpus_for_migration(struct kvm *kvm)
+> -{
+> -	struct kvm_vcpu *vcpu;
+> -	unsigned long i;
+> -	bool first = true;
+> -
+> -	kvm_for_each_vcpu(i, vcpu, kvm) {
+> -		if (first)
+> -			first = false;
+> -		else
+> -			mutex_acquire(&vcpu->mutex.dep_map,
+> -				      SEV_NR_MIGRATION_ROLES, 0, _THIS_IP_);
+> -
+> -		mutex_unlock(&vcpu->mutex);
+> -	}
+> -}
+> -
+>  static void sev_migrate_from(struct kvm *dst_kvm, struct kvm *src_kvm)
+>  {
+>  	struct kvm_sev_info *dst = &to_kvm_svm(dst_kvm)->sev_info;
+> @@ -1744,25 +1634,6 @@ static void sev_migrate_from(struct kvm *dst_kvm, struct kvm *src_kvm)
+>  	}
+>  }
+>  
+> -static int sev_check_source_vcpus(struct kvm *dst, struct kvm *src)
+> -{
+> -	struct kvm_vcpu *src_vcpu;
+> -	unsigned long i;
+> -
+> -	if (!sev_es_guest(src))
+> -		return 0;
+> -
+> -	if (atomic_read(&src->online_vcpus) != atomic_read(&dst->online_vcpus))
+> -		return -EINVAL;
+> -
+> -	kvm_for_each_vcpu(i, src_vcpu, src) {
+> -		if (!src_vcpu->arch.guest_state_protected)
+> -			return -EINVAL;
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+>  int sev_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_fd)
+>  {
+>  	struct kvm_sev_info *dst_sev = &to_kvm_svm(kvm)->sev_info;
+> @@ -1777,19 +1648,20 @@ int sev_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_fd)
+>  		ret = -EBADF;
+>  		goto out_fput;
+>  	}
+> -
+>  	source_kvm = source_kvm_file->private_data;
+> -	ret = sev_lock_two_vms(kvm, source_kvm);
+> +	src_sev = &to_kvm_svm(source_kvm)->sev_info;
+> +
+> +	ret = pre_move_enc_context_from(kvm, source_kvm,
+> +					&dst_sev->migration_in_progress,
+> +					&src_sev->migration_in_progress);
+>  	if (ret)
+>  		goto out_fput;
+>  
+> -	if (sev_guest(kvm) || !sev_guest(source_kvm)) {
+> +	if (sev_guest(kvm) || !sev_es_guest(source_kvm)) {
+>  		ret = -EINVAL;
+> -		goto out_unlock;
+> +		goto out_post;
+>  	}
+>  
+> -	src_sev = &to_kvm_svm(source_kvm)->sev_info;
+> -
+>  	dst_sev->misc_cg = get_current_misc_cg();
+>  	cg_cleanup_sev = dst_sev;
+>  	if (dst_sev->misc_cg != src_sev->misc_cg) {
+> @@ -1799,34 +1671,21 @@ int sev_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_fd)
+>  		charged = true;
+>  	}
+>  
+> -	ret = sev_lock_vcpus_for_migration(kvm, SEV_MIGRATION_SOURCE);
+> -	if (ret)
+> -		goto out_dst_cgroup;
+> -	ret = sev_lock_vcpus_for_migration(source_kvm, SEV_MIGRATION_TARGET);
+> -	if (ret)
+> -		goto out_dst_vcpu;
+> -
+> -	ret = sev_check_source_vcpus(kvm, source_kvm);
+> -	if (ret)
+> -		goto out_source_vcpu;
+> -
+>  	sev_migrate_from(kvm, source_kvm);
+>  	kvm_vm_dead(source_kvm);
+>  	cg_cleanup_sev = src_sev;
+>  	ret = 0;
+>  
+> -out_source_vcpu:
+> -	sev_unlock_vcpus_for_migration(source_kvm);
+> -out_dst_vcpu:
+> -	sev_unlock_vcpus_for_migration(kvm);
+>  out_dst_cgroup:
+>  	/* Operates on the source on success, on the destination on failure.  */
+>  	if (charged)
+>  		sev_misc_cg_uncharge(cg_cleanup_sev);
+>  	put_misc_cg(cg_cleanup_sev->misc_cg);
+>  	cg_cleanup_sev->misc_cg = NULL;
+> -out_unlock:
+> -	sev_unlock_two_vms(kvm, source_kvm);
+> +out_post:
+> +	post_move_enc_context_from(kvm, source_kvm,
+> +				   &dst_sev->migration_in_progress,
+> +				   &src_sev->migration_in_progress);
+>  out_fput:
+>  	if (source_kvm_file)
+>  		fput(source_kvm_file);
+> @@ -2058,7 +1917,11 @@ int sev_vm_copy_enc_context_from(struct kvm *kvm, unsigned int source_fd)
+>  	}
+>  
+>  	source_kvm = source_kvm_file->private_data;
+> -	ret = sev_lock_two_vms(kvm, source_kvm);
+> +	source_sev = &to_kvm_svm(source_kvm)->sev_info;
+> +	mirror_sev = &to_kvm_svm(kvm)->sev_info;
+> +	ret = lock_two_vms_for_migration(kvm, source_kvm,
+> +					 &mirror_sev->migration_in_progress,
+> +					 &source_sev->migration_in_progress);
+>  	if (ret)
+>  		goto e_source_fput;
+>  
+> @@ -2078,9 +1941,7 @@ int sev_vm_copy_enc_context_from(struct kvm *kvm, unsigned int source_fd)
+>  	 * The mirror kvm holds an enc_context_owner ref so its asid can't
+>  	 * disappear until we're done with it
+>  	 */
+> -	source_sev = &to_kvm_svm(source_kvm)->sev_info;
+>  	kvm_get_kvm(source_kvm);
+> -	mirror_sev = &to_kvm_svm(kvm)->sev_info;
+>  	list_add_tail(&mirror_sev->mirror_entry, &source_sev->mirror_vms);
+>  
+>  	/* Set enc_context_owner and copy its encryption context over */
+> @@ -2101,7 +1962,9 @@ int sev_vm_copy_enc_context_from(struct kvm *kvm, unsigned int source_fd)
+>  	 */
+>  
+>  e_unlock:
+> -	sev_unlock_two_vms(kvm, source_kvm);
+> +	unlock_two_vms_for_migration(kvm, source_kvm,
+> +				     &mirror_sev->migration_in_progress,
+> +				     &source_sev->migration_in_progress);
+>  e_source_fput:
+>  	if (source_kvm_file)
+>  		fput(source_kvm_file);
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 870041887ed91..865c434a94899 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -13596,6 +13596,172 @@ int kvm_sev_es_string_io(struct kvm_vcpu *vcpu, unsigned int size,
+>  }
+>  EXPORT_SYMBOL_GPL(kvm_sev_es_string_io);
+>  
+> +/* vCPU mutex subclasses.  */
+> +enum migration_role {
+> +	MIGRATION_SOURCE = 0,
+> +	MIGRATION_TARGET,
+> +	NR_MIGRATION_ROLES,
+> +};
+> +
+
+> +static int lock_vcpus_for_migration(struct kvm *kvm, enum migration_role role)
 > +{
-> +	struct pagemap_scan_private *p = walk->private;
-> +	struct vm_area_struct *vma = walk->vma;
-> +	unsigned long addr = end;
-> +	pte_t *pte, *orig_pte;
-> +	spinlock_t *ptl;
-> +	bool is_written;
-> +	int ret = 0;
+> +	struct kvm_vcpu *vcpu;
+> +	unsigned long i, j;
 > +
-> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
-> +	ptl = pmd_trans_huge_lock(pmd, vma);
-> +	if (ptl) {
-> +		unsigned long n_pages = (end - start)/PAGE_SIZE;
+> +	kvm_for_each_vcpu(i, vcpu, kvm) {
+> +		if (mutex_lock_killable_nested(&vcpu->mutex, role))
+> +			goto out_unlock;
 > +
-> +		if (p->max_pages && n_pages > p->max_pages - p->found_pages)
-> +			n_pages = p->max_pages - p->found_pages;
-> +
-> +		is_written = !is_pmd_uffd_wp(*pmd);
-> +
-> +		/*
-> +		 * Break huge page into small pages if the WP operation need to
-> +		 * be performed is on a portion of the huge page.
-> +		 */
-> +		if (is_written && PM_SCAN_DO_UFFD_WP(p) &&
-> +		    n_pages < HPAGE_SIZE/PAGE_SIZE) {
-> +			spin_unlock(ptl);
-> +			split_huge_pmd(vma, pmd, start);
-> +			goto process_smaller_pages;
-> +		}
-> +
-> +		ret = pagemap_scan_output(is_written, vma->vm_file,
-> +					  pmd_present(*pmd), is_swap_pmd(*pmd),
-> +					  p, start, n_pages);
-> +
-> +		if (ret >= 0 && is_written && PM_SCAN_DO_UFFD_WP(p))
-> +			make_uffd_wp_pmd(vma, addr, pmd);
-> +
-> +		spin_unlock(ptl);
-> +		return ret;
+> +#ifdef CONFIG_PROVE_LOCKING
+> +		if (!i)
+> +			/*
+> +			 * Reset the role to one that avoids colliding with
+> +			 * the role used for the first vcpu mutex.
+> +			 */
+> +			role = NR_MIGRATION_ROLES;
+> +		else
+> +			mutex_release(&vcpu->mutex.dep_map, _THIS_IP_);
+> +#endif
 > +	}
-> +process_smaller_pages:
-> +	if (pmd_trans_unstable(pmd))
-> +		return 0;
+> +
+> +	return 0;
+> +
+> +out_unlock:
+> +
+> +	kvm_for_each_vcpu(j, vcpu, kvm) {
+> +		if (i == j)
+> +			break;
+> +
+> +#ifdef CONFIG_PROVE_LOCKING
+> +		if (j)
+> +			mutex_acquire(&vcpu->mutex.dep_map, role, 0, _THIS_IP_);
 > +#endif
 > +
-> +	pte = pte_offset_map_lock(vma->vm_mm, pmd, start, &ptl);
-> +	for (addr = start; addr < end && !ret; pte++, addr += PAGE_SIZE) {
-> +		is_written = !is_pte_uffd_wp(*pte);
-> +
-> +		ret = pagemap_scan_output(is_written, vma->vm_file,
-> +					  pte_present(*pte), is_swap_pte(*pte),
-> +					  p, addr, 1);
-> +
-> +		if (ret >= 0 && is_written && PM_SCAN_DO_UFFD_WP(p))
-> +			make_uffd_wp_pte(vma, addr, pte);
+> +		mutex_unlock(&vcpu->mutex);
 > +	}
-> +	pte_unmap_unlock(orig_pte, ptl);
-
-IIUC tlb flushes, mmu notifications are still missing here, am I right?
-
-Thanks,
-
+> +	return -EINTR;
+> +}
 > +
-> +	cond_resched();
+> +static void unlock_vcpus_for_migration(struct kvm *kvm)
+> +{
+> +	struct kvm_vcpu *vcpu;
+> +	unsigned long i;
+> +	bool first = true;
+> +
+> +	kvm_for_each_vcpu(i, vcpu, kvm) {
+> +		if (first)
+> +			first = false;
+> +		else
+> +			mutex_acquire(&vcpu->mutex.dep_map, NR_MIGRATION_ROLES,
+> +				      0, _THIS_IP_);
+> +
+> +		mutex_unlock(&vcpu->mutex);
+> +	}
+> +}
+> +
+> +int lock_two_vms_for_migration(struct kvm *dst_kvm, struct kvm *src_kvm,
+> +			       atomic_t *dst_migration_in_progress,
+> +			       atomic_t *src_migration_in_progress)
+> +{
+> +	int r = -EBUSY;
+> +
+> +	if (dst_kvm == src_kvm)
+> +		return -EINVAL;
+> +
+> +	/*
+> +	 * Bail if these VMs are already involved in a migration to avoid
+> +	 * deadlock between two VMs trying to migrate to/from each other.
+> +	 */
+> +	if (atomic_cmpxchg_acquire(dst_migration_in_progress, 0, 1))
+> +		return -EBUSY;
+> +
+> +	if (atomic_cmpxchg_acquire(src_migration_in_progress, 0, 1))
+> +		goto release_dst;
+> +
+> +	r = -EINTR;
+> +	if (mutex_lock_killable(&dst_kvm->lock))
+> +		goto release_src;
+> +	if (mutex_lock_killable_nested(&src_kvm->lock, SINGLE_DEPTH_NESTING))
+> +		goto unlock_dst;
+> +	return 0;
+> +
+> +unlock_dst:
+> +	mutex_unlock(&dst_kvm->lock);
+> +release_src:
+> +	atomic_set_release(src_migration_in_progress, 0);
+> +release_dst:
+> +	atomic_set_release(dst_migration_in_progress, 0);
+> +	return r;
+> +}
+> +EXPORT_SYMBOL_GPL(lock_two_vms_for_migration);
+> +
+> +void unlock_two_vms_for_migration(struct kvm *dst_kvm, struct kvm *src_kvm,
+> +				  atomic_t *dst_migration_in_progress,
+> +				  atomic_t *src_migration_in_progress)
+> +{
+> +	mutex_unlock(&dst_kvm->lock);
+> +	mutex_unlock(&src_kvm->lock);
+> +	atomic_set_release(dst_migration_in_progress, 0);
+> +	atomic_set_release(src_migration_in_progress, 0);
+> +}
+> +EXPORT_SYMBOL_GPL(unlock_two_vms_for_migration);
+> +
+> +int pre_move_enc_context_from(struct kvm *dst_kvm, struct kvm *src_kvm,
+> +			      atomic_t *dst_migration_in_progress,
+> +			      atomic_t *src_migration_in_progress)
+> +{
+> +	struct kvm_vcpu *src_vcpu;
+> +	unsigned long i;
+> +	int ret = -EINVAL;
+> +
+> +	ret = lock_two_vms_for_migration(dst_kvm, src_kvm,
+> +					 dst_migration_in_progress,
+> +					 src_migration_in_progress);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = lock_vcpus_for_migration(dst_kvm, MIGRATION_TARGET);
+> +	if (ret)
+> +		goto unlock_vms;
+> +
+> +	ret = lock_vcpus_for_migration(src_kvm, MIGRATION_SOURCE);
+> +	if (ret)
+> +		goto unlock_dst_vcpu;
+> +
+> +	if (atomic_read(&dst_kvm->online_vcpus) !=
+> +	    atomic_read(&src_kvm->online_vcpus))
+> +		goto unlock_dst_vcpu;
+> +
+> +	kvm_for_each_vcpu(i, src_vcpu, src_kvm) {
+> +		if (!src_vcpu->arch.guest_state_protected)
+> +			goto unlock_dst_vcpu;
+> +	}
+> +
+> +	return 0;
+> +
+> +unlock_dst_vcpu:
+> +	unlock_vcpus_for_migration(dst_kvm);
+> +unlock_vms:
+> +	unlock_two_vms_for_migration(dst_kvm, src_kvm,
+> +				     dst_migration_in_progress,
+> +				     src_migration_in_progress);
+> +
 > +	return ret;
 > +}
+> +EXPORT_SYMBOL_GPL(pre_move_enc_context_from);
+> +
+> +void post_move_enc_context_from(struct kvm *dst_kvm, struct kvm *src_kvm,
+> +				atomic_t *dst_migration_in_progress,
+> +				atomic_t *src_migration_in_progress)
+> +{
+> +	unlock_vcpus_for_migration(src_kvm);
+> +	unlock_vcpus_for_migration(dst_kvm);
+> +	unlock_two_vms_for_migration(dst_kvm, src_kvm,
+> +				     dst_migration_in_progress,
+> +				     src_migration_in_progress);
+> +}
+> +EXPORT_SYMBOL_GPL(post_move_enc_context_from);
+> +
 
--- 
-Peter Xu
+It would be nice to have kvm_ prefix for the functions exported.
 
+>  bool kvm_arch_dirty_log_supported(struct kvm *kvm)
+>  {
+>  	return kvm->arch.vm_type != KVM_X86_PROTECTED_VM;
+> diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
+> index 33a1a5341e788..554c797184994 100644
+> --- a/arch/x86/kvm/x86.h
+> +++ b/arch/x86/kvm/x86.h
+> @@ -502,4 +502,20 @@ int kvm_sev_es_string_io(struct kvm_vcpu *vcpu, unsigned int size,
+>  			 unsigned int port, void *data,  unsigned int count,
+>  			 int in);
+>  
+> +int lock_two_vms_for_migration(struct kvm *dst_kvm, struct kvm *src_kvm,
+> +			       atomic_t *dst_migration_in_progress,
+> +			       atomic_t *src_migration_in_progress);
+> +
+> +void unlock_two_vms_for_migration(struct kvm *dst_kvm, struct kvm *src_kvm,
+> +				  atomic_t *dst_migration_in_progress,
+> +				  atomic_t *src_migration_in_progress);
+> +
+> +int pre_move_enc_context_from(struct kvm *dst_kvm, struct kvm *src_kvm,
+> +			      atomic_t *dst_migration_in_progress,
+> +			      atomic_t *src_migration_in_progress);
+> +
+> +void post_move_enc_context_from(struct kvm *dst_kvm, struct kvm *src_kvm,
+> +				atomic_t *dst_migration_in_progress,
+> +				atomic_t *src_migration_in_progress);
+> +
+>  #endif
