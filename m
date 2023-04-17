@@ -2,122 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05C396E510E
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:35:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B136E5111
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbjDQTfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 15:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51490 "EHLO
+        id S230231AbjDQThG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 15:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbjDQTfM (ORCPT
+        with ESMTP id S229602AbjDQThE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 15:35:12 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF6213E
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:35:09 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id lh8so13974148plb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:35:09 -0700 (PDT)
+        Mon, 17 Apr 2023 15:37:04 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A46EC;
+        Mon, 17 Apr 2023 12:37:02 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4edc51644b6so95351e87.1;
+        Mon, 17 Apr 2023 12:37:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1681760109; x=1684352109;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UXrDQCneSb8jgaB5WOV1RqaoODncwrujP+Iw89BILhs=;
-        b=O5dg6sOfwLf72QhLfcA5JPZKGpC9v3EPOX2y0AYcP7Il8gcym2sV8o5lhXHrPSGiGW
-         DPGhkhxCJAOGPQHDgIJQWDZgMpZ18zws9m2PU3filA4f04zZ/ATq8zPp2oc0CvIEZOx4
-         aS6Dmvqfg1ZBUBAHKCZGkO1qU4Za622yPoSyVVfHHKSW/NNIp8JEewzQlEvRUxd26zgx
-         c3D57alEVgMwcn82DCHEwvxiO+Gj6jb3vWycOEc2eSWxLW3VrVDVPARr/jOUFRnCXL2R
-         HCsjeToQ1OnDlO+wynHZo/8xZeVoZoCrR1W37oblagNvZ1Qy78o/cJdejEHoycqWtbfQ
-         venQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681760109; x=1684352109;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1681760220; x=1684352220;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UXrDQCneSb8jgaB5WOV1RqaoODncwrujP+Iw89BILhs=;
-        b=kqR7GtGLlWLtBdwc14R1WxgxLY6d/Mcub7Ydjbe3X2rWLiNLfJ1Yv/zAKysuwjEIwv
-         5aq0IBxcQsFyuOtbOwUr33wo1xtIeVxVR/5t+6SQz8PoMmr4UVsnkwYl8gUkAkqCAGBN
-         n/MWBJMgEcYF1lfcG7Ya4MDu8rHWdsVgJkKvMbvxE/Tqfolg+eBfFByBOuYn4ljig5Xe
-         UGQ6wbz1Mpv3EjLyZQ1vKvZ1Ab8T1GWtot0uzHDEmod0eeRRn+DJ0RUz9Li2fATkjOsC
-         SD50gxEcSf8ZPD4AIkbhBwDylZbTi/pkfTUBuxZV3mtxlK9+OpP0yONVf95N4J2iyN35
-         h18g==
-X-Gm-Message-State: AAQBX9dkze/WXiMNYSZq3LGp3nh2PZdZhazBAweLOIOlbpmT6nMOXaLC
-        1KYESWsnQXnCI6y9+t8e2TN7fA==
-X-Google-Smtp-Source: AKy350ZgkvMBwxuvsB2Nzf72S0ZpG/7AYjuh89fy8y1Y+VJOMWc5KS3m/VSnzQO/xLsTnbpfVXYkiA==
-X-Received: by 2002:a17:90a:2a41:b0:247:c0bd:b99a with SMTP id d1-20020a17090a2a4100b00247c0bdb99amr597549pjg.31.1681760109163;
-        Mon, 17 Apr 2023 12:35:09 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id b10-20020a17090a800a00b002479c36b10esm1828978pjn.23.2023.04.17.12.35.08
+        bh=7kcEqkWwDnSb2Vr/kKTigbKdiQ7bKuudzY2P/pZrExU=;
+        b=pawD2mkoR+7QoMOQwCB1AYWgSd7dZsJs1NVJiLuM60kxBLCpkr2u4c0nF5ciUFoNg0
+         k64wLTCq9lKp1A9g4gM11Gz1bvdH/RnqRnvRg2cb5tTkWeDqcLa3mmal1kkmOdkllnJ4
+         t5dQTf0HLMzlrlpir1+cDDWeTS7lzjzS3t1QAMYtgjAGJ1Vgc8IhthnKhcZkfaHeWPFm
+         ZOxNaEFpS3uEQYOsMx3NAxkcXE8XAT30AuY/dh5LOnWz/vjz//Ob2Wcv1xrNyZ32VlrF
+         jNrfMS+JpHkjIf7/sWpdFWV/8UllRnGfSqjgeCPr2nw6CYEAnP/gBVVhhDX4+CoUU5XF
+         QOeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681760220; x=1684352220;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7kcEqkWwDnSb2Vr/kKTigbKdiQ7bKuudzY2P/pZrExU=;
+        b=CT4FdIUtQbVZFdnsgAuZ0Cy838fcg9u0JEr0ZxuZ7puxLvKj2Wo1GAfC7Exo1aFr8H
+         c6s9zdHhtTKWrqpMmZ/FRazPsnKmq4cxpqWtVyS1vNysiwyDu6G/CPk4YYprd5v0NQuy
+         pt0XeHIJzmIkNVERPDl+xr4T5LMC8SpiEs+4xEmNRsK+qD/LV0yB+782ZFyt/SDrGkwW
+         KlY3eG+KzLUl3XJFBNV8Mu6LfEERD/Zmla4O10TtCDJ8YBL+EUyAwVX/qiMELHy46JsW
+         M9lRgCxh7iiEv2vQTH/PN18gaAsJNy4YA4oCZW1S74giV7/Z7TW8qHwi719QaaSbLzcS
+         rGAQ==
+X-Gm-Message-State: AAQBX9c9yzuMbJBSaKvSXmBGN2jgoDkVF7mK85Jl2lVb1ytJn42ozOoy
+        LGU9ZrEmC7kqYJfmgGukgxM=
+X-Google-Smtp-Source: AKy350bwPR/Fg5EyUJdxVaBkSyRMFm3rP1YuBXk/6dNmo5EhpB5GHRJudKaNFxzjf189UrXL2rbMsg==
+X-Received: by 2002:a05:651c:88a:b0:2a8:c954:e9e0 with SMTP id d10-20020a05651c088a00b002a8c954e9e0mr991502ljq.3.1681760220186;
+        Mon, 17 Apr 2023 12:37:00 -0700 (PDT)
+Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
+        by smtp.gmail.com with ESMTPSA id p24-20020a2ea418000000b002a7a5201bfdsm2328460ljn.80.2023.04.17.12.36.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 12:35:08 -0700 (PDT)
-Date:   Mon, 17 Apr 2023 12:35:08 -0700 (PDT)
-X-Google-Original-Date: Mon, 17 Apr 2023 12:34:57 PDT (-0700)
-Subject:     Re: [PATCH 2/6] tools/nolibc: riscv: add stackprotector support
-In-Reply-To: <20230408-nolibc-stackprotector-archs-v1-2-271f5c859c71@weissschuh.net>
-CC:     w@1wt.eu, shuah@kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux@weissschuh.net
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     linux@weissschuh.net
-Message-ID: <mhng-1ec176a9-ec5d-470b-a278-a4e9cec728a8@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Mon, 17 Apr 2023 12:37:00 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 22:36:11 +0300
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     Sagi Shahar <sagis@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [RFC PATCH 1/5] KVM: Split tdp_mmu_pages to private and shared
+ lists
+Message-ID: <20230417223611.00004aee.zhi.wang.linux@gmail.com>
+In-Reply-To: <20230407201921.2703758-2-sagis@google.com>
+References: <20230407201921.2703758-1-sagis@google.com>
+        <20230407201921.2703758-2-sagis@google.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Apr 2023 09:01:32 PDT (-0700), linux@weissschuh.net wrote:
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> ---
->  tools/include/nolibc/arch-riscv.h       | 7 ++++++-
->  tools/testing/selftests/nolibc/Makefile | 1 +
->  2 files changed, 7 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/arch-riscv.h
-> index 0d5f15fdedc4..b2ccffcc079f 100644
-> --- a/tools/include/nolibc/arch-riscv.h
-> +++ b/tools/include/nolibc/arch-riscv.h
-> @@ -173,14 +173,19 @@ struct sys_stat_struct {
->  char **environ __attribute__((weak));
->  const unsigned long *_auxv __attribute__((weak));
->
-> +#define __ARCH_SUPPORTS_STACK_PROTECTOR
-> +
->  /* startup code */
-> -void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
-> +void __attribute__((weak,noreturn,optimize("omit-frame-pointer"),no_stack_protector)) _start(void)
->  {
->  	__asm__ volatile (
->  		".option push\n"
->  		".option norelax\n"
->  		"lla   gp, __global_pointer$\n"
->  		".option pop\n"
-> +#ifdef NOLIBC_STACKPROTECTOR
-> +		"call __stack_chk_init\n"    /* initialize stack protector                          */
-> +#endif
->  		"lw    a0, 0(sp)\n"          /* argc (a0) was in the stack                          */
->  		"add   a1, sp, "SZREG"\n"    /* argv (a1) = sp                                      */
->  		"slli  a2, a0, "PTRLOG"\n"   /* envp (a2) = SZREG*argc ...                          */
-> diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-> index 3c8e3a6f8985..0a83ad388a16 100644
-> --- a/tools/testing/selftests/nolibc/Makefile
-> +++ b/tools/testing/selftests/nolibc/Makefile
-> @@ -82,6 +82,7 @@ CFLAGS_STACKPROTECTOR = -DNOLIBC_STACKPROTECTOR \
->  CFLAGS_STKP_i386 = $(CFLAGS_STACKPROTECTOR)
->  CFLAGS_STKP_x86_64 = $(CFLAGS_STACKPROTECTOR)
->  CFLAGS_STKP_x86 = $(CFLAGS_STACKPROTECTOR)
-> +CFLAGS_STKP_riscv = $(CFLAGS_STACKPROTECTOR)
->  CFLAGS_s390 = -m64
->  CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
->  		$(call cc-option,-fno-stack-protector) \
+On Fri,  7 Apr 2023 20:19:17 +0000
+Sagi Shahar <sagis@google.com> wrote:
 
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+This patch is actually adding a separate counter for accounting private
+tdp mmu page not really introducing a new tdp_mmu_pages list for private
+pages. I guess better refine the tittle to reflect what this patch
+is doing.
+
+> tdp_mmu_pages holds all the active pages used by the mmu. When we
+> transfer the state during intra-host migration we need to transfer the
+> private pages but not the shared ones.
+> 
+Maybe explain a little bit about how the shared one is processed. Guess
+one sentence is enough.
+> Keeping them in separate counters makes this transfer more efficient.
+> 
+> Signed-off-by: Sagi Shahar <sagis@google.com>
+> ---
+>  arch/x86/include/asm/kvm_host.h |  5 ++++-
+>  arch/x86/kvm/mmu/tdp_mmu.c      | 11 +++++++++--
+>  2 files changed, 13 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index ae377eec81987..5ed70cd9d74bf 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1426,9 +1426,12 @@ struct kvm_arch {
+>  	struct task_struct *nx_huge_page_recovery_thread;
+>  
+>  #ifdef CONFIG_X86_64
+> -	/* The number of TDP MMU pages across all roots. */
+> +	/* The number of non-private TDP MMU pages across all roots. */
+>  	atomic64_t tdp_mmu_pages;
+>  
+> +	/* Same as tdp_mmu_pages but only for private pages. */
+> +	atomic64_t tdp_private_mmu_pages;
+> +
+>  	/*
+>  	 * List of struct kvm_mmu_pages being used as roots.
+>  	 * All struct kvm_mmu_pages in the list should have
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index 58a236a69ec72..327dee4f6170e 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -44,6 +44,7 @@ void kvm_mmu_uninit_tdp_mmu(struct kvm *kvm)
+>  	destroy_workqueue(kvm->arch.tdp_mmu_zap_wq);
+>  
+>  	WARN_ON(atomic64_read(&kvm->arch.tdp_mmu_pages));
+> +	WARN_ON(atomic64_read(&kvm->arch.tdp_private_mmu_pages));
+>  	WARN_ON(!list_empty(&kvm->arch.tdp_mmu_roots));
+>  
+>  	/*
+> @@ -373,13 +374,19 @@ static void handle_changed_spte_dirty_log(struct kvm *kvm, int as_id, gfn_t gfn,
+>  static void tdp_account_mmu_page(struct kvm *kvm, struct kvm_mmu_page *sp)
+>  {
+>  	kvm_account_pgtable_pages((void *)sp->spt, +1);
+> -	atomic64_inc(&kvm->arch.tdp_mmu_pages);
+> +	if (is_private_sp(sp))
+> +		atomic64_inc(&kvm->arch.tdp_private_mmu_pages);
+> +	else
+> +		atomic64_inc(&kvm->arch.tdp_mmu_pages);
+>  }
+>  
+>  static void tdp_unaccount_mmu_page(struct kvm *kvm, struct kvm_mmu_page *sp)
+>  {
+>  	kvm_account_pgtable_pages((void *)sp->spt, -1);
+> -	atomic64_dec(&kvm->arch.tdp_mmu_pages);
+> +	if (is_private_sp(sp))
+> +		atomic64_dec(&kvm->arch.tdp_private_mmu_pages);
+> +	else
+> +		atomic64_dec(&kvm->arch.tdp_mmu_pages);
+>  }
+>  
+>  /**
+
