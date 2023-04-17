@@ -2,83 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 418306E3F6A
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 08:11:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3194D6E3F6D
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 08:12:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbjDQGLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 02:11:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48404 "EHLO
+        id S230086AbjDQGMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 02:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjDQGLV (ORCPT
+        with ESMTP id S229519AbjDQGMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 02:11:21 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0837B9C
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 23:11:20 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33H2tLOG031643;
-        Mon, 17 Apr 2023 06:11:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=0L2GsiArAQ0KHo+J66zk+d6GqegkJ7AgxORPHbMMORA=;
- b=fIC3e+5wkSvdbpOkJQyJaiQS2T9kmHT0pgQ4mJIrhrsQb2m4B80+BSRAKbsHfklOkqjq
- yzF2E4k/cz+J0g6JEpDZaV9jjYGJuXXXNqLto+exiKQPkRvkRxUvnVb5Aup5fiVrTAfW
- rWyA/sKTVj9B1s0bcMovW+EW+Wtn/iAdLn+RnPq0KWCq8QB3lZYjIGVsfuBh0ncdoEBh
- 22G5aRddCU3h3VOfxbUEl6V0qEA50hUUaecMmcIj9jFoOFbpwd+TglCMUKJbeCj8QG4j
- QLhVsoXsAcEaKc7sULRpvSFQkp8gjs94pvSWSAdA2tlxBSYOgwt+lXrWr8LYHrIc7ytz eA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pymppanyd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Apr 2023 06:11:08 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33H6B8iY011327
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Apr 2023 06:11:08 GMT
-Received: from [10.216.36.54] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Sun, 16 Apr
- 2023 23:11:04 -0700
-Message-ID: <e6cd1f1e-e54c-87ae-ed23-cc1eca26837c@quicinc.com>
-Date:   Mon, 17 Apr 2023 11:41:00 +0530
+        Mon, 17 Apr 2023 02:12:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 633692116;
+        Sun, 16 Apr 2023 23:12:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F2C97610A0;
+        Mon, 17 Apr 2023 06:12:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED16CC433EF;
+        Mon, 17 Apr 2023 06:12:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1681711959;
+        bh=9+bae1oGpumyWoxfJVr4FvUHUo2hifL7pYORTIPZ5lY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XHFNHE3w23C46xvz4Ln3qBh5fKn6g/XVa7NKO8wmO6GQ3NGFZmyNNYkDO7cF40s3c
+         ZVwbDeA9umPcoAzPaYQkoPZbY7XgGfI7gzQuetbN0Mg0OdznWW5Tymhi8KcEzwQiKC
+         Y7jInNrxzIaSEZZJTUVlb3U7rhmNVvgQIKmDtE9g=
+Date:   Mon, 17 Apr 2023 08:12:36 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+Cc:     heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: typec: intel_pmc_mux: Expose IOM port status to
+ debugfs
+Message-ID: <ZDzjVG7QZP1z9gNX@kroah.com>
+References: <20230414081910.1336405-1-rajat.khandelwal@linux.intel.com>
+ <ZDo2mzmjZpWIKbxk@kroah.com>
+ <2c960f0c-5cbb-4c2d-07cb-dafd94d22414@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH V7 0/2] mm: shmem: support POSIX_FADV_[WILL|DONT]NEED for
- shmem files
-Content-Language: en-US
-To:     Frank van der Linden <fvdl@google.com>
-CC:     <akpm@linux-foundation.org>, <hughd@google.com>,
-        <willy@infradead.org>, <markhemm@googlemail.com>,
-        <rientjes@google.com>, <surenb@google.com>, <shakeelb@google.com>,
-        <quic_pkondeti@quicinc.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-References: <cover.1676378702.git.quic_charante@quicinc.com>
- <CAPTztWYgRORXKp83Spm3DX8qJsi1rw5s=WbPcjUYfOxFXxRAwg@mail.gmail.com>
- <CAPTztWadceJtPUrSab1Tj2WV=uAhLo+CrxqyeSQ8rLn0FtM_zA@mail.gmail.com>
- <0853b4b0-770f-f742-95bc-eb74a1859138@quicinc.com>
- <CAPTztWZ-PTmF=AazhCuC3u-Ca_mY+QsJGgMdu4W0DC05zk3-iA@mail.gmail.com>
-From:   Charan Teja Kalla <quic_charante@quicinc.com>
-In-Reply-To: <CAPTztWZ-PTmF=AazhCuC3u-Ca_mY+QsJGgMdu4W0DC05zk3-iA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: cF2e-jBVb6DNIvzZe6tIhl1wtVm5d3xI
-X-Proofpoint-GUID: cF2e-jBVb6DNIvzZe6tIhl1wtVm5d3xI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-17_02,2023-04-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- clxscore=1015 lowpriorityscore=0 impostorscore=0 mlxlogscore=563
- mlxscore=0 phishscore=0 priorityscore=1501 spamscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304170056
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2c960f0c-5cbb-4c2d-07cb-dafd94d22414@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,16 +54,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/15/2023 3:32 AM, Frank van der Linden wrote:
-> However, that can
-> be addressed later, my comments weren't intended to raise an objection
-> - merely that there is a chance here to address this usecase. But that
-> shouldn't block anything. It's something to keep in mind, though.
->
-Noted. Thanks!!
-> I'll do some experiments to see what the best solution is here
-Sure. We can work and add the support for mapped pages too which will go
-on top of these patches.
+On Mon, Apr 17, 2023 at 11:28:18AM +0530, Rajat Khandelwal wrote:
+> Hi,
+> 
+> On 4/15/2023 11:01 AM, Greg KH wrote:
+> > On Fri, Apr 14, 2023 at 01:49:10PM +0530, Rajat Khandelwal wrote:
+> > > IOM status has a crucial role during debugging to check the
+> > > current state of the type-C port.
+> > > There are ways to fetch the status, but all those require the
+> > > IOM port status offset, which could change with platform.
+> > > 
+> > > Make a debugfs directory for intel_pmc_mux and expose the status
+> > > under it per port basis.
+> > > 
+> > > Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+> > > ---
+> > > 
+> > > v2:
+> > > 1. Remove static declaration of the debugfs root for 'intel_pmc_mux'
+> > > 2. Remove explicitly defined one-liner functions
+> > > 
+> > >   drivers/usb/typec/mux/intel_pmc_mux.c | 34 +++++++++++++++++++++++++++
+> > >   1 file changed, 34 insertions(+)
+> > > 
+> > > diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
+> > > index 34e4188a40ff..1d43b111781e 100644
+> > > --- a/drivers/usb/typec/mux/intel_pmc_mux.c
+> > > +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
+> > > @@ -15,6 +15,7 @@
+> > >   #include <linux/usb/typec_mux.h>
+> > >   #include <linux/usb/typec_dp.h>
+> > >   #include <linux/usb/typec_tbt.h>
+> > > +#include <linux/debugfs.h>
+> > >   #include <asm/intel_scu_ipc.h>
+> > > @@ -639,9 +640,34 @@ static int pmc_usb_probe_iom(struct pmc_usb *pmc)
+> > >   	return 0;
+> > >   }
+> > > +static int port_iom_status_show(struct seq_file *s, void *unused)
+> > > +{
+> > > +	struct pmc_usb_port *port = s->private;
+> > > +
+> > > +	update_port_status(port);
+> > > +	seq_printf(s, "0x%08x\n", port->iom_status);
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +DEFINE_SHOW_ATTRIBUTE(port_iom_status);
+> > > +
+> > > +static void pmc_mux_port_debugfs_init(struct pmc_usb_port *port,
+> > > +				      struct dentry *pmc_mux_debugfs_root)
+> > > +{
+> > > +	struct dentry *debugfs_dir;
+> > > +	char name[6];
+> > > +
+> > > +	snprintf(name, sizeof(name), "port%d", port->usb3_port - 1);
+> > > +
+> > > +	debugfs_dir = debugfs_create_dir(name, pmc_mux_debugfs_root);
+> > > +	debugfs_create_file("iom_status", 0400, debugfs_dir, port,
+> > > +			    &port_iom_status_fops);
+> > > +}
+> > > +
+> > >   static int pmc_usb_probe(struct platform_device *pdev)
+> > >   {
+> > >   	struct fwnode_handle *fwnode = NULL;
+> > > +	struct dentry *pmc_mux_debugfs_root;
+> > >   	struct pmc_usb *pmc;
+> > >   	int i = 0;
+> > >   	int ret;
+> > > @@ -674,6 +700,8 @@ static int pmc_usb_probe(struct platform_device *pdev)
+> > >   	if (ret)
+> > >   		return ret;
+> > > +	pmc_mux_debugfs_root = debugfs_create_dir("intel_pmc_mux", NULL);
+> > What happens when you have more than one device in the system at the
+> > same time?
+> 
+> I'm sorry I didn't understand the question. We would have separate directories
+> for all the ports which would contain the 'iom_status' file, thus representing
+> status for all the ports individually.
+> Can you rephrase the question since I guess you had something else in mind?
 
-Thanks,
-Charan
+Can you please show the output of the directory
+/sys/kernel/debug/intel_pmc_mux/ with multiple pmc devices in the system
+at the same time?
+
+This code seems to want to create that directory for every platform
+device that matches this signature, so that implies you can not have
+more than one of them at a time, which is not good and an artificial
+restriction you are placing on the driver.
+
+thanks,
+
+greg k-h
