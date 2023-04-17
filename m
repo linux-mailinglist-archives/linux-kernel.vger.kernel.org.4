@@ -2,181 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEB186E47C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 14:30:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5786E47BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 14:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231184AbjDQMad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 08:30:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50798 "EHLO
+        id S229992AbjDQMaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 08:30:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231144AbjDQMaX (ORCPT
+        with ESMTP id S231215AbjDQM37 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 08:30:23 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087225251
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 05:30:15 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2a776fb84a3so12868881fa.1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 05:30:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681734614; x=1684326614;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=75hX5LgqItGx5RLX1YQ5Q6RKXg/GRTXjzOrDItgmVU8=;
-        b=bT94vu0Q6QRHgkHMEux4pflaaEqrFFc9jX1D805hEY084GlZmJv+1LygxuvQew1edM
-         hctSDM0hY+ODTMcO7zHmtX8MLfqUUeP5ImlX+GX6vSDzXx2oH5mueGc2ohwmreBqIgDI
-         5aBsWScygu9ggPb8ghX65lq+WFo54ITKOCDAQn5scP9waolP2+7UiCySk6p7FBWvJdOW
-         +z9f3UsEORF2MNFIg4B7w0dVKtjBSwguQWZHQCRalTPBX4QZUSt6y09W8QfxqdaHDFPH
-         i5QAfqKyUX1gTkREQBbNGvOqdmf4h1oXoeeCUgF7QJ8G2tNiG8DbvOcpPn+cMU3vRdaN
-         iGKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681734614; x=1684326614;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=75hX5LgqItGx5RLX1YQ5Q6RKXg/GRTXjzOrDItgmVU8=;
-        b=YldHogZSEePESd9+abDIEB7Jn/UT1bZfdiC3OJUm+jhJA+HlexnPbosF/9HfFauLSD
-         5ZCZ4d0H2hZ9HxeNSWzRKvlFHs4C5w6VChX/PjcMVSiCBMQAvfKiXjypCOhkp0PsgWNR
-         aUUuQiC03BhCj3ptIxqhZtErvCSSHK7vbR9dMXaMY8Y67CcFxKlzSuo8HKIbzQmkvEFu
-         +QcOCwHe3iQU5m87r59QvggEt/GMdAUPb5CMJ0PwaueNJgfRbHogilcim6TZOVKXOf/Q
-         rgpLnDjb90riM5EG3k5O+Xgm4jUMxOv8s6+3V4fT3VXof0ElUv/IWBieWvgN1Eoh9us+
-         RtEA==
-X-Gm-Message-State: AAQBX9fJNAyflbZsMlcf/ZFyRNHrybK1ZcyQYJYO+L3kH4eVVW1z1DXF
-        Py9IIldBibDtg/XbBfvXyDvV9A7Lwo+rkwCl3BtngQ==
-X-Google-Smtp-Source: AKy350alT7HiO9MfMmbe+E0WP+k1zFnMqspxl3ZlYTgElWMD/Xir4oBFbijc65PEYJil5tk+XpmFfw==
-X-Received: by 2002:ac2:5a50:0:b0:4b3:d6e1:26bb with SMTP id r16-20020ac25a50000000b004b3d6e126bbmr1783540lfn.29.1681734613986;
-        Mon, 17 Apr 2023 05:30:13 -0700 (PDT)
-Received: from localhost (c-9b0ee555.07-21-73746f28.bbcust.telenor.se. [85.229.14.155])
-        by smtp.gmail.com with ESMTPSA id d6-20020ac244c6000000b004eca2b8b6bdsm2027412lfm.4.2023.04.17.05.30.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 05:30:13 -0700 (PDT)
-From:   Anders Roxell <anders.roxell@linaro.org>
-To:     stable@vger.kernel.org
-Cc:     acme@redhat.com, andres@anarazel.de, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Quentin Monnet <quentin@isovalent.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Ben Hutchings <benh@debian.org>, Jiri Olsa <jolsa@kernel.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>, bpf@vger.kernel.org,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: [backport PATCH 2/2] tools build: Add feature test for init_disassemble_info API changes
-Date:   Mon, 17 Apr 2023 14:29:43 +0200
-Message-Id: <20230417122943.2155502-3-anders.roxell@linaro.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230417122943.2155502-1-anders.roxell@linaro.org>
-References: <20230417122943.2155502-1-anders.roxell@linaro.org>
+        Mon, 17 Apr 2023 08:29:59 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA7CE5B;
+        Mon, 17 Apr 2023 05:29:56 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id B6A735FD1F;
+        Mon, 17 Apr 2023 15:29:54 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1681734594;
+        bh=jvK4cXeO8Jj4+6kMoLy/DP4MK+U8SvFogPOaVUzPgzM=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=eDdQtACxFXEqW9lv0/TbVuemLFGr05aN/2rtSitOukENevq2YpZU1eJIDGIUzC3op
+         IpM60h1IZiEXMQsxT+Lype5cB1mZa2XUi7KJBeTaUltlibH1bZmx9qPU+yR54J0Nv2
+         gHeV002pL93tMlt6tfVHZPlsXqxDyhDcrrOTooj2H1bU+pOdjNDCl9PJbN2pF1hf7U
+         Df7myAOXL2YSMclFwSiu3k2Zy7VTy6xO5aTH3NhaHqSE+ydMDNx42kww5CgHFVbf60
+         kTSRCd10xUeAsFYOboT8GI9umuSD9aXbt7yNaVsr9qWokp1G2cROb58jVVwW3czh5D
+         lj2Qe3T++gS9A==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Mon, 17 Apr 2023 15:29:53 +0300 (MSK)
+Date:   Mon, 17 Apr 2023 15:29:52 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     <neil.armstrong@linaro.org>
+CC:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <khilman@baylibre.com>,
+        <jbrunet@baylibre.com>, <mturquette@baylibre.com>,
+        <vkoul@kernel.org>, <kishon@kernel.org>, <hminas@synopsys.com>,
+        <Thinh.Nguyen@synopsys.com>, <yue.wang@amlogic.com>,
+        <hanjie.lin@amlogic.com>, <kernel@sberdevices.ru>,
+        <rockosov@gmail.com>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>
+Subject: Re: [PATCH v1 4/5] usb: dwc3-meson-g12a: support OTG switch
+Message-ID: <20230417122952.s6ag2mtc7exdbr4n@CAB-WSD-L081021>
+References: <20230414152423.19842-1-ddrokosov@sberdevices.ru>
+ <20230414152423.19842-5-ddrokosov@sberdevices.ru>
+ <CAFBinCDyUBWd-V0mDy_edzH=3JM5SAuX=vtT4MG9Fb62Rcv=mA@mail.gmail.com>
+ <20230417114739.r7aoiodqybalbn4o@CAB-WSD-L081021>
+ <3381d124-1049-16da-bcdb-1cbbec379154@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <3381d124-1049-16da-bcdb-1cbbec379154@linaro.org>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/17 09:07:00 #21118574
+X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andres Freund <andres@anarazel.de>
+Hello Neil,
 
-binutils changed the signature of init_disassemble_info(), which now causes
-compilation failures for tools/{perf,bpf}, e.g. on debian unstable.
+Thank you for review, appreciate it!
 
-Relevant binutils commit:
+On Mon, Apr 17, 2023 at 02:22:26PM +0200, neil.armstrong@linaro.org wrote:
+> On 17/04/2023 13:47, Dmitry Rokosov wrote:
+> > Hello Martin,
+> > 
+> > Thank you for quick review, appreciate it!
+> > Please find my comments below and in the other replies.
+> > 
+> > On Sun, Apr 16, 2023 at 10:56:36PM +0200, Martin Blumenstingl wrote:
+> > > On Fri, Apr 14, 2023 at 5:24 PM Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
+> > > [...]
+> > > >   static const struct dwc3_meson_g12a_drvdata a1_drvdata = {
+> > > > -       .otg_switch_supported = false,
+> > > > +       .otg_switch_supported = true,
+> > > it would be great if you could also follow up with a patch that
+> > > removes otg_switch_supported.
+> > > A1 was the only variant that needed it and after this patch it's just dead code.
+> > 
+> > It makes sense. I thought about it before sending the first version, but
+> > I found a counter-argument: future SoCs may use this parameter.
+> > But if you ask, I will remove 'otg_switch_supported' in the next version
+> > 
+> 
+> Please remove it, it's easy to add it again if needed.
 
-  https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=60a3da00bd5407f07
+Sure, no problem. It will be removed in the next version.
 
-This commit adds a feature test to detect the new signature.  Subsequent
-commits will use it to fix the build failures.
-
-Signed-off-by: Andres Freund <andres@anarazel.de>
-Acked-by: Quentin Monnet <quentin@isovalent.com>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Ben Hutchings <benh@debian.org>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Quentin Monnet <quentin@isovalent.com>
-Cc: Sedat Dilek <sedat.dilek@gmail.com>
-Cc: bpf@vger.kernel.org
-Link: http://lore.kernel.org/lkml/20220622181918.ykrs5rsnmx3og4sv@alap3.anarazel.de
-Link: https://lore.kernel.org/r/20220801013834.156015-2-andres@anarazel.de
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
----
- tools/build/Makefile.feature                        |  1 +
- tools/build/feature/Makefile                        |  4 ++++
- tools/build/feature/test-all.c                      |  4 ++++
- tools/build/feature/test-disassembler-init-styled.c | 13 +++++++++++++
- 4 files changed, 22 insertions(+)
- create mode 100644 tools/build/feature/test-disassembler-init-styled.c
-
-diff --git a/tools/build/Makefile.feature b/tools/build/Makefile.feature
-index e1d2c255669e..a789ccbad93a 100644
---- a/tools/build/Makefile.feature
-+++ b/tools/build/Makefile.feature
-@@ -69,6 +69,7 @@ FEATURE_TESTS_BASIC :=                  \
-         libaio				\
-         libzstd				\
-         disassembler-four-args		\
-+        disassembler-init-styled	\
-         file-handle
- 
- # FEATURE_TESTS_BASIC + FEATURE_TESTS_EXTRA is the complete list
-diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-index 221250973d07..33ab9823ad0d 100644
---- a/tools/build/feature/Makefile
-+++ b/tools/build/feature/Makefile
-@@ -17,6 +17,7 @@ FILES=                                          \
-          test-libbfd.bin                        \
-          test-libbfd-buildid.bin		\
-          test-disassembler-four-args.bin        \
-+         test-disassembler-init-styled.bin	\
-          test-reallocarray.bin			\
-          test-libbfd-liberty.bin                \
-          test-libbfd-liberty-z.bin              \
-@@ -235,6 +236,9 @@ $(OUTPUT)test-libbfd-buildid.bin:
- $(OUTPUT)test-disassembler-four-args.bin:
- 	$(BUILD) -DPACKAGE='"perf"' -lbfd -lopcodes
- 
-+$(OUTPUT)test-disassembler-init-styled.bin:
-+	$(BUILD) -DPACKAGE='"perf"' -lbfd -lopcodes
-+
- $(OUTPUT)test-reallocarray.bin:
- 	$(BUILD)
- 
-diff --git a/tools/build/feature/test-all.c b/tools/build/feature/test-all.c
-index 09517ff2fad5..0cfbdc83ffbc 100644
---- a/tools/build/feature/test-all.c
-+++ b/tools/build/feature/test-all.c
-@@ -170,6 +170,10 @@
- # include "test-disassembler-four-args.c"
- #undef main
- 
-+#define main main_test_disassembler_init_styled
-+# include "test-disassembler-init-styled.c"
-+#undef main
-+
- #define main main_test_libzstd
- # include "test-libzstd.c"
- #undef main
-diff --git a/tools/build/feature/test-disassembler-init-styled.c b/tools/build/feature/test-disassembler-init-styled.c
-new file mode 100644
-index 000000000000..f1ce0ec3bee9
---- /dev/null
-+++ b/tools/build/feature/test-disassembler-init-styled.c
-@@ -0,0 +1,13 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <stdio.h>
-+#include <dis-asm.h>
-+
-+int main(void)
-+{
-+	struct disassemble_info info;
-+
-+	init_disassemble_info(&info, stdout,
-+			      NULL, NULL);
-+
-+	return 0;
-+}
 -- 
-2.39.2
-
+Thank you,
+Dmitry
