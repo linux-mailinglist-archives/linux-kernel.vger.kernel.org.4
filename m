@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 440876E4405
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 11:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C6486E4413
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 11:39:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230499AbjDQJgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 05:36:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36370 "EHLO
+        id S229763AbjDQJiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 05:38:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230370AbjDQJgQ (ORCPT
+        with ESMTP id S230471AbjDQJhz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 05:36:16 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B21526D;
-        Mon, 17 Apr 2023 02:35:39 -0700 (PDT)
+        Mon, 17 Apr 2023 05:37:55 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1CE659D;
+        Mon, 17 Apr 2023 02:37:24 -0700 (PDT)
 Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B68B16603050;
-        Mon, 17 Apr 2023 10:35:36 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D032F66030BF;
+        Mon, 17 Apr 2023 10:35:53 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681724137;
-        bh=QbaAg8NSbQhZf+R83qw59tCN5hywaWcaUrmWKWZXTyU=;
+        s=mail; t=1681724154;
+        bh=2ela0OE3EzNbVcej6d6Wb6FQs6kE2UzvgK4k9tO5HZE=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=HVjqv50rUaQjAKGVeiL4GIggSCWrywwXkSBKv4hPhGrFXDt+vIPS+IfPfzAVz9naa
-         DNGl31fkP2Pu0NAaB9QS6GV9HxZfbvhsWrEzVD24UVeWUvcmg1LQejIhWi4+kzJ4Rb
-         6IDUpwIEvmbsr0t5A+gwU5LMNhG3xX0+LYumN/7wcg9zGCPdwY2ShdlTq0yo0cShMU
-         9aMeRmhaUy7zEazoIuicOn1T+pQUbrML12lyttXfyRzoDPSB7REkmVqdhjKGtGyXvd
-         BXg3Pk75kpM6PPGu/Ec+I4kTMmHTt/m2UzNXAqUCFP1R1/uPvuIjkIVc8+qqbPZuAN
-         44K0Jvb5n0MLA==
-Message-ID: <c1533e76-b8a2-70e6-d144-d53b26c9b952@collabora.com>
-Date:   Mon, 17 Apr 2023 11:35:34 +0200
+        b=gKKxXKWq2YTjMOxBZqZoQVdZ6AYtfX6HoOa/p48i2UL9jPXOpqrB2mX2F/wq8FWWU
+         PsaAK0O1E0SPtQ9kP+NppDYxglNsUgSw1VcIdyfS/BmF/oyifBP39g86P1gNyGMNsF
+         Wf17/y0+0sKLIP5ZErZrXgycCe7XKQ+G0lbWEp8G5ykF8kwkIrPy+SV3WZplJ9iHGP
+         WW8EeZHPHDRL4fyOb1F8Nh+zmcFtg2R+E5e1CbZIuBJVJXgzcbPopUv+CGEu/tHeZl
+         rk53Kqoi2CCPMii78chkcps4iq91BrEYfKV5hep1DJh1dKwTKDsYrq3gw879OoC2fq
+         UgH+4Fcj1HCfA==
+Message-ID: <4b58c2a9-0861-e79a-c740-954cdc193599@collabora.com>
+Date:   Mon, 17 Apr 2023 11:35:50 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
-Subject: Re: [PATCH 5/6] media: mediatek: vcodec: move core context from
- device to each instance
+Subject: Re: [PATCH 4/6] media: mediatek: vcodec: add one empty lat buffer as
+ the last one to decode
 Content-Language: en-US
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Chen-Yu Tsai <wenst@chromium.org>,
@@ -57,10 +57,10 @@ Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
         linux-mediatek@lists.infradead.org,
         Project_Global_Chrome_Upstream_Group@mediatek.com
 References: <20230417054816.17097-1-yunfei.dong@mediatek.com>
- <20230417054816.17097-6-yunfei.dong@mediatek.com>
+ <20230417054816.17097-5-yunfei.dong@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230417054816.17097-6-yunfei.dong@mediatek.com>
+In-Reply-To: <20230417054816.17097-5-yunfei.dong@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -74,55 +74,16 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Il 17/04/23 07:48, Yunfei Dong ha scritto:
-> There are so many lat buffer in core context list, some instances
-> maybe be scheduled for a very long time. Moving the core context to
-> each instance, it only be used to control lat buffer of each instance.
-> And the core work queue of each instance is scheduled by system.
+> Adding one empty lat buffer with the parameter 'is_empty_flag = true' used
+> to flush core work queue decode.
 > 
-> Fixes: 2cfca6c1bf80 ("media: mediatek: vcodec: move lat_buf to the top of core list")
 > Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-> ---
->   .../mediatek/vcodec/mtk_vcodec_dec_drv.c      |  1 -
->   .../platform/mediatek/vcodec/mtk_vcodec_drv.h |  2 -
->   .../vcodec/vdec/vdec_h264_req_multi_if.c      |  4 +-
->   .../vcodec/vdec/vdec_vp9_req_lat_if.c         |  2 +-
->   .../platform/mediatek/vcodec/vdec_msg_queue.c | 53 +++++++------------
->   .../platform/mediatek/vcodec/vdec_msg_queue.h |  6 ++-
->   6 files changed, 25 insertions(+), 43 deletions(-)
-> 
 
-..snip..
+Since commit [6/6] depends on this one, you should either squash this with [6/6]
+or add the same Fixes tag to this.
 
-> diff --git a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h
-> index a80b9853cec9..ae37d020a1bd 100644
-> --- a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h
-> +++ b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h
-> @@ -83,10 +83,11 @@ struct vdec_lat_buf {
->    * @wdma_wptr_addr: ube write point
->    * @core_work: core hardware work
->    * @lat_ctx: used to store lat buffer list
-> - * @ctx: point to mtk_vcodec_ctx
-> + * @core_ctx: used to store core buffer list
->    *
->    * @lat_list_cnt: used to record each instance lat list count
->    * @core_list_cnt: used to record each instance core list count
-> + * @flush_done: core flush done status
->    * @empty_lat_buf: the last lat buf used to flush decode
->    * @core_dec_done: core work queue decode done event
->    * @status: current context decode status for core hardware
-> @@ -100,10 +101,11 @@ struct vdec_msg_queue {
->   
->   	struct work_struct core_work;
->   	struct vdec_msg_queue_ctx lat_ctx;
-> -	struct mtk_vcodec_ctx *ctx;
-> +	struct vdec_msg_queue_ctx core_ctx;
->   
->   	atomic_t lat_list_cnt;
->   	atomic_t core_list_cnt;
-> +	bool flush_done;
+I think that the most sensible option is to squash it.
 
-flush_done is used in patch [6/6]: this does not belong to this patch,
-please move the addition of this member in the same patch where you use it.
 
 Regards,
 Angelo
