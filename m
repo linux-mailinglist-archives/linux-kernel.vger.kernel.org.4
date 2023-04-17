@@ -2,279 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B18356E49C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 15:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF386E4995
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 15:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230199AbjDQNTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 09:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47164 "EHLO
+        id S230424AbjDQNMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 09:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbjDQNTU (ORCPT
+        with ESMTP id S230336AbjDQNLj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 09:19:20 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8DEE6D
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 06:18:56 -0700 (PDT)
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id D097F3F04B
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 13:09:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1681736945;
-        bh=YiUFuqU/fhzjjmJ7DSn8Q7aAMZ0aYSzaCs/lV3Bh1Qo=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=gfcldaD+jXqx38RURoGoikqf4wYzaFFcZJjJ0kcxxocEC2l3Re4cKOXQbRTO/yckX
-         XkzRQCIDcdQTnPmHm3gSKlydrcAl623GCo0aGLKI/7RWlMU87lo+nHiuG6ZstZGIKg
-         NgiC+l/LzmnF0kdcfMPOPxQZHJ/yQIPVyBv8S/O2s7cCvoSg96QXWFR1gyEGdFA+wm
-         GvixXerbNYHiJy2tmuQN3knMs1PRwIim4aodV4t7VOHOvALhhVMtyjrF87CVCXL9NC
-         f0BEGfQH0Jpx5W+r9zPExyK5y5VfEcdz344/qq/OrUPQcRTsHdR3d3he1wsHULE/+C
-         ZSJ+AZ8foWGeg==
-Received: by mail-pg1-f197.google.com with SMTP id 16-20020a630510000000b0051b5d41b0dcso4798566pgf.18
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 06:09:05 -0700 (PDT)
+        Mon, 17 Apr 2023 09:11:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FE0A5C6
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 06:10:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681736945;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9MqaIYBLmFSm1ptnAL0Yl/d5VMKemh+p/YpkWEA8fl0=;
+        b=GcB7I3qlu6PhzEuJjk50vYiM0WsvO/SRKXt9witQGa1y3ya05XxsnF+KA/yZDJ/7TerFzB
+        WlPd8PQ//PhQLRzv9tlPAKcqt952HzaAeCqv7UY389h3/JSHeBXyirMatHW37wsEY0+wNu
+        VKgKw0CxbX24d9i4oNeQ881xDcdXRDQ=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-462-KBnLrAxHPxu7vGh_0GoLXg-1; Mon, 17 Apr 2023 09:09:04 -0400
+X-MC-Unique: KBnLrAxHPxu7vGh_0GoLXg-1
+Received: by mail-ed1-f69.google.com with SMTP id 4fb4d7f45d1cf-50489dce38aso3497663a12.2
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 06:09:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681736944; x=1684328944;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YiUFuqU/fhzjjmJ7DSn8Q7aAMZ0aYSzaCs/lV3Bh1Qo=;
-        b=EiLVAXzrCJG6gLMKgq0n9g2CUNG8UuaI6EJPxDJ7ebLeKXVWoGdOinrj5UXsO+mHYL
-         i2G63Fj1jqTrnxy8XkdQ9kvDNgKnzGZq1J9OxCACeodsf0OuaYu9cknzXK0dkg14BXa2
-         8BX6/aDfkJri9XGTSK9aeDdzjzDCCHFVIYdJQLP7jVNBO8NC8bP/mUXS+IXTqpjpm7yo
-         dXkgp3kR5N14W+QqXuJmzBT2iuB78nXsHTtLqc5LuG8kEx2GDHsPhWwztFY8HCpBOns7
-         RTYUdL3pZkaMpndCklPPuUtkDaKFIXDJ3FUsj1ETG49X/dc3b7Dk0dmXCu0+g2ZGEzNO
-         1Hsg==
-X-Gm-Message-State: AAQBX9dIEHQcgXB329mjRVk8zpOvU9EgMvI7K7bdk/onhV44JWyNITCd
-        WcGe73SJH3R/J/cieYVIhqNuyDgsn8Lyhn1bWlnasZhfWFWC5Zezi5olp9uPSfC2tUs547AuJvB
-        9edKcBYrWX33O6kLV+KnSwIq1f6jfcrNx7QIqEVjPU8nhHv3gTnUJermSqw==
-X-Received: by 2002:a05:6a21:3289:b0:ef:ead5:6fdf with SMTP id yt9-20020a056a21328900b000efead56fdfmr3237244pzb.33.1681736944220;
-        Mon, 17 Apr 2023 06:09:04 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Y4+tmmuSr/2Z3KNN7Jh48j6KvrHrUIuFudVHw7Y7X97z4iFkBn86z0rfwYvct0MY7OmsK5RY2wd9BuIP5xboU=
-X-Received: by 2002:a05:6a21:3289:b0:ef:ead5:6fdf with SMTP id
- yt9-20020a056a21328900b000efead56fdfmr3237216pzb.33.1681736943751; Mon, 17
- Apr 2023 06:09:03 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681736943; x=1684328943;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9MqaIYBLmFSm1ptnAL0Yl/d5VMKemh+p/YpkWEA8fl0=;
+        b=JQDSRrgpa3fv32tS0DWB5WpAQNo/K1/0VG/Z4dAysoh/6sN/FeOqJHLG39JRKlXgwk
+         y9Ih3kkQ5aR92T6mPsVMyJPV9+pMmk6M1q1A5wTWdeU6GLyazAzHUKpfd8B7jIuuBmiu
+         3jc1pHdE9/CC57r9ck4chwKqRL6aTtmHVXi0uODSEheLRn4RrFfC5U9CqVL6rZjoqAj6
+         k8+2hKxG/nVb4jES2M/wtUUfqadZ/s3z163e6mky7q2bS1IDg8RsQn3oMBxlLhyTtztR
+         Smu4lnhL2XDBDQ2jfPP9kj3lLTXruIeJaXbx6qRkmVvo0xqx77FHcBXoY/19cpWmLyBj
+         wGGg==
+X-Gm-Message-State: AAQBX9dccSp4ohChsXWgZPueq/JxNAxWfivRU4dif9NQPs+Bdu04RYmE
+        PUfXToLDUkFqhKMrxpmNW55pj9Yv8ecyKKR/elGGof54qn2q6pQwKAbbS/vxP/iPUZ1SsAZIlTv
+        GSNgC/2UbI2+jyw6cjF8BYuJB
+X-Received: by 2002:aa7:c907:0:b0:504:a1ca:d1c2 with SMTP id b7-20020aa7c907000000b00504a1cad1c2mr12675746edt.26.1681736943298;
+        Mon, 17 Apr 2023 06:09:03 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YbGT/yxZBrEaHuOZ/5jMmArjdzKRtRBUSnKAl2eyk95b/tIr4RS0p6dt4n0eaYbKF3JB64bg==
+X-Received: by 2002:aa7:c907:0:b0:504:a1ca:d1c2 with SMTP id b7-20020aa7c907000000b00504a1cad1c2mr12675727edt.26.1681736942977;
+        Mon, 17 Apr 2023 06:09:02 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id ca15-20020aa7cd6f000000b0050477decdfasm5779306edb.3.2023.04.17.06.09.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Apr 2023 06:09:01 -0700 (PDT)
+Message-ID: <ab900b77-5e8f-4a4f-7e0f-c3358b784c01@redhat.com>
+Date:   Mon, 17 Apr 2023 15:09:01 +0200
 MIME-Version: 1.0
-References: <20220727013255.269815-3-kai.heng.feng@canonical.com> <20220928212438.GA1836272@bhelgaas>
-In-Reply-To: <20220928212438.GA1836272@bhelgaas>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Mon, 17 Apr 2023 21:08:52 +0800
-Message-ID: <CAAd53p7C8UkpEqTEy-WN-uKTSJYOuxPz1kOOcOykYZBvjQX0xg@mail.gmail.com>
-Subject: Re: [PATCH 3/3] PCI/DPC: Disable DPC service on suspend when IRQ is
- shared with PME
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     bhelgaas@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, koba.ko@canonical.com,
-        "Oliver O'Halloran" <oohall@gmail.com>,
-        mika.westerberg@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] ACPI: video: Add backlight=native DMI quirk for Lenovo
+ Ideapad Z470
+Content-Language: en-US, nl
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+References: <20230417104817.30254-1-jirislaby@kernel.org>
+ <CAJZ5v0iYRxGLWgiTD5ouWLy84YN4ddnVshCNgiYJMbLdpK_ZRA@mail.gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <CAJZ5v0iYRxGLWgiTD5ouWLy84YN4ddnVshCNgiYJMbLdpK_ZRA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 5:24=E2=80=AFAM Bjorn Helgaas <helgaas@kernel.org> =
-wrote:
->
-> On Wed, Jul 27, 2022 at 09:32:52AM +0800, Kai-Heng Feng wrote:
-> > PCIe service that shares IRQ with PME may cause spurious wakeup on
-> > system suspend.
-> >
-> > Since AER is conditionally disabled in previous patch, also apply the
-> > same condition to disable DPC which depends on AER to work.
-> >
-> > PCIe Base Spec 5.0, section 5.2 "Link State Power Management" states
-> > that TLP and DLLP transmission is disabled for a Link in L2/L3 Ready
-> > (D3hot), L2 (D3cold with aux power) and L3 (D3cold), so we don't lose
-> > much here to disable DPC during system suspend.
-> >
-> > This is very similar to previous attempts to suspend AER and DPC [1],
-> > but with a different reason.
-> >
-> > [1] https://lore.kernel.org/linux-pci/20220408153159.106741-1-kai.heng.=
-feng@canonical.com/
-> > Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=3D216295
-> >
-> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> > ---
-> >  drivers/pci/pcie/dpc.c | 52 +++++++++++++++++++++++++++++++++---------
-> >  1 file changed, 41 insertions(+), 11 deletions(-)
-> >
-> > diff --git a/drivers/pci/pcie/dpc.c b/drivers/pci/pcie/dpc.c
-> > index 3e9afee02e8d1..542f282c43f75 100644
-> > --- a/drivers/pci/pcie/dpc.c
-> > +++ b/drivers/pci/pcie/dpc.c
-> > @@ -343,13 +343,33 @@ void pci_dpc_init(struct pci_dev *pdev)
-> >       }
-> >  }
-> >
-> > +static void dpc_enable(struct pcie_device *dev)
-> > +{
-> > +     struct pci_dev *pdev =3D dev->port;
-> > +     u16 ctl;
-> > +
-> > +     pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, &ctl)=
-;
-> > +     ctl =3D (ctl & 0xfff4) | PCI_EXP_DPC_CTL_EN_FATAL | PCI_EXP_DPC_C=
-TL_INT_EN;
-> > +     pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, ctl)=
-;
-> > +}
->
+Hi,
 
-Sorry for the belated response.
+On 4/17/23 13:40, Rafael J. Wysocki wrote:
+> On Mon, Apr 17, 2023 at 12:48 PM Jiri Slaby (SUSE) <jirislaby@kernel.org> wrote:
+>>
+>> From: Hans de Goede <hdegoede@redhat.com>
+>>
+>> The Lenovo Ideapad Z470 predates Windows 8, so it defaults to using
+>> acpi_video for backlight control. But this is not functional on this
+>> model.
+>>
+>> Add a DMI quirk to use the native backlight interface which works.
+>>
+>> Link: https://bugzilla.suse.com/show_bug.cgi?id=1208724
+>> Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
+>> Cc: Hans de Goede <hdegoede@redhat.com>
+>> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Hans, can you please give your S-o-b for this one?
 
-> I guess the reason we need this is because we disable interupts in
-> pci_pm_suspend() first, then we call pci_save_dpc_state() from
-> pci_pm_suspend_noirq(), so we save the *disabled* control register.
-> Then when we resume, we restore that disabled control register so we
-> need to enable DPC again.  Right?
+Hmm, I do not believe that I wrote this patch
+(also see the suse bugzilla link in the comment it adds) ?
 
-Sorry for the belated response.
+I guess it started as a copy of my "ACPI: video: Add
+backlight=native DMI quirk for Acer Aspire 3830TG" patch
+and that is why I was kept as the author ?
 
-Yes, and the same logic applies to AER too.
+Anyways I'm fine with me being the author, or with Jiri
+being the author. Pick a tag depending on the answer:
 
->
-> I think we should save a "dpc_enabled" bit in the pci_dev and
-> conditionally set PCI_EXP_DPC_CTL_INT_EN here.  If we unconditionally
-> set it here, we depend on portdrv *not* calling dpc_resume() if we
-> didn't enable DPC at enumeration-time for some reason.
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
-Does this scenario really happen?
-Once the port is marked with PCIE_PORT_SERVICE_DPC, DPC will be
-enabled by dpc_probe().
-So an additional bit seems to be unnecessary.
+Regards,
 
->
-> And I would leave PCI_EXP_DPC_CTL_EN_FATAL alone; see below.
->
-> > +static void dpc_disable(struct pcie_device *dev)
-> > +{
-> > +     struct pci_dev *pdev =3D dev->port;
-> > +     u16 ctl;
-> > +
-> > +     pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, &ctl)=
-;
-> > +     ctl &=3D ~(PCI_EXP_DPC_CTL_EN_FATAL | PCI_EXP_DPC_CTL_INT_EN);
-> > +     pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, ctl)=
-;
->
->   #define  PCI_EXP_DPC_CTL_EN_FATAL       0x0001
->   #define  PCI_EXP_DPC_CTL_INT_EN         0x0008
->
-> Clearing PCI_EXP_DPC_CTL_INT_EN makes sense to me, but I don't
-> understand the PCI_EXP_DPC_CTL_EN_FATAL part.
->
-> PCI_EXP_DPC_CTL_EN_FATAL is one of the four values of the two-bit DPC
-> Trigger Enable, so clearing that bit leaves the field as either 00b
-> (DPC is disabled) or 10b (DPC enabled and triggered when the port
-> detects an uncorrectable error or receives an ERR_NONFATAL or
-> ERR_FATAL message).
->
-> I think we should only clear PCI_EXP_DPC_CTL_INT_EN.
+Hans
 
-Yes, clearing PCI_EXP_DPC_CTL_INT_EN should be sufficient.
 
->
-> > +}
-> > +
-> >  #define FLAG(x, y) (((x) & (y)) ? '+' : '-')
-> >  static int dpc_probe(struct pcie_device *dev)
-> >  {
-> >       struct pci_dev *pdev =3D dev->port;
-> >       struct device *device =3D &dev->device;
-> >       int status;
-> > -     u16 ctl, cap;
-> > +     u16 cap;
-> >
-> >       if (!pcie_aer_is_native(pdev) && !pcie_ports_dpc_native)
-> >               return -ENOTSUPP;
-> > @@ -364,10 +384,7 @@ static int dpc_probe(struct pcie_device *dev)
-> >       }
-> >
-> >       pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CAP, &cap)=
-;
-> > -     pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, &ctl)=
-;
-> > -
-> > -     ctl =3D (ctl & 0xfff4) | PCI_EXP_DPC_CTL_EN_FATAL | PCI_EXP_DPC_C=
-TL_INT_EN;
-> > -     pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, ctl)=
-;
->
-> I think we should keep the PCI_EXP_DPC_CTL_EN_FATAL part here. That
-> just sets the desired trigger mode but AFAICT, has nothing to do with
-> generating interrupts.
 
-Agree. Will do it in next revision.
 
->
-> > +     dpc_enable(dev);
->
-> Then dpc_enable() could be called something like dpc_enable_irq(), and
-> it would *only* control interupt generation.
 
-Will do.
 
-Kai-Heng
+> 
+>> ---
+>>  drivers/acpi/video_detect.c | 9 +++++++++
+>>  1 file changed, 9 insertions(+)
+>>
+>> diff --git a/drivers/acpi/video_detect.c b/drivers/acpi/video_detect.c
+>> index 69ef2d9710c2..af5cea005f54 100644
+>> --- a/drivers/acpi/video_detect.c
+>> +++ b/drivers/acpi/video_detect.c
+>> @@ -459,6 +459,15 @@ static const struct dmi_system_id video_detect_dmi_table[] = {
+>>                 DMI_MATCH(DMI_BOARD_NAME, "Lenovo IdeaPad S405"),
+>>                 },
+>>         },
+>> +       {
+>> +        /* https://bugzilla.suse.com/show_bug.cgi?id=1208724 */
+>> +        .callback = video_detect_force_native,
+>> +        /* Lenovo Ideapad Z470 */
+>> +        .matches = {
+>> +               DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+>> +               DMI_MATCH(DMI_PRODUCT_VERSION, "IdeaPad Z470"),
+>> +               },
+>> +       },
+>>         {
+>>          /* https://bugzilla.redhat.com/show_bug.cgi?id=1187004 */
+>>          .callback = video_detect_force_native,
+>> --
+>> 2.40.0
+>>
+> 
 
->
-> >       pci_info(pdev, "enabled with IRQ %d\n", dev->irq);
-> >
-> >       pci_info(pdev, "error containment capabilities: Int Msg #%d, RPEx=
-t%c PoisonedTLP%c SwTrigger%c RP PIO Log %d, DL_ActiveErr%c\n",
-> > @@ -380,14 +397,25 @@ static int dpc_probe(struct pcie_device *dev)
-> >       return status;
-> >  }
-> >
-> > -static void dpc_remove(struct pcie_device *dev)
-> > +static int dpc_suspend(struct pcie_device *dev)
-> >  {
-> > -     struct pci_dev *pdev =3D dev->port;
-> > -     u16 ctl;
-> > +     if (dev->shared_pme_irq)
-> > +             dpc_disable(dev);
-> >
-> > -     pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, &ctl)=
-;
-> > -     ctl &=3D ~(PCI_EXP_DPC_CTL_EN_FATAL | PCI_EXP_DPC_CTL_INT_EN);
-> > -     pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, ctl)=
-;
-> > +     return 0;
-> > +}
-> > +
-> > +static int dpc_resume(struct pcie_device *dev)
-> > +{
-> > +     if (dev->shared_pme_irq)
-> > +             dpc_enable(dev);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static void dpc_remove(struct pcie_device *dev)
-> > +{
-> > +     dpc_disable(dev);
-> >  }
-> >
-> >  static struct pcie_port_service_driver dpcdriver =3D {
-> > @@ -395,6 +423,8 @@ static struct pcie_port_service_driver dpcdriver =
-=3D {
-> >       .port_type      =3D PCIE_ANY_PORT,
-> >       .service        =3D PCIE_PORT_SERVICE_DPC,
-> >       .probe          =3D dpc_probe,
-> > +     .suspend        =3D dpc_suspend,
-> > +     .resume         =3D dpc_resume,
-> >       .remove         =3D dpc_remove,
-> >  };
-> >
-> > --
-> > 2.36.1
-> >
