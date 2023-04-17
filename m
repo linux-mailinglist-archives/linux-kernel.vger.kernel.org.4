@@ -2,117 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 961666E451E
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 12:23:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94C916E44D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 12:07:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbjDQKXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 06:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56592 "EHLO
+        id S230271AbjDQKHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 06:07:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjDQKXl (ORCPT
+        with ESMTP id S229898AbjDQKHJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 06:23:41 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0495FC5
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 03:22:48 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-94f0dd117dcso114453666b.3
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 03:22:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1681726866; x=1684318866;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IEKwLXsBEauVzf8PBHcbltO1uOVycYMbAPiN0uQCZOA=;
-        b=5LV+SeBksJhKwW/oHH1Qu2EZxleA5Ag+Fg5gg9tH0tIz+qArovNG3tMYELPPELzA8a
-         s+sm1FK7gNyDRHCJHDnOesasukCNcSKVg5Xd8RNGthXIXHjoYQJMVfJPrgPVVaAp08PY
-         /wO3cZ7RycIAP+W+CDYtHccEpBjsiI/WvCaxLGTk1hc7dKUwYHq8CXeVIQdYDYVDl0rf
-         NnjD2G5KCUFCsx9CnGehGRw8SXKkPLEIzbdFDrw50j5qUnuIwedr/hx/jFxLsOeUzKn8
-         PaNazVlOC7GD3DpmHtBC3KGKTEM8Xtx43Yv/kiZdBuBRAocoMHssgMV3Hxb31F5XV9uV
-         fwYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681726866; x=1684318866;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=IEKwLXsBEauVzf8PBHcbltO1uOVycYMbAPiN0uQCZOA=;
-        b=FSbCOQ27NQRc1855lek6sRYRxyc6y5McuLrXLuwne9xgcOcJ1dSHALcKJdU14B+YFr
-         E/t43jlQN9AfeT0kCH4o3hFP7ylb0TV725lme3Scg3BOffLQP1kCWM1PF5dhdhlDVDSQ
-         Qm7lx/bbdfwr3DOCTKUtALbg9LRiXtmy0et7yPCaxsWD+LTqJlKu1APmXBq48pM3Zl41
-         JZTajE5uH2aEiYTxebGy4+aOO7wI1LzKHN/SJmaXwf7K4jQ8qttDOKGGG32h9LNA715+
-         /+OfyFOQk98ZUJP4yWd1OvZAJlwFEE2NFr/DyIU5LHJm7K828WvjUx6VIskQ/KGG7gIM
-         9mpQ==
-X-Gm-Message-State: AAQBX9fz2hB/2BnfUr65ia+K+tftSKWkY3QJJWXicsWlbeQhstK8SeMH
-        tSRce6wmXonhdcG5xxA0YHBzPQl8nEpoPqKvLMsAjg==
-X-Google-Smtp-Source: AKy350Yn97b8YdvYRltq539a9T88Tdd9ctYhN1bmF84VQIX609OSCsLtqz6Ga+Pe34Pw2ZZURwGa6g==
-X-Received: by 2002:a7b:ca59:0:b0:3ef:5a4f:430 with SMTP id m25-20020a7bca59000000b003ef5a4f0430mr11274672wml.11.1681725905871;
-        Mon, 17 Apr 2023 03:05:05 -0700 (PDT)
-Received: from localhost ([2a01:e0a:28d:66d0:92d9:442d:a276:285d])
-        by smtp.gmail.com with ESMTPSA id p8-20020a7bcc88000000b003f04f0c5a6fsm11463173wma.26.2023.04.17.03.05.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Apr 2023 03:05:05 -0700 (PDT)
-Mime-Version: 1.0
+        Mon, 17 Apr 2023 06:07:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6476D7ED1;
+        Mon, 17 Apr 2023 03:06:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8152E614BD;
+        Mon, 17 Apr 2023 10:05:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1DA0C433D2;
+        Mon, 17 Apr 2023 10:05:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681725906;
+        bh=nlMhgVd7pguxjkFgcrm5IWWYvfrdSdeliQ3gHwuSens=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=b7Wr1gVx1JAIPRvlVI2Vh+6Ckw9sh4l3MkAu5081Z4TVOtf7hfxtBuru6QnFVxa2Q
+         H1b+6CfjA7wys2oZ2WHiJgetHLEvaUV2YMS6vILvm9OSbwH9UBrimAh3vvf8BegXRb
+         hgNCTLR4S3Y1og3sdeYhYK5EvX+dZlgATgA6PFRuYNF9fK6Phgnx4hCWzEIp2TTgSM
+         M6VjkfNQkMZwlpEZxHWeGSGBvvz4T5+KQczGGmqTqbvyMeym8riZRxSKxNcA73AhgE
+         lF52ABKuSpyCdcZdjNE7KgaXR2e/EOY+xAR31H2uhTg2cvjiKEUAOIYN/6VXUmULgD
+         Sq8WYSMyqiP8w==
+Message-ID: <94c2aadfb2fe7830d0289ffe6084581b99505a58.camel@kernel.org>
+Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM
+ after writes
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Amir Goldstein <amir73il@gmail.com>
+Cc:     Paul Moore <paul@paul-moore.com>, zohar@linux.ibm.com,
+        linux-integrity@vger.kernel.org, miklos@szeredi.hu,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org
+Date:   Mon, 17 Apr 2023 06:05:04 -0400
+In-Reply-To: <e2455c0e-5a17-7fc1-95e3-5f2aca2eb409@linux.ibm.com>
+References: <20230407-trasse-umgearbeitet-d580452b7a9b@brauner>
+         <90a25725b4b3c96e84faefdb827b261901022606.camel@kernel.org>
+         <e2455c0e-5a17-7fc1-95e3-5f2aca2eb409@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 17 Apr 2023 12:05:04 +0200
-Message-Id: <CRYY2V3HJ0CP.96JQ18PLZB3C@burritosblues>
-Cc:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <sterzik@ti.com>, <u-kumar1@ti.com>, <jneanne@baylibre.com>,
-        <jpanis@baylibre.com>, <aseketeli@baylibre.com>
-Subject: Re: [PATCH v2 0/5] arm64: dts: ti: k3-j7200-som-p0: Add TP6594
- family PMICs
-From:   "Esteban Blanc" <eblanc@baylibre.com>
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
-X-Mailer: aerc 0.14.0
-References: <20230414112843.1358067-1-eblanc@baylibre.com>
- <714a56b1-438c-7aad-920b-f3f1d72afc5f@linaro.org>
-In-Reply-To: <714a56b1-438c-7aad-920b-f3f1d72afc5f@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri Apr 14, 2023 at 1:36 PM CEST, Krzysztof Kozlowski wrote:
-> On 14/04/2023 13:28, Esteban Blanc wrote:
-> > TPS6594 is a Power Management IC which provides regulators and others
-> > features like GPIOs, RTC, watchdog, ESMs (Error Signal Monitor), and
-> > PFSM (Pre-configurable Finite State Machine). The SoC and the PMIC can
-> > communicate through the I2C or SPI interfaces.
-> > TPS6594 is the super-set device while TPS6593 and LP8764 are derivative=
-s.
+On Sun, 2023-04-16 at 21:57 -0400, Stefan Berger wrote:
+>=20
+> On 4/7/23 09:29, Jeff Layton wrote:
+> > > > > >=20
+> > > > > > I would ditch the original proposal in favor of this 2-line pat=
+ch shown here:
+> > > > > >=20
+> > > > > > https://lore.kernel.org/linux-integrity/a95f62ed-8b8a-38e5-e468=
+-ecbde3b221af@linux.ibm.com/T/#m3bd047c6e5c8200df1d273c0ad551c645dd43232
+> > >=20
+> > > We should cool it with the quick hacks to fix things. :)
+> > >=20
 > >=20
-> > This should be applied on top of other patch series:
-> > - https://lore.kernel.org/all/20230406075622.8990-1-jpanis@baylibre.com=
-/
-> >   For core MFD driver
-> > - https://lore.kernel.org/lkml/20230414101217.1342891-1-eblanc@baylibre=
-.com/
-> >   For regulator driver
->
-> Why? DTS cannot be merged with drivers, so if you insist on such
-> dependency then:
-> 1. Your patchset is broken,
-> 2. I actually does not understand why,
-> 3. NAK - don't merge DTS into driver branches.
->
-> You probably are misunderstanding branches and dependencies.
+> > Yeah. It might fix this specific testcase, but I think the way it uses
+> > the i_version is "gameable" in other situations. Then again, I don't
+> > know a lot about IMA in this regard.
+> >=20
+> > When is it expected to remeasure? If it's only expected to remeasure on
+> > a close(), then that's one thing. That would be a weird design though.
+>=20
+> IMA should remeasure the file when it has visibly changed for another thr=
+ead or process.
+>=20
+>=20
+> > > > -----------------------8<---------------------------
+> > > >=20
+> > > > [PATCH] IMA: use vfs_getattr_nosec to get the i_version
+> > > >=20
+> > > > IMA currently accesses the i_version out of the inode directly when=
+ it
+> > > > does a measurement. This is fine for most simple filesystems, but c=
+an be
+> > > > problematic with more complex setups (e.g. overlayfs).
+> > > >=20
+> > > > Make IMA instead call vfs_getattr_nosec to get this info. This allo=
+ws
+> > > > the filesystem to determine whether and how to report the i_version=
+, and
+> > > > should allow IMA to work properly with a broader class of filesyste=
+ms in
+> > > > the future.
+> > > >=20
+> > > > Reported-by: Stefan Berger <stefanb@linux.ibm.com>
+> > > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > > > ---
+> > >=20
+> > > So, I think we want both; we want the ovl_copyattr() and the
+> > > vfs_getattr_nosec() change:
+> > >=20
+> > > (1) overlayfs should copy up the inode version in ovl_copyattr(). Tha=
+t
+> > >      is in line what we do with all other inode attributes. IOW, the
+> > >      overlayfs inode's i_version counter should aim to mirror the
+> > >      relevant layer's i_version counter. I wouldn't know why that
+> > >      shouldn't be the case. Asking the other way around there doesn't
+> > >      seem to be any use for overlayfs inodes to have an i_version tha=
+t
+> > >      isn't just mirroring the relevant layer's i_version.
+> >=20
+> > It's less than ideal to do this IMO, particularly with an IS_I_VERSION
+> > inode.
+> >=20
+> > You can't just copy=A0up the value from the upper. You'll need to call
+> > inode_query_iversion(upper_inode), which will flag the upper inode for =
+a
+> > logged i_version update on the next write. IOW, this could create some
+> > (probably minor) metadata write amplification in the upper layer inode
+> > with IS_I_VERSION inodes.
+> >=20
+> >=20
+> > > (2) Jeff's changes for ima to make it rely on vfs_getattr_nosec().
+> > >      Currently, ima assumes that it will get the correct i_version fr=
+om
+> > >      an inode but that just doesn't hold for stacking filesystem.
+> > >=20
+> > > While (1) would likely just fix the immediate bug (2) is correct and
+> > > _robust_. If we change how attributes are handled vfs_*() helpers wil=
+l
+> > > get updated and ima with it. Poking at raw inodes without using
+> > > appropriate helpers is much more likely to get ima into trouble.
+> >=20
+> > This will fix it the right way, I think (assuming it actually works),
+> > and should open the door for IMA to work properly with networked
+> > filesystems that support i_version as well.
+> >=20
+> > Note that there Stephen is correct that calling getattr is probably
+> > going to be less efficient here since we're going to end up calling
+> > generic_fillattr unnecessarily, but I still think it's the right thing
+> > to do.
+>=20
+> I was wondering whether to use the existing inode_eq_iversion() for all
+> other filesystems than overlayfs, nfs, and possibly other ones (which one=
+s?)
+> where we would use the vfs_getattr_nosec() via a case on inode->i_sb->s_m=
+agic?
+> If so, would this function be generic enough to be a public function for =
+libfs.c?
+>=20
+> I'll hopefully be able to test the proposed patch tomorrow.
+>=20
+>=20
 
-There is no dependency indeed. We thought that dt-bindings patch at least h=
-ad
-to be applied before this DT series even if it is not a 'dependency', the o=
-ther
-link was a mistake. I will remove these misleading links in next cover-lett=
-er.
+No, you don't want to use inode_eq_iversion here because (as the comment
+over it says):
 
-Thanks for your time. Best regards,
+ * Note that we don't need to set the QUERIED flag in this case, as the val=
+ue
+ * in the inode is not being recorded for later use.
 
+The IMA code _does_ record the value for later use. Furthermore, it's
+not valid to use inode_eq_iversion on a non-IS_I_VERSION inode, so it's
+better to just use vfs_getattr_nosec which allows IMA to avoid all of
+those gory details.
+
+Thanks,
 --=20
-Esteban Blanc
-BayLibre
+Jeff Layton <jlayton@kernel.org>
