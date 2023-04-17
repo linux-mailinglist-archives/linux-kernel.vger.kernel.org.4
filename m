@@ -2,97 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 488526E4276
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:22:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 457486E41E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:02:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbjDQIWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 04:22:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38556 "EHLO
+        id S229669AbjDQICQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 04:02:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230461AbjDQIWU (ORCPT
+        with ESMTP id S230128AbjDQIBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 04:22:20 -0400
-Received: from mail.distrito09d21.saludzona5.gob.ec (mail.distrito09d21.saludzona5.gob.ec [190.214.49.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E54283A80
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 01:22:17 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.distrito09d21.saludzona5.gob.ec (Postfix) with ESMTP id 517671517EA4;
-        Mon, 17 Apr 2023 02:59:53 -0500 (-05)
-Received: from mail.distrito09d21.saludzona5.gob.ec ([127.0.0.1])
-        by localhost (mail.distrito09d21.saludzona5.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id s7pb8FWeG4zm; Mon, 17 Apr 2023 02:59:53 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.distrito09d21.saludzona5.gob.ec (Postfix) with ESMTP id ECB531517ECF;
-        Mon, 17 Apr 2023 02:59:52 -0500 (-05)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.distrito09d21.saludzona5.gob.ec ECB531517ECF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=distrito09d21.saludzona5.gob.ec;
-        s=B3F564AE-DCCF-11EA-A8CE-DCDEBBF83439; t=1681718393;
-        bh=Dcs2PdQd+rhHCVw1keoJ9FS9PUCMRPAIMppoLwfJVdU=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=WrgVm6tzVzKiTxPPqj6QLC67H5OTCQwHsW6gQ5LZlrF30qE8TwDlBxI5E9uMpeba1
-         rJuLh4nOJ3o4kAxmUJCHS4g+lPAJ4WPTEotRu87tpHrhXALv+AeMs/yv9yC0cpNM3N
-         ixAS9fXs5X30SNeW8vb14IHRcVMJnW1+gzm0wk4MCUXKJNnNKrft0XJsVvDIr5NBfJ
-         0jTiO3JxgJqii55tJ7NX36CIuWkIZP61V9xAmF47Tvy2FO+5mPcJPaVYy84U0IHXAG
-         MoOYWiqD8HcJmjrNa/o2JnsxyjcgXfVWAEYlWumnNl4pkgfENOYJZIvDufgKMsk5ET
-         yilIEvtjacp9g==
-X-Virus-Scanned: amavisd-new at distrito09d21.saludzona5.gob.ec
-Received: from mail.distrito09d21.saludzona5.gob.ec ([127.0.0.1])
-        by localhost (mail.distrito09d21.saludzona5.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id nhlfQubw_tBQ; Mon, 17 Apr 2023 02:59:52 -0500 (-05)
-Received: from [23.172.112.93] (unknown [23.172.112.93])
-        by mail.distrito09d21.saludzona5.gob.ec (Postfix) with ESMTPSA id 5E8F71517EC1;
-        Mon, 17 Apr 2023 02:59:50 -0500 (-05)
-Content-Type: text/plain; charset="iso-8859-1"
+        Mon, 17 Apr 2023 04:01:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DAC46AB;
+        Mon, 17 Apr 2023 01:01:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8194761408;
+        Mon, 17 Apr 2023 08:01:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDF9EC433EF;
+        Mon, 17 Apr 2023 08:01:30 +0000 (UTC)
+Message-ID: <0341924c-7f0a-28aa-eeae-f7de69ab36d8@xs4all.nl>
+Date:   Mon, 17 Apr 2023 10:01:29 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?q?Atenci=C3=B3n_usuario_de_cuenta_de_correo_electr=C3=B3nico?=
-To:     Recipients <hernan.suarez@distrito09d21.saludzona5.gob.ec>
-From:   "@ZIMBRA" <hernan.suarez@distrito09d21.saludzona5.gob.ec>
-Date:   Mon, 17 Apr 2023 00:59:28 -0700
-Reply-To: webmasterzimbra1@gmail.com
-Message-Id: <20230417075950.5E8F71517EC1@mail.distrito09d21.saludzona5.gob.ec>
-X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] media: mediatek: vcodec: Move a variable assignment
+ behind condition checks in vdec_vp9_slice_single_decode()
+Content-Language: en-US
+To:     Markus Elfring <Markus.Elfring@web.de>,
+        kernel-janitors@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Guo Zhengkui <guozhengkui@vivo.com>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Mingjia Zhang <mingjia.zhang@mediatek.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>
+Cc:     cocci@inria.fr, LKML <linux-kernel@vger.kernel.org>
+References: <40c60719-4bfe-b1a4-ead7-724b84637f55@web.de>
+ <1a11455f-ab57-dce0-1677-6beb8492a257@web.de>
+ <b98dcc94-13f3-a6cb-f5bd-f1f8644d87d1@web.de>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <b98dcc94-13f3-a6cb-f5bd-f1f8644d87d1@web.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Atenci=F3n usuario de cuenta de correo electr=F3nico,
+On 14/04/2023 20:30, Markus Elfring wrote:
+> Date: Fri, 14 Apr 2023 20:07:01 +0200
+> 
+> The address of a data structure member was determined before
+> a corresponding null pointer check in the implementation of
+> the function “vdec_vp9_slice_single_decode”.
+> 
+> Thus avoid the risk for undefined behaviour by moving the assignment
+> for the variable “pfc” behind some condition checks.
+> 
+> This issue was detected by using the Coccinelle software.
+> 
+> Fixes: b0f407c19648ae9110c932c91d6e1b9381ec0aeb ("media: mediatek: vcodec: add vp9 decoder driver for mt8186")
 
-Este mensaje proviene de su Centro de administraci=F3n de cuentas Webmail y=
- red. Estamos en el proceso de actualizar todos nuestros servidores de corr=
-eo electr=F3nico como parte de nuestros esfuerzos en curso para proporciona=
-r el mejor servicio de correo web posible. Tambi=E9n eliminamos todas las c=
-uentas no utilizadas para crear m=E1s espacio para registros de cuentas nue=
-vas.
+Not a fix, it was never broken.
 
-Para asegurarse de que no experimenta interrupciones del servicio o posible=
- desactivaci=F3n de su cuenta de correo electr=F3nico, debe responder a est=
-e mensaje confirmando inmediatamente los detalles de su cuenta de correo el=
-ectr=F3nico a continuaci=F3n para confirmaci=F3n e identificaci=F3n.
+> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+> ---
+>  .../media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c  | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> index cf16cf2807f0..22b27f7b57bf 100644
+> --- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> +++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> @@ -1990,7 +1990,7 @@ static int vdec_vp9_slice_single_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
+>  					struct vdec_fb *fb, bool *res_chg)
+>  {
+>  	struct vdec_vp9_slice_instance *instance = h_vdec;
 
-Confirme los detalles de su cuenta a continuaci=F3n.
-_____________________________________
-1. Nombre y apellido:
-2. Email completo de acceso:
-3. Nombre de usuario:
-4. Contrase=F1a:
-5. Vuelva a escribir la contrase=F1a:
-_____________________________________
+Just drop these lines instead:
 
-De lo contrario, su cuenta de correo electr=F3nico puede desactivarse autom=
-=E1ticamente de nuestro servidor de correo electr=F3nico / base de datos de=
- correo electr=F3nico. Para poder actualizar su cuenta de correo electr=F3n=
-ico, responda a este mensaje.
+        if (!instance || !instance->ctx)
+                return -EINVAL;
 
-Gracias por su comprensi=F3n, le deseamos un d=EDa agradable por delante.
+That can never happen.
 
+Regards,
 
-Administrador,
-Webmail y Centro de administraci=F3n de cuentas de red.
+	Hans
+
+> -	struct vdec_vp9_slice_pfc *pfc = &instance->sc_pfc;
+> +	struct vdec_vp9_slice_pfc *pfc;
+>  	struct vdec_vp9_slice_vsi *vsi;
+>  	struct mtk_vcodec_ctx *ctx;
+>  	int ret;
+> @@ -2007,6 +2007,7 @@ static int vdec_vp9_slice_single_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
+>  	if (!fb)
+>  		return -EBUSY;
+> 
+> +	pfc = &instance->sc_pfc;
+>  	vsi = &pfc->vsi;
+> 
+>  	ret = vdec_vp9_slice_setup_single(instance, bs, fb, pfc);
+> --
+> 2.40.0
+> 
+
