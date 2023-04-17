@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 650286E49E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 15:27:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DAB56E49E6
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 15:28:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjDQN1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 09:27:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55094 "EHLO
+        id S230236AbjDQN2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 09:28:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjDQN1v (ORCPT
+        with ESMTP id S229504AbjDQN1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 09:27:51 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA67CF5
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 06:27:49 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33HDRInE101679;
-        Mon, 17 Apr 2023 08:27:18 -0500
+        Mon, 17 Apr 2023 09:27:55 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D69421C
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 06:27:53 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33HDRNWN001840;
+        Mon, 17 Apr 2023 08:27:23 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1681738038;
-        bh=tjQx4OnwT0WZGl61dt1OrT4RuDJjc0JnzyTMhotwyuk=;
-        h=From:To:CC:Subject:Date;
-        b=LVmvdi4ZfG5W1IEu9KaXU22T44aqlp3EB/9bVDJPF/qbm/TWpRJVgJ2d8kz0jwxEt
-         +HtP7dykdidBbK+vRiXCvsReFvroBTSLwdQWfD6k+Hx8Z+ncreDhxju5MLY3lHjy1K
-         CVNafbmQ7CoFNKAZg5INWGvE3nMydMBXLTe43qzo=
+        s=ti-com-17Q1; t=1681738043;
+        bh=PV8uK7AipAOLhEs40zX9UG2hpbPj6DOf6/EFECarqCA=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=ieZ6z5jwyQHnjvXQ4H3MQNftfctm5IuI4r5ztqsmBwH1+iupIn+4yvDH2sP0tC1tJ
+         7V3w8D2El6FWNQtHg9RMMgXm067v/IcOTjRLG3IyPB1vxFS6bMqdGq2COuIlrClCAL
+         34K44uM9qhmS1+w6+a7RW9FP5N2IfsPk7G0zwpjs=
 Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33HDRIT1038406
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33HDRNDY074019
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 17 Apr 2023 08:27:18 -0500
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE109.ent.ti.com
+        Mon, 17 Apr 2023 08:27:23 -0500
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE109.ent.ti.com
  (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 17
- Apr 2023 08:27:18 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ Apr 2023 08:27:23 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 17 Apr 2023 08:27:18 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33HDRHpV007836;
-        Mon, 17 Apr 2023 08:27:18 -0500
+ Frontend Transport; Mon, 17 Apr 2023 08:27:23 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33HDRMqH106152;
+        Mon, 17 Apr 2023 08:27:22 -0500
 From:   <kamlesh@ti.com>
 To:     <catalin.marinas@arm.com>, <will@kernel.org>,
         <quic_bjorande@quicinc.com>, <arnd@arndb.de>,
@@ -50,10 +50,12 @@ To:     <catalin.marinas@arm.com>, <will@kernel.org>,
 CC:     <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <praneeth@ti.com>,
         Kamlesh Gurudasani <kamlesh@ti.com>
-Subject: [PATCH] arm64: defconfig: Enable crypto test module
-Date:   Mon, 17 Apr 2023 18:57:16 +0530
-Message-ID: <20230417132717.1990023-1-kamlesh@ti.com>
+Subject: [PATCH] arm64: defconfig: Enable security accelerator driver for TI K3 SoCs
+Date:   Mon, 17 Apr 2023 18:57:17 +0530
+Message-ID: <20230417132717.1990023-2-kamlesh@ti.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230417132717.1990023-1-kamlesh@ti.com>
+References: <20230417132717.1990023-1-kamlesh@ti.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -70,7 +72,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kamlesh Gurudasani <kamlesh@ti.com>
 
-Enable crypto test module, used for testing crypto engine performance.
+Enable TI's SA2UL driver to support security acceleration on TI K3 SoCs.
 
 Signed-off-by: Kamlesh Gurudasani <kamlesh@ti.com>
 ---
@@ -78,17 +80,17 @@ Signed-off-by: Kamlesh Gurudasani <kamlesh@ti.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index b6342b40c600..e4ef0cc35235 100644
+index b6342b40c600..c9e3b3b9bab4 100644
 --- a/arch/arm64/configs/defconfig
 +++ b/arch/arm64/configs/defconfig
-@@ -1452,6 +1452,7 @@ CONFIG_NLS_CODEPAGE_437=y
- CONFIG_NLS_ISO8859_1=y
- CONFIG_SECURITY=y
- CONFIG_CRYPTO_USER=y
-+CONFIG_CRYPTO_TEST=m
- CONFIG_CRYPTO_ECHAINIV=y
- CONFIG_CRYPTO_MICHAEL_MIC=m
- CONFIG_CRYPTO_ANSI_CPRNG=y
+@@ -1477,6 +1477,7 @@ CONFIG_CRYPTO_DEV_HISI_SEC2=m
+ CONFIG_CRYPTO_DEV_HISI_ZIP=m
+ CONFIG_CRYPTO_DEV_HISI_HPRE=m
+ CONFIG_CRYPTO_DEV_HISI_TRNG=m
++CONFIG_CRYPTO_DEV_SA2UL=m
+ CONFIG_DMA_RESTRICTED_POOL=y
+ CONFIG_CMA_SIZE_MBYTES=32
+ CONFIG_PRINTK_TIME=y
 -- 
 2.34.1
 
