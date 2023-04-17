@@ -2,156 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E23486E4044
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 08:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBA566E4049
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 09:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbjDQG6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 02:58:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50790 "EHLO
+        id S230178AbjDQHAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 03:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230312AbjDQG6i (ORCPT
+        with ESMTP id S229690AbjDQHAb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 02:58:38 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2089.outbound.protection.outlook.com [40.107.101.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2DB81BC2
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 23:58:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KUCIluitJhWinAylpgA25J/Fi70a2sJfdFBSlaqdRqpaI5s1bnbHN7kLzHm464tUxRDGYhIVYoe8Bv4/nNAqELI7LXMQXHtPAI+/TFqrADsoLFxPCUD375y2QXZ8+QUmhblDJ2ZigaxpPH25vQFrFwKTj1Qfb/CWPjWrZIM1kba8R3bK1TfBZWdp0KqRK1iC2hwhkyWxz3EgQYAmR9uIepkhLVRqnoD1M/7P7lCRmmrOtVAWboVG3Brj9jJ7WjoRrtV/ffOBmqebIth9IBH5CCr5TVOZ3IXz7m5gzuTa66QzFXu6O09k/OEwf2bgOA82T5Yx11Q64BAgbXVGqQiSHA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=429hsLPc3da6ZTJs18unyxBe1692b1kDPIhbOLb53pY=;
- b=E7YkiZQFYNMXvJ0cBrf5tOgtko/NzXMlm+XlH/tX0aKQX1nwQgi8BS0P8R9B4CfJ2o0jqKcdvKMXIByKzO7pps9J3ltdzYAqtB1PTzpqnP/Nkxul1Pfntu1VT9Pi32oZ6TxU/d38OOlVsE7WmgAzQ+WthTU2pbUKdiY1Mt7q4xPq+uYu2pW66db0Q7BLLiUUixyb0qMsIV38stjfmN5anbjVU9dTQZC/ZnCYMgsUICtMuZvCg3KxG0+sN4x3QHw4rXYwR95YrQAQOOCCWQghELkl5YmQQVWbZHJrxijjVYLpn2u9NWEzpApWu47t9wHR26aKIF2vJE1JgWgf2zPyow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=429hsLPc3da6ZTJs18unyxBe1692b1kDPIhbOLb53pY=;
- b=E9bTqje8KQmMh8LJ/K+dtz2ebFfZ1dE7He1HQslAGKZKIiCmaPxokfOmLldTyByG98rUunnk0uBRH6fWgVPbS/2WhTjMNhbjl4CebxrAoSHoHil07Oy2R4nDYl37NM1j/y3Ih2a9OgT0hzsPUv64xAv/5ffDn5FietjoCvBCCdo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by SJ0PR12MB6878.namprd12.prod.outlook.com (2603:10b6:a03:483::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.49; Mon, 17 Apr
- 2023 06:58:34 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d2f8:7388:39c1:bbed]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d2f8:7388:39c1:bbed%3]) with mapi id 15.20.6298.045; Mon, 17 Apr 2023
- 06:58:34 +0000
-Message-ID: <a8ca8691-5507-a80d-357c-43d45a44d799@amd.com>
-Date:   Mon, 17 Apr 2023 08:58:27 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] dma-buf/dma-resv.c: fix a typo
-Content-Language: en-US
-To:     Sui Jingfeng <suijingfeng@loongson.cn>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        David Airlie <airlied@gmail.com>, Li Yi <liyi@loongson.cn>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, loongson-kernel@lists.loongnix.cn
-References: <20230416143849.1142779-1-suijingfeng@loongson.cn>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20230416143849.1142779-1-suijingfeng@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0127.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:94::13) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Mon, 17 Apr 2023 03:00:31 -0400
+Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32480199E
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 00:00:29 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R951e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VgF9ZB1_1681714825;
+Received: from 30.97.49.3(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VgF9ZB1_1681714825)
+          by smtp.aliyun-inc.com;
+          Mon, 17 Apr 2023 15:00:26 +0800
+Message-ID: <dd1d75a6-38c3-771c-c1ed-2f5dca523c03@linux.alibaba.com>
+Date:   Mon, 17 Apr 2023 15:00:25 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|SJ0PR12MB6878:EE_
-X-MS-Office365-Filtering-Correlation-Id: de5763d0-a255-44d8-8ee9-08db3f1128e1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 260tvEH3Qp+b3rnX4ZBROJb9stEAy+A5rw7SmmODpaMNPiGEQ5bt/WcSvCCTXEZivNmDNc4hIwEe4cXLiOWQSg7Ifkk+R3GYo1fNrsEKNX4mzcu84OqVzsKsla23/ftgjBtzI8SQOfmtiFBPnzcPjETvTxceP0FrmDzTgJWipFxubpTpd8JPwYanX0Qv5O666q2Xzma6B7R8H4I5hgkibipAQ8r/nf6h58gTBDayzFXkobBE5RNo6bFu4CBDwcEFFrxAEqFKbzjspSxkGTjulEY3TbUJDq0YI6SyS/Y96Ze9Wah4irAvMJ+SW8G62VO9OE3POjQLZo4OLWRLEFrDCaDpRvPAsSGSbXmKtnZHseFy58r8p3kAWOFvafzXo0T+DYo9XkqRPga6xsO9dvV7dY24Ia78HEkrTJxs8JY9sALNv8lSDnCdA4AH0ytYEte2A5ubKcQe9XAAiBY0yd1uzul+2AlkyexD6MkVHY99Dq91Qf80tlTyafMOnbKUYUf70yQvzC8EE7MP0ltlV8rbDTj5nMUkDp5gdTnMNq+uJA8LE5CzHvEDV+nrRJgonvKxM13IM+FhIVfxaffM+umpy562Zy7QjWQcht0yhNhfezNeTfSKYslh24JVCe8fhNLahAsdaXSnQXN9kF/beDLdeg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(39860400002)(396003)(366004)(376002)(346002)(451199021)(110136005)(31686004)(31696002)(4326008)(66946007)(66556008)(66476007)(86362001)(478600001)(83380400001)(38100700002)(2616005)(316002)(36756003)(186003)(41300700001)(6666004)(26005)(6512007)(6506007)(4744005)(2906002)(6486002)(8676002)(8936002)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NmxKaHZDZ0dMeEIxUXJJQXpZNDVvVGp4aFpDaVJVQmNkNUl5MTR3cWVmbmRC?=
- =?utf-8?B?QjAxSzVIaGVEWGc3V3NwNUpsbGQzRVZoVG1BNlV6TXVOREhBSmlLUElGTWdL?=
- =?utf-8?B?azd0UG1VenFYcXJ1UmFlbjRDZzJQZmhXMzJYdE11dlBYTHJjNFRZZnlIc0l3?=
- =?utf-8?B?MkZRUWo3TFlTbG4yb2xudW9zUTI0TzZZL0VpMFlaT0pZeDA2eitpSEw4b1hK?=
- =?utf-8?B?WFllSEp4WUovMWNYY0JMRVMwQktLcW5GV2NLcnNuTis4UWc1K1JHalBzMG53?=
- =?utf-8?B?VDBYTHN3YkFEdUJ1a21iK3dTT3dsUDczUEo4V0J2YmlhSWVOVmo3SnFvaDhG?=
- =?utf-8?B?VE15K0xXZ0FzS2lXSVNlREQxT2luUjhWY2RCU1IydkNQVGVvK1lXNUxDalJa?=
- =?utf-8?B?Tkl3by8wUEQrMTZOWTAwb0o4TEF4ZzR0MjM3YkVhMXRGTmpJYUtwdG1SV0xK?=
- =?utf-8?B?bWVkbm5jeTAyai9LK1llb0NZOEJGRGs2Zkt3QzVxVjdUZEFoRERzd3hrTHQ5?=
- =?utf-8?B?M1dRSFZjTUErRklrSG1wTy9vejY1dUhhYjNWblcwNGUrN0cxTGdsUlR4VUFk?=
- =?utf-8?B?ajFrQk9aMU5XbktVRnZjTzNqNHNvaStiTlhjS2w1RHo1dEhHbTNVeGVrQ2cw?=
- =?utf-8?B?aFZiTGpUL2pYT0ZDOXRTbUZkU2NucDlXcEtTbXVjNmhsRk40Z0J2bUdXNERD?=
- =?utf-8?B?eHBpa08zZHFuYjE0SjI1czlHbGRlZUhxQjlUdUcwSnVFbDdaU1RrbFphVUh6?=
- =?utf-8?B?RUpmQngzdGNzUU9Jc1IyTmtpUlVud29sekNnc3h3WFRCRkNNZ0E2Q0FiNVdi?=
- =?utf-8?B?TVNPbFQ2dGFJZE0wNDI4T3BVbjE4emcyZVhnaEFVRXlYNU9FdXJHMEpkSThJ?=
- =?utf-8?B?OWlXd3N3NDQ5NlR0c1VhTnNlTmxBdThia3NWbDk0a0lXbWpxK2ZGQm1NYkpH?=
- =?utf-8?B?T053N0dHbE8ra2VXWG4wR1lrVnhFN2lGYmdYbzJFSGtCdngzN2gwV0lSSFh0?=
- =?utf-8?B?ZDdybldCeEpnNzN1SkMrVWhVRE5hYVprekh2OU5YV2FBVHRtWDc5aFdLeGxG?=
- =?utf-8?B?TjRObU54UVl3TVFTM3ZwWkFXY0E0L0RxS1ZsT1BpanNmWDU2ZU1yWkJsejZB?=
- =?utf-8?B?SFMvWlFoeVo3L3NnVEU2WnVOT0V6UFVRcE5QOTNQa1RCaGVNTG81UkNCMG9E?=
- =?utf-8?B?alorMzhlN3d5UWp3cDRKRUc2MUlKVnU1YjRLWm5mRU1UOVR4bTV4cW51WWFx?=
- =?utf-8?B?TVNSdTJSckl6a04xOE5RejlLTTVHYUtxS0ZZSHNFSFI5WWFFcGZFQzc0RmZM?=
- =?utf-8?B?MzNZcWplWlp5MGRIdHViMUpjYVpTZ1ZyNytFOU5HQ3JSOE5aWE9SNXFSeTlI?=
- =?utf-8?B?SWhBa3A4dGNMUUhldVdNYzJFblhDQmExMGY1RkVCaW54MExLeFpJU2diZGh3?=
- =?utf-8?B?VCsrVFNMa3lrUGJTSU5STjBNMlJMQ1VqbXFoZ1ZaTk5ueFFySGQ4Q21SQUdv?=
- =?utf-8?B?bWlLSzVzS2pqc3AvT1p2RVlmL284bnJiVldUMkJrSVJoa1c4RGl0REROQmZv?=
- =?utf-8?B?ZW1zWDcrOGdFZXZHK044S0I3U2hTQXQ1dW9seTdkMTBGUlZ3bGtDTUFIRU9y?=
- =?utf-8?B?Y0V0QzNrUEMwV3lmK1RhTUhCMjgwWXFEaUh4Znkwa1Exb2RPUGlsOENaU0FN?=
- =?utf-8?B?blZqVEl4MnZsWHhxZStXcisvSkx6bGVjN05yd2tUR3FpTjdkMnBPcmVTVzFE?=
- =?utf-8?B?aDRtS2w5Tk9GK096MG1JOW4rVFRQTDUzV2hKMEQ0Z1BJT29EQWpyeEZWTWNt?=
- =?utf-8?B?WXJpZDBWcG42RWYrVkF1YUd2VUFXOWxSeGtITzdjOVlZVlhwaWJHUEpQQWlC?=
- =?utf-8?B?S3RrTlVXSVNKa2dSYlduWE81VTY3SnJGaWViY0hWQVIrbjd3L0dUMmVjeFlj?=
- =?utf-8?B?YUF6aGF3SnBoMG02Z3REaGdiWnE2Mkc0bTJnOUNNSTVuR1Rmb0pka1JWVTJY?=
- =?utf-8?B?M2xXWWJVaWVjOGVXL0VIRUNtL09GOE4yVFgrckxvZTBON1RkamZOaFV1d3ZM?=
- =?utf-8?B?alZWYXh3VW52Z1ZLalJTQ1VrWldqTUJZUDBrcURpYzhPSXdHZG5zVFZweWxn?=
- =?utf-8?Q?9GcQ=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: de5763d0-a255-44d8-8ee9-08db3f1128e1
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2023 06:58:33.8757
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: I55xPpllG5rmV9m/CPEtsPTmM/BRJhsjmuI5a1N60gBjsNhybdI5UxDhBHhse/nP
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6878
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH] erofs: remove unneeded icur field from struct
+ z_erofs_decompress_frontend
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     Yue Hu <zbestahu@gmail.com>, xiang@kernel.org, chao@kernel.org,
+        linux-erofs@lists.ozlabs.org
+Cc:     jefflexu@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        huyue2@coolpad.com, zhangwen@coolpad.com
+References: <20230417064136.5890-1-zbestahu@gmail.com>
+ <26cdf7b0-5d7d-68ba-da76-1ad800708946@linux.alibaba.com>
+In-Reply-To: <26cdf7b0-5d7d-68ba-da76-1ad800708946@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 16.04.23 um 16:38 schrieb Sui Jingfeng:
-> The dma_resv_wait_timeout() function return a value greater than zero
-> on success.
->
-> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
 
-Reviewed and pushed to drm-misc-next.
+
+On 2023/4/17 14:52, Gao Xiang wrote:
+> 
+> 
+> On 2023/4/17 14:41, Yue Hu wrote:
+>> From: Yue Hu <huyue2@coolpad.com>
+>>
+>> The icur field is only used in z_erofs_try_inplace_io(). Let's just use
+>> a local variable instead. And no need to check if the pcluster is inline
+>> when setting icur since inline page cannot be used for inplace I/O.
+
+Where do we check if the pcluster is inline?
+
+>>
+>> Signed-off-by: Yue Hu <huyue2@coolpad.com>
+> 
+> Nope, it's a behavior change.
+> Other users could feed more inplace I/O pages before I/O submission
+> to reduce memory consumption, it's common when applying stress model
+> in low memory scenarios.
+
+Oh, I misread it.  I think it can be done in this way although
+each following users will now rescan the whole array all the time.
+
+Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+
+> 
+> Thanks,
+> Gao Xiang
+> 
+>> ---
+>>   fs/erofs/zdata.c | 13 +++++--------
+>>   1 file changed, 5 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+>> index f759152feffa..f8bf2b227942 100644
+>> --- a/fs/erofs/zdata.c
+>> +++ b/fs/erofs/zdata.c
+>> @@ -554,9 +554,6 @@ struct z_erofs_decompress_frontend {
+>>       /* used for applying cache strategy on the fly */
+>>       bool backmost;
+>>       erofs_off_t headoffset;
+>> -
+>> -    /* a pointer used to pick up inplace I/O pages */
+>> -    unsigned int icur;
+>>   };
+>>   #define DECOMPRESS_FRONTEND_INIT(__i) { \
+>> @@ -707,11 +704,13 @@ static bool z_erofs_try_inplace_io(struct z_erofs_decompress_frontend *fe,
+>>                      struct z_erofs_bvec *bvec)
+>>   {
+>>       struct z_erofs_pcluster *const pcl = fe->pcl;
+>> +    /* file-backed online pages are traversed in reverse order */
+
+Although please help refine the comment below:
+
+	/* scan & fill inplace I/O pages in the reverse order */
 
 Thanks,
-Christian.
+Gao Xiang
 
-> ---
->   drivers/dma-buf/dma-resv.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/dma-buf/dma-resv.c b/drivers/dma-buf/dma-resv.c
-> index 2a594b754af1..b6f71eb00866 100644
-> --- a/drivers/dma-buf/dma-resv.c
-> +++ b/drivers/dma-buf/dma-resv.c
-> @@ -660,7 +660,7 @@ EXPORT_SYMBOL_GPL(dma_resv_get_singleton);
->    * dma_resv_lock() already
->    * RETURNS
->    * Returns -ERESTARTSYS if interrupted, 0 if the wait timed out, or
-> - * greater than zer on success.
-> + * greater than zero on success.
->    */
->   long dma_resv_wait_timeout(struct dma_resv *obj, enum dma_resv_usage usage,
->   			   bool intr, unsigned long timeout)
-
+>> +    unsigned int icur = pcl->pclusterpages;
+>> -    while (fe->icur > 0) {
+>> -        if (!cmpxchg(&pcl->compressed_bvecs[--fe->icur].page,
+>> +    while (icur > 0) {
+>> +        if (!cmpxchg(&pcl->compressed_bvecs[--icur].page,
+>>                    NULL, bvec->page)) {
+>> -            pcl->compressed_bvecs[fe->icur] = *bvec;
+>> +            pcl->compressed_bvecs[icur] = *bvec;
+>>               return true;
+>>           }
+>>       }
+>> @@ -877,8 +876,6 @@ static int z_erofs_collector_begin(struct z_erofs_decompress_frontend *fe)
+>>       }
+>>       z_erofs_bvec_iter_begin(&fe->biter, &fe->pcl->bvset,
+>>                   Z_EROFS_INLINE_BVECS, fe->pcl->vcnt);
+>> -    /* since file-backed online pages are traversed in reverse order */
+>> -    fe->icur = z_erofs_pclusterpages(fe->pcl);
+>>       return 0;
+>>   }
