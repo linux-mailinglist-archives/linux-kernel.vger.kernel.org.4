@@ -2,69 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CC8F6E577A
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 04:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2111C6E5588
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 01:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbjDRC0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 22:26:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60104 "EHLO
+        id S230253AbjDQX6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 19:58:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230375AbjDRC0T (ORCPT
+        with ESMTP id S229740AbjDQX6g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 22:26:19 -0400
-Received: from mail.peterfykh.hu (mail.peterfykh.hu [84.206.67.96])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97B240D2
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 19:26:15 -0700 (PDT)
-Received: from mail.peterfykh.hu (localhost [127.0.0.1])
-        by mail.peterfykh.hu (Postfix) with ESMTP id 84E041177;
-        Tue, 18 Apr 2023 01:57:45 +0200 (CEST)
+        Mon, 17 Apr 2023 19:58:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B391101;
+        Mon, 17 Apr 2023 16:58:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA0166125D;
+        Mon, 17 Apr 2023 23:58:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4762CC433D2;
+        Mon, 17 Apr 2023 23:58:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681775914;
+        bh=PGFpD0GYJaRNOFKJZnEXcZ1DrsfKc5ed2PJqcpwgF0Y=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=nkKVN+uXGoAHBDbhVk0vwkXzGy4vq0aSTi6Rkyf1FmaXdT9VhjSTRBU9COpHZKL9A
+         mViTITPqYY3by3YMdcI00WF0wjkw46as3/ebDlcJZrMy2a+eaK6XcxyPkOK6r2mYMu
+         7djRfu37gZM2mFS+J5BzMDgzuJrlScxbD2sP1FsxSdwGjpl/VaII5aSe08oPHbFc78
+         sO0Nncgm8+UkIzPxttrPigHu3W6nLd/DvynDiSoTcaiQWlMGqy/AxuohT+g4ARMjLT
+         nHlvgde9DeCLRb6dPm7fzUBG20fnZRrqtUgNd3QjM4PJCZO9J58o2mjVzHexY8nd6A
+         d/a6tCUHC0J6A==
+Message-ID: <d4e5d8c8-52ef-3a6c-64a9-ea6c499cb5f0@kernel.org>
+Date:   Tue, 18 Apr 2023 08:58:30 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4 01/11] PCI: rockchip: Remove writes to unused registers
+Content-Language: en-US
+To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>,
+        alberto.dassatti@heig-vd.ch
+Cc:     xxm@rock-chips.com, Shawn Lin <shawn.lin@rock-chips.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Brian Norris <briannorris@chromium.org>,
+        Caleb Connolly <kc@postmarketos.org>,
+        Corentin Labbe <clabbe@baylibre.com>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Arnaud Ferraris <arnaud.ferraris@collabora.com>,
+        Judy Hsiao <judyhsiao@chromium.org>,
+        Hugh Cole-Baker <sigmaris@gmail.com>,
+        linux-pci@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20230417092631.347976-1-rick.wertenbroek@gmail.com>
+ <20230417092631.347976-2-rick.wertenbroek@gmail.com>
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <20230417092631.347976-2-rick.wertenbroek@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Date:   Tue, 18 Apr 2023 01:57:45 +0200
-From:   MK <sebeszet@peterfykh.hu>
-To:     undisclosed-recipients:;
-Subject: Hello sunshine, how are you?
-Reply-To: marion.K08@bahnhof.se
-Mail-Reply-To: marion.K08@bahnhof.se
-Message-ID: <73f25765f6b58f5dbcf3a26ec7364a17@peterfykh.hu>
-X-Sender: sebeszet@peterfykh.hu
-User-Agent: Roundcube Webmail/1.2.3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=peterfykh.hu; s=mail; t=1681775879; bh=EK7FNzGPLm9pid/gmdFBrbarvHS9H0a48U7GgrEq6Uo=; h=MIME-Version:Content-Type:Content-Transfer-Encoding:Date:From:To:Subject:Reply-To:Message-ID; b=uC7WHjqTrFAg10SLXW8+MXT+Qur7exwfyWB2mmR6YGDcxtzadBldDX1N3UpRP30aojbveWRGeFTlU2peS9vUANH7zbFMs4qoDnNMBQzuzQsfWh5lww1DY8W5QfGUmuBFMeNVgffcdOjeQAMphdEqLaKEZ7SaH5Ij5Ylepqp/rYo=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I am sorry to bother you and intrude your privacy. I am single,
-  lonely and in need of a caring, loving and romantic companion.
+On 4/17/23 18:26, Rick Wertenbroek wrote:
+> Remove write accesses to registers that are marked "unused" (and
+> therefore read-only) in the technical reference manual (TRM)
+> (see RK3399 TRM 17.6.8.1)
+> 
+> Signed-off-by: Rick Wertenbroek <rick.wertenbroek@gmail.com>
+> Tested-by: Damien Le Moal <dlemoal@kernel.org>
 
-I am a secret admirer and would like to explore the opportunity to
-learn more about each other. I know it is strange to contact you
-this way and I hope you can forgive me. I am a shy person and
-this is the only way I know I could get your attention. I just want
-to know what you think and my intention is not to offend you.
-I hope we can be friends if that is what you want, although I wish
-to be more than just a friend. I know you have a few questions to
-ask and I hope I can satisfy some of your curiosity with a few
-answers.
-
-I believe in the saying that 'to the world you are just one person,
-but to someone special you are the world'. All I want is love,
-romantic care and attention from a special companion which I am
-hoping would be you.
-
-I hope this message will be the beginning of a long term
-communication between us, simply send a reply to this message, it
-will make me happy.
+Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
 
 
-Hugs and kisses,
-
-Marion.
