@@ -2,208 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6F46E3E90
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 06:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05DE96E3E93
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 06:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjDQElL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 00:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40514 "EHLO
+        id S229929AbjDQEln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 00:41:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjDQElB (ORCPT
+        with ESMTP id S230019AbjDQElV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 00:41:01 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E65BAD;
-        Sun, 16 Apr 2023 21:41:00 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33H4UWGF023450;
-        Mon, 17 Apr 2023 04:40:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=EN0FMN5loUlgn1vfCleo2+w2tmhm6o9jKmgdg156a4Q=;
- b=Bv4Y0uYH4hOUg/lnG8tAFGa1GlWAW+trllSB2z5IugjIhsupi9eCXng/ivfCPHstpw1e
- Pyl3bu7HUNwZ5Q4DNqL4+BtGmie/fuzxTwZiqzsy7w+LJbU72keyiGWhuL/XhvGFPL8C
- 1qDtT3jN+4xhM01/rNKO/w+YPTc5LP7FiIf2XC1tOFol6q+Kps/NyctCotirc+GQgH3m
- JElBo7+qawjIUKZOJulzU42eIf8MF1iT5rm0oxSKisy5JN45Mz9kuuAt5mrRVl35GUGB
- D5JvYq3qbIHo5aaePbVloWVLxWK0IUVyKXyiSXhZpvYa+P5FhbnsGnM1iDWrpFKWnrUN fg== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pymp4akbx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Apr 2023 04:40:55 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33H4esxs024149
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Apr 2023 04:40:54 GMT
-Received: from [10.217.216.152] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Sun, 16 Apr
- 2023 21:40:51 -0700
-Message-ID: <ce6c952b-2e2b-67d9-5023-e740ed798758@quicinc.com>
-Date:   Mon, 17 Apr 2023 10:10:48 +0530
+        Mon, 17 Apr 2023 00:41:21 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2103.outbound.protection.outlook.com [40.107.255.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2EFB2D73;
+        Sun, 16 Apr 2023 21:41:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Q3tBRpFn7ei073fUYF7zo8HHTVz5EMEyXkh7DtI4IvFb/Xpxef/RtnODR2j2w98851VitW6l4IH7X22ZBXrBv0jqiUM2H3JaFPuov2lHM2OrKw4c2hmrbYpFD3PL7SONDC2CnZjS4Tf+1bBw/T5XHTEzdFZcf0jRguUZnNSjpRvQMg80WGViv+f3rFGtj5htSlGhw8C4+352/j2ce9HLEOVv5a7g+AO2tqF1hpuhj+7ICU0pHSiN74BKoh2atQjyT5AzdGSKnBWibgjVJpgejUYDJ+aYCQ/NsjmUPMmUVy2JyUoSx8q5oEfAlep1au/USgU6LjjpYKV8QnBKMmJTzQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LRCyXawd2J7MaaYWT9bRYzad+yct5dkOwX5dc//iFz8=;
+ b=fv/F5xZQ72kdyPPR4az2SdwxM4YhwaqrrqbDG/WTF0bNL7oFq6bEd6JuiRMn/5AlwewU0iHr/LidE0dUf+yl54/93xXogPDcF9u6wvhZpoaZDAN7iOeIfiKE/79o5G/nUuBSRRYxJMIYrNCaNCgmi8boAa69lWT2KrSkrPVTXh9oXgU3hBQZYOSrnYoEEDE5n6vgeNzek2y2AnXBm5I/tcxeeAbh63RiOR51j+roPVTuk8/S52W2A/i0SdW+av9zf2AyeVjR2+qFogAWmcmzlY68hanYSrUaLhcRhtCTt2Slav9qj62FxrwlbKCsFeiyyu6GtpUhjqsyl+lAN24prA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LRCyXawd2J7MaaYWT9bRYzad+yct5dkOwX5dc//iFz8=;
+ b=R3IBZ8LizmaxSCVLvuKgFC7VQ7HjlxQvx92PuWqDPgDcjTQbnfxJI58vN1W4Vw+gVaTCgEowtTbEtWUt4VTmgrOUAaEG0AqCihP+2aQKqlNxJ0olgXywCsDwakdT9Py5RdCd4MJY5cG9wfXaNdTDDAc45wWE5CuDaW/NHpfnGtgu/cWIHkfxGjPzOjzgCXlhMHCLiwb4kFIw0nr7sPrq2h8wP5+/wIod+XlrM4YhhT0GGa4hfAPdWgvMEhjVTL2x4zh5p0i4yf+zyMBcjF33AAA9bohQm4Z80o7G51Anf7R0MPAFlPhWuHOOKT8k/+7l2IqDchojRkJnkIspCChVSA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB5275.apcprd06.prod.outlook.com (2603:1096:400:1f5::6)
+ by KL1PR0601MB3875.apcprd06.prod.outlook.com (2603:1096:820:21::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Mon, 17 Apr
+ 2023 04:41:13 +0000
+Received: from TYZPR06MB5275.apcprd06.prod.outlook.com
+ ([fe80::16db:8a6e:6861:4bb]) by TYZPR06MB5275.apcprd06.prod.outlook.com
+ ([fe80::16db:8a6e:6861:4bb%6]) with mapi id 15.20.6277.035; Mon, 17 Apr 2023
+ 04:41:12 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Yangtao Li <frank.li@vivo.com>,
+        linux-f2fs-devel@lists.sourceforge.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] docs: f2fs: specify extent cache for read explicitly
+Date:   Mon, 17 Apr 2023 12:41:00 +0800
+Message-Id: <20230417044100.56409-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2P153CA0024.APCP153.PROD.OUTLOOK.COM
+ (2603:1096:4:190::13) To TYZPR06MB5275.apcprd06.prod.outlook.com
+ (2603:1096:400:1f5::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] clk: qcom: common: Handle invalid index error
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230303092859.22094-1-quic_tdas@quicinc.com>
- <20230303092859.22094-2-quic_tdas@quicinc.com>
- <CAA8EJpq5xBF=Wt-1_hGR-7qZHREcALurmR4ucmMmZaC-R_7Ttg@mail.gmail.com>
-From:   Taniya Das <quic_tdas@quicinc.com>
-In-Reply-To: <CAA8EJpq5xBF=Wt-1_hGR-7qZHREcALurmR4ucmMmZaC-R_7Ttg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: NJfFyt5rPfqQVDjXd1pUl6al8DyzF4eT
-X-Proofpoint-ORIG-GUID: NJfFyt5rPfqQVDjXd1pUl6al8DyzF4eT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-17_02,2023-04-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- impostorscore=0 spamscore=0 mlxlogscore=658 lowpriorityscore=0
- phishscore=0 priorityscore=1501 bulkscore=0 adultscore=0 suspectscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304170041
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYZPR06MB5275:EE_|KL1PR0601MB3875:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0f931cd9-0c39-4d53-2afd-08db3efdf8e4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Wac1rSq3Sl2mYZKklXE37B1c+I2Tsm4N+rXiN1erF7QEyuq/gp64/uYsi8R0+TA9s3BZF28rhfJ158dOen6HAPH66LCyWytzdwtjegGhQ5kifWPEY1W1gJbj39Fs0uCycWE3Qd96lg82CrymbImXrxQc+KY1t+OxqsCmlgUwcdzN6MOdDHYHGnVYdqlCK5lfGc9TFehgF+uaobMG5k4oK9vuKLzzGepzec45RdROmoDW1x/0AR2RfMIRNtoGwlEmhelRgGAL6ux7pE2V27UIAJlUBrEW4CHB02RGRlPeHoeRH/iO1A6Iv/BrLVsc/xG/7djzbxi7J/h2DYbH2w0XHw50A0NVATPic2QkdgToIOJQJQg8KaBJlRoovPMznT399Dvp+U3AuztG2cdXbAUUqz+/Ca6VDHF8E0NgXSkp2Cu7H/dC40a/zXK4s8dJHLa5lxOhViLYwkAAUyf0h8SCv4Oocxc7qOzS3YX3X+8oceVM7FILmxOH/7B1+0MPacQP2A9ETgC7FVbWzosr/k/eEesKW8DESAxofvSPEfoevoq6eR2IGtV0QhfGqMHj3oqIoZeyD4SGzWXJu4YRTz3+CfE3DWG05TrKSwm+A6GjHqH+Clj9PbcPHwco2ASXVBfW
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB5275.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(396003)(376002)(136003)(39860400002)(451199021)(4326008)(316002)(110136005)(66556008)(66476007)(66946007)(186003)(6506007)(1076003)(26005)(6512007)(38100700002)(38350700002)(2616005)(83380400001)(41300700001)(5660300002)(8676002)(8936002)(478600001)(52116002)(6486002)(6666004)(36756003)(86362001)(2906002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cpJVbAjc6mPD7rMac30QqWzm+t83FyOL1x66hQcfZtMMnxcSWdfzeTSJvQkr?=
+ =?us-ascii?Q?NoAPNQy9lfRPQuzxjmZgOZ4kLPtV1VKdHJaN0/JKii32ke2E+wfk74KGMatw?=
+ =?us-ascii?Q?9lcYsIrzoeIZhWT00U6UZ/kT54FfhPiqI1oEUU8RCtF3tW1DIvvxZS3RU+pS?=
+ =?us-ascii?Q?JufA4J/STFugOUwU0OA8grocXOWZ7n+JbB+yitPtUMfyKXFVAmjV1F5+UfZy?=
+ =?us-ascii?Q?5d1NVBQznm98+zZOS8DmZyEsAT1crjiq38VVFFxDN0axfsliib8NrJjkOoWX?=
+ =?us-ascii?Q?rbdatfWD/BY5gvzyj0AtiLn3CEaBOykmiYyY1GduQu3l1ALiI4dn2YWxFh6O?=
+ =?us-ascii?Q?fc6Y0zu6yawaOCUhY0WshvUtzZqW9sKzHglKaH5jJbxGVCCCT5kyG6bLTY5J?=
+ =?us-ascii?Q?G3cLF7RmfDpOQ352+ZuMghAWMb4GbKvBBGMY8nhZWEK3VoVBSlhW2ENiDmhE?=
+ =?us-ascii?Q?y/ytt57lIFqLFrk6rkFlflv6vhrAJhS4Qv1iyhrTFnrYPSI/36RMWFITNR0n?=
+ =?us-ascii?Q?/hk4n9p4JKdClemEKtkUuWsLxhYrMm4LgMvXyEcw61vHU3BMFWoJ1/Aoa3ce?=
+ =?us-ascii?Q?mZ5r8YMSwcZiYdRqNRmGvFSfFFol52H2VuUpSFhKjK7lNRGxC4zF6312C2Vd?=
+ =?us-ascii?Q?27XM60CUiug2oDSh32fk6b2gSK88tS2b0RiOino0Hoxo4XgsYxBt9A9YUQyx?=
+ =?us-ascii?Q?1ktjzA2ZwqocI/NFqgO0F3iVn6kDffZ3K5UtmHoqkH7i1XJ+9UI0t/onSrKE?=
+ =?us-ascii?Q?UJcJw0VG5UBpX00FXZt7rNlkdvGq/6ITSk44L6+dVYJNwc+0XvF2gCgrNgzr?=
+ =?us-ascii?Q?XMxhWvSep7QYi+XrCGRq4xf652SeLzHHk68iTpa00baXCf6yGVOuu4RK+FWP?=
+ =?us-ascii?Q?NoaEbk+k8XDoFgkmUgVn2wc0mNiJgd3NXjl96ZUicuE/fIbuA/GKS/Pujx8j?=
+ =?us-ascii?Q?16W9gGkSl9fWMYeFtH/C+V2Hs517djhJnoUh3S3gd1aJ7shyfMKyfuGFf4rM?=
+ =?us-ascii?Q?FLA9U4CEmG6adSWEctB8uEzA5qtk+GFT5P1xk0FdCSA/dpxOYjErHiMseuv4?=
+ =?us-ascii?Q?kGOCvGw0i4h/uy6VuCkENQ/TgXTL2wJ5IqdBPXSN05vQbh1QlfFue7uIXoiF?=
+ =?us-ascii?Q?PPC6ecqglGeWnCexk/PbL/5PrqJBdI6bMpGnvI0yGrDVrvARRiIpeol9gY8B?=
+ =?us-ascii?Q?j27yArJR2pbDgugO0n3qW1m1w2r/uRRtAnf+p0V2uqglNEDlooigeFDYN6W2?=
+ =?us-ascii?Q?LTxG6nIOpX+3Hf+4a4LwFoItQa4H9Vn4/DRxSlh3rcznzZbahH56b8JCwyht?=
+ =?us-ascii?Q?5HpgncCGDzGUWtAzv18diB/1TbkIbImxsByWrj4+D1gJFLtHt/m/wytkvz68?=
+ =?us-ascii?Q?dbFqZF3mk8HpOhp3sy2kbI/5Ve+Urf4QZmA7XIc3m2Rmg80iDt+1XrzGm4Ry?=
+ =?us-ascii?Q?mJG8jF01qJaH0yzbFVCMj+/oNaPU4lbQaGiXjgMqmWwU49ctfQv+LVV7/r3j?=
+ =?us-ascii?Q?XiEqklJAR2TW1/4baMVW/6JSuHyzk9+tzSe7tGGC+irBWnKcZSL3eTvOu7mm?=
+ =?us-ascii?Q?9cILrROYGAISX5Tj+JZenB1tV4yt50P2ccxH7Bdb?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0f931cd9-0c39-4d53-2afd-08db3efdf8e4
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB5275.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2023 04:41:12.9088
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JNSAvRu/39euGZmiUZDPQP3sUvqBrYh5PfYsAl5rG4Q7Q6DczAhKQ8SqhCTlbNSSX7TP8j7thStfMVy3NLj9SQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB3875
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
+Let's descrbie it's read extent cache.
 
-Thanks for the comments.
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+v2:
+-s/an/a
+ Documentation/filesystems/f2fs.rst | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-
-On 3/3/2023 4:14 PM, Dmitry Baryshkov wrote:
-> On Fri, 3 Mar 2023 at 11:30, Taniya Das <quic_tdas@quicinc.com> wrote:
->>
->> Introduce start_index to handle invalid index error
->> seen when there are two clock descriptors assigned
->> to the same clock controller.
-> 
-> Please provide details of the exact case that you are trying to solve
-> (this might go to the cover letter). I think the commit message is
-> slightly misleading here. Are you trying to add error messages or to
-> prevent them from showing up?
-> 
-
-We are trying to avoid error messages from showing up.
-
-> I'm asking because error messages do not seem to correspond to patch
-> 2. You add start_index to make the kernel warn for the clock indices
-> less than LPASS_AUDIO_CC_CDIV_RX_MCLK_DIV_CLK_SRC = 4, while quoted
-> messages show indices 5,6,7.
-> 
-
-Right, we want the kernel to warn if the clock index is less than 
-start_index, along with that we also want to handle the case where 
-num_rclks is uninitialized because of same clock descriptor being 
-assigned to two clock controllers.
-
-Earlier Invalid index error was showing up for valid indices 5,6,7 
-because of the simple if check(idx >= num_rclks), hence we enhanced the 
-checks to handle the above case and compare the index to the start_index 
-+ num_rclks, instead of simply comparing it with num_clks.
-
-> Nit: please don't overwrap the commit message, the recommended line
-> width is about 72-77 chars.
-> 
-
-Done.
-
->>
->> [ 3.600604] qcom_cc_clk_hw_get: invalid index 5
->> [ 3.625251] qcom_cc_clk_hw_get: invalid index 6
->> [ 3.648190] qcom_cc_clk_hw_get: invalid index 7
-> 
->>
->> Fixes: 120c15528390 ("clk: qcom: Migrate to clk_hw based registration and OF APIs")
->> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
->> ---
->>   drivers/clk/qcom/common.c | 12 ++++++++----
->>   drivers/clk/qcom/common.h |  1 +
->>   2 files changed, 9 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/clk/qcom/common.c b/drivers/clk/qcom/common.c
->> index 75f09e6e057e..0e80535b61f2 100644
->> --- a/drivers/clk/qcom/common.c
->> +++ b/drivers/clk/qcom/common.c
->> @@ -21,6 +21,7 @@ struct qcom_cc {
->>          struct qcom_reset_controller reset;
->>          struct clk_regmap **rclks;
->>          size_t num_rclks;
->> +       u32 rclks_start_index;
->>   };
->>
->>   const
->> @@ -226,12 +227,13 @@ static struct clk_hw *qcom_cc_clk_hw_get(struct of_phandle_args *clkspec,
->>          struct qcom_cc *cc = data;
->>          unsigned int idx = clkspec->args[0];
->>
->> -       if (idx >= cc->num_rclks) {
->> +       if (idx >= cc->rclks_start_index && idx < cc->num_rclks)
->> +               return cc->rclks[idx] ? &cc->rclks[idx]->hw : NULL;
->> +       else if (idx < cc->rclks_start_index && idx >= cc->num_rclks)
->>                  pr_err("%s: invalid index %u\n", __func__, idx);
->> -               return ERR_PTR(-EINVAL);
->> -       }
->>
->> -       return cc->rclks[idx] ? &cc->rclks[idx]->hw : NULL;
->> +       return ERR_PTR(-EINVAL);
->> +
->>   }
->>
->>   int qcom_cc_really_probe(struct platform_device *pdev,
->> @@ -281,6 +283,8 @@ int qcom_cc_really_probe(struct platform_device *pdev,
->>
->>          cc->rclks = rclks;
->>          cc->num_rclks = num_clks;
->> +       if (desc->start_index)
->> +               cc->rclks_start_index = desc->start_index;
->>
->>          qcom_cc_drop_protected(dev, cc);
->>
->> diff --git a/drivers/clk/qcom/common.h b/drivers/clk/qcom/common.h
->> index 9c8f7b798d9f..924f36af55b3 100644
->> --- a/drivers/clk/qcom/common.h
->> +++ b/drivers/clk/qcom/common.h
->> @@ -23,6 +23,7 @@ struct qcom_cc_desc {
->>          const struct regmap_config *config;
->>          struct clk_regmap **clks;
->>          size_t num_clks;
->> +       u32 start_index;
->>          const struct qcom_reset_map *resets;
->>          size_t num_resets;
->>          struct gdsc **gdscs;
->> --
->> 2.17.1
->>
-> 
-> 
-> --
-> With best wishes
-> 
-> 
-> 
-> Dmitry
-
+diff --git a/Documentation/filesystems/f2fs.rst b/Documentation/filesystems/f2fs.rst
+index c57745375edb..84911b7aff25 100644
+--- a/Documentation/filesystems/f2fs.rst
++++ b/Documentation/filesystems/f2fs.rst
+@@ -163,11 +163,11 @@ barrier			 If this option is set, cache_flush commands are allowed to be
+ fastboot		 This option is used when a system wants to reduce mount
+ 			 time as much as possible, even though normal performance
+ 			 can be sacrificed.
+-extent_cache		 Enable an extent cache based on rb-tree, it can cache
+-			 as many as extent which map between contiguous logical
++extent_cache		 Enable a read extent cache based on rb-tree, it can cache
++			 many extents which map between contiguous logical
+ 			 address and physical address per inode, resulting in
+ 			 increasing the cache hit ratio. Set by default.
+-noextent_cache		 Disable an extent cache based on rb-tree explicitly, see
++noextent_cache		 Disable a read extent cache based on rb-tree explicitly, see
+ 			 the above extent_cache mount option.
+ noinline_data		 Disable the inline data feature, inline data feature is
+ 			 enabled by default.
 -- 
-Thanks & Regards,
-Taniya Das.
+2.35.1
+
