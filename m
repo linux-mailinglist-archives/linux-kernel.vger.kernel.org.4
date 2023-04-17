@@ -2,190 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66DB76E42F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF2D6E42FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230097AbjDQI4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 04:56:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58592 "EHLO
+        id S230265AbjDQI5R convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 17 Apr 2023 04:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjDQI4p (ORCPT
+        with ESMTP id S230102AbjDQI5O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 04:56:45 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D699346BF;
-        Mon, 17 Apr 2023 01:56:42 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33H8uUbb041635;
-        Mon, 17 Apr 2023 03:56:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1681721790;
-        bh=yzptaXuOq27eKuFA1U5AHvuUaV8N+INkrgU3LkJGkzg=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=vX9M0Pmevcx4H6ERbAGrUdcdEAjHtFoyavYjeyPlvc91pghsGHTeSyokpHSxBPpYO
-         AJXkfsPoOOYvgwExmrLIvo0V2OTaV1A5E1xEOcNHSD8pDPPq3SWpqaDadAUDfsB3VW
-         Q28VQmpJn0SIs+MPjkeoPHyhSijYyw394FsrdzNI=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33H8uT58021083
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 17 Apr 2023 03:56:30 -0500
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 17
- Apr 2023 03:56:29 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 17 Apr 2023 03:56:29 -0500
-Received: from [172.24.145.247] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33H8uQA3077069;
-        Mon, 17 Apr 2023 03:56:27 -0500
-Message-ID: <d4a017e6-6df4-fc50-49c4-12c53719b7c0@ti.com>
-Date:   Mon, 17 Apr 2023 14:26:26 +0530
+        Mon, 17 Apr 2023 04:57:14 -0400
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6424EDF;
+        Mon, 17 Apr 2023 01:57:07 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id o11so6006552ybk.11;
+        Mon, 17 Apr 2023 01:57:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681721826; x=1684313826;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rtUWIJu6Ns0zOdXgId6MZyD/lN9k8BpY4Fb8foShQOs=;
+        b=Sodx6yV/BnJxGw7H8+G0BTk7whqvpAHu2KkZpYA0LuKYVoI/drhJQt+Du0Q/pwzdH4
+         cSbvoNumG/9zDh460GXWwurZx3JipbtxwaB7+benH/cxlUmqZufTN7SHlH6NUCaeqw05
+         rc18pQkAyC+YDQN0Irp9RRDY+WCunuUcd6tHdVRqld+tmmo3EAgaISdaD8WDuCWK+1kk
+         uXf9KYGm0W/7LPiddFC4uvneExSUK4WPd+nGH7PZZwNRTBiUiJRTNdF6Lc0GuZKMRRiI
+         boAQ0R4zr+eUUP/YFidmC7J88lmcafCIFvGXUi463eyKYGvv+vecsSKQmu01vkXa1oXJ
+         g6VQ==
+X-Gm-Message-State: AAQBX9cUHrWbE04gBTMFmSHyERrlvv1JBtDYix4zVB7LsCAUsiXTtYBk
+        WSjE3ESApQM2rIATdIKY9QDpTnj1MX9ttQ==
+X-Google-Smtp-Source: AKy350Y9IpHajHkecLsIIwjWmHZUGw72waksAEkDIrAwwcshEIkqTWuFlo9GgH1d+Gl+3WNIkcNKBQ==
+X-Received: by 2002:a25:c714:0:b0:b8e:e029:7961 with SMTP id w20-20020a25c714000000b00b8ee0297961mr18025449ybe.34.1681721826173;
+        Mon, 17 Apr 2023 01:57:06 -0700 (PDT)
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
+        by smtp.gmail.com with ESMTPSA id b1-20020a25cb01000000b00b92579d3d7csm399450ybg.52.2023.04.17.01.57.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Apr 2023 01:57:05 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-54fe82d8bf5so96008127b3.3;
+        Mon, 17 Apr 2023 01:57:05 -0700 (PDT)
+X-Received: by 2002:a81:4407:0:b0:54f:bb6f:3deb with SMTP id
+ r7-20020a814407000000b0054fbb6f3debmr8857925ywa.4.1681721824852; Mon, 17 Apr
+ 2023 01:57:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/3] dt-bindings: misc: esm: Add ESM support for TI K3
- devices
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <u-boot@lists.denx.de>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <nm@ti.com>, <vigneshr@ti.com>, <u-kumar1@ti.com>
-References: <20230414105225.194195-1-n-francis@ti.com>
- <20230414105225.194195-2-n-francis@ti.com>
- <40498f71-d0cd-e7af-6515-c60a8d1edce8@linaro.org>
-From:   Neha Malcom Francis <n-francis@ti.com>
-In-Reply-To: <40498f71-d0cd-e7af-6515-c60a8d1edce8@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230412185608.64628-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20230412185608.64628-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20230412185608.64628-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 17 Apr 2023 10:56:53 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU9qrSaJqNL_PsrvbyrBAEB17yVMmLPon8AbvE3kjbTUQ@mail.gmail.com>
+Message-ID: <CAMuHMdU9qrSaJqNL_PsrvbyrBAEB17yVMmLPon8AbvE3kjbTUQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] arm64: dts: renesas: rzv2l-smarc: Enable CRU, CSI support
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof
+Hi Prabhakar,
 
-On 14/04/23 17:10, Krzysztof Kozlowski wrote:
-> On 14/04/2023 12:52, Neha Malcom Francis wrote:
->> Document the binding for TI K3 ESM (Error Signaling Module) block.
->>
->> Signed-off-by: Neha Malcom Francis <n-francis@ti.com>
->> ---
->>   .../devicetree/bindings/misc/esm-k3.yaml      | 54 +++++++++++++++++++
->>   1 file changed, 54 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/misc/esm-k3.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/misc/esm-k3.yaml b/Documentation/devicetree/bindings/misc/esm-k3.yaml
->> new file mode 100644
->> index 000000000000..5e637add3b0e
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/misc/esm-k3.yaml
-> 
-> Filename matching compatible. Missing vendor prefix and device name.
-> 
->> @@ -0,0 +1,54 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +# Copyright (C) 2022 Texas Instruments Incorporated
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/misc/esm-k3.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Texas Instruments K3 ESM Binding
-> 
-> Drop: Binding
-> 
->> +
->> +maintainers:
->> +  - Neha Malcom Francis <n-francis@ti.com>
->> +
->> +description: |
->> +  The ESM (Error Signaling Module) is an IP block on TI K3 devices
->> +  that allows handling of safety events somewhat similar to what interrupt
->> +  controller would do. The safety signals have their separate paths within
->> +  the SoC, and they are handld by the ESM, which routes them to the proper
-> 
-> typo: handled
-> 
->> +  destination, which can be system reset, interrupt controller, etc. In the
->> +  simplest configuration the signals are just routed to reset the SoC.
-> 
-> There is no proper bindings directory for ESM? Misc is discouraged.
-> 
+Thanks for your patch!
 
-There is no other directory I see fit for a block like ESM; it could 
-either remain in misc/ or maybe create a directory error/ for all error 
-signaling and correction mechanisms? I see misc/xlnx,sd-fec.txt that 
-could also go in error/
+On Wed, Apr 12, 2023 at 8:56 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Enable CRU, CSI on RZ/V2L SMARC EVK and tie the CSI to the OV5645 sensor
+> using Device Tree overlay. RZ/G2L SMARC EVK and RZ/V2L SMARC EVK have the
+> same connections for connecting the CSI to OV5645 sensor so just reuse
+> the existing r9a07g044l2-smarc-cru-csi-ov5645.dtso and create a symbolic
+> link to this file for RZ/V2L SMARC EVK.
 
-What do you think is fit?
+Perhaps it makes more sense to rename r9a07g044l2-smarc-cru-csi-ov5645.dtso
+to rzg2l-smarc-cru-csi-ov5645.dtso instead?
 
->> +
->> +properties:
->> +  compatible:
->> +    const: ti,j721e-esm
->> +
->> +  reg:
->> +    items:
->> +      - description: physical address and length of the registers which
->> +          contain revision and debug features
-> 
-> Drop useless "physical address and length of the registers which". reg
-> cannot be anything else.
-> 
->> +      - description: physical address and length of the registers which
->> +          indicate strapping options
->> +
->> +  ti,esm-pins:
->> +    $ref: /schemas/types.yaml#/definitions/uint32-array
->> +    description: |
-> 
-> Do not need '|' unless you need to preserve formatting.
-> 
->> +      integer array of ESM event IDs to route to external event pin which can
->> +      be used to reset the SoC. The array can have an arbitrary amount of event
->> +      IDs listed on it.
-> 
-> What is ESM event ID? The property name suggests pins...
-> 
-> 
->> +    minItems: 1
->> +    maxItems: 255
->> +
->> +additionalProperties: false
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - ti,esm-pins
->> +
->> +examples:
->> +  - |
->> +    main_esm: esm@700000 {
-> 
-> Drop label.
-> 
+Gr{oetje,eeting}s,
 
-Thanks for the reviews! I'll send v2 after we decide on the location.
-
->> +        compatible = "ti,j721e-esm";
->> +        reg = <0x0 0x700000 0x0 0x1000>;
->> +        ti,esm-pins = <344>, <345>;
->> +    };
-> 
-> Best regards,
-> Krzysztof
-> 
+                        Geert
 
 -- 
-Thanking You
-Neha Malcom Francis
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
