@@ -2,214 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E87C6E4B39
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B256E4AD0
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230516AbjDQORG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 10:17:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42810 "EHLO
+        id S229804AbjDQOGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 10:06:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbjDQOQz (ORCPT
+        with ESMTP id S231134AbjDQOGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 10:16:55 -0400
-Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878CE59E6;
-        Mon, 17 Apr 2023 07:16:33 -0700 (PDT)
-Received: from van1shing-pc.localdomain ([10.12.182.0])
-        (user=silver_code@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 33HE5WJQ031085-33HE5WJR031085
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 17 Apr 2023 22:05:34 +0800
-From:   Wang Zhang <silver_code@hust.edu.cn>
-To:     Peter Korsgaard <peter@korsgaard.com>, Andrew Lunn <andrew@lunn.ch>
-Cc:     hust-os-kernel-patches@googlegroups.com,
-        Wang Zhang <silver_code@hust.edu.cn>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] i2c: ocores: use devm_ managed clks
-Date:   Mon, 17 Apr 2023 22:05:31 +0800
-Message-Id: <20230417140531.81853-1-silver_code@hust.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <843fab4d-0fdd-4610-91ed-1d8e9accbd25@lunn.ch>
-References: <843fab4d-0fdd-4610-91ed-1d8e9accbd25@lunn.ch>
+        Mon, 17 Apr 2023 10:06:48 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7D95261;
+        Mon, 17 Apr 2023 07:06:22 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 662D521A28;
+        Mon, 17 Apr 2023 14:06:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1681740361; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5mUuxKymXhjOKakNWGIOxAW/7IlZKVWPSwdxH/XYD7c=;
+        b=bFUAWa4exGrR+N0addrueDBSgLX0ve+bCGYg/IKFn5+7SrbnI6c5aa9Rn5XF0eHFU2ZrJG
+        LYzXpojKnoGJ37gzsenvW0afCThgZHsIdaT2GFS7i40Y01lZHs3H/uS8hgVQT//VPbESF+
+        A66u7bWR2mGI3kAbb5uRvleBhgDVeMk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1681740361;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5mUuxKymXhjOKakNWGIOxAW/7IlZKVWPSwdxH/XYD7c=;
+        b=n2ZcJ+P3x0YzYgvk4eZMTuLaYuGGr06Hvxf/42v+GDGMp6HNh2QXqkUcOpCKbVHSM1mFg7
+        CS4gVq+XSTtN/PBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DFD0E13319;
+        Mon, 17 Apr 2023 14:06:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id SSNHNUhSPWRGBgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 17 Apr 2023 14:06:00 +0000
+Message-ID: <132f1185-d61f-b8c7-8d6e-4e4280a1a4ad@suse.de>
+Date:   Mon, 17 Apr 2023 16:06:00 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: silver_code@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 16/19] arch/sh: Implement <asm/fb.h> with generic
+ helpers
+Content-Language: en-US
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        arnd@arndb.de, daniel.vetter@ffwll.ch, deller@gmx.de,
+        javierm@redhat.com, gregkh@linuxfoundation.org
+Cc:     linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, x86@kernel.org,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>
+References: <20230417125651.25126-1-tzimmermann@suse.de>
+ <20230417125651.25126-17-tzimmermann@suse.de>
+ <3c188e948506dc97112dcc070cf16e36209c6cc5.camel@physik.fu-berlin.de>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <3c188e948506dc97112dcc070cf16e36209c6cc5.camel@physik.fu-berlin.de>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------GRLvBPfqMPOps21m0NeYuHxf"
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch Warns:
-drivers/i2c/busses/i2c-ocores.c:701 ocores_i2c_probe() warn:
-missing unwind goto?
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------GRLvBPfqMPOps21m0NeYuHxf
+Content-Type: multipart/mixed; boundary="------------jOsx0SUaezXHVt7ObFmVoIUH";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, arnd@arndb.de,
+ daniel.vetter@ffwll.ch, deller@gmx.de, javierm@redhat.com,
+ gregkh@linuxfoundation.org
+Cc: linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-snps-arc@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org,
+ Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>
+Message-ID: <132f1185-d61f-b8c7-8d6e-4e4280a1a4ad@suse.de>
+Subject: Re: [PATCH v3 16/19] arch/sh: Implement <asm/fb.h> with generic
+ helpers
+References: <20230417125651.25126-1-tzimmermann@suse.de>
+ <20230417125651.25126-17-tzimmermann@suse.de>
+ <3c188e948506dc97112dcc070cf16e36209c6cc5.camel@physik.fu-berlin.de>
+In-Reply-To: <3c188e948506dc97112dcc070cf16e36209c6cc5.camel@physik.fu-berlin.de>
 
-If any wrong occurs in ocores_i2c_of_probe, the i2c->clk needs to be
-released. But the function returns directly in line 701 without freeing
-the clock. Even though we can fix it by freeing the clock manually if
-platform_get_irq_optional fails, it may not be following the best practice.
-The original code for this driver contains if (IS_ERR()) checks 
-throughout, explicitly allowing the driver to continue loading even if 
-devm_clk_get() fails.
+--------------jOsx0SUaezXHVt7ObFmVoIUH
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-While it is not entirely clear why the original author implemented this
-behavior, there may have been certain circumstances or issues that were not
-apparent to us. It's possible that they were trying to work around a bug by
-employing an unconventional solution.Using `devm_clk_get_enabled()` rather
-than devm_clk_get() can automatically track the usage of clocks and free
-them when they are no longer needed or an error occurs.
+SGkNCg0KQW0gMTcuMDQuMjMgdW0gMTU6MDIgc2NocmllYiBKb2huIFBhdWwgQWRyaWFuIEds
+YXViaXR6Og0KPiBIaSBUaG9tYXMhDQo+IA0KPiBPbiBNb24sIDIwMjMtMDQtMTcgYXQgMTQ6
+NTYgKzAyMDAsIFRob21hcyBaaW1tZXJtYW5uIHdyb3RlOg0KPj4gUmVwbGFjZSB0aGUgYXJj
+aGl0ZWN0dXJlJ3MgZmJkZXYgaGVscGVycyB3aXRoIHRoZSBnZW5lcmljDQo+PiBvbmVzIGZy
+b20gPGFzbS1nZW5lcmljL2ZiLmg+LiBObyBmdW5jdGlvbmFsIGNoYW5nZXMuDQo+Pg0KPj4g
+djI6DQo+PiAJKiB1c2UgZGVmYXVsdCBpbXBsZW1lbnRhdGlvbiBmb3IgZmJfcGdwcm90ZWN0
+KCkgKEFybmQpDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogVGhvbWFzIFppbW1lcm1hbm4gPHR6
+aW1tZXJtYW5uQHN1c2UuZGU+DQo+PiBDYzogWW9zaGlub3JpIFNhdG8gPHlzYXRvQHVzZXJz
+LnNvdXJjZWZvcmdlLmpwPg0KPj4gQ2M6IFJpY2ggRmVsa2VyIDxkYWxpYXNAbGliYy5vcmc+
+DQo+PiBDYzogSm9obiBQYXVsIEFkcmlhbiBHbGF1Yml0eiA8Z2xhdWJpdHpAcGh5c2lrLmZ1
+LWJlcmxpbi5kZT4NCj4+IC0tLQ0KPj4gICBhcmNoL3NoL2luY2x1ZGUvYXNtL2ZiLmggfCAx
+NSArLS0tLS0tLS0tLS0tLS0NCj4+ICAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCsp
+LCAxNCBkZWxldGlvbnMoLSkNCj4+DQo+PiBkaWZmIC0tZ2l0IGEvYXJjaC9zaC9pbmNsdWRl
+L2FzbS9mYi5oIGIvYXJjaC9zaC9pbmNsdWRlL2FzbS9mYi5oDQo+PiBpbmRleCA5YTBiY2Ey
+Njg2ZmQuLjE5ZGYxM2VlOWNhNyAxMDA2NDQNCj4+IC0tLSBhL2FyY2gvc2gvaW5jbHVkZS9h
+c20vZmIuaA0KPj4gKysrIGIvYXJjaC9zaC9pbmNsdWRlL2FzbS9mYi5oDQo+PiBAQCAtMiwx
+OSArMiw2IEBADQo+PiAgICNpZm5kZWYgX0FTTV9GQl9IXw0KPj4gICAjZGVmaW5lIF9BU01f
+RkJfSF8NCj4+ICAgDQo+PiAtI2luY2x1ZGUgPGxpbnV4L2ZiLmg+DQo+PiAtI2luY2x1ZGUg
+PGxpbnV4L2ZzLmg+DQo+PiAtI2luY2x1ZGUgPGFzbS9wYWdlLmg+DQo+PiAtDQo+PiAtc3Rh
+dGljIGlubGluZSB2b2lkIGZiX3BncHJvdGVjdChzdHJ1Y3QgZmlsZSAqZmlsZSwgc3RydWN0
+IHZtX2FyZWFfc3RydWN0ICp2bWEsDQo+PiAtCQkJCXVuc2lnbmVkIGxvbmcgb2ZmKQ0KPj4g
+LXsNCj4+IC0Jdm1hLT52bV9wYWdlX3Byb3QgPSBwZ3Byb3Rfd3JpdGVjb21iaW5lKHZtYS0+
+dm1fcGFnZV9wcm90KTsNCj4+IC19DQo+IA0KPiBMb29raW5nIGF0IHRoZSBtYWNybyBpbiBh
+c20tZ2VuZXJpYy9mYi5oLCBmYl9wZ3Byb3RlY3QoKSBpcyBiZWluZyByZXBsYWNlZCB3aXRo
+DQo+IGEgbm8tb3AgZnVuY3Rpb24uIElzIHRoYXQgaW50ZW50aW9uYWw/IENhbiB5b3UgYnJp
+ZWZseSBleHBsYWluIHRoZSBiYWNrZ3JvdW5kDQo+IGZvciB0aGlzIGNoYW5nZT8NCg0KUGF0
+Y2ggMDEgb2YgdGhpcyBwYXRjaHNldCBjaGFuZ2VzIHRoZSBnZW5lcmljIGZiX3BncHJvdGVj
+dCgpIHRvIHNldCANCnBncHJvdF93cml0ZWNvbWJpbmUoKS4gU28gb24gU0gsIHRoZXJlIHNo
+b3VsZCBiZSBubyBjaGFuZ2UgYXQgYWxsLg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+
+IA0KPj4gLXN0YXRpYyBpbmxpbmUgaW50IGZiX2lzX3ByaW1hcnlfZGV2aWNlKHN0cnVjdCBm
+Yl9pbmZvICppbmZvKQ0KPj4gLXsNCj4+IC0JcmV0dXJuIDA7DQo+PiAtfQ0KPj4gKyNpbmNs
+dWRlIDxhc20tZ2VuZXJpYy9mYi5oPg0KPj4gICANCj4+ICAgI2VuZGlmIC8qIF9BU01fRkJf
+SF8gKi8NCj4gDQo+IFRoYW5rcywNCj4gQWRyaWFuDQo+IA0KDQotLSANClRob21hcyBaaW1t
+ZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0
+aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2Vy
+bWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2
+byBUb3Rldg0K
 
-fixing it by changing `ocores_i2c_of_probe` to use `devm_clk_get_enabled()`
-rather than `devm_clk_get()`, changing `goto err_clk' to direct return and
-removing `err_clk`.
+--------------jOsx0SUaezXHVt7ObFmVoIUH--
 
-Signed-off-by: Wang Zhang <silver_code@hust.edu.cn>
----
-v1->v2: change `ocores_i2c_of_probe` to use `devm_clk_get_enabled()`
- 
- drivers/i2c/busses/i2c-ocores.c | 62 +++++++++++++--------------------
- 1 file changed, 24 insertions(+), 38 deletions(-)
+--------------GRLvBPfqMPOps21m0NeYuHxf
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-diff --git a/drivers/i2c/busses/i2c-ocores.c b/drivers/i2c/busses/i2c-ocores.c
-index a0af027db04c..1dcb1af1ad13 100644
---- a/drivers/i2c/busses/i2c-ocores.c
-+++ b/drivers/i2c/busses/i2c-ocores.c
-@@ -549,28 +549,24 @@ static int ocores_i2c_of_probe(struct platform_device *pdev,
- 							&clock_frequency);
- 	i2c->bus_clock_khz = 100;
- 
--	i2c->clk = devm_clk_get(&pdev->dev, NULL);
-+	i2c->clk = devm_clk_get_enabled(&pdev->dev, NULL);
- 
--	if (!IS_ERR(i2c->clk)) {
--		int ret = clk_prepare_enable(i2c->clk);
--
--		if (ret) {
--			dev_err(&pdev->dev,
--				"clk_prepare_enable failed: %d\n", ret);
--			return ret;
--		}
--		i2c->ip_clock_khz = clk_get_rate(i2c->clk) / 1000;
--		if (clock_frequency_present)
--			i2c->bus_clock_khz = clock_frequency / 1000;
-+	if (IS_ERR(i2c->clk)) {
-+		dev_err(&pdev->dev,
-+			"devm_clk_get_enabled failed\n");
-+		return PTR_ERR(i2c->clk);
- 	}
- 
-+	i2c->ip_clock_khz = clk_get_rate(i2c->clk) / 1000;
-+	if (clock_frequency_present)
-+		i2c->bus_clock_khz = clock_frequency / 1000;
-+
- 	if (i2c->ip_clock_khz == 0) {
- 		if (of_property_read_u32(np, "opencores,ip-clock-frequency",
- 						&val)) {
- 			if (!clock_frequency_present) {
- 				dev_err(&pdev->dev,
- 					"Missing required parameter 'opencores,ip-clock-frequency'\n");
--				clk_disable_unprepare(i2c->clk);
- 				return -ENODEV;
- 			}
- 			i2c->ip_clock_khz = clock_frequency / 1000;
-@@ -675,8 +671,7 @@ static int ocores_i2c_probe(struct platform_device *pdev)
- 		default:
- 			dev_err(&pdev->dev, "Unsupported I/O width (%d)\n",
- 				i2c->reg_io_width);
--			ret = -EINVAL;
--			goto err_clk;
-+			return -EINVAL;
- 		}
- 	}
- 
-@@ -707,13 +702,13 @@ static int ocores_i2c_probe(struct platform_device *pdev)
- 						   pdev->name, i2c);
- 		if (ret) {
- 			dev_err(&pdev->dev, "Cannot claim IRQ\n");
--			goto err_clk;
-+			return ret;
- 		}
- 	}
- 
- 	ret = ocores_init(&pdev->dev, i2c);
- 	if (ret)
--		goto err_clk;
-+		return ret;
- 
- 	/* hook up driver to tree */
- 	platform_set_drvdata(pdev, i2c);
-@@ -725,7 +720,7 @@ static int ocores_i2c_probe(struct platform_device *pdev)
- 	/* add i2c adapter to i2c tree */
- 	ret = i2c_add_adapter(&i2c->adap);
- 	if (ret)
--		goto err_clk;
-+		return ret;
- 
- 	/* add in known devices to the bus */
- 	if (pdata) {
-@@ -734,10 +729,6 @@ static int ocores_i2c_probe(struct platform_device *pdev)
- 	}
- 
- 	return 0;
--
--err_clk:
--	clk_disable_unprepare(i2c->clk);
--	return ret;
- }
- 
- static int ocores_i2c_remove(struct platform_device *pdev)
-@@ -752,9 +743,6 @@ static int ocores_i2c_remove(struct platform_device *pdev)
- 	/* remove adapter & data */
- 	i2c_del_adapter(&i2c->adap);
- 
--	if (!IS_ERR(i2c->clk))
--		clk_disable_unprepare(i2c->clk);
--
- 	return 0;
- }
- 
-@@ -768,8 +756,7 @@ static int ocores_i2c_suspend(struct device *dev)
- 	ctrl &= ~(OCI2C_CTRL_EN | OCI2C_CTRL_IEN);
- 	oc_setreg(i2c, OCI2C_CONTROL, ctrl);
- 
--	if (!IS_ERR(i2c->clk))
--		clk_disable_unprepare(i2c->clk);
-+	clk_disable_unprepare(i2c->clk);
- 	return 0;
- }
- 
-@@ -777,19 +764,18 @@ static int ocores_i2c_resume(struct device *dev)
- {
- 	struct ocores_i2c *i2c = dev_get_drvdata(dev);
- 
--	if (!IS_ERR(i2c->clk)) {
--		unsigned long rate;
--		int ret = clk_prepare_enable(i2c->clk);
-+	unsigned long rate;
-+	int ret = clk_prepare_enable(i2c->clk);
- 
--		if (ret) {
--			dev_err(dev,
--				"clk_prepare_enable failed: %d\n", ret);
--			return ret;
--		}
--		rate = clk_get_rate(i2c->clk) / 1000;
--		if (rate)
--			i2c->ip_clock_khz = rate;
-+	if (ret) {
-+		dev_err(dev,
-+			"clk_prepare_enable failed: %d\n", ret);
-+		return ret;
- 	}
-+	rate = clk_get_rate(i2c->clk) / 1000;
-+	if (rate)
-+		i2c->ip_clock_khz = rate;
-+
- 	return ocores_init(dev, i2c);
- }
- 
--- 
-2.34.1
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmQ9UkgFAwAAAAAACgkQlh/E3EQov+CT
+dxAAlaeZyea9oxbjHET7y9S9z07PiGslCvB1B9EMC4ni/lgz7L6gx7STXzzpd5ONJWiY7auM2WAN
+t3hqR7Dzuw6zSaOSaI8cC2ea0BqmRqB9Kp5PsHVHfeDd+ttE3hfeeLb+UDY0tbe0RZQfOL0elv34
+caKqb0i3LzJ+6khaquE0KFN8zvATCMTtsKourTtuC6g7r+ZmSLRM3j1NT5kAahgAelYHHuFXPakP
+k1cXqj1GgFzFh61UACffWRXCEhxGkN837BkWsB2JDolMRXCnU6v1+hjopS+Q+feiYpFKdI7/92qy
+mwkMLfHZx6vruJaZYOPyGP7eqA+kXZ62Qrs5quhoG1/gtJhjCnMYdlgcH/oCUpWL3SloQQHlq3BG
+bzaOYloNOGEEGrFroFyE0aMYMIKipcKiYCCdHK0mDn3om+hBaGQnCbcl2Ee+RtfjM7IsJjz8R82F
+xkdAvmr99dYQdvJq6BvElO6D2k4M6XPucghD8jW9+kiZKdTz4p8q5Y7iY/b5eXbozEhrcAj8zsM2
+2Cfv8zmqbUCfOiasUAXCtsHeZ0rC49nLHlF4UdJF9N6KIVCxwwLhKeojr0Y8fd/tSL26bxFH209G
+hUHBENKZ4zwpXWSHyhLDzs5fIWo4wAAM13/2OVhgT8W1anIX0riForyhNb4EO+FVbdBZIIMyj+8u
+sMs=
+=sWM8
+-----END PGP SIGNATURE-----
+
+--------------GRLvBPfqMPOps21m0NeYuHxf--
