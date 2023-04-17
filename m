@@ -2,150 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B6076E50D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:26:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAC546E50CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230490AbjDQT0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 15:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42552 "EHLO
+        id S230463AbjDQT0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 15:26:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjDQT0Z (ORCPT
+        with ESMTP id S229531AbjDQT0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 15:26:25 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B386576A8
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:26:22 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1poUUJ-0004Fg-PX; Mon, 17 Apr 2023 21:26:07 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id BC3631B175F;
-        Mon, 17 Apr 2023 19:26:04 +0000 (UTC)
+        Mon, 17 Apr 2023 15:26:12 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA88F65B9
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:26:10 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D4A3A1EC063A;
+        Mon, 17 Apr 2023 21:26:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1681759568;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=ctd6FUk5ost2tH+czhZg3cUaJX0lMVsHZ0jeULbjVp8=;
+        b=qCRzqqAcfo6nrERMbkfiv1N2/06EBGWx8tWIoHuvpLb+iEPpkM8JSFnxPZ4IQjOQaGusf3
+        X2oNJ77cFgIqNi9nI4pQKPWEEtdcroYIUj027dGVongRflq2Yx8zUWp3N5G/10vKUlcsAn
+        CY2Z5YJedmxn6V2n6Y51TolYEF9hMGI=
 Date:   Mon, 17 Apr 2023 21:26:04 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Judith Mendez <jm@ti.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Andrew Davis <afd@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        Schuyler Patton <spatton@ti.com>
-Subject: Re: [RFC PATCH 5/5] can: m_can: Add hrtimer to generate software
- interrupt
-Message-ID: <20230417-unsafe-porridge-0b712d137530-mkl@pengutronix.de>
-References: <20230413223051.24455-1-jm@ti.com>
- <20230413223051.24455-6-jm@ti.com>
- <20230414-bounding-guidance-262dffacd05c-mkl@pengutronix.de>
- <4a6c66eb-2ccf-fc42-a6fc-9f411861fcef@hartkopp.net>
- <20230416-failing-washbasin-e4fa5caea267-mkl@pengutronix.de>
- <f58e8dce-898c-8797-5293-1001c9a75381@hartkopp.net>
- <20230417-taking-relieving-f2c8532864c0-mkl@pengutronix.de>
- <25806ec7-64c5-3421-aea1-c0d431e3f27f@hartkopp.net>
+From:   Borislav Petkov <bp@alien8.de>
+To:     "H. Peter Anvin" <hpa@zytor.com>
+Cc:     Willy Tarreau <w@1wt.eu>, Jingbo Xu <jefflexu@linux.alibaba.com>,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [BUG REPORT] arch/x86/include/asm/uaccess_64.h:119: Error: junk
+ at end of line
+Message-ID: <20230417192604.GJZD2dTM64OGLdJj2E@fat_crate.local>
+References: <a9aae568-3046-306c-bd71-92c1fc8eeddc@linux.alibaba.com>
+ <20230314102316.GAZBBLFHKqQr9RSeM+@fat_crate.local>
+ <ZDrlMfy+OcDjXwvn@1wt.eu>
+ <E8CB02C5-E18C-42F6-93D8-2CC7CB4CB3FF@alien8.de>
+ <ZDuzlNOmIT0Gd7fF@1wt.eu>
+ <20230417181417.GHZD2MeRSuMWUPEU3V@fat_crate.local>
+ <F3AC1D23-D1B7-4036-BF52-1CC4FD6C3EAD@zytor.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="clk4ct7erfqsly7j"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <25806ec7-64c5-3421-aea1-c0d431e3f27f@hartkopp.net>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <F3AC1D23-D1B7-4036-BF52-1CC4FD6C3EAD@zytor.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Apr 17, 2023 at 11:32:19AM -0700, H. Peter Anvin wrote:
+> We do have assembly-aware macros for this; I believe they are called _UL() etc.
 
---clk4ct7erfqsly7j
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It doesn't work even if I do:
 
-On 17.04.2023 19:34:03, Oliver Hartkopp wrote:
-> On 17.04.23 09:26, Marc Kleine-Budde wrote:
-> > On 16.04.2023 21:46:40, Oliver Hartkopp wrote:
-> > > > I had the 5ms that are actually used in the code in mind. But this =
-is a
-> > > > good calculation.
-> > >=20
-> > > @Judith: Can you acknowledge the value calculation?
-> > >=20
-> > > > > The "shortest" 11 bit CAN ID CAN frame is a Classical CAN frame w=
-ith DLC =3D 0
-> > > > > and 1 Mbit/s (arbitration) bitrate. This should be 48 bits @1Mbit=
- =3D> ~50
-> > > > > usecs
-> > > > >=20
-> > > > > So it should be something about
-> > > > >=20
-> > > > >       50 usecs * (FIFO queue len - 2)
-> > > >=20
-> > > > Where does the "2" come from?
-> > >=20
-> > > I thought about handling the FIFO earlier than it gets completely "fu=
-ll".
-> > >=20
-> > > The fetching routine would need some time too and the hrtimer could a=
-lso
-> > > jitter to some extend.
-> >=20
-> > I was assuming something like this.
-> >=20
-> > I would argue that the polling time should be:
-> >=20
-> >      50 =C2=B5s * FIFO length - IRQ overhead.
-> >=20
-> > The max IRQ overhead depends on your SoC and kernel configuration.
->=20
-> I just tried an educated guess to prevent the FIFO to be filled up
-> completely. How can you estimate the "IRQ overhead"? And how do you catch
-> the CAN frames that are received while the IRQ is handled?
+#define ALT_FLAG_NOT            BIT_MASK(0)
 
-We're talking about polling, better call it "overhead" or "latency from
-timer expiration until FIFO has at least one frame room". This value
-depends on your system.
+and that macro has the UL() wrappery for the __ASSEMBLY__ preprocessor case
+because where it gets used, ALTERNATIVE_3() in __clear_user(),
+__ASSEMBLY__ is there not defined, ofc - it is C code.
 
-It depends on many, many factors, SoC, Kernel configuration (preempt RT,
-powersaving, frequency scaling, system load. In your example it's 100
-=C2=B5s. I wanted to say there's an overhead (or latency) and we need enough
-space in the FIFO, to cover it.
+So it does:
 
-Marc
+"# ALT: oldinstr3\n" "661:\n\t" "rep stosb" "\n662:\n" "# ALT: padding3\n"...
+  " .4byte " "((((((1UL))) << ((0) % 64)) << 16) | ((18*32+ 4)))"
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+which those old gas things don't have support yet for.
 
---clk4ct7erfqsly7j
-Content-Type: application/pgp-signature; name="signature.asc"
+And U and L suffixes are C-syntax, strictly speaking. So assembler
+numbers don't need them. Even if binutils has support for them:
 
------BEGIN PGP SIGNATURE-----
+$ binutils-gdb> git tag --contains e140100a5da85568e83ffe8e77d3f5e4a59ddee8 | head 
+binutils-2_27
+...
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQ9nUkACgkQvlAcSiqK
-BOixwwf/S6gpZAbZI0gDLqq59QAhT0OVgjq9E8jQRb6b3SM430nhVX/oOlfIXRCJ
-mz76H1v+b1fURaOi+VZC5zoVb5MF8WhJtBEAWa2IbLNGA1A/6UMtQ466nbNCXPYP
-dFBo+MfWZrkcSayCEYuWdwiPPHJSkOtNeZnjRDwMm2uPF1CeSrQlS5Fbi0GNJy//
-7hVBMN7Jm4qlCQxCC3jHRm0Gtc8qWz5n1v2DyxokjtT4jMo9Iwni6wnPB9ni5JHT
-SldeHxtqHDcc4i83eUxhZzsYD6WDV+J7VAkARfnJBcDnFX8qCznvU5eOjBMU3qgr
-IIraJi0ns1cH/zWAc/yyMoaL+/vn9A==
-=PGh8
------END PGP SIGNATURE-----
+$ binutils-gdb> git tag --contains 86b80085c889cd388fa677a5ae9053fd4be3776c | head 
+binutils-2_28
+...
 
---clk4ct7erfqsly7j--
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
