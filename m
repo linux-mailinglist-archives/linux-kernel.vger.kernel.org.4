@@ -2,118 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE5CE6E3F79
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 08:14:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 444556E3F7E
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 08:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230097AbjDQGOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 02:14:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50018 "EHLO
+        id S230168AbjDQGOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 02:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbjDQGOE (ORCPT
+        with ESMTP id S230139AbjDQGOX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 02:14:04 -0400
+        Mon, 17 Apr 2023 02:14:23 -0400
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370843A80;
-        Sun, 16 Apr 2023 23:14:01 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33H5TC2i028440;
-        Mon, 17 Apr 2023 06:13:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=AnozYKldYPPiwWMIq1K3TwbJCUH1AaFWc9XPSNJKdfY=;
- b=OpDPN9XGLddpIKPD1p9VpzldGjNyKXh5j0gqk1jlvLqUSVKjJ9RunKZP0KpqyjIzbxJD
- pW5HMBzVk8fxxMZTdSY5uMtdlT8npsnyTFxeErTwPzlwh2ru76XHbOIcaClFAZih9/aY
- MKY5WLkzUjIl4kEmfjLYzliORMUJQPDTUot1nYDMdGAqcwQh0pk9j8a0TI+TSFw26mqv
- Gjx/S/vHJIl+U3Tum+cRVqSb4W7DT3BIsGg8sS54z/HSfiOfAYoN/LMzTfylb9MPxdan
- Mba36xS8mJqU0YDXFqg0byiECCQ+SR/D6fJizaatNhVBFi+HX3Mrp5UpPB3VFv6qpYzb Iw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pymssjp0x-1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E44D35A4;
+        Sun, 16 Apr 2023 23:14:20 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33H2LaNi004212;
+        Mon, 17 Apr 2023 06:14:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=E6nLR0rFwUDzoQMQrzv+Mu4OzOmNlQ+3PcHqn8dIZAg=;
+ b=iv1WuE7JalUl0UG1NZ5OmjKf0QvXseAMTAI/66P/2i2j6hm767ZNYGi7A8HFRwCnq1gG
+ DKdzzSFlHGuA7vPXvRFp3WyAJScU30S39oripDzSuAV4LdF30bmY1SQmhkJTxxBQagkW
+ aVwaT6o4xGZwzjjEssIVbSbt9vSWA0nw1fddfTCGISMJXBWyRRsNk9EknkzolLfHgSCp
+ 1uIOKJf12JRBmHe/Ye33AwVuhhzG1DO47Qh0fz7aN6KaZ+DGexzd1hM3MaN9czehjESr
+ RkkXhbbLeO182DD64WG9dRGO2dXNT9NqSn0if/090gu1DDCkrx1HFupsMP95d5OSGnDO wA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pymkj2qk6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Apr 2023 06:13:57 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33H6Duk9006601
+        Mon, 17 Apr 2023 06:14:09 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33H6E8LG018114
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Apr 2023 06:13:56 GMT
-Received: from devipriy-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Sun, 16 Apr 2023 23:13:51 -0700
-From:   Devi Priya <quic_devipriy@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <linus.walleij@linaro.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <quic_srichara@quicinc.com>, <quic_sjaganat@quicinc.com>,
-        <quic_kathirav@quicinc.com>, <quic_arajkuma@quicinc.com>,
-        <quic_anusha@quicinc.com>
-Subject: [PATCH] dt-bindings: pinctrl: qcom: Add few missing functions
-Date:   Mon, 17 Apr 2023 11:43:37 +0530
-Message-ID: <20230417061337.6552-1-quic_devipriy@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 17 Apr 2023 06:14:08 GMT
+Received: from [10.216.30.175] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Sun, 16 Apr
+ 2023 23:14:02 -0700
+Message-ID: <1c972732-4270-763c-14c5-9f0e2c00a7d8@quicinc.com>
+Date:   Mon, 17 Apr 2023 11:43:59 +0530
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH V3 5/9] dt-bindings: qcom: Add ipq5018 bindings
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <ulf.hansson@linaro.org>,
+        <linus.walleij@linaro.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <p.zabel@pengutronix.de>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <1681468167-11689-1-git-send-email-quic_srichara@quicinc.com>
+ <1681468167-11689-6-git-send-email-quic_srichara@quicinc.com>
+ <4b3ce97d-a134-290d-e762-46d6a91caee1@linaro.org>
+From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
+In-Reply-To: <4b3ce97d-a134-290d-e762-46d6a91caee1@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: xbX9dFsYVyjU8sP7m9cvME8TIP-_hnQo
-X-Proofpoint-ORIG-GUID: xbX9dFsYVyjU8sP7m9cvME8TIP-_hnQo
+X-Proofpoint-GUID: v49Y7iUfoU5IxYJAO8mlmGSCNDCKa8vj
+X-Proofpoint-ORIG-GUID: v49Y7iUfoU5IxYJAO8mlmGSCNDCKa8vj
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-04-17_02,2023-04-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=914 clxscore=1015 mlxscore=0 malwarescore=0 impostorscore=0
- spamscore=0 priorityscore=1501 lowpriorityscore=0 adultscore=0 bulkscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
+ clxscore=1015 phishscore=0 malwarescore=0 mlxscore=0 mlxlogscore=896
+ spamscore=0 adultscore=0 lowpriorityscore=0 priorityscore=1501
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2303200000 definitions=main-2304170056
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added the missing functions cri_trng2, gpio and removed the
-duplicate entry qdss_tracedata_b
 
-Fixes: 5b63ccb69ee8 ("dt-bindings: pinctrl: qcom: Add support for IPQ9574")
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
----
- changes:
-	- Separated out this pinctrl binding fix from PCIe series
-	- Picked up the Acked-by tag 
 
- .../devicetree/bindings/pinctrl/qcom,ipq9574-tlmm.yaml      | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On 4/16/2023 2:35 PM, Krzysztof Kozlowski wrote:
+> On 14/04/2023 12:29, Sricharan Ramabadhran wrote:
+>> Document the new ipq5018 SOC/board device tree bindings.
+>>
+>> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+>> ---
+>>   [v3] Fixed board name
+>>
+>>   Documentation/devicetree/bindings/arm/qcom.yaml | 7 +++++++
+>>   1 file changed, 7 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+>> index 785b969..350f9f6 100644
+>> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
+>> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+>> @@ -30,6 +30,7 @@ description: |
+>>           apq8084
+>>           apq8096
+>>           ipq4018
+>> +        ipq5018
+>>           ipq5332
+>>           ipq6018
+>>           ipq8074
+>> @@ -95,6 +96,7 @@ description: |
+>>           hk10-c2
+>>           idp
+>>           liquid
+>> +        rdp432-c1
+> 
+> Keep proper order, not random.
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,ipq9574-tlmm.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,ipq9574-tlmm.yaml
-index f32239d08c32..673713debac2 100644
---- a/Documentation/devicetree/bindings/pinctrl/qcom,ipq9574-tlmm.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/qcom,ipq9574-tlmm.yaml
-@@ -74,15 +74,15 @@ $defs:
-                 blsp1_i2c, blsp1_spi, blsp1_uart, blsp2_i2c, blsp2_spi,
-                 blsp2_uart, blsp3_i2c, blsp3_spi, blsp3_uart, blsp4_i2c,
-                 blsp4_spi, blsp4_uart, blsp5_i2c, blsp5_uart, cri_trng0,
--                cri_trng1, cri_trng3, cxc0, cxc1, dbg_out, dwc_ddrphy,
--                gcc_plltest, gcc_tlmm, mac, mdc, mdio, pcie0_clk, pcie0_wake,
-+                cri_trng1, cri_trng2, cri_trng3, cxc0, cxc1, dbg_out, dwc_ddrphy,
-+                gcc_plltest, gcc_tlmm, gpio, mac, mdc, mdio, pcie0_clk, pcie0_wake,
-                 pcie1_clk, pcie1_wake, pcie2_clk, pcie2_wake, pcie3_clk, pcie3_wake,
-                 prng_rosc0, prng_rosc1, prng_rosc2, prng_rosc3, pta, pwm,
-                 qdss_cti_trig_in_a0, qdss_cti_trig_in_a1, qdss_cti_trig_in_b0,
-                 qdss_cti_trig_in_b1, qdss_cti_trig_out_a0, qdss_cti_trig_out_a1,
-                 qdss_cti_trig_out_b0, qdss_cti_trig_out_b1, qdss_traceclk_a,
-                 qdss_traceclk_b, qdss_tracectl_a, qdss_tracectl_b, qdss_tracedata_a,
--                qdss_tracedata_b, qdss_tracedata_b, qspi_clk, qspi_cs, qspi_data,
-+                qdss_tracedata_b, qspi_clk, qspi_cs, qspi_data,
-                 rx0, rx1, sdc_clk, sdc_cmd, sdc_data, sdc_rclk, tsens_max,
-                 wci20, wci21, wsa_swrm ]
- 
--- 
-2.17.1
+  ok.
 
+Regards,
+  Sricharan
