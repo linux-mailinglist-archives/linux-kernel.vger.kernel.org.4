@@ -2,206 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FC866E47F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 14:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DFC16E47FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 14:40:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbjDQMio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 08:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59610 "EHLO
+        id S231186AbjDQMk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 08:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjDQMim (ORCPT
+        with ESMTP id S231182AbjDQMkZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 08:38:42 -0400
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2073.outbound.protection.outlook.com [40.107.13.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122145267;
-        Mon, 17 Apr 2023 05:38:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c/kAqe46GPlTlTTztecN0A+e7AHck1zm1Pu9CTMhHLAarWv8ux1v4cHzwDXdXmePaSSmCQSb6AiN9wC0oxnRQPfU3vZe2RZ8ok80MTqRNPjAXVmjJ22vFsp+620DHiwLohN8DUaCIUzr4KZxQ52oOkReGbMuD8RE8jVZKeRHaqr6BQkhlSyXIYh8DPxYJ5HRqIVPYLoNTWQmIUe4fI8QtZe1ZWc6ikEkjp/xIHp5SFN/z+ZixvNL+/EAB7hJUdIZAfsZvo8LU0P2AcLyiB+1wzynWn03a5EhMmTKokMW9uSoaSKOCcvTTC0vgdmyuDxA4h6+c+z6ql1NrzfHs23ZLA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bOrcjaTiPlsuwJocR7ykoIe/ZKGwLwqAoRXN6G2T6Dw=;
- b=gPT4mhbwC+66EiXYOFz/UiVQq9TwGvloKpqL63CNrpPTBooyZK+5eHrJNqTeZPpmG/NCXNAuhpDqhqf5cVL3XYtn0Ya17I0dYpX52EqvBEdnnY74D+2TqwfiTJ6JGLPuivot9JCFNqh0Kqo0HddJ1+7UNE43DUnctEhemnE0LLGmHotoe5+msP/LLtv86KsRgAMv9U2TB7KmJZCTcW3sCQUv3YaVRYmskrTolSM5OPkuJ6tcG+n8vhHaj0xle/GgLd0WhWq4qhuRFyZwKmKau9Ek/EKsxKECcmrgrDFS85tyHN795CMFT5P5p1bJ766LAigE5AUVGK9pPFn6Leg9GQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wolfvision.net; dmarc=pass action=none
- header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bOrcjaTiPlsuwJocR7ykoIe/ZKGwLwqAoRXN6G2T6Dw=;
- b=sjAiPhD4Fi32wbl5esPfT2ZfpXalj+FJZygcykugTdNHDKb39XnRWCiuMH/PGKH9qiRVFE/4YQg6GJFaBOnbxtt278n0p6wGYBoK2iOwIm8qA3v02W0+BXj6HXLQlNMttQso/CK2VzwVIhlxr8gNC/Z7BdblxCu/sVb5TJejd4E=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wolfvision.net;
-Received: from DU0PR08MB9155.eurprd08.prod.outlook.com (2603:10a6:10:416::5)
- by PA4PR08MB5936.eurprd08.prod.outlook.com (2603:10a6:102:f1::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Mon, 17 Apr
- 2023 12:38:22 +0000
-Received: from DU0PR08MB9155.eurprd08.prod.outlook.com
- ([fe80::77dd:14e4:a772:d85f]) by DU0PR08MB9155.eurprd08.prod.outlook.com
- ([fe80::77dd:14e4:a772:d85f%4]) with mapi id 15.20.6298.045; Mon, 17 Apr 2023
- 12:38:22 +0000
-Message-ID: <ccae3994-3b1b-4050-ea34-98f97cf886e0@wolfvision.net>
-Date:   Mon, 17 Apr 2023 14:38:20 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [libcamera-devel] [PATCH RFC 1/4] media: v4l2-ctrls: add lens
- group status controls for zoom and focus
-Content-Language: en-US
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Riesch via B4 Relay 
-        <devnull+michael.riesch.wolfvision.net@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Matthias Fend <Matthias.Fend@wolfvision.net>,
-        libcamera-devel@lists.libcamera.org, linux-media@vger.kernel.org
-References: <20230406-feature-controls-lens-v1-0-543189a680de@wolfvision.net>
- <20230406-feature-controls-lens-v1-1-543189a680de@wolfvision.net>
- <CAPY8ntArOOqPQzvkJrQEyuVFfb6j8x6WODTMHOn1qHPU588mbQ@mail.gmail.com>
- <0f1baf5e-2ff6-e10b-5c3e-0a82c71d0ce6@wolfvision.net>
- <CAPY8ntAjBEFfeV6nnQs34Y22QM-irT13ALDv4ksP8AYK=jWsKg@mail.gmail.com>
- <3ab7bfc4-aaae-2e39-b420-40ad8d71dda4@wolfvision.net>
- <CAPY8ntCNuvgmF37kDvVh1kuepbLqy2hWcz9HOi8iub9trHmi2g@mail.gmail.com>
- <ZDbKU5kwcb7RGeCo@kekkonen.localdomain>
-From:   Michael Riesch <michael.riesch@wolfvision.net>
-In-Reply-To: <ZDbKU5kwcb7RGeCo@kekkonen.localdomain>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: ZR2P278CA0006.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:50::12) To DU0PR08MB9155.eurprd08.prod.outlook.com
- (2603:10a6:10:416::5)
+        Mon, 17 Apr 2023 08:40:25 -0400
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E974ECE;
+        Mon, 17 Apr 2023 05:40:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1681735155; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=Qe3f3DJMW7rVfel5hwvxHVmNN8FOrRlB+5V3ET4tS512GjMVJYH+lfrctq5btSpY777z6b4pg+btdo1kpM7zsBvvlZ/P0WM1sIJwgCmDurxPL/292FIM0GxoKddu7aOVkIXrz6jPwafYUwFG7yM6gbd/gYAtGVfMWipdGqkhFSM=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1681735155; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=IBS5MQ79A00z9x8TFg/cPfaBPRimEKaIX4YZh24vdEA=; 
+        b=PON0DiOvbogqRwyoLf/zgsj3dIEJq+YvxLDESQtf3rFNIZNvRdxHzY51tm+wuKAnwttuC5ShKpdzTQbDnEYv0LAQwAzp++B2O9YoWPNwcKWWeG06sYMHV3ntoScXDs8ajH6EOROJXdW9FM3A8hGDBRi2bh6x7nVYUWvVhVyC4wA=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1681735155;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=IBS5MQ79A00z9x8TFg/cPfaBPRimEKaIX4YZh24vdEA=;
+        b=HMNxYBrXzrzT1gJpneExXT+rPYJdPMd4etpGC94P4RYiwxVaCId/pe+lSZ3MFIxO
+        iLjEKJLF3EL9FlEk/G8CzzhMdDT6KS7uBhk6bE6WRbKUnlcys7LP0OtBowNo0vbOUJo
+        jOPlwSt2yY9cq29TMUtKZ7csKtgSTR9xUPxuGGI8=
+Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
+        with SMTPS id 1681735152846370.03127621675515; Mon, 17 Apr 2023 05:39:12 -0700 (PDT)
+Message-ID: <fb4f6f99-4b87-aba3-7ca3-2f1a291f7569@arinc9.com>
+Date:   Mon, 17 Apr 2023 15:39:02 +0300
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR08MB9155:EE_|PA4PR08MB5936:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6fd3abd5-3f68-4a27-e92a-08db3f40a155
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: glYV16OrWYIBaLduXbxwcWo3d1+1AqjFl0IXvwaXCatOP8jT07fgxnSFANVCaZVhETEhikiuxsdseeNknHuOj172rQk16laxE8KF6RFEls1HwC3X4WPraM79kPD8hMYLh9PQNxAHW2+yXeNWWGOZHLV4eHWMjNBRhz2gl5sv2cjgCitAsjASafGCJq64Uq1WgZVlCFxu/1vldGaKeak99n6D6aj+kDq9Dq6y1ea/qcHrttRnhEWjSGuY7e3yTftUBZXJa6lUbdJqd4T58WlRTma5BPvLemkPO1KHekwPLRfCTQsuamy4waN4c+utKlfI/z9ygwITja35eBJl2nLg39c8roPZO3BIVmLDbHJqpGSDunVYa5VV1pSmTPsw/NRlvEOO0L8U79L9Oq0I1UfpX1ijV7Lh2w32yY+zxkGv3Q8tDGjo3W79CIPGHIq0wFSbVPS3gdToLOuziwv75jGusf7xLv6QCeXKKralE6S+WfLOclTW0QznbQbIvXtLbuA2JdosnoF/uOOGzHR3k7RSiYFVZzHsfx8qQsMCmCHy05rcjHTJ3Fv7rEpI4+asCkUfjyJI/6LTz7EKCg+TTHMVMoUvCwryG1rqvONNsUinLVQzViH1CW8TDXu2b0wtglzM/jfT3CyE1y6Renyg7D+kLg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9155.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(39840400004)(396003)(346002)(136003)(451199021)(44832011)(83380400001)(41300700001)(5660300002)(2616005)(31686004)(2906002)(38100700002)(53546011)(6512007)(6506007)(8936002)(186003)(8676002)(6486002)(66556008)(36756003)(4326008)(478600001)(66946007)(86362001)(66476007)(54906003)(110136005)(31696002)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K09XNEd0UXRoQlBkL2x0RmphbWovYWxEaCsvbndDTnVQOGUvY3RvQWV3VlJn?=
- =?utf-8?B?aGhkWkduT3RBL1JIL3A0K3F4d2UyTElkR3d1bnFjUWZ2NFlMaVMybGsxbmQr?=
- =?utf-8?B?MGRQVEEvb2V2dWFzMXEyUjhBbDFRdkNmQjJzWndJRHN6M3MyMEMxY3czb3JQ?=
- =?utf-8?B?dlZHRjZvTExiNUY1RGgyekpjMGpsL1d0SWU3bXhBZGJvRmJ1VitENmh3UFlr?=
- =?utf-8?B?bkdXQ01hanl6WGlNcFV2ckhDSjViTVpFblp3V2hVbFpMUndEZFdXU2tlc0Fo?=
- =?utf-8?B?S2tvTm4vaU5HalovdjBDbG1TUEpVVnFVTnNkc0pQejR5dFpyS010eGI4UUpB?=
- =?utf-8?B?R01oL0RzbTN3cWtIajBBOEI4RElMYVQ5TmZIczM2T0ROdmVueDYwVXBMblpC?=
- =?utf-8?B?amUxVG9uL0ExanNGcDZrU0tRVlgzV3l3d0dIelNCUFp4T1M2dWZWUnNLbWov?=
- =?utf-8?B?eW1JdjdhNjVwbm5RQmRBSTU3SjJ5N1p2dUUzakZCKy9WeC9pdmI3Rm9wNjhv?=
- =?utf-8?B?d0ptVFBDNzg3Q1cxcUZNQjFCc3phNjlWaS9PdjlkdEdBNTlYRFlMS1BNV2dm?=
- =?utf-8?B?QlE3ZXZZcXFOeWtwUzJMMVBRNlBKOEF1a2JKRzJaZWhDUkNkNzJ5L3ViOHRO?=
- =?utf-8?B?QlE2NG93MlYwL2pkSVBra3h5dkdIREFpMDRSREFtMCtEZDU5S293NWFUdHMx?=
- =?utf-8?B?bm1MendlSFZWUHluQ3Z4TXBtY1NyQWZSOGo2a1pwSThlNTFFSnB6djBiaDB2?=
- =?utf-8?B?cEh0REd3RXBSN3ZneDE3UDd4NlJUNm8xb1Z0NVJBQmF5NTI5VFYwZ0dGcDBK?=
- =?utf-8?B?Vk54bWd1S3dHcTlmV2dCVGVNbEN6K3RralE2Q1hMVjJtTUdtb2IzYTdDVERI?=
- =?utf-8?B?bkdpUGFhWFZiNk1HK0RaeVJwbUZiNk9xUVA5VE4vMVYrTnFlNnI5L1RyQ3dz?=
- =?utf-8?B?Tnl0QXNiaFBickVTYUZPUEc2SXlPVzdDdEYvNXBZazgrRElnbWVOL0g3RWpv?=
- =?utf-8?B?TkVoT3FWZ0ZLTXRGNEhKaUdiQWFvaytVaW5wQW81ajN0MzMyWkRkZG1NdzhK?=
- =?utf-8?B?dW85MzdaM0k1NVBVQlBndEQzOURwWDVXUklCeVlkK1BhK25pekgrSVdmUCtS?=
- =?utf-8?B?Mm1FVnZCVGttdThSaW5OTkFjRXhram1KMzdUbUJ1VXBEUjFaL3VtT0JTbjJT?=
- =?utf-8?B?VFp1bXc4dmZKNUNleVlUVzcvcEtqRmZoRjYxMU5rbUZsNHdvR2lBOUxqODBy?=
- =?utf-8?B?L05KQ2xBWVlpelljVWRZdWdzOVhuRnV4U25xTkFPN1kvdHR4a1RGNWlkaEoy?=
- =?utf-8?B?QXVySkFJcUdoc0Z1NTVNS3Y3K014Z3JDZHV0RHFVcnNQNGU4cE8xaW5GRFdU?=
- =?utf-8?B?RkMrQTFtUENrb00rK29DOWx5UmE3VUtERFYzODZySzJqV2NKbE5VcDN4cTFO?=
- =?utf-8?B?Sy9RYWY5RlJ3QWJjRGtLcXZ4TTBsc1pHZDVTUnhGMk1uMEQwMStSU3pHYVlJ?=
- =?utf-8?B?cG5QT1cyMGNMejRMakhpdUc3bzZSVVJNN3dRcGwvMHJNMVpxL1RML2NvUVlB?=
- =?utf-8?B?dUttL2FHM1JlV1gwcFlGNGNIaW01cm0xNWVJV2RMeXE1Q25tRmVYWk5KM3Na?=
- =?utf-8?B?TmNnemQ3QXBjWUlIZERlc1NGZUd2QUwraGczeDI2Q3VDZTlIWXdyUThiQm5z?=
- =?utf-8?B?SFZUVy9jaXZrVFY5Z0U3d1ZBM3YwdkdtcTZ3S1Y5V3VZNHNJU0dWaUpIRzN1?=
- =?utf-8?B?TjgyWUtkYzlmZitKR3dSVXJsdVN2TFBFTUVHTGpEZnRCbWhNdy92VTNjVmVI?=
- =?utf-8?B?am9YUmpZd3BSSDhFTXJtRlZmZDArVnV0L0QrMWRBY3UxbUxlVTI0eU1Jcnhr?=
- =?utf-8?B?dmZtbFA5WEliYjdtV0FXYzNmeTk2VGxUU0wxSUNoOW1XMDR2VDQ2Rkx6RVAw?=
- =?utf-8?B?eG11RzNWNFA5NC9aeXJKNnZZTmtPSCsrUlY3dFNWWDY4MjY0U0dtOWhHcnVU?=
- =?utf-8?B?RTluUmZ2cjNldGlBSGZ5TFRSOS9TMTZYeFhhQ3g2SDZSemVRL042MFZRb0x5?=
- =?utf-8?B?dzhnNDV3clVRMk15UHhaeXVLZ2ZHRFJydlFIZTZDYWF6ZnQ0a1B5NDh5OCtO?=
- =?utf-8?B?Nk9CTXJpbHR3ZVpCd3FGQjJ3VFA2dDNTdzhyMmtDZGd1bXNqSVd3K2xUNnZt?=
- =?utf-8?B?SFFCMUw2ZjhXU1lmZk5rZExTS3I5bWxGR2VPeHcwZjFCTTArY3RmbXpheE1h?=
- =?utf-8?B?SmpTcC9xN2lmd0tmTWZKVE1SKzZBPT0=?=
-X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6fd3abd5-3f68-4a27-e92a-08db3f40a155
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9155.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2023 12:38:22.1916
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: w94QlELEcV0BlAz3juQvKECylqOpGkGVgUKV+tX+W4V+PS54Ot04Hd19+2xnLRceBjobPFPxFUKLJpQJVIlBDPs9th+hbeGhEbAc8ixYD2M=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR08MB5936
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH net-next v2] net: dsa: mt7530: fix support for MT7531BE
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>
+References: <ZDvlLhhqheobUvOK@makrotopia.org>
+ <8d36ff3b-e084-9f79-4c00-ec832f2cdbb3@arinc9.com>
+ <ZDwDs6BHRo0ukfGF@makrotopia.org>
+ <f125954e-d4ac-121f-18c4-bc7db25efa1c@arinc9.com>
+ <ZD0v3Y2pdkwazICG@makrotopia.org>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <ZD0v3Y2pdkwazICG@makrotopia.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sakari,
-
-On 4/12/23 17:12, Sakari Ailus wrote:
-> Hi Dave, Michael,
-> 
-> On Wed, Apr 12, 2023 at 02:55:56PM +0100, Dave Stevenson wrote:
->>>> If the ranges aren't updated, where should that out-of-range lens
->>>> movement leave the lens?
+On 17.04.2023 14:39, Daniel Golle wrote:
+> On Mon, Apr 17, 2023 at 12:28:57AM +0300, Arınç ÜNAL wrote:
+>> On 16/04/2023 17:18, Daniel Golle wrote:
+>>> On Sun, Apr 16, 2023 at 04:48:23PM +0300, Arınç ÜNAL wrote:
+>>>> On 16.04.2023 15:08, Daniel Golle wrote:
+>>>>> [...]
+>>>>>    * It doesn't move PCS creation to mt7530.c, hence PCS_MTK_LYNXI is
+>>>>>      only required for MDIO-connected switches
+>>>>>      (with your patch we would have to move the dependency on PCS_MTK_LYNXI
+>>>>>      from NET_DSA_MT7530_MDIO to NET_DSA_MT7530)
+>>>>
+>>>> Maybe this is what should happen. Maybe the PCS creation (and therefore
+>>>> mt7530_regmap_bus) should be on the core driver. Both are on the MDIO driver
+>>>> for the sole reason of only the devices on the MDIO driver currently using
+>>>> it. It's not an MDIO-specific operation as far as I can tell. Having it on
+>>>> the core driver would make more sense in the long run.
 >>>
->>> This is up to the hardware controller, but I would guess it typically
->>> stops one step before disaster. Wherever that may be, the error
->>> condition and the current position can be read out via this new STATUS
->>> control.
->>>
->>> Does this sound good so far?
+>>> Which "long run" are you talking about?
+>>> regmap creation is bus-specific, and so is the existence of LynxI PCS.
+>>> There simply aren't any MMIO-connected switches which come with that IP.
+>>> And I strongly doubt there ever will be. And even if, why should we now
+>>> prepare for an entirely speculative future? If it actually happens, ie.
+>>> in case there is going to be a new SoC with MMIO-connected switch which
+>>> does comes with LynxI PCS (e.g. for port 5 only) we can still move the
+>>> code.
 >>
->> Sounds reasonable, but I'm not the gatekeeper (that would be Sakari or
->> Laurent), and I'm just expressing my views based on the lenses I've
->> encountered.
->> All of my lenses have a single drive for focus, a single drive for
->> zoom, and where there are multiple elements they are all connected
->> mechanically. Your setup sounds far more complex and is likely to need
->> a more extensive driver, but it'd be nice to not unnecessarily
->> overcomplicate the interface.
+>> Makes sense.
 > 
-> Could we also have a driver that uses these new controls?
+> 
+>>>> [...]
+>>>>
+>>>> A similar logic is already there on the U-Boot MediaTek ethernet driver.
+>>>>
+>>>> https://github.com/u-boot/u-boot/blob/a94ab561e2f49a80d8579930e840b810ab1a1330/drivers/net/mtk_eth.c#L903
+>>>>
+>>>> So this patch fixes the issue with the only consideration being changing as
+>>>> less lines of code as possible.
+>>>
+>>> You are ignore two more important arguments:
+>>>    * It doesn't requrire additional export of mt7530_regmap_bus
+>>>      (which would imply significantly more storage overhead compared to
+>>>      an additional function pointer in a priv struct)
+>>>
+>>>    * It doesn't move PCS creation to mt7530.c, hence PCS_MTK_LYNXI is
+>>>      only required for MDIO-connected switches
+>>>      (with your patch we would have to move the dependency on PCS_MTK_LYNXI
+>>>      from NET_DSA_MT7530_MDIO to NET_DSA_MT7530)
+>>
+>> Understood.
+> 
+>>>> And that's okay. We can make the least
+>>>> amount of changes to fix the issue first, then improve the driver. But
+>>>> there's nothing new made on the driver after the commit that caused this
+>>>> issue, backportability to the stable trees is a non-issue. So why not do it
+>>>> properly the first time?
+>>>
+>>> Most of all I'd rather have it fixed before net-next is merged to Linus'
+>>> tree and also before net-next will close again.
+>>>
+>>> However, I also simply don't see what would be more "proper" about your
+>>> solution.
+>>
+>> Nothing. Your patch here is perfectly fine after reading your points. One
+>> thing I'd like to ask is, if I understand correctly, instead of exporting
+>> mt7531_create_sgmii(), defining a pointer that points to it causes less
+>> overhead?
+> 
+> Yes. Depending on build configuration and debugging options an exported
+> function or constant will require different amounts of storage, ie.
+> function name and parameter prototypes need to be stored in the kernel
+> symbol table, any module calling the exporting functions and in the
+> exporting modules ELF header, the latter being the most significant.
+> Even if kernel modules aren't used and it's all built-in the overhead
+> is still more than a few bytes for the struct member definition as well
+> as the growth of the per-instance allocated struct member itself --
+> especially given that I have only heard about one board using two
+> MT7531AE, most boards use exactly one of them.
+> 
+>>
+>> The current patch looks very similar to exporting a function. Instead of
+>> putting EXPORT_SYMBOL_GPL and declaring the function prototype on the header
+>> file, you declare a function pointer on the priv structure, then assign it
+>> to the function.
+> 
+> The effect is similar, just limited in scope as a caller needs to have
+> access to the priv struct (opposed to an EXPORT_SYMBOL* which will
+> make the function or const available globally).
+> 
+> Also note that exporting mt7531_create_sgmii() would not work equally
+> well as the result would be a hard dependency of NET_DSA_MT7530 on
+> NET_DSA_MT7530_MDIO for the exported function being linkable.
+> The function pointer has the advantage that it can be set to NULL and
+> in that way we can model a weak dependency.
 
-If you are referring to the driver for our custom lens controller, then
-I have to say that it is under development and simply not ready for
-release yet. Also, the decision has not yet been made whether or not
-this will be an open-source driver.
+Very nice, thanks for the explanation.
 
-A different approach could be the adaptation of the vimc-lens driver,
-which currently only supports FOCUS_ABSOLUTE. But this would raise
-several implementation questions and at least for me this would be a
-nontrivial task.
+> 
+>>
+>>>
+>>>>
+>>>> Whatever the outcome with this patch is, on my upcoming patch series, I
+>>>> intend to move mt7531_create_sgmii to mt7530.c. Then introduce
+>>>> priv->p5_sgmii to get rid of mt7531_dual_sgmii_supported().
+>>>
+>>> What is the argument for that?
+>>
+>> Nothing for moving mt7531_create_sgmii() but I think introducing
+>> priv->p5_sgmii with later patches is in the clear?
+> 
+> Yes, I agree that introducing priv->p5_sgmii can make sense, given that
+> it would prevent having to export mt7531_dual_sgmii_supported() or
+> passing its return value as a function parameter, or even just having
+> to call it many times.
+> 
+> Regarding this current patch (see subject), do you still agree that we
+> should apply it as-is and then either you or me will prepare another
+> series further refactoring the driver?
 
-Is it required to have a driver for this interface (in the sense that
-the patches cannot be accepted otherwise)?
+This patch is fine as is and should go in, I will base my upcoming RFC 
+series on top of this.
 
-> The controls themselves appear reasonable to me as well. I guess there are
-> changes to be made based on the discussion?
+Acked-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 
-I'd summarize that whether or not the status controls are compound
-controls of the type V4L2_CTRL_TYPE_LENS_STATUS is the open question.
+> 
+> 
+>>
+>>>
+>>> There is not a single MMIO-connected switch which comes with LynxI PCS.
+>>> (see above)
+>>>
+>>> Imho we should rather try to work into the opposite direction and move
+>>> more code only used on either MDIO or MMIO from core to the
+>>> bus-specific drivers. If needed we can even split them more, eg. have
+>>> different modules for MT7530 and MT7531, so that even the driver for
+>>> MDIO-connected MT7530 would not require MTK_PCS_LYNXI.
+>>
+>> Interesting, I may work on this in the future. This could benefit my folks
+>> too.
+>>
+>>>
+>>> In that sense I'm a big fan of the structure of the mt76 wireless
+>>> driver: Have a core module for shared helper functions and then
+>>> device-specific driver modules. Unfortunately many if not most drivers
+>>> are doing the exact opposite approach, ie. having some abstration layer
+>>> which will always need to be extended and changed with every
+>>> unforeseeable new hardware to be supported which just results in lots
+>>> of overhead and is a burden to maintain. You can see that in the rt2x00
+>>> wireless driver which I also worked on a lot: Most of the abstractions
+>>> aren't even useful with any of the latest hardware generations.
+>>>
+>>> tl;dr: What's wrong with moving functions specific to either variant
+>>> (MMIO vs. MDIO) into the corresponding modules and keeping the core
+>>> slim and really only cover shared functionality? This is also why I
+>>> originally wanted the names of files and Kconfig symbols to reflect the
+>>> supported hardware rather than the supported bus-type -- I've changed
+>>> that upon your request and now believe I should have argued more
+>>> clearly why I made my choice like I did...
+>>
+>> Ah that makes sense. I'd like to address this. I was already planning to to
+>> do some renaming on the driver. Please, allow me to do the work.
+> 
+> Sure, your efforts are appreciated, and I'll happily review and test
+> your suggestions.
 
-As a potential follow-up question I recently asked myself if the struct
-v4l2_ctrl_lens_status should contain trailing reserved bytes for future
-extension (no idea, though, what this could be).
+Sounds good, till then.
 
-Alternatively, we could come up with "V4L2_CID_FOCUS_CURRENT (integer)"
-for the current position and "V4L2_CID_FOCUS_STATUS (bitmask)" (and add
-further controls when they are needed. Here, we lose atomicity but maybe
-this can be ignored. One could assume that all relevant controls are
-read out with a single ioctl which provides at least some level of
-atomicity.
-
-Any comments and/or recommendations to this open question would be much
-appreciated.
-
-Other review comments will be incorporated in the next iteration of this
-series as well, but they are quite straightforward.
-
-Best regards,
-Michael
+Arınç
