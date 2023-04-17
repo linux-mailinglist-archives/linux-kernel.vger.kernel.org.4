@@ -2,159 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 743046E5179
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 22:12:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E6F16E517C
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 22:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbjDQUMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 16:12:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42228 "EHLO
+        id S229830AbjDQUPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 16:15:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbjDQUMb (ORCPT
+        with ESMTP id S229554AbjDQUPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 16:12:31 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A3C558D;
-        Mon, 17 Apr 2023 13:12:25 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id h24-20020a17090a9c1800b002404be7920aso27709582pjp.5;
-        Mon, 17 Apr 2023 13:12:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681762345; x=1684354345;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uGGeQ34qFmH3qFSmAUdD5AsG5Jqn1gFFjidxM1csPmQ=;
-        b=WP1cGmhDXEaM2XoZQjksyWZjyjJ8/dPdSZFCLLz/R19MHv4d8SYoajJ3n7KJGGRP2d
-         QfL8ZCHeiRUBptfALCwXRF34t1z07YYlkovBk2/hsT8PJckcxJI+ZsBCXsg2pi9LvC1d
-         rggmvYF4ju/BUSXm2VA+2JY6fVH8vgjnf0fz97JefdsnlbPsqu6gE2y7kSOZ9r2ZtnIy
-         ygjwVBziEtNITmZ5gllCzuvyKpWojJLQwxnRhV3/072eKrNSg/4TfPqqi8S3Wpt3IGlm
-         aGZiitnwhALRhD1nKBOWbwppjuXsprBAvS5mBlN4oYjef76qBN+AMd4pN7SrTzRzxWlF
-         oqyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681762345; x=1684354345;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uGGeQ34qFmH3qFSmAUdD5AsG5Jqn1gFFjidxM1csPmQ=;
-        b=PLg+Ms/uCM7q/5+HUPoU6AwCmbX/OPEcCbpv4lhLJ2PvM2UvPI9iKVbcEl2P9tACgi
-         AqgAa+IYoEtv0eY9EjalwXR7F6VGLsE0Cli/FDhNdjUFebsfa2wTrNQp/x8AUZWuh4OF
-         FKK/udILpTHi1Cjb+ID5RocWOl4xkZTlchKYAnGNG7SBdQ10Mf4uOx8Cz+7gdLW0XmIo
-         KP2fcIA7eKdFR6mg7CRaWu96BFHXHUjVxx1QzJNkHt76t7t5RXuQWm1x5wgc8yoxWLds
-         tKpUiCuThUao+YSxDLT+rOR4GReilOQ8fTAnvRVPD06460dCop4063fWHYAsUAYjZDEs
-         NK2w==
-X-Gm-Message-State: AAQBX9cYkmI0IZoZNYRfSKNuDrgRrFHoJ+g82QoNkS9DB8beJN7ofKlf
-        kfrDAS0TvzVLb1zrYpvVA3g=
-X-Google-Smtp-Source: AKy350apR+UW6/r809TtL7zmvsClieP2I6EjDtF1IFJX/9UC+3g2jKbrC6+C4/pk1uCM3wzNBU0ZUQ==
-X-Received: by 2002:a17:902:bc4b:b0:1a6:6a7c:9fde with SMTP id t11-20020a170902bc4b00b001a66a7c9fdemr140605plz.14.1681762345291;
-        Mon, 17 Apr 2023 13:12:25 -0700 (PDT)
-Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
-        by smtp.gmail.com with ESMTPSA id w24-20020a17090aaf9800b0023d0c2f39f2sm9118078pjq.19.2023.04.17.13.12.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 13:12:24 -0700 (PDT)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rob Clark <robdclark@chromium.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>,
-        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
-        linux-kernel@vger.kernel.org (open list),
-        linux-arm-msm@vger.kernel.org (open list:DRM DRIVER FOR MSM ADRENO GPU),
-        freedreno@lists.freedesktop.org (open list:DRM DRIVER FOR MSM ADRENO
-        GPU)
-Subject: [RFC 3/3] drm/msm: Add comm/cmdline fields
-Date:   Mon, 17 Apr 2023 13:12:12 -0700
-Message-Id: <20230417201215.448099-4-robdclark@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230417201215.448099-1-robdclark@gmail.com>
-References: <20230417201215.448099-1-robdclark@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 17 Apr 2023 16:15:03 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EECE446AC;
+        Mon, 17 Apr 2023 13:15:00 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 4CB913200991;
+        Mon, 17 Apr 2023 16:14:56 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 17 Apr 2023 16:14:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=duggan.us; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1681762495; x=1681848895; bh=puHS/9Gsnu4EihLPDZetwQwvkbohwlsflAA
+        TKAuIYAY=; b=GjgYs5EUwhDq3E2kJ1Dr9Cvj3F2neXvZ0NxHQOHd7AhyOReFHmZ
+        MosDrgKZB6IEn2ghSLtnOvC1VTSk0fGI2kf4w836OcXBvXCvcrhFxR5J7pk2Ifm3
+        J846h18LI139zRgFiyP4dVhfJO4sHQCjlpKWhxLLbTsK+x/cMxv36OctJUhxrH17
+        WwIY5TWDal8bkJYADKtvdKq711QFDf190pWHPLyAwC0MfUMygI5rSud38gW2BJoH
+        Haht5+feVM6OerXrhaT4oLq5gN6MZU5tWWe8nb2LzS9n7RaVYuaZXMDfhmn94zLT
+        OAKlymtsFFSTEVrdze1WNYWtk38fjaky34g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1681762495; x=1681848895; bh=puHS/9Gsnu4EihLPDZetwQwvkbohwlsflAA
+        TKAuIYAY=; b=iOJDf/IjxQQr0+qwLaqFi8xLiTgXDvlPkUJj750Ei/5bDPKVEZ6
+        M9dTAoTeBnJk4WLaYcjkwUPUSBdC0/LYXzkEiw3ocaqfe+Sykp+dfTK820d7Mq+G
+        2z/Gi9owyFQV7++sunsZFb9nt7byHNjhhAnJoDAgL0owzJxwwVJlbpuKcDDesx8/
+        PSQHDmONtTwWGMrQKDfrniQnI9bU4fr4Dz6C6x8MDd6lAA9ZYPUvU8++OyPsnDDX
+        RCt2evhLJqFTo5uzEZ+3s9c8SSzBStSvWc8egE2XiB2khDIOLys3sMj4CVBIPGku
+        kq8lXdieoQYnMgGT95r2FgSiI3qQkZW6kug==
+X-ME-Sender: <xms:v6g9ZHvAdMFaXs1TFPGMswTX492b-9rIlOPq3zIbvWG2kW6Luw5Zhw>
+    <xme:v6g9ZIeS_qblLLL7y8kafnU_ST4_sNWGV0bVvecwkrrzbX4mrL_fegG-mZvS9rjIG
+    d9hoFmygAh9p4a6Tg>
+X-ME-Received: <xmr:v6g9ZKwF3u-Yk8gY7TR6jb960iNGdd1Y-4Akpo9CpzwLjOJk9_lJiu2rVf-WAHiiKw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeliedgudegjecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpegtggfuhfgjffevgffkfhfvofesthhqmhdthhdtjeenucfhrhhomheptehn
+    ughrvgifucffuhhgghgrnhcuoegrnhgurhgvfiesughughhgrghnrdhusheqnecuggftrf
+    grthhtvghrnhepveehheeuffduteeuhfetfefhleetteekvdehlefgfeekhfekteeujeet
+    teeludetnecuffhomhgrihhnpegsuhhtthhonhhsrdhpshenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrnhgurhgvfiesughughhgrghnrdhu
+    sh
+X-ME-Proxy: <xmx:v6g9ZGNeFEJaYfKdydCsbrzi2azBCQDE-6M0pvMxk401gYecHk_YGw>
+    <xmx:v6g9ZH_mAImqGGpZTpwcmoD9AuGYyuh_kexunzfSsZwOxqBsEZ5d5w>
+    <xmx:v6g9ZGXackSYofpmzc7DVT6jmPtST-l9pcAremJo07_BzWuIp-viGA>
+    <xmx:v6g9ZObd2fFoxkZ4fXaT21wnnib8NboxaSXV5oOXyavdxZGY_smo7g>
+Feedback-ID: i06a0429a:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 17 Apr 2023 16:14:53 -0400 (EDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
+Subject: Re: [PATCH v2] Input: synaptics - disable intertouch for Lenovo L440
+From:   Andrew Duggan <andrew@duggan.us>
+In-Reply-To: <CALNJtpV4WsknSSfBBer-MM0y_V=O5Fv2Lc3ei3heEyZwvR2rzQ@mail.gmail.com>
+Date:   Mon, 17 Apr 2023 13:14:42 -0700
+Cc:     Lyude Paul <lyude@redhat.com>,
+        Andrew Duggan <aduggan@synaptics.com>,
+        "amandhoot12@gmail.com" <amandhoot12@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "jdenose@google.com" <jdenose@google.com>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "markpearson@lenovo.com" <markpearson@lenovo.com>,
+        "wsa+renesas@sang-engineering.com" <wsa+renesas@sang-engineering.com>,
+        benjamin.tissoires@redhat.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <65C23A49-5A55-4CF4-9AFD-2DA504DAABF5@duggan.us>
+References: <063c8f77c216ffac463532023009124542d54c19.camel@redhat.com>
+ <20230414092353.v2.1.Ieb687047a5b75c7b7ee5dd258207ef5ca9a3b728@changeid>
+ <CALNJtpXLHHSV8YshUnk0opLNMUJpT7DgBNRYXoP2Yn-fnA8vPA@mail.gmail.com>
+ <CALNJtpV4WsknSSfBBer-MM0y_V=O5Fv2Lc3ei3heEyZwvR2rzQ@mail.gmail.com>
+To:     Jonathan Denose <jdenose@chromium.org>
+X-Mailer: Apple Mail (2.3731.500.231)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+Hi Lyude and Jonathan,
 
-Normally this would be the same information that can be obtained in
-other ways.  But in some cases the process opening the drm fd is merely
-a sort of proxy for the actual process using the GPU.  This is the case
-for guest VM processes using the GPU via virglrenderer, in which case
-the msm native-context renderer in virglrenderer overrides the comm/
-cmdline to be the guest process's values.
+I was just about to reply and suggest that we look into this issue a =
+little more since the touchpad in the L440 would benefit from the =
+additional data from the intertouch interface. Especially, since it has =
+a large area and several buttons. PS/2 only reports position data for =
+two fingers so three finger gestures is another example.
 
-Exposing this via fdinfo allows tools like gputop to show something more
-meaningful than just a bunch of "pcivirtio-gpu" users.
+Generally, these types of suspend / resume issues are the result of the =
+touchpad resetting and the firmware expecting commands from the PS/2 =
+interface. On resume, the PS/2 driver should send a command over the =
+PS/2 interface to switch the touchpad firmware back into intertouch =
+(SMBus) mode. The logs you provided look like that's what is happening =
+here. The SMBus driver is sending commands, but the touchpad firmware =
+won't respond until it is switch back into intertouch mode. It has been =
+a while since I have worked on these touchpads, but from what I remember =
+I think there is code in the psmouse-smbus driver to handle these =
+situations. I added Benjamin Tissoires to CC since I think he worked on =
+that handling. I thought suspend / resume was tested on with these "top =
+button" touchpads when support for them was added. I don't know if the =
+L440 specifically included in the testing. I'm curious if this is a =
+regression or not.
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- Documentation/gpu/drm-usage-stats.rst |  8 ++++++++
- drivers/gpu/drm/msm/msm_gpu.c         | 14 ++++++++++++++
- 2 files changed, 22 insertions(+)
+Regarding the patch, I do have one comment below:
 
-diff --git a/Documentation/gpu/drm-usage-stats.rst b/Documentation/gpu/drm-usage-stats.rst
-index 8e00d53231e0..bc90bed455e3 100644
---- a/Documentation/gpu/drm-usage-stats.rst
-+++ b/Documentation/gpu/drm-usage-stats.rst
-@@ -148,6 +148,14 @@ percentage utilization of the engine, whereas drm-engine-<keystr> only reflects
- time active without considering what frequency the engine is operating as a
- percentage of it's maximum frequency.
- 
-+- drm-comm: <valstr>
-+
-+Returns the clients executable path.
-+
-+- drm-cmdline: <valstr>
-+
-+Returns the clients cmdline.
-+
- Implementation Details
- ======================
- 
-diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
-index f0f4f845c32d..1150dcbf28aa 100644
---- a/drivers/gpu/drm/msm/msm_gpu.c
-+++ b/drivers/gpu/drm/msm/msm_gpu.c
-@@ -148,12 +148,26 @@ int msm_gpu_pm_suspend(struct msm_gpu *gpu)
- 	return 0;
- }
- 
-+static void get_comm_cmdline(struct msm_file_private *ctx, char **comm, char **cmd);
-+
- void msm_gpu_show_fdinfo(struct msm_gpu *gpu, struct msm_file_private *ctx,
- 			 struct drm_printer *p)
- {
-+	char *comm, *cmdline;
-+
-+	get_comm_cmdline(ctx, &comm, &cmdline);
-+
- 	drm_printf(p, "drm-engine-gpu:\t%llu ns\n", ctx->elapsed_ns);
- 	drm_printf(p, "drm-cycles-gpu:\t%llu\n", ctx->cycles);
- 	drm_printf(p, "drm-maxfreq-gpu:\t%u Hz\n", gpu->fast_rate);
-+
-+	if (comm)
-+		drm_printf(p, "drm-comm:\t%s\n", comm);
-+	if (cmdline)
-+		drm_printf(p, "drm-cmdline:\t%s\n", cmdline);
-+
-+	kfree(comm);
-+	kfree(cmdline);
- }
- 
- int msm_gpu_hw_init(struct msm_gpu *gpu)
--- 
-2.39.2
+> On Apr 17, 2023, at 11:52, Jonathan Denose <jdenose@chromium.org> =
+wrote:
+>=20
+> CAUTION: Email originated externally, do not click links or open =
+attachments unless you recognize the sender and know the content is =
+safe.
+>=20
+>=20
+> Sorry, I thought I sent this as plain text but I think maybe not.
+> Trying once more, the message was:
+>=20
+> I think that disabling synaptics_intertouch would resolve the issue
+> mentioned in the commit, but cause a regression in the functionality
+> that intertouch is supposed to bring, like three-finger gestures. I'm
+> attaching some of the logs that I captured when the touchpad was
+> failing on resume. I think the main culprit is
+> i2c_smbus_read_byte_data where the driver is unable to get the SMBus
+> version number. I get the following lines in dmesg:
+>=20
+> [ 2869.745860] rmi4_smbus 0-002c: failed to get SMBus version number!
+> [ 2869.746060] rmi4_physical rmi4-00: rmi_driver_reset_handler: Failed
+> to read current IRQ mask.
+> [ 2869.746260] rmi4_f01 rmi4-00.fn01: Failed to restore normal =
+operation: -6.
+> [ 2869.746262] rmi4_f01 rmi4-00.fn01: Resume failed with code -6.
+> [ 2869.746264] rmi4_physical rmi4-00: Failed to suspend functions: -6
+> [ 2869.746265] rmi4_smbus 0-002c: Failed to resume device: -6
+> [ 2869.746268] rmi4_smbus 0-002c: rmi_smb_resume+0x0/0x6b [rmi_smbus]
+> returned 0 after 549 usecs
+> [ 2869.746446] rmi4_physical rmi4-00: Failed to read irqs, code=3D-6
+>=20
+> Any ideas on what might be causing this, only on resume from deep =
+sleep?
+>=20
+>=20
+> On Mon, Apr 17, 2023 at 1:47=E2=80=AFPM Jonathan Denose =
+<jdenose@chromium.org> wrote:
+>>=20
+>> I think that disabling synaptics_intertouch would resolve the issue =
+mentioned in the commit, but cause a regression in the functionality =
+that intertouch is supposed to bring, like three-finger gestures. I'm =
+attaching some of the logs that I captured when the touchpad was failing =
+on resume. I think the main culprit is i2c_smbus_read_byte_data where =
+the driver is unable to get the SMBus version number. I get the =
+following lines in dmesg:
+>>=20
+>> [ 2869.745860] rmi4_smbus 0-002c: failed to get SMBus version number!
+>> [ 2869.746060] rmi4_physical rmi4-00: rmi_driver_reset_handler: =
+Failed to read current IRQ mask.
+>> [ 2869.746260] rmi4_f01 rmi4-00.fn01: Failed to restore normal =
+operation: -6.
+>> [ 2869.746262] rmi4_f01 rmi4-00.fn01: Resume failed with code -6.
+>> [ 2869.746264] rmi4_physical rmi4-00: Failed to suspend functions: -6
+>> [ 2869.746265] rmi4_smbus 0-002c: Failed to resume device: -6
+>> [ 2869.746268] rmi4_smbus 0-002c: rmi_smb_resume+0x0/0x6b [rmi_smbus] =
+returned 0 after 549 usecs
+>> [ 2869.746446] rmi4_physical rmi4-00: Failed to read irqs, code=3D-6
+>>=20
+>> Any ideas on what might be causing this, only on resume from deep =
+sleep?
+>>=20
+>>=20
+>> On Fri, Apr 14, 2023 at 11:41=E2=80=AFAM Jonathan Denose =
+<jdenose@chromium.org> wrote:
+>>>=20
+>>> When intertouch is enabled for the L440 a (deep)sleep/resume
+>>> cycle causes the touchpad driver to hang which causes the
+>>> touchpad to become unresponsive. Disable intertouch resolves
+>>> this issue and the touchpad is fine after resume from sleep.
+>>>=20
+>>> Additionally, when the PNP id for the L440 is only removed
+>>> from the topbuttonpad_pnp_ids list, a message is logged to
+>>> enable psmouse.synaptics_intertouch, which would cause the
+>>> sleep/resume issue again. By removing the PNP id from
+>>> topbutton_pnp_ids and then adding it to the
+>>> forcepad_pnp_ids array, intertouch is disabled and the
+>>> message is not logged.
+>>>=20
+>>> Signed-off-by: Jonathan Denose <jdenose@google.com>
+>>> ---
+>>>=20
+>>> Changes in v2:
+>>> - remove debug statement
+>>>=20
+>>> drivers/input/mouse/synaptics.c | 2 +-
+>>> 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>=20
+>>> diff --git a/drivers/input/mouse/synaptics.c =
+b/drivers/input/mouse/synaptics.c
+>>> index fa021af8506e4..b7218b7652c20 100644
+>>> --- a/drivers/input/mouse/synaptics.c
+>>> +++ b/drivers/input/mouse/synaptics.c
+>>> @@ -150,7 +150,6 @@ static const char * const topbuttonpad_pnp_ids[] =
+=3D {
+>>>        "LEN2001", /* Edge E431 */
+>>>        "LEN2002", /* Edge E531 */
+>>>        "LEN2003",
+>>> -       "LEN2004", /* L440 */
+>>>        "LEN2005",
+>>>        "LEN2006", /* Edge E440/E540 */
+>>>        "LEN2007",
+>>> @@ -198,6 +197,7 @@ static const char * const smbus_pnp_ids[] =3D {
+>>> static const char * const forcepad_pnp_ids[] =3D {
+>>>        "SYN300D",
+>>>        "SYN3014",
+>>> +       "LEN2004", /* L440 */
+
+While this does seem to elliminate the message, the touchpad in the L440 =
+is not a forcepad. Adding the L440 PnP ID here implies that it is one of =
+these special forcepads which reports "force" data for contacts and that =
+is not the case here.
+
+>>>        NULL
+>>> };
+>>>=20
+>>> =E2=80=94
+>>> 2.39.2
+>>>=20
+
+
+Andrew
 
