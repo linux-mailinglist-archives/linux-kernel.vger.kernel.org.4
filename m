@@ -2,326 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE8136E5498
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 00:15:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEDEF6E549A
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 00:16:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbjDQWPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 18:15:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57532 "EHLO
+        id S229967AbjDQWQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 18:16:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjDQWPa (ORCPT
+        with ESMTP id S229694AbjDQWQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 18:15:30 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29BE45275;
-        Mon, 17 Apr 2023 15:15:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=JDQzZLMFJDW5Lkfe1LxMQV8f8XQI7ptxaDWypTR6ENw=; b=aoKysKwocvLQSxSr8k6YPuhx1T
-        TpfprTvFoskLH4J1OC5XkCLUQYmYrS8OK2bRUbEYgqWoRLUxoK3cQIM+TK9fbiKFzLehx5//x0q4N
-        BqPl7tzAmWGK7zzvyZddo7lHkZB4hicgpRzc5LhiJHIK4S7E1iO69kKn0OsefyaPyyi1iEPE22Rnb
-        52INLLlyQR26JLT7X9XL519lVVbr2YaeztBIGDIbYzdmebdDlafjdXWZK4abe7LypyWrTBWp9+1G/
-        sLRNsGFQkdRJOieGwxlDoxuR0H5XxXpsJj1eKfTB6bI8iFKXKptA05d5YC4q/zoRYzPrYNPupxoL0
-        nLALzLrw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1poX84-000FNP-2U;
-        Mon, 17 Apr 2023 22:15:20 +0000
-Date:   Mon, 17 Apr 2023 15:15:20 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Aaron Tomlin <atomlin@redhat.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Viktor Malik <vmalik@redhat.com>,
-        Jason Baron <jbaron@akamai.com>, Song Liu <song@kernel.org>,
-        Jim Cromie <jim.cromie@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] module: fix building stats for 32-bit targets
-Message-ID: <ZD3E+AYPzq/EO2Gs@bombadil.infradead.org>
-References: <20230417220254.3215576-1-arnd@kernel.org>
- <20230417220254.3215576-2-arnd@kernel.org>
+        Mon, 17 Apr 2023 18:16:17 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6AD15279
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 15:16:16 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-63b73203e0aso4190745b3a.1
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 15:16:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1681769776; x=1684361776;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HX6x50X1I0Zl7KqrE4lTGH4kDeVIRVgagffI4hk1W4w=;
+        b=BAQM/Qj6aW6qQVkNxEdFfvp4L2v43/c1sWfOR0aw0h4Q4QXr91VuuUfUq4AAd0INWD
+         YwUAjIo/zgar/4MiknTnJOhzPmBP5cT+Eq6J5LrcP/OVrQBjHwp8yuW4S91pa7GLFw/S
+         ao8TZKF4rpXW4x3pxnaWwY/z/1I9ZK3fC7dSY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681769776; x=1684361776;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HX6x50X1I0Zl7KqrE4lTGH4kDeVIRVgagffI4hk1W4w=;
+        b=TOG1ZPiPSJU7HmAEv7wYecfj3iVmzAjwEkj/6NqMWluQ8v/WMTJpcAqtfUrZ+KSFFn
+         pncmhFu74PAqM+oJtH6kTBf7YSa1WusYJDx+xteKODpnAQX1GuokMMCNGxV9dy4Z1rLw
+         AEKi+czvmlxEuKSVqWtqJfKgCrs8xQbAaw+5TdpEvIpntRioHEDvBCV5gDUMz0ljD+dz
+         gcEJC5+OZu2ulaWeVJOZ+6jJrX5NwRS8suy307FtC5NDO15qfZ/H99ydVitusy9Lwmwj
+         2xOO4rqb77ceZzLo6FLQWr9cqLnx7MBSmharWXH+55XBvmrTQVf952f+0XNkFFHR+evx
+         fQVw==
+X-Gm-Message-State: AAQBX9dDFi7E4Tx4nHFgGO/gQdRFZ/gxPV2wneIOHN98jcSgxyvpuX99
+        HOnPhf7bB7sKnFk6SL1Lvuqi15BoVNZ1oVjE6p8=
+X-Google-Smtp-Source: AKy350bt8N4R7lILLMHSaYdSwchsR8TA9GZ20EO9f7pWWrbydsPpvy5sU2/JHpVNhYZRSgP0t7F50Q==
+X-Received: by 2002:a17:902:c405:b0:1a6:3630:16e1 with SMTP id k5-20020a170902c40500b001a6363016e1mr50164plk.13.1681769776269;
+        Mon, 17 Apr 2023 15:16:16 -0700 (PDT)
+Received: from pc98uv11.mtv.corp.google.com ([2620:15c:9d:2:8021:f588:5cf5:d9b4])
+        by smtp.gmail.com with ESMTPSA id b15-20020a170902b60f00b001a27f810a2esm8139061pls.256.2023.04.17.15.16.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 15:16:15 -0700 (PDT)
+From:   Daisuke Nojiri <dnojiri@chromium.org>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Daisuke Nojiri <dnojiri@chromium.org>
+Subject: [PATCH] cros_pchg: Sync port status on resume
+Date:   Mon, 17 Apr 2023 15:16:10 -0700
+Message-ID: <20230417221610.1507341-1-dnojiri@chromium.org>
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230417220254.3215576-2-arnd@kernel.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 12:02:47AM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The new module statistics code mixes 64-bit types and wordsized 'long'
-> variables, which leads to build failures on 32-bit architectures:
+When a stylus is removed (or attached) during suspend, the device detach
+(or attach) events can be lost. This patch makes the peripheral device
+charge driver retrieve the latest status from the EC on resume.
 
-Doh. 0-day had not complained!
+BUG=b:276414488
+TEST=Redrix
 
-> kernel/module/stats.c: In function 'read_file_mod_stats':
-> kernel/module/stats.c:291:29: error: passing argument 1 of 'atomic64_read' from incompatible pointer type [-Werror=incompatible-pointer-types]
->   291 |  total_size = atomic64_read(&total_mod_size);
-> x86_64-linux-ld: kernel/module/stats.o: in function `read_file_mod_stats':
-> stats.c:(.text+0x2b2): undefined reference to `__udivdi3'
-> 
-> To fix this, the code has to use one of the two types consistently.
-> 
-> Change them all to fixed-size 64-bit ones here.
-> 
-> Fixes: 0d4ab68ce983 ("module: add debug stats to help identify memory pressure")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
-> I have no idea if there is a risk of these variables actually
-> overflowing 'long' on 32-bit machines. If they provably can't, it
-> would be better to do the opposite patch.
+Signed-off-by: Daisuke Nojiri <dnojiri@chromium.org>
+---
+ .../power/supply/cros_peripheral_charger.c    | 25 ++++++++++++++++---
+ 1 file changed, 22 insertions(+), 3 deletions(-)
 
-I had originally used atomic64_t and added a debugfs knob for it but
-Linus had advised against it because its not a stat we care too much
-on 32-bit and atomic64 is nasty on 32-bit [0].
-
-So I went with atomic_long and the cast becuase we're just reading.
+diff --git a/drivers/power/supply/cros_peripheral_charger.c b/drivers/power/supply/cros_peripheral_charger.c
+index 1379afd9698d..a204f2355be4 100644
+--- a/drivers/power/supply/cros_peripheral_charger.c
++++ b/drivers/power/supply/cros_peripheral_charger.c
+@@ -227,8 +227,7 @@ static int cros_pchg_get_prop(struct power_supply *psy,
+ 	return 0;
+ }
  
-Is there a way to fix this without doing the fully jump? If not oh well.
+-static int cros_pchg_event(const struct charger_data *charger,
+-			   unsigned long host_event)
++static int cros_pchg_event(const struct charger_data *charger)
+ {
+ 	int i;
+ 
+@@ -256,7 +255,7 @@ static int cros_ec_notify(struct notifier_block *nb,
+ 	if (!(host_event & EC_MKBP_PCHG_DEVICE_EVENT))
+ 		return NOTIFY_DONE;
+ 
+-	return cros_pchg_event(charger, host_event);
++	return cros_pchg_event(charger);
+ }
+ 
+ static int cros_pchg_probe(struct platform_device *pdev)
+@@ -281,6 +280,8 @@ static int cros_pchg_probe(struct platform_device *pdev)
+ 	charger->ec_dev = ec_dev;
+ 	charger->ec_device = ec_device;
+ 
++	platform_set_drvdata(pdev, charger);
++
+ 	ret = cros_pchg_port_count(charger);
+ 	if (ret <= 0) {
+ 		/*
+@@ -349,9 +350,27 @@ static int cros_pchg_probe(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_PM_SLEEP
++static int __maybe_unused cros_pchg_resume(struct device *dev)
++{
++	struct charger_data *charger = dev_get_drvdata(dev);
++
++	/*
++	 * Sync all ports on resume in case reports from EC are lost during
++	 * the last suspend.
++	 */
++	cros_pchg_event(charger);
++
++	return 0;
++}
++#endif
++
++static SIMPLE_DEV_PM_OPS(cros_pchg_pm_ops, NULL, cros_pchg_resume);
++
+ static struct platform_driver cros_pchg_driver = {
+ 	.driver = {
+ 		.name = DRV_NAME,
++		.pm = &cros_pchg_pm_ops,
+ 	},
+ 	.probe = cros_pchg_probe
+ };
+-- 
+2.39.2
 
-[0] https://lkml.kernel.org/r/CAHk-=whH+OsAY+9qLc9Hz+-W8u=dvD3NLWHemOQpZPcgZa52fA@mail.gmail.com
-
-  Luis
-
-> ---
->  kernel/module/internal.h | 14 +++++------
->  kernel/module/main.c     | 10 ++++----
->  kernel/module/stats.c    | 50 ++++++++++++++++++++--------------------
->  3 files changed, 37 insertions(+), 37 deletions(-)
-> 
-> diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-> index 9ba5f8df15bc..c1710b74027c 100644
-> --- a/kernel/module/internal.h
-> +++ b/kernel/module/internal.h
-> @@ -175,13 +175,13 @@ enum fail_dup_mod_reason {
->  
->  #ifdef CONFIG_MODULE_STATS
->  
-> -#define mod_stat_add_long(count, var) atomic_long_add(count, var)
-> +#define mod_stat_add_64(count, var) atomic64_add(count, var)
->  #define mod_stat_inc(name) atomic_inc(name)
->  
-> -extern atomic_long_t total_mod_size;
-> -extern atomic_long_t total_text_size;
-> -extern atomic_long_t invalid_kread_bytes;
-> -extern atomic_long_t invalid_decompress_bytes;
-> +extern atomic64_t total_mod_size;
-> +extern atomic64_t total_text_size;
-> +extern atomic64_t invalid_kread_bytes;
-> +extern atomic64_t invalid_decompress_bytes;
->  
->  extern atomic_t modcount;
->  extern atomic_t failed_kreads;
-> @@ -189,7 +189,7 @@ extern atomic_t failed_decompress;
->  struct mod_fail_load {
->  	struct list_head list;
->  	char name[MODULE_NAME_LEN];
-> -	atomic_long_t count;
-> +	atomic64_t count;
->  	unsigned long dup_fail_mask;
->  };
->  
-> @@ -199,7 +199,7 @@ void mod_stat_bump_becoming(struct load_info *info, int flags);
->  
->  #else
->  
-> -#define mod_stat_add_long(name, var)
-> +#define mod_stat_add_64(name, var)
->  #define mod_stat_inc(name)
->  
->  static inline int try_add_failed_module(const char *name, size_t len,
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index 1ed373145278..d1b213310e4b 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -2600,8 +2600,8 @@ static noinline int do_init_module(struct module *mod)
->  	mutex_unlock(&module_mutex);
->  	wake_up_all(&module_wq);
->  
-> -	mod_stat_add_long(text_size, &total_text_size);
-> -	mod_stat_add_long(total_size, &total_mod_size);
-> +	mod_stat_add_64(text_size, &total_text_size);
-> +	mod_stat_add_64(total_size, &total_mod_size);
->  
->  	mod_stat_inc(&modcount);
->  
-> @@ -3052,7 +3052,7 @@ SYSCALL_DEFINE3(init_module, void __user *, umod,
->  	err = copy_module_from_user(umod, len, &info);
->  	if (err) {
->  		mod_stat_inc(&failed_kreads);
-> -		mod_stat_add_long(len, &invalid_kread_bytes);
-> +		mod_stat_add_64(len, &invalid_kread_bytes);
->  		return err;
->  	}
->  
-> @@ -3081,7 +3081,7 @@ SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
->  				       READING_MODULE);
->  	if (len < 0) {
->  		mod_stat_inc(&failed_kreads);
-> -		mod_stat_add_long(len, &invalid_kread_bytes);
-> +		mod_stat_add_64(len, &invalid_kread_bytes);
->  		return len;
->  	}
->  
-> @@ -3090,7 +3090,7 @@ SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
->  		vfree(buf); /* compressed data is no longer needed */
->  		if (err) {
->  			mod_stat_inc(&failed_decompress);
-> -			mod_stat_add_long(len, &invalid_decompress_bytes);
-> +			mod_stat_add_64(len, &invalid_decompress_bytes);
->  			return err;
->  		}
->  	} else {
-> diff --git a/kernel/module/stats.c b/kernel/module/stats.c
-> index bbf90190a3fe..c4db7f64cdae 100644
-> --- a/kernel/module/stats.c
-> +++ b/kernel/module/stats.c
-> @@ -196,12 +196,12 @@ static LIST_HEAD(dup_failed_modules);
->   *    a separate module request was being issued for each CPU on a system.
->   */
->  
-> -atomic_long_t total_mod_size;
-> -atomic_long_t total_text_size;
-> -atomic_long_t invalid_kread_bytes;
-> -atomic_long_t invalid_decompress_bytes;
-> -static atomic_long_t invalid_becoming_bytes;
-> -static atomic_long_t invalid_mod_bytes;
-> +atomic64_t total_mod_size;
-> +atomic64_t total_text_size;
-> +atomic64_t invalid_kread_bytes;
-> +atomic64_t invalid_decompress_bytes;
-> +static atomic64_t invalid_becoming_bytes;
-> +static atomic64_t invalid_mod_bytes;
->  atomic_t modcount;
->  atomic_t failed_kreads;
->  atomic_t failed_decompress;
-> @@ -222,21 +222,21 @@ static const char *mod_fail_to_str(struct mod_fail_load *mod_fail)
->  
->  void mod_stat_bump_invalid(struct load_info *info, int flags)
->  {
-> -	atomic_long_add(info->len * 2, &invalid_mod_bytes);
-> +	atomic64_add(info->len * 2, &invalid_mod_bytes);
->  	atomic_inc(&failed_load_modules);
->  #if defined(CONFIG_MODULE_DECOMPRESS)
->  	if (flags & MODULE_INIT_COMPRESSED_FILE)
-> -		atomic_long_add(info->compressed_len, &invalid_mod_byte);
-> +		atomic64_add(info->compressed_len, &invalid_mod_bytes);
->  #endif
->  }
->  
->  void mod_stat_bump_becoming(struct load_info *info, int flags)
->  {
->  	atomic_inc(&failed_becoming);
-> -	atomic_long_add(info->len, &invalid_becoming_bytes);
-> +	atomic64_add(info->len, &invalid_becoming_bytes);
->  #if defined(CONFIG_MODULE_DECOMPRESS)
->  	if (flags & MODULE_INIT_COMPRESSED_FILE)
-> -		atomic_long_add(info->compressed_len, &invalid_becoming_bytes);
-> +		atomic64_add(info->compressed_len, &invalid_becoming_bytes);
->  #endif
->  }
->  
-> @@ -247,7 +247,7 @@ int try_add_failed_module(const char *name, size_t len, enum fail_dup_mod_reason
->  	list_for_each_entry_rcu(mod_fail, &dup_failed_modules, list,
->  				lockdep_is_held(&module_mutex)) {
->  		if (strlen(mod_fail->name) == len && !memcmp(mod_fail->name, name, len)) {
-> -                        atomic_long_inc(&mod_fail->count);
-> +                        atomic64_inc(&mod_fail->count);
->  			__set_bit(reason, &mod_fail->dup_fail_mask);
->                          goto out;
->                  }
-> @@ -258,7 +258,7 @@ int try_add_failed_module(const char *name, size_t len, enum fail_dup_mod_reason
->  		return -ENOMEM;
->  	memcpy(mod_fail->name, name, len);
->  	__set_bit(reason, &mod_fail->dup_fail_mask);
-> -        atomic_long_inc(&mod_fail->count);
-> +        atomic64_inc(&mod_fail->count);
->          list_add_rcu(&mod_fail->list, &dup_failed_modules);
->  out:
->  	return 0;
-> @@ -331,12 +331,12 @@ static ssize_t read_file_mod_stats(struct file *file, char __user *user_buf,
->  
->  	if (live_mod_count && total_size) {
->  		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Average mod size",
-> -				 DIV_ROUND_UP(total_size, live_mod_count));
-> +				 DIV64_U64_ROUND_UP(total_size, live_mod_count));
->  	}
->  
->  	if (live_mod_count && text_size) {
->  		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Average mod text size",
-> -				 DIV_ROUND_UP(text_size, live_mod_count));
-> +				 DIV64_U64_ROUND_UP(text_size, live_mod_count));
->  	}
->  
->  	/*
-> @@ -349,25 +349,25 @@ static ssize_t read_file_mod_stats(struct file *file, char __user *user_buf,
->  	WARN_ON_ONCE(ikread_bytes && !fkreads);
->  	if (fkreads && ikread_bytes) {
->  		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Avg fail kread bytes",
-> -				 DIV_ROUND_UP(ikread_bytes, fkreads));
-> +				 DIV64_U64_ROUND_UP(ikread_bytes, fkreads));
->  	}
->  
->  	WARN_ON_ONCE(ibecoming_bytes && !fbecoming);
->  	if (fbecoming && ibecoming_bytes) {
->  		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Avg fail becoming bytes",
-> -				 DIV_ROUND_UP(ibecoming_bytes, fbecoming));
-> +				 DIV64_U64_ROUND_UP(ibecoming_bytes, fbecoming));
->  	}
->  
->  	WARN_ON_ONCE(idecompress_bytes && !fdecompress);
->  	if (fdecompress && idecompress_bytes) {
->  		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Avg fail decomp bytes",
-> -				 DIV_ROUND_UP(idecompress_bytes, fdecompress));
-> +				 DIV64_U64_ROUND_UP(idecompress_bytes, fdecompress));
->  	}
->  
->  	WARN_ON_ONCE(imod_bytes && !floads);
->  	if (floads && imod_bytes) {
->  		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Average fail load bytes",
-> -				 DIV_ROUND_UP(imod_bytes, floads));
-> +				 DIV64_U64_ROUND_UP(imod_bytes, floads));
->  	}
->  
->  	/* End of our debug preamble header. */
-> @@ -407,16 +407,16 @@ static const struct file_operations fops_mod_stats = {
->  	.llseek = default_llseek,
->  };
->  
-> -#define mod_debug_add_ulong(name) debugfs_create_ulong(#name, 0400, mod_debugfs_root, (unsigned long *) &name.counter)
-> +#define mod_debug_add_u64(name) debugfs_create_u64(#name, 0400, mod_debugfs_root, (s64 *)&name.counter)
->  #define mod_debug_add_atomic(name) debugfs_create_atomic_t(#name, 0400, mod_debugfs_root, &name)
->  static int __init module_stats_init(void)
->  {
-> -	mod_debug_add_ulong(total_mod_size);
-> -	mod_debug_add_ulong(total_text_size);
-> -	mod_debug_add_ulong(invalid_kread_bytes);
-> -	mod_debug_add_ulong(invalid_decompress_bytes);
-> -	mod_debug_add_ulong(invalid_becoming_bytes);
-> -	mod_debug_add_ulong(invalid_mod_bytes);
-> +	mod_debug_add_u64(total_mod_size);
-> +	mod_debug_add_u64(total_text_size);
-> +	mod_debug_add_u64(invalid_kread_bytes);
-> +	mod_debug_add_u64(invalid_decompress_bytes);
-> +	mod_debug_add_u64(invalid_becoming_bytes);
-> +	mod_debug_add_u64(invalid_mod_bytes);
->  
->  	mod_debug_add_atomic(modcount);
->  	mod_debug_add_atomic(failed_kreads);
-> -- 
-> 2.39.2
-> 
