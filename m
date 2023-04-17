@@ -2,134 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD2BB6E4B5E
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 842526E4B5A
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:21:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230364AbjDQOV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 10:21:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48206 "EHLO
+        id S230244AbjDQOVp convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 17 Apr 2023 10:21:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbjDQOVt (ORCPT
+        with ESMTP id S229555AbjDQOVm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 10:21:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B7197
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:21:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681741262;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hXXWTVEI1mMsVSpGycpPWe1J+aRrdeZCdqy7/mR/vH0=;
-        b=h3wu4rM/hYwbf+knvWmG5lCdZ1Hz+zPSUv7ifoETb+XCLaLwMVZ7ZXILXzTDrxghHrHEQm
-        H1VxJF1rt8vQembSWhjFmGvM7ZveRfYZUeTa1h0q6uflz7QJlWZGHOlkNwn3rKu7YWKIJS
-        bIJewseTJ2lxkZjFa2jLm9xRHI1VVS8=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-271--_W405W6MPCmx2EkGQQIJg-1; Mon, 17 Apr 2023 10:20:56 -0400
-X-MC-Unique: -_W405W6MPCmx2EkGQQIJg-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-2f8c2258b48so363583f8f.1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:20:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681741255; x=1684333255;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hXXWTVEI1mMsVSpGycpPWe1J+aRrdeZCdqy7/mR/vH0=;
-        b=YNLHZNtmblNszeCOAZL04KKR5Vu0unHYC3ymQ3UF7b0K2iLBkKOGhC4ETEzemzidTg
-         F6Vo+kwBGtGoKv29picd7onrulHdwoQq4wWqb9YNqcGcw8IGx7KGGWw9Hzyxyu/YDdkF
-         am63xLa7BMYYJ+hKE9Lk+oXgJbX0qHT0x1TiJMeYi0JOkBaaT1ZHB7dEQUx4ouGyvZIj
-         /wBX/B7OFXueI67cTgq4huVXpabx7wbUgUoJJW0xwQPQ26hEDPF/t5EgIpF9ZESXnMTa
-         JDs10IqcPUT8lKGxJ08kdtTD23YHuorcZs7i5UBlCXzmLLieVgr+x9bY/R+sn6Va7dgG
-         LSZg==
-X-Gm-Message-State: AAQBX9fRAid9yjxF9LEXVHnxF4Mmdfc4jSnox13VfHanYrgKlawPM5j2
-        bAwJtJ4uDtByP3fxhsXUunL4/08DCyDSc6X26gy9/ViHbt9cox/7TFz1lLyWffPDA5jO476o/K+
-        PYn4xHIRvWFC0vp/bBJDZBfCL
-X-Received: by 2002:a5d:5248:0:b0:2f9:a75:b854 with SMTP id k8-20020a5d5248000000b002f90a75b854mr3792094wrc.59.1681741254928;
-        Mon, 17 Apr 2023 07:20:54 -0700 (PDT)
-X-Google-Smtp-Source: AKy350boMM0zmEGTfFZFjlk6c0N1TW//CLM7LqCyngTtQr2+J07kOHHTQAknS4PxsNoOPWRVKQQvfg==
-X-Received: by 2002:a5d:5248:0:b0:2f9:a75:b854 with SMTP id k8-20020a5d5248000000b002f90a75b854mr3792081wrc.59.1681741254560;
-        Mon, 17 Apr 2023 07:20:54 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c700:fc00:db07:68a9:6af5:ecdf? (p200300cbc700fc00db0768a96af5ecdf.dip0.t-ipconnect.de. [2003:cb:c700:fc00:db07:68a9:6af5:ecdf])
-        by smtp.gmail.com with ESMTPSA id u13-20020a05600c00cd00b003edf2dc7ca3sm12016562wmm.34.2023.04.17.07.20.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Apr 2023 07:20:53 -0700 (PDT)
-Message-ID: <b37d1876-0a74-aa52-7911-e6f78280caaa@redhat.com>
-Date:   Mon, 17 Apr 2023 16:20:52 +0200
+        Mon, 17 Apr 2023 10:21:42 -0400
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17835F3;
+        Mon, 17 Apr 2023 07:21:41 -0700 (PDT)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1poPjb-002Mbf-Vt; Mon, 17 Apr 2023 16:21:36 +0200
+Received: from p5b13a017.dip0.t-ipconnect.de ([91.19.160.23] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1poPjb-0046Ky-Nw; Mon, 17 Apr 2023 16:21:35 +0200
+Message-ID: <3522e1a2957f20a01bd5bc61b0f78d4d38e43b68.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH v3 16/19] arch/sh: Implement <asm/fb.h> with generic
+ helpers
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Thomas Zimmermann <tzimmermann@suse.de>, arnd@arndb.de,
+        daniel.vetter@ffwll.ch, deller@gmx.de, javierm@redhat.com,
+        gregkh@linuxfoundation.org
+Cc:     linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, x86@kernel.org,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>
+Date:   Mon, 17 Apr 2023 16:21:34 +0200
+In-Reply-To: <20230417125651.25126-17-tzimmermann@suse.de>
+References: <20230417125651.25126-1-tzimmermann@suse.de>
+         <20230417125651.25126-17-tzimmermann@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.48.0 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v3 0/7] Split a folio to any lower order folios
-Content-Language: en-US
-To:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Zi Yan <ziy@nvidia.com>, Zi Yan <zi.yan@sent.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
-        linux-mm@kvack.org,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Zach O'Keefe <zokeefe@google.com>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20230403201839.4097845-1-zi.yan@sent.com>
- <20230404144727.e613116684dbd65a4b4745c1@linux-foundation.org>
- <49ee481e-452f-61c7-2da5-28de2cf3de2@google.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <49ee481e-452f-61c7-2da5-28de2cf3de2@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 91.19.160.23
+X-ZEDAT-Hint: PO
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.04.23 20:11, Hugh Dickins wrote:
-> On Tue, 4 Apr 2023, Andrew Morton wrote:
->> On Mon,  3 Apr 2023 16:18:32 -0400 Zi Yan <zi.yan@sent.com> wrote:
->>
->>> File folio supports any order and people would like to support flexible orders
->>> for anonymous folio[1] too. Currently, split_huge_page() only splits a huge
->>> page to order-0 pages, but splitting to orders higher than 0 is also useful.
->>> This patchset adds support for splitting a huge page to any lower order pages
->>> and uses it during file folio truncate operations.
->>
->> This series (and its v1 & v2) don't appear to have much in the way of
->> detailed review.  As it's at v3 and has been fairly stable I'll queue
->> it up for some testing now, but I do ask that some reviewers go through
->> it please.
+On Mon, 2023-04-17 at 14:56 +0200, Thomas Zimmermann wrote:
+> Replace the architecture's fbdev helpers with the generic
+> ones from <asm-generic/fb.h>. No functional changes.
 > 
-> Andrew, please don't let this series drift into 6.4-rc1.
+> v2:
+> 	* use default implementation for fb_pgprotect() (Arnd)
 > 
-> I've seen a bug or two (I'll point out in response to those patches),
-> but overall I don't see what the justification for the series is: done
-> because it could be done, it seems to me, but liable to add surprises.
+> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+> Cc: Rich Felker <dalias@libc.org>
+> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+> ---
+>  arch/sh/include/asm/fb.h | 15 +--------------
+>  1 file changed, 1 insertion(+), 14 deletions(-)
 > 
-> The cover letter says "splitting to orders higher than 0 is also useful",
-> but it's not clear why; and the infrastructure provided seems unsuited
-> to the one use provided - I'll say more on that truncation patch.
+> diff --git a/arch/sh/include/asm/fb.h b/arch/sh/include/asm/fb.h
+> index 9a0bca2686fd..19df13ee9ca7 100644
+> --- a/arch/sh/include/asm/fb.h
+> +++ b/arch/sh/include/asm/fb.h
+> @@ -2,19 +2,6 @@
+>  #ifndef _ASM_FB_H_
+>  #define _ASM_FB_H_
+>  
+> -#include <linux/fb.h>
+> -#include <linux/fs.h>
+> -#include <asm/page.h>
+> -
+> -static inline void fb_pgprotect(struct file *file, struct vm_area_struct *vma,
+> -				unsigned long off)
+> -{
+> -	vma->vm_page_prot = pgprot_writecombine(vma->vm_page_prot);
+> -}
+> -
+> -static inline int fb_is_primary_device(struct fb_info *info)
+> -{
+> -	return 0;
+> -}
+> +#include <asm-generic/fb.h>
+>  
+>  #endif /* _ASM_FB_H_ */
 
-I agree. Maybe this patch set is something we want to have in the future 
-once actual consumers that can benefit are in place, such that we can 
-show actual performance numbers with/without.
-
-Until then, "365 insertions(+), 68 deletions(-)" certainly needs some 
-reasonable motivation.
+Acked-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 
 -- 
-Thanks,
-
-David / dhildenb
-
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
