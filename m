@@ -2,98 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E4D66E40C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 09:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCBC26E408E
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 09:19:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbjDQHYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 03:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
+        id S230257AbjDQHTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 03:19:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjDQHYK (ORCPT
+        with ESMTP id S230204AbjDQHTB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 03:24:10 -0400
-X-Greylist: delayed 668 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 17 Apr 2023 00:24:07 PDT
-Received: from mail.distrito09d21.saludzona5.gob.ec (mail.distrito09d21.saludzona5.gob.ec [190.214.49.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23C5E4E
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 00:24:07 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.distrito09d21.saludzona5.gob.ec (Postfix) with ESMTP id 6A871DEB9E9;
-        Mon, 17 Apr 2023 02:18:34 -0500 (-05)
-Received: from mail.distrito09d21.saludzona5.gob.ec ([127.0.0.1])
-        by localhost (mail.distrito09d21.saludzona5.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id Je81GdEGGyEl; Mon, 17 Apr 2023 02:18:34 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.distrito09d21.saludzona5.gob.ec (Postfix) with ESMTP id E258FDEBA02;
-        Mon, 17 Apr 2023 02:18:33 -0500 (-05)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.distrito09d21.saludzona5.gob.ec E258FDEBA02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=distrito09d21.saludzona5.gob.ec;
-        s=B3F564AE-DCCF-11EA-A8CE-DCDEBBF83439; t=1681715914;
-        bh=Dcs2PdQd+rhHCVw1keoJ9FS9PUCMRPAIMppoLwfJVdU=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=M26sp4QfK19uDNrZEFUCz3HV7W5mJTyvjUIooVW5f7vdWWd/v4OMgSmn6s5gTyZ6w
-         Bc0NBHAS8Aka4kvNNAatCOdOLXM63Vo0K2ImYFVLpUvmFEGgZI8XzvuFZzlJ6EAnZR
-         ZNiwP6k5gqe6gFh840Unzos0cj8DJNKd7SITZC5/XWYqpzK//eHdXQmtiUJp9LCbj/
-         T7P1/jtdvuYdx6tlKxESuidesVZEcCSQDDOmXu7X/rC4KG+RNJnXcBEBXkLFMaA4DP
-         fjgdngjfTkMXfa3JTeNv+8OGXrzfy0q0sm0SjRGTo0QByvZKISkDYQt8rOQkv714Kb
-         4Wk3uyFM3Kr9g==
-X-Virus-Scanned: amavisd-new at distrito09d21.saludzona5.gob.ec
-Received: from mail.distrito09d21.saludzona5.gob.ec ([127.0.0.1])
-        by localhost (mail.distrito09d21.saludzona5.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id sIFH6o7OeoJC; Mon, 17 Apr 2023 02:18:33 -0500 (-05)
-Received: from [23.172.112.93] (unknown [23.172.112.93])
-        by mail.distrito09d21.saludzona5.gob.ec (Postfix) with ESMTPSA id 956BFDEB9EC;
-        Mon, 17 Apr 2023 02:18:31 -0500 (-05)
-Content-Type: text/plain; charset="iso-8859-1"
+        Mon, 17 Apr 2023 03:19:01 -0400
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A08040D0
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 00:18:48 -0700 (PDT)
+Received: from ramsan.of.borg ([84.195.187.55])
+        by albert.telenet-ops.be with bizsmtp
+        id ljJk2900L1C8whw06jJk4X; Mon, 17 Apr 2023 09:18:46 +0200
+Received: from geert (helo=localhost)
+        by ramsan.of.borg with local-esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1poJ8O-00GyYx-Gn;
+        Mon, 17 Apr 2023 09:18:44 +0200
+Date:   Mon, 17 Apr 2023 09:18:44 +0200 (CEST)
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     linux-kernel@vger.kernel.org
+cc:     linux-spi@vger.kernel.org, linux-um@lists.infradead.org
+Subject: Re: Build regressions/improvements in v6.3-rc7
+In-Reply-To: <20230417071429.965980-1-geert@linux-m68k.org>
+Message-ID: <1ab2158e-dda-c1c5-4a3b-301cd41f9ef@linux-m68k.org>
+References: <CAHk-=wjwK59PegTZb9r=EVuCPwbigcbbby5AwEboMBgykhL-KA@mail.gmail.com> <20230417071429.965980-1-geert@linux-m68k.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?q?Atenci=C3=B3n_usuario_de_cuenta_de_correo_electr=C3=B3nico?=
-To:     Recipients <hernan.suarez@distrito09d21.saludzona5.gob.ec>
-From:   "@ZIMBRA" <hernan.suarez@distrito09d21.saludzona5.gob.ec>
-Date:   Mon, 17 Apr 2023 00:18:09 -0700
-Reply-To: webmasterzimbra1@gmail.com
-Message-Id: <20230417071831.956BFDEB9EC@mail.distrito09d21.saludzona5.gob.ec>
-X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Atenci=F3n usuario de cuenta de correo electr=F3nico,
+On Mon, 17 Apr 2023, Geert Uytterhoeven wrote:
+> JFYI, when comparing v6.3-rc7[1] to v6.3-rc6[3], the summaries are:
+>  - build errors: +1/-2
 
-Este mensaje proviene de su Centro de administraci=F3n de cuentas Webmail y=
- red. Estamos en el proceso de actualizar todos nuestros servidores de corr=
-eo electr=F3nico como parte de nuestros esfuerzos en curso para proporciona=
-r el mejor servicio de correo web posible. Tambi=E9n eliminamos todas las c=
-uentas no utilizadas para crear m=E1s espacio para registros de cuentas nue=
-vas.
+   + /kisskb/src/drivers/spi/spi-stm32-qspi.c: error: 'op' is used uninitialized [-Werror=uninitialized]:  => 564:27, 523:27
 
-Para asegurarse de que no experimenta interrupciones del servicio o posible=
- desactivaci=F3n de su cuenta de correo electr=F3nico, debe responder a est=
-e mensaje confirmando inmediatamente los detalles de su cuenta de correo el=
-ectr=F3nico a continuaci=F3n para confirmaci=F3n e identificaci=F3n.
+um-x86_64-gcc12/um-all{mod,yes}config
 
-Confirme los detalles de su cuenta a continuaci=F3n.
-_____________________________________
-1. Nombre y apellido:
-2. Email completo de acceso:
-3. Nombre de usuario:
-4. Contrase=F1a:
-5. Vuelva a escribir la contrase=F1a:
-_____________________________________
+Seen before, and looks completely bogus to me, unless there's a bug in
+the UML implementation of memcpy() and memset(), which are used to
+initialize "op".
 
-De lo contrario, su cuenta de correo electr=F3nico puede desactivarse autom=
-=E1ticamente de nuestro servidor de correo electr=F3nico / base de datos de=
- correo electr=F3nico. Para poder actualizar su cuenta de correo electr=F3n=
-ico, responda a este mensaje.
+> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/6a8f57ae2eb07ab39a6f0ccad60c760743051026/ (all 152 configs)
+> [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/09a9639e56c01c7a00d6c0ca63f4c7c41abe075d/ (all 152 configs)
 
-Gracias por su comprensi=F3n, le deseamos un d=EDa agradable por delante.
+Gr{oetje,eeting}s,
 
+ 						Geert
 
-Administrador,
-Webmail y Centro de administraci=F3n de cuentas de red.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+ 							    -- Linus Torvalds
