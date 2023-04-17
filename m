@@ -2,99 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE0446E46C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 13:50:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDEE96E468E
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 13:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbjDQLuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 07:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39536 "EHLO
+        id S229841AbjDQLfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 07:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230192AbjDQLuO (ORCPT
+        with ESMTP id S230202AbjDQLdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 07:50:14 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8B365AF;
-        Mon, 17 Apr 2023 04:49:16 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 18A545FD28;
-        Mon, 17 Apr 2023 14:47:41 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1681732061;
-        bh=UFOQ7zl15XBdCKDP1PBa7gWSCuhGytq2kMbaG0PLdoc=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=l3oCzl5MJATaLtjposS07ZcWREmdW4Z4JqkdE5ALl7zbPpEgBtFlhtj8kWx6ooy7O
-         IasWd1VK1kgPIueM2Od6VLJWmA7IvsvEaZ/z/AA8uMBCcJKV4ZpmYKXKmgdrXcSZaD
-         /dLFxE4K784BXu0cOxqOU/CKULHj7FC48gpyuaYalocdi/HCjehD36QZ6qpYwzav+I
-         WB9I9KJuZaNn4hYCCSR3gdqmg5vf4gEnCo0/muMQJo/mOupgs6RqQIXVYh7fPBfgjw
-         b001/EpgNTtDPcUvqqppiw2o+bQLDrWf45kA7DyN3Wn39hy0cpO5EQ0Ijdf5DI9RPz
-         4w+nL9GaUb/Cw==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Mon, 17 Apr 2023 14:47:39 +0300 (MSK)
-Date:   Mon, 17 Apr 2023 14:47:39 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-CC:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <neil.armstrong@linaro.org>,
-        <khilman@baylibre.com>, <jbrunet@baylibre.com>,
-        <mturquette@baylibre.com>, <vkoul@kernel.org>, <kishon@kernel.org>,
-        <hminas@synopsys.com>, <Thinh.Nguyen@synopsys.com>,
-        <yue.wang@amlogic.com>, <hanjie.lin@amlogic.com>,
-        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Mon, 17 Apr 2023 07:33:00 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4183C93F2
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 04:31:58 -0700 (PDT)
+Received: from dggpemm500001.china.huawei.com (unknown [7.185.36.107])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Q0PrT2nG6z17SgW;
+        Mon, 17 Apr 2023 19:26:17 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 17 Apr 2023 19:29:57 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>
+CC:     SeongJae Park <sj@kernel.org>, Hugh Dickins <hughd@google.com>,
         <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>
-Subject: Re: [PATCH v1 4/5] usb: dwc3-meson-g12a: support OTG switch
-Message-ID: <20230417114739.r7aoiodqybalbn4o@CAB-WSD-L081021>
-References: <20230414152423.19842-1-ddrokosov@sberdevices.ru>
- <20230414152423.19842-5-ddrokosov@sberdevices.ru>
- <CAFBinCDyUBWd-V0mDy_edzH=3JM5SAuX=vtT4MG9Fb62Rcv=mA@mail.gmail.com>
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH] mm: correct arg in reclaim_pages()/reclaim_clean_pages_from_list()
+Date:   Mon, 17 Apr 2023 19:48:07 +0800
+Message-ID: <20230417114807.186786-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFBinCDyUBWd-V0mDy_edzH=3JM5SAuX=vtT4MG9Fb62Rcv=mA@mail.gmail.com>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/17 09:07:00 #21118574
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Martin,
+Both of them change the arg from page_list to folio_list when convert
+them to use a folio, but not the declaration, let's correct it, also
+move the reclaim_pages() from swap.h to internal.h as it only used
+in mm.
 
-Thank you for quick review, appreciate it!
-Please find my comments below and in the other replies.
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+ include/linux/swap.h | 1 -
+ mm/internal.h        | 3 ++-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Sun, Apr 16, 2023 at 10:56:36PM +0200, Martin Blumenstingl wrote:
-> On Fri, Apr 14, 2023 at 5:24 PM Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
-> [...]
-> >  static const struct dwc3_meson_g12a_drvdata a1_drvdata = {
-> > -       .otg_switch_supported = false,
-> > +       .otg_switch_supported = true,
-> it would be great if you could also follow up with a patch that
-> removes otg_switch_supported.
-> A1 was the only variant that needed it and after this patch it's just dead code.
-
-It makes sense. I thought about it before sending the first version, but
-I found a counter-argument: future SoCs may use this parameter.
-But if you ask, I will remove 'otg_switch_supported' in the next version
-
+diff --git a/include/linux/swap.h b/include/linux/swap.h
+index 7f7d5b9ddf7e..3c69cb653cb9 100644
+--- a/include/linux/swap.h
++++ b/include/linux/swap.h
+@@ -442,7 +442,6 @@ extern unsigned long shrink_all_memory(unsigned long nr_pages);
+ extern int vm_swappiness;
+ long remove_mapping(struct address_space *mapping, struct folio *folio);
+ 
+-extern unsigned long reclaim_pages(struct list_head *page_list);
+ #ifdef CONFIG_NUMA
+ extern int node_reclaim_mode;
+ extern int sysctl_min_unmapped_ratio;
+diff --git a/mm/internal.h b/mm/internal.h
+index 286f97a5125c..f59093b8adb6 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -804,8 +804,9 @@ extern unsigned long  __must_check vm_mmap_pgoff(struct file *, unsigned long,
+         unsigned long, unsigned long);
+ 
+ extern void set_pageblock_order(void);
++unsigned long reclaim_pages(struct list_head *folio_list);
+ unsigned int reclaim_clean_pages_from_list(struct zone *zone,
+-					    struct list_head *page_list);
++					    struct list_head *folio_list);
+ /* The ALLOC_WMARK bits are used as an index to zone->watermark */
+ #define ALLOC_WMARK_MIN		WMARK_MIN
+ #define ALLOC_WMARK_LOW		WMARK_LOW
 -- 
-Thank you,
-Dmitry
+2.35.3
+
