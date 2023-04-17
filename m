@@ -2,51 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B2F66E51DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 22:27:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFC716E51DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 22:27:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbjDQU1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 16:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54414 "EHLO
+        id S230026AbjDQU1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 16:27:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjDQU1q (ORCPT
+        with ESMTP id S229863AbjDQU1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 16:27:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8AE61FC7
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 13:27:43 -0700 (PDT)
+        Mon, 17 Apr 2023 16:27:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C95B1FC0
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 13:27:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 746C062036
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 20:27:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04660C433D2;
-        Mon, 17 Apr 2023 20:27:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CAFC6208F
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 20:27:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DDADC4339B;
+        Mon, 17 Apr 2023 20:27:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681763262;
-        bh=f5WmfpzL8IKLAgdbpNwv/8PyUKUYDvOrFroiYuwRsVg=;
+        s=k20201202; t=1681763266;
+        bh=jTUKGS4yE6dGIJLV1sOj+vFZpr3b/IpFoTct4m0Hq2g=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Gf2wLhb+ale7Pra5hMLANyXZzrTRGIcwy5FNCGzsmxPpZLXC7Np0Ndu45JjgbFPLf
-         f4dIS4xsCNstsPg/ua8zCRylp6htgrnlzHne0O5hvcwEaIOnjlK2KNGdembYXeaqyt
-         n0oXoLQjJDVcCQ+8mxHxLhOitR3ItKEm4QX3xFbNaoh7GiTC9re2n2ww9x5c/HI9BV
-         lUWtwD73Maj4RRdIsiZE9UdFDISvoQRSniWYIWT9PT2xOWHI1+p2vlTxGV7DM11hSj
-         fX4X4N0spQR39CUb818wmPQoxthqdX+rV7y3qr+jxTDdwrzXm5V+iBW5556P3fyWEF
-         VcBKFjxc69j+Q==
+        b=XZCyyjyxzcZQzG6lCLUfJCEqUBRP0qLMwCzDSoB+ZjpdCHx0IB5PPsL0btoPeUmyR
+         cUN8Sw0p7Vsk8oyw1KslYMeJH+JaZ839letabf4nApeHj4jPvi6VBDLXxikYNddoGK
+         Ra2h3wrArKnQWdR982Uf3YO3Wie6EEZ8sX9J++nUKGlwJG8/zBwRF8CTuSL9zPPzVO
+         etVpnrG23fGEV6lLIn7lfO5cfoxw1BdFfpKr6yrGTNM4wmb6Lmc9XMl9LqrAnvk2bM
+         45zYm/PBs6eNBw+itcI3v+mq92HzJNfWsrxg1erv2INbnw4uaHwTc3Ff/+Z+8Yxe1g
+         BpRwBKz11Hdlw==
 From:   Mark Brown <broonie@kernel.org>
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com
-In-Reply-To: <20230414133753.653139-1-rf@opensource.cirrus.com>
-References: <20230414133753.653139-1-rf@opensource.cirrus.com>
-Subject: Re: [PATCH 0/5] ASoC: cs35l56: Code improvements
-Message-Id: <168176326169.1296984.12735339184719682836.b4-ty@kernel.org>
-Date:   Mon, 17 Apr 2023 21:27:41 +0100
+To:     Shengjiu Wang <shengjiu.wang@gmail.com>,
+        Xiubo Li <Xiubo.Lee@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Nicolin Chen <nicoleotsuka@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Dan Carpenter <error27@gmail.com>, Liliang Ye <yll@hust.edu.cn>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230403152647.17638-1-yll@hust.edu.cn>
+References: <20230403152647.17638-1-yll@hust.edu.cn>
+Subject: Re: [PATCH 1/2] ASoC: fsl_mqs: move of_node_put() to the correct
+ location
+Message-Id: <168176326315.1296984.11419887064802720363.b4-ty@kernel.org>
+Date:   Mon, 17 Apr 2023 21:27:43 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13-dev-00303
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,16 +64,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Apr 2023 14:37:48 +0100, Richard Fitzgerald wrote:
-> Various code improvements. These remove redundant code and
-> clean up less-than-optimal original implementations.
+On Mon, 03 Apr 2023 23:26:47 +0800, Liliang Ye wrote:
+> of_node_put() should have been done directly after
+> mqs_priv->regmap = syscon_node_to_regmap(gpr_np);
+> otherwise it creates a reference leak on the success path.
 > 
-> Simon Trimmer (5):
->   ASoC: cs35l56: Rework IRQ allocation
->   ASoC: cs35l56: Allow a wider range for reset pulse width
->   ASoC: cs35l56: Wait for init_complete in cs35l56_component_probe()
->   ASoC: cs35l56: Remove redundant dsp_ready_completion
->   ASoC: cs35l56: Don't return a value from cs35l56_remove()
+> To fix this, of_node_put() is moved to the correct location, and change
+> all the gotos to direct returns.
 > 
 > [...]
 
@@ -74,16 +80,8 @@ Applied to
 
 Thanks!
 
-[1/5] ASoC: cs35l56: Rework IRQ allocation
-      commit: 7d72351a4ef6e1e763bccc24d43c44ffbe1a1555
-[2/5] ASoC: cs35l56: Allow a wider range for reset pulse width
-      commit: b82396122b028a07ce2977e3f33123d7ab526d91
-[3/5] ASoC: cs35l56: Wait for init_complete in cs35l56_component_probe()
-      commit: 440c2d38950f738d7a35d3d29533728e74586d54
-[4/5] ASoC: cs35l56: Remove redundant dsp_ready_completion
-      commit: 4be476830bf96c0095e4e1acdfc12081aa0fb165
-[5/5] ASoC: cs35l56: Don't return a value from cs35l56_remove()
-      commit: 9ed4c762e214a6592184d0dd65b6db86ad30e6d5
+[1/2] ASoC: fsl_mqs: move of_node_put() to the correct location
+      commit: 1c34890273a020d61d6127ade3f68ed1cb21c16a
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
