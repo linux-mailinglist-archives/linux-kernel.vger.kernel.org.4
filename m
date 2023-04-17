@@ -2,104 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B37CF6E474E
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 14:13:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B40D6E4715
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 14:03:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230461AbjDQMNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 08:13:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60188 "EHLO
+        id S230357AbjDQMDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 08:03:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbjDQMNS (ORCPT
+        with ESMTP id S229738AbjDQMDB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 08:13:18 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C4F4499;
-        Mon, 17 Apr 2023 05:12:44 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 70C3B5FD28;
-        Mon, 17 Apr 2023 14:57:08 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1681732628;
-        bh=iw1ARucM/xufZ3PIY5MlxUVdgnsDiUvAkRlREVNWQsw=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=bsIliiOemS+7Us65TsC1UYc2EnsgwRkpA1vS5+MdbvaNpSsOdTZ+uwjQVnrH6WrFX
-         gwdAzfZJBsFlXxbAW3xS3EuUh5HSqrPu9GqrQtubQ16fqCkgYrJxn1qtX5d+jgbskl
-         jHKdMkpJTHa9rqCEb7eMmxUbkrg2wdw6+V0so9+rndyj0okTIy6FzNVBEvQAhzdFTU
-         DguPVJtO3RSNDltSr/K+qEYjmtMZKeCdyxL8QoZZkPGAKUaKHxpp0HUV/aeHqEOJbf
-         1y/cE+PEYfYctE9X+zywjYa4eHYv+c65/swsh+NcMW6VzSi0ljchvhDzNqQgEdC5AB
-         epGeyRW58N/LQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Mon, 17 Apr 2023 14:57:07 +0300 (MSK)
-Date:   Mon, 17 Apr 2023 14:57:07 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-CC:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <neil.armstrong@linaro.org>,
-        <khilman@baylibre.com>, <jbrunet@baylibre.com>,
-        <mturquette@baylibre.com>, <vkoul@kernel.org>, <kishon@kernel.org>,
-        <hminas@synopsys.com>, <Thinh.Nguyen@synopsys.com>,
-        <yue.wang@amlogic.com>, <hanjie.lin@amlogic.com>,
-        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>
-Subject: Re: [PATCH v1 1/5] phy: amlogic: during USB PHY clkin obtaining,
- enable it
-Message-ID: <20230417115707.p5btzzg4rlyzf7ni@CAB-WSD-L081021>
-References: <20230414152423.19842-1-ddrokosov@sberdevices.ru>
- <20230414152423.19842-2-ddrokosov@sberdevices.ru>
- <CAFBinCCEhobbyKHuKDWzTYCQWgNT1-e8=7hMhq1mvT6CuEOjGw@mail.gmail.com>
+        Mon, 17 Apr 2023 08:03:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FE765AF
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 05:01:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681732863;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2LRp3zjh0DOhKKwcTJt+220dZY+oP35RdJVHgXAQvQE=;
+        b=D0p9hffpr7Xeolr36BHrIuSoscnEuTY5KIyW9Dvka5g3IZV04rFiL4+Qh6GR1z5s7wGYal
+        PKMaa0TXD8d5S/E+goXrbS/NeocUNOOiIby6GJk+LD75aceKNZ1ab2Zn9mMxJDsqyBi7NA
+        WH3N2cvm65nfdosn8eE7OaBPDXnSLYg=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-81-gmexpUbVNQauECkjwQoiVQ-1; Mon, 17 Apr 2023 07:57:29 -0400
+X-MC-Unique: gmexpUbVNQauECkjwQoiVQ-1
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-94a34e35f57so284958666b.3
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 04:57:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681732649; x=1684324649;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2LRp3zjh0DOhKKwcTJt+220dZY+oP35RdJVHgXAQvQE=;
+        b=OlImrRLbSLbXZtYasLhGvnnQjyxg+I4lmFi3YP29toC5aaoILMmdOqGGrUSEKPS8wX
+         7YdMwDxXOOMS32Ii6/AkaPNA3OEbhX1YPX0PXus+ufUCUo6KdsH+voFZyj6xrtRnr1Aa
+         MO35X3bHGQU0Od+7SKl6qWcZPN9OpneCqaEWkp6HbCHplcOVdl8MF+GddjL+SMUcqxSR
+         AKlHr6CE2DRjknwKLFwIcbD6w6m0JPwGdKdmxZol9q37ocYdBWJCnY0eHPZdSQuBrr/I
+         je2SrZXpf1CQwjFSrtgToLSYGLdM00tcJBAxjUM0gDiCAw7la9u3UfnwCGKIDt7VbFCe
+         MTSQ==
+X-Gm-Message-State: AAQBX9d43Q6Et51vk5cZQ3ur4+l9A5/zK+c3LJBZaKCsn1Ay5P2UZSrM
+        4RYdeYe0cTIY/+R0XxExJEyOe9jTyqdaqBcHZEV/WXVDKTh5HpS23jba+ZSFSrB1DZ3jq3iS1H8
+        o0GqlUOv5r47gJ2jQIymBSqxX
+X-Received: by 2002:a05:6402:1154:b0:506:83f7:157b with SMTP id g20-20020a056402115400b0050683f7157bmr10206151edw.10.1681732648814;
+        Mon, 17 Apr 2023 04:57:28 -0700 (PDT)
+X-Google-Smtp-Source: AKy350aNKgY4zPoooD46Q25GLFK8yAqcM6inydsLa/BdAONuep0Wjoauz5/ie895Qh5ZYK7I0H0Nfg==
+X-Received: by 2002:a05:6402:1154:b0:506:83f7:157b with SMTP id g20-20020a056402115400b0050683f7157bmr10206139edw.10.1681732648606;
+        Mon, 17 Apr 2023 04:57:28 -0700 (PDT)
+Received: from redhat.com ([2.52.136.129])
+        by smtp.gmail.com with ESMTPSA id n23-20020a056402061700b005068f46064asm3426009edv.33.2023.04.17.04.57.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 04:57:28 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 07:57:24 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Alvaro Karsz <alvaro.karsz@solid-run.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net] virtio-net: reject small vring sizes
+Message-ID: <20230417075645-mutt-send-email-mst@kernel.org>
+References: <20230417021725-mutt-send-email-mst@kernel.org>
+ <AM0PR04MB4723B8489F8F9AE547393697D49C9@AM0PR04MB4723.eurprd04.prod.outlook.com>
+ <20230417023911-mutt-send-email-mst@kernel.org>
+ <AM0PR04MB47237BFB8BB3A3606CE6A408D49C9@AM0PR04MB4723.eurprd04.prod.outlook.com>
+ <20230417030713-mutt-send-email-mst@kernel.org>
+ <AM0PR04MB4723F3E6AE381AEC36D1AEFED49C9@AM0PR04MB4723.eurprd04.prod.outlook.com>
+ <20230417051816-mutt-send-email-mst@kernel.org>
+ <AM0PR04MB47237705695AFD873DEE4530D49C9@AM0PR04MB4723.eurprd04.prod.outlook.com>
+ <20230417073830-mutt-send-email-mst@kernel.org>
+ <AM0PR04MB4723FA4F0FFEBD25903E3344D49C9@AM0PR04MB4723.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFBinCCEhobbyKHuKDWzTYCQWgNT1-e8=7hMhq1mvT6CuEOjGw@mail.gmail.com>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/17 09:07:00 #21118574
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <AM0PR04MB4723FA4F0FFEBD25903E3344D49C9@AM0PR04MB4723.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 16, 2023 at 10:54:17PM +0200, Martin Blumenstingl wrote:
-> Hi Dmitry,
+On Mon, Apr 17, 2023 at 11:51:22AM +0000, Alvaro Karsz wrote:
+> > > I see your point.
+> > > Regardless, we'll need to fail probe in some cases.
+> > > ring size of 1 for example (if I'm not mistaken)
+> > 
+> > Hmm. We can make it work if we increase hard header size, then
+> > there will always be room for vnet header.
+> > 
+> > > control vq even needs a bigger ring.
+> > 
+> > Why does it?
 > 
-> On Fri, Apr 14, 2023 at 5:24 PM Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
-> [...]
-> > -       priv->clk = devm_clk_get(dev, "xtal");
-> > +       priv->clk = devm_clk_get_enabled(dev, "xtal");
-> Generally this works fine but I wouldn't recommend this approach if:
-> - there's some required wait time after the clock has been enabled
-> (see phy_meson_g12a_usb2_init - there's already some required wait
-> time after triggering the reset)
-> - clock gating (for power saving) is needed when the dwc3 driver is
-> unloaded by the PHY driver is not
+> At the moment, most of the commands chain 3 descriptors:
+> 1 - class + command
+> 2 - command specific
+> 3 - ack
 > 
-> In this case: just manually manage the clock in phy_meson_g12a_usb2_{init,exit}
+> We could merge 1 and 2 into a single one, both are read only for the device, so I take it back, it won't need a bigger ring.
+> But it will need 2 descriptors at least(1 read only for the device and 1 write only for the device), so we still need to fail probe sometimes.
+> 
 
-I'm sorry, but I'm not fully understanding your point. Currently, no
-sleeps are required for this clock and we don't have any logic for
-power saving (g12a phy_ops doesn't have power_on()/power_off()
-implementation).
-However, I believe all of your arguments make sense for the future
-development of the phy_meson_g12a_usb2 driver. Is that correct?
+Yes that makes sense, it's architetural. We can disable ctrl vq though.
 
 -- 
-Thank you,
-Dmitry
+MST
+
