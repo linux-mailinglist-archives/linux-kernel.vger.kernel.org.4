@@ -2,123 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C636E4E58
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 18:33:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC3816E4E5D
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 18:38:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbjDQQc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 12:32:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51240 "EHLO
+        id S229690AbjDQQiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 12:38:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjDQQc5 (ORCPT
+        with ESMTP id S229515AbjDQQh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 12:32:57 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C3E8A59;
-        Mon, 17 Apr 2023 09:32:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681749166; x=1713285166;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=84P+ue7q6gbeMc23HNjLrNIJ593kLc/rbC2QengU/0w=;
-  b=I8BTeAfuoa1UWOKrlAiWUdnve0Kx2dDoejx955Z450R6Y40g9VoHTamU
-   ndAL+afjMXnnnEOO9Ly+54aLqhL69po1WsXhQlegwgtIrd18PJ+BYXQuv
-   TkviWwj2za4jLS6MXUIOWoK2/RmDMnatKtcc/h22mp1IOztO1Wx8vfzDx
-   R0MGjZ/pN8fxE0G9LjwBxUaqGH06hidtcCqmkdDk3SRzmf3PBpK8HQ2d0
-   LEaxloOtoPBH6GOdhkAmXGcNsCboTNlF8zbGmyey3FWG6EXmuGqSaw09j
-   6QFQdTVmkEJBcgJigF9naFt2A+j2MmC8PTGI3P/hLzAwOrIpu52mys5LG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="347680876"
-X-IronPort-AV: E=Sophos;i="5.99,204,1677571200"; 
-   d="scan'208";a="347680876"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 09:32:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="640987912"
-X-IronPort-AV: E=Sophos;i="5.99,204,1677571200"; 
-   d="scan'208";a="640987912"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 09:32:46 -0700
-Date:   Mon, 17 Apr 2023 09:36:59 -0700
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
-        vkoul@kernel.org, Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH v4 4/7] iommu/vt-d: Reserve RID_PASID from global PASID
- space
-Message-ID: <20230417093659.653d81e9@jacob-builder>
-In-Reply-To: <c8373d68-9f15-e9a5-d19f-c050f23ac85d@linux.intel.com>
-References: <20230407180554.2784285-1-jacob.jun.pan@linux.intel.com>
-        <20230407180554.2784285-5-jacob.jun.pan@linux.intel.com>
-        <c8373d68-9f15-e9a5-d19f-c050f23ac85d@linux.intel.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Mon, 17 Apr 2023 12:37:58 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F726E8E
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 09:37:54 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f04275b2bdso229355e9.1
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 09:37:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681749472; x=1684341472;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Y12t8FRkoyEyk0bMe914lw6E/czb3SRxw59S8iZC1Uc=;
+        b=rxk+Nn8PufS+81nHUs0I+UFtsIkcSBXz1RKFi5fJB965/TPvLrweGYeLPOTXZ02XKT
+         OEOmwfqB0XI8VvZPHCRurH11Z/mogCp1qS/TxBmUVHdxwJx8lnmcYpE25TGkn4uBWHxK
+         LwOm7NzW9Hplzq2bTSzt4d52ivZct0TKdb07VqrDcOVL05YyfplHoFaYZHH7ospcATEK
+         QE3IJnFkRqyHWboxfG0bY8tDwTE7nHpqldYkzNBDIf9os4FouvX0EPbEjqz3TNnLczBu
+         wlDUSbje1v/HBKqyMdFFas+Y2QX06wSEqfXx9Jy1tV6nVXfV++JEt41h14hnITy3XKuB
+         qpwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681749472; x=1684341472;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Y12t8FRkoyEyk0bMe914lw6E/czb3SRxw59S8iZC1Uc=;
+        b=M5Is25YFsRoxBY1s0v51bRP/6QG0quZGQy4oXr1pMgvXZv7G6p/eDBD4tU0C77lMuT
+         sQpyZE38CZrMQDfKvzrlpjjKVLNhMPIskHFlbkUPTOR0AsqEPOOl4H6YjAoLJspkwgRH
+         QXXxc+xNDKYJYkx8RpBru0vPntElsejtkxKlrNmml7r7Y8MEmr18nOwD3dvo3V8VwKvi
+         NZ90XTmkqB/ecdcBuQVNMJZ5v0b4SwWbE+xsKSv8fVOVRiSYaCkwXo4fMymEvJY1DxoA
+         fPBEjb4MVCFTGSmtICUAeSbBj3XzcFQUYFp2Ih3ovB+p2YlBmzodirvuq+Buvrr2Eyzt
+         KqSg==
+X-Gm-Message-State: AAQBX9cl9U1h+ACSdXSaCe3+ecmN2n8NHPLu8QWEQdudKRzipNhXcwUn
+        O8A7ybFqx0L+pNdfVMdOyabgNGzU2atYaOPlpzTQcQ==
+X-Google-Smtp-Source: AKy350b/PcbvwgUXhKj6FKeyq2/NAraVnaIx3D3A7ebH0CLGWn7aqmil2UrIQTjqxwwrE6wNX+7RY2IZF63wyGwJEjs=
+X-Received: by 2002:a05:600c:c13:b0:3f1:6fe9:4a98 with SMTP id
+ fm19-20020a05600c0c1300b003f16fe94a98mr412681wmb.5.1681749472307; Mon, 17 Apr
+ 2023 09:37:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230414082300.34798-1-adrian.hunter@intel.com> <20230417110221.GH83892@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230417110221.GH83892@hirez.programming.kicks-ass.net>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 17 Apr 2023 09:37:37 -0700
+Message-ID: <CAP-5=fUD=RNqD-7229J5fgaUCMtNiu-urp-9B3LDq8JnP2sGBg@mail.gmail.com>
+Subject: Re: [PATCH RFC 0/5] perf: Add ioctl to emit sideband events
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Baolu,
+On Mon, Apr 17, 2023 at 4:02=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
+>
+> On Fri, Apr 14, 2023 at 11:22:55AM +0300, Adrian Hunter wrote:
+> > Hi
+> >
+> > Here is a stab at adding an ioctl for sideband events.
+> >
+> > This is to overcome races when reading the same information
+> > from /proc.
+>
+> What races? Are you talking about reading old state in /proc the kernel
+> delivering a sideband event for the new state, and then you writing the
+> old state out?
+>
+> Surely that's something perf tool can fix without kernel changes?
 
-On Mon, 10 Apr 2023 09:59:45 +0800, Baolu Lu <baolu.lu@linux.intel.com>
-wrote:
+So my reading is that during event synthesis there are races between
+reading the different /proc files. There is still, I believe, a race
+in with perf record/top with uid filtering which reminds me of this.
+The uid filtering race is that we scan /proc to find processes (pids)
+for a uid, we then synthesize the maps for each of these pids but if a
+pid starts or exits we either error out or don't sample that pid. I
+believe the error out behavior is easy to hit 100% of the time making
+uid mode of limited use.
 
-> On 4/8/23 2:05 AM, Jacob Pan wrote:
-> > On VT-d platforms, RID_PASID is used for DMA request without PASID. We
-> > should not treat RID_PASID special instead let it be allocated from the
-> > global PASID number space. Non-zero value can be used in RID_PASID on
-> > Intel VT-d.
-> > 
-> > For ARM, AMD and others that_always_  use 0 as RID_PASID, there is no
-> > impact in that SVA PASID allocation base is 1.
-> > 
-> > With this change, devices do both DMA with PASID and SVA will not worry
-> > about conflicts when it comes to allocating PASIDs for in-kernel DMA.
-> > 
-> > Signed-off-by: Jacob Pan<jacob.jun.pan@linux.intel.com>
-> > ---
-> >   drivers/iommu/intel/iommu.c | 4 ++++
-> >   1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-> > index 9f737ef55463..cbb2670f88ca 100644
-> > --- a/drivers/iommu/intel/iommu.c
-> > +++ b/drivers/iommu/intel/iommu.c
-> > @@ -3956,6 +3956,10 @@ int __init intel_iommu_init(void)
-> >   
-> >   	intel_iommu_enabled = 1;
-> >   
-> > +	/* Reserved RID_PASID from the global namespace for legacy DMA
-> > */
-> > +	WARN_ON(iommu_alloc_global_pasid(PASID_RID2PASID,
-> > PASID_RID2PASID) !=
-> > +		PASID_RID2PASID);  
-> 
-> How about moving above line up a bit? For example, at least before
-> iommu_device_register(). This is the starting point where device drivers
-> may want global PASIDs.
-> 
-makes sense will do.
+This may be for something other than synthesis, but for synthesis a
+few points are:
+ - as servers get bigger and consequently more jobs get consolidated
+on them, synthesis is slow (hence --num-thread-synthesize) and also
+the events dominate the perf.data file - perhaps >90% of the file
+size, and a lot of that will be for processes with no samples in them.
+Another issue here is that all those file descriptors don't come for
+free in the kernel.
+ - BPF has buildid+offset stack traces that remove the need for
+synthesis by having more expensive stack generation. I believe this is
+unpopular as adding this as a variant for every kind of event would be
+hard, but perhaps we can do some low-hanging fruit like instructions
+and cycles.
+ - I believe Jiri looked at doing synthesis with BPF. Perhaps we could
+do something similar to the off-cpu and tail-synthesize, where more
+things happen at the tail end of perf. Off-cpu records data in maps
+that it then synthesizes into samples.
+
+There is also a long standing issue around not sampling munmap (or
+mremap) that causes plenty of issues. Perhaps if we had less mmap in
+the perf.data file we could add these.
 
 Thanks,
-
-Jacob
+Ian
