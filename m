@@ -2,86 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 291236E4E94
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 18:50:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAD756E4E9C
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 18:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbjDQQuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 12:50:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58794 "EHLO
+        id S229898AbjDQQwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 12:52:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjDQQut (ORCPT
+        with ESMTP id S229824AbjDQQwA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 12:50:49 -0400
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73EAC526A;
-        Mon, 17 Apr 2023 09:50:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
-        MIME-Version:Date:Message-ID:content-disposition;
-        bh=7vXipZ/UwJBW0uB9csVn0cpof8IbwzgFkLpm2tMHzig=; b=DRb+ktBgy9dy7gp9xLzNPGyTsM
-        ReNOA6XrzUnwkCS4xxBitS7Y7sFiFDDbjcZn11nncoNe7E+DeVD7CZGmcZ9IHdBpiieGoF6HoP2jG
-        9JrW1JVq6rC+zQL6vMnOb/P+EZ0N+ynrj+YrpqeRCLmbPx8E2Cu4C5EdHfCorXORyec4XEXwiCgcA
-        FVlL1KoSOSx+7Bd1wMccBWfdXWkjQ8erbEP4e/ZkyiElbWLYplfNhLztp7sRhwp/V8+MTlbqD4J2H
-        Y/lgc817r7FSMb6zR/nRDuM+YMFT475IQFHhh6f7VbIVS8SHkaoULPs9oHxDTM50ozfbMZuYVYYQB
-        dP464ERg==;
-Received: from s0106a84e3fe8c3f3.cg.shawcable.net ([24.64.144.200] helo=[192.168.0.10])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1poS3e-00Azru-5V; Mon, 17 Apr 2023 10:50:26 -0600
-Message-ID: <694b79c7-b88a-bccf-d026-690cd3ccffee@deltatee.com>
-Date:   Mon, 17 Apr 2023 10:50:23 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-To:     Jisheng Zhang <jszhang@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Sinan Kaya <okaya@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
-References: <20230415095517.2763-1-jszhang@kernel.org>
- <20230415095517.2763-4-jszhang@kernel.org>
-Content-Language: en-CA
-From:   Logan Gunthorpe <logang@deltatee.com>
-In-Reply-To: <20230415095517.2763-4-jszhang@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 24.64.144.200
-X-SA-Exim-Rcpt-To: jszhang@kernel.org, lars@metafoo.de, vkoul@kernel.org, Eugeniy.Paltsev@synopsys.com, okaya@kernel.org, agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org, orsonzhai@gmail.com, baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com, dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
-X-SA-Exim-Mail-From: logang@deltatee.com
+        Mon, 17 Apr 2023 12:52:00 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9A5AD38
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 09:51:54 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54f69fb5cafso180074687b3.12
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 09:51:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681750313; x=1684342313;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xPGXtfoj8zWfrxnDm8mfNpTrHIS3T28NNHxcP0q+UvU=;
+        b=fHPvgnEZ9Q20W163j2WeKhNLShLbrOCT756OhTAsT7XfjoUgvtomSsUpCGjDP2jzKt
+         zJPjwyFsFZfWNtkXYd/+JgC17JTwMEJsrxsN/pUJ+kRta3Bcm+RkPVGiNlSHDx7xFxAR
+         zqUjOzHidTSeHcSGw/qu4K+dwuH58vO6kfrCts0GQ7AMEE5xgUlg4JUlItGyTyGDaGad
+         odbrhY2zgcepvi2XnmxdpNr5lITeZ/NPbmyyLpDxvhxeaBP4fBk2nQA/YdNocWQ7TWdk
+         iE3n/LVcWOyPbX6Abiw5jMyZS9uTUtkYXvFNuGx3mrODqW27jzEszuAzRgpAv+9s6n7H
+         EA5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681750313; x=1684342313;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xPGXtfoj8zWfrxnDm8mfNpTrHIS3T28NNHxcP0q+UvU=;
+        b=JMSeq6CSGVPZUkLYLp6cqbFZxQFGSlZWb9Fxj7FjOk0tRje3Iqf/85ZfjzJWfvh1+3
+         VKsgdcZ1DafcOSKqIuFcqKyz/spIwTjIFPcT6Rm2R0wPz+OTG8QIaR/bK6W8n00+ma7f
+         2IESrOiPdQKR1Q4d9FQLwZrjucW6Q0rZpjCNpJzW8DkNrGoUWVC11tBMQL/TjC+eCewj
+         sybxJdvOal8pGzEzSTkpDN0EWi/E5r7SRBUuYYJHGsCS42CmXRygFbJqPO8JV0YdRe3S
+         ZwMTnNtlBFr3S30A/MMyyuvUvH/i2fCnWYFhHF30aG0SxKGytVaHMfnA5vRmlz6Hiwe8
+         WzSA==
+X-Gm-Message-State: AAQBX9eRV+BxgDSFEOxOEeL0GHfbl1XZ10AVJ7hOJQkOuui531czjLzD
+        j5o1m/NKeWJKTadRB+Tv/KnxCzeRKM8=
+X-Google-Smtp-Source: AKy350ZrfKImkrnKZQlURSg7UI6PwCvqyet7zKKn2r62aQROPOQaP8MBSBy9i/kch4Xb/n5OAMaqLBYeXEs=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:e503:0:b0:54f:40fe:10cc with SMTP id
+ s3-20020a81e503000000b0054f40fe10ccmr9678583ywl.9.1681750313800; Mon, 17 Apr
+ 2023 09:51:53 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 09:51:52 -0700
+In-Reply-To: <20230415033012.3826437-1-alexjlzheng@tencent.com>
+Mime-Version: 1.0
+References: <ZDmSWIEOTYo3qHf7@google.com> <20230415033012.3826437-1-alexjlzheng@tencent.com>
+Message-ID: <ZD15KFZO9J33Eodj@google.com>
+Subject: Re: [PATCH v2] KVM: x86: Fix poll command
+From:   Sean Christopherson <seanjc@google.com>
+To:     alexjlzheng@gmail.com
+Cc:     alexjlzheng@tencent.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mingo@redhat.com, pbonzini@redhat.com, tglx@linutronix.de,
+        x86@kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
-Subject: Re: [PATCH v2 3/5] dmaengine: plx_dma: Don't set chancnt
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023-04-15 03:55, Jisheng Zhang wrote:
-> The dma framework will calculate the dma channels chancnt, setting it
-> ourself is wrong.
+On Sat, Apr 15, 2023, alexjlzheng@gmail.com wrote:
+> On Fri, 14 Apr 2023, Sean Christopherson <seanjc@google.com> wrote:
+> > On Thu, Apr 13, 2023, alexjlzheng@gmail.com wrote:
+> > > Fix the implementation of pic_poll_read():
+> > > 1. Set Bit 7 when there is an interrupt
+> > > 2. Return 0 when there is no interrupt
+> > 
+> > I don't think #2 is justified.  The spec says:
+> > 
+> >   The interrupt requests are ordered in priority from 0 through 7 (0 highest).
 > 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> This is only true when don't use rotation for priority or just reset the 8259a.
+> It's prossible to change priorities, i.e. Specific Rotation Mode or Automatic
+> Rotation Mode.
+> 
+> > 
+> > I.e. the current code enumerates the _lowest_ priority when there is no interrupt,
+> > which seems more correct than reporting the highest priority possible.
+> 
+> The practice and interpretation of returning to the lowest priority interrupt
+> when there are no active interrupts in the PIC doesn't seem reasonable, as far as I
+> understand. For #2, in my opinion, the correct interpretation of the current code
+> may be that a spurious interrupt is returned(IRQ 7 is used for that according to
+> the 8259 hardware manual).
+> 
+> For #2, the main purpose of returning 0 is to set Bit 7 of the return value to 0
+> to indicate that there is no interrupt.
 
-Seems fine to me.
+Is there an actual real world chunk of guest code that is broken by KVM's behavior
+for the "no interrupt" case?  Because if not, my strong preference is to leave the
+code as-is.
 
-Acked-by: Logan Gunthorpe <logang@deltatee.com>
+I have no objection to setting bit 7 when there is an interrupt, as that behavior
+is explicitly called out and KVM is clearly in the wrong.
 
-Thanks,
+But for the "no interrupt" case, there are a lot of "mays" and "seems" in both of
+our responses, i.e. it's not obvious that the current code is outright wrong, nor
+that it is correct either.  Given the lack of clarity, unless there's a guest that's
+actually broken by KVM's current implementation, I see no benefit to changing KVM's
+behavior, only the potential for breaking existing KVM guests.
 
-Logan
+And if the "no interrupt" case really does need to be fixed, please split it to
+a separate patch.
