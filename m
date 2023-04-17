@@ -2,110 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9525D6E4419
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 11:39:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 392566E4424
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 11:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbjDQJjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 05:39:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39738 "EHLO
+        id S230316AbjDQJkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 05:40:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbjDQJiy (ORCPT
+        with ESMTP id S230517AbjDQJjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 05:38:54 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CACA03A80
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 02:38:10 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 3442B1F86B;
-        Mon, 17 Apr 2023 09:38:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1681724286; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hu4ArTJdFlf4Y+7WYwWayjTFYuqmBYo9d3ZHVBFbq4U=;
-        b=svzfbr0oZPX/N5ioOtUU4RnUU53Lybt7RVtEw0TYJgHvz31Zu9Ee6eYwAFNvr73S7tyh/E
-        1q8rVUI1TFLZ1DKmdoWi1TRSJKDbIqKHlpmLyHXwgwOABke+BZy2+9ZiGg3eCIypGN66Nz
-        B/jIsUlQjTbDxL4zQP4nEX4hNZsZtqw=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 8C37F2C141;
-        Mon, 17 Apr 2023 09:38:05 +0000 (UTC)
-Date:   Mon, 17 Apr 2023 11:38:05 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Rong Tao <rtoax@foxmail.com>
-Cc:     will@kernel.org, prasad@linux.vnet.ibm.com, tglx@linutronix.de,
-        gregkh@linuxfoundation.org, frederic@kernel.org,
-        qperret@google.com, ast@kernel.org, mbenes@suse.cz,
-        rongtao@cestc.cn, open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] samples/hw_breakpoint: Fix kernel BUG 'invalid opcode:
- 0000'
-Message-ID: <ZD0TfQHWQftNvFNA@alley>
-References: <tencent_D547A5F2B576141E11CCA04308252BE61205@qq.com>
+        Mon, 17 Apr 2023 05:39:47 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 145B9EE;
+        Mon, 17 Apr 2023 02:39:00 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 87E7FFEC;
+        Mon, 17 Apr 2023 02:39:11 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.19.253])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D13D83F6C4;
+        Mon, 17 Apr 2023 02:38:24 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 10:38:22 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Luca Vizzarro <Luca.Vizzarro@arm.com>,
+        linux-kernel@vger.kernel.org,
+        Christian Brauner <brauner@kernel.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Kevin Brodsky <Kevin.Brodsky@arm.com>,
+        Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        David Laight <David.Laight@aculab.com>,
+        linux-fsdevel@vger.kernel.org, linux-morello@op-lists.linaro.org
+Subject: Re: [PATCH v2 1/5] fcntl: Cast commands with int args explicitly
+Message-ID: <ZD0Tjk2oO8Ewj1nc@FVFF77S0Q05N>
+References: <20230414152459.816046-1-Luca.Vizzarro@arm.com>
+ <20230414152459.816046-2-Luca.Vizzarro@arm.com>
+ <20230414154631.GK3390869@ZenIV>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <tencent_D547A5F2B576141E11CCA04308252BE61205@qq.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230414154631.GK3390869@ZenIV>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun 2023-04-16 23:05:17, Rong Tao wrote:
-> From: Rong Tao <rongtao@cestc.cn>
+On Fri, Apr 14, 2023 at 04:46:31PM +0100, Al Viro wrote:
+> On Fri, Apr 14, 2023 at 04:24:55PM +0100, Luca Vizzarro wrote:
+> >  	void __user *argp = (void __user *)arg;
+> > +	int argi = (int)arg;
 > 
-> Macro symbol_put() is defined as __symbol_put(__stringify(x))
+> Strictly speaking, conversion from unsigned long to int is
+> an undefined behaviour, unless the value fits into the
+> range representable by int ;-)
 > 
->     ksym_name = "jiffies"
->     symbol_put(ksym_name)
+> >  	case F_SETFD:
+> >  		err = 0;
+> > -		set_close_on_exec(fd, arg & FD_CLOEXEC);
+> > +		set_close_on_exec(fd, argi & FD_CLOEXEC);
 > 
-> will be resolved as
+> Why?
 > 
->     __symbol_put("ksym_name")
+> >  	case F_SETSIG:
+> >  		/* arg == 0 restores default behaviour. */
+> > -		if (!valid_signal(arg)) {
+> > +		if (!valid_signal(argi)) {
 > 
-> which is clearly wrong. So symbol_put must be replaced with __symbol_put.
+> Why???
 > 
-> When we uninstall hw_breakpoint.ko (rmmod), a kernel bug occurs with the
-> following error:
+> >  			break;
+> >  		}
+> >  		err = 0;
+> > -		filp->f_owner.signum = arg;
+> > +		filp->f_owner.signum = argi;
+> >  		break;
 > 
-> [11381.854152] kernel BUG at kernel/module/main.c:779!
-> [11381.854159] invalid opcode: 0000 [#2] PREEMPT SMP PTI
-> [11381.854163] CPU: 8 PID: 59623 Comm: rmmod Tainted: G      D    OE      6.2.9-200.fc37.x86_64 #1
-> [11381.854167] Hardware name: To Be Filled By O.E.M. To Be Filled By O.E.M./B360M-HDV, BIOS P3.20 10/23/2018
-> [11381.854169] RIP: 0010:__symbol_put+0xa2/0xb0
-> [11381.854175] Code: 00 e8 92 d2 f7 ff 65 8b 05 c3 2f e6 78 85 c0 74 1b 48 8b 44 24 30 65 48 2b 04 25 28 00 00 00 75 12 48 83 c4 38 c3 cc cc cc cc <0f> 0b 0f 1f 44 00 00 eb de e8 c0 df d8 00 90 90 90 90 90 90 90 90
-> [11381.854178] RSP: 0018:ffffad8ec6ae7dd0 EFLAGS: 00010246
-> [11381.854181] RAX: 0000000000000000 RBX: ffffffffc1fd1240 RCX: 000000000000000c
-> [11381.854184] RDX: 000000000000006b RSI: ffffffffc02bf7c7 RDI: ffffffffc1fd001c
-> [11381.854186] RBP: 000055a38b76e7c8 R08: ffffffff871ccfe0 R09: 0000000000000000
-> [11381.854188] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-> [11381.854190] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-> [11381.854192] FS:  00007fbf7c62c740(0000) GS:ffff8c5badc00000(0000) knlGS:0000000000000000
-> [11381.854195] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [11381.854197] CR2: 000055a38b7793f8 CR3: 0000000363e1e001 CR4: 00000000003726e0
-> [11381.854200] DR0: ffffffffb3407980 DR1: 0000000000000000 DR2: 0000000000000000
-> [11381.854202] DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000400
-> [11381.854204] Call Trace:
-> [11381.854207]  <TASK>
-> [11381.854212]  s_module_exit+0xc/0xff0 [symbol_getput]
-> [11381.854219]  __do_sys_delete_module.constprop.0+0x198/0x2f0
-> [11381.854225]  do_syscall_64+0x58/0x80
-> [11381.854231]  ? exit_to_user_mode_prepare+0x180/0x1f0
-> [11381.854237]  ? syscall_exit_to_user_mode+0x17/0x40
-> [11381.854241]  ? do_syscall_64+0x67/0x80
-> [11381.854245]  ? syscall_exit_to_user_mode+0x17/0x40
-> [11381.854248]  ? do_syscall_64+0x67/0x80
-> [11381.854252]  ? exc_page_fault+0x70/0x170
-> [11381.854256]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
-> 
-> Signed-off-by: Rong Tao <rongtao@cestc.cn>
+> These two are clearly bogus and I'd like to see more details
+> on the series rationale, please.
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+I agree the first isn't necessary, but I don't think the second is bogus, since
+valid_signal() takes an unsigned long and the man page for F_SETSIG says that
+the argument is an int:
 
-Best Regards,
-Petr
+  https://man7.org/linux/man-pages/man2/fcntl.2.html
+
+... though arguably that could be a bug in the man page.
+
+The cover letter really should have quoted the description that Szabolcs wote
+at:
+
+  https://lore.kernel.org/linux-api/Y1%2FDS6uoWP7OSkmd@arm.com/
+
+The gist being that where the calling convention leaves narrowing to callees
+(as is the case on arm64 with our "AAPCS64" calling convention), if the caller
+passes a type which is narrower than a register, the upper bits of that
+register may contain junk.
+
+So e.g. for F_SETSIG, if the userspace will try to pass some 32-bit value,
+leaving bits 63:32 of the argument register containing arbitrary junk. Then
+here we interprert the value as an unsigned long, considering that junk as part
+of the argument. Then valid_signal(arg) may end up rejecting the argument due
+to the junk uper bits, which is surprising to the caller as from its PoV it
+passed a 32-bit value in the correct way.
+
+So either:
+
+* That's a documentation bug, and userspce needs to treat the agument to
+  F_SETSIG as an unsigned long.
+
+* The kernel needs to narrow the argument to an int (if required by the calling
+  convention) to prevent that.
+
+Does that make sense, or have I missed the point you were making?
+
+Thanks,
+Mark.
