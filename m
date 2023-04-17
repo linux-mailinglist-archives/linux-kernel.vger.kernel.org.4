@@ -2,166 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D05296E4237
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:09:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D9066E4240
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbjDQIJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 04:09:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55834 "EHLO
+        id S230195AbjDQIKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 04:10:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbjDQIJv (ORCPT
+        with ESMTP id S230152AbjDQIKu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 04:09:51 -0400
-Received: from outbound-smtp42.blacknight.com (outbound-smtp42.blacknight.com [46.22.139.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC87546A1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 01:09:47 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail06.blacknight.ie [81.17.255.152])
-        by outbound-smtp42.blacknight.com (Postfix) with ESMTPS id BE0BF1EA9
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 09:09:45 +0100 (IST)
-Received: (qmail 17197 invoked from network); 17 Apr 2023 08:09:45 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.21.103])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 17 Apr 2023 08:09:45 -0000
-Date:   Mon, 17 Apr 2023 09:09:43 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Doug Berger <opendmb@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        Oscar Salvador <OSalvador@suse.com>,
-        Yuanxi Liu <y.liu@naruida.com>,
-        David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mm: page_alloc: Skip regions with hugetlbfs pages when
- allocating 1G pages
-Message-ID: <20230417080943.ybapzpxq4uoph6k6@techsingularity.net>
-References: <20230414141429.pwgieuwluxwez3rj@techsingularity.net>
- <085983ed-b32a-3ec6-ff4a-a340776c410b@gmail.com>
+        Mon, 17 Apr 2023 04:10:50 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A43558B
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 01:10:41 -0700 (PDT)
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33H3N4qW014276;
+        Mon, 17 Apr 2023 01:10:33 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
+ from : subject : to : content-type : content-transfer-encoding :
+ mime-version; s=s2048-2021-q4;
+ bh=iJftWS3GesfKz4XKpjpyvS1J74LKzydTYSPe9+ExzyU=;
+ b=b7OVCSAlH17Urp3rSywBoiWHoOepj8R0D/EGJE6BkVtEN7guA6lDRZqiqa7ERaP6aw2s
+ +pvhazPFOG7buHvA1U5BiorLAfXKToMOpkNsMkxBwXkpEbGt4gOECkW1YsKLAun973HB
+ vlHCWISl/cbx74JTpyUwCrBHhNbM+oiSeSsXU9wdNO0u2WbwPCC8FSmdcWzBbmnQTg8B
+ rAvMzLKcJsiCUYuATffWosdcWL866Ga2yKiaOnhAd/y7xVOaHB5xwtP+nAeziRhFUQqW
+ nnQbpr/uxHktWg/JKTr0wyMthU01uc32ZGasDdFwmfW4hHk+4x96sa3f0LLLyoklkdC/ 5A== 
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam04lp2045.outbound.protection.outlook.com [104.47.73.45])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3pyq8qqwfd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Apr 2023 01:10:32 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SnJsOj8zhoPQAxl7066mDpzsJVsXY1/1Z8Kb08S5aQApftcOF0lXy2k+HevkVk541CarMgQwpwzfDxMQEoQSYKycApqmnQ0dGKtCJO1w2KXvQIafBk5OOsXjtOwXshB/GlDjebhN5JZa23vl9jx/GXndbX/6UHAbvyVlhnDJ46XsKmEYkZAW+iAoD5bZ+eGJ2vuUb5WifjQFJ9L5v2py5meqUE2Ufrn/O9NZaAu7Ky9lLlnZoCHo4/QgIVeMfOrpXCEyJb8WMJJeREyUmn5usBi7u2MYGI294URGjyI/w+7cXDTkHeOS7DxlXShOVNcbQqyB+swAn+DgstUsEt7qfw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iJftWS3GesfKz4XKpjpyvS1J74LKzydTYSPe9+ExzyU=;
+ b=i2op/zbKd2CYLfGxPWzDHWvOMMx8dFxVdmF3uMXdSSitlb7PuYfVdcwkWGOJ3ko1rkswiwSnyAW0usGb0AtD/q5Q+NVYXhD8QFmztOq90NJuPDW8w3egJrr/2sE45CvqJXyb0edfw5fxj90PEBdApcLOXoHhDov3hmYzuL/qVB2fgFfsmkfDfWutoFxsA5BVqLimkXZUnRpkWFNvNnVRSzyy7T5Gon+LpwL4LKRDq4UcTGB5ySDv71dz5mlL/f3IaNACJ6QsNeMpbe2UvMq7CPA/IZwiqmJ9FzmVVgm2buP1pKqL1N2aieS/bhLd44YeAB0shj4wwLu54/D8jhBWYw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from MN2PR15MB4287.namprd15.prod.outlook.com (2603:10b6:208:1b6::13)
+ by BL1PR15MB5338.namprd15.prod.outlook.com (2603:10b6:208:385::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Mon, 17 Apr
+ 2023 08:10:30 +0000
+Received: from MN2PR15MB4287.namprd15.prod.outlook.com
+ ([fe80::48fd:d25b:5e9c:7fd8]) by MN2PR15MB4287.namprd15.prod.outlook.com
+ ([fe80::48fd:d25b:5e9c:7fd8%7]) with mapi id 15.20.6298.045; Mon, 17 Apr 2023
+ 08:10:30 +0000
+Message-ID: <bc85a40c-1ea0-9b57-6ba3-b920c436a02c@meta.com>
+Date:   Mon, 17 Apr 2023 10:10:25 +0200
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Content-Language: en-US
+From:   Chris Mason <clm@meta.com>
+Subject: schbench v1.0
+To:     Peter Zijlstra <peterz@infradead.org>,
+        David Vernet <void@manifault.com>,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Content-Type: text/plain; charset=UTF-8
+X-ClientProxiedBy: LO4P265CA0152.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2c7::15) To MN2PR15MB4287.namprd15.prod.outlook.com
+ (2603:10b6:208:1b6::13)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN2PR15MB4287:EE_|BL1PR15MB5338:EE_
+X-MS-Office365-Filtering-Correlation-Id: e3ee65a1-739f-4795-5020-08db3f1b356d
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 7wJPAY4AwQXcBKijs4aaahzyVVYgi1J0HvjzDdC9++5ruAGxvqPrKZyAW41gqN/PTP1FUrQFUEMUHf1++MKTXD82F3i1i92t4UnSSsm/c2NnEs99PicndKuVx/nsGxMn9k1x9WjNntDPW12vtZMeJG0U102NyaEIGCE/GBHAsnIxH8kJ/1o05N8Z8+kVYvyeKB0tUnzV4RkjK6ngJyNAnqxg9TX4E9TlnTKMbSrY6jeJp+rRJW9QjH6T2nJsPmtK4UWwzJgCWJoj5RT8eydhFnqrCOF4VG89wQ53kIc+p4oELemCtVw5gHpaSCwEZ6RlY9GKEsPp6qkEoiXaBWpOia95MLE3IJ7PUKR5J6IxFY/9ZdrusGQUJkTyg1qq8P/sVBFdEL8UnDCyndT5YBGPAUXDLdoAZLeBSRcdnUFwRQ9WA9NzsO1gCjTDCJVWWZ/QOWM5JRqTRSXDOxhvGWJm95oNIzWUSmxb2S3tlH8kSrDHY0+8HHArexuV8w2XURfIbbT2O9PWQJ8bSbY2pOjHLN7IwqHqrsPwp3s4W6ORdxdeUxW0X1WtB64RUAhnuWHifQrh+LbFdfURuVNixY7E13xjGy2Mey1swPGjRbhyppfsjCfWN2mQofiJ48WXYxEA2UiOj6Pc8Gz8PpJBD8klbA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR15MB4287.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(366004)(39860400002)(136003)(346002)(451199021)(36756003)(110136005)(316002)(66556008)(66946007)(66476007)(966005)(6486002)(478600001)(6666004)(5660300002)(8936002)(8676002)(41300700001)(2906002)(86362001)(31696002)(38100700002)(2616005)(6512007)(6506007)(186003)(83380400001)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bnJPVkhJQS9kUG53N0Z2OGVJakRCd21mSDE4Z0ZKWTFuUUxUakRHcGxwVFhu?=
+ =?utf-8?B?TWZzNW12YU5Bc085M2JRcC9wcko0RS9WLzEvOHpKY3FDdUFnbURGWEU0TnNu?=
+ =?utf-8?B?MkZtYVBYdmlPdk1WWGVra2pBLzIrVmxmM01YUHVQdGpFaDZWUU1uWWFiRS8w?=
+ =?utf-8?B?dnJTQ3pMSTZiR1pCeU9HKzVuOGRLTkswZ2VPcy81OVpaNGlCVC9Xc3UvdnBQ?=
+ =?utf-8?B?Ri9XRk1ReE55cU5oOUUwWkFGQTkvMkZuNzVjVUJmS1hLV1ZSQTA4NjA2c2Vz?=
+ =?utf-8?B?dkt3M0NWenM1alFJWEhzVGNhNXBiUlNSSDdHNE43d1ovNW9ybmJKc3RqUG1u?=
+ =?utf-8?B?L2FkVmpKbmhyTWpqZmt1ZVRrSzlSRUR3QmhpWjlDZjcyK0h6T3J0bWU0emZ3?=
+ =?utf-8?B?dkpKNjc1QmVaeVc5cmhBLzdxcCs3UlNNUkRzQnJnaXMva2p0bjU4YkRzVm5J?=
+ =?utf-8?B?UUVrV3ppT2pxZE1TZDAvOEFUVU5oYjI4dHhtODBLdGx2dGx2NitmbEs5ak9P?=
+ =?utf-8?B?Q3l0aHZiVXdkdDlERkFLdTFnRml2cFlmSXlQNnZITFdESkVzVndTSGlTN2hh?=
+ =?utf-8?B?VmFaaFRraGgxa3VhRHRMTkEzRWRiN0JJYUhSaFFwaDFuMjdoNDlZTm96UVFL?=
+ =?utf-8?B?dEFOcHVLS3g4em4xWmFob011UmhvOHRybU83RENRYlNaS3QzYS9mSDlMbHQr?=
+ =?utf-8?B?MVhVdEE5dFpkbVVtQnppemVRbnhLSWJFL0NQYzJoK2UzT3ZHTk5jNlhOQ25E?=
+ =?utf-8?B?US9wYTE4T1lKbm9lbE9XUXJhMnJzcGtselc1UFVUbHpSYlU3WkNLSjVCZmI0?=
+ =?utf-8?B?ZER3SitEclBKaVFLVHdFdVo4NEg1ZW9SMFlSYTlLdlprUTBMY1E3bEZWTlZk?=
+ =?utf-8?B?dW1NUXFiM29QUldHa1U5bHMzcENaNSt5V1M3ekhlZEZOTGFqR2tqL3pGMEx1?=
+ =?utf-8?B?WnZTWlM2Ty9MWW9PbVNqTDNyYTdqMWhFVUxkaUZXL1paQTNtWnF3dDJpZnhT?=
+ =?utf-8?B?Mzdua2c5Rzk1VjIwOGdQeWNUcWZZNGFtekVkS0RuUmtIMHVYQU5kdlE5VXpL?=
+ =?utf-8?B?U0U2dDM2OEdSYVM3US82ODFVbWpFYmIvWXp2TEtJNUtqenNNeTRUVWJ2cmpB?=
+ =?utf-8?B?QmRYcnRSYmZ4c1pLZktVdFBGUGFpM3l0ZXJNQ1FSY1AxWjIvZkxVYTNTamEw?=
+ =?utf-8?B?NVAvMHlVNkpuVlZ3MG5ybWJWUE1SVDlGUFBRNExsQlNYK21EN2hjMTE2MGtQ?=
+ =?utf-8?B?UFVZdXdldVVob3ZlVkZuazZrK21oMzFiN1dkZUlJaWNsWjFxK0tUWWlxOVZq?=
+ =?utf-8?B?OFp3TVc1ZWFLb1JFU3RWZHJzL3ZPMThLSHZPK0hSSEphZmdnMHFIZmJpOWdw?=
+ =?utf-8?B?cjRYS0dxWFBubXVSeTZZZkd0Q3FUSkxtZDByejZoSGlqVmtGeE1wbW9XMFhB?=
+ =?utf-8?B?eUVvM2l2ODVqWHkyVG9sNGJSWVpLRDhzcjcwUDJKczhIOUZBSnRRdnB6MFFi?=
+ =?utf-8?B?UmFPZTV5eUtPb0dJTGlPNTNWeHhSd0RWeGVLVWcrYkJMTU4yVlcyY2VkM0ha?=
+ =?utf-8?B?M09JT0hNWlpIM255b1hrMFB3UkxXdXRzc2IxWGxaZ08xdi9vcCtCK2s5c2ha?=
+ =?utf-8?B?anlwd1F4WHNPSHhoTE4wZU1IcVdnUG5wMStPaXhET3FKQzZ6eUlHRjd4OHhP?=
+ =?utf-8?B?K3hXOHNUcDZ5b2lmcS9tSTRmTjROeUdPbUkwdFJvSTgxNEMxNVpFUm1RYldw?=
+ =?utf-8?B?aGlBZDMyOWlmUW1URldGUitRREIzSzJRR1dtOTh4SXB1eHU2VkZXWXc2eVEw?=
+ =?utf-8?B?bitEb0ZUYUlRSTd4U09QOVR2SEdCK05ZU2FIZ1o2dTFKQm1rQ0ZYMUpOWGNl?=
+ =?utf-8?B?OS9ocTNzbnZQcHg4N0pTUzMwak8rK3NpM0lrVGJrREZ5K3RnR1QrMFNHdGZO?=
+ =?utf-8?B?WHJQY1U4T0FOMjVoamxrTTlveGJCdzBIeVpTTTJ6WEd0eU9DZFdlc3hIUXdX?=
+ =?utf-8?B?SWdYMGs5QVp4NnNjdEtRUmZ0aU1NRC92T2hIallLbWR4ZzJUUmNBYzdOc0VK?=
+ =?utf-8?B?TkoxQUJXZXhvdTl1SWcrTUhWd2pHaUlhUDhtMW9aY0ZOa0huNHNVUlpZeVgx?=
+ =?utf-8?B?eEhUd2FHOUJaOEZCSFhiVEJrR2hpMjdTRzdrU2dCUW5UL2Z4TXo4MlZxMGsw?=
+ =?utf-8?B?Y3c9PQ==?=
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e3ee65a1-739f-4795-5020-08db3f1b356d
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR15MB4287.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2023 08:10:29.8736
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: o/lq5gDI3eMJIcNQqXS7OnHUkZdSx1C81xdD17AcHZ58auYptUI4VNUDRfquQ00N
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR15MB5338
+X-Proofpoint-ORIG-GUID: lstR5KKNOjy6_rPFQuzYqMja16CdtlhC
+X-Proofpoint-GUID: lstR5KKNOjy6_rPFQuzYqMja16CdtlhC
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <085983ed-b32a-3ec6-ff4a-a340776c410b@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-17_04,2023-04-14_01,2023-02-09_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 14, 2023 at 04:20:33PM -0700, Doug Berger wrote:
-> On 4/14/2023 7:14 AM, Mel Gorman wrote:
-> > A bug was reported by Yuanxi Liu where allocating 1G pages at runtime is
-> > taking an excessive amount of time for large amounts of memory. Further
-> > testing allocating huge pages that the cost is linear i.e. if allocating
-> > 1G pages in batches of 10 then the time to allocate nr_hugepages from
-> > 10->20->30->etc increases linearly even though 10 pages are allocated at
-> > each step. Profiles indicated that much of the time is spent checking the
-> > validity within already existing huge pages and then attempting a migration
-> > that fails after isolating the range, draining pages and a whole lot of
-> > other useless work.
-> > 
-> > Commit eb14d4eefdc4 ("mm,page_alloc: drop unnecessary checks from
-> > pfn_range_valid_contig") removed two checks, one which ignored huge pages
-> > for contiguous allocations as huge pages can sometimes migrate. While
-> > there may be value on migrating a 2M page to satisfy a 1G allocation, it's
-> > potentially expensive if the 1G allocation fails and it's pointless to
-> > try moving a 1G page for a new 1G allocation or scan the tail pages for
-> > valid PFNs.
-> > 
-> > Reintroduce the PageHuge check and assume any contiguous region with
-> > hugetlbfs pages is unsuitable for a new 1G allocation.
-> > 
-> > The hpagealloc test allocates huge pages in batches and reports the
-> > average latency per page over time. This test happens just after boot when
-> > fragmentation is not an issue. Units are in milliseconds.
-> > 
-> > hpagealloc
-> >                                 6.3.0-rc6              6.3.0-rc6              6.3.0-rc6
-> >                                   vanilla   hugeallocrevert-v1r1   hugeallocsimple-v1r2
-> > Min       Latency       26.42 (   0.00%)        5.07 (  80.82%)       18.94 (  28.30%)
-> > 1st-qrtle Latency      356.61 (   0.00%)        5.34 (  98.50%)       19.85 (  94.43%)
-> > 2nd-qrtle Latency      697.26 (   0.00%)        5.47 (  99.22%)       20.44 (  97.07%)
-> > 3rd-qrtle Latency      972.94 (   0.00%)        5.50 (  99.43%)       20.81 (  97.86%)
-> > Max-1     Latency       26.42 (   0.00%)        5.07 (  80.82%)       18.94 (  28.30%)
-> > Max-5     Latency       82.14 (   0.00%)        5.11 (  93.78%)       19.31 (  76.49%)
-> > Max-10    Latency      150.54 (   0.00%)        5.20 (  96.55%)       19.43 (  87.09%)
-> > Max-90    Latency     1164.45 (   0.00%)        5.53 (  99.52%)       20.97 (  98.20%)
-> > Max-95    Latency     1223.06 (   0.00%)        5.55 (  99.55%)       21.06 (  98.28%)
-> > Max-99    Latency     1278.67 (   0.00%)        5.57 (  99.56%)       22.56 (  98.24%)
-> > Max       Latency     1310.90 (   0.00%)        8.06 (  99.39%)       26.62 (  97.97%)
-> > Amean     Latency      678.36 (   0.00%)        5.44 *  99.20%*       20.44 *  96.99%*
-> > 
-> >                     6.3.0-rc6   6.3.0-rc6   6.3.0-rc6
-> >                       vanilla   revert-v1   hugeallocfix-v2
-> > Duration User           0.28        0.27        0.30
-> > Duration System       808.66       17.77       35.99
-> > Duration Elapsed      830.87       18.08       36.33
-> > 
-> > The vanilla kernel is poor, taking up to 1.3 second to allocate a huge page
-> > and almost 10 minutes in total to run the test. Reverting the problematic
-> > commit reduces it to 8ms at worst and the patch takes 26ms. This patch
-> > fixes the main issue with skipping huge pages but leaves the page_count()
-> > out because a page with an elevated count potentially can migrate.
-> > 
-> A while ago I submitted this patch set that should significantly improve
-> the chances of a 2MB Huge Page being successfully migrated:
-> https://lore.kernel.org/linux-mm/20220921223639.1152392-1-opendmb@gmail.com/
-> 
-> Unfortunately, it is collecting dust and needs to be updated to support
-> Folios, but I would be curious how it affects the performance of this test.
-> 
+Hi everyone,
 
-It would not affect the specific test reported in the changelog as it's
-1G allocations early in boot so no other hugetlb pages present. To be
-representative there would have to an initialisation step to allocate 2M
-pages first, place them awkwardly and then attempt the 1G allocations
-to force the migrations to occur. That's not impossible as huge pages
-could be allocated while base pages are being faulted in a mmap() region
-to try interleaving 2M and base pages in the physical address space (only
-realistic during boot and the same process faulting base pages should also
-increment nr_hugepages so it's reproducible).  That would be sufficient
-to demonstrate that migrating the 2M pages allows a 1G to succeed where
-it would have failed otherwise.
+Since we've been doing a lot of scheduler benchmarking lately, I wanted
+to dust off schbench and see if I could make it more accurately model
+the results we're seeing from production workloads.
 
-> > BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=217022
-> > Fixes: eb14d4eefdc4 ("mm,page_alloc: drop unnecessary checks from pfn_range_valid_contig")
-> > Reported-by: Yuanxi Liu <y.liu@naruida.com>
-> > Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-> > ---
-> >   mm/page_alloc.c | 3 +++
-> >   1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> > index 7136c36c5d01..b47f520c3051 100644
-> > --- a/mm/page_alloc.c
-> > +++ b/mm/page_alloc.c
-> > @@ -9450,6 +9450,9 @@ static bool pfn_range_valid_contig(struct zone *z, unsigned long start_pfn,
-> >   		if (PageReserved(page))
-> >   			return false;
-> > +
-> > +		if (PageHuge(page))
-> > +			return false;
-> >   	}
-> >   	return true;
-> >   }
-> > 
-> 
-> I am OK with this patch too, but I could resubmit my patch with Mike's
-> suggested variant and Folio support if anyone wants to try it instead of
-> this approach.
-> 
+I've reworked a few things and since it's somewhat different now I went
+ahead and tagged v1.0:
 
-I have no objection to a patch checking compound_order(page) > MAX_ORDER but
-I wouldn't consider it to be a stable candidate. Ideally, there would be some
-data showing it actually works (1G pages succeed that would otherwise fail)
-and that it doesn't take a silly amount of time to succeed *or* fail a 1G
-allocation. The test case is an ideal based on commit eb14d4eefdc4 implying
-that 2M migrations were expected to improve 1G allocations but I don't
-know if that's actually true or what the cost is. Maybe someone else knows.
+https://git.kernel.org/pub/scm/linux/kernel/git/mason/schbench.git
 
--- 
-Mel Gorman
-SUSE Labs
+I also tossed in a README.md, which documents the arguments.
+
+https://git.kernel.org/pub/scm/linux/kernel/git/mason/schbench.git/tree/README.md
+
+The original schbench focused almost entirely on wakeup latencies, which
+is still included in the output now.  Instead of spinning for a fixed
+amount of wall time, v1.0 now uses a loop of matrix multiplication to
+simulate a web request.
+
+David Vernet recently benchmarked EEVDF, CFS, and sched_ext against
+production workloads:
+
+https://lore.kernel.org/lkml/20230411020945.GA65214@maniforge/
+
+And what we see in general is that involuntary context switches trigger
+a basket of expensive interactions between CPU/memory/disk.  This is
+pretty difficult to model from a benchmark targeting just the scheduler,
+so instead of making a much bigger simulation of the workload, I  made
+preemption slower inside of schbench.  In terms of performance he found:
+
+EEVDF < CFS < CFS shared wake queue < sched_ext BPF
+
+My runs with schbench match his percentage differences pretty closely.
+
+The least complicated way I could find to penalize preemption is to use
+a per-cpu spinlock around the matrix math.  This can be disabled with
+(-L/--no-locking).  The results map really well to our production
+workloads, which don't use spinlocks, but do get hit with major page
+faults when they lose the CPU in the middle of a request.
+
+David has more schbench examples for his presentation at OSPM, but
+here's some annotated output:
+
+schbench -F128 -n 10
+Wakeup Latencies percentiles (usec) runtime 90 (s) (370488 total samples)
+          50.0th: 9          (69381 samples)
+          90.0th: 24         (134753 samples)
+        * 99.0th: 1266       (32796 samples)
+          99.9th: 4712       (3322 samples)
+          min=1, max=12449
+
+This is basically the important part of the original schbench.  It's the
+time from when a worker thread is woken to when it starts running.
+
+Request Latencies percentiles (usec) runtime 90 (s) (370983 total samples)
+          50.0th: 11440      (103738 samples)
+          90.0th: 12496      (120020 samples)
+        * 99.0th: 22304      (32498 samples)
+          99.9th: 26336      (3308 samples)
+          min=5818, max=57747
+
+RPS percentiles (requests) runtime 90 (s) (9 total samples)
+          20.0th: 4312       (3 samples)
+        * 50.0th: 4376       (3 samples)
+          90.0th: 4440       (3 samples)
+          min=4290, max=4446
+
+Request latency and RPS are both new.  The original schbench had
+requests, but they were based on wall clock spinning instead of a fixed
+amount of CPU work.  The new requests include two small usleeps() and
+the matrix math in their timing.
+
+Generally for production the 99th percentile latencies are most
+important.  For RPS, I watch 20th and 50th percentile more. The readme
+linked above talks through the command line options and how to pick a
+good numbers.
+
+I did some runs with different parameters comparing Linus git and EEVDF:
+
+Comparing EEVDF (8c59a975d5ee) With Linus 6.3-rc6ish (a7a55e27ad72)
+
+schbench -F128 -N <val> with and without -L
+Single socket Intel cooperlake CPUs, turbo disabled
+
+F128 N1                 EEVDF    Linus
+Wakeup  (usec): 99.0th: 355      555
+Request (usec): 99.0th: 2,620    1,906
+RPS    (count): 50.0th: 37,696   41,664
+
+F128 N1 no-locking      EEVDF    Linus
+Wakeup  (usec): 99.0th: 295      545
+Request (usec): 99.0th: 1,890    1,758
+RPS    (count): 50.0th: 37,824   41,920
+
+F128 N10                EEVDF    Linus
+Wakeup  (usec): 99.0th: 755      1,266
+Request (usec): 99.0th: 25,632   22,304
+RPS    (count): 50.0th: 4,280    4,376
+
+F128 N10 no-locking     EEVDF    Linus
+Wakeup  (usec): 99.0th: 823      1,118
+Request (usec): 99.0th: 17,184   14,192
+RPS    (count): 50.0th: 4,440    4,456
+
+F128 N20                EEVDF    Linus
+Wakeup  (usec): 99.0th: 901      1,806
+Request (usec): 99.0th: 51,136   46,016
+RPS    (count): 50.0th: 2,132    2,196
+
+F128 N20 no-locking     EEVDF    Linus
+Wakeup  (usec): 99.0th: 905      1,902
+Request (usec): 99.0th: 32,832   30,496
+RPS    (count): 50.0th: 2,212    2,212
+
+In general this shows us that EEVDF is a huge improvement on wakeup
+latency, but we pay for it with preemptions during the request itself.
+Diving into the F128 N10 no-locking numbers:
+
+F128 N10 no-locking     EEVDF    Linus
+Wakeup  (usec): 99.0th: 823      1,118
+Request (usec): 99.0th: 17,184   14,192
+RPS    (count): 50.0th: 4,440    4,456
+
+EEVDF is very close in terms of RPS.  The p99 request latency shows the
+preemptions pretty well, but the p50 request latency numbers have EEVDF
+winning slightly (11,376 usec eevdf vs 11,408 usec on -linus).
+
+-chris
