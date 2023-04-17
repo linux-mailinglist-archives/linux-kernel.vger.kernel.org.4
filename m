@@ -2,66 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1AA06E4615
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 13:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 212136E4605
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 13:06:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231193AbjDQLL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 07:11:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37388 "EHLO
+        id S230494AbjDQLGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 07:06:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbjDQLL4 (ORCPT
+        with ESMTP id S229959AbjDQLGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 07:11:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5486585
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 04:11:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB4616226B
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 11:02:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50123C433D2;
-        Mon, 17 Apr 2023 11:02:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681729364;
-        bh=dVSmXgHc7Wtq5f3KTG1Nv3Jo2iMZ9ubzY2vutXfxDvU=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=s7eTyOVtBebCEcitRRwiCrhz5ZYaAis5MtzW5zCo7lEaCl418rXJb3cLfzdAMtKxa
-         i1B5/x2H0NA3QcS9YymojTsXU9rZKhmC8orr683S/wEDRRzlMuVJAG1bTRWXAvkgwL
-         qHNfE5OduLyKch7U8X2PBBxVID1zeG05yDokzeFhCfbisdQO1C5uwL/BIsNVF4yz1N
-         UI+5LFtlqy6CAQeW7BfR2ZtzI8p2tD5344rSZ9Qxpk5LaodUuLdBrTgVqlZuuDGnDw
-         meNTzw/SoNRG2F0GABCFHkm3qBSBmoVoUcgUVmsfc0JQmAO4HYZOxB7k181OSFqivW
-         k1n4MKwt4R3HQ==
-Message-ID: <73d0178c3b9608fae207c9f135aa1f807cb56e47.camel@kernel.org>
-Subject: Re: [PATCH] drm: make drm_dp_add_payload_part2 gracefully handle
- NULL state pointer
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>,
-        "Lin, Wayne" <Wayne.Lin@amd.com>,
-        Alex Deucher <alexdeucher@gmail.com>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
-Date:   Mon, 17 Apr 2023 07:02:41 -0400
-In-Reply-To: <87leiqer8g.fsf@intel.com>
-References: <20230413111254.22458-1-jlayton@kernel.org>
-         <87edooarpq.fsf@intel.com>
-         <CADnq5_PVnYMSiKO77+cfg_V-tDKYkVJYN3qGNb1vhQO3QtXskA@mail.gmail.com>
-         <CO6PR12MB5489044012B2A96639470F38FC999@CO6PR12MB5489.namprd12.prod.outlook.com>
-         <4d8479f20ef30866fcf73f3602f1237376110764.camel@kernel.org>
-         <878reug394.fsf@intel.com>
-         <7a1b00f02b125bd65824b18ea09509efe3cf777d.camel@redhat.com>
-         <874jpegao0.fsf@intel.com>
-         <b99732f7c0dd968c0702ae7629695e8fb9cb573f.camel@kernel.org>
-         <87leiqer8g.fsf@intel.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Mon, 17 Apr 2023 07:06:32 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B343E4EF2
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 04:05:32 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id i8so16232172plt.10
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 04:05:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1681729435; x=1684321435;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AXWxF7DmGQlS+I9+P3uaxt1m3XBosotbfe+681ULx84=;
+        b=MzuSVH7Zo2sPbGWOQ47oeP4xLii2+aOg/66pgyJLKCz+X/rFQCZEZAlJXuDiRPX63L
+         Cux+FDAbL2z7jkjdIeQ640L8J3LRvmFN5d/WR9Ny+AaK6EMbcWe5MWSCRdLkCXf100Ae
+         4S6Af4C5MkMixqMRH1kFCqPRf92TDYYP6Bans=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681729435; x=1684321435;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AXWxF7DmGQlS+I9+P3uaxt1m3XBosotbfe+681ULx84=;
+        b=haqPCf0VbV4J1YC5EFvts0UEGGS8y9h+mQvSZnV2q4faspjAReYocU8MEn7OyIwRo+
+         umV+lLB/iJI5N9XLqwnm+Yjkju2DqtVd+R4gyOD0cV1ysNDkpjMgYzdlgt5GnR/VClfJ
+         IhwqwUK9SIpQv3OkhsKHQ5Wi7hLFE9oJHDG5aM53vA8hdJkj3sUHBPPbqCVec87ecbd5
+         k+tWiZE+CcsfEVd3rMt0mFXFD0qDreeYljUzudMcJtotBo2lCR8kUOCsD6kySB4whZg5
+         AJrczHNvEUVCQ6EY4tpWc0qMy4wTsPP6fJrFME3TZrteo91+P52fyOlzq22NPj7dBImW
+         t1aw==
+X-Gm-Message-State: AAQBX9cGP9hxTcAEgM0aG3HjQFkEr3d5bcbkamNDDRoTc6SOeY9eZmqH
+        CYjBL64mRcz+lY9BQDdoCbEyfw==
+X-Google-Smtp-Source: AKy350aXLCVk+OYIIUH+lbE2hcALZKyJLxunUGHqU3dWfL0H59xa5XS2CsoUO3I3xsT99xRfHjqmzw==
+X-Received: by 2002:a17:902:ac88:b0:1a6:5493:a3e8 with SMTP id h8-20020a170902ac8800b001a65493a3e8mr11813926plr.41.1681729435548;
+        Mon, 17 Apr 2023 04:03:55 -0700 (PDT)
+Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:97ac:e7c:d412:5251])
+        by smtp.gmail.com with ESMTPSA id c6-20020a170902aa4600b001a221d14179sm7258666plr.302.2023.04.17.04.03.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 04:03:55 -0700 (PDT)
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Yosry Ahmed <yosryahmed@google.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: [PATCH] zsmalloc: allow only one active pool compaction context
+Date:   Mon, 17 Apr 2023 20:02:59 +0900
+Message-ID: <20230417110259.1737315-1-senozhatsky@chromium.org>
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,90 +67,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-04-17 at 13:29 +0300, Jani Nikula wrote:
-> On Mon, 17 Apr 2023, Jeff Layton <jlayton@kernel.org> wrote:
-> > On Mon, 2023-04-17 at 11:44 +0300, Jani Nikula wrote:
-> > > On Fri, 14 Apr 2023, Lyude Paul <lyude@redhat.com> wrote:
-> > > > On Fri, 2023-04-14 at 13:35 +0300, Jani Nikula wrote:
-> > > > > On Fri, 14 Apr 2023, Jeff Layton <jlayton@kernel.org> wrote:
-> > > > > > On Fri, 2023-04-14 at 04:40 +0000, Lin, Wayne wrote:
-> > > > > > > [Public]
-> > > > > > >=20
-> > > > > > > Hi Jeff,
-> > > > > > >=20
-> > > > > > > Thanks. I might need more information to understand why we ca=
-n't retrieve
-> > > > > > > the drm atomic state. Also , "Failed to create MST payload fo=
-r port" indicates
-> > > > > > > error while configuring DPCD payload ID table. Could you help=
- to provide log
-> > > > > > > with KMS + ATOMIC + DP debug on please? Thanks in advance!
-> > > > > > >=20
-> > > > > > > Regards,
-> > > > > > > Wayne
-> > > > > > >=20
-> > > > > >=20
-> > > > > > Possibly. I'm not that familiar with display driver debugging. =
-Can you
-> > > > > > send me some directions on how to crank up that sort of debug l=
-ogging?
-> > > > > >=20
-> > > > > > Note that this problem is _very_ intermittent too: I went about=
- 2 weeks
-> > > > > > between crashes, and then I got 3 in one day. I'd rather not ru=
-n with a
-> > > > > > lot of debug logging for a long time if that's what this is goi=
-ng to
-> > > > > > require, as this is my main workstation.
-> > > > > >=20
-> > > > > > The last time I got this log message, my proposed patch did pre=
-vent the
-> > > > > > box from oopsing, so I'd really like to see it go in unless it'=
-s just
-> > > > > > categorically wrong for the caller to pass down a NULL state po=
-inter to
-> > > > > > drm_dp_add_payload_part2.
-> > > > >=20
-> > > > > Cc: Lyude.
-> > > > >=20
-> > > > > Looks like the state parameter was added in commit 4d07b0bc4034
-> > > > > ("drm/display/dp_mst: Move all payload info into the atomic state=
-") and
-> > > > > its only use is to get at state->dev for debug logging.
-> > > > >=20
-> > > > > What's the plan for the parameter? Surely something more than tha=
-t! :)
-> > > >=20
-> > > > I don't think there was any plan for that, or at least I certainly =
-don't even
-> > > > remember adding that D:. It must totally have been by mistake and s=
-nuck by
-> > > > review, if that's the only thing that we're using it for I'd say it=
-'s
-> > > > definitely fine to just drop it entirely
-> > >=20
-> > > I guess we could use two patches then, first replace state->dev with
-> > > mgr->dev as something that can be backported as needed, and second dr=
-op
-> > > the state parameter altogether.
-> > >=20
-> > > Jeff, up for it? At least the first one?
-> > >=20
-> > >=20
-> > > BR,
-> > > Jani.
-> > >=20
-> >=20
-> > Sure. I'm happy to test patches if you send them along.
->=20
-> I was hoping to lure you into sending patches. ;)
->=20
-> Anyway, I'm not working on this.
->=20
->=20
+zsmalloc pool can be compacted concurrently by many contexts,
+e.g.
 
-Ok. I misunderstood, I'll change the patch I've been using to use mgr-
->dev instead and will send along a v2 here in a few days (after some
-testing).
---=20
-Jeff Layton <jlayton@kernel.org>
+ cc1 handle_mm_fault()
+      do_anonymous_page()
+       __alloc_pages_slowpath()
+        try_to_free_pages()
+         do_try_to_free_pages(
+          lru_gen_shrink_node()
+           shrink_slab()
+            do_shrink_slab()
+             zs_shrinker_scan()
+              zs_compact()
+
+This creates unnecessary contention as all those processes
+compete for access to the same classes. A single compaction
+process is enough. Moreover contention that is created by
+multiple compaction processes impact other zsmalloc functions,
+e.g. zs_malloc(), since zsmalloc uses "global" pool->lock to
+synchronize access to pool.
+
+Introduce pool compaction mutex and permit only one compaction
+context at a time.
+
+/proc/lock-stat after make -j$((`nproc`+1)) linux kernel for
+&pool->lock#3:
+
+                Base           Patched
+--------------------------------------
+con-bounces     9797655        8125860
+contentions     11131185       9242153
+waittime-min    0.09           0.10
+waittime-max    4171695.76     3926258.74
+waittime-total  506197629.16   417061026.20
+waittime-avg    45.48          45.13
+acq-bounces     13809103       11383480
+acquisitions    21145155       18049364
+holdtime-min    0.06           0.07
+holdtime-max    7379928.80     3926274.89
+holdtime-total  46273950.89    37279624.53
+holdtime-avg    2.19           2.07
+
+Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+---
+ mm/zsmalloc.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
+index cc81dfba05a0..0e036ec56c3c 100644
+--- a/mm/zsmalloc.c
++++ b/mm/zsmalloc.c
+@@ -264,6 +264,7 @@ struct zs_pool {
+ 	struct work_struct free_work;
+ #endif
+ 	spinlock_t lock;
++	struct mutex compact_lock;
+ };
+ 
+ struct zspage {
+@@ -2274,6 +2275,9 @@ unsigned long zs_compact(struct zs_pool *pool)
+ 	struct size_class *class;
+ 	unsigned long pages_freed = 0;
+ 
++	if (!mutex_trylock(&pool->compact_lock))
++		return 0;
++
+ 	for (i = ZS_SIZE_CLASSES - 1; i >= 0; i--) {
+ 		class = pool->size_class[i];
+ 		if (class->index != i)
+@@ -2281,6 +2285,7 @@ unsigned long zs_compact(struct zs_pool *pool)
+ 		pages_freed += __zs_compact(pool, class);
+ 	}
+ 	atomic_long_add(pages_freed, &pool->stats.pages_compacted);
++	mutex_unlock(&pool->compact_lock);
+ 
+ 	return pages_freed;
+ }
+@@ -2388,6 +2393,7 @@ struct zs_pool *zs_create_pool(const char *name)
+ 
+ 	init_deferred_free(pool);
+ 	spin_lock_init(&pool->lock);
++	mutex_init(&pool->compact_lock);
+ 
+ 	pool->name = kstrdup(name, GFP_KERNEL);
+ 	if (!pool->name)
+-- 
+2.40.0.634.g4ca3ef3211-goog
+
