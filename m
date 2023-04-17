@@ -2,127 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC3816E4E5D
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 18:38:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFB5E6E4E65
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 18:39:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbjDQQiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 12:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52834 "EHLO
+        id S229878AbjDQQjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 12:39:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjDQQh6 (ORCPT
+        with ESMTP id S229515AbjDQQjK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 12:37:58 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F726E8E
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 09:37:54 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f04275b2bdso229355e9.1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 09:37:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681749472; x=1684341472;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Y12t8FRkoyEyk0bMe914lw6E/czb3SRxw59S8iZC1Uc=;
-        b=rxk+Nn8PufS+81nHUs0I+UFtsIkcSBXz1RKFi5fJB965/TPvLrweGYeLPOTXZ02XKT
-         OEOmwfqB0XI8VvZPHCRurH11Z/mogCp1qS/TxBmUVHdxwJx8lnmcYpE25TGkn4uBWHxK
-         LwOm7NzW9Hplzq2bTSzt4d52ivZct0TKdb07VqrDcOVL05YyfplHoFaYZHH7ospcATEK
-         QE3IJnFkRqyHWboxfG0bY8tDwTE7nHpqldYkzNBDIf9os4FouvX0EPbEjqz3TNnLczBu
-         wlDUSbje1v/HBKqyMdFFas+Y2QX06wSEqfXx9Jy1tV6nVXfV++JEt41h14hnITy3XKuB
-         qpwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681749472; x=1684341472;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Y12t8FRkoyEyk0bMe914lw6E/czb3SRxw59S8iZC1Uc=;
-        b=M5Is25YFsRoxBY1s0v51bRP/6QG0quZGQy4oXr1pMgvXZv7G6p/eDBD4tU0C77lMuT
-         sQpyZE38CZrMQDfKvzrlpjjKVLNhMPIskHFlbkUPTOR0AsqEPOOl4H6YjAoLJspkwgRH
-         QXXxc+xNDKYJYkx8RpBru0vPntElsejtkxKlrNmml7r7Y8MEmr18nOwD3dvo3V8VwKvi
-         NZ90XTmkqB/ecdcBuQVNMJZ5v0b4SwWbE+xsKSv8fVOVRiSYaCkwXo4fMymEvJY1DxoA
-         fPBEjb4MVCFTGSmtICUAeSbBj3XzcFQUYFp2Ih3ovB+p2YlBmzodirvuq+Buvrr2Eyzt
-         KqSg==
-X-Gm-Message-State: AAQBX9cl9U1h+ACSdXSaCe3+ecmN2n8NHPLu8QWEQdudKRzipNhXcwUn
-        O8A7ybFqx0L+pNdfVMdOyabgNGzU2atYaOPlpzTQcQ==
-X-Google-Smtp-Source: AKy350b/PcbvwgUXhKj6FKeyq2/NAraVnaIx3D3A7ebH0CLGWn7aqmil2UrIQTjqxwwrE6wNX+7RY2IZF63wyGwJEjs=
-X-Received: by 2002:a05:600c:c13:b0:3f1:6fe9:4a98 with SMTP id
- fm19-20020a05600c0c1300b003f16fe94a98mr412681wmb.5.1681749472307; Mon, 17 Apr
- 2023 09:37:52 -0700 (PDT)
+        Mon, 17 Apr 2023 12:39:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563C56E8E;
+        Mon, 17 Apr 2023 09:39:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E3B1261182;
+        Mon, 17 Apr 2023 16:39:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EF05C433EF;
+        Mon, 17 Apr 2023 16:39:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681749548;
+        bh=JCqP49Xpz85bHJtVkhJeBIQ8R7VedWXznxPSZaz5a90=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gSIGsY6qXIZBY2NmJowvUhPOroGWnVYrnpjj4HZdKj0Loy/wX1y/xPyPuwYFUvvn+
+         co7RimQUmLGRtnUpjGKsE5ICf4LznyfxJdKLNrJhKG9zduhhxqq8la7D/XX438acy/
+         vayM/0atTfF7YHY/j1icwAFcAIrXbORhu/5XOrdnoKT6HXkg9shZkPnSZ0A9VuYHUw
+         7xwk6ljyzDwt62NfX80+9EJZNRSnRyazJ3g8BauDFFtcO339AIHkNCgYgkfimoFrKo
+         ABvdpia6wEBBeoawryExFPwqHBhlqku09RoYg8jBmycH2TzqjUolgLQfVyl6YZlu5N
+         AGVCKbHVg077g==
+Date:   Mon, 17 Apr 2023 17:39:01 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Cc:     Doug Anderson <dianders@chromium.org>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        cros-qcom-dts-watchers@chromium.org, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_msavaliy@quicinc.com,
+        mka@chromium.org, swboyd@chromium.org, quic_vtanuku@quicinc.com
+Subject: Re: [PATCH v3 3/3] spi: spi-qcom-qspi: Add DMA mode support
+Message-ID: <85225dd4-7ecd-4ce9-8447-184f749022fe@sirena.org.uk>
+References: <1681481153-24036-1-git-send-email-quic_vnivarth@quicinc.com>
+ <1681481153-24036-4-git-send-email-quic_vnivarth@quicinc.com>
+ <CAD=FV=VKY-0vX271G+EQQ5kC3gTqpPPyTGE0xHWPBncVUhZufQ@mail.gmail.com>
+ <30a752c9-3ea0-43d3-959a-da2e8b526cb4@sirena.org.uk>
+ <CAD=FV=VCbcUnf42tK-HV8j=71BXXytxku_0rGjKyhyR3WG4SUw@mail.gmail.com>
+ <46249e7e-ac2c-00d3-b3b0-7b15848e7b7c@quicinc.com>
 MIME-Version: 1.0
-References: <20230414082300.34798-1-adrian.hunter@intel.com> <20230417110221.GH83892@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230417110221.GH83892@hirez.programming.kicks-ass.net>
-From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 17 Apr 2023 09:37:37 -0700
-Message-ID: <CAP-5=fUD=RNqD-7229J5fgaUCMtNiu-urp-9B3LDq8JnP2sGBg@mail.gmail.com>
-Subject: Re: [PATCH RFC 0/5] perf: Add ioctl to emit sideband events
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="8OVq0bfjkI9I0UjH"
+Content-Disposition: inline
+In-Reply-To: <46249e7e-ac2c-00d3-b3b0-7b15848e7b7c@quicinc.com>
+X-Cookie: Two heads are more numerous than one.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 4:02=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
->
-> On Fri, Apr 14, 2023 at 11:22:55AM +0300, Adrian Hunter wrote:
-> > Hi
-> >
-> > Here is a stab at adding an ioctl for sideband events.
-> >
-> > This is to overcome races when reading the same information
-> > from /proc.
->
-> What races? Are you talking about reading old state in /proc the kernel
-> delivering a sideband event for the new state, and then you writing the
-> old state out?
->
-> Surely that's something perf tool can fix without kernel changes?
 
-So my reading is that during event synthesis there are races between
-reading the different /proc files. There is still, I believe, a race
-in with perf record/top with uid filtering which reminds me of this.
-The uid filtering race is that we scan /proc to find processes (pids)
-for a uid, we then synthesize the maps for each of these pids but if a
-pid starts or exits we either error out or don't sample that pid. I
-believe the error out behavior is easy to hit 100% of the time making
-uid mode of limited use.
+--8OVq0bfjkI9I0UjH
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-This may be for something other than synthesis, but for synthesis a
-few points are:
- - as servers get bigger and consequently more jobs get consolidated
-on them, synthesis is slow (hence --num-thread-synthesize) and also
-the events dominate the perf.data file - perhaps >90% of the file
-size, and a lot of that will be for processes with no samples in them.
-Another issue here is that all those file descriptors don't come for
-free in the kernel.
- - BPF has buildid+offset stack traces that remove the need for
-synthesis by having more expensive stack generation. I believe this is
-unpopular as adding this as a variant for every kind of event would be
-hard, but perhaps we can do some low-hanging fruit like instructions
-and cycles.
- - I believe Jiri looked at doing synthesis with BPF. Perhaps we could
-do something similar to the off-cpu and tail-synthesize, where more
-things happen at the tail end of perf. Off-cpu records data in maps
-that it then synthesizes into samples.
+On Mon, Apr 17, 2023 at 09:27:16PM +0530, Vijaya Krishna Nivarthi wrote:
 
-There is also a long standing issue around not sampling munmap (or
-mremap) that causes plenty of issues. Perhaps if we had less mmap in
-the perf.data file we could add these.
+> However, Like Doug pointed, dma_alignment is not being used by core.
 
-Thanks,
-Ian
+The core will use kmalloc() for any new buffers it allocates, this is
+guaranteed to satisfy DMA constraints.
+
+> Is it up to the SPI consumers to read this and ensure they are providing
+> dmaable buffers of required alignment?
+
+If they're doing anything fun for allocation.  Or they can just use
+kmalloc() themselves.
+
+> The dma_addresses coming from core are aligned for larger sized buffers but
+> for small ones like 1 and 3 bytes they are not aligned.
+
+In theory even buffers that small should be DMA safe, in practice that
+rarely matters since it's vanishingly rare that it's sensible to DMA
+such tiny buffers rather than PIOing them so drivers will tend to never
+actually try to do so and I'd expect bugs.  It is likely worth checking
+that DMA makes sense for this hardware.
+
+> I have not checked the spi-nor driver, but is it the consumer driver's job
+> to ensure required alignment in all cases?
+
+Yes.
+
+--8OVq0bfjkI9I0UjH
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ9diQACgkQJNaLcl1U
+h9AnLwf/SFrq8jwQOq601LZUGWq/RZOBA8bDTO1wfWl54flsCjecwLtsvd9kSxAu
+RnvPBbH8WYfqFWPPqrNhFXCLnLQUAopOnN2jv1l4qU+JXtAaWh64c/6tzoDFIlH6
+zrYIjh7HhLcxd72py5K9AXJwYFI+VtKCq08obGiUICl9PwZbOxJZnehf7wFnJhKM
+J93W7fU9FohfKY35qWab854R+xgi5b53NJN5GkuvG+t43QOV1ERFYT26GyHdjKtI
+UEiqahdm+2iw6i0xxqIeurkjasM63IXU+K/F4Te+rGPda7wwXQpzTUt3muhnXx2f
+5Ls7OU3Ht8KLYxk8ckc6BUuI5f8fBg==
+=m+st
+-----END PGP SIGNATURE-----
+
+--8OVq0bfjkI9I0UjH--
