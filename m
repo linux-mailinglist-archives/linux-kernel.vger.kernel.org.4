@@ -2,135 +2,448 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBAE96E4D6F
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 17:41:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D26DD6E4D77
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 17:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbjDQPlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 11:41:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37368 "EHLO
+        id S231349AbjDQPmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 11:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231288AbjDQPlT (ORCPT
+        with ESMTP id S231350AbjDQPmM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 11:41:19 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B53959F4
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 08:41:17 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2a7af0cb2e6so14668501fa.0
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 08:41:17 -0700 (PDT)
+        Mon, 17 Apr 2023 11:42:12 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE115273C
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 08:42:10 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f167d2941fso15555235e9.1
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 08:42:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681746075; x=1684338075;
+        d=freebox-fr.20221208.gappssmtp.com; s=20221208; t=1681746129; x=1684338129;
         h=cc:to:message-id:content-transfer-encoding:mime-version:subject
          :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gNAR3DHHJC576sjB6C7w6VlykVXtRCYWbXKleTgIMtU=;
-        b=lqxVhSMkDgK0WQQQ6j6mWXdZCAKMy6ZCoyuZuBPf7iyGeBUCVclfaXJ0vtZv9gwILB
-         whOHkmGCTzdOspRKQtaY5wdkH2h+YzDKnFAOmru1wAq3h89qSNHWdS4Bwa9WRzqLuJmm
-         GaWTZEs9gvZUQ43v0ASLWnaxdW++mHBPEXKQ4BXKXodckOypxM++jSULkJ241hoox4A7
-         uT3r1oi0rz4pXvGViegj1f+RFOJXjlbcT3NmETOW/Rlj4QPxuA+FSPEhru4IDVygp1iP
-         o7bpFe/jmkZanXKeVs5vKTle2wwtHOYRm97R6AI6DYGHhNNDDk3KUBv7ig3XS77urcYo
-         Xn7A==
+        bh=/hzlswnMiGoXB1p+F9TnJvkyooz/IBar1fNaepAPNYs=;
+        b=T3CK4OwOnNC+elT8N6i0jZ1zicSIeXQvFj0vk/wahuHBvgkcPiOW7MvpX871+/YUMq
+         2+Tas9IVNc4Ekrk3XQIPRCYtOG5tAzuowjE9teAZ7mLOKAFTGWqn/a6tPCbuM4Sawx21
+         1C5+wMDF4XcTXywGeSVz4HA5TfRVCg9fPQ40Av9NOQKJdGZoGURk/udT+T7XXyjR8HKu
+         Ib4A/1QsVqIHGb+Law58vh3g+atqpSu2c4om4mz5BZlveeM6Q0rf/NBvbOHd64t+HJcA
+         aUnRURsVbTD7EiLXCbneAd8fULlLLxzQfwVsiIEX1l7SlVIAVn1OorKEFTnULu4p77fe
+         znvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681746075; x=1684338075;
+        d=1e100.net; s=20221208; t=1681746129; x=1684338129;
         h=cc:to:message-id:content-transfer-encoding:mime-version:subject
          :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gNAR3DHHJC576sjB6C7w6VlykVXtRCYWbXKleTgIMtU=;
-        b=ZTA3N3xw9NhbrIL8H9h6bDlYF58QQ9TP98DtiJsvE4duk1PFabSm0JRr/WAQ6hvWEE
-         RjhOMn/ROFVHIqccoB0FyxrcCMF/96qn6FEkXsUL+knXytBkW+jcdASh1ZBvl5wHTsx5
-         Z39pjWn8A3zddu3PutI6TOnjIp3WlP05ikaq1f5gdOZ29lKHsdm5jFv88drInQM155qy
-         UA28Vo8QCvx0RZbzUQkhXNnSKUE2Hf9E7pg2M4gA0B+l2UIim7iuAuDD2zrH/FiCbZwu
-         n4jXUhdyIT6a4MHMzlX3sSy75SVtkI7Em3vjBiAy9wtVSE/PtV7blJT6bqYKy98P+td0
-         EPmQ==
-X-Gm-Message-State: AAQBX9dJ72kdYlO/f2ukT2cfD+RNBS1qicK2bG22L0HTClJoCExW0Vx7
-        U61pE6W8g2/qvKrKPBEDL35Gig==
-X-Google-Smtp-Source: AKy350aozgk1r5Jb/wfhVODFS97I8ZHEVfPFiXLG9ajKtf3QHi8XgpoqyMYmVFGZGJFbckexE/XItA==
-X-Received: by 2002:a05:6512:98b:b0:4ed:c089:6e68 with SMTP id w11-20020a056512098b00b004edc0896e68mr1219950lft.41.1681746075603;
-        Mon, 17 Apr 2023 08:41:15 -0700 (PDT)
-Received: from [192.168.1.101] (abyk99.neoplus.adsl.tpnet.pl. [83.9.30.99])
-        by smtp.gmail.com with ESMTPSA id w13-20020ac2442d000000b004e95a1aca1bsm2066458lfl.87.2023.04.17.08.41.14
+        bh=/hzlswnMiGoXB1p+F9TnJvkyooz/IBar1fNaepAPNYs=;
+        b=TF+KiFlImT4M/AePrFii1Oi3PWKTRBVcSADlELpwu+JKCjwTl70TM/coFXF0HvR25w
+         qwQEJg3Nj8sBiblbb8y8ZpdF/yiXJ30MvsoQd7SwBeVmlatUtbHEVsavtM8gPCULrAi0
+         oCeslIrKXpqWoNB9Um9BTAi2t0gCM+vRc5FxBj6PZ3h/Ftw1DVt7i32OJih+BFswY2Fc
+         qRMXruK57YD/oLMBGU+wdBffwJVmwArRFdg+fhAnZrSp0W5mG9MR8g7hkdqToJUZaEVo
+         r2s1cACSTKXXr6ROcLUWvi9ehhccpw9yqP28t/38GcQh5ix6YrIWqTICytVd3j73/r/E
+         4d7Q==
+X-Gm-Message-State: AAQBX9fgg6VWu1m4hlzf/Lnvn1lTofyoMbfmB9+puQXk3Ef9gIkRypXB
+        TPu3TWb0DBIUVKVK39ODe1Yd
+X-Google-Smtp-Source: AKy350ZsR/2TLPkpZkVYV14GGSd9u7PKle7GzyPwzThrprfO8AdQJO8TKQbg81n6gO8IXbwIG+7TaQ==
+X-Received: by 2002:a5d:6410:0:b0:2f2:17fc:e15b with SMTP id z16-20020a5d6410000000b002f217fce15bmr5852579wru.6.1681746129285;
+        Mon, 17 Apr 2023 08:42:09 -0700 (PDT)
+Received: from [127.0.1.1] (freebox.vlq16.iliad.fr. [213.36.7.13])
+        by smtp.gmail.com with ESMTPSA id h12-20020a5d4fcc000000b002f22c44e974sm10742937wrw.102.2023.04.17.08.42.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 08:41:15 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 17 Apr 2023 17:41:08 +0200
-Subject: [PATCH] drm/panel: novatek-nt35950: Only unregister DSI1 if it
- exists
+        Mon, 17 Apr 2023 08:42:09 -0700 (PDT)
+From:   Arnaud Vrac <avrac@freebox.fr>
+Date:   Mon, 17 Apr 2023 17:41:18 +0200
+Subject: [PATCH] arm64: dts: qcom: msm8998: add blsp spi nodes
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230417-topic-maple_panel_fixup-v1-1-07c8db606f5e@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAJNoPWQC/x2N0QrCMAxFf2Xk2UK7Daf+ishIu+gCNQutE2Hs3
- xd8PId7uBtUKkwVbs0Ghb5ceRGDcGogzSgvcjwZQ+vbzvdhcJ9FObk3aqZRUSiPT/6t6sLg43n
- q8JKuEayOWMnFgpJm62XN2aQWsvX/7v7Y9wPRM+VffgAAAA==
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
+Message-Id: <20230417-msm8998-spi-v1-1-6ea13d8a5384@freebox.fr>
+X-B4-Tracking: v=1; b=H4sIAJ1oPWQC/x2NQQqDMBAAvyJ77kI0YmK/UjzEZFsXNJUsiiD+3
+ cXjDAxzglBhEnhXJxTaWfifFepXBXEK+UfISRka01jT1g4XWXzfe5SV0XXJeduZaH0CLcYghGM
+ JOU7a5G2eVa6Fvnw8i89wXTdOWCnwcgAAAA==
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Arnaud Vrac <avrac@freebox.fr>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1681746074; l=1768;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=ow64D0ztle1HmCwm747eKsJ3DSYCPMzYtrfBJ40ZY7w=;
- b=Wn+uTmifJi38q2SDiT/M2w/1LL8ry3gAsuKx92D5PjdkIhxdbFhFIMQ0GYid46vs1uiFfoeeI0Qe
- 4PI1zgdkDZORcLs5aclC8V87sgGqd+ju6XwawXnVxcFyoYL1Km3n
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=9969; i=avrac@freebox.fr;
+ h=from:subject:message-id; bh=CgPjylovqcl5OJuFgtl1xjV8EqwfG/LPMd0muZhCxgc=;
+ b=owEBbQKS/ZANAwAIAXED/9m7NDSrAcsmYgBkPWjLngR/x0QIKwwLVlP91twpyAd0oI77juPCJ
+ YffOu92onWJAjMEAAEIAB0WIQSUwb/ndwkXHdZ/QQZxA//ZuzQ0qwUCZD1oywAKCRBxA//ZuzQ0
+ q+9vD/93Wj4n7t47etlIb56iDWAFcK/RxxG94FPKNjibkvPDyDhcIpxgnygmCZ/FJbuNwNLl+U5
+ w6Vu1JEQUu95MaZUsxAPvRtwXJGXiG0jqAwsefNw1DWpsD+PxvorBdPhA8TnPBQM9A4dEzgPZwN
+ 28/m/v8yRiu3jDK5EFe+EbT1ymQRaUaWvIF/1atFNrDcLIKB53Nj49rgp7PA/BqKnDDyAmgfSQ5
+ 1I+7yIMVrtsCPo7RZHYgfb7eHd8bejufjOzrmic7+FHJ/C1VkTUaE39s9a6Ip7MFJLBiybAqBzE
+ NDRKgQk2ji72mmFrbihgl2DRIkEvWiM7ll3gd2YLk0RdykzAEKfPz0xxNNt7Nz7zjBbyhLOHKKu
+ EbtwgYmUAQGcxqwHZnpnJ5hXI3erBNpjDM27Nat2Tj3q6dHy56DkN6u2YoGUneKZl3DLbnPxKgq
+ CroyO8iznFpXzqgGyocad73Cu+pqcmtNmUKxWDlSgqDUiJspC8x/cgN5yKhMKUjxzbgGAPggfCw
+ Lt6Yfymgg+dyGw6m+MpxrrDl87o9yi+EkH+sY2/KnZ/OpiNHJtS7dqxxKyaEgUp/1+ztzGM0Z6t
+ ZKgX3udgLDBE8tGVygcX1Ezeo67ILOmUyMNjH9biWlDu2tGvRqlbiTkzhsVxLgaiAJ8Zhu28naM
+ G6wUxVftK41VoHw==
+X-Developer-Key: i=avrac@freebox.fr; a=openpgp;
+ fpr=6225092072BB58E3CEEC091E75392A176D952DB4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 5dd45b66742a ("drm/panel: novatek-nt35950: Improve error handling")
-introduced logic to unregister DSI1 on any sort of probe failure, as
-that's not done automatically by kernel APIs.
-
-It did not however account for cases where only one DSI host is used.
-Fix that.
-
-Fixes: 5dd45b66742a ("drm/panel: novatek-nt35950: Improve error handling")
-Reported-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Signed-off-by: Arnaud Vrac <avrac@freebox.fr>
 ---
- drivers/gpu/drm/panel/panel-novatek-nt35950.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/qcom/msm8998.dtsi | 309 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 309 insertions(+)
 
-diff --git a/drivers/gpu/drm/panel/panel-novatek-nt35950.c b/drivers/gpu/drm/panel/panel-novatek-nt35950.c
-index 7498fc6258bb..8b108ac80b55 100644
---- a/drivers/gpu/drm/panel/panel-novatek-nt35950.c
-+++ b/drivers/gpu/drm/panel/panel-novatek-nt35950.c
-@@ -586,7 +586,8 @@ static int nt35950_probe(struct mipi_dsi_device *dsi)
+diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+index b150437a83558..41c8bb44d1fb1 100644
+--- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+@@ -1228,6 +1228,57 @@ blsp1_i2c6_sleep: blsp1-i2c6-sleep-state {
+ 				drive-strength = <2>;
+ 				bias-pull-up;
+ 			};
++
++			blsp1_spi_b_default: blsp1-spi_b-default {
++				pins = "gpio23", "gpio28";
++				function = "blsp1_spi_b";
++				drive-strength = <6>;
++				bias-disable;
++			};
++
++			blsp1_spi1_default: blsp1-spi1-default {
++				pins = "gpio0", "gpio1", "gpio2", "gpio3";
++				function = "blsp_spi1";
++				drive-strength = <6>;
++				bias-disable;
++			};
++
++			blsp1_spi2_default: blsp1-spi2-default {
++				pins = "gpio31", "gpio34", "gpio32", "gpio33";
++				function = "blsp_spi2";
++				drive-strength = <6>;
++				bias-disable;
++			};
++
++			blsp1_spi3_default: blsp1-spi3-default {
++				pins = "gpio45", "gpio46", "gpio47", "gpio48";
++				function = "blsp_spi2";
++				drive-strength = <6>;
++				bias-disable;
++			};
++
++			blsp1_spi4_default: blsp1-spi4-default {
++				pins = "gpio8", "gpio9", "gpio10", "gpio11";
++				function = "blsp_spi4";
++				drive-strength = <6>;
++				bias-disable;
++			};
++
++			blsp1_spi5_default: blsp1-spi5-default {
++				pins = "gpio85", "gpio86", "gpio87", "gpio88";
++				function = "blsp_spi5";
++				drive-strength = <6>;
++				bias-disable;
++			};
++
++			blsp1_spi6_default: blsp1-spi6-default {
++				pins = "gpio41", "gpio42", "gpio43", "gpio44";
++				function = "blsp_spi6";
++				drive-strength = <6>;
++				bias-disable;
++			};
++
++
+ 			/* 6 interfaces per QUP, BLSP2 indexes are numbered (n)+6 */
+ 			blsp2_i2c1_default: blsp2-i2c1-default-state {
+ 				pins = "gpio55", "gpio56";
+@@ -1312,6 +1363,48 @@ blsp2_i2c6_sleep: blsp2-i2c6-sleep-state {
+ 				drive-strength = <2>;
+ 				bias-pull-up;
+ 			};
++
++			blsp2_spi1_default: blsp2-spi1-default {
++				pins = "gpio53", "gpio54", "gpio55", "gpio56";
++				function = "blsp_spi7";
++				drive-strength = <6>;
++				bias-disable;
++			};
++
++			blsp2_spi2_default: blsp2-spi2-default {
++				pins = "gpio4", "gpio5", "gpio6", "gpio7";
++				function = "blsp_spi8";
++				drive-strength = <6>;
++				bias-disable;
++			};
++
++			blsp2_spi3_default: blsp2-spi3-default {
++				pins = "gpio49", "gpio50", "gpio51", "gpio52";
++				function = "blsp_spi9";
++				drive-strength = <6>;
++				bias-disable;
++			};
++
++			blsp2_spi4_default: blsp2-spi4-default {
++				pins = "gpio65", "gpio66", "gpio67", "gpio68";
++				function = "blsp_spi10";
++				drive-strength = <6>;
++				bias-disable;
++			};
++
++			blsp2_spi5_default: blsp2-spi5-default {
++				pins = "gpio58", "gpio59", "gpio60", "gpio61";
++				function = "blsp_spi11";
++				drive-strength = <6>;
++				bias-disable;
++			};
++
++			blsp2_spi6_default: blsp2-spi6-default {
++				pins = "gpio81", "gpio82", "gpio83", "gpio84";
++				function = "blsp_spi12";
++				drive-strength = <6>;
++				bias-disable;
++			};
+ 		};
  
- 	ret = drm_panel_of_backlight(&nt->panel);
- 	if (ret) {
--		mipi_dsi_device_unregister(nt->dsi[1]);
-+		if (num_dsis == 2)
-+			mipi_dsi_device_unregister(nt->dsi[1]);
+ 		remoteproc_mss: remoteproc@4080000 {
+@@ -2249,6 +2342,114 @@ blsp1_i2c6: i2c@c17a000 {
+ 			#size-cells = <0>;
+ 		};
  
- 		return dev_err_probe(dev, ret, "Failed to get backlight\n");
- 	}
-@@ -606,7 +607,8 @@ static int nt35950_probe(struct mipi_dsi_device *dsi)
- 		ret = mipi_dsi_attach(nt->dsi[i]);
- 		if (ret < 0) {
- 			/* If we fail to attach to either host, we're done */
--			mipi_dsi_device_unregister(nt->dsi[1]);
-+			if (num_dsis == 2)
-+				mipi_dsi_device_unregister(nt->dsi[1]);
++		blsp1_spi1: spi@c175000 {
++			compatible = "qcom,spi-qup-v2.2.1";
++			reg = <0x0c175000 0x600>;
++			interrupts = <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>;
++
++			clocks = <&gcc GCC_BLSP1_QUP1_SPI_APPS_CLK>,
++				 <&gcc GCC_BLSP1_AHB_CLK>;
++			clock-names = "core", "iface";
++			dmas = <&blsp1_dma 6>, <&blsp1_dma 7>;
++			dma-names = "tx", "rx";
++			pinctrl-names = "default";
++			pinctrl-0 = <&blsp1_spi1_default>;
++
++			status = "disabled";
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
++		blsp1_spi2: spi@c176000 {
++			compatible = "qcom,spi-qup-v2.2.1";
++			reg = <0x0c176000 0x600>;
++			interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>;
++
++			clocks = <&gcc GCC_BLSP1_QUP2_SPI_APPS_CLK>,
++				 <&gcc GCC_BLSP1_AHB_CLK>;
++			clock-names = "core", "iface";
++			dmas = <&blsp1_dma 8>, <&blsp1_dma 9>;
++			dma-names = "tx", "rx";
++			pinctrl-names = "default";
++			pinctrl-0 = <&blsp1_spi2_default>;
++
++			status = "disabled";
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
++		blsp1_spi3: spi@c177000 {
++			compatible = "qcom,spi-qup-v2.2.1";
++			reg = <0x0c177000 0x600>;
++			interrupts = <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>;
++
++			clocks = <&gcc GCC_BLSP1_QUP3_SPI_APPS_CLK>,
++				 <&gcc GCC_BLSP1_AHB_CLK>;
++			clock-names = "core", "iface";
++			dmas = <&blsp1_dma 10>, <&blsp1_dma 11>;
++			dma-names = "tx", "rx";
++			pinctrl-names = "default";
++			pinctrl-0 = <&blsp1_spi3_default>;
++
++			status = "disabled";
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
++		blsp1_spi4: spi@c178000 {
++			compatible = "qcom,spi-qup-v2.2.1";
++			reg = <0x0c178000 0x600>;
++			interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
++
++			clocks = <&gcc GCC_BLSP1_QUP4_SPI_APPS_CLK>,
++				 <&gcc GCC_BLSP1_AHB_CLK>;
++			clock-names = "core", "iface";
++			dmas = <&blsp1_dma 12>, <&blsp1_dma 13>;
++			dma-names = "tx", "rx";
++			pinctrl-names = "default";
++			pinctrl-0 = <&blsp1_spi4_default>;
++
++			status = "disabled";
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
++		blsp1_spi5: spi@c179000 {
++			compatible = "qcom,spi-qup-v2.2.1";
++			reg = <0x0c179000 0x600>;
++			interrupts = <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>;
++
++			clocks = <&gcc GCC_BLSP1_QUP5_SPI_APPS_CLK>,
++				 <&gcc GCC_BLSP1_AHB_CLK>;
++			clock-names = "core", "iface";
++			dmas = <&blsp1_dma 14>, <&blsp1_dma 15>;
++			dma-names = "tx", "rx";
++			pinctrl-names = "default";
++			pinctrl-0 = <&blsp1_spi5_default>;
++
++			status = "disabled";
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
++		blsp1_spi6: spi@c17a000 {
++			compatible = "qcom,spi-qup-v2.2.1";
++			reg = <0x0c17a000 0x600>;
++			interrupts = <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>;
++
++			clocks = <&gcc GCC_BLSP1_QUP6_SPI_APPS_CLK>,
++				 <&gcc GCC_BLSP1_AHB_CLK>;
++			clock-names = "core", "iface";
++			dmas = <&blsp1_dma 16>, <&blsp1_dma 17>;
++			dma-names = "tx", "rx";
++			pinctrl-names = "default";
++			pinctrl-0 = <&blsp1_spi6_default>;
++
++			status = "disabled";
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
+ 		blsp2_dma: dma-controller@c184000 {
+ 			compatible = "qcom,bam-v1.7.0";
+ 			reg = <0x0c184000 0x25000>;
+@@ -2392,6 +2593,114 @@ blsp2_i2c6: i2c@c1ba000 {
+ 			#size-cells = <0>;
+ 		};
  
- 			return dev_err_probe(dev, ret,
- 					     "Cannot attach to DSI%d host.\n", i);
++		blsp2_spi1: spi@c1b5000 {
++			compatible = "qcom,spi-qup-v2.2.1";
++			reg = <0x0c1b5000 0x600>;
++			interrupts = <GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>;
++
++			clocks = <&gcc GCC_BLSP2_QUP1_SPI_APPS_CLK>,
++				 <&gcc GCC_BLSP2_AHB_CLK>;
++			clock-names = "core", "iface";
++			dmas = <&blsp2_dma 6>, <&blsp2_dma 7>;
++			dma-names = "tx", "rx";
++			pinctrl-names = "default";
++			pinctrl-0 = <&blsp2_spi1_default>;
++
++			status = "disabled";
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
++		blsp2_spi2: spi@c1b6000 {
++			compatible = "qcom,spi-qup-v2.2.1";
++			reg = <0x0c1b6000 0x600>;
++			interrupts = <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>;
++
++			clocks = <&gcc GCC_BLSP2_QUP2_SPI_APPS_CLK>,
++				 <&gcc GCC_BLSP2_AHB_CLK>;
++			clock-names = "core", "iface";
++			dmas = <&blsp2_dma 8>, <&blsp2_dma 9>;
++			dma-names = "tx", "rx";
++			pinctrl-names = "default";
++			pinctrl-0 = <&blsp2_spi2_default>;
++
++			status = "disabled";
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
++		blsp2_spi3: spi@c1b7000 {
++			compatible = "qcom,spi-qup-v2.2.1";
++			reg = <0x0c1b7000 0x600>;
++			interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
++
++			clocks = <&gcc GCC_BLSP2_QUP3_SPI_APPS_CLK>,
++				 <&gcc GCC_BLSP2_AHB_CLK>;
++			clock-names = "core", "iface";
++			dmas = <&blsp2_dma 10>, <&blsp2_dma 11>;
++			dma-names = "tx", "rx";
++			pinctrl-names = "default";
++			pinctrl-0 = <&blsp2_spi3_default>;
++
++			status = "disabled";
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
++		blsp2_spi4: spi@c1b8000 {
++			compatible = "qcom,spi-qup-v2.2.1";
++			reg = <0x0c1b8000 0x600>;
++			interrupts = <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>;
++
++			clocks = <&gcc GCC_BLSP2_QUP4_SPI_APPS_CLK>,
++				 <&gcc GCC_BLSP2_AHB_CLK>;
++			clock-names = "core", "iface";
++			dmas = <&blsp2_dma 12>, <&blsp2_dma 13>;
++			dma-names = "tx", "rx";
++			pinctrl-names = "default";
++			pinctrl-0 = <&blsp2_spi4_default>;
++
++			status = "disabled";
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
++		blsp2_spi5: spi@c1b9000 {
++			compatible = "qcom,spi-qup-v2.2.1";
++			reg = <0x0c1b9000 0x600>;
++			interrupts = <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>;
++
++			clocks = <&gcc GCC_BLSP2_QUP5_SPI_APPS_CLK>,
++				 <&gcc GCC_BLSP2_AHB_CLK>;
++			clock-names = "core", "iface";
++			dmas = <&blsp2_dma 14>, <&blsp2_dma 15>;
++			dma-names = "tx", "rx";
++			pinctrl-names = "default";
++			pinctrl-0 = <&blsp2_spi5_default>;
++
++			status = "disabled";
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
++		blsp2_spi6: spi@c1ba000 {
++			compatible = "qcom,spi-qup-v2.2.1";
++			reg = <0x0c1ba000 0x600>;
++			interrupts = <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>;
++
++			clocks = <&gcc GCC_BLSP2_QUP6_SPI_APPS_CLK>,
++				 <&gcc GCC_BLSP2_AHB_CLK>;
++			clock-names = "core", "iface";
++			dmas = <&blsp2_dma 16>, <&blsp2_dma 17>;
++			dma-names = "tx", "rx";
++			pinctrl-names = "default";
++			pinctrl-0 = <&blsp2_spi6_default>;
++
++			status = "disabled";
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
+ 		mmcc: clock-controller@c8c0000 {
+ 			compatible = "qcom,mmcc-msm8998";
+ 			#clock-cells = <1>;
 
 ---
-base-commit: ab4f869fba6119997f7630d600049762a2b014fa
-change-id: 20230417-topic-maple_panel_fixup-170b6d3a8c9b
+base-commit: e3342532ecd39bbd9c2ab5b9001cec1589bc37e9
+change-id: 20230417-msm8998-spi-76d78360c38d
 
 Best regards,
 -- 
-Konrad Dybcio <konrad.dybcio@linaro.org>
+Arnaud Vrac <avrac@freebox.fr>
 
