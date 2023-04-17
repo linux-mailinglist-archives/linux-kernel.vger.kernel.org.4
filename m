@@ -2,105 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E27556E45C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 12:53:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3967C6E47DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 14:35:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbjDQKxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 06:53:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50808 "EHLO
+        id S230403AbjDQMe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 08:34:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230493AbjDQKw5 (ORCPT
+        with ESMTP id S229784AbjDQMe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 06:52:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51741976D;
-        Mon, 17 Apr 2023 03:51:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D67F6124E;
-        Mon, 17 Apr 2023 10:49:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD791C433EF;
-        Mon, 17 Apr 2023 10:49:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681728571;
-        bh=ziVA6an0IclPiTv5XXAnS129CvY6eq9Ui0ud26tLlWU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=pnlzBaD2datLbMEEuWf8qpGLvnCe9TaMR7JX0TfTiVM14q5kUkGVSP6CXaYN9wjt9
-         biSqEVVYsSs8uUIU0j67ehaj8JjecZXJBtdf8rAwcqraalik96YmsY0qtuNrh8Hf7E
-         +C1Fya95z8EeZXji2v8L8AOSaH/18WObxmVEoxlaBuptn1CzOX9l+WmbmczVa1io1W
-         RvKC6okQtnql7Vf7QuaxO94aubCdXDuHPfJiUDK/CX7hrQOJw6R8OPYjwgMCToMMP3
-         dhd2y6M+vmkynLIunJK+Lx4F5SzWZCd4nacwg5hPCdXKFUl7hCXaz3Cw3gWzq+QKo7
-         j4h5VXR1FUbgQ==
-Message-ID: <0fdc2dd8-89d6-8282-d16d-946ec2cb87c4@kernel.org>
-Date:   Mon, 17 Apr 2023 13:49:26 +0300
+        Mon, 17 Apr 2023 08:34:57 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C02C3;
+        Mon, 17 Apr 2023 05:34:55 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33H8xKJS014309;
+        Mon, 17 Apr 2023 10:52:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=kC0CibSpWa+1cOrD/+TCskbaGKiLhIhR/udUirvN9VI=;
+ b=pD9QslcpYJ1P8VMIxPJkii6OibWR44/MVqkOKsslzRsJtrW8gOaNxxtgahf5am31eW6v
+ mnJkaO+ckVMOhYU/7jsdUPdv2lgyPAClvOuz3Rs8EDjspNiAZ/V6gl7HSYVjm2Ue9rH9
+ rRcNbNkxjYALBaNb1FFkx5i1/Ss5u/1lnjyJeHRADpYi51xAFNxlm6KtXaq/fKcj7OgJ
+ LZtI4bnyNcYiwXfNFR362uYQLJY5WVNKr+7XXMKtzTbSnUdyF7TycsK4UdR3cuut5ndc
+ spLOGGAaSsLzU4xzhn4RC2LBSEPcNRBqU/Kmy/lDc/mm+c/vltN6b7Nv67mc+X65OI5G RQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pymuu38gn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Apr 2023 10:52:46 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33HAqjts028961
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Apr 2023 10:52:45 GMT
+Received: from kathirav-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Mon, 17 Apr 2023 03:52:41 -0700
+From:   Kathiravan T <quic_kathirav@quicinc.com>
+To:     <andersson@kernel.org>, <agross@kernel.org>,
+        <konrad.dybcio@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Kathiravan T <quic_kathirav@quicinc.com>
+Subject: [PATCH] clk: qcom: ipq5332: fix the order of SLEEP_CLK and XO clock
+Date:   Mon, 17 Apr 2023 16:22:26 +0530
+Message-ID: <20230417105226.3169-1-quic_kathirav@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 00/10] arm64: dts: ti: k3-am64: Add missing properties
- used in u-boot
-Content-Language: en-US
-To:     Nishanth Menon <nm@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Tero Kristo <kristo@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neha Malcom Francis <n-francis@ti.com>,
-        Nikhil M Jain <n-jain1@ti.com>, Tom Rini <trini@konsulko.com>
-References: <20230414073328.381336-1-nm@ti.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20230414073328.381336-1-nm@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: yMuRW1jW99ROMZCxg-G5aCeyk601bh2G
+X-Proofpoint-ORIG-GUID: yMuRW1jW99ROMZCxg-G5aCeyk601bh2G
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-17_06,2023-04-17_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ mlxscore=0 mlxlogscore=893 impostorscore=0 malwarescore=0 suspectscore=0
+ clxscore=1015 spamscore=0 bulkscore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304170097
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The order of DT_SLEEP_CLK and DT_XO are swapped and it is incorrect.
+Due to which the clocks for which the parent should be XO is having parent
+as SLEEP_CLK and vice versa. So fix the same by re-ordering the entries.
 
+Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
+---
+ drivers/clk/qcom/gcc-ipq5332.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 14/04/2023 10:33, Nishanth Menon wrote:
-> Hi,
-> 
-> while attempting to cleanup u-boot, I noticed that u-boot had some
-> additional nodes that were'nt in kernel.org, and this makes syncing the
-> kernel.org patches back to u-boot hard.
-> 
-> So, sync the same.
-> 
-> Bootlogs: (SK and evm)
-> https://gist.github.com/nmenon/6b09f55251225d3f3cce076c32a33bba
-> 
-> Baseline: next-20230413 (will be great if we can get into rc2 - will
-> make u-boot sync easier)
-> 
-> Nishanth Menon (10):
->   arm64: dts: ti: k3-am64: Add general purpose timers
->   arm64: dts: ti: k3-am642-sk: Fix mmc1 pinmux
->   arm64: dts: ti: k3-am642-sk: Enable main_i2c0 and eeprom
->   arm64: dts: ti: k3-am642-sk: Describe main_uart1 pins
->   arm64: dts: ti: k3-am642-sk: Rename regulator node name
->   arm64: dts: ti: k3-am642-evm: Enable main_i2c0 and eeprom
->   arm64: dts: ti: k3-am642-evm: Describe main_uart1 pins
->   arm64: dts: ti: k3-am642-evm: Rename regulator node name
->   arm64: dts: ti: k3-am642-evm: Add VTT GPIO regulator for DDR
->   arm64: dts: ti: k3-am642-sk|evm: Drop bootargs, add aliases
-> 
->  arch/arm64/boot/dts/ti/k3-am64-main.dtsi | 144 +++++++++++++++++++++++
->  arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi  |  45 +++++++
->  arch/arm64/boot/dts/ti/k3-am64.dtsi      |  16 ---
->  arch/arm64/boot/dts/ti/k3-am642-evm.dts  |  76 ++++++++++--
->  arch/arm64/boot/dts/ti/k3-am642-sk.dts   |  69 ++++++++---
->  5 files changed, 313 insertions(+), 37 deletions(-)
-> 
+diff --git a/drivers/clk/qcom/gcc-ipq5332.c b/drivers/clk/qcom/gcc-ipq5332.c
+index 8cacbfb10c72..14096887d436 100644
+--- a/drivers/clk/qcom/gcc-ipq5332.c
++++ b/drivers/clk/qcom/gcc-ipq5332.c
+@@ -20,8 +20,8 @@
+ #include "reset.h"
+ 
+ enum {
+-	DT_SLEEP_CLK,
+ 	DT_XO,
++	DT_SLEEP_CLK,
+ 	DT_PCIE_2LANE_PHY_PIPE_CLK,
+ 	DT_PCIE_2LANE_PHY_PIPE_CLK_X1,
+ 	DT_USB_PCIE_WRAPPER_PIPE_CLK,
+-- 
+2.17.1
 
-for this series:
-
-Reviewed-by: Roger Quadros <rogerq@kernel.org>
