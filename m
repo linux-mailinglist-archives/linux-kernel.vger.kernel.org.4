@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 212136E4605
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 13:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E9BB6E4603
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 13:06:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbjDQLGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 07:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33514 "EHLO
+        id S230363AbjDQLGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 07:06:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbjDQLGc (ORCPT
+        with ESMTP id S230137AbjDQLGL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 07:06:32 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B343E4EF2
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 04:05:32 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id i8so16232172plt.10
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 04:05:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1681729435; x=1684321435;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AXWxF7DmGQlS+I9+P3uaxt1m3XBosotbfe+681ULx84=;
-        b=MzuSVH7Zo2sPbGWOQ47oeP4xLii2+aOg/66pgyJLKCz+X/rFQCZEZAlJXuDiRPX63L
-         Cux+FDAbL2z7jkjdIeQ640L8J3LRvmFN5d/WR9Ny+AaK6EMbcWe5MWSCRdLkCXf100Ae
-         4S6Af4C5MkMixqMRH1kFCqPRf92TDYYP6Bans=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681729435; x=1684321435;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AXWxF7DmGQlS+I9+P3uaxt1m3XBosotbfe+681ULx84=;
-        b=haqPCf0VbV4J1YC5EFvts0UEGGS8y9h+mQvSZnV2q4faspjAReYocU8MEn7OyIwRo+
-         umV+lLB/iJI5N9XLqwnm+Yjkju2DqtVd+R4gyOD0cV1ysNDkpjMgYzdlgt5GnR/VClfJ
-         IhwqwUK9SIpQv3OkhsKHQ5Wi7hLFE9oJHDG5aM53vA8hdJkj3sUHBPPbqCVec87ecbd5
-         k+tWiZE+CcsfEVd3rMt0mFXFD0qDreeYljUzudMcJtotBo2lCR8kUOCsD6kySB4whZg5
-         AJrczHNvEUVCQ6EY4tpWc0qMy4wTsPP6fJrFME3TZrteo91+P52fyOlzq22NPj7dBImW
-         t1aw==
-X-Gm-Message-State: AAQBX9cGP9hxTcAEgM0aG3HjQFkEr3d5bcbkamNDDRoTc6SOeY9eZmqH
-        CYjBL64mRcz+lY9BQDdoCbEyfw==
-X-Google-Smtp-Source: AKy350aXLCVk+OYIIUH+lbE2hcALZKyJLxunUGHqU3dWfL0H59xa5XS2CsoUO3I3xsT99xRfHjqmzw==
-X-Received: by 2002:a17:902:ac88:b0:1a6:5493:a3e8 with SMTP id h8-20020a170902ac8800b001a65493a3e8mr11813926plr.41.1681729435548;
-        Mon, 17 Apr 2023 04:03:55 -0700 (PDT)
-Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:97ac:e7c:d412:5251])
-        by smtp.gmail.com with ESMTPSA id c6-20020a170902aa4600b001a221d14179sm7258666plr.302.2023.04.17.04.03.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 04:03:55 -0700 (PDT)
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Yosry Ahmed <yosryahmed@google.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [PATCH] zsmalloc: allow only one active pool compaction context
-Date:   Mon, 17 Apr 2023 20:02:59 +0900
-Message-ID: <20230417110259.1737315-1-senozhatsky@chromium.org>
-X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
+        Mon, 17 Apr 2023 07:06:11 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2945279
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 04:05:13 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1poMdd-0000eR-4a; Mon, 17 Apr 2023 13:03:13 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1poMdb-0005No-Nb; Mon, 17 Apr 2023 13:03:11 +0200
+Date:   Mon, 17 Apr 2023 13:03:11 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Woojung Huh <woojung.huh@microchip.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Arun Ramadoss <arun.ramadoss@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        UNGLinuxDriver@microchip.com, Eric Dumazet <edumazet@google.com>,
+        kernel@pengutronix.de, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH net-next v1 2/2] net: dsa: microchip: Add partial ACL
+ support for ksz9477 switches
+Message-ID: <20230417110311.GA11474@pengutronix.de>
+References: <20230411172456.3003003-1-o.rempel@pengutronix.de>
+ <20230411172456.3003003-1-o.rempel@pengutronix.de>
+ <20230411172456.3003003-3-o.rempel@pengutronix.de>
+ <20230411172456.3003003-3-o.rempel@pengutronix.de>
+ <20230416165658.fuo7vwer7m7ulkg2@skbuf>
+ <20230417045710.GB20350@pengutronix.de>
+ <20230417101209.m5fhc7njeeomljkf@skbuf>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230417101209.m5fhc7njeeomljkf@skbuf>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,91 +67,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-zsmalloc pool can be compacted concurrently by many contexts,
-e.g.
+On Mon, Apr 17, 2023 at 01:12:09PM +0300, Vladimir Oltean wrote:
+> On Mon, Apr 17, 2023 at 06:57:10AM +0200, Oleksij Rempel wrote:
+> > > On Tue, Apr 11, 2023 at 07:24:55PM +0200, Oleksij Rempel wrote:
+> > > > The ACL also implements a count function, generating an interrupt
+> > > > instead of a forwarding action. It can be used as a watchdog timer or an
+> > > > event counter.
+> > > 
+> > > Is the interrupt handled here? I didn't see cls_flower_stats().
+> > 
+> > No, it is not implemented in this patch. It is generic description of things
+> > ACL should be able to do. Is it confusing? Should I remove it?
+> 
+> No, it's confusing that the ACL statistics are not reported even though
+> it's mentioned that it's possible...
 
- cc1 handle_mm_fault()
-      do_anonymous_page()
-       __alloc_pages_slowpath()
-        try_to_free_pages()
-         do_try_to_free_pages(
-          lru_gen_shrink_node()
-           shrink_slab()
-            do_shrink_slab()
-             zs_shrinker_scan()
-              zs_compact()
+Certain aspects of the chip specification appeared ambiguous, leading me
+to decide to allocate a separate time slot for investigating the counter
+topic if necessary.
 
-This creates unnecessary contention as all those processes
-compete for access to the same classes. A single compaction
-process is enough. Moreover contention that is created by
-multiple compaction processes impact other zsmalloc functions,
-e.g. zs_malloc(), since zsmalloc uses "global" pool->lock to
-synchronize access to pool.
+For example, according to the
+KSZ9477 4.4.18 ACCESS CONTROL LIST (ACL) FILTERING:
 
-Introduce pool compaction mutex and permit only one compaction
-context at a time.
+"It is also possible to configure the ACL table so that multiple processing
+entries specify the same action rule. In this way, the final matching result is
+the OR of the matching results from each of the multiple RuleSets.
+The 16 ACL rules represent an ordered list, with entry #0 having the highest
+priority and entry #15 having the lowest priority. All matching rules are
+evaluated. If there are multiple true match results and multiple corresponding
+actions, the highest priority (lowest numbered) of those actions will be the
+one taken."
 
-/proc/lock-stat after make -j$((`nproc`+1)) linux kernel for
-&pool->lock#3:
+A summary of this part of documentation is:
+1. ACL table can have multiple entries specifying the same action rule.
+2. Final matching result is the OR of multiple RuleSets' results.
+3. 16 ACL rules form an ordered list, with priority descending from #0 to #15.
+4. All matching rules are evaluated.
+5. When multiple true matches and actions occur, the highest priority action is
+   executed.
 
-                Base           Patched
---------------------------------------
-con-bounces     9797655        8125860
-contentions     11131185       9242153
-waittime-min    0.09           0.10
-waittime-max    4171695.76     3926258.74
-waittime-total  506197629.16   417061026.20
-waittime-avg    45.48          45.13
-acq-bounces     13809103       11383480
-acquisitions    21145155       18049364
-holdtime-min    0.06           0.07
-holdtime-max    7379928.80     3926274.89
-holdtime-total  46273950.89    37279624.53
-holdtime-avg    2.19           2.07
+Considering this, there is a possibility that separate action rules would not
+be executed, as they might not be the highest priority match.  Since counters
+would have separation action rules, they would not be executed or prevent other
+action rules from execution.
 
-Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
----
- mm/zsmalloc.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+To confirm my hypothesis, additional time and testing will be required.
+Nonetheless, I hope this issue does not impede the progress of this patch.
 
-diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
-index cc81dfba05a0..0e036ec56c3c 100644
---- a/mm/zsmalloc.c
-+++ b/mm/zsmalloc.c
-@@ -264,6 +264,7 @@ struct zs_pool {
- 	struct work_struct free_work;
- #endif
- 	spinlock_t lock;
-+	struct mutex compact_lock;
- };
- 
- struct zspage {
-@@ -2274,6 +2275,9 @@ unsigned long zs_compact(struct zs_pool *pool)
- 	struct size_class *class;
- 	unsigned long pages_freed = 0;
- 
-+	if (!mutex_trylock(&pool->compact_lock))
-+		return 0;
-+
- 	for (i = ZS_SIZE_CLASSES - 1; i >= 0; i--) {
- 		class = pool->size_class[i];
- 		if (class->index != i)
-@@ -2281,6 +2285,7 @@ unsigned long zs_compact(struct zs_pool *pool)
- 		pages_freed += __zs_compact(pool, class);
- 	}
- 	atomic_long_add(pages_freed, &pool->stats.pages_compacted);
-+	mutex_unlock(&pool->compact_lock);
- 
- 	return pages_freed;
- }
-@@ -2388,6 +2393,7 @@ struct zs_pool *zs_create_pool(const char *name)
- 
- 	init_deferred_free(pool);
- 	spin_lock_init(&pool->lock);
-+	mutex_init(&pool->compact_lock);
- 
- 	pool->name = kstrdup(name, GFP_KERNEL);
- 	if (!pool->name)
+> > > Have you considered the "skbedit priority" action as opposed to hw_tc?
+> > 
+> > I had already thought of that, but since bridging is offloaded in the HW
+> > no skbs are involved, i thought it will be confusing. Since tc-flower seems to
+> > already support hw_tc remapping, I decided to use it. I hope it will not harm,
+> > to use it for now as mandatory option and make it optional later if other
+> > actions are added, including skbedit.
+> 
+> Well, skbedit is offloadable, so in that sense, its behavior is defined
+> even when no skbs are involved. OTOH, skbedit also has a software data
+> path (sets skb->priority), as opposed to hw_tc, which last time I checked,
+> did not.
+
+Alright, having tc rules be portable is certainly a benefit. I presume
+that in this situation, it's not an exclusive "either...or" choice. Both
+variants can coexist, and the skbedit action can be incorporated at a
+later time. Is that accurate?
+
+Regards,
+Oleksij
 -- 
-2.40.0.634.g4ca3ef3211-goog
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
