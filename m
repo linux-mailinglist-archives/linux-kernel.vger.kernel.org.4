@@ -2,625 +2,518 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF086E42B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:38:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23A326E42BB
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbjDQIiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 04:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49578 "EHLO
+        id S230421AbjDQIia convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 17 Apr 2023 04:38:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbjDQIiD (ORCPT
+        with ESMTP id S230173AbjDQIi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 04:38:03 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2041.outbound.protection.outlook.com [40.107.243.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56EB21FEE;
-        Mon, 17 Apr 2023 01:38:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AXMkLrruKTAGC2Mw4uvaOjcuZj1dQn+9BiEBIPmvbJSssCU0JKL9zhwQot3o7xSpHaIpQSYldow8twSvzfLHBjDTq4oXKTfgXs39xKaZnO9mZu0zCLPZex4p1aC+lPu9zGHDguatNfvDcCHB+yGTqkMunnU+yOsPG9ivBUnQ+qpASgXn+FNeFS978oQux5hP8ug5sEm4AylZN4004AEjpz+GwG3SfnRrir2askcVxjuYDTw+VmMep+e/vGk1eVxmP3lV6HE/Rdm+975OWVKnAXzPhcHrCMXICFAAfhPKsENJdABp6FpCqsLYQHzgS+ar9QyZyHwgYcnnKy9CX0m3Ng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hcMhMlkUvb8KvTiTttOX3/oPv1WeCt+V+GKiTmFjZGo=;
- b=kNqfu5NY9HOjCxX9r/vKqyzxwBVqE81p2AJsutWc48/Xc4BvlKr2vx0k9j5r5n6DUkud9NihwFhzSsk4Yz3QETGJIbxt1RWezoY7xs7+FqiTH/Wjxd0pcFgdgcU2g4jANNi8iVVLiM0xD3pCD6zaVgn1Rm+ePyBYQ0khEkkGK9UWoqqzmeSRV0Jckoq9HX99s2ntbphAE1xzschgnU0Lr9t2s5lG4cK2i7bXzU2QgjAiuUP8Zo2Wr+QiBEfLxtwoxm+WydnC2E5hfpubhHROW5MFv+GvSXFpkKm6UtIff+V2wIYPc92HWTGNI8O/jJs5/jigtGz6mqigW9IS/fEzqQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=redhat.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hcMhMlkUvb8KvTiTttOX3/oPv1WeCt+V+GKiTmFjZGo=;
- b=3bJsL3tzmkJaS4Zav2kt2XKaMfZdvb1XCALv9iWOGAvTeCNLLNzmY2lDWv9+ni6ZDxCgvQeZzmwrQurDEXIXz4oWD4GovKPvMgo2ppEBGF4N3crGTgyjW6JFpiz/Jp/JyQ8W2THVNkuLevDToEUh6V4OETB3rZwek/lBysAyHKc=
-Received: from BY3PR03CA0006.namprd03.prod.outlook.com (2603:10b6:a03:39a::11)
- by PH7PR12MB7212.namprd12.prod.outlook.com (2603:10b6:510:207::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Mon, 17 Apr
- 2023 08:37:57 +0000
-Received: from CO1PEPF00001A5D.namprd05.prod.outlook.com
- (2603:10b6:a03:39a:cafe::69) by BY3PR03CA0006.outlook.office365.com
- (2603:10b6:a03:39a::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.46 via Frontend
- Transport; Mon, 17 Apr 2023 08:37:57 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- CO1PEPF00001A5D.mail.protection.outlook.com (10.167.241.4) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6319.14 via Frontend Transport; Mon, 17 Apr 2023 08:37:57 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 17 Apr
- 2023 03:37:56 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
- (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 17 Apr
- 2023 03:37:55 -0500
-Received: from xhdipdslab41.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Mon, 17 Apr 2023 03:37:52 -0500
-From:   Nipun Gupta <nipun.gupta@amd.com>
-To:     <alex.williamson@redhat.com>, <jgg@ziepe.ca>,
-        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <masahiroy@kernel.org>, <nathan@kernel.org>,
-        <ndesaulniers@google.com>, <nicolas@fjasle.eu>
-CC:     <git@amd.com>, <harpreet.anand@amd.com>,
-        <pieter.jansen-van-vuuren@amd.com>, <nikhil.agarwal@amd.com>,
-        <michal.simek@amd.com>, Nipun Gupta <nipun.gupta@amd.com>
-Subject: [PATCH v3] vfio/cdx: add support for CDX bus
-Date:   Mon, 17 Apr 2023 14:07:25 +0530
-Message-ID: <20230417083725.20193-1-nipun.gupta@amd.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 17 Apr 2023 04:38:28 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E8171FEE
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 01:38:26 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1poKN5-0002M1-VM; Mon, 17 Apr 2023 10:38:00 +0200
+Message-ID: <8db7ad8da4805d7eb4471051676d179e193ee399.camel@pengutronix.de>
+Subject: Re: [PATCH 4/6] drm: bridge: samsung-dsim: Dynamically configure
+ DPHY timing
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Adam Ford <aford173@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        aford@beaconembedded.com,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Fabio Estevam <festevam@gmail.com>, m.szyprowski@samsung.com,
+        marex@denx.de, Robert Foss <rfoss@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Inki Dae <inki.dae@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Date:   Mon, 17 Apr 2023 10:37:56 +0200
+In-Reply-To: <20230415104104.5537-4-aford173@gmail.com>
+References: <20230415104104.5537-1-aford173@gmail.com>
+         <20230415104104.5537-4-aford173@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF00001A5D:EE_|PH7PR12MB7212:EE_
-X-MS-Office365-Filtering-Correlation-Id: 71dfdcaa-eca8-4ccd-ab8e-08db3f1f0b89
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ih6HZdl04gvSlrDy3l1aEVB4B1I+kdhE4xw6fsMBAeqT8WWNNopKeNaEpcbm0I/PmJEdMPf8wUKSZEcS3h1GJ3JaW5xf2/jw9AXlpQ+cJjaUDGw2eLufnSVlY01Bpt1Kovw0Yr/ZEV2c1egWThkhkh8OJ9Cp1jfzXZ/BIx0Powblx4/2XKXxEcQrZyZDSiPekuWoXH1wQ/kgWHjum7RqEw6OFNQ4AsjOf5rg+AO0a4mfjN0WpzA9GVHAy2vCgzA3c7j1P6k4mHA2A3Gcjiwf9375gP/lMyHA+hvq9Ww8GFX58BgpgqnLxvANKR7tsw63KnOX89jlOIiK+wOsKXeKCOZ6pItWc16JV3xelbvaz1SFNBXADGjLtQeHFJTU/3GuucsMqQq1Ihsgs/tTWy/QKoepotIYFmAJElcwUhVpV7wuIMWnanef99ds8yMsP4Rij3UWSKyT9dZm7VzUQONhpitwM7fFb8zX0zSaKmLNQSEYp72gyu2Jab3qt4HDTTJ4jVwemZw+HPfIimoKDn8iUFvZIDOv9EwFTKqX7/YVuyZOGqvaDBAoWb9LdII+OQL3h9TG1LBwvmH+MoHjiWIzTb2sZeHDi5iS6st/6patbvbg3XztNcVIjlK0WrwS19QIbbtWslEGnMZ4mbUfBRfx733I3BGNCHW2baq580wNT5njVXIzIGR1kSvoWpOeIc6yCR7Coqg3c6b8/EZ3/zzw20Jcb8S8Xh30QqqXyU8gXcifvdSJe2C+Ofz2lrGmXtaS
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(346002)(376002)(39860400002)(451199021)(40470700004)(36840700001)(46966006)(426003)(5660300002)(44832011)(82310400005)(2616005)(336012)(86362001)(47076005)(83380400001)(186003)(356005)(1076003)(26005)(82740400003)(81166007)(36860700001)(8936002)(8676002)(110136005)(54906003)(478600001)(40480700001)(6666004)(41300700001)(316002)(40460700003)(36756003)(4326008)(70206006)(70586007)(2906002)(30864003)(36900700001)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2023 08:37:57.1602
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 71dfdcaa-eca8-4ccd-ab8e-08db3f1f0b89
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF00001A5D.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7212
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vfio-cdx driver enables IOCTLs for user space to query
-MMIO regions for CDX devices and mmap them. This change
-also adds support for reset of CDX devices.
+Hi Adam,
 
-This change adds the VFIO CDX driver and enables the following
-ioctls for CDX devices:
- - VFIO_DEVICE_GET_INFO:
- - VFIO_DEVICE_GET_REGION_INFO
- - VFIO_DEVICE_RESET
+Am Samstag, dem 15.04.2023 um 05:41 -0500 schrieb Adam Ford:
+> NXP uses a lookup table to determine the various values for
+> the PHY Timing based on the clock rate in their downstream
+> kernel.  Since the input clock can be variable, the phy
+> settings need to be variable too.  Add an additional variable
+> to the driver data to enable this feature to prevent breaking
+> boards that don't support it.
+> 
 
-Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
-Reviewed-by: Pieter Jansen van Vuuren <pieter.jansen-van-vuuren@amd.com>
-Tested-by: Nikhil Agarwal <nikhil.agarwal@amd.com>
----
+I haven't checked if this generates values close to the ones in this
+table, but I guess it should be worth a try to use
+phy_mipi_dphy_get_default_config() instead.
 
-Changes v2->v3:
-- removed redundant init and release functions
-- removed redundant dev and cdx_dev from vfio_cdx_device
-- added support for iommufd
-- added VFIO_DEVICE_FLAGS_CDX
-- removed unrequried WARN_ON
-- removed unused ioaddr
+Regards,
+Lucas
 
-Changes v1->v2:
-- Updated file2alias to support vfio_cdx
-- removed some un-necessary checks in mmap
-- removed vfio reset wrapper API
-- converted complex macros to static APIs
-- used pgprot_device and io_remap_pfn_range
-
- MAINTAINERS                         |   7 +
- drivers/vfio/Kconfig                |   1 +
- drivers/vfio/Makefile               |   1 +
- drivers/vfio/cdx/Kconfig            |  17 ++
- drivers/vfio/cdx/Makefile           |   8 +
- drivers/vfio/cdx/vfio_cdx.c         | 271 ++++++++++++++++++++++++++++
- drivers/vfio/cdx/vfio_cdx_private.h |  28 +++
- include/linux/cdx/cdx_bus.h         |   1 -
- include/linux/mod_devicetable.h     |   6 +
- include/uapi/linux/vfio.h           |   1 +
- scripts/mod/devicetable-offsets.c   |   1 +
- scripts/mod/file2alias.c            |  17 +-
- 12 files changed, 357 insertions(+), 2 deletions(-)
- create mode 100644 drivers/vfio/cdx/Kconfig
- create mode 100644 drivers/vfio/cdx/Makefile
- create mode 100644 drivers/vfio/cdx/vfio_cdx.c
- create mode 100644 drivers/vfio/cdx/vfio_cdx_private.h
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7f74d8571ac9..c4fd42ba8f46 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -22064,6 +22064,13 @@ F:	Documentation/filesystems/vfat.rst
- F:	fs/fat/
- F:	tools/testing/selftests/filesystems/fat/
- 
-+VFIO CDX DRIVER
-+M:	Nipun Gupta <nipun.gupta@amd.com>
-+M:	Nikhil Agarwal <nikhil.agarwal@amd.com>
-+L:	kvm@vger.kernel.org
-+S:	Maintained
-+F:	drivers/vfio/cdx/*
-+
- VFIO DRIVER
- M:	Alex Williamson <alex.williamson@redhat.com>
- L:	kvm@vger.kernel.org
-diff --git a/drivers/vfio/Kconfig b/drivers/vfio/Kconfig
-index 89e06c981e43..aba36f5be4ec 100644
---- a/drivers/vfio/Kconfig
-+++ b/drivers/vfio/Kconfig
-@@ -57,6 +57,7 @@ source "drivers/vfio/pci/Kconfig"
- source "drivers/vfio/platform/Kconfig"
- source "drivers/vfio/mdev/Kconfig"
- source "drivers/vfio/fsl-mc/Kconfig"
-+source "drivers/vfio/cdx/Kconfig"
- endif
- 
- source "virt/lib/Kconfig"
-diff --git a/drivers/vfio/Makefile b/drivers/vfio/Makefile
-index 70e7dcb302ef..1a27b2516612 100644
---- a/drivers/vfio/Makefile
-+++ b/drivers/vfio/Makefile
-@@ -14,3 +14,4 @@ obj-$(CONFIG_VFIO_PCI) += pci/
- obj-$(CONFIG_VFIO_PLATFORM) += platform/
- obj-$(CONFIG_VFIO_MDEV) += mdev/
- obj-$(CONFIG_VFIO_FSL_MC) += fsl-mc/
-+obj-$(CONFIG_VFIO_CDX) += cdx/
-diff --git a/drivers/vfio/cdx/Kconfig b/drivers/vfio/cdx/Kconfig
-new file mode 100644
-index 000000000000..e6de0a0caa32
---- /dev/null
-+++ b/drivers/vfio/cdx/Kconfig
-@@ -0,0 +1,17 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# VFIO CDX configuration
-+#
-+# Copyright (C) 2022-2023, Advanced Micro Devices, Inc.
-+#
-+
-+config VFIO_CDX
-+	tristate "VFIO support for CDX bus devices"
-+	depends on CDX_BUS
-+	select EVENTFD
-+	help
-+	  Driver to enable VFIO support for the devices on CDX bus.
-+	  This is required to make use of CDX devices present in
-+	  the system using the VFIO framework.
-+
-+	  If you don't know what to do here, say N.
-diff --git a/drivers/vfio/cdx/Makefile b/drivers/vfio/cdx/Makefile
-new file mode 100644
-index 000000000000..82e4ef412c0f
---- /dev/null
-+++ b/drivers/vfio/cdx/Makefile
-@@ -0,0 +1,8 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Copyright (C) 2022-2023, Advanced Micro Devices, Inc.
-+#
-+
-+obj-$(CONFIG_VFIO_CDX) += vfio-cdx.o
-+
-+vfio-cdx-objs := vfio_cdx.o
-diff --git a/drivers/vfio/cdx/vfio_cdx.c b/drivers/vfio/cdx/vfio_cdx.c
-new file mode 100644
-index 000000000000..e937af968579
---- /dev/null
-+++ b/drivers/vfio/cdx/vfio_cdx.c
-@@ -0,0 +1,271 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2022-2023, Advanced Micro Devices, Inc.
-+ */
-+
-+#include <linux/vfio.h>
-+#include <linux/cdx/cdx_bus.h>
-+
-+#include "vfio_cdx_private.h"
-+
-+static struct cdx_driver vfio_cdx_driver;
-+
-+/**
-+ * CDX_DRIVER_OVERRIDE_DEVICE_VFIO - macro used to describe a VFIO
-+ *                                   "driver_override" CDX device.
-+ * @vend: the 16 bit CDX Vendor ID
-+ * @dev: the 16 bit CDX Device ID
-+ *
-+ * This macro is used to create a struct cdx_device_id that matches a
-+ * specific device. driver_override will be set to
-+ * CDX_ID_F_VFIO_DRIVER_OVERRIDE.
-+ */
-+#define CDX_DRIVER_OVERRIDE_DEVICE_VFIO(vend, dev) \
-+	CDX_DEVICE_DRIVER_OVERRIDE(vend, dev, CDX_ID_F_VFIO_DRIVER_OVERRIDE)
-+
-+static int vfio_cdx_open_device(struct vfio_device *core_vdev)
-+{
-+	struct vfio_cdx_device *vdev =
-+		container_of(core_vdev, struct vfio_cdx_device, vdev);
-+	struct cdx_device *cdx_dev = to_cdx_device(core_vdev->dev);
-+	int count = cdx_dev->res_count;
-+	int i;
-+
-+	vdev->regions = kcalloc(count, sizeof(struct vfio_cdx_region),
-+				GFP_KERNEL);
-+	if (!vdev->regions)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < count; i++) {
-+		struct resource *res = &cdx_dev->res[i];
-+
-+		vdev->regions[i].addr = res->start;
-+		vdev->regions[i].size = resource_size(res);
-+		vdev->regions[i].type = res->flags;
-+		/*
-+		 * Only regions addressed with PAGE granularity may be
-+		 * MMAP'ed securely.
-+		 */
-+		if (!(vdev->regions[i].addr & ~PAGE_MASK) &&
-+		    !(vdev->regions[i].size & ~PAGE_MASK))
-+			vdev->regions[i].flags |=
-+					VFIO_REGION_INFO_FLAG_MMAP;
-+		vdev->regions[i].flags |= VFIO_REGION_INFO_FLAG_READ;
-+		if (!(cdx_dev->res[i].flags & IORESOURCE_READONLY))
-+			vdev->regions[i].flags |= VFIO_REGION_INFO_FLAG_WRITE;
-+	}
-+
-+	return 0;
-+}
-+
-+static void vfio_cdx_regions_cleanup(struct vfio_cdx_device *vdev)
-+{
-+	kfree(vdev->regions);
-+}
-+
-+static void vfio_cdx_close_device(struct vfio_device *core_vdev)
-+{
-+	struct vfio_cdx_device *vdev =
-+		container_of(core_vdev, struct vfio_cdx_device, vdev);
-+	int ret;
-+
-+	vfio_cdx_regions_cleanup(vdev);
-+
-+	/* reset the device before cleaning up the interrupts */
-+	ret = cdx_dev_reset(core_vdev->dev);
-+	if (ret)
-+		dev_warn(core_vdev->dev,
-+			 "VFIO_CDX: reset device has failed (%d)\n", ret);
-+}
-+
-+static long vfio_cdx_ioctl(struct vfio_device *core_vdev,
-+			   unsigned int cmd, unsigned long arg)
-+{
-+	struct vfio_cdx_device *vdev =
-+		container_of(core_vdev, struct vfio_cdx_device, vdev);
-+	struct cdx_device *cdx_dev = to_cdx_device(core_vdev->dev);
-+	unsigned long minsz;
-+
-+	switch (cmd) {
-+	case VFIO_DEVICE_GET_INFO:
-+	{
-+		struct vfio_device_info info;
-+
-+		minsz = offsetofend(struct vfio_device_info, num_irqs);
-+
-+		if (copy_from_user(&info, (void __user *)arg, minsz))
-+			return -EFAULT;
-+
-+		if (info.argsz < minsz)
-+			return -EINVAL;
-+
-+		info.flags = VFIO_DEVICE_FLAGS_CDX;
-+		info.flags = VFIO_DEVICE_FLAGS_RESET;
-+
-+		info.num_regions = cdx_dev->res_count;
-+		info.num_irqs = 0;
-+
-+		return copy_to_user((void __user *)arg, &info, minsz) ?
-+			-EFAULT : 0;
-+	}
-+	case VFIO_DEVICE_GET_REGION_INFO:
-+	{
-+		struct vfio_region_info info;
-+
-+		minsz = offsetofend(struct vfio_region_info, offset);
-+
-+		if (copy_from_user(&info, (void __user *)arg, minsz))
-+			return -EFAULT;
-+
-+		if (info.argsz < minsz)
-+			return -EINVAL;
-+
-+		if (info.index >= cdx_dev->res_count)
-+			return -EINVAL;
-+
-+		/* map offset to the physical address  */
-+		info.offset = vfio_cdx_index_to_offset(info.index);
-+		info.size = vdev->regions[info.index].size;
-+		info.flags = vdev->regions[info.index].flags;
-+
-+		if (copy_to_user((void __user *)arg, &info, minsz))
-+			return -EFAULT;
-+		return 0;
-+	}
-+	case VFIO_DEVICE_RESET:
-+	{
-+		return cdx_dev_reset(core_vdev->dev);
-+	}
-+	default:
-+		return -ENOTTY;
-+	}
-+}
-+
-+static int vfio_cdx_mmap_mmio(struct vfio_cdx_region region,
-+			      struct vm_area_struct *vma)
-+{
-+	u64 size = vma->vm_end - vma->vm_start;
-+	u64 pgoff, base;
-+
-+	pgoff = vma->vm_pgoff &
-+		((1U << (VFIO_CDX_OFFSET_SHIFT - PAGE_SHIFT)) - 1);
-+	base = pgoff << PAGE_SHIFT;
-+
-+	if (region.size < PAGE_SIZE || base + size > region.size)
-+		return -EINVAL;
-+
-+	vma->vm_pgoff = (region.addr >> PAGE_SHIFT) + pgoff;
-+	vma->vm_page_prot = pgprot_device(vma->vm_page_prot);
-+
-+	return io_remap_pfn_range(vma, vma->vm_start, vma->vm_pgoff,
-+				  size, vma->vm_page_prot);
-+}
-+
-+static int vfio_cdx_mmap(struct vfio_device *core_vdev,
-+			 struct vm_area_struct *vma)
-+{
-+	struct vfio_cdx_device *vdev =
-+		container_of(core_vdev, struct vfio_cdx_device, vdev);
-+	struct cdx_device *cdx_dev = to_cdx_device(core_vdev->dev);
-+	unsigned int index;
-+
-+	index = vma->vm_pgoff >> (VFIO_CDX_OFFSET_SHIFT - PAGE_SHIFT);
-+
-+	if (index >= cdx_dev->res_count)
-+		return -EINVAL;
-+
-+	if (!(vdev->regions[index].flags & VFIO_REGION_INFO_FLAG_MMAP))
-+		return -EINVAL;
-+
-+	if (!(vdev->regions[index].flags & VFIO_REGION_INFO_FLAG_READ) &&
-+	    (vma->vm_flags & VM_READ))
-+		return -EINVAL;
-+
-+	if (!(vdev->regions[index].flags & VFIO_REGION_INFO_FLAG_WRITE) &&
-+	    (vma->vm_flags & VM_WRITE))
-+		return -EINVAL;
-+
-+	return vfio_cdx_mmap_mmio(vdev->regions[index], vma);
-+}
-+
-+static const struct vfio_device_ops vfio_cdx_ops = {
-+	.name		= "vfio-cdx",
-+	.open_device	= vfio_cdx_open_device,
-+	.close_device	= vfio_cdx_close_device,
-+	.ioctl		= vfio_cdx_ioctl,
-+	.mmap		= vfio_cdx_mmap,
-+	.bind_iommufd	= vfio_iommufd_physical_bind,
-+	.unbind_iommufd	= vfio_iommufd_physical_unbind,
-+	.attach_ioas	= vfio_iommufd_physical_attach_ioas,
-+};
-+
-+static int vfio_cdx_probe(struct cdx_device *cdx_dev)
-+{
-+	struct vfio_cdx_device *vdev = NULL;
-+	struct device *dev = &cdx_dev->dev;
-+	int ret;
-+
-+	vdev = vfio_alloc_device(vfio_cdx_device, vdev, dev,
-+				 &vfio_cdx_ops);
-+	if (IS_ERR(vdev))
-+		return PTR_ERR(vdev);
-+
-+	ret = vfio_register_group_dev(&vdev->vdev);
-+	if (ret) {
-+		dev_err(dev, "VFIO_CDX: Failed to add to vfio group\n");
-+		goto out_uninit;
-+	}
-+
-+	dev_set_drvdata(dev, vdev);
-+	return 0;
-+
-+out_uninit:
-+	vfio_put_device(&vdev->vdev);
-+	return ret;
-+}
-+
-+static int vfio_cdx_remove(struct cdx_device *cdx_dev)
-+{
-+	struct device *dev = &cdx_dev->dev;
-+	struct vfio_cdx_device *vdev;
-+
-+	vdev = dev_get_drvdata(dev);
-+	vfio_unregister_group_dev(&vdev->vdev);
-+	vfio_put_device(&vdev->vdev);
-+
-+	return 0;
-+}
-+
-+static const struct cdx_device_id vfio_cdx_table[] = {
-+	{ CDX_DRIVER_OVERRIDE_DEVICE_VFIO(CDX_ANY_ID, CDX_ANY_ID) }, /* match all by default */
-+	{}
-+};
-+
-+MODULE_DEVICE_TABLE(cdx, vfio_cdx_table);
-+
-+static struct cdx_driver vfio_cdx_driver = {
-+	.probe		= vfio_cdx_probe,
-+	.remove		= vfio_cdx_remove,
-+	.match_id_table	= vfio_cdx_table,
-+	.driver	= {
-+		.name	= "vfio-cdx",
-+		.owner	= THIS_MODULE,
-+	},
-+	.driver_managed_dma = true,
-+};
-+
-+static int __init vfio_cdx_driver_init(void)
-+{
-+	return cdx_driver_register(&vfio_cdx_driver);
-+}
-+
-+static void __exit vfio_cdx_driver_exit(void)
-+{
-+	cdx_driver_unregister(&vfio_cdx_driver);
-+}
-+
-+module_init(vfio_cdx_driver_init);
-+module_exit(vfio_cdx_driver_exit);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("VFIO for CDX devices - User Level meta-driver");
-diff --git a/drivers/vfio/cdx/vfio_cdx_private.h b/drivers/vfio/cdx/vfio_cdx_private.h
-new file mode 100644
-index 000000000000..8bdc117ea88e
---- /dev/null
-+++ b/drivers/vfio/cdx/vfio_cdx_private.h
-@@ -0,0 +1,28 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2022-2023, Advanced Micro Devices, Inc.
-+ */
-+
-+#ifndef VFIO_CDX_PRIVATE_H
-+#define VFIO_CDX_PRIVATE_H
-+
-+#define VFIO_CDX_OFFSET_SHIFT    40
-+
-+static inline u64 vfio_cdx_index_to_offset(u32 index)
-+{
-+	return ((u64)(index) << VFIO_CDX_OFFSET_SHIFT);
-+}
-+
-+struct vfio_cdx_region {
-+	u32			flags;
-+	u32			type;
-+	u64			addr;
-+	resource_size_t		size;
-+};
-+
-+struct vfio_cdx_device {
-+	struct vfio_device	vdev;
-+	struct vfio_cdx_region	*regions;
-+};
-+
-+#endif /* VFIO_CDX_PRIVATE_H */
-diff --git a/include/linux/cdx/cdx_bus.h b/include/linux/cdx/cdx_bus.h
-index 35ef41d8a61a..bead71b7bc73 100644
---- a/include/linux/cdx/cdx_bus.h
-+++ b/include/linux/cdx/cdx_bus.h
-@@ -14,7 +14,6 @@
- #include <linux/mod_devicetable.h>
- 
- #define MAX_CDX_DEV_RESOURCES	4
--#define CDX_ANY_ID (0xFFFF)
- #define CDX_CONTROLLER_ID_SHIFT 4
- #define CDX_BUS_NUM_MASK 0xF
- 
-diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_devicetable.h
-index ccaaeda792c0..ccf017353bb6 100644
---- a/include/linux/mod_devicetable.h
-+++ b/include/linux/mod_devicetable.h
-@@ -912,6 +912,12 @@ struct ishtp_device_id {
- 	kernel_ulong_t driver_data;
- };
- 
-+#define CDX_ANY_ID (0xFFFF)
-+
-+enum {
-+	CDX_ID_F_VFIO_DRIVER_OVERRIDE = 1,
-+};
-+
- /**
-  * struct cdx_device_id - CDX device identifier
-  * @vendor: Vendor ID
-diff --git a/include/uapi/linux/vfio.h b/include/uapi/linux/vfio.h
-index 0552e8dcf0cb..8e91aaf973e7 100644
---- a/include/uapi/linux/vfio.h
-+++ b/include/uapi/linux/vfio.h
-@@ -213,6 +213,7 @@ struct vfio_device_info {
- #define VFIO_DEVICE_FLAGS_AP	(1 << 5)	/* vfio-ap device */
- #define VFIO_DEVICE_FLAGS_FSL_MC (1 << 6)	/* vfio-fsl-mc device */
- #define VFIO_DEVICE_FLAGS_CAPS	(1 << 7)	/* Info supports caps */
-+#define VFIO_DEVICE_FLAGS_CDX	(1 << 8)	/* vfio-cdx device */
- 	__u32	num_regions;	/* Max region index + 1 */
- 	__u32	num_irqs;	/* Max IRQ index + 1 */
- 	__u32   cap_offset;	/* Offset within info struct of first cap */
-diff --git a/scripts/mod/devicetable-offsets.c b/scripts/mod/devicetable-offsets.c
-index 62dc988df84d..abe65f8968dd 100644
---- a/scripts/mod/devicetable-offsets.c
-+++ b/scripts/mod/devicetable-offsets.c
-@@ -265,6 +265,7 @@ int main(void)
- 	DEVID(cdx_device_id);
- 	DEVID_FIELD(cdx_device_id, vendor);
- 	DEVID_FIELD(cdx_device_id, device);
-+	DEVID_FIELD(cdx_device_id, override_only);
- 
- 	return 0;
- }
-diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
-index 28da34ba4359..38120f932b0d 100644
---- a/scripts/mod/file2alias.c
-+++ b/scripts/mod/file2alias.c
-@@ -1458,8 +1458,23 @@ static int do_cdx_entry(const char *filename, void *symval,
- {
- 	DEF_FIELD(symval, cdx_device_id, vendor);
- 	DEF_FIELD(symval, cdx_device_id, device);
-+	DEF_FIELD(symval, cdx_device_id, override_only);
- 
--	sprintf(alias, "cdx:v%08Xd%08Xd", vendor, device);
-+	switch (override_only) {
-+	case 0:
-+		strcpy(alias, "cdx:");
-+		break;
-+	case CDX_ID_F_VFIO_DRIVER_OVERRIDE:
-+		strcpy(alias, "vfio_cdx:");
-+		break;
-+	default:
-+		warn("Unknown CDX driver_override alias %08X\n",
-+		     override_only);
-+		return 0;
-+	}
-+
-+	ADD(alias, "v", vendor != CDX_ANY_ID, vendor);
-+	ADD(alias, "d", device != CDX_ANY_ID, device);
- 	return 1;
- }
- 
--- 
-2.17.1
+> Signed-off-by: Adam Ford <aford173@gmail.com>
+> ---
+>  drivers/gpu/drm/bridge/samsung-dsim.c |  85 +++++++--
+>  drivers/gpu/drm/bridge/samsung-dsim.h | 254 ++++++++++++++++++++++++++
+>  include/drm/bridge/samsung-dsim.h     |   1 +
+>  3 files changed, 326 insertions(+), 14 deletions(-)
+>  create mode 100644 drivers/gpu/drm/bridge/samsung-dsim.h
+> 
+> diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/bridge/samsung-dsim.c
+> index 73f0c3fbbdf5..c48db27adafe 100644
+> --- a/drivers/gpu/drm/bridge/samsung-dsim.c
+> +++ b/drivers/gpu/drm/bridge/samsung-dsim.c
+> @@ -18,13 +18,14 @@
+>  #include <linux/media-bus-format.h>
+>  #include <linux/of_device.h>
+>  #include <linux/phy/phy.h>
+> -
+> +#include <linux/bsearch.h>
+>  #include <video/mipi_display.h>
+> -
+>  #include <drm/bridge/samsung-dsim.h>
+>  #include <drm/drm_panel.h>
+>  #include <drm/drm_print.h>
+>  
+> +#include "samsung-dsim.h"
+> +
+>  /* returns true iff both arguments logically differs */
+>  #define NEQV(a, b) (!(a) ^ !(b))
+>  
+> @@ -488,6 +489,7 @@ static const struct samsung_dsim_driver_data imx8mm_dsi_driver_data = {
+>  	.m_min = 64,
+>  	.m_max = 1023,
+>  	.vco_min = 1050,
+> +	.dynamic_dphy = 1,
+>  };
+>  
+>  static const struct samsung_dsim_driver_data *
+> @@ -694,18 +696,52 @@ static int samsung_dsim_enable_clock(struct samsung_dsim *dsi)
+>  	return 0;
+>  }
+>  
+> +static inline int dphy_timing_default_cmp(const void *key, const void *elt)
+> +{
+> +	const struct sec_mipi_dsim_dphy_timing *_key = key;
+> +	const struct sec_mipi_dsim_dphy_timing *_elt = elt;
+> +
+> +	/*
+> +	 * find an element whose 'bit_clk' is equal to
+> +	 * the key's 'bit_clk' value or, the difference
+> +	 * between them is less than 5.
+> +	 */
+> +
+> +	if (abs((int)(_elt->bit_clk - _key->bit_clk)) <= 5)
+> +		return 0;
+> +
+> +	if (_key->bit_clk < _elt->bit_clk)
+> +		/* search bottom half */
+> +		return 1;
+> +	else
+> +		/* search top half */
+> +		return -1;
+> +}
+> +
+>  static void samsung_dsim_set_phy_ctrl(struct samsung_dsim *dsi)
+>  {
+>  	const struct samsung_dsim_driver_data *driver_data = dsi->driver_data;
+>  	const unsigned int *reg_values = driver_data->reg_values;
+> -	u32 reg;
+> -
+> -	if (driver_data->has_freqband)
+> -		return;
+> +	u32 reg = 0;
+> +	struct drm_display_mode *m = &dsi->mode;
+> +	struct sec_mipi_dsim_dphy_timing key = { 0 };
+> +	const struct sec_mipi_dsim_dphy_timing *match = NULL;
+> +	int bpp = mipi_dsi_pixel_format_to_bpp(dsi->format);
+> +
+> +	/* Only dynamic dphy uses the lookup table to determine rates based on clock */
+> +	if (driver_data->dynamic_dphy) {
+> +		key.bit_clk = DIV_ROUND_UP(m->clock * bpp, dsi->lanes * 1000);
+> +
+> +		match = bsearch(&key, dphy_timing_ln14lpp_v1p2,
+> +				ARRAY_SIZE(dphy_timing_ln14lpp_v1p2),
+> +				sizeof(struct sec_mipi_dsim_dphy_timing),
+> +				dphy_timing_default_cmp);
+> +	}
+>  
+>  	/* B D-PHY: D-PHY Master & Slave Analog Block control */
+>  	reg = reg_values[PHYCTRL_ULPS_EXIT] | reg_values[PHYCTRL_VREG_LP] |
+>  		reg_values[PHYCTRL_SLEW_UP];
+> +
+>  	samsung_dsim_write(dsi, DSIM_PHYCTRL_REG, reg);
+>  
+>  	/*
+> @@ -713,7 +749,11 @@ static void samsung_dsim_set_phy_ctrl(struct samsung_dsim *dsi)
+>  	 * T HS-EXIT: Time that the transmitter drives LP-11 following a HS
+>  	 *	burst
+>  	 */
+> -	reg = reg_values[PHYTIMING_LPX] | reg_values[PHYTIMING_HS_EXIT];
+> +	if (driver_data->dynamic_dphy)
+> +		reg  = DSIM_PHYTIMING_LPX(match->lpx) | DSIM_PHYTIMING_HS_EXIT(match->hs_exit);
+> +	else
+> +		reg = reg_values[PHYTIMING_LPX] | reg_values[PHYTIMING_HS_EXIT];
+> +
+>  	samsung_dsim_write(dsi, DSIM_PHYTIMING_REG, reg);
+>  
+>  	/*
+> @@ -729,10 +769,17 @@ static void samsung_dsim_set_phy_ctrl(struct samsung_dsim *dsi)
+>  	 * T CLK-TRAIL: Time that the transmitter drives the HS-0 state after
+>  	 *	the last payload clock bit of a HS transmission burst
+>  	 */
+> -	reg = reg_values[PHYTIMING_CLK_PREPARE] |
+> -		reg_values[PHYTIMING_CLK_ZERO] |
+> -		reg_values[PHYTIMING_CLK_POST] |
+> -		reg_values[PHYTIMING_CLK_TRAIL];
+> +	if (driver_data->dynamic_dphy) {
+> +		reg = DSIM_PHYTIMING1_CLK_PREPARE(match->clk_prepare)	|
+> +		      DSIM_PHYTIMING1_CLK_ZERO(match->clk_zero)	|
+> +		      DSIM_PHYTIMING1_CLK_POST(match->clk_post)	|
+> +		      DSIM_PHYTIMING1_CLK_TRAIL(match->clk_trail);
+> +	} else {
+> +		reg = reg_values[PHYTIMING_CLK_PREPARE] |
+> +		      reg_values[PHYTIMING_CLK_ZERO] |
+> +		      reg_values[PHYTIMING_CLK_POST] |
+> +		      reg_values[PHYTIMING_CLK_TRAIL];
+> +	}
+>  
+>  	samsung_dsim_write(dsi, DSIM_PHYTIMING1_REG, reg);
+>  
+> @@ -745,8 +792,17 @@ static void samsung_dsim_set_phy_ctrl(struct samsung_dsim *dsi)
+>  	 * T HS-TRAIL: Time that the transmitter drives the flipped differential
+>  	 *	state after last payload data bit of a HS transmission burst
+>  	 */
+> -	reg = reg_values[PHYTIMING_HS_PREPARE] | reg_values[PHYTIMING_HS_ZERO] |
+> -		reg_values[PHYTIMING_HS_TRAIL];
+> +
+> +	if (driver_data->dynamic_dphy) {
+> +		reg = DSIM_PHYTIMING2_HS_PREPARE(match->hs_prepare) |
+> +		      DSIM_PHYTIMING2_HS_ZERO(match->hs_zero) |
+> +		      DSIM_PHYTIMING2_HS_TRAIL(match->hs_trail);
+> +	} else {
+> +		reg = reg_values[PHYTIMING_HS_PREPARE] |
+> +		      reg_values[PHYTIMING_HS_ZERO] |
+> +		      reg_values[PHYTIMING_HS_TRAIL];
+> +	}
+> +
+>  	samsung_dsim_write(dsi, DSIM_PHYTIMING2_REG, reg);
+>  }
+>  
+> @@ -1353,7 +1409,8 @@ static int samsung_dsim_init(struct samsung_dsim *dsi)
+>  	samsung_dsim_enable_clock(dsi);
+>  	if (driver_data->wait_for_reset)
+>  		samsung_dsim_wait_for_reset(dsi);
+> -	samsung_dsim_set_phy_ctrl(dsi);
+> +	if (!driver_data->has_freqband)
+> +		samsung_dsim_set_phy_ctrl(dsi);
+>  	samsung_dsim_init_link(dsi);
+>  
+>  	dsi->state |= DSIM_STATE_INITIALIZED;
+> diff --git a/drivers/gpu/drm/bridge/samsung-dsim.h b/drivers/gpu/drm/bridge/samsung-dsim.h
+> new file mode 100644
+> index 000000000000..7a382a758cab
+> --- /dev/null
+> +++ b/drivers/gpu/drm/bridge/samsung-dsim.h
+> @@ -0,0 +1,254 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +
+> +/*
+> + * Copyright 2018 NXP
+> + *
+> + * This program is free software; you can redistribute it and/or modify
+> + * it under the terms of the GNU General Public License as published by
+> + * the Free Software Foundation; either version 2 of the License, or
+> + * (at your option) any later version.
+> + *
+> + * This program is distributed in the hope that it will be useful,
+> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
+> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+> + * GNU General Public License for more details.
+> + */
+> +
+> +#ifndef __SEC_DSIM_DPHY_LN14LPP_H__
+> +#define __SEC_DSIM_DPHY_LN14LPP_H__
+> +
+> +/* DPHY timings structure */
+> +struct sec_mipi_dsim_dphy_timing {
+> +	uint32_t bit_clk;       /* MHz */
+> +	uint32_t clk_prepare;
+> +	uint32_t clk_zero;
+> +	uint32_t clk_post;
+> +	uint32_t clk_trail;
+> +	uint32_t hs_prepare;
+> +	uint32_t hs_zero;
+> +	uint32_t hs_trail;
+> +	uint32_t lpx;
+> +	uint32_t hs_exit;
+> +};
+> +
+> +#define DSIM_DPHY_TIMING(bclk, cpre, czero, cpost, ctrail, \
+> +			 hpre, hzero, htrail, lp, hexit) \
+> +	.bit_clk        = bclk, \
+> +	.clk_prepare    = cpre, \
+> +	.clk_zero       = czero, \
+> +	.clk_post       = cpost, \
+> +	.clk_trail      = ctrail, \
+> +	.hs_prepare     = hpre, \
+> +	.hs_zero        = hzero, \
+> +	.hs_trail       = htrail, \
+> +	.lpx            = lp, \
+> +	.hs_exit        = hexit
+> +
+> +/* descending order based on 'bit_clk' value */
+> +static const struct sec_mipi_dsim_dphy_timing dphy_timing_ln14lpp_v1p2[] = {
+> +	{ DSIM_DPHY_TIMING(2100, 19, 91, 22, 19, 20, 35, 22, 15, 26), },
+> +	{ DSIM_DPHY_TIMING(2090, 19, 91, 22, 19, 19, 35, 22, 15, 26), },
+> +	{ DSIM_DPHY_TIMING(2080, 19, 91, 21, 18, 19, 35, 22, 15, 26), },
+> +	{ DSIM_DPHY_TIMING(2070, 18, 90, 21, 18, 19, 35, 22, 15, 25), },
+> +	{ DSIM_DPHY_TIMING(2060, 18, 90, 21, 18, 19, 34, 22, 15, 25), },
+> +	{ DSIM_DPHY_TIMING(2050, 18, 89, 21, 18, 19, 34, 22, 15, 25), },
+> +	{ DSIM_DPHY_TIMING(2040, 18, 89, 21, 18, 19, 34, 21, 15, 25), },
+> +	{ DSIM_DPHY_TIMING(2030, 18, 88, 21, 18, 19, 34, 21, 15, 25), },
+> +	{ DSIM_DPHY_TIMING(2020, 18, 88, 21, 18, 19, 34, 21, 15, 25), },
+> +	{ DSIM_DPHY_TIMING(2010, 18, 87, 21, 18, 19, 34, 21, 15, 25), },
+> +	{ DSIM_DPHY_TIMING(2000, 18, 87, 21, 18, 19, 33, 21, 15, 25), },
+> +	{ DSIM_DPHY_TIMING(1990, 18, 87, 21, 18, 18, 33, 21, 14, 24), },
+> +	{ DSIM_DPHY_TIMING(1980, 18, 86, 21, 18, 18, 33, 21, 14, 24), },
+> +	{ DSIM_DPHY_TIMING(1970, 17, 86, 21, 17, 18, 33, 21, 14, 24), },
+> +	{ DSIM_DPHY_TIMING(1960, 17, 85, 21, 17, 18, 33, 21, 14, 24), },
+> +	{ DSIM_DPHY_TIMING(1950, 17, 85, 21, 17, 18, 32, 21, 14, 24), },
+> +	{ DSIM_DPHY_TIMING(1940, 17, 84, 20, 17, 18, 32, 21, 14, 24), },
+> +	{ DSIM_DPHY_TIMING(1930, 17, 84, 20, 17, 18, 32, 20, 14, 24), },
+> +	{ DSIM_DPHY_TIMING(1920, 17, 84, 20, 17, 18, 32, 20, 14, 24), },
+> +	{ DSIM_DPHY_TIMING(1910, 17, 83, 20, 17, 18, 32, 20, 14, 23), },
+> +	{ DSIM_DPHY_TIMING(1900, 17, 83, 20, 17, 18, 32, 20, 14, 23), },
+> +	{ DSIM_DPHY_TIMING(1890, 17, 82, 20, 17, 18, 31, 20, 14, 23), },
+> +	{ DSIM_DPHY_TIMING(1880, 17, 82, 20, 17, 17, 31, 20, 14, 23), },
+> +	{ DSIM_DPHY_TIMING(1870, 17, 81, 20, 17, 17, 31, 20, 14, 23), },
+> +	{ DSIM_DPHY_TIMING(1860, 16, 81, 20, 17, 17, 31, 20, 13, 23), },
+> +	{ DSIM_DPHY_TIMING(1850, 16, 80, 20, 16, 17, 31, 20, 13, 23), },
+> +	{ DSIM_DPHY_TIMING(1840, 16, 80, 20, 16, 17, 30, 20, 13, 23), },
+> +	{ DSIM_DPHY_TIMING(1830, 16, 80, 20, 16, 17, 30, 20, 13, 22), },
+> +	{ DSIM_DPHY_TIMING(1820, 16, 79, 20, 16, 17, 30, 19, 13, 22), },
+> +	{ DSIM_DPHY_TIMING(1810, 16, 79, 19, 16, 17, 30, 19, 13, 22), },
+> +	{ DSIM_DPHY_TIMING(1800, 16, 78, 19, 16, 17, 30, 19, 13, 22), },
+> +	{ DSIM_DPHY_TIMING(1790, 16, 78, 19, 16, 17, 30, 19, 13, 22), },
+> +	{ DSIM_DPHY_TIMING(1780, 16, 77, 19, 16, 16, 29, 19, 13, 22), },
+> +	{ DSIM_DPHY_TIMING(1770, 16, 77, 19, 16, 16, 29, 19, 13, 22), },
+> +	{ DSIM_DPHY_TIMING(1760, 16, 77, 19, 16, 16, 29, 19, 13, 22), },
+> +	{ DSIM_DPHY_TIMING(1750, 15, 76, 19, 16, 16, 29, 19, 13, 21), },
+> +	{ DSIM_DPHY_TIMING(1740, 15, 76, 19, 15, 16, 29, 19, 13, 21), },
+> +	{ DSIM_DPHY_TIMING(1730, 15, 75, 19, 15, 16, 28, 19, 12, 21), },
+> +	{ DSIM_DPHY_TIMING(1720, 15, 75, 19, 15, 16, 28, 19, 12, 21), },
+> +	{ DSIM_DPHY_TIMING(1710, 15, 74, 19, 15, 16, 28, 18, 12, 21), },
+> +	{ DSIM_DPHY_TIMING(1700, 15, 74, 19, 15, 16, 28, 18, 12, 21), },
+> +	{ DSIM_DPHY_TIMING(1690, 15, 73, 19, 15, 16, 28, 18, 12, 21), },
+> +	{ DSIM_DPHY_TIMING(1680, 15, 73, 18, 15, 16, 28, 18, 12, 21), },
+> +	{ DSIM_DPHY_TIMING(1670, 15, 73, 18, 15, 15, 27, 18, 12, 20), },
+> +	{ DSIM_DPHY_TIMING(1660, 15, 72, 18, 15, 15, 27, 18, 12, 20), },
+> +	{ DSIM_DPHY_TIMING(1650, 14, 72, 18, 15, 15, 27, 18, 12, 20), },
+> +	{ DSIM_DPHY_TIMING(1640, 14, 71, 18, 15, 15, 27, 18, 12, 20), },
+> +	{ DSIM_DPHY_TIMING(1630, 14, 71, 18, 15, 15, 27, 18, 12, 20), },
+> +	{ DSIM_DPHY_TIMING(1620, 14, 70, 18, 14, 15, 26, 18, 12, 20), },
+> +	{ DSIM_DPHY_TIMING(1610, 14, 70, 18, 14, 15, 26, 17, 12, 20), },
+> +	{ DSIM_DPHY_TIMING(1600, 14, 70, 18, 14, 15, 26, 17, 12, 20), },
+> +	{ DSIM_DPHY_TIMING(1590, 14, 69, 18, 14, 15, 26, 17, 11, 19), },
+> +	{ DSIM_DPHY_TIMING(1580, 14, 69, 18, 14, 15, 26, 17, 11, 19), },
+> +	{ DSIM_DPHY_TIMING(1570, 14, 68, 18, 14, 15, 26, 17, 11, 19), },
+> +	{ DSIM_DPHY_TIMING(1560, 14, 68, 18, 14, 14, 25, 17, 11, 19), },
+> +	{ DSIM_DPHY_TIMING(1550, 14, 67, 18, 14, 14, 25, 17, 11, 19), },
+> +	{ DSIM_DPHY_TIMING(1540, 13, 67, 17, 14, 14, 25, 17, 11, 19), },
+> +	{ DSIM_DPHY_TIMING(1530, 13, 66, 17, 14, 14, 25, 17, 11, 19), },
+> +	{ DSIM_DPHY_TIMING(1520, 13, 66, 17, 14, 14, 25, 17, 11, 19), },
+> +	{ DSIM_DPHY_TIMING(1510, 13, 66, 17, 13, 14, 24, 17, 11, 18), },
+> +	{ DSIM_DPHY_TIMING(1500, 13, 65, 17, 13, 14, 24, 16, 11, 18), },
+> +	{ DSIM_DPHY_TIMING(1490, 13, 65, 17, 13, 14, 24, 16, 11, 18), },
+> +	{ DSIM_DPHY_TIMING(1480, 13, 64, 17, 13, 14, 24, 16, 11, 18), },
+> +	{ DSIM_DPHY_TIMING(1470, 13, 64, 17, 13, 14, 24, 16, 11, 18), },
+> +	{ DSIM_DPHY_TIMING(1460, 13, 63, 17, 13, 13, 24, 16, 10, 18), },
+> +	{ DSIM_DPHY_TIMING(1450, 13, 63, 17, 13, 13, 23, 16, 10, 18), },
+> +	{ DSIM_DPHY_TIMING(1440, 13, 63, 17, 13, 13, 23, 16, 10, 18), },
+> +	{ DSIM_DPHY_TIMING(1430, 12, 62, 17, 13, 13, 23, 16, 10, 17), },
+> +	{ DSIM_DPHY_TIMING(1420, 12, 62, 17, 13, 13, 23, 16, 10, 17), },
+> +	{ DSIM_DPHY_TIMING(1410, 12, 61, 16, 13, 13, 23, 16, 10, 17), },
+> +	{ DSIM_DPHY_TIMING(1400, 12, 61, 16, 13, 13, 23, 16, 10, 17), },
+> +	{ DSIM_DPHY_TIMING(1390, 12, 60, 16, 12, 13, 22, 15, 10, 17), },
+> +	{ DSIM_DPHY_TIMING(1380, 12, 60, 16, 12, 13, 22, 15, 10, 17), },
+> +	{ DSIM_DPHY_TIMING(1370, 12, 59, 16, 12, 13, 22, 15, 10, 17), },
+> +	{ DSIM_DPHY_TIMING(1360, 12, 59, 16, 12, 13, 22, 15, 10, 17), },
+> +	{ DSIM_DPHY_TIMING(1350, 12, 59, 16, 12, 12, 22, 15, 10, 16), },
+> +	{ DSIM_DPHY_TIMING(1340, 12, 58, 16, 12, 12, 21, 15, 10, 16), },
+> +	{ DSIM_DPHY_TIMING(1330, 11, 58, 16, 12, 12, 21, 15,  9, 16), },
+> +	{ DSIM_DPHY_TIMING(1320, 11, 57, 16, 12, 12, 21, 15,  9, 16), },
+> +	{ DSIM_DPHY_TIMING(1310, 11, 57, 16, 12, 12, 21, 15,  9, 16), },
+> +	{ DSIM_DPHY_TIMING(1300, 11, 56, 16, 12, 12, 21, 15,  9, 16), },
+> +	{ DSIM_DPHY_TIMING(1290, 11, 56, 16, 12, 12, 21, 15,  9, 16), },
+> +	{ DSIM_DPHY_TIMING(1280, 11, 56, 15, 11, 12, 20, 14,  9, 16), },
+> +	{ DSIM_DPHY_TIMING(1270, 11, 55, 15, 11, 12, 20, 14,  9, 15), },
+> +	{ DSIM_DPHY_TIMING(1260, 11, 55, 15, 11, 12, 20, 14,  9, 15), },
+> +	{ DSIM_DPHY_TIMING(1250, 11, 54, 15, 11, 11, 20, 14,  9, 15), },
+> +	{ DSIM_DPHY_TIMING(1240, 11, 54, 15, 11, 11, 20, 14,  9, 15), },
+> +	{ DSIM_DPHY_TIMING(1230, 11, 53, 15, 11, 11, 19, 14,  9, 15), },
+> +	{ DSIM_DPHY_TIMING(1220, 10, 53, 15, 11, 11, 19, 14,  9, 15), },
+> +	{ DSIM_DPHY_TIMING(1210, 10, 52, 15, 11, 11, 19, 14,  9, 15), },
+> +	{ DSIM_DPHY_TIMING(1200, 10, 52, 15, 11, 11, 19, 14,  9, 15), },
+> +	{ DSIM_DPHY_TIMING(1190, 10, 52, 15, 11, 11, 19, 14,  8, 14), },
+> +	{ DSIM_DPHY_TIMING(1180, 10, 51, 15, 11, 11, 19, 13,  8, 14), },
+> +	{ DSIM_DPHY_TIMING(1170, 10, 51, 15, 10, 11, 18, 13,  8, 14), },
+> +	{ DSIM_DPHY_TIMING(1160, 10, 50, 15, 10, 11, 18, 13,  8, 14), },
+> +	{ DSIM_DPHY_TIMING(1150, 10, 50, 15, 10, 11, 18, 13,  8, 14), },
+> +	{ DSIM_DPHY_TIMING(1140, 10, 49, 14, 10, 10, 18, 13,  8, 14), },
+> +	{ DSIM_DPHY_TIMING(1130, 10, 49, 14, 10, 10, 18, 13,  8, 14), },
+> +	{ DSIM_DPHY_TIMING(1120, 10, 49, 14, 10, 10, 17, 13,  8, 14), },
+> +	{ DSIM_DPHY_TIMING(1110,  9, 48, 14, 10, 10, 17, 13,  8, 13), },
+> +	{ DSIM_DPHY_TIMING(1100,  9, 48, 14, 10, 10, 17, 13,  8, 13), },
+> +	{ DSIM_DPHY_TIMING(1090,  9, 47, 14, 10, 10, 17, 13,  8, 13), },
+> +	{ DSIM_DPHY_TIMING(1080,  9, 47, 14, 10, 10, 17, 13,  8, 13), },
+> +	{ DSIM_DPHY_TIMING(1070,  9, 46, 14, 10, 10, 17, 12,  8, 13), },
+> +	{ DSIM_DPHY_TIMING(1060,  9, 46, 14, 10, 10, 16, 12,  7, 13), },
+> +	{ DSIM_DPHY_TIMING(1050,  9, 45, 14,  9, 10, 16, 12,  7, 13), },
+> +	{ DSIM_DPHY_TIMING(1040,  9, 45, 14,  9, 10, 16, 12,  7, 13), },
+> +	{ DSIM_DPHY_TIMING(1030,  9, 45, 14,  9,  9, 16, 12,  7, 12), },
+> +	{ DSIM_DPHY_TIMING(1020,  9, 44, 14,  9,  9, 16, 12,  7, 12), },
+> +	{ DSIM_DPHY_TIMING(1010,  8, 44, 13,  9,  9, 15, 12,  7, 12), },
+> +	{ DSIM_DPHY_TIMING(1000,  8, 43, 13,  9,  9, 15, 12,  7, 12), },
+> +	{ DSIM_DPHY_TIMING(990,  8, 43, 13,  9,  9, 15, 12,  7, 12), },
+> +	{ DSIM_DPHY_TIMING(980,  8, 42, 13,  9,  9, 15, 12,  7, 12), },
+> +	{ DSIM_DPHY_TIMING(970,  8, 42, 13,  9,  9, 15, 12,  7, 12), },
+> +	{ DSIM_DPHY_TIMING(960,  8, 42, 13,  9,  9, 15, 11,  7, 12), },
+> +	{ DSIM_DPHY_TIMING(950,  8, 41, 13,  9,  9, 14, 11,  7, 11), },
+> +	{ DSIM_DPHY_TIMING(940,  8, 41, 13,  8,  9, 14, 11,  7, 11), },
+> +	{ DSIM_DPHY_TIMING(930,  8, 40, 13,  8,  8, 14, 11,  6, 11), },
+> +	{ DSIM_DPHY_TIMING(920,  8, 40, 13,  8,  8, 14, 11,  6, 11), },
+> +	{ DSIM_DPHY_TIMING(910,  8, 39, 13,  8,  8, 14, 11,  6, 11), },
+> +	{ DSIM_DPHY_TIMING(900,  7, 39, 13,  8,  8, 13, 11,  6, 11), },
+> +	{ DSIM_DPHY_TIMING(890,  7, 38, 13,  8,  8, 13, 11,  6, 11), },
+> +	{ DSIM_DPHY_TIMING(880,  7, 38, 12,  8,  8, 13, 11,  6, 11), },
+> +	{ DSIM_DPHY_TIMING(870,  7, 38, 12,  8,  8, 13, 11,  6, 10), },
+> +	{ DSIM_DPHY_TIMING(860,  7, 37, 12,  8,  8, 13, 11,  6, 10), },
+> +	{ DSIM_DPHY_TIMING(850,  7, 37, 12,  8,  8, 13, 10,  6, 10), },
+> +	{ DSIM_DPHY_TIMING(840,  7, 36, 12,  8,  8, 12, 10,  6, 10), },
+> +	{ DSIM_DPHY_TIMING(830,  7, 36, 12,  8,  8, 12, 10,  6, 10), },
+> +	{ DSIM_DPHY_TIMING(820,  7, 35, 12,  7,  7, 12, 10,  6, 10), },
+> +	{ DSIM_DPHY_TIMING(810,  7, 35, 12,  7,  7, 12, 10,  6, 10), },
+> +	{ DSIM_DPHY_TIMING(800,  7, 35, 12,  7,  7, 12, 10,  6, 10), },
+> +	{ DSIM_DPHY_TIMING(790,  6, 34, 12,  7,  7, 11, 10,  5,  9), },
+> +	{ DSIM_DPHY_TIMING(780,  6, 34, 12,  7,  7, 11, 10,  5,  9), },
+> +	{ DSIM_DPHY_TIMING(770,  6, 33, 12,  7,  7, 11, 10,  5,  9), },
+> +	{ DSIM_DPHY_TIMING(760,  6, 33, 12,  7,  7, 11, 10,  5,  9), },
+> +	{ DSIM_DPHY_TIMING(750,  6, 32, 12,  7,  7, 11,  9,  5,  9), },
+> +	{ DSIM_DPHY_TIMING(740,  6, 32, 11,  7,  7, 11,  9,  5,  9), },
+> +	{ DSIM_DPHY_TIMING(730,  6, 31, 11,  7,  7, 10,  9,  5,  9), },
+> +	{ DSIM_DPHY_TIMING(720,  6, 31, 11,  7,  6, 10,  9,  5,  9), },
+> +	{ DSIM_DPHY_TIMING(710,  6, 31, 11,  6,  6, 10,  9,  5,  8), },
+> +	{ DSIM_DPHY_TIMING(700,  6, 30, 11,  6,  6, 10,  9,  5,  8), },
+> +	{ DSIM_DPHY_TIMING(690,  5, 30, 11,  6,  6, 10,  9,  5,  8), },
+> +	{ DSIM_DPHY_TIMING(680,  5, 29, 11,  6,  6,  9,  9,  5,  8), },
+> +	{ DSIM_DPHY_TIMING(670,  5, 29, 11,  6,  6,  9,  9,  5,  8), },
+> +	{ DSIM_DPHY_TIMING(660,  5, 28, 11,  6,  6,  9,  9,  4,  8), },
+> +	{ DSIM_DPHY_TIMING(650,  5, 28, 11,  6,  6,  9,  9,  4,  8), },
+> +	{ DSIM_DPHY_TIMING(640,  5, 28, 11,  6,  6,  9,  8,  4,  8), },
+> +	{ DSIM_DPHY_TIMING(630,  5, 27, 11,  6,  6,  9,  8,  4,  7), },
+> +	{ DSIM_DPHY_TIMING(620,  5, 27, 11,  6,  6,  8,  8,  4,  7), },
+> +	{ DSIM_DPHY_TIMING(610,  5, 26, 10,  6,  5,  8,  8,  4,  7), },
+> +	{ DSIM_DPHY_TIMING(600,  5, 26, 10,  6,  5,  8,  8,  4,  7), },
+> +	{ DSIM_DPHY_TIMING(590,  5, 25, 10,  5,  5,  8,  8,  4,  7), },
+> +	{ DSIM_DPHY_TIMING(580,  4, 25, 10,  5,  5,  8,  8,  4,  7), },
+> +	{ DSIM_DPHY_TIMING(570,  4, 24, 10,  5,  5,  7,  8,  4,  7), },
+> +	{ DSIM_DPHY_TIMING(560,  4, 24, 10,  5,  5,  7,  8,  4,  7), },
+> +	{ DSIM_DPHY_TIMING(550,  4, 24, 10,  5,  5,  7,  8,  4,  6), },
+> +	{ DSIM_DPHY_TIMING(540,  4, 23, 10,  5,  5,  7,  8,  4,  6), },
+> +	{ DSIM_DPHY_TIMING(530,  4, 23, 10,  5,  5,  7,  7,  3,  6), },
+> +	{ DSIM_DPHY_TIMING(520,  4, 22, 10,  5,  5,  7,  7,  3,  6), },
+> +	{ DSIM_DPHY_TIMING(510,  4, 22, 10,  5,  5,  6,  7,  3,  6), },
+> +	{ DSIM_DPHY_TIMING(500,  4, 21, 10,  5,  4,  6,  7,  3,  6), },
+> +	{ DSIM_DPHY_TIMING(490,  4, 21, 10,  5,  4,  6,  7,  3,  6), },
+> +	{ DSIM_DPHY_TIMING(480,  4, 21,  9,  4,  4,  6,  7,  3,  6), },
+> +	{ DSIM_DPHY_TIMING(470,  3, 20,  9,  4,  4,  6,  7,  3,  5), },
+> +	{ DSIM_DPHY_TIMING(460,  3, 20,  9,  4,  4,  5,  7,  3,  5), },
+> +	{ DSIM_DPHY_TIMING(450,  3, 19,  9,  4,  4,  5,  7,  3,  5), },
+> +	{ DSIM_DPHY_TIMING(440,  3, 19,  9,  4,  4,  5,  7,  3,  5), },
+> +	{ DSIM_DPHY_TIMING(430,  3, 18,  9,  4,  4,  5,  7,  3,  5), },
+> +	{ DSIM_DPHY_TIMING(420,  3, 18,  9,  4,  4,  5,  6,  3,  5), },
+> +	{ DSIM_DPHY_TIMING(410,  3, 17,  9,  4,  4,  5,  6,  3,  5), },
+> +	{ DSIM_DPHY_TIMING(400,  3, 17,  9,  4,  3,  4,  6,  3,  5), },
+> +	{ DSIM_DPHY_TIMING(390,  3, 17,  9,  4,  3,  4,  6,  2,  4), },
+> +	{ DSIM_DPHY_TIMING(380,  3, 16,  9,  4,  3,  4,  6,  2,  4), },
+> +	{ DSIM_DPHY_TIMING(370,  2, 16,  9,  3,  3,  4,  6,  2,  4), },
+> +	{ DSIM_DPHY_TIMING(360,  2, 15,  9,  3,  3,  4,  6,  2,  4), },
+> +	{ DSIM_DPHY_TIMING(350,  2, 15,  9,  3,  3,  3,  6,  2,  4), },
+> +	{ DSIM_DPHY_TIMING(340,  2, 14,  8,  3,  3,  3,  6,  2,  4), },
+> +	{ DSIM_DPHY_TIMING(330,  2, 14,  8,  3,  3,  3,  6,  2,  4), },
+> +	{ DSIM_DPHY_TIMING(320,  2, 14,  8,  3,  3,  3,  5,  2,  4), },
+> +	{ DSIM_DPHY_TIMING(310,  2, 13,  8,  3,  3,  3,  5,  2,  3), },
+> +	{ DSIM_DPHY_TIMING(300,  2, 13,  8,  3,  3,  3,  5,  2,  3), },
+> +	{ DSIM_DPHY_TIMING(290,  2, 12,  8,  3,  2,  2,  5,  2,  3), },
+> +	{ DSIM_DPHY_TIMING(280,  2, 12,  8,  3,  2,  2,  5,  2,  3), },
+> +	{ DSIM_DPHY_TIMING(270,  2, 11,  8,  3,  2,  2,  5,  2,  3), },
+> +	{ DSIM_DPHY_TIMING(260,  1, 11,  8,  3,  2,  2,  5,  1,  3), },
+> +	{ DSIM_DPHY_TIMING(250,  1, 10,  8,  2,  2,  2,  5,  1,  3), },
+> +	{ DSIM_DPHY_TIMING(240,  1,  9,  8,  2,  2,  1,  5,  1,  3), },
+> +	{ DSIM_DPHY_TIMING(230,  1,  8,  8,  2,  2,  1,  5,  1,  2), },
+> +	{ DSIM_DPHY_TIMING(220,  1,  8,  8,  2,  2,  1,  5,  1,  2), },
+> +	{ DSIM_DPHY_TIMING(210,  1,  7,  7,  2,  2,  1,  4,  1,  2), },
+> +	{ DSIM_DPHY_TIMING(200,  1,  7,  7,  2,  2,  1,  4,  1,  2), },
+> +	{ DSIM_DPHY_TIMING(190,  1,  7,  7,  2,  1,  1,  4,  1,  2), },
+> +	{ DSIM_DPHY_TIMING(180,  1,  6,  7,  2,  1,  0,  4,  1,  2), },
+> +	{ DSIM_DPHY_TIMING(170,  1,  6,  7,  2,  1,  0,  4,  1,  2), },
+> +	{ DSIM_DPHY_TIMING(160,  1,  6,  7,  2,  1,  0,  4,  1,  2), },
+> +	{ DSIM_DPHY_TIMING(150,  0,  5,  7,  2,  1,  0,  4,  1,  1), },
+> +	{ DSIM_DPHY_TIMING(140,  0,  5,  7,  1,  1,  0,  4,  1,  1), },
+> +	{ DSIM_DPHY_TIMING(130,  0,  4,  7,  1,  1,  0,  4,  0,  1), },
+> +	{ DSIM_DPHY_TIMING(120,  0,  4,  7,  1,  1,  0,  4,  0,  1), },
+> +	{ DSIM_DPHY_TIMING(110,  0,  3,  7,  1,  0,  0,  4,  0,  1), },
+> +	{ DSIM_DPHY_TIMING(100,  0,  3,  7,  1,  0,  0,  3,  0,  1), },
+> +	{ DSIM_DPHY_TIMING(90,  0,  2,  7,  1,  0,  0,  3,  0,  1), },
+> +	{ DSIM_DPHY_TIMING(80,  0,  2,  6,  1,  0,  0,  3,  0,  1), },
+> +};
+> +
+> +#endif
+> diff --git a/include/drm/bridge/samsung-dsim.h b/include/drm/bridge/samsung-dsim.h
+> index a088d84579bc..25475d78adb3 100644
+> --- a/include/drm/bridge/samsung-dsim.h
+> +++ b/include/drm/bridge/samsung-dsim.h
+> @@ -62,6 +62,7 @@ struct samsung_dsim_driver_data {
+>  	u16 m_min;
+>  	u16 m_max;
+>  	u64 vco_min;
+> +	bool dynamic_dphy;
+>  };
+>  
+>  struct samsung_dsim_host_ops {
 
