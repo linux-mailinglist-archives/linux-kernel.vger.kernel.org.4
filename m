@@ -2,126 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18A756E4B35
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:17:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0748F6E4B38
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:17:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbjDQOQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 10:16:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42802 "EHLO
+        id S230323AbjDQORB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 10:17:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbjDQOQy (ORCPT
+        with ESMTP id S229963AbjDQOQy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 17 Apr 2023 10:16:54 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97375AF02
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:16:19 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 779F76603201;
-        Mon, 17 Apr 2023 15:16:17 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681740978;
-        bh=OPT6H/zM6C1zlDEJTDEzUtCdA2vazUZtgaBHelUF2fQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=PQJuscfqVyehQve5PfbhMH+4dAJT6W6LluJn8ufYN/xmbxpYi9PZcXNq+7To2u1kn
-         k07ixsHLcyatdIxgiLfqzgLivxg1PYicIlbtBdN6CJ5sZcrp4wVQrb60qJEudxd6fr
-         25eO0sUKJedrr2xaSv4RyVM9PI/gmVIKigKpSAeaqkuPPtK/bQ5o4Rx7X4jdIA9C0q
-         SR17YtqVoDP3qgNOfMvDMWijFVnGxRG3g/SAqSTwUtH/YKghZLeZGCwYq5l7MslR2R
-         1dElELGvGlBoAUCUWpL4m7suJKC1zYKpaXz4G/BiXusrVszDYgWtTimU49DNZ5I5Ft
-         QrNryw4flXdLQ==
-Message-ID: <3570a98d-a7f8-7bef-0184-ad740cc44ee6@collabora.com>
-Date:   Mon, 17 Apr 2023 16:16:14 +0200
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B77859D1
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:16:32 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-505934ccc35so4034524a12.2
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:16:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681740990; x=1684332990;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yVQRzgONTjXgcIxkUzSecJIpFbUF/z8zPatZhBjABrY=;
+        b=JR2AESFF0BC+QkXNEMd1fyoFzNxcA7STjpz5F0nsNpOnZo5UEei7/goAt80LRQfUYY
+         1g4Hf4HFnC1gAKhYF5InoeQuYnsmsq7RSGaVS/7NaMAgGQLTSB/ROSSrbqGahMtVIgtL
+         sOyapjl4n9Ob0mB1pL91p2BcKrUXfod4S5kC5MrnNEhr3W1j+vvr6xat0h60lRHxA3O7
+         qiMKeFzqIl6f6B499g/4MK3g+sHkzMRybDdVgOsTnoSQZDtfDhOB2PVrqTmXC5nkNEf2
+         m36JoYyw7xsdwNyYqiaUayZp839SUz3Vj7vWpBkBRvjHP6xlEbYWacpfWVeW5YXbSxI2
+         0n1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681740990; x=1684332990;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yVQRzgONTjXgcIxkUzSecJIpFbUF/z8zPatZhBjABrY=;
+        b=ZOG7sFLGjOXMyy1MUz6ttjqRiAs+v0Q2doEL/YT4r1refgfwGRCzCm3EHdMcdPNWri
+         Dz0Y0HwI4pIGwXFZfpyoyPkXeF1WeOClixNkQC9iw2jgdN0aoYZhPTsve1r8Ivl/ZLBs
+         fzk9F8QSCIgFTZCSmGg5vo/6yB63n65IdkohFVPi/chX5wfy6BNAgGDFmqP5EGL/NMzf
+         XdS+C/sZAW1f4BI47KEbdHwxn0EJExhhlaYutLjAMpHbzvw9UNpzNHOJwJEwh0R1PVUK
+         P300AFczywZncc+A92JjE3WSZUEjUUBSUiqAr/Ta2ADDzFBcwch5OMED3KVp3pFQT1l9
+         scaA==
+X-Gm-Message-State: AAQBX9ddr66I/NqgRCozpVrlPUrZ2RtOenyuBvSjqXBj5Dwn6a7++HUY
+        GqNvZFCuXhGEmmrQZgSR7YKpjg==
+X-Google-Smtp-Source: AKy350aZvD7dqPSR14EhguXP0BaRVtu68WfxF+4FDPU3OJWaId59qnrxRKHVkTGD2yDgSTgenaausA==
+X-Received: by 2002:a50:ef10:0:b0:506:b88a:cab4 with SMTP id m16-20020a50ef10000000b00506b88acab4mr209225eds.3.1681740990555;
+        Mon, 17 Apr 2023 07:16:30 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:96aa:60eb:e021:6511? ([2a02:810d:15c0:828:96aa:60eb:e021:6511])
+        by smtp.gmail.com with ESMTPSA id b6-20020aa7c906000000b0050687dbb5dasm4025762edt.31.2023.04.17.07.16.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Apr 2023 07:16:30 -0700 (PDT)
+Message-ID: <dccd1951-9fbe-272b-541d-72446ea892e6@linaro.org>
+Date:   Mon, 17 Apr 2023 16:16:28 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] drm/panel: novatek-nt35950: Improve error handling
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 6/7] soundwire: qcom: add support for v2.0.0 controller
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Rao Mandadapu <quic_srivasam@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
+Cc:     Patrick Lai <quic_plai@quicinc.com>
+References: <20230403132503.62090-1-krzysztof.kozlowski@linaro.org>
+ <20230403132503.62090-7-krzysztof.kozlowski@linaro.org>
+ <f2f1871c-38f1-52b0-d90d-d1f263048606@linaro.org>
 Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        neil.armstrong@linaro.org, Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230415-konrad-longbois-next-v1-1-ce695dc9df84@linaro.org>
- <ea9f27a2-ce75-01a9-3758-0fe0bfcd1e5e@linaro.org>
- <e9c2e179-eacc-151e-123b-a4e425e76333@collabora.com>
- <51d94c13-853c-519d-f206-722288b5edf4@collabora.com>
- <df752738-824c-20be-f7d9-83e470912260@linaro.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <df752738-824c-20be-f7d9-83e470912260@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <f2f1871c-38f1-52b0-d90d-d1f263048606@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 17/04/23 15:38, Konrad Dybcio ha scritto:
+On 13/04/2023 13:27, Srinivas Kandagatla wrote:
+RM_INTERRUPT_STATUS_RMSK);
+>>   
+>>   	/* Configure No pings */
+>>   	ctrl->reg_read(ctrl, SWRM_MCP_CFG_ADDR, &val);
+>>   	u32p_replace_bits(&val, SWRM_DEF_CMD_NO_PINGS, SWRM_MCP_CFG_MAX_NUM_OF_CMD_NO_PINGS_BMSK);
+>>   	ctrl->reg_write(ctrl, SWRM_MCP_CFG_ADDR, val);
+>>   
+>> -	if (ctrl->version >= SWRM_VERSION_1_7_0) {
+>> +	if (ctrl->version == SWRM_VERSION_1_7_0) {
+>>   		ctrl->reg_write(ctrl, SWRM_LINK_MANAGER_EE, SWRM_EE_CPU);
+>>   		ctrl->reg_write(ctrl, SWRM_MCP_BUS_CTRL,
+>>   				SWRM_MCP_BUS_CLK_START << SWRM_EE_CPU);
+>> +	} else if (ctrl->version >= SWRM_VERSION_2_0_0) {
 > 
-> 
-> On 17.04.2023 11:44, AngeloGioacchino Del Regno wrote:
->> Il 17/04/23 11:44, AngeloGioacchino Del Regno ha scritto:
->>> Il 17/04/23 09:25, Neil Armstrong ha scritto:
->>>> On 15/04/2023 13:00, Konrad Dybcio wrote:
->>>>> In a very peculiar case when probing and registering with the secondary
->>>>> DSI host succeeds, but the OF backlight or DSI attachment fails, the
->>>>> primary DSI device is automatically cleaned up, but the secondary one
->>>>> is not, leading to -EEXIST when the driver core tries to handle
->>>>> -EPROBE_DEFER.
->>>>>
->>>>> Unregister the DSI1 device manually on failure to prevent that.
->>>>>
->>>>> Fixes: 623a3531e9cf ("drm/panel: Add driver for Novatek NT35950 DSI DriverIC panels")
->>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>>>> ---
->>>>>    drivers/gpu/drm/panel/panel-novatek-nt35950.c | 8 +++++++-
->>>>>    1 file changed, 7 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/drivers/gpu/drm/panel/panel-novatek-nt35950.c b/drivers/gpu/drm/panel/panel-novatek-nt35950.c
->>>>> index abf752b36a52..7498fc6258bb 100644
->>>>> --- a/drivers/gpu/drm/panel/panel-novatek-nt35950.c
->>>>> +++ b/drivers/gpu/drm/panel/panel-novatek-nt35950.c
->>>>> @@ -585,8 +585,11 @@ static int nt35950_probe(struct mipi_dsi_device *dsi)
->>>>>                   DRM_MODE_CONNECTOR_DSI);
->>>>>        ret = drm_panel_of_backlight(&nt->panel);
->>>>> -    if (ret)
->>>>> +    if (ret) {
->>>
->>> If this is not a dual-DSI case, nt->dsi[1] will be NULL: I agree it's still
->>> fine as in the kernel won't crash in that case, but for logical correctness
->>> I would still account for that:
->>>
->>>           if (num_dsis == 2)
->>>               mipi_dsi_device_unregister(nt->dsi[1]);
->>>
->>>>> +        mipi_dsi_device_unregister(nt->dsi[1]);
->>>>> +
->>>>>            return dev_err_probe(dev, ret, "Failed to get backlight\n");
->>>>> +    }
->>>>>        drm_panel_add(&nt->panel);
->>>>> @@ -602,6 +605,9 @@ static int nt35950_probe(struct mipi_dsi_device *dsi)
->>>>>            ret = mipi_dsi_attach(nt->dsi[i]);
->>>>>            if (ret < 0) {
->>>
->>> Same here, please add a check for num_dsis.
-> Right, I'll send an incremental patch to fix the fix, thanks
-> for spotting this!
-> 
+> we can move this to a proper switch case rather than if else's
 
-You're welcome! Please make sure to Cc me so that I can timely give you a review!
+OK
 
-Cheers,
-Angelo
-
+Best regards,
+Krzysztof
 
