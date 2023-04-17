@@ -2,130 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9130A6E4FC8
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 20:03:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C03396E4FC9
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 20:03:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbjDQSDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 14:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52036 "EHLO
+        id S230419AbjDQSDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 14:03:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230182AbjDQSDH (ORCPT
+        with ESMTP id S230411AbjDQSDp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 14:03:07 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B632D61;
-        Mon, 17 Apr 2023 11:03:06 -0700 (PDT)
+        Mon, 17 Apr 2023 14:03:45 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B206A63
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 11:03:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681754586; x=1713290586;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NiywolP3IeUIa8VfpIaUT5vTVN52GkeINXKV5c29gCM=;
-  b=YPMZLyJwFIeYu0so3eVup4eky2T7JZLGMDIvh2HP+2nnH0wS7DiLL/fr
-   HU3qO9VHh2MsVFSMujHUetokPlHWSkGaXRap2wDy4JLMmpMtYt9pCXoiZ
-   zSq+Be9eMBTAwGJMLwYyxzD3bGYNWjCl0kRzWWtgh5qasS/phupyfl7no
-   PYoaVlRBCvYIn1m6S4HiDnqwE1ZOqwtXtRK1RgOxgY+4epRopuKP6pmyU
-   vGOIRVrKv8dms6TDQ3f32quofI5+xYhzBunc0UHELY7Cm4eu7/U+sa8QH
-   lbCHxNI369ADn1OmgVN/mimApX7htnQQ3Ls09Ap9QVCZtmuy2oc+dtVoN
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1681754622; x=1713290622;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9e21tFRFiV9+9wH7e2y0RyrvY6ylThwIDqV0ywj2WJU=;
+  b=fGXZRV/AhywUfoeHlObNIgHy1b101t2ikzkdUfnWm1ezD7tRMsSSBFu9
+   7Xo33waHuY8yft3yX0RnSEvOMGW3egoM4j6GSdrUMJL/mweykU1qF2ZhD
+   YRcmDf3lSMJJ9+q7g8up3SFwsJx2Jq6IN1DcG55OmuGz2GhO7KZX6CAMM
+   ZrCopHscAZ6PQVN2klEd7cXFDLg7nkGQRPIzBD7oXAX4l2gbKvBBrH4GD
+   wqraiTJ/XQpuHcFHkqB3eQL6dtt0OsAoK0Fo3fpDSkT6GYGN5HScG4OEQ
+   4m23HDKARKZd1XVJ30kutq08bZY1ptxyKNSrgsj0oJY3i4XqGCbWaX0A4
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="372844402"
-X-IronPort-AV: E=Sophos;i="5.99,204,1677571200"; 
-   d="scan'208";a="372844402"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 11:03:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="865078950"
-X-IronPort-AV: E=Sophos;i="5.99,204,1677571200"; 
-   d="scan'208";a="865078950"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 17 Apr 2023 11:03:01 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1poTBs-000ccB-2O;
-        Mon, 17 Apr 2023 18:03:00 +0000
-Date:   Tue, 18 Apr 2023 02:02:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Subject: Re: [PATCH V4 2/3] soc: qcom: boot_stat: Add Driver Support for Boot
- Stats
-Message-ID: <202304180101.Wxf2Jbjq-lkp@intel.com>
-References: <2ef76ce292c059c144e559123a9a54201ae2d0cf.1681742910.git.quic_schowdhu@quicinc.com>
+X-IronPort-AV: E=Sophos;i="5.99,204,1677567600"; 
+   d="scan'208";a="221268893"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Apr 2023 11:03:42 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 17 Apr 2023 11:03:42 -0700
+Received: from DEN-LT-70577.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Mon, 17 Apr 2023 11:03:40 -0700
+From:   Daniel Machon <daniel.machon@microchip.com>
+To:     <vkoul@kernel.org>
+CC:     <kishon@kernel.org>, <Steen.Hegelund@microchip.com>,
+        <daniel.machon@microchip.com>, <UNGLinuxDriver@microchip.com>,
+        <joe@perches.com>, <linux-phy@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/7] Power down serdes lanes and CMUs initially
+Date:   Mon, 17 Apr 2023 20:03:28 +0200
+Message-ID: <20230417180335.2787494-1-daniel.machon@microchip.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2ef76ce292c059c144e559123a9a54201ae2d0cf.1681742910.git.quic_schowdhu@quicinc.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Souradeep,
+This patch series aims to lower the power consumption of the Sparx5
+switch chip, by configuring optimal quiet mode for serdes lanes, as well
+as powering down unused CMUs (Clock Multiplier Unit). Before this series,
+serdes lane quiet mode were not optimally configured, and all the CMUs were
+powered on by default. This uses needless power.
 
-kernel test robot noticed the following build warnings:
+Each serdes lane is provided a CMU clock, depending on the serdes mode
+and the serdes index. CMUs will now be powered on individually, when
+needed. The amount of power saved varies, depending on the port
+configuration. As a reference, this change saves about 1W on
+sparx5_pcb135 and 2W on sparx5_pcb134.
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on krzk-dt/for-next linus/master v6.3-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Patch #1: Adds the required registers.
+Patch #2: Configures optimal quiet mode for all serdes lanes.
+Patch #3: Reorders CMU functions.
+Patch #4: Configures CMUs to be powered down by default.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Souradeep-Chowdhury/dt-bindings-sram-qcom-imem-Add-Boot-Stat-region-within-IMEM/20230417-231510
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/2ef76ce292c059c144e559123a9a54201ae2d0cf.1681742910.git.quic_schowdhu%40quicinc.com
-patch subject: [PATCH V4 2/3] soc: qcom: boot_stat: Add Driver Support for Boot Stats
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20230418/202304180101.Wxf2Jbjq-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/4c8808184261e004f0b258e469415e4eea9c5ad9
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Souradeep-Chowdhury/dt-bindings-sram-qcom-imem-Add-Boot-Stat-region-within-IMEM/20230417-231510
-        git checkout 4c8808184261e004f0b258e469415e4eea9c5ad9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/soc/qcom/
+Patch #5: Adds the serdes mode and index to CMU index map, and configures the
+          individual CMU when the corresponding serdes lane is configured.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304180101.Wxf2Jbjq-lkp@intel.com/
+Patch #6: Removes the code that unconditionally powered on all CMUs
+Patch #7: Adds a check that serdesmode is not unset when a CMU is configured.
 
-All warnings (new ones prefixed by >>):
+Daniel Machon (7):
+  phy: sparx5-serdes: add registers required for SD/CMU power down
+  phy: sparx5-serdes: configure optimal qiet mode for serdes lanes
+  phy: sparx5-serdes: reorder CMU functions
+  phy: sparx5-serdes: power down all CMUs by default
+  phy: sparx5-serdes: power on CMUs individually
+  phy: sparx5-serdes: remove power up of all CMUs
+  phy: sparx5-serdes: do not reconfigure serdes if serdesmode is unset
 
->> drivers/soc/qcom/boot_stats.c:76:6: warning: no previous prototype for 'boot_stats_remove' [-Wmissing-prototypes]
-      76 | void boot_stats_remove(struct platform_device *pdev)
-         |      ^~~~~~~~~~~~~~~~~
+ drivers/phy/microchip/sparx5_serdes.c      | 426 +++++++++++++--------
+ drivers/phy/microchip/sparx5_serdes.h      |   1 -
+ drivers/phy/microchip/sparx5_serdes_regs.h | 106 +++++
+ 3 files changed, 370 insertions(+), 163 deletions(-)
 
-
-vim +/boot_stats_remove +76 drivers/soc/qcom/boot_stats.c
-
-    75	
-  > 76	void boot_stats_remove(struct platform_device *pdev)
-    77	{
-    78		struct bs_data *drvdata = platform_get_drvdata(pdev);
-    79	
-    80		debugfs_remove_recursive(drvdata->dbg_dir);
-    81		iounmap(drvdata->b_stats);
-    82	}
-    83	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--
+2.34.1
