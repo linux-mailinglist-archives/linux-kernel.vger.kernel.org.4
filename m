@@ -2,167 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B32C26E447F
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 11:57:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 092106E4476
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 11:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbjDQJ5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 05:57:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59808 "EHLO
+        id S229992AbjDQJz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 05:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDQJ5p (ORCPT
+        with ESMTP id S231218AbjDQJzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 05:57:45 -0400
-Received: from xry111.site (xry111.site [89.208.246.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70525659D;
-        Mon, 17 Apr 2023 02:57:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1681725043;
-        bh=O/cKAdPP1ntH7IK9e/3cclJfPJoYfiCKYcnR1FDS28c=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=E5ZnmxxoCi42LLMmO5z0FR3DlqAoAY5yiajei+fCHQX57j4JBVZRuMDZiTncJykyh
-         MqkIeXj9QPaMbH2TEpJA+cyEtEDz72q/MhY7nble68s8WYuOCo6UfpWh6gtX/oQqyZ
-         EjNGC9LdHmSREBfn9zK60G0/Qx4weomdm7z9QWL4=
-Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id 2A3F865C4E;
-        Mon, 17 Apr 2023 05:50:42 -0400 (EDT)
-Message-ID: <f54abfae989023fcfdabb4e9800a66847c357b85.camel@xry111.site>
-Subject: Re: [PATCH 0/2] LoongArch: Make bounds-checking instructions useful
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev
-Cc:     WANG Xuerui <git@xen0n.name>, Huacai Chen <chenhuacai@kernel.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 17 Apr 2023 17:50:40 +0800
-In-Reply-To: <6ca642a9-62a6-00e5-39ac-f14ef36f6bdb@xen0n.name>
-References: <20230416173326.3995295-1-kernel@xen0n.name>
-         <e593541e7995cc46359da3dd4eb3a69094e969e2.camel@xry111.site>
-         <6ca642a9-62a6-00e5-39ac-f14ef36f6bdb@xen0n.name>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.0 
+        Mon, 17 Apr 2023 05:55:01 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D19558A
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 02:54:21 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id xd13so28611360ejb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 02:54:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681725167; x=1684317167;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gcr5YmlYoVcdrEFDHra0XuIJQfELMbNwudSm2TRrzow=;
+        b=hNQPAeO7roIO6GhA/CDHT/L+bHgrIpMw4KHbMpBZt+dcE0MT6BRNLElolGrIjj06uL
+         v0oeBt2oeiJD/PcMLXUpALj+R/gjciFhBbDSBvlWc8jurdVgST8yMwJAQqDf0jj7nRYO
+         2obf9bHKgUan3lsRWrvnkF+95LCpROpb5aXOe9LtCYeUutwNJGuZfA2boOJbSjgrno/r
+         S0TiHu7by/zGq+suQPr8zXNBbbpY9ECY3eskJjihRzEdLZFeJE9hthxtuNd70b/ERSss
+         E2FPAGCAq38un6VzIXUF3v1w8vuPdlW7XlAX2+HFWQ/pS1QVSD6w5AP9qkBT9NISEGzP
+         u//g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681725167; x=1684317167;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gcr5YmlYoVcdrEFDHra0XuIJQfELMbNwudSm2TRrzow=;
+        b=VqceYmoOSy9bHJuzJafK0+XOkRxiY7eOq8CmT0MYfubbbSmKK8hs0PoxmcGDAAk5Y4
+         2EN/y1PoDwEcqSOPxzNEHGbv1vEPNXeEUhYcozlEFbCtUwf5ycseVm/xqv/8nobXo0dy
+         d83FxXQeG76ADQ7ecNtGyOOgAnCBOyIPzg0LrxEnJX+CwRRpY278oPPkYGozPL2g5ByO
+         GxkefFb483kZb0BiDxgwM1+t3voMA2Wg1RIKWAbrvGwk5xaGjW7o87O/wirkFp0mK6X6
+         uWXCrEiT6Qr6dateQzZ6yeaAQZ3gfYpQBLeDF8RvH3jkG9lv4Bnn7xdfA85HerETTpDY
+         lFgQ==
+X-Gm-Message-State: AAQBX9dBiJvjYkyBsu4P/ug36zQnfIwDF45OZhkKGbjr6YoXynd869M/
+        YHc/JS96GiRnFpp1JCCbNFdlvw==
+X-Google-Smtp-Source: AKy350YsZx2nKFyEnXBZglFwnu+EZhMUrIcOvtxJAINOd9ys3x1JK5D6h749rW6LsTd/MCLy+Pzwlw==
+X-Received: by 2002:a17:906:e2d4:b0:94e:8d26:f610 with SMTP id gr20-20020a170906e2d400b0094e8d26f610mr6489616ejb.28.1681725167046;
+        Mon, 17 Apr 2023 02:52:47 -0700 (PDT)
+Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id h3-20020a170906530300b0093a0e5977e2sm6357961ejo.225.2023.04.17.02.52.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Apr 2023 02:52:46 -0700 (PDT)
+Message-ID: <cfb7743b-03b0-96c4-fcc3-7095694f6fbb@linaro.org>
+Date:   Mon, 17 Apr 2023 11:52:36 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 2/2] thermal: mediatek: change clk_prepare_enable to
+ devm_clk_get_enabled in mtk_thermal_probe
+To:     void0red@hust.edu.cn
+Cc:     amitk@kernel.org, angelogioacchino.delregno@collabora.com,
+        bchihi@baylibre.com, daniel@makrotopia.org, dzm91@hust.edu.cn,
+        error27@gmail.com, henry.yen@mediatek.com,
+        hust-os-kernel-patches@googlegroups.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+        matthias.bgg@gmail.com, rafael@kernel.org, rdunlap@infradead.org,
+        rui.zhang@intel.com, void0red@gmail.com
+References: <b2e5ef14-9a12-15d5-8016-d0994c1177c3@linaro.org>
+ <20230411063531.3976354-1-void0red@hust.edu.cn>
+ <20230411063531.3976354-2-void0red@hust.edu.cn>
+ <4fed91ef.3c256.18783c407e3.Coremail.void0red@hust.edu.cn>
+Content-Language: en-US
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <4fed91ef.3c256.18783c407e3.Coremail.void0red@hust.edu.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-04-17 at 15:54 +0800, WANG Xuerui wrote:
-> On 2023/4/17 14:47, Xi Ruoyao wrote:
-> > On Mon, 2023-04-17 at 01:33 +0800, WANG Xuerui wrote:
-> > > From: WANG Xuerui <git@xen0n.name>
-> > >=20
-> > > Hi,
-> > >=20
-> > > The LoongArch-64 base architecture is capable of performing
-> > > bounds-checking either before memory accesses or alone, with speciali=
-zed
-> > > instructions generating BCEs (bounds-checking error) in case of faile=
-d
-> > > assertions (ISA manual Volume 1, Sections 2.2.6.1 [1] and 2.2.10.3 [2=
-]).
-> > > This could be useful for managed runtimes, but the exception is not
-> > > being handled so far, resulting in SIGSYSes in these cases, which is
-> > > incorrect and warrants a fix in itself.
-> > >=20
-> > > During experimentation, it was discovered that there is already UAPI =
-for
-> > > expressing such semantics: SIGSEGV with si_code=3DSEGV_BNDERR. This w=
-as
-> > > originally added for Intel MPX, and there is currently no user (!) af=
-ter
-> > > the removal of MPX support a few years ago. Although the semantics is
-> > > not a 1:1 match to that of LoongArch, still it is better than
-> > > alternatives such as SIGTRAP or SIGBUS of BUS_OBJERR kind, due to bei=
-ng
-> > > able to convey both the value that failed assertion and the bound val=
-ue.
-> > >=20
-> > > This patch series implements just this approach: translating BCEs int=
-o
-> > > SIGSEGVs with si_code=3DSEGV_BNDERR, si_value set to the offending va=
-lue,
-> > > and si_lower and si_upper set to resemble a range with both lower and
-> > > upper bound while in fact there is only one.
-> > >=20
-> > > The instructions are not currently used anywhere yet in the fledgling
-> > > LoongArch ecosystem, so it's not very urgent and we could take the ti=
-me
-> > > to figure out the best way forward (should SEGV_BNDERR turn out not
-> > > suitable).
-> >=20
-> > I don't think these instructions can be used in any systematic way
-> > within a Linux userspace in 2023.=C2=A0 IMO they should not exist in
-> > LoongArch at all because they have all the same disadvantages of Intel
-> > MPX; MPX has been removed by Intel in 2019, and LoongArch is designed
-> > after 2019.
->=20
-> Well, the difference is IMO significant enough to make LoongArch=20
-> bounds-checking more useful, at least for certain use cases. For=20
-> example, the bounds were a separate register bank in Intel MPX, but in
-> LoongArch they are just values in GPRs. This fits naturally into=20
-> JIT-ting or other managed runtimes (e.g. Go) whose slice indexing ops=20
-> already bounds-check with a temporary register per bound anyway, so it's=
-=20
-> just a matter of this snippet (or something like it)
->=20
-> - calculate element address
-> - if address < base: goto fail
-> - load/calculate upper bound
-> - if address >=3D upper bound: goto fail
-> - access memory
->=20
-> becoming
->=20
-> - calculate element address
-> - asrtgt address, base - 1
-> - load/calculate upper bound
-> - {ld,st}le address, upper bound
->=20
-> then in SIGSEGV handler, check PC to associate the signal back with the=
-=20
-> exact access op;
 
-I remember using the signal handler for "usual" error handling can be a
-very bad idea but I can't remember where I've read about it.  Is there
-any managed environments doing so in practice?
+Hi,
 
-If we redefine new_ldle/new_stle as "if [[likely]] the address is in-
-bound, do the load/store and skip the next instruction; otherwise do
-nothing", we can say:
+this patch does not apply:
 
-blt        address, base, 1f
-new_ldle.d rd, address, upperbound
-1:b        panic_oob_access
-xor        rd, rd, 42 // use rd to do something
+Analyzing 9 messages in the thread
+Will use the latest revision: v3
+You can pick other revisions using the -vN flag
+Checking attestation on all messages, may take a moment...
+---
+   [PATCH v3 2/2] thermal: mediatek: change clk_prepare_enable to 
+devm_clk_get_enabled in mtk_thermal_probe
+     + Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+     + Link: 
+https://lore.kernel.org/r/20230411063531.3976354-2-void0red@hust.edu.cn
+---
+Total patches: 1 (cherrypicked: 2)
+---
+  Link: 
+https://lore.kernel.org/r/20230411063531.3976354-1-void0red@hust.edu.cn
+  Base: not specified
+Applying: thermal: mediatek: change clk_prepare_enable to 
+devm_clk_get_enabled in mtk_thermal_probe
+error: patch failed: drivers/thermal/mediatek/auxadc_thermal.c:1182
+error: drivers/thermal/mediatek/auxadc_thermal.c: patch does not apply
+Patch failed at 0001 thermal: mediatek: change clk_prepare_enable to 
+devm_clk_get_enabled in mtk_thermal_probe
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+When you have resolved this problem, run "git am --continue".
+If you prefer to skip this patch, run "git am --skip" instead.
+To restore the original branch and stop patching, run "git am --abort".
 
-This is more versatile, and useful for building a loop as well:
 
-or            a0, r0, r0
-0:new_ldle.d  t1, t0, t2
-b             1f
-add.d         a0, t1, a0
-add.d         t0, t0, 8
-b             0b
-1:bl          do_something_with_the_sum
 
-Yes it's "non-RISC", but at least more RISC than the current ldle: if
-you want a trap anyway you can say
+On 15/04/2023 09:14, void0red@hust.edu.cn wrote:
+> 
+> 
+> 
+>> -----Original Messages-----
+>> From: "Kang Chen" <void0red@hust.edu.cn>
+>> Sent Time: 2023-04-11 14:35:31 (Tuesday)
+>> To: daniel.lezcano@linaro.org
+>> Cc: amitk@kernel.org, angelogioacchino.delregno@collabora.com, bchihi@baylibre.com, daniel@makrotopia.org, dzm91@hust.edu.cn, error27@gmail.com, henry.yen@mediatek.com, hust-os-kernel-patches@googlegroups.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org, matthias.bgg@gmail.com, rafael@kernel.org, rdunlap@infradead.org, rui.zhang@intel.com, void0red@gmail.com, void0red@hust.edu.cn
+>> Subject: [PATCH v3 2/2] thermal: mediatek: change clk_prepare_enable to devm_clk_get_enabled in mtk_thermal_probe
+>>
+>> use devm_clk_get_enabled to do automatic resource management.
+>> Meanwhile, remove error handling labels in the probe function and
+>> the whole remove function.
+>>
+>> Signed-off-by: Kang Chen <void0red@hust.edu.cn>
+>> Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+>> ---
+>> v3 -> v2: remove some useles func calls.
+>> v2 -> v1: init
+>>
+>> Notice the devm_clk_get_enabled do the clk_get and clk_prepare_enable
+>> at the same time.
+>> I'm not sure if this has any side effects in initialization.
+>>
+>>   drivers/thermal/mediatek/auxadc_thermal.c | 48 +++++------------------
+>>   1 file changed, 10 insertions(+), 38 deletions(-)
+>>
+>> diff --git a/drivers/thermal/mediatek/auxadc_thermal.c b/drivers/thermal/mediatek/auxadc_thermal.c
+>> index 3372f7c29626..995837ce3ea2 100644
+>> --- a/drivers/thermal/mediatek/auxadc_thermal.c
+>> +++ b/drivers/thermal/mediatek/auxadc_thermal.c
+>> @@ -1116,14 +1116,6 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+>>   
+>>   	mt->conf = of_device_get_match_data(&pdev->dev);
+>>   
+>> -	mt->clk_peri_therm = devm_clk_get(&pdev->dev, "therm");
+>> -	if (IS_ERR(mt->clk_peri_therm))
+>> -		return PTR_ERR(mt->clk_peri_therm);
+>> -
+>> -	mt->clk_auxadc = devm_clk_get(&pdev->dev, "auxadc");
+>> -	if (IS_ERR(mt->clk_auxadc))
+>> -		return PTR_ERR(mt->clk_auxadc);
+>> -
+>>   	mt->thermal_base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
+>>   	if (IS_ERR(mt->thermal_base))
+>>   		return PTR_ERR(mt->thermal_base);
+>> @@ -1182,16 +1174,16 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+>>   	if (ret)
+>>   		return ret;
+>>   
+>> -	ret = clk_prepare_enable(mt->clk_auxadc);
+>> -	if (ret) {
+>> -		dev_err(&pdev->dev, "Can't enable auxadc clk: %d\n", ret);
+>> -		return ret;
+>> +	mt->clk_auxadc = devm_clk_get_enabled(&pdev->dev, "auxadc");
+>> +	if (IS_ERR(mt->clk_auxadc)) {
+>> +		dev_err(&pdev->dev, "Can't enable auxadc clk: %d\n", mt->clk_auxadc);
+>> +		return PTR_ERR(mt->clk_auxadc);
+>>   	}
+>>   
+>> -	ret = clk_prepare_enable(mt->clk_peri_therm);
+>> -	if (ret) {
+>> -		dev_err(&pdev->dev, "Can't enable peri clk: %d\n", ret);
+>> -		goto err_disable_clk_auxadc;
+>> +	mt->clk_peri_therm = devm_clk_get_enabled(&pdev->dev, "therm");
+>> +	if (IS_ERR(mt->clk_peri_therm)) {
+>> +		dev_err(&pdev->dev, "Can't enable peri clk: %d\n", mt->clk_peri_therm);
+>> +		return PTR_ERR(mt->clk_peri_therm);
+>>   	}
+>>   
+>>   	if (mt->conf->version != MTK_THERMAL_V1) {
+>> @@ -1215,38 +1207,18 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+>>   
+>>   	tzdev = devm_thermal_of_zone_register(&pdev->dev, 0, mt,
+>>   					      &mtk_thermal_ops);
+>> -	if (IS_ERR(tzdev)) {
+>> -		ret = PTR_ERR(tzdev);
+>> -		goto err_disable_clk_peri_therm;
+>> -	}
+>> +	if (IS_ERR(tzdev))
+>> +		return PTR_ERR(tzdev);
+>>   
+>>   	ret = devm_thermal_add_hwmon_sysfs(tzdev);
+>>   	if (ret)
+>>   		dev_warn(&pdev->dev, "error in thermal_add_hwmon_sysfs");
+>>   
+>>   	return 0;
+>> -
+>> -err_disable_clk_peri_therm:
+>> -	clk_disable_unprepare(mt->clk_peri_therm);
+>> -err_disable_clk_auxadc:
+>> -	clk_disable_unprepare(mt->clk_auxadc);
+>> -
+>> -	return ret;
+>> -}
+>> -
+>> -static int mtk_thermal_remove(struct platform_device *pdev)
+>> -{
+>> -	struct mtk_thermal *mt = platform_get_drvdata(pdev);
+>> -
+>> -	clk_disable_unprepare(mt->clk_peri_therm);
+>> -	clk_disable_unprepare(mt->clk_auxadc);
+>> -
+>> -	return 0;
+>>   }
+>>   
+>>   static struct platform_driver mtk_thermal_driver = {
+>>   	.probe = mtk_thermal_probe,
+>> -	.remove = mtk_thermal_remove,
+>>   	.driver = {
+>>   		.name = "mtk-thermal",
+>>   		.of_match_table = mtk_thermal_of_match,
+>> -- 
+>> 2.34.1
+> 
+> ping?
 
-blt        address, base, 1f
-new_ldle.d rd, address, upperbound
-1:break    {a code defined for OOB}
-xor        rd, rd, 42 // use rd
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
