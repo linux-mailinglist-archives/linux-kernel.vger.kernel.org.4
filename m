@@ -2,62 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13C2E6E3EA8
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 06:57:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BBB36E3EBB
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 07:01:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbjDQE53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 00:57:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45168 "EHLO
+        id S229958AbjDQFBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 01:01:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbjDQE51 (ORCPT
+        with ESMTP id S229644AbjDQFBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 00:57:27 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C2C2D69
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 21:57:25 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1poGvQ-0003PV-EK; Mon, 17 Apr 2023 06:57:12 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1poGvO-0006SM-Ob; Mon, 17 Apr 2023 06:57:10 +0200
-Date:   Mon, 17 Apr 2023 06:57:10 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Arun Ramadoss <arun.ramadoss@microchip.com>,
-        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net-next v1 2/2] net: dsa: microchip: Add partial ACL
- support for ksz9477 switches
-Message-ID: <20230417045710.GB20350@pengutronix.de>
-References: <20230411172456.3003003-1-o.rempel@pengutronix.de>
- <20230411172456.3003003-1-o.rempel@pengutronix.de>
- <20230411172456.3003003-3-o.rempel@pengutronix.de>
- <20230411172456.3003003-3-o.rempel@pengutronix.de>
- <20230416165658.fuo7vwer7m7ulkg2@skbuf>
+        Mon, 17 Apr 2023 01:01:53 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BBDE10D8
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 22:01:52 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-2472dc49239so700254a91.1
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 22:01:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1681707711; x=1684299711;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bS4Pkg0HE5+UxYA0hiruUQ00ilsEPgdYXH5UV1O8hIk=;
+        b=HzynEqYHkWXVtxmpOKeHNyA59TmKbC48BgADQgAoicyyonNQRXqBtqety7oevIB4mO
+         kWKoXOGUb43q9ItRNjf2w/tVUpztvMbeF/eCrjFRlTI/ywnZR+UYUGr9q22sca3LhHsf
+         ASX7P+o6OaOaL52hSvqJvffIalsVnc2QJSpW8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681707711; x=1684299711;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bS4Pkg0HE5+UxYA0hiruUQ00ilsEPgdYXH5UV1O8hIk=;
+        b=jNB17VTKbONSCQavQSxW5T8s2yp4tGcZuY2+zuXYUiz4jouGRzhlOJfUSGe4RX9g9j
+         ggXLr7KWQgehK355OuZwtEYzySTCr8755TBAxecUMDajjHSw7dK1qGI0vz4grD/aTaHW
+         xHB8M5+CnCsGx0fYUHdHC9wTh7QAxKZezg21PELWTh08Kp75yqX/4oKOCKcfI0SXqOoq
+         7YWLISgCkR+Nd6rA8zb0eBVyn/JbkznJCFNFX8Vg2q2Mw81ogTo8Lmmfgae0o0rn20bD
+         HbBW+ebEn+HWZYpXzYUdTS1/1s67acoKwyAuornnE0Edw9getk7KwKEiTq30/t6oeCko
+         ACYg==
+X-Gm-Message-State: AAQBX9eCrSQFDbzNShuMOEloXu66+rKVIg0ehZ2YWUM+aSnY7fZRybfp
+        Xx5Zo5p2BfT5TmBkQGAHORkdgA==
+X-Google-Smtp-Source: AKy350bQ2D/xaVVJ692Azw6bLaxA+WF72DQHClmy0RxhD6f3549DDpfcBdeZ78HRBvLYvTirNl7gSw==
+X-Received: by 2002:a05:6a00:23c8:b0:623:e4d2:d13e with SMTP id g8-20020a056a0023c800b00623e4d2d13emr21214550pfc.34.1681707711595;
+        Sun, 16 Apr 2023 22:01:51 -0700 (PDT)
+Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:97ac:e7c:d412:5251])
+        by smtp.gmail.com with ESMTPSA id p15-20020aa7860f000000b005810c4286d6sm6661977pfn.0.2023.04.16.22.01.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Apr 2023 22:01:51 -0700 (PDT)
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Yu Zhao <yuzhao@google.com>, Minchan Kim <minchan@kernel.org>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: [PATCH] zsmalloc: reset compaction source zspage pointer after putback_zspage()
+Date:   Mon, 17 Apr 2023 14:01:40 +0900
+Message-ID: <20230417050140.1653593-1-senozhatsky@chromium.org>
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
+In-Reply-To: <20230304034835.2082479-4-senozhatsky@chromium.org>
+References: <20230304034835.2082479-4-senozhatsky@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230416165658.fuo7vwer7m7ulkg2@skbuf>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,49 +71,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vladimir,
+Fixup.
 
-On Sun, Apr 16, 2023 at 07:56:58PM +0300, Vladimir Oltean wrote:
-> Hi Oleksij,
-> 
-> I only took a superficial look, and hence, here are some superficial comments.
-> 
-> On Tue, Apr 11, 2023 at 07:24:55PM +0200, Oleksij Rempel wrote:
-> > The ACL also implements a count function, generating an interrupt
-> > instead of a forwarding action. It can be used as a watchdog timer or an
-> > event counter.
-> 
-> Is the interrupt handled here? I didn't see cls_flower_stats().
+Reported-by: Yu Zhao <yuzhao@google.com>
+Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+---
+ mm/zsmalloc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-No, it is not implemented in this patch. It is generic description of things
-ACL should be able to do. Is it confusing? Should I remove it?
-
-> > The ACL consists of three parts: matching rules, action
-> > rules, and processing entries. Multiple match conditions can be either
-> > AND'ed or OR'ed together.
-> > 
-> > This patch introduces support for a subset of the available ACL
-> > functionality, specifically layer 2 matching and prioritization of
-> > matched packets. For example:
-> > 
-> > tc qdisc add dev lan2 clsact
-> > tc filter add dev lan2 ingress protocol 0x88f7 flower skip_sw hw_tc 7
-> > 
-> > tc qdisc add dev lan1 clsact
-> > tc filter add dev lan1 ingress protocol 0x88f7 flower skip_sw hw_tc 7
-> 
-> Have you considered the "skbedit priority" action as opposed to hw_tc?
-
-I had already thought of that, but since bridging is offloaded in the HW
-no skbs are involved, i thought it will be confusing. Since tc-flower seems to
-already support hw_tc remapping, I decided to use it. I hope it will not harm,
-to use it for now as mandatory option and make it optional later if other
-actions are added, including skbedit.
-
-Regards,
-Oleksij
+diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
+index aea50e2aa350..cc81dfba05a0 100644
+--- a/mm/zsmalloc.c
++++ b/mm/zsmalloc.c
+@@ -2239,8 +2239,8 @@ static unsigned long __zs_compact(struct zs_pool *pool,
+ 		if (fg == ZS_INUSE_RATIO_0) {
+ 			free_zspage(pool, class, src_zspage);
+ 			pages_freed += class->pages_per_zspage;
+-			src_zspage = NULL;
+ 		}
++		src_zspage = NULL;
+ 
+ 		if (get_fullness_group(class, dst_zspage) == ZS_INUSE_RATIO_100
+ 		    || spin_is_contended(&pool->lock)) {
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.40.0.634.g4ca3ef3211-goog
+
