@@ -2,58 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81C906E5488
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 00:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC3226E548B
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 00:05:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbjDQWDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 18:03:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53464 "EHLO
+        id S230349AbjDQWFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 18:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbjDQWDO (ORCPT
+        with ESMTP id S229652AbjDQWF2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 18:03:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A512A59F1;
-        Mon, 17 Apr 2023 15:03:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B48862A1D;
-        Mon, 17 Apr 2023 22:03:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1DF8C433D2;
-        Mon, 17 Apr 2023 22:03:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681768990;
-        bh=NPxQjO7lQFQT90f/YnXOfHivS3WfjLHS7+aurRlMvQ8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=quuPedun+h1pebQ2j8cAhov1YmjDEvy2Q2uVTeqclmrjwGx3BAD3SIO5Z0g0ZWiEm
-         s0d7nGD+uni+38/ntwCP3eOQAspLQ5yyPYbzM3GAoTOVpcl4am5NINM/s5FnXP1tpa
-         IUqPmDN2ldekopE8+SZtK4jvphJC6avW6RV+7SRPXL7Rr0sRwukQ5oFpEwVZNgZSV5
-         k9v/0rHQIHN0oWfUe6ASDwl/1HzYlqSzjYSYqV4kfJCrWdjIZBmBGd9fl/a3M2DjcL
-         CS0RW30mFyvFeyWQfNtNedftN9rBPUl948qBnEd2vRUhodb1oq/RQv9XSqWFvpPQl5
-         pB0QFyYgzg5pg==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Aaron Tomlin <atomlin@redhat.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Viktor Malik <vmalik@redhat.com>,
-        Jason Baron <jbaron@akamai.com>, Song Liu <song@kernel.org>,
-        Jim Cromie <jim.cromie@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] module: fix building stats for 32-bit targets
-Date:   Tue, 18 Apr 2023 00:02:47 +0200
-Message-Id: <20230417220254.3215576-2-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230417220254.3215576-1-arnd@kernel.org>
-References: <20230417220254.3215576-1-arnd@kernel.org>
+        Mon, 17 Apr 2023 18:05:28 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2132.outbound.protection.outlook.com [40.107.92.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2846A1B4;
+        Mon, 17 Apr 2023 15:05:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=l0Va9hHYRBx2KocUMiiewpSYLVmOacZ06Nj733OnvgAP/pvMb9ONTETwDd2ExaGD+GrJvPPvep1+iauwlo7he91SbYUVojMBD95MtbPIl4Nh3wCFfxTjHUoiIvTOe8gjf6dNSx4Da4YITKnx9EpJNY7sqXXGYriTp7JvsiyjkJhastx0UVBuDZZ4wi4Sg5XesbKTqrmDoaTsMnIRXcHn3N9T48aq3KDtOEroKx4zWpxNhvGeInzhuCPC9+Zj4/1VoY9ma9+w0fa8uOAnP33+fXL/u2Wj+ekiy6rTm/RuvLzPepjT0tRAqK6ioBO3+yo8ad+LRBf7uf4DLOTf3qGelw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Xn2yzfb0M9gWtmvoQj9dkkfPLywYMKcFtZQV6v4OvGA=;
+ b=MEgfQRApDlH3fFUESbsI/Pv0r8AU8doEGbqPlJxlgKXNFgYJSRW0VGhMYzl8IA5wlpXQE44t3ss0ot8wdXGESn3nve1Mf4snxfAnjqoA2ZV2KpkIp2iqBkjArKFT3BrpQySssj2rcxCqouSX5w03QLtXc2tayvVMGMJo1mPVpRaSJETMO0ZY82lxueMBHA8R0J6v5DCaigVrFP/FPFrKfRgz2Qkj67CNw4pvz46IZKWbBifEk92Vkd9OfFG8NPTMEU1tU3n2p+zpIjdaCl+TwskiOeFKayTKh1STQhq8dkRVUJaFISc60h2LKOSB4woDmA63p8fQaRRp16XTv1KfWQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Xn2yzfb0M9gWtmvoQj9dkkfPLywYMKcFtZQV6v4OvGA=;
+ b=YS9P/H/smJDPB+eGSpoUq0e0UjCuQYDS9OKSP6E6WbA4WyMZwJ1kFKHA1U+UTVACq0fuUNiN3HRW6kMvWDvDq5KNfPbHFcQq+z3N1GVVWvbzTM5aOtsJ7THzFgXPoBTecLS0wYgyYWgcP6v4b41FHsOuNQVF1OEUHICJKwvtOT0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from SJ0PR01MB7432.prod.exchangelabs.com (2603:10b6:a03:3d3::16) by
+ PH0PR01MB7948.prod.exchangelabs.com (2603:10b6:510:286::20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6319.9; Mon, 17 Apr 2023 22:05:21 +0000
+Received: from SJ0PR01MB7432.prod.exchangelabs.com
+ ([fe80::c091:3fdb:5662:5198]) by SJ0PR01MB7432.prod.exchangelabs.com
+ ([fe80::c091:3fdb:5662:5198%3]) with mapi id 15.20.6319.006; Mon, 17 Apr 2023
+ 22:05:21 +0000
+Date:   Mon, 17 Apr 2023 15:05:18 -0700
+From:   Darren Hart <darren@os.amperecomputing.com>
+To:     Andrea Righi <andrea.righi@canonical.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Paolo Pisati <paolo.pisati@canonical.com>,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: kernel 6.2 stuck at boot (efi_call_rts) on arm64
+Message-ID: <ZD3CniUzNXVJRthE@fedora>
+References: <ZBMes6r2FiAyo81F@righiandr-XPS-13-7390>
+ <CAMj1kXG0+NO6HayK2YqSJU0pwj8bn9Un_G-4VJr=hc1ELi-TpQ@mail.gmail.com>
+ <ZBMgy+Yh9fDxt44C@righiandr-XPS-13-7390>
+ <CAMj1kXEWs43NaTegzmGPFD7UGNVw_13hUCuvmwvKNVYPsfh5Vg@mail.gmail.com>
+ <CAMj1kXHKkK+6TDLebZw=H-ZZLVnwPGSRpNNKSbJoPwwA2vhG+w@mail.gmail.com>
+ <ZBNXaF32nIh3Ca49@righiandr-XPS-13-7390>
+ <CAMj1kXFgmPp8TPDWePNN2wU_TQ87dL940SFEaMKAm4oVaB86+g@mail.gmail.com>
+ <ZBOYBdJR00dOKPSx@fedora>
+ <CAMj1kXF8G3G41cPt+5=nB2D_uEaB_iXh6=3ZcTFTHrpsVm5D5g@mail.gmail.com>
+ <ZDhlBjbRGufpDm6u@righiandr-XPS-13-7390>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZDhlBjbRGufpDm6u@righiandr-XPS-13-7390>
+X-ClientProxiedBy: CH0PR03CA0408.namprd03.prod.outlook.com
+ (2603:10b6:610:11b::9) To SJ0PR01MB7432.prod.exchangelabs.com
+ (2603:10b6:a03:3d3::16)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ0PR01MB7432:EE_|PH0PR01MB7948:EE_
+X-MS-Office365-Filtering-Correlation-Id: a5539afb-d613-49d6-c67a-08db3f8fd640
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: PPeZSTOg6B5gYav1KMafpgJr8OIIlINhyUxs4KxwFszbtBQJ+Nnkju7aqOLZlwiw/BIS8Q/dH03WIj6LTIwc9LCEh13DVWB7t4vn58nkzwbIt4x8vz6QfeEzNlsv6s/b71yZ0P/5+RBKV7bIZHveGpk1otgNVTvg07qTVLOkZUyqUN/lFMNKL6Ncfij+6EOPrAlKfpuM3ddarE4lXX8h5arEG2hgLZrvQCOT/nbDF/y7iIot2sDVxmZUcPeqo5jwX75mKk2FtgxncBfN37MCsfViJlOtKU6jjftpAp/xHL6YaWLSY26QsshgiwxPGSovSrNAdmVdLVjfzkKk071+zSrzVzNFfizrO2hoq6L3TWm95+eqL1IC4NtoJVTSQUkDanhMmr17JP0Rh8w4CoXpfz0PuQusZJAUBvP4O6Zuc9gmyvg1/anVNYTMxc8tkbeMk2AT70/rSPnUp89wj9lf/rsX2PlboavELTqCtcEVnThgpro8JRj/LdZ3tuYTN5Q1XmXK2/D8y8ZfgbvCWdhtMtSM0TZR0NAnSZt4A3PSc+GIhmC/B7fHqxCAOWRhst8yNFeIDInLDNRGNetOrmQXnLZA4KlmYK3NRnZ3tvsqZsfjd6IGoOvqN7FakU2fG6Zi
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7432.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(4636009)(136003)(376002)(396003)(346002)(366004)(39850400004)(451199021)(66476007)(66556008)(41300700001)(66946007)(38100700002)(4326008)(83380400001)(52116002)(54906003)(478600001)(8936002)(6666004)(6486002)(8676002)(316002)(5660300002)(2906002)(38350700002)(6916009)(6506007)(186003)(9686003)(26005)(6512007)(86362001)(33716001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?s/zxz16Ij9hBK63glTBwpqXfR8Ju6XmvDWCn0VRtnQvj4JoB2g6WO3AUvwhL?=
+ =?us-ascii?Q?Hj+cGspuRroe10qhUHyNjxogy1k+pHTMLXANvQnwIhzWvAPUqORMG8RRFve1?=
+ =?us-ascii?Q?AuP5XuL3JGai8nxicNrN3UhL8y5YkpRK1zOKiZE+/kXfmgwkEvtXKhbCOyIs?=
+ =?us-ascii?Q?WRMoP7szRhKNmj+xvi7knVEfHVMjnNF904W+ohvOmAueiaGbNS/yitvQG4GY?=
+ =?us-ascii?Q?oHMYyj7BvO7ukxTAOOgq9F8BYma2Hcl98tMZUD0cBvFSD80KrJw83tS/LlqQ?=
+ =?us-ascii?Q?DYDSpVZPox+5L4LlHFCU7CkHE0Aa0bsEWBKYLHKT99JNSFHBrYamxjkgssA2?=
+ =?us-ascii?Q?dIbbKVK6ShWjjxWyjQy9t4VYaGtl3upoXc8HOGlen+voctAljdlXZ1U+mV/v?=
+ =?us-ascii?Q?3TwTr6LHR7TCFyKjQ+eamzsHfEYvmc4cBBCUbDqnRlIbcWnu8BJpSt3ZU9dj?=
+ =?us-ascii?Q?HtWYeV2b5lPKcSI+4SY7iU2GR24ff+D3wFH6FxC96no8QMpWl1oVDLETjjvD?=
+ =?us-ascii?Q?whho0LnXf0b2HSdiDdf4Yol2JfU2I25rJdLsDnQ6kUKFO7AFc4VxHJ+0Yrid?=
+ =?us-ascii?Q?uBFUdWr07jpG/3BPTesd3CcjafFY/zxM8aM0Vx4RduacQ7rfF1OSxLOxrf3n?=
+ =?us-ascii?Q?O4rmLNk2U/TfQ1IdJgcXJFzFfmeMHa/ZC86HUFaK5wfReysQFiAmljIGQp2X?=
+ =?us-ascii?Q?QK9P+lyDoVAS4O++Y48Nfznbenddys1RPM6XS2H4+bBTN4sQRNHIvimhzDMx?=
+ =?us-ascii?Q?a/KD1DqhyKBM/C+g3x9LJMse345gv8S/pS6ZQUuXe5t7Q/lFsg+u8t8X/4yS?=
+ =?us-ascii?Q?HH3Zq2KOfFb8lDx2rNZdKWIUnhDjpVqDrV4U0Dhm+Xy0VZx1z9267Q3dNE6r?=
+ =?us-ascii?Q?WrHnWKcsdOBfok1nnSUOVlCXf6YgheokiTKg4kqZJV8H51REOnr8ExdbI0+Z?=
+ =?us-ascii?Q?PER6xoHAm1Y9GsWC0uy+5JPYWx1rTF2LUinvh4EygdC8RU/juxJyeJQOH+qM?=
+ =?us-ascii?Q?dECezTEcTeGn19MGwoD1Ta7I1CyqhK/xjtti+XbGd/ty8IWh6TvL8pWHhHLT?=
+ =?us-ascii?Q?AgGyy2eAW3CntfovPlX4b+0RRv6YCoWg5x5VVbe4HFYFi8s1A3E0j/tj6VKL?=
+ =?us-ascii?Q?vPKu62rFDEZqLiBfoYoOswiBwq71HiM3+5yg+9tdC7uT2AX29EudV8zVc8qC?=
+ =?us-ascii?Q?PNnWcS5XrHlwJkRgZcLpEDHzO4TKAlsKxUhAeiO2j87uxpM2Fc26f0QdQq7I?=
+ =?us-ascii?Q?OFIg1lDcFxSwV3IKlGC5KMBsMatVskr3fxnf8Yhmsk/f/ZNmxDNYYxPxKpV1?=
+ =?us-ascii?Q?6xN2OKa9QCNBG4i0s2gfxYrnC13az94o/fh2j+BFHYamJ4WZNCXC9gifYjGi?=
+ =?us-ascii?Q?vPqF+VSAZm2DXAmjcP3YFE0wIVD99mt4ay/QjpnhlqJnom4w0Rjuqm4h9lWA?=
+ =?us-ascii?Q?HCKJa0G5XktCrxkl91NiPNDCQjAwd3olHZM57flHtRrkiWFezRBC7zYxU8nq?=
+ =?us-ascii?Q?znRMeh4SYcA0kFNrCZCPh1d3HF/xyi4ASHuvL1/cqLCT9/OMEN5I/qwryh6f?=
+ =?us-ascii?Q?y8MOx9TOKM8cE0E+UeIrxREU4N3272G1Occ8hSIelgBUhfavHAxJPUbRfvZk?=
+ =?us-ascii?Q?1/aB5B9NhtBy4jagJk5m2qM=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a5539afb-d613-49d6-c67a-08db3f8fd640
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7432.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2023 22:05:21.4842
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4B4OJPsBND1LgFsaVv+R0Q6ZQWMyZeUhS7d46cinWkqJM7I2vNQ5EznI8nh42fSLlkrNDfjz4kptfmuJcVbekxK1OL6JaWE83LcrskyixkPPv1mC7rQyswfD4Qjk1Trv
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR01MB7948
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,252 +125,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Thu, Apr 13, 2023 at 10:24:38PM +0200, Andrea Righi wrote:
+> 
+> Not sure if it's a similar issue, but I have found another Ampere box
+> that is booting fine with your fixes, but the eifvars.sh kselftest is
+> failing with some I/O errors, specifically:
 
-The new module statistics code mixes 64-bit types and wordsized 'long'
-variables, which leads to build failures on 32-bit architectures:
+Thanks for reporting. Can you confirm this worked reliably for you prior
+to v6.1?
 
-kernel/module/stats.c: In function 'read_file_mod_stats':
-kernel/module/stats.c:291:29: error: passing argument 1 of 'atomic64_read' from incompatible pointer type [-Werror=incompatible-pointer-types]
-  291 |  total_size = atomic64_read(&total_mod_size);
-x86_64-linux-ld: kernel/module/stats.o: in function `read_file_mod_stats':
-stats.c:(.text+0x2b2): undefined reference to `__udivdi3'
+--
+Darren
 
-To fix this, the code has to use one of the two types consistently.
+> 
+> $ sudo ./efivarfs.sh
+> --------------------
+> running test_create
+> --------------------
+> ./efivarfs.sh: line 58: printf: write error: Input/output error
+> /sys/firmware/efi/efivars/test_create-210be57c-9849-4fc7-a635-e6382d1aec27 has invalid size
+>   [FAIL]
+> --------------------
+> running test_create_empty
+> --------------------
+>   [PASS]
+> --------------------
+> running test_create_read
+> --------------------
+>   [PASS]
+> --------------------
+> running test_delete
+> --------------------
+> ./efivarfs.sh: line 103: printf: write error: Input/output error
+>   [PASS]
+> --------------------
+> running test_zero_size_delete
+> --------------------
+> ./efivarfs.sh: line 126: printf: write error: Input/output error
+> ./efivarfs.sh: line 134: printf: write error: Input/output error
+> /sys/firmware/efi/efivars/test_zero_size_delete-210be57c-9849-4fc7-a635-e6382d1aec27 should have been deleted
+>   [FAIL]
+> --------------------
+> running test_open_unlink
+> --------------------
+> open(O_WRONLY): Operation not permitted
+>   [FAIL]
+> --------------------
+> running test_valid_filenames
+> --------------------
+> ./efivarfs.sh: line 158: printf: write error: Input/output error
+> ./efivarfs.sh: line 158: printf: write error: Input/output error
+> ./efivarfs.sh: line 158: printf: write error: Input/output error
+> ./efivarfs.sh: line 158: printf: write error: Input/output error
+>   [PASS]
+> --------------------
+> running test_invalid_filenames
+> --------------------
+>   [PASS]
+> 
+> If it helps:
+> 
+> $ sudo hexdump -C /sys/firmware/dmi/entries/4-0/raw
+> 00000000  04 30 04 00 01 03 fe 02  c1 d0 3f 41 00 00 00 00  |.0........?A....|
+> 00000010  03 8a 72 06 b8 0b f0 0a  41 06 05 00 06 00 07 00  |..r.....A.......|
+> 00000020  04 05 06 50 50 50 04 00  01 01 01 00 01 00 01 00  |...PPP..........|
+> 00000030  43 50 55 20 31 00 41 6d  70 65 72 65 28 52 29 00  |CPU 1.Ampere(R).|
+> 00000040  41 6d 70 65 72 65 28 52  29 20 41 6c 74 72 61 28  |Ampere(R) Altra(|
+> 00000050  52 29 20 50 72 6f 63 65  73 73 6f 72 00 30 30 30  |R) Processor.000|
+> 00000060  30 30 30 30 30 30 30 30  30 30 30 30 30 30 32 35  |0000000000000025|
+> 00000070  35 30 32 30 39 30 33 33  38 36 35 42 34 00 30 30  |50209033865B4.00|
+> 00000080  30 30 30 30 30 31 00 51  38 30 2d 33 30 00 00     |000001.Q80-30..|
+> 0000008f
+> 
+> I guess EFI is not very reliable here...
+> 
+> -Andrea
 
-Change them all to fixed-size 64-bit ones here.
-
-Fixes: 0d4ab68ce983 ("module: add debug stats to help identify memory pressure")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-I have no idea if there is a risk of these variables actually
-overflowing 'long' on 32-bit machines. If they provably can't, it
-would be better to do the opposite patch.
----
- kernel/module/internal.h | 14 +++++------
- kernel/module/main.c     | 10 ++++----
- kernel/module/stats.c    | 50 ++++++++++++++++++++--------------------
- 3 files changed, 37 insertions(+), 37 deletions(-)
-
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index 9ba5f8df15bc..c1710b74027c 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -175,13 +175,13 @@ enum fail_dup_mod_reason {
- 
- #ifdef CONFIG_MODULE_STATS
- 
--#define mod_stat_add_long(count, var) atomic_long_add(count, var)
-+#define mod_stat_add_64(count, var) atomic64_add(count, var)
- #define mod_stat_inc(name) atomic_inc(name)
- 
--extern atomic_long_t total_mod_size;
--extern atomic_long_t total_text_size;
--extern atomic_long_t invalid_kread_bytes;
--extern atomic_long_t invalid_decompress_bytes;
-+extern atomic64_t total_mod_size;
-+extern atomic64_t total_text_size;
-+extern atomic64_t invalid_kread_bytes;
-+extern atomic64_t invalid_decompress_bytes;
- 
- extern atomic_t modcount;
- extern atomic_t failed_kreads;
-@@ -189,7 +189,7 @@ extern atomic_t failed_decompress;
- struct mod_fail_load {
- 	struct list_head list;
- 	char name[MODULE_NAME_LEN];
--	atomic_long_t count;
-+	atomic64_t count;
- 	unsigned long dup_fail_mask;
- };
- 
-@@ -199,7 +199,7 @@ void mod_stat_bump_becoming(struct load_info *info, int flags);
- 
- #else
- 
--#define mod_stat_add_long(name, var)
-+#define mod_stat_add_64(name, var)
- #define mod_stat_inc(name)
- 
- static inline int try_add_failed_module(const char *name, size_t len,
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 1ed373145278..d1b213310e4b 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -2600,8 +2600,8 @@ static noinline int do_init_module(struct module *mod)
- 	mutex_unlock(&module_mutex);
- 	wake_up_all(&module_wq);
- 
--	mod_stat_add_long(text_size, &total_text_size);
--	mod_stat_add_long(total_size, &total_mod_size);
-+	mod_stat_add_64(text_size, &total_text_size);
-+	mod_stat_add_64(total_size, &total_mod_size);
- 
- 	mod_stat_inc(&modcount);
- 
-@@ -3052,7 +3052,7 @@ SYSCALL_DEFINE3(init_module, void __user *, umod,
- 	err = copy_module_from_user(umod, len, &info);
- 	if (err) {
- 		mod_stat_inc(&failed_kreads);
--		mod_stat_add_long(len, &invalid_kread_bytes);
-+		mod_stat_add_64(len, &invalid_kread_bytes);
- 		return err;
- 	}
- 
-@@ -3081,7 +3081,7 @@ SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
- 				       READING_MODULE);
- 	if (len < 0) {
- 		mod_stat_inc(&failed_kreads);
--		mod_stat_add_long(len, &invalid_kread_bytes);
-+		mod_stat_add_64(len, &invalid_kread_bytes);
- 		return len;
- 	}
- 
-@@ -3090,7 +3090,7 @@ SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
- 		vfree(buf); /* compressed data is no longer needed */
- 		if (err) {
- 			mod_stat_inc(&failed_decompress);
--			mod_stat_add_long(len, &invalid_decompress_bytes);
-+			mod_stat_add_64(len, &invalid_decompress_bytes);
- 			return err;
- 		}
- 	} else {
-diff --git a/kernel/module/stats.c b/kernel/module/stats.c
-index bbf90190a3fe..c4db7f64cdae 100644
---- a/kernel/module/stats.c
-+++ b/kernel/module/stats.c
-@@ -196,12 +196,12 @@ static LIST_HEAD(dup_failed_modules);
-  *    a separate module request was being issued for each CPU on a system.
-  */
- 
--atomic_long_t total_mod_size;
--atomic_long_t total_text_size;
--atomic_long_t invalid_kread_bytes;
--atomic_long_t invalid_decompress_bytes;
--static atomic_long_t invalid_becoming_bytes;
--static atomic_long_t invalid_mod_bytes;
-+atomic64_t total_mod_size;
-+atomic64_t total_text_size;
-+atomic64_t invalid_kread_bytes;
-+atomic64_t invalid_decompress_bytes;
-+static atomic64_t invalid_becoming_bytes;
-+static atomic64_t invalid_mod_bytes;
- atomic_t modcount;
- atomic_t failed_kreads;
- atomic_t failed_decompress;
-@@ -222,21 +222,21 @@ static const char *mod_fail_to_str(struct mod_fail_load *mod_fail)
- 
- void mod_stat_bump_invalid(struct load_info *info, int flags)
- {
--	atomic_long_add(info->len * 2, &invalid_mod_bytes);
-+	atomic64_add(info->len * 2, &invalid_mod_bytes);
- 	atomic_inc(&failed_load_modules);
- #if defined(CONFIG_MODULE_DECOMPRESS)
- 	if (flags & MODULE_INIT_COMPRESSED_FILE)
--		atomic_long_add(info->compressed_len, &invalid_mod_byte);
-+		atomic64_add(info->compressed_len, &invalid_mod_bytes);
- #endif
- }
- 
- void mod_stat_bump_becoming(struct load_info *info, int flags)
- {
- 	atomic_inc(&failed_becoming);
--	atomic_long_add(info->len, &invalid_becoming_bytes);
-+	atomic64_add(info->len, &invalid_becoming_bytes);
- #if defined(CONFIG_MODULE_DECOMPRESS)
- 	if (flags & MODULE_INIT_COMPRESSED_FILE)
--		atomic_long_add(info->compressed_len, &invalid_becoming_bytes);
-+		atomic64_add(info->compressed_len, &invalid_becoming_bytes);
- #endif
- }
- 
-@@ -247,7 +247,7 @@ int try_add_failed_module(const char *name, size_t len, enum fail_dup_mod_reason
- 	list_for_each_entry_rcu(mod_fail, &dup_failed_modules, list,
- 				lockdep_is_held(&module_mutex)) {
- 		if (strlen(mod_fail->name) == len && !memcmp(mod_fail->name, name, len)) {
--                        atomic_long_inc(&mod_fail->count);
-+                        atomic64_inc(&mod_fail->count);
- 			__set_bit(reason, &mod_fail->dup_fail_mask);
-                         goto out;
-                 }
-@@ -258,7 +258,7 @@ int try_add_failed_module(const char *name, size_t len, enum fail_dup_mod_reason
- 		return -ENOMEM;
- 	memcpy(mod_fail->name, name, len);
- 	__set_bit(reason, &mod_fail->dup_fail_mask);
--        atomic_long_inc(&mod_fail->count);
-+        atomic64_inc(&mod_fail->count);
-         list_add_rcu(&mod_fail->list, &dup_failed_modules);
- out:
- 	return 0;
-@@ -331,12 +331,12 @@ static ssize_t read_file_mod_stats(struct file *file, char __user *user_buf,
- 
- 	if (live_mod_count && total_size) {
- 		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Average mod size",
--				 DIV_ROUND_UP(total_size, live_mod_count));
-+				 DIV64_U64_ROUND_UP(total_size, live_mod_count));
- 	}
- 
- 	if (live_mod_count && text_size) {
- 		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Average mod text size",
--				 DIV_ROUND_UP(text_size, live_mod_count));
-+				 DIV64_U64_ROUND_UP(text_size, live_mod_count));
- 	}
- 
- 	/*
-@@ -349,25 +349,25 @@ static ssize_t read_file_mod_stats(struct file *file, char __user *user_buf,
- 	WARN_ON_ONCE(ikread_bytes && !fkreads);
- 	if (fkreads && ikread_bytes) {
- 		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Avg fail kread bytes",
--				 DIV_ROUND_UP(ikread_bytes, fkreads));
-+				 DIV64_U64_ROUND_UP(ikread_bytes, fkreads));
- 	}
- 
- 	WARN_ON_ONCE(ibecoming_bytes && !fbecoming);
- 	if (fbecoming && ibecoming_bytes) {
- 		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Avg fail becoming bytes",
--				 DIV_ROUND_UP(ibecoming_bytes, fbecoming));
-+				 DIV64_U64_ROUND_UP(ibecoming_bytes, fbecoming));
- 	}
- 
- 	WARN_ON_ONCE(idecompress_bytes && !fdecompress);
- 	if (fdecompress && idecompress_bytes) {
- 		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Avg fail decomp bytes",
--				 DIV_ROUND_UP(idecompress_bytes, fdecompress));
-+				 DIV64_U64_ROUND_UP(idecompress_bytes, fdecompress));
- 	}
- 
- 	WARN_ON_ONCE(imod_bytes && !floads);
- 	if (floads && imod_bytes) {
- 		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Average fail load bytes",
--				 DIV_ROUND_UP(imod_bytes, floads));
-+				 DIV64_U64_ROUND_UP(imod_bytes, floads));
- 	}
- 
- 	/* End of our debug preamble header. */
-@@ -407,16 +407,16 @@ static const struct file_operations fops_mod_stats = {
- 	.llseek = default_llseek,
- };
- 
--#define mod_debug_add_ulong(name) debugfs_create_ulong(#name, 0400, mod_debugfs_root, (unsigned long *) &name.counter)
-+#define mod_debug_add_u64(name) debugfs_create_u64(#name, 0400, mod_debugfs_root, (s64 *)&name.counter)
- #define mod_debug_add_atomic(name) debugfs_create_atomic_t(#name, 0400, mod_debugfs_root, &name)
- static int __init module_stats_init(void)
- {
--	mod_debug_add_ulong(total_mod_size);
--	mod_debug_add_ulong(total_text_size);
--	mod_debug_add_ulong(invalid_kread_bytes);
--	mod_debug_add_ulong(invalid_decompress_bytes);
--	mod_debug_add_ulong(invalid_becoming_bytes);
--	mod_debug_add_ulong(invalid_mod_bytes);
-+	mod_debug_add_u64(total_mod_size);
-+	mod_debug_add_u64(total_text_size);
-+	mod_debug_add_u64(invalid_kread_bytes);
-+	mod_debug_add_u64(invalid_decompress_bytes);
-+	mod_debug_add_u64(invalid_becoming_bytes);
-+	mod_debug_add_u64(invalid_mod_bytes);
- 
- 	mod_debug_add_atomic(modcount);
- 	mod_debug_add_atomic(failed_kreads);
 -- 
-2.39.2
-
+Darren Hart
+Ampere Computing / OS and Kernel
