@@ -2,344 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99CA46E49D1
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 15:23:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A9D06E49D7
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 15:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjDQNXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 09:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51482 "EHLO
+        id S230143AbjDQNYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 09:24:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjDQNXi (ORCPT
+        with ESMTP id S229898AbjDQNYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 09:23:38 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F1830DC;
-        Mon, 17 Apr 2023 06:23:36 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33H8skMm024804;
-        Mon, 17 Apr 2023 13:23:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=XwpxomG3rWLUbB1XoGemSNYyJ/Toe7thPIH7pe9chAk=;
- b=S8FqyamOHb23BHlkjwJs5p3YHjKG7n+qkDhbcxKA5hVZ/bzWzAM46ueheZg2eU7pljTT
- 2AYLpWanpCzCRUkisn5h0bTZOvgFppSboeHIK2K8Bbn/XyVUdmDMbgt6LXOcLmgLbqUS
- O6e/pP1vZp+lbKlq0A89ujQ0rQkP3TDZBsIIg425x/dGpcGXnvPfo+MXLbrmQzz0bWw+
- vPnCj6iUf+0nMfwCjYixXuV5O9BASf2o0yBYYBszXlJFi52fmsFkmfm/OkT/uJRSALWk
- UCccXUiSAMdJRnIvheMmZ916Qao3WL+PT6AxcwpPJ6dTQ+n7e49WM9Z1OGB4fuY47re1 6w== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pymneuk0j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Apr 2023 13:23:11 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33HDNA82020535
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Apr 2023 13:23:10 GMT
-Received: from [10.216.21.23] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 17 Apr
- 2023 06:23:04 -0700
-Message-ID: <a33e2d43-d6a6-f830-8421-ec68baf8159d@quicinc.com>
-Date:   Mon, 17 Apr 2023 18:52:17 +0530
+        Mon, 17 Apr 2023 09:24:02 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510F549FF;
+        Mon, 17 Apr 2023 06:23:56 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-2f625d52275so1550487f8f.3;
+        Mon, 17 Apr 2023 06:23:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681737835; x=1684329835;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RKAAc3ZsjOsQZpjk6XJI6NMJzVbDtqI98XsTFMuJ8w4=;
+        b=oNOvCHGNkSBvUbh4ERh8j/DqJtUwbQoII2LGqZbVAhWFWfbbcnRnf+8UhdDzO/d1ET
+         i21AXWRsFFh1RWrHvwHpOF6isEiP2D2zO1ON4sIutL4dtw2gJaEBVtjK+ZX1jqOwfXxe
+         bVmx0wrpYw1yojVfAmWruLcF69lFlLHUEQKj/58zZKf6DmefiuCIzxxqH4DJID8yaXbt
+         urENc2lY29lF4j2ZupatM9Uz2p8FmREaiqOOYw7xEoUPXmJhrPFMpD8ihomU3gxN+/no
+         nX01agI2B5Q0NxrW9XatoyAzGuOV0xtn3Regsk8O0VTAdr+YKUHGHmxJzeZsjHXbaZ7u
+         1r4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681737835; x=1684329835;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RKAAc3ZsjOsQZpjk6XJI6NMJzVbDtqI98XsTFMuJ8w4=;
+        b=FSSFwy/LXp1yxMfUHZds9iHh9uVVd9SMbz4BvAJ6OylEtIyPLs/MI4HyaGarwz2Kel
+         aJTg3iaMENh6AEZI4CSI9GfJ22EcVbHtZrYG8DjKbOJ99KlJtACG18g9RgBzUV43UtcN
+         OVEDxHUtoWYbTbWrel4tlp/eJ10mS7c+YkWro7DPRA/amM28+xOxgUIQd8GC1/5ft84k
+         0iUxiWDBdXFEhegYO3p1cLi31bclAYk6ZBGxotkKupqXT5UW3+J+AOArtlqJdwv6JGcv
+         dhaNWDpC47kng0W4qUPGLDHHNxcjdtu7dSREooy6d0fqMTL+TgPZ4SJ3d8CalcYOsI3d
+         iQow==
+X-Gm-Message-State: AAQBX9cxtwIfd2bfg8RTtISqu9GkCF3uK2agGjGSGIfkdHRLLvOqOaTS
+        /MkDroe32/oMe3mRyR3jXq4=
+X-Google-Smtp-Source: AKy350ZgGhmNdbORfcWWT3+kEaLh1DjBGO2Qr9T2OkuqSkpU4KmNaszZ8mszkHwAUCbDgkdgFsooIQ==
+X-Received: by 2002:adf:dd4b:0:b0:2ef:eb54:4dc0 with SMTP id u11-20020adfdd4b000000b002efeb544dc0mr6790292wrm.51.1681737834522;
+        Mon, 17 Apr 2023 06:23:54 -0700 (PDT)
+Received: from localhost (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
+        by smtp.gmail.com with ESMTPSA id k14-20020a5d66ce000000b002f103ca90cdsm10571529wrw.101.2023.04.17.06.23.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 06:23:53 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 14:23:52 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH 3/7] mm/gup: remove vmas parameter from
+ get_user_pages_remote()
+Message-ID: <241f0c22-f3d6-436e-a0d8-be04e281ed2f@lucifer.local>
+References: <cover.1681508038.git.lstoakes@gmail.com>
+ <5a4cf1ebf1c6cdfabbf2f5209facb0180dd20006.1681508038.git.lstoakes@gmail.com>
+ <ZD1FECftWekha6Do@nvidia.com>
+ <9be77e7e-4531-4e1c-9e0d-4edbb5ad3bd5@lucifer.local>
+ <ZD1GrBezHrJTo6x2@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 2/6] remoteproc: qcom: Move minidump specific data to
- qcom_minidump.h
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <corbet@lwn.net>,
-        <keescook@chromium.org>, <tony.luck@intel.com>,
-        <gpiccoli@igalia.com>, <catalin.marinas@arm.com>, <will@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-doc@vger.kernel.org>
-References: <1679491817-2498-1-git-send-email-quic_mojha@quicinc.com>
- <1679491817-2498-3-git-send-email-quic_mojha@quicinc.com>
- <e74fb30d-4268-86b1-cdf7-ad3d104c6c40@linaro.org>
- <3df1ec27-7e4d-1f84-ff20-94e8ea91c86f@quicinc.com>
- <040a1992-baff-c3e4-69a9-ff3110de62e7@linaro.org>
-Content-Language: en-US
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <040a1992-baff-c3e4-69a9-ff3110de62e7@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Btf2zd7RS_BmGpJ7-xz9tMB6k9gpt69W
-X-Proofpoint-GUID: Btf2zd7RS_BmGpJ7-xz9tMB6k9gpt69W
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-17_08,2023-04-17_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
- lowpriorityscore=0 clxscore=1015 mlxscore=0 spamscore=0 impostorscore=0
- malwarescore=0 bulkscore=0 priorityscore=1501 adultscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304170120
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZD1GrBezHrJTo6x2@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Apr 17, 2023 at 10:16:28AM -0300, Jason Gunthorpe wrote:
+> On Mon, Apr 17, 2023 at 02:13:39PM +0100, Lorenzo Stoakes wrote:
+> > On Mon, Apr 17, 2023 at 10:09:36AM -0300, Jason Gunthorpe wrote:
+> > > On Sat, Apr 15, 2023 at 12:27:31AM +0100, Lorenzo Stoakes wrote:
+> > > > The only instances of get_user_pages_remote() invocations which used the
+> > > > vmas parameter were for a single page which can instead simply look up the
+> > > > VMA directly. In particular:-
+> > > >
+> > > > - __update_ref_ctr() looked up the VMA but did nothing with it so we simply
+> > > >   remove it.
+> > > >
+> > > > - __access_remote_vm() was already using vma_lookup() when the original
+> > > >   lookup failed so by doing the lookup directly this also de-duplicates the
+> > > >   code.
+> > > >
+> > > > This forms part of a broader set of patches intended to eliminate the vmas
+> > > > parameter altogether.
+> > > >
+> > > > Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+> > > > ---
+> > > >  arch/arm64/kernel/mte.c   |  5 +++--
+> > > >  arch/s390/kvm/interrupt.c |  2 +-
+> > > >  fs/exec.c                 |  2 +-
+> > > >  include/linux/mm.h        |  2 +-
+> > > >  kernel/events/uprobes.c   | 10 +++++-----
+> > > >  mm/gup.c                  | 12 ++++--------
+> > > >  mm/memory.c               |  9 +++++----
+> > > >  mm/rmap.c                 |  2 +-
+> > > >  security/tomoyo/domain.c  |  2 +-
+> > > >  virt/kvm/async_pf.c       |  3 +--
+> > > >  10 files changed, 23 insertions(+), 26 deletions(-)
+> > > >
+> > > > diff --git a/arch/arm64/kernel/mte.c b/arch/arm64/kernel/mte.c
+> > > > index f5bcb0dc6267..74d8d4007dec 100644
+> > > > --- a/arch/arm64/kernel/mte.c
+> > > > +++ b/arch/arm64/kernel/mte.c
+> > > > @@ -437,8 +437,9 @@ static int __access_remote_tags(struct mm_struct *mm, unsigned long addr,
+> > > >  		struct page *page = NULL;
+> > > >
+> > > >  		ret = get_user_pages_remote(mm, addr, 1, gup_flags, &page,
+> > > > -					    &vma, NULL);
+> > > > -		if (ret <= 0)
+> > > > +					    NULL);
+> > > > +		vma = vma_lookup(mm, addr);
+> > > > +		if (ret <= 0 || !vma)
+> > > >  			break;
+> > >
+> > > Given the slightly tricky error handling, it would make sense to turn
+> > > this pattern into a helper function:
+> > >
+> > > page = get_single_user_page_locked(mm, addr, gup_flags, &vma);
+> > > if (IS_ERR(page))
+> > >   [..]
+> > >
+> > > static inline struct page *get_single_user_page_locked(struct mm_struct *mm,
+> > >    unsigned long addr, int gup_flags, struct vm_area_struct **vma)
+> > > {
+> > > 	struct page *page;
+> > > 	int ret;
+> > >
+> > > 	ret = get_user_pages_remote(*mm, addr, 1, gup_flags, &page, NULL, NULL);
+> > > 	if (ret < 0)
+> > > 	   return ERR_PTR(ret);
+> > > 	if (WARN_ON(ret == 0))
+> > > 	   return ERR_PTR(-EINVAL);
+> > >         *vma = vma_lookup(mm, addr);
+> > > 	if (WARN_ON(!*vma) {
+> > > 	   put_user_page(page);
+> > > 	   return ERR_PTR(-EINVAL);
+> > >         }
+> > > 	return page;
+> > > }
+> > >
+> > > It could be its own patch so this change was just a mechanical removal
+> > > of NULL
+> > >
+> > > Jason
+> > >
+> >
+> > Agreed, I think this would work better as a follow up patch however so as
+> > not to distract too much from the core change.
+>
+> I don't think you should open code sketchy error handling in several
+> places and then clean it up later. Just do it right from the start.
+>
 
+Intent was to do smallest change possible (though through review that grew
+of course), but I see your point, in this instance this is fiddly stuff and
+probably better to abstract it to enforce correct handling.
 
-On 4/14/2023 4:10 PM, Srinivas Kandagatla wrote:
-> 
-> 
-> On 14/04/2023 08:05, Mukesh Ojha wrote:
->> Thanks again for coming back on this.
->>
->> On 4/14/2023 4:02 AM, Srinivas Kandagatla wrote:
->>>
->>>
->>> On 22/03/2023 13:30, Mukesh Ojha wrote:
->>>> Move minidump specific data types and macros to a separate internal
->>>> header(qcom_minidump.h) so that it can be shared among different
->>>
->>> minidump.h should be good as we are already in include/soc/qcom/
->>
->>
->> Initially, i wanted to protect the content of qcom_minidump.h between 
->> qcom_minidump.c and qcom_common.c
->>
->> Ideally, here qcom_minidump.h should be supplier/provider header and can 
-> 
-> Am not sure if I understand the supplier concept correctly.
-> AFAIU, we have a 2 sets of apis
-> 
-> 1. get hold of minidump descriptor based on minidump_id fro gtoc using 
-> qcom_minidump_subsystem_desc(). Am assuming which ever driver uses this 
-> api will set there segments and regions in there respective drivers.
-> 
-> 2. setting regions/segments in APSS minidump descriptors which are done 
-> via qcom_minidump_region_register(). TBH this should be renamed to 
-> qcom_apss_minidump_region_register().
-> 
-> mixing of thsee apis makes it bit confusing, specially we have these two 
-> category of apis that deal with different things.
-> 
-> Does it make sense to spit and abstract them properly by doing?
-> 
-> 
-> 1. minidump driver to deal with handling gtoc and providing descriptors 
-> to the consumers like remoteproc or apss, This can probably live within 
-> smem driver as loc for this support is very minimal and proabably rename 
-> the api accordingly.
-> 
+I'll respin + add something like this.
 
-> 2. apss_minidump driver to allow other qcom drivers to 
-> register/unregister regions within apss minidump descriptor.
-> 
-> did I miss something?
-
-No, you are correct with your understanding.
-
-To your suggestion to split code and to keep 
-qcom_minidump_subsystem_desc() live inside smem driver,
-
-And how about the header qcom_minidump.h, should we keep it separate 
-than the apss minidump client header minidump.h ?
-
-Since, you kind of understand the driver now, do you think it is worth
-to create platform device for minidump from smem driver, and
-have a probe inside apss minidump driver to solve chicken and egg 
-problem for the clients who comes before minidump and try to register 
-itself without doing ready check and apss_minidump can note this client 
-entry and only register this region once minidump probe success and then 
-it can register all the noted clients in one go.
-
-The reason to do this would be apss_minidump driver has no meaning 
-without smem, and for this reason checking qcom_minidump_ready() would 
-not be ideal for at least qcom clients and for core kernel may be.
-
---Mukesh
-> 
-> thanks,
-> Srini
-> 
->> be shared among above qcom_minidump.c and qcom_common.c but since they 
->> are not in same directory, moved it inside include/soc/qcom/ as 
->> separate header than consumer header minidump.h . >
->> -Mukesh
->>>
->>> --srini
->>>
->>>> Qualcomm drivers.
->>>>
->>>> There is no change in functional behavior after this.
->>>>
->>>> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
->>>> ---
->>>>   drivers/remoteproc/qcom_common.c | 56 
->>>> +---------------------------------
->>>>   include/soc/qcom/qcom_minidump.h | 66 
->>>> ++++++++++++++++++++++++++++++++++++++++
->>>>   2 files changed, 67 insertions(+), 55 deletions(-)
->>>>   create mode 100644 include/soc/qcom/qcom_minidump.h
->>>>
->>>> diff --git a/drivers/remoteproc/qcom_common.c 
->>>> b/drivers/remoteproc/qcom_common.c
->>>> index 805e525..88fc984 100644
->>>> --- a/drivers/remoteproc/qcom_common.c
->>>> +++ b/drivers/remoteproc/qcom_common.c
->>>> @@ -18,6 +18,7 @@
->>>>   #include <linux/slab.h>
->>>>   #include <linux/soc/qcom/mdt_loader.h>
->>>>   #include <linux/soc/qcom/smem.h>
->>>> +#include <soc/qcom/qcom_minidump.h>
->>>>   #include "remoteproc_internal.h"
->>>>   #include "qcom_common.h"
->>>> @@ -26,61 +27,6 @@
->>>>   #define to_smd_subdev(d) container_of(d, struct qcom_rproc_subdev, 
->>>> subdev)
->>>>   #define to_ssr_subdev(d) container_of(d, struct qcom_rproc_ssr, 
->>>> subdev)
->>>> -#define MAX_NUM_OF_SS           10
->>>> -#define MAX_REGION_NAME_LENGTH  16
->>>> -#define SBL_MINIDUMP_SMEM_ID    602
->>>> -#define MINIDUMP_REGION_VALID        ('V' << 24 | 'A' << 16 | 'L' 
->>>> << 8 | 'I' << 0)
->>>> -#define MINIDUMP_SS_ENCR_DONE        ('D' << 24 | 'O' << 16 | 'N' 
->>>> << 8 | 'E' << 0)
->>>> -#define MINIDUMP_SS_ENABLED        ('E' << 24 | 'N' << 16 | 'B' << 
->>>> 8 | 'L' << 0)
->>>> -
->>>> -/**
->>>> - * struct minidump_region - Minidump region
->>>> - * @name        : Name of the region to be dumped
->>>> - * @seq_num:        : Use to differentiate regions with same name.
->>>> - * @valid        : This entry to be dumped (if set to 1)
->>>> - * @address        : Physical address of region to be dumped
->>>> - * @size        : Size of the region
->>>> - */
->>>> -struct minidump_region {
->>>> -    char    name[MAX_REGION_NAME_LENGTH];
->>>> -    __le32    seq_num;
->>>> -    __le32    valid;
->>>> -    __le64    address;
->>>> -    __le64    size;
->>>> -};
->>>> -
->>>> -/**
->>>> - * struct minidump_subsystem - Subsystem's SMEM Table of content
->>>> - * @status : Subsystem toc init status
->>>> - * @enabled : if set to 1, this region would be copied during coredump
->>>> - * @encryption_status: Encryption status for this subsystem
->>>> - * @encryption_required : Decides to encrypt the subsystem regions 
->>>> or not
->>>> - * @region_count : Number of regions added in this subsystem toc
->>>> - * @regions_baseptr : regions base pointer of the subsystem
->>>> - */
->>>> -struct minidump_subsystem {
->>>> -    __le32    status;
->>>> -    __le32    enabled;
->>>> -    __le32    encryption_status;
->>>> -    __le32    encryption_required;
->>>> -    __le32    region_count;
->>>> -    __le64    regions_baseptr;
->>>> -};
->>>> -
->>>> -/**
->>>> - * struct minidump_global_toc - Global Table of Content
->>>> - * @status : Global Minidump init status
->>>> - * @md_revision : Minidump revision
->>>> - * @enabled : Minidump enable status
->>>> - * @subsystems : Array of subsystems toc
->>>> - */
->>>> -struct minidump_global_toc {
->>>> -    __le32                status;
->>>> -    __le32                md_revision;
->>>> -    __le32                enabled;
->>>> -    struct minidump_subsystem    subsystems[MAX_NUM_OF_SS];
->>>> -};
->>>> -
->>>>   struct qcom_ssr_subsystem {
->>>>       const char *name;
->>>>       struct srcu_notifier_head notifier_list;
->>>> diff --git a/include/soc/qcom/qcom_minidump.h 
->>>> b/include/soc/qcom/qcom_minidump.h
->>>> new file mode 100644
->>>> index 0000000..84c8605
->>>> --- /dev/null
->>>> +++ b/include/soc/qcom/qcom_minidump.h
->>>> @@ -0,0 +1,66 @@
->>>> +/* SPDX-License-Identifier: GPL-2.0-only */
->>>> +/*
->>>> + * Qualcomm minidump shared data structures and macros
->>>> + *
->>>> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights 
->>>> reserved.
->>>> + */
->>>> +
->>>> +#ifndef _QCOM_MINIDUMP_H_
->>>> +#define _QCOM_MINIDUMP_H_
->>>> +
->>>> +#define MAX_NUM_OF_SS           10
->>>> +#define MAX_REGION_NAME_LENGTH  16
->>>> +#define SBL_MINIDUMP_SMEM_ID    602
->>>> +#define MINIDUMP_REGION_VALID        ('V' << 24 | 'A' << 16 | 'L' 
->>>> << 8 | 'I' << 0)
->>>> +#define MINIDUMP_SS_ENCR_DONE        ('D' << 24 | 'O' << 16 | 'N' 
->>>> << 8 | 'E' << 0)
->>>> +#define MINIDUMP_SS_ENABLED        ('E' << 24 | 'N' << 16 | 'B' << 
->>>> 8 | 'L' << 0)
->>>> +
->>>> +/**
->>>> + * struct minidump_region - Minidump region
->>>> + * @name        : Name of the region to be dumped
->>>> + * @seq_num:        : Use to differentiate regions with same name.
->>>> + * @valid        : This entry to be dumped (if set to 1)
->>>> + * @address        : Physical address of region to be dumped
->>>> + * @size        : Size of the region
->>>> + */
->>>> +struct minidump_region {
->>>> +    char    name[MAX_REGION_NAME_LENGTH];
->>>> +    __le32    seq_num;
->>>> +    __le32    valid;
->>>> +    __le64    address;
->>>> +    __le64    size;
->>>> +};
->>>> +
->>>> +/**
->>>> + * struct minidump_subsystem - Subsystem's SMEM Table of content
->>>> + * @status : Subsystem toc init status
->>>> + * @enabled : if set to 1, this region would be copied during coredump
->>>> + * @encryption_status: Encryption status for this subsystem
->>>> + * @encryption_required : Decides to encrypt the subsystem regions 
->>>> or not
->>>> + * @region_count : Number of regions added in this subsystem toc
->>>> + * @regions_baseptr : regions base pointer of the subsystem
->>>> + */
->>>> +struct minidump_subsystem {
->>>> +    __le32    status;
->>>> +    __le32    enabled;
->>>> +    __le32    encryption_status;
->>>> +    __le32    encryption_required;
->>>> +    __le32    region_count;
->>>> +    __le64    regions_baseptr;
->>>> +};
->>>> +
->>>> +/**
->>>> + * struct minidump_global_toc - Global Table of Content
->>>> + * @status : Global Minidump init status
->>>> + * @md_revision : Minidump revision
->>>> + * @enabled : Minidump enable status
->>>> + * @subsystems : Array of subsystems toc
->>>> + */
->>>> +struct minidump_global_toc {
->>>> +    __le32                status;
->>>> +    __le32                md_revision;
->>>> +    __le32                enabled;
->>>> +    struct minidump_subsystem    subsystems[MAX_NUM_OF_SS];
->>>> +};
->>>> +
->>>> +#endif  /* _QCOM_MINIDUMP_H_ */
+> Jason
