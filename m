@@ -2,102 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D8A76E50E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:28:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4076B6E50E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:28:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbjDQT2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 15:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45010 "EHLO
+        id S230285AbjDQT2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 15:28:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbjDQT2P (ORCPT
+        with ESMTP id S229930AbjDQT2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 15:28:15 -0400
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DD76A63;
-        Mon, 17 Apr 2023 12:28:08 -0700 (PDT)
-Received: by mail-wm1-f51.google.com with SMTP id l31-20020a05600c1d1f00b003f1718d89b2so2616159wms.0;
-        Mon, 17 Apr 2023 12:28:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681759686; x=1684351686;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8W0xUzGv3bFlwwmNaUOnlow2Y+E2WT5THpDh/RmBiBg=;
-        b=fTGgDwmIlzc0u5fgo1RpLaLwBK1t0e9PuUnfyIVBoGkCf629E4DomarncEznaNlGI8
-         BENW+YYLHnxQHkBA2+nwkON1hkXSDZ+jwg3sQ1JBm+m3HBF7RQVhC0P7FDhpxRo7ucxi
-         oMcMFUlLoqIEUucY/1zQdbVBtqYoSq2pkQkLvrWYqoTOenHocA5psK1HqAD+E858G/RQ
-         t7qJ9gz+AHpKuMCs9c5Qmgt9ceA1bTNo9qEhvYVsd/6ccdVJcALM+XmBqkycjkFNMnKQ
-         atQ3Cn+Wuf+RMQCyKlO/57nS0y6yUvO/+Ur0S+fBZ0iVRMPrmftbNuD+2Obs0MBaRtJW
-         YhTA==
-X-Gm-Message-State: AAQBX9f3bqwIupwT5jlA4qjQeFmHCajAcjr4kQAO25sVFMDSopzEjTkX
-        65Yw+VYrEvby9ES2CFbhdJ8=
-X-Google-Smtp-Source: AKy350YYXu/ISUG/HMPx/7EQwboUx8u1Nwy2hZHmc+5zXx3e3AejFgNqmggs19BTxhkgbeLd4ZSdCQ==
-X-Received: by 2002:a05:600c:2244:b0:3f0:7e63:e034 with SMTP id a4-20020a05600c224400b003f07e63e034mr11570091wmm.29.1681759686577;
-        Mon, 17 Apr 2023 12:28:06 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id u10-20020a7bc04a000000b003f09d7b6e20sm12792462wmc.2.2023.04.17.12.28.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 12:28:06 -0700 (PDT)
-Date:   Mon, 17 Apr 2023 19:28:04 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     "longli@linuxonhyperv.com" <longli@linuxonhyperv.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        Long Li <longli@microsoft.com>
-Subject: Re: [PATCH v2] Drivers: hv: move panic report code from vmbus to hv
- early init code
-Message-ID: <ZD2dxHaq8NDzpfYw@liuwe-devbox-debian-v2>
-References: <1681435612-19282-1-git-send-email-longli@linuxonhyperv.com>
- <BYAPR21MB1688377B56A9A844EAABEEDAD79E9@BYAPR21MB1688.namprd21.prod.outlook.com>
+        Mon, 17 Apr 2023 15:28:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79AE6EB7;
+        Mon, 17 Apr 2023 12:28:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 61FC961F9E;
+        Mon, 17 Apr 2023 19:28:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09481C433D2;
+        Mon, 17 Apr 2023 19:28:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681759688;
+        bh=vUS3zjVd3+6BO4WHfibtTk9oL6xSScrdumIoUioILDA=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=THajXB+ML1MMwctxmXts4VxHz2S3pGPkEBy0XyPnOJPJrBmRMoFRyVIcJ0cpnHN++
+         MfcUovaySK7ez0esDbSsRS/uI+js/h+r7EuYC4Lw9FBfY1rbXniW6/zC+pHQVPAV1u
+         J/5EdENWVCSqWg2Hu2YiT7lj+RYW4T1YEYPXDOhohkwJGj7581dehgHu6Oe3gSrXXi
+         oo/listP0wM+6Gfs1xn3QCteWfNijUdyKFytyCvRyxxnusw/DceofFlZQxe0RPeh2p
+         Z8L5keaD+Vg0bP6pdaMJTlO2Bbc9cENkbyIKZEA+62LqkdQV9sLR9iZD2avrmBxP99
+         dThCqi+6OpT2Q==
+From:   Mark Brown <broonie@kernel.org>
+To:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lgirdwood@gmail.com,
+        =?utf-8?q?Pawe=C5=82_Anikiel?= <pan@semihalf.com>
+Cc:     perex@perex.cz, tiwai@suse.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, dinguyen@kernel.org,
+        lars@metafoo.de, nuno.sa@analog.com, upstream@semihalf.com
+In-Reply-To: <20230414140203.707729-1-pan@semihalf.com>
+References: <20230414140203.707729-1-pan@semihalf.com>
+Subject: Re: (subset) [PATCH 0/9] Add Chameleon v3 ASoC audio
+Message-Id: <168175968572.1283403.9162743333691420976.b4-ty@kernel.org>
+Date:   Mon, 17 Apr 2023 20:28:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR21MB1688377B56A9A844EAABEEDAD79E9@BYAPR21MB1688.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.13-dev-00303
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 15, 2023 at 06:16:11PM +0000, Michael Kelley (LINUX) wrote:
-> From: longli@linuxonhyperv.com <longli@linuxonhyperv.com> Sent: Thursday, April 13, 2023 6:27 PM
-> > 
-> > The panic reporting code was added in commit 81b18bce48af
-> > ("Drivers: HV: Send one page worth of kmsg dump over Hyper-V during panic")
-> > 
-> > It was added to the vmbus driver. The panic reporting has no dependence
-> > on vmbus, and can be enabled at an earlier boot time when Hyper-V is
-> > initialized.
-> > 
-> > This patch moves the panic reporting code out of vmbus. There is no
-> > functionality changes. During moving, also refactored some cleanup
-> > functions into hv_kmsg_dump_unregister(), and removed unused function
-> > hv_alloc_hyperv_page().
-> > 
-> > Signed-off-by: Long Li <longli@microsoft.com>
-> > ---
-> > 
-> > Change log v2:
-> > 1. Check on hv_is_isolation_supported() before reporting crash dump
-> > 2. Remove hyperv_report_reg(), inline the check condition instead
-> > 3. Remove the test NULL on hv_panic_page when freeing it
-> > 
-> >  drivers/hv/hv.c                |  36 ------
-> >  drivers/hv/hv_common.c         | 229 +++++++++++++++++++++++++++++++++
-> >  drivers/hv/vmbus_drv.c         | 199 ----------------------------
-> >  include/asm-generic/mshyperv.h |   1 -
-> >  4 files changed, 229 insertions(+), 236 deletions(-)
+On Fri, 14 Apr 2023 16:01:54 +0200, Paweł Anikiel wrote:
+> The Google Chameleon v3 is a device made for testing audio and video
+> paths of other devices. This patchset adds support for ASoC audio on
+> this device. It has two audio sources: HDMI audio from the it68051 chip
+> (RX only), and analog audio from the ssm2603 chip (RX and TX).
 > 
-> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+> The patchset adds the ASoC platform and machine drivers, as well as some
+> changes to the existing ssm2602 codec driver.
+> 
+> [...]
 
-Applied to hyperv-next. Thanks.
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[6/9] ASoC: ssm2602: Add support for CLKDIV2
+      commit: 8076c586bbc1c62e075e58f41dafdd8b5022b24d
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
