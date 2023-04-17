@@ -2,257 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A05D86E54E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 00:58:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D34C16E54FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 01:08:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbjDQW6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 18:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42446 "EHLO
+        id S230217AbjDQXIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 19:08:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjDQW6m (ORCPT
+        with ESMTP id S229605AbjDQXIV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 18:58:42 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FD6B4;
-        Mon, 17 Apr 2023 15:58:41 -0700 (PDT)
+        Mon, 17 Apr 2023 19:08:21 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C199A3A92;
+        Mon, 17 Apr 2023 16:08:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681772321; x=1713308321;
+  t=1681772900; x=1713308900;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=AIE+CoOGqb1UWeCCkDmWvwKNd1mywZBoxhG2fX96HGY=;
-  b=Xx9Vyy9MiP+GzJYSewU4k2FvnvvJhUN85AtebiauA0cUT3myyQVuqbL8
-   GqmUiMaQPwypjZWyDdB0DQtom4rW8zcG4tmVPYifbu0ck+HEO64qEmwCS
-   44rRA3+NTpeH7n2w+eZDkzlnvPV3/tW/WCBuh36BWKtSRxp4TVtFth2J3
-   XCLHHdwILwrobj6uW1GpQF6ivMiFnCu6nmuXkIPkyjtLkXnzLktrXvM0b
-   FZ0/qeCdy8GNpqmlMm+Yn+vZh4YnM44N0vTApJUrxIoJ20567lPUxnPDv
-   08i23fbHIiF2HdvNq37DkrIOnYkOrcQ9gYNE4wpIQP3BRMlN6Gs/N0F9R
+   in-reply-to:mime-version;
+  bh=yAEAgwMwgRMbEcRqLvpigCwM42Nkcw9n84AzIC2OBDE=;
+  b=HbZ96MGfuGDK3s51g1/2MVYkBwVbY8m4wrU9IiU4QRrx2+BNuviKgl7n
+   vWZkelrjOrMhsKXB8jfsafTPG+szHuWsR8UkgiaJsuH/gTkQafAa5uz7Q
+   eAj2yuMDyioTYtrd/mvigCSmYctRxfMivWPjmPXnh+Ylk/eD2EZeyV9wg
+   tZPix8/gcuK3S5ms0AlP2PH2xysuQtC9oJmdsOQrN2Ur8P1BGOuW28tmc
+   HwPk9/YbyBjrQBwecoI2hqgqTtC9QB70IeZ97ERxdJEbftmblKVjgrKza
+   pcSln4iRkXjYXzjBDgBwKI5UMpt1QbYfRWpSzaF4ebI91DV/oqc7yLHIb
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="343777650"
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="342523930"
 X-IronPort-AV: E=Sophos;i="5.99,205,1677571200"; 
-   d="scan'208";a="343777650"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 15:58:40 -0700
+   d="scan'208";a="342523930"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 16:08:20 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="937027497"
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="690863274"
 X-IronPort-AV: E=Sophos;i="5.99,205,1677571200"; 
-   d="scan'208";a="937027497"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga006.fm.intel.com with ESMTP; 17 Apr 2023 15:58:39 -0700
-Date:   Mon, 17 Apr 2023 16:01:43 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [PATCH v3 10/24] sched/fair: Use IPCC scores to select a busiest
- runqueue
-Message-ID: <20230417230143.GB6156@ranerica-svr.sc.intel.com>
-References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com>
- <20230207051105.11575-11-ricardo.neri-calderon@linux.intel.com>
- <CAKfTPtAciJr-ZQWcJN3bHZHyHmjmSOuDYZz9UwfK2EnMVPX6aQ@mail.gmail.com>
- <20230330021431.GB26315@ranerica-svr.sc.intel.com>
- <CAKfTPtCUVbiVJxRHx_AcXbfm-SeW1ATE8QZ-jOqyfMh+PLwAjw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+   d="scan'208";a="690863274"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orsmga002.jf.intel.com with ESMTP; 17 Apr 2023 16:08:20 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 17 Apr 2023 16:08:19 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 17 Apr 2023 16:08:19 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Mon, 17 Apr 2023 16:08:19 -0700
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.45) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Mon, 17 Apr 2023 16:08:19 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DWG0tnAmtRxwr68QGH0gJ+H0sNIck25VoGSNXqyki9EHkbtlQGFAvtObiuj9kwDL1lb1x8Yb3K0mHPlf6nTgADDaQ/UPbWIBtr5XRK8LJQqFXrbs482wake/18MOTcRpv8oMfp+78Gg8cMVGvrVNzxYAzK/CiJBoG9T7VQXspztfg+JFU7Nj7U05BcTIIdKFrQ1yyhCjfN54DGddLm05WZSQm+9P4B7za5qOtuqqSBeRRdfSmWh4gKBo4cMnMu9Q5u0mnenRpss6Kl2aJKeXDdLhqYFHdwsvU6CTqLsYkcFqbBJBQg73ibmoJg95O7Z3op+fApDM2fw7JrgCyxvfBQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mmapHKzpuFDAQvHz268ZalA380EB3dv/M3eshGaXtzM=;
+ b=GQhWQerbbgi5bhHqMOhftnPmrLIiwfKy+eENuupYQ+XXdLZ1OLMnXo4UegFmneZIv/alQ2Qwi9rjaopK0jXp3P3OmMX/S4n6URRweqp7eVhh8F61TqHWIP3b9Jv1W/SLC3QYphHwO1G+HIIR6kV8YgetYeHbHdPvud32vadE1OQanCbc+oMkyRc+na/h7uqj4G4Hw+lF9dZfJhXFZJtU9puzEAHDI7G4YI3cnwxh4MqL6H0bNZoqMLncd/jHYzZEl9jPTauTHfE/lmF7Me+0TQLqN+vcmd1Yom1ziR1fzVssiTi5Xg13CScICkPyDLLbLhMkvyeFTL8GHJVQPjV/rg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
+ by PH7PR11MB6723.namprd11.prod.outlook.com (2603:10b6:510:1af::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Mon, 17 Apr
+ 2023 23:08:17 +0000
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::ffa1:410b:20b3:6233]) by PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::ffa1:410b:20b3:6233%6]) with mapi id 15.20.6298.045; Mon, 17 Apr 2023
+ 23:08:17 +0000
+Date:   Mon, 17 Apr 2023 16:08:14 -0700
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     Terry Bowman <terry.bowman@amd.com>, <alison.schofield@intel.com>,
+        <vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
+        <bwidawsk@kernel.org>, <dan.j.williams@intel.com>,
+        <dave.jiang@intel.com>, <Jonathan.Cameron@huawei.com>,
+        <linux-cxl@vger.kernel.org>
+CC:     <terry.bowman@amd.com>, <rrichter@amd.com>,
+        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>, <linux-efi@vger.kernel.org>
+Subject: RE: [PATCH v3 2/6] efi/cper: Export cper_mem_err_unpack() for use by
+ modules
+Message-ID: <643dd15e9bb8_1b662943c@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20230411180302.2678736-1-terry.bowman@amd.com>
+ <20230411180302.2678736-3-terry.bowman@amd.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKfTPtCUVbiVJxRHx_AcXbfm-SeW1ATE8QZ-jOqyfMh+PLwAjw@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230411180302.2678736-3-terry.bowman@amd.com>
+X-ClientProxiedBy: SJ0PR13CA0016.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c0::21) To PH8PR11MB8107.namprd11.prod.outlook.com
+ (2603:10b6:510:256::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|PH7PR11MB6723:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3a96a417-ae18-4a0e-c381-08db3f98a09a
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: IhY63UICuxXDc9PaGkDW9/KZq/QyE94bXCf4nz0AaEcPSbHAitHD9CB5IqMVPS0cDqN2lmGr1PqB9tq4pk6T67cMwoopDg/k5qQVH3wIx1FntSieZQSFwSY1aDy2/u0bIGYBoK22KgHc4cfyaaCnvg/gQPOzIb3aekqK6LJJRmkdxvuJSVEhYO1ZhzMN+V94vRgiE0+Igzx620v3NmMnYHj3ina8v2al7wNHyteHVN0JXh2cFQ2IiT7NW9uDD7rs+reED68GDD8iWlS/qBX4q+ffQOhOshX1fkklYdFlVyQD29KHgO38Gehhl5dTsLON+Zk1v94dXHJdiPSF9kAe2K4qmju4KNr5NHOV+o9Uq3DgrGVdbU/aHiwEVk6Zv6qcOi8zcVeLAG0tG18saD2u1MUyezIOfylXmX3YI1ek1bxW3hcwgPvPsSpsbrAYvs4cBdoUf2vHLxra3AZm6E3TPSVMSJUVcpQKwsGZeNj4ve9/HSvheEz4Knz1gM2MDajYwPtrtjwOKFToZerdUWTT6vi6L3mGIQv4dB8L4ZPF6M9qBPaVcWbbBooaVPaf7SDf
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(396003)(376002)(346002)(39860400002)(136003)(451199021)(4326008)(316002)(66556008)(66946007)(66476007)(6486002)(478600001)(6666004)(41300700001)(5660300002)(8676002)(8936002)(2906002)(86362001)(82960400001)(38100700002)(6506007)(9686003)(26005)(186003)(6512007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?OeUZVCF4gkajZiDcku7PIH1wAV9sEppQBnzWNI/uv1hMmR6BPjL3N2VkFHn7?=
+ =?us-ascii?Q?C3pnQjSS+hT0TLYLts49UEclXWyYj//1LszOUmyDnnJ7CCf2eb4nmHtXtQX6?=
+ =?us-ascii?Q?pIZcqVWvPic6JNCrp09WEnbtKPmDJN0D6awZJ+pjozytI4iwXtTDJ/Yj2NnV?=
+ =?us-ascii?Q?RW+wa4p4o2E0oWOjCP8vLVBY6jTxkpo4d4q5girupzR4izQUqwzSO5msME36?=
+ =?us-ascii?Q?RsLagWJfQ4QTVAqDqeINEjGdtSdYi+valOK6U8cX4U7zOAtn5ILLVNwlINKM?=
+ =?us-ascii?Q?CKZdTxqx9WwxE1kwBfBBfsPMXcfNohY8uZwn0fc95xxzSt0yoEOOnUOFltxU?=
+ =?us-ascii?Q?DuRJtNWQZbpd2LVJNGw/LSjwyDpV98skbWgWmH+M6RHnzqaVgS98c4sV+V9h?=
+ =?us-ascii?Q?k3RAgl7s50jhx2fdWB6559ewYIzgeKwFT+22Llb0y1pkV5jeUNQxyrYKuv51?=
+ =?us-ascii?Q?E3Lbt7aLSA6fRYfWWWXzL/sgKaDkMmXxJl8D4j5ggr4VFP46f5WQ6HO7Pxks?=
+ =?us-ascii?Q?L9k7svjMkndcHJXjLdpZxzGyBvnFMdGkEnxa6qZ1XQ8cY1MnjCPvHYFxMnUu?=
+ =?us-ascii?Q?+aRvK816ti42mcnQIxuv2rxLDBHAP+wRpEhvgkEEQRIEIDrlqSVMwz4kcYR2?=
+ =?us-ascii?Q?i8gk/mrnqZpQS/F5JzJVbW3sp6fZxnD0SvxOigiGv93CI7go5Km26lQg2lxw?=
+ =?us-ascii?Q?WQeaYiF6II+8RUPmpLV4ZxGKzjI2ZYOscoYOdx3OatwXSnG1bdxq/kq5+Xm+?=
+ =?us-ascii?Q?KSvzhzDthgfUGswpB9n266gVqlsPjwOl49yMHUcv7q/oJZSf3nH5R76AhM/o?=
+ =?us-ascii?Q?zZ2OpLKidUVEsVSl/1T8/oZQBHrzra4q6CiBNevIqk42QmrMc8+RXy4NSN3u?=
+ =?us-ascii?Q?WtkC2St3UPJQqTa3XRDqDx99ntp9Xy9DNNMEUnGwEO2bB9WUECTkuDXaz9h9?=
+ =?us-ascii?Q?LsnQJMx76FD39cnYjPgy7sUSIPGTM+w+lbMBfHNdHsRAjPBIUKJD51fcgEj0?=
+ =?us-ascii?Q?b4Yer49F0pMwL1I9UH18D3wCxOZxQvHOmow5e50C7kgvRdtOuc7WA8pH1tl/?=
+ =?us-ascii?Q?8zOVwILjjP7guZ5RAzrmDxyk6DLWgV2wof2xZ6dVpDq2j1M6eHef5DgF1+ck?=
+ =?us-ascii?Q?el9Hot7eghfnjWgJ7KcII5iYDfqVHgNwXHNnP4W9MyGzV4JS/X8GKBAxxe2+?=
+ =?us-ascii?Q?31va8OFim/Q/VHRm7Zwjl0pZMQhtaLRNuF9h9wqX3YLAq4hfCmDpO8+aK1rf?=
+ =?us-ascii?Q?53Ldd3MYvqjAgvLLs0/Zl9B4wUTFtSLCH4NX+ienArQY1xzRItuUIf9k9cJE?=
+ =?us-ascii?Q?o64sFH+dd35oEs31LUdbmpQTFnPXu4MPM+1I5h0UU2JVh9tAz9W5khL/T2Ho?=
+ =?us-ascii?Q?DC4BJzc/EIlvaMQZSi6sCyyF6BbfP5SrFlgak0KKr+jUTCM5uMXrFZfdH1em?=
+ =?us-ascii?Q?taq1XGIg2N4rPw/Rb+ze10MP9o2f8AMfHysjQT8N7wl4egl9LxLvzR3ZOBWk?=
+ =?us-ascii?Q?h8N8efV6fPQ80awvTCiyuL4+ZeQ2GtYVpxUJ09lg8cqIg4x4w053Ef4i1tYE?=
+ =?us-ascii?Q?RwR6eIhUeARmsQAzZm69UXVtuaaEsIJXXbuAJ52LyU4dk4kbzUiY3+M5pLkU?=
+ =?us-ascii?Q?cQ=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3a96a417-ae18-4a0e-c381-08db3f98a09a
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2023 23:08:16.8697
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tofIBWR6c4PNixwJIg3lzA3n7jxF8IqWgAeOsUqkcM8JPIuQrNFi0CtVhC+K5V5NGxOF9IbqYRz2wcBb9aZuvaSUZK+NT21kxJURHgICDHo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6723
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 02:23:58PM +0200, Vincent Guittot wrote:
-> On Thu, 30 Mar 2023 at 04:03, Ricardo Neri
-> <ricardo.neri-calderon@linux.intel.com> wrote:
-> >
-> > On Tue, Mar 28, 2023 at 12:03:58PM +0200, Vincent Guittot wrote:
-> > > On Tue, 7 Feb 2023 at 06:01, Ricardo Neri
-> > > <ricardo.neri-calderon@linux.intel.com> wrote:
-> > > >
-> > > > For two runqueues of equal priority and equal number of running of tasks,
-> > > > select the one whose current task would have the highest IPC class score
-> > > > if placed on the destination CPU.
-> > >
-> > > You failed to explain why it make sense to compare current task score
-> > > whereas we will most probably not pull this task at the end
-> >
-> > Thank you for your feedback Vincent! Please kindly refer to my reply to
-> > your feedback in patch 7.
-> >
-> > > >
-> > > > For now, use IPCC scores only for scheduling domains with the
-> > > > SD_ASYM_PACKING flag.
-> > > >
-> > > > Cc: Ben Segall <bsegall@google.com>
-> > > > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-> > > > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> > > > Cc: Ionela Voinescu <ionela.voinescu@arm.com>
-> > > > Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > > > Cc: Len Brown <len.brown@intel.com>
-> > > > Cc: Lukasz Luba <lukasz.luba@arm.com>
-> > > > Cc: Mel Gorman <mgorman@suse.de>
-> > > > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> > > > Cc: Steven Rostedt <rostedt@goodmis.org>
-> > > > Cc: Tim C. Chen <tim.c.chen@intel.com>
-> > > > Cc: Valentin Schneider <vschneid@redhat.com>
-> > > > Cc: x86@kernel.org
-> > > > Cc: linux-pm@vger.kernel.org
-> > > > Cc: linux-kernel@vger.kernel.org
-> > > > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> > > > ---
-> > > > Changes since v2:
-> > > >  * Only use IPCC scores to break ties if the sched domain uses
-> > > >    asym_packing. (Ionela)
-> > > >  * Handle errors of arch_get_ipcc_score(). (Ionela)
-> > > >
-> > > > Changes since v1:
-> > > >  * Fixed a bug when selecting a busiest runqueue: when comparing two
-> > > >    runqueues with equal nr_running, we must compute the IPCC score delta
-> > > >    of both.
-> > > >  * Renamed local variables to improve the layout of the code block.
-> > > >    (PeterZ)
-> > > >  * Used the new interface names.
-> > > > ---
-> > > >  kernel/sched/fair.c | 64 +++++++++++++++++++++++++++++++++++++++++++++
-> > > >  1 file changed, 64 insertions(+)
-> > > >
-> > > > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > > > index 72d88270b320..d3c22dc145f7 100644
-> > > > --- a/kernel/sched/fair.c
-> > > > +++ b/kernel/sched/fair.c
-> > > > @@ -9399,6 +9399,37 @@ static bool sched_asym_ipcc_pick(struct sched_group *a,
-> > > >         return sched_asym_ipcc_prefer(a_stats, b_stats);
-> > > >  }
-> > > >
-> > > > +/**
-> > > > + * ipcc_score_delta - Get the IPCC score delta wrt the load balance's dst_cpu
-> > > > + * @p:         A task
-> > > > + * @env:       Load balancing environment
-> > > > + *
-> > > > + * Returns: The IPCC score delta that @p would get if placed in the destination
-> > > > + * CPU of @env. LONG_MIN to indicate that the delta should not be used.
-> > > > + */
-> > > > +static long ipcc_score_delta(struct task_struct *p, struct lb_env *env)
-> > > > +{
-> > > > +       unsigned long score_src, score_dst;
-> > > > +       unsigned short ipcc = p->ipcc;
-> > > > +
-> > > > +       if (!sched_ipcc_enabled())
-> > > > +               return LONG_MIN;
-> > > > +
-> > > > +       /* Only asym_packing uses IPCC scores at the moment. */
-> > > > +       if (!(env->sd->flags & SD_ASYM_PACKING))
-> > > > +               return LONG_MIN;
-> > > > +
-> > > > +       score_dst = arch_get_ipcc_score(ipcc, env->dst_cpu);
-> > > > +       if (IS_ERR_VALUE(score_dst))
-> > > > +               return LONG_MIN;
-> > > > +
-> > > > +       score_src = arch_get_ipcc_score(ipcc, task_cpu(p));
-> > > > +       if (IS_ERR_VALUE(score_src))
-> > > > +               return LONG_MIN;
-> > > > +
-> > > > +       return score_dst - score_src;
-> > > > +}
-> > > > +
-> > > >  #else /* CONFIG_IPC_CLASSES */
-> > > >  static void update_sg_lb_ipcc_stats(int dst_cpu, struct sg_lb_stats *sgs,
-> > > >                                     struct rq *rq)
-> > > > @@ -9429,6 +9460,11 @@ static bool sched_asym_ipcc_pick(struct sched_group *a,
-> > > >         return false;
-> > > >  }
-> > > >
-> > > > +static long ipcc_score_delta(struct task_struct *p, struct lb_env *env)
-> > > > +{
-> > > > +       return LONG_MIN;
-> > > > +}
-> > > > +
-> > > >  #endif /* CONFIG_IPC_CLASSES */
-> > > >
-> > > >  /**
-> > > > @@ -10589,6 +10625,7 @@ static struct rq *find_busiest_queue(struct lb_env *env,
-> > > >  {
-> > > >         struct rq *busiest = NULL, *rq;
-> > > >         unsigned long busiest_util = 0, busiest_load = 0, busiest_capacity = 1;
-> > > > +       long busiest_ipcc_delta = LONG_MIN;
-> > > >         unsigned int busiest_nr = 0;
-> > > >         int i;
-> > > >
-> > > > @@ -10705,8 +10742,35 @@ static struct rq *find_busiest_queue(struct lb_env *env,
-> > > >
-> > > >                 case migrate_task:
-> > > >                         if (busiest_nr < nr_running) {
-> > > > +                               struct task_struct *curr;
-> > > > +
-> > > >                                 busiest_nr = nr_running;
-> > > >                                 busiest = rq;
-> > > > +
-> > > > +                               /*
-> > > > +                                * Remember the IPCC score delta of busiest::curr.
-> > > > +                                * We may need it to break a tie with other queues
-> > > > +                                * with equal nr_running.
-> > > > +                                */
-> > > > +                               curr = rcu_dereference(busiest->curr);
-> > > > +                               busiest_ipcc_delta = ipcc_score_delta(curr, env);
-> > >
-> > > Hmm, i don't like this at all
-> > >
-> > > Also, curr is the least probable task to be pulled which means that
-> > > all this his useless
-> >
-> > but when doing asym_packing balancing nr_running = 1, need_active_balance()
-> > returns true and we will pull the current task, no? This is also true for
-> > fully_busy groups with one task per CPU. These are the only two cases that
-> > currently use IPCC scores.
+Terry Bowman wrote:
+> The CXL driver plans to use cper_print_aer() for restricted CXL host (RCH)
+> logging. This is not currently possible if CXL is built as a loadable
+> module because cper_print_aer() depends on cper_mem_err_unpack() which
+> is not exported.
 > 
-> hmm, for sure it's not true for fully_busy and I don't see anything
-> about asym_packing mandating that  nr_running = 1
-
-I meant to say that if nr_running = 1, we would pull the running task
-because there is nothing else to pull.
-
-Just as when identifying the busiest group, we can instead break the tie
-using the task at the back of the runqueue. We will start with this task
-when migrating tasks.
-
+> Export cper_mem_err_unpack() to enable cper_print_aer() usage in
+> CXL and other loadable modules.
 > 
-> You should have a look at misfit task which seems to better fit your
-> situation where you have one task that doesn't fit  its cpu instead of
-> adding such condition
+> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Cc: linux-efi@vger.kernel.org
+> ---
+>  drivers/firmware/efi/cper.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/firmware/efi/cper.c b/drivers/firmware/efi/cper.c
+> index 35c37f667781..ff15e12160ae 100644
+> --- a/drivers/firmware/efi/cper.c
+> +++ b/drivers/firmware/efi/cper.c
+> @@ -350,6 +350,7 @@ const char *cper_mem_err_unpack(struct trace_seq *p,
+>  
+>  	return ret;
+>  }
+> +EXPORT_SYMBOL_GPL(cper_mem_err_unpack);
 
-Thank you for the suggestion! I did take a look. When dealing with misfit
-tasks, we identify one task that is too big for a small CPU. The
-destination CPU is not needed when updating the misfit status.
+Looks ok to me. You could make it:
 
-On the other hand, identifying the “an IPCC-misfit” task (similar to
-update_misfit_status()) would require knowing the destination CPU, of which
-there may be more than one type. We could compute the IPCC-misfit status
-for all prospective destinations CPU types but that may introduce a non-
-trivial overhead and would be too complex for a tie breaker, IMO.
+EXPORT_SYMBOL_NS_GPL(cper_mem_err_unpack, CXL)
 
-Unlike migrate_misfit, we would not take immediate action but use IPCC
-scores to improve the selection of the busiest runqueue.
+...to make it clear that this is really only meant to be consumed by the
+CXL subsystem. That was also the approach taken with the otherwise
+internal-only insert_resource_expand_to_fit() symbol.
