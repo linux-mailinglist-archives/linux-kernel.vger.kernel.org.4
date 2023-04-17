@@ -2,306 +2,625 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC136E42B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:36:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBF086E42B8
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:38:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjDQIgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 04:36:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48570 "EHLO
+        id S230317AbjDQIiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 04:38:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbjDQIgd (ORCPT
+        with ESMTP id S229946AbjDQIiD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 04:36:33 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 166A23C01;
-        Mon, 17 Apr 2023 01:36:24 -0700 (PDT)
-Received: from loongson.cn (unknown [192.168.200.1])
-        by gateway (Coremail) with SMTP id _____8DxUOUHBT1k0t0dAA--.46371S3;
-        Mon, 17 Apr 2023 16:36:23 +0800 (CST)
-Received: from [0.0.0.0] (unknown [192.168.200.1])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axnr4DBT1kPZoqAA--.14313S3;
-        Mon, 17 Apr 2023 16:36:21 +0800 (CST)
-Subject: Re: [PATCH V2] tools/perf: Add basic support for LoongArch
-To:     Huacai Chen <chenhuacai@kernel.org>
-References: <20230410111823.2538831-1-chenhuacai@loongson.cn>
- <0a278ab5-751a-9433-3d1f-19a5a6b99d39@loongson.cn>
- <CAAhV-H5sxLDS7+MOaC_Y+gd-=Qrog7gzidKDkYa=DWC2Ci_5_Q@mail.gmail.com>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>, loongarch@lists.linux.dev,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Xuerui Wang <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn,
-        Ming Wang <wangming01@loongson.cn>
-From:   Youling Tang <tangyouling@loongson.cn>
-Message-ID: <d50d7779-3bff-1a83-2641-36abdb077ac1@loongson.cn>
-Date:   Mon, 17 Apr 2023 16:36:19 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Mon, 17 Apr 2023 04:38:03 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2041.outbound.protection.outlook.com [40.107.243.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56EB21FEE;
+        Mon, 17 Apr 2023 01:38:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AXMkLrruKTAGC2Mw4uvaOjcuZj1dQn+9BiEBIPmvbJSssCU0JKL9zhwQot3o7xSpHaIpQSYldow8twSvzfLHBjDTq4oXKTfgXs39xKaZnO9mZu0zCLPZex4p1aC+lPu9zGHDguatNfvDcCHB+yGTqkMunnU+yOsPG9ivBUnQ+qpASgXn+FNeFS978oQux5hP8ug5sEm4AylZN4004AEjpz+GwG3SfnRrir2askcVxjuYDTw+VmMep+e/vGk1eVxmP3lV6HE/Rdm+975OWVKnAXzPhcHrCMXICFAAfhPKsENJdABp6FpCqsLYQHzgS+ar9QyZyHwgYcnnKy9CX0m3Ng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hcMhMlkUvb8KvTiTttOX3/oPv1WeCt+V+GKiTmFjZGo=;
+ b=kNqfu5NY9HOjCxX9r/vKqyzxwBVqE81p2AJsutWc48/Xc4BvlKr2vx0k9j5r5n6DUkud9NihwFhzSsk4Yz3QETGJIbxt1RWezoY7xs7+FqiTH/Wjxd0pcFgdgcU2g4jANNi8iVVLiM0xD3pCD6zaVgn1Rm+ePyBYQ0khEkkGK9UWoqqzmeSRV0Jckoq9HX99s2ntbphAE1xzschgnU0Lr9t2s5lG4cK2i7bXzU2QgjAiuUP8Zo2Wr+QiBEfLxtwoxm+WydnC2E5hfpubhHROW5MFv+GvSXFpkKm6UtIff+V2wIYPc92HWTGNI8O/jJs5/jigtGz6mqigW9IS/fEzqQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=redhat.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hcMhMlkUvb8KvTiTttOX3/oPv1WeCt+V+GKiTmFjZGo=;
+ b=3bJsL3tzmkJaS4Zav2kt2XKaMfZdvb1XCALv9iWOGAvTeCNLLNzmY2lDWv9+ni6ZDxCgvQeZzmwrQurDEXIXz4oWD4GovKPvMgo2ppEBGF4N3crGTgyjW6JFpiz/Jp/JyQ8W2THVNkuLevDToEUh6V4OETB3rZwek/lBysAyHKc=
+Received: from BY3PR03CA0006.namprd03.prod.outlook.com (2603:10b6:a03:39a::11)
+ by PH7PR12MB7212.namprd12.prod.outlook.com (2603:10b6:510:207::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Mon, 17 Apr
+ 2023 08:37:57 +0000
+Received: from CO1PEPF00001A5D.namprd05.prod.outlook.com
+ (2603:10b6:a03:39a:cafe::69) by BY3PR03CA0006.outlook.office365.com
+ (2603:10b6:a03:39a::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.46 via Frontend
+ Transport; Mon, 17 Apr 2023 08:37:57 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ CO1PEPF00001A5D.mail.protection.outlook.com (10.167.241.4) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6319.14 via Frontend Transport; Mon, 17 Apr 2023 08:37:57 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 17 Apr
+ 2023 03:37:56 -0500
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
+ (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 17 Apr
+ 2023 03:37:55 -0500
+Received: from xhdipdslab41.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Mon, 17 Apr 2023 03:37:52 -0500
+From:   Nipun Gupta <nipun.gupta@amd.com>
+To:     <alex.williamson@redhat.com>, <jgg@ziepe.ca>,
+        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <masahiroy@kernel.org>, <nathan@kernel.org>,
+        <ndesaulniers@google.com>, <nicolas@fjasle.eu>
+CC:     <git@amd.com>, <harpreet.anand@amd.com>,
+        <pieter.jansen-van-vuuren@amd.com>, <nikhil.agarwal@amd.com>,
+        <michal.simek@amd.com>, Nipun Gupta <nipun.gupta@amd.com>
+Subject: [PATCH v3] vfio/cdx: add support for CDX bus
+Date:   Mon, 17 Apr 2023 14:07:25 +0530
+Message-ID: <20230417083725.20193-1-nipun.gupta@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H5sxLDS7+MOaC_Y+gd-=Qrog7gzidKDkYa=DWC2Ci_5_Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Axnr4DBT1kPZoqAA--.14313S3
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3GryUuw1UJFWDZFy3CFWUXFb_yoW3KF4rpF
-        W7CFs7tw48Wr1SkwsIyFWqgr13JrWfGFZav34fK3y7Aryjvwn3Jw48tr9xCFyxXw1kGry0
-        9ws0kr4YkF1FyaDanT9S1TB71UUUUjJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bsAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4
-        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF
-        7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7
-        CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAq
-        jxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6c
-        x26rWlOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxv
-        r21lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8V
-        WrMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAF
-        wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc4
-        0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AK
-        xVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr
-        1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7xREWSoJUU
-        UUU==
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF00001A5D:EE_|PH7PR12MB7212:EE_
+X-MS-Office365-Filtering-Correlation-Id: 71dfdcaa-eca8-4ccd-ab8e-08db3f1f0b89
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ih6HZdl04gvSlrDy3l1aEVB4B1I+kdhE4xw6fsMBAeqT8WWNNopKeNaEpcbm0I/PmJEdMPf8wUKSZEcS3h1GJ3JaW5xf2/jw9AXlpQ+cJjaUDGw2eLufnSVlY01Bpt1Kovw0Yr/ZEV2c1egWThkhkh8OJ9Cp1jfzXZ/BIx0Powblx4/2XKXxEcQrZyZDSiPekuWoXH1wQ/kgWHjum7RqEw6OFNQ4AsjOf5rg+AO0a4mfjN0WpzA9GVHAy2vCgzA3c7j1P6k4mHA2A3Gcjiwf9375gP/lMyHA+hvq9Ww8GFX58BgpgqnLxvANKR7tsw63KnOX89jlOIiK+wOsKXeKCOZ6pItWc16JV3xelbvaz1SFNBXADGjLtQeHFJTU/3GuucsMqQq1Ihsgs/tTWy/QKoepotIYFmAJElcwUhVpV7wuIMWnanef99ds8yMsP4Rij3UWSKyT9dZm7VzUQONhpitwM7fFb8zX0zSaKmLNQSEYp72gyu2Jab3qt4HDTTJ4jVwemZw+HPfIimoKDn8iUFvZIDOv9EwFTKqX7/YVuyZOGqvaDBAoWb9LdII+OQL3h9TG1LBwvmH+MoHjiWIzTb2sZeHDi5iS6st/6patbvbg3XztNcVIjlK0WrwS19QIbbtWslEGnMZ4mbUfBRfx733I3BGNCHW2baq580wNT5njVXIzIGR1kSvoWpOeIc6yCR7Coqg3c6b8/EZ3/zzw20Jcb8S8Xh30QqqXyU8gXcifvdSJe2C+Ofz2lrGmXtaS
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(346002)(376002)(39860400002)(451199021)(40470700004)(36840700001)(46966006)(426003)(5660300002)(44832011)(82310400005)(2616005)(336012)(86362001)(47076005)(83380400001)(186003)(356005)(1076003)(26005)(82740400003)(81166007)(36860700001)(8936002)(8676002)(110136005)(54906003)(478600001)(40480700001)(6666004)(41300700001)(316002)(40460700003)(36756003)(4326008)(70206006)(70586007)(2906002)(30864003)(36900700001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2023 08:37:57.1602
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 71dfdcaa-eca8-4ccd-ab8e-08db3f1f0b89
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF00001A5D.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7212
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Huacai
+vfio-cdx driver enables IOCTLs for user space to query
+MMIO regions for CDX devices and mmap them. This change
+also adds support for reset of CDX devices.
 
-On 04/17/2023 04:22 PM, Huacai Chen wrote:
-> Hi, Youling,
->
-> On Wed, Apr 12, 2023 at 5:44 PM Youling Tang <tangyouling@loongson.cn> wrote:
->>
->> Hi, Huacai
->>
->> On 04/10/2023 07:18 PM, Huacai Chen wrote:
->>> Add basic support for LoongArch, which is very similar to the MIPS
->>> version.
->>>
->>> Signed-off-by: Ming Wang <wangming01@loongson.cn>
->>> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
->>> ---
->>> V2: Add libdw support.
->>>
->>>  .../loongarch/include/uapi/asm/perf_regs.h    | 40 +++++++++
->>>  .../arch/loongarch/include/uapi/asm/unistd.h  |  9 ++
->>>  tools/perf/Makefile.config                    | 12 ++-
->>>  tools/perf/arch/loongarch/Build               |  1 +
->>>  tools/perf/arch/loongarch/Makefile            | 28 +++++++
->>>  .../arch/loongarch/annotate/instructions.c    | 45 ++++++++++
->>>  .../loongarch/entry/syscalls/mksyscalltbl     | 61 ++++++++++++++
->>>  .../arch/loongarch/include/dwarf-regs-table.h | 16 ++++
->>>  tools/perf/arch/loongarch/include/perf_regs.h | 15 ++++
->>>  tools/perf/arch/loongarch/util/Build          |  5 ++
->>>  tools/perf/arch/loongarch/util/dwarf-regs.c   | 44 ++++++++++
->>>  tools/perf/arch/loongarch/util/perf_regs.c    |  6 ++
->>>  tools/perf/arch/loongarch/util/unwind-libdw.c | 56 +++++++++++++
->>>  .../arch/loongarch/util/unwind-libunwind.c    | 82 +++++++++++++++++++
->>>  tools/perf/check-headers.sh                   |  1 +
->>>  tools/perf/util/annotate.c                    |  8 ++
->>>  tools/perf/util/dwarf-regs.c                  |  7 ++
->>>  tools/perf/util/env.c                         |  2 +
->>>  tools/perf/util/genelf.h                      |  3 +
->>>  tools/perf/util/perf_regs.c                   | 76 +++++++++++++++++
->>>  tools/perf/util/syscalltbl.c                  |  4 +
->>>  21 files changed, 518 insertions(+), 3 deletions(-)
->>>  create mode 100644 tools/arch/loongarch/include/uapi/asm/perf_regs.h
->>>  create mode 100644 tools/arch/loongarch/include/uapi/asm/unistd.h
->>>  create mode 100644 tools/perf/arch/loongarch/Build
->>>  create mode 100644 tools/perf/arch/loongarch/Makefile
->>>  create mode 100644 tools/perf/arch/loongarch/annotate/instructions.c
->>>  create mode 100755 tools/perf/arch/loongarch/entry/syscalls/mksyscalltbl
->>>  create mode 100644 tools/perf/arch/loongarch/include/dwarf-regs-table.h
->>>  create mode 100644 tools/perf/arch/loongarch/include/perf_regs.h
->>>  create mode 100644 tools/perf/arch/loongarch/util/Build
->>>  create mode 100644 tools/perf/arch/loongarch/util/dwarf-regs.c
->>>  create mode 100644 tools/perf/arch/loongarch/util/perf_regs.c
->>>  create mode 100644 tools/perf/arch/loongarch/util/unwind-libdw.c
->>>  create mode 100644 tools/perf/arch/loongarch/util/unwind-libunwind.c
->>>
->>> diff --git a/tools/arch/loongarch/include/uapi/asm/perf_regs.h b/tools/arch/loongarch/include/uapi/asm/perf_regs.h
->>> new file mode 100644
->>> index 000000000000..29d69c00fc7a
->>> --- /dev/null
->>> +++ b/tools/arch/loongarch/include/uapi/asm/perf_regs.h
->>> @@ -0,0 +1,40 @@
->>> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
->>> +#ifndef _ASM_LOONGARCH_PERF_REGS_H
->>> +#define _ASM_LOONGARCH_PERF_REGS_H
->>> +
->>> +enum perf_event_loongarch_regs {
->>> +     PERF_REG_LOONGARCH_PC,
->>
->> Why do we replace PERF_REG_LOONGARCH_PC with PERF_REG_LOONGARCH_R0
->> (although it is $zero) position (maybe refer to RISCV), but there are
->> many differences between LoongArch and RISCV, such as `struct
->> user_pt_regs` definition.
-> This comes from arch/loongarch/include/uapi/asm/perf_regs.h, and I
-> think the root cause is RISC-V, the trouble is we shouldn't change
-> UAPI now.
-OK, consistent with arch/loongarch/include/uapi/asm/perf_regs.h
+This change adds the VFIO CDX driver and enables the following
+ioctls for CDX devices:
+ - VFIO_DEVICE_GET_INFO:
+ - VFIO_DEVICE_GET_REGION_INFO
+ - VFIO_DEVICE_RESET
 
->
->>
->> IMO, it may be better not to destroy $zero as much as possible, and to
->> keep it consistent with the definition in the libunwind tool.
->>
->> PERF_REG_LOONGARCH_PC = 33.
-> If PERF_REG_LOONGARCH_PC is 33 in libunwind, I think we can only
-> change libunwind now.
->
-There is no need to change libunwind, and there is no requirement that
-the order of the two be exactly the same (the original hope is to be
-consistent with the order in pt_regs).
+Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
+Reviewed-by: Pieter Jansen van Vuuren <pieter.jansen-van-vuuren@amd.com>
+Tested-by: Nikhil Agarwal <nikhil.agarwal@amd.com>
+---
 
->>
->>> +     PERF_REG_LOONGARCH_R1,
->>> +     PERF_REG_LOONGARCH_R2,
->>> +     PERF_REG_LOONGARCH_R3,
->>> +     PERF_REG_LOONGARCH_R4,
->>> +     PERF_REG_LOONGARCH_R5,
->>> +     PERF_REG_LOONGARCH_R6,
->>> +     PERF_REG_LOONGARCH_R7,
->>> +     PERF_REG_LOONGARCH_R8,
->>> +     PERF_REG_LOONGARCH_R9,
->>> +     PERF_REG_LOONGARCH_R10,
->>> +     PERF_REG_LOONGARCH_R11,
->>> +     PERF_REG_LOONGARCH_R12,
->>> +     PERF_REG_LOONGARCH_R13,
->>> +     PERF_REG_LOONGARCH_R14,
->>> +     PERF_REG_LOONGARCH_R15,
->>> +     PERF_REG_LOONGARCH_R16,
->>> +     PERF_REG_LOONGARCH_R17,
->>> +     PERF_REG_LOONGARCH_R18,
->>> +     PERF_REG_LOONGARCH_R19,
->>> +     PERF_REG_LOONGARCH_R20,
->>> +     PERF_REG_LOONGARCH_R21,
->>> +     PERF_REG_LOONGARCH_R22,
->>> +     PERF_REG_LOONGARCH_R23,
->>> +     PERF_REG_LOONGARCH_R24,
->>> +     PERF_REG_LOONGARCH_R25,
->>> +     PERF_REG_LOONGARCH_R26,
->>> +     PERF_REG_LOONGARCH_R27,
->>> +     PERF_REG_LOONGARCH_R28,
->>> +     PERF_REG_LOONGARCH_R29,
->>> +     PERF_REG_LOONGARCH_R30,
->>> +     PERF_REG_LOONGARCH_R31,
->>> +     PERF_REG_LOONGARCH_MAX,
->>> +};
->>> +#endif /* _ASM_LOONGARCH_PERF_REGS_H */
+Changes v2->v3:
+- removed redundant init and release functions
+- removed redundant dev and cdx_dev from vfio_cdx_device
+- added support for iommufd
+- added VFIO_DEVICE_FLAGS_CDX
+- removed unrequried WARN_ON
+- removed unused ioaddr
 
-/* snip */
+Changes v1->v2:
+- Updated file2alias to support vfio_cdx
+- removed some un-necessary checks in mmap
+- removed vfio reset wrapper API
+- converted complex macros to static APIs
+- used pgprot_device and io_remap_pfn_range
 
->>> --- /dev/null
->>> +++ b/tools/perf/arch/loongarch/util/dwarf-regs.c
->>> @@ -0,0 +1,44 @@
->>> +// SPDX-License-Identifier: GPL-2.0
->>> +/*
->>> + * dwarf-regs.c : Mapping of DWARF debug register numbers into register names.
->>> + *
->>> + * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
->>> + */
->>> +
->>> +#include <stdio.h>
->>> +#include <errno.h> /* for EINVAL */
->>> +#include <string.h> /* for strcmp */
->>> +#include <dwarf-regs.h>
->>> +
->>> +struct pt_regs_dwarfnum {
->>> +     const char *name;
->>> +     unsigned int dwarfnum;
->>> +};
->>> +
->>> +static struct pt_regs_dwarfnum loongarch_gpr_table[] = {
->>> +     {"$0", 0}, {"$1", 1}, {"$2", 2}, {"$3", 3},
->>> +     {"$4", 4}, {"$5", 5}, {"$6", 6}, {"$7", 7},
->>> +     {"$8", 8}, {"$9", 9}, {"$10", 10}, {"$11", 11},
->>> +     {"$12", 12}, {"$13", 13}, {"$14", 14}, {"$15", 15},
->>> +     {"$16", 16}, {"$17", 17}, {"$18", 18}, {"$19", 19},
->>> +     {"$20", 20}, {"$21", 21}, {"$22", 22}, {"$23", 23},
->>> +     {"$24", 24}, {"$25", 25}, {"$26", 26}, {"$27", 27},
->>> +     {"$28", 28}, {"$29", 29}, {"$30", 30}, {"$31", 31},
->>> +     {NULL, 0}
->>> +};
->> Do you need to change it to the following:
->>
->> #define GPR_DWARFNUM_NAME(num) {.name = __stringify($r##num), .dwarfnum
->> = num}
->> #define REG_DWARFNUM_END {.name = NULL, .dwarfnum = 0}
->>
->> static const struct pt_regs_dwarfnum regdwarfnum_table[] = {
->>          GPR_DWARFNUM_NAME(0),
->>          GPR_DWARFNUM_NAME(1),
->>          GPR_DWARFNUM_NAME(2),
->>          GPR_DWARFNUM_NAME(3),
->>          GPR_DWARFNUM_NAME(4),
->>          GPR_DWARFNUM_NAME(5),
->>          GPR_DWARFNUM_NAME(6),
->>          GPR_DWARFNUM_NAME(7),
->>          GPR_DWARFNUM_NAME(8),
->>          GPR_DWARFNUM_NAME(9),
->>          GPR_DWARFNUM_NAME(10),
->>          GPR_DWARFNUM_NAME(11),
->>          GPR_DWARFNUM_NAME(12),
->>          GPR_DWARFNUM_NAME(13),
->>          GPR_DWARFNUM_NAME(14),
->>          GPR_DWARFNUM_NAME(15),
->>          GPR_DWARFNUM_NAME(16),
->>          GPR_DWARFNUM_NAME(17),
->>          GPR_DWARFNUM_NAME(18),
->>          GPR_DWARFNUM_NAME(19),
->>          GPR_DWARFNUM_NAME(20),
->>          GPR_DWARFNUM_NAME(21),
->>          GPR_DWARFNUM_NAME(22),
->>          GPR_DWARFNUM_NAME(23),
->>          GPR_DWARFNUM_NAME(24),
->>          GPR_DWARFNUM_NAME(25),
->>          GPR_DWARFNUM_NAME(26),
->>          GPR_DWARFNUM_NAME(27),
->>          GPR_DWARFNUM_NAME(28),
->>          GPR_DWARFNUM_NAME(29),
->>          REG_DWARFNUM_NAME(30),
->>          REG_DWARFNUM_NAME(31),
->>          REG_DWARFNUM_END,
->> };
->>
->> At the same time, "$rx" is used in __perf_reg_name_loongarch and
->> loongarch_regstr_tbl, which is consistent with assembly.
-> OK, I will use the "$rx" format, but I don't want to use macros.
-Use the "rx" format to make regs_query_register_offset consistent with
-arch/loongarch/kernel/ptrace.c (that is, the names in
-loongarch_gpr_table and regoffset_table are consistent)
+ MAINTAINERS                         |   7 +
+ drivers/vfio/Kconfig                |   1 +
+ drivers/vfio/Makefile               |   1 +
+ drivers/vfio/cdx/Kconfig            |  17 ++
+ drivers/vfio/cdx/Makefile           |   8 +
+ drivers/vfio/cdx/vfio_cdx.c         | 271 ++++++++++++++++++++++++++++
+ drivers/vfio/cdx/vfio_cdx_private.h |  28 +++
+ include/linux/cdx/cdx_bus.h         |   1 -
+ include/linux/mod_devicetable.h     |   6 +
+ include/uapi/linux/vfio.h           |   1 +
+ scripts/mod/devicetable-offsets.c   |   1 +
+ scripts/mod/file2alias.c            |  17 +-
+ 12 files changed, 357 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/vfio/cdx/Kconfig
+ create mode 100644 drivers/vfio/cdx/Makefile
+ create mode 100644 drivers/vfio/cdx/vfio_cdx.c
+ create mode 100644 drivers/vfio/cdx/vfio_cdx_private.h
 
-Youling.
->
-> Huacai
->>
->>> +
->>> +const char *get_arch_regstr(unsigned int n)
->>> +{
->>> +     n %= 32;
->>> +     return loongarch_gpr_table[n].name;
->>> +}
->>> +
->>> +int regs_query_register_offset(const char *name)
->>> +{
->>> +     const struct pt_regs_dwarfnum *roff;
->>> +
->>> +     for (roff = loongarch_gpr_table; roff->name != NULL; roff++)
->>> +             if (!strcmp(roff->name, name))
->>> +                     return roff->dwarfnum;
->>> +     return -EINVAL;
->>> +}
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 7f74d8571ac9..c4fd42ba8f46 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -22064,6 +22064,13 @@ F:	Documentation/filesystems/vfat.rst
+ F:	fs/fat/
+ F:	tools/testing/selftests/filesystems/fat/
+ 
++VFIO CDX DRIVER
++M:	Nipun Gupta <nipun.gupta@amd.com>
++M:	Nikhil Agarwal <nikhil.agarwal@amd.com>
++L:	kvm@vger.kernel.org
++S:	Maintained
++F:	drivers/vfio/cdx/*
++
+ VFIO DRIVER
+ M:	Alex Williamson <alex.williamson@redhat.com>
+ L:	kvm@vger.kernel.org
+diff --git a/drivers/vfio/Kconfig b/drivers/vfio/Kconfig
+index 89e06c981e43..aba36f5be4ec 100644
+--- a/drivers/vfio/Kconfig
++++ b/drivers/vfio/Kconfig
+@@ -57,6 +57,7 @@ source "drivers/vfio/pci/Kconfig"
+ source "drivers/vfio/platform/Kconfig"
+ source "drivers/vfio/mdev/Kconfig"
+ source "drivers/vfio/fsl-mc/Kconfig"
++source "drivers/vfio/cdx/Kconfig"
+ endif
+ 
+ source "virt/lib/Kconfig"
+diff --git a/drivers/vfio/Makefile b/drivers/vfio/Makefile
+index 70e7dcb302ef..1a27b2516612 100644
+--- a/drivers/vfio/Makefile
++++ b/drivers/vfio/Makefile
+@@ -14,3 +14,4 @@ obj-$(CONFIG_VFIO_PCI) += pci/
+ obj-$(CONFIG_VFIO_PLATFORM) += platform/
+ obj-$(CONFIG_VFIO_MDEV) += mdev/
+ obj-$(CONFIG_VFIO_FSL_MC) += fsl-mc/
++obj-$(CONFIG_VFIO_CDX) += cdx/
+diff --git a/drivers/vfio/cdx/Kconfig b/drivers/vfio/cdx/Kconfig
+new file mode 100644
+index 000000000000..e6de0a0caa32
+--- /dev/null
++++ b/drivers/vfio/cdx/Kconfig
+@@ -0,0 +1,17 @@
++# SPDX-License-Identifier: GPL-2.0
++#
++# VFIO CDX configuration
++#
++# Copyright (C) 2022-2023, Advanced Micro Devices, Inc.
++#
++
++config VFIO_CDX
++	tristate "VFIO support for CDX bus devices"
++	depends on CDX_BUS
++	select EVENTFD
++	help
++	  Driver to enable VFIO support for the devices on CDX bus.
++	  This is required to make use of CDX devices present in
++	  the system using the VFIO framework.
++
++	  If you don't know what to do here, say N.
+diff --git a/drivers/vfio/cdx/Makefile b/drivers/vfio/cdx/Makefile
+new file mode 100644
+index 000000000000..82e4ef412c0f
+--- /dev/null
++++ b/drivers/vfio/cdx/Makefile
+@@ -0,0 +1,8 @@
++# SPDX-License-Identifier: GPL-2.0
++#
++# Copyright (C) 2022-2023, Advanced Micro Devices, Inc.
++#
++
++obj-$(CONFIG_VFIO_CDX) += vfio-cdx.o
++
++vfio-cdx-objs := vfio_cdx.o
+diff --git a/drivers/vfio/cdx/vfio_cdx.c b/drivers/vfio/cdx/vfio_cdx.c
+new file mode 100644
+index 000000000000..e937af968579
+--- /dev/null
++++ b/drivers/vfio/cdx/vfio_cdx.c
+@@ -0,0 +1,271 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2022-2023, Advanced Micro Devices, Inc.
++ */
++
++#include <linux/vfio.h>
++#include <linux/cdx/cdx_bus.h>
++
++#include "vfio_cdx_private.h"
++
++static struct cdx_driver vfio_cdx_driver;
++
++/**
++ * CDX_DRIVER_OVERRIDE_DEVICE_VFIO - macro used to describe a VFIO
++ *                                   "driver_override" CDX device.
++ * @vend: the 16 bit CDX Vendor ID
++ * @dev: the 16 bit CDX Device ID
++ *
++ * This macro is used to create a struct cdx_device_id that matches a
++ * specific device. driver_override will be set to
++ * CDX_ID_F_VFIO_DRIVER_OVERRIDE.
++ */
++#define CDX_DRIVER_OVERRIDE_DEVICE_VFIO(vend, dev) \
++	CDX_DEVICE_DRIVER_OVERRIDE(vend, dev, CDX_ID_F_VFIO_DRIVER_OVERRIDE)
++
++static int vfio_cdx_open_device(struct vfio_device *core_vdev)
++{
++	struct vfio_cdx_device *vdev =
++		container_of(core_vdev, struct vfio_cdx_device, vdev);
++	struct cdx_device *cdx_dev = to_cdx_device(core_vdev->dev);
++	int count = cdx_dev->res_count;
++	int i;
++
++	vdev->regions = kcalloc(count, sizeof(struct vfio_cdx_region),
++				GFP_KERNEL);
++	if (!vdev->regions)
++		return -ENOMEM;
++
++	for (i = 0; i < count; i++) {
++		struct resource *res = &cdx_dev->res[i];
++
++		vdev->regions[i].addr = res->start;
++		vdev->regions[i].size = resource_size(res);
++		vdev->regions[i].type = res->flags;
++		/*
++		 * Only regions addressed with PAGE granularity may be
++		 * MMAP'ed securely.
++		 */
++		if (!(vdev->regions[i].addr & ~PAGE_MASK) &&
++		    !(vdev->regions[i].size & ~PAGE_MASK))
++			vdev->regions[i].flags |=
++					VFIO_REGION_INFO_FLAG_MMAP;
++		vdev->regions[i].flags |= VFIO_REGION_INFO_FLAG_READ;
++		if (!(cdx_dev->res[i].flags & IORESOURCE_READONLY))
++			vdev->regions[i].flags |= VFIO_REGION_INFO_FLAG_WRITE;
++	}
++
++	return 0;
++}
++
++static void vfio_cdx_regions_cleanup(struct vfio_cdx_device *vdev)
++{
++	kfree(vdev->regions);
++}
++
++static void vfio_cdx_close_device(struct vfio_device *core_vdev)
++{
++	struct vfio_cdx_device *vdev =
++		container_of(core_vdev, struct vfio_cdx_device, vdev);
++	int ret;
++
++	vfio_cdx_regions_cleanup(vdev);
++
++	/* reset the device before cleaning up the interrupts */
++	ret = cdx_dev_reset(core_vdev->dev);
++	if (ret)
++		dev_warn(core_vdev->dev,
++			 "VFIO_CDX: reset device has failed (%d)\n", ret);
++}
++
++static long vfio_cdx_ioctl(struct vfio_device *core_vdev,
++			   unsigned int cmd, unsigned long arg)
++{
++	struct vfio_cdx_device *vdev =
++		container_of(core_vdev, struct vfio_cdx_device, vdev);
++	struct cdx_device *cdx_dev = to_cdx_device(core_vdev->dev);
++	unsigned long minsz;
++
++	switch (cmd) {
++	case VFIO_DEVICE_GET_INFO:
++	{
++		struct vfio_device_info info;
++
++		minsz = offsetofend(struct vfio_device_info, num_irqs);
++
++		if (copy_from_user(&info, (void __user *)arg, minsz))
++			return -EFAULT;
++
++		if (info.argsz < minsz)
++			return -EINVAL;
++
++		info.flags = VFIO_DEVICE_FLAGS_CDX;
++		info.flags = VFIO_DEVICE_FLAGS_RESET;
++
++		info.num_regions = cdx_dev->res_count;
++		info.num_irqs = 0;
++
++		return copy_to_user((void __user *)arg, &info, minsz) ?
++			-EFAULT : 0;
++	}
++	case VFIO_DEVICE_GET_REGION_INFO:
++	{
++		struct vfio_region_info info;
++
++		minsz = offsetofend(struct vfio_region_info, offset);
++
++		if (copy_from_user(&info, (void __user *)arg, minsz))
++			return -EFAULT;
++
++		if (info.argsz < minsz)
++			return -EINVAL;
++
++		if (info.index >= cdx_dev->res_count)
++			return -EINVAL;
++
++		/* map offset to the physical address  */
++		info.offset = vfio_cdx_index_to_offset(info.index);
++		info.size = vdev->regions[info.index].size;
++		info.flags = vdev->regions[info.index].flags;
++
++		if (copy_to_user((void __user *)arg, &info, minsz))
++			return -EFAULT;
++		return 0;
++	}
++	case VFIO_DEVICE_RESET:
++	{
++		return cdx_dev_reset(core_vdev->dev);
++	}
++	default:
++		return -ENOTTY;
++	}
++}
++
++static int vfio_cdx_mmap_mmio(struct vfio_cdx_region region,
++			      struct vm_area_struct *vma)
++{
++	u64 size = vma->vm_end - vma->vm_start;
++	u64 pgoff, base;
++
++	pgoff = vma->vm_pgoff &
++		((1U << (VFIO_CDX_OFFSET_SHIFT - PAGE_SHIFT)) - 1);
++	base = pgoff << PAGE_SHIFT;
++
++	if (region.size < PAGE_SIZE || base + size > region.size)
++		return -EINVAL;
++
++	vma->vm_pgoff = (region.addr >> PAGE_SHIFT) + pgoff;
++	vma->vm_page_prot = pgprot_device(vma->vm_page_prot);
++
++	return io_remap_pfn_range(vma, vma->vm_start, vma->vm_pgoff,
++				  size, vma->vm_page_prot);
++}
++
++static int vfio_cdx_mmap(struct vfio_device *core_vdev,
++			 struct vm_area_struct *vma)
++{
++	struct vfio_cdx_device *vdev =
++		container_of(core_vdev, struct vfio_cdx_device, vdev);
++	struct cdx_device *cdx_dev = to_cdx_device(core_vdev->dev);
++	unsigned int index;
++
++	index = vma->vm_pgoff >> (VFIO_CDX_OFFSET_SHIFT - PAGE_SHIFT);
++
++	if (index >= cdx_dev->res_count)
++		return -EINVAL;
++
++	if (!(vdev->regions[index].flags & VFIO_REGION_INFO_FLAG_MMAP))
++		return -EINVAL;
++
++	if (!(vdev->regions[index].flags & VFIO_REGION_INFO_FLAG_READ) &&
++	    (vma->vm_flags & VM_READ))
++		return -EINVAL;
++
++	if (!(vdev->regions[index].flags & VFIO_REGION_INFO_FLAG_WRITE) &&
++	    (vma->vm_flags & VM_WRITE))
++		return -EINVAL;
++
++	return vfio_cdx_mmap_mmio(vdev->regions[index], vma);
++}
++
++static const struct vfio_device_ops vfio_cdx_ops = {
++	.name		= "vfio-cdx",
++	.open_device	= vfio_cdx_open_device,
++	.close_device	= vfio_cdx_close_device,
++	.ioctl		= vfio_cdx_ioctl,
++	.mmap		= vfio_cdx_mmap,
++	.bind_iommufd	= vfio_iommufd_physical_bind,
++	.unbind_iommufd	= vfio_iommufd_physical_unbind,
++	.attach_ioas	= vfio_iommufd_physical_attach_ioas,
++};
++
++static int vfio_cdx_probe(struct cdx_device *cdx_dev)
++{
++	struct vfio_cdx_device *vdev = NULL;
++	struct device *dev = &cdx_dev->dev;
++	int ret;
++
++	vdev = vfio_alloc_device(vfio_cdx_device, vdev, dev,
++				 &vfio_cdx_ops);
++	if (IS_ERR(vdev))
++		return PTR_ERR(vdev);
++
++	ret = vfio_register_group_dev(&vdev->vdev);
++	if (ret) {
++		dev_err(dev, "VFIO_CDX: Failed to add to vfio group\n");
++		goto out_uninit;
++	}
++
++	dev_set_drvdata(dev, vdev);
++	return 0;
++
++out_uninit:
++	vfio_put_device(&vdev->vdev);
++	return ret;
++}
++
++static int vfio_cdx_remove(struct cdx_device *cdx_dev)
++{
++	struct device *dev = &cdx_dev->dev;
++	struct vfio_cdx_device *vdev;
++
++	vdev = dev_get_drvdata(dev);
++	vfio_unregister_group_dev(&vdev->vdev);
++	vfio_put_device(&vdev->vdev);
++
++	return 0;
++}
++
++static const struct cdx_device_id vfio_cdx_table[] = {
++	{ CDX_DRIVER_OVERRIDE_DEVICE_VFIO(CDX_ANY_ID, CDX_ANY_ID) }, /* match all by default */
++	{}
++};
++
++MODULE_DEVICE_TABLE(cdx, vfio_cdx_table);
++
++static struct cdx_driver vfio_cdx_driver = {
++	.probe		= vfio_cdx_probe,
++	.remove		= vfio_cdx_remove,
++	.match_id_table	= vfio_cdx_table,
++	.driver	= {
++		.name	= "vfio-cdx",
++		.owner	= THIS_MODULE,
++	},
++	.driver_managed_dma = true,
++};
++
++static int __init vfio_cdx_driver_init(void)
++{
++	return cdx_driver_register(&vfio_cdx_driver);
++}
++
++static void __exit vfio_cdx_driver_exit(void)
++{
++	cdx_driver_unregister(&vfio_cdx_driver);
++}
++
++module_init(vfio_cdx_driver_init);
++module_exit(vfio_cdx_driver_exit);
++
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("VFIO for CDX devices - User Level meta-driver");
+diff --git a/drivers/vfio/cdx/vfio_cdx_private.h b/drivers/vfio/cdx/vfio_cdx_private.h
+new file mode 100644
+index 000000000000..8bdc117ea88e
+--- /dev/null
++++ b/drivers/vfio/cdx/vfio_cdx_private.h
+@@ -0,0 +1,28 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2022-2023, Advanced Micro Devices, Inc.
++ */
++
++#ifndef VFIO_CDX_PRIVATE_H
++#define VFIO_CDX_PRIVATE_H
++
++#define VFIO_CDX_OFFSET_SHIFT    40
++
++static inline u64 vfio_cdx_index_to_offset(u32 index)
++{
++	return ((u64)(index) << VFIO_CDX_OFFSET_SHIFT);
++}
++
++struct vfio_cdx_region {
++	u32			flags;
++	u32			type;
++	u64			addr;
++	resource_size_t		size;
++};
++
++struct vfio_cdx_device {
++	struct vfio_device	vdev;
++	struct vfio_cdx_region	*regions;
++};
++
++#endif /* VFIO_CDX_PRIVATE_H */
+diff --git a/include/linux/cdx/cdx_bus.h b/include/linux/cdx/cdx_bus.h
+index 35ef41d8a61a..bead71b7bc73 100644
+--- a/include/linux/cdx/cdx_bus.h
++++ b/include/linux/cdx/cdx_bus.h
+@@ -14,7 +14,6 @@
+ #include <linux/mod_devicetable.h>
+ 
+ #define MAX_CDX_DEV_RESOURCES	4
+-#define CDX_ANY_ID (0xFFFF)
+ #define CDX_CONTROLLER_ID_SHIFT 4
+ #define CDX_BUS_NUM_MASK 0xF
+ 
+diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_devicetable.h
+index ccaaeda792c0..ccf017353bb6 100644
+--- a/include/linux/mod_devicetable.h
++++ b/include/linux/mod_devicetable.h
+@@ -912,6 +912,12 @@ struct ishtp_device_id {
+ 	kernel_ulong_t driver_data;
+ };
+ 
++#define CDX_ANY_ID (0xFFFF)
++
++enum {
++	CDX_ID_F_VFIO_DRIVER_OVERRIDE = 1,
++};
++
+ /**
+  * struct cdx_device_id - CDX device identifier
+  * @vendor: Vendor ID
+diff --git a/include/uapi/linux/vfio.h b/include/uapi/linux/vfio.h
+index 0552e8dcf0cb..8e91aaf973e7 100644
+--- a/include/uapi/linux/vfio.h
++++ b/include/uapi/linux/vfio.h
+@@ -213,6 +213,7 @@ struct vfio_device_info {
+ #define VFIO_DEVICE_FLAGS_AP	(1 << 5)	/* vfio-ap device */
+ #define VFIO_DEVICE_FLAGS_FSL_MC (1 << 6)	/* vfio-fsl-mc device */
+ #define VFIO_DEVICE_FLAGS_CAPS	(1 << 7)	/* Info supports caps */
++#define VFIO_DEVICE_FLAGS_CDX	(1 << 8)	/* vfio-cdx device */
+ 	__u32	num_regions;	/* Max region index + 1 */
+ 	__u32	num_irqs;	/* Max IRQ index + 1 */
+ 	__u32   cap_offset;	/* Offset within info struct of first cap */
+diff --git a/scripts/mod/devicetable-offsets.c b/scripts/mod/devicetable-offsets.c
+index 62dc988df84d..abe65f8968dd 100644
+--- a/scripts/mod/devicetable-offsets.c
++++ b/scripts/mod/devicetable-offsets.c
+@@ -265,6 +265,7 @@ int main(void)
+ 	DEVID(cdx_device_id);
+ 	DEVID_FIELD(cdx_device_id, vendor);
+ 	DEVID_FIELD(cdx_device_id, device);
++	DEVID_FIELD(cdx_device_id, override_only);
+ 
+ 	return 0;
+ }
+diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
+index 28da34ba4359..38120f932b0d 100644
+--- a/scripts/mod/file2alias.c
++++ b/scripts/mod/file2alias.c
+@@ -1458,8 +1458,23 @@ static int do_cdx_entry(const char *filename, void *symval,
+ {
+ 	DEF_FIELD(symval, cdx_device_id, vendor);
+ 	DEF_FIELD(symval, cdx_device_id, device);
++	DEF_FIELD(symval, cdx_device_id, override_only);
+ 
+-	sprintf(alias, "cdx:v%08Xd%08Xd", vendor, device);
++	switch (override_only) {
++	case 0:
++		strcpy(alias, "cdx:");
++		break;
++	case CDX_ID_F_VFIO_DRIVER_OVERRIDE:
++		strcpy(alias, "vfio_cdx:");
++		break;
++	default:
++		warn("Unknown CDX driver_override alias %08X\n",
++		     override_only);
++		return 0;
++	}
++
++	ADD(alias, "v", vendor != CDX_ANY_ID, vendor);
++	ADD(alias, "d", device != CDX_ANY_ID, device);
+ 	return 1;
+ }
+ 
+-- 
+2.17.1
 
