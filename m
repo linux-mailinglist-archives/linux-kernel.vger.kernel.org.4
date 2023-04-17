@@ -2,89 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 451796E4087
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 09:17:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D2E86E408A
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 09:17:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbjDQHRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 03:17:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
+        id S230229AbjDQHRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 03:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjDQHR3 (ORCPT
+        with ESMTP id S230228AbjDQHRp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 03:17:29 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB8910C2;
-        Mon, 17 Apr 2023 00:17:26 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 1CFEC21A43;
-        Mon, 17 Apr 2023 07:17:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1681715845; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mlHm/FZ1rHFHsWok7oMfEp5R5t1KE7mzb/Y7qq5IQyQ=;
-        b=Yh3ZIVm/dhA03l6PPhIbhgX5FWxgQtv9XwYGEEADPjRxtMlAFQ+kSOHMMO6dldO4SxWjOR
-        gemyq8ECz/d8rYRvX5oK0xcTpaE77PTgzSCvDHOyq0aVMoPBC8n0eIVEEjn2qeu4ihMj8/
-        aAN5m8kOo19UK+nVQn+yHyjDqXPgBQY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1681715845;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mlHm/FZ1rHFHsWok7oMfEp5R5t1KE7mzb/Y7qq5IQyQ=;
-        b=oGrh6UEwdn/cj3xwtrX2fimxyJ1f5ZrksH6IWvT75NPHB42euwY70P4iQmcTNw0wPjHwq/
-        jvaXBSnJyZIqFKDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D11C813319;
-        Mon, 17 Apr 2023 07:17:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id jSnSMYTyPGSgGwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 17 Apr 2023 07:17:24 +0000
-Message-ID: <2061666b-3978-d117-5acd-71d0d10b0af6@suse.de>
-Date:   Mon, 17 Apr 2023 09:17:24 +0200
+        Mon, 17 Apr 2023 03:17:45 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F7540FA
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 00:17:38 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2a8ba5f1d6bso9669301fa.2
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 00:17:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681715857; x=1684307857;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3OR5eT9VnzB8iC9lmd78WCiWUCSzoPnYyNJk6lQC8Oc=;
+        b=B8e0BXhwU4lqGmdezCmNtposCPWNDQsrr5U8BuPRXI99DeyUt/CICr5FjRWWtD0ZCO
+         B6sVXpU3n4W1y1ijhh5Gp62WWoOcJGcAwUEW5n1ukLr4y/b8aryEHiiBRoi2lMGiry8v
+         jZ/RWKOzasftEEE6rzZXV/Gli/JmCNAA1bM0/+oocvjobrpWOrE63+sls3P+4MT6tncn
+         m8G/VfCfVW9aIahT4Qrn5TzJnZ6K70gLv7swFTUQ8KZ3k4tRYuBPUPjTEJpr2foOUqUV
+         7Ruicx7/gIqumpoDrQNpmLpPWV29pULliByxrxgRYNOu1gbg9UaEn8T70T2WGbazG5LP
+         lwlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681715857; x=1684307857;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3OR5eT9VnzB8iC9lmd78WCiWUCSzoPnYyNJk6lQC8Oc=;
+        b=BAQRq7o/s9HxGxA1O/UVTz7TtVIEzhDijwUX/Zyr01aPR37M6/nRuBIjkQmpSdSoOb
+         rYqd0dzUKlcNLAhW1o62Fx5KgWuF+AMwA8meddeOCMu6LCRZhx3NzVaf+NGjDnvH1u0o
+         UNgFMkfV3wEIuaQgDR44V6EOXyl72hNaV44AwnOm0E2Lvr1f8Y1KF+XE4nJsWAcWGV5U
+         OiIS6LHiF/UrCO9RG3eH3/8wZVSAlQ7ImM5MXO8w4bjeYoyY2ZOu6kEi+sARsaJOA3pm
+         jbM44EfodTgjKpmYdb7P2BrkySIGL8zZRrd55f4ifqmzZxVchvA6ygrgW7h20Ci9x4Gt
+         n8JQ==
+X-Gm-Message-State: AAQBX9cEsv6fOBpCStRB/evB4VOS2hiUufKoGpw4QO5XCRwPoT9ljeMz
+        0fOIXnJKBPS5D4EUBd5t2cDUtr0TyQLUchHsu2M=
+X-Google-Smtp-Source: AKy350ab+wKkL8gb4ltrCcM9tnhiEY2HkIoaBTwD+PoQh+qh2OILwYOXIQ3SdEWHJwapl/UE+lfJ2A==
+X-Received: by 2002:a19:ad02:0:b0:4db:3a92:2c85 with SMTP id t2-20020a19ad02000000b004db3a922c85mr1157217lfc.67.1681715857157;
+        Mon, 17 Apr 2023 00:17:37 -0700 (PDT)
+Received: from [192.168.1.101] (abyk99.neoplus.adsl.tpnet.pl. [83.9.30.99])
+        by smtp.gmail.com with ESMTPSA id u6-20020ac251c6000000b004d85f2acd8esm1948698lfm.295.2023.04.17.00.17.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Apr 2023 00:17:36 -0700 (PDT)
+Message-ID: <0e5cf9e6-bfcb-ff79-d94c-97c46735e12b@linaro.org>
+Date:   Mon, 17 Apr 2023 09:17:35 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] drm/fbdev-generic: fix potential out-of-bounds access
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 4/4] arm64: dts: qcom: sc8280xp: correct GIC child node
+ name
 Content-Language: en-US
-To:     Daniel Vetter <daniel@ffwll.ch>
-Cc:     Sui Jingfeng <15330273260@189.cn>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>, Li Yi <liyi@loongson.cn>,
-        Helge Deller <deller@gmx.de>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
-References: <20230409132110.494630-1-15330273260@189.cn>
- <ZDV0Te65tSh4Q/vc@phenom.ffwll.local>
- <42f16d0d-4e1a-a016-f4cc-af24efa75f1c@189.cn>
- <ZDbuCWKfFlWyiOGp@phenom.ffwll.local>
- <dbac96b2-0fea-591b-517d-2a23cc36b8de@189.cn>
- <CAKMK7uG_h7htCDARudZpHOOMG4iOOLZmz0_WskvWGf+DKGwU1w@mail.gmail.com>
- <531f0bdf-2ae8-0361-183b-57b40df6345f@189.cn>
- <ZDhQW6El6ztyHK4M@phenom.ffwll.local>
- <1bbc7228-c2fe-0af0-c15c-b378bc4d111c@suse.de>
- <ZDhfkq92hbGc630z@phenom.ffwll.local>
- <1b44a3b5-5053-f121-ee62-de83d505759e@189.cn>
- <CAKMK7uHRWy=7m3=eEQz324kKOh9AM8J3Rma=KgBic0pRmW1NBQ@mail.gmail.com>
- <410baaef-bc55-cb2a-2e92-a407ce5cad04@suse.de>
- <CAKMK7uGZUJh7JoqPSj=WJeRPDkPrxmNJGVoKcGZGy75=9AWCMA@mail.gmail.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <CAKMK7uGZUJh7JoqPSj=WJeRPDkPrxmNJGVoKcGZGy75=9AWCMA@mail.gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------V6bfjhQPBIZJisTVt052EytK"
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230416151311.346596-1-krzysztof.kozlowski@linaro.org>
+ <20230416151311.346596-4-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230416151311.346596-4-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,144 +81,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------V6bfjhQPBIZJisTVt052EytK
-Content-Type: multipart/mixed; boundary="------------6vbnjkWA6597NBOFZJTblbt3";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Daniel Vetter <daniel@ffwll.ch>
-Cc: Sui Jingfeng <15330273260@189.cn>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
- Li Yi <liyi@loongson.cn>, Helge Deller <deller@gmx.de>,
- Lucas De Marchi <lucas.demarchi@intel.com>, linux-kernel@vger.kernel.org,
- linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
- loongson-kernel@lists.loongnix.cn
-Message-ID: <2061666b-3978-d117-5acd-71d0d10b0af6@suse.de>
-Subject: Re: [PATCH] drm/fbdev-generic: fix potential out-of-bounds access
-References: <20230409132110.494630-1-15330273260@189.cn>
- <ZDV0Te65tSh4Q/vc@phenom.ffwll.local>
- <42f16d0d-4e1a-a016-f4cc-af24efa75f1c@189.cn>
- <ZDbuCWKfFlWyiOGp@phenom.ffwll.local>
- <dbac96b2-0fea-591b-517d-2a23cc36b8de@189.cn>
- <CAKMK7uG_h7htCDARudZpHOOMG4iOOLZmz0_WskvWGf+DKGwU1w@mail.gmail.com>
- <531f0bdf-2ae8-0361-183b-57b40df6345f@189.cn>
- <ZDhQW6El6ztyHK4M@phenom.ffwll.local>
- <1bbc7228-c2fe-0af0-c15c-b378bc4d111c@suse.de>
- <ZDhfkq92hbGc630z@phenom.ffwll.local>
- <1b44a3b5-5053-f121-ee62-de83d505759e@189.cn>
- <CAKMK7uHRWy=7m3=eEQz324kKOh9AM8J3Rma=KgBic0pRmW1NBQ@mail.gmail.com>
- <410baaef-bc55-cb2a-2e92-a407ce5cad04@suse.de>
- <CAKMK7uGZUJh7JoqPSj=WJeRPDkPrxmNJGVoKcGZGy75=9AWCMA@mail.gmail.com>
-In-Reply-To: <CAKMK7uGZUJh7JoqPSj=WJeRPDkPrxmNJGVoKcGZGy75=9AWCMA@mail.gmail.com>
 
---------------6vbnjkWA6597NBOFZJTblbt3
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
 
-SGkNCg0KQW0gMTQuMDQuMjMgdW0gMDk6NTYgc2NocmllYiBEYW5pZWwgVmV0dGVyOg0KPiBP
-biBGcmksIDE0IEFwciAyMDIzIGF0IDA5OjM0LCBUaG9tYXMgWmltbWVybWFubiA8dHppbW1l
-cm1hbm5Ac3VzZS5kZT4gd3JvdGU6DQpbLi4uXQ0KPj4NCj4+IFRoZXJlJ3MgYWxzbyBubyBu
-ZWVkL3dheSB0byBjaGFuZ2UgdmlkZW8gbW9kZXMgb3IgZm9ybWF0cyBpbiB0aGUgc2hhZG93
-DQo+PiBidWZmZXIuIElmIHdlJ2QgZXZlciBzdXBwb3J0IHRoYXQsIGl0IHdvdWxkIGJlIGlt
-cGxlbWVudGVkIGluIHRoZSBEUk0NCj4+IGRyaXZlcidzIG1vZGVzZXR0aW5nLiAgVGhlIHJl
-bGF0aW9uc2hpcCBiZXR3ZWVuIEdFTSBidWZmZXIgYW5kIHNoYWRvdw0KPj4gYnVmZmVyIHJl
-bWFpbnMgdW5hZmZlY3RlZCBieSB0aGlzLg0KPiANCj4gVHJ5IGl0IGFuZCBiZSBhbWF6ZWQg
-Oi0pDQoNCkl0J3Mgbm90IHN1cHBvcnRlZC4gSSBkb24ndCBrbm93IGlmIHdlIGNhdGNoIGFs
-bCB0aGUgY2FzZXMsIGJ1dCBhdCBsZWFzdCANCndlIHRyeS4gQW5kIEkgZG9uJ3QgdGhpbmsg
-d2Ugd2lsbCBldmVyIHN1cHBvcnQgY2hhbmdlcyB0byB0aGUgdmlkZW8gDQptb2RlLiBUaGUg
-ZnJhbWVidWZmZXIgd2lkdGgvaGVpZ2h0IGJpbmRzIHVzIHRvIGNlcnRhaW4gY29uc3RyYWlu
-cyBkdXJpbmcgDQp0aGUgZGFtYWdlIGhhbmRsaW5nLiAgRmlndXJpbmcgYWxsIHRoaXMgb3V0
-IGlzIHByb2JhYmx5IG5vdCB3b3J0aCB0aGUgDQplZmZvcnQuDQoNCj4gSSd2ZSBzZWVuIGVu
-b3VnaCBzeXprYWxsZXIgYnVncyBhbmQgc2NyZWFtZWQNCj4gYXQgdGhlbSB0aGF0IHllcyB3
-ZSBkbyB0aGlzLiBBbHNvIHhyZXMveXJlcyBpcyB0aGUgd3JvbmcgdGhpbmcgZXZlbiBpZg0K
-PiB5b3UgZG9uJ3QgdXNlIGZiIGlvY3RsIHRvIGNoYW5nZSB0aGluZ3MgdXAgaW4gbXVsdGkt
-bW9uaXRvciBjYXNlcyAod2UNCj4gYWxsb2NhdGUgdGhlIGRybV9mYi9mYmRldiB2aXJ0dWFs
-IHNpemUgdG8gbWF0Y2ggdGhlIGJpZ2dlc3QNCj4gcmVzb2x1dGlvbiwgYnV0IHRoZW4gc2V0
-IGZiaW5mby0+dmFyLngveXJlcyB0byBtYXRjaCB0aGUgc21hbGxlc3QgdG8NCj4gbWFrZSBz
-dXJlIGZiY29uIGlzIGZ1bGx5IHZpc2libGUgZXZlcnl3aGVyZSkuDQo+IA0KPiBJIHRoaW5r
-IHlvdSdyZSBjb25mdXNpb24gaXMgdGhlIHBlcmZlY3QgY2FzZSBmb3Igd2h5IHdlIHJlYWxs
-eSBzaG91bGQNCj4gdXNlIGZiLT5oZWlnaHQvd2lkdGgvcGl0Y2hlc1swXSBoZXJlLg0KDQpJ
-IHJlYWxseSBkb24ndCBzZWUgdGhlIHBvaW50IG9mIGJ1aWxkaW5nIGEgRFJNLW9ubHkgdmFy
-aWFudCB3aGVuIHRoZXJlJ3MgDQp0aGUgc2FtZSBjb2RlIGluIGZiZGV2IGRyaXZlcnMuIFJl
-cXVpcmVkIGluZm9ybWF0aW9uIGlzIGFsbCBzdG9yZWQgaW4gDQp0aGUgZmJfaW5mby4gVGhl
-IGhlbHBlciBjb2RlIHNob3VsZCBiZSBzZWVuIGFzIHBhcnQgb2YgZmJkZXYncyBkZWZlcnJl
-ZCBJL08uDQoNClRoaXMsIGhvd2V2ZXIsIGlzIGluZGVwZW5kZW50IGZyb20gdGhlIGxpbWl0
-YXRpb24gd2hlcmUgdGhlIG1lbW9yeSBzaXplIA0KaGFzIHRvIGJlIGEgbXVsdGlwbGUgb2Yg
-dGhlIGZyYW1lYnVmZmVyIHJlc29sdXRpb24uIFRoYXQncyBhIGxpbWl0YXRpb24gDQppbXBv
-c2VkIGJ5IERSTS4gUGxlYXNlIGFsc28gbm90ZSB0aGF0IHRoaXMgaXMgb25seSByZWxldmFu
-dCBmb3IgDQpmYmRldi1nZW5lcmljLiBJIGludGVudCB0byBtb3ZlIHNvbWUgb2YgdGhvc2Ug
-ZGFtYWdlIGhlbHBlcnMgdGhlcmUuIEknZCANCmFzc3VtZSB0aGF0IHdpbGwgbWFrZSB0aGUg
-d2hvbGUgdGhpbmcgYSBiaXQgbW9yZSB1bmRlcnN0YW5kYWJsZS4gDQooVW5mb3J0dW5hdGVs
-eSwgdGhlIGZiZGV2IGVtdWxhdGlvbiBoYXMgYmVlbiBhIHZpY3RpbSBvZiBmYWxzZSBzdGFy
-dHMgDQphbmQgY29tcGxleGl0eS4gSXQgdGFrZXMgdGltZSB0byBmaXggYWxsIHRoaXMuKQ0K
-DQpJJ20gbm90IHN1cmUgd2h5IHlvdSByZWZlciB0byB4cmVzL3lyZXM7IEkgdGhpbmssIHRo
-ZSBzbWVtX2xlbmd0aCBhbmQgDQpsaW5lX2xlbmd0aCBpcyB3aGF0IHdlJ2QgbmVlZCBpbiBt
-b3N0IGNhc2VzLg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+IC1EYW5pZWwNCj4gDQo+
-Pg0KPj4gQmVzdCByZWdhcmRzDQo+PiBUaG9tYXMNCj4+DQo+Pj4NCj4+PiBUaGUgeHJlc192
-aXJ0dWFsL3lyZXNfdmlydHVhbCBzaG91bGQgYWx3YXlzIG1hdGNoIGRybV9mYiBzaXplcyAo
-YnV0DQo+Pj4gd2UndmUgaGFkIGJ1Z3MgaW4gdGhlIHBhc3QgZm9yIHRoYXQsIG9ubHkgcmVj
-ZW50bHkgZml4ZWQgYWxsIGluDQo+Pj4gbGludXgtbmV4dCksIGJlY2F1c2UgdGhhdCdzIHN1
-cHBvc2VkIHRvIGJlIHRoZSBtYXggc2l6ZS4gQW5kIHNpbmNlIHdlDQo+Pj4gbmV2ZXIgcmVh
-bGxvY2F0ZSB0aGUgZmJkZXYgZW11bGF0aW9uIGZiIChhdCBsZWFzdCB3aXRoIHRoZSBjdXJy
-ZW50DQo+Pj4gY29kZSkgdGhpcyBzaG91bGQgbmV2ZXIgY2hhbmdlLg0KPj4+DQo+Pj4gQnV0
-IGZ1bmRhbWVudGFsbHkgeW91J3JlIGJyaW5naW5nIHVwIGEgdmVyeSBnb29kIHBvaW50LCB3
-ZSd2ZSBoYWQNCj4+PiBwaWxlcyBvZiBidWdzIGluIHRoZSBwYXN0IHdpdGggbm90IHByb3Bl
-cmx5IHZhbGlkYXRpbmcgdGhlIGZiZGV2IHNpZGUNCj4+PiBpbmZvcm1hdGlvbiBpbiBpbmZv
-LT52YXIsIGFuZCBhIGJ1bmNoIG9mIHJlc3VsdGluZyBidWdzLiBTbyB2YWxpZGF0aW5nDQo+
-Pj4gYWdhaW5zdCB0aGUgZHJtIHNpZGUgb2YgdGhpbmdzIHNob3VsZCBiZSBhIGJpdCBtb3Jl
-IHJvYnVzdC4NCj4+Pg0KPj4+IEl0J3Mga2luZGEgdGhlIHNhbWUgd2UgZG8gZm9yIGxlZ2Fj
-eSBrbXMgaW9jdGxzOiBXZSB0cmFuc2xhdGUgdGhhdCB0bw0KPj4+IGF0b21pYyBrbXMgYXMg
-ZmFzdCBhcyBwb3NzaWJsZSwgYW5kIHRoZW4gZG8gdGhlIGVudGlyZSBzdWJzZXF1ZW50DQo+
-Pj4gdmFsaWRhdGlvbiB3aXRoIGF0b21pYyBrbXMgZGF0YSBzdHJ1Y3R1cmVzLg0KPj4+IC1E
-YW5pZWwNCj4+Pg0KPj4+Pj4gVGhlIHRoaW5nIGlzLCBpZiB5b3UgY2hhbmdlIHRoaXMNCj4+
-Pj4+IGZ1cnRoZXIgdG8ganVzdCBwYXNzIHRoZSBkcm1fZnJhbWVidWZmZXIsIHRoZW4gdGhp
-cyAxMDAlIGJlY29tZXMgYSBkcm0NCj4+Pj4+IGZ1bmN0aW9uLCB3aGljaCBjb3VsZCBiZSB1
-c2VkIGJ5IGFueXRoaW5nIGluIGRybSByZWFsbHkuDQo+Pj4+DQo+Pj4+IEkgYWdyZWUgd2l0
-aCB5b3UuDQo+Pj4+DQo+Pj4+IElmIEkgdXNlIGZiX3dpZHRoL2ZiX2hlaWdodCBkaXJlY3Rs
-eSBhbmQgYnlwYXNzaW5nICdpbmZvLT52YXIueHJlcyIgYW5kDQo+Pj4+ICJpbmZvLT52YXIu
-eXJlcyIsDQo+Pj4+DQo+Pj4+IHRoZSBjb2RlIHN0eWxlIGRpdmVyZ2VkIHRoZW4uIEFzIGZh
-ciBhcyBJIGFtIHVuZGVyc3RhbmRpbmcsICB0aGUgY2xpcA0KPj4+PiBoYXBwZW4gb24gdGhl
-IGZyb250IGVuZCwNCj4+Pj4NCj4+Pj4gdGhlIGFjdHVhbCBkYW1hZ2UgdXBkYXRlIGhhcHBl
-biBhdCBiYWNrIGVuZC4NCj4+Pj4NCj4+Pj4gVXNpbmcgdGhlIGRhdGEgc3RydWN0dXJlIGNv
-bWUgd2l0aCB0aGUgZnJvbnQgZW5kIGlzIG1vcmUgcmVhc29uYWJsZSBmb3INCj4+Pj4gY3Vy
-cmVudCBpbXBsZW1lbnQuDQo+Pj4+DQo+Pj4+PiBCdXQgYWxzbyAqc2hydWcqLg0KPj4+Pg0K
-Pj4+PiBJIGNhbiBjb252ZXJ0IHRoaXMgc2luZ2xlIGZ1bmN0aW9uIHRvIDEwMCUgZHJtIHdp
-dGggYW5vdGhlciBwYXRjaC4NCj4+Pj4NCj4+Pj4gQnV0LCBtYXliZSB0aGVyZSBhbHNvIGhh
-dmUgb3RoZXIgZnVuY3Rpb25zIGFyZSBub3QgMTAwJSBkcm0NCj4+Pj4NCj4+Pj4gSSB3b3Vs
-ZCBsaWtlIGRvIHNvbWV0aGluZyB0byBoZWxwIGFjaGlldmUgdGhpcyBpbiB0aGUgZnV0dXJl
-LA0KPj4+Pg0KPj4+PiBsZXQgbWUgaGVscCB0byBmaXggdGhpcyBidWcgZmlyc3Q/DQo+Pj4+
-DQo+Pj4+PiAtRGFuaWVsDQo+Pj4NCj4+Pg0KPj4+DQo+Pg0KPj4gLS0NCj4+IFRob21hcyBa
-aW1tZXJtYW5uDQo+PiBHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQo+PiBTVVNFIFNvZnR3
-YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCj4+IE1heGZlbGRzdHIuIDUsIDkwNDA5IE7D
-vHJuYmVyZywgR2VybWFueQ0KPj4gKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KPj4gR2Vz
-Y2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0KPiANCj4gDQo+IA0KDQotLSANClRob21hcyBa
-aW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNv
-bHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywg
-R2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6
-IEl2byBUb3Rldg0K
+On 16.04.2023 17:13, Krzysztof Kozlowski wrote:
+> GIC child node is supposed to be named msi-controller:
+> 
+>   sa8295p-adp.dtb: interrupt-controller@17a00000: gic-its@17a40000: False schema does not allow
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
---------------6vbnjkWA6597NBOFZJTblbt3--
-
---------------V6bfjhQPBIZJisTVt052EytK
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmQ88oQFAwAAAAAACgkQlh/E3EQov+B/
-ZRAAys9T1aWZBALxOCyTl9qUQOa851YsJ++8RgZ8VJ9WAp7u6J+FbqKwqYAshgzGVQ2KeBWszLk8
-vAEwAwpAwANK2WPd4rKwNyEtiQp+Ox+K/c3T0k3KM5P1WjepycgrGf6BreubJN+5C9p7bTzc9TcG
-Nrv1RBlffK3svVkaAIsmRxjGh9l4abzZX2Fs7/Ad/WWh6po+O1K4/SpsZUI1stdZzkKZRI36TquD
-u86Cx6FohGieL9dfX+UPkfkYLy+9KKsZAghcTnpRGDb04M4r64mUeu38soKeRZmsfowwffOUyB0G
-I4QdLkt10nAsQQT+FRlCqOhDCA2Q4t7DymtefwaEG0FKm5v9a2m0Q1/Ub1A42rvtOzo3RPcAhVbv
-X8pcUq9aAJppTQHkbdB2HJlvZs5IwB9QEdJOpFgBdWfFNNzyVdPgmRgboCk8Co5GeET/mkElmCD9
-0KI8dc/iPksGc5hxsyuki4NbKnuRUdPUAplP3rcAUZSLlSwEXSfK0cr2aFPAK6pRD/jGYokyEiSj
-8OXbGMDHFZbudkZwk+Sh0WDVAxiCQiWbCsLtqPSQ4M/9UDQ/dr7qSzH+pDuvz8YT89rCAtmTLF8e
-MRCMQsTxlR9ofeFFle0JC6pNkj0EapFrxjlGPqdrzxIjnkyX9tMsh0slhzYBFgAFSbiJD+z/WIAN
-M6Q=
-=hQTA
------END PGP SIGNATURE-----
-
---------------V6bfjhQPBIZJisTVt052EytK--
+Konrad
+>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> index 6d3780a75024..5532bf8af211 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> @@ -3907,7 +3907,7 @@ intc: interrupt-controller@17a00000 {
+>  			#size-cells = <2>;
+>  			ranges;
+>  
+> -			gic-its@17a40000 {
+> +			msi-controller@17a40000 {
+>  				compatible = "arm,gic-v3-its";
+>  				reg = <0 0x17a40000 0 0x20000>;
+>  				msi-controller;
