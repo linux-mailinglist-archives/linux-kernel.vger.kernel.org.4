@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC3DC6E417B
+	by mail.lfdr.de (Postfix) with ESMTP id 292686E4179
 	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 09:42:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231140AbjDQHm0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 17 Apr 2023 03:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59600 "EHLO
+        id S230517AbjDQHmY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 17 Apr 2023 03:42:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230316AbjDQHmU (ORCPT
+        with ESMTP id S229754AbjDQHmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 03:42:20 -0400
+        Mon, 17 Apr 2023 03:42:19 -0400
 Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FFED1AD;
-        Mon, 17 Apr 2023 00:41:45 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3C340D5;
+        Mon, 17 Apr 2023 00:41:42 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id DE41324E2A9;
-        Mon, 17 Apr 2023 15:41:16 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 17 Apr
- 2023 15:41:16 +0800
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 7BB3F24E2AB;
+        Mon, 17 Apr 2023 15:41:17 +0800 (CST)
+Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 17 Apr
+ 2023 15:41:17 +0800
 Received: from ubuntu.localdomain (183.27.97.249) by EXMBX172.cuchost.com
  (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 17 Apr
  2023 15:41:16 +0800
@@ -38,10 +38,12 @@ CC:     Stephen Boyd <sboyd@kernel.org>,
         Hal Feng <hal.feng@starfivetech.com>,
         Xingyu Wu <xingyu.wu@starfivetech.com>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1 0/2] A fix for StarFive JH7110 clock drivers
-Date:   Mon, 17 Apr 2023 15:41:13 +0800
-Message-ID: <20230417074115.30786-1-hal.feng@starfivetech.com>
+Subject: [PATCH v1 1/2] clk: starfive: Fix RESET_STARFIVE_JH7110 can't be selected in a specified case
+Date:   Mon, 17 Apr 2023 15:41:14 +0800
+Message-ID: <20230417074115.30786-2-hal.feng@starfivetech.com>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20230417074115.30786-1-hal.feng@starfivetech.com>
+References: <20230417074115.30786-1-hal.feng@starfivetech.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [183.27.97.249]
@@ -58,30 +60,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Stephen,
+When (ARCH_STARFIVE [=n] && COMPILE_TEST [=y] && RESET_CONTROLLER [=n]),
+RESET_STARFIVE_JH7110 can't be selected by CLK_STARFIVE_JH7110_SYS
+and CLK_STARFIVE_JH7110_AON.
 
-This series fix some issues of StarFive JH7110 sys and aon clock drivers.
+Considering RESET_STARFIVE_JH7110 is not a necessary option for compilation
+test, we should select it only if ARCH_STARFIVE=y. Also, delete redundant
+selected options of CLK_STARFIVE_JH7110_AON because these options are
+already selected by the dependency.
 
-The first patch fix two issues [1] [2] reported by kernel test robot.
+Fixes: edab7204afe5 ("clk: starfive: Add StarFive JH7110 system clock driver")
+Fixes: b2ab3c94f41f ("clk: starfive: Add StarFive JH7110 always-on clock driver")
+Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+---
+ drivers/clk/starfive/Kconfig | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-The second patch is an addition to patch [3]. It removes the redundant
-dev_set_drvdata().
-
-[1] https://lore.kernel.org/oe-kbuild-all/202304140256.aIlJMfbA-lkp@intel.com/
-[2] https://lore.kernel.org/oe-kbuild-all/202304140706.aOBNhUj2-lkp@intel.com/
-[3] https://lore.kernel.org/all/20230413205528.4044216-1-sboyd@kernel.org/
-
-Hal Feng (2):
-  clk: starfive: Fix RESET_STARFIVE_JH7110 can't be selected in a
-    specified case
-  clk: starfive: Delete the redundant dev_set_drvdata() in JH7110 clock
-    drivers
-
- drivers/clk/starfive/Kconfig                   | 5 +----
- drivers/clk/starfive/clk-starfive-jh7110-aon.c | 2 --
- drivers/clk/starfive/clk-starfive-jh7110-sys.c | 2 --
- 3 files changed, 1 insertion(+), 8 deletions(-)
-
+diff --git a/drivers/clk/starfive/Kconfig b/drivers/clk/starfive/Kconfig
+index 71c1148ee5f6..3fad4adee841 100644
+--- a/drivers/clk/starfive/Kconfig
++++ b/drivers/clk/starfive/Kconfig
+@@ -26,7 +26,7 @@ config CLK_STARFIVE_JH7110_SYS
+ 	depends on ARCH_STARFIVE || COMPILE_TEST
+ 	select AUXILIARY_BUS
+ 	select CLK_STARFIVE_JH71X0
+-	select RESET_STARFIVE_JH7110
++	select RESET_STARFIVE_JH7110 if ARCH_STARFIVE
+ 	default ARCH_STARFIVE
+ 	help
+ 	  Say yes here to support the system clock controller on the
+@@ -35,9 +35,6 @@ config CLK_STARFIVE_JH7110_SYS
+ config CLK_STARFIVE_JH7110_AON
+ 	tristate "StarFive JH7110 always-on clock support"
+ 	depends on CLK_STARFIVE_JH7110_SYS
+-	select AUXILIARY_BUS
+-	select CLK_STARFIVE_JH71X0
+-	select RESET_STARFIVE_JH7110
+ 	default m if ARCH_STARFIVE
+ 	help
+ 	  Say yes here to support the always-on clock controller on the
 -- 
 2.38.1
 
