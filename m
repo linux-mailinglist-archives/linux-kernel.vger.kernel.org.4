@@ -2,142 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 584CB6E4D6B
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 17:40:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9186B6E4D6D
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 17:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230488AbjDQPkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 11:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36292 "EHLO
+        id S231249AbjDQPkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 11:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbjDQPkU (ORCPT
+        with ESMTP id S231300AbjDQPks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 11:40:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A95C145;
-        Mon, 17 Apr 2023 08:40:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C5DF62049;
-        Mon, 17 Apr 2023 15:40:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A62CC433EF;
-        Mon, 17 Apr 2023 15:40:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681746009;
-        bh=Ct1SScPIzDNRIt4RDA3X/shUOw1Xw3+mqc/PCLpW23o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t07U6pldJ/amL9H0/1sY2jhYYH9ZkRIwH4n3OoG1oC65WpCQ7nwP3mwnumrAWd+jf
-         8B/j4ORuXVj6/7D2n+/jC7NBrSM183DaBikNJT33HJCsCrSIGD1Q5d3dsAeaT576O7
-         07fzfU1ZxOZXAxb+tA7YvT6/eUXisf/E76IjO1es+JnWao8Binyf/zl1Dx+GM6jURW
-         n6XZDJq1DHVve+QzHv+gpoIgkdhS9Ab35XhHkOlpxbuLGqxo02VP5u61IgU4xO+vBn
-         0N3/e+c935BTOr4APFDPEZtVsU3uvcSjCctgbCGtg+jrvE6DsEGNVuh5mohqSozsZq
-         yapuFJT97D/Ew==
-Date:   Mon, 17 Apr 2023 08:40:09 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Hannes Reinecke <hare@suse.de>,
-        Pankaj Raghav <p.raghav@samsung.com>,
-        "kbus >> Keith Busch" <kbusch@kernel.org>, brauner@kernel.org,
-        viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gost.dev@samsung.com
-Subject: Re: [RFC 0/4] convert create_page_buffers to create_folio_buffers
-Message-ID: <20230417154009.GC360881@frogsfrogsfrogs>
-References: <ZDn3XPMA024t+C1x@bombadil.infradead.org>
- <ZDoMmtcwNTINAu3N@casper.infradead.org>
- <ZDoZCJHQXhVE2KZu@bombadil.infradead.org>
- <ZDodlnm2nvYxbvR4@casper.infradead.org>
- <31765c8c-e895-4207-2b8c-39f6c7c83ece@suse.de>
- <ZDraOHQHqeabyCvN@casper.infradead.org>
- <ZDtPK5Qdts19bKY2@bombadil.infradead.org>
- <ZDtuFux7FGlCMkC3@casper.infradead.org>
- <ZDuHEolre/saj8iZ@bombadil.infradead.org>
- <ZDwBJVmIN3tLFhXI@casper.infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZDwBJVmIN3tLFhXI@casper.infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 17 Apr 2023 11:40:48 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74124976E
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 08:40:44 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-552f169d85eso12035247b3.13
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 08:40:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681746043; x=1684338043;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=861p/mmeP8T3SiCwUxpewu/iS7xrVxg3F2DKk7EVi8c=;
+        b=vvwCBTL53cBEQx7PhTlyquBOic72G5F32FJIl+IoAMOZ77d7Xj0GRhLwGkJ1Vk5mfE
+         yQYUt4Ze6IWamyUOjghkGJ2v6lwx5uCRJcVFquJmwGoix6bIHfUigwmWm2qtsRjzQBuH
+         rz2KtD5wiHsRHmT21rTsOwJ1jbPxIiatIIF3ZKpftMFLh2a/tXbb1PnJaiv3eWDuWeso
+         n6UtzPPqbHcT1FOtKfvWTzH5q6osWBQ+mPI9HLlpL/GF50Em+xSU62RSuNx8+gN+baPx
+         0JdnOlbC9dPlTJB2+0ipI2UHNRAnT1JHQZDM7Z2QNOZ//rwCjkP7NjmW+cSHk7ocavFg
+         D4IA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681746043; x=1684338043;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=861p/mmeP8T3SiCwUxpewu/iS7xrVxg3F2DKk7EVi8c=;
+        b=dVupyMGG5xBYhvK5ETN/FPkadvkU3tW4QSsbIJGqBTAYCwR1icS1MUYoZP3pj58roS
+         /BcrMiI3Lrha/RctmVsU47qEDmALxDrgb70wfC76rOTXBBJEa9/+0DYbDZQorQOlaf8G
+         UCq4rRiPy6LqypHntCb6bcSRYbDzQrFYA45cyhLI8qokIo0vt0u0SsmMoxr3SPLHP+68
+         0uclseuwWZ/Nx9lPS3+dNCG27HXdFcX+R0Iu4tRIKpaZfcGwgewEPQpp+Sir/gyUnMDF
+         xqz+8P5OrMBcgD94CJ96NBup7370ldeTH7aYYdOx6usU7eK5zWaFxtvkwLG++p+M9Xv9
+         AOlg==
+X-Gm-Message-State: AAQBX9cOjvzb58NsrH+ybcf1Tn74DDEv44L7kJp5/GBzY1gw3QacFdnz
+        YCZicee7BN6gLHXCrTwRbOrPp3F9cPI=
+X-Google-Smtp-Source: AKy350bnbpXqj2osNUQ0Zx7iijNlw+hTKOHjn3teb9i7T73pmJwEiRC/8/v8yXvZpKZy08RkGqXoAhGV9eI=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:e082:0:b0:b92:3917:d925 with SMTP id
+ x124-20020a25e082000000b00b923917d925mr3370459ybg.8.1681746043706; Mon, 17
+ Apr 2023 08:40:43 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 08:40:42 -0700
+In-Reply-To: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+Mime-Version: 1.0
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+Message-ID: <ZD1oevE8iHsi66T2@google.com>
+Subject: Rename restrictedmem => guardedmem? (was: Re: [PATCH v10 0/9] KVM:
+ mm: fd-based approach for supporting KVM)
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        tabba@google.com, Michael Roth <michael.roth@amd.com>,
+        wei.w.wang@intel.com, Mike Rapoport <rppt@kernel.org>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Ackerley Tng <ackerleytng@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 16, 2023 at 03:07:33PM +0100, Matthew Wilcox wrote:
-> On Sat, Apr 15, 2023 at 10:26:42PM -0700, Luis Chamberlain wrote:
-> > On Sun, Apr 16, 2023 at 04:40:06AM +0100, Matthew Wilcox wrote:
-> > > I don't think we
-> > > should be overriding the aops, and if we narrow the scope of large folio
-> > > support in blockdev t only supporting folio_size == LBA size, it becomes
-> > > much more feasible.
-> > 
-> > I'm trying to think of the possible use cases where folio_size != LBA size
-> > and I cannot immediately think of some. Yes there are cases where a
-> > filesystem may use a different block for say meta data than data, but that
-> > I believe is side issue, ie, read/writes for small metadata would have
-> > to be accepted. At least for NVMe we have metadata size as part of the
-> > LBA format, but from what I understand no Linux filesystem yet uses that.
-> 
-> NVMe metadata is per-block metadata -- a CRC or similar.  Filesystem
-> metadata is things like directories, inode tables, free space bitmaps,
-> etc.
-> 
-> > struct buffer_head *alloc_page_buffers(struct page *page, unsigned long size,   
-> >                 bool retry)                                                     
-> > { 
-> [...]
-> >         head = NULL;  
-> >         offset = PAGE_SIZE;                                                     
-> >         while ((offset -= size) >= 0) {                                         
-> > 
-> > I see now what you say about the buffer head being of the block size
-> > bh->b_size = size above.
-> 
-> Yes, just changing that to 'offset = page_size(page);' will do the trick.
-> 
-> > > sb_bread() is used by most filesystems, and the buffer cache aliases
-> > > into the page cache.
-> > 
-> > I see thanks. I checked what xfs does and its xfs_readsb() uses its own
-> > xfs_buf_read_uncached(). It ends up calling xfs_buf_submit() and
-> > xfs_buf_ioapply_map() does it's own submit_bio(). So I'm curious why
-> > they did that.
-> 
-> IRIX didn't have an sb_bread() ;-)
-> 
-> > > In userspace, if I run 'dd if=blah of=/dev/sda1 bs=512 count=1 seek=N',
-> > > I can overwrite the superblock.  Do we want filesystems to see that
-> > > kind of vandalism, or do we want the mounted filesystem to have its
-> > > own copy of the data and overwrite what userspace wrote the next time it
-> > > updates the superblock?
-> > 
-> > Oh, what happens today?
-> 
-> Depends on the filesystem, I think?  Not really sure, to be honest.
+What do y'all think about renaming "restrictedmem" to "guardedmem"?
 
-The filesystem driver sees the vandalism, and can very well crash as a
-result[1].  In that case it was corrupted journal contents being
-replayed, but the same thing would happen if you wrote a malicious
-userspace program to set the metadata_csum feature flag in the ondisk
-superblock after mounting the fs.
+I want to start referring to the code/patches by its syscall/implementation name
+instead of "UPM", as "UPM" is (a) very KVM centric, (b) refers to the broader effort
+and not just the non-KVM code, and (c) will likely be confusing for future reviewers
+since there's nothing in the code that mentions "UPM" in any way.
 
-https://bugzilla.kernel.org/show_bug.cgi?id=82201#c4
+But typing out restrictedmem is quite tedious, and git grep shows that "rmem" is
+already used to refer to "reserved memory".
 
-I've tried to prevent people from writing to mounted block devices in
-the past, but did not succeed.  If you try to prevent programs from
-opening such devices with O_RDWR/O_WRONLY you then break lvm tools which
-require that ability even though they don't actually write anything to
-the block device.  If you make the block device write_iter function
-fail, then old e2fsprogs breaks and you get shouted at for breaking
-userspace.
+Renaming the syscall to "guardedmem"...
 
-Hence I decided to let security researchers find these bugs and control
-the design discussion via CVE.  That's not correct and it's not smart,
-but it preserves some of my sanity.
+  1. Allows for a shorthand and namespace, "gmem", that isn't already in use by
+     the kernel (see "reserved memory above").
+ 
+  2. Provides a stronger hint as to its purpose.  "Restricted" conveys that the
+     allocated memory is limited in some way, but doesn't capture how the memory
+     is restricted, e.g. "restricted" could just as easily mean that the allocation
+     can be restricted to certain types of backing stores or something.  "Guarded"
+     on the other hand captures that the memory has extra defenses of some form.
 
---D
+  3. Is shorter to type and speak.  Work smart, not hard :-)
+
+  4. Isn't totally wrong for the KVM use case if someone assumes the "g" means
+     "guest" when reading mail and whatnot.
+
+
+P.S. I trimmed the Cc/To substantially for this particular discussion to avoid
+     spamming folks that don't (yet) care about this stuff with another potentially
+     lengthy thread.  Feel free to add (back) any people/lists.
