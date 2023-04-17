@@ -2,155 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 996C86E3F0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 07:36:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC4C6E3F14
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 07:42:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbjDQFgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 01:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57678 "EHLO
+        id S229958AbjDQFmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 01:42:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbjDQFgh (ORCPT
+        with ESMTP id S229754AbjDQFmB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 01:36:37 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BCE24225
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 22:35:55 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id 18-20020a056e0211b200b0032ae3bce0d1so1203526ilj.10
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 22:35:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681709740; x=1684301740;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ksk0yAdnPZ9h+aa8w70NQWMQ13RRkG9NRGp4NJmYeqw=;
-        b=eVvPDtaRl1XWrfROM6kCzbAG+9aW04Tw0U8IMqsMc+l5wVzxpMUlBgGprp5/QV4roP
-         fqh2t29J08pUrpTq/fpbIHGQyVuvbV4vWTIl27NqwlA7arT5e+lcPJk75OCKuS16kpse
-         40k+MDlbkqWIS2oxr0c4zRq1qDk42pw+hWtSpOjsft05mXXYPdkPZY64S0WKcCQJlhHT
-         OWhthtd0FvcpWIkgb9MlZN6zZYbY4+z4rnrNvV2LNVchwklMdQWGOGQEPSk9QKf04y95
-         ZIUkDLQvhTuCicW/dzfRmo7/vqZzwKnVGPBL1ahdOztuVxn5DYOT4ytd8KFCZ6KIbGzw
-         47/g==
-X-Gm-Message-State: AAQBX9dBuz68idvUGMSW/azEVdFSTpuBwvbq9u6/0WuwyCMy4uP0pm6D
-        Y+jbkFjIGWqc91ycvLCMENOL1rgJasfIiqpusIc4ug3N+vAr
-X-Google-Smtp-Source: AKy350aW5NfPbylJiWYB2EOuEHNguTLeuWv/IdMWFRoIGTZMfrjvgnnMWASkFNhxSmpzMrF5rrCsrd2Ed+7E3EhJ/bg2l4f46B7e
+        Mon, 17 Apr 2023 01:42:01 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7091935B3;
+        Sun, 16 Apr 2023 22:41:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681710119; x=1713246119;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=RJMiBHhWXS/CTaGMp1qpFdE1UFN+kNutJ+cfgf5SjVQ=;
+  b=VF2guojU+QmqbxaXw0/Iv3OSmYpQut/RUMqFEl9+siOOdwzIqUnkJlZJ
+   Nuke3q0c0hKFucy8SH+6bCFMiNGrnwpn9oeeqST2OlwdArZj8tpbuGNxU
+   nEMVd1cnBzj0HS8iPGy66U+O4ODYEtJA3qO0llwXTMhzPItHtZ5zXRH8Y
+   ePWdvRhXcpjUpDRPeyabyt0+i+4G/XSFfNlbr4lLB8PDij7SfWtuGh69W
+   uXlATBUy2KpTWtFWOZhMbUaMUet4so6zVm1JreL3XpXvANiPoRa3vRyj2
+   B7D7J+cSKwD7/zmLYD/YWF/UlTbUcP3n4/sJ9kVEmZpmxg1oFfXH4eLq1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="346654895"
+X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
+   d="scan'208";a="346654895"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2023 22:40:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="720997059"
+X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
+   d="scan'208";a="720997059"
+Received: from fgarrona-mobl.ger.corp.intel.com (HELO [10.0.2.15]) ([10.251.212.228])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2023 22:40:41 -0700
+Message-ID: <7f629f24-d98a-8a7d-e464-46b0237adf96@intel.com>
+Date:   Mon, 17 Apr 2023 08:40:37 +0300
 MIME-Version: 1.0
-X-Received: by 2002:a02:b15c:0:b0:40f:9ab9:c43e with SMTP id
- s28-20020a02b15c000000b0040f9ab9c43emr1955764jah.3.1681709740392; Sun, 16 Apr
- 2023 22:35:40 -0700 (PDT)
-Date:   Sun, 16 Apr 2023 22:35:40 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b1076405f9818f92@google.com>
-Subject: [syzbot] [block?] WARNING in floppy_interrupt (2)
-From:   syzbot <syzbot+aa45f3927a085bc1b242@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, efremov@linux.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+Subject: Re: [PATCH v4 2/2] perf: script: add new output field 'dsoff' to
+ print dso offset
+To:     Changbin Du <changbin.du@huawei.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hui Wang <hw.huiwang@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>
+References: <20230414032547.2767909-1-changbin.du@huawei.com>
+ <20230414032547.2767909-3-changbin.du@huawei.com>
+Content-Language: en-US
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20230414032547.2767909-3-changbin.du@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 14/04/23 06:25, Changbin Du wrote:
+> This adds a new 'dsoff' field to print dso offset for resolved symbols,
+> and the offset is appended to dso name.
+> 
+> Default output:
+> $ perf script
+>        ls 2695501 3011030.487017:     500000 cycles:      152cc73ef4b5 get_common_indices.constprop.0+0x155 (/usr/lib/x86_64-linux-gnu/ld-2.31.so)
+>        ls 2695501 3011030.487018:     500000 cycles:  ffffffff99045b3e [unknown] ([unknown])
+>        ls 2695501 3011030.487018:     500000 cycles:  ffffffff9968e107 [unknown] ([unknown])
+>        ls 2695501 3011030.487018:     500000 cycles:  ffffffffc1f54afb [unknown] ([unknown])
+>        ls 2695501 3011030.487018:     500000 cycles:  ffffffff9968382f [unknown] ([unknown])
+>        ls 2695501 3011030.487019:     500000 cycles:  ffffffff99e00094 [unknown] ([unknown])
+>        ls 2695501 3011030.487019:     500000 cycles:      152cc718a8d0 __errno_location@plt+0x0 (/usr/lib/x86_64-linux-gnu/libselinux.so.1)
+> 
+> Display 'dsoff' field:
+> $ perf script -F +dsoff
+>        ls 2695501 3011030.487017:     500000 cycles:      152cc73ef4b5 get_common_indices.constprop.0+0x155 (/usr/lib/x86_64-linux-gnu/ld-2.31.so+0x1c4b5)
+>        ls 2695501 3011030.487018:     500000 cycles:  ffffffff99045b3e [unknown] ([unknown])
+>        ls 2695501 3011030.487018:     500000 cycles:  ffffffff9968e107 [unknown] ([unknown])
+>        ls 2695501 3011030.487018:     500000 cycles:  ffffffffc1f54afb [unknown] ([unknown])
+>        ls 2695501 3011030.487018:     500000 cycles:  ffffffff9968382f [unknown] ([unknown])
+>        ls 2695501 3011030.487019:     500000 cycles:  ffffffff99e00094 [unknown] ([unknown])
+>        ls 2695501 3011030.487019:     500000 cycles:      152cc718a8d0 __errno_location@plt+0x0 (/usr/lib/x86_64-linux-gnu/libselinux.so.1+0x68d0)
+>        ls 2695501 3011030.487019:     500000 cycles:  ffffffff992a6db0 [unknown] ([unknown])
+> 
+> Signed-off-by: Changbin Du <changbin.du@huawei.com>
 
-syzbot found the following issue on:
+Looks good, but patches do not apply to:
 
-HEAD commit:    3e7bb4f24617 Merge tag '6.3-rc6-smb311-client-negcontext-f..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1304980bc80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c21559e740385326
-dashboard link: https://syzkaller.appspot.com/bug?extid=aa45f3927a085bc1b242
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: i386
+	git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git perf-tools-next
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Note the use of map__dso(map) now.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+aa45f3927a085bc1b242@syzkaller.appspotmail.com
+Also the repeated dso printing code:
 
-------------[ cut here ]------------
-WARNING: CPU: 3 PID: 21618 at drivers/block/floppy.c:999 schedule_bh drivers/block/floppy.c:999 [inline]
-WARNING: CPU: 3 PID: 21618 at drivers/block/floppy.c:999 floppy_interrupt+0x3cc/0x440 drivers/block/floppy.c:1765
-Modules linked in:
-CPU: 3 PID: 21618 Comm: kworker/u16:7 Not tainted 6.3.0-rc6-syzkaller-00188-g3e7bb4f24617 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Workqueue: floppy floppy_work_workfn
-RIP: 0010:schedule_bh drivers/block/floppy.c:999 [inline]
-RIP: 0010:floppy_interrupt+0x3cc/0x440 drivers/block/floppy.c:1765
-Code: 03 cf 8a 89 c6 89 05 63 fa eb 0c e8 7e 27 ff ff 8b 1d 58 fa eb 0c e9 9c fd ff ff e8 8e 5f b7 fc e9 66 fd ff ff e8 24 4d 66 fc <0f> 0b e9 c9 fe ff ff 48 c7 c7 00 f2 40 8c e8 31 5f b7 fc e9 5a fc
-RSP: 0018:ffffc900005d8e58 EFLAGS: 00010046
-RAX: 0000000080010000 RBX: 0000000000000001 RCX: 0000000000000000
-RDX: ffff88801d1b1d40 RSI: ffffffff851c9e3c RDI: 0000000000000001
-RBP: 0000000000000001 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000000 R12: ffffffff851c17e0
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000006
-FS:  0000000000000000(0000) GS:ffff88802c900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fc8f5102dd0 CR3: 000000002655a000 CR4: 0000000000150ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <IRQ>
- floppy_hardint+0x1b1/0x200 arch/x86/include/asm/floppy.h:66
- __handle_irq_event_percpu+0x22b/0x730 kernel/irq/handle.c:158
- handle_irq_event_percpu kernel/irq/handle.c:193 [inline]
- handle_irq_event+0xab/0x1e0 kernel/irq/handle.c:210
- handle_edge_irq+0x263/0xd00 kernel/irq/chip.c:819
- generic_handle_irq_desc include/linux/irqdesc.h:158 [inline]
- handle_irq arch/x86/kernel/irq.c:231 [inline]
- __common_interrupt+0xa1/0x220 arch/x86/kernel/irq.c:250
- common_interrupt+0xa8/0xd0 arch/x86/kernel/irq.c:240
- </IRQ>
- <TASK>
- asm_common_interrupt+0x26/0x40 arch/x86/include/asm/idtentry.h:636
-RIP: 0010:outb_p arch/x86/include/asm/io.h:296 [inline]
-RIP: 0010:fdc_outb drivers/block/floppy.c:602 [inline]
-RIP: 0010:reset_fdc+0x185/0x400 drivers/block/floppy.c:1817
-Code: ba 00 00 00 00 00 fc ff df 48 89 f9 48 c1 e9 03 80 3c 11 00 0f 85 8a 01 00 00 48 8d 14 9b 48 8b 14 d5 70 6f 08 92 83 c2 04 ee <e8> 56 ec ff ff 48 83 c4 08 5b 5d e9 ab 05 67 fc e8 a6 05 67 fc 48
-RSP: 0018:ffffc9000f2c7c20 EFLAGS: 00000202
-RAX: 00000000ffffff83 RBX: 0000000000000000 RCX: 1ffffffff2410dee
-RDX: 00000000000003f4 RSI: ffffffff851be51c RDI: ffffffff92086f70
-RBP: 0000000000000062 R08: 0000000000000001 R09: 0000000000000044
-R10: 0000000000000062 R11: 0000000000000000 R12: ffffffff851ca2e0
-R13: 0000000000000001 R14: ffff888049043c00 R15: ffff888012489000
- fd_wait_for_completion+0xd2/0x170 drivers/block/floppy.c:1051
- redo_fd_request+0x1f0/0x3010 drivers/block/floppy.c:2799
- process_one_work+0x991/0x15c0 kernel/workqueue.c:2390
- worker_thread+0x669/0x1090 kernel/workqueue.c:2537
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-----------------
-Code disassembly (best guess):
-   0:	ba 00 00 00 00       	mov    $0x0,%edx
-   5:	00 fc                	add    %bh,%ah
-   7:	ff                   	(bad)
-   8:	df 48 89             	fisttps -0x77(%rax)
-   b:	f9                   	stc
-   c:	48 c1 e9 03          	shr    $0x3,%rcx
-  10:	80 3c 11 00          	cmpb   $0x0,(%rcx,%rdx,1)
-  14:	0f 85 8a 01 00 00    	jne    0x1a4
-  1a:	48 8d 14 9b          	lea    (%rbx,%rbx,4),%rdx
-  1e:	48 8b 14 d5 70 6f 08 	mov    -0x6df79090(,%rdx,8),%rdx
-  25:	92
-  26:	83 c2 04             	add    $0x4,%edx
-  29:	ee                   	out    %al,(%dx)
-* 2a:	e8 56 ec ff ff       	callq  0xffffec85 <-- trapping instruction
-  2f:	48 83 c4 08          	add    $0x8,%rsp
-  33:	5b                   	pop    %rbx
-  34:	5d                   	pop    %rbp
-  35:	e9 ab 05 67 fc       	jmpq   0xfc6705e5
-  3a:	e8 a6 05 67 fc       	callq  0xfc6705e5
-  3f:	48                   	rex.W
+	printed += fprintf(fp, "(");
+	printed += map__fprintf_dsoname(map, fp);
+	if (PRINT_FIELD(DSOFF) && map && map__dso(map))
+		printed += fprintf(fp, "+0x%" PRIx64, alf.addr);
+	printed += fprintf(fp, ")");
 
+is begging to be replaced by a helper function e.g.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+	if (PRINT_FIELD(DSO))
+		map__fprintf_dsoname_dsoff(map, PRINT_FIELD(DSOFF), addr, fp);
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Perhaps another patch for that.
+
+Also see comment further below.
+
+> ---
+>  tools/perf/Documentation/perf-script.txt |  2 +-
+>  tools/perf/builtin-script.c              | 25 +++++++++++++++++++++++-
+>  tools/perf/util/evsel_fprintf.c          |  6 ++++++
+>  tools/perf/util/evsel_fprintf.h          |  1 +
+>  4 files changed, 32 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/perf/Documentation/perf-script.txt b/tools/perf/Documentation/perf-script.txt
+> index 68e37de5fae4..20a1558c555f 100644
+> --- a/tools/perf/Documentation/perf-script.txt
+> +++ b/tools/perf/Documentation/perf-script.txt
+> @@ -130,7 +130,7 @@ OPTIONS
+>  -F::
+>  --fields::
+>          Comma separated list of fields to print. Options are:
+> -        comm, tid, pid, time, cpu, event, trace, ip, sym, dso, addr, symoff,
+> +        comm, tid, pid, time, cpu, event, trace, ip, sym, dso, dsoff, addr, symoff,
+>          srcline, period, iregs, uregs, brstack, brstacksym, flags, bpf-output,
+>          brstackinsn, brstackinsnlen, brstackoff, callindent, insn, insnlen, synth,
+>          phys_addr, metric, misc, srccode, ipc, data_page_size, code_page_size, ins_lat,
+> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+> index 69394ac0a20d..95dd6d650c21 100644
+> --- a/tools/perf/builtin-script.c
+> +++ b/tools/perf/builtin-script.c
+> @@ -130,6 +130,7 @@ enum perf_output_field {
+>  	PERF_OUTPUT_BRSTACKINSNLEN  = 1ULL << 36,
+>  	PERF_OUTPUT_MACHINE_PID     = 1ULL << 37,
+>  	PERF_OUTPUT_VCPU            = 1ULL << 38,
+> +	PERF_OUTPUT_DSOFF           = 1ULL << 39,
+>  };
+>  
+>  struct perf_script {
+> @@ -171,6 +172,7 @@ struct output_option {
+>  	{.str = "ip",    .field = PERF_OUTPUT_IP},
+>  	{.str = "sym",   .field = PERF_OUTPUT_SYM},
+>  	{.str = "dso",   .field = PERF_OUTPUT_DSO},
+> +	{.str = "dsoff", .field = PERF_OUTPUT_DSOFF},
+>  	{.str = "addr",  .field = PERF_OUTPUT_ADDR},
+>  	{.str = "symoff", .field = PERF_OUTPUT_SYMOFFSET},
+>  	{.str = "srcline", .field = PERF_OUTPUT_SRCLINE},
+> @@ -559,6 +561,9 @@ static void set_print_ip_opts(struct perf_event_attr *attr)
+>  	if (PRINT_FIELD(DSO))
+>  		output[type].print_ip_opts |= EVSEL__PRINT_DSO;
+>  
+> +	if (PRINT_FIELD(DSOFF))
+> +		output[type].print_ip_opts |= EVSEL__PRINT_DSOFF;
+> +
+>  	if (PRINT_FIELD(SYMOFFSET))
+>  		output[type].print_ip_opts |= EVSEL__PRINT_SYMOFFSET;
+>  
+> @@ -612,6 +617,10 @@ static int perf_session__check_output_opt(struct perf_session *session)
+>  		if (evsel == NULL)
+>  			continue;
+>  
+> +		/* 'dsoff' implys 'dso' field */
+> +		if (output[j].fields & PERF_OUTPUT_DSOFF)
+> +			output[j].fields |= PERF_OUTPUT_DSO;
+> +
+>  		set_print_ip_opts(&evsel->core.attr);
+>  		tod |= output[j].fields & PERF_OUTPUT_TOD;
+>  	}
+> @@ -916,6 +925,8 @@ static int perf_sample__fprintf_brstack(struct perf_sample *sample,
+>  		if (PRINT_FIELD(DSO)) {
+>  			printed += fprintf(fp, "(");
+>  			printed += map__fprintf_dsoname(alf.map, fp);
+> +			if (PRINT_FIELD(DSOFF) && alf.map && alf.map->dso)
+> +				printed += fprintf(fp, "+0x%lx", alf.addr);
+
+Here and elsewhere, addr is a u64 so you
+need to use PRIx64 e.g.
+
+	printed += fprintf(fp, "+0x%" PRIx64, alf.addr);
+
+>  			printed += fprintf(fp, ")");
+>  		}
+>  
+> @@ -923,6 +934,8 @@ static int perf_sample__fprintf_brstack(struct perf_sample *sample,
+>  		if (PRINT_FIELD(DSO)) {
+>  			printed += fprintf(fp, "(");
+>  			printed += map__fprintf_dsoname(alt.map, fp);
+> +			if (PRINT_FIELD(DSOFF) && alt.map && alt.map->dso)
+> +				printed += fprintf(fp, "+0x%lx", alt.addr);
+>  			printed += fprintf(fp, ")");
+>  		}
+>  
+> @@ -959,6 +972,8 @@ static int perf_sample__fprintf_brstacksym(struct perf_sample *sample,
+>  		if (PRINT_FIELD(DSO)) {
+>  			printed += fprintf(fp, "(");
+>  			printed += map__fprintf_dsoname(alf.map, fp);
+> +			if (PRINT_FIELD(DSOFF) && alf.map && alf.map->dso)
+> +				printed += fprintf(fp, "+0x%lx", alf.addr);
+>  			printed += fprintf(fp, ")");
+>  		}
+>  		printed += fprintf(fp, "%c", '/');
+> @@ -966,6 +981,8 @@ static int perf_sample__fprintf_brstacksym(struct perf_sample *sample,
+>  		if (PRINT_FIELD(DSO)) {
+>  			printed += fprintf(fp, "(");
+>  			printed += map__fprintf_dsoname(alt.map, fp);
+> +			if (PRINT_FIELD(DSOFF) && alt.map && alt.map->dso)
+> +				printed += fprintf(fp, "+0x%lx", alt.addr);
+>  			printed += fprintf(fp, ")");
+>  		}
+>  		printed += print_bstack_flags(fp, entries + i);
+> @@ -1006,12 +1023,16 @@ static int perf_sample__fprintf_brstackoff(struct perf_sample *sample,
+>  		if (PRINT_FIELD(DSO)) {
+>  			printed += fprintf(fp, "(");
+>  			printed += map__fprintf_dsoname(alf.map, fp);
+> +			if (PRINT_FIELD(DSOFF) && alf.map && alf.map->dso)
+> +				printed += fprintf(fp, "+0x%lx", alf.addr);
+>  			printed += fprintf(fp, ")");
+>  		}
+>  		printed += fprintf(fp, "/0x%"PRIx64, to);
+>  		if (PRINT_FIELD(DSO)) {
+>  			printed += fprintf(fp, "(");
+>  			printed += map__fprintf_dsoname(alt.map, fp);
+> +			if (PRINT_FIELD(DSOFF) && alt.map && alt.map->dso)
+> +				printed += fprintf(fp, "+0x%lx", alt.addr);
+>  			printed += fprintf(fp, ")");
+>  		}
+>  		printed += print_bstack_flags(fp, entries + i);
+> @@ -1378,6 +1399,8 @@ static int perf_sample__fprintf_addr(struct perf_sample *sample,
+>  	if (PRINT_FIELD(DSO)) {
+>  		printed += fprintf(fp, " (");
+>  		printed += map__fprintf_dsoname(al.map, fp);
+> +		if (PRINT_FIELD(DSOFF) && al.map && al.map->dso)
+> +			printed += fprintf(fp, "+0x%lx", al.addr);
+>  		printed += fprintf(fp, ")");
+>  	}
+>  out:
+> @@ -3851,7 +3874,7 @@ int cmd_script(int argc, const char **argv)
+>  		     "comma separated output fields prepend with 'type:'. "
+>  		     "+field to add and -field to remove."
+>  		     "Valid types: hw,sw,trace,raw,synth. "
+> -		     "Fields: comm,tid,pid,time,cpu,event,trace,ip,sym,dso,"
+> +		     "Fields: comm,tid,pid,time,cpu,event,trace,ip,sym,dso,dsoff"
+>  		     "addr,symoff,srcline,period,iregs,uregs,brstack,"
+>  		     "brstacksym,flags,data_src,weight,bpf-output,brstackinsn,"
+>  		     "brstackinsnlen,brstackoff,callindent,insn,insnlen,synth,"
+> diff --git a/tools/perf/util/evsel_fprintf.c b/tools/perf/util/evsel_fprintf.c
+> index 1fb8044d402e..ae8333772c76 100644
+> --- a/tools/perf/util/evsel_fprintf.c
+> +++ b/tools/perf/util/evsel_fprintf.c
+> @@ -116,6 +116,7 @@ int sample__fprintf_callchain(struct perf_sample *sample, int left_alignment,
+>  	int print_ip = print_opts & EVSEL__PRINT_IP;
+>  	int print_sym = print_opts & EVSEL__PRINT_SYM;
+>  	int print_dso = print_opts & EVSEL__PRINT_DSO;
+> +	int print_dsoff = print_opts & EVSEL__PRINT_DSOFF;
+>  	int print_symoffset = print_opts & EVSEL__PRINT_SYMOFFSET;
+>  	int print_oneline = print_opts & EVSEL__PRINT_ONELINE;
+>  	int print_srcline = print_opts & EVSEL__PRINT_SRCLINE;
+> @@ -174,6 +175,8 @@ int sample__fprintf_callchain(struct perf_sample *sample, int left_alignment,
+>  			if (print_dso && (!sym || !sym->inlined)) {
+>  				printed += fprintf(fp, " (");
+>  				printed += map__fprintf_dsoname(map, fp);
+> +				if (print_dsoff && map && map->dso)
+> +					printed += fprintf(fp, "+0x%lx", addr);
+>  				printed += fprintf(fp, ")");
+>  			}
+>  
+> @@ -209,6 +212,7 @@ int sample__fprintf_sym(struct perf_sample *sample, struct addr_location *al,
+>  	int print_ip = print_opts & EVSEL__PRINT_IP;
+>  	int print_sym = print_opts & EVSEL__PRINT_SYM;
+>  	int print_dso = print_opts & EVSEL__PRINT_DSO;
+> +	int print_dsoff = print_opts & EVSEL__PRINT_DSOFF;
+>  	int print_symoffset = print_opts & EVSEL__PRINT_SYMOFFSET;
+>  	int print_srcline = print_opts & EVSEL__PRINT_SRCLINE;
+>  	int print_unknown_as_addr = print_opts & EVSEL__PRINT_UNKNOWN_AS_ADDR;
+> @@ -237,6 +241,8 @@ int sample__fprintf_sym(struct perf_sample *sample, struct addr_location *al,
+>  		if (print_dso) {
+>  			printed += fprintf(fp, " (");
+>  			printed += map__fprintf_dsoname(al->map, fp);
+> +			if (print_dsoff && al->map && al->map->dso)
+> +				printed += fprintf(fp, "+0x%lx", al->addr);
+>  			printed += fprintf(fp, ")");
+>  		}
+>  
+> diff --git a/tools/perf/util/evsel_fprintf.h b/tools/perf/util/evsel_fprintf.h
+> index 3093d096c29f..c8a9fac2f2dd 100644
+> --- a/tools/perf/util/evsel_fprintf.h
+> +++ b/tools/perf/util/evsel_fprintf.h
+> @@ -26,6 +26,7 @@ int evsel__fprintf(struct evsel *evsel, struct perf_attr_details *details, FILE
+>  #define EVSEL__PRINT_UNKNOWN_AS_ADDR	(1<<6)
+>  #define EVSEL__PRINT_CALLCHAIN_ARROW	(1<<7)
+>  #define EVSEL__PRINT_SKIP_IGNORED	(1<<8)
+> +#define EVSEL__PRINT_DSOFF		(1<<9)
+>  
+>  struct addr_location;
+>  struct perf_event_attr;
+
