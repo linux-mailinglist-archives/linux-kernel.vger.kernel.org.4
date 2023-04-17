@@ -2,49 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 632736E47EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 14:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4CED6E47F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 14:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbjDQMhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 08:37:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58442 "EHLO
+        id S230523AbjDQMiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 08:38:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230343AbjDQMhd (ORCPT
+        with ESMTP id S229824AbjDQMiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 08:37:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F6A24EF1;
-        Mon, 17 Apr 2023 05:37:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 486DF6239D;
-        Mon, 17 Apr 2023 12:37:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C32BC433EF;
-        Mon, 17 Apr 2023 12:36:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1681735019;
-        bh=cZkrlscYdiJDQiCpwVk8ynp/4B7C4EvBAfc7DKgA0E8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=h3tSKHnfksiRkXoMZjtfe8Imke7Z7dlwVy+SWzzASYKGD5F6e9mTFxwVgY+ZKmDmL
-         6ChSFb+qfLHqYVxW8bWEUwAMSV5pH8Q76WknaDRhOkEYRzvL1orsgApnhb0yS1gEdy
-         SQlJVzloYyl0Q0+RhXPTqXcajPfJtEuavktz4S/s=
-Date:   Mon, 17 Apr 2023 14:36:57 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "songrui.771" <songrui.771@bytedance.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] libbpf: correct the macro KERNEL_VERSION for old kernel
-Message-ID: <ZD09abW0YyHU3Snt@kroah.com>
-References: <20230417084449.99848-1-songrui.771@bytedance.com>
+        Mon, 17 Apr 2023 08:38:13 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC6B212F
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 05:37:47 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id b2-20020a17090a6e0200b002470b249e59so15089732pjk.4
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 05:37:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1681735064; x=1684327064;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vie4whHHPmibdiBKTG0fY7db5Iv/a7XJkSahv5+UhFk=;
+        b=HF/7DG2n1EMT2xuofihIKJwY3AgaoLvNbmm9LAh7A3lIqLAYThD2zLU9zOBOIFpFoF
+         RXooN2MahML4yoGupZdv0xpFFR06vhAsdj7+aDclEylSmHRkv48RF4ZfvRMN/dp5bcWg
+         znxgy5WkZ9glu+iWumCVabVquQgOe9RG3NBjc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681735064; x=1684327064;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vie4whHHPmibdiBKTG0fY7db5Iv/a7XJkSahv5+UhFk=;
+        b=B9LOQhon6CnMTgdN+TfWvWOYbc8NidAuEm/mNzzyO3J9HgA+P4ViTia4flyKsuKwPz
+         t5eJiGdLCDfcFVkUFo/XXmQwGOvZv4p6sUrvkPu6oUauw8uv5JiB4S8m09rZUY6fHNE5
+         jO80cgzTHHI+okl/L3JumxMuXgzCIBUL4obbhPTAAtJf2E4xoulWe8FMo6dqFJ0YuW0B
+         XUdn3X0PKks/KY2VHI3x3tl+zrYvZYbvRiwXwUd/XuOJvKZNoqMy2VsD1G4lf4mqNboI
+         QqzC85+Dtl9rUzLNWGFCiGirv4XkGdnHxNVyD+pz2wPdWXuljyKFhhmehIdfPBnyn0Rg
+         ttJQ==
+X-Gm-Message-State: AAQBX9dYtZIKtDMbBVb0HapbuWfso06JMHThh2i96eYvDBuKKiEJd06i
+        8TluxE41dSIqfT+cDIdICPWiOw==
+X-Google-Smtp-Source: AKy350avrCH6piHZBzzjYd0m9IgipYojqQEVpd1UaznV/jomwntqa2XKZ8LCNkK3m2JSq1pjn6yMmg==
+X-Received: by 2002:a17:902:aa84:b0:1a6:7fae:3a28 with SMTP id d4-20020a170902aa8400b001a67fae3a28mr11736865plr.42.1681735063984;
+        Mon, 17 Apr 2023 05:37:43 -0700 (PDT)
+Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
+        by smtp.gmail.com with ESMTPSA id w7-20020a170902904700b001a25d7d1fbcsm7594893plz.38.2023.04.17.05.37.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 05:37:43 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 21:37:40 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH] zsmalloc: allow only one active pool compaction context
+Message-ID: <20230417123740.GP25053@google.com>
+References: <20230417110259.1737315-1-senozhatsky@chromium.org>
+ <CAJD7tkbVnwV0t8BPqVcY7+gooW8NSs=nq2U0TuQC5ZP1xhVSNg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230417084449.99848-1-songrui.771@bytedance.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <CAJD7tkbVnwV0t8BPqVcY7+gooW8NSs=nq2U0TuQC5ZP1xhVSNg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,55 +71,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 04:44:49PM +0800, songrui.771 wrote:
-> The introduced header file linux/version.h in libbpf_probes.c may have a
-> wrong macro KERNEL_VERSION for calculating LINUX_VERSION_CODE in some old
-> kernel (Debian9, 10). Below is a version info example from Debian 10.
-> 
-> release: 4.19.0-22-amd64
-> version: #1 SMP Debian 4.19.260-1 (2022-09-29)
-> 
-> The macro KERNEL_VERSION is defined to (((a) << 16) + ((b) << 8)) + (c)),
-> which a, b, and c stand for major, minor and patch version. So in example here,
-> the major is 4, minor is 19, patch is 260, the LINUX_VERSION(4, 19, 260) which
-> is 267268 should be matched to LINUX_VERSION_CODE. However, the KERNEL_VERSION_CODE
-> in linux/version.h is defined to 267263.
-> 
-> I noticed that the macro KERNEL_VERSION in linux/version.h of some new kernel is
-> defined to (((a) << 16) + ((b) << 8) + ((c) > 255 ? 255 : (c))). And
-> KERNEL_VERSION(4, 19, 260) is equal to 267263 which is the right LINUX_VERSION_CODE.
-> 
-> The mismatched LINUX_VERSION_CODE which will cause failing to load kprobe BPF
-> programs in the version check of BPF syscall.
-> 
-> The return value of get_kernel_version in libbpf_probes.c should be matched to
-> LINUX_VERSION_CODE by correcting the macro KERNEL_VERSION.
-> 
-> Signed-off-by: songrui.771 <songrui.771@bytedance.com>
+Hi,
 
-This needs to be your name, not your email alias (do you use ".771" as a
-name to sign things with?)
-
-> ---
->  tools/lib/bpf/libbpf_probes.c | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
+On (23/04/17 04:53), Yosry Ahmed wrote:
+> > Introduce pool compaction mutex and permit only one compaction
+> > context at a time.
 > 
-> diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.c
-> index 4f3bc968ff8e..5b22a880c7e7 100644
-> --- a/tools/lib/bpf/libbpf_probes.c
-> +++ b/tools/lib/bpf/libbpf_probes.c
-> @@ -18,6 +18,10 @@
->  #include "libbpf.h"
->  #include "libbpf_internal.h"
->  
-> +#ifndef LIBBPF_KERNEL_VERSION
-> +#define LIBBPF_KERNEL_VERSION(a, b, c) (((a) << 16) + ((b) << 8) + ((c) > 255 ? 255 : (c)))
-> +#endif
+> I am not sure what's the best practice here, but if the only use of
+> the mutex is a trylock, do we need a mutex here? It seems like a
+> simple atomic would do the trick. Perhaps something like:
+> 
+> static atomic_t ongoing_compaction = ATOMIC_INIT(0);
+> ...
+> if (atomic_xchg(&ongoing_compaction, 1))
+>     return;
+> ....
+> atomic_set(&ongoing_compaction, 0);
 
-What is wrong with using the KERNEL_VERSION() macro, it should be fixed
-to work properly here, right?  Did we not get this resolved in the
-main portion of the kernel already?
-
-thanks,
-
-greg k-h
+Looks good to me. Will switch to atomic_t in v2.
