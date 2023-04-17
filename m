@@ -2,190 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6259B6E510A
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:34:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05C396E510E
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:35:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbjDQTee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 15:34:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50744 "EHLO
+        id S230203AbjDQTfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 15:35:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjDQTed (ORCPT
+        with ESMTP id S229854AbjDQTfM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 15:34:33 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB27F2107;
-        Mon, 17 Apr 2023 12:34:30 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-1878504c22aso18258266fac.8;
-        Mon, 17 Apr 2023 12:34:30 -0700 (PDT)
+        Mon, 17 Apr 2023 15:35:12 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF6213E
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:35:09 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id lh8so13974148plb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:35:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681760069; x=1684352069;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5q1UADTLtxpaMg26Rskq3kK3zFrTI6WC2dwC06gJvSg=;
-        b=IHqpf2sk6GocJcMUsxs7EfH25jwhs8pny+rgCsFkFVvee5zh6VW+fji3F7acj7NOGM
-         NpBLJkBPE0evdOqIk9nHBFmZ0D/QICtqPzJ7acbSKBVgL0Q4CpBsvp2txsIQF2jQfMd1
-         R+Otpjdk8UUdxApKTKmST3WGlH9msFY2to5R/93AHeg+a5vnsnAEAgZfU+Isv2tZ9GmS
-         NG04Tkw+pn/Kisy0rasEpqktx3KY7CEKxoun7E4eXM528b7uY2tftG+4nDJ1T0yCXZhr
-         447bUjFW0u8MktcRXncryfD4L8+RdOntdBX3PiE6a3YBG/BrwIM39xxzgz0e831t7Z0X
-         2nBg==
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1681760109; x=1684352109;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UXrDQCneSb8jgaB5WOV1RqaoODncwrujP+Iw89BILhs=;
+        b=O5dg6sOfwLf72QhLfcA5JPZKGpC9v3EPOX2y0AYcP7Il8gcym2sV8o5lhXHrPSGiGW
+         DPGhkhxCJAOGPQHDgIJQWDZgMpZ18zws9m2PU3filA4f04zZ/ATq8zPp2oc0CvIEZOx4
+         aS6Dmvqfg1ZBUBAHKCZGkO1qU4Za622yPoSyVVfHHKSW/NNIp8JEewzQlEvRUxd26zgx
+         c3D57alEVgMwcn82DCHEwvxiO+Gj6jb3vWycOEc2eSWxLW3VrVDVPARr/jOUFRnCXL2R
+         HCsjeToQ1OnDlO+wynHZo/8xZeVoZoCrR1W37oblagNvZ1Qy78o/cJdejEHoycqWtbfQ
+         venQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681760069; x=1684352069;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5q1UADTLtxpaMg26Rskq3kK3zFrTI6WC2dwC06gJvSg=;
-        b=awD6lT/4ArN5WWl+hG+hSqn6y95zlBIfqCdi8ClhfGSFqP3ScahCltwjS8j/WNeeSL
-         KdcpRz+yV2rCVKj0UTTSILPC55r8IBNG7ZIFfRjuQgNEAp+hmQoSZYIBOQcScpMjm2Py
-         0owZTia3QknQC9nuyejrwJWnDHe08YtNyx3BjOTqaPhHhI+W++b9Mt4OHnAhHP4uRvqR
-         N3QEK2Ni6GDGSFT00Q/q23iekpOaOx74hMdmfNAZIDzBy1zQjg4CnI+bLU+OecZTZjS3
-         gmCgHdt5G9ImKFFSTm3YHUDz9nnYK2mQEULOj5RR+9HBNUjIrQidWPcGb87SwYAg40oJ
-         8i0w==
-X-Gm-Message-State: AAQBX9fA4cBDEmL5ztgf9sZ2qNo4Skh4nnYFE6WCDv7NEYxGRSEFEaqu
-        S/yfb83U7l/Dz5GbRghP2LH9YVAjphdvxFcRVeA=
-X-Google-Smtp-Source: AKy350Y6q2hi+cxptjOwoPFYriOiGtU+hYfqGDp+Z7d0toixkRxdfroHewDdXnL5ss2zptH/e+7WDkWHMI6tvpahUWU=
-X-Received: by 2002:a05:6870:32ca:b0:188:438:d4b6 with SMTP id
- r10-20020a05687032ca00b001880438d4b6mr515953oac.3.1681760069194; Mon, 17 Apr
- 2023 12:34:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230413151228.19714-1-n.zhandarovich@fintech.ru>
-In-Reply-To: <20230413151228.19714-1-n.zhandarovich@fintech.ru>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 17 Apr 2023 15:34:18 -0400
-Message-ID: <CADnq5_MqJ7jnYrRus+HFy+Qk5F6b3627TN-gpxSbGgPdgfLkfw@mail.gmail.com>
-Subject: Re: [PATCH v2] radeon: avoid double free in ci_dpm_init()
-To:     Nikita Zhandarovich <n.zhandarovich@fintech.ru>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        Natalia Petrova <n.petrova@fintech.ru>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        stable@vger.kernel.org,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        lvc-project@linuxtesting.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1681760109; x=1684352109;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UXrDQCneSb8jgaB5WOV1RqaoODncwrujP+Iw89BILhs=;
+        b=kqR7GtGLlWLtBdwc14R1WxgxLY6d/Mcub7Ydjbe3X2rWLiNLfJ1Yv/zAKysuwjEIwv
+         5aq0IBxcQsFyuOtbOwUr33wo1xtIeVxVR/5t+6SQz8PoMmr4UVsnkwYl8gUkAkqCAGBN
+         n/MWBJMgEcYF1lfcG7Ya4MDu8rHWdsVgJkKvMbvxE/Tqfolg+eBfFByBOuYn4ljig5Xe
+         UGQ6wbz1Mpv3EjLyZQ1vKvZ1Ab8T1GWtot0uzHDEmod0eeRRn+DJ0RUz9Li2fATkjOsC
+         SD50gxEcSf8ZPD4AIkbhBwDylZbTi/pkfTUBuxZV3mtxlK9+OpP0yONVf95N4J2iyN35
+         h18g==
+X-Gm-Message-State: AAQBX9dkze/WXiMNYSZq3LGp3nh2PZdZhazBAweLOIOlbpmT6nMOXaLC
+        1KYESWsnQXnCI6y9+t8e2TN7fA==
+X-Google-Smtp-Source: AKy350ZgkvMBwxuvsB2Nzf72S0ZpG/7AYjuh89fy8y1Y+VJOMWc5KS3m/VSnzQO/xLsTnbpfVXYkiA==
+X-Received: by 2002:a17:90a:2a41:b0:247:c0bd:b99a with SMTP id d1-20020a17090a2a4100b00247c0bdb99amr597549pjg.31.1681760109163;
+        Mon, 17 Apr 2023 12:35:09 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id b10-20020a17090a800a00b002479c36b10esm1828978pjn.23.2023.04.17.12.35.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 12:35:08 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 12:35:08 -0700 (PDT)
+X-Google-Original-Date: Mon, 17 Apr 2023 12:34:57 PDT (-0700)
+Subject:     Re: [PATCH 2/6] tools/nolibc: riscv: add stackprotector support
+In-Reply-To: <20230408-nolibc-stackprotector-archs-v1-2-271f5c859c71@weissschuh.net>
+CC:     w@1wt.eu, shuah@kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux@weissschuh.net
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     linux@weissschuh.net
+Message-ID: <mhng-1ec176a9-ec5d-470b-a278-a4e9cec728a8@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks.  Applied!
-
-Alex
-
-On Thu, Apr 13, 2023 at 11:12=E2=80=AFAM Nikita Zhandarovich
-<n.zhandarovich@fintech.ru> wrote:
->
-> Several calls to ci_dpm_fini() will attempt to free resources that
-> either have been freed before or haven't been allocated yet. This
-> may lead to undefined or dangerous behaviour.
->
-> For instance, if r600_parse_extended_power_table() fails, it might
-> call r600_free_extended_power_table() as will ci_dpm_fini() later
-> during error handling.
->
-> Fix this by only freeing pointers to objects previously allocated.
->
-> Found by Linux Verification Center (linuxtesting.org) with static
-> analysis tool SVACE.
->
-> Fixes: cc8dbbb4f62a ("drm/radeon: add dpm support for CI dGPUs (v2)")
-> Cc: stable@vger.kernel.org
-> Co-developed-by: Natalia Petrova <n.petrova@fintech.ru>
-> Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+On Mon, 17 Apr 2023 09:01:32 PDT (-0700), linux@weissschuh.net wrote:
+> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 > ---
-> v2: free only resouces allocated prior, do not remove ci_dpm_fini()
-> or other deallocating calls altogether; fix commit message.
-> v1: https://lore.kernel.org/all/20230403182808.8699-1-n.zhandarovich@fint=
-ech.ru/
+>  tools/include/nolibc/arch-riscv.h       | 7 ++++++-
+>  tools/testing/selftests/nolibc/Makefile | 1 +
+>  2 files changed, 7 insertions(+), 1 deletion(-)
 >
->  drivers/gpu/drm/radeon/ci_dpm.c | 28 ++++++++++++++++++++--------
->  1 file changed, 20 insertions(+), 8 deletions(-)
+> diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/arch-riscv.h
+> index 0d5f15fdedc4..b2ccffcc079f 100644
+> --- a/tools/include/nolibc/arch-riscv.h
+> +++ b/tools/include/nolibc/arch-riscv.h
+> @@ -173,14 +173,19 @@ struct sys_stat_struct {
+>  char **environ __attribute__((weak));
+>  const unsigned long *_auxv __attribute__((weak));
 >
-> diff --git a/drivers/gpu/drm/radeon/ci_dpm.c b/drivers/gpu/drm/radeon/ci_=
-dpm.c
-> index 8ef25ab305ae..b8f4dac68d85 100644
-> --- a/drivers/gpu/drm/radeon/ci_dpm.c
-> +++ b/drivers/gpu/drm/radeon/ci_dpm.c
-> @@ -5517,6 +5517,7 @@ static int ci_parse_power_table(struct radeon_devic=
-e *rdev)
->         u8 frev, crev;
->         u8 *power_state_offset;
->         struct ci_ps *ps;
-> +       int ret;
->
->         if (!atom_parse_data_header(mode_info->atom_context, index, NULL,
->                                    &frev, &crev, &data_offset))
-> @@ -5546,11 +5547,15 @@ static int ci_parse_power_table(struct radeon_dev=
-ice *rdev)
->                 non_clock_array_index =3D power_state->v2.nonClockInfoInd=
-ex;
->                 non_clock_info =3D (struct _ATOM_PPLIB_NONCLOCK_INFO *)
->                         &non_clock_info_array->nonClockInfo[non_clock_arr=
-ay_index];
-> -               if (!rdev->pm.power_state[i].clock_info)
-> -                       return -EINVAL;
-> +               if (!rdev->pm.power_state[i].clock_info) {
-> +                       ret =3D -EINVAL;
-> +                       goto err_free_ps;
-> +               }
->                 ps =3D kzalloc(sizeof(struct ci_ps), GFP_KERNEL);
-> -               if (ps =3D=3D NULL)
-> -                       return -ENOMEM;
-> +               if (ps =3D=3D NULL) {
-> +                       ret =3D -ENOMEM;
-> +                       goto err_free_ps;
-> +               }
->                 rdev->pm.dpm.ps[i].ps_priv =3D ps;
->                 ci_parse_pplib_non_clock_info(rdev, &rdev->pm.dpm.ps[i],
->                                               non_clock_info,
-> @@ -5590,6 +5595,12 @@ static int ci_parse_power_table(struct radeon_devi=
-ce *rdev)
->         }
->
->         return 0;
+> +#define __ARCH_SUPPORTS_STACK_PROTECTOR
 > +
-> +err_free_ps:
-> +       for (i =3D 0; i < rdev->pm.dpm.num_ps; i++)
-> +               kfree(rdev->pm.dpm.ps[i].ps_priv);
-> +       kfree(rdev->pm.dpm.ps);
-> +       return ret;
->  }
->
->  static int ci_get_vbios_boot_values(struct radeon_device *rdev,
-> @@ -5678,25 +5689,26 @@ int ci_dpm_init(struct radeon_device *rdev)
->
->         ret =3D ci_get_vbios_boot_values(rdev, &pi->vbios_boot_state);
->         if (ret) {
-> -               ci_dpm_fini(rdev);
-> +               kfree(rdev->pm.dpm.priv);
->                 return ret;
->         }
->
->         ret =3D r600_get_platform_caps(rdev);
->         if (ret) {
-> -               ci_dpm_fini(rdev);
-> +               kfree(rdev->pm.dpm.priv);
->                 return ret;
->         }
->
->         ret =3D r600_parse_extended_power_table(rdev);
->         if (ret) {
-> -               ci_dpm_fini(rdev);
-> +               kfree(rdev->pm.dpm.priv);
->                 return ret;
->         }
->
->         ret =3D ci_parse_power_table(rdev);
->         if (ret) {
-> -               ci_dpm_fini(rdev);
-> +               kfree(rdev->pm.dpm.priv);
-> +               r600_free_extended_power_table(rdev);
->                 return ret;
->         }
->
+>  /* startup code */
+> -void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
+> +void __attribute__((weak,noreturn,optimize("omit-frame-pointer"),no_stack_protector)) _start(void)
+>  {
+>  	__asm__ volatile (
+>  		".option push\n"
+>  		".option norelax\n"
+>  		"lla   gp, __global_pointer$\n"
+>  		".option pop\n"
+> +#ifdef NOLIBC_STACKPROTECTOR
+> +		"call __stack_chk_init\n"    /* initialize stack protector                          */
+> +#endif
+>  		"lw    a0, 0(sp)\n"          /* argc (a0) was in the stack                          */
+>  		"add   a1, sp, "SZREG"\n"    /* argv (a1) = sp                                      */
+>  		"slli  a2, a0, "PTRLOG"\n"   /* envp (a2) = SZREG*argc ...                          */
+> diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+> index 3c8e3a6f8985..0a83ad388a16 100644
+> --- a/tools/testing/selftests/nolibc/Makefile
+> +++ b/tools/testing/selftests/nolibc/Makefile
+> @@ -82,6 +82,7 @@ CFLAGS_STACKPROTECTOR = -DNOLIBC_STACKPROTECTOR \
+>  CFLAGS_STKP_i386 = $(CFLAGS_STACKPROTECTOR)
+>  CFLAGS_STKP_x86_64 = $(CFLAGS_STACKPROTECTOR)
+>  CFLAGS_STKP_x86 = $(CFLAGS_STACKPROTECTOR)
+> +CFLAGS_STKP_riscv = $(CFLAGS_STACKPROTECTOR)
+>  CFLAGS_s390 = -m64
+>  CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
+>  		$(call cc-option,-fno-stack-protector) \
+
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
