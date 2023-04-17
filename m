@@ -2,503 +2,467 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C1476E4AFA
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:10:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4516E4B20
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:15:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230323AbjDQOKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 10:10:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35624 "EHLO
+        id S230459AbjDQOPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 10:15:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbjDQOKk (ORCPT
+        with ESMTP id S231174AbjDQOPB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 10:10:40 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5EBB527D;
-        Mon, 17 Apr 2023 07:10:32 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id d16so7748023iow.2;
-        Mon, 17 Apr 2023 07:10:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681740632; x=1684332632;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=T01sfQqQdMdXRmdajNdjhGR+yeueVTfe3Obxv9jJj0Y=;
-        b=MQZNkc3lAjt2dylyV9rIZnVFXTrFt45t7+6VVNZovhgH6uSiLN5wdtIL3Duntc782u
-         FA/VPD9x0tuuh5bsX+8otyHUnz0bzCpUFuCFXr1bm5+QlKVqPJFbUXsPQJLK1Hsg9nKJ
-         VbU/iSqnXDszW2+XnMZDF1g4nAsiFwj4wa0JbkDZOPjzAPYX83qiTv8fKz/LC9GyiWCa
-         frhKNSeGOS94+BdVNqV+dplCCBdpmeBU9vZat0er1tL4Fc5kWAccUdcObf7YeSOJT80Z
-         ANGGDzYnqsfAVFjs+wKx/UH9Fh4Qr87tVmjj/7Sa4DDj4fNDJRTq5xe2KX6bjhk9wCVH
-         OwVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681740632; x=1684332632;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=T01sfQqQdMdXRmdajNdjhGR+yeueVTfe3Obxv9jJj0Y=;
-        b=MUNLhBu9LAThDg0f6bSm+dlzgWmjDuCfjdyaG3sfFSwFBB2NgJ9xbFwzvln2Maa+9+
-         miPbchk2DgAySUSOkYWue++n3QTz7VnyjiC794jeAbVZenfVivbkN2Jf/mazBHdC6JtF
-         cLBMO0tgB9nylG6Q4QFmGCIM4Xll7cUcLLeJ07Ec6vwCiU4ILbFqnltR+iU9gScPLLx6
-         f8KcatsknAOUh4T1Je325P5z0uD/X86o38y2LhZK8SPj6hSuJPoJDO3VRBXFsrF1l584
-         paLfkGF1sgMtM7vWiRblojQZAnctHNgd16fi3LBgLzn7FYbOXvis20ZOKc3I+wYDKZdW
-         9fcQ==
-X-Gm-Message-State: AAQBX9dOOFR1xkykXkAUFrHOHsgJejdoVfnh5lbv46sigXYYSgW4Pe87
-        e0ubjwNPfLsUf9gTBUrB5n/gZqIyNPg=
-X-Google-Smtp-Source: AKy350Zva82w7J2catmbiiXWXABGiWU7RcWsPP5kw4m/LU/KsB5SsE1he+Zerw/9XTujO4jRtHSztA==
-X-Received: by 2002:a5d:88c5:0:b0:760:a51d:d9f9 with SMTP id i5-20020a5d88c5000000b00760a51dd9f9mr9855058iol.12.1681740632080;
-        Mon, 17 Apr 2023 07:10:32 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r16-20020a02aa10000000b0040f978ab875sm1839858jam.107.2023.04.17.07.10.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Apr 2023 07:10:31 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <2481a311-b8ca-23a8-fcfb-de980a104f8e@roeck-us.net>
-Date:   Mon, 17 Apr 2023 07:10:29 -0700
+        Mon, 17 Apr 2023 10:15:01 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4F14C17
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:14:56 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 1B3B45FD20;
+        Mon, 17 Apr 2023 17:14:53 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1681740893;
+        bh=6ALgFWstOPn2Hmx01At6qoAFnI+IjsxDSXwQ19gag4M=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=BpFvEpI4m7/huDknDr/2S0yv1Yp/WvdMwPi1EeC8soTbw3cK0EfDpBzsDDbW0kMIe
+         GZ52GTufKTK3Ouk6Q+Z4u0r+9Wv+4SzQJfaHXVq835clVzf0zX16cImyzlOrA4vgW6
+         MCzFgr/lEneMJ2Ons42Zv+t571MHCSAvrNk2B3XJ923G7h/RJgIWrdKOhTdBpdGObT
+         jbVpxFD7va9+W1ZqF70dqckX25/U16IWVfFC+dLEvjhpZDC9bvx1kPjiVTuZu8+2IM
+         X2a9DEExPdq1GiXwOPdgsOVTKElJqV+9cGjoILUT417FN/liITss183WMxk0W7MvTp
+         MKtbIngUVcXNw==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Mon, 17 Apr 2023 17:14:51 +0300 (MSK)
+Message-ID: <44dd5bcc-2b98-d402-7e8f-5e2d4babf898@sberdevices.ru>
+Date:   Mon, 17 Apr 2023 17:10:54 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [EXT] Re: [PATCH 2/2] Watchdog: Add octeontx2 GTI watchdog driver
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v1 1/5] mtd: rawnand: meson: fix NAND access for
+ read/write
 Content-Language: en-US
-To:     Bharat Bhushan <bbhushan2@marvell.com>
-Cc:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230414102342.23696-1-bbhushan2@marvell.com>
- <20230414102342.23696-2-bbhushan2@marvell.com>
- <b3087a0c-d079-4ccb-8202-593abb4a4d44@roeck-us.net>
- <DM5PR1801MB188396A390171D72C6702021E39C9@DM5PR1801MB1883.namprd18.prod.outlook.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <DM5PR1801MB188396A390171D72C6702021E39C9@DM5PR1801MB1883.namprd18.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+To:     Liang Yang <liang.yang@amlogic.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Yixun Lan <yixun.lan@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>
+CC:     <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
+        <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+References: <20230412061700.1492474-1-AVKrasnov@sberdevices.ru>
+ <20230412061700.1492474-2-AVKrasnov@sberdevices.ru>
+ <889cf54e-584c-9bee-2106-633155897324@amlogic.com>
+ <3f247cbe-2798-4871-82a5-5124142fdcc5@sberdevices.ru>
+ <4f552f57-c31e-985c-82be-081dff38d377@sberdevices.ru>
+ <dc690524-51d5-7bb9-a106-fa153c4e6250@amlogic.com>
+ <68f3bea8-4b79-db48-172f-712dcabce65b@sberdevices.ru>
+ <d3d5cf52-cf1e-31d1-46c5-d1df06c61fb3@amlogic.com>
+ <ac6d67ce-54e3-83f4-fef4-fb93bdef2515@sberdevices.ru>
+ <6c573ffd-55a1-6a39-1ca1-c2681e0e960d@amlogic.com>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <6c573ffd-55a1-6a39-1ca1-c2681e0e960d@amlogic.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/17 09:07:00 #21118574
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/17/23 04:06, Bharat Bhushan wrote:
-> Please see inline
-> 
->> -----Original Message-----
->> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
->> Sent: Friday, April 14, 2023 8:05 PM
->> To: Bharat Bhushan <bbhushan2@marvell.com>
->> Cc: wim@linux-watchdog.org; robh+dt@kernel.org;
->> krzysztof.kozlowski+dt@linaro.org; linux-watchdog@vger.kernel.org;
->> devicetree@vger.kernel.org; linux-kernel@vger.kernel.org
->> Subject: [EXT] Re: [PATCH 2/2] Watchdog: Add octeontx2 GTI watchdog driver
->>
->> External Email
->>
->> ----------------------------------------------------------------------
->> On Fri, Apr 14, 2023 at 03:53:42PM +0530, Bharat Bhushan wrote:
->>> GTI watchdog timer are programmed in "interrupt + del3t + reset mode"
->>> and del3t traps are not enabled.
->>> GTI watchdog exception flow is:
->>>   - 1st timer expiration generates watchdog interrupt.
->>>   - 2nd timer expiration is ignored
->>>   - On 3rd timer expiration will trigger a system-wide core reset.
->>>
->>
->> This means the interrupt should not result in a panic, the programmed timeout
->> value should be considered a pretimeout which is set to (timeout / 3), and the
->> interrupt handler should call watchdog_notify_pretimeout().
->>
->> Either case, the above should be documented in the driver but does not make
->> much if any sense as patch description. If not, what are the other modes, and
->> why is this mode used instead of any of those modes ?
-> 
-> Hardware supports following mode of operation:
-> 1) Interrupt Only:
->      This will generate the interrupt to arm core whenever timeout happens.
-> 
-> 2) Interrupt + del3t (Interrupt to firmware (SCP processor)).
->       This will generate interrupt to arm core whenever 1st timeout happens
->       This will generate interrupt to SCP processor whenever 2nd timeout happens
-> 
-> 3) Interrupt + Interrupt to SCP processor (called delt3t) + reboot.
->       This will generate interrupt to arm core whenever 1st timeout happens
->       This will generate interrupt to SCP processor whenever 2nd timeout happens, if interrupt is configured.
->       This will reboot on 3rd timeout.
-> 
-> We are going with mode-3 above so that system can reboot in case a hardware hang. Also h/w is configured not to generate SCP interrupt, so effectively 2nd timeout is ignored within hardware.
-> 
-> Software is supposed to poke within 1st timeout. If poke does not happen then it will receive interrupt, interrupt handler will do panic.
-> But for some reason if processor can not take interrupt then system will reboot on 3rd timeout.
-> 
-Then, as I said, the first timeout shopuld be modeled as pretimeout.
 
-Thanks,
-Guenter
 
+On 17.04.2023 16:54, Liang Yang wrote:
+> Hi Arseniy,
+> 
+> On 2023/4/17 14:47, Arseniy Krasnov wrote:
+>> [ EXTERNAL EMAIL ]
 >>
->>> Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
->>> ---
->>>   drivers/watchdog/Kconfig         |   9 ++
->>>   drivers/watchdog/Makefile        |   1 +
->>>   drivers/watchdog/octeontx2_wdt.c | 238
->>> +++++++++++++++++++++++++++++++
->>>   3 files changed, 248 insertions(+)
->>>   create mode 100644 drivers/watchdog/octeontx2_wdt.c
+>>
+>>
+>> On 13.04.2023 08:57, Liang Yang wrote:
+>>> Hi Arseniy,
 >>>
->>> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig index
->>> f0872970daf9..31ff282c62ad 100644
->>> --- a/drivers/watchdog/Kconfig
->>> +++ b/drivers/watchdog/Kconfig
->>> @@ -2212,4 +2212,13 @@ config KEEMBAY_WATCHDOG
->>>   	  To compile this driver as a module, choose M here: the
->>>   	  module will be called keembay_wdt.
+>>> On 2023/4/13 13:10, Arseniy Krasnov wrote:
+>>>> [ EXTERNAL EMAIL ]
+>>>>
+>>>>
+>>>>
+>>>> On 12.04.2023 16:30, Liang Yang wrote:
+>>>>> Hi,
+>>>>>
+>>>>> On 2023/4/12 20:03, Arseniy Krasnov wrote:
+>>>>>> [ EXTERNAL EMAIL ]
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>> On 12.04.2023 13:24, Arseniy Krasnov wrote:
+>>>>>>>
+>>>>>>>
+>>>>>>> On 12.04.2023 12:37, Liang Yang wrote:
+>>>>>>>> Hi Arseniy,
+>>>>>>>>
+>>>>>>>> Thanks for pointing out this problem. also comment inline.
+>>>>>>>>
+>>>>>>>> On 2023/4/12 14:16, Arseniy Krasnov wrote:
+>>>>>>>>> [ EXTERNAL EMAIL ]
+>>>>>>>>>
+>>>>>>>>> This fixes read/write functionality. New command sequences were ported
+>>>>>>>>> from old vendor's driver. Without this patch driver works unstable. This
+>>>>>>>>> change is tested with 'nanddump'/'nandwrite' utilities and mounting
+>>>>>>>>> JFFS2 filesystem on AXG family (A113X SoC).
+>>>>>>>>>
+>>>>>>>>> Fixes: 8fae856c5350 ("mtd: rawnand: meson: add support for Amlogic NAND flash controller")
+>>>>>>>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>>>>>>>>> ---
+>>>>>>>>>      drivers/mtd/nand/raw/meson_nand.c | 116 ++++++++++++++++++++++++++----
+>>>>>>>>>      1 file changed, 101 insertions(+), 15 deletions(-)
+>>>>>>>>>
+>>>>>>>>> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
+>>>>>>>>> index 074e14225c06..256c37c76526 100644
+>>>>>>>>> --- a/drivers/mtd/nand/raw/meson_nand.c
+>>>>>>>>> +++ b/drivers/mtd/nand/raw/meson_nand.c
+>>>>>>>>> @@ -26,6 +26,7 @@
+>>>>>>>>>      #define NFC_CMD_IDLE        (0xc << 14)
+>>>>>>>>>      #define NFC_CMD_CLE        (0x5 << 14)
+>>>>>>>>>      #define NFC_CMD_ALE        (0x6 << 14)
+>>>>>>>>> +#define NFC_CMD_DRD        (0x8 << 14)
+>>>>>>>>>      #define NFC_CMD_ADL        ((0 << 16) | (3 << 20))
+>>>>>>>>>      #define NFC_CMD_ADH        ((1 << 16) | (3 << 20))
+>>>>>>>>>      #define NFC_CMD_AIL        ((2 << 16) | (3 << 20))
+>>>>>>>>> @@ -84,6 +85,7 @@
+>>>>>>>>>        #define DMA_BUSY_TIMEOUT    0x100000
+>>>>>>>>>      #define CMD_FIFO_EMPTY_TIMEOUT    1000
+>>>>>>>>> +#define DEVICE_READY_TIMEOUT    1000
+>>>>>>>>>        #define MAX_CE_NUM        2
+>>>>>>>>>      @@ -255,8 +257,26 @@ static void meson_nfc_select_chip(struct nand_chip *nand, int chip)
+>>>>>>>>>          }
+>>>>>>>>>      }
+>>>>>>>>>      +static int meson_nfc_wait_cmd_finish(struct meson_nfc *nfc,
+>>>>>>>>> +                     unsigned int timeout_ms)
+>>>>>>>>> +{
+>>>>>>>>> +    u32 cmd_size = 0;
+>>>>>>>>> +    int ret;
+>>>>>>>>> +
+>>>>>>>>> +    /* wait cmd fifo is empty */
+>>>>>>>>> +    ret = readl_relaxed_poll_timeout(nfc->reg_base + NFC_REG_CMD, cmd_size,
+>>>>>>>>> +                     !NFC_CMD_GET_SIZE(cmd_size),
+>>>>>>>>> +                     10, timeout_ms * 1000);
+>>>>>>>>> +    if (ret)
+>>>>>>>>> +        dev_err(nfc->dev, "wait for empty CMD FIFO timed out\n");
+>>>>>>>>> +
+>>>>>>>>> +    return ret;
+>>>>>>>>> +}
+>>>>>>>>> +
+>>>>>>>>>      static void meson_nfc_cmd_idle(struct meson_nfc *nfc, u32 time)
+>>>>>>>>>      {
+>>>>>>>>> +    meson_nfc_wait_cmd_finish(nfc, 0);
+>>>>>>>>> +
+>>>>>>>>>          writel(nfc->param.chip_select | NFC_CMD_IDLE | (time & 0x3ff),
+>>>>>>>>>                 nfc->reg_base + NFC_REG_CMD);
+>>>>>>>>>      }
+>>>>>>>>> @@ -308,23 +328,9 @@ static void meson_nfc_drain_cmd(struct meson_nfc *nfc)
+>>>>>>>>>           */
+>>>>>>>>>          meson_nfc_cmd_idle(nfc, 0);
+>>>>>>>>>          meson_nfc_cmd_idle(nfc, 0);
+>>>>>>>>> +    meson_nfc_wait_cmd_finish(nfc, 1000);
+>>>>>>>>>      }
+>>>>>>>>>      -static int meson_nfc_wait_cmd_finish(struct meson_nfc *nfc,
+>>>>>>>>> -                     unsigned int timeout_ms)
+>>>>>>>>> -{
+>>>>>>>>> -    u32 cmd_size = 0;
+>>>>>>>>> -    int ret;
+>>>>>>>>> -
+>>>>>>>>> -    /* wait cmd fifo is empty */
+>>>>>>>>> -    ret = readl_relaxed_poll_timeout(nfc->reg_base + NFC_REG_CMD, cmd_size,
+>>>>>>>>> -                     !NFC_CMD_GET_SIZE(cmd_size),
+>>>>>>>>> -                     10, timeout_ms * 1000);
+>>>>>>>>> -    if (ret)
+>>>>>>>>> -        dev_err(nfc->dev, "wait for empty CMD FIFO time out\n");
+>>>>>>>>> -
+>>>>>>>>> -    return ret;
+>>>>>>>>> -}
+>>>>>>>>>        static int meson_nfc_wait_dma_finish(struct meson_nfc *nfc)
+>>>>>>>>>      {
+>>>>>>>>> @@ -631,6 +637,48 @@ static int meson_nfc_rw_cmd_prepare_and_execute(struct nand_chip *nand,
+>>>>>>>>>          return 0;
+>>>>>>>>>      }
+>>>>>>>>>      +static uint8_t meson_nfc_read_byte(struct nand_chip *nand)
+>>>>>>>>> +{
+>>>>>>>>> +    struct meson_nfc *nfc = nand_get_controller_data(nand);
+>>>>>>>>> +
+>>>>>>>>> +    writel(NFC_CMD_DRD, nfc->reg_base + NFC_REG_CMD);
+>>>>>>>>> +    meson_nfc_cmd_idle(nfc, nfc->timing.twb);
+>>>>>>>>> +    meson_nfc_drain_cmd(nfc);
+>>>>>>>>> +
+>>>>>>>>> +    return readl(nfc->reg_base + NFC_REG_BUF);
+>>>>>>>>> +}
+>>>>>>>>> +
+>>>>>>>>> +static int meson_nfc_wait_dev_ready(struct nand_chip *nand)
+>>>>>>>>> +{
+>>>>>>>>> +    struct meson_nfc *nfc = nand_get_controller_data(nand);
+>>>>>>>>> +    u32 cs = nfc->param.chip_select;
+>>>>>>>>> +    unsigned long cnt = 0;
+>>>>>>>>> +
+>>>>>>>>> +    meson_nfc_drain_cmd(nfc);
+>>>>>>>>> +
+>>>>>>>>> +    writel(cs | NFC_CMD_CLE | NAND_CMD_STATUS, nfc->reg_base + NFC_REG_CMD);
+>>>>>>>>> +
+>>>>>>>>> +    /* 10 ms. */
+>>>>>>>>> +    while (cnt < DEVICE_READY_TIMEOUT) {
+>>>>>>>>> +        uint8_t status;
+>>>>>>>>> +
+>>>>>>>>> +        status = meson_nfc_read_byte(nand);
+>>>>>>>>> +
+>>>>>>>>> +        if (status & NAND_STATUS_READY)
+>>>>>>>>> +            break;
+>>>>>>>>> +
+>>>>>>>>> +        usleep_range(10, 11);
+>>>>>>>>> +        cnt++;
+>>>>>>>>> +    }
+>>>>>>>>> +
+>>>>>>>>> +    if (cnt == DEVICE_READY_TIMEOUT) {
+>>>>>>>>> +        dev_err(nfc->dev, "device ready timeout\n");
+>>>>>>>>> +        return -ETIMEDOUT;
+>>>>>>>>> +    }
+>>>>>>>>> +
+>>>>>>>>> +    return 0;
+>>>>>>>>> +}
+>>>>>>>>> +
+>>>>>>>>>      static int meson_nfc_write_page_sub(struct nand_chip *nand,
+>>>>>>>>>                          int page, int raw)
+>>>>>>>>>      {
+>>>>>>>>> @@ -643,6 +691,10 @@ static int meson_nfc_write_page_sub(struct nand_chip *nand,
+>>>>>>>>>          u32 cmd;
+>>>>>>>>>          int ret;
+>>>>>>>>>      +    ret = meson_nfc_wait_dev_ready(nand);
+>>>>>>>>> +    if (ret)
+>>>>>>>>> +        return ret;
+>>>>>>>>> +
+>>>>>>>>>          meson_nfc_select_chip(nand, nand->cur_cs);
+>>>>>>>>>            data_len =  mtd->writesize + mtd->oobsize;
+>>>>>>>>> @@ -667,12 +719,20 @@ static int meson_nfc_write_page_sub(struct nand_chip *nand,
+>>>>>>>>>                           NFC_CMD_SCRAMBLER_DISABLE);
+>>>>>>>>>          }
+>>>>>>>>>      +    ret = meson_nfc_wait_dma_finish(nfc);
+>>>>>>>>> +    if (ret)
+>>>>>>>>> +        return ret;
+>>>>>>>>> +
+>>>>>>>>>          cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_PAGEPROG;
+>>>>>>>>>          writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>>>>>>>>>          meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tPROG_max));
+>>>>>>>>>            meson_nfc_dma_buffer_release(nand, data_len, info_len, DMA_TO_DEVICE);
+>>>>>>>>>      +    ret = meson_nfc_wait_dev_ready(nand);
+>>>>>>>>> +    if (ret)
+>>>>>>>>> +        return ret;
+>>>>>>>>> +
+>>>>>>>>>          return ret;
+>>>>>>>>>      }
+>>>>>>>>>      @@ -720,6 +780,21 @@ static void meson_nfc_check_ecc_pages_valid(struct meson_nfc *nfc,
+>>>>>>>>>          } while (!ret);
+>>>>>>>>>      }
+>>>>>>>>>      +static inline int meson_nfc_send_read(struct nand_chip *nand)
+>>>>>>>>> +{
+>>>>>>>>> +    struct meson_nfc *nfc = nand_get_controller_data(nand);
+>>>>>>>>> +    u32 cs = nfc->param.chip_select;
+>>>>>>>>> +    int ret;
+>>>>>>>>> +
+>>>>>>>>> +    ret = meson_nfc_wait_dev_ready(nand);
+>>>>>>>>> +    if (ret)
+>>>>>>>>> +        return ret;
+>>>>>>>>> +
+>>>>>>>>> +    writel(cs | NFC_CMD_CLE | NAND_CMD_READ0, nfc->reg_base + NFC_REG_CMD);
+>>>>>>>>> +
+>>>>>>>>> +    return 0;
+>>>>>>>>> +}
+>>>>>>>>> +
+>>>>>>>>
+>>>>>>>> it already calls meson_nfc_queue_rb() in meson_nfc_rw_cmd_prepare_and_execute(). Could you implements this in meson_nfc_queue_rb()? and we can use the irq method.
+>>>>>>>> also without Ready/Busy pin, the meson_nfc_queue_rb() should change like below:
+>>>>>>>>        ......
+>>>>>>>>        #define NFC_CMD_RB_INT    ((0xb << 10) | BIT(18))
+>>>>>>
+>>>>>> Sorry, I can see this define as (and it is used in the driver):
+>>>>>> #define NFC_CMD_RB_INT          BIT(14)
+>>>>>>
+>>>>>> in drivers/mtd/nand/raw/meson_nand.c
+>>>>>>
+>>>>>> Which one is correct ?
+>>>>>
+>>>>> we need to modify the define 'NFC_CMD_RB_INT' as ((0xb << 10) | BIT(18)).
+>>>>>
+>>>>
+>>>> Ok, NFC_CMD_RB_INT - it is "Ready/Busy_Interrupt" ? You suppose that currently it is
+>>>> defined incorrectly, so irq waiting does not work?
 >>>
->>> +config OCTEONTX2_WATCHDOG
->>> +	tristate "OCTEONTX2 Watchdog driver"
->>> +	depends on ARCH_THUNDER || (COMPILE_TEST && 64BIT)
->>> +	help
->>> +	 OCTEONTX2 GTI hardware supports watchdog timer. This watchdog
->> timer are
->>> +	 programmed in "interrupt + del3t + reset" mode. On first expiry it will
->>> +	 generate interrupt. Second expiry (del3t) is ignored and system will reset
->>> +	 on final timer expiry.
->>> +
->>
->> The above should be part of the in-driver documentation but those details
->> should not be in Kconfig.
-> 
-> Ok,
-> 
->>
->> Is the documentation available in public ? I'd like to check if this mode, especially
->> the ignored del3t mode, really makes sense.
-> 
-> Documentation is not public. Provided some description above, let me know if I need to provide some more details.
-> 
->>
->>>   endif # WATCHDOG
->>> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
->>> index 9cbf6580f16c..aa1b813ad1f9 100644
->>> --- a/drivers/watchdog/Makefile
->>> +++ b/drivers/watchdog/Makefile
->>> @@ -230,3 +230,4 @@ obj-$(CONFIG_MENZ069_WATCHDOG) +=
->> menz69_wdt.o
->>>   obj-$(CONFIG_RAVE_SP_WATCHDOG) += rave-sp-wdt.o
->>>   obj-$(CONFIG_STPMIC1_WATCHDOG) += stpmic1_wdt.o
->>>   obj-$(CONFIG_SL28CPLD_WATCHDOG) += sl28cpld_wdt.o
->>> +obj-$(CONFIG_OCTEONTX2_WATCHDOG) += octeontx2_wdt.o
->>> diff --git a/drivers/watchdog/octeontx2_wdt.c
->>> b/drivers/watchdog/octeontx2_wdt.c
->>> new file mode 100644
->>> index 000000000000..7b78a092e83f
->>> --- /dev/null
->>> +++ b/drivers/watchdog/octeontx2_wdt.c
->>> @@ -0,0 +1,238 @@
->>> +// SPDX-License-Identifier: GPL-2.0
->>> +/* Marvell Octeontx2 Watchdog driver
->>> + *
->>> + * Copyright (C) 2023 Marvell International Ltd.
->>> + *
->>> + * This program is free software; you can redistribute it and/or
->>> +modify
->>> + * it under the terms of the GNU General Public License version 2 as
->>> + * published by the Free Software Foundation.
->>> + */
->>> +
->>> +#include <linux/module.h>
->>> +#include <linux/cpu.h>
->>> +#include <linux/interrupt.h>
->>> +#include <linux/of_platform.h>
->>> +#include <linux/platform_device.h>
->>> +#include <linux/watchdog.h>
->>> +#include <linux/sched/debug.h>
->>
->> What is this include for ?
-> 
-> Taken from other driver when started coding this one. Will remove
-> 
->>
->>> +
->>> +#include <asm/arch_timer.h>
->>> +
->>> +/* GTI CWD Watchdog Registers */
->>> +#define GTI_CWD_GLOBAL_WDOG_IDX		63
->>> +#define GTI_CWD_WDOG			(0x8 *
->> GTI_CWD_GLOBAL_WDOG_IDX)
->>> +#define GTI_CWD_WDOG_MODE_INT_DEL3T_RST	0x3
->>> +#define GTI_CWD_WDOG_MODE_MASK		0x3
->>> +#define GTI_CWD_WDOG_LEN_SHIFT		4
->>> +#define GTI_CWD_WDOG_CNT_SHIFT		20
->>> +
->>> +/* GTI Per-core Watchdog Interrupt Register */
->>> +#define GTI_CWD_INT			0x200
->>> +#define GTI_CWD_INT_PENDING_STATUS	(1ULL <<
->> GTI_CWD_GLOBAL_WDOG_IDX)
->>> +
->>> +/* GTI Per-core Watchdog Interrupt Enable Clear Register */
->>> +#define GTI_CWD_INT_ENA_CLR		0x210
->>> +#define GTI_CWD_INT_ENA_CLR_VAL		(1ULL <<
->> GTI_CWD_GLOBAL_WDOG_IDX)
->>> +
->>> +/* GTI Per-core Watchdog Interrupt Enable Set Register */
->>> +#define GTI_CWD_INT_ENA_SET		0x218
->>> +#define GTI_CWD_INT_ENA_SET_VAL		(1ULL <<
->> GTI_CWD_GLOBAL_WDOG_IDX)
->>> +
->>> +/* GTI Per-core Watchdog Poke Registers */
->>> +#define GTI_CWD_POKE		(0x10000 + 0x8 *
->> GTI_CWD_GLOBAL_WDOG_IDX)
->>> +#define GTI_CWD_POKE_VAL	(1ULL << GTI_CWD_GLOBAL_WDOG_IDX)
->>> +
->>> +struct octeontx2_wdt_priv {
->>> +	struct watchdog_device wdev;
->>> +	void __iomem *base;
->>> +	u64 clock_freq;
->>> +	int irq;
->>> +};
->>> +
->>> +static irqreturn_t octeontx2_wdt_interrupt(int irq, void *data) {
->>> +	panic("Kernel Watchdog");
->>> +	return IRQ_HANDLED;
->>> +}
->>> +
->>> +static int octeontx2_wdt_ping(struct watchdog_device *wdev) {
->>> +	struct octeontx2_wdt_priv *priv = watchdog_get_drvdata(wdev);
->>> +
->>> +	writeq(GTI_CWD_POKE_VAL, priv->base + GTI_CWD_POKE);
->>> +	return 0;
->>> +}
->>> +
->>> +static int octeontx2_wdt_start(struct watchdog_device *wdev) {
->>> +	struct octeontx2_wdt_priv *priv = watchdog_get_drvdata(wdev);
->>> +	u64 regval;
->>> +
->>> +	set_bit(WDOG_HW_RUNNING, &wdev->status);
->>> +
->>> +	/* Clear any pending interrupt */
->>> +	writeq(GTI_CWD_INT_PENDING_STATUS, priv->base + GTI_CWD_INT);
->>> +
->>> +	/* Enable Interrupt */
->>> +	writeq(GTI_CWD_INT_ENA_SET_VAL, priv->base +
->> GTI_CWD_INT_ENA_SET);
->>> +
->>> +	/* Set (Interrupt + SCP interrupt (DEL3T) + core domain reset) Mode */
->>> +	regval = readq(priv->base + GTI_CWD_WDOG);
->>> +	regval |= GTI_CWD_WDOG_MODE_INT_DEL3T_RST;
->>> +	writeq(regval, priv->base + GTI_CWD_WDOG);
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static int octeontx2_wdt_stop(struct watchdog_device *wdev) {
->>> +	struct octeontx2_wdt_priv *priv = watchdog_get_drvdata(wdev);
->>> +	u64 regval;
->>> +
->>> +	/* Disable Interrupt */
->>> +	writeq(GTI_CWD_INT_ENA_CLR_VAL, priv->base +
->> GTI_CWD_INT_ENA_CLR);
->>> +
->>> +	/* Set GTI_CWD_WDOG.Mode = 0 to stop the timer */
->>> +	regval = readq(priv->base + GTI_CWD_WDOG);
->>> +	regval &= ~GTI_CWD_WDOG_MODE_MASK;
->>> +	writeq(regval, priv->base + GTI_CWD_WDOG);
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static int octeontx2_wdt_settimeout(struct watchdog_device *wdev,
->>> +					unsigned int timeout)
->>> +{
->>> +	struct octeontx2_wdt_priv *priv = watchdog_get_drvdata(wdev);
->>> +	u64 timeout_wdog, regval;
->>> +
->>> +	/* Update new timeout */
->>> +	wdev->timeout = timeout;
->>> +
->>> +	/* Get clock cycles from timeout in second */
->>> +	timeout_wdog = (u64)timeout * priv->clock_freq;
->>> +
->>> +	/* Watchdog counts in 1024 cycle steps */
->>> +	timeout_wdog = timeout_wdog >> 10;
->>> +
->>> +	/*
->>> +	 * Hardware allows programming of upper 16-bits of 24-bits cycles
->>> +	 * Round up and use upper 16-bits only.
->>> +	 * Set max if timeout more than h/w supported
->>
->> This should be covered when setting max_timeout or max_hw_heartbeat_ms.
->> Setting the actual timeout to a value smaller than configured may result in the
->> watchdog firing before its configured timeout expires.
-> 
-> wdog_dev->max_timeout = 16 is set based on above description, will move this comment there.
-> 
-> Just to explain why I added above comment here and below check, that was to ensure that if user provides timeout more than " wdog_dev->max_timeout" then program wdog_dev->max_timeout only.
-> But now looking at the code "set_timeout()" will be called only if timeout is valid ( timeout is <= wdog_dev->max_timeout)
-> 
-> So above comment is not valid, while below check can also be removed.
-> 
->>
->>> +	 */
->>> +	timeout_wdog = (timeout_wdog + 0xff) >> 8;
->>> +	if (timeout_wdog >= 0x10000)
->>> +		timeout_wdog = 0xffff;
->>> +
->>> +	/*
->>> +	 * GTI_CWD_WDOG.LEN have only upper 16-bits of 24-bits
->>> +	 * GTI_CWD_WDOG.CNT, need addition shift of 8.
->>> +	 */
->>> +	regval = readq(priv->base + GTI_CWD_WDOG);
->>> +	regval &= GTI_CWD_WDOG_MODE_MASK;
->>> +	regval |= ((timeout_wdog) << (GTI_CWD_WDOG_CNT_SHIFT + 8)) |
->>> +		   (timeout_wdog << GTI_CWD_WDOG_LEN_SHIFT);
->>
->> () around timeout is unnecessary. Why does the timeout need to be programmed
->> twice into the register ? The shift values are odd.
->> Are you sure this does what you expect it to do ?
-> 
-> This register have two timeouts:
->     GTI_CWD_WDOG.CNT[43:20] (24bit) = this is something decrementing with a frequency.
->     GTI_CWD_WDOG.LEN[19:4] (16bit) = this is something loaded in upper 16 bits of GTI_CWD_WDOG.CNT when poke happens.
-> 
-> Shift looks odd but it works as expected.
-> 
->>
->>> +	writeq(regval, priv->base + GTI_CWD_WDOG);
->>> +	return 0;
->>> +}
->>> +
->>> +static const struct watchdog_info octeontx2_wdt_ident = {
->>> +	.identity = "OcteonTX2 watchdog",
->>> +	.options	= WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING |
->> WDIOF_MAGICCLOSE |
->>> +			  WDIOF_CARDRESET,
->>> +};
->>> +
->>> +static const struct watchdog_ops octeontx2_wdt_ops = {
->>> +	.owner = THIS_MODULE,
->>> +	.start = octeontx2_wdt_start,
->>> +	.stop = octeontx2_wdt_stop,
->>> +	.ping = octeontx2_wdt_ping,
->>> +	.set_timeout = octeontx2_wdt_settimeout, };
->>> +
->>> +static int octeontx2_wdt_probe(struct platform_device *pdev) {
->>> +	struct octeontx2_wdt_priv *priv;
->>> +	struct device *dev = &pdev->dev;
->>> +	struct watchdog_device *wdog_dev;
->>> +	int irq;
->>> +	int err;
->>> +
->>> +	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
->>> +	if (!priv)
->>> +		return -ENOMEM;
->>> +
->>> +	priv->base = devm_platform_ioremap_resource(pdev, 0);
->>> +	if (IS_ERR(priv->base))
->>> +		return dev_err_probe(&pdev->dev, PTR_ERR(priv->base),
->>> +			      "reg property not valid/found\n");
->>> +
->>> +	priv->clock_freq = arch_timer_get_cntfrq();
->>> +
->>> +	wdog_dev = &priv->wdev;
->>> +	wdog_dev->info = &octeontx2_wdt_ident,
->>> +	wdog_dev->ops = &octeontx2_wdt_ops,
->>> +	wdog_dev->parent = dev;
->>> +	wdog_dev->min_timeout = 1;
->>> +	wdog_dev->max_timeout = 16;
->>
->> Setting max_timeout makes max_hw_heartbeat_ms useless. Use only
->> max_hw_heartbeat_ms to enable larger soft timeouts, or use only max_timeout
->> to set the hard limit, but not both.
-> 
-> Okay, thanks for details
-> 
->>
->>> +	wdog_dev->max_hw_heartbeat_ms = 16000;
->>> +	wdog_dev->timeout = 8;
->>> +
->>> +	irq = platform_get_irq(pdev, 0);
->>> +	if (irq < 0) {
->>> +		dev_err(&pdev->dev, "IRQ resource not found\n");
->>> +		return -ENODEV;
->>> +	}
->>> +
->>> +	err = request_irq(irq, octeontx2_wdt_interrupt, 0, pdev->name, priv);
->>> +	if (err) {
->>> +		dev_err(dev, "cannot register interrupt handler %d\n", err);
->>> +		return err;
->>> +	}
->>
->> Use devm_request_irq() and request the interrupt after registering the watchdog.
-> 
-> Okay,
-> 
->>
->>> +
->>> +	priv->irq = irq;
->>> +	watchdog_set_drvdata(wdog_dev, priv);
->>> +	platform_set_drvdata(pdev, priv);
->>> +	watchdog_init_timeout(wdog_dev, wdog_dev->timeout, dev);
->>
->> watchdog_init_timeout sets wdog_dev->timeout, so this is pointless.
->> Calling watchdog_init_timeout() only makes sense if the parameter is either a
->> timeout module parameter or 0 and the idea is to use a value from devicetree if
->> configured.
-> 
-> Okay, thanks again for detail
-> 
-> Regards
-> -Bharat
-> 
->>
->>> +	octeontx2_wdt_settimeout(wdog_dev, wdog_dev->timeout);
->>> +	watchdog_stop_on_reboot(wdog_dev);
->>> +	watchdog_stop_on_unregister(wdog_dev);
->>> +
->>> +	err = devm_watchdog_register_device(dev, wdog_dev);
->>> +	if (err) {
->>> +		free_irq(irq, priv);
->>> +		return err;
->>> +	}
->>> +
->>> +	dev_info(dev, "Watchdog enabled (timeout=%d sec)\n", wdog_dev-
->>> timeout);
->>> +	return 0;
->>> +}
->>> +
->>> +static int octeontx2_wdt_remove(struct platform_device *pdev) {
->>> +	struct octeontx2_wdt_priv *priv = platform_get_drvdata(pdev);
->>> +
->>> +	if (priv->irq)
->>> +		free_irq(priv->irq, priv);
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static const struct of_device_id octeontx2_wdt_of_match[] = {
->>> +	{ .compatible = "marvell-octeontx2-wdt", },
->>> +	{ },
->>> +};
->>> +MODULE_DEVICE_TABLE(of, octeontx2_wdt_of_match);
->>> +
->>> +static struct platform_driver octeontx2_wdt_driver = {
->>> +	.driver = {
->>> +		.name = "octeontx2-wdt",
->>> +		.of_match_table = octeontx2_wdt_of_match,
->>> +	},
->>> +	.probe = octeontx2_wdt_probe,
->>> +	.remove = octeontx2_wdt_remove,
->>> +};
->>> +module_platform_driver(octeontx2_wdt_driver);
->>> +
->>> +MODULE_AUTHOR("Bharat Bhushan <bbhushan2@marvell.com>");
->>> +MODULE_DESCRIPTION("OcteonTX2 watchdog driver");
->>> --
->>> 2.17.1
+>>> Previous defined BIT(14) is for having the external Ready/Busy pin of the NAND device connected to the controller. the new define is for reading status by sending read status(70H) command and read status from the data bus(checking the IO6). the both can work on AXG soc.
+>>> when the controller RB command is sent, the controller automatically checks the level of external Ready/Busy pin or the data bus(IO6) periodicity. and generate the irq signal if status is ready.
 >>>
+>>>>
+>>>> Thanks, Arseniy
+>>>>
+>>>>>>
+>>>>>> Thanks, Arseniy
+>>>>>>
+>>>>>>>>
+>>>>>>>>        meson_nfc_cmd_idle(nfc, 0);
+>>>>>>>>        cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_STATUS;
+>>>>>>>>        writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>>>>>>>>        meson_nfc_cmd_idle(nfc, 5);
+>>>>>>>>        cmd = NFC_CMD_RB | NFC_CMD_RB_INT | nfc->timing.tbers_max;
+>>>>>>>>        writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>>>>>>>>
+>>>>>>>>        ret = wait_for_completion_timeout(&nfc->completion,
+>>>>>>>>                          msecs_to_jiffies(timeout_ms));
+>>>>>>>>        if (ret == 0)
+>>>>>>>>            ret = -1;
+>>>>>>>>
+>>>>>>>>        writel(cs | NFC_CMD_CLE | NAND_CMD_READ0, nfc->reg_base + NFC_REG_CMD);
+>>>>>>>>        ......
+>>>>>>>>
+>>
+>> Hello Liang!
+>>
+>> I've got small questions to clarify Your comment. You suggest two thing IIUC:
+>>
+>> 1) Send NAND_CMD_READ0 from 'meson_nfc_queue_rb()'. This means that extra argument is needed to
+>> 'meson_nfc_queue_rb()' which shows that read operation is going to be performed. We can't send
+>> NAND_CMD_READ0 for write operation?
+> 
+> it is ok to me. but does NAND_CMD_READ0 really need to send in the controller driver? i don't find the other controller drivers have to send it for the old vendor NAND device.
 
+Hm, I found this command in the old driver. For example without it I get the following error:
+
+# nanddump -c -s 0 -l 2048 /dev/mtd0 --oob
+ECC failed: 3975
+ECC corrected: 47
+Number of bad blocks: 10
+Number of bbt blocks: 0
+Block size 131072, page size 2048, OOB size 64
+Dumping data starting at 0x00000000 and ending at 0x00000800...
+
+But data is not corrupted and seems ok. With this extra NAND_CMD_READ0 everything is ok - data is still valid and
+there are no ECC errors.
+
+> 
+>>
+>> 2) About code and define above, I tried to replace current body of 'meson_nfc_queue_rb()', but it
+>> didn't work. May be I did it wrong, because what to do with 'meson_nfc_wait_dev_ready()' and it's
+>> call sites? It must be removed? Could You please explain Your idea in more details? I'm asking You
+>> because I don't have doc for this NAND controller, so it is very difficult to me to add valid
+>> logic to this driver without any references
+> 
+> Could you please try the following? i have tested it on another SOC (not axg).
+> 
+> static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms)
+> {
+>     u32 cmd, cfg;
+>     int ret = 0;
+> 
+>     meson_nfc_cmd_idle(nfc, nfc->timing.twb);
+>     meson_nfc_drain_cmd(nfc);
+>     meson_nfc_wait_cmd_finish(nfc, CMD_FIFO_EMPTY_TIMEOUT);
+> 
+>     cfg = readl(nfc->reg_base + NFC_REG_CFG);
+>     cfg |= NFC_RB_IRQ_EN;
+>     writel(cfg, nfc->reg_base + NFC_REG_CFG);
+> 
+>     reinit_completion(&nfc->completion);
+> 
+>     meson_nfc_cmd_idle(nfc, 0);
+>     cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_STATUS;
+>     writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>     meson_nfc_cmd_idle(nfc, 5);
+>     cmd = NFC_CMD_RB | NFC_CMD_RB_INT
+>         | nfc->param.chip_select | nfc->timing.tbers_max;
+>     writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>     meson_nfc_drain_cmd(nfc);
+> 
+>     ret = wait_for_completion_timeout(&nfc->completion,
+>                       msecs_to_jiffies(timeout_ms));
+>     if (ret == 0)
+>         ret = -1;
+> 
+>     writel(1 << 31, nfc->reg_base + NFC_REG_CMD);
+> 
+>     return ret;
+> }
+
+Ok! Thanks, I'll try it!
+
+Thanks, Arseniy
+
+> 
+> also we need to check and return the return value for meson_nfc_queue_rb() in meson_nfc_rw_cmd_prepare_and_execute() and meson_nfc_write_page_sub().
+> 
+>>
+>> May be I can send v2 patchset for review without this change, as v2 already includes udpate for OOB
+>> handling which is I think more critical?
+>>
+> 
+> sure, it is up to you. it is more important, thanks again.
+> 
+>> Thanks, Arseniy
+>>
+>>>>>>>
+>>>>>>>        Thanks for reply! I'll try this code! One more question about OOB processing in this
+>>>>>>> driver (as You are author of it):
+>>>>>>>
+>>>>>>>       OOB size is 64 bytes, but for example if I have 1K ECC, 2 bytes user bytes and 14
+>>>>>>>       bytes for ECC code for each 1K. In this case I have access to only 32 bytes of OOB:
+>>>>>>>       2 x (2 user bytes + 14 ECC bytes). Correct me if i'm wrong, but rest of OOB (next
+>>>>>>>       32 bytes) become unavailable (in both raw and ECC modes) ?
+>>>>>>>
+>>>>>>> Thanks, Arseniy
+>>>>>>>
+>>>>>>>>>      static int meson_nfc_read_page_sub(struct nand_chip *nand,
+>>>>>>>>>                         int page, int raw)
+>>>>>>>>>      {
+>>>>>>>>> @@ -734,10 +809,18 @@ static int meson_nfc_read_page_sub(struct nand_chip *nand,
+>>>>>>>>>          data_len =  mtd->writesize + mtd->oobsize;
+>>>>>>>>>          info_len = nand->ecc.steps * PER_INFO_BYTE;
+>>>>>>>>>      +    ret = meson_nfc_wait_dev_ready(nand);
+>>>>>>>>> +    if (ret)
+>>>>>>>>> +        return ret;
+>>>>>>>>> +
+>>>>>>>>>          ret = meson_nfc_rw_cmd_prepare_and_execute(nand, page, DIRREAD);
+>>>>>>>>>          if (ret)
+>>>>>>>>>              return ret;
+>>>>>>>>>      +    ret = meson_nfc_send_read(nand);
+>>>>>>>>> +    if (ret)
+>>>>>>>>> +        return ret;
+>>>>>>>>> +
+>>>>>>>>>          ret = meson_nfc_dma_buffer_setup(nand, meson_chip->data_buf,
+>>>>>>>>>                           data_len, meson_chip->info_buf,
+>>>>>>>>>                           info_len, DMA_FROM_DEVICE);
+>>>>>>>>> @@ -754,6 +837,9 @@ static int meson_nfc_read_page_sub(struct nand_chip *nand,
+>>>>>>>>>          }
+>>>>>>>>>            ret = meson_nfc_wait_dma_finish(nfc);
+>>>>>>>>> +    if (ret)
+>>>>>>>>> +        return ret;
+>>>>>>>>> +
+>>>>>>>>>          meson_nfc_check_ecc_pages_valid(nfc, nand, raw);
+>>>>>>>>>            meson_nfc_dma_buffer_release(nand, data_len, info_len, DMA_FROM_DEVICE);
+>>>>>>>>
+>>>>>>
+>>>>>
+>>>>
+>>>
+>>
