@@ -2,144 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 037D56E4390
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 11:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5166E438B
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 11:20:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbjDQJVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 05:21:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
+        id S230227AbjDQJUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 05:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbjDQJVW (ORCPT
+        with ESMTP id S230002AbjDQJUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 05:21:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2CFD44B3
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 02:20:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681723217;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vNVnMNLujGbpw5r7sYnlsLlVBFalrrcN8dNsOuZXTw0=;
-        b=LvSWET45AKADXPG2360TOKh/wZ0nwHafApESXq4iCJn4EJwaOJHsHkfl+8gwdyAbxArc40
-        XuzNDHAxTdA5kz0gZha8v9TTzwBMZavdtROwvhETxDYqCKUha5NalqR0WfVofUGDj5CTIl
-        t62f/sSRcisTirF29swZVEM/Oru4aTY=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-589-_IbWhcVuNGKdkH2zoba4VA-1; Mon, 17 Apr 2023 05:20:16 -0400
-X-MC-Unique: _IbWhcVuNGKdkH2zoba4VA-1
-Received: by mail-qt1-f199.google.com with SMTP id b7-20020a05622a020700b003e38f7f800bso17488699qtx.9
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 02:20:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681723216; x=1684315216;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vNVnMNLujGbpw5r7sYnlsLlVBFalrrcN8dNsOuZXTw0=;
-        b=ZUk+SChMl1yL26IDfubUMizaNaaJnItsoyusnvzgX2IoO52q/6WYNrgH6vSv94UUzM
-         G0gNoQA1Oc1XgHWEKBs4WnMws9pHahgC4vBcCtL4nBbvIrfJlrYjg0NhIY8hMJ0uK++t
-         ktMnJUBOcL2sn1HXyCUnSwRFiuen1y11VTLQ5a2wHNCBVj+8QfTXsZZzqmWdem0NsaFM
-         fNccHdaAfD+8v6HzYT5rulAt3ftZwlhmhtAW750o2xsR82aeFeG2X3KYTWbkU26iFX4/
-         pPoEqeRr9yNlH5XHvMtFAQPELwN+iqbuV2vivXf+B7c7V7LqYrFd0SDe75e42wlGO+sR
-         tqxQ==
-X-Gm-Message-State: AAQBX9ewrgM8zKWLnNad4ww+fk5VEjSBnrYiDENdvHLhhZgkkhfRE+WV
-        bG3df+OK34ppjNgzbSAdSojL+pV8w3+/4gz85k5Uz1uMaBQmiyk935JrHqE0EdK11beHNWrNS02
-        b1HrUhBQgNN1vp3z67Jc1sr1L
-X-Received: by 2002:a05:622a:550:b0:3e6:35d9:2c14 with SMTP id m16-20020a05622a055000b003e635d92c14mr25324984qtx.19.1681723216014;
-        Mon, 17 Apr 2023 02:20:16 -0700 (PDT)
-X-Google-Smtp-Source: AKy350b2JvceDDe59kay7fdrE1cUYDltBYRWJcjOLEX8d+sK0DHfxcKJlAzVlK4Jy62gtSq9j6RpqQ==
-X-Received: by 2002:a05:622a:550:b0:3e6:35d9:2c14 with SMTP id m16-20020a05622a055000b003e635d92c14mr25324970qtx.19.1681723215756;
-        Mon, 17 Apr 2023 02:20:15 -0700 (PDT)
-Received: from redhat.com ([185.199.103.251])
-        by smtp.gmail.com with ESMTPSA id bp11-20020a05620a458b00b0074cf9d16cb0sm1481988qkb.14.2023.04.17.02.20.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 02:20:15 -0700 (PDT)
-Date:   Mon, 17 Apr 2023 05:20:09 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Alvaro Karsz <alvaro.karsz@solid-run.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net] virtio-net: reject small vring sizes
-Message-ID: <20230417051816-mutt-send-email-mst@kernel.org>
-References: <20230416074607.292616-1-alvaro.karsz@solid-run.com>
- <AM0PR04MB4723C6E99A217F51973710F5D49F9@AM0PR04MB4723.eurprd04.prod.outlook.com>
- <20230416164453-mutt-send-email-mst@kernel.org>
- <CACGkMEvFhVyWb5+ET_akPvnjUq04+ZbJC8o_GtNBWqSMGNum8A@mail.gmail.com>
- <20230417021725-mutt-send-email-mst@kernel.org>
- <AM0PR04MB4723B8489F8F9AE547393697D49C9@AM0PR04MB4723.eurprd04.prod.outlook.com>
- <20230417023911-mutt-send-email-mst@kernel.org>
- <AM0PR04MB47237BFB8BB3A3606CE6A408D49C9@AM0PR04MB4723.eurprd04.prod.outlook.com>
- <20230417030713-mutt-send-email-mst@kernel.org>
- <AM0PR04MB4723F3E6AE381AEC36D1AEFED49C9@AM0PR04MB4723.eurprd04.prod.outlook.com>
+        Mon, 17 Apr 2023 05:20:41 -0400
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472044EE8;
+        Mon, 17 Apr 2023 02:20:17 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 6243242404;
+        Mon, 17 Apr 2023 09:20:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1681723215; bh=9jlVu198RfqwmaRiA8SNqHWeiiqMm+RyqmhZGbIcPz4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=w+ZM745qp5UA4iaN2535iZH+6vIHrUS7ZsqW+Tn+nml+2ZaejGEwCZmHQ+yw67cOU
+         xCftyDtFkXnUbWInwP055JUKGLb/arnH0FyKwvdK8e4CQyrI73IFVMzVZCgKZJuhc7
+         P6OxoJsRpfh4o1nJ9YhVgJ7GxQbKh4rMhZzbx2Uk/DQAF2kA3wBa1dsFA4j9P8Gyqn
+         cE5XrjSXjKuJ4xNTrt4Asib4SYtjrAIiiBvJTvKZgg+B8UFPBD/X8TeMXomemIqqJV
+         g/NBZ/xnsv4ENfC0XY7iAv03oVsX8XnZyzOpjPzYDZ2oqz8H2wsIWdJxhTWYFwQwu2
+         fTYRBSRrvQqiQ==
+Message-ID: <c366d449-542f-8365-9f04-74da4ef847be@marcan.st>
+Date:   Mon, 17 Apr 2023 18:20:11 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <AM0PR04MB4723F3E6AE381AEC36D1AEFED49C9@AM0PR04MB4723.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] arm64: dts: apple: t8112: Add PWM controller
+Content-Language: en-US
+To:     fnkl.kernel@gmail.com, Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230409-t8112-fpwm-v1-1-feffa5f8b99b@gmail.com>
+From:   Hector Martin <marcan@marcan.st>
+In-Reply-To: <20230409-t8112-fpwm-v1-1-feffa5f8b99b@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 07:33:58AM +0000, Alvaro Karsz wrote:
-> > > > > > Actually, I think that all you need to do is disable NETIF_F_SG,
-> > > > > > and things will work, no?
-> > > > >
-> > > > > I think that this is not so simple, if I understand correctly, by disabling NETIF_F_SG we will never receive a chained skbs to transmit, but we still have more functionality to address, for example:
-> > > > > * The TX timeouts.
-> > > >
-> > > > I don't get it. With a linear skb we can transmit it as long as there's
-> > > > space for 2 entries in the vq: header and data. What's the source of the
-> > > > timeouts?
-> > > >
-> > >
-> > > I'm not saying that this is not possible, I meant that we need more changes to virtio-net.
-> > > The source of the timeouts is from the current implementation of virtnet_poll_tx.
-> > >
-> > > if (sq->vq->num_free >= 2 + MAX_SKB_FRAGS)
-> > >       netif_tx_wake_queue(txq);
-> > 
-> > Oh right. So this should check NETIF_F_SG then.
-> > BTW both ring size and s/g can be tweaked by ethtool, also
-> > needs handling.
-> > 
+On 09/04/2023 18.18, Sasha Finkelstein via B4 Relay wrote:
+> From: Sasha Finkelstein <fnkl.kernel@gmail.com>
 > 
-> Good point.
+> This patch adds the device tree entries for the PWM controller
+> present on M2 macbooks that is connected to the keyboard backlight.
 > 
-> > >
-> > > > > * Guest GSO/big MTU (without VIRTIO_NET_F_MRG_RXBUF?), we can't chain page size buffers anymore.
-> > > >
-> > > > I think we can.  mergeable_min_buf_len will just be large.
-> > > >
-> > >
-> > > I meant that we can't just by clearing NETIF_F_SG, we'll need to change virtio-net a little bit more, for example, the virtnet_set_big_packets function.
-> > >
-> > 
-> > Right - for RX, big_packets_num_skbfrags ignores ring size and that's
-> > probably a bug if mtu is very large.
-> > 
+> Signed-off-by: Sasha Finkelstein <fnkl.kernel@gmail.com>
+> ---
+>  arch/arm64/boot/dts/apple/t8112-j413.dts | 17 +++++++++++++++++
+>  arch/arm64/boot/dts/apple/t8112-j493.dts | 17 +++++++++++++++++
+>  arch/arm64/boot/dts/apple/t8112.dtsi     |  9 +++++++++
+>  3 files changed, 43 insertions(+)
 > 
-> So, what do you think, we should fix virtio-net to work with smaller rings? we should fail probe?
+> diff --git a/arch/arm64/boot/dts/apple/t8112-j413.dts b/arch/arm64/boot/dts/apple/t8112-j413.dts
+> index 9e758edeaa82..6f69658623bf 100644
+> --- a/arch/arm64/boot/dts/apple/t8112-j413.dts
+> +++ b/arch/arm64/boot/dts/apple/t8112-j413.dts
+> @@ -11,6 +11,7 @@
+>  
+>  #include "t8112.dtsi"
+>  #include "t8112-jxxx.dtsi"
+> +#include <dt-bindings/leds/common.h>
+>  
+>  / {
+>  	compatible = "apple,j413", "apple,t8112", "apple,arm-platform";
+> @@ -20,6 +21,18 @@ aliases {
+>  		bluetooth0 = &bluetooth0;
+>  		wifi0 = &wifi0;
+>  	};
+> +
+> +	led-controller {
+> +		compatible = "pwm-leds";
+> +		led-0 {
+> +			pwms = <&fpwm1 0 40000>;
+> +			label = "kbd_backlight";
+> +			function = LED_FUNCTION_KBD_BACKLIGHT;
+> +			color = <LED_COLOR_ID_WHITE>;
+> +			max-brightness = <255>;
+> +			default-state = "keep";
+> +		};
+> +	};
+>  };
+>  
+>  /*
+> @@ -61,3 +74,7 @@ hpm5: usb-pd@3a {
+>  &i2c4 {
+>  	status = "okay";
+>  };
+> +
+> +&fpwm1 {
+> +	status = "okay";
+> +};
+> diff --git a/arch/arm64/boot/dts/apple/t8112-j493.dts b/arch/arm64/boot/dts/apple/t8112-j493.dts
+> index 8552c15be265..0ad908349f55 100644
+> --- a/arch/arm64/boot/dts/apple/t8112-j493.dts
+> +++ b/arch/arm64/boot/dts/apple/t8112-j493.dts
+> @@ -11,6 +11,7 @@
+>  
+>  #include "t8112.dtsi"
+>  #include "t8112-jxxx.dtsi"
+> +#include <dt-bindings/leds/common.h>
+>  
+>  / {
+>  	compatible = "apple,j493", "apple,t8112", "apple,arm-platform";
+> @@ -20,6 +21,18 @@ aliases {
+>  		bluetooth0 = &bluetooth0;
+>  		wifi0 = &wifi0;
+>  	};
+> +
+> +	led-controller {
+> +		compatible = "pwm-leds";
+> +		led-0 {
+> +			pwms = <&fpwm1 0 40000>;
+> +			label = "kbd_backlight";
+> +			function = LED_FUNCTION_KBD_BACKLIGHT;
+> +			color = <LED_COLOR_ID_WHITE>;
+> +			max-brightness = <255>;
+> +			default-state = "keep";
+> +		};
+> +	};
+>  };
+>  
+>  /*
+> @@ -50,3 +63,7 @@ bluetooth0: bluetooth@0,1 {
+>  &i2c4 {
+>  	status = "okay";
+>  };
+> +
+> +&fpwm1 {
+> +	status = "okay";
+> +};
+> diff --git a/arch/arm64/boot/dts/apple/t8112.dtsi b/arch/arm64/boot/dts/apple/t8112.dtsi
+> index 698a436e7dac..1666e6ab250b 100644
+> --- a/arch/arm64/boot/dts/apple/t8112.dtsi
+> +++ b/arch/arm64/boot/dts/apple/t8112.dtsi
+> @@ -458,6 +458,15 @@ i2c4: i2c@235020000 {
+>  			status = "disabled";
+>  		};
+>  
+> +		fpwm1: pwm@235044000 {
+> +			compatible = "apple,t8112-fpwm", "apple,s5l-fpwm";
+> +			reg = <0x2 0x35044000 0x0 0x4000>;
+> +			power-domains = <&ps_fpwm1>;
+> +			clocks = <&clkref>;
+> +			#pwm-cells = <2>;
+> +			status = "disabled";
+> +		};
+> +
+>  		serial0: serial@235200000 {
+>  			compatible = "apple,s5l-uart";
+>  			reg = <0x2 0x35200000 0x0 0x1000>;
 > 
-> I think that since this never came up until now, there is no big demand to such small rings.
+> ---
+> base-commit: 8d59efc33fdaa2c82072b4d3ba5f67d7dd9270d0
+> change-id: 20230409-t8112-fpwm-06e434cc358d
 
-The worry is that once we start failing probe there's just a tiny chance
-hosts begin to rely on us failing probe then we won't be able to fix it.
-So it depends on the size of the patch I think. So far it seems small enough
-that wasting code on failing probe isn't worth it.
+Applied to asahi-soc/dt, thanks!
 
--- 
-MST
+- Hector
 
