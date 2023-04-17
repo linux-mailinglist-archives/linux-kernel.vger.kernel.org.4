@@ -2,315 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ECB76E453D
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 12:33:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09DFC6E4551
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 12:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230448AbjDQKdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 06:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35818 "EHLO
+        id S229508AbjDQKf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 06:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjDQKdV (ORCPT
+        with ESMTP id S229742AbjDQKfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 06:33:21 -0400
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5248D40EF
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 03:32:23 -0700 (PDT)
-Received: from ramsan.of.borg ([84.195.187.55])
-        by laurent.telenet-ops.be with bizsmtp
-        id lmXe2900C1C8whw01mXeGh; Mon, 17 Apr 2023 12:31:48 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1poM8A-00GzWt-SH;
-        Mon, 17 Apr 2023 12:31:38 +0200
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1poM94-007KQx-FS;
-        Mon, 17 Apr 2023 12:31:38 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Bin Liu <bin.liu@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Mikhail Ulyanov <mikhail.ulyanov@cogentembedded.com>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] media: Add common header file with JPEG marker definitions
-Date:   Mon, 17 Apr 2023 12:31:35 +0200
-Message-Id: <bcb81f910f03eef4ed964d39883df0d33c762f9f.1681727493.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
+        Mon, 17 Apr 2023 06:35:25 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2054.outbound.protection.outlook.com [40.107.223.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE895FE8;
+        Mon, 17 Apr 2023 03:34:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Mtn9YFhaHl57OUyS9k01CO9CvdBCD9bjf3GqpaM5ModdIOKN9nTh7Z9PCyCe1m14vDgcUIWhA8L9q68z+Gagfx7FelQvdjMUauRId+ACNlYJJYWx4qufeQQxDUGy+LnisAlnS6hQM5vKlvEob6vAhsi07h/Ft7dnEM1GagIRaaYwF/JryzRF7FUrjjFkbhs+xud6AvkvRw2CO7j6mBblAbvH/XD/BF6QEb3deI6fldfH2zi9vyR3kjSOZpZf3tEROv2WQbggLnh/z+oI2dUwMSwvf5Ad/3B1kuhOUi6ySD5ReimfDv0HmEIza+4nsvO/2lLKNH/RcZdI6NHce3CH9Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eohcHGR3xOqVsyJ2t2ABIsyEPw9GaUnrXy5TJF3iYI0=;
+ b=jklUNa/EqyOAPTBQuCJg1dST17Od5/ItFYAxBfgXOUD/KkFStQWSLr91l2FBYyaEKeYDwIvGqRj+oFklwbyDWH2Xn4rNjooZa7WB2UZogwLEqt5Twlz6S3Dw4yGt1/v5yauh4A0T7wyIluJzr+e0NDy9MugJG3em4R4GrOfJB1kvKiSiWlEAx1NvkmkVCSwp9Js2WcXBrB0OU+3nyPZ8qbdSPOJ2PddIx3OWy2cEkeRj2pAVJNTWjLroKoH4kqVBz6W25FJZGRf4uowDaXVIhKBHXBN/PM6J68uxaRfKyEC5yGm/lqe0j/QzMKkWwEUIoIsp2yoUm2WHEyzvzKPR7A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eohcHGR3xOqVsyJ2t2ABIsyEPw9GaUnrXy5TJF3iYI0=;
+ b=wn8BltaQRVE76KZa6xskdcGCE2rHjaAQK5NO5B3gZ6wUhgBF4EfeqGNBC5tkNktuGgNRh/z/0BOBFMeIQoZr1d784YkPZvnM3F9Z02KhfhqUDNsfnwLBiAxJeia9Jtc+n9vt3VnY/8m1icgxmWoXefBJeZap9C2pYIopzxX3BAI=
+Received: from MN2PR10CA0018.namprd10.prod.outlook.com (2603:10b6:208:120::31)
+ by SJ1PR12MB6074.namprd12.prod.outlook.com (2603:10b6:a03:45f::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Mon, 17 Apr
+ 2023 10:33:18 +0000
+Received: from BL02EPF00010208.namprd05.prod.outlook.com
+ (2603:10b6:208:120:cafe::a0) by MN2PR10CA0018.outlook.office365.com
+ (2603:10b6:208:120::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.46 via Frontend
+ Transport; Mon, 17 Apr 2023 10:33:18 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL02EPF00010208.mail.protection.outlook.com (10.167.241.199) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6319.14 via Frontend Transport; Mon, 17 Apr 2023 10:33:18 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 17 Apr
+ 2023 05:33:17 -0500
+Received: from xhdthippesw40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Mon, 17 Apr 2023 05:33:14 -0500
+From:   Thippeswamy Havalige <thippeswamy.havalige@amd.com>
+To:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <krzysztof.kozlowski@linaro.org>
+CC:     <bhelgaas@google.com>, <michals@xilinx.com>, <robh+dt@kernel.org>,
+        <nagaradhesh.yeleswarapu@amd.com>, <bharat.kumar.gogada@amd.com>,
+        <lorenzo.pieralisi@arm.com>,
+        Thippeswamy Havalige <thippeswamy.havalige@amd.com>
+Subject: [PATCH 0/2] Add support for Xilinx XDMA Soft IP as Root Port.
+Date:   Mon, 17 Apr 2023 16:02:24 +0530
+Message-ID: <20230417103226.334588-1-thippeswamy.havalige@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF00010208:EE_|SJ1PR12MB6074:EE_
+X-MS-Office365-Filtering-Correlation-Id: 44e0357c-8cce-4717-0c30-08db3f2f28ca
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: cLR8FHb936j162LUOSiXS1smD3wQ0NPxsVj5gLLCnK2UhkYhtyR/GCsx6h41fnfe91jffDAMRDlURzsOQ2m1Sy+2plFlDnplU86a1A3fLRTqWuHV9YbIVY8ylVqMaEkhKvias6cks1EM6p5LhwNWakR3grFU8QAEJDP6nNjOudLNOqqoKjQk+0TqS+D5ILHWbihVLm2TZqyaqjOae9sxH3E79tX99r/ofbYXdR7QzxKdBtDCFt5ZLwlW6OlZa0Z/qBiuCdF6qida7gdHgDq86Xa77BJntDsGcjqsB61M8EA2bfoUEVlS07+OvpGpL6euVnfx/rbW7SteDXo8a0fOuwflf5Oqjc1sducWe+RjcKWqiSO9DqEJ+cLQ2j5olgNq4GlBz5/D87USRU/HQC3TjsVXCTzDUPrC+uEbPawjvV78EGwatMaw7yVJpeudsF/UVf9cyeZIavFbGEwe8maZS75tN0gK2g670UG4YsTGhei0s3yIByFH4w+NcpheBoDZvZClFtVvMoaqqxVf7pM6dpWrMn6NyXcgeyubZQAS2C/ZFJJbZUjI7XqtwOYdUJrmKWZWOEL1YukKYkt2tRqo2iZmpovBG0NiKkw0b5zxuloWfZZZV0Hj+PiQaa52wtXH1hUOTpF5jBY+tWiiGmwSq5YdGzaqXU9ALxTk2a2ixvku6fxSui4UH+IBRKurKG+JrVV+4soiVFuDDDD/EEIA2DpFEhl3fRa+JuFQu+PDAMI=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(136003)(39860400002)(396003)(451199021)(40470700004)(46966006)(36840700001)(81166007)(44832011)(36860700001)(70586007)(70206006)(6666004)(8676002)(8936002)(4744005)(2906002)(5660300002)(478600001)(36756003)(82740400003)(356005)(54906003)(40460700003)(26005)(1076003)(186003)(110136005)(82310400005)(41300700001)(47076005)(2616005)(316002)(4326008)(40480700001)(336012)(426003)(86362001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2023 10:33:18.2931
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 44e0357c-8cce-4717-0c30-08db3f2f28ca
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF00010208.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6074
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When compile-testing on mips/RB532 with W=1:
+This series of patch add support for Xilinx XDMA Soft IP as Root Port.
 
-    arch/mips/include/asm/mach-rc32434/rb.h:13: note: this is the location of the previous definition
-       13 | #define RST  (1 << 15)
-	  |
-    drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_parse.c:15: warning: "RST" redefined
-       15 | #define RST 0xd0
-	  |
-    drivers/media/platform/renesas/rcar_jpu.c:77: warning: "RST" redefined
-       77 | #define RST 0xd0
-	  |
+The Xilinx XDMA Soft IP support's 32 bit and 64bit BAR's.
+As Root Port it supports MSI and legacy interrupts.
 
-"RST" is indeed a name too short to be conflict-free.
-
-Fix this by creating a common <media/jpeg.h> header file, containing
-definitions for all JPEG markers used, prefixed by "JPEG_MARKER_", based
-on the existing private definitions in the Samsung S5P JPEG driver, and
-convert all affected drivers.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/oe-kbuild-all/202304152346.hJOPxPRh-lkp@intel.com/
-Link: https://lore.kernel.org/oe-kbuild-all/202304150059.bHUyuriy-lkp@intel.com/
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Signed-off-by: Thippeswamy Havalige <thippeswamy.havalige@amd.com>
+Signed-off-by: Bharat Kumar Gogada <bharat.kumar.gogada@amd.com>
 ---
-No change in generated code before/after.
----
- .../mediatek/jpeg/mtk_jpeg_dec_parse.c        | 17 ++----
- drivers/media/platform/renesas/rcar_jpu.c     | 55 +++++++++----------
- .../platform/samsung/s5p-jpeg/jpeg-core.h     | 12 +---
- include/media/jpeg.h                          | 20 +++++++
- 4 files changed, 52 insertions(+), 52 deletions(-)
- create mode 100644 include/media/jpeg.h
+Thippeswamy Havalige (2):
+  dt-bindings: PCI: xilinx-xdma: Add YAML schemas for Xilinx XDMA PCIe
+    Root Port Bridge
+  PCI: xilinx-xdma: Add Xilinx XDMA Root Port driver
 
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_parse.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_parse.c
-index b95c45791c29edc5..bb9cdc9e0e90912b 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_parse.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_parse.c
-@@ -7,15 +7,10 @@
- 
- #include <linux/kernel.h>
- #include <linux/videodev2.h>
-+#include <media/jpeg.h>
- 
- #include "mtk_jpeg_dec_parse.h"
- 
--#define TEM	0x01
--#define SOF0	0xc0
--#define RST	0xd0
--#define SOI	0xd8
--#define EOI	0xd9
--
- struct mtk_jpeg_stream {
- 	u8 *addr;
- 	u32 size;
-@@ -83,7 +78,7 @@ static bool mtk_jpeg_do_parse(struct mtk_jpeg_dec_param *param, u8 *src_addr_va,
- 
- 		length = 0;
- 		switch (byte) {
--		case SOF0:
-+		case JPEG_MARKER_SOF0:
- 			/* length */
- 			if (read_word_be(&stream, &word))
- 				break;
-@@ -123,10 +118,10 @@ static bool mtk_jpeg_do_parse(struct mtk_jpeg_dec_param *param, u8 *src_addr_va,
- 
- 			notfound = !(i == param->comp_num);
- 			break;
--		case RST ... RST + 7:
--		case SOI:
--		case EOI:
--		case TEM:
-+		case JPEG_MARKER_RST ... JPEG_MARKER_RST + 7:
-+		case JPEG_MARKER_SOI:
-+		case JPEG_MARKER_EOI:
-+		case JPEG_MARKER_TEM:
- 			break;
- 		default:
- 			if (read_word_be(&stream, &word))
-diff --git a/drivers/media/platform/renesas/rcar_jpu.c b/drivers/media/platform/renesas/rcar_jpu.c
-index d1dda68bfb5e2087..25d3f0376d6709ba 100644
---- a/drivers/media/platform/renesas/rcar_jpu.c
-+++ b/drivers/media/platform/renesas/rcar_jpu.c
-@@ -28,6 +28,7 @@
- #include <linux/spinlock.h>
- #include <linux/string.h>
- #include <linux/videodev2.h>
-+#include <media/jpeg.h>
- #include <media/v4l2-ctrls.h>
- #include <media/v4l2-device.h>
- #include <media/v4l2-event.h>
-@@ -71,19 +72,6 @@
- #define JPU_JPEG_DEFAULT_422_PIX_FMT V4L2_PIX_FMT_NV16M
- #define JPU_JPEG_DEFAULT_420_PIX_FMT V4L2_PIX_FMT_NV12M
- 
--/* JPEG markers */
--#define TEM	0x01
--#define SOF0	0xc0
--#define RST	0xd0
--#define SOI	0xd8
--#define EOI	0xd9
--#define DHP	0xde
--#define DHT	0xc4
--#define COM	0xfe
--#define DQT	0xdb
--#define DRI	0xdd
--#define APP0	0xe0
--
- #define JPU_RESET_TIMEOUT	100 /* ms */
- #define JPU_JOB_TIMEOUT		300 /* ms */
- #define JPU_MAX_QUALITY		4
-@@ -330,26 +318,32 @@ static const u8 zigzag[] = {
-  * Huffman tables; Padding with 0xff (33.3.27 R01UH0501EJ0100 Rev.1.00)
-  */
- #define JPU_JPEG_HDR_BLOB {                                                    \
--	0xff, SOI, 0xff, DQT, 0x00, JPU_JPEG_QTBL_SIZE + 0x3, JPU_JPEG_LUM,    \
--	[JPU_JPEG_QTBL_LUM_OFFSET ...                                          \
-+	0xff, JPEG_MARKER_SOI, 0xff, JPEG_MARKER_DQT, 0x00,		       \
-+	JPU_JPEG_QTBL_SIZE + 0x3, JPU_JPEG_LUM,				       \
-+	[JPU_JPEG_QTBL_LUM_OFFSET ...					       \
- 		JPU_JPEG_QTBL_LUM_OFFSET + JPU_JPEG_QTBL_SIZE - 1] = 0x00,     \
--	0xff, DQT, 0x00, JPU_JPEG_QTBL_SIZE + 0x3, JPU_JPEG_CHR,               \
-+	0xff, JPEG_MARKER_DQT, 0x00, JPU_JPEG_QTBL_SIZE + 0x3, JPU_JPEG_CHR,   \
- 	[JPU_JPEG_QTBL_CHR_OFFSET ... JPU_JPEG_QTBL_CHR_OFFSET +               \
--		JPU_JPEG_QTBL_SIZE - 1] = 0x00, 0xff, SOF0, 0x00, 0x11, 0x08,  \
-+		JPU_JPEG_QTBL_SIZE - 1] = 0x00,				       \
-+	0xff, JPEG_MARKER_SOF0, 0x00, 0x11, 0x08,			       \
- 	[JPU_JPEG_HEIGHT_OFFSET ... JPU_JPEG_HEIGHT_OFFSET + 1] = 0x00,        \
- 	[JPU_JPEG_WIDTH_OFFSET ... JPU_JPEG_WIDTH_OFFSET + 1] = 0x00,          \
- 	0x03, 0x01, [JPU_JPEG_SUBS_OFFSET] = 0x00, JPU_JPEG_LUM,               \
- 	0x02, 0x11, JPU_JPEG_CHR, 0x03, 0x11, JPU_JPEG_CHR,                    \
--	0xff, DHT, 0x00, JPU_JPEG_HDCTBL_SIZE + 0x3, JPU_JPEG_LUM|JPU_JPEG_DC, \
-+	0xff, JPEG_MARKER_DHT, 0x00, JPU_JPEG_HDCTBL_SIZE + 0x3,	       \
-+	JPU_JPEG_LUM | JPU_JPEG_DC,					       \
- 	[JPU_JPEG_HDCTBL_LUM_OFFSET ...                                        \
- 		JPU_JPEG_HDCTBL_LUM_OFFSET + JPU_JPEG_HDCTBL_SIZE - 1] = 0x00, \
--	0xff, DHT, 0x00, JPU_JPEG_HACTBL_SIZE + 0x3, JPU_JPEG_LUM|JPU_JPEG_AC, \
-+	0xff, JPEG_MARKER_DHT, 0x00, JPU_JPEG_HACTBL_SIZE + 0x3,	       \
-+	JPU_JPEG_LUM | JPU_JPEG_AC,					       \
- 	[JPU_JPEG_HACTBL_LUM_OFFSET ...                                        \
- 		JPU_JPEG_HACTBL_LUM_OFFSET + JPU_JPEG_HACTBL_SIZE - 1] = 0x00, \
--	0xff, DHT, 0x00, JPU_JPEG_HDCTBL_SIZE + 0x3, JPU_JPEG_CHR|JPU_JPEG_DC, \
-+	0xff, JPEG_MARKER_DHT, 0x00, JPU_JPEG_HDCTBL_SIZE + 0x3,	       \
-+	JPU_JPEG_CHR | JPU_JPEG_DC,					       \
- 	[JPU_JPEG_HDCTBL_CHR_OFFSET ...                                        \
- 		JPU_JPEG_HDCTBL_CHR_OFFSET + JPU_JPEG_HDCTBL_SIZE - 1] = 0x00, \
--	0xff, DHT, 0x00, JPU_JPEG_HACTBL_SIZE + 0x3, JPU_JPEG_CHR|JPU_JPEG_AC, \
-+	0xff, JPEG_MARKER_DHT, 0x00, JPU_JPEG_HACTBL_SIZE + 0x3,	       \
-+	JPU_JPEG_CHR | JPU_JPEG_AC,					       \
- 	[JPU_JPEG_HACTBL_CHR_OFFSET ...                                        \
- 		JPU_JPEG_HACTBL_CHR_OFFSET + JPU_JPEG_HACTBL_SIZE - 1] = 0x00, \
- 	[JPU_JPEG_PADDING_OFFSET ... JPU_JPEG_HDR_SIZE - 1] = 0xff             \
-@@ -613,7 +607,8 @@ static u8 jpu_parse_hdr(void *buffer, unsigned long size, unsigned int *width,
- 	 * basic size check and EOI - we don't want to let JPU cross
- 	 * buffer bounds in any case. Hope it's stopping by EOI.
- 	 */
--	if (size < JPU_JPEG_MIN_SIZE || *(u8 *)(buffer + size - 1) != EOI)
-+	if (size < JPU_JPEG_MIN_SIZE ||
-+	    *(u8 *)(buffer + size - 1) != JPEG_MARKER_EOI)
- 		return 0;
- 
- 	for (;;) {
-@@ -624,14 +619,14 @@ static u8 jpu_parse_hdr(void *buffer, unsigned long size, unsigned int *width,
- 			c = get_byte(&jpeg_buffer);
- 		while (c == 0xff || c == 0);
- 
--		if (!soi && c == SOI) {
-+		if (!soi && c == JPEG_MARKER_SOI) {
- 			soi = true;
- 			continue;
--		} else if (soi != (c != SOI))
-+		} else if (soi != (c != JPEG_MARKER_SOI))
- 			return 0;
- 
- 		switch (c) {
--		case SOF0: /* SOF0: baseline JPEG */
-+		case JPEG_MARKER_SOF0: /* SOF0: baseline JPEG */
- 			skip(&jpeg_buffer, 3); /* segment length and bpp */
- 			if (get_word_be(&jpeg_buffer, height) ||
- 			    get_word_be(&jpeg_buffer, width) ||
-@@ -640,11 +635,11 @@ static u8 jpu_parse_hdr(void *buffer, unsigned long size, unsigned int *width,
- 
- 			skip(&jpeg_buffer, 1);
- 			return get_byte(&jpeg_buffer);
--		case DHT:
--		case DQT:
--		case COM:
--		case DRI:
--		case APP0 ... APP0 + 0x0f:
-+		case JPEG_MARKER_DHT:
-+		case JPEG_MARKER_DQT:
-+		case JPEG_MARKER_COM:
-+		case JPEG_MARKER_DRI:
-+		case JPEG_MARKER_APP0 ... JPEG_MARKER_APP0 + 0x0f:
- 			if (get_word_be(&jpeg_buffer, &word))
- 				return 0;
- 			skip(&jpeg_buffer, (long)word - 2);
-diff --git a/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.h b/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.h
-index 5570c79f122f5a09..4b665a3b630f8bf9 100644
---- a/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.h
-+++ b/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.h
-@@ -11,6 +11,7 @@
- #define JPEG_CORE_H_
- 
- #include <linux/interrupt.h>
-+#include <media/jpeg.h>
- #include <media/v4l2-device.h>
- #include <media/v4l2-fh.h>
- #include <media/v4l2-ctrls.h>
-@@ -36,17 +37,6 @@
- 
- #define EXYNOS3250_IRQ_TIMEOUT		0x10000000
- 
--/* a selection of JPEG markers */
--#define JPEG_MARKER_TEM				0x01
--#define JPEG_MARKER_SOF0				0xc0
--#define JPEG_MARKER_DHT				0xc4
--#define JPEG_MARKER_RST				0xd0
--#define JPEG_MARKER_SOI				0xd8
--#define JPEG_MARKER_EOI				0xd9
--#define	JPEG_MARKER_SOS				0xda
--#define JPEG_MARKER_DQT				0xdb
--#define JPEG_MARKER_DHP				0xde
--
- /* Flags that indicate a format can be used for capture/output */
- #define SJPEG_FMT_FLAG_ENC_CAPTURE	(1 << 0)
- #define SJPEG_FMT_FLAG_ENC_OUTPUT	(1 << 1)
-diff --git a/include/media/jpeg.h b/include/media/jpeg.h
-new file mode 100644
-index 0000000000000000..a01e142e99a7d001
---- /dev/null
-+++ b/include/media/jpeg.h
-@@ -0,0 +1,20 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+
-+#ifndef _MEDIA_JPEG_H_
-+#define _MEDIA_JPEG_H_
-+
-+/* JPEG markers */
-+#define JPEG_MARKER_TEM		0x01
-+#define JPEG_MARKER_SOF0	0xc0
-+#define JPEG_MARKER_DHT		0xc4
-+#define JPEG_MARKER_RST		0xd0
-+#define JPEG_MARKER_SOI		0xd8
-+#define JPEG_MARKER_EOI		0xd9
-+#define JPEG_MARKER_SOS		0xda
-+#define JPEG_MARKER_DQT		0xdb
-+#define JPEG_MARKER_DRI		0xdd
-+#define JPEG_MARKER_DHP		0xde
-+#define JPEG_MARKER_APP0	0xe0
-+#define JPEG_MARKER_COM		0xfe
-+
-+#endif /* _MEDIA_JPEG_H_ */
+ .../bindings/pci/xlnx,xdma-host.yaml          | 117 +++
+ drivers/pci/controller/Kconfig                |  10 +
+ drivers/pci/controller/Makefile               |   1 +
+ drivers/pci/controller/pcie-xdma-pl.c         | 877 ++++++++++++++++++
+ 4 files changed, 1005 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pci/xlnx,xdma-host.yaml
+ create mode 100644 drivers/pci/controller/pcie-xdma-pl.c
+
 -- 
-2.34.1
+2.25.1
 
