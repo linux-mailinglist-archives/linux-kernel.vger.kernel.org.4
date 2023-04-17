@@ -2,144 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 806166E4425
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 11:41:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F295F6E4435
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 11:43:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbjDQJk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 05:40:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40790 "EHLO
+        id S230281AbjDQJnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 05:43:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230466AbjDQJkM (ORCPT
+        with ESMTP id S229750AbjDQJnP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 05:40:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1694D61B7;
-        Mon, 17 Apr 2023 02:39:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9898B614E4;
-        Mon, 17 Apr 2023 09:39:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA6FAC433D2;
-        Mon, 17 Apr 2023 09:39:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681724365;
-        bh=G5C5rstyDPJTkrMWbCah2++jAPmMZtuh3VaoGEvcJ/w=;
-        h=From:To:Cc:Subject:Date:From;
-        b=WSag1yeLBtsqTloKUVVMt1zVN0+mL5TRyipBsCNGYrqdkpmOCET86CdauUDpmrVZH
-         xWgzpWTvHa8dr4be3oDWDK5p0Qx0idQZ72V7UkynGEe1SRtB7pxBmamrQ16NhCf9fX
-         LkAz22+nUUSPBpqbgE+Oxpyz8z+XFMo7miPOo/+gvK3mmx8rfCQwmiRMKV98pWY1t2
-         k/W2m9IILMUoeVG+RQCDm09V5PeUeTPP4Ryd9sCBvH25lMpEHeYW78ZN66wV9E2XCN
-         vNZkZVQx4soteNrmAtl9OyduAhY42qJ7mKTlzIfmENuS/xkQ+XXSIXX0A2Pxk13oKR
-         Y2KOc3z8xYjzw==
-From:   Georgi Djakov <djakov@kernel.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        djakov@kernel.org
-Subject: [GIT PULL] interconnect changes for 6.4
-Date:   Mon, 17 Apr 2023 12:39:10 +0300
-Message-Id: <20230417093910.1642934-1-djakov@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Mon, 17 Apr 2023 05:43:15 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E96695259;
+        Mon, 17 Apr 2023 02:42:26 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33H8uIx8028737;
+        Mon, 17 Apr 2023 09:40:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=qcppdkim1;
+ bh=gmFjwPOeIRvp54NzkNArds8OCxs3AtN0RRoBSNyeKTI=;
+ b=pc/BtBcp2rptCZJ5c0yGBNCd2hl/TZ+7tgTtnowdyAKNTNluBk0mPsyKACiWfOfK2MRY
+ DyyvK048Gn8pcGnsNJyLc2gTyEwtzOzizvil+6pl8HC4JdBK1bcswnRvBSmzoRSNw2ts
+ UI4e99vlw5Jn8UlvZ3rxjJPAtzHa4ZDRsuYxvdTtoBrkCk4Xxt/SVDcEth0K0tdQxil6
+ TMKj1ih4FlcQx96VC/MvhdEA3xTRQvDukaCmRy6HPF6H4bYKkKKiGfAFd9Hh7+jbYTrQ
+ G/6a+FwRWIVPBSfAu7ogvWimsaCjCdiFzz6Q+ToGopiVQIzUiWn723Gzty8CG3WoajSv ug== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q11er89mu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Apr 2023 09:40:09 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33H9e80a007215
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Apr 2023 09:40:08 GMT
+Received: from zijuhu-gv.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Mon, 17 Apr 2023 02:40:04 -0700
+From:   Zijun Hu <quic_zijuhu@quicinc.com>
+To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>,
+        <luiz.dentz@gmail.com>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <linux-bluetooth@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <quic_zijuhu@quicinc.com>, <abhishekpandit@chromium.org>
+Subject: [PATCH v2] Bluetooth: Devcoredump: Fix storing u32 without specifying byte order issue
+Date:   Mon, 17 Apr 2023 17:39:59 +0800
+Message-ID: <1681724399-28292-1-git-send-email-quic_zijuhu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1681213778-31754-1-git-send-email-quic_zijuhu@quicinc.com>
+References: <1681213778-31754-1-git-send-email-quic_zijuhu@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: fp6i7WSwlnlVP6_7bm54u842youxFVeG
+X-Proofpoint-ORIG-GUID: fp6i7WSwlnlVP6_7bm54u842youxFVeG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-17_05,2023-04-14_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
+ phishscore=0 malwarescore=0 lowpriorityscore=0 clxscore=1015 adultscore=0
+ suspectscore=0 priorityscore=1501 mlxscore=0 spamscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304170085
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Greg,
+API hci_devcd_init() stores its u32 type parameter @dump_size into
+skb, but it does not specify which byte order is used to store the
+integer, let us take little endian to store and parse the integer.
 
-This is the pull request with interconnect changes for the 6.4-rc1 merge
-window. In contains cleanups and tiny updates. The details are in the
-signed tag.
+Fixes: f5cc609d09d4 ("Bluetooth: Add support for hci devcoredump")
+Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
+---
+ net/bluetooth/coredump.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-All patches have been in linux-next during the last two weeks. Please pull
-into char-misc-next when possible.
+diff --git a/net/bluetooth/coredump.c b/net/bluetooth/coredump.c
+index 08fa98505454..d2d2624ec708 100644
+--- a/net/bluetooth/coredump.c
++++ b/net/bluetooth/coredump.c
+@@ -5,6 +5,7 @@
+ 
+ #include <linux/devcoredump.h>
+ 
++#include <asm/unaligned.h>
+ #include <net/bluetooth/bluetooth.h>
+ #include <net/bluetooth/hci_core.h>
+ 
+@@ -180,25 +181,25 @@ static int hci_devcd_prepare(struct hci_dev *hdev, u32 dump_size)
+ 
+ static void hci_devcd_handle_pkt_init(struct hci_dev *hdev, struct sk_buff *skb)
+ {
+-	u32 *dump_size;
++	u32 dump_size;
+ 
+ 	if (hdev->dump.state != HCI_DEVCOREDUMP_IDLE) {
+ 		DBG_UNEXPECTED_STATE();
+ 		return;
+ 	}
+ 
+-	if (skb->len != sizeof(*dump_size)) {
++	if (skb->len != sizeof(dump_size)) {
+ 		bt_dev_dbg(hdev, "Invalid dump init pkt");
+ 		return;
+ 	}
+ 
+-	dump_size = skb_pull_data(skb, sizeof(*dump_size));
+-	if (!*dump_size) {
++	dump_size = get_unaligned_le32(skb_pull_data(skb, 4));
++	if (!dump_size) {
+ 		bt_dev_err(hdev, "Zero size dump init pkt");
+ 		return;
+ 	}
+ 
+-	if (hci_devcd_prepare(hdev, *dump_size)) {
++	if (hci_devcd_prepare(hdev, dump_size)) {
+ 		bt_dev_err(hdev, "Failed to prepare for dump");
+ 		return;
+ 	}
+@@ -441,7 +442,7 @@ int hci_devcd_init(struct hci_dev *hdev, u32 dump_size)
+ 		return -ENOMEM;
+ 
+ 	hci_dmp_cb(skb)->pkt_type = HCI_DEVCOREDUMP_PKT_INIT;
+-	skb_put_data(skb, &dump_size, sizeof(dump_size));
++	put_unaligned_le32(dump_size, skb_put(skb, 4));
+ 
+ 	skb_queue_tail(&hdev->dump.dump_q, skb);
+ 	queue_work(hdev->workqueue, &hdev->dump.dump_rx);
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, a Linux Foundation Collaborative Project
 
-Thanks,
-Georgi
-
-The following changes since commit e8d018dd0257f744ca50a729e3d042cf2ec9da65:
-
-  Linux 6.3-rc3 (2023-03-19 13:27:55 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-6.4-rc1
-
-for you to fetch changes up to b7590f3841f47d5c6732db9a6d6474162109f487:
-
-  dt-bindings: interconnect: qcom,msm8998-bwmon: Resolve MSM8998 support (2023-04-05 11:30:00 +0300)
-
-----------------------------------------------------------------
-interconnect changes for 6.4
-
-This pull request contains the interconnect changes for the 6.4-rc1 merge
-window, which this time are mostly cleanups.
-
-Core changes:
-  interconnect: Skip call into provider if initial bw is zero
-  interconnect: Use of_property_present() for testing DT property presence
-  interconnect: drop racy registration API
-  interconnect: drop unused icc_link_destroy() interface
-
-Driver changes:
-  interconnect: qcom: Drop obsolete dependency on COMPILE_TEST
-  interconnect: qcom: drop obsolete OSM_L3/EPSS defines
-  interconnect: qcom: osm-l3: drop unuserd header inclusion
-  interconnect: qcom: rpm: drop bogus pm domain attach
-  interconnect: qcom: rpm: make QoS INVALID default
-  interconnect: qcom: rpm: Add support for specifying channel num
-  interconnect: qcom: Sort kerneldoc entries
-  dt-bindings: interconnect: OSM L3: Add SM6375 CPUCP compatible
-  dt-bindings: interconnect: qcom,msm8998-bwmon: Resolve MSM8998 support
-
-Signed-off-by: Georgi Djakov <djakov@kernel.org>
-
-----------------------------------------------------------------
-Dmitry Baryshkov (2):
-      interconnect: qcom: drop obsolete OSM_L3/EPSS defines
-      interconnect: qcom: osm-l3: drop unuserd header inclusion
-
-Jean Delvare (1):
-      interconnect: qcom: Drop obsolete dependency on COMPILE_TEST
-
-Johan Hovold (3):
-      interconnect: drop racy registration API
-      interconnect: drop unused icc_link_destroy() interface
-      interconnect: qcom: rpm: drop bogus pm domain attach
-
-Konrad Dybcio (5):
-      interconnect: qcom: rpm: make QoS INVALID default
-      interconnect: qcom: rpm: Add support for specifying channel num
-      interconnect: qcom: Sort kerneldoc entries
-      dt-bindings: interconnect: OSM L3: Add SM6375 CPUCP compatible
-      dt-bindings: interconnect: qcom,msm8998-bwmon: Resolve MSM8998 support
-
-Rob Herring (1):
-      interconnect: Use of_property_present() for testing DT property presence
-
-Vivek Aknurwar (1):
-      interconnect: Skip call into provider if initial bw is zero
-
- .../devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml     | 41 +++-
- Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml  |  1 +
- drivers/interconnect/core.c                                      | 81 +-------
- drivers/interconnect/qcom/Kconfig                                |  2 +-
- drivers/interconnect/qcom/icc-rpm.c                              | 38 ++--
- drivers/interconnect/qcom/icc-rpm.h                              | 17 +-
- drivers/interconnect/qcom/msm8996.c                              |  1 -
- drivers/interconnect/qcom/osm-l3.c                               |  7 -
- drivers/interconnect/qcom/sc7180.h                               |  2 -
- drivers/interconnect/qcom/sc7280.h                               |  2 -
- drivers/interconnect/qcom/sc8180x.h                              |  2 -
- drivers/interconnect/qcom/sdm845.h                               |  2 -
- drivers/interconnect/qcom/sm8150.h                               |  2 -
- drivers/interconnect/qcom/sm8250.h                               |  2 -
- include/linux/interconnect-provider.h                            | 17 --
- 15 files changed, 76 insertions(+), 141 deletions(-)
