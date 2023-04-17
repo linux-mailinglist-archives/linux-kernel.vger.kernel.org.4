@@ -2,160 +2,313 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA496E4E9E
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 18:53:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C60A6E4EA1
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 18:54:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbjDQQxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 12:53:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60948 "EHLO
+        id S229914AbjDQQyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 12:54:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjDQQxO (ORCPT
+        with ESMTP id S229710AbjDQQyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 12:53:14 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F3AE78F
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 09:53:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=difeq
-        NYROJLd3h7pJgHbiQGat6ELIM7KbJhDgj4H5js=; b=EKu60oX0w16R8PltMmtIK
-        YbgiRhHMdG4GiNpUM7mRAczlD4wCqyYmHmZIXqLOWM5uA7KHL4B3DhyVBYCdAoZ1
-        C4Mw5/aaysBCenWZS+JM+vH2uySewzwG75X4YY34rwpPtD2NbXZsTwFBo6vaTriU
-        X3Fxhx+h4aFERFCkZv37Lg=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g3-3 (Coremail) with SMTP id _____wB33mZgeT1kpY0GBw--.48629S2;
-        Tue, 18 Apr 2023 00:52:48 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     matt.hsiao@hpe.com
-Cc:     arnd@arndb.de, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        1395428693sheep@gmail.com, alex000young@gmail.com,
-        Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH] misc: hpilo: Fix use after free bug in ilo_remove due  to race condition with ilo_open
-Date:   Tue, 18 Apr 2023 00:52:46 +0800
-Message-Id: <20230417165246.467723-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 17 Apr 2023 12:54:37 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5F5A9;
+        Mon, 17 Apr 2023 09:54:35 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Q0Y4938pbz6J8Ds;
+        Tue, 18 Apr 2023 00:51:53 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Mon, 17 Apr
+ 2023 17:54:32 +0100
+Date:   Mon, 17 Apr 2023 17:54:31 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Robert Richter <rrichter@amd.com>
+CC:     Terry Bowman <terry.bowman@amd.com>, <alison.schofield@intel.com>,
+        <vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
+        <bwidawsk@kernel.org>, <dan.j.williams@intel.com>,
+        <dave.jiang@intel.com>, <linux-cxl@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        "Mahesh J Salgaonkar" <mahesh@linux.ibm.com>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH v3 5/6] PCI/AER: Forward RCH downstream port-detected
+ errors to the CXL.mem dev handler
+Message-ID: <20230417175431.00004ab5@Huawei.com>
+In-Reply-To: <ZDlkmcsbwsNv/t8+@rric.localdomain>
+References: <20230411180302.2678736-1-terry.bowman@amd.com>
+        <20230411180302.2678736-6-terry.bowman@amd.com>
+        <20230414131950.00006e76@Huawei.com>
+        <ZDlkmcsbwsNv/t8+@rric.localdomain>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wB33mZgeT1kpY0GBw--.48629S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxGryUJFyDuFWDKFyxZr4kXrb_yoW5Ww1xpF
-        W5Xa45CF4rXrZrWF4Utr4DCFyay34xtrykGrWIk3s5ZF1Svr1vgF18ta4UZFy5tFZ5XF13
-        JF1YgryrG3WUJaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziaiiDUUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXAFUU1Xl6SOPWAAAs3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A race condition may occur if the user physically removes the ilo device 
-while calling ilo_open.
+On Fri, 14 Apr 2023 16:35:05 +0200
+Robert Richter <rrichter@amd.com> wrote:
 
-If we remove the driver which will call ilo_remove to make cleanup, there 
-is no guarantee to make sure there's no more ilo_open invoking.
+> On 14.04.23 13:19:50, Jonathan Cameron wrote:
+> > On Tue, 11 Apr 2023 13:03:01 -0500
+> > Terry Bowman <terry.bowman@amd.com> wrote:
+> >   
+> > > From: Robert Richter <rrichter@amd.com>
+> > > 
+> > > In Restricted CXL Device (RCD) mode a CXL device is exposed as an
+> > > RCiEP, but CXL downstream and upstream ports are not enumerated and
+> > > not visible in the PCIe hierarchy. Protocol and link errors are sent
+> > > to an RCEC.
+> > > 
+> > > Restricted CXL host (RCH) downstream port-detected errors are signaled
+> > > as internal AER errors, either Uncorrectable Internal Error (UIE) or
+> > > Corrected Internal Errors (CIE). The error source is the id of the
+> > > RCEC. A CXL handler must then inspect the error status in various CXL
+> > > registers residing in the dport's component register space (CXL RAS
+> > > cap) or the dport's RCRB (AER ext cap). [1]
+> > > 
+> > > Errors showing up in the RCEC's error handler must be handled and
+> > > connected to the CXL subsystem. Implement this by forwarding the error
+> > > to all CXL devices below the RCEC. Since the entire CXL device is
+> > > controlled only using PCIe Configuration Space of device 0, Function
+> > > 0, only pass it there [2]. These devices have the Memory Device class
+> > > code set (PCI_CLASS_MEMORY_CXL, 502h) and the existing cxl_pci driver
+> > > can implement the handler.  
+> > 
+> > This comment implies only class code compliant drivers.  Sure we don't
+> > have drivers for anything else yet, but we should try to avoid saying
+> > there won't be any (which I think above implies).
+> > 
+> > You have a comment in the code, but maybe relaxing the description above
+> > to "currently support devices have..."  
+> 
+> It is used here to identify CXL memory devices and limit the
+> enablement to those. The spec requires this to be set for CXL mem devs
+> (see cxl 3.0, 8.1.12.2).
+> 
+> There could be other CXL devices (e.g. cache), but other drivers are
+> not yet implemented. That is what I am referring to. The check makes
+> sure there is actually a driver with a handler for it (cxl_pci).
 
-The possible sequence is as follows:
+Understood on intent. My worry is that the above can be read as a
+statement on hardware restrictions, rathe than on what software currently
+implements.  Meh. Minor point so I don't care that much!
+Unlikely anyone will read the patch description after it merges anyway ;)
 
-Fix it by adding a refcount check to ilo_remove() function to free the 
-"ilo_hwinfo " structure after the last file is closed.
+> 
+> >   
+> > > In addition to errors directed to the CXL
+> > > endpoint device, the handler must also inspect the CXL downstream
+> > > port's CXL RAS and PCIe AER external capabilities that is connected to
+> > > the device.
+> > > 
+> > > Since CXL downstream port errors are signaled using internal errors,
+> > > the handler requires those errors to be unmasked. This is subject of a
+> > > follow-on patch.
+> > > 
+> > > The reason for choosing this implementation is that a CXL RCEC device
+> > > is bound to the AER port driver, but the driver does not allow it to
+> > > register a custom specific handler to support CXL. Connecting the RCEC
+> > > hard-wired with a CXL handler does not work, as the CXL subsystem
+> > > might not be present all the time. The alternative to add an
+> > > implementation to the portdrv to allow the registration of a custom
+> > > RCEC error handler isn't worth doing it as CXL would be its only user.
+> > > Instead, just check for an CXL RCEC and pass it down to the connected
+> > > CXL device's error handler. With this approach the code can entirely
+> > > be implemented in the PCIe AER driver and is independent of the CXL
+> > > subsystem. The CXL driver only provides the handler.
+> > > 
+> > > [1] CXL 3.0 spec, 12.2.1.1 RCH Downstream Port-detected Errors
+> > > [2] CXL 3.0 spec, 8.1.3 PCIe DVSEC for CXL Devices
+> > > 
+> > > Co-developed-by: Terry Bowman <terry.bowman@amd.com>
+> > > Signed-off-by: Robert Richter <rrichter@amd.com>
+> > > Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+> > > Cc: "Oliver O'Halloran" <oohall@gmail.com>
+> > > Cc: Bjorn Helgaas <bhelgaas@google.com>
+> > > Cc: Mahesh J Salgaonkar <mahesh@linux.ibm.com>
+> > > Cc: linuxppc-dev@lists.ozlabs.org
+> > > Cc: linux-pci@vger.kernel.org  
+> > 
+> > Generally looks good to me.  A few trivial comments inline.
+> >   
+> > > ---
+> > >  drivers/pci/pcie/Kconfig |  8 ++++++
+> > >  drivers/pci/pcie/aer.c   | 61 ++++++++++++++++++++++++++++++++++++++++
+> > >  2 files changed, 69 insertions(+)
+> > > 
+> > > diff --git a/drivers/pci/pcie/Kconfig b/drivers/pci/pcie/Kconfig
+> > > index 228652a59f27..b0dbd864d3a3 100644
+> > > --- a/drivers/pci/pcie/Kconfig
+> > > +++ b/drivers/pci/pcie/Kconfig
+> > > @@ -49,6 +49,14 @@ config PCIEAER_INJECT
+> > >  	  gotten from:
+> > >  	     https://git.kernel.org/cgit/linux/kernel/git/gong.chen/aer-inject.git/
+> > >  
+> > > +config PCIEAER_CXL
+> > > +	bool "PCI Express CXL RAS support"  
+> > 
+> > Description makes this sound too general. I'd mentioned restricted
+> > hosts even in the menu option title.
+> > 
+> >   
+> > > +	default y
+> > > +	depends on PCIEAER && CXL_PCI
+> > > +	help
+> > > +	  This enables CXL error handling for Restricted CXL Hosts
+> > > +	  (RCHs).  
+> > 
+> > Spec term is probably fine in the title, but in the help I'd 
+> > expand it as per the CXL 3.0 glossary to include
+> > "CXL Host that is operating in RCD mode."
+> > It might otherwise surprise people that this matters on their shiny
+> > new CXL X.0 host (because they found an old CXL 1.1 card in a box
+> > and decided to plug it in)
+> > 
+> > Do we actually need this protection at all?  It's a tiny amount of code
+> > and I can't see anything immediately that requires the CXL_PCI dependency
+> > other than it's a bit pointless if that isn't here.
+> >   
+> > > +
+> > >  #
+> > >  # PCI Express ECRC
+> > >  #
+> > > diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+> > > index 7a25b62d9e01..171a08fd8ebd 100644
+> > > --- a/drivers/pci/pcie/aer.c
+> > > +++ b/drivers/pci/pcie/aer.c
+> > > @@ -946,6 +946,65 @@ static bool find_source_device(struct pci_dev *parent,
+> > >  	return true;
+> > >  }
+> > >  
+> > > +#ifdef CONFIG_PCIEAER_CXL
+> > > +
+> > > +static bool is_cxl_mem_dev(struct pci_dev *dev)
+> > > +{
+> > > +	/*
+> > > +	 * A CXL device is controlled only using PCIe Configuration
+> > > +	 * Space of device 0, Function 0.  
+> > 
+> > That's not true in general.   Definitely true that CXL protocol
+> > error reporting is controlled only using this Devfn, but
+> > more generally there could be other stuff in later functions.
+> > So perhaps make the comment more specific.  
+> 
+> I actually mean CXL device in RCD mode here (seen as RCiEP in the PCI
+> hierarchy).
+> 
+> The spec says (cxl 3.0, 8.1.3):
+> 
+> """
+> In either case [(RCD and non-RCD)], the capability, status, and
+> control fields in Device 0, Function 0 DVSEC control the CXL
+> functionality of the entire device.
 
-CPU0                  CPU1
+> """
+> 
+> So dev 0, func 0 must contain a CXL PCIe DVSEC. Thus it is a CXL
+> device and able to handle CXL AER errors. The limitation to the first
+> device prevents the handler from being run multiple times for the same
+> event.
 
-                    |ilo_open
-ilo_remove          |
-kfree(ilo_hw)       |
-//free	            |
-                    |hw = container_of(ip->i_cdev,
-	   	     |struct ilo_hwinfo, cdev);
-                    |hw->ccb_alloc[slot]
-                    |//use
-Fixes: 89bcb05d9bbf ("HP iLO driver")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
----
- drivers/misc/hpilo.c | 16 +++++++++++++++-
- drivers/misc/hpilo.h |  1 +
- 2 files changed, 16 insertions(+), 1 deletion(-)
+Fine with limitation.  Text says "device is controlled only using".
+That is true for what you are controlling here, but other aspects of the
+device are controlled via whatever interface they like.
 
-diff --git a/drivers/misc/hpilo.c b/drivers/misc/hpilo.c
-index 8d00df9243c4..2e9af39e91a4 100644
---- a/drivers/misc/hpilo.c
-+++ b/drivers/misc/hpilo.c
-@@ -37,6 +37,8 @@ static const struct pci_device_id ilo_blacklist[] = {
- 	{}
- };
- 
-+static void ilo_delete(struct kref *kref);
-+
- static inline int get_entry_id(int entry)
- {
- 	return (entry & ENTRY_MASK_DESCRIPTOR) >> ENTRY_BITPOS_DESCRIPTOR;
-@@ -559,6 +561,7 @@ static int ilo_close(struct inode *ip, struct file *fp)
- 		hw->ccb_alloc[slot]->ccb_cnt--;
- 
- 	spin_unlock(&hw->open_lock);
-+	kref_put(&hw->refcnt, ilo_delete);
- 
- 	return 0;
- }
-@@ -578,6 +581,7 @@ static int ilo_open(struct inode *ip, struct file *fp)
- 	if (!data)
- 		return -ENOMEM;
- 
-+	kref_get(&hw->refcnt);
- 	spin_lock(&hw->open_lock);
- 
- 	/* each fd private_data holds sw/hw view of ccb */
-@@ -633,6 +637,8 @@ static int ilo_open(struct inode *ip, struct file *fp)
- 
- 	if (!error)
- 		fp->private_data = hw->ccb_alloc[slot];
-+	else
-+		kref_put(&hw->refcnt, ilo_delete);
- 
- 	return error;
- }
-@@ -742,8 +748,15 @@ static int ilo_map_device(struct pci_dev *pdev, struct ilo_hwinfo *hw)
- 
- static void ilo_remove(struct pci_dev *pdev)
- {
--	int i, minor;
- 	struct ilo_hwinfo *ilo_hw = pci_get_drvdata(pdev);
-+	kref_put(&ilo_hw->refcnt, ilo_delete);
-+}
-+
-+static void ilo_delete(struct kref *kref)
-+{
-+	int i, minor;
-+	struct ilo_hwinfo *ilo_hw = container_of(kref, struct ilo_hwinfo, refcnt);
-+	struct pci_dev *pdev = ilo_hw->ilo_dev;
- 
- 	if (!ilo_hw)
- 		return;
-@@ -807,6 +820,7 @@ static int ilo_probe(struct pci_dev *pdev,
- 		goto out;
- 
- 	ilo_hw->ilo_dev = pdev;
-+	kref_init(&ilo_hw->refcnt);
- 	spin_lock_init(&ilo_hw->alloc_lock);
- 	spin_lock_init(&ilo_hw->fifo_lock);
- 	spin_lock_init(&ilo_hw->open_lock);
-diff --git a/drivers/misc/hpilo.h b/drivers/misc/hpilo.h
-index d57c34680b09..ebc677eb45ae 100644
---- a/drivers/misc/hpilo.h
-+++ b/drivers/misc/hpilo.h
-@@ -62,6 +62,7 @@ struct ilo_hwinfo {
- 	spinlock_t fifo_lock;
- 
- 	struct cdev cdev;
-+	struct kref refcnt;
- };
- 
- /* offset from mmio_vaddr for enabling doorbell interrupts */
--- 
-2.25.1
+Perhaps just quote the specification as you have done in your reply. Then it
+is clear that we mean just these registers.
+
+
+> 
+> 
+> >   
+> > > +	 */
+> > > +	if (dev->devfn != PCI_DEVFN(0, 0))
+> > > +		return false;
+> > > +
+> > > +	/* Right now there is only a CXL.mem driver */
+> > > +	if ((dev->class >> 8) != PCI_CLASS_MEMORY_CXL)
+> > > +		return false;
+> > > +
+> > > +	return true;
+> > > +}
+> > > +
+> > > +static bool is_internal_error(struct aer_err_info *info)
+> > > +{
+> > > +	if (info->severity == AER_CORRECTABLE)
+> > > +		return info->status & PCI_ERR_COR_INTERNAL;
+> > > +
+> > > +	return info->status & PCI_ERR_UNC_INTN;
+> > > +}
+> > > +
+> > > +static void handle_error_source(struct pci_dev *dev, struct aer_err_info *info);
+> > > +
+> > > +static int cxl_handle_error_iter(struct pci_dev *dev, void *data)
+> > > +{
+> > > +	struct aer_err_info *e_info = (struct aer_err_info *)data;
+> > > +
+> > > +	if (!is_cxl_mem_dev(dev))
+> > > +		return 0;
+> > > +
+> > > +	/* pci_dev_put() in handle_error_source() */
+> > > +	dev = pci_dev_get(dev);
+> > > +	if (dev)
+> > > +		handle_error_source(dev, e_info);
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static void cxl_handle_error(struct pci_dev *dev, struct aer_err_info *info)
+> > > +{
+> > > +	/*
+> > > +	 * CXL downstream port errors are signaled as RCEC internal  
+> > 
+> > Make this comment more specific (to RCH I think).  
+> 
+> Right, same here, this is restricted mode only.
+> 
+> Thanks for review.
+> 
+> -Robert
+> 
+> 
+> >   
+> > > +	 * errors. Forward them to all CXL devices below the RCEC.
+> > > +	 */
+> > > +	if (pci_pcie_type(dev) == PCI_EXP_TYPE_RC_EC &&
+> > > +	    is_internal_error(info))
+> > > +		pcie_walk_rcec(dev, cxl_handle_error_iter, info);
+> > > +}
+> > > +
+> > > +#else
+> > > +static inline void cxl_handle_error(struct pci_dev *dev,
+> > > +				    struct aer_err_info *info) { }
+> > > +#endif
+> > > +
+> > >  /**
+> > >   * handle_error_source - handle logging error into an event log
+> > >   * @dev: pointer to pci_dev data structure of error source device
+> > > @@ -957,6 +1016,8 @@ static void handle_error_source(struct pci_dev *dev, struct aer_err_info *info)
+> > >  {
+> > >  	int aer = dev->aer_cap;
+> > >  
+> > > +	cxl_handle_error(dev, info);
+> > > +
+> > >  	if (info->severity == AER_CORRECTABLE) {
+> > >  		/*
+> > >  		 * Correctable error does not need software intervention.  
+> >   
 
