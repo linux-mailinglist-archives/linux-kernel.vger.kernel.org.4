@@ -2,73 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 447616E3F64
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 08:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 418306E3F6A
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 08:11:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbjDQGIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 02:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46864 "EHLO
+        id S230003AbjDQGLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 02:11:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjDQGIH (ORCPT
+        with ESMTP id S229519AbjDQGLV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 02:08:07 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B93730F4;
-        Sun, 16 Apr 2023 23:08:06 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 07EE121A3F;
-        Mon, 17 Apr 2023 06:08:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1681711685; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=57APiRN5jmkxHW5qmrqEqSD4orbsmDmR3FRnoe94H+8=;
-        b=nYAzHSqJwsSlksYUDBfan7/Sam5ZBe93jlwB/R2D+CUocq2G6NTQwX9VEtiyCHGDvF4hX3
-        HbODDmSCOUzvWJ0lWToqn1KriceumR6eZqgkVX0M3M/nMHCT/k+paQK0xx9xsnJCzmRMto
-        hc4j7xf1dg3fXnN8/9JzR9V1mNzICYk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1681711685;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=57APiRN5jmkxHW5qmrqEqSD4orbsmDmR3FRnoe94H+8=;
-        b=kgoPt0Oq6wA5BtJfFT/NP9ZN5UBRc0ZOOok0eybP0nORcqCDrmsPtkFSGt52ZWuoDhuKky
-        o5V9oapmkD7do6Cg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D93071390E;
-        Mon, 17 Apr 2023 06:08:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id c9MsNETiPGRYewAAMHmgww
-        (envelope-from <hare@suse.de>); Mon, 17 Apr 2023 06:08:04 +0000
-Message-ID: <df36a72c-5b20-f071-ec1c-312f43939ebc@suse.de>
-Date:   Mon, 17 Apr 2023 08:08:04 +0200
+        Mon, 17 Apr 2023 02:11:21 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0837B9C
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 23:11:20 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33H2tLOG031643;
+        Mon, 17 Apr 2023 06:11:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=0L2GsiArAQ0KHo+J66zk+d6GqegkJ7AgxORPHbMMORA=;
+ b=fIC3e+5wkSvdbpOkJQyJaiQS2T9kmHT0pgQ4mJIrhrsQb2m4B80+BSRAKbsHfklOkqjq
+ yzF2E4k/cz+J0g6JEpDZaV9jjYGJuXXXNqLto+exiKQPkRvkRxUvnVb5Aup5fiVrTAfW
+ rWyA/sKTVj9B1s0bcMovW+EW+Wtn/iAdLn+RnPq0KWCq8QB3lZYjIGVsfuBh0ncdoEBh
+ 22G5aRddCU3h3VOfxbUEl6V0qEA50hUUaecMmcIj9jFoOFbpwd+TglCMUKJbeCj8QG4j
+ QLhVsoXsAcEaKc7sULRpvSFQkp8gjs94pvSWSAdA2tlxBSYOgwt+lXrWr8LYHrIc7ytz eA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pymppanyd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Apr 2023 06:11:08 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33H6B8iY011327
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Apr 2023 06:11:08 GMT
+Received: from [10.216.36.54] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Sun, 16 Apr
+ 2023 23:11:04 -0700
+Message-ID: <e6cd1f1e-e54c-87ae-ed23-cc1eca26837c@quicinc.com>
+Date:   Mon, 17 Apr 2023 11:41:00 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] mm/filemap: allocate folios according to the blocksize
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH V7 0/2] mm: shmem: support POSIX_FADV_[WILL|DONT]NEED for
+ shmem files
 Content-Language: en-US
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Pankaj Raghav <p.raghav@samsung.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mcgrof@kernel.org
-References: <20230414134908.103932-1-hare@suse.de>
- <ZDzM6A0w4seEumVo@infradead.org>
-From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <ZDzM6A0w4seEumVo@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+To:     Frank van der Linden <fvdl@google.com>
+CC:     <akpm@linux-foundation.org>, <hughd@google.com>,
+        <willy@infradead.org>, <markhemm@googlemail.com>,
+        <rientjes@google.com>, <surenb@google.com>, <shakeelb@google.com>,
+        <quic_pkondeti@quicinc.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+References: <cover.1676378702.git.quic_charante@quicinc.com>
+ <CAPTztWYgRORXKp83Spm3DX8qJsi1rw5s=WbPcjUYfOxFXxRAwg@mail.gmail.com>
+ <CAPTztWadceJtPUrSab1Tj2WV=uAhLo+CrxqyeSQ8rLn0FtM_zA@mail.gmail.com>
+ <0853b4b0-770f-f742-95bc-eb74a1859138@quicinc.com>
+ <CAPTztWZ-PTmF=AazhCuC3u-Ca_mY+QsJGgMdu4W0DC05zk3-iA@mail.gmail.com>
+From:   Charan Teja Kalla <quic_charante@quicinc.com>
+In-Reply-To: <CAPTztWZ-PTmF=AazhCuC3u-Ca_mY+QsJGgMdu4W0DC05zk3-iA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: cF2e-jBVb6DNIvzZe6tIhl1wtVm5d3xI
+X-Proofpoint-GUID: cF2e-jBVb6DNIvzZe6tIhl1wtVm5d3xI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-17_02,2023-04-14_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ clxscore=1015 lowpriorityscore=0 impostorscore=0 mlxlogscore=563
+ mlxscore=0 phishscore=0 priorityscore=1501 spamscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304170056
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,22 +87,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/17/23 06:36, Christoph Hellwig wrote:
-> On Fri, Apr 14, 2023 at 03:49:08PM +0200, Hannes Reinecke wrote:
->> If the blocksize is larger than the pagesize allocate folios
->> with the correct order.
-> 
-> And how is that supposed to actually happen?
+On 4/15/2023 3:32 AM, Frank van der Linden wrote:
+> However, that can
+> be addressed later, my comments weren't intended to raise an objection
+> - merely that there is a chance here to address this usecase. But that
+> shouldn't block anything. It's something to keep in mind, though.
+>
+Noted. Thanks!!
+> I'll do some experiments to see what the best solution is here
+Sure. We can work and add the support for mapped pages too which will go
+on top of these patches.
 
-By using my patcheset to brd and set the logical blocksize to eg 16k.
-
-Cheers,
-
-Hannes
--- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Ivo Totev, Andrew
-Myers, Andrew McDonald, Martje Boudien Moerman
-
+Thanks,
+Charan
