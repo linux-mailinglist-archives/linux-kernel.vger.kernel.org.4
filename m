@@ -2,60 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47D596E3F93
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 08:18:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E12676E3FA0
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 08:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbjDQGSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 02:18:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53046 "EHLO
+        id S230121AbjDQGUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 02:20:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbjDQGSB (ORCPT
+        with ESMTP id S230064AbjDQGUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 02:18:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA2663594;
-        Sun, 16 Apr 2023 23:17:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F9B061E55;
-        Mon, 17 Apr 2023 06:17:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFD6BC433D2;
-        Mon, 17 Apr 2023 06:17:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1681712275;
-        bh=Y8TxkwBypVbfJfqk9Zx8zrG1eLvILNU8x7E3DpCb4nk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WG5vVYDnZacNXITU37Ny/Se1syqBe8WxtL5YEOC2+vtM3aMQ9hxA1U3wiOCLiS9a7
-         PMsd+YFj2CLbJD6vErPCqveZP0d5Plui3DKftHcoVEqNvTKRcQrhGouX8UmJq1l8zA
-         NuOq5s6qDWOaUNOZ4oxtDiAoXIodEYgffF+EPGuo=
-Date:   Mon, 17 Apr 2023 08:17:52 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Alex Elder <elder@ieee.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-Subject: Re: [PATCH V1 2/3] drivers: misc: dcc: Add driver support for Data
- Capture and Compare unit(DCC)
-Message-ID: <ZDzkkNQP5eO2vcxA@kroah.com>
-References: <cover.1681480351.git.quic_schowdhu@quicinc.com>
- <b1a9cbbcfefe133cc9047a71a2acdaa74239df29.1681480351.git.quic_schowdhu@quicinc.com>
- <ZDo4jIIV7cfPD2qW@kroah.com>
- <f3196d7a-50f0-9bfb-71a6-47ddb9686039@quicinc.com>
+        Mon, 17 Apr 2023 02:20:11 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C6A3AA8
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 23:20:08 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id u3so9219428ejj.12
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 23:20:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681712407; x=1684304407;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cJzj86LhSJdAtbDEWAVBqUw/9fJfGhViwtTg9bTQuwI=;
+        b=UwxNUHi1Q2SgXqIq3683UkBdctv5eKKX4T6cw2UjfsXc5YW6Z3PBE6NlPjLW6oVX8G
+         kwN3WLBuMU05G6+iRNYz4AZAV6bHlfUVNFqrywbO0pBt8oD6KYzVcHpeWoGmx1hDTw2Z
+         KDBCiGit5JahQBASnL1rzyGRy43I70DwwKGxJ2LI1rlRjLOC+s/4sO1GLMxjvOkb1b/T
+         5+39CQS1xToB6e9McpvQoD7TYUklpGa9WnUh/ubH/roqVLknUgjocOXkSxqtFtXXR0PP
+         dC31xa56ppER0VHU4Dpk+mo3NIAVMs1Nf0+pr4opnCQ2wUQ7Noh4n4hLAjs8xQFRm2bX
+         ct0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681712407; x=1684304407;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cJzj86LhSJdAtbDEWAVBqUw/9fJfGhViwtTg9bTQuwI=;
+        b=PFHQT1jvoeEEsvswlsxJ3/zmQM/qqcH/J5PUpWrdcTkGDGRyitjSPZUPtdL1orYSTx
+         /H0CHfFntlLexUtXjRP+r74FuGwi6EagqegQ/d3cfHOveaBVBC+UEpE/nMZCSQfENAW3
+         AV9ejpsIX2WIh7sRnwBswutz/8YuKOS1yR4UBpdUjYAI3j/xecqE6k4zKVtQxgkiAFcX
+         HCNYjjIYb02oOc72LNF6YF6LJAjo7H3wcblvkHtwa/AbA9Zi5OD0vdVlRK+riiTRq8ke
+         7YKpEueFIF64vyMiJG3NW4QyU4Dk8tvGXo15VT6TxVptfADiliSgZrBqmPqlO3Qqi/qh
+         5FPg==
+X-Gm-Message-State: AAQBX9f8ZflzKpu86CCY0Zv3greCGQKzh0ZMDxYfqqfsh0X9LzRT+Afh
+        WcgJbsk8g3DR81Ngfgt5HdCeOg==
+X-Google-Smtp-Source: AKy350b8SXOaVHs71B0PzryL6gYZwUkAWF9/MWVAL9BYOIq7rQp8WPjgG4lUStlvKPn23FMl4BQA3g==
+X-Received: by 2002:a17:907:a08d:b0:94f:8f37:d4e with SMTP id hu13-20020a170907a08d00b0094f8f370d4emr707144ejc.65.1681712407414;
+        Sun, 16 Apr 2023 23:20:07 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:b0ac:4d3b:966c:b33d? ([2a02:810d:15c0:828:b0ac:4d3b:966c:b33d])
+        by smtp.gmail.com with ESMTPSA id s15-20020a1709060c0f00b0094ca077c985sm6072788ejf.213.2023.04.16.23.20.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Apr 2023 23:20:06 -0700 (PDT)
+Message-ID: <9edfca01-4191-8eca-32c6-c95f7c7601ae@linaro.org>
+Date:   Mon, 17 Apr 2023 08:20:04 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f3196d7a-50f0-9bfb-71a6-47ddb9686039@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 6/6] dt-bindings: watchdog: realtek,otto-wdt: simplify
+ requiring interrupt-names
+Content-Language: en-US
+To:     Sander Vanheule <sander@svanheule.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Julius Werner <jwerner@chromium.org>,
+        Evan Benn <evanbenn@chromium.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Fu Wei <fu.wei@linaro.org>, Viresh Kumar <vireshk@kernel.org>,
+        Eugen Hristev <eugen.hristev@collabora.com>,
+        Justin Chen <justinpopo6@gmail.com>, ?ecki <rafal@milecki.pl>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Corentin Labbe <clabbe@baylibre.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jamie Iles <jamie@jamieiles.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Christophe Roullier <christophe.roullier@foss.st.com>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
+        Srinivas Neeli <srinivas.neeli@xilinx.com>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-renesas-soc@vger.kernel.org
+References: <20230415095112.51257-1-krzysztof.kozlowski@linaro.org>
+ <20230415095112.51257-6-krzysztof.kozlowski@linaro.org>
+ <75148300a158ceb0f86043535b089838e1d1bb61.camel@svanheule.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <75148300a158ceb0f86043535b089838e1d1bb61.camel@svanheule.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,152 +129,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 11:31:46AM +0530, Souradeep Chowdhury wrote:
+On 16/04/2023 21:00, Sander Vanheule wrote:
+> Hi Krzysztof,
 > 
+> On Sat, 2023-04-15 at 11:51 +0200, Krzysztof Kozlowski wrote:
+>> Required properties should be listed in "required:" block.  Since
+>> interrupts are already there, the dependency of interrupt-names on the
+>> interrupts can be simplified.
 > 
-> On 4/15/2023 11:09 AM, Greg Kroah-Hartman wrote:
-> > On Fri, Apr 14, 2023 at 07:29:12PM +0530, Souradeep Chowdhury wrote:
-> > > The DCC is a DMA Engine designed to capture and store data
-> > > during system crash or software triggers. The DCC operates
-> > > based on user inputs via the debugfs interface. The user gives
-> > > addresses as inputs and these addresses are stored in the
-> > > dcc sram. In case of a system crash or a manual software
-> > > trigger by the user through the debugfs interface,
-> > > the dcc captures and stores the values at these addresses.
-> > > This patch contains the driver which has all the methods
-> > > pertaining to the debugfs interface, auxiliary functions to
-> > > support all the four fundamental operations of dcc namely
-> > > read, write, read/modify/write and loop. The probe method
-> > > here instantiates all the resources necessary for dcc to
-> > > operate mainly the dedicated dcc sram where it stores the
-> > > values. The DCC driver can be used for debugging purposes
-> > > without going for a reboot since it can perform software
-> > > triggers as well based on user inputs.
-> > 
-> > You have 72 columns, why not use them all please?
-> > 
-> > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > +/*
-> > > + * Copyright (c) 2015-2021, The Linux Foundation. All rights reserved.
-> > > + * Copyright (c) 2022, Qualcomm Innovation Center, Inc. All rights reserved.
-> > 
-> > It is now 2023 :)
-> 
-> Ack
-> 
-> > 
-> > 
-> > 
-> > 
-> > > + */
-> > > +
-> > > +#include <linux/bitfield.h>
-> > > +#include <linux/bitops.h>
-> > > +#include <linux/debugfs.h>
-> > > +#include <linux/delay.h>
-> > > +#include <linux/fs.h>
-> > > +#include <linux/io.h>
-> > > +#include <linux/iopoll.h>
-> > > +#include <linux/miscdevice.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/of.h>
-> > > +#include <linux/of_device.h>
-> > > +#include <linux/platform_device.h>
-> > > +#include <linux/slab.h>
-> > > +#include <linux/uaccess.h>
-> > > +
-> > > +#define STATUS_READY_TIMEOUT		5000  /* microseconds */
-> > > +
-> > > +#define DCC_SRAM_NODE "dcc_sram"
-> > 
-> > You only use this once, why is a #define needed?
-> 
-> This is as per the comment on version 1 of the patch series on DCC
-> 
-> https://lore.kernel.org/linux-arm-kernel/YElUCaBUOx7hEuIh@builder.lan/
-> 
-> "kzalloc + strlcpy can be replaced by kstrdup(), but that said...all this
-> does seems to be to copy a const string to the heap and lugging it
-> around. Use a define instead."
+> Maybe I'm not reading this right, but isn't the dependency stated in the binding
+> "interrupts requires interrupt-names to be present"? resource-names.txt
+> describes the reverse dependency ("interrupt-names is only meaningful with an
+> associated interrupts").
 
-But as you are not doing any of that here, just using the string in the
-one place it is needed is the same thing :)
+The interrupts are already required by the binding, so the dependency,
+which makes interrupts depending on presence of interrupt-names,
+effectively was making the names required.
 
-> > > +static void dcc_create_debug_dir(struct dcc_drvdata *drvdata)
-> > > +{
-> > > +	int i;
-> > > +	char list_num[10];
-> > > +	struct dentry *list;
-> > > +	struct device *dev = drvdata->dev;
-> > > +
-> > > +	drvdata->dbg_dir = debugfs_create_dir(dev_name(dev), NULL);
-> > 
-> > You are creating a directory at the root of debugfs with just your
-> > device name?  While that will work, that feels very odd.  Please use a
-> > subdirectory.
-> 
-> This is as per the comment on v17 of the patch series on DCC
-> 
-> https://lore.kernel.org/linux-arm-kernel/6693993c-bd81-c974-a903-52a62bfec606@ieee.org/
-> 
-> "You never remove this dcc_dbg directory.  Why not?
-> 
-> And since you don't, dcc_dbg could just be a local
-> variable here rather than being a global.  But it
-> seems to me this is the root directory you want to
-> remove when you're done."
+Best regards,
+Krzysztof
 
-But that's not the issue.  The issue is that you are putting into
-/sys/kernel/debug/ a flat namespace of all of your devices.  Is that
-really what you want?  If so, why do you think this will never conflict
-with any other device in the system?
-
-> > > +	if (IS_ERR(drvdata->dbg_dir)) {
-> > > +		pr_err("can't create debugfs dir\n");
-> > 
-> > There is no need to ever check the return value of a debugfs call.
-> > 
-> > Nor do you really ever even need to save off the dentry here, just look
-> > it up when you need to remove it.
-> 
-> Ack
-> 
-> > 
-> > > +		return;
-> > > +	}
-> > > +
-> > > +	for (i = 0; i <= drvdata->nr_link_list; i++) {
-> > > +		sprintf(list_num, "%d", i);
-> > > +		list = debugfs_create_dir(list_num, drvdata->dbg_dir);
-> > > +		debugfs_create_file("enable", 0600, list, drvdata, &enable_fops);
-> > > +		debugfs_create_file("config", 0600, list, drvdata, &config_fops);
-> > > +	}
-> > > +
-> > > +	debugfs_create_file("trigger", 0200, drvdata->dbg_dir, drvdata, &trigger_fops);
-> > > +	debugfs_create_file("ready", 0400, drvdata->dbg_dir, drvdata, &ready_fops);
-> > > +	debugfs_create_file("config_reset", 0200, drvdata->dbg_dir,
-> > > +			    drvdata, &config_reset_fops);
-> > 
-> > This really looks like you are using debugfs to control the device, not
-> > just for debugging information.  How are you going to be able to use the
-> > device in a system that has debugfs disabled?
-> 
-> As per upstream discussions it was decided that debugfs will be a suitable
-> interface for DCC. More on this in the following link:-
-> 
-> https://lore.kernel.org/linux-arm-kernel/20221228172825.r32vpphbdulaldvv@builder.lan/
-
-debugfs is not a suitable interface for anything that is "real" as
-that's not what it is there for.  Most systems disable debugfs entirely
-(i.e. Android), or prevent any normal user from accessing it, so this
-api you are creating will not be able to be used by anyone.
-
-debugfs is for debugging, not for anything that the system functionality
-relies on to work properly.
-
-Also, that was a v21 of the patch series, why did the numbering start
-over here at v1?
-
-thanks,
-
-greg k-h
