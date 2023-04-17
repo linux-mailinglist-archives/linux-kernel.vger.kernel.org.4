@@ -2,79 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 605AD6E46CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 13:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A210F6E4769
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 14:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbjDQLuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 07:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40010 "EHLO
+        id S230181AbjDQMTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 08:19:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230192AbjDQLux (ORCPT
+        with ESMTP id S230039AbjDQMS7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 07:50:53 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A62E5B
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 04:49:59 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4ec8133c698so6259427e87.0
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 04:49:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681732169; x=1684324169;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=T/OjZyhE0ENwMdI5KuPOl9FD06Q0NXkVYxfRjcYOPrE=;
-        b=KCLNbnzyHTT8esQG29pR8LPrFJTnKlZAOfEg3RK+HOPSU2yxVxgAlRF8i0+JCGuwp6
-         J1nHX03YXSz2YOM9JYWcrlU7XvehWfW/2OjA6ndP8EHl6GC4lTXDQH14IMnXV37y9iqK
-         /Szv3Q28HSyN/6UrCIHTCakLzKcyF15cd/2Mz1skZweAGdAJPaLyGt4QtTvLNPczG1fe
-         DvcMgugL+6INRO6iBievWC2oYghp4nH2QK3A4vR7nXrTvkGKTrgHh7IiCzqNIvrKzz2S
-         DJnyq325yzVsRr4zHEsPlZQI2YVWbpcjBsjatJ5vlran414DVJbTTUk+XqhLQV+6TTmH
-         SAeg==
+        Mon, 17 Apr 2023 08:18:59 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F15BB
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 05:18:57 -0700 (PDT)
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 1D5563F22C
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 11:50:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1681732223;
+        bh=6GYDRTm5i091Nsg8Us5E8SdBSSCh6NzIhoebfwUefD0=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=IgahMDmI2v/POHGj/X7gKk2fgviknFjsr8RSLsNooxNNiteND1O8zFY4wH/E1/jUB
+         CX0sSrAtgeH0+ik6GB0OOh7fVyXajxjNxuz5+FcUn4J/sD9Sym7q1MVzEli7Kj8JuA
+         6LupZE4KoJPcYufC+T9d6rgnkbycOEHytZn3mbS/Kh4TThmWAkGeZmuHxVBlwMtcpU
+         OBipkC6SlRTmHquxE99vR8myA5yVdlYeP0ZUnuE08o/TwCV3mtj0eNNaDpQrKQK1bS
+         0sXRoREMQyLyp4QGcAnj7xvdP/lJBuIwyiVX/dc5CsWJaV8NxQolyNdqv1yXX8LM/8
+         QC3zBal444PKQ==
+Received: by mail-pj1-f70.google.com with SMTP id n14-20020a17090aab8e00b002470e26aa0cso3269272pjq.3
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 04:50:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681732169; x=1684324169;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T/OjZyhE0ENwMdI5KuPOl9FD06Q0NXkVYxfRjcYOPrE=;
-        b=f2i2AiiV5l3E0fmLybHW0D1zA5hCJL3fLjOun4LZEGqZ5Fvpw0/SgDjuE8IFQWbvrD
-         0NtCq8NS4Cvf6E/WW31d57MbnybcMpqOCCQDrY1x8uEAtuneTzhnxbw3V78PV+SwAQVE
-         C/5B6nxOra1aMKPibKaqA9rdgPdN+MGgKP16SmQvbFzq6z1cLIxSirOBy6miDuBL3yHQ
-         cBsTpG80l51rxOXtW9IEVJPwokmOPTRsGA57Ncx5oHXJvhUh/JFR4GN5mpF4m9rAD91N
-         Zd6w/ezKEYeLODUFEI0yTA3dCvM9J7XJ+1kMW4tDOcJvx1RFHcM4ZF0cYfnXHt6Q2WQ2
-         XCyA==
-X-Gm-Message-State: AAQBX9e5tNGTUqsvFtYbZJzBez0FEGpZFuEHAVYXYIOtxbFsHPsKpm/M
-        YVk6qI10KWMVBO6b1AGa6ezYsQ==
-X-Google-Smtp-Source: AKy350ZJpouc9mBroBFCAgLb2jZvQ22H22pgo7QKQsZ0p87Se9m+QKD6rvyA8mhUwAVUxNENBdntrA==
-X-Received: by 2002:ac2:532c:0:b0:4eb:e8e:4139 with SMTP id f12-20020ac2532c000000b004eb0e8e4139mr2275009lfh.2.1681732168874;
-        Mon, 17 Apr 2023 04:49:28 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id u9-20020a056512094900b004e887fd71acsm1994012lft.236.2023.04.17.04.49.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Apr 2023 04:49:28 -0700 (PDT)
-Message-ID: <d850071e-162d-9303-6e28-1fe675f69ce4@linaro.org>
-Date:   Mon, 17 Apr 2023 14:49:27 +0300
+        d=1e100.net; s=20221208; t=1681732221; x=1684324221;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6GYDRTm5i091Nsg8Us5E8SdBSSCh6NzIhoebfwUefD0=;
+        b=cxflpyog8MwSVAlrxaG1HwG1W0/Lf43QGhbcinyUuXfswbz2xhhOSp3SwJBtGI4azY
+         DkqYrtKxLYo3PMtlpgwG1+8PEIqZH6l5YRQAusOffnHqODbaCmmn1uhkVNXZg8qXwU+b
+         eKdpuJKR5hFe50cZMLTO9ZaZzjMs5LnSIHU2V7h1T03jpkGMaUaUa/OK0SXoW8z9GuTT
+         lsuKAiiWIqWPO4UenfN8uiAgpzPAWdTFsMTmN5NT3tncqxTPdo9kOAds8OB4+anHROJw
+         1qk0gAxA1avcH6HvL21BRH5vnzL24r+EZHtkS44C3U1DnpAm9U+aoYXiLK/KWvHK18iR
+         xPUQ==
+X-Gm-Message-State: AAQBX9cpzk90pWWfclBcm8KItKQS2Q+Xs81RTRCx0y/BzOYffC9rflAr
+        GeGN4U3bvOnLGNGRk4aMQ8HeJAfmBP4G24C5DunFU+8gjzgVwccd7to+UZwqw4J0Lo/FxkxRtnw
+        YUQOdMF4ceXBZyGX3fWRfmlHlNvXLSuml3CNv8/pvSwGTz2MTpS6tq1k0mw==
+X-Received: by 2002:a17:90a:b00e:b0:247:2437:d5c4 with SMTP id x14-20020a17090ab00e00b002472437d5c4mr13489421pjq.13.1681732221391;
+        Mon, 17 Apr 2023 04:50:21 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bMHUJJluXpbTYJTU5g2d4iXGCmYsFbXGYmNAIPXStId8I4XBXBOXkL9aEbLgiYT/vEGd3M3KO/cmCBEgLV28M=
+X-Received: by 2002:a17:90a:b00e:b0:247:2437:d5c4 with SMTP id
+ x14-20020a17090ab00e00b002472437d5c4mr13489409pjq.13.1681732221055; Mon, 17
+ Apr 2023 04:50:21 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 1/2] clk: qcom: common: Handle invalid index error
-Content-Language: en-GB
-To:     Taniya Das <quic_tdas@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230303092859.22094-1-quic_tdas@quicinc.com>
- <20230303092859.22094-2-quic_tdas@quicinc.com>
- <CAA8EJpq5xBF=Wt-1_hGR-7qZHREcALurmR4ucmMmZaC-R_7Ttg@mail.gmail.com>
- <ce6c952b-2e2b-67d9-5023-e740ed798758@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <ce6c952b-2e2b-67d9-5023-e740ed798758@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20220727013255.269815-2-kai.heng.feng@canonical.com> <20220928214557.GA1840266@bhelgaas>
+In-Reply-To: <20220928214557.GA1840266@bhelgaas>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Mon, 17 Apr 2023 19:50:09 +0800
+Message-ID: <CAAd53p7LFXSmBfLoz3i1C16x1oSJf99pVPuxTbj+tvxuKcNmPA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] PCI/AER: Disable AER service on suspend when IRQ is
+ shared with PME
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     bhelgaas@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, koba.ko@canonical.com,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        mika.westerberg@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,154 +81,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/04/2023 07:40, Taniya Das wrote:
-> Hi Dmitry,
-> 
-> Thanks for the comments.
-> 
-> 
-> On 3/3/2023 4:14 PM, Dmitry Baryshkov wrote:
->> On Fri, 3 Mar 2023 at 11:30, Taniya Das <quic_tdas@quicinc.com> wrote:
->>>
->>> Introduce start_index to handle invalid index error
->>> seen when there are two clock descriptors assigned
->>> to the same clock controller.
->>
->> Please provide details of the exact case that you are trying to solve
->> (this might go to the cover letter). I think the commit message is
->> slightly misleading here. Are you trying to add error messages or to
->> prevent them from showing up?
->>
-> 
-> We are trying to avoid error messages from showing up.
-> 
->> I'm asking because error messages do not seem to correspond to patch
->> 2. You add start_index to make the kernel warn for the clock indices
->> less than LPASS_AUDIO_CC_CDIV_RX_MCLK_DIV_CLK_SRC = 4, while quoted
->> messages show indices 5,6,7.
->>
-> 
-> Right, we want the kernel to warn if the clock index is less than 
-> start_index,
+On Thu, Sep 29, 2022 at 5:46=E2=80=AFAM Bjorn Helgaas <helgaas@kernel.org> =
+wrote:
+>
+> On Wed, Jul 27, 2022 at 09:32:51AM +0800, Kai-Heng Feng wrote:
+> > PCIe service that shares IRQ with PME may cause spurious wakeup on
+> > system suspend.
+> >
+> > PCIe Base Spec 5.0, section 5.2 "Link State Power Management" states
+> > that TLP and DLLP transmission is disabled for a Link in L2/L3 Ready
+> > (D3hot), L2 (D3cold with aux power) and L3 (D3cold), so we don't lose
+> > much here to disable AER during system suspend.
+> >
+> > This is very similar to previous attempts to suspend AER and DPC [1],
+> > but with a different reason.
+> >
+> > [1] https://lore.kernel.org/linux-pci/20220408153159.106741-1-kai.heng.=
+feng@canonical.com/
+> > Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=3D216295
+> >
+> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > ---
+> >  drivers/pci/pcie/aer.c | 23 ++++++++++++++++++++++-
+> >  1 file changed, 22 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+> > index 7952e5efd6cf3..60cc373754af2 100644
+> > --- a/drivers/pci/pcie/aer.c
+> > +++ b/drivers/pci/pcie/aer.c
+> > @@ -1372,6 +1372,26 @@ static int aer_probe(struct pcie_device *dev)
+> >       return 0;
+> >  }
+> >
+> > +static int aer_suspend(struct pcie_device *dev)
+> > +{
+> > +     struct aer_rpc *rpc =3D get_service_data(dev);
+> > +
+> > +     if (dev->shared_pme_irq)
+> > +             aer_disable_rootport(rpc);
+>
+> aer_disable_rootport() seems like it might be overkill.  IIUC, what
+> we want to do here is disable AER interrupts, which should only
+> require clearing ROOT_PORT_INTR_ON_MESG_MASK in PCI_ERR_ROOT_COMMAND.
+>
+> In addition to clearing ROOT_PORT_INTR_ON_MESG_MASK,
+> aer_disable_rootport() traverses the whole hierarchy, clearing
+> PCI_EXP_AER_FLAGS (CERE | NFERE | FERE | URRE) in PCI_EXP_DEVCTL.
+> I don't think these DEVCTL bits control interrupt generation, so I
+> don't know why we need to touch them.
+>
+> aer_disable_rootport() also clears PCI_ERR_ROOT_STATUS, which I think
+> we should not do during suspend either.  We might want to clear it
+> on resume (which we already do in pci_restore_state()), but I think
+> generally we should preserve error information as long as it doesn't
+> cause trouble.
+>
+> Your thoughts please :)
 
-This is arguable but logical. Usually we do not warn for absent clocks.
+Sorry for the belated response.
 
-> along with that we also want to handle the case where 
-> num_rclks is uninitialized because of same clock descriptor being 
-> assigned to two clock controllers.
+Clearing ROOT_PORT_INTR_ON_MESG_MASK along to disable interrupt can
+solve the issue too.
+And I agree that the AER information should be preserved too.
 
-Hmm, but num_rclks is always initialized, isn't it? In the worst case it 
-will default to 0 meaning that
+Kai-Heng
 
-> Earlier Invalid index error was showing up for valid indices 5,6,7 
-> because of the simple if check(idx >= num_rclks), hence we enhanced the 
-> checks to handle the above case and compare the index to the start_index 
-> + num_rclks, instead of simply comparing it with num_clks.
-
-This is not a part of the patch and it will be incorrect anyway, since 
-num_rclks = desc->num_clks = ARRAY_SIZE(some_cc_clocks).
-
-Checking idx against `start_index + num_rclks` will allow one to get 
-clocks after the end of rclks array.
-
-For lpass_audio_cc_sc7280_desc num_rclks should get the value of 16, as 
-the last entry in llpass_audio_cc_sc7280_clocks has index 
-LPASS_AUDIO_CC_RX_MCLK_CLK_SRC = 15.
-
-My analysis might be completely wrong, but I can only assume that 
-somehow wrong clock controller got used. Could you please give it a try 
-with the 
-https://lore.kernel.org/linux-clk/20230417114659.137535-1-dmitry.baryshkov@linaro.org/ 
-being applied?
-
-> 
->> Nit: please don't overwrap the commit message, the recommended line
->> width is about 72-77 chars.
->>
-> 
-> Done.
-> 
->>>
->>> [ 3.600604] qcom_cc_clk_hw_get: invalid index 5
->>> [ 3.625251] qcom_cc_clk_hw_get: invalid index 6
->>> [ 3.648190] qcom_cc_clk_hw_get: invalid index 7
->>
->>>
->>> Fixes: 120c15528390 ("clk: qcom: Migrate to clk_hw based registration 
->>> and OF APIs")
->>> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
->>> ---
->>>   drivers/clk/qcom/common.c | 12 ++++++++----
->>>   drivers/clk/qcom/common.h |  1 +
->>>   2 files changed, 9 insertions(+), 4 deletions(-)
->>>
->>> diff --git a/drivers/clk/qcom/common.c b/drivers/clk/qcom/common.c
->>> index 75f09e6e057e..0e80535b61f2 100644
->>> --- a/drivers/clk/qcom/common.c
->>> +++ b/drivers/clk/qcom/common.c
->>> @@ -21,6 +21,7 @@ struct qcom_cc {
->>>          struct qcom_reset_controller reset;
->>>          struct clk_regmap **rclks;
->>>          size_t num_rclks;
->>> +       u32 rclks_start_index;
->>>   };
->>>
->>>   const
->>> @@ -226,12 +227,13 @@ static struct clk_hw *qcom_cc_clk_hw_get(struct 
->>> of_phandle_args *clkspec,
->>>          struct qcom_cc *cc = data;
->>>          unsigned int idx = clkspec->args[0];
->>>
->>> -       if (idx >= cc->num_rclks) {
->>> +       if (idx >= cc->rclks_start_index && idx < cc->num_rclks)
->>> +               return cc->rclks[idx] ? &cc->rclks[idx]->hw : NULL;
->>> +       else if (idx < cc->rclks_start_index && idx >= cc->num_rclks)
->>>                  pr_err("%s: invalid index %u\n", __func__, idx);
->>> -               return ERR_PTR(-EINVAL);
->>> -       }
->>>
->>> -       return cc->rclks[idx] ? &cc->rclks[idx]->hw : NULL;
->>> +       return ERR_PTR(-EINVAL);
->>> +
->>>   }
->>>
->>>   int qcom_cc_really_probe(struct platform_device *pdev,
->>> @@ -281,6 +283,8 @@ int qcom_cc_really_probe(struct platform_device 
->>> *pdev,
->>>
->>>          cc->rclks = rclks;
->>>          cc->num_rclks = num_clks;
->>> +       if (desc->start_index)
->>> +               cc->rclks_start_index = desc->start_index;
->>>
->>>          qcom_cc_drop_protected(dev, cc);
->>>
->>> diff --git a/drivers/clk/qcom/common.h b/drivers/clk/qcom/common.h
->>> index 9c8f7b798d9f..924f36af55b3 100644
->>> --- a/drivers/clk/qcom/common.h
->>> +++ b/drivers/clk/qcom/common.h
->>> @@ -23,6 +23,7 @@ struct qcom_cc_desc {
->>>          const struct regmap_config *config;
->>>          struct clk_regmap **clks;
->>>          size_t num_clks;
->>> +       u32 start_index;
->>>          const struct qcom_reset_map *resets;
->>>          size_t num_resets;
->>>          struct gdsc **gdscs;
->>> -- 
->>> 2.17.1
->>>
->>
->>
->> -- 
->> With best wishes
->>
->>
->>
->> Dmitry
-> 
-
--- 
-With best wishes
-Dmitry
-
+>
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int aer_resume(struct pcie_device *dev)
+> > +{
+> > +     struct aer_rpc *rpc =3D get_service_data(dev);
+> > +
+> > +     if (dev->shared_pme_irq)
+> > +             aer_enable_rootport(rpc);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> >  /**
+> >   * aer_root_reset - reset Root Port hierarchy, RCEC, or RCiEP
+> >   * @dev: pointer to Root Port, RCEC, or RCiEP
+> > @@ -1441,8 +1461,9 @@ static struct pcie_port_service_driver aerdriver =
+=3D {
+> >       .name           =3D "aer",
+> >       .port_type      =3D PCIE_ANY_PORT,
+> >       .service        =3D PCIE_PORT_SERVICE_AER,
+> > -
+> >       .probe          =3D aer_probe,
+> > +     .suspend        =3D aer_suspend,
+> > +     .resume         =3D aer_resume,
+> >       .remove         =3D aer_remove,
+> >  };
+> >
+> > --
+> > 2.36.1
+> >
