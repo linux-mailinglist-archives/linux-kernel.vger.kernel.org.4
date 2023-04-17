@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 524406E4C50
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 17:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24B866E4C51
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 17:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231124AbjDQPDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 11:03:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57426 "EHLO
+        id S231226AbjDQPDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 11:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231145AbjDQPDN (ORCPT
+        with ESMTP id S231223AbjDQPDQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 11:03:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087BF86B8
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 08:03:12 -0700 (PDT)
+        Mon, 17 Apr 2023 11:03:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7BE7D8A
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 08:03:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8152862523
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 15:03:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63776C433D2;
-        Mon, 17 Apr 2023 15:03:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4505561FE3
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 15:03:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67510C433EF;
+        Mon, 17 Apr 2023 15:03:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681743790;
-        bh=SPowuaH4kDg56XhhrdUJCm9J7cpCLWj1gVcG5OvC6VM=;
+        s=k20201202; t=1681743793;
+        bh=4zLCQQLPHhd9U3NrW2oybo5omrLbQqct9gaX3Vlktc4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=akwHn71tvkQTubB94jj3Aoio+N9pIMuCBYiPk5CCZ0K2hfGlSVElhxSzhOx+3R+Py
-         UKP5qIAUqd9VsfxvfeRgoZfQmdakL1H6vGQWAkZ1mH9DaY8PfJ6f15SQu1OBTzEWbE
-         7tUDUVttmWnM9OWmlNi6xFpBiXXw3ezvJnFJEFbCixmV4mO7vBcD3HMQF4Lo98bCdU
-         LXbZxOeQQIydlrf9c3NBzbrAu7PS3B6+omMgGkRBG4Q7vnBsOz2wGzeeY/x8vx37aj
-         g8BuoUD+yK+0s2F52i04Mp8r8NDa0Da9dP6XaArP8+6VuqcRvOwRuxVoPwdJM895af
-         IWm5C+uaw9Dfg==
+        b=LcXRN8NHKHZ4jUdOw5dLi+CZreHW/xr/v8W+UqOfapglOWdi/AtwGVP1O/Ke9uAy4
+         Zx1uyqDUaH2/Zod+Xbj8K8mG/PxhFG2gTCateKkpMopCzvplpn5DYnrlJciNK+19XF
+         oWcmfl9B+8C6bYMBnUcjs0w+UV6TkycsDYPXi/jSFONBZmNhwtEPjLUYgp41+Zm9kY
+         MbO898F5MBsMUw6PLm9AvepfCN552xVL0hM1/eKGtlEl85Y7R6q0GELk/Czad8FXzq
+         sPcNO7d1YX5sQAtZtlhsAukdrS8dKQ9rJuT997iMUN86FFednibqolw/y7i5bKk9fL
+         ZEYxLLTvg/Fyg==
 From:   Will Deacon <will@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Joey Gouly <joey.gouly@arm.com>
-Subject: Re: [PATCH v5] arm64/sysreg: Convert HFGITR_EL2 to automatic generation
-Date:   Mon, 17 Apr 2023 16:03:02 +0100
-Message-Id: <168173287047.3661649.9384527225958097521.b4-ty@kernel.org>
+To:     Junhao He <hejunhao3@huawei.com>, mark.rutland@arm.com,
+        linux-kernel@vger.kernel.org, jonathan.cameron@huawei.com
+Cc:     catalin.marinas@arm.com, kernel-team@android.com,
+        Will Deacon <will@kernel.org>, yangyicong@huawei.com,
+        shenyang39@huawei.com, f.fangjian@huawei.com, linuxarm@huawei.com,
+        linux-arm-kernel@lists.infradead.org, prime.zeng@hisilicon.com
+Subject: Re: [PATCH 0/2]Fix NULL pointer and doing cleanup
+Date:   Mon, 17 Apr 2023 16:03:03 +0100
+Message-Id: <168173365122.3729437.735931240907393778.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230306-arm64-fgt-reg-gen-v5-1-516a89cb50f6@kernel.org>
-References: <20230306-arm64-fgt-reg-gen-v5-1-516a89cb50f6@kernel.org>
+In-Reply-To: <20230403081423.62460-1-hejunhao3@huawei.com>
+References: <20230403081423.62460-1-hejunhao3@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,17 +58,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Apr 2023 17:26:43 +0100, Mark Brown wrote:
-> Automatically generate the Hypervisor Fine-Grained Instruction Trap
-> Register as per DDI0601 2023-03, currently we only have a definition for
-> the register name not any of the contents.  No functional change.
+On Mon, 3 Apr 2023 16:14:21 +0800, Junhao He wrote:
+> Fix NULL pointer and cleanup redundant initialized.
 > 
+> Junhao He (2):
+>   drivers/perf: hisi: Remove redundant initialized of pmu->name
+>   drivers/perf: hisi: add NULL check for name
 > 
+> drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c  |  2 +-
+>  drivers/perf/hisilicon/hisi_uncore_ddrc_pmu.c | 19 +++++++++++--------
+>  drivers/perf/hisilicon/hisi_uncore_hha_pmu.c  |  9 ++++++---
+>  drivers/perf/hisilicon/hisi_uncore_l3c_pmu.c  | 13 ++++++-------
+>  drivers/perf/hisilicon/hisi_uncore_pa_pmu.c   |  2 +-
+>  drivers/perf/hisilicon/hisi_uncore_pmu.c      |  4 +---
+>  drivers/perf/hisilicon/hisi_uncore_pmu.h      |  3 +--
+>  drivers/perf/hisilicon/hisi_uncore_sllc_pmu.c |  2 +-
+>  8 files changed, 28 insertions(+), 26 deletions(-)
+> 
+> [...]
 
-Applied to arm64 (for-next/sysreg), thanks!
+Applied to will (for-next/perf), thanks!
 
-[1/1] arm64/sysreg: Convert HFGITR_EL2 to automatic generation
-      https://git.kernel.org/arm64/c/bbd329fe723d
+[1/2] drivers/perf: hisi: Remove redundant initialized of pmu->name
+      https://git.kernel.org/will/c/25d8c25025a4
+[2/2] drivers/perf: hisi: add NULL check for name
+      https://git.kernel.org/will/c/257aedb72e73
 
 Cheers,
 -- 
