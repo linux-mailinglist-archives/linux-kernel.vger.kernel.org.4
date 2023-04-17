@@ -2,214 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 321D56E4EEC
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 19:15:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 784C26E4EF4
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 19:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbjDQRPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 13:15:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43918 "EHLO
+        id S230143AbjDQRPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 13:15:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjDQRPI (ORCPT
+        with ESMTP id S229602AbjDQRPr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 13:15:08 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67011F2
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 10:15:06 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f04275b2bdso231465e9.1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 10:15:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681751705; x=1684343705;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a3stGmteRzeKnj1XWwcELOuoYuh13a22U1AyLn+AXFA=;
-        b=USlKOpbDldphAUyai69TJ//1HRVKA+ShayAbY7sLGbOvQEvKIz5naSn8kFIiDcr28/
-         NIQJbOHZ8t3qCBFz3xrGTiZzjZeb3edXdAxv576q7gp/guq8USCQw3xlKGcIgm2F9wlh
-         czvyeui5XMogGuzZFqFg3RkSzMKnnDBMXFJ++iSePFy3yf5ijT7DBL196+/BykIq58yB
-         mCV0EAz3oaws1Mx2yyICHKgCqo+opOlSsTFGz2C9YDQXIbqoTXT9QDfJfo/feuB7Qelk
-         K1jUJryuv9g3iU2g0t9KSxnLF5jTTdFowzqOPr/k9fHkohYrGxSyWDWgs/u1KLsxaF5+
-         F59w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681751705; x=1684343705;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a3stGmteRzeKnj1XWwcELOuoYuh13a22U1AyLn+AXFA=;
-        b=bgolllegi5PdfUcYpLvyw8KnFTaNdAIBXKLxEtM5YqofG++NXUD0SY18mrVpCqQETf
-         bcRWrqV2LZA414QiuV0acTKErQdEElRpmcvB+w3lygePRNt+FYnqCELPTI8+4wwwIuNy
-         Hsv2gXEhHHVNePZP/fZA3ql+ep/gebXFpYIMYU9bHMH2CLmHpB4Oxi3sdMkkzr93/Yjn
-         vF55QD60CQYPZFJ1UUPemyeGtoA8dheP6OFHD1jfrxkglKrMJ+rfXVwEfbpcqkpln7LJ
-         T4GL6PXnswRIu/hO5arc3Jmak8jDoI3/xWQmdgK9uWjdR54yn5SyVAjCktQOXpzqDZJK
-         rfVw==
-X-Gm-Message-State: AAQBX9c/tH9QggKmzcrANG8gIpw2PF4G0D2TW4574yqeoZjlzE4yDRLv
-        +hUDcfmQG3Mq90Zk3iDPahst12OqcenZgYHeG8Nocg==
-X-Google-Smtp-Source: AKy350Z7GLpgZB4nWfaWROBdqmPEACzgMPzNNdQCuM59lX1IGltn277CXYX21QobH4mjsaKVJbsxhora8Sr1e5fDRRg=
-X-Received: by 2002:a05:600c:5122:b0:3f1:70d1:21a6 with SMTP id
- o34-20020a05600c512200b003f170d121a6mr4313wms.0.1681751704759; Mon, 17 Apr
- 2023 10:15:04 -0700 (PDT)
+        Mon, 17 Apr 2023 13:15:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924F68A47;
+        Mon, 17 Apr 2023 10:15:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2452562155;
+        Mon, 17 Apr 2023 17:15:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73900C433EF;
+        Mon, 17 Apr 2023 17:15:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681751745;
+        bh=Ar210rKGPKuILnpDS5s4+q18d5eqdiuCqZZ4JpgYU5I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sjvO5jGW4dVyzB0xA/L0PtCpjzZ4O1of1Ka3VQoA6VX1B8GeGfFnopG3X55eItuX6
+         7eyhv7BKvfpPCAzsaX9ASRGuhu1shbAUPGXDyYlcHdAlUYgxswYGdFn/egOt59xCJi
+         XBdkH/w2BotEGmA5gcbLQxwpTwZ+nePLkHgtlccFWjNBBea2Cah5P+9UdEpwWmwTBR
+         9SEeBEZ0FkDK7KxRZ7zhOdSyZTo0hr4sqkWSxaNKOHKoVWgtCr8+AKDL6m7xTtwSRV
+         9PwRW+jZxIuaUCSpyGaD/rO8ktKOX0k4PK6dXgy5drcPtG75EmAu+OC6uy7Mmw7HqY
+         aJWgJt1c1IWJg==
+Date:   Mon, 17 Apr 2023 18:15:34 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Brad Larson <blarson@amd.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
+        adrian.hunter@intel.com, alcooperx@gmail.com,
+        andy.shevchenko@gmail.com, arnd@arndb.de,
+        brendan.higgins@linux.dev, briannorris@chromium.org,
+        brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
+        davidgow@google.com, gsomlo@gmail.com, gerg@linux-m68k.org,
+        krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        lee.jones@linaro.org, yamada.masahiro@socionext.com,
+        p.zabel@pengutronix.de, piotrs@cadence.com, p.yadav@ti.com,
+        rdunlap@infradead.org, robh+dt@kernel.org, samuel@sholland.org,
+        fancer.lancer@gmail.com, skhan@linuxfoundation.org,
+        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
+        tonyhuang.sunplus@gmail.com, ulf.hansson@linaro.org,
+        vaishnav.a@ti.com, will@kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v13 03/15] dt-bindings: spi: cdns: Add compatible for AMD
+ Pensando Elba SoC
+Message-ID: <9c7aec03-265f-414e-9a3f-9511f40cbbc0@sirena.org.uk>
+References: <20230410184526.15990-1-blarson@amd.com>
+ <20230410184526.15990-4-blarson@amd.com>
 MIME-Version: 1.0
-References: <20230417122943.2155502-1-anders.roxell@linaro.org> <20230417122943.2155502-2-anders.roxell@linaro.org>
-In-Reply-To: <20230417122943.2155502-2-anders.roxell@linaro.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 17 Apr 2023 10:14:51 -0700
-Message-ID: <CAP-5=fWUevSnyn5MtVO1p6cEVE8MvBTq4Qgth7RcPYueRERQKA@mail.gmail.com>
-Subject: Re: [backport PATCH 1/2] tools perf: Fix compilation error with new binutils
-To:     Anders Roxell <anders.roxell@linaro.org>
-Cc:     stable@vger.kernel.org, acme@redhat.com, andres@anarazel.de,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Quentin Monnet <quentin@isovalent.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Ben Hutchings <benh@debian.org>, Jiri Olsa <jolsa@kernel.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Y3QWPZq3ZHOCu8GE"
+Content-Disposition: inline
+In-Reply-To: <20230410184526.15990-4-blarson@amd.com>
+X-Cookie: You can't push on a string.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 5:30=E2=80=AFAM Anders Roxell <anders.roxell@linaro=
-.org> wrote:
->
-> From: Andres Freund <andres@anarazel.de>
->
-> binutils changed the signature of init_disassemble_info(), which now caus=
-es
-> compilation failures for tools/perf/util/annotate.c, e.g. on debian
-> unstable.
 
-Thanks, I believe the compilation issue may well be resolved by:
-https://lore.kernel.org/lkml/20230311065753.3012826-8-irogers@google.com/
-where binutils is made opt-in rather than opt-out.
+--Y3QWPZq3ZHOCu8GE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> Relevant binutils commit:
->
->   https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommit;h=3D60a3da0=
-0bd5407f07
->
-> Wire up the feature test and switch to init_disassemble_info_compat(),
-> which were introduced in prior commits, fixing the compilation failure.
+On Mon, Apr 10, 2023 at 11:45:14AM -0700, Brad Larson wrote:
+> Document the cadence qspi controller compatible for AMD Pensando
+> Elba SoC boards.  The Elba qspi fifo size is 1024.
 
-I was kind of surprised to see no version check ifdef. Is
-init_disassemble_info_compat is supported in older binutils?
+This does not apply against current code, please check and resend.
 
-Thanks,
-Ian
+--Y3QWPZq3ZHOCu8GE
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> I verified that perf can still disassemble bpf programs by using bpftrace
-> under load, recording a perf trace, and then annotating the bpf "function=
-"
-> with and without the changes. With old binutils there's no change in outp=
-ut
-> before/after this patch. When comparing the output from old binutils (2.3=
-5)
-> to new bintuils with the patch (upstream snapshot) there are a few output
-> differences, but they are unrelated to this patch. An example hunk is:
->
->        1.15 :   55:mov    %rbp,%rdx
->        0.00 :   58:add    $0xfffffffffffffff8,%rdx
->        0.00 :   5c:xor    %ecx,%ecx
->   -    1.03 :   5e:callq  0xffffffffe12aca3c
->   +    1.03 :   5e:call   0xffffffffe12aca3c
->        0.00 :   63:xor    %eax,%eax
->   -    2.18 :   65:leaveq
->   -    2.82 :   66:retq
->   +    2.18 :   65:leave
->   +    2.82 :   66:ret
->
-> Signed-off-by: Andres Freund <andres@anarazel.de>
-> Acked-by: Quentin Monnet <quentin@isovalent.com>
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Ben Hutchings <benh@debian.org>
-> Cc: Jiri Olsa <jolsa@kernel.org>
-> Cc: Sedat Dilek <sedat.dilek@gmail.com>
-> Cc: bpf@vger.kernel.org
-> Link: http://lore.kernel.org/lkml/20220622181918.ykrs5rsnmx3og4sv@alap3.a=
-narazel.de
-> Link: https://lore.kernel.org/r/20220801013834.156015-5-andres@anarazel.d=
-e
-> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
-> ---
->  tools/perf/Makefile.config | 8 ++++++++
->  tools/perf/util/annotate.c | 7 ++++---
->  2 files changed, 12 insertions(+), 3 deletions(-)
->
-> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-> index 3e7706c251e9..55905571f87b 100644
-> --- a/tools/perf/Makefile.config
-> +++ b/tools/perf/Makefile.config
-> @@ -281,6 +281,7 @@ FEATURE_CHECK_LDFLAGS-libpython :=3D $(PYTHON_EMBED_L=
-DOPTS)
->  FEATURE_CHECK_LDFLAGS-libaio =3D -lrt
->
->  FEATURE_CHECK_LDFLAGS-disassembler-four-args =3D -lbfd -lopcodes -ldl
-> +FEATURE_CHECK_LDFLAGS-disassembler-init-styled =3D -lbfd -lopcodes -ldl
->
->  CORE_CFLAGS +=3D -fno-omit-frame-pointer
->  CORE_CFLAGS +=3D -ggdb3
-> @@ -838,13 +839,16 @@ else
->    ifeq ($(feature-libbfd-liberty), 1)
->      EXTLIBS +=3D -lbfd -lopcodes -liberty
->      FEATURE_CHECK_LDFLAGS-disassembler-four-args +=3D -liberty -ldl
-> +    FEATURE_CHECK_LDFLAGS-disassembler-init-styled +=3D -liberty -ldl
->    else
->      ifeq ($(feature-libbfd-liberty-z), 1)
->        EXTLIBS +=3D -lbfd -lopcodes -liberty -lz
->        FEATURE_CHECK_LDFLAGS-disassembler-four-args +=3D -liberty -lz -ld=
-l
-> +      FEATURE_CHECK_LDFLAGS-disassembler-init-styled +=3D -liberty -ldl
->      endif
->    endif
->    $(call feature_check,disassembler-four-args)
-> +  $(call feature_check,disassembler-init-styled)
->  endif
->
->  ifeq ($(feature-libbfd-buildid), 1)
-> @@ -957,6 +961,10 @@ ifeq ($(feature-disassembler-four-args), 1)
->      CFLAGS +=3D -DDISASM_FOUR_ARGS_SIGNATURE
->  endif
->
-> +ifeq ($(feature-disassembler-init-styled), 1)
-> +    CFLAGS +=3D -DDISASM_INIT_STYLED
-> +endif
-> +
->  ifeq (${IS_64_BIT}, 1)
->    ifndef NO_PERF_READ_VDSO32
->      $(call feature_check,compile-32)
-> diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
-> index 308189454788..f2d1741b7610 100644
-> --- a/tools/perf/util/annotate.c
-> +++ b/tools/perf/util/annotate.c
-> @@ -1684,6 +1684,7 @@ static int dso__disassemble_filename(struct dso *ds=
-o, char *filename, size_t fil
->  #define PACKAGE "perf"
->  #include <bfd.h>
->  #include <dis-asm.h>
-> +#include <tools/dis-asm-compat.h>
->
->  static int symbol__disassemble_bpf(struct symbol *sym,
->                                    struct annotate_args *args)
-> @@ -1726,9 +1727,9 @@ static int symbol__disassemble_bpf(struct symbol *s=
-ym,
->                 ret =3D errno;
->                 goto out;
->         }
-> -       init_disassemble_info(&info, s,
-> -                             (fprintf_ftype) fprintf);
-> -
-> +       init_disassemble_info_compat(&info, s,
-> +                                    (fprintf_ftype) fprintf,
-> +                                    fprintf_styled);
->         info.arch =3D bfd_get_arch(bfdf);
->         info.mach =3D bfd_get_mach(bfdf);
->
-> --
-> 2.39.2
->
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ9frYACgkQJNaLcl1U
+h9B3jQf+LoKtFdxP8+ZXFtvgBvCs44/hkaDUu6Qz2NRI+d4wgLknS/P0fkqNa5fb
++PJIu76z/h9YjljFPaAdIue6USY+0g4kZZTfXjb24QmTtrPPqDzsE1bFXIKGC9iJ
+ABTT8U+DwIaagK+1fl/37rer8Bi/RsYY5fH+UesiXMyfHNE8QWdDiJ7urGQTfJG/
+h76thHZ3gTS298ZURH0cQcNv99loPpYl+Fnh2GX55hnZ7dGVPHpg+nFL4Xwd3ebB
+AYRp8z9zv6ary86tDU2IKdtlHZtUjYXuUOp5BkYOgec7MdxOY9k9CbT/b8wj+O3S
+fclEugSoM9qmO77Y88oIULqIb+aTBw==
+=97Ia
+-----END PGP SIGNATURE-----
+
+--Y3QWPZq3ZHOCu8GE--
