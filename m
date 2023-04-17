@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2629E6E494D
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 15:05:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97FFD6E4950
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 15:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230515AbjDQNFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 09:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54938 "EHLO
+        id S231300AbjDQNF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 09:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231532AbjDQNE7 (ORCPT
+        with ESMTP id S231448AbjDQNFm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 09:04:59 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58132B768;
-        Mon, 17 Apr 2023 06:01:58 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id m16so13600098qvx.9;
-        Mon, 17 Apr 2023 06:01:58 -0700 (PDT)
+        Mon, 17 Apr 2023 09:05:42 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FDDAC16A;
+        Mon, 17 Apr 2023 06:02:53 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id fy11so772739qtb.12;
+        Mon, 17 Apr 2023 06:02:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681736456; x=1684328456;
+        d=gmail.com; s=20221208; t=1681736511; x=1684328511;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=YcmcOTzJu6ks4W+Xm1OQFHPsO0/0+fE8ApT88ZcqOZ0=;
-        b=XYK8piwuriVyb0esGnYNkBji1A9kKEgAFfQ9G1/vITNBd9hsmLZ1OY9S9vw1sSPxcm
-         WDwBLbknufOj2krrxo/MANaP4iiW2JNLEFGUgAeRPDW1yp+GpGnM+Ltrf9iC6wHxN1Sd
-         hjBLq0eBrczP7U32gs/q1VaFZJVNRqpX1+zr3+wV14e7p2aIenABBh2LoIQcivqEwp5o
-         PvwLH6Z0vyTtv8KO6hRipCUpqaqc4vx5zWs7Je5ieQ2jMRiEDZ0otQqZm3FMJzXOMTc1
-         taPDIP171g6gNrc67GjFlkVuU/UTTY5UAeusJDQcL73gys1dddW+rNLLzTXtCEfYUlfU
-         SE4Q==
+        bh=jJIXoM5kZrcMxzMIBNvJFyOYulaQfBENBRWvgUZhs6A=;
+        b=npG1dVxs8i1JQ/TgD7zhuAqJyCQXwyRb3LYhhAZLSoFBe979CASlJ7mcfkEl8bUoAl
+         EX+iZCHcHu3BliLwGredk9RRcTldwJCJWQ/5X8DLE0A77YqN4QlVR6OyjRcx1A395rHo
+         nOxwIDmTklBDxZVuxSNF6BYfaTuJvS5jA6jpTL9F5BENwcf7lyfB6ZjcBcYiQCrG/mmn
+         I54JheNgapI7w7ON3V5nWG7rhKhD63rvQxX3Ehd3fedJpB0Wj8MLrw6bVX1RXMhYg5j0
+         SlfqQHSj6hCQcXKdkjf6D97Slm+6KZOeblubzB+RdgUXNjdAT2AImWEs1dGvsrGwjPi6
+         LFEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681736456; x=1684328456;
+        d=1e100.net; s=20221208; t=1681736511; x=1684328511;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YcmcOTzJu6ks4W+Xm1OQFHPsO0/0+fE8ApT88ZcqOZ0=;
-        b=SF3VJaHcfciy03K+WPNiEDchUH1IxND68PLYdf8h2MIXHDRgORiQFc+lotyJpCRuWo
-         MTOzJNky7BdeQNkj1vatVC2hWq15A8eMMfPUrcueENvgHI2Zzh720tzwZHbzE2vjHLXi
-         K5VAJCRuJNTEDTpTbAxnfHh3myVoG0qFGd2lVPuWlXMymrjSqsg7Ks8dDdNkEZU/HLJc
-         608pmYXJw1pTrxObGmp6UGDCmJT6cMzwNVBXHEBzdCzqdN8zTZKpeolqRhdQAsMf1H0x
-         N9WyyGRyHx7SYR6nhjyzbIrhJ7/xeNKr+WNNqg2wszf+NNWl/OdJLZYJcAfmrzo9j5SI
-         tcxA==
-X-Gm-Message-State: AAQBX9cWTsYRlAz5rVG6rc++NuXMP65EbMR32CiKS4VCnm8f7R4/Jxee
-        f4GcSyp6Bn2A96BBvT8fmuM=
-X-Google-Smtp-Source: AKy350axhTb7+McBcdBF5jvaNdl84UlK6+7CX3MSisCJXXiJPS/2fsG3Y1Fxnlhk4GuhPSSo2OsHBA==
-X-Received: by 2002:ad4:5bcd:0:b0:56f:52ba:cce6 with SMTP id t13-20020ad45bcd000000b0056f52bacce6mr17623833qvt.19.1681736456173;
-        Mon, 17 Apr 2023 06:00:56 -0700 (PDT)
+        bh=jJIXoM5kZrcMxzMIBNvJFyOYulaQfBENBRWvgUZhs6A=;
+        b=XAu7aw0yEScR5YAdAxZPRgeIsBK0di3Er+jpL6lqV1T9sS+bacgo0VB27VoDdAe9Ai
+         +qKPIVxjY5wZ6ZY5vw6hF30rvSiGx7b+EP/+Ru0olj13j8o71oxGhQ6bx60Nre2US751
+         RX48EMpbwXj92UnHQjk0AdJXpt8SrT9/n4t6THE+1ouja18zlHRbUjG/1QkfWFKHGIBF
+         sRaWikJoXa5+Xs6u5hbZXHDCqoMfKNFmr6r3KHMTvbUYSf5M1yV61UGLljIwj2jMImcy
+         YSFlLDCCKou2JnCUzucbskhlL/wsljkpEOMTpQMcIOa++/NcfPCtsbZQcohNmjbLAou/
+         iV/A==
+X-Gm-Message-State: AAQBX9fA3JcII8zHt2HRQGh4+ll8htcZok4keb3hswH292TVJmghxizx
+        AlasesBhDvKrnY06oAdrKsI=
+X-Google-Smtp-Source: AKy350YdG1412f3+B0KPTn68ItjvFai9YX+yRqKc/mmINQWZ4dZQliuLj6MX0FLC/M7DLZSjqBzzsg==
+X-Received: by 2002:a05:622a:110a:b0:3e4:eb53:b02c with SMTP id e10-20020a05622a110a00b003e4eb53b02cmr22940515qty.60.1681736510841;
+        Mon, 17 Apr 2023 06:01:50 -0700 (PDT)
 Received: from [192.168.1.105] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id pv16-20020ad45490000000b005ef5dfea0b7sm2009783qvb.72.2023.04.17.06.00.53
+        by smtp.gmail.com with ESMTPSA id j20-20020ac84414000000b003e6610471c1sm95481qtn.16.2023.04.17.06.01.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Apr 2023 06:00:55 -0700 (PDT)
-Message-ID: <8b6c498f-c9a1-7841-c24c-7986878c2206@gmail.com>
-Date:   Mon, 17 Apr 2023 06:00:52 -0700
+        Mon, 17 Apr 2023 06:01:50 -0700 (PDT)
+Message-ID: <7ecfc07e-ef71-728b-29cd-c41319c1d2b2@gmail.com>
+Date:   Mon, 17 Apr 2023 06:01:32 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH net-next 5/7] net: mscc: ocelot: add support for mqprio
- offload
+Subject: Re: [PATCH net-next 6/7] net: dsa: felix: act upon the mqprio qopt in
+ taprio offload
 Content-Language: en-US
 To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
 Cc:     Andrew Lunn <andrew@lunn.ch>,
@@ -71,9 +71,9 @@ Cc:     Andrew Lunn <andrew@lunn.ch>,
         linux-kernel@vger.kernel.org, Ferenc Fejes <fejes@inf.elte.hu>,
         Simon Horman <simon.horman@corigine.com>
 References: <20230415170551.3939607-1-vladimir.oltean@nxp.com>
- <20230415170551.3939607-6-vladimir.oltean@nxp.com>
+ <20230415170551.3939607-7-vladimir.oltean@nxp.com>
 From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230415170551.3939607-6-vladimir.oltean@nxp.com>
+In-Reply-To: <20230415170551.3939607-7-vladimir.oltean@nxp.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -89,11 +89,12 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 On 4/15/2023 10:05 AM, Vladimir Oltean wrote:
-> This doesn't apply anything to hardware and in general doesn't do
-> anything that the software variant doesn't do, except for checking that
-> there isn't more than 1 TXQ per TC (TXQs for a DSA switch are a dubious
-> concept anyway). The reason we add this is to be able to parse one more
-> field added to struct tc_mqprio_qopt_offload, namely preemptible_tcs.
+> The mqprio queue configuration can appear either through
+> TC_SETUP_QDISC_MQPRIO or through TC_SETUP_QDISC_TAPRIO. Make sure both
+> are treated in the same way.
+> 
+> Code does nothing new for now (except for rejecting multiple TXQs per
+> TC, which is a useless concept with DSA switches).
 > 
 > Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 > Reviewed-by: Ferenc Fejes <fejes@inf.elte.hu>
