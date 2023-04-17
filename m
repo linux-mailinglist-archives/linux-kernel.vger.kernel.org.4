@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B576E5198
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 22:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BD126E519B
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 22:21:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbjDQUVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 16:21:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47068 "EHLO
+        id S229926AbjDQUV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 16:21:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbjDQUVr (ORCPT
+        with ESMTP id S230078AbjDQUVs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 16:21:47 -0400
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A613AB0
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 13:21:46 -0700 (PDT)
+        Mon, 17 Apr 2023 16:21:48 -0400
+Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [IPv6:2001:4b7a:2000:18::167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B94B10CE
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 13:21:47 -0700 (PDT)
 Received: from Marijn-Arch-PC.localdomain (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id DC6CB3F87D;
-        Mon, 17 Apr 2023 22:21:43 +0200 (CEST)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id DB1F23F885;
+        Mon, 17 Apr 2023 22:21:44 +0200 (CEST)
 From:   Marijn Suijten <marijn.suijten@somainline.org>
-Date:   Mon, 17 Apr 2023 22:21:41 +0200
-Subject: [PATCH v2 02/17] drm/msm/dpu: Remove TE2 block and feature from
- DPU >= 7.0.0 hardware
+Date:   Mon, 17 Apr 2023 22:21:42 +0200
+Subject: [PATCH v2 03/17] drm/msm/dpu: Move non-MDP_TOP INTF_INTR offsets
+ out of hwio header
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230411-dpu-intf-te-v2-2-ef76c877eb97@somainline.org>
+Message-Id: <20230411-dpu-intf-te-v2-3-ef76c877eb97@somainline.org>
 References: <20230411-dpu-intf-te-v2-0-ef76c877eb97@somainline.org>
 In-Reply-To: <20230411-dpu-intf-te-v2-0-ef76c877eb97@somainline.org>
 To:     Rob Clark <robdclark@gmail.com>,
@@ -67,86 +67,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No hardware beyond kona (sm8250) defines the TE2 PINGPONG sub-block
-offset downstream.  Even though neither downstream nor upstream utilizes
-these registers in any way, remove the erroneous specification for
-SC8280XP, SM8350 and SM8450 to prevent confusion.
+These offsets do not fall under the MDP TOP block and do not fit the
+comment right above.  Move them to dpu_hw_interrupts.c next to the
+repsective MDP_INTF_x_OFF interrupt block offsets.
 
-Note that downstream enables the PPSPLIT (split-FIFO) topology (single
-LM for 2 PP and 2 INTF) based on the presence of a TE2 block.
-
-Fixes: f0a1bdf64dd7 ("drm/msm/dpu: Introduce SC8280XP")
-Fixes: 0a72f23f6ef8 ("drm/msm/dpu: Add SM8350 to hw catalog")
-Fixes: 8cbbc3396065 ("drm/msm/dpu: add support for SM8450")
+Fixes: 25fdd5933e4c ("drm/msm: Add SDM845 DPU support")
 Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 ---
- drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h   |  4 ++--
- drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h | 12 ++++++------
- drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h   |  4 ++--
- 3 files changed, 10 insertions(+), 10 deletions(-)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c | 5 ++++-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h          | 3 ---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
-index ca107ca8de46..41ef0c8fc993 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
-@@ -127,10 +127,10 @@ static const struct dpu_dspp_cfg sm8350_dspp[] = {
- };
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
+index 53326f25e40e..85c0bda3ff90 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
+@@ -15,7 +15,7 @@
  
- static const struct dpu_pingpong_cfg sm8350_pp[] = {
--	PP_BLK_TE("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sdm845_pp_sblk_te,
-+	PP_BLK("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sdm845_pp_sblk,
- 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
- 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
--	PP_BLK_TE("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sdm845_pp_sblk_te,
-+	PP_BLK("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sdm845_pp_sblk,
- 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
- 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
- 	PP_BLK("pingpong_2", PINGPONG_2, 0x6b000, MERGE_3D_1, sdm845_pp_sblk,
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
-index 9aab110b8c44..12c14d15e386 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
-@@ -121,17 +121,17 @@ static const struct dpu_dspp_cfg sc8280xp_dspp[] = {
- };
- 
- static const struct dpu_pingpong_cfg sc8280xp_pp[] = {
--	PP_BLK_TE("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sdm845_pp_sblk_te,
-+	PP_BLK("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sdm845_pp_sblk,
- 		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8), -1),
--	PP_BLK_TE("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sdm845_pp_sblk_te,
-+	PP_BLK("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sdm845_pp_sblk,
- 		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9), -1),
--	PP_BLK_TE("pingpong_2", PINGPONG_2, 0x6b000, MERGE_3D_1, sdm845_pp_sblk_te,
-+	PP_BLK("pingpong_2", PINGPONG_2, 0x6b000, MERGE_3D_1, sdm845_pp_sblk,
- 		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10), -1),
--	PP_BLK_TE("pingpong_3", PINGPONG_3, 0x6c000, MERGE_3D_1, sdm845_pp_sblk_te,
-+	PP_BLK("pingpong_3", PINGPONG_3, 0x6c000, MERGE_3D_1, sdm845_pp_sblk,
- 		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11), -1),
--	PP_BLK_TE("pingpong_4", PINGPONG_4, 0x6d000, MERGE_3D_2, sdm845_pp_sblk_te,
-+	PP_BLK("pingpong_4", PINGPONG_4, 0x6d000, MERGE_3D_2, sdm845_pp_sblk,
- 		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30), -1),
--	PP_BLK_TE("pingpong_5", PINGPONG_5, 0x6e000, MERGE_3D_2, sdm845_pp_sblk_te,
-+	PP_BLK("pingpong_5", PINGPONG_5, 0x6e000, MERGE_3D_2, sdm845_pp_sblk,
- 		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31), -1),
- };
- 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
-index 02a259b6b426..e409c119b0a2 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
-@@ -128,10 +128,10 @@ static const struct dpu_dspp_cfg sm8450_dspp[] = {
- };
- /* FIXME: interrupts */
- static const struct dpu_pingpong_cfg sm8450_pp[] = {
--	PP_BLK_TE("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sdm845_pp_sblk_te,
-+	PP_BLK("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sdm845_pp_sblk,
- 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
- 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
--	PP_BLK_TE("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sdm845_pp_sblk_te,
-+	PP_BLK("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sdm845_pp_sblk,
- 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
- 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
- 	PP_BLK("pingpong_2", PINGPONG_2, 0x6b000, MERGE_3D_1, sdm845_pp_sblk,
+ /*
+  * Register offsets in MDSS register file for the interrupt registers
+- * w.r.t. to the MDP base
++ * w.r.t. the MDP base
+  */
+ #define MDP_SSPP_TOP0_OFF		0x0
+ #define MDP_INTF_0_OFF			0x6A000
+@@ -24,6 +24,9 @@
+ #define MDP_INTF_3_OFF			0x6B800
+ #define MDP_INTF_4_OFF			0x6C000
+ #define MDP_INTF_5_OFF			0x6C800
++#define INTF_INTR_EN			0x1c0
++#define INTF_INTR_STATUS		0x1c4
++#define INTF_INTR_CLEAR			0x1c8
+ #define MDP_AD4_0_OFF			0x7C000
+ #define MDP_AD4_1_OFF			0x7D000
+ #define MDP_AD4_INTR_EN_OFF		0x41c
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h
+index feb9a729844a..5acd5683d25a 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h
+@@ -21,9 +21,6 @@
+ #define HIST_INTR_EN                    0x01c
+ #define HIST_INTR_STATUS                0x020
+ #define HIST_INTR_CLEAR                 0x024
+-#define INTF_INTR_EN                    0x1C0
+-#define INTF_INTR_STATUS                0x1C4
+-#define INTF_INTR_CLEAR                 0x1C8
+ #define SPLIT_DISPLAY_EN                0x2F4
+ #define SPLIT_DISPLAY_UPPER_PIPE_CTRL   0x2F8
+ #define DSPP_IGC_COLOR0_RAM_LUTN        0x300
 
 -- 
 2.40.0
