@@ -2,111 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 789F76E50D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04FEC6E50D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230435AbjDQT0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 15:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42678 "EHLO
+        id S230281AbjDQT13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 15:27:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbjDQT0X (ORCPT
+        with ESMTP id S229930AbjDQT12 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 15:26:23 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC56C6A63;
-        Mon, 17 Apr 2023 12:26:21 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id j12so17527751oij.3;
-        Mon, 17 Apr 2023 12:26:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681759581; x=1684351581;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JgR9yWNpXpcXRujoJTOWZN4Ac0PmAsb3IYAK2OBiNYA=;
-        b=A8POwEXBtxt+z9gTMk5vE9Iw0O2L50tlrIpIBNPihPRGY7iBhlfQHgpQV6cMdIguFV
-         Zc7g/Mr6qy2w/TL+uwD/XDpQIRYhH/ZwzlmUvA+j3NNU8FdP4OWsfnhrwwrL2pykM1bV
-         qEkfNp/kQFga0y8gsJYNwNPF5gOJRRBDyCQLoK9+GJLxNd8YZOVCUMBLxXMyYZjP63XF
-         /7n09KvbS0laZg1caprKHGE6Mm2+/UgcR4wfeTHxPXGqi0BAHGl64bQKA7VFgpIAYYa7
-         sBR5CsJrsBSSTKsK7OtL04IfWLFtkNo53bRHTAotAV7mhQtYwR9SOj+KjFuJum5Pha8g
-         jW3w==
+        Mon, 17 Apr 2023 15:27:28 -0400
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6243376BD;
+        Mon, 17 Apr 2023 12:26:58 -0700 (PDT)
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-3f09b4a1584so12455935e9.2;
+        Mon, 17 Apr 2023 12:26:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681759581; x=1684351581;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JgR9yWNpXpcXRujoJTOWZN4Ac0PmAsb3IYAK2OBiNYA=;
-        b=bO4njCABvp8SM908V6GHC3KPYWfLnBeXBhlKV9ynql+2Hz9m56sE3qsq+CH+SMbQRL
-         Mzkv+0b3WwjOOQ49lqWBnzGIUJintqXMrtMU1pBWdLVx5Rral2MwIE/F7glCqM+H8T1s
-         +n+WUzUDB7qxXv1tR6jh6xwccU0maNB1Hwp4dfREqQNL8QFqF1PbWJ+NKpuMmCqIeCu5
-         LuLnyWz0F4eHKTNd+BQv9V0owsFBDGMYzyMmJ8295umvDP9x3LAhS8SDw1ApI9ObIZGO
-         eML5v9yKgKvPNBcsSC6gswBdZia2hVmokfdLM3GiB/+V8JHRVw7S6Dl1Drlv9yaRsUwo
-         WvTw==
-X-Gm-Message-State: AAQBX9cWHGuW5THqcrMxdoXxQmzKq43EQ/xMfrAA/+ioLYYAiyOQ8o71
-        4T94wmP/zTMcE2OOOLzawh/GZBL2oeNc3mucFJU=
-X-Google-Smtp-Source: AKy350Z22GK6kLG6tHEeqc6xa37gCtz2jfI4yCVpFEw8uzuKlFwUL0hIMP6R+pDki+ZmMO2BdQwHr9XWxrdFNQRgufI=
-X-Received: by 2002:aca:f0c2:0:b0:38d:c10a:e7b6 with SMTP id
- o185-20020acaf0c2000000b0038dc10ae7b6mr13624oih.3.1681759579651; Mon, 17 Apr
- 2023 12:26:19 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681759617; x=1684351617;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+5RS4OCZjuf4jfezYrqMeVPvp3K61VGB0efnNQZ4z/4=;
+        b=Z6yweulJJ4gGcqydP1IMSqfEzCKvMktn5Z5/Jt4ReE9SsQ6f2/BdxqkEI7i0IOudVR
+         1VTljQeg/bbXUwRXCNeI0zq4lV32vGIhVNeGPgx0yLuD6aUZsA3RAXs0/3F5l/+Roynq
+         GotCIrvURYYsNWLRMFxdcrzKwvgK26Ak11nCVtUOanNoLcRFXi6Empj9/EXxdpCW96ug
+         6iGu+0+KyVkxmOHL19X/Ztkb1I086EQ30uYljNSfaPTs/5FRTfsYlvDasi3b+c520zpq
+         idZeNt1jDCxq9ZOHr0Crg+Hbweojqr7ZX8v2D9NFk2c2a3vrpqXgzUdS7r1h3Co+7OBM
+         pgFw==
+X-Gm-Message-State: AAQBX9fT6NXxVEhMdEPRAN0gtCVZzh9fqOKvum3FXC7n4/xp2WvdC52g
+        pKwwAEa/VHpzyiN0hzIIUWk=
+X-Google-Smtp-Source: AKy350ZFvg5yKuE1DjUbqiVfYlFE4k3Q6gUqHWytAcm0hYz+RbnUbsAqe4q8fpcFgoLQPNg5UJaN9g==
+X-Received: by 2002:a5d:6a11:0:b0:2fb:f6ff:e8d2 with SMTP id m17-20020a5d6a11000000b002fbf6ffe8d2mr25346wru.35.1681759616704;
+        Mon, 17 Apr 2023 12:26:56 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id v3-20020adfe4c3000000b002f459afc809sm11189828wrm.72.2023.04.17.12.26.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 12:26:56 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 19:26:54 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Saurabh Sengar <ssengar@linux.microsoft.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, arnd@arndb.de, tiala@microsoft.com,
+        mikelley@microsoft.com, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org,
+        jgross@suse.com, mat.jonczyk@o2.pl
+Subject: Re: [PATCH v5 0/5] Hyper-V VTL support
+Message-ID: <ZD2dfuHFCJmOkGt9@liuwe-devbox-debian-v2>
+References: <1681192532-15460-1-git-send-email-ssengar@linux.microsoft.com>
 MIME-Version: 1.0
-References: <20230417174237.52638-1-colin.i.king@gmail.com>
-In-Reply-To: <20230417174237.52638-1-colin.i.king@gmail.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 17 Apr 2023 15:26:08 -0400
-Message-ID: <CADnq5_MCRciy+zvVmJ0_HeAsYV-g9cMjNoyezhtZP77erFrGsw@mail.gmail.com>
-Subject: Re: [PATCH][next] drm/amd/pm: Fix spelling mistake "aquire" -> "acquire"
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Evan Quan <evan.quan@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Xinhui.Pan@amd.com, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1681192532-15460-1-git-send-email-ssengar@linux.microsoft.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+On Mon, Apr 10, 2023 at 10:55:27PM -0700, Saurabh Sengar wrote:
+[...]
+> Saurabh Sengar (5):
+>   x86/init: Make get/set_rtc_noop() public
+>   x86/hyperv: Add VTL specific structs and hypercalls
+>   x86/hyperv: Make hv_get_nmi_reason public
+>   Drivers: hv: Kconfig: Add HYPERV_VTL_MODE
+>   x86/hyperv: VTL support for Hyper-V
+> 
 
-Alex
-
-On Mon, Apr 17, 2023 at 1:42=E2=80=AFPM Colin Ian King <colin.i.king@gmail.=
-com> wrote:
->
-> There is a spelling mistake in the smu_i2c_bus_access prototype. Fix it.
->
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->  drivers/gpu/drm/amd/pm/powerplay/inc/hwmgr.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/amd/pm/powerplay/inc/hwmgr.h b/drivers/gpu/d=
-rm/amd/pm/powerplay/inc/hwmgr.h
-> index 5ce433e2c16a..f1580a26a850 100644
-> --- a/drivers/gpu/drm/amd/pm/powerplay/inc/hwmgr.h
-> +++ b/drivers/gpu/drm/amd/pm/powerplay/inc/hwmgr.h
-> @@ -359,7 +359,7 @@ struct pp_hwmgr_func {
->         int (*set_ppfeature_status)(struct pp_hwmgr *hwmgr, uint64_t ppfe=
-ature_masks);
->         int (*set_mp1_state)(struct pp_hwmgr *hwmgr, enum pp_mp1_state mp=
-1_state);
->         int (*asic_reset)(struct pp_hwmgr *hwmgr, enum SMU_ASIC_RESET_MOD=
-E mode);
-> -       int (*smu_i2c_bus_access)(struct pp_hwmgr *hwmgr, bool aquire);
-> +       int (*smu_i2c_bus_access)(struct pp_hwmgr *hwmgr, bool acquire);
->         int (*set_df_cstate)(struct pp_hwmgr *hwmgr, enum pp_df_cstate st=
-ate);
->         int (*set_xgmi_pstate)(struct pp_hwmgr *hwmgr, uint32_t pstate);
->         int (*disable_power_features_for_compute_performance)(struct pp_h=
-wmgr *hwmgr,
-> --
-> 2.30.2
->
+Applied to hyperv-next. Thanks.
