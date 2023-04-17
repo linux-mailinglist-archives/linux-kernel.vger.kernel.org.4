@@ -2,156 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85CCE6E3E0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 05:30:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39DA76E3E38
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 05:35:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbjDQDaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 23:30:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47464 "EHLO
+        id S230063AbjDQDfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 23:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbjDQD3h (ORCPT
+        with ESMTP id S230288AbjDQDef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 23:29:37 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05F53AA1
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 20:29:20 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id w1so1395525plg.6
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 20:29:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=smartx-com.20221208.gappssmtp.com; s=20221208; t=1681702152; x=1684294152;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i439ByrCwwyeW71ZoBXBy3yEzqs8Vnj9PSWAYBsoXlE=;
-        b=CZIhzjCN+vEVTWpW65Yup+aopwZLg+7s8FT92h4UGxiUCXwnDrLdzodkMn46t1WRCm
-         EHa/z84VHl6kq5BEgCJLxRGlBfwJHvYCpu/CBrFbDGLig4OyIE7DnNKIhFWklYg9172M
-         CatswHGFSeNeVaSfXEnW7sKMUDbv+A0MeLWoxrvQvkLOYBLWea1N2qlCLY6avBPl9kMK
-         OkDwwnFgqmIZaWymXf7qbmnB+aGhWu+V+R3PMlmfONx5I46r0j9g+xJcwHxMdTvqdm0k
-         f7aJSZbC+2zgtMIm/30mDPfKm737OeHamS1xzjDztETJei2pDxbLPbBHSN9WlrjBQ6IL
-         9muQ==
+        Sun, 16 Apr 2023 23:34:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA1F3C01
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 20:32:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681702323;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ot4mAzk1dD+VO6IKPj86pu2eAQn+6tiF/RKoyglMHgI=;
+        b=UZnWxHo4sA0NIvSoynBwRyocZ9WTNn0L+0gJhDsPIytg6ct6IaFMbqV7LgsrU+yeN9tfac
+        kNZvTxP6Bc0YwKAOfF+x6M2Iy6sD3O+vDfIXP61wyNMq2UJ9Bq6wNUKP7xr9Zd8fbKb6qG
+        Fku+CpW9zRYXlt42HxtrkEO9As6VJOs=
+Received: from mail-oa1-f69.google.com (mail-oa1-f69.google.com
+ [209.85.160.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-168-Ka8-8ubdMpK90UOnqr3OEQ-1; Sun, 16 Apr 2023 23:32:02 -0400
+X-MC-Unique: Ka8-8ubdMpK90UOnqr3OEQ-1
+Received: by mail-oa1-f69.google.com with SMTP id 586e51a60fabf-1878ffe6eddso6164018fac.13
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 20:32:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681702152; x=1684294152;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1681702321; x=1684294321;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=i439ByrCwwyeW71ZoBXBy3yEzqs8Vnj9PSWAYBsoXlE=;
-        b=GujSfKu61CH+U0kwPCMa/SeKWyL9Ur2AT3j+FsEr9wHyHs4cgxYAVUDdrpmvVi7Uz1
-         WniiGa/COxntIRERNtEyBreMlv/vQgDNwkOdER6u8MxaV0Tt14Gbffl0okdVjIHlC0MS
-         yU8G/lSwlpPt+H7jH64K9h/pzSroILfBTWB5TwUl+Q7cSNDumrF7hnBqq70JbVqE9u6F
-         VSky5IlCet2lGizXctLpSvRbZKZHdwZzw/LtsD7UXX1r4dturBgf4oSXLIiP3nPQparr
-         5a/Nk1G4OhLx0KuuQNFSG+IPdixwZfAytkdiRElmhwRKwEaNDlxB4jaDJ5vAfPMCDEk4
-         qhHA==
-X-Gm-Message-State: AAQBX9dxiki3wgLIiWF2RheuEYCxQ6e9tD4cbX5K08p5tsw8E4wE1EBb
-        yuP9wZXAP36cDQZUDI8/+fEngQ==
-X-Google-Smtp-Source: AKy350YJJdcM66yr8j9/kPzcnVKnGuU1IZcC++IHyi8cKOk9L52nS3dy7qY5Jtqe1FbMnc6AHgOYtw==
-X-Received: by 2002:a17:902:c947:b0:1a6:7ea8:9f47 with SMTP id i7-20020a170902c94700b001a67ea89f47mr12982890pla.66.1681702152044;
-        Sun, 16 Apr 2023 20:29:12 -0700 (PDT)
-Received: from smtpclient.apple ([47.75.78.161])
-        by smtp.gmail.com with ESMTPSA id 20-20020a170902ee5400b001a19bac463fsm6525445plo.42.2023.04.16.20.29.09
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 16 Apr 2023 20:29:11 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
-Subject: Re: [PATCH v2] nvme/tcp: Add support to set the tcp worker cpu
- affinity
-From:   Li Feng <fengli@smartx.com>
-In-Reply-To: <3e45f600db2049c4986fd8bb6aea69f4@AcuMS.aculab.com>
-Date:   Mon, 17 Apr 2023 11:31:08 +0800
-Cc:     Hannes Reinecke <hare@suse.de>, Keith Busch <kbusch@kernel.org>,
-        Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        "open list:NVM EXPRESS DRIVER" <linux-nvme@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        bh=Ot4mAzk1dD+VO6IKPj86pu2eAQn+6tiF/RKoyglMHgI=;
+        b=aB9cpDRdyenh+d3pJeAti2BedhAg+7d5PK6gngQdLWnUU7hgYAlj7otWQJ/uPCc7n6
+         CFfeq7DukP+moS4lsDN+hKuMMSapC0bb+0anTbCv/ASew+MrrEuLX64OuXzz6ou2ugKp
+         S1162elNLwJVULa+YZzVlDRD3y8+hchO1YZk0adTL2HPZx1wHitS3KDtD+srTlbc15In
+         4BCdUeTgUEfDLvG/08D2/Gl4f09JxEBMH0B5Osep1Ni8LuYrJwQJJ1bz/7R+sNGaw87c
+         O+9EHsS/OgZlnfVZhtiMbGZrQWNngpMkEWA1xeLWixnSNBRX5ZTVOu5ErseTabrXBaoy
+         rF+w==
+X-Gm-Message-State: AAQBX9c4LdvMgeHCfQjL0b62LkghpGWu4Wj3Nr2ES0O4RStl2ikiit1d
+        /ddE4DaAYeHaTVM4ymBhh4WfNtnMXgYKjARj+RG01trFmYn6+xZSlinoUUep4RjQyQpxA9AykU0
+        FW2KQ8+iN3oeC1oWCS+XWLJfIAyoPBueP0eS0lmdu7aIkqXm6/GA=
+X-Received: by 2002:a05:6870:b605:b0:184:5497:53e6 with SMTP id cm5-20020a056870b60500b00184549753e6mr4511733oab.3.1681702321610;
+        Sun, 16 Apr 2023 20:32:01 -0700 (PDT)
+X-Google-Smtp-Source: AKy350a1OSW7Q3WyPX8YhgEEOJFU2G0q8lgnrVvLOt3ciyV8fmwl1u54r2QQlagOxp9oJTR/pFZt15KWbVevkS6IVh0=
+X-Received: by 2002:a05:6870:b605:b0:184:5497:53e6 with SMTP id
+ cm5-20020a056870b60500b00184549753e6mr4511728oab.3.1681702321435; Sun, 16 Apr
+ 2023 20:32:01 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230415021959.197891-1-lulu@redhat.com>
+In-Reply-To: <20230415021959.197891-1-lulu@redhat.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Mon, 17 Apr 2023 11:31:50 +0800
+Message-ID: <CACGkMEtu=Xiqc1JJrRVZ40dGsP8su_USq3ZJAWKgb4QaA4F5xw@mail.gmail.com>
+Subject: Re: [PATCH v2] vhost_vdpa: fix unmap process in no-batch mode
+To:     Cindy Lu <lulu@redhat.com>
+Cc:     mst@redhat.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <A5745886-81C6-4BB3-848C-D4A7E47E720A@smartx.com>
-References: <20230413062339.2454616-1-fengli@smartx.com>
- <20230413132941.2489795-1-fengli@smartx.com>
- <94d6a76c-8ad1-bda1-6336-e9f5fa3a6168@suse.de>
- <CAHckoCxcmNC++AXELmnCVZNjpHcaOQWOGcjia=NBCnOA7S7EeQ@mail.gmail.com>
- <3e45f600db2049c4986fd8bb6aea69f4@AcuMS.aculab.com>
-To:     David Laight <David.Laight@ACULAB.COM>
-X-Mailer: Apple Mail (2.3731.300.101.1.3)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Apr 15, 2023 at 10:20=E2=80=AFAM Cindy Lu <lulu@redhat.com> wrote:
+>
+> While using the no-batch mode with vIOMMU enabled
+> Qemu will call a large memory to unmap. Much larger than the memory
+> mapped to the kernel. The iotlb is NULL in the kernel and will return fai=
+l.
 
+This patch looks good but I don't understand the above. I think it's
+better to explain why such large unmap will lead to this error:
 
-> 2023=E5=B9=B44=E6=9C=8816=E6=97=A5 =E4=B8=8A=E5=8D=885:06=EF=BC=8CDavid =
-Laight <David.Laight@ACULAB.COM> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> From: Li Feng
->> Sent: 14 April 2023 10:35
->>>=20
->>> On 4/13/23 15:29, Li Feng wrote:
->>>> The default worker affinity policy is using all online cpus, e.g. =
-from 0
->>>> to N-1. However, some cpus are busy for other jobs, then the =
-nvme-tcp will
->>>> have a bad performance.
->>>>=20
->>>> This patch adds a module parameter to set the cpu affinity for the =
-nvme-tcp
->>>> socket worker threads.  The parameter is a comma separated list of =
-CPU
->>>> numbers.  The list is parsed and the resulting cpumask is used to =
-set the
->>>> affinity of the socket worker threads.  If the list is empty or the
->>>> parsing fails, the default affinity is used.
->>>>=20
-> ...
->>> I am not in favour of this.
->>> NVMe-over-Fabrics has _virtual_ queues, which really have no
->>> relationship to the underlying hardware.
->>> So trying to be clever here by tacking queues to CPUs sort of works =
-if
->>> you have one subsystem to talk to, but if you have several where =
-each
->>> exposes a _different_ number of queues you end up with a quite
->>> suboptimal setting (ie you rely on the resulting cpu sets to =
-overlap,
->>> but there is no guarantee that they do).
->>=20
->> Thanks for your comment.
->> The current io-queues/cpu map method is not optimal.
->> It is stupid, and just starts from 0 to the last CPU, which is not =
-configurable.
->=20
-> Module parameters suck, and passing the buck to the user
-> when you can't decide how to do something isn't a good idea either.
->=20
-> If the system is busy pinning threads to cpus is very hard to
-> get right.
->=20
-> It can be better to set the threads to run at the lowest RT
-> priority - so they have priority over all 'normal' threads
-> and also have a very sticky (but not fixed) cpu affinity so
-> that all such threads tends to get spread out by the scheduler.
-> This all works best if the number of RT threads isn't greater
-> than the number of physical cpu.
->=20
-> 	David
->=20
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, =
-MK1 1PT, UK
-> Registration No: 1397386 (Wales)
+Is it a batched unmap or a [0, ULONG_MAX] map? How could we end up the NULL=
+?
 
-Hi David,
+> Which causes failure.
+> To fix this, we will not remove the AS while the iotlb->nmaps is 0.
+> This will free in the vhost_vdpa_clean
+>
+> Signed-off-by: Cindy Lu <lulu@redhat.com>
 
-RT priority can=E2=80=99t solve the cross numa access issue.
-If the user doesn=E2=80=99t know how to configure this affinity, just =
-keep it default.
+Do we need a fix tag and does it need to go for -stable?
 
-Cross numa is not a obvious issue on X86{_64}, but it=E2=80=99s a =
-significant issue
-on aarch64 with multiple numa nodes.
+Thanks
 
-Thanks.
+> ---
+>  drivers/vhost/vdpa.c | 8 +-------
+>  1 file changed, 1 insertion(+), 7 deletions(-)
+>
+> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> index 7be9d9d8f01c..74c7d1f978b7 100644
+> --- a/drivers/vhost/vdpa.c
+> +++ b/drivers/vhost/vdpa.c
+> @@ -851,11 +851,7 @@ static void vhost_vdpa_unmap(struct vhost_vdpa *v,
+>                 if (!v->in_batch)
+>                         ops->set_map(vdpa, asid, iotlb);
+>         }
+> -       /* If we are in the middle of batch processing, delay the free
+> -        * of AS until BATCH_END.
+> -        */
+> -       if (!v->in_batch && !iotlb->nmaps)
+> -               vhost_vdpa_remove_as(v, asid);
+> +
+>  }
+>
+>  static int vhost_vdpa_va_map(struct vhost_vdpa *v,
+> @@ -1112,8 +1108,6 @@ static int vhost_vdpa_process_iotlb_msg(struct vhos=
+t_dev *dev, u32 asid,
+>                 if (v->in_batch && ops->set_map)
+>                         ops->set_map(vdpa, asid, iotlb);
+>                 v->in_batch =3D false;
+> -               if (!iotlb->nmaps)
+> -                       vhost_vdpa_remove_as(v, asid);
+>                 break;
+>         default:
+>                 r =3D -EINVAL;
+> --
+> 2.34.3
+>
 
