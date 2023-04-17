@@ -2,66 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 640AC6E418F
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 09:45:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74C766E4145
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 09:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbjDQHpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 03:45:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35246 "EHLO
+        id S231163AbjDQHiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 03:38:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230327AbjDQHpH (ORCPT
+        with ESMTP id S230002AbjDQHho (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 03:45:07 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11D112F;
-        Mon, 17 Apr 2023 00:44:57 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 63DD580CF;
-        Mon, 17 Apr 2023 15:44:48 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 17 Apr
- 2023 15:44:48 +0800
-Received: from [192.168.125.131] (183.27.97.249) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 17 Apr
- 2023 15:44:46 +0800
-Message-ID: <8c396a98-a76e-cd68-4d26-15ae3a15a623@starfivetech.com>
-Date:   Mon, 17 Apr 2023 15:43:48 +0800
+        Mon, 17 Apr 2023 03:37:44 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 788445BBE
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 00:37:03 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id y6so23611618plp.2
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 00:37:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681717022; x=1684309022;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ql0iTP179pIhS3D2wVviSQ4v43IiJJy5uQQWSApfMgw=;
+        b=olHgJtXl3xiBtP0Nv6bocud6SVVd0gwMTdXw8n/5ssQfoXMiSy2INA8TOLFP8Vp7TH
+         Ku+SQ5nb+FwwYzAgVgF9hI7Q8ymhh4THiLGZMZJEIpXPaSdwr9d1Lu8hDifYSdXQFOV8
+         +3t8C1DEdGkqKzFvhoGptiQtZTfbg/CEMSZctRk81+Jie5sX9rxu39Rw4VsF+zwvn7vQ
+         1jA/ortoG/zVQWnuNBj+Cw9RGTW3KYlqOaLsYfb0T+/3ymr0rljTK73UcAWo0NjAQpJg
+         093o8n4v1IBIM4ZzQ6rErOtJLTBxEycDdQakKYwvQ+5LcsD54D4CJpHIctbI0yZxgbIn
+         geIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681717022; x=1684309022;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ql0iTP179pIhS3D2wVviSQ4v43IiJJy5uQQWSApfMgw=;
+        b=XFRuL1qE6Y/OxPGhorloWfWyPaVluXEkKn32bYpHoRhb3wTc931Q2tAfzpD6PrWh0d
+         ADYqOqxWKAiRRrqjq4K0PMvh9NFaCkpclkoSSV7ADpq80hQarOIDeM8OnkTtFYGFp6vc
+         O7PRFPH3IljS/rCyZU6C2EPprXUN5V985MBkEku1m5UONbEQkEVu6JE7ayo6rHplZXKs
+         jUpA6o/Nr83nhsaSPZOQzouAgkwCy07qYUwVuvHw4PWjSLnol5fnp38Vz6jF7Ttlr6kP
+         gyOmr4wz8AR61j1DUj2chORuFWUI+vvjgU6US/1iQ0zMeacnhN9toi/3ACXMfraEKNGy
+         v/sg==
+X-Gm-Message-State: AAQBX9d5Q/2tV7gs983Km7847ptwCjNEmdETXYOGNdEbvG0fdE6eMBOt
+        3TBeYg3JfCBC0s3vpnR8TNU=
+X-Google-Smtp-Source: AKy350YeY4lDiDKgaTbJgzkeVNGLeDCUGf6a016OYEmzHRIiSAmh720ZwkB11T8nqxSBGfp4/SD7jw==
+X-Received: by 2002:a17:903:32c6:b0:1a6:566b:dd73 with SMTP id i6-20020a17090332c600b001a6566bdd73mr13990591plr.60.1681717022477;
+        Mon, 17 Apr 2023 00:37:02 -0700 (PDT)
+Received: from localhost ([156.236.96.165])
+        by smtp.gmail.com with ESMTPSA id d22-20020a170902b71600b001a67759f9f8sm733233pls.106.2023.04.17.00.37.00
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 17 Apr 2023 00:37:02 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 15:44:15 +0800
+From:   Yue Hu <zbestahu@gmail.com>
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>
+Cc:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        jefflexu@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        huyue2@coolpad.com, zhangwen@coolpad.com
+Subject: Re: [PATCH] erofs: remove unneeded icur field from struct
+ z_erofs_decompress_frontend
+Message-ID: <20230417154415.00006a18.zbestahu@gmail.com>
+In-Reply-To: <a8b9a758-d469-b9a6-f5e8-8f3768e2ea81@linux.alibaba.com>
+References: <20230417064136.5890-1-zbestahu@gmail.com>
+        <26cdf7b0-5d7d-68ba-da76-1ad800708946@linux.alibaba.com>
+        <dd1d75a6-38c3-771c-c1ed-2f5dca523c03@linux.alibaba.com>
+        <20230417151506.00006565.zbestahu@gmail.com>
+        <a8b9a758-d469-b9a6-f5e8-8f3768e2ea81@linux.alibaba.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 5/7] dt-bindings: soc: starfive: Add StarFive syscon
- module
-To:     Rob Herring <robh@kernel.org>,
-        William Qiu <william.qiu@starfivetech.com>
-CC:     <linux-riscv@lists.infradead.org>, Conor Dooley <conor@kernel.org>,
-        "Emil Renner Berthing" <kernel@esmil.dk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, <linux-clk@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <devicetree@vger.kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>
-References: <20230414024157.53203-1-xingyu.wu@starfivetech.com>
- <20230414024157.53203-6-xingyu.wu@starfivetech.com>
- <168147484896.3576391.17289619505417988717.robh@kernel.org>
-Content-Language: en-US
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-In-Reply-To: <168147484896.3576391.17289619505417988717.robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.97.249]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX061.cuchost.com
- (172.16.6.61)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=GB18030
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,52 +79,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/14 20:37, Rob Herring wrote:
-> 
-> On Fri, 14 Apr 2023 10:41:55 +0800, Xingyu Wu wrote:
->> From: William Qiu <william.qiu@starfivetech.com>
->> 
->> Add documentation to describe StarFive System Controller Registers.
->> 
->> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
->> ---
->>  .../soc/starfive/starfive,jh7110-syscon.yaml  | 58 +++++++++++++++++++
->>  MAINTAINERS                                   |  6 ++
->>  2 files changed, 64 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
->> 
-> 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> ./Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/clock/starfive,jh7110-pll.yaml
-> 
-> doc reference errors (make refcheckdocs):
-> 
-> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230414024157.53203-6-xingyu.wu@starfivetech.com
-> 
-> The base for the series is generally the latest rc1. A different dependency
-> should be noted in *this* patch.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit after running the above command yourself. Note
-> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-> your schema. However, it must be unset to test all examples with your schema.
-> 
+On Mon, 17 Apr 2023 15:12:31 +0800
+Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
 
-I have updated yamllint and dtschema, and tested it and didn't see this error.
-I asked william and also didn't see this. This error says the file:
-http://devicetree.org/schemas/clock/starfive,jh7110-pll.yaml was not found.
-This file is added in patch 1 but patch 1 should be applied after these patchset
-about JH7110 basic clock drivers. I don't know if that's the reason.
+> On 2023/4/17 15:15, Yue Hu wrote:
+> > On Mon, 17 Apr 2023 15:00:25 +0800
+> > Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
+> >   
+> 
+> ..
+> 
+> >>
+> >> Although please help refine the comment below:
+> >>
+> >> 	/* scan & fill inplace I/O pages in the reverse order */  
+> > 
+> > Ok, will refine it in v2.  
+> 
+> I rethink this, I don't want to go far in this way, and this makes a
+> O(n) scan into O(n^2) when a single inplace I/O page is added.
 
-Best regards,
-Xingyu Wu
+Yeah, i misread that, it should be global before submission, just ignore the change.
+
+> 
+> So sorry, I don't think it's a good way, although I also don't think
+> `icur` is a good name and we might need to find a better name.
+> 
+> Thanks,
+> Gao Xiang
+> 
+> >   
+> >>
+> >> Thanks,
+> >> Gao Xiang
+> >>  
+> >>>> +    unsigned int icur = pcl->pclusterpages;
+> >>>> -    while (fe->icur > 0) {
+> >>>> -        if (!cmpxchg(&pcl->compressed_bvecs[--fe->icur].page,
+> >>>> +    while (icur > 0) {
+> >>>> +        if (!cmpxchg(&pcl->compressed_bvecs[--icur].page,
+> >>>>                     NULL, bvec->page)) {
+> >>>> -            pcl->compressed_bvecs[fe->icur] = *bvec;
+> >>>> +            pcl->compressed_bvecs[icur] = *bvec;
+> >>>>                return true;
+> >>>>            }
+> >>>>        }
+> >>>> @@ -877,8 +876,6 @@ static int z_erofs_collector_begin(struct z_erofs_decompress_frontend *fe)
+> >>>>        }
+> >>>>        z_erofs_bvec_iter_begin(&fe->biter, &fe->pcl->bvset,
+> >>>>                    Z_EROFS_INLINE_BVECS, fe->pcl->vcnt);
+> >>>> -    /* since file-backed online pages are traversed in reverse order */
+> >>>> -    fe->icur = z_erofs_pclusterpages(fe->pcl);
+> >>>>        return 0;
+> >>>>    }  
+
