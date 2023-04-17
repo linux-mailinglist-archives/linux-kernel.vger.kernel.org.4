@@ -2,188 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A128A6E499C
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 15:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BBE56E49A6
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 15:15:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbjDQNN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 09:13:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38980 "EHLO
+        id S229889AbjDQNPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 09:15:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbjDQNNV (ORCPT
+        with ESMTP id S229509AbjDQNO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 09:13:21 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A847BB87;
-        Mon, 17 Apr 2023 06:12:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=FE2aYU852rz8VFM71Zf0NPY5Z8xae5dz5AyrnjR6CRk=; b=aJO/xqw0yuG5O0J+EcNakJf//S
-        jzGliHgT+hO5VJysONNxACqWx9cAg62h2SZ5mS/OBrJE0Fer/DZJzEa9IP+R1H82atNsd49uJw+oy
-        wsHrQS19ZtsSzuXogSnjNYeaw5qhXNof8ab5dvXe8qF3W1SaXJg9OmAL0YjB+t69jIpQ=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1poOeU-00AVCY-SX; Mon, 17 Apr 2023 15:12:14 +0200
-Date:   Mon, 17 Apr 2023 15:12:14 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-phy@lists.infradead.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [RFC PATCH 0/4] Add support for QMC HDLC and PHY
-Message-ID: <a2615755-f009-4a21-b464-88ec5e58f32a@lunn.ch>
-References: <20230323103154.264546-1-herve.codina@bootlin.com>
- <885e4f20-614a-4b8e-827e-eb978480af87@lunn.ch>
- <20230414165504.7da4116f@bootlin.com>
- <c99a99c5-139d-41c5-89a4-0722e0627aea@lunn.ch>
- <20230417121629.63e97b80@bootlin.com>
+        Mon, 17 Apr 2023 09:14:27 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16C57ECB;
+        Mon, 17 Apr 2023 06:14:01 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id n43-20020a05600c502b00b003f17466a9c1so1173417wmr.2;
+        Mon, 17 Apr 2023 06:14:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681737221; x=1684329221;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lPGY+l1CBUT18TsP0BCzWYtqqLAzY/UJAkAM6GBikAI=;
+        b=aqrejtYqZ72eMGnohVkxxmF9AebULGxw+hxnhS8EOT+S+J4ULyjYh3dTiJj1BsgFnN
+         A0l5ZaQnNqMIGES5L9Io723MF9vX3cetSoAgl+C5N5nsyEClwkqeWilkdC1kLKEVP8vp
+         1A0kUxov/HK+x8ZaJjMPp0PoJE3t3gBJxiE9Ir0uTfnv2aJyxaUGUkgLebIUkw84fYf8
+         NP5jQNKqMOqIcALr9n6P3ej4FaMTbJzg0MDyZOFXfDjfTO4BEQibN4NigX4muHB/5E4Y
+         Vx+rprvun5jPO2AehmFLakX+R+N0DjJyizknFVS+k4rv4n0BOkWFamgmPpItpM5mboQj
+         l4ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681737221; x=1684329221;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lPGY+l1CBUT18TsP0BCzWYtqqLAzY/UJAkAM6GBikAI=;
+        b=P/F+F6YGuqmXVK+g9hRuMGfdN2okxZRSUHoDm8qi5POpNEVzVeT6BS0EX8ISyMjuvX
+         VsGl5ep4bTumzbg9TZB4REiT8U06C1UTAQ1R3QGvwsEJtIpedpACKa+HmvHTlwsDwUtU
+         vdPaIvszC9VhboZC2RCKqAt7+8lAxt5784FF0AwXfTulM30aKIPpp5OS/zBJVzti+k4C
+         5hocbbFS76KJvs2HC7W6gp0E3zbtZPV3xXnAWMHn1ZecyUgfwglwDWpKGU1vWPJf3mWy
+         u/iHclQJiTEryV+XbEaU8LAKtpQNcw483QPnT02nvMwXXZxb1bmApGS0s0CV/NLOADkS
+         PH8g==
+X-Gm-Message-State: AAQBX9ecLVzsbcJBWtDhHX6wNs/VMaFsKsMs98Ud3xscBL864wKa7oww
+        EP8xDnA41PVrFFL0CMYHhXnRRpN3AACBHg==
+X-Google-Smtp-Source: AKy350YpxgIqhPqBTW2ZP9bBA/59bVyp5FATSus2VQX+XLtFyrwX7wxzZ/PbJ44wrYd2UB6TkPWruA==
+X-Received: by 2002:a05:600c:20d:b0:3f0:9cc6:daf0 with SMTP id 13-20020a05600c020d00b003f09cc6daf0mr11002739wmi.27.1681737220790;
+        Mon, 17 Apr 2023 06:13:40 -0700 (PDT)
+Received: from localhost (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
+        by smtp.gmail.com with ESMTPSA id hn3-20020a05600ca38300b003f16ebdc93esm6117802wmb.24.2023.04.17.06.13.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 06:13:40 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 14:13:39 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH 3/7] mm/gup: remove vmas parameter from
+ get_user_pages_remote()
+Message-ID: <9be77e7e-4531-4e1c-9e0d-4edbb5ad3bd5@lucifer.local>
+References: <cover.1681508038.git.lstoakes@gmail.com>
+ <5a4cf1ebf1c6cdfabbf2f5209facb0180dd20006.1681508038.git.lstoakes@gmail.com>
+ <ZD1FECftWekha6Do@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230417121629.63e97b80@bootlin.com>
+In-Reply-To: <ZD1FECftWekha6Do@nvidia.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > I'm surprised to see so much in the binding. I assume you are familiar
-> > with DAHDI. It allows nearly everything to be configured at
-> > runtime. The systems i've used allow you to select the clock
-> > configuration, line build out, user side vs networks side signalling
-> > CRC4 enables or not, etc.
-> 
-> Well, I am not familiar with DAHDI at all.
-> I didn't even know about the DAHDI project.
-> The project seems to use specific kernel driver and I would like to avoid
-> these external drivers.
+On Mon, Apr 17, 2023 at 10:09:36AM -0300, Jason Gunthorpe wrote:
+> On Sat, Apr 15, 2023 at 12:27:31AM +0100, Lorenzo Stoakes wrote:
+> > The only instances of get_user_pages_remote() invocations which used the
+> > vmas parameter were for a single page which can instead simply look up the
+> > VMA directly. In particular:-
+> >
+> > - __update_ref_ctr() looked up the VMA but did nothing with it so we simply
+> >   remove it.
+> >
+> > - __access_remote_vm() was already using vma_lookup() when the original
+> >   lookup failed so by doing the lookup directly this also de-duplicates the
+> >   code.
+> >
+> > This forms part of a broader set of patches intended to eliminate the vmas
+> > parameter altogether.
+> >
+> > Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+> > ---
+> >  arch/arm64/kernel/mte.c   |  5 +++--
+> >  arch/s390/kvm/interrupt.c |  2 +-
+> >  fs/exec.c                 |  2 +-
+> >  include/linux/mm.h        |  2 +-
+> >  kernel/events/uprobes.c   | 10 +++++-----
+> >  mm/gup.c                  | 12 ++++--------
+> >  mm/memory.c               |  9 +++++----
+> >  mm/rmap.c                 |  2 +-
+> >  security/tomoyo/domain.c  |  2 +-
+> >  virt/kvm/async_pf.c       |  3 +--
+> >  10 files changed, 23 insertions(+), 26 deletions(-)
+> >
+> > diff --git a/arch/arm64/kernel/mte.c b/arch/arm64/kernel/mte.c
+> > index f5bcb0dc6267..74d8d4007dec 100644
+> > --- a/arch/arm64/kernel/mte.c
+> > +++ b/arch/arm64/kernel/mte.c
+> > @@ -437,8 +437,9 @@ static int __access_remote_tags(struct mm_struct *mm, unsigned long addr,
+> >  		struct page *page = NULL;
+> >
+> >  		ret = get_user_pages_remote(mm, addr, 1, gup_flags, &page,
+> > -					    &vma, NULL);
+> > -		if (ret <= 0)
+> > +					    NULL);
+> > +		vma = vma_lookup(mm, addr);
+> > +		if (ret <= 0 || !vma)
+> >  			break;
+>
+> Given the slightly tricky error handling, it would make sense to turn
+> this pattern into a helper function:
+>
+> page = get_single_user_page_locked(mm, addr, gup_flags, &vma);
+> if (IS_ERR(page))
+>   [..]
+>
+> static inline struct page *get_single_user_page_locked(struct mm_struct *mm,
+>    unsigned long addr, int gup_flags, struct vm_area_struct **vma)
+> {
+> 	struct page *page;
+> 	int ret;
+>
+> 	ret = get_user_pages_remote(*mm, addr, 1, gup_flags, &page, NULL, NULL);
+> 	if (ret < 0)
+> 	   return ERR_PTR(ret);
+> 	if (WARN_ON(ret == 0))
+> 	   return ERR_PTR(-EINVAL);
+>         *vma = vma_lookup(mm, addr);
+> 	if (WARN_ON(!*vma) {
+> 	   put_user_page(page);
+> 	   return ERR_PTR(-EINVAL);
+>         }
+> 	return page;
+> }
+>
+> It could be its own patch so this change was just a mechanical removal
+> of NULL
+>
+> Jason
+>
 
-DAHDI is kind of the reference. Pretty much any Linux system being
-used as a open source PBX runs Asterisk, and has the out of tree DAHDI
-code to provide access to E1/T1 hardware and analogue POTS. I doubt it
-will ever be merged into mainline, but i think it gives a good idea
-what is needed to fully make use of such hardware.
-
-I don't know what you application is. Are you using libpri for
-signalling? How are you exposing the B channel to user space so that
-libpri can use it?
-
-> > > Further more, the QMC HDLC is not the only PEF2256 consumer.
-> > > The PEF2256 is also used for audio path (ie audio over E1) and so the
-> > > configuration is shared between network and audio. The setting cannot be
-> > > handle by the network part as the PEF2256 must be available and correctly
-> > > configured even if the network part is not present.  
-> > 
-> > But there is no reason why the MFD could not provide a generic PHY to
-> > actually configure the 'PHY'. The HDLC driver can then also use the
-> > generic PHY. It would make your generic PHY less 'pointless'. I'm not
-> > saying it has to be this way, but it is an option.
-> 
-> If the pef2256 PHY provides a configure function, who is going to call this
-> configure(). I mean the one calling the configure will be the configuration
-> owner. None of the MFD child can own the configuration as this configuration
-> will impact other children. So the MFD (top level node) owns the configuration.
-
-Fine. Nothing unusual there. The netdev owns the configuration for an
-Ethernet device. The MAC driver passes a subset down to any generic
-PHY being used to implement a SERDES.
-
-You could have the same architecture here. The MFD implements a
-standardised netlink API for configuring E1/T1/J1 devices. Part of it
-gets passed to the framer, which could be part of a generic PHY. I
-assume you also need to configure the HDLC hardware. It needs to know
-if it is using the whole E1 channel in unframed mode, or it should do
-a fractional link, using a subset of slots, or is just using one slot
-for 64Kbps, which would be an ISDN B channel.
-
-> > > > In fact, this PHY driver does not seem to do any configuration of any
-> > > > sort on the framer. All it seems to be doing is take notification from
-> > > > one chain and send them out another chain!  
-> > > 
-> > > Configuration is done by the parent MFD driver.
-> > > The PHY driver has nothing more to do.
-> > >   
-> > > > 
-> > > > I also wounder if this get_status() call is sufficient. Don't you also
-> > > > want Red, Yellow and Blue alarms? It is not just the carrier is down,
-> > > > but why it is down.  
-> > > 
-> > > I don't need them in my use case but if needed can't they be added later?
-> > > Also, from the HDLC device point of view what can be done with these alarms?  
-> > 
-> > https://elixir.bootlin.com/linux/latest/source/Documentation/networking/ethtool-netlink.rst#L472
-> 
-> Thanks for pointing this interface.
-> It is specific to ethtool but I can see the idea.
-
-Don't equate ethtool with Ethernet. Any netdev can implement it, and a
-HDLC device is a netdev. So it could well return link down reason.
-
-> But indeed this could be changed.
-> If changed, the MFD pef2256 will have to handle the full struct
-> phy_status_basic as the translation will not be there anymore.
-> Right now, this structure is pretty simple and contains only the link state
-> flag. But in the future, this PHY structure can move to something more
-> complex and I am not sure that filling this struct is the MFD pef2256
-> responsibility. The PHY pef2256 is responsible for the correct structure
-> contents not sure that this should be moved to the MFD part.
-
-Framers, like Ethernet PHYs, are reasonably well defined, because
-there are clear standards to follow. You could put the datasheets for
-the various frames side by side and quickly get an idea of the common
-properties. So you could define a structure now. In order to make it
-extendable, just avoid 0 having any meaning other than UNKNOWN. If you
-look at ethernet, SPEED_UNKNOWN is 0, DUPLEX_UNKNOWN is 0. So if a new
-field is added, we know if a driver has not filled it in.
-
-> > And why is the notifier specific to the PEF2256? What would happen if
-> > i used a analog devices DS2155, DS21Q55, and DS2156, or the IDT
-> > 82P2281? Would each have its own notifier? And hence each would need
-> > its own PHY which translates one notifier into another?
-> 
-> Each of them should have their own notifier if they can notify.
-
-I doubt you will find a framer which cannot report lost of framing. It
-is too much a part of the standards. There are signalling actions you
-need to do when a link goes does. So all framer drivers will have a
-notifier.
-
-> At least they will need their own notifier at they PHY driver level.
-> Having or not a translation from something else would depend on each device
-> PHY driver implementation.
-
-Have you ever look at Ethernet PHYs? They all export the same API. You
-can plug any Linux MAC driver into any Linux Ethernet PHY driver. It
-should be the same here. You should be able to plug any HDLC driver
-into any Framer. I should be able to take the same SoC you have
-implementing the TDM interface, and plug it into the IDT framer i know
-of. We want a standardised API between the HDLC device and the framer.
-
-> I would like this first implementation without too much API restriction
-> in order to see how it goes.
-> The actual proposal imposes nothing on the PHY internal implementation.
-> the pef2256 implementation chooses to have two notifiers (one at MFD
-> level and one at PHY level) but it was not imposed by the API.
-
-What i would like to see is some indication the API you are proposing
-is generic, and could be implemented by multiple frames and HDLC
-devices. The interface between the HDLC driver and the framer should
-be generic. The HDLC driver has an abstract reference to a framer. The
-framer has a reference to a netdev for the HDLC device.
-
-You can keep this API very simple, just have link up/down
-notification, since that is all you want at the moment. But the
-implementation should give hints how it can be extended.
-
-	Andrew
+Agreed, I think this would work better as a follow up patch however so as
+not to distract too much from the core change. I feel like there are quite
+a few things we can follow up on including assessing whether we might be
+able to use _fast() paths in places (I haven't assessed this yet).
