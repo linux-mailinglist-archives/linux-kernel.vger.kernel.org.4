@@ -2,83 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 065DE6E4157
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 09:40:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54BA26E4156
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 09:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbjDQHkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 03:40:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55958 "EHLO
+        id S230369AbjDQHkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 03:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231280AbjDQHjz (ORCPT
+        with ESMTP id S231243AbjDQHju (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 03:39:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CEA54236
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 00:38:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681717087;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QRdnQCKny8giW3OyExxPhuJqL89+ZaGGJFW/ztJq/GQ=;
-        b=Hchb+DzdLmaEMJW/XuahMEGmJ/qRwq8KffahtKBOejxVNe6LYzbW1H1+u2/+IJ68l0R8n5
-        dTpt60TGimXkJC0R46WZbnYjq6s2D2xckS66GYQF24erkfOq19v6tTHu+XPzJJPmI95o+T
-        opcXVCebkUS+VBzuGJZ+AlWw7nV9hEY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-549--G3PADyWMEmGXGJVJmaYgA-1; Mon, 17 Apr 2023 03:38:03 -0400
-X-MC-Unique: -G3PADyWMEmGXGJVJmaYgA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 17 Apr 2023 03:39:50 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3327C4C00
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 00:39:10 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 980DE85C1A7;
-        Mon, 17 Apr 2023 07:38:02 +0000 (UTC)
-Received: from ovpn-8-16.pek2.redhat.com (ovpn-8-16.pek2.redhat.com [10.72.8.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9AEFB40C6E6E;
-        Mon, 17 Apr 2023 07:37:55 +0000 (UTC)
-Date:   Mon, 17 Apr 2023 15:37:50 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Li Feng <fengli@smartx.com>
-Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        "open list:NVM EXPRESS DRIVER" <linux-nvme@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>, lifeng1519@gmail.com,
-        ming.lei@redhat.com
-Subject: Re: [PATCH v2] nvme/tcp: Add support to set the tcp worker cpu
- affinity
-Message-ID: <ZDz3TlFUxMxaO1W4@ovpn-8-16.pek2.redhat.com>
-References: <20230413062339.2454616-1-fengli@smartx.com>
- <20230413132941.2489795-1-fengli@smartx.com>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 291FA6602F91;
+        Mon, 17 Apr 2023 08:39:00 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1681717141;
+        bh=EiNOtPE+lhG3aPoSAyOgtZ67mh+dWMxFs/Uq9B0YnJ8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=lU0itS7YxkQVm5YQFoUgsqWn6Vd06iFLiHynBxqblggbo2MEPzBT9spA2Zqfk4UFJ
+         Cbn6jnVbdcE6SP9XuzTJUpIa+a26j8PNE5v1HgXyYTB7WakjfRLirje5oUn7+TtKnd
+         bLcSHcZvINymW6HM5iAOoi/D+yz/GJAGpB4jOX8Zjk4TD0ZZ2renr3eNnM2c+Al26Z
+         eoq+f8VLGcbey/5VL4MV2Tbg+sprTWOj8W89BZyma/PlYpbTWa/J1mV/8LqvmAAXVV
+         9ekNPLBtSrrSH9BW4YLhf3RIVVkMKjoBceZ393ExGtxsz1AYo0+QFBRYctCQPodwsw
+         Wea+5pJxYXv8A==
+Message-ID: <447c1e8a-b3cd-0515-3998-edf3d2f5d476@collabora.com>
+Date:   Mon, 17 Apr 2023 09:38:57 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230413132941.2489795-1-fengli@smartx.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] phy: mediatek: fix returning garbage
+To:     Tom Rix <trix@redhat.com>, chunkuang.hu@kernel.org,
+        p.zabel@pengutronix.de, chunfeng.yun@mediatek.com,
+        vkoul@kernel.org, kishon@kernel.org, matthias.bgg@gmail.com,
+        nathan@kernel.org, ndesaulniers@google.com, granquet@baylibre.com
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+References: <20230414122253.3171524-1-trix@redhat.com>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230414122253.3171524-1-trix@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 09:29:41PM +0800, Li Feng wrote:
-> The default worker affinity policy is using all online cpus, e.g. from 0
-> to N-1. However, some cpus are busy for other jobs, then the nvme-tcp will
-> have a bad performance.
+Il 14/04/23 14:22, Tom Rix ha scritto:
+> clang reports
+> drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable
+>    'ret' is uninitialized when used here [-Werror,-Wuninitialized]
+>          if (ret)
+>              ^~~
+> ret should have been set by the preceding call to mtk_hdmi_pll_set_hw.
+> 
+> Fixes: 45810d486bb4 ("phy: mediatek: add support for phy-mtk-hdmi-mt8195")
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Can you explain in detail how nvme-tcp performs worse in this situation?
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-If some of CPUs are knows as busy, you can submit the nvme-tcp io jobs
-on other non-busy CPUs via taskset, or scheduler is supposed to choose
-proper CPUs for you. And usually nvme-tcp device should be saturated
-with limited io depth or jobs/cpus.
-
-
-Thanks, 
-Ming
 
