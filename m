@@ -2,205 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 633826E45F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 13:03:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D2F56E457B
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 12:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbjDQLC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 07:02:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59484 "EHLO
+        id S230106AbjDQKoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 06:44:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbjDQLCp (ORCPT
+        with ESMTP id S229634AbjDQKox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 07:02:45 -0400
-X-Greylist: delayed 1070 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 17 Apr 2023 04:01:53 PDT
-Received: from sender3-op-o17.zoho.com (sender3-op-o17.zoho.com [136.143.184.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 337DCCD;
-        Mon, 17 Apr 2023 04:01:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1681728135; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=DH2IVBozEs6pUVU0K5hsGDcJrZ6CJ3nWzbDYtoGHioVjFxvvacBPxjbSGWH8Kwswq+tEGtQKkyNjbUIcy85yGQ+LCiAVUYh3c1t9X10EcoKz88sQSyWZU3VL360BRkKpVVJCqriaiVP0/EytUxC2oeyP+MpIFOW/0ZYtPzcXewU=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1681728135; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=l5UzRmzjBmdp1SHIiT+fyytsFP7exoqSFPSjT6fGmo8=; 
-        b=RyUcRo2i4spe6I+LR7SWSY/0esnRpNPujxx7OXsrHHH7tILwVrL6RhM7Pcaayk2YSy+K56pG3OkHv7CNzTX1wDknQWlbG6O5P75DBOoXT7e2IAWD6dM2v689mSz37FjY76luaHgQgUsS2ZKDZxnLALzN0IGECiz5LhGAxIJzqAQ=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1681728135;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=l5UzRmzjBmdp1SHIiT+fyytsFP7exoqSFPSjT6fGmo8=;
-        b=eSaBIRkapZ8gYAkR0KtPDJQXlGi43FvP/QaKqV4Ye7LnFHrhROfOJcUNasnqO426
-        vj6MilsJgrTzWjK5nUgeYBPv/yJTFVNgK51KKJQWUZfI/E1tnEWTFC6fX8kw8KLY3Y5
-        epoNYk08hRpl6WR6CtYaiilxb9QPiTQj9KbTvQ64=
-Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
-        with SMTPS id 1681728134506248.94212542722335; Mon, 17 Apr 2023 03:42:14 -0700 (PDT)
-Message-ID: <a6474ebf-67be-cdd9-8213-6251f27da2bd@arinc9.com>
-Date:   Mon, 17 Apr 2023 13:42:05 +0300
+        Mon, 17 Apr 2023 06:44:53 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2479B5B9C;
+        Mon, 17 Apr 2023 03:43:50 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id d8-20020a05600c3ac800b003ee6e324b19so12847498wms.1;
+        Mon, 17 Apr 2023 03:43:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681728145; x=1684320145;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+FSsTNaAxDVrnnWZoYzSsuW1bfOx2KirKh1RVOBinvY=;
+        b=bImlZtJsk9iREVOmEf/RbWim78bXjszsA+dO0JytrrS7kWGgf/T8r2bAZugCyK3Hzu
+         JbjVo8JYuYY//n4ElWQCvFHPRWlWsFgXSgyFR0G7BSYfzyELmgCT5RMU+kTSaVqojf6b
+         +mGH1Ej5yCIoLM5//rhimXdrtyqhZJlSZW7BbsItuvx1XOCYSS3EhnQIdTJjsx2F2DZ+
+         f2rSsW5nMMQu0CcMvCAGc9eRRjST1LPPxhOsqUzzLf7RZeZAGy+TKtbceMbq6Gtspg0+
+         P/l3Bh4dATWSrKGsKUyw/JGU6CTblM+GD0u1lfvT6eidKtUXvDjGAaa81mHlMArX/qXL
+         BH1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681728145; x=1684320145;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+FSsTNaAxDVrnnWZoYzSsuW1bfOx2KirKh1RVOBinvY=;
+        b=BsPN7jrwPXzugNd9H9qI6UZ+sNs7R3wS5nEM2WB5JpJVQb0TosE8aZ/YT+Lg8dhnGL
+         anluikO9oGYVUgPTafUaqNYs5ZUcy+0TWNIm0+1vo2M3aBjI/L196cvsGqQlh3Hw1TW6
+         4/tggKdUJrMyamLiAUrroWt6gyabq/SPkPq8UErR7wl1GrbYZG1iqv3Bi4XFGo7CcgXQ
+         2XAuyeiv/GwmSPpppMyGfp7OhyCVeACirCwc8BoNSnIIiLcZ9JINXSK0ZAzrp4o4LP5K
+         Y6oCBobAwjj29aKPzYcC7qDb96TZAHtZ0E/dYP/R2EUmPMoK5g6nOhGQIgsNrl+BqTio
+         p6dA==
+X-Gm-Message-State: AAQBX9dvw6a1RI61cOZjl8tVScb9h1eotKZ1N7/v84Li0yX6vCfpRpA7
+        aq7M8Etx24fXxEx1gf2Wgmg=
+X-Google-Smtp-Source: AKy350YgtqidShU+Z+BRMWKOzSY0N6RpgZt7pJjc0/NbbrBY/lJjWRKH94XwvA30WZXkQLYokVa9XQ==
+X-Received: by 2002:a1c:7717:0:b0:3f1:75d2:a6a7 with SMTP id t23-20020a1c7717000000b003f175d2a6a7mr760219wmi.36.1681728145521;
+        Mon, 17 Apr 2023 03:42:25 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id 15-20020a05600c230f00b003f16fdc6233sm5189129wmo.47.2023.04.17.03.42.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 03:42:25 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 13:42:21 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Dongliang Mu <dzm91@hust.edu.cn>, Vicki Pfau <vi@endrift.com>,
+        kernel-janitors@vger.kernel.org
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Pavel Rojtberg <rojtberg@gmail.com>,
+        Nate Yocom <nate@yocom.org>,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        John Butler <radon86dev@gmail.com>,
+        Matthias Benkmann <matthias.benkmann@gmail.com>,
+        Christopher Crockett <chaorace@gmail.com>,
+        Santosh De Massari <s.demassari@gmail.com>,
+        hust-os-kernel-patches@googlegroups.com,
+        syzbot+a3f758b8d8cb7e49afec@syzkaller.appspotmail.com,
+        "Pierre-Loup A. Griffais" <pgriffais@valvesoftware.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Input: xpad - fix GPF in xpad_probe
+Message-ID: <011c00e7-c351-4331-8be4-1c184d5773e1@kili.mountain>
+References: <20230414125603.686123-1-dzm91@hust.edu.cn>
+ <c3e0823b-2b03-4dab-b7cb-a8bc5151f0b1@kili.mountain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] USB: serial: option: add UNISOC vendor and TOZED LT70C
- product
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Bj=c3=b8rn_Mork?= <bjorn@mork.no>, me@1conan.com,
-        erkin.bozoglu@xeront.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230406055004.8216-1-arinc.unal@arinc9.com>
- <ZDgca7wgfGlK/9cZ@hovoldconsulting.com>
-Content-Language: en-US
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <ZDgca7wgfGlK/9cZ@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c3e0823b-2b03-4dab-b7cb-a8bc5151f0b1@kili.mountain>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13.04.2023 18:14, Johan Hovold wrote:
-> On Thu, Apr 06, 2023 at 08:50:04AM +0300, arinc9.unal@gmail.com wrote:
->> From: Arınç ÜNAL <arinc.unal@arinc9.com>
->>
->> Add UNISOC vendor ID and TOZED LT70-C modem which is based from UNISOC
->> SL8563. The modem supports the NCM mode.
-> 
-> Thanks for the patch. Looks mostly good, but see my comments below.
+Btw, we should be thinking about how to detect these sorts of issues
+using static analysis.  Unfortunately, it's not as simple as saying
+"We know this variable is NULL so don't dereference it."  The problem
+with that is that many times Smatch sees where a pointer is set to NULL
+but not when it is assigned to a different value.
 
-Thanks a lot for looking at this Johan!
+What we could do instead is say:
+1) If a pointer is dereferenced and we know it is NULL then:
+    set_state_expr(my_id, expr, &suspicious);
+2) If we set a pointer to non-NULL and it is marked as suspicious then
+   print a warning.
 
-> 
->> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  6 Spd=480  MxCh= 0
->> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
->> P:  Vendor=1782 ProdID=4055 Rev=04.04
->> S:  Manufacturer=Unisoc Phone
->> S:  Product=Unisoc Phone
->> S:  SerialNumber=<redacted>
->> C:  #Ifs=14 Cfg#= 1 Atr=c0 MxPwr=500mA
->> I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0d Prot=00 Driver=cdc_ncm
->> E:  Ad=82(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
->> I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=01 Driver=cdc_ncm
->> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> I:  If#=10 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
->> E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> E:  Ad=8b(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> I:  If#=11 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
->> E:  Ad=08(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> E:  Ad=8c(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> I:  If#=12 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=option
->> E:  Ad=09(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> E:  Ad=8d(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> 
-> This looks like an ADB interface which should be blacklisted (reserved)
-> so that the driver does not bind to it.
+This would generate a warning for cases where we dereference a pointer
+before it has been initialized.
 
-Will do.
+It is not hard to write a Smatch check like this.  The first draft
+approach is only three functions long.
 
-> 
->> I:  If#=13 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
->> E:  Ad=0a(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> I:  If#= 2 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0d Prot=00 Driver=cdc_ncm
->> E:  Ad=84(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
->> I:  If#= 3 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=01 Driver=cdc_ncm
->> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> I:  If#= 4 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0d Prot=00 Driver=cdc_ncm
->> E:  Ad=86(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
->> I:  If#= 5 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=01 Driver=cdc_ncm
->> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> I:  If#= 6 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0d Prot=00 Driver=cdc_ncm
->> E:  Ad=88(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
->> I:  If#= 7 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=01 Driver=cdc_ncm
->> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> I:  If#= 8 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
->> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> I:  If#= 9 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
->> E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> E:  Ad=8a(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->>
->> Bus 001 Device 002: ID 1782:4055 Unisoc Phone Unisoc Phone
->> Device Descriptor:
->>    bLength                18
->>    bDescriptorType         1
->>    bcdUSB               2.00
->>    bDeviceClass            0
->>    bDeviceSubClass         0
->>    bDeviceProtocol         0
->>    bMaxPacketSize0        64
->>    idVendor           0x1782
->>    idProduct          0x4055
->>    bcdDevice            4.04
->>    iManufacturer           1 Unisoc Phone
->>    iProduct                2 Unisoc Phone
->>    iSerial                 3 <redacted>
->>    bNumConfigurations      1
-> 
-> When resending you can put the verbose lsusb output below the cut-off
-> line (---) so that we have it in the mail archives if ever needed.
+regards,
+dan carpenter
 
-Will do.
-
-> 
-> Could you also add something what the various serial interfaces are used
-> for?
-
-Me and Conan only know the first interface which is where the AT 
-commands are run. I will mention this and the ADB interface on v2.
-
-> 
->> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
->> ---
->>
->> I did not receive any comments on RFC so I'm sending this as is.
->>
->> Arınç
->>
->> ---
->>   drivers/usb/serial/option.c | 6 ++++++
->>   1 file changed, 6 insertions(+)
->>
->> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
->> index f31cc3c76329..65a050a9ca39 100644
->> --- a/drivers/usb/serial/option.c
->> +++ b/drivers/usb/serial/option.c
->> @@ -595,6 +595,11 @@ static void option_instat_callback(struct urb *urb);
->>   #define SIERRA_VENDOR_ID			0x1199
->>   #define SIERRA_PRODUCT_EM9191			0x90d3
->>   
->> +/* UNISOC (Spreadtrum) products */
->> +#define UNISOC_VENDOR_ID			0x1782
->> +/* TOZED TL70-C based on UNISOC SL8563 uses UNISOC's vendor ID */
->> +#define TOZED_PRODUCT_LT70C			0x4055
->> +
->>   /* Device flags */
->>   
->>   /* Highest interface number which can be used with NCTRL() and RSVD() */
->> @@ -2225,6 +2230,7 @@ static const struct usb_device_id option_ids[] = {
->>   	{ USB_DEVICE_AND_INTERFACE_INFO(OPPO_VENDOR_ID, OPPO_PRODUCT_R11, 0xff, 0xff, 0x30) },
->>   	{ USB_DEVICE_AND_INTERFACE_INFO(SIERRA_VENDOR_ID, SIERRA_PRODUCT_EM9191, 0xff, 0xff, 0x30) },
->>   	{ USB_DEVICE_AND_INTERFACE_INFO(SIERRA_VENDOR_ID, SIERRA_PRODUCT_EM9191, 0xff, 0, 0) },
->> +	{ USB_DEVICE(UNISOC_VENDOR_ID, TOZED_PRODUCT_LT70C) },
-> 
-> You should match also on the interface class so that you don't try to
-> bind to the cdc interfaces. See USB_DEVICE_INTERFACE_CLASS() (and
-> RSVD() for the ADB interface).
-
-Thanks, the final result should look like this:
-
-{ USB_DEVICE_INTERFACE_CLASS(UNISOC_VENDOR_ID, TOZED_PRODUCT_LT70C, 0xff),
-   .driver_info = RSVD(12) },
-
-Arınç
