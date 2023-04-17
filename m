@@ -2,51 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 662696E5387
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 23:00:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0638D6E538A
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 23:03:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231185AbjDQVAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 17:00:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46344 "EHLO
+        id S229957AbjDQVDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 17:03:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231395AbjDQU7h (ORCPT
+        with ESMTP id S230347AbjDQVCz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 16:59:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47854D319
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 13:57:43 -0700 (PDT)
+        Mon, 17 Apr 2023 17:02:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE6A7AA4
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 14:02:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D682762A71
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 20:56:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A0F9C4339B;
-        Mon, 17 Apr 2023 20:56:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CDAF62A85
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 21:02:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4189DC4339B;
+        Mon, 17 Apr 2023 21:02:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681765019;
-        bh=GsJ+PxyTSnYDGmLARig0264/+VJ67ApwAzYJ119+iSo=;
+        s=k20201202; t=1681765339;
+        bh=M+0Wkonx6xgqnpncRO7OGIWleTNT95JSdoH0jUPeOZ4=;
         h=From:To:Cc:Subject:Date:From;
-        b=nNatzqFHmOQ057sTK5UQ0wFqiCQjllH8w0mjnxyxRPlfJsHBhuPXHefHqjInEH4AF
-         nulbc2rGyqnAWGzjW6V0YKevxeCLXOL8eAXvgSNhRb+ukhcMvfqKY1urg0P2VRvXWg
-         3hxjk0TJmgcsKe++pVJcahc2qD9SjKYg2jhlP5UGERc8J3BodkS2nHWW9YKCAMKsdU
-         nj6Z486FHooltVb23ucWjyx4fcaOFIl0c6m6X0u7FI4sP5lYW+cIbC/uFhbhkM1k1N
-         lyN4WUD9hNmoI/z2V2LQnnlAuMuMII3zGoxtafcFjdpbESky0FBzIz/httvFFSFlaX
-         2U9g4u1Uci3Cg==
+        b=MpAkNO0krwEsoJPAt7dNl0COD7+wh03WF2d3c1EKXmjLKM6OZnBMcSPbqYKub1jR7
+         hLsZp9CBdvceZrM2gfDGyMn9PkVoXBAL79G6J7/YShxy9ffLlPz804Z+P1rbTnR6ON
+         lVAuh9boHMbLX0yd7BASNMdQ/UoeAigySsBqyZpCcHYQXBP4ght0vdteUdZk65f2Yn
+         nAzuq70pEK34nvCo/eIP5nTE2nuy0HdxCLQfbNdZ2JZBgLX6A9YuSWdR3RhBEHQPhF
+         7wSvaXvV+60Ho5gRttq68P2dag6QhODix4Fwf3XeCFMSCO2y5qiXGWRa8RGDfaO7fU
+         Bees4prCuY2WQ==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        =?UTF-8?q?Micha=C5=82=20K=C4=99pie=C5=84?= <kernel@kempniu.pl>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] mtdchar: mark bits of ioctl handler noinline
-Date:   Mon, 17 Apr 2023 22:56:50 +0200
-Message-Id: <20230417205654.1982368-1-arnd@kernel.org>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH] backlight: corgi_lcd: fix missing prototype
+Date:   Mon, 17 Apr 2023 23:02:13 +0200
+Message-Id: <20230417210213.2385912-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,50 +56,55 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The addition of the mtdchar_read_ioctl() function caused the stack usage
-of mtdchar_ioctl() to grow beyond the warning limit on 32-bit architectures
-with gcc-13:
+The corgi_lcd_limit_intensity() function is called from platform
+and defined in a driver, but the driver does not see the declaration:
 
-drivers/mtd/mtdchar.c: In function 'mtdchar_ioctl':
-drivers/mtd/mtdchar.c:1229:1: error: the frame size of 1488 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+drivers/video/backlight/corgi_lcd.c:434:6: error: no previous prototype for 'corgi_lcd_limit_intensity' [-Werror=missing-prototypes]
+  434 | void corgi_lcd_limit_intensity(int limit)
 
-Mark both the read and write portions as noinline_for_stack to ensure
-they don't get inlined and use separate stack slots to reduce the
-maximum usage, both in the mtdchar_ioctl() and combined with any
-of its callees.
+Move the prototype into a header that can be included from both
+sides to shut up the warning.
 
-Fixes: 095bb6e44eb1 ("mtdchar: add MEMREAD ioctl")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/mtd/mtdchar.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/arm/mach-pxa/sharpsl_pm.h | 1 -
+ arch/arm/mach-pxa/spitz_pm.c   | 1 +
+ include/linux/spi/corgi_lcd.h  | 2 ++
+ 3 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mtd/mtdchar.c b/drivers/mtd/mtdchar.c
-index 01f1c6792df9..8dc4f5c493fc 100644
---- a/drivers/mtd/mtdchar.c
-+++ b/drivers/mtd/mtdchar.c
-@@ -590,8 +590,8 @@ static void adjust_oob_length(struct mtd_info *mtd, uint64_t start,
- 			    (end_page - start_page + 1) * oob_per_page);
- }
+diff --git a/arch/arm/mach-pxa/sharpsl_pm.h b/arch/arm/mach-pxa/sharpsl_pm.h
+index 9429900db0bb..eff9a74e787f 100644
+--- a/arch/arm/mach-pxa/sharpsl_pm.h
++++ b/arch/arm/mach-pxa/sharpsl_pm.h
+@@ -105,5 +105,4 @@ void sharpsl_pm_led(int val);
+ #define MAX1111_ACIN_VOLT   6u
+ int sharpsl_pm_pxa_read_max1111(int channel);
  
--static int mtdchar_write_ioctl(struct mtd_info *mtd,
--		struct mtd_write_req __user *argp)
-+static noinline_for_stack int
-+mtdchar_write_ioctl(struct mtd_info *mtd, struct mtd_write_req __user *argp)
- {
- 	struct mtd_info *master = mtd_get_master(mtd);
- 	struct mtd_write_req req;
-@@ -688,8 +688,8 @@ static int mtdchar_write_ioctl(struct mtd_info *mtd,
- 	return ret;
- }
+-void corgi_lcd_limit_intensity(int limit);
+ #endif
+diff --git a/arch/arm/mach-pxa/spitz_pm.c b/arch/arm/mach-pxa/spitz_pm.c
+index c783696e13b9..9571f2b5b118 100644
+--- a/arch/arm/mach-pxa/spitz_pm.c
++++ b/arch/arm/mach-pxa/spitz_pm.c
+@@ -15,6 +15,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/platform_device.h>
+ #include <linux/apm-emulation.h>
++#include <linux/spi/corgi_lcd.h>
  
--static int mtdchar_read_ioctl(struct mtd_info *mtd,
--		struct mtd_read_req __user *argp)
-+static noinline_for_stack int
-+mtdchar_read_ioctl(struct mtd_info *mtd, struct mtd_read_req __user *argp)
- {
- 	struct mtd_info *master = mtd_get_master(mtd);
- 	struct mtd_read_req req;
+ #include <asm/irq.h>
+ #include <asm/mach-types.h>
+diff --git a/include/linux/spi/corgi_lcd.h b/include/linux/spi/corgi_lcd.h
+index 0b857616919c..fc6c1515dc54 100644
+--- a/include/linux/spi/corgi_lcd.h
++++ b/include/linux/spi/corgi_lcd.h
+@@ -15,4 +15,6 @@ struct corgi_lcd_platform_data {
+ 	void (*kick_battery)(void);
+ };
+ 
++void corgi_lcd_limit_intensity(int limit);
++
+ #endif /* __LINUX_SPI_CORGI_LCD_H */
 -- 
 2.39.2
 
