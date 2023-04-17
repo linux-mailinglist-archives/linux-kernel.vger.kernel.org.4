@@ -2,56 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D04EA6E5083
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:02:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CD306E5085
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:02:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbjDQTB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 15:01:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57546 "EHLO
+        id S230295AbjDQTC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 15:02:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbjDQTBz (ORCPT
+        with ESMTP id S230003AbjDQTC0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 15:01:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45AA249DD;
-        Mon, 17 Apr 2023 12:01:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 17 Apr 2023 15:02:26 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E01E62
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:02:24 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D40DB611BF;
-        Mon, 17 Apr 2023 19:01:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF6FEC433EF;
-        Mon, 17 Apr 2023 19:01:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681758113;
-        bh=pUQsRK2HHtBTEizrDJUqpSN9HwdIy8SdQUjD/fbmkvY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=DqXpfZ6CZUUejW+o7NfwfIHlQohPbq0iVu6KmzFD2akkuTwDI98z3onwKRH5fUk78
-         yCZ+Q9EBxBvdqytWYUQcxzm4x6T9WTjCVAxLh8mclqd9dA5RXivrhYJaiQrqkZ9+1E
-         KcSK3SNZWXrAV5DhrTgrV/ZRpurStoRYYTPq/Z6a1LnecZeYo064vVzsgCAsaZHQZo
-         fu7b//78L7B6unHAYMkF+zg35JON8ZfnpHxzuii9rDHVFRUjG1/jB+8ika8wRYcYr7
-         CCU7atasDSCRrQggGuXefenv0kG95IoE7IFF7Mirw7uavLwahQhm/ayj6InEh5zMMi
-         zCvxQ1iLc8NPg==
-Date:   Mon, 17 Apr 2023 12:01:52 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Shmuel Hazan <shmuel.h@siklu.com>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Marcin Wojtas <mw@semihalf.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        horatiu.vultur@microchip.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] net: mvpp2: tai: add extts support
-Message-ID: <20230417120152.1ac03faf@kernel.org>
-In-Reply-To: <20230417170741.1714310-1-shmuel.h@siklu.com>
-References: <20230417170741.1714310-1-shmuel.h@siklu.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 08A5B1F85D;
+        Mon, 17 Apr 2023 19:02:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1681758143; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+Bm/TkpcMy6cuYGFixPMtHN6GQvyYrnWfVkOFEnqjaw=;
+        b=VMALOtZopBgD/6l2GDTO7VzUHOBAFNMokUNAQT3o2i/7q+iRcJvNU1/wGkUHrBSH+vsG1c
+        g3oX0FMqF8FQ4nmXN/26AQcAN/vKgHXLL9w9T/gYyXpnk/LSOKOqJld+dq7Yv8s10l01DZ
+        S0utMIsut+u6oc9PfaTU9jQ3jswZ1F4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1681758143;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+Bm/TkpcMy6cuYGFixPMtHN6GQvyYrnWfVkOFEnqjaw=;
+        b=GMsCwVu6HWh2dPz+S/L4pxzYt++4V7dmJTdQEF2RC7ffeASZHg5UUFOap5IwuJOyI7XJTU
+        WfNRFCPcGSp4TfCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E012013319;
+        Mon, 17 Apr 2023 19:02:22 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id rB4YNr6XPWQxIwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 17 Apr 2023 19:02:22 +0000
+Message-ID: <17bbab58-3cde-e980-bdeb-b9de65848b2e@suse.cz>
+Date:   Mon, 17 Apr 2023 21:02:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 2/2] mm/slab: break up RCU readers on
+ SLAB_TYPESAFE_BY_RCU example code
+Content-Language: en-US
+To:     SeongJae Park <sj@kernel.org>, Matthew Wilcox <willy@infradead.org>
+Cc:     akpm@linux-foundation.org, paulmck@kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20230417190129.1454-1-sj@kernel.org>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230417190129.1454-1-sj@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,15 +75,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Apr 2023 20:07:38 +0300 Shmuel Hazan wrote:
-> This patch series adds support for PTP event capture on the Aramda
-> 80x0/70x0. This feature is mainly used by tools linux ts2phc(3) in order
-> to synchronize a timestamping unit (like the mvpp2's TAI) and a system
-> DPLL on the same PCB. 
+On 4/17/23 21:01, SeongJae Park wrote:
+> On Mon, 17 Apr 2023 18:53:24 +0100 Matthew Wilcox <willy@infradead.org> wrote:
 > 
-> The patch series includes 3 patches: the second one implements the
-> actual extts function.
+>> On Mon, Apr 17, 2023 at 05:26:57PM +0000, SeongJae Park wrote:
+>> > Hi Vlastimil,
+>> > 
+>> > On Mon, 17 Apr 2023 13:05:40 +0200 Vlastimil Babka <vbabka@suse.cz> wrote:
+>> > 
+>> > > On 4/15/23 05:31, SeongJae Park wrote:
+>> > > > The SLAB_TYPESAFE_BY_RCU example code snippet is having not tiny RCU
+>> > > 
+>> > > Since "tiny RCU" means something quite specific in the RCU world, it can be
+>> > > confusing to read it in this sense. We could say e.g. "... snippet uses a
+>> > > single RCU read-side critical section for retries"?
+>> > 
+>> > Looks much better, thank you for this suggestion!
+>> > 
+>> > > 
+>> > > > read-side critical section.  'Documentation/RCU/rculist_nulls.rst' has
+>> > > > similar example code snippet, and commit da82af04352b ("doc: Update and
+>> > > > wordsmith rculist_nulls.rst") has broken it.
+>> > > 
+>> > > "has broken it" has quite different meaning than "has broken it up" :) I
+>> > > guess we could just add the "up", unless someone has an even better wording.
+>> > 
+>> > Good point, thank you for your suggestion!
+>> > 
+>> > I will apply above suggestion on the next spin.
+>> 
+>> For the last one, perhaps changing the tense would have more clarity:
+>> 
+>> similar example code snippet, and commit da82af04352b ("doc: Update and
+>> wordsmith rculist_nulls.rst") broke it up.
+> 
+> Thank you for this suggestion, Matthew!  Will send a new version.
 
-Please wait at least 24h between resends.
-Please read the rules:
-https://www.kernel.org/doc/html/next/process/maintainer-netdev.html
+It's ok, I can just use that when picking the patches up without a new resend.
+
+> Thanks,
+> SJ
+
