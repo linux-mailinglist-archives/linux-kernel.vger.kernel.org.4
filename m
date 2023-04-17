@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C066E4EAC
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 18:57:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4536E4EB1
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 18:59:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbjDQQ5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 12:57:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34986 "EHLO
+        id S230005AbjDQQ7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 12:59:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjDQQ5B (ORCPT
+        with ESMTP id S229485AbjDQQ7q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 12:57:01 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D34B1FDE;
-        Mon, 17 Apr 2023 09:57:00 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Q0Y4h4QMVz67dxR;
-        Tue, 18 Apr 2023 00:52:20 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Mon, 17 Apr
- 2023 17:56:56 +0100
-Date:   Mon, 17 Apr 2023 17:56:55 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Terry Bowman <Terry.Bowman@amd.com>
-CC:     <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
-        <ira.weiny@intel.com>, <bwidawsk@kernel.org>,
-        <dan.j.williams@intel.com>, <dave.jiang@intel.com>,
-        <linux-cxl@vger.kernel.org>, <rrichter@amd.com>,
-        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>
-Subject: Re: [PATCH v3 4/6] cxl/pci: Add RCH downstream port error logging
-Message-ID: <20230417175655.00005d59@Huawei.com>
-In-Reply-To: <1552ec3c-fa30-2f2b-c73b-5a9f4cd999be@amd.com>
-References: <20230411180302.2678736-1-terry.bowman@amd.com>
-        <20230411180302.2678736-5-terry.bowman@amd.com>
-        <20230413175043.0000523e@Huawei.com>
-        <1552ec3c-fa30-2f2b-c73b-5a9f4cd999be@amd.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Mon, 17 Apr 2023 12:59:46 -0400
+Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D2AEB4;
+        Mon, 17 Apr 2023 09:59:45 -0700 (PDT)
+Received: from mg.ssi.bg (localhost [127.0.0.1])
+        by mg.bb.i.ssi.bg (Proxmox) with ESMTP id CEC681B28D;
+        Mon, 17 Apr 2023 19:59:41 +0300 (EEST)
+Received: from ink.ssi.bg (ink.ssi.bg [193.238.174.40])
+        by mg.bb.i.ssi.bg (Proxmox) with ESMTPS id B557B1B257;
+        Mon, 17 Apr 2023 19:59:41 +0300 (EEST)
+Received: from ja.ssi.bg (unknown [178.16.129.10])
+        by ink.ssi.bg (Postfix) with ESMTPS id A51913C043A;
+        Mon, 17 Apr 2023 19:59:36 +0300 (EEST)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 33HGxZgk120021;
+        Mon, 17 Apr 2023 19:59:35 +0300
+Date:   Mon, 17 Apr 2023 19:59:35 +0300 (EEST)
+From:   Julian Anastasov <ja@ssi.bg>
+To:     Simon Horman <horms@kernel.org>
+cc:     Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, lvs-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: Re: [PATCH nf-next v3 0/4] ipvs: Cleanups for v6.4
+In-Reply-To: <20230409-ipvs-cleanup-v3-0-5149ea34b0b9@kernel.org>
+Message-ID: <a873ffc-bcdf-934f-127a-80188e8b33e6@ssi.bg>
+References: <20230409-ipvs-cleanup-v3-0-5149ea34b0b9@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -56,51 +57,63 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-> 
-> >> +
-> >> +	writel(aer_regs->uncor_status, aer_base + PCI_ERR_UNCOR_STATUS);
-> >> +	writel(aer_regs->cor_status, aer_base + PCI_ERR_COR_STATUS);
-> >> +
-> >> +	return true;
-> >> +}  
-> > =  
-> >> diff --git a/drivers/cxl/core/regs.c b/drivers/cxl/core/regs.c
-> >> index bde1fffab09e..dfa6fcfc428a 100644
-> >> --- a/drivers/cxl/core/regs.c
-> >> +++ b/drivers/cxl/core/regs.c
-> >> @@ -198,6 +198,7 @@ void __iomem *devm_cxl_iomap_block(struct device *dev, resource_size_t addr,
-> >>  
-> >>  	return ret_val;
-> >>  }
-> >> +EXPORT_SYMBOL_NS_GPL(devm_cxl_iomap_block, CXL);
-> >>  
-> >>  int cxl_map_component_regs(struct device *dev, struct cxl_component_regs *regs,
-> >>  			   struct cxl_register_map *map, unsigned long map_mask)
-> >> diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
-> >> index df64c402e6e6..dae3f141ffcb 100644
-> >> --- a/drivers/cxl/cxl.h
-> >> +++ b/drivers/cxl/cxl.h
-> >> @@ -66,6 +66,8 @@
-> >>  #define CXL_DECODER_MIN_GRANULARITY 256
-> >>  #define CXL_DECODER_MAX_ENCODED_IG 6
-> >>  
-> >> +#define PCI_AER_CAPABILITY_LENGTH 56  
-> > 
-> > Odd place to find a PCI specific define. Also a spec reference is
-> > always good for these.  What's the the length of? PCI r6.0 has
-> > cap going up to address 0x5c  so length 0x60.  This seems to be igoring
-> > the header log register.
-> >  
-> 
-> This was to avoid including the TLP log at 0x38+.
-> 
-> I can use sizeof(struct aer_capability_regs) or sizeof(*aer_regs) instead. 
-> It's the same 38h(56) and will allow me to remove this #define in the 
-> patchset revision.
+	Hello,
 
-That works better than a define that people might think is more generic.
-Otherwise you get PCI_AER_CAP_WITHOUT_TLP_LOG_LENGTH or
-something equally horrible. (or define the TLP_LOG length as another
-define and subtract that?)
+On Mon, 17 Apr 2023, Simon Horman wrote:
 
->  
+> Hi Julian,
+> 
+> this series aims to clean up IPVS in several ways without
+> implementing any functional changes, aside from removing
+> some debugging output.
+> 
+> Patch 1/4: Update width of source for ip_vs_sync_conn_options
+>            The operation is safe, use an annotation to describe it properly.
+> 
+> Patch 2/4: Consistently use array_size() in ip_vs_conn_init()
+>            It seems better to use helpers consistently.
+> 
+> Patch 3/4: Remove {Enter,Leave}Function
+>            These seem to be well past their use-by date.
+> 
+> Patch 4/4: Correct spelling in comments
+> 	   I can't spell. But codespell helps me these days.
+> 
+> All changes: compile tested only!
+> 
+> ---
+> Changes in v3:
+> - Patch 2/4: Correct division by 1024.
+>              It was applied to the wrong variable in v2.
+> - Add Horatiu's Reviewed-by tag.
+> 
+> Changes in v2:
+> - Patch 1/4: Correct spelling of 'conn' in subject.
+> - Patch 2/4: Restore division by 1024. It was lost on v1.
+> 
+> ---
+> Simon Horman (4):
+>       ipvs: Update width of source for ip_vs_sync_conn_options
+>       ipvs: Consistently use array_size() in ip_vs_conn_init()
+>       ipvs: Remove {Enter,Leave}Function
+>       ipvs: Correct spelling in comments
+
+	The patchset looks good to me, thanks!
+
+Acked-by: Julian Anastasov <ja@ssi.bg>
+
+>  include/net/ip_vs.h             | 32 +++++----------------
+>  net/netfilter/ipvs/ip_vs_conn.c | 12 ++++----
+>  net/netfilter/ipvs/ip_vs_core.c |  8 ------
+>  net/netfilter/ipvs/ip_vs_ctl.c  | 26 +----------------
+>  net/netfilter/ipvs/ip_vs_sync.c |  7 +----
+>  net/netfilter/ipvs/ip_vs_xmit.c | 62 ++++++-----------------------------------
+>  6 files changed, 23 insertions(+), 124 deletions(-)
+> 
+> base-commit: 99676a5766412f3936c55b9d18565d248e5463ee
+
+Regards
+
+--
+Julian Anastasov <ja@ssi.bg>
+
