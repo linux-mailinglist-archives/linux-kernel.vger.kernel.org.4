@@ -2,100 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF106E3DB0
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 04:56:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 133F86E3DEF
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 05:19:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbjDQC4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 22:56:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59140 "EHLO
+        id S229647AbjDQDTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 23:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDQC4H (ORCPT
+        with ESMTP id S229567AbjDQDTE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 22:56:07 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0557D30E7
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 19:55:58 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f08b6a9f8aso189395e9.0
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 19:55:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681700156; x=1684292156;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x4c8L7VsZgoyPG8O8WEpaQWguavlynHaEcvAogGRYUI=;
-        b=zxhkp9OEKijNfW6g/6CYNlaJKDTH4UhRZ56vl423M3dC2Tx6CI+nm7quah+flVOazp
-         y0eTRq96Jp32vYBFyrzIbKOcV8LQisPT6UxyxMod/S3XBvbLx545JW8Z8DCVH/JLHlnC
-         LT+KTf+a0YfvydkMKMvBZcYe6XOaYAuf0KTwVJGcBy096f1/78jlpEyrhgVN1ociRskE
-         i4AwZcF7s1+nos/N6lTzvNiDhvVC4pnFgYAXTUXVczODp2+DHnYarUc0RxDN4RhvCvki
-         4vq65dhmT61tXFTrGh3XkMkT64Voa/UHHtbE57ZuKLHN4rTooSyZliwe+FYowQxOMaYk
-         tfKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681700156; x=1684292156;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=x4c8L7VsZgoyPG8O8WEpaQWguavlynHaEcvAogGRYUI=;
-        b=D9H9GMao/kOiWSiFD9RxYUqcK7awgYR73N/O8plVrKuOVdIQT+uymy49mcdqCIeUaU
-         Iy03WWnC4qYmXXAJHL04tFij+EMJCTpN6+LtNwNM6yBOz8c+GomtrKUIJQspLPjAsvIs
-         Hobb3KNVwEbyTrEaU/OzBEDaLg3bGIJbbX/sOTMjDx1am6/Pr4VWuhzppTvYFf+oNil5
-         s/BXqvEhoKIae7dvftZUM2aBMTAcP4oaweP7zp02LNtnU0D8VXYtx5PIVQoUVLOuWaV9
-         HtZBQ9e7gBaNb8KSR+kki6vctvc3G4dqfwwPAxPM7QAxY1A08Nu92ErYwIQ0i/8/LadG
-         Pc3Q==
-X-Gm-Message-State: AAQBX9e/+gC5vmpJ7n0OG4huIqEGEpzQcaxpwnGf1TQmTHy+fXuqZTCJ
-        7TryClp/AsQdvxHpB4FzuSSkTY+BOAo8d2YoQZTKNFZVFbtHNP4TrpqvNQ==
-X-Google-Smtp-Source: AKy350a/AbTPkNfR9MVzY+0vuXZSs3EmG7yZhMnygYPMmBmJKpiVgIC02MAzSPHURPIOHguRrEtknv6E8BueaelcDPc=
-X-Received: by 2002:a05:600c:3512:b0:3f0:aeef:e2da with SMTP id
- h18-20020a05600c351200b003f0aeefe2damr397745wmq.3.1681700156385; Sun, 16 Apr
- 2023 19:55:56 -0700 (PDT)
+        Sun, 16 Apr 2023 23:19:04 -0400
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E60B1FC4
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 20:19:02 -0700 (PDT)
+Received: from wangchao.. ([10.12.190.56])
+        (user=D202280639@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 33H368pS014728-33H368pT014728
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 17 Apr 2023 11:06:11 +0800
+From:   Chao Wang <D202280639@hust.edu.cn>
+To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Marc Zyngier <maz@kernel.org>, Olof Johansson <olof@lixom.net>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        Chao Wang <D202280639@hust.edu.cn>,
+        Dongliang Mu <dzm91@hust.edu.cn>, iommu@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] iommu: Fix unwind goto issue
+Date:   Mon, 17 Apr 2023 03:04:21 +0000
+Message-Id: <20230417030421.2777-1-D202280639@hust.edu.cn>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230304034835.2082479-1-senozhatsky@chromium.org>
- <CAOUHufZ6jPLJYeshO8=2TaqXRmpOFuMQ92E9sg-oCh54fkqW7g@mail.gmail.com>
- <20230416151853.GK25053@google.com> <CAOUHufZk+dxE8UXWwGzGbX1BYxomD_25u2xoWt3vnoQp4xSZqw@mail.gmail.com>
- <20230417024446.GL25053@google.com>
-In-Reply-To: <20230417024446.GL25053@google.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Sun, 16 Apr 2023 20:55:19 -0600
-Message-ID: <CAOUHufYJtB0n314GnMH1ByXL5PTtzzsrMvi2YbHz2YVqTTcYfA@mail.gmail.com>
-Subject: Re: [PATCHv4 0/4] zsmalloc: fine-grained fullness and new compaction algorithm
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: D202280639@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 16, 2023 at 8:44=E2=80=AFPM Sergey Senozhatsky
-<senozhatsky@chromium.org> wrote:
->
-> On (23/04/16 13:27), Yu Zhao wrote:
-> > > Hi,
-> > >
-> > > Did you bisect it down to this series?
-> >
-> > Not exactly -- since this series was the only suspect I had, I cherry
-> > picked it to v6.3-rc6 and verified it is the culprit.
->
-> Can't reproduce it yet. One of the theories is that get_fullness_group()
-> maybe returns an invalid index, but I don't immediately see how would it
-> do so.
->
-> Is the problem reproducible?
+Smatch complains that
+drivers/iommu/rockchip-iommu.c:1306 rk_iommu_probe() warn: missing unwind goto?
 
-Whenever swapping *multithreaded* heavily.
+The rk_iommu_probe function, after obtaining the irq value through
+platform_get_irq, directly returns an error if the returned value
+is negative, without releasing any resources.
 
-> Do you run some specific test?
+Fix this by adding a new error handling label "err_pm_disable" and
+use a goto statement to redirect to the error handling process. In
+order to preserve the original semantics, set err to the value of irq.
 
-E.g.,
-  tools/testing/selftests/kvm/max_guest_memory_test -c 112 -m 800 -s 800
-with 112 CPUs and ~770GB DRAM + 32GB zram.
+Fixes: 1aa55ca9b14a ("iommu/rockchip: Move irq request past pm_runtime_enable")
+Signed-off-by: Chao Wang <D202280639@hust.edu.cn>
+Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+---
+This issue is found by static analysis and remains untested.
+---
+ drivers/iommu/rockchip-iommu.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/iommu/rockchip-iommu.c b/drivers/iommu/rockchip-iommu.c
+index f30db22ea5d7..31cd1e2929e9 100644
+--- a/drivers/iommu/rockchip-iommu.c
++++ b/drivers/iommu/rockchip-iommu.c
+@@ -1302,20 +1302,22 @@ static int rk_iommu_probe(struct platform_device *pdev)
+ 	for (i = 0; i < iommu->num_irq; i++) {
+ 		int irq = platform_get_irq(pdev, i);
+ 
+-		if (irq < 0)
+-			return irq;
++		if (irq < 0) {
++			err = irq;
++			goto err_pm_disable;
++		}
+ 
+ 		err = devm_request_irq(iommu->dev, irq, rk_iommu_irq,
+ 				       IRQF_SHARED, dev_name(dev), iommu);
+-		if (err) {
+-			pm_runtime_disable(dev);
+-			goto err_remove_sysfs;
+-		}
++		if (err)
++			goto err_pm_disable;
+ 	}
+ 
+ 	dma_set_mask_and_coherent(dev, rk_ops->dma_bit_mask);
+ 
+ 	return 0;
++err_pm_disable:
++	pm_runtime_disable(dev);
+ err_remove_sysfs:
+ 	iommu_device_sysfs_remove(&iommu->iommu);
+ err_put_group:
+-- 
+2.34.1
+
