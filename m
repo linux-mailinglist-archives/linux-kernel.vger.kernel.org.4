@@ -2,150 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB0BF6E4771
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 14:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5E136E478C
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 14:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbjDQMTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 08:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38674 "EHLO
+        id S230489AbjDQMWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 08:22:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbjDQMT1 (ORCPT
+        with ESMTP id S231163AbjDQMVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 08:19:27 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEE046A4;
-        Mon, 17 Apr 2023 05:19:21 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id u3so11577219ejj.12;
-        Mon, 17 Apr 2023 05:19:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681733960; x=1684325960;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ala6pnVWRI+DISyg+Zfj6GT1Nc0i1dyOe1WIhGmL7jY=;
-        b=BNzSOCzPWeoxnj/JLpp3hZglGHowRJ1iJiGstMZDhWc/awGw7sN9GxX1H8p/I7cClT
-         wc7EPDLY8dfEK6hfigSpiz+IV6ptgfeQW5n0x9K9VL9LQENwpE1Axq6d49SPjWfrylfc
-         BcNNMhM6HjHoYYfmUbmqZPaONMbw/9+5b7sQUOEyxf+nLj9emDuAVtXYBLiI1jvEUhRO
-         ZX/u5ObxdAkGLWGLR/LyOC8Bmdaojpwx7BEjO7ShUHunSaFtSffxdnPD5wAuFzJPwgs9
-         FOolhQKe3t9RJcksduvWrEefKLmHhfftBkujDPRq+sjyg/fkXJlyH+OQfO+QG83b4OAw
-         2fqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681733960; x=1684325960;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ala6pnVWRI+DISyg+Zfj6GT1Nc0i1dyOe1WIhGmL7jY=;
-        b=a77WOxKInn6hWsbt0osim16uKm26qaiNIq1MSbLrYOXdKmPIcevs4YVDPZu1hdlQNd
-         vpQ4YTDaUYotu4JH3BVZhwX0t1UXgzidtCcELU6dPB3930yl9m7htEl7IFU+f5mzz0xZ
-         MMrmWRBhA9UB1nJ/h1ZLNiFK+rIgATwKZASUZTIxnAF9c7WD4Fx/yhDsUy1hqHEVrEXg
-         REl9/Jj42Xx7RjDlq5rYZBcF0HioYxXp2U38tCoM5aULb6KwBlYOfqHEnk9ewwsiutLK
-         0Q/XZgC/64O13yj+LKA1/+xEJsjmM96pt6oQzF+7CJ3+eXIjXQPFgHz2bBNkX++uw1Ab
-         fmrA==
-X-Gm-Message-State: AAQBX9dEF5LnG+YLO3r+F6Pms8bDGOISFHyc6t0f9gk3bo9IxO/k3HRU
-        m2UHoiO6Ep2E9KKtCj9DegA=
-X-Google-Smtp-Source: AKy350bcG31fIZqNlJZTSZo/nH0fIjRaSQ+Aq9hFTF4IF2ue3ktDSHpAXiNLDSxSd/hfy5axh/FTVA==
-X-Received: by 2002:a17:906:d101:b0:94e:c43f:316b with SMTP id b1-20020a170906d10100b0094ec43f316bmr7329496ejz.19.1681733959738;
-        Mon, 17 Apr 2023 05:19:19 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id eq17-20020a170907291100b0094efe88a037sm4320883ejc.9.2023.04.17.05.19.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 05:19:19 -0700 (PDT)
-Date:   Mon, 17 Apr 2023 15:19:17 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Petr Machata <petrm@nvidia.com>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Arun Ramadoss <arun.ramadoss@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, Eric Dumazet <edumazet@google.com>,
-        kernel@pengutronix.de, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net-next v1 2/2] net: dsa: microchip: Add partial ACL
- support for ksz9477 switches
-Message-ID: <20230417121917.cfixzwoqds6wwlyu@skbuf>
-References: <20230411172456.3003003-1-o.rempel@pengutronix.de>
- <20230411172456.3003003-1-o.rempel@pengutronix.de>
- <20230411172456.3003003-3-o.rempel@pengutronix.de>
- <20230411172456.3003003-3-o.rempel@pengutronix.de>
- <20230416165658.fuo7vwer7m7ulkg2@skbuf>
- <20230417045710.GB20350@pengutronix.de>
- <20230417101209.m5fhc7njeeomljkf@skbuf>
- <20230417110311.GA11474@pengutronix.de>
+        Mon, 17 Apr 2023 08:21:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4593D9746;
+        Mon, 17 Apr 2023 05:21:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8429D62343;
+        Mon, 17 Apr 2023 12:21:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D856C433EF;
+        Mon, 17 Apr 2023 12:21:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681734067;
+        bh=v6GeTyqbTX2Q85J3eve/ZjdwGEtZ70QLU5PDsHNjMNM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=bJYof9iTHwmCBFCQvVtPDNrilh2yIbNrxB1SSz9ksP+sOCFflxdtqGSXbA51mX8hm
+         oFeLbNee+xgqt6XD+4NvzhuW/kHMzmUqZGBvCWB311Ajk/fP3ovWe3ObsAiZfTFbJP
+         z/Vy3nqSYw9Lggn8lK9Qc5IH/o2HjcBnGGI1G303oBs5cn+HD+YvGFbupyqGiZj/Vc
+         53zSnWiZpTH26bwIriIrE+YGE/d5afCfELzMp+c/ZBkAAw4DpMQ1Cah7k8dlv5vpHJ
+         UsfptrPMHl/rcXA0/abFh1TzksFBizZfagPPWnJG3/n3+4p5Dl6gu27XuCAllvkwWj
+         3TmXkSJ49zw7Q==
+From:   broonie@kernel.org
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Peter Xu <peterx@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: linux-next: manual merge of the sh tree with the mm-unstable tree
+Date:   Mon, 17 Apr 2023 13:20:55 +0100
+Message-Id: <20230417122056.244444-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230417110311.GA11474@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 01:03:11PM +0200, Oleksij Rempel wrote:
-> Certain aspects of the chip specification appeared ambiguous, leading me
-> to decide to allocate a separate time slot for investigating the counter
-> topic if necessary.
-> 
-> For example, according to the
-> KSZ9477 4.4.18 ACCESS CONTROL LIST (ACL) FILTERING:
-> 
-> "It is also possible to configure the ACL table so that multiple processing
-> entries specify the same action rule. In this way, the final matching result is
-> the OR of the matching results from each of the multiple RuleSets.
-> The 16 ACL rules represent an ordered list, with entry #0 having the highest
-> priority and entry #15 having the lowest priority. All matching rules are
-> evaluated. If there are multiple true match results and multiple corresponding
-> actions, the highest priority (lowest numbered) of those actions will be the
-> one taken."
-> 
-> A summary of this part of documentation is:
-> 1. ACL table can have multiple entries specifying the same action rule.
-> 2. Final matching result is the OR of multiple RuleSets' results.
-> 3. 16 ACL rules form an ordered list, with priority descending from #0 to #15.
-> 4. All matching rules are evaluated.
-> 5. When multiple true matches and actions occur, the highest priority action is
->    executed.
-> 
-> Considering this, there is a possibility that separate action rules would not
-> be executed, as they might not be the highest priority match.  Since counters
-> would have separation action rules, they would not be executed or prevent other
-> action rules from execution.
-> 
-> To confirm my hypothesis, additional time and testing will be required.
-> Nonetheless, I hope this issue does not impede the progress of this patch.
+Hi all,
 
-This is the kind of stuff you'd have to know when adding a software model
-for the rules, right? Could you consider writing a selftest that
-precisely illustrates the matching pattern of the hardware? It would be
-good if the same test could then be run on a software-only implementation
-and if the behavior would match. The tc tool should be more than a
-vendor agnostic tool of doing vendor specific stuff. It should offload
-as faithfully as possible the software data path. It would also be good,
-but I haven't studied or used this test personally, if the test could be
-based on the existing tools/testing/selftests/net/forwarding/skbedit_priority.sh.
+Today's linux-next merge of the sh tree got a conflict in:
 
-> > > > Have you considered the "skbedit priority" action as opposed to hw_tc?
-> > > 
-> > > I had already thought of that, but since bridging is offloaded in the HW
-> > > no skbs are involved, i thought it will be confusing. Since tc-flower seems to
-> > > already support hw_tc remapping, I decided to use it. I hope it will not harm,
-> > > to use it for now as mandatory option and make it optional later if other
-> > > actions are added, including skbedit.
-> > 
-> > Well, skbedit is offloadable, so in that sense, its behavior is defined
-> > even when no skbs are involved. OTOH, skbedit also has a software data
-> > path (sets skb->priority), as opposed to hw_tc, which last time I checked,
-> > did not.
-> 
-> Alright, having tc rules be portable is certainly a benefit. I presume
-> that in this situation, it's not an exclusive "either...or" choice. Both
-> variants can coexist, and the skbedit action can be incorporated at a
-> later time. Is that accurate?
+  tools/testing/selftests/mm/Makefile
 
-I believe Petr Machata (now copied) could have an opinion here too.
+between commit:
+
+  aaf87fd8703a5 ("selftests/mm: use TEST_GEN_PROGS where proper")
+
+from the mm-unstable tree and commit:
+
+  644a9cf0d2a83 ("sh: remove sh5/sh64 last fragments")
+
+from the sh tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index a913397c6b3c5..3ad614d359e44 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -93,7 +93,7 @@ endif
+ 
+ endif
+ 
+-ifneq (,$(filter $(MACHINE),arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x sh64 sparc64 x86_64))
++ifneq (,$(filter $(MACHINE),arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x sparc64 x86_64))
+ TEST_GEN_PROGS += va_high_addr_switch
+ TEST_GEN_PROGS += virtual_address_range
+ TEST_GEN_PROGS += write_to_hugetlbfs
