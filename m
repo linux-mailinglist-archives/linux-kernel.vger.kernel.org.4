@@ -2,80 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 642B06E5184
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 22:16:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DBE96E5189
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 22:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbjDQUQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 16:16:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44706 "EHLO
+        id S229959AbjDQURa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 16:17:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbjDQUQo (ORCPT
+        with ESMTP id S229655AbjDQUR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 16:16:44 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BD749D9
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 13:16:41 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-54fbee98814so182788287b3.8
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 13:16:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1681762600; x=1684354600;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mkFM4OddDI3MzXQTdAgqfF3VU3F/+LgzOjoA+7s8XA4=;
-        b=Ml35Br1S4fB3lQjg+85g3UBuNpD2qRSHHrPy7eSM2cIKJ0UHgLPilBvXvoOd26NpVQ
-         XScr4M6uxDpgNOv8wz3lwCYE24jCZFRGgOvMfIhHkdttvMie4TqlWXyoZi7H5u5YSb/G
-         jW/p817xKSmzxkgQXaPUdAbZpNp4DpLIB3lm+1FhoqzLTLUUqTavEQlTtnPv9HlQ8HMQ
-         e119/w9x96Z3IkM9ZXV6zNWtzvuCmN5sJD3GY4c5m6weNq50I9GDsXzCjT4/5MAIWwbl
-         /EqEfWvaLjxUeqvn7BVtzYa97LE8hT7Mu7aE7S+4t84d0NzWjqskd+G/HvvL/AJivftr
-         B7xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681762600; x=1684354600;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mkFM4OddDI3MzXQTdAgqfF3VU3F/+LgzOjoA+7s8XA4=;
-        b=hbDE70ETsrTWLm+6Syj+uCrqsEpDrdaAdhbdOHWMLQttsS4E2LQEHuTIUjmFSMr3g5
-         YFIjjsqGX5GSy8trLRwE/v3T8wfn7rh2QpB184Upe8ZQ/KsiRufvw6WpRSwmFlG3p3Ic
-         kdIn3cIei+BSZVQoJaWfoa1Fiz0w0qv1qtzGdelTsbDVGvskPLBccsi1HKq5nXCBhez4
-         3JKvTDg24HuQ4f7X2gL1/opcGukK7N/wXuHyQ0jMr5V4BaQdAd02bnr+z9Su0fXPbUuW
-         ck3M5eWUbU4xx9N+swJfgabb5NVumZwe57xQXX2Xi9KVxySQ2mt3GDYmOQkWUWP+sJK2
-         WVEg==
-X-Gm-Message-State: AAQBX9clB2rfNS9wiIYKq7Z9u8923lbaYt/66dbi1OE12YH3ohFEb2V1
-        /KfyiFw1XIeYdfJXPFak9ajMBM02LiHZ9Tycfa1f
-X-Google-Smtp-Source: AKy350ZxQlOfbob70cyzh//3Qo4gX/RJVSVzb07xLMzIeYlrCU36AjFdx5P2s2Fo1lBjmj4URw4Qp0a1MdAC8VUyDYc=
-X-Received: by 2002:a81:4524:0:b0:54f:aa4b:100c with SMTP id
- s36-20020a814524000000b0054faa4b100cmr9804160ywa.8.1681762600389; Mon, 17 Apr
- 2023 13:16:40 -0700 (PDT)
+        Mon, 17 Apr 2023 16:17:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C600F10CE;
+        Mon, 17 Apr 2023 13:17:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6164962434;
+        Mon, 17 Apr 2023 20:17:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62E41C4339B;
+        Mon, 17 Apr 2023 20:17:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681762645;
+        bh=2Z+SIDd9C6cEZu/Q2BOuzuLxvlVlpCYFLsgPpDLRIXY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Zu3KpGaddyzaA9/FQUizcAfTLZOuhyxaTrl0ye5+npMzq+AuNYsRCA8tnyaH1YMzm
+         4E5MKBnoH6AHDogtfgdeDc6f2510KiVL4CH6pG8FAJTiQCaMjTPDTPETRXsRTAgmyF
+         ZmGlWepufPohN99o9x/BE1uSrkkKB7kKnPD9eOf+qiv04Li3ric7VXuz9HuloScxXh
+         LKKJrqm/1y23IikxGTzXOLj/Flj0nfH2wY8YMSvilZZoV1MQsXqDllkH/wJ31cg9XT
+         QEajky01ohKSorWjtgEAHenIlFYf0hnY0nQXdFrPOwiuK6L9S+ssAuoD+WKvZm+JSw
+         kBB7gwW5yGJ+A==
+Date:   Mon, 17 Apr 2023 16:17:23 -0400
+From:   William Breathitt Gray <wbg@kernel.org>
+To:     linux-iio@vger.kernel.org
+Cc:     William Breathitt Gray <william.gray@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] counter: 104-quad-8: Remove reference in Kconfig to
+ 25-bit counter value
+Message-ID: <ZD2pU9hocDAVNkS0@ishi>
+References: <20230410134516.102886-1-william.gray@linaro.org>
 MIME-Version: 1.0
-References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
- <1675119451-23180-6-git-send-email-wufan@linux.microsoft.com>
- <CAHC9VhRa+NwKzLfQBmHfMgUp6_d5soQG7JBq-Vn=MUeUAt4tuQ@mail.gmail.com>
- <20230410191035.GB18827@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
- <CAHC9VhQDvWDshaZvJrHmjcwyHFxv9oYTN9bn0xiTtFZQRp+GPg@mail.gmail.com>
- <20230412233606.GA16658@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
- <CAHC9VhTs3Njfg=1baQ6=58rPLBmyB3cW0R-MfAaEcRF-jAaYBw@mail.gmail.com> <20230417180605.GA402@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-In-Reply-To: <20230417180605.GA402@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 17 Apr 2023 16:16:29 -0400
-Message-ID: <CAHC9VhSnKbhtgFxOAY7NYZyOkV4kEA0=mVsCyogLBSCJs0r_ig@mail.gmail.com>
-Subject: Re: [RFC PATCH v9 05/16] ipe: add userspace interface
-To:     Fan Wu <wufan@linux.microsoft.com>
-Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
-        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
-        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
-        eparis@redhat.com, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
-        dm-devel@redhat.com, linux-audit@redhat.com,
-        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
-        Deven Bowers <deven.desai@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yJ+WcPd4laP4aanl"
+Content-Disposition: inline
+In-Reply-To: <20230410134516.102886-1-william.gray@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,76 +56,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 2:06=E2=80=AFPM Fan Wu <wufan@linux.microsoft.com> =
-wrote:
-> On Thu, Apr 13, 2023 at 02:45:07PM -0400, Paul Moore wrote:
-> > On Wed, Apr 12, 2023 at 7:36???PM Fan Wu <wufan@linux.microsoft.com> wr=
-ote:
-> > > On Tue, Apr 11, 2023 at 05:45:41PM -0400, Paul Moore wrote:
-> > > > On Mon, Apr 10, 2023 at 3:10???PM Fan Wu <wufan@linux.microsoft.com=
-> wrote:
-> > > > > On Thu, Mar 02, 2023 at 02:04:42PM -0500, Paul Moore wrote:
-> > > > > > On Mon, Jan 30, 2023 at 5:58???PM Fan Wu <wufan@linux.microsoft=
-.com> wrote:
-> >
-> > ...
-> >
-> > > > I guess this does make me wonder about keeping a non-active policy
-> > > > loaded in the kernel, what purpose does that serve?
-> > > >
-> > >
-> > > The non-active policy doesn't serve anything unless it is activated. =
-User can
-> > > even delete a policy if that is no longer needed. Non-active is just =
-the default
-> > > state when a new policy is loaded.
-> > >
-> > > If IPE supports namespace, there is another use case where different =
-containers
-> > > can select different policies as the active policy from among multipl=
-e loaded
-> > > policies. Deven has presented a demo of this during LSS 2021. But thi=
-s goes
-> > > beyond the scope of this version.
-> >
-> > Do you plan to add namespace support at some point in the
-> > not-too-distant future?  If so, I'm okay with keeping support for
-> > multiple policies, but if you think you're only going to support one
-> > active policy at a time, it might be better to remove support for
-> > multiple (inactive) policies.
-> >
-> > --
-> > paul-moore.com
->
-> Another benefit of having multiple policies is that it provides isolation
-> between different policies. For instance, if we have two policies named
-> "policy_a" and "policy_b," we can ensure that only team a can update "pol=
-icy_a,"
-> and only team b can update "policy_b." This way, both teams can update
-> their policy without affecting others. However, if there is only one poli=
-cy
-> in the system, both teams will have to operate on the same policy, making=
- it
-> less manageable.
 
-That only really matters if both policies are active at the same time;
-if only one policy can be active at one point in time the only
-permission that matters is the one who can load/activate a policy.
+--yJ+WcPd4laP4aanl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Allowing for multiple policies complicates the code.  If there is
-another feature that requires multiple policies, e.g. IPE namespaces,
-then that is okay.  However, if there is no feature which requires
-multiple active policies, supporting multiple loaded policies only
-increases the risk of an exploitable bug in the IPE code.
+On Mon, Apr 10, 2023 at 09:45:16AM -0400, William Breathitt Gray wrote:
+> Support for 25-bit counter values was removed in commit 4aa3b75c7460
+> ("counter: 104-quad-8: Fix race condition between FLAG and CNTR reads").
+> Adjust the Kconfig description of CONFIG_104_QUAD_8 to remove reference
+> of 25-bit counter values.
+>=20
+> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
 
-> Besides, removing multiple (inactive) policies support will
-> render the policy_name field meaningless, and we should only audit the po=
-licy
-> hash. I am fine if we decide to go for the single policy option.
+Applied to counter-next of the Counter tree.
 
-Once again, I think it comes back to: do you still want to support IPE
-namespaces at some point in the future, and if so, when do you expect
-to work on that?
+William Breathitt Gray
 
---=20
-paul-moore.com
+--yJ+WcPd4laP4aanl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZD2pUwAKCRC1SFbKvhIj
+K96IAP9LUMD8lCBCVxA4KlLVfNblbaW5FlZE6RgpY33TPHf+hAEA2fHBH3FG0M2p
+A17UqggKB6pxZVht2dicEajlneLB2AQ=
+=Xj4C
+-----END PGP SIGNATURE-----
+
+--yJ+WcPd4laP4aanl--
