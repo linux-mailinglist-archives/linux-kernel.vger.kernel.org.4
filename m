@@ -2,76 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F8E6E422B
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:08:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BD786E4225
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:08:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbjDQIIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 04:08:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53908 "EHLO
+        id S230449AbjDQIIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 04:08:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230518AbjDQIIs (ORCPT
+        with ESMTP id S230489AbjDQIIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 04:08:48 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244B34EC0
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 01:08:19 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id s6-20020a17090a698600b00247a7794e78so873174pjj.0
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 01:08:19 -0700 (PDT)
+        Mon, 17 Apr 2023 04:08:32 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8562046AF
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 01:08:30 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id xd13so27920644ejb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 01:08:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1681718898; x=1684310898;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1pw86lkQMgAq2RDg8SbWVwn8vGT1h12ZQk1wvkYIReo=;
-        b=hjF133/QONFZyitenmtjp0ZYeV3xbNysg6Km7omFX2WmTCji5Q0JNOY1YRay8T8RtG
-         f+2xfP4i1GEDVWsEWu4nqWyEVKCAdlfn7LYHPQiiBeMnkYw5dlsobVnqFQzohR3zgpAA
-         DSbF3zfJH6AqSwVO+gOARdL5BahZ5qhS+QLAugiTWX1UDaltFt9UFV3wcVPD464HDeY5
-         fgsbbVTnwHJlBBXd4yHWdEH7L4rwCi+fjhM7c4wahS7qWRM9l/7SdPeMZsToa+ortz0v
-         cEh+gwpdv+tPlN2YtPzacZo54zM8pQhtc9X1omgDjbw3tq+bVUY+NCVyE5B+gi4HpHq4
-         kmzQ==
+        d=linaro.org; s=google; t=1681718909; x=1684310909;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rQJ7WRIROJNRsBKAyL6TG+aWODJFqJnhKcD+H/twEi8=;
+        b=bSJcdRynVCuoM2KupKqejM2B0WGsVcO+G+R1IZPtHYiKv5q+Tg/90CGkMQZLSk71Eb
+         zRhUVdPVREPE/cxpLa7L44K7M6yPqvRvcN1Wk4EyCTg4kRm+2BnTRfho5Ia3Cz8VMMQT
+         MfO/lzrxMdFETdzqdsQHYhOJ7cXBhWe+86UWcjpRyXYaibcrK3ke/TppDXQO6Z6qiy4q
+         zaiPcj2MvF86Y/79ieKtWu65cTdeDZ6ifJswxoNGM0RtuFxkUDrLxACRgAjAfYWWtg7R
+         ozQZwWI5lSzBD2qcv2wYTHhzsVRX7N0DVR7+ugJg0d8CTXV28Xx/Y+ijMKnVP/xjNOuT
+         46YA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681718898; x=1684310898;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1pw86lkQMgAq2RDg8SbWVwn8vGT1h12ZQk1wvkYIReo=;
-        b=YUw7v+joXD+p1e9UPMiSs7lNDjmKC97YxstKEACZXbeXryHEJ2TeRF4XFl2JsYV2aT
-         opeyia/Iaa8y3CeBfOsomkFP2OGDtZc1dncc4zv2Y47xNBUPGl+SevAkH/rtPAoyvxTU
-         ahlyOraKT+ZymaQbhsCol8AugZPOq7U5K786cBIpVXbtfj9AXqqq/DAGke/3BBUDKmFK
-         hjs62MmnGOa5DpydNHjjizhYxw+opKHcjhxr5K2wwrmvcpONVoI4QwTA1bYIfKd6bS+J
-         jVkwpQ1hkP67QNE7HhbhPu1BbGl/NOfWhzQxOBRlI1kvaxdFXsXbNtdo16sGITqPUpEz
-         0qCA==
-X-Gm-Message-State: AAQBX9cD3TLtGm9/EhIFWv8fdv5RFL0/pxYkrKWw3S/Eeq7uWN7zlFQP
-        4k8+fqXZ/PPnz5PC6A1KvL3yVQ==
-X-Google-Smtp-Source: AKy350Z8s7HBWoiUwUgBaoQgtBCq8ongGM5SOTp6XKSAx/VbvU1WfA8zD0I7T0xDwVZMO4CjZfb9tw==
-X-Received: by 2002:a17:902:e804:b0:1a6:b98b:eea9 with SMTP id u4-20020a170902e80400b001a6b98beea9mr8184873plg.20.1681718898555;
-        Mon, 17 Apr 2023 01:08:18 -0700 (PDT)
-Received: from C02F52LSML85.bytedance.net ([139.177.225.238])
-        by smtp.gmail.com with ESMTPSA id jc3-20020a17090325c300b0019a97a4324dsm7114135plb.5.2023.04.17.01.08.10
+        d=1e100.net; s=20221208; t=1681718909; x=1684310909;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rQJ7WRIROJNRsBKAyL6TG+aWODJFqJnhKcD+H/twEi8=;
+        b=OyfZklPMnn1yGfTXggRHgg477cn2RlsAF6Y8dqeF2QR3Fna6ZujnoVdmwMldxsNK+T
+         IDb/DksATqQ/JH7/T+7Tgo2uU9h+EGN4mEgJnBf4rcJ7UB8/Ay9khyts3ZH2mE3duLtn
+         0n5az4IwNjdf1eu29TwJiEAOoOEj4C+PlQ20UW4f/f8w7LkYQOGmtLJVJZANMeeh/Hr3
+         IFDRGLKs+48RFWiljKk++GCfiaVhgsvFl8u+kQAgy2VmKnGLtRYsFGujjCa+qOqRpq2a
+         if490/meoLcTUkmIhS22rbUP6LLBddXpi4k7yLFVniGYmM7O4vmrrx70OGc7r6Hlzqig
+         YlAw==
+X-Gm-Message-State: AAQBX9cfaNgRJNDOYzNwqDPo77cxEbBWogG1qMHy14VYwKpOM/3M2l1i
+        ISObz+lyBFXj/EA6yn6cbvlu4ssFGXK5NBpZd5A=
+X-Google-Smtp-Source: AKy350aAVVKQWnFf41usawThl6KubR7Da4LuMEHW3fDT7WFbzF6LSQRy3LfjSzPLj0Zj0ouY8cDqpA==
+X-Received: by 2002:a17:906:abd2:b0:930:f953:962c with SMTP id kq18-20020a170906abd200b00930f953962cmr6268495ejb.1.1681718909007;
+        Mon, 17 Apr 2023 01:08:29 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:b0ac:4d3b:966c:b33d])
+        by smtp.gmail.com with ESMTPSA id v25-20020a170906381900b0094f3f222d34sm2338984ejc.56.2023.04.17.01.08.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 01:08:18 -0700 (PDT)
-From:   Feng zhou <zhoufeng.zf@bytedance.com>
-To:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        mykolal@fb.com, shuah@kernel.org
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        yangzhenze@bytedance.com, wangdongdong.6@bytedance.com,
-        zhouchengming@bytedance.com, zhoufeng.zf@bytedance.com
-Subject: [PATCH 2/2] selftests/bpf: Add test to access integer type of variable array
-Date:   Mon, 17 Apr 2023 16:07:49 +0800
-Message-Id: <20230417080749.39074-3-zhoufeng.zf@bytedance.com>
-X-Mailer: git-send-email 2.39.2 (Apple Git-143)
-In-Reply-To: <20230417080749.39074-1-zhoufeng.zf@bytedance.com>
-References: <20230417080749.39074-1-zhoufeng.zf@bytedance.com>
+        Mon, 17 Apr 2023 01:08:28 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 1/4] arm64: dts: qcom: sm8150: drop incorrect serial properties
+Date:   Mon, 17 Apr 2023 10:08:15 +0200
+Message-Id: <20230417080818.28398-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,120 +74,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Feng Zhou <zhoufeng.zf@bytedance.com>
+Drop incorrect and unused serial properties - address/size-cells and
+reg-names:
 
-Add prog test for accessing integer type of variable array in tracing
-program.
+  sa8155p-adp.dtb: geniqup@ac0000: serial@a84000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'reg-names' were unexpected)
 
-Co-developed-by: Chengming Zhou <zhouchengming@bytedance.com>
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 ---
- .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 20 +++++++++++++++++++
- .../selftests/bpf/prog_tests/tracing_struct.c |  2 ++
- .../selftests/bpf/progs/tracing_struct.c      | 13 ++++++++++++
- 3 files changed, 35 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-index fe847ebfb731..52785ba671e6 100644
---- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-@@ -28,6 +28,11 @@ struct bpf_testmod_struct_arg_2 {
- 	long b;
- };
+Changes since v1:
+1. Add Rb tag.
+---
+ arch/arm64/boot/dts/qcom/sm8150.dtsi | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+index 27dcda0d4288..3846f5e0f656 100644
+--- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+@@ -1362,14 +1362,11 @@ spi9: spi@a84000 {
+ 			uart9: serial@a84000 {
+ 				compatible = "qcom,geni-uart";
+ 				reg = <0x0 0x00a84000 0x0 0x4000>;
+-				reg-names = "se";
+ 				clocks = <&gcc GCC_QUPV3_WRAP1_S1_CLK>;
+ 				clock-names = "se";
+ 				pinctrl-0 = <&qup_uart9_default>;
+ 				pinctrl-names = "default";
+ 				interrupts = <GIC_SPI 354 IRQ_TYPE_LEVEL_HIGH>;
+-				#address-cells = <1>;
+-				#size-cells = <0>;
+ 				status = "disabled";
+ 			};
  
-+struct bpf_testmod_struct_arg_3 {
-+	int a;
-+	int b[];
-+};
-+
- __diag_push();
- __diag_ignore_all("-Wmissing-prototypes",
- 		  "Global functions as their definitions will be in bpf_testmod.ko BTF");
-@@ -63,6 +68,12 @@ bpf_testmod_test_struct_arg_5(void) {
- 	return bpf_testmod_test_struct_arg_result;
- }
- 
-+noinline int
-+bpf_testmod_test_struct_arg_6(struct bpf_testmod_struct_arg_3 *a) {
-+	bpf_testmod_test_struct_arg_result = a->b[0];
-+	return bpf_testmod_test_struct_arg_result;
-+}
-+
- __bpf_kfunc void
- bpf_testmod_test_mod_kfunc(int i)
- {
-@@ -195,6 +206,7 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
- 	};
- 	struct bpf_testmod_struct_arg_1 struct_arg1 = {10};
- 	struct bpf_testmod_struct_arg_2 struct_arg2 = {2, 3};
-+	struct bpf_testmod_struct_arg_3 *struct_arg3;
- 	int i = 1;
- 
- 	while (bpf_testmod_return_ptr(i))
-@@ -206,6 +218,14 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
- 	(void)bpf_testmod_test_struct_arg_4(struct_arg1, 1, 2, 3, struct_arg2);
- 	(void)bpf_testmod_test_struct_arg_5();
- 
-+	struct_arg3 = kmalloc((sizeof(struct bpf_testmod_struct_arg_3) +
-+				sizeof(int)), GFP_KERNEL);
-+	if (struct_arg3 != NULL) {
-+		struct_arg3->b[0] = 1;
-+		(void)bpf_testmod_test_struct_arg_6(struct_arg3);
-+		kfree(struct_arg3);
-+	}
-+
- 	/* This is always true. Use the check to make sure the compiler
- 	 * doesn't remove bpf_testmod_loop_test.
- 	 */
-diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-index 48dc9472e160..1c75a32186d6 100644
---- a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-@@ -53,6 +53,8 @@ static void test_fentry(void)
- 
- 	ASSERT_EQ(skel->bss->t5_ret, 1, "t5 ret");
- 
-+	ASSERT_EQ(skel->bss->t6, 1, "t6 ret");
-+
- 	tracing_struct__detach(skel);
- destroy_skel:
- 	tracing_struct__destroy(skel);
-diff --git a/tools/testing/selftests/bpf/progs/tracing_struct.c b/tools/testing/selftests/bpf/progs/tracing_struct.c
-index e718f0ebee7d..c435a3a8328a 100644
---- a/tools/testing/selftests/bpf/progs/tracing_struct.c
-+++ b/tools/testing/selftests/bpf/progs/tracing_struct.c
-@@ -13,12 +13,18 @@ struct bpf_testmod_struct_arg_2 {
- 	long b;
- };
- 
-+struct bpf_testmod_struct_arg_3 {
-+	int a;
-+	int b[];
-+};
-+
- long t1_a_a, t1_a_b, t1_b, t1_c, t1_ret, t1_nregs;
- __u64 t1_reg0, t1_reg1, t1_reg2, t1_reg3;
- long t2_a, t2_b_a, t2_b_b, t2_c, t2_ret;
- long t3_a, t3_b, t3_c_a, t3_c_b, t3_ret;
- long t4_a_a, t4_b, t4_c, t4_d, t4_e_a, t4_e_b, t4_ret;
- long t5_ret;
-+int t6;
- 
- SEC("fentry/bpf_testmod_test_struct_arg_1")
- int BPF_PROG2(test_struct_arg_1, struct bpf_testmod_struct_arg_2, a, int, b, int, c)
-@@ -117,4 +123,11 @@ int BPF_PROG2(test_struct_arg_10, int, ret)
- 	return 0;
- }
- 
-+SEC("fentry/bpf_testmod_test_struct_arg_6")
-+int BPF_PROG2(test_struct_arg_11, struct bpf_testmod_struct_arg_3 *, a)
-+{
-+	t6 = a->b[0];
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
 -- 
-2.20.1
+2.34.1
 
