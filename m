@@ -2,121 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD9E6E4625
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 13:14:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94CDE6E46D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 13:52:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbjDQLOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 07:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39672 "EHLO
+        id S230190AbjDQLwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 07:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230196AbjDQLOf (ORCPT
+        with ESMTP id S230085AbjDQLv7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 07:14:35 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E17BF65AF
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 04:13:39 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id i8so16257168plt.10
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 04:13:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1681729969; x=1684321969;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ym2iTUwYVaWcJIA6dTtqLmrSL3SannhpVhMnxRPf3Fc=;
-        b=SZ12pbssbjHUow9znkGHEbDHYBaDRi91wqJMnjeC+2m3PX/022btfKCJ260Z2TZdqK
-         hP+SU4Xt7nufTLUqOQ7Qzwb8z2dNLitHsYzdEjw8DXN+1jKzjMe20d9pady+jbrvNSvV
-         COJ9CPh+1FhrqGQe29HsgZtVXCR0MtrvgmAJc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681729969; x=1684321969;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ym2iTUwYVaWcJIA6dTtqLmrSL3SannhpVhMnxRPf3Fc=;
-        b=SgazUjqLkKyD+H7nE5t9qYsHmB7fqJlolCmQiQ+DCCZY1fYlDcNs2f/2iZV0rfujlk
-         QdqxOaC0U7GnK+eUCo74po3JmoaeSjrKECuekicaMIq6FaTC+2aHcSDfGHxyoRnVrqGS
-         5lmoWIRD8F0HNH0KmwAk6irPlm5/IcaYU0ozqRJfUzUNlwYVq99iV0mTcKlhmG5KAn06
-         uEvLDdfmdP2WcCjIDL3lgris0MtBoScfQYuBx17G2Nhmsa0Tucx8y7fbpvS8HrSkLNzd
-         ZJFYcugs+CuSHvvcX1kuetULuK/rti2I7GtHMuRHDr2maC1F+cZIKldgfx1PUqGlQfr9
-         SZRg==
-X-Gm-Message-State: AAQBX9cxW709bErWZn31rCW81YyCxa+JFl75OhwM7GjvrQAOzx6te8QJ
-        vPIGXNhfzO9lYce6lB9SNbRDCw==
-X-Google-Smtp-Source: AKy350YWn3KpPdVRwVstuqwc5G/3ig3SKTF2ExoN3zDvfo327CiLjLu1Tz0B5K5epY34HwTtVNdTnw==
-X-Received: by 2002:a17:902:eb89:b0:19c:d309:4612 with SMTP id q9-20020a170902eb8900b0019cd3094612mr11599882plg.6.1681729968673;
-        Mon, 17 Apr 2023 04:12:48 -0700 (PDT)
-Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
-        by smtp.gmail.com with ESMTPSA id 20-20020a170902ee5400b001a19bac463fsm7458297plo.42.2023.04.17.04.12.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 04:12:48 -0700 (PDT)
-Date:   Mon, 17 Apr 2023 20:12:43 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Yu Zhao <yuzhao@google.com>, Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCHv4 0/4] zsmalloc: fine-grained fullness and new compaction
- algorithm
-Message-ID: <20230417111243.GN25053@google.com>
-References: <20230304034835.2082479-1-senozhatsky@chromium.org>
- <CAOUHufZ6jPLJYeshO8=2TaqXRmpOFuMQ92E9sg-oCh54fkqW7g@mail.gmail.com>
- <20230416151853.GK25053@google.com>
- <CAOUHufZk+dxE8UXWwGzGbX1BYxomD_25u2xoWt3vnoQp4xSZqw@mail.gmail.com>
- <20230417024446.GL25053@google.com>
- <CAOUHufYJtB0n314GnMH1ByXL5PTtzzsrMvi2YbHz2YVqTTcYfA@mail.gmail.com>
- <20230417035232.GM25053@google.com>
- <CAJD7tkZFufCacfu-EeqwhQBYXt8dpea1DYhyDgponjFjdLt5Sw@mail.gmail.com>
+        Mon, 17 Apr 2023 07:51:59 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7599510D3;
+        Mon, 17 Apr 2023 04:51:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1681732265; x=1713268265;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=W5TQ3wd/xW5hpZCXv0bBA8AsymSy3tuwpq12Dh6k4+w=;
+  b=TUSDiGLQ7zy7sqBrEpRXRU9vuymgJBAyFuz3Hs82mHnbmWNHazlQ5uUV
+   Kdd7rju9MfCI80GC0s0lai2WuQKTslee2C51Qoi5tCFDvcv6TmH0NAbVC
+   hO9k8OvaeR9sHgG0zO/GzdeUjdsE97+O8s+5exCkY4KQL/9Cigs4e5t2f
+   WoI1Ob8tNefWKBdx63Xabf67n+Yf2/fk5DatXX4jt454jH64xw8uzhshs
+   iUWvm0ys0w2ah/X/RfZsmN97SV0LIX/vbEnMUnVNucXy8mQGVs+BfnFoQ
+   u7huyDCGk/oAYWs/xAjJUz2BikjQkdxEyBWorUlqLZlMoJyimQyxeLI1e
+   g==;
+X-IronPort-AV: E=Sophos;i="5.99,204,1677567600"; 
+   d="scan'208";a="210758879"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Apr 2023 04:12:58 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 17 Apr 2023 04:12:58 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Mon, 17 Apr 2023 04:12:58 -0700
+Date:   Mon, 17 Apr 2023 13:12:57 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Alain Volmat <avolmat@me.com>
+CC:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        <patrice.chotard@foss.st.com>, <netdev@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] net: ethernet: stmmac: dwmac-sti: remove
+ stih415/stih416/stid127
+Message-ID: <20230417111257.ilmlp5y3xp47edzv@soft-dev3-1>
+References: <20230416195523.61075-1-avolmat@me.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <CAJD7tkZFufCacfu-EeqwhQBYXt8dpea1DYhyDgponjFjdLt5Sw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230416195523.61075-1-avolmat@me.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (23/04/17 01:29), Yosry Ahmed wrote:
-> > @@ -2239,8 +2241,8 @@ static unsigned long __zs_compact(struct zs_pool *pool,
-> >                 if (fg == ZS_INUSE_RATIO_0) {
-> >                         free_zspage(pool, class, src_zspage);
-> >                         pages_freed += class->pages_per_zspage;
-> > -                       src_zspage = NULL;
-> >                 }
-> > +               src_zspage = NULL;
-> >
-> >                 if (get_fullness_group(class, dst_zspage) == ZS_INUSE_RATIO_100
-> >                     || spin_is_contended(&pool->lock)) {
+The 04/16/2023 21:55, Alain Volmat wrote:
 > 
-> For my own education, how can this result in the "next is NULL" debug
-> error Yu Zhao is seeing?
+> Remove no more supported platforms (stih415/stih416 and stid127)
+
+Reviewed-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+
 > 
-> IIUC if we do not set src_zspage to NULL properly after putback, then
-> we will attempt to putback again after the main loop in some cases.
-> This can result in a zspage being present more than once in the
-> per-class fullness list, right?
+> Signed-off-by: Alain Volmat <avolmat@me.com>
+> Acked-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+> Patch sent previously as part of serie: https://lore.kernel.org/all/20230209091659.1409-8-avolmat@me.com/
 > 
-> I am not sure how this can lead to "next is NULL", which sounds like a
-> corrupted list_head, because the next ptr should never be NULL as far
-> as I can tell. I feel like I am missing something.
+>  .../net/ethernet/stmicro/stmmac/dwmac-sti.c   | 60 +------------------
+>  1 file changed, 1 insertion(+), 59 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-sti.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-sti.c
+> index be3b1ebc06ab..465ce66ef9c1 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-sti.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-sti.c
+> @@ -35,7 +35,7 @@
+>  #define IS_PHY_IF_MODE_GBIT(iface)     (IS_PHY_IF_MODE_RGMII(iface) || \
+>                                          iface == PHY_INTERFACE_MODE_GMII)
+> 
+> -/* STiH4xx register definitions (STiH415/STiH416/STiH407/STiH410 families)
+> +/* STiH4xx register definitions (STiH407/STiH410 families)
+>   *
+>   * Below table summarizes the clock requirement and clock sources for
+>   * supported phy interface modes with link speeds.
+> @@ -75,27 +75,6 @@
+>  #define STIH4XX_ETH_SEL_INTERNAL_NOTEXT_PHYCLK BIT(7)
+>  #define STIH4XX_ETH_SEL_TXCLK_NOT_CLK125       BIT(6)
+> 
+> -/* STiD127 register definitions
+> - *-----------------------
+> - * src  |BIT(6)| BIT(7)|
+> - *-----------------------
+> - * MII   |  1  |   n/a |
+> - *-----------------------
+> - * RMII  |  n/a        |   1   |
+> - * clkgen|     |       |
+> - *-----------------------
+> - * RMII  |  n/a        |   0   |
+> - * phyclk|     |       |
+> - *-----------------------
+> - * RGMII |  1  |  n/a  |
+> - * clkgen|     |       |
+> - *-----------------------
+> - */
+> -
+> -#define STID127_RETIME_SRC_MASK                        GENMASK(7, 6)
+> -#define STID127_ETH_SEL_INTERNAL_NOTEXT_PHYCLK BIT(7)
+> -#define STID127_ETH_SEL_INTERNAL_NOTEXT_TXCLK  BIT(6)
+> -
+>  #define ENMII_MASK     GENMASK(5, 5)
+>  #define ENMII          BIT(5)
+>  #define EN_MASK                GENMASK(1, 1)
+> @@ -194,36 +173,6 @@ static void stih4xx_fix_retime_src(void *priv, u32 spd)
+>                            stih4xx_tx_retime_val[src]);
+>  }
+> 
+> -static void stid127_fix_retime_src(void *priv, u32 spd)
+> -{
+> -       struct sti_dwmac *dwmac = priv;
+> -       u32 reg = dwmac->ctrl_reg;
+> -       u32 freq = 0;
+> -       u32 val = 0;
+> -
+> -       if (dwmac->interface == PHY_INTERFACE_MODE_MII) {
+> -               val = STID127_ETH_SEL_INTERNAL_NOTEXT_TXCLK;
+> -       } else if (dwmac->interface == PHY_INTERFACE_MODE_RMII) {
+> -               if (!dwmac->ext_phyclk) {
+> -                       val = STID127_ETH_SEL_INTERNAL_NOTEXT_PHYCLK;
+> -                       freq = DWMAC_50MHZ;
+> -               }
+> -       } else if (IS_PHY_IF_MODE_RGMII(dwmac->interface)) {
+> -               val = STID127_ETH_SEL_INTERNAL_NOTEXT_TXCLK;
+> -               if (spd == SPEED_1000)
+> -                       freq = DWMAC_125MHZ;
+> -               else if (spd == SPEED_100)
+> -                       freq = DWMAC_25MHZ;
+> -               else if (spd == SPEED_10)
+> -                       freq = DWMAC_2_5MHZ;
+> -       }
+> -
+> -       if (freq)
+> -               clk_set_rate(dwmac->clk, freq);
+> -
+> -       regmap_update_bits(dwmac->regmap, reg, STID127_RETIME_SRC_MASK, val);
+> -}
+> -
+>  static int sti_dwmac_set_mode(struct sti_dwmac *dwmac)
+>  {
+>         struct regmap *regmap = dwmac->regmap;
+> @@ -408,14 +357,7 @@ static const struct sti_dwmac_of_data stih4xx_dwmac_data = {
+>         .fix_retime_src = stih4xx_fix_retime_src,
+>  };
+> 
+> -static const struct sti_dwmac_of_data stid127_dwmac_data = {
+> -       .fix_retime_src = stid127_fix_retime_src,
+> -};
+> -
+>  static const struct of_device_id sti_dwmac_match[] = {
+> -       { .compatible = "st,stih415-dwmac", .data = &stih4xx_dwmac_data},
+> -       { .compatible = "st,stih416-dwmac", .data = &stih4xx_dwmac_data},
+> -       { .compatible = "st,stid127-dwmac", .data = &stid127_dwmac_data},
+>         { .compatible = "st,stih407-dwmac", .data = &stih4xx_dwmac_data},
+>         { }
+>  };
+> --
+> 2.34.1
+> 
 
-That's a good question to which I don't have an answer. We can list_add()
-the same zspage twice, unlocking the pool after first list_add() so that
-another process (including another zs_compact()) can do something to that
-zspage. The answer is somewhere between these lines, I guess.
-
-I can see how, for example, another DEBUG_LIST check can be triggered:
-"list_add double add", because we basically can do
-
-	list_add(page, list)
-	list_add(page, list)
-
-I can also see how lockdep can be unhappy with us doing
-
-	write_unlock(&zspage->lock);
-	write_unlock(&zspage->lock);
-
-But I don't think I see how "next is NULL" happens (I haven't observed
-it).
+-- 
+/Horatiu
