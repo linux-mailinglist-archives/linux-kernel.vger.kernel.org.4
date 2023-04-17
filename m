@@ -2,105 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3FF56E4F9E
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 19:48:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F9ED6E4FA7
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 19:52:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231167AbjDQRsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 13:48:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44400 "EHLO
+        id S231160AbjDQRwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 13:52:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjDQRsj (ORCPT
+        with ESMTP id S229579AbjDQRwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 13:48:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E415F59C8;
-        Mon, 17 Apr 2023 10:48:37 -0700 (PDT)
+        Mon, 17 Apr 2023 13:52:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CAE540FC;
+        Mon, 17 Apr 2023 10:52:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 812CD623C9;
-        Mon, 17 Apr 2023 17:48:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04B29C433D2;
-        Mon, 17 Apr 2023 17:48:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D6871628D8;
+        Mon, 17 Apr 2023 17:52:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 590E0C433EF;
+        Mon, 17 Apr 2023 17:52:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681753716;
-        bh=89s4jIuMXAhIUTAJDlYbcbPQ9HBWG9slfoztr8C81Jg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=GM8OrTjBLQ5euREIO0XOxN+XgHYNGwY+eEINd8cdohxNl9v3YOuuLiIfl0YaP6yR9
-         uSXpT7NhMXncsnWtbetUyJwNmvUiJhpZu5B6W83b9ln7XSUchsQSu3J4S4SOf2AJ5z
-         3Efxpcyt8RyEHMcaUJ+J33Obvu6dY01LtgJFQ6jwn0NDwKhzx7HDRh8Jdj05WgzVLL
-         0e51Te/09UvR24QOVyf6cINOcZgeAgFR+xEn7zKPXdOZmGZ4BSrpQqWSRXIsIA1TZN
-         5qcok8DJwnfLONVXIkn8wOzLbE8um9bJ1qf4xb4cWBht6o0T/or3ijf1gAigajhPYK
-         +exoAs2fQEf1A==
-From:   broonie@kernel.org
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Apr 17
-Date:   Mon, 17 Apr 2023 18:48:32 +0100
-Message-Id: <20230417174832.1060254-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        s=k20201202; t=1681753951;
+        bh=KUWjXDPTi3zx4/aPtq9cu6CjLL1a2cS0RTwS+jLqeXA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=GyKhjju38oDxcu+ziCWD7KV7feK0ctul+XMO8fJzxDUPamU6KI/8qqWMTfJSKwthb
+         hr9iLhJjTljD4TtxRqdFcdx324GVZhFTMB7TaqJZw9337rFvLuH7vrYSw57/5n+Dak
+         mzKJMgLShjqSOLVv8A3Q6nkAdR2wwrtLyDXxR0p3Q/OATOQFyFV4Hish0JvuG5xo4d
+         KZed9yxKQqRJULKioPAfD33fkRaFbWcz3WM2gaG2q78xCvyMwQYIxbAgjOB+54UnQT
+         g+qXhT5jMrCB1PCnB+KYjEpEbjWUmdIY68h8XhNjyuIhNnlnZircAw0TBbF2cngkt9
+         p5BKB06tH6vIw==
+Date:   Mon, 17 Apr 2023 10:52:29 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Haiyang Zhang <haiyangz@microsoft.com>
+Cc:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Paul Rosswurm <paulros@microsoft.com>,
+        "olaf@aepfle.de" <olaf@aepfle.de>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "leon@kernel.org" <leon@kernel.org>,
+        Long Li <longli@microsoft.com>,
+        "ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        Ajay Sharma <sharmaajay@microsoft.com>,
+        "hawk@kernel.org" <hawk@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V3,net-next, 3/4] net: mana: Enable RX path to handle
+ various MTU sizes
+Message-ID: <20230417105229.7d1eb988@kernel.org>
+In-Reply-To: <PH7PR21MB3116023068CFA8D600FA5B18CA9E9@PH7PR21MB3116.namprd21.prod.outlook.com>
+References: <1681334163-31084-1-git-send-email-haiyangz@microsoft.com>
+        <1681334163-31084-4-git-send-email-haiyangz@microsoft.com>
+        <20230414190608.3c21f44f@kernel.org>
+        <PH7PR21MB3116023068CFA8D600FA5B18CA9E9@PH7PR21MB3116.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        LOCALPART_IN_SUBJECT,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On Sat, 15 Apr 2023 14:25:29 +0000 Haiyang Zhang wrote:
+> > Allocating frag larger than a page is not safe. =20
+>=20
+>  I saw other drivers doing this - use napi_alloc_frag for size bigger tha=
+n a page.
+> And it returns compound page. Why it's not safe? Should we use other allo=
+cator
+> when need compound pages?
 
-Changes since 20230414:
+I believe so. There was a thread about this within the last year.
+Someone was trying to fix the page frag allocator to not fall back
+to order 0 pages in case of failure if requested size is > PAGE_SIZE.
+But there was push back and folks were saying that it's simply not=20
+a case supported by the frag allocator. =F0=9F=A4=B7=EF=B8=8F
 
-The sh tree gained a conflict against the mm-unstable tree.
+> > Frag allocator falls back to allocating single pages, doesn't it? =20
+>=20
+> Actually I checked it. Compound page is still returned for size smaller t=
+han PAGE_SIZE,
+> so I used single page allocation for that.
 
-The pci tree gained a conflict with Linus' tree.
+https://elixir.bootlin.com/linux/v6.3-rc6/source/mm/page_alloc.c#L5723
 
-The bluetooth tree gained a conflict with Linus' tree.
-
-The drm-next tree gained a conflict against the drm-intel-fixes tree.
-
-The driver-core conflict gained a conflict with the iommu tree.
-
-Non-merge commits (relative to Linus' tree): 11516
- 11898 files changed, 781881 insertions(+), 407199 deletions(-)
-
-----------------------------------------------------------------------------
-
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
-
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There is also the merge.log file in the Next
-directory.  Between each merge, the tree was built with a ppc64_defconfig
-for powerpc, an allmodconfig for x86_64, a multi_v7_defconfig for arm
-and a native build of tools/perf. After the final fixups (if any), I do
-an x86_64 modules_install followed by builds for x86_64 allnoconfig,
-powerpc allnoconfig (32 and 64 bit), ppc44x_defconfig, allyesconfig
-and pseries_le_defconfig and i386, arm64, s390, sparc and sparc64
-defconfig and htmldocs. And finally, a simple boot test of the powerpc
-pseries_le_defconfig kernel in qemu (with and without kvm enabled).
-
-Below is a summary of the state of the merge.
-
-I am currently merging 357 trees (counting Linus' and 102 trees of bug
-fix patches pending for the current merge release).
-
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
-
-Status of my local build tests will be at
-http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-advice about cross compilers/configs that work, we are always open to add
-more builds.
-
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
+Jumbo frames should really be supported as scatter transfers,=20
+if possible.
