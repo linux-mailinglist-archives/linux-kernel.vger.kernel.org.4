@@ -2,37 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C49EF6E480C
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 14:42:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1E1C6E4810
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 14:44:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbjDQMmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 08:42:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35900 "EHLO
+        id S230523AbjDQMoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 08:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjDQMmn (ORCPT
+        with ESMTP id S229992AbjDQMoC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 08:42:43 -0400
+        Mon, 17 Apr 2023 08:44:02 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B70840D1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 05:42:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D854CCF
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 05:44:00 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A8487168F;
-        Mon, 17 Apr 2023 05:42:42 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5724F168F;
+        Mon, 17 Apr 2023 05:44:44 -0700 (PDT)
 Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 184E23F5A1;
-        Mon, 17 Apr 2023 05:41:57 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id F07463F5A1;
+        Mon, 17 Apr 2023 05:43:59 -0700 (PDT)
 From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Liviu Dudau <liviu.dudau@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] bus: vexpress-config: Add explicit of_platform.h include
-Date:   Mon, 17 Apr 2023 13:41:52 +0100
-Message-Id: <168173489108.1885873.12046093132176694657.b4-ty@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Cristian Marussi <cristian.marussi@arm.com>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [PATCH] firmware: arm_scmi: Fix xfers allocation on RX channel
+Date:   Mon, 17 Apr 2023 13:43:51 +0100
+Message-Id: <168173500399.1886197.2762979819765120755.b4-ty@arm.com>
 X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230410232727.1562115-1-robh@kernel.org>
-References: <20230410232727.1562115-1-robh@kernel.org>
+In-Reply-To: <20230326203449.3492948-1-cristian.marussi@arm.com>
+References: <20230326203449.3492948-1-cristian.marussi@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -45,17 +43,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Apr 2023 18:27:26 -0500, Rob Herring wrote:
-> vexpress-config uses of_platform_* functions which are declared in
-> of_platform.h. of_platform.h gets implicitly included by of_device.h,
-> but that is going to be removed soon. Nothing else depends on
-> of_device.h so it can be dropped.
+On Sun, 26 Mar 2023 21:34:49 +0100, Cristian Marussi wrote:
+> Two distinct pools of xfer descriptors are allocated at initialization
+> time: one (TX) used to provide xfers to track commands and their replies
+> (or delayed replies) and another (RX) to pick xfers from to be used for
+> processing notifications.
 > 
+> Such pools, though, are allocated globally to be used by the whole SCMI
+> instance, they are not allocated per-channel and as such the allocation of
+> notifications xfers cannot be simply skipped if no RX channel was found for
+> the Base protocol common channel, because there could be defined more
+> optional per-protocol dedicated channels that instead support RX channels.
+> 
+> [...]
 
-Applied to sudeep.holla/linux (for-next/vexpress), thanks!
+Applied to sudeep.holla/linux (for-next/scmi/fixes), thanks!
 
-[1/1] bus: vexpress-config: Add explicit of_platform.h include
-      https://git.kernel.org/sudeep.holla/c/04ebdc354895
+[1/1] firmware: arm_scmi: Fix xfers allocation on RX channel
+	https://git.kernel.org/sudeep.holla/c/b2ccba9e8cdc
 --
 Regards,
 Sudeep
