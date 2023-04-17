@@ -2,87 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 172E26E53DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 23:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 641EA6E53E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 23:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbjDQVaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 17:30:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35544 "EHLO
+        id S230342AbjDQVb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 17:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230364AbjDQVaV (ORCPT
+        with ESMTP id S229717AbjDQVbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 17:30:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2BED46BC;
-        Mon, 17 Apr 2023 14:30:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FBE562A9F;
-        Mon, 17 Apr 2023 21:30:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20EE4C433EF;
-        Mon, 17 Apr 2023 21:30:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681767018;
-        bh=c9wyqvm7qvjDBra8OeFJcTD+B23bdO0zYToSSBVC3Cc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XeS5LqpCY6qUIHuj1KCf+aHOKTaDdPhg770tNEVWdf6eMV9qHH21RMyChyUvdbiab
-         zsHVEg/rjU0pr6eowt8qtxohgbwu49dIw0JKRb5A72jLRYfG04WtA4aYMm4oYFVSPN
-         lIe4we7SsjvnGC5XUFrQUxZFwYmT9qgZYaCwYpiQGmJwKgKnt9UTJ7FZZo72mcwdPw
-         K35ygfgXR5kPz9Byu6TFuWJmL3vrXsiQUu6KW3O4MUvJTCAloX9SicgG8EZ8fVHWss
-         6Pns+08qZl02eWTkuwJ9JomuEKNc6nig6FmWnptluXztuFzdO2649afH4q8ret/I97
-         +KFZs92h5ydqA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id F38EB403B5; Mon, 17 Apr 2023 18:30:14 -0300 (-03)
-Date:   Mon, 17 Apr 2023 18:30:14 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        James Clark <james.clark@arm.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
-        Song Liu <song@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Stephen Brennan <stephen.s.brennan@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        German Gomez <german.gomez@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v7 3/5] perf namespaces: Add reference count checking
-Message-ID: <ZD26ZlqSbgSyH5lX@kernel.org>
-References: <20230407230405.2931830-1-irogers@google.com>
- <20230407230405.2931830-4-irogers@google.com>
+        Mon, 17 Apr 2023 17:31:25 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A671F4687
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 14:31:23 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-54fe3cd445aso128029177b3.5
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 14:31:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1681767083; x=1684359083;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BCzVu2UsKp7hdLDjLx5y43eqwBluLCZhJw8zkmfWK7s=;
+        b=L4lIgMDUo+CoVwZROqgkHM1P5l8PMDt1tMF+3n6mYb/oTyl6jZZARiOyi4mY749zTf
+         kd6MKQWITu/+gFbXbDd8PRN889Ab1UneKVGjM8dJfGHZk1x69itMrG6mVAMXx6c94Kgj
+         wsnxittzLcJmNlQ2TmgAffk7LZPA0GjY7q3YVrjMNaQxDody759vfh8QxNsbIEZIbNpi
+         YEiGC7lB/ogD9pMXaYUg7qcmHjeO7XkF2svcHQ6pd/dMN/CipBYMhe50S/ctKhKU/5Xb
+         VduqXgJXIwtVunLI04d/oZ9995Fp6s9L0vc6khDXs8odobPBxwM6nmpDBHJfyzOBpVBf
+         lSXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681767083; x=1684359083;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BCzVu2UsKp7hdLDjLx5y43eqwBluLCZhJw8zkmfWK7s=;
+        b=U2U4TbJD2rjckvLR63h3qg640GI6cPC7WmQIg9+NvQwmNRYI+pZDuHZ3eSybY1wLb4
+         NXwWC4uR9FBCWnXooYD35gkzJJZxXYyCHCf6+7e0lt7MLjf5C0Mcodb83wp5IVi0KQeF
+         r8lZMJ5E98PI1pUQjF6lKerBul7o8wHqqXOFFO5xYFl8okfCnMw56hepHXBYgF3xs8IQ
+         l0X22uUlOAd9SMswEKvfX+eoQKuCD9/uA1YAAm2eRfk+VaKM9wPWUatZjYrhtvygBz9X
+         JjBhH0qxIEXTvU+PEAPub6qRSKkfGpORVNZZCacqqT83aLLB5JovCLxinvNqHeFTNsyJ
+         pNvQ==
+X-Gm-Message-State: AAQBX9dTAvLgfmxSf9uoc0nhrhZtjYTDVo9OoIir5JZ6DpPXe6DQaSsH
+        ev5/GK6aoLCbpV8oNY8QOzXeMflhemBJrER/P099
+X-Google-Smtp-Source: AKy350bgu9ZFLZmYkOlWaVpVvG9J/JdkBbU14XNGAtkoY2ENWGlUCNYD5NN6A3BCb0Ne4rd9gsfKQgsCVLB08+3wRKo=
+X-Received: by 2002:a81:c649:0:b0:54f:2b65:a865 with SMTP id
+ q9-20020a81c649000000b0054f2b65a865mr10208390ywj.8.1681767082657; Mon, 17 Apr
+ 2023 14:31:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230407230405.2931830-4-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
+ <1675119451-23180-6-git-send-email-wufan@linux.microsoft.com>
+ <CAHC9VhRa+NwKzLfQBmHfMgUp6_d5soQG7JBq-Vn=MUeUAt4tuQ@mail.gmail.com>
+ <20230410191035.GB18827@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+ <CAHC9VhQDvWDshaZvJrHmjcwyHFxv9oYTN9bn0xiTtFZQRp+GPg@mail.gmail.com>
+ <20230412233606.GA16658@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+ <CAHC9VhTs3Njfg=1baQ6=58rPLBmyB3cW0R-MfAaEcRF-jAaYBw@mail.gmail.com>
+ <20230417180605.GA402@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+ <CAHC9VhSnKbhtgFxOAY7NYZyOkV4kEA0=mVsCyogLBSCJs0r_ig@mail.gmail.com> <20230417211826.GA6475@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+In-Reply-To: <20230417211826.GA6475@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 17 Apr 2023 17:31:11 -0400
+Message-ID: <CAHC9VhT9uTYrtEsXUvj5qaTpNL2ix762dE5AzUaSqzas8-frXA@mail.gmail.com>
+Subject: Re: [RFC PATCH v9 05/16] ipe: add userspace interface
+To:     Fan Wu <wufan@linux.microsoft.com>
+Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
+        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+        eparis@redhat.com, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, linux-audit@redhat.com,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,168 +85,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Apr 07, 2023 at 04:04:03PM -0700, Ian Rogers escreveu:
-> Add reference count checking controlled by REFCNT_CHECKING ifdef. The
-> reference count checking interposes an allocated pointer between the
-> reference counted struct on a get and frees the pointer on a put.
-> Accesses after a put cause faults and use after free, missed puts are
-> caughts as leaks and double puts are double frees.
-> 
-> This checking helped resolve a memory leak and use after free:
-> https://lore.kernel.org/linux-perf-users/CAP-5=fWZH20L4kv-BwVtGLwR=Em3AOOT+Q4QGivvQuYn5AsPRg@mail.gmail.com/
-> 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/builtin-inject.c  |   2 +-
->  tools/perf/util/annotate.c   |   2 +-
->  tools/perf/util/dso.c        |   2 +-
->  tools/perf/util/dsos.c       |   2 +-
->  tools/perf/util/namespaces.c | 132 ++++++++++++++++++++---------------
->  tools/perf/util/namespaces.h |   3 +-
->  tools/perf/util/symbol.c     |   2 +-
->  7 files changed, 83 insertions(+), 62 deletions(-)
-> 
-> diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
-> index fd2b38458a5d..fe6ddcf7fb1e 100644
-> --- a/tools/perf/builtin-inject.c
-> +++ b/tools/perf/builtin-inject.c
-> @@ -632,7 +632,7 @@ static int dso__read_build_id(struct dso *dso)
->  	else if (dso->nsinfo) {
->  		char *new_name;
->  
-> -		new_name = filename_with_chroot(dso->nsinfo->pid,
-> +		new_name = filename_with_chroot(RC_CHK_ACCESS(dso->nsinfo)->pid,
->  						dso->long_name);
+On Mon, Apr 17, 2023 at 5:18=E2=80=AFPM Fan Wu <wufan@linux.microsoft.com> =
+wrote:
+> On Mon, Apr 17, 2023 at 04:16:29PM -0400, Paul Moore wrote:
+> > On Mon, Apr 17, 2023 at 2:06???PM Fan Wu <wufan@linux.microsoft.com> wr=
+ote:
+> > > On Thu, Apr 13, 2023 at 02:45:07PM -0400, Paul Moore wrote:
+> > > > On Wed, Apr 12, 2023 at 7:36???PM Fan Wu <wufan@linux.microsoft.com=
+> wrote:
+> > > > > On Tue, Apr 11, 2023 at 05:45:41PM -0400, Paul Moore wrote:
+> > > > > > On Mon, Apr 10, 2023 at 3:10???PM Fan Wu <wufan@linux.microsoft=
+.com> wrote:
+> > > > > > > On Thu, Mar 02, 2023 at 02:04:42PM -0500, Paul Moore wrote:
+> > > > > > > > On Mon, Jan 30, 2023 at 5:58???PM Fan Wu <wufan@linux.micro=
+soft.com> wrote:
+> > > >
+> > > > ...
+> > > >
+> > > > > > I guess this does make me wonder about keeping a non-active pol=
+icy
+> > > > > > loaded in the kernel, what purpose does that serve?
+> > > > > >
+> > > > >
+> > > > > The non-active policy doesn't serve anything unless it is activat=
+ed. User can
+> > > > > even delete a policy if that is no longer needed. Non-active is j=
+ust the default
+> > > > > state when a new policy is loaded.
+> > > > >
+> > > > > If IPE supports namespace, there is another use case where differ=
+ent containers
+> > > > > can select different policies as the active policy from among mul=
+tiple loaded
+> > > > > policies. Deven has presented a demo of this during LSS 2021. But=
+ this goes
+> > > > > beyond the scope of this version.
+> > > >
+> > > > Do you plan to add namespace support at some point in the
+> > > > not-too-distant future?  If so, I'm okay with keeping support for
+> > > > multiple policies, but if you think you're only going to support on=
+e
+> > > > active policy at a time, it might be better to remove support for
+> > > > multiple (inactive) policies.
+> > > >
+> > > > --
+> > > > paul-moore.com
+> > >
+> > > Another benefit of having multiple policies is that it provides isola=
+tion
+> > > between different policies. For instance, if we have two policies nam=
+ed
+> > > "policy_a" and "policy_b," we can ensure that only team a can update =
+"policy_a,"
+> > > and only team b can update "policy_b." This way, both teams can updat=
+e
+> > > their policy without affecting others. However, if there is only one =
+policy
+> > > in the system, both teams will have to operate on the same policy, ma=
+king it
+> > > less manageable.
+> >
+> > That only really matters if both policies are active at the same time;
+> > if only one policy can be active at one point in time the only
+> > permission that matters is the one who can load/activate a policy.
+> >
+> > Allowing for multiple policies complicates the code.  If there is
+> > another feature that requires multiple policies, e.g. IPE namespaces,
+> > then that is okay.  However, if there is no feature which requires
+> > multiple active policies, supporting multiple loaded policies only
+> > increases the risk of an exploitable bug in the IPE code.
+> >
+> > > Besides, removing multiple (inactive) policies support will
+> > > render the policy_name field meaningless, and we should only audit th=
+e policy
+> > > hash. I am fine if we decide to go for the single policy option.
+> >
+> > Once again, I think it comes back to: do you still want to support IPE
+> > namespaces at some point in the future, and if so, when do you expect
+> > to work on that?
+>
+> Yes, absolutely! We definitely have plans to support namespaces in the fu=
+ture.
+> However, it's worth mentioning that there are other tasks that we may nee=
+d
+> to prioritize due to their relatively lower complexity. For example, befo=
+re
+> we can fully implement namespaces, we need to address some other importan=
+t
+> aspects of the system, such as adding a policy language for integrity
+> enforcement on configuration files and defining trusted certificates
+> that can sign the root hash. Therefore, the timeline for implementing
+> namespaces will depend on the completion time of these tasks.
+>
+> I understand your concerns, and we can proceed with a single policy desig=
+n
+> for the initial version.
 
-To reduce these:
+I think it's okay to stick with the multi-policy code for the initial
+submission, you've got the code now, and it's tested.  I just wanted
+to make sure there were plans to make use of it at some point, if not
+we might as well drop it now.  However, it sounds like you've got a
+plan to utilize the multi-policy support so that's fine with me.
 
-
-From c80478cfc86cf24f6f075576d731d99e0fa8fe4f Mon Sep 17 00:00:00 2001
-From: Arnaldo Carvalho de Melo <acme@redhat.com>
-Date: Mon, 17 Apr 2023 18:28:01 -0300
-Subject: [PATCH 1/1] perf dso: Add dso__filename_with_chroot() to reduce
- number of accesses to dso->nsinfo members
-
-We'll need to reference count dso->nsinfo, so reduce the number of
-direct accesses by having a shorter form of obtaining a filename with
-a chroot (namespace one).
-
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>
-Cc: Dmitriy Vyukov <dvyukov@google.com>
-Cc: Ian Rogers <irogers@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Riccardo Mancini <rickyman7@gmail.com>
-Cc: Stephane Eranian <eranian@google.com>
-Cc: Stephen Brennan <stephen.s.brennan@oracle.com>
-Link: https://lore.kernel.org/lkml/
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/perf/builtin-inject.c | 4 +---
- tools/perf/util/annotate.c  | 3 +--
- tools/perf/util/dso.c       | 7 ++++++-
- tools/perf/util/dso.h       | 2 ++
- tools/perf/util/dsos.c      | 3 +--
- tools/perf/util/symbol.c    | 3 +--
- 6 files changed, 12 insertions(+), 10 deletions(-)
-
-diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
-index 76723ac314b60b80..61766eead4f48e34 100644
---- a/tools/perf/builtin-inject.c
-+++ b/tools/perf/builtin-inject.c
-@@ -630,10 +630,8 @@ static int dso__read_build_id(struct dso *dso)
- 	if (filename__read_build_id(dso->long_name, &dso->bid) > 0)
- 		dso->has_build_id = true;
- 	else if (dso->nsinfo) {
--		char *new_name;
-+		char *new_name = dso__filename_with_chroot(dso, dso->long_name);
- 
--		new_name = filename_with_chroot(dso->nsinfo->pid,
--						dso->long_name);
- 		if (new_name && filename__read_build_id(new_name, &dso->bid) > 0)
- 			dso->has_build_id = true;
- 		free(new_name);
-diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
-index e2693a1c28d5989f..ca9f0add68f461e4 100644
---- a/tools/perf/util/annotate.c
-+++ b/tools/perf/util/annotate.c
-@@ -1692,8 +1692,7 @@ static int dso__disassemble_filename(struct dso *dso, char *filename, size_t fil
- 
- 		mutex_lock(&dso->lock);
- 		if (access(filename, R_OK) && errno == ENOENT && dso->nsinfo) {
--			char *new_name = filename_with_chroot(dso->nsinfo->pid,
--							      filename);
-+			char *new_name = dso__filename_with_chroot(dso, filename);
- 			if (new_name) {
- 				strlcpy(filename, new_name, filename_size);
- 				free(new_name);
-diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
-index e36b418df2c68cc2..0bc288f29a548dc9 100644
---- a/tools/perf/util/dso.c
-+++ b/tools/perf/util/dso.c
-@@ -491,6 +491,11 @@ static int do_open(char *name)
- 	return -1;
- }
- 
-+char *dso__filename_with_chroot(const struct dso *dso, const char *filename)
-+{
-+	return filename_with_chroot(dso->nsinfo->pid, filename);
-+}
-+
- static int __open_dso(struct dso *dso, struct machine *machine)
- {
- 	int fd = -EINVAL;
-@@ -515,7 +520,7 @@ static int __open_dso(struct dso *dso, struct machine *machine)
- 		if (errno != ENOENT || dso->nsinfo == NULL)
- 			goto out;
- 
--		new_name = filename_with_chroot(dso->nsinfo->pid, name);
-+		new_name = dso__filename_with_chroot(dso, name);
- 		if (!new_name)
- 			goto out;
- 
-diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
-index 58d94175e7148049..0b7c7633b9f6667d 100644
---- a/tools/perf/util/dso.h
-+++ b/tools/perf/util/dso.h
-@@ -266,6 +266,8 @@ static inline bool dso__has_symbols(const struct dso *dso)
- 	return !RB_EMPTY_ROOT(&dso->symbols.rb_root);
- }
- 
-+char *dso__filename_with_chroot(const struct dso *dso, const char *filename);
-+
- bool dso__sorted_by_name(const struct dso *dso);
- void dso__set_sorted_by_name(struct dso *dso);
- void dso__sort_by_name(struct dso *dso);
-diff --git a/tools/perf/util/dsos.c b/tools/perf/util/dsos.c
-index 2bd23e4cf19efaa7..cf80aa42dd07b036 100644
---- a/tools/perf/util/dsos.c
-+++ b/tools/perf/util/dsos.c
-@@ -91,8 +91,7 @@ bool __dsos__read_build_ids(struct list_head *head, bool with_hits)
- 			have_build_id	  = true;
- 			pos->has_build_id = true;
- 		} else if (errno == ENOENT && pos->nsinfo) {
--			char *new_name = filename_with_chroot(pos->nsinfo->pid,
--							      pos->long_name);
-+			char *new_name = dso__filename_with_chroot(pos, pos->long_name);
- 
- 			if (new_name && filename__read_build_id(new_name,
- 								&pos->bid) > 0) {
-diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-index 91ebf93e0c20bd24..e7f63670688e8e59 100644
---- a/tools/perf/util/symbol.c
-+++ b/tools/perf/util/symbol.c
-@@ -1963,8 +1963,7 @@ int dso__load(struct dso *dso, struct map *map)
- 
- 		is_reg = is_regular_file(name);
- 		if (!is_reg && errno == ENOENT && dso->nsinfo) {
--			char *new_name = filename_with_chroot(dso->nsinfo->pid,
--							      name);
-+			char *new_name = dso__filename_with_chroot(dso, name);
- 			if (new_name) {
- 				is_reg = is_regular_file(new_name);
- 				strlcpy(name, new_name, PATH_MAX);
--- 
-2.39.2
-
+--=20
+paul-moore.com
