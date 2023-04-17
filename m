@@ -2,64 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D706C6E4218
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A72496E4222
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:08:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbjDQIHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 04:07:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53202 "EHLO
+        id S230397AbjDQIIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 04:08:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjDQIHq (ORCPT
+        with ESMTP id S230447AbjDQII2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 04:07:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA29F3AA8;
-        Mon, 17 Apr 2023 01:07:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 666EE611DE;
-        Mon, 17 Apr 2023 08:07:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33C35C433EF;
-        Mon, 17 Apr 2023 08:07:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1681718863;
-        bh=bIltGGJ6YcOhoza2HEf8IC35/kY4YKdMLPy5ID3ijTU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cgHostyGrfLJJ2W5utfqD9Gjo+cNUR7gkyjU5jh/+V8A0sDdwYlo+jPD9DeDOMVq/
-         Gqkkz4RHPnA+N9r6HlMT/qzJK1zL+C1WJBuKF1eOD/RWbXfzA37bggdoxSAGlIjRXc
-         QCtJysjtw5tGp/R0nvN81eH5LDzszO/5ZocEt5Ts=
-Date:   Mon, 17 Apr 2023 10:06:47 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] wifi: brcmfmac: Demote vendor-specific attach/detach
- messages to info
-Message-ID: <ZDz-F50Zlwkf2njN@kroah.com>
-References: <20230416-brcmfmac-noise-v1-0-f0624e408761@marcan.st>
- <20230416-brcmfmac-noise-v1-1-f0624e408761@marcan.st>
- <2023041631-crying-contour-5e11@gregkh>
- <8b2e7bb9-3681-0265-01bc-e7abdd0d08b8@marcan.st>
+        Mon, 17 Apr 2023 04:08:28 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D3046B8
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 01:08:01 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id w1so1943060plg.6
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 01:08:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1681718881; x=1684310881;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Swqe8hdnyr90lKGZ34p9/SCrV2uM7jygoSbLirhNYaU=;
+        b=RzueqtYWKHquKbh1r91xnBOR9MFUOwTtEL7JuxAvbQGOmalRQOVk1il2sClha6cktk
+         s5S7cML/Wwg1GRJxaXsrEaCZN/OiX9UnhHG1VTPCe56uCsDOVj88DLWTvKtoFEdGowdK
+         PAXU293prILUVEDi6LZXzQpTFWYDfQT4XC0FOjfOgQ+EERaWxfzeTwj8DKGN6mo6uctv
+         LgzqgPSfu/eoCaiCcEWkSMMeKHCj8EBpaUGmnfZ9BYuIjvu8awDUj6BzfeunPMQ66ufO
+         OdR/gnDrVLXe+KP+ObUuYs5tcysmfvWdJTDWsGF8FoZh/cRnk3gtvxAd+d+pUEHvi6td
+         2haQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681718881; x=1684310881;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Swqe8hdnyr90lKGZ34p9/SCrV2uM7jygoSbLirhNYaU=;
+        b=a/Tf6mJdhy8JMV9p2OKdInDjXsTDvW8oGAD9Pk0PSMfBlgyRmZXHHOmHpu4YORk2RM
+         zqWtHI/+YbABhQZdqNzyNDPdNhMBjBByhfny4h7iB75jdSD8OVrQWF2JyFapRpizz3qj
+         4Z4LpTeZBERvBPXaROGOLPeEC+aNRIdUmQ3KgOOOhHPvGngUpTLkFpZt0k0dGTFmpSNO
+         dsGaZol8TKENeqTgE3EANniPRapPLEmK0+63Jo4WckwNmuj47rx7MPwrWp80Ch9XcVmr
+         cIDX7B1C3aUpPD/vBZuYz2hwnhQaekX45gmOJAt2Hv8fu9sE8YYk/dbmbqZw6jQkMlbF
+         8T6Q==
+X-Gm-Message-State: AAQBX9d1oHYp/SO4eCDCjDoC/8yYt0lJl8rzwwCdpPV/TK28xNB3VyPT
+        zeGDVUS7TTJn6VDgVScVQImGNw==
+X-Google-Smtp-Source: AKy350YRelaL8B0w4O3NnCLX/PVG+4BiJ3Ah+M51OrPw3Y8gE6kkvDrzEvhk+MJ95rnyIbRwnbV+xA==
+X-Received: by 2002:a17:902:db06:b0:1a1:bff4:49e9 with SMTP id m6-20020a170902db0600b001a1bff449e9mr14009898plx.23.1681718881342;
+        Mon, 17 Apr 2023 01:08:01 -0700 (PDT)
+Received: from C02F52LSML85.bytedance.net ([139.177.225.238])
+        by smtp.gmail.com with ESMTPSA id jc3-20020a17090325c300b0019a97a4324dsm7114135plb.5.2023.04.17.01.07.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 01:08:00 -0700 (PDT)
+From:   Feng zhou <zhoufeng.zf@bytedance.com>
+To:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        mykolal@fb.com, shuah@kernel.org
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        yangzhenze@bytedance.com, wangdongdong.6@bytedance.com,
+        zhouchengming@bytedance.com, zhoufeng.zf@bytedance.com
+Subject: [PATCH 0/2] Access variable length array relaxed for integer type
+Date:   Mon, 17 Apr 2023 16:07:47 +0800
+Message-Id: <20230417080749.39074-1-zhoufeng.zf@bytedance.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8b2e7bb9-3681-0265-01bc-e7abdd0d08b8@marcan.st>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,46 +76,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 04:54:33PM +0900, Hector Martin wrote:
-> On 16/04/2023 21.46, Greg KH wrote:
-> > On Sun, Apr 16, 2023 at 09:42:17PM +0900, Hector Martin wrote:
-> >> People are getting spooked by brcmfmac errors on their boot console.
-> >> There's no reason for these messages to be errors.
-> >>
-> >> Cc: stable@vger.kernel.org
-> >> Fixes: d6a5c562214f ("wifi: brcmfmac: add support for vendor-specific firmware api")
-> >> Signed-off-by: Hector Martin <marcan@marcan.st>
-> >> ---
-> >>  drivers/net/wireless/broadcom/brcm80211/brcmfmac/bca/core.c | 4 ++--
-> >>  drivers/net/wireless/broadcom/brcm80211/brcmfmac/cyw/core.c | 4 ++--
-> >>  drivers/net/wireless/broadcom/brcm80211/brcmfmac/wcc/core.c | 4 ++--
-> >>  3 files changed, 6 insertions(+), 6 deletions(-)
-> >>
-> >> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bca/core.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bca/core.c
-> >> index ac3a36fa3640..c83bc435b257 100644
-> >> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bca/core.c
-> >> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bca/core.c
-> >> @@ -12,13 +12,13 @@
-> >>  
-> >>  static int brcmf_bca_attach(struct brcmf_pub *drvr)
-> >>  {
-> >> -	pr_err("%s: executing\n", __func__);
-> >> +	pr_info("%s: executing\n", __func__);
-> > 
-> > Why are these here at all?  Please just remove these entirely, you can
-> > get this information normally with ftrace.
-> > 
-> > Or, just delete these functions, why have empty ones at all?
-> 
-> This is a new WIP code path that Arend introduced which currently
-> deliberately does nothing (but is intended to hold firmware vendor
-> specific init in the future). So we can just drop the messages, but I
-> don't think we want to remove the code entirely.
+From: Feng Zhou <zhoufeng.zf@bytedance.com>
 
-Why have empty functions that do nothing?  If you want to put
-vendor-specific anything in here, add it when that is needed.  We don't
-like having dead code laying around in the kernel if at all possible.
+Add support for integer type of accessing variable length array.
+Add a selftest to check it.
 
-thanks,
+Feng Zhou (2):
+  bpf: support access variable length array of integer type
+  selftests/bpf: Add test to access integer type of variable array
 
-greg k-h
+ kernel/bpf/btf.c                              |  8 +++++---
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 20 +++++++++++++++++++
+ .../selftests/bpf/prog_tests/tracing_struct.c |  2 ++
+ .../selftests/bpf/progs/tracing_struct.c      | 13 ++++++++++++
+ 4 files changed, 40 insertions(+), 3 deletions(-)
+
+-- 
+2.20.1
+
