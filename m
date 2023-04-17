@@ -2,62 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A31766E46BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 13:46:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 063406E46C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 13:47:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbjDQLqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 07:46:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36994 "EHLO
+        id S230175AbjDQLq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 07:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbjDQLqo (ORCPT
+        with ESMTP id S230158AbjDQLq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 07:46:44 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A4830C6;
-        Mon, 17 Apr 2023 04:45:48 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+        Mon, 17 Apr 2023 07:46:57 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 063F49F;
+        Mon, 17 Apr 2023 04:46:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=euqFyJ5D5EZ1z4Bo2J06MIkQP2iXlSqQQupLUBYhVqM=; b=aPcrZ46ynB7zUL/Qy+XlM2Op3u
+        JHQ4DEQ8rAmR/vD5AMWPQM7dGv1tN77w9/9GHhWblSScKnVmb+tpfmrNkKrpVVkSqnodRrhAWk/RX
+        RZ3CR4qxp1Yezm1tnqe+J9CoTlLbRebkW7yQcDhlNmrKzwRjsYdR6Bg/+RJ1JiaapcPu1pLivfOOB
+        Crek56RUCUMvBMZRDqIJ4UqY9AuuPRsMxeuxeSJYd/pVCYxXeCf4q8+ybr1mMGaP1Oasifytp+B0j
+        zmXKSZub0w8PIOzMSH5b50nZ0xswntJXSlIP15+pQNLQSoYLpa69pj03eH4NLdIWPXgVsbczP+wFe
+        wKDIcyWw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1poNIK-00BIsx-4T; Mon, 17 Apr 2023 11:45:16 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1D6FA66031F1;
-        Mon, 17 Apr 2023 12:45:00 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681731900;
-        bh=rc5sSx+YYAGFEa3FY87Igi7HBmh/hyzSbmpQbdwi+y0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Um5p9+brAQ6SHqAXekne7HyJj0Eq7yT6g1y55LmbVItRhaGWaluW2ZcfTtzRpNMHP
-         lnCePxAGv0WPC/y8Rdu7cy/zEth2V2VntcQHbhIKhLOiWKDBuag6XJbe+J5C2Do7eL
-         FkA2WY5ePKom214x1Jhfa3JkuHPaDVCd5ATlDrsJby0yEdAy35iODggx+QQOw+hMcZ
-         TvsZsfSA2po+V24o8ASPUX7oU1cKk0t9RzieaxpSFWmccAEiIEigvdFiecF06Gbj39
-         qFiGGjSv8V8QLB7xya/u/TeQYUNSjsnVrY2RXDbxOZqAK/lrYLgUHIcmcuW9zCXlLz
-         0aghy4R1wV+yg==
-Message-ID: <ac0fcec9-a2fe-06cc-c727-189ef7babe9c@collabora.com>
-Date:   Mon, 17 Apr 2023 13:44:58 +0200
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D3586300338;
+        Mon, 17 Apr 2023 13:45:12 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 782C024248737; Mon, 17 Apr 2023 13:45:12 +0200 (CEST)
+Date:   Mon, 17 Apr 2023 13:45:12 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Yang Jihong <yangjihong1@huawei.com>
+Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf/core: Fix perf_sample_data not properly initialized
+ for different swevents in perf_tp_event()
+Message-ID: <20230417114512.GK83892@hirez.programming.kicks-ass.net>
+References: <20230412095240.181516-1-yangjihong1@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 2/2] drm/mediatek: dp: Add the audio control to
- mtk_dp_data struct
-Content-Language: en-US
-To:     xinlei.lee@mediatek.com, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de, airlied@linux.ie, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, jitao.shi@mediatek.com
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <1681358785-6930-1-git-send-email-xinlei.lee@mediatek.com>
- <1681358785-6930-3-git-send-email-xinlei.lee@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <1681358785-6930-3-git-send-email-xinlei.lee@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230412095240.181516-1-yangjihong1@huawei.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,158 +61,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 13/04/23 06:06, xinlei.lee@mediatek.com ha scritto:
-> From: Xinlei Lee <xinlei.lee@mediatek.com>
+On Wed, Apr 12, 2023 at 09:52:40AM +0000, Yang Jihong wrote:
+> data->sample_flags may be modified in perf_prepare_sample(),
+> in perf_tp_event(), different swevents use the same on-stack
+> perf_sample_data, the previous swevent may change sample_flags in
+> perf_prepare_sample(), as a result, some members of perf_sample_data are
+> not correctly initialized when next swevent_event preparing sample
+> (for example data->id, the value varies according to swevent).
 > 
-> Mainly add the following two flag:
+> A simple scenario triggers this problem is as follows:
 > 
-> 1.The audio packet arrangement function is to only arrange audio
-> packets into the Hblanking area. In order to align with the HW
-> default setting of g1200, this function needs to be turned off.
+>   # perf record -e sched:sched_switch --switch-output-event sched:sched_switch -a sleep 1
+>   [ perf record: dump data: Woken up 0 times ]
+>   [ perf record: Dump perf.data.2023041209014396 ]
+>   [ perf record: dump data: Woken up 0 times ]
+>   [ perf record: Dump perf.data.2023041209014662 ]
+>   [ perf record: dump data: Woken up 0 times ]
+>   [ perf record: Dump perf.data.2023041209014910 ]
+>   [ perf record: Woken up 0 times to write data ]
+>   [ perf record: Dump perf.data.2023041209015164 ]
+>   [ perf record: Captured and wrote 0.069 MB perf.data.<timestamp> ]
+>   # ls -l
+>   total 860
+>   -rw------- 1 root root  95694 Apr 12 09:01 perf.data.2023041209014396
+>   -rw------- 1 root root 606430 Apr 12 09:01 perf.data.2023041209014662
+>   -rw------- 1 root root  82246 Apr 12 09:01 perf.data.2023041209014910
+>   -rw------- 1 root root  82342 Apr 12 09:01 perf.data.2023041209015164
+>   # perf script -i perf.data.2023041209014396
+>   0x11d58 [0x80]: failed to process type: 9 [Bad address]
 > 
-> 2.Due to the difference of HW, different dividers need to be set.
+> Solution: Add perf_sample_data_flags_{save, restore} helpers to save and
+> restore sample_flags when processing different swevents
 > 
-> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
-> ---
->   drivers/gpu/drm/mediatek/mtk_dp.c     | 32 ++++++++++++++++++++++++++-
->   drivers/gpu/drm/mediatek/mtk_dp_reg.h |  5 +++++
->   2 files changed, 36 insertions(+), 1 deletion(-)
+> After fix:
 > 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c b/drivers/gpu/drm/mediatek/mtk_dp.c
-> index 767b71da31a4..65a9984eac81 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dp.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dp.c
-> @@ -139,6 +139,8 @@ struct mtk_dp_data {
->   	unsigned int smc_cmd;
->   	const struct mtk_dp_efuse_fmt *efuse_fmt;
->   	bool audio_supported;
-> +	const bool arrange;
+>   # perf record -e sched:sched_switch --switch-output-event sched:sched_switch -a sleep 1
+>   [ perf record: dump data: Woken up 0 times ]
+>   [ perf record: Dump perf.data.2023041209442259 ]
+>   [ perf record: dump data: Woken up 0 times ]
+>   [ perf record: Dump perf.data.2023041209442514 ]
+>   [ perf record: dump data: Woken up 0 times ]
+>   [ perf record: Dump perf.data.2023041209442760 ]
+>   [ perf record: Woken up 0 times to write data ]
+>   [ perf record: Dump perf.data.2023041209443003 ]
+>   [ perf record: Captured and wrote 0.069 MB perf.data.<timestamp> ]
+>   # ls -l
+>   total 864
+>   -rw------- 1 root root 100166 Apr 12 09:44 perf.data.2023041209442259
+>   -rw------- 1 root root 606438 Apr 12 09:44 perf.data.2023041209442514
+>   -rw------- 1 root root  82246 Apr 12 09:44 perf.data.2023041209442760
+>   -rw------- 1 root root  82342 Apr 12 09:44 perf.data.2023041209443003
+>   # perf script -i perf.data.2023041209442259 | head -n 5
+>               perf   232 [000]    66.846217: sched:sched_switch: prev_comm=perf prev_pid=232 prev_prio=120 prev_state=D ==> next_comm=perf next_pid=234 next_prio=120
+>               perf   234 [000]    66.846449: sched:sched_switch: prev_comm=perf prev_pid=234 prev_prio=120 prev_state=S ==> next_comm=perf next_pid=232 next_prio=120
+>               perf   232 [000]    66.846546: sched:sched_switch: prev_comm=perf prev_pid=232 prev_prio=120 prev_state=R ==> next_comm=perf next_pid=234 next_prio=120
+>               perf   234 [000]    66.846606: sched:sched_switch: prev_comm=perf prev_pid=234 prev_prio=120 prev_state=S ==> next_comm=perf next_pid=232 next_prio=120
+>               perf   232 [000]    66.846646: sched:sched_switch: prev_comm=perf prev_pid=232 prev_prio=120 prev_state=R ==> next_comm=perf next_pid=234 next_prio=120
 
-bool audio_pkt_in_hblank_area
+This seems a little bit short on analysis; what actual flags are the
+problem? Much of the data will in fact be identical between these
+invocations and endlessly re-computing that is wasteful.
 
-> +	const u8 audio_m_div2;
-
-u16 audio_m_div2_bit would be more descriptive, and would allow you to store
-the bit for later use as-it-is.
-
-P.S.: This structure is always declared as const, so it's useless to declare
-each of its members as const.
-
->   };
->   
->   static const struct mtk_dp_efuse_fmt mt8195_edp_efuse_fmt[MTK_DP_CAL_MAX] = {
-> @@ -646,8 +648,10 @@ static void mtk_dp_audio_sdp_asp_set_channels(struct mtk_dp *mtk_dp,
->   
->   static void mtk_dp_audio_set_divider(struct mtk_dp *mtk_dp)
->   {
-> +	u8 div2_id = mtk_dp->data->audio_m_div2;
-> +
->   	mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_30BC,
-> -			   AUDIO_M_CODE_MULT_DIV_SEL_DP_ENC0_P0_DIV_2,
-> +			   div2_id << AUDIO_M_CODE_MULT_DIV_SEL_DP_ENC0_P0_SHIFT,
-
-So, if you do it like I've suggested, this becomes
-
-	mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_30BC
-			   mtk_dp->data->audio_m_div2_bit,
-			   AUDIO_M_CODE_MULT_DIV_SEL_DP_ENC0_P0_MASK);
-
->   			   AUDIO_M_CODE_MULT_DIV_SEL_DP_ENC0_P0_MASK);
->   }
->   
-> @@ -1362,6 +1366,14 @@ static void mtk_dp_sdp_set_down_cnt_init_in_hblank(struct mtk_dp *mtk_dp)
->   			   SDP_DOWN_CNT_INIT_IN_HBLANK_DP_ENC1_P0_MASK);
->   }
->   
-> +static void mtk_dp_audio_sample_arrange(struct mtk_dp *mtk_dp)
-
-Since your register names are not human readable (I know that this is not your
-fault, don't worry), please add a comment that describes this function, saying
-that this arranges the audio packets into the Hblank area, similarly to how you
-described the same into the commit description.
-
-This would otherwise be a nightmare to understand for the "random reader" :-)
-
-> +{
-> +	if (mtk_dp->data->arrange) {
-
-You can reduce indentation, if you need to do so (after adding the definitions)
-with doing the inverse check like so:
-
-	if (!mtk_dp->data->audio_pkt_in_hblank_area)
-		return;
-
-> +		mtk_dp_update_bits(mtk_dp, MTK_DP_ENC1_P0_3374, 0, BIT(12));
-
-Add a definition for this bit....
-
-> +		mtk_dp_update_bits(mtk_dp, MTK_DP_ENC1_P0_3374, 0, 0xFFF);
-
-....and for this mask; please define this one as GENMASK(11, 0).
-
-> +	}
-> +}
-> +
->   static void mtk_dp_setup_tu(struct mtk_dp *mtk_dp)
->   {
->   	u32 sram_read_start = min_t(u32, MTK_DP_TBC_BUF_READ_START_ADDR,
-> @@ -1371,6 +1383,7 @@ static void mtk_dp_setup_tu(struct mtk_dp *mtk_dp)
->   				    MTK_DP_PIX_PER_ADDR);
->   	mtk_dp_set_sram_read_start(mtk_dp, sram_read_start);
->   	mtk_dp_setup_encoder(mtk_dp);
-> +	mtk_dp_audio_sample_arrange(mtk_dp);
->   	mtk_dp_sdp_set_down_cnt_init_in_hblank(mtk_dp);
->   	mtk_dp_sdp_set_down_cnt_init(mtk_dp, sram_read_start);
->   }
-> @@ -2615,11 +2628,22 @@ static int mtk_dp_resume(struct device *dev)
->   
->   static SIMPLE_DEV_PM_OPS(mtk_dp_pm_ops, mtk_dp_suspend, mtk_dp_resume);
->   
-> +static const struct mtk_dp_data mt8188_dp_data = {
-> +	.bridge_type = DRM_MODE_CONNECTOR_DisplayPort,
-> +	.smc_cmd = MTK_DP_SIP_ATF_VIDEO_UNMUTE,
-> +	.efuse_fmt = mt8195_dp_efuse_fmt,
-> +	.audio_supported = true,
-> +	.arrange = true,
-> +	.audio_m_div2 = 4,
-
-	.audio_m_div2_bit = MT8188_AUDIO_M_CODE_MULT_DIV_SEL_DP_ENC0_P0_DIV_2,
-
-> +};
-> +
->   static const struct mtk_dp_data mt8195_edp_data = {
->   	.bridge_type = DRM_MODE_CONNECTOR_eDP,
->   	.smc_cmd = MTK_DP_SIP_ATF_EDP_VIDEO_UNMUTE,
->   	.efuse_fmt = mt8195_edp_efuse_fmt,
->   	.audio_supported = false,
-> +	.arrange = false,
-> +	.audio_m_div2 = 5,
-
-	.audio_m_div2_bit = AUDIO_M_CODE_MULT_DIV_SEL_DP_ENC0_P0_DIV_2,
-
->   };
->   
->   static const struct mtk_dp_data mt8195_dp_data = {
-> @@ -2627,9 +2651,15 @@ static const struct mtk_dp_data mt8195_dp_data = {
->   	.smc_cmd = MTK_DP_SIP_ATF_VIDEO_UNMUTE,
->   	.efuse_fmt = mt8195_dp_efuse_fmt,
->   	.audio_supported = true,
-> +	.arrange = false,
-> +	.audio_m_div2 = 5,
-
-	.audio_m_div2_bit = AUDIO_M_CODE_MULT_DIV_SEL_DP_ENC0_P0_DIV_2,
-
->   };
->   
->   static const struct of_device_id mtk_dp_of_match[] = {
-> +	{
-> +		.compatible = "mediatek,mt8188-dp-tx",
-> +		.data = &mt8188_dp_data,
-> +	},
-
-Please also add support for mediatek,mt8188-edp-tx.
-
-Regards,
-Angelo
-
+I'm thinking perhaps those flags that update ->dyn_size are the problem?
+At the same time, Should you not also then clear dyn_size?
