@@ -2,72 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42B1B6E4AF0
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB846E4AFD
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:11:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231233AbjDQOIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 10:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60836 "EHLO
+        id S230340AbjDQOK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 10:10:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231159AbjDQOIj (ORCPT
+        with ESMTP id S230210AbjDQOKq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 10:08:39 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C19ED4C17
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:07:45 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5ACFA1FC7;
-        Mon, 17 Apr 2023 07:08:28 -0700 (PDT)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9EB3D3F5A1;
-        Mon, 17 Apr 2023 07:07:43 -0700 (PDT)
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     linux-kernel@vger.kernel.org, Radu Rendec <rrendec@redhat.com>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Pierre Gondois <Pierre.Gondois@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 0/3] arch_topology: Pre-allocate cacheinfo from primary CPU
-Date:   Mon, 17 Apr 2023 15:07:40 +0100
-Message-Id: <168174033569.1898335.12120283777353899091.b4-ty@arm.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230412185759.755408-1-rrendec@redhat.com>
-References: <20230412185759.755408-1-rrendec@redhat.com>
+        Mon, 17 Apr 2023 10:10:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4126AD24
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:09:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681740549;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dq1ZaJrdSpk9YDp+gB/JqY8bgzdWvHUIe3Gl73jkbAI=;
+        b=iWzzm3Tvfc3wRzRVlTBrdR57Q2rJtHcmj4fhMjRuILoD0G9ktb9JAFWZYiHAbpgJ0bFt5M
+        5CsDjZChUeMljmoBerWD570/gAk6MlnYYik6yjWgoZAzTeHBsLLtd14CXWbDni/GXkkN2p
+        ek2QdFwyFYVvjcjk2PtYm/NqoCofcUw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-325-yuJlK1hSNYOJOe91MOXTYg-1; Mon, 17 Apr 2023 10:09:06 -0400
+X-MC-Unique: yuJlK1hSNYOJOe91MOXTYg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4A5FD102F231;
+        Mon, 17 Apr 2023 14:09:05 +0000 (UTC)
+Received: from [10.18.17.153] (dhcp-17-153.bos.redhat.com [10.18.17.153])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 05EE440C83AC;
+        Mon, 17 Apr 2023 14:09:05 +0000 (UTC)
+Message-ID: <88977fec-16f9-a507-c717-709d6288084a@redhat.com>
+Date:   Mon, 17 Apr 2023 10:09:04 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2] locking/rwsem: Add __always_inline annotation to
+ __down_read_common()
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        John Stultz <jstultz@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Tim Murray <timmurray@google.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>, kernel-team@android.com,
+        stable@vger.kernel.org
+References: <20230412023839.2869114-1-jstultz@google.com>
+ <20230412035905.3184199-1-jstultz@google.com>
+ <20230417111949.GJ83892@hirez.programming.kicks-ass.net>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230417111949.GJ83892@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Apr 2023 14:57:56 -0400, Radu Rendec wrote:
-> Commit 5944ce092b97 ("arch_topology: Build cacheinfo from primary CPU")
-> tries to build the cacheinfo from the primary CPU prior to secondary
-> CPUs boot, if the DT/ACPI description contains cache information.
-> However, if such information is not present, it still reverts to the old
-> behavior, which allocates the cacheinfo memory on each secondary CPU. On
-> RT kernels, this triggers a "BUG: sleeping function called from invalid
-> context" because the allocation is done before preemption is first
-> enabled on the secondary CPU.
-> 
-> [...]
 
-Applied to sudeep.holla/linux (for-next/cacheinfo), thanks!
+On 4/17/23 07:19, Peter Zijlstra wrote:
+> On Wed, Apr 12, 2023 at 03:59:05AM +0000, John Stultz wrote:
+>> Apparently despite it being marked inline, the compiler
+>> may not inline __down_read_common() which makes it difficult
+>> to identify the cause of lock contention, as the blocked
+>> function will always be listed as __down_read_common().
+>>
+>> So this patch adds __always_inline annotation to the
+>> function to force it to be inlines so the calling function
+>> will be listed.
+> I'm a wee bit confused; what are you looking at? Wchan? What is stopping
+> the compiler from now handing you
+> __down_read{,_interruptible,_killable}() instead? Is that fine?
+>
+My theory is that the compiler may refuse to inline __down_read_common() 
+because it is called 3 times in order to reduce overall code size. The 
+other __down_read*() functions you listed are only called once.
 
-[1/3] cacheinfo: Add arch specific early level initializer
-      https://git.kernel.org/sudeep.holla/c/6539cffa9495
-[2/3] cacheinfo: Add arm64 early level initializer implementation
-      https://git.kernel.org/sudeep.holla/c/c931680cfa95
-[3/3] cacheinfo: Allow early level detection when DT/ACPI info is missing/broken
-      https://git.kernel.org/sudeep.holla/c/e103d55465db
+My 2 cents.
 
---
-Regards,
-Sudeep
+Cheers,
+Longman
 
