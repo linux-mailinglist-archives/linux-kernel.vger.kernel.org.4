@@ -2,60 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7F316E4245
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 884036E4246
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:12:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbjDQIMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 04:12:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59426 "EHLO
+        id S230342AbjDQIMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 04:12:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjDQIMd (ORCPT
+        with ESMTP id S230305AbjDQIMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 04:12:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C8CC46AF;
-        Mon, 17 Apr 2023 01:12:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 17 Apr 2023 04:12:45 -0400
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737CA558A
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 01:12:06 -0700 (PDT)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 70B5B62001;
-        Mon, 17 Apr 2023 08:11:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3519AC433D2;
-        Mon, 17 Apr 2023 08:11:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681719103;
-        bh=8MiZRL2DhtFX41sGqGhRmX2BDJeuPZ5YL+edsTjESe8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Xfzb7kUNo5mLEiE/9fXLQ1n4Bds+EODxkboUCgWtJX+kwncJH8zeoo9ohDNMLpsJp
-         w2yfEobVpl04zTjNnfzSaPqv83e5QwJ3d/p7maLcpPa/aXvPh6GLVbVT0+cTl6n5/a
-         w7gcU/Z15G97bLYbnIDFt2tRZmrscMeq7S4w2OCLkvvv3KU1NaXhl28o5uxExde4zg
-         3u8lbfPao9AHuEmulusYNBZZpRNQZiVMT2Ur73mHNR6ytdFn0XwzhcF/ORypiRMJJB
-         z3O+5vsWOk6+/p12FC8yY2QUXGzpt8JPLvC797hd8M6l1sSs0WpSpyQaz4xP/yjulF
-         L6MhgJy5Ukx1Q==
-Date:   Mon, 17 Apr 2023 10:11:38 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     Jeff Layton <jlayton@kernel.org>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Paul Moore <paul@paul-moore.com>, zohar@linux.ibm.com,
-        linux-integrity@vger.kernel.org, miklos@szeredi.hu,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org
-Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM after
- writes
-Message-ID: <20230417-umlaufen-chirurgisch-a60642cd34e9@brauner>
-References: <20230407-trasse-umgearbeitet-d580452b7a9b@brauner>
- <90a25725b4b3c96e84faefdb827b261901022606.camel@kernel.org>
- <e2455c0e-5a17-7fc1-95e3-5f2aca2eb409@linux.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e2455c0e-5a17-7fc1-95e3-5f2aca2eb409@linux.ibm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4Q0KXF6Rhtz4xq1X;
+        Mon, 17 Apr 2023 16:11:57 +0800 (CST)
+Received: from szxlzmapp04.zte.com.cn ([10.5.231.166])
+        by mse-fl2.zte.com.cn with SMTP id 33H8BqU3072551;
+        Mon, 17 Apr 2023 16:11:52 +0800 (+08)
+        (envelope-from yang.yang29@zte.com.cn)
+Received: from mapi (szxlzmapp01[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Mon, 17 Apr 2023 16:11:54 +0800 (CST)
+Date:   Mon, 17 Apr 2023 16:11:54 +0800 (CST)
+X-Zmail-TransId: 2b03643cff4afffffffff01-c5680
+X-Mailer: Zmail v1.0
+Message-ID: <202304171611545861530@zte.com.cn>
+Mime-Version: 1.0
+From:   <yang.yang29@zte.com.cn>
+To:     <hannes@cmpxchg.org>, <surenb@google.com>
+Cc:     <mingo@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <juri.lelli@redhat.com>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdwqBzY2hlZC9wc2k6IGF2b2lkwqB1bm5lY2Vzc2FyeSByZXNldHRpbmcgbWluIHVwZGF0ZSBwZXJpb2Qgd2hlbsKgZGVzdHJvecKgdHJpZ2dlcg==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 33H8BqU3072551
+X-Fangmail-Gw-Spam-Type: 0
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 643CFF4D.000/4Q0KXF6Rhtz4xq1X
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,91 +52,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 16, 2023 at 09:57:10PM -0400, Stefan Berger wrote:
-> 
-> 
-> On 4/7/23 09:29, Jeff Layton wrote:
-> > > > > > 
-> > > > > > I would ditch the original proposal in favor of this 2-line patch shown here:
-> > > > > > 
-> > > > > > https://lore.kernel.org/linux-integrity/a95f62ed-8b8a-38e5-e468-ecbde3b221af@linux.ibm.com/T/#m3bd047c6e5c8200df1d273c0ad551c645dd43232
-> > > 
-> > > We should cool it with the quick hacks to fix things. :)
-> > > 
-> > 
-> > Yeah. It might fix this specific testcase, but I think the way it uses
-> > the i_version is "gameable" in other situations. Then again, I don't
-> > know a lot about IMA in this regard.
-> > 
-> > When is it expected to remeasure? If it's only expected to remeasure on
-> > a close(), then that's one thing. That would be a weird design though.
-> 
-> IMA should remeasure the file when it has visibly changed for another thread or process.
-> 
-> 
-> > > > -----------------------8<---------------------------
-> > > > 
-> > > > [PATCH] IMA: use vfs_getattr_nosec to get the i_version
-> > > > 
-> > > > IMA currently accesses the i_version out of the inode directly when it
-> > > > does a measurement. This is fine for most simple filesystems, but can be
-> > > > problematic with more complex setups (e.g. overlayfs).
-> > > > 
-> > > > Make IMA instead call vfs_getattr_nosec to get this info. This allows
-> > > > the filesystem to determine whether and how to report the i_version, and
-> > > > should allow IMA to work properly with a broader class of filesystems in
-> > > > the future.
-> > > > 
-> > > > Reported-by: Stefan Berger <stefanb@linux.ibm.com>
-> > > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> > > > ---
-> > > 
-> > > So, I think we want both; we want the ovl_copyattr() and the
-> > > vfs_getattr_nosec() change:
-> > > 
-> > > (1) overlayfs should copy up the inode version in ovl_copyattr(). That
-> > >      is in line what we do with all other inode attributes. IOW, the
-> > >      overlayfs inode's i_version counter should aim to mirror the
-> > >      relevant layer's i_version counter. I wouldn't know why that
-> > >      shouldn't be the case. Asking the other way around there doesn't
-> > >      seem to be any use for overlayfs inodes to have an i_version that
-> > >      isn't just mirroring the relevant layer's i_version.
-> > 
-> > It's less than ideal to do this IMO, particularly with an IS_I_VERSION
-> > inode.
-> > 
-> > You can't just copy up the value from the upper. You'll need to call
-> > inode_query_iversion(upper_inode), which will flag the upper inode for a
-> > logged i_version update on the next write. IOW, this could create some
-> > (probably minor) metadata write amplification in the upper layer inode
-> > with IS_I_VERSION inodes.
-> > 
-> > 
-> > > (2) Jeff's changes for ima to make it rely on vfs_getattr_nosec().
-> > >      Currently, ima assumes that it will get the correct i_version from
-> > >      an inode but that just doesn't hold for stacking filesystem.
-> > > 
-> > > While (1) would likely just fix the immediate bug (2) is correct and
-> > > _robust_. If we change how attributes are handled vfs_*() helpers will
-> > > get updated and ima with it. Poking at raw inodes without using
-> > > appropriate helpers is much more likely to get ima into trouble.
-> > 
-> > This will fix it the right way, I think (assuming it actually works),
-> > and should open the door for IMA to work properly with networked
-> > filesystems that support i_version as well.
-> > 
-> > Note that there Stephen is correct that calling getattr is probably
-> > going to be less efficient here since we're going to end up calling
-> > generic_fillattr unnecessarily, but I still think it's the right thing
-> > to do.
-> 
-> I was wondering whether to use the existing inode_eq_iversion() for all
-> other filesystems than overlayfs, nfs, and possibly other ones (which ones?)
-> where we would use the vfs_getattr_nosec() via a case on inode->i_sb->s_magic?
-> If so, would this function be generic enough to be a public function for libfs.c?
+From: Yang Yang <yang.yang19@zte.com.cn>
 
-That's just an invitation for bugs and maintenance headaches. Just call
-vfs_getattr_nosec() directly and measure the performance impact before
-trying to optimize this. If you see performance impact that is worth
-mentioning then we can explore other options such as allowing
-->getattr() to only query for i_version and nothing else.
+Psi_group's poll_min_period is determined by the min window size of
+psi_trigger when creating new triggers. While destroying a psi_trigger,
+there is no need to reset poll_min_period if the destroying psi_trigger
+not had the min windows size, since in this condition poll_min_period
+will keep the same as before.
+
+Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
+---
+ kernel/sched/psi.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+index 02e011cabe91..12869585cf89 100644
+--- a/kernel/sched/psi.c
++++ b/kernel/sched/psi.c
+@@ -1359,11 +1359,16 @@ void psi_trigger_destroy(struct psi_trigger *t)
+ 		group->nr_triggers[t->state]--;
+ 		if (!group->nr_triggers[t->state])
+ 			group->poll_states &= ~(1 << t->state);
+-		/* reset min update period for the remaining triggers */
+-		list_for_each_entry(tmp, &group->triggers, node)
+-			period = min(period, div_u64(tmp->win.size,
+-					UPDATES_PER_WINDOW));
+-		group->poll_min_period = period;
++		/*
++		 * Reset min update period for the remaining triggers iff the destroying
++		 * trigger had the min window size.
++		 */
++		if (group->poll_min_period == div_u64(t->win.size, UPDATES_PER_WINDOW)) {
++			list_for_each_entry(tmp, &group->triggers, node)
++				period = min(period, div_u64(tmp->win.size,
++						UPDATES_PER_WINDOW));
++			group->poll_min_period = period;
++		}
+ 		/* Destroy poll_task when the last trigger is destroyed */
+ 		if (group->poll_states == 0) {
+ 			group->polling_until = 0;
+-- 
+2.25.1
