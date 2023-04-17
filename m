@@ -2,95 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 216F96E4AA6
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4126E4AB2
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:04:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbjDQOE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 10:04:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55840 "EHLO
+        id S230152AbjDQOEl convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 17 Apr 2023 10:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbjDQOEV (ORCPT
+        with ESMTP id S230410AbjDQOEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 10:04:21 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482F0AD37;
-        Mon, 17 Apr 2023 07:03:55 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 99EF51FE09;
-        Mon, 17 Apr 2023 14:03:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1681740210; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+BTqdIaKMgfCKDmdI90DW9DHLtHV07G0du1vlR3DUGQ=;
-        b=wWW5WRK2q5kqp5TCtpMDlzbRVCuKzmPJjYxET7kk6fT0D12K+qPK4+CO7sXgioEniYl7BI
-        Eubqt4CDBm26clHkq+LJIPYJLx/bd13fx9SUmDPibgMsany6gEG7MoKhv5Ly46CxOHfxKB
-        bgj92vzhdiCpH516IK114rE94K1piRY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1681740210;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+BTqdIaKMgfCKDmdI90DW9DHLtHV07G0du1vlR3DUGQ=;
-        b=Xu7DMrt4BpEi8IRGov+SBkcn/E8dRXm+lAlS8BVOElVeJoYpRPCMBCjOj69z2bQ1R9egr2
-        wgNnwu1dltqdI/Cg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8470013319;
-        Mon, 17 Apr 2023 14:03:30 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id VnwGILJRPWS+BAAAMHmgww
-        (envelope-from <hare@suse.de>); Mon, 17 Apr 2023 14:03:30 +0000
-Message-ID: <40d568d0-9c06-780c-00b7-630af356d0df@suse.de>
-Date:   Mon, 17 Apr 2023 16:03:30 +0200
+        Mon, 17 Apr 2023 10:04:35 -0400
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03BB993F2;
+        Mon, 17 Apr 2023 07:04:07 -0700 (PDT)
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-506a44cd9a0so122791a12.0;
+        Mon, 17 Apr 2023 07:04:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681740229; x=1684332229;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HMGdkWPY4wn1qRFSgU+nnMTUSEo599lD2CAXxhYpTLI=;
+        b=a1rTOT1qX/Z8UcKdqK8WCTSzGyY770iQE6SpTciE0D8mOjTQAT3U/HZs/PO0GBuHVZ
+         tW/4uOLYaKcbprr2YrPTSEF4qv40AC41guqXmbVsEAWTtV6PmaHN3Q7JnXurUh4/6Lhf
+         m8tJpMd84+bELi6jxJthNwpGegq5xAgPEYtijiwvc17ce3WOKAuF+XkZuUWpWPfV+ZtU
+         HGnHX9zQPUc7CKLgPuKXmgBfwCJy1xGMxUlNP4EIeQU/0LeLLnv1kuIOfqbobBfLkuUj
+         +iIL269Yc5cXa2OnFbR0N62yyFIjaTYhMdXYmReefXwGR4R5n7Ormj7ZRkXG3Bayyqn3
+         cnag==
+X-Gm-Message-State: AAQBX9eIIu+b2PVux1EQHK+Igajtzuh425iFGh3sTxT4VLYbpS/Qpwfk
+        KEl9AW2aZBO/4MF89WZendeK41pkh7bJV//8vb7D1zBk
+X-Google-Smtp-Source: AKy350Y2btpVArGToWvIHtqD0EvlOz3NQ1/99RCPQ1qWMfJZbBfYxbCe4KdP+ScGBCEY261s9VplDdRcmUWDivOqrtE=
+X-Received: by 2002:a17:906:5d:b0:94e:d688:fc92 with SMTP id
+ 29-20020a170906005d00b0094ed688fc92mr10146132ejg.0.1681740228659; Mon, 17 Apr
+ 2023 07:03:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 1/4] fs/buffer: add folio_set_bh helper
-Content-Language: en-US
-To:     Pankaj Raghav <p.raghav@samsung.com>, viro@zeniv.linux.org.uk,
-        brauner@kernel.org, willy@infradead.org, akpm@linux-foundation.org
-Cc:     linux-fsdevel@vger.kernel.org, mcgrof@kernel.org,
-        linux-kernel@vger.kernel.org, gost.dev@samsung.com
-References: <20230417123618.22094-1-p.raghav@samsung.com>
- <CGME20230417123620eucas1p266aa61d2213f94bbe028a98be73b70fc@eucas1p2.samsung.com>
- <20230417123618.22094-2-p.raghav@samsung.com>
-From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <20230417123618.22094-2-p.raghav@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <43723ee9-f786-b423-b2ce-f4c549581d49@gmail.com>
+In-Reply-To: <43723ee9-f786-b423-b2ce-f4c549581d49@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 17 Apr 2023 16:03:37 +0200
+Message-ID: <CAJZ5v0ij+kBOCdmAbZFGiPBG0HL3VuFm1-XwqhzHr_qSDhJ_zQ@mail.gmail.com>
+Subject: Re: [GIT PULL] devfreq next for 6.4
+To:     Chanwoo Choi <cwchoi00@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "open list:DEVICE FREQUENCY (DEVFREQ)" <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/17/23 14:36, Pankaj Raghav wrote:
-> The folio version of set_bh_page(). This is required to convert
-> create_page_buffers() to folio_create_buffers() later in the series.
-> 
-> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
-> ---
->   fs/buffer.c                 | 15 +++++++++++++++
->   include/linux/buffer_head.h |  2 ++
->   2 files changed, 17 insertions(+)
-> 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+On Sun, Apr 16, 2023 at 4:20 PM Chanwoo Choi <cwchoi00@gmail.com> wrote:
+>
+> Dear Rafael,
+>
+> This is devfreq-next pull request for v6.4. I add detailed description of
+> this pull request on the following tag. Please pull devfreq with
+> following updates.
+>
+> Best Regards,
+> Chanwoo Choi
+>
+>
+> The following changes since commit eeac8ede17557680855031c6f305ece2378af326:
+>
+>   Linux 6.3-rc2 (2023-03-12 16:36:44 -0700)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-6.4
+>
+> for you to fetch changes up to 376b1446153ca67e7028e6b9555d9b17477f568b:
+>
+>   PM / devfreq: exynos-ppmu: Use devm_platform_get_and_ioremap_resource() (2023-04-04 00:09:32 +0900)
+>
+> ----------------------------------------------------------------
+> Update devfreq next for v6.4
+>
+> Detailed description for this pull request:
+> 1. Remove unneeded SRCU selection in Kconfig because it's always set from
+> devfreq core.
+>
+> 2. Fix minor updates of devfreq drivers
+> - Drop of_match_ptr macro from exynos-bus.c because this driver is always using
+> the DT table for driver probe.
+> - Use the preferred of_property_present instead of the low-level of_get_property
+> on exynos-bus.c
+> - Use devm_platform_get_and_ioream_resource on exyno-ppmu.c
+> ----------------------------------------------------------------
+>
+> Krzysztof Kozlowski (1):
+>       PM / devfreq: exyos-bus: drop of_match_ptr for ID table
+>
+> Paul E. McKenney (1):
+>       PM / devfreq: Remove "select SRCU"
+>
+> Rob Herring (1):
+>       PM / devfreq: exynos: Use of_property_present() for testing DT property presence
+>
+> Yang Li (1):
+>       PM / devfreq: exynos-ppmu: Use devm_platform_get_and_ioremap_resource()
+>
+>  drivers/devfreq/Kconfig             | 1 -
+>  drivers/devfreq/event/exynos-ppmu.c | 3 +--
+>  drivers/devfreq/exynos-bus.c        | 4 ++--
+>  3 files changed, 3 insertions(+), 5 deletions(-)
 
-Cheers,
+Pulled and merged into the linux-next branch on linux-pm.git.
 
-Hannes
-
-
+Thanks!
