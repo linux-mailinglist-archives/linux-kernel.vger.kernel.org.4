@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0B6F6E4598
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 12:49:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CEE46E4591
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 12:49:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbjDQKtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 06:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48826 "EHLO
+        id S230218AbjDQKtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 06:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230271AbjDQKtC (ORCPT
+        with ESMTP id S229940AbjDQKsm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 06:49:02 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3E8ED;
-        Mon, 17 Apr 2023 03:48:12 -0700 (PDT)
+        Mon, 17 Apr 2023 06:48:42 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D704ECB;
+        Mon, 17 Apr 2023 03:47:52 -0700 (PDT)
 Date:   Mon, 17 Apr 2023 10:46:45 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1681728406;
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EygwRbB8JyZnkTtOgv8diB/DIMVBm1/6K4FuPOI9bXM=;
-        b=tuIQyVEw8pRS8KPuqNfCmSr+gP6U/gQ8phJzhksfq379Z2dKY8Vfiy4UFyw4Xmi65VM3ls
-        A3EvHolwJWpq+om49n8p1DIM5Vog16IBXMu++UVU4kwAa6d1l0tzVFBQ5mitZ5fTrbWLOK
-        xvbRhKapeXp7qmA7NCYqjCDGMuaHTaluIk5UINBCngsWZIvQSNWzcvqQrxHwuTug+Zk30C
-        yWz7z9S9e4wyZVNiw2xW6nLD7tgvyT6zMgtGjGYs92t/mVSo7cBVCibHrKi3jo5EFrRcCv
-        eO3yuFdVzrRSni+njxErBojpGIr0FhTz7mbzGKEfaK8WFGQ/QONXjug2SBcaNg==
+        bh=2eRms53gsCOGxd9wfLLeeaNB85kzjJoqLxCQxZQiw6Q=;
+        b=EBRq/5zINw18RCMNTUNRcjn31FnbGfhFsFDo6+OCRE6uy8Lcb0TRyRCup0stmkAW3fso5A
+        10pnTaNorpzMp6RlihHjG125uPA4seEwOar+ylIGlsFXgBOzsEPdlnj4K0nzLM/D5DsxxP
+        N62unRu8lUrMK6Tbzr/gksmG5ekuvj42s3XhUcm85U1UhT89F6rpk/ItgpBt6coZb2Z7BP
+        755yEG4Q3dLH8amZVISFk6KpetDO+ObfQ4Egt7qSYe8clABOzXrRoF7wnlCu8MW7pV9uyP
+        M8bGoNj3fUtpvpyvLv3p9XjvaZeEIct5cPkRuOdKsi9zLM3XTax93aL/wv5Ikw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1681728406;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,22 +36,24 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EygwRbB8JyZnkTtOgv8diB/DIMVBm1/6K4FuPOI9bXM=;
-        b=aezQTuIGs1lQVIWSLljq6polu1aPIiEFkZRDZUjd961NT5pFZfqRH0ky11tS+5MajtFmfp
-        RBAUK5O7yl77N+CA==
+        bh=2eRms53gsCOGxd9wfLLeeaNB85kzjJoqLxCQxZQiw6Q=;
+        b=iCeuKA7/qepbW3Bjx3np1pkdJN+xPOvas8qTXg7k7Qja1UHolCPXUE0n8V2m9pm4cbgGEa
+        srKEs5xNKsaUhLBw==
 From:   "tip-bot2 for Josh Poimboeuf" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: objtool/core] x86/cpu: Mark {hlt,resume}_play_dead() __noreturn
+Subject: [tip: objtool/core] scsi: message: fusion: Mark mpt_halt_firmware()
+ __noreturn
 Cc:     kernel test robot <lkp@intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
         Josh Poimboeuf <jpoimboe@kernel.org>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <ce1407c4bf88b1334fe40413126343792a77ca50.1681342859.git.jpoimboe@kernel.org>
-References: <ce1407c4bf88b1334fe40413126343792a77ca50.1681342859.git.jpoimboe@kernel.org>
+In-Reply-To: <d8129817423422355bf30e90dadc6764261b53e0.1681342859.git.jpoimboe@kernel.org>
+References: <d8129817423422355bf30e90dadc6764261b53e0.1681342859.git.jpoimboe@kernel.org>
 MIME-Version: 1.0
-Message-ID: <168172840596.404.15545078409070467274.tip-bot2@tip-bot2>
+Message-ID: <168172840572.404.16516527452411089196.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,86 +70,69 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the objtool/core branch of tip:
 
-Commit-ID:     52668badd34b4b346f32c33a9bcba069a06c3caa
-Gitweb:        https://git.kernel.org/tip/52668badd34b4b346f32c33a9bcba069a06c3caa
+Commit-ID:     6e36a56a5f617262c0e8ae7e961487361c720b9e
+Gitweb:        https://git.kernel.org/tip/6e36a56a5f617262c0e8ae7e961487361c720b9e
 Author:        Josh Poimboeuf <jpoimboe@kernel.org>
-AuthorDate:    Wed, 12 Apr 2023 16:49:39 -07:00
+AuthorDate:    Wed, 12 Apr 2023 16:49:40 -07:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Fri, 14 Apr 2023 17:31:27 +02:00
 
-x86/cpu: Mark {hlt,resume}_play_dead() __noreturn
+scsi: message: fusion: Mark mpt_halt_firmware() __noreturn
 
-Fixes the following warning:
+mpt_halt_firmware() doesn't return.  Mark it as such.
 
-  vmlinux.o: warning: objtool: resume_play_dead+0x21: unreachable instruction
+Fixes the following warnings:
+
+  vmlinux.o: warning: objtool: mptscsih_abort+0x7f4: unreachable instruction
+  vmlinux.o: warning: objtool: mptctl_timeout_expired+0x310: unreachable instruction
 
 Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Mark Rutland <mark.rutland@arm.com>
+Debugged-by: Peter Zijlstra <peterz@infradead.org>
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/ce1407c4bf88b1334fe40413126343792a77ca50.1681342859.git.jpoimboe@kernel.org
+Link: https://lore.kernel.org/r/d8129817423422355bf30e90dadc6764261b53e0.1681342859.git.jpoimboe@kernel.org
 ---
- arch/x86/include/asm/smp.h | 2 +-
- arch/x86/kernel/smpboot.c  | 2 +-
- arch/x86/power/cpu.c       | 2 +-
- tools/objtool/check.c      | 2 ++
- 4 files changed, 5 insertions(+), 3 deletions(-)
+ drivers/message/fusion/mptbase.c | 2 +-
+ drivers/message/fusion/mptbase.h | 2 +-
+ tools/objtool/check.c            | 1 +
+ 3 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/include/asm/smp.h b/arch/x86/include/asm/smp.h
-index e6d1d28..47ce4c7 100644
---- a/arch/x86/include/asm/smp.h
-+++ b/arch/x86/include/asm/smp.h
-@@ -125,7 +125,7 @@ int native_cpu_up(unsigned int cpunum, struct task_struct *tidle);
- int native_cpu_disable(void);
- int common_cpu_die(unsigned int cpu);
- void native_cpu_die(unsigned int cpu);
--void hlt_play_dead(void);
-+void __noreturn hlt_play_dead(void);
- void native_play_dead(void);
- void play_dead_common(void);
- void wbinvd_on_cpu(int cpu);
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 9013bb2..a6da3f9 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -1816,7 +1816,7 @@ static inline void mwait_play_dead(void)
- 	}
- }
- 
--void hlt_play_dead(void)
-+void __noreturn hlt_play_dead(void)
+diff --git a/drivers/message/fusion/mptbase.c b/drivers/message/fusion/mptbase.c
+index 9b3ba2d..4f0afce 100644
+--- a/drivers/message/fusion/mptbase.c
++++ b/drivers/message/fusion/mptbase.c
+@@ -6935,7 +6935,7 @@ EXPORT_SYMBOL(mpt_clear_taskmgmt_in_progress_flag);
+  *	@ioc: Pointer to MPT_ADAPTER structure
+  *
+  **/
+-void
++void __noreturn
+ mpt_halt_firmware(MPT_ADAPTER *ioc)
  {
- 	if (__this_cpu_read(cpu_info.x86) >= 4)
- 		wbinvd();
-diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
-index 236447e..7a4d5e9 100644
---- a/arch/x86/power/cpu.c
-+++ b/arch/x86/power/cpu.c
-@@ -288,7 +288,7 @@ EXPORT_SYMBOL(restore_processor_state);
- #endif
+ 	u32	 ioc_raw_state;
+diff --git a/drivers/message/fusion/mptbase.h b/drivers/message/fusion/mptbase.h
+index 4bd0682..0f226cd 100644
+--- a/drivers/message/fusion/mptbase.h
++++ b/drivers/message/fusion/mptbase.h
+@@ -945,7 +945,7 @@ extern int	mpt_raid_phys_disk_get_num_paths(MPT_ADAPTER *ioc,
+ 		u8 phys_disk_num);
+ extern int	 mpt_set_taskmgmt_in_progress_flag(MPT_ADAPTER *ioc);
+ extern void	 mpt_clear_taskmgmt_in_progress_flag(MPT_ADAPTER *ioc);
+-extern void     mpt_halt_firmware(MPT_ADAPTER *ioc);
++extern void __noreturn mpt_halt_firmware(MPT_ADAPTER *ioc);
  
- #if defined(CONFIG_HIBERNATION) && defined(CONFIG_HOTPLUG_CPU)
--static void resume_play_dead(void)
-+static void __noreturn resume_play_dead(void)
- {
- 	play_dead_common();
- 	tboot_shutdown(TB_SHUTDOWN_WFS);
+ 
+ /*
 diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index ceb9848..724a63b 100644
+index 724a63b..e1b01ea 100644
 --- a/tools/objtool/check.c
 +++ b/tools/objtool/check.c
-@@ -212,6 +212,7 @@ static bool __dead_end_function(struct objtool_file *file, struct symbol *func,
- 		"do_task_dead",
- 		"ex_handler_msr_mce",
- 		"fortify_panic",
-+		"hlt_play_dead",
- 		"kthread_complete_and_exit",
- 		"kthread_exit",
- 		"kunit_try_catch_throw",
-@@ -222,6 +223,7 @@ static bool __dead_end_function(struct objtool_file *file, struct symbol *func,
+@@ -219,6 +219,7 @@ static bool __dead_end_function(struct objtool_file *file, struct symbol *func,
+ 		"lbug_with_loc",
+ 		"machine_real_restart",
+ 		"make_task_dead",
++		"mpt_halt_firmware",
+ 		"nmi_panic_self_stop",
  		"panic",
  		"panic_smp_self_stop",
- 		"rest_init",
-+		"resume_play_dead",
- 		"rewind_stack_and_make_dead",
- 		"sev_es_terminate",
- 		"snp_abort",
