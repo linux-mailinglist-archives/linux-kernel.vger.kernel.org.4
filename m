@@ -2,129 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 788FC6E4E03
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 18:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F526E4E06
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 18:08:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbjDQQHp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 17 Apr 2023 12:07:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34510 "EHLO
+        id S230237AbjDQQIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 12:08:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229896AbjDQQHn (ORCPT
+        with ESMTP id S229657AbjDQQIv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 12:07:43 -0400
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB4E659D;
-        Mon, 17 Apr 2023 09:07:40 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id F33EA64551BD;
-        Mon, 17 Apr 2023 18:07:37 +0200 (CEST)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id n1W0Qrtyq6yM; Mon, 17 Apr 2023 18:07:37 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 913E76431C58;
-        Mon, 17 Apr 2023 18:07:37 +0200 (CEST)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id Ln_Xl0bMsm8o; Mon, 17 Apr 2023 18:07:37 +0200 (CEST)
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 3DEF464551BD;
-        Mon, 17 Apr 2023 18:07:37 +0200 (CEST)
-Date:   Mon, 17 Apr 2023 18:07:37 +0200 (CEST)
-From:   Richard Weinberger <richard@nod.at>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     George Kennedy <george.kennedy@oracle.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        eorge kennedy <eorge.kennedy@oracle.com>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        syzkaller <syzkaller@googlegroups.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        harshit m mogalapalli <harshit.m.mogalapalli@oracle.com>,
-        kernel <kernel@pengutronix.de>, stable <stable@vger.kernel.org>
-Message-ID: <1791587113.113210.1681747656999.JavaMail.zimbra@nod.at>
-In-Reply-To: <20230417160102.lw6n7bdxwrlkluwj@pengutronix.de>
-References: <ae901608-0580-010a-26e3-99d0b704b88b@oracle.com> <20230417160102.lw6n7bdxwrlkluwj@pengutronix.de>
-Subject: Re: [Regression] Cannot overwrite VID header offset any more [Was:
- [PATCH] ubi: ensure that VID header offset + VID header size <= alloc,
- size]
+        Mon, 17 Apr 2023 12:08:51 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522E846AB;
+        Mon, 17 Apr 2023 09:08:50 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33HDxpnV018583;
+        Mon, 17 Apr 2023 18:08:29 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=mPV7GLBx8x0NE9kJ5R1Z38xG1GCGlkd5tMt4db0xXFs=;
+ b=sTgMELsV/HrXPnrIHwkrhZmtAAZO7UjwGyYXA9w1sHR62g4+7jwupD4aN4prTzIsTA9V
+ WcZvwwp/aFNUFB7OzDLTMiTpFg2EL3UM+BzyVu9bnUxU2yK6jGgkL+PHabssNohLJUaV
+ 3rQfv0zJMT6bZXCY++RqwmqnzZCrSwuM4SKpYCZQcxSKL9Qth9HrCIi4iemaFVGcNbbK
+ QgzeErY0TCDyNMIckO5rIyuEZUvpOPuiRSOeBcxT8v7PfqTJ+EvQTVh4aOjXLTBsXlC3
+ GmYYaL5FvUFyCRGG2JGf2+fnx6Ox+gYv55ASNeahBhmYg/7DporIGfLa5t641lQpfv8B Rw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3q10vdupg2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Apr 2023 18:08:29 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id F2F34100034;
+        Mon, 17 Apr 2023 18:08:28 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node3.st.com [10.75.129.71])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id EC1AC22F7A3;
+        Mon, 17 Apr 2023 18:08:28 +0200 (CEST)
+Received: from localhost (10.48.0.157) by SHFDAG1NODE3.st.com (10.75.129.71)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Mon, 17 Apr
+ 2023 18:08:28 +0200
+From:   Patrick Delaunay <patrick.delaunay@foss.st.com>
+To:     Alexandre TORGUE <alexandre.torgue@foss.st.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+CC:     Patrick Delaunay <patrick.delaunay@foss.st.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+Subject: [PATCH v2] ARM: dts: stm32: remove extra space in stm32mp15xx-dkx.dtsi
+Date:   Mon, 17 Apr 2023 18:08:18 +0200
+Message-ID: <20230417180757.v2.1.If11ffa6edfdfef0869478412ec3cec3169483cb9@changeid>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [195.201.40.130]
-X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF97 (Linux)/8.8.12_GA_3809)
-Thread-Topic: Cannot overwrite VID header offset any more [Was: [PATCH] ubi: ensure that VID header offset + VID header size <= alloc, size]
-Thread-Index: QZS7NxF6po442+3+qhw1upzn2ik3iw==
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.48.0.157]
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE3.st.com
+ (10.75.129.71)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-17_10,2023-04-17_01,2023-02-09_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Uwe,
+Remove unnecessary space in device tree stm32mp15xx-dkx.dtsi.
 
------ Ursprüngliche Mail -----
-> Von: "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de>
-> This patch is in mainline as 1b42b1a36fc946f0d7088425b90d491b4257ca3e,
-> and backported to various stable releases.
-> 
-> For me this breaks
-> 
->	ubiattach -m 0 -O 2048
-> 
-> I think the check
-> 
->	ubi->vid_hdr_offset + UBI_VID_HDR_SIZE > ubi->vid_hdr_alsize
-> 
-> is wrong. Without -O passed to ubiattach (and dynamic debug enabled) I
-> get:
-> 
-> [ 5294.936762] UBI DBG gen (pid 9619): sizeof(struct ubi_ainf_peb) 56
-> [ 5294.936769] UBI DBG gen (pid 9619): sizeof(struct ubi_wl_entry) 32
-> [ 5294.936774] UBI DBG gen (pid 9619): min_io_size      2048
-> [ 5294.936779] UBI DBG gen (pid 9619): max_write_size   2048
-> [ 5294.936783] UBI DBG gen (pid 9619): hdrs_min_io_size 512
-> [ 5294.936787] UBI DBG gen (pid 9619): ec_hdr_alsize    512
-> [ 5294.936791] UBI DBG gen (pid 9619): vid_hdr_alsize   512
-> [ 5294.936796] UBI DBG gen (pid 9619): vid_hdr_offset   512
-> [ 5294.936800] UBI DBG gen (pid 9619): vid_hdr_aloffset 512
-> [ 5294.936804] UBI DBG gen (pid 9619): vid_hdr_shift    0
-> [ 5294.936808] UBI DBG gen (pid 9619): leb_start        2048
-> [ 5294.936812] UBI DBG gen (pid 9619): max_erroneous    409
-> 
-> So the check would only pass for vid_hdr_offset <= 512 -
-> UBI_VID_HDR_SIZE; note that even specifying the default value 512 (i.e.
-> 
->	ubiattach -m 0 -O 512
-> 
-> ) fails the check.
-> 
-> A less strong check would be:
-> 
-> diff --git a/drivers/mtd/ubi/build.c b/drivers/mtd/ubi/build.c
-> index 0904eb40c95f..69c28a862430 100644
-> --- a/drivers/mtd/ubi/build.c
-> +++ b/drivers/mtd/ubi/build.c
-> @@ -666,8 +666,8 @@ static int io_init(struct ubi_device *ubi, int
-> max_beb_per1024)
-> 	ubi->ec_hdr_alsize = ALIGN(UBI_EC_HDR_SIZE, ubi->hdrs_min_io_size);
-> 	ubi->vid_hdr_alsize = ALIGN(UBI_VID_HDR_SIZE, ubi->hdrs_min_io_size);
-> 
-> -	if (ubi->vid_hdr_offset && ((ubi->vid_hdr_offset + UBI_VID_HDR_SIZE) >
-> -	    ubi->vid_hdr_alsize)) {
-> +	if (ubi->vid_hdr_offset &&
-> +	    ubi->vid_hdr_offset + UBI_VID_HDR_SIZE > ubi->peb_size) {
-> 		ubi_err(ubi, "VID header offset %d too large.", ubi->vid_hdr_offset);
-> 		return -EINVAL;
-> 	}
-> 
-> But I'm unsure if this would be too lax?!
+Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+---
 
-As written on IRC, 1e020e1b96af ("ubi: Fix failure attaching when vid_hdr offset equals to (sub)page size") is supposed to fix that
-and on it's way into stable.
+Changes in v2:
+- update commit title to reflect what the change is
+  V1="ARM: dts: stm32: fix typo in stm32mp15xx-dkx.dtsi"
 
-Thanks,
-//richard
+ arch/arm/boot/dts/stm32mp15xx-dkx.dtsi | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
+index 11370ae0d868..ccd6c4722bd3 100644
+--- a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
++++ b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
+@@ -382,21 +382,21 @@ vref_ddr: vref_ddr {
+ 				regulator-always-on;
+ 			};
+ 
+-			 bst_out: boost {
++			bst_out: boost {
+ 				regulator-name = "bst_out";
+ 				interrupts = <IT_OCP_BOOST 0>;
+-			 };
++			};
+ 
+ 			vbus_otg: pwr_sw1 {
+ 				regulator-name = "vbus_otg";
+ 				interrupts = <IT_OCP_OTG 0>;
+-			 };
++			};
+ 
+-			 vbus_sw: pwr_sw2 {
++			vbus_sw: pwr_sw2 {
+ 				regulator-name = "vbus_sw";
+ 				interrupts = <IT_OCP_SWOUT 0>;
+ 				regulator-active-discharge = <1>;
+-			 };
++			};
+ 		};
+ 
+ 		onkey {
+-- 
+2.25.1
+
