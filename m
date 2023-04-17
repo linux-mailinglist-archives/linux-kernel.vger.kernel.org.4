@@ -2,172 +2,294 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD12D6E4FEA
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 20:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 104146E4FEE
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 20:11:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbjDQSKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 14:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58060 "EHLO
+        id S230207AbjDQSLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 14:11:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjDQSKb (ORCPT
+        with ESMTP id S229567AbjDQSLC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 14:10:31 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD061BCB
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 11:10:29 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-63b60366047so1045892b3a.1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 11:10:29 -0700 (PDT)
+        Mon, 17 Apr 2023 14:11:02 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21C372B6
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 11:10:51 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2a8b8aea230so15001371fa.0
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 11:10:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681755029; x=1684347029;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4sl9ziKyZqPoy8aLo+Gl92oC/7FehXmT2AIhyqndHBY=;
-        b=nJVr4FILdu5bU4E72aAnZSynAvymUqegXgB59klqsogKC7WJxtqSYGYUybck5xKIH8
-         FYb5pFzFqkrQKBvl0P66732MQeRjhzSHNoNRtH37Ux2NmgsVxlSiENHCrExCzd+Q/0DR
-         P82BdWDMQ50B64/Fc5K+e6vFzUY2y4oCaiEmdabrVXF1FvQ0qlwDMuEjqHcDN7nlGtLd
-         58Di7uv/E/K9O6RuLskhxGsDbekYPJZZMQdoDqUfR08+O8D5PYUCEBiYV+RGHRbCcIGH
-         bYphFSe5O4b/Hc3hl9lI8jUMn0LhPWi2SeLRu6Tb4So5ZljeCMNqhtLGOvfpjjTLGz/j
-         W/7w==
+        d=linaro.org; s=google; t=1681755050; x=1684347050;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9uqtAfQlYGu+vY2Plp4hxP/KFfqrrJzRhSyUGXHc1vs=;
+        b=QdK0kQD+iSTNBhJLDqmF0w9Qdi1xrnAchVb/Fo8lTXhDrwmpcNo2+9/cCQ/gm8hbjx
+         Lp2ON4MuBgKpTi052EOri08cGSE+7yHlf/KCzY+CNvLN5TMJYMyLZh45X7mMNH2WjObw
+         dXXqhGZo32AdQKfyNR4rT/jMbYhUr05MRkmEL10Pl4vIvngsSR7tqX87Vi9TP0scqqsI
+         CpmM/6R34Xxq8bI56KH4ydzxgyZrQQlnL/mCHtKiThMYzotI5iKFquESkD4BIv5w1Q5u
+         nPkefT8whaHgjlezIS6V35f8dGCag8ArsPQw+lXJsiq3OPHkTLc0ANVv8zfOmfLNtxMB
+         ppXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681755029; x=1684347029;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4sl9ziKyZqPoy8aLo+Gl92oC/7FehXmT2AIhyqndHBY=;
-        b=C0TMBVi9UvHQWAumwiGi8AWEdWtaq9d2mOo8AmPcPElRjdIN9hd3YmlU/i/NwmlcOX
-         NreydrrFpgaBGL/bQsf+8GaX27dTtKjNZ+QS/V6uLozHsoQnQybrUlRURfS7TjdNAQ0N
-         35/Now8jJUyGW/R4t68hXwkFro1YGw7HkAHYAm95u3FwtxZI5/d5nxD4uir5uG513KhE
-         Uwlx6fJ0nMgISawZNVxSfx4HZCWCgAUrETPuFAlqOcy3nxGRO40Uqf4HxvVy/ff2qFR9
-         UCrPgCzCjscU+YIw/51ngY3cp7IEmwa/HGrR2ZvNiGbzEWbQHWb0s00AA0q+4YplPhzL
-         L5Mg==
-X-Gm-Message-State: AAQBX9fpYZWCKonXD9bPROR9ahGhAE2WyCXIcmcA50sNe81AS2TZLPDp
-        spLrt0DhbJEYfh4jLjjJqq9liZnhgg2dG5OWNLk4xA==
-X-Google-Smtp-Source: AKy350agKI3IJEia6GE10oRHfJ2yBUf/emYDmwLibiytnwVpTiKZKIXteccNnA4CKimextC1Abl3uVyOBTN12S3XK2g=
-X-Received: by 2002:a05:6a00:1a43:b0:62e:154e:d6be with SMTP id
- h3-20020a056a001a4300b0062e154ed6bemr7839056pfv.5.1681755028758; Mon, 17 Apr
- 2023 11:10:28 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681755050; x=1684347050;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9uqtAfQlYGu+vY2Plp4hxP/KFfqrrJzRhSyUGXHc1vs=;
+        b=cTA+IDUITLVdaP3x/i75DKIruY2vKM6DiXm6ZR5fCt4n28ftsmyz4vmDB+YcDMPH+o
+         JG/vHAIdoJdyZl9rW/RHh0QvVy+PhrhjeDtts1nImpVqG9EEeJgOglnX9icqMR9RoTiD
+         H8tqx4172O3kRQOQe3x6utI4B17FSZeYDDN5Ksby6Sx3yevH/O6nsmcfjvhrRR2Mird8
+         O9dcDH0zVD/8y9uqf5FkHig2mtEHi9Lmtz1BRnEaFRQAbLgVXey6XvtzHoy2/FUuZ9++
+         1qRWCk7vevVf0JAiNJ+4DqAT9EFsPEdsqLiBMGH4D25MFzGVe5PMd88VDTExGX7HDCKZ
+         8f0Q==
+X-Gm-Message-State: AAQBX9eC9efjyr6sxsuX71SnK1I3wV1oqVGqqede3vHiCvQlKvVIA6Pw
+        UcC6WDnLC2xkZWooYhHlFpCbAA==
+X-Google-Smtp-Source: AKy350YaPTMslaFvtrHA2Nfq2hFNykocPsuzJB0IVo7rkjUVCi3GtslMvx+lU2eO6rxt1C0Hal/g9Q==
+X-Received: by 2002:a19:f60d:0:b0:4ec:8615:303e with SMTP id x13-20020a19f60d000000b004ec8615303emr2249053lfe.33.1681755050135;
+        Mon, 17 Apr 2023 11:10:50 -0700 (PDT)
+Received: from [192.168.1.101] (abyk99.neoplus.adsl.tpnet.pl. [83.9.30.99])
+        by smtp.gmail.com with ESMTPSA id l20-20020a19c214000000b004ed149acc08sm1969009lfc.93.2023.04.17.11.10.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Apr 2023 11:10:49 -0700 (PDT)
+Message-ID: <5cf16897-0670-78b9-a1c0-2f6ecb086987@linaro.org>
+Date:   Mon, 17 Apr 2023 20:10:46 +0200
 MIME-Version: 1.0
-References: <20230413133355.350571-1-aleksandr.mikhalitsyn@canonical.com>
- <20230413133355.350571-3-aleksandr.mikhalitsyn@canonical.com>
- <CANn89iLuLkUvX-dDC=rJhtFcxjnVmfn_-crOevbQe+EjaEDGbg@mail.gmail.com>
- <CAEivzxcEhfLttf0VK=NmHdQxF7CRYXNm6NwUVx6jx=-u2k-T6w@mail.gmail.com>
- <CAKH8qBt+xPygUVPMUuzbi1HCJuxc4gYOdU6JkrFmSouRQgoG6g@mail.gmail.com>
- <ZDoEG0VF6fb9y0EC@google.com> <20230417-wellblech-zoodirektor-76a80f7763ab@brauner>
-In-Reply-To: <20230417-wellblech-zoodirektor-76a80f7763ab@brauner>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Mon, 17 Apr 2023 11:10:17 -0700
-Message-ID: <CAKH8qBuW+T23ZvvYf4-MPc-S+ChSOARPWpTnLqTEQmF-p_3F6w@mail.gmail.com>
-Subject: Re: [PATCH net-next v4 2/4] net: socket: add sockopts blacklist for
- BPF cgroup hook
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        Eric Dumazet <edumazet@google.com>, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        daniel@iogearbox.net, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 2/2] clk: qcom: Introduce SM8350 VIDEOCC
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Taniya Das <tdas@codeaurora.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230413-topic-lahaina_vidcc-v2-0-f721d507e555@linaro.org>
+ <20230413-topic-lahaina_vidcc-v2-2-f721d507e555@linaro.org>
+ <CAA8EJpoxvjWrvJENkFSimfU=CG7C3jZ=ToZep1tnJbtPzCcS9Q@mail.gmail.com>
+ <34797b11-b654-a9a4-ac26-5287ca582a82@linaro.org>
+ <CAA8EJppVUddvAp=3H7oGntE-5XqJkHc7=2mcgpBBnRcsHCDZQg@mail.gmail.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <CAA8EJppVUddvAp=3H7oGntE-5XqJkHc7=2mcgpBBnRcsHCDZQg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 7:42=E2=80=AFAM Christian Brauner <brauner@kernel.o=
-rg> wrote:
->
-> On Fri, Apr 14, 2023 at 06:55:39PM -0700, Stanislav Fomichev wrote:
-> > On 04/13, Stanislav Fomichev wrote:
-> > > On Thu, Apr 13, 2023 at 7:38=E2=80=AFAM Aleksandr Mikhalitsyn
-> > > <aleksandr.mikhalitsyn@canonical.com> wrote:
-> > > >
-> > > > On Thu, Apr 13, 2023 at 4:22=E2=80=AFPM Eric Dumazet <edumazet@goog=
-le.com> wrote:
-> > > > >
-> > > > > On Thu, Apr 13, 2023 at 3:35=E2=80=AFPM Alexander Mikhalitsyn
-> > > > > <aleksandr.mikhalitsyn@canonical.com> wrote:
-> > > > > >
-> > > > > > During work on SO_PEERPIDFD, it was discovered (thanks to Chris=
-tian),
-> > > > > > that bpf cgroup hook can cause FD leaks when used with sockopts=
- which
-> > > > > > install FDs into the process fdtable.
-> > > > > >
-> > > > > > After some offlist discussion it was proposed to add a blacklis=
-t of
-> > > > >
-> > > > > We try to replace this word by either denylist or blocklist, even=
- in changelogs.
-> > > >
-> > > > Hi Eric,
-> > > >
-> > > > Oh, I'm sorry about that. :( Sure.
-> > > >
-> > > > >
-> > > > > > socket options those can cause troubles when BPF cgroup hook is=
- enabled.
-> > > > > >
-> > > > >
-> > > > > Can we find the appropriate Fixes: tag to help stable teams ?
-> > > >
-> > > > Sure, I will add next time.
-> > > >
-> > > > Fixes: 0d01da6afc54 ("bpf: implement getsockopt and setsockopt hook=
-s")
-> > > >
-> > > > I think it's better to add Stanislav Fomichev to CC.
-> > >
-> > > Can we use 'struct proto' bpf_bypass_getsockopt instead? We already
-> > > use it for tcp zerocopy, I'm assuming it should work in this case as
-> > > well?
-> >
-> > Jakub reminded me of the other things I wanted to ask here bug forgot:
-> >
-> > - setsockopt is probably not needed, right? setsockopt hook triggers
-> >   before the kernel and shouldn't leak anything
-> > - for getsockopt, instead of bypassing bpf completely, should we instea=
-d
-> >   ignore the error from the bpf program? that would still preserve
->
-> That's fine by me as well.
->
-> It'd be great if the net folks could tell Alex how they would want this
-> handled.
 
-Doing the bypass seems fine with me for now. If we ever decide that
-fd-based optvals are worth inspecting in bpf, we can lift that bypass.
 
-> >   the observability aspect
->
-> Please see for more details
-> https://lore.kernel.org/lkml/20230411-nudelsalat-spreu-3038458f25c4@braun=
-er
+On 14.04.2023 22:54, Dmitry Baryshkov wrote:
+> On Fri, 14 Apr 2023 at 20:48, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>>
+>>
+>>
+>> On 14.04.2023 18:31, Dmitry Baryshkov wrote:
+>>> On Fri, 14 Apr 2023 at 14:26, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>>>>
+>>>> Add support for the Video Clock Controller found on the SM8350 SoC.
+>>>>
+>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>>> ---
+>>
+>> [...]
+>>
+>>>> +static struct clk_rcg2 video_cc_ahb_clk_src = {
+>>>> +       .cmd_rcgr = 0xbd4,
+>>>> +       .mnd_width = 0,
+>>>> +       .hid_width = 5,
+>>>> +       .parent_map = video_cc_parent_map_0,
+>>>> +       .freq_tbl = ftbl_video_cc_ahb_clk_src,
+>>>> +       .clkr.hw.init = &(const struct clk_init_data) {
+>>>> +               .name = "video_cc_ahb_clk_src",
+>>>> +               .parent_data = video_cc_parent_data_0,
+>>>> +               .num_parents = ARRAY_SIZE(video_cc_parent_data_0),
+>>>> +               .flags = CLK_SET_RATE_PARENT,
+>>>> +               .ops = &clk_rcg2_shared_ops,
+>>>> +       },
+>>>> +};
+>>>
+>>> Do we need this clock at all? We don't have the child
+>>> video_cc_ahb_clk, so potentially CCF can try disabling or modifying
+>>> this clock.
+>> Hm.. I see a few things:
+>>
+>> 1. downstream kona has it, upstream does not
+>> 2. it's shared so we never actually hard-shut it off..
+>> 2a. ..but it'd be good to ensure it's on when it's ready..
+>> 2b. ..but we never do anyway..
+>> 2c. ..but should we even? doesn't Venus govern it internally?
+>>
+>>
+>>>
+>>>> +
+>>>> +static const struct freq_tbl ftbl_video_cc_mvs0_clk_src[] = {
+>>>> +       F(720000000, P_VIDEO_PLL0_OUT_MAIN, 1, 0, 0),
+>>>> +       F(1014000000, P_VIDEO_PLL0_OUT_MAIN, 1, 0, 0),
+>>>> +       F(1098000000, P_VIDEO_PLL0_OUT_MAIN, 1, 0, 0),
+>>>> +       F(1332000000, P_VIDEO_PLL0_OUT_MAIN, 1, 0, 0),
+>>>> +       { }
+>>>> +};
+>>>> +
+>>
+>> [...]
+>>
+>>>> +static struct clk_branch video_cc_mvs1_clk = {
+>>>> +       .halt_reg = 0xdb4,
+>>>> +       .halt_check = BRANCH_HALT_VOTED,
+>>>
+>>> As a note, sm8250 has BRANCH_HALT here.
+>> No, it does on the div2 clk, and so do we:
+> 
+> Excuse me, I got confused by all the syllables. I was looking at the
+> video_cc_mvs1c_clk. On sm8250 it is _VOTED, in this patch it is not. I
+> can not say that either one of those is incorrect, but such a
+> difference looks a bit suspicious for me. Maybe Tanya or somebody else
+> can comment here.
+I'd say this could be a design decision, with div2 clocks being
+treated differently, but it's how downstream does it on shipping
+devices and while generally it's not a great thing to say, it seems
+to be the "right enough" thing..
 
-Thanks for the context. Yeah, sockopts are being used for a lot of
-interesting things :-(
+> 
+>> [...]
+>>
+>>>> +};
+>>>> +
+>>>> +static struct clk_branch video_cc_mvs1_div2_clk = {
+>>>> +       .halt_reg = 0xdf4,
+>>>> +       .halt_check = BRANCH_HALT_VOTED,
+>>>> +       .hwcg_reg = 0xdf4,
+>>
+>> [...]
+>>
+>>>> +
+>>>> +static const struct qcom_reset_map video_cc_sm8350_resets[] = {
+>>>> +       [CVP_VIDEO_CC_INTERFACE_BCR] = { 0xe54 },
+>>>> +       [CVP_VIDEO_CC_MVS0_BCR] = { 0xd14 },
+>>>
+>>> Would it be better to use common VIDEO_CC prefix here (IOW:
+>>> VIDEO_CC_CVP_MVS0_BCR, VIDEO_CC_CVP_INTERFACE_BCR), etc.
+>> My best guess would be that the ones prefixed with CVP_
+>> are actual INTF/INSTANCEn(CORE) reset lines whereas
+>> the ones containing _CLK_ reset their clock sub-branches.
+> 
+> Note, again, on sm8250 all resets start with VIDEO_CC, even CVP ones.
+> I think we can follow that.
+Or get rid of that, as it's always called with a phandle to videocc..
 
-> > - or maybe we can even have a per-proto bpf_getsockopt_cleanup call tha=
-t
-> >   gets called whenever bpf returns an error to make sure protocols have
-> >   a chance to handle that condition (and free the fd)
->
-> Installing an fd into an fdtable makes it visible to userspace at which
-> point calling close_fd() is doable but an absolute last resort and
-> generally a good indicator of misdesign. If the bpf hook wants to make
-> decisions based on the file then it should receive a struct
-> file, not an fd.
+Thoughts?
 
-SG! Then let's not over-complicate it for now and do a simple bypass.
+> 
+>>
+>>>
+>>>> +       [VIDEO_CC_MVS0C_CLK_ARES] = { 0xc34, 2 },
+>>>> +       [CVP_VIDEO_CC_MVS0C_BCR] = { 0xbf4 },
+>>>> +       [CVP_VIDEO_CC_MVS1_BCR] = { 0xd94 },
+>>>> +       [VIDEO_CC_MVS1C_CLK_ARES] = { 0xcd4, 2 },
+>>>> +       [CVP_VIDEO_CC_MVS1C_BCR] = { 0xc94 },
+>>>> +};
+>>
+>> [...]
+>>
+>>>> +       ret = pm_runtime_resume_and_get(&pdev->dev);
+>>>> +       if (ret)
+>>>> +               return ret;
+>>>> +
+>>>> +       regmap = qcom_cc_map(pdev, &video_cc_sm8350_desc);
+>>>> +       if (IS_ERR(regmap)) {
+>>>> +               pm_runtime_put(&pdev->dev);
+>>>> +               return PTR_ERR(regmap);
+>>>> +       };
+>>>
+>>> Extra semicolon
+>> Ooeh!
+>>
+>>>
+>>>> +
+>>>> +       clk_lucid_pll_configure(&video_pll0, regmap, &video_pll0_config);
+>>>> +       clk_lucid_pll_configure(&video_pll1, regmap, &video_pll1_config);
+>>>> +
+>>>> +       /*
+>>>> +        * Keep clocks always enabled:
+>>>> +        *      video_cc_ahb_clk
+>>>> +        *      video_cc_xo_clk
+>>>> +        */
+>>>> +       regmap_update_bits(regmap, 0xe58, BIT(0), BIT(0));
+>>>> +       regmap_update_bits(regmap, 0xeec, BIT(0), BIT(0));
+>>>> +
+>>>> +       ret = qcom_cc_really_probe(pdev, &video_cc_sm8350_desc, regmap);
+>>>> +       pm_runtime_put(&pdev->dev);
+>>>> +
+>>>> +       return ret;
+>>>> +}
+>>>> +
+>>>> +static const struct dev_pm_ops video_cc_sm8350_pm_ops = {
+>>>> +       SET_RUNTIME_PM_OPS(pm_clk_suspend, pm_clk_resume, NULL)
+>>>
+>>> The driver doesn't use pm_clk at all. Are these PM_OPS correct?
+>> I'm unsure. I see the pm state changing in debugfs when the clocks are
+>> (not) consumed. But let's continue our discussion about using pm_clks
+>> for AHB.
+> 
+> Well, those are two separate questions. One is that w/o additional
+> pm_clk calls this string is useless (and should be removed). Another
+> on is a possible restructure of our cc drivers to use pm_clk for AHB
+> clocks (which would require adding more than that).
+Right, I had an impression that you needed any sort of pm ops at
+all to be registered with pm_genpd correctly, but that seems not to
+be the case.. With that commented out, I still see "suspended" / "active"
+and not "unsupported"..
+
+Konrad
+> 
+> 
+>>
+>>>
+>>>> +};
+>>>> +
+>>>> +static const struct of_device_id video_cc_sm8350_match_table[] = {
+>>>> +       { .compatible = "qcom,sm8350-videocc" },
+>>>> +       { }
+>>>> +};
+>>>> +MODULE_DEVICE_TABLE(of, video_cc_sm8350_match_table);
+>>>> +
+>>>> +static struct platform_driver video_cc_sm8350_driver = {
+>>>> +       .probe = video_cc_sm8350_probe,
+>>>> +       .driver = {
+>>>> +               .name = "sm8350-videocc",
+>>>> +               .of_match_table = video_cc_sm8350_match_table,
+>>>> +               .pm = &video_cc_sm8350_pm_ops,
+>>>> +       },
+>>>> +};
+>>>> +module_platform_driver(video_cc_sm8350_driver);
+>>>> +
+>>>> +MODULE_DESCRIPTION("QTI SM8350 VIDEOCC Driver");
+>>>> +MODULE_LICENSE("GPL");
+>>>>
+>>>> --
+>>>> 2.40.0
+>>>>
+>>>
+>>> Generic note: the register layout follows closely sm8250. However the
+>>> existing differences probably do not warrant merging them.
+>> No, I don't think merging any designs that are farther away
+>> than 8150 and 8155 or 8992 and 8994 etc. is a good idea..
+>>
+>> I don't want to ever look at something like dispcc-sm8[123]50.c
+>> again!
+> 
+> Me too!
+> 
