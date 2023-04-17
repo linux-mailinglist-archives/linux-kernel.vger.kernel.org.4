@@ -2,123 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BA086E44DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 12:11:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D4666E44D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 12:10:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbjDQKLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 06:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45638 "EHLO
+        id S230213AbjDQKKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 06:10:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbjDQKLU (ORCPT
+        with ESMTP id S230024AbjDQKKc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 06:11:20 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD146A72;
-        Mon, 17 Apr 2023 03:10:34 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id m21so13920519qtg.0;
-        Mon, 17 Apr 2023 03:10:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681726114; x=1684318114;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uYIIRjxNda/ziUqkZhz2I8xvie0gsHo4ftMvTuqFRis=;
-        b=NYIkajAArbsLM49c5Zzj36P+HXW/I+UYGch2JB2/+dWKLpa+omDZITXvq2zJDI+rFx
-         QwInVjvGeD7a+UHoHAGb3CV8OruU7FcrkrPxgX0f8RW4vPY+R9KSNSCYNvOFaGEtig3P
-         wwNi2xjv7qo9AUKJ/CE9fUM++ZbkYNf86vg+kG29TJHaXQuSyreEmQpJK/P8ZgK4tnQw
-         +O9ol1qAi0zFipZB0TN4itsulLZv8lgQkMnxQjwA4jzTkH9YF/Ql7PEtFazJQB8GeuFW
-         oOygwws8GrT7nYvy5qWqgHLJTHcMeZpkfqI5g07FLB4zq4HYrKRSvU/kfwFQpdKf5/4v
-         CXhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681726114; x=1684318114;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uYIIRjxNda/ziUqkZhz2I8xvie0gsHo4ftMvTuqFRis=;
-        b=iRRi9Ch9GNnK0OAQzxPrpk6oboeWxUPKrVU/rLXaLIJzMphCLj5EPyhp0tobVvZlhY
-         eAN1AJ0lI0Us9zH/FxFMPvZU2GhMJXkXt/GegDi3csx89PN09LKILK0udGgYoXDB/9a8
-         6JXlXfR6eIuifh2uyhUs9laWncOAbZ1HdoGN6S82+966eMgD2FIAAxfK5LUK0Tc/Pi+/
-         bZ6O+5VOkbRxfjQdD8hUFdd9eQxmRAhmkzyVH9isULPAfW1hE+xm3WvohBk8k2IV9Znu
-         A+UE/werQ8v0J84BQj+19rXOy1pn5zxK36KY4xu1hs3MwFtqnX2g/NTT3YuETSnhS6Lk
-         zokg==
-X-Gm-Message-State: AAQBX9dfT0+9c56vk8MUDZHd8LKbdF/ok3mc0tQCkxdVztQQmyGv9kTK
-        rIhHBM6r9ufv25TenjTLMY20iQTPSNYO+XPsyU4=
-X-Google-Smtp-Source: AKy350aidr5mhwJmg0IddRiawwv35eduv7ffrQvf/kXLi/fnL1/dp4WvuTBRpSzBs+d5c4LHVDXqto/0bvBg2KzOWxE=
-X-Received: by 2002:ac8:5902:0:b0:3de:d15a:847f with SMTP id
- 2-20020ac85902000000b003ded15a847fmr4470777qty.0.1681726113789; Mon, 17 Apr
- 2023 03:08:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230306151014.60913-1-schnelle@linux.ibm.com>
- <20230306151014.60913-2-schnelle@linux.ibm.com> <20230417074633.GA12881@wunner.de>
-In-Reply-To: <20230417074633.GA12881@wunner.de>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 17 Apr 2023 13:07:57 +0300
-Message-ID: <CAHp75VfuBTR6gO4SSZUZodWnBH7UfTS859PLCQy+qM+ABSkKdQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] PCI: s390: Fix use-after-free of PCI resources
- with per-function hotplug
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Gerd Bayer <gbayer@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, Andy Shevchenko <andy@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 17 Apr 2023 06:10:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23CFC6A6B;
+        Mon, 17 Apr 2023 03:09:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC46260F88;
+        Mon, 17 Apr 2023 10:09:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B352C433EF;
+        Mon, 17 Apr 2023 10:09:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681726192;
+        bh=V2wRmJnf4rtafpsOkImRTxfzgqylAUh6GeAuaVADOEE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IDSBMgZaUB6h4K/xRHyNbJ0+FPiLxFUaTIA/4JbCSDGEIVMTsb1rri4xCSawZRHq/
+         tCJt/BlNpLib4A56TOXVa2QPwLvRrJxhS1EN0LoulgLbtc/edlWvFVi8sYh5utVQCb
+         H9KXO+8ZO3IID9Y42yrNDJRLxN5CI08OqU1F8uyOO9ed+UYEv/EcPrGN6ZYramaO+P
+         +9XVbgbMAelOxurNYoUM+DeeAArmZW7/T2r+QxpoCY8f1PqVNLTifM7DWCG7SEuG8c
+         vXIwlFFf7twube4Ie3sMQRyDAQWCkLtIG3zvNnH4nL4weAl9rT4dx6HONe3LofIXSE
+         7mntqs+tkM7CQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1poLnx-008yiv-VB;
+        Mon, 17 Apr 2023 11:09:50 +0100
+Date:   Mon, 17 Apr 2023 11:09:49 +0100
+Message-ID: <86cz42lt02.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     walter.chang@mediatek.com,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        wsd_upstream@mediatek.com, stanley.chu@mediatek.com,
+        Chun-hung.Wu@mediatek.com, Freddy.Hsin@mediatek.com,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] clocksource/drivers/arm_arch_timer: Add workaround for MediaTek MMIO timer
+In-Reply-To: <f3f01c18-a2cc-9329-d186-421f5170e08a@collabora.com>
+References: <20230417090635.13202-1-walter.chang@mediatek.com>
+        <f3f01c18-a2cc-9329-d186-421f5170e08a@collabora.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: angelogioacchino.delregno@collabora.com, walter.chang@mediatek.com, catalin.marinas@arm.com, will@kernel.org, corbet@lwn.net, daniel.lezcano@linaro.org, tglx@linutronix.de, mark.rutland@arm.com, matthias.bgg@gmail.com, wsd_upstream@mediatek.com, stanley.chu@mediatek.com, Chun-hung.Wu@mediatek.com, Freddy.Hsin@mediatek.com, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 10:46=E2=80=AFAM Lukas Wunner <lukas@wunner.de> wro=
-te:
-> On Mon, Mar 06, 2023 at 04:10:11PM +0100, Niklas Schnelle wrote:
-
-...
-
-> > +void pci_bus_remove_resource(struct pci_bus *bus, struct resource *res=
-)
-> > +{
-> > +     struct pci_bus_resource *bus_res, *tmp;
-> > +     int i;
+On Mon, 17 Apr 2023 11:01:15 +0100,
+AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> wrote:
+> 
+> Il 17/04/23 11:06, walter.chang@mediatek.com ha scritto:
+> > From: Walter Chang <walter.chang@mediatek.com>
+> > 
+> > The MT69XX series SoCs have the incomplete implementation issue in the
+> > mmio timer. Specifically, the hardware only implements the TVAL
+> > functionality, but not the CVAL functionality. This hardware limitation
+> > will cause set_next_event_mem() fail to set the actual expiration time
+> > when writing a value to the CVAL. On these platforms, the mmio timer's
+> > internal expiration time will still be judged as 0 (the value of TVAL),
+> > resulting in the mmio timer not functioning as intended.
+> > 
+> > The workaround is to use TVAL in addition to CVAL for these affected
+> > platforms.
+> > 
+> > Signed-off-by: Walter Chang <walter.chang@mediatek.com>
+> > ---
+> >   Documentation/arm64/silicon-errata.rst |  4 ++++
+> >   drivers/clocksource/Kconfig            |  9 ++++++++
+> >   drivers/clocksource/arm_arch_timer.c   | 29 ++++++++++++++++++++++++++
+> >   3 files changed, 42 insertions(+)
+> > 
+> > diff --git a/Documentation/arm64/silicon-errata.rst b/Documentation/arm64/silicon-errata.rst
+> > index ec5f889d7681..ca1893713a4c 100644
+> > --- a/Documentation/arm64/silicon-errata.rst
+> > +++ b/Documentation/arm64/silicon-errata.rst
+> > @@ -209,3 +209,7 @@ stable kernels.
+> >   +----------------+-----------------+-----------------+-----------------------------+
+> >   | Fujitsu        | A64FX           | E#010001        | FUJITSU_ERRATUM_010001      |
+> >   +----------------+-----------------+-----------------+-----------------------------+
 > > +
-> > +     for (i =3D 0; i < PCI_BRIDGE_RESOURCE_NUM; i++) {
-> > +             if (bus->resource[i] =3D=3D res) {
-> > +                     bus->resource[i] =3D NULL;
-> > +                     return;
-> > +             }
-> > +     }
+> > ++----------------+-----------------+-----------------+-----------------------------+
+> > +| MediaTek       | MT69XX series   | #690001         | MEDIATEK_ERRATUM_690001     |
+> > ++----------------+-----------------+-----------------+-----------------------------+
+> > diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
+> > index 5fc8f0e7fb38..475356b8dbdc 100644
+> > --- a/drivers/clocksource/Kconfig
+> > +++ b/drivers/clocksource/Kconfig
+> > @@ -368,6 +368,15 @@ config SUN50I_ERRATUM_UNKNOWN1
+> >   	  the Allwinner A64 SoC. The workaround will only be active if the
+> >   	  allwinner,erratum-unknown1 property is found in the timer node.
+> >   +config MEDIATEK_ERRATUM_690001
+> > +	bool "Workaround for MediaTek MT69XX erratum 690001"
+> > +	depends on ARM_ARCH_TIMER && ARM64
+> > +	help
+> > +	  This option enables a workaround for incomplete implementation
+> > +	  in the MMIO timer on the MediaTek MT69XX SoCs. The workaround
+> > +	  will only be active if mediatek,erratum-690001 property is
+> > +	  found in the timer node.
 > > +
-> > +     list_for_each_entry_safe(bus_res, tmp, &bus->resources, list) {
-> > +             if (bus_res->res =3D=3D res) {
-> > +                     list_del(&bus_res->list);
-> > +                     kfree(bus_res);
-> > +                     return;
-> > +             }
-> > +     }
-> > +}
->
-> I realize this has already been applied so s390.git/master,
-> but nevertheless would like to point out there's a handy
-> pci_bus_for_each_resource() helper which could have been
-> used here instead of the for-loop.
+> >   config ARM_GLOBAL_TIMER
+> >   	bool "Support for the ARM global timer" if COMPILE_TEST
+> >   	select TIMER_OF if OF
+> > diff --git a/drivers/clocksource/arm_arch_timer.c b/drivers/clocksource/arm_arch_timer.c
+> > index e09d4427f604..920570d57fc0 100644
+> > --- a/drivers/clocksource/arm_arch_timer.c
+> > +++ b/drivers/clocksource/arm_arch_timer.c
+> > @@ -389,6 +389,10 @@ static u64 notrace sun50i_a64_read_cntvct_el0(void)
+> >   }
+> >   #endif
+> >   +#ifdef CONFIG_MEDIATEK_ERRATUM_690001
+> > +static bool arch_timer_mem_sne_use_tval __ro_after_init;
+> 
+> What about reusing part of the CONFIG_ARM_ARCH_TIMER_OOL_WORKAROUND logic and
+> adding something like CONFIG_ARM_ARCH_TIMER_MEM_WORKAROUND?
 
-Actually in this case it's not possible. The above code nullifies the
-matched resource or removes it from the list. We don't have any good
-iterator inside pci_bus_for_each_resource() to do the latter.
+I don't think there is *any* need for the out-of-line stuff on any of
+the memory-mapped accesses, if only because they are not inlined the
+first place, and that there is no performance requirements around this
+timer (it should hardly ever be used as the sched clock, for example).
 
-There might be other places in the kernel code where something like
-above is used and we can split a separate helper exactly for matching
-cases, but with the above context I dunno we need to do anything right
-now.
+Despite being part of the same driver, the sysreg and MMIO timers are
+vastly different and keeping them together has only been a nuisance.
+Someone should throw an axe at this stuff.
 
-P.S. Thanks for Cc'ing me.
+	M.
 
---=20
-With Best Regards,
-Andy Shevchenko
+-- 
+Without deviation from the norm, progress is not possible.
