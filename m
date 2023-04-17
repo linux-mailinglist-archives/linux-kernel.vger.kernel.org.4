@@ -2,140 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A37E86E435B
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 11:13:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD9176E4363
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 11:16:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjDQJNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 05:13:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43216 "EHLO
+        id S230115AbjDQJP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 05:15:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjDQJNv (ORCPT
+        with ESMTP id S229519AbjDQJP4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 05:13:51 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C6912681;
-        Mon, 17 Apr 2023 02:13:50 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id l9-20020a17090a3f0900b0023d32684e7fso13666684pjc.1;
-        Mon, 17 Apr 2023 02:13:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681722829; x=1684314829;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0iICltxFxgZD7R2lQTiHpMVo3mXptmJ3sD33hI5e5uk=;
-        b=PEGtYHB8vcNPmJeN/3BWPJUXD34DC3d8nTzcdQ5SU0HXSdviZdZS7jX48UgKcKkkFD
-         LywnNNnnqUZRfyErlEk/9kfe9GDI0CG8pfNqclzTLEdewx/kw9001B8axTYZ6Tz1KWJb
-         54qzjE5DGVJW2wW6VIusdZwSD7IA7THsZFtx1/Ljx2hObiqESvd6mNhiWKcvOWdguxO6
-         VItRc0/cEnIBMNL0H5j7MMIa9ud0eq95uYS3ZVyji1GGH8e6WIGgB+dTUiCG4vnX8pVr
-         TfOXiZ/aluHroIjpy7Ucj9K5dO3m8/FI08Fi1G/CppVcAeUfRHl4z/zDcM+c0Pvk/pwF
-         wdRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681722829; x=1684314829;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0iICltxFxgZD7R2lQTiHpMVo3mXptmJ3sD33hI5e5uk=;
-        b=N/idBJFssqnB8rCy93k+XKteaybPFJj7qL5lKvvUTIj6nAc42gd+0snoDzkVkI36NE
-         z/il8BqCLsre/I2D8baqsAXVsLI3vneiqjSPyVXGjGlZbDWXvICEKAGdHbl6u1aewdBh
-         ZXg20cy9+15r4cQRA0PdqbFDA/gIAoJ9CMPrduwSC44a2tOxMcjfOOiF6awJ8ELDJY0y
-         3qSLrH9WP6Kx5d2tv6kxCGApgc4CQQDgHQ6zeVJNYAjLGfpRSN8f5WXh774iMURCJP6d
-         5FeBSEGCuONkNDsAYcLgJL9FFoo75eAK8VDc7V1sZqA3LR6yKcEEO2dOEnpGhrGCT3wg
-         ubnw==
-X-Gm-Message-State: AAQBX9e0fKTEw1WOgdud5eHZuU4XIVfbeoDRD4HkSGEKWX6RDrOScOpl
-        j1lcQ/JoHAMbkVTpxweMX9rnakak65rUlMOHF/ZWalueJA+V1A==
-X-Google-Smtp-Source: AKy350aviDT6EneJ4TKrGKHHcE4yfBcvO2iwK2xSsQtOSQuSp0qiFKcKVDrxymtY16ncCDCODnLUlWqkzy8GgSlnzyI=
-X-Received: by 2002:a17:90a:540a:b0:23f:2486:5b53 with SMTP id
- z10-20020a17090a540a00b0023f24865b53mr21424312pjh.17.1681722829480; Mon, 17
- Apr 2023 02:13:49 -0700 (PDT)
+        Mon, 17 Apr 2023 05:15:56 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543F81BE9
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 02:15:55 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id F13CA21A55;
+        Mon, 17 Apr 2023 09:15:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1681722953; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uVrJFgRq76SXN0mjQwgcRCwNsBmRPfyewXiOhLZvq74=;
+        b=j0sXJEQFywmQ/eGhH1C36VKD3kkM1L3q6yTVxal/zazGU+sF+qS+9jt4VFSpqiW72HnVHE
+        EdFcukgxd245osOFM7ZKT5hLPzhzJP47z00dxq8jwZZKwJ4d0SqciJoB/oxLopNbEpGG7Z
+        9iJy7cY7IZPnwkoUXFzr0Gib8gcNAN0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1681722953;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uVrJFgRq76SXN0mjQwgcRCwNsBmRPfyewXiOhLZvq74=;
+        b=RhsdHZqMNrQWH9jfZtKpud+Lg/QsBLYXL4kw2k24umKZX8fB8WTS7yoKnwoFW747G0FIPE
+        c74dm60KdWGu87Ag==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B9E1213319;
+        Mon, 17 Apr 2023 09:15:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id pRNeLEkOPWRQXQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 17 Apr 2023 09:15:53 +0000
+Message-ID: <60b7cad3-8923-98b1-2c0f-71bfabd0b2e9@suse.de>
+Date:   Mon, 17 Apr 2023 11:15:53 +0200
 MIME-Version: 1.0
-References: <CAEm4hYXLNP6pcCj5Av35sRG6kCOF0H3+a7VfTtFfGduMgcXJhA@mail.gmail.com>
- <20230403224517.GA3472913@bhelgaas> <CAEm4hYXNUdm_wdK580xsZBUWTycJFsEhjFJ+d57U_QYu6RFWxg@mail.gmail.com>
-In-Reply-To: <CAEm4hYXNUdm_wdK580xsZBUWTycJFsEhjFJ+d57U_QYu6RFWxg@mail.gmail.com>
-From:   Xinghui Li <korantwork@gmail.com>
-Date:   Mon, 17 Apr 2023 17:15:00 +0800
-Message-ID: <CAEm4hYU4Z+LzhC8PT3OTePMeYjDa-QZEfXMkZqODnSY5i+_hrQ@mail.gmail.com>
-Subject: Re: [PATCH v4] PCI: vmd: Add the module param to adjust MSI mode
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     nirmal.patel@linux.intel.com, kbusch@kernel.org,
-        jonathan.derrick@linux.dev, lpieralisi@kernel.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xinghui Li <korantli@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] firmware/sysfb: Fix wrong stride when bits-per-pixel is
+ calculated
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        Pierre Asselin <pa@panix.com>
+Cc:     jfalempe@redhat.com, daniel.vetter@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        hdegoede@redhat.com, ardb@kernel.org
+References: <20230412150225.3757223-1-javierm@redhat.com>
+ <2e07f818ccdff7023a060e732d7c4ef6.squirrel@mail.panix.com>
+ <87jzyhror0.fsf@minerva.mail-host-address-is-not-set>
+ <beeff0335ab4cc244d214a7baadba371.squirrel@mail.panix.com>
+ <CAFOAJEdKBUg91pDmNYYw5xigUxjifBgOLz2YgD+xQ+WyEy=V2w@mail.gmail.com>
+ <1afd3044c2aca9322ecf304941c7df66.squirrel@mail.panix.com>
+ <87fs94stgw.fsf@minerva.mail-host-address-is-not-set>
+ <87cz48srs4.fsf@minerva.mail-host-address-is-not-set>
+ <40edb0fdb0eaff434f4872dd677923a6.squirrel@mail.panix.com>
+ <87a5zcsqg8.fsf@minerva.mail-host-address-is-not-set>
+ <9e6fff69b09b36cbdd96499cd0015154.squirrel@mail.panix.com>
+ <4PxhQn3zK1zcbc@panix1.panix.com>
+ <f3004fccf706fb3cbb7ef6877dcd9168.squirrel@mail.panix.com>
+ <23d45518-3565-e915-c6d4-45dabe82ea4c@suse.de>
+ <87zg76evh3.fsf@minerva.mail-host-address-is-not-set>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <87zg76evh3.fsf@minerva.mail-host-address-is-not-set>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------hL513dDKaaB5ApJrzbfMxZty"
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Friendly ping~
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------hL513dDKaaB5ApJrzbfMxZty
+Content-Type: multipart/mixed; boundary="------------PaKoyYix1vgdNzCg7Iir6Idq";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ Pierre Asselin <pa@panix.com>
+Cc: jfalempe@redhat.com, daniel.vetter@ffwll.ch,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ hdegoede@redhat.com, ardb@kernel.org
+Message-ID: <60b7cad3-8923-98b1-2c0f-71bfabd0b2e9@suse.de>
+Subject: Re: [PATCH] firmware/sysfb: Fix wrong stride when bits-per-pixel is
+ calculated
+References: <20230412150225.3757223-1-javierm@redhat.com>
+ <2e07f818ccdff7023a060e732d7c4ef6.squirrel@mail.panix.com>
+ <87jzyhror0.fsf@minerva.mail-host-address-is-not-set>
+ <beeff0335ab4cc244d214a7baadba371.squirrel@mail.panix.com>
+ <CAFOAJEdKBUg91pDmNYYw5xigUxjifBgOLz2YgD+xQ+WyEy=V2w@mail.gmail.com>
+ <1afd3044c2aca9322ecf304941c7df66.squirrel@mail.panix.com>
+ <87fs94stgw.fsf@minerva.mail-host-address-is-not-set>
+ <87cz48srs4.fsf@minerva.mail-host-address-is-not-set>
+ <40edb0fdb0eaff434f4872dd677923a6.squirrel@mail.panix.com>
+ <87a5zcsqg8.fsf@minerva.mail-host-address-is-not-set>
+ <9e6fff69b09b36cbdd96499cd0015154.squirrel@mail.panix.com>
+ <4PxhQn3zK1zcbc@panix1.panix.com>
+ <f3004fccf706fb3cbb7ef6877dcd9168.squirrel@mail.panix.com>
+ <23d45518-3565-e915-c6d4-45dabe82ea4c@suse.de>
+ <87zg76evh3.fsf@minerva.mail-host-address-is-not-set>
+In-Reply-To: <87zg76evh3.fsf@minerva.mail-host-address-is-not-set>
 
-On Tue, Apr 4, 2023 at 7:02=E2=80=AFPM Xinghui Li <korantwork@gmail.com> wr=
-ote:
->
-> On Tue, Apr 4, 2023 at 6:45=E2=80=AFAM Bjorn Helgaas <helgaas@kernel.org>=
- wrote:
-> >
-> > > In the patch I send in last email, We speculate that the VMD
-> > > Controller aggregate interrupts,
-> > > making the PCIe port less stressed and improving iops. In this
-> > > case(lots of 4k random IO), if we enable the VMD MSI
-> > > remapping, we found the interrupts from VMD Controller's MSI are less
-> > > and the IOPS is much higher.
-> >
-> > Great, that's useful information about why users would want to use
-> > this parameter.
-> >
-> > Obviously the other half is to mention the reasons why they may not be
-> > able to use it.  If "msi_remap=3Doff" were *always* safe and desirable,
-> > we would just do that unconditionally and there would be no point in a
-> > parameter.
-> >
-> > > > > I place the "vmd_config_msi_remap_param" that is VMD MSI-X's mode
-> > > > > param configuring helper front
-> > > > > "vmd_enable_domain". So, It will not change the logic disabling
-> > > > > remapping from ee81ee84f873, such as
-> > > > > "Currently MSI remapping must be enabled in guest passthrough mod=
-e".
-> > > > > So, if the user config the wrong type, it will not work, and they=
- can
-> > > > > find it by dmesg.
-> > > >
-> > > > That's kind of a problem.  I'm not in favor of something failing an=
-d
-> > > > the user having to debug it via dmesg.  That causes user frustratio=
-n
-> > > > and problem reports.
-> > >
-> > > What about adding a sysfs node for it in VMD PCI bus dir, which allow=
-s
-> > > users to catch VMD's MSI current working mode?
-> >
-> > No, a sysfs node is not the answer to this.  If we *can* avoid a
-> > non-working situation, we should avoid it.  If users see a non-working
-> > situation, they will rightly complain, and somebody will have to debug
-> > it.  We don't want that.
-> emm~
-> I privately suppose: In the traditional way without module parameters,
-> this problem also exists. If the user disables remapping in guest os, the=
- VMD
-> driver will force it to remapping mode.
-> What about I add the additional description in MODULE_PARM_DESC and comme=
-nt?
-> As for some devices not support disable remapping,  What about changing
-> the param to disabae_bypass=3D0/1?
-> And make it clear in the description:
-> this parameter will only affect the disabling of bypass mode on
-> devices that support it.
-> >
-> > My point is that apparently guest passthrough mode is relevant and
-> > maybe it should be part of the commit log about how this parameter
-> > should be used.
-> You are right~
-> I will add some clarification on how to configure VMD MSI in the guest.
-> >
-> > Bjorn
+--------------PaKoyYix1vgdNzCg7Iir6Idq
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+
+SGkNCg0KQW0gMTcuMDQuMjMgdW0gMTA6NTggc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
+aWxsYXM6DQo+IFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPiB3cml0
+ZXM6DQo+IA0KPj4gSGksDQo+Pg0KPj4gdGhhbmtzIGEgbG90IHRvIGJvdGggb2YgeW91IGZv
+ciB0aGlzIGJ1ZyBmaXguDQo+Pg0KPj4gQW0gMTMuMDQuMjMgdW0gMDM6MzQgc2NocmllYiBQ
+aWVycmUgQXNzZWxpbjoNCj4+Pj4gKG5vdCB0ZXN0ZWQpDQo+Pj4NCj4+PiBUZXN0ZWQuICBJ
+dCBmaXhlcyB0aGUgcmVncmVzc2lvbiBvbiBteSBsYXB0b3AuDQo+Pj4NCj4+Pj4gZGlmZiAt
+LWdpdCBhL2RyaXZlcnMvZmlybXdhcmUvc3lzZmJfc2ltcGxlZmIuYw0KPj4+PiBiL2RyaXZl
+cnMvZmlybXdhcmUvc3lzZmJfc2ltcGxlZmIuYw0KPj4+PiBpbmRleCA4MmM2NGNiOWY1MzEu
+LjlmNTI5OWQ1NDczMiAxMDA2NDQNCj4+Pj4gLS0tIGEvZHJpdmVycy9maXJtd2FyZS9zeXNm
+Yl9zaW1wbGVmYi5jDQo+Pj4+ICsrKyBiL2RyaXZlcnMvZmlybXdhcmUvc3lzZmJfc2ltcGxl
+ZmIuYw0KPj4+PiBAQCAtNTYsMTAgKzU2LDExIEBAIF9faW5pdCBib29sIHN5c2ZiX3BhcnNl
+X21vZGUoY29uc3Qgc3RydWN0IHNjcmVlbl9pbmZvDQo+Pj4+ICpzaSwNCj4+Pj4gICAgCSAq
+IGRvbid0IHNwZWNpZnkgYWxwaGEgY2hhbm5lbHMuDQo+Pj4+ICAgIAkgKi8NCj4+Pj4gICAg
+CWlmIChzaS0+bGZiX2RlcHRoID4gOCkgew0KPj4+PiAtCQliaXRzX3Blcl9waXhlbCA9IG1h
+eChtYXgzKHNpLT5yZWRfc2l6ZSArIHNpLT5yZWRfcG9zLA0KPj4+PiArCQliaXRzX3Blcl9w
+aXhlbCA9IG1heDMobWF4MyhzaS0+cmVkX3NpemUgKyBzaS0+cmVkX3BvcywNCj4+Pj4gICAg
+CQkJCQkgIHNpLT5ncmVlbl9zaXplICsgc2ktPmdyZWVuX3BvcywNCj4+Pj4gICAgCQkJCQkg
+IHNpLT5ibHVlX3NpemUgKyBzaS0+Ymx1ZV9wb3MpLA0KPj4+PiAtCQkJCSAgICAgc2ktPnJz
+dmRfc2l6ZSArIHNpLT5yc3ZkX3Bvcyk7DQo+Pj4+ICsJCQkJICAgICBzaS0+cnN2ZF9zaXpl
+ICsgc2ktPnJzdmRfcG9zLA0KPj4+PiArCQkJCSAgICAgc2ktPmxmYl9kZXB0aCk7DQo+Pg0K
+Pj4gSSdtIE9LIHdpdGggdGhpcyBjaGFuZ2UuIFRoZXJlJ3MgYSBjb21tZW50DQo+Pg0KPj4g
+ICAgIlRoZSBiZXN0IHNvbHV0aW9uIGlzIHRvIGNvbXB1dGUgYml0c19wZXJfcGl4ZWwgaGVy
+ZSBhbmQgaWdub3JlDQo+PiBsZmJfZGVwdGguIg0KPj4NCj4+IEknZCBjaGFuZ2UgdGhpcyB0
+bw0KPj4NCj4+ICAgICJUaGUgYmVzdCBzb2x1dGlvbiBpcyB0byBjb21wdXRlIGJpdHNfcGVy
+X3BpeGVsIGhlcmUgZnJvbSB0aGUgY29sb3INCj4+IGJpdHMsIHRoZSByZXNlcnZlZCBiaXRz
+IGFuZCB0aGUgcmVwb3J0ZWQgY29sb3IgZGVwdGg7IHdoYXRldmVyIGlzIGhpZ2hlc3QuIg0K
+Pj4NCj4+IFRoYXQgd2lsbCBob3BlZnVsbHkgY2xhcmlmeSB0aGUgbWVhbmluZyBvZiB0aGVz
+ZSBtYXgzKCkgc3RhdGVtZW50cy4gVGhleQ0KPj4gYXJlIG5vdCBvYnZpb3VzIGF0IGZpcnN0
+Lg0KPj4NCj4gDQo+IEknbSBPSyB3aXRoIHRoaXMgYXMgd2VsbCBidXQgdGhlbiBzaG91bGQg
+cHJvYmFibHkgYWxzbyBhcHBseSBteSBwYXRjaCBbMV0NCj4gdGhhdCBjb21wdXRlZCB0aGUg
+c3RyaWRlIHRvby4gU2luY2UgaWYgd2UgZG9uJ3QgdHJ1c3QgdGhlIGxmYl9kZXB0aCBhbmQN
+Cj4gY2FsY3VsYXRlIHRoZSBCUFAsIHRoZW4gd2Ugc2hvdWxkbid0IHRydXN0IHRoZSByZXBv
+cnRlZCBsaW5lIGxlbmd0aCB0b28uDQo+IA0KPiBBcyBQaWVycmUgcmVwb3J0ZWQgaW4gdGhl
+IHRocmVhZCBbMl0sIHdoZW4gdGhlIHdyb25nIEJQUCB3YXMgY2FsY3VsYXRlZCAoYW5kDQo+
+IHdyb25nIHBpeGVsIGZvcm1hdCBjaG9zZW4pLCB0aGUgbGluZSBsZW5naHQgZGlkbid0IG1h
+dGNoIHRoZSBCUFAgKiBsZmJfd2lkdGguDQo+IA0KPiBIZSBtZW50aW9uZWQgdGhhdCBpdCB3
+YXMgbGlrZSB0aGlzOg0KPiANCj4gICBmb3JtYXQ9cjhnOGI4LCBtb2RlPTEwMjR4NzY4eDI0
+LCBsaW5lbGVuZ3RoPTQwOTYNCj4gDQo+IEluc3RlYWQgb2YgdGhlIGV4cGVjdGVkOg0KPiAN
+Cj4gICBmb3JtYXQ9cjhnOGI4LCBtb2RlPTEwMjR4NzY4eDI0LCBsaW5lbGVuZ3RoPTMwNzIN
+Cj4gDQo+IE15IHBhdGNoIGluIFsxXSwgZml4ZWQgdGhlIGxpbmVsZW5ndGggY2FsY3VsYXRp
+b24gc28gaXQgd2FzIGludGVybmFsbHkNCj4gY29uc2lzdGVudCAoYnV0IHN0aWxsIHdyb25n
+IHNpbmNlIHRoZSBwaXhlbCBmb3JtYXQgd2FzIHJlYWxseSB4cjhnOGI4KS4NCj4gDQo+IElu
+IG90aGVyIHdvcmRzLCBJIHRoaW5rIHRoYXQgd2Ugc2hvdWxkIGVpdGhlcjoNCj4gDQo+IGEp
+IFRydXN0IHRoZSBsZmJfbGluZWxlbmd0aCBhbmQgbGZiX3dpZHRoICh3ZSBhcmUgYWxyZWFk
+eSBkb2luZyB0aGF0IHNpbmNlDQo+ICAgICBtb2RlLT5zdHJpZGUgYW5kIG1vZGUtPndpZHRo
+IGFyZSBzZXQgdG8gdGhvc2Ugb25jZSB0aGUgZm9ybWF0IG1hdGNoZXMpLg0KPiAgICAgDQo+
+ICAgICBJZiB3ZSBkZWNpZGVkIHRvIHRydXN0IHRob3NlLCB0aGVuIHRoZSBiaXRzLXBlci1w
+aXhlbCBjb3VsZCBqdXN0IGJlDQo+ICAgICBjYWxjdWxhdGVkIGFzOiBiaXRzX3Blcl9waXhl
+bCA9IHNpLT5sZmJfbGluZWxlbmd0aCAqIDggLyBzaS0+bGZiX3dpZHRoDQo+IA0KPiAgICAg
+d2hpY2ggaXMgd2hhdCBJIGRvIG9uIG15IHYyIHBhdGNoIFszXS4NCj4gDQo+IGIpIE5vdCB0
+cnVzdCBsZmJfbGluZWxlbmd0aCwgc2luY2UgdGhhdCB3b3VsZCBuZWVkIHRvIGJlIHJlY2Fs
+Y3VsYXRlZCBhZnRlcg0KPiAgICAgdGhlIEJQUCB3YXMgY2FsY3VhbHRlZC4gVGhhdCdzIHdo
+eSBJIG1lbnRpb25lZCB0aGF0IHdlIG5lZWQgUGllcnJlJ3MgZml4ICsNCj4gICAgIG15IHBh
+dGNoIFsxXSB0aGF0IGRpZDoNCj4gDQo+ICAgICBzdHJpZGUgPSBESVZfUk9VTkRfVVAoc2kt
+PmxmYl93aWR0aCAqIGJpdHNfcGVyX3BpeGVsLCA4KQ0KDQpJJ2QgcmF0aGVyIGtlZXAgdGhl
+IGNvZGUgYXMtaXMgdW50aWwgd2UgZ2V0IGFuIGFjdHVhbCBidWcgcmVwb3J0Lg0KDQpGb3Ig
+ZXhhbXBsZSwgRFJNIGZyYW1lYnVmZmVyIHNpemVzIGFyZSBvZnRlbiBtdWx0aXBsZXMgb2Yg
+NjQuIENyZWF0aW5nIGEgDQpmcmFtZWJ1ZmZlciBvZiA4MDB4NjAwIHdpbGwgY3JlYXRlIGEg
+ZnJhbWVidWZmZXIgd2l0aCANCnN0cmlkZS9waXRjaC9saW5lbGVuZ3RoIG9mIDgzMi4gIEkg
+Y2FuIGltYWdpbmUgdGhhdCBzb21lIEJJT1NlcyBvdXQgDQp0aGVyZSBkbyBzb21ldGhpbmcg
+c2ltaWxhciB3aXRoIHRoZSBzeXN0ZW0gZnJhbWVidWZmZXIuIE1lc3Npbmcgd2l0aCB0aGUg
+DQpzdHJpZGUgd291bGQgYnJlYWsgdGhlbS4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0K
+PiANCj4gQnV0IGNhbGN1bGF0aW5nIGEgQlBQIHlldCBibGluZGx5IHVzaW5nIGxpbmVsZW5n
+dGggZG9lbnMndCBtYWtlIHNlbnNlIHRvIG1lLg0KPiANCj4gWzFdOiBodHRwczovL2xpc3Rz
+LmZyZWVkZXNrdG9wLm9yZy9hcmNoaXZlcy9kcmktZGV2ZWwvMjAyMy1BcHJpbC8zOTk5NjMu
+aHRtbA0KPiBbMl06IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2RyaS1kZXZlbC9kZmI0ZjI1
+Y2E4ZGZiMGQ4MWQ3NzhkNjMxNWYxMDRhZC5zcXVpcnJlbEBtYWlsLnBhbml4LmNvbS8NCj4g
+WzNdOiBodHRwczovL2xpc3RzLmZyZWVkZXNrdG9wLm9yZy9hcmNoaXZlcy9kcmktZGV2ZWwv
+MjAyMy1BcHJpbC80MDAwODguaHRtbA0KPiANCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0K
+R3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2Vy
+bWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihI
+UkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYN
+Cg==
+
+--------------PaKoyYix1vgdNzCg7Iir6Idq--
+
+--------------hL513dDKaaB5ApJrzbfMxZty
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmQ9DkkFAwAAAAAACgkQlh/E3EQov+DL
+fw//RA+9G6SKJk+9AWXuiHX6uaJ63Oa7oAIhOmAFq7+6ilVqzCLAyyplZwUXbS8CK7guWlhfRMDo
+VBZjBlnemGc0FxQ/m54UjhQK4c/+FW3o55ggvxY0yea3u9UIMwuI4b+DlMPiC57ZQG6+XO4WdVri
+7Gp/X/QRq9U5LSJ9xg2Dn1sjbgB7/DLV8EuDcfhc61aKcDLRC7NOD9E9mESDaj8n87oQfRuQ8Mi/
+zIIW4WOTfq2FEBRBLJo+09Pwk+N96WAcN8elGEA5ycl339fXf5Mz29emTlZSK+qiOO+NXqChsgKi
+vcegg5FZxGENxsW14uDy3Ji/7sFIAeM3Bu8FgWPoBNZRjinLYqQhXENYH76NanHSmzIqiLGVJJ2G
+84mdxQBx38eD+KazMEexOpiiJkmA3hZ+yUfX8ca9b28AhygCIqRBLXsDpLtmMSJ4u7paUSC1FzNS
+Cb1G0ZD6Hh8YcnMOM7Fq0w7gu0YP9lPeVbajgYkT/XI3QGbh+QPjgXaJPDVjte8cO3ak6o1twqOs
+JfwiGZtGDDRRnSry8NQHHCwY9HBXIrzyJ0+Kfj4UObUjQIEl3f2dNLh51AXytCSVqiBtElTAiyDM
+IkYX81MBaThC74DGUjQbEPnx/8o+lwmW/TbMfFXb/LvocjLYkCHiBdn+q8WPD6mJ6+eVNqsJAu9R
+ppA=
+=ieK9
+-----END PGP SIGNATURE-----
+
+--------------hL513dDKaaB5ApJrzbfMxZty--
