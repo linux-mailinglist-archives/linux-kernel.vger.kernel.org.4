@@ -2,72 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 477286E5178
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 22:12:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 743046E5179
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 22:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbjDQUMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 16:12:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41996 "EHLO
+        id S230331AbjDQUMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 16:12:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbjDQUM0 (ORCPT
+        with ESMTP id S229870AbjDQUMb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 16:12:26 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DD14C3B;
-        Mon, 17 Apr 2023 13:12:24 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id hg14-20020a17090b300e00b002471efa7a8fso14182168pjb.0;
-        Mon, 17 Apr 2023 13:12:24 -0700 (PDT)
+        Mon, 17 Apr 2023 16:12:31 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A3C558D;
+        Mon, 17 Apr 2023 13:12:25 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id h24-20020a17090a9c1800b002404be7920aso27709582pjp.5;
+        Mon, 17 Apr 2023 13:12:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681762343; x=1684354343;
+        d=gmail.com; s=20221208; t=1681762345; x=1684354345;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tG6YslYBKkuazr2dWr4ftni9ZweXIehBqMaA0S88C5g=;
-        b=ranf+f0tP4Pb5Lh3n2WP/yUu2QmlnNs1+iNecDfUR5KzPGDF2bZRgZqk1mWXpHnHt5
-         LvjFfEz45tozCyPEEtQjKkO8d/GjRWICY4Hv4JwW6qTQHxWO9CZfLaHGX8p2r4CW9gPn
-         jMzksiwIj2fJfm/8vwU20S8sWgres5UTA5RA7TWq47jF1gyXHpo9quj4zTNbN3BzCa/u
-         opUoVSqp96ZbME/+aQRIHHBrCgoRQ4uAp9Giig/8md+Q4eWVzwdTzUdpfQWjKL0hFWnn
-         Vc3VUfTXzlPtTiL1SdnAxgrtE/Cl2UhuPJaDPjJVqT9V/wnujeoXWsWJHFu7pNrDbT3C
-         VwNw==
+        bh=uGGeQ34qFmH3qFSmAUdD5AsG5Jqn1gFFjidxM1csPmQ=;
+        b=WP1cGmhDXEaM2XoZQjksyWZjyjJ8/dPdSZFCLLz/R19MHv4d8SYoajJ3n7KJGGRP2d
+         QfL8ZCHeiRUBptfALCwXRF34t1z07YYlkovBk2/hsT8PJckcxJI+ZsBCXsg2pi9LvC1d
+         rggmvYF4ju/BUSXm2VA+2JY6fVH8vgjnf0fz97JefdsnlbPsqu6gE2y7kSOZ9r2ZtnIy
+         ygjwVBziEtNITmZ5gllCzuvyKpWojJLQwxnRhV3/072eKrNSg/4TfPqqi8S3Wpt3IGlm
+         aGZiitnwhALRhD1nKBOWbwppjuXsprBAvS5mBlN4oYjef76qBN+AMd4pN7SrTzRzxWlF
+         oqyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681762343; x=1684354343;
+        d=1e100.net; s=20221208; t=1681762345; x=1684354345;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tG6YslYBKkuazr2dWr4ftni9ZweXIehBqMaA0S88C5g=;
-        b=Z+yJmrZ3ohZiOcr0CS+qokah6ZIqqtoEKieTVdm0C9mwZGRqgFVp2pt3YE3NKyf8+A
-         aWfbh5fAfeUlHaUfe4kgVNjvB1RhLn1o8mvOhfWbE1TxjqMxlLDuk0JIlCJnuHM1AXzE
-         re2o/IZxCmByxWlFJWOisuuKDF3vi96wvl+B/+l9wZ/dDrrbE+/Dn161xNUFPrb/y/cG
-         wIAGi6xFIVnjLycJszRWCPNmksv/6SGV0JV8ja9YiOi88+AMu1JjCa7WEuSxCYSD/6Go
-         ZbuzzbJvrCrse8VsKqy2c4KBh0Gl9Qh0DGo5/pE0w6asc422EMZ+LpZjvuGGOq1eS2VQ
-         zoHA==
-X-Gm-Message-State: AAQBX9c3RCuUUsSZbA43h4nPFN8PewjoZHdXE/ZGwf5uIihVKUGWbMFR
-        oss4zACsgjkAhbP7acZ9+UM=
-X-Google-Smtp-Source: AKy350Z897P0ebUOEGMZ5BJSTsfQqtu+SrNiRCFFaWIYGgI+O1qDjfMdnTtEGHt9vqVAg5JBSzDliQ==
-X-Received: by 2002:a17:902:82c5:b0:1a1:b11d:6af5 with SMTP id u5-20020a17090282c500b001a1b11d6af5mr76812plz.52.1681762343629;
-        Mon, 17 Apr 2023 13:12:23 -0700 (PDT)
+        bh=uGGeQ34qFmH3qFSmAUdD5AsG5Jqn1gFFjidxM1csPmQ=;
+        b=PLg+Ms/uCM7q/5+HUPoU6AwCmbX/OPEcCbpv4lhLJ2PvM2UvPI9iKVbcEl2P9tACgi
+         AqgAa+IYoEtv0eY9EjalwXR7F6VGLsE0Cli/FDhNdjUFebsfa2wTrNQp/x8AUZWuh4OF
+         FKK/udILpTHi1Cjb+ID5RocWOl4xkZTlchKYAnGNG7SBdQ10Mf4uOx8Cz+7gdLW0XmIo
+         KP2fcIA7eKdFR6mg7CRaWu96BFHXHUjVxx1QzJNkHt76t7t5RXuQWm1x5wgc8yoxWLds
+         tKpUiCuThUao+YSxDLT+rOR4GReilOQ8fTAnvRVPD06460dCop4063fWHYAsUAYjZDEs
+         NK2w==
+X-Gm-Message-State: AAQBX9cYkmI0IZoZNYRfSKNuDrgRrFHoJ+g82QoNkS9DB8beJN7ofKlf
+        kfrDAS0TvzVLb1zrYpvVA3g=
+X-Google-Smtp-Source: AKy350apR+UW6/r809TtL7zmvsClieP2I6EjDtF1IFJX/9UC+3g2jKbrC6+C4/pk1uCM3wzNBU0ZUQ==
+X-Received: by 2002:a17:902:bc4b:b0:1a6:6a7c:9fde with SMTP id t11-20020a170902bc4b00b001a66a7c9fdemr140605plz.14.1681762345291;
+        Mon, 17 Apr 2023 13:12:25 -0700 (PDT)
 Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
-        by smtp.gmail.com with ESMTPSA id u19-20020a170902a61300b001a20b31a23fsm8094636plq.293.2023.04.17.13.12.22
+        by smtp.gmail.com with ESMTPSA id w24-20020a17090aaf9800b0023d0c2f39f2sm9118078pjq.19.2023.04.17.13.12.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 13:12:23 -0700 (PDT)
+        Mon, 17 Apr 2023 13:12:24 -0700 (PDT)
 From:   Rob Clark <robdclark@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
         Rob Clark <robdclark@chromium.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jonathan Corbet <corbet@lwn.net>,
         Rob Clark <robdclark@gmail.com>,
         Abhinav Kumar <quic_abhinavk@quicinc.com>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Sean Paul <sean@poorly.run>,
+        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
+        linux-kernel@vger.kernel.org (open list),
         linux-arm-msm@vger.kernel.org (open list:DRM DRIVER FOR MSM ADRENO GPU),
         freedreno@lists.freedesktop.org (open list:DRM DRIVER FOR MSM ADRENO
-        GPU), linux-kernel@vger.kernel.org (open list)
-Subject: [RFC 2/3] drm/msm: Rework get_comm_cmdline() helper
-Date:   Mon, 17 Apr 2023 13:12:11 -0700
-Message-Id: <20230417201215.448099-3-robdclark@gmail.com>
+        GPU)
+Subject: [RFC 3/3] drm/msm: Add comm/cmdline fields
+Date:   Mon, 17 Apr 2023 13:12:12 -0700
+Message-Id: <20230417201215.448099-4-robdclark@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230417201215.448099-1-robdclark@gmail.com>
 References: <20230417201215.448099-1-robdclark@gmail.com>
@@ -85,141 +89,72 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rob Clark <robdclark@chromium.org>
 
-Make it work in terms of ctx so that it can be re-used for fdinfo.
+Normally this would be the same information that can be obtained in
+other ways.  But in some cases the process opening the drm fd is merely
+a sort of proxy for the actual process using the GPU.  This is the case
+for guest VM processes using the GPU via virglrenderer, in which case
+the msm native-context renderer in virglrenderer overrides the comm/
+cmdline to be the guest process's values.
+
+Exposing this via fdinfo allows tools like gputop to show something more
+meaningful than just a bunch of "pcivirtio-gpu" users.
 
 Signed-off-by: Rob Clark <robdclark@chromium.org>
 ---
- drivers/gpu/drm/msm/adreno/adreno_gpu.c |  4 ++--
- drivers/gpu/drm/msm/msm_drv.c           |  2 ++
- drivers/gpu/drm/msm/msm_gpu.c           | 13 ++++++-------
- drivers/gpu/drm/msm/msm_gpu.h           | 12 ++++++++++--
- drivers/gpu/drm/msm/msm_submitqueue.c   |  1 +
- 5 files changed, 21 insertions(+), 11 deletions(-)
+ Documentation/gpu/drm-usage-stats.rst |  8 ++++++++
+ drivers/gpu/drm/msm/msm_gpu.c         | 14 ++++++++++++++
+ 2 files changed, 22 insertions(+)
 
-diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-index bb38e728864d..43c4e1fea83f 100644
---- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-@@ -412,7 +412,7 @@ int adreno_set_param(struct msm_gpu *gpu, struct msm_file_private *ctx,
- 		/* Ensure string is null terminated: */
- 		str[len] = '\0';
+diff --git a/Documentation/gpu/drm-usage-stats.rst b/Documentation/gpu/drm-usage-stats.rst
+index 8e00d53231e0..bc90bed455e3 100644
+--- a/Documentation/gpu/drm-usage-stats.rst
++++ b/Documentation/gpu/drm-usage-stats.rst
+@@ -148,6 +148,14 @@ percentage utilization of the engine, whereas drm-engine-<keystr> only reflects
+ time active without considering what frequency the engine is operating as a
+ percentage of it's maximum frequency.
  
--		mutex_lock(&gpu->lock);
-+		mutex_lock(&ctx->lock);
++- drm-comm: <valstr>
++
++Returns the clients executable path.
++
++- drm-cmdline: <valstr>
++
++Returns the clients cmdline.
++
+ Implementation Details
+ ======================
  
- 		if (param == MSM_PARAM_COMM) {
- 			paramp = &ctx->comm;
-@@ -423,7 +423,7 @@ int adreno_set_param(struct msm_gpu *gpu, struct msm_file_private *ctx,
- 		kfree(*paramp);
- 		*paramp = str;
- 
--		mutex_unlock(&gpu->lock);
-+		mutex_unlock(&ctx->lock);
- 
- 		return 0;
- 	}
-diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
-index 3d73b98d6a9c..ca0e89e46e13 100644
---- a/drivers/gpu/drm/msm/msm_drv.c
-+++ b/drivers/gpu/drm/msm/msm_drv.c
-@@ -581,6 +581,8 @@ static int context_init(struct drm_device *dev, struct drm_file *file)
- 	rwlock_init(&ctx->queuelock);
- 
- 	kref_init(&ctx->ref);
-+	ctx->pid = get_pid(task_pid(current));
-+	mutex_init(&ctx->lock);
- 	msm_submitqueue_init(dev, ctx);
- 
- 	ctx->aspace = msm_gpu_create_private_address_space(priv->gpu, current);
 diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
-index c403912d13ab..f0f4f845c32d 100644
+index f0f4f845c32d..1150dcbf28aa 100644
 --- a/drivers/gpu/drm/msm/msm_gpu.c
 +++ b/drivers/gpu/drm/msm/msm_gpu.c
-@@ -327,18 +327,17 @@ find_submit(struct msm_ringbuffer *ring, uint32_t fence)
+@@ -148,12 +148,26 @@ int msm_gpu_pm_suspend(struct msm_gpu *gpu)
+ 	return 0;
+ }
  
- static void retire_submits(struct msm_gpu *gpu);
- 
--static void get_comm_cmdline(struct msm_gem_submit *submit, char **comm, char **cmd)
-+static void get_comm_cmdline(struct msm_file_private *ctx, char **comm, char **cmd)
++static void get_comm_cmdline(struct msm_file_private *ctx, char **comm, char **cmd);
++
+ void msm_gpu_show_fdinfo(struct msm_gpu *gpu, struct msm_file_private *ctx,
+ 			 struct drm_printer *p)
  {
--	struct msm_file_private *ctx = submit->queue->ctx;
- 	struct task_struct *task;
- 
--	WARN_ON(!mutex_is_locked(&submit->gpu->lock));
--
- 	/* Note that kstrdup will return NULL if argument is NULL: */
-+	mutex_lock(&ctx->lock);
- 	*comm = kstrdup(ctx->comm, GFP_KERNEL);
- 	*cmd  = kstrdup(ctx->cmdline, GFP_KERNEL);
-+	mutex_unlock(&ctx->lock);
- 
--	task = get_pid_task(submit->pid, PIDTYPE_PID);
-+	task = get_pid_task(ctx->pid, PIDTYPE_PID);
- 	if (!task)
- 		return;
- 
-@@ -372,7 +371,7 @@ static void recover_worker(struct kthread_work *work)
- 		if (submit->aspace)
- 			submit->aspace->faults++;
- 
--		get_comm_cmdline(submit, &comm, &cmd);
-+		get_comm_cmdline(submit->queue->ctx, &comm, &cmd);
- 
- 		if (comm && cmd) {
- 			DRM_DEV_ERROR(dev->dev, "%s: offending task: %s (%s)\n",
-@@ -460,7 +459,7 @@ static void fault_worker(struct kthread_work *work)
- 		goto resume_smmu;
- 
- 	if (submit) {
--		get_comm_cmdline(submit, &comm, &cmd);
-+		get_comm_cmdline(submit->queue->ctx, &comm, &cmd);
- 
- 		/*
- 		 * When we get GPU iova faults, we can get 1000s of them,
-diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
-index 7a4fa1b8655b..b2023a42116b 100644
---- a/drivers/gpu/drm/msm/msm_gpu.h
-+++ b/drivers/gpu/drm/msm/msm_gpu.h
-@@ -377,17 +377,25 @@ struct msm_file_private {
- 	 */
- 	int sysprof;
- 
-+	/** @pid: Process that opened this file. */
-+	struct pid *pid;
++	char *comm, *cmdline;
 +
-+	/**
-+	 * lock: Protects comm and cmdline
-+	 */
-+	struct mutex lock;
++	get_comm_cmdline(ctx, &comm, &cmdline);
 +
- 	/**
- 	 * comm: Overridden task comm, see MSM_PARAM_COMM
- 	 *
--	 * Accessed under msm_gpu::lock
-+	 * Accessed under msm_file_private::lock
- 	 */
- 	char *comm;
+ 	drm_printf(p, "drm-engine-gpu:\t%llu ns\n", ctx->elapsed_ns);
+ 	drm_printf(p, "drm-cycles-gpu:\t%llu\n", ctx->cycles);
+ 	drm_printf(p, "drm-maxfreq-gpu:\t%u Hz\n", gpu->fast_rate);
++
++	if (comm)
++		drm_printf(p, "drm-comm:\t%s\n", comm);
++	if (cmdline)
++		drm_printf(p, "drm-cmdline:\t%s\n", cmdline);
++
++	kfree(comm);
++	kfree(cmdline);
+ }
  
- 	/**
- 	 * cmdline: Overridden task cmdline, see MSM_PARAM_CMDLINE
- 	 *
--	 * Accessed under msm_gpu::lock
-+	 * Accessed under msm_file_private::lock
- 	 */
- 	char *cmdline;
- 
-diff --git a/drivers/gpu/drm/msm/msm_submitqueue.c b/drivers/gpu/drm/msm/msm_submitqueue.c
-index 0e803125a325..0444ba04fa06 100644
---- a/drivers/gpu/drm/msm/msm_submitqueue.c
-+++ b/drivers/gpu/drm/msm/msm_submitqueue.c
-@@ -61,6 +61,7 @@ void __msm_file_private_destroy(struct kref *kref)
- 	}
- 
- 	msm_gem_address_space_put(ctx->aspace);
-+	put_pid(ctx->pid);
- 	kfree(ctx->comm);
- 	kfree(ctx->cmdline);
- 	kfree(ctx);
+ int msm_gpu_hw_init(struct msm_gpu *gpu)
 -- 
 2.39.2
 
