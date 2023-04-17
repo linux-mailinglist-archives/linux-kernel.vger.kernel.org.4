@@ -2,467 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E4516E4B20
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E15BE6E4B0C
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:13:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbjDQOPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 10:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40364 "EHLO
+        id S230117AbjDQOM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 10:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbjDQOPB (ORCPT
+        with ESMTP id S231166AbjDQOMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 10:15:01 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4F14C17
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:14:56 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 1B3B45FD20;
-        Mon, 17 Apr 2023 17:14:53 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1681740893;
-        bh=6ALgFWstOPn2Hmx01At6qoAFnI+IjsxDSXwQ19gag4M=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=BpFvEpI4m7/huDknDr/2S0yv1Yp/WvdMwPi1EeC8soTbw3cK0EfDpBzsDDbW0kMIe
-         GZ52GTufKTK3Ouk6Q+Z4u0r+9Wv+4SzQJfaHXVq835clVzf0zX16cImyzlOrA4vgW6
-         MCzFgr/lEneMJ2Ons42Zv+t571MHCSAvrNk2B3XJ923G7h/RJgIWrdKOhTdBpdGObT
-         jbVpxFD7va9+W1ZqF70dqckX25/U16IWVfFC+dLEvjhpZDC9bvx1kPjiVTuZu8+2IM
-         X2a9DEExPdq1GiXwOPdgsOVTKElJqV+9cGjoILUT417FN/liITss183WMxk0W7MvTp
-         MKtbIngUVcXNw==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Mon, 17 Apr 2023 17:14:51 +0300 (MSK)
-Message-ID: <44dd5bcc-2b98-d402-7e8f-5e2d4babf898@sberdevices.ru>
-Date:   Mon, 17 Apr 2023 17:10:54 +0300
+        Mon, 17 Apr 2023 10:12:51 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01olkn2078.outbound.protection.outlook.com [40.92.53.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 595928692;
+        Mon, 17 Apr 2023 07:12:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cWl54IYlwjAkrO3pn8piWK0dhNCrG6wllMFx9HddbyfVwwunZTi5NhU0Ilaye6Oe3rEp0bAKJdxH13q+yfEpee4BWidv47Dl2Sa1sCNcgsmeud0x65cPhNM9D17XSiA/QhtV0ARTxZfZZUvEMq+Ajq9WA2kX5pAP0GXN2f1446LDApEKQuPO99K+yoJCYREdm1KsZQ/a4Xoen0ZqenqVPgP4yUnLgZXrBpMcQDYtTbxB+54Ntur+6UMSv56YO/jsnnfkB5ZsfPAPltmoYhMvlMC1ow9fbdI3LK84iDLnBtgIBQvT+h00rip6dJj4OAGCHZhCELUjgDn0GzRT2jSRBw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=V0xeytHljvOXf5NHTqal52zH9rp4DhzDEWxt/9rXN4I=;
+ b=YNL44mzefnYAzOufGVvPd0NCibla2i8F2CuUVLhxLd+JqBVZkUZZCr6qkqH5kEzPwtCgrSAj+G6Yk6REB2GMjTmyPo8z6Qvl0RIESWGpPyjUJLCcTaL69+LDSIB4fqfgHdKcZ4ToJ2OX1Hej2h0Yn8RnqY8676asvKiTqjAaUOsWZ5nTSdH+i5dzvmAd5iFdQii5W10Db9Oy39EwrU7jO5lP4lvuz1fK+4NUddsUZrF8OsCHwrrdCfhwJZ1OMnkjfowF2dqBr9vWqf1WOE5He/mA5pLkl+rxpblJ0Tot4MoT9jLtMVI1MAonYBQEXDgNSBxDkv/1I00VO/rwLsyIQg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=V0xeytHljvOXf5NHTqal52zH9rp4DhzDEWxt/9rXN4I=;
+ b=AWZhu9hSVn1DS8JF4h2fVaj315iT/Y9KnnN5B/Skm1x/kqEsOsufu7dNPvmsASaOa0cFPp4rC3ASUvsLenuOQZyR1znFkrwkxP4tFMxAvU9HvD0j2RZ9qGIg1jWC8c09JhF1sHKWJ35YqDSlmCyxFWnufjrEyxsLwYcH5A7KtbreiebXQUG4lFlrYGZOAaGywDDW5oSU6XYMrbvuGY1RfsgJEdYbxjlL825c8U5I0uqFeKqoQU2Z8gzjXkCsDRHQcHYttovM1caFxe/ve7l8qOaZxFWO8nEZ/w+JtmmEURmwoZ0chCfLRly5YHCoVF2zanPPA8Bgm4suSu6SKRvEJA==
+Received: from KL1PR01MB5448.apcprd01.prod.exchangelabs.com
+ (2603:1096:820:9a::12) by SEZPR01MB4399.apcprd01.prod.exchangelabs.com
+ (2603:1096:101:4f::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.19; Mon, 17 Apr
+ 2023 14:12:40 +0000
+Received: from KL1PR01MB5448.apcprd01.prod.exchangelabs.com
+ ([fe80::5bff:fd7e:ec7c:e9d3]) by KL1PR01MB5448.apcprd01.prod.exchangelabs.com
+ ([fe80::5bff:fd7e:ec7c:e9d3%7]) with mapi id 15.20.6319.019; Mon, 17 Apr 2023
+ 14:12:40 +0000
+From:   Yan Wang <rk.code@outlook.com>
+To:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        kuba@kernel.org, mcoquelin.stm32@gmail.com
+Cc:     Yan Wang <rk.code@outlook.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        netdev@vger.kernel.org (open list:STMMAC ETHERNET DRIVER),
+        linux-stm32@st-md-mailman.stormreply.com (moderated list:ARM/STM32
+        ARCHITECTURE),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/STM32
+        ARCHITECTURE), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH net-next v5] net: stmmac:fix system hang when setting up tag_8021q VLAN for DSA ports
+Date:   Mon, 17 Apr 2023 22:11:58 +0800
+Message-ID: <KL1PR01MB544863D839654F0EC9485894E69C9@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <KL1PR01MB544872920F00149E3BDDC7ECE6999@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
+References: <KL1PR01MB544872920F00149E3BDDC7ECE6999@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
+Content-Type: text/plain
+X-TMN:  [Izq4ixWFoT5xMFEXGpXnBBZFvSalMboKPzgY83wZyyI=]
+X-ClientProxiedBy: SG3P274CA0016.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:be::28)
+ To KL1PR01MB5448.apcprd01.prod.exchangelabs.com (2603:1096:820:9a::12)
+X-Microsoft-Original-Message-ID: <20230417141158.29749-1-rk.code@outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1 1/5] mtd: rawnand: meson: fix NAND access for
- read/write
-Content-Language: en-US
-To:     Liang Yang <liang.yang@amlogic.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Yixun Lan <yixun.lan@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>
-CC:     <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
-        <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20230412061700.1492474-1-AVKrasnov@sberdevices.ru>
- <20230412061700.1492474-2-AVKrasnov@sberdevices.ru>
- <889cf54e-584c-9bee-2106-633155897324@amlogic.com>
- <3f247cbe-2798-4871-82a5-5124142fdcc5@sberdevices.ru>
- <4f552f57-c31e-985c-82be-081dff38d377@sberdevices.ru>
- <dc690524-51d5-7bb9-a106-fa153c4e6250@amlogic.com>
- <68f3bea8-4b79-db48-172f-712dcabce65b@sberdevices.ru>
- <d3d5cf52-cf1e-31d1-46c5-d1df06c61fb3@amlogic.com>
- <ac6d67ce-54e3-83f4-fef4-fb93bdef2515@sberdevices.ru>
- <6c573ffd-55a1-6a39-1ca1-c2681e0e960d@amlogic.com>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <6c573ffd-55a1-6a39-1ca1-c2681e0e960d@amlogic.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/17 09:07:00 #21118574
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: KL1PR01MB5448:EE_|SEZPR01MB4399:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0a188c4f-ddfc-4560-9445-08db3f4dce04
+X-MS-Exchange-SLBlob-MailProps: YfhX3sd/0TVMxuI8J5UzJ6wcIdkd2x4ktEaID4hDgJNjb+GaNGG+vZlHu3LoU5M6TN/MDJP2IprhMk63hsQGQm6XYPDXbqzoA+TZJYxtNuk9PwFIbLAjEPufhN9+Yr+2FcEGHBWTmWRMjLtniK+1Sp4IRwxLWRGbxybNyi0FEUQc3ZQLf8ddW0q6g4oGnjIq1bYVmrfggMk54xEkVrtP6DVDwNUUmmma8zcQUjw2UWq5a4JFXLetUfLijlubN8jBo07yIn9aCRxyVNGU2o1lDeJ6/yXAnX2W3YMeWoRZM6B/bRDqPvFTExbhK8Udt+C9D+dr5pTMc1YcE6bUHNy31nwJvxdcgsWDKXfe6JxhXgNWLgj381Wau19SDz+rUf204DluP1L+BBYWgfIvmHZkxrQ6/q9NwDNRKr0oX52Z0Eg2KWhGf0k0WQrY6QvZXVHt5hEWStARidCAy+Ykn1oawyYWMPbe9BmL+p6S+xD4YmetB/pTFrhpht2zEiRHXwxkgsAUN5Id3AT5rKz0ek9rrWp4DdijfZtNtSIPNbjhAtOBFBaYhNduUubWA5PjvS+Il4ejc+WvQPbz+A2R/sh6ciAojwIg8/RN/Tm6ZmaF/ZQvHg1uBWBYecmTPPnBifHhsFmVRCcgBxNXd7lR7q0/tgYXaNL9ca0kbAlzWqd8SVUyR2XByezKsIpydoGgOEDs9ldbCHVpCT+4WTLrvMLTRQwx0iJBzJkkCKWC19X23kuu3BtXCiAhbbOXvNDh1/Ow44nkv+CD4xPKc85mPcwP9YqDK0kDEgP2vLZB0eLf7gI=
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BIJUfa0iC+AUprwA4jZa9J9OokfHx94bmsXrGnrrIoSWCQkqxetx9Oa23YWgCv5CDQG78LPVvoO41ndlQaa9Wkmv/mbIkkBRWOLOIcgo56XFULqKFHOWJVcQdKH6Us4x4C0DA7fP9JlCvXIMebXn8KhrYgOCdw90CSlLkBwMdf5caFaAZhK5r2Oj8bX2BzcWJhxy8+FoPSrD+AKjzZSJ/hfA5wSNNuFYyw/ini7Jq6cfbOW9ygptLXZECMeEiUnY212Wxbr7bPxV+xFolI8s9iUrfsQVTvdIr1h1N+GD+1Q61dV8QOkQCrFjxCcaHD7rccMhL53A1b6Jse7u0pxPP4AKgR2o2VDhwoM7N3zfg8nWu1uxOoSL134SQAVQjqNUjOVPAyS68sLxHUz/wKolZ9+IipGRMHwF2jIHUwt/q84J0bi/7EknPnUrZQ/KtCTGqGaHPHQIsWmdBOQvTsk0b5Xf7j0Ts4egqsUoX8xIVeSf3VcF995bnBhQjZ9Dv5VknkU7DD1UmCjjlfPrZwzkvUWzp7tdbqOYhC80Q7wHnufPDGZfe0PSAr8YxPJZuouO4bh5CprNJRcA3nLRU2MAZdPGhuYkUqn2TaFpnNqAWLAPI/bVRZt5b23cWHherD5BiC00MKWaWhgSBVaaqkn+Ng==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pb5skgQJB+ynN4VVd9y4OUxOhbyB8Ns0x8vLAwCtAgatv7HDoT+a69xkY+d6?=
+ =?us-ascii?Q?MAD/OP2BJjKqfeZ5j28WY1QhQdt1k3GhbGK3xHOIhnmgFuyXL5ta4m4XREBo?=
+ =?us-ascii?Q?RcEO73hoc0beuFgjNQx7bdBGalnvs2SYp2AAW1DmW+7LQJFEVUmt7XYyRxvc?=
+ =?us-ascii?Q?IgZKwF8+wr3eivNMUf4gVBfVw9UM0l8w1Pn3E5juO8Gwf56KBv8Ng0r1ohSz?=
+ =?us-ascii?Q?dPkSmXrBxNxRilyKfjhc3Gz98rsorGEErOxUkzymGjoQT4MK84gYr7fLnzmI?=
+ =?us-ascii?Q?3sZ2cafnaWvakI3u3UeuRQ0mDssNZZzcvSYc3y29JjpQHxLzolisBDV7cG9Z?=
+ =?us-ascii?Q?ByjjEriZ5WEb+MvB/HvMGGDkkfVOJZMtZ6dLKiQAn3JeSAElQR9Dq5ETmlzM?=
+ =?us-ascii?Q?CKvKlD7ioySXDLPIqLpcXbP5sumIpYMQeYw9P5E5NZTnLstGBuuZv8AyRpzY?=
+ =?us-ascii?Q?rjEi57adcDEuafkOWskevZpzguulFNzjYaqYCnv7mvOUAKIJ+Y7GlgcQl6Nt?=
+ =?us-ascii?Q?BWaF9X/nfX4dx9KMT1RR9gIr4RLrfd41I3G9EyDSH6gXlx1pPEGXK31GVjma?=
+ =?us-ascii?Q?rfUqvv5kYIwlMhYYp7XJNrHJ+yU0veSgBYoFhy3DDwguDN+ni1CjUmJay4Bw?=
+ =?us-ascii?Q?/ZEQ83s1zSt+WjZiI+shMz+3luCDOuASqGYc0ueEJI0GyxlWY2xCSk4ntOMv?=
+ =?us-ascii?Q?SJb4q8dkvsV11GGhGF2l4YPj8CtLXIV6NchjWSMsW9oJ5zQaV8ifLgmdQC3F?=
+ =?us-ascii?Q?JdWpeVPqC6VFTbVzK6uW2AkmUL0tbhMm+unSzmbbwO81S3voHxhc5gXHrkpV?=
+ =?us-ascii?Q?wWAGNc9DGeRydupLccjrfDhopoNycsJVq0g2uZ0BI5W0fPSSxzWbS4DP4/57?=
+ =?us-ascii?Q?FbZonG4ydU6/cParM4qioIFJACCKs2Ggl8Agpxfrx5dW517/8eh+VEVJW4BS?=
+ =?us-ascii?Q?6HyY2LOJHqqJClzxbwIaP3OHhWOOvcFyXU98183V+fPsvmI2r0aARhzhdgPy?=
+ =?us-ascii?Q?KVGh5lWYem5noERq1Pw2TIxZyDAClUfU1p3DDJBSRT3cyihzn9bPxatg0mbZ?=
+ =?us-ascii?Q?n41AOj4S9YYJDHwfMuvBtpsEtZbIqo1KFTpR5cQCZ2JF223xV2ZgABxgLRbN?=
+ =?us-ascii?Q?oqLs7rTpIeM0k07dtR0eBstXG+EJcQOf2NCBZGE+PYobeATZCUBGSd88Oj1W?=
+ =?us-ascii?Q?0TC11kHscOwnHwM6y52w/cKYhLOOVumYw9FQYQ=3D=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0a188c4f-ddfc-4560-9445-08db3f4dce04
+X-MS-Exchange-CrossTenant-AuthSource: KL1PR01MB5448.apcprd01.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2023 14:12:40.8040
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR01MB4399
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The system hang because of dsa_tag_8021q_port_setup()->
+				stmmac_vlan_rx_add_vid().
 
+I found in stmmac_drv_probe() that cailing pm_runtime_put()
+disabled the clock.
 
-On 17.04.2023 16:54, Liang Yang wrote:
-> Hi Arseniy,
-> 
-> On 2023/4/17 14:47, Arseniy Krasnov wrote:
->> [ EXTERNAL EMAIL ]
->>
->>
->>
->> On 13.04.2023 08:57, Liang Yang wrote:
->>> Hi Arseniy,
->>>
->>> On 2023/4/13 13:10, Arseniy Krasnov wrote:
->>>> [ EXTERNAL EMAIL ]
->>>>
->>>>
->>>>
->>>> On 12.04.2023 16:30, Liang Yang wrote:
->>>>> Hi,
->>>>>
->>>>> On 2023/4/12 20:03, Arseniy Krasnov wrote:
->>>>>> [ EXTERNAL EMAIL ]
->>>>>>
->>>>>>
->>>>>>
->>>>>> On 12.04.2023 13:24, Arseniy Krasnov wrote:
->>>>>>>
->>>>>>>
->>>>>>> On 12.04.2023 12:37, Liang Yang wrote:
->>>>>>>> Hi Arseniy,
->>>>>>>>
->>>>>>>> Thanks for pointing out this problem. also comment inline.
->>>>>>>>
->>>>>>>> On 2023/4/12 14:16, Arseniy Krasnov wrote:
->>>>>>>>> [ EXTERNAL EMAIL ]
->>>>>>>>>
->>>>>>>>> This fixes read/write functionality. New command sequences were ported
->>>>>>>>> from old vendor's driver. Without this patch driver works unstable. This
->>>>>>>>> change is tested with 'nanddump'/'nandwrite' utilities and mounting
->>>>>>>>> JFFS2 filesystem on AXG family (A113X SoC).
->>>>>>>>>
->>>>>>>>> Fixes: 8fae856c5350 ("mtd: rawnand: meson: add support for Amlogic NAND flash controller")
->>>>>>>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->>>>>>>>> ---
->>>>>>>>>      drivers/mtd/nand/raw/meson_nand.c | 116 ++++++++++++++++++++++++++----
->>>>>>>>>      1 file changed, 101 insertions(+), 15 deletions(-)
->>>>>>>>>
->>>>>>>>> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
->>>>>>>>> index 074e14225c06..256c37c76526 100644
->>>>>>>>> --- a/drivers/mtd/nand/raw/meson_nand.c
->>>>>>>>> +++ b/drivers/mtd/nand/raw/meson_nand.c
->>>>>>>>> @@ -26,6 +26,7 @@
->>>>>>>>>      #define NFC_CMD_IDLE        (0xc << 14)
->>>>>>>>>      #define NFC_CMD_CLE        (0x5 << 14)
->>>>>>>>>      #define NFC_CMD_ALE        (0x6 << 14)
->>>>>>>>> +#define NFC_CMD_DRD        (0x8 << 14)
->>>>>>>>>      #define NFC_CMD_ADL        ((0 << 16) | (3 << 20))
->>>>>>>>>      #define NFC_CMD_ADH        ((1 << 16) | (3 << 20))
->>>>>>>>>      #define NFC_CMD_AIL        ((2 << 16) | (3 << 20))
->>>>>>>>> @@ -84,6 +85,7 @@
->>>>>>>>>        #define DMA_BUSY_TIMEOUT    0x100000
->>>>>>>>>      #define CMD_FIFO_EMPTY_TIMEOUT    1000
->>>>>>>>> +#define DEVICE_READY_TIMEOUT    1000
->>>>>>>>>        #define MAX_CE_NUM        2
->>>>>>>>>      @@ -255,8 +257,26 @@ static void meson_nfc_select_chip(struct nand_chip *nand, int chip)
->>>>>>>>>          }
->>>>>>>>>      }
->>>>>>>>>      +static int meson_nfc_wait_cmd_finish(struct meson_nfc *nfc,
->>>>>>>>> +                     unsigned int timeout_ms)
->>>>>>>>> +{
->>>>>>>>> +    u32 cmd_size = 0;
->>>>>>>>> +    int ret;
->>>>>>>>> +
->>>>>>>>> +    /* wait cmd fifo is empty */
->>>>>>>>> +    ret = readl_relaxed_poll_timeout(nfc->reg_base + NFC_REG_CMD, cmd_size,
->>>>>>>>> +                     !NFC_CMD_GET_SIZE(cmd_size),
->>>>>>>>> +                     10, timeout_ms * 1000);
->>>>>>>>> +    if (ret)
->>>>>>>>> +        dev_err(nfc->dev, "wait for empty CMD FIFO timed out\n");
->>>>>>>>> +
->>>>>>>>> +    return ret;
->>>>>>>>> +}
->>>>>>>>> +
->>>>>>>>>      static void meson_nfc_cmd_idle(struct meson_nfc *nfc, u32 time)
->>>>>>>>>      {
->>>>>>>>> +    meson_nfc_wait_cmd_finish(nfc, 0);
->>>>>>>>> +
->>>>>>>>>          writel(nfc->param.chip_select | NFC_CMD_IDLE | (time & 0x3ff),
->>>>>>>>>                 nfc->reg_base + NFC_REG_CMD);
->>>>>>>>>      }
->>>>>>>>> @@ -308,23 +328,9 @@ static void meson_nfc_drain_cmd(struct meson_nfc *nfc)
->>>>>>>>>           */
->>>>>>>>>          meson_nfc_cmd_idle(nfc, 0);
->>>>>>>>>          meson_nfc_cmd_idle(nfc, 0);
->>>>>>>>> +    meson_nfc_wait_cmd_finish(nfc, 1000);
->>>>>>>>>      }
->>>>>>>>>      -static int meson_nfc_wait_cmd_finish(struct meson_nfc *nfc,
->>>>>>>>> -                     unsigned int timeout_ms)
->>>>>>>>> -{
->>>>>>>>> -    u32 cmd_size = 0;
->>>>>>>>> -    int ret;
->>>>>>>>> -
->>>>>>>>> -    /* wait cmd fifo is empty */
->>>>>>>>> -    ret = readl_relaxed_poll_timeout(nfc->reg_base + NFC_REG_CMD, cmd_size,
->>>>>>>>> -                     !NFC_CMD_GET_SIZE(cmd_size),
->>>>>>>>> -                     10, timeout_ms * 1000);
->>>>>>>>> -    if (ret)
->>>>>>>>> -        dev_err(nfc->dev, "wait for empty CMD FIFO time out\n");
->>>>>>>>> -
->>>>>>>>> -    return ret;
->>>>>>>>> -}
->>>>>>>>>        static int meson_nfc_wait_dma_finish(struct meson_nfc *nfc)
->>>>>>>>>      {
->>>>>>>>> @@ -631,6 +637,48 @@ static int meson_nfc_rw_cmd_prepare_and_execute(struct nand_chip *nand,
->>>>>>>>>          return 0;
->>>>>>>>>      }
->>>>>>>>>      +static uint8_t meson_nfc_read_byte(struct nand_chip *nand)
->>>>>>>>> +{
->>>>>>>>> +    struct meson_nfc *nfc = nand_get_controller_data(nand);
->>>>>>>>> +
->>>>>>>>> +    writel(NFC_CMD_DRD, nfc->reg_base + NFC_REG_CMD);
->>>>>>>>> +    meson_nfc_cmd_idle(nfc, nfc->timing.twb);
->>>>>>>>> +    meson_nfc_drain_cmd(nfc);
->>>>>>>>> +
->>>>>>>>> +    return readl(nfc->reg_base + NFC_REG_BUF);
->>>>>>>>> +}
->>>>>>>>> +
->>>>>>>>> +static int meson_nfc_wait_dev_ready(struct nand_chip *nand)
->>>>>>>>> +{
->>>>>>>>> +    struct meson_nfc *nfc = nand_get_controller_data(nand);
->>>>>>>>> +    u32 cs = nfc->param.chip_select;
->>>>>>>>> +    unsigned long cnt = 0;
->>>>>>>>> +
->>>>>>>>> +    meson_nfc_drain_cmd(nfc);
->>>>>>>>> +
->>>>>>>>> +    writel(cs | NFC_CMD_CLE | NAND_CMD_STATUS, nfc->reg_base + NFC_REG_CMD);
->>>>>>>>> +
->>>>>>>>> +    /* 10 ms. */
->>>>>>>>> +    while (cnt < DEVICE_READY_TIMEOUT) {
->>>>>>>>> +        uint8_t status;
->>>>>>>>> +
->>>>>>>>> +        status = meson_nfc_read_byte(nand);
->>>>>>>>> +
->>>>>>>>> +        if (status & NAND_STATUS_READY)
->>>>>>>>> +            break;
->>>>>>>>> +
->>>>>>>>> +        usleep_range(10, 11);
->>>>>>>>> +        cnt++;
->>>>>>>>> +    }
->>>>>>>>> +
->>>>>>>>> +    if (cnt == DEVICE_READY_TIMEOUT) {
->>>>>>>>> +        dev_err(nfc->dev, "device ready timeout\n");
->>>>>>>>> +        return -ETIMEDOUT;
->>>>>>>>> +    }
->>>>>>>>> +
->>>>>>>>> +    return 0;
->>>>>>>>> +}
->>>>>>>>> +
->>>>>>>>>      static int meson_nfc_write_page_sub(struct nand_chip *nand,
->>>>>>>>>                          int page, int raw)
->>>>>>>>>      {
->>>>>>>>> @@ -643,6 +691,10 @@ static int meson_nfc_write_page_sub(struct nand_chip *nand,
->>>>>>>>>          u32 cmd;
->>>>>>>>>          int ret;
->>>>>>>>>      +    ret = meson_nfc_wait_dev_ready(nand);
->>>>>>>>> +    if (ret)
->>>>>>>>> +        return ret;
->>>>>>>>> +
->>>>>>>>>          meson_nfc_select_chip(nand, nand->cur_cs);
->>>>>>>>>            data_len =  mtd->writesize + mtd->oobsize;
->>>>>>>>> @@ -667,12 +719,20 @@ static int meson_nfc_write_page_sub(struct nand_chip *nand,
->>>>>>>>>                           NFC_CMD_SCRAMBLER_DISABLE);
->>>>>>>>>          }
->>>>>>>>>      +    ret = meson_nfc_wait_dma_finish(nfc);
->>>>>>>>> +    if (ret)
->>>>>>>>> +        return ret;
->>>>>>>>> +
->>>>>>>>>          cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_PAGEPROG;
->>>>>>>>>          writel(cmd, nfc->reg_base + NFC_REG_CMD);
->>>>>>>>>          meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tPROG_max));
->>>>>>>>>            meson_nfc_dma_buffer_release(nand, data_len, info_len, DMA_TO_DEVICE);
->>>>>>>>>      +    ret = meson_nfc_wait_dev_ready(nand);
->>>>>>>>> +    if (ret)
->>>>>>>>> +        return ret;
->>>>>>>>> +
->>>>>>>>>          return ret;
->>>>>>>>>      }
->>>>>>>>>      @@ -720,6 +780,21 @@ static void meson_nfc_check_ecc_pages_valid(struct meson_nfc *nfc,
->>>>>>>>>          } while (!ret);
->>>>>>>>>      }
->>>>>>>>>      +static inline int meson_nfc_send_read(struct nand_chip *nand)
->>>>>>>>> +{
->>>>>>>>> +    struct meson_nfc *nfc = nand_get_controller_data(nand);
->>>>>>>>> +    u32 cs = nfc->param.chip_select;
->>>>>>>>> +    int ret;
->>>>>>>>> +
->>>>>>>>> +    ret = meson_nfc_wait_dev_ready(nand);
->>>>>>>>> +    if (ret)
->>>>>>>>> +        return ret;
->>>>>>>>> +
->>>>>>>>> +    writel(cs | NFC_CMD_CLE | NAND_CMD_READ0, nfc->reg_base + NFC_REG_CMD);
->>>>>>>>> +
->>>>>>>>> +    return 0;
->>>>>>>>> +}
->>>>>>>>> +
->>>>>>>>
->>>>>>>> it already calls meson_nfc_queue_rb() in meson_nfc_rw_cmd_prepare_and_execute(). Could you implements this in meson_nfc_queue_rb()? and we can use the irq method.
->>>>>>>> also without Ready/Busy pin, the meson_nfc_queue_rb() should change like below:
->>>>>>>>        ......
->>>>>>>>        #define NFC_CMD_RB_INT    ((0xb << 10) | BIT(18))
->>>>>>
->>>>>> Sorry, I can see this define as (and it is used in the driver):
->>>>>> #define NFC_CMD_RB_INT          BIT(14)
->>>>>>
->>>>>> in drivers/mtd/nand/raw/meson_nand.c
->>>>>>
->>>>>> Which one is correct ?
->>>>>
->>>>> we need to modify the define 'NFC_CMD_RB_INT' as ((0xb << 10) | BIT(18)).
->>>>>
->>>>
->>>> Ok, NFC_CMD_RB_INT - it is "Ready/Busy_Interrupt" ? You suppose that currently it is
->>>> defined incorrectly, so irq waiting does not work?
->>>
->>> Previous defined BIT(14) is for having the external Ready/Busy pin of the NAND device connected to the controller. the new define is for reading status by sending read status(70H) command and read status from the data bus(checking the IO6). the both can work on AXG soc.
->>> when the controller RB command is sent, the controller automatically checks the level of external Ready/Busy pin or the data bus(IO6) periodicity. and generate the irq signal if status is ready.
->>>
->>>>
->>>> Thanks, Arseniy
->>>>
->>>>>>
->>>>>> Thanks, Arseniy
->>>>>>
->>>>>>>>
->>>>>>>>        meson_nfc_cmd_idle(nfc, 0);
->>>>>>>>        cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_STATUS;
->>>>>>>>        writel(cmd, nfc->reg_base + NFC_REG_CMD);
->>>>>>>>        meson_nfc_cmd_idle(nfc, 5);
->>>>>>>>        cmd = NFC_CMD_RB | NFC_CMD_RB_INT | nfc->timing.tbers_max;
->>>>>>>>        writel(cmd, nfc->reg_base + NFC_REG_CMD);
->>>>>>>>
->>>>>>>>        ret = wait_for_completion_timeout(&nfc->completion,
->>>>>>>>                          msecs_to_jiffies(timeout_ms));
->>>>>>>>        if (ret == 0)
->>>>>>>>            ret = -1;
->>>>>>>>
->>>>>>>>        writel(cs | NFC_CMD_CLE | NAND_CMD_READ0, nfc->reg_base + NFC_REG_CMD);
->>>>>>>>        ......
->>>>>>>>
->>
->> Hello Liang!
->>
->> I've got small questions to clarify Your comment. You suggest two thing IIUC:
->>
->> 1) Send NAND_CMD_READ0 from 'meson_nfc_queue_rb()'. This means that extra argument is needed to
->> 'meson_nfc_queue_rb()' which shows that read operation is going to be performed. We can't send
->> NAND_CMD_READ0 for write operation?
-> 
-> it is ok to me. but does NAND_CMD_READ0 really need to send in the controller driver? i don't find the other controller drivers have to send it for the old vendor NAND device.
+First, when the kernel is compiled with CONFIG_PM=y,The stmmac's
+resume/suspend is active.
 
-Hm, I found this command in the old driver. For example without it I get the following error:
+Secondly,stmmac as DSA master,the dsa_tag_8021q_port_setup() function
+will callback stmmac_vlan_rx_add_vid when DSA dirver starts. However,
+The system is hanged for the stmmac_vlan_rx_add_vid() accesses its
+registers after stmmac's clock is closed.
 
-# nanddump -c -s 0 -l 2048 /dev/mtd0 --oob
-ECC failed: 3975
-ECC corrected: 47
-Number of bad blocks: 10
-Number of bbt blocks: 0
-Block size 131072, page size 2048, OOB size 64
-Dumping data starting at 0x00000000 and ending at 0x00000800...
+I would suggest adding the pm_runtime_resume_and_get() to the
+stmmac_vlan_rx_add_vid().This guarantees that resuming clock output
+while in use.
 
-But data is not corrupted and seems ok. With this extra NAND_CMD_READ0 everything is ok - data is still valid and
-there are no ECC errors.
+Fixes: b3dcb3127786 ("net: stmmac: correct clocks enabled in stmmac_vlan_rx_kill_vid()")
+Signed-off-by: Yan Wang <rk.code@outlook.com>
+---
+v5:
+  - Add version tags.
+v4: https://lore.kernel.org/netdev/KL1PR01MB5448C7BF5A7AAC1CBCD5C36AE6989@KL1PR01MB5448.apcprd01.prod.exchangelabs.com/
+  - Fixed email address,but The Version number is wrong.
+v3: https://lore.kernel.org/netdev/KL1PR01MB544872920F00149E3BDDC7ECE6999@KL1PR01MB5448.apcprd01.prod.exchangelabs.com/
+  - Fixed the Fixes tag,but Missing version change log.
+v2: https://lore.kernel.org/netdev/KL1PR01MB54482D50B5C8713A2CA697DFE6999@KL1PR01MB5448.apcprd01.prod.exchangelabs.com/
+  - Add a error fixed tag.
+v1: https://lore.kernel.org/netdev/KL1PR01MB5448020DE191340AE64530B0E6989@KL1PR01MB5448.apcprd01.prod.exchangelabs.com/
+  - the Subject is set incorrectly
+---
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-> 
->>
->> 2) About code and define above, I tried to replace current body of 'meson_nfc_queue_rb()', but it
->> didn't work. May be I did it wrong, because what to do with 'meson_nfc_wait_dev_ready()' and it's
->> call sites? It must be removed? Could You please explain Your idea in more details? I'm asking You
->> because I don't have doc for this NAND controller, so it is very difficult to me to add valid
->> logic to this driver without any references
-> 
-> Could you please try the following? i have tested it on another SOC (not axg).
-> 
-> static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms)
-> {
->     u32 cmd, cfg;
->     int ret = 0;
-> 
->     meson_nfc_cmd_idle(nfc, nfc->timing.twb);
->     meson_nfc_drain_cmd(nfc);
->     meson_nfc_wait_cmd_finish(nfc, CMD_FIFO_EMPTY_TIMEOUT);
-> 
->     cfg = readl(nfc->reg_base + NFC_REG_CFG);
->     cfg |= NFC_RB_IRQ_EN;
->     writel(cfg, nfc->reg_base + NFC_REG_CFG);
-> 
->     reinit_completion(&nfc->completion);
-> 
->     meson_nfc_cmd_idle(nfc, 0);
->     cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_STATUS;
->     writel(cmd, nfc->reg_base + NFC_REG_CMD);
->     meson_nfc_cmd_idle(nfc, 5);
->     cmd = NFC_CMD_RB | NFC_CMD_RB_INT
->         | nfc->param.chip_select | nfc->timing.tbers_max;
->     writel(cmd, nfc->reg_base + NFC_REG_CMD);
->     meson_nfc_drain_cmd(nfc);
-> 
->     ret = wait_for_completion_timeout(&nfc->completion,
->                       msecs_to_jiffies(timeout_ms));
->     if (ret == 0)
->         ret = -1;
-> 
->     writel(1 << 31, nfc->reg_base + NFC_REG_CMD);
-> 
->     return ret;
-> }
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index d7fcab057032..f9cd063f1fe3 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -6350,6 +6350,10 @@ static int stmmac_vlan_rx_add_vid(struct net_device *ndev, __be16 proto, u16 vid
+ 	bool is_double = false;
+ 	int ret;
+ 
++	ret = pm_runtime_resume_and_get(priv->device);
++	if (ret < 0)
++		return ret;
++
+ 	if (be16_to_cpu(proto) == ETH_P_8021AD)
+ 		is_double = true;
+ 
+@@ -6357,16 +6361,18 @@ static int stmmac_vlan_rx_add_vid(struct net_device *ndev, __be16 proto, u16 vid
+ 	ret = stmmac_vlan_update(priv, is_double);
+ 	if (ret) {
+ 		clear_bit(vid, priv->active_vlans);
+-		return ret;
++		goto err_pm_put;
+ 	}
+ 
+ 	if (priv->hw->num_vlan) {
+ 		ret = stmmac_add_hw_vlan_rx_fltr(priv, ndev, priv->hw, proto, vid);
+ 		if (ret)
+-			return ret;
++			goto err_pm_put;
+ 	}
++err_pm_put:
++	pm_runtime_put(priv->device);
+ 
+-	return 0;
++	return ret;
+ }
+ 
+ static int stmmac_vlan_rx_kill_vid(struct net_device *ndev, __be16 proto, u16 vid)
+-- 
+2.17.1
 
-Ok! Thanks, I'll try it!
-
-Thanks, Arseniy
-
-> 
-> also we need to check and return the return value for meson_nfc_queue_rb() in meson_nfc_rw_cmd_prepare_and_execute() and meson_nfc_write_page_sub().
-> 
->>
->> May be I can send v2 patchset for review without this change, as v2 already includes udpate for OOB
->> handling which is I think more critical?
->>
-> 
-> sure, it is up to you. it is more important, thanks again.
-> 
->> Thanks, Arseniy
->>
->>>>>>>
->>>>>>>        Thanks for reply! I'll try this code! One more question about OOB processing in this
->>>>>>> driver (as You are author of it):
->>>>>>>
->>>>>>>       OOB size is 64 bytes, but for example if I have 1K ECC, 2 bytes user bytes and 14
->>>>>>>       bytes for ECC code for each 1K. In this case I have access to only 32 bytes of OOB:
->>>>>>>       2 x (2 user bytes + 14 ECC bytes). Correct me if i'm wrong, but rest of OOB (next
->>>>>>>       32 bytes) become unavailable (in both raw and ECC modes) ?
->>>>>>>
->>>>>>> Thanks, Arseniy
->>>>>>>
->>>>>>>>>      static int meson_nfc_read_page_sub(struct nand_chip *nand,
->>>>>>>>>                         int page, int raw)
->>>>>>>>>      {
->>>>>>>>> @@ -734,10 +809,18 @@ static int meson_nfc_read_page_sub(struct nand_chip *nand,
->>>>>>>>>          data_len =  mtd->writesize + mtd->oobsize;
->>>>>>>>>          info_len = nand->ecc.steps * PER_INFO_BYTE;
->>>>>>>>>      +    ret = meson_nfc_wait_dev_ready(nand);
->>>>>>>>> +    if (ret)
->>>>>>>>> +        return ret;
->>>>>>>>> +
->>>>>>>>>          ret = meson_nfc_rw_cmd_prepare_and_execute(nand, page, DIRREAD);
->>>>>>>>>          if (ret)
->>>>>>>>>              return ret;
->>>>>>>>>      +    ret = meson_nfc_send_read(nand);
->>>>>>>>> +    if (ret)
->>>>>>>>> +        return ret;
->>>>>>>>> +
->>>>>>>>>          ret = meson_nfc_dma_buffer_setup(nand, meson_chip->data_buf,
->>>>>>>>>                           data_len, meson_chip->info_buf,
->>>>>>>>>                           info_len, DMA_FROM_DEVICE);
->>>>>>>>> @@ -754,6 +837,9 @@ static int meson_nfc_read_page_sub(struct nand_chip *nand,
->>>>>>>>>          }
->>>>>>>>>            ret = meson_nfc_wait_dma_finish(nfc);
->>>>>>>>> +    if (ret)
->>>>>>>>> +        return ret;
->>>>>>>>> +
->>>>>>>>>          meson_nfc_check_ecc_pages_valid(nfc, nand, raw);
->>>>>>>>>            meson_nfc_dma_buffer_release(nand, data_len, info_len, DMA_FROM_DEVICE);
->>>>>>>>
->>>>>>
->>>>>
->>>>
->>>
->>
