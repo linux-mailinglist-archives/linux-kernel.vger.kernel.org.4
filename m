@@ -2,48 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE6DF6E4B71
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:26:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7017B6E4B72
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:26:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbjDQO0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 10:26:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52398 "EHLO
+        id S230337AbjDQO0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 10:26:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbjDQO0B (ORCPT
+        with ESMTP id S230002AbjDQO0C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 10:26:01 -0400
+        Mon, 17 Apr 2023 10:26:02 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC64B1B0;
-        Mon, 17 Apr 2023 07:25:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 898F01721;
+        Mon, 17 Apr 2023 07:25:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B382625FC;
-        Mon, 17 Apr 2023 14:25:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C926C433D2;
-        Mon, 17 Apr 2023 14:25:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BE03625F9;
+        Mon, 17 Apr 2023 14:25:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6D8EC433EF;
+        Mon, 17 Apr 2023 14:25:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681741555;
-        bh=4VUfUFTzriUEayXF7DZGvDbUbjRc4fsFHIWx3dcJhYU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=N35E61l7MknlldPrCkwVeaAaOA6fbZtbhZ9Ulezets7P9AiwfKKszo9AyBjG2nwf8
-         Bs1F/UpANpgQWwaIdVGzW8XBGxVVQgl0It5JqM+U7R+5dFeYSmiZkd2D01LQJwtqwJ
-         HuYM/sO4vxIWKasOyts/2vkdqCkSyOihFg6JjI4GXQz2cRIHzlYsBfvIT+E0ozDNNH
-         vQDr9ZdKwMyi8VD5lu7P+DIGXmDZwSTJm97xWc78zsDMKr8cTpdNzvPg6y5W+HyuKn
-         79n8oh7RJ32NzvkS00l3s6sXZeyCw91D0qWXlDs7kUmLHui8zvs0XOwpEKeC+U6WnU
-         nh9gdyl3ocj8w==
+        s=k20201202; t=1681741557;
+        bh=Ex/hrCKvMBExc7EXGij2hsZznnwJSrqrpsR18ZEHT+o=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Iqx7F+dNQlywiPvNJMhhLidXroLp28Wfni816BukuFUE5BTNAlSVDkKXVKTdpPeN/
+         hpGkRb+RycKc2iOmZKVNDADD+SCPDKmjVfb9dc+hpBzpx53fUi3d4oKJkQ2MjUSHEk
+         l4l1YXonDB3pr752oa1d7DvDzCw3w2WfpbIQ6lwDg4QsA1vatuZP4pLniym53iOM/x
+         O5+/SvCOAa53EZXzA+tgyJsmsQ4GO39kSJgUGhtJr4rjIGopI4ubRVZZPFZPrzsSb0
+         +od1Ca5NfE8HtkD6pH1uGnLDsQCIAkuhHAW7Kr/n0CLHaMUUW22guLG6kxFPgU1YU5
+         vx4+J/35Aazng==
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, Ben Hutchings <ben@decadent.org.uk>,
         Bastian Germann <bage@linutronix.de>,
         Masahiro Yamada <masahiroy@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
         Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH 1/2] kbuild: add srcdeb-pkg target
-Date:   Mon, 17 Apr 2023 23:25:47 +0900
-Message-Id: <20230417142548.249610-1-masahiroy@kernel.org>
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Subject: [PATCH 2/2] kbuild: deb-pkg: add KDEB_SOURCE_COMPRESS to specify compression type
+Date:   Mon, 17 Apr 2023 23:25:48 +0900
+Message-Id: <20230417142548.249610-2-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20230417142548.249610-1-masahiroy@kernel.org>
+References: <20230417142548.249610-1-masahiroy@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -56,80 +58,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This new target builds only the debian source package.
+Add KDEB_SOURCE_COMPRESS to specify the compression for the orig and
+debian tarballs. (The existing KDEB_COMPRESS is used to specify the
+compression for binary packages.)
 
-Unify the build rules of deb-pkg, srcdeb-pkg, bindeb-pkg to avoid
-code duplication.
+Supported algorithms are gzip, bzip2, lzma, and xz, all of which are
+supported by dpkg-source.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
 ---
 
- scripts/Makefile.package | 28 +++++++++++++++++++++-------
- 1 file changed, 21 insertions(+), 7 deletions(-)
+ scripts/Makefile.package | 31 +++++++++++++++++++++++--------
+ 1 file changed, 23 insertions(+), 8 deletions(-)
 
 diff --git a/scripts/Makefile.package b/scripts/Makefile.package
-index 4d90691505b1..d8a36304b26e 100644
+index d8a36304b26e..ce3d8b4e9cb0 100644
 --- a/scripts/Makefile.package
 +++ b/scripts/Makefile.package
-@@ -5,7 +5,6 @@ include $(srctree)/scripts/Kbuild.include
- include $(srctree)/scripts/Makefile.lib
+@@ -41,19 +41,25 @@ check-git:
+ 		false; \
+ 	fi
  
- KERNELPATH := kernel-$(subst -,_,$(KERNELRELEASE))
--KBUILD_PKG_ROOTCMD ?="fakeroot -u"
- # Include only those top-level files that are needed by make, plus the GPL copy
- TAR_CONTENT := Documentation LICENSES arch block certs crypto drivers fs \
-                include init io_uring ipc kernel lib mm net rust \
-@@ -86,6 +85,9 @@ binrpm-pkg:
- 	+rpmbuild $(RPMOPTS) --define "_builddir $(objtree)" --target \
- 		$(UTS_MACHINE)-linux -bb $(objtree)/binkernel.spec
+-git-config-tar.gz  = -c tar.tar.gz.command="$(KGZIP)"
+-git-config-tar.bz2 = -c tar.tar.bz2.command="$(KBZIP2)"
+-git-config-tar.xz  = -c tar.tar.xz.command="$(XZ)"
+-git-config-tar.zst = -c tar.tar.zst.command="$(ZSTD)"
++git-config-tar.gz   = -c tar.tar.gz.command="$(KGZIP)"
++git-config-tar.bz2  = -c tar.tar.bz2.command="$(KBZIP2)"
++git-config-tar.lzma = -c tar.tar.lzma.command="$(LZMA)"
++git-config-tar.xz   = -c tar.tar.xz.command="$(XZ)"
++git-config-tar.zst  = -c tar.tar.zst.command="$(ZSTD)"
  
-+# deb-pkg srcdeb-pkg bindeb-pkg
-+# ---------------------------------------------------------------------------
+ quiet_cmd_archive = ARCHIVE $@
+       cmd_archive = git -C $(srctree) $(git-config-tar$(suffix $@)) archive \
+                     --output=$$(realpath $@) --prefix=$(basename $@)/ $(archive-args)
+ 
++suffix-gzip  := .gz
++suffix-bzip2 := .bz2
++suffix-lzma  := .lzma
++suffix-xz    := .xz
++
+ # Linux source tarball
+ # ---------------------------------------------------------------------------
+ 
+-linux-tarballs := $(addprefix linux, .tar.gz)
++linux-tarballs := $(addprefix linux, .tar.gz .tar.bz2 .tar.lzma .tar.xz)
+ 
+ targets += $(linux-tarballs)
+ $(linux-tarballs): archive-args = $$(cat $<)
+@@ -88,6 +94,15 @@ binrpm-pkg:
+ # deb-pkg srcdeb-pkg bindeb-pkg
+ # ---------------------------------------------------------------------------
+ 
++KDEB_SOURCE_COMPRESS ?= gzip
++
++PHONY += linux.tar.unsupported_deb_compress
++linux.tar.unsupported_deb_compress:
++	@echo "error: $(KDEB_SOURCE_COMPRESS): unsupported debian source compression" >&2
++	@false
++
++debian-orig-suffix := $(if $(filter gzip bzip2 lzma xz, $(KDEB_SOURCE_COMPRESS)),$(suffix-$(KDEB_SOURCE_COMPRESS)),.unsupported_deb_compress)
 +
  quiet_cmd_debianize = GEN     $@
        cmd_debianize = $(srctree)/scripts/package/mkdebian $(mkdebian-opts)
  
-@@ -104,14 +106,25 @@ debian-orig: linux.tar.gz debian
- 		cp $< ../$(orig-name); \
- 	fi
- 
--PHONY += deb-pkg
--deb-pkg: debian-orig
--	+dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) \
--		--build=source,binary -nc -us -uc
-+KBUILD_PKG_ROOTCMD ?= 'fakeroot -u'
-+
-+PHONY += deb-pkg srcdeb-pkg bindeb-pkg
-+
-+deb-pkg:    private build-type := source,binary
-+srcdeb-pkg: private build-type := source
-+bindeb-pkg: private build-type := binary
- 
--PHONY += bindeb-pkg
-+deb-pkg srcdeb-pkg: debian-orig
- bindeb-pkg: debian
--	+dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) -b -nc -uc
-+deb-pkg srcdeb-pkg bindeb-pkg:
-+	+$(strip dpkg-buildpackage \
-+	--build=$(build-type) --no-pre-clean --unsigned-changes \
-+	$(if $(findstring source, $(build-type)), \
-+		--unsigned-source) \
-+	$(if $(findstring binary, $(build-type)), \
-+		-r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch), \
-+		--no-check-builddeps) \
-+	$(DPKG_FLAGS))
- 
- PHONY += intdeb-pkg
- intdeb-pkg:
-@@ -208,6 +221,7 @@ help:
- 	@echo '  srcrpm-pkg          - Build only the source kernel RPM package'
- 	@echo '  binrpm-pkg          - Build only the binary kernel RPM package'
- 	@echo '  deb-pkg             - Build both source and binary deb kernel packages'
-+	@echo '  srcdeb-pkg          - Build only the source kernel deb package'
- 	@echo '  bindeb-pkg          - Build only the binary kernel deb package'
- 	@echo '  snap-pkg            - Build only the binary kernel snap package'
- 	@echo '                        (will connect to external hosts)'
+@@ -97,9 +112,9 @@ debian: FORCE
+ PHONY += debian-orig
+ debian-orig: private source = $(shell dpkg-parsechangelog -S Source)
+ debian-orig: private version = $(shell dpkg-parsechangelog -S Version | sed 's/-[^-]*$$//')
+-debian-orig: private orig-name = $(source)_$(version).orig.tar.gz
++debian-orig: private orig-name = $(source)_$(version).orig.tar$(debian-orig-suffix)
+ debian-orig: mkdebian-opts = --need-source
+-debian-orig: linux.tar.gz debian
++debian-orig: linux.tar$(debian-orig-suffix) debian
+ 	$(Q)if [ "$(df  --output=target .. 2>/dev/null)" = "$(df --output=target $< 2>/dev/null)" ]; then \
+ 		ln -f $< ../$(orig-name); \
+ 	else \
+@@ -120,7 +135,7 @@ deb-pkg srcdeb-pkg bindeb-pkg:
+ 	+$(strip dpkg-buildpackage \
+ 	--build=$(build-type) --no-pre-clean --unsigned-changes \
+ 	$(if $(findstring source, $(build-type)), \
+-		--unsigned-source) \
++		--unsigned-source --compression=$(KDEB_SOURCE_COMPRESS)) \
+ 	$(if $(findstring binary, $(build-type)), \
+ 		-r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch), \
+ 		--no-check-builddeps) \
 -- 
 2.37.2
 
