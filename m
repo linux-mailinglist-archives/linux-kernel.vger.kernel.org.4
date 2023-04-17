@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B3C6E4B1E
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:15:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 818F46E4B1D
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:15:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbjDQOPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 10:15:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40366 "EHLO
+        id S231218AbjDQOPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 10:15:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230253AbjDQOPA (ORCPT
+        with ESMTP id S229804AbjDQOPA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 17 Apr 2023 10:15:00 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B985267
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:14:57 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id c9so25671789ejz.1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:14:57 -0700 (PDT)
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB0625580
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:14:58 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50672fbf83eso14693688a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:14:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681740896; x=1684332896;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=l8OjZCSSC//phSuWYvfawiHJ89Dsp2AaxdfcVlgHVfA=;
-        b=w/93HIzAuP5t6l+IMz0tDo3YXGzXWUJfwpErdrbZ2jkDH3nOltQcKZOYn6MZ1Ylvl1
-         YLolZ3KjnWSSIntWx1g4yDPgdjiqT6I2zzmCX5KJQaQXaq7L1KeNKa/3w2mWAegaasjt
-         GWU8XrzdE0Pru49Zd1WhwPo+2oynrKKVG5jGGjYX7k30SB0aWL2mm0mc/6absdit0rpU
-         BBAP1E3hWtowRNEii0j1CYtHHW29bvRE0778vJ/k0HYCuNJqW5M39iKouODl141uyHqW
-         6pLzU7eyxgPEr7q/m3ltm80htp1o9qRxVwIM7gIQTCZ35T61WGr6juhm5kInRcEn1L7g
-         Lr1Q==
+        d=linaro.org; s=google; t=1681740897; x=1684332897;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DdSLfFTkv6LYV3M0mzyuGaPRuWS7s/5vp6QK5VHSwvw=;
+        b=RzE+hWQvLG+ToUxcaDtEz9Q3e8NAYpfR7V5FIpzDQuomR5owNFdDhUvH2QaJipF10D
+         GWjQqAHBtrZGC615Ls7NgtT+6C4C1jOjVw0B7hMOEY3u/fUyHuT3t4TsOAkAKWsVI1h4
+         AEfglOWetOIog4xZls6MOZJkql6492Ni2Zw4EoF5Qo+zrz5dJPENj1jeJIRTF9U1khZ6
+         fn936x3xvUrAzwgWBXafJCWCBWUufiAkTrw9X8JlPtynRTseumDspzinwkfJVPxg/qgG
+         ZZ4hsxxTHKzvHpblKwulKigeP7Nw7tZNwiWpKpZlNnxIC1QrXUS+vvo4QSm+yRiHh8Qc
+         zanA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681740896; x=1684332896;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=l8OjZCSSC//phSuWYvfawiHJ89Dsp2AaxdfcVlgHVfA=;
-        b=ghRhpi53pZ7PHmnSKl4Gro8bOoITPto44HlPo2A4W9H2Yrjn7yscHbKolyPfb6eURK
-         e/HIS3nXp0TK1UZQTes7yhvY83tgKpbjktTCMdHeIe3qrHdsdLqowQGLBEjtJE9+K9cX
-         s0dUuQZXj6NfIkIV3gi5tByWHZarVb0R5UKPhIOt0n/4nA8ZNaRGod1c6+Womqci8c8l
-         WjX+8mkTMeEVNoqGbI5hYF6oTKW83/qHSTVJbCGcqjKuUXL0Se3gyIiWx7PLS7u3Wwxl
-         3+yVoTJSIVW+kcyEFdbPdjmPSS0IUmzC4r4s9FB6Y8W4gO3SDa4dXdKqELSofVuAWa+S
-         t4jA==
-X-Gm-Message-State: AAQBX9dUhff9rAMrfpwQWg6NC0e3m4xrSp82dXPRJP5+dilNdQAsXmeT
-        Q94u1gGwhyRlXt4g+oSANX+PjA==
-X-Google-Smtp-Source: AKy350a2bmRei9A0qs2pgDzWdwVvj/XCBSxX7OL18aPrP8Z+ZGBhJJ5K8guxgj+yHghapBSOeIWGQg==
-X-Received: by 2002:a17:907:7e9c:b0:94f:335b:4da0 with SMTP id qb28-20020a1709077e9c00b0094f335b4da0mr6563124ejc.51.1681740895939;
-        Mon, 17 Apr 2023 07:14:55 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681740897; x=1684332897;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DdSLfFTkv6LYV3M0mzyuGaPRuWS7s/5vp6QK5VHSwvw=;
+        b=B5/viSX84/tk7bbED0bG+mxUYqxk1xhb8EJJIdcQBXB566UI59WsyZzRjAJWdWTPeL
+         FZKmpeNkyiJ/tqBRQnEeDu0a0dIWv9dnSWoSblKOVjmPvCjlvDMa82LflPHFKw8Aipkk
+         seQmlmHk4NDB8JNi29KEsUm2yoZWmJ8GA9wWj2o6kerXNFroqEAsOpBOOL68Q7UZ5+VG
+         LTqhvfVwS++UOOXV4cro2E8nKFiNCH8t1H3nVBEs3+dB6rP/9NT7ciTprUgxpn9HDi8l
+         w6ekVp6idX+PJGpFriMAc3pNncI91kRf/r/tzdkXocZh2M95n9eD6QjBs13Hvk9l6fiK
+         32fQ==
+X-Gm-Message-State: AAQBX9ekS0XVwT57FiHIzRJsg4DaHxUvUqgg+JUMQdRqttNkdmOELu0t
+        db34zjshQhj9rI2FtwCYN+2iDw==
+X-Google-Smtp-Source: AKy350ZpK+Q0Lk/sUrpuzdbTEMJgrM0zQiaQj9MfhnmQ30N0Ripjw7eud+5jh+xVfNdGhumzqyNY+Q==
+X-Received: by 2002:a05:6402:4cb:b0:504:9350:f458 with SMTP id n11-20020a05640204cb00b005049350f458mr13585489edw.1.1681740897195;
+        Mon, 17 Apr 2023 07:14:57 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:96aa:60eb:e021:6511])
-        by smtp.gmail.com with ESMTPSA id q6-20020a056402040600b004f9e6495f94sm5832034edv.50.2023.04.17.07.14.54
+        by smtp.gmail.com with ESMTPSA id q6-20020a056402040600b004f9e6495f94sm5832034edv.50.2023.04.17.07.14.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 07:14:55 -0700 (PDT)
+        Mon, 17 Apr 2023 07:14:56 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Banajit Goswami <bgoswami@quicinc.com>,
@@ -58,10 +59,12 @@ To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 1/4] ASoC: codecs: wcd9335: Simplify with dev_err_probe
-Date:   Mon, 17 Apr 2023 16:14:50 +0200
-Message-Id: <20230417141453.919158-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 2/4] ASoC: codecs: wcd934x: Simplify with dev_err_probe
+Date:   Mon, 17 Apr 2023 16:14:51 +0200
+Message-Id: <20230417141453.919158-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230417141453.919158-1-krzysztof.kozlowski@linaro.org>
+References: <20230417141453.919158-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,53 +81,17 @@ Code can be a bit simpler with dev_err_probe().
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- sound/soc/codecs/wcd9335.c | 27 +++++++++++----------------
- 1 file changed, 11 insertions(+), 16 deletions(-)
+ sound/soc/codecs/wcd934x.c | 19 +++++++------------
+ 1 file changed, 7 insertions(+), 12 deletions(-)
 
-diff --git a/sound/soc/codecs/wcd9335.c b/sound/soc/codecs/wcd9335.c
-index d2548fdf9ae5..8bf3510a3ea3 100644
---- a/sound/soc/codecs/wcd9335.c
-+++ b/sound/soc/codecs/wcd9335.c
-@@ -5138,20 +5138,17 @@ static int wcd9335_irq_init(struct wcd9335_codec *wcd)
- 	 * INTR2 is a subset of first interrupt sources MAD, VBAT, and SVA
- 	 */
- 	wcd->intr1 = of_irq_get_byname(wcd->dev->of_node, "intr1");
--	if (wcd->intr1 < 0) {
--		if (wcd->intr1 != -EPROBE_DEFER)
--			dev_err(wcd->dev, "Unable to configure IRQ\n");
--
--		return wcd->intr1;
--	}
-+	if (wcd->intr1 < 0)
-+		return dev_err_probe(wcd->dev, wcd->intr1,
-+				     "Unable to configure IRQ\n");
- 
- 	ret = devm_regmap_add_irq_chip(wcd->dev, wcd->regmap, wcd->intr1,
- 				 IRQF_TRIGGER_HIGH, 0,
- 				 &wcd9335_regmap_irq1_chip, &wcd->irq_data);
- 	if (ret)
--		dev_err(wcd->dev, "Failed to register IRQ chip: %d\n", ret);
-+		return dev_err_probe(wcd->dev, ret, "Failed to register IRQ chip\n");
- 
--	return ret;
-+	return 0;
- }
- 
- static int wcd9335_slim_probe(struct slim_device *slim)
-@@ -5207,17 +5204,15 @@ static int wcd9335_slim_status(struct slim_device *sdev,
- 	slim_get_logical_addr(wcd->slim_ifc_dev);
- 
- 	wcd->regmap = regmap_init_slimbus(sdev, &wcd9335_regmap_config);
--	if (IS_ERR(wcd->regmap)) {
--		dev_err(dev, "Failed to allocate slim register map\n");
--		return PTR_ERR(wcd->regmap);
--	}
-+	if (IS_ERR(wcd->regmap))
-+		return dev_err_probe(dev, PTR_ERR(wcd->regmap),
-+				     "Failed to allocate slim register map\n");
- 
- 	wcd->if_regmap = regmap_init_slimbus(wcd->slim_ifc_dev,
- 						  &wcd9335_ifc_regmap_config);
+diff --git a/sound/soc/codecs/wcd934x.c b/sound/soc/codecs/wcd934x.c
+index 783479a4d535..56487ad2f048 100644
+--- a/sound/soc/codecs/wcd934x.c
++++ b/sound/soc/codecs/wcd934x.c
+@@ -5868,10 +5868,9 @@ static int wcd934x_codec_parse_data(struct wcd934x_codec *wcd)
+ 	slim_get_logical_addr(wcd->sidev);
+ 	wcd->if_regmap = regmap_init_slimbus(wcd->sidev,
+ 				  &wcd934x_ifc_regmap_config);
 -	if (IS_ERR(wcd->if_regmap)) {
 -		dev_err(dev, "Failed to allocate ifc register map\n");
 -		return PTR_ERR(wcd->if_regmap);
@@ -133,8 +100,32 @@ index d2548fdf9ae5..8bf3510a3ea3 100644
 +		return dev_err_probe(dev, PTR_ERR(wcd->if_regmap),
 +				     "Failed to allocate ifc register map\n");
  
- 	ret = wcd9335_bring_up(wcd);
- 	if (ret) {
+ 	of_property_read_u32(dev->parent->of_node, "qcom,dmic-sample-rate",
+ 			     &wcd->dmic_sample_rate);
+@@ -5923,19 +5922,15 @@ static int wcd934x_codec_probe(struct platform_device *pdev)
+ 	memcpy(wcd->tx_chs, wcd934x_tx_chs, sizeof(wcd934x_tx_chs));
+ 
+ 	irq = regmap_irq_get_virq(data->irq_data, WCD934X_IRQ_SLIMBUS);
+-	if (irq < 0) {
+-		dev_err(wcd->dev, "Failed to get SLIM IRQ\n");
+-		return irq;
+-	}
++	if (irq < 0)
++		return dev_err_probe(wcd->dev, irq, "Failed to get SLIM IRQ\n");
+ 
+ 	ret = devm_request_threaded_irq(dev, irq, NULL,
+ 					wcd934x_slim_irq_handler,
+ 					IRQF_TRIGGER_RISING | IRQF_ONESHOT,
+ 					"slim", wcd);
+-	if (ret) {
+-		dev_err(dev, "Failed to request slimbus irq\n");
+-		return ret;
+-	}
++	if (ret)
++		return dev_err_probe(dev, ret, "Failed to request slimbus irq\n");
+ 
+ 	wcd934x_register_mclk_output(wcd);
+ 	platform_set_drvdata(pdev, wcd);
 -- 
 2.34.1
 
