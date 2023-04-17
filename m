@@ -2,191 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C4386E54C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 00:48:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7F456E54C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 00:50:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbjDQWsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 18:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35852 "EHLO
+        id S229710AbjDQWuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 18:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbjDQWsS (ORCPT
+        with ESMTP id S229762AbjDQWuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 18:48:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D480F49CA;
-        Mon, 17 Apr 2023 15:48:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BE88621D4;
-        Mon, 17 Apr 2023 22:48:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60A28C4339C;
-        Mon, 17 Apr 2023 22:48:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681771695;
-        bh=u6/6uW/rx2JuHFXB4ndkciesh2ZCckbEAGctN29yNms=;
-        h=From:To:Cc:Subject:Date:From;
-        b=hgqOWDCDp/NaH+YIS/4Z4iD3atlZii3Ycud9CfBx5sJ/DkOBPyM1qJBsrBvLlcWp2
-         iREMhw0G0lKtO2g+CT/BrHyaaHCJqxnF7r3GP8qVXW1slRrnP5D0pS5aQHAA7bDM3x
-         RkD1nxA1siEwh7iH9HXYlCyBNrtjR8ZsjjEQLTLG3+xSodqxeNa0pIo9C3gb2ypglY
-         IeM1E48I/m8OXCXdp/UfrtisOtSvjFYLeJjzG9XvKbVa8os61IrsG5jqc0lgfQ0ZHO
-         tPTDO25isdgTSy47d2BAaWaGHMq85oVmPZiq5vrkAY0o+4uaaauaytrELYLYJL4ckh
-         gvsCKPVybH5jA==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] [v2] module: fix building stats for 32-bit targets
-Date:   Tue, 18 Apr 2023 00:48:04 +0200
-Message-Id: <20230417224810.2922059-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 17 Apr 2023 18:50:02 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED4446A8;
+        Mon, 17 Apr 2023 15:50:01 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id BFAB83200949;
+        Mon, 17 Apr 2023 18:49:57 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Mon, 17 Apr 2023 18:49:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1681771797; x=1681858197; bh=Uv
+        1oc3npXKlB1WxLwiqApxeyeE+yNkaEVZoDDF0LLXU=; b=GYe9tZQN8GYHgiPkdP
+        lWkvIiTgewMK5ToHiirxxofpi7Bs4mgEVppU//lBKkyYpZv6Rz3+A7GCpOB5J0zN
+        S7bUtjxBmVTH6x3SCRXwY0u4WW7Vv6H8BGP9ZxlJpkeZmm4i+KlgKAZ10KBjfqq5
+        F7ujmKZ0b/LO9RSgpWaUNq8AcpMBCYYau/cBay+/6NeCkpJlRRHQ4X7i7f/4gk+9
+        HEwDOQE9NfuhPPHm85fliEdpvGKouapsPqeMhw85VnCADuYZwub+b92W/L2TFo1U
+        Lw2WVHE/2lJPhepvLmMj4sPoJmEIWQhVz7aSDcgfQu0iMssxoURRz9lJURU9tDkY
+        XPxQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1681771797; x=1681858197; bh=Uv1oc3npXKlB1
+        WxLwiqApxeyeE+yNkaEVZoDDF0LLXU=; b=YpZYZm1mNPrHbxzvS2jV71YKVaRZl
+        wwho1zUDeGuUVGoVnsKR1vt6dFjOhfcDOiFn5+h7chKrWys/nBNDHjmyLh0QwH7Y
+        Zr4aIIirvK9OWVsK9Ivkl0QGMgt/TmU57CKgul8fpKir+9+0wyew9i05nkvZXXvl
+        ZFazSGAiphEQqlwMWoceWk7UK13gGHrGBQhIaM3P6oJbIHOCEqY7m4YeMNAqrX17
+        /axg4hehsxLAhRBOon+bc8q2UwLejAltCxNHfZY5QhdEcjifALV6thqtCG5xRs4H
+        9neqIYAFnv5NFo9LJM1J7ntnwgNZkCY0t5eZkgkEk9l9jHFmRU3/5nlfA==
+X-ME-Sender: <xms:Fc09ZEpOdaX0kw3zgt98nD7dbBdRMQZ3SXNo0qpdXcGE29C30ula4Q>
+    <xme:Fc09ZKrtdne4yf8qTpk6JvCxB69cQ_PuUo966g4UHM4VsqBeWxXFjynRZvrM7FLph
+    CH8G9sUhJBYPm6FOeo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeljedgudehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:Fc09ZJNFQjNE3ociTCO6yIhiCXryYQ-kRLIRBnQxpDOU_hbc8GQmIw>
+    <xmx:Fc09ZL4dIUBBRAv-6AnVUQ1knyJa_ES1BBTUJs0YEoctTzJRboCsig>
+    <xmx:Fc09ZD4iPnpzpNOaDoccmtKQ_loPEZQYZzMa7a46uzWHMyRt3xxADA>
+    <xmx:Fc09ZHiVv3Z4na2jw5oSblSGzcdiK3VcjWxx5tcNzMOTjWIOktj5Dg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 0EA74B60086; Mon, 17 Apr 2023 18:49:56 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-372-g43825cb665-fm-20230411.003-g43825cb6
+Mime-Version: 1.0
+Message-Id: <cd9d08ea-ffa5-4932-b296-7a58203ef701@app.fastmail.com>
+In-Reply-To: <ZD3E+AYPzq/EO2Gs@bombadil.infradead.org>
+References: <20230417220254.3215576-1-arnd@kernel.org>
+ <20230417220254.3215576-2-arnd@kernel.org>
+ <ZD3E+AYPzq/EO2Gs@bombadil.infradead.org>
+Date:   Tue, 18 Apr 2023 00:49:29 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Luis Chamberlain" <mcgrof@kernel.org>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc:     "Aaron Tomlin" <atomlin@redhat.com>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Viktor Malik" <vmalik@redhat.com>,
+        "Jason Baron" <jbaron@akamai.com>, "Song Liu" <song@kernel.org>,
+        "Jim Cromie" <jim.cromie@gmail.com>,
+        "Kees Cook" <keescook@chromium.org>,
+        "Masahiro Yamada" <masahiroy@kernel.org>,
+        "Sami Tolvanen" <samitolvanen@google.com>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] module: fix building stats for 32-bit targets
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Tue, Apr 18, 2023, at 00:15, Luis Chamberlain wrote:
+> On Tue, Apr 18, 2023 at 12:02:47AM +0200, Arnd Bergmann wrote:
+>> I have no idea if there is a risk of these variables actually
+>> overflowing 'long' on 32-bit machines. If they provably can't, it
+>> would be better to do the opposite patch.
+>
+> I had originally used atomic64_t and added a debugfs knob for it but
+> Linus had advised against it because its not a stat we care too much
+> on 32-bit and atomic64 is nasty on 32-bit [0].
+>
+> So I went with atomic_long and the cast becuase we're just reading.
+> 
+> Is there a way to fix this without doing the fully jump? If not oh well.
 
-The new module statistics code mixes 64-bit types and wordsized 'long'
-variables, which leads to build failures on 32-bit architectures:
+I've sent a v2 now that does it the other way round, which is
+clearly much more efficient. Have only done minimal build testing
+so far, but it passes the randconfigs that failed before.
 
-kernel/module/stats.c: In function 'read_file_mod_stats':
-kernel/module/stats.c:291:29: error: passing argument 1 of 'atomic64_read' from incompatible pointer type [-Werror=incompatible-pointer-types]
-  291 |  total_size = atomic64_read(&total_mod_size);
-x86_64-linux-ld: kernel/module/stats.o: in function `read_file_mod_stats':
-stats.c:(.text+0x2b2): undefined reference to `__udivdi3'
-
-To fix this, the code has to use one of the two types consistently.
-
-Change them all to word-size types here.
-
-Fixes: 0d4ab68ce983 ("module: add debug stats to help identify memory pressure")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-v2: use long instead of u64 everywheren
----
- kernel/module/stats.c | 46 +++++++++++++++++++++----------------------
- 1 file changed, 23 insertions(+), 23 deletions(-)
-
-diff --git a/kernel/module/stats.c b/kernel/module/stats.c
-index bbf90190a3fe..cdcd60695399 100644
---- a/kernel/module/stats.c
-+++ b/kernel/module/stats.c
-@@ -280,8 +280,8 @@ static ssize_t read_file_mod_stats(struct file *file, char __user *user_buf,
- 	unsigned int len, size, count_failed = 0;
- 	char *buf;
- 	u32 live_mod_count, fkreads, fdecompress, fbecoming, floads;
--	u64 total_size, text_size, ikread_bytes, ibecoming_bytes, idecompress_bytes, imod_bytes,
--	    total_virtual_lost;
-+	unsigned long total_size, text_size, ikread_bytes, ibecoming_bytes,
-+		idecompress_bytes, imod_bytes, total_virtual_lost;
- 
- 	live_mod_count = atomic_read(&modcount);
- 	fkreads = atomic_read(&failed_kreads);
-@@ -289,12 +289,12 @@ static ssize_t read_file_mod_stats(struct file *file, char __user *user_buf,
- 	fbecoming = atomic_read(&failed_becoming);
- 	floads = atomic_read(&failed_load_modules);
- 
--	total_size = atomic64_read(&total_mod_size);
--	text_size = atomic64_read(&total_text_size);
--	ikread_bytes = atomic64_read(&invalid_kread_bytes);
--	idecompress_bytes = atomic64_read(&invalid_decompress_bytes);
--	ibecoming_bytes = atomic64_read(&invalid_becoming_bytes);
--	imod_bytes = atomic64_read(&invalid_mod_bytes);
-+	total_size = atomic_long_read(&total_mod_size);
-+	text_size = atomic_long_read(&total_text_size);
-+	ikread_bytes = atomic_long_read(&invalid_kread_bytes);
-+	idecompress_bytes = atomic_long_read(&invalid_decompress_bytes);
-+	ibecoming_bytes = atomic_long_read(&invalid_becoming_bytes);
-+	imod_bytes = atomic_long_read(&invalid_mod_bytes);
- 
- 	total_virtual_lost = ikread_bytes + idecompress_bytes + ibecoming_bytes + imod_bytes;
- 
-@@ -315,27 +315,27 @@ static ssize_t read_file_mod_stats(struct file *file, char __user *user_buf,
- 
- 	len += scnprintf(buf + len, size - len, "%25s\t%u\n", "Mods failed on load", floads);
- 
--	len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Total module size", total_size);
--	len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Total mod text size", text_size);
-+	len += scnprintf(buf + len, size - len, "%25s\t%lu\n", "Total module size", total_size);
-+	len += scnprintf(buf + len, size - len, "%25s\t%lu\n", "Total mod text size", text_size);
- 
--	len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Failed kread bytes", ikread_bytes);
-+	len += scnprintf(buf + len, size - len, "%25s\t%lu\n", "Failed kread bytes", ikread_bytes);
- 
--	len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Failed decompress bytes",
-+	len += scnprintf(buf + len, size - len, "%25s\t%lu\n", "Failed decompress bytes",
- 			 idecompress_bytes);
- 
--	len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Failed becoming bytes", ibecoming_bytes);
-+	len += scnprintf(buf + len, size - len, "%25s\t%lu\n", "Failed becoming bytes", ibecoming_bytes);
- 
--	len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Failed kmod bytes", imod_bytes);
-+	len += scnprintf(buf + len, size - len, "%25s\t%lu\n", "Failed kmod bytes", imod_bytes);
- 
--	len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Virtual mem wasted bytes", total_virtual_lost);
-+	len += scnprintf(buf + len, size - len, "%25s\t%lu\n", "Virtual mem wasted bytes", total_virtual_lost);
- 
- 	if (live_mod_count && total_size) {
--		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Average mod size",
-+		len += scnprintf(buf + len, size - len, "%25s\t%lu\n", "Average mod size",
- 				 DIV_ROUND_UP(total_size, live_mod_count));
- 	}
- 
- 	if (live_mod_count && text_size) {
--		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Average mod text size",
-+		len += scnprintf(buf + len, size - len, "%25s\t%lu\n", "Average mod text size",
- 				 DIV_ROUND_UP(text_size, live_mod_count));
- 	}
- 
-@@ -348,25 +348,25 @@ static ssize_t read_file_mod_stats(struct file *file, char __user *user_buf,
- 
- 	WARN_ON_ONCE(ikread_bytes && !fkreads);
- 	if (fkreads && ikread_bytes) {
--		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Avg fail kread bytes",
-+		len += scnprintf(buf + len, size - len, "%25s\t%lu\n", "Avg fail kread bytes",
- 				 DIV_ROUND_UP(ikread_bytes, fkreads));
- 	}
- 
- 	WARN_ON_ONCE(ibecoming_bytes && !fbecoming);
- 	if (fbecoming && ibecoming_bytes) {
--		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Avg fail becoming bytes",
-+		len += scnprintf(buf + len, size - len, "%25s\t%lu\n", "Avg fail becoming bytes",
- 				 DIV_ROUND_UP(ibecoming_bytes, fbecoming));
- 	}
- 
- 	WARN_ON_ONCE(idecompress_bytes && !fdecompress);
- 	if (fdecompress && idecompress_bytes) {
--		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Avg fail decomp bytes",
-+		len += scnprintf(buf + len, size - len, "%25s\t%lu\n", "Avg fail decomp bytes",
- 				 DIV_ROUND_UP(idecompress_bytes, fdecompress));
- 	}
- 
- 	WARN_ON_ONCE(imod_bytes && !floads);
- 	if (floads && imod_bytes) {
--		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Average fail load bytes",
-+		len += scnprintf(buf + len, size - len, "%25s\t%lu\n", "Average fail load bytes",
- 				 DIV_ROUND_UP(imod_bytes, floads));
- 	}
- 
-@@ -387,8 +387,8 @@ static ssize_t read_file_mod_stats(struct file *file, char __user *user_buf,
- 	list_for_each_entry_rcu(mod_fail, &dup_failed_modules, list) {
- 		if (WARN_ON_ONCE(++count_failed >= MAX_FAILED_MOD_PRINT))
- 			goto out_unlock;
--		len += scnprintf(buf + len, size - len, "%25s\t%15llu\t%25s\n", mod_fail->name,
--				 atomic64_read(&mod_fail->count), mod_fail_to_str(mod_fail));
-+		len += scnprintf(buf + len, size - len, "%25s\t%15lu\t%25s\n", mod_fail->name,
-+				 atomic_long_read(&mod_fail->count), mod_fail_to_str(mod_fail));
- 	}
- out_unlock:
- 	mutex_unlock(&module_mutex);
--- 
-2.39.2
-
+     Arnd
