@@ -2,206 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEDD56E54D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 00:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A31C6E54DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 00:56:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbjDQWzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 18:55:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39336 "EHLO
+        id S230000AbjDQW4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 18:56:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbjDQWzR (ORCPT
+        with ESMTP id S229929AbjDQW4C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 18:55:17 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE6059DF;
-        Mon, 17 Apr 2023 15:55:14 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1a516fb6523so20838825ad.3;
-        Mon, 17 Apr 2023 15:55:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681772114; x=1684364114;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=m9iYR2Co4JKSAqYdknl1fdrnccybCVbaZOt1uS3IMoI=;
-        b=jF1aSbP/z+VAHYr733tjVAKHQskfbcRGT7nHvMxcrpK92pui607eWFCtRtCh2nLSDo
-         HlXrbyH/wCcw+k7urF9aALSN6UnsW57iFclyAsowmir0jPXmFIHFa76/6qYCxiwSoTJc
-         Sll8+MqlZJhqpoICAHdpFyp3aArZMUFPhu5vr1SVG0E/H7ocGH7+4DFJYSDDAsSFGYRG
-         6G/UanZsG6hagEsnypDS/u42ZcD+7GRiNDFyEcoHnK2uYKgPr8WhpK9bW16YMlUTr6Y4
-         1mXU25UFA63hPICSQ7T277Hkgl2NeJVkSlNKRNSLCgrj+1Yzrn60y5ZjObUVNVR4RkEL
-         z78w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681772114; x=1684364114;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=m9iYR2Co4JKSAqYdknl1fdrnccybCVbaZOt1uS3IMoI=;
-        b=IQOOxXjYydyqrpk82iVdBx8aB/nG5Ji7kMoDabqQf8+FZNirEl8CI5tWGs+a+J9/Ak
-         iDQXtSxTJHiVn8dz6s3fQO8FlNEfx8xzkhPWxMYO4K5wUfy3jj1qS39G910UcZV9wSmr
-         76JuqPIqNv6WD0jR7y1tWI39d3GaJkwP4rNv1gdBEiV1+mjNuHaAjU/qSyyAlRbLliZ4
-         crE/dAVz+d1NXCzHCzeKmJW+sLZvMHs9ePPRAIGEXJ4NMVkbxfdrR3aHm630FtZiItdL
-         SbjH+RO3p1cjiYWDycZl9/LFVyPRKk75rXcr5dQiQhjpgumLCbEqfPilS+cLLLmUl0uR
-         XFKg==
-X-Gm-Message-State: AAQBX9cz6mTC7fRpzSW7dB86amJMSpNmFcf9r06w83yTQZkLkT3i3xQt
-        8VikaxjrowXf3r4vT2lTlkk=
-X-Google-Smtp-Source: AKy350bDp91wqZ9o16qSqyOTp5/kQfreQ5CbUQ03iZ80C8Ymc/TVcSCdZHcYiomfdA9z85lKA89oDA==
-X-Received: by 2002:a17:902:7290:b0:1a6:8ed5:428a with SMTP id d16-20020a170902729000b001a68ed5428amr109735pll.22.1681772114120;
-        Mon, 17 Apr 2023 15:55:14 -0700 (PDT)
-Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
-        by smtp.gmail.com with ESMTPSA id jf1-20020a170903268100b001a1ccb37847sm8209039plb.146.2023.04.17.15.55.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 15:55:13 -0700 (PDT)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm/msm: Move cmdstream dumping out of sched kthread
-Date:   Mon, 17 Apr 2023 15:55:10 -0700
-Message-Id: <20230417225510.494951-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        Mon, 17 Apr 2023 18:56:02 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97AEA49DA;
+        Mon, 17 Apr 2023 15:55:45 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33HMNHSY014460;
+        Mon, 17 Apr 2023 22:55:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=7U+aHnfVAWUr9+TgSNykvL0n3P5vsDx6kCg/xTLyFvg=;
+ b=G/Q7DQViTwou247edvk6fNgzaop+rCC+pjdvGHdB08RfHv0CZAU/IThB95fKCBKE+9x1
+ 6f3NunIQFoKIEj4HDCWC4WWeF3EchKEjiKooNIbu0D9zLU1Uj4B4tiDeOAbla+On9Caw
+ ZjlTGY5sYvzkywQeip+CrLseP7HAY+B7LSq41JtZBNEfB1LTWB6TfKj02bParXbjIXls
+ SfVqZewrU8pWjQ8fyB6smaktS4MqBM0maugOY9RpKml75QFpze6fzD7XPGQMQw62jH8+
+ y2n1AcSebXxWB1y6+m0vfBP2X97jHufZNnYYHjlK0I4LxNNrQ1qYev56aOsGOaCL0zVn Dg== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q12stsueu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Apr 2023 22:55:32 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33HMtVb7013987
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Apr 2023 22:55:31 GMT
+Received: from [10.134.65.165] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 17 Apr
+ 2023 15:55:30 -0700
+Message-ID: <c8e95fd5-5761-b9aa-2877-6a8827a76f21@quicinc.com>
+Date:   Mon, 17 Apr 2023 15:55:26 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v11 24/26] virt: gunyah: Add irqfd interface
+Content-Language: en-US
+To:     Alex Elder <elder@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Jonathan Corbet <corbet@lwn.net>
+CC:     Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Will Deacon <will@kernel.org>, Andy Gross <agross@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20230304010632.2127470-1-quic_eberman@quicinc.com>
+ <20230304010632.2127470-25-quic_eberman@quicinc.com>
+ <a8dc6572-0a48-f772-2d8c-6329d632e0b4@linaro.org>
+From:   Elliot Berman <quic_eberman@quicinc.com>
+In-Reply-To: <a8dc6572-0a48-f772-2d8c-6329d632e0b4@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: UzFcKxxxsI1y1ILA5uReQsN0DsCewJjX
+X-Proofpoint-ORIG-GUID: UzFcKxxxsI1y1ILA5uReQsN0DsCewJjX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-17_14,2023-04-17_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 mlxscore=0 impostorscore=0 adultscore=0 bulkscore=0
+ mlxlogscore=999 phishscore=0 clxscore=1015 spamscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304170202
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
 
-This is something that can block for arbitrary amounts of time as
-userspace consumes from the FIFO.  So we don't really want this to
-be in the fence signaling path.
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/gpu/drm/msm/msm_gem_submit.c |  2 ++
- drivers/gpu/drm/msm/msm_gpu.c        |  4 ----
- drivers/gpu/drm/msm/msm_rd.c         | 24 ++++++++----------------
- 3 files changed, 10 insertions(+), 20 deletions(-)
+On 3/31/2023 7:27 AM, Alex Elder wrote:
+> On 3/3/23 7:06 PM, Elliot Berman wrote:
 
-diff --git a/drivers/gpu/drm/msm/msm_gem_submit.c b/drivers/gpu/drm/msm/msm_gem_submit.c
-index 89375c2e422b..6c6aefaa72be 100644
---- a/drivers/gpu/drm/msm/msm_gem_submit.c
-+++ b/drivers/gpu/drm/msm/msm_gem_submit.c
-@@ -952,6 +952,8 @@ int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
- 	/* The scheduler owns a ref now: */
- 	msm_gem_submit_get(submit);
- 
-+	msm_rd_dump_submit(priv->rd, submit, NULL);
-+
- 	drm_sched_entity_push_job(&submit->base);
- 
- 	args->fence = submit->fence_id;
-diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
-index 1150dcbf28aa..513e2fccfefc 100644
---- a/drivers/gpu/drm/msm/msm_gpu.c
-+++ b/drivers/gpu/drm/msm/msm_gpu.c
-@@ -759,8 +759,6 @@ void msm_gpu_retire(struct msm_gpu *gpu)
- /* add bo's to gpu's ring, and kick gpu: */
- void msm_gpu_submit(struct msm_gpu *gpu, struct msm_gem_submit *submit)
- {
--	struct drm_device *dev = gpu->dev;
--	struct msm_drm_private *priv = dev->dev_private;
- 	struct msm_ringbuffer *ring = submit->ring;
- 	unsigned long flags;
- 
-@@ -772,8 +770,6 @@ void msm_gpu_submit(struct msm_gpu *gpu, struct msm_gem_submit *submit)
- 
- 	submit->seqno = submit->hw_fence->seqno;
- 
--	msm_rd_dump_submit(priv->rd, submit, NULL);
--
- 	update_sw_cntrs(gpu);
- 
- 	/*
-diff --git a/drivers/gpu/drm/msm/msm_rd.c b/drivers/gpu/drm/msm/msm_rd.c
-index db2f847c8535..8d5687d5ed78 100644
---- a/drivers/gpu/drm/msm/msm_rd.c
-+++ b/drivers/gpu/drm/msm/msm_rd.c
-@@ -83,15 +83,10 @@ struct msm_rd_state {
- 
- 	bool open;
- 
--	/* current submit to read out: */
--	struct msm_gem_submit *submit;
--
- 	/* fifo access is synchronized on the producer side by
--	 * gpu->lock held by submit code (otherwise we could
--	 * end up w/ cmds logged in different order than they
--	 * were executed).  And read_lock synchronizes the reads
-+	 * write_lock.  And read_lock synchronizes the reads
- 	 */
--	struct mutex read_lock;
-+	struct mutex read_lock, write_lock;
- 
- 	wait_queue_head_t fifo_event;
- 	struct circ_buf fifo;
-@@ -243,6 +238,7 @@ static void rd_cleanup(struct msm_rd_state *rd)
- 		return;
- 
- 	mutex_destroy(&rd->read_lock);
-+	mutex_destroy(&rd->write_lock);
- 	kfree(rd);
- }
- 
-@@ -258,6 +254,7 @@ static struct msm_rd_state *rd_init(struct drm_minor *minor, const char *name)
- 	rd->fifo.buf = rd->buf;
- 
- 	mutex_init(&rd->read_lock);
-+	mutex_init(&rd->write_lock);
- 
- 	init_waitqueue_head(&rd->fifo_event);
- 
-@@ -338,19 +335,15 @@ static void snapshot_buf(struct msm_rd_state *rd,
- 	if (!(submit->bos[idx].flags & MSM_SUBMIT_BO_READ))
- 		return;
- 
--	msm_gem_lock(&obj->base);
- 	buf = msm_gem_get_vaddr_active(&obj->base);
- 	if (IS_ERR(buf))
--		goto out_unlock;
-+		return;
- 
- 	buf += offset;
- 
- 	rd_write_section(rd, RD_BUFFER_CONTENTS, buf, size);
- 
- 	msm_gem_put_vaddr_locked(&obj->base);
--
--out_unlock:
--	msm_gem_unlock(&obj->base);
- }
- 
- /* called under gpu->lock */
-@@ -364,10 +357,7 @@ void msm_rd_dump_submit(struct msm_rd_state *rd, struct msm_gem_submit *submit,
- 	if (!rd->open)
- 		return;
- 
--	/* writing into fifo is serialized by caller, and
--	 * rd->read_lock is used to serialize the reads
--	 */
--	WARN_ON(!mutex_is_locked(&submit->gpu->lock));
-+	mutex_lock(&rd->write_lock);
- 
- 	if (fmt) {
- 		va_list args;
-@@ -424,5 +414,7 @@ void msm_rd_dump_submit(struct msm_rd_state *rd, struct msm_gem_submit *submit,
- 			break;
- 		}
- 	}
-+
-+	mutex_unlock(&rd->write_lock);
- }
- #endif
--- 
-2.39.2
+[snip]
 
+>> +
+>> +static int irqfd_wakeup(wait_queue_entry_t *wait, unsigned int mode, 
+>> int sync, void *key)
+>> +{
+>> +    struct gh_irqfd *irqfd = container_of(wait, struct gh_irqfd, wait);
+>> +    __poll_t flags = key_to_poll(key);
+>> +    u64 enable_mask = GH_BELL_NONBLOCK;
+>> +    u64 old_flags;
+>> +    int ret = 0;
+>> +
+>> +    if (flags & EPOLLIN) {
+>> +        if (irqfd->ghrsc) {
+>> +            ret = gh_hypercall_bell_send(irqfd->ghrsc->capid, 
+>> enable_mask, &old_flags);
+> 
+> I commented elsewhere that you might support passing a null
+> pointer as the last argument above (since you don't use the
+> result).
+> 
+>> +            if (ret)
+>> +                pr_err_ratelimited("Failed to inject interrupt %d: 
+>> %d\n",
+>> +                        irqfd->ticket.label, ret);
+>> +        } else
+>> +            pr_err_ratelimited("Premature injection of interrupt\n");
+>> +    }
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static void irqfd_ptable_queue_proc(struct file *file, 
+>> wait_queue_head_t *wqh, poll_table *pt)
+>> +{
+>> +    struct gh_irqfd *irq_ctx = container_of(pt, struct gh_irqfd, pt);
+>> +
+>> +    add_wait_queue(wqh, &irq_ctx->wait);
+>> +}
+>> +
+>> +static int gh_irqfd_populate(struct gh_vm_resource_ticket *ticket, 
+>> struct gh_resource *ghrsc)
+>> +{
+>> +    struct gh_irqfd *irqfd = container_of(ticket, struct gh_irqfd, 
+>> ticket);
+>> +    u64 enable_mask = GH_BELL_NONBLOCK;
+>> +    u64 ack_mask = ~0;
+> 
+> Why is the ACK mask ~0?
+> 
+> I guess I don't know details about this hypercall (do you document
+> them somewhere?), so it's hard to judge whether or why this is the
+> right thing to use.  The enable_mask is just GH_BELL_NONBLOCK,
+> which is just BIT(32).
+> 
+
+I talked to our hypervisor folks and they mentioned we can simplify 
+this. In v12, enable_mask and ack_mask can just be "1" (BIT(0)). We had 
+chosen bit 32 arbitrarily.
+
+[snip]
+
+> 
+>> +    }
+>> +
+>> +    irqfd->ghrsc = ghrsc;
+>> +    if (irqfd->level) {
+> 
+> I think I don't understand this part of the code well
+> enough to know this.  What happens if level is false?
+> 
+
+If level is false, then guest is assumed to set up IRQ on its side as 
+edge-triggered. In that case, we don't need to configure the enable 
+mask/ack mask because the doorbell flags aren't polled.
+
+[snip]
+
+>> +/**
+>> + * struct gh_fn_irqfd_arg - Arguments to create an irqfd function
+>> + * @fd: an eventfd which when written to will raise a doorbell
+>> + * @label: Label of the doorbell created on the guest VM
+>> + * @flags: GH_IRQFD_LEVEL configures the corresponding doorbell to 
+>> behave
+>> + *         like a level triggered interrupt.
+>> + * @padding: padding bytes
+>> + */
+>> +struct gh_fn_irqfd_arg {
+>> +    __u32 fd;
+> 
+> Should the "fd" field be signed?  Should it be an int?  (Perhaps
+> you're trying to define a fixed kernel API, so __s32 if signed would
+> be better.)
+> 
+
+It looked to me like some interfaces use __u32 and some use __s32. Is 
+one technically correct?
