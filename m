@@ -2,266 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB0826E4F4D
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 19:34:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA626E4F59
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 19:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230405AbjDQRes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 13:34:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57060 "EHLO
+        id S230338AbjDQRh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 13:37:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbjDQRef (ORCPT
+        with ESMTP id S229887AbjDQRh5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 13:34:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C494EC7
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 10:33:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681752826;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Jm85SSVaopQAxnU3x7Lrot1DU+GlbD9SOLxgFW9cj5k=;
-        b=c2moo9YH8STRbnVlFl98w9cL6GP0h32x+n9S85qFWy7vH6+Ly0u7o8Pd13sqc0xiMmjBbM
-        xgoYKl8aH1G4bxr8+Lvj3XvyKsrOI9wUnE40thast8q1Tbu/32Opq5l09MCFqINRAlGCPb
-        PLr7Y5n8hQVolJO78aiCSPi/USohEFk=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-423-dEOJ2tEbMLSiIxERnK10xw-1; Mon, 17 Apr 2023 13:33:45 -0400
-X-MC-Unique: dEOJ2tEbMLSiIxERnK10xw-1
-Received: by mail-qk1-f199.google.com with SMTP id 13-20020a37050d000000b0074dfd7b97bbso729416qkf.18
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 10:33:44 -0700 (PDT)
+        Mon, 17 Apr 2023 13:37:57 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CEA31BD1
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 10:37:55 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id x34so13863086ljq.1
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 10:37:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681753074; x=1684345074;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y7j5v37v0cFJe7eIrc+n1ZxsUusKsgN3Q+vl+g9FMbE=;
+        b=VjVQ822cU597IWSHWdLmAs6ETCwssHLxrmNUrhOndk5vY/7Q/320F7otHSk34LxBuH
+         t3vnLA/5WF88Nvr9NmlKAbiryq+F7PKg6Im8E5Ez7b+uwlCyPG2Jru4ppJN3xr6tTL59
+         tisKCW2sYQFwwUUx1Wxa1MNwsMYJjo4XZaCCuwTxiedSjsnrlcM8kcPGCgJVFfwBe+vc
+         aVHLTqmRXJ3ZxOHY+bSd4F7BjKyU74tYlEvyH08dmn1DDKeEoENQkzhXtHXuTDi/Cu2I
+         haJj9g1zSqS6KQdtYab7M8qgw35CDxMy5H47c7jdBnxfOP5pw6Ed5dzt1WqARIWtdRGH
+         tjwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681752824; x=1684344824;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Jm85SSVaopQAxnU3x7Lrot1DU+GlbD9SOLxgFW9cj5k=;
-        b=an2Hils9Vi7FpyyC5INLqMYPodVqJ9HViYsehFgg/MxaNV9e3uj3qdm38VA/2YyqS1
-         9QMQ1xEA6QY9B7m99uYSwNs+V0nC6Qf5brJKCMyxNRApeCQmnpi6t0GessYTOMLaU3kC
-         i7RBl3+w7/auQddedFl8Qe4fwdYaM/IQGBhY0lsX5hvBaviZr2T0TGBaM3lTslcGH9/a
-         r7rHQbNoYgRF+aUT4UXm3Q3TRqjeOCJ9w1umG6iXujzZn0KsF5nhhfHoAi8Vd75qYsA4
-         8dStVOnot4sDxjsc3xqgIo8FIjbYAvW3csmVfvKIqEC4VHoT/N31o1gB/iefMxoKus/H
-         bPWg==
-X-Gm-Message-State: AAQBX9erOCpRKhG4Hc+PgJaFOVXDlOd3C3VY3DBRV27965er8BeVJSSU
-        0ryOHOtn9GxAvEH0AvLJMoWcDDWufJwSTFDUSpADvPueIj3mNH0PF3MGkm9U9tbzvYJOkV5jCA1
-        2KK5YQdXq6xDbxiiB6rwhkZSh
-X-Received: by 2002:a05:622a:1746:b0:3ec:e29f:6f4f with SMTP id l6-20020a05622a174600b003ece29f6f4fmr13735670qtk.33.1681752824519;
-        Mon, 17 Apr 2023 10:33:44 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZygDANXtkSDESQaT+/nlutXw5EifsNXMDbt5vvWnxrF6WrCl5NaVCG+oOnpCy/E82arPOA9Q==
-X-Received: by 2002:a05:622a:1746:b0:3ec:e29f:6f4f with SMTP id l6-20020a05622a174600b003ece29f6f4fmr13735633qtk.33.1681752824192;
-        Mon, 17 Apr 2023 10:33:44 -0700 (PDT)
-Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
-        by smtp.gmail.com with ESMTPSA id p24-20020a05620a22f800b0074a2467f541sm3337263qki.35.2023.04.17.10.33.43
+        d=1e100.net; s=20221208; t=1681753074; x=1684345074;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Y7j5v37v0cFJe7eIrc+n1ZxsUusKsgN3Q+vl+g9FMbE=;
+        b=CJJutNI2fLy2+bcy070SaujZ7P/YqYDJXkcRK9V/CYGwV0TkrFX+n/esGWrWzWHn83
+         +BquwW8cZnUPwDMxAC96rue9i1str2AEgfpsvz2fl2ACAAVL+woLOg18AQdLLjDQGouC
+         W/qXsy0gt1ZeOyNzronWG1/WaVtQo4bJZE6CTcZuTbaQZXakCdUgIo7epKNOjTEiP1UO
+         uL9rlUtwoMKFwjUAitkWkQ0xJDyEZUOpT/Eh93RJ/OEdHbvnNsA/Awcnk3O+b1TM7zmb
+         OQ0ZtCHQewTgdDiDq2p3flqAVTBxVOvI21PKoM0Zka3C2HRAFxSwrNB0BmbWAzGx76/Q
+         Q6VQ==
+X-Gm-Message-State: AAQBX9fZkBKdftHzFO0JNZsl/k7vh0u+66L2jjV7TPb4ybxaGAOY/FjJ
+        zoVVpUXsprZgwsGWxdtnrQlDBQ==
+X-Google-Smtp-Source: AKy350Z3wav47/0RzLKAWuUWjHeacDm9uPT3vn2i4OgQfNDZgObom7Olj7tmklR7GOhnI7/sGlUElQ==
+X-Received: by 2002:a2e:8896:0:b0:2a8:bdda:87f3 with SMTP id k22-20020a2e8896000000b002a8bdda87f3mr1473807lji.31.1681753073776;
+        Mon, 17 Apr 2023 10:37:53 -0700 (PDT)
+Received: from [192.168.1.101] (abyk99.neoplus.adsl.tpnet.pl. [83.9.30.99])
+        by smtp.gmail.com with ESMTPSA id h13-20020a2e900d000000b002987088bda4sm2191329ljg.69.2023.04.17.10.37.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 10:33:43 -0700 (PDT)
-Date:   Mon, 17 Apr 2023 13:35:46 -0400
-From:   Brian Foster <bfoster@redhat.com>
-To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
-Cc:     sarthakkukreti@google.com, dm-devel@redhat.com,
-        linux-block@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Bart Van Assche <bvanassche@google.com>,
-        Daniil Lunev <dlunev@google.com>,
-        "Darrick J. Wong" <djwong@kernel.org>
-Subject: Re: [PATCH v3 1/3] block: Introduce provisioning primitives
-Message-ID: <ZD2DcvyHdNmkdwr1@bfoster>
-References: <20221229071647.437095-1-sarthakkukreti@chromium.org>
- <20230414000219.92640-1-sarthakkukreti@chromium.org>
- <20230414000219.92640-2-sarthakkukreti@chromium.org>
+        Mon, 17 Apr 2023 10:37:53 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH v4 0/2] Introduce RPM Master stats
+Date:   Mon, 17 Apr 2023 19:37:51 +0200
+Message-Id: <20230405-topic-master_stats-v4-0-4217362fcc79@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230414000219.92640-2-sarthakkukreti@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAO+DPWQC/4XNQQrCMBAF0KtI1kaSSavElfcQkUlM20BNShKLU
+ np3p+5EsMs/zH9/Ytkl7zI7biaW3Oizj4FCtd0w22FoHfc3ygwEKFGJmpc4eMvvmItL11ywZG4
+ QhESNjVY3RkWD2XGTMNiOquHR93Qckmv887N0vlDufC4xvT7Do1yufzdGyQWXRjYIB6V1rU69D
+ 5jiLqaWLd4I6waQUUtLD86avRQ/hlo3FBlgDRisGhAavox5nt8SjrT0UgEAAA==
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1681753072; l=2265;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=XrAEFoYbGavRPeKk7KK+IVW8Jgm3IU8DzAiHjb+PNRA=;
+ b=p4IjNdeAgFb1YAAcIo122wBfDyx7Rxz88aP5J/w9WLb2jxOcIpcRiPX4qjuUwHM5bfbRUgwOVTro
+ Ukq6nLVnCdmHYzgFxcEuDPWxtUGmYgkvlcFf6MRLNtCYW325c2S5
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 05:02:17PM -0700, Sarthak Kukreti wrote:
-> Introduce block request REQ_OP_PROVISION. The intent of this request
-> is to request underlying storage to preallocate disk space for the given
-> block range. Block devices that support this capability will export
-> a provision limit within their request queues.
-> 
-> This patch also adds the capability to call fallocate() in mode 0
-> on block devices, which will send REQ_OP_PROVISION to the block
-> device for the specified range,
-> 
-> Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
-> ---
->  block/blk-core.c          |  5 ++++
->  block/blk-lib.c           | 53 +++++++++++++++++++++++++++++++++++++++
->  block/blk-merge.c         | 18 +++++++++++++
->  block/blk-settings.c      | 19 ++++++++++++++
->  block/blk-sysfs.c         |  8 ++++++
->  block/bounce.c            |  1 +
->  block/fops.c              | 14 ++++++++---
->  include/linux/bio.h       |  6 +++--
->  include/linux/blk_types.h |  5 +++-
->  include/linux/blkdev.h    | 16 ++++++++++++
->  10 files changed, 138 insertions(+), 7 deletions(-)
-> 
-...
-> diff --git a/block/fops.c b/block/fops.c
-> index d2e6be4e3d1c..f82da2fb8af0 100644
-> --- a/block/fops.c
-> +++ b/block/fops.c
-> @@ -625,7 +625,7 @@ static long blkdev_fallocate(struct file *file, int mode, loff_t start,
->  	int error;
->  
->  	/* Fail if we don't recognize the flags. */
-> -	if (mode & ~BLKDEV_FALLOC_FL_SUPPORTED)
-> +	if (mode != 0 && mode & ~BLKDEV_FALLOC_FL_SUPPORTED)
->  		return -EOPNOTSUPP;
->  
->  	/* Don't go off the end of the device. */
-> @@ -649,11 +649,17 @@ static long blkdev_fallocate(struct file *file, int mode, loff_t start,
->  	filemap_invalidate_lock(inode->i_mapping);
->  
->  	/* Invalidate the page cache, including dirty pages. */
-> -	error = truncate_bdev_range(bdev, file->f_mode, start, end);
-> -	if (error)
-> -		goto fail;
-> +	if (mode != 0) {
-> +		error = truncate_bdev_range(bdev, file->f_mode, start, end);
-> +		if (error)
-> +			goto fail;
-> +	}
->  
->  	switch (mode) {
-> +	case 0:
-> +		error = blkdev_issue_provision(bdev, start >> SECTOR_SHIFT,
-> +					       len >> SECTOR_SHIFT, GFP_KERNEL);
-> +		break;
+v3 -> v4:
+- Use "data" instead of "d" for naming local struct master_stats_data *
+- Add "qcom_" prefix in the debugfs path
+- Add "Qualcomm" prefix in MODULE_NAME
+- Make the struct __packed__ to avoid padding surprises
+  (even though it looks like there shouldn't be any, by eye)
+- use IS_ERR for checking debugfs_create_file return value instead of
+  nullchecking, that apparently changed..
+- Use -ENODEV instead of -EINVAL when a MSG RAM handle is not found
+- Add missing of_node_put() after of_parse_phandle()
 
-I would think we'd want to support any combination of
-FALLOC_FL_KEEP_SIZE and FALLOC_FL_UNSHARE_RANGE..? All of the other
-commands support the former modifier, for one. It also looks like if
-somebody attempts to invoke with mode == FALLOC_FL_KEEP_SIZE, even with
-the current upstream code that would perform the bdev truncate before
-returning -EOPNOTSUPP. That seems like a bit of an unfortunate side
-effect to me.
+- Vastly improve the documentation bit
 
-WRT to unshare, if the PROVISION request is always going to imply an
-unshare (which seems reasonable to me), there's probably no reason to
--EOPNOTSUPP if a caller explicitly passes UNSHARE_RANGE.
+v3: https://lore.kernel.org/r/20230405-topic-master_stats-v3-0-2cb2ba4f2092@linaro.org
 
-Brian
+v2 -> v3:
+- rename rpm-master-stats.yaml to qcom,rpm-master-stats.yaml
 
->  	case FALLOC_FL_ZERO_RANGE:
->  	case FALLOC_FL_ZERO_RANGE | FALLOC_FL_KEEP_SIZE:
->  		error = blkdev_issue_zeroout(bdev, start >> SECTOR_SHIFT,
-> diff --git a/include/linux/bio.h b/include/linux/bio.h
-> index d766be7152e1..9820b3b039f2 100644
-> --- a/include/linux/bio.h
-> +++ b/include/linux/bio.h
-> @@ -57,7 +57,8 @@ static inline bool bio_has_data(struct bio *bio)
->  	    bio->bi_iter.bi_size &&
->  	    bio_op(bio) != REQ_OP_DISCARD &&
->  	    bio_op(bio) != REQ_OP_SECURE_ERASE &&
-> -	    bio_op(bio) != REQ_OP_WRITE_ZEROES)
-> +	    bio_op(bio) != REQ_OP_WRITE_ZEROES &&
-> +	    bio_op(bio) != REQ_OP_PROVISION)
->  		return true;
->  
->  	return false;
-> @@ -67,7 +68,8 @@ static inline bool bio_no_advance_iter(const struct bio *bio)
->  {
->  	return bio_op(bio) == REQ_OP_DISCARD ||
->  	       bio_op(bio) == REQ_OP_SECURE_ERASE ||
-> -	       bio_op(bio) == REQ_OP_WRITE_ZEROES;
-> +	       bio_op(bio) == REQ_OP_WRITE_ZEROES ||
-> +	       bio_op(bio) == REQ_OP_PROVISION;
->  }
->  
->  static inline void *bio_data(struct bio *bio)
-> diff --git a/include/linux/blk_types.h b/include/linux/blk_types.h
-> index 99be590f952f..27bdf88f541c 100644
-> --- a/include/linux/blk_types.h
-> +++ b/include/linux/blk_types.h
-> @@ -385,7 +385,10 @@ enum req_op {
->  	REQ_OP_DRV_IN		= (__force blk_opf_t)34,
->  	REQ_OP_DRV_OUT		= (__force blk_opf_t)35,
->  
-> -	REQ_OP_LAST		= (__force blk_opf_t)36,
-> +	/* request device to provision block */
-> +	REQ_OP_PROVISION        = (__force blk_opf_t)37,
-> +
-> +	REQ_OP_LAST		= (__force blk_opf_t)38,
->  };
->  
->  enum req_flag_bits {
-> diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-> index 941304f17492..239e2f418b6e 100644
-> --- a/include/linux/blkdev.h
-> +++ b/include/linux/blkdev.h
-> @@ -303,6 +303,7 @@ struct queue_limits {
->  	unsigned int		discard_granularity;
->  	unsigned int		discard_alignment;
->  	unsigned int		zone_write_granularity;
-> +	unsigned int		max_provision_sectors;
->  
->  	unsigned short		max_segments;
->  	unsigned short		max_integrity_segments;
-> @@ -921,6 +922,8 @@ extern void blk_queue_max_discard_sectors(struct request_queue *q,
->  		unsigned int max_discard_sectors);
->  extern void blk_queue_max_write_zeroes_sectors(struct request_queue *q,
->  		unsigned int max_write_same_sectors);
-> +extern void blk_queue_max_provision_sectors(struct request_queue *q,
-> +		unsigned int max_provision_sectors);
->  extern void blk_queue_logical_block_size(struct request_queue *, unsigned int);
->  extern void blk_queue_max_zone_append_sectors(struct request_queue *q,
->  		unsigned int max_zone_append_sectors);
-> @@ -1060,6 +1063,9 @@ int __blkdev_issue_discard(struct block_device *bdev, sector_t sector,
->  int blkdev_issue_secure_erase(struct block_device *bdev, sector_t sector,
->  		sector_t nr_sects, gfp_t gfp);
->  
-> +extern int blkdev_issue_provision(struct block_device *bdev, sector_t sector,
-> +		sector_t nr_sects, gfp_t gfp_mask);
-> +
->  #define BLKDEV_ZERO_NOUNMAP	(1 << 0)  /* do not free blocks */
->  #define BLKDEV_ZERO_NOFALLBACK	(1 << 1)  /* don't write explicit zeroes */
->  
-> @@ -1139,6 +1145,11 @@ static inline unsigned short queue_max_discard_segments(const struct request_que
->  	return q->limits.max_discard_segments;
->  }
->  
-> +static inline unsigned short queue_max_provision_sectors(const struct request_queue *q)
-> +{
-> +	return q->limits.max_provision_sectors;
-> +}
-> +
->  static inline unsigned int queue_max_segment_size(const struct request_queue *q)
->  {
->  	return q->limits.max_segment_size;
-> @@ -1281,6 +1292,11 @@ static inline bool bdev_nowait(struct block_device *bdev)
->  	return test_bit(QUEUE_FLAG_NOWAIT, &bdev_get_queue(bdev)->queue_flags);
->  }
->  
-> +static inline unsigned int bdev_max_provision_sectors(struct block_device *bdev)
-> +{
-> +	return bdev_get_queue(bdev)->limits.max_provision_sectors;
-> +}
-> +
->  static inline enum blk_zoned_model bdev_zoned_model(struct block_device *bdev)
->  {
->  	return blk_queue_zoned_model(bdev_get_queue(bdev));
-> -- 
-> 2.40.0.634.g4ca3ef3211-goog
-> 
+v2: https://lore.kernel.org/r/20230405-topic-master_stats-v2-0-51c304ecb610@linaro.org
+
+v1 -> v2:
+- Drop the `-` in /properties/compatible to make our entry be of the
+  correct type [1/2]
+- Change %s to %d for printing out the iterator [2/2]
+
+v1: https://lore.kernel.org/r/20230405-topic-master_stats-v1-0-1b1fa2739953@linaro.org
+
+The RPM MSG ram includes per-subsystem low-power mode entry/exit/
+residence/etc. statistics which are very useful for trying to debug
+what I'd call "SoC insomnia", or IOW the plaftorm refusing to drop
+the voltage rails to a minimum and gate the non-critical clocks.
+
+This series adds a very short and simple driver to query that data
+and expose it through debugfs.
+
+The base used for writing this driver is:
+https://github.com/sonyxperiadev/kernel/blob/aosp/LA.UM.9.14.r1/drivers/soc/qcom/rpm_master_stat.c
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (2):
+      dt-bindings: soc: qcom: Add RPM Master stats
+      soc: qcom: Introduce RPM master stats driver
+
+ .../bindings/soc/qcom/qcom,rpm-master-stats.yaml   |  69 +++++++++
+ drivers/soc/qcom/Kconfig                           |  11 ++
+ drivers/soc/qcom/Makefile                          |   1 +
+ drivers/soc/qcom/rpm_master_stats.c                | 162 +++++++++++++++++++++
+ 4 files changed, 243 insertions(+)
+---
+base-commit: d3f2cd24819158bb70701c3549e586f9df9cee67
+change-id: 20230405-topic-master_stats-ba201a9af93d
+
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
