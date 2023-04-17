@@ -2,82 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B8076E4F33
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 19:27:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A376E6E4F32
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 19:27:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbjDQR1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 13:27:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52934 "EHLO
+        id S230173AbjDQR1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 13:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbjDQR1Q (ORCPT
+        with ESMTP id S229682AbjDQR1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 13:27:16 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2598E1FE9
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 10:27:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+tuJX1We1PoACh/ojLaOjM7tDLHm8IU9UAe1VlYXWPI=; b=bUnZZH0kAE3IObO93zsnJUTx41
-        wqOIdkHeJO2hWJQZyfOojZIZqzPzpCp0fsa29aGznFH48P8Qdvl7JrD3GRgYLxGfnk/mPt7b3Cj89
-        +SeKo8+FjmHnHu+f+fIMcS2e0HYFWRkax+q6pn714X11WW2hLGmlmH2eaNwxOGAoFht2uzVW8WKop
-        Kh85oRyH+MHYIcT3nvMfC63wbVPFAfhTuzU28qiZ/7wvffCoh57nHHDCWjUbX1Ad2JxHhSFKZHbPX
-        Z0osQ5va9P6+UmQgr9eYCkOKHdOHAtbeskZXAMDmLoAUjKYXtpeR+0l72zB1FoXmxnawTiVq47bhq
-        k1iWoXLw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1poScf-00BXC2-Vu; Mon, 17 Apr 2023 17:26:38 +0000
-Date:   Mon, 17 Apr 2023 18:26:37 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, mhocko@suse.com,
-        josef@toxicpanda.com, jack@suse.cz, ldufour@linux.ibm.com,
-        laurent.dufour@fr.ibm.com, michel@lespinasse.org,
-        liam.howlett@oracle.com, jglisse@google.com, vbabka@suse.cz,
-        minchan@google.com, dave@stgolabs.net, punit.agrawal@bytedance.com,
-        lstoakes@gmail.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH v2 1/1] mm: do not increment pgfault stats when page
- fault handler retries
-Message-ID: <ZD2BTZ5qDYgp/46E@casper.infradead.org>
-References: <20230415000818.1955007-1-surenb@google.com>
+        Mon, 17 Apr 2023 13:27:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD7F44B0
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 10:27:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE51661169
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 17:27:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 407CAC433EF;
+        Mon, 17 Apr 2023 17:26:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681752419;
+        bh=vEWkokyirFhRtj/YWmCPS6fJqqBTAPVAZdVM7XsRP/I=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=nBxoJpT0UWy+yulrd7i+AZtLb5bXUGAskJS7oq6+UWBmmMZ877YDw4x+r9MwtZmyI
+         0j1Hvv/qv3Orw3IyN6R7EvroVejgIuOAoVHRNOqZMDL+hpXKFstPU47B0+7pK7WKDx
+         AOQ1LL/ao2tlosTkutFq/WvFZxxC53zIy2FSdywpfxTVjfKc4v+7fqWBjWaop2aIgH
+         TWVrMII8IuJBi/U8+uU++ECPHN9lU+QVS3q048J8xcmsS/jmA0k2YpXElKyy8+EplF
+         flqXtop7yryfuXpm7OwOFWaWKMf7nl8RIUchQDbSW6k9Qd3znSMemRXYN9Bqnw9B1g
+         m5LA6PpkNePuA==
+From:   SeongJae Park <sj@kernel.org>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     SeongJae Park <sj@kernel.org>, akpm@linux-foundation.org,
+        willy@infradead.org, paulmck@kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] mm/slab: break up RCU readers on SLAB_TYPESAFE_BY_RCU example code
+Date:   Mon, 17 Apr 2023 17:26:57 +0000
+Message-Id: <20230417172657.21925-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <e2561303-8853-7e16-7eba-001415d34e09@suse.cz>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230415000818.1955007-1-surenb@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 14, 2023 at 05:08:18PM -0700, Suren Baghdasaryan wrote:
->  	/*
-> -	 * We don't do accounting for some specific faults:
-> -	 *
-> -	 * - Unsuccessful faults (e.g. when the address wasn't valid).  That
-> -	 *   includes arch_vma_access_permitted() failing before reaching here.
-> -	 *   So this is not a "this many hardware page faults" counter.  We
-> -	 *   should use the hw profiling for that.
-> -	 *
-> -	 * - Incomplete faults (VM_FAULT_RETRY).  They will only be counted
-> -	 *   once they're completed.
-> +	 * Do not account for incomplete faults (VM_FAULT_RETRY). They will be
+Hi Vlastimil,
 
-I don't think you need the "(VM_FAULT_RETRY)" here.
+On Mon, 17 Apr 2023 13:05:40 +0200 Vlastimil Babka <vbabka@suse.cz> wrote:
 
-> @@ -5180,21 +5186,22 @@ static vm_fault_t sanitize_fault_flags(struct vm_area_struct *vma,
->  vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
->  			   unsigned int flags, struct pt_regs *regs)
->  {
-> +	/* Copy vma->vm_mm in case mmap_lock is dropped and vma becomes unstable. */
+> On 4/15/23 05:31, SeongJae Park wrote:
+> > The SLAB_TYPESAFE_BY_RCU example code snippet is having not tiny RCU
+> 
+> Since "tiny RCU" means something quite specific in the RCU world, it can be
+> confusing to read it in this sense. We could say e.g. "... snippet uses a
+> single RCU read-side critical section for retries"?
 
-How about:
+Looks much better, thank you for this suggestion!
 
-	/* If the fault handler drops the mmap_lock, vma may be freed */
+> 
+> > read-side critical section.  'Documentation/RCU/rculist_nulls.rst' has
+> > similar example code snippet, and commit da82af04352b ("doc: Update and
+> > wordsmith rculist_nulls.rst") has broken it.
+> 
+> "has broken it" has quite different meaning than "has broken it up" :) I
+> guess we could just add the "up", unless someone has an even better wording.
 
-> +	struct mm_struct *mm = vma->vm_mm;
+Good point, thank you for your suggestion!
+
+I will apply above suggestion on the next spin.
+
+
+Thanks,
+SJ
+
+> 
+> > Apply the change to
+> > SLAB_TYPESAFE_BY_RCU example code snippet, too.
+> > 
+> > Signed-off-by: SeongJae Park <sj@kernel.org>
+> > ---
+> >  include/linux/slab.h | 8 +++++---
+> >  1 file changed, 5 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/include/linux/slab.h b/include/linux/slab.h
+> > index b18e56c6f06c..6acf1b7c6551 100644
+> > --- a/include/linux/slab.h
+> > +++ b/include/linux/slab.h
+> > @@ -53,16 +53,18 @@
+> >   * stays valid, the trick to using this is relying on an independent
+> >   * object validation pass. Something like:
+> >   *
+> > + * begin:
+> >   *  rcu_read_lock();
+> > - * again:
+> >   *  obj = lockless_lookup(key);
+> >   *  if (obj) {
+> >   *    if (!try_get_ref(obj)) // might fail for free objects
+> > - *      goto again;
+> > + *      rcu_read_unlock();
+> > + *      goto begin;
+> >   *
+> >   *    if (obj->key != key) { // not the object we expected
+> >   *      put_ref(obj);
+> > - *      goto again;
+> > + *      rcu_read_unlock();
+> > + *      goto begin;
+> >   *    }
+> >   *  }
+> >   *  rcu_read_unlock();
+> 
