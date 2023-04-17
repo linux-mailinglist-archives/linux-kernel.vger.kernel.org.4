@@ -2,99 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F19D96E4A46
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 15:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E68A6E4A4A
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 15:46:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230514AbjDQNpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 09:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43246 "EHLO
+        id S231140AbjDQNqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 09:46:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbjDQNpm (ORCPT
+        with ESMTP id S230443AbjDQNq2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 09:45:42 -0400
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D0D10E
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 06:45:41 -0700 (PDT)
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-3f174c4b404so618975e9.1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 06:45:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681739140; x=1684331140;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sy7wQsGi6Nyz8v43nQvutVpWGG1vp+oDxTzBNGMPHN8=;
-        b=kAGYieZho9eBUVdaNMOBSdYntF1gyaQYWTruFm6flWtejNMjgfxlhjFxQ3SgGGNk9d
-         wZHFvdfPAs+X2YUMSE1boxxDI4sPfnfId5UG59ZYIjI/ntnQQ0pezg2LJZDy5NBQJ87A
-         ds53SROQnGBnM0wyeHTpbs2v39wjDW+Vo2AaBQLdaRhIRnqDDoYbJKJ3wR/h5DN7poRt
-         5kVkd0/1q9WxQpDyXvN9/DmrnxdnGYI1DYqiuP4P2t8Q62rxlyFJvLbuiTmV7KE1Yv77
-         WYWSOFGWFp/J7MkhO5C4yvhlcrGeFUOSqoInOHpRzfDOnN/wa2PqGVGZR74cUmRcczOs
-         uzfg==
-X-Gm-Message-State: AAQBX9e1a4NorOvYL8hHDYaEzAk0/l6tdu6huYsqskhwKuP3st+Rwisj
-        el/VSbhsNzxbe6XXo7l920Q=
-X-Google-Smtp-Source: AKy350YBfbjvfjeQ0sD799bOScyuPO276lIbLuDkqHFHL2HlShdNtg9EsNM1V+hrzVVo4DsgmCrraw==
-X-Received: by 2002:a05:600c:1c93:b0:3f0:b1c9:b676 with SMTP id k19-20020a05600c1c9300b003f0b1c9b676mr7756064wms.2.1681739139515;
-        Mon, 17 Apr 2023 06:45:39 -0700 (PDT)
-Received: from [192.168.64.192] (bzq-219-42-90.isdn.bezeqint.net. [62.219.42.90])
-        by smtp.gmail.com with ESMTPSA id p6-20020a1c7406000000b003ed2c0a0f37sm11966478wmc.35.2023.04.17.06.45.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Apr 2023 06:45:38 -0700 (PDT)
-Message-ID: <7f553d34-9ada-426c-4847-c7cd1aba64a8@grimberg.me>
-Date:   Mon, 17 Apr 2023 16:45:37 +0300
+        Mon, 17 Apr 2023 09:46:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58E710E
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 06:45:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681739142;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zQIbr1IdRvX8ZwbP47xI9cpUC59Ke3qChHXmW4g760E=;
+        b=OML4J20bV5gh2emyeOBPWTTH2QZS8iLp+HOt4ifnDnuUIfY9Ev6PqFRHMrFgT8+BFO3KvJ
+        LKjqzsL29/nh1mITx5RoQ5xBeQS1tbR3e2WwsIXDWtgVX0k0fAHWQfyfxNu8h2kuOCkXUl
+        L37rMLdayFpsW+SJOVLUBfPJuoImg/M=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-114-W7l8ec26OjKUm6Br76yOCQ-1; Mon, 17 Apr 2023 09:45:41 -0400
+X-MC-Unique: W7l8ec26OjKUm6Br76yOCQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CB3D538173C0;
+        Mon, 17 Apr 2023 13:45:40 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.67])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 812C2C158BB;
+        Mon, 17 Apr 2023 13:45:39 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <e8bc6158-86b2-18e5-efea-c165e2a3f196@kernel.dk>
+References: <e8bc6158-86b2-18e5-efea-c165e2a3f196@kernel.dk> <20230413182542.1133335-1-broonie@kernel.org> <0c6b661c-f7ff-cf12-b7f0-00b6b2f1317b@amd.com> <3c4b9025-2667-ca8c-7427-502068b8168e@amd.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     dhowells@redhat.com, Ayush Jain <ayush.jain3@amd.com>,
+        broonie@kernel.org,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Santosh.Shukla@amd.com, Kalpana.Shetty@amd.com,
+        Narasimhan V <Narasimhan.V@amd.com>, sfr@canb.auug.org.au
+Subject: Re: linux-next: Tree for Apr 13
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] nvme/tcp: Add support to set the tcp worker cpu affinity
-Content-Language: en-US
-To:     Li Feng <fengli@smartx.com>, Keith Busch <kbusch@kernel.org>,
-        Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
-        "open list:NVM EXPRESS DRIVER" <linux-nvme@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     lifeng1519@gmail.com
-References: <20230413062339.2454616-1-fengli@smartx.com>
- <20230413063317.2455680-1-fengli@smartx.com>
-From:   Sagi Grimberg <sagi@grimberg.me>
-In-Reply-To: <20230413063317.2455680-1-fengli@smartx.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1551343.1681739138.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Mon, 17 Apr 2023 14:45:38 +0100
+Message-ID: <1551344.1681739138@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Li,
+The problem might be summed up by the following snippet:
 
-> The default worker affinity policy is using all online cpus, e.g. from 0
-> to N-1. However, some cpus are busy for other jobs, then the nvme-tcp will
-> have a bad performance.
-> 
-> This patch adds a module parameter to set the cpu affinity for the nvme-tcp
-> socket worker threads.  The parameter is a comma separated list of CPU
-> numbers.  The list is parsed and the resulting cpumask is used to set the
-> affinity of the socket worker threads.  If the list is empty or the
-> parsing fails, the default affinity is used.
+	openat(AT_FDCWD, "/dev/loop0", O_RDONLY) =3D 3
+	newfstatat(3, "", {st_mode=3DS_IFBLK|0660, st_rdev=3Dmakedev(0x7, 0), ...=
+}, AT_EMPTY_PATH) =3D 0
+	splice(3, NULL, 1, NULL, 1048576, 0)    =3D 0
 
-I can see how this may benefit a specific set of workloads, but I have a
-few issues with this.
+David
 
-- This is exposing a user interface for something that is really
-internal to the driver.
-
-- This is something that can be misleading and could be tricky to get
-right, my concern is that this would only benefit a very niche case.
-
-- If the setting should exist, it should not be global.
-
-- I prefer not to introduce new modparams.
-
-- I'd prefer to find a way to support your use-case without introducing
-a config knob for it.
-
-- It is not backed by performance improvements, but more importantly
-does not cover any potential regressions in key metrics (bw/iops/lat)
-or lack there of.
