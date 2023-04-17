@@ -2,144 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F4886E4808
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 14:41:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C49EF6E480C
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 14:42:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231272AbjDQMlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 08:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60994 "EHLO
+        id S230236AbjDQMmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 08:42:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbjDQMk5 (ORCPT
+        with ESMTP id S229655AbjDQMmn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 08:40:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792A35B90
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 05:40:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681735210;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=d8R/DyfPuxRJq8lFo64wBLNVpfrgX/DMbIH8EiFz9DI=;
-        b=UMHcNDB1jMrgHEhRmsyfqDz+JSI4qLExyMI2Erngpqs5g86AtjqsYaqPEsJKvS60AsXojC
-        fwisWZqyAROu2xncRdjujw3Y2VxKH6OE6+3/8JdGZYs6AM2Qu5cDqnHAIwUP+zl3kZxqjt
-        SROV+D202jNpRJHRMfKzAoARtEfASpo=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-316-Z6kkADfHPEOoA1k2mn35Cg-1; Mon, 17 Apr 2023 08:40:07 -0400
-X-MC-Unique: Z6kkADfHPEOoA1k2mn35Cg-1
-Received: by mail-ed1-f71.google.com with SMTP id b60-20020a509f42000000b00504eca73d05so8733391edf.18
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 05:40:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681735206; x=1684327206;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=d8R/DyfPuxRJq8lFo64wBLNVpfrgX/DMbIH8EiFz9DI=;
-        b=GJWAHCintr/I/IHz1XeiIxJtodp5QdqhNKkgR6N+KJdBoToCq5Tn0MPGiSv9yz+Y47
-         xDnGZKp5Jpv/E4KFy+iDAy8cbpFKN1cgYcYGe6IA3/AOfN8buIz7I+4GnL8KS488yoMu
-         NweS2yzf/60Nq7eOMI7aN+IlKhto0UedmEIRTRjFgvJXWyd+yKV4gDsZQHf6l8AU/ALh
-         5Oeo8Rblmvh8nLFg6wEfJwy2jinNTrc1oGLFV2sfrLjSFp+GVj/OlqhxPH7/BAvvvo4z
-         NOe/juPbCfkrrk/+A7C/dQ7Vct4B4OXaQI6lCfzX/s7IKGVvjemhNj6m8g8Kwwo2YvRx
-         saog==
-X-Gm-Message-State: AAQBX9cztLVUH4vB4A49VYWHjl5bmJEpISUiahUTL8KvAQX23oa07Xie
-        R/VFW1nD5L9qCSYZC6tBMH5xreJd2Uy/WyQvtOj7jc0hAyVwQQ/k53+xCSwWFamdBKObj003SgP
-        voOfm6+9DNTISo1FbzcP6l8A5
-X-Received: by 2002:a17:906:ae56:b0:932:1af9:7386 with SMTP id lf22-20020a170906ae5600b009321af97386mr7169630ejb.27.1681735206438;
-        Mon, 17 Apr 2023 05:40:06 -0700 (PDT)
-X-Google-Smtp-Source: AKy350aW/kxO/780wfJlvoA8/SxGVLczSeSpBXtQ9jUSEU7Eij2vduEeVE6+vnyBY1Qt/CkYdfKc2w==
-X-Received: by 2002:a17:906:ae56:b0:932:1af9:7386 with SMTP id lf22-20020a170906ae5600b009321af97386mr7169594ejb.27.1681735206008;
-        Mon, 17 Apr 2023 05:40:06 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id 14-20020a17090601ce00b0094a671c2298sm1119966ejj.62.2023.04.17.05.40.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 05:40:05 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id B7E40AA8452; Mon, 17 Apr 2023 14:40:04 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Magnus Karlsson <magnus.karlsson@gmail.com>
-Cc:     Kal Cutter Conley <kal.conley@dectris.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3 1/3] xsk: Support UMEM chunk_size > PAGE_SIZE
-In-Reply-To: <CAJ8uoz3Rts2Xfhqq+0cm3GES=dMb2hTqPzGm515oG_nmt=-Nbg@mail.gmail.com>
-References: <20230406130205.49996-1-kal.conley@dectris.com>
- <20230406130205.49996-2-kal.conley@dectris.com> <87sfdckgaa.fsf@toke.dk>
- <ZDBEng1KEEG5lOA6@boxer>
- <CAHApi-nuD7iSY7fGPeMYiNf8YX3dG27tJx1=n8b_i=ZQdZGZbw@mail.gmail.com>
- <875ya12phx.fsf@toke.dk>
- <CAHApi-=rMHt7uR8Sw1Vw+MHDrtkyt=jSvTvwz8XKV7SEb01CmQ@mail.gmail.com>
- <87ile011kz.fsf@toke.dk>
- <CAHApi-m4gu8SX_1rBtUwrw+1-Q3ERFEX-HPMcwcCK1OceirwuA@mail.gmail.com>
- <87o7nrzeww.fsf@toke.dk>
- <CAJ8uoz3Rts2Xfhqq+0cm3GES=dMb2hTqPzGm515oG_nmt=-Nbg@mail.gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Mon, 17 Apr 2023 14:40:04 +0200
-Message-ID: <87o7nmwul7.fsf@toke.dk>
+        Mon, 17 Apr 2023 08:42:43 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B70840D1
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 05:42:12 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A8487168F;
+        Mon, 17 Apr 2023 05:42:42 -0700 (PDT)
+Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 184E23F5A1;
+        Mon, 17 Apr 2023 05:41:57 -0700 (PDT)
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Liviu Dudau <liviu.dudau@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] bus: vexpress-config: Add explicit of_platform.h include
+Date:   Mon, 17 Apr 2023 13:41:52 +0100
+Message-Id: <168173489108.1885873.12046093132176694657.b4-ty@arm.com>
+X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230410232727.1562115-1-robh@kernel.org>
+References: <20230410232727.1562115-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Magnus Karlsson <magnus.karlsson@gmail.com> writes:
+On Mon, 10 Apr 2023 18:27:26 -0500, Rob Herring wrote:
+> vexpress-config uses of_platform_* functions which are declared in
+> of_platform.h. of_platform.h gets implicitly included by of_device.h,
+> but that is going to be removed soon. Nothing else depends on
+> of_device.h so it can be dropped.
+> 
 
-> On Thu, 13 Apr 2023 at 22:52, Toke H=C3=B8iland-J=C3=B8rgensen <toke@redh=
-at.com> wrote:
->>
->> Kal Cutter Conley <kal.conley@dectris.com> writes:
->>
->> >> Well, you mentioned yourself that:
->> >>
->> >> > The disadvantage of this patchset is requiring the user to allocate
->> >> > HugeTLB pages which is an extra complication.
->> >
->> > It's a small extra complication *for the user*. However, users that
->> > need this feature are willing to allocate hugepages. We are one such
->> > user. For us, having to deal with packets split into disjoint buffers
->> > (from the XDP multi-buffer paradigm) is a significantly more annoying
->> > complication than allocating hugepages (particularly on the RX side).
->>
->> "More annoying" is not a great argument, though. You're basically saying
->> "please complicate your code so I don't have to complicate mine". And
->> since kernel API is essentially frozen forever, adding more of them
->> carries a pretty high cost, which is why kernel developers tend not to
->> be easily swayed by convenience arguments (if all you want is a more
->> convenient API, just build one on top of the kernel primitives and wrap
->> it into a library).
->>
->> So you'll need to come up with either (1) a use case that you *can't*
->> solve without this new API (with specifics as to why that is the case),
->> or (2) a compelling performance benchmark showing the complexity is
->> worth it. Magnus indicated he would be able to produce the latter, in
->> which case I'm happy to be persuaded by the numbers.
->
-> We will measure it and get back to you. Would be good with some
-> numbers.
+Applied to sudeep.holla/linux (for-next/vexpress), thanks!
 
-Sounds good, thanks! :)
-
--Toke
+[1/1] bus: vexpress-config: Add explicit of_platform.h include
+      https://git.kernel.org/sudeep.holla/c/04ebdc354895
+--
+Regards,
+Sudeep
 
