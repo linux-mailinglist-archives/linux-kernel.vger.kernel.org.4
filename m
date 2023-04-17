@@ -2,65 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFC406E5200
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 22:43:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5D5B6E5206
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 22:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbjDQUnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 16:43:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33694 "EHLO
+        id S230145AbjDQUpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 16:45:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjDQUnl (ORCPT
+        with ESMTP id S229681AbjDQUpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 16:43:41 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44EC4422E;
-        Mon, 17 Apr 2023 13:43:40 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-5144a9c11c7so2018571a12.2;
-        Mon, 17 Apr 2023 13:43:40 -0700 (PDT)
+        Mon, 17 Apr 2023 16:45:21 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799F7449E;
+        Mon, 17 Apr 2023 13:45:20 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-187dc84637aso6325430fac.2;
+        Mon, 17 Apr 2023 13:45:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681764220; x=1684356220;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0D8fVQxMh2FytECOWBOGS25wxqSLBJ+NNK2BQrzIi0o=;
-        b=Ovsw61+/H1VzeZJwEvaeiN2rtY9+4CGQ97C3CXw57wyz4X3sGBZSw4h/rpIFulq7nn
-         HE9XwCw79oVevtF5Ckuw+PvXxdZ6QI1fus7xzyW/+6kfXOqNl8ltuKpZr3h2eHM8ESyF
-         NpcC52hW0bk5GrYGbuIX07KdMIsJ/N84j+SzdOyqS6EHjX1OF3QffdlBovpLUI9hpqbT
-         OZJppBBbR40xKayueq3IPwdEg3DgDyzCSQXCoJrvR39xueqfrsynhIFlZxrDam4Cv3iz
-         +ZsC8D0yhSHT7ETYy9GhWzOPulqpr1T985vZfikHihLdR4XQl2KeDUWF21mhG3c43g2+
-         BwUg==
+        d=gmail.com; s=20221208; t=1681764319; x=1684356319;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6fpw6Zw0s5R3Qp1iH0xXMY6crGqEVCslknpiblwPum4=;
+        b=PbL9RlrcEvNtSBq5aFF1K+XHDmkI1FDrcYfuJUZi/GpvIqLh3TS1ne611uq7ZetEs7
+         wTsy6p5MIs1/M1NQGID3U8sN6mdCiFAqtLNe+1MlksdnJ4Q2BoVi9N4G4Wi32A2mcoIS
+         CRtbvVrcsxf8IStYHnSXI2//mFbzdQQNb976ojo0B/ZPO7rHgUXtzBClLCH3CrBP7Ivp
+         BB6UxkCNPc31gU5iVLET6tA2Dfznsf4FlRy49CqleR2cFoqqvVg7fFCUXHw/KFQi9MmZ
+         cchHkgfPOma52nHjRoG4lvsUSnl5tcgdf5u9T6N1pdIsMfaUHlJeeblnSdNkg7WW4wGY
+         vojg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681764220; x=1684356220;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0D8fVQxMh2FytECOWBOGS25wxqSLBJ+NNK2BQrzIi0o=;
-        b=QjrUewghmZ9ATFHjpyDtJKsZokwW8uVNEH1yKnGl38NGVG0qtrxykZ1p/Ok+O7B92K
-         tnxemKHCaSK2qm7rpZNAFXEcmTBBDwRkcKLdy3drMbEEdAz5XubSj2L5Md60n/62MNiJ
-         u2RyWCs/p9I35E1fL3WZzcXECUY4+jTU9J/bfpKcN6iSqgeCVkRtZuo5csN82epZ6Cay
-         r8bahsgF+3K8OVl/uiDDGoXTTrVBkBt7S1v+u0f0C0Fn41wLx5XLayXimyj71ts+NxGd
-         kZOSH1HVneqQvzk+OkBPUWy2nKB+T1N5IYm0aBEq18ELQY/wH39lrG+gbyqlOOcOp5V9
-         3Xdg==
-X-Gm-Message-State: AAQBX9e3Mjv1i3a6fNAmWzWJykT2UAG2ey34kWNOJf369MylZv/cb1al
-        MFeDIXZ/lscFy/KLwCDQ0kmCxl3172WvtA==
-X-Google-Smtp-Source: AKy350ZEPlPFvNP14bOLRitENDFtYaBMlc5g7zDZRvZSbWac/MAqQ3aSClp6qBRk07miCaf4k7I38A==
-X-Received: by 2002:a05:6a00:890:b0:63a:fae3:9890 with SMTP id q16-20020a056a00089000b0063afae39890mr22888001pfj.24.1681764219582;
-        Mon, 17 Apr 2023 13:43:39 -0700 (PDT)
-Received: from localhost.localdomain ([2402:e280:218d:82:ae97:7cb6:b12a:54f5])
-        by smtp.gmail.com with ESMTPSA id a2-20020aa78642000000b00632bb373949sm7956126pfo.158.2023.04.17.13.43.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 13:43:39 -0700 (PDT)
-From:   Saalim Quadri <danascape@gmail.com>
-To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, daniel.baluta@gmail.com
-Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Saalim Quadri <danascape@gmail.com>
-Subject: [PATCH] ASoC: dt-bindings: wm8728: Convert to dtschema
-Date:   Mon, 17 Apr 2023 20:43:23 +0000
-Message-Id: <20230417204323.137681-1-danascape@gmail.com>
-X-Mailer: git-send-email 2.40.0
+        d=1e100.net; s=20221208; t=1681764319; x=1684356319;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6fpw6Zw0s5R3Qp1iH0xXMY6crGqEVCslknpiblwPum4=;
+        b=UMdvJSOOchZ27Jdr1vjlshzH8Cwb1omwIMkOSemuyNKpDEFPx81qo0/o/TB8mHBT7R
+         5VGxQM5GW5ukBodw5H3JvtlwE4d64B96gGbtifFySrr+hdR1Y3rR/m5QJtsmtI7Ve+u6
+         ncIGo4yAh0ovNax/WIp4xon/uNl1O9Fhc6Zy6eQOkiofoYpa7/Zzk4KK44L2ibPGLphz
+         oXmxGaxTDqw60Q+wBqeZhEDRR+G9iRx0+vd6Mp8kLw46436GWKNWm7l05Mv34csWZpdT
+         DPJsgTSzTHBln3YnwYFyIhN0CsP8cZXeLCwApcKXAStJZpuZnTZrDsNlU/P4uqfXZQWa
+         kHhA==
+X-Gm-Message-State: AAQBX9ch/RBAEPhvjecR921jrtSr3TuJ5uyfDOQN44N3pN5gRsw9SwiB
+        DqEhnPPtoubUQ00uknlD0DmBTJrq7NE5x+O5Kgg=
+X-Google-Smtp-Source: AKy350YGawNtt/qIBtEhaGmjXWvU97vjeDYCYWAWwSsngIuB8jSH/zqF+G8k9jUHx6+c7HnX9gmC/4usZ8HmOXt9ftk=
+X-Received: by 2002:a05:6870:34b:b0:187:8ee8:5f5b with SMTP id
+ n11-20020a056870034b00b001878ee85f5bmr7174102oaf.5.1681764319699; Mon, 17 Apr
+ 2023 13:45:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230417201215.448099-1-robdclark@gmail.com>
+In-Reply-To: <20230417201215.448099-1-robdclark@gmail.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Mon, 17 Apr 2023 13:45:08 -0700
+Message-ID: <CAF6AEGumgsJJQXojapPAJOjmFo=MZ31DNmp9T+SErQ2GBKBLFg@mail.gmail.com>
+Subject: Re: [RFC 0/3] drm: Add comm/cmdline fdinfo fields
+To:     dri-devel@lists.freedesktop.org
+Cc:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
+        <freedreno@lists.freedesktop.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
+        <linux-arm-msm@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Sean Paul <sean@poorly.run>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -71,86 +80,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the WM8728 audio CODEC bindings to DT schema
+On Mon, Apr 17, 2023 at 1:12=E2=80=AFPM Rob Clark <robdclark@gmail.com> wro=
+te:
+>
+> From: Rob Clark <robdclark@chromium.org>
+>
+> When many of the things using the GPU are processes in a VM guest, the
+> actual client process is just a proxy.  The msm driver has a way to let
+> the proxy tell the kernel the actual VM client process's executable name
+> and command-line, which has until now been used simply for GPU crash
+> devcore dumps.  Lets also expose this via fdinfo so that tools can
+> expose who the actual user of the GPU is.
 
-Signed-off-by: Saalim Quadri <danascape@gmail.com>
----
- .../devicetree/bindings/sound/wlf,wm8728.yaml | 40 +++++++++++++++++++
- .../devicetree/bindings/sound/wm8728.txt      | 18 ---------
- 2 files changed, 40 insertions(+), 18 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/sound/wlf,wm8728.yaml
- delete mode 100644 Documentation/devicetree/bindings/sound/wm8728.txt
+I should have also mentioned, in the VM/proxy scenario we have a
+single process with separate drm_file's for each guest VM process.  So
+it isn't an option to just change the proxy process's name to match
+the client.
 
-diff --git a/Documentation/devicetree/bindings/sound/wlf,wm8728.yaml b/Documentation/devicetree/bindings/sound/wlf,wm8728.yaml
-new file mode 100644
-index 000000000000..fc89475a051e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/wlf,wm8728.yaml
-@@ -0,0 +1,40 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/wlf,wm8728.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: WM8728 audio CODEC
-+
-+maintainers:
-+  - patches@opensource.cirrus.com
-+
-+allOf:
-+  - $ref: dai-common.yaml#
-+
-+properties:
-+  compatible:
-+    const: wlf,wm8728
-+
-+  reg:
-+    maxItems: 1
-+
-+  "#sound-dai-cells":
-+    const: 0
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        codec@1a {
-+            compatible = "wlf,wm8728";
-+            reg = <0x1a>;
-+        };
-+    };
-diff --git a/Documentation/devicetree/bindings/sound/wm8728.txt b/Documentation/devicetree/bindings/sound/wm8728.txt
-deleted file mode 100644
-index a3608b4c78b9..000000000000
---- a/Documentation/devicetree/bindings/sound/wm8728.txt
-+++ /dev/null
-@@ -1,18 +0,0 @@
--WM8728 audio CODEC
--
--This device supports both I2C and SPI (configured with pin strapping
--on the board).
--
--Required properties:
--
--  - compatible : "wlf,wm8728"
--
--  - reg : the I2C address of the device for I2C, the chip select
--          number for SPI.
--
--Example:
--
--wm8728: codec@1a {
--	compatible = "wlf,wm8728";
--	reg = <0x1a>;
--};
--- 
-2.40.0
-
+> Rob Clark (3):
+>   drm/doc: Relax fdinfo string constraints
+>   drm/msm: Rework get_comm_cmdline() helper
+>   drm/msm: Add comm/cmdline fields
+>
+>  Documentation/gpu/drm-usage-stats.rst   | 37 +++++++++++++++----------
+>  drivers/gpu/drm/msm/adreno/adreno_gpu.c |  4 +--
+>  drivers/gpu/drm/msm/msm_drv.c           |  2 ++
+>  drivers/gpu/drm/msm/msm_gpu.c           | 27 +++++++++++++-----
+>  drivers/gpu/drm/msm/msm_gpu.h           | 12 ++++++--
+>  drivers/gpu/drm/msm/msm_submitqueue.c   |  1 +
+>  6 files changed, 58 insertions(+), 25 deletions(-)
+>
+> --
+> 2.39.2
+>
