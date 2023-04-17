@@ -2,57 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0FE06E4105
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 09:31:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18D2A6E4107
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 09:31:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231205AbjDQHbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 03:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45370 "EHLO
+        id S230416AbjDQHbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 03:31:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbjDQHan (ORCPT
+        with ESMTP id S230450AbjDQHat (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 03:30:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2351A4C0F;
-        Mon, 17 Apr 2023 00:30:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4848861F31;
-        Mon, 17 Apr 2023 07:30:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A5B1CC4339C;
-        Mon, 17 Apr 2023 07:30:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681716619;
-        bh=leNX+acNVy8tTVTexUmA8hPJABXi1tT50Vr4vkpw6pM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=tR7sdBYa9NbzRjRv6hIqQGaM3dJjhqJQeRCYuvk6s7fWqZW3T5TpC4KI7EBkkL2Qx
-         LI2w1L2Apy0+H/nNsvPGxRKLYMPaPVRqWAZcwIBmnIRf5jGQRPCRfgCUAoROUbqzdM
-         nkdJPtSwlmnr7JJUyKeisGXSNLozIeoXmOn4OcytarVGdPc1hHMokysbTc/IKI60Ma
-         MEhUpkOCJOFMnbP9tZbN4hfrEFPp9R5bBcPd3wnuv+058lislHdSytrSgZBnEsxttk
-         y3FAMzFPXiya7T3dzUC74si5Xy5ZwhSQnJPWAakw3znG2C4lOFyjo/1k/WUvc6BTWw
-         zMAaRsZ17EzAA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 868D2E3309E;
-        Mon, 17 Apr 2023 07:30:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 17 Apr 2023 03:30:49 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6CC4C28
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 00:30:24 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2a8b766322bso11235601fa.1
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 00:30:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681716624; x=1684308624;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/w3KNIf6Lo6ERSRg71uJEB0w+Ck4o2XMQvRHvyp6BrA=;
+        b=WBS+W96hChuHW4d4MC5bEu+d18ewZBvBnzN7b1qs1+mctkxcuBNa0/gOaLuUiyOSgY
+         jQ772P5Idu0hn+Ohxp4VAnMQ2hwSK+/toLxR5wXmkTOv75sQ0scnah7Moa8wNyKZXnkW
+         WmFP4nOz7Qe/umjGKxro90GZO4xq+4UR3sFLPHZ0rU1AhuQqFQw08yFrfVeK7CeSlXMd
+         lHzKcZe9un9uc7QaR7fHfZANEfL87KJt+j7VbaR0hsevZzFaI87cn8k2KKB6WUhdoLZs
+         Ka/9lxgfolVYAtqMSBSoq/YQLYvbkNwLm2atlurZ9y8XxcV3fFGGc3Hw7GR1b+/MEZcu
+         UR8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681716624; x=1684308624;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/w3KNIf6Lo6ERSRg71uJEB0w+Ck4o2XMQvRHvyp6BrA=;
+        b=caMkxYUaFLoVU4Ym9GpMayaleH4eNgX7nHdrZoFZUAdKVCu9Z/bHB0jvW+qoIvfl0+
+         kZ/KJabJDaCZ01uqpNc7iKs03jy7vcoOXMApVIvaAT5VcU07VCz1JUOpTIHfpPTXOa2h
+         q3m5gzGZ5HHLMdEbCs+BtUuLsoO60fIJQW+nxA5TpCzFoah1k/6AyZMY0UyvxgguFWNm
+         hh7eTGxXVh9uMNncHrtyePkKZF8rz4kBpP2FZid531EbjMafUqX+V/HsNmAI8ZAEYONe
+         XD6xfxUWxBzDGaZIed/z/LeVIFH0dVxhj57Zj6XjLuvNWsNjVozG6bnazsknEhX+ZjZI
+         Uj7A==
+X-Gm-Message-State: AAQBX9eN4yS9+EQaDmwEXttaPrGHQsvGpIoS2lGQsm/IwI95peYHu1Op
+        XUNwttqTJ9yCXLekry/rRMNhpg==
+X-Google-Smtp-Source: AKy350Z6xTd5N42EcWS5IPO0ZqpEtUct7pZCuVOphlZv0eZZfwcizIfdRAZOXioBpzEhrMI2jOS1kw==
+X-Received: by 2002:ac2:560e:0:b0:4cc:5e3a:dd82 with SMTP id v14-20020ac2560e000000b004cc5e3add82mr1524305lfd.58.1681716624181;
+        Mon, 17 Apr 2023 00:30:24 -0700 (PDT)
+Received: from [192.168.1.101] (abyk99.neoplus.adsl.tpnet.pl. [83.9.30.99])
+        by smtp.gmail.com with ESMTPSA id m3-20020ac24243000000b004db3e7dfb8csm1962931lfl.189.2023.04.17.00.30.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Apr 2023 00:30:23 -0700 (PDT)
+Message-ID: <f2ecffe7-9a43-4a77-7721-14c59f2931e6@linaro.org>
+Date:   Mon, 17 Apr 2023 09:30:22 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/5] mptcp: various small cleanups
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168171661954.7386.4716677833792034478.git-patchwork-notify@kernel.org>
-Date:   Mon, 17 Apr 2023 07:30:19 +0000
-References: <20230414-upstream-net-next-20230414-mptcp-small-cleanups-v1-0-5aa4a2e05cf2@tessares.net>
-In-Reply-To: <20230414-upstream-net-next-20230414-mptcp-small-cleanups-v1-0-5aa4a2e05cf2@tessares.net>
-To:     Matthieu Baerts <matthieu.baerts@tessares.net>
-Cc:     mptcp@lists.linux.dev, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, geliang.tang@suse.com,
-        abaci@linux.alibaba.com, martineau@kernel.org,
-        jiapeng.chong@linux.alibaba.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 4/6] arm64: dts: qcom: sm8250: add missing qcom,smmu-500
+ fallback
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230416123730.300863-1-krzysztof.kozlowski@linaro.org>
+ <20230416123730.300863-4-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230416123730.300863-4-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,38 +81,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This series was applied to netdev/net-next.git (main)
-by David S. Miller <davem@davemloft.net>:
 
-On Fri, 14 Apr 2023 17:47:05 +0200 you wrote:
-> Patch 1 makes a function static because it is only used in one file.
+On 16.04.2023 14:37, Krzysztof Kozlowski wrote:
+> Since commit 6c84bbd103d8 ("dt-bindings: arm-smmu: Add generic
+> qcom,smmu-500 bindings") the SMMU is supposed to use qcom,smmu-500
+> compatible fallback:
 > 
-> Patch 2 adds info about the git trees we use to help occasional devs.
+>   ['qcom,sm8250-smmu-500', 'qcom,adreno-smmu', 'qcom,smmu-500', 'arm,mmu-500'] is too long
+>   'qcom,sm8250-smmu-500' is not one of ['qcom,msm8996-smmu-v2', 'qcom,msm8998-smmu-v2', 'qcom,sdm630-smmu-v2']
+>   'qcom,sm8250-smmu-500' is not one of ['qcom,msm8996-smmu-v2', 'qcom,sc7180-smmu-v2', 'qcom,sdm630-smmu-v2', 'qcom,sdm845-smmu-v2'
 > 
-> Patch 3 removes an unused variable.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+>  arch/arm64/boot/dts/qcom/sm8250.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Patch 4 removes duplicated entries from the help menu of a tool used in
-> MPTCP selftests.
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next,1/5] mptcp: make userspace_pm_append_new_local_addr static
-    https://git.kernel.org/netdev/net-next/c/aa5887dca2d2
-  - [net-next,2/5] MAINTAINERS: add git trees for MPTCP
-    https://git.kernel.org/netdev/net-next/c/c3d713409b53
-  - [net-next,3/5] mptcp: remove unused 'remaining' variable
-    https://git.kernel.org/netdev/net-next/c/ce395d0e3ad5
-  - [net-next,4/5] selftests: mptcp: remove duplicated entries in usage
-    https://git.kernel.org/netdev/net-next/c/0a85264e48b6
-  - [net-next,5/5] selftests: mptcp: join: fix ShellCheck warnings
-    https://git.kernel.org/netdev/net-next/c/0fcd72df8847
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> index 7bea916900e2..778fbec9a554 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> @@ -5254,7 +5254,7 @@ wake-pins {
+>  		};
+>  
+>  		apps_smmu: iommu@15000000 {
+> -			compatible = "qcom,sm8250-smmu-500", "arm,mmu-500";
+> +			compatible = "qcom,sm8250-smmu-500", "qcom,smmu-500", "arm,mmu-500";
+>  			reg = <0 0x15000000 0 0x100000>;
+>  			#iommu-cells = <2>;
+>  			#global-interrupts = <2>;
