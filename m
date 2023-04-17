@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD9BC6E513F
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:54:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EAE36E5143
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:54:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjDQTye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 15:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33252 "EHLO
+        id S230202AbjDQTyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 15:54:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbjDQTy3 (ORCPT
+        with ESMTP id S230453AbjDQTyo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 15:54:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73FD4E6
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:53:27 -0700 (PDT)
+        Mon, 17 Apr 2023 15:54:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C40B49DE
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:53:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681761206;
+        s=mimecast20190719; t=1681761209;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZZajLRXbE1gHSG0/rWcJydl4VAkwntQbZfH27HHj2cI=;
-        b=UERaqskK3tXv/LdQiirxN4czmv8yGqF3TI6D2EFVZHjOnUfZqY4oLMb9TYlCkxFVu3B16b
-        VvF3rQL4NGcNUE7LvuBbtSlVkQ4+rBVF0tM2RJNxbu12VD7w1pNHqcGEXN4Zs3pwVd3ysi
-        n54kKzWAELzAIITExzh8MVQhe3jKEWg=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=VlJAJroC0qfUjlayNMIBwxZydfuRD55bTGjabDZPAD4=;
+        b=ZP/rrgSoE8H9BWi3SPbjCRHnruOYAOKmECWWGBS7em4hapH1bU7Oqr/XeGCDTbsTf+iJ8d
+        v3YYFvtsDL2Z5avJZYs/N1aJuNkWGuEMNlPsZmPnkZRywhVuDHjU//+aAZY9RHocslZfQL
+        Hb4nFryoUJ2xGvroq0l5JKHQ1fsSRi0=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-399-pYY-GGELN5-Ng1fR-ZQUXQ-1; Mon, 17 Apr 2023 15:53:25 -0400
-X-MC-Unique: pYY-GGELN5-Ng1fR-ZQUXQ-1
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-3ed767b30easo1904911cf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:53:25 -0700 (PDT)
+ us-mta-282-kbxCxsszMya_WNCi-f4CHQ-1; Mon, 17 Apr 2023 15:53:28 -0400
+X-MC-Unique: kbxCxsszMya_WNCi-f4CHQ-1
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-3ed767b30easo1905071cf.1
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:53:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681761204; x=1684353204;
+        d=1e100.net; s=20221208; t=1681761207; x=1684353207;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZZajLRXbE1gHSG0/rWcJydl4VAkwntQbZfH27HHj2cI=;
-        b=NWBMYm5aHIsxlBp8ondzM8isHbwfygMoEuFJoBCXJIQP5vOamVzxImXe0fNcao6JiO
-         eGKycxrGE2h2fWk+M3c9ylu2rpiyHwJZ91b6SkW9gq8raCQmPTRCqtdiHw+QJj5IdomV
-         OxRFxkLKmS+FG+4ZdsQcGXWyorEPgm4LYEQuL5oCEpJclMsywLUN1Jm7focSC2Ce75UC
-         AjrHvKlIlRICUX9wVf0g1LUVNN3+7vhOy1fQexnKhXhvJnqbEzr96JErqFC35N8tqR15
-         Y/pUKByWkQu4aVnSTnS8kM+DKcKrdkX2mSA7lioM4IbZt7PJ3qnP70eMCXlnLzbvWBBr
-         lJEw==
-X-Gm-Message-State: AAQBX9c8iTF+bYI72lGcMjUHzRN2lLsG0JXx/mU8hWEus9Fza7BrCyAC
-        ZUPxJVlevVBC8mOZUQrZ+J3Bt4GhD/aMs9tqnm+kH/GaTZT0KJx80Rdb1zJV0CRj6XXEJ3jYflc
-        14REu41e6BbGNqZU0dQURRh7D4LlrO0hxgwwON+no6W8XXRffY+CaRaQre5U5YX2QOUB/rTlLG8
-        wTPawbjA==
-X-Received: by 2002:a05:622a:1a9b:b0:3ea:ef5:5b8c with SMTP id s27-20020a05622a1a9b00b003ea0ef55b8cmr19155691qtc.3.1681761204345;
-        Mon, 17 Apr 2023 12:53:24 -0700 (PDT)
-X-Google-Smtp-Source: AKy350aPbpBAnSBo8hIMWFwYiZl6fBgvrueoUnmaQeBSdZmgAZBXgdsikL50SEQY0Q9p7+B82l1+8Q==
-X-Received: by 2002:a05:622a:1a9b:b0:3ea:ef5:5b8c with SMTP id s27-20020a05622a1a9b00b003ea0ef55b8cmr19155663qtc.3.1681761204064;
-        Mon, 17 Apr 2023 12:53:24 -0700 (PDT)
+        bh=VlJAJroC0qfUjlayNMIBwxZydfuRD55bTGjabDZPAD4=;
+        b=PEpzUxSrViaNRRpWeADN++C5Yj7jF5lN2MbPOyE/58Yy74CJWc6I3QqFDsrtK8H40l
+         16FNG62byDuMgl6bMa7vs30ICmcriVrGaeYe7mc8gWCf56L7TbbDNDBbI2/Soorb0Rgb
+         kZjTKjGxtDrZhozfoK7jvw9BAPNvpAtML9kPESwETQx/8XsZHizLbqjSH7bfIP6sn6K4
+         QAfzB7/5rJZJQL021aWy/NUb1S1LTDyxfMVTXTC4LQW/hTbh+CSJkb5fEvp6HeC/pqDi
+         pfF7OHd0jmjKLXCsyWmnxOwMY6CnRaASwdz2c6tiYgKbjbkiIlzWv0guCXMV6TVzZyRd
+         W5NQ==
+X-Gm-Message-State: AAQBX9cecB4SpY42T/z5V2sN5dSRKCs7donLG+cQqvJXHyVwKiadjVdi
+        mYMPE8+azsOgR7XPJdEsQK5PkP36dy64Pe5EYdzXLmqcfgLc+xzZLbLggfUQgYsEZfSuwSsmlEF
+        YyGswNywh00Mb2Xcy8/zflQYQMfVzX65O82yPDkJSOCUAgXlXVLSVHDJvz9reXOTQhCaSWvaQAz
+        ey6aeANA==
+X-Received: by 2002:ac8:4e43:0:b0:3bf:cf77:a861 with SMTP id e3-20020ac84e43000000b003bfcf77a861mr19130150qtw.4.1681761206873;
+        Mon, 17 Apr 2023 12:53:26 -0700 (PDT)
+X-Google-Smtp-Source: AKy350atiTLtabqgcPaZB1CQI3pkzcoQyHjGkW0AJzAmgZF9tCzczfoqxlZpXO4VXi+keofELA+BDw==
+X-Received: by 2002:ac8:4e43:0:b0:3bf:cf77:a861 with SMTP id e3-20020ac84e43000000b003bfcf77a861mr19130115qtw.4.1681761206528;
+        Mon, 17 Apr 2023 12:53:26 -0700 (PDT)
 Received: from x1n.redhat.com (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
-        by smtp.gmail.com with ESMTPSA id r17-20020ac87ef1000000b003edfb5d7637sm1731278qtc.73.2023.04.17.12.53.21
+        by smtp.gmail.com with ESMTPSA id r17-20020ac87ef1000000b003edfb5d7637sm1731278qtc.73.2023.04.17.12.53.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 12:53:23 -0700 (PDT)
+        Mon, 17 Apr 2023 12:53:25 -0700 (PDT)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
@@ -65,11 +65,10 @@ Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
         Andrew Morton <akpm@linux-foundation.org>, peterx@redhat.com,
         Axel Rasmussen <axelrasmussen@google.com>,
         Nadav Amit <nadav.amit@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        linux-stable <stable@vger.kernel.org>
-Subject: [PATCH v2 2/6] mm/hugetlb: Fix uffd-wp bit lost when unsharing happens
-Date:   Mon, 17 Apr 2023 15:53:13 -0400
-Message-Id: <20230417195317.898696-3-peterx@redhat.com>
+        David Hildenbrand <david@redhat.com>
+Subject: [PATCH v2 3/6] selftests/mm: Add a few options for uffd-unit-test
+Date:   Mon, 17 Apr 2023 15:53:14 -0400
+Message-Id: <20230417195317.898696-4-peterx@redhat.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230417195317.898696-1-peterx@redhat.com>
 References: <20230417195317.898696-1-peterx@redhat.com>
@@ -78,53 +77,110 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When we try to unshare a pinned page for a private hugetlb, uffd-wp bit can
-get lost during unsharing.  Fix it by carrying it over.
+Namely:
 
-This should be very rare, only if an unsharing happened on a private
-hugetlb page with uffd-wp protected (e.g. in a child which shares the same
-page with parent with UFFD_FEATURE_EVENT_FORK enabled).
+  "-f": add a wildcard filter for tests to run
+  "-l": list tests rather than running any
+  "-h": help msg
 
-Cc: linux-stable <stable@vger.kernel.org>
-Fixes: 166f3ecc0daf ("mm/hugetlb: hook page faults for uffd write protection")
-Reported-by: Mike Kravetz <mike.kravetz@oracle.com>
-Reviewed-by: David Hildenbrand <david@redhat.com>
-Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
 Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- mm/hugetlb.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ tools/testing/selftests/mm/uffd-unit-tests.c | 52 +++++++++++++++++---
+ 1 file changed, 45 insertions(+), 7 deletions(-)
 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 0213efaf31be..cd3a9d8f4b70 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -5637,13 +5637,16 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
- 	spin_lock(ptl);
- 	ptep = hugetlb_walk(vma, haddr, huge_page_size(h));
- 	if (likely(ptep && pte_same(huge_ptep_get(ptep), pte))) {
-+		pte_t newpte = make_huge_pte(vma, &new_folio->page, !unshare);
+diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
+index d871bf732e62..452ca05a829d 100644
+--- a/tools/testing/selftests/mm/uffd-unit-tests.c
++++ b/tools/testing/selftests/mm/uffd-unit-tests.c
+@@ -909,28 +909,65 @@ uffd_test_case_t uffd_tests[] = {
+ 	},
+ };
+ 
++static void usage(const char *prog)
++{
++	printf("usage: %s [-f TESTNAME]\n", prog);
++	puts("");
++	puts(" -f: test name to filter (e.g., event)");
++	puts(" -h: show the help msg");
++	puts(" -l: list tests only");
++	puts("");
++	exit(KSFT_FAIL);
++}
 +
- 		/* Break COW or unshare */
- 		huge_ptep_clear_flush(vma, haddr, ptep);
- 		mmu_notifier_invalidate_range(mm, range.start, range.end);
- 		page_remove_rmap(old_page, vma, true);
- 		hugepage_add_new_anon_rmap(new_folio, vma, haddr);
--		set_huge_pte_at(mm, haddr, ptep,
--				make_huge_pte(vma, &new_folio->page, !unshare));
-+		if (huge_pte_uffd_wp(pte))
-+			newpte = huge_pte_mkuffd_wp(newpte);
-+		set_huge_pte_at(mm, haddr, ptep, newpte);
- 		folio_set_hugetlb_migratable(new_folio);
- 		/* Make the old page be freed below */
- 		new_folio = page_folio(old_page);
+ int main(int argc, char *argv[])
+ {
+ 	int n_tests = sizeof(uffd_tests) / sizeof(uffd_test_case_t);
+ 	int n_mems = sizeof(mem_types) / sizeof(mem_type_t);
++	const char *test_filter = NULL;
++	bool list_only = false;
+ 	uffd_test_case_t *test;
+ 	mem_type_t *mem_type;
+ 	uffd_test_args_t args;
+ 	char test_name[128];
+ 	const char *errmsg;
+-	int has_uffd;
++	int has_uffd, opt;
+ 	int i, j;
+ 
+-	has_uffd = test_uffd_api(false);
+-	has_uffd |= test_uffd_api(true);
++	while ((opt = getopt(argc, argv, "f:hl")) != -1) {
++		switch (opt) {
++		case 'f':
++			test_filter = optarg;
++			break;
++		case 'l':
++			list_only = true;
++			break;
++		case 'h':
++		default:
++			/* Unknown */
++			usage(argv[0]);
++			break;
++		}
++	}
++
++	if (!test_filter && !list_only) {
++		has_uffd = test_uffd_api(false);
++		has_uffd |= test_uffd_api(true);
+ 
+-	if (!has_uffd) {
+-		printf("Userfaultfd not supported or unprivileged, skip all tests\n");
+-		exit(KSFT_SKIP);
++		if (!has_uffd) {
++			printf("Userfaultfd not supported or unprivileged, skip all tests\n");
++			exit(KSFT_SKIP);
++		}
+ 	}
+ 
+ 	for (i = 0; i < n_tests; i++) {
+ 		test = &uffd_tests[i];
++		if (test_filter && !strstr(test->name, test_filter))
++			continue;
++		if (list_only) {
++			printf("%s\n", test->name);
++			continue;
++		}
+ 		for (j = 0; j < n_mems; j++) {
+ 			mem_type = &mem_types[j];
+ 			if (!(test->mem_targets & mem_type->mem_flag))
+@@ -952,7 +989,8 @@ int main(int argc, char *argv[])
+ 		}
+ 	}
+ 
+-	uffd_test_report();
++	if (!list_only)
++		uffd_test_report();
+ 
+ 	return ksft_get_fail_cnt() ? KSFT_FAIL : KSFT_PASS;
+ }
 -- 
 2.39.1
 
