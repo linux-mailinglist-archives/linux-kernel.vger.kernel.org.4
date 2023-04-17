@@ -2,118 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 811EC6E43DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 11:29:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AEDD6E43A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 11:26:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230518AbjDQJ3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 05:29:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56462 "EHLO
+        id S230232AbjDQJ0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 05:26:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230488AbjDQJ1n (ORCPT
+        with ESMTP id S230182AbjDQJ0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 05:27:43 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01838271B;
-        Mon, 17 Apr 2023 02:27:28 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id ud9so62161313ejc.7;
-        Mon, 17 Apr 2023 02:27:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681723647; x=1684315647;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mIzKLg4GpjOzi297VJ0dtCu0S6Mi4dppQa6/15EW5pk=;
-        b=DGwKRCNVQmOXvqi1wI53bFf+tp8DMr0UfGFDldJ1hYnZv9tpCW2WTYgVa1QA17xwC+
-         YHL6JmzMiuHDLrGts81MkWsgHDF66J5Oz7A1O1cbLT5vUgoWb2zKGAuGeLg4US4NBVCc
-         TnirPg0MAj4NOfTESsXhbHThAQRt3lqknbPksa79D0CSSsmLz0wJvr4AIz7XKPQRsclm
-         hO1GZNyXDQdgt/gmuj30I1fj1EQr6+1K/8xZF8FMiirgNLcsGg8Qxala5zqixKMi5W1B
-         oa5k2wUsFNqh77QKDqnGuiaptUoWj8t3Ew2o6Cpt/e93dvnpwwwgYMrxKOEMI8D59ABU
-         W7dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681723647; x=1684315647;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mIzKLg4GpjOzi297VJ0dtCu0S6Mi4dppQa6/15EW5pk=;
-        b=Ah0AVgqJ78pc7JwlQOT6PU/Zv13bcUDldQuheIlAq2534wYkIQKPP2AB2eYblm+Tn1
-         FdblRaF/T4M2GqSRmB19ghbOkSgt9pUZHSRFoleUqsPtdqjCM1R9LYc36ZPlvhkAsAgr
-         mnfkGSFD1hCh1/A2X2fMiERFxUKk5WwoZQlH2zdokDXJz29vjwdbpZzepLR36DetQ4DN
-         OVIzZjFCte3LJMikA++uSgCcTHsaeoqzUiqPPTUDt9QEdXYUqbiTovR0YAoZvIpvnBZd
-         8AZkaAP3c3wtDCAMA4wBCcYdyFQlXBCqOrfNRehrtu2JUMUpsFCiVMMdlDqZ6PU1o6sh
-         Oiyw==
-X-Gm-Message-State: AAQBX9fjQ+WaB9IxODDkPebYcf+MAYavjgN/dXBWlcwzDMvKWncPZyly
-        slpqthdf9Mw/cHnJ5vm2W3I=
-X-Google-Smtp-Source: AKy350a1J6+gjrzwXv0Ks+vuzPkCdPg2TE3nyMnSTa1A9epJMEunrqg4MJREhDQaLIBvDxzcasA+mA==
-X-Received: by 2002:a17:907:6e14:b0:94f:4bd4:36f with SMTP id sd20-20020a1709076e1400b0094f4bd4036fmr4374087ejc.64.1681723647131;
-        Mon, 17 Apr 2023 02:27:27 -0700 (PDT)
-Received: from A13PC04R.einet.ad.eivd.ch ([193.134.219.72])
-        by smtp.googlemail.com with ESMTPSA id p20-20020a170906615400b0094aa087578csm6398596ejl.171.2023.04.17.02.27.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 02:27:26 -0700 (PDT)
-From:   Rick Wertenbroek <rick.wertenbroek@gmail.com>
-To:     alberto.dassatti@heig-vd.ch
-Cc:     xxm@rock-chips.com, Damien Le Moal <dlemoal@kernel.org>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Caleb Connolly <kc@postmarketos.org>,
-        Brian Norris <briannorris@chromium.org>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Hugh Cole-Baker <sigmaris@gmail.com>,
-        Rick Wertenbroek <rick.wertenbroek@gmail.com>,
-        Judy Hsiao <judyhsiao@chromium.org>,
-        Arnaud Ferraris <arnaud.ferraris@collabora.com>,
-        linux-pci@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 11/11] PCI: rockchip: Set address alignment for endpoint mode
-Date:   Mon, 17 Apr 2023 11:26:29 +0200
-Message-Id: <20230417092631.347976-12-rick.wertenbroek@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230417092631.347976-1-rick.wertenbroek@gmail.com>
-References: <20230417092631.347976-1-rick.wertenbroek@gmail.com>
+        Mon, 17 Apr 2023 05:26:45 -0400
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C2BF1BE9
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 02:26:40 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id AFEA441F72;
+        Mon, 17 Apr 2023 09:26:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1681723598; bh=tJwzVZqrJCl1Nyb8wS/o4gf6vdrybmwtTAfNdsp9wDM=;
+        h=Date:To:Cc:From:Subject;
+        b=lknILKwdHgQpfTmPOHNLybhGJVO0onZFLgdWamk3MSaG5DJMu5I6Cok1vyPWogrqI
+         wdytm7AqZsTnrxrFy6a6xGSB7J5SqYYKrkfTQ12oWHnUdDSxXPJUVRAYs+IMfZCTFa
+         2foJo4xCEz/mtxEGn7uBueKEog6Q502vLcHWtVksp6cVRcgC+xLgnxg7iNRvZ754Nd
+         e4M/H+ZjXGVIyD+K9G1g1UlW4YR6MC1L6Ud9lYI0uIzEAxr6SmKAntOAxIUHw3uTDZ
+         DKR4C9Yg0OBJB32AHFFj70iDschANJQ2Y8xYBiyl4ctCkErlGvwKiuZ6B8IIx4y7Zb
+         htyIAS0gCZL9Q==
+Message-ID: <d0862463-acb3-ce83-6493-281a833ec87e@marcan.st>
+Date:   Mon, 17 Apr 2023 18:26:35 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Content-Language: en-US
+To:     SoC Team <soc@kernel.org>
+Cc:     Asahi Linux <asahi@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+From:   Hector Martin <marcan@marcan.st>
+Subject: [GIT PULL] Apple SoC DT updates for 6.4 (v2)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <dlemoal@kernel.org>
+Hi SoC folks,
 
-The address translation unit of the rockchip EP controller does not use
-the lower 8 bits of a PCIe-space address to map local memory. Thus we
-must set the align feature field to 256 to let the user know about this
-constraint.
+Please merge these DT changes for 6.4.
 
-Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
----
- drivers/pci/controller/pcie-rockchip-ep.c | 1 +
- 1 file changed, 1 insertion(+)
+A bit late this cycle, this adds the PWM controllers and keyboard
+backlight nodes. That driver is also on the way to 6.4.
 
-diff --git a/drivers/pci/controller/pcie-rockchip-ep.c b/drivers/pci/controller/pcie-rockchip-ep.c
-index edfced311a9f..0af0e965fb57 100644
---- a/drivers/pci/controller/pcie-rockchip-ep.c
-+++ b/drivers/pci/controller/pcie-rockchip-ep.c
-@@ -442,6 +442,7 @@ static const struct pci_epc_features rockchip_pcie_epc_features = {
- 	.linkup_notifier = false,
- 	.msi_capable = true,
- 	.msix_capable = false,
-+	.align = 256,
- };
- 
- static const struct pci_epc_features*
--- 
-2.25.1
+- Hector
 
+The following changes since commit 8d59efc33fdaa2c82072b4d3ba5f67d7dd9270d0:
+
+  arm64: dts: apple: t600x: Disable unused PCIe ports (2023-03-28 20:07:02 +0900)
+
+are available in the Git repository at:
+
+  https://github.com/AsahiLinux/linux.git tags/asahi-soc-dt-6.4-v2
+
+for you to fetch changes up to 50aa09ac18fac94a907d26dca21aff5507373fb1:
+
+  arm64: dts: apple: t8112: Add PWM controller (2023-04-17 17:27:57 +0900)
+
+----------------------------------------------------------------
+Apple SoC DT updates for 6.4 (v2).
+
+A late addition to the tree, adding the PWM controllers and associated
+keyboard backlight nodes, since that driver and its bindings are now
+on the way to 6.4.
+
+----------------------------------------------------------------
+Sasha Finkelstein (3):
+      arm64: dts: apple: t8103: Add PWM controller
+      arm64: dts: apple: t600x: Add PWM controller
+      arm64: dts: apple: t8112: Add PWM controller
+
+ arch/arm64/boot/dts/apple/t600x-die0.dtsi      |  9 +++++++++
+ arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi | 18 ++++++++++++++++++
+ arch/arm64/boot/dts/apple/t8103-j293.dts       | 17 +++++++++++++++++
+ arch/arm64/boot/dts/apple/t8103-j313.dts       | 17 +++++++++++++++++
+ arch/arm64/boot/dts/apple/t8103.dtsi           |  9 +++++++++
+ arch/arm64/boot/dts/apple/t8112-j413.dts       | 17 +++++++++++++++++
+ arch/arm64/boot/dts/apple/t8112-j493.dts       | 17 +++++++++++++++++
+ arch/arm64/boot/dts/apple/t8112.dtsi           |  9 +++++++++
+ 8 files changed, 113 insertions(+)
+
+- Hector
