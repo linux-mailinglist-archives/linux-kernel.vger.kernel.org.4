@@ -2,82 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85AA46E3D73
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 04:28:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C8986E3D72
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 04:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbjDQC2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 22:28:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48372 "EHLO
+        id S229657AbjDQC1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 22:27:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjDQC2j (ORCPT
+        with ESMTP id S229510AbjDQC1b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 22:28:39 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E061FEB
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 19:28:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681698519; x=1713234519;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=k4gAZozd+Yrw3Ljl8MgCxDpqzd2X7xRSXq1bELURyF8=;
-  b=TlXP7P0+/Ixh4KY0aYXJ9CnvJ4Zdy3V/BYA0n7OXzB2AInsImUN9SpSq
-   7e3enYPyAgNAqYrmBocl1Im/l5PE4l7FYRR9EGY5rIpwiGjbi6w2qaDx4
-   y2OiMJEmRpzP2hRZkxBwmhBGY8pHOiTAr8PM2jbvio5TDbTCksGHEQLJ1
-   bK1Mvt6YTqlazcmpr6ztH24q3nsP1CKj+/sfGu5O3zRnFfa5SMpi7EoLk
-   0OPflur2+cCzXeqmDFwCvhPzrjT5SgQqA5ZBbXDjkap91notr2EaKR5I/
-   I6HxBop21GhiM2GD8p7+yQKexugLeDjCS/SiH4GKPqa7hRmhU/nrW2zX5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="431079190"
-X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
-   d="scan'208";a="431079190"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2023 19:28:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="667954169"
-X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
-   d="scan'208";a="667954169"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2023 19:28:18 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        SeongJae Park <sj@kernel.org>, Hugh Dickins <hughd@google.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: rename reclaim_pages() to reclaim_folios()
-References: <20230415092716.61970-1-wangkefeng.wang@huawei.com>
-        <ZDrK9R9wLlfrUWMZ@casper.infradead.org>
-Date:   Mon, 17 Apr 2023 10:27:12 +0800
-In-Reply-To: <ZDrK9R9wLlfrUWMZ@casper.infradead.org> (Matthew Wilcox's message
-        of "Sat, 15 Apr 2023 17:04:05 +0100")
-Message-ID: <87a5z7w8e7.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Sun, 16 Apr 2023 22:27:31 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E27B2136;
+        Sun, 16 Apr 2023 19:27:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=msiZ6WOWh9wYm2rgjnQHKfX3Kq3D4bGwJU71qMcPnJ4=; b=iGcPEtF5QzvOLyPzaLt8fcJh2m
+        0Rq+8ns3zLjAFbbL2aPK2iSbHXmfxiz5wuOcVEMzDmN/LdrGCwnLrZh3YdaY+CIPmHwo3r0PPrF/0
+        skI5fKi7HUQMoCGrxUDOso/qn58hHllRGeSSL/D06UPgPtJaZOZraIEnYjGratkP1W0ZFL7Qw3G3s
+        aGpfaiulpzl06117hh5a6mOj+kw6pM06G5Mi00OlApM3ycjq7Ea46WqPOlYbvnnsEWK1SUFJbCIHg
+        3HMvlpWQmqo+JHI116oQRWKJ1kRL6we/ZhzvFN+QpOhk5GpTuZj8OJFhv3wj6vY+uac2Q6uVnoRMe
+        ScsAD2IA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1poEaM-00Eh1s-1B;
+        Mon, 17 Apr 2023 02:27:18 +0000
+Date:   Sun, 16 Apr 2023 19:27:18 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     Pankaj Raghav <p.raghav@samsung.com>, brauner@kernel.org,
+        willy@infradead.org, viro@zeniv.linux.org.uk,
+        akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gost.dev@samsung.com
+Subject: Re: [RFC 0/4] convert create_page_buffers to create_folio_buffers
+Message-ID: <ZDyuhmcc9OeJGUcJ@bombadil.infradead.org>
+References: <CGME20230414110825eucas1p1ed4d16627889ef8542dfa31b1183063d@eucas1p1.samsung.com>
+ <20230414110821.21548-1-p.raghav@samsung.com>
+ <1e68a118-d177-a218-5139-c8f13793dbbf@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1e68a118-d177-a218-5139-c8f13793dbbf@suse.de>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Matthew Wilcox <willy@infradead.org> writes:
+On Fri, Apr 14, 2023 at 03:47:13PM +0200, Hannes Reinecke wrote:
+> @@ -2333,13 +2395,15 @@ int block_read_full_folio(struct folio *folio,
+> get_block_t *get_block)
+>         if (IS_ENABLED(CONFIG_FS_VERITY) && IS_VERITY(inode))
+>                 limit = inode->i_sb->s_maxbytes;
+> 
+> -       VM_BUG_ON_FOLIO(folio_test_large(folio), folio);
+> -
+>         head = create_folio_buffers(folio, inode, 0);
+>         blocksize = head->b_size;
+>         bbits = block_size_bits(blocksize);
+> 
+> -       iblock = (sector_t)folio->index << (PAGE_SHIFT - bbits);
+> +       if (WARN_ON(PAGE_SHIFT < bbits)) {
+> +               iblock = (sector_t)folio->index >> (bbits - PAGE_SHIFT);
+> +       } else {
+> +               iblock = (sector_t)folio->index << (PAGE_SHIFT - bbits);
+> +       }
+>         lblock = (limit+blocksize-1) >> bbits;
+>         bh = head;
+>         nr = 0;
 
-> On Sat, Apr 15, 2023 at 05:27:16PM +0800, Kefeng Wang wrote:
->> As commit a83f0551f496 ("mm/vmscan: convert reclaim_pages() to use
->> a folio") changes the arg from page_list to folio_list, but not
->> the defination, let's correct it and rename it to reclaim_folios too.
->
-> I didn't bother.  It's not inaccurate; we're reclaiming the pages
-> in the folios.
+BTW I See this pattern in:
 
-What's the general rule about renaming "pages" to "folios" in function
-names?  I am thinking whether it's necessary to rename migrate_pages()
-to migrate_folios().  It's unnecessary?
+fs/mpage.c: do_mpage_readpage()
+fs/mpage.c: __mpage_writepage()
 
-Best Regards,
-Huang, Ying
+A helper might be in order.
+
+  Luis
