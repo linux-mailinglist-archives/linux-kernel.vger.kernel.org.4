@@ -2,77 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 755656E3FD2
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 08:30:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 074286E3FD4
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 08:31:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbjDQGaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 02:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60830 "EHLO
+        id S230034AbjDQGaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 02:30:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjDQGaG (ORCPT
+        with ESMTP id S230283AbjDQGa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 02:30:06 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBBD10E3
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 23:30:03 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-504eb1155d3so19030365a12.1
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 23:30:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681713002; x=1684305002;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Rbr7dITfZlBNrOU3sgoC9hFuL+fFrZv65zzAZtIBsq0=;
-        b=SrWjsobloflYb7f6BmyVdO/YYtFDDB9pO7XiY0wOojUUVk8iSBQ63xasHG0VfazS6+
-         1xnySMqqRmRzDRynGmGqOheZrm70j93MkBSVBhDBIU70vBOdm2jSs6tDsafxiWvbg8ph
-         ToJ1RPr77U0ZIQS3S+ARaodQ/JRxbhbCjcMsUJWHiSLwE6h3O2tyCafvd6Mzk7btMX3D
-         NwiUWYlDKS5b2bsKCwgA72P6PLWi8AvQOlGLa/9QsaoDiPLeyUQEd1AvDPrQwnza0rkX
-         Jh0kGbjfW3G1aY5q1x3/ZztszBj19MNZKNdr+joWV/zfDJ3XqGQeKs1w7DEJUCvI6WsR
-         epMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681713002; x=1684305002;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rbr7dITfZlBNrOU3sgoC9hFuL+fFrZv65zzAZtIBsq0=;
-        b=S71WdDZX/CJRO/t6qdDFTMAb42LL2xyyR+RyEEiYuh+mxz7VWQE7YAEhT7TDNX6Uns
-         aQa2EADzwCb2dT8vrrYlpyIg4+GozqDfVeQAvL4Xt9SENESL1iQkCocx8teZqpCXkI6K
-         H+hz6eF7rc29USo849sEVQ6B4W8LQ3rUU7/PTZ4KwrkJ82e+oF8/SilrzUgnHxgz24A5
-         7ktNTUclbnCCR+yBNZk2HBgSKtkBFVVgJAMYapv6KNv0LMtH9Tq0LhWS0bjF+Q7zZFPY
-         usL0jsdpscybIlG7oQqFdpXcB8PtoH7uf0V/340BthI0VjbuNriAjZJ4H/VjAzTOtYxA
-         XaSw==
-X-Gm-Message-State: AAQBX9do5d8XASdg6dhkEBO71zvnG63uU/M2oq/LPg5Xwi99UQ+GIgoD
-        GHFHq2t1Zqf80RmKLbF8QnjtOw==
-X-Google-Smtp-Source: AKy350ZhGCI4nKB2rNBLO5dGxX+qcrNO6ZBdzl6bN0SQV/cayNGubQvkofnZFqJlnl4AGISWYdpnig==
-X-Received: by 2002:a05:6402:4413:b0:4af:7bdc:188e with SMTP id y19-20020a056402441300b004af7bdc188emr16627552eda.16.1681713002258;
-        Sun, 16 Apr 2023 23:30:02 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:b0ac:4d3b:966c:b33d? ([2a02:810d:15c0:828:b0ac:4d3b:966c:b33d])
-        by smtp.gmail.com with ESMTPSA id ta15-20020a1709078c0f00b0094fa472a7c4sm140808ejc.161.2023.04.16.23.30.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Apr 2023 23:30:01 -0700 (PDT)
-Message-ID: <94e776a1-a927-ac3e-6f16-e9e71d71f3f0@linaro.org>
-Date:   Mon, 17 Apr 2023 08:30:00 +0200
+        Mon, 17 Apr 2023 02:30:28 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8EC1709;
+        Sun, 16 Apr 2023 23:30:23 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 2740A1F381;
+        Mon, 17 Apr 2023 06:30:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1681713022; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=roBouqcwrrL48gYZgmbmYU0kUH5SEah2GFkcNfYxmOI=;
+        b=ck8Z3Wqum42wIEZqp4vzxAuQXzIrDeywyEiGIMSSpaaFUG9pPnDv0u/Fqlu5Cein/TWoqC
+        1bkI5TXDEQMtEl6y0+CPx5Yg0jI+jSSAKZLfTuD/e4WFQO9pvJ4PNm4haiA/JugtprIaGq
+        pF+HdrFQilGJb2+QSLwbUTaRcqMgzbs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1681713022;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=roBouqcwrrL48gYZgmbmYU0kUH5SEah2GFkcNfYxmOI=;
+        b=A85iskxesfGUQMCDpxgU5nzMknneXeCJICtFvNxfWVAbX+AhFwUnsqxooHan3nhyTOyPwH
+        n/iD3DroorisHtBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 04A1D13319;
+        Mon, 17 Apr 2023 06:30:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id si+ZO33nPGSLBQAAMHmgww
+        (envelope-from <hare@suse.de>); Mon, 17 Apr 2023 06:30:21 +0000
+Message-ID: <71f872a5-781d-c805-9789-cd3aed024658@suse.de>
+Date:   Mon, 17 Apr 2023 08:30:21 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 1/4] dt-bindings: clock: Add simple-clock-controller
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] mm/filemap: allocate folios according to the blocksize
 Content-Language: en-US
-To:     David Yang <mmyangfl@gmail.com>, linux-clk@vger.kernel.org
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230416194624.1258860-1-mmyangfl@gmail.com>
- <20230416194624.1258860-2-mmyangfl@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230416194624.1258860-2-mmyangfl@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Pankaj Raghav <p.raghav@samsung.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mcgrof@kernel.org
+References: <20230414134908.103932-1-hare@suse.de>
+ <ZDzM6A0w4seEumVo@infradead.org>
+ <df36a72c-5b20-f071-ec1c-312f43939ebc@suse.de>
+ <ZDzmtK64elHn6yPg@infradead.org>
+From:   Hannes Reinecke <hare@suse.de>
+In-Reply-To: <ZDzmtK64elHn6yPg@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,27 +79,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/04/2023 21:46, David Yang wrote:
+On 4/17/23 08:27, Christoph Hellwig wrote:
+> On Mon, Apr 17, 2023 at 08:08:04AM +0200, Hannes Reinecke wrote:
+>> On 4/17/23 06:36, Christoph Hellwig wrote:
+>>> On Fri, Apr 14, 2023 at 03:49:08PM +0200, Hannes Reinecke wrote:
+>>>> If the blocksize is larger than the pagesize allocate folios
+>>>> with the correct order.
+>>>
+>>> And how is that supposed to actually happen?
+>>
+>> By using my patcheset to brd and set the logical blocksize to eg 16k.
+> 
+> Then add it to your patchset instead of trying to add dead code to the
+> kernel while also losing context.
 
-> +patternProperties:
-> +  '.*clock.*':
-> +    type: object
-> +    description: Clock devices.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    clock-controller@ffff000 {
-> +      compatible = "simple-clock-controller";
-> +      reg = <0xffff000 0x1000>;
+Yeah, sorry. Was a bit overexcited here.
 
-BTW, this is just incomplete example. Fill it with proper children.
+Cheers,
 
-Best regards,
-Krzysztof
+Hannes
+-- 
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Ivo Totev, Andrew
+Myers, Andrew McDonald, Martje Boudien Moerman
 
