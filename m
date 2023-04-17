@@ -2,68 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCBC26E408E
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 09:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD9666E4095
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 09:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230257AbjDQHTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 03:19:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35174 "EHLO
+        id S230137AbjDQHUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 03:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230204AbjDQHTB (ORCPT
+        with ESMTP id S230285AbjDQHUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 03:19:01 -0400
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A08040D0
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 00:18:48 -0700 (PDT)
-Received: from ramsan.of.borg ([84.195.187.55])
-        by albert.telenet-ops.be with bizsmtp
-        id ljJk2900L1C8whw06jJk4X; Mon, 17 Apr 2023 09:18:46 +0200
-Received: from geert (helo=localhost)
-        by ramsan.of.borg with local-esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1poJ8O-00GyYx-Gn;
-        Mon, 17 Apr 2023 09:18:44 +0200
-Date:   Mon, 17 Apr 2023 09:18:44 +0200 (CEST)
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     linux-kernel@vger.kernel.org
-cc:     linux-spi@vger.kernel.org, linux-um@lists.infradead.org
-Subject: Re: Build regressions/improvements in v6.3-rc7
-In-Reply-To: <20230417071429.965980-1-geert@linux-m68k.org>
-Message-ID: <1ab2158e-dda-c1c5-4a3b-301cd41f9ef@linux-m68k.org>
-References: <CAHk-=wjwK59PegTZb9r=EVuCPwbigcbbby5AwEboMBgykhL-KA@mail.gmail.com> <20230417071429.965980-1-geert@linux-m68k.org>
+        Mon, 17 Apr 2023 03:20:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09C540F0;
+        Mon, 17 Apr 2023 00:20:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 84DD661E72;
+        Mon, 17 Apr 2023 07:20:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D45AC433EF;
+        Mon, 17 Apr 2023 07:20:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681716005;
+        bh=GIlq1xazAppk+4PJdlj+79u9JtEaGtPambHTZuB/bFQ=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=t/Wm+Z4lufEoglmsAGChmQMgJpQoB4XNwtH5NxGv6kKl2ec78W1E4q7AwMj1t0Ov4
+         71f9rzU6VJyeLhGZ4RxAMPf6XmUuDE+tj8Sgn82UffxPhDbOes+n0Nm3YEiV6Uta/w
+         vNYOr/Mrg0JuqM9gjhhmlA6TpbiSmNUjQ5YZZX1JXsb2YUc0T60uToZ07m37ouHPgm
+         xSMgy6IafpXkwa0mgKQg/ocvLqN0COG4iFUpGis67h3kS7UwSCUFp1Quto1MsbDzcy
+         guiNCaCQgPY4IgnbYX25LM1yGjkj+jFirD1k9mHiXa0fuM2DaBW1ZRKfe2shPNPCZl
+         ahFbB02ub2RDw==
+Message-ID: <dd1525de-fa91-965f-148a-f7f517ae48f9@kernel.org>
+Date:   Mon, 17 Apr 2023 09:19:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: net: wireless: ath9k: document endian
+ check
+To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
+        f.fainelli@gmail.com, jonas.gorski@gmail.com, nbd@nbd.name,
+        toke@toke.dk, kvalo@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        chunkeey@gmail.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230417053509.4808-1-noltari@gmail.com>
+ <20230417053509.4808-2-noltari@gmail.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20230417053509.4808-2-noltari@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Apr 2023, Geert Uytterhoeven wrote:
-> JFYI, when comparing v6.3-rc7[1] to v6.3-rc6[3], the summaries are:
->  - build errors: +1/-2
+On 17/04/2023 07:35, Álvaro Fernández Rojas wrote:
+> Document new endian check flag to allow checking the endianness of EEPROM and
+> swap its values if needed.
+> 
+> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
 
-   + /kisskb/src/drivers/spi/spi-stm32-qspi.c: error: 'op' is used uninitialized [-Werror=uninitialized]:  => 564:27, 523:27
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
 
-um-x86_64-gcc12/um-all{mod,yes}config
+You missed the lists so this won't be tested. Resend following Linux
+kernel submission process.
 
-Seen before, and looks completely bogus to me, unless there's a bug in
-the UML implementation of memcpy() and memset(), which are used to
-initialize "op".
 
-> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/6a8f57ae2eb07ab39a6f0ccad60c760743051026/ (all 152 configs)
-> [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/09a9639e56c01c7a00d6c0ca63f4c7c41abe075d/ (all 152 configs)
+> ---
+>  .../devicetree/bindings/net/wireless/qca,ath9k.yaml          | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/wireless/qca,ath9k.yaml b/Documentation/devicetree/bindings/net/wireless/qca,ath9k.yaml
+> index 0e5412cff2bc..ff9ca5e3674b 100644
+> --- a/Documentation/devicetree/bindings/net/wireless/qca,ath9k.yaml
+> +++ b/Documentation/devicetree/bindings/net/wireless/qca,ath9k.yaml
+> @@ -44,6 +44,11 @@ properties:
+>  
+>    ieee80211-freq-limit: true
+>  
+> +  qca,endian-check:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description:
+> +      Indicates that the EEPROM endianness should be checked
 
-Gr{oetje,eeting}s,
+Does not look like hardware property. Do not instruct what driver should
+or should not do. It's not the purpose of DT.
 
- 						Geert
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Best regards,
+Krzysztof
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
- 							    -- Linus Torvalds
