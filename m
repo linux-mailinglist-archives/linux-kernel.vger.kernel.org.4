@@ -2,101 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C29D6E53ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 23:34:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8A436E53F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 23:35:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbjDQVd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 17:33:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38080 "EHLO
+        id S230459AbjDQVfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 17:35:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229903AbjDQVdw (ORCPT
+        with ESMTP id S229825AbjDQVfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 17:33:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A9F558A;
-        Mon, 17 Apr 2023 14:33:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E51B62A8C;
-        Mon, 17 Apr 2023 21:33:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 745FFC433D2;
-        Mon, 17 Apr 2023 21:33:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681767230;
-        bh=DevFUD2pXPhn+7qfSYqBFbAMM38Bh/J+7pB96YIeCO8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ADfEtqMR+K4KEUM0j4f0TkpVqPh5F4A4S6hW7z0Ozghn/n4W0SwN+di2Rii8laW3E
-         KEEblr/tirCyldF9c+zbPrpYJhpGlvSPqaZnrjffWzBC7XBo/++bapkyingkVo32sP
-         4FSGNeCkMe9CfxgasFku8iN8zkQXkHfWVhhAxl6mdJiw1LzwaFB6Jk56rwjrVo2ab/
-         pq+GI20Ik6SYZ9AZZweW+vTTvEZ6hq0lA+KQEVPaL5parzQyLz3EKho4sXGx0epz4s
-         kwq88bnUHlZW4t4C2HVvhm3wrkYMR6UnCBfsBHSDPETfGhe7p5UbgzNNTylmiJuMF0
-         TvMi2lclY9YpQ==
-Date:   Mon, 17 Apr 2023 17:33:47 -0400
-From:   William Breathitt Gray <wbg@kernel.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Olivier Moysan <olivier.moysan@foss.st.com>,
-        linux-iio@vger.kernel.org, Lee Jones <lee@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        kernel@pengutronix.de, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2] counter: stm32-timer-cnt: Reset TIM_TISEL to its
- default value in probe
-Message-ID: <ZD27O3l1WMPSQnzy@ishi>
-References: <20230413212339.3611722-1-u.kleine-koenig@pengutronix.de>
+        Mon, 17 Apr 2023 17:35:13 -0400
+Received: from smtp.smtpout.orange.fr (smtp-27.smtpout.orange.fr [80.12.242.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E04AE4C28
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 14:35:12 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id oWVBpmySP7JnhoWVBpp7Yo; Mon, 17 Apr 2023 23:35:11 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orange.fr;
+        s=t20230301; t=1681767311;
+        bh=exdfx2AQYI+d3tNi/ZWU6Qg32IUD8RC19Z/dcWtgLqs=;
+        h=From:To:Cc:Subject:Date;
+        b=NdxG2WsGN31gVPGEViY7Gfx6CGXCETw38SsVxY6IMCbDTSfxJfXScMtFpUjcrKaKG
+         NVgFyLzcDAenFlcjEu92emWpI0WggHaWsRMRyb1j5k0GqiAzyRgTYoXhNLRHvnRR9C
+         k/uxWrNaiTFNq1C8OBkSyax8cLOpnVn5gXA0002el4r+WuB58lXuybGxlgyZQVdbYU
+         nnjfp7Zw2UQWmUDflTkQ34Dr3CEm02FFBu8uwmhsaHf/kv586EWgib/eHTjbpLtnDF
+         jVSer0ib8ZfQ6hgF0MOUutTWNMqpSOHW6rhUWpXZNwfNO9BecmslqM1kij833b97lQ
+         KUlMW8ZxR2/hw==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 17 Apr 2023 23:35:11 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Pavle Kotarac <Pavle.Kotarac@amd.com>,
+        Nevenko Stupar <Nevenko.Stupar@amd.com>,
+        Aric Cyr <aric.cyr@amd.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: [PATCH] drm/amd/display: Fix a test CalculatePrefetchSchedule()
+Date:   Mon, 17 Apr 2023 23:35:08 +0200
+Message-Id: <13ab79d7a6c7ec6292c803ce1e52c8ac12af320f.1681767298.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="if/W+Y61PnsCB3GM"
-Content-Disposition: inline
-In-Reply-To: <20230413212339.3611722-1-u.kleine-koenig@pengutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+It is likely Height was expected here, instead of Width.
 
---if/W+Y61PnsCB3GM
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Test the correct variable.
 
-On Thu, Apr 13, 2023 at 11:23:39PM +0200, Uwe Kleine-K=F6nig wrote:
-> The driver assumes that the input selection register (TIM_TISEL) is at
-> its reset default value. Usually this is the case, but the bootloader
-> might have modified it.
->=20
-> This bases on a similar patch submitted by Olivier Moysan for pwm-stm32.
->=20
-> Reviewed-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com
-> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+Fixes: 17529ea2acfa ("drm/amd/display: Optimizations for DML math")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to the counter-next branch of the Counter tree. I made a minor
-fix to Fabrice's Reviewed-by tag line for the missing closing chevron.
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c b/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
+index b7c2844d0cbe..f294f2f8c75b 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
+@@ -810,7 +810,7 @@ static bool CalculatePrefetchSchedule(
+ 			*swath_width_chroma_ub = dml_ceil(SwathWidthY / 2 - 1, myPipe->BlockWidth256BytesC) + myPipe->BlockWidth256BytesC;
+ 	} else {
+ 		*swath_width_luma_ub = dml_ceil(SwathWidthY - 1, myPipe->BlockHeight256BytesY) + myPipe->BlockHeight256BytesY;
+-		if (myPipe->BlockWidth256BytesC > 0)
++		if (myPipe->BlockHeight256BytesC > 0)
+ 			*swath_width_chroma_ub = dml_ceil(SwathWidthY / 2 - 1, myPipe->BlockHeight256BytesC) + myPipe->BlockHeight256BytesC;
+ 	}
+ 
+-- 
+2.34.1
 
-Thanks,
-
-William Breathitt Gray
-
---if/W+Y61PnsCB3GM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZD27OwAKCRC1SFbKvhIj
-K+cOAQDeYS4l9+RlqHr4D7QYrKZxrerhqbYBTIvV2vktTXzPIwD/dhyY5SuBy/hf
-gGPzZn8MPwGhXr9LAN8tnKpuZwaoCgc=
-=AAdE
------END PGP SIGNATURE-----
-
---if/W+Y61PnsCB3GM--
