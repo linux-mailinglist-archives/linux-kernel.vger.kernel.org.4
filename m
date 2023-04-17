@@ -2,63 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B86076E466C
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 13:28:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05D036E4613
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 13:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbjDQL2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 07:28:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48940 "EHLO
+        id S231184AbjDQLKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 07:10:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230101AbjDQL1L (ORCPT
+        with ESMTP id S230518AbjDQLKU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 07:27:11 -0400
-X-Greylist: delayed 1032 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 17 Apr 2023 04:26:09 PDT
-Received: from endrift.com (endrift.com [173.255.198.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB425255;
-        Mon, 17 Apr 2023 04:26:09 -0700 (PDT)
-Received: from [192.168.0.22] (unknown [50.47.218.115])
-        by endrift.com (Postfix) with ESMTPSA id 1CC7DA270;
-        Mon, 17 Apr 2023 04:07:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=endrift.com; s=2020;
-        t=1681729649; bh=de2yKnAwsU9431FBx3POLOHI3HNYYKnkxcSV1WxNjjE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kKBPWCTao7pOECwQzAAvGKsYg7sScrXZD0tvf4ngHL4djt5tV0/I/luuGV0ayK0qs
-         oTMfMnW+RoLF494HuxuAaqCPPx4fGDzFJQ74FM9DL+sIcBPxSH13ndfaAGmREdiZyc
-         hVhwr8sWoGA/h4330zuqpLl9o7YIS1w8Ww6AUs2XUB0bzy04kzG8+CGNACVxl0RJfK
-         SdY0j31SfYdegjh+oinB7SmolxQbopl7RCeJnPgpEoG8/MCt4qjF0pgOoV+21OOFfw
-         1WFpV1SzELe9qvy/YQsqolUqOgYWOgcxLegjeM/o89Z8INaa5xuEqrhIgEOtbvkm4Y
-         DUs6+A0q6oM6w==
-Message-ID: <69fc3a73-f18b-0268-6431-1b8b6aeed8ff@endrift.com>
-Date:   Mon, 17 Apr 2023 04:07:27 -0700
+        Mon, 17 Apr 2023 07:10:20 -0400
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6FB268F;
+        Mon, 17 Apr 2023 04:09:17 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 46059582221;
+        Mon, 17 Apr 2023 07:07:40 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 17 Apr 2023 07:07:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1681729660; x=1681736860; bh=bT
+        tthA6VPXAxkFfxNa3/wjFZM4+tTAxqmF+b3PB+Glg=; b=hTIIrpcTTKkYsjZtiA
+        fy/r45LsFjqK/L9BmkNWnqHS4+DxuAAHNkBtr8BvgoNvK23Gq9Ie0j/OM6Q/834h
+        gf/Y5SqjLrWnHy+tgu9OWVdgWQLhgAefsDrGyto8fWA3afdcFa0eUvFXNU14ySqq
+        VmZTgZif/+MqRDXjmTnMmieRLwe8tbugXSi7zVrwTdSEIH4xDGLY6JnQfMPUtKvv
+        HNDvg8LBiryLPFAkD94CeSvX46dYN3OzdFIyfeFb4MaPOanwLOHUD7mrAl+yztHm
+        ft8JRNq/dFbhm3HnAGjoi/i+A9OgFIhWfB9J1sZipqG5PTh6q6pNbZjza73bq3HK
+        lr+Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1681729660; x=1681736860; bh=bTtthA6VPXAxk
+        FfxNa3/wjFZM4+tTAxqmF+b3PB+Glg=; b=Ev3LPsCN9ACOrvriKQJqNDyYXMGeY
+        yjwABcqyEcSqdXHV4QtT0wAATotgfFmBKqx2+J6PXbsw//J6IpXcLzsVlBUcf1fu
+        VAhM0mpE9WeJJ6rlCBqZAn0U1HzE1eEeyaZzyVAhpX2n4Q4+bLmFfx1dm0rLCL7g
+        PaWdggW40AOH7hJ3tx/wZhIGUQqeNM//UcBw6BKfT/VP7Ic82MJAcxs18DcPtVce
+        t83ZDpbrVocffRAkBuaAVWbmPg3wAhaJ4vcm2k2PEfFJrbj8MlUoMWXQOPgUfFDC
+        X0Fdn0wdJKWrhkqkg5VaNWbOkuce/TCs9H0ZddtmrhBHC3hXQmlTTf6JQ==
+X-ME-Sender: <xms:eyg9ZEUfC7UVhyEYgIiG7aFMMQeMgiTjyU034P1mrKEH2SIy-VeEHQ>
+    <xme:eyg9ZIlqZgXLqth13k-bd7saG3UGdyTldNsU9D6kV-WVbse7p4zVka6hv46wkvVaa
+    POmPT3IRAISpLavRXY>
+X-ME-Received: <xmr:eyg9ZIbK_kvjAVDewXjyFhlCGF4YviudNKPCjEA7eCtFZZCp5sMQLwHBuwHgecAkVxZU4e1aDqjAvq-4c8scPo2iG__ciuo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeliedgfeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtsfertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpedtgfdukeeigeeuhfelheeftdfhgfegfefgudeuiefhueeuleekveetvdei
+    tddvieenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
+    hh
+X-ME-Proxy: <xmx:eyg9ZDUL3HFcDHjyrKYRinf1AOzwtE_XHxmznZuZN8LNUuJlfVCKgg>
+    <xmx:eyg9ZOkn4rPRnN6x7E8-IFkI_HToNwNOA7Kz7hAGEkm1n7WxTkwdFQ>
+    <xmx:eyg9ZIfw2CA3vuQtn38C2PMca11goBf_zEbDqtWFr2n5XH9zbYpwKA>
+    <xmx:fCg9ZKxCiuyeDWrx6yuRYrdGpe19i8f2ZSDCEtqT7RlubNqzVcskxw>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 17 Apr 2023 07:07:38 -0400 (EDT)
+Date:   Mon, 17 Apr 2023 13:07:36 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     David Gow <davidgow@google.com>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        Rae Moar <rmoar@google.com>,
+        Benjamin Berg <benjamin@sipsolutions.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com
+Subject: Re: [RFC PATCH v2 1/3] kunit: Add kunit_add_action() to defer a call
+ until test exit
+Message-ID: <rsmo6fiwagtrbev2o556rpp747s67ymz3s564chm2q3h73qf3f@e5s3x3wtzfqf>
+References: <20230331080411.981038-1-davidgow@google.com>
+ <20230331080411.981038-2-davidgow@google.com>
+ <56w47e5mff74b4jrpgl4odhjxzayoptb6u2e2u6haaf7tuvl4f@xwlmne7p6kli>
+ <CABVgOSmjs0wLUa4=ErkB9tH8p6A1P6N33befv63whF+hECRExQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] Input: xpad - fix GPF in xpad_probe
-Content-Language: en-US
-To:     Dongliang Mu <dzm91@hust.edu.cn>, Dan Carpenter <error27@gmail.com>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Pavel Rojtberg <rojtberg@gmail.com>,
-        Nate Yocom <nate@yocom.org>,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        John Butler <radon86dev@gmail.com>,
-        Matthias Benkmann <matthias.benkmann@gmail.com>,
-        Christopher Crockett <chaorace@gmail.com>,
-        Santosh De Massari <s.demassari@gmail.com>,
-        hust-os-kernel-patches@googlegroups.com,
-        syzbot+a3f758b8d8cb7e49afec@syzkaller.appspotmail.com,
-        "Pierre-Loup A. Griffais" <pgriffais@valvesoftware.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230414125603.686123-1-dzm91@hust.edu.cn>
- <c3e0823b-2b03-4dab-b7cb-a8bc5151f0b1@kili.mountain>
- <99794af0-7367-acff-357d-1cd4fa7f832e@hust.edu.cn>
- <38279d91-402c-7f8b-273d-0882a0567a0c@endrift.com>
- <57577302-8d18-231f-062b-b1d262720943@hust.edu.cn>
-From:   Vicki Pfau <vi@endrift.com>
-In-Reply-To: <57577302-8d18-231f-062b-b1d262720943@hust.edu.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="36nq5iptcuyvnvqr"
+Content-Disposition: inline
+In-Reply-To: <CABVgOSmjs0wLUa4=ErkB9tH8p6A1P6N33befv63whF+hECRExQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,70 +102,185 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--36nq5iptcuyvnvqr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 4/17/23 03:33, Dongliang Mu wrote:
->
-> On 2023/4/17 18:24, Vicki Pfau wrote:
->> Hi,
->>
->> On 4/17/23 03:01, Dongliang Mu wrote:
->>> On 2023/4/17 17:25, Dan Carpenter wrote:
->>>> On Fri, Apr 14, 2023 at 08:55:47PM +0800, Dongliang Mu wrote:
->>>>> In xpad_probe(), it does not allocate xpad->dev with input_dev type.
->>>>> Then, when it invokes dev_warn with 1st argument - &xpad->dev->dev, it
->>>>> would trigger GPF.
->>>> What is a call tree for this?  Actually I found it from the bug report.
->>>> drivers/input/joystick/xpad.c
->>>>     2034                  if (error)
->>>>     2035                          dev_warn(&xpad->dev->dev,
->>>>     2036                                   "unable to receive magic message: %d\n",
->>>>     2037                                   error);
->>>>     2038          }
->> Sorry, this appears to be my code, and was merged recently after a few drafts with Dmitry. This code is sensitive to being moved and only affects some controllers, so I'm looking into if I can move it into after creation of the input_dev right now. It's something I'd already thought might be necessary, but I didn't find any evidence for it before. I'll try to get back to you on that soon.
->
-> If this is necessary, we can change it with another device pointer. Otherwise, we need to move it after the allocation and assignment. Or move the allocation and assignment before which is not suggested.
->
-> Thanks for your reply. Do I need to submit a v2 patch? Or you will take care of it?
+Hi David,
 
-I'll take care of it. I have a patch prepared, but I need to do a bit more testing before I can confirm it doesn't break one specific controller. I'll try to file it as soon as possible. Do you have a timeframe you need this by?
+On Sat, Apr 15, 2023 at 04:42:27PM +0800, David Gow wrote:
+> On Fri, 14 Apr 2023 at 18:02, <maxime@cerno.tech> wrote:
+> >
+> > Hi David,
+> >
+> > On Fri, Mar 31, 2023 at 04:04:09PM +0800, David Gow wrote:
+> > > Many uses of the KUnit resource system are intended to simply defer
+> > > calling a function until the test exits (be it due to success or
+> > > failure). The existing kunit_alloc_resource() function is often used =
+for
+> > > this, but was awkward to use (requiring passing NULL init functions, =
+etc),
+> > > and returned a resource without incrementing its reference count, whi=
+ch
+> > > -- while okay for this use-case -- could cause problems in others.
+> > >
+> > > Instead, introduce a simple kunit_add_action() API: a simple function
+> > > (returning nothing, accepting a single void* argument) can be schedul=
+ed
+> > > to be called when the test exits. Deferred actions are called in the
+> > > opposite order to that which they were registered.
+> > >
+> > > This mimics the devres API, devm_add_action(), and also provides
+> > > kunit_remove_action(), to cancel a deferred action, and
+> > > kunit_release_action() to trigger one early.
+> > >
+> > > This is implemented as a resource under the hood, so the ordering
+> > > between resource cleanup and deferred functions is maintained.
+> > >
+> > > Signed-off-by: David Gow <davidgow@google.com>
+> > > ---
+> > >
+> > > Changes since RFC v1:
+> > > https://lore.kernel.org/linux-kselftest/20230325043104.3761770-2-davi=
+dgow@google.com/
+> > > - Rename functions to better match the devm_* APIs. (Thanks Maxime)
+> > > - Embed the kunit_resource in struct kunit_action_ctx to avoid an ext=
+ra
+> > >   allocation (Thanks Benjamin)
+> > > - Use 'struct kunit_action_ctx' as the type for cancellation tokens
+> > >   (Thanks Benjamin)
+> > > - Add tests.
+> > >
+> > > ---
+> > >  include/kunit/resource.h |  89 ++++++++++++++++++++++++++++
+> > >  lib/kunit/kunit-test.c   | 123 +++++++++++++++++++++++++++++++++++++=
++-
+> > >  lib/kunit/resource.c     |  99 +++++++++++++++++++++++++++++++
+> > >  3 files changed, 310 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/include/kunit/resource.h b/include/kunit/resource.h
+> > > index c0d88b318e90..15efd8924666 100644
+> > > --- a/include/kunit/resource.h
+> > > +++ b/include/kunit/resource.h
+> > > @@ -387,4 +387,93 @@ static inline int kunit_destroy_named_resource(s=
+truct kunit *test,
+> > >   */
+> > >  void kunit_remove_resource(struct kunit *test, struct kunit_resource=
+ *res);
+> > >
+> > > +typedef void (*kunit_defer_function_t)(void *ctx);
+> > > +
+> > > +/* An opaque token to a deferred action. */
+> > > +struct kunit_action_ctx;
+> > > +
+> > > +/**
+> > > + * kunit_add_action() - Defer an 'action' (function call) until the =
+test ends.
+> > > + * @test: Test case to associate the action with.
+> > > + * @func: The function to run on test exit
+> > > + * @ctx: Data passed into @func
+> > > + * @internal_gfp: gfp to use for internal allocations, if unsure, us=
+e GFP_KERNEL
+> > > + *
+> > > + * Defer the execution of a function until the test exits, either no=
+rmally or
+> > > + * due to a failure.  @ctx is passed as additional context. All func=
+tions
+> > > + * registered with kunit_add_action() will execute in the opposite o=
+rder to that
+> > > + * they were registered in.
+> > > + *
+> > > + * This is useful for cleaning up allocated memory and resources.
+> > > + *
+> > > + * Returns:
+> > > + *   An opaque "cancellation token", or NULL on error. Pass this tok=
+en to
+> > > + *   kunit_remove_action_token() in order to cancel the deferred exe=
+cution of
+> > > + *   func().
+> > > + */
+> > > +struct kunit_action_ctx *kunit_add_action(struct kunit *test, kunit_=
+defer_function_t func,
+> > > +                   void *ctx, gfp_t internal_gfp);
+> >
+> > I've tried to leverage kunit_add_action() today, and I'm wondering if
+> > passing the struct kunit pointer to the deferred function would help.
+> >
+>=20
+> I'm tempted, but it does make the case where we just want to cast,
+> e.g., kfree() directly to an action pointer more difficult. Not that
+> that's a deal-blocker, but it was convenient...
+>=20
+> > The code I'm struggling with is something like:
+> >
+> > > static int test_init(struct kunit *test)
+> > > {
+> > >       priv =3D kunit_kzalloc(sizeof(*priv), GFP_KERNEL);
+> > >       KUNIT_ASSERT_NOT_NULL(test, priv);
+> > >       test->priv =3D priv;
+> > >
+> > >       priv->dev =3D alloc_device();
+> > >
+> > >       return 0;
+> > > }
+> >
+> > and then in the test itself:
+> >
+> > > static void actual_test(struct kunit *test)
+> > > {
+> > >       struct test_priv *priv =3D test->priv;
+> > >
+> > >       id =3D allocate_buffer(priv->dev);
+> > >
+> > >       KUNIT_EXPECT_EQ(test, id, 42);
+> > >
+> > >       free_buffer(priv->dev, id);
+> > > }
+> >
+> > I'd like to turn free_buffer an action registered right after allocate
+> > buffer. However, since it takes several arguments and kunit_add_action
+> > expects a single pointer, we would need to create a structure for it,
+> > allocate it, fill it, and then free it when the action has ran.
+>=20
+> The general case of wanting multiple arguments to an action is a bit
+> complicated. My plan was to initially support just the one argument,
+> and deal with more complicated cases later. Ideas included:
+> - using a struct like you suggest, possibly with some macro magic to
+> make it easier,
+> - having a bunch of very similar implementations of
+> kunit_add_action{2,3,4,..}(), which accept 2,3,4,... arguments,
+> - something horrible and architecture-specific with manually writing
+> out arguments to the stack (or registers)
+>=20
+> None of those sounded particularly pleasant, though. My suspicion is
+> that the "right" way of doing this is to maybe have one or two helpers
+> for common cases (e.g., 2 arguments), and just suggest people create a
+> structure for anything more complicated, but I'd love a nicer
+> solution.
+>=20
+> >
+> > It creates a lot of boilerplate, while if we were passing the pointer to
+> > struct kunit we could access the context of the test as well, and things
+> > would be much simpler.
+>=20
+> For the test context specifically, can you just use kunit_get_current_tes=
+t()?
 
->
-> Dongliang Mu
->
->>> Hi Dan,
->>>
->>> this only occurs in linux-next tree.
->>>
->>> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/input/joystick/xpad.c?n2053#n2053
->>>
->>>>> Fix this by allocating xpad->dev, its error handling and cleanup
->>>>> operations in the remove function.
->>>>>
->>>>> Note that this crash does not have any reproducer, so the patch
->>>>> only passes compilation testing.
->>>> The xpad->dev = input_dev; already happens in xpad_init_input().  We
->>>> shouldn't allocate it twice.  I think the fix is to just use a different
->>>> device pointer for the dev_warn().  Why not use &xpad->intf->dev?
->>> Yeah, the allocation and assignment is in the last part that I missed before. We have two choices to fix this issue:
->>>
->>> 1. Change to another device pointer;
->>>
->>> 2. Move the allocation and assignment to a previous code site;
->>>
->>> If there is no other places dereferencing this pointer before the allocation and assignment, it's better to use the 1st one.
->>>
->>> Let me craft a v2 patch.
->>>
->>>>> Reported-by: syzbot+a3f758b8d8cb7e49afec@syzkaller.appspotmail.com
->>>> Could you use a Link tag to link to the bug report?
->>>> Link: https://groups.google.com/g/syzkaller-bugs/c/iMhTgpGuIbM
->>> Sure, no problem.
->>>> This needs a Fixes tag.
->>>>
->>>> Fixes: db7220c48d8d ("Input: xpad - fix support for some third-party controllers")
->>>>
->>>> regards,
->>>> dan carpenter
->>>>
->> Vicki
-Vicki
+I wasn't aware that it was a solution, but it looks like a good compromise =
+:)
+
+Maxime
+
+--36nq5iptcuyvnvqr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZD0oeAAKCRDj7w1vZxhR
+xetdAQD6BdDGcA8CaNrjEeewx2GnU7b8aAKRN2mT+UmW5XxKVAD/VAz2yzSt8dtO
+A2kxfYeUuivVfGIiT/qbriZ/YJDyewo=
+=VPwF
+-----END PGP SIGNATURE-----
+
+--36nq5iptcuyvnvqr--
