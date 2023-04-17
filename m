@@ -2,99 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A96136E4322
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 11:04:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28DC36E4323
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 11:04:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230402AbjDQJEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 05:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35550 "EHLO
+        id S230426AbjDQJE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 05:04:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbjDQJEQ (ORCPT
+        with ESMTP id S229564AbjDQJEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 05:04:16 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4C4524C;
-        Mon, 17 Apr 2023 02:04:08 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Mon, 17 Apr 2023 05:04:20 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E05170D
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 02:04:19 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E3B4D660309E;
-        Mon, 17 Apr 2023 10:04:05 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681722246;
-        bh=mmJ0iBDdFxaw1hgC1BUonlQRRJ5YNpa5yzZ59XFkdY8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=IsIwscG9vpQo5g+as2A2VwbuhAaeS91T4rhpvpyRoj2MkE2mMlHPtOGRchRFwTYag
-         3ceHD3BmX3DEoTJ82clCEpWyIXff/9tithcoLlIaZy5/rNSj87pZJq5JzO5Pb5AhTj
-         kDAK7HBB8WNgtWZ6OVxQX1wyJzfR37on8hxp26HGo/G829OwQtVwfBsRQcd6zcaX4S
-         A+8Nw31pUGorLY9CqImD55kLocvlD8biBVvPOeU5k2exJVrNqTrcU2vZXNSt7dU+wV
-         09lJONJies1zQAdacjTtkyry8qv42vEEoaAJmBgKTl6N1hb5234TLC4gz67+XalLyu
-         cptzz1sD80BQg==
-Message-ID: <b645c058-9f51-034b-0e81-94c8d69469c1@collabora.com>
-Date:   Mon, 17 Apr 2023 11:04:03 +0200
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BD03E1EC0338;
+        Mon, 17 Apr 2023 11:04:17 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1681722257;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rWzkI3qQG/NuXcS/YM+xYmwtbGykjkEqCxWHFmCGjwE=;
+        b=gf7h+BtdQuRjQ2+8BYQBbPYzPG1x5I7T84Mu0TiqtOtwME/3YeeXOWVSHVkU92oUfrjigD
+        zbJ4jeK87GDVxL4U9w2PtKzKTBdyWcAnJ2Pb1nno1QbGCyrAwd8XpyCUTG3Er0gsNrWG5L
+        cd1a+pfjzRajmqguQ5QXy9oZEa16GW8=
+Date:   Mon, 17 Apr 2023 11:04:12 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL] x86/urgent for v6.3-rc7
+Message-ID: <20230417090412.GAZD0LjH5ZIaGUdoHH@fat_crate.local>
+References: <20230416122913.GCZDvqGVe9TPa5LPRm@fat_crate.local>
+ <CAHk-=wjOZgMu2VYBHMt-yFvurAqWsxLG8wh59km=B245CXRKxA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v10 7/7] MAINTAINERS: iommu/mediatek: Update the header
- file name
-Content-Language: en-US
-To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        iommu@lists.linux.dev, linux-mediatek@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, mingyuan.ma@mediatek.com,
-        yf.wang@mediatek.com, jianjiao.zeng@mediatek.com,
-        chengci.xu@mediatek.com
-References: <20230417073606.25729-1-yong.wu@mediatek.com>
- <20230417073606.25729-8-yong.wu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230417073606.25729-8-yong.wu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=wjOZgMu2VYBHMt-yFvurAqWsxLG8wh59km=B245CXRKxA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 17/04/23 09:36, Yong Wu ha scritto:
-> We add the prefix "mediatek," for the lastest ports header file name,
-> For example, include/dt-bindings/memory/mediatek,mt8188-memory-port.h.
-> Update the entry from "mt*" to "m*".
+On Sun, Apr 16, 2023 at 10:33:19AM -0700, Linus Torvalds wrote:
+> On Sun, Apr 16, 2023 at 5:29 AM Borislav Petkov <bp@alien8.de> wrote:
+> >
+> > - Drop __init annotation from two rtc functions which get called after
+> >   boot is done, in order to prevent a crash
 > 
-> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-> ---
->   MAINTAINERS | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> .. ahh, and our automation to catch these things didn't find it,
+> because they are only accessed from x86_wallclock_init(), which is
+> also __init.
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index d8ebab595b2a..833d32c356ef 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -13056,7 +13056,7 @@ L:	linux-mediatek@lists.infradead.org (moderated for non-subscribers)
->   S:	Supported
->   F:	Documentation/devicetree/bindings/iommu/mediatek*
->   F:	drivers/iommu/mtk_iommu*
-> -F:	include/dt-bindings/memory/mt*-port.h
-> +F:	include/dt-bindings/memory/m*-port.h
+> So it all looked superficially good, except for the "oh, we saved them
+> into a data structure that _isn't_ init".
+> 
+> It would require automation much smarter than the one we have to catch
+> that kind of thing.
 
-Stuff that's not MediaTek specific which filename starts by m and ends for -port.h
-is really unlikely, but we can prevent future issues.
+Looking at
 
-Perhaps the best idea here would be to keep the mt*-port.h and add a new file entry
-with mediatek,mt*-port.h.
+objdump -D arch/x86/kernel/x86_init.o
 
-Regards,
-Angelo
+output, all the info is there in order to check whether a function ptr from
+a .init section gets assigned to .data section structure.
 
+Question is whether this is worth to put into objtool. From all the
+objtool code I've seen flying by in recent years, we should pretty much
+have everything needed so it should relatively easy to do.
+
+But lemme add Josh and Peter...
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
