@@ -2,265 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E1F6E4D1D
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 17:28:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22A976E4D20
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 17:28:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231147AbjDQP2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 11:28:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53194 "EHLO
+        id S231239AbjDQP2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 11:28:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbjDQP2G (ORCPT
+        with ESMTP id S229854AbjDQP2I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 11:28:06 -0400
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6906D44B1;
-        Mon, 17 Apr 2023 08:27:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1681745252; x=1713281252;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=v0/0PkaXNmulsOMq+tVEtmLwKhDdTddNBPViBM0pdDg=;
-  b=Bd0mfg6be7zd5sXL6PjvCyX0+2I4b1TDCeelXmepa/eMKp0ZYgIbjMvK
-   VmD6gVsrvfYP4HJvLPzlI0rhhPSg6w67uCGzIMETAjLuFgaZkSmspJl5r
-   I9kljljhaqJiTOqhKfbMxiG4DVIlFPw0Tk2nQBXFPTm7J+UuJ70XyGSjN
-   Y=;
-X-IronPort-AV: E=Sophos;i="5.99,204,1677542400"; 
-   d="scan'208";a="321268303"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1e-m6i4x-245b69b1.us-east-1.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 15:27:16 +0000
-Received: from EX19MTAUWA002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1e-m6i4x-245b69b1.us-east-1.amazon.com (Postfix) with ESMTPS id 6EB2F340028;
-        Mon, 17 Apr 2023 15:27:13 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 17 Apr 2023 15:27:10 +0000
-Received: from 88665a182662.ant.amazon.com.com (10.94.51.151) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 17 Apr 2023 15:27:08 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <edumazet@google.com>
-CC:     <davem@davemloft.net>, <dsahern@kernel.org>, <kuba@kernel.org>,
-        <kuniyu@amazon.com>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <oswalpalash@gmail.com>,
-        <pabeni@redhat.com>, <syzkaller-bugs@googlegroups.com>
-Subject: Re: kernel BUG in fou_build_udp
-Date:   Mon, 17 Apr 2023 08:26:59 -0700
-Message-ID: <20230417152659.14209-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <CANn89iJvYSRboReUkcT4M4OjoZV6EkuPbtTsDgZ2=5p7peNTbg@mail.gmail.com>
-References: <CANn89iJvYSRboReUkcT4M4OjoZV6EkuPbtTsDgZ2=5p7peNTbg@mail.gmail.com>
+        Mon, 17 Apr 2023 11:28:08 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2082.outbound.protection.outlook.com [40.107.93.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9840CB75D;
+        Mon, 17 Apr 2023 08:27:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=k5xa7O+JPDJlegDo6O8S//lxqZ9kd6hyYkeRQJmGtFkOVYTuf8cnOrMG/Lnwl50/M61b7SX1vP2B2pky0WxLYwEQ0XxUKYyIFIlkqh+rTnBAbqARnMYjGius6FYUT8fc1CHzpmGouzaA8uWmQUOYhyLlhG8AQYf55wRmBm5mX3RSLbK29sIY3qoPKIESrai8HrlEtC/cWCxiDGjSYqyc7xFbDgoAwVuSxu460IqhMGmIvYRJxb2a/1TneUIlc3VOcfXXJ0fkleKXadHSE53fit1kRXTh8dkGargZZkM3koZeE4LT7Hmt5gE9Yu1FsVBlIxItsdPkBj6VSb08//eddQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lX7IzZ9NoGafkcLs9B6Bii7+0aRCJ+oL7qYtxqnKRdM=;
+ b=RbvjwWau21zzSvejfmLHoOyHBNe0ymGDf0faN5fPAiaW0UggemViU8y0uDAtD4C3I3qzTFcRBkM9m8iCYu0PHMIPXGUjK676knV001K+M52xGwLaQscqN2YOwZuQ0xMmlN19RtOhj1iAvkSi5DWj0IA1zlDXQ70H0i1CRA8aof1I6D4J17osojN4qnUzcaUIjqjAqCPBJFjSI3NlEnj5gSxMHvybQxgLsq2TBBHX9U3MMbOh4wapYFRz3dxWWXe8kBDVhIB5IO+t6LXNlVF4QT+I5UnatEXTOLjNru6Ny1IZgD9qgN/PEipR1sxONk1wMY9UnqxAVBwvtUHJKnE42Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lX7IzZ9NoGafkcLs9B6Bii7+0aRCJ+oL7qYtxqnKRdM=;
+ b=JCnAttsu3Pz0oGMdvQID100oC0GMTQYvH2dXfTKKTt4NciXm9kyb5dS4sbF89SrSQOGNeWYL2gWqIhhdsoz7A/SsWnZF8jcDM/crtStEUj6WVNNuEYz+hL8nzorYIEiilbhLChLdfkFQx5/fMkRg5sh0gEV6Nu+9YHyyL4PihRc=
+Received: from SJ0PR03CA0094.namprd03.prod.outlook.com (2603:10b6:a03:333::9)
+ by BL0PR12MB4931.namprd12.prod.outlook.com (2603:10b6:208:17e::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Mon, 17 Apr
+ 2023 15:27:27 +0000
+Received: from CO1PEPF00001A5D.namprd05.prod.outlook.com
+ (2603:10b6:a03:333:cafe::b9) by SJ0PR03CA0094.outlook.office365.com
+ (2603:10b6:a03:333::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.46 via Frontend
+ Transport; Mon, 17 Apr 2023 15:27:26 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1PEPF00001A5D.mail.protection.outlook.com (10.167.241.4) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6319.14 via Frontend Transport; Mon, 17 Apr 2023 15:27:26 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 17 Apr
+ 2023 10:27:22 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>
+CC:     Box David E <david.e.box@intel.com>, <jstultz@google.com>,
+        <pavel@ucw.cz>, <svenva@chromium.org>,
+        <platform-driver-x86@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
+        <rrangel@chromium.org>, Jain Rajat <rajatja@google.com>,
+        <hdegoede@redhat.com>, <linux-kernel@vger.kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH v10 0/4] Add vendor agnostic mechanism to report hardware sleep
+Date:   Mon, 17 Apr 2023 10:27:04 -0500
+Message-ID: <20230417152708.3599-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.94.51.151]
-X-ClientProxiedBy: EX19D033UWA002.ant.amazon.com (10.13.139.10) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF00001A5D:EE_|BL0PR12MB4931:EE_
+X-MS-Office365-Filtering-Correlation-Id: 73329d16-f645-46e1-c2df-08db3f583fbc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XVtEeHKHYUvVEfIjqo77bQ1ENzsaQKhGKNH3wVmB1BxRYOjXOnrnlLFQHFFWyFv8tHQCK7ATyebI/SGtz1M+XAdBudFFMLf+K5KVmyPdowP+5QZ2JWBy74FZMBArz+lgMOZzkjF7+inAVxWp6hLVPAo/wQt4aaDWQfyZAh0vG/DshuYA1hlGSlFcmGBmajqq7m+QlpRsxoomXvdQbm+qmwgbgrlWpW1wsVXTTfY9epPqkP1v+wksP8U57nj1YF1E4zhAxWWqQciig1hI7UXFUtCCpsfGR371KLc3bJOaIoUq/SlXy8VmnFuac4o3lzTSEeIX01mBvo7KLcdKHFPQYN0Fyj9kfnX1r4MK9uh9BjyYw1IKPrlOXWNfVJ5LkSC5QDwSjmFe+E98Gm9mCXMehZ0lHW/MoAmauyswzm0IJzfqCTOFnac755tFlLjeSVB/VjRNUoBWfD1UYxqpSVDxhI0jCiDAZhXkblj/PPiqPTPVqTHsn6PJHUBBuXJrebzqlxZ6yNA2hEbcF1HnsViE0q3vi7+si4VrDY57O+N/VGf3GZAzNkf5zXO/4OkGqK1iDA7glO5MAGE13eacjW1+SI+EbxB0+TAkl+CgmDQuOrz4C544Nmg/xzS1czT9j6YsgFNhuETb5Ew19CKiu/UvJu8sJYGcA95GlQcIl364U9Z76ujwEQLg8SRIBHl53T0WqWuw3cFNu9hBHkxCiQ/FCn90aprcS3xY8sRm2CTJsKk=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(39860400002)(396003)(376002)(451199021)(36840700001)(40470700004)(46966006)(8676002)(8936002)(40460700003)(44832011)(5660300002)(7416002)(2906002)(36756003)(82310400005)(86362001)(40480700001)(478600001)(7696005)(6666004)(54906003)(16526019)(186003)(2616005)(36860700001)(26005)(1076003)(70206006)(70586007)(82740400003)(83380400001)(316002)(81166007)(41300700001)(356005)(4326008)(6916009)(47076005)(426003)(336012)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2023 15:27:26.0501
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 73329d16-f645-46e1-c2df-08db3f583fbc
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF00001A5D.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4931
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Mon, 17 Apr 2023 11:00:20 +0200
-> On Sat, Apr 15, 2023 at 9:44 PM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
-> >
-> > Hi,
-> >
-> > Thanks for reporting the issue.
-> >
-> > From:   Palash Oswal <oswalpalash@gmail.com>
-> > Date:   Thu, 13 Apr 2023 20:35:52 -0700
-> > > Hello,
-> > > I found the following issue using syzkaller with enriched corpus on:
-> > > HEAD commit : 0bcc4025550403ae28d2984bddacafbca0a2f112
-> > > git tree: linux
-> > >
-> > > C Reproducer : https://gist.github.com/oswalpalash/2a4bdb639c605ec80dbeec220e09603c
-> > > Kernel .config :
-> > > https://gist.github.com/oswalpalash/d9580b0bfce202b37445fa5fd426e41f
-> > > syz-repro :
-> > > r0 = socket$inet6(0xa, 0x2, 0x0)
-> > > r1 = socket$nl_route(0x10, 0x3, 0x0)
-> > > r2 = socket(0x10, 0x803, 0x0)
-> > > sendmsg$nl_route(r2, &(0x7f0000000380)={0x0, 0x0,
-> > > &(0x7f0000000340)={0x0, 0x14}}, 0x0)
-> > > getsockname$packet(r2, &(0x7f0000000100)={0x11, 0x0, <r3=>0x0, 0x1,
-> > > 0x0, 0x6, @broadcast}, &(0x7f00000000c0)=0x14)
-> > > sendmsg$nl_route(r1, &(0x7f0000000080)={0x0, 0x0,
-> > > &(0x7f0000000500)={&(0x7f0000000180)=@newlink={0x60, 0x10, 0x439, 0x0,
-> > > 0x0, {0x0, 0x0, 0x0, 0x0, 0x9801}, [@IFLA_LINKINFO={0x40, 0x12, 0x0,
-> > > 0x1, @sit={{0x8}, {0x34, 0x2, 0x0, 0x1, [@IFLA_IPTUN_LINK={0x8, 0x1,
-> > > r3}, @IFLA_IPTUN_ENCAP_TYPE={0x6, 0xf, 0x2},
-> > > @IFLA_IPTUN_ENCAP_SPORT={0x6, 0x11, 0x4e21},
-> > > @IFLA_IPTUN_ENCAP_SPORT={0x6, 0x11, 0x4e24}, @IFLA_IPTUN_LOCAL={0x8,
-> > > 0x2, @dev={0xac, 0x14, 0x14, 0x16}}, @IFLA_IPTUN_ENCAP_FLAGS={0x6,
-> > > 0x10, 0xfff}]}}}]}, 0x60}}, 0x20048894)
-> > > sendmmsg$inet(r0, &(0x7f00000017c0)=[{{&(0x7f0000000040)={0x2, 0x4e20,
-> > > @multicast1}, 0x10, 0x0, 0x0, &(0x7f0000000000)=[@ip_pktinfo={{0x1c,
-> > > 0x0, 0x8, {r3, @empty, @remote}}}], 0x20}}], 0x1, 0x0)
-> > >
-> > >
-> > > Console log:
-> > >
-> > > skbuff: skb_under_panic: text:ffffffff88a09da0 len:48 put:8
-> > > head:ffff88801e4be680 data:ffff88801e4be67c tail:0x2c end:0x140
-> > > dev:sit1
-> > > ------------[ cut here ]------------
-> > > kernel BUG at net/core/skbuff.c:150!
-> > > invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-> > > CPU: 0 PID: 10068 Comm: syz-executor.3 Not tainted
-> > > 6.3.0-rc6-pasta-00035-g0bcc40255504 #1
-> > > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-> > > 1.13.0-1ubuntu1.1 04/01/2014
-> > > RIP: 0010:skb_panic+0x152/0x1d0
-> > > Code: 0f b6 04 01 84 c0 74 04 3c 03 7e 20 8b 4b 70 41 56 45 89 e8 48
-> > > c7 c7 80 b3 5b 8b 41 57 56 48 89 ee 52 4c 89 e2 e8 ae 15 6c f9 <0f> 0b
-> > > 4c 89 4c 24 10 48 89 54 24 08 48 89 34 24 e8 69 1f d8 f9 4c
-> > > RSP: 0018:ffffc900029bead0 EFLAGS: 00010282
-> > > RAX: 0000000000000084 RBX: ffff88801d1c3d00 RCX: ffffc9000d863000
-> > > RDX: 0000000000000000 RSI: ffffffff816695cc RDI: 0000000000000005
-> > > RBP: ffffffff8b5bc1e0 R08: 0000000000000005 R09: 0000000000000000
-> > > R10: 0000000000000400 R11: 0000000000000000 R12: ffffffff88a09da0
-> > > R13: 0000000000000008 R14: ffff8880306b8000 R15: 0000000000000140
-> > > FS:  00007f1dae5ed700(0000) GS:ffff888063a00000(0000) knlGS:0000000000000000
-> > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > CR2: 0000564f403b7d10 CR3: 0000000117f1c000 CR4: 00000000000006f0
-> > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > > Call Trace:
-> > >  <TASK>
-> > >  skb_push+0xc8/0xe0
-> > >  fou_build_udp+0x30/0x370
-> >
-> > It seems we need skb_cow_head() before skb_push().
-> > I'll take a deeper look on the repro.
-> 
-> Not sure about that.
-> 
-> The issue looks to be a lack of dev->needed_headroom update as we do
-> in other tunnels.
+An important part of validating that s0ix worked properly is to check how
+much of a cycle was spent in a hardware sleep state.
 
-I'll check around it as well.
-Thank you!
+The reporting of hardware sleep is a mix of kernel messages and sysfs
+files that vary from vendor to vendor. Collecting this information
+requires extra information on the kernel command line or fetching from
+debugfs.
 
-> 
-> >
-> > ---8<---
-> > diff --git a/net/ipv4/fou_core.c b/net/ipv4/fou_core.c
-> > index cafec9b4eee0..24c751f1dbc4 100644
-> > --- a/net/ipv4/fou_core.c
-> > +++ b/net/ipv4/fou_core.c
-> > @@ -1013,10 +1013,15 @@ EXPORT_SYMBOL(__gue_build_header);
-> >
-> >  #ifdef CONFIG_NET_FOU_IP_TUNNELS
-> >
-> > -static void fou_build_udp(struct sk_buff *skb, struct ip_tunnel_encap *e,
-> > -                         struct flowi4 *fl4, u8 *protocol, __be16 sport)
-> > +static int fou_build_udp(struct sk_buff *skb, struct ip_tunnel_encap *e,
-> > +                        struct flowi4 *fl4, u8 *protocol, __be16 sport)
-> >  {
-> >         struct udphdr *uh;
-> > +       int err;
-> > +
-> > +       err = skb_cow_head(skb, sizeof(*uh));
-> > +       if (err)
-> > +               return err;
-> >
-> >         skb_push(skb, sizeof(struct udphdr));
-> >         skb_reset_transport_header(skb);
-> > @@ -1030,6 +1035,8 @@ static void fou_build_udp(struct sk_buff *skb, struct ip_tunnel_encap *e,
-> >                      fl4->saddr, fl4->daddr, skb->len);
-> >
-> >         *protocol = IPPROTO_UDP;
-> > +
-> > +       return 0;
-> >  }
-> >
-> >  static int fou_build_header(struct sk_buff *skb, struct ip_tunnel_encap *e,
-> > @@ -1044,9 +1051,7 @@ static int fou_build_header(struct sk_buff *skb, struct ip_tunnel_encap *e,
-> >         if (err)
-> >                 return err;
-> >
-> > -       fou_build_udp(skb, e, fl4, protocol, sport);
-> > -
-> > -       return 0;
-> > +       return fou_build_udp(skb, e, fl4, protocol, sport);
-> >  }
-> >
-> >  static int gue_build_header(struct sk_buff *skb, struct ip_tunnel_encap *e,
-> > @@ -1061,9 +1066,7 @@ static int gue_build_header(struct sk_buff *skb, struct ip_tunnel_encap *e,
-> >         if (err)
-> >                 return err;
-> >
-> > -       fou_build_udp(skb, e, fl4, protocol, sport);
-> > -
-> > -       return 0;
-> > +       return fou_build_udp(skb, e, fl4, protocol, sport);
-> >  }
-> >
-> >  static int gue_err_proto_handler(int proto, struct sk_buff *skb, u32 info)
-> > ---8<---
-> >
-> > Thanks,
-> > Kuniyuki
-> >
-> >
-> > >  gue_build_header+0xfb/0x150
-> > >  ip_tunnel_xmit+0x66e/0x3150
-> > >  sit_tunnel_xmit__.isra.0+0xe7/0x150
-> > >  sit_tunnel_xmit+0xf7e/0x28e0
-> > >  dev_hard_start_xmit+0x187/0x700
-> > >  __dev_queue_xmit+0x2ce4/0x3c40
-> > >  neigh_connected_output+0x3c2/0x550
-> > >  ip_finish_output2+0x78a/0x22e0
-> > >  __ip_finish_output+0x396/0x650
-> > >  ip_finish_output+0x31/0x280
-> > >  ip_mc_output+0x21f/0x710
-> > >  ip_send_skb+0xd8/0x260
-> > >  udp_send_skb+0x73a/0x1480
-> > >  udp_sendmsg+0x1bb2/0x2840
-> > >  udpv6_sendmsg+0x1710/0x2c20
-> > >  inet6_sendmsg+0x9d/0xe0
-> > >  sock_sendmsg+0xde/0x190
-> > >  ____sys_sendmsg+0x334/0x900
-> > >  ___sys_sendmsg+0x110/0x1b0
-> > >  __sys_sendmmsg+0x18f/0x460
-> > >  __x64_sys_sendmmsg+0x9d/0x100
-> > >  do_syscall_64+0x39/0xb0
-> > >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > > RIP: 0033:0x7f1dad88eacd
-> > > Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48
-> > > 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
-> > > 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> > > RSP: 002b:00007f1dae5ecbf8 EFLAGS: 00000246 ORIG_RAX: 0000000000000133
-> > > RAX: ffffffffffffffda RBX: 00007f1dad9bbf80 RCX: 00007f1dad88eacd
-> > > RDX: 0000000000000001 RSI: 00000000200017c0 RDI: 0000000000000003
-> > > RBP: 00007f1dad8fcb05 R08: 0000000000000000 R09: 0000000000000000
-> > > R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-> > > R13: 00007fff4922802f R14: 00007fff492281d0 R15: 00007f1dae5ecd80
-> > >  </TASK>
-> > > Modules linked in:
-> > > ---[ end trace 0000000000000000 ]---
-> > > RIP: 0010:skb_panic+0x152/0x1d0
-> > > Code: 0f b6 04 01 84 c0 74 04 3c 03 7e 20 8b 4b 70 41 56 45 89 e8 48
-> > > c7 c7 80 b3 5b 8b 41 57 56 48 89 ee 52 4c 89 e2 e8 ae 15 6c f9 <0f> 0b
-> > > 4c 89 4c 24 10 48 89 54 24 08 48 89 34 24 e8 69 1f d8 f9 4c
-> > > RSP: 0018:ffffc900029bead0 EFLAGS: 00010282
-> > > RAX: 0000000000000084 RBX: ffff88801d1c3d00 RCX: ffffc9000d863000
-> > > RDX: 0000000000000000 RSI: ffffffff816695cc RDI: 0000000000000005
-> > > RBP: ffffffff8b5bc1e0 R08: 0000000000000005 R09: 0000000000000000
-> > > R10: 0000000000000400 R11: 0000000000000000 R12: ffffffff88a09da0
-> > > R13: 0000000000000008 R14: ffff8880306b8000 R15: 0000000000000140
-> > > FS:  00007f1dae5ed700(0000) GS:ffff888063a00000(0000) knlGS:0000000000000000
-> > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > CR2: 0000564f403b7d10 CR3: 0000000117f1c000 CR4: 00000000000006f0
-> > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+To make this information more readily accessible introduce a new file in
+suspend_stats that drivers can report into during their resume routine.
+
+Userspace can fetch this information and compare it against the duration
+of the cycle to allow determining residency percentages and flagging
+problems.
+
+v9->v10:
+ * Add tags
+ * Rebase on linux-pm/bleeding-edge as it will apply through this tree
+
+Mario Limonciello (4):
+  PM: Add sysfs files to represent time spent in hardware sleep state
+  platform/x86/amd: pmc: Report duration of time in hw sleep state
+  platform/x86/intel/pmc: core: Always capture counters on suspend
+  platform/x86/intel/pmc: core: Report duration of time in HW sleep
+    state
+
+ Documentation/ABI/testing/sysfs-power | 29 +++++++++++++
+ drivers/platform/x86/amd/pmc.c        |  6 +--
+ drivers/platform/x86/intel/pmc/core.c | 17 ++++----
+ drivers/platform/x86/intel/pmc/core.h |  4 +-
+ include/linux/suspend.h               |  8 ++++
+ kernel/power/main.c                   | 59 +++++++++++++++++++++------
+ 6 files changed, 98 insertions(+), 25 deletions(-)
+
+
+base-commit: 0962c5df83b088fad0c531257744fb7a1e83221c
+-- 
+2.34.1
+
