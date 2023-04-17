@@ -2,135 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEC256E412B
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 09:37:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B7986E413B
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 09:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbjDQHg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 03:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51258 "EHLO
+        id S231159AbjDQHhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 03:37:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbjDQHgS (ORCPT
+        with ESMTP id S230481AbjDQHhI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 03:36:18 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21542468D
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 00:35:04 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4ec8da7aaf8so1241996e87.2
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 00:35:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681716899; x=1684308899;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=n47v9+PzhQgXr23TTNhsK7isjIIKM72ZIjxtKH7ks7Q=;
-        b=q5yMGpOVyeyFCk+S0Ffj+uDLwQX1UOOr4uKsV6Wz3P69P9eIzxL57eahmDFLtoDCr1
-         9spzByynB6vOIJTvgD7o6auKxzc2fYDstW89N7lKOyWaiY0NSOUN07Ex2YGqUndJFVZH
-         CtdBourk1Fb4eUKGsqmtvcb+tEvXtOgqVeWpYpBuOye580U/kPK7DAwVs/vfgpGNEhRa
-         KkmmtCCvYs7xHeMWe/2gEvzOSfMU/4aHSDTXUYdVCBuzie7kNpu2y3DPT8x4GkMP3Kd8
-         dJRSXuYdOkz7x7DCcOyg6oMFtGMldgtB900Fv1ysiJkIYjsrJxiZA4FO1hfhotwxS93A
-         o1Gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681716899; x=1684308899;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=n47v9+PzhQgXr23TTNhsK7isjIIKM72ZIjxtKH7ks7Q=;
-        b=hBgVNhzRXSMsr7GFFZKADvTBBu9TUY+pb9ZBihYSmab5GOpgUQyIY6IFsnkjUII6ml
-         2jl0GNGZsYokCF9MxS/E26i5KQAzN5gSaoTpT0w57Spqr8hYhKoT4NWcSXP+Sf0df5LG
-         G7guPe1ws3xKUa5J369Dxg4Y/puH4LUYNASWdZQ54KoEBOA0LYbmyqGBNGmMe3Y37orv
-         rAO95IeJG2BxoPlq0SigarlyWvT/ltPfpJ2JqQYqW3eGJSoVD9gxTWSAmpbmQdIqYLU8
-         3TPq0O6JqABur+hW73vxM58+6Zyz2aL4sWEbg//nCF7iDJT55yZw8B1gQbw+TsjarEej
-         SA/g==
-X-Gm-Message-State: AAQBX9cf6cYelxRHgtC1rbALtHJAWF3ZTcElDWQjREcf7cO3abGciuxv
-        ue2ST0sm7jYGV+ZkJv9Wu2sF+w==
-X-Google-Smtp-Source: AKy350Y3aoSR3pxVPSyf35wftXXudu2hZ2TSxbE4T9ejSSxyln411KwE9XoAOTwQq4x5ybYzVjEN8A==
-X-Received: by 2002:ac2:4848:0:b0:4db:28ce:e5ef with SMTP id 8-20020ac24848000000b004db28cee5efmr1635960lfy.0.1681716899646;
-        Mon, 17 Apr 2023 00:34:59 -0700 (PDT)
-Received: from [192.168.1.2] (c-05d8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.216.5])
-        by smtp.gmail.com with ESMTPSA id w15-20020a056512098f00b004eb2f35045bsm1956275lft.269.2023.04.17.00.34.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 00:34:59 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 17 Apr 2023 09:34:57 +0200
-Subject: [PATCH 2/2] misc: sram: Generate unique names for subpools
+        Mon, 17 Apr 2023 03:37:08 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10CD10D8;
+        Mon, 17 Apr 2023 00:36:03 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33H7Zp5L051645;
+        Mon, 17 Apr 2023 02:35:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1681716951;
+        bh=Z4LB/IWF7ou7ipPzsHyZXXQjaY1cCvmLaOqcfk3aGqw=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=GvzRGLO8i/x9jaN2hCg9cDTkELxNrkqjj1u+E39JgPG5OUfTo5rtWSBtZeK4tmjHW
+         7y4j7RXToWCZOiooM9xzj46Jbz51yjhf5HQ1Hd0nQh485qq6Iavg4q/zGtkzgVweS6
+         J2OO2s6ymZ+PVyDYmzUE2Ny6JxYUiVfB0ApGb5sI=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33H7ZpBs065183
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 17 Apr 2023 02:35:51 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 17
+ Apr 2023 02:35:50 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 17 Apr 2023 02:35:51 -0500
+Received: from [172.24.145.7] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33H7ZlA5085138;
+        Mon, 17 Apr 2023 02:35:48 -0500
+Message-ID: <c41fe817-6ce2-e3dd-3380-d04f3319f7eb@ti.com>
+Date:   Mon, 17 Apr 2023 13:05:47 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 1/5] arm64: dts: ti: k3-j784s4-main: Add system
+ controller and SERDES lane mux
+Content-Language: en-US
+To:     Vignesh Raghavendra <vigneshr@ti.com>, <nm@ti.com>, <afd@ti.com>
+CC:     <s-vadapalli@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230414151553.339599-1-j-choudhary@ti.com>
+ <20230414151553.339599-2-j-choudhary@ti.com>
+ <bc3e7500-b653-323b-2a8e-86926f1c090e@ti.com>
+From:   Jayesh Choudhary <j-choudhary@ti.com>
+In-Reply-To: <bc3e7500-b653-323b-2a8e-86926f1c090e@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230417-ux500-sram-v1-2-5924988bb835@linaro.org>
-References: <20230417-ux500-sram-v1-0-5924988bb835@linaro.org>
-In-Reply-To: <20230417-ux500-sram-v1-0-5924988bb835@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current code will, if we do not specify unique labels
-for the SRAM subnodes, fail to register several nodes named
-the same.
+Hi Vignesh,
 
-Example:
+On 17/04/23 10:07, Vignesh Raghavendra wrote:
+> Hi Jayesh
+> 
+> On 14/04/23 20:45, Jayesh Choudhary wrote:
+>> From: Siddharth Vadapalli <s-vadapalli@ti.com>
+>>
+>> The system controller node manages the CTRL_MMR0 region.
+>> Add serdes_ln_ctrl node which is used for controlling the SERDES lane mux.
+>>
+>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+>> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
+>> ---
+>>   arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi | 22 ++++++++++++++++++++++
+>>   1 file changed, 22 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi b/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
+>> index e9169eb358c1..344f4ffa0b82 100644
+>> --- a/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
+>> +++ b/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
+>> @@ -5,6 +5,9 @@
+>>    * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
+>>    */
+>>   
+>> +#include <dt-bindings/mux/mux.h>
+>> +#include <dt-bindings/mux/ti-serdes.h>
+>> +
+>>   &cbass_main {
+>>   	msmc_ram: sram@70000000 {
+>>   		compatible = "mmio-sram";
+>> @@ -26,6 +29,25 @@ l3cache-sram@200000 {
+>>   		};
+>>   	};
+>>   
+>> +	scm_conf: scm-conf@100000 {
+> 
+> generic node name please: "syscon@"
 
-sram@40020000 {
-  (...)
-  sram@0 {
-    (...)
-  };
-  sram@1000 {
-    (...)
-  };
-};
+Okay.
 
-Since the child->name in both cases will be "sram" the
-gen_pool_create() will fail because the name is not unique.
-So let's use of_full_node_name() instead of child->name
-so the name is "sram@0" and "sram@1000" respectively.
+> 
+>> +		compatible = "ti,j721e-system-controller", "syscon", "simple-mfd";
+>> +		reg = <0x00 0x00100000 0x00 0x1c000>;
+>> +		#address-cells = <1>;
+>> +		#size-cells = <1>;
+>> +		ranges = <0x00 0x00 0x00100000 0x1c000>;
+>> +
+>> +		serdes_ln_ctrl: mux-controller@4080 {
+> 
+> Either add reg property or replace @ with -
 
-However if there are two or more SRAMs on the system
-with subnodes named the same (that exists on the U8500)
-then this again will not work. So catenate the top node
-name and the subnode full name to form a string that will
-always be unique.
+Will use '-'.
 
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- drivers/misc/sram.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> Run make with W=12 to catch such errors.
 
-diff --git a/drivers/misc/sram.c b/drivers/misc/sram.c
-index f0e7f02605eb..84d4e090678b 100644
---- a/drivers/misc/sram.c
-+++ b/drivers/misc/sram.c
-@@ -240,10 +240,12 @@ static int sram_reserve_regions(struct sram_dev *sram, struct resource *res)
- 				goto err_chunks;
- 			}
- 			if (!label)
--				label = child->name;
--
--			block->label = devm_kstrdup(sram->dev,
--						    label, GFP_KERNEL);
-+				block->label = devm_kasprintf(sram->dev, GFP_KERNEL,
-+							"%s-%s", dev_name(sram->dev),
-+							of_node_full_name(child));
-+			else
-+				block->label = devm_kstrdup(sram->dev,
-+							    label, GFP_KERNEL);
- 			if (!block->label) {
- 				ret = -ENOMEM;
- 				goto err_chunks;
+Okay. Will do.
 
--- 
-2.39.2
+Thanks.
 
+[...]
