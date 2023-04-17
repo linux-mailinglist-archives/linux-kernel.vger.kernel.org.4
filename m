@@ -2,117 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D37C6E4EE9
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 19:14:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 321D56E4EEC
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 19:15:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbjDQRN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 13:13:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43396 "EHLO
+        id S230117AbjDQRPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 13:15:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjDQRN5 (ORCPT
+        with ESMTP id S229643AbjDQRPI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 13:13:57 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 274ADF2;
-        Mon, 17 Apr 2023 10:13:56 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id ca18e2360f4ac-7606df2b5e3so73247639f.3;
-        Mon, 17 Apr 2023 10:13:56 -0700 (PDT)
+        Mon, 17 Apr 2023 13:15:08 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67011F2
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 10:15:06 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f04275b2bdso231465e9.1
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 10:15:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681751635; x=1684343635;
+        d=google.com; s=20221208; t=1681751705; x=1684343705;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UrftNEs2qOSwWl03Nchn5scIv7SNUtGLtjGhEsWIfMQ=;
-        b=qtIQZkmtv2I5Fl9ovw3w81fAHC9Tp9f8hcIBskUhz4aPj9VVWHOzzGs7Npi7F2LpL0
-         badLBN5o3fBh4PcNaW56+ghzNXq40fvukcHMMu1AT6ZQMvQW/WZrGNqJl8NncBg37H8D
-         LdLtSGW97jOefI4Zk4wJN0N0xlHeItmerK3zrqmHT4ZJfnx7e1CaSZR0yUl9YyJWJ656
-         j+uytAPX+8cBNS3PMN/kO0eap/6rM2/lYCE6cxmKMpAYZ8ghLoh/gvqwaxSq9VXgiZkY
-         DXWoTtp+jOp321J8v9QoHWSyFzy31BR6Fs+mQJXOWBKOgUQH42RAfKxPFLaqF07/FPln
-         +ZyA==
+        bh=a3stGmteRzeKnj1XWwcELOuoYuh13a22U1AyLn+AXFA=;
+        b=USlKOpbDldphAUyai69TJ//1HRVKA+ShayAbY7sLGbOvQEvKIz5naSn8kFIiDcr28/
+         NIQJbOHZ8t3qCBFz3xrGTiZzjZeb3edXdAxv576q7gp/guq8USCQw3xlKGcIgm2F9wlh
+         czvyeui5XMogGuzZFqFg3RkSzMKnnDBMXFJ++iSePFy3yf5ijT7DBL196+/BykIq58yB
+         mCV0EAz3oaws1Mx2yyICHKgCqo+opOlSsTFGz2C9YDQXIbqoTXT9QDfJfo/feuB7Qelk
+         K1jUJryuv9g3iU2g0t9KSxnLF5jTTdFowzqOPr/k9fHkohYrGxSyWDWgs/u1KLsxaF5+
+         F59w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681751635; x=1684343635;
+        d=1e100.net; s=20221208; t=1681751705; x=1684343705;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UrftNEs2qOSwWl03Nchn5scIv7SNUtGLtjGhEsWIfMQ=;
-        b=eGcTKfAWHBFBtwkcyPFtZ6ghvMJ/M6TnGjFSbVY388iwWby0gVK78Y5EgRMezG9+jM
-         Tr6RngdeomlAsx6wsRzaG3MYR3bkU3uQHCvBoQz9iYSBSam4ODMA11Al0Gi377ggPA68
-         hcHATkn2VttFeAl7XPiANN/0lLvL0JC+OhEKsjXtCsxp9o9abvrtIu5vGCXARFpdPnTM
-         E91oAG48CRIUQHMcql9vcSvmikeHhsZt4MIUZBbqB4b1qV5WE5kNgl0v1vAUOhaLfoGM
-         t4gx2ysUHJmcg0Y+CbXsLLwBqjq/QISS5hiewqu0Lrfcr8fm2/iVCxEYLR711+C2JliO
-         r5qg==
-X-Gm-Message-State: AAQBX9fqZ3LR0OfL2BRpYXV1iewE/tmYSwvvLwmDkVZMSMKcVxFHJWSF
-        B4hsfek1JRqWD6Y905nZlP+Xwye+ajkQQqgVj3RCbsTTKVE=
-X-Google-Smtp-Source: AKy350b8EuFkknWtPCx3RXxKeq2wJ/oKOALz7EFbhNKaaES23ijMCaFMMchAzssbqWnWvYhxbRc2iMxMI0ESgEDiD4g=
-X-Received: by 2002:a92:2906:0:b0:329:5faf:cbc0 with SMTP id
- l6-20020a922906000000b003295fafcbc0mr6372058ilg.2.1681751635408; Mon, 17 Apr
- 2023 10:13:55 -0700 (PDT)
+        bh=a3stGmteRzeKnj1XWwcELOuoYuh13a22U1AyLn+AXFA=;
+        b=bgolllegi5PdfUcYpLvyw8KnFTaNdAIBXKLxEtM5YqofG++NXUD0SY18mrVpCqQETf
+         bcRWrqV2LZA414QiuV0acTKErQdEElRpmcvB+w3lygePRNt+FYnqCELPTI8+4wwwIuNy
+         Hsv2gXEhHHVNePZP/fZA3ql+ep/gebXFpYIMYU9bHMH2CLmHpB4Oxi3sdMkkzr93/Yjn
+         vF55QD60CQYPZFJ1UUPemyeGtoA8dheP6OFHD1jfrxkglKrMJ+rfXVwEfbpcqkpln7LJ
+         T4GL6PXnswRIu/hO5arc3Jmak8jDoI3/xWQmdgK9uWjdR54yn5SyVAjCktQOXpzqDZJK
+         rfVw==
+X-Gm-Message-State: AAQBX9c/tH9QggKmzcrANG8gIpw2PF4G0D2TW4574yqeoZjlzE4yDRLv
+        +hUDcfmQG3Mq90Zk3iDPahst12OqcenZgYHeG8Nocg==
+X-Google-Smtp-Source: AKy350Z7GLpgZB4nWfaWROBdqmPEACzgMPzNNdQCuM59lX1IGltn277CXYX21QobH4mjsaKVJbsxhora8Sr1e5fDRRg=
+X-Received: by 2002:a05:600c:5122:b0:3f1:70d1:21a6 with SMTP id
+ o34-20020a05600c512200b003f170d121a6mr4313wms.0.1681751704759; Mon, 17 Apr
+ 2023 10:15:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230417160148.60011-1-n.zhandarovich@fintech.ru>
-In-Reply-To: <20230417160148.60011-1-n.zhandarovich@fintech.ru>
-From:   Ping Cheng <pinglinux@gmail.com>
-Date:   Mon, 17 Apr 2023 10:13:43 -0700
-Message-ID: <CAF8JNh+Ba1SNT5JFy3EGAAtcfZdRYcQ_M4LtQoV0H0dViFyGcw@mail.gmail.com>
-Subject: Re: [PATCH] HID: wacom: avoid integer overflow in wacom_intuos_inout()
-To:     Nikita Zhandarovich <n.zhandarovich@fintech.ru>
-Cc:     Ping Cheng <ping.cheng@wacom.com>,
-        Jason Gerecke <jason.gerecke@wacom.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
+References: <20230417122943.2155502-1-anders.roxell@linaro.org> <20230417122943.2155502-2-anders.roxell@linaro.org>
+In-Reply-To: <20230417122943.2155502-2-anders.roxell@linaro.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 17 Apr 2023 10:14:51 -0700
+Message-ID: <CAP-5=fWUevSnyn5MtVO1p6cEVE8MvBTq4Qgth7RcPYueRERQKA@mail.gmail.com>
+Subject: Re: [backport PATCH 1/2] tools perf: Fix compilation error with new binutils
+To:     Anders Roxell <anders.roxell@linaro.org>
+Cc:     stable@vger.kernel.org, acme@redhat.com, andres@anarazel.de,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Quentin Monnet <quentin@isovalent.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Ben Hutchings <benh@debian.org>, Jiri Olsa <jolsa@kernel.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 9:03=E2=80=AFAM Nikita Zhandarovich
-<n.zhandarovich@fintech.ru> wrote:
+On Mon, Apr 17, 2023 at 5:30=E2=80=AFAM Anders Roxell <anders.roxell@linaro=
+.org> wrote:
 >
-> If high bit is set to 1 in ((data[3] & 0x0f << 28), after all arithmetic
-> operations and integer promotions are done, high bits in
-> wacom->serial[idx] will be filled with 1s as well.
-> Avoid this, albeit unlikely, issue by specifying left operand's __u64
-> type for the right operand.
-
-Thank you Nikita for the fix! It's good to avoid potential issues.
-
-> Found by Linux Verification Center (linuxtesting.org) with static
-> analysis tool SVACE.
+> From: Andres Freund <andres@anarazel.de>
 >
-> Fixes: 3bea733ab212 ("USB: wacom tablet driver reorganization")
-> Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+> binutils changed the signature of init_disassemble_info(), which now caus=
+es
+> compilation failures for tools/perf/util/annotate.c, e.g. on debian
+> unstable.
 
-Reviewed-by: Ping Cheng <ping.cheng@wacom.com>
-Cc: stable@vger.kernel.org
+Thanks, I believe the compilation issue may well be resolved by:
+https://lore.kernel.org/lkml/20230311065753.3012826-8-irogers@google.com/
+where binutils is made opt-in rather than opt-out.
 
-Cheers,
-Ping
+> Relevant binutils commit:
+>
+>   https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommit;h=3D60a3da0=
+0bd5407f07
+>
+> Wire up the feature test and switch to init_disassemble_info_compat(),
+> which were introduced in prior commits, fixing the compilation failure.
+
+I was kind of surprised to see no version check ifdef. Is
+init_disassemble_info_compat is supported in older binutils?
+
+Thanks,
+Ian
+
+> I verified that perf can still disassemble bpf programs by using bpftrace
+> under load, recording a perf trace, and then annotating the bpf "function=
+"
+> with and without the changes. With old binutils there's no change in outp=
+ut
+> before/after this patch. When comparing the output from old binutils (2.3=
+5)
+> to new bintuils with the patch (upstream snapshot) there are a few output
+> differences, but they are unrelated to this patch. An example hunk is:
+>
+>        1.15 :   55:mov    %rbp,%rdx
+>        0.00 :   58:add    $0xfffffffffffffff8,%rdx
+>        0.00 :   5c:xor    %ecx,%ecx
+>   -    1.03 :   5e:callq  0xffffffffe12aca3c
+>   +    1.03 :   5e:call   0xffffffffe12aca3c
+>        0.00 :   63:xor    %eax,%eax
+>   -    2.18 :   65:leaveq
+>   -    2.82 :   66:retq
+>   +    2.18 :   65:leave
+>   +    2.82 :   66:ret
+>
+> Signed-off-by: Andres Freund <andres@anarazel.de>
+> Acked-by: Quentin Monnet <quentin@isovalent.com>
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Ben Hutchings <benh@debian.org>
+> Cc: Jiri Olsa <jolsa@kernel.org>
+> Cc: Sedat Dilek <sedat.dilek@gmail.com>
+> Cc: bpf@vger.kernel.org
+> Link: http://lore.kernel.org/lkml/20220622181918.ykrs5rsnmx3og4sv@alap3.a=
+narazel.de
+> Link: https://lore.kernel.org/r/20220801013834.156015-5-andres@anarazel.d=
+e
+> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 > ---
->  drivers/hid/wacom_wac.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  tools/perf/Makefile.config | 8 ++++++++
+>  tools/perf/util/annotate.c | 7 ++++---
+>  2 files changed, 12 insertions(+), 3 deletions(-)
 >
-> diff --git a/drivers/hid/wacom_wac.c b/drivers/hid/wacom_wac.c
-> index 9312d611db8e..0e4404f3801e 100644
-> --- a/drivers/hid/wacom_wac.c
-> +++ b/drivers/hid/wacom_wac.c
-> @@ -826,7 +826,7 @@ static int wacom_intuos_inout(struct wacom_wac *wacom=
-)
->         /* Enter report */
->         if ((data[1] & 0xfc) =3D=3D 0xc0) {
->                 /* serial number of the tool */
-> -               wacom->serial[idx] =3D ((data[3] & 0x0f) << 28) +
-> +               wacom->serial[idx] =3D ((__u64)(data[3] & 0x0f) << 28) +
->                         (data[4] << 20) + (data[5] << 12) +
->                         (data[6] << 4) + (data[7] >> 4);
+> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+> index 3e7706c251e9..55905571f87b 100644
+> --- a/tools/perf/Makefile.config
+> +++ b/tools/perf/Makefile.config
+> @@ -281,6 +281,7 @@ FEATURE_CHECK_LDFLAGS-libpython :=3D $(PYTHON_EMBED_L=
+DOPTS)
+>  FEATURE_CHECK_LDFLAGS-libaio =3D -lrt
+>
+>  FEATURE_CHECK_LDFLAGS-disassembler-four-args =3D -lbfd -lopcodes -ldl
+> +FEATURE_CHECK_LDFLAGS-disassembler-init-styled =3D -lbfd -lopcodes -ldl
+>
+>  CORE_CFLAGS +=3D -fno-omit-frame-pointer
+>  CORE_CFLAGS +=3D -ggdb3
+> @@ -838,13 +839,16 @@ else
+>    ifeq ($(feature-libbfd-liberty), 1)
+>      EXTLIBS +=3D -lbfd -lopcodes -liberty
+>      FEATURE_CHECK_LDFLAGS-disassembler-four-args +=3D -liberty -ldl
+> +    FEATURE_CHECK_LDFLAGS-disassembler-init-styled +=3D -liberty -ldl
+>    else
+>      ifeq ($(feature-libbfd-liberty-z), 1)
+>        EXTLIBS +=3D -lbfd -lopcodes -liberty -lz
+>        FEATURE_CHECK_LDFLAGS-disassembler-four-args +=3D -liberty -lz -ld=
+l
+> +      FEATURE_CHECK_LDFLAGS-disassembler-init-styled +=3D -liberty -ldl
+>      endif
+>    endif
+>    $(call feature_check,disassembler-four-args)
+> +  $(call feature_check,disassembler-init-styled)
+>  endif
+>
+>  ifeq ($(feature-libbfd-buildid), 1)
+> @@ -957,6 +961,10 @@ ifeq ($(feature-disassembler-four-args), 1)
+>      CFLAGS +=3D -DDISASM_FOUR_ARGS_SIGNATURE
+>  endif
+>
+> +ifeq ($(feature-disassembler-init-styled), 1)
+> +    CFLAGS +=3D -DDISASM_INIT_STYLED
+> +endif
+> +
+>  ifeq (${IS_64_BIT}, 1)
+>    ifndef NO_PERF_READ_VDSO32
+>      $(call feature_check,compile-32)
+> diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
+> index 308189454788..f2d1741b7610 100644
+> --- a/tools/perf/util/annotate.c
+> +++ b/tools/perf/util/annotate.c
+> @@ -1684,6 +1684,7 @@ static int dso__disassemble_filename(struct dso *ds=
+o, char *filename, size_t fil
+>  #define PACKAGE "perf"
+>  #include <bfd.h>
+>  #include <dis-asm.h>
+> +#include <tools/dis-asm-compat.h>
+>
+>  static int symbol__disassemble_bpf(struct symbol *sym,
+>                                    struct annotate_args *args)
+> @@ -1726,9 +1727,9 @@ static int symbol__disassemble_bpf(struct symbol *s=
+ym,
+>                 ret =3D errno;
+>                 goto out;
+>         }
+> -       init_disassemble_info(&info, s,
+> -                             (fprintf_ftype) fprintf);
+> -
+> +       init_disassemble_info_compat(&info, s,
+> +                                    (fprintf_ftype) fprintf,
+> +                                    fprintf_styled);
+>         info.arch =3D bfd_get_arch(bfdf);
+>         info.mach =3D bfd_get_mach(bfdf);
 >
 > --
-> 2.25.1
+> 2.39.2
 >
