@@ -2,121 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38E986E4250
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:14:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0C186E4258
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:16:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbjDQIOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 04:14:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33442 "EHLO
+        id S230358AbjDQIQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 04:16:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbjDQIOm (ORCPT
+        with ESMTP id S229741AbjDQIQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 04:14:42 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A934194;
-        Mon, 17 Apr 2023 01:14:40 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-54fbb713301so166926447b3.11;
-        Mon, 17 Apr 2023 01:14:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681719279; x=1684311279;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=A4Os3dr8ojnrC3FQMNzZ9SxkQapJmMPc47/v8RETnk8=;
-        b=BH+CDfZx2N9ZcbtJns70WTRBMhkR5ArWhqyXCuyT3yiXdVfMufgwvFCew0Efv6UKaB
-         Tia5Lnq3l9vw2QQ0E3RoFhvxzAlqEWErRuqOUPQ2xyLL7UzA50F3TvmjjQk6P/rCkPcI
-         ExfD1eyzU9obs17nRfczccbzrk4t9dqSWkmx9Uuw968xQxIXxT7AYqwQxg6LR6Q3wkGS
-         d31jHc6KK0WPCFLisYjFegiRtqdUh7m+MEsoNApJxwLSW5c8mT6Pp/jCgwe6ooECUJpJ
-         EPMdRcxHx2HP7qZzWcSEjQTl1fyZvQVJgRjuKaezsLzIS0ajZ50ejjcgPaikWq/Ss0Ud
-         b8Ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681719279; x=1684311279;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=A4Os3dr8ojnrC3FQMNzZ9SxkQapJmMPc47/v8RETnk8=;
-        b=Y6o94QZ0i33F3rDaVMCTG8qLgw+LUtz5sayBkLP7ZrHHq4HAYXk6rvzSiXNTlI6Ga6
-         LZBx2rVX516CKZtddXuFYpkFtXBONKM6nQBOwM/KTprGUq3wT7/FuL966I0uqGQoSjz2
-         jB4CW10b0VAI48yZVy6WgUeHY6qBb2/iUc1mjNHVqqMKd3rJJtA0wotxAHOQreFY5RaM
-         q579dEVZKKxHn0tGXuLiMDOYtPfKLSizcaI3tUaXvP2qWMYAFmzDEG3SaH8BKsVkXTwH
-         ujOR0Io+dRTSZl1UwoBo3Z9hkdwGVY851/j+LXiJOVOk3G+m6RuaAM1cVBw5o4i5N1w1
-         xIWg==
-X-Gm-Message-State: AAQBX9fPwRVM3IR6SJSQpl7GG7CHVLIR1kNZC3lDhDr8GcN34bx6mogr
-        o8fD2ZbWmyhuEdH/7EmoHMirJqidL1xj2OZeO+4=
-X-Google-Smtp-Source: AKy350YD1tm08Nz2B7USYkth+bw6H1Eo/Lt6AG00O3UuMVmikLF/P03nRE0E2gnhxOAzJ46OT71GkLUJ/Iwx8P4WMyw=
-X-Received: by 2002:a81:af0c:0:b0:54f:8566:495 with SMTP id
- n12-20020a81af0c000000b0054f85660495mr8898022ywh.1.1681719279655; Mon, 17 Apr
- 2023 01:14:39 -0700 (PDT)
+        Mon, 17 Apr 2023 04:16:07 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0698137
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 01:16:01 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 4EB311F381;
+        Mon, 17 Apr 2023 08:16:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1681719360; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=q5nmUpgvCQ0u2MP+TI3hAO45vlI9kSGcrKDYAZgJlps=;
+        b=SfAPvxwpn9wO/zRDhf6Ag2dJdAJX4S3igCp6leYs8904j6yk6+639LBC/CsNvA++RG4+cw
+        hue8Ci10SY4SpJrqrCIbaRv6Am6LbgfXfLwHRfG4HILN3JAHp6kbtIZ4Xmc7/1TcV+7AQ4
+        QUPdArG53TaSiGQnoaGQwaZ4fR4B3ZI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1681719360;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=q5nmUpgvCQ0u2MP+TI3hAO45vlI9kSGcrKDYAZgJlps=;
+        b=YP107ZirM4rvsq/kINPS5/KU2zjcwMy9SS3kPqMBALxmM2zAhothy6+oFf5RvdJpeOG+y7
+        RqEM7rwtjsHlQJDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1FDD31390E;
+        Mon, 17 Apr 2023 08:16:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 9wPIBkAAPWQgOwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 17 Apr 2023 08:16:00 +0000
+Message-ID: <23d45518-3565-e915-c6d4-45dabe82ea4c@suse.de>
+Date:   Mon, 17 Apr 2023 10:15:59 +0200
 MIME-Version: 1.0
-References: <20230403174406.4180472-1-ltykernel@gmail.com> <20230403174406.4180472-14-ltykernel@gmail.com>
- <CAM9Jb+gsHLgkqFf=ydtv4_Tr1uE5qeMQu4PhnD-aJ10OvzBbhA@mail.gmail.com> <21210f9c-8831-9f5a-e391-0f44f277b024@gmail.com>
-In-Reply-To: <21210f9c-8831-9f5a-e391-0f44f277b024@gmail.com>
-From:   Pankaj Gupta <pankaj.gupta.linux@gmail.com>
-Date:   Mon, 17 Apr 2023 10:14:28 +0200
-Message-ID: <CAM9Jb+husLaxX7p+rR3xx=cLDUMXqJMk5RmzYRAvu3Tr6Y7EMg@mail.gmail.com>
-Subject: Re: [RFC PATCH V4 13/17] x86/sev: Add Check of #HV event in path
-To:     Tianyu Lan <ltykernel@gmail.com>
-Cc:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
-        jgross@suse.com, tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, peterz@infradead.org,
-        ashish.kalra@amd.com, srutherford@google.com,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
-        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
-        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
-        michael.roth@amd.com, thomas.lendacky@amd.com,
-        venu.busireddy@oracle.com, sterritt@google.com,
-        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com,
-        pangupta@amd.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] firmware/sysfb: Fix wrong stride when bits-per-pixel is
+ calculated
+Content-Language: en-US
+To:     Pierre Asselin <pa@panix.com>
+Cc:     jfalempe@redhat.com, daniel.vetter@ffwll.ch, javierm@redhat.com,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        hdegoede@redhat.com, ardb@kernel.org
+References: <20230412150225.3757223-1-javierm@redhat.com>
+ <2e07f818ccdff7023a060e732d7c4ef6.squirrel@mail.panix.com>
+ <87jzyhror0.fsf@minerva.mail-host-address-is-not-set>
+ <beeff0335ab4cc244d214a7baadba371.squirrel@mail.panix.com>
+ <CAFOAJEdKBUg91pDmNYYw5xigUxjifBgOLz2YgD+xQ+WyEy=V2w@mail.gmail.com>
+ <1afd3044c2aca9322ecf304941c7df66.squirrel@mail.panix.com>
+ <87fs94stgw.fsf@minerva.mail-host-address-is-not-set>
+ <87cz48srs4.fsf@minerva.mail-host-address-is-not-set>
+ <40edb0fdb0eaff434f4872dd677923a6.squirrel@mail.panix.com>
+ <87a5zcsqg8.fsf@minerva.mail-host-address-is-not-set>
+ <9e6fff69b09b36cbdd96499cd0015154.squirrel@mail.panix.com>
+ <4PxhQn3zK1zcbc@panix1.panix.com>
+ <f3004fccf706fb3cbb7ef6877dcd9168.squirrel@mail.panix.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <f3004fccf706fb3cbb7ef6877dcd9168.squirrel@mail.panix.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------PWXLCqpksoB4tWK4hp6JjzCo"
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> >> +void check_hv_pending_irq_enable(void)
-> >> +{
-> >> +       struct pt_regs regs;
-> >> +
-> >> +       if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
-> >> +               return;
-> >> +
-> >> +       memset(&regs, 0, sizeof(struct pt_regs));
-> >> +       asm volatile("movl %%cs, %%eax;" : "=a" (regs.cs));
-> >> +       asm volatile("movl %%ss, %%eax;" : "=a" (regs.ss));
-> >> +       regs.orig_ax = 0xffffffff;
-> >> +       regs.flags = native_save_fl();
-> >> +
-> >> +       /*
-> >> +        * Disable irq when handle pending #HV events after
-> >> +        * re-enabling irq.
-> >> +        */
-> >> +       asm volatile("cli" : : : "memory");
-> > Just curious, Does the hypervisor injects irqs via doorbell page when
-> > interrupts are disabled with "cli" ? Trying to understand the need to
-> > cli/sti covering on "do_exc_hv".
->
->
-> Hi Pankaj:
->         Thanks for your review. Yes, Hypervisor still injects #HV exception
-> when irq was disabled check_hv_pending() is called when
-> there is a #HV exception. It checks irq flag and return back without
-> handling irq event when irq was disabled.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------PWXLCqpksoB4tWK4hp6JjzCo
+Content-Type: multipart/mixed; boundary="------------97byxBVVYkHd1Wqftw3W5M97";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Pierre Asselin <pa@panix.com>
+Cc: jfalempe@redhat.com, daniel.vetter@ffwll.ch, javierm@redhat.com,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ hdegoede@redhat.com, ardb@kernel.org
+Message-ID: <23d45518-3565-e915-c6d4-45dabe82ea4c@suse.de>
+Subject: Re: [PATCH] firmware/sysfb: Fix wrong stride when bits-per-pixel is
+ calculated
+References: <20230412150225.3757223-1-javierm@redhat.com>
+ <2e07f818ccdff7023a060e732d7c4ef6.squirrel@mail.panix.com>
+ <87jzyhror0.fsf@minerva.mail-host-address-is-not-set>
+ <beeff0335ab4cc244d214a7baadba371.squirrel@mail.panix.com>
+ <CAFOAJEdKBUg91pDmNYYw5xigUxjifBgOLz2YgD+xQ+WyEy=V2w@mail.gmail.com>
+ <1afd3044c2aca9322ecf304941c7df66.squirrel@mail.panix.com>
+ <87fs94stgw.fsf@minerva.mail-host-address-is-not-set>
+ <87cz48srs4.fsf@minerva.mail-host-address-is-not-set>
+ <40edb0fdb0eaff434f4872dd677923a6.squirrel@mail.panix.com>
+ <87a5zcsqg8.fsf@minerva.mail-host-address-is-not-set>
+ <9e6fff69b09b36cbdd96499cd0015154.squirrel@mail.panix.com>
+ <4PxhQn3zK1zcbc@panix1.panix.com>
+ <f3004fccf706fb3cbb7ef6877dcd9168.squirrel@mail.panix.com>
+In-Reply-To: <f3004fccf706fb3cbb7ef6877dcd9168.squirrel@mail.panix.com>
 
-o.k. Thanks for your reply! I am clear with this part.
+--------------97byxBVVYkHd1Wqftw3W5M97
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-But want to know if there is possibility when "do_exc_hv" would keep
-handling irqs in the continuous while loop i.e from the update in the
-hv doorbell page and that can result in DOS like scenario? Is there is already
-a protection for this?
+SGksDQoNCnRoYW5rcyBhIGxvdCB0byBib3RoIG9mIHlvdSBmb3IgdGhpcyBidWcgZml4Lg0K
+DQpBbSAxMy4wNC4yMyB1bSAwMzozNCBzY2hyaWViIFBpZXJyZSBBc3NlbGluOg0KPj4gKG5v
+dCB0ZXN0ZWQpDQo+IA0KPiBUZXN0ZWQuICBJdCBmaXhlcyB0aGUgcmVncmVzc2lvbiBvbiBt
+eSBsYXB0b3AuDQo+IA0KPj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZmlybXdhcmUvc3lzZmJf
+c2ltcGxlZmIuYw0KPj4gYi9kcml2ZXJzL2Zpcm13YXJlL3N5c2ZiX3NpbXBsZWZiLmMNCj4+
+IGluZGV4IDgyYzY0Y2I5ZjUzMS4uOWY1Mjk5ZDU0NzMyIDEwMDY0NA0KPj4gLS0tIGEvZHJp
+dmVycy9maXJtd2FyZS9zeXNmYl9zaW1wbGVmYi5jDQo+PiArKysgYi9kcml2ZXJzL2Zpcm13
+YXJlL3N5c2ZiX3NpbXBsZWZiLmMNCj4+IEBAIC01NiwxMCArNTYsMTEgQEAgX19pbml0IGJv
+b2wgc3lzZmJfcGFyc2VfbW9kZShjb25zdCBzdHJ1Y3Qgc2NyZWVuX2luZm8NCj4+ICpzaSwN
+Cj4+ICAgCSAqIGRvbid0IHNwZWNpZnkgYWxwaGEgY2hhbm5lbHMuDQo+PiAgIAkgKi8NCj4+
+ICAgCWlmIChzaS0+bGZiX2RlcHRoID4gOCkgew0KPj4gLQkJYml0c19wZXJfcGl4ZWwgPSBt
+YXgobWF4MyhzaS0+cmVkX3NpemUgKyBzaS0+cmVkX3BvcywNCj4+ICsJCWJpdHNfcGVyX3Bp
+eGVsID0gbWF4MyhtYXgzKHNpLT5yZWRfc2l6ZSArIHNpLT5yZWRfcG9zLA0KPj4gICAJCQkJ
+CSAgc2ktPmdyZWVuX3NpemUgKyBzaS0+Z3JlZW5fcG9zLA0KPj4gICAJCQkJCSAgc2ktPmJs
+dWVfc2l6ZSArIHNpLT5ibHVlX3BvcyksDQo+PiAtCQkJCSAgICAgc2ktPnJzdmRfc2l6ZSAr
+IHNpLT5yc3ZkX3Bvcyk7DQo+PiArCQkJCSAgICAgc2ktPnJzdmRfc2l6ZSArIHNpLT5yc3Zk
+X3BvcywNCj4+ICsJCQkJICAgICBzaS0+bGZiX2RlcHRoKTsNCg0KSSdtIE9LIHdpdGggdGhp
+cyBjaGFuZ2UuIFRoZXJlJ3MgYSBjb21tZW50DQoNCiAgIlRoZSBiZXN0IHNvbHV0aW9uIGlz
+IHRvIGNvbXB1dGUgYml0c19wZXJfcGl4ZWwgaGVyZSBhbmQgaWdub3JlIA0KbGZiX2RlcHRo
+LiINCg0KSSdkIGNoYW5nZSB0aGlzIHRvDQoNCiAgIlRoZSBiZXN0IHNvbHV0aW9uIGlzIHRv
+IGNvbXB1dGUgYml0c19wZXJfcGl4ZWwgaGVyZSBmcm9tIHRoZSBjb2xvciANCmJpdHMsIHRo
+ZSByZXNlcnZlZCBiaXRzIGFuZCB0aGUgcmVwb3J0ZWQgY29sb3IgZGVwdGg7IHdoYXRldmVy
+IGlzIGhpZ2hlc3QuIg0KDQpUaGF0IHdpbGwgaG9wZWZ1bGx5IGNsYXJpZnkgdGhlIG1lYW5p
+bmcgb2YgdGhlc2UgbWF4MygpIHN0YXRlbWVudHMuIFRoZXkgDQphcmUgbm90IG9idmlvdXMg
+YXQgZmlyc3QuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCg0KPj4gICAJfSBlbHNlIHsN
+Cj4+ICAgCQliaXRzX3Blcl9waXhlbCA9IHNpLT5sZmJfZGVwdGg7DQo+PiAgIAl9DQo+IA0K
+PiANCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Bl
+cg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1
+LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykN
+Ckdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
-Thanks,
-Pankaj
+--------------97byxBVVYkHd1Wqftw3W5M97--
+
+--------------PWXLCqpksoB4tWK4hp6JjzCo
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmQ9AD8FAwAAAAAACgkQlh/E3EQov+A4
+kA//b8iLVNTGaV3hmyG3/0DiQzBiimbrk9Za/r+oYm6eslbT7RDGiHkiY4/7uBzAQF/N6D/goXyB
+2P2Rr6ueTWtz+lpj+C5G9WQW7cSyqdipX5zuw5Us/CKW9++RZDekU2CBehmvhzPxynTIxXbalN5x
+OZSI3+yzOEA1zkuvkscnt7cSbMRcNaFwV1Nll2CsFMM6esnrtfWjTiwhUc6f8s24sBIQ1D2lbei/
+2W/ETaTefRet4SkW0bf3bH2w4TyeoPWcrlXLtwUJoSOXau/lVBt4ewMY9LgUoQjMI08bUnm3PiZQ
+HPNFZ9rzGMN1dHaKu2pIdZUJpgnum1Vl6hlP1JVI+du9mYKrbHAoH3XPGIcmnxIQBq4Wr/vdetl2
+g3zOY+vr1DHrvmGMEywL0hnr5pqdmRYPnKROEtEYxBrZDGJiX7iCue7zo2yAila8wQPLLdCpbiwE
+icpVg+CgJMjZd1IyjPmlo93iryJnC/yr293n0frzkAxrWGFgV89pPGR3CLHuvJ8HtuaUwGkk9AZf
+jx9lxqqyi33tjq5orZPZ6qjdF9P9vFCD5vtCGObx98tpnpv4by9thRY2yBjd/psMwrjBuB+ALzp0
+/2zOkdCr1pt/4VqljUpn0sbE1DxLGNPcu85NHsig9/Ar8FOu3ApjbUDchm+iyMwaa/XJ7ksOI0es
+rbQ=
+=ECWV
+-----END PGP SIGNATURE-----
+
+--------------PWXLCqpksoB4tWK4hp6JjzCo--
