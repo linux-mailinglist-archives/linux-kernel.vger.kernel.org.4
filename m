@@ -2,33 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 475E26E51A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 22:22:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 179536E51B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 22:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbjDQUWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 16:22:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47174 "EHLO
+        id S230217AbjDQUWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 16:22:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbjDQUVv (ORCPT
+        with ESMTP id S230070AbjDQUV5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 16:21:51 -0400
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [5.144.164.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED59120
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 13:21:50 -0700 (PDT)
+        Mon, 17 Apr 2023 16:21:57 -0400
+Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [IPv6:2001:4b7a:2000:18::166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FCCA46AC;
+        Mon, 17 Apr 2023 13:21:51 -0700 (PDT)
 Received: from Marijn-Arch-PC.localdomain (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id BE0B53F8B8;
-        Mon, 17 Apr 2023 22:21:47 +0200 (CEST)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id B354D3F8D7;
+        Mon, 17 Apr 2023 22:21:48 +0200 (CEST)
 From:   Marijn Suijten <marijn.suijten@somainline.org>
-Date:   Mon, 17 Apr 2023 22:21:45 +0200
-Subject: [PATCH v2 06/17] drm/msm/dpu: Remove extraneous register define
- indentation
+Date:   Mon, 17 Apr 2023 22:21:46 +0200
+Subject: [PATCH v2 07/17] drm/msm/dpu: Sort INTF registers numerically
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230411-dpu-intf-te-v2-6-ef76c877eb97@somainline.org>
+Message-Id: <20230411-dpu-intf-te-v2-7-ef76c877eb97@somainline.org>
 References: <20230411-dpu-intf-te-v2-0-ef76c877eb97@somainline.org>
 In-Reply-To: <20230411-dpu-intf-te-v2-0-ef76c877eb97@somainline.org>
 To:     Rob Clark <robdclark@gmail.com>,
@@ -58,77 +57,69 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht,
         Sravanthi Kollukuduru <skolluku@codeaurora.org>,
         Marijn Suijten <marijn.suijten@somainline.org>
 X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A bunch of registers are indented with two extra spaces, looking as if
-these are values corresponding to the previous register which is not the
-case, rather these are simply also register offsets and should only have
-a single space separating them and the #define keyword.
+A bunch of registers were appended at the end in e.g. 91143873a05d
+("drm/msm/dpu: Add MISR register support for interface") rather than
+being inserted in a place that maintains numerical sorting.  Restore
+that.
 
 Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 ---
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c | 41 +++++++++++++++--------------
- 1 file changed, 21 insertions(+), 20 deletions(-)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
-index b9dddf576c02..1d22d7dc99b8 100644
+index 1d22d7dc99b8..1491568f86fc 100644
 --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
 +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
-@@ -38,26 +38,27 @@
+@@ -36,6 +36,10 @@
+ #define INTF_CONFIG2                    0x060
+ #define INTF_DISPLAY_DATA_HCTL          0x064
  #define INTF_ACTIVE_DATA_HCTL           0x068
- #define INTF_FRAME_LINE_COUNT_EN        0x0A8
- #define INTF_FRAME_COUNT                0x0AC
--#define   INTF_LINE_COUNT               0x0B0
--
--#define   INTF_DEFLICKER_CONFIG         0x0F0
--#define   INTF_DEFLICKER_STRNG_COEFF    0x0F4
--#define   INTF_DEFLICKER_WEAK_COEFF     0x0F8
--
--#define   INTF_DSI_CMD_MODE_TRIGGER_EN  0x084
--#define   INTF_PANEL_FORMAT             0x090
--#define   INTF_TPG_ENABLE               0x100
--#define   INTF_TPG_MAIN_CONTROL         0x104
--#define   INTF_TPG_VIDEO_CONFIG         0x108
--#define   INTF_TPG_COMPONENT_LIMITS     0x10C
--#define   INTF_TPG_RECTANGLE            0x110
--#define   INTF_TPG_INITIAL_VALUE        0x114
--#define   INTF_TPG_BLK_WHITE_PATTERN_FRAMES   0x118
--#define   INTF_TPG_RGB_MAPPING          0x11C
--#define   INTF_PROG_FETCH_START         0x170
--#define   INTF_PROG_ROT_START           0x174
--#define   INTF_MUX                      0x25C
--#define   INTF_STATUS                   0x26C
-+#define INTF_LINE_COUNT                 0x0B0
-+
-+#define INTF_DEFLICKER_CONFIG           0x0F0
-+#define INTF_DEFLICKER_STRNG_COEFF      0x0F4
-+#define INTF_DEFLICKER_WEAK_COEFF       0x0F8
 +
 +#define INTF_DSI_CMD_MODE_TRIGGER_EN    0x084
 +#define INTF_PANEL_FORMAT               0x090
-+#define INTF_TPG_ENABLE                 0x100
-+#define INTF_TPG_MAIN_CONTROL           0x104
-+#define INTF_TPG_VIDEO_CONFIG           0x108
-+#define INTF_TPG_COMPONENT_LIMITS       0x10C
-+#define INTF_TPG_RECTANGLE              0x110
-+#define INTF_TPG_INITIAL_VALUE          0x114
-+#define INTF_TPG_BLK_WHITE_PATTERN_FRAMES 0x118
-+#define INTF_TPG_RGB_MAPPING            0x11C
-+#define INTF_PROG_FETCH_START           0x170
-+#define INTF_PROG_ROT_START             0x174
 +
-+#define INTF_MUX                        0x25C
-+#define INTF_STATUS                     0x26C
+ #define INTF_FRAME_LINE_COUNT_EN        0x0A8
+ #define INTF_FRAME_COUNT                0x0AC
+ #define INTF_LINE_COUNT                 0x0B0
+@@ -44,8 +48,6 @@
+ #define INTF_DEFLICKER_STRNG_COEFF      0x0F4
+ #define INTF_DEFLICKER_WEAK_COEFF       0x0F8
  
- #define INTF_CFG_ACTIVE_H_EN	BIT(29)
- #define INTF_CFG_ACTIVE_V_EN	BIT(30)
+-#define INTF_DSI_CMD_MODE_TRIGGER_EN    0x084
+-#define INTF_PANEL_FORMAT               0x090
+ #define INTF_TPG_ENABLE                 0x100
+ #define INTF_TPG_MAIN_CONTROL           0x104
+ #define INTF_TPG_VIDEO_CONFIG           0x108
+@@ -57,6 +59,9 @@
+ #define INTF_PROG_FETCH_START           0x170
+ #define INTF_PROG_ROT_START             0x174
+ 
++#define INTF_MISR_CTRL                  0x180
++#define INTF_MISR_SIGNATURE             0x184
++
+ #define INTF_MUX                        0x25C
+ #define INTF_STATUS                     0x26C
+ 
+@@ -66,9 +71,6 @@
+ #define INTF_CFG2_DATABUS_WIDEN	BIT(0)
+ #define INTF_CFG2_DATA_HCTL_EN	BIT(4)
+ 
+-#define INTF_MISR_CTRL			0x180
+-#define INTF_MISR_SIGNATURE		0x184
+-
+ static const struct dpu_intf_cfg *_intf_offset(enum dpu_intf intf,
+ 		const struct dpu_mdss_cfg *m,
+ 		void __iomem *addr,
 
 -- 
 2.40.0
