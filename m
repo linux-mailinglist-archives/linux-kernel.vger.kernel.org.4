@@ -2,81 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1FF76E4DF6
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 18:02:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C79C6E4E38
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 18:23:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbjDQQCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 12:02:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56386 "EHLO
+        id S230189AbjDQQWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 12:22:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231200AbjDQQCM (ORCPT
+        with ESMTP id S230427AbjDQQWi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 12:02:12 -0400
-Received: from exchange.fintech.ru (exchange.fintech.ru [195.54.195.159])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F6ABBA1;
-        Mon, 17 Apr 2023 09:02:01 -0700 (PDT)
-Received: from Ex16-01.fintech.ru (10.0.10.18) by exchange.fintech.ru
- (195.54.195.159) with Microsoft SMTP Server (TLS) id 14.3.498.0; Mon, 17 Apr
- 2023 19:01:53 +0300
-Received: from localhost (10.0.253.138) by Ex16-01.fintech.ru (10.0.10.18)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Mon, 17 Apr
- 2023 19:01:53 +0300
-From:   Nikita Zhandarovich <n.zhandarovich@fintech.ru>
-To:     Ping Cheng <ping.cheng@wacom.com>
-CC:     Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
-        Jason Gerecke <jason.gerecke@wacom.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        <linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lvc-project@linuxtesting.org>
-Subject: [PATCH] HID: wacom: avoid integer overflow in wacom_intuos_inout()
-Date:   Mon, 17 Apr 2023 09:01:48 -0700
-Message-ID: <20230417160148.60011-1-n.zhandarovich@fintech.ru>
-X-Mailer: git-send-email 2.25.1
+        Mon, 17 Apr 2023 12:22:38 -0400
+Received: from synguard (unknown [212.29.212.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD2EBB9E;
+        Mon, 17 Apr 2023 09:22:28 -0700 (PDT)
+Received: from T14.siklu.local (unknown [192.168.42.162])
+        by synguard (Postfix) with ESMTP id D03F24DE4E;
+        Mon, 17 Apr 2023 19:03:07 +0300 (IDT)
+From:   Shmuel Hazan <shmuel.h@siklu.com>
+To:     Russell King <linux@armlinux.org.uk>
+Cc:     Marcin Wojtas <mw@semihalf.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        horatiu.vultur@microchip.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: net: mvpp2: tai: add extts support 
+Date:   Mon, 17 Apr 2023 19:01:48 +0300
+Message-Id: <20230417160151.1617256-1-shmuel.h@siklu.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.0.253.138]
-X-ClientProxiedBy: Ex16-02.fintech.ru (10.0.10.19) To Ex16-01.fintech.ru
- (10.0.10.18)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,FSL_HELO_NON_FQDN_1,
+        HELO_NO_DOMAIN,RDNS_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If high bit is set to 1 in ((data[3] & 0x0f << 28), after all arithmetic
-operations and integer promotions are done, high bits in
-wacom->serial[idx] will be filled with 1s as well.
-Avoid this, albeit unlikely, issue by specifying left operand's __u64
-type for the right operand.
+This patch series adds support for PTP event capture on the Aramda
+80x0/70x0. This feature is mainly used by tools linux ts2phc(3) in order
+to synchronize a timestamping unit (like the mvpp2's TAI) and a system
+DPLL on the same PCB. 
 
-Found by Linux Verification Center (linuxtesting.org) with static
-analysis tool SVACE.
+The patch series includes 3 patches: the second one implements the
+actual extts function.
 
-Fixes: 3bea733ab212 ("USB: wacom tablet driver reorganization")
-Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
----
- drivers/hid/wacom_wac.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/hid/wacom_wac.c b/drivers/hid/wacom_wac.c
-index 9312d611db8e..0e4404f3801e 100644
---- a/drivers/hid/wacom_wac.c
-+++ b/drivers/hid/wacom_wac.c
-@@ -826,7 +826,7 @@ static int wacom_intuos_inout(struct wacom_wac *wacom)
- 	/* Enter report */
- 	if ((data[1] & 0xfc) == 0xc0) {
- 		/* serial number of the tool */
--		wacom->serial[idx] = ((data[3] & 0x0f) << 28) +
-+		wacom->serial[idx] = ((__u64)(data[3] & 0x0f) << 28) +
- 			(data[4] << 20) + (data[5] << 12) +
- 			(data[6] << 4) + (data[7] >> 4);
- 
--- 
-2.25.1
 
