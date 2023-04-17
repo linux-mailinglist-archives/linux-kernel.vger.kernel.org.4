@@ -2,111 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 146B46E4208
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:05:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AA926E420D
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:06:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbjDQIFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 04:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50558 "EHLO
+        id S231167AbjDQIGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 04:06:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231277AbjDQIFH (ORCPT
+        with ESMTP id S231145AbjDQIGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 04:05:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E20F1BF;
-        Mon, 17 Apr 2023 01:05:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 17 Apr 2023 04:06:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63708196
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 01:05:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681718734;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=64LjpVCxLV+TLB4DlA7ht7RGBF6FWgyYq2+ZXjoxFPQ=;
+        b=SmAHlQIZa9+y8fXgpQOwzKZbwqU3VWaU760MPlhKOhwvLemAH8jV8H4BmbocJ594ub7hYX
+        MU4Rh2Iy60qHUDIh5qWgVY5WMe7LwbawVuJkEj6hKHkBDw1cPZnBxPfa83CO4NMNTre6id
+        h4WnEnHrwnzQEhEvtG8IfNX99JfAVJk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-436-iqveTSncMZGVonA7d7IEsw-1; Mon, 17 Apr 2023 04:05:30 -0400
+X-MC-Unique: iqveTSncMZGVonA7d7IEsw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EFBA61FD4;
-        Mon, 17 Apr 2023 08:05:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A6F3C4339B;
-        Mon, 17 Apr 2023 08:05:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681718704;
-        bh=0Y/mnS2pjaYk07j+LJSA/55y9ntA2FADo9/M3Dr4xgk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DGKJDv/BLy56BiFvmzmoetNbBUmKx1OS5vjufwpa9DMDa4mpBFiD918rvHExFqe9f
-         YsTYesSOFT7FcZyJvTAJjSCRAtAFNpoX/uS6xAF3TxMBqeB7QPV7uAbmI0B0qMB7Yn
-         kATDatbmgWXBYL3FWMniD9DEHM/iztPJ4+H9e4pSqLzimIeAP6znCuSo8LggP5GfRZ
-         M0bNu7BjUDOxcEQmUQUttIaWAC36jaDyOwaKa+KYPlrauqv/uKzIK69VTXgd1RPXy9
-         mZGu2O8Y+qd8VOMWyw+ziPsCOVg2C4bT42JBJQ/xl0FDFDpV9LUUHS+izm0F1VV3K7
-         xax7EE8okIlgg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1poJrL-0003gR-Mp; Mon, 17 Apr 2023 10:05:11 +0200
-Date:   Mon, 17 Apr 2023 10:05:11 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
-        kishon@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v8 2/8] dt-bindings: phy: qcom,qmp-usb: Add IPQ9574 USB3
- PHY
-Message-ID: <ZDz9t9TkBqZ1fcfn@hovoldconsulting.com>
-References: <cover.1680693149.git.quic_varada@quicinc.com>
- <1efa9a64499767d939efadd0aef897ac4a6e54eb.1680693149.git.quic_varada@quicinc.com>
- <0a66e291-a86d-1ff9-e674-839b8cc8f1da@linaro.org>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 40DF985A5B1;
+        Mon, 17 Apr 2023 08:05:30 +0000 (UTC)
+Received: from ovpn-8-16.pek2.redhat.com (ovpn-8-16.pek2.redhat.com [10.72.8.16])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2CFBD14152F6;
+        Mon, 17 Apr 2023 08:05:23 +0000 (UTC)
+Date:   Mon, 17 Apr 2023 16:05:18 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Li Feng <lifeng1519@gmail.com>
+Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        "open list:NVM EXPRESS DRIVER" <linux-nvme@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>, ming.lei@redhat.com
+Subject: Re: [PATCH v2] nvme/tcp: Add support to set the tcp worker cpu
+ affinity
+Message-ID: <ZDz9vv6tbmKyhK7h@ovpn-8-16.pek2.redhat.com>
+References: <20230413062339.2454616-1-fengli@smartx.com>
+ <20230413132941.2489795-1-fengli@smartx.com>
+ <ZDz3TlFUxMxaO1W4@ovpn-8-16.pek2.redhat.com>
+ <D8FFAFCB-5486-4211-9AC8-2779AE368183@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <0a66e291-a86d-1ff9-e674-839b8cc8f1da@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <D8FFAFCB-5486-4211-9AC8-2779AE368183@gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 09:41:49AM +0200, Krzysztof Kozlowski wrote:
-> On 05/04/2023 13:41, Varadarajan Narayanan wrote:
-> > Add dt-bindings for USB3 PHY found on Qualcomm IPQ9574
-> > 
-> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > ---
-> >  Changes in v8:
-> > 	- Update clock names for ipq9574
-> > 
-> >  Changes in v6:
-> > 	- Made power-domains optional
-> > 
-> > Note: In the earlier patch sets, had used the (legacy)
-> > specification available in qcom,msm8996-qmp-usb3-phy.yaml. Moved
-> > to newer specification in qcom,sc8280xp-qmp-usb3-uni-phy.yaml
-> > ---
-> >  .../phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml        | 43 +++++++++++++++++++---
-> >  1 file changed, 37 insertions(+), 6 deletions(-)
-
-> > +        clock-names:
-> > +          items:
-> > +            - const: aux
-> > +            - const: ref
-> > +            - const: com_aux
+On Mon, Apr 17, 2023 at 03:50:46PM +0800, Li Feng wrote:
 > 
-> Can anyone explain me why do we name these (here and other Qualcomm
-> bindings) based on clock name, not input? Just because different clock
-> is fed to the block, does not necessarily mean the input should be named
-> differently.
+> 
+> > 2023年4月17日 下午3:37，Ming Lei <ming.lei@redhat.com> 写道：
+> > 
+> > On Thu, Apr 13, 2023 at 09:29:41PM +0800, Li Feng wrote:
+> >> The default worker affinity policy is using all online cpus, e.g. from 0
+> >> to N-1. However, some cpus are busy for other jobs, then the nvme-tcp will
+> >> have a bad performance.
+> > 
+> > Can you explain in detail how nvme-tcp performs worse in this situation?
+> > 
+> > If some of CPUs are knows as busy, you can submit the nvme-tcp io jobs
+> > on other non-busy CPUs via taskset, or scheduler is supposed to choose
+> > proper CPUs for you. And usually nvme-tcp device should be saturated
+> > with limited io depth or jobs/cpus.
+> > 
+> > 
+> > Thanks, 
+> > Ming
+> > 
+> 
+> Taskset can’t work on nvme-tcp io-queues, because the worker cpu has decided at the nvme-tcp ‘connect’ stage,
+> not the sending io stage. Assume there is only one io-queue, the binding cpu is CPU0, no matter io jobs
+> run other cpus.
 
-I guess part of the answer is that this has just been copied from the
-vendor dts and (almost) no one but Qualcomm has access to the
-documentation. What would the input names be here?
+OK, looks the problem is on queue->io_cpu, see nvme_tcp_queue_request().
 
-Also note that there are SoCs that enable both 'cfg_ahb' and 'com_aux'
-(e.g. sc7180).
+But I am wondering why nvme-tcp doesn't queue the io work on the current
+cpu? And why is queue->io_cpu introduced? Given blk-mq defines cpu
+affinities for each hw queue, driver is supposed to submit IO request
+to hardware on the local CPU.
 
-> > +            - const: pipe
-> > +
-> >  examples:
-> >    - |
-> >      #include <dt-bindings/clock/qcom,gcc-sc8280xp.h>
+Sagi and Guys, any ideas about introducing queue->io_cpu?
 
-Johan
+
+Thanks,
+Ming
+
