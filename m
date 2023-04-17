@@ -2,71 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C99086E4FE5
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 20:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD12D6E4FEA
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 20:10:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230186AbjDQSJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 14:09:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57578 "EHLO
+        id S229929AbjDQSKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 14:10:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjDQSJg (ORCPT
+        with ESMTP id S229602AbjDQSKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 14:09:36 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8723610D;
-        Mon, 17 Apr 2023 11:09:35 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id w11so26648437plp.13;
-        Mon, 17 Apr 2023 11:09:35 -0700 (PDT)
+        Mon, 17 Apr 2023 14:10:31 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD061BCB
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 11:10:29 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-63b60366047so1045892b3a.1
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 11:10:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681754975; x=1684346975;
+        d=google.com; s=20221208; t=1681755029; x=1684347029;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WNOsIQtquipVLHz8/RMsd7IDhOh5uaDhFa5Mb/HyQyI=;
-        b=K8lNZwCWAi69HuM8H5CpvXsO6JRXmF5bjsuJP4MBlqphQkWtHN5yPJgRPvhr11jBXv
-         LCQ0XiBOvyWy5lLY6PjcNjovVPe+8B2Xe6pkEDe9wlD21biLd8qxrncpDxkEIV44w5qR
-         Ll4g6NjbGABIuFK/2Aw4ZznxTV0HFr+kVqNBw9EFhOoDtcHJM7NTh30TWF/sisZla8kF
-         MQTOLmHoxRj+FjiTizTWKLFVOZQj3LDIfwVmudGbeC1nQ+WoQobnPHtXS9WpjP9eXdJr
-         TGBAsd6GCk/fy/X1ifvZpV4YZThGoaWGGJpyGQvb1oj2JnhKcLHjtGVuNJwdQBRLkbl4
-         ZCdw==
+        bh=4sl9ziKyZqPoy8aLo+Gl92oC/7FehXmT2AIhyqndHBY=;
+        b=nJVr4FILdu5bU4E72aAnZSynAvymUqegXgB59klqsogKC7WJxtqSYGYUybck5xKIH8
+         FYb5pFzFqkrQKBvl0P66732MQeRjhzSHNoNRtH37Ux2NmgsVxlSiENHCrExCzd+Q/0DR
+         P82BdWDMQ50B64/Fc5K+e6vFzUY2y4oCaiEmdabrVXF1FvQ0qlwDMuEjqHcDN7nlGtLd
+         58Di7uv/E/K9O6RuLskhxGsDbekYPJZZMQdoDqUfR08+O8D5PYUCEBiYV+RGHRbCcIGH
+         bYphFSe5O4b/Hc3hl9lI8jUMn0LhPWi2SeLRu6Tb4So5ZljeCMNqhtLGOvfpjjTLGz/j
+         W/7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681754975; x=1684346975;
+        d=1e100.net; s=20221208; t=1681755029; x=1684347029;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WNOsIQtquipVLHz8/RMsd7IDhOh5uaDhFa5Mb/HyQyI=;
-        b=iewYxCK2EGK7aCjUa8MAUILzojjEGvoQDYZzkXto+kSuvt8+xMeHh2PWh+KyclJWUM
-         VOULx4R7y6VMnByBgAvsoVVsvNQ8zDSR6xp3ynHbClTzWiA7jCpGuonAs8YkcChV7h8f
-         A9Q0ZnfdQobIg3aVjO5xR+HR0+ilceq0WHyPmFLZmhX5iIJyFcEFThmlJGiaXa2GiL6K
-         Ibk/s2/E3BmewuiJsRcBQ79T6oVCJAAc1O7oMiT/cfSDMtqWZybgWlR1vaueCGjPXsPX
-         qm+GPI0ZdmgrQo3cBj4/CFfBShHf8QyZZwV5yhUAsm0uuTOvlxwisblVFGbwE8SxEcYn
-         EEeg==
-X-Gm-Message-State: AAQBX9cPN2GCRclL0p4WgcHTM7HT7MtfW7RGSh/hdqCVV8g7Eb4Wstvd
-        32bLcqZwSy6R5aIqntOmElLdPMxlTvtuJ+X8bUw=
-X-Google-Smtp-Source: AKy350ZcGwtvc9bc5OmV986re8jTS7t6yf3evE/VHZhrKbmPQSK20zQKGda3a6I2bSv/pHSjitN9vGPX2QJ/+41y0BM=
-X-Received: by 2002:a17:902:ea05:b0:19a:64f6:e147 with SMTP id
- s5-20020a170902ea0500b0019a64f6e147mr4400040plg.2.1681754974933; Mon, 17 Apr
- 2023 11:09:34 -0700 (PDT)
+        bh=4sl9ziKyZqPoy8aLo+Gl92oC/7FehXmT2AIhyqndHBY=;
+        b=C0TMBVi9UvHQWAumwiGi8AWEdWtaq9d2mOo8AmPcPElRjdIN9hd3YmlU/i/NwmlcOX
+         NreydrrFpgaBGL/bQsf+8GaX27dTtKjNZ+QS/V6uLozHsoQnQybrUlRURfS7TjdNAQ0N
+         35/Now8jJUyGW/R4t68hXwkFro1YGw7HkAHYAm95u3FwtxZI5/d5nxD4uir5uG513KhE
+         Uwlx6fJ0nMgISawZNVxSfx4HZCWCgAUrETPuFAlqOcy3nxGRO40Uqf4HxvVy/ff2qFR9
+         UCrPgCzCjscU+YIw/51ngY3cp7IEmwa/HGrR2ZvNiGbzEWbQHWb0s00AA0q+4YplPhzL
+         L5Mg==
+X-Gm-Message-State: AAQBX9fpYZWCKonXD9bPROR9ahGhAE2WyCXIcmcA50sNe81AS2TZLPDp
+        spLrt0DhbJEYfh4jLjjJqq9liZnhgg2dG5OWNLk4xA==
+X-Google-Smtp-Source: AKy350agKI3IJEia6GE10oRHfJ2yBUf/emYDmwLibiytnwVpTiKZKIXteccNnA4CKimextC1Abl3uVyOBTN12S3XK2g=
+X-Received: by 2002:a05:6a00:1a43:b0:62e:154e:d6be with SMTP id
+ h3-20020a056a001a4300b0062e154ed6bemr7839056pfv.5.1681755028758; Mon, 17 Apr
+ 2023 11:10:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230416173302.1185683-1-mmyangfl@gmail.com> <20230416173302.1185683-2-mmyangfl@gmail.com>
- <c6571a6d-bf55-14b3-102d-814af6763be7@linaro.org>
-In-Reply-To: <c6571a6d-bf55-14b3-102d-814af6763be7@linaro.org>
-From:   Yangfl <mmyangfl@gmail.com>
-Date:   Tue, 18 Apr 2023 02:08:58 +0800
-Message-ID: <CAAXyoMNKDFBnJbT0XX2LWtwDPiePjqhJ4n--cb+SDDBSmPZ_WQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] dt-bindings: clock: Add simple-clock-controller
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <20230413133355.350571-1-aleksandr.mikhalitsyn@canonical.com>
+ <20230413133355.350571-3-aleksandr.mikhalitsyn@canonical.com>
+ <CANn89iLuLkUvX-dDC=rJhtFcxjnVmfn_-crOevbQe+EjaEDGbg@mail.gmail.com>
+ <CAEivzxcEhfLttf0VK=NmHdQxF7CRYXNm6NwUVx6jx=-u2k-T6w@mail.gmail.com>
+ <CAKH8qBt+xPygUVPMUuzbi1HCJuxc4gYOdU6JkrFmSouRQgoG6g@mail.gmail.com>
+ <ZDoEG0VF6fb9y0EC@google.com> <20230417-wellblech-zoodirektor-76a80f7763ab@brauner>
+In-Reply-To: <20230417-wellblech-zoodirektor-76a80f7763ab@brauner>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Mon, 17 Apr 2023 11:10:17 -0700
+Message-ID: <CAKH8qBuW+T23ZvvYf4-MPc-S+ChSOARPWpTnLqTEQmF-p_3F6w@mail.gmail.com>
+Subject: Re: [PATCH net-next v4 2/4] net: socket: add sockopts blacklist for
+ BPF cgroup hook
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        Eric Dumazet <edumazet@google.com>, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        daniel@iogearbox.net, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        linux-arch@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,113 +86,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =E4=BA=8E2023=E5=B9=B4=
-4=E6=9C=8817=E6=97=A5=E5=91=A8=E4=B8=80 01:38=E5=86=99=E9=81=93=EF=BC=9A
+On Mon, Apr 17, 2023 at 7:42=E2=80=AFAM Christian Brauner <brauner@kernel.o=
+rg> wrote:
 >
-> On 16/04/2023 19:32, David Yang wrote:
-> > Add DT bindings documentation for simple-clock-controller, mutex
-> > controller for clocks.
+> On Fri, Apr 14, 2023 at 06:55:39PM -0700, Stanislav Fomichev wrote:
+> > On 04/13, Stanislav Fomichev wrote:
+> > > On Thu, Apr 13, 2023 at 7:38=E2=80=AFAM Aleksandr Mikhalitsyn
+> > > <aleksandr.mikhalitsyn@canonical.com> wrote:
+> > > >
+> > > > On Thu, Apr 13, 2023 at 4:22=E2=80=AFPM Eric Dumazet <edumazet@goog=
+le.com> wrote:
+> > > > >
+> > > > > On Thu, Apr 13, 2023 at 3:35=E2=80=AFPM Alexander Mikhalitsyn
+> > > > > <aleksandr.mikhalitsyn@canonical.com> wrote:
+> > > > > >
+> > > > > > During work on SO_PEERPIDFD, it was discovered (thanks to Chris=
+tian),
+> > > > > > that bpf cgroup hook can cause FD leaks when used with sockopts=
+ which
+> > > > > > install FDs into the process fdtable.
+> > > > > >
+> > > > > > After some offlist discussion it was proposed to add a blacklis=
+t of
+> > > > >
+> > > > > We try to replace this word by either denylist or blocklist, even=
+ in changelogs.
+> > > >
+> > > > Hi Eric,
+> > > >
+> > > > Oh, I'm sorry about that. :( Sure.
+> > > >
+> > > > >
+> > > > > > socket options those can cause troubles when BPF cgroup hook is=
+ enabled.
+> > > > > >
+> > > > >
+> > > > > Can we find the appropriate Fixes: tag to help stable teams ?
+> > > >
+> > > > Sure, I will add next time.
+> > > >
+> > > > Fixes: 0d01da6afc54 ("bpf: implement getsockopt and setsockopt hook=
+s")
+> > > >
+> > > > I think it's better to add Stanislav Fomichev to CC.
+> > >
+> > > Can we use 'struct proto' bpf_bypass_getsockopt instead? We already
+> > > use it for tcp zerocopy, I'm assuming it should work in this case as
+> > > well?
 > >
-> > Signed-off-by: David Yang <mmyangfl@gmail.com>
-> > ---
-> >  .../clock/simple-clock-controller.yaml        | 50 +++++++++++++++++++
->
-> Where is the changelog?
->
-
-Cover now send with v3.
-
-> >  1 file changed, 50 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/clock/simple-cloc=
-k-controller.yaml
+> > Jakub reminded me of the other things I wanted to ask here bug forgot:
 > >
-> > diff --git a/Documentation/devicetree/bindings/clock/simple-clock-contr=
-oller.yaml b/Documentation/devicetree/bindings/clock/simple-clock-controlle=
-r.yaml
-> > new file mode 100644
-> > index 000000000000..17835aeddb1d
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/clock/simple-clock-controller.y=
-aml
-> > @@ -0,0 +1,50 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/clock/simple-clock-controller.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Simple clock controller
-> > +
-> > +maintainers:
-> > +  - David Yang <mmyangfl@gmail.com>
-> > +
-> > +description: |
-> > +  Driver (lock provider) for real clocks.
+> > - setsockopt is probably not needed, right? setsockopt hook triggers
+> >   before the kernel and shouldn't leak anything
+> > - for getsockopt, instead of bypassing bpf completely, should we instea=
+d
+> >   ignore the error from the bpf program? that would still preserve
 >
-> Drop driver references. Typo: clock, not lock.
+> That's fine by me as well.
 >
-> What is a real clock? What is an unreal clock?
->
+> It'd be great if the net folks could tell Alex how they would want this
+> handled.
 
-Rewrite description in v3. The controller is kinda unreal since it
-does not require any operation to "enable" the controller, but such
-description is avoided in v3.
+Doing the bypass seems fine with me for now. If we ever decide that
+fd-based optvals are worth inspecting in bpf, we can lift that bypass.
 
-> > +
-> > +  Usually one register controls more than one clocks. This controller =
-avoids
-> > +  write conflicts by imposing a write lock, so that two operations on =
-the same
-> > +  register will not happen at the same time.
+> >   the observability aspect
 >
-> Interesting. How the clock controller imposes write locks? Aren't you
-> now mixing drivers and hardware?
+> Please see for more details
+> https://lore.kernel.org/lkml/20230411-nudelsalat-spreu-3038458f25c4@braun=
+er
 
-Avoided driver details in device description in v3.
+Thanks for the context. Yeah, sockopts are being used for a lot of
+interesting things :-(
 
+> > - or maybe we can even have a per-proto bpf_getsockopt_cleanup call tha=
+t
+> >   gets called whenever bpf returns an error to make sure protocols have
+> >   a chance to handle that condition (and free the fd)
 >
->
-> > +
-> > +properties:
-> > +  compatible:
-> > +    items:
-> > +      - oneOf:
-> > +          - const: simple-clock-controller
-> > +          - const: simple-clock-reset-controller
->
-> Why two?
+> Installing an fd into an fdtable makes it visible to userspace at which
+> point calling close_fd() is doable but an absolute last resort and
+> generally a good indicator of misdesign. If the bpf hook wants to make
+> decisions based on the file then it should receive a struct
+> file, not an fd.
 
-It may also handle reset requests. But removed in v3 for further considerat=
-ion.
-
->
-> > +      - const: syscon
-> > +      - const: simple-mfd
->
-> Why do you need syscon and simple-mfd?
-
-Kinda typo. Removed in v3.
-
->
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  '#reset-cells':
-> > +    const: 2
-> > +
-> > +patternProperties:
-> > +  "clock@.*":
->
-> Use consistent quotes.
-
-Fixed in v3.
-
->
-> Anyway, I don't understand what is happening here and why such changes.
-> Nothing is explained...
->
->
-> Best regards,
-> Krzysztof
->
+SG! Then let's not over-complicate it for now and do a simple bypass.
