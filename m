@@ -2,120 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9256E424C
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:14:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38E986E4250
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbjDQIN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 04:13:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60994 "EHLO
+        id S230389AbjDQIOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 04:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbjDQIN4 (ORCPT
+        with ESMTP id S230102AbjDQIOm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 04:13:56 -0400
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22DDB40C3;
-        Mon, 17 Apr 2023 01:13:51 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 3696941F72;
-        Mon, 17 Apr 2023 08:13:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1681719229; bh=ZRiy6qdtYG9gSvsJM9Fbh019YpZ1VS/7JH0gfpCcJKU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=Oc4R2Shwbxp0hWo+owR+2A1muBziLfN7tJBDMEigI4MJqhVtKjxc0cAQNcqUmO9b9
-         irzIcKQWpVNPQswzja+uszpvPMGErPcizmkTnVwcDycDbE8lJDl02sZmYQLMXyYT/8
-         CI4sJ/dEHUCt+sdRXw56dq+Yexdwb24Ze0DYbB3bSDJ05hEmYNwTrh3LH6EbfgqCi3
-         /4nSRgfUURtfrPdHyssArJtaGVlUmNexRYA91CKomdbmkghoXNvtaIyGvwVv0EGXCi
-         McileHTjhm9GjWzr5DHFZWvoJM3SdMjq5tXWR/qGEwsEXLOKG/+TSD60fKYuw5KGlp
-         O3tihc2Vryu3g==
-Message-ID: <1201f65f-1b92-a121-05af-9f0290eb0c47@marcan.st>
-Date:   Mon, 17 Apr 2023 17:13:43 +0900
+        Mon, 17 Apr 2023 04:14:42 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A934194;
+        Mon, 17 Apr 2023 01:14:40 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-54fbb713301so166926447b3.11;
+        Mon, 17 Apr 2023 01:14:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681719279; x=1684311279;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=A4Os3dr8ojnrC3FQMNzZ9SxkQapJmMPc47/v8RETnk8=;
+        b=BH+CDfZx2N9ZcbtJns70WTRBMhkR5ArWhqyXCuyT3yiXdVfMufgwvFCew0Efv6UKaB
+         Tia5Lnq3l9vw2QQ0E3RoFhvxzAlqEWErRuqOUPQ2xyLL7UzA50F3TvmjjQk6P/rCkPcI
+         ExfD1eyzU9obs17nRfczccbzrk4t9dqSWkmx9Uuw968xQxIXxT7AYqwQxg6LR6Q3wkGS
+         d31jHc6KK0WPCFLisYjFegiRtqdUh7m+MEsoNApJxwLSW5c8mT6Pp/jCgwe6ooECUJpJ
+         EPMdRcxHx2HP7qZzWcSEjQTl1fyZvQVJgRjuKaezsLzIS0ajZ50ejjcgPaikWq/Ss0Ud
+         b8Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681719279; x=1684311279;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=A4Os3dr8ojnrC3FQMNzZ9SxkQapJmMPc47/v8RETnk8=;
+        b=Y6o94QZ0i33F3rDaVMCTG8qLgw+LUtz5sayBkLP7ZrHHq4HAYXk6rvzSiXNTlI6Ga6
+         LZBx2rVX516CKZtddXuFYpkFtXBONKM6nQBOwM/KTprGUq3wT7/FuL966I0uqGQoSjz2
+         jB4CW10b0VAI48yZVy6WgUeHY6qBb2/iUc1mjNHVqqMKd3rJJtA0wotxAHOQreFY5RaM
+         q579dEVZKKxHn0tGXuLiMDOYtPfKLSizcaI3tUaXvP2qWMYAFmzDEG3SaH8BKsVkXTwH
+         ujOR0Io+dRTSZl1UwoBo3Z9hkdwGVY851/j+LXiJOVOk3G+m6RuaAM1cVBw5o4i5N1w1
+         xIWg==
+X-Gm-Message-State: AAQBX9fPwRVM3IR6SJSQpl7GG7CHVLIR1kNZC3lDhDr8GcN34bx6mogr
+        o8fD2ZbWmyhuEdH/7EmoHMirJqidL1xj2OZeO+4=
+X-Google-Smtp-Source: AKy350YD1tm08Nz2B7USYkth+bw6H1Eo/Lt6AG00O3UuMVmikLF/P03nRE0E2gnhxOAzJ46OT71GkLUJ/Iwx8P4WMyw=
+X-Received: by 2002:a81:af0c:0:b0:54f:8566:495 with SMTP id
+ n12-20020a81af0c000000b0054f85660495mr8898022ywh.1.1681719279655; Mon, 17 Apr
+ 2023 01:14:39 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 1/2] wifi: brcmfmac: Demote vendor-specific attach/detach
- messages to info
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
-        stable@vger.kernel.org
-References: <20230416-brcmfmac-noise-v1-0-f0624e408761@marcan.st>
- <20230416-brcmfmac-noise-v1-1-f0624e408761@marcan.st>
- <2023041631-crying-contour-5e11@gregkh>
- <8b2e7bb9-3681-0265-01bc-e7abdd0d08b8@marcan.st> <ZDz-F50Zlwkf2njN@kroah.com>
-From:   Hector Martin <marcan@marcan.st>
-In-Reply-To: <ZDz-F50Zlwkf2njN@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230403174406.4180472-1-ltykernel@gmail.com> <20230403174406.4180472-14-ltykernel@gmail.com>
+ <CAM9Jb+gsHLgkqFf=ydtv4_Tr1uE5qeMQu4PhnD-aJ10OvzBbhA@mail.gmail.com> <21210f9c-8831-9f5a-e391-0f44f277b024@gmail.com>
+In-Reply-To: <21210f9c-8831-9f5a-e391-0f44f277b024@gmail.com>
+From:   Pankaj Gupta <pankaj.gupta.linux@gmail.com>
+Date:   Mon, 17 Apr 2023 10:14:28 +0200
+Message-ID: <CAM9Jb+husLaxX7p+rR3xx=cLDUMXqJMk5RmzYRAvu3Tr6Y7EMg@mail.gmail.com>
+Subject: Re: [RFC PATCH V4 13/17] x86/sev: Add Check of #HV event in path
+To:     Tianyu Lan <ltykernel@gmail.com>
+Cc:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
+        jgross@suse.com, tiala@microsoft.com, kirill@shutemov.name,
+        jiangshan.ljs@antgroup.com, peterz@infradead.org,
+        ashish.kalra@amd.com, srutherford@google.com,
+        akpm@linux-foundation.org, anshuman.khandual@arm.com,
+        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
+        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
+        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
+        michael.roth@amd.com, thomas.lendacky@amd.com,
+        venu.busireddy@oracle.com, sterritt@google.com,
+        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com,
+        pangupta@amd.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/04/2023 17.06, Greg KH wrote:
-> On Mon, Apr 17, 2023 at 04:54:33PM +0900, Hector Martin wrote:
->> On 16/04/2023 21.46, Greg KH wrote:
->>> On Sun, Apr 16, 2023 at 09:42:17PM +0900, Hector Martin wrote:
->>>> People are getting spooked by brcmfmac errors on their boot console.
->>>> There's no reason for these messages to be errors.
->>>>
->>>> Cc: stable@vger.kernel.org
->>>> Fixes: d6a5c562214f ("wifi: brcmfmac: add support for vendor-specific firmware api")
->>>> Signed-off-by: Hector Martin <marcan@marcan.st>
->>>> ---
->>>>  drivers/net/wireless/broadcom/brcm80211/brcmfmac/bca/core.c | 4 ++--
->>>>  drivers/net/wireless/broadcom/brcm80211/brcmfmac/cyw/core.c | 4 ++--
->>>>  drivers/net/wireless/broadcom/brcm80211/brcmfmac/wcc/core.c | 4 ++--
->>>>  3 files changed, 6 insertions(+), 6 deletions(-)
->>>>
->>>> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bca/core.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bca/core.c
->>>> index ac3a36fa3640..c83bc435b257 100644
->>>> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bca/core.c
->>>> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bca/core.c
->>>> @@ -12,13 +12,13 @@
->>>>  
->>>>  static int brcmf_bca_attach(struct brcmf_pub *drvr)
->>>>  {
->>>> -	pr_err("%s: executing\n", __func__);
->>>> +	pr_info("%s: executing\n", __func__);
->>>
->>> Why are these here at all?  Please just remove these entirely, you can
->>> get this information normally with ftrace.
->>>
->>> Or, just delete these functions, why have empty ones at all?
->>
->> This is a new WIP code path that Arend introduced which currently
->> deliberately does nothing (but is intended to hold firmware vendor
->> specific init in the future). So we can just drop the messages, but I
->> don't think we want to remove the code entirely.
-> 
-> Why have empty functions that do nothing?  If you want to put
-> vendor-specific anything in here, add it when that is needed.  We don't
-> like having dead code laying around in the kernel if at all possible.
+> >> +void check_hv_pending_irq_enable(void)
+> >> +{
+> >> +       struct pt_regs regs;
+> >> +
+> >> +       if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
+> >> +               return;
+> >> +
+> >> +       memset(&regs, 0, sizeof(struct pt_regs));
+> >> +       asm volatile("movl %%cs, %%eax;" : "=a" (regs.cs));
+> >> +       asm volatile("movl %%ss, %%eax;" : "=a" (regs.ss));
+> >> +       regs.orig_ax = 0xffffffff;
+> >> +       regs.flags = native_save_fl();
+> >> +
+> >> +       /*
+> >> +        * Disable irq when handle pending #HV events after
+> >> +        * re-enabling irq.
+> >> +        */
+> >> +       asm volatile("cli" : : : "memory");
+> > Just curious, Does the hypervisor injects irqs via doorbell page when
+> > interrupts are disabled with "cli" ? Trying to understand the need to
+> > cli/sti covering on "do_exc_hv".
+>
+>
+> Hi Pankaj:
+>         Thanks for your review. Yes, Hypervisor still injects #HV exception
+> when irq was disabled check_hv_pending() is called when
+> there is a #HV exception. It checks irq flag and return back without
+> handling irq event when irq was disabled.
 
-That's a question for Arend. But I think we should not be blocking this
-fix on that. I'll send a v2 that just removes the messages.
+o.k. Thanks for your reply! I am clear with this part.
 
+But want to know if there is possibility when "do_exc_hv" would keep
+handling irqs in the continuous while loop i.e from the update in the
+hv doorbell page and that can result in DOS like scenario? Is there is already
+a protection for this?
 
-- Hector
-
+Thanks,
+Pankaj
