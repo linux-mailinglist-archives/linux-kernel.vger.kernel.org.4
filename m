@@ -2,114 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 001806E4B5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD2BB6E4B5E
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbjDQOVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 10:21:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48242 "EHLO
+        id S230364AbjDQOV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 10:21:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230173AbjDQOVq (ORCPT
+        with ESMTP id S230296AbjDQOVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 10:21:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA1F8692
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:20:47 -0700 (PDT)
+        Mon, 17 Apr 2023 10:21:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B7197
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:21:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681741246;
+        s=mimecast20190719; t=1681741262;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=kX2QbjQkNKFUG0HI//3ah0FMVuwyYgCsq8gdQgA9+DY=;
-        b=AcHAcjSs2X3fR5KZXVd94ELymd1JUmtFOxS3krsqm44hgdBjDCWTGnOviD0sCRHANHVG2z
-        rjO/WBXX+LHzbvknSp8q0UcrKA8RvMQ/exSq0dJCLS5v1xcs2YnmgT1sUKeAIlj7pgK5vc
-        D8AzHnLZlhGVbGvauiLsRuL5wuUlWes=
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
- [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=hXXWTVEI1mMsVSpGycpPWe1J+aRrdeZCdqy7/mR/vH0=;
+        b=h3wu4rM/hYwbf+knvWmG5lCdZ1Hz+zPSUv7ifoETb+XCLaLwMVZ7ZXILXzTDrxghHrHEQm
+        H1VxJF1rt8vQembSWhjFmGvM7ZveRfYZUeTa1h0q6uflz7QJlWZGHOlkNwn3rKu7YWKIJS
+        bIJewseTJ2lxkZjFa2jLm9xRHI1VVS8=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-438-ejlV0ahjPnOX_EOCLLd0sQ-1; Mon, 17 Apr 2023 10:20:43 -0400
-X-MC-Unique: ejlV0ahjPnOX_EOCLLd0sQ-1
-Received: by mail-il1-f200.google.com with SMTP id b9-20020a923409000000b00326156e3a8bso7248049ila.3
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:20:43 -0700 (PDT)
+ us-mta-271--_W405W6MPCmx2EkGQQIJg-1; Mon, 17 Apr 2023 10:20:56 -0400
+X-MC-Unique: -_W405W6MPCmx2EkGQQIJg-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-2f8c2258b48so363583f8f.1
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:20:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681741242; x=1684333242;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kX2QbjQkNKFUG0HI//3ah0FMVuwyYgCsq8gdQgA9+DY=;
-        b=CYgD1+PXPdDk9PgZDz2ZOrSfYoc5OcZDTLHlfK0a4sRsbxFKh9uC/9EaOO557o3c7c
-         pVIIogCsQ0HXHz7nsytoyuXC8VgUDfcQ+koe4WI7AUlVuUuX1QIttzO5eezk6NIsdVh3
-         kf6SVnG8+26uFiI4BaYLSBTHVeM5YWGasJS1RSZyVc8+ZxInvxjNTyijeB98IFob6HjR
-         YRDKGCMQJfz/yRw4d4K7CmZLp3hXFjnz8CQtLRfAs3mylwmT9Uod4UU95v8otRMS1EKr
-         XPLQtuWdVKNzCELtaLqKavWkI73BljzihukIjimc6lapobix8YqtvgXIf68Hs8dp2Wdr
-         Ssdw==
-X-Gm-Message-State: AAQBX9c6szi+uGzHbomJ3oNhIetUY13rKIrFQ1jRO+lK6MYxOhIyjPS4
-        7ASf5XKWBn8NfL59tPPMfxERDmjnbzgVO1CfS4Py337oSNmSksH5qA5RSP4kXoZlJrI7jsskdDg
-        XeHmeRQpd/juCbwPphbiXI2zH
-X-Received: by 2002:a6b:6005:0:b0:760:ec52:254d with SMTP id r5-20020a6b6005000000b00760ec52254dmr3675139iog.2.1681741242424;
-        Mon, 17 Apr 2023 07:20:42 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bMGBwWtdzEZLE6LUMmtCHKf9b8M1jQWBOqR4lTGDGrgfArjIr2Yv/7d5NYkeWmN2JehMBRxg==
-X-Received: by 2002:a6b:6005:0:b0:760:ec52:254d with SMTP id r5-20020a6b6005000000b00760ec52254dmr3675122iog.2.1681741242233;
-        Mon, 17 Apr 2023 07:20:42 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id y14-20020a02730e000000b0040611a31d5fsm3454447jab.80.2023.04.17.07.20.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 07:20:41 -0700 (PDT)
-Date:   Mon, 17 Apr 2023 08:20:40 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Nipun Gupta <nipun.gupta@amd.com>
-Cc:     <jgg@ziepe.ca>, <linux-kernel@vger.kernel.org>,
-        <kvm@vger.kernel.org>, <masahiroy@kernel.org>, <nathan@kernel.org>,
-        <ndesaulniers@google.com>, <nicolas@fjasle.eu>, <git@amd.com>,
-        <harpreet.anand@amd.com>, <pieter.jansen-van-vuuren@amd.com>,
-        <nikhil.agarwal@amd.com>, <michal.simek@amd.com>
-Subject: Re: [PATCH v3] vfio/cdx: add support for CDX bus
-Message-ID: <20230417082040.16e0ac18.alex.williamson@redhat.com>
-In-Reply-To: <20230417083725.20193-1-nipun.gupta@amd.com>
-References: <20230417083725.20193-1-nipun.gupta@amd.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+        d=1e100.net; s=20221208; t=1681741255; x=1684333255;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hXXWTVEI1mMsVSpGycpPWe1J+aRrdeZCdqy7/mR/vH0=;
+        b=YNLHZNtmblNszeCOAZL04KKR5Vu0unHYC3ymQ3UF7b0K2iLBkKOGhC4ETEzemzidTg
+         F6Vo+kwBGtGoKv29picd7onrulHdwoQq4wWqb9YNqcGcw8IGx7KGGWw9Hzyxyu/YDdkF
+         am63xLa7BMYYJ+hKE9Lk+oXgJbX0qHT0x1TiJMeYi0JOkBaaT1ZHB7dEQUx4ouGyvZIj
+         /wBX/B7OFXueI67cTgq4huVXpabx7wbUgUoJJW0xwQPQ26hEDPF/t5EgIpF9ZESXnMTa
+         JDs10IqcPUT8lKGxJ08kdtTD23YHuorcZs7i5UBlCXzmLLieVgr+x9bY/R+sn6Va7dgG
+         LSZg==
+X-Gm-Message-State: AAQBX9fRAid9yjxF9LEXVHnxF4Mmdfc4jSnox13VfHanYrgKlawPM5j2
+        bAwJtJ4uDtByP3fxhsXUunL4/08DCyDSc6X26gy9/ViHbt9cox/7TFz1lLyWffPDA5jO476o/K+
+        PYn4xHIRvWFC0vp/bBJDZBfCL
+X-Received: by 2002:a5d:5248:0:b0:2f9:a75:b854 with SMTP id k8-20020a5d5248000000b002f90a75b854mr3792094wrc.59.1681741254928;
+        Mon, 17 Apr 2023 07:20:54 -0700 (PDT)
+X-Google-Smtp-Source: AKy350boMM0zmEGTfFZFjlk6c0N1TW//CLM7LqCyngTtQr2+J07kOHHTQAknS4PxsNoOPWRVKQQvfg==
+X-Received: by 2002:a5d:5248:0:b0:2f9:a75:b854 with SMTP id k8-20020a5d5248000000b002f90a75b854mr3792081wrc.59.1681741254560;
+        Mon, 17 Apr 2023 07:20:54 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c700:fc00:db07:68a9:6af5:ecdf? (p200300cbc700fc00db0768a96af5ecdf.dip0.t-ipconnect.de. [2003:cb:c700:fc00:db07:68a9:6af5:ecdf])
+        by smtp.gmail.com with ESMTPSA id u13-20020a05600c00cd00b003edf2dc7ca3sm12016562wmm.34.2023.04.17.07.20.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Apr 2023 07:20:53 -0700 (PDT)
+Message-ID: <b37d1876-0a74-aa52-7911-e6f78280caaa@redhat.com>
+Date:   Mon, 17 Apr 2023 16:20:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v3 0/7] Split a folio to any lower order folios
+Content-Language: en-US
+To:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Zi Yan <ziy@nvidia.com>, Zi Yan <zi.yan@sent.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
+        linux-mm@kvack.org,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Zach O'Keefe <zokeefe@google.com>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20230403201839.4097845-1-zi.yan@sent.com>
+ <20230404144727.e613116684dbd65a4b4745c1@linux-foundation.org>
+ <49ee481e-452f-61c7-2da5-28de2cf3de2@google.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <49ee481e-452f-61c7-2da5-28de2cf3de2@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Apr 2023 14:07:25 +0530
-Nipun Gupta <nipun.gupta@amd.com> wrote:
+On 16.04.23 20:11, Hugh Dickins wrote:
+> On Tue, 4 Apr 2023, Andrew Morton wrote:
+>> On Mon,  3 Apr 2023 16:18:32 -0400 Zi Yan <zi.yan@sent.com> wrote:
+>>
+>>> File folio supports any order and people would like to support flexible orders
+>>> for anonymous folio[1] too. Currently, split_huge_page() only splits a huge
+>>> page to order-0 pages, but splitting to orders higher than 0 is also useful.
+>>> This patchset adds support for splitting a huge page to any lower order pages
+>>> and uses it during file folio truncate operations.
+>>
+>> This series (and its v1 & v2) don't appear to have much in the way of
+>> detailed review.  As it's at v3 and has been fairly stable I'll queue
+>> it up for some testing now, but I do ask that some reviewers go through
+>> it please.
+> 
+> Andrew, please don't let this series drift into 6.4-rc1.
+> 
+> I've seen a bug or two (I'll point out in response to those patches),
+> but overall I don't see what the justification for the series is: done
+> because it could be done, it seems to me, but liable to add surprises.
+> 
+> The cover letter says "splitting to orders higher than 0 is also useful",
+> but it's not clear why; and the infrastructure provided seems unsuited
+> to the one use provided - I'll say more on that truncation patch.
 
-> +static long vfio_cdx_ioctl(struct vfio_device *core_vdev,
-> +			   unsigned int cmd, unsigned long arg)
-> +{
-> +	struct vfio_cdx_device *vdev =
-> +		container_of(core_vdev, struct vfio_cdx_device, vdev);
-> +	struct cdx_device *cdx_dev = to_cdx_device(core_vdev->dev);
-> +	unsigned long minsz;
-> +
-> +	switch (cmd) {
-> +	case VFIO_DEVICE_GET_INFO:
-> +	{
-> +		struct vfio_device_info info;
-> +
-> +		minsz = offsetofend(struct vfio_device_info, num_irqs);
-> +
-> +		if (copy_from_user(&info, (void __user *)arg, minsz))
-> +			return -EFAULT;
-> +
-> +		if (info.argsz < minsz)
-> +			return -EINVAL;
-> +
-> +		info.flags = VFIO_DEVICE_FLAGS_CDX;
-> +		info.flags = VFIO_DEVICE_FLAGS_RESET;
+I agree. Maybe this patch set is something we want to have in the future 
+once actual consumers that can benefit are in place, such that we can 
+show actual performance numbers with/without.
 
-Whoops, I think you mean |= for the latter one.  Thanks,
+Until then, "365 insertions(+), 68 deletions(-)" certainly needs some 
+reasonable motivation.
 
-Alex
+-- 
+Thanks,
+
+David / dhildenb
 
