@@ -2,89 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A95EF6E4022
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 08:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51FD86E4038
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 08:54:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbjDQGv0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 17 Apr 2023 02:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44760 "EHLO
+        id S230171AbjDQGyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 02:54:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbjDQGvY (ORCPT
+        with ESMTP id S230117AbjDQGyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 02:51:24 -0400
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D151729;
-        Sun, 16 Apr 2023 23:51:22 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id v9so4155784ybm.0;
-        Sun, 16 Apr 2023 23:51:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681714282; x=1684306282;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zJYvk4q6mS1dys9tzSECyNKgl5eo32ZFDWFyFDVmtjY=;
-        b=RnfTbd5H6dkXV/mD0ZC8t7VCAp3goMQ4x2Y2lM9+rkKsORuuiAzFzBciWsSjf/VIRk
-         Nl8kLE5IA2czObaDz1xq6jAkf8BE3ZgjpgXvXB07sFKIBr2neTfqlo9Lr0nnE7W7IHrG
-         j/78yhiNMtKN6zsuRalRifaXLwiSECwx5mehGhgmJXo+gC1DJpTqub1+ZrXIdAfmoW9+
-         7qtUdKcx1kFIEvrEiSiBdzGxJZ550MiqOcNSTz2fRiRKe9xHXxqm8vbhtKI0BJ3/0pbF
-         V4aKgud6uwJt0UeQkd6PJYrLN+siLcFhbi8Js1569vRLc3mcLbqCB7IvEZMzAWgjiw67
-         SwWg==
-X-Gm-Message-State: AAQBX9dLPOP70CSqof+xRIVUXV7nw8Xn+BX24/7hPKhbkTATbhCfMG/w
-        vKEMQgAyyhgQsNrGV3PI0sltyJVx2wy2fg==
-X-Google-Smtp-Source: AKy350YWz1jv13TTchreG9vqWHZmwbICSJh68YwLDY7uSb4o+t5DST05ed+03H29pUqLJq5vIrAo0A==
-X-Received: by 2002:a05:6902:114d:b0:b8f:384b:4f83 with SMTP id p13-20020a056902114d00b00b8f384b4f83mr15847354ybu.33.1681714282007;
-        Sun, 16 Apr 2023 23:51:22 -0700 (PDT)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
-        by smtp.gmail.com with ESMTPSA id h82-20020a252155000000b00b8d65899d76sm2826046ybh.47.2023.04.16.23.51.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Apr 2023 23:51:21 -0700 (PDT)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-54fbb713301so165320867b3.11;
-        Sun, 16 Apr 2023 23:51:21 -0700 (PDT)
-X-Received: by 2002:a81:b71c:0:b0:54f:b931:adf7 with SMTP id
- v28-20020a81b71c000000b0054fb931adf7mr9260584ywh.4.1681714281276; Sun, 16 Apr
- 2023 23:51:21 -0700 (PDT)
+        Mon, 17 Apr 2023 02:54:19 -0400
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C753DF
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 23:53:36 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VgELZVh_1681714379;
+Received: from 30.97.49.3(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VgELZVh_1681714379)
+          by smtp.aliyun-inc.com;
+          Mon, 17 Apr 2023 14:53:00 +0800
+Message-ID: <26cdf7b0-5d7d-68ba-da76-1ad800708946@linux.alibaba.com>
+Date:   Mon, 17 Apr 2023 14:52:59 +0800
 MIME-Version: 1.0
-References: <071e9f32c19a007f4922903282c9121898641400.1681671848.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <071e9f32c19a007f4922903282c9121898641400.1681671848.git.christophe.jaillet@wanadoo.fr>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 17 Apr 2023 08:51:10 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXGgxYubHe7dcJgLa9gsZdvPdOdpBUh1ppMnJbc=VTj+Q@mail.gmail.com>
-Message-ID: <CAMuHMdXGgxYubHe7dcJgLa9gsZdvPdOdpBUh1ppMnJbc=VTj+Q@mail.gmail.com>
-Subject: Re: [PATCH RESEND] sh: sq: Use the bitmap API when applicable
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-sh@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH] erofs: remove unneeded icur field from struct
+ z_erofs_decompress_frontend
+To:     Yue Hu <zbestahu@gmail.com>, xiang@kernel.org, chao@kernel.org,
+        linux-erofs@lists.ozlabs.org
+Cc:     jefflexu@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        huyue2@coolpad.com, zhangwen@coolpad.com
+References: <20230417064136.5890-1-zbestahu@gmail.com>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <20230417064136.5890-1-zbestahu@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 16, 2023 at 9:10 PM Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
-> Using the bitmap API is less verbose than hand writing them.
-> It also improves the semantic.
->
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Gr{oetje,eeting}s,
+On 2023/4/17 14:41, Yue Hu wrote:
+> From: Yue Hu <huyue2@coolpad.com>
+> 
+> The icur field is only used in z_erofs_try_inplace_io(). Let's just use
+> a local variable instead. And no need to check if the pcluster is inline
+> when setting icur since inline page cannot be used for inplace I/O.
+> 
+> Signed-off-by: Yue Hu <huyue2@coolpad.com>
 
-                        Geert
+Nope, it's a behavior change.
+Other users could feed more inplace I/O pages before I/O submission
+to reduce memory consumption, it's common when applying stress model
+in low memory scenarios.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Thanks,
+Gao Xiang
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> ---
+>   fs/erofs/zdata.c | 13 +++++--------
+>   1 file changed, 5 insertions(+), 8 deletions(-)
+> 
+> diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+> index f759152feffa..f8bf2b227942 100644
+> --- a/fs/erofs/zdata.c
+> +++ b/fs/erofs/zdata.c
+> @@ -554,9 +554,6 @@ struct z_erofs_decompress_frontend {
+>   	/* used for applying cache strategy on the fly */
+>   	bool backmost;
+>   	erofs_off_t headoffset;
+> -
+> -	/* a pointer used to pick up inplace I/O pages */
+> -	unsigned int icur;
+>   };
+>   
+>   #define DECOMPRESS_FRONTEND_INIT(__i) { \
+> @@ -707,11 +704,13 @@ static bool z_erofs_try_inplace_io(struct z_erofs_decompress_frontend *fe,
+>   				   struct z_erofs_bvec *bvec)
+>   {
+>   	struct z_erofs_pcluster *const pcl = fe->pcl;
+> +	/* file-backed online pages are traversed in reverse order */
+> +	unsigned int icur = pcl->pclusterpages;
+>   
+> -	while (fe->icur > 0) {
+> -		if (!cmpxchg(&pcl->compressed_bvecs[--fe->icur].page,
+> +	while (icur > 0) {
+> +		if (!cmpxchg(&pcl->compressed_bvecs[--icur].page,
+>   			     NULL, bvec->page)) {
+> -			pcl->compressed_bvecs[fe->icur] = *bvec;
+> +			pcl->compressed_bvecs[icur] = *bvec;
+>   			return true;
+>   		}
+>   	}
+> @@ -877,8 +876,6 @@ static int z_erofs_collector_begin(struct z_erofs_decompress_frontend *fe)
+>   	}
+>   	z_erofs_bvec_iter_begin(&fe->biter, &fe->pcl->bvset,
+>   				Z_EROFS_INLINE_BVECS, fe->pcl->vcnt);
+> -	/* since file-backed online pages are traversed in reverse order */
+> -	fe->icur = z_erofs_pclusterpages(fe->pcl);
+>   	return 0;
+>   }
+>   
