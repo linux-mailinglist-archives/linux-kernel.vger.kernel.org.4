@@ -2,172 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F72B6E3FF0
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 08:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91DA16E3FF8
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 08:42:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbjDQGkE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 17 Apr 2023 02:40:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36020 "EHLO
+        id S229664AbjDQGmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 02:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbjDQGj5 (ORCPT
+        with ESMTP id S229458AbjDQGmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 02:39:57 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233CE213A;
-        Sun, 16 Apr 2023 23:39:56 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id C29A224E217;
-        Mon, 17 Apr 2023 14:39:46 +0800 (CST)
-Received: from EXMBX067.cuchost.com (172.16.6.67) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 17 Apr
- 2023 14:39:46 +0800
-Received: from localhost.localdomain (183.27.97.249) by EXMBX067.cuchost.com
- (172.16.6.67) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 17 Apr
- 2023 14:39:45 +0800
-From:   Mason Huo <mason.huo@starfivetech.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-CC:     Shengyu Qu <wiagn233@outlook.com>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>,
-        Mason Huo <mason.huo@starfivetech.com>
-Subject: [PATCH v2 3/3] riscv: dts: starfive: Add cpu scaling for JH7110 SoC
-Date:   Mon, 17 Apr 2023 14:39:42 +0800
-Message-ID: <20230417063942.3141-4-mason.huo@starfivetech.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230417063942.3141-1-mason.huo@starfivetech.com>
-References: <20230417063942.3141-1-mason.huo@starfivetech.com>
+        Mon, 17 Apr 2023 02:42:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3011729
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 23:41:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681713673;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OxKMHMF5ij1bxNLeFZRcL6SeBcLJINT9bFcDHFvcGBQ=;
+        b=YuETFynOezCctj1CJlHYhFR+u8Gtev3GqeiR4y5+NBR8qP9E3DPA4HBtcAIyNzhvt4sDLc
+        kVVfYzhcOUvBNMtBVOY2BcM6VhjQ7bc3f3xvBEmtceifg98HEa3AKCm6ygU2JY+y0VuO19
+        roQOQ21fzHzFbHc1bga78lJrY93CVNk=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-671-yQjhFGMWPISM5mTPEXDjlA-1; Mon, 17 Apr 2023 02:41:11 -0400
+X-MC-Unique: yQjhFGMWPISM5mTPEXDjlA-1
+Received: by mail-qk1-f198.google.com with SMTP id 70-20020a370b49000000b0074de765f08eso840278qkl.18
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 23:41:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681713671; x=1684305671;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OxKMHMF5ij1bxNLeFZRcL6SeBcLJINT9bFcDHFvcGBQ=;
+        b=At+v4T6cV95jJ18piVokVVpf57lMK1FcenpJai8KU232fdPxQQe8mQ2BGddHSYCkIL
+         YtU/mFPj5Q6SIWYzLHI6VP2/GdqqwjLxNaxZA0s7NFbjziSY21DDXzRvY+o//1aeGe42
+         PScrg/Yy+bbM1teqS0prjP2aa5ifYPPzAJh8txmgVsGSvU60hIZE1bQc+U9CRhRit/kO
+         jOTBPFS6eRn4U8OAVTzLpEMFw8R4EJJYxmqeXMIzRT2FJfPAnhPJ8RfhmOWKvAuugOoh
+         dXeQT+4OthfpXJIB032+HFedjkOo0eOnAdTwu+r34877ncNId13ZNZ39Vax1O9E2K0rJ
+         2bdw==
+X-Gm-Message-State: AAQBX9cOtv1FLpt8LykUTRC1o/h9K0LutwlgKnBrvrod1iVHyvWHEYCA
+        Yz2CISNAI9ynJNlHL9E/JL1bYLoemikjgsxib8J7AydzYF0Mo0IMD//fgkyz8XpyJCdMiRyrs5A
+        soU2FKhXDfhoHFQywsDiUSgIL
+X-Received: by 2002:a05:622a:144:b0:3e3:9036:8d7b with SMTP id v4-20020a05622a014400b003e390368d7bmr23144629qtw.24.1681713671548;
+        Sun, 16 Apr 2023 23:41:11 -0700 (PDT)
+X-Google-Smtp-Source: AKy350awUisy2QmOytI/7wHAUSKfUVvRV0PC8LxBgH9zz1azFDxXLfpwgedyZCjCtr2bsDRdI6Gagw==
+X-Received: by 2002:a05:622a:144:b0:3e3:9036:8d7b with SMTP id v4-20020a05622a014400b003e390368d7bmr23144611qtw.24.1681713671291;
+        Sun, 16 Apr 2023 23:41:11 -0700 (PDT)
+Received: from redhat.com ([185.199.103.251])
+        by smtp.gmail.com with ESMTPSA id bi8-20020a05620a318800b007456b51ee13sm1898249qkb.16.2023.04.16.23.41.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Apr 2023 23:41:10 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 02:41:04 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Alvaro Karsz <alvaro.karsz@solid-run.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net] virtio-net: reject small vring sizes
+Message-ID: <20230417023911-mutt-send-email-mst@kernel.org>
+References: <20230416074607.292616-1-alvaro.karsz@solid-run.com>
+ <AM0PR04MB4723C6E99A217F51973710F5D49F9@AM0PR04MB4723.eurprd04.prod.outlook.com>
+ <20230416164453-mutt-send-email-mst@kernel.org>
+ <CACGkMEvFhVyWb5+ET_akPvnjUq04+ZbJC8o_GtNBWqSMGNum8A@mail.gmail.com>
+ <20230417021725-mutt-send-email-mst@kernel.org>
+ <AM0PR04MB4723B8489F8F9AE547393697D49C9@AM0PR04MB4723.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [183.27.97.249]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX067.cuchost.com
- (172.16.6.67)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <AM0PR04MB4723B8489F8F9AE547393697D49C9@AM0PR04MB4723.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the operating-points-v2 to support cpu scaling on StarFive JH7110 SoC.
-It supports up to 4 cpu frequency loads.
+On Mon, Apr 17, 2023 at 06:38:43AM +0000, Alvaro Karsz wrote:
+> > Actually, I think that all you need to do is disable NETIF_F_SG,
+> > and things will work, no?
+> 
+> I think that this is not so simple, if I understand correctly, by disabling NETIF_F_SG we will never receive a chained skbs to transmit, but we still have more functionality to address, for example:
+> * The TX timeouts.
 
-Signed-off-by: Mason Huo <mason.huo@starfivetech.com>
----
- .../jh7110-starfive-visionfive-2.dtsi         | 17 ++++++++++
- arch/riscv/boot/dts/starfive/jh7110.dtsi      | 33 +++++++++++++++++++
- 2 files changed, 50 insertions(+)
+I don't get it. With a linear skb we can transmit it as long as there's
+space for 2 entries in the vq: header and data. What's the source of the
+timeouts?
 
-diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-index cca1c8040801..b25e6d68ce53 100644
---- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-+++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-@@ -227,3 +227,20 @@ &uart0 {
- 	pinctrl-0 = <&uart0_pins>;
- 	status = "okay";
- };
-+
-+&U74_1 {
-+	cpu-supply = <&vdd_cpu>;
-+};
-+
-+&U74_2 {
-+	cpu-supply = <&vdd_cpu>;
-+};
-+
-+&U74_3 {
-+	cpu-supply = <&vdd_cpu>;
-+};
-+
-+&U74_4 {
-+	cpu-supply = <&vdd_cpu>;
-+};
-+
-diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-index 4c5fdb905da8..7eef88d2cedb 100644
---- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
-+++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-@@ -53,6 +53,9 @@ U74_1: cpu@1 {
- 			next-level-cache = <&ccache>;
- 			riscv,isa = "rv64imafdc_zba_zbb";
- 			tlb-split;
-+			operating-points-v2 = <&cpu_opp>;
-+			clocks = <&syscrg JH7110_SYSCLK_CPU_CORE>;
-+			clock-names = "cpu";
- 
- 			cpu1_intc: interrupt-controller {
- 				compatible = "riscv,cpu-intc";
-@@ -79,6 +82,9 @@ U74_2: cpu@2 {
- 			next-level-cache = <&ccache>;
- 			riscv,isa = "rv64imafdc_zba_zbb";
- 			tlb-split;
-+			operating-points-v2 = <&cpu_opp>;
-+			clocks = <&syscrg JH7110_SYSCLK_CPU_CORE>;
-+			clock-names = "cpu";
- 
- 			cpu2_intc: interrupt-controller {
- 				compatible = "riscv,cpu-intc";
-@@ -105,6 +111,9 @@ U74_3: cpu@3 {
- 			next-level-cache = <&ccache>;
- 			riscv,isa = "rv64imafdc_zba_zbb";
- 			tlb-split;
-+			operating-points-v2 = <&cpu_opp>;
-+			clocks = <&syscrg JH7110_SYSCLK_CPU_CORE>;
-+			clock-names = "cpu";
- 
- 			cpu3_intc: interrupt-controller {
- 				compatible = "riscv,cpu-intc";
-@@ -131,6 +140,9 @@ U74_4: cpu@4 {
- 			next-level-cache = <&ccache>;
- 			riscv,isa = "rv64imafdc_zba_zbb";
- 			tlb-split;
-+			operating-points-v2 = <&cpu_opp>;
-+			clocks = <&syscrg JH7110_SYSCLK_CPU_CORE>;
-+			clock-names = "cpu";
- 
- 			cpu4_intc: interrupt-controller {
- 				compatible = "riscv,cpu-intc";
-@@ -164,6 +176,27 @@ core4 {
- 		};
- 	};
- 
-+	cpu_opp: opp-table-0 {
-+			compatible = "operating-points-v2";
-+			opp-shared;
-+			opp-375000000 {
-+					opp-hz = /bits/ 64 <375000000>;
-+					opp-microvolt = <800000>;
-+			};
-+			opp-500000000 {
-+					opp-hz = /bits/ 64 <500000000>;
-+					opp-microvolt = <800000>;
-+			};
-+			opp-750000000 {
-+					opp-hz = /bits/ 64 <750000000>;
-+					opp-microvolt = <800000>;
-+			};
-+			opp-1500000000 {
-+					opp-hz = /bits/ 64 <1500000000>;
-+					opp-microvolt = <1040000>;
-+			};
-+	};
-+
- 	gmac0_rgmii_rxin: gmac0-rgmii-rxin-clock {
- 		compatible = "fixed-clock";
- 		clock-output-names = "gmac0_rgmii_rxin";
--- 
-2.39.2
+> * Guest GSO/big MTU (without VIRTIO_NET_F_MRG_RXBUF?), we can't chain page size buffers anymore.
+
+I think we can.  mergeable_min_buf_len will just be large.
+
+
+> > Alvaro, can you try?
+> 
+> It won't matter at the moment, we'll get TX timeout after the first tx packet, we need to address this part as well.
 
