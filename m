@@ -2,233 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81E756E53D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 23:29:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 172E26E53DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 23:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230368AbjDQV3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 17:29:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34916 "EHLO
+        id S230408AbjDQVaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 17:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjDQV3L (ORCPT
+        with ESMTP id S230364AbjDQVaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 17:29:11 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9006FF;
-        Mon, 17 Apr 2023 14:29:09 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-552ae3e2cbeso61562807b3.13;
-        Mon, 17 Apr 2023 14:29:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681766948; x=1684358948;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=55hC0C6PEmc4uh5DYwJYIxp6KDXjWnD+6ic8XLUbNJk=;
-        b=YKbaQH880ffbrD1wSOeYaho611fZvl8uvV2IkFui1/mpcsuGl8HTmTKzTVyNAeeWRv
-         K2HCmGqXq9q9RWCBtcngTm57FIzo6bzfEBLWPGXhcknNkGBtu/JWCSUGP994oL9GdPs1
-         BXU6gnQ18K9Yy8NqmxORm35quAoZireqRWLj4qXR7WhrabKwun03lI1kOWmO6B8EyO95
-         zagmJFtTWpSdzvCaZOb7G5RHn8+Ohcw55170PB6SgxcEysKW6yrM5vqkLbQ2DNaYhKGL
-         so8Hv47MKZSHkTptbG3Tp0ZjZM6r8NOfl1kiqxIEU+uxEy7RT8ZMjzyS7CUnFb7LhFf+
-         1byw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681766948; x=1684358948;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=55hC0C6PEmc4uh5DYwJYIxp6KDXjWnD+6ic8XLUbNJk=;
-        b=Ycge3riNQ6QRU/LPs3RLP4IW+BZD/tC62Nqu5zOOcGD/TEqnJhr99BUvNIODKcXU/v
-         xHC3UF+AWQ4hxJ7HEIbQfEC1WOv3k4j2hulcyQAwlpYItcLLPft4uBO6wvnYOBif/Obd
-         nfakUcbWWjju7wc9tt/1EzpfobDsaCJLdx+bntDbsyZntxkEKWm4mp1ptYVRsBDycaJA
-         7gXZvBQCxpIlM1/nDroGal9QMoxmZkQuSIv4N3wRpUGDbINe+EEEEOA//muDUNobFcxh
-         p8WBNCTz4La08SH7H/iVZHPDiRUtVwSgtbshIm1vbWVMC4R5auy9qdbNh0HR9mowpxT/
-         ZrSw==
-X-Gm-Message-State: AAQBX9el1gMj2A8qjVDReFD2r8NP+y6zjv3CkxLexFsVBYVe0StCvkVa
-        gvDEkCzg64bN6g9eZSdc8cLfI581dUM=
-X-Google-Smtp-Source: AKy350Z4Nlte19iUKzHlWFsNgXXDy8Cm/QC1uz8bpSc6mOHOgOUn+xPO/slxQ2mViPvD61RnB4T2MQ==
-X-Received: by 2002:a81:4f09:0:b0:541:66e8:d4da with SMTP id d9-20020a814f09000000b0054166e8d4damr14851383ywb.29.1681766947164;
-        Mon, 17 Apr 2023 14:29:07 -0700 (PDT)
-Received: from tachyon.tail92c87.ts.net ([192.159.180.233])
-        by smtp.gmail.com with ESMTPSA id cl22-20020a05690c0c1600b0054fbadd96c4sm3332372ywb.126.2023.04.17.14.29.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 14:29:06 -0700 (PDT)
-Sender: Tavian Barnes <tavianator@gmail.com>
-From:   tavianator@tavianator.com
-To:     linux-kernel@vger.kernel.org
-Cc:     Tavian Barnes <tavianator@tavianator.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        Mon, 17 Apr 2023 17:30:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2BED46BC;
+        Mon, 17 Apr 2023 14:30:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FBE562A9F;
+        Mon, 17 Apr 2023 21:30:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20EE4C433EF;
+        Mon, 17 Apr 2023 21:30:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681767018;
+        bh=c9wyqvm7qvjDBra8OeFJcTD+B23bdO0zYToSSBVC3Cc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XeS5LqpCY6qUIHuj1KCf+aHOKTaDdPhg770tNEVWdf6eMV9qHH21RMyChyUvdbiab
+         zsHVEg/rjU0pr6eowt8qtxohgbwu49dIw0JKRb5A72jLRYfG04WtA4aYMm4oYFVSPN
+         lIe4we7SsjvnGC5XUFrQUxZFwYmT9qgZYaCwYpiQGmJwKgKnt9UTJ7FZZo72mcwdPw
+         K35ygfgXR5kPz9Byu6TFuWJmL3vrXsiQUu6KW3O4MUvJTCAloX9SicgG8EZ8fVHWss
+         6Pns+08qZl02eWTkuwJ9JomuEKNc6nig6FmWnptluXztuFzdO2649afH4q8ret/I97
+         +KFZs92h5ydqA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id F38EB403B5; Mon, 17 Apr 2023 18:30:14 -0300 (-03)
+Date:   Mon, 17 Apr 2023 18:30:14 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Darren Hart <dvhart@infradead.org>,
         Davidlohr Bueso <dave@stgolabs.net>,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests/futex: Fix pthread_create() error handling
-Date:   Mon, 17 Apr 2023 17:28:57 -0400
-Message-Id: <42a8405a78936a3ec96bbd0c6b5d983291faf646.1681766292.git.tavianator@tavianator.com>
-X-Mailer: git-send-email 2.40.0
+        James Clark <james.clark@arm.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
+        Song Liu <song@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Stephen Brennan <stephen.s.brennan@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        German Gomez <german.gomez@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v7 3/5] perf namespaces: Add reference count checking
+Message-ID: <ZD26ZlqSbgSyH5lX@kernel.org>
+References: <20230407230405.2931830-1-irogers@google.com>
+ <20230407230405.2931830-4-irogers@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230407230405.2931830-4-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tavian Barnes <tavianator@tavianator.com>
+Em Fri, Apr 07, 2023 at 04:04:03PM -0700, Ian Rogers escreveu:
+> Add reference count checking controlled by REFCNT_CHECKING ifdef. The
+> reference count checking interposes an allocated pointer between the
+> reference counted struct on a get and frees the pointer on a put.
+> Accesses after a put cause faults and use after free, missed puts are
+> caughts as leaks and double puts are double frees.
+> 
+> This checking helped resolve a memory leak and use after free:
+> https://lore.kernel.org/linux-perf-users/CAP-5=fWZH20L4kv-BwVtGLwR=Em3AOOT+Q4QGivvQuYn5AsPRg@mail.gmail.com/
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/builtin-inject.c  |   2 +-
+>  tools/perf/util/annotate.c   |   2 +-
+>  tools/perf/util/dso.c        |   2 +-
+>  tools/perf/util/dsos.c       |   2 +-
+>  tools/perf/util/namespaces.c | 132 ++++++++++++++++++++---------------
+>  tools/perf/util/namespaces.h |   3 +-
+>  tools/perf/util/symbol.c     |   2 +-
+>  7 files changed, 83 insertions(+), 62 deletions(-)
+> 
+> diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
+> index fd2b38458a5d..fe6ddcf7fb1e 100644
+> --- a/tools/perf/builtin-inject.c
+> +++ b/tools/perf/builtin-inject.c
+> @@ -632,7 +632,7 @@ static int dso__read_build_id(struct dso *dso)
+>  	else if (dso->nsinfo) {
+>  		char *new_name;
+>  
+> -		new_name = filename_with_chroot(dso->nsinfo->pid,
+> +		new_name = filename_with_chroot(RC_CHK_ACCESS(dso->nsinfo)->pid,
+>  						dso->long_name);
 
-The pthread APIs return error codes, rather than setting errno.
+To reduce these:
 
-Signed-off-by: Tavian Barnes <tavianator@tavianator.com>
+
+From c80478cfc86cf24f6f075576d731d99e0fa8fe4f Mon Sep 17 00:00:00 2001
+From: Arnaldo Carvalho de Melo <acme@redhat.com>
+Date: Mon, 17 Apr 2023 18:28:01 -0300
+Subject: [PATCH 1/1] perf dso: Add dso__filename_with_chroot() to reduce
+ number of accesses to dso->nsinfo members
+
+We'll need to reference count dso->nsinfo, so reduce the number of
+direct accesses by having a shorter form of obtaining a filename with
+a chroot (namespace one).
+
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>
+Cc: Dmitriy Vyukov <dvyukov@google.com>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Riccardo Mancini <rickyman7@gmail.com>
+Cc: Stephane Eranian <eranian@google.com>
+Cc: Stephen Brennan <stephen.s.brennan@oracle.com>
+Link: https://lore.kernel.org/lkml/
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 ---
- .../selftests/futex/functional/futex_requeue.c    | 10 ++++++----
- .../functional/futex_requeue_pi_mismatched_ops.c  |  5 +++--
- .../selftests/futex/functional/futex_wait.c       | 15 +++++++++------
- .../functional/futex_wait_private_mapped_file.c   |  2 +-
- .../functional/futex_wait_uninitialized_heap.c    |  2 +-
- .../selftests/futex/functional/futex_waitv.c      | 10 ++++++----
- 6 files changed, 26 insertions(+), 18 deletions(-)
+ tools/perf/builtin-inject.c | 4 +---
+ tools/perf/util/annotate.c  | 3 +--
+ tools/perf/util/dso.c       | 7 ++++++-
+ tools/perf/util/dso.h       | 2 ++
+ tools/perf/util/dsos.c      | 3 +--
+ tools/perf/util/symbol.c    | 3 +--
+ 6 files changed, 12 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/futex/functional/futex_requeue.c b/tools/testing/selftests/futex/functional/futex_requeue.c
-index 51485be6eb2f..76f672ad5263 100644
---- a/tools/testing/selftests/futex/functional/futex_requeue.c
-+++ b/tools/testing/selftests/futex/functional/futex_requeue.c
-@@ -73,8 +73,9 @@ int main(int argc, char *argv[])
- 	/*
- 	 * Requeue a waiter from f1 to f2, and wake f2.
- 	 */
--	if (pthread_create(&waiter[0], NULL, waiterfn, NULL))
--		error("pthread_create failed\n", errno);
-+	res = pthread_create(&waiter[0], NULL, waiterfn, NULL);
-+	if (res)
-+		error("pthread_create failed\n", res);
+diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
+index 76723ac314b60b80..61766eead4f48e34 100644
+--- a/tools/perf/builtin-inject.c
++++ b/tools/perf/builtin-inject.c
+@@ -630,10 +630,8 @@ static int dso__read_build_id(struct dso *dso)
+ 	if (filename__read_build_id(dso->long_name, &dso->bid) > 0)
+ 		dso->has_build_id = true;
+ 	else if (dso->nsinfo) {
+-		char *new_name;
++		char *new_name = dso__filename_with_chroot(dso, dso->long_name);
  
- 	usleep(WAKE_WAIT_US);
+-		new_name = filename_with_chroot(dso->nsinfo->pid,
+-						dso->long_name);
+ 		if (new_name && filename__read_build_id(new_name, &dso->bid) > 0)
+ 			dso->has_build_id = true;
+ 		free(new_name);
+diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
+index e2693a1c28d5989f..ca9f0add68f461e4 100644
+--- a/tools/perf/util/annotate.c
++++ b/tools/perf/util/annotate.c
+@@ -1692,8 +1692,7 @@ static int dso__disassemble_filename(struct dso *dso, char *filename, size_t fil
  
-@@ -105,8 +106,9 @@ int main(int argc, char *argv[])
- 	 * At futex_wake, wake INT_MAX (should be exactly 7).
- 	 */
- 	for (i = 0; i < 10; i++) {
--		if (pthread_create(&waiter[i], NULL, waiterfn, NULL))
--			error("pthread_create failed\n", errno);
-+		res = pthread_create(&waiter[i], NULL, waiterfn, NULL);
-+		if (res)
-+			error("pthread_create failed\n", res);
- 	}
+ 		mutex_lock(&dso->lock);
+ 		if (access(filename, R_OK) && errno == ENOENT && dso->nsinfo) {
+-			char *new_name = filename_with_chroot(dso->nsinfo->pid,
+-							      filename);
++			char *new_name = dso__filename_with_chroot(dso, filename);
+ 			if (new_name) {
+ 				strlcpy(filename, new_name, filename_size);
+ 				free(new_name);
+diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
+index e36b418df2c68cc2..0bc288f29a548dc9 100644
+--- a/tools/perf/util/dso.c
++++ b/tools/perf/util/dso.c
+@@ -491,6 +491,11 @@ static int do_open(char *name)
+ 	return -1;
+ }
  
- 	usleep(WAKE_WAIT_US);
-diff --git a/tools/testing/selftests/futex/functional/futex_requeue_pi_mismatched_ops.c b/tools/testing/selftests/futex/functional/futex_requeue_pi_mismatched_ops.c
-index d0a4d332ea44..e28de62bc03a 100644
---- a/tools/testing/selftests/futex/functional/futex_requeue_pi_mismatched_ops.c
-+++ b/tools/testing/selftests/futex/functional/futex_requeue_pi_mismatched_ops.c
-@@ -79,8 +79,9 @@ int main(int argc, char *argv[])
- 	ksft_print_msg("%s: Detect mismatched requeue_pi operations\n",
- 	       basename(argv[0]));
++char *dso__filename_with_chroot(const struct dso *dso, const char *filename)
++{
++	return filename_with_chroot(dso->nsinfo->pid, filename);
++}
++
+ static int __open_dso(struct dso *dso, struct machine *machine)
+ {
+ 	int fd = -EINVAL;
+@@ -515,7 +520,7 @@ static int __open_dso(struct dso *dso, struct machine *machine)
+ 		if (errno != ENOENT || dso->nsinfo == NULL)
+ 			goto out;
  
--	if (pthread_create(&child, NULL, blocking_child, NULL)) {
--		error("pthread_create\n", errno);
-+	ret = pthread_create(&child, NULL, blocking_child, NULL);
-+	if (ret) {
-+		error("pthread_create\n", ret);
- 		ret = RET_ERROR;
- 		goto out;
- 	}
-diff --git a/tools/testing/selftests/futex/functional/futex_wait.c b/tools/testing/selftests/futex/functional/futex_wait.c
-index 685140d9b93d..2e06539e5bb7 100644
---- a/tools/testing/selftests/futex/functional/futex_wait.c
-+++ b/tools/testing/selftests/futex/functional/futex_wait.c
-@@ -78,8 +78,9 @@ int main(int argc, char *argv[])
+-		new_name = filename_with_chroot(dso->nsinfo->pid, name);
++		new_name = dso__filename_with_chroot(dso, name);
+ 		if (!new_name)
+ 			goto out;
  
- 	/* Testing a private futex */
- 	info("Calling private futex_wait on futex: %p\n", futex);
--	if (pthread_create(&waiter, NULL, waiterfn, (void *) &flags))
--		error("pthread_create failed\n", errno);
-+	res = pthread_create(&waiter, NULL, waiterfn, (void *) &flags);
-+	if (res)
-+		error("pthread_create failed\n", res);
+diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
+index 58d94175e7148049..0b7c7633b9f6667d 100644
+--- a/tools/perf/util/dso.h
++++ b/tools/perf/util/dso.h
+@@ -266,6 +266,8 @@ static inline bool dso__has_symbols(const struct dso *dso)
+ 	return !RB_EMPTY_ROOT(&dso->symbols.rb_root);
+ }
  
- 	usleep(WAKE_WAIT_US);
++char *dso__filename_with_chroot(const struct dso *dso, const char *filename);
++
+ bool dso__sorted_by_name(const struct dso *dso);
+ void dso__set_sorted_by_name(struct dso *dso);
+ void dso__sort_by_name(struct dso *dso);
+diff --git a/tools/perf/util/dsos.c b/tools/perf/util/dsos.c
+index 2bd23e4cf19efaa7..cf80aa42dd07b036 100644
+--- a/tools/perf/util/dsos.c
++++ b/tools/perf/util/dsos.c
+@@ -91,8 +91,7 @@ bool __dsos__read_build_ids(struct list_head *head, bool with_hits)
+ 			have_build_id	  = true;
+ 			pos->has_build_id = true;
+ 		} else if (errno == ENOENT && pos->nsinfo) {
+-			char *new_name = filename_with_chroot(pos->nsinfo->pid,
+-							      pos->long_name);
++			char *new_name = dso__filename_with_chroot(pos, pos->long_name);
  
-@@ -106,8 +107,9 @@ int main(int argc, char *argv[])
- 	futex = shared_data;
+ 			if (new_name && filename__read_build_id(new_name,
+ 								&pos->bid) > 0) {
+diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
+index 91ebf93e0c20bd24..e7f63670688e8e59 100644
+--- a/tools/perf/util/symbol.c
++++ b/tools/perf/util/symbol.c
+@@ -1963,8 +1963,7 @@ int dso__load(struct dso *dso, struct map *map)
  
- 	info("Calling shared (page anon) futex_wait on futex: %p\n", futex);
--	if (pthread_create(&waiter, NULL, waiterfn, NULL))
--		error("pthread_create failed\n", errno);
-+	res = pthread_create(&waiter, NULL, waiterfn, NULL);
-+	if (res)
-+		error("pthread_create failed\n", res);
- 
- 	usleep(WAKE_WAIT_US);
- 
-@@ -145,8 +147,9 @@ int main(int argc, char *argv[])
- 	futex = shm;
- 
- 	info("Calling shared (file backed) futex_wait on futex: %p\n", futex);
--	if (pthread_create(&waiter, NULL, waiterfn, NULL))
--		error("pthread_create failed\n", errno);
-+	res = pthread_create(&waiter, NULL, waiterfn, NULL);
-+	if (res)
-+		error("pthread_create failed\n", res);
- 
- 	usleep(WAKE_WAIT_US);
- 
-diff --git a/tools/testing/selftests/futex/functional/futex_wait_private_mapped_file.c b/tools/testing/selftests/futex/functional/futex_wait_private_mapped_file.c
-index fb4148f23fa3..7b4a28e8dc1a 100644
---- a/tools/testing/selftests/futex/functional/futex_wait_private_mapped_file.c
-+++ b/tools/testing/selftests/futex/functional/futex_wait_private_mapped_file.c
-@@ -100,7 +100,7 @@ int main(int argc, char **argv)
- 		basename(argv[0]));
- 
- 	ret = pthread_create(&thr, NULL, thr_futex_wait, NULL);
--	if (ret < 0) {
-+	if (ret) {
- 		fprintf(stderr, "pthread_create error\n");
- 		ret = RET_ERROR;
- 		goto out;
-diff --git a/tools/testing/selftests/futex/functional/futex_wait_uninitialized_heap.c b/tools/testing/selftests/futex/functional/futex_wait_uninitialized_heap.c
-index ed9cd07e31c1..bf7529bd7f0d 100644
---- a/tools/testing/selftests/futex/functional/futex_wait_uninitialized_heap.c
-+++ b/tools/testing/selftests/futex/functional/futex_wait_uninitialized_heap.c
-@@ -103,7 +103,7 @@ int main(int argc, char **argv)
- 
- 	ret = pthread_create(&thr, NULL, wait_thread, NULL);
- 	if (ret) {
--		error("pthread_create\n", errno);
-+		error("pthread_create\n", ret);
- 		ret = RET_ERROR;
- 		goto out;
- 	}
-diff --git a/tools/testing/selftests/futex/functional/futex_waitv.c b/tools/testing/selftests/futex/functional/futex_waitv.c
-index a94337f677e1..d2400b3c7d0a 100644
---- a/tools/testing/selftests/futex/functional/futex_waitv.c
-+++ b/tools/testing/selftests/futex/functional/futex_waitv.c
-@@ -94,8 +94,9 @@ int main(int argc, char *argv[])
- 	}
- 
- 	/* Private waitv */
--	if (pthread_create(&waiter, NULL, waiterfn, NULL))
--		error("pthread_create failed\n", errno);
-+	res = pthread_create(&waiter, NULL, waiterfn, NULL);
-+	if (res)
-+		error("pthread_create failed\n", res);
- 
- 	usleep(WAKE_WAIT_US);
- 
-@@ -127,8 +128,9 @@ int main(int argc, char *argv[])
- 		waitv[i].__reserved = 0;
- 	}
- 
--	if (pthread_create(&waiter, NULL, waiterfn, NULL))
--		error("pthread_create failed\n", errno);
-+	res = pthread_create(&waiter, NULL, waiterfn, NULL);
-+	if (res)
-+		error("pthread_create failed\n", res);
- 
- 	usleep(WAKE_WAIT_US);
- 
+ 		is_reg = is_regular_file(name);
+ 		if (!is_reg && errno == ENOENT && dso->nsinfo) {
+-			char *new_name = filename_with_chroot(dso->nsinfo->pid,
+-							      name);
++			char *new_name = dso__filename_with_chroot(dso, name);
+ 			if (new_name) {
+ 				is_reg = is_regular_file(new_name);
+ 				strlcpy(name, new_name, PATH_MAX);
 -- 
-2.40.0
+2.39.2
 
