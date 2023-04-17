@@ -2,387 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EB726E43DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 11:28:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9ADB6E441D
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 11:39:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231221AbjDQJ2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 05:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56366 "EHLO
+        id S230209AbjDQJjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 05:39:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230433AbjDQJ1l (ORCPT
+        with ESMTP id S230405AbjDQJjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 05:27:41 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564992D62;
-        Mon, 17 Apr 2023 02:27:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681723644; x=1713259644;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=MHGEtcKcY+puHEIF6HdRQcSnr9Fy0usGjiNOAMUcUJU=;
-  b=JRaog/aMbbgzc5p1QSjothqEvTy23HYZGWz7kG/BHr1SMuh2TrGo1WOr
-   Tb6pu7TostXQGcuGZ5udKXkM/UtAduzxIPcqFedQWqJoGYAydNe9LoWMt
-   UKRdKfm21bq4+A39fiO+tRAuVi5ZjvX8wkZGjtOvVIXNfSzRXYORIjvEx
-   LmMKAq0fpGQdtmsDl+mUQMJfR9GzwySMvPnicAopaQ5Oixwr9DyKlQQyF
-   OGk4t/sSr28KTx4uLI9Gk752Emp++0jGxFQMsk/ts7TWwna7nlXS98a/D
-   DoG2s7Bn1LsKXfRMVhl1lzFdcpHMasDq7rrSfVJDcU/3lWlhw3LUMBGI9
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="344846521"
-X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
-   d="scan'208";a="344846521"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 02:27:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="684094864"
-X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
-   d="scan'208";a="684094864"
-Received: from anicosix-mobl2.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.249.35.34])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 02:27:19 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Xu Yilun <yilun.xu@intel.com>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-        linux-fpga@vger.kernel.org, Lee Jones <lee@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Russ Weight <russell.h.weight@intel.com>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-hwmon@vger.kernel.org,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v3 4/4] mfd: intel-m10-bmc: Manage access to MAX 10 fw handshake registers
-Date:   Mon, 17 Apr 2023 12:26:53 +0300
-Message-Id: <20230417092653.16487-5-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230417092653.16487-1-ilpo.jarvinen@linux.intel.com>
-References: <20230417092653.16487-1-ilpo.jarvinen@linux.intel.com>
+        Mon, 17 Apr 2023 05:39:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A2959C8
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 02:37:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681724160;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZozA7MZ/y/4iKOl2TeZkQx7oEXefDUw2m6z73qNdQrc=;
+        b=HpKED/0jeCvoOmaSFaaIz3CJib9ma5+q6U1XSDr790pQZa/LgBMleb0O+QbML3kA4PGJF9
+        9EY4sHmeKoq/kIvqqhtuzS9qkbuii31oAeY6IWM4xhJTZgzaDnQCGvVzq3XMKLJiMsdbPN
+        jaVROCc4MfH0Ud/xTuB60B45cHMnens=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-596-MfDADmVCNIuxQSgX-JDeog-1; Mon, 17 Apr 2023 05:29:54 -0400
+X-MC-Unique: MfDADmVCNIuxQSgX-JDeog-1
+Received: by mail-wm1-f71.google.com with SMTP id bd16-20020a05600c1f1000b003f172e02edbso1848966wmb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 02:29:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681723793; x=1684315793;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZozA7MZ/y/4iKOl2TeZkQx7oEXefDUw2m6z73qNdQrc=;
+        b=BX0iWSYJj+O3a4p+pCbRhcwR/LIjD6r5xfj4XZhilDe1kK62ZHjC63CAsMA26nNqSu
+         p35U7PA0Ks81oUnv9CMvx86xnfYcscVGxZZQZD8gxxTTa58+rFg8o4mWZ07QBZoEmhMz
+         P6mhdOIxqOPNTBtej3IUv9egKSF1WlEkk/AKwguJ0gUBrTLmw9/Rct8//iFyoctOfaK1
+         WZ6k9Cyq0MUwf0ohTg9A5Y6ONzf0/FH8JhW1yBUgmDEE2NBVn3Qq+rOIDYMNbonAMqJW
+         NaSs95X79LLCpmS55KjRtc8vOPwAdupQrY3ZfQ//GWkJBcIUsVP93d0RfyaCy/JPGFRL
+         uH8w==
+X-Gm-Message-State: AAQBX9eBdXgVMmPXlzP2pvOG6dTqoEzWmhDBV5q+Z4gyoZ6fdL0B2RCP
+        rzZserMqCi/HEwvFPsJxK98STsF7hYFCveR3RiZLW3MiGAP8tkU0VOLAoXcz5hM5fUXak3LxexX
+        NT4f2lYUs0f31/38g5dL1tsq5
+X-Received: by 2002:a05:600c:231a:b0:3f0:4e04:b8f8 with SMTP id 26-20020a05600c231a00b003f04e04b8f8mr9631422wmo.39.1681723793326;
+        Mon, 17 Apr 2023 02:29:53 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bVKcINv0hsCXLJ7U0w23pttcQc+XPNvtnV3lcTUDmYDPJpXAoK+AjoxGOAt72/4TZrxWDdvg==
+X-Received: by 2002:a05:600c:231a:b0:3f0:4e04:b8f8 with SMTP id 26-20020a05600c231a00b003f04e04b8f8mr9631412wmo.39.1681723792968;
+        Mon, 17 Apr 2023 02:29:52 -0700 (PDT)
+Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id m10-20020a05600c3b0a00b003ef5e5f93f5sm15041116wms.19.2023.04.17.02.29.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 02:29:52 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Pierre Asselin <pa@panix.com>
+Cc:     jfalempe@redhat.com, daniel.vetter@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        hdegoede@redhat.com, ardb@kernel.org
+Subject: Re: [PATCH] firmware/sysfb: Fix wrong stride when bits-per-pixel is
+ calculated
+In-Reply-To: <60b7cad3-8923-98b1-2c0f-71bfabd0b2e9@suse.de>
+References: <20230412150225.3757223-1-javierm@redhat.com>
+ <2e07f818ccdff7023a060e732d7c4ef6.squirrel@mail.panix.com>
+ <87jzyhror0.fsf@minerva.mail-host-address-is-not-set>
+ <beeff0335ab4cc244d214a7baadba371.squirrel@mail.panix.com>
+ <CAFOAJEdKBUg91pDmNYYw5xigUxjifBgOLz2YgD+xQ+WyEy=V2w@mail.gmail.com>
+ <1afd3044c2aca9322ecf304941c7df66.squirrel@mail.panix.com>
+ <87fs94stgw.fsf@minerva.mail-host-address-is-not-set>
+ <87cz48srs4.fsf@minerva.mail-host-address-is-not-set>
+ <40edb0fdb0eaff434f4872dd677923a6.squirrel@mail.panix.com>
+ <87a5zcsqg8.fsf@minerva.mail-host-address-is-not-set>
+ <9e6fff69b09b36cbdd96499cd0015154.squirrel@mail.panix.com>
+ <4PxhQn3zK1zcbc@panix1.panix.com>
+ <f3004fccf706fb3cbb7ef6877dcd9168.squirrel@mail.panix.com>
+ <23d45518-3565-e915-c6d4-45dabe82ea4c@suse.de>
+ <87zg76evh3.fsf@minerva.mail-host-address-is-not-set>
+ <60b7cad3-8923-98b1-2c0f-71bfabd0b2e9@suse.de>
+Date:   Mon, 17 Apr 2023 11:29:51 +0200
+Message-ID: <87v8hueu0g.fsf@minerva.mail-host-address-is-not-set>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some MAX 10 cards, the BMC firmware is not available to service
-handshake registers during secure update erase and write phases at
-normal speeds. This problem affects at least hwmon driver. When the MAX
-10 hwmon driver tries to read the sensor values during a secure update,
-the reads are slowed down (e.g., reading all D5005 sensors takes ~24s
-which is magnitudes worse than the normal <0.02s).
+Thomas Zimmermann <tzimmermann@suse.de> writes:
 
-Manage access to the handshake registers using a rw semaphore and a FW
-state variable to prevent accesses during those secure update phases
-and return -EBUSY instead.
+[...]
 
-If handshake_sys_reg_nranges == 0, don't update bwcfw_state as it is not
-used. This avoids the locking cost.
+>> 
+>>     stride = DIV_ROUND_UP(si->lfb_width * bits_per_pixel, 8)
+>
+> I'd rather keep the code as-is until we get an actual bug report.
+>
 
-Co-developed-by: Russ Weight <russell.h.weight@intel.com>
-Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-Co-developed-by: Xu Yilun <yilun.xu@intel.com>
-Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- drivers/fpga/intel-m10-bmc-sec-update.c | 17 +++++--
- drivers/mfd/intel-m10-bmc-core.c        | 67 ++++++++++++++++++++++++-
- drivers/mfd/intel-m10-bmc-spi.c         | 14 ++++++
- include/linux/mfd/intel-m10-bmc.h       | 28 +++++++++++
- 4 files changed, 121 insertions(+), 5 deletions(-)
+Ok. After all if the pixel format is chosen correctly, the reported line
+length should match anyways. So is really a corner case what Pierre had.
 
-diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
-index fe0127a58eff..31af2e08c825 100644
---- a/drivers/fpga/intel-m10-bmc-sec-update.c
-+++ b/drivers/fpga/intel-m10-bmc-sec-update.c
-@@ -544,21 +544,28 @@ static enum fw_upload_err m10bmc_sec_prepare(struct fw_upload *fwl,
- 	if (ret != FW_UPLOAD_ERR_NONE)
- 		goto unlock_flash;
- 
-+	m10bmc_fw_state_set(sec->m10bmc, M10BMC_FW_STATE_SEC_UPDATE_PREPARE);
-+
- 	ret = rsu_update_init(sec);
- 	if (ret != FW_UPLOAD_ERR_NONE)
--		goto unlock_flash;
-+		goto fw_state_exit;
- 
- 	ret = rsu_prog_ready(sec);
- 	if (ret != FW_UPLOAD_ERR_NONE)
--		goto unlock_flash;
-+		goto fw_state_exit;
- 
- 	if (sec->cancel_request) {
- 		ret = rsu_cancel(sec);
--		goto unlock_flash;
-+		goto fw_state_exit;
- 	}
- 
-+	m10bmc_fw_state_set(sec->m10bmc, M10BMC_FW_STATE_SEC_UPDATE_WRITE);
-+
- 	return FW_UPLOAD_ERR_NONE;
- 
-+fw_state_exit:
-+	m10bmc_fw_state_set(sec->m10bmc, M10BMC_FW_STATE_NORMAL);
-+
- unlock_flash:
- 	if (sec->m10bmc->flash_bulk_ops)
- 		sec->m10bmc->flash_bulk_ops->unlock_write(sec->m10bmc);
-@@ -607,6 +614,8 @@ static enum fw_upload_err m10bmc_sec_poll_complete(struct fw_upload *fwl)
- 	if (sec->cancel_request)
- 		return rsu_cancel(sec);
- 
-+	m10bmc_fw_state_set(sec->m10bmc, M10BMC_FW_STATE_SEC_UPDATE_PROGRAM);
-+
- 	result = rsu_send_data(sec);
- 	if (result != FW_UPLOAD_ERR_NONE)
- 		return result;
-@@ -650,6 +659,8 @@ static void m10bmc_sec_cleanup(struct fw_upload *fwl)
- 
- 	(void)rsu_cancel(sec);
- 
-+	m10bmc_fw_state_set(sec->m10bmc, M10BMC_FW_STATE_NORMAL);
-+
- 	if (sec->m10bmc->flash_bulk_ops)
- 		sec->m10bmc->flash_bulk_ops->unlock_write(sec->m10bmc);
- }
-diff --git a/drivers/mfd/intel-m10-bmc-core.c b/drivers/mfd/intel-m10-bmc-core.c
-index 51f865174796..8ad5b3821584 100644
---- a/drivers/mfd/intel-m10-bmc-core.c
-+++ b/drivers/mfd/intel-m10-bmc-core.c
-@@ -12,6 +12,46 @@
- #include <linux/mfd/intel-m10-bmc.h>
- #include <linux/module.h>
- 
-+void m10bmc_fw_state_set(struct intel_m10bmc *m10bmc, enum m10bmc_fw_state new_state)
-+{
-+	/* bmcfw_state is only needed if handshake_sys_reg_nranges > 0 */
-+	if (!m10bmc->info->handshake_sys_reg_nranges)
-+		return;
-+
-+	down_write(&m10bmc->bmcfw_lock);
-+	m10bmc->bmcfw_state = new_state;
-+	up_write(&m10bmc->bmcfw_lock);
-+}
-+EXPORT_SYMBOL_NS_GPL(m10bmc_fw_state_set, INTEL_M10_BMC_CORE);
-+
-+/*
-+ * For some Intel FPGA devices, the BMC firmware is not available to service
-+ * handshake registers during a secure update.
-+ */
-+static bool m10bmc_reg_always_available(struct intel_m10bmc *m10bmc, unsigned int offset)
-+{
-+	if (!m10bmc->info->handshake_sys_reg_nranges)
-+		return true;
-+
-+	return !regmap_reg_in_ranges(offset, m10bmc->info->handshake_sys_reg_ranges,
-+				     m10bmc->info->handshake_sys_reg_nranges);
-+}
-+
-+/*
-+ * m10bmc_handshake_reg_unavailable - Checks if reg access collides with secure update state
-+ * @m10bmc: M10 BMC structure
-+ *
-+ * For some Intel FPGA devices, the BMC firmware is not available to service
-+ * handshake registers during a secure update erase and write phases.
-+ *
-+ * Context: @m10bmc->bmcfw_lock must be held.
-+ */
-+static bool m10bmc_handshake_reg_unavailable(struct intel_m10bmc *m10bmc)
-+{
-+	return m10bmc->bmcfw_state == M10BMC_FW_STATE_SEC_UPDATE_PREPARE ||
-+	       m10bmc->bmcfw_state == M10BMC_FW_STATE_SEC_UPDATE_WRITE;
-+}
-+
- /*
-  * This function helps to simplify the accessing of the system registers.
-  *
-@@ -21,8 +61,19 @@
- int m10bmc_sys_read(struct intel_m10bmc *m10bmc, unsigned int offset, unsigned int *val)
- {
- 	const struct m10bmc_csr_map *csr_map = m10bmc->info->csr_map;
-+	int ret;
-+
-+	if (m10bmc_reg_always_available(m10bmc, offset))
-+		return m10bmc_raw_read(m10bmc, csr_map->base + offset, val);
- 
--	return m10bmc_raw_read(m10bmc, csr_map->base + offset, val);
-+	down_read(&m10bmc->bmcfw_lock);
-+	if (m10bmc_handshake_reg_unavailable(m10bmc))
-+		ret = -EBUSY;	/* Reg not available during secure update */
-+	else
-+		ret = m10bmc_raw_read(m10bmc, csr_map->base + offset, val);
-+	up_read(&m10bmc->bmcfw_lock);
-+
-+	return ret;
- }
- EXPORT_SYMBOL_NS_GPL(m10bmc_sys_read, INTEL_M10_BMC_CORE);
- 
-@@ -30,8 +81,19 @@ int m10bmc_sys_update_bits(struct intel_m10bmc *m10bmc, unsigned int offset,
- 			   unsigned int msk, unsigned int val)
- {
- 	const struct m10bmc_csr_map *csr_map = m10bmc->info->csr_map;
-+	int ret;
- 
--	return regmap_update_bits(m10bmc->regmap, csr_map->base + offset, msk, val);
-+	if (m10bmc_reg_always_available(m10bmc, offset))
-+		return regmap_update_bits(m10bmc->regmap, csr_map->base + offset, msk, val);
-+
-+	down_read(&m10bmc->bmcfw_lock);
-+	if (m10bmc_handshake_reg_unavailable(m10bmc))
-+		ret = -EBUSY;	/* Reg not available during secure update */
-+	else
-+		ret = regmap_update_bits(m10bmc->regmap, csr_map->base + offset, msk, val);
-+	up_read(&m10bmc->bmcfw_lock);
-+
-+	return ret;
- }
- EXPORT_SYMBOL_NS_GPL(m10bmc_sys_update_bits, INTEL_M10_BMC_CORE);
- 
-@@ -129,6 +191,7 @@ int m10bmc_dev_init(struct intel_m10bmc *m10bmc, const struct intel_m10bmc_platf
- 
- 	m10bmc->info = info;
- 	dev_set_drvdata(m10bmc->dev, m10bmc);
-+	init_rwsem(&m10bmc->bmcfw_lock);
- 
- 	ret = devm_mfd_add_devices(m10bmc->dev, PLATFORM_DEVID_AUTO,
- 				   info->cells, info->n_cells,
-diff --git a/drivers/mfd/intel-m10-bmc-spi.c b/drivers/mfd/intel-m10-bmc-spi.c
-index edd266557ab9..cbeb7de9e041 100644
---- a/drivers/mfd/intel-m10-bmc-spi.c
-+++ b/drivers/mfd/intel-m10-bmc-spi.c
-@@ -116,12 +116,20 @@ static struct mfd_cell m10bmc_d5005_subdevs[] = {
- 	{ .name = "d5005bmc-sec-update" },
- };
- 
-+static const struct regmap_range m10bmc_d5005_fw_handshake_regs[] = {
-+	regmap_reg_range(M10BMC_N3000_TELEM_START, M10BMC_D5005_TELEM_END),
-+};
-+
- static struct mfd_cell m10bmc_pacn3000_subdevs[] = {
- 	{ .name = "n3000bmc-hwmon" },
- 	{ .name = "n3000bmc-retimer" },
- 	{ .name = "n3000bmc-sec-update" },
- };
- 
-+static const struct regmap_range m10bmc_n3000_fw_handshake_regs[] = {
-+	regmap_reg_range(M10BMC_N3000_TELEM_START, M10BMC_N3000_TELEM_END),
-+};
-+
- static struct mfd_cell m10bmc_n5010_subdevs[] = {
- 	{ .name = "n5010bmc-hwmon" },
- };
-@@ -129,18 +137,24 @@ static struct mfd_cell m10bmc_n5010_subdevs[] = {
- static const struct intel_m10bmc_platform_info m10bmc_spi_n3000 = {
- 	.cells = m10bmc_pacn3000_subdevs,
- 	.n_cells = ARRAY_SIZE(m10bmc_pacn3000_subdevs),
-+	.handshake_sys_reg_ranges = m10bmc_n3000_fw_handshake_regs,
-+	.handshake_sys_reg_nranges = ARRAY_SIZE(m10bmc_n3000_fw_handshake_regs),
- 	.csr_map = &m10bmc_n3000_csr_map,
- };
- 
- static const struct intel_m10bmc_platform_info m10bmc_spi_d5005 = {
- 	.cells = m10bmc_d5005_subdevs,
- 	.n_cells = ARRAY_SIZE(m10bmc_d5005_subdevs),
-+	.handshake_sys_reg_ranges = m10bmc_d5005_fw_handshake_regs,
-+	.handshake_sys_reg_nranges = ARRAY_SIZE(m10bmc_d5005_fw_handshake_regs),
- 	.csr_map = &m10bmc_n3000_csr_map,
- };
- 
- static const struct intel_m10bmc_platform_info m10bmc_spi_n5010 = {
- 	.cells = m10bmc_n5010_subdevs,
- 	.n_cells = ARRAY_SIZE(m10bmc_n5010_subdevs),
-+	.handshake_sys_reg_ranges = m10bmc_n3000_fw_handshake_regs,
-+	.handshake_sys_reg_nranges = ARRAY_SIZE(m10bmc_n3000_fw_handshake_regs),
- 	.csr_map = &m10bmc_n3000_csr_map,
- };
- 
-diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
-index 252644fa61be..ee66c9751003 100644
---- a/include/linux/mfd/intel-m10-bmc.h
-+++ b/include/linux/mfd/intel-m10-bmc.h
-@@ -11,6 +11,7 @@
- #include <linux/bits.h>
- #include <linux/dev_printk.h>
- #include <linux/regmap.h>
-+#include <linux/rwsem.h>
- 
- #define M10BMC_N3000_LEGACY_BUILD_VER	0x300468
- #define M10BMC_N3000_SYS_BASE		0x300800
-@@ -39,6 +40,11 @@
- #define M10BMC_N3000_VER_PCB_INFO_MSK	GENMASK(31, 24)
- #define M10BMC_N3000_VER_LEGACY_INVALID	0xffffffff
- 
-+/* Telemetry registers */
-+#define M10BMC_N3000_TELEM_START	0x100
-+#define M10BMC_N3000_TELEM_END		0x250
-+#define M10BMC_D5005_TELEM_END		0x300
-+
- /* Secure update doorbell register, in system register region */
- #define M10BMC_N3000_DOORBELL		0x400
- 
-@@ -205,11 +211,15 @@ struct m10bmc_csr_map {
-  * struct intel_m10bmc_platform_info - Intel MAX 10 BMC platform specific information
-  * @cells: MFD cells
-  * @n_cells: MFD cells ARRAY_SIZE()
-+ * @handshake_sys_reg_ranges: array of register ranges for fw handshake regs
-+ * @handshake_sys_reg_nranges: number of register ranges for fw handshake regs
-  * @csr_map: the mappings for register definition of MAX10 BMC
-  */
- struct intel_m10bmc_platform_info {
- 	struct mfd_cell *cells;
- 	int n_cells;
-+	const struct regmap_range *handshake_sys_reg_ranges;
-+	unsigned int handshake_sys_reg_nranges;
- 	const struct m10bmc_csr_map *csr_map;
- };
- 
-@@ -232,18 +242,30 @@ struct intel_m10bmc_flash_bulk_ops {
- 	void (*unlock_write)(struct intel_m10bmc *m10bmc);
- };
- 
-+enum m10bmc_fw_state {
-+	M10BMC_FW_STATE_NORMAL,
-+	M10BMC_FW_STATE_SEC_UPDATE_PREPARE,
-+	M10BMC_FW_STATE_SEC_UPDATE_WRITE,
-+	M10BMC_FW_STATE_SEC_UPDATE_PROGRAM,
-+};
-+
- /**
-  * struct intel_m10bmc - Intel MAX 10 BMC parent driver data structure
-  * @dev: this device
-  * @regmap: the regmap used to access registers by m10bmc itself
-  * @info: the platform information for MAX10 BMC
-  * @flash_bulk_ops: optional device specific operations for flash R/W
-+ * @bmcfw_lock: read/write semaphore to BMC firmware running state
-+ * @bmcfw_state: BMC firmware running state. Available only when
-+ *		 handshake_sys_reg_nranges > 0.
-  */
- struct intel_m10bmc {
- 	struct device *dev;
- 	struct regmap *regmap;
- 	const struct intel_m10bmc_platform_info *info;
- 	const struct intel_m10bmc_flash_bulk_ops *flash_bulk_ops;
-+	struct rw_semaphore bmcfw_lock;		/* Protects bmcfw_state */
-+	enum m10bmc_fw_state bmcfw_state;
- };
- 
- /*
-@@ -271,6 +293,12 @@ int m10bmc_sys_read(struct intel_m10bmc *m10bmc, unsigned int offset, unsigned i
- int m10bmc_sys_update_bits(struct intel_m10bmc *m10bmc, unsigned int offset,
- 			   unsigned int msk, unsigned int val);
- 
-+/*
-+ * Track the state of the firmware, as it is not available for register
-+ * handshakes during secure updates on some MAX 10 cards.
-+ */
-+void m10bmc_fw_state_set(struct intel_m10bmc *m10bmc, enum m10bmc_fw_state new_state);
-+
- /*
-  * MAX10 BMC Core support
-  */
+> For example, DRM framebuffer sizes are often multiples of 64. Creating a 
+> framebuffer of 800x600 will create a framebuffer with 
+> stride/pitch/linelength of 832.  I can imagine that some BIOSes out 
+> there do something similar with the system framebuffer. Messing with the 
+> stride would break them.
+>
+
+I see, is not that simple then. Thanks a lot for the clarification.
+
 -- 
-2.30.2
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
 
