@@ -2,72 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3CC6E41C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 09:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A77FE6E41CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 09:58:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231259AbjDQH4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 03:56:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42262 "EHLO
+        id S230211AbjDQH6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 03:58:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231182AbjDQH4D (ORCPT
+        with ESMTP id S230491AbjDQH5p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 03:56:03 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E2B40F5
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 00:56:01 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4edbd6cc46bso1040574e87.2
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 00:56:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681718159; x=1684310159;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6O/2AisgZasdz5TfqSJm6yXze5QCOC8Gd2nntmT4L9I=;
-        b=bKmXKwxI1i5GaBTDoiN8WGb3G7UxJGUxg2INzSxaVMCoaFLx48refXd4Nz5bpaTidd
-         +aJVPhMYK3cl1wy7wA5gA2ITlD3XkS104O9DZZlUQkF/2sYeRwZdKIDF9YkwMDLsEHUa
-         fMknMhAwfXB7I6Abw/8FZI2/Fc6hGYMjSWeHlTqNKpRCbf/nCmmlBfc4HHeSS+DKo7Il
-         Usoh5H71wzm1HaCo6ZsGh01TzozH0JBMsxXAxp8OBvFE1iOe8WNQHfmBGmxmUhPK2InJ
-         InJDp5EKEQvh6O5GYiMLKHqqQqQlbPHOxLZUBQN+wvDF8krGuzw/A27tH1xHHfnQZyT3
-         0BCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681718159; x=1684310159;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6O/2AisgZasdz5TfqSJm6yXze5QCOC8Gd2nntmT4L9I=;
-        b=MCrW5gKpsVXzpnOde6JL5bGgL1YiWNOO6FbTcVBLqaU7JTLX7K6KOpzrIqcLYoMVGo
-         bVrS8soYmTk3Ay2Q1f5XpicoSNr9HIA+IjEWyVXXHZIc/fia4Ua+fTniFVihUl089Ota
-         licdt2oKjNhrcYHKlFI5s6XJqwcrkVauZElf2qrHWwLH/dEqWv7BcWVwN1M7akJakqtF
-         noUkVj4U1UecBnU9Xjam1QWEO1czr7v7ztJtjLCultXfrixIf2lWLegXMSuRyHiKmlL9
-         Q1Ws+Yd9V2xVjJm0A5D/a/t9VBq8ZdCkd8LiuNDtNfM1R3rVU1lf3f32eaZIccBOPAoI
-         t7rg==
-X-Gm-Message-State: AAQBX9eECt9qvhv+lzyrSJ15Y8zYjvkNQzXpNI13auSrNwavYpQRKPYC
-        JyUFHs5508+qaH5N0y/1zgD1lg==
-X-Google-Smtp-Source: AKy350b1bPM4ZvhIq7AXqAPSfk90VNy/bO686xdKsHNZIEjfAdaq86Nur6RkVitNLBwji6bmwe5PsA==
-X-Received: by 2002:a19:f80a:0:b0:4ec:9e01:71e with SMTP id a10-20020a19f80a000000b004ec9e01071emr1697300lff.4.1681718159455;
-        Mon, 17 Apr 2023 00:55:59 -0700 (PDT)
-Received: from [192.168.1.2] (c-05d8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.216.5])
-        by smtp.gmail.com with ESMTPSA id p2-20020a19f002000000b004eb274b3a43sm1952547lfc.134.2023.04.17.00.55.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 00:55:59 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 17 Apr 2023 09:55:52 +0200
-Subject: [PATCH 7/7] dmaengine: ste_dma40: Return error codes properly
+        Mon, 17 Apr 2023 03:57:45 -0400
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6223594;
+        Mon, 17 Apr 2023 00:57:37 -0700 (PDT)
+X-UUID: c289f049c77a4a198bb1e1d0d4378632-20230417
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.22,REQID:7ce7aaf4-ce7a-4d63-a731-4be079b546fb,IP:-32
+        768,URL:-32768,TC:-32768,Content:-32768,EDM:-32768,RT:-32768,SF:-32768,FIL
+        E:-32768,BULK:-32768,RULE:Release_Ham,ACTION:release,TS:0
+X-CID-INFO: VERSION:1.1.22,REQID:7ce7aaf4-ce7a-4d63-a731-4be079b546fb,IP:-3276
+        8,URL:-32768,TC:-32768,Content:-32768,EDM:-32768,RT:-32768,SF:-32768,FILE:
+        -32768,BULK:-32768,RULE:Release_Ham,ACTION:release,TS:0
+X-CID-META: VersionHash:120426c,CLOUDID:nil,BulkID:nil,BulkQuantity:0,Recheck:
+        0,SF:nil,TC:nil,Content:nil,EDM:nil,IP:nil,URL:nil,File:nil,Bulk:nil,QS:ni
+        l,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-UUID: c289f049c77a4a198bb1e1d0d4378632-20230417
+Received: from mail.kylinos.cn [(39.156.73.10)] by mailgw
+        (envelope-from <zenghao@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 1100353138; Mon, 17 Apr 2023 15:56:21 +0800
+Received: from mail.kylinos.cn (localhost [127.0.0.1])
+        by mail.kylinos.cn (NSMail) with SMTP id 4763EE0084A1;
+        Mon, 17 Apr 2023 15:56:21 +0800 (CST)
+X-ns-mid: postfix-643CFBA5-20992179
+Received: from zdzh5-QiTianM428-A376.. (unknown [172.20.12.253])
+        by mail.kylinos.cn (NSMail) with ESMTPA id 7FF1FE0084A1;
+        Mon, 17 Apr 2023 15:56:19 +0800 (CST)
+From:   Hao Zeng <zenghao@kylinos.cn>
+To:     skhan@linuxfoundation.org
+Cc:     trenn@suse.com, shuah@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zenghao@kylinos.cn
+Subject: [PATCH v3] cpupower:Fix resource leaks in sysfs_get_enabled()
+Date:   Mon, 17 Apr 2023 15:56:17 +0800
+Message-Id: <20230417075617.10487-1-zenghao@kylinos.cn>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230417-ux500-dma40-cleanup-v1-7-b26324956e47@linaro.org>
-References: <20230417-ux500-dma40-cleanup-v1-0-b26324956e47@linaro.org>
-In-Reply-To: <20230417-ux500-dma40-cleanup-v1-0-b26324956e47@linaro.org>
-To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,179 +59,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This makes the probe() and its subfunction d40_hw_detect_init()
-return proper error codes.
+The sysfs_get_enabled() opened file processor not closed,
+may cause a file handle leak.
+Putting error handling and resource cleanup code together
+makes the code easy to maintain and read.
+Removed the unnecessary else if branch from the original
+function, as it should return an error in cases other than '0'.
 
-One effect of this is that deferred probe, e.g from the clock,
-will start to work, would it happen. Also it is better design.
-
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Hao Zeng <zenghao@kylinos.cn>
+Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
 ---
- drivers/dma/ste_dma40.c | 46 ++++++++++++++++++++++++----------------------
- 1 file changed, 24 insertions(+), 22 deletions(-)
+ tools/power/cpupower/lib/powercap.c | 22 ++++++++++++++--------
+ 1 file changed, 14 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/dma/ste_dma40.c b/drivers/dma/ste_dma40.c
-index c5991009d3e4..2911017265cf 100644
---- a/drivers/dma/ste_dma40.c
-+++ b/drivers/dma/ste_dma40.c
-@@ -3132,7 +3132,8 @@ static void d40_drop_kmem_cache_action(void *d)
- 	kmem_cache_destroy(desc_slab);
- }
- 
--static struct d40_base * __init d40_hw_detect_init(struct platform_device *pdev)
-+static int __init d40_hw_detect_init(struct platform_device *pdev,
-+				     struct d40_base **retbase)
+diff --git a/tools/power/cpupower/lib/powercap.c b/tools/power/cpupower/l=
+ib/powercap.c
+index 0ce29ee4c2e4..f0334a5f1acf 100644
+--- a/tools/power/cpupower/lib/powercap.c
++++ b/tools/power/cpupower/lib/powercap.c
+@@ -40,25 +40,31 @@ static int sysfs_get_enabled(char *path, int *mode)
  {
- 	struct stedma40_platform_data *plat_data = dev_get_platdata(&pdev->dev);
- 	struct device *dev = &pdev->dev;
-@@ -3150,14 +3151,12 @@ static struct d40_base * __init d40_hw_detect_init(struct platform_device *pdev)
- 
- 	clk = devm_clk_get_enabled(dev, NULL);
- 	if (IS_ERR(clk))
--		return NULL;
-+		return PTR_ERR(clk);
- 
- 	/* Get IO for DMAC base address */
- 	virtbase = devm_platform_ioremap_resource_byname(pdev, "base");
--	if (IS_ERR(virtbase)) {
--		dev_err(dev, "No IO base defined\n");
--		return NULL;
--	}
-+	if (IS_ERR(virtbase))
-+		return PTR_ERR(virtbase);
- 
- 	/* This is just a regular AMBA PrimeCell ID actually */
- 	for (pid = 0, i = 0; i < 4; i++)
-@@ -3169,13 +3168,13 @@ static struct d40_base * __init d40_hw_detect_init(struct platform_device *pdev)
- 
- 	if (cid != AMBA_CID) {
- 		d40_err(dev, "Unknown hardware! No PrimeCell ID\n");
--		return NULL;
-+		return -EINVAL;
+ 	int fd;
+ 	char yes_no;
++	int ret =3D 0;
+=20
+ 	*mode =3D 0;
+=20
+ 	fd =3D open(path, O_RDONLY);
+-	if (fd =3D=3D -1)
+-		return -1;
++	if (fd =3D=3D -1) {
++		ret =3D -1;
++		goto out;
++	}
+=20
+ 	if (read(fd, &yes_no, 1) !=3D 1) {
+-		close(fd);
+-		return -1;
++		ret =3D -1;
++		goto out_close;
  	}
- 	if (AMBA_MANF_BITS(pid) != AMBA_VENDOR_ST) {
- 		d40_err(dev, "Unknown designer! Got %x wanted %x\n",
- 			AMBA_MANF_BITS(pid),
- 			AMBA_VENDOR_ST);
--		return NULL;
-+		return -EINVAL;
+=20
+ 	if (yes_no =3D=3D '1') {
+ 		*mode =3D 1;
+-		return 0;
+-	} else if (yes_no =3D=3D '0') {
+-		return 0;
++	} else if (yes_no !=3D '0') {
++		ret =3D -1;
++		goto out_close;
  	}
- 	/*
- 	 * HW revision:
-@@ -3189,7 +3188,7 @@ static struct d40_base * __init d40_hw_detect_init(struct platform_device *pdev)
- 	rev = AMBA_REV_BITS(pid);
- 	if (rev < 2) {
- 		d40_err(dev, "hardware revision: %d is not supported", rev);
--		return NULL;
-+		return -EINVAL;
- 	}
- 
- 	/* The number of physical channels on this HW */
-@@ -3216,7 +3215,7 @@ static struct d40_base * __init d40_hw_detect_init(struct platform_device *pdev)
- 		sizeof(struct d40_chan), GFP_KERNEL);
- 
- 	if (!base)
--		return NULL;
-+		return -ENOMEM;
- 
- 	base->rev = rev;
- 	base->clk = clk;
-@@ -3263,51 +3262,53 @@ static struct d40_base * __init d40_hw_detect_init(struct platform_device *pdev)
- 				     sizeof(*base->phy_res),
- 				     GFP_KERNEL);
- 	if (!base->phy_res)
--		return NULL;
-+		return -ENOMEM;
- 
- 	base->lookup_phy_chans = devm_kcalloc(dev, num_phy_chans,
- 					      sizeof(*base->lookup_phy_chans),
- 					      GFP_KERNEL);
- 	if (!base->lookup_phy_chans)
--		return NULL;
-+		return -ENOMEM;
- 
- 	base->lookup_log_chans = devm_kcalloc(dev, num_log_chans,
- 					      sizeof(*base->lookup_log_chans),
- 					      GFP_KERNEL);
- 	if (!base->lookup_log_chans)
--		return NULL;
-+		return -ENOMEM;
- 
- 	base->reg_val_backup_chan = devm_kmalloc_array(dev, base->num_phy_chans,
- 						  sizeof(d40_backup_regs_chan),
- 						  GFP_KERNEL);
- 	if (!base->reg_val_backup_chan)
--		return NULL;
-+		return -ENOMEM;
- 
- 	base->lcla_pool.alloc_map = devm_kcalloc(dev, num_phy_chans
- 					    * D40_LCLA_LINK_PER_EVENT_GRP,
- 					    sizeof(*base->lcla_pool.alloc_map),
- 					    GFP_KERNEL);
- 	if (!base->lcla_pool.alloc_map)
--		return NULL;
-+		return -ENOMEM;
- 
- 	base->regs_interrupt = devm_kmalloc_array(dev, base->gen_dmac.il_size,
- 					     sizeof(*base->regs_interrupt),
- 					     GFP_KERNEL);
- 	if (!base->regs_interrupt)
--		return NULL;
-+		return -ENOMEM;
- 
- 	base->desc_slab = kmem_cache_create(D40_NAME, sizeof(struct d40_desc),
- 					    0, SLAB_HWCACHE_ALIGN,
- 					    NULL);
- 	if (!base->desc_slab)
--		return NULL;
-+		return -ENOMEM;
- 
- 	ret = devm_add_action_or_reset(dev, d40_drop_kmem_cache_action,
- 				       base->desc_slab);
- 	if (ret)
--		return NULL;
-+		return ret;
-+
-+	*retbase = base;
- 
--	return base;
-+	return 0;
+-	return -1;
++out_close:
++	close(fd);
++out:
++	return ret;
  }
- 
- static void __init d40_hw_init(struct d40_base *base)
-@@ -3503,20 +3504,20 @@ static int __init d40_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct device_node *np = pdev->dev.of_node;
- 	struct device_node *np_lcpa;
--	int ret = -ENOENT;
- 	struct d40_base *base;
- 	struct resource *res;
- 	struct resource res_lcpa;
- 	int num_reserved_chans;
- 	u32 val;
-+	int ret;
- 
- 	if (d40_of_probe(dev, np)) {
- 		ret = -ENOMEM;
- 		goto report_failure;
- 	}
- 
--	base = d40_hw_detect_init(pdev);
--	if (!base)
-+	ret = d40_hw_detect_init(pdev, &base);
-+	if (ret)
- 		goto report_failure;
- 
- 	num_reserved_chans = d40_phy_res_init(base);
-@@ -3530,6 +3531,7 @@ static int __init d40_probe(struct platform_device *pdev)
- 	np_lcpa = of_parse_phandle(np, "sram", 0);
- 	if (!np_lcpa) {
- 		dev_err(dev, "no LCPA SRAM node\n");
-+		ret = -EINVAL;
- 		goto report_failure;
- 	}
- 	/* This is no device so read the address directly from the node */
-
--- 
-2.39.2
+=20
+ int powercap_get_enabled(int *mode)
+--=20
+2.37.2
 
