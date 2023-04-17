@@ -2,98 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A69216E44B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 12:03:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CFB96E44BC
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 12:04:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbjDQKDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 06:03:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34978 "EHLO
+        id S230023AbjDQKE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 06:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230476AbjDQKDR (ORCPT
+        with ESMTP id S231213AbjDQKD0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 06:03:17 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F5493FF;
-        Mon, 17 Apr 2023 03:02:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681725742; x=1713261742;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zvjET+jzN2hNNHCvxTti35dlNkZroCmFXuHR9aPW1gI=;
-  b=d9+LbDgnJhUHfWqjZF5yVFetvIHM/Ihq1xGZHA+pnjUnbvonETVA77bj
-   E4PItE065HZBiAZ622sbqvG7T2gH+89SoJaGf7PHZM7otcQN/D/Ef/0Y4
-   NHnvhKimoeB3kyetqpl93edeXJq78wsqzv8HPcjLKKQdFAHBClRh13xGt
-   wuALpAOk45shKkY38w1c6xRWPPtxN0vJ+xonoPEqa9iPz04CTasaDx0Ad
-   V1OZkGQ7k5qeEO21GgG70Sb3J0SXHm1NsrX+pPfFgGa6Izd3nOmZd1Z0i
-   /p63mOx+Pxf1M67oVRixF84DmAksSxiqhRrL7DZeP3Ib9mu3/94wQXExj
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="329019079"
-X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
-   d="scan'208";a="329019079"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 03:00:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="759894444"
-X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
-   d="scan'208";a="759894444"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 03:00:17 -0700
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id 8BBE012227A;
-        Mon, 17 Apr 2023 13:00:14 +0300 (EEST)
-Date:   Mon, 17 Apr 2023 13:00:14 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH] media: i2c: imx296: Fix error handling while reading
- temperature
-Message-ID: <ZD0YrkVOoxPL7TrB@kekkonen.localdomain>
-References: <827f94730c85b742f9ae66209b383a50ca79ec43.1681683246.git.christophe.jaillet@wanadoo.fr>
- <20230417053059.GC28551@pendragon.ideasonboard.com>
+        Mon, 17 Apr 2023 06:03:26 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39A69759;
+        Mon, 17 Apr 2023 03:02:32 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 007E26603050;
+        Mon, 17 Apr 2023 11:01:17 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1681725679;
+        bh=B0H7Xc8pFJmEgctk+ZRRF3aNKm7rElFH0bnnlDlQbD4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=I9U/Xvg6M9NzMGqGFPDKP+SNzfidPj4xuKy5l3xAe+xzrJsSasPjxW/UmVJ9HYX5O
+         fJf0X6VoV3NLH8YmOWvrl+bE/JIr9G4QDsIo1Ze5VRKj1Ka9NM/rQIRBFiN4Mb3U0h
+         K8Wqv6nPJsbJBPNEfSHcX0DIpvxU4vJ4vjeZjiT+dkwOKAmC7QfiYQwvJtcOiiqv+c
+         S/yj8Mkc/X5lhArSCPu8t7C+AKLEVvJDr1N1bojF0MSH9Hsob5L43gcVpgpUmqAOZf
+         OyygQWO6S1yOMWd3pueGDa9965KjEM89yYvG4CGktP5UdcjZRYKlvltI60jDb5yQR8
+         AtHuQrS1OGfAg==
+Message-ID: <f3f01c18-a2cc-9329-d186-421f5170e08a@collabora.com>
+Date:   Mon, 17 Apr 2023 12:01:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230417053059.GC28551@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] clocksource/drivers/arm_arch_timer: Add workaround for
+ MediaTek MMIO timer
+Content-Language: en-US
+To:     walter.chang@mediatek.com,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     wsd_upstream@mediatek.com, stanley.chu@mediatek.com,
+        Chun-hung.Wu@mediatek.com, Freddy.Hsin@mediatek.com,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+References: <20230417090635.13202-1-walter.chang@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230417090635.13202-1-walter.chang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
-
-On Mon, Apr 17, 2023 at 08:30:59AM +0300, Laurent Pinchart wrote:
-> Hi Christophe,
+Il 17/04/23 11:06, walter.chang@mediatek.com ha scritto:
+> From: Walter Chang <walter.chang@mediatek.com>
 > 
-> Thank you for the patch.
+> The MT69XX series SoCs have the incomplete implementation issue in the
+> mmio timer. Specifically, the hardware only implements the TVAL
+> functionality, but not the CVAL functionality. This hardware limitation
+> will cause set_next_event_mem() fail to set the actual expiration time
+> when writing a value to the CVAL. On these platforms, the mmio timer's
+> internal expiration time will still be judged as 0 (the value of TVAL),
+> resulting in the mmio timer not functioning as intended.
 > 
-> On Mon, Apr 17, 2023 at 12:14:42AM +0200, Christophe JAILLET wrote:
-> > If imx296_read() returns an error, its returned value is a negative value.
-> > But because of the "& IMX296_TMDOUT_MASK" (i.e. 0x3ff), 'tmdout' can't be
-> > negative.
-> > 
-> > So the error handling does not work as expected and a wrong value is used
-> > to compute the temperature.
-> > 
-> > Apply the IMX296_TMDOUT_MASK mask after checking for errors to fix it.
-> > 
-> > Fixes: cb33db2b6ccf ("media: i2c: IMX296 camera sensor driver")
-> > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> The workaround is to use TVAL in addition to CVAL for these affected
+> platforms.
 > 
-> Dan Carpenter has submitted the same fix in
-> https://lore.kernel.org/linux-media/Y%2FYf19AE78jn5YW7@kili/. Sakari,
-> could you please pick it up ?
+> Signed-off-by: Walter Chang <walter.chang@mediatek.com>
+> ---
+>   Documentation/arm64/silicon-errata.rst |  4 ++++
+>   drivers/clocksource/Kconfig            |  9 ++++++++
+>   drivers/clocksource/arm_arch_timer.c   | 29 ++++++++++++++++++++++++++
+>   3 files changed, 42 insertions(+)
+> 
+> diff --git a/Documentation/arm64/silicon-errata.rst b/Documentation/arm64/silicon-errata.rst
+> index ec5f889d7681..ca1893713a4c 100644
+> --- a/Documentation/arm64/silicon-errata.rst
+> +++ b/Documentation/arm64/silicon-errata.rst
+> @@ -209,3 +209,7 @@ stable kernels.
+>   +----------------+-----------------+-----------------+-----------------------------+
+>   | Fujitsu        | A64FX           | E#010001        | FUJITSU_ERRATUM_010001      |
+>   +----------------+-----------------+-----------------+-----------------------------+
+> +
+> ++----------------+-----------------+-----------------+-----------------------------+
+> +| MediaTek       | MT69XX series   | #690001         | MEDIATEK_ERRATUM_690001     |
+> ++----------------+-----------------+-----------------+-----------------------------+
+> diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
+> index 5fc8f0e7fb38..475356b8dbdc 100644
+> --- a/drivers/clocksource/Kconfig
+> +++ b/drivers/clocksource/Kconfig
+> @@ -368,6 +368,15 @@ config SUN50I_ERRATUM_UNKNOWN1
+>   	  the Allwinner A64 SoC. The workaround will only be active if the
+>   	  allwinner,erratum-unknown1 property is found in the timer node.
+>   
+> +config MEDIATEK_ERRATUM_690001
+> +	bool "Workaround for MediaTek MT69XX erratum 690001"
+> +	depends on ARM_ARCH_TIMER && ARM64
+> +	help
+> +	  This option enables a workaround for incomplete implementation
+> +	  in the MMIO timer on the MediaTek MT69XX SoCs. The workaround
+> +	  will only be active if mediatek,erratum-690001 property is
+> +	  found in the timer node.
+> +
+>   config ARM_GLOBAL_TIMER
+>   	bool "Support for the ARM global timer" if COMPILE_TEST
+>   	select TIMER_OF if OF
+> diff --git a/drivers/clocksource/arm_arch_timer.c b/drivers/clocksource/arm_arch_timer.c
+> index e09d4427f604..920570d57fc0 100644
+> --- a/drivers/clocksource/arm_arch_timer.c
+> +++ b/drivers/clocksource/arm_arch_timer.c
+> @@ -389,6 +389,10 @@ static u64 notrace sun50i_a64_read_cntvct_el0(void)
+>   }
+>   #endif
+>   
+> +#ifdef CONFIG_MEDIATEK_ERRATUM_690001
+> +static bool arch_timer_mem_sne_use_tval __ro_after_init;
 
-Oops, thanks for notifying me. This slipped from my hands somehow. It's in
-my tree now.
+What about reusing part of the CONFIG_ARM_ARCH_TIMER_OOL_WORKAROUND logic and
+adding something like CONFIG_ARM_ARCH_TIMER_MEM_WORKAROUND?
 
--- 
-Sakari Ailus
+That would make you able to reuse the already existing infrastructure to parse
+the device-tree and possibly more.
+
+Regards,
+Angelo
+
+> +#endif
+> +
+>   #ifdef CONFIG_ARM_ARCH_TIMER_OOL_WORKAROUND
+>   DEFINE_PER_CPU(const struct arch_timer_erratum_workaround *, timer_unstable_counter_workaround);
+>   EXPORT_SYMBOL_GPL(timer_unstable_counter_workaround);
+> @@ -783,6 +787,19 @@ static __always_inline void set_next_event_mem(const int access, unsigned long e
+>   		cnt = arch_counter_get_cnt_mem(timer, CNTPCT_LO);
+>   
+>   	arch_timer_reg_write(access, ARCH_TIMER_REG_CVAL, evt + cnt, clk);
+> +#ifdef CONFIG_MEDIATEK_ERRATUM_690001
+> +	if (arch_timer_mem_sne_use_tval) {
+> +		/* Due to the incomplete implementation of mmio timer on
+> +		 * specific MediaTek platforms, CVAL has not been implemented.
+> +		 * Therefore, the workaround is to use TVAL in addition to
+> +		 * CVAL.
+> +		 */
+> +		if (access == ARCH_TIMER_MEM_VIRT_ACCESS)
+> +			writel_relaxed(evt, timer->base + 0x38);
+> +		else
+> +			writel_relaxed(evt, timer->base + 0x28);
+> +	}
+> +#endif
+>   	arch_timer_reg_write(access, ARCH_TIMER_REG_CTRL, ctrl, clk);
+>   }
+>   
+> @@ -878,7 +895,16 @@ static void __arch_timer_setup(unsigned type,
+>   				arch_timer_set_next_event_phys_mem;
+>   		}
+>   
+> +#ifdef CONFIG_MEDIATEK_ERRATUM_690001
+> +		if (arch_timer_mem_sne_use_tval) {
+> +			pr_info("Enabling mediatek,erratum-690001 for mmio timer\n");
+> +			max_delta = CLOCKSOURCE_MASK(31);
+> +		} else {
+> +			max_delta = CLOCKSOURCE_MASK(56);
+> +		}
+> +#else
+>   		max_delta = CLOCKSOURCE_MASK(56);
+> +#endif
+>   	}
+>   
+>   	clk->set_state_shutdown(clk);
+> @@ -1591,6 +1617,9 @@ static int __init arch_timer_mem_of_init(struct device_node *np)
+>   		frame->valid = true;
+>   	}
+>   
+> +#ifdef CONFIG_MEDIATEK_ERRATUM_690001
+> +	arch_timer_mem_sne_use_tval = of_property_read_bool(np, "mediatek,erratum-690001");
+> +#endif
+>   	frame = arch_timer_mem_find_best_frame(timer_mem);
+>   	if (!frame) {
+>   		pr_err("Unable to find a suitable frame in timer @ %pa\n",
+
