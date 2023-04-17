@@ -2,79 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E04176E4D3A
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 17:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E8B26E4D47
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 17:31:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbjDQPad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 11:30:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56054 "EHLO
+        id S230035AbjDQPbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 11:31:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjDQPaa (ORCPT
+        with ESMTP id S230093AbjDQPbT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 11:30:30 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D464C649
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 08:29:50 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id n43-20020a05600c502b00b003f17466a9c1so1416106wmr.2
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 08:29:50 -0700 (PDT)
+        Mon, 17 Apr 2023 11:31:19 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E529ECC
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 08:30:38 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4ec81245ae1so1563392e87.0
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 08:30:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681745359; x=1684337359;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RzwpePrDPa7xmr54v7b5JEOp+2Pd1xHJ2snEcb8e6Q0=;
-        b=xXaSXGfkqHywUqrIdSTuJGAOS2HgJQOlGEp1vPBfWt4kLdPXwVzEKmVTiN95xLc4kP
-         jt6uY5G34VADtXHyi41pUyd1eX/fc6ehmYIp8G78BwotiHlWZR+7CWP6uVcNWNIYpCnI
-         TBOa0nvTTmubsOSWm1ztLzYuTRM1WEE07NSI+9pUT3575MnQJ6j5UIi66rZ9uuglOaqs
-         AKTTIjohJAQLbVBhCleyYRR5n5kPNDtHpyK42IV0yJWNxdrY4psQR8lOZ72VvQKFr0OS
-         VrmMhFF3n8sMibZpkqcTERyK6rD5GLa87TJxyqJbjLN92pHZ8fjEaBuvPGGCoPrNgij3
-         rOAQ==
+        d=linaro.org; s=google; t=1681745423; x=1684337423;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=I8LbL8wHVmoQuMN2A2YYCMJWPp7z1pqeUMnyON+WyIo=;
+        b=JG47fwq7zSttpAYNQSPKRmIoJOpFSCZ/9p2plC/Hd4GdYjYnqgqWeHfPSVDM9ZOW6c
+         LX4TJoq5Ex0QOV1KwJqAPqz1k0YQGBPWc8Zq/6eshxaTDwWwas1ixYYlINfyvAqlIJ0n
+         xgFRRqbY0AMMXz5c6ehyUL6JW1oBYt8qzczIbA3ZEMPufqQWAIhocrpz0Zyal6TOAT6B
+         Q6MHC3grv0YCnZKOt4m+YrbUqMgry/s4nvjaAxm2DrGcOlD5Pgxqbpn8t7RYvZbE+XeX
+         sXre8yDsxicibT9I91QJfVIWeNzDiUthd+QlFIez2SLtZ7VBLKPW5y3PYbz0cG3lbLKl
+         l74Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681745359; x=1684337359;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RzwpePrDPa7xmr54v7b5JEOp+2Pd1xHJ2snEcb8e6Q0=;
-        b=Eay55NcLt+eFJlbIQvYPHSfqkLNUk3WOJBx0GaxWAQURZuhE6w4PvwQXzF0UgHCPU9
-         ifvijEdPdZp2Q4QYz6tn6Yvv+02fbo6bMcRtg1WI145+hCus1a/8n4DX6EbWqa1WsA4J
-         d6IybDK76UdBTmXeryz12EKHnV8cgF0fbNVG6iSGo3Vk4Er41q0BmX+1uP4l/1gCGzUN
-         NXqSP9wCl4GujuvUC8YhZCF74dXzMwRAktoAjD8jy/CRYrtUnre0c8T0d1xVL/UmGIQg
-         Cz4KB2izSth0ONBNNcSBRn36ayJ+UJX3icCcB4V+Nt5Y90tlRNqM4pvEk6x3atJ93SmX
-         YPqA==
-X-Gm-Message-State: AAQBX9e2pkJBr3guXe4CSrM/+doVB/vNjXFADgmw8MeABok5yrTJn5BV
-        2eBUoyVHf28KfpcLMXVG9PRQ9k5HIU1uXX7jcVDvsw==
-X-Google-Smtp-Source: AKy350a8R3cCjE1wWQ446FxciFe8xGnzx9tik/JyEKMV1aebQPlDVAQwTU0a+LXIf1Hlno0IQpE1/Q==
-X-Received: by 2002:a7b:ce14:0:b0:3f1:65de:764 with SMTP id m20-20020a7bce14000000b003f165de0764mr6377900wmc.32.1681745359638;
-        Mon, 17 Apr 2023 08:29:19 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id jb17-20020a05600c54f100b003f17316ab46sm4097554wmb.13.2023.04.17.08.29.18
+        d=1e100.net; s=20221208; t=1681745423; x=1684337423;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=I8LbL8wHVmoQuMN2A2YYCMJWPp7z1pqeUMnyON+WyIo=;
+        b=RU0h22WYYizeI5skqB7SRXmKJObvw7T17AFJg6kqWFx8L/43kAG5L9c4HX2ZkzGoeP
+         UFZVVNFZxkQMYloUdUmzhOPa7f2wICC3h1n2Qf8Z3oXtdkkL4NH3tpMFJ1L19RPVl+e5
+         0T15Fvc9Z2SwrL4aFYoMMXaC0zwHnvk4C77BfUItmhfwA7Oae4QejR4Q6/CMQjTJcYSy
+         71jzjPyDt9YsUnY40RkJk4bAmMYnolIBxlXT7A2WD4S7KIfiddKuAHTTuSgEQOkv7OFb
+         DoYlOaxvXZXkZewswUnuobC62uRpIcjEhpulgftNKvwo6vNdh2xBVDVTGrfa/Mh5bNLY
+         sdZw==
+X-Gm-Message-State: AAQBX9cIXJc+Kb+BGnTDuohTW2hHdKvIDeXRANoEBrFSC3+MLw1GxiyG
+        38Ujf8JlO1FcBzHAhno5JpivD0p33yiDqR7+CV4=
+X-Google-Smtp-Source: AKy350a3Tw9fQfVihN2uzdE6CB5pgQeyBmA1eEZ4/bZBjcHnznsgDl7RIQAdJKDtBKzBRCzyfH0wTQ==
+X-Received: by 2002:a19:5501:0:b0:4ed:be06:9e9a with SMTP id n1-20020a195501000000b004edbe069e9amr2186365lfe.26.1681745423567;
+        Mon, 17 Apr 2023 08:30:23 -0700 (PDT)
+Received: from [192.168.1.101] (abyk99.neoplus.adsl.tpnet.pl. [83.9.30.99])
+        by smtp.gmail.com with ESMTPSA id b16-20020ac25e90000000b004ec8a3d4200sm2053439lfq.293.2023.04.17.08.30.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 08:29:19 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-To:     Jianhua Lu <lujianhua000@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230412-topic-lenovopanel-v3-0-bcf9ba4de46f@linaro.org>
-References: <20230412-topic-lenovopanel-v3-0-bcf9ba4de46f@linaro.org>
-Subject: Re: [PATCH v3 0/4] Lenovo Tab P11 panel
-Message-Id: <168174535878.1042404.157210995107973966.b4-ty@linaro.org>
-Date:   Mon, 17 Apr 2023 17:29:18 +0200
+        Mon, 17 Apr 2023 08:30:23 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH 0/5] MDSS reg bus interconnect
+Date:   Mon, 17 Apr 2023 17:30:14 +0200
+Message-Id: <20230417-topic-dpu_regbus-v1-0-06fbdc1643c0@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.1
+X-B4-Tracking: v=1; b=H4sIAAZmPWQC/x2N0QrCMAwAf2Xk2UBXJ2X+ioikXdwCoyvNKsLYv
+ xt8vIPjDlCuwgr37oDKH1HZskF/6SAtlGdGmYzBO391Qx9w34oknEp7VZ5jU6SYxoFCcOPNg2W
+ RlDFWymmxMLd1NVkqv+X7/zye5/kDpOQGPncAAAA=
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1681745422; l=1380;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=mhnjPjgyrCcQ+i64OauymCa5KF6SxBBllHrPHpBzDLw=;
+ b=rVoFconVuc2rDcbx8eq5loFRaR3/QTMtcZJG3qdonQSsYSSfI9Zm2BlCKuTX3bLj+F0sVdSRTQrI
+ DiBtMEIeCTeakogOWO44Fj4ndiSLXqFqMmI9zCOgWfQXym7j7e7n
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,33 +90,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Apart from the already handled data bus (MAS_MDP_Pn<->DDR), there's
+another path that needs to be handled to ensure MDSS functions properly,
+namely the "reg bus", a.k.a the CPU-MDSS interconnect.
 
-On Mon, 17 Apr 2023 16:39:02 +0200, Konrad Dybcio wrote:
-> v2 -> v3:
-> - Drop patch 1 (the one allowing port AND ports)
-> - Pick up tags
-> 
-> v2: https://lore.kernel.org/r/20230412-topic-lenovopanel-v2-0-055c3649788e@linaro.org
-> 
-> v1 -> v2:
-> - Remove dsi_info (unused for single DSI) [5/5]
-> - Add backlight.scale [3/5]
-> - pick up tags
-> 
-> [...]
+Gating that path may have a variety of effects.. from none to otherwise
+inexplicable DSI timeouts..
 
-Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next-fixes)
+This series tries to address the lack of that.
 
-[1/4] dt-bindings: display: panel: nt36523: Add Lenovo J606F panel
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=b4b26ab24f8f9ad3aa9fbdfd211e51b051ddb91e
-[2/4] drm/panel: nt36523: Add DCS backlight support
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=aecb583cb997935fb4f4a667a8013469528a8d53
-[3/4] drm/panel: nt36523: Get orientation from OF
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=1eae88fa7b56b3b02d0e003a737fc31d71f3f486
-[4/4] drm/panel: nt36523: Add Lenovo J606F panel
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=4f048de28b90abefff2044f450e882576eb746e9
+Example path:
 
+interconnects = <&bimc MASTER_AMPSS_M0 0 &config_noc SLAVE_DISPLAY_CFG 0>;
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (5):
+      dt-bindings: display/msm: Add reg bus interconnect
+      drm/msm/dpu1: Rename path references to mdp_path
+      drm/msm/mdss: Rename path references to mdp_path
+      drm/msm/mdss: Handle the reg bus ICC path
+      drm/msm/dpu1: Handle the reg bus ICC path
+
+ .../bindings/display/msm/mdss-common.yaml          |  1 +
+ drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c      | 10 +++----
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c            | 34 ++++++++++++++++-----
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h            |  5 ++--
+ drivers/gpu/drm/msm/msm_mdss.c                     | 35 ++++++++++++++--------
+ 5 files changed, 57 insertions(+), 28 deletions(-)
+---
+base-commit: d3f2cd24819158bb70701c3549e586f9df9cee67
+change-id: 20230417-topic-dpu_regbus-abc94a770952
+
+Best regards,
 -- 
-Neil
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
