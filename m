@@ -2,63 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 094C66E3DE4
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 05:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A446E3DED
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 05:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229473AbjDQDKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 23:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34584 "EHLO
+        id S230098AbjDQDRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 23:17:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbjDQDJ0 (ORCPT
+        with ESMTP id S229547AbjDQDRn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 23:09:26 -0400
-Received: from out-34.mta1.migadu.com (out-34.mta1.migadu.com [IPv6:2001:41d0:203:375::22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1825B6
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 20:08:43 -0700 (PDT)
-Message-ID: <90bcf57d-3e2f-5fd5-a901-6a640d2b523c@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1681700892;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=c/5MImZBx71ArdVTD8JIk3uIrjgFKB62VcP4IolAfhg=;
-        b=tNx2slIOxnlY6tArRUlKKGAGc3DcI6ueTMOywqot4Icxtxm6c3iKDi/TJVUgsB/KktrZux
-        aEGe7miRueNqkMQmDgXAm7iV8zSxW+QPotvQ0yvsDXLGk6sdATTyFlEaFLJpXrhBwaODSm
-        6zeAndOGbQgVMzKRv+F87+YFjA20JHU=
-Date:   Mon, 17 Apr 2023 11:08:09 +0800
+        Sun, 16 Apr 2023 23:17:43 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F81B1FE8;
+        Sun, 16 Apr 2023 20:17:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681701462; x=1713237462;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=BIGXHvmfwanLSioUPx3H5y5bX16YMkfJyknDFdNRixA=;
+  b=Veeuyssw4rncA6JbKt0K9V7/ExD2rxVuani4pNahqecQ3/vIBMxMzcUX
+   +MRlJy+pJjsqRMy4fRCFDzZLW13TMKvM1gmAQ+8MT0YWD0rEcCqJrfiZN
+   ydJ3Maa5kjR4dWQDHDbAzV8kahdX3NaTsgJQb4iQxYyqCVHL+GFFCB1eZ
+   oyF8PwSLS2lG8juUTA6DBDL+OHrRe+hrN/QiOVYOpj2wp/f4huqomvX2R
+   z6ASR6dAA+l+T+6hhRtFGCR7Jbsvh69c49NH/9mK1VyEHXfi5YAfs2Lr0
+   4mZ0008HUM01LWAXQoqA4icp0Pn+bT14S02fRMr14ONVtqVJEhwn/J0mz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="431085373"
+X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
+   d="scan'208";a="431085373"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2023 20:17:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="779905728"
+X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
+   d="scan'208";a="779905728"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.238.8.125]) ([10.238.8.125])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2023 20:17:38 -0700
+Message-ID: <35b92d89-3eb1-368e-3804-e3ce9ad9c81f@linux.intel.com>
+Date:   Mon, 17 Apr 2023 11:17:36 +0800
 MIME-Version: 1.0
-Subject: Re: [PATCH for-next 2/3] RDMA/rtrs: Fix rxe_dealloc_pd warning
-To:     "Zhijian Li (Fujitsu)" <lizhijian@fujitsu.com>,
-        Leon Romanovsky <leon@kernel.org>
-Cc:     "haris.iqbal@ionos.com" <haris.iqbal@ionos.com>,
-        "jinpu.wang@ionos.com" <jinpu.wang@ionos.com>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <1681108984-2-1-git-send-email-lizhijian@fujitsu.com>
- <1681108984-2-3-git-send-email-lizhijian@fujitsu.com>
- <20230410120809.GN182481@unreal>
- <0d9c57db-bca3-adb4-71fd-7362e4842917@linux.dev>
- <85323eb2-cfc7-d1b8-3a75-3fa63dde29db@fujitsu.com>
- <20230411122651.GV182481@unreal>
- <aa43746f-77f9-8592-5370-2a5042506ee5@fujitsu.com>
- <8fe62e38-e43d-3d6c-624f-1c8ce5859788@linux.dev>
- <f85cdaaa-b1d6-bc89-e963-8b611ae3667d@fujitsu.com>
- <230b310a-26ef-34f1-4c3b-c2360088ce04@linux.dev>
- <f71e67d8-119c-7ec5-fbc0-d37799ed82b6@fujitsu.com>
- <bfa3317b-656f-9a3f-9564-4dbb1bbef3e3@linux.dev>
- <71935de6-e3c1-c719-4e66-19242af51ab7@fujitsu.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Guoqing Jiang <guoqing.jiang@linux.dev>
-In-Reply-To: <71935de6-e3c1-c719-4e66-19242af51ab7@fujitsu.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH v2 04/11] KVM: VMX: Add IA32_SPEC_CTRL virtualization
+ support
+To:     Chao Gao <chao.gao@intel.com>, kvm@vger.kernel.org
+Cc:     Jiaan Lu <jiaan.lu@intel.com>, Zhang Chen <chen.zhang@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
+References: <20230414062545.270178-1-chao.gao@intel.com>
+ <20230414062545.270178-5-chao.gao@intel.com>
+From:   Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20230414062545.270178-5-chao.gao@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -66,93 +71,99 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-
-On 4/14/23 18:09, Zhijian Li (Fujitsu) wrote:
+On 4/14/2023 2:25 PM, Chao Gao wrote:
+> From: Zhang Chen <chen.zhang@intel.com>
 >
-> On 14/04/2023 14:04, Guoqing Jiang wrote:
->>
->> On 4/14/23 13:37, Zhijian Li (Fujitsu) wrote:
->>> On 14/04/2023 11:40, Guoqing Jiang wrote:
->>>> On 4/13/23 16:12, Zhijian Li (Fujitsu) wrote:
->>>>> On 13/04/2023 15:35, Guoqing Jiang wrote:
->>>>>> Hi,
->>>>>>
->>>>>> I take a closer look today.
->>>>>>
->>>>>> On 4/12/23 09:15, Zhijian Li (Fujitsu) wrote:
->>>>>>> On 11/04/2023 20:26, Leon Romanovsky wrote:
->>>>>>>> On Tue, Apr 11, 2023 at 02:43:46AM +0000, Zhijian Li (Fujitsu) wrote:
->>>>>>>>> On 10/04/2023 21:10, Guoqing Jiang wrote:
->>>>>>>>>> On 4/10/23 20:08, Leon Romanovsky wrote:
->>>>>>>>>>> On Mon, Apr 10, 2023 at 06:43:03AM +0000, Li Zhijian wrote:
->>>>>>>>>>>> The warning occurs when destroying PD whose reference count is not zero.
->>>>>>>>>>>>
->>>>>>>>>>>> Precodition: clt_path->s.con_num is 2.
->>>>>>>>>>>> So 2 cm connection will be created as below:
->>>>>>>>>>>> CPU0                                              CPU1
->>>>>>>>>>>> init_conns {                              |
->>>>>>>>>>>>         create_cm() // a. con[0] created        |
->>>>>>>>>>>>                                                 |  a'. rtrs_clt_rdma_cm_handler() {
->>>>>>>>>>>>                                                 |    rtrs_rdma_addr_resolved()
->>>>>>>>>>>>                                                 |      create_con_cq_qp(con); << con[0]
->>>>>>>>>>>>                                                 |  }
->>>>>>>>>>>>                                                 | in this moment, refcnt of PD was increased to 2+
->>>>>> What do you mean "refcnt of PD"? usecnt in struct ib_pd or dev_ref.
->>>>> I mean usecnt in struct ib_pd
->>>>>
->>>>>>>>>>>>                                                 |
->>>>>>>>>>>>         create_cm() // b. cid = 1, failed       |
->>>>>>>>>>>>           destroy_con_cq_qp()                   |
->>>>>>>>>>>>             rtrs_ib_dev_put()                   |
->>>>>>>>>>>>               dev_free()                        |
->>>>>>>>>>>>                 ib_dealloc_pd(dev->ib_pd) << PD |
->>>>>>>>>>>>                  is destroyed, but refcnt is    |
->>>>>>>>>>>>                  still greater than 0           |
->>>>>> Assuming you mean "pd->usecnt". We only allocate pd in con[0] by rtrs_ib_dev_find_or_add,
->>>>>> if con[1] failed to create cm, then alloc_path_reqs -> ib_alloc_mr -> atomic_inc(&pd->usecnt)
->>>> The above can't be invoked, right?
->>>>
->>>>>> can't be triggered. Is there other places could increase the refcnt?
->>>>> Yes, when create a qp, it will also associate to this PD, that also mean refcnt of PD will be increased.
->>>>>
->>>>> When con[0](create_con_cq_qp) succeeded, refcnt of PD will be 2. and then when con[1] failed, since
->>>>> QP didn't create, refcnt of PD is still 2. con[1]'s cleanup will destroy the PD(ib_dealloc_pd) since dev_ref = 1, after that its
->>>>> refcnt is still 1.
->>>> I can see the path increase usecnt to 1.
->>>>
->>>> rtrs_cq_qp_create -> create_qp
->>>>                        -> rdma_create_qp
->>>>                            -> ib_create_qp
->>>>                                -> create_qp
->>>>                                -> ib_qp_usecnt_inc which increases pd->usecnt
->>>>
->>>> Where is another place to increase usecnt to 2?
->>> It should be
->>> ib_create_qp　...
->>>      -> rxe_create_qp
->>>        -> rxe_qp_from_init
->>>           -> rxe_get(pd) <<< pd's refcnt will be increased.
->> Isn't rxe_get just increase elem->ref_cnt?
-> Yes, that's true.
+> Currently KVM disables interception of IA32_SPEC_CTRL after a non-0 is
+> written to IA32_SPEC_CTRL by guest. Then, guest is allowed to write any
+> value to hardware.
+>
+> "virtualize IA32_SPEC_CTRL" is a new tertiary vm-exec control. This
+> feature allows KVM to specify that certain bits of the IA32_SPEC_CTRL
+> MSR cannot be modified by guest software.
+>
+> Two VMCS fields are added:
+>
+>    IA32_SPEC_CTRL_MASK:   bits that guest software cannot modify
+>    IA32_SPEC_CTRL_SHADOW: value that guest software expects to be in the
+> 			 IA32_SPEC_CTRL MSR
+>
+> On rdmsr, the shadow value is returned. on wrmsr, EDX:EAX is written
+> to the IA32_SPEC_CTRL_SHADOW and (cur_val & mask) | (EDX:EAX & ~mask)
+> is written to the IA32_SPEC_CTRL MSR, where
+>    * cur_val is the original value of IA32_SPEC_CTRL MSR
+>    * mask is the value of IA32_SPEC_CTRL_MASK
+>
+> Add a mask e.g.,
 
-I am confused, does increase ref_cnt equal to increase usecnt?
-If not, then where is another place to increase usecnt to 2?
+e.g. or i.e. ?
 
-BTW, I traced with 6.3-rc5, seems pd's usecnt is only increase once
-after create one connection.
 
-[ 6941.525088] in init_conns 2353 con_num=3
-[ 6941.525732] in create_con_cq_qp 1648
-[ 6941.525944] in rtrs_cq_qp_create 311 con->cid=0 
-path->dev->ib_pd->usecnt=1
-[ 6941.532460] in create_con_cq_qp 1648
-[ 6941.532746] in rtrs_cq_qp_create 311 con->cid=1 
-path->dev->ib_pd->usecnt=2
-[ 6941.533183] in create_con_cq_qp 1648
-[ 6941.533464] in rtrs_cq_qp_create 311 con->cid=2 
-path->dev->ib_pd->usecnt=3
-[ 6941.533685] in init_conns 2365, clt_path->s.dev->ib_pd->usecnt=3
-[ 6941.535680] in init_conns 2371, clt_path->s.dev->ib_pd->usecnt=515
+> loaded_vmcs->spec_ctrl_mask to represent the bits guest
+> shouldn't change. It is 0 for now and some bits will be added by
+> following patches. Use per-vmcs cache to avoid unnecessary vmcs_write()
+> on nested transition because the mask is expected to be rarely changed
+> and the same for vmcs01 and vmcs02.
+>
+> To prevent guest from changing the bits in the mask, enable "virtualize
+> IA32_SPEC_CTRL" if supported or emulate its behavior by intercepting
+> the IA32_SPEC_CTRL msr. Emulating "virtualize IA32_SPEC_CTRL" behavior
+> is mainly to give the same capability to KVM running on potential broken
+> hardware or L1 guests.
+>
+> To avoid L2 evading the enforcement, enable "virtualize IA32_SPEC_CTRL"
+> in vmcs02. Always update the guest (shadow) value of IA32_SPEC_CTRL MSR
+> and the mask to preserve them across nested transitions. Note that the
+> shadow value may be changed because L2 may access the IA32_SPEC_CTRL
+> directly and the mask may be changed due to migration when L2 vCPUs are
+> running.
+>
+> Co-developed-by: Chao Gao <chao.gao@intel.com>
+> Signed-off-by: Chao Gao <chao.gao@intel.com>
+> Signed-off-by: Zhang Chen <chen.zhang@intel.com>
+> Signed-off-by: Chao Gao <chao.gao@intel.com>
+> Tested-by: Jiaan Lu <jiaan.lu@intel.com>
+> ---
+>   arch/x86/include/asm/vmx.h         |  5 ++++
+>   arch/x86/include/asm/vmxfeatures.h |  2 ++
+>   arch/x86/kvm/vmx/capabilities.h    |  5 ++++
+>   arch/x86/kvm/vmx/nested.c          | 13 ++++++++++
+>   arch/x86/kvm/vmx/vmcs.h            |  2 ++
+>   arch/x86/kvm/vmx/vmx.c             | 34 ++++++++++++++++++++-----
+>   arch/x86/kvm/vmx/vmx.h             | 40 +++++++++++++++++++++++++++++-
+>   7 files changed, 94 insertions(+), 7 deletions(-)
+>
+[...]
 
-Thanks,
-Guoqing
+> @@ -750,4 +766,26 @@ static inline bool guest_cpuid_has_evmcs(struct kvm_vcpu *vcpu)
+>   	       to_vmx(vcpu)->nested.enlightened_vmcs_enabled;
+>   }
+>   
+> +static inline u64 vmx_get_guest_spec_ctrl(struct vcpu_vmx *vmx)
+> +{
+> +	return vmx->guest_spec_ctrl;
+> +}
+> +
+> +static inline void vmx_set_guest_spec_ctrl(struct vcpu_vmx *vmx, u64 val)
+> +{
+> +	vmx->guest_spec_ctrl = val;
+> +
+> +	/*
+> +	 * For simplicity, always keep IA32_SPEC_CTRL_SHADOW up-to-date,
+> +	 * regardless of the MSR intercept state.
+
+It is better to use "IA32_SPEC_CTRL"  explicitly instead of "the MSR" to 
+avoid misunderstand.
+
+
+> +	 */
+> +	if (cpu_has_spec_ctrl_virt())
+> +		vmcs_write64(IA32_SPEC_CTRL_SHADOW, val);
+> +
+> +	/*
+> +	 * Update the effective value of IA32_SPEC_CTRL to reflect changes to
+> +	 * guest's IA32_SPEC_CTRL. Bits in the mask should always be set.
+> +	 */
+> +	vmx->spec_ctrl = val | vmx_get_spec_ctrl_mask(vmx);
+> +}
+>   #endif /* __KVM_X86_VMX_H */
