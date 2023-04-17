@@ -2,68 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01DDE6E53CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 23:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E1746E53D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 23:27:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbjDQVYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 17:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33308 "EHLO
+        id S230358AbjDQV06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 17:26:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjDQVYR (ORCPT
+        with ESMTP id S229643AbjDQV05 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 17:24:17 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945253A82;
-        Mon, 17 Apr 2023 14:24:16 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id l21so9527426pla.5;
-        Mon, 17 Apr 2023 14:24:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681766656; x=1684358656;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tS2EUAIxndFqnf5A6Ki9yaF0traiHvKhRYcLbNaTGjs=;
-        b=Fk/0X/CitoM7OVxl8nn7ggP0Ren4uObavNY91hwd44HvH2NrKmoM0h23GPordmdQk1
-         dMIvDKGQZ6vocVh9NEtr6riaR0BFi433NmwiWQ0WiXHqdukhUtYGmEgCqkW55JPnMAir
-         sXmGk7XXIEgJXib45NbZVgiNjjWKkJ5PO/hwvP+ksBeNyyWFoFBn3toRELFepx9U7g1+
-         6kB3tF+cLh6pQD0Ob3kjFPOKztpgGXsxYGuCKDWF4yc0x7+h0Yw0pCN9bVGOPkTO8KU9
-         XmzpZ6DgO4zXHDL/DKfqaF/SMcS6+NATLNM1veooGQeS94J92n0oWmyBqz2WEXdukkpA
-         yjXg==
+        Mon, 17 Apr 2023 17:26:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE5E3A82
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 14:26:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681766768;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+iUdFnPPW5Cjo+Wv9uVErEgS8kkVkrl+5T7LT3zMOPQ=;
+        b=BPKEmPTA6imjDbkb/AoPdNUrU+XLbfq7Lt/WM4E5HBo+3RR1GX5iCWN6ADAGKk2MCf368D
+        HodOdxH1pTQgsXqYGYZ6wJkMdHXBW0WyiTh3G/UIxKPJBL2b1Y6OZrFL6tMrZNJ9dCAak0
+        fMYyOlW/Gf7pMaRPC3AmZO6hdgpptkk=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-86-qY6-dE2KOb6SvQDBRKbJsA-1; Mon, 17 Apr 2023 17:26:07 -0400
+X-MC-Unique: qY6-dE2KOb6SvQDBRKbJsA-1
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-5ef5fbe2cfaso6172336d6.0
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 14:26:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681766656; x=1684358656;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tS2EUAIxndFqnf5A6Ki9yaF0traiHvKhRYcLbNaTGjs=;
-        b=D73qD3j6jemSDaE8dC5jWQVlHDoY7iPzctSIv4IGk+9oEP19izjXdMwwHGwOFyuVWv
-         Av63NhaYxXQD3YErzjGj/iuDx8pYWaC9KVdyGY0XYkX/Le/WLSj9nrEKsTyhvQXT55qj
-         f6Zkcuy+uKh950a/XY5mtIfdJ8npcyyiFemalJ5/O9z/8ktte8MWEXMVnBYmf9z4s9WA
-         NSCAFDGyeiDr9Bdn4MmG0eYGCJz9rVS/vkk4ys85/A7zWkt0Kp/E+L6ne8dZzWSpZAoL
-         eT52HDNy3UgiUpntOXWuDuWe5Ndk49ccYV2GzrQeY7KGduHQP6hR7Fp5hjt54hctf4X1
-         a7vw==
-X-Gm-Message-State: AAQBX9dXrV4JcJawmaXnjnzo4l+Xnzf+9lrHs9jXCC6TKiJlBdp2MeRG
-        0JOZ9OFHBKP/JMjrNmVbUcBXh5p0Dhdabw==
-X-Google-Smtp-Source: AKy350aujkebVnw/oK8vmydVyXqYA3HoOBCMvisiFO1fI6aF4eFv8ANUXJNBd8VwXfiyiWREOkU7bA==
-X-Received: by 2002:a05:6a21:7893:b0:f0:93d9:9c03 with SMTP id bf19-20020a056a21789300b000f093d99c03mr265012pzc.15.1681766655822;
-        Mon, 17 Apr 2023 14:24:15 -0700 (PDT)
-Received: from localhost.localdomain ([2402:e280:218d:82:ae97:7cb6:b12a:54f5])
-        by smtp.gmail.com with ESMTPSA id k4-20020aa790c4000000b0063d2dae6247sm1177507pfk.77.2023.04.17.14.24.11
+        d=1e100.net; s=20221208; t=1681766767; x=1684358767;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+iUdFnPPW5Cjo+Wv9uVErEgS8kkVkrl+5T7LT3zMOPQ=;
+        b=G6+cf8yDJkCxHzCmu4vharKGABs1Ebkstb+RRVugzEg9VyyhO3d5HEv2ckOrgNavEX
+         Qu+qqztHrXoSJIUXesSKcH12l67+8VAMRQ4zcArZBGhONjwwuiyn6m3xvOfDtTOkmjUz
+         iZhPCQWGXHCyCZVeKJv0Omgmi8d0WAb0uRxsbWkXS7n8AXGopHj8OjsCAJQEG+nEJ4ty
+         ILfYK3YifEE5jNz6kS+KJLm8ig1dhoP5dMWpBJl8wXi4HeX1My9q2Mw/c82bkbHcsRuF
+         b9fJ6pTY1YC0WBcFIncF9hrr24rafc8o/cTllfODNQce9MVW0slqYRoW2bc+m5QvGmrh
+         JNUg==
+X-Gm-Message-State: AAQBX9dURrUjD+Gf//b/eKxCmOhWWAvYBEFNZr/FS78eDgVxmQeODvxG
+        ZUH0xmCwyFEv9ysX+sHGIjH1lT7pcvm5+qtTBK26ja6POjrGfysPokLv5JIUyUYNiAUMEMCOE6U
+        1smtI0fxPV07E/7yQdqYZtHV3
+X-Received: by 2002:a05:6214:4114:b0:5a9:ab44:5fdf with SMTP id kc20-20020a056214411400b005a9ab445fdfmr17548928qvb.0.1681766767257;
+        Mon, 17 Apr 2023 14:26:07 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bvmfyActz0XucL8uBTGsMXoULXM+Q4SGkObq+luJMUHRHs+pm3taS35Ybk4Jlndg31eEXu4A==
+X-Received: by 2002:a05:6214:4114:b0:5a9:ab44:5fdf with SMTP id kc20-20020a056214411400b005a9ab445fdfmr17548909qvb.0.1681766767032;
+        Mon, 17 Apr 2023 14:26:07 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
+        by smtp.gmail.com with ESMTPSA id dw17-20020a0562140a1100b005dd8b9345cesm3274332qvb.102.2023.04.17.14.26.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 14:24:14 -0700 (PDT)
-From:   Saalim Quadri <danascape@gmail.com>
-To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, daniel.baluta@gmail.com
-Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Saalim Quadri <danascape@gmail.com>
-Subject: [PATCH] ASoC: dt-bindings: wm8737: Convert to dtschema
-Date:   Mon, 17 Apr 2023 21:24:00 +0000
-Message-Id: <20230417212400.161796-1-danascape@gmail.com>
-X-Mailer: git-send-email 2.40.0
+        Mon, 17 Apr 2023 14:26:06 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 17:26:04 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
+        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
+        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v2 1/1] mm: do not increment pgfault stats when page
+ fault handler retries
+Message-ID: <ZD25bBPbZYSb7grA@x1n>
+References: <20230415000818.1955007-1-surenb@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230415000818.1955007-1-surenb@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,86 +84,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the WM8737 audio CODEC bindings to DT schema
+On Fri, Apr 14, 2023 at 05:08:18PM -0700, Suren Baghdasaryan wrote:
+> @@ -5223,8 +5230,8 @@ vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
+>  		if (task_in_memcg_oom(current) && !(ret & VM_FAULT_OOM))
+>  			mem_cgroup_oom_synchronize(false);
+>  	}
+> -
+> -	mm_account_fault(regs, address, flags, ret);
+> +out:
+> +	mm_account_fault(mm, regs, address, flags, ret);
 
-Signed-off-by: Saalim Quadri <danascape@gmail.com>
----
- .../devicetree/bindings/sound/wlf,wm8737.yaml | 40 +++++++++++++++++++
- .../devicetree/bindings/sound/wm8737.txt      | 18 ---------
- 2 files changed, 40 insertions(+), 18 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/sound/wlf,wm8737.yaml
- delete mode 100644 Documentation/devicetree/bindings/sound/wm8737.txt
+Ah, one more question.. can this cached mm race with a destroying mm (just
+like the vma race we wanted to avoid)?  Still a question only applies to
+COMPLETE case when mmap read lock can be released.  Thanks,
 
-diff --git a/Documentation/devicetree/bindings/sound/wlf,wm8737.yaml b/Documentation/devicetree/bindings/sound/wlf,wm8737.yaml
-new file mode 100644
-index 000000000000..12d8765726d8
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/wlf,wm8737.yaml
-@@ -0,0 +1,40 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/wlf,wm8737.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: WM8737 audio CODEC
-+
-+maintainers:
-+  - patches@opensource.cirrus.com
-+
-+allOf:
-+  - $ref: dai-common.yaml#
-+
-+properties:
-+  compatible:
-+    const: wlf,wm8737
-+
-+  reg:
-+    maxItems: 1
-+
-+  "#sound-dai-cells":
-+    const: 0
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        codec@1a {
-+            compatible = "wlf,wm8737";
-+            reg = <0x1a>;
-+        };
-+    };
-diff --git a/Documentation/devicetree/bindings/sound/wm8737.txt b/Documentation/devicetree/bindings/sound/wm8737.txt
-deleted file mode 100644
-index eda1ec6a7563..000000000000
---- a/Documentation/devicetree/bindings/sound/wm8737.txt
-+++ /dev/null
-@@ -1,18 +0,0 @@
--WM8737 audio CODEC
--
--This device supports both I2C and SPI (configured with pin strapping
--on the board).
--
--Required properties:
--
--  - compatible : "wlf,wm8737"
--
--  - reg : the I2C address of the device for I2C, the chip select
--          number for SPI.
--
--Example:
--
--wm8737: codec@1a {
--	compatible = "wlf,wm8737";
--	reg = <0x1a>;
--};
+>  
+>  	return ret;
+>  }
+
 -- 
-2.40.0
+Peter Xu
 
