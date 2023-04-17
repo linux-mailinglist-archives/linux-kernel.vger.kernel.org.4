@@ -2,74 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC3E76E4F50
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 19:35:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C686E4F52
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 19:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbjDQRfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 13:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57766 "EHLO
+        id S230135AbjDQRfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 13:35:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbjDQRfH (ORCPT
+        with ESMTP id S229485AbjDQRfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 13:35:07 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484F7B74D;
-        Mon, 17 Apr 2023 10:34:46 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id be20so3238135oib.4;
-        Mon, 17 Apr 2023 10:34:46 -0700 (PDT)
+        Mon, 17 Apr 2023 13:35:30 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96AE0BBBE;
+        Mon, 17 Apr 2023 10:35:19 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1a667067275so10680745ad.1;
+        Mon, 17 Apr 2023 10:35:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681752885; x=1684344885;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1681752919; x=1684344919;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eeGDsMuMU6qRe43N99vF2ssCtRufnnsTh9UIA9+QypE=;
-        b=IDInwrW+xH9jdKHhQwGZ9AMx5IBZdTD6+1g3OhLs9BWIvByeuF8PqXlZYUpbq13ny8
-         /CYUx0aSkCiH+tnQ1E70s+IGQ8WA2eqmH7hS/7MnAaKcHofmJ86YfSi1Y38FKGOCNdMA
-         g3m+DAZpNsBcTuqDcyVLYTwgcWMeqR0Jb3MZD8ZYVQNxghqAIUU6r/lyLwqGDpf0w29g
-         WjOwYOtrKN8/k4FPwJhoEp1I0+NGXF6sglPcQq3Qlo1TNlp6XLoWjB1IP4AI9+4i64bv
-         UqXueR38VYZqbwHAIWrwo/ZOTqmMuybmySOdU86AU7kuz5YsH33MG6ug6/G30vMd7Pl4
-         o6wQ==
+        bh=kKBqkldHay2ydjs9ABXeuxtcdI+nj2fd1RyBmIcAqMg=;
+        b=HTyK6NDe5chPRopsL3ZuFt853JC1dQzM9r/S4i6agc4qQxedDGKHNQ7pfSeFHPuNRn
+         9fUr56G76/laVqXz/FxXlMpC3P7hdee4wokzwRSUp9XcnH77vIrKa/He5dgkmMzUHoqX
+         j5o6vspV6stz26v0WPLzA5KzMjSlRosGBeVbpwARY+jdb/zEvOo3u9EM4cxaHQSlkrFj
+         TtKwQuT/zeuZ8BrglkO25FFlSwryfmMxwZ9Qp0bJR/ONRQ0c3zJCm1QGvwe1nHbe9/3G
+         YnxnAbziCZ6sI+wlCY3Me/NYkn/Bvq0tq444lrkjikG/Pv0pfEC5OiOFXkcf3+KJe6Pe
+         CMFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681752885; x=1684344885;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1681752919; x=1684344919;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=eeGDsMuMU6qRe43N99vF2ssCtRufnnsTh9UIA9+QypE=;
-        b=hhosQUQGKgnWkTotJELwLCKQgevmSweGfwN+UW9UW9BrtFHY7ZyCjoJgD3GUMz9kzQ
-         a6ulSjOO9wSncF1E+ZHJrhBxxkcOV+07dYKDhr81IqVlkcehb/wggfeIUAO+fftYIj/G
-         HKktlu9sa7JtSaO8HLCi2a/7IcEIO/LRi4JvIJt/gy6fy7QzATsZsE5r8/Uz127xg44T
-         o5d8fnABRCFY/tY8fZRaAHMA9bZxAWpNyhhucaI9uUCohpkpt1OlOi9xExrse7cqmOTa
-         7qsTm3FuU1JVFD78F47nG+ksazktCufnLQ1EUsDop4UZH0l0lvzixZMwwhjiepKgXLMk
-         VnFg==
-X-Gm-Message-State: AAQBX9dPhDKUeEpNT3D8JIVQ2c4IxZK7Yy0FJz5brFPsWJWb/kPIj9rq
-        EvIwrpFAJZheJq7rN1eaOV7SkRlP/LnAr/bfqRY=
-X-Google-Smtp-Source: AKy350bTrioIHzK5dr57vHhkLOTsyDawAXA2vhtRBswSuZM9nYlM43t4FGB7iGqblWvkCMZohmexiSP4DPey+QT8DqY=
-X-Received: by 2002:aca:ea8b:0:b0:38e:2135:697f with SMTP id
- i133-20020acaea8b000000b0038e2135697fmr426732oih.3.1681752885378; Mon, 17 Apr
- 2023 10:34:45 -0700 (PDT)
+        bh=kKBqkldHay2ydjs9ABXeuxtcdI+nj2fd1RyBmIcAqMg=;
+        b=CF+2KY+S+DD4S7asd0V4nPnSPlmFcNYl0hBw29GKAbbnB9BVDI6DLK+/CpMT3HLq12
+         yHm3MjdbwZWYtZwhUwu8mpokugcg81/MyyefFdZ8gsMW1JSAJteCKIlog+VEcd3IMF8D
+         aGzamRiPprzOKEOY3qxsUoLPfYvcCna1V+3bAGDvzbNI+IPj10fLcWfqdrXngsPLOBaP
+         XRBS6xaW1srdw8xSwCaWzSbLPi7K7RnfE+VZ4z2cFsi8WQZ+b5ta1dvsU9ztKcWD3oCC
+         D7KsXd568lGtSKdtszmWEGLi/fTTz0usjZ9fCEOzOJuRa7tDtxdLSQpnz3lfhEofcJjY
+         QMnA==
+X-Gm-Message-State: AAQBX9dNo9j6nFSLyp6eAFZkM/K6RjDr1JHflullHmjnkuVz9D2K5mUM
+        94mNAA827P3mTJBC1eciNM3x2pbQStk=
+X-Google-Smtp-Source: AKy350YF3pTMln2uLFQQmuOrQhev5UO7YUd1SQbfoop5nap0iMmEhUxWuYbT/KKdqC6KffLvzdD3kg==
+X-Received: by 2002:a05:6a00:234a:b0:63b:2102:a068 with SMTP id j10-20020a056a00234a00b0063b2102a068mr23329841pfj.26.1681752918665;
+        Mon, 17 Apr 2023 10:35:18 -0700 (PDT)
+Received: from carrot.. (i223-217-34-84.s42.a014.ap.plala.or.jp. [223.217.34.84])
+        by smtp.gmail.com with ESMTPSA id p22-20020aa78616000000b0063b675f01a2sm5980509pfn.26.2023.04.17.10.35.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 10:35:17 -0700 (PDT)
+From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-nilfs@vger.kernel.org,
+        syzbot <syzbot+048585f3f4227bb2b49b@syzkaller.appspotmail.com>,
+        syzkaller-bugs@googlegroups.com, linux-kernel@vger.kernel.org,
+        glider@google.com
+Subject: [PATCH] nilfs2: initialize unused bytes in segment summary blocks
+Date:   Tue, 18 Apr 2023 02:35:13 +0900
+Message-Id: <20230417173513.12598-1-konishi.ryusuke@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <0000000000000d710705f63f014c@google.com>
+References: <0000000000000d710705f63f014c@google.com>
 MIME-Version: 1.0
-References: <20230414193331.199598-1-hamza.mahfooz@amd.com> <4207e848-4e79-29a7-2bb0-44f74a2d62c7@amd.com>
-In-Reply-To: <4207e848-4e79-29a7-2bb0-44f74a2d62c7@amd.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 17 Apr 2023 13:34:33 -0400
-Message-ID: <CADnq5_MRMjr3byW_qO==Ps+X9grYQ9FLYGFEnd_Jsu3FLQBzCw@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/display: fix flickering caused by S/G mode
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        amd-gfx@lists.freedesktop.org, Stylon Wang <stylon.wang@amd.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        Hersen Wu <hersenxs.wu@amd.com>,
-        dri-devel@lists.freedesktop.org,
-        Alex Deucher <alexander.deucher@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -80,123 +74,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 1:59=E2=80=AFAM Christian K=C3=B6nig
-<christian.koenig@amd.com> wrote:
->
-> Am 14.04.23 um 21:33 schrieb Hamza Mahfooz:
-> > Currently, we allow the framebuffer for a given plane to move between
-> > memory domains, however when that happens it causes the screen to
-> > flicker, it is even possible for the framebuffer to change memory
-> > domains on every plane update (causing a continuous flicker effect). So=
-,
-> > to fix this, don't perform an immediate flip in the aforementioned case=
-.
->
-> That sounds strongly like you just forget to wait for the move to finish!
+Syzbot still reports uninit-value in nilfs_add_checksums_on_logs() for
+KMSAN enabled kernels after applying commit 7397031622e0 ("nilfs2:
+initialize "struct nilfs_binfo_dat"->bi_pad field").
 
-It doesn't exhibit when we allow only gtt or only vram, only when
-switches between pools does it flicker.
+This is because the unused bytes at the end of each block in segment
+summaries are not initialized.  So this fixes the issue by padding the
+unused bytes with null bytes.
 
-Alex
+Signed-off-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Reported-by: syzbot+048585f3f4227bb2b49b@syzkaller.appspotmail.com
+Link: https://syzkaller.appspot.com/bug?extid=048585f3f4227bb2b49b
+Tested-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Cc: stable@vger.kernel.org
+---
+ fs/nilfs2/segment.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
->
-> What is the order of things done here? E.g. who calls amdgpu_bo_pin()
-> and who waits for fences for finish signaling? Is that maybe just in the
-> wrong order?
->
-> Regards,
-> Christian.
->
-> >
-> > Cc: stable@vger.kernel.org
-> > Fixes: 81d0bcf99009 ("drm/amdgpu: make display pinning more flexible (v=
-2)")
-> > Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
-> > ---
-> >   .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 41 ++++++++++++++++++=
--
-> >   1 file changed, 39 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/driver=
-s/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> > index da3045fdcb6d..9a4e7408384a 100644
-> > --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> > +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> > @@ -7897,6 +7897,34 @@ static void amdgpu_dm_commit_cursors(struct drm_=
-atomic_state *state)
-> >                       amdgpu_dm_plane_handle_cursor_update(plane, old_p=
-lane_state);
-> >   }
-> >
-> > +static inline uint32_t get_mem_type(struct amdgpu_device *adev,
-> > +                                 struct drm_gem_object *obj,
-> > +                                 bool check_domain)
-> > +{
-> > +     struct amdgpu_bo *abo =3D gem_to_amdgpu_bo(obj);
-> > +     uint32_t mem_type;
-> > +
-> > +     if (unlikely(amdgpu_bo_reserve(abo, true)))
-> > +             return 0;
-> > +
-> > +     if (unlikely(dma_resv_reserve_fences(abo->tbo.base.resv, 1)))
-> > +             goto err;
-> > +
-> > +     if (check_domain &&
-> > +         amdgpu_display_supported_domains(adev, abo->flags) !=3D
-> > +         (AMDGPU_GEM_DOMAIN_VRAM | AMDGPU_GEM_DOMAIN_GTT))
-> > +             goto err;
-> > +
-> > +     mem_type =3D abo->tbo.resource->mem_type;
-> > +     amdgpu_bo_unreserve(abo);
-> > +
-> > +     return mem_type;
-> > +
-> > +err:
-> > +     amdgpu_bo_unreserve(abo);
-> > +     return 0;
-> > +}
-> > +
-> >   static void amdgpu_dm_commit_planes(struct drm_atomic_state *state,
-> >                                   struct dc_state *dc_state,
-> >                                   struct drm_device *dev,
-> > @@ -7916,6 +7944,7 @@ static void amdgpu_dm_commit_planes(struct drm_at=
-omic_state *state,
-> >                       to_dm_crtc_state(drm_atomic_get_old_crtc_state(st=
-ate, pcrtc));
-> >       int planes_count =3D 0, vpos, hpos;
-> >       unsigned long flags;
-> > +     uint32_t mem_type;
-> >       u32 target_vblank, last_flip_vblank;
-> >       bool vrr_active =3D amdgpu_dm_crtc_vrr_active(acrtc_state);
-> >       bool cursor_update =3D false;
-> > @@ -8035,13 +8064,21 @@ static void amdgpu_dm_commit_planes(struct drm_=
-atomic_state *state,
-> >                       }
-> >               }
-> >
-> > +             mem_type =3D get_mem_type(dm->adev, old_plane_state->fb->=
-obj[0],
-> > +                                     true);
-> > +
-> >               /*
-> >                * Only allow immediate flips for fast updates that don't
-> > -              * change FB pitch, DCC state, rotation or mirroing.
-> > +              * change memory domain, FB pitch, DCC state, rotation or
-> > +              * mirroring.
-> >                */
-> >               bundle->flip_addrs[planes_count].flip_immediate =3D
-> >                       crtc->state->async_flip &&
-> > -                     acrtc_state->update_type =3D=3D UPDATE_TYPE_FAST;
-> > +                     acrtc_state->update_type =3D=3D UPDATE_TYPE_FAST =
-&&
-> > +                     (!mem_type || (mem_type && get_mem_type(dm->adev,
-> > +                                                             fb->obj[0=
-],
-> > +                                                             false) =
-=3D=3D
-> > +                                    mem_type));
-> >
-> >               timestamp_ns =3D ktime_get_ns();
-> >               bundle->flip_addrs[planes_count].flip_timestamp_in_us =3D=
- div_u64(timestamp_ns, 1000);
->
+diff --git a/fs/nilfs2/segment.c b/fs/nilfs2/segment.c
+index 6ad41390fa74..228659612c0d 100644
+--- a/fs/nilfs2/segment.c
++++ b/fs/nilfs2/segment.c
+@@ -430,6 +430,23 @@ static int nilfs_segctor_reset_segment_buffer(struct nilfs_sc_info *sci)
+ 	return 0;
+ }
+ 
++/**
++ * nilfs_segctor_zeropad_segsum - zero pad the rest of the segment summary area
++ * @sci: segment constructor object
++ *
++ * nilfs_segctor_zeropad_segsum() zero-fills unallocated space at the end of
++ * the current segment summary block.
++ */
++static void nilfs_segctor_zeropad_segsum(struct nilfs_sc_info *sci)
++{
++	struct nilfs_segsum_pointer *ssp;
++
++	ssp = sci->sc_blk_cnt > 0 ? &sci->sc_binfo_ptr : &sci->sc_finfo_ptr;
++	if (ssp->offset < ssp->bh->b_size)
++		memset(ssp->bh->b_data + ssp->offset, 0,
++		       ssp->bh->b_size - ssp->offset);
++}
++
+ static int nilfs_segctor_feed_segment(struct nilfs_sc_info *sci)
+ {
+ 	sci->sc_nblk_this_inc += sci->sc_curseg->sb_sum.nblocks;
+@@ -438,6 +455,7 @@ static int nilfs_segctor_feed_segment(struct nilfs_sc_info *sci)
+ 				* The current segment is filled up
+ 				* (internal code)
+ 				*/
++	nilfs_segctor_zeropad_segsum(sci);
+ 	sci->sc_curseg = NILFS_NEXT_SEGBUF(sci->sc_curseg);
+ 	return nilfs_segctor_reset_segment_buffer(sci);
+ }
+@@ -542,6 +560,7 @@ static int nilfs_segctor_add_file_block(struct nilfs_sc_info *sci,
+ 		goto retry;
+ 	}
+ 	if (unlikely(required)) {
++		nilfs_segctor_zeropad_segsum(sci);
+ 		err = nilfs_segbuf_extend_segsum(segbuf);
+ 		if (unlikely(err))
+ 			goto failed;
+@@ -1533,6 +1552,7 @@ static int nilfs_segctor_collect(struct nilfs_sc_info *sci,
+ 		nadd = min_t(int, nadd << 1, SC_MAX_SEGDELTA);
+ 		sci->sc_stage = prev_stage;
+ 	}
++	nilfs_segctor_zeropad_segsum(sci);
+ 	nilfs_segctor_truncate_segments(sci, sci->sc_curseg, nilfs->ns_sufile);
+ 	return 0;
+ 
+-- 
+2.34.1
+
