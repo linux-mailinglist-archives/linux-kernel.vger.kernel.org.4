@@ -2,304 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4A436E5058
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 20:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFD266E5062
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 20:47:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjDQSlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 14:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48486 "EHLO
+        id S229477AbjDQSrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 14:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjDQSle (ORCPT
+        with ESMTP id S229751AbjDQSq4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 14:41:34 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0C446BF
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 11:41:31 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-54fc337a650so176695527b3.4
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 11:41:31 -0700 (PDT)
+        Mon, 17 Apr 2023 14:46:56 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F14E5FCD;
+        Mon, 17 Apr 2023 11:46:55 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-2efbaad83b8so1101768f8f.0;
+        Mon, 17 Apr 2023 11:46:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681756891; x=1684348891;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zh2NygFtkr3VUedMSETAcg+PkAMPbYO4qgRvEzIpFdA=;
-        b=GGkR4g/uPZVqgebfVFZrVET/qxYmJ9p02R7SCDBUn2CObHnoLTJmwYYk6SYFZdRz9q
-         xDN9bgfRttmR2K4LyLZcNcAGZ42DqgO5vye8FBXvwTE+gStEO/k3od+sgMQfpB3zvjbs
-         6RSSQ6mj/IxXr9H2rDYIQpogoEbLYppiQWgngTNRa92HGLhMO07FW7r0lJdXpMmOCXum
-         nZhDot+xgEjqhA+uK+zeKrt/f+pRG6ZqNtNRD9AeNwV645wF29Rqb1rWXi6ek3YTzHaE
-         vKUO81VLqrb0I86Jr4EmHD3pne1XUyESmOSJhLlmWDJ8U67kdGl7oovlXzlwqg86Nefm
-         74hw==
+        d=gmail.com; s=20221208; t=1681757213; x=1684349213;
+        h=in-reply-to:from:references:cc:to:content-language:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ul0ppOIkYr7g2MWVX67OJIrGHXNlS5b/6/869/4/+x4=;
+        b=pIdNR6N6XNaRlrxiCeIayd/j5VtTDT7GqaPnrm4JWY1DdoI3xlCIkTbo8YZRQsXYtU
+         k4cMd0qnsk8x/C+h7A3+7OZ6x5+ekUPOVRUaroxQeLADchETFe0V4401rQAxddNefwqE
+         H/M5BLn5Kbfr67tsmAr5pC1+bRSBvq+sGcvk+qjp88U9szsAq1+mo1mGKMUid0f6MIwF
+         2UV9MqgSDUGPYM+cwVOc+1+ZP7avCoVP3THj8cbxYufK/xGYrIHezQfcPJULB3+k9i3A
+         IRF2WLqvOG+I5S7Xpkh8r3DKZF4WE+dGMlZqUTUf6aP58OoFX3EwNtUpEAP7WIEuk9qS
+         nqzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681756891; x=1684348891;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zh2NygFtkr3VUedMSETAcg+PkAMPbYO4qgRvEzIpFdA=;
-        b=YTCxRXZz2xxyyn8hpGDW9sPoKNBuC+XeLC6KffRK1fkOuGVYKuV/HGZyNGiYI4vC7S
-         C+a8gALxNgmk7Lg5nrWfE14ONgN1+yIBcUaC+pL7nQjlk+Q15/7cmlibPBmx2y0YDXvd
-         zSVLIFNxrAspGwpcKM/RO0cm38oIAMy4q+tMdkpwBCWWBhbvNMKTb0p2VczG6Mkn0BY1
-         bGjmkGg9L47XKxM/peXEjE5g/bPD+ai5qLotIXqAaFvxQfaRfW4biJLQWFGZdf+1c4xz
-         iq9yfkQe/iP5wWvidRH3cG9bhNTURXKkuGByR1+QXhnDFU3+ul/eu3TFYx0R+XDg4EQu
-         dmqQ==
-X-Gm-Message-State: AAQBX9dDH0MGYhBT9EGWNdrVXgudFBeMOMTzzk5C+FAP+jJmz/I0Pamh
-        ONujHOaKRKq8w7jbp5qUr6g7Kqs4V5vIkWNjhm7/1g==
-X-Google-Smtp-Source: AKy350Z6FWj4zKvPDAxvAHo/deDE8tFqv0ceNT9dCNYRALo/7GspKAKMsq1sb5MY9YeaPfrjuaaJaItelRDkE6wuACA=
-X-Received: by 2002:a81:af62:0:b0:54c:bdc:ef18 with SMTP id
- x34-20020a81af62000000b0054c0bdcef18mr9977412ywj.5.1681756891046; Mon, 17 Apr
- 2023 11:41:31 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681757213; x=1684349213;
+        h=in-reply-to:from:references:cc:to:content-language:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ul0ppOIkYr7g2MWVX67OJIrGHXNlS5b/6/869/4/+x4=;
+        b=S8tPW/Uee92nAAZh3+P/0T99ngIbaUXcuYXfs07di+4fCjSL8C3AR4JuCau7N81aI1
+         P6P7bdwK+oP3Rz0NG1fLjywvPCAHqM5s8vjjLzAuuw8ZyQwPpN4G8YkaIXsMics0HD/X
+         37qC9GYJfjJhamzC6ThiiFjzpb7qt8DzLsRw1Mza7iG0qLncpyy0pU2kkCKsfRidho7h
+         TfrXTbMWt6/1HtQkCCdscnSwvH8mk951P5csiorVE76JodoweRDcMXKNWvHM+OusukuK
+         LbiKHRqpQjZc1ml3c1T8pCU/Y6rRC9iOsZGyqo9UvdxT0bn6Gj7LGqNsMKaziQy6FxD/
+         KFoQ==
+X-Gm-Message-State: AAQBX9fSufgKp0LmhkRF+KKq/HBeqQs9VWqmcDcRLGrUbXNXFw/erpau
+        1NREfHZK13RDK8SjOsjsips=
+X-Google-Smtp-Source: AKy350ayNxA/myZiQO/XrI+jeShYY04XIk94dPHRZkDEdoda2pl9GSNKqxgsD7/OsEFWeed6F4T3RQ==
+X-Received: by 2002:a5d:5744:0:b0:2d1:3eb9:c3c2 with SMTP id q4-20020a5d5744000000b002d13eb9c3c2mr6123412wrw.54.1681757213669;
+        Mon, 17 Apr 2023 11:46:53 -0700 (PDT)
+Received: from [192.168.0.160] ([170.253.51.134])
+        by smtp.gmail.com with ESMTPSA id q13-20020adfcd8d000000b002e51195a3e2sm11098120wrj.79.2023.04.17.11.46.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Apr 2023 11:46:53 -0700 (PDT)
+Message-ID: <88991b38-26f5-e060-3a29-5f17c5fc85df@gmail.com>
+Date:   Mon, 17 Apr 2023 20:46:51 +0200
 MIME-Version: 1.0
-References: <20230413-topic-lahaina_vidcc-v2-0-f721d507e555@linaro.org>
- <20230413-topic-lahaina_vidcc-v2-2-f721d507e555@linaro.org>
- <CAA8EJpoxvjWrvJENkFSimfU=CG7C3jZ=ToZep1tnJbtPzCcS9Q@mail.gmail.com>
- <34797b11-b654-a9a4-ac26-5287ca582a82@linaro.org> <CAA8EJppVUddvAp=3H7oGntE-5XqJkHc7=2mcgpBBnRcsHCDZQg@mail.gmail.com>
- <5cf16897-0670-78b9-a1c0-2f6ecb086987@linaro.org>
-In-Reply-To: <5cf16897-0670-78b9-a1c0-2f6ecb086987@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Mon, 17 Apr 2023 21:41:19 +0300
-Message-ID: <CAA8EJppW+QRq=uKQwCToMg8PmHmEgAz=bYg-_sD2UpfH_Li2RA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] clk: qcom: Introduce SM8350 VIDEOCC
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Taniya Das <quic_tdas@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: Checking for support of ptrace(PTRACE_SEIZE,...) on older kernels
+Content-Language: en-US
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     Sergei Zhirikov <sfzhi@yahoo.com>, linux-man@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+References: <997950238.3486335.1681414225118.ref@mail.yahoo.com>
+ <997950238.3486335.1681414225118@mail.yahoo.com>
+ <0d95a96b-dd49-db45-ab3c-1d9cee51381d@gmail.com>
+ <20230417115009.GA906@redhat.com>
+From:   Alejandro Colomar <alx.manpages@gmail.com>
+In-Reply-To: <20230417115009.GA906@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------03r7NMpvI9fyCsHllq8xf7Cs"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Apr 2023 at 21:10, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
->
->
-> On 14.04.2023 22:54, Dmitry Baryshkov wrote:
-> > On Fri, 14 Apr 2023 at 20:48, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
-> >>
-> >>
-> >>
-> >> On 14.04.2023 18:31, Dmitry Baryshkov wrote:
-> >>> On Fri, 14 Apr 2023 at 14:26, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
-> >>>>
-> >>>> Add support for the Video Clock Controller found on the SM8350 SoC.
-> >>>>
-> >>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> >>>> ---
-> >>
-> >> [...]
-> >>
-> >>>> +static struct clk_rcg2 video_cc_ahb_clk_src = {
-> >>>> +       .cmd_rcgr = 0xbd4,
-> >>>> +       .mnd_width = 0,
-> >>>> +       .hid_width = 5,
-> >>>> +       .parent_map = video_cc_parent_map_0,
-> >>>> +       .freq_tbl = ftbl_video_cc_ahb_clk_src,
-> >>>> +       .clkr.hw.init = &(const struct clk_init_data) {
-> >>>> +               .name = "video_cc_ahb_clk_src",
-> >>>> +               .parent_data = video_cc_parent_data_0,
-> >>>> +               .num_parents = ARRAY_SIZE(video_cc_parent_data_0),
-> >>>> +               .flags = CLK_SET_RATE_PARENT,
-> >>>> +               .ops = &clk_rcg2_shared_ops,
-> >>>> +       },
-> >>>> +};
-> >>>
-> >>> Do we need this clock at all? We don't have the child
-> >>> video_cc_ahb_clk, so potentially CCF can try disabling or modifying
-> >>> this clock.
-> >> Hm.. I see a few things:
-> >>
-> >> 1. downstream kona has it, upstream does not
-> >> 2. it's shared so we never actually hard-shut it off..
-> >> 2a. ..but it'd be good to ensure it's on when it's ready..
-> >> 2b. ..but we never do anyway..
-> >> 2c. ..but should we even? doesn't Venus govern it internally?
-> >>
-> >>
-> >>>
-> >>>> +
-> >>>> +static const struct freq_tbl ftbl_video_cc_mvs0_clk_src[] = {
-> >>>> +       F(720000000, P_VIDEO_PLL0_OUT_MAIN, 1, 0, 0),
-> >>>> +       F(1014000000, P_VIDEO_PLL0_OUT_MAIN, 1, 0, 0),
-> >>>> +       F(1098000000, P_VIDEO_PLL0_OUT_MAIN, 1, 0, 0),
-> >>>> +       F(1332000000, P_VIDEO_PLL0_OUT_MAIN, 1, 0, 0),
-> >>>> +       { }
-> >>>> +};
-> >>>> +
-> >>
-> >> [...]
-> >>
-> >>>> +static struct clk_branch video_cc_mvs1_clk = {
-> >>>> +       .halt_reg = 0xdb4,
-> >>>> +       .halt_check = BRANCH_HALT_VOTED,
-> >>>
-> >>> As a note, sm8250 has BRANCH_HALT here.
-> >> No, it does on the div2 clk, and so do we:
-> >
-> > Excuse me, I got confused by all the syllables. I was looking at the
-> > video_cc_mvs1c_clk. On sm8250 it is _VOTED, in this patch it is not. I
-> > can not say that either one of those is incorrect, but such a
-> > difference looks a bit suspicious for me. Maybe Tanya or somebody else
-> > can comment here.
-> I'd say this could be a design decision, with div2 clocks being
-> treated differently, but it's how downstream does it on shipping
-> devices and while generally it's not a great thing to say, it seems
-> to be the "right enough" thing..
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------03r7NMpvI9fyCsHllq8xf7Cs
+Content-Type: multipart/mixed; boundary="------------fHhULJne82m7Do3fon0zhWTb";
+ protected-headers="v1"
+From: Alejandro Colomar <alx.manpages@gmail.com>
+To: Oleg Nesterov <oleg@redhat.com>
+Cc: Sergei Zhirikov <sfzhi@yahoo.com>, linux-man@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>
+Message-ID: <88991b38-26f5-e060-3a29-5f17c5fc85df@gmail.com>
+Subject: Re: Checking for support of ptrace(PTRACE_SEIZE,...) on older kernels
+References: <997950238.3486335.1681414225118.ref@mail.yahoo.com>
+ <997950238.3486335.1681414225118@mail.yahoo.com>
+ <0d95a96b-dd49-db45-ab3c-1d9cee51381d@gmail.com>
+ <20230417115009.GA906@redhat.com>
+In-Reply-To: <20230417115009.GA906@redhat.com>
 
-Ack. Fair enough.
+--------------fHhULJne82m7Do3fon0zhWTb
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
->
-> >
-> >> [...]
-> >>
-> >>>> +};
-> >>>> +
-> >>>> +static struct clk_branch video_cc_mvs1_div2_clk = {
-> >>>> +       .halt_reg = 0xdf4,
-> >>>> +       .halt_check = BRANCH_HALT_VOTED,
-> >>>> +       .hwcg_reg = 0xdf4,
-> >>
-> >> [...]
-> >>
-> >>>> +
-> >>>> +static const struct qcom_reset_map video_cc_sm8350_resets[] = {
-> >>>> +       [CVP_VIDEO_CC_INTERFACE_BCR] = { 0xe54 },
-> >>>> +       [CVP_VIDEO_CC_MVS0_BCR] = { 0xd14 },
-> >>>
-> >>> Would it be better to use common VIDEO_CC prefix here (IOW:
-> >>> VIDEO_CC_CVP_MVS0_BCR, VIDEO_CC_CVP_INTERFACE_BCR), etc.
-> >> My best guess would be that the ones prefixed with CVP_
-> >> are actual INTF/INSTANCEn(CORE) reset lines whereas
-> >> the ones containing _CLK_ reset their clock sub-branches.
-> >
-> > Note, again, on sm8250 all resets start with VIDEO_CC, even CVP ones.
-> > I think we can follow that.
-> Or get rid of that, as it's always called with a phandle to videocc..
->
-> Thoughts?
+Hi Oleg,
 
-I'd say, switch to VIDEO_CC prefix, please. We can not drop the
-prefix, as we risc getting conflicts otherwise.
+On 4/17/23 13:50, Oleg Nesterov wrote:
+> Well, from https://man7.org/linux/man-pages/man2/ptrace.2.html
+>=20
+>        ESRCH  The specified process does not exist, or is not currently=
 
->
-> >
-> >>
-> >>>
-> >>>> +       [VIDEO_CC_MVS0C_CLK_ARES] = { 0xc34, 2 },
-> >>>> +       [CVP_VIDEO_CC_MVS0C_BCR] = { 0xbf4 },
-> >>>> +       [CVP_VIDEO_CC_MVS1_BCR] = { 0xd94 },
-> >>>> +       [VIDEO_CC_MVS1C_CLK_ARES] = { 0xcd4, 2 },
-> >>>> +       [CVP_VIDEO_CC_MVS1C_BCR] = { 0xc94 },
-> >>>> +};
-> >>
-> >> [...]
-> >>
-> >>>> +       ret = pm_runtime_resume_and_get(&pdev->dev);
-> >>>> +       if (ret)
-> >>>> +               return ret;
-> >>>> +
-> >>>> +       regmap = qcom_cc_map(pdev, &video_cc_sm8350_desc);
-> >>>> +       if (IS_ERR(regmap)) {
-> >>>> +               pm_runtime_put(&pdev->dev);
-> >>>> +               return PTR_ERR(regmap);
-> >>>> +       };
-> >>>
-> >>> Extra semicolon
-> >> Ooeh!
-> >>
-> >>>
-> >>>> +
-> >>>> +       clk_lucid_pll_configure(&video_pll0, regmap, &video_pll0_config);
-> >>>> +       clk_lucid_pll_configure(&video_pll1, regmap, &video_pll1_config);
-> >>>> +
-> >>>> +       /*
-> >>>> +        * Keep clocks always enabled:
-> >>>> +        *      video_cc_ahb_clk
-> >>>> +        *      video_cc_xo_clk
-> >>>> +        */
-> >>>> +       regmap_update_bits(regmap, 0xe58, BIT(0), BIT(0));
-> >>>> +       regmap_update_bits(regmap, 0xeec, BIT(0), BIT(0));
-> >>>> +
-> >>>> +       ret = qcom_cc_really_probe(pdev, &video_cc_sm8350_desc, regmap);
-> >>>> +       pm_runtime_put(&pdev->dev);
-> >>>> +
-> >>>> +       return ret;
-> >>>> +}
-> >>>> +
-> >>>> +static const struct dev_pm_ops video_cc_sm8350_pm_ops = {
-> >>>> +       SET_RUNTIME_PM_OPS(pm_clk_suspend, pm_clk_resume, NULL)
-> >>>
-> >>> The driver doesn't use pm_clk at all. Are these PM_OPS correct?
-> >> I'm unsure. I see the pm state changing in debugfs when the clocks are
-> >> (not) consumed. But let's continue our discussion about using pm_clks
-> >> for AHB.
-> >
-> > Well, those are two separate questions. One is that w/o additional
-> > pm_clk calls this string is useless (and should be removed). Another
-> > on is a possible restructure of our cc drivers to use pm_clk for AHB
-> > clocks (which would require adding more than that).
-> Right, I had an impression that you needed any sort of pm ops at
-> all to be registered with pm_genpd correctly, but that seems not to
-> be the case.. With that commented out, I still see "suspended" / "active"
-> and not "unsupported"..
+>               being traced by the caller, or is not stopped (for
+>               requests that require a stopped tracee).
+>=20
+> so if the kernel doesn't support PTRACE_SEIZE then ptrace(PTRACE_SEIZE)=
 
-Let's just drop them for now.
+> should fail with -ESRCH as documented.
+>=20
+> Perhaps this part
+>=20
+>        EIO    request is invalid, or ...
+>=20
+> can be improvef a bit to explain that this happens if the target is alr=
+eady
+> traced by us and stopped.
 
+I'm not sure if it's necessary.  When several errors happen at the same t=
+ime,
+there's usually no documentation about which takes precedence, with few
+exceptions.  Knowing it's intentional, I'm content.
 
->
-> Konrad
-> >
-> >
-> >>
-> >>>
-> >>>> +};
-> >>>> +
-> >>>> +static const struct of_device_id video_cc_sm8350_match_table[] = {
-> >>>> +       { .compatible = "qcom,sm8350-videocc" },
-> >>>> +       { }
-> >>>> +};
-> >>>> +MODULE_DEVICE_TABLE(of, video_cc_sm8350_match_table);
-> >>>> +
-> >>>> +static struct platform_driver video_cc_sm8350_driver = {
-> >>>> +       .probe = video_cc_sm8350_probe,
-> >>>> +       .driver = {
-> >>>> +               .name = "sm8350-videocc",
-> >>>> +               .of_match_table = video_cc_sm8350_match_table,
-> >>>> +               .pm = &video_cc_sm8350_pm_ops,
-> >>>> +       },
-> >>>> +};
-> >>>> +module_platform_driver(video_cc_sm8350_driver);
-> >>>> +
-> >>>> +MODULE_DESCRIPTION("QTI SM8350 VIDEOCC Driver");
-> >>>> +MODULE_LICENSE("GPL");
-> >>>>
-> >>>> --
-> >>>> 2.40.0
-> >>>>
-> >>>
-> >>> Generic note: the register layout follows closely sm8250. However the
-> >>> existing differences probably do not warrant merging them.
-> >> No, I don't think merging any designs that are farther away
-> >> than 8150 and 8155 or 8992 and 8994 etc. is a good idea..
-> >>
-> >> I don't want to ever look at something like dispcc-sm8[123]50.c
-> >> again!
-> >
-> > Me too!
-> >
+Thanks,
 
+Alex
 
+--=20
+<http://www.alejandro-colomar.es/>
+GPG key fingerprint: A9348594CE31283A826FBDD8D57633D441E25BB5
 
--- 
-With best wishes
-Dmitry
+--------------fHhULJne82m7Do3fon0zhWTb--
+
+--------------03r7NMpvI9fyCsHllq8xf7Cs
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEE6jqH8KTroDDkXfJAnowa+77/2zIFAmQ9lBsACgkQnowa+77/
+2zL59Q//X28ctGScdrEJzDoIicoxyQQ//Xd9l+LjF2dAYgiOQIhKaBQsVA8WmErh
+24JyCCTdOnxxTjUhZN4O0BHrE/0Cz6oRqgzur+sgtu8+HO/1eVqIn0QciGM8Zx4C
+AHWsfouxVsztXd0NNK67IbuZhWnfunSwf72EjH4bPQI7gd6pvXTJuYJZ9yBVEcpk
+CsK4JHK4bRMicq8lXUxBNMaPo4/iaDCv7Cnfkdrpc4eXlKdjeELIHte59io1sY19
+DK7Dm13xY0AqAtcUMzvJV73u4HGvDGVIPR1zTrSO3ckjKS4PwyyVldCMSlSvWN/o
+vyTKFfwWpVwkn7RM8xS3w2Fy2Gm8ONLtpdhhm3KR5vCAXue3BXZCnGvpd6bpngtY
+8NHRkHMMk0aw3xe6HuDAWqHGzLqqPoLH05B5A+KirDXlzzY09PGJY51KwcqhWpwJ
+SqnOq7qXPB0Ku6BEYIJGOSOZDNhrfNd1CGp9IZFtBFBcKi/e5Yviz1SvLRrM67/f
+uHO9d+WWBGFTMKKQ72rT20AglYH08crixU0uyRkS2MCsokiO47yvKrnT3UMWHzdZ
+XUFqJGVf6w2x5Tn9sFbIet4XPHiNPv+Cnj51B5X2w/UU3Q5GrVLuNURyFf2oJ9QQ
+QCRrQGGjpY1Tyuuu8iFbAQOncpn6J0SOJTSFqfe5Rrolg7/b2zU=
+=MrCo
+-----END PGP SIGNATURE-----
+
+--------------03r7NMpvI9fyCsHllq8xf7Cs--
