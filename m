@@ -2,117 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF3F76E3E07
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 05:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85CCE6E3E0D
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 05:30:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229789AbjDQD3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 23:29:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45976 "EHLO
+        id S229926AbjDQDaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 23:30:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjDQD2v (ORCPT
+        with ESMTP id S229925AbjDQD3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 23:28:51 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD1335A6;
-        Sun, 16 Apr 2023 20:28:35 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-504eac2f0b2so4328326a12.3;
-        Sun, 16 Apr 2023 20:28:35 -0700 (PDT)
+        Sun, 16 Apr 2023 23:29:37 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05F53AA1
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 20:29:20 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id w1so1395525plg.6
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 20:29:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681702114; x=1684294114;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=smartx-com.20221208.gappssmtp.com; s=20221208; t=1681702152; x=1684294152;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Sclm3NiSyjGTXJ3EM8GpKC+H9zqtpnRJNhokYQ4pWxE=;
-        b=aIVLzpwLDgH7PSXcKuXcxG9qleJgPVUvyy8XHPJb3V3zYFW2Nw1x6Bi/9WBnT90WrC
-         sx0yrMThm4aNO1vXphTas5n+gc1DEnWBFd7BnLFGEs61x1yk3NfPJaBW18ffRYREvbR3
-         HFoVkHaN2St1yHEHmXuOa1nn7o9CISGFQcZpltxpyNE+T5BfC+4gWCAju0qWIjvCl4sN
-         oUD8v3oI9HJYKdIP0NVwjGdMXg3/3AWfaKcxoQVWDZi8cEM2ouomNaEh8S0a8Tqz2acV
-         /YyvFWZZO2d0EucaEw0cImxRVY9iVJKZpESUWQaEmp6PfszJg30KZ0fJZkTyERazAH8v
-         F50w==
+        bh=i439ByrCwwyeW71ZoBXBy3yEzqs8Vnj9PSWAYBsoXlE=;
+        b=CZIhzjCN+vEVTWpW65Yup+aopwZLg+7s8FT92h4UGxiUCXwnDrLdzodkMn46t1WRCm
+         EHa/z84VHl6kq5BEgCJLxRGlBfwJHvYCpu/CBrFbDGLig4OyIE7DnNKIhFWklYg9172M
+         CatswHGFSeNeVaSfXEnW7sKMUDbv+A0MeLWoxrvQvkLOYBLWea1N2qlCLY6avBPl9kMK
+         OkDwwnFgqmIZaWymXf7qbmnB+aGhWu+V+R3PMlmfONx5I46r0j9g+xJcwHxMdTvqdm0k
+         f7aJSZbC+2zgtMIm/30mDPfKm737OeHamS1xzjDztETJei2pDxbLPbBHSN9WlrjBQ6IL
+         9muQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681702114; x=1684294114;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1681702152; x=1684294152;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Sclm3NiSyjGTXJ3EM8GpKC+H9zqtpnRJNhokYQ4pWxE=;
-        b=Fc+AAEbSJj7uEDb5XH4gpAVz/W7B7h5QrSlAFPVlQrir5CPU+0skpTtFJivfvCgG7p
-         B0wg2kGxL/wPpF7meu/tBroD2eDs6MYEB4tFDdPtLbiaCi5tArF9q0sUNRY/mDIH+lgT
-         7kdojEbD+CdP6gscySiRYAgIZi1KmXwrjbTZ6bUko630qzkz+bz3xcXjkjoqwOc5JH2F
-         WJ+HdtPIb0wpsnp5bErnN9WOIurBnuRfoBltLdEXCsyH7JJbvAQfl+2qXvcRpKk64KOJ
-         gh2cM12wvPva50c/CR0ZXQuPW4zd6mQZZr/0UQEHplWrgI1nL0tHYuNOs8YmL2gnkSqg
-         MaVg==
-X-Gm-Message-State: AAQBX9dZ1/TssMpP0runGV0MWWzhUitAfRqunUB6d7iInp9FbZdodO4C
-        AuA133Gvtjo/pqqf+QdcrXKYsEQ6GkC7PgpWGP8=
-X-Google-Smtp-Source: AKy350ZfFbhqSvOEG2EDXFS8/j14sozOTQatjzxzULmwFxka8Bp5GN1htoY0hzrqGoYZYR9aZ2slsRSvUUu8hdG7JSM=
-X-Received: by 2002:a50:cd55:0:b0:504:fcf5:63ee with SMTP id
- d21-20020a50cd55000000b00504fcf563eemr6393394edj.0.1681702113958; Sun, 16 Apr
- 2023 20:28:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230330102013.545588-1-keguang.zhang@gmail.com>
- <20230330102013.545588-2-keguang.zhang@gmail.com> <20230330113053.GB9674@alpha.franken.de>
-In-Reply-To: <20230330113053.GB9674@alpha.franken.de>
-From:   Keguang Zhang <keguang.zhang@gmail.com>
-Date:   Mon, 17 Apr 2023 11:28:17 +0800
-Message-ID: <CAJhJPsWDP1Wvef2HGhAqiL77bDRMzz37XkXkVWgzW7Ca54p5XA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] MIPS: Loongson32: Remove reset.c
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-watchdog@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Yang Ling <gnaygnil@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        bh=i439ByrCwwyeW71ZoBXBy3yEzqs8Vnj9PSWAYBsoXlE=;
+        b=GujSfKu61CH+U0kwPCMa/SeKWyL9Ur2AT3j+FsEr9wHyHs4cgxYAVUDdrpmvVi7Uz1
+         WniiGa/COxntIRERNtEyBreMlv/vQgDNwkOdER6u8MxaV0Tt14Gbffl0okdVjIHlC0MS
+         yU8G/lSwlpPt+H7jH64K9h/pzSroILfBTWB5TwUl+Q7cSNDumrF7hnBqq70JbVqE9u6F
+         VSky5IlCet2lGizXctLpSvRbZKZHdwZzw/LtsD7UXX1r4dturBgf4oSXLIiP3nPQparr
+         5a/Nk1G4OhLx0KuuQNFSG+IPdixwZfAytkdiRElmhwRKwEaNDlxB4jaDJ5vAfPMCDEk4
+         qhHA==
+X-Gm-Message-State: AAQBX9dxiki3wgLIiWF2RheuEYCxQ6e9tD4cbX5K08p5tsw8E4wE1EBb
+        yuP9wZXAP36cDQZUDI8/+fEngQ==
+X-Google-Smtp-Source: AKy350YJJdcM66yr8j9/kPzcnVKnGuU1IZcC++IHyi8cKOk9L52nS3dy7qY5Jtqe1FbMnc6AHgOYtw==
+X-Received: by 2002:a17:902:c947:b0:1a6:7ea8:9f47 with SMTP id i7-20020a170902c94700b001a67ea89f47mr12982890pla.66.1681702152044;
+        Sun, 16 Apr 2023 20:29:12 -0700 (PDT)
+Received: from smtpclient.apple ([47.75.78.161])
+        by smtp.gmail.com with ESMTPSA id 20-20020a170902ee5400b001a19bac463fsm6525445plo.42.2023.04.16.20.29.09
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 16 Apr 2023 20:29:11 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
+Subject: Re: [PATCH v2] nvme/tcp: Add support to set the tcp worker cpu
+ affinity
+From:   Li Feng <fengli@smartx.com>
+In-Reply-To: <3e45f600db2049c4986fd8bb6aea69f4@AcuMS.aculab.com>
+Date:   Mon, 17 Apr 2023 11:31:08 +0800
+Cc:     Hannes Reinecke <hare@suse.de>, Keith Busch <kbusch@kernel.org>,
+        Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        "open list:NVM EXPRESS DRIVER" <linux-nvme@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <A5745886-81C6-4BB3-848C-D4A7E47E720A@smartx.com>
+References: <20230413062339.2454616-1-fengli@smartx.com>
+ <20230413132941.2489795-1-fengli@smartx.com>
+ <94d6a76c-8ad1-bda1-6336-e9f5fa3a6168@suse.de>
+ <CAHckoCxcmNC++AXELmnCVZNjpHcaOQWOGcjia=NBCnOA7S7EeQ@mail.gmail.com>
+ <3e45f600db2049c4986fd8bb6aea69f4@AcuMS.aculab.com>
+To:     David Laight <David.Laight@ACULAB.COM>
+X-Mailer: Apple Mail (2.3731.300.101.1.3)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 7:33=E2=80=AFPM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
->
-> On Thu, Mar 30, 2023 at 06:20:12PM +0800, Keguang Zhang wrote:
-> > The Loongson-1 restart handler will be moved to watchdog driver,
-> > then _machine_restart is no longer needed.
-> > The _machine_halt and pm_power_off are also unnecessary,
-> > which contain no hardware operations.
-> >
-> > Therefore, remove the entire reset.c and related header file.
-> > Update the Makefile accordingly.
-> >
-> > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> > ---
-> >  .../include/asm/mach-loongson32/regs-wdt.h    | 15 ------
-> >  arch/mips/loongson32/common/Makefile          |  2 +-
-> >  arch/mips/loongson32/common/reset.c           | 51 -------------------
-> >  3 files changed, 1 insertion(+), 67 deletions(-)
-> >  delete mode 100644 arch/mips/include/asm/mach-loongson32/regs-wdt.h
-> >  delete mode 100644 arch/mips/loongson32/common/reset.c
->
-> Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
->
-Thomas,
-Sorry! I forgot to remove the reference to regs-wdt.h, which will
-cause a build error.
-Could you please review v2:
-https://lore.kernel.org/all/20230330112051.551648-2-keguang.zhang@gmail.com=
-/
-Thanks very much!
-
-> --
-> Crap can work. Given enough thrust pigs will fly, but it's not necessaril=
-y a
-> good idea.                                                [ RFC1925, 2.3 =
-]
 
 
+> 2023=E5=B9=B44=E6=9C=8816=E6=97=A5 =E4=B8=8A=E5=8D=885:06=EF=BC=8CDavid =
+Laight <David.Laight@ACULAB.COM> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> From: Li Feng
+>> Sent: 14 April 2023 10:35
+>>>=20
+>>> On 4/13/23 15:29, Li Feng wrote:
+>>>> The default worker affinity policy is using all online cpus, e.g. =
+from 0
+>>>> to N-1. However, some cpus are busy for other jobs, then the =
+nvme-tcp will
+>>>> have a bad performance.
+>>>>=20
+>>>> This patch adds a module parameter to set the cpu affinity for the =
+nvme-tcp
+>>>> socket worker threads.  The parameter is a comma separated list of =
+CPU
+>>>> numbers.  The list is parsed and the resulting cpumask is used to =
+set the
+>>>> affinity of the socket worker threads.  If the list is empty or the
+>>>> parsing fails, the default affinity is used.
+>>>>=20
+> ...
+>>> I am not in favour of this.
+>>> NVMe-over-Fabrics has _virtual_ queues, which really have no
+>>> relationship to the underlying hardware.
+>>> So trying to be clever here by tacking queues to CPUs sort of works =
+if
+>>> you have one subsystem to talk to, but if you have several where =
+each
+>>> exposes a _different_ number of queues you end up with a quite
+>>> suboptimal setting (ie you rely on the resulting cpu sets to =
+overlap,
+>>> but there is no guarantee that they do).
+>>=20
+>> Thanks for your comment.
+>> The current io-queues/cpu map method is not optimal.
+>> It is stupid, and just starts from 0 to the last CPU, which is not =
+configurable.
+>=20
+> Module parameters suck, and passing the buck to the user
+> when you can't decide how to do something isn't a good idea either.
+>=20
+> If the system is busy pinning threads to cpus is very hard to
+> get right.
+>=20
+> It can be better to set the threads to run at the lowest RT
+> priority - so they have priority over all 'normal' threads
+> and also have a very sticky (but not fixed) cpu affinity so
+> that all such threads tends to get spread out by the scheduler.
+> This all works best if the number of RT threads isn't greater
+> than the number of physical cpu.
+>=20
+> 	David
+>=20
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, =
+MK1 1PT, UK
+> Registration No: 1397386 (Wales)
 
---
-Best regards,
+Hi David,
 
-Keguang Zhang
+RT priority can=E2=80=99t solve the cross numa access issue.
+If the user doesn=E2=80=99t know how to configure this affinity, just =
+keep it default.
+
+Cross numa is not a obvious issue on X86{_64}, but it=E2=80=99s a =
+significant issue
+on aarch64 with multiple numa nodes.
+
+Thanks.
+
