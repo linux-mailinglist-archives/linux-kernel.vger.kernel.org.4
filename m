@@ -2,185 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 600A36E4B23
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:15:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 794B86E4B2E
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:16:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231277AbjDQOPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 10:15:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40606 "EHLO
+        id S229555AbjDQOQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 10:16:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231250AbjDQOPZ (ORCPT
+        with ESMTP id S229609AbjDQOQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 10:15:25 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2086.outbound.protection.outlook.com [40.107.220.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB51AF02;
-        Mon, 17 Apr 2023 07:15:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Avmozi7HwWqGZgboQpHbahzs7/AsRxEnvE4jMSp0bHP/bPFCGPoPEmml/aOpvlvLr5vPz2yvLpRSIw8shBf3q/oVNsPYvf0697rlAaMtDIkVbw4UcPRR4na7bm54OGmjX9qmjLYS2dCFxreZYnkr1ULdpXLXeSgCXAbnZScaqdfTmCRf984rkNAx46elqct+hED7U9ZYGZF9liqxJhezuB7NENbAQQLBw1bLfmupHApRVIY+P2dri8jC6gnDWyIau5wHSLjqEoEOYkhDxaq82HBh3D1mQCv41qAfjeQx01qtYWXLvE5v/EzcUIsiv/SXjEOEPv60Ldd6a4PqOQF+MA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WfrXEzBwWiomCZmP9gORtGauH7ZNalgt/By5l6xbuts=;
- b=QflxD0AiPXLld4RU7t7/qk5jz0Bujsw/a20jgU4imM5J4W9HdXlPbCl8wn5mEzyK7odQTjOZgHdyzWVjSJBYLW4MpAjSgpj4adyagEOP6iTgHQ3PvEjAy4cZkXsA8AUzPyXfA84m4PF99sBGdVVs2p58MPaAYkJUv6EMyXtyUe7dNz02WHXuillTynvJXn18D1wCKoYQdlBmz39h/oqubMyYtFEppv6JX8ouJiWnz+SLAyFvcyqyHlchAudbLF6pfOkfSrcw6kRbx9uMwwGK6T0zHUHoBMGOtm/dVsKQwZvEVB8gJNFFdFGo2mwWvRkf7HRwTyrpBVfQymEb5SwJmQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WfrXEzBwWiomCZmP9gORtGauH7ZNalgt/By5l6xbuts=;
- b=WrbcrlSRoJGYW8FWdUw77woHsVcNknmvgkvtLFMcdyp/I/Lry4LMzWT3mrzFNeWSsFHMgICAypWJ/aAp6x7VqXrEPnUCt1f1Yw2uqz3h4twS1goJYugMV72yHME0r2uxc9H8g0fmssVCo0eMT94FG/l+V1/UftKP+AZAT3vh4eec2TbiViCdfLH/ZZRB3Bt25ZUOtYSh/mfzVIVYLYZpXJPN0QILKa7N1Ci0rbIQXob9hzHKS6+ExfsdoMyPT8c6MTt8m/S1kk9mqBIoSjcObcw2lcbNxRc4FRw1KQqCxYRMasGpDexll+juadPA0WoAxdSNxrM/P4eKgAcELDeCPw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by DM4PR12MB5213.namprd12.prod.outlook.com (2603:10b6:5:394::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Mon, 17 Apr
- 2023 14:15:12 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::6045:ad97:10b7:62a2]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::6045:ad97:10b7:62a2%9]) with mapi id 15.20.6298.030; Mon, 17 Apr 2023
- 14:15:11 +0000
-Date:   Mon, 17 Apr 2023 11:15:10 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring@vger.kernel.org
-Subject: Re: [PATCH 5/7] io_uring: rsrc: use FOLL_SAME_FILE on
- pin_user_pages()
-Message-ID: <ZD1UbgeoeNFEvv9/@nvidia.com>
-References: <cover.1681508038.git.lstoakes@gmail.com>
- <17357dec04b32593b71e4fdf3c30a346020acf98.1681508038.git.lstoakes@gmail.com>
- <ZD1CAvXee5E5456e@nvidia.com>
- <b1f125c8-05ec-4b41-9b3d-165bf7694e5a@lucifer.local>
- <ZD1I8XlSBIYET9A+@nvidia.com>
- <34959b70-6270-46cf-94c5-d6da12b0c62d@lucifer.local>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <34959b70-6270-46cf-94c5-d6da12b0c62d@lucifer.local>
-X-ClientProxiedBy: YT4PR01CA0004.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:d1::9) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Mon, 17 Apr 2023 10:16:40 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA12CA5D7;
+        Mon, 17 Apr 2023 07:16:09 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 281921F86C;
+        Mon, 17 Apr 2023 14:16:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1681740966; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9FjKGooJn3lir0WMvbcOmP+8v9vNHx9fonOO/eGQRzE=;
+        b=UueISTjhQ+q4JFg/UyjvmzxoxKSO1vQjyCaKu5z1YEprYuUJ1CDTkLXVMFCNYU1doB7f2B
+        VRncFxCDSOQlMzPTnIA8K/N6aeFNkHgtlxXkkGsDOzzvplcAKEXEf/BL1/Ah8x9xE0W5sQ
+        dU5kiHp9pH0evdxwJTCuU1ecq32ZPDw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1681740966;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9FjKGooJn3lir0WMvbcOmP+8v9vNHx9fonOO/eGQRzE=;
+        b=+NUsXVOoXIxhKSKr919p9nprrZO/rsclOe9JA/Sh8LetYbc/OM9B1zIqCxgxOBly9bcu1w
+        w/S8uqgQFerR+UDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A22ED13319;
+        Mon, 17 Apr 2023 14:16:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 7XEOJqVUPWRcDAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 17 Apr 2023 14:16:05 +0000
+Message-ID: <b287fdf6-81ec-c25d-3f59-75cc8f63f844@suse.de>
+Date:   Mon, 17 Apr 2023 16:16:05 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DM4PR12MB5213:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7f2dd7b8-baef-4a8f-7150-08db3f4e2835
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jwIFZQKIo+9fSWhFf+EcUYaJa3ul4hs85jCCiCSxeyJsrZupdh+lToWFzM6ZqsgQ9Z/Ko1j5bXXavJyPljBmchkD/dpAivaSqxyhvUfzjmhzgv7KqsJDrlfm2mKU4WrI5VXEulYgIRDNiheaXPu2m3QdY5nyaO+X3UJRr0WJVlDcsOrLuAz5yH8dD846hjOkel0lm0QJrZ+mCXkbHg1bNhfLnsKxvfZBXmOOxcFxUlKi7/tteWnVhjplz/9VsQgHcj34PQa/yGvDomJIgyJAzKJgbADmEHeuFGx2xKdIE12cSwN5qhASJ7QQl1yf6B2bgT4BUh5sV4KkQYOZsGczeGGpgEhXbLBO8cWta5LmH5UhZDVno8Ak+Or5EZjm80kuYde93fLuFVQqyIqBD1TuV95Pz9ww9mM+1UlWzFBEFzYb/vEPze0/AZ4r75xCUe+vF2/k/YioolUAs///2pbzqLnk11NrL09tOUdncqTmR5qmoCBVZOxIU9i44Zb2Rfzwof5T7xn/yB4dVk10YO8oIXY1OIiod06mjVavtdEOT+eB5ivdx2R/OvVntIBquHrC
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(396003)(366004)(136003)(376002)(451199021)(36756003)(2906002)(5660300002)(8936002)(8676002)(41300700001)(86362001)(38100700002)(478600001)(54906003)(2616005)(26005)(6506007)(6512007)(186003)(6486002)(6916009)(4326008)(66476007)(66556008)(66946007)(316002)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mSPY23IUhBa3uivgGO0EkNfMl+Izz8sLcy7zAdzokUK3PeKYH7Lp2OoKM2rL?=
- =?us-ascii?Q?qqtecas0VldkNttDG//PCy/Djw4VDFhkYm/kGOu9kq30wLmkM0YqS4f69Bb9?=
- =?us-ascii?Q?rgrQGiNZfKHf4RNYy8RjBU3FpHtwSy/GL0PvoQI3MtE9SlC1fSe+AF66lnZk?=
- =?us-ascii?Q?0mgpf57P2ZDfdlWO52G4ENasnmmfLjzFE5wpFNURFHGndwXDHHyczsY8ZuiP?=
- =?us-ascii?Q?k5djl+VXkhUe7qRsn4wUcJGPplzlWPao5f4Mes256OBJQH0eGPU752GOMJf3?=
- =?us-ascii?Q?5EsH0wEoM0hsCxIZXtN+boyA9fecFGsr12F6JKjlXzdD1h8I3s0Dgvz5zH5a?=
- =?us-ascii?Q?UID6qw/AdkyZpn5SFgN7+83m33RmfBJBdq4wnZx1pmXKwbUz8UhCX5FuvY/s?=
- =?us-ascii?Q?3rIM5sj5qnNsZlDwhyL1L/4wAkrHFDCzK/loAy3+dDhBCyqo2CtrWTdgMyP1?=
- =?us-ascii?Q?/Sg3iLC5Dprm4L9q+SPodAhlHxPBZsX7nESmtBkfzLJrVQ/XOcBw/v7c9gnu?=
- =?us-ascii?Q?Py6dbbBaFSDYT1z+yFhCtnp3Im0p4cCBFcIgnRf884Cpi7iIXcYmTx7sSIQQ?=
- =?us-ascii?Q?4YDZbWsy/9H3z2N58CrFk3jO8oFNFdsBTk91vNBlsqSkM7j+29AZnax8YVHb?=
- =?us-ascii?Q?/8HF8kXfUUDYQCmYfCZW1Siye3ONsX8wwkjcAtH5UsfxgbxfsuJsd4tnobnp?=
- =?us-ascii?Q?KIYwKpn0POLxOV/DMBbpRzthGMPc+o/xoaR8wE7j68sbGcEXB4STJVSfD4oa?=
- =?us-ascii?Q?eOWgseuEZmpuBoOslf/49jDdNb4b/fclxgMrsyIn+vgfU0gg5I1DnRkZXIv/?=
- =?us-ascii?Q?9GZvFN8iGAmQhLRVh7jK1p33yyFkh4tq/YPxINvv0EA0BqJxUDxHy7UMxisa?=
- =?us-ascii?Q?8BSea6vl02fyMWo2+bmcL3Y5xi6tUPI2o/KXS9qfSSHEtjY2w8BQL5CYS1AB?=
- =?us-ascii?Q?tqxs7imJJ/x2zx6pEE/7OE+yGkTs7ZaXZ4GwDuYYXhmlqQ7GBjqSribtSQNk?=
- =?us-ascii?Q?aqPgOJ2EE536JFhXR+mSyy4f1+MCRnsvlsPGyYC1akdWQ7ESSdSVCk4hrNI+?=
- =?us-ascii?Q?e0JIFMvOEsNaUXK7esyqV/2hvUI1p4F1tZtWx4+sItdDgiujmkNoX0mn1i8g?=
- =?us-ascii?Q?pyc2jPdYVXEJknoBDVDnicxFfzNmha+ASE6j1f7qc/gqKHwFHPbuFEVqn5mZ?=
- =?us-ascii?Q?1hBFVEAd824Q+8oYV6tDCrwSw++l4GCypbYm6KUt1A8pAP2deb8cYn6jkZi5?=
- =?us-ascii?Q?n+1JqgLXWbyPNPhsd9odMJdFSv9ZstbhTzusQtoGESS0T1pehapIs1x12ZBS?=
- =?us-ascii?Q?+e7sEdZF7DDXnfDUXS4W+nTXXZqr+6q8dcxC/5oKyKeiqj/bUmgmEdAkeWtk?=
- =?us-ascii?Q?bPZ/opV9SBLA4+UScyK/1bkOKaVn9eIl7GZwjUsx7sx7E6mxYEQ5Y4jx2rzd?=
- =?us-ascii?Q?bTozhJoy8ZOzY5R9+INiP4tVu1vwFj5dOdJxhIYu1ke1FjYMMQElQEBl2Wkj?=
- =?us-ascii?Q?SpBqep5mdTK050BxpT8xi0Ii/DsNH88CglPNrgYbNkrV1ijXexb0K2yZduat?=
- =?us-ascii?Q?hqTgpnsAWKmlbCn8k9l2BkM8XF/+ozbfKWjzR3km?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7f2dd7b8-baef-4a8f-7150-08db3f4e2835
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2023 14:15:11.9383
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KeroLZLKlk1i4/TAMlgmn1cHiRE/9qzkk+kHfD1rig4Yn9IgDPlb7gUapWyg5Oxx
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5213
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 16/19] arch/sh: Implement <asm/fb.h> with generic
+ helpers
+Content-Language: en-US
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        arnd@arndb.de, daniel.vetter@ffwll.ch, deller@gmx.de,
+        javierm@redhat.com, gregkh@linuxfoundation.org
+Cc:     linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        Rich Felker <dalias@libc.org>, linux-ia64@vger.kernel.org,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-parisc@vger.kernel.org, linux-sh@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-mips@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, loongarch@lists.linux.dev,
+        sparclinux@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
+References: <20230417125651.25126-1-tzimmermann@suse.de>
+ <20230417125651.25126-17-tzimmermann@suse.de>
+ <3c188e948506dc97112dcc070cf16e36209c6cc5.camel@physik.fu-berlin.de>
+ <132f1185-d61f-b8c7-8d6e-4e4280a1a4ad@suse.de>
+ <0b07fbadce4512e4696750cf69cf3fbbf38355a3.camel@physik.fu-berlin.de>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <0b07fbadce4512e4696750cf69cf3fbbf38355a3.camel@physik.fu-berlin.de>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------94ByKkIGSexm73INo0EWjmZz"
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 03:00:16PM +0100, Lorenzo Stoakes wrote:
-> On Mon, Apr 17, 2023 at 10:26:09AM -0300, Jason Gunthorpe wrote:
-> > On Mon, Apr 17, 2023 at 02:19:16PM +0100, Lorenzo Stoakes wrote:
-> >
-> > > > I'd rather see something like FOLL_ALLOW_BROKEN_FILE_MAPPINGS than
-> > > > io_uring open coding this kind of stuff.
-> > > >
-> > >
-> > > How would the semantics of this work? What is broken? It is a little
-> > > frustrating that we have FOLL_ANON but hugetlb as an outlying case, adding
-> > > FOLL_ANON_OR_HUGETLB was another consideration...
-> >
-> > It says "historically this user has accepted file backed pages and we
-> > we think there may actually be users doing that, so don't break the
-> > uABI"
-> 
-> Having written a bunch here I suddenly realised that you probably mean for
-> this flag to NOT be applied to the io_uring code and thus have it enforce
-> the 'anonymous or hugetlb' check by default?
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------94ByKkIGSexm73INo0EWjmZz
+Content-Type: multipart/mixed; boundary="------------QXZ2BuEL3CAdRAw00ZDRM1Ri";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, arnd@arndb.de,
+ daniel.vetter@ffwll.ch, deller@gmx.de, javierm@redhat.com,
+ gregkh@linuxfoundation.org
+Cc: linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
+ Rich Felker <dalias@libc.org>, linux-ia64@vger.kernel.org,
+ Yoshinori Sato <ysato@users.sourceforge.jp>, linux-parisc@vger.kernel.org,
+ linux-sh@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-mips@vger.kernel.org,
+ linux-m68k@lists.linux-m68k.org, loongarch@lists.linux.dev,
+ sparclinux@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+ linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
+Message-ID: <b287fdf6-81ec-c25d-3f59-75cc8f63f844@suse.de>
+Subject: Re: [PATCH v3 16/19] arch/sh: Implement <asm/fb.h> with generic
+ helpers
+References: <20230417125651.25126-1-tzimmermann@suse.de>
+ <20230417125651.25126-17-tzimmermann@suse.de>
+ <3c188e948506dc97112dcc070cf16e36209c6cc5.camel@physik.fu-berlin.de>
+ <132f1185-d61f-b8c7-8d6e-4e4280a1a4ad@suse.de>
+ <0b07fbadce4512e4696750cf69cf3fbbf38355a3.camel@physik.fu-berlin.de>
+In-Reply-To: <0b07fbadce4512e4696750cf69cf3fbbf38355a3.camel@physik.fu-berlin.de>
 
-Yes
+--------------QXZ2BuEL3CAdRAw00ZDRM1Ri
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-> So you mean to disallow file-backed page pinning as a whole unless this
-> flag is specified? 
+SGkNCg0KQW0gMTcuMDQuMjMgdW0gMTY6MTMgc2NocmllYiBKb2huIFBhdWwgQWRyaWFuIEds
+YXViaXR6Og0KPiBIaSBUaG9tYXMhDQo+IA0KPiBPbiBNb24sIDIwMjMtMDQtMTcgYXQgMTY6
+MDYgKzAyMDAsIFRob21hcyBaaW1tZXJtYW5uIHdyb3RlOg0KPj4gSGkNCj4+DQo+PiBBbSAx
+Ny4wNC4yMyB1bSAxNTowMiBzY2hyaWViIEpvaG4gUGF1bCBBZHJpYW4gR2xhdWJpdHo6DQo+
+Pj4gSGkgVGhvbWFzIQ0KPj4+DQo+Pj4gT24gTW9uLCAyMDIzLTA0LTE3IGF0IDE0OjU2ICsw
+MjAwLCBUaG9tYXMgWmltbWVybWFubiB3cm90ZToNCj4+Pj4gUmVwbGFjZSB0aGUgYXJjaGl0
+ZWN0dXJlJ3MgZmJkZXYgaGVscGVycyB3aXRoIHRoZSBnZW5lcmljDQo+Pj4+IG9uZXMgZnJv
+bSA8YXNtLWdlbmVyaWMvZmIuaD4uIE5vIGZ1bmN0aW9uYWwgY2hhbmdlcy4NCj4+Pj4NCj4+
+Pj4gdjI6DQo+Pj4+IAkqIHVzZSBkZWZhdWx0IGltcGxlbWVudGF0aW9uIGZvciBmYl9wZ3By
+b3RlY3QoKSAoQXJuZCkNCj4+Pj4NCj4+Pj4gU2lnbmVkLW9mZi1ieTogVGhvbWFzIFppbW1l
+cm1hbm4gPHR6aW1tZXJtYW5uQHN1c2UuZGU+DQo+Pj4+IENjOiBZb3NoaW5vcmkgU2F0byA8
+eXNhdG9AdXNlcnMuc291cmNlZm9yZ2UuanA+DQo+Pj4+IENjOiBSaWNoIEZlbGtlciA8ZGFs
+aWFzQGxpYmMub3JnPg0KPj4+PiBDYzogSm9obiBQYXVsIEFkcmlhbiBHbGF1Yml0eiA8Z2xh
+dWJpdHpAcGh5c2lrLmZ1LWJlcmxpbi5kZT4NCj4+Pj4gLS0tDQo+Pj4+ICAgIGFyY2gvc2gv
+aW5jbHVkZS9hc20vZmIuaCB8IDE1ICstLS0tLS0tLS0tLS0tLQ0KPj4+PiAgICAxIGZpbGUg
+Y2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDE0IGRlbGV0aW9ucygtKQ0KPj4+Pg0KPj4+PiBk
+aWZmIC0tZ2l0IGEvYXJjaC9zaC9pbmNsdWRlL2FzbS9mYi5oIGIvYXJjaC9zaC9pbmNsdWRl
+L2FzbS9mYi5oDQo+Pj4+IGluZGV4IDlhMGJjYTI2ODZmZC4uMTlkZjEzZWU5Y2E3IDEwMDY0
+NA0KPj4+PiAtLS0gYS9hcmNoL3NoL2luY2x1ZGUvYXNtL2ZiLmgNCj4+Pj4gKysrIGIvYXJj
+aC9zaC9pbmNsdWRlL2FzbS9mYi5oDQo+Pj4+IEBAIC0yLDE5ICsyLDYgQEANCj4+Pj4gICAg
+I2lmbmRlZiBfQVNNX0ZCX0hfDQo+Pj4+ICAgICNkZWZpbmUgX0FTTV9GQl9IXw0KPj4+PiAg
+ICANCj4+Pj4gLSNpbmNsdWRlIDxsaW51eC9mYi5oPg0KPj4+PiAtI2luY2x1ZGUgPGxpbnV4
+L2ZzLmg+DQo+Pj4+IC0jaW5jbHVkZSA8YXNtL3BhZ2UuaD4NCj4+Pj4gLQ0KPj4+PiAtc3Rh
+dGljIGlubGluZSB2b2lkIGZiX3BncHJvdGVjdChzdHJ1Y3QgZmlsZSAqZmlsZSwgc3RydWN0
+IHZtX2FyZWFfc3RydWN0ICp2bWEsDQo+Pj4+IC0JCQkJdW5zaWduZWQgbG9uZyBvZmYpDQo+
+Pj4+IC17DQo+Pj4+IC0Jdm1hLT52bV9wYWdlX3Byb3QgPSBwZ3Byb3Rfd3JpdGVjb21iaW5l
+KHZtYS0+dm1fcGFnZV9wcm90KTsNCj4+Pj4gLX0NCj4+Pg0KPj4+IExvb2tpbmcgYXQgdGhl
+IG1hY3JvIGluIGFzbS1nZW5lcmljL2ZiLmgsIGZiX3BncHJvdGVjdCgpIGlzIGJlaW5nIHJl
+cGxhY2VkIHdpdGgNCj4+PiBhIG5vLW9wIGZ1bmN0aW9uLiBJcyB0aGF0IGludGVudGlvbmFs
+PyBDYW4geW91IGJyaWVmbHkgZXhwbGFpbiB0aGUgYmFja2dyb3VuZA0KPj4+IGZvciB0aGlz
+IGNoYW5nZT8NCj4+DQo+PiBQYXRjaCAwMSBvZiB0aGlzIHBhdGNoc2V0IGNoYW5nZXMgdGhl
+IGdlbmVyaWMgZmJfcGdwcm90ZWN0KCkgdG8gc2V0DQo+PiBwZ3Byb3Rfd3JpdGVjb21iaW5l
+KCkuIFNvIG9uIFNILCB0aGVyZSBzaG91bGQgYmUgbm8gY2hhbmdlIGF0IGFsbC4NCj4+DQo+
+IA0KPiBBaCwgSSBtaXNzZWQgdGhhdCwgdGhhbmtzIGZvciB0aGUgZXhwbGFuYXRpb24uIExl
+dCBtZSBjaGVjayBhbmQgQWNrIHlvdXIgcGF0Y2gNCg0KVGhhbmtzIQ0KDQo+IHRoZW4uIEkg
+YXNzdW1lIHlvdSB3aWxsIGJlIHRha2luZyB0aGlzIHBhdGNoIGFzIHBhcnQgb2YgdGhlIHdo
+b2xlIHNlcmllcyB0aHJvdWdoDQo+IHlvdXIgb3duIHRyZWU/DQoNClllcywgSSdkIG1lcmdl
+IGl0IHRocm91Z2ggZHJtLW1pc2MtbmV4dCBpZGVhbGx5Lg0KDQpCZXN0IHJlZ2FyZHMNClRo
+b21hcw0KDQo+IA0KPiBUaGFua3MsDQo+IEFkcmlhbg0KPiANCg0KLS0gDQpUaG9tYXMgWmlt
+bWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1
+dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdl
+cm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJ
+dm8gVG90ZXYNCg==
 
-Yes
+--------------QXZ2BuEL3CAdRAw00ZDRM1Ri--
 
-> For FOLL_GET I can see that access to the underlying
-> data is dangerous as the memory may get reclaimed or migrated, but surely
-> DMA-pinned memory (as is the case here) is safe?
+--------------94ByKkIGSexm73INo0EWjmZz
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-No, it is all broken, read-only access is safe.
+-----BEGIN PGP SIGNATURE-----
 
-We are trying to get a point where pin access will interact properly
-with the filesystem, but it isn't done yet.
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmQ9VKUFAwAAAAAACgkQlh/E3EQov+Dw
+Hw//TuN1hpDFybmdlm+Gzly6R8RqA/JO58uPl7V+zZ8/SdX9FcgbJLr07zjs6QGWIraTUb1teSjP
+pldmO+zy7GEfChq3o+X96QwGmiyRSt/b2FbRhSvQvjtSIIBMSapXxjYVgmzfg84L4WA8jTY95dvP
+p1MCxmosiaDcWlBchai72zcxcud3K/qp1xpyHwilOFblHXVO8FKoKmTP1iLEr2xxBA7m+lZfUaF+
+fx9EyVgXwCLvFuaeGaOx7Ow0hSf5VvjizIMRwsqMt7VV1F8xK6Bz/eHPG7ptdkbUBv9uS4/YGVOR
+Ue5tg91eEdRXmZV9qls6t0SwxBtArm/pr7KUBTVa+cLthtLtXI4RJTINnin6aA7GWsezQRpSR83u
+DDWGlhPgHTsSkhAgHH3AjDZImtTkIjFR8HWtxyWMCFXmnoltujUU9SDlaXxx3MLIAWImo1S9V94i
+ljyt+ETvSxvglKiS2PBJM2abRhdtGGWWFP/XQyqKAHQfIcilR4Y6HxMRK78dzvPvOQqwG0UkrwAK
+v2ND/FRkgunPfWzsWpfgQNxlbIF8vOPsX3Rj52ur6KL0/MyC385HcSB0kP8+eA7fvWqYyv4jSE+l
+2593WbYx64pvD+xtFgNDXAu0/4MVPyA7e/2e4ECI5KkgVwN5B6jNbkKk3tpPrJVLQfx9Y/Fsj3I3
+kR8=
+=u9yH
+-----END PGP SIGNATURE-----
 
-> Or is this a product more so of some kernel process accessing file-backed
-> pages for a file system which expects write-notify semantics and doesn't
-> get them in this case, which could indeed be horribly broken.
-
-Yes, broadly
-
-> I am definitely in favour of cutting things down if possible, and very much
-> prefer the use of uaccess if we are able to do so rather than GUP.
-> 
-> I do feel that GUP should be focused purely on pinning memory rather than
-> manipulating it (whether read or write) so I agree with this sentiment.
-
-Yes, someone needs to be brave enough to go and try to adjust these
-old places :)
-
-I see in the git history this was added to solve CVE-2018-1120 - eg
-FUSE can hold off fault-in indefinitely. So the flag is really badly
-misnamed - it is "FOLL_DONT_BLOCK_ON_USERSPACE" and anon memory is a
-simple, but overly narrow, way to get that property.
-
-If it is changed to use kthread_use_mm() it needs a VMA based check
-for the same idea.
-
-Jason
+--------------94ByKkIGSexm73INo0EWjmZz--
