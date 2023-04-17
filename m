@@ -2,125 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D99426E3DA5
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 04:52:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A43B6E3D8C
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 04:47:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbjDQCwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 22:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54676 "EHLO
+        id S229803AbjDQCrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 22:47:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjDQCw0 (ORCPT
+        with ESMTP id S229458AbjDQCre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 22:52:26 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 525963580;
-        Sun, 16 Apr 2023 19:52:22 -0700 (PDT)
-Received: from ubuntu.localdomain ([10.12.172.250])
-        (user=jkluo@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 33H2ncBq006394-33H2ncBr006394
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
-        Mon, 17 Apr 2023 10:49:43 +0800
-From:   Jiakai Luo <jkluo@hust.edu.cn>
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Ksenija Stanojevic <ksenija.stanojevic@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>, Marek Vasut <marex@denx.de>
-Cc:     hust-os-kernel-patches@googlegroups.com,
-        Jiakai Luo <jkluo@hust.edu.cn>, linux-iio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] iio: adc: mxs-lradc: fix the order of two cleanup operations
-Date:   Sun, 16 Apr 2023 19:47:45 -0700
-Message-Id: <20230417024745.59614-1-jkluo@hust.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-FEAS-AUTH-USER: jkluo@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sun, 16 Apr 2023 22:47:34 -0400
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329222117
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 19:47:33 -0700 (PDT)
+X-ASG-Debug-ID: 1681699650-1eb14e63880fab0001-xx1T2L
+Received: from ZXSHMBX1.zhaoxin.com (ZXSHMBX1.zhaoxin.com [10.28.252.163]) by mx2.zhaoxin.com with ESMTP id x1VcCWwhnV8HXCt1 (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Mon, 17 Apr 2023 10:47:30 +0800 (CST)
+X-Barracuda-Envelope-From: TonyWWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX1.zhaoxin.com
+ (10.28.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Mon, 17 Apr
+ 2023 10:47:29 +0800
+Received: from [10.32.65.162] (10.32.65.162) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Mon, 17 Apr
+ 2023 10:47:28 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
+Message-ID: <8647895b-560f-2272-aae4-eda00fc06eca@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.32.65.162
+Date:   Mon, 17 Apr 2023 10:47:52 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] x86/cpufeatures: extend CPUID leaf 0xc0000001 support for
+ Zhaoxin
+Content-Language: en-US
+X-ASG-Orig-Subj: Re: [PATCH] x86/cpufeatures: extend CPUID leaf 0xc0000001 support for
+ Zhaoxin
+To:     Borislav Petkov <bp@alien8.de>
+CC:     <tglx@linutronix.de>, <mingo@redhat.com>,
+        <dave.hansen@linux.intel.com>, <hpa@zytor.com>, <x86@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <peterz@infradead.org>,
+        <seanjc@google.com>, <pbonzini@redhat.com>, <kim.phillips@amd.com>,
+        <babu.moger@amd.com>, <pawan.kumar.gupta@linux.intel.com>,
+        <sandipan.das@amd.com>, <CobeChen@zhaoxin.com>,
+        <TimGuo@zhaoxin.com>, <LeoLiu-oc@zhaoxin.com>
+References: <20230414095334.8743-1-TonyWWang-oc@zhaoxin.com>
+ <20230414104808.GBZDkvaJechZSM+SI9@fat_crate.local>
+ <7866e99a-df88-14fa-92ae-c5b5d176724b@zhaoxin.com>
+ <20230414134824.GCZDlZqDWLl6A958SF@fat_crate.local>
+From:   Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+In-Reply-To: <20230414134824.GCZDlZqDWLl6A958SF@fat_crate.local>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.32.65.162]
+X-ClientProxiedBy: ZXSHCAS2.zhaoxin.com (10.28.252.162) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Barracuda-Connect: ZXSHMBX1.zhaoxin.com[10.28.252.163]
+X-Barracuda-Start-Time: 1681699650
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 807
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: -2.02
+X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.107522
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch reports:
-drivers/iio/adc/mxs-lradc-adc.c:766 mxs_lradc_adc_probe() warn:
-missing unwind goto?
 
-the order of three init operation:
-1.mxs_lradc_adc_trigger_init
-2.iio_triggered_buffer_setup
-3.mxs_lradc_adc_hw_init
 
-thus, the order of three cleanup operation should be:
-1.mxs_lradc_adc_hw_stop
-2.iio_triggered_buffer_cleanup
-3.mxs_lradc_adc_trigger_remove
+On 4/14/23 21:48, Borislav Petkov wrote:
+> On Fri, Apr 14, 2023 at 09:14:17PM +0800, Tony W Wang-oc wrote:
+>>  The instructions about these flags can be executed at any privilege
+>> level. I think using these flags in kernel mode is a case. This patch
+>> shows the statement of these flags to the user mode explicitly. So users
+>> can see and use these CPU features conveniently.
+>>
+>>> If you want to dump them on the hardware to know what's set or not,
+>>> there's tools/arch/x86/kcpuid/ for that.
+> 
+> See this here. We have this tool exactly for users who wanna see CPU
+> features. All CPU features, as a matter of fact.
+> 
 
-we exchange the order of two cleanup operations,
-introducing the following differences:
-1.if mxs_lradc_adc_trigger_init fails, returns directly;
-2.if trigger_init succeeds but iio_triggered_buffer_setup fails,
-goto err_trig and remove the trigger.
+Ok, will patch this tool for Zhaoxin extended CPUID leaf.
+Will add Zhaoxin CPU features to kernel when they are used by the kernel.
 
-In addition, we also reorder the unwind that goes on in the
-remove() callback to match the new ordering.
-
-Fixes: 6dd112b9f85e ("iio: adc: mxs-lradc: Add support for ADC driver")
-Signed-off-by: Jiakai Luo <jkluo@hust.edu.cn>
-Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
----
-The issue is found by static analysis and remains untested.
----
- drivers/iio/adc/mxs-lradc-adc.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/iio/adc/mxs-lradc-adc.c b/drivers/iio/adc/mxs-lradc-adc.c
-index bca79a93cbe4..85882509b7d9 100644
---- a/drivers/iio/adc/mxs-lradc-adc.c
-+++ b/drivers/iio/adc/mxs-lradc-adc.c
-@@ -757,13 +757,13 @@ static int mxs_lradc_adc_probe(struct platform_device *pdev)
- 
- 	ret = mxs_lradc_adc_trigger_init(iio);
- 	if (ret)
--		goto err_trig;
-+		return ret;
- 
- 	ret = iio_triggered_buffer_setup(iio, &iio_pollfunc_store_time,
- 					 &mxs_lradc_adc_trigger_handler,
- 					 &mxs_lradc_adc_buffer_ops);
- 	if (ret)
--		return ret;
-+		goto err_trig;
- 
- 	adc->vref_mv = mxs_lradc_adc_vref_mv[lradc->soc];
- 
-@@ -801,9 +801,9 @@ static int mxs_lradc_adc_probe(struct platform_device *pdev)
- 
- err_dev:
- 	mxs_lradc_adc_hw_stop(adc);
--	mxs_lradc_adc_trigger_remove(iio);
--err_trig:
- 	iio_triggered_buffer_cleanup(iio);
-+err_trig:
-+	mxs_lradc_adc_trigger_remove(iio);
- 	return ret;
- }
- 
-@@ -814,8 +814,8 @@ static int mxs_lradc_adc_remove(struct platform_device *pdev)
- 
- 	iio_device_unregister(iio);
- 	mxs_lradc_adc_hw_stop(adc);
--	mxs_lradc_adc_trigger_remove(iio);
- 	iio_triggered_buffer_cleanup(iio);
-+	mxs_lradc_adc_trigger_remove(iio);
-
- 	return 0;
- }
--- 
-2.17.1
-
+Sincerely
+TonyWWangoc
