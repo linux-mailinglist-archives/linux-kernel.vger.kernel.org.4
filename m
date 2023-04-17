@@ -2,79 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6426E4DE0
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 18:01:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FDEA6E4DE1
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 18:01:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbjDQQBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 12:01:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55408 "EHLO
+        id S230224AbjDQQBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 12:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjDQQBE (ORCPT
+        with ESMTP id S229713AbjDQQBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 12:01:04 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654B01991
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 09:01:02 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id vc20so10543506ejc.10
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 09:01:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681747261; x=1684339261;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LGfj7dhEzmUyz7+syDE2F39t7UKzS4afv7ZNVWEs8oE=;
-        b=RKtmfhmf04iXYaQnoCUfBRfqrnHwSdKnaffoZSgvc1HJMmswfg3m8Oh7JQXi0h0Z3X
-         zrRwu/cUTw2RbD+bpbhFgta2inCjd8JqjnTY2vdBd/nfExSBCMJshEaZKicjZ/62E5xm
-         omM2dfAFfEh/AZmC1TgLpzZRaO1qO3PNfOhRh5IbTZNF59KQqgeAtulEZnnBzQAKhBYV
-         sgjZLxi0g46qlIQrPcS5cmOLN9I2l4ovI5Y9xIWjWhvY/1dOCNHfWzN91SU+gtS2FhmB
-         FFEpZZaQNOrgltQgknDXUd+54VdurJyhHqoI7BGiiLDNCWiHxXlGvaTgEfWHt3rBLaIj
-         UP/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681747261; x=1684339261;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LGfj7dhEzmUyz7+syDE2F39t7UKzS4afv7ZNVWEs8oE=;
-        b=Vj7fJklw0+k186ValOQ8NSrqu9uhP11d6j4R9mR70vFjC0k+l0gjrk2Gcr02f4tuwx
-         sLlmGDYpaJWnG5zZXWtXdYOan7YPWoc7A3r7n8JZwLtDqU9MLzId6PrbqfCdH75L1HFZ
-         T0F1B/mUTK8WCEc0PW3b8hVEW87gc6qdWMGYO0FJRxQHDEruRzgoAZzHLtc/ppJ+bBXY
-         n2mThvKTtk01VEEUvQnmHLGPdPIILgserNMlcLDirUPqkqHm7LhPuLqbSV1HnvERkR9P
-         Ct8VoCrZzKkZFv3U/Agf3/ypT6SfOlyuPZqMOrzcLAucZ+QKZILYpLO+o1KF8HkYiB3D
-         t1/A==
-X-Gm-Message-State: AAQBX9frgn1xVgkaXQfQmCCBLozqR99uuC1RQjG4IJf0PjcNvpFGsMYi
-        OO45F9am9fMixQG7N+Kcnj9/cQ==
-X-Google-Smtp-Source: AKy350bwoDbML000tkSfu3RK1XvtX3xs9Z47Frf6gU00ujf+0MhVCVn28uwpnRfUijyUrwaT8AClZg==
-X-Received: by 2002:a17:907:a047:b0:8fa:b2b:9de with SMTP id gz7-20020a170907a04700b008fa0b2b09demr6941122ejc.25.1681747260869;
-        Mon, 17 Apr 2023 09:01:00 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:96aa:60eb:e021:6511? ([2a02:810d:15c0:828:96aa:60eb:e021:6511])
-        by smtp.gmail.com with ESMTPSA id k26-20020a17090666da00b0094a64196ed6sm6790426ejp.54.2023.04.17.09.00.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Apr 2023 09:01:00 -0700 (PDT)
-Message-ID: <752c2dc1-65a9-a74a-d9ce-7db5ddbea5f8@linaro.org>
-Date:   Mon, 17 Apr 2023 18:00:59 +0200
+        Mon, 17 Apr 2023 12:01:23 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6A8184
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 09:01:22 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1poRHt-00055n-V1; Mon, 17 Apr 2023 18:01:05 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1poRHr-00BuXB-Ko; Mon, 17 Apr 2023 18:01:03 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1poRHq-00DyP0-TH; Mon, 17 Apr 2023 18:01:02 +0200
+Date:   Mon, 17 Apr 2023 18:01:02 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     George Kennedy <george.kennedy@oracle.com>
+Cc:     richard@nod.at, miquel.raynal@bootlin.com, vigneshr@ti.com,
+        eorge.kennedy@oracle.com, linux-mtd@lists.infradead.org,
+        syzkaller@googlegroups.com, linux-kernel@vger.kernel.org,
+        harshit.m.mogalapalli@oracle.com, kernel@pengutronix.de,
+        stable@vger.kernel.org
+Subject: [Regression] Cannot overwrite VID header offset any more [Was:
+ [PATCH] ubi: ensure that VID header offset + VID header size <= alloc, size]
+Message-ID: <20230417160102.lw6n7bdxwrlkluwj@pengutronix.de>
+References: <ae901608-0580-010a-26e3-99d0b704b88b@oracle.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 2/4] ASoC: codecs: wcd934x: Simplify with dev_err_probe
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-References: <20230417141453.919158-1-krzysztof.kozlowski@linaro.org>
- <20230417141453.919158-2-krzysztof.kozlowski@linaro.org>
- <20aa9662-9cbb-4fbe-b6ed-3a6ba33e820a@sirena.org.uk>
- <c294d672-c2fa-7468-f02d-18d5230a1d95@linaro.org>
- <5d753a8a-b979-43f6-a403-8a51f69bac29@sirena.org.uk>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <5d753a8a-b979-43f6-a403-8a51f69bac29@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vrholj4gzneqir3b"
+Content-Disposition: inline
+In-Reply-To: <ae901608-0580-010a-26e3-99d0b704b88b@oracle.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,31 +57,209 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/04/2023 17:58, Mark Brown wrote:
-> On Mon, Apr 17, 2023 at 05:43:03PM +0200, Krzysztof Kozlowski wrote:
->> On 17/04/2023 17:33, Mark Brown wrote:
->>> On Mon, Apr 17, 2023 at 04:14:51PM +0200, Krzysztof Kozlowski wrote:
-> 
->>>> -	if (IS_ERR(wcd->if_regmap)) {
->>>> -		dev_err(dev, "Failed to allocate ifc register map\n");
->>>> -		return PTR_ERR(wcd->if_regmap);
->>>> -	}
->>>> +	if (IS_ERR(wcd->if_regmap))
->>>> +		return dev_err_probe(dev, PTR_ERR(wcd->if_regmap),
->>>> +				     "Failed to allocate ifc register map\n");
-> 
->>> This is a functional change.
-> 
->> Hmm... I don't see it. Return value is the same, same message is
->> printed, same condition. Did I make some copy-paste error?
-> 
-> You've replaced an unconditional dev_err() with dev_err_probe().
 
-Which is the core of this change... so what is here surprising? Yes,
-that's functional change and I never wrote that dev_err_probe is equal
-dev_err. It is similar but offers benefits and one difference - does not
-print DEFER. Which is in general exactly what we want.
+--vrholj4gzneqir3b
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Krzysztof
+Hello,
 
+On Tue, Nov 15, 2022 at 10:14:44AM -0500, George Kennedy wrote:
+> Ensure that the VID header offset + VID header size does not exceed
+> the allocated area to avoid slab OOB.
+>=20
+> BUG: KASAN: slab-out-of-bounds in crc32_body lib/crc32.c:111 [inline]
+> BUG: KASAN: slab-out-of-bounds in crc32_le_generic lib/crc32.c:179 [inlin=
+e]
+> BUG: KASAN: slab-out-of-bounds in crc32_le_base+0x58c/0x626 lib/crc32.c:1=
+97
+> Read of size 4 at addr ffff88802bb36f00 by task syz-executor136/1555
+>=20
+> CPU: 2 PID: 1555 Comm: syz-executor136 Tainted: G        W
+> 6.0.0-1868 #1
+> Hardware name: Red Hat KVM, BIOS 1.13.0-2.module+el8.3.0+7860+a7792d29
+> 04/01/2014
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0x85/0xad lib/dump_stack.c:106
+>  print_address_description mm/kasan/report.c:317 [inline]
+>  print_report.cold.13+0xb6/0x6bb mm/kasan/report.c:433
+>  kasan_report+0xa7/0x11b mm/kasan/report.c:495
+>  crc32_body lib/crc32.c:111 [inline]
+>  crc32_le_generic lib/crc32.c:179 [inline]
+>  crc32_le_base+0x58c/0x626 lib/crc32.c:197
+>  ubi_io_write_vid_hdr+0x1b7/0x472 drivers/mtd/ubi/io.c:1067
+>  create_vtbl+0x4d5/0x9c4 drivers/mtd/ubi/vtbl.c:317
+>  create_empty_lvol drivers/mtd/ubi/vtbl.c:500 [inline]
+>  ubi_read_volume_table+0x67b/0x288a drivers/mtd/ubi/vtbl.c:812
+>  ubi_attach+0xf34/0x1603 drivers/mtd/ubi/attach.c:1601
+>  ubi_attach_mtd_dev+0x6f3/0x185e drivers/mtd/ubi/build.c:965
+>  ctrl_cdev_ioctl+0x2db/0x347 drivers/mtd/ubi/cdev.c:1043
+>  vfs_ioctl fs/ioctl.c:51 [inline]
+>  __do_sys_ioctl fs/ioctl.c:870 [inline]
+>  __se_sys_ioctl fs/ioctl.c:856 [inline]
+>  __x64_sys_ioctl+0x193/0x213 fs/ioctl.c:856
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x3e/0x86 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0x0
+> RIP: 0033:0x7f96d5cf753d
+> Code:
+> RSP: 002b:00007fffd72206f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f96d5cf753d
+> RDX: 0000000020000080 RSI: 0000000040186f40 RDI: 0000000000000003
+> RBP: 0000000000400cd0 R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000400be0
+> R13: 00007fffd72207e0 R14: 0000000000000000 R15: 0000000000000000
+>  </TASK>
+>=20
+> Allocated by task 1555:
+>  kasan_save_stack+0x20/0x3d mm/kasan/common.c:38
+>  kasan_set_track mm/kasan/common.c:45 [inline]
+>  set_alloc_info mm/kasan/common.c:437 [inline]
+>  ____kasan_kmalloc mm/kasan/common.c:516 [inline]
+>  __kasan_kmalloc+0x88/0xa3 mm/kasan/common.c:525
+>  kasan_kmalloc include/linux/kasan.h:234 [inline]
+>  __kmalloc+0x138/0x257 mm/slub.c:4429
+>  kmalloc include/linux/slab.h:605 [inline]
+>  ubi_alloc_vid_buf drivers/mtd/ubi/ubi.h:1093 [inline]
+>  create_vtbl+0xcc/0x9c4 drivers/mtd/ubi/vtbl.c:295
+>  create_empty_lvol drivers/mtd/ubi/vtbl.c:500 [inline]
+>  ubi_read_volume_table+0x67b/0x288a drivers/mtd/ubi/vtbl.c:812
+>  ubi_attach+0xf34/0x1603 drivers/mtd/ubi/attach.c:1601
+>  ubi_attach_mtd_dev+0x6f3/0x185e drivers/mtd/ubi/build.c:965
+>  ctrl_cdev_ioctl+0x2db/0x347 drivers/mtd/ubi/cdev.c:1043
+>  vfs_ioctl fs/ioctl.c:51 [inline]
+>  __do_sys_ioctl fs/ioctl.c:870 [inline]
+>  __se_sys_ioctl fs/ioctl.c:856 [inline]
+>  __x64_sys_ioctl+0x193/0x213 fs/ioctl.c:856
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x3e/0x86 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0x0
+>=20
+> The buggy address belongs to the object at ffff88802bb36e00
+>  which belongs to the cache kmalloc-256 of size 256
+> The buggy address is located 0 bytes to the right of
+>  256-byte region [ffff88802bb36e00, ffff88802bb36f00)
+>=20
+> The buggy address belongs to the physical page:
+> page:00000000ea4d1263 refcount:1 mapcount:0 mapping:0000000000000000
+> index:0x0 pfn:0x2bb36
+> head:00000000ea4d1263 order:1 compound_mapcount:0 compound_pincount:0
+> flags: 0xfffffc0010200(slab|head|node=3D0|zone=3D1|lastcpupid=3D0x1fffff)
+> raw: 000fffffc0010200 ffffea000066c300 dead000000000003 ffff888100042b40
+> raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
+> page dumped because: kasan: bad access detected
+>=20
+> Memory state around the buggy address:
+>  ffff88802bb36e00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>  ffff88802bb36e80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> > ffff88802bb36f00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>                    ^
+>  ffff88802bb36f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>  ffff88802bb37000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>=20
+> Fixes: 801c135ce73d ("UBI: Unsorted Block Images")
+> Reported-by: syzkaller <syzkaller@googlegroups.com>
+> Signed-off-by: George Kennedy <george.kennedy@oracle.com>
+> ---
+>  drivers/mtd/ubi/build.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>=20
+> diff --git a/drivers/mtd/ubi/build.c b/drivers/mtd/ubi/build.c
+> index a32050fecabf..53aa4de6b963 100644
+> --- a/drivers/mtd/ubi/build.c
+> +++ b/drivers/mtd/ubi/build.c
+> @@ -663,6 +663,12 @@ static int io_init(struct ubi_device *ubi, int max_b=
+eb_per1024)
+>  	ubi->ec_hdr_alsize =3D ALIGN(UBI_EC_HDR_SIZE, ubi->hdrs_min_io_size);
+>  	ubi->vid_hdr_alsize =3D ALIGN(UBI_VID_HDR_SIZE, ubi->hdrs_min_io_size);
+> +	if (ubi->vid_hdr_offset && ((ubi->vid_hdr_offset + UBI_VID_HDR_SIZE) >
+> +	    ubi->vid_hdr_alsize)) {
+> +		ubi_err(ubi, "VID header offset %d too large.", ubi->vid_hdr_offset);
+> +		return -EINVAL;
+> +	}
+> +
+
+This patch is in mainline as 1b42b1a36fc946f0d7088425b90d491b4257ca3e,
+and backported to various stable releases.
+
+For me this breaks
+
+	ubiattach -m 0 -O 2048
+
+I think the check
+
+	ubi->vid_hdr_offset + UBI_VID_HDR_SIZE > ubi->vid_hdr_alsize
+
+is wrong. Without -O passed to ubiattach (and dynamic debug enabled) I
+get:
+
+[ 5294.936762] UBI DBG gen (pid 9619): sizeof(struct ubi_ainf_peb) 56
+[ 5294.936769] UBI DBG gen (pid 9619): sizeof(struct ubi_wl_entry) 32
+[ 5294.936774] UBI DBG gen (pid 9619): min_io_size      2048
+[ 5294.936779] UBI DBG gen (pid 9619): max_write_size   2048
+[ 5294.936783] UBI DBG gen (pid 9619): hdrs_min_io_size 512
+[ 5294.936787] UBI DBG gen (pid 9619): ec_hdr_alsize    512
+[ 5294.936791] UBI DBG gen (pid 9619): vid_hdr_alsize   512
+[ 5294.936796] UBI DBG gen (pid 9619): vid_hdr_offset   512
+[ 5294.936800] UBI DBG gen (pid 9619): vid_hdr_aloffset 512
+[ 5294.936804] UBI DBG gen (pid 9619): vid_hdr_shift    0
+[ 5294.936808] UBI DBG gen (pid 9619): leb_start        2048
+[ 5294.936812] UBI DBG gen (pid 9619): max_erroneous    409
+
+So the check would only pass for vid_hdr_offset <=3D 512 -
+UBI_VID_HDR_SIZE; note that even specifying the default value 512 (i.e.
+
+	ubiattach -m 0 -O 512
+
+) fails the check.
+
+A less strong check would be:
+
+diff --git a/drivers/mtd/ubi/build.c b/drivers/mtd/ubi/build.c
+index 0904eb40c95f..69c28a862430 100644
+--- a/drivers/mtd/ubi/build.c
++++ b/drivers/mtd/ubi/build.c
+@@ -666,8 +666,8 @@ static int io_init(struct ubi_device *ubi, int max_beb_=
+per1024)
+ 	ubi->ec_hdr_alsize =3D ALIGN(UBI_EC_HDR_SIZE, ubi->hdrs_min_io_size);
+ 	ubi->vid_hdr_alsize =3D ALIGN(UBI_VID_HDR_SIZE, ubi->hdrs_min_io_size);
+=20
+-	if (ubi->vid_hdr_offset && ((ubi->vid_hdr_offset + UBI_VID_HDR_SIZE) >
+-	    ubi->vid_hdr_alsize)) {
++	if (ubi->vid_hdr_offset &&
++	    ubi->vid_hdr_offset + UBI_VID_HDR_SIZE > ubi->peb_size) {
+ 		ubi_err(ubi, "VID header offset %d too large.", ubi->vid_hdr_offset);
+ 		return -EINVAL;
+ 	}
+
+But I'm unsure if this would be too lax?!
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--vrholj4gzneqir3b
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmQ9bT0ACgkQj4D7WH0S
+/k4JbggAnl8YnX6+ci/263B7bektLKWsdvSkW23vvDgVKJIyWJLuIdg4oxTijyKw
+Zxk4521RSK6JDAr416vi6HsLcsF65tqNfwE6x9aTuFJmMdyxIpynfTOz/BTeHYAF
+0MQ1TgLjbbHP7ihvJ7aPaOvsWOyYYdfS5aG7RW/IFm3Lv212YcbrORiW6tBAI2gA
+gF/G15fym4Z3DbTqVGXsSddBlvLntn1CJ7O4DBtwrGt/VjC79+M2SWRAgqkj/ynz
+VUgG/t2NtXVz0N2pQdmEd2Eyp9jCROsviiTt9gbFEWuneCB+X5KGR8MmbnLo/lAt
++SPjo//mi2NMeppyPL5obOEycng4Yw==
+=YQU7
+-----END PGP SIGNATURE-----
+
+--vrholj4gzneqir3b--
