@@ -2,157 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E414E6E466A
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 13:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24F196E4664
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 13:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbjDQL2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 07:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50196 "EHLO
+        id S230143AbjDQL1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 07:27:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjDQL23 (ORCPT
+        with ESMTP id S229583AbjDQL1m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 07:28:29 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D1193C4
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 04:27:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681730858; x=1713266858;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=dQdP2C0y13QjGPGlu8h5gpexTCLBs2TEofj4iMkHvbs=;
-  b=F6JP3M7ak7iUPt7nyZmSgYHAEQgJ3NlmHwoeGjQrfJyZ1R+LGzai+HWk
-   UOK6suO25SPw07rJQdKNJiBPa5HDfzKimpZvyTn88i1l82C1kiuc3sZc5
-   KiOUI3v1qao173KzOxxANgPapUUq1DN9zV0Tkv+pnvxyyJRav/mF3lMFX
-   6qU86cpHBjYSBk18e0+oiXnVbenbPtH2hRCpqz9gA/uQgMpf4SAVyN4c5
-   a4RF1/hnjm1HJ/0c1EDAEIx7Z1P4sK87o/rk6anFXPXSwWGwKz/XbUyV8
-   mBqvtwaisrCA+WgSDpmOvJ0q1m+IgYvCdHLyghmNXb4Bx8VnITRkN3yYf
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="325210110"
-X-IronPort-AV: E=Sophos;i="5.99,204,1677571200"; 
-   d="scan'208";a="325210110"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 04:24:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="721081935"
-X-IronPort-AV: E=Sophos;i="5.99,204,1677571200"; 
-   d="scan'208";a="721081935"
-Received: from gtohallo-mobl.ger.corp.intel.com (HELO [10.213.232.210]) ([10.213.232.210])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 04:24:47 -0700
-Message-ID: <048d4dba-153f-5d32-75fc-d7e7144d1e9c@linux.intel.com>
-Date:   Mon, 17 Apr 2023 12:24:45 +0100
+        Mon, 17 Apr 2023 07:27:42 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 756E24C1C;
+        Mon, 17 Apr 2023 04:26:51 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1poMyw-0000Lo-Iw; Mon, 17 Apr 2023 13:25:14 +0200
+Message-ID: <69602f1b-4afa-d864-b6d3-d8237f81a51d@leemhuis.info>
+Date:   Mon, 17 Apr 2023 13:25:13 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 9/9] drm/i915: Use kmap_local_page() in
- gem/i915_gem_execbuffer.c
-Content-Language: en-US
-To:     Zhao Liu <zhao1.liu@linux.intel.com>
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthew Auld <matthew.auld@intel.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Nirmoy Das <nirmoy.das@intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Zhenyu Wang <zhenyu.z.wang@intel.com>,
-        Zhao Liu <zhao1.liu@intel.com>
-References: <20230329073220.3982460-1-zhao1.liu@linux.intel.com>
- <64265ef8725fe_375f7e294a@iweiny-mobl.notmuch>
- <fdc8a470-1e6b-815d-e367-a9df1b0b14dd@linux.intel.com>
- <2177327.1BCLMh4Saa@suse>
- <1b341218-f0e2-a613-2ac6-107064a813ca@linux.intel.com>
- <ZDku5SJhl2Ve51UC@liuzhao-OptiPlex-7080>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <ZDku5SJhl2Ve51UC@liuzhao-OptiPlex-7080>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+ Thunderbird/102.9.1
+Subject: Re: kernel error at led trigger "phy0tpt"
+Content-Language: en-US, de-DE
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Tobias Dahms <dahms.tobias@web.de>,
+        Sean Wang <sean.wang@mediatek.com>
+Cc:     stable@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-leds@vger.kernel.org,
+        linux-wireless@vger.kernel.org,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+References: <91feceb2-0df4-19b9-5ffa-d37e3d344fdf@web.de>
+ <3fcc707b-f757-e74b-2800-3b6314217868@leemhuis.info>
+ <fcecf6fc-bf18-73a0-9fc1-6850e183323a@web.de>
+ <d14fb08c-70e3-4cc7-caf9-87e73eab9194@gmail.com>
+ <8b07ead5-f105-da86-e7da-ee49616f7c1d@collabora.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <8b07ead5-f105-da86-e7da-ee49616f7c1d@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1681730811;1bf629c5;
+X-HE-SMSGID: 1poMyw-0000Lo-Iw
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+[adding Matthias to the list of recipients, who back then applied to
+culprit]
 
-On 14/04/2023 11:45, Zhao Liu wrote:
-> Hi Tvrtko,
-> 
-> On Wed, Apr 12, 2023 at 04:45:13PM +0100, Tvrtko Ursulin wrote:
-> 
-> [snip]
-> 
+Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
+for once, to make this easily accessible to everyone.
+
+AngeloGioacchino, Has any progress been made to fix below regression? It
+doesn't look like it from here, hence I wondered if it fall through the
+cracks.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
+
+#regzbot poke
+
+On 27.03.23 10:23, AngeloGioacchino Del Regno wrote:
+> Il 26/03/23 15:23, Bagas Sanjaya ha scritto:
+>> On 3/26/23 02:20, Tobias Dahms wrote:
+>>> Hello,
 >>>
->>> [snip]
->>>> However I am unsure if disabling pagefaulting is needed or not. Thomas,
->>>> Matt, being the last to touch this area, perhaps you could have a look?
->>>> Because I notice we have a fallback iomap path which still uses
->>>> io_mapping_map_atomic_wc. So if kmap_atomic to kmap_local conversion is
->>>> safe, does the iomap side also needs converting to
->>>> io_mapping_map_local_wc? Or they have separate requirements?
+>>> the bisection gives following result:
+>>> --------------------------------------------------------------------
+>>> 18c7deca2b812537aa4d928900e208710f1300aa is the first bad commit
+>>> commit 18c7deca2b812537aa4d928900e208710f1300aa
+>>> Author: AngeloGioacchino Del Regno
+>>> <angelogioacchino.delregno@collabora.com>
+>>> Date:   Tue May 17 12:47:08 2022 +0200
 >>>
->>> AFAIK, the requirements for io_mapping_map_local_wc() are the same as for
->>> kmap_local_page(): the kernel virtual address is _only_ valid in the caller
->>> context, and map/unmap nesting must be done in stack-based ordering (LIFO).
+>>>      soc: mediatek: pwrap: Use readx_poll_timeout() instead of custom
+>>> function
 >>>
->>> I think a follow up patch could safely switch to io_mapping_map_local_wc() /
->>> io_mapping_unmap_local_wc since the address is local to context.
+>>>      Function pwrap_wait_for_state() is a function that polls an address
+>>>      through a helper function, but this is the very same operation that
+>>>      the readx_poll_timeout macro means to do.
+>>>      Convert all instances of calling pwrap_wait_for_state() to instead
+>>>      use the read_poll_timeout macro.
 >>>
->>> However, not being an expert, reading your note now I suspect that I'm missing
->>> something. Can I ask why you think that page-faults disabling might be
->>> necessary?
+>>>      Signed-off-by: AngeloGioacchino Del Regno
+>>> <angelogioacchino.delregno@collabora.com>
+>>>      Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+>>>      Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+>>>      Link:
+>>> https://lore.kernel.org/r/20220517104712.24579-2-angelogioacchino.delregno@collabora.com
+>>>      Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
+>>>
+>>>   drivers/soc/mediatek/mtk-pmic-wrap.c | 60
+>>> ++++++++++++++++++++----------------
+>>>   1 file changed, 33 insertions(+), 27 deletions(-)
+>>> --------------------------------------------------------------------
+>>>
 >>
->> I am not saying it is, was just unsure and wanted some people who worked on this code most recently to take a look and confirm.
+>> OK, I'm updating the regression status:
 >>
->> I guess it will work since the copying is done like this anyway:
+>> #regzbot introduced: 18c7deca2b8125
 >>
->> 		/*
->> 		 * This is the fast path and we cannot handle a pagefault
->> 		 * whilst holding the struct mutex lest the user pass in the
->> 		 * relocations contained within a mmaped bo. For in such a case
->> 		 * we, the page fault handler would call i915_gem_fault() and
->> 		 * we would try to acquire the struct mutex again. Obviously
->> 		 * this is bad and so lockdep complains vehemently.
->> 		 */
->> 		pagefault_disable();
->> 		copied = __copy_from_user_inatomic(r, urelocs, count * sizeof(r[0]));
->> 		pagefault_enable();
->> 		if (unlikely(copied)) {
->> 			remain = -EFAULT;
->> 			goto out;
->> 		}
+>> And for replying, don't top-post, but rather reply inline with
+>> appropriate context instead; hence I cut the replied context.
 >>
->> Comment is a bit outdated since we don't use that global "struct mutex" any longer, but in any case, if there is a page fault on the mapping where we need to recurse into i915 again to satisfy if, we seem to have code already to handle it. So kmap_local conversion I *think* can't regress anything.
 > 
-> Thanks for your explanation!
+> There are two possible solutions to that, specifically, either:
+>  1. Change readx_poll_timeout() to readx_poll_timeout_atomic(); or
+>  2. Fix the mt6323-led driver so that this operation gets done
+>     out of atomic context, which is IMO the option to prefer.
 > 
->>
->> Patch to convert the io_mapping_map_atomic_wc can indeed come later.
+> Ideas?
 > 
-> Okay, I will also look at this.
+> Regards,
+> Angelo
 > 
->>
->> In terms of logistics - if we landed this series to out branch it would be queued only for 6.5. Would that work for you?
 > 
-> Yeah, it's ok for me. But could I ask, did I miss the 6.4 merge time?
-
-Yes, but just because we failed to review and merge in time, not because 
-you did not provide patches in time.
-
-Regards,
-
-Tvrtko
-
