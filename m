@@ -2,74 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 850936E4B8E
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:34:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 238856E4B94
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:35:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230296AbjDQOes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 10:34:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
+        id S230400AbjDQOfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 10:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230454AbjDQOen (ORCPT
+        with ESMTP id S229655AbjDQOfr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 10:34:43 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC659ED3
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:34:37 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4ec8399e963so1447131e87.1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:34:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681742075; x=1684334075;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZbFC79Oq+9Hmqepmm6jPvUsF/5+tyLfUN18+6Z858KQ=;
-        b=i2gd9vrsSf0FZ3njsdwlXYbOAQmsvA7jjO3MFexLRv6nEN46apEntdBYccGWUdL9o2
-         Ul3NRO9qCUApBTMRDy/sAW5OcR9e1DsQecqtaLSHduCtS5SPLA+zSQv6LGcGikBBRHCt
-         RZSHyagv0hHkj3QYOXy+ZA5inw9Fpu9/PuzegV1FYBiRTDeWYbyJxMZA3QQceq9QyIw4
-         MovaLcksvSNOT0tiN5Ld1mtHgSaGnns5FkrsaCl7JnKwmANsJsga9BG4dZuRFVoTRXz7
-         atr5I9wYOKJ+6bttLJHOfFQP7kfsOi6O/W+xrlUcCWYDpRlN1t2w02hYARZeYSK8Y3gQ
-         BdyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681742075; x=1684334075;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZbFC79Oq+9Hmqepmm6jPvUsF/5+tyLfUN18+6Z858KQ=;
-        b=OAwpvQdA8lEvalgRTvSDmoBTkcxrLeHZL3BWIk8qaj7z8phwKKhPXIPKfh7I1zyKY9
-         SEzrvBMQeQZwrglH7/ZOLBwNIyqaiu/buA2lcD91VEkbi/sBPAWWd4A6hn3+sRqra37w
-         Q57MXaUwTLm4ic24m+l9pX5wZY1gpto6ZtCCTdpXjEbXKHV+BtKe67eUOzU6n8iZeXRG
-         NlSWatinjelIDlsvn7dyjLCJG1BbgXMc410CF4FnuSqVVNxE5RQ/aXTYvcDW/twig7SC
-         4l05hYmi8A+45QDyxbMC4voEF2YG7UHO8uAkDFh/56/sH8MyDUf2rKykWF70iLtYeLb4
-         0UqA==
-X-Gm-Message-State: AAQBX9c2QMpcBT6o1U7Z7dX2JeV1uvzfvx2M/GwU7EyeO7vZRNFu5q9A
-        leusPrqP8lDpqES6e3VRQIwdIw==
-X-Google-Smtp-Source: AKy350aaUQGrmfENt3BQQZ0nR1tYMqNpI8SGmDfriGYVbYfw49/uQIcT2pRp7Ln1mH1Ij+mbAcC/zg==
-X-Received: by 2002:ac2:5dc4:0:b0:4e8:49ff:8df8 with SMTP id x4-20020ac25dc4000000b004e849ff8df8mr2001819lfq.61.1681742075428;
-        Mon, 17 Apr 2023 07:34:35 -0700 (PDT)
-Received: from [192.168.1.101] (abyk99.neoplus.adsl.tpnet.pl. [83.9.30.99])
-        by smtp.gmail.com with ESMTPSA id m14-20020ac24ace000000b004e83fbba141sm2062414lfp.164.2023.04.17.07.34.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Apr 2023 07:34:35 -0700 (PDT)
-Message-ID: <b2ddefb6-78e1-1c25-00de-3512b9f76b6d@linaro.org>
-Date:   Mon, 17 Apr 2023 16:34:32 +0200
+        Mon, 17 Apr 2023 10:35:47 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF01892
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:35:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681742146; x=1713278146;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=59soud3ZVPF24XKGntxNV2rXm7hsRRLDATDpC2PciaM=;
+  b=gZMfFH0yPmKBe7N2K3o1oymIzTT/mWMDIvd/Tl5k6/POQaiuHqYqEyLr
+   FydtPHFp0IT+PDFjIennNfJNTugYqmdfANzF5htIQgwpsbEud/mIz2Ot3
+   XJypC+IBMVa9ZpFj+IX4zWD4wJIm6l1EMOW5JBxIoVzgbEoY6xRtA7CwZ
+   xCb96YAIOnaQe1KsoZus8OSic52KxXfqFc8KKEVLSVJn+DMxdn8o+dX9v
+   3ChOc/bIZ6Pj3TNB+OTQx8WkIFspW7xzSYDBFNpPdEttWo8N/0qWHdrAj
+   04dLBj7nztYfzWJB9qtEpOR22HIg//q+crk+mFDQBb02B4LYccOiloFDM
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="343659521"
+X-IronPort-AV: E=Sophos;i="5.99,204,1677571200"; 
+   d="scan'208";a="343659521"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 07:35:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="684170049"
+X-IronPort-AV: E=Sophos;i="5.99,204,1677571200"; 
+   d="scan'208";a="684170049"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orsmga007.jf.intel.com with ESMTP; 17 Apr 2023 07:35:45 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 17 Apr 2023 07:35:45 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 17 Apr 2023 07:35:45 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Mon, 17 Apr 2023 07:35:45 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.174)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Mon, 17 Apr 2023 07:35:45 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Avgnr9i6MtnVeMU/e7eegdLpmB1ou8TfIUH9W17yvVWgFV9E/Z02ILHV3hDxb4mCbdw0GgJqaMCphONllu+yr2i6wrtrzESVnBbk3HMGmJ5sIXdOJrz+X5sPs7c5yubBmy5V/HXeKLdjkdomIzRn1HaWCDYnNEBz7hwKt6+NV8C1LQcvDiU+g2CsgMg9Mrfn1Ij80OED5pEXQayHZhzVnirZPVN34lMMZn7L04myMFmHKHO9wvgIO9hbeFs47QJHbn21L/TS1V8BUxz0lOA1KiFMoSCFZUbfK+CMM4npwMZUymxHbWg79iOLOc8u9I6FaPCaaHu/5Jnqau7QTfSJcQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uKOw4ZnNGZoRHt/C0VR/opz6la5x7SDCRcD017uxI7A=;
+ b=HKTR93iIppEyhjAG0tQ2FxMPCbMOzZTXGxYC3X8E+8B9aMfu26yOLIIWlzY1pTTKBOpTjbX0nYRuOlKngv6L0enAu9HXaAXI7ggbQWV7fy+406isa/6OK2Bl//vxMoTp0joV10wICm2mUWC2jTZ8bmmavcQFATm9yhoy1zvACd07N8ESKI+/mg2Z4S/Iz5wAbZMQ/8yOKqR4w8TdGd7XqUQ3UaYt8y6P8tXSPl63hXFI0Xe6THeANoChpToPVElgny7SLAU5g2vNeuuNHk3kL1d1EiYwTFpHzu/mRg+830E+tArcZz2ZuoBvZhwINzcMZLLd+p1b8hjYHRb5uymjBw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BYAPR11MB3062.namprd11.prod.outlook.com (2603:10b6:a03:92::18)
+ by SJ0PR11MB5103.namprd11.prod.outlook.com (2603:10b6:a03:2d3::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Mon, 17 Apr
+ 2023 14:35:42 +0000
+Received: from BYAPR11MB3062.namprd11.prod.outlook.com
+ ([fe80::9cc2:9827:4f29:5885]) by BYAPR11MB3062.namprd11.prod.outlook.com
+ ([fe80::9cc2:9827:4f29:5885%4]) with mapi id 15.20.6298.030; Mon, 17 Apr 2023
+ 14:35:42 +0000
+Date:   Mon, 17 Apr 2023 22:35:32 +0800
+From:   Aaron Lu <aaron.lu@intel.com>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+CC:     Peter Zijlstra <peterz@infradead.org>,
+        <linux-kernel@vger.kernel.org>, Olivier Dion <odion@efficios.com>,
+        <michael.christie@oracle.com>
+Subject: Re: [RFC PATCH v7] sched: Fix performance regression introduced by
+ mm_cid
+Message-ID: <20230417143532.GA491276@ziqianlu-desk2>
+References: <20230416223217.191261-1-mathieu.desnoyers@efficios.com>
+ <20230417101855.GA485797@ziqianlu-desk2>
+ <5abacbf4-8101-7931-6dee-84f4f004240a@efficios.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <5abacbf4-8101-7931-6dee-84f4f004240a@efficios.com>
+X-ClientProxiedBy: SG2PR04CA0198.apcprd04.prod.outlook.com
+ (2603:1096:4:14::36) To BYAPR11MB3062.namprd11.prod.outlook.com
+ (2603:10b6:a03:92::18)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH V2] clk: qcom: ipq5332: fix the order of SLEEP_CLK and XO
- clock
-Content-Language: en-US
-To:     Kathiravan T <quic_kathirav@quicinc.com>, andersson@kernel.org,
-        agross@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230417105607.4091-1-quic_kathirav@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230417105607.4091-1-quic_kathirav@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR11MB3062:EE_|SJ0PR11MB5103:EE_
+X-MS-Office365-Filtering-Correlation-Id: f3cb4d4b-966d-4c13-47d7-08db3f510527
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: u8BB5awWRFRSUxZWqOX1LsM9IhsoJb0s4dAp0rm3M6p29q5zw9ndCX+zkbpmE8C13Pdg/sIJEkDlyzBGVf0pWzXp0Fp9sg7kxsdhhxMbYQs+8gV6Mydj3bvOLyOfikVl614TQDxb3EetqdZ36eilWvg0UR8gcCow5imo3bhtOMgEss/x5j89ux8uNJWGBRxtkN7IU7L7G8BXH/F1H9Jbd66fRuFrgvW46UUHXvp/ovpMnSK4ElJQC8bv8mTIJzt+eiEFr7dIw/DBycwX0KboEideRJpt4RDqfCVDZ2s6iY2fWXXUWjznqvdj4vKHG80ETcQ+nBKHrB5ItyjGBYc3HjR++lEKvVVt0QOiJCpjeaPTk8qY464ojo2/hKYwiukKUaxayQx/7loJWa0ZmV5W60eAMSPiSjckFxrObqQRYAVesT02zW7eMWH1L4Tm44zo7RtzNP6r7H7bEKAc4ksUpTTvmI46+MdQib3t2qN5jbqw3iZFrHZ3+ybKFi46sT7/+EN5IL1MheZUJQFaO6OjezBS37+fz5aFcNj2jrkSC6kxU9QCepPIum+7tTdDPjG7
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3062.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(396003)(376002)(366004)(39860400002)(136003)(346002)(451199021)(33656002)(6916009)(54906003)(4326008)(316002)(66556008)(66946007)(66476007)(6486002)(478600001)(6666004)(5660300002)(8936002)(8676002)(41300700001)(33716001)(2906002)(44832011)(86362001)(82960400001)(38100700002)(26005)(6512007)(6506007)(1076003)(9686003)(186003)(53546011)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/KVZPl5eBJRjTi3OcajpbDKV0hQQ5xO5GvHg/X/T6Cta36CE9/X/wTwXzyZr?=
+ =?us-ascii?Q?TF//oD10JUlEiCTHRSVU3zp2Z/jgKndlcJcFBl1p/FTevRPtoaa+PfczPG5t?=
+ =?us-ascii?Q?DdfF9wIYqfQjx3dgMZy8D45PEBX3bs+63SIMw4R7pAEBt7P9WQLHGtd9KNkH?=
+ =?us-ascii?Q?jd2a7IrJ74DsY3mdCDuLD7U1Vy6Zt1qC6kmMRaBUVlgdo1IpCEUh7r7kUMg3?=
+ =?us-ascii?Q?j6bPVDooNmlhkcEfIIg+5ZXjaoBMyyPzye0kdm1RVKNJo7+SU+H2pzKZ1Beg?=
+ =?us-ascii?Q?43HGuiK/0hVbw8zBKRIppIBaB50LD0iKLvghxgv8ztfC15TEfbbEBgMo79S/?=
+ =?us-ascii?Q?I1o+F7NQ2Wp8gvJFBIFFxIHd8BLcl7s+frlGqSommU31wRhYLi0A9+ipUNGY?=
+ =?us-ascii?Q?/gVXZdKHDY+66kfZil387sUESGaMsk6hshrNsv/cBDk5f1wHRX7XpYYCihEv?=
+ =?us-ascii?Q?FFCSKYSknS3Inay0qhibhY/Eq8T5wKC9XmWeWz9AlKYmDxFiKOVaKUQAg65y?=
+ =?us-ascii?Q?QWO5NwYBgsLBNpSSGW1u+sq8OhPPSoR5Jmdh9L+il4dYZS8p9vhNZPmbTvQm?=
+ =?us-ascii?Q?lYREacWht2HGQF62FCVSXQ6pcQCKIyyMESspFBppS1aHgG8NdqUPLu6B3Ano?=
+ =?us-ascii?Q?zhmZTVUhnoFzOH6AKOXQJKhrMrkdzLJW2dMmTZldMPyU0VqpdC6Cx30aLpwB?=
+ =?us-ascii?Q?t63vRbt1rePd44lsofapysFSSCDUXLQPdX7Vm4MIS2diKaDIUh9Xf2/+fT8t?=
+ =?us-ascii?Q?H+D2NlDSMxLsPyCxEtURTxSJHtWcflHWjb6ZWueAEW8BOjq56vxJrrMH5KYb?=
+ =?us-ascii?Q?AaFpB2imAWnDs7x3eHuHNVNRQDYUu2UkqbVEXTvzkDsIWQqcvrMYHZc82AEY?=
+ =?us-ascii?Q?57NKCBQ+BdMVyilBvOFZ0M5nPO0xjrNdx/UvwLOxlKHO1eaX6wmoWruRrisa?=
+ =?us-ascii?Q?wIUEEmHf6rKZKTBFYbbkQUAMkPQR6iGfwDv895DrSVzJD7DvQDJLLHgCcnUv?=
+ =?us-ascii?Q?qjNxNeHLu2rt4IhuTl9e9v5AprdJzqf227hE0DtMfcLJ1RqhTSRAMTK0yWT9?=
+ =?us-ascii?Q?qDpnHG/YKLVDL9dWeNXppK59WNBBp7uiiUpoHmIyhNpMpAWF2vpce7GAMPic?=
+ =?us-ascii?Q?VogcYNCtduH6tQrLEpPQmZOR7oJ2S6yTFbPr0Ne3KG1nLFBcMDREEgy/k23E?=
+ =?us-ascii?Q?QwJfWs2XDpbozEEiostm607ez+t4y+/wenCPt8If4Ek0C4ERnJBcmFu3Q5LP?=
+ =?us-ascii?Q?jfUwFyxZxYHA0iPllK+oF56i2/zdsVSn7mVovk+I62vGi65odjOiXc9cuKwc?=
+ =?us-ascii?Q?Qg9guQuDKV3td2oY3p7Q/jIWb4d/pPjAM8jXYLbsn0OY4dQt3a8KdmXecbKM?=
+ =?us-ascii?Q?CjZzlboEgN/8djdk9CcZJJYLfi0WxmudL2Gnk2pHV2ZA6Jhv5IX0Dy+8D/BO?=
+ =?us-ascii?Q?zYIWDpIY/OB8ygemsKk9cHwosFkBkBC6oYRLNOZOBncxHb4XahRnG0VQjV5P?=
+ =?us-ascii?Q?/19ThHBFnbZpTw9F23yIyUGLkqRq5ClrWohfdWJq9/FPvxnxZIuaC4gTMxm9?=
+ =?us-ascii?Q?SUJicSrJbify5Ma7aIG0myzjXr7+aH9ldkao3H4H?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: f3cb4d4b-966d-4c13-47d7-08db3f510527
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3062.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2023 14:35:41.6681
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ClDc3kPcrgmYJUhHrCbTlbB9NHbok8VxKR2+P3GEz82VEHW3nDyS30tPOp6DyQF2xU21xwlpVETSYeXNdzSFvA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5103
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,39 +152,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 17.04.2023 12:56, Kathiravan T wrote:
-> The order of DT_SLEEP_CLK and DT_XO are swapped and it is incorrect.
-> Due to which the clocks for which the parent should be XO is having parent
-> as SLEEP_CLK and vice versa. So fix the same by re-ordering the entries.
+On Mon, Apr 17, 2023 at 09:28:54AM -0400, Mathieu Desnoyers wrote:
+> On 2023-04-17 06:18, Aaron Lu wrote:
+> > On Sun, Apr 16, 2023 at 06:32:17PM -0400, Mathieu Desnoyers wrote:
+> > > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> > > index 0d18c3969f90..9532cf1a2a44 100644
+> > > --- a/kernel/sched/core.c
+> > > +++ b/kernel/sched/core.c
+> > > @@ -2084,8 +2084,10 @@ static inline void dequeue_task(struct rq *rq, struct task_struct *p, int flags)
+> > >   void activate_task(struct rq *rq, struct task_struct *p, int flags)
+> > >   {
+> > > -	if (task_on_rq_migrating(p))
+> > > +	if (task_on_rq_migrating(p)) {
+> > >   		flags |= ENQUEUE_MIGRATED;
+> > > +		sched_mm_cid_migrate_to(rq, p);
+> > 
+> > 
+> > I noticed you did this in previous version too but forgot to ask:
+> > is it your intention to only invoke sched_mm_cid_migrate_to() for queued
+> > tasks, i.e. tasks that are being migrated due to load/idle balance etc,
+> > but not those tasks that migrated on wakeup?
 > 
-> Fixes: 3d89d52970fd ("clk: qcom: add Global Clock controller (GCC) driver for IPQ5332 SoC")
-> Reported-by: Devi Priya <quic_devipriy@quicinc.com>
-> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
-> ---
-This matches what I can see in the bindings.
-
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
-> Changes in V2:
-> 	- Added the Reported-by and Fixes tag
+> My intent is to also cover tasks migrated on wakeup.
 > 
->  drivers/clk/qcom/gcc-ipq5332.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > I saw you did the corresonding sched_mm_cid_migrate_from() in
+> > set_task_cpu(), which on the other hand includes tasks that migrated due
+> > to wakeup, so it kind of feel weird.
 > 
-> diff --git a/drivers/clk/qcom/gcc-ipq5332.c b/drivers/clk/qcom/gcc-ipq5332.c
-> index 8cacbfb10c72..14096887d436 100644
-> --- a/drivers/clk/qcom/gcc-ipq5332.c
-> +++ b/drivers/clk/qcom/gcc-ipq5332.c
-> @@ -20,8 +20,8 @@
->  #include "reset.h"
->  
->  enum {
-> -	DT_SLEEP_CLK,
->  	DT_XO,
-> +	DT_SLEEP_CLK,
->  	DT_PCIE_2LANE_PHY_PIPE_CLK,
->  	DT_PCIE_2LANE_PHY_PIPE_CLK_X1,
->  	DT_USB_PCIE_WRAPPER_PIPE_CLK,
+> I'm probably missing something here. AFAIU, when try_to_wake_up() moves the
+> target process to a different cpu:
+> 
+>         cpu = select_task_rq(p, p->wake_cpu, wake_flags | WF_TTWU);
+>         if (task_cpu(p) != cpu) {
+> 
+> it ends up calling ttwu_queue() with wake_flags |= WF_MIGRATED bit set.
+> 
+> Then ttwu_queue() ends up calling ttwu_queue_wakelist(), which may initiate
+> an IPI to the target cpu which executes sched_ttwu_pending().
+> This function will take the target cpu's runqueue lock and call
+> ttwu_do_activate() with wake_flags=WF_MIGRATED.
+> 
+> The other path that ttwu_queue() can take is to issue ttwu_do_activate()
+> with the target cpu's rq lock held.
+> 
+> ttwu_do_activate() calls activate_task() with flags having ENQUEUE_MIGRATED
+> set.
+> 
+> OK I think I see what I missed here, I should change this to:
+> 
+> void activate_task(struct rq *rq, struct task_struct *p, int flags)
+> {
+>         if (task_on_rq_migrating(p))
+>                 flags |= ENQUEUE_MIGRATED;
+> 	if (flags & ENQUEUE_MIGRATED)
+>                 sched_mm_cid_migrate_to(rq, p);
+> [...]
+> 
+> Because flags is received as input parameter as well.
+> 
+> Do I get your meaning correctly ?
+
+Yes, that's what I meant.
+
+Tasks that have on_rq equals to TASK_ON_RQ_MIGRATING are only those
+migrated by load balance etc., it doesn't apply to tasks that migrated
+on wake up.
+
+I think your new change looks correct.
+
+Thanks,
+Aaron
