@@ -2,115 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 491696E50EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6756E50ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:28:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbjDQT25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 15:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45434 "EHLO
+        id S231134AbjDQT2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 15:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230513AbjDQT2x (ORCPT
+        with ESMTP id S230389AbjDQT2c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 15:28:53 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D570729E
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:28:33 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-187916b6543so16076747fac.7
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:28:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681759713; x=1684351713;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S4g+hmFG2hUra6SC/fsLnmP46WQx2KRuK2G3ZEHGCWs=;
-        b=UV93IM6N/SBFjFRKZoUVrsBH/AHHXGJNLxt+tHJsZ90TTOcFg/fp2wfoWCKAvdnSc+
-         lUjqCYrCMsR9yRnbBDjSENLH7jNlyBsTdJH17jTw68KrEV4nmPQNjc7uPD/iYCsanN8O
-         Y32mQBkCqzy9M4bRaPwHvvnGF3z7Dd6UUFHbNNRZrSv1j+pVRtCQsU/Md2pd0BBLZtnS
-         Acq5mbPspUjVLl2FWAyftyTNlWD4vBNEygapFN5yDuqFfKKl4rlGN2V6OMx8O1TMb8AY
-         6+zA43YlW5+1xSRPEjL+nuQ3VothVYnr7EQ1GWb4j3bmlK0oGwrvzB3BeZGWc7h3P4pU
-         lohw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681759713; x=1684351713;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S4g+hmFG2hUra6SC/fsLnmP46WQx2KRuK2G3ZEHGCWs=;
-        b=HVgcqvFWiZtEE63VWcmzjLI5kl6lYyreOwZHVL+p8hGL1xz33fnmCdVpOgRrDrHvfJ
-         jQtZmxIl3/e12xOE1BqS5YAhh/UVjdHCAlm6Th7GJlb6StsQ+OSvAPT4IQZy6IQoRh3y
-         UT1lMMNaTWh2ESE/TfSTuYBiEy4shdPRc+4GFAJiErUptNteCutKSTBavnCWU+qDryK4
-         2d0AgcKAdFDDFO7Dchcf2NFNO7lduQOQsSmhhjThN7Oha7RiAqOj4H8n20BuHd9l8/Fv
-         pWW3vCbGYXqJxSYNYTDTN2Yf60cb/wVDl3tJ0EfwNKE+JbGgG/snst3NWwgwIioz95N5
-         DM9g==
-X-Gm-Message-State: AAQBX9c7w9gtOGDFmI84WJF1FbdxBXGovJQNYqLEnhQMUHihUUm2dWcJ
-        kDfEqtIAalbG9sDwDSWmhPSuCDhPmbXfevECu74=
-X-Google-Smtp-Source: AKy350Ype+Viup2qX4/8PJj4TAhayZgd5LJav0NCFhC/hTj2y7gBSdREXeexNBhmWfjamHynt0zsvFQrK9hx1hnLZJY=
-X-Received: by 2002:a05:6870:2e0e:b0:187:7524:9a8d with SMTP id
- oi14-20020a0568702e0e00b0018775249a8dmr7534364oab.4.1681759712906; Mon, 17
- Apr 2023 12:28:32 -0700 (PDT)
+        Mon, 17 Apr 2023 15:28:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075249034;
+        Mon, 17 Apr 2023 12:28:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D20162991;
+        Mon, 17 Apr 2023 19:28:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42946C433A1;
+        Mon, 17 Apr 2023 19:28:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681759706;
+        bh=NaEpV7md2fFf2NAvFZ80rIV5tItCszPCwFIYfaLb+0k=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=lFbVFlzzR1yTP3V417gNR3mcCexU4rps12BIDS+560RQYy2d4ahim1e4JFHfgNihw
+         lWHXQCw/6dHiUlEGf0CqGshnugUHy3pvXPYa6v14KYBkBnDc5KlLSamFsXdu5Mzkmf
+         fuJk3rYJsX+UGlOCEL4fUkyYB6KR40UmYjVNQ/F0GCog1e6EAFuSQKfZzewsA7HSox
+         f1qERbzW0ulX28f5utgNBuV6MT7LdmqjcijVzcuxKfeqcTbqBMgPlUotLgAXc5oJ+/
+         vdUNEOx53gcoAYxoUUC2sKET/uvsq+P1TMsec1ZXShpcd8bQCfyDHfyACnlZGkJmRl
+         dNFdqdAYyjxew==
+From:   Mark Brown <broonie@kernel.org>
+To:     Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        git@amd.com, saikrishna12468@gmail.com
+In-Reply-To: <20230320095931.2651714-1-sai.krishna.potthuri@amd.com>
+References: <20230320095931.2651714-1-sai.krishna.potthuri@amd.com>
+Subject: Re: [PATCH 0/2] spi: cadence-quadspi: Fix random issues with
+ Xilinx Versal DMA read
+Message-Id: <168175970492.1284440.7735201840102180045.b4-ty@kernel.org>
+Date:   Mon, 17 Apr 2023 20:28:24 +0100
 MIME-Version: 1.0
-References: <20230414150830.3173504-1-trix@redhat.com>
-In-Reply-To: <20230414150830.3173504-1-trix@redhat.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 17 Apr 2023 15:28:21 -0400
-Message-ID: <CADnq5_OHu7kJGvTVg_oDMadqQFBrhFAZBM9H76y6tiYNsWT+4Q@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/display: remove unused variable oldest_index
-To:     Tom Rix <trix@redhat.com>
-Cc:     harry.wentland@amd.com, sunpeng.li@amd.com,
-        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, HaoPing.Liu@amd.com, aric.cyr@amd.com,
-        qingqing.zhuo@amd.com, hanghong.ma@amd.com, felipe.clark@amd.com,
-        Dillon.Varone@amd.com, Mike.Hsieh@amd.com,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-00303
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+On Mon, 20 Mar 2023 15:29:29 +0530, Sai Krishna Potthuri wrote:
+> Update Xilinx Versal external DMA read logic to fix random issues
+> - Instead of having the fixed timeout, update the read timeout based on
+> the length of the transfer to avoid timeout for larger data size.
+> - While switching between external DMA read and indirect read, disable the
+> SPI before configuration and enable it after configuration as recommended
+> by Octal-SPI Flash Controller specification.
+> 
+> [...]
 
-On Fri, Apr 14, 2023 at 11:08=E2=80=AFAM Tom Rix <trix@redhat.com> wrote:
->
-> cpp_check reports
-> drivers/gpu/drm/amd/display/modules/freesync/freesync.c:1143:17: style: V=
-ariable
->   'oldest_index' is assigned a value that is never used. [unreadVariable]
->    oldest_index =3D 0;
->                 ^
->
-> This variable is not used so remove.
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/gpu/drm/amd/display/modules/freesync/freesync.c | 4 ----
->  1 file changed, 4 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/display/modules/freesync/freesync.c b/dr=
-ivers/gpu/drm/amd/display/modules/freesync/freesync.c
-> index 5c41a4751db4..5798c0eafa1f 100644
-> --- a/drivers/gpu/drm/amd/display/modules/freesync/freesync.c
-> +++ b/drivers/gpu/drm/amd/display/modules/freesync/freesync.c
-> @@ -1137,10 +1137,6 @@ void mod_freesync_handle_preflip(struct mod_freesy=
-nc *mod_freesync,
->
->         if (in_out_vrr->supported &&
->                         in_out_vrr->state =3D=3D VRR_STATE_ACTIVE_VARIABL=
-E) {
-> -               unsigned int oldest_index =3D plane->time.index + 1;
-> -
-> -               if (oldest_index >=3D DC_PLANE_UPDATE_TIMES_MAX)
-> -                       oldest_index =3D 0;
->
->                 last_render_time_in_us =3D curr_time_stamp_in_us -
->                                 plane->time.prev_update_time_in_us;
-> --
-> 2.27.0
->
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/2] spi: cadence-quadspi: Update the read timeout based on the length
+      commit: 22c8ce0aa274cea2ff538ffdf723053ecf77d78b
+[2/2] spi: cadence-quadspi: Disable the SPI before reconfiguring
+      commit: c0b53f4e545e4c6106aab553eb351138d46211cc
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
