@@ -2,95 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87A4C6E400B
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 08:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B37546E400D
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 08:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbjDQGqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 02:46:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41466 "EHLO
+        id S229826AbjDQGrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 02:47:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbjDQGql (ORCPT
+        with ESMTP id S229587AbjDQGrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 02:46:41 -0400
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E610A10DE
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 23:46:38 -0700 (PDT)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-03 (Coremail) with SMTP id rQCowABnb2dI6zxkpKH0Ag--.5355S2;
-        Mon, 17 Apr 2023 14:46:32 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com, yanaijie@huawei.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] scsi: aic94xx: Add missing check for dma_map_sg()
-Date:   Mon, 17 Apr 2023 14:46:31 +0800
-Message-Id: <20230417064631.1939-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 17 Apr 2023 02:47:17 -0400
+Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B335B35B7
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 23:47:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1681714030;
+        bh=X5Si7Sz3dcckMNDn8ioalIMpIjcJEST+qawKVUbSZE4=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=FUjhuTwu6euQMt36q/j6P7ioJQ8RRYcFdrR0MmAe6327tp/SP0qd+kj4X6pZeKGqN
+         YyCSNs12RerdkjkiU4FyLEJC2x+2dkgjgG+tfNKJR08VdrW16LE2Qv3wzQBXgSUs36
+         E2LyOF7TujJ/5MZwS0mpmwJGUIGTMXQsQT2bjer4=
+Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id 2051065C17;
+        Mon, 17 Apr 2023 02:47:08 -0400 (EDT)
+Message-ID: <e593541e7995cc46359da3dd4eb3a69094e969e2.camel@xry111.site>
+Subject: Re: [PATCH 0/2] LoongArch: Make bounds-checking instructions useful
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev
+Cc:     WANG Xuerui <git@xen0n.name>, Huacai Chen <chenhuacai@kernel.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 17 Apr 2023 14:47:07 +0800
+In-Reply-To: <20230416173326.3995295-1-kernel@xen0n.name>
+References: <20230416173326.3995295-1-kernel@xen0n.name>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.0 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowABnb2dI6zxkpKH0Ag--.5355S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZFyUJw17Cw17WFWrJw47Arb_yoW8Gr1fpF
-        WrJasI9rsrtF109wsrJFWDWF15WFn3KFW7WFWDtasIkwsxX3savrW5J3W7WFykCFWxGF47
-        Ar1rA3ySgFyUt37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkq14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
-        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
-        AwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
-        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
-        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
-        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
-        0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUj0zuJUUUUU==
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add check for dma_map_sg() and return error if it fails.
-Moreover, unmap the first buffer when the second dma_map_sg() fails.
+On Mon, 2023-04-17 at 01:33 +0800, WANG Xuerui wrote:
+> From: WANG Xuerui <git@xen0n.name>
+>=20
+> Hi,
+>=20
+> The LoongArch-64 base architecture is capable of performing
+> bounds-checking either before memory accesses or alone, with specialized
+> instructions generating BCEs (bounds-checking error) in case of failed
+> assertions (ISA manual Volume 1, Sections 2.2.6.1 [1] and 2.2.10.3 [2]).
+> This could be useful for managed runtimes, but the exception is not
+> being handled so far, resulting in SIGSYSes in these cases, which is
+> incorrect and warrants a fix in itself.
+>=20
+> During experimentation, it was discovered that there is already UAPI for
+> expressing such semantics: SIGSEGV with si_code=3DSEGV_BNDERR. This was
+> originally added for Intel MPX, and there is currently no user (!) after
+> the removal of MPX support a few years ago. Although the semantics is
+> not a 1:1 match to that of LoongArch, still it is better than
+> alternatives such as SIGTRAP or SIGBUS of BUS_OBJERR kind, due to being
+> able to convey both the value that failed assertion and the bound value.
+>=20
+> This patch series implements just this approach: translating BCEs into
+> SIGSEGVs with si_code=3DSEGV_BNDERR, si_value set to the offending value,
+> and si_lower and si_upper set to resemble a range with both lower and
+> upper bound while in fact there is only one.
+>=20
+> The instructions are not currently used anywhere yet in the fledgling
+> LoongArch ecosystem, so it's not very urgent and we could take the time
+> to figure out the best way forward (should SEGV_BNDERR turn out not
+> suitable).
 
-Fixes: 2908d778ab3e ("[SCSI] aic94xx: new driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/scsi/aic94xx/aic94xx_task.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+I don't think these instructions can be used in any systematic way
+within a Linux userspace in 2023.  IMO they should not exist in
+LoongArch at all because they have all the same disadvantages of Intel
+MPX; MPX has been removed by Intel in 2019, and LoongArch is designed
+after 2019.
 
-diff --git a/drivers/scsi/aic94xx/aic94xx_task.c b/drivers/scsi/aic94xx/aic94xx_task.c
-index 7f0208300110..0ff7aac0bb29 100644
---- a/drivers/scsi/aic94xx/aic94xx_task.c
-+++ b/drivers/scsi/aic94xx/aic94xx_task.c
-@@ -419,11 +419,20 @@ static int asd_build_smp_ascb(struct asd_ascb *ascb, struct sas_task *task,
- 	struct asd_ha_struct *asd_ha = ascb->ha;
- 	struct domain_device *dev = task->dev;
- 	struct scb *scb;
-+	int num;
- 
--	dma_map_sg(&asd_ha->pcidev->dev, &task->smp_task.smp_req, 1,
-+	num = dma_map_sg(&asd_ha->pcidev->dev, &task->smp_task.smp_req, 1,
- 		   DMA_TO_DEVICE);
--	dma_map_sg(&asd_ha->pcidev->dev, &task->smp_task.smp_resp, 1,
-+	if (num == 0)
-+		return -ENOMEM;
-+
-+	num = dma_map_sg(&asd_ha->pcidev->dev, &task->smp_task.smp_resp, 1,
- 		   DMA_FROM_DEVICE);
-+	if (num == 0) {
-+		dma_unmap_sg(&asd_ha->pcidev->dev, &task->smp_task.smp_req, 1,
-+			     DMA_TO_DEVICE);
-+		return -ENOMEM;
-+	}
- 
- 	scb = ascb->scb;
- 
--- 
-2.25.1
+If we need some hardware assisted memory safety facility, an extension
+similar to ARM TBI or Intel LAM would be much more useful.
 
+
+Back in the old MIPS-based Loongson CPUs, similar instructions (GSLE,
+GSGT, etc.) were included in LoongISA extension and the manual says they
+raises "address error" when assert fails.  So SIGSEGV seems the
+"backward compatible" (quoted because we absolutely don't need to
+maintain any backward compatibility with old MIPS-based implementations)
+thing to do.
+
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
