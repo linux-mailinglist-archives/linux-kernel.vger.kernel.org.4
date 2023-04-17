@@ -2,129 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 663DA6E4D8B
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 17:47:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C881B6E4D94
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 17:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231362AbjDQPrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 11:47:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42292 "EHLO
+        id S231442AbjDQPsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 11:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjDQPrs (ORCPT
+        with ESMTP id S231420AbjDQPsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 11:47:48 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F415AB0
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 08:47:46 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id AD26A1F6E6;
-        Mon, 17 Apr 2023 15:47:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1681746465; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gWaGp6h7eG3pYrSv/bO1HCdBjKN4Xw+BSEvICpcpi/4=;
-        b=mvLhMZoWbebI8r+gQzEh+wSPI224Hxq7CWXkL7UiY/2/4m1jRLfToM2I+gR0NPHlCJ6yM6
-        mc0h/mdJGLUX+3JelZWTphsq01tQ28KugME+WPN2Va8dbm5iBj7UK/avtPPkjAcpV9G4rm
-        RHizf00Skiwqjr+CdRzc34OYMtMiofc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1681746465;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gWaGp6h7eG3pYrSv/bO1HCdBjKN4Xw+BSEvICpcpi/4=;
-        b=PSseswosx2QxDS48lOus2B6NdL8l+v1ajQBpJCOwg2w54gDmKeakceEmmP4FF2EMFq5jYF
-        T9MdNipSW4OndPCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 84E0D13319;
-        Mon, 17 Apr 2023 15:47:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id uxDYHyFqPWSrPwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 17 Apr 2023 15:47:45 +0000
-Message-ID: <24a0219d-b0a1-8b81-ff98-2fff107650c3@suse.cz>
-Date:   Mon, 17 Apr 2023 17:47:45 +0200
+        Mon, 17 Apr 2023 11:48:09 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B278A24F
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 08:48:05 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 62B701691;
+        Mon, 17 Apr 2023 08:48:48 -0700 (PDT)
+Received: from [10.57.68.227] (unknown [10.57.68.227])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 742CB3F5A1;
+        Mon, 17 Apr 2023 08:48:03 -0700 (PDT)
+Message-ID: <e932c4c4-c0a5-76f0-20ee-1d0155d5b79e@arm.com>
+Date:   Mon, 17 Apr 2023 16:48:02 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2] mm: Fixed incorrect comment for _kmem_cache_create
- function
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH v3 32/60] arm64: head: allocate more pages for the kernel
+ mapping
 Content-Language: en-US
-To:     zhaoxinchao <ChrisXinchao@outlook.com>, bagasdotme@gmail.com
-Cc:     akpm@linux-foundation.org, cl@linux.com, iamjoonsoo.kim@lge.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        penberg@kernel.org, rientjes@google.com
-References: <ZDQXl2wMk271w3xy@debian.me>
- <DM6PR22MB183653311FF3549B7D473020C59A9@DM6PR22MB1836.namprd22.prod.outlook.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <DM6PR22MB183653311FF3549B7D473020C59A9@DM6PR22MB1836.namprd22.prod.outlook.com>
+To:     Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Kees Cook <keescook@chromium.org>
+References: <20230307140522.2311461-1-ardb@kernel.org>
+ <20230307140522.2311461-33-ardb@kernel.org>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <20230307140522.2311461-33-ardb@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/23 11:13, zhaoxinchao wrote:
-> From: zhaoxinchao <chrisxinchao@outlook.com>
+On 07/03/2023 14:04, Ard Biesheuvel wrote:
+> In preparation for switching to an early kernel mapping routine that
+> maps each segment according to its precise boundaries, and with the
+> correct attributes, let's allocate some extra pages for page tables for
+> the 4k page size configuration. This is necessary because the start and
+> end of each segment may not be aligned to the block size, and so we'll
+> need an extra page table at each segment boundary.
 > 
-> Actually __kmem_cache_create() returns a status :
-> 0 is success
-> nonezero are failed.
-> 
-> This function has three return positions. In addition to successfully
-> return 0, the first failed position will return - E2BIG, and the second
-> position will return nonzero value for setup_cpu_cache function failure.
-> 
-> Signed-off-by: zhaoxinchao <chrisxinchao@outlook.com>
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 > ---
->  mm/slab.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
+>  arch/arm64/include/asm/kernel-pgtable.h | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
 > 
-> diff --git a/mm/slab.c b/mm/slab.c
-> index edbe722fb..399daa4d0 100644
-> --- a/mm/slab.c
-> +++ b/mm/slab.c
-> @@ -1893,7 +1893,12 @@ static bool set_on_slab_cache(struct kmem_cache *cachep,
->   * @cachep: cache management descriptor
->   * @flags: SLAB flags
->   *
-> - * Returns a ptr to the cache on success, NULL on failure.
-> + * Returns zero on success, nonzero on failure.
+> diff --git a/arch/arm64/include/asm/kernel-pgtable.h b/arch/arm64/include/asm/kernel-pgtable.h
+> index 4d13c73171e1e360..50b5c145358a5d8e 100644
+> --- a/arch/arm64/include/asm/kernel-pgtable.h
+> +++ b/arch/arm64/include/asm/kernel-pgtable.h
+> @@ -80,7 +80,7 @@
+>  			+ EARLY_PGDS((vstart), (vend), add) 	/* each PGDIR needs a next level page table */	\
+>  			+ EARLY_PUDS((vstart), (vend), add)	/* each PUD needs a next level page table */	\
+>  			+ EARLY_PMDS((vstart), (vend), add))	/* each PMD needs a next level page table */
+> -#define INIT_DIR_SIZE (PAGE_SIZE * EARLY_PAGES(KIMAGE_VADDR, _end, EARLY_KASLR))
+> +#define INIT_DIR_SIZE (PAGE_SIZE * (EARLY_PAGES(KIMAGE_VADDR, _end, EARLY_KASLR) + EARLY_SEGMENT_EXTRA_PAGES))
+>  
+>  /* the initial ID map may need two extra pages if it needs to be extended */
+>  #if VA_BITS < 48
+> @@ -101,6 +101,15 @@
+>  #define SWAPPER_TABLE_SHIFT	PMD_SHIFT
+>  #endif
+>  
+> +/* The number of segments in the kernel image (text, rodata, inittext, initdata, data+bss) */
+> +#define KERNEL_SEGMENT_COUNT	5
+> +
+> +#if SWAPPER_BLOCK_SIZE > SEGMENT_ALIGN
+> +#define EARLY_SEGMENT_EXTRA_PAGES (KERNEL_SEGMENT_COUNT + 1)
 
-OK.
+I'm guessing the block size for 4K pages is PMD, so you need these extra pages
+to define PTEs for the case where the section start/end addresses are not on
+exact 2MB boundaries? But in that case, isn't it possible that you would need 2
+extra PTE tables per segment - one for the start and one for the end?
 
-> + * This function has three return positions.
-> + * In addition to successfully return 0, the
-> + * first failed position will return - E2BIG,
-> + * and the second position will return nonzero
-> + * value for setup_cpu_cache function failure.
+> +#else
+> +#define EARLY_SEGMENT_EXTRA_PAGES 0
+> +#endif
+> +
+>  /*
+>   * Initial memory map attributes.
+>   */
 
-I don't think we need to be so specific here, so we can drop this block.
-
->   * Cannot be called within an int, but can be interrupted.
->   * The @ctor is run when new pages are allocated by the cache.
->   *
-
-You missed that there's also:
-
- * Return: a pointer to the created cache or %NULL in case of error
- */
-int __kmem_cache_create(struct kmem_cache *cachep, slab_flags_t flags)
-
-I guess we can drop the first mention of returns and fix up this one.
-Also I'd make this a non-kerneldoc comment (/* instead of /**) as
-it's for a SLAB-specific internal implementation only. Only
-kmem_cache_create() is meant as an API.
