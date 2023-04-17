@@ -2,106 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8097B6E45A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 12:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 448166E45A6
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 12:50:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbjDQKuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 06:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50280 "EHLO
+        id S230127AbjDQKue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 06:50:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjDQKuX (ORCPT
+        with ESMTP id S230072AbjDQKub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 06:50:23 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A8E33A82;
-        Mon, 17 Apr 2023 03:49:39 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-2f8405b3dc1so834728f8f.3;
-        Mon, 17 Apr 2023 03:49:39 -0700 (PDT)
+        Mon, 17 Apr 2023 06:50:31 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81AF626B8
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 03:49:49 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id xi5so62888599ejb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 03:49:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681728465; x=1684320465;
+        d=9elements.com; s=google; t=1681728495; x=1684320495;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aObB3gJrc6daE2Ub3D70WFvZc+MAMO7dkXaerkKuI3s=;
-        b=RXtnXeZZXh+VYZJiHO88aK0CSgdCnLOoMdEuRCkY9HvdqoQOpy2yOdn2VbYysVhQEo
-         Qp3qQWty1Awi//NPEO2vjwxvnTunFZEh9JGMiPRZUbbo91duK52ft167gIsvd4SoSAZP
-         g2+UMw+9aEMMIuHjthxFdI4y/ffXjJtbbCHQaycZsrxO9XubnFo5FXbb92ZqW85yXFzT
-         XYIZd0AAJkP+bCshzIFAZ5k0U5ek3spTLDa26+TcErtP1d2/KveQe5VcKXD4YClmjZpe
-         CBhTG0XqkXen+uqzAifVeYjxEFJxVEVJ5f6nVylsLEJXv6u2KQehZmTwTVN7yC0Ayy3s
-         cAJg==
+        bh=XVld+S5St6MGoNtw2Z0Re1+rcHuAmLcad2TIJO7KIg8=;
+        b=Q61PKRtPes2SjXBFvUFdqqmyo9LI/93dt8pcQkm3ztl+2HTsQWzk1lKFpty0toUdJe
+         wbuX3riv2STIwJ0PK4gaktkoD7M0xXhK0HgGmdErakyqZYug4N1l1A4/0mkxJwOwiHbv
+         s7CcQ8wNv9fI12bnWCad1mSPVjCGpCEuUlZnjz8tGWmKKGegCETimwMSl84r+Q8NSRxU
+         jpQ3WNo0N9cRftZ0cDqL29uQJB9qrmQVNJLIXWFTEjAlYl4uGu/AEo7XWs1bQD7BnqrA
+         szXYwibrapMo94yMv5SPfQxkxrlAmhfnuL2znKJATxyC0sWA9eqgAl0S5NE6jbH41gER
+         OUSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681728465; x=1684320465;
+        d=1e100.net; s=20221208; t=1681728495; x=1684320495;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=aObB3gJrc6daE2Ub3D70WFvZc+MAMO7dkXaerkKuI3s=;
-        b=elJqsQ0SpPyuu0zpbttoYly9NrPpRK8SzOJh9SU/pWth8FJELhnLGIn4qGmfK39+zm
-         oy1CE1qIbb4vnH6ZrzWhFPdhZGwsacgBm/MNUDhRsOmm81yZPK+t6T9hHWfjp0JfXm7p
-         wf6N4NuyfdkjufUkByFQIDsDb7YygVHUE7KwhO12QAM2E/EYvEQ9cw109I+KqUb62Lkm
-         VUHqA8odmP+FnhBw0lXdBfXeb80l8owNPqIiOuU/YhhLh98ColNOvKDXUnhhN0wXluY7
-         3iM/kJofcflwsZn0EXs4mDwUtNN7PQfuyosD7uzDd2jEsnH7m0tUsKOKVrUktm1MqHPO
-         lCSQ==
-X-Gm-Message-State: AAQBX9eA6lbuctPyrlcjybttNpmg/l9cbQyjSU2BBsfr3q4vwDSUib6R
-        fehvYlDdXMJUPZ8lSbIQeug=
-X-Google-Smtp-Source: AKy350Z7+uQlEP1XtKOD7AoJ+k93bSPkZQhD/9C7egiwqE5TiutJFDy9XPkoBQK2c265G8aUDx1Rbw==
-X-Received: by 2002:adf:ce12:0:b0:2ef:b137:37fe with SMTP id p18-20020adfce12000000b002efb13737femr4862686wrn.0.1681728464622;
-        Mon, 17 Apr 2023 03:47:44 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id v11-20020a5d43cb000000b002f490a0cd1asm10138510wrr.92.2023.04.17.03.47.44
+        bh=XVld+S5St6MGoNtw2Z0Re1+rcHuAmLcad2TIJO7KIg8=;
+        b=ddhBGa2YOaNDL4flIGSSGAZRxk0N51994kn4EdPJrmCNvrifgliAVBLvnuFFlwoEVJ
+         Gp7UdC4+7D993Cc0LM2pbB6JgcyBO455nXkn/Hn+rnN2k15pZg/33V6dS0hxFJK7sbYc
+         lcR2w83qaJR/r2OMxwkZRetEhV2+pUynv7pyhcfdf9hmP3CCL5xYLAUqk3m4Fi6ya0Ac
+         1jxoQJBNVAMksNUsTjwt9353ZRIagV6BMIcbjpShHBJRiqrl+11aBF9gIAI+AFcgJiIO
+         Oo+ttSg5tXa0Q/YOVHop1Wm5rDQ5R2POaVqP3zXcKFK85QkEFlTWfdUWrRZOrBcO5h2X
+         dRSg==
+X-Gm-Message-State: AAQBX9eXAO0I1lnfRRv+jIrYH/udwR/8MqXD4G3D2PLJC7G3Vq7SquVu
+        ic4qdSBWzpPHEeiRNnU4znvmSA==
+X-Google-Smtp-Source: AKy350aLdlnsMM9T2bJXBaovylQDBAXMxNjpndGEePpxQStukgMlskHsfguoBlY2uIn+xG6LINSktA==
+X-Received: by 2002:a17:906:240d:b0:94e:8556:f01c with SMTP id z13-20020a170906240d00b0094e8556f01cmr6945899eja.57.1681728494971;
+        Mon, 17 Apr 2023 03:48:14 -0700 (PDT)
+Received: from fedora.sec.9e.network (ip-095-222-150-251.um34.pools.vodafone-ip.de. [95.222.150.251])
+        by smtp.gmail.com with ESMTPSA id j25-20020a1709062a1900b0094f614e43d0sm1953842eje.8.2023.04.17.03.48.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 03:47:44 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-kselftest@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] kselftest: vDSO: Fix accumulation of uninitialized ret when CLOCK_REALTIME is undefined
-Date:   Mon, 17 Apr 2023 11:47:43 +0100
-Message-Id: <20230417104743.30018-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Mon, 17 Apr 2023 03:48:14 -0700 (PDT)
+From:   Patrick Rudolph <patrick.rudolph@9elements.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-i2c@vger.kernel.org
+Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v12 0/4] Add support for Maxim MAX735x/MAX736x variants
+Date:   Mon, 17 Apr 2023 12:47:56 +0200
+Message-Id: <20230417104801.808972-1-patrick.rudolph@9elements.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the unlikely case that CLOCK_REALTIME is not defined, variable ret is
-not initialized and further accumulation of return values to ret can leave
-ret in an undefined state. Fix this by initialized ret to zero and changing
-the assignment of ret to an accumulation for the CLOCK_REALTIME case.
+v12:
+- Add separate patch correcting interrupt support in dt-binding
+- Fix typo in commit message
+- Make vdd-supply non optional
 
-Fixes: 03f55c7952c9 ("kselftest: Extend vDSO selftest to clock_getres")
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- tools/testing/selftests/vDSO/vdso_test_clock_getres.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+v11:
+- Fix dt-binding example
 
-diff --git a/tools/testing/selftests/vDSO/vdso_test_clock_getres.c b/tools/testing/selftests/vDSO/vdso_test_clock_getres.c
-index 15dcee16ff72..38d46a8bf7cb 100644
---- a/tools/testing/selftests/vDSO/vdso_test_clock_getres.c
-+++ b/tools/testing/selftests/vDSO/vdso_test_clock_getres.c
-@@ -84,12 +84,12 @@ static inline int vdso_test_clock(unsigned int clock_id)
- 
- int main(int argc, char **argv)
- {
--	int ret;
-+	int ret = 0;
- 
- #if _POSIX_TIMERS > 0
- 
- #ifdef CLOCK_REALTIME
--	ret = vdso_test_clock(CLOCK_REALTIME);
-+	ret += vdso_test_clock(CLOCK_REALTIME);
- #endif
- 
- #ifdef CLOCK_BOOTTIME
+v10:
+- Small updates to dt-bindings
+- Make vdd-supply optional
+- Drop MAX7357 enhanced mode configuration
+
+v9:
+- Fix 'then' not aligned with 'if' in dt-bindings
+- Split enhanced mode configuration into separate patch
+- Add MAX7357/MAX7358 register definitions
+- Rename config register defines
+- Update comments and explain non default config being applied on MAX7357
+- Check for I2C_FUNC_SMBUS_WRITE_BYTE_DATA functionality
+
+v8:
+- Move allOf in dt-binding and use double negation
+
+v7:
+- Reworked the commit message, comments and renamed a struct
+  field. No functional change.
+
+v6:
+- Fix typo in dt-bindings
+
+v5:
+- Remove optional and make vdd-supply mandatory
+
+v4:
+- Add missing maxitems dt-bindings property
+
+v3:
+- Merge dt-bindings into i2c-mux-pca954x.yaml
+
+v2:
+- Move dt-bindings to separate file
+- Added support for MAX736x as they are very similar
+- Fixed an issue found by kernel test robot
+- Dropped max735x property and custom IRQ check
+- Added MAX7357 config register defines instead of magic values
+- Renamed vcc-supply to vdd-supply
+
+Patrick Rudolph (4):
+  dt-bindings: i2c: Correct interrupt support
+  dt-bindings: i2c: Add Maxim MAX735x/MAX736x variants
+  i2c: muxes: pca954x: Add MAX735x/MAX736x support
+  i2c: muxes: pca954x: Add regulator support
+
+ .../bindings/i2c/i2c-mux-pca954x.yaml         | 45 ++++++++--
+ drivers/i2c/muxes/Kconfig                     |  6 +-
+ drivers/i2c/muxes/i2c-mux-pca954x.c           | 89 +++++++++++++++++--
+ 3 files changed, 125 insertions(+), 15 deletions(-)
+
 -- 
-2.30.2
+2.39.2
 
