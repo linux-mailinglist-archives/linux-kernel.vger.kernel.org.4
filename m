@@ -2,49 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 430546E4F3D
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 19:32:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C15C66E4F3E
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 19:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbjDQRcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 13:32:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55708 "EHLO
+        id S230300AbjDQRct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 13:32:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjDQRco (ORCPT
+        with ESMTP id S230232AbjDQRcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 13:32:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74ACB268A
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 10:32:43 -0700 (PDT)
+        Mon, 17 Apr 2023 13:32:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92D4E76
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 10:32:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F7286234B
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 17:32:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0164CC433EF;
-        Mon, 17 Apr 2023 17:32:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F384621AE
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 17:32:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C786DC433EF;
+        Mon, 17 Apr 2023 17:32:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681752762;
-        bh=cS2RFs4XMe0xw2oUFdlh9ED73FpVzzv+cYgwOzfeKs4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=WAB9sLbnY4Gys4zfBKBSFUuRBA0NSqtwZVxeBbn5t3RXcLpUGoo8uzemVUJirU7LP
-         uc+86KL+i1KvLpscvoD4f/G3cBjANnmKn1gYPT4V6/WrxKSxX/RfdROz0x9V+pkGJu
-         7zrkxf9+DH1BEv2y7zxnZfEV16xQ16qwhjZF1TDbD6dCX8AH/zs8n/+afTaBkMR8OQ
-         wwOYDJzO0CPpWdXwB4lzwZ0+6WGygwcW+xoyJjU4H5NDbKduNJ5JPXsvxDhvOM8hBM
-         S/oyXLRGWGAk2CtkoVeyS8l2IvVnjnTS/vjD9aCYlyYbTh3fQ5PlyzWT4JM9++q1zx
-         s6Sbu9J/02Avg==
+        s=k20201202; t=1681752765;
+        bh=Es+n5/VxwrYKRoTO9yEi5YcqrEo9wXUokpGjthhzOWE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=rlH9lbkOVcwAIisH9F8THoJkl9K3xhlyWm4TKUEpm0Vkt0daWLvdvBbBuU4a4O5og
+         BQ0fDOAAL3fC2ZidRrTB5pTjTklr7INrTAUDZ55/Z83W9/zYXenLaUCmGXxPyJtcLn
+         zyImTrcCWxER+WZG4HbmSFAkieQM/VpLkf9dFQIoieIpbPrhrcVQUY7kiyWy41VCBR
+         YpSFMK+ugQzbOxB/dADQa4/7DXVp1+ImgTOeAh3qW2CQYQYBsCZ51ckqR1JZjUUjpY
+         KYsubIcX4mIJj6RbrYq1Og9GVI6q/L5Ys7dW7zpgw9OrqvE5fnT8YU1jX3zjIWFa1Z
+         NmNggbU7Kq85w==
 From:   SeongJae Park <sj@kernel.org>
 To:     akpm@linux-foundation.org
 Cc:     SeongJae Park <sj@kernel.org>, vbabka@suse.cz, willy@infradead.org,
         paulmck@kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 0/2] mm/slab: trivial fixup for SLAB_TYPESAFE_BY_RCU example code snippet
-Date:   Mon, 17 Apr 2023 17:32:36 +0000
-Message-Id: <20230417173238.22237-1-sj@kernel.org>
+Subject: [PATCH v3 1/2] mm/slab: add a missing semicolon on SLAB_TYPESAFE_BY_RCU example code
+Date:   Mon, 17 Apr 2023 17:32:37 +0000
+Message-Id: <20230417173238.22237-2-sj@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230417173238.22237-1-sj@kernel.org>
+References: <20230417173238.22237-1-sj@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,26 +55,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes from v2
-(https://lore.kernel.org/linux-mm/20230415033159.4249-1-sj@kernel.org/)
-- Wordsmith commit message of the second patch (Valstimil Babka)
+An example code snippet for SLAB_TYPESAFE_BY_RCU is missing a semicolon.
+Add it.
 
-Changes from v1
-(https://lore.kernel.org/linux-mm/20230415003754.1852-1-sj@kernel.org/)
-- Update label (s/again/begin/) correctly (Matthew Wilcox)
-- Add missed rcu_read_unlock()
+Signed-off-by: SeongJae Park <sj@kernel.org>
+---
+ include/linux/slab.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This patchset is for trivial fixup for SLAB_TYPESAFE_BY_RCU example code
-snippet, namely adding missed semicolon and breaking RCU read-side
-critical section into smaller ones.
-
-SeongJae Park (2):
-  mm/slab: add a missing semicolon on SLAB_TYPESAFE_BY_RCU example code
-  mm/slab: break up RCU readers on SLAB_TYPESAFE_BY_RCU example code
-
- include/linux/slab.h | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
+diff --git a/include/linux/slab.h b/include/linux/slab.h
+index f8b1d63c63a3..b18e56c6f06c 100644
+--- a/include/linux/slab.h
++++ b/include/linux/slab.h
+@@ -53,7 +53,7 @@
+  * stays valid, the trick to using this is relying on an independent
+  * object validation pass. Something like:
+  *
+- *  rcu_read_lock()
++ *  rcu_read_lock();
+  * again:
+  *  obj = lockless_lookup(key);
+  *  if (obj) {
 -- 
 2.25.1
 
