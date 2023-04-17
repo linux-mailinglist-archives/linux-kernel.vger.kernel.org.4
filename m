@@ -2,242 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 084426E45EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 13:01:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82ED36E462E
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 13:16:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjDQLBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 07:01:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58224 "EHLO
+        id S230209AbjDQLQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 07:16:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjDQLBI (ORCPT
+        with ESMTP id S229583AbjDQLQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 07:01:08 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2040.outbound.protection.outlook.com [40.107.244.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40CB1BC0
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 04:00:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aqMXE/O45hpzYJt3MDVdPFSGPZVdqsLSfbMMy3ycrpBs3KQnTtGoxRvlHbrHY/lSp7BOn65vxLuaIS/JSgC3o53RrbrRdvJLo5yCwVvh137U6XxEqOs8Nv3a3oXIVhtHYiaUEPY2xkKtrq06Rwa5lyTJ0g0LBRGMtfXsyJucRY326dUvxZ7GNvhGQw6kW2QDFDSYBxGbSJfDg4m0MFU5CrtMWvGMsQ19bseDcjBIQ5A42TM9rz/ySKzujtIBI1yaxybz96kYh8669fln2Pv9lH2FsmcAn6rcunf9MYKUX0fedrYn4qyhWhaLvFMmrWvXJQzSVQMcml7i1rkFdcT5bA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rH8lsCn10xgxYD8UkMBh6IPk1LCcV1IV7+wzNFuQkgA=;
- b=Y+4pNAA750dl2bZP/EjNi+xupdYF/eQdXvOBmVkgr3Y7Bh06P+IfTfjzkzTyEnMw171QyvIvlEq6kG8xDSQxKW7M6WFelKSpgXxwddNsz93aFVZprlGABpxEukSnm8QMDaYvekx8pCkd5Q4MdYTq7G6vTqSLHUWqqsAOgkoGfcoZvwYhjlJgnsJJIpmndjVS2jmKO6PJiLcllM036zvtICni6Pt8nrNjonLeth+YhXSywLU2gqm9wTRuvtazaP4Of1b0q/W3yGBP+XmMnHGsZJcX/dZs/8Ro2AhMF5yVBHXklYRIGx2ckTISl5ALOHjN0YF+C55+sfT6Dxf0IwaWUw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rH8lsCn10xgxYD8UkMBh6IPk1LCcV1IV7+wzNFuQkgA=;
- b=fag35qTxdVhwAINr1qBWgP/vIUktq/gnb4fsg7rRIghTRjclXedcXQHiuSS4gl9gv0IC6qA/jAmzgKnwUuxSulhV6/DM/+ZYmo1mvDP+nGhAPP8PmNaZvQAwK/NvrSyW7aATxthogHyLmbk0SCz3TskaiQduLTr88TFZtWy+SPo=
-Received: from CO6PR12MB5489.namprd12.prod.outlook.com (2603:10b6:303:139::18)
- by SJ2PR12MB8928.namprd12.prod.outlook.com (2603:10b6:a03:53e::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Mon, 17 Apr
- 2023 10:58:39 +0000
-Received: from CO6PR12MB5489.namprd12.prod.outlook.com
- ([fe80::2dba:b4a2:1765:9eb7]) by CO6PR12MB5489.namprd12.prod.outlook.com
- ([fe80::2dba:b4a2:1765:9eb7%6]) with mapi id 15.20.6298.045; Mon, 17 Apr 2023
- 10:58:39 +0000
-From:   "Lin, Wayne" <Wayne.Lin@amd.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Lyude Paul <lyude@redhat.com>,
-        Alex Deucher <alexdeucher@gmail.com>
-CC:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
-Subject: RE: [PATCH] drm: make drm_dp_add_payload_part2 gracefully handle NULL
- state pointer
-Thread-Topic: [PATCH] drm: make drm_dp_add_payload_part2 gracefully handle
- NULL state pointer
-Thread-Index: AQHZbgevOkIvuDaCukWSs5CyyZSFR68qOfSggABeKQCAAAWXgIAAzaiAgAPKT4CAABbdgIAABn6AgAAGMFA=
-Date:   Mon, 17 Apr 2023 10:58:38 +0000
-Message-ID: <CO6PR12MB548998DE5E97B8EA9EB92AA6FC9C9@CO6PR12MB5489.namprd12.prod.outlook.com>
-References: <20230413111254.22458-1-jlayton@kernel.org>
- <87edooarpq.fsf@intel.com>
- <CADnq5_PVnYMSiKO77+cfg_V-tDKYkVJYN3qGNb1vhQO3QtXskA@mail.gmail.com>
- <CO6PR12MB5489044012B2A96639470F38FC999@CO6PR12MB5489.namprd12.prod.outlook.com>
- <4d8479f20ef30866fcf73f3602f1237376110764.camel@kernel.org>
- <878reug394.fsf@intel.com>
- <7a1b00f02b125bd65824b18ea09509efe3cf777d.camel@redhat.com>
- <874jpegao0.fsf@intel.com>
- <b99732f7c0dd968c0702ae7629695e8fb9cb573f.camel@kernel.org>
- <87leiqer8g.fsf@intel.com>
-In-Reply-To: <87leiqer8g.fsf@intel.com>
-Accept-Language: en-US, zh-TW
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-04-17T10:57:53Z;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=41c48230-4d05-44cc-a0df-e3756e2b77ed;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CO6PR12MB5489:EE_|SJ2PR12MB8928:EE_
-x-ms-office365-filtering-correlation-id: 021e6b08-fd9d-410e-49a5-08db3f32b2f5
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hOPLvNRUmwCqojePY3RFzRnVOD8FyEfh9bskCf1Lbd84cwtbnUG5oaWcT8WFq3Hu9veVbGsZmDp8WUsP4Ge6Btxp4bRr7EJTY164Ua6XzQ1M/k+qfut+tjCxOBAANNZafB29yVSquhGZkPobBUPGQqsV5an4PW1zwXzI/iJDHV4Pak6MneVde9cN95OCjIofgEOcWsLwY4zaNToWu2paiAQenXX0fg0oghOcXJLP5De02aSy1FCFdAptx3iiQ7/8vjhMVz5TwWFl1+RDSyeAtqew02x4RRWAQDP/lGLcHHS3zuPRooXazwamZo6wAbQyCW0fRsvcOAZqpBSOO8b6IGI0LPkxuSLUSSSlI2UVbc0e/DpS4VZ4RB9q2ERBxkHmfOV7MhT4t/jY3XTmKDJPumSXYODX778IfKm2zTeV/iTywtnCwgWDDjNkRlWiNi1lhRRrbGwY22VBm+rWgNaCxwN+yM6wNb3KVd8Tz8Djioz+WBbLzXyNva7/iLQr2jVS8Pi0TPIEjH228RNZprodMYxr0vVCaqAQkHZRLjbz+aXCjN6yKD57lJA4DyJPr73KSXqT1JIYa4wlBLnWhIUymCZR8PiMFIO4BN2Aa3UhFSmv0wFfv9qUEeALuqeU3jgt
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5489.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(39860400002)(346002)(376002)(136003)(451199021)(86362001)(83380400001)(38070700005)(55236004)(53546011)(6506007)(26005)(9686003)(186003)(2906002)(33656002)(7696005)(52536014)(5660300002)(64756008)(38100700002)(71200400001)(8936002)(8676002)(478600001)(122000001)(54906003)(110136005)(41300700001)(316002)(76116006)(66446008)(66946007)(66556008)(55016003)(66476007)(4326008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?7whbsIc0QFqLQMgtMAIdcAYd+pPN4I/3aK80hIcZ0Qz15IR1Qip56zDZUm1t?=
- =?us-ascii?Q?OVoRTs6k1xK8+4jWBTe19lyDNLkAkBrVvtSMTlL/mzjXnokDcZpuzxvkLiLG?=
- =?us-ascii?Q?eySe1PWhsvAAUQqYb3jNKFg3bX7VZjx+iB5ZkN90sfVAZpim0ZyEExQKyoXE?=
- =?us-ascii?Q?9k06+fyhJEJQxBnqZ9B/kRM2awu2lL5dcYdmdmTEnCM4B8fCF2KRb8+NDzIR?=
- =?us-ascii?Q?vDvE2w79jHnE+ir9ZVZ+8VszgxkduelMYVpfuzGx84KnJ13v4Duqr8kfTBr0?=
- =?us-ascii?Q?k7WS2429Pv4/lQGWwewhl0viCtBURDcgCN3iVdEvtDcviWW9S6Ig/9q0IEoZ?=
- =?us-ascii?Q?OuDKB/ONdq0TpeY38HHjOmOmmfq8Gh7Pa+pMlXfzhZ4JfsfjJQ+hXUuuUtg/?=
- =?us-ascii?Q?Hwv2WyG/5haLx5xg74F1RWYOKA4tfXTmVgYCa46DYZXpk9azx+WhBeP1OURz?=
- =?us-ascii?Q?Z+JYkGlOZIhaf78AL0fonk6eKbnQ4dhMgWm8B5T0P4t1ywX32aemURgqepV+?=
- =?us-ascii?Q?yWHpvmHaGL8hUzGlnf1WZn+uRK6ZH8NgyBq3da1wQYe/aqqWJUA/extvot6g?=
- =?us-ascii?Q?DYjAk6G1Xe2wyubsBV2HEXnbEF8ceV4so37BAUYXfYC/3o85BpUql9UnKWV0?=
- =?us-ascii?Q?nUSG2txsWIOQvHd3ZSLjslUeC7uXITtUKmR2Mf3RYa6s80Ymo/g93YBr1EY4?=
- =?us-ascii?Q?HrClW8e4IgXMv6edXxWJWJb1uB4o6igziYT5J8odvI8g9Hv6i60ouxMQ0i3z?=
- =?us-ascii?Q?p+C+zzVywfg5KhaN+VLCmjichtvvd0F6Djgg0XE69vvUfZ29wYPwE2Q77Wov?=
- =?us-ascii?Q?Tk2HGNiu4y93g0ZOWJ7EfUe6QsDOZPT0t/MPAwJ3+28f81aHRpI1mDiNjaub?=
- =?us-ascii?Q?7PoBPuAA+morCW3PL0tHXJKGEhSspgsM3hrxtdLDOCAYzNpfSLewsp/YK7L7?=
- =?us-ascii?Q?9Gp1GkfR0a7acuyLR5O7efqzBLSJjXJEeR8v/8wGSMOqIt/Bo1x2yqlwRima?=
- =?us-ascii?Q?x7d7OLUD6KIqyeeDEbzh+6Q6i8KEOfRx5dvgZETuCUSCZQ1Y14lYGOiEOrdi?=
- =?us-ascii?Q?CiGAYlQFxCFCupgmcvhd3P8sDNjImh+LNqWGdPzguDCGS4CVfHDTAci3ovaZ?=
- =?us-ascii?Q?0nluXlY6Hjm6CLHP/X7lzycnqqTE89L5gBano7Ztf9ojHYwBUJJ0+QAwrl4Q?=
- =?us-ascii?Q?L6kU6/OZ81Wd2qDuYcQOyIMaJdONO1q/l3kwKL2wpiNmIqeHJF1JRXfs023P?=
- =?us-ascii?Q?5JoV5RUgdUvqB4A4muRs4jSebuuER5JE8DmV6EIlIbvfMGZW1t+RTBVOpUUp?=
- =?us-ascii?Q?M2mREd/t26rNP/+BU2V4q6Z2kUOzziFwP0U+XVJCtZDY+fiXOjLFdtWHdvtS?=
- =?us-ascii?Q?96DSwvb8CVLvNlvKqC/wD4QvGdQmkcu+seW/vav7VONWE9Wd4tOnBk3sOswq?=
- =?us-ascii?Q?fmGPSK2iRaItBsvVvw3/GnHxMOAKWTZX0/cyqsc0dHJUQwbtGWPYdQeiufc5?=
- =?us-ascii?Q?LP5bvkLOIQ5TDg7GVOzwPgo5Qvfj7X+/eWijPnxuIuOiPD3HabxTF6wxHSbr?=
- =?us-ascii?Q?1xNEt32sY3esslUAQfs=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 17 Apr 2023 07:16:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A1831BD8
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 04:14:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681729981;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oVc9uxy2kIdreOR/jYYEkHBdj+2RYiJitTncQTj92Ak=;
+        b=ZjXuATHntJsIXR+a3RAen8tYrXtLQmU9jEeL7PIr++BV+xzE+I8D6PFS10KO1nS7P3PrY/
+        LvqPo0kio228lf37eLWl8y3SPdRMQ6Ght+T4x/bTUVnuHsLiN/STWbeeBMd8C+UcAoTsEo
+        5nG9pH3mdMjjJ3wpGjNuC6/IOjfhOms=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-56-4xsItSo5OJqbbNbl03NFSA-1; Mon, 17 Apr 2023 07:01:22 -0400
+X-MC-Unique: 4xsItSo5OJqbbNbl03NFSA-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-2f6cd27b991so389186f8f.2
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 04:01:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681729281; x=1684321281;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oVc9uxy2kIdreOR/jYYEkHBdj+2RYiJitTncQTj92Ak=;
+        b=GPHq6lzADqg4/D8G3WHU2e1iLU3+/Eh/MxQGmB1R9BgNiTO1tzffJgqXJ8MctpXMSu
+         5qBfP/lRkz3QzOQT8M1lwHjR2SXiTAOPTu+JBiMl292TqgUasMXQu/uHC5ljIqalbXJP
+         tUC5t+dOgQIdJAX0Obv0qLIzNVFDRQ+iTt8mPtuanTVWr3QjxDTMYJXjcCg09neIG45d
+         wezQ0jyBwQXOqHNK4BpDp2uERR5Asa5SF3Z2JVl8jjOXe7GxfOYz4ngqt7Res4ZoYFaK
+         bV8mPrl9BKU2uhmo7VI3Dg+6wZ8q4+lCk98gPhKApyHvOKNRaVC3khC1Lz74UVikkNdq
+         WGOg==
+X-Gm-Message-State: AAQBX9elr2jNqnDwX/fLZl73BKfHekwYFg4V3kzIW6swLzBa0QnaMX+A
+        RtNcbOMEwct2SPqQIDZO60D/YCQ+5vUbt+1XQOSTrFYFBNYBDo0T7sYo7MOGXuK8G39wUZMagU/
+        19XI2qr/V8MZz/MeSw1Ni7lvD
+X-Received: by 2002:a05:6000:1376:b0:2f7:fb78:9694 with SMTP id q22-20020a056000137600b002f7fb789694mr5066282wrz.17.1681729281619;
+        Mon, 17 Apr 2023 04:01:21 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZQIa4sVrexrjBGWt+x2dl05vD2C7OxIO4qZKWXoX9kbiyotAMI/EdKnSlVTtQjGuOSPjILbQ==
+X-Received: by 2002:a05:6000:1376:b0:2f7:fb78:9694 with SMTP id q22-20020a056000137600b002f7fb789694mr5066215wrz.17.1681729280958;
+        Mon, 17 Apr 2023 04:01:20 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c700:fc00:db07:68a9:6af5:ecdf? (p200300cbc700fc00db0768a96af5ecdf.dip0.t-ipconnect.de. [2003:cb:c700:fc00:db07:68a9:6af5:ecdf])
+        by smtp.gmail.com with ESMTPSA id h12-20020a5d4fcc000000b002f22c44e974sm10214704wrw.102.2023.04.17.04.01.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Apr 2023 04:01:20 -0700 (PDT)
+Message-ID: <8a323d9f-f54e-065d-d611-0a07aea170c8@redhat.com>
+Date:   Mon, 17 Apr 2023 13:01:18 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5489.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 021e6b08-fd9d-410e-49a5-08db3f32b2f5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Apr 2023 10:58:38.5802
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ZGChfEmQPb7CC8vRRW/+lGOAdSOcUmY1jPqgB4NPv7UiitSY12XVznZRXTD+jF00R9BF0HjCOeMHg3LsX3UPBA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8928
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v3 3/7] mm/gup: remove vmas parameter from
+ get_user_pages_remote()
+Content-Language: en-US
+To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+References: <cover.1681558407.git.lstoakes@gmail.com>
+ <523f0764f4979276a6d4b89cbad9af9124e4bf0a.1681558407.git.lstoakes@gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <523f0764f4979276a6d4b89cbad9af9124e4bf0a.1681558407.git.lstoakes@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[AMD Official Use Only - General]
+On 15.04.23 14:09, Lorenzo Stoakes wrote:
+> The only instances of get_user_pages_remote() invocations which used the
+> vmas parameter were for a single page which can instead simply look up the
+> VMA directly. In particular:-
+> 
+> - __update_ref_ctr() looked up the VMA but did nothing with it so we simply
+>    remove it.
+> 
+> - __access_remote_vm() was already using vma_lookup() when the original
+>    lookup failed so by doing the lookup directly this also de-duplicates the
+>    code.
+> 
+> This forms part of a broader set of patches intended to eliminate the vmas
+> parameter altogether.
+> 
+> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+> ---
 
+I guess we should never drop the mmap lock temporarily in these cases, 
+so it's fine.
 
+Acked-by: David Hildenbrand <david@redhat.com>
 
-> -----Original Message-----
-> From: Jani Nikula <jani.nikula@linux.intel.com>
-> Sent: Monday, April 17, 2023 6:30 PM
-> To: Jeff Layton <jlayton@kernel.org>; Lyude Paul <lyude@redhat.com>; Lin,
-> Wayne <Wayne.Lin@amd.com>; Alex Deucher <alexdeucher@gmail.com>
-> Cc: David Airlie <airlied@gmail.com>; Daniel Vetter <daniel@ffwll.ch>;
-> Deucher, Alexander <Alexander.Deucher@amd.com>; linux-
-> kernel@vger.kernel.org; dri-devel@lists.freedesktop.org
-> Subject: Re: [PATCH] drm: make drm_dp_add_payload_part2 gracefully
-> handle NULL state pointer
->=20
-> On Mon, 17 Apr 2023, Jeff Layton <jlayton@kernel.org> wrote:
-> > On Mon, 2023-04-17 at 11:44 +0300, Jani Nikula wrote:
-> >> On Fri, 14 Apr 2023, Lyude Paul <lyude@redhat.com> wrote:
-> >> > On Fri, 2023-04-14 at 13:35 +0300, Jani Nikula wrote:
-> >> > > On Fri, 14 Apr 2023, Jeff Layton <jlayton@kernel.org> wrote:
-> >> > > > On Fri, 2023-04-14 at 04:40 +0000, Lin, Wayne wrote:
-> >> > > > > [Public]
-> >> > > > >
-> >> > > > > Hi Jeff,
-> >> > > > >
-> >> > > > > Thanks. I might need more information to understand why we
-> >> > > > > can't retrieve the drm atomic state. Also , "Failed to create
-> >> > > > > MST payload for port" indicates error while configuring DPCD
-> >> > > > > payload ID table. Could you help to provide log with KMS +
-> ATOMIC + DP debug on please? Thanks in advance!
-> >> > > > >
-> >> > > > > Regards,
-> >> > > > > Wayne
-> >> > > > >
-> >> > > >
-> >> > > > Possibly. I'm not that familiar with display driver debugging.
-> >> > > > Can you send me some directions on how to crank up that sort of
-> debug logging?
-> >> > > >
-> >> > > > Note that this problem is _very_ intermittent too: I went about
-> >> > > > 2 weeks between crashes, and then I got 3 in one day. I'd
-> >> > > > rather not run with a lot of debug logging for a long time if
-> >> > > > that's what this is going to require, as this is my main worksta=
-tion.
-> >> > > >
-> >> > > > The last time I got this log message, my proposed patch did
-> >> > > > prevent the box from oopsing, so I'd really like to see it go
-> >> > > > in unless it's just categorically wrong for the caller to pass
-> >> > > > down a NULL state pointer to drm_dp_add_payload_part2.
-> >> > >
-> >> > > Cc: Lyude.
-> >> > >
-> >> > > Looks like the state parameter was added in commit 4d07b0bc4034
-> >> > > ("drm/display/dp_mst: Move all payload info into the atomic
-> >> > > state") and its only use is to get at state->dev for debug logging=
-.
-> >> > >
-> >> > > What's the plan for the parameter? Surely something more than
-> >> > > that! :)
-> >> >
-> >> > I don't think there was any plan for that, or at least I certainly
-> >> > don't even remember adding that D:. It must totally have been by
-> >> > mistake and snuck by review, if that's the only thing that we're
-> >> > using it for I'd say it's definitely fine to just drop it entirely
-> >>
-> >> I guess we could use two patches then, first replace state->dev with
-> >> mgr->dev as something that can be backported as needed, and second
-> >> mgr->drop
-> >> the state parameter altogether.
-> >>
-> >> Jeff, up for it? At least the first one?
-> >>
-> >>
-> >> BR,
-> >> Jani.
-> >>
-> >
-> > Sure. I'm happy to test patches if you send them along.
->=20
-> I was hoping to lure you into sending patches. ;)
->=20
-> Anyway, I'm not working on this.
->=20
->=20
-Hi Jeff,
+-- 
+Thanks,
 
-I probably know the root cause.=20
-But it doesn't need to use the state in the end, I will just rely on the pa=
-tch=20
-that Jani suggested to fix it. I can help to provide the patch later : )
+David / dhildenb
 
-> BR,
-> Jani.
->=20
-> >
-> > Thanks,
->=20
-> --
-> Jani Nikula, Intel Open Source Graphics Center
-
---
-Regards,
-Wayne
