@@ -2,67 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE886E3D3F
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 03:51:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 496B46E3D42
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 03:54:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbjDQBvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 21:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38038 "EHLO
+        id S229643AbjDQByA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 21:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjDQBvM (ORCPT
+        with ESMTP id S229461AbjDQBx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 21:51:12 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235B71995
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 18:51:09 -0700 (PDT)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Q091m3GzbzL03l;
-        Mon, 17 Apr 2023 09:48:28 +0800 (CST)
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 17 Apr 2023 09:51:01 +0800
-Message-ID: <91eded3b-0ad8-b092-bf17-7b34fd4ece65@huawei.com>
-Date:   Mon, 17 Apr 2023 09:51:01 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH] mm: rename reclaim_pages() to reclaim_folios()
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>
-CC:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        SeongJae Park <sj@kernel.org>, Hugh Dickins <hughd@google.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20230415092716.61970-1-wangkefeng.wang@huawei.com>
- <ZDrK9R9wLlfrUWMZ@casper.infradead.org>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <ZDrK9R9wLlfrUWMZ@casper.infradead.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 16 Apr 2023 21:53:58 -0400
+Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586051987;
+        Sun, 16 Apr 2023 18:53:56 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R721e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VgBVEby_1681696431;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VgBVEby_1681696431)
+          by smtp.aliyun-inc.com;
+          Mon, 17 Apr 2023 09:53:52 +0800
+Message-ID: <1681696410.7972026-1-xuanzhuo@linux.alibaba.com>
+Subject: Re: [PATCH net] virtio-net: reject small vring sizes
+Date:   Mon, 17 Apr 2023 09:53:30 +0800
+From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To:     Alvaro Karsz <alvaro.karsz@solid-run.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alvaro Karsz <alvaro.karsz@solid-run.com>, mst@redhat.com,
+        jasowang@redhat.com
+References: <20230416074607.292616-1-alvaro.karsz@solid-run.com>
+In-Reply-To: <20230416074607.292616-1-alvaro.karsz@solid-run.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, 16 Apr 2023 10:46:07 +0300, Alvaro Karsz <alvaro.karsz@solid-run.com> wrote:
+> Check vring size and fail probe if a transmit/receive vring size is
+> smaller than MAX_SKB_FRAGS + 2.
+>
+> At the moment, any vring size is accepted. This is problematic because
+> it may result in attempting to transmit a packet with more fragments
+> than there are descriptors in the ring.
+
+So, why we check the rx ring?
+
+Thanks.
 
 
-On 2023/4/16 0:04, Matthew Wilcox wrote:
-> On Sat, Apr 15, 2023 at 05:27:16PM +0800, Kefeng Wang wrote:
->> As commit a83f0551f496 ("mm/vmscan: convert reclaim_pages() to use
->> a folio") changes the arg from page_list to folio_list, but not
->> the defination, let's correct it and rename it to reclaim_folios too.
-> 
-> I didn't bother.  It's not inaccurate; we're reclaiming the pages
-> in the folios.
-
-OK, keep the name seems better, there is another similar issue in
-reclaim_clean_pages_from_list(), I will only unify the arg between
-definition and declaration.>
+>
+> Furthermore, it leads to an immediate bug:
+>
+> The condition: (sq->vq->num_free >= 2 + MAX_SKB_FRAGS) in
+> virtnet_poll_cleantx and virtnet_poll_tx always evaluates to false,
+> so netif_tx_wake_queue is not called, leading to TX timeouts.
+>
+> Signed-off-by: Alvaro Karsz <alvaro.karsz@solid-run.com>
+> ---
+>  drivers/net/virtio_net.c | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+>
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 2396c28c012..59676252c5c 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -3745,6 +3745,26 @@ static int init_vqs(struct virtnet_info *vi)
+>  	return ret;
+>  }
+>
+> +static int virtnet_validate_vqs(struct virtnet_info *vi)
+> +{
+> +	u32 i, min_size = roundup_pow_of_two(MAX_SKB_FRAGS + 2);
+> +
+> +	/* Transmit/Receive vring size must be at least MAX_SKB_FRAGS + 2
+> +	 * (fragments + linear part + virtio header)
+> +	 */
+> +	for (i = 0; i < vi->max_queue_pairs; i++) {
+> +		if (virtqueue_get_vring_size(vi->sq[i].vq) < min_size ||
+> +		    virtqueue_get_vring_size(vi->rq[i].vq) < min_size) {
+> +			dev_warn(&vi->vdev->dev,
+> +				 "Transmit/Receive virtqueue vring size must be at least %u\n",
+> +				 min_size);
+> +			return -EINVAL;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  #ifdef CONFIG_SYSFS
+>  static ssize_t mergeable_rx_buffer_size_show(struct netdev_rx_queue *queue,
+>  		char *buf)
+> @@ -4056,6 +4076,10 @@ static int virtnet_probe(struct virtio_device *vdev)
+>  	if (err)
+>  		goto free;
+>
+> +	err = virtnet_validate_vqs(vi);
+> +	if (err)
+> +		goto free_vqs;
+> +
+>  #ifdef CONFIG_SYSFS
+>  	if (vi->mergeable_rx_bufs)
+>  		dev->sysfs_rx_queue_group = &virtio_net_mrg_rx_group;
+> --
+> 2.34.1
+>
