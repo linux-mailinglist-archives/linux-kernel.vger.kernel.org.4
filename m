@@ -2,107 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4BEC6E4FB4
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 19:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36EBE6E4FB7
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 19:54:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231196AbjDQRyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 13:54:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48332 "EHLO
+        id S231210AbjDQRyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 13:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230182AbjDQRyV (ORCPT
+        with ESMTP id S231202AbjDQRyi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 13:54:21 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894A7B44D
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 10:54:18 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id j11so15010605ljq.10
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 10:54:18 -0700 (PDT)
+        Mon, 17 Apr 2023 13:54:38 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE266E97;
+        Mon, 17 Apr 2023 10:54:36 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id r184so10901553ybc.1;
+        Mon, 17 Apr 2023 10:54:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681754056; x=1684346056;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F4+8olREfasjZv5QZc5V/pBOVr5naRMQNwCkcS8I+dA=;
-        b=xWU5V7sLim6ioC/6Y+oJGgycGYAycQ5y8UhuBIc4sh3cg9EMDk8QRYHlF/jnbdPdsd
-         32bDTpiDjIw0Egbeqk4eXTxNtEv3FtPbSHAkLGmSLadSJ2Elm0V1OOdfXXiGvQZIws5k
-         KLSdVDp1B8h/UzI/xc+fQmAQvn0u3P4jRkJ9g0EP9cyK2JDwz7iHt9LNC845kDcVAv0r
-         6xzLFeLqCNUoK8xhkDp+KCXFvvvuWnBiJ8097BQmVKCH8lDShMJRy+Ir0A4IzlafTh2d
-         YrLSdE1XCyXcGIcGF5OZwh7kbYjlI7O9JYii9SIU3q8HAnKS7UiyecSVVTdalT4aX2sn
-         k50w==
+        d=gmail.com; s=20221208; t=1681754075; x=1684346075;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oyR8W7v3COTYLNobCuykJJtDSCMEC7xmskW6emUW3jY=;
+        b=BvJ3B4oBQxTmyVZLNr0yv6+R9zNTpbS4Q+bz8Up5LfmkIHQTvNxDu+WLqlKqaMBR9d
+         2lQsUZjBM7phenPFqMqU6lDVX/6rb3ix6cVg7TM0HQzYm50ay0uklXvxww1yz24klY9Z
+         G1SKy6xVM32F9mgaesrv9rmgMBJ/T1Zh5AH5dXccZ9LBnRFojKjrvoOzHsEicQUJguy1
+         7LcPPNUSUIIhI15fqkOXlqkeQpZHL9t7qVFHpFt/RWf+O7KQMpmLyydyRbjMcAqUCsRu
+         69rAZwrxZprnC/g6Kx1IFBUDA+jGvPlnJ2L6DYZBdj5Zd3dPoWl7RcmaLRsCc3Jsstv8
+         HJ9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681754056; x=1684346056;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F4+8olREfasjZv5QZc5V/pBOVr5naRMQNwCkcS8I+dA=;
-        b=F0zjBQh8XycIVirh6t7+Pwyx5JlIX8AMjz7RqcSkk62LY71MHLfcwFcCc38JXGK7WG
-         OAfN3KkDn6wpc5XsD7ZLahHirqevJ8lx0dUAmm/Tmc2U8eQcfYV8Og7qp6wZcWluLW7+
-         KJlBAWyKb1RtucTG47KoZIS2jmpHIjrc4RiI6UtFSfIjKbMSuCZgFW8thq97yxHkPOpR
-         6629UK2GUx1HQZJOo9TmojFsWqFLSLXxdJxmxR2jiJbGXT4bkC9uT3VIvoOsDZZDQpNl
-         D4VPlmVqKunR6/RmnvsrfoNdKSsZUlIk+Bbwre52IMKlRYIy1DHxDNIktrWkssVWgYmA
-         f+5g==
-X-Gm-Message-State: AAQBX9d9oUhO2nRdqZxtu22nzOTXJYVNGoEDph+A2RlulxP6SZuxNJ20
-        09l861TmohFVSvx/hcuW7ezf83OG7esKjzb8cDs=
-X-Google-Smtp-Source: AKy350ZdGGOn1B6q+n7vcHcpU61x1OwUpebtzROn9z+Ltft2doHXj3wDzpWVq4DXIjV60SfmaBUrRg==
-X-Received: by 2002:a2e:7c06:0:b0:2a7:a5f7:e9bc with SMTP id x6-20020a2e7c06000000b002a7a5f7e9bcmr3887227ljc.15.1681754056399;
-        Mon, 17 Apr 2023 10:54:16 -0700 (PDT)
-Received: from [192.168.1.101] (abyk99.neoplus.adsl.tpnet.pl. [83.9.30.99])
-        by smtp.gmail.com with ESMTPSA id w19-20020a2e9bd3000000b002a8d915f30asm8799ljj.77.2023.04.17.10.54.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Apr 2023 10:54:16 -0700 (PDT)
-Message-ID: <8b73a320-8c52-16bb-12c5-85e78dd48c04@linaro.org>
-Date:   Mon, 17 Apr 2023 19:54:14 +0200
+        d=1e100.net; s=20221208; t=1681754075; x=1684346075;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oyR8W7v3COTYLNobCuykJJtDSCMEC7xmskW6emUW3jY=;
+        b=XCFUlbKik6reNn3VKGWyXzpap3kw/nStomBTrFqzin8n6u85XgNxU8dO2tEKepS6SA
+         A8pvZBVZXN1AegmAoCMJBBTpTRWnQVGkVg55iAsJ9fySJMbI9kKlN693PqhImvEBDf7D
+         Mg2oy3Oetpif2U6RISg/SC4BwkKfAMttFEcIAS9oID83RAv/GpjxSpKMgDAP9acAvz32
+         irEu9RjP80Fr/GZkMFLQwT/0IdzMFjS00sAJxRAImIG0nFa1cQ/FKIUAaoGi9IEFRcVO
+         Z54fh0S/nyPpzpTY+SOyFbAKanQn5vbkxmFJp8Ia9811qo8F04NbJlUtPUxg8LxPKKb2
+         EMQw==
+X-Gm-Message-State: AAQBX9cl9v0ESmHSeRHlvjaFJA5k4VvSydzErA26aCZAh3Pjp8iYqmlY
+        WYMUqTVon2oZM9QB/63HK/yO+sBs851XLsARTqQ=
+X-Google-Smtp-Source: AKy350aVcCPZirKE4e29h+YR180S7kRdUycNhPLL1rAIzCXyCib+3TlzUD9p5cdFIFr0nJmeRynje/8Rtgczf6uHy+s=
+X-Received: by 2002:a25:cb97:0:b0:b8b:f597:f3e5 with SMTP id
+ b145-20020a25cb97000000b00b8bf597f3e5mr10181400ybg.9.1681754075318; Mon, 17
+ Apr 2023 10:54:35 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 2/2] clk: qcom: gcc-sdm660: drop redundant F define
-Content-Language: en-US
-To:     Christian Marangi <ansuelsmth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230417174408.23722-1-ansuelsmth@gmail.com>
- <20230417174408.23722-2-ansuelsmth@gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230417174408.23722-2-ansuelsmth@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230417053509.4808-1-noltari@gmail.com> <20230417053509.4808-3-noltari@gmail.com>
+ <87wn2ax3sq.fsf@toke.dk>
+In-Reply-To: <87wn2ax3sq.fsf@toke.dk>
+From:   =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
+Date:   Mon, 17 Apr 2023 19:54:24 +0200
+Message-ID: <CAKR-sGftiGWf86uE2QwbpjJ+H7oyM6=AsFpHaxFBviJBrdueBg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] ath9k: of_init: add endian check
+To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>
+Cc:     f.fainelli@gmail.com, jonas.gorski@gmail.com, nbd@nbd.name,
+        kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, chunkeey@gmail.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+El lun, 17 abr 2023 a las 11:21, Toke H=C3=B8iland-J=C3=B8rgensen
+(<toke@toke.dk>) escribi=C3=B3:
+>
+> =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com> writes:
+>
+> > BCM63xx (Big Endian MIPS) devices store the calibration data in MTD
+> > partitions but it needs to be swapped in order to work, otherwise it fa=
+ils:
+> > ath9k 0000:00:01.0: enabling device (0000 -> 0002)
+> > ath: phy0: Ignoring endianness difference in EEPROM magic bytes.
+> > ath: phy0: Bad EEPROM VER 0x0001 or REV 0x00e0
+> > ath: phy0: Unable to initialize hardware; initialization status: -22
+> > ath9k 0000:00:01.0: Failed to initialize device
+> > ath9k: probe of 0000:00:01.0 failed with error -22
+> >
+> > For compatibility with current devices the AH_NO_EEP_SWAP flag will be
+> > activated only when qca,endian-check isn't present in the device tree.
+> > This is because some devices have the magic values swapped but not the =
+actual
+> > EEPROM data, so activating the flag for those devices will break them.
+> >
+> > Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>
+> > ---
+> >  drivers/net/wireless/ath/ath9k/init.c | 5 +++--
+> >  1 file changed, 3 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/net/wireless/ath/ath9k/init.c b/drivers/net/wirele=
+ss/ath/ath9k/init.c
+> > index 4f00400c7ffb..abde953aec61 100644
+> > --- a/drivers/net/wireless/ath/ath9k/init.c
+> > +++ b/drivers/net/wireless/ath/ath9k/init.c
+> > @@ -615,7 +615,6 @@ static int ath9k_nvmem_request_eeprom(struct ath_so=
+ftc *sc)
+> >
+> >       ah->nvmem_blob_len =3D len;
+> >       ah->ah_flags &=3D ~AH_USE_EEPROM;
+> > -     ah->ah_flags |=3D AH_NO_EEP_SWAP;
+> >
+> >       return 0;
+> >  }
+> > @@ -688,9 +687,11 @@ static int ath9k_of_init(struct ath_softc *sc)
+> >                       return ret;
+> >
+> >               ah->ah_flags &=3D ~AH_USE_EEPROM;
+> > -             ah->ah_flags |=3D AH_NO_EEP_SWAP;
+> >       }
+> >
+> > +     if (!of_property_read_bool(np, "qca,endian-check"))
+> > +             ah->ah_flags |=3D AH_NO_EEP_SWAP;
+> > +
+>
+> So I'm not sure just setting (or not) this flag actually leads to
+> consistent behaviour. The code in ath9k_hw_nvram_swap_data() that reacts
+> to this flag does an endianness check before swapping, and the behaviour
+> of this check depends on the CPU endianness. However, the byte swapping
+> you're after here also swaps u8 members of the eeprom, so it's not
+> really a data endianness swap, and I don't think it should depend on the
+> endianness of the CPU?
+>
+> So at least conceptually, the magic byte check in
+> ath9k_hw_nvram_swap_data() is wrong; instead the byteswap check should
+> just be checking against the little-endian version of the firmware
+> (i.e., 0xa55a; I think that's what your device has, right?). However,
+> since we're setting an explicit per-device property anyway (in the
+> device tree), maybe it's better to just have that be an "eeprom needs
+> swapping" flag and do the swap unconditionally if it's set? I think that
+> would address Krzysztof's comment as well ("needs swapping" is a
+> hardware property, "do the check" is not).
 
+Yes, you're right, it's probably better to introduce a new and more
+clear flag that swaps the content inconditionally.
 
-On 17.04.2023 19:44, Christian Marangi wrote:
-> The same exact F frequency table entry is defined in clk-rcg.h
-> Drop the redundant define to cleanup code.
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>
+> Now, the question becomes whether the "check" code path is actually used
+> for anything today? The old mail thread I quoted in the other thread
+> seems to indicate it's not, but it's not quite clear from the code
+> whether there's currently any way to call into
+> ath9k_hw_nvram_swap_data() without the NO_EEP_SWAP flag being set?
 
-Konrad
->  drivers/clk/qcom/gcc-sdm660.c | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/clk/qcom/gcc-sdm660.c b/drivers/clk/qcom/gcc-sdm660.c
-> index db918c92a522..6afce8e42ede 100644
-> --- a/drivers/clk/qcom/gcc-sdm660.c
-> +++ b/drivers/clk/qcom/gcc-sdm660.c
-> @@ -25,8 +25,6 @@
->  #include "reset.h"
->  #include "gdsc.h"
->  
-> -#define F(f, s, h, m, n) { (f), (s), (2 * (h) - 1), (m), (n) }
-> -
->  enum {
->  	P_XO,
->  	P_SLEEP_CLK,
+It's only used when endian_check is enabled in ath9k_platform_data:
+https://github.com/torvalds/linux/blob/6a8f57ae2eb07ab39a6f0ccad60c76074305=
+1026/drivers/net/wireless/ath/ath9k/init.c#L645
+We're currently using it on OpenWrt for bmips:
+https://github.com/Noltari/openwrt/blob/457549665fcb93667453ef48c50bf43eddd=
+776ef/target/linux/bmips/files/arch/mips/bmips/ath9k-fixup.c#L198-L199
+
+>
+> WDYT?
+>
+> -Toke
