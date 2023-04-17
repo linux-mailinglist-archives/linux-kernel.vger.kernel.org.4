@@ -2,161 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76A726E4671
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 13:29:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 203CC6E4670
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 13:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230296AbjDQL3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 07:29:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50742 "EHLO
+        id S230135AbjDQL3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 07:29:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbjDQL3H (ORCPT
+        with ESMTP id S229806AbjDQL3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 07:29:07 -0400
-Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on20609.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe16::609])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B1E7683;
-        Mon, 17 Apr 2023 04:28:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hdSVjlC8tne4FsyVG71P2eWZRlvddfscE5pT494/MpaMOqS1AEoF1M2IdQ1mrKOa0M1trSKzF2j/flxVP2IalS1EyvOIg3U9aklRZOsp8w+rlOb1TeGTpm0j4c9M04Iy0nvUqFMkyWu+Yafhj5GIP85xuBRbXApsCQ9AkXSv9Ks6kb0ICd8agQpSxYk7FWx20OloKZVfHHqzazvUp5BcVYbFMKh6tE8biOxgOswHt1O2jXzJSja60oe/b/BqGzyeVUK5hfbmI+BdRqXG/78DDZe5pYvYSxSXNYyyyGvS4CUkqahsJd1hmKvbCKVS3/v42JJSQ9FmsR7ZhVvCtQzzSg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dc+y43GbovzjVbicJR3poCkcfjapDAnNMoaUGiQ0GKM=;
- b=EhpmtujTfqANholESUtWcjw5OF/QqnBUykEf2Vqu4NNv6bjLpxF21pH9OA+Z1P1J1oiSKRRvegnlE2Ta/6o4JBFogzUyXGS+N2fKcoK+hdjtFdPKKcS7GOJv8V2L0oeq1H1tYOFcr2mmxH9U889UYE0YDTQL/a5Na+3fvfRt2RjuR37AnK/HytLPUcutiNtUaKp9e31QNAHQi8zBrHNl1opL+jGP84spbL8yGcZ+UKTKxrUnILlBVIPVZ0p7vPfV7wIkbbGfW5dbYu3MhwZ6KBXCg0Gw2u0R1wtkqVy1+fzJrcScaFc6w4NZ1tAfQpbSNgdDhNez14PLuiP185zeOw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dc+y43GbovzjVbicJR3poCkcfjapDAnNMoaUGiQ0GKM=;
- b=lLb7P13CFjkoGWOHJ5iWaf3Fdj14qeLlJU0P/dNzYe91z166fproFGhRJn1gwSL62IPL4B85/9gmuImAVFOuIzQgGgUuXZxnoa/L/O9DBMktNNpgfrrTOVwvS4veICpp1bb9v4Jql35q2jctG9okWv4B6knHvHJPQfbDOx2reyc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU2PR04MB8774.eurprd04.prod.outlook.com (2603:10a6:10:2e1::21)
- by GVXPR04MB9928.eurprd04.prod.outlook.com (2603:10a6:150:117::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Mon, 17 Apr
- 2023 11:27:08 +0000
-Received: from DU2PR04MB8774.eurprd04.prod.outlook.com
- ([fe80::b6a5:b35f:94f8:ff53]) by DU2PR04MB8774.eurprd04.prod.outlook.com
- ([fe80::b6a5:b35f:94f8:ff53%8]) with mapi id 15.20.6298.045; Mon, 17 Apr 2023
- 11:27:08 +0000
-Message-ID: <55bd4292-7abf-dee1-9ce3-94dfb5b4b19a@nxp.com>
-Date:   Mon, 17 Apr 2023 14:27:05 +0300
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH] ASoC: fsl: Simplify an error message
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Nicolin Chen <nicoleotsuka@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org
-References: <c167c16a535049d56f817bbede9c9f6f0a0f4c68.1681626553.git.christophe.jaillet@wanadoo.fr>
-Content-Language: en-US
-From:   Iuliana Prodan <iuliana.prodan@nxp.com>
-In-Reply-To: <c167c16a535049d56f817bbede9c9f6f0a0f4c68.1681626553.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM0PR07CA0014.eurprd07.prod.outlook.com
- (2603:10a6:208:ac::27) To DU2PR04MB8774.eurprd04.prod.outlook.com
- (2603:10a6:10:2e1::21)
+        Mon, 17 Apr 2023 07:29:06 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04AFF7DA7
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 04:28:08 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-2f87c5b4635so1254987f8f.1
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 04:28:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681730845; x=1684322845;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=T1bjYOZ0+WFkX3zMO2+p0oL2JA0K0j319E8cjNoH3SQ=;
+        b=iJ8T0QKBqr0mm2B+ByRi/km6mBfPBPFP+G0Ah/RNFPO50HvSIryJeXEpglA5ysuQMN
+         3424CMWcaQkffQS4XPgTABCKtuEUsQPxy9pOwqSYwjLebtqOeBLsFWN/DQDch0uHyOYt
+         gYYot8hUgSJlpImrN3+9F1dZBDgqcMv57NZeAXjFY7cyjcADnbvtcq4bCSeNSsbFhYHI
+         sCO43GjLGvm4F6CVgTQNSaqtpRxqdtvlkQv6FDp2LjyQc/W9C++QpIkJScxG3hqvuvRV
+         BcpjclI+vUxGFoEsITwTiA9RK81fxd7kSMaBoB7H5LugBy+UHO3ioxqomPecbiIBSwBJ
+         H8hA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681730845; x=1684322845;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T1bjYOZ0+WFkX3zMO2+p0oL2JA0K0j319E8cjNoH3SQ=;
+        b=dQJrCcTYy2OOxssOxeijjjZZRLf405X7xXroo5nAYlYCeqoQ4zhDyKnfBc1D0nIhIS
+         a1OkILzOEHLEqzdIAu7CNUoBWnsF3clW05dPwRUmaLOEKei4UDhwrJJNTC4Z6B5gPLUJ
+         koFzojBxevqQABpquv8M+GW1kjSYB7Xe/GmAeTxuXebssqL+yABci7m/NEDqrjKJgczI
+         E8S42MU0y0nQ8xqynGF5SEQyGG1BPGSMk5Inq/NsepQbeb/F4uu4oTBWTVepI2hIAE5h
+         Cp9XgAIZckje62PjWj8Vj2B0nz8iURnGn8MmumF2iRyvI2IF6WeJbZiURq1xAJzjvn1E
+         on9Q==
+X-Gm-Message-State: AAQBX9dsbQT30LDsTNhj+yIdN39EbFif0TtGFwWzQjYfZKiBbmXozfFH
+        mjg9nlYDyKDeORClHCEVtu4=
+X-Google-Smtp-Source: AKy350ZNtknwYsgyT9D24QijtMkYk8/hy75MlISQ9kZqMOVw2VRsKIIhnRMvUrL+KiinweLLr0sqnA==
+X-Received: by 2002:a5d:558f:0:b0:2f9:9f6f:e4d with SMTP id i15-20020a5d558f000000b002f99f6f0e4dmr3102635wrv.39.1681730844892;
+        Mon, 17 Apr 2023 04:27:24 -0700 (PDT)
+Received: from localhost (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
+        by smtp.gmail.com with ESMTPSA id b2-20020adfe302000000b002fae2a08089sm1610694wrj.70.2023.04.17.04.27.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 04:27:24 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 12:27:22 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH v3 4/7] mm/gup: introduce the FOLL_SAME_FILE GUP flag
+Message-ID: <e614a3c1-d933-40aa-9cee-a4175b5d0cec@lucifer.local>
+References: <cover.1681558407.git.lstoakes@gmail.com>
+ <2feedd2bad6fd1ec4bc4639f9d9012c5ae2faf1f.1681558407.git.lstoakes@gmail.com>
+ <e4087551-c5d3-e82d-3c4e-dcfa476a971e@redhat.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8774:EE_|GVXPR04MB9928:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3a9479c0-0d5b-4ef3-4aa4-08db3f36ae3a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NipD/ATflIMs9/bZgxMmfDesn6w0DoQVnbpXEN8qveM6gd+rqdroBQUpmZOEM7T8ACD6stfdYk7UkXMx8ETRfjSju7kowLMbFMnqMn6IsKHKneIQzLJAvGmsqJGknt2cWLV55XayV+6T2VT191njcOEa45DjItPGcRcMacN6MXSK1GUpaTrQPd77HsbvjlVY+gMpvZ+d7esR4kYZBVCiRqdYeJrZD6y8bOq9ALCiYo3DYFi/V7MudMlZmsIXuDFt3NrYBAwTKpmwMj+kw8semNxayF+xZf2NSTFNXhWcxfkixMco8HOoBXAp95+Ya1kGldt9NtxLdKE7GoxhDAf86yeiHvWSlkJnL5MB/+p5zGfMQq4AMQncPslW3s1kiEUccTBTWPRBM2oxAUQis1VGo4crQO6FdRaYq7Bl0wKVyzgyiMGGj9cTkdGmdFafjyXv7ZBenDjmPTITe3x6JgHgxX0EDC2d7K0osqW/6Oyu+vQbnWSrdxIETNNkhx2EOoYt5MpN+Vy5YHFRyjGqZUrqOpuSlidBKrowFUmC+TqpMMs0HNno9s0GAFnFwIyQk4IbqaJwOlEA0c4N1DXQx4gMfbIU4zNMG9HlR7JXyC2lvZ6+WwAvr0kHjhrnK5VhD2IA1229mrsaX6GXuzUaq+HAAg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8774.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(136003)(376002)(396003)(346002)(451199021)(4326008)(66556008)(66946007)(66476007)(110136005)(316002)(8676002)(8936002)(7416002)(44832011)(5660300002)(41300700001)(4744005)(2906002)(38100700002)(15650500001)(6512007)(6506007)(53546011)(55236004)(26005)(186003)(36756003)(83380400001)(86362001)(31686004)(2616005)(478600001)(31696002)(6666004)(6486002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NVplQXN1Ui9RVWxVcVp6TERIQjdHczl1L1czdlJGUmoxZURsbEg0ckx4RFFO?=
- =?utf-8?B?QzRFM3czYlRjRGhnSmphbUhiMTl3OVZmWE9mSmpKQURoeXNhYWtkUkwyYlNZ?=
- =?utf-8?B?KzE3bmZjUXpmQURLQjhzNnhtMW00RjdybWplY0ovNmp1Y3dVZlMrL290bGtr?=
- =?utf-8?B?eUx4c0cyUGs3aFMwN04vK1VFamtqZCtBenJERTQ4eklreFBHUGpFbTU2MnJG?=
- =?utf-8?B?SnRWZjFCYnFiVFNNSkw5eXRtK1l3bXZ0WEUzWmk0SjJ0U092M3pON3JqR1o4?=
- =?utf-8?B?ZGlBS3RTeVlwTzRheDYzRThKN3V2bzBoZ09sUUxFM2JzQTNiekxLa3pLaksx?=
- =?utf-8?B?ZTNDOGp6eEpWT1k5cXgyelRHTWdDeWlEcUFTaGt3VFZBVFlQQmNTNHoyQTIv?=
- =?utf-8?B?NjFiSXJOU1dhbkUvWVJNM09KN0FTZlhoOHN4bHhON1RscnRDSWhQSFJCWjJo?=
- =?utf-8?B?andUSzgzKzVydDhFTHMwbFdFb1NpV0dvdk44cXhNT1cyajhxTnA4YUJhMHNh?=
- =?utf-8?B?L0I2QzRoTjF2MkE2U0J6TXpzc0dmOE9sVUlqaFFTRE8yMGZOT2xVcFQvMDVy?=
- =?utf-8?B?N3d5NFF1THE4RE5SY0V6dTMrQ3NRV21pdWdCU2dHenBkTzRRcldweCtueWF0?=
- =?utf-8?B?OEhOV0J1ektRNGgyK1RZaGgxUGxXQkJadHdxc09lb042bUpXdVN5WW1Pb3dL?=
- =?utf-8?B?SjBkdU1QS2xiUlEyU2xhY1dlTnB5MGMyWXVNTEIyais1bVdqNXZHTGtDbllR?=
- =?utf-8?B?REZPR0gxbjJWNVlUeHJ2TXlPaEd3Y01EemdsVUxzaGNweitMMllPVnE3UjA1?=
- =?utf-8?B?dng3SitGY0JkekFta3NTdGQ4N3B0cGlORDU0MWw3a0NhTzhXc0wxd25LV3Nw?=
- =?utf-8?B?Q01pQzNSZDBqbEZxUXY3bUZreUl1SmRPUkw3WUJYRVdUMmNxQys4dnRPMlhi?=
- =?utf-8?B?ajYvV29RSW5QS3dWKzFaNEJOQzNuTStCZ2x5QU1Ga0E0bG9Cemo3eVdYazY0?=
- =?utf-8?B?empxVTJhSVRJZks0ak9SVjBHUmlCTVhWNW9kNk83dHpqMElYUGdyb2FkZlFQ?=
- =?utf-8?B?YU1mUnJ1SHJVMTdXS25oelU3UFdxei94WkhUcU5aK2VURUxGRy9Oamd6eFdH?=
- =?utf-8?B?VGNUOXlpVUdtS0VpaVBMZ1RsYUxpS01PQVJaVjF2SFphNHRSVjkyQVM4Q3lU?=
- =?utf-8?B?Y29QU1YvRmVFVmhLVlpHYllmbzdiWGttMThXVXlkU0lEaWc4YS9tNHo4VDYr?=
- =?utf-8?B?N1VnVnI2NFlzZzZNVzljSVBBS0FRb056TkVhZzJZTk1NSHlpcUJyY2ZEeVFk?=
- =?utf-8?B?K2lxUG5OYnQ3dW5WMTdxcEV5UENjRFpVQzhEcmUrcXZZcGluU09jb1lpd3hE?=
- =?utf-8?B?MDI3bjFpeUFnZkdtS3dZbWlQVkcra3pxN0tSMVNIVkcwd1I1NHZQcEd0ajQr?=
- =?utf-8?B?ektXWHVuK21MWldKd0o4TXc5MEJyVGRnOG1wMHM1WVVhTk1Rd1dMVm4wODNt?=
- =?utf-8?B?V3pOVDZnVEhxZ3lhQlVHVGE1bkxqTWRuVDlQYktlQlN6bVE0TDMxcWFHT0Nm?=
- =?utf-8?B?YlFDdlFwMHREZHE3OHZIS1c1TFl0bXoxMjlPbjROQWlzaCtBRWFFSDFmMEdG?=
- =?utf-8?B?RmwwdGRkVkpIVll1WW82QmNWMXhOdktWZWRLc2E2Nmw3YXlJUWZOdVdhU1JY?=
- =?utf-8?B?dXllaHNodVNLUGsraFB2VzVVN0VTNThvaFk3N1BRNG1zZ1hrNFpIemVQMDdU?=
- =?utf-8?B?c2ZrMEUzTkxmRERacExRN2NkUUxoUUtGQlhsM1orOVRRZTM2U2tDaVpSU3JM?=
- =?utf-8?B?Z3c2cHVya0kzR1RETmhqbEdxNU54eU82ZjZzc1ViVmgrTEZYdzJIMHE3c2Nh?=
- =?utf-8?B?TExQM3dMR3N3MjlBNGNVYndEYXE3UklnRFNTbjZwbGdPR3JiMyswbFppZnhz?=
- =?utf-8?B?b3h3KzYxbnZSQkYwWXBJRkNscFg4OVl0dDNlc2FXeklhbkNaL3dBR05lVTFE?=
- =?utf-8?B?Um9obHVqc1RNOVJrMzQrYkNxQWQxbXM4OFIvOGxkUFNhNjdKRS91YkJTUjY4?=
- =?utf-8?B?T3dWYVhUak1uMEZtWWloZFR0UmlBbC9GUVVZMXl0Tmd6VmpEdHlPWENCZ1Bl?=
- =?utf-8?B?SmdBS2J0M25QVkZ6THlabjlXU2dqSU9yb0x6aWJ6eDdTSGIremVQVVZ4YVNx?=
- =?utf-8?B?eUE9PQ==?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3a9479c0-0d5b-4ef3-4aa4-08db3f36ae3a
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8774.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2023 11:27:08.8372
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qvXXJISxkiYTLmPuPpMarK7D1plYLPzYH+fckpyHjkTypNVpcMa21jlwJmEBCpiPUuXk00ao5ARgUC+/FXDgJg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR04MB9928
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e4087551-c5d3-e82d-3c4e-dcfa476a971e@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/16/2023 9:29 AM, Christophe JAILLET wrote:
-> dev_err_probe() already display the error code. There is no need to
-> duplicate it explicitly in the error message.
+On Mon, Apr 17, 2023 at 01:13:58PM +0200, David Hildenbrand wrote:
+> On 15.04.23 14:09, Lorenzo Stoakes wrote:
+> > This flag causes GUP to assert that all VMAs within the input range possess
+> > the same vma->vm_file. If not, the operation fails.
+> >
+> > This is part of a patch series which eliminates the vmas parameter from the
+> > GUP API, implementing the one remaining assertion within the entire kernel
+> > that requires access to the VMAs associated with a GUP range.
+> >
+> > Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
 >
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-
-Reviewed-by: Iuliana Prodan <iuliana.prodan@nxp.com>
-
-Thanks,
-Iulia
-
-> ---
->   sound/soc/fsl/fsl-asoc-card.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> [...]
 >
-> diff --git a/sound/soc/fsl/fsl-asoc-card.c b/sound/soc/fsl/fsl-asoc-card.c
-> index bffa1048d31e..40870668ee24 100644
-> --- a/sound/soc/fsl/fsl-asoc-card.c
-> +++ b/sound/soc/fsl/fsl-asoc-card.c
-> @@ -858,7 +858,7 @@ static int fsl_asoc_card_probe(struct platform_device *pdev)
->   
->   	ret = devm_snd_soc_register_card(&pdev->dev, &priv->card);
->   	if (ret) {
-> -		dev_err_probe(&pdev->dev, ret, "snd_soc_register_card failed: %d\n", ret);
-> +		dev_err_probe(&pdev->dev, ret, "snd_soc_register_card failed\n");
->   		goto asrc_fail;
->   	}
->   
+> > ---
+> >   						&start, &nr_pages, i,
+> > @@ -1595,7 +1603,7 @@ long faultin_vma_page_range(struct vm_area_struct *vma, unsigned long start,
+> >   	 * We want to report -EINVAL instead of -EFAULT for any permission
+> >   	 * problems or incompatible mappings.
+> >   	 */
+> > -	if (check_vma_flags(vma, gup_flags))
+> > +	if (check_vma_flags(vma, vma->vm_file, gup_flags))
+> >   		return -EINVAL;
+>
+> FOLL_SAME_FILE is never set here, just pass NULL instead of vma->vm_file.
+>
+>
+> As we're not allowing to drop the mmap lock, why can't io_uring simply go
+> over all VMAs once, after pinning succeeded, and make sure that the files
+> match (or even before pinning)?
+>
+> In most cases, we're dealing with a single VMA only, it's not like the
+> common case is that io_uring pins accross 100s of VMAs.
+>
+> So I really wonder if the GUP complexity is justified by something.
+
+This is one that needs some input from Jens I think (added to cc, for some
+reason I didn't include him on this one but I did on the one updating uring
+to use it).
+
+I agree it'd be better not to introduce this flag if we can avoid it,
+intent was to avoid having to add complexity to the uring code when we're
+already iterating through VMAs in the GUP code, but as you say it's highly
+likely most cases will consist of a single VMA anyway.
+
+If Jens is OK with us iterating here I'm more than happy to respin without
+adding the flag!
+
+> (removing the VMAs is certainly a welcome surprise -- as it doesn't make any
+> sense when used with FOLL_UNLOCKABLE).
+
+This is a product of reading the GUP code when writing the GUP bit for the
+book and wishing it were more sane :) I suspect I'll have some more patches
+in this area aimed at marrying the disparate APIs where sensible to do so.
+
+>
+> --
+> Thanks,
+>
+> David / dhildenb
+>
+>
