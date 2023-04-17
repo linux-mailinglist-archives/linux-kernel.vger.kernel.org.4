@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CCAB6E555B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 01:40:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EBEE6E5562
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 01:48:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbjDQXkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 19:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60880 "EHLO
+        id S230135AbjDQXs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 19:48:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjDQXkU (ORCPT
+        with ESMTP id S229529AbjDQXsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 19:40:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6041A103;
-        Mon, 17 Apr 2023 16:40:19 -0700 (PDT)
+        Mon, 17 Apr 2023 19:48:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C67272A;
+        Mon, 17 Apr 2023 16:48:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EEEAB6219B;
-        Mon, 17 Apr 2023 23:40:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5137EC433EF;
-        Mon, 17 Apr 2023 23:40:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681774818;
-        bh=YRSpDLLO0Uo9m9k8X5YteEHYv2PhYNHD3aH2/tE6Q0A=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=iPbUwxzhJBABBG63TNk2/oKaT4lyKwtJjqc7gPJ81bu1sjJcnnLf0CxN0VEDvAl2v
-         IvSGEWFWP2EcKeH0MufISW8W5NYKkry/QKq7qgLzYidQRNr1jVm8HhVMalZOhCeUau
-         lRc6s0TVmcv36Khalz9gpR8jaaPzQ9Njtex6OLMdZWPs9xgTT8NclG5HbiVXG3cFwh
-         WRjTb7X/1m8+zLHtJigKQyu+REJ/CZ0o+jhUFkDrQZ+6j3pBrBrZReL7EJrQCiDdFl
-         GkBESzzxhgpdCKqUrkJY5YewMMpkjG498jwuS6UuPrMgVd4jrszZEepNQswxEo1uKs
-         EWvcVt/Fa1Nrw==
-Message-ID: <3251d8e89d5f047784149419c5bff7c0.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <ce6c952b-2e2b-67d9-5023-e740ed798758@quicinc.com>
-References: <20230303092859.22094-1-quic_tdas@quicinc.com> <20230303092859.22094-2-quic_tdas@quicinc.com> <CAA8EJpq5xBF=Wt-1_hGR-7qZHREcALurmR4ucmMmZaC-R_7Ttg@mail.gmail.com> <ce6c952b-2e2b-67d9-5023-e740ed798758@quicinc.com>
-Subject: Re: [PATCH 1/2] clk: qcom: common: Handle invalid index error
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>
-Date:   Mon, 17 Apr 2023 16:40:16 -0700
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF74D6209F;
+        Mon, 17 Apr 2023 23:48:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9AD1C433EF;
+        Mon, 17 Apr 2023 23:48:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1681775303;
+        bh=5Zdo30UwbY/ugu5/xvKsTrl3c9ZrDjjdWYxF5rzZT84=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=sVSf3VXBkTRXrirTwU3FG2FBV7kU4yfoxfiWm7KupFJBq0aLURnd6HUp/GZlsbc+3
+         AFA6HPhkZkm7DvYCkWOct6xO3S1WXD0jZ00eeJ32RV6LKYYYy5sHDNLNFe3wk4yRuR
+         NXNS1wOJHqds6ummn+iJkFYaHoKPuy7smosu3Bic=
+Date:   Mon, 17 Apr 2023 16:48:22 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Mika =?ISO-8859-1?Q?Penttil=E4?= <mpenttil@redhat.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        linux-stable <stable@vger.kernel.org>
+Subject: Re: [PATCH v2 2/6] mm/hugetlb: Fix uffd-wp bit lost when unsharing
+ happens
+Message-Id: <20230417164822.d1f5d162115c53aab4c85e85@linux-foundation.org>
+In-Reply-To: <20230417195317.898696-3-peterx@redhat.com>
+References: <20230417195317.898696-1-peterx@redhat.com>
+        <20230417195317.898696-3-peterx@redhat.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,36 +60,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Taniya Das (2023-04-16 21:40:48)
-> Hi Dmitry,
->=20
-> Thanks for the comments.
->=20
->=20
-> On 3/3/2023 4:14 PM, Dmitry Baryshkov wrote:
-> > On Fri, 3 Mar 2023 at 11:30, Taniya Das <quic_tdas@quicinc.com> wrote:
-> >>
-> >> Introduce start_index to handle invalid index error
-> >> seen when there are two clock descriptors assigned
-> >> to the same clock controller.
-> >=20
-> > Please provide details of the exact case that you are trying to solve
-> > (this might go to the cover letter). I think the commit message is
-> > slightly misleading here. Are you trying to add error messages or to
-> > prevent them from showing up?
-> >=20
->=20
-> We are trying to avoid error messages from showing up.
->=20
-> > I'm asking because error messages do not seem to correspond to patch
-> > 2. You add start_index to make the kernel warn for the clock indices
-> > less than LPASS_AUDIO_CC_CDIV_RX_MCLK_DIV_CLK_SRC =3D 4, while quoted
-> > messages show indices 5,6,7.
-> >=20
->=20
-> Right, we want the kernel to warn if the clock index is less than=20
-> start_index, along with that we also want to handle the case where=20
-> num_rclks is uninitialized because of same clock descriptor being=20
-> assigned to two clock controllers.
+On Mon, 17 Apr 2023 15:53:13 -0400 Peter Xu <peterx@redhat.com> wrote:
 
-The start_index should be 0.
+> When we try to unshare a pinned page for a private hugetlb, uffd-wp bit can
+> get lost during unsharing.  Fix it by carrying it over.
+> 
+> This should be very rare, only if an unsharing happened on a private
+> hugetlb page with uffd-wp protected (e.g. in a child which shares the same
+> page with parent with UFFD_FEATURE_EVENT_FORK enabled).
+
+What are the user-visible consequences of the bug?
+
+> Cc: linux-stable <stable@vger.kernel.org>
+
+When proposing a backport, it's better to present the patch as a
+standalone thing, against current -linus.  I'll then queue it in
+mm-hotfixes and shall send it upstream during this -rc cycle.
+
+As presented, this patch won't go upstream until after 6.3 is released,
+and as it comes later in time, more backporting effort might be needed.
+
+I can rework things if this fix is reasonably urgent (the "user-visible
+consequences" info is the guide).  If not urgent, we can leave things
+as they are.
