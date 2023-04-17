@@ -2,77 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB236E47A1
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 14:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63AC46E47A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 14:28:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231134AbjDQM0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 08:26:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46290 "EHLO
+        id S229988AbjDQM2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 08:28:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231126AbjDQM0T (ORCPT
+        with ESMTP id S229575AbjDQM16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 08:26:19 -0400
-Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F374359C9
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 05:25:47 -0700 (PDT)
-Received: by mail-ua1-x930.google.com with SMTP id l13so1890592uan.10
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 05:25:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681734346; x=1684326346;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JixgYwWa7BlwqObsT/AUW3SuD9EHVR6lIpoIyDwEkmE=;
-        b=4IYfU7fwDiuPdzxLCN2I/e6xbtjRLi668VfHNAbGrpuvaCbU3r06w3i2X5ot65D9hs
-         7EVQDvwfdcaWIDuH/oO3qBQL9Cf+gxlE5QFCEDnnSI3K4GdqPO8qBxpW0XBoIzG5lEd4
-         IbFyMIlWJwaa4KISUiTaZK/++rwZqyf1Wz2QMXR0KC4wkuObu01yidELPdTK6zk9Nnjh
-         9kBSbhlwNmGeCoZRn+AIuvbILqxRKgfzbzQkOpSdaQ41EAHosIpEGjU5TCi5sHiQFokM
-         ZbPgdQyvIrDsHlhaK/UAqjUJtCLMy/ppUyH/evfQT55AXm+o/9MnepdyjH3kezRlJjvQ
-         Y7fQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681734346; x=1684326346;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JixgYwWa7BlwqObsT/AUW3SuD9EHVR6lIpoIyDwEkmE=;
-        b=DR8RtFAB8oMCawVFfToDUBsdepyDB6sfp4BcTAHjP311LMb3XZ3rBHBAEpTXeCccvh
-         LMqf0eOiMpIRl6yHObVh3RLTOx+DUelG9DQdtJPZJYYkznlTWl9dAQ1oPV7k3B/YnejB
-         jRZXU6LOphi2QDv3Mrgno6wKq1zGK2VdD7lHwFt/QP7OPa8OclyQwdAXlgMIMftrQPQH
-         OoWeaYevYGoSPiEKku5/LwJqk0UYboOUiWO4D2jfvq+oAMcRQk0WIYyrbbs6AilRsiLd
-         hmKg16t5Geu5q+IixTLD8kBZquuya681QfaSFvUohsR3I9mf+ufLTjBJPn7UKcW92gMR
-         H2OQ==
-X-Gm-Message-State: AAQBX9fL87pr7qDvvEfkRiZ7yo9F8B0TDJS4qH0nd8hAe3wxys0Qpcdm
-        6zSqFFn0ReXhhoZ5gcCA6+ZldLgJIE51wxLchZv4Aw==
-X-Google-Smtp-Source: AKy350bRvGIdVkXV8vicmzwnEjTbHvNshy1BhmtYdaaUpqxWSbFvgngFPg/FxxPLXppuJD9GgPEIq9oBGrVGNzVaWOU=
-X-Received: by 2002:a1f:c682:0:b0:440:4938:fe24 with SMTP id
- w124-20020a1fc682000000b004404938fe24mr4010877vkf.13.1681734346378; Mon, 17
- Apr 2023 05:25:46 -0700 (PDT)
+        Mon, 17 Apr 2023 08:27:58 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0335911C;
+        Mon, 17 Apr 2023 05:27:32 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1poNx9-0005H7-Lh; Mon, 17 Apr 2023 14:27:27 +0200
+Message-ID: <c04a9a24-a802-261a-0d98-d4eef0ebfbe5@leemhuis.info>
+Date:   Mon, 17 Apr 2023 14:27:26 +0200
 MIME-Version: 1.0
-References: <20230413100859.1492323-1-quic_pkondeti@quicinc.com> <20230415065808.GI25053@google.com>
-In-Reply-To: <20230415065808.GI25053@google.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Mon, 17 Apr 2023 14:25:10 +0200
-Message-ID: <CAG_fn=VEdPHopbJgip97uD48sW6OX7MOh4L671dTxuc_rG1gRw@mail.gmail.com>
-Subject: Re: [PATCH] printk: Export console trace point for kcsan/kasan/kfence/kmsan
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: Re: Kernel Panic - V6.2 - Reseved memory issue
+Content-Language: en-US, de-DE
+To:     Christian Hewitt <christianshewitt@gmail.com>, tanure@linux.com,
+        Stefan Agner <stefan@agner.ch>
+Cc:     kernelnewbies <kernelnewbies@kernelnewbies.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        AML <linux-amlogic@lists.infradead.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+References: <CAJX_Q+1Tjc+-TjZ6JW9X0NxEdFe=82a9626yL63j7uVD4LpxEA@mail.gmail.com>
+ <9BAD677A-74AF-4515-B19C-A15A69CE53EF@gmail.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+In-Reply-To: <9BAD677A-74AF-4515-B19C-A15A69CE53EF@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1681734452;2e1ebda9;
+X-HE-SMSGID: 1poNx9-0005H7-Lh
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,16 +53,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 15, 2023 at 8:58=E2=80=AFAM Sergey Senozhatsky
-<senozhatsky@chromium.org> wrote:
->
-> On (23/04/13 15:38), Pavankumar Kondeti wrote:
-> > The console tracepoint is used by kcsan/kasan/kfence/kmsan test
-> > modules. Since this tracepoint is not exported, these modules iterate
-> > over all available tracepoints to find the console trace point.
-> > Export the trace point so that it can be directly used.
-> >
-> > Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
->
-> Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org> # printk
-Reviewed-by: Alexander Potapenko <glider@google.com>
+Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
+for once, to make this easily accessible to everyone.
+
+This is apparently is a regression and thus got on my radar.
+
+This all sounds a bit unfortunate. What can we do to get this properly
+solved? Which commit actually causes this? I wonder if poking maintainer
+higher in the hierarchy might help getting this finally fixed.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
+
+#regzbot poke
+
+On 02.04.23 15:11, Christian Hewitt wrote:
+>> On 2 Apr 2023, at 12:10 pm, Lucas Tanure <tanure@linux.com> wrote:
+>>
+>> I am trying to fix a kernel panic I am seeing on my vim3 board (Amlogic A311D).
+>> I don't have enough knowledge about this area, but my current guess is
+>> the kernel is using a piece of memory belonging to ARM-trusted
+>> firmware that I shouldn't.
+>> Log:
+>>
+>> [ 9.792966] SError Interrupt on CPU3, code 0x00000000bf000000 -- SError
+>> [ 9.792980] CPU: 3 PID: 3471 Comm: kded5 Tainted: G C 6.2.0 #1
+>> [ 9.792985] Hardware name: Khadas VIM3 (DT)
+>> [ 9.792987] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>> [ 9.792991] pc : kmem_cache_free_bulk.part.98+0x1f0/0x528
+>> [ 9.793004] lr : kmem_cache_free_bulk.part.98+0x2f8/0x528
+>> [ 9.793008] sp : ffff80000a2eb7f0
+>> [ 9.793009] x29: ffff80000a2eb7f0 x28: ffff00001f358518 x27: ffff000000008800
+>> [ 9.793016] x26: ffff00000262b300 x25: ffff00000262b300 x24: 0000000000000001
+>> [ 9.793019] x23: ffff00000262b000 x22: 0000000000000000 x21: ffff00001f358538
+>> [ 9.793022] x20: fffffc0000098ac0 x19: 0000000000000004 x18: 0000000000000040
+>> [ 9.793025] x17: 0000000000000018 x16: 00000000000007f8 x15: 0000000000000003
+>> [ 9.793028] x14: 0000000000000006 x13: ffff800008e48550 x12: 0000ffff9dc91fff
+>> [ 9.793031] x11: 0000000000000004 x10: 0000000000000001 x9 : ffff000007e93680
+>> [ 9.793035] x8 : 0000000000000020 x7 : ffff000001d2b100 x6 : 0000000000000007
+>> [ 9.793037] x5 : 0000000000000020 x4 : ffff000000008800 x3 : 0000000000000001
+>> [ 9.793040] x2 : 0000000000000007 x1 : 0000000000000000 x0 : ffff00001f358540
+>> [ 9.793045] Kernel panic - not syncing: Asynchronous SError Interrupt
+>>
+>> This doesn't happen with downstream Khadas 6.2 kernel, and that's
+>> because the downstream kernel removed this from
+>> early_init_dt_reserve_memory (drivers/of/fdt.c):
+>>
+>> /*
+>> * If the memory is already reserved (by another region), we
+>> * should not allow it to be marked nomap, but don't worry
+>> * if the region isn't memory as it won't be mapped.
+>> */
+>> if (memblock_overlaps_region(&memblock.memory, base, size) &&
+>>    memblock_is_region_reserved(base, size))
+>>          return -EBUSY;
+>>
+>>
+>> And this causes 3 MiB of memory belonging to ARM Trusted firmware to
+>> be reserved.
+>>
+>> arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi :
+>> /* 3 MiB reserved for ARM Trusted Firmware (BL31) */
+>> secmon_reserved: secmon@5000000 {
+>>        reg = <0x0 0x05000000 0x0 0x300000>;
+>>        no-map;
+>> };
+>>
+>> And the mainline kernel fails to reserve that memory:
+>> [    0.000000] OF: fdt: Reserved memory: failed to reserve memory for
+>> node 'secmon@5000000': base 0x0000000005000000, size 3 MiB
+>>
+>> It fails to reserve because memblock_overlaps_region and
+>> memblock_is_region_reserved return one.
+>> I think memblock_is_region_reserved is saying the memory is already
+>> reserved by uboot and shouldn't be nomap, but it should.
+>>
+>> Is there a bug here?
+>> Why the kernel is failing to reserve this memory?
+>> Is this an u-boot issue?
+>>
+>> I would appreciate any help. The current mainline kernel fails 90% of
+>> the time to boot into the Vim3 board.
+> 
+> The issue was raised before by Stefan Agner here:
+> 
+> https://lore.kernel.org/linux-arm-kernel/40ca11f84b7cdbfb9ad2ddd480cb204a@agner.ch/
+> 
+> The thread sort of points at the general issue but the conversation
+> fizzled out and didn’t lead to any changes. At one point Stefan made
+> a suggestion about reverting part of the code, leading to this patch
+> in my own patchset:
+> 
+> https://github.com/chewitt/linux/commit/9633c9b24f6f16afdb7fa8c2e163b6ea7a7ac5f8
+> 
+> The issue is still present and the patch does work around it. The
+> crashes would probably show up more, only a large percentage of
+> distros that actively support Amlogic boards (and several vendors)
+> are picking chunks of my curated LibreELEC patchset for their own
+> kernels and thus that patch is quite widely used.
+> 
+> Christian
+> 
